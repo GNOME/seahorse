@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD.hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-16 15:54+0100\n"
-"PO-Revision-Date: 2009-02-16 15:40+0100\n"
+"POT-Creation-Date: 2009-02-17 14:59+0100\n"
+"PO-Revision-Date: 2009-02-17 15:01+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -328,8 +328,7 @@ msgid "The last search pattern searched for against a key server."
 msgstr "A kulcskiszolgálón utoljára keresett minta."
 
 #: ../data/seahorse.schemas.in.h:30
-msgid ""
-"This specifies the default key to use for certain operations, mainly signing."
+msgid "This specifies the default key to use for certain operations, mainly signing."
 msgstr ""
 "Ez megadja az alapértelmezett kulcsot bizonyos műveletekhez, főképp "
 "aláíráshoz."
@@ -368,8 +367,7 @@ msgstr "Új kulcstartónév:"
 msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
-msgstr ""
-"Válassza ki az új kulcstartó nevét. A program bekéri a feloldási jelszót."
+msgstr "Válassza ki az új kulcstartó nevét. A program bekéri a feloldási jelszót."
 
 #: ../gkr/seahorse-add-keyring.glade.h:4
 #: ../libseahorse/seahorse-add-keyserver.glade.h:5
@@ -585,8 +583,7 @@ msgstr "_Feloldás"
 msgid ""
 "Unlock the password storage keyring with a master password so it is "
 "available for use."
-msgstr ""
-"A jelszótároló kulcstartó feloldása mesterjelszóval, így használható lesz."
+msgstr "A jelszótároló kulcstartó feloldása mesterjelszóval, így használható lesz."
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:254
 msgid "_Set as default"
@@ -702,7 +699,7 @@ msgstr "Keresés eredménye"
 #. Filter Label
 #: ../libcryptui/cryptui-key-chooser.c:185
 msgid "Search _for:"
-msgstr "Kere_sés: "
+msgstr "Kere_sés:"
 
 #: ../libcryptui/cryptui-key-chooser.c:243
 msgid "None (Don't Sign)"
@@ -1113,7 +1110,11 @@ msgstr "Magánkulcs"
 msgid "Credentials"
 msgstr "Hitelesítési adatok"
 
-#: ../libseahorse/seahorse-object.c:228
+#.
+#. * Translators: "This object is a means of storing items such as
+#. * name, email address, etc. that make up one's digital identity.
+#.
+#: ../libseahorse/seahorse-object.c:232
 msgid "Identity"
 msgstr "Személyazonosság"
 
@@ -1266,6 +1267,12 @@ msgstr "_Csere"
 #: ../pgp/seahorse-pgp-key-properties.c:1182
 msgid "Unknown"
 msgstr "Ismeretlen"
+
+#: ../libseahorse/seahorse-validity.c:36
+#: ../pgp/seahorse-pgp-key-properties.c:1188
+msgctxt "Validity"
+msgid "Never"
+msgstr "Soha"
 
 #: ../libseahorse/seahorse-validity.c:38
 #: ../pgp/seahorse-pgp-key-properties.c:1195
@@ -1480,8 +1487,7 @@ msgstr "Át_méretezés"
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
-msgstr ""
-"Ez nem képfájl vagy típusa nem ismerhető fel. Próbáljon JPEG fájlt használni."
+msgstr "Ez nem képfájl vagy típusa nem ismerhető fel. Próbáljon JPEG fájlt használni."
 
 #: ../pgp/seahorse-gpgme-photos.c:224
 msgid "All image files"
@@ -1579,8 +1585,7 @@ msgstr "Nincsenek az aláíráshoz megfelelő kulcsok"
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
-msgstr ""
-"Nincsenek titkos PGP kulcsai, amelyekkel jelezhetné a bizalmát a kulcsban."
+msgstr "Nincsenek titkos PGP kulcsai, amelyekkel jelezhetné a bizalmát a kulcsban."
 
 #: ../pgp/seahorse-gpgme-source.c:99
 #, c-format
@@ -1641,8 +1646,7 @@ msgstr "ElGamal"
 #: ../pgp/seahorse-hkp-source.c:330
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
-msgstr ""
-"A keresés nem volt elég egyedi. A(z) „%s” kiszolgáló túl sok kulcsot talált."
+msgstr "A keresés nem volt elég egyedi. A(z) „%s” kiszolgáló túl sok kulcsot talált."
 
 #: ../pgp/seahorse-hkp-source.c:332
 #, c-format
@@ -1749,8 +1753,7 @@ msgstr "<b>_Haladó kulcsbeállítások</b>"
 
 #: ../pgp/seahorse-pgp-generate.glade.h:2
 msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr ""
-"A PGP kulcs lehetővé teszi e-mailek vagy fájlok titkosítását mások számára."
+msgstr "A PGP kulcs lehetővé teszi e-mailek vagy fájlok titkosítását mások számára."
 
 #: ../pgp/seahorse-pgp-generate.glade.h:3
 msgid "Algorithms here"
@@ -1877,6 +1880,12 @@ msgstr "Teljes kulcs exportálása"
 #: ../ssh/seahorse-ssh-key-properties.c:213
 msgid "Couldn't export key."
 msgstr "Nem sikerült exportálni a kulcsot."
+
+#: ../pgp/seahorse-pgp-key-properties.c:1331
+#: ../pgp/seahorse-pgp-key-properties.c:1420
+msgctxt "Expires"
+msgid "Never"
+msgstr "Soha"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1381
@@ -2135,8 +2144,7 @@ msgstr ""
 
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:28
 #, no-c-format
-msgid ""
-"If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
+msgid "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
 msgstr ""
 "Ha már nem biztos abban, hogy a kulcs „%s” tulajdona, <i>vonja vissza</i> az "
 "aláírását:"
@@ -2203,8 +2211,7 @@ msgid "_Reason:"
 msgstr "_Ok:"
 
 #: ../pgp/seahorse-signer.c:62
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
+msgid "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
 "Nincsenek dokumentumok vagy üzenetek aláírására használható személyes PGP "
 "kulcsai."
@@ -2679,6 +2686,10 @@ msgstr "_Nézet"
 msgid "_Help"
 msgstr "_Súgó"
 
+#: ../src/seahorse-viewer.c:196
+msgid "Prefere_nces"
+msgstr "B_eállítások"
+
 #: ../src/seahorse-viewer.c:197
 msgid "Change preferences for this program"
 msgstr "Ezen program beállításainak megváltoztatása"
@@ -2738,6 +2749,11 @@ msgstr "A törölt kulcsok közül legalább egy személyes. Biztosan folytatja?
 #: ../src/seahorse-viewer.c:496
 msgid "Show properties"
 msgstr "Tulajdonságok megjelenítése"
+
+#: ../src/seahorse-viewer.c:497
+msgctxt "This text refers to deleting an item from its type's backing store."
+msgid "_Delete"
+msgstr "_Törlés"
 
 #: ../src/seahorse-viewer.c:498
 msgid "Delete selected items"
@@ -3013,10 +3029,3 @@ msgstr "Bejelentkezési _név:"
 msgid "_Set Up"
 msgstr "_Beállítás"
 
-#, fuzzy
-#~ msgid "_Expire"
-#~ msgstr "Lejár"
-
-#, fuzzy
-#~ msgid "_Revoke"
-#~ msgstr "Visszavonás"
