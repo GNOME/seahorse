@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-14 20:20+0700\n"
-"PO-Revision-Date: 2009-02-14 21:34+0700\n"
+"POT-Creation-Date: 2009-02-17 10:46+0700\n"
+"PO-Revision-Date: 2009-02-17 10:55+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -443,9 +443,9 @@ msgid "Applications"
 msgstr "โปรแกรมประยุกต์"
 
 #: ../gkr/seahorse-gkr-item-properties.glade.h:6
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
 msgid "Details"
 msgstr "รายละเอียด"
@@ -510,68 +510,15 @@ msgstr "เ_ขียน"
 msgid "Listing passwords"
 msgstr "กำลังไล่เรียงรหัสผ่าน"
 
-#. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-keyring.glade.h:2
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:19
-msgid "Created:"
-msgstr "สร้าง:"
+#: ../gkr/seahorse-gkr-keyring.c:354
+#, c-format
+msgid "Passwords: %s"
+msgstr "รหัสผ่าน: %s"
 
-#: ../gkr/seahorse-gkr-keyring.glade.h:3
-msgid "Keyring"
-msgstr "พวงกุญแจ"
-
-#: ../gkr/seahorse-gkr-keyring.glade.h:4
-msgid "Keyring Properties"
-msgstr "คุณสมบัติพวงกุญแจ"
-
-#: ../gkr/seahorse-gkr-keyring.glade.h:5
-msgid "_Name:"
-msgstr "_ชื่อ:"
-
-#: ../gkr/seahorse-gkr-operation.c:168
-msgid "Access to the key ring was denied"
-msgstr "ไม่ได้รับอนุญาตให้เข้าใช้พวงกุญแจ"
-
-#: ../gkr/seahorse-gkr-operation.c:171
-msgid "The gnome-keyring daemon is not running"
-msgstr "ดีมอน gnome-keyring ไม่ได้ทำงานอยู่"
-
-#: ../gkr/seahorse-gkr-operation.c:174
-msgid "The key ring has already been unlocked"
-msgstr "พวงกุญแจถูกปลดล็อคไปแล้ว"
-
-#: ../gkr/seahorse-gkr-operation.c:177
-msgid "No such key ring exists"
-msgstr "ไม่มีพวงกุญแจที่ว่านี้อยู่"
-
-#: ../gkr/seahorse-gkr-operation.c:180
-msgid "Couldn't communicate with key ring daemon"
-msgstr "ไม่สามารถติดต่อสื่อสารกับดีมอนพวงกุญแจ"
-
-#: ../gkr/seahorse-gkr-operation.c:183
-msgid "The item already exists"
-msgstr "มีรายการนี้อยู่ก่อนแล้ว"
-
-#: ../gkr/seahorse-gkr-operation.c:189
-msgid "Internal error accessing gnome-keyring"
-msgstr "เกิดข้อผิดพลาดภายในขณะเข้าใช้ gnome-keyring"
-
-#: ../gkr/seahorse-gkr-operation.c:238 ../gkr/seahorse-gkr-operation.c:264
-msgid "Saving item..."
-msgstr "กำลังบันทึกรายการ..."
-
-#: ../gkr/seahorse-gkr-operation.c:300
-msgid "Deleting item..."
-msgstr "กำลังลบรายการ..."
-
-#: ../gkr/seahorse-gkr-operation.c:325
-msgid "Deleting keyring..."
-msgstr "กำลังลบพวงกุญแจ..."
-
-#: ../gkr/seahorse-gkr-source.c:234
-msgid "Listing password keyrings"
-msgstr "กำลังไล่เรียงพวงกุญแจเก็บรหัสผ่าน"
+#: ../gkr/seahorse-gkr-keyring.c:355
+#, c-format
+msgid "<b>Passwords:</b> %s"
+msgstr "<b>รหัสผ่าน:</b> %s"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:87
 msgid "Password Keyring"
@@ -637,6 +584,81 @@ msgstr "เปลี่ยนรหัสผ่านที่จะใช้ป
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "ยืนยันหรือไม่ว่าต้องการลบพวงกุญแจเก็บรหัสผ่าน '%s'?"
+
+#. -----------------------------------------------------------------------------
+#. * PUBLIC
+#.
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-keyring.glade.h:2
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:19
+msgid "Created:"
+msgstr "สร้าง:"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:3
+msgid "Keyring"
+msgstr "พวงกุญแจ"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:4
+msgid "Keyring Properties"
+msgstr "คุณสมบัติพวงกุญแจ"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:5
+msgid "_Name:"
+msgstr "_ชื่อ:"
+
+#: ../gkr/seahorse-gkr-operation.c:168
+msgid "Access to the key ring was denied"
+msgstr "ไม่ได้รับอนุญาตให้เข้าใช้พวงกุญแจ"
+
+#: ../gkr/seahorse-gkr-operation.c:171
+msgid "The gnome-keyring daemon is not running"
+msgstr "ดีมอน gnome-keyring ไม่ได้ทำงานอยู่"
+
+#: ../gkr/seahorse-gkr-operation.c:174
+msgid "The key ring has already been unlocked"
+msgstr "พวงกุญแจถูกปลดล็อคไปแล้ว"
+
+#: ../gkr/seahorse-gkr-operation.c:177
+msgid "No such key ring exists"
+msgstr "ไม่มีพวงกุญแจที่ว่านี้อยู่"
+
+#: ../gkr/seahorse-gkr-operation.c:180
+msgid "Couldn't communicate with key ring daemon"
+msgstr "ไม่สามารถติดต่อสื่อสารกับดีมอนพวงกุญแจ"
+
+#: ../gkr/seahorse-gkr-operation.c:183
+msgid "The item already exists"
+msgstr "มีรายการนี้อยู่ก่อนแล้ว"
+
+#: ../gkr/seahorse-gkr-operation.c:189
+msgid "Internal error accessing gnome-keyring"
+msgstr "เกิดข้อผิดพลาดภายในขณะเข้าใช้ gnome-keyring"
+
+#: ../gkr/seahorse-gkr-operation.c:238 ../gkr/seahorse-gkr-operation.c:264
+msgid "Saving item..."
+msgstr "กำลังบันทึกรายการ..."
+
+#: ../gkr/seahorse-gkr-operation.c:300
+msgid "Deleting item..."
+msgstr "กำลังลบรายการ..."
+
+#: ../gkr/seahorse-gkr-operation.c:325
+msgid "Deleting keyring..."
+msgstr "กำลังลบพวงกุญแจ..."
+
+#: ../gkr/seahorse-gkr-source.c:234
+msgid "Listing password keyrings"
+msgstr "กำลังไล่เรียงพวงกุญแจเก็บรหัสผ่าน"
+
+#: ../libcryptui/cryptui.c:222
+msgid ""
+"No encryption keys were found with which to perform the operation you "
+"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
+"started so that you may either create a key or import one."
+msgstr ""
+"ไม่พบกุญแจเข้ารหัสลับที่จะใช้ดำเนินการตามที่คุณขอ ดังนั้น จะเรียกโปรแกรม "
+"<b>รหัสผ่านและกุญแจเข้ารหัสลับ</b> เพื่อที่คุณจะสามารถสร้างหรือนำเข้ากุญแจได้"
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -1061,9 +1083,13 @@ msgstr "กุญแจส่วนตัว"
 msgid "Credentials"
 msgstr "รหัสลับ"
 
-#: ../libseahorse/seahorse-object.c:228
+#.
+#. * Translators: "This object is a means of storing items such as
+#. * name, email address, etc. that make up one's digital identity.
+#.
+#: ../libseahorse/seahorse-object.c:232
 msgid "Identity"
-msgstr ""
+msgstr "เอกลักษณ์บุคคล"
 
 #: ../libseahorse/seahorse-passphrase.c:196
 msgid "Passphrase"
@@ -1249,30 +1275,6 @@ msgstr "เพิกถอน"
 msgid "Could not display help: %s"
 msgstr "ไม่สามารถแสดงวิธีใช้: %s"
 
-#: ../libcryptui/cryptui.c:222
-msgid ""
-"No encryption keys were found with which to perform the operation you "
-"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
-"started so that you may either create a key or import one."
-msgstr ""
-"ไม่พบกุญแจเข้ารหัสลับที่จะใช้ดำเนินการตามที่คุณขอ ดังนั้น จะเรียกโปรแกรม "
-"<b>รหัสผ่านและกุญแจเข้ารหัสลับ</b> เพื่อที่คุณจะสามารถสร้างหรือนำเข้ากุญแจได้"
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:108
-#, c-format
-msgid "Are you sure you want to delete the certificate '%s'?"
-msgstr "ยืนยันหรือไม่ว่าต้องการลบใบรับรอง '%s'?"
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:110
-#, c-format
-msgid "Are you sure you want to delete %d certificates?"
-msgstr "ยืนยันหรือไม่ว่าต้องการลบใบรับรองทั้ง %d รายการ?"
-
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
-msgid "Certificate"
-msgstr "ใบรับรอง"
-
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
 msgstr "วันหมดอายุ:"
@@ -1345,10 +1347,6 @@ msgstr "เพิกถอนกุญแจ"
 msgid "_Never expires"
 msgstr "ไ_ม่มีวันหมดอายุ"
 
-#: ../pgp/seahorse-gpgme.c:51
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr "ถอดรหัสลับไม่สำเร็จ คุณอาจไม่มีกุญแจสำหรับถอดรหัสลับ"
-
 #: ../pgp/seahorse-gpgme-add-subkey.c:144
 msgid "Couldn't add subkey"
 msgstr "ไม่สามารถเพิ่มกุญแจย่อย"
@@ -1382,6 +1380,10 @@ msgstr "ไม่สามารถเพิ่มหมายเลขผู้
 #, c-format
 msgid "Add user ID to %s"
 msgstr "เพิ่มหมายเลขผู้ใช้ใน %s"
+
+#: ../pgp/seahorse-gpgme.c:51
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr "ถอดรหัสลับไม่สำเร็จ คุณอาจไม่มีกุญแจสำหรับถอดรหัสลับ"
 
 #: ../pgp/seahorse-gpgme-expires.c:58
 msgid "Invalid expiry date"
@@ -1598,7 +1600,7 @@ msgstr ""
 "สาเหตุอาจเกิดจากการตั้งเวลาของเครื่องคอมพิวเตอร์ไว้เป็นเวลาอนาคต "
 "หรือกุญแจไม่มีลายเซ็นเจ้าของกำกับ"
 
-#: ../pgp/seahorse-gpgme-source.c:910
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:564
 msgid "Importing Keys"
 msgstr "กำลังนำเข้ากุญแจ"
 
@@ -2175,6 +2177,15 @@ msgstr "เหตุผลสำหรับการเพิกถอนกุ
 msgid "_Reason:"
 msgstr "เ_หตุผล:"
 
+#: ../pgp/seahorse-signer.c:62
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr "คุณไม่มีกุญแจ PGP ส่วนตัวที่สามารถใช้เซ็นกำกับเอกสารหรือข้อความได้"
+
+#: ../pgp/seahorse-signer.glade.h:1
+msgid "_Sign message with key:"
+msgstr "เ_ซ็นกำกับข้อความด้วยกุญแจ:"
+
 #: ../pgp/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
 msgstr "<b>คุณได้ตรวจสอบกุญแจนี้อย่างระมัดระวังแค่ไหน?</b>"
@@ -2261,14 +2272,21 @@ msgstr "_ผู้เซ็น:"
 msgid "_Very Carefully"
 msgstr "_ระมัดระวังมาก"
 
-#: ../pgp/seahorse-signer.c:62
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr "คุณไม่มีกุญแจ PGP ส่วนตัวที่สามารถใช้เซ็นกำกับเอกสารหรือข้อความได้"
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+msgid "Certificate"
+msgstr "ใบรับรอง"
 
-#: ../pgp/seahorse-signer.glade.h:1
-msgid "_Sign message with key:"
-msgstr "เ_ซ็นกำกับข้อความด้วยกุญแจ:"
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
+#, c-format
+msgid "Are you sure you want to delete the certificate '%s'?"
+msgstr "ยืนยันหรือไม่ว่าต้องการลบใบรับรอง '%s'?"
+
+#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#, c-format
+msgid "Are you sure you want to delete %d certificate?"
+msgid_plural "Are you sure you want to delete %d certificates?"
+msgstr[0] "ยืนยันหรือไม่ว่าต้องการลบใบรับรองทั้ง %d รายการ?"
 
 #: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
@@ -2290,7 +2308,7 @@ msgstr "วลีรหัสผ่านให_ม่:"
 msgid "Manage your passwords and encryption keys"
 msgstr "จัดการรหัสผ่านและกุญแจเข้ารหัสลับของคุณ"
 
-#: ../src/seahorse.desktop.in.in.h:2
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:880
 msgid "Passwords and Encryption Keys"
 msgstr "รหัสผ่านและกุญแจเข้ารหัสลับ"
 
@@ -2305,6 +2323,121 @@ msgstr "_ต่อไป"
 #: ../src/seahorse-generate-select.glade.h:3
 msgid "Create New ..."
 msgstr "สร้างรายการใหม่ ..."
+
+#: ../src/seahorse-key-manager.c:245 ../src/seahorse-keyserver-results.c:84
+#, c-format
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "เลือกกุญแจ %d ดอก"
+
+#: ../src/seahorse-key-manager.c:430 ../src/seahorse-key-manager.c:490
+#: ../src/seahorse-key-manager.c:553 ../src/seahorse-keyserver-results.c:170
+msgid "Couldn't import keys"
+msgstr "ไม่สามารถนำเข้ากุญแจ"
+
+#: ../src/seahorse-key-manager.c:435 ../src/seahorse-keyserver-results.c:175
+msgid "Imported keys"
+msgstr "กุญแจนำเข้า"
+
+#: ../src/seahorse-key-manager.c:484
+msgid "Importing keys"
+msgstr "กำลังนำเข้ากุญแจ"
+
+#: ../src/seahorse-key-manager.c:507 ../ssh/seahorse-ssh-operation.c:1017
+msgid "Import Key"
+msgstr "นำเข้ากุญแจ"
+
+#: ../src/seahorse-key-manager.c:553
+msgid "Unrecognized key type, or invalid data format"
+msgstr "ไม่รู้จักชนิดกุญแจ หรือรูปแบบข้อมูลไม่ถูกต้อง"
+
+#: ../src/seahorse-key-manager.c:747 ../src/seahorse-keyserver-results.c:221
+msgid "_Remote"
+msgstr "เ_ครือข่าย"
+
+#: ../src/seahorse-key-manager.c:748
+msgid "_Quit"
+msgstr "_ออก"
+
+#: ../src/seahorse-key-manager.c:749
+msgid "Close this program"
+msgstr "ปิดโปรแกรมนี้"
+
+#: ../src/seahorse-key-manager.c:750
+msgid "_New..."
+msgstr "ใ_หม่..."
+
+#: ../src/seahorse-key-manager.c:751
+msgid "Create a new key or item"
+msgstr "สร้างกุญแจหรือรายการใหม่"
+
+#: ../src/seahorse-key-manager.c:752
+msgid "_Import..."
+msgstr "_นำเข้า..."
+
+#: ../src/seahorse-key-manager.c:753
+msgid "Import from a file"
+msgstr "นำเข้าจากแฟ้ม"
+
+#: ../src/seahorse-key-manager.c:754
+msgid "_Paste"
+msgstr "_แปะ"
+
+#: ../src/seahorse-key-manager.c:755
+msgid "Import from the clipboard"
+msgstr "นำเข้าจากคลิปบอร์ด"
+
+#: ../src/seahorse-key-manager.c:760 ../src/seahorse-keyserver-results.c:231
+msgid "_Find Remote Keys..."
+msgstr "_หากุญแจในเครือข่าย..."
+
+#: ../src/seahorse-key-manager.c:761 ../src/seahorse-keyserver-results.c:232
+msgid "Search for keys on a key server"
+msgstr "ค้นหากุญแจในเซิร์ฟเวอร์กุญแจ"
+
+#: ../src/seahorse-key-manager.c:762
+msgid "_Sync and Publish Keys..."
+msgstr "_ปรับและประกาศกุญแจ..."
+
+#: ../src/seahorse-key-manager.c:763
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "ประกาศ และ/หรือ ปรับข้อมูลกุญแจของคุณกับค่าออนไลน์ให้ตรงกัน"
+
+#: ../src/seahorse-key-manager.c:768
+msgid "T_ypes"
+msgstr "_ชนิด"
+
+#: ../src/seahorse-key-manager.c:768
+msgid "Show type column"
+msgstr "แสดงคอลัมน์ชนิดกุญแจ"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "_Expiry"
+msgstr "วันห_มดอายุ"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "Show expiry column"
+msgstr "แสดงคอลัมน์วันหมดอายุกุญแจ"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "_Trust"
+msgstr "ความเชื่อ_ถือ"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "Show owner trust column"
+msgstr "แสดงคอลัมน์ความเชื่อถือของเจ้าของ"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "_Validity"
+msgstr "สถานะ_มีผลใช้งาน"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "Show validity column"
+msgstr "แสดงคอลัมน์สถานะมีผลใช้งาน"
+
+#: ../src/seahorse-key-manager.c:951
+msgid "Filter:"
+msgstr "ตัวกรอง:"
 
 #: ../src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -2331,6 +2464,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "เพื่อจะเริ่มเข้ารหัสลับข้อมูล คุณต้องมีกุญแจเสียก่อน"
 
 #: ../src/seahorse-key-manager.glade.h:7
+#: ../src/seahorse-keyserver-results.c:236
 msgid "_Import"
 msgstr "_นำเข้า"
 
@@ -2354,6 +2488,47 @@ msgstr "มีผลใช้งาน"
 #: ../src/seahorse-key-manager-store.c:865
 msgid "Expiration Date"
 msgstr "วันหมดอายุ"
+
+#: ../src/seahorse-keyserver-results.c:194
+msgid "Importing keys from key servers"
+msgstr "กำลังนำเข้ากุญแจจากเซิร์ฟเวอร์พวงกุญแจ"
+
+#: ../src/seahorse-keyserver-results.c:222
+msgid "_Close"
+msgstr "ปิ_ด"
+
+#: ../src/seahorse-keyserver-results.c:223
+msgid "Close this window"
+msgstr "ปิดหน้าต่างนี้"
+
+#: ../src/seahorse-keyserver-results.c:224
+msgid "_Expand All"
+msgstr "_ขยายทั้งหมด"
+
+#: ../src/seahorse-keyserver-results.c:225
+msgid "Expand all listings"
+msgstr "ขยายรายการทั้งหมด"
+
+#: ../src/seahorse-keyserver-results.c:226
+msgid "_Collapse All"
+msgstr "ยุ_บทั้งหมด"
+
+#: ../src/seahorse-keyserver-results.c:227
+msgid "Collapse all listings"
+msgstr "ยุบรายการทั้งหมด"
+
+#: ../src/seahorse-keyserver-results.c:237
+msgid "Import selected keys to local key ring"
+msgstr "นำเข้ากุญแจที่เลือกเข้าในพวงกุญแจในเครื่อง"
+
+#: ../src/seahorse-keyserver-results.c:294
+msgid "Remote Keys"
+msgstr "กุญแจจากเครือข่าย"
+
+#: ../src/seahorse-keyserver-results.c:296
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "กุญแจจากเครือข่ายที่มี '%s'"
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2514,63 +2689,64 @@ msgstr "กำลังส่งออกกุญแจ"
 msgid "Couldn't retrieve data from key server"
 msgstr "ไม่สามารถดึงข้อมูลจากเซิร์ฟเวอร์กุญแจ"
 
-#: ../src/seahorse-viewer.c:360
+#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
+#: ../src/seahorse-viewer.c:361
 msgid "Copied keys"
 msgstr "ทำสำเนากุญแจแล้ว"
 
-#: ../src/seahorse-viewer.c:380
+#: ../src/seahorse-viewer.c:381
 msgid "Retrieving keys"
 msgstr "กำลังดึงข้อมูลกุญแจ"
 
-#: ../src/seahorse-viewer.c:395
+#: ../src/seahorse-viewer.c:396
 msgid "Couldn't delete."
 msgstr "ไม่สามารถลบ"
 
-#: ../src/seahorse-viewer.c:429
+#: ../src/seahorse-viewer.c:430
 msgid "Deleting..."
 msgstr "กำลังลบ..."
 
-#: ../src/seahorse-viewer.c:458
+#: ../src/seahorse-viewer.c:459
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s เป็นกุญแจส่วนตัว คุณยังคงต้องการดำเนินการต่อไปหรือไม่?"
 
-#: ../src/seahorse-viewer.c:461
+#: ../src/seahorse-viewer.c:462
 msgid ""
 "One or more of the deleted keys are private keys. Are you sure you want to "
 "proceed?"
 msgstr "กุญแจที่ลบอย่างน้อยหนึ่งดอกเป็นกุญแจส่วนตัว คุณยังคงต้องการดำเนินการต่อไปหรือไม่?"
 
-#: ../src/seahorse-viewer.c:494
+#: ../src/seahorse-viewer.c:495
 msgid "P_roperties"
 msgstr "คุณ_สมบัติ"
 
-#: ../src/seahorse-viewer.c:495
+#: ../src/seahorse-viewer.c:496
 msgid "Show properties"
 msgstr "แสดงคุณสมบัติ"
 
-#: ../src/seahorse-viewer.c:496
+#: ../src/seahorse-viewer.c:497
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "_ลบ"
 
-#: ../src/seahorse-viewer.c:497
+#: ../src/seahorse-viewer.c:498
 msgid "Delete selected items"
 msgstr "ลบรายการที่เลือก"
 
-#: ../src/seahorse-viewer.c:501
+#: ../src/seahorse-viewer.c:502
 msgid "E_xport..."
 msgstr "_ส่งออก..."
 
-#: ../src/seahorse-viewer.c:502
+#: ../src/seahorse-viewer.c:503
 msgid "Export to a file"
 msgstr "ส่งออกลงในแฟ้ม"
 
-#: ../src/seahorse-viewer.c:503
+#: ../src/seahorse-viewer.c:504
 msgid "_Copy"
 msgstr "_คัดลอก"
 
-#: ../src/seahorse-viewer.c:504
+#: ../src/seahorse-viewer.c:505
 msgid "Copy to the clipboard"
 msgstr "คัดลอกเข้าคลิปบอร์ด"
 
@@ -2786,10 +2962,6 @@ msgstr "กำลังนำเข้ากุญแจ: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "กำลังนำเข้ากุญแจ กรุณาป้อนวลีรหัสผ่าน"
 
-#: ../ssh/seahorse-ssh-operation.c:1017
-msgid "Import Key"
-msgstr "นำเข้ากุญแจ"
-
 #: ../ssh/seahorse-ssh-source.c:825
 msgid "No private key file is available for this key."
 msgstr "ไม่มีแฟ้มกุญแจส่วนตัวสำหรับกุญแจนี้"
@@ -2891,18 +3063,6 @@ msgstr "_ตั้งค่า"
 #~ msgid "Expiry for Subkey %d of %s"
 #~ msgstr "วันหมดอายุสำหรับกุญแจย่อย %d ของ %s"
 
-#~ msgid "Create a New Key"
-#~ msgstr "สร้างกุญแจใหม่"
-
-#~ msgid "_Remote"
-#~ msgstr "เ_ครือข่าย"
-
-#~ msgid "_Quit"
-#~ msgstr "_ออก"
-
-#~ msgid "Close this program"
-#~ msgstr "ปิดโปรแกรมนี้"
-
 #~ msgid "Create a new personal key"
 #~ msgstr "สร้างกุญแจส่วนตัวใหม่"
 
@@ -2911,91 +3071,6 @@ msgstr "_ตั้งค่า"
 
 #~ msgid "Paste _Keys"
 #~ msgstr "แ_ปะกุญแจ"
-
-#~ msgid "Import keys from the clipboard"
-#~ msgstr "นำเข้ากุญแจจากคลิปบอร์ด"
-
-#~ msgid "_Find Remote Keys..."
-#~ msgstr "_หากุญแจในเครือข่าย..."
-
-#~ msgid "Search for keys on a key server"
-#~ msgstr "ค้นหากุญแจในเซิร์ฟเวอร์กุญแจ"
-
-#~ msgid "_Sync and Publish Keys..."
-#~ msgstr "_ปรับและประกาศกุญแจ..."
-
-#~ msgid "Publish and/or synchronize your keys with those online."
-#~ msgstr "ประกาศ และ/หรือ ปรับข้อมูลกุญแจของคุณกับค่าออนไลน์ให้ตรงกัน"
-
-#~ msgid "T_ypes"
-#~ msgstr "_ชนิด"
-
-#~ msgid "Show type column"
-#~ msgstr "แสดงคอลัมน์ชนิดกุญแจ"
-
-#~ msgid "_Expiry"
-#~ msgstr "วันห_มดอายุ"
-
-#~ msgid "Show expiry column"
-#~ msgstr "แสดงคอลัมน์วันหมดอายุกุญแจ"
-
-#~ msgid "_Trust"
-#~ msgstr "ความเชื่อ_ถือ"
-
-#~ msgid "Show owner trust column"
-#~ msgstr "แสดงคอลัมน์ความเชื่อถือของเจ้าของ"
-
-#~ msgid "_Validity"
-#~ msgstr "สถานะ_มีผลใช้งาน"
-
-#~ msgid "Show validity column"
-#~ msgstr "แสดงคอลัมน์สถานะมีผลใช้งาน"
-
-#~ msgid "Couldn't import keys"
-#~ msgstr "ไม่สามารถนำเข้ากุญแจ"
-
-#~ msgid "Imported keys"
-#~ msgstr "กุญแจนำเข้า"
-
-#~ msgid "Importing keys"
-#~ msgstr "กำลังนำเข้ากุญแจ"
-
-#~ msgid "Unrecognized key type, or invalid data format"
-#~ msgstr "ไม่รู้จักชนิดกุญแจ หรือรูปแบบข้อมูลไม่ถูกต้อง"
-
-#~ msgid "Selected %d key"
-#~ msgid_plural "Selected %d keys"
-#~ msgstr[0] "เลือกกุญแจ %d ดอก"
-
-#~ msgid "_Close"
-#~ msgstr "ปิ_ด"
-
-#~ msgid "Close this window"
-#~ msgstr "ปิดหน้าต่างนี้"
-
-#~ msgid "_Expand All"
-#~ msgstr "_ขยายทั้งหมด"
-
-#~ msgid "Expand all listings"
-#~ msgstr "ขยายรายการทั้งหมด"
-
-#~ msgid "_Collapse All"
-#~ msgstr "ยุ_บทั้งหมด"
-
-#~ msgid "Collapse all listings"
-#~ msgstr "ยุบรายการทั้งหมด"
-
-#~ msgid "Import selected keys to local key ring"
-#~ msgstr "นำเข้ากุญแจที่เลือกเข้าในพวงกุญแจในเครื่อง"
-
-#~ msgid "Remote Keys"
-#~ msgstr "กุญแจจากเครือข่าย"
-
-#~ msgid "Remote Keys Containing '%s'"
-#~ msgstr "กุญแจจากเครือข่ายที่มี '%s'"
-
-#~ msgid "Importing keys from key servers"
-#~ msgstr "กำลังนำเข้ากุญแจจากเซิร์ฟเวอร์พวงกุญแจ"
 
 #~ msgid "_Key"
 #~ msgstr "กุญแ_จ"
@@ -3498,9 +3573,6 @@ msgstr "_ตั้งค่า"
 
 #~ msgid "Encryption and Keyrings"
 #~ msgstr "การเข้ารหัสลับและพวงกุญแจ"
-
-#~ msgid "Import keys from the file"
-#~ msgstr "นำเข้ากุญแจจากแฟ้ม"
 
 #~ msgid "Encrypt file"
 #~ msgstr "เข้ารหัสลับแฟ้ม"
