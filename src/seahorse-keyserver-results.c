@@ -219,7 +219,7 @@ on_delete_event (GtkWidget* widget, GdkEvent* event, SeahorseKeyserverResults* s
 
 static const GtkActionEntry GENERAL_ENTRIES[] = {
 	{ "remote-menu", NULL, N_("_Remote") }, 
-	{ "app-close", GTK_STOCK_CLOSE, N_("_Close"), "<control>W", 
+	{ "app-close", GTK_STOCK_CLOSE, NULL, "<control>W", 
 	  N_("Close this window"), G_CALLBACK (on_app_close) }, 
 	{ "view-expand-all", GTK_STOCK_ADD, N_("_Expand All"), NULL, 
 	  N_("Expand all listings"), G_CALLBACK (on_view_expand_all) }, 

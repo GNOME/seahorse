@@ -196,7 +196,7 @@ static const GtkActionEntry UI_ENTRIES[] = {
 	{ "app-preferences", GTK_STOCK_PREFERENCES, N_("Prefere_nces"), NULL,
 	  N_("Change preferences for this program"), G_CALLBACK (on_app_preferences) },
 #endif
-	{ "app-about", "gtk-about", N_("_About"), NULL, 
+	{ "app-about", GTK_STOCK_ABOUT, NULL, NULL, 
 	  N_("About this program"), G_CALLBACK (on_app_about) }, 
 	{ "help-show", GTK_STOCK_HELP, N_("_Contents"), "F1",
 	  N_("Show Seahorse help"), G_CALLBACK (on_help_show) } 
@@ -492,7 +492,7 @@ show_properties_for_selected (SeahorseViewer *self, SeahorseCommands *commands,
 }
 		
 static const GtkActionEntry KEY_ENTRIES[] = {
-	{ "show-properties", GTK_STOCK_PROPERTIES, N_("P_roperties"), NULL,
+	{ "show-properties", GTK_STOCK_PROPERTIES, NULL, NULL,
 	  N_("Show properties"), G_CALLBACK (on_key_properties) },
 	{ "edit-delete", GTK_STOCK_DELETE, NC_("This text refers to deleting an item from its type's backing store.", "_Delete"), NULL,
 	  N_("Delete selected items"), G_CALLBACK (on_key_delete) }
@@ -501,7 +501,7 @@ static const GtkActionEntry KEY_ENTRIES[] = {
 static const GtkActionEntry EXPORT_ENTRIES[] = {
 	{ "file-export", GTK_STOCK_SAVE_AS, N_("E_xport..."), NULL,
 	  N_("Export to a file"), G_CALLBACK (on_key_export_file) },
-	{ "edit-export-clipboard", GTK_STOCK_COPY, N_("_Copy"), "<control>C",
+	{ "edit-export-clipboard", GTK_STOCK_COPY, NULL, "<control>C",
 	  N_("Copy to the clipboard"), G_CALLBACK (on_key_export_clipboard) }
 };
 		
