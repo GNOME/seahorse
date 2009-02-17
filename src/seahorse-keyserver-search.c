@@ -206,19 +206,7 @@ populate_keyserver_list (SeahorseWidget *swidget, GtkWidget *box, GSList *uris,
     GHashTable *unchecked;
     gboolean any = FALSE;
     GtkWidget *check;
-    GtkTooltips *tooltips;
     GSList *l, *n;
-    
-    tooltips = GTK_TOOLTIPS (g_object_get_data (G_OBJECT (box), "tooltips"));
-    if (!tooltips) {
-        tooltips = gtk_tooltips_new ();
-
-        /* Special little reference counting for 'floating' reference */
-        g_object_ref (tooltips);
-        gtk_object_sink (GTK_OBJECT (tooltips));
-        
-        g_object_set_data_full (G_OBJECT (box), "tooltips", tooltips, (GDestroyNotify)g_object_unref);
-    }
     
     /* Remove all checks, and note which ones were unchecked */
     unchecked = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
@@ -237,7 +225,7 @@ populate_keyserver_list (SeahorseWidget *swidget, GtkWidget *box, GSList *uris,
 
         /* Save URI and set it as the tooltip */
         g_object_set_data_full (G_OBJECT (check), "keyserver-uri", g_strdup ((gchar*)l->data), g_free);
-        gtk_tooltips_set_tip (tooltips, check, (gchar*)l->data, "");
+        gtk_widget_set_tooltip_text (check, (gchar*)l->data);
         
         gtk_container_add (cont, check);
     }

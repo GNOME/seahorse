@@ -677,7 +677,7 @@ update_application (SeahorseGkrItem *git, SeahorseWidget *swidget)
 	model = gtk_tree_view_get_model (tree);
 	if (!model) {
 		g_assert (2 == APPS_N_COLUMNS);
-		store = gtk_list_store_new (2, boxed_access_control_type (), GTK_TYPE_STRING);
+		store = gtk_list_store_new (2, boxed_access_control_type (), G_TYPE_STRING);
 		model = GTK_TREE_MODEL (store);
 		gtk_tree_view_set_model (tree, model);
 
