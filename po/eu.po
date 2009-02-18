@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-13 11:53+0100\n"
-"PO-Revision-Date: 2009-02-13 15:32+0100\n"
+"POT-Creation-Date: 2009-02-18 22:10+0100\n"
+"PO-Revision-Date: 2009-02-18 22:16+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -379,7 +379,7 @@ msgstr ""
 msgid "The host name or address of the server."
 msgstr "Zerbitzariaren ostalari-izena edo helbidea."
 
-#: ../gkr/seahorse-gkr-add-keyring.c:121
+#: ../gkr/seahorse-gkr-add-keyring.c:133
 msgid "Couldn't add keyring"
 msgstr "Ezin izan da gako sorta gehitu"
 
@@ -466,9 +466,9 @@ msgid "Applications"
 msgstr "Aplikazioak"
 
 #: ../gkr/seahorse-gkr-item-properties.glade.h:6
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:71
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
 msgid "Details"
 msgstr "Xehetasunak"
@@ -533,6 +533,90 @@ msgstr "I_datzi"
 msgid "Listing passwords"
 msgstr "Pasahitzak zerrendatzea"
 
+#: ../gkr/seahorse-gkr-keyring.c:354
+#, c-format
+msgid "Passwords: %s"
+msgstr "Pasahitzak: %s"
+
+#: ../gkr/seahorse-gkr-keyring.c:355
+#, c-format
+msgid "<b>Passwords:</b> %s"
+msgstr "<b>Pasahitzak:</b> %s"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:87
+msgid "Password Keyring"
+msgstr "Pasahitzen gako sorta"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:88
+msgid "Used to store application and network passwords"
+msgstr "Aplikazio eta sareko pasahitzak gordetzeko erabiltzen da"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:101
+msgid "Couldn't unlock keyring"
+msgstr "Ezin izan da gako sorta desblokeatu"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:141
+msgid "Couldn't lock keyring"
+msgstr "Ezin izan da gako sorta blokeatu"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:181
+msgid "Couldn't set default keyring"
+msgstr "Ezin izan da gako sorta lehenetsia ezarri"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:219
+msgid "Couldn't change keyring password"
+msgstr "Ezin izan da gako sortaren pasahitza aldatu"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:250
+msgid "_Lock"
+msgstr "_Blokeatu"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:251
+msgid ""
+"Lock the password storage keyring so a master password is required to unlock "
+"it."
+msgstr ""
+"Blokeatu pasahitzak gordetzeko gako sorta, horrela pasahitz maisua beharko "
+"da desblokeatzeko."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:252
+msgid "_Unlock"
+msgstr "_Desblokeatu"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:253
+msgid ""
+"Unlock the password storage keyring with a master password so it is "
+"available for use."
+msgstr ""
+"Desblokeatu pasahitzak gordetzeko gako sorta, horrela erabiltzeko "
+"erabilgarri egongo da."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:254
+msgid "_Set as default"
+msgstr "Ezarri _lehenetsi gisa"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:255
+msgid "Applications usually store new passwords in the default keyring."
+msgstr ""
+"Normalean aplikazioek pasahitz berriak gako sorta lehenetsian gordetzen "
+"dituzte."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:256
+msgid "Change _Password"
+msgstr "Aldatu _pasahitza"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:257
+msgid "Change the unlock password of the password storage keyring"
+msgstr "Aldatu pasahitzak gordetzeko gako sorta desblokeatzeko pasahitza"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:321
+#, c-format
+msgid "Are you sure you want to delete the password keyring '%s'?"
+msgstr "Ziur zaude pasahitzen '%s' gako sorta ezabatu nahi duzula?"
+
+#. -----------------------------------------------------------------------------
+#. * PUBLIC
+#.
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.glade.h:2
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
@@ -596,72 +680,15 @@ msgstr "Gako sorta ezabatzen..."
 msgid "Listing password keyrings"
 msgstr "Pasahitzen gako sortak zerrendatzen"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:87
-msgid "Password Keyring"
-msgstr "Pasahitzen gako sorta"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:88
-msgid "Used to store application and network passwords"
-msgstr "Aplikazio eta sareko pasahitzak gordetzeko erabiltzen da"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:101
-msgid "Couldn't unlock keyring"
-msgstr "Ezin izan da gako sorta desblokeatu"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:141
-msgid "Couldn't lock keyring"
-msgstr "Ezin izan da gako sorta blokeatu"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:181
-msgid "Couldn't set default keyring"
-msgstr "Ezin izan da gako sorta lehenetsia ezarri"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:219
-msgid "Couldn't change keyring password"
-msgstr "Ezin izan da gako sortaren pasahitza aldatu"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:250
-msgid "_Lock"
-msgstr "_Blokeatu"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:251
+#: ../libcryptui/cryptui.c:222
 msgid ""
-"Lock the password storage keyring so a master password is required to unlock "
-"it."
-msgstr "Blokeatu pasahitzak gordetzeko gako sorta, horrela pasahitz maisua beharko da desblokeatzeko."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:252
-msgid "_Unlock"
-msgstr "_Desblokeatu"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:253
-msgid ""
-"Unlock the password storage keyring with a master password so it is "
-"available for use."
+"No encryption keys were found with which to perform the operation you "
+"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
+"started so that you may either create a key or import one."
 msgstr ""
-"Desblokeatu pasahitzak gordetzeko gako sorta, "
-"horrela erabiltzeko erabilgarri egongo da."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:254
-msgid "_Set as default"
-msgstr "Ezarri _lehenetsi gisa"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:255
-msgid "Applications usually store new passwords in the default keyring."
-msgstr "Normalean aplikazioek pasahitz berriak gako sorta lehenetsian gordetzen dituzte."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:256
-msgid "Change _Password"
-msgstr "Aldatu _pasahitza"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:257
-msgid "Change the unlock password of the password storage keyring"
-msgstr "Aldatu pasahitzak gordetzeko gako sorta desblokeatzeko pasahitza"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:320
-#, c-format
-msgid "Are you sure you want to delete the password keyring '%s'?"
-msgstr "Ziur zaude pasahitzen '%s' gako sorta ezabatu nahi duzula?"
+"Ez da enkriptatze-gakorik aurkitu zeinekin zuk eskatutako eragiketa egiteko. "
+"<b>Pasahitzak eta enkriptatze-gakoak</b> programa abiaraziko da zuk gako bat "
+"sortu edo inportatzeko."
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -1089,7 +1116,11 @@ msgstr "Gako pribatua"
 msgid "Credentials"
 msgstr "Kredentzialak"
 
-#: ../libseahorse/seahorse-object.c:228
+#.
+#. * Translators: "This object is a means of storing items such as
+#. * name, email address, etc. that make up one's digital identity.
+#.
+#: ../libseahorse/seahorse-object.c:232
 msgid "Identity"
 msgstr "Identitatea"
 
@@ -1278,31 +1309,6 @@ msgstr "Errebokatuta"
 msgid "Could not display help: %s"
 msgstr "Ezin izan da laguntza erakutsi: %s"
 
-#: ../libcryptui/cryptui.c:222
-msgid ""
-"No encryption keys were found with which to perform the operation you "
-"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
-"started so that you may either create a key or import one."
-msgstr ""
-"Ez da enkriptatze-gakorik aurkitu zeinekin zuk eskatutako eragiketa egiteko. "
-"<b>Pasahitzak eta enkriptatze-gakoak</b> programa abiaraziko da "
-"zuk gako bat sortu edo inportatzeko."
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:108
-#, c-format
-msgid "Are you sure you want to delete the certificate '%s'?"
-msgstr "Ziur zaude %s ziurtagiria ezabatu nahi duzula?"
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:110
-#, c-format
-msgid "Are you sure you want to delete %d certificates?"
-msgstr "Ziur zaude %d ziurtagiri ezabatu nahi dituzula?"
-
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:67
-msgid "Certificate"
-msgstr "Ziurtagiria"
-
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
 msgstr "Iraungitze-data:"
@@ -1375,10 +1381,6 @@ msgstr "Errebokatu gakoa"
 msgid "_Never expires"
 msgstr "_Ez da iraungitzen"
 
-#: ../pgp/seahorse-gpgme.c:51
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr "Huts egin du desenkriptatzean. Segur aski desenkriptatzeko gakoa falta duzu."
-
 #: ../pgp/seahorse-gpgme-add-subkey.c:144
 msgid "Couldn't add subkey"
 msgstr "Ezin da azpigakoa gehitu"
@@ -1412,6 +1414,10 @@ msgstr "Ezin izan da erabiltzailearen IDa gehitu"
 #, c-format
 msgid "Add user ID to %s"
 msgstr "Gehitu erabiltzailearen IDa %s(r)i"
+
+#: ../pgp/seahorse-gpgme.c:51
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr "Huts egin du desenkriptatzean. Segur aski desenkriptatzeko gakoa falta duzu."
 
 #: ../pgp/seahorse-gpgme-expires.c:58
 msgid "Invalid expiry date"
@@ -1632,7 +1638,7 @@ msgstr ""
 "Gako-datu baliogabeak (UIDak falta dira). Litekeena da ordenagailu baten "
 "data etorkizunekoa izatea, edo autosinadura bat falta izatea."
 
-#: ../pgp/seahorse-gpgme-source.c:910
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:564
 msgid "Importing Keys"
 msgstr "Gakoak inportatzea"
 
@@ -2145,8 +2151,8 @@ msgstr "Gako honen jabea '%s' dela uste baduzu, <i>sinatu</i> gakoa:"
 #, no-c-format
 msgid "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
 msgstr ""
-"Ez bazara fidatzen gako honen jabea '%s' dela, <i>errebokatu</i> "
-"zure sinadura:"
+"Ez bazara fidatzen gako honen jabea '%s' dela, <i>errebokatu</i> zure "
+"sinadura:"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:35
@@ -2209,6 +2215,16 @@ msgstr "Gakoa errebokatzeko arrazoia"
 msgid "_Reason:"
 msgstr "_Arrazoia:"
 
+#: ../pgp/seahorse-signer.c:62
+msgid "You have no personal PGP keys that can be used to sign a document or message."
+msgstr ""
+"Ez duzu dokumentu edo mezu bat sinatzeko erabil daitekeen PGP gako "
+"pertsonalik."
+
+#: ../pgp/seahorse-signer.glade.h:1
+msgid "_Sign message with key:"
+msgstr "_Sinatu mezua gako honekin:"
+
 #: ../pgp/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
 msgstr "<b>Nola egiaztatu duzu gako hori?</b>"
@@ -2228,8 +2244,8 @@ msgid ""
 "key fingerprint to the owner over the phone. "
 msgstr ""
 "<i>Azaletik:</i> gako horren jabea omen dena hala dela azaletik egiaztatu "
-"duzula adierazten du. Adibidez, gakoaren hatz-marka irakurri diozu "
-"jabeari telefonoz. "
+"duzula adierazten du. Adibidez, gakoaren hatz-marka irakurri diozu jabeari "
+"telefonoz. "
 
 #: ../pgp/seahorse-sign.glade.h:5
 msgid "<i>Key Name</i>"
@@ -2240,16 +2256,16 @@ msgid ""
 "<i>Not at all:</i> means you believe the key is owned by the person who "
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
-"<i>Inola ere ez:</i> gakoa haren jabea omen denarena dela uste duzu, "
-"baina ezin izan duzu edo ez duzu hori egiaztatu."
+"<i>Inola ere ez:</i> gakoa haren jabea omen denarena dela uste duzu, baina "
+"ezin izan duzu edo ez duzu hori egiaztatu."
 
 #: ../pgp/seahorse-sign.glade.h:7
 msgid ""
 "<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
 "key is genuine."
 msgstr ""
-"<i>Kontu handiz:</i> hautatu hau soilik gako hori benetakoa dela erabat "
-"ziur bazaude."
+"<i>Kontu handiz:</i> hautatu hau soilik gako hori benetakoa dela erabat ziur "
+"bazaude."
 
 #: ../pgp/seahorse-sign.glade.h:8
 msgid "By signing you indicate your trust that this key belongs to:"
@@ -2270,9 +2286,8 @@ msgid ""
 "used email to check that the email address belongs to the owner."
 msgstr ""
 "Faltsutzen zaila den argazki-identifikazioa erabil dezakezu (pasaportea, "
-"kasu) gakoko izena zuzena dela pertsonalki egiaztatzeko. Posta "
-"elektronikoa ere erabili beharko zenuke helbide elektronikoa jabearena "
-"dela egiaztatzeko."
+"kasu) gakoko izena zuzena dela pertsonalki egiaztatzeko. Posta elektronikoa "
+"ere erabili beharko zenuke helbide elektronikoa jabearena dela egiaztatzeko."
 
 #: ../pgp/seahorse-sign.glade.h:12
 msgid "_Casually"
@@ -2298,15 +2313,22 @@ msgstr "_Sinatzailea:"
 msgid "_Very Carefully"
 msgstr "_Kontu handiz"
 
-#: ../pgp/seahorse-signer.c:62
-msgid "You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"Ez duzu dokumentu edo mezu bat sinatzeko erabil daitekeen PGP gako "
-"pertsonalik."
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+msgid "Certificate"
+msgstr "Ziurtagiria"
 
-#: ../pgp/seahorse-signer.glade.h:1
-msgid "_Sign message with key:"
-msgstr "_Sinatu mezua gako honekin:"
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
+#, c-format
+msgid "Are you sure you want to delete the certificate '%s'?"
+msgstr "Ziur zaude %s ziurtagiria ezabatu nahi duzula?"
+
+#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#, c-format
+msgid "Are you sure you want to delete %d certificate?"
+msgid_plural "Are you sure you want to delete %d certificates?"
+msgstr[0] "Ziur zaude ziurtagiri %d ezabatu nahi duzula?"
+msgstr[1] "Ziur zaude %d ziurtagiri ezabatu nahi dituzula?"
 
 #: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
@@ -2328,7 +2350,7 @@ msgstr "_Pasaesaldi berria:"
 msgid "Manage your passwords and encryption keys"
 msgstr "Kudeatu pasahitzak eta enkriptatze-gakoak"
 
-#: ../src/seahorse.desktop.in.in.h:2
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:880
 msgid "Passwords and Encryption Keys"
 msgstr "Pasahitzak eta enkriptatze-gakoak"
 
@@ -2343,6 +2365,114 @@ msgstr "_Jarraitu"
 #: ../src/seahorse-generate-select.glade.h:3
 msgid "Create New ..."
 msgstr "Sortu berria..."
+
+#: ../src/seahorse-key-manager.c:245 ../src/seahorse-keyserver-results.c:84
+#, c-format
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "Gako %d hautatuta"
+msgstr[1] "%d gako hautatua"
+
+#: ../src/seahorse-key-manager.c:430 ../src/seahorse-key-manager.c:490
+#: ../src/seahorse-key-manager.c:553 ../src/seahorse-keyserver-results.c:170
+msgid "Couldn't import keys"
+msgstr "Ezin izan dira gakoak inportatu"
+
+#: ../src/seahorse-key-manager.c:435 ../src/seahorse-keyserver-results.c:175
+msgid "Imported keys"
+msgstr "Inportatutako gakoak"
+
+#: ../src/seahorse-key-manager.c:484
+msgid "Importing keys"
+msgstr "Gakoak inportatzen"
+
+#: ../src/seahorse-key-manager.c:507 ../ssh/seahorse-ssh-operation.c:1017
+msgid "Import Key"
+msgstr "Inportatu gakoa"
+
+#: ../src/seahorse-key-manager.c:553
+msgid "Unrecognized key type, or invalid data format"
+msgstr "Gako mota ezezaguna, edo datu formatu baliogabea"
+
+#: ../src/seahorse-key-manager.c:747 ../src/seahorse-keyserver-results.c:221
+msgid "_Remote"
+msgstr "_Urrunekoa"
+
+#: ../src/seahorse-key-manager.c:749
+msgid "Close this program"
+msgstr "Itxi programa hau"
+
+#: ../src/seahorse-key-manager.c:750
+msgid "_New..."
+msgstr "_Berria..."
+
+#: ../src/seahorse-key-manager.c:751
+msgid "Create a new key or item"
+msgstr "Sortu gako edo elementu berri bat"
+
+#: ../src/seahorse-key-manager.c:752
+msgid "_Import..."
+msgstr "_Inportatu..."
+
+#: ../src/seahorse-key-manager.c:753
+msgid "Import from a file"
+msgstr "Inportatu fitxategi batetik"
+
+#: ../src/seahorse-key-manager.c:755
+msgid "Import from the clipboard"
+msgstr "Inportatu arbeletik"
+
+#: ../src/seahorse-key-manager.c:760 ../src/seahorse-keyserver-results.c:231
+msgid "_Find Remote Keys..."
+msgstr "_Bilatu urruneko gakoak..."
+
+#: ../src/seahorse-key-manager.c:761 ../src/seahorse-keyserver-results.c:232
+msgid "Search for keys on a key server"
+msgstr "Gakoak bilatzea gako zerbitzarian"
+
+#: ../src/seahorse-key-manager.c:762
+msgid "_Sync and Publish Keys..."
+msgstr "_Sinkronizatu eta argitaratu gakoak..."
+
+#: ../src/seahorse-key-manager.c:763
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "Argitaratu edo/eta sinkronizatu zure gakoak linean daudenekin."
+
+#: ../src/seahorse-key-manager.c:768
+msgid "T_ypes"
+msgstr "_Motak"
+
+#: ../src/seahorse-key-manager.c:768
+msgid "Show type column"
+msgstr "Erakutsi Mota zutabea"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "_Expiry"
+msgstr "_Iraungi"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "Show expiry column"
+msgstr "Erakutsi Iraungitze-data zutabea"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "_Trust"
+msgstr "_Fidagarritasuna"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "Show owner trust column"
+msgstr "Erakutsi Fidagarritasuna zutabea"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "_Validity"
+msgstr "_Baliozkotasuna"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "Show validity column"
+msgstr "Erakutsi Baliozkotasuna zutabea"
+
+#: ../src/seahorse-key-manager.c:951
+msgid "Filter:"
+msgstr "Iragazkia:"
 
 #: ../src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -2369,6 +2499,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "Enkriptatzen hasteko gakoak beharko dituzu."
 
 #: ../src/seahorse-key-manager.glade.h:7
+#: ../src/seahorse-keyserver-results.c:236
 msgid "_Import"
 msgstr "_Inportatu"
 
@@ -2392,6 +2523,43 @@ msgstr "Baliozkotasuna"
 #: ../src/seahorse-key-manager-store.c:865
 msgid "Expiration Date"
 msgstr "Iraungitze-data"
+
+#: ../src/seahorse-keyserver-results.c:194
+msgid "Importing keys from key servers"
+msgstr "Gakoak inportatzen gako zerbitzaritik"
+
+#: ../src/seahorse-keyserver-results.c:223
+msgid "Close this window"
+msgstr "Itxi leiho hau"
+
+#: ../src/seahorse-keyserver-results.c:224
+msgid "_Expand All"
+msgstr "_Zabaldu denak"
+
+#: ../src/seahorse-keyserver-results.c:225
+msgid "Expand all listings"
+msgstr "Zabaldu zerrenda guztiak"
+
+#: ../src/seahorse-keyserver-results.c:226
+msgid "_Collapse All"
+msgstr "_Tolestu denak"
+
+#: ../src/seahorse-keyserver-results.c:227
+msgid "Collapse all listings"
+msgstr "Tolestu zerrenda guztiak"
+
+#: ../src/seahorse-keyserver-results.c:237
+msgid "Import selected keys to local key ring"
+msgstr "Inportatu hautatutako gakoak lokaleko gako sortara"
+
+#: ../src/seahorse-keyserver-results.c:294
+msgid "Remote Keys"
+msgstr "Urruneko gakoak"
+
+#: ../src/seahorse-keyserver-results.c:296
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "'%s' duten urruneko gakoak"
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2527,10 +2695,6 @@ msgstr "_Hobespenak"
 msgid "Change preferences for this program"
 msgstr "Aldatu programa honen hobespenak"
 
-#: ../src/seahorse-viewer.c:199
-msgid "_About"
-msgstr "Honi _buruz"
-
 #: ../src/seahorse-viewer.c:200
 msgid "About this program"
 msgstr "Programa honi buruz"
@@ -2555,65 +2719,58 @@ msgstr "Gakoak esportatzea"
 msgid "Couldn't retrieve data from key server"
 msgstr "Ezin izan dira datuak gako zerbitzaritik eskuratu"
 
-#: ../src/seahorse-viewer.c:360
+#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
+#: ../src/seahorse-viewer.c:361
 msgid "Copied keys"
 msgstr "Kopiatutako gakoak"
 
-#: ../src/seahorse-viewer.c:380
+#: ../src/seahorse-viewer.c:381
 msgid "Retrieving keys"
 msgstr "Gakoak eskuratzen"
 
-#: ../src/seahorse-viewer.c:395
+#: ../src/seahorse-viewer.c:396
 msgid "Couldn't delete."
 msgstr "Ezin izan da ezabatu."
 
-#: ../src/seahorse-viewer.c:429
+#: ../src/seahorse-viewer.c:430
 msgid "Deleting..."
 msgstr "Ezabatzen..."
 
-#: ../src/seahorse-viewer.c:458
+#: ../src/seahorse-viewer.c:459
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s gako pribatua da. Aurrera jarraitzea nahi duzu?"
 
-#: ../src/seahorse-viewer.c:461
+#: ../src/seahorse-viewer.c:462
 msgid ""
 "One or more of the deleted keys are private keys. Are you sure you want to "
 "proceed?"
 msgstr ""
-"Ezabatutako gako bat edo gehiago gako pribatuak dira. "
-"Ziur zaude jarraitzea nahi duzula?"
+"Ezabatutako gako bat edo gehiago gako pribatuak dira. Ziur zaude jarraitzea "
+"nahi duzula?"
 
-#: ../src/seahorse-viewer.c:494
-msgid "P_roperties"
-msgstr "_Propietateak"
-
-#: ../src/seahorse-viewer.c:495
+#: ../src/seahorse-viewer.c:496
 msgid "Show properties"
 msgstr "Erakutsi propietateak"
 
-#: ../src/seahorse-viewer.c:496
+#: ../src/seahorse-viewer.c:497
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "_Ezabatu"
 
-#: ../src/seahorse-viewer.c:497
+#: ../src/seahorse-viewer.c:498
 msgid "Delete selected items"
 msgstr "Hautatutako elementuak ezabatzen ditu"
 
-#: ../src/seahorse-viewer.c:501
+#: ../src/seahorse-viewer.c:502
 msgid "E_xport..."
 msgstr "E_sportatu..."
 
-#: ../src/seahorse-viewer.c:502
+#: ../src/seahorse-viewer.c:503
 msgid "Export to a file"
 msgstr "Fitxategi batera esportatzen du"
 
-#: ../src/seahorse-viewer.c:503
-msgid "_Copy"
-msgstr "_Kopiatu"
-
-#: ../src/seahorse-viewer.c:504
+#: ../src/seahorse-viewer.c:505
 msgid "Copy to the clipboard"
 msgstr "Kopiatu arbelean"
 
@@ -2665,25 +2822,25 @@ msgid ""
 "<i>Use your email address, and any other reminder you need about what this "
 "key is for.</i>"
 msgstr ""
-"<i>Erabili helbide elektronikoa eta beharrezko beste edozein oroigarri, "
-"gako hori zertarako den jakiteko.</i>"
+"<i>Erabili helbide elektronikoa eta beharrezko beste edozein oroigarri, gako "
+"hori zertarako den jakiteko.</i>"
 
 #: ../ssh/seahorse-ssh-generate.glade.h:3
 msgid ""
 "A Secure Shell (SSH) key lets you connect securely to trusted computers "
 "using SSH, without entering a different password for each of them."
 msgstr ""
-"Shell seguruaren (SSH) gakoak SSHren bidez konfiantzako "
-"ordenagailuekin era seguruan konektatzeko aukera ematen du, "
-"haietako bakoitzean pasahitza sartu beharrik gabe."
+"Shell seguruaren (SSH) gakoak SSHren bidez konfiantzako ordenagailuekin era "
+"seguruan konektatzeko aukera ematen du, haietako bakoitzean pasahitza sartu "
+"beharrik gabe."
 
 #: ../ssh/seahorse-ssh-generate.glade.h:5
 msgid ""
 "If there is already a computer you want to use this key with, you can set up "
 "that computer to recognize your key now. "
 msgstr ""
-"Gako hori ordenagailu batean erabili nahi baduzu dagoeneko, zure "
-"gakoa ezagutzeko konfigura dezakezu orain ordenagailu hori. "
+"Gako hori ordenagailu batean erabili nahi baduzu dagoeneko, zure gakoa "
+"ezagutzeko konfigura dezakezu orain ordenagailu hori. "
 
 #: ../ssh/seahorse-ssh-generate.glade.h:7
 msgid "New Secure Shell Key"
@@ -2835,10 +2992,6 @@ msgstr "Gakoa inportatzea: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "Gakoa inportatzea. Idatzi pasaesaldia"
 
-#: ../ssh/seahorse-ssh-operation.c:1017
-msgid "Import Key"
-msgstr "Inportatu gakoa"
-
 #: ../ssh/seahorse-ssh-source.c:825
 msgid "No private key file is available for this key."
 msgstr "Ez dago gako pribatuaren fitxategirik erabilgarri gako honentzako."
@@ -2865,9 +3018,8 @@ msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
 msgstr ""
-"Shell seguruaren gakoa SSH erabiltzen duen beste "
-"ordenagailu batean erabiltzeko, beharrezkoa da aurretik "
-"kontu bat izatea ordenagailu horretan."
+"Shell seguruaren gakoa SSH erabiltzen duen beste ordenagailu batean "
+"erabiltzeko, beharrezkoa da aurretik kontu bat izatea ordenagailu horretan."
 
 #: ../ssh/seahorse-ssh-upload.glade.h:5
 msgid "_Computer Name:"
