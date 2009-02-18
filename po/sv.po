@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-15 00:11+0100\n"
-"PO-Revision-Date: 2009-02-15 00:11+0100\n"
+"POT-Creation-Date: 2009-02-19 00:32+0100\n"
+"PO-Revision-Date: 2009-02-19 00:33+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -415,9 +415,9 @@ msgid "Applications"
 msgstr "Program"
 
 #: ../gkr/seahorse-gkr-item-properties.glade.h:6
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
 msgid "Details"
 msgstr "Detaljer"
@@ -482,6 +482,80 @@ msgstr "_Skriva"
 msgid "Listing passwords"
 msgstr "Listar lösenord"
 
+#: ../gkr/seahorse-gkr-keyring.c:354
+#, c-format
+msgid "Passwords: %s"
+msgstr "Lösenord: %s"
+
+#: ../gkr/seahorse-gkr-keyring.c:355
+#, c-format
+msgid "<b>Passwords:</b> %s"
+msgstr "<b>Lösenord:</b> %s"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:87
+msgid "Password Keyring"
+msgstr "Lösenordsnyckelring"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:88
+msgid "Used to store application and network passwords"
+msgstr "Används för att lagra program- och nätverkslösenord"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:101
+msgid "Couldn't unlock keyring"
+msgstr "Kunde inte låsa upp nyckelringen"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:141
+msgid "Couldn't lock keyring"
+msgstr "Kunde inte låsa nyckelringen"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:181
+msgid "Couldn't set default keyring"
+msgstr "Kunde inte ställa in standardnyckelringen"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:219
+msgid "Couldn't change keyring password"
+msgstr "Kunde inte ändra lösenord för nyckelring"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:250
+msgid "_Lock"
+msgstr "_Lås"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:251
+msgid "Lock the password storage keyring so a master password is required to unlock it."
+msgstr "Lås nyckelring för lösenordslagring så ett huvudlösenord krävs för att låsa upp den."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:252
+msgid "_Unlock"
+msgstr "Lås _upp"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:253
+msgid "Unlock the password storage keyring with a master password so it is available for use."
+msgstr "Lås upp nyckelring för lösenordslagring med ett huvudlösenord så att den är tillgänglig för användning."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:254
+msgid "_Set as default"
+msgstr "_Ange som standard"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:255
+msgid "Applications usually store new passwords in the default keyring."
+msgstr "Program lagrar vanligtvis nya lösenord i standardnyckelringen."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:256
+msgid "Change _Password"
+msgstr "Ändra _lösenord"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:257
+msgid "Change the unlock password of the password storage keyring"
+msgstr "Ändra upplåsningslösenordet för nyckelring för lösenordslagring"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:321
+#, c-format
+msgid "Are you sure you want to delete the password keyring '%s'?"
+msgstr "Är du säker på att du vill ta bort lösenordsnyckelringen \"%s\"?"
+
+#. -----------------------------------------------------------------------------
+#. * PUBLIC
+#.
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.glade.h:2
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
@@ -546,66 +620,9 @@ msgstr "Tar bort nyckelring..."
 msgid "Listing password keyrings"
 msgstr "Listar lösenordsnyckelringar"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:87
-msgid "Password Keyring"
-msgstr "Lösenordsnyckelring"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:88
-msgid "Used to store application and network passwords"
-msgstr "Används för att lagra program- och nätverkslösenord"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:101
-msgid "Couldn't unlock keyring"
-msgstr "Kunde inte låsa upp nyckelringen"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:141
-msgid "Couldn't lock keyring"
-msgstr "Kunde inte låsa nyckelringen"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:181
-msgid "Couldn't set default keyring"
-msgstr "Kunde inte ställa in standardnyckelringen"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:219
-msgid "Couldn't change keyring password"
-msgstr "Kunde inte ändra lösenord för nyckelring"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:250
-msgid "_Lock"
-msgstr "_Lås"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:251
-msgid "Lock the password storage keyring so a master password is required to unlock it."
-msgstr "Lås nyckelring för lösenordslagring så ett huvudlösenord krävs för att låsa upp den."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:252
-msgid "_Unlock"
-msgstr "Lås _upp"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:253
-msgid "Unlock the password storage keyring with a master password so it is available for use."
-msgstr "Lås upp nyckelring för lösenordslagring med ett huvudlösenord så att den är tillgänglig för användning."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:254
-msgid "_Set as default"
-msgstr "_Ange som standard"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:255
-msgid "Applications usually store new passwords in the default keyring."
-msgstr "Program lagrar vanligtvis nya lösenord i standardnyckelringen."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:256
-msgid "Change _Password"
-msgstr "Ändra _lösenord"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:257
-msgid "Change the unlock password of the password storage keyring"
-msgstr "Ändra upplåsningslösenordet för nyckelring för lösenordslagring"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:321
-#, c-format
-msgid "Are you sure you want to delete the password keyring '%s'?"
-msgstr "Är du säker på att du vill ta bort lösenordsnyckelringen \"%s\"?"
+#: ../libcryptui/cryptui.c:222
+msgid "No encryption keys were found with which to perform the operation you requested.  The program <b>Passwords and Encryption Keys</b> will now be started so that you may either create a key or import one."
+msgstr "Inga krypteringsnycklar hittades som kan användas för den begärda åtgärden.  Programmet <b>Lösenord och krypteringsnycklar</b> kommer nu att startas så att du antingen kan skapa eller importera en nyckel."
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -1037,7 +1054,11 @@ msgstr "Privat nyckel"
 msgid "Credentials"
 msgstr "Inloggningsuppgifter"
 
-#: ../libseahorse/seahorse-object.c:228
+#.
+#. * Translators: "This object is a means of storing items such as
+#. * name, email address, etc. that make up one's digital identity.
+#.
+#: ../libseahorse/seahorse-object.c:232
 msgid "Identity"
 msgstr "Identitet"
 
@@ -1220,27 +1241,6 @@ msgstr "Spärrad"
 msgid "Could not display help: %s"
 msgstr "Kunde inte visa hjälp: %s"
 
-#: ../libcryptui/cryptui.c:222
-msgid "No encryption keys were found with which to perform the operation you requested.  The program <b>Passwords and Encryption Keys</b> will now be started so that you may either create a key or import one."
-msgstr "Inga krypteringsnycklar hittades som kan användas för den begärda åtgärden.  Programmet <b>Lösenord och krypteringsnycklar</b> kommer nu att startas så att du antingen kan skapa eller importera en nyckel."
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:108
-#, c-format
-msgid "Are you sure you want to delete the certificate '%s'?"
-msgstr "Är du säker på att du vill ta bort certifikatet \"%s\"?"
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:111
-#, c-format
-msgid "Are you sure you want to delete %d certificate?"
-msgid_plural "Are you sure you want to delete %d certificates?"
-msgstr[0] "Är du säker på att du vill ta bort %d certifikat?"
-msgstr[1] "Är du säker på att du vill ta bort %d certifikat?"
-
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
-msgid "Certificate"
-msgstr "Certifikat"
-
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
 msgstr "Utgångsdatum:"
@@ -1316,10 +1316,6 @@ msgstr "Spärra nyckel"
 msgid "_Never expires"
 msgstr "_Går aldrig ut"
 
-#: ../pgp/seahorse-gpgme.c:51
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr "Dekryptering misslyckades. Du kanske inte har dekrypteringsnyckeln."
-
 #: ../pgp/seahorse-gpgme-add-subkey.c:144
 msgid "Couldn't add subkey"
 msgstr "Kunde inte lägga till undernyckel"
@@ -1355,6 +1351,10 @@ msgstr "Kunde inte lägga till användaridentitet"
 #, c-format
 msgid "Add user ID to %s"
 msgstr "Lägg till användaridentitet till %s"
+
+#: ../pgp/seahorse-gpgme.c:51
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr "Dekryptering misslyckades. Du kanske inte har dekrypteringsnyckeln."
 
 #: ../pgp/seahorse-gpgme-expires.c:58
 msgid "Invalid expiry date"
@@ -1562,6 +1562,7 @@ msgid "Invalid key data (missing UIDs). This may be due to a computer with a dat
 msgstr "Ogiltigt nyckeldata (UID:er saknas). Det här kan bero på en dator som har datumet inställt till framtiden eller att en självsignatur saknas."
 
 #: ../pgp/seahorse-gpgme-source.c:910
+#: ../src/seahorse-key-manager.c:564
 msgid "Importing Keys"
 msgstr "Importerar nycklar"
 
@@ -2137,6 +2138,14 @@ msgstr "Anledning för spärr av nyckeln"
 msgid "_Reason:"
 msgstr "_Orsak:"
 
+#: ../pgp/seahorse-signer.c:62
+msgid "You have no personal PGP keys that can be used to sign a document or message."
+msgstr "Du har inga personliga PGP-nycklar som kan användas för att signera ett dokument eller meddelande."
+
+#: ../pgp/seahorse-signer.glade.h:1
+msgid "_Sign message with key:"
+msgstr "_Signera meddelande med nyckel:"
+
 #: ../pgp/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
 msgstr "<b>Hur noggrant har du kontrollerat denna nyckel?</b>"
@@ -2205,13 +2214,22 @@ msgstr "_Signerare:"
 msgid "_Very Carefully"
 msgstr "_Mycket noggrant"
 
-#: ../pgp/seahorse-signer.c:62
-msgid "You have no personal PGP keys that can be used to sign a document or message."
-msgstr "Du har inga personliga PGP-nycklar som kan användas för att signera ett dokument eller meddelande."
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+msgid "Certificate"
+msgstr "Certifikat"
 
-#: ../pgp/seahorse-signer.glade.h:1
-msgid "_Sign message with key:"
-msgstr "_Signera meddelande med nyckel:"
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
+#, c-format
+msgid "Are you sure you want to delete the certificate '%s'?"
+msgstr "Är du säker på att du vill ta bort certifikatet \"%s\"?"
+
+#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#, c-format
+msgid "Are you sure you want to delete %d certificate?"
+msgid_plural "Are you sure you want to delete %d certificates?"
+msgstr[0] "Är du säker på att du vill ta bort %d certifikat?"
+msgstr[1] "Är du säker på att du vill ta bort %d certifikat?"
 
 #: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
@@ -2234,6 +2252,7 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Hantera dina lösenord och krypteringsnycklar"
 
 #: ../src/seahorse.desktop.in.in.h:2
+#: ../src/seahorse-key-manager.c:880
 msgid "Passwords and Encryption Keys"
 msgstr "Lösenord och krypteringsnycklar"
 
@@ -2248,6 +2267,122 @@ msgstr "F_ortsätt"
 #: ../src/seahorse-generate-select.glade.h:3
 msgid "Create New ..."
 msgstr "Skapa ny ..."
+
+#: ../src/seahorse-key-manager.c:245
+#: ../src/seahorse-keyserver-results.c:84
+#, c-format
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "%d nyckel markerad"
+msgstr[1] "%d nycklar markerade"
+
+#: ../src/seahorse-key-manager.c:430
+#: ../src/seahorse-key-manager.c:490
+#: ../src/seahorse-key-manager.c:553
+#: ../src/seahorse-keyserver-results.c:170
+msgid "Couldn't import keys"
+msgstr "Kunde inte importera nycklar"
+
+#: ../src/seahorse-key-manager.c:435
+#: ../src/seahorse-keyserver-results.c:175
+msgid "Imported keys"
+msgstr "Importerade nycklar"
+
+#: ../src/seahorse-key-manager.c:484
+msgid "Importing keys"
+msgstr "Importerar nycklar"
+
+#: ../src/seahorse-key-manager.c:507
+#: ../ssh/seahorse-ssh-operation.c:1017
+msgid "Import Key"
+msgstr "Importera nyckel"
+
+#: ../src/seahorse-key-manager.c:553
+msgid "Unrecognized key type, or invalid data format"
+msgstr "Okänd nyckeltyp, eller ogiltigt dataformat"
+
+#: ../src/seahorse-key-manager.c:747
+#: ../src/seahorse-keyserver-results.c:221
+msgid "_Remote"
+msgstr "_Fjärr"
+
+#: ../src/seahorse-key-manager.c:749
+msgid "Close this program"
+msgstr "Stäng detta program"
+
+#: ../src/seahorse-key-manager.c:750
+msgid "_New..."
+msgstr "_Ny..."
+
+#: ../src/seahorse-key-manager.c:751
+msgid "Create a new key or item"
+msgstr "Skapa en ny nyckel eller objekt"
+
+#: ../src/seahorse-key-manager.c:752
+msgid "_Import..."
+msgstr "_Importera..."
+
+#: ../src/seahorse-key-manager.c:753
+msgid "Import from a file"
+msgstr "Importera från en fil"
+
+#: ../src/seahorse-key-manager.c:755
+msgid "Import from the clipboard"
+msgstr "Importera från urklipp"
+
+#: ../src/seahorse-key-manager.c:760
+#: ../src/seahorse-keyserver-results.c:231
+msgid "_Find Remote Keys..."
+msgstr "_Sök fjärrnycklar..."
+
+#: ../src/seahorse-key-manager.c:761
+#: ../src/seahorse-keyserver-results.c:232
+msgid "Search for keys on a key server"
+msgstr "Sök efter nycklar på en nyckelserver"
+
+#: ../src/seahorse-key-manager.c:762
+msgid "_Sync and Publish Keys..."
+msgstr "Synkronisera och _publicera nycklar..."
+
+#: ../src/seahorse-key-manager.c:763
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "Publicera och/eller synkronisera dina nycklar med de på nätet."
+
+#: ../src/seahorse-key-manager.c:768
+msgid "T_ypes"
+msgstr "T_yper"
+
+#: ../src/seahorse-key-manager.c:768
+msgid "Show type column"
+msgstr "Visa typkolumnen"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "_Expiry"
+msgstr "Utgångs_datum"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "Show expiry column"
+msgstr "Visa utgångskolumnen"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "_Trust"
+msgstr "_Tillit"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "Show owner trust column"
+msgstr "Visa ägartillitskolumnen"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "_Validity"
+msgstr "_Giltighet"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "Show validity column"
+msgstr "Visa giltighetskolumnen"
+
+#: ../src/seahorse-key-manager.c:951
+msgid "Filter:"
+msgstr "Filter:"
 
 #: ../src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -2274,6 +2409,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "För att komma igång med kryptering behöver du nycklar."
 
 #: ../src/seahorse-key-manager.glade.h:7
+#: ../src/seahorse-keyserver-results.c:236
 msgid "_Import"
 msgstr "_Importera"
 
@@ -2298,6 +2434,43 @@ msgstr "Giltighet"
 #: ../src/seahorse-key-manager-store.c:865
 msgid "Expiration Date"
 msgstr "Utgångsdatum"
+
+#: ../src/seahorse-keyserver-results.c:194
+msgid "Importing keys from key servers"
+msgstr "Importerar nycklar från nyckelservrar"
+
+#: ../src/seahorse-keyserver-results.c:223
+msgid "Close this window"
+msgstr "Stäng detta fönster"
+
+#: ../src/seahorse-keyserver-results.c:224
+msgid "_Expand All"
+msgstr "_Fäll ut alla"
+
+#: ../src/seahorse-keyserver-results.c:225
+msgid "Expand all listings"
+msgstr "Fäll ut alla listningar"
+
+#: ../src/seahorse-keyserver-results.c:226
+msgid "_Collapse All"
+msgstr "_Fäll ihop alla"
+
+#: ../src/seahorse-keyserver-results.c:227
+msgid "Collapse all listings"
+msgstr "Fäll ihop alla listningar"
+
+#: ../src/seahorse-keyserver-results.c:237
+msgid "Import selected keys to local key ring"
+msgstr "Importera markerade nycklar till lokal nyckelring"
+
+#: ../src/seahorse-keyserver-results.c:294
+msgid "Remote Keys"
+msgstr "Fjärrnycklar"
+
+#: ../src/seahorse-keyserver-results.c:296
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "Fjärrnycklar innehållande \"%s\""
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2423,10 +2596,6 @@ msgstr "Inställni_ngar"
 msgid "Change preferences for this program"
 msgstr "Ändra inställningar för detta program"
 
-#: ../src/seahorse-viewer.c:199
-msgid "_About"
-msgstr "_Om"
-
 #: ../src/seahorse-viewer.c:200
 msgid "About this program"
 msgstr "Om detta program"
@@ -2477,10 +2646,6 @@ msgstr "%s är en privat nyckel. Är du säker på att du vill fortsätta?"
 msgid "One or more of the deleted keys are private keys. Are you sure you want to proceed?"
 msgstr "En eller flera av de borttagna nycklarna är privata nycklar. Är du säker på att du vill fortsätta?"
 
-#: ../src/seahorse-viewer.c:495
-msgid "P_roperties"
-msgstr "E_genskaper"
-
 #: ../src/seahorse-viewer.c:496
 msgid "Show properties"
 msgstr "Visa egenskaper"
@@ -2501,10 +2666,6 @@ msgstr "E_xportera..."
 #: ../src/seahorse-viewer.c:503
 msgid "Export to a file"
 msgstr "Exportera till en fil"
-
-#: ../src/seahorse-viewer.c:504
-msgid "_Copy"
-msgstr "_Kopiera"
 
 #: ../src/seahorse-viewer.c:505
 msgid "Copy to the clipboard"
@@ -2716,10 +2877,6 @@ msgstr "Importerar nyckel: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "Importerar nyckel. Ange lösenfras"
 
-#: ../ssh/seahorse-ssh-operation.c:1017
-msgid "Import Key"
-msgstr "Importera nyckel"
-
 #: ../ssh/seahorse-ssh-source.c:825
 msgid "No private key file is available for this key."
 msgstr "Ingen privat nyckel-fil finns tillgänglig för denna nyckel."
@@ -2757,6 +2914,12 @@ msgstr "_Inloggningsnamn:"
 msgid "_Set Up"
 msgstr "_Konfigurera"
 
+#~ msgid "_About"
+#~ msgstr "_Om"
+#~ msgid "P_roperties"
+#~ msgstr "E_genskaper"
+#~ msgid "_Copy"
+#~ msgstr "_Kopiera"
 #~ msgid "Passwords"
 #~ msgstr "Lösenord"
 #~ msgid "Unavailable Key"
@@ -2838,78 +3001,16 @@ msgstr "_Konfigurera"
 #~ msgstr "Exportering stöds inte än."
 #~ msgid "Expiry for Subkey %d of %s"
 #~ msgstr "Utgångsdatum för undernyckel %d av %s"
-#~ msgid "Create a New Key"
-#~ msgstr "Skapa en ny nyckel"
-#~ msgid "_Remote"
-#~ msgstr "_Fjärr"
 #~ msgid "_Quit"
 #~ msgstr "_Avsluta"
-#~ msgid "Close this program"
-#~ msgstr "Stäng detta program"
 #~ msgid "Create a new personal key"
 #~ msgstr "Skapa en ny personlig nyckel"
 #~ msgid "Import keys into your key ring from a file"
 #~ msgstr "Importera nycklar till din nyckelring från en fil"
 #~ msgid "Paste _Keys"
 #~ msgstr "Klistra _in nycklar"
-#~ msgid "Import keys from the clipboard"
-#~ msgstr "Importera nycklar från urklipp"
-#~ msgid "_Find Remote Keys..."
-#~ msgstr "_Sök fjärrnycklar..."
-#~ msgid "Search for keys on a key server"
-#~ msgstr "Sök efter nycklar på en nyckelserver"
-#~ msgid "_Sync and Publish Keys..."
-#~ msgstr "Synkronisera och _publicera nycklar..."
-#~ msgid "Publish and/or synchronize your keys with those online."
-#~ msgstr "Publicera och/eller synkronisera dina nycklar med de på nätet."
-#~ msgid "T_ypes"
-#~ msgstr "T_yper"
-#~ msgid "Show type column"
-#~ msgstr "Visa typkolumnen"
-#~ msgid "_Expiry"
-#~ msgstr "Utgångs_datum"
-#~ msgid "Show expiry column"
-#~ msgstr "Visa utgångskolumnen"
-#~ msgid "_Trust"
-#~ msgstr "_Tillit"
-#~ msgid "Show owner trust column"
-#~ msgstr "Visa ägartillitskolumnen"
-#~ msgid "_Validity"
-#~ msgstr "_Giltighet"
-#~ msgid "Show validity column"
-#~ msgstr "Visa giltighetskolumnen"
-#~ msgid "Couldn't import keys"
-#~ msgstr "Kunde inte importera nycklar"
-#~ msgid "Imported keys"
-#~ msgstr "Importerade nycklar"
-#~ msgid "Importing keys"
-#~ msgstr "Importerar nycklar"
-#~ msgid "Unrecognized key type, or invalid data format"
-#~ msgstr "Okänd nyckeltyp, eller ogiltigt dataformat"
-#~ msgid "Selected %d key"
-#~ msgid_plural "Selected %d keys"
-#~ msgstr[0] "%d nyckel markerad"
-#~ msgstr[1] "%d nycklar markerade"
 #~ msgid "_Close"
 #~ msgstr "_Stäng"
-#~ msgid "Close this window"
-#~ msgstr "Stäng detta fönster"
-#~ msgid "_Expand All"
-#~ msgstr "_Fäll ut alla"
-#~ msgid "Expand all listings"
-#~ msgstr "Fäll ut alla listningar"
-#~ msgid "_Collapse All"
-#~ msgstr "_Fäll ihop alla"
-#~ msgid "Collapse all listings"
-#~ msgstr "Fäll ihop alla listningar"
-#~ msgid "Import selected keys to local key ring"
-#~ msgstr "Importera markerade nycklar till lokal nyckelring"
-#~ msgid "Remote Keys"
-#~ msgstr "Fjärrnycklar"
-#~ msgid "Remote Keys Containing '%s'"
-#~ msgstr "Fjärrnycklar innehållande \"%s\""
-#~ msgid "Importing keys from key servers"
-#~ msgstr "Importerar nycklar från nyckelservrar"
 #~ msgid "_Key"
 #~ msgstr "_Nyckel"
 #~ msgid "_Delete Key"
@@ -3275,8 +3376,6 @@ msgstr "_Konfigurera"
 #~ msgstr "Konfigurera nyckelservrar och andra krypteringsinställningar"
 #~ msgid "Encryption and Keyrings"
 #~ msgstr "Kryptering och nyckelringar"
-#~ msgid "Import keys from the file"
-#~ msgstr "Importera nycklar från filen"
 #~ msgid "Encrypt file"
 #~ msgstr "Kryptera fil"
 #~ msgid "Sign file with default key"
