@@ -1,15 +1,15 @@
 # Bulgarian translation of seahorse po-file.
-# Copyright (C) 2005, 2007, 2008 Free Software Foundation, Inc.
+# Copyright (C) 2005, 2007, 2008, 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the seahorse package.
 # Iassen Pramatarov <turin@fsa-bg.org>, 2005.
-# Alexander Shopov <ash@contact.bg>, 2005, 2007, 2008.
+# Alexander Shopov <ash@contact.bg>, 2005, 2007, 2008, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-05 08:29+0300\n"
-"PO-Revision-Date: 2008-09-05 08:29+0300\n"
+"POT-Creation-Date: 2009-02-23 07:55+0200\n"
+"PO-Revision-Date: 2009-02-23 07:55+0200\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,134 +17,138 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ../daemon/seahorse-daemon.c:66
+#: ../daemon/seahorse-daemon.c:69
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "seahorse-agent да не работи като демон"
 
-#: ../daemon/seahorse-daemon.c:84
+#: ../daemon/seahorse-daemon.c:87
 msgid "couldn't fork process"
 msgstr "неуспех при създаването на нов процес"
 
-#: ../daemon/seahorse-daemon.c:90
+#: ../daemon/seahorse-daemon.c:93
 msgid "couldn't create new process group"
 msgstr "неуспех при създаването на нова група процеси"
 
-#: ../daemon/seahorse-daemon.c:191
+#: ../daemon/seahorse-daemon.c:207
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Демон за шифриране (Seahorse)"
+
+#: ../daemon/seahorse-daemon.desktop.in.in.h:1
+msgid "Seahorse Daemon"
+msgstr "Демон на Seahorse"
 
 #: ../daemon/seahorse-service.c:110 ../daemon/seahorse-service.c:134
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Грешен или неразпознат вид ключ: %s"
 
-#: ../daemon/seahorse-service.c:183 ../daemon/seahorse-service-keyset.c:130
-#: ../daemon/seahorse-service-keyset.c:160
+#: ../daemon/seahorse-service.c:183 ../daemon/seahorse-service-keyset.c:135
+#: ../daemon/seahorse-service-keyset.c:164
 #, c-format
 msgid "Invalid or unrecognized key: %s"
 msgstr "Грешен или неразпознат ключ: %s"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:142
+#: ../daemon/seahorse-service-crypto.c:160
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
 msgstr "Подписан с <i><key id='%s'/>, <b>ключът е изтекъл</b></i> на %s."
 
-#: ../daemon/seahorse-service-crypto.c:143
+#: ../daemon/seahorse-service-crypto.c:161
 msgid "Invalid Signature"
 msgstr "Грешен подпис"
 
-#: ../daemon/seahorse-service-crypto.c:149
+#: ../daemon/seahorse-service-crypto.c:167
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
 msgstr "Подписан с <i><key id='%s'/>, <b>подписът е изтекъл</b></i> на %s."
 
-#: ../daemon/seahorse-service-crypto.c:150
+#: ../daemon/seahorse-service-crypto.c:168
 msgid "Expired Signature"
 msgstr "Изтекъл подпис"
 
-#: ../daemon/seahorse-service-crypto.c:156
+#: ../daemon/seahorse-service-crypto.c:174
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
 msgstr "Подписан с <i><key id='%s'/> <b>анулиран</b></i> на %s."
 
-#: ../daemon/seahorse-service-crypto.c:157
+#: ../daemon/seahorse-service-crypto.c:175
 msgid "Revoked Signature"
 msgstr "Анулиран подпис"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:163
+#: ../daemon/seahorse-service-crypto.c:181
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s."
 msgstr "Подписан с <i><key id='%s'/> на %s."
 
-#: ../daemon/seahorse-service-crypto.c:164
+#: ../daemon/seahorse-service-crypto.c:182
 msgid "Good Signature"
 msgstr "Добър подпис"
 
-#: ../daemon/seahorse-service-crypto.c:169
+#: ../daemon/seahorse-service-crypto.c:187
 msgid "Signing key not in keyring."
 msgstr "Ключът за подпис не е в ключодържателя"
 
-#: ../daemon/seahorse-service-crypto.c:170
+#: ../daemon/seahorse-service-crypto.c:188
 msgid "Unknown Signature"
 msgstr "Непознат подпис"
 
-#: ../daemon/seahorse-service-crypto.c:174
+#: ../daemon/seahorse-service-crypto.c:192
 msgid "Bad or forged signature. The signed data was modified."
 msgstr "Неправилен или подправен подпис. Подписаните данни са били променени."
 
-#: ../daemon/seahorse-service-crypto.c:175
+#: ../daemon/seahorse-service-crypto.c:193
 msgid "Bad Signature"
 msgstr "Неправилен подпис"
 
-#: ../daemon/seahorse-service-crypto.c:183
+#: ../daemon/seahorse-service-crypto.c:201
 msgid "Couldn't verify signature."
 msgstr "Подписът не може да бъде проверен."
 
-#: ../daemon/seahorse-service-crypto.c:239
-#: ../daemon/seahorse-service-crypto.c:346
+#: ../daemon/seahorse-service-crypto.c:257
+#: ../daemon/seahorse-service-crypto.c:364
 #, c-format
 msgid "Invalid or unrecognized signer: %s"
 msgstr "Грешен или неразпознат подписал: %s"
 
-#: ../daemon/seahorse-service-crypto.c:246
-#: ../daemon/seahorse-service-crypto.c:353
+#: ../daemon/seahorse-service-crypto.c:264
+#: ../daemon/seahorse-service-crypto.c:371
 #, c-format
 msgid "Key is not valid for signing: %s"
 msgstr "Грешен ключ за подписване: %s"
 
-#: ../daemon/seahorse-service-crypto.c:258
+#: ../daemon/seahorse-service-crypto.c:276
 #, c-format
 msgid "Invalid or unrecognized recipient: %s"
 msgstr "Грешен или неразпознат получател: %s"
 
-#: ../daemon/seahorse-service-crypto.c:266
+#: ../daemon/seahorse-service-crypto.c:284
 #, c-format
 msgid "Key is not a valid recipient for encryption: %s"
 msgstr "Ключът не може да шифрира: %s"
 
-#: ../daemon/seahorse-service-crypto.c:275
+#: ../daemon/seahorse-service-crypto.c:293
 #, c-format
 msgid "No recipients specified"
 msgstr "Не са указани получатели"
 
-#: ../daemon/seahorse-service-crypto.c:341
+#: ../daemon/seahorse-service-crypto.c:359
 #, c-format
 msgid "No signer specified"
 msgstr "Не е указан подписал"
 
-#: ../daemon/seahorse-service-crypto.c:396
+#: ../daemon/seahorse-service-crypto.c:414
 #, c-format
 msgid "Invalid key type for decryption: %s"
 msgstr "Грешен вид на ключ за дешифриране: %s"
 
-#: ../daemon/seahorse-service-crypto.c:459
+#: ../daemon/seahorse-service-crypto.c:477
 #, c-format
 msgid "Invalid key type for verifying: %s"
 msgstr "Грешен вид на ключ за проверка: %s"
 
-#: ../daemon/seahorse-service-keyset.c:196
+#: ../daemon/seahorse-service-keyset.c:200
 #, c-format
 msgid "Invalid key id: %s"
 msgstr "Неправилен идентификатор на ключ: %s"
@@ -351,201 +355,336 @@ msgstr "Дали винаги да се шифрира със стандартн
 msgid "Whether to use ASCII Armor"
 msgstr "Дали да се ползва само ASCII"
 
-#: ../gkr/seahorse-gkeyring-item.c:243 ../pgp/seahorse-pgp-key.c:209
-#: ../ssh/seahorse-ssh-key.c:115
-msgid "Invalid"
-msgstr "Грешен"
+#: ../gkr/seahorse-add-keyring.glade.h:1
+msgid "Add Password Keyring"
+msgstr "Добавяне на ключодържател"
 
-#: ../gkr/seahorse-gkeyring-item.c:260
+#: ../gkr/seahorse-add-keyring.glade.h:2
+msgid "New Keyring Name:"
+msgstr "Име на нов ключодържател:"
+
+#: ../gkr/seahorse-add-keyring.glade.h:3
+msgid ""
+"Please choose a name for the new keyring. You will be prompted for an unlock "
+"password."
+msgstr ""
+"Изберете име на новия ключодържател. Ще бъдете запитани за парола за "
+"отключването му."
+
+#: ../gkr/seahorse-add-keyring.glade.h:4
+#: ../libseahorse/seahorse-add-keyserver.glade.h:5
+#: ../ssh/seahorse-ssh-upload.glade.h:3
+msgid "The host name or address of the server."
+msgstr "Името на хоста или адреса на сървъра с ключове."
+
+#: ../gkr/seahorse-gkr-add-keyring.c:133
+msgid "Couldn't add keyring"
+msgstr "Неуспех при добавянето на ключодържател"
+
+#: ../gkr/seahorse-gkr-item.c:470
 msgid "Web Password"
 msgstr "Парола за уеб"
 
-#: ../gkr/seahorse-gkeyring-item.c:262
+#: ../gkr/seahorse-gkr-item.c:472
 msgid "Network Password"
 msgstr "Парола за мрежата"
 
-#: ../gkr/seahorse-gkeyring-item.c:264
-#: ../gkr/seahorse-gkeyring-item-properties.c:126
-#: ../gkr/seahorse-gkeyring-source.c:676
+#: ../gkr/seahorse-gkr-item.c:474 ../gkr/seahorse-gkr-item-properties.c:106
 msgid "Password"
 msgstr "Парола"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:98
+#: ../gkr/seahorse-gkr-item-commands.c:78
+#, c-format
+msgid "Are you sure you want to delete the password '%s'?"
+msgstr "Сигурни ли сте, че искате да изтриете паролата — „%s“?"
+
+#: ../gkr/seahorse-gkr-item-commands.c:81
+#, c-format
+msgid "Are you sure you want to delete %d password?"
+msgid_plural "Are you sure you want to delete %d passwords?"
+msgstr[0] "Сигурни ли сте, че искате окончателно да изтриете %d парола?"
+msgstr[1] "Сигурни ли сте, че искате окончателно да изтриете %d пароли?"
+
+#: ../gkr/seahorse-gkr-item-properties.c:65
 msgid "Access a network share or resource"
 msgstr "Достъп до ресурс споделен по мрежата"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:102
+#: ../gkr/seahorse-gkr-item-properties.c:68
 msgid "Access a website"
 msgstr "Достъп до уеб сайт"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:106
+#: ../gkr/seahorse-gkr-item-properties.c:71
 msgid "Unlocks a PGP key"
 msgstr "Отключване на ключ за PGP"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:109
+#: ../gkr/seahorse-gkr-item-properties.c:74
 msgid "Unlocks a Secure Shell key"
 msgstr "Отключване на ключ за SSH"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:112
+#: ../gkr/seahorse-gkr-item-properties.c:77
 msgid "Saved password or login"
 msgstr "Запазени пароли и имена"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:126
+#: ../gkr/seahorse-gkr-item-properties.c:101
 msgid "Network Credentials"
 msgstr "Мрежово удостоверяване на самоличност"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:187
+#: ../gkr/seahorse-gkr-item-properties.c:244
 msgid "Couldn't change password."
 msgstr "Неуспех при промяна на паролата."
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:295
+#: ../gkr/seahorse-gkr-item-properties.c:346
 msgid "Couldn't set description."
 msgstr "Неуспех при задаване на описание."
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:505
+#: ../gkr/seahorse-gkr-item-properties.c:652
 msgid "Couldn't set application access."
 msgstr "Неуспех при задаване на достъпа на програма."
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:1
+#: ../gkr/seahorse-gkr-item-properties.glade.h:1
 msgid "<b>Password:</b>"
 msgstr "<b>Парола:</b>"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:2
+#: ../gkr/seahorse-gkr-item-properties.glade.h:2
 msgid "<b>Path:</b>"
 msgstr "<b>Път:</b>"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:3
+#: ../gkr/seahorse-gkr-item-properties.glade.h:3
 msgid "<b>Permissions:</b>"
 msgstr "<b>Права:</b>"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:4
+#: ../gkr/seahorse-gkr-item-properties.glade.h:4
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:9
 #: ../ssh/seahorse-ssh-key-properties.glade.h:9
 msgid "<b>Technical Details:</b>"
 msgstr "<b>Технически детайли:</b>"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:5
+#: ../gkr/seahorse-gkr-item-properties.glade.h:5
 msgid "Applications"
 msgstr "Програми"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:6
+#: ../gkr/seahorse-gkr-item-properties.glade.h:6
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
 msgid "Details"
 msgstr "Подробности"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:7
+#: ../gkr/seahorse-gkr-item-properties.glade.h:7
+#: ../pgp/seahorse-pgp-subkey.c:366
 #: ../ssh/seahorse-ssh-key-properties.glade.h:19
 msgid "Key"
 msgstr "Ключ"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:8
+#: ../gkr/seahorse-gkr-item-properties.glade.h:8
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:30
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:30
 #: ../ssh/seahorse-ssh-key-properties.glade.h:20
 msgid "Key Properties"
 msgstr "Настройки на ключа"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:9
+#: ../gkr/seahorse-gkr-item-properties.glade.h:9
 msgid "Login:"
 msgstr "Потребителско име:"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:10
+#: ../gkr/seahorse-gkr-item-properties.glade.h:10
 msgid "Server:"
 msgstr "Сървър:"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:11
+#: ../gkr/seahorse-gkr-item-properties.glade.h:11
 msgid "Show pass_word"
 msgstr "_Показване на пароли"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:12
+#: ../gkr/seahorse-gkr-item-properties.glade.h:12
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:42
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:36
 msgid "Type:"
 msgstr "Вид:"
 
 #. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:14
+#: ../gkr/seahorse-gkr-item-properties.glade.h:14
 msgid "Use:"
 msgstr "Употреба:"
 
-#. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:16
+#. To translators: This is the infinitive not the imperative.  This string refers to the ability of an application to delete this secret from its key ring.
+#: ../gkr/seahorse-gkr-item-properties.glade.h:16
 msgid "_Delete"
 msgstr "_Изтриване"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:17
+#: ../gkr/seahorse-gkr-item-properties.glade.h:17
 #: ../pgp/seahorse-revoke.glade.h:5
 msgid "_Description:"
 msgstr "_Описание:"
 
 #. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:19
+#: ../gkr/seahorse-gkr-item-properties.glade.h:19
 msgid "_Read"
 msgstr "Про_читане"
 
 #. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:21
+#: ../gkr/seahorse-gkr-item-properties.glade.h:21
 msgid "_Write"
 msgstr "_Запазване"
 
-#: ../gkr/seahorse-gkeyring-operation.c:205
-msgid "Access to the key ring was denied"
-msgstr "Достъпът до ключодържателя бе отказан"
-
-#: ../gkr/seahorse-gkeyring-operation.c:208
-msgid "The gnome-keyring daemon is not running"
-msgstr "Програмата-демон gnome-keyring не е стартирана"
-
-#: ../gkr/seahorse-gkeyring-operation.c:211
-msgid "The key ring has already been unlocked"
-msgstr "Ключодържателят вече е отключен"
-
-#: ../gkr/seahorse-gkeyring-operation.c:214
-msgid "No such key ring exists"
-msgstr "Не съществува такъв ключодържател"
-
-#: ../gkr/seahorse-gkeyring-operation.c:217
-msgid "Couldn't communicate with key ring daemon"
-msgstr "Неуспех при връзка към програмата за ключодържатели"
-
-#: ../gkr/seahorse-gkeyring-operation.c:220
-msgid "The item already exists"
-msgstr "Елементът вече съществува"
-
-#: ../gkr/seahorse-gkeyring-operation.c:226
-msgid "Internal error accessing gnome-keyring"
-msgstr "Вътрешна грешка при достъпа до gnome-keyring"
-
-#: ../gkr/seahorse-gkeyring-operation.c:283
-#: ../gkr/seahorse-gkeyring-operation.c:315
-msgid "Saving item..."
-msgstr "Запазване на елемента…"
-
-#: ../gkr/seahorse-gkeyring-source.c:408
-msgid "Retrieving key"
-msgstr "Получаване на ключ"
-
-#. Start listing of ids
-#: ../gkr/seahorse-gkeyring-source.c:422
+#: ../gkr/seahorse-gkr-keyring.c:193
 msgid "Listing passwords"
 msgstr "Списък с пароли"
 
-#. Start listing of ids
-#: ../gkr/seahorse-gkeyring-source.c:554
-msgid "Removing item"
-msgstr "Изтриване на елемент"
-
-#: ../gkr/seahorse-gkr-commands.vala:63
+#: ../gkr/seahorse-gkr-keyring.c:354
 #, c-format
-msgid "Are you sure you want to delete the password '%s'?"
-msgstr "Сигурни ли сте, че искате да изтриете паролата — „%s“?"
+msgid "Passwords: %s"
+msgstr "Пароли: %s"
 
-#: ../gkr/seahorse-gkr-commands.vala:65
+#: ../gkr/seahorse-gkr-keyring.c:355
 #, c-format
-msgid "Are you sure you want to delete %d passwords?"
-msgstr "Сигурни ли сте, че искате окончателно да изтриете %d пароли?"
+msgid "<b>Passwords:</b> %s"
+msgstr "<b>Пароли:</b> %s"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:87
+msgid "Password Keyring"
+msgstr "Парола за ключодържателя"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:88
+msgid "Used to store application and network passwords"
+msgstr "Ползва се за паролите за програмите и мрежата:"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:101
+msgid "Couldn't unlock keyring"
+msgstr "Неуспех при отключването на ключодържател"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:141
+msgid "Couldn't lock keyring"
+msgstr "Неуспех при заключването на ключодържател"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:181
+msgid "Couldn't set default keyring"
+msgstr "Неуспех при задаване на стандартния ключодържател"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:219
+msgid "Couldn't change keyring password"
+msgstr "Неуспех при промяна на паролата на ключодържателя"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:250
+msgid "_Lock"
+msgstr "_Заключване"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:251
+msgid ""
+"Lock the password storage keyring so a master password is required to unlock "
+"it."
+msgstr ""
+"Заключване на ключодържателя с паролите. За да го отключите, ще ви трябва "
+"главната парола."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:252
+msgid "_Unlock"
+msgstr "_Отключване"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:253
+msgid ""
+"Unlock the password storage keyring with a master password so it is "
+"available for use."
+msgstr ""
+"Отключване на ключодържателя с паролите чрез главната парола. Той ще е готов "
+"да се ползва след това."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:254
+msgid "_Set as default"
+msgstr "_Задаване да е стандартния"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:255
+msgid "Applications usually store new passwords in the default keyring."
+msgstr "Обикновено приложенията запазват паролите в този ключодържател."
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:256
+msgid "Change _Password"
+msgstr "_Смяна на паролата"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:257
+msgid "Change the unlock password of the password storage keyring"
+msgstr "Смяна на паролата за отключване на ключодържателя"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:321
+#, c-format
+msgid "Are you sure you want to delete the password keyring '%s'?"
+msgstr "Сигурни ли сте, че искате да изтриете ключодържателя „%s“?"
+
+#. -----------------------------------------------------------------------------
+#. * PUBLIC
+#.
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-keyring.glade.h:2
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:19
+msgid "Created:"
+msgstr "Създаден:"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:3
+msgid "Keyring"
+msgstr "Ключодържател"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:4
+msgid "Keyring Properties"
+msgstr "Настройки на ключодържателя"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:5
+msgid "_Name:"
+msgstr "_Име:"
+
+#: ../gkr/seahorse-gkr-operation.c:168
+msgid "Access to the key ring was denied"
+msgstr "Достъпът до ключодържателя бе отказан"
+
+#: ../gkr/seahorse-gkr-operation.c:171
+msgid "The gnome-keyring daemon is not running"
+msgstr "Програмата-демон gnome-keyring не е стартирана"
+
+#: ../gkr/seahorse-gkr-operation.c:174
+msgid "The key ring has already been unlocked"
+msgstr "Ключодържателят вече е отключен"
+
+#: ../gkr/seahorse-gkr-operation.c:177
+msgid "No such key ring exists"
+msgstr "Не съществува такъв ключодържател"
+
+#: ../gkr/seahorse-gkr-operation.c:180
+msgid "Couldn't communicate with key ring daemon"
+msgstr "Неуспех при връзка към програмата за ключодържатели"
+
+#: ../gkr/seahorse-gkr-operation.c:183
+msgid "The item already exists"
+msgstr "Обектът вече съществува"
+
+#: ../gkr/seahorse-gkr-operation.c:189
+msgid "Internal error accessing gnome-keyring"
+msgstr "Вътрешна грешка при достъпа до gnome-keyring"
+
+#: ../gkr/seahorse-gkr-operation.c:238 ../gkr/seahorse-gkr-operation.c:264
+msgid "Saving item..."
+msgstr "Запазване на обекта…"
+
+#: ../gkr/seahorse-gkr-operation.c:300
+msgid "Deleting item..."
+msgstr "Изтриване на обекта…"
+
+#: ../gkr/seahorse-gkr-operation.c:325
+msgid "Deleting keyring..."
+msgstr "Изтриване на ключодържател…"
+
+#: ../gkr/seahorse-gkr-source.c:234
+msgid "Listing password keyrings"
+msgstr "Списък с ключодържателите"
+
+#: ../libcryptui/cryptui.c:222
+msgid ""
+"No encryption keys were found with which to perform the operation you "
+"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
+"started so that you may either create a key or import one."
+msgstr ""
+"Ключове за шифриране необходими за поисканото действие липсват. Програмата "
+"<b>Пароли и ключове за шифриране</b> ще бъде стартирана, за да можете да "
+"създадете или внесете такъв ключ."
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -579,15 +718,17 @@ msgid "_Sign message as:"
 msgstr "Подписване на пощата _като:"
 
 #. TODO: Icons
-#: ../libcryptui/cryptui-key-list.c:117
-#: ../pgp/seahorse-pgp-key-properties.c:905
-#: ../src/seahorse-key-manager-store.c:817
+#. The name column
+#: ../libcryptui/cryptui-key-list.c:121
+#: ../pgp/seahorse-pgp-key-properties.c:890
+#: ../src/seahorse-key-manager-store.c:828
 msgid "Name"
 msgstr "Име"
 
-#: ../libcryptui/cryptui-key-list.c:120
-#: ../pgp/seahorse-pgp-key-properties.c:1773
-#: ../src/seahorse-key-manager-store.c:829
+#. The keyid column
+#: ../libcryptui/cryptui-key-list.c:126
+#: ../pgp/seahorse-pgp-key-properties.c:1823
+#: ../src/seahorse-key-manager-store.c:840
 msgid "Key ID"
 msgstr "Идентификатор"
 
@@ -846,27 +987,68 @@ msgstr "%04d-%02d-%02d"
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
-#: ../libseahorse/seahorse-add-keyring.glade.h:1
-msgid "Add Password Keyring"
-msgstr "Добавяне на ключодържател"
+#: ../libegg/eggdesktopfile.c:165
+#, c-format
+msgid "File is not a valid .desktop file"
+msgstr "Файлът не е във формат .desktop"
 
-#: ../libseahorse/seahorse-add-keyring.glade.h:2
-msgid "New Keyring Name:"
-msgstr "Име на нов ключодържател:"
+#: ../libegg/eggdesktopfile.c:188
+#, c-format
+msgid "Unrecognized desktop file Version '%s'"
+msgstr "Непозната версия на файла: %s"
 
-#: ../libseahorse/seahorse-add-keyring.glade.h:3
-msgid ""
-"Please choose a name for the new keyring. You will be prompted for an unlock "
-"password."
-msgstr ""
-"Изберете име на новия ключодържател. Ще бъдете запитани за парола за "
-"отключването му."
+#: ../libegg/eggdesktopfile.c:958
+#, c-format
+msgid "Starting %s"
+msgstr "Стартиране на %s"
 
-#: ../libseahorse/seahorse-add-keyring.glade.h:4
-#: ../libseahorse/seahorse-add-keyserver.glade.h:5
-#: ../ssh/seahorse-ssh-upload.glade.h:3
-msgid "The host name or address of the server."
-msgstr "Името на хоста или адреса на сървъра с ключове."
+#: ../libegg/eggdesktopfile.c:1100
+#, c-format
+msgid "Application does not accept documents on command line"
+msgstr "Програмата не приема документи през командния ред"
+
+#: ../libegg/eggdesktopfile.c:1168
+#, c-format
+msgid "Unrecognized launch option: %d"
+msgstr "Непозната опция при стартиране „%d“"
+
+#: ../libegg/eggdesktopfile.c:1373
+#, c-format
+msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+msgstr "В обекти от вида „Type=Link“ не може да се подават адреси на документи"
+
+#: ../libegg/eggdesktopfile.c:1392
+#, c-format
+msgid "Not a launchable item"
+msgstr "Не е обект за стартиране"
+
+#: ../libegg/eggsmclient.c:224
+msgid "Disable connection to session manager"
+msgstr "Изключване на връзката с управлението на сесиите"
+
+#: ../libegg/eggsmclient.c:227
+msgid "Specify file containing saved configuration"
+msgstr "Указване на файла със запазените настройки"
+
+#: ../libegg/eggsmclient.c:227
+msgid "FILE"
+msgstr "ФАЙЛ"
+
+#: ../libegg/eggsmclient.c:230
+msgid "Specify session management ID"
+msgstr "Указване на идентификатор за управлението на сесиите"
+
+#: ../libegg/eggsmclient.c:230 ../pgp/seahorse-pgp-key-properties.c:1378
+msgid "ID"
+msgstr "ИДЕНТИФИКАТОР"
+
+#: ../libegg/eggsmclient.c:244
+msgid "Session management options:"
+msgstr "Настройки на управлението на сесии:"
+
+#: ../libegg/eggsmclient.c:245
+msgid "Show session management options"
+msgstr "Показване на настройките за управлението на сесиите"
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
@@ -914,23 +1096,48 @@ msgstr[1] "Внесени са ключове за"
 msgid "Notification Messages"
 msgstr "Съобщения за уведомяване"
 
-#: ../libseahorse/seahorse-passphrase.c:174
+#: ../libseahorse/seahorse-object.c:216
+msgid "Symmetric Key"
+msgstr "Симетричен ключ"
+
+#: ../libseahorse/seahorse-object.c:219
+msgid "Public Key"
+msgstr "Публичен ключ"
+
+#: ../libseahorse/seahorse-object.c:222
+msgid "Private Key"
+msgstr "Частен ключ"
+
+#: ../libseahorse/seahorse-object.c:225
+msgid "Credentials"
+msgstr "Удостоверяване на самоличност"
+
+#.
+#. * Translators: "This object is a means of storing items such as
+#. * name, email address, etc. that make up one's digital identity.
+#.
+#: ../libseahorse/seahorse-object.c:232
+msgid "Identity"
+msgstr "Самоличност"
+
+#: ../libseahorse/seahorse-passphrase.c:196
 msgid "Passphrase"
 msgstr "Парола"
 
-#: ../libseahorse/seahorse-passphrase.c:177
+#: ../libseahorse/seahorse-passphrase.c:199
+#: ../ssh/seahorse-ssh-operation.c:480
 msgid "Password:"
 msgstr "Парола:"
 
-#: ../libseahorse/seahorse-passphrase.c:241
+#: ../libseahorse/seahorse-passphrase.c:262
 msgid "Confirm:"
 msgstr "Потвърждаване:"
 
-#: ../libseahorse/seahorse-prefs.c:65
+#: ../libseahorse/seahorse-prefs.c:62
 msgid "Not a valid Key Server address."
 msgstr "Неправилен адрес на сървър с ключове."
 
-#: ../libseahorse/seahorse-prefs.c:66
+#: ../libseahorse/seahorse-prefs.c:63
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
@@ -938,88 +1145,39 @@ msgstr ""
 "За помощ се обърнете към вашия системен администратор или администратора на "
 "сървъра с ключове."
 
-#: ../libseahorse/seahorse-prefs.c:177
+#: ../libseahorse/seahorse-prefs.c:174
 msgid "URL"
 msgstr "Адрес"
 
-#: ../libseahorse/seahorse-prefs.c:359
+#: ../libseahorse/seahorse-prefs.c:356
 msgid "Custom"
 msgstr "Потребителски"
 
-#: ../libseahorse/seahorse-prefs.c:433
+#: ../libseahorse/seahorse-prefs.c:430
 msgid "None: Don't publish keys"
 msgstr "няма — ключовете няма да се публикуват"
 
-#: ../libseahorse/seahorse-prefs-keyrings.c:207
-msgid "<i>Automatically unlocked when user logs in.</i>"
-msgstr "<i>Автоматично отключван при влизането на потребител.</i>"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:244
-msgid "Couldn't get default password keyring"
-msgstr "Неуспех при зареждането на стандартния ключодържател"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:267
-msgid "Couldn't get list of password keyrings"
-msgstr "Неуспех при зареждането на списъка с ключодържатели"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:322
-msgid "Couldn't set default password keyring"
-msgstr "Неуспех при задаване на стандартния ключодържател"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:404
-msgid "Couldn't remove keyring"
-msgstr "Неуспех при изтриването на ключодържател"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:422
-#, c-format
-msgid "Are you sure you want to permanently delete the '%s' keyring?"
-msgstr "Сигурни ли сте, че искате окончателно да изтриете ключодържателя „%s“?"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:470
-msgid "Couldn't add keyring"
-msgstr "Неуспех при добавянето на ключодържател"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:527
-msgid "Couldn't change keyring password"
-msgstr "Неуспех при промяна на паролата на ключодържателя"
-
 #: ../libseahorse/seahorse-prefs.glade.h:1
-msgid "<b>Default Keyring</b>"
-msgstr "<b>Стандартен ключодържател</b>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:2
-msgid "<b>Password Keyrings</b>"
-msgstr "<b>Ключодържатели</b>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:3
 msgid "Automatically retrieve keys from _key servers"
 msgstr "_Автоматично получаване на ключовете от сървърите за ключове"
 
-#: ../libseahorse/seahorse-prefs.glade.h:4
+#: ../libseahorse/seahorse-prefs.glade.h:2
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "Автоматично _сверяване на променените ключове със сървърите за ключове"
 
-#: ../libseahorse/seahorse-prefs.glade.h:5
-msgid "Change Unlock _Password"
-msgstr "_Смяна на паролата за отключване"
-
-#: ../libseahorse/seahorse-prefs.glade.h:6
+#: ../libseahorse/seahorse-prefs.glade.h:3
 msgid "Key Servers"
 msgstr "Сървъри с ключове"
 
-#: ../libseahorse/seahorse-prefs.glade.h:7
+#: ../libseahorse/seahorse-prefs.glade.h:4
 msgid "Key Sharing"
 msgstr "Споделяне на ключове"
 
-#: ../libseahorse/seahorse-prefs.glade.h:8
-msgid "Password Keyrings"
-msgstr "Ключодържатели"
+#: ../libseahorse/seahorse-prefs.glade.h:5
+msgid "Preferences"
+msgstr "Настройки"
 
-#: ../libseahorse/seahorse-prefs.glade.h:9
-msgid "Password and Encryption Settings"
-msgstr "Настройки на паролите и шифрирането"
-
-#: ../libseahorse/seahorse-prefs.glade.h:10
+#: ../libseahorse/seahorse-prefs.glade.h:6
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've "
 "collected. This means they can automatically encrypt things for you or those "
@@ -1034,27 +1192,15 @@ msgstr ""
 "\n"
 "<b>Бележка:</b> Личните ви ключове няма да бъдат компрометирани."
 
-#: ../libseahorse/seahorse-prefs.glade.h:13
-msgid "_Add Keyring"
-msgstr "_Добавяне на ключодържател"
-
-#: ../libseahorse/seahorse-prefs.glade.h:14
+#: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "_Find keys via:"
 msgstr "_Търсене на ключове чрез:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:15
-msgid "_Location for application passwords:"
-msgstr "_Местоположение на паролите за програмите:"
-
-#: ../libseahorse/seahorse-prefs.glade.h:16
+#: ../libseahorse/seahorse-prefs.glade.h:10
 msgid "_Publish keys to:"
 msgstr "П_убликуване на ключове към:"
 
-#: ../libseahorse/seahorse-prefs.glade.h:17
-msgid "_Remove Keyring"
-msgstr "_Изтриване на ключодържател"
-
-#: ../libseahorse/seahorse-prefs.glade.h:18
+#: ../libseahorse/seahorse-prefs.glade.h:11
 msgid "_Share my keys with others on my network"
 msgstr "_Споделяне на ключовете ми с други по мрежата"
 
@@ -1062,63 +1208,50 @@ msgstr "_Споделяне на ключовете ми с други по мр
 msgid "Progress Title"
 msgstr "Заглавие на напредъка"
 
-#: ../libseahorse/seahorse-unknown-key.c:70
+#: ../libseahorse/seahorse-unknown.c:67
 msgid "Unavailable"
 msgstr "Недостъпен"
 
-#: ../libseahorse/seahorse-unknown-key.c:90
-#, c-format
-msgid "Unknown Key: %s"
-msgstr "Неизвестен ключ: %s"
-
-#: ../libseahorse/seahorse-unknown-key.c:122
-msgid "Unknown Key"
-msgstr "Неизвестен ключ"
-
-#: ../libseahorse/seahorse-unknown-source.c:118
-msgid "Unavailable Key"
-msgstr "Недостъпен ключ"
-
-#: ../libseahorse/seahorse-util.c:203
+#: ../libseahorse/seahorse-util.c:206
 msgid "%Y-%m-%d"
 msgstr "%d.%m.%Y г."
 
-#: ../libseahorse/seahorse-util.c:436
+#: ../libseahorse/seahorse-util.c:440
 msgid "Key Data"
 msgstr "Данни за ключ"
 
-#: ../libseahorse/seahorse-util.c:438
+#: ../libseahorse/seahorse-util.c:442
 msgid "Multiple Keys"
 msgstr "Множество ключове"
 
-#: ../libseahorse/seahorse-util.c:694
+#: ../libseahorse/seahorse-util.c:697
 msgid "Couldn't run file-roller"
 msgstr "Неуспех при изпълнението на file-roller"
 
-#: ../libseahorse/seahorse-util.c:700
+#: ../libseahorse/seahorse-util.c:703
 msgid "Couldn't package files"
 msgstr "Файловете не могат да бъдат пакетирани"
 
-#: ../libseahorse/seahorse-util.c:701
+#: ../libseahorse/seahorse-util.c:704
 msgid "The file-roller process did not complete successfully"
 msgstr "Процесът на file-roller завърши неуспешно"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:810
+#: ../libseahorse/seahorse-util.c:813
 msgid "All key files"
 msgstr "Всички файлове с ключове"
 
-#: ../libseahorse/seahorse-util.c:821 ../libseahorse/seahorse-util.c:861
-#: ../pgp/seahorse-pgp-photos.c:242
+#: ../libseahorse/seahorse-util.c:824 ../libseahorse/seahorse-util.c:864
+#: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "Всички файлове"
 
-#: ../libseahorse/seahorse-util.c:854
+#: ../libseahorse/seahorse-util.c:857
 msgid "Archive files"
 msgstr "Всички архиви"
 
-#: ../libseahorse/seahorse-util.c:903
+#: ../libseahorse/seahorse-util.c:906
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1128,80 +1261,50 @@ msgstr ""
 "\n"
 "Искате ли да го замените?"
 
-#: ../libseahorse/seahorse-util.c:906
+#: ../libseahorse/seahorse-util.c:909
 msgid "_Replace"
 msgstr "_Замяна"
 
-#: ../libseahorse/seahorse-validity.c:32 ../pgp/seahorse-pgp-key.c:665
-#: ../pgp/seahorse-pgp-key-properties.c:1171
+#: ../libseahorse/seahorse-validity.c:34 ../pgp/seahorse-gpgme-subkey.c:197
+#: ../pgp/seahorse-pgp-key-properties.c:1182
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: ../libseahorse/seahorse-validity.c:34
-#: ../pgp/seahorse-pgp-key-properties.c:1177
+#: ../libseahorse/seahorse-validity.c:36
+#: ../pgp/seahorse-pgp-key-properties.c:1188
 msgctxt "Validity"
 msgid "Never"
 msgstr "Никога"
 
-#: ../libseahorse/seahorse-validity.c:36
-#: ../pgp/seahorse-pgp-key-properties.c:1184
+#: ../libseahorse/seahorse-validity.c:38
+#: ../pgp/seahorse-pgp-key-properties.c:1195
 msgid "Marginal"
 msgstr "донякъде"
 
-#: ../libseahorse/seahorse-validity.c:38
-#: ../pgp/seahorse-pgp-key-properties.c:1190
+#: ../libseahorse/seahorse-validity.c:40
+#: ../pgp/seahorse-pgp-key-properties.c:1201
 msgid "Full"
 msgstr "пълно"
 
-#: ../libseahorse/seahorse-validity.c:40
-#: ../pgp/seahorse-pgp-key-properties.c:1196
+#: ../libseahorse/seahorse-validity.c:42
+#: ../pgp/seahorse-pgp-key-properties.c:1207
 msgid "Ultimate"
 msgstr "най-пълно"
 
-#: ../libseahorse/seahorse-validity.c:42
+#: ../libseahorse/seahorse-validity.c:44
+#: ../pgp/seahorse-pgp-key-properties.c:1415
 msgid "Disabled"
 msgstr "Изключена"
 
-#: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1377
+#: ../libseahorse/seahorse-validity.c:46
+#: ../pgp/seahorse-pgp-key-properties.c:1411
 msgid "Revoked"
 msgstr "Анулиран"
 
-#: ../libseahorse/seahorse-widget.c:363
+#: ../libseahorse/seahorse-widget.c:365
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Помощта не може да бъде показана: %s"
-
-#: ../libcryptui/cryptui.c:211
-msgid ""
-"No encryption keys were found with which to perform the operation you "
-"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
-"started so that you may either create a key or import one."
-msgstr ""
-"Ключове за шифриране необходими за поисканото действие липсват. Програмата "
-"<b>Пароли и ключове за шифриране</b> ще бъде стартирана, за да можете да "
-"създадете или внесете такъв ключ."
-
-#. TODO: Calculate something from the subject?
-#: ../pkcs11/seahorse-pkcs11-certificate.vala:28
-msgid "Certificate"
-msgstr "Сертификат"
-
-#: ../pkcs11/seahorse-pkcs11-source.vala:33
-msgid "X509 Certificate"
-msgstr "Сертификат X509"
-
-#: ../pkcs11/seahorse-pkcs11-source.vala:120
-msgid "Loading..."
-msgstr "Зареждане…"
-
-#: ../pkcs11/seahorse-pkcs11-source.vala:381
-msgid "Invalid or unrecognized object."
-msgstr "Грешен или неразпознат обект"
-
-#: ../pkcs11/seahorse-pkcs11-source.vala:398
-msgid "Exporting is not yet supported."
-msgstr "Все още не се поддържа изнасяне."
 
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
@@ -1275,193 +1378,379 @@ msgstr "Анулиране на ключ"
 msgid "_Never expires"
 msgstr "_Не изтича никога"
 
-#: ../pgp/seahorse-gpgmex-util.c:55
+#: ../pgp/seahorse-gpgme-add-subkey.c:144
+msgid "Couldn't add subkey"
+msgstr "Неуспех при добавянето на подключ"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:163
+#, c-format
+msgid "Add subkey to %s"
+msgstr "Добавяне на подключ към %s"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:179 ../pgp/seahorse-gpgme-generate.c:96
+msgid "DSA (sign only)"
+msgstr "DSA (само подписване)"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:187
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (само шифриране)"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:193 ../pgp/seahorse-gpgme-generate.c:97
+msgid "RSA (sign only)"
+msgstr "RSA (само подписване)"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:199
+msgid "RSA (encrypt only)"
+msgstr "RSA (само шифриране)"
+
+#: ../pgp/seahorse-gpgme-add-uid.c:85
+msgid "Couldn't add user id"
+msgstr "Неуспех при добавяне на идентификатор на потребител"
+
+#: ../pgp/seahorse-gpgme-add-uid.c:107
+#, c-format
+msgid "Add user ID to %s"
+msgstr "Добавяне на идентификатор на потребител към %s"
+
+#: ../pgp/seahorse-gpgme.c:51
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Неуспешно дешифриране. Вероятно не притежавате ключа за дешифриране."
 
-#: ../pgp/seahorse-hkp-source.c:331
+#: ../pgp/seahorse-gpgme-expires.c:58
+msgid "Invalid expiry date"
+msgstr "Грешна дата на изтичане"
+
+#: ../pgp/seahorse-gpgme-expires.c:59
+msgid "The expiry date must be in the future"
+msgstr "Датата на изтичане трябва да е в бъдещето"
+
+#: ../pgp/seahorse-gpgme-expires.c:72
+msgid "Couldn't change expiry date"
+msgstr "Неуспех при промяна на датата на изтичане"
+
+#: ../pgp/seahorse-gpgme-expires.c:137
+#, c-format
+msgid "Expiry: %s"
+msgstr "Изтичане: %s"
+
+#: ../pgp/seahorse-gpgme-generate.c:65
+msgid "PGP Key"
+msgstr "Ключ за PGP"
+
+#: ../pgp/seahorse-gpgme-generate.c:66
+msgid "Used to encrypt email and files"
+msgstr "Използва се за шифриране на поща и файлове"
+
+#: ../pgp/seahorse-gpgme-generate.c:95
+msgid "DSA Elgamal"
+msgstr "DSA ElGamal"
+
+#: ../pgp/seahorse-gpgme-generate.c:106
+msgid "Couldn't generate PGP key"
+msgstr "Неуспех при създаването на ключ за PGP"
+
+#: ../pgp/seahorse-gpgme-generate.c:213
+msgid "Passphrase for New PGP Key"
+msgstr "Парола за новия ключ за PGP"
+
+#: ../pgp/seahorse-gpgme-generate.c:214
+msgid "Enter the passphrase for your new key twice."
+msgstr "Въведете двукратно паролата за новия си ключ."
+
+#: ../pgp/seahorse-gpgme-generate.c:223
+msgid "Couldn't generate key"
+msgstr "Неуспех при създаването на ключ"
+
+#: ../pgp/seahorse-gpgme-generate.c:225
+msgid "Generating key"
+msgstr "Създаване на ключ"
+
+#: ../pgp/seahorse-gpgme-photos.c:73
+#, c-format
+msgid ""
+"<big><b>The photo is too large</b></big>\n"
+"The recommended size for a photo on your key is %d x %d pixels."
+msgstr ""
+"<big><b>Изображението е прекалено голямо</b></big>\n"
+"Препоръчителният размер на изображение за ключа ви е %d×%d пиксела."
+
+#: ../pgp/seahorse-gpgme-photos.c:78
+msgid "_Don't Resize"
+msgstr "_Без преоразмеряване"
+
+#: ../pgp/seahorse-gpgme-photos.c:79
+msgid "_Resize"
+msgstr "_Преоразмеряване"
+
+#: ../pgp/seahorse-gpgme-photos.c:128
+#, c-format
+msgid ""
+"This is not a image file, or an unrecognized kind of image file. Try to use "
+"a JPEG image."
+msgstr ""
+"Това не е файл с изображение или е от неразпознат вид. Пробвайте с JPEG."
+
+#: ../pgp/seahorse-gpgme-photos.c:224
+msgid "All image files"
+msgstr "Всички файлове с изображения"
+
+#: ../pgp/seahorse-gpgme-photos.c:237
+msgid "All JPEG files"
+msgstr "Всички файлове, формат JPEG"
+
+#: ../pgp/seahorse-gpgme-photos.c:261
+msgid "Choose Photo to Add to Key"
+msgstr "Изберете изображение, което да прикачите към ключа"
+
+#: ../pgp/seahorse-gpgme-photos.c:290 ../pgp/seahorse-gpgme-photos.c:294
+msgid "Couldn't add photo"
+msgstr "Неуспех при прикачането на изображение"
+
+#: ../pgp/seahorse-gpgme-photos.c:291
+msgid "The file could not be loaded. It may be in an invalid format"
+msgstr "Файлът не бе зареден. Може да е в грешен формат"
+
+#: ../pgp/seahorse-gpgme-photos.c:320
+msgid "Are you sure you want to remove the current photo from your key?"
+msgstr "Сигурни ли сте, че искате да изтриете изображението от ключа си?"
+
+#: ../pgp/seahorse-gpgme-photos.c:333
+msgid "Couldn't delete photo"
+msgstr "Неуспех при изтриването на изображение"
+
+#: ../pgp/seahorse-gpgme-revoke.c:70
+msgid "Couldn't revoke subkey"
+msgstr "Неуспех при анулирането на подключ"
+
+#: ../pgp/seahorse-gpgme-revoke.c:94
+#, c-format
+msgid "Revoke: %s"
+msgstr "Анулиране: %s"
+
+#: ../pgp/seahorse-gpgme-revoke.c:105
+msgid "No reason"
+msgstr "Липсва причина"
+
+#: ../pgp/seahorse-gpgme-revoke.c:106
+msgid "No reason for revoking key"
+msgstr "Липсва причина за анулиране на ключа"
+
+#: ../pgp/seahorse-gpgme-revoke.c:112
+msgid "Compromised"
+msgstr "Компрометиран"
+
+#: ../pgp/seahorse-gpgme-revoke.c:113
+msgid "Key has been compromised"
+msgstr "Ключът е компрометиран"
+
+#: ../pgp/seahorse-gpgme-revoke.c:119
+msgid "Superseded"
+msgstr "Заменен"
+
+#: ../pgp/seahorse-gpgme-revoke.c:120
+msgid "Key has been superseded"
+msgstr "Ключът е заменен"
+
+#: ../pgp/seahorse-gpgme-revoke.c:126
+msgid "Not Used"
+msgstr "Не се ползва"
+
+#: ../pgp/seahorse-gpgme-revoke.c:127
+msgid "Key is no longer used"
+msgstr "Ключът вече не се ползва"
+
+#: ../pgp/seahorse-gpgme-revoke.c:164
+#, c-format
+msgid ""
+"You are about to add %s as a revoker for %s. This operation cannot be "
+"undone! Are you sure you want to continue?"
+msgstr ""
+"Що добавите %s като анулиращ %s. Това действие е необратимо! Сигурни ли сте, "
+"че искате да го направите?"
+
+#: ../pgp/seahorse-gpgme-revoke.c:176
+msgid "Couldn't add revoker"
+msgstr "Неуспех при добавянето на анулиращ"
+
+#: ../pgp/seahorse-gpgme-sign.c:96
+msgid "Couldn't sign key"
+msgstr "Неуспех при подписването на ключа"
+
+#. TODO: We should be giving an error message that allows them to
+#. generate or import a key
+#: ../pgp/seahorse-gpgme-sign.c:149 ../pgp/seahorse-signer.c:61
+msgid "No keys usable for signing"
+msgstr "Няма ключове, които стават за подпис"
+
+#: ../pgp/seahorse-gpgme-sign.c:150
+msgid ""
+"You have no personal PGP keys that can be used to indicate your trust of "
+"this key."
+msgstr ""
+"Нямате лични ключове за PGP, които да могат да се използват, за да укажете "
+"доверието си към този ключ."
+
+#: ../pgp/seahorse-gpgme-source.c:99
+#, c-format
+msgid "Wrong passphrase."
+msgstr "Неправилна парола."
+
+#: ../pgp/seahorse-gpgme-source.c:103
+#, c-format
+msgid "Enter new passphrase for '%s'"
+msgstr "Въведете нова парола за „%s“"
+
+#: ../pgp/seahorse-gpgme-source.c:105
+#, c-format
+msgid "Enter passphrase for '%s'"
+msgstr "Въведете парола за „%s“"
+
+#: ../pgp/seahorse-gpgme-source.c:108
+#: ../src/seahorse-change-passphrase.glade.h:4
+msgid "Enter new passphrase"
+msgstr "Въведете нова парола"
+
+#: ../pgp/seahorse-gpgme-source.c:110
+msgid "Enter passphrase"
+msgstr "Въведете парола"
+
+#. TODO: We can use the GPGME progress to make this more accurate
+#: ../pgp/seahorse-gpgme-source.c:722
+#, c-format
+msgid "Loaded %d key"
+msgid_plural "Loaded %d keys"
+msgstr[0] "Зареден е %d ключ"
+msgstr[1] "Заредени са %d ключа"
+
+#: ../pgp/seahorse-gpgme-source.c:777
+msgid "Loading Keys..."
+msgstr "Зареждане на ключовете…"
+
+#: ../pgp/seahorse-gpgme-source.c:820
+msgid ""
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
+msgstr ""
+"Грешни данни за ключ (липсва потребителски идентификатор). Може да се дължи "
+"на компютър със системна дата в бъдещето или липсващ собствен подпис."
+
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:564
+msgid "Importing Keys"
+msgstr "Внасяне на ключове"
+
+#: ../pgp/seahorse-gpgme-source.c:946
+msgid "Exporting Keys"
+msgstr "Изнасяне на ключове"
+
+#: ../pgp/seahorse-gpgme-subkey.c:199
+msgid "ElGamal"
+msgstr "ElGamal"
+
+#: ../pgp/seahorse-hkp-source.c:330
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 "Търсеното не е било достатъчно специфично. Сървърът „%s“ съдържа прекалено "
 "много съвпадащи ключове."
 
-#: ../pgp/seahorse-hkp-source.c:333
+#: ../pgp/seahorse-hkp-source.c:332
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Неуспех при връзката към сървъра „%s“: %s"
 
-#: ../pgp/seahorse-hkp-source.c:553
+#: ../pgp/seahorse-hkp-source.c:573
 msgid "Searching for keys..."
 msgstr "Търсене на ключове…"
 
-#: ../pgp/seahorse-hkp-source.c:624
+#: ../pgp/seahorse-hkp-source.c:644
 msgid "Uploading keys..."
 msgstr "Изпращане на ключовете…"
 
-#: ../pgp/seahorse-hkp-source.c:702
+#: ../pgp/seahorse-hkp-source.c:722
 msgid "Retrieving keys..."
 msgstr "Получаване на ключове…"
 
-#: ../pgp/seahorse-hkp-source.c:735 ../pgp/seahorse-ldap-source.c:1276
-#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:443
-#: ../pgp/seahorse-server-source.c:209
-msgid "PGP Key"
-msgstr "Ключ за PGP"
-
-#: ../pgp/seahorse-hkp-source.c:769
+#: ../pgp/seahorse-hkp-source.c:828
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Търсене на ключове в „%s“"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:866 ../pgp/seahorse-hkp-source.c:939
-#: ../pgp/seahorse-ldap-source.c:665
+#: ../pgp/seahorse-hkp-source.c:905 ../pgp/seahorse-hkp-source.c:978
+#: ../pgp/seahorse-ldap-source.c:668
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Свързване с %s"
 
-#: ../pgp/seahorse-hkp-source.c:975
+#: ../pgp/seahorse-hkp-source.c:1002
 msgid "HTTP Key Server"
 msgstr "Сървър с ключове по HTTP"
 
-#: ../pgp/seahorse-ldap-source.c:456
+#: ../pgp/seahorse-ldap-source.c:459
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "Неуспех при връзка към „%s“: %s"
 
-#: ../pgp/seahorse-ldap-source.c:638
+#: ../pgp/seahorse-ldap-source.c:641
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "Неуспех при откриването на адреса: %s"
 
-#: ../pgp/seahorse-ldap-source.c:716
+#: ../pgp/seahorse-ldap-source.c:719
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Откриване на адреса на сървър: %s"
 
-#: ../pgp/seahorse-ldap-source.c:920
+#: ../pgp/seahorse-ldap-source.c:955
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "Търсене на ключове, съдържащи „%s“…"
 
-#: ../pgp/seahorse-ldap-source.c:947
+#: ../pgp/seahorse-ldap-source.c:982
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "Търсене на ключ с идентификатор „%s“…"
 
-#: ../pgp/seahorse-ldap-source.c:1052
+#: ../pgp/seahorse-ldap-source.c:1087
 msgid "Retrieving remote keys..."
 msgstr "Получаване на ключове…"
 
-#: ../pgp/seahorse-ldap-source.c:1184
+#: ../pgp/seahorse-ldap-source.c:1219
 msgid "Sending keys to key server..."
 msgstr "Изпращане на ключовете до сървър…"
 
-#: ../pgp/seahorse-ldap-source.c:1416
+#: ../pgp/seahorse-ldap-source.c:1421
 msgid "LDAP Key Server"
 msgstr "Сървър с ключове по LDAP"
 
-#: ../pgp/seahorse-pgp-add-subkey.c:166
-msgid "Couldn't add subkey"
-msgstr "Неуспех при добавянето на подключ"
-
-#: ../pgp/seahorse-pgp-add-subkey.c:187
-#, c-format
-msgid "Add subkey to %s"
-msgstr "Добавяне на подключ към %s"
-
-#: ../pgp/seahorse-pgp-add-subkey.c:204 ../pgp/seahorse-pgp-generate.c:51
-msgid "DSA (sign only)"
-msgstr "DSA (само подписване)"
-
-#: ../pgp/seahorse-pgp-add-subkey.c:212
-msgid "ElGamal (encrypt only)"
-msgstr "ElGamal (само шифриране)"
-
-#: ../pgp/seahorse-pgp-add-subkey.c:218 ../pgp/seahorse-pgp-generate.c:52
-msgid "RSA (sign only)"
-msgstr "RSA (само подписване)"
-
-#: ../pgp/seahorse-pgp-add-subkey.c:224
-msgid "RSA (encrypt only)"
-msgstr "RSA (само шифриране)"
-
-#: ../pgp/seahorse-pgp-add-uid.c:85
-msgid "Couldn't add user id"
-msgstr "Неуспех при добавяне на идентификатор на потребител"
-
-#: ../pgp/seahorse-pgp-add-uid.c:107
-#, c-format
-msgid "Add user ID to %s"
-msgstr "Добавяне на идентификатор на потребител към %s"
-
-#: ../pgp/seahorse-pgp-commands.vala:29
+#: ../pgp/seahorse-pgp-commands.c:103
 msgid "_Sign Key..."
 msgstr "_Подписване на ключ…"
 
-#: ../pgp/seahorse-pgp-commands.vala:30
+#: ../pgp/seahorse-pgp-commands.c:103
 msgid "Sign public key"
 msgstr "Подписване на публичен ключ"
 
-#: ../pgp/seahorse-pgp-commands.vala:110
+#: ../pgp/seahorse-pgp-commands.c:171
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Сигурни ли сте, че искате окончателно да изтриете „%s“?"
 
-#: ../pgp/seahorse-pgp-commands.vala:114
+#: ../pgp/seahorse-pgp-commands.c:176
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys and identities?"
 msgstr ""
 "Сигурни ли сте, че искате окончателно да изтриете %d ключа и идентификатори?"
 
-#: ../pgp/seahorse-pgp-commands.vala:116
+#: ../pgp/seahorse-pgp-commands.c:178
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys?"
 msgstr "Сигурни ли сте, че искате окончателно да изтриете %d ключа?"
 
-#: ../pgp/seahorse-pgp-commands.vala:118
+#: ../pgp/seahorse-pgp-commands.c:180
 #, c-format
 msgid "Are you sure you want to permanently delete %d identities?"
 msgstr "Сигурни ли сте, че искате окончателно да изтриете %d идентификатори?"
-
-#: ../pgp/seahorse-pgp-expires.c:70
-msgid "Couldn't change expiry date"
-msgstr "Неуспех при промяна на датата на изтичане"
-
-#: ../pgp/seahorse-pgp-expires.c:134
-#, c-format
-msgid "Expiry for Subkey %d of %s"
-msgstr "Изтичане на подключа %d на %s"
-
-#: ../pgp/seahorse-pgp-expires.c:136
-#, c-format
-msgid "Expiry for %s"
-msgstr "Изтичане за %s"
-
-#: ../pgp/seahorse-pgp-generate.c:50
-msgid "DSA Elgamal"
-msgstr "DSA ElGamal"
-
-#: ../pgp/seahorse-pgp-generate.c:61
-msgid "Couldn't generate PGP key"
-msgstr "Неуспех при създаването на ключ за PGP"
-
-#: ../pgp/seahorse-pgp-generate.c:168
-msgid "Passphrase for New PGP Key"
-msgstr "Парола за новия ключ за PGP"
-
-#: ../pgp/seahorse-pgp-generate.c:169
-msgid "Enter the passphrase for your new key twice."
-msgstr "Въведете двукратно паролата за новия си ключ."
-
-#: ../pgp/seahorse-pgp-generate.c:178
-msgid "Couldn't generate key"
-msgstr "Неуспех при създаването на ключ"
-
-#: ../pgp/seahorse-pgp-generate.c:180
-msgid "Generating key"
-msgstr "Създаване на ключ"
 
 #: ../pgp/seahorse-pgp-generate.glade.h:1
 #: ../ssh/seahorse-ssh-generate.glade.h:1
@@ -1490,7 +1779,7 @@ msgid "E_xpiration Date:"
 msgstr "Дата на _изтичане:"
 
 #: ../pgp/seahorse-pgp-generate.glade.h:7
-#: ../ssh/seahorse-ssh-generate.glade.h:7
+#: ../ssh/seahorse-ssh-generate.glade.h:4
 msgid "Encryption _Type:"
 msgstr "_Вид шифриране:"
 
@@ -1499,7 +1788,7 @@ msgid "Generate a new key"
 msgstr "Създаване на нов ключ"
 
 #: ../pgp/seahorse-pgp-generate.glade.h:10
-#: ../ssh/seahorse-ssh-generate.glade.h:10
+#: ../ssh/seahorse-ssh-generate.glade.h:6
 msgid "Key _Strength (bits):"
 msgstr "Си_ла на ключа (битове):"
 
@@ -1515,189 +1804,123 @@ msgstr "Нов ключ за PGP"
 msgid "_Comment:"
 msgstr "_Коментар:"
 
-#: ../pgp/seahorse-pgp-generator.vala:30
-msgid "Used to encrypt email and files"
-msgstr "Използва се за шифриране на поща и файлове"
-
-#: ../pgp/seahorse-pgp-key.c:234
+#: ../pgp/seahorse-pgp-key.c:200
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:36
 msgid "Private PGP Key"
 msgstr "Частен ключ за PGP"
 
-#: ../pgp/seahorse-pgp-key.c:237
+#: ../pgp/seahorse-pgp-key.c:203
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:32
 msgid "Public PGP Key"
 msgstr "Публичен ключ за PGP"
 
-#: ../pgp/seahorse-pgp-key.c:397 ../pgp/seahorse-pgp-key-properties.c:1378
+#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1413
 msgid "Expired"
 msgstr "Изтекъл"
 
-#: ../pgp/seahorse-pgp-key.c:667
-msgid "ElGamal"
-msgstr "ElGamal"
-
-#: ../pgp/seahorse-pgp-key-properties.c:215
+#: ../pgp/seahorse-pgp-key-properties.c:224
 msgid "Couldn't change primary user ID"
 msgstr "Неуспех при промяната на основния идентификатор на потребител"
 
-#: ../pgp/seahorse-pgp-key-properties.c:234
+#: ../pgp/seahorse-pgp-key-properties.c:241
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr ""
 "Сигурни ли сте, че искате окончателно да изтриете идентификатора на "
 "потребител „%s“?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:245
+#: ../pgp/seahorse-pgp-key-properties.c:251
 msgid "Couldn't delete user ID"
 msgstr "Неуспех при изтриването на идентификатора на потребител"
 
-#: ../pgp/seahorse-pgp-key-properties.c:336
-#: ../pgp/seahorse-pgp-key-properties.c:1494
+#: ../pgp/seahorse-pgp-key-properties.c:333
+#: ../pgp/seahorse-pgp-key-properties.c:1526
 msgid "[Unknown]"
 msgstr "[Неизвестно]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:434
-#: ../pgp/seahorse-pgp-key-properties.c:1770
+#: ../pgp/seahorse-pgp-key-properties.c:426
+#: ../pgp/seahorse-pgp-key-properties.c:1820
 msgid "Name/Email"
 msgstr "Име/е-поща"
 
-#: ../pgp/seahorse-pgp-key-properties.c:439
+#: ../pgp/seahorse-pgp-key-properties.c:431
 msgid "Signature ID"
 msgstr "Идентификатор на подпис"
 
-#: ../pgp/seahorse-pgp-key-properties.c:591
+#: ../pgp/seahorse-pgp-key-properties.c:566
 msgid "Couldn't change primary photo"
 msgstr "Неуспех при промяната на основното изображение"
 
-#: ../pgp/seahorse-pgp-key-properties.c:839
+#: ../pgp/seahorse-pgp-key-properties.c:826
 msgid "(unknown)"
 msgstr "(неизвестно)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:842
+#: ../pgp/seahorse-pgp-key-properties.c:829
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Този ключ изтече на: %s"
 
-#: ../pgp/seahorse-pgp-key-properties.c:996
+#: ../pgp/seahorse-pgp-key-properties.c:997
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Сигурни ли сте, че искате окончателно да изтриете %d подключ на „%s“?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1008
+#: ../pgp/seahorse-pgp-key-properties.c:1006
 msgid "Couldn't delete subkey"
 msgstr "Неуспех при изтриването на подключ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1044
-#: ../pgp/seahorse-pgp-key-properties.c:1458
+#: ../pgp/seahorse-pgp-key-properties.c:1042
+#: ../pgp/seahorse-pgp-key-properties.c:1489
 msgid "Unable to change trust"
 msgstr "Доверието не може да се промени"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1060 ../src/seahorse-viewer.vala:408
-#: ../ssh/seahorse-ssh-key-properties.c:214
+#: ../pgp/seahorse-pgp-key-properties.c:1056 ../src/seahorse-viewer.c:312
+#: ../ssh/seahorse-ssh-key-properties.c:167
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Неуспех при изнасянето на ключ към „%s“"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1085
-#: ../ssh/seahorse-ssh-key-properties.c:238
+#: ../pgp/seahorse-pgp-key-properties.c:1084
+#: ../ssh/seahorse-ssh-key-properties.c:191
 msgid "Export Complete Key"
 msgstr "Изнасяне на пълен ключ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1110
-#: ../ssh/seahorse-ssh-key-properties.c:260
+#: ../pgp/seahorse-pgp-key-properties.c:1109
+#: ../ssh/seahorse-ssh-key-properties.c:213
 msgid "Couldn't export key."
 msgstr "Неуспех при изнасянето на ключ."
 
-#: ../pgp/seahorse-pgp-key-properties.c:1309
-#: ../pgp/seahorse-pgp-key-properties.c:1381
+#: ../pgp/seahorse-pgp-key-properties.c:1331
+#: ../pgp/seahorse-pgp-key-properties.c:1420
 msgctxt "Expires"
 msgid "Never"
 msgstr "Никога"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1353
-msgid "ID"
-msgstr "Идентификатор"
-
 #. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1356
-#: ../src/seahorse-key-manager-store.c:848
+#: ../pgp/seahorse-pgp-key-properties.c:1381
+#: ../src/seahorse-key-manager-store.c:859
 msgid "Type"
 msgstr "Вид"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1359
+#: ../pgp/seahorse-pgp-key-properties.c:1384
 msgid "Created"
 msgstr "Създаден"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1362
+#: ../pgp/seahorse-pgp-key-properties.c:1387
 msgid "Expires"
 msgstr "Изтича на"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1365
+#: ../pgp/seahorse-pgp-key-properties.c:1390
 msgid "Status"
 msgstr "Състояние:"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1368
+#: ../pgp/seahorse-pgp-key-properties.c:1393
 msgid "Strength"
 msgstr "Сила"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1377
-#: ../pgp/seahorse-pgp-key-properties.c:1378
+#: ../pgp/seahorse-pgp-key-properties.c:1417
 msgid "Good"
 msgstr "Добро"
-
-#: ../pgp/seahorse-pgp-photos.c:73
-#, c-format
-msgid ""
-"<big><b>The photo is too large</b></big>\n"
-"The recommended size for a photo on your key is %d x %d pixels."
-msgstr ""
-"<big><b>Изображението е прекалено голямо</b></big>\n"
-"Препоръчителният размер на изображение за ключа ви е %d×%d пиксела."
-
-#: ../pgp/seahorse-pgp-photos.c:78
-msgid "_Don't Resize"
-msgstr "_Без преоразмеряване"
-
-#: ../pgp/seahorse-pgp-photos.c:79
-msgid "_Resize"
-msgstr "_Преоразмеряване"
-
-#: ../pgp/seahorse-pgp-photos.c:128
-#, c-format
-msgid ""
-"This is not a image file, or an unrecognized kind of image file. Try to use "
-"a JPEG image."
-msgstr ""
-"Това не е файл с изображение или е от неразпознат вид. Пробвайте с JPEG."
-
-#: ../pgp/seahorse-pgp-photos.c:224
-msgid "All image files"
-msgstr "Всички файлове с изображения"
-
-#: ../pgp/seahorse-pgp-photos.c:237
-msgid "All JPEG files"
-msgstr "Всички файлове, формат JPEG"
-
-#: ../pgp/seahorse-pgp-photos.c:261
-msgid "Choose Photo to Add to Key"
-msgstr "Изберете изображение, което да прикачите към ключа"
-
-#: ../pgp/seahorse-pgp-photos.c:290 ../pgp/seahorse-pgp-photos.c:294
-msgid "Couldn't add photo"
-msgstr "Неуспех при прикачането на изображение"
-
-#: ../pgp/seahorse-pgp-photos.c:291
-msgid "The file could not be loaded. It may be in an invalid format"
-msgstr "Файлът не бе зареден. Може да е в грешен формат"
-
-#: ../pgp/seahorse-pgp-photos.c:321
-msgid "Are you sure you want to remove the current photo from your key?"
-msgstr "Сигурни ли сте, че искате да изтриете изображението от ключа си?"
-
-#: ../pgp/seahorse-pgp-photos.c:334
-msgid "Couldn't delete photo"
-msgstr "Неуспех при изтриването на изображение"
 
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:1
 msgid "<b>Actions</b>"
@@ -1785,11 +2008,6 @@ msgstr "Прикачане на изображение към този ключ"
 #: ../ssh/seahorse-ssh-key-properties.glade.h:16
 msgid "Change _Passphrase"
 msgstr "Смяна на _паролата"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:19
-msgid "Created:"
-msgstr "Създаден:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:21
 msgid "Decrypt files and email sent to you."
@@ -1943,7 +2161,7 @@ msgstr ""
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:35
-#: ../src/seahorse-key-manager-store.c:842
+#: ../src/seahorse-key-manager-store.c:853
 msgid "Trust"
 msgstr "Доверие"
 
@@ -1981,134 +2199,10 @@ msgstr "_Анулиране на подпис"
 msgid "_Sign this Key"
 msgstr "Подписване на _този ключ"
 
-#: ../pgp/seahorse-pgp-revoke.c:75
-msgid "Couldn't revoke subkey"
-msgstr "Неуспех при анулирането на подключ"
-
-#: ../pgp/seahorse-pgp-revoke.c:102
+#: ../pgp/seahorse-pgp-subkey.c:371
 #, c-format
-msgid "Revoke Subkey %d of %s"
-msgstr "Анулиране на подключ %d от %s"
-
-#: ../pgp/seahorse-pgp-revoke.c:104
-#, c-format
-msgid "Revoke %s"
-msgstr "Анулиране на %s"
-
-#: ../pgp/seahorse-pgp-revoke.c:115
-msgid "No reason"
-msgstr "Липсва причина"
-
-#: ../pgp/seahorse-pgp-revoke.c:116
-msgid "No reason for revoking key"
-msgstr "Липсва причина за анулиране на ключа"
-
-#: ../pgp/seahorse-pgp-revoke.c:122
-msgid "Compromised"
-msgstr "Компрометиран"
-
-#: ../pgp/seahorse-pgp-revoke.c:123
-msgid "Key has been compromised"
-msgstr "Ключът е компрометиран"
-
-#: ../pgp/seahorse-pgp-revoke.c:129
-msgid "Superseded"
-msgstr "Заменен"
-
-#: ../pgp/seahorse-pgp-revoke.c:130
-msgid "Key has been superseded"
-msgstr "Ключът е заменен"
-
-#: ../pgp/seahorse-pgp-revoke.c:136
-msgid "Not Used"
-msgstr "Не се ползва"
-
-#: ../pgp/seahorse-pgp-revoke.c:137
-msgid "Key is no longer used"
-msgstr "Ключът вече не се ползва"
-
-#: ../pgp/seahorse-pgp-revoke.c:176
-#, c-format
-msgid ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
-msgstr ""
-"Що добавите %s като анулиращ %s. Това действие е необратимо! Сигурни ли сте, "
-"че искате да го направите?"
-
-#: ../pgp/seahorse-pgp-revoke.c:191
-msgid "Couldn't add revoker"
-msgstr "Неуспех при добавянето на анулиращ"
-
-#: ../pgp/seahorse-pgp-sign.c:96
-msgid "Couldn't sign key"
-msgstr "Неуспех при подписването на ключа"
-
-#. TODO: We should be giving an error message that allows them to
-#. generate or import a key
-#: ../pgp/seahorse-pgp-sign.c:159 ../pgp/seahorse-signer.c:61
-msgid "No keys usable for signing"
-msgstr "Няма ключове, които стават за подпис"
-
-#: ../pgp/seahorse-pgp-sign.c:160
-msgid ""
-"You have no personal PGP keys that can be used to indicate your trust of "
-"this key."
-msgstr ""
-"Нямате лични ключове за PGP, които да могат да се използват, за да укажете "
-"доверието си към този ключ."
-
-#: ../pgp/seahorse-pgp-source.c:100
-#, c-format
-msgid "Wrong passphrase."
-msgstr "Неправилна парола."
-
-#: ../pgp/seahorse-pgp-source.c:104
-#, c-format
-msgid "Enter new passphrase for '%s'"
-msgstr "Въведете нова парола за „%s“"
-
-#: ../pgp/seahorse-pgp-source.c:106
-#, c-format
-msgid "Enter passphrase for '%s'"
-msgstr "Въведете парола за „%s“"
-
-#: ../pgp/seahorse-pgp-source.c:109
-#: ../src/seahorse-change-passphrase.glade.h:4
-msgid "Enter new passphrase"
-msgstr "Въведете нова парола"
-
-#: ../pgp/seahorse-pgp-source.c:111
-msgid "Enter passphrase"
-msgstr "Въведете парола"
-
-#. TODO: We can use the GPGME progress to make this more accurate
-#: ../pgp/seahorse-pgp-source.c:802
-#, c-format
-msgid "Loaded %d key"
-msgid_plural "Loaded %d keys"
-msgstr[0] "Зареден е %d ключ"
-msgstr[1] "Заредени са %d ключа"
-
-#: ../pgp/seahorse-pgp-source.c:857
-msgid "Loading Keys..."
-msgstr "Зареждане на ключовете…"
-
-#: ../pgp/seahorse-pgp-source.c:900
-msgid ""
-"Invalid key data (missing UIDs). This may be due to a computer with a date "
-"set in the future or a missing self-signature."
-msgstr ""
-"Грешни данни за ключ (липсва потребителски идентификатор). Може да се дължи "
-"на компютър със системна дата в бъдещето или липсващ собствен подпис."
-
-#: ../pgp/seahorse-pgp-source.c:1000 ../src/seahorse-key-manager.vala:549
-msgid "Importing Keys"
-msgstr "Внасяне на ключове"
-
-#: ../pgp/seahorse-pgp-source.c:1036
-msgid "Exporting Keys"
-msgstr "Изнасяне на ключове"
+msgid "Subkey %d of %s"
+msgstr "Подключ %d от %s"
 
 #: ../pgp/seahorse-revoke.glade.h:1
 msgid "Optional description of revocation"
@@ -2126,6 +2220,17 @@ msgstr "Причина за анулиране на ключа"
 msgid "_Reason:"
 msgstr "_Причина:"
 
+#: ../pgp/seahorse-signer.c:62
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr ""
+"Не притежавате лични ключове за PGP, които стават за подписване на документи "
+"или съобщения."
+
+#: ../pgp/seahorse-signer.glade.h:1
+msgid "_Sign message with key:"
+msgstr "Подписване на файл с _ключа:"
+
 #: ../pgp/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
 msgstr "<b>Колко внимателно сте проверили този ключ?</b>"
@@ -2140,92 +2245,97 @@ msgstr "<b>Подписване на ключа като:</b>"
 
 #: ../pgp/seahorse-sign.glade.h:4
 msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key\n"
-"is owned by the person who claims to own it. For example, you could\n"
-"read the key fingerprint to the owner over the phone. "
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone. "
 msgstr ""
-"<i>Небрежно:</i> означава, че сте извършили небрежна проверка, че\n"
-"ключът се притежава от човека, който твърди това. Например можете\n"
-"да прочетете на притежателя отпечатъка на ключа по телефона."
+"<i>Небрежно:</i> означава, че сте извършили небрежна проверка, че ключът се "
+"притежава от човека, който твърди това. Например можете да прочетете на "
+"притежателя отпечатъка на ключа по телефона."
 
-#: ../pgp/seahorse-sign.glade.h:7
+#: ../pgp/seahorse-sign.glade.h:5
 msgid "<i>Key Name</i>"
 msgstr "<i>Име на ключа</i>"
 
-#: ../pgp/seahorse-sign.glade.h:8
+#: ../pgp/seahorse-sign.glade.h:6
 msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who \n"
+"<i>Not at all:</i> means you believe the key is owned by the person who "
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
-"<i>Въобще не:</i> означава, че вярвате, че ключът се притежава от\n"
-"човека, който твърди това, но не сте се уверили, че това е така."
+"<i>Въобще не:</i> означава, че вярвате, че ключът се притежава от човека, "
+"който твърди това, но не сте се уверили, че това е така."
 
-#: ../pgp/seahorse-sign.glade.h:10
+#: ../pgp/seahorse-sign.glade.h:7
 msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that "
-"this\n"
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
 "key is genuine."
 msgstr ""
-"<i>С голямо внимание:</i> изберете това, само ако сте напълно сигурни,\n"
-"че този ключ е автентичен."
+"<i>С голямо внимание:</i> изберете това, само ако сте напълно сигурни, че "
+"този ключ е автентичен."
 
-#: ../pgp/seahorse-sign.glade.h:12
+#: ../pgp/seahorse-sign.glade.h:8
 msgid "By signing you indicate your trust that this key belongs to:"
 msgstr "Подписвайки този ключ, вие указвате доверие, че той принадлежи на:"
 
-#: ../pgp/seahorse-sign.glade.h:13
+#: ../pgp/seahorse-sign.glade.h:9
 msgid "I can _revoke this signature at a later date."
 msgstr "Мога да _анулирам този подпис на по-късен етап."
 
-#: ../pgp/seahorse-sign.glade.h:14
-msgid ""
-"You could use a hard to forge photo identification (such as a passport) \n"
-"to personally check that the name on the key is correct. You should \n"
-"have also used email to check that the email address belongs to the\n"
-"owner."
-msgstr ""
-"Можете да използвате някакъв документ за идентификация (напр. паспорт),\n"
-"за да се уверите лично, че името на ключа е вярно. Трябва да сте\n"
-"използвали и е-поща, за да проверите, че адресът е на притежателя."
+#: ../pgp/seahorse-sign.glade.h:10
+msgid "Sign Key"
+msgstr "Подписване на ключ"
 
-#: ../pgp/seahorse-sign.glade.h:18
+#: ../pgp/seahorse-sign.glade.h:11
+msgid ""
+"You could use a hard to forge photo identification (such as a passport) to "
+"personally check that the name on the key is correct. You should have also "
+"used email to check that the email address belongs to the owner."
+msgstr ""
+"Можете да използвате някакъв документ за идентификация (напр. паспорт), в "
+"който има снимка и е трудно да се фалшифицира, за да се уверите лично, че "
+"името на ключа е вярно. Трябва да сте използвали и е-поща, за да проверите, "
+"че адресът е на притежателя."
+
+#: ../pgp/seahorse-sign.glade.h:12
 msgid "_Casually"
 msgstr "_Небрежно"
 
-#: ../pgp/seahorse-sign.glade.h:19
+#: ../pgp/seahorse-sign.glade.h:13
 msgid "_Not at all"
 msgstr "_Въобще не"
 
-#: ../pgp/seahorse-sign.glade.h:20
+#: ../pgp/seahorse-sign.glade.h:14
 msgid "_Others may not see this signature"
 msgstr "Другите да _не могат да видят този подпис"
 
-#: ../pgp/seahorse-sign.glade.h:21
+#: ../pgp/seahorse-sign.glade.h:15
 msgid "_Sign"
 msgstr "_Подписване"
 
-#: ../pgp/seahorse-sign.glade.h:22
+#: ../pgp/seahorse-sign.glade.h:16
 msgid "_Signer:"
 msgstr "_Подписал:"
 
-#: ../pgp/seahorse-sign.glade.h:23
+#: ../pgp/seahorse-sign.glade.h:17
 msgid "_Very Carefully"
 msgstr "_Много внимателно"
 
-#: ../pgp/seahorse-signer.c:62
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"Не притежавате лични ключове за PGP, които стават за подписване на документи "
-"или съобщения."
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+msgid "Certificate"
+msgstr "Сертификат"
 
-#: ../pgp/seahorse-signer.glade.h:1
-msgid "_Sign message with key:"
-msgstr "Подписване на файл с _ключа:"
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
+#, c-format
+msgid "Are you sure you want to delete the certificate '%s'?"
+msgstr "Сигурни ли сте, че искате да изтриете сертификата — „%s“?"
 
-#: ../src/main.c:70 ../src/seahorse-viewer.vala:229
-msgid "Encryption Key Manager"
-msgstr "Управление на ключове"
+#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#, c-format
+msgid "Are you sure you want to delete %d certificate?"
+msgid_plural "Are you sure you want to delete %d certificates?"
+msgstr[0] "Сигурни ли сте, че искате окончателно да изтриете %d сертификат?"
+msgstr[1] "Сигурни ли сте, че искате окончателно да изтриете %d сертификата?"
 
 #: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
@@ -2247,21 +2357,129 @@ msgstr "Нова _парола:"
 msgid "Manage your passwords and encryption keys"
 msgstr "Управление на паролите и ключовете за шифриране"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.vala:142
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:880
 msgid "Passwords and Encryption Keys"
 msgstr "Пароли и ключове за шифриране"
 
 #: ../src/seahorse-generate-select.glade.h:1
-msgid "<b>_Select the kind of key you wish to create:</b>"
-msgstr "<b>_Избор на вида ключ, който искате да създадете:</b>"
+msgid "<b>_Select the type of item to create:</b>"
+msgstr "<b>_Избор на вида обект, който искате да създадете:</b>"
 
 #: ../src/seahorse-generate-select.glade.h:2
 msgid "C_ontinue"
 msgstr "_Продължаване"
 
 #: ../src/seahorse-generate-select.glade.h:3
-msgid "Create a New Key"
-msgstr "Създаване на нов ключ"
+msgid "Create New ..."
+msgstr "_Създаване на нов…"
+
+#: ../src/seahorse-key-manager.c:245 ../src/seahorse-keyserver-results.c:84
+#, c-format
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "Избран е %d ключ"
+msgstr[1] "Избрани са %d ключа"
+
+#: ../src/seahorse-key-manager.c:430 ../src/seahorse-key-manager.c:490
+#: ../src/seahorse-key-manager.c:553 ../src/seahorse-keyserver-results.c:170
+msgid "Couldn't import keys"
+msgstr "Ключовете не могат да бъдат внесени"
+
+#: ../src/seahorse-key-manager.c:435 ../src/seahorse-keyserver-results.c:175
+msgid "Imported keys"
+msgstr "Внесени ключове"
+
+#: ../src/seahorse-key-manager.c:484
+msgid "Importing keys"
+msgstr "Внасяне на ключове"
+
+#: ../src/seahorse-key-manager.c:507 ../ssh/seahorse-ssh-operation.c:1017
+msgid "Import Key"
+msgstr "Внасяне на ключ"
+
+#: ../src/seahorse-key-manager.c:553
+msgid "Unrecognized key type, or invalid data format"
+msgstr "Неразпознат вид ключ или данни в грешен формат"
+
+#: ../src/seahorse-key-manager.c:747 ../src/seahorse-keyserver-results.c:221
+msgid "_Remote"
+msgstr "_SSH"
+
+#: ../src/seahorse-key-manager.c:749
+msgid "Close this program"
+msgstr "Спиране на тази програма"
+
+#: ../src/seahorse-key-manager.c:750
+msgid "_New..."
+msgstr "_Нов…"
+
+#: ../src/seahorse-key-manager.c:751
+msgid "Create a new key or item"
+msgstr "Създаване на нов ключ или обект"
+
+#: ../src/seahorse-key-manager.c:752
+msgid "_Import..."
+msgstr "_Внасяне…"
+
+#: ../src/seahorse-key-manager.c:753
+msgid "Import from a file"
+msgstr "Внасяне от файл"
+
+#: ../src/seahorse-key-manager.c:755
+msgid "Import from the clipboard"
+msgstr "Внасяне от буфера за обмен"
+
+#: ../src/seahorse-key-manager.c:760 ../src/seahorse-keyserver-results.c:231
+msgid "_Find Remote Keys..."
+msgstr "_Търсене на отдалечени ключове…"
+
+#: ../src/seahorse-key-manager.c:761 ../src/seahorse-keyserver-results.c:232
+msgid "Search for keys on a key server"
+msgstr "Търсене на ключове в сървър с ключове"
+
+#: ../src/seahorse-key-manager.c:762
+msgid "_Sync and Publish Keys..."
+msgstr "_Сверяване/публикуване на ключове…"
+
+#: ../src/seahorse-key-manager.c:763
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "Публикуване/сверяване на вашите ключове с тези на сървър."
+
+#: ../src/seahorse-key-manager.c:768
+msgid "T_ypes"
+msgstr "_Вид"
+
+#: ../src/seahorse-key-manager.c:768
+msgid "Show type column"
+msgstr "Показване колоната за вида"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "_Expiry"
+msgstr "Дата на _изтичане"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "Show expiry column"
+msgstr "Показване колоната за изтичане"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "_Trust"
+msgstr "_Доверие"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "Show owner trust column"
+msgstr "Показване колоната за доверие на притежателя"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "_Validity"
+msgstr "В_алидност"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "Show validity column"
+msgstr "Показване колоната за валидност"
+
+#: ../src/seahorse-key-manager.c:951
+msgid "Filter:"
+msgstr "Филтър:"
 
 #: ../src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -2288,7 +2506,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "Трябват ви ключове, за да шифрирате."
 
 #: ../src/seahorse-key-manager.glade.h:7
-#: ../src/seahorse-keyserver-results.vala:53
+#: ../src/seahorse-keyserver-results.c:236
 msgid "_Import"
 msgstr "_Внасяне"
 
@@ -2300,181 +2518,55 @@ msgstr "_Пароли"
 msgid "_Trusted Keys"
 msgstr "_Доверени ключове"
 
-#: ../src/seahorse-key-manager.vala:105
-#: ../src/seahorse-keyserver-results.vala:37
-msgid "_Remote"
-msgstr "_SSH"
-
-#: ../src/seahorse-key-manager.vala:107
-msgid "_Quit"
-msgstr "_Спиране на програмата"
-
-#: ../src/seahorse-key-manager.vala:108
-msgid "Close this program"
-msgstr "Спиране на тази програма"
-
-#: ../src/seahorse-key-manager.vala:110
-msgid "_Create New Key..."
-msgstr "_Създаване нов ключ…"
-
-#: ../src/seahorse-key-manager.vala:111
-msgid "Create a new personal key"
-msgstr "Създаване на нов личен ключ"
-
-#: ../src/seahorse-key-manager.vala:112
-msgid "_Import..."
-msgstr "_Внасяне…"
-
-#: ../src/seahorse-key-manager.vala:113
-msgid "Import keys into your key ring from a file"
-msgstr "Внасяне на ключове от файл в ключодържателя ви"
-
-#: ../src/seahorse-key-manager.vala:114
-msgid "Paste _Keys"
-msgstr "_Поставяне на ключ"
-
-#: ../src/seahorse-key-manager.vala:115
-msgid "Import keys from the clipboard"
-msgstr "Внасяне на ключове от буфера за обмен"
-
-#: ../src/seahorse-key-manager.vala:119
-#: ../src/seahorse-keyserver-results.vala:48
-msgid "_Find Remote Keys..."
-msgstr "_Търсене на отдалечени ключове…"
-
-#: ../src/seahorse-key-manager.vala:120
-#: ../src/seahorse-keyserver-results.vala:49
-msgid "Search for keys on a key server"
-msgstr "Търсене на ключове в сървър с ключове"
-
-#: ../src/seahorse-key-manager.vala:121
-msgid "_Sync and Publish Keys..."
-msgstr "_Сверяване/публикуване на ключове…"
-
-#: ../src/seahorse-key-manager.vala:122
-msgid "Publish and/or synchronize your keys with those online."
-msgstr "Публикуване/сверяване на вашите ключове с тези на сървър."
-
-#: ../src/seahorse-key-manager.vala:126
-msgid "T_ypes"
-msgstr "_Вид"
-
-#: ../src/seahorse-key-manager.vala:126
-msgid "Show type column"
-msgstr "Показване колоната за вида"
-
-#: ../src/seahorse-key-manager.vala:127
-msgid "_Expiry"
-msgstr "Дата на _изтичане"
-
-#: ../src/seahorse-key-manager.vala:127
-msgid "Show expiry column"
-msgstr "Показване колоната за изтичане"
-
-#: ../src/seahorse-key-manager.vala:128
-msgid "_Trust"
-msgstr "_Доверие"
-
-#: ../src/seahorse-key-manager.vala:128
-msgid "Show owner trust column"
-msgstr "Показване колоната за доверие на притежателя"
-
-#: ../src/seahorse-key-manager.vala:129
-msgid "_Validity"
-msgstr "В_алидност"
-
-#: ../src/seahorse-key-manager.vala:129
-msgid "Show validity column"
-msgstr "Показване колоната за валидност"
-
-#: ../src/seahorse-key-manager.vala:225
-msgid "Filter:"
-msgstr "Филтър:"
-
-#: ../src/seahorse-key-manager.vala:463 ../src/seahorse-key-manager.vala:510
-#: ../src/seahorse-key-manager.vala:537
-#: ../src/seahorse-keyserver-results.vala:211
-msgid "Couldn't import keys"
-msgstr "Ключовете не могат да бъдат внесени"
-
-#: ../src/seahorse-key-manager.vala:467
-#: ../src/seahorse-keyserver-results.vala:215
-msgid "Imported keys"
-msgstr "Внесени ключове"
-
-#: ../src/seahorse-key-manager.vala:505
-msgid "Importing keys"
-msgstr "Внасяне на ключове"
-
-#: ../src/seahorse-key-manager.vala:514 ../ssh/seahorse-ssh-operation.c:1094
-msgid "Import Key"
-msgstr "Внасяне на ключ"
-
-#: ../src/seahorse-key-manager.vala:538
-msgid "Unrecognized key type, or invalid data format"
-msgstr "Неразпознат вид ключ или данни в грешен формат"
-
-#: ../src/seahorse-key-manager.vala:682
-#: ../src/seahorse-keyserver-results.vala:247
-#, c-format
-msgid "Selected %d key"
-msgid_plural "Selected %d keys"
-msgstr[0] "Избран е %d ключ"
-msgstr[1] "Избрани са %d ключа"
-
-#: ../src/seahorse-key-manager-store.c:644 ../src/seahorse-viewer.vala:383
+#: ../src/seahorse-key-manager-store.c:648 ../src/seahorse-viewer.c:279
 msgid "Couldn't export keys"
 msgstr "Неуспех при изнасянето на ключове"
 
-#: ../src/seahorse-key-manager-store.c:835
+#: ../src/seahorse-key-manager-store.c:846
 msgid "Validity"
 msgstr "Валидност"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:854
+#: ../src/seahorse-key-manager-store.c:865
 msgid "Expiration Date"
 msgstr "Дата на изтичане"
 
-#: ../src/seahorse-keyserver-results.vala:39
-msgid "_Close"
-msgstr "_Затваряне"
+#: ../src/seahorse-keyserver-results.c:194
+msgid "Importing keys from key servers"
+msgstr "Внасяне на ключове от сървъри с ключове"
 
-#: ../src/seahorse-keyserver-results.vala:40
+#: ../src/seahorse-keyserver-results.c:223
 msgid "Close this window"
 msgstr "Затваряне на този прозорец"
 
-#: ../src/seahorse-keyserver-results.vala:41
+#: ../src/seahorse-keyserver-results.c:224
 msgid "_Expand All"
 msgstr "Разширяване на _всички"
 
-#: ../src/seahorse-keyserver-results.vala:42
+#: ../src/seahorse-keyserver-results.c:225
 msgid "Expand all listings"
 msgstr "Разширяване на всички списъци"
 
-#: ../src/seahorse-keyserver-results.vala:43
+#: ../src/seahorse-keyserver-results.c:226
 msgid "_Collapse All"
 msgstr "_Свиване на всички"
 
-#: ../src/seahorse-keyserver-results.vala:44
+#: ../src/seahorse-keyserver-results.c:227
 msgid "Collapse all listings"
 msgstr "Свиване на всички списъци"
 
-#: ../src/seahorse-keyserver-results.vala:54
+#: ../src/seahorse-keyserver-results.c:237
 msgid "Import selected keys to local key ring"
 msgstr "Внасяне на избраните ключове в локалния ключодържател"
 
-#: ../src/seahorse-keyserver-results.vala:65
+#: ../src/seahorse-keyserver-results.c:294
 msgid "Remote Keys"
 msgstr "Отдалечени ключове"
 
-#: ../src/seahorse-keyserver-results.vala:67
+#: ../src/seahorse-keyserver-results.c:296
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Отдалечени ключове, съдържащи „%s“"
-
-#: ../src/seahorse-keyserver-results.vala:226
-msgid "Importing keys from key servers"
-msgstr "Внасяне на ключове от сървъри с ключове"
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2569,84 +2661,15 @@ msgstr "_Сървъри с ключове"
 msgid "_Sync"
 msgstr "_Сверяване"
 
-#. Top menu items
-#: ../src/seahorse-viewer.vala:36
-msgid "_Key"
-msgstr "_Ключ"
+#: ../src/seahorse-main.c:72 ../src/seahorse-viewer.c:167
+msgid "Encryption Key Manager"
+msgstr "Управление на ключове"
 
-#: ../src/seahorse-viewer.vala:37
-msgid "_Edit"
-msgstr "_Редактиране"
-
-#: ../src/seahorse-viewer.vala:38
-msgid "_View"
-msgstr "_Изглед"
-
-#: ../src/seahorse-viewer.vala:39
-msgid "_Help"
-msgstr "Помо_щ"
-
-#: ../src/seahorse-viewer.vala:41
-msgid "Prefere_nces"
-msgstr "_Настройки"
-
-#: ../src/seahorse-viewer.vala:42
-msgid "Change preferences for this program"
-msgstr "Промяна на настройките на програмата"
-
-#: ../src/seahorse-viewer.vala:43
-msgid "_About"
-msgstr "_Относно"
-
-#: ../src/seahorse-viewer.vala:44
-msgid "About this program"
-msgstr "Относно тази програма"
-
-#: ../src/seahorse-viewer.vala:45
-msgid "_Contents"
-msgstr "_Ръководство"
-
-#: ../src/seahorse-viewer.vala:46
-msgid "Show Seahorse help"
-msgstr "Показване на ръководството на Seahorse"
-
-#: ../src/seahorse-viewer.vala:50
-msgid "P_roperties"
-msgstr "_Настройки"
-
-#: ../src/seahorse-viewer.vala:51
-msgid "Show key properties"
-msgstr "Показване на настройките на ключа"
-
-#: ../src/seahorse-viewer.vala:52
-msgid "E_xport Public Key..."
-msgstr "И_знасяне на публичен ключ…"
-
-#: ../src/seahorse-viewer.vala:53
-msgid "Export public part of key to a file"
-msgstr "Изнасяне на публичен ключ във файл"
-
-#: ../src/seahorse-viewer.vala:54
-msgid "_Copy Public Key"
-msgstr "_Копиране на публичен ключ"
-
-#: ../src/seahorse-viewer.vala:55
-msgid "Copy public part of selected keys to the clipboard"
-msgstr "Копиране на публичния ключ в буфера за обмен"
-
-#: ../src/seahorse-viewer.vala:56
-msgid "_Delete Key"
-msgstr "_Изтриване на ключ"
-
-#: ../src/seahorse-viewer.vala:57
-msgid "Delete selected keys"
-msgstr "Изтриване на избраните ключове"
-
-#: ../src/seahorse-viewer.vala:203
+#: ../src/seahorse-viewer.c:138
 msgid "Contributions:"
 msgstr "Сътрудници:"
 
-#: ../src/seahorse-viewer.vala:231
+#: ../src/seahorse-viewer.c:169
 msgid "translator-credits"
 msgstr ""
 "Ясен Праматаров <turin@fsa-bg.org>\n"
@@ -2656,24 +2679,82 @@ msgstr ""
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
 
-#: ../src/seahorse-viewer.vala:234
+#: ../src/seahorse-viewer.c:172
 msgid "Seahorse Project Homepage"
 msgstr "Страница на проекта Seahorse"
 
-#: ../src/seahorse-viewer.vala:284
+#. Top menu items
+#: ../src/seahorse-viewer.c:191
+msgid "_File"
+msgstr "_Файл"
+
+#: ../src/seahorse-viewer.c:192
+msgid "_Edit"
+msgstr "_Редактиране"
+
+#: ../src/seahorse-viewer.c:193
+msgid "_View"
+msgstr "_Изглед"
+
+#: ../src/seahorse-viewer.c:194
+msgid "_Help"
+msgstr "Помо_щ"
+
+#: ../src/seahorse-viewer.c:196
+msgid "Prefere_nces"
+msgstr "_Настройки"
+
+#: ../src/seahorse-viewer.c:197
+msgid "Change preferences for this program"
+msgstr "Промяна на настройките на програмата"
+
+#: ../src/seahorse-viewer.c:200
+msgid "About this program"
+msgstr "Относно тази програма"
+
+#: ../src/seahorse-viewer.c:201
+msgid "_Contents"
+msgstr "_Ръководство"
+
+#: ../src/seahorse-viewer.c:202
+msgid "Show Seahorse help"
+msgstr "Показване на ръководството на Seahorse"
+
+#: ../src/seahorse-viewer.c:299
+msgid "Export public key"
+msgstr "Изнасяне на публичен ключ"
+
+#: ../src/seahorse-viewer.c:317
+msgid "Exporting keys"
+msgstr "Изнасяне на ключове"
+
+#: ../src/seahorse-viewer.c:342
+msgid "Couldn't retrieve data from key server"
+msgstr "Данните не бяха получени от сървъра с ключове"
+
+#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
+#: ../src/seahorse-viewer.c:361
+msgid "Copied keys"
+msgstr "Копирани ключове"
+
+#: ../src/seahorse-viewer.c:381
+msgid "Retrieving keys"
+msgstr "Получаване на ключове"
+
+#: ../src/seahorse-viewer.c:396
 msgid "Couldn't delete."
 msgstr "Неуспех при изтриването."
 
-#: ../src/seahorse-viewer.vala:296
+#: ../src/seahorse-viewer.c:430
 msgid "Deleting..."
 msgstr "Изтриване…"
 
-#: ../src/seahorse-viewer.vala:317
+#: ../src/seahorse-viewer.c:459
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s e частен ключ. Сигурни ли сте, че искате да продължите?"
 
-#: ../src/seahorse-viewer.vala:319
+#: ../src/seahorse-viewer.c:462
 msgid ""
 "One or more of the deleted keys are private keys. Are you sure you want to "
 "proceed?"
@@ -2681,35 +2762,40 @@ msgstr ""
 "Поне един от изтриваните ключове е частен. Сигурни ли сте, че искате да "
 "продължите?"
 
-#: ../src/seahorse-viewer.vala:347
-msgid "Couldn't retrieve data from key server"
-msgstr "Данните не бяха получени от сървъра с ключове"
+#: ../src/seahorse-viewer.c:496
+msgid "Show properties"
+msgstr "Показване на настройките"
 
-#: ../src/seahorse-viewer.vala:365
-msgid "Copied keys"
-msgstr "Копирани ключове"
+#: ../src/seahorse-viewer.c:497
+msgctxt "This text refers to deleting an item from its type's backing store."
+msgid "_Delete"
+msgstr "_Изтриване"
 
-#: ../src/seahorse-viewer.vala:377
-msgid "Retrieving keys"
-msgstr "Получаване на ключове"
+#: ../src/seahorse-viewer.c:498
+msgid "Delete selected items"
+msgstr "Изтриване на избраните обекти"
 
-#: ../src/seahorse-viewer.vala:392
-msgid "Export public key"
-msgstr "Изнасяне на публичен ключ"
+#: ../src/seahorse-viewer.c:502
+msgid "E_xport..."
+msgstr "_Изнасяне…"
 
-#: ../src/seahorse-viewer.vala:404
-msgid "Exporting keys"
-msgstr "Изнасяне на ключове"
+#: ../src/seahorse-viewer.c:503
+msgid "Export to a file"
+msgstr "Изнасяне към файл"
 
-#: ../ssh/seahorse-ssh-askpass.c:101
+#: ../src/seahorse-viewer.c:505
+msgid "Copy to the clipboard"
+msgstr "Изнасяне към буфера за обмен"
+
+#: ../ssh/seahorse-ssh-askpass.c:99
 msgid "Enter your Secure Shell passphrase:"
 msgstr "Въведете паролата за SSH:"
 
-#: ../ssh/seahorse-ssh-commands.vala:29
+#: ../ssh/seahorse-ssh-commands.c:85
 msgid "Configure Key for _Secure Shell..."
 msgstr "На_стройване на ключовете за SSH…"
 
-#: ../ssh/seahorse-ssh-commands.vala:30
+#: ../ssh/seahorse-ssh-commands.c:86
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
@@ -2717,98 +2803,99 @@ msgstr ""
 "Изпращане на ключа за SSH до друга машина и позволяване на влизането чрез "
 "същия ключ."
 
-#: ../ssh/seahorse-ssh-commands.vala:77
+#: ../ssh/seahorse-ssh-commands.c:115
 #, c-format
 msgid "Are you sure you want to delete the secure shell key '%s'?"
 msgstr "Сигурни ли сте, че искате да изтриете ключа за SSH — „%s“?"
 
-#: ../ssh/seahorse-ssh-commands.vala:79
+#: ../ssh/seahorse-ssh-commands.c:118
 #, c-format
 msgid "Are you sure you want to delete %d secure shell keys?"
 msgstr "Сигурни ли сте, че искате да изтриете %d ключа за SSH?"
 
-#: ../ssh/seahorse-ssh-generate.c:47
+#: ../ssh/seahorse-ssh-generate.c:59 ../ssh/seahorse-ssh-key.c:91
+#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.glade.h:21
+msgid "Secure Shell Key"
+msgstr "Ключ за SSH"
+
+#: ../ssh/seahorse-ssh-generate.c:60
+msgid "Used to access other computers (eg: via a terminal)"
+msgstr "Използва се за достъп до други компютри (напр. чрез терминал)"
+
+#: ../ssh/seahorse-ssh-generate.c:90
 msgid "Couldn't generate Secure Shell key"
 msgstr "Неуспех при създаването на ключ за SSH"
 
-#: ../ssh/seahorse-ssh-generate.c:154
+#: ../ssh/seahorse-ssh-generate.c:205
 msgid "Creating Secure Shell Key"
 msgstr "Създаване на ключ за SSH"
 
 #: ../ssh/seahorse-ssh-generate.glade.h:2
 msgid ""
-"<i>Use your email address, and any other reminder\n"
-" you need about what this key is for.</i>"
+"<i>Use your email address, and any other reminder you need about what this "
+"key is for.</i>"
 msgstr ""
-"<i>Ползвайте адреса на е-пощата си или нещо друго,\n"
-"което да ви напомня за какво е този ключ.</i>"
+"<i>Ползвайте адреса на е-пощата си или нещо друго, което да ви напомня за "
+"какво е този ключ.</i>"
 
-#: ../ssh/seahorse-ssh-generate.glade.h:4
+#: ../ssh/seahorse-ssh-generate.glade.h:3
 msgid ""
-"A Secure Shell (SSH) key lets you connect securely to trusted\n"
-"computers using SSH, without entering a different password \n"
-"for each of them."
+"A Secure Shell (SSH) key lets you connect securely to trusted computers "
+"using SSH, without entering a different password for each of them."
 msgstr ""
-"Ключът за SSH (сигурна обвивка) ви дава възможност да\n"
-"се свързвате сигурно към доверени компютри чрез SSH,\n"
-"без да въвеждате парола за всеки от тях."
+"Ключът за SSH (сигурна обвивка) ви дава възможност да се свързвате сигурно "
+"към доверени компютри чрез SSH, без да въвеждате парола за всеки от тях."
 
-#: ../ssh/seahorse-ssh-generate.glade.h:8
+#: ../ssh/seahorse-ssh-generate.glade.h:5
 msgid ""
-"If there is already a computer you want to use this key with, you \n"
-"can set up that computer to recognize your key now. "
+"If there is already a computer you want to use this key with, you can set up "
+"that computer to recognize your key now. "
 msgstr ""
-"В момента можете да настроите компютър,\n"
-"който искате да използвате с този ключ."
+"В момента можете да настроите компютър, който искате да използвате с този "
+"ключ."
 
-#: ../ssh/seahorse-ssh-generate.glade.h:11
+#: ../ssh/seahorse-ssh-generate.glade.h:7
 msgid "New Secure Shell Key"
 msgstr "Нов ключ за SSH"
 
-#: ../ssh/seahorse-ssh-generate.glade.h:12
+#: ../ssh/seahorse-ssh-generate.glade.h:8
 msgid "_Create and Set Up"
 msgstr "_Създаване и настройка"
 
-#: ../ssh/seahorse-ssh-generate.glade.h:13
+#: ../ssh/seahorse-ssh-generate.glade.h:9
 msgid "_Just Create Key"
 msgstr "_Просто създаване на ключ"
 
-#: ../ssh/seahorse-ssh-generate.glade.h:14
+#: ../ssh/seahorse-ssh-generate.glade.h:10
 msgid "_Key Description:"
 msgstr "_Описание на ключа:"
 
-#: ../ssh/seahorse-ssh-generator.vala:29 ../ssh/seahorse-ssh-key.c:97
-#: ../ssh/seahorse-ssh-key.c:101 ../ssh/seahorse-ssh-key-properties.glade.h:21
-#: ../ssh/seahorse-ssh-source.c:726
-msgid "Secure Shell Key"
-msgstr "Ключ за SSH"
-
-#: ../ssh/seahorse-ssh-generator.vala:30
-msgid "Used to access other computers (eg: via a terminal)"
-msgstr "Използва се за достъп до други компютри (напр. чрез терминал)"
-
-#: ../ssh/seahorse-ssh-key.c:93
+#: ../ssh/seahorse-ssh-key.c:87
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Ключът за SSH не може да бъде прочетен)"
 
-#: ../ssh/seahorse-ssh-key.c:129
+#: ../ssh/seahorse-ssh-key.c:105
+msgid "Invalid"
+msgstr "Грешен"
+
+#: ../ssh/seahorse-ssh-key.c:116
 msgid "Private Secure Shell Key"
 msgstr "Частен ключ за SSH"
 
-#: ../ssh/seahorse-ssh-key.c:132
+#: ../ssh/seahorse-ssh-key.c:119
 msgid "Public Secure Shell Key"
 msgstr "Публичен ключ за SSH"
 
-#: ../ssh/seahorse-ssh-key-properties.c:118
+#: ../ssh/seahorse-ssh-key-properties.c:71
 msgid "Couldn't rename key."
 msgstr "Неуспех при преименуването на ключ."
 
-#: ../ssh/seahorse-ssh-key-properties.c:159
+#: ../ssh/seahorse-ssh-key-properties.c:112
 msgid "Couldn't change authorization for key."
 msgstr "Неуспех при промяната на упълномощаването за ключа."
 
-#: ../ssh/seahorse-ssh-key-properties.c:174
-msgid "Couldn't change passhrase for key."
+#: ../ssh/seahorse-ssh-key-properties.c:127
+msgid "Couldn't change passphrase for key."
 msgstr "Неуспех при промяната на паролата за ключа."
 
 #: ../ssh/seahorse-ssh-key-properties.glade.h:1
@@ -2856,16 +2943,16 @@ msgstr "Притежателят на този ключ е _упълномоще
 msgid "Used to connect to other computers."
 msgstr "Използва се за връзка към други компютри."
 
-#: ../ssh/seahorse-ssh-operation.c:138 ../ssh/seahorse-ssh-operation.c:700
+#: ../ssh/seahorse-ssh-operation.c:143 ../ssh/seahorse-ssh-operation.c:732
 #, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "Командата за SSH завърши неочаквано."
 
-#: ../ssh/seahorse-ssh-operation.c:146 ../ssh/seahorse-ssh-operation.c:707
+#: ../ssh/seahorse-ssh-operation.c:151 ../ssh/seahorse-ssh-operation.c:739
 msgid "The SSH command failed."
 msgstr "Командата за SSH бе неуспешна."
 
-#: ../ssh/seahorse-ssh-operation.c:444
+#: ../ssh/seahorse-ssh-operation.c:445 ../ssh/seahorse-ssh-operation.c:477
 msgid "Secure Shell key"
 msgstr "Ключ за SSH"
 
@@ -2874,63 +2961,50 @@ msgid "Passphrase:"
 msgstr "Парола:"
 
 #. Just prompt over and over again
-#: ../ssh/seahorse-ssh-operation.c:730
-msgid "Secure Shell Passphrase"
-msgstr "Парола за SSH"
+#: ../ssh/seahorse-ssh-operation.c:762
+msgid "Remote Host Password"
+msgstr "Парола за отдалечения компютър"
 
-#: ../ssh/seahorse-ssh-operation.c:818
+#: ../ssh/seahorse-ssh-operation.c:850
 msgid "Old Key Passphrase"
 msgstr "Стара парола на ключ"
 
-#: ../ssh/seahorse-ssh-operation.c:819
+#: ../ssh/seahorse-ssh-operation.c:851
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "Въведете старата парола за %s"
 
-#: ../ssh/seahorse-ssh-operation.c:823
+#: ../ssh/seahorse-ssh-operation.c:855
 msgid "New Key Passphrase"
 msgstr "Нова парола за ключ"
 
-#: ../ssh/seahorse-ssh-operation.c:824
+#: ../ssh/seahorse-ssh-operation.c:856
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "Въведете нова парола за: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:832
+#: ../ssh/seahorse-ssh-operation.c:864
 msgid "Enter Key Passphrase"
 msgstr "Въведете паролата за ключа"
 
-#: ../ssh/seahorse-ssh-operation.c:900
+#: ../ssh/seahorse-ssh-operation.c:931
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Парола за новия ключ за SSH"
 
-#: ../ssh/seahorse-ssh-operation.c:901
+#: ../ssh/seahorse-ssh-operation.c:932
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr "Въведете парола за новия ключ за SSH."
 
-#: ../ssh/seahorse-ssh-operation.c:1036
-msgid "Secure Shell Key Passphrase"
-msgstr "Парола за ключа за SSH"
-
-#: ../ssh/seahorse-ssh-operation.c:1036
-#, c-format
-msgid "Enter the passphrase for: %s"
-msgstr "Въведете паролата за %s"
-
-#: ../ssh/seahorse-ssh-operation.c:1037
-msgid "Save this passphrase in my keyring"
-msgstr "Запомняне на паролата в ключодържателя"
-
-#: ../ssh/seahorse-ssh-operation.c:1090
+#: ../ssh/seahorse-ssh-operation.c:1013
 #, c-format
 msgid "Importing key: %s"
 msgstr "Внасяне на ключа: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:1092
+#: ../ssh/seahorse-ssh-operation.c:1015
 msgid "Importing key. Enter passphrase"
 msgstr "Внасяне на ключ. Въведете парола"
 
-#: ../ssh/seahorse-ssh-source.c:945
+#: ../ssh/seahorse-ssh-source.c:825
 msgid "No private key file is available for this key."
 msgstr "За тази ключ липсва частен."
 
@@ -2944,8 +3018,8 @@ msgid "Configuring Secure Shell Keys..."
 msgstr "Настройване на ключовете за SSH…"
 
 #: ../ssh/seahorse-ssh-upload.glade.h:1
-msgid "<i>eg: fileserver.example.com</i>"
-msgstr "<i>напр: fileserver.example.com</i>"
+msgid "<i>eg: fileserver.example.com:port</i>"
+msgstr "<i>напр: файлов-сървър.нейде.com:порт</i>"
 
 #: ../ssh/seahorse-ssh-upload.glade.h:2
 msgid "Set Up Computer for SSH Connection"
@@ -2953,22 +3027,20 @@ msgstr "Настройване на компютър за връзка по SSH"
 
 #: ../ssh/seahorse-ssh-upload.glade.h:4
 msgid ""
-"To use your Secure Shell key with another computer that\n"
-"uses SSH, you must already have a login account on that \n"
-"computer."
+"To use your Secure Shell key with another computer that uses SSH, you must "
+"already have a login account on that computer."
 msgstr ""
-"За да използвате ключа си за SSH с друг компютър,\n"
-"трябва да имате достъп до другата машина — валидно\n"
-"потребителско име."
+"За да използвате ключа си за SSH с друг компютър, трябва да имате достъп до "
+"другата машина — валидно потребителско име."
 
-#: ../ssh/seahorse-ssh-upload.glade.h:7
+#: ../ssh/seahorse-ssh-upload.glade.h:5
 msgid "_Computer Name:"
 msgstr "Име на _компютъра:"
 
-#: ../ssh/seahorse-ssh-upload.glade.h:8
+#: ../ssh/seahorse-ssh-upload.glade.h:6
 msgid "_Login Name:"
 msgstr "_Потребителско име:"
 
-#: ../ssh/seahorse-ssh-upload.glade.h:9
+#: ../ssh/seahorse-ssh-upload.glade.h:7
 msgid "_Set Up"
 msgstr "_Настройки"
