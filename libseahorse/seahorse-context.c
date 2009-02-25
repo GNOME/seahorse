@@ -239,7 +239,8 @@ seahorse_context_new (guint flags)
 			g_object_unref (app_context);
         
 		g_object_ref (sctx);
-		gtk_object_sink (GTK_OBJECT (sctx));
+		g_object_ref_sink (sctx);
+		g_object_unref (sctx)
 		app_context = sctx;
         
 		refresh_keyservers (NULL, 0, NULL, sctx);

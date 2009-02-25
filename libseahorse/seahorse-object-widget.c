@@ -266,6 +266,6 @@ seahorse_object_widget_new (gchar *name, GtkWindow *parent, SeahorseObject *obje
     /* We don't care about this floating business */
     g_object_ref (GTK_OBJECT (swidget));
     gtk_object_sink (GTK_OBJECT (swidget));
-
+    g_object_unref (GTK_OBJECT (swidget));
     return swidget;
 }
