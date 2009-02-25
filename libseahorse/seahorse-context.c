@@ -240,7 +240,7 @@ seahorse_context_new (guint flags)
         
 		g_object_ref (sctx);
 		g_object_ref_sink (sctx);
-		g_object_unref (sctx)
+		g_object_unref (sctx);
 		app_context = sctx;
         
 		refresh_keyservers (NULL, 0, NULL, sctx);
