@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 2.25.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-29 16:28+0100\n"
-"PO-Revision-Date: 2009-01-29 16:29+0100\n"
+"POT-Creation-Date: 2009-02-26 14:05+0100\n"
+"PO-Revision-Date: 2009-02-26 14:17+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -367,7 +367,7 @@ msgstr ""
 msgid "The host name or address of the server."
 msgstr "Vertsnavnet eller adressen til tjeneren."
 
-#: ../gkr/seahorse-gkr-add-keyring.c:121
+#: ../gkr/seahorse-gkr-add-keyring.c:133
 msgid "Couldn't add keyring"
 msgstr "Kunne ikke legge til nøkkelring"
 
@@ -380,7 +380,6 @@ msgid "Network Password"
 msgstr "Nettverkspassord"
 
 #: ../gkr/seahorse-gkr-item.c:474 ../gkr/seahorse-gkr-item-properties.c:106
-#: ../gkr/seahorse-gkr-source.c:283
 msgid "Password"
 msgstr "Passord"
 
@@ -455,9 +454,9 @@ msgid "Applications"
 msgstr "Programmer"
 
 #: ../gkr/seahorse-gkr-item-properties.glade.h:6
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:71
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
 msgid "Details"
 msgstr "Detaljer"
@@ -498,8 +497,8 @@ msgstr "Type:"
 msgid "Use:"
 msgstr "Bruk:"
 
-#. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkr-item-properties.glade.h:16 ../src/seahorse-viewer.c:495
+#. To translators: This is the infinitive not the imperative.  This string refers to the ability of an application to delete this secret from its key ring.
+#: ../gkr/seahorse-gkr-item-properties.glade.h:16
 msgid "_Delete"
 msgstr "_Slett"
 
@@ -522,10 +521,84 @@ msgstr "_Skriv"
 msgid "Listing passwords"
 msgstr "Lister passord"
 
-#: ../gkr/seahorse-gkr-keyring.c:478
-msgid "Passwords"
-msgstr "Passord"
+#: ../gkr/seahorse-gkr-keyring.c:354
+#, c-format
+msgid "Passwords: %s"
+msgstr "Passord: %s"
 
+#: ../gkr/seahorse-gkr-keyring.c:355
+#, c-format
+msgid "<b>Passwords:</b> %s"
+msgstr "<b>Passord:</b> %s"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:87
+msgid "Password Keyring"
+msgstr "Nøkkelringer for passord"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:88
+msgid "Used to store application and network passwords"
+msgstr "Brukes til å lagre passord for programmer og nettverk"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:101
+msgid "Couldn't unlock keyring"
+msgstr "Kunne ikke låse opp nøkkelring"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:141
+msgid "Couldn't lock keyring"
+msgstr "Kunne ikke låse nøkkelring"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:181
+msgid "Couldn't set default keyring"
+msgstr "Kunne ikke sette forvalgt nøkkelring"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:219
+msgid "Couldn't change keyring password"
+msgstr "Kunne ikke endre passord for nøkkelring"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:250
+msgid "_Lock"
+msgstr "_Lås"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:251
+msgid ""
+"Lock the password storage keyring so a master password is required to unlock "
+"it."
+msgstr ""
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:252
+msgid "_Unlock"
+msgstr "Lås _opp"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:253
+msgid ""
+"Unlock the password storage keyring with a master password so it is "
+"available for use."
+msgstr ""
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:254
+msgid "_Set as default"
+msgstr "_Sett som forvalg"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:255
+msgid "Applications usually store new passwords in the default keyring."
+msgstr ""
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:256
+msgid "Change _Password"
+msgstr "Bytt _passord"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:257
+msgid "Change the unlock password of the password storage keyring"
+msgstr ""
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:321
+#, c-format
+msgid "Are you sure you want to delete the password keyring '%s'?"
+msgstr "Er du sikker på at du vil slette passordnøkkelring «%s»?"
+
+#. -----------------------------------------------------------------------------
+#. * PUBLIC
+#.
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.glade.h:2
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
@@ -585,22 +658,19 @@ msgstr "Sletter oppføring..."
 msgid "Deleting keyring..."
 msgstr "Sletter nøkkelring..."
 
-#: ../gkr/seahorse-gkr-source.c:188
+#: ../gkr/seahorse-gkr-source.c:234
 msgid "Listing password keyrings"
 msgstr "Viser nøkkelringer med passord"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:57
-msgid "Password Keyring"
-msgstr "Nøkkelringer for passord"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:58
-msgid "Used to store application and network passwords"
-msgstr "Brukes til å lagre passord for programmer og nettverk"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:89
-#, c-format
-msgid "Are you sure you want to delete the password keyring '%s'?"
-msgstr "Er du sikker på at du vil slette passordnøkkelring «%s»?"
+#: ../libcryptui/cryptui.c:222
+msgid ""
+"No encryption keys were found with which to perform the operation you "
+"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
+"started so that you may either create a key or import one."
+msgstr ""
+"Fant ingen krypteringsnøkler for å utføre operasjonen du forespurte. "
+"Programmet <b>Passord og krypteringsnøkler</b> vil nå startes slik at du kan "
+"lage en nøkkel eller importere en."
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -903,6 +973,69 @@ msgstr "%04d-%02d-%02d"
 msgid "%u:%u:%u"
 msgstr "%u.%u.%u"
 
+#: ../libegg/eggdesktopfile.c:165
+#, c-format
+msgid "File is not a valid .desktop file"
+msgstr ""
+
+#: ../libegg/eggdesktopfile.c:188
+#, c-format
+msgid "Unrecognized desktop file Version '%s'"
+msgstr ""
+
+#: ../libegg/eggdesktopfile.c:958
+#, c-format
+msgid "Starting %s"
+msgstr ""
+
+#: ../libegg/eggdesktopfile.c:1100
+#, c-format
+msgid "Application does not accept documents on command line"
+msgstr ""
+
+#: ../libegg/eggdesktopfile.c:1168
+#, c-format
+msgid "Unrecognized launch option: %d"
+msgstr ""
+
+#: ../libegg/eggdesktopfile.c:1373
+#, c-format
+msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+msgstr ""
+
+#: ../libegg/eggdesktopfile.c:1392
+#, c-format
+msgid "Not a launchable item"
+msgstr ""
+
+#: ../libegg/eggsmclient.c:224
+msgid "Disable connection to session manager"
+msgstr ""
+
+#: ../libegg/eggsmclient.c:227
+msgid "Specify file containing saved configuration"
+msgstr ""
+
+#: ../libegg/eggsmclient.c:227
+msgid "FILE"
+msgstr ""
+
+#: ../libegg/eggsmclient.c:230
+msgid "Specify session management ID"
+msgstr ""
+
+#: ../libegg/eggsmclient.c:230 ../pgp/seahorse-pgp-key-properties.c:1378
+msgid "ID"
+msgstr "ID"
+
+#: ../libegg/eggsmclient.c:244
+msgid "Session management options:"
+msgstr ""
+
+#: ../libegg/eggsmclient.c:245
+msgid "Show session management options"
+msgstr ""
+
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
 msgstr ":"
@@ -1158,31 +1291,6 @@ msgstr "Tilbakekalt"
 msgid "Could not display help: %s"
 msgstr "Kunne ikke vise hjelp: %s"
 
-#: ../libcryptui/cryptui.c:213
-msgid ""
-"No encryption keys were found with which to perform the operation you "
-"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
-"started so that you may either create a key or import one."
-msgstr ""
-"Fant ingen krypteringsnøkler for å utføre operasjonen du forespurte. "
-"Programmet <b>Passord og krypteringsnøkler</b> vil nå startes slik at du kan "
-"lage en nøkkel eller importere en."
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:108
-#, c-format
-msgid "Are you sure you want to delete the certificate '%s'?"
-msgstr "Er du sikker på at du vil slette sertifikatet «%s»?"
-
-#: ../pkcs11/seahorse-pkcs11-commands.c:110
-#, c-format
-msgid "Are you sure you want to delete %d certificates?"
-msgstr "Er du sikker på at du vil slette %d sertifikater?"
-
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:67
-msgid "Certificate"
-msgstr "Sertifikat"
-
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
 msgstr "Utløpsdato:"
@@ -1255,10 +1363,6 @@ msgstr "Trekk tilbake nøkkel"
 msgid "_Never expires"
 msgstr "_Går aldri ut"
 
-#: ../pgp/seahorse-gpgme.c:51
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr "Dekryptering feilet. Du har muligens ikke dekrypteringsnøkkelen."
-
 #: ../pgp/seahorse-gpgme-add-subkey.c:144
 msgid "Couldn't add subkey"
 msgstr "Kunne ikke legge til undernøkkel"
@@ -1293,6 +1397,10 @@ msgstr "Kunne ikke legge til bruker-ID"
 msgid "Add user ID to %s"
 msgstr "Legg til bruker-ID i %s"
 
+#: ../pgp/seahorse-gpgme.c:51
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr "Dekryptering feilet. Du har muligens ikke dekrypteringsnøkkelen."
+
 #: ../pgp/seahorse-gpgme-expires.c:58
 msgid "Invalid expiry date"
 msgstr "Ugyldig utløpsdato"
@@ -1310,9 +1418,7 @@ msgstr "Kunne ikke endre utløpsdato"
 msgid "Expiry: %s"
 msgstr "Utgår: %s"
 
-#: ../pgp/seahorse-gpgme-generate.c:65 ../pgp/seahorse-gpgme-source.c:438
-#: ../pgp/seahorse-hkp-source.c:759 ../pgp/seahorse-ldap-source.c:1314
-#: ../pgp/seahorse-server-source.c:207
+#: ../pgp/seahorse-gpgme-generate.c:65
 msgid "PGP Key"
 msgstr "PGP-nøkkel"
 
@@ -1470,43 +1576,43 @@ msgstr ""
 "Du har ingen personlige PGP-nøkler som kan brukes for å indikere din tillit "
 "til denne nøkkelen."
 
-#: ../pgp/seahorse-gpgme-source.c:100
+#: ../pgp/seahorse-gpgme-source.c:99
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Feil passordfrase."
 
-#: ../pgp/seahorse-gpgme-source.c:104
+#: ../pgp/seahorse-gpgme-source.c:103
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "Oppgi ny passordfrase for «%s»"
 
-#: ../pgp/seahorse-gpgme-source.c:106
+#: ../pgp/seahorse-gpgme-source.c:105
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Oppgi passordfrase for «%s»"
 
-#: ../pgp/seahorse-gpgme-source.c:109
+#: ../pgp/seahorse-gpgme-source.c:108
 #: ../src/seahorse-change-passphrase.glade.h:4
 msgid "Enter new passphrase"
 msgstr "Oppgi nytt passord"
 
-#: ../pgp/seahorse-gpgme-source.c:111
+#: ../pgp/seahorse-gpgme-source.c:110
 msgid "Enter passphrase"
 msgstr "Oppgi passordfrase"
 
 #. TODO: We can use the GPGME progress to make this more accurate
-#: ../pgp/seahorse-gpgme-source.c:727
+#: ../pgp/seahorse-gpgme-source.c:722
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Lastet %d nøkkel"
 msgstr[1] "Lastet %d nøkler"
 
-#: ../pgp/seahorse-gpgme-source.c:782
+#: ../pgp/seahorse-gpgme-source.c:777
 msgid "Loading Keys..."
 msgstr "Laster nøkler..."
 
-#: ../pgp/seahorse-gpgme-source.c:825
+#: ../pgp/seahorse-gpgme-source.c:820
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1514,11 +1620,11 @@ msgstr ""
 "Ugyldige nøkkeldata (mangler UIDer). Dette kan være forårsaket av en "
 "datamaskin med datoen satt i fremtiden eller en manglende selvsignering."
 
-#: ../pgp/seahorse-gpgme-source.c:915
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:564
 msgid "Importing Keys"
 msgstr "Importerer nøkler"
 
-#: ../pgp/seahorse-gpgme-source.c:951
+#: ../pgp/seahorse-gpgme-source.c:946
 msgid "Exporting Keys"
 msgstr "Eksporterer nøkler"
 
@@ -1548,19 +1654,19 @@ msgstr "Laster opp nøkler..."
 msgid "Retrieving keys..."
 msgstr "Henter nøkler..."
 
-#: ../pgp/seahorse-hkp-source.c:832
+#: ../pgp/seahorse-hkp-source.c:828
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Søker etter nøkler på: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:909 ../pgp/seahorse-hkp-source.c:982
+#: ../pgp/seahorse-hkp-source.c:905 ../pgp/seahorse-hkp-source.c:978
 #: ../pgp/seahorse-ldap-source.c:668
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Kobler til: %s"
 
-#: ../pgp/seahorse-hkp-source.c:1007
+#: ../pgp/seahorse-hkp-source.c:1002
 msgid "HTTP Key Server"
 msgstr "HTTP nøkkeltjener"
 
@@ -1597,7 +1703,7 @@ msgstr "Henter eksterne nøkler..."
 msgid "Sending keys to key server..."
 msgstr "Sender nøkler til en nøkkeltjener..."
 
-#: ../pgp/seahorse-ldap-source.c:1426
+#: ../pgp/seahorse-ldap-source.c:1421
 msgid "LDAP Key Server"
 msgstr "LDAP nøkkeltjener"
 
@@ -1680,17 +1786,17 @@ msgstr "Ny PGP-nøkkel"
 msgid "_Comment:"
 msgstr "_Kommentar:"
 
-#: ../pgp/seahorse-pgp-key.c:196
+#: ../pgp/seahorse-pgp-key.c:200
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:36
 msgid "Private PGP Key"
 msgstr "Privat PGP-nøkkel"
 
-#: ../pgp/seahorse-pgp-key.c:199
+#: ../pgp/seahorse-pgp-key.c:203
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:32
 msgid "Public PGP Key"
 msgstr "Offentlig PGP-nøkkel"
 
-#: ../pgp/seahorse-pgp-key.c:565 ../pgp/seahorse-pgp-key-properties.c:1413
+#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1413
 msgid "Expired"
 msgstr "Utgått"
 
@@ -1748,7 +1854,7 @@ msgstr "Kunne ikke slette undernøkkel"
 msgid "Unable to change trust"
 msgstr "Kan ikke endre tillitsforhold"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1056 ../src/seahorse-viewer.c:311
+#: ../pgp/seahorse-pgp-key-properties.c:1056 ../src/seahorse-viewer.c:312
 #: ../ssh/seahorse-ssh-key-properties.c:215
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -1769,10 +1875,6 @@ msgstr "Kunne ikke eksportere nøkkel."
 msgctxt "Expires"
 msgid "Never"
 msgstr "Aldri"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1378
-msgid "ID"
-msgstr "ID"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1381
@@ -2100,6 +2202,17 @@ msgstr "Grunn til å tilbakekalle nøkkelen"
 msgid "_Reason:"
 msgstr "Å_rsak:"
 
+#: ../pgp/seahorse-signer.c:62
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr ""
+"Du har ingen personlige PGP-nøkler som kan brukes til å signere et dokument "
+"eller beskjed."
+
+#: ../pgp/seahorse-signer.glade.h:1
+msgid "_Sign message with key:"
+msgstr "_Signer melding med nøkkel:"
+
 #: ../pgp/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
 msgstr "<b>Hvor nøye har du sjekket denne nøkkelen?</b>"
@@ -2113,90 +2226,103 @@ msgid "<b>Sign key as:</b>"
 msgstr "<b>Signer nøkkel som:</b>"
 
 #: ../pgp/seahorse-sign.glade.h:4
+#, fuzzy
 msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key\n"
-"is owned by the person who claims to own it. For example, you could\n"
-"read the key fingerprint to the owner over the phone. "
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone. "
 msgstr ""
 "<i>Tilfeldig:</i> betyr at du har gjort en rask verifisering av at nøkkelen\n"
 "eies av personen som hevder at de eier den. Du kan for eksempel ha lest\n"
 "nøkkelens fingeravtrykk til eieren over telefonen."
 
-#: ../pgp/seahorse-sign.glade.h:7
+#: ../pgp/seahorse-sign.glade.h:5
 msgid "<i>Key Name</i>"
 msgstr "<i>Navn på nøkkel</i>"
 
-#: ../pgp/seahorse-sign.glade.h:8
+#: ../pgp/seahorse-sign.glade.h:6
+#, fuzzy
 msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who \n"
+"<i>Not at all:</i> means you believe the key is owned by the person who "
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
 "<i>Ikke i det hele tatt:</i> betyr at du tror denne nøkkelen eies av "
 "personen som hevder å eie den, men du har ikke verifisert at dette stemmer."
 
-#: ../pgp/seahorse-sign.glade.h:10
+#: ../pgp/seahorse-sign.glade.h:7
+#, fuzzy
 msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that "
-"this\n"
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
 "key is genuine."
 msgstr ""
 "<i>Meget nøye:</i> Velg dette kun hvis du er helt sikker på at denne\n"
 "nøkkelen er ekte."
 
-#: ../pgp/seahorse-sign.glade.h:12
+#: ../pgp/seahorse-sign.glade.h:8
 msgid "By signing you indicate your trust that this key belongs to:"
 msgstr "Bed å signere indikerer du at du stoler på at denne nøkkelen tilhører:"
 
-#: ../pgp/seahorse-sign.glade.h:13
+#: ../pgp/seahorse-sign.glade.h:9
 msgid "I can _revoke this signature at a later date."
 msgstr "Jeg kan t_rekke tilbake denne signaturen senere."
 
-#: ../pgp/seahorse-sign.glade.h:14
+#: ../pgp/seahorse-sign.glade.h:10
+#, fuzzy
+msgid "Sign Key"
+msgstr "_Signer nøkkel..."
+
+#: ../pgp/seahorse-sign.glade.h:11
+#, fuzzy
 msgid ""
-"You could use a hard to forge photo identification (such as a passport) \n"
-"to personally check that the name on the key is correct. You should \n"
-"have also used email to check that the email address belongs to the\n"
-"owner."
+"You could use a hard to forge photo identification (such as a passport) to "
+"personally check that the name on the key is correct. You should have also "
+"used email to check that the email address belongs to the owner."
 msgstr ""
 "Du kan bruke fotoidentifikasjon som er vanskelig å forfalske (f.eks pass) \n"
 "for personlig å sjekke at navnet på nøkkelen er korrekt. Du bør også\n"
 "bruke e-post for å sjekke at e-postadressen tilhører\n"
 "eieren."
 
-#: ../pgp/seahorse-sign.glade.h:18
+#: ../pgp/seahorse-sign.glade.h:12
 msgid "_Casually"
 msgstr "_Tilfeldig"
 
-#: ../pgp/seahorse-sign.glade.h:19
+#: ../pgp/seahorse-sign.glade.h:13
 msgid "_Not at all"
 msgstr "_Ikke i det hele tatt"
 
-#: ../pgp/seahorse-sign.glade.h:20
+#: ../pgp/seahorse-sign.glade.h:14
 msgid "_Others may not see this signature"
 msgstr "_Andre kan muligens ikke se denne signaturen"
 
-#: ../pgp/seahorse-sign.glade.h:21
+#: ../pgp/seahorse-sign.glade.h:15
 msgid "_Sign"
 msgstr "_Signer"
 
-#: ../pgp/seahorse-sign.glade.h:22
+#: ../pgp/seahorse-sign.glade.h:16
 msgid "_Signer:"
 msgstr "_Signeringspart:"
 
-#: ../pgp/seahorse-sign.glade.h:23
+#: ../pgp/seahorse-sign.glade.h:17
 msgid "_Very Carefully"
 msgstr "_Meget nøye"
 
-#: ../pgp/seahorse-signer.c:62
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"Du har ingen personlige PGP-nøkler som kan brukes til å signere et dokument "
-"eller beskjed."
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+msgid "Certificate"
+msgstr "Sertifikat"
 
-#: ../pgp/seahorse-signer.glade.h:1
-msgid "_Sign message with key:"
-msgstr "_Signer melding med nøkkel:"
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
+#, c-format
+msgid "Are you sure you want to delete the certificate '%s'?"
+msgstr "Er du sikker på at du vil slette sertifikatet «%s»?"
+
+#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#, fuzzy, c-format
+msgid "Are you sure you want to delete %d certificate?"
+msgid_plural "Are you sure you want to delete %d certificates?"
+msgstr[0] "Er du sikker på at du vil slette %d sertifikater?"
+msgstr[1] "Er du sikker på at du vil slette %d sertifikater?"
 
 #: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
@@ -2218,7 +2344,7 @@ msgstr "Nytt _passord:"
 msgid "Manage your passwords and encryption keys"
 msgstr "Håndter dine passord og krypteringsnøkler"
 
-#: ../src/seahorse.desktop.in.in.h:2
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:880
 msgid "Passwords and Encryption Keys"
 msgstr "Passord og krypteringsnøkler"
 
@@ -2233,6 +2359,121 @@ msgstr "F_ortsett"
 #: ../src/seahorse-generate-select.glade.h:3
 msgid "Create New ..."
 msgstr "Lag ny..."
+
+#: ../src/seahorse-key-manager.c:245 ../src/seahorse-keyserver-results.c:84
+#, fuzzy, c-format
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "Lastet %d nøkkel"
+msgstr[1] "Lastet %d nøkler"
+
+#: ../src/seahorse-key-manager.c:430 ../src/seahorse-key-manager.c:490
+#: ../src/seahorse-key-manager.c:553 ../src/seahorse-keyserver-results.c:170
+msgid "Couldn't import keys"
+msgstr "Kunne ikke importere nøkler"
+
+#: ../src/seahorse-key-manager.c:435 ../src/seahorse-keyserver-results.c:175
+msgid "Imported keys"
+msgstr "Importerte nøkler"
+
+#: ../src/seahorse-key-manager.c:484
+msgid "Importing keys"
+msgstr "Importerer nøkler"
+
+#: ../src/seahorse-key-manager.c:507 ../ssh/seahorse-ssh-operation.c:1017
+msgid "Import Key"
+msgstr "Importer nøkkel"
+
+#: ../src/seahorse-key-manager.c:553
+msgid "Unrecognized key type, or invalid data format"
+msgstr ""
+
+#: ../src/seahorse-key-manager.c:747 ../src/seahorse-keyserver-results.c:221
+msgid "_Remote"
+msgstr "_Ekstern"
+
+#: ../src/seahorse-key-manager.c:749
+msgid "Close this program"
+msgstr "Lukk dette programmet"
+
+#: ../src/seahorse-key-manager.c:750
+msgid "_New..."
+msgstr "_Ny..."
+
+#: ../src/seahorse-key-manager.c:751
+#, fuzzy
+msgid "Create a new key or item"
+msgstr "Generer en ny nøkkel"
+
+#: ../src/seahorse-key-manager.c:752
+msgid "_Import..."
+msgstr "_Importer..."
+
+#: ../src/seahorse-key-manager.c:753
+msgid "Import from a file"
+msgstr "Importer fra en fil"
+
+#: ../src/seahorse-key-manager.c:755
+msgid "Import from the clipboard"
+msgstr "Importer fra utklippstavlen"
+
+#: ../src/seahorse-key-manager.c:760 ../src/seahorse-keyserver-results.c:231
+msgid "_Find Remote Keys..."
+msgstr "_Finn eksterne nøkler..."
+
+#: ../src/seahorse-key-manager.c:761 ../src/seahorse-keyserver-results.c:232
+#, fuzzy
+msgid "Search for keys on a key server"
+msgstr "Søker etter nøkler på: %s"
+
+#: ../src/seahorse-key-manager.c:762
+msgid "_Sync and Publish Keys..."
+msgstr ""
+
+#: ../src/seahorse-key-manager.c:763
+msgid "Publish and/or synchronize your keys with those online."
+msgstr ""
+
+#: ../src/seahorse-key-manager.c:768
+msgid "T_ypes"
+msgstr "T_yper"
+
+#: ../src/seahorse-key-manager.c:768
+#, fuzzy
+msgid "Show type column"
+msgstr "Vis typekolonnen i nøkkelhåndtereren"
+
+#: ../src/seahorse-key-manager.c:770
+#, fuzzy
+msgid "_Expiry"
+msgstr "Utløpt"
+
+#: ../src/seahorse-key-manager.c:770
+#, fuzzy
+msgid "Show expiry column"
+msgstr "Vis utløpskolonnen i nøkkelhåndtereren"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "_Trust"
+msgstr "_Tillit"
+
+#: ../src/seahorse-key-manager.c:772
+#, fuzzy
+msgid "Show owner trust column"
+msgstr "Vis tillitskolonnen i nøkkelhåndtereren"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "_Validity"
+msgstr "_Validitet"
+
+#: ../src/seahorse-key-manager.c:774
+#, fuzzy
+msgid "Show validity column"
+msgstr "Vis gyldighetskolonnen i nøkkelhåndtereren"
+
+#: ../src/seahorse-key-manager.c:951
+msgid "Filter:"
+msgstr "Filter:"
 
 #: ../src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -2259,6 +2500,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "For å komme i gang med kryptering må du ha nøkler."
 
 #: ../src/seahorse-key-manager.glade.h:7
+#: ../src/seahorse-keyserver-results.c:236
 msgid "_Import"
 msgstr "_Importer"
 
@@ -2270,7 +2512,7 @@ msgstr "_Passord"
 msgid "_Trusted Keys"
 msgstr "Nøkler du s_toler på"
 
-#: ../src/seahorse-key-manager-store.c:648 ../src/seahorse-viewer.c:278
+#: ../src/seahorse-key-manager-store.c:648 ../src/seahorse-viewer.c:279
 msgid "Couldn't export keys"
 msgstr "Kunne ikke eksportere nøkler"
 
@@ -2282,6 +2524,43 @@ msgstr "Validitet"
 #: ../src/seahorse-key-manager-store.c:865
 msgid "Expiration Date"
 msgstr "Utløpsdato"
+
+#: ../src/seahorse-keyserver-results.c:194
+msgid "Importing keys from key servers"
+msgstr "Importerer nøkler fra nøkkeltjenere"
+
+#: ../src/seahorse-keyserver-results.c:223
+msgid "Close this window"
+msgstr "Lukk dette vinduet"
+
+#: ../src/seahorse-keyserver-results.c:224
+msgid "_Expand All"
+msgstr "_Utvid alle"
+
+#: ../src/seahorse-keyserver-results.c:225
+msgid "Expand all listings"
+msgstr "Utvid alle lister"
+
+#: ../src/seahorse-keyserver-results.c:226
+msgid "_Collapse All"
+msgstr "S_lå sammen alle"
+
+#: ../src/seahorse-keyserver-results.c:227
+msgid "Collapse all listings"
+msgstr "Slå sammen alle lister"
+
+#: ../src/seahorse-keyserver-results.c:237
+msgid "Import selected keys to local key ring"
+msgstr ""
+
+#: ../src/seahorse-keyserver-results.c:294
+msgid "Remote Keys"
+msgstr "Eksterne nøkler"
+
+#: ../src/seahorse-keyserver-results.c:296
+#, fuzzy, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "Søker etter nøkler som inneholder «%s»..."
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2419,56 +2698,53 @@ msgstr "_Innstillinger"
 msgid "Change preferences for this program"
 msgstr "Endre brukervalg for dette programmet"
 
-#: ../src/seahorse-viewer.c:198
-msgid "_About"
-msgstr "_Om"
-
-#: ../src/seahorse-viewer.c:199
+#: ../src/seahorse-viewer.c:200
 msgid "About this program"
 msgstr "Om dette programmet"
 
-#: ../src/seahorse-viewer.c:200
+#: ../src/seahorse-viewer.c:201
 msgid "_Contents"
 msgstr "_Innhold"
 
-#: ../src/seahorse-viewer.c:201
+#: ../src/seahorse-viewer.c:202
 msgid "Show Seahorse help"
 msgstr "Vis hjelp for Seahorse"
 
-#: ../src/seahorse-viewer.c:298
+#: ../src/seahorse-viewer.c:299
 msgid "Export public key"
 msgstr "Eksporter offentlig nøkkel"
 
-#: ../src/seahorse-viewer.c:316
+#: ../src/seahorse-viewer.c:317
 msgid "Exporting keys"
 msgstr "Eksporterer nøkler"
 
-#: ../src/seahorse-viewer.c:341
+#: ../src/seahorse-viewer.c:342
 msgid "Couldn't retrieve data from key server"
 msgstr "Kunne ikke hente data fra nøkkeltjener"
 
-#: ../src/seahorse-viewer.c:359
+#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
+#: ../src/seahorse-viewer.c:361
 msgid "Copied keys"
 msgstr "Kopierte nøkler"
 
-#: ../src/seahorse-viewer.c:379
+#: ../src/seahorse-viewer.c:381
 msgid "Retrieving keys"
 msgstr "Henter nøkler"
 
-#: ../src/seahorse-viewer.c:394
+#: ../src/seahorse-viewer.c:396
 msgid "Couldn't delete."
 msgstr "Kunne ikke slette."
 
-#: ../src/seahorse-viewer.c:428
+#: ../src/seahorse-viewer.c:430
 msgid "Deleting..."
 msgstr "Sletter..."
 
-#: ../src/seahorse-viewer.c:457
+#: ../src/seahorse-viewer.c:459
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s er en privat nøkkel. Er du sikker på at du vil fortsette?"
 
-#: ../src/seahorse-viewer.c:460
+#: ../src/seahorse-viewer.c:462
 msgid ""
 "One or more of the deleted keys are private keys. Are you sure you want to "
 "proceed?"
@@ -2476,31 +2752,28 @@ msgstr ""
 "En eller flere av nøklene som skal slettes er private nøkler. Er du sikker "
 "på at du vil fortsette?"
 
-#: ../src/seahorse-viewer.c:493
-msgid "P_roperties"
-msgstr "E_genskaper"
-
-#: ../src/seahorse-viewer.c:494
+#: ../src/seahorse-viewer.c:496
 msgid "Show properties"
 msgstr "Vis egenskaper"
 
-#: ../src/seahorse-viewer.c:496
+#: ../src/seahorse-viewer.c:497
+msgctxt "This text refers to deleting an item from its type's backing store."
+msgid "_Delete"
+msgstr "_Slett"
+
+#: ../src/seahorse-viewer.c:498
 msgid "Delete selected items"
 msgstr "Slett valgte oppføringer"
 
-#: ../src/seahorse-viewer.c:500
+#: ../src/seahorse-viewer.c:502
 msgid "E_xport..."
 msgstr "E_ksporter..."
 
-#: ../src/seahorse-viewer.c:501
+#: ../src/seahorse-viewer.c:503
 msgid "Export to a file"
 msgstr "Eksporter til en fil"
 
-#: ../src/seahorse-viewer.c:502
-msgid "_Copy"
-msgstr "_Kopier"
-
-#: ../src/seahorse-viewer.c:503
+#: ../src/seahorse-viewer.c:505
 msgid "Copy to the clipboard"
 msgstr "Kopier til utklippstavlen"
 
@@ -2724,10 +2997,6 @@ msgstr "Importerer nøkkel: %s"
 #: ../ssh/seahorse-ssh-operation.c:1015
 msgid "Importing key. Enter passphrase"
 msgstr "Importerer nøkkel. Oppgi passord"
-
-#: ../ssh/seahorse-ssh-operation.c:1017
-msgid "Import Key"
-msgstr "Importer nøkkel"
 
 #: ../ssh/seahorse-ssh-source.c:830
 msgid "No private key file is available for this key."
