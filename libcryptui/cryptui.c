@@ -66,6 +66,16 @@ init_remote_service ()
  * PUBLIC 
  */
 
+/**
+ * cryptui_key_get_base:
+ * @key: key for use with libcryptui
+ * 
+ * This function is a utility function to get the part of the key that preceeds
+ * the colon.
+ *
+ * Returns: the key base
+ */
+ 
 gchar*
 cryptui_key_get_base (const gchar *key)
 {
@@ -92,6 +102,20 @@ cryptui_key_get_enctype (const gchar *key)
     return CRYPTUI_ENCTYPE_PUBLIC;
 }
 
+/**
+ * cryptui_display_notification:
+ * @title: Headline for the notification
+ * @body: Text for the body of the notification
+ * @icon: Full path to icon to be included
+ * @urgent: Whether the notification is urgent or not.
+ * 
+ * This function creates a notification bubble that can be updated as additional
+ * key details are discovered.  See http://live.gnome.org/Seahorse/DBus for a
+ * description of the markup syntax.
+ *
+ * Returns: void
+ */
+ 
 void
 cryptui_display_notification (const gchar *title, const gchar *body, const gchar *icon, 
                               gboolean urgent)
@@ -124,6 +148,19 @@ selection_changed (CryptUIKeyChooser *chooser, GtkWidget *dialog)
                                        cryptui_key_chooser_have_recipients (chooser));
 }
 
+/**
+ * cryptui_prompt_recipients:
+ * @keyset: CryptUIKeyset to select keys to present to the user from
+ * @title: Window title for presented GtkWindow
+ * @signer: Variable in which to store the key of the signer if one is selected
+ * 
+ * This function prompts the user to select one or more keys from the keyset to
+ * use to encrypt to.  It also allows the user to select a private key from the 
+ * keyset to sign with. 
+ *
+ * Returns: the selected key
+ */
+ 
 gchar**
 cryptui_prompt_recipients (CryptUIKeyset *keyset, const gchar *title, 
                            gchar **signer)
@@ -173,6 +210,17 @@ cryptui_prompt_recipients (CryptUIKeyset *keyset, const gchar *title,
     gtk_widget_destroy (dialog);
     return keys;
 }
+
+/**
+ * cryptui_prompt_signer:
+ * @keyset: CryptUIKeyset to select keys to present to the user from
+ * @title: Window title for presented GtkWindow
+ * 
+ * This function prompts the user to select a private key from the keyset to
+ * use to sign something.
+ *
+ * Returns: the selected key
+ */
 
 gchar*
 cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title)
