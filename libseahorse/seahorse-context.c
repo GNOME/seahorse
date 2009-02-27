@@ -153,7 +153,7 @@ seahorse_context_dispose (GObject *gobject)
     g_hash_table_foreach (sctx->pv->objects_by_source, hash_to_ref_slist, &objects);
     for (l = objects; l; l = g_slist_next (l)) {
             seahorse_context_remove_object (sctx, l->data);
-            g_object_unref (l->data);
+            g_object_unref (G_OBJECT (l->data));
     }
     g_slist_free (objects);
 
@@ -737,6 +737,7 @@ seahorse_context_remove_object (SeahorseContext *sctx, SeahorseObject *sobj)
         sctx = seahorse_context_for_app ();
     g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
     g_return_if_fail (SEAHORSE_IS_OBJECT (sobj));
+    g_return_if_fail (seahorse_object_get_id (sobj) != 0);
     
     k = hashkey_by_source (seahorse_object_get_source (sobj), 
                            seahorse_object_get_id (sobj));
