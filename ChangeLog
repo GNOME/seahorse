@@ -16,6 +16,10 @@
 	* src/seahorse-key-manager.c: Fix problems highlighted by valgrind,
 	using uninitialized variables, and freeing non-allocated memory.
 	
+	* pgp/seahorse-gpgme-key.c:
+	* pgp/seahorse-pgp-key.c: Workaround for strange ownership behavior, 
+	we only add GPGME keys to the context, rather than all PGP keys.
+	
 2009-02-27  Adam Schreiber  <sadam@clemson.edu>
 
     * libseahorse/seahorse-context.c: Stop segfaulting when objects with NULL 

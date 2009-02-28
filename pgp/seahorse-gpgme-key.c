@@ -410,12 +410,22 @@ static void
 seahorse_gpgme_key_set_uids (SeahorsePgpKey *base, GList *uids)
 {
 	SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (base);
+	GList *l;
+	
 	SEAHORSE_PGP_KEY_CLASS (seahorse_gpgme_key_parent_class)->set_uids (base, uids);
 	
+	/* Remove the parent on each old one */
+	for (l = self->pv->uids; l; l = g_list_next (l))
+		seahorse_context_remove_object (seahorse_context_for_app (), l->data);
+
 	/* Keep our own copy of the UID list */
 	seahorse_object_list_free (self->pv->uids);
 	self->pv->uids = seahorse_object_list_copy (uids);
 	
+	/* Add UIDS to context so that they show up in libcryptui */
+	for (l = self->pv->uids; l; l = g_list_next (l))
+		seahorse_context_add_object (seahorse_context_for_app (), l->data);
+
 	renumber_actual_uids (self);
 }
 
@@ -493,6 +503,11 @@ static void
 seahorse_gpgme_key_object_dispose (GObject *obj)
 {
 	SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (obj);
+	GList *l;
+	
+	/* Remove the attached UIDs */
+	for (l = self->pv->uids; l; l = g_list_next (l))
+		seahorse_context_remove_object (seahorse_context_for_app (), l->data);
 
 	if (self->pv->pubkey)
 		gpgme_key_unref (self->pv->pubkey);
