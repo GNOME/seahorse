@@ -578,10 +578,12 @@ seahorse_gpgme_key_class_init (SeahorseGpgmeKeyClass *klass)
 
 SeahorseGpgmeKey* 
 seahorse_gpgme_key_new (SeahorseSource *sksrc, gpgme_key_t pubkey, 
-                      gpgme_key_t seckey)
+                        gpgme_key_t seckey)
 {
 	return g_object_new (SEAHORSE_TYPE_GPGME_KEY, "source", sksrc,
-	                     "pubkey", pubkey, "seckey", seckey, NULL);
+	                     "id", seahorse_pgp_key_canonize_id (pubkey->subkeys->keyid),
+	                     "pubkey", pubkey, "seckey", seckey, 
+	                     NULL);
 }
 
 gpgme_key_t

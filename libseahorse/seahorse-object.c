@@ -619,8 +619,6 @@ GQuark
 seahorse_object_get_id (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
-	if (!self->pv->id)
-		seahorse_object_realize (self);
 	return self->pv->id;
 }
 
