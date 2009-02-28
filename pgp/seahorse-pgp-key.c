@@ -103,10 +103,14 @@ _seahorse_pgp_key_get_uids (SeahorsePgpKey *self)
 static void
 _seahorse_pgp_key_set_uids (SeahorsePgpKey *self, GList *uids)
 {
+	guint index;
+	GQuark id;
 	GList *l;
 	
 	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
 
+	id = seahorse_object_get_id (SEAHORSE_OBJECT (self));
+	
 	/* Remove the parent on each old one */
 	for (l = self->pv->uids; l; l = g_list_next (l)) {
 		seahorse_context_remove_object (seahorse_context_for_app (), l->data);
@@ -115,9 +119,10 @@ _seahorse_pgp_key_set_uids (SeahorsePgpKey *self, GList *uids)
 
 	seahorse_object_list_free (self->pv->uids);
 	self->pv->uids = seahorse_object_list_copy (uids);
-
+	
 	/* Set parent and source on each new one, except the first */
-	for (l = self->pv->uids; l; l = g_list_next (l)) {
+	for (l = self->pv->uids, index = 0; l; l = g_list_next (l), ++index) {
+		g_object_set (l->data, "id", seahorse_pgp_uid_calc_id (id, index), NULL);
 		if (l != self->pv->uids)
 			seahorse_object_set_parent (l->data, SEAHORSE_OBJECT (self));
 		seahorse_context_add_object (seahorse_context_for_app (), l->data);

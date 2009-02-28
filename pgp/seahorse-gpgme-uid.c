@@ -68,23 +68,6 @@ convert_string (const gchar *str)
 }
 
 static void
-realize_id (SeahorseGpgmeUid *self)
-{
-	gchar *str = NULL;
-	GQuark id = 0;
-	
-	if (self->pv->gpgme_index >= 0 || self->pv->pubkey != NULL) {
-		/* Build up a new id for this UID */
-		g_return_if_fail (self->pv->pubkey->subkeys && self->pv->pubkey->subkeys->keyid);
-		str = seahorse_pgp_key_calc_id (self->pv->pubkey->subkeys->keyid, self->pv->gpgme_index + 1);
-		id = g_quark_from_string (str);
-		g_free (str);
-	}
-
-	g_object_set (self, "id", id, NULL);
-}
-
-static void
 realize_signatures (SeahorseGpgmeUid *self)
 {
 	gpgme_key_sig_t gsig;
@@ -348,7 +331,6 @@ seahorse_gpgme_uid_set_userid (SeahorseGpgmeUid *self, gpgme_user_id_t userid)
 	seahorse_pgp_uid_set_comment (base, string);
 	g_free (string);
 	
-	realize_id (self);
 	realize_signatures (self);
 
 	seahorse_pgp_uid_set_validity (base, seahorse_gpgme_convert_validity (userid->validity));

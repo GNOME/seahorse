@@ -89,4 +89,7 @@ gchar*            seahorse_pgp_uid_calc_markup          (const gchar *name,
                                                          const gchar *comment,
                                                          guint flags);
 
+GQuark            seahorse_pgp_uid_calc_id              (GQuark key_id,
+                                                         guint index);
+
 #endif /* __SEAHORSE_PGP_UID_H__ */

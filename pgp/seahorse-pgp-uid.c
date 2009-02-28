@@ -532,3 +532,16 @@ seahorse_pgp_uid_calc_markup (const gchar *name, const gchar *email,
 	 	          comment && comment[0] ? comment : "",
 	 	          comment && comment[0] ? "'" : "");
 }
+
+GQuark
+seahorse_pgp_uid_calc_id (GQuark key_id, guint index)
+{
+	gchar *str = NULL;
+	GQuark id = 0;
+	
+	str = g_strdup_printf ("%s:%u", g_quark_to_string (key_id), index + 1);
+	id = g_quark_from_string (str);
+	g_free (str);
+
+	return id;
+}
