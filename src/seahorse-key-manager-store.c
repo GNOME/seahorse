@@ -876,6 +876,8 @@ seahorse_key_manager_store_new (SeahorseSet *skset, GtkTreeView *view)
         g_free (sort);
     } 
     
+    gtk_tree_view_set_enable_search (view, FALSE);
+    
     seahorse_gconf_notify_lazy (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, 
                                 view, GTK_WIDGET (view));
 
