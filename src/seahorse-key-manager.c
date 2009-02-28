@@ -868,7 +868,6 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (G_OBJECT_CLASS (seahorse_key_manager_parent_class)->constructor(type, n_props, props));
 	GtkActionGroup* actions;
 	GtkToggleAction* action;
-	GtkTargetEntry* entries;
 	GtkTargetList* targets;
 	GtkWidget* widget;
 
@@ -985,7 +984,7 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	/* Setup drops */
 	gtk_drag_dest_set (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), 
 	                   GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
-	targets = gtk_target_list_new (entries, 0);
+	targets = gtk_target_list_new (NULL, 0);
 	gtk_target_list_add_uri_targets (targets, TARGETS_URIS);
 	gtk_target_list_add_text_targets (targets, TARGETS_PLAIN);
 	gtk_drag_dest_set_target_list (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), targets);

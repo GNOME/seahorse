@@ -77,7 +77,7 @@ calc_name (SeahorsePgpKey *self)
 	GList *uids = seahorse_pgp_key_get_uids (self);
 	return uids ? seahorse_pgp_uid_calc_label (seahorse_pgp_uid_get_name (uids->data),
 	                                           seahorse_pgp_uid_get_email (uids->data),
-	                                           seahorse_pgp_uid_get_comment (uids->data)) : "";
+	                                           seahorse_pgp_uid_get_comment (uids->data)) : g_strdup ("");
 }
 
 static gchar* 
@@ -86,7 +86,7 @@ calc_markup (SeahorsePgpKey *self, guint flags)
 	GList *uids = seahorse_pgp_key_get_uids (self);
 	return uids ? seahorse_pgp_uid_calc_markup (seahorse_pgp_uid_get_name (uids->data),
 	                                            seahorse_pgp_uid_get_email (uids->data),
-	                                            seahorse_pgp_uid_get_comment (uids->data), flags) : "";
+	                                            seahorse_pgp_uid_get_comment (uids->data), flags) : g_strdup ("");
 }
 
 /* -----------------------------------------------------------------------------

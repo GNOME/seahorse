@@ -116,6 +116,7 @@ on_find_objects(GP11Session *session, GAsyncResult *result, SeahorsePkcs11Refres
 	/* Remove all objects that were found, from the check table */
 	for (l = objects; l; l = g_list_next (l)) {
 		seahorse_pkcs11_source_receive_object (self->source, l->data);
+		handle = gp11_object_get_handle (l->data);
 		g_hash_table_remove (self->checks, &handle);
 	}
 
