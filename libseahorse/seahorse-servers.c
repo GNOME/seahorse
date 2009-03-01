@@ -155,7 +155,7 @@ seahorse_servers_is_valid_uri (const char* uri)
 	parts = g_strsplit (uri, ":", 2);
 	if (parts && parts[0]) {
 		info = g_hash_table_lookup (server_types, parts[0]);
-		if (info->validator && (info->validator) (uri))
+		if (info && info->validator && (info->validator) (uri))
 			ret = TRUE;
 	}
 	
