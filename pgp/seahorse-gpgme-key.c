@@ -580,8 +580,17 @@ SeahorseGpgmeKey*
 seahorse_gpgme_key_new (SeahorseSource *sksrc, gpgme_key_t pubkey, 
                         gpgme_key_t seckey)
 {
+	const gchar *keyid;
+
+	g_return_val_if_fail (pubkey || seckey, NULL);
+	
+	if (pubkey != NULL)
+		keyid = pubkey->subkeys->keyid;
+	else
+		keyid = seckey->subkeys->keyid;
+	
 	return g_object_new (SEAHORSE_TYPE_GPGME_KEY, "source", sksrc,
-	                     "id", seahorse_pgp_key_canonize_id (pubkey->subkeys->keyid),
+	                     "id", seahorse_pgp_key_canonize_id (keyid),
 	                     "pubkey", pubkey, "seckey", seckey, 
 	                     NULL);
 }
