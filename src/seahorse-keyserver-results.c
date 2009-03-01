@@ -60,6 +60,7 @@ on_filter_objects (SeahorseObject *obj, SeahorseKeyserverResults *self)
 	const gchar *match;
 	gboolean ret = FALSE;
 	gchar* value;
+	gsize n_value, n_match;
 
 	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self), FALSE);
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (obj), FALSE);
@@ -80,7 +81,14 @@ on_filter_objects (SeahorseObject *obj, SeahorseKeyserverResults *self)
 		if (strncmp (match, "0x", 2) == 0)
 			match += 2;
 		value = g_utf8_casefold (seahorse_object_get_identifier (obj), -1);
+		
+		/* Only compare as many bytes as exist in the key id */
+		n_value = strlen (value);
+		n_match = strlen (match);
+		if (n_value > n_match)
+			match += (n_value - n_match);
 		ret = strstr (value, match) != NULL;
+		
 		g_free (value);
 	}
 	
