@@ -57,17 +57,33 @@ G_DEFINE_TYPE (SeahorseKeyserverResults, seahorse_keyserver_results, SEAHORSE_TY
 static gboolean 
 on_filter_objects (SeahorseObject *obj, SeahorseKeyserverResults *self) 
 {
-	gboolean ret;
-	char* name;
+	const gchar *match;
+	gboolean ret = FALSE;
+	gchar* value;
 
 	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self), FALSE);
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (obj), FALSE);
-	if (g_utf8_strlen (self->pv->search_string, -1) == 0)
-		return TRUE;
 
-	name = g_utf8_casefold (seahorse_object_get_label (obj), -1);
-	ret = strstr (name, self->pv->search_string) != NULL;
-	g_free (name);
+	match = self->pv->search_string;
+	if (g_utf8_strlen (match, -1) == 0)
+		ret = TRUE;
+
+	/* Match against the label */
+	if (ret != TRUE) {
+		value = g_utf8_casefold (seahorse_object_get_label (obj), -1);
+		ret = strstr (value, match) != NULL;
+		g_free (value);
+	}
+	
+	/* Match against the key identifier */
+	if (ret != TRUE) {
+		if (strncmp (match, "0x", 2) == 0)
+			match += 2;
+		value = g_utf8_casefold (seahorse_object_get_identifier (obj), -1);
+		ret = strstr (value, match) != NULL;
+		g_free (value);
+	}
+	
 	return ret;
 }
 
