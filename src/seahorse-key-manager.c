@@ -919,7 +919,7 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	                         "clicked", G_CALLBACK (on_new_button_clicked), self, 0);
 	
 	/* The notebook */
-	g_signal_connect_object (self->pv->notebook, "switch-page", G_CALLBACK (on_tab_changed), self, 0);
+	g_signal_connect_object (self->pv->notebook, "switch-page", G_CALLBACK (on_tab_changed), self, G_CONNECT_AFTER);
 	
 	/* Flush all updates */
 	seahorse_viewer_ensure_updated (SEAHORSE_VIEWER (self));
