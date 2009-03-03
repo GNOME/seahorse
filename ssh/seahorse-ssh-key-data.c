@@ -231,7 +231,12 @@ seahorse_ssh_key_data_parse (const gchar *data, SeahorseSSHPublicKeyParsed publi
     gchar **lines, **l;
     gchar *line;
     
-    lines = g_strsplit (data, "\n", -1);
+    g_return_val_if_fail (data, 0);
+    
+    if (!*data)
+	    return 0;
+    
+    lines = g_strsplit (data, "\n", 0);
     for (l = lines; *l; l++) {
         
         line = *l;

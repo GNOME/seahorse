@@ -265,8 +265,7 @@ seahorse_util_read_to_memory (GInputStream *input, guint *len)
 	if (len)
 		*len = string->len;
     
-	text = string->str;
-	g_string_free (string, FALSE);
+	text = g_string_free (string, FALSE);
 	g_free (buffer);
 	
 	return (guchar*)text;
