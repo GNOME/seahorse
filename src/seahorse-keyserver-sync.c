@@ -145,7 +145,7 @@ seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
     guint n, notify_id;
     gchar *t;
     
-    swidget = seahorse_widget_new ("keyserver-sync", parent);
+    swidget = seahorse_widget_new_allow_multiple ("keyserver-sync", parent);
     g_return_val_if_fail (swidget != NULL, NULL);
     
     win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
