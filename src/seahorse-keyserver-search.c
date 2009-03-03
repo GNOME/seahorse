@@ -301,6 +301,8 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
                                     selection->all ? NULL : selection->names);
                                     
     op = seahorse_context_search_remote (SCTX_APP(), search);
+    if (op == NULL)
+        return;
     
     /* Open the new result window */    
     seahorse_keyserver_results_show (op, 
