@@ -522,7 +522,7 @@ seahorse_secure_entry_init (SeahorseSecureEntry *entry)
      * This object is completely private. No external entity can gain a reference
      * to it; so we create it here and destroy it in finalize().
      */
-    entry->im_context = gtk_im_multicontext_new ();
+    entry->im_context = gtk_im_context_simple_new ();
 
     g_signal_connect (entry->im_context, "commit",
                       G_CALLBACK (seahorse_secure_entry_commit_cb), entry);
@@ -2348,6 +2348,26 @@ seahorse_secure_entry_set_visibility (SeahorseSecureEntry *entry, gboolean setti
 
     if (setting == entry->visibility)
         return;
+
+    if (GTK_WIDGET_HAS_FOCUS (entry) && !setting)
+        gtk_im_context_focus_out (entry->im_context);
+    g_object_unref (entry->im_context);
+
+    if (setting)
+        entry->im_context = gtk_im_multicontext_new ();
+    else
+        entry->im_context = gtk_im_context_simple_new ();
+
+    g_signal_connect (entry->im_context, "commit",
+                      G_CALLBACK (seahorse_secure_entry_commit_cb), entry);
+    g_signal_connect (entry->im_context, "preedit_changed",
+                      G_CALLBACK(seahorse_secure_entry_preedit_changed_cb), entry);
+    g_signal_connect (entry->im_context, "retrieve_surrounding",
+                      G_CALLBACK(seahorse_secure_entry_retrieve_surrounding_cb), entry);
+    g_signal_connect (entry->im_context, "delete_surrounding",
+                      G_CALLBACK(seahorse_secure_entry_delete_surrounding_cb), entry);
+    if (GTK_WIDGET_HAS_FOCUS (entry) && setting)
+        gtk_im_context_focus_in (entry->im_context);
 
     entry->visibility = setting;
     g_object_notify (G_OBJECT (entry), "visibility");
