@@ -977,7 +977,9 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	/* Set focus to the current key list */
 	widget = GTK_WIDGET (get_current_view (self));
 	gtk_widget_grab_focus (widget);
-	
+
+	g_signal_emit_by_name (self, "selection-changed");
+
 	/* To avoid flicker */
 	seahorse_widget_show (SEAHORSE_WIDGET (SEAHORSE_VIEWER (self)));
 	
@@ -995,7 +997,6 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	/* To show first time dialog */
 	g_timeout_add_seconds (1, (GSourceFunc)on_first_timer, self);
 	
-	g_signal_emit_by_name (self, "selection-changed");
 	g_signal_connect (seahorse_context_for_app (), "refreshing", G_CALLBACK (on_refreshing), self);
 
 	return G_OBJECT (self);
