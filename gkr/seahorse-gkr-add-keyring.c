@@ -153,10 +153,8 @@ properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 	
 	if (response == GTK_RESPONSE_HELP) {
 		seahorse_widget_show_help (swidget);
-		return;
-	}
-
-	if (response == GTK_RESPONSE_ACCEPT) {
+		
+	} else if (response == GTK_RESPONSE_ACCEPT) {
 	    
 		entry = GTK_ENTRY (seahorse_widget_get_widget (swidget, "keyring-name"));
 		g_return_if_fail (entry); 
@@ -167,6 +165,9 @@ properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 		request = gnome_keyring_create (keyring, NULL, keyring_add_done, g_object_ref (swidget), g_object_unref);
 		g_return_if_fail (request);
 		setup_request (swidget, request);
+		
+	} else {
+		seahorse_widget_destroy (swidget);
 	}
 }
 
