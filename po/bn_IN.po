@@ -5,15 +5,15 @@
 # Runa Bhattacharjee <runabh@gmail.com>, 2007.
 # Runa Bhattacharjee <runab@fedoraproject.org>, 2008.
 # Sankarshan Mukhopadhyay <sankarshan@randomink.org>, 2008.
-# Runa Bhattacharjee <runab@redhat.com>, 2008.
+# Runa Bhattacharjee <runab@redhat.com>, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: bn_IN\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-19 21:06+0000\n"
-"PO-Revision-Date: 2008-09-21 15:02+0530\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse&component=general\n"
+"POT-Creation-Date: 2009-02-17 13:59+0000\n"
+"PO-Revision-Date: 2009-03-12 00:09+0530\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
-"Language-Team: Bengali INDIA <fedora-trans-bn_IN@redhat.com>\n"
+"Language-Team: Bengali INDIA <discuss@lists.ankur.org.in>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,134 +21,138 @@ msgstr ""
 "\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../daemon/seahorse-daemon.c:66
+#: ../daemon/seahorse-daemon.c:69
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "seahorse-daemon ডেমন রূপে সঞ্চালন করা হবে না"
 
-#: ../daemon/seahorse-daemon.c:84
+#: ../daemon/seahorse-daemon.c:87
 msgid "couldn't fork process"
 msgstr "প্রসেস fork (ফর্ক) করা সম্ভব হয়নি"
 
-#: ../daemon/seahorse-daemon.c:90
+#: ../daemon/seahorse-daemon.c:93
 msgid "couldn't create new process group"
 msgstr "নতুন প্রসেস সংকলন নির্মাণ করতে ব্যর্থ"
 
-#: ../daemon/seahorse-daemon.c:196
+#: ../daemon/seahorse-daemon.c:207
 msgid "Encryption Daemon (Seahorse)"
 msgstr "এনক্রিপশন ডেমন (Seahorse)"
+
+#: ../daemon/seahorse-daemon.desktop.in.in.h:1
+msgid "Seahorse Daemon"
+msgstr "Seahorse ডেমন"
 
 #: ../daemon/seahorse-service.c:110 ../daemon/seahorse-service.c:134
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "অবৈধ অথবা অজানা কি-র ধরন: %s"
 
-#: ../daemon/seahorse-service.c:183 ../daemon/seahorse-service-keyset.c:130
-#: ../daemon/seahorse-service-keyset.c:160
+#: ../daemon/seahorse-service.c:183 ../daemon/seahorse-service-keyset.c:135
+#: ../daemon/seahorse-service-keyset.c:164
 #, c-format
 msgid "Invalid or unrecognized key: %s"
 msgstr "অবৈধ অথবা অজানা কি: %s"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:147
+#: ../daemon/seahorse-service-crypto.c:160
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
 msgstr "<i><key id='%s'/> দ্বারা স্বাক্ষরিত। এটি <b>মেয়াদ পূর্ণ হয়েছে</b></i> %s-এ।"
 
-#: ../daemon/seahorse-service-crypto.c:148
+#: ../daemon/seahorse-service-crypto.c:161
 msgid "Invalid Signature"
 msgstr "অবৈধ স্বাক্ষর"
 
-#: ../daemon/seahorse-service-crypto.c:154
+#: ../daemon/seahorse-service-crypto.c:167
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
 msgstr "<i><key id='%s'/></i> দ্বারা স্বাক্ষরিত। %s-এ এটির <b>মেয়াদ পূর্ণ হয়েছে</b>।"
 
-#: ../daemon/seahorse-service-crypto.c:155
+#: ../daemon/seahorse-service-crypto.c:168
 msgid "Expired Signature"
 msgstr "মেয়াদ উত্তীর্ণ স্বাক্ষর"
 
-#: ../daemon/seahorse-service-crypto.c:161
+#: ../daemon/seahorse-service-crypto.c:174
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
 msgstr "যেটি দিয়ে স্বাক্ষর করা হয়েছে <i><key id='%s'/> <b>বাতিল করার তারিখ</b></i> %s।"
 
-#: ../daemon/seahorse-service-crypto.c:162
+#: ../daemon/seahorse-service-crypto.c:175
 msgid "Revoked Signature"
 msgstr "বাতিল করা স্বাক্ষর"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:168
+#: ../daemon/seahorse-service-crypto.c:181
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s."
 msgstr "<i><key id='%s'/></i> দ্বারা %s-এ স্বাক্ষর করা হয়েছে।"
 
-#: ../daemon/seahorse-service-crypto.c:169
+#: ../daemon/seahorse-service-crypto.c:182
 msgid "Good Signature"
 msgstr "বৈধ স্বাক্ষর"
 
-#: ../daemon/seahorse-service-crypto.c:174
+#: ../daemon/seahorse-service-crypto.c:187
 msgid "Signing key not in keyring."
 msgstr "স্বাক্ষরে ব্যবহৃত কি কি রিং এ অনুপস্থিত।"
 
-#: ../daemon/seahorse-service-crypto.c:175
+#: ../daemon/seahorse-service-crypto.c:188
 msgid "Unknown Signature"
 msgstr "অজানা স্বাক্ষর"
 
-#: ../daemon/seahorse-service-crypto.c:179
+#: ../daemon/seahorse-service-crypto.c:192
 msgid "Bad or forged signature. The signed data was modified."
 msgstr "অবৈধ বা জাল স্বাক্ষর। স্বাক্ষর করা তথ্যের পরিবর্তন ঘটেছে।"
 
-#: ../daemon/seahorse-service-crypto.c:180
+#: ../daemon/seahorse-service-crypto.c:193
 msgid "Bad Signature"
 msgstr "অবৈধ স্বাক্ষর"
 
-#: ../daemon/seahorse-service-crypto.c:188
+#: ../daemon/seahorse-service-crypto.c:201
 msgid "Couldn't verify signature."
 msgstr "স্বাক্ষর যাচাই করা সম্ভব হয়নি।"
 
-#: ../daemon/seahorse-service-crypto.c:244
-#: ../daemon/seahorse-service-crypto.c:351
+#: ../daemon/seahorse-service-crypto.c:257
+#: ../daemon/seahorse-service-crypto.c:364
 #, c-format
 msgid "Invalid or unrecognized signer: %s"
 msgstr "অবৈধ অথবা অজানা স্বাক্ষরকারী: %s"
 
-#: ../daemon/seahorse-service-crypto.c:251
-#: ../daemon/seahorse-service-crypto.c:358
+#: ../daemon/seahorse-service-crypto.c:264
+#: ../daemon/seahorse-service-crypto.c:371
 #, c-format
 msgid "Key is not valid for signing: %s"
 msgstr "স্বাক্ষর করার উদ্দেশ্যে, কি বৈধ নয়: %s"
 
-#: ../daemon/seahorse-service-crypto.c:263
+#: ../daemon/seahorse-service-crypto.c:276
 #, c-format
 msgid "Invalid or unrecognized recipient: %s"
 msgstr "অবৈধ অথবা অজানা প্রাপক: %s"
 
-#: ../daemon/seahorse-service-crypto.c:271
+#: ../daemon/seahorse-service-crypto.c:284
 #, c-format
 msgid "Key is not a valid recipient for encryption: %s"
 msgstr "এনক্রিপশনপর জন্য এই কি-টি বৈধ প্রাপক নয়: %s"
 
-#: ../daemon/seahorse-service-crypto.c:280
+#: ../daemon/seahorse-service-crypto.c:293
 #, c-format
 msgid "No recipients specified"
 msgstr "প্রাপক নির্ধারণ করা হয়নি"
 
-#: ../daemon/seahorse-service-crypto.c:346
+#: ../daemon/seahorse-service-crypto.c:359
 #, c-format
 msgid "No signer specified"
 msgstr "স্বাক্ষরকারী নির্ধারণ করা হয়নি"
 
-#: ../daemon/seahorse-service-crypto.c:401
+#: ../daemon/seahorse-service-crypto.c:414
 #, c-format
 msgid "Invalid key type for decryption: %s"
 msgstr "ডিক্রিপশনের জন্য অবৈধ প্রকৃতির কি: %s"
 
-#: ../daemon/seahorse-service-crypto.c:464
+#: ../daemon/seahorse-service-crypto.c:477
 #, c-format
 msgid "Invalid key type for verifying: %s"
 msgstr "পরীক্ষণের জন্য অবৈধ প্রকৃতির কি: %s"
 
-#: ../daemon/seahorse-service-keyset.c:196
+#: ../daemon/seahorse-service-keyset.c:200
 #, c-format
 msgid "Invalid key id: %s"
 msgstr "কি-র id অবৈধ: %s"
@@ -272,8 +276,9 @@ msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name' and "
 "'id'. Put a '-' in front of the column name to sort in descending order."
 msgstr ""
-"প্রাপক তালিকার উইন্ডোর ক্রমবিন্যাস করতে ব্যবহারযোগ্য কলাম নির্ধারণ করুন। কলামের নাম হল: 'name' ও "
-"'id'। বড় থেকে ছোট অনুক্রমে সুবিন্যাস্ত করার জন্য কলামের নামের পূর্বে '-' লিখুন।"
+"প্রাপক তালিকার উইন্ডোর ক্রমবিন্যাস করতে ব্যবহারযোগ্য কলাম নির্ধারণ করুন। কলামের নাম "
+"হল: 'name' ও 'id'। বড় থেকে ছোট অনুক্রমে সুবিন্যাস্ত করার জন্য কলামের নামের পূর্বে "
+"'-' লিখুন।"
 
 #: ../data/seahorse.schemas.in.h:23
 msgid ""
@@ -306,7 +311,9 @@ msgstr ""
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
-msgstr "অনুসন্ধানের জন্য ব্যবহৃত  সর্বশেষ কি-সার্ভার অথবা সকল কি-সার্ভারে অনুসন্ধানের জন্য ফাঁকা রাখুন।"
+msgstr ""
+"অনুসন্ধানের জন্য ব্যবহৃত  সর্বশেষ কি-সার্ভার অথবা সকল কি-সার্ভারে অনুসন্ধানের জন্য ফাঁকা "
+"রাখুন।"
 
 #: ../data/seahorse.schemas.in.h:29
 msgid "The last search pattern searched for against a key server."
@@ -334,201 +341,345 @@ msgstr "ডিফল্ট-কি দ্বারা সর্বদা এন�
 msgid "Whether to use ASCII Armor"
 msgstr "ASCII Armor ব্যবহার করা হবে কি না"
 
-#: ../gkr/seahorse-gkeyring-item.c:243 ../pgp/seahorse-pgp-key.c:209
-#: ../ssh/seahorse-ssh-key.c:115
-msgid "Invalid"
-msgstr "অবৈধ"
+#: ../gkr/seahorse-add-keyring.glade.h:1
+msgid "Add Password Keyring"
+msgstr "পাসওয়ার্ড কি রিং যোগ করুন"
 
-#: ../gkr/seahorse-gkeyring-item.c:260
+#: ../gkr/seahorse-add-keyring.glade.h:2
+msgid "New Keyring Name:"
+msgstr "নতুন কি-রিংয়ের নাম:"
+
+#: ../gkr/seahorse-add-keyring.glade.h:3
+msgid ""
+"Please choose a name for the new keyring. You will be prompted for an unlock "
+"password."
+msgstr ""
+"অনুগ্রহ করে নতুন কি-রিংয়ের নাম নির্বাচন করুন। আন-লক করার জন্য পাসওয়ার্ড লেখার অনুরোধ "
+"জানানো হবে।"
+
+#: ../gkr/seahorse-add-keyring.glade.h:4
+#: ../libseahorse/seahorse-add-keyserver.glade.h:5
+#: ../ssh/seahorse-ssh-upload.glade.h:3
+msgid "The host name or address of the server."
+msgstr "সার্ভারের হোস্ট-নেম অথবা ঠিকানা।"
+
+#: ../gkr/seahorse-gkr-add-keyring.c:133
+msgid "Couldn't add keyring"
+msgstr "কি-রিং যোগ করতে ব্যর্থ"
+
+#: ../gkr/seahorse-gkr-item.c:470
 msgid "Web Password"
 msgstr "ওয়েব পাসওয়ার্ড"
 
-#: ../gkr/seahorse-gkeyring-item.c:262
+#: ../gkr/seahorse-gkr-item.c:472
 msgid "Network Password"
 msgstr "নেটওয়ার্ক পাসওয়ার্ড"
 
-#: ../gkr/seahorse-gkeyring-item.c:264
-#: ../gkr/seahorse-gkeyring-item-properties.c:126
-#: ../gkr/seahorse-gkeyring-source.c:680
+#: ../gkr/seahorse-gkr-item.c:474 ../gkr/seahorse-gkr-item-properties.c:106
 msgid "Password"
 msgstr "পাসওয়ার্ড"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:98
+#: ../gkr/seahorse-gkr-item-commands.c:78
+#, c-format
+msgid "Are you sure you want to delete the password '%s'?"
+msgstr "আপনি কি নিশ্চিতরূপে '%s' পাসওয়ার্ড মুছে ফেলতে ইচ্ছুক?"
+
+#: ../gkr/seahorse-gkr-item-commands.c:81
+#, c-format
+#| msgid "Are you sure you want to delete %d passwords?"
+msgid "Are you sure you want to delete %d password?"
+msgid_plural "Are you sure you want to delete %d passwords?"
+msgstr[0] "আপনি কি নিশ্চিতরূপে %d পাসওয়ার্ড মুছে ফেলতে ইচ্ছুক?"
+msgstr[1] "আপনি কি নিশ্চিতরূপে %d পাসওয়ার্ড মুছে ফেলতে ইচ্ছুক?"
+
+#: ../gkr/seahorse-gkr-item-properties.c:65
 msgid "Access a network share or resource"
 msgstr "একটি নেটওয়ার্ক শেয়ার বা তথ্যসমূহের সাথে সংযোগ স্থাপন করুন"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:102
+#: ../gkr/seahorse-gkr-item-properties.c:68
 msgid "Access a website"
 msgstr "একটি ওয়েবসাইট-এর সাথে সংযোগ স্থাপন করুন"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:106
+#: ../gkr/seahorse-gkr-item-properties.c:71
 msgid "Unlocks a PGP key"
 msgstr "একটি PGP কি খুলুন"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:109
+#: ../gkr/seahorse-gkr-item-properties.c:74
 msgid "Unlocks a Secure Shell key"
 msgstr "একটি Secure Shell কি খুলুন"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:112
+#: ../gkr/seahorse-gkr-item-properties.c:77
 msgid "Saved password or login"
 msgstr "সংরক্ষিত পাসওয়ার্ড বা লগ-ইন"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:126
+#: ../gkr/seahorse-gkr-item-properties.c:101
 msgid "Network Credentials"
 msgstr "নেটওয়ার্ক-এর বৈশিষ্ট্য"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:187
+#: ../gkr/seahorse-gkr-item-properties.c:244
 msgid "Couldn't change password."
 msgstr "পাসওয়ার্ড পরিবর্তন করা সম্ভব হয়নি।"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:295
+#: ../gkr/seahorse-gkr-item-properties.c:346
 msgid "Couldn't set description."
 msgstr "বর্ণনা স্থাপন করা সম্ভব হয়নি।"
 
-#: ../gkr/seahorse-gkeyring-item-properties.c:505
+#: ../gkr/seahorse-gkr-item-properties.c:652
 msgid "Couldn't set application access."
 msgstr "অ্যাপ্লিকেশন-এর সংযোগ স্থাপন সম্ভব হয়নি।"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:1
+#: ../gkr/seahorse-gkr-item-properties.glade.h:1
 msgid "<b>Password:</b>"
 msgstr "<b>পাসওয়ার্ড:</b>"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:2
+#: ../gkr/seahorse-gkr-item-properties.glade.h:2
 msgid "<b>Path:</b>"
 msgstr "<b>পথ:</b> "
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:3
+#: ../gkr/seahorse-gkr-item-properties.glade.h:3
 msgid "<b>Permissions:</b>"
 msgstr "<b>অনুমতি:</b> "
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:4
+#: ../gkr/seahorse-gkr-item-properties.glade.h:4
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:9
 #: ../ssh/seahorse-ssh-key-properties.glade.h:9
 msgid "<b>Technical Details:</b>"
 msgstr "<b>প্রযুক্তি বৈশিষ্ট্য:</b>"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:5
+#: ../gkr/seahorse-gkr-item-properties.glade.h:5
 msgid "Applications"
 msgstr "অ্যাপ্লিকেশন সমূহ"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:6
+#: ../gkr/seahorse-gkr-item-properties.glade.h:6
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.glade.h:17
 msgid "Details"
 msgstr "বিশেষ বর্ণনা"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:7
+#: ../gkr/seahorse-gkr-item-properties.glade.h:7
+#: ../pgp/seahorse-pgp-subkey.c:366
 #: ../ssh/seahorse-ssh-key-properties.glade.h:19
 msgid "Key"
 msgstr "কি"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:8
+#: ../gkr/seahorse-gkr-item-properties.glade.h:8
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:30
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:30
 #: ../ssh/seahorse-ssh-key-properties.glade.h:20
 msgid "Key Properties"
 msgstr "কি-এর বৈশিষ্ট্য"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:9
+#: ../gkr/seahorse-gkr-item-properties.glade.h:9
 msgid "Login:"
 msgstr "লগ-ইন:"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:10
+#: ../gkr/seahorse-gkr-item-properties.glade.h:10
 msgid "Server:"
 msgstr "সার্ভার:"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:11
+#: ../gkr/seahorse-gkr-item-properties.glade.h:11
 msgid "Show pass_word"
 msgstr "পাসওয়ার্ড প্রদর্শন করুন(_w)"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:12
+#: ../gkr/seahorse-gkr-item-properties.glade.h:12
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:42
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:36
 msgid "Type:"
 msgstr "ধরন:"
 
 #. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:14
+#: ../gkr/seahorse-gkr-item-properties.glade.h:14
 msgid "Use:"
 msgstr "ব্যবহার করুন:"
 
-#. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:16
+#. To translators: This is the infinitive not the imperative.  This string refers to the ability of an application to delete this secret from its key ring.
+#: ../gkr/seahorse-gkr-item-properties.glade.h:16
 msgid "_Delete"
 msgstr "মুছে ফেলুন (_D)"
 
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:17
+#: ../gkr/seahorse-gkr-item-properties.glade.h:17
 #: ../pgp/seahorse-revoke.glade.h:5
 msgid "_Description:"
 msgstr "বিবরণ :(_D)"
 
 #. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:19
+#: ../gkr/seahorse-gkr-item-properties.glade.h:19
 msgid "_Read"
 msgstr "পাঠ (_R)"
 
 #. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkeyring-item-properties.glade.h:21
+#: ../gkr/seahorse-gkr-item-properties.glade.h:21
 msgid "_Write"
 msgstr "লিখুন(_W)"
 
-#: ../gkr/seahorse-gkeyring-operation.c:205
-msgid "Access to the key ring was denied"
-msgstr "কি রিং-এর সাথে সংযোগস্থাপন করতে দেওয়া হয়নি"
-
-#: ../gkr/seahorse-gkeyring-operation.c:208
-msgid "The gnome-keyring daemon is not running"
-msgstr "gnome-keyring ডেমন স্বক্রিয় নয়"
-
-#: ../gkr/seahorse-gkeyring-operation.c:211
-msgid "The key ring has already been unlocked"
-msgstr "কি রিং-টি খোলা অবস্থায় রয়েছে"
-
-#: ../gkr/seahorse-gkeyring-operation.c:214
-msgid "No such key ring exists"
-msgstr "ঐ নামের কি রিং অনুপস্থিত"
-
-#: ../gkr/seahorse-gkeyring-operation.c:217
-msgid "Couldn't communicate with key ring daemon"
-msgstr "কি রিং ডেমন-এর সাথে সংযোগস্থাপন করা সম্ভব হয়নি"
-
-#: ../gkr/seahorse-gkeyring-operation.c:220
-msgid "The item already exists"
-msgstr "এই বস্তুটি বর্তমানে উপস্থিত"
-
-#: ../gkr/seahorse-gkeyring-operation.c:226
-msgid "Internal error accessing gnome-keyring"
-msgstr "gnome-keyring ব্যবহার করতে অভ্যন্তরীণ সমস্যা"
-
-#: ../gkr/seahorse-gkeyring-operation.c:283
-#: ../gkr/seahorse-gkeyring-operation.c:315
-msgid "Saving item..."
-msgstr "সংরক্ষণ করা হচ্ছে..."
-
-#: ../gkr/seahorse-gkeyring-source.c:409
-msgid "Retrieving key"
-msgstr "কি উদ্ধার করা হচ্ছে"
-
-#. Start listing of ids
-#: ../gkr/seahorse-gkeyring-source.c:423
+#: ../gkr/seahorse-gkr-keyring.c:193
 msgid "Listing passwords"
 msgstr "পাসওয়ার্ড-এর তালিকা প্রস্তুতি"
 
-#. Start listing of ids
-#: ../gkr/seahorse-gkeyring-source.c:555
-msgid "Removing item"
-msgstr "বস্তু সরিয়ে ফেলা হচ্ছে"
-
-#: ../gkr/seahorse-gkr-commands.vala:63
+#: ../gkr/seahorse-gkr-keyring.c:354
 #, c-format
-msgid "Are you sure you want to delete the password '%s'?"
-msgstr "আপনি কি নিশ্চিতরূপে '%s' পাসওয়ার্ড মুছে ফেলতে ইচ্ছুক?"
+#| msgid "Password:"
+msgid "Passwords: %s"
+msgstr "পাসওয়ার্ড: %s"
 
-#: ../gkr/seahorse-gkr-commands.vala:65
+#: ../gkr/seahorse-gkr-keyring.c:355
 #, c-format
-msgid "Are you sure you want to delete %d passwords?"
-msgstr "আপনি কি নিশ্চিতরূপে %d পাসওয়ার্ড মুছে ফেলতে ইচ্ছুক?"
+#| msgid "<b>Password:</b>"
+msgid "<b>Passwords:</b> %s"
+msgstr "<b>পাসওয়ার্ড::</b> %s"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:87
+#| msgid "Password Keyrings"
+msgid "Password Keyring"
+msgstr "পাসওয়ার্ডের কি-রিং"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:88
+#| msgid "_Location for application passwords:"
+msgid "Used to store application and network passwords"
+msgstr "অ্যাপ্লিকেশন ও নেটওয়ার্কের পাসওয়ার্ড সংরক্ষণ করতে ব্যবহৃত হয়"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:101
+#| msgid "Couldn't add keyring"
+msgid "Couldn't unlock keyring"
+msgstr "কি-রিং আন-লক করতে ব্যর্থ"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:141
+#| msgid "Couldn't add keyring"
+msgid "Couldn't lock keyring"
+msgstr "কি-রিং লক করতে ব্যর্থ"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:181
+#| msgid "Couldn't set default password keyring"
+msgid "Couldn't set default keyring"
+msgstr "ডিফল্ট কি-রিং নির্ধারণ করতে ব্যর্থ"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:219
+msgid "Couldn't change keyring password"
+msgstr "কি-রিং পাসওয়ার্ড পরিবর্তন করতে ব্যর্থ"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:250
+msgid "_Lock"
+msgstr "লক করুন (_L)"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:251
+msgid ""
+"Lock the password storage keyring so a master password is required to unlock "
+"it."
+msgstr ""
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:252
+msgid "_Unlock"
+msgstr "আন-লক করুন (_U)"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:253
+msgid ""
+"Unlock the password storage keyring with a master password so it is "
+"available for use."
+msgstr ""
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:254
+msgid "_Set as default"
+msgstr "ডিফল্ট রূপে নির্ধারণ করুন (_S)"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:255
+msgid "Applications usually store new passwords in the default keyring."
+msgstr ""
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:256
+#| msgid "Change Unlock _Password"
+msgid "Change _Password"
+msgstr "পাসওয়ার্ড পরিবর্তন করুন (_P)"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:257
+msgid "Change the unlock password of the password storage keyring"
+msgstr ""
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:321
+#, c-format
+#| msgid "Are you sure you want to delete the password '%s'?"
+msgid "Are you sure you want to delete the password keyring '%s'?"
+msgstr "আপনি কি নিশ্চিতরূপে '%s' পাসওয়ার্ড কি-রিং মুছে ফেলতে ইচ্ছুক?"
+
+#. -----------------------------------------------------------------------------
+#. * PUBLIC
+#.
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-keyring.glade.h:2
+#: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
+#: ../pgp/seahorse-pgp-public-key-properties.glade.h:19
+msgid "Created:"
+msgstr "নিমার্ণের সময়কাল:"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:3
+#| msgid "Key Sharing"
+msgid "Keyring"
+msgstr "কি-রিং"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:4
+#| msgid "Key Properties"
+msgid "Keyring Properties"
+msgstr "কি-রিংয়ের বৈশিষ্ট্য"
+
+#: ../gkr/seahorse-gkr-keyring.glade.h:5
+#| msgid "Name"
+msgid "_Name:"
+msgstr "নাম: (_N)"
+
+#: ../gkr/seahorse-gkr-operation.c:168
+msgid "Access to the key ring was denied"
+msgstr "কি রিং-এর সাথে সংযোগস্থাপন করতে দেওয়া হয়নি"
+
+#: ../gkr/seahorse-gkr-operation.c:171
+msgid "The gnome-keyring daemon is not running"
+msgstr "gnome-keyring ডেমন স্বক্রিয় নয়"
+
+#: ../gkr/seahorse-gkr-operation.c:174
+msgid "The key ring has already been unlocked"
+msgstr "কি রিং-টি খোলা অবস্থায় রয়েছে"
+
+#: ../gkr/seahorse-gkr-operation.c:177
+msgid "No such key ring exists"
+msgstr "ঐ নামের কি রিং অনুপস্থিত"
+
+#: ../gkr/seahorse-gkr-operation.c:180
+msgid "Couldn't communicate with key ring daemon"
+msgstr "কি রিং ডেমন-এর সাথে সংযোগস্থাপন করা সম্ভব হয়নি"
+
+#: ../gkr/seahorse-gkr-operation.c:183
+msgid "The item already exists"
+msgstr "এই বস্তুটি বর্তমানে উপস্থিত"
+
+#: ../gkr/seahorse-gkr-operation.c:189
+msgid "Internal error accessing gnome-keyring"
+msgstr "gnome-keyring ব্যবহার করতে অভ্যন্তরীণ সমস্যা"
+
+#: ../gkr/seahorse-gkr-operation.c:238 ../gkr/seahorse-gkr-operation.c:264
+msgid "Saving item..."
+msgstr "সংরক্ষণ করা হচ্ছে..."
+
+#: ../gkr/seahorse-gkr-operation.c:300
+#| msgid "Saving item..."
+msgid "Deleting item..."
+msgstr "বস্তু মুছে ফেলা হচ্ছে..."
+
+#: ../gkr/seahorse-gkr-operation.c:325
+#| msgid "Retrieving keys..."
+msgid "Deleting keyring..."
+msgstr "কি-রিং মুছে ফেলা হচ্ছে..."
+
+#: ../gkr/seahorse-gkr-source.c:234
+#| msgid "Listing passwords"
+msgid "Listing password keyrings"
+msgstr "পাসওয়ার্ড কি-রিংয়ের তালিকা প্রস্তুতি"
+
+#: ../libcryptui/cryptui.c:222
+msgid ""
+"No encryption keys were found with which to perform the operation you "
+"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
+"started so that you may either create a key or import one."
+msgstr "।"
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -564,15 +715,15 @@ msgstr "বার্তা স্বাক্ষরের জন্য ব্য
 #. TODO: Icons
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:121
-#: ../pgp/seahorse-pgp-key-properties.c:910
-#: ../src/seahorse-key-manager-store.c:819
+#: ../pgp/seahorse-pgp-key-properties.c:890
+#: ../src/seahorse-key-manager-store.c:828
 msgid "Name"
 msgstr "নাম"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:126
-#: ../pgp/seahorse-pgp-key-properties.c:1782
-#: ../src/seahorse-key-manager-store.c:831
+#: ../pgp/seahorse-pgp-key-properties.c:1823
+#: ../src/seahorse-key-manager-store.c:840
 msgid "Key ID"
 msgstr "কি-র ID"
 
@@ -831,27 +982,68 @@ msgstr "%04d-%02d-%02d"
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
-#: ../libseahorse/seahorse-add-keyring.glade.h:1
-msgid "Add Password Keyring"
-msgstr "পাসওয়ার্ড কি রিং যোগ করুন"
+#: ../libegg/eggdesktopfile.c:165
+#, c-format
+msgid "File is not a valid .desktop file"
+msgstr "এটি বৈধ .desktop ফাইল নয়"
 
-#: ../libseahorse/seahorse-add-keyring.glade.h:2
-msgid "New Keyring Name:"
-msgstr "নতুন কি-রিংয়ের নাম:"
+#: ../libegg/eggdesktopfile.c:188
+#, c-format
+msgid "Unrecognized desktop file Version '%s'"
+msgstr "ডেস্কটপ ফাইলের অজ্ঞাত সংস্করণ '%s'"
 
-#: ../libseahorse/seahorse-add-keyring.glade.h:3
-msgid ""
-"Please choose a name for the new keyring. You will be prompted for an unlock "
-"password."
-msgstr ""
-"অনুগ্রহ করে নতুন কি-রিংয়ের নাম নির্বাচন করুন। আন-লক করার জন্য পাসওয়ার্ড লেখার অনুরোধ "
-"জানানো হবে।"
+#: ../libegg/eggdesktopfile.c:958
+#, c-format
+msgid "Starting %s"
+msgstr "%s আরম্ভ করা হচ্ছে"
 
-#: ../libseahorse/seahorse-add-keyring.glade.h:4
-#: ../libseahorse/seahorse-add-keyserver.glade.h:5
-#: ../ssh/seahorse-ssh-upload.glade.h:3
-msgid "The host name or address of the server."
-msgstr "সার্ভারের হোস্ট-নেম অথবা ঠিকানা।"
+#: ../libegg/eggdesktopfile.c:1100
+#, c-format
+msgid "Application does not accept documents on command line"
+msgstr "অ্যাপ্লিকেশন দ্বারা কমান্ড-লাইনের মাধ্যমে নথিপত্র গ্রহণ করা হয় না"
+
+#: ../libegg/eggdesktopfile.c:1168
+#, c-format
+msgid "Unrecognized launch option: %d"
+msgstr "প্রারম্ভিক বিকল্প অজানা: %d"
+
+#: ../libegg/eggdesktopfile.c:1373
+#, c-format
+msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+msgstr "'Type=Link' ডেস্কটপ এনট্রির ক্ষেত্রে নথিপত্রের URI উল্লেখ করা সম্ভব নয়"
+
+#: ../libegg/eggdesktopfile.c:1392
+#, c-format
+msgid "Not a launchable item"
+msgstr "প্রারম্ভ করার যোগ্য বস্তু নয়"
+
+#: ../libegg/eggsmclient.c:224
+msgid "Disable connection to session manager"
+msgstr "সেশান পরিচালনব্যবস্থার সাথে সংযোগ বিচ্ছিন্ন করা হবে"
+
+#: ../libegg/eggsmclient.c:227
+msgid "Specify file containing saved configuration"
+msgstr "সংরক্ষিত কনফিগারেশন ধারণকারী ফাইল উল্লেখ করুন"
+
+#: ../libegg/eggsmclient.c:227
+msgid "FILE"
+msgstr "FILE"
+
+#: ../libegg/eggsmclient.c:230
+msgid "Specify session management ID"
+msgstr "সেশান পরিচালনার ID উল্লেখ করুন"
+
+#: ../libegg/eggsmclient.c:230 ../pgp/seahorse-pgp-key-properties.c:1378
+msgid "ID"
+msgstr "ID"
+
+#: ../libegg/eggsmclient.c:244
+msgid "Session management options:"
+msgstr "সেশান পরিচালনা সংক্রান্ত বিকল্প:"
+
+#: ../libegg/eggsmclient.c:245
+msgid "Show session management options"
+msgstr "সেশান পরিচালনা সংক্রান্ত বিকল্প প্রদর্শন করা হবে"
 
 #: ../libseahorse/seahorse-add-keyserver.glade.h:1
 msgid ":"
@@ -899,11 +1091,40 @@ msgstr[1] ""
 msgid "Notification Messages"
 msgstr "সূচনামূলক বার্তা"
 
+#: ../libseahorse/seahorse-object.c:216
+#| msgid "Sync Keys"
+msgid "Symmetric Key"
+msgstr ""
+
+#: ../libseahorse/seahorse-object.c:219
+#| msgid "Public PGP Key"
+msgid "Public Key"
+msgstr "সার্বজনীন কি"
+
+#: ../libseahorse/seahorse-object.c:222
+#| msgid "Private PGP Key"
+msgid "Private Key"
+msgstr "ব্যক্তিগত-কি"
+
+#: ../libseahorse/seahorse-object.c:225
+#| msgid "Network Credentials"
+msgid "Credentials"
+msgstr ""
+
+#.
+#. * Translators: "This object is a means of storing items such as
+#. * name, email address, etc. that make up one's digital identity.
+#.
+#: ../libseahorse/seahorse-object.c:232
+msgid "Identity"
+msgstr "পরিচয়"
+
 #: ../libseahorse/seahorse-passphrase.c:196
 msgid "Passphrase"
 msgstr "পরিচিত-পংক্তি"
 
 #: ../libseahorse/seahorse-passphrase.c:199
+#: ../ssh/seahorse-ssh-operation.c:480
 msgid "Password:"
 msgstr "পাসওয়ার্ড:"
 
@@ -911,11 +1132,11 @@ msgstr "পাসওয়ার্ড:"
 msgid "Confirm:"
 msgstr "নিশ্চায়ণ:"
 
-#: ../libseahorse/seahorse-prefs.c:65
+#: ../libseahorse/seahorse-prefs.c:62
 msgid "Not a valid Key Server address."
 msgstr "কি সার্ভারের বৈধ ঠিকানা নয়"
 
-#: ../libseahorse/seahorse-prefs.c:66
+#: ../libseahorse/seahorse-prefs.c:63
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
@@ -923,88 +1144,39 @@ msgstr ""
 "সাহায্যের জন্য সিস্টেম অ্যাডমিনিস্ট্রেটর অথবা কি-সার্ভারের অ্যাডমিনিস্ট্রেটরের সাথে "
 "যোগাযোগ করুন।"
 
-#: ../libseahorse/seahorse-prefs.c:177
+#: ../libseahorse/seahorse-prefs.c:174
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:359
+#: ../libseahorse/seahorse-prefs.c:356
 msgid "Custom"
 msgstr "স্বনির্ধারিত"
 
-#: ../libseahorse/seahorse-prefs.c:433
+#: ../libseahorse/seahorse-prefs.c:430
 msgid "None: Don't publish keys"
 msgstr "শূণ্য: কি প্রকাশ করা হবে না"
 
-#: ../libseahorse/seahorse-prefs-keyrings.c:207
-msgid "<i>Automatically unlocked when user logs in.</i>"
-msgstr "<i>ব্যবহারকারী লগ-ইন করলে স্বয়ংক্রিয়রূপে আন-লক করা হবে।</i>"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:244
-msgid "Couldn't get default password keyring"
-msgstr "ডিফল্ট পাসওয়ার্ড কি-রিং পাওয়া যায়নি"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:267
-msgid "Couldn't get list of password keyrings"
-msgstr "পাসওয়ার্ড কি-রিংয়ের তালিকা পাওয়া যায়নি"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:322
-msgid "Couldn't set default password keyring"
-msgstr "ডিফল্ট পাসওয়ার্ড কি-রিং নির্ধারণ করতে ব্যর্থ"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:404
-msgid "Couldn't remove keyring"
-msgstr "কি-রিং মুছে ফেলতে ব্যর্থ"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:422
-#, c-format
-msgid "Are you sure you want to permanently delete the '%s' keyring?"
-msgstr "আপনি কি নিশ্চিতরূপে '%s' কি-রিং মুছে ফেলতে ইচ্ছুক?"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:470
-msgid "Couldn't add keyring"
-msgstr "কি-রিং যোগ করতে ব্যর্থ"
-
-#: ../libseahorse/seahorse-prefs-keyrings.c:527
-msgid "Couldn't change keyring password"
-msgstr "কি-রিং পাসওয়ার্ড পরিবর্তন করতে ব্যর্থ"
-
 #: ../libseahorse/seahorse-prefs.glade.h:1
-msgid "<b>Default Keyring</b>"
-msgstr "<b>ডিফল্ট কি-রিং</b>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:2
-msgid "<b>Password Keyrings</b>"
-msgstr "<b>পাসওয়ার্ডের কি-রিং</b>"
-
-#: ../libseahorse/seahorse-prefs.glade.h:3
 msgid "Automatically retrieve keys from _key servers"
 msgstr "কি-রিং থেকে স্বয়ংক্রিয়ভাবে কি প্রাপ্ত করতে ব্যর্থ (_k)"
 
-#: ../libseahorse/seahorse-prefs.glade.h:4
+#: ../libseahorse/seahorse-prefs.glade.h:2
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "পরিবর্তিত কি-গুলি স্বয়ংক্রিয়ভাবে কি-সার্ভারের সাথে সুসংগত করা হবে (_m)"
 
-#: ../libseahorse/seahorse-prefs.glade.h:5
-msgid "Change Unlock _Password"
-msgstr "আন-লক করতে ব্যবহৃত পাসওয়ার্ড পরিবর্তন করুন (_P)"
-
-#: ../libseahorse/seahorse-prefs.glade.h:6
+#: ../libseahorse/seahorse-prefs.glade.h:3
 msgid "Key Servers"
 msgstr "কি-সার্ভার"
 
-#: ../libseahorse/seahorse-prefs.glade.h:7
+#: ../libseahorse/seahorse-prefs.glade.h:4
 msgid "Key Sharing"
 msgstr "কি-র যৌথ ব্যবহার"
 
-#: ../libseahorse/seahorse-prefs.glade.h:8
-msgid "Password Keyrings"
-msgstr "পাসওয়ার্ডের কি-রিং"
+#: ../libseahorse/seahorse-prefs.glade.h:5
+msgid "Preferences"
+msgstr "পছন্দ"
 
-#: ../libseahorse/seahorse-prefs.glade.h:9
-msgid "Password and Encryption Settings"
-msgstr "পাসওয়ার্ড ও এনক্রিপশন সংক্রান্ত বৈশিষ্ট্য"
-
-#: ../libseahorse/seahorse-prefs.glade.h:10
+#: ../libseahorse/seahorse-prefs.glade.h:6
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've "
 "collected. This means they can automatically encrypt things for you or those "
@@ -1013,27 +1185,15 @@ msgid ""
 "<b>Note:</b> Your personal keys will not be compromised."
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:13
-msgid "_Add Keyring"
-msgstr "কি-রিং যোগ করুন (_A)"
-
-#: ../libseahorse/seahorse-prefs.glade.h:14
+#: ../libseahorse/seahorse-prefs.glade.h:9
 msgid "_Find keys via:"
 msgstr "কি অনুসন্ধানের মাধ্যম: (_F)"
 
-#: ../libseahorse/seahorse-prefs.glade.h:15
-msgid "_Location for application passwords:"
-msgstr "অ্যাপ্লিকেশনের পাসওয়ার্ডের অবস্থান: (_L)"
-
-#: ../libseahorse/seahorse-prefs.glade.h:16
+#: ../libseahorse/seahorse-prefs.glade.h:10
 msgid "_Publish keys to:"
 msgstr "চিহ্নিত কি-সার্ভারে উপস্থিত কি প্রকাশিত করা হবে: (_P)"
 
-#: ../libseahorse/seahorse-prefs.glade.h:17
-msgid "_Remove Keyring"
-msgstr "কি-রিং মুছে ফেলুন (_R)"
-
-#: ../libseahorse/seahorse-prefs.glade.h:18
+#: ../libseahorse/seahorse-prefs.glade.h:11
 msgid "_Share my keys with others on my network"
 msgstr "নেটওয়ার্কের অন্যান্য ব্যবহারকারীদের সাথে আমার কি-গুলি বিনিময় করা হবে (_S)"
 
@@ -1041,63 +1201,50 @@ msgstr "নেটওয়ার্কের অন্যান্য ব্যব�
 msgid "Progress Title"
 msgstr "প্রগতিসূচক শিরোনাম"
 
-#: ../libseahorse/seahorse-unknown-key.c:70
+#: ../libseahorse/seahorse-unknown.c:67
 msgid "Unavailable"
 msgstr "উপলব্ধ নয়"
 
-#: ../libseahorse/seahorse-unknown-key.c:90
-#, c-format
-msgid "Unknown Key: %s"
-msgstr "অজানা কি: %s"
-
-#: ../libseahorse/seahorse-unknown-key.c:122
-msgid "Unknown Key"
-msgstr "অজানা কি"
-
-#: ../libseahorse/seahorse-unknown-source.c:118
-msgid "Unavailable Key"
-msgstr "অনুপলব্ধ কি"
-
-#: ../libseahorse/seahorse-util.c:203
+#: ../libseahorse/seahorse-util.c:206
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:436
+#: ../libseahorse/seahorse-util.c:440
 msgid "Key Data"
 msgstr "কি-র তথ্য"
 
-#: ../libseahorse/seahorse-util.c:438
+#: ../libseahorse/seahorse-util.c:442
 msgid "Multiple Keys"
 msgstr "একাধিক কি"
 
-#: ../libseahorse/seahorse-util.c:694
+#: ../libseahorse/seahorse-util.c:697
 msgid "Couldn't run file-roller"
 msgstr "file-roller সঞ্চালন করতে ব্যর্থ"
 
-#: ../libseahorse/seahorse-util.c:700
+#: ../libseahorse/seahorse-util.c:703
 msgid "Couldn't package files"
 msgstr "ফাইল প্যাকেজ করতে ব্যর্থ"
 
-#: ../libseahorse/seahorse-util.c:701
+#: ../libseahorse/seahorse-util.c:704
 msgid "The file-roller process did not complete successfully"
 msgstr "file-roller-র কর্ম সাফল্যের সাথে সমাপ্ত হয়নি"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:810
+#: ../libseahorse/seahorse-util.c:813
 msgid "All key files"
 msgstr "সর্বধরনের কি-র ফাইল"
 
-#: ../libseahorse/seahorse-util.c:821 ../libseahorse/seahorse-util.c:861
-#: ../pgp/seahorse-pgp-photos.c:242
+#: ../libseahorse/seahorse-util.c:824 ../libseahorse/seahorse-util.c:864
+#: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "সর্বধরনের ফাইল"
 
-#: ../libseahorse/seahorse-util.c:854
+#: ../libseahorse/seahorse-util.c:857
 msgid "Archive files"
 msgstr "আর্কাইভ ফাইল"
 
-#: ../libseahorse/seahorse-util.c:903
+#: ../libseahorse/seahorse-util.c:906
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1107,77 +1254,50 @@ msgstr ""
 "\n"
 "এই ফাইলটির পরিবর্তে নতুন ফাইলটি স্থাপন করা হবে কি?"
 
-#: ../libseahorse/seahorse-util.c:906
+#: ../libseahorse/seahorse-util.c:909
 msgid "_Replace"
 msgstr "প্রতিস্থাপন (_R)"
 
-#: ../libseahorse/seahorse-validity.c:34 ../pgp/seahorse-pgp-key.c:665
-#: ../pgp/seahorse-pgp-key-properties.c:1176
+#: ../libseahorse/seahorse-validity.c:34 ../pgp/seahorse-gpgme-subkey.c:197
+#: ../pgp/seahorse-pgp-key-properties.c:1182
 msgid "Unknown"
 msgstr "অজানা"
 
 #: ../libseahorse/seahorse-validity.c:36
-#: ../pgp/seahorse-pgp-key-properties.c:1182
+#: ../pgp/seahorse-pgp-key-properties.c:1188
 msgctxt "Validity"
 msgid "Never"
 msgstr "কখনো নয়"
 
 #: ../libseahorse/seahorse-validity.c:38
-#: ../pgp/seahorse-pgp-key-properties.c:1189
+#: ../pgp/seahorse-pgp-key-properties.c:1195
 msgid "Marginal"
 msgstr "আংশিক"
 
 #: ../libseahorse/seahorse-validity.c:40
-#: ../pgp/seahorse-pgp-key-properties.c:1195
+#: ../pgp/seahorse-pgp-key-properties.c:1201
 msgid "Full"
 msgstr "সম্পূর্ণ"
 
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1201
+#: ../pgp/seahorse-pgp-key-properties.c:1207
 msgid "Ultimate"
 msgstr ""
 
 #: ../libseahorse/seahorse-validity.c:44
+#: ../pgp/seahorse-pgp-key-properties.c:1415
 msgid "Disabled"
 msgstr "নিষ্ক্রিয়"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1383
+#: ../pgp/seahorse-pgp-key-properties.c:1411
 msgid "Revoked"
 msgstr "প্রত্যাখ্যাত"
 
-#: ../libseahorse/seahorse-widget.c:363
+#: ../libseahorse/seahorse-widget.c:365
 #, c-format
 msgid "Could not display help: %s"
 msgstr "সহায়ক তথ্য প্রদর্শন করতে ব্যর্থ: %s"
-
-#: ../libcryptui/cryptui.c:213
-msgid ""
-"No encryption keys were found with which to perform the operation you "
-"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
-"started so that you may either create a key or import one."
-msgstr "।"
-
-#. TODO: Calculate something from the subject?
-#: ../pkcs11/seahorse-pkcs11-certificate.vala:28
-msgid "Certificate"
-msgstr "সার্টিফিকেট"
-
-#: ../pkcs11/seahorse-pkcs11-source.vala:34
-msgid "X509 Certificate"
-msgstr "X509 সার্টিফিকেট"
-
-#: ../pkcs11/seahorse-pkcs11-source.vala:121
-msgid "Loading..."
-msgstr "লোড করা হচ্ছে..."
-
-#: ../pkcs11/seahorse-pkcs11-source.vala:382
-msgid "Invalid or unrecognized object."
-msgstr "অবৈধ অথবা অজানা সামগ্রী।"
-
-#: ../pkcs11/seahorse-pkcs11-source.vala:399
-msgid "Exporting is not yet supported."
-msgstr "এই মুহূর্তে এক্সপোর্ট কর্ম সমর্থিত নয়।"
 
 #: ../pgp/seahorse-add-subkey.glade.h:1
 msgid "Expiration Date:"
@@ -1251,190 +1371,374 @@ msgstr "কি প্রত্যাখ্যান করুন"
 msgid "_Never expires"
 msgstr "মেয়াদ পূর্ণ হবে না (_N)"
 
-#: ../pgp/seahorse-gpgmex-util.c:55
+#: ../pgp/seahorse-gpgme-add-subkey.c:144
+msgid "Couldn't add subkey"
+msgstr "সাব-কি যোগ করা যায়নি"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:163
+#, c-format
+msgid "Add subkey to %s"
+msgstr "%s-এ সাব-কি যোগ করুন"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:179 ../pgp/seahorse-gpgme-generate.c:96
+msgid "DSA (sign only)"
+msgstr "DSA (শুধুমাত্র স্বাক্ষর)"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:187
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (শুধুমাত্র এনক্রিপশন)"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:193 ../pgp/seahorse-gpgme-generate.c:97
+msgid "RSA (sign only)"
+msgstr "RSA (শুধুমাত্র স্বাক্ষর)"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:199
+msgid "RSA (encrypt only)"
+msgstr "RSA (শুধুমাত্র এনক্রিপশন)"
+
+#: ../pgp/seahorse-gpgme-add-uid.c:85
+msgid "Couldn't add user id"
+msgstr "ব্যবহারকারীর id যোগ করতে ব্যর্থ"
+
+#: ../pgp/seahorse-gpgme-add-uid.c:107
+#, c-format
+msgid "Add user ID to %s"
+msgstr "%s-এ ব্যবহারকারীর ID যোগ করুন"
+
+#: ../pgp/seahorse-gpgme.c:51
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "ডিক্রিপশন করতে ব্যর্থ। সম্ভবত ডিক্রিপশন-কি উপস্থিত নেই।"
 
-#: ../pgp/seahorse-hkp-source.c:331
+#: ../pgp/seahorse-gpgme-expires.c:58
+#| msgid "Invalid Signature"
+msgid "Invalid expiry date"
+msgstr "মেয়াদপূর্তীর তারিখ বৈধ নয়"
+
+#: ../pgp/seahorse-gpgme-expires.c:59
+msgid "The expiry date must be in the future"
+msgstr "মেয়াদপূর্তীর ক্ষেত্রে ভবিষ্যতের একটি তারিখ নির্ধারণ করা আবশ্যক"
+
+#: ../pgp/seahorse-gpgme-expires.c:72
+msgid "Couldn't change expiry date"
+msgstr "মেয়াদপূর্তীর তারিখ পরিবর্তন করতে ব্যর্থ"
+
+#: ../pgp/seahorse-gpgme-expires.c:137
+#, c-format
+#| msgid "Expiry for %s"
+msgid "Expiry: %s"
+msgstr "মেয়াদপূর্তী: %s"
+
+#: ../pgp/seahorse-gpgme-generate.c:65
+msgid "PGP Key"
+msgstr "PGP-কি"
+
+#: ../pgp/seahorse-gpgme-generate.c:66
+msgid "Used to encrypt email and files"
+msgstr "ই-মেইল ও ফাইল এনক্রিপ্ট করতে ব্যবহৃত"
+
+#: ../pgp/seahorse-gpgme-generate.c:95
+msgid "DSA Elgamal"
+msgstr "DSA Elgamal"
+
+#: ../pgp/seahorse-gpgme-generate.c:106
+msgid "Couldn't generate PGP key"
+msgstr "PGP-কি নির্মাণ করতে ব্যর্থ"
+
+#: ../pgp/seahorse-gpgme-generate.c:213
+msgid "Passphrase for New PGP Key"
+msgstr "নতুন PGP-কির পরিচয়-পংক্তি"
+
+#: ../pgp/seahorse-gpgme-generate.c:214
+msgid "Enter the passphrase for your new key twice."
+msgstr "নতুন কি-র পরিচয়-পংক্তি দুইবার লেখা আবশ্যক।"
+
+#: ../pgp/seahorse-gpgme-generate.c:223
+msgid "Couldn't generate key"
+msgstr "কি নির্মাণ করতে ব্যর্থ"
+
+#: ../pgp/seahorse-gpgme-generate.c:225
+msgid "Generating key"
+msgstr "কি নির্মাণ করতে ব্যর্থ"
+
+#: ../pgp/seahorse-gpgme-photos.c:73
+#, c-format
+msgid ""
+"<big><b>The photo is too large</b></big>\n"
+"The recommended size for a photo on your key is %d x %d pixels."
+msgstr ""
+"<big><b>ফোটোর মাপ অত্যন্ত বড়</b></big>\n"
+"কি-র জন্য ফোটোর প্রস্তাবিত মান হল %d x %d পিক্সেল।"
+
+#: ../pgp/seahorse-gpgme-photos.c:78
+msgid "_Don't Resize"
+msgstr "মাপ পরিবর্তন করা হবে না (_D)"
+
+#: ../pgp/seahorse-gpgme-photos.c:79
+msgid "_Resize"
+msgstr "মান পরিবর্তন করা হবে (_R)"
+
+#: ../pgp/seahorse-gpgme-photos.c:128
+#, c-format
+msgid ""
+"This is not a image file, or an unrecognized kind of image file. Try to use "
+"a JPEG image."
+msgstr ""
+"এটি সম্ভবত ছবির ফাইল নয় অথবা পরিচিত ধরনের ছবির ফাইল নয়। JPEG ছবির ব্যবহারের "
+"প্রয়াস করুন।"
+
+#: ../pgp/seahorse-gpgme-photos.c:224
+msgid "All image files"
+msgstr "সর্বধরনের ছবির ফাইল"
+
+#: ../pgp/seahorse-gpgme-photos.c:237
+msgid "All JPEG files"
+msgstr "সর্বধরনের JPEG ফাইল"
+
+#: ../pgp/seahorse-gpgme-photos.c:261
+msgid "Choose Photo to Add to Key"
+msgstr "কি-র সাথে যোগ করার উদ্দেশ্যে ফোটো নির্বাচন করুন"
+
+#: ../pgp/seahorse-gpgme-photos.c:290 ../pgp/seahorse-gpgme-photos.c:294
+msgid "Couldn't add photo"
+msgstr "ছবি যোগ করতে ব্যর্থ"
+
+#: ../pgp/seahorse-gpgme-photos.c:291
+msgid "The file could not be loaded. It may be in an invalid format"
+msgstr "ফাইল লোড করা যায়নি। সম্ভবত বৈধ বিন্যাস নয়।"
+
+#: ../pgp/seahorse-gpgme-photos.c:320
+msgid "Are you sure you want to remove the current photo from your key?"
+msgstr "আপনি কি নিশ্চিতরূপে কি থেকে বর্তমান ফোটো মুছে ফেলতে ইচ্ছুক?"
+
+#: ../pgp/seahorse-gpgme-photos.c:333
+msgid "Couldn't delete photo"
+msgstr "ছবি মুছে ফেলতে ব্যর্থ"
+
+#: ../pgp/seahorse-gpgme-revoke.c:70
+msgid "Couldn't revoke subkey"
+msgstr "সাব-কি প্রত্যাখ্যান করতে ব্যর্থ"
+
+#: ../pgp/seahorse-gpgme-revoke.c:94
+#, c-format
+#| msgid "Revoke %s"
+msgid "Revoke: %s"
+msgstr "প্রত্যাখ্যান করুন: %s"
+
+#: ../pgp/seahorse-gpgme-revoke.c:105
+msgid "No reason"
+msgstr "কারণ বিনা"
+
+#: ../pgp/seahorse-gpgme-revoke.c:106
+msgid "No reason for revoking key"
+msgstr "কি প্রত্যাখ্যানের কোনো কারণ নেই"
+
+#: ../pgp/seahorse-gpgme-revoke.c:112
+msgid "Compromised"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-revoke.c:113
+msgid "Key has been compromised"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-revoke.c:119
+msgid "Superseded"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-revoke.c:120
+msgid "Key has been superseded"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-revoke.c:126
+msgid "Not Used"
+msgstr "ব্যবহৃত নয়"
+
+#: ../pgp/seahorse-gpgme-revoke.c:127
+msgid "Key is no longer used"
+msgstr "এই কি এখন ব্যবহত হয় না"
+
+#: ../pgp/seahorse-gpgme-revoke.c:164
+#, c-format
+msgid ""
+"You are about to add %s as a revoker for %s. This operation cannot be "
+"undone! Are you sure you want to continue?"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-revoke.c:176
+msgid "Couldn't add revoker"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-sign.c:96
+msgid "Couldn't sign key"
+msgstr "কি স্বাক্ষর করতে ব্যর্থ"
+
+#. TODO: We should be giving an error message that allows them to
+#. generate or import a key
+#: ../pgp/seahorse-gpgme-sign.c:149 ../pgp/seahorse-signer.c:61
+msgid "No keys usable for signing"
+msgstr "স্বাক্ষরের জন্য কোনো কি ব্যবহারযোগ্য নয়"
+
+#: ../pgp/seahorse-gpgme-sign.c:150
+msgid ""
+"You have no personal PGP keys that can be used to indicate your trust of "
+"this key."
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-source.c:99
+#, c-format
+msgid "Wrong passphrase."
+msgstr "ভুল পরিচিতি-পংক্তি।"
+
+#: ../pgp/seahorse-gpgme-source.c:103
+#, c-format
+msgid "Enter new passphrase for '%s'"
+msgstr "'%s'-র জন্য নতুন পরিচিতি-পংক্তি লিখুন"
+
+#: ../pgp/seahorse-gpgme-source.c:105
+#, c-format
+msgid "Enter passphrase for '%s'"
+msgstr "'%s'-র পরিচিতি-পংক্তি লিখুন"
+
+#: ../pgp/seahorse-gpgme-source.c:108
+#: ../src/seahorse-change-passphrase.glade.h:4
+msgid "Enter new passphrase"
+msgstr "নতুন পরিচিতি-পংক্তি লিখুন"
+
+#: ../pgp/seahorse-gpgme-source.c:110
+msgid "Enter passphrase"
+msgstr "পরিচিতি-পংক্তি লিখুন"
+
+#. TODO: We can use the GPGME progress to make this more accurate
+#: ../pgp/seahorse-gpgme-source.c:722
+#, c-format
+msgid "Loaded %d key"
+msgid_plural "Loaded %d keys"
+msgstr[0] "%d-টি কি লোড করা হয়েছে"
+msgstr[1] "%d-টি কি লোড করা হয়েছে"
+
+#: ../pgp/seahorse-gpgme-source.c:777
+msgid "Loading Keys..."
+msgstr "কি লোড করা হচ্ছে..."
+
+#: ../pgp/seahorse-gpgme-source.c:820
+msgid ""
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:564
+msgid "Importing Keys"
+msgstr "কি ইম্পোর্ট করা হচ্ছে"
+
+#: ../pgp/seahorse-gpgme-source.c:946
+msgid "Exporting Keys"
+msgstr "কি এক্সপোর্ট করা হচ্ছে"
+
+#: ../pgp/seahorse-gpgme-subkey.c:199
+msgid "ElGamal"
+msgstr "ElGamal"
+
+#: ../pgp/seahorse-hkp-source.c:330
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "সুনির্দিষ্ট অনুসন্ধান প্রয়োগ করা হয়নি। '%s' সার্ভার দ্বারা একাধিক কি সনাক্ত হয়েছে।"
 
-#: ../pgp/seahorse-hkp-source.c:333
+#: ../pgp/seahorse-hkp-source.c:332
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "'%s' সার্ভারের সাথে সংযোগ স্থাপন করতে ব্যর্থ: %s"
 
-#: ../pgp/seahorse-hkp-source.c:553
+#: ../pgp/seahorse-hkp-source.c:573
 msgid "Searching for keys..."
 msgstr "কি অনুসন্ধান করা হচ্ছে..."
 
-#: ../pgp/seahorse-hkp-source.c:624
+#: ../pgp/seahorse-hkp-source.c:644
 msgid "Uploading keys..."
 msgstr "কি আপলোড করা হচ্ছে..."
 
-#: ../pgp/seahorse-hkp-source.c:702
+#: ../pgp/seahorse-hkp-source.c:722
 msgid "Retrieving keys..."
 msgstr "কি পুনরুদ্ধার করা হচ্ছে..."
 
-#: ../pgp/seahorse-hkp-source.c:735 ../pgp/seahorse-ldap-source.c:1276
-#: ../pgp/seahorse-pgp-generator.vala:29 ../pgp/seahorse-pgp-source.c:443
-#: ../pgp/seahorse-server-source.c:209
-msgid "PGP Key"
-msgstr "PGP-কি"
-
-#: ../pgp/seahorse-hkp-source.c:769
+#: ../pgp/seahorse-hkp-source.c:828
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "চিহ্নিত স্থানে কি অনুসন্ধান করা হচ্ছে: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:866 ../pgp/seahorse-hkp-source.c:939
-#: ../pgp/seahorse-ldap-source.c:665
+#: ../pgp/seahorse-hkp-source.c:905 ../pgp/seahorse-hkp-source.c:978
+#: ../pgp/seahorse-ldap-source.c:668
 #, c-format
 msgid "Connecting to: %s"
 msgstr "সংযোগ স্থাপন করা হচ্ছে: %s"
 
-#: ../pgp/seahorse-hkp-source.c:975
+#: ../pgp/seahorse-hkp-source.c:1002
 msgid "HTTP Key Server"
 msgstr "HTTP কি-সার্ভার"
 
-#: ../pgp/seahorse-ldap-source.c:456
+#: ../pgp/seahorse-ldap-source.c:459
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "'%s'-র সাথে সংযোগ করতে ব্যর্থ: %s"
 
-#: ../pgp/seahorse-ldap-source.c:638
+#: ../pgp/seahorse-ldap-source.c:641
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "চিহ্নিত ঠিকানা মীমাংসা করতে ব্যর্থ: %s"
 
-#: ../pgp/seahorse-ldap-source.c:716
+#: ../pgp/seahorse-ldap-source.c:719
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "সার্ভারের ঠিকানা মীমাংসা করতে ব্যর্থ: %s"
 
-#: ../pgp/seahorse-ldap-source.c:920
+#: ../pgp/seahorse-ldap-source.c:955
 #, c-format
 msgid "Searching for keys containing '%s'..."
 msgstr "'%s' সহ কি অনুসন্ধান করা হবে..."
 
-#: ../pgp/seahorse-ldap-source.c:947
+#: ../pgp/seahorse-ldap-source.c:982
 #, c-format
 msgid "Searching for key id '%s'..."
 msgstr "কি-id '%s' অনুসন্ধান করুন..."
 
-#: ../pgp/seahorse-ldap-source.c:1052
+#: ../pgp/seahorse-ldap-source.c:1087
 msgid "Retrieving remote keys..."
 msgstr "দূরবর্তী-কি উদ্ধার করা হচ্ছে..."
 
-#: ../pgp/seahorse-ldap-source.c:1184
+#: ../pgp/seahorse-ldap-source.c:1219
 msgid "Sending keys to key server..."
 msgstr "কি-সার্ভারে কি পাঠানো হচ্ছে..."
 
-#: ../pgp/seahorse-ldap-source.c:1416
+#: ../pgp/seahorse-ldap-source.c:1421
 msgid "LDAP Key Server"
 msgstr "LDAP কি-সার্ভার"
 
-#: ../pgp/seahorse-pgp-add-subkey.c:166
-msgid "Couldn't add subkey"
-msgstr "সাব-কি যোগ করা যায়নি"
-
-#: ../pgp/seahorse-pgp-add-subkey.c:187
-#, c-format
-msgid "Add subkey to %s"
-msgstr "%s-এ সাব-কি যোগ করুন"
-
-#: ../pgp/seahorse-pgp-add-subkey.c:204 ../pgp/seahorse-pgp-generate.c:51
-msgid "DSA (sign only)"
-msgstr "DSA (শুধুমাত্র স্বাক্ষর)"
-
-#: ../pgp/seahorse-pgp-add-subkey.c:212
-msgid "ElGamal (encrypt only)"
-msgstr "ElGamal (শুধুমাত্র এনক্রিপশন)"
-
-#: ../pgp/seahorse-pgp-add-subkey.c:218 ../pgp/seahorse-pgp-generate.c:52
-msgid "RSA (sign only)"
-msgstr "RSA (শুধুমাত্র স্বাক্ষর)"
-
-#: ../pgp/seahorse-pgp-add-subkey.c:224
-msgid "RSA (encrypt only)"
-msgstr "RSA (শুধুমাত্র এনক্রিপশন)"
-
-#: ../pgp/seahorse-pgp-add-uid.c:85
-msgid "Couldn't add user id"
-msgstr "ব্যবহারকারীর id যোগ করতে ব্যর্থ"
-
-#: ../pgp/seahorse-pgp-add-uid.c:107
-#, c-format
-msgid "Add user ID to %s"
-msgstr "%s-এ ব্যবহারকারীর ID যোগ করুন"
-
-#: ../pgp/seahorse-pgp-commands.vala:29
+#: ../pgp/seahorse-pgp-commands.c:103
 msgid "_Sign Key..."
 msgstr "কি স্বাক্ষর করুন...(_S)"
 
-#: ../pgp/seahorse-pgp-commands.vala:30
+#: ../pgp/seahorse-pgp-commands.c:103
 msgid "Sign public key"
 msgstr "সার্বজনীন-কি স্বাক্ষর করুন"
 
-#: ../pgp/seahorse-pgp-commands.vala:110
+#: ../pgp/seahorse-pgp-commands.c:171
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "আপনি কি নিশ্চিতরূপে %s স্থায়ীভাবে মুছে ফেলতে ইচ্ছুক?"
 
-#: ../pgp/seahorse-pgp-commands.vala:114
+#: ../pgp/seahorse-pgp-commands.c:176
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys and identities?"
 msgstr "আপনি কি নিশ্চিতরূপে %d কি ও পরিচয় স্থায়ীভাবে মুছে ফেলতে ইচ্ছুক?"
 
-#: ../pgp/seahorse-pgp-commands.vala:116
+#: ../pgp/seahorse-pgp-commands.c:178
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys?"
 msgstr "আপনি কি নিশ্চিতরূপে %d-টি কি স্থায়ীভাবে মুছে ফেলতে ইচ্ছুক?"
 
-#: ../pgp/seahorse-pgp-commands.vala:118
+#: ../pgp/seahorse-pgp-commands.c:180
 #, c-format
 msgid "Are you sure you want to permanently delete %d identities?"
 msgstr "আপনি কি নিশ্চিতরূপে %d-টি পরিচয় স্থায়ীভাবে মুছে ফেলতে ইচ্ছুক?"
-
-#: ../pgp/seahorse-pgp-expires.c:70
-msgid "Couldn't change expiry date"
-msgstr "মেয়াদপূর্তীর তারিখ পরিবর্তন করতে ব্যর্থ"
-
-#: ../pgp/seahorse-pgp-expires.c:134
-#, c-format
-msgid "Expiry for Subkey %d of %s"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-expires.c:136
-#, c-format
-msgid "Expiry for %s"
-msgstr "%s-র মেয়াদ পূর্তী"
-
-#: ../pgp/seahorse-pgp-generate.c:50
-msgid "DSA Elgamal"
-msgstr "DSA Elgamal"
-
-#: ../pgp/seahorse-pgp-generate.c:61
-msgid "Couldn't generate PGP key"
-msgstr "PGP-কি নির্মাণ করতে ব্যর্থ"
-
-#: ../pgp/seahorse-pgp-generate.c:168
-msgid "Passphrase for New PGP Key"
-msgstr "নতুন PGP-কির পরিচয়-পংক্তি"
-
-#: ../pgp/seahorse-pgp-generate.c:169
-msgid "Enter the passphrase for your new key twice."
-msgstr "নতুন কি-র পরিচয়-পংক্তি দুইবার লেখা আবশ্যক।"
-
-#: ../pgp/seahorse-pgp-generate.c:178
-msgid "Couldn't generate key"
-msgstr "কি নির্মাণ করতে ব্যর্থ"
-
-#: ../pgp/seahorse-pgp-generate.c:180
-msgid "Generating key"
-msgstr "কি নির্মাণ করতে ব্যর্থ"
 
 #: ../pgp/seahorse-pgp-generate.glade.h:1
 #: ../ssh/seahorse-ssh-generate.glade.h:1
@@ -1462,7 +1766,7 @@ msgid "E_xpiration Date:"
 msgstr "মেয়াদপূর্তীর তারিখ: (_x)"
 
 #: ../pgp/seahorse-pgp-generate.glade.h:7
-#: ../ssh/seahorse-ssh-generate.glade.h:7
+#: ../ssh/seahorse-ssh-generate.glade.h:4
 msgid "Encryption _Type:"
 msgstr "এনক্রিপশনের ধরন: (_T)"
 
@@ -1471,7 +1775,7 @@ msgid "Generate a new key"
 msgstr "একটি নতুন কি নির্মাণ করুন"
 
 #: ../pgp/seahorse-pgp-generate.glade.h:10
-#: ../ssh/seahorse-ssh-generate.glade.h:10
+#: ../ssh/seahorse-ssh-generate.glade.h:6
 msgid "Key _Strength (bits):"
 msgstr "কি-র ক্ষমতা (বিট): (_S)"
 
@@ -1487,185 +1791,121 @@ msgstr "নতুন PGP-কি"
 msgid "_Comment:"
 msgstr "বিবৃতি: (_C)"
 
-#: ../pgp/seahorse-pgp-generator.vala:30
-msgid "Used to encrypt email and files"
-msgstr "ই-মেইল ও ফাইল এনক্রিপ্ট করতে ব্যবহৃত"
-
-#: ../pgp/seahorse-pgp-key.c:234
+#: ../pgp/seahorse-pgp-key.c:200
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:36
 msgid "Private PGP Key"
 msgstr "ব্যক্তিগত PGP-কি"
 
-#: ../pgp/seahorse-pgp-key.c:237
+#: ../pgp/seahorse-pgp-key.c:203
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:32
 msgid "Public PGP Key"
 msgstr "সার্বজনীন PGP-কি"
 
-#: ../pgp/seahorse-pgp-key.c:397 ../pgp/seahorse-pgp-key-properties.c:1385
+#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1413
 msgid "Expired"
 msgstr "মেয়াদ উত্তীর্ণ"
 
-#: ../pgp/seahorse-pgp-key.c:667
-msgid "ElGamal"
-msgstr "ElGamal"
-
-#: ../pgp/seahorse-pgp-key-properties.c:220
+#: ../pgp/seahorse-pgp-key-properties.c:224
 msgid "Couldn't change primary user ID"
 msgstr "ব্যবহারকারীর প্রধান ID পরিবর্তন করা যায়নি"
 
-#: ../pgp/seahorse-pgp-key-properties.c:239
+#: ../pgp/seahorse-pgp-key-properties.c:241
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr "আপনি কি নিশ্চিতরূপে '%s' ব্যবহারকারীর ID স্থায়ীভাবে মুছে ফেলতে ইচ্ছুক?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:250
+#: ../pgp/seahorse-pgp-key-properties.c:251
 msgid "Couldn't delete user ID"
 msgstr "ব্যবহারকারীর ID মুছে ফেলতে ব্যর্থ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:341
-#: ../pgp/seahorse-pgp-key-properties.c:1503
+#: ../pgp/seahorse-pgp-key-properties.c:333
+#: ../pgp/seahorse-pgp-key-properties.c:1526
 msgid "[Unknown]"
 msgstr "[অজানা]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:439
-#: ../pgp/seahorse-pgp-key-properties.c:1779
+#: ../pgp/seahorse-pgp-key-properties.c:426
+#: ../pgp/seahorse-pgp-key-properties.c:1820
 msgid "Name/Email"
 msgstr "নাম/ই-মেইল"
 
-#: ../pgp/seahorse-pgp-key-properties.c:444
+#: ../pgp/seahorse-pgp-key-properties.c:431
 msgid "Signature ID"
 msgstr "স্বাক্ষরের ID"
 
-#: ../pgp/seahorse-pgp-key-properties.c:596
+#: ../pgp/seahorse-pgp-key-properties.c:566
 msgid "Couldn't change primary photo"
 msgstr "প্রধান ফোটো পরিবর্তন করতে ব্যর্থ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:844
+#: ../pgp/seahorse-pgp-key-properties.c:826
 msgid "(unknown)"
 msgstr "(অজানা)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:847
+#: ../pgp/seahorse-pgp-key-properties.c:829
 #, c-format
 msgid "This key expired on: %s"
 msgstr "কি-র মেয়াদপূর্তীর তারিখ: %s"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1001
+#: ../pgp/seahorse-pgp-key-properties.c:997
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:1013
+#: ../pgp/seahorse-pgp-key-properties.c:1006
 msgid "Couldn't delete subkey"
 msgstr "সাব-কি মুছে ফেলতে ব্যর্থ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1049
-#: ../pgp/seahorse-pgp-key-properties.c:1467
+#: ../pgp/seahorse-pgp-key-properties.c:1042
+#: ../pgp/seahorse-pgp-key-properties.c:1489
 msgid "Unable to change trust"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:1065
-#: ../ssh/seahorse-ssh-key-properties.c:214
+#: ../pgp/seahorse-pgp-key-properties.c:1056 ../src/seahorse-viewer.c:312
+#: ../ssh/seahorse-ssh-key-properties.c:167
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "\"%s\"-এ কি এক্সপোর্ট করতে ব্যর্থ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1090
-#: ../ssh/seahorse-ssh-key-properties.c:238
+#: ../pgp/seahorse-pgp-key-properties.c:1084
+#: ../ssh/seahorse-ssh-key-properties.c:191
 msgid "Export Complete Key"
 msgstr "সম্পূর্ণ কি এক্সপোর্ট করুন"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1115
-#: ../ssh/seahorse-ssh-key-properties.c:260
+#: ../pgp/seahorse-pgp-key-properties.c:1109
+#: ../ssh/seahorse-ssh-key-properties.c:213
 msgid "Couldn't export key."
 msgstr "কি এক্সপোর্ট করতে বিফল।"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1314
-#: ../pgp/seahorse-pgp-key-properties.c:1390
+#: ../pgp/seahorse-pgp-key-properties.c:1331
+#: ../pgp/seahorse-pgp-key-properties.c:1420
 msgctxt "Expires"
 msgid "Never"
 msgstr "কখনো নয়"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1358
-msgid "ID"
-msgstr "ID"
-
 #. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1361
-#: ../src/seahorse-key-manager-store.c:850
+#: ../pgp/seahorse-pgp-key-properties.c:1381
+#: ../src/seahorse-key-manager-store.c:859
 msgid "Type"
 msgstr "ধরন"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1364
+#: ../pgp/seahorse-pgp-key-properties.c:1384
 msgid "Created"
 msgstr "নির্মাণের তারিখ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1367
+#: ../pgp/seahorse-pgp-key-properties.c:1387
 msgid "Expires"
 msgstr "মেয়াদপূর্তী"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1370
+#: ../pgp/seahorse-pgp-key-properties.c:1390
 msgid "Status"
 msgstr "অবস্থা"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1373
+#: ../pgp/seahorse-pgp-key-properties.c:1393
 msgid "Strength"
 msgstr "ক্ষমতা"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1387
+#: ../pgp/seahorse-pgp-key-properties.c:1417
 msgid "Good"
 msgstr "ভাল"
-
-#: ../pgp/seahorse-pgp-photos.c:73
-#, c-format
-msgid ""
-"<big><b>The photo is too large</b></big>\n"
-"The recommended size for a photo on your key is %d x %d pixels."
-msgstr ""
-"<big><b>ফোটোর মাপ অত্যন্ত বড়</b></big>\n"
-"কি-র জন্য ফোটোর প্রস্তাবিত মান হল %d x %d পিক্সেল।"
-
-#: ../pgp/seahorse-pgp-photos.c:78
-msgid "_Don't Resize"
-msgstr "মাপ পরিবর্তন করা হবে না (_D)"
-
-#: ../pgp/seahorse-pgp-photos.c:79
-msgid "_Resize"
-msgstr "মান পরিবর্তন করা হবে (_R)"
-
-#: ../pgp/seahorse-pgp-photos.c:128
-#, c-format
-msgid ""
-"This is not a image file, or an unrecognized kind of image file. Try to use "
-"a JPEG image."
-msgstr "এটি সম্ভবত ছবির ফাইল নয় অথবা পরিচিত ধরনের ছবির ফাইল নয়। JPEG ছবির ব্যবহারের প্রয়াস করুন।"
-
-#: ../pgp/seahorse-pgp-photos.c:224
-msgid "All image files"
-msgstr "সর্বধরনের ছবির ফাইল"
-
-#: ../pgp/seahorse-pgp-photos.c:237
-msgid "All JPEG files"
-msgstr "সর্বধরনের JPEG ফাইল"
-
-#: ../pgp/seahorse-pgp-photos.c:261
-msgid "Choose Photo to Add to Key"
-msgstr "কি-র সাথে যোগ করার উদ্দেশ্যে ফোটো নির্বাচন করুন"
-
-#: ../pgp/seahorse-pgp-photos.c:290 ../pgp/seahorse-pgp-photos.c:294
-msgid "Couldn't add photo"
-msgstr "ছবি যোগ করতে ব্যর্থ"
-
-#: ../pgp/seahorse-pgp-photos.c:291
-msgid "The file could not be loaded. It may be in an invalid format"
-msgstr "ফাইল লোড করা যায়নি। সম্ভবত বৈধ বিন্যাস নয়।"
-
-#: ../pgp/seahorse-pgp-photos.c:321
-msgid "Are you sure you want to remove the current photo from your key?"
-msgstr "আপনি কি নিশ্চিতরূপে কি থেকে বর্তমান ফোটো মুছে ফেলতে ইচ্ছুক?"
-
-#: ../pgp/seahorse-pgp-photos.c:334
-msgid "Couldn't delete photo"
-msgstr "ছবি মুছে ফেলতে ব্যর্থ"
 
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:1
 msgid "<b>Actions</b>"
@@ -1753,11 +1993,6 @@ msgstr "কি-র জন্য ছবি যোগ করুন"
 #: ../ssh/seahorse-ssh-key-properties.glade.h:16
 msgid "Change _Passphrase"
 msgstr "পরিচয়-পংক্তি পরিবর্তন করুন (_P)"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:19
-msgid "Created:"
-msgstr "নিমার্ণের সময়কাল:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.glade.h:21
 msgid "Decrypt files and email sent to you."
@@ -1906,7 +2141,7 @@ msgstr ""
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.glade.h:35
-#: ../src/seahorse-key-manager-store.c:844
+#: ../src/seahorse-key-manager-store.c:853
 msgid "Trust"
 msgstr "বিশ্বাসের মাত্রা"
 
@@ -1944,128 +2179,11 @@ msgstr "স্বাক্ষর প্রত্যাখ্যান করু�
 msgid "_Sign this Key"
 msgstr "এই কি স্বাক্ষর করুন (_S)"
 
-#: ../pgp/seahorse-pgp-revoke.c:75
-msgid "Couldn't revoke subkey"
-msgstr "সাব-কি প্রত্যাখ্যান করতে ব্যর্থ"
-
-#: ../pgp/seahorse-pgp-revoke.c:102
+#: ../pgp/seahorse-pgp-subkey.c:371
 #, c-format
-msgid "Revoke Subkey %d of %s"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-revoke.c:104
-#, c-format
-msgid "Revoke %s"
-msgstr "%s প্রত্যাখ্যান করুন"
-
-#: ../pgp/seahorse-pgp-revoke.c:115
-msgid "No reason"
-msgstr "কারণ বিনা"
-
-#: ../pgp/seahorse-pgp-revoke.c:116
-msgid "No reason for revoking key"
-msgstr "কি প্রত্যাখ্যানের কোনো কারণ নেই"
-
-#: ../pgp/seahorse-pgp-revoke.c:122
-msgid "Compromised"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-revoke.c:123
-msgid "Key has been compromised"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-revoke.c:129
-msgid "Superseded"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-revoke.c:130
-msgid "Key has been superseded"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-revoke.c:136
-msgid "Not Used"
-msgstr "ব্যবহৃত নয়"
-
-#: ../pgp/seahorse-pgp-revoke.c:137
-msgid "Key is no longer used"
-msgstr "এই কি এখন ব্যবহত হয় না"
-
-#: ../pgp/seahorse-pgp-revoke.c:176
-#, c-format
-msgid ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-revoke.c:191
-msgid "Couldn't add revoker"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-sign.c:96
-msgid "Couldn't sign key"
-msgstr "কি স্বাক্ষর করতে ব্যর্থ"
-
-#. TODO: We should be giving an error message that allows them to
-#. generate or import a key
-#: ../pgp/seahorse-pgp-sign.c:159 ../pgp/seahorse-signer.c:61
-msgid "No keys usable for signing"
-msgstr "স্বাক্ষরের জন্য কোনো কি ব্যবহারযোগ্য নয়"
-
-#: ../pgp/seahorse-pgp-sign.c:160
-msgid ""
-"You have no personal PGP keys that can be used to indicate your trust of "
-"this key."
-msgstr ""
-
-#: ../pgp/seahorse-pgp-source.c:100
-#, c-format
-msgid "Wrong passphrase."
-msgstr "ভুল পরিচিতি-পংক্তি।"
-
-#: ../pgp/seahorse-pgp-source.c:104
-#, c-format
-msgid "Enter new passphrase for '%s'"
-msgstr "'%s'-র জন্য নতুন পরিচিতি-পংক্তি লিখুন"
-
-#: ../pgp/seahorse-pgp-source.c:106
-#, c-format
-msgid "Enter passphrase for '%s'"
-msgstr "'%s'-র পরিচিতি-পংক্তি লিখুন"
-
-#: ../pgp/seahorse-pgp-source.c:109
-#: ../src/seahorse-change-passphrase.glade.h:4
-msgid "Enter new passphrase"
-msgstr "নতুন পরিচিতি-পংক্তি লিখুন"
-
-#: ../pgp/seahorse-pgp-source.c:111
-msgid "Enter passphrase"
-msgstr "পরিচিতি-পংক্তি লিখুন"
-
-#. TODO: We can use the GPGME progress to make this more accurate
-#: ../pgp/seahorse-pgp-source.c:802
-#, c-format
-msgid "Loaded %d key"
-msgid_plural "Loaded %d keys"
-msgstr[0] "%d-টি কি লোড করা হয়েছে"
-msgstr[1] "%d-টি কি লোড করা হয়েছে"
-
-#: ../pgp/seahorse-pgp-source.c:857
-msgid "Loading Keys..."
-msgstr "কি লোড করা হচ্ছে..."
-
-#: ../pgp/seahorse-pgp-source.c:900
-msgid ""
-"Invalid key data (missing UIDs). This may be due to a computer with a date "
-"set in the future or a missing self-signature."
-msgstr ""
-
-#: ../pgp/seahorse-pgp-source.c:1000 ../src/seahorse-key-manager.vala:549
-msgid "Importing Keys"
-msgstr "কি ইম্পোর্ট করা হচ্ছে"
-
-#: ../pgp/seahorse-pgp-source.c:1036
-msgid "Exporting Keys"
-msgstr "কি এক্সপোর্ট করা হচ্ছে"
+#| msgid "Add subkey to %s"
+msgid "Subkey %d of %s"
+msgstr "সাব-কি %d, %s-র"
 
 #: ../pgp/seahorse-revoke.glade.h:1
 msgid "Optional description of revocation"
@@ -2083,6 +2201,14 @@ msgstr ""
 msgid "_Reason:"
 msgstr "কারণ: (_R)"
 
+#: ../pgp/seahorse-signer.c:62
+msgid "You have no personal PGP keys that can be used to sign a document or message."
+msgstr "কোনো নথি অথবা বার্তা স্বাক্ষর করার উদ্দেশ্যে আপনার কোনো ব্যক্তিগত PGP-কি উপস্থিত নেই।"
+
+#: ../pgp/seahorse-signer.glade.h:1
+msgid "_Sign message with key:"
+msgstr "কি সহযোগে বার্তা স্বাক্ষর করা হবে (_S)"
+
 #: ../pgp/seahorse-sign.glade.h:1
 msgid "<b>How carefully have you checked this key?</b>"
 msgstr "<b>এই কি-টি পুঙ্খানুপুঙ্খভাবে পরীক্ষা করা হয়েছে কি না?</b>"
@@ -2097,79 +2223,89 @@ msgstr "<b>কি স্বাক্ষরের :</b>"
 
 #: ../pgp/seahorse-sign.glade.h:4
 msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key\n"
-"is owned by the person who claims to own it. For example, you could\n"
-"read the key fingerprint to the owner over the phone. "
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone. "
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:7
+#: ../pgp/seahorse-sign.glade.h:5
 msgid "<i>Key Name</i>"
 msgstr "<i>কি-র নাম</i>"
 
-#: ../pgp/seahorse-sign.glade.h:8
+#: ../pgp/seahorse-sign.glade.h:6
 msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who \n"
+"<i>Not at all:</i> means you believe the key is owned by the person who "
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:10
+#: ../pgp/seahorse-sign.glade.h:7
 msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that "
-"this\n"
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
 "key is genuine."
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:12
+#: ../pgp/seahorse-sign.glade.h:8
 msgid "By signing you indicate your trust that this key belongs to:"
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:13
+#: ../pgp/seahorse-sign.glade.h:9
 msgid "I can _revoke this signature at a later date."
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:14
+#: ../pgp/seahorse-sign.glade.h:10
+#| msgid "_Sign Key..."
+msgid "Sign Key"
+msgstr "কি স্বাক্ষর করুন"
+
+#: ../pgp/seahorse-sign.glade.h:11
 msgid ""
-"You could use a hard to forge photo identification (such as a passport) \n"
-"to personally check that the name on the key is correct. You should \n"
-"have also used email to check that the email address belongs to the\n"
-"owner."
+"You could use a hard to forge photo identification (such as a passport) to "
+"personally check that the name on the key is correct. You should have also "
+"used email to check that the email address belongs to the owner."
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:18
+#: ../pgp/seahorse-sign.glade.h:12
 msgid "_Casually"
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:19
+#: ../pgp/seahorse-sign.glade.h:13
 msgid "_Not at all"
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:20
+#: ../pgp/seahorse-sign.glade.h:14
 msgid "_Others may not see this signature"
 msgstr "এই স্বাক্ষর অন্যান্যদের জন্য দৃশ্যমান হবে না (_O)"
 
-#: ../pgp/seahorse-sign.glade.h:21
+#: ../pgp/seahorse-sign.glade.h:15
 msgid "_Sign"
 msgstr "স্বাক্ষর করুন (_S)"
 
-#: ../pgp/seahorse-sign.glade.h:22
+#: ../pgp/seahorse-sign.glade.h:16
 msgid "_Signer:"
 msgstr "স্বাক্ষরকারী: (_S)"
 
-#: ../pgp/seahorse-sign.glade.h:23
+#: ../pgp/seahorse-sign.glade.h:17
 msgid "_Very Carefully"
 msgstr "পুঙ্খানুপুঙ্খভাবে (_V)"
 
-#: ../pgp/seahorse-signer.c:62
-msgid "You have no personal PGP keys that can be used to sign a document or message."
-msgstr "কোনো নথি অথবা বার্তা স্বাক্ষর করার উদ্দেশ্যে আপনার কোনো ব্যক্তিগত PGP-কি উপস্থিত নেই।"
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+msgid "Certificate"
+msgstr "সার্টিফিকেট"
 
-#: ../pgp/seahorse-signer.glade.h:1
-msgid "_Sign message with key:"
-msgstr "কি সহযোগে বার্তা স্বাক্ষর করা হবে (_S)"
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
+#, c-format
+#| msgid "Are you sure you want to delete the password '%s'?"
+msgid "Are you sure you want to delete the certificate '%s'?"
+msgstr "আপনি কি নিশ্চিতরূপে '%s' সার্টিফিকেট মুছে ফেলতে ইচ্ছুক?"
 
-#: ../src/main.c:73
-msgid "Encryption Key Manager"
-msgstr "এনক্রিপশন-কি পরিচালন ব্যবস্থা"
+#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#, c-format
+#| msgid "Are you sure you want to delete %d passwords?"
+msgid "Are you sure you want to delete %d certificate?"
+msgid_plural "Are you sure you want to delete %d certificates?"
+msgstr[0] "আপনি কি নিশ্চিতরূপে %d সার্টিফিকেট মুছে ফেলতে ইচ্ছুক?"
+msgstr[1] "আপনি কি নিশ্চিতরূপে %d পাসওয়ার্ড মুছে ফেলতে ইচ্ছুক?"
 
 #: ../src/seahorse-change-passphrase.glade.h:1
 msgid "Change Passphrase"
@@ -2191,21 +2327,134 @@ msgstr "নতুন পরিচয়-পংক্তি: (_P)"
 msgid "Manage your passwords and encryption keys"
 msgstr "পাসওয়ার্ড ও এনক্রিপশন-কি পরিচালনা করুন"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.vala:142
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:880
 msgid "Passwords and Encryption Keys"
 msgstr "পাসওয়ার্ড ও এনক্রিপশন কি"
 
 #: ../src/seahorse-generate-select.glade.h:1
-msgid "<b>_Select the kind of key you wish to create:</b>"
-msgstr "<b>নির্মাণের উদ্দেশ্যে কি-র ধরন নির্ধারণ করুন: (_S)</b>"
+#| msgid "<b>_Select the kind of key you wish to create:</b>"
+msgid "<b>_Select the type of item to create:</b>"
+msgstr "<b>নির্মাণের উদ্দেশ্যে বস্তুর ধরন নির্ধারণ করুন: (_S)</b>"
 
 #: ../src/seahorse-generate-select.glade.h:2
 msgid "C_ontinue"
 msgstr "এগিয়ে চলুন (_o)"
 
 #: ../src/seahorse-generate-select.glade.h:3
-msgid "Create a New Key"
-msgstr "নতুন কি নির্মাণ করুন"
+#| msgid "_Create New Key..."
+msgid "Create New ..."
+msgstr "নতুন নির্মাণ করুন..."
+
+#: ../src/seahorse-key-manager.c:245 ../src/seahorse-keyserver-results.c:84
+#, c-format
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "নির্বাচিত %d-টি কি"
+msgstr[1] "নির্বাচিত %d-টি কি"
+
+#: ../src/seahorse-key-manager.c:430 ../src/seahorse-key-manager.c:490
+#: ../src/seahorse-key-manager.c:553 ../src/seahorse-keyserver-results.c:170
+msgid "Couldn't import keys"
+msgstr "কি ইম্পোর্ট করতে ব্যর্থ"
+
+#: ../src/seahorse-key-manager.c:435 ../src/seahorse-keyserver-results.c:175
+msgid "Imported keys"
+msgstr "ইম্পোর্ট করা কি"
+
+#: ../src/seahorse-key-manager.c:484
+msgid "Importing keys"
+msgstr "কি ইম্পোর্ট করা হচ্ছে"
+
+#: ../src/seahorse-key-manager.c:507 ../ssh/seahorse-ssh-operation.c:1017
+msgid "Import Key"
+msgstr "কি ইম্পোর্ট করুন"
+
+#: ../src/seahorse-key-manager.c:553
+msgid "Unrecognized key type, or invalid data format"
+msgstr "অপরিচিত ধরনের কি অথবা তারিখের বিন্যাস বৈধ নয়"
+
+#: ../src/seahorse-key-manager.c:747 ../src/seahorse-keyserver-results.c:221
+msgid "_Remote"
+msgstr "দূরবর্তী (_R)"
+
+#: ../src/seahorse-key-manager.c:749
+msgid "Close this program"
+msgstr "এই প্রোগ্রাম বন্ধ করুন"
+
+#: ../src/seahorse-key-manager.c:750
+msgid "_New..."
+msgstr ""
+
+#: ../src/seahorse-key-manager.c:751
+#| msgid "Create a New Key"
+msgid "Create a new key or item"
+msgstr "নতুন কি অথবা বস্তু নির্মাণ করুন"
+
+#: ../src/seahorse-key-manager.c:752
+msgid "_Import..."
+msgstr "ইম্পোর্ট করুন...(_I)"
+
+#: ../src/seahorse-key-manager.c:753
+#| msgid "Import existing keys from a file:"
+msgid "Import from a file"
+msgstr "একটি ফাইল থেকে ইম্পোর্ট করুন"
+
+#: ../src/seahorse-key-manager.c:755
+#| msgid "Import keys from the clipboard"
+msgid "Import from the clipboard"
+msgstr "ক্লিপ-বোর্ড থেকে ইম্পোর্ট করুন"
+
+#: ../src/seahorse-key-manager.c:760 ../src/seahorse-keyserver-results.c:231
+msgid "_Find Remote Keys..."
+msgstr "দূরবর্তী কি অনুসন্ধান করুন...(_F)"
+
+#: ../src/seahorse-key-manager.c:761 ../src/seahorse-keyserver-results.c:232
+msgid "Search for keys on a key server"
+msgstr "কি-সার্ভারের মধ্যে কি অনুসন্ধান করুন"
+
+#: ../src/seahorse-key-manager.c:762
+msgid "_Sync and Publish Keys..."
+msgstr "কি সুসংগত ও প্রকাশ করুন...(_S)"
+
+#: ../src/seahorse-key-manager.c:763
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "অন-লাইন উপস্থিত কি-র সাথে আপনার কি সুসংগত এবং/অথবা প্রকাশ করুন।"
+
+#: ../src/seahorse-key-manager.c:768
+msgid "T_ypes"
+msgstr "ধরন (_y)"
+
+#: ../src/seahorse-key-manager.c:768
+msgid "Show type column"
+msgstr "ধরনের কলাম প্রদর্শন করা হবে"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "_Expiry"
+msgstr "মেয়াদ পূর্তী (_E)"
+
+#: ../src/seahorse-key-manager.c:770
+msgid "Show expiry column"
+msgstr "মেয়াদপূর্তীর কলাম প্রদর্শন করা হবে"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "_Trust"
+msgstr "বিশ্বাসের মাত্রা (_T)"
+
+#: ../src/seahorse-key-manager.c:772
+msgid "Show owner trust column"
+msgstr "ব্যবহারকারীর বিশ্বাসের মাত্রা চিহ্নকারী কলাম প্রদর্শন করা হবে"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "_Validity"
+msgstr "বৈধতা (_V)"
+
+#: ../src/seahorse-key-manager.c:774
+msgid "Show validity column"
+msgstr "বৈধতার কলাম প্রদর্শন করা হবে"
+
+#: ../src/seahorse-key-manager.c:951
+msgid "Filter:"
+msgstr "ফিল্টার:"
 
 #: ../src/seahorse-key-manager.glade.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -2232,7 +2481,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "এনক্রিপশন ব্যবহারের জন্য কি-র উপস্থিতি আবশ্যক।"
 
 #: ../src/seahorse-key-manager.glade.h:7
-#: ../src/seahorse-keyserver-results.vala:53
+#: ../src/seahorse-keyserver-results.c:236
 msgid "_Import"
 msgstr "ইম্পোর্ট করুন (_I)"
 
@@ -2244,181 +2493,55 @@ msgstr "পাসওয়ার্ড (_P)"
 msgid "_Trusted Keys"
 msgstr "কি লোড করতে বিফল"
 
-#: ../src/seahorse-key-manager.vala:105
-#: ../src/seahorse-keyserver-results.vala:37
-msgid "_Remote"
-msgstr "দূরবর্তী (_R)"
-
-#: ../src/seahorse-key-manager.vala:107
-msgid "_Quit"
-msgstr "প্রস্থান (_Q)"
-
-#: ../src/seahorse-key-manager.vala:108
-msgid "Close this program"
-msgstr "এই প্রোগ্রাম বন্ধ করুন"
-
-#: ../src/seahorse-key-manager.vala:110
-msgid "_Create New Key..."
-msgstr "নতুন কি নির্মাণ করুন...(_C)"
-
-#: ../src/seahorse-key-manager.vala:111
-msgid "Create a new personal key"
-msgstr "নতুন ব্যক্তিগত কি নির্মাণ করুন"
-
-#: ../src/seahorse-key-manager.vala:112
-msgid "_Import..."
-msgstr "ইম্পোর্ট করুন...(_I)"
-
-#: ../src/seahorse-key-manager.vala:113
-msgid "Import keys into your key ring from a file"
-msgstr "ফাইল থেকে আপনার কি-রিংয়ের মধ্যে কি ইম্পোর্ট করুন"
-
-#: ../src/seahorse-key-manager.vala:114
-msgid "Paste _Keys"
-msgstr "কি পেস্ট করুন (_K)"
-
-#: ../src/seahorse-key-manager.vala:115
-msgid "Import keys from the clipboard"
-msgstr "ক্লিপ-বোর্ড থেকে কি ইম্পোর্ট করুন"
-
-#: ../src/seahorse-key-manager.vala:119
-#: ../src/seahorse-keyserver-results.vala:48
-msgid "_Find Remote Keys..."
-msgstr "দূরবর্তী কি অনুসন্ধান করুন...(_F)"
-
-#: ../src/seahorse-key-manager.vala:120
-#: ../src/seahorse-keyserver-results.vala:49
-msgid "Search for keys on a key server"
-msgstr "কি-সার্ভারের মধ্যে কি অনুসন্ধান করুন"
-
-#: ../src/seahorse-key-manager.vala:121
-msgid "_Sync and Publish Keys..."
-msgstr "কি সুসংগত ও প্রকাশ করুন...(_S)"
-
-#: ../src/seahorse-key-manager.vala:122
-msgid "Publish and/or synchronize your keys with those online."
-msgstr "অন-লাইন উপস্থিত কি-র সাথে আপনার কি সুসংগত এবং/অথবা প্রকাশ করুন।"
-
-#: ../src/seahorse-key-manager.vala:126
-msgid "T_ypes"
-msgstr "ধরন (_y)"
-
-#: ../src/seahorse-key-manager.vala:126
-msgid "Show type column"
-msgstr "ধরনের কলাম প্রদর্শন করা হবে"
-
-#: ../src/seahorse-key-manager.vala:127
-msgid "_Expiry"
-msgstr "মেয়াদ পূর্তী (_E)"
-
-#: ../src/seahorse-key-manager.vala:127
-msgid "Show expiry column"
-msgstr "মেয়াদপূর্তীর কলাম প্রদর্শন করা হবে"
-
-#: ../src/seahorse-key-manager.vala:128
-msgid "_Trust"
-msgstr "বিশ্বাসের মাত্রা (_T)"
-
-#: ../src/seahorse-key-manager.vala:128
-msgid "Show owner trust column"
-msgstr "ব্যবহারকারীর বিশ্বাসের মাত্রা চিহ্নকারী কলাম প্রদর্শন করা হবে"
-
-#: ../src/seahorse-key-manager.vala:129
-msgid "_Validity"
-msgstr "বৈধতা (_V)"
-
-#: ../src/seahorse-key-manager.vala:129
-msgid "Show validity column"
-msgstr "বৈধতার কলাম প্রদর্শন করা হবে"
-
-#: ../src/seahorse-key-manager.vala:225
-msgid "Filter:"
-msgstr "ফিল্টার:"
-
-#: ../src/seahorse-key-manager.vala:463 ../src/seahorse-key-manager.vala:510
-#: ../src/seahorse-key-manager.vala:537
-#: ../src/seahorse-keyserver-results.vala:211
-msgid "Couldn't import keys"
-msgstr "কি ইম্পোর্ট করতে ব্যর্থ"
-
-#: ../src/seahorse-key-manager.vala:467
-#: ../src/seahorse-keyserver-results.vala:215
-msgid "Imported keys"
-msgstr "ইম্পোর্ট করা কি"
-
-#: ../src/seahorse-key-manager.vala:505
-msgid "Importing keys"
-msgstr "কি ইম্পোর্ট করা হচ্ছে"
-
-#: ../src/seahorse-key-manager.vala:514 ../ssh/seahorse-ssh-operation.c:1094
-msgid "Import Key"
-msgstr "কি ইম্পোর্ট করুন"
-
-#: ../src/seahorse-key-manager.vala:538
-msgid "Unrecognized key type, or invalid data format"
-msgstr "অপরিচিত ধরনের কি অথবা তারিখের বিন্যাস বৈধ নয়"
-
-#: ../src/seahorse-key-manager.vala:682
-#: ../src/seahorse-keyserver-results.vala:247
-#, c-format
-msgid "Selected %d key"
-msgid_plural "Selected %d keys"
-msgstr[0] "নির্বাচিত %d-টি কি"
-msgstr[1] "নির্বাচিত %d-টি কি"
-
-#: ../src/seahorse-key-manager-store.c:644
+#: ../src/seahorse-key-manager-store.c:648 ../src/seahorse-viewer.c:279
 msgid "Couldn't export keys"
 msgstr "কি এক্সপোর্ট করতে বিফল"
 
-#: ../src/seahorse-key-manager-store.c:837
+#: ../src/seahorse-key-manager-store.c:846
 msgid "Validity"
 msgstr "বৈধতা"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:856
+#: ../src/seahorse-key-manager-store.c:865
 msgid "Expiration Date"
 msgstr "মেয়াদপূর্তীর তারিখ"
 
-#: ../src/seahorse-keyserver-results.vala:39
-msgid "_Close"
-msgstr "বন্ধ করুন (_C)"
+#: ../src/seahorse-keyserver-results.c:194
+msgid "Importing keys from key servers"
+msgstr "কি সার্ভার থেকে কি ইম্পোর্ট করার প্রণালী"
 
-#: ../src/seahorse-keyserver-results.vala:40
+#: ../src/seahorse-keyserver-results.c:223
 msgid "Close this window"
 msgstr "এই উইন্ডো বন্ধ করুন"
 
-#: ../src/seahorse-keyserver-results.vala:41
+#: ../src/seahorse-keyserver-results.c:224
 msgid "_Expand All"
 msgstr "সমস্ত প্রসারিত করুন (_E)"
 
-#: ../src/seahorse-keyserver-results.vala:42
+#: ../src/seahorse-keyserver-results.c:225
 msgid "Expand all listings"
 msgstr "সকল তালিকা প্রসারিত করুন"
 
-#: ../src/seahorse-keyserver-results.vala:43
+#: ../src/seahorse-keyserver-results.c:226
 msgid "_Collapse All"
 msgstr "সকল সংকুচিত করুন (_C)"
 
-#: ../src/seahorse-keyserver-results.vala:44
+#: ../src/seahorse-keyserver-results.c:227
 msgid "Collapse all listings"
 msgstr "সকল তালিকা সংকুচিত করুন"
 
-#: ../src/seahorse-keyserver-results.vala:54
+#: ../src/seahorse-keyserver-results.c:237
 msgid "Import selected keys to local key ring"
 msgstr "নির্বাচিত কি-গুলি স্থানীয় কি-রিংয়ের মধ্যে ইম্পোর্ট করুন"
 
-#: ../src/seahorse-keyserver-results.vala:65
+#: ../src/seahorse-keyserver-results.c:294
 msgid "Remote Keys"
 msgstr "দূরবর্তী কি"
 
-#: ../src/seahorse-keyserver-results.vala:67
+#: ../src/seahorse-keyserver-results.c:296
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "'%s' সহ দূরবর্তী কি"
-
-#: ../src/seahorse-keyserver-results.vala:226
-msgid "Importing keys from key servers"
-msgstr "কি সার্ভার থেকে কি ইম্পোর্ট করার প্রণালী"
 
 #: ../src/seahorse-keyserver-search.glade.h:1
 msgid "<b>Key Servers:</b>"
@@ -2436,7 +2559,9 @@ msgstr "দূরবর্তী কি অনুসন্ধান করুন
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
-msgstr "এর দ্বারা  ইন্টারনেটের অন্যান্যদের কি অনুসন্ধান করা হবে এবং এর পরে স্থানীয় কি-রিংয়ের মধ্যে এই কি ইম্পোর্ট করা হবে।"
+msgstr ""
+"এর দ্বারা  ইন্টারনেটের অন্যান্যদের কি অনুসন্ধান করা হবে এবং এর পরে স্থানীয় কি-"
+"রিংয়ের মধ্যে এই কি ইম্পোর্ট করা হবে।"
 
 #: ../src/seahorse-keyserver-search.glade.h:5
 msgid "Where to search:"
@@ -2505,105 +2630,240 @@ msgstr "কি সার্ভার (_K)"
 msgid "_Sync"
 msgstr "সুসংগত করুন (_S)"
 
-#: ../ssh/seahorse-ssh-askpass.c:101
+#: ../src/seahorse-main.c:72 ../src/seahorse-viewer.c:167
+msgid "Encryption Key Manager"
+msgstr "এনক্রিপশন-কি পরিচালন ব্যবস্থা"
+
+#: ../src/seahorse-viewer.c:138
+msgid "Contributions:"
+msgstr ""
+
+#: ../src/seahorse-viewer.c:169
+msgid "translator-credits"
+msgstr "রুণা ভট্টাচার্য্য (runab@redhat.com)"
+
+#: ../src/seahorse-viewer.c:172
+msgid "Seahorse Project Homepage"
+msgstr ""
+
+#. Top menu items
+#: ../src/seahorse-viewer.c:191
+#| msgid "Filter:"
+msgid "_File"
+msgstr "ফাইল (_F)"
+
+#: ../src/seahorse-viewer.c:192
+#| msgid "_Quit"
+msgid "_Edit"
+msgstr "সম্পাদনা (_E)"
+
+#: ../src/seahorse-viewer.c:193
+msgid "_View"
+msgstr "প্রদর্শন (_V)"
+
+#: ../src/seahorse-viewer.c:194
+msgid "_Help"
+msgstr "সাহায্য (_H)"
+
+#: ../src/seahorse-viewer.c:196
+msgid "Prefere_nces"
+msgstr "বৈশিষ্ট্যাবলী (_n)"
+
+#: ../src/seahorse-viewer.c:197
+msgid "Change preferences for this program"
+msgstr ""
+
+#: ../src/seahorse-viewer.c:200
+#| msgid "Close this program"
+msgid "About this program"
+msgstr "প্রোগ্রাম পরিচিতি"
+
+#: ../src/seahorse-viewer.c:201
+#| msgid "_Comment:"
+msgid "_Contents"
+msgstr "সূচী (_C)"
+
+#: ../src/seahorse-viewer.c:202
+msgid "Show Seahorse help"
+msgstr "Seahorse সংক্রান্ত সহায়তা প্রদর্শন করা হবে"
+
+#: ../src/seahorse-viewer.c:299
+#| msgid "Sign public key"
+msgid "Export public key"
+msgstr "সার্বজনীন-কি এক্সপোর্ট করুন"
+
+#: ../src/seahorse-viewer.c:317
+#| msgid "Exporting Keys"
+msgid "Exporting keys"
+msgstr "কি এক্সপোর্ট করা হচ্ছে"
+
+#: ../src/seahorse-viewer.c:342
+#| msgid "Couldn't retrieve keys from server: %s"
+msgid "Couldn't retrieve data from key server"
+msgstr "কি-সার্ভার থেকে তথ্য উদ্ধার করতে ব্যর্থ"
+
+#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
+#: ../src/seahorse-viewer.c:361
+#| msgid "Imported keys"
+msgid "Copied keys"
+msgstr "কি কপি করা হয়েছে"
+
+#: ../src/seahorse-viewer.c:381
+#| msgid "Retrieving key"
+msgid "Retrieving keys"
+msgstr "কি উদ্ধার করা হচ্ছে"
+
+#: ../src/seahorse-viewer.c:396
+#| msgid "Couldn't delete photo"
+msgid "Couldn't delete."
+msgstr "মুছে ফেলতে ব্যর্থ।"
+
+#: ../src/seahorse-viewer.c:430
+msgid "Deleting..."
+msgstr "মুছে ফেলা হচ্ছে..."
+
+#: ../src/seahorse-viewer.c:459
+#, c-format
+msgid "%s is a private key. Are you sure you want to proceed?"
+msgstr ""
+
+#: ../src/seahorse-viewer.c:462
+msgid ""
+"One or more of the deleted keys are private keys. Are you sure you want to "
+"proceed?"
+msgstr ""
+
+#: ../src/seahorse-viewer.c:496
+#| msgid "Key Properties"
+msgid "Show properties"
+msgstr "বৈশিষ্ট্য প্রদর্শন করা হবে"
+
+#: ../src/seahorse-viewer.c:497
+#| msgid "_Delete"
+msgctxt "This text refers to deleting an item from its type's backing store."
+msgid "_Delete"
+msgstr "মুছে ফেলুন (_D)"
+
+#: ../src/seahorse-viewer.c:498
+msgid "Delete selected items"
+msgstr "নির্বাচিত সামগ্রী মুছে ফেলুন"
+
+#: ../src/seahorse-viewer.c:502
+#| msgid "_Import..."
+msgid "E_xport..."
+msgstr "এক্সপোর্ট করুন...(_x)"
+
+#: ../src/seahorse-viewer.c:503
+msgid "Export to a file"
+msgstr "ফাইলের মধ্যে এক্সপোর্ট করুন"
+
+#: ../src/seahorse-viewer.c:505
+#| msgid "Import keys from the clipboard"
+msgid "Copy to the clipboard"
+msgstr "ক্লিপ-বোর্ডে কপি করুন"
+
+#: ../ssh/seahorse-ssh-askpass.c:99
 msgid "Enter your Secure Shell passphrase:"
 msgstr "সিকিউর শেল পরিচয়-পংক্তি লিখুন:"
 
-#: ../ssh/seahorse-ssh-commands.vala:29
+#: ../ssh/seahorse-ssh-commands.c:85
 msgid "Configure Key for _Secure Shell..."
 msgstr "সিকিউর শেলের জন্য কি কনফিগার করুন...(_S)"
 
-#: ../ssh/seahorse-ssh-commands.vala:30
+#: ../ssh/seahorse-ssh-commands.c:86
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
 msgstr ""
 
-#: ../ssh/seahorse-ssh-commands.vala:77
+#: ../ssh/seahorse-ssh-commands.c:115
 #, c-format
 msgid "Are you sure you want to delete the secure shell key '%s'?"
 msgstr "আপনি কি নিশ্চিতরূপে '%s'-র সিকিউর শেল কি মুছে ফেলতে ইচ্ছুক?"
 
-#: ../ssh/seahorse-ssh-commands.vala:79
+#: ../ssh/seahorse-ssh-commands.c:118
 #, c-format
 msgid "Are you sure you want to delete %d secure shell keys?"
 msgstr "আপনি কি নিশ্চিতরূপে %d-টি সিকিউর শেল কি মুছে ফেলতে ইচ্ছুক?"
 
-#: ../ssh/seahorse-ssh-generate.c:47
+#: ../ssh/seahorse-ssh-generate.c:59 ../ssh/seahorse-ssh-key.c:91
+#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.glade.h:21
+msgid "Secure Shell Key"
+msgstr "সিকিউর শেল কি"
+
+#: ../ssh/seahorse-ssh-generate.c:60
+msgid "Used to access other computers (eg: via a terminal)"
+msgstr "অন্যান্য কম্পিউটারের প্রবেশ করতে ব্যবহৃত (উদাহরণ: টার্মিনালের মাধ্যমে)"
+
+#: ../ssh/seahorse-ssh-generate.c:90
 msgid "Couldn't generate Secure Shell key"
 msgstr "সিকিউর শেল কি নির্মাণ করতে ব্যর্থ"
 
-#: ../ssh/seahorse-ssh-generate.c:154
+#: ../ssh/seahorse-ssh-generate.c:205
 msgid "Creating Secure Shell Key"
 msgstr "সিকিউর শেল কি নির্মাণ করা হচ্ছে"
 
 #: ../ssh/seahorse-ssh-generate.glade.h:2
 msgid ""
-"<i>Use your email address, and any other reminder\n"
-" you need about what this key is for.</i>"
+"<i>Use your email address, and any other reminder you need about what this "
+"key is for.</i>"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-generate.glade.h:4
+#: ../ssh/seahorse-ssh-generate.glade.h:3
 msgid ""
-"A Secure Shell (SSH) key lets you connect securely to trusted\n"
-"computers using SSH, without entering a different password \n"
-"for each of them."
+"A Secure Shell (SSH) key lets you connect securely to trusted computers "
+"using SSH, without entering a different password for each of them."
 msgstr ""
 
-#: ../ssh/seahorse-ssh-generate.glade.h:8
+#: ../ssh/seahorse-ssh-generate.glade.h:5
 msgid ""
-"If there is already a computer you want to use this key with, you \n"
-"can set up that computer to recognize your key now. "
+"If there is already a computer you want to use this key with, you can set up "
+"that computer to recognize your key now. "
 msgstr ""
 
-#: ../ssh/seahorse-ssh-generate.glade.h:11
+#: ../ssh/seahorse-ssh-generate.glade.h:7
 msgid "New Secure Shell Key"
 msgstr "নতুন সিকিউর শেল কি"
 
-#: ../ssh/seahorse-ssh-generate.glade.h:12
+#: ../ssh/seahorse-ssh-generate.glade.h:8
 msgid "_Create and Set Up"
 msgstr "নির্মাণ ও প্রস্তুত করুন (_C)"
 
-#: ../ssh/seahorse-ssh-generate.glade.h:13
+#: ../ssh/seahorse-ssh-generate.glade.h:9
 msgid "_Just Create Key"
 msgstr "শুধু কি নির্মাণ করুন (_J)"
 
-#: ../ssh/seahorse-ssh-generate.glade.h:14
+#: ../ssh/seahorse-ssh-generate.glade.h:10
 msgid "_Key Description:"
 msgstr "কি-র বিবরণ: (_K)"
 
-#: ../ssh/seahorse-ssh-generator.vala:29 ../ssh/seahorse-ssh-key.c:97
-#: ../ssh/seahorse-ssh-key.c:101 ../ssh/seahorse-ssh-key-properties.glade.h:21
-#: ../ssh/seahorse-ssh-source.c:726
-msgid "Secure Shell Key"
-msgstr "সিকিউর শেল কি"
-
-#: ../ssh/seahorse-ssh-generator.vala:30
-msgid "Used to access other computers (eg: via a terminal)"
-msgstr "অন্যান্য কম্পিউটারের প্রবেশ করতে ব্যবহৃত (উদাহরণ: টার্মিনালের মাধ্যমে)"
-
-#: ../ssh/seahorse-ssh-key.c:93
+#: ../ssh/seahorse-ssh-key.c:87
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(সিকিউর শেল কি পাঠযোগ্য নয়)"
 
-#: ../ssh/seahorse-ssh-key.c:130
+#: ../ssh/seahorse-ssh-key.c:105
+msgid "Invalid"
+msgstr "অবৈধ"
+
+#: ../ssh/seahorse-ssh-key.c:116
 msgid "Private Secure Shell Key"
 msgstr "গোপনীয় সিকিউর শেল কি"
 
-#: ../ssh/seahorse-ssh-key.c:133
+#: ../ssh/seahorse-ssh-key.c:119
 msgid "Public Secure Shell Key"
 msgstr "সার্বজনীন সিকিউর শেল কি"
 
-#: ../ssh/seahorse-ssh-key-properties.c:118
+#: ../ssh/seahorse-ssh-key-properties.c:71
 msgid "Couldn't rename key."
 msgstr "কি-র নাম পরিবর্তন করা যায়নি।"
 
-#: ../ssh/seahorse-ssh-key-properties.c:159
+#: ../ssh/seahorse-ssh-key-properties.c:112
 msgid "Couldn't change authorization for key."
 msgstr "কি-র অনুমতি পরিবর্তন করা যায়নি"
 
-#: ../ssh/seahorse-ssh-key-properties.c:174
-msgid "Couldn't change passhrase for key."
+#: ../ssh/seahorse-ssh-key-properties.c:127
+#| msgid "Couldn't change passhrase for key."
+msgid "Couldn't change passphrase for key."
 msgstr "কি-র পরিচয়-পংক্তি পরিবর্তন করা যায়নি।"
 
 #: ../ssh/seahorse-ssh-key-properties.glade.h:1
@@ -2651,16 +2911,16 @@ msgstr ""
 msgid "Used to connect to other computers."
 msgstr "অন্যান্য কম্পিউটারের সাথে সংযোগ স্থাপন করতে ব্যবহৃত।"
 
-#: ../ssh/seahorse-ssh-operation.c:138 ../ssh/seahorse-ssh-operation.c:700
+#: ../ssh/seahorse-ssh-operation.c:143 ../ssh/seahorse-ssh-operation.c:732
 #, c-format
 msgid "The SSH command was terminated unexpectedly."
 msgstr "SSH কমান্ড অপ্রত্যাশিতভাবে বন্ধ করা হয়েছে।"
 
-#: ../ssh/seahorse-ssh-operation.c:146 ../ssh/seahorse-ssh-operation.c:707
+#: ../ssh/seahorse-ssh-operation.c:151 ../ssh/seahorse-ssh-operation.c:739
 msgid "The SSH command failed."
 msgstr "SSH কমান্ড বিফল।"
 
-#: ../ssh/seahorse-ssh-operation.c:444
+#: ../ssh/seahorse-ssh-operation.c:445 ../ssh/seahorse-ssh-operation.c:477
 msgid "Secure Shell key"
 msgstr "সিকিউর শেল কি"
 
@@ -2669,63 +2929,51 @@ msgid "Passphrase:"
 msgstr "পরিচয়-পংক্তি:"
 
 #. Just prompt over and over again
-#: ../ssh/seahorse-ssh-operation.c:730
-msgid "Secure Shell Passphrase"
-msgstr "সিকিউর শেলের পরিচয়-পংক্তি"
+#: ../ssh/seahorse-ssh-operation.c:762
+#| msgid "Network Password"
+msgid "Remote Host Password"
+msgstr "দূরবর্তী হোস্টের পাসওয়ার্ড"
 
-#: ../ssh/seahorse-ssh-operation.c:818
+#: ../ssh/seahorse-ssh-operation.c:850
 msgid "Old Key Passphrase"
 msgstr "পুরোনো কি-র পরিচয়-পংক্তি"
 
-#: ../ssh/seahorse-ssh-operation.c:819
+#: ../ssh/seahorse-ssh-operation.c:851
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "পুরোনো পরিচয়-পংক্তি লিখুন: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:823
+#: ../ssh/seahorse-ssh-operation.c:855
 msgid "New Key Passphrase"
 msgstr "নতুন কি-র পরিচয়-পংক্তি"
 
-#: ../ssh/seahorse-ssh-operation.c:824
+#: ../ssh/seahorse-ssh-operation.c:856
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "নতুন পরিচয়-পংক্তি লিখুন: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:832
+#: ../ssh/seahorse-ssh-operation.c:864
 msgid "Enter Key Passphrase"
 msgstr "কি-র পরিচয়-পংক্তি লিখুন"
 
-#: ../ssh/seahorse-ssh-operation.c:900
+#: ../ssh/seahorse-ssh-operation.c:931
 msgid "Passphrase for New Secure Shell Key"
 msgstr "নতুন সিকিউর শেল কি-র পরিচয়-পংক্তি লিখুন"
 
-#: ../ssh/seahorse-ssh-operation.c:901
+#: ../ssh/seahorse-ssh-operation.c:932
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr "নতুন সিকিউর শেল কি-র পরিচয়-পংক্তি লিখুন।"
 
-#: ../ssh/seahorse-ssh-operation.c:1036
-msgid "Secure Shell Key Passphrase"
-msgstr "সিকিউর শেল কি-র পরিচয়-পংক্তি"
-
-#: ../ssh/seahorse-ssh-operation.c:1036
-#, c-format
-msgid "Enter the passphrase for: %s"
-msgstr "পরিচয়-পংক্তি লিখুন: %s"
-
-#: ../ssh/seahorse-ssh-operation.c:1037
-msgid "Save this passphrase in my keyring"
-msgstr "কি-রিংয়ের মধ্যে এই পরিচয়-পংক্তি সংরক্ষণ করা হবে"
-
-#: ../ssh/seahorse-ssh-operation.c:1090
+#: ../ssh/seahorse-ssh-operation.c:1013
 #, c-format
 msgid "Importing key: %s"
 msgstr "কি ইম্পোর্ট করা হচ্ছে: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:1092
+#: ../ssh/seahorse-ssh-operation.c:1015
 msgid "Importing key. Enter passphrase"
 msgstr "কি ইম্পোর্ট করা হচ্ছে। পরিচয়-পংক্তি লিখুন।"
 
-#: ../ssh/seahorse-ssh-source.c:945
+#: ../ssh/seahorse-ssh-source.c:825
 msgid "No private key file is available for this key."
 msgstr "এই কি-র জন্য কোনো গোপনীয় কি-র ফাইল উপস্থিত নেই।"
 
@@ -2739,8 +2987,9 @@ msgid "Configuring Secure Shell Keys..."
 msgstr "সিকিউর শেল কি কনফিগার করা হচ্ছে..."
 
 #: ../ssh/seahorse-ssh-upload.glade.h:1
-msgid "<i>eg: fileserver.example.com</i>"
-msgstr "<i>উদাহরণ: fileserver.example.com</i>"
+#| msgid "<i>eg: fileserver.example.com</i>"
+msgid "<i>eg: fileserver.example.com:port</i>"
+msgstr "<i>উদাহরণ: fileserver.example.com:port</i>"
 
 #: ../ssh/seahorse-ssh-upload.glade.h:2
 msgid "Set Up Computer for SSH Connection"
@@ -2748,20 +2997,19 @@ msgstr "SSH সংযোগের জন্য কম্পিউটার প�
 
 #: ../ssh/seahorse-ssh-upload.glade.h:4
 msgid ""
-"To use your Secure Shell key with another computer that\n"
-"uses SSH, you must already have a login account on that \n"
-"computer."
+"To use your Secure Shell key with another computer that uses SSH, you must "
+"already have a login account on that computer."
 msgstr ""
 
-#: ../ssh/seahorse-ssh-upload.glade.h:7
+#: ../ssh/seahorse-ssh-upload.glade.h:5
 msgid "_Computer Name:"
 msgstr "কম্পিউটারের নাম: (_C)"
 
-#: ../ssh/seahorse-ssh-upload.glade.h:8
+#: ../ssh/seahorse-ssh-upload.glade.h:6
 msgid "_Login Name:"
 msgstr "লগ-ইন নাম: (_L)"
 
-#: ../ssh/seahorse-ssh-upload.glade.h:9
+#: ../ssh/seahorse-ssh-upload.glade.h:7
 msgid "_Set Up"
 msgstr "প্রস্তুত করুন(_S)"
 
