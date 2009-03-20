@@ -808,7 +808,7 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
      * and then appends all input data onto the end of .ssh/authorized_keys
      */
     /* TODO: Important, we should handle the host checking properly */
-    cmd = g_strdup_printf (SSH_PATH " '%s@%s' %s '%s' -o StrictHostKeyChecking=no "
+    cmd = g_strdup_printf (SSH_PATH " '%s@%s' %s %s -o StrictHostKeyChecking=no "
                                     "\"umask 077; test -d .ssh || mkdir .ssh ; cat >> .ssh/authorized_keys\"", 
                            username, hostname, 
                            port ? "-p" : "", 
@@ -817,7 +817,7 @@ seahorse_ssh_operation_upload (SeahorseSSHSource *ssrc, GList *keys,
 	data = g_memory_output_stream_get_data (output);
 	length = strlen (data);
 	g_object_unref (output);
-    
+
 	op = seahorse_ssh_operation_new (ssrc, cmd, data, length, NULL);
     
 	g_free (cmd);
