@@ -480,26 +480,32 @@ seahorse_prefs_new (GtkWindow *parent)
     SeahorseWidget *swidget;
     GtkWidget *widget = NULL;
 
-    
     swidget = seahorse_widget_new ("prefs", parent);
     
+    if (swidget != NULL) {
+    
 #ifdef WITH_KEYSERVER
-    setup_keyservers (swidget);
+        setup_keyservers (swidget);
 #else
-    widget = glade_xml_get_widget (swidget->xml, "keyserver-tab");
-    g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
-    seahorse_prefs_remove_tab (swidget, widget);
+        widget = glade_xml_get_widget (swidget->xml, "keyserver-tab");
+        g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
+        seahorse_prefs_remove_tab (swidget, widget);
 #endif
 
 #ifdef WITH_SHARING
-    setup_sharing (swidget);
+        setup_sharing (swidget);
 #else
-    widget = glade_xml_get_widget (swidget->xml, "sharing-tab");
-    g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
-    seahorse_prefs_remove_tab (swidget, widget);
+        widget = glade_xml_get_widget (swidget->xml, "sharing-tab");
+        g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
+        seahorse_prefs_remove_tab (swidget, widget);
 #endif    
 
-    seahorse_widget_show (swidget);
+        seahorse_widget_show (swidget);
+    } else {
+        swidget = seahorse_widget_find ("prefs");
+        gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
+    }
+    
     return swidget;
 }
 
