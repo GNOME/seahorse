@@ -522,9 +522,9 @@ parse_hkp_index (const gchar *response)
 	g_strfreev (lines);
 
 	if (key) {
-		seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
+		seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), g_list_reverse (uids));
 		seahorse_object_list_free (uids);
-		seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
+		seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), g_list_reverse (subkeys));
 		seahorse_object_list_free (subkeys);
 	}
 	
