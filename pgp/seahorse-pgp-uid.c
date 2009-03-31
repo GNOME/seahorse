@@ -154,7 +154,9 @@ parse_user_id (const gchar *uid, gchar **name, gchar **email, gchar **comment)
                     tail = src + 1;
 		        }
 	            in_name = 0;
-	        }
+	        } else
+	            tail = src + 1;
+	            
 	        in_email = 1;
 	    } else if (*src == '(') {
 	        if (in_name) {

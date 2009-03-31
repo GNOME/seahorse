@@ -409,8 +409,11 @@ parse_hkp_index (const gchar *response)
     
 	for (l = lines; *l; l++) {
 
-		line = *l;
+		line = *l;	
 		dehtmlize (line);
+#if DEBUG_HKP_ENABLE
+        fprintf(stderr,"%s\n", line);
+#endif
 
 		/* Start a new key */
 		if (g_ascii_strncasecmp (line, "pub ", 4) == 0) {
