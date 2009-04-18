@@ -1,0 +1,3216 @@
+=== seahorse 2.26.1 ===
+
+2009-04-12  Stef Walter  <stef@memberwebs.com>
+
+	* NEWS:
+	* README:
+	* configure.in: Version 2.26.1
+
+2009-04-08  Adam Schreiber <sadam@gnome.org>
+
+    * libegg/eggsmclient.c: Update to latest version.
+
+2009-03-31  Adam Schreiber  <sadam@clemson.edu>
+
+    * pgp/seahorse-hkp-source.c: Make UIDs show up in the order reported by the 
+    keyserver. 
+    * pgp/seahorse-hkp-source.c:
+    * pgp/seahorse-pgp-uid.c: Fix parsing of uids.  Fixes bug #577362
+
+2009-03-24  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-prefs.c: Gracefully handle preferences window already
+    being open.  Fixes bug #576519
+
+2009-03-20  Stef Walter  <stef@memberwebs.com>
+
+	* ssh/seahorse-ssh-operation.c: When a port wasn't specified 
+	the umask for a new authorized_keys wasn't taking effect.
+	Research by Andreas Moog. Fixes bug #574899
+	
+2009-03-16  Stef Walter  <stef@memberwebs.com>
+
+	* pgp/seahorse-hkp-source.c: Fix crash when entering hkp:
+	url manually. Fixes bug #575225
+
+2009-03-16  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Bump version number
+
+=== seahorse 2.26.0 ===
+
+2009-03-14  Stef Walter  <stef@memberwebs.com>
+
+	* NEWS:
+	* README:
+	* configure.in: Version 2.26.0
+
+2009-03-05  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-add-keyring.c: Fix cancel button in add keyring
+	dialog. Fixes bug #574424
+
+2009-03-04  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-key-manager.c: Update GUI before showing window, to avoid
+	GUI changes when selection is initialized. Fix bug #574079
+	 
+2009-03-02  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-util.c: Read out memory properly from GString.
+	Fixes bug #551753
+	
+	* ssh/seahorse-ssh-key-data.c: Add some null checks. 
+	
+2009-03-02  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-keyserver-sync.c: Allow multiple sync windows to open. 
+	
+2009-03-02  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-key-manager.c: Fire selection changed after tab 
+	switch actually happens. Fixes bug #553670
+	
+2009-03-02  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-keyserver-search.c: Add null check. Fixes bug #502029
+
+2009-03-02  Stef Walter  <stef@memberwebs.com>
+
+	* egg/egg-secure-entry.c: Fix "gnome-keyring-ask needs to disable 
+	input method in password" bug #561331 Patch by Takao Fujiwara
+
+=== seahorse 2.25.92 ===
+
+2009-03-02  Stef Walter  <stef@memberwebs.com>
+
+	* NEWS:
+	* README: Release version 2.25.92
+
+2009-03-01  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-servers.c: Fix crash when typing in custom
+	key server URL. Fixes bug #573602
+	
+2009-03-01  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-keyserver-results.c: Match key identifiers where 
+	the server returned a short one, but we're searching for a longer
+	key identifier. See bug #568799
+	
+2009-02-28  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-keyserver-results.c: Make results of 
+	a keyserver searched by keyid display properly. Fixes bug #568799
+	
+2009-02-28  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-object.c:
+	* pgp/seahorse-gpgme-key.c: Always have an ID on a GPGME key before
+	trying to load other parts.
+
+	* pgp/seahorse-gpgme-key.c: Don't crash when loading a key that 
+	initialy only has a secret part.
+
+2009-02-27  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-key-manager-store.c: Don't allow interactive
+	search in the key tree since, the filter on the top serves 
+	that purpose.
+	
+2009-02-27  Stef Walter  <stef@memberwebs.com>
+
+	* pgp/seahorse-gpgme-uid.c:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-uid.c:
+	* pgp/seahorse-pgp-uid.h: Setup ids properly on UID objects. 
+	
+	* pgp/seahorse-pgp-key.c: 
+	* pkcs11/seahorse-pkcs11-operations.c:
+	* src/seahorse-key-manager.c: Fix problems highlighted by valgrind,
+	using uninitialized variables, and freeing non-allocated memory.
+	
+	* pgp/seahorse-gpgme-key.c:
+	* pgp/seahorse-pgp-key.c: Workaround for strange ownership behavior, 
+	we only add GPGME keys to the context, rather than all PGP keys.
+	
+2009-02-27  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-context.c: Stop segfaulting when objects with NULL 
+    ids are removed.
+
+    * libcryptui/cryptui.c: gtk-doc documentation
+
+    * libseahorse/seahorse-widget.c: Fix reference counting so destroyed
+    widgets are indeed destroyed.
+
+2009-02-25  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-context.c:
+    * libseahorse/seahorse-object-widget.c:
+    * libseahorse/seahorse-widget.c: Remove more deprecated symbols.
+    Patch from Thomas Anderson.  Fixes bug #572181
+
+2009-02-17  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-widget.c: Remove deprecated GTK+ symbols
+    Fixes bug #572181
+
+2009-02-17  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-keyserver-search.c:
+    * gkr/seahorse-gkr-item-properties.c:
+    * libseahorse/seahorse-object-widget.h: Remove deprecated GTK+ symbols
+    Fixes bug #572181
+
+2009-02-17  Gabor Kelemen  <kelemeng@gnome.hu>
+
+	* src/seahorse-keyserver-results.c:
+	* src/seahorse-key-manager.c:
+	* src/seahorse-viewer.c: Get rid of some reused stock item names, 
+	fall back to default. Fixes bug #572140.
+
+2009-02-16  Adam Schrieber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-object.c: Change context to comment. 
+    Fixes bug #571808
+
+    * libseahorse/seahorse-object.c: Add context to string.  Fixes bug #571808
+
+2009-02-16  Gabor Kelemen  <kelemeng@gnome.hu>
+
+	* gkr/seahorse-gkr-keyring.c: Mark two strings for translation. Fixes bug #571991
+
+2009-02-14  Adam Schreiber  <sadam@clemson.edu>
+
+    * pkcs11/seahorse-pkcs11-commands.c: Add missing comma
+
+2009-02-14  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+	reviewed by: Stef Walter <stef@memberwebs.com>
+
+	* pkcs11/seahorse-pkcs11-commands.c:
+	(seahorse_pkcs11_commands_delete_objects):
+
+	Use ngettext() where appropriate. Fixes bug #571778.
+
+2009-02-14  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+	* src/seahorse-viewer.c: (on_copy_complete):
+	Add translator comments.
+
+2009-02-14  Stef Walter  <stef@memberwebs.com>
+
+	* pgp/seahorse-pgp-generate.glade: Collapse key generate 
+	'Advanced Options' by default.
+
+2009-02-14  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Bump version number.
+
+=== seahorse 2.25.91 ===
+
+2009-02-14  Stef Walter  <stef@memberwebs.com>
+
+	* NEWS:
+	* README: Release version 2.25.91
+
+2009-02-13  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-add-keyring.c: Fix problem with creation
+	and destruction of the keyring create dialog. Fixes bug #548319
+	
+	* gkr/seahorse-gkr-add-keyring.c: Refresh keyrings after adding
+	a keyring.
+	
+	* gkr/seahorse-gkr-keyring-commands.c: Prompt before deleting a keyring.
+	
+2009-02-13  Stef Walter  <stef@memberwebs.com>
+
+	* reference/libcryptui/Makefile.am: Fix path-as-variable which
+	prevents seahorse from building.
+	
+2009-02-12  Adam Schreiber  <sadam@clemson.edu>
+
+    * gkr/seahorse-gkr-item-properties.glade.h:
+    * src/seahorse-viewer.c: Add contexts for "delete" string.  
+    Fixes bug #571359
+
+    * help/C/figures/passphrase.png: (deleted)
+    * help/C/figures/file-manager.png: (deleted)
+    * help/C/figures/key-manager.png: (deleted)
+    * help/C/figures/key-properties.png: (deleted)
+    * help/C/figures/preferences.png: (deleted)
+    * help/C/figures/signature.png: (deleted)
+    * help/C/figures/generate.png: (deleted)
+    * help/C/figures/recipients.png: (deleted)
+    * help/C/figures/text-editor.png: (deleted)
+    * help/C/figures/export.png: (deleted)
+    * help/C/figures/import.png: (deleted)
+    * help/Makefile.am: Remove unused screenshots
+
+2009-02-10  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in:
+	* pkcs11/seahorse-pkcs11-certificate-props.c:
+	* pkcs11/seahorse-pkcs11-certificate.c: Allow PKCS#11 support to build,
+	and fix build for changes in gnome-keyring.
+	
+2009-02-08  Stef Walter  <stef@memberwebs.com>
+
+	* common/seahorse-registry.c: 
+	* src/seahorse-viewer.c: GType is 64-bits on 64-bit platforms. 
+	Fixes bug #562084. Research by Joe Marcus Clarke, Scott McVittie
+	
+2009-02-07  Adam Schreiber  <sadam@clemson.edu>
+
+    * daemon/org.gnome.seahorse.service.in:
+    * daemon/seahorse-daemon.desktop.in.in: Remove -d flag from exec strings
+    to start the daemon.
+
+    * daemon/seahorse-daemon.desktop.in.in: Only autostart the daemon when
+    sharing is enabled.  Fixes bug #570773
+
+2009-02-06  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-object.c: Map 'raw-id' DBus field to 
+	internal properties.
+	
+2009-02-06  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-unknown-source.c: Fix problem constructing
+	SeahorseUnknownSource due to read-only property. 
+	
+	* libseahorse/seahorse-context.c: Fix problem with not creating 'missing'
+	objects when the 'auto_retrieve' setting isn't set. Fixes bug #570456
+	
+	* libseahorse/seahorse-unknown-source.c: Set location of unknown objects
+	correctly to signifiy searching or missing.
+	
+2009-02-05  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-context.c: 
+	* libseahorse/seahorse-context.h: Ref objects while the 
+	context is being destroyed, so that removing an object 
+	that was removed by another object doesn't crash. We need
+	a new ownership model....
+
+	* pgp/seahorse-pgp-key.c: Register UIDs with the context. This
+	enables their IDs to be once again used over DBus. Fixes bug #570704
+	
+2009-02-04  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in:
+	* libcryptui/Makefile.am:
+	* libcryptui/tests/Makefile.am:
+	* libcryptui/tests/cryptui-test-ui.c: Revert accidental deletion 
+	of libcryptui test program deletion in svn commit [2716]
+	
+	* daemon/seahorse-service-keyset.c: Don't return objects without ids
+	via libcryptui. Fixes bug #570454
+
+	* daemon/seahorse-service-crypto.c:
+	* pgp/seahorse-gpgme-key.c:
+	* pgp/seahorse-gpgme-source.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-signature.c:
+	* pgp/seahorse-server-source.c: Rework functions for converting pgp keyids
+	into object ids, including the canonize id function. 
+	
+	* pgp/seahorse-gpgme-uid.c: Add object id to UID objects, which helps them
+	to show up in libcryptui. 
+
+2009-02-04  Adam Schreiber  <sadam@clemson.edu>
+
+    * pgp/seahorse-sign.glade:
+    * ssh/seahorse-ssh-upload.glade:
+    * ssh/seahorse-ssh-generate.glade: Remove explicit line breaks from glade
+    files.  Patch from Gabor Kelemen.  Fixes bug #570485
+    
+2009-02-03  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in: increment version number to 2.25.91
+
+=== seahorse 2.25.90 ===
+
+2009-02-03  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in:
+    * NEWS:
+    * README: Release version 2.25.1
+
+2009-02-03  Theppitak Karoonboonyanan  <thep@linux.thai.net>
+
+	* daemon/Makefile.am: Remove excessive $(srcdir) in rules, fixing
+	non-source-dir build error.  Fixes bug #570330.
+
+2009-02-02  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Remove libtasn1 dependency. 
+	
+2009-02-01  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-keyring.c:
+	* gkr/seahorse-gkr-keyring.h: 
+	* gkr/seahorse-gkr-source.c: Retrieve default key name and set 
+	default keyring flag on keyrings.
+	
+	* gkr/seahorse-gkr-keyring-commands.c: Add menu item to make keyring
+	default.
+	
+	* gkr/seahorse-gkr-source.c:
+	* gkr/seahorse-gkr-source.h: Add concept of a 'default' gkr source, 
+	so we can access it for refresh operations and the like.  
+	
+	* libseahorse/seahorse-context.c: Don't refresh sources as they're 
+	added to the context. Only refresh when specifically requested.
+	
+	* gkr/seahorse-gkr-source.c: Refresh keyring sources when the main
+	gkr source is refreshed.
+	
+	* gkr/seahorse-gkr-keyring-commands.c: Refresh all keyrings when the 
+	status of a keyring changes. For example lock/unlock, set default etc..
+	
+2009-02-01  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-source.c: Don't show the session keyring.
+
+2009-02-01  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-keyring-commands.c:
+	* gkr/seahorse-gkr-keyring-commands.h: Add 'lock' and 'unlock' commands
+	to password keyrings.
+
+2009-02-01  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-set-model.c: Don't remove nodes that have 
+	children which are still in the set to display.
+
+2009-02-01  Adam Schreiber  <sadam@clemson.edu>
+
+    * daemon/Makefile.am:
+    * daemon/seahorse-daemon.c: Register properly with the session manager.
+    Fixes bug #569636
+
+    * autogen.sh:
+    * libcryptui/cryptui.c:
+    * configure.in:
+    * reference/libcryptui/libcryptui-overrides.txt: (added)
+    * reference/libcryptui/version.xml.in: (added)
+    * reference/libcryptui/Makefile.am: (added)
+    * reference/libcryptui/libcryptui-docs.sgml: (added)
+    * reference/Makefile.am:
+    * Makefile.am: Add infrastructure to add gtk-doc for libcryptui.  
+    Removes block for bug #353061
+
+    * configure.in:
+    * src/seahorse-viewer.c: Make sure hkp and ldap are disable and preferences
+    is removed from the menu when pgp is disabled.  Fixes bug #551799
+    * libseahorse/seahorse-prefs.glade: Change window name to "Preferences"
+    Fixes bug #546492
+    
+2009-01-31  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in:
+    * libegg/eggdesktopfile.c: (added)
+    * libegg/eggdesktopfile.h: (added)
+    * libegg/eggsmclient.c: (added)
+    * libegg/eggsmclient.h:  (added)
+    * libegg/eggsmclient-private.h: (added)
+    * libegg/eggsmclient-xsmp.c: (added)
+    * libegg/Makefile.am: Add files and build magic to start adding smclient to
+    daemon
+    
+2009-02-01  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-operation.c: Don't show operation debug output by default.
+	
+2009-02-01  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-keyring.c: Show all keyrings in the key manager.
+	
+2009-02-01  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/seahorse-service.c:
+	* gkr/seahorse-gkr-keyring.c:
+	* gkr/seahorse-gkr-source.c:
+	* libseahorse/seahorse-commands.c:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-source.h:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-unknown-source.c:
+	* pgp/seahorse-gpgme-source.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-server-source.c:
+	* pkcs11/seahorse-pkcs11-source.c:
+	* src/seahorse-keyserver-sync.c:
+	* ssh/seahorse-ssh-source.c: Rename the SeahorseSource properties so that they 
+	can be more easily defined on SeahorseObject objects. Removes a wrinkle for 
+	implementing source and object on the same class.
+
+2009-02-01  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-keyring.c:
+	* gkr/seahorse-gkr-source.c:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-source.h:
+	* libseahorse/seahorse-unknown-source.c:
+	* pgp/seahorse-gpgme-source.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-server-source.c:
+	* pkcs11/seahorse-pkcs11-source.c:
+	* ssh/seahorse-ssh-source.c: Remove unused 'key-desc' property from sources.
+	 
+2009-01-30  Stef Walter  <stef@memberwebs.com>
+
+	* ssh/seahorse-ssh-key-properties.c: Block trust-toggled signal handler
+	when updating the toggle button. Fixes bug #568852
+	
+2009-01-29  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-keyring-commands.c:
+	* src/seahorse-key-manager.ui: Add right click item for changing keyring password.
+
+2009-01-29  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-gtkstock.c: Enable proper folder icon for keyrings
+
+2009-01-29  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-source.c: Fix problem with hidden gnome-keyring items.
+
+2009-01-28  Stef Walter  <stef@memberwebs.com>
+
+	* libcryptui/crui-*: (removed)
+	* libcryptui/Makefile.am:
+	* libcryptui/template/*: (removed)
+	* libcryptui/tests/*: (removed)
+	* libcryptui/tests/files/*: (removed) Remove bits of libcryptui
+	that are now handled by the gcr library from gnome-keyring.
+	
+	* pkcs11/Makefile.am:
+	* pkcs11/seahorse-pkcs11-certificate.c:
+	* pkcs11/seahorse-pkcs11-certificate-props.c: (added)
+	* pkcs11/seahorse-pkcs11-certificate-props.h: (added)
+	* pkcs11/seahorse-pkcs11-commands.c: 
+	* configure.in: Depend on and use the gcr library from gnome-keyring
+	for displaying certificate properties.
+	
+2009-01-22  Adam Schreiber  <sadam@clemson.edu>
+
+    * pgp/seahorse-hkp-source.c: Prepend "0x" onto hex keyid search terms that
+    need it.
+    * daemon/Makefile.am: Change autostart directory.  Fixes bug #568761
+
+2009-01-14  Magnus Boman  <captain.magnus@gmail.com>
+
+	* common/seahorse-registry.c (lookup_category_values),
+	(seahorse_registry_lookup_function): Fix bug #565649 (64bit
+	portability issue)
+
+2009-01-07  Vincent Untz  <vuntz@gnome.org>
+
+	* configure.in: post-release bump to 2.25.5
+
+==================== 2.25.4 ====================
+
+2009-01-07  Vincent Untz  <vuntz@gnome.org>
+
+	* NEWS:
+	* README:
+	* configure.in: version 2.25.4
+
+2009-01-04  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in:
+	* pkcs11/seahorse-pkcs11-module.c: Update for new gp11 library changes.
+	Depend on gnome-keyring 2.25.4
+
+2008-12-30  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in:
+	* pkcs11/seahorse-pkcs11-object.c: Make seahorse depend on gnome-keyring
+	HEAD (ie: 2.25.3), and fix build problems because of GP11 changes.
+	
+2008-12-22  Adam Schreiber  <sadam@clemson.edu>
+
+    * ssh/seahorse-ssh-generate.c: Dont' destroy swidget immediately.
+    Patch from Jeff Cai.  Fixes bug #562413
+
+== Seahorse 2.25.3 ==
+
+2008-12-19  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in:
+    * Makefile.am:
+    * NEWS:
+    * README: 
+    * pkcs11/Makefile.am:
+    * po/POTFILES.in: Release 2.25.3
+
+2008-12-17  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Build fix. Fixes bug #564815
+
+2008-12-16  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-object.c:
+	* gkr/seahorse-gkr-item.c:
+	* gkr/seahorse-gkr-keyring.c: 
+	* pgp/seahorse-pgp-uid.c: Allow 'tag' property to be directly set.
+	This is useful for matching in predicates.
+	
+	* gkr/seahorse-gkr-item-commands.c:
+	* gkr/seahorse-gkr-keyring-commands.c:
+	* libseahorse/seahorse-types.h:
+	* libseahorse/seahorse-view.c:
+	* libseahorse/seahorse-view.h:
+	* pgp/seahorse-pgp-commands.c:
+	* pkcs11/seahorse-pkcs11-commands.c:
+	* src/seahorse-key-manager.c:
+	* src/seahorse-viewer.c:
+	* src/seahorse-viewer.h:
+	* ssh/seahorse-ssh-commansd.c: Use predicates to enable and disable 
+	commands in the view. Fine tune exporting and deleting based on exportable and 
+	deletable flags. Select objects being operated on, when not all 
+	objects apply for the current operation. Hide commands that are not
+	applicable for the currently selected objects. 
+	
+2008-12-16  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-object.c: Lots of fixes on when to 
+	realize objects.
+	
+	* libseahorse/seahorse-object-widget.c: Don't do a window grab.
+	
+	* pgp/seahorse-add-subkey.glade:
+	* pgp/seahorse-expires.glade:
+	* pgp/seahorse-gpgme-add-subkey.c:
+	* pgp/seahorse-gpgme-expires.c:
+	* pgp/seahorse-gpgme-key.c:
+	* pgp/seahorse-gpgme-key-op.c:
+	* pgp/seahorse-gpgme-subkey.c:
+	* pgp/seahorse-gpgme-uid.c:
+	* pgp/seahorse-gpgme-uid.h:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-commands.c:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-private-key-properties.glade:
+	* pgp/seahorse-pgp-public-key-properties.glade:
+	* pgp/seahorse-pgp-signature.c:
+	* pgp/seahorse-pgp-subkey.c:
+	* pgp/seahorse-pgp-subkey.h:
+	* pgp/seahorse-pgp-uid.c: 
+	* src/seahorse-keyserver-results.c:
+	* src/seahorse-keyserver-results.ui: Fix various PGP key operations. Lots of UI
+	fixes as well. Go through and test everything in the PGP dialogs.
+	Fixes for searching for remote keys.
+	
+2008-12-16  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-set-model.c: Remove objects that 
+	disappeared from table properly. Fixes assertion on exit.
+	
+	* src/seahorse-key-manager.c: Fix erroneous unref of widget
+	owned by glade.
+	
+	* daemon/seahorse-service-crypto.c:
+	* pgp/seahorse-gpgme-key.c:
+	* pgp/seahorse-gpgme-key-op.c:
+	* pgp/seahorse-gpgme-source.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-signature.c:
+	* pgp/seahorse-server-source.c: Add function for calculating 
+	displayable identifier. Rename other PGP key ID related functions
+	to have 'calc' in the name instead of 'get. 
+	
+	* ssh/seahorse-ssh-key.c: 
+	* ssh/seahorse-ssh-key.h:
+	* ssh/seahorse-ssh-source.c: Explicitly set SSH key displayable ID.
+	
+	* libseahorse/seahorse-widget.c: Don't save window sizes for dialogs.
+	
+	* libseahorse/seahorse-object-widget.c: Fix assertion when closing windows.
+	The window group is the one of the transient parent, and we were trying to 
+	fiddle with it directly. 
+	
+	* libseahorse/seahorse-view.vala: (remove) Old leftover file
+	
+	* pgp/seahorse-pgp-commands.c: 
+	* src/seahorse-key-manager.c:
+	* src/seahorse-key-manager.ui:
+	* src/seahorse-keyserver-results.ui:
+	* src/seahorse-viewer.c: Generalize names for 'delete' and other actions.
+	Fix deletion of PGP keys.
+	
+	* src/seahorse-generate-select.glade:
+	* pgp/seahorse-pgp-generate.glade: UI fixes for PGP key generation.
+	
+2008-12-16  Stef Walter  <stef@memberwebs.com>
+
+	* src/Makefile.am:
+	* src/main.c: (moved to seahorse-main.c) Rename main.c
+	to stop confusing debuggers. 
+	
+2008-12-16  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-key-manager-store.c: Fix cyclical reference,
+	with the filter and sort models.
+	
+	* libseahorse/seahorse-context.c: Don't automatically try 
+	and refresh remote key sources.
+	
+	* libseahorse/seahorse-object.c: Don't try to realize properties
+	for which we already have a value.
+
+2008-12-16  Stef Walter  <stef@memberwebs.com>
+	
+	* pgp/seahorse-gpgme-key.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-key.c:
+	* src/seahorse-keyserver-results.c: Fix bugs relating to searching
+	for remote keys, that resulted from recent refactoring.
+
+2008-12-15  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-progress.c: Disconnect properly from 
+	monitoring progress on operations when op finishes.
+	
+	* pkcs11/seahorse-pkcs11-object.c: Access object slot correctly.
+	
+2008-12-15  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/Makefile.am:
+	* gkr/seahorse-add-keyring.glade: (moved from libseahorse)
+	* gkr/seahorse-gkr-add-keyring.c: (added)
+	* gkr/seahorse-gkr-commands.c: (removed)
+	* gkr/seahorse-gkr-commands.c: (removed)
+	* gkr/seahorse-gkr-dialogs.h:
+	* gkr/seahorse-gkr-item-commands.c: (added)
+	* gkr/seahorse-gkr-item-commands.h: (added)
+	* gkr/seahorse-gkr-keyring-commands.c: (added)
+	* gkr/seahorse-gkr-keyring-commands.h: (added)
+	* gkr/seahorse-gkr-module.c: 
+	* gkr/seahorse-gkr-module.h:
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-add-keyring.glade: (moved to gkr)
+	* libseahorse/seahorse-prefs.c:
+	* libseahorse/seahorse-prefs.glade:
+	* libseahorse/seahorse-prefs-keyrings.c: (removed)
+	Moved the add keyring and delete keyring functionality into 
+	the gkr module.
+	
+2008-12-15  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/seahorse-hkp-server.c:
+	* daemon/seahorse-service-crypto.c:
+	* pgp/Makefile.am:
+	* pgp/seahorse-gpgme-*: (added)
+	* pgp/seahorse-gpgmex-*: (removed)
+	* pgp/seahorse-gpg-op.c: (added)
+	* pgp/seahorse-gpg-op.h: (added)
+	* pgp/seahorse-gpg-options.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp.c:
+	* pgp/seahorse-pgp.h:
+	* pgp/seahorse-pgp-add-subkey.c: (moved)
+	* pgp/seahorse-pgp-add-uid.c: (moved)
+	* pgp/seahorse-pgp-commands.c:
+	* pgp/seahorse-pgp-dialogs.h:
+	* pgp/seahorse-pgp-error.c: (removed)
+	* pgp/seahorse-pgp-expires.c: (moved)
+	* pgp/seahorse-pgp-generate.c: (moved)
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key.h: 
+	* pgp/seahorse-pgp-key-op.c: (moved)
+	* pgp/seahorse-pgp-key-op.h: (moved)
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-module.c: 
+	* pgp/seahorse-pgp-operation.c: (moved)
+	* pgp/seahorse-pgp-operation.h: (moved)
+	* pgp/seahorse-pgp-photo.c:
+	* pgp/seahorse-pgp-photo.h:
+	* pgp/seahorse-pgp-photos.c: (moved)
+	* pgp/seahorse-pgp-revoke.c: (moved)
+	* pgp/seahorse-pgp-sign.c: (moved)
+	* pgp/seahorse-pgp-signature.c: (added)
+	* pgp/seahorse-pgp-signature.h: (added)
+	* pgp/seahorse-pgp-source.c: (moved)
+	* pgp/seahorse-pgp-source.h: (moved)
+	* pgp/seahorse-pgp-uid.c: 
+	* pgp/seahorse-pgp-uid.h:
+	* pgp/seahorse-server-source.c:
+	* libseahorse/seahorse-object.c:
+	* libseahorse/seahorse-util.c: More cleanly split GPGME dependant
+	code. Allow for non GPGME based PGP keys (ie: remote keys)
+	
+2008-12-15  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/libseahorse.gidl: (removed)
+	* libseahorse/libseahorse.vapi: (removed)
+	* libseahorse/libseahorse-c.deps: (removed)
+	* libseahorse/libseahorse-c.vapi: (removed)
+	* src/Makefile.am:
+	* src/seahorse-keyserver-results.c:
+	* src/seahorse-keyserver-results.h:
+	* src/seahorse-keyserver-results.vala: (removed) 
+	* acinclude.m4:
+	* bugs.vapi: (removed)
+	* config.vapi: (removed)
+	* configure.in: Change keyserver results to C code. 
+	Remove last vala traces.
+	
+2008-12-14  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/Makefile.am:
+    * src/seahorse-key-manager.c: Fix building without keyserver
+    * pkcs11/seahorse-pkcs11-object.c: Fix compiler error
+
+2008-12-14  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/seahorse-daemon.c:
+	* gkr/seahorse-gkr-item-properties.c:
+	* gkr/seahorse-gkr-keyring.c:
+	* gkr/seahorse-gkr-source.c:
+	* gkr/seahorse-gkr-source.h:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-context.h:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-unknown-source.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-server-source.c:
+	* pkcs11/seahorse-pkcs11-source.c:
+	* src/main.c:
+	* src/seahorse-key-manager.h:
+	* src/seahorse-key-manager.c:
+	* ssh/seahorse-ssh-source.c: Make SeahorseGkrKeyring be both
+	a SeahorseObject and a SeahorseSource. Enumerate keyrings 
+	properly. Don't list items in locked keyrings. Refresh 
+	sources as they're added to the context.
+	
+2008-12-14  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-transfer-operation.c:
+    * libseahorse/seahorse-progress.c:
+    * src/seahorse-key-manager.c:
+    * src/seahorse-key-manager.vala: Use g_timeout_add_seconds instead of
+    g_timeout_add where possible to allow for event grouping. 
+    Patch from Debarshi Ray. Fixes bug #564403.  
+
+2008-12-14  Stef Walter  <stef@memberwebs.com>
+
+	* src/Makefile.am:
+	* src/seahorse-key-manager.c:
+	* src/seahorse-key-manager.h:
+	* src/seahorse-key-manager.vala: (removed)
+	Change Key manager window to C code from vala.
+	
+2008-12-14  Stef Walter  <stef@memberwebs.com>
+
+	* common/seahorse-registry.c:
+	* common/seahorse-registry.h:
+	* daemon/seahorse-service-keyset.c:
+	* gkr/seahorse-gkr-source.c:
+	* gkr/seahorse-gkr-source.h:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-context.h:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-source.h:
+	* libseahorse/seahorse-unknown-source.c:
+	* libseahorse/seahorse-unknown-source.h:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-pgp-source.h:
+	* pgp/seahorse-server-source.c:
+	* pgp/seahorse-server-source.h:
+	* pkcs11/seahorse-pkcs11-source.c:
+	* pkcs11/seahorse-pkcs11-source.h: 
+	* ssh/seahorse-ssh-source.c:
+	* ssh/seahorse-ssh-source.h: Make SeahorseSource be an 
+	interface that can be implemented on other objects (ie: keyrings).
+	
+2008-12-14  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-item.c:
+	* gkr/seahorse-gkr-item-properties.c:
+	* gkr/seahorse-gkr-keyring.c:
+	* gkr/seahorse-gkr-operation.c:
+	* gkr/seahorse-gkr-operation.h:
+	* gkr/seahorse-gkr-source.c:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-object.c:
+	* libseahorse/seahorse-object.h:
+	* libseahorse/seahorse-prefs-keyrings.c:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-source.h:
+	* libseahorse/seahorse-types.h:
+	* libseahorse/seahorse-unknown.c:
+	* libseahorse/seahorse-unknown-source.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key-op.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-source.c:
+	* pkcs11/gp11.vapi: (removed)
+	* pkcs11/gp11-hacks.h: (removed)
+	* pkcs11/libseahorse-pkcs11-c.vapi: (removed)
+	* pkcs11/Makefile.am:
+	* pkcs11/p11.vapi: (removed)
+	* pkcs11/seahorse-pkcs11.c:
+	* pkcs11/seahorse-pkcs11.h:
+	* pkcs11/seahorse-pkcs11.vala: (removed)
+	* pkcs11/seahorse-pkcs11-certificate.c:
+	* pkcs11/seahorse-pkcs11-certificate.h:
+	* pkcs11/seahorse-pkcs11-commands.c:
+	* pkcs11/seahorse-pkcs11-helpers.c: (added)
+	* pkcs11/seahorse-pkcs11-helpers.h: (added)
+	* pkcs11/seahorse-pkcs11-module.c:
+	* pkcs11/seahorse-pkcs11-object.c: (added)
+	* pkcs11/seahorse-pkcs11-object.h: (added)
+	* pkcs11/seahorse-pkcs11-operations.c: (added)
+	* pkcs11/seahorse-pkcs11-operations.h: (added)
+	* pkcs11/seahorse-pkcs11-source.c:
+	* pkcs11/seahorse-pkcs11-source.h:
+	* pkcs11/seahorse-pkcs11-source.vala: (removed)
+	Remove delete from the source to the object. The object now 
+	knows how to delete itself (if possible). Change how refresh 
+	works so that an object is always as valid as possible.
+	Rework PKCS#11 objects and sources. 
+	
+2008-12-12  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-servers.c:
+	* libseahorse/seahorse-servers.h:
+	* libseahorse/seahorse-servers.vala: (removed)
+	Remove more vala usage
+	
+2008-12-12  Stef Walter  <stef@memberwebs.com>
+
+	* common/seahorse-registry.c:
+	* common/seahorse-registry.h:
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-generator.c: (removed)
+	* libseahorse/seahorse-generator.h: (removed)
+	* libseahorse/seahorse-generator.vala: (removed)
+	* libseahorse/seahorse-source.c:
+	* pgp/libseahorse-pgp-c.vapi: (removed)
+	* pgp/Makefile.am:
+	* pgp/seahorse-pgp-dialogs.h:
+	* pgp/seahorse-pgp-generate.c:
+	* pgp/seahorse-pgp-generator.c: (removed)
+	* pgp/seahorse-pgp-generator.h: (removed)
+	* pgp/seahorse-pgp-generator.vala: (removed)
+	* pgp/seahorse-pgp-module.c:
+	* src/Makefile.am:
+	* src/seahorse-generate-select.c:
+	* src/seahorse-generate-select.h:
+	* src/seahorse-generate-select.vala: (removed)
+	* ssh/libseahorse-ssh-c.vapi: (removed)
+	* ssh/Makefile.am:
+	* ssh/seahorse-ssh.c:
+	* ssh/seahorse-ssh.h:
+	* ssh/seahorse-ssh.vala: (removed)
+	* ssh/seahorse-ssh-dialogs.h:
+	* ssh/seahorse-ssh-generate.c:
+	* ssh/seahorse-ssh-generator.c: (removed)
+	* ssh/seahorse-ssh-generator.h: (removed)
+	* ssh/seahorse-ssh-generator.vala: (removed)
+	* ssh/seahorse-ssh-module.c: Simplified how the generate actions work,
+	and removed some vala code.
+	
+2008-12-12  Adam Schreiber  <sadam@clemson.edu>
+    
+    * pkcs11/seahorse-pkcs11-source.c
+    * pkcs11/seahorse-pkcs11.c:
+    * pgp/seahorse-pgp-commands.vala:
+    * pgp/seahorse-pgp-commands.c: Fix compiler warnings
+
+    * pkcs11/gp11.vapi: Add [Compact] to attributes.  Fixes jhbuild build.
+
+2008-12-12  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkr-commands.c:
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-commands.c:
+	* libseahorse/seahorse-commands.h:
+	* libseahorse/seahorse-commands.vala: (removed)
+	* libseahorse/seahorse-view.c:
+	* libseahorse/seahorse-view.h:
+	* libseahorse/seahorse-view.vala: (removed)
+	* pgp/Makefile.am:
+	* pgp/seahorse-pgp-commands.c:
+	* pgp/seahorse-pgp-commands.h:
+	* pgp/seahorse-pgp-commands.vala: (removed)
+	* pgp/seahorse-pgp-module.c:
+	* pkcs11/seahorse-pkcs11-commands.c:
+	* src/seahorse-viewer.c:
+	* src/seahorse-viewer.h:
+	* ssh/Makefile.am:
+	* ssh/seahorse-ssh-commands.c:
+	* ssh/seahorse-ssh-commands.vala: (removed)
+	* ssh/seahorse-ssh-module.c: Rework how commands are looked up.
+	No longer by tag, but by object GType.
+	
+2008-12-12  Stef Walter  <stef@memberwebs.com>
+
+	* common/seahorse-object-list.c: (added)
+	* common/seahorse-object-list.h: (added)
+	* common/Makefile.am: Aded utility functions for managing lists of objects.
+	
+	* libseahorse/seahorse-object.c:
+	* libseahorse/seahorse-object-model.c:
+	* libseahorse/seahorse-set-model.c: 
+	* src/seahorse-key-manager-store.c: Various object and model fixes
+	to patch corner cases with objects going away.
+	
+	* daemon/seahorse-service-crypto.c: 
+	* pgp/libseahorse-pgp-c.vapi:
+	* pgp/Makefile.am:
+	* pgp/seahorse-expires.glade:
+	* pgp/seahorse-gpgmex.h:
+	* pgp/seahorse-gpgmex-util.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp.c:
+	* pgp/seahorse-pgp.h:
+	* pgp/seahorse-pgp.vala: (removed)
+	* pgp/seahorse-pgp-add-subkey.c:
+	* pgp/seahorse-pgp-add-uid.c:
+	* pgp/seahorse-pgp-commands.c:
+	* pgp/seahorse-pgp-commands.vala:
+	* pgp/seahorse-pgp-dialogs.h:
+	* pgp/seahorse-pgp-expires.c:
+	* pgp/seahorse-pgp-generator.c:
+	* pgp/seahorse-pgp-key.c: 
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-key-op.c:
+	* pgp/seahorse-pgp-key-op.h:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-photo.c: (added)
+	* pgp/seahorse-pgp-photo.c: (added)
+	* pgp/seahorse-pgp-revoke.c: 
+	* pgp/seahorse-pgp-sign.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-pgp-sign.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-pgp-subkey.c: (added)
+	* pgp/seahorse-pgp-subkey.h: (added)
+	* pgp/seahorse-pgp-uid.c:
+	* pgp/seahorse-pgp-uid.h:
+	* pgp/seahorse-server-source.c:
+	* pgp/seahorse-signer.c: Refactored how the PGP code works with regard
+	to UIDs and subkeys. These are now separate objects, and keep track of 
+	their own indexes etc.. Operations can be done directly with these objects
+	(ie: sign, revoke etc...)
+	
+2008-12-11  Adam Schreiber  <sadam@clemson.edu>
+
+    * pgp/seahorse-pgp-generate.c:
+    * pgp/seahorse-pgpgenerate.glade: Fix display of expiry date time.
+    Fixes bug #564199
+    * configure.in:
+    * daemon/Makefile.am:
+    * daemon/seahorse-daemon.desktop.in.in:
+    * po/POTFILES.in: Autostart seahorse-daemon.  Patch from F. Steinel.
+    Fixes bugs #555735, #484154
+    * ssh/seahorse-ssh-operation.c: Patch from Jeff Cai.  Fixes bug #558491.
+
+2008-11-29  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/Makefile.am:
+	* gkr/seahorse-gkr-item.c:
+	* gkr/seahorse-gkr-keyring.c: (added)
+	* gkr/seahorse-gkr-keyring.glade: (added)
+	* gkr/seahorse-gkr-keyring.h: (added)
+	* gkr/seahorse-gkr-keyring-properties.c: (added)
+	* gkr/seahorse-gkr-module.c: 
+	* gkr/seahorse-gkr-source.c: Add keyring object, and show all keyrings
+	in the main window. Basic support.
+	
+	* libseahorse/seahorse-set-model.c: Some fixes for displaying parents
+	that aren't in the matched set.
+	
+	* libseahorse/libseahorse.vapi:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-context.h:
+	* libseahorse/seahorse-object.c:
+	* libseahorse/seahorse-object.h:
+	* src/seahorse-key-manager.vala: Add some better enumeration of objects
+	using callbacks. Also add possiblility to match on GObject type.
+	
+2008-11-29  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-object.c:
+	* libseahorse/seahorse-object.h: Better checks to not notify if the 
+	value being set on a property is the same.
+
+	* libseahorse/seahorse-operation.c: Some additional 
+	safety debugging checks.
+	
+	* gkr/seahorse-gkr-item.c:
+	* gkr/seahorse-gkr-item.h:
+	* gkr/seahorse-gkr-item-properties.c:
+	* gkr/seahorse-gkr-module.c:
+	* gkr/seahorse-gkr-operation.c:
+	* gkr/seahorse-gkr-source.c: Load item info, attributes and ACL 
+	on demand. Rework dialog so it's more event driven.
+	
+	* src/main.c:
+	* src/seahorse-key-manager.vala: Load gnome-keyring items on startup.
+
+2008-11-29  Stef Walter  <stef@memberwebs.com>
+
+	* common/Makefile.am:
+	* common/seahorse-bind.c: (added)
+	* common/seahorse-bind.h: (added)
+	Added generic property binding from one object to another.
+	
+	* daemon/seahorse-service.c:
+	* daemon/seahorse-service-crypto.c:
+	* daemon/seahorse-service-keyset.c:
+	* gkr/seahorse-gkr-commands.c:
+	* gkr/seahorse-gkr-item.c:
+	* gkr/seahorse-gkr-item.h:
+	* gkr/seahorse-gkr-item-properties.c:
+	* gkr/seahorse-gkr-operation.c:
+	* gkr/seahorse-gkr-source.c:
+	* libseahorse/libseahorse.vapi:
+	* libseahorse/libseahorse-c.vapi:
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-combo-keys.c:
+	* libseahorse/seahorse-combo-keys.h:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-context.h:
+	* libseahorse/seahorse-gtkstock.h:
+	* libseahorse/seahorse-key.c: (removed)
+	* libseahorse/seahorse-key.h: (removed)
+	* libseahorse/seahorse-key-model.c: (moved to seahorse-object-model.c)
+	* libseahorse/seahorse-key-model.h: (moved to seahorse-object-model.h)
+	* libseahorse/seahorse-keyserver-control.c:
+	* libseahorse/seahorse-key-widget.c: (moved to seahorse-object-widget.c)
+	* libseahorse/seahorse-key-widget.h: (moved to seahorse-object-widget.h)
+	* libseahorse/seahorse-notification.c:
+	* libseahorse/seahorse-object.c:
+	* libseahorse/seahorse-object.h:
+	* libseahorse/seahorse-object.vala: (removed)
+	* libseahorse/seahorse-object-model.c: (moved from seahorse-key-model.c)
+	* libseahorse/seahorse-object-model.h: (moved from seahorse-key-model.h)
+	* libseahorse/seahorse-object-widget.c: (moved from seahorse-key-widget.c)
+	* libseahorse/seahorse-object-widget.h: (moved from seahorse-key-widget.h)
+	* libseahorse/seahorse-progress.c:
+	* libseahorse/seahorse-set.c:
+	* libseahorse/seahorse-set.h:
+	* libseahorse/seahorse-set-model.c:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-types.c:
+	* libseahorse/seahorse-types.h:
+	* libseahorse/seahorse-types.vala: (removed)
+	* libseahorse/seahorse-unknown.c: (moved from seahorse-unknown-key.c)
+	* libseahorse/seahorse-unknown.h: (moved from seahorse-unknown-key.h)
+	* libseahorse/seahorse-unknown-key.c: (moved to seahorse-unknown.c)
+	* libseahorse/seahorse-unknown-key.h: (moved from seahorse-unknown.h)
+	* libseahorse/seahorse-unknown-source.c:
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-util.h:
+	* pgp/libseahorse-pgp-c.vapi:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-add-subkey.c:
+	* pgp/seahorse-pgp-add-uid.c:
+	* pgp/seahorse-pgp-commands.vala:
+	* pgp/seahorse-pgp-expires.c:
+	* pgp/seahorse-pgp-generate.c:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-key-op.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-keysets.c:
+	* pgp/seahorse-pgp-revoke.c:
+	* pgp/seahorse-pgp-sign.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-pgp-uid.c:
+	* pgp/seahorse-pgp-uid.h:
+	* pgp/seahorse-server-source.c:
+	* pgp/seahorse-signer.c:
+	* pkcs11/seahorse-pkcs11-certificate.c:
+	* pkcs11/seahorse-pkcs11-certificate.h:
+	* pkcs11/seahorse-pkcs11-commands.c:
+	* src/seahorse-key-manager.vala:
+	* src/seahorse-key-manager-store.c:
+	* src/seahorse-keyserver-results.vala:
+	* src/seahorse-keyserver-sync.c:
+	* src/seahorse-viewer.c:
+	* ssh/libseahorse-ssh-c.vapi:
+	* ssh/seahorse-ssh-commands.vala:
+	* ssh/seahorse-ssh-generate.c:
+	* ssh/seahorse-ssh-key.c:
+	* ssh/seahorse-ssh-key.h:
+	* ssh/seahorse-ssh-key-properties.c:
+	* ssh/seahorse-ssh-operation.c:
+	* ssh/seahorse-ssh-source.c:
+	* ssh/seahorse-ssh-upload.c:
+	Major refactoring. Remove SeahorseKey and use SeahorseObject directly. Remove the 
+	changed signal from keys, and use GObject 'notify' signal instead. Standardize 
+	set of properties, with all the common properties handled by SeahorseObject. 
+	Cleanup concept of child objects. 
+	
+2008-11-23  Stef Walter  <stef@memberwebs.com>
+	
+	* gkr/libseahorse-gkr-c.vapi: (removed)
+	* gkr/Makefile.am:
+	* gkr/seahorse-gkeyring-item.c: (moved to seahorse-gkr-item.c)
+	* gkr/seahorse-gkeyring-item.h: (moved to seahorse-gkr-item.h)
+	* gkr/seahorse-gkeyring-item-properties.c: (moved to seahorse-gkr-item-properties.c)
+	* gkr/seahorse-gkeyring-item-properties.glade: (moved to seahorse-gkr-item-properties.glade)
+	* gkr/seahorse-gkeyring-operation.c: (moved to seahorse-gkr-operation.c)
+	* gkr/seahorse-gkeyring-operation.h: (moved to seahorse-gkr-operation.h)
+	* gkr/seahorse-gkeyring-source.c: (moved to seahorse-gkr-source.c)
+	* gkr/seahorse-gkeyring-source.h: (moved to seahorse-gkr-source.h)
+	* gkr/seahorse-gkr.c:
+	* gkr/seahorse-gkr.h:
+	* gkr/seahorse-gkr.vala: (removed)
+	* gkr/seahorse-gkr-commands.c:
+	* gkr/seahorse-gkr-commands.h:
+	* gkr/seahorse-gkr-commands.vala:
+	* gkr/seahorse-gkr-dialogs.h:
+	* gkr/seahorse-gkr-item.c: (moved from seahorse-gkeyring-item.c)
+	* gkr/seahorse-gkr-item.h: (moved from seahorse-gkeyring-item.h)
+	* gkr/seahorse-gkr-item-properties.c: (moved from seahorse-gkeyring-item-properties.c)
+	* gkr/seahorse-gkr-item-properties.glade: (moved from seahorse-gkeyring-item-properties.glade)
+	* gkr/seahorse-gkr-module.c:
+	* gkr/seahorse-gkr-operation.c: (moved from seahorse-gkeyring-operation.c)
+	* gkr/seahorse-gkr-operation.h: (moved from seahorse-gkeyring-operation.h)
+	* gkr/seahorse-gkr-source.c: (moved from seahorse-gkr-source.c)
+	* gkr/seahorse-gkr-source.h: (moved from seahorse-gkr-source.h)
+	Make all of gnome-keyring component in the same namespace, and remove vala usage.
+	
+2008-11-22  Stef Walter  <stef@memberwebs.com>
+
+	* libcryptui/crui-asn1.c: (added)
+	* libcryptui/crui-asn1.h: (added)
+	* libcryptui/pk.asn: (added)
+	* libcryptui/pkix.asn: (added)
+	* libcryptui/tests/unit-test-asn1.c: (added)
+	* configure.in: Add libtasn1 depdencency and ASN.1 parsing functionality
+	to libcryptui.
+	
+	* libcryptui/crui-util.c: (added)
+	* libcryptui/crui-util.h: (added)
+	* libcryptui/crui-x509-cert.c: (added)
+	* libcryptui/crui-x509-cert.h: (added)
+	* libcryptui/crui-x509-simple.c: (added)
+	* libcryptui/crui-x509-simple.h: (added)
+	* libcryptui/tests/unit-test-util.c: (added)
+	* libcryptui/tests/unit-test-x509-cert.c: (added)
+	* libcryptui/tests/files/test-certificate-1.der: (added) Add interface 
+	that represents a certificate, and a basic file loader.
+	
+	* libcryptui/crui-x509-cert-basics.c: (added)
+	* libcryptui/crui-x509-cert-basics.h: (added)
+	* libcryptui/crui-x509-cert-basics.glade: (added)
+	* libcryptui/crui-x509-cert-basics.ui: (added)
+	* libcryptui/crui-x509-cert-dialog.c: (added)
+	* libcryptui/crui-x509-cert-dialog.h: (added)
+	* libcryptui/tests/crui-show.c: (added) Add a basic UI display for a X509
+	certificate.
+	
+	* libcryptui/gtest-helpers.c: (added)
+	* libcryptui/gtest-helpers.h: (added)
+	* libcryptui/gtest-prep.sh: (added)
+	* libcryptui/Makefile.am: Add unit testing to libcryptui for new functionality.
+	
+	* libcryptui/tests/cryptui-test-keyset.c: (removed)
+	* libcryptui/tests/cryptui-test-ui.c: 
+	* libcryptui/Makefile.am: Reorganize old tests.
+	
+	* pkcs11/libseahorse-pkcs11-c.vapi: (added)
+	* pkcs11/Makefile.am:
+	* pkcs11/seahorse-pkcs11-certificate.c:
+	* pkcs11/seahorse-pkcs11-certificate.h:
+	* pkcs11/seahorse-pkcs11-certificate.vala: (removed)
+	* pkcs11/seahorse-pkcs11-commands.c: (added)
+	* pkcs11/seahorse-pkcs11-commands.h: (added)
+	* pkcs11/seahorse-pkcs11-module.c:
+	* pkcs11/seahorse-pkcs11-source.vala: Use the new X509 display for certificates
+	in seahorse. Very simple beginnings. Rework SeahorsePkcs11Certificate. No longer
+	written in vala.
+	
+2008-11-20  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-progress.c: Put progress dialog in upper left corner.
+    Patch from Jeff Cai.  Fixes bug #561476
+    * ssh/seahorse-ssh-source.c: Monitor ssh pub key files so key changes are
+    monitored on Solaris.  Patch by Jeff Cai.  Fixes bug #561641
+
+2008-11-18  Adam Schreiber  <sadam@clemson.edu>
+
+    * pgp/seahorse-add-subkey.glade:
+    * pgp/seahorse-pgp-generate.glade:
+    * ssh/seahorse-ssh-generate.glade: Set page_size property of spin buttons to
+    zero. non-zero values deprecated.
+    * src/seahorse-generate-select.c:
+    * src/seahorse-generate-select.vala: Close select window when row activated.
+    * pgp/seahorse-pgp-key-properties.c: Set transient on the main window 
+    instead of the key properties window.  Fixes bug # 558234
+    * ssh/seahorse-ssh-upload.glade: Indicate how to connect to port != 22.
+    Fixes bug #489903
+
+2008-11-15  Adam Schreiber  <sadam@clemson.edu>
+    
+    * pgp/seahorse-pgp-private-key-properties.glade:
+    * pgp/seahorse-pgp-public-key-properties.glade: Remove frame shadow from 
+    photoid frame.  Fixes bug #404785
+    * gkr/seahorse-gkr-commands.c:
+    * gkr/seahorse-gkr-commands.vala: Use ngettext. Fixes bug #554933
+
+2008-11-14  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-util.c: Re-fix dialog.  Patch from Wouter Bolsterlee
+
+2008-11-11  Adam Schrieber  <sadam@clemson.edu>
+
+    * src/eggtreemultidnd.c: Update from svn.  Fixes bug #560338
+
+2008-11-10  Adam Schreiber  <sadam@clemson.edu>
+
+    * ssh/seahorse-ssh-key-properties.c: Fix spelling error
+    * ssh/seahorse-ssh-askpass.c: Remove call to gtk_init.  Patch from Jeff Cai.
+    Fixes bug #557537
+    * ssh/seahorse-ssh-operation.c: Fix upload password prompt.  
+    Fixes bug #550755
+    * libseahorse/seahorse-util.c: Fix markup in dialog.
+    Patch from Jeff Cai.  Fixes bug #558494
+
+=== seahorse 2.25.1 ===
+2008-11-04  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in:
+	* NEWS:
+	* README: Release version 2.25.1
+
+2008-11-03  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/eggtreemultidnd.c:
+    * src/eggtreemultidnd.h:
+    * libegg/egg-datetime.h:
+    * daemon/seahorse-service.h: Clean up GLib and GTK+ includes (GNOME Goal)
+
+2008-10-29  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-keyserver-results.c:
+    * src/seahorse-keyserver-results.vala:
+    * src/seahorse-key-manager.c:
+    * src/seahorse-key-manager.vala: Clean up errors in declaration of signal
+    handlers.  Fixes bug #558406
+
+=== seahorse 2.24.1 ===
+
+2008-10-19  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in:
+	* NEWS:
+	* README: Release version 2.24.1
+
+2008-10-18  Stef Walter  <stef@memberwebs.com>
+
+	* pgp/seahorse-pgp-key.c: PGP keys don't always have to come 
+	from a PGP source. Should fix bug #553648
+
+2008-10-18  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Add gthread to pkg-config requirements.
+	Fixes bug 553235. Patch by Jeff Cai.
+
+2008-10-18  Stef Walter  <stef@memberwebs.com>
+
+	* libcryptui/cryptui-key-store.c: cryptui_key_store_set_selected_key 
+	used wrong iter. Fixes bug #556187. Patch by Philip Withnall
+
+2008-10-11  Adam Schreiber  <sadam@clemson.edu>
+
+    * * gkr/seahorse-gkr-commands.c:
+    * gkr/seahorse-gkr-commands.vala:
+    * gkr/vala-build.stamp: Revert 2574
+    * po/POTFILES.in: Add src/seahorse-viewer.c.
+    * gkr/Makefile.am:
+    * gkr/seahorse-gkr-commands.c:
+    * gkr/seahorse-gkr-commands.vala:
+    * gkr/vala-build.stamp: Use ngettext. Fixes bug #554933
+    * po/POTFILES.skip: Remove src/seahorse-viewer.c.  Fixes bug #554937
+
+2008-09-25  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/vala-build.stamp:
+    * src/seahorse-keyserver-results.c:
+    * src/seahorse-keyserver-results.vala: Fix crasher part of bug #553648
+
+=== seahorse 2.24.0 ===
+
+2008-09-20  Stef Walter  <stef@memberwebs.com>
+
+	* NEWS:
+	* configure.in:
+	* README: Release version 2.24.0
+
+2008-09-15  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-passphrase.c: Some tweaks to the password
+	prompt window, including allowing minimizing to release the 
+	keyboard grab.
+
+2008-09-14  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/seahorse-daemon.c:
+	* daemon/seahorse-hkp-server.c:
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-validity.c:
+	* pgp/seahorse-gpg-options.c:
+	* pgp/seahorse-gpgme-io.c:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-ssh-askpass.c: Fix compiler warnings
+	for gcc 4.3. 
+	
+2008-09-14  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-key-manager-store.c: Disconnect from 'sort-changed'
+	when closing down a key manager window. This prevents gconf
+	notifications after window is gone away. See bug #546686
+	
+2008-09-14  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-widget.c: Ignore erroneous negative
+	window sizes. 
+	
+2008-09-14  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-set-model.c:
+	* pkcs11/seahorse-pkcs11-certificate.vala:
+	* src/seahorse-key-manager-store.c: Fix problems with validity
+	and trust columns being the wrong type in the tree model.
+	
+2008-09-14  Stef Walter  <stef@memberwebs.com>
+
+	* src/main.c:
+	* daemon/seahorse-daemon.c: Check result of gtk_init_with_args().
+	Should fix bug #544352. Patch by Christian Persch.
+	
+2008-09-13  Stef Walter  <stef@memberwebs.com>
+
+	* libcryptui/cryptui.c: Request a minimum width for the 
+	prompt dialog to prevent ellipsizing from collapsing 
+	all text down to nothing.
+	
+2008-09-13  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/seahorse-service-crypto.c:
+	* daemon/seahorse-service.h: Return a 'cancelled' error when
+	from the daemon crypto dbus methods when a user cancels
+	out of a password prompt. Fixes bug #520119
+	
+2008-09-13  Stef Walter  <stef@memberwebs.com>
+
+	* pgp/seahorse-pgp-key-properties.c: Show revoked subkeys
+	properly in details view of PGP keys. Fixes bug #550913
+	
+2008-09-13  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-key-widget.c:
+	* pgp/seahorse-pgp-key-properties.c: Fix reference problems
+	when closing with a PGP properties window open.
+	
+2008-09-13  Stef Walter  <stef@memberwebs.com>
+
+	* ssh/seahorse-ssh-source.c: Fix problem deleting SSH
+	keys. Fixes bug #551377
+	
+2008-09-13  Stef Walter  <stef@memberwebs.com>
+
+	* libcryptui/cryptui-key-list.c: Fix column widths, and 
+	elipsize long text in key listing. Fixes bug #551426
+	Patch by Adam Schreiber.
+
+2008-09-12  Joe Orton  <jorton@redhat.com>
+ 
+ 	* pkcs11/seahorse-pkcs11-module.c: Include gp11.h without
+ 	directory prefix.
+ 
+ 	* pkcs11/p11.vapi:
+ 	* pkcs11/gp11.vapi:
+ 	* pkcs11/seahorse-pkcs11-source.vala: Treat attribute types
+ 	as ulong not uint, to prevent truncation warnings from the compiler.
+	
+2008-09-12  Stef Walter  <stef@memberwebs.com>
+
+	* pgp/seahorse-pgp-keysets.c: Fix problem with 'no keys 
+	available' when trying to sign a PGP key. Fixes bug #545626
+	
+2008-09-10  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkeyring-source.c:
+	* libcryptui/cryptui.h:
+	* libseahorse/libseahorse-c.vapi:
+	* libseahorse/seahorse-key.h:
+	* pgp/seahorse-pgp-key.c:
+	* pkcs11/p11.vapi:
+	* pkcs11/seahorse-pkcs11-certificate.vala:
+	* pkcs11/seahorse-pkcs11-source.vala:
+	* src/seahorse-viewer.c:
+	* ssh/seahorse-ssh-key.c: Add 'exportable' flag to objects/keys
+	and don't enable export UI if selected objects are not exportable.
+	Fixes bug #551477
+	
+2008-09-09  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-transfer-operation.c: Fix crash/warning 
+	when syncing with an ldap server that doesn't have our key.
+	   
+2008-09-08  Adam Schreiber  <sadam@clemson.edu>
+
+    * libcryptui/cryptui-key-combo.c: Ellipsize too long UIDs
+    Fixes bug #550281
+    
+    * pixmaps/scalable/Makefile.am: Remove remaining reference to 
+    seahorse-applet.svg. Fixes bug #551379
+
+    * pixmaps/22x22/seahorse-applet-key.svg (deleted):
+    * pixmaps/22x22/seahorse-applet-encrypted.svg (deleted):
+    * pixmaps/22x22/seahorse-applet-unknown.svg (deleted):
+    * pixmaps/22x22/seahorse-applet-text.png (deleted):
+    * pixmaps/22x22/seahorse-applet-text.svg (deleted):
+    * pixmaps/22x22/seahorse-applet-signed.png (deleted):
+    * pixmaps/22x22/seahorse-applet-signed.svg (deleted):
+    * pixmaps/22x22/seahorse-applet-key.png (deleted):
+    * pixmaps/22x22/Makefile.am:
+    * pixmaps/22x22/seahorse-applet-encrypted.png (deleted):
+    * pixmaps/22x22/seahorse-applet-unknown.png (deleted):
+    * pixmaps/48x48/seahorse-applet.png (deleted):
+    * pixmaps/48x48/seahorse-applet-signed.png (deleted):
+    * pixmaps/48x48/seahorse-applet-text.png (deleted):
+    * pixmaps/48x48/seahorse-applet-key.png (deleted):
+    * pixmaps/48x48/Makefile.am:
+    * pixmaps/48x48/seahorse-applet-encrypted.png (deleted):
+    * pixmaps/48x48/seahorse-applet-unknown.png (deleted):
+    * pixmaps/scalable/seahorse-applet-key.svg (deleted):
+    * pixmaps/scalable/seahorse-applet-encrypted.svg (deleted):
+    * pixmaps/scalable/seahorse-applet-unknown.svg (deleted):
+    * pixmaps/scalable/seahorse-applet.svg (deleted):
+    * pixmaps/scalable/seahorse-applet-signed.svg (deleted):
+    * pixmaps/scalable/Makefile.am:
+    * pixmaps/scalable/seahorse-applet-text.svg (deleted): Remove icons that 
+    are now part of seahorse-plugins.  Fixes bug #550802
+
+
+
+=== seahorse 2.23.92 ===
+
+2008-09-07  Stef Walter  <stef@memberwebs.com>
+
+	* README:
+	* NEWS: Release version 2.23.92
+
+2008-09-07  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkeyring-item-properties.c: Fix problem with 
+	password saving happening before lower levels get the 
+	focus-out event. Fixes bug #548320. 
+	 
+	* libseahorse/seahorse-secure-entry.c: Insignificant change 
+	of return type for event handler. 
+	
+2008-09-07  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/libseahorse-c.vapi: Fix ownership problem 
+	with seahorse_multi_operation_take().
+	
+	* src/seahorse-key-manager.vala: Fix dumb 'Couldn't import keys'
+	error message when success. Fixes bug #544059
+	
+2008-09-07  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/libseahorse-c.vapi:
+	* src/saehorse-preferences.h:
+	* src/seahorse-viewer.c:
+	* src/seahorse-viewer.h:
+	* src/seahorse-viewer.vala: (removed)
+	* src/Makefile.am: Write SeahorseViewer in C.
+	
+	* gkr/seahorse-gkr-commands.vala:
+	* libseahorse/seahorse-commands.vala:
+	* pgp/seahorse-pgp-commands.vala:
+	* ssh/seahorse-ssh-commands.vala: Fine tune memory copies 
+	of UI data.
+	
+2008-09-07  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-key.c: Fill in abstract methods properly
+	on the SeahorseObject class. Fixes crash. 
+	
+2008-09-03  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Bump version number.
+
+=== seahorse 2.23.91 ===
+
+2008-09-03  Stef Walter  <stef@memberwebs.com>
+
+	* README:
+	* NEWS: 
+	* pkcs11/Makefile.am: Release version 2.23.91
+
+2008-09-01  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-viewer.c:
+    * src/seahorse-viewer.vala:
+    * src/vala-build.stamp: Fix some more logic.
+    * src/seahorse-viewer.c:
+    * src/seahorse-viewer.vala:
+    * src/vala-build.stamp: Fix copying keys to clipboard.  Fixes bug #550279
+    * src/seahorse.desktop.in.in: Remove encoding line.  Fixes bug #550169
+    
+2008-08-31  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-util.h: 
+	* src/seahorse-key-manager.vala: Fix double free. See bug #547918
+	
+2008-08-31  Stef Walter  <stef@memberwebs.com>
+
+	* pgp/seahorse-pgp-key.c: Fix null pointer dereference. See bug #549603
+	
+2008-08-31  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in:
+	* pkcs11/gp11.vapi:
+	* pkcs11/gp11-hacks.h: (added)
+	* pkcs11/seahorse-pkcs11-certificate.vala: Bump vala dependency, and make 
+	build work with latest vala again.
+	
+2008-08-28  Adam Schreiber  <sadam@clemson.edu>
+
+    * ssh/seahorse-ssh-operation.c: Don't round up to the next highest power of 2
+    bytes.  Fixes bug #549747.  Happy Birthday to me :)
+
+2008-08-27  Adam Schreiber  <sadam@clemson.edu>
+
+    * help/seahorse.omf.in: Change series id so that the manual shows up
+    * help/C/seahorse.xml: Updated manual.
+    * src/vala-build.stamp:
+    * src/seahorse-key-manager.c:
+    * src/seahorse-key-manager.vala: Don't repetedly load gnome-keyring items.
+    Fixes bug #547682
+
+2008-08-26  Adam Schreiber  <sadam@clemson.edu>
+    * src/vala-build.stamp:
+    * src/seahorse-keyserver-results.c:
+    * src/seahorse-keyserver-results.vala:
+    * src/seahorse-keyserver-results.h:
+    * src/seahorse-key-manager.c:
+    * src/seahorse-key-manager.vala:
+    * src/seahorse-viewer.c:
+    * src/seahorse-key-manager.h:
+    * src/seahorse-viewer.h:
+    * src/seahorse-generate-select.c:
+    * gkr/vala-build.stamp:
+    * gkr/seahorse-gkr-commands.c:
+    * pgp/vala-build.stamp:
+    * pgp/seahorse-pgp-generator.c:
+    * pgp/seahorse-pgp-commands.c:
+    * ssh/vala-build.stamp:
+    * ssh/seahorse-ssh-commands.c:
+    * ssh/seahorse-ssh-generator.c:
+    * libseahorse/seahorse-generator.h:
+    * libseahorse/seahorse-commands.c:
+    * libseahorse/seahorse-object.c:
+    * libseahorse/seahorse-commands.h:
+    * libseahorse/seahorse-object.h:
+    * libseahorse/seahorse-servers.c:
+    * libseahorse/vala-build.stamp:
+    * libseahorse/seahorse-view.c:
+    * libseahorse/seahorse-view.h:
+    * libseahorse/seahorse-generator.c: Add signal handler for help button on
+    the first time options.  Fixes bug #549036
+    * libseahorse/seahorse-validity.c:
+    * pgp/seahorse-pgp-key-properties.c: Clear up ambiguity by adding contexts.
+    Fixes bug #549460
+
+2008-08-22  Adam Schreiber  <sadam@clemson.edu>
+
+    * libcryptui/cryptui-key-chooser.c: Fix copy & paste error while installing
+    properties.
+
+2008-08-18  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Bump version number.
+
+=== seahorse 2.23.90 ===
+
+2008-08-18  Stef Walter  <stef@memberwebs.com>
+
+	* README:
+	* NEWS: Release version 2.23.90
+
+2008-08-13  Adam Schreiber  <sadam@clemson.edu>
+
+    * data/icons/hicolor_apps_16x16_seahorse.png (added):
+    * data/icons/hicolor_apps_16x16_seahorse-preferences.png (added):
+    * data/icons/hicolor_apps_22x22_seahorse.png (added):
+    * data/icons/hicolor_apps_22x22_seahorse-preferences.png (added):
+    * data/icons/hicolor_apps_24x24_seahorse.png (added):
+    * data/icons/hicolor_apps_24x24_seahorse-preferences.png (added):
+    * data/icons/hicolor_apps_32x32_seahorse.png (added):
+    * data/icons/hicolor_apps_32x32_seahorse-preferences.png (added):
+    * data/icons/hicolor_apps_48x48_seahorse.png (added):
+    * data/icons/hicolor_apps_48x48_seahorse-preferences.png (added):
+    * data/icons/Makefile.am (added):
+    * data/icons/svg (added):
+    * data/icons/svg/seahorse.svg (added):
+    * data/icons/svg/seahorse-preferences.svg (added):
+    * pixmaps/22x22/Makefile.am:
+    * pixmaps/48x48/Makefile.am:
+    * pixmaps/scalable/Makefile.am:
+    * src/seahorse-viewer.vala:
+    * data/Makefile.am:
+    * configure.in:
+    * libseahorse/seahorse-widget.c:
+    * libseahorse/seahorse-gtkstock.c:
+    * libseahorse/seahorse-gtkstock.h: Icon makeover.  Patch from Michael 
+    Monreal.  Fixes bug #520114
+
+2008-08-03  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Bump version number.
+
+=== seahorse 2.23.6 ===
+
+2008-08-03  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in:
+	* NEWS:
+	* README: Release 2.23.6
+
+2008-08-03  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/libseahorse-c.vapi:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-object.vala:
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-util.h:
+	* pkcs11/p11.vapi:
+	* pkcs11/gp11.vapi:
+	* pkcs11/Makefile.am:
+	* pkcs11/seahorse-pkcs11.c:
+	* pkcs11/seahorse-pkcs11-certificate.vala: (added)
+	* pkcs11/seahorse-pkcs11-source.vala: (added)
+	* pkcs11/seahorse-pkcs11-module.c: 
+	* src/Makefile.am:
+	* src/main.c:
+	* ssh/seahorse-ssh-source.c: 
+	* configure.in: Add initial proof of concept for loading of 
+	objects from PKCS#11. 
+
+2008-07-30  Stef Walter  <stef@memberwebs.com>
+
+	* common/seahorse-registry.c:
+	* common/seahorse-registry.h:
+	* daemon/seahorse-daemon.c:
+	* gkr/seahorse-gkr-module.c:
+	* gkr/seahorse-gkr-module.h:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-context.h:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-module.c:
+	* pgp/seahorse-pgp-module.h:
+	* pgp/seahorse-pgp-source.c:
+	* pkcs11/seahorse-pkcs11-module.c:
+	* pkcs11/seahorse-pkcs11-module.h:
+	* src/main.c:
+	* src/seahorse-keyserver-search.c:
+	* ssh/seahorse-ssh-module.c:
+	* ssh/seahorse-ssh-module.h:
+	* ssh/seahorse-ssh-source.c: Simplify initialization of modules,
+	and make modules add sources to context explicitly.
+	
+2008-07-30  Adam Schreiber  <sadam@clemson.edu>
+
+    * ssh/seahorse-ssh-data.c: Fix usage of strncat.  Fixes bugs #523022 
+    and 543601
+
+2008-07-27  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Removing strange -O0 flag from eons 
+	ago. Fixes bug #544305
+
+2008-07-27  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-viewer.vala: Close the about dialog when 
+	close button is clicked. Fixes bug #544350
+	
+2008-07-27  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkeyring-operation.c:
+	* gkr/seahorse-gkeyring-source.c:
+	* gkr/seahorse-gkr-commands.vala:
+	* libseahorse/libseahorse-c.vapi:
+	* libseahorse/seahorse-commands.vala:
+	* libseahorse/seahorse-operation.h:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-source.h:
+	* libseahorse/seahorse-transfer-operation.c:
+	* libseahorse/seahorse-unknown-source.c:
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-util.h:
+	* pgp/Makefile.am:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-commands.vala:
+	* pgp/seahorse-pgp-delete.c: (removed)
+	* pgp/seahorse-pgp-dialogs.h:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-operation.c:
+	* pgp/seahorse-pgp-source.c:
+	* src/seahorse-viewer.vala:
+	* ssh/seahorse-delete.c: (removed)
+	* ssh/seahorse-ssh-commands.vala:
+	* ssh/seahorse-ssh-operation.c:
+	* ssh/seahorse-ssh-source.c: Refactor the delete code so it 
+	returns proper operations and handles identities properly.
+	
+2008-07-27  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-progress.c: Fix reference counting
+	problem on operations.
+	
+2008-07-26  Stef Walter  <stef@memberwebs.com>
+
+	* pkcs11/gp11.vapi:
+	* pkcs11/Makefile.am:
+	* pkcs11/p11.vapi: (added)
+	* pkcs11/seahorse-pkcs11.vala:
+	* bugs.vapi: Add functions for converting from a seahorse object
+	id (quark) to a set of attributes that uniquely identifies a
+	PKCS#11 object.
+	
+2008-07-26  Stef Walter  <stef@memberwebs.com>
+
+	* ssh/seahorse-algo.c:
+	* ssh/seahorse-algo.h:
+	* ssh/seahorse-ssh-key-data.c: Use base64 encoding functions
+	in GLib rather than including our own.
+	
+2008-07-23  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in:
+    * ssh/Makefile.am: Include socket libraries.  Patch from Jeff Cai.
+    Fixes bug #544267
+    * libseahorse/seahorse-dns-sd.c: Fix empty struct.
+    Patch from Jeff Cai.  Fixes bug #544266
+    * libseahorse/seahorse-prefs.c: Fix undeclared variable.  
+    Patch from Jeff Cai.  Fixes bug #544262
+
+2008-07-22  Stef Walter  <stef@memberwebs.com>
+
+	* pgp/seahorse-ldap-source.c: Don't use deprecated LDAP functions.
+	Patch by Adam Schreiber. Fixes bug #514618
+	
+2008-07-22  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-progress.c: Don't add a multi-operation
+	to itself. Fixes bug #510992
+	
+2008-07-21  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Bump version number.
+
+=== seahorse 2.23.5 ===
+
+2008-07-21  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in:
+	* NEWS:
+	* README: Release 2.23.5
+
+2008-07-20  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-widget.c: Fix memory leak.
+
+2008-07-20  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-key-manager.glade:
+    * src/seahorse-keyserver-results.glade:
+    * libseahorse/seahorse-gconf.h:
+    * libseahorse/seahorse-widget.c: Save and load window sizes from gconf.
+    Fixes bug #510004
+
+2008-07-19  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/seahorse-service.c:
+	* gkr/seahorse-gkeyring-source.c:
+	* libseahorse/seahorse-source.c:
+	* libseahorse/seahorse-source.h:
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-util.h:
+	* pgp/seahorse-gpgmex-op.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* src/seahorse-key-manager-store.c:
+	* ssh/seahorse-ssh-key-properties.c:
+	* ssh/seahrose-ssh-operation.c:
+	* ssh/seahorse-ssh-source.c:
+	* ssh/seahorse-ssh-source.h: Remove the exporting of secret keys from 
+	the SeahorseSource interface, and push this into the modules.
+	
+2008-07-18  Stef Walter  <stef@memberwebs.com>
+
+	* gkr/seahorse-gkeyring-item.c:
+	* gkr/seahorse-gkeyring-item.h:
+	* gkr/seahorse-gkeyring-item-properties.c:
+	* gkr/seahorse-gkr-commands.vala:
+	* libseahorse/libseahorse-c.vapi:
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-key.c:
+	* libseahorse/seahorse-key.h:
+	* libseahorse/seahorse-object.vala:
+	* libseahorse/seahorse-set-model.c: (added)
+	* libseahorse/seahorse-set-model.h: (added)
+	* libseahorse/seahorse-types.vala:
+	* libseahorse/seahorse-unknown-key.c:
+	* libseahorse/seahorse-unknown-key.h:
+	* libseahorse/seahorse-view.vala:
+	* pgp/libseahorse-pgp-c.vapi:
+	* pgp/Makefile.am:
+	* pgp/seahorse-pgp-commands.vala:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-key-op.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-pgp-uid.c:
+	* pgp/seahorse-pgp-uid.h:
+	* src/seahorse-key-manager.vala:
+	* src/seahorse-key-manager-store.c:
+	* src/seahorse-key-manager-store.h:
+	* src/seahorse-keyserver-results.vala:
+	* src/seahorse-viewer.vala:
+	* ssh/seahorse-ssh-commands.vala:
+	* ssh/seahorse-ssh-key.c:
+	* ssh/seahorse-ssh-key.h: Add real GtkTreeModel for displaying 
+	objects. And use real parent/child relationships for tree.
+
+	* pgp/seahorse-pgp-source.c: Prevent refresh loop
+
+2008-07-18  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in: Add AC_PROG checks.  Patch from Rodrigo Moya. Fixes
+    bug #543602
+
+2008-07-16  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/seahorse-daemon.c:
+	* daemon/seahorse-service.c:
+	* daemon/seahorse-service.h:
+	* daemon/seahorse-service-crypto.c:
+	* daemon/seahorse-service-keyset.c:
+	* gkr/libseahorse-gkr-c.vapi:
+	* gkr/seahorse-gkeyring-item.c:
+	* gkr/seahorse-gkeyring-item.h:
+	* gkr/seahorse-gkeyring-item-properties.c:
+	* gkr/seahorse-gkeyring-operation.c:
+	* gkr/seahorse-gkeyring-source.c:
+	* gkr/seahorse-gkeyring-source.h:
+	* gkr/seahorse-gkr-commands.vala:
+	* libseahorse/libseahorse-c.vapi:
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-combo-keys.c:
+	* libseahorse/seahorse-combo-keys.h:
+	* libseahorse/seahorse-commands.vala:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-context.h:
+	* libseahorse/seahorse-dns-sd.c:
+	* libseahorse/seahorse-key.c:
+	* libseahorse/seahorse-key.h:
+	* libseahorse/seahorse-keyset.c: (moved to seahorse-set.c)
+	* libseahorse/seahorse-keyset.h: (moved to seahorse-set.h)
+	* libseahorse/seahorse-key-source.c: (moved to seahorse-source.c)
+	* libseahorse/seahorse-key-source.h: (moved to seahorse-source.h)
+	* libseahorse/seahorse-notification.c:
+	* libseahorse/seahorse-object.vala: (added)
+	* libseahorse/seahorse-prefs-keyrings.c:
+	* libseahorse/seahorse-set.c: (moved from seahorse-keyset.c)
+	* libseahorse/seahorse-set.h: (moved from seahorse-keyset.h)
+	* libseahorse/seahorse-source.c: (moved from seahorse-key-source.c)
+	* libseahorse/seahorse-source.h: (moved from seahorse-key-source.h)
+	* libseahorse/seahorse-transfer-operation.c:
+	* libseahorse/seahorse-types.vala: (added)
+	* libseahorse/seahorse-unknown-key.c:
+	* libseahorse/seahorse-unknown-source.c:
+	* libseahorse/seahorse-unknown-source.h:
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-util.h:
+	* libseahorse/seahorse-view.vala:
+	* pgp/libseahorse-pgp-c.vala:
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-pgp-commands.vala:
+	* pgp/seahorse-pgp-delete.c:
+	* pgp/seahorse-pgp-generator.vala:
+	* pgp/seahorse-pgp-key.c:
+	* pgp/seahorse-pgp-key.h:
+	* pgp/seahorse-pgp-key-op.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-keysets.c:
+	* pgp/seahorse-pgp-keysets.h:
+	* pgp/seahorse-pgp-sign.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-pgp-source.h:
+	* pgp/seahorse-server-source.c:
+	* pgp/seahorse-server-source.h:
+	* pgp/seahorse-signer.c:
+	* src/main.c:
+	* src/seahorse-key-manager.vala:
+	* src/seahorse-key-manager-store.c:
+	* src/seahorse-key-manager-store.h:
+	* src/seahorse-keyserver-results.vala:
+	* src/seahorse-keyserver-search.c:
+	* src/seahorse-keyserver-sync.c:
+	* src/seahorse-viewer.vala:
+	* ssh/libseahorse-ssh-c.vapi:
+	* ssh/seahorse-delete.c:
+	* ssh/seahorse-ssh-commands.vala:
+	* ssh/seahorse-ssh-generator.vala:
+	* ssh/seahorse-ssh-key.c:
+	* ssh/seahorse-ssh-key.h:
+	* ssh/seahorse-ssh-key-properties.c:
+	* ssh/seahorse-ssh-operation.c:
+	* ssh/seahorse-ssh-source.c:
+	* ssh/seahorse-ssh-source.h:
+	* ssh/seahorse-ssh-upload.c: Refactor and add SeahorseObject class
+	as a base class of SeahorseKey, so that we can have non-key objects
+	in the mix.
+	
+2008-07-16  Stef Walter  <stef@memberwebs.com>
+
+	* pkcs11/*:
+	* Makefile.am:
+	* configure.in: Initial infrastructure for PKCS11 component.
+	
+	* gkr/seahorse-gkeyring-source.c:
+	* libseahorse/libseahorse-c.vapi:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-key-source.c:
+	* libseahorse/seahorse-key-source.h:
+	* libseahorse/seahorse-unknown-source.c:
+	* pgp/seahorse-pgp-source.c:
+	* pgp/seahorse-server-source.c:
+	* ssh/seahorse-ssh-source.c: Remove unused stop() and get_state() 
+	virtual methods of SeahorseKey
+	
+	* libseahorse/seahorse-prefs.c: Fix compiler warning
+	
+2008-07-16  Stef Walter  <stef@memberwebs.com>
+
+	* acinclude.m4: Fix vala version check.
+	
+	* pgp/seahorse-pgp-source.c: Include appropriate header
+	
+2008-07-15  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/seahorse-dbus-server.c:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-dns-sd.c:
+	* pgp/seahorse-pgp-source.c:
+	* src/main.c:
+	* configure.in: Complete decoupling from GPGME. Seahorse
+	should now be buildable without GPGME or GnuPG.
+	
+2008-07-15  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/Makefile.am:
+	* daemon/seahorse-daemon.c:
+	* daemon/seahorse-service.c:
+	* gkr/seahorse-gkeyring-item.c:
+	* gkr/seahorse-gkeyring-operation.h:
+	* libseahorse/libseahorse-c.vapi:
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-keyserver-control.c:
+	* libseahorse/seahorse-prefs.c:
+	* libseahorse/seahorse-servers.vala: (added)
+	* pgp/seahorse-hkp-source.c:
+	* pgp/seahorse-ldap-source.c:
+	* pgp/seahorse-server-source.c:
+	* pgp/seahorse-server-source.h:
+	* src/main.c:
+	* src/seahorse-key-manager-store.c:
+	* src/seahorse-keyserver-search.c:
+	* src/seahorse-keyserver-sync.c:
+	* configure.in:
+	* Makefile.am: Further decouple seahorse from PGP. Implement a place
+	where modules can register server uri validation functions.
+	
+	* libseahorse/seahorse-dns-sd.c:
+	* libseahorse/seahorse-util.c:
+	* pgp/seahorse-pgp-key-properties.c:
+	* pgp/seahorse-pgp-photos.c:
+	* ssh/seahorse-ssh-key-properties.c: Fix compile warnings	
+	 
+2008-07-08  Stef Walter  <stef@memberwebs.com>
+
+	* src/Makefile.am:
+	* gkr/Makefile.am:
+	* pgp/Makefile.am:
+	* ssh/Makefile.am:
+	* libseahorse/Makefile.am:
+	* acinclude.m4: Make seahorse build more reliably on machines without 
+	a version of vala.
+
+2008-07-05  Adam Schreiber  <sadam@clemson.edu>
+    
+    * libcryptui/cryptui.c:
+    * libcryptui/cryptui.h: Add function for consumers to launch seahorse when
+    a key needs to be created.
+    * libcryptui/cryptui-key-chooser.c: Fix warnings
+    * libcryptui/cryptui-keyset.c:
+    * libcryptui/cryptui-key-store.c:
+    * libcryptui/cryptui-key-store.h:
+    * libcryptui/cryptui-key-chooser.c: Implement ToDo: replace signer drop down
+    in chooser with check button when only one secret key
+    * src/seahorse-keyserver-sync.c:
+    * src/seahorse-keyserver-sync.glade: Set Sync button insensitive when a
+    server isn't selected.  Fixes bug #541579
+
+
+2008-06-28  Stef Walter  <stef@memberwebs.com>
+
+	* daemon/seahorse-daemon.c:
+	* daemon/seahorse-sharing.c:
+	* daemon/Makefile.am:
+	* gkr/libseahorse-gkr-c.vapi: (added)
+	* gkr/Makefile.am:
+	* gkr/seahorse-gkeyring-item-properties.c:
+	* gkr/seahorse-gkeyring-item-properties.glade: (moved from src/)
+	* gkr/seahorse-gkeyring-item.h:
+	* gkr/seahorse-gkr.vala: (added)
+	* gkr/seahorse-gkr-commands.vala: (added)
+	* gkr/seahorse-gkr-module.h: (moved from seahorse-gkr.h)
+	* gkr/seahorse-gkr-module.c: (moved from seahorse-gkr.c)
+	* libcryptui/cryptui.h:
+	* libseahorse/libseahorse-c.deps: (added)
+	* libseahorse/libseahorse-c.vapi: (added)
+	* libseahorse/Makefile.am:
+	* libseahorse/seahorse-commands.vala: (added)
+	* libseahorse/seahorse-context.h:
+	* libseahorse/seahorse-context.c:
+	* libseahorse/seahorse-generator.vala: (added)
+	* libseahorse/seahorse-key-source.c:
+	* libseahorse/seahorse-key-source.h:
+	* libseahorse/seahorse-key.c:
+	* libseahorse/seahorse-key.h:
+	* libseahorse/seahorse-key-widget.h: (moved from src/)
+	* libseahorse/seahorse-key-widget.c: (moved from src/)
+	* libseahorse/seahorse-operation.c:
+	* libseahorse/seahorse-operation.h:
+	* libseahorse/seahorse-prefs-keyrings.c:
+	* libseahorse/seahorse-prefs.c:
+	* libseahorse/seahorse-progress.c:
+	* libseahorse/seahorse-transfer-operation.c:
+	* libseahorse/seahorse-unknown-source.c:
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-util.h:
+	* libseahorse/seahorse-view.vala: (added):
+	* libseahorse/seahorse-widget.c:
+	* libseahorse/seahorse-widget.h:
+	* pgp/libseahorse-pgp-c.vapi:
+	* pgp/Makefile.am:
+	* pgp/seahorse-add-subkey.glade: (moved from src/)
+	* pgp/seahorse-add-uid.glade: (moved from src/)
+	* pgp/seahorse-expires.glade: (moved from src/)
+	* pgp/seahorse-pgp-add-subkey.c: (moved from src/)
+	* pgp/seahorse-pgp-add-uid.c: (moved from src/)
+	* pgp/seahorse-pgp-commands.vala: (added)
+	* pgp/seahorse-pgp-delete.c: (moved from src/)
+	* pgp/seahorse-pgp-dialogs.h: (added)
+	* pgp/seahorse-pgp-expires.c: (moved from src/)
+	* pgp/seahorse-pgp-generate.c: (moved from src/)
+	* pgp/seahorse-pgp-generate.glade: (moved from src/)
+	* pgp/seahorse-pgp-generator.vala: (added)
+	* pgp/seahorse-pgp-key.h: 
+	* pgp/seahorse-pgp-key-properties.c: (moved from src/)
+	* pgp/seahorse-pgp-keysets.h:
+	* pgp/seahorse-pgp-module.c: (moved from seahorse-pgp.c)
+	* pgp/seahorse-pgp-module.h: (moved from seahorse-pgp.h)
+	* pgp/seahorse-pgp-photos.c: (moved from src/)
+	* pgp/seahorse-pgp-private-key-properties.glade: (moved from src/)
+	* pgp/seahorse-pgp-public-key-properties.glade: (moved from src/)
+	* pgp/seahorse-pgp-revoke.c: (moved from src/)
+	* pgp/seahorse-pgp-sign.c: (moved from src/)
+	* pgp/seahorse-pgp.vala: (added)
+	* pgp/seahorse-revoke.glade: (moved from src/)
+	* pgp/seahorse-signer.glade: 
+	* pgp/seahorse-sign.glade: (moved from src/)
+	* pgp/seahorse-xloadimage.c: (moved from src/)
+	* src/Makefile.am:
+	* src/main.c:
+	* src/seahorse-generate-select.vala: (added)
+	* src/seahorse-key-manager.ui:
+	* src/seahorse-key-manager.vala: (added)
+	* src/seahorse-keyserver-results.vala: (added)
+	* src/seahorse-keyserver-search.c: 
+	* src/seahorse-keyserver-sync.c:
+	* src/seahorse-viewer.vala: (added)
+	* src/seahorse-windows.h:
+	* ssh/libseahorse-ssh-c.vapi: 
+	* ssh/Makefile.am:
+	* ssh/seahorse-delete.c: (added)
+	* ssh/seahorse-ssh-commands.vala: (added)
+	* ssh/seahorse-ssh-dialogs.h:
+	* ssh/seahorse-ssh-generate.c: (moved from src/)
+	* ssh/seahorse-ssh-generate.glade: (moved from src/)
+	* ssh/seahorse-ssh-generator.vala: (added)
+	* ssh/seahorse-ssh-key.h: 
+	* ssh/seahorse-ssh-source.h:
+	* ssh/seahorse-ssh.vala: (added)
+	* ssh/seahorse-ssh-key-properties.c: (moved from src/)
+	* ssh/seahorse-ssh-key-properties.glade: (moved from src/)
+	* ssh/seahorse-ssh-module.c: (moved from seahorse-ssh.c)
+	* ssh/seahorse-ssh-module.h: (moved from seahorse-ssh.h) 
+		Major UI refactoring. Use vala for new code. Move PGP, 
+		SSH, and gnome-keyring UI code into separate modules.
+	  
+2008-06-20  Christian Persch  <chpe@gnome.org>
+
+	* libcryptui/cryptui-key-chooser.h:
+	* libcryptui/cryptui-key-store.h:
+	* libcryptui/cryptui-keyset.h:
+	* libegg/egg-datetime.c: (egg_datetime_get_type):
+	* libegg/egg-datetime.h:
+	* libseahorse/seahorse-context.h:
+	* libseahorse/seahorse-dns-sd.h:
+	* libseahorse/seahorse-key-model.h:
+	* libseahorse/seahorse-key.h:
+	* libseahorse/seahorse-keyserver-control.h:
+	* libseahorse/seahorse-keyset.h:
+	* libseahorse/seahorse-widget.h:
+	* src/seahorse-key-manager-store.h:
+	* src/seahorse-key-manager.c: (seahorse_key_manager_show):
+	* src/seahorse-key-widget.h: Replace deprecated gtk type macros with
+	nondeprecated gtype ones. Bug #539287.
+
+2008-06-16  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-prefs-keyrings.c:
+	* libseahorse/seahorse-util.c:
+	* libseahorse/seahorse-util.h: Make seahorse_util_show_error more 
+	useful so that accepts any widget as a parent and figues out the 
+	appropriate window to use.
+	
+	* src/seahorse-key-manager.c:
+	* src/seahorse-key-manager-store.c:
+	* src/seahorse-key-manager-store.h: Support XDS properly. 
+	Fixes bug #507366
+	
+2008-06-04  Adam Schreiber  <sadam@clemson.edu>
+
+    * ssh/seahorse-ssh-operation.c: Add header file not included on Solaris.
+    Patch from Alexis Ballier.  Fixes bug #536213.
+
+2008-05-21  Saleem Abdulrasool  <compnerd@compnerd.org>
+
+	reviewed by: Adam Schreiber  <sadam@clemson.edu>
+
+	* configure.in:
+	* daemon/seahorse-hkp-server.c: (lookup_handle_index),
+	(lookup_callback):
+	* gkr/seahorse-gkeyring-item.c: (find_attribute_int),
+	(is_network_item), (seahorse_gkeyring_item_get_attribute):
+	* libseahorse/seahorse-context.c:
+	(seahorse_context_remote_key_source):
+	* libseahorse/seahorse-dns-sd.c: (resolve_callback),
+	(browse_callback):
+	* libseahorse/seahorse-unknown-key.c:
+	(seahorse_unknown_key_get_property):
+	* libseahorse/seahorse-util.c: (seahorse_util_get_date_string),
+	(seahorse_util_get_display_date_string):
+	* pgp/seahorse-gpgmex-util.c: (gpgmex_data_write_all):
+	* pgp/seahorse-pgp-key-op.c: (photoid_load_transit):
+	* src/seahorse-gkeyring-item-properties.c: (do_main):
+		Fix compiling with -Werror and fix typo of -DG_DISABLE_DEPRECATED.
+
+2008-05-17  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-passphrase.c: Grab keyboard focus
+    Patch from Josselin Mouette.  Fixes bug #326611
+
+
+2008-05-05  Saleem Abdulrasool  <compnerd@compnerd.org>
+
+	reviewed by: Adam Schreiber  <sadam@clemson.edu>
+
+	* configure.in:
+	* libseahorse/seahorse-widget.c: (seahorse_widget_show_help):
+		Remove gnome-vfs usage for seahorse in general.
+
+2008-05-04  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-keyserver-results.glade: Fix crash caused by libgnome removal.
+    * src/seahorse-key-manager.c: Add window title to match desktop file.
+    * src/seahorse-key-manager.glade:
+    * src/seahorse-revoke.c:
+    * src/seahorse-sign.c:
+    * src/seahorse-delete.c:
+    * src/seahorse-add-uid.c:
+    * src/seahorse-pgp-generate.glade:
+    * src/seahorse-key-widget.c:
+    * src/seahorse-ssh-key-properties.c:
+    * src/seahorse-keyserver-results.c:
+    * src/seahorse-keyserver-search.c:
+    * src/seahorse-ssh-generate.c:
+    * src/seahorse-add-subkey.c:
+    * src/seahorse-keyserver-sync.c:
+    * src/seahorse-key-manager-store.c:
+    * src/seahorse-key-manager.c:
+    * src/seahorse-preferences.c:
+    * src/seahorse-gkeyring-item-properties.c:
+    * src/seahorse-generate-select.c:
+    * src/seahorse-photos.c:
+    * src/main.c:
+    * src/seahorse-pgp-generate.c:
+    * src/seahorse-expires.c:
+    * src/seahorse-ssh-upload.c:
+    * src/Makefile.am:
+    * src/seahorse-key-properties.c:
+    * src/seahorse-add-subkey.glade:
+    * INSTALL:
+    * gkr/seahorse-gkeyring-item.c:
+    * gkr/seahorse-gkeyring-operation.c:
+    * gkr/seahorse-gkeyring-source.c:
+    * configure.in:
+    * pgp/seahorse-signer.c:
+    * pgp/seahorse-pgp-key-op.c:
+    * pgp/seahorse-server-source.c:
+    * pgp/seahorse-gpg-options.c:
+    * pgp/seahorse-pgp-key.c:
+    * pgp/seahorse-ldap-source.c:
+    * pgp/seahorse-hkp-source.c:
+    * pgp/Makefile.am:
+    * pgp/seahorse-pgp-operation.c:
+    * pgp/seahorse-pgp-source.c:
+    * ssh/seahorse-ssh-operation.c:
+    * ssh/seahorse-ssh-source.c:
+    * ssh/seahorse-ssh-askpass.c:
+    * ssh/seahorse-ssh-key.c:
+    * libseahorse/seahorse-keyserver-control.c:
+    * libseahorse/seahorse-unix-signal.c:
+    * libseahorse/seahorse-prefs-keyrings.c:
+    * libseahorse/seahorse-passphrase.c:
+    * libseahorse/seahorse-util.c:
+    * libseahorse/seahorse-prefs.c:
+    * libseahorse/seahorse-transfer-operation.c:
+    * libseahorse/seahorse-widget.c:
+    * libseahorse/seahorse-context.c:
+    * libseahorse/seahorse-unknown-key.c:
+    * libseahorse/seahorse-notification.c:
+    * libseahorse/seahorse-key.c:
+    * libseahorse/seahorse-dns-sd.c:
+    * libseahorse/seahorse-unknown-source.c:
+    * libseahorse/seahorse-operation.c:
+    * libseahorse/seahorse-operation.h:
+    * libseahorse/seahorse-validity.c:
+    * libseahorse/seahorse-key-source.c:
+    * libseahorse/seahorse-key-model.c:
+    * daemon/seahorse-sharing.c:
+    * daemon/seahorse-service.c:
+    * daemon/seahorse-service-keyset.c:
+    * daemon/seahorse-daemon.c:
+    * daemon/seahorse-service-crypto.c:
+    * daemon/seahorse-hkp-server.c:
+    * Makefile.am:
+    * libegg/: Added
+    * libegg/Makefile.am: Added
+    * libegg/egg-datetime.c: Added
+    * libegg/egg-datetime.h: Added
+    Remove dependency on libgnome/ui.  Patch from Saleem Abdulrasool. 
+    Partially fixes bug #524018
+
+2008-05-01  Adam Schreiber  <sadam@clemson.edu>
+
+    * libcryptui/crypui-key-chooser.c: Remove returns in void functions.
+    Patch from Brian Cameron.  Fixes bug #530950
+    * src/seahorse-key-properties.c:
+    * src/seahorse-pgp-public-key-properties.glade: Change "trust model" used
+    to match GPG.  Fixes bug #435278
+    * pgp/seahorse-gpg-options.c: Add headers.
+    Patch from Brian Cameron.  Fixes bug #530952
+
+2008-04-28  Stef Walter  <stef@memberwebs.com>
+
+	* Refactoring: Remove gnome-vfs dependency. Use gio instead. 
+	Remove most of the hard dependency on gpgme.
+	
+	* Use the full 'Seahorse' namespace instead of 'Sea'
+	
+2008-04-20  Stef Walter  <stef@memberwebs.com>
+
+	* Initial part of refactoring into components.
+	
+2008-04-17  Stef Walter  <stef@memberwebs.com>
+
+    * Split out the seahorse-plugins module 
+    
+2008-04-17  Adam Schreiber  <sadam@clemson.edu>
+
+    * plugins/nautilus/seahorse-extension.c:
+    * plugins/epiphany/mozilla/mozilla-helper.cpp: Changes to work with new API.
+    Patch from Ed Catmur.  Fixes bug #523325
+    * libseahorse/seahorse-secure-memory.c: Test for secure memory before
+    remapping memory functions.  Patch from Coleman Kane. Fixes bug #527193
+    * plugins/nautilus/seahorse-pgp-preferences.c: Remove unused variable.
+    * libseahorse/seahorse-hkp-source.c: Fix importing keys from hkp keyservers.
+    Patch from Mackenzie Morgan.  Fixes bug #528150
+
+2008-04-02  Adam Schreiber  <sadam@clemson.edu>
+
+    * daemon/seahorse-service-crypto.c: Return key id of signer even when key
+    is not found locally
+    * configure.in: Bump version number
+
+=== seahorse 2.23.0 ===
+
+2008-03-10  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in:
+    * agent/Makefile.am:
+    * daemon/Makefile.am:
+    * acinclude.m4: Remove code concerning mlock that is no longer used 
+    now that secure memory is provided by gnome-keyring.  Fixes bug #520664
+
+=== seahorse 2.22.0 ===
+
+2008-02-24  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in:
+    * NEWS:
+    * README: Release version 2.22.0
+
+=== seahorse 2.21.92 ===
+
+2008-02-24  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in: 
+    * NEWS:
+    * README: Release version 2.21.92
+
+2008-02-11  Adam Schreiber  <sadam@clemson.edu>
+
+    * help/C/seahorse.xml: Change menu strings for key generation.
+    Fixes bug #503704
+    * plugins/applet/docs/C/seahorse-applet.xml: Update applet manual. 
+    Patch by Jasper Lievisse Adriaanse.  Fixes bug #507092
+
+2008-02-04  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-gkeyring-item-properties.glade:
+    * src/seahorse-pgp-private-key-properties.glade:
+    * src/seahorse-pgp-public-key-properties.glade:
+    * src/seahorse-ssh-key-properties.glade:  Add comments for translators.
+    Fixes bug #514276
+
+2008-01-30  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in: Bump version number
+
+=== seahorse 2.21.91 ===
+
+2008-01-30  Adam Schreiber  <sadam@clemson.edu>
+
+    * NEWS
+    * README: Release version 2.21.91
+
+2008-01-30  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in:
+    * plugins/epiphany/seahorse-extension.c: Fix building with new Epiphany API.
+    Fixes bug #512837
+
+2008-01-29  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in: more epiphany configure changes
+
+2008-01-28  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in: Bump version number
+
+=== seahorse 2.21.90 ===
+
+2008-01-28  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in:
+    * Makefile.am:
+    * NEWS
+    * README: Release version 2.21.90
+
+2008-01-28  Stef Walter  <stef@memberwebs.com>
+    
+    * agent/seahorse-agent.desktop.in.in: (deleted)
+    * po/POTFILES.in:
+    * agent/Makefile.am: More cleanup for Adam's last revert below.
+    
+2008-01-28  Stef Walter  <stef@memberwebs.com>
+
+	* agent/seahorse-agent-main.c:
+	* agent/seahorse-agent.c:
+	* agent/seahorse-agent.h: Remove option to munge gpg.conf on startup
+	from seahorse-agent.
+	
+2008-01-28  Stef Walter  <stef@memberwebs.com>
+
+    * libseahorse/seahorse-prefs.glade:
+    * libseahorse/seahorse-prefs-cache.c: Remove option to start agent 
+    from preferences dialog.  
+    
+2008-01-28  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in:
+    * INSTALL:
+    * daemon/seahorse-hkp-server.c:
+    * libseahorse/seahorse-hkp-source.c:
+    * libseahorse/seahorse-ldap-source.c: Use libsoup 2.4. Patches by 
+    Dan Winship. Fixes bug #509704
+
+2008-01-25  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in: Add new epiphany api versions.  Fixes bug #511216
+    * plugins/seahorse-pgp.gedit-plugin.desktop.in: Added an icon attribute so 
+    that an icon shows up in Gedit's plugin listing.  Fixes bug #512001
+
+2008-01-24  Adam Schreiber  <sadam@clemson.edu>
+
+    * agent/seahorse-agent.desktop.in.in: deleted
+    * po/POTFILES.skip:
+    * configure.in:
+    * agent/Makefile.am: Revert autostarting seahorse-agent with xdg. Requires
+    evil gpg.conf munging.
+
+2008-01-24  Luca Ferretti  <elle.uca@libero.it>
+
+    * agent/seahorse-agent.desktop.in.in:
+      Missing part from bug #511224. Forgot to add to svn, sorry.	
+
+2008-01-23  Adam Schreiber  <sadam@clemson.edu>
+
+    * plugins/nautilus/seahorse-pgp-preferences.desktop.in:
+    * src/seahorse.desktop.in.in: Revert patch from JP Rosevear.
+      Reopens bug #503648
+
+2008-01-22  Adam Schreiber  <sadam@clemson.edu>
+
+    * po/POTFILES.in:
+    * po/POTFILES.skip:
+    * configure.in:
+    * agent/Makefile.am: Autostart seahorse-agent with xdg.  Patch from 
+    Luca Ferretti.  Fixes bug #511224
+
+
+2008-01-20  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-util.c: Don't add an extra 'dot' to file names unless
+    necessary.  Patch from Kip Warner.  Fixes bug #510928
+
+2008-01-08  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+    * configure.in:
+
+    Add gnome-vfs libs for the nautilus extension since
+    they're not automatically pulled in with Nautilus
+    anymore (Nautilus uses GIO now). The real fix would of
+    course be to convert the code to GIO, but this
+    workaround at least fixes the build for now. See also
+    bug #501542.
+
+2008-01-07  Adam Schreiber  <sadam@clemson.edu>
+
+	* plugins/nautilus-ext/Makefile.am (nautilus_extensiondir): 
+	* configure.in (NAUTILUS_LIBS): Fetch nautilus extension
+	dir from libnautilus-extension.pc.  Patch from Brian Pepple.  
+	Fixes bug #505990
+
+2008-01-01  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-key-manager-store.c:
+    * src/seahorse-key-manager-store.h:
+    * src/seahorse-key-manager.c: Support all text targets that gtk supports.
+    Patch from Christian Persch.  Fixes bug #504941
+
+2007-12-17  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in: Bump version number
+
+=== seahorse 2.21.4 ===
+
+2007-12-17  Stef Walter  <stef@memberwebs.com>
+
+    * README:
+    * NEWS: Release version 2.21.4
+
+2007-12-17  Stef Walter  <stef@memberwebs.com>
+
+    * libseahorse/seahorse-prefs.glade: Reverse last terminology
+    change, and use the word 'keyring' for consistency.
+
+2007-12-14  Adam Schreiber  <sadam@clemson.edu>
+
+    * plugins/nautilus/seahorse-pgp-preferences.desktop.in:
+    * src/seahorse.desktop.in.in: Use name field correctly.
+    Patch from JP Rosevear.  Fixes bug #503648
+
+2007-12-09  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-prefs.glade: Better terminology for 
+	preferences dialog.
+	
+2007-12-09  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-gkeyring-item.c:
+	* src/seahorse-gkeyring-item.h:
+	* src/seahorse-gkeyring-item-properties.c:
+	* src/seahorse-gkeyring-item-properties.glade:
+	* src/seahorse-gkeyring-operation.c:
+	* src/seahorse-gkeyring-operation.h:
+	* src/seahorse-gkeyring-source.c: Add support for modifying gnome-keyring
+	application ACLs.
+	
+2007-12-08  Stef Walter  <stef@memberwebs.com>
+
+    * libseahorse/Makefile.am
+    * libseahorse/seahorse-add-keyring.glade: (added)
+    * libseahorse/seahorse-prefs-keyrings.c: (added)
+    * libseahorse/seahorse-prefs.c: 
+    * libseahorse/seahorse-prefs.glade:
+    * libseahorse/seahorse-widget.c:
+    * libseahorse/seahorse-widget.h:
+    * src/seahorse-gkeyring-source.c: Add gnome-keyring-manager functionality
+    to seahorse.
+
+2007-12-08  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in:
+    * libseahorse/seahorse-ssh-operation.c:
+    * libseahorse/seahorse-ssh-operation.h: Remove usage of ssh-add and 
+    related operations which are no longer needed.
+	
+2007-12-06  Adam Schreiber  <sadam@clemson.edu>
+
+    * plugins/nautilus/seahorse-tool.c: Switched import to use DBus interface.
+    Fixes bug #416458
+
+2007-12-02  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-prefs.glade:
+    * libseahorse/seahorse-prefs-cache.c: Adds UI to show/hide cache 
+    icon.  Patch from Stef Walter.  Fixes bug #432891
+
+2007-12-01  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in: Bump version number.
+
+=== seahorse 2.21.3 ===
+
+2007-12-01  Stef Walter  <stef@memberwebs.com>
+
+    * NEWS:
+    * README:
+    * configure.in: Release version 2.21.3
+
+2007-11-29  Stef Walter  <stef@memberwebs.com>
+
+    * agent/Makefile.am:
+    * agent/seahorse-agent.h:
+    * agent/seahorse-agent-main.c:
+    * agent/seahorse-agent-ssh.c:
+    * agent/seahorse-agent-status.c:
+    * data/seahorse.schemas.in:
+    * libseahorse/seahorse-passphrase.c:
+    * libseahorse/seahorse-prefs.glade:
+    * libseahorse/seahorse-prefs-cache.c: Remove SSH agent, since a proper 
+    one now exists in gnome-keyring. Fixes bug #413278
+
+2007-11-15  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-gkeyring-operation.c: Some how this was missed too.
+    * plugins/epiphany/Makefile.am: Forgot to check it in
+    * configure.in: Don't hard code epiphany extensions dir.  Patch from
+    Josselin Mouette.  Fixes bug #497163
+
+2007-11-11  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in: Fix selective compilation of Epiphany and Gedit plugins
+    * src/seahorse-key-dialogs.h:
+    * src/seahorse-key-manager.c:
+    * src/seahorse-gkeyring-operation.c:
+    * src/main.c:
+    * src/Makefile.am:
+    * INSTALL:
+    * plugins/nautilus/seahorse-tool.c:
+    * plugins/applet/seahorse-applet.c:
+    * configure.in:
+    * agent/seahorse-agent-actions.c:
+    * agent/seahorse-agent-cache.c:
+    * agent/seahorse-agent-status.c:
+    * agent/seahorse-agent-main.c:
+    * libseahorse/seahorse-secure-memory.c:
+    * libseahorse/seahorse-secure-memory.h:
+    * libseahorse/seahorse-ssh-operation.c:
+    * libseahorse/seahorse-prefs-cache.c:
+    * daemon/seahorse-daemon.c: Use secure memory from gnome-keyring.  Patch
+    from Stef Walter.  Fixes bug #435015
+
+2007-11-09  Adam Schreiber  <sadam@clemson.edu>
+
+    * plugins/nautilus/seahorse-pgp-preferences.desktop.in: Change 
+    preferences applet name.  Patch by Luca Ferretti.  Fixes bug #484433
+
+2007-10-31  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-revoke.c: Fix incomplete conversion from GtkOptionMenu 
+    to GtkComboBox.  Fixes bug #475757
+
+2007-10-30  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-keyserver-control.c:
+    * libseahorse/seahorse-keyserver-control.h: Clean up 
+    keyserver-control.  Patch from Christian Persch.  
+    Fixes bug #478454
+
+2007-10-29  Adam Schreiber  <sadam@clemson.edu>
+
+    * data/seahorse.schemas.in: Disabled automatic key uploading 
+    retrieval by default.  Fixes bug #484159
+    * libseahorse/seahorse-prefs.c:
+    * libseahorse/seahorse-prefs.glade: Add mnemonics and fix HIG 
+    issues.  Patch from Christian Persch.  Fixes bug #478451
+    * libseahorse/seahorse-progress.glade: Don't translate dummy text.
+    Patch from Christian Persch.  Fixes bug #478462
+    * src/seahorse-expires.glade: Fix capitalization and add mnemonic.
+    Patch from Christian Persch.  Fixes bug #478474
+    * src/seahorse-gkeyring-item-properties.glade: Bring into HIG
+    compliance.  Patch from Christian Persch.  Fixes bug #478477
+
+2007-10-15  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Bump version number
+
+=== seahorse-2.20.1 ===
+
+2007-10-15  Stef Walter  <stef@memberwebs.com>
+
+	* README:
+	* NEWS: 
+	* configure.in: Release version 2.20.1
+
+2007-09-19  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-combo-keys.c: Fix pointer usage. Patch from 
+    Michael Wolf
+    * libseahorse/seahorse-ssh-operation.c: Fix assertions.  Patch from 
+    Michael Wolf
+    * plugins/nautilus/seahorse-tool-files.c: Fix selection of package 
+    name. Patch from Michael Wolf
+    * src/seahorse-pgp-generate.c: Fix error text.  Patch from Michael Wolf
+    * configure.in: Fix Gedit compilation on 2.20. Patch from Gotz Waschk. 
+    Fixes bug #478350
+    * plugins/nautilus/seahorse-tool-progress.c: Fix compilation warning.
+
+2007-09-19  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Release with proper version number 2.20.0
+
+=== seahorse-2.20 ===
+
+2007-09-17  Stef Walter  <stef@memberwebs.com>
+
+	* README:
+	* NEWS: 
+	* configure.in: Release version 2.20 
+
+2007-09-11  Claude Paroz  <claude@2xlibre.net>
+
+	* plugins/applet/docs/Makefile.am: Added fr to DOC_LINGUAS.
+	* plugins/applet/docs/fr/fr.po: Added French translation.
+
+2007-09-06  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-prefs.c: Connect auto retreive check box to
+    gconf.  Fixes bug #473940 
+
+2007-09-04  Stef Walter  <stef@memberwebs.com>
+
+	* src/seahorse-gkeyring-item.c: Fix problem when building without
+	SSH support. 
+
+2007-09-04  Alessio Frusciante  <algol@firenze.linux.it>
+
+	* plugins/applet/docs/Makefile.am: Added "it" (Italian) to
+	DOC_LINGUAS.  
+	* plugins/applet/docs/it/it.po: Addded Italian
+	translation by Milo Casagrande <milo_casagrande@yahoo.it>.
+
+2007-08-26  Daniel Nylander <po@danielnylander.se>
+
+	* plugins/applet/docs/sv/sv.po: Updated Swedish translation
+
+2007-08-26  Stef Walter  <stef@memberwebs.com>
+
+	* configure.in: Bump version number
+	
+=== seahorse-2.19.91 ===
+
+2007-08-26  Stef Walter  <stef@memberwebs.com>
+
+    * NEWS:
+    * README: Release 2.19.91
+
+2007-08-22  Stef Walter  <stef@memberwebs.com>
+
+	* libseahorse/seahorse-prefs.glade: Remove needlessly translated strings.
+	Patch by Claude Paroz. Fixes bug #469176
+
+2007-08-21  Stef Walter  <stef@memberwebs.com>
+
+    * agent/seahorse-agent-actions.c:
+    * agent/seahorse-agent-cache.c: Fix badly placed semi-colons which 
+    shortcircuit if()s. Patch by  Dave Jones. Fixes bug #467485
+
+2007-08-21  Stef Walter  <stef@memberwebs.com>
+
+    * src/seahorse-gkeyring-item.c: Properly escape any markup characters in 
+    a gnome-keyring item name. Fixes bug #453188
+
+2007-08-21  Stef Walter  <stef@memberwebs.com>
+
+    * src/seahorse-key-properties.c: Remove assertions in UI code that we 
+    really don't guarantee. Fixes bug #453152
+
+2007-08-20  Stef Walter  <stef@memberwebs.com>
+
+    * libseahorse/seahorse-progress.glade: Progress operations now show up in 
+    the task list properly. Fixes bug #445767
+
+2007-08-20  Stef Walter  <stef@memberwebs.com>
+
+    * data/seahorse.schemas.in: Hide agent try icon by default.
+    Fixes bug #432891
+
+2007-08-12  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in: Bump version
+
+=== seahorse-2.19.90 ===
+
+2007-08-12  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in:
+    * NEWS:
+    * README: Release 2.19.90
+
+2007-08-12  Adam Schreiber  <sadam@clemson.edu>
+
+    * MAINTAINERS: Changed format to match discussion on d-d-l
+
+2007-07-16  Adam Schreiber  <sadam@clemson.edu>
+
+    * help/C/seahorse.xml: Add documentation for changing the password
+    on the default gnome-keyring key ring.  Patch by Milo Casagrande.
+    Fixes bug #453043
+
+2007-07-10  Adam Schreiber  <sadam@clemson.edu>
+
+    * plugins/applet/seahorse-applet.c: Add word wrapping to window that
+    displays text.
+
+2007-07-07  Stef Walter  <stef@memberwebs.com>
+
+   * configure.in: Bump version number
+   
+=== seahorse-2.19.5 ===
+
+2007-07-07  Stef Walter  <stef@memberwebs.com>
+
+    * NEWS:
+    * README:
+    * configure.in: Release 2.19.5
+
+2007-07-07  Adam Schreiber  <sadam@clemson.edu>
+
+    * agent/seahorse-agent-cache.c:
+    * agent/seahorse-agent-ssh.c: When only using the ssh portion of 
+    seahorse-agent, still init the cache.  Patch from Ted Percival.
+    Fixes bug #454469
+
+2007-06-24  Daniel Nylander <po@danielnylander.se>
+
+	* plugins/applet/docs/sv/sv.po: Added Swedish translation
+	* plugins/applet/docs/sv/legal.xml: Updated translation
+	* plugins/applet/docs/sv/seahorse-applet.xml: Updated translation
+	* plugins/applet/docs/Makefile.am: Added sv to DOC_LINGUAS
+
+2007-06-22  Stef Walter  <stef@memberwebs.com>
+
+    * Use my real name in copyrights, and proper email address.
+    This change touched most files in the project, in comments 
+    and strings. 
+
+2007-06-22  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-ssh-askpass.c: Internationalize properly.
+    Patch from Gabor Kelemen.  Fixes bug #450087
+
+2007-06-18  Stef Walter  <stef@memberwebs.com>
+
+    * configure.in: Bump version number
+
+=== seahorse-2.19.4 ===
+
+2007-06-18  Stef Walter  <stef@memberwebs.com>
+
+    * NEWS:
+    * README:
+    * configure.in: Release 2.19.4
+
+2007-06-18  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-prefs.c:
+    * libseahorse/seahorse-prefs.glade: Add ability to change gnome-keyring
+    master password.  Fixes bug #356575 
+    * daemon/seahorse-service.c:
+    * libseahorse/seahorse-libdialogs.h:
+    * libseahorse/seahorse-notification.c: Gives more detail for imported keys 
+    when using the DBus interface.  Partially fixes bug #416458
+
+2007-06-14  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-ssh-key-properties.c: Fix null access while creating window.
+    Fixes bug #447450
+
+2007-06-09  Adam Schreiber  <sadam@clemson.edu>
+
+    * plugins/nautilus/seahorse-tool-progress.c: Unescape gnome-vfs strings
+    before display.  Fixes bug #445769
+
+2007-06-07  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in: Remove errant pidgin plugin checks.  Fixes bug #445323 
+    * agent/seahorse-agent-main.c: Internationalize the notification area.
+    Fixes bug #443920
+
+2007-06-06  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in:
+    * libseahorse/seahorse-gpg-options.c: Re-enable building with gpg-2.0.x.
+    Fixes bug #444259
+
+2007-06-04  Adam Schreiber  <sadam@clemson.edu>
+
+    * plugins/nautilus/seahorse-pgp-preferences.c: There is not an applet tab. 
+
+2007-05-23  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-generate-select.c:
+    * src/seahorse-ssh-generate.c: Don't destroy swidgets until we're 
+    finished with them.  Patch by Christian Persch.  Fixes bug #440778
+
+2007-05-19  Adam Schreiber  <sadam@clemson.edu>
+
+    * agent/seahorse-agent.1: Patch by Sebastian Dröge.  Fixes bug #438559
+    * plugins/nautilus/seahorse-tool-files.c:
+    * src/seahorse-multi-encrypt.glade: Add file-roller style extensions to
+    seahorse-tool --encrypt.  Fixes bug #432573
+    * agent/seahorse-agent-status.c:
+    * libseahorse/seahorse-libdialogs.h:
+    * libseahorse/seahorse-notification.c:
+    * libseahorse/seahorse-prefs.c:
+    * libseahorse/seahorse-prefs.h:
+    * libseahorse/seahorse-progress.c:
+    * libseahorse/seahorse-signer.c:
+    * libseahorse/seahorse-widget.c:
+    * libseahorse/seahorse-widget.h:
+    * plugins/applet/seahorse-applet.c:
+    * plugins/nautilus/seahorse-pgp-preferences.c:
+    * plugins/nautilus/seahorse-tool-files.c:
+    * src/seahorse-add-uid.c:
+    * src/seahorse-ssh-key-properties.c:
+    * src/seahorse-add-subkey.c:
+    * src/seahorse-expires.c:
+    * src/seahorse-generate-select.c:
+    * src/seahorse-generate-select.h:
+    * src/seahorse-gkeyring-item-properties.c:
+    * src/seahorse-key-dialogs.h:
+    * src/seahorse-key-manager.c:
+    * src/seahorse-key-properties.c:
+    * src/seahorse-key-widget.c:
+    * src/seahorse-key-widget.h:
+    * src/seahorse-keyserver-results.c:
+    * src/seahorse-keyserver-search.c:
+    * src/seahorse-keyserver-sync.c:
+    * src/seahorse-pgp-generate.c:
+    * src/seahorse-photos.c:
+    * src/seahorse-preferences.c:
+    * src/seahorse-preferences.h:
+    * src/seahorse-revoke.c:
+    * src/seahorse-sign.c:
+    * src/seahorse-ssh-generate.c:
+    * src/seahorse-ssh-upload.c:
+    * src/seahorse-windows.h: Make dialogs transient. Fixes bug #408776
+    * libseahorse/seahorse-pgp-key-op.h: Change value for Elgamal key type to 
+    be synchoronized with gpg.  Fixes bug #439479
+
+2007-05-15  Adam Schreiber  <sadam@clemson.edu>
+
+    * configure.in: Bump epiphany api version.  Fixes bug #438563
+
+2007-05-11  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * configure.in: Bump version number
+
+2007-05-11  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * configure.in:
+    * NEWS:
+    * README: Seahorse version 2.19.2
+
+2007-05-11  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * Merged changes from gnome-2-18 branch. (r1729 - r1771)
+
+2007-05-10  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * agent/seahorse-agent-main.c:
+    * data/seahorse.schemas.in:
+    * libseahorse/seahorse-add-keyserver.glade:
+    * libseahorse/seahorse-notification.c:
+    * libseahorse/seahorse-prefs.glade:
+    * libseahorse/seahorse-secure-entry.c:
+    * plugins/applet/seahorse-applet.c: 
+    * src/seahorse-gkeyring-item-properties.glade:
+    * src/seahorse-pgp-private-key-properties.glade:
+    * src/seahorse-pgp-public-key-properties.glade: Fix translatable 
+   strings. Fixes bug #418979
+
+2007-05-08  Adam Schreiber  <sadam@clemson.edu>
+
+    * plugins/nautilus/Makefile.am: Remove rule to install desktop files in 
+    /usr/share/control-center-2.0/capplets/.  Fixes bug #436840
+
+2007-05-06  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/Makefile.am:
+    * libseahorse/seahorse-combo-keys.c:
+    * libseahorse/seahorse-combo-keys.h:
+    * libseahorse/seahorse-signer.c:
+    * libseahorse/seahorse-prefs.c:
+    * src/seahorse-sign.c: Move libseahorse/seahorse-default-key-control.* to
+    libseahorse/seahorse-combo-keys.*
+    * libseahorse/seahorse-notification.c:
+    * libseahorse/seahorse-util.c:
+    * libseahorse/seahorse-util.h: 
+    * src/seahorse-key-manager-store.c:
+    * src/seahorse-key-properties.c: Fix problem with internationalized
+    expiration dates on PGP keys.  Fixes bug #393207
+
+2007-05-05  Adam Schreiber  <sadam@clemson.edu>
+
+    * help/C/seahorse.xml: Fix spelling error
+
+2007-05-04  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-widget.c: Change gnome_help_display function 
+    called.  Fixes bug #415807
+
+2007-05-03  Adam Schreiber  <sadam@clemson.edu>
+
+    * src/seahorse-revoke.glade:
+    * src/seahorse-add-subkey.c:
+    * src/seahorse-add-subkey.glade: Remove use of GtkOptionMenu in favor
+    of GtkComboBox.  Fixes bug #370817
+
+
+2007-05-01  Adam Schreiber  <sadam@clemson.edu>
+
+    * acinclude.m4: Add stdio.h to mlock check.  Fixes bug #435016
+    * pixmaps/22x22/Makefile.am:
+    * pixmaps/22x22/seahorse-person.png (added):
+    * pixmaps/22x22/seahorse-person.svg (added):
+    * pixmaps/22x22/seahorse-sign.png (added):
+    * pixmaps/22x22/seahorse-sign.svg (added): Add files causing warning
+    messages.  Fixes bug #435051
+
+2007-04-26  Adam Schreiber  <sadam@clemson.edu>
+
+    * MAINTAINERS: Added myself as a co-maintainer
+
+2007-04-24  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-ssh-operation.c: Escaping already provides 
+    single quotes to comment string
+    * src/seahorse-ssh-generate.c: Choose 1024 bits when DSA is selected.
+    Fixes bug #419227
+
+2007-04-16  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * libseahorse/seahorse-util.c: Provide a better 'decrypt
+    failed' error message. Fixes bug #355062
+
+2007-04-16  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * data/seahorse.schemas.in: 
+    * libseahorse/seahorse-context.c:
+    * libseahorse/seahorse-gconf.h:
+    * libseahorse/seahorse-prefs.glade: Add option to disable 
+    auto-retrieval from key servers. See bug #366798
+
+2007-04-16  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * Merged changes from gnome-2-18 branch. (r1654 - r1729)
+
+2007-04-15  Adam Schreiber  <sadam@clemson.edu>
+
+    * plugins/epiphany/seahorse-extension.c: Fix problem with context
+    menu items always appearing.
+
+2007-04-13  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * plugins/nautilus/seahorse.xml: Recognize encrypted private
+    keys properly. Fixes bug #429509
+
+2007-04-07  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * agent/Makefile.am: Set proper binary as setuid. 
+    Fixes bug #427586
+
+2007-04-07  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * configure.in: Bump version number
+
+2007-04-07  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * INSTALL:
+    * NEWS:
+    * README: Seahorse version 1.0.1
+
+2007-04-07  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * libseahorse/seahorse-ssh-key-data.c: 
+    * libseahorse/seahorse-util.c:
+    * plugins/nautilus/seahorse.xml: Enable importing of plain SSH
+    keys, generated elsewhere. Fixes bug #424473
+
+2007-04-06  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * libseahorse/seahorse-widget.c: Make 'Keyserver Results' window help
+    work properly. Patch from Adam Schreiber. Fixes bug #421615
+
+2007-04-06  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * libseahorse/seahorse-ldap-source.c: Make progress bar pulse 
+    properly during an LDAP search. Fixes bug #355850
+
+2007-04-06  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * libseahorse/seahorse-ldap-source.c: 
+    * src/seahorse-keyserver-results.c: Handle spaces properly in LDAP 
+    search filters. 
+
+2007-04-06  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * libseahorse/seahorse-ssh-key-data.c: Don't add extra lines to 
+    .ssh/authorized_keys when moving keys around. Fixes bug #352929
+
+2007-04-03  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * src/seahorse-key-manager.c: Fix crasher when deleting more than one 
+    private keys. Fixes bug #417901
+
+2007-04-03  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * src/seahorse-pgp-private-key-properties.glade: Show expired date properly
+    in warning message for private keys.
+
+2007-03-27  Adam Schreiber <sadam@clemson.edu>
+
+    * src/seahorse-key-manager.c: Fix il8n of the about dialog.
+    Patch from Bjoern Voigt.  Fixes bug #423082
+
+2007-03-22  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * configure.in: 
+    * INSTALL: Require GTK+ version 2.10
+
+2007-03-19  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * libseahorse/seahorse-ssh-operation.c:
+    * libseahorse/seahorse-ssh-operation.h:
+    * libseahorse/seahorse-util.c:
+    * libseahorse/seahorse-util.h:
+    * src/seahorse-ssh-upload.c: Recognize port properly in SSH key upload 
+    Fixes bug #418205
+
+2007-03-19  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * agent/seahorse-agent-status.c:
+    * libseahorse/seahorse-context.c:
+    * libseahorse/seahorse-server-source.c: 
+    * libseahorse/seahorse-ssh-key-data.c: (possible crasher)
+    * libseahorse/seahorse-util.c: (minor capitalization bug)
+    * src/seahorse-ssh-upload.c: Satisfy compiler warnings.
+
+2007-03-19  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * agent/seahorse-agent-prompt.c: 
+    * libseahorse/seahorse-passphrase.c: Setup icons for passphrase 
+    prompts.
+
+2007-03-18  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * libseahorse/seahorse-gtkstock.c: Setup a default icon for processes.
+    Fixes bug #419264
+
+2007-03-17  Adam Schreiber  <sadam@clemson.edu>
+
+    * libseahorse/seahorse-widget.c: Link swidget error dialogs to their 
+    parent
+    * configure.in: Allow building the Epiphany plugin with Epiphany 2.18.
+    Fixes #417806
+
+2007-03-17  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * acinclude.m4: Fixed mlock checks. Fixes bug #417757 and 
+    bug #417758
+
+2007-03-17  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * agent/seahorse-agent-io.c: Use /tmp directory for agent sockets
+
+2007-03-17  Nate Nielsen  <nielsen@memberwebs.com>
+
+    * configure.in: Bump version number
+
+=== seahorse-1.0 ===
