@@ -185,44 +185,6 @@ on_app_close (GtkAction* action, SeahorseKeyserverResults* self)
 }
 
 static void 
-imported_keys (SeahorseOperation* op, SeahorseKeyserverResults* self) 
-{
-	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
-	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
-	
-	if (!seahorse_operation_is_successful (op)) {
-		seahorse_operation_display_error (op, _ ("Couldn't import keys"), 
-		                                  GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))));
-		return;
-	}
-	
-	seahorse_viewer_set_status (SEAHORSE_VIEWER (self), _ ("Imported keys"));
-}
-
-static void 
-on_key_import_keyring (GtkAction* action, SeahorseKeyserverResults* self) 
-{
-	GList* keys;
-	SeahorseOperation* op;
-
-	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
-	g_return_if_fail (GTK_IS_ACTION (action));
-
-	keys = seahorse_viewer_get_selected_objects (SEAHORSE_VIEWER (self));
-	
-	/* No keys, nothing to do */
-	if (keys == NULL) 
-		return;
-
-	op = seahorse_context_transfer_objects (seahorse_context_for_app (), keys, NULL);
-	seahorse_progress_show (op, _ ("Importing keys from key servers"), TRUE);
-	seahorse_operation_watch (op, (SeahorseDoneFunc)imported_keys, self, NULL, NULL);
-	
-	g_object_unref (op);
-	g_list_free (keys);
-}
-
-static void 
 on_remote_find (GtkAction* action, SeahorseKeyserverResults* self) 
 {
 	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
@@ -254,11 +216,6 @@ static const GtkActionEntry GENERAL_ENTRIES[] = {
 static const GtkActionEntry SERVER_ENTRIES[] = {
 	{ "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "", 
 	  N_("Search for keys on a key server"), G_CALLBACK (on_remote_find) }
-};
-
-static const GtkActionEntry KEY_ENTRIES[] = {
-	{ "key-import-keyring", GTK_STOCK_ADD, N_("_Import"), "", 
-	  N_("Import selected keys to local key ring"), G_CALLBACK (on_key_import_keyring) }
 };
 
 /* -----------------------------------------------------------------------------
@@ -335,12 +292,6 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, SERVER_ENTRIES, G_N_ELEMENTS (SERVER_ENTRIES), self);
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
-	
-	self->pv->object_actions = gtk_action_group_new ("key");
-	gtk_action_group_set_translation_domain (self->pv->object_actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (self->pv->object_actions, KEY_ENTRIES, G_N_ELEMENTS (KEY_ENTRIES), self);
-	g_object_set (gtk_action_group_get_action (self->pv->object_actions, "key-import-keyring"), "is-important", TRUE, NULL);
-	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->pv->object_actions);
 
 	/* init key list & selection settings */
 	self->pv->view = GTK_TREE_VIEW (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "key_list"));

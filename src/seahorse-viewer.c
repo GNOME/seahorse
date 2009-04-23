@@ -52,6 +52,7 @@ struct _SeahorseViewerPrivate {
 	GtkUIManager *ui_manager;
 	GtkActionGroup *object_actions;
 	GtkActionGroup *export_actions;
+	GtkActionGroup *import_actions;
 	GtkAction *delete_action;
 	GArray *predicates;
 	GList *all_commands;
@@ -69,6 +70,8 @@ static gboolean about_initialized = FALSE;
 /* Predicates which control export and delete commands, inited in class_init */
 static SeahorseObjectPredicate exportable_predicate = { 0, };
 static SeahorseObjectPredicate deletable_predicate = { 0, };
+static SeahorseObjectPredicate importable_predicate = { 0, };
+static SeahorseObjectPredicate remote_predicate = { 0, };
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
@@ -475,6 +478,46 @@ on_key_delete (GtkAction* action, SeahorseViewer* self)
 	g_list_free (objects);
 }
 
+static void 
+imported_keys (SeahorseOperation* op, SeahorseViewer* self) 
+{
+	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
+	
+	if (!seahorse_operation_is_successful (op)) {
+		seahorse_operation_display_error (op, _ ("Couldn't import keys"), 
+		                                  GTK_WIDGET (seahorse_viewer_get_window (self)));
+		return;
+	}
+	
+	seahorse_viewer_set_status (self, _ ("Imported keys"));
+}
+
+static void 
+on_key_import_keyring (GtkAction* action, SeahorseViewer* self) 
+{
+	GList* objects;
+	SeahorseOperation* op;
+
+	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (GTK_IS_ACTION (action));
+
+	objects = seahorse_viewer_get_selected_objects (self);
+	objects = objects_prune_non_exportable (objects);
+		
+	/* No objects, nothing to do */
+	if (objects == NULL) 
+		return;
+
+	op = seahorse_context_transfer_objects (seahorse_context_for_app (), objects, NULL);
+	seahorse_progress_show (op, _ ("Importing keys from key servers"), TRUE);
+	seahorse_operation_watch (op, (SeahorseDoneFunc)imported_keys, self, NULL, NULL);
+	
+	g_object_unref (op);
+	g_list_free (objects);
+}
+
+
 static gboolean
 show_properties_for_selected (SeahorseViewer *self, SeahorseCommands *commands, 
                               SeahorseObjectPredicate *pred, gpointer user_data)
@@ -503,6 +546,11 @@ static const GtkActionEntry EXPORT_ENTRIES[] = {
 	  N_("Export to a file"), G_CALLBACK (on_key_export_file) },
 	{ "edit-export-clipboard", GTK_STOCK_COPY, NULL, "<control>C",
 	  N_("Copy to the clipboard"), G_CALLBACK (on_key_export_clipboard) }
+};
+
+static const GtkActionEntry IMPORT_ENTRIES[] = {
+	{ "key-import-keyring", GTK_STOCK_ADD, N_("_Import"), "", 
+	  N_("Import selected keys to local key ring"), G_CALLBACK (on_key_import_keyring) }
 };
 		
 static void 
@@ -533,6 +581,12 @@ include_basic_actions (SeahorseViewer* self)
 	gtk_action_group_set_translation_domain (pv->export_actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (pv->export_actions, EXPORT_ENTRIES, G_N_ELEMENTS (EXPORT_ENTRIES), self);
 	seahorse_viewer_include_actions (self, pv->export_actions);
+	
+	pv->import_actions = gtk_action_group_new ("import");
+	gtk_action_group_set_translation_domain (pv->import_actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (pv->import_actions, IMPORT_ENTRIES, G_N_ELEMENTS (IMPORT_ENTRIES), self);
+	g_object_set (gtk_action_group_get_action (pv->import_actions, "key-import-keyring"), "is-important", TRUE, NULL);
+	seahorse_viewer_include_actions (self, pv->import_actions);
 }
 
 static void 
@@ -554,6 +608,10 @@ on_selection_changed (SeahorseView* view, SeahorseViewer* self)
 	/* Enable if any exportable objects are selected */
 	gtk_action_group_set_sensitive (pv->export_actions, 
 	                                has_matching_objects (&exportable_predicate, objects));
+	                                
+    /* Enable if any importable objects are selected */
+    gtk_action_group_set_sensitive (pv->import_actions, 
+	                                has_matching_objects (&importable_predicate, objects));
 	
 	/* Enable if any deletable objects are selected */
 	gtk_action_set_sensitive (pv->delete_action, 
@@ -795,6 +853,9 @@ seahorse_viewer_class_init (SeahorseViewerClass *klass)
 	
 	exportable_predicate.flags = SEAHORSE_FLAG_EXPORTABLE;
 	deletable_predicate.flags = SEAHORSE_FLAG_DELETABLE;
+	importable_predicate.flags = SEAHORSE_FLAG_EXPORTABLE;
+	importable_predicate.location = SEAHORSE_LOCATION_REMOTE;
+	remote_predicate.location = SEAHORSE_LOCATION_REMOTE;
 }
 
 static void 
