@@ -72,7 +72,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
     --enable-gtk-doc
     
 CHANGELOG_START = \
-	8a4d5f9e45a8e05e319ce45bb883d265d92c1a6d
+	d2f8367dc600080b6cf3edbe4e2fc204f929471e
 
 dist-hook:
 	@if test -d "$(srcdir)/.git"; \
