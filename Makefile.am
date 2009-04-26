@@ -43,7 +43,8 @@ EXTRA_DIST = \
     COPYING-LIBCRYPTUI \
     ChangeLog \
     ChangeLog.pre-auto \
-    ChangeLog.pre-split \
+    ChangeLog.pre-1.0 \
+    ChangeLog.pre-0.6 \
     HACKING \
     INSTALL \
     MAINTAINERS \
