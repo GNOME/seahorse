@@ -42,6 +42,8 @@ EXTRA_DIST = \
     COPYING-DOCS \
     COPYING-LIBCRYPTUI \
     ChangeLog \
+    ChangeLog.pre-auto \
+    ChangeLog.pre-split \
     HACKING \
     INSTALL \
     MAINTAINERS \
@@ -69,14 +71,14 @@ DISTCHECK_CONFIGURE_FLAGS = \
     --enable-gtk-doc
     
 CHANGELOG_START = \
-	d2f8367dc600080b6cf3edbe4e2fc204f929471e
+	8a4d5f9e45a8e05e319ce45bb883d265d92c1a6d
 
 dist-hook:
 	@if test -d "$(srcdir)/.git"; \
 	then \
 		echo Creating ChangeLog && \
 		( cd "$(top_srcdir)" && \
-		  echo '# Generate automatically. Do not edit.'; echo; \
+		  echo '# Generated automatically. Do not edit.'; echo; \
 		  $(top_srcdir)/missing --run git log $(CHANGELOG_START).. --stat --date=short ) > ChangeLog.tmp \
 		&& mv -f ChangeLog.tmp $(top_distdir)/ChangeLog \
 		|| ( rm -f ChangeLog.tmp ; \
