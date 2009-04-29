@@ -68,12 +68,13 @@ init_remote_service ()
 
 /**
  * cryptui_key_get_base:
- * @key: key for use with libcryptui
+ * @key: (in): key for use with libcryptui
  * 
  * This function is a utility function to get the part of the key that preceeds
  * the colon.
  *
- * Returns: the key base
+ * Returns: (transfer full) (allow-none): the key base if one is found in @key 
+ *          or @key if it is already a base or is invalid
  */
  
 gchar*
@@ -93,6 +94,15 @@ cryptui_key_get_base (const gchar *key)
     return g_strdup (key);
 }
 
+/**
+ * cryptui_key_get_enctype:
+ * @key: (in): key for use with libcryptui
+ *
+ * A utility function to get the type of key passed in. (public, private, 
+ * symmetric, etc.).
+ *
+ * Returns: The type of key.
+ */
 CryptUIEncType
 cryptui_key_get_enctype (const gchar *key)
 {
@@ -104,10 +114,10 @@ cryptui_key_get_enctype (const gchar *key)
 
 /**
  * cryptui_display_notification:
- * @title: Headline for the notification
- * @body: Text for the body of the notification
- * @icon: Full path to icon to be included
- * @urgent: Whether the notification is urgent or not.
+ * @title: (in) (allow-none): Headline for the notification
+ * @body: (in) (allow-none): Text for the body of the notification
+ * @icon: (in) (allow-none): Full path to icon to be included
+ * @urgent: (in) (allow-none): Whether the notification is urgent or not.
  * 
  * This function creates a notification bubble that can be updated as additional
  * key details are discovered.  See http://live.gnome.org/Seahorse/DBus for a
@@ -325,6 +335,16 @@ get_global_client (void)
     return global_gconf_client;
 }
 
+/**
+ * _cryptui_gconf_get_boolean:
+ *
+ * @key: a gconf key/path
+ *
+ * A private library function that gets a boolean from a gconf key.
+ *
+ * Returns: The boolean stored at the key location or FALSE if an error
+ *          occured.
+ */
 gboolean
 _cryptui_gconf_get_boolean (const char *key)
 {
@@ -339,6 +359,16 @@ _cryptui_gconf_get_boolean (const char *key)
     return handle_error (&error) ? FALSE : result;
 }
 
+/**
+ * _cryptui_gconf_get_string:
+ *
+ * @key: a gconf key/path
+ *
+ * A private library function that gets a string from a gconf key.
+ *
+ * Returns: The string stored at the key location or the null string if an error
+ *          occured.
+ */
 char *
 _cryptui_gconf_get_string (const char *key)
 {
@@ -355,6 +385,16 @@ _cryptui_gconf_get_string (const char *key)
     return handle_error (&error) ? g_strdup ("") : result;
 }
 
+/**
+ * _cryptui_gconf_set_string:
+ *
+ * @key: a gconf key/path
+ * @string_value: a text string
+ *
+ * A private library function that sets a gconf key to the string given.
+ *
+ * Returns: void
+ */
 void
 _cryptui_gconf_set_string (const char *key, const char *string_value)
 {
@@ -368,6 +408,17 @@ _cryptui_gconf_set_string (const char *key, const char *string_value)
     handle_error (&error);
 }
 
+/**
+ * _cryptui_gconf_notify:
+ * @key: a gconf key/path
+ * @notification_callback: function to be called by the notification
+ * @callback_data: data to be passed to the callback function
+ * 
+ * A private library convenience function that creates a gconf notification
+ * on a specified gconf key.
+ *
+ * Returns: the gconf notification id
+ */
 guint
 _cryptui_gconf_notify (const char *key, GConfClientNotifyFunc notification_callback,
                        gpointer callback_data)
@@ -392,6 +443,20 @@ internal_gconf_unnotify (gpointer data)
     _cryptui_gconf_unnotify (notify_id);
 }
 
+/**
+ * _cryptui_gconf_notify_lazy:
+ *
+ * @key: a gconf key/path
+ * @notification_callback: function to be called by the notification
+ * @callback_data: data to be passed to the callback function
+ * @lifetime: the object whose destruction will end the notification
+ *
+ * A private library convenience function that creates a gconf notification
+ * on a specified gconf key and automatically removes the notification when an
+ * object is destroyed.
+ *
+ * Returns: void
+ */
 void
 _cryptui_gconf_notify_lazy (const char *key, GConfClientNotifyFunc notification_callback,
                             gpointer callback_data, gpointer lifetime)
@@ -407,6 +472,15 @@ _cryptui_gconf_notify_lazy (const char *key, GConfClientNotifyFunc notification_
     }
 }
 
+/**
+ * _crytpui_gconf_unnotify:
+ *
+ * @notification_id: a current gconf notification id
+ *
+ * A private library function to remove a gconf notification.
+ *
+ * Returns: void
+ */
 void
 _cryptui_gconf_unnotify (guint notification_id)
 {
