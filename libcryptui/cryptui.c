@@ -68,12 +68,13 @@ init_remote_service ()
 
 /**
  * cryptui_key_get_base:
+ *
  * @key: (in): key for use with libcryptui
- * 
+ *
  * This function is a utility function to get the part of the key that preceeds
  * the colon.
  *
- * Returns: (transfer full) (allow-none): the key base if one is found in @key 
+ * Returns: (transfer full) (allow-none): the key base if one is found in @key
  *          or @key if it is already a base or is invalid
  */
  
@@ -96,9 +97,10 @@ cryptui_key_get_base (const gchar *key)
 
 /**
  * cryptui_key_get_enctype:
+ *
  * @key: (in): key for use with libcryptui
  *
- * A utility function to get the type of key passed in. (public, private, 
+ * A utility function to get the type of key passed in. (public, private,
  * symmetric, etc.).
  *
  * Returns: The type of key.
@@ -162,9 +164,9 @@ selection_changed (CryptUIKeyChooser *chooser, GtkWidget *dialog)
  * @keyset: CryptUIKeyset to select keys to present to the user from
  * @title: Window title for presented GtkWindow
  * @signer: Variable in which to store the key of the signer if one is selected
- * 
+ *
  * This function prompts the user to select one or more keys from the keyset to
- * use to encrypt to.  It also allows the user to select a private key from the 
+ * use to encrypt to.  It also allows the user to select a private key from the
  * keyset to sign with. 
  *
  * Returns: the selected key
@@ -222,9 +224,10 @@ cryptui_prompt_recipients (CryptUIKeyset *keyset, const gchar *title,
 
 /**
  * cryptui_prompt_signer:
+ *
  * @keyset: CryptUIKeyset to select keys to present to the user from
  * @title: Window title for presented GtkWindow
- * 
+ *
  * This function prompts the user to select a private key from the keyset to
  * use to sign something.
  *
