@@ -68,16 +68,14 @@ init_remote_service ()
 
 /**
  * cryptui_key_get_base:
- *
  * @key: (in): key for use with libcryptui
  *
  * This function is a utility function to get the part of the key that preceeds
  * the colon.
  *
- * Returns: (transfer full) (allow-none): the key base if one is found in @key
+ * Returns: the key base if one is found in @key
  *          or @key if it is already a base or is invalid
  */
- 
 gchar*
 cryptui_key_get_base (const gchar *key)
 {
@@ -97,7 +95,6 @@ cryptui_key_get_base (const gchar *key)
 
 /**
  * cryptui_key_get_enctype:
- *
  * @key: (in): key for use with libcryptui
  *
  * A utility function to get the type of key passed in. (public, private,
@@ -224,7 +221,6 @@ cryptui_prompt_recipients (CryptUIKeyset *keyset, const gchar *title,
 
 /**
  * cryptui_prompt_signer:
- *
  * @keyset: CryptUIKeyset to select keys to present to the user from
  * @title: Window title for presented GtkWindow
  *
@@ -233,7 +229,6 @@ cryptui_prompt_recipients (CryptUIKeyset *keyset, const gchar *title,
  *
  * Returns: the selected key
  */
-
 gchar*
 cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title)
 {
@@ -340,7 +335,6 @@ get_global_client (void)
 
 /**
  * _cryptui_gconf_get_boolean:
- *
  * @key: a gconf key/path
  *
  * A private library function that gets a boolean from a gconf key.
@@ -364,7 +358,6 @@ _cryptui_gconf_get_boolean (const char *key)
 
 /**
  * _cryptui_gconf_get_string:
- *
  * @key: a gconf key/path
  *
  * A private library function that gets a string from a gconf key.
@@ -390,7 +383,6 @@ _cryptui_gconf_get_string (const char *key)
 
 /**
  * _cryptui_gconf_set_string:
- *
  * @key: a gconf key/path
  * @string_value: a text string
  *
@@ -448,7 +440,6 @@ internal_gconf_unnotify (gpointer data)
 
 /**
  * _cryptui_gconf_notify_lazy:
- *
  * @key: a gconf key/path
  * @notification_callback: function to be called by the notification
  * @callback_data: data to be passed to the callback function
@@ -477,7 +468,6 @@ _cryptui_gconf_notify_lazy (const char *key, GConfClientNotifyFunc notification_
 
 /**
  * _crytpui_gconf_unnotify:
- *
  * @notification_id: a current gconf notification id
  *
  * A private library function to remove a gconf notification.
