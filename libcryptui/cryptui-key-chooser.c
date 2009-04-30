@@ -463,7 +463,6 @@ cryptui_key_chooser_class_init (CryptUIKeyChooserClass *klass)
 
 /**
  * cryptui_key_chooser_new:
- *
  * @ckset: key set to choose keys from
  * @mode: how to display the signer portion of the widget
  *
@@ -480,8 +479,45 @@ cryptui_key_chooser_new (CryptUIKeyset *ckset, CryptUIKeyChooserMode mode)
 }
 
 /**
- * cryptui_key_chooser_have_recipients:
+ * cryptui_key_chooser_get_enforce_prefs:
+ * @chooser: the key chooser widget
  *
+ * Gets whether or not the preference to encrypt to self will be enforced.  If
+ * TRUE, the default signing key will be added to the recipient list.  If FALSE,
+ * the selected recipients will be returned without adding the default signing
+ * key.
+ *
+ * Returns: whether or not the default signing key will be included in the
+ *          recipients even if not selected
+ */
+gboolean
+cryptui_key_chooser_get_enforce_prefs (CryptUIKeyChooser *chooser)
+{
+    return chooser->priv->enforce_prefs;
+}
+
+/**
+ * cryptui_key_chooser_set_enforce_prefs:
+ * @chooser: the chooser widget
+ * @enforce_prefs: whether or not the default signing key will be included in the
+ *                 recipients even if not selected
+ *
+ * Sets whether or not the preference to encrypt to self will be enforced.  If
+ * TRUE, the default signing key will be added to the recipient list.  If FALSE,
+ * the selected recipients will be returned without adding the default signing
+ * key.
+ *
+ * Returns: void
+ */
+void
+cryptui_key_chooser_set_enforce_prefs (CryptUIKeyChooser *chooser,
+                                       gboolean enforce_prefs)
+{
+    chooser->priv->enforce_prefs = enforce_prefs;
+}
+
+/**
+ * cryptui_key_chooser_have_recipients:
  * @chooser: the chooser to check
  *
  * Determines if recipient keys have been selected.
@@ -497,7 +533,6 @@ cryptui_key_chooser_have_recipients (CryptUIKeyChooser *chooser)
 
 /**
  * cryptui_key_chooser_get_recipients:
- *
  * @chooser: the chooser to get selected recipients from
  *
  * This function returns a list of recipients selected in the chooser widget.
@@ -556,7 +591,6 @@ cryptui_key_chooser_get_recipients (CryptUIKeyChooser *chooser)
 
 /**
  * cryptui_key_chooser_set_recipients:
- *
  * @chooser: the chooser to set recipients on
  * @keys: the list of recipients to mark selected
  *
@@ -593,7 +627,6 @@ cryptui_key_chooser_get_signer (CryptUIKeyChooser *chooser)
 
 /**
  * cryptui_key_chooser_set_signer:
- *
  * @chooser: the chooser to set the signer on
  * @key: the signer key to set
  *
@@ -610,7 +643,6 @@ cryptui_key_chooser_set_signer (CryptUIKeyChooser *chooser, const gchar *key)
 
 /**
  * cryptui_key_chooser_get_mode:
- *
  * @chooser: the chooser to get the mode from
  *
  * Determines the mode of the given chooser widget.
