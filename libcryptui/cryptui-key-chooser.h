@@ -83,5 +83,6 @@ const gchar*        cryptui_key_chooser_get_signer          (CryptUIKeyChooser *
 void                cryptui_key_chooser_set_signer          (CryptUIKeyChooser *chooser,
                                                              const gchar *key);
 
-CryptUIKeyChooserMode cryptui_key_chooser_get_mode          (CryptUIKeyChooser *chooser);
+CryptUIKeyChooserMode 
+                    cryptui_key_chooser_get_mode            (CryptUIKeyChooser *chooser);
 #endif /* __CRYPTUI_KEY_CHOOSER_H__ */
