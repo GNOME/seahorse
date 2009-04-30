@@ -461,6 +461,16 @@ cryptui_key_chooser_class_init (CryptUIKeyChooserClass *klass)
  * PUBLIC 
  */
 
+/**
+ * cryptui_key_chooser_new:
+ *
+ * @ckset: key set to choose keys from
+ * @mode: how to display the signer portion of the widget
+ *
+ * Creates a key chooser widget from a key set.
+ *
+ * Returns: a key shooser widget
+ */
 CryptUIKeyChooser*
 cryptui_key_chooser_new (CryptUIKeyset *ckset, CryptUIKeyChooserMode mode)
 {
@@ -469,6 +479,15 @@ cryptui_key_chooser_new (CryptUIKeyset *ckset, CryptUIKeyChooserMode mode)
     return CRYPTUI_KEY_CHOOSER (obj);
 }
 
+/**
+ * cryptui_key_chooser_have_recipients:
+ *
+ * @chooser: the chooser to check
+ *
+ * Determines if recipient keys have been selected.
+ *
+ * Returns: TRUE if recipients have been selected.
+ */
 gboolean
 cryptui_key_chooser_have_recipients (CryptUIKeyChooser *chooser)
 {
@@ -476,6 +495,15 @@ cryptui_key_chooser_have_recipients (CryptUIKeyChooser *chooser)
     return cryptui_key_list_have_selected_keys (chooser->priv->keylist);
 }
 
+/**
+ * cryptui_key_chooser_get_recipients:
+ *
+ * @chooser: the chooser to get selected recipients from
+ *
+ * This function returns a list of recipients selected in the chooser widget.
+ *
+ * Returns: the list of recipients 
+ */
 GList*
 cryptui_key_chooser_get_recipients (CryptUIKeyChooser *chooser)
 {
@@ -526,6 +554,16 @@ cryptui_key_chooser_get_recipients (CryptUIKeyChooser *chooser)
     return recipients;
 }
 
+/**
+ * cryptui_key_chooser_set_recipients:
+ *
+ * @chooser: the chooser to set recipients on
+ * @keys: the list of recipients to mark selected
+ *
+ * Marks the listed keys as selected in the chooser widget.
+ *
+ * Returns: void 
+ */
 void
 cryptui_key_chooser_set_recipients (CryptUIKeyChooser *chooser, GList *keys)
 {
@@ -533,6 +571,14 @@ cryptui_key_chooser_set_recipients (CryptUIKeyChooser *chooser, GList *keys)
     cryptui_key_list_set_selected_keys (chooser->priv->keylist, keys);
 }
 
+/**
+ * cryptui_key_chooser_get_signer:
+ * @chooser: the chooser widget to get the signer from
+ *
+ * Gets the key of the selected signer from the chooser widget.
+ *
+ * Returns: the selected signer's key
+ */
 const gchar*
 cryptui_key_chooser_get_signer (CryptUIKeyChooser *chooser)
 {
@@ -545,6 +591,16 @@ cryptui_key_chooser_get_signer (CryptUIKeyChooser *chooser)
         return NULL;
 }
 
+/**
+ * cryptui_key_chooser_set_signer:
+ *
+ * @chooser: the chooser to set the signer on
+ * @key: the signer key to set
+ *
+ * Sets the signer in the chooser to the provided key.
+ *
+ * Returns: void
+ */
 void
 cryptui_key_chooser_set_signer (CryptUIKeyChooser *chooser, const gchar *key)
 {
@@ -552,6 +608,15 @@ cryptui_key_chooser_set_signer (CryptUIKeyChooser *chooser, const gchar *key)
     cryptui_key_combo_set_key (chooser->priv->keycombo, key);
 }
 
+/**
+ * cryptui_key_chooser_get_mode:
+ *
+ * @chooser: the chooser to get the mode from
+ *
+ * Determines the mode of the given chooser widget.
+ *
+ * Returns: the chooser's mode
+ */
 CryptUIKeyChooserMode
 cryptui_key_chooser_get_mode (CryptUIKeyChooser *chooser)
 {
