@@ -52,10 +52,16 @@
   
 #include <glib/gi18n.h>
 
+static gboolean show_version = FALSE;
+
 /* Initializes context and preferences, then loads key manager */
 int
 main (int argc, char **argv)
 {
+    static GOptionEntry options[] = {
+        { "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("Version of this application"), NULL },
+        { NULL, 0, 0, 0, NULL, NULL, NULL }
+    };
     GError *error = NULL;
     int ret = 0;
 
@@ -69,9 +75,14 @@ main (int argc, char **argv)
     textdomain (GETTEXT_PACKAGE);
 #endif
 
-    if (!gtk_init_with_args (&argc, &argv, _("Encryption Key Manager"), NULL, GETTEXT_PACKAGE, &error)) {
+    if (!gtk_init_with_args (&argc, &argv, _("Encryption Key Manager"), options, GETTEXT_PACKAGE, &error)) {
         g_printerr ("seahorse: %s\n", error->message);
         g_error_free (error);
+        exit (1);
+    }
+
+    if (show_version) {
+        g_print ("%s %s\n", argv [0], VERSION);
         exit (1);
     }
 
