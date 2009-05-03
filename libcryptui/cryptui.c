@@ -115,7 +115,6 @@ cryptui_key_get_enctype (const gchar *key)
  *
  * Returns: void
  */
- 
 void
 cryptui_display_notification (const gchar *title, const gchar *body, const gchar *icon, 
                               gboolean urgent)
@@ -253,7 +252,6 @@ cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title)
 
 /**
  * cryptui_need_to_get_keys:
- * @void
  *
  * This function is called when seahorse needs to be launched to generate a
  * key or keys or import a key or keys to perform the requested operation.
