@@ -654,5 +654,3 @@ cryptui_key_chooser_get_mode (CryptUIKeyChooser *chooser)
 {
     return chooser->priv->mode;
 }
-
-
