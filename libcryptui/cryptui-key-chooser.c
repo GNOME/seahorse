@@ -537,7 +537,7 @@ cryptui_key_chooser_have_recipients (CryptUIKeyChooser *chooser)
  *
  * This function returns a list of recipients selected in the chooser widget.
  *
- * Returns: the list of recipients 
+ * Returns: the list of recipients
  */
 GList*
 cryptui_key_chooser_get_recipients (CryptUIKeyChooser *chooser)
@@ -596,7 +596,7 @@ cryptui_key_chooser_get_recipients (CryptUIKeyChooser *chooser)
  *
  * Marks the listed keys as selected in the chooser widget.
  *
- * Returns: void 
+ * Returns: void
  */
 void
 cryptui_key_chooser_set_recipients (CryptUIKeyChooser *chooser, GList *keys)
