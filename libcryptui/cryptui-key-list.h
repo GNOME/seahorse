@@ -45,20 +45,20 @@ void              cryptui_key_list_setup                (GtkTreeView *view,
                                                          CryptUIKeyStore *ckstore,
                                                          guint flags);
 
-CryptUIKeyStore*  cryptui_key_list_get_key_store        (GtkTreeView *combo);
+CryptUIKeyStore*  cryptui_key_list_get_key_store        (GtkTreeView *list);
 
-CryptUIKeyset*    cryptui_key_list_get_keyset           (GtkTreeView *combo);
+CryptUIKeyset*    cryptui_key_list_get_keyset           (GtkTreeView *list);
 
-gboolean          cryptui_key_list_have_selected_keys   (GtkTreeView *view);
+gboolean          cryptui_key_list_have_selected_keys   (GtkTreeView *list);
 
-GList*            cryptui_key_list_get_selected_keys    (GtkTreeView *view);
+GList*            cryptui_key_list_get_selected_keys    (GtkTreeView *list);
 
-void              cryptui_key_list_set_selected_keys    (GtkTreeView *view, 
+void              cryptui_key_list_set_selected_keys    (GtkTreeView *list, 
                                                          GList *keys);
 
-const gchar*      cryptui_key_list_get_selected_key     (GtkTreeView *view);
+const gchar*      cryptui_key_list_get_selected_key     (GtkTreeView *list);
 
-void              cryptui_key_list_set_selected_key     (GtkTreeView *view, 
+void              cryptui_key_list_set_selected_key     (GtkTreeView *list, 
                                                          const gchar *key);
 
 #endif /* __CRYPTUI_KEY_LIST_H__ */

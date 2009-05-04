@@ -51,9 +51,9 @@ is_row_separator (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 GtkComboBox*
 cryptui_key_combo_new (CryptUIKeyStore *ckstore)
 {
-    GtkComboBox *combo = g_object_new (GTK_TYPE_COMBO_BOX, "model", ckstore, NULL);
-    cryptui_key_combo_setup (combo, ckstore);
-    return combo;
+    GtkComboBox *ckcombo = g_object_new (GTK_TYPE_COMBO_BOX, "model", ckstore, NULL);
+    cryptui_key_combo_setup (ckcombo, ckstore);
+    return ckcombo;
 }
 
 /**
@@ -83,48 +83,48 @@ cryptui_key_combo_setup (GtkComboBox *combo, CryptUIKeyStore *ckstore)
 
 /**
  * cryptui_key_combo_get_key_store:
- * @combo: a CryptUICombo
+ * @ckcombo: a CryptUICombo
  *
  * Gets the key store from a CryptUiCombo
  *
  * Returns: the key store
  */
 CryptUIKeyStore*
-cryptui_key_combo_get_key_store (GtkComboBox *combo)
+cryptui_key_combo_get_key_store (GtkComboBox *ckcombo)
 {
-    GtkTreeModel *model = gtk_combo_box_get_model (combo);
+    GtkTreeModel *model = gtk_combo_box_get_model (ckcombo);
     g_return_val_if_fail (CRYPTUI_KEY_STORE (model), NULL);
     return CRYPTUI_KEY_STORE (model);
 }
 
 /**
  * cryptui_key_combo_get_keyset:
- * @combo: a CryptUICombo
+ * @ckcombo: a CryptUICombo
  *
  * Gets the keyset stored in the combo's key store.
  *
  * Returns: a CryptuiKeyset
  */
 CryptUIKeyset*
-cryptui_key_combo_get_keyset (GtkComboBox *combo)
+cryptui_key_combo_get_keyset (GtkComboBox *ckcombo)
 {
-    CryptUIKeyStore *ckstore = cryptui_key_combo_get_key_store (combo);
+    CryptUIKeyStore *ckstore = cryptui_key_combo_get_key_store (ckcombo);
     return ckstore ? cryptui_key_store_get_keyset (ckstore) : NULL;
 }
 
 /**
  * cryptui_key_combo_set_key:
- * @combo: a CryptUICombo
+ * @ckcombo: a CryptUICombo
  * @key: a CryptUI Key
  *
- * Sets the combo's current selection to the indicated key
+ * Sets the combo's selection to the indicated key
  *
  * Returns: void
  */
 void
-cryptui_key_combo_set_key (GtkComboBox *combo, const gchar *key)
+cryptui_key_combo_set_key (GtkComboBox *ckcombo, const gchar *key)
 {
-    GtkTreeModel *model = gtk_combo_box_get_model (combo);
+    GtkTreeModel *model = gtk_combo_box_get_model (ckcombo);
     CryptUIKeyStore *ckstore;
     GtkTreeIter iter;
 
@@ -132,28 +132,28 @@ cryptui_key_combo_set_key (GtkComboBox *combo, const gchar *key)
     ckstore = CRYPTUI_KEY_STORE (model);
 
     if (cryptui_key_store_get_iter_from_key (ckstore, key, &iter))
-        gtk_combo_box_set_active_iter (combo, &iter);
+        gtk_combo_box_set_active_iter (ckcombo, &iter);
 }
 
 /**
  * cryptui_key_combo_get_key:
- * @combo: a CryptUICombo
+ * @ckcombo: a CryptUICombo
  *
- * Gets the currently selected key from the combo
+ * Gets the first selected key from the combo
  *
- * Returns: the currently selected key
+ * Returns: the first selected key
  */
 const gchar*
-cryptui_key_combo_get_key (GtkComboBox *combo)
+cryptui_key_combo_get_key (GtkComboBox *ckcombo)
 {
-    GtkTreeModel *model = gtk_combo_box_get_model (combo);
+    GtkTreeModel *model = gtk_combo_box_get_model (ckcombo);
     CryptUIKeyStore *ckstore;
     GtkTreeIter iter;
 
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (model), NULL);
     ckstore = CRYPTUI_KEY_STORE (model);
 
-    if (gtk_combo_box_get_active_iter (combo, &iter))
+    if (gtk_combo_box_get_active_iter (ckcombo, &iter))
         return cryptui_key_store_get_key_from_iter (ckstore, &iter);
 
     return NULL;

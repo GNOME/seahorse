@@ -38,11 +38,11 @@ GtkComboBox*      cryptui_key_combo_new             (CryptUIKeyStore *ckstore);
 void              cryptui_key_combo_setup           (GtkComboBox *combo,
                                                      CryptUIKeyStore *ckstore);
                                                      
-CryptUIKeyStore*  cryptui_key_combo_get_key_store   (GtkComboBox *combo);
+CryptUIKeyStore*  cryptui_key_combo_get_key_store   (GtkComboBox *ckcombo);
 
-CryptUIKeyset*    cryptui_key_combo_get_keyset      (GtkComboBox *combo);
+CryptUIKeyset*    cryptui_key_combo_get_keyset      (GtkComboBox *ckcombo);
 
-void              cryptui_key_combo_set_key         (GtkComboBox *combo,
+void              cryptui_key_combo_set_key         (GtkComboBox *ckcombo,
                                                      const gchar *key);
 
 const gchar*      cryptui_key_combo_get_key         (GtkComboBox *ckcombo);

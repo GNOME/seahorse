@@ -75,14 +75,35 @@ row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *arg2
  * PUBLIC
  */
 
+/**
+ * cryptui_key_list_new:
+ * @ckstore: a CryptUIKeyStore containing keys to list
+ * @flags: CryptUIKeyFlags indicating which keys from the store to list
+ *
+ * Creates a new key list widget displaying keys from the key store that match
+ * the given flags.
+ *
+ * Returns: the new key list widget
+ */
 GtkTreeView*      
 cryptui_key_list_new (CryptUIKeyStore *ckstore, guint flags)
 {
-    GtkTreeView *view = GTK_TREE_VIEW (gtk_tree_view_new ());
-    cryptui_key_list_setup (view, ckstore, flags);
-    return view;
+    GtkTreeView *list = GTK_TREE_VIEW (gtk_tree_view_new ());
+    cryptui_key_list_setup (list, ckstore, flags);
+    return list;
 }
 
+/**
+ * cryptui_key_list_setup:
+ * @view: an existing tree view to be turned into a CryptUIKeyList
+ * @ckstore: a CryptUIKeyStore containing keys to list
+ * @flags: CryptUIKeyFlags indicating which keys from the store to list
+ *
+ * Changes an existing GtkTreeView into a CryptUIKeyList using the key store
+ * as the model and the filters the view based on the given flags.
+ *
+ * Returns: void
+ */
 void
 cryptui_key_list_setup (GtkTreeView *view, CryptUIKeyStore *ckstore,
                         guint flags)
@@ -135,6 +156,14 @@ cryptui_key_list_setup (GtkTreeView *view, CryptUIKeyStore *ckstore,
     gtk_widget_set_size_request (GTK_WIDGET (view), 500, 250);
 }
 
+/**
+ * cryptui_key_list_get_key_store:
+ * @list: a CryptUIKeyList
+ *
+ * Gets the CryptuiKeyStore used as a model by the CryptuiKeyList
+ *
+ * Returns: a CryptUIKeyList
+ */
 CryptUIKeyStore*
 cryptui_key_list_get_key_store (GtkTreeView *list)
 {
@@ -143,6 +172,14 @@ cryptui_key_list_get_key_store (GtkTreeView *list)
     return CRYPTUI_KEY_STORE (model);
 }
 
+/**
+ * cryptui_key_list_get_keyset:
+ * @list: a CryptUIKeyList
+ *
+ * Gets the keyset from the key store set as the model in the list
+ *
+ * Returns: a CryptUIKeyset
+ */
 CryptUIKeyset* 
 cryptui_key_list_get_keyset (GtkTreeView *list)
 {
@@ -150,57 +187,97 @@ cryptui_key_list_get_keyset (GtkTreeView *list)
     return ckstore ? cryptui_key_store_get_keyset (ckstore) : NULL;
 }
 
+/**
+ * cryptui_key_list_have_selected_keys:
+ * @list: a CryptUIKeyList
+ *
+ * Used to determine if any keys have been selected
+ *
+ * Returns: TRUE if keys have been selected, FALSE otherwise
+ */
 gboolean          
-cryptui_key_list_have_selected_keys (GtkTreeView *view)
+cryptui_key_list_have_selected_keys (GtkTreeView *list)
 {
     GtkTreeModel *model;
     
-    model = gtk_tree_view_get_model (view);
+    model = gtk_tree_view_get_model (list);
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (model), FALSE);
     
-    return cryptui_key_store_have_selected_keys (CRYPTUI_KEY_STORE (model), view);
+    return cryptui_key_store_have_selected_keys (CRYPTUI_KEY_STORE (model), list);
 }
 
+/**
+ * cryptui_key_list_get_selected_keys:
+ * @list: a CryptUIKeyList
+ *
+ * Gets the kyes selected in the list
+ *
+ * Returns: a list of selected keys 
+ */
 GList*
-cryptui_key_list_get_selected_keys (GtkTreeView *view)
+cryptui_key_list_get_selected_keys (GtkTreeView *list)
 {
     GtkTreeModel *model;
     
-    model = gtk_tree_view_get_model (view);
+    model = gtk_tree_view_get_model (list);
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (model), NULL);
     
-    return cryptui_key_store_get_selected_keys (CRYPTUI_KEY_STORE (model), view);
+    return cryptui_key_store_get_selected_keys (CRYPTUI_KEY_STORE (model), list);
 }
 
+/**
+ * cryptui_key_list_set_selected_keys:
+ * @list: a CryptUIKeyList
+ * @keys: a list of CryptUI keys
+ *
+ * Selects the given list of keys in the list
+ *
+ * Returns: void
+ */
 void
-cryptui_key_list_set_selected_keys (GtkTreeView *view, GList *keys)
+cryptui_key_list_set_selected_keys (GtkTreeView *list, GList *keys)
 {
     GtkTreeModel *model;
     
-    model = gtk_tree_view_get_model (view);
+    model = gtk_tree_view_get_model (list);
     g_return_if_fail (CRYPTUI_IS_KEY_STORE (model));
     
-    cryptui_key_store_set_selected_keys (CRYPTUI_KEY_STORE (model), view, keys);
+    cryptui_key_store_set_selected_keys (CRYPTUI_KEY_STORE (model), list, keys);
 }
 
+/**
+ * cryptui_key_list_get_selected_key:
+ * @list: a CryptUIKeyList
+ *
+ * Returns: the selected key
+ */
 const gchar*
-cryptui_key_list_get_selected_key (GtkTreeView *view)
+cryptui_key_list_get_selected_key (GtkTreeView *list)
 {
     GtkTreeModel *model;
     
-    model = gtk_tree_view_get_model (view);
+    model = gtk_tree_view_get_model (list);
     g_return_val_if_fail (CRYPTUI_IS_KEY_STORE (model), NULL);
     
-    return cryptui_key_store_get_selected_key (CRYPTUI_KEY_STORE (model), view);
+    return cryptui_key_store_get_selected_key (CRYPTUI_KEY_STORE (model), list);
 }
 
+/**
+ * cryptui_key_list_set_selected_key:
+ * @list: a CryptUIKeyList
+ * @key: the key to set
+ *
+ * Selects the given key in the list widget
+ *
+ * Returns: void
+ */
 void
-cryptui_key_list_set_selected_key (GtkTreeView *view, const gchar *key)
+cryptui_key_list_set_selected_key (GtkTreeView *list, const gchar *key)
 {
     GtkTreeModel *model;
     
-    model = gtk_tree_view_get_model (view);
+    model = gtk_tree_view_get_model (list);
     g_return_if_fail (CRYPTUI_IS_KEY_STORE (model));
     
-    cryptui_key_store_set_selected_key (CRYPTUI_KEY_STORE (model), view, key);
+    cryptui_key_store_set_selected_key (CRYPTUI_KEY_STORE (model), list, key);
 }
