@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&component=general\n"
-"POT-Creation-Date: 2009-04-18 03:38+0000\n"
-"PO-Revision-Date: 2009-04-12 16:36+0200\n"
+"POT-Creation-Date: 2009-05-03 20:10+0000\n"
+"PO-Revision-Date: 2009-05-04 14:16+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -688,7 +688,7 @@ msgstr "Borrando depósito de claves…"
 msgid "Listing password keyrings"
 msgstr "Listando contraseñas"
 
-#: ../libcryptui/cryptui.c:270
+#: ../libcryptui/cryptui.c:268
 msgid ""
 "No encryption keys were found with which to perform the operation you "
 "requested.  The program <b>Passwords and Encryption Keys</b> will now be "
@@ -1172,7 +1172,7 @@ msgstr "Ninguno: no publicar claves"
 
 #: ../libseahorse/seahorse-prefs.glade.h:1
 msgid "Automatically retrieve keys from _key servers"
-msgstr "Obtener automáticamente las claves de los servidores de _claves"
+msgstr "Obtener _automáticamente las claves de los servidores de claves"
 
 #: ../libseahorse/seahorse-prefs.glade.h:2
 msgid "Automatically synchronize _modified keys with key servers"
@@ -1217,7 +1217,7 @@ msgstr "_Publicar claves en:"
 
 #: ../libseahorse/seahorse-prefs.glade.h:11
 msgid "_Share my keys with others on my network"
-msgstr "_Compartir mis claves con otros en mi red"
+msgstr "Co_mpartir mis claves con otros en mi red"
 
 #: ../libseahorse/seahorse-progress.glade.h:1
 msgid "Progress Title"
@@ -1889,7 +1889,7 @@ msgstr "No se pudo borrar la subclave"
 msgid "Unable to change trust"
 msgstr "Imposible cambiar la confianza"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1056 ../src/seahorse-viewer.c:312
+#: ../pgp/seahorse-pgp-key-properties.c:1056 ../src/seahorse-viewer.c:315
 #: ../ssh/seahorse-ssh-key-properties.c:167
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2397,11 +2397,11 @@ msgstr[0] "%d clave seleccionada"
 msgstr[1] "%d claves seleccionadas"
 
 #: ../src/seahorse-key-manager.c:430 ../src/seahorse-key-manager.c:490
-#: ../src/seahorse-key-manager.c:553 ../src/seahorse-keyserver-results.c:194
+#: ../src/seahorse-key-manager.c:553 ../src/seahorse-viewer.c:488
 msgid "Couldn't import keys"
 msgstr "No se pudieron importar las claves"
 
-#: ../src/seahorse-key-manager.c:435 ../src/seahorse-keyserver-results.c:199
+#: ../src/seahorse-key-manager.c:435 ../src/seahorse-viewer.c:493
 msgid "Imported keys"
 msgstr "Claves importadas"
 
@@ -2417,7 +2417,7 @@ msgstr "Importar clave"
 msgid "Unrecognized key type, or invalid data format"
 msgstr "Tipo de clave no reconocido, o formato de datos inválido"
 
-#: ../src/seahorse-key-manager.c:747 ../src/seahorse-keyserver-results.c:245
+#: ../src/seahorse-key-manager.c:747 ../src/seahorse-keyserver-results.c:207
 msgid "_Remote"
 msgstr "_Remota"
 
@@ -2445,11 +2445,11 @@ msgstr "Importar desde un archivo"
 msgid "Import from the clipboard"
 msgstr "Importar desde el portapapeles"
 
-#: ../src/seahorse-key-manager.c:760 ../src/seahorse-keyserver-results.c:255
+#: ../src/seahorse-key-manager.c:760 ../src/seahorse-keyserver-results.c:217
 msgid "_Find Remote Keys..."
 msgstr "_Buscar claves remotas…"
 
-#: ../src/seahorse-key-manager.c:761 ../src/seahorse-keyserver-results.c:256
+#: ../src/seahorse-key-manager.c:761 ../src/seahorse-keyserver-results.c:218
 msgid "Search for keys on a key server"
 msgstr "Buscar claves en un servidor de claves"
 
@@ -2463,7 +2463,7 @@ msgstr "Publicar y/o sincronizar sus claves con las que estén en línea."
 
 #: ../src/seahorse-key-manager.c:768
 msgid "T_ypes"
-msgstr "T_ipos"
+msgstr "_Tipos"
 
 #: ../src/seahorse-key-manager.c:768
 msgid "Show type column"
@@ -2511,7 +2511,7 @@ msgstr "Importar claves existentes desde el archivo:"
 
 #: ../src/seahorse-key-manager.glade.h:4
 msgid "My _Personal Keys"
-msgstr "Mis claves _personales"
+msgstr "_Mis claves personales"
 
 #: ../src/seahorse-key-manager.glade.h:5
 msgid "Other _Collected Keys"
@@ -2521,20 +2521,19 @@ msgstr "Otras claves _reunidas"
 msgid "To get started with encryption you will need keys."
 msgstr "Para cifrar necesitará claves."
 
-#: ../src/seahorse-key-manager.glade.h:7
-#: ../src/seahorse-keyserver-results.c:260
+#: ../src/seahorse-key-manager.glade.h:7 ../src/seahorse-viewer.c:552
 msgid "_Import"
 msgstr "_Importar"
 
 #: ../src/seahorse-key-manager.glade.h:8
 msgid "_Passwords"
-msgstr "_Contraseñas"
+msgstr "Contrase_ñas"
 
 #: ../src/seahorse-key-manager.glade.h:9
 msgid "_Trusted Keys"
 msgstr "_Claves confiadas"
 
-#: ../src/seahorse-key-manager-store.c:648 ../src/seahorse-viewer.c:279
+#: ../src/seahorse-key-manager-store.c:648 ../src/seahorse-viewer.c:282
 msgid "Couldn't export keys"
 msgstr "No se pudo exportar las claves"
 
@@ -2547,39 +2546,31 @@ msgstr "Validez"
 msgid "Expiration Date"
 msgstr "Fecha de caducidad"
 
-#: ../src/seahorse-keyserver-results.c:218
-msgid "Importing keys from key servers"
-msgstr "Importando claves desde servidores de claves"
-
-#: ../src/seahorse-keyserver-results.c:247
+#: ../src/seahorse-keyserver-results.c:209
 msgid "Close this window"
 msgstr "Cerrar esta ventana"
 
-#: ../src/seahorse-keyserver-results.c:248
+#: ../src/seahorse-keyserver-results.c:210
 msgid "_Expand All"
 msgstr "_Expandir todo"
 
-#: ../src/seahorse-keyserver-results.c:249
+#: ../src/seahorse-keyserver-results.c:211
 msgid "Expand all listings"
 msgstr "Expandir todos los listados"
 
-#: ../src/seahorse-keyserver-results.c:250
+#: ../src/seahorse-keyserver-results.c:212
 msgid "_Collapse All"
 msgstr "_Contraer todo"
 
-#: ../src/seahorse-keyserver-results.c:251
+#: ../src/seahorse-keyserver-results.c:213
 msgid "Collapse all listings"
 msgstr "Contraer todos los listados"
 
-#: ../src/seahorse-keyserver-results.c:261
-msgid "Import selected keys to local key ring"
-msgstr "Importar las claves seleccionadas en el depósito local"
-
-#: ../src/seahorse-keyserver-results.c:318
+#: ../src/seahorse-keyserver-results.c:275
 msgid "Remote Keys"
 msgstr "Claves remotas"
 
-#: ../src/seahorse-keyserver-results.c:320
+#: ../src/seahorse-keyserver-results.c:277
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Claves remotas que contengan «%s»"
@@ -2677,15 +2668,19 @@ msgstr "Servidores de _claves"
 msgid "_Sync"
 msgstr "_Sincronizar"
 
-#: ../src/seahorse-main.c:72 ../src/seahorse-viewer.c:167
+#: ../src/seahorse-main.c:62
+msgid "Version of this application"
+msgstr "Versión de esta aplicación"
+
+#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:170
 msgid "Encryption Key Manager"
 msgstr "Administrador de claves de cifrado"
 
-#: ../src/seahorse-viewer.c:138
+#: ../src/seahorse-viewer.c:141
 msgid "Contributions:"
 msgstr "Contribuciones:"
 
-#: ../src/seahorse-viewer.c:169
+#: ../src/seahorse-viewer.c:172
 msgid "translator-credits"
 msgstr ""
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2009\n"
@@ -2693,82 +2688,82 @@ msgstr ""
 "Germán Poo-Caamaño <gpoo@ubiobio.cl>, 2003\n"
 "José Carlos García Sogo <jsogo@debian.org>, 2002, 2003"
 
-#: ../src/seahorse-viewer.c:172
+#: ../src/seahorse-viewer.c:175
 msgid "Seahorse Project Homepage"
 msgstr "Página web de Seahorse"
 
 #. Top menu items
-#: ../src/seahorse-viewer.c:191
+#: ../src/seahorse-viewer.c:194
 msgid "_File"
-msgstr "Filtro:"
+msgstr "_Archivo"
 
-#: ../src/seahorse-viewer.c:192
+#: ../src/seahorse-viewer.c:195
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/seahorse-viewer.c:193
+#: ../src/seahorse-viewer.c:196
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/seahorse-viewer.c:194
+#: ../src/seahorse-viewer.c:197
 msgid "_Help"
 msgstr "Ay_uda"
 
-#: ../src/seahorse-viewer.c:196
+#: ../src/seahorse-viewer.c:199
 msgid "Prefere_nces"
 msgstr "Prefere_ncias"
 
-#: ../src/seahorse-viewer.c:197
+#: ../src/seahorse-viewer.c:200
 msgid "Change preferences for this program"
 msgstr "Cambia las preferencias de este programa"
 
-#: ../src/seahorse-viewer.c:200
+#: ../src/seahorse-viewer.c:203
 msgid "About this program"
 msgstr "Acerca de este programa"
 
-#: ../src/seahorse-viewer.c:201
+#: ../src/seahorse-viewer.c:204
 msgid "_Contents"
 msgstr "Índ_ice"
 
-#: ../src/seahorse-viewer.c:202
+#: ../src/seahorse-viewer.c:205
 msgid "Show Seahorse help"
 msgstr "Mostrar ayuda de seahorse"
 
-#: ../src/seahorse-viewer.c:299
+#: ../src/seahorse-viewer.c:302
 msgid "Export public key"
 msgstr "Exportar clave pública"
 
-#: ../src/seahorse-viewer.c:317
+#: ../src/seahorse-viewer.c:320
 msgid "Exporting keys"
 msgstr "Exportando claves"
 
-#: ../src/seahorse-viewer.c:342
+#: ../src/seahorse-viewer.c:345
 msgid "Couldn't retrieve data from key server"
 msgstr "No se puede obtener los datos del servidor de claves"
 
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:361
+#: ../src/seahorse-viewer.c:364
 msgid "Copied keys"
 msgstr "Claves copiadas"
 
-#: ../src/seahorse-viewer.c:381
+#: ../src/seahorse-viewer.c:384
 msgid "Retrieving keys"
 msgstr "Obteniendo claves"
 
-#: ../src/seahorse-viewer.c:396
+#: ../src/seahorse-viewer.c:399
 msgid "Couldn't delete."
 msgstr "No se pudo borrar."
 
-#: ../src/seahorse-viewer.c:430
+#: ../src/seahorse-viewer.c:433
 msgid "Deleting..."
 msgstr "Borrando…"
 
-#: ../src/seahorse-viewer.c:459
+#: ../src/seahorse-viewer.c:462
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s es una clave privada. ¿Seguro que quiere continuar?"
 
-#: ../src/seahorse-viewer.c:462
+#: ../src/seahorse-viewer.c:465
 msgid ""
 "One or more of the deleted keys are private keys. Are you sure you want to "
 "proceed?"
@@ -2776,30 +2771,38 @@ msgstr ""
 "Una o más de las claves borradas son claves privadas. ¿Está seguro que "
 "quiere continuar?"
 
-#: ../src/seahorse-viewer.c:496
+#: ../src/seahorse-viewer.c:513
+msgid "Importing keys from key servers"
+msgstr "Importando claves desde servidores de claves"
+
+#: ../src/seahorse-viewer.c:539
 msgid "Show properties"
 msgstr "Mostrar propiedades de la clave"
 
-#: ../src/seahorse-viewer.c:497
+#: ../src/seahorse-viewer.c:540
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "_Borrar"
 
-#: ../src/seahorse-viewer.c:498
+#: ../src/seahorse-viewer.c:541
 msgid "Delete selected items"
 msgstr "Borrar las claves seleccionadas"
 
-#: ../src/seahorse-viewer.c:502
+#: ../src/seahorse-viewer.c:545
 msgid "E_xport..."
-msgstr "_Importar…"
+msgstr "E_xportar…"
 
-#: ../src/seahorse-viewer.c:503
+#: ../src/seahorse-viewer.c:546
 msgid "Export to a file"
 msgstr "Exportar parte de la clave pública a un archivo"
 
-#: ../src/seahorse-viewer.c:505
+#: ../src/seahorse-viewer.c:548
 msgid "Copy to the clipboard"
 msgstr "Importar claves desde el portapapeles"
+
+#: ../src/seahorse-viewer.c:553
+msgid "Import selected keys to local key ring"
+msgstr "Importar las claves seleccionadas en el depósito local"
 
 #: ../ssh/seahorse-ssh-askpass.c:99
 msgid "Enter your Secure Shell passphrase:"
