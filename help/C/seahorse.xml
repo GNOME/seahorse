@@ -2,7 +2,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 	<!ENTITY legal SYSTEM "legal.xml">
-	<!ENTITY appversion "2.24.x">
+	<!ENTITY appversion "2.28.x">
 	<!ENTITY manrevision "3.1">
 	<!ENTITY date "July 2005">
 	<!ENTITY app "Passwords and Encryption Keys">
@@ -15,7 +15,7 @@
 	<articleinfo>
 		<title>&app; Manual</title>
 		<copyright>
-			<year>2005, 2006, 2007, 2008</year>
+			<year>2005, 2006, 2007, 2008, 2009</year>
 			<holder>Jacob Perkins and Adam Schreiber</holder>
 		</copyright>
 		<publisher role="maintainer">
@@ -46,11 +46,36 @@
 					</address>
 				</affiliation>
 			</author>
+			<author>
+				<firstname>Paul</firstname>
+				<surname>Cutler</surname>
+				<affiliation>
+					<orgname>GNOME Documentation Project</orgname>
+					<address>
+						<email>pcutler@foresightlinux.org</email>
+					</address>
+				</affiliation>
+			</author>
 		</authorgroup>
+		<releaseinfo revision="2.28" role="draft">
+		</releaseinfo>
 		<publisher role="maintainer">
 			<publishername>Seahorse Project</publishername>
 		</publisher>
+		<publisher role="maintainer">
+			<publishername>GNOME Documentation Project</publishername>
+		</publisher>
 		<revhistory>
+			<revision>
+				<revnumber>&app; Manual V2.11.0</revnumber>
+				<date>May 2009</date>
+				<revdescription>
+					<para role="author">
+						Paul Cutler
+						<email>pcutler@foresightlinux.org</email>
+					</para>
+				</revdescription>	
+			</revision>
 			<revision>
 				<revnumber>&app; Manual V0.10.1</revnumber>
 				<date>August 2008</date>
@@ -122,6 +147,8 @@
 	<indexterm zone="index">
 		<primary>Encryption Keys</primary>
 	</indexterm>
+	
+	<!-- ============= Introduction ============================== -->
 
   <sect1 id="introduction">
     <title>Introduction</title>
@@ -153,6 +180,8 @@
 			</para>
 	</sect1>
 
+	<!-- ============= Getting Started ============================== -->
+	  
 	<sect1 id="seahorse-getting-started">
 		<title>Getting Started</title>
 		<sect2 id="seahorse-start">
@@ -167,7 +196,7 @@
 					<listitem>
 						<para>Choose
 						<menuchoice>
-							<guimenu>Other</guimenu>
+							<guimenu>Accessories</guimenu>
 							<guimenuitem>Password and Encryption Keys</guimenuitem>
 						</menuchoice>.</para>
 					</listitem>
@@ -245,6 +274,8 @@
 	    </variablelist>
 	</sect2>
     </sect1>
+	
+	<!-- ============= Creating OpenPGP Keys ============================== -->	
 
   <sect1 id="pgp-generate">
     <title>Creating OpenPGP Keys</title>
@@ -264,7 +295,7 @@
       <orderedlist>
 	<listitem>
 	  <para>
-	    Choose <menuchoice><guimenu>Key</guimenu><guimenuitem>Create New Key</guimenuitem></menuchoice>
+	    Choose <menuchoice><guimenu>File</guimenu><guimenuitem>New...</guimenuitem></menuchoice>
 	  </para>
 	</listitem>
 	<listitem>
@@ -376,6 +407,7 @@
     </sect2>
   </sect1>
 	
+	<!-- ============= Creating SSH Keys ============================== -->	
 	
 	<sect1 id="ssh-generate">
 	<title>Creating Secure Shell Keys</title>
@@ -395,7 +427,7 @@
     </para>
     <orderedlist>
       <listitem>
-        <para>Choose <menuchoice><guimenu>Key</guimenu><guimenuitem>Create New Key</guimenuitem></menuchoice></para>
+        <para>Choose <menuchoice><guimenu>File</guimenu><guimenuitem>New...</guimenuitem></menuchoice></para>
       </listitem>
       <listitem>
         <para>Select <guilabel>Secure Shell Key</guilabel> and click <guibutton>Continue</guibutton></para>
@@ -483,7 +515,7 @@
 		</sect2>
 	</sect1>
 	
-	
+	<!-- ============= OpenPGP Key Properties ============================== -->	
 
 	<sect1 id="seahorse-key-properties">
 		<title>OpenPGP Key Properties</title>
@@ -794,6 +826,8 @@
 			</note> 
 		</sect2>
 	</sect1>
+	
+	<!-- ============= OpenPGP Properties ============================== -->	
 		
 	<sect1 id="subkey-properties">
 		<title>OpenPGP Subkey Properties</title>
@@ -1042,6 +1076,8 @@
 		</sect2>
 	</sect1>
 
+	<!-- ============= SSH Key Properties ============================== -->
+
 	<sect1 id="ssh-key-properties">
 	    <title>Secure Shell Key Properties</title>
 	    <para>
@@ -1145,13 +1181,15 @@
 		</para>
 	</sect2>
 	</sect1>
+	
+	<!-- ============= Importing Keys ============================== -->	
 
         <sect1 id="import">
 		<title>Importing Keys</title>
 		<para>
 			To import keys choose
 			<menuchoice>
-				<guimenu>Key</guimenu>
+				<guimenu>File</guimenu>
 				<guimenuitem>Import</guimenuitem>
 			</menuchoice> and select, from the file chooser, a file containing at least one ASCII armored public key. 
 		</para>
@@ -1180,6 +1218,8 @@
 		</itemizedlist>
 		</para>
 	</sect1>
+	
+	<!-- ============= Exporting Keys ============================== -->	
 
 	<sect1 id="export">
 		<title>Exporting Keys</title>
@@ -1187,7 +1227,7 @@
 			To export keys, select the keys in the main window 
 			and choose
 			<menuchoice>
-				<guimenu>Key</guimenu>
+				<guimenu>File</guimenu>
 				<guimenuitem>Export</guimenuitem>
 			</menuchoice>. 
 		</para>
@@ -1212,6 +1252,8 @@
 		</itemizedlist>
 		</para>
 	</sect1>
+	
+	<!-- ============= Backing up Keyrings ============================== -->	
 
 	<sect1 id="backup">
 		<title>Backing up Keyrings</title>
@@ -1222,7 +1264,7 @@
 				<para> 
 					Choose
 					<menuchoice>
-						<guimenu>Key</guimenu>
+						<guimenu>File</guimenu>
 						<guimenuitem>Back up Keyrings</guimenuitem>
 					</menuchoice>,
 				</para>
@@ -1243,6 +1285,8 @@
 			</note>
 		</para>
 	</sect1>
+	
+	<!-- ============= Signing a Key ============================== -->	
 
 	<sect1 id="sign">
 		<title>Signing a Key</title>
@@ -1265,7 +1309,7 @@
 				<para>
 					Choose <guibutton>Sign</guibutton> from the toolbar 
 					or <menuchoice>
-						<guimenu>Key</guimenu>
+						<guimenu>File</guimenu>
 						<guimenuitem>Sign</guimenuitem>
 					</menuchoice>,
 				</para>
@@ -1289,6 +1333,8 @@
 			</itemizedlist>		
 		</para>
 	</sect1>
+	
+	<!-- ============= Preferences ============================== -->	
   
   <sect1 id="prefs">
     <title>Preferences</title>
@@ -1327,7 +1373,7 @@
         	<sect3>
         	    <title>Removing Keyrings</title>
         	    <para>
-        	        To remove a keyring, , first select the appropriate keyring and then 
+        	        To remove a keyring, first select the appropriate keyring and then 
             	  press <guibutton>Remove Keyring</guibutton> button.
         	    </para>
         	</sect3>
@@ -1379,6 +1425,8 @@
 	</para>
       </sect2>
   </sect1>
+  
+	<!-- ============= About ============================== -->  
       
     <sect1 id="about">
     <title>About &app;</title>
