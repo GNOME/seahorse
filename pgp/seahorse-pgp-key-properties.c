@@ -1339,7 +1339,7 @@ do_details (SeahorseWidget *swidget)
     widget = glade_xml_get_widget (swidget->xml, "details-trust-combobox");
     
     if (widget) {
-        gtk_widget_set_sensitive (widget, seahorse_object_get_flags (object) & SEAHORSE_FLAG_DISABLED);
+        gtk_widget_set_sensitive (widget, !(seahorse_object_get_flags (object) & SEAHORSE_FLAG_DISABLED));
         model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
         
         valid = gtk_tree_model_get_iter_first (model, &iter);
