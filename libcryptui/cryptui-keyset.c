@@ -374,6 +374,15 @@ cryptui_keyset_class_init (CryptUIKeysetClass *klass)
  * PUBLIC 
  */
 
+/**
+ * cryptui_keyset_new:
+ * @keytype: libcryptui key prefix
+ * @expand_keys: whether key's non-primary uids are part of the set
+ *
+ * Creates a new keylist
+ *
+ * Returns: the new keyset
+ */
 CryptUIKeyset*
 cryptui_keyset_new (const gchar *keytype, gboolean expand_keys)
 {
@@ -381,12 +390,28 @@ cryptui_keyset_new (const gchar *keytype, gboolean expand_keys)
                          "expand-keys", expand_keys, NULL);
 }
 
+/**
+ * cryptui_keyset_get_keytype:
+ * @keyset: a libcryptui keyset
+ *
+ * Gets the libcryptui key prefix for the keyset
+ *
+ * Returns: a libcryptui key prefix
+ */
 const gchar*
 cryptui_keyset_get_keytype (CryptUIKeyset *keyset)
 {
     return keyset->priv->keytype;
 }
 
+/**
+ * cryptui_keyset_get_keys:
+ * @keyset: a libcryptui keyset
+ *
+ * Gets a list of keys contained in the key set
+ *
+ * Returns: a doubly linked list of keys
+ */
 GList*             
 cryptui_keyset_get_keys (CryptUIKeyset *keyset)
 {
@@ -395,12 +420,28 @@ cryptui_keyset_get_keys (CryptUIKeyset *keyset)
     return keys;
 }
 
+/**
+ * cryptui_keyset_get_count:
+ * @keyset: a libcryptui keyset
+ *
+ * Gets the number of keys stored in the keyset
+ *
+ * Returns: the number of keys
+ */
 guint
 cryptui_keyset_get_count (CryptUIKeyset *keyset)
 {
     return g_hash_table_size (keyset->priv->keys);
 }
 
+/**
+ * cryptui_keyset_refresh:
+ * @keyset: a libcryptui keyset
+ *
+ * Checks the remote keyset to see which keys have been added or removed
+ *
+ * Returns: void
+ */
 void
 cryptui_keyset_refresh (CryptUIKeyset *keyset)
 {
@@ -440,6 +481,15 @@ finally:
     g_strfreev (keys);
 }
 
+/**
+ * cryptui_keyset_get_closure:
+ * @keyset: a libcryptui keyset
+ * @key: a libcryptui key
+ *
+ * TODO: Find out what closure is and document this function
+ *
+ * Returns: closure associated with key
+ */
 gpointer
 cryptui_keyset_get_closure (CryptUIKeyset *keyset, const gchar *key)
 {
@@ -453,6 +503,16 @@ cryptui_keyset_get_closure (CryptUIKeyset *keyset, const gchar *key)
     return closure;
 }
 
+/**
+ * cryptui_keyset_set_closure:
+ * @keyset: a libcryptui keyset
+ * @key: a libcryptui key
+ * @closure: TODO
+ *
+ * TODO: Find out what closure is and document this function
+ *
+ * Returns: void
+ */
 void
 cryptui_keyset_set_closure (CryptUIKeyset *keyset, const gchar *key, 
                              gpointer closure)
@@ -467,6 +527,14 @@ cryptui_keyset_set_closure (CryptUIKeyset *keyset, const gchar *key,
     g_hash_table_insert (keyset->priv->keys, g_strdup (key), closure);    
 }
 
+/**
+ * cryptui_keyset_get_expand_keys:
+ * @keyset: a libcryptui keyset
+ *
+ * Gets whether or not non-primary key UIDs are included in the keyset
+ *
+ * Returns: TRUE if non-primary key UIDs are included in the keyset
+ */
 gboolean
 cryptui_keyset_get_expand_keys (CryptUIKeyset *keyset)
 {
@@ -475,12 +543,31 @@ cryptui_keyset_get_expand_keys (CryptUIKeyset *keyset)
     return expand;
 }
 
+/**
+ * cryptui_keyset_set_expand_keys:
+ * @keyset: a libcryptui keyset
+ * @expand_keys:
+ *
+ * Sets whether or not non-primary key UIDs are included in the keyset
+ *
+ * Returns: void
+ */
 void
 cryptui_keyset_set_expand_keys (CryptUIKeyset *keyset, gboolean expand_keys)
 {
     g_object_set(keyset, "expand-keys", expand_keys, NULL);
 }
 
+/**
+ * cryptui_keyset_cache_key:
+ * @keyset: a libcryptui keyset
+ * @key: libcryptui key to cache
+ *
+ * Stores the key's fields returned by the DBus method GetKeyFields in the
+ * keyset.
+ *
+ * Returns: void
+ */
 void
 cryptui_keyset_cache_key (CryptUIKeyset *keyset, const gchar *key)
 {
@@ -506,6 +593,16 @@ cryptui_keyset_cache_key (CryptUIKeyset *keyset, const gchar *key)
         g_hash_table_remove (keyset->priv->key_props, key);
 }
 
+/**
+ * cryptui_keyset_key_get_string:
+ * @keyset: a libcryptui keyset
+ * @key: libcryptui key to fetch a property of
+ * @prop: string property to get
+ *
+ * Gets the given property of the key in the keyset.
+ *
+ * Returns: a string containing the property's value
+ */
 gchar*
 cryptui_keyset_key_get_string (CryptUIKeyset *keyset, const gchar *key, 
                                const gchar *prop)
@@ -529,6 +626,16 @@ cryptui_keyset_key_get_string (CryptUIKeyset *keyset, const gchar *key,
     return str;
 }
 
+/**
+ * cryptui_keyset_key_get_uint:
+ * @keyset: a libcryptui keyset
+ * @key: libcryptui key to fetch a property of
+ * @prop: uint property to get
+ *
+ * Gets the given property of the key in the keyset.
+ *
+ * Returns: a uint containing the property's value
+ */
 guint
 cryptui_keyset_key_get_uint (CryptUIKeyset *keyset, const gchar *key,
                              const gchar *prop)
@@ -553,30 +660,75 @@ cryptui_keyset_key_get_uint (CryptUIKeyset *keyset, const gchar *key,
 }
 
 
+/**
+ * cryptui_keyset_key_display_name:
+ * @keyset: a libcryptui keyset
+ * @key: a libcryptui key
+ *
+ * Gets the "display-name" property of the given key
+ *
+ * Returns: the display name of the key
+ */
 gchar*
 cryptui_keyset_key_display_name (CryptUIKeyset *keyset, const gchar *key)
 {
     return cryptui_keyset_key_get_string (keyset, key, "display-name");
 }
 
+/**
+ * cryptui_keyset_key_display_id:
+ * @keyset: a libcryptui keyset
+ * @key: a libcryptui key
+ *
+ * Gets the "display-id" property of the given key
+ *
+ * Returns: the display id of the key
+ */
 gchar*
 cryptui_keyset_key_display_id (CryptUIKeyset *keyset, const gchar *key)
 {
     return cryptui_keyset_key_get_string (keyset, key, "display-id");
 }
 
+/**
+ * cryptui_keyset_key_flags:
+ * @keyset: a libcryptui keyset
+ * @key: a libcryptui key
+ *
+ * Gets the key's flags
+ *
+ * Returns: a uint containing the flags
+ */
 guint
 cryptui_keyset_key_flags (CryptUIKeyset *keyset, const gchar *key)
 {
     return cryptui_keyset_key_get_uint (keyset, key, "flags");
 }
 
+/**
+ * cryptui_keyset_key_raw_keyid:
+ * @keyset: a libcryptui keyset
+ * @key: a libcryptui key
+ *
+ * Gets the key's raw key id
+ *
+ * Returns: a string with the raw key id
+ */
 gchar*
 cryptui_keyset_key_raw_keyid (CryptUIKeyset *keyset, const gchar *key)
 {
     return cryptui_keyset_key_get_string (keyset, key, "raw-id");
 }
 
+/**
+ * cryptui_keyset_keys_raw_keyids:
+ * @keyset: a libcryptui keyset
+ * @keys: an array of libcryptui keys
+ *
+ * Gets the keys' raw key ids
+ *
+ * Returns: an array of raw key ids
+ */
 gchar**
 cryptui_keyset_keys_raw_keyids (CryptUIKeyset *keyset, const gchar **keys)
 {
