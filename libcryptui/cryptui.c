@@ -402,7 +402,7 @@ _cryptui_gconf_set_string (const char *key, const char *string_value)
  * @key: a gconf key/path
  * @notification_callback: function to be called by the notification
  * @callback_data: data to be passed to the callback function
- * 
+ *
  * A private library convenience function that creates a gconf notification
  * on a specified gconf key.
  *
