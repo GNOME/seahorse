@@ -123,7 +123,7 @@ const gchar*        cryptui_key_store_get_selected_key      (CryptUIKeyStore *ck
 
 void                cryptui_key_store_set_selected_key      (CryptUIKeyStore *ckstore, 
                                                              GtkTreeView *view,
-                                                             const gchar *key);
+                                                             const gchar *selkey);
                                                              
 void                cryptui_key_store_set_search_mode       (CryptUIKeyStore *ckstore,
                                                              CryptUIKeyStoreMode mode);

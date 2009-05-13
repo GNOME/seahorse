@@ -1137,13 +1137,13 @@ cryptui_key_store_get_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view)
  * cryptui_key_store_set_selected_key:
  * @ckstore: a libcryptui key store
  * @view: a GtkTreeView
- * @key: a libcryptui key
+ * @selkey: a libcryptui key
  *
  * Marks the given key as selected
  */
 void
 cryptui_key_store_set_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view,
-                                    const gchar *key)
+                                    const gchar *selkey)
 {
     GtkTreeModel* model = GTK_TREE_MODEL (ckstore->priv->store);
     GtkTreeSelection *sel;
