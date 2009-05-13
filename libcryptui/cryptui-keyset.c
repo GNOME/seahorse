@@ -391,6 +391,21 @@ cryptui_keyset_new (const gchar *keytype, gboolean expand_keys)
 }
 
 /**
+ * cryptui_keyset_has_key:
+ * @keyset: a libcryptui keyset
+ * @key: a libcryptui key
+ *
+ * Determines whether or not a key is present in the keyset
+ *
+ * Returns: TRUE if the key is present, FALSE otherwise
+ */
+gboolean
+cryptui_keyset_has_key (CryptUIKeyset *keyset, const gchar *key)
+{
+    return g_hash_table_lookup (keyset->priv->keys, key) ? TRUE : FALSE;
+}
+
+/**
  * cryptui_keyset_get_keytype:
  * @keyset: a libcryptui keyset
  *
