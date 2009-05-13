@@ -53,7 +53,7 @@ gboolean          cryptui_key_list_have_selected_keys   (GtkTreeView *list);
 
 GList*            cryptui_key_list_get_selected_keys    (GtkTreeView *list);
 
-void              cryptui_key_list_set_selected_keys    (GtkTreeView *list, 
+void              cryptui_key_list_set_selected_keys    (GtkTreeView *list,
                                                          GList *keys);
 
 const gchar*      cryptui_key_list_get_selected_key     (GtkTreeView *list);

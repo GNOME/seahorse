@@ -210,7 +210,7 @@ cryptui_key_list_have_selected_keys (GtkTreeView *list)
  *
  * Gets the kyes selected in the list
  *
- * Returns: a list of selected keys 
+ * Returns: a list of selected keys
  */
 GList*
 cryptui_key_list_get_selected_keys (GtkTreeView *list)
