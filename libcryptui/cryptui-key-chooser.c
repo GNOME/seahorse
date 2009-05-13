@@ -506,8 +506,6 @@ cryptui_key_chooser_get_enforce_prefs (CryptUIKeyChooser *chooser)
  * TRUE, the default signing key will be added to the recipient list.  If FALSE,
  * the selected recipients will be returned without adding the default signing
  * key.
- *
- * Returns: void
  */
 void
 cryptui_key_chooser_set_enforce_prefs (CryptUIKeyChooser *chooser,
@@ -595,8 +593,6 @@ cryptui_key_chooser_get_recipients (CryptUIKeyChooser *chooser)
  * @keys: the list of recipients to mark selected
  *
  * Marks the listed keys as selected in the chooser widget.
- *
- * Returns: void
  */
 void
 cryptui_key_chooser_set_recipients (CryptUIKeyChooser *chooser, GList *keys)
@@ -631,8 +627,6 @@ cryptui_key_chooser_get_signer (CryptUIKeyChooser *chooser)
  * @key: the signer key to set
  *
  * Sets the signer in the chooser to the provided key.
- *
- * Returns: void
  */
 void
 cryptui_key_chooser_set_signer (CryptUIKeyChooser *chooser, const gchar *key)

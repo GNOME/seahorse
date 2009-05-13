@@ -121,8 +121,6 @@ cryptui_key_get_enctype (const gchar *key)
  * This function creates a notification bubble that can be updated as additional
  * key details are discovered.  See http://live.gnome.org/Seahorse/DBus for a
  * description of the markup syntax.
- *
- * Returns: void
  */
 void
 cryptui_display_notification (const gchar *title, const gchar *body, const gchar *icon, 
@@ -263,8 +261,6 @@ cryptui_prompt_signer (CryptUIKeyset *keyset, const gchar *title)
  *
  * This function is called when seahorse needs to be launched to generate a
  * key or keys or import a key or keys to perform the requested operation.
- *
- * Returns: void
  */
 void                
 cryptui_need_to_get_keys ()
@@ -387,8 +383,6 @@ _cryptui_gconf_get_string (const char *key)
  * @string_value: a text string
  *
  * A private library function that sets a gconf key to the string given.
- *
- * Returns: void
  */
 void
 _cryptui_gconf_set_string (const char *key, const char *string_value)
@@ -448,8 +442,6 @@ internal_gconf_unnotify (gpointer data)
  * A private library convenience function that creates a gconf notification
  * on a specified gconf key and automatically removes the notification when an
  * object is destroyed.
- *
- * Returns: void
  */
 void
 _cryptui_gconf_notify_lazy (const char *key, GConfClientNotifyFunc notification_callback,
@@ -471,8 +463,6 @@ _cryptui_gconf_notify_lazy (const char *key, GConfClientNotifyFunc notification_
  * @notification_id: a current gconf notification id
  *
  * A private library function to remove a gconf notification.
- *
- * Returns: void
  */
 void
 _cryptui_gconf_unnotify (guint notification_id)

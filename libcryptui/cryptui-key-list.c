@@ -101,8 +101,6 @@ cryptui_key_list_new (CryptUIKeyStore *ckstore, guint flags)
  *
  * Changes an existing GtkTreeView into a CryptUIKeyList using the key store
  * as the model and the filters the view based on the given flags.
- *
- * Returns: void
  */
 void
 cryptui_key_list_setup (GtkTreeView *view, CryptUIKeyStore *ckstore,
@@ -231,8 +229,6 @@ cryptui_key_list_get_selected_keys (GtkTreeView *list)
  * @keys: a list of CryptUI keys
  *
  * Selects the given list of keys in the list
- *
- * Returns: void
  */
 void
 cryptui_key_list_set_selected_keys (GtkTreeView *list, GList *keys)
@@ -268,8 +264,6 @@ cryptui_key_list_get_selected_key (GtkTreeView *list)
  * @key: the key to set
  *
  * Selects the given key in the list widget
- *
- * Returns: void
  */
 void
 cryptui_key_list_set_selected_key (GtkTreeView *list, const gchar *key)

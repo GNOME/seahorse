@@ -62,8 +62,6 @@ cryptui_key_combo_new (CryptUIKeyStore *ckstore)
  * @ckstore: key store containing keys to be listed in the combo
  *
  * Populates an existing GtkComboBox with keys from a CryptUIKeyStore
- *
- * Returns: void
  */
 void
 cryptui_key_combo_setup (GtkComboBox *combo, CryptUIKeyStore *ckstore)
@@ -118,8 +116,6 @@ cryptui_key_combo_get_keyset (GtkComboBox *ckcombo)
  * @key: a CryptUI Key
  *
  * Sets the combo's selection to the indicated key
- *
- * Returns: void
  */
 void
 cryptui_key_combo_set_key (GtkComboBox *ckcombo, const gchar *key)

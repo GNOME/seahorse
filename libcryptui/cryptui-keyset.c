@@ -439,8 +439,6 @@ cryptui_keyset_get_count (CryptUIKeyset *keyset)
  * @keyset: a libcryptui keyset
  *
  * Checks the remote keyset to see which keys have been added or removed
- *
- * Returns: void
  */
 void
 cryptui_keyset_refresh (CryptUIKeyset *keyset)
@@ -510,8 +508,6 @@ cryptui_keyset_get_closure (CryptUIKeyset *keyset, const gchar *key)
  * @closure: TODO
  *
  * TODO: Find out what closure is and document this function
- *
- * Returns: void
  */
 void
 cryptui_keyset_set_closure (CryptUIKeyset *keyset, const gchar *key, 
@@ -546,11 +542,9 @@ cryptui_keyset_get_expand_keys (CryptUIKeyset *keyset)
 /**
  * cryptui_keyset_set_expand_keys:
  * @keyset: a libcryptui keyset
- * @expand_keys:
+ * @expand_keys: a gboolean
  *
  * Sets whether or not non-primary key UIDs are included in the keyset
- *
- * Returns: void
  */
 void
 cryptui_keyset_set_expand_keys (CryptUIKeyset *keyset, gboolean expand_keys)
@@ -565,8 +559,6 @@ cryptui_keyset_set_expand_keys (CryptUIKeyset *keyset, gboolean expand_keys)
  *
  * Stores the key's fields returned by the DBus method GetKeyFields in the
  * keyset.
- *
- * Returns: void
  */
 void
 cryptui_keyset_cache_key (CryptUIKeyset *keyset, const gchar *key)
