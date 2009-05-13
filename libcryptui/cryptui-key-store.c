@@ -712,6 +712,17 @@ cryptui_key_store_class_init (CryptUIKeyStoreClass *klass)
  * PUBLIC 
  */
 
+/**
+ * cryptui_key_store_new:
+ * @keyset: a libcryptui keyset
+ * @use_checks: a gboolean
+ * @none_option: a const gchar string
+ *
+ * Creates a new libcryptui key store setting the keystore, use-checks and none-option
+ * properties
+ *
+ * Returns: the new libcryptui key store
+ */
 CryptUIKeyStore*
 cryptui_key_store_new (CryptUIKeyset *keyset, gboolean use_checks, 
                        const gchar *none_option)
@@ -721,18 +732,41 @@ cryptui_key_store_new (CryptUIKeyset *keyset, gboolean use_checks,
     return (CryptUIKeyStore*)obj;
 }
 
+/**
+ * cryptui_key_store_get_keyset:
+ * @ckstore: a libcryptui key store
+ *
+ * Gets ckstore's internal keyset
+ *
+ * Returns: the internal libcryptui keyset
+ */
 CryptUIKeyset*
 cryptui_key_store_get_keyset (CryptUIKeyStore *ckstore)
 {
     return ckstore->ckset;
 }
 
+/**
+ * cryptui_key_store_set_sortable:
+ * @ckstore: a libcryptui key store
+ * @sortable: a gboolean
+ *
+ * Sets whether ckstore is sortable or not
+ */
 void
 cryptui_key_store_set_sortable (CryptUIKeyStore *ckstore, gboolean sortable)
 {
     g_object_set (ckstore, "sortable", sortable, NULL);
 }
 
+/**
+ * cryptui_key_store_get_sortable:
+ * @ckstore: a libcryptui key store
+ *
+ * Gets whether ckstore is sortable or not
+ *
+ * Returns: TRUE if ckstore is sortable, FALSE otherwise
+ */
 gboolean 
 cryptui_key_store_get_sortable (CryptUIKeyStore *ckstore)
 {
@@ -741,6 +775,14 @@ cryptui_key_store_get_sortable (CryptUIKeyStore *ckstore)
     return sortable;
 }
 
+/**
+ * cryptui_key_store_check_toggled:
+ * @ckstore: a libcryptui key store
+ * @view: a GtkTreeView
+ * @iter: a GtkTreeIter
+ *
+ * Gets whether the check at iter is toggled
+ */
 void
 cryptui_key_store_check_toggled (CryptUIKeyStore *ckstore, GtkTreeView *view, GtkTreeIter *iter)
 {
@@ -766,6 +808,17 @@ cryptui_key_store_check_toggled (CryptUIKeyStore *ckstore, GtkTreeView *view, Gt
     g_signal_emit_by_name (selection, "changed");
 }
 
+/**
+ * cryptui_key_store_get_iter_from_key:
+ * @ckstore: a libcryptui key store
+ * @key: a libcryptui key
+ * @iter: a GtkTreeIter
+ *
+ * Get the iter that the key is stored at in ckstore
+ *
+ * Returns: TRUE if the key is present in the ckstore and the value of iter
+ *          has been modified to point to it, FALSE otherwise
+ */
 gboolean
 cryptui_key_store_get_iter_from_key (CryptUIKeyStore *ckstore, const gchar *key,
                                      GtkTreeIter *iter)
@@ -803,6 +856,15 @@ cryptui_key_store_get_iter_from_key (CryptUIKeyStore *ckstore, const gchar *key,
     return ret;
 }
 
+/**
+ * cryptui_key_store_get_key_from_iter:
+ * @ckstore: a libcryptui key store
+ * @iter: a GtkTreeIter
+ *
+ * Gets the key stored at iter in ckstore
+ *
+ * Returns: a libcryptui key
+ */
 const gchar*
 cryptui_key_store_get_key_from_iter (CryptUIKeyStore *ckstore, GtkTreeIter *iter)
 {
@@ -813,6 +875,15 @@ cryptui_key_store_get_key_from_iter (CryptUIKeyStore *ckstore, GtkTreeIter *iter
     return key_from_iterator (GTK_TREE_MODEL (ckstore), iter);
 }
 
+/**
+ * cryptui_key_store_get_key_from_path:
+ * @ckstore: a libcryptui key store
+ * @path: a GtkTreePath
+ *
+ * Get the key at path in ckstore
+ *
+ * Returns: a libcryptui key
+ */
 const gchar*
 cryptui_key_store_get_key_from_path (CryptUIKeyStore *ckstore, GtkTreePath *path)
 {
@@ -826,6 +897,14 @@ cryptui_key_store_get_key_from_path (CryptUIKeyStore *ckstore, GtkTreePath *path
     return key_from_iterator (GTK_TREE_MODEL (ckstore), &iter);
 }
 
+/**
+ * cryptui_key_store_get_all_keys:
+ * @ckstore: a libcryptui key store
+ *
+ * Get a list of all keys in ckstore
+ *
+ * Returns: a list of libcryptui keys
+ */
 GList*
 cryptui_key_store_get_all_keys (CryptUIKeyStore *ckstore)
 {
@@ -833,6 +912,14 @@ cryptui_key_store_get_all_keys (CryptUIKeyStore *ckstore)
     return cryptui_keyset_get_keys (ckstore->ckset);
 }
 
+/**
+ * cryptui_key_store_get_count:
+ * @ckstore: a libcryptui key store
+ *
+ * Get the number of keys stored in ckstore
+ *
+ * Returns: the number of keys
+ */
 guint
 cryptui_key_store_get_count (CryptUIKeyStore *ckstore)
 {
@@ -840,6 +927,15 @@ cryptui_key_store_get_count (CryptUIKeyStore *ckstore)
     return cryptui_keyset_get_count (ckstore->ckset);    
 }
 
+/**
+ * cryptui_key_store_have_selected_keys:
+ * @ckstore: a libcryptui key store
+ * @view: a GtkTreeView
+ *
+ * Determines whether keys are selected or not.
+ *
+ * Returns: TRUE if keys have been selected, FALSE otherwise
+ */
 gboolean            
 cryptui_key_store_have_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *view)
 {
@@ -871,6 +967,15 @@ cryptui_key_store_have_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *vie
     return FALSE;
 }
 
+/**
+ * cryptui_key_store_get_selected_keys:
+ * @ckstore: a libcryptui key store
+ * @view: a GtkTreeView
+ *
+ * Get the currently selected keys
+ *
+ * Returns: a list of libcryptui keys
+ */
 GList*
 cryptui_key_store_get_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *view)
 {
@@ -921,6 +1026,14 @@ cryptui_key_store_get_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *view
     return keys;
 }
 
+/**
+ * cryptui_key_store_set_selected_keys:
+ * @ckstore: a libcryptui key store
+ * @view: a GtkTreeView
+ * @keys: a list of libcryptui keys
+ *
+ * Set the current selection to be the list of keys
+ */
 void
 cryptui_key_store_set_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *view,
                                     GList *keys)
@@ -966,6 +1079,15 @@ cryptui_key_store_set_selected_keys (CryptUIKeyStore *ckstore, GtkTreeView *view
     g_hash_table_destroy (keyset);
 }
 
+/**
+ * cryptui_key_store_get_selected_key:
+ * @ckstore: a libcryptui key store
+ * @view: a GtkTreeView
+ *
+ * Get the currently selected key
+ *
+ * Returns: a libcryptui key
+ */
 const gchar*
 cryptui_key_store_get_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view)
 {
@@ -1011,9 +1133,17 @@ cryptui_key_store_get_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view)
     return key;
 }
 
+/**
+ * cryptui_key_store_set_selected_key:
+ * @ckstore: a libcryptui key store
+ * @view: a GtkTreeView
+ * @key: a libcryptui key
+ *
+ * Marks the given key as selected
+ */
 void
 cryptui_key_store_set_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view,
-                                    const gchar *selkey)
+                                    const gchar *key)
 {
     GtkTreeModel* model = GTK_TREE_MODEL (ckstore->priv->store);
     GtkTreeSelection *sel;
@@ -1051,6 +1181,14 @@ cryptui_key_store_set_selected_key (CryptUIKeyStore *ckstore, GtkTreeView *view,
     }
 }
 
+/**
+ * cryptui_key_store_set_search_mode:
+ * @ckstore: a libcryptui key store
+ * @mode: search mode
+ *
+ * Sets whether the keys returned will be all, just those searched for, or
+ * those selected.
+ */
 void
 cryptui_key_store_set_search_mode (CryptUIKeyStore *ckstore, CryptUIKeyStoreMode mode)
 {
@@ -1060,6 +1198,13 @@ cryptui_key_store_set_search_mode (CryptUIKeyStore *ckstore, CryptUIKeyStoreMode
     }
 }
 
+/**
+ * cryptui_key_store_set_search_text:
+ * @ckstore: a libcryptui key store
+ * @search_text: a string
+ *
+ * Filters the keys in the store by the text in search_text.
+ */
 void
 cryptui_key_store_set_search_text (CryptUIKeyStore *ckstore, const gchar *search_text)
 {
@@ -1080,6 +1225,14 @@ cryptui_key_store_set_search_text (CryptUIKeyStore *ckstore, const gchar *search
     }
 }
 
+/**
+ * cryptui_key_store_set_filter:
+ * @ckstore: a libcryptui key store
+ * @func: a filter function
+ * @user_data: a generic pointer
+ *
+ * Filters the key store's keys with the given filter function.
+ */
 void
 cryptui_key_store_set_filter (CryptUIKeyStore *ckstore, CryptUIKeyStoreFilterFunc func,
                               gpointer user_data)
