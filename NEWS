@@ -1,10 +1,20 @@
+seahorse 2.26.2
+---------------
+
+    * (no significant changes)
+
+    Translations
+    * Greek [Simos Xenitellis and Fotis Tsamis]
+    * Spanish [Jorge Gonzalez]
+    * Ukranian [Maxim V. Dziumanenko]
+
 seahorse 2.26.1
 ---------------
 
-    * PGP UIDs display in order reported by key server, and fix 
+    * PGP UIDs display in order reported by key server, and fix
       parsing of HKP PGP search UIDs. [Adam Schreiber]
     * Fix problem opening preferences window twice. [Adam Schreiber]
-    * Set authorized_keys properly when sending SSH keys to a 
+    * Set authorized_keys properly when sending SSH keys to a
       remote system. [Andreas Moog, Stef Walter]
     * Fix crash when entering hkp: url manually. [Stef Walter]
 
@@ -12,7 +22,7 @@ seahorse 2.26.0
 ---------------
 
     * Fix cancel button in 'Add keyring' dialog. [Stef Walter]
-    * Update GUI before showing window, to avoid GUI changes 
+    * Update GUI before showing window, to avoid GUI changes
       when selection is initialized. [Stef Walter]
     * Allow multiple "Sync and Publish" windows to open. [Stef Walter]
     * Disable input method in password prompt. [Takao Fujiwara]
@@ -23,18 +33,18 @@ seahorse 2.25.92
 
     * Fix crash when typing in a custom key server URL. [Stef Walter]
     * Searching by key identifiers now shows results. [Stef Walter]
-    * Don't crash when loading a PGP key that loads the secret 
+    * Don't crash when loading a PGP key that loads the secret
       part before the public part. [Stef Walter]
     * Disable interactive tree search in key manager. [Stef Walter]
     * Fix issues with object IDs, crashes and other inconsistencies
       when accessed via DBus. [Adam Schreiber, Stef Walter]
     * Add libcryptui documentation [Adam Schreiber]
     * Reference counting fixes. [Adam Schreiber]
-    * Remove use of GTK+ deprecated symbols. [Adam Schreiber, 
+    * Remove use of GTK+ deprecated symbols. [Adam Schreiber,
       Thomas Anderson]
     * Use proper GTK+ stock item names. [Gabor Kelemen]
     * Translation fixes. [Adam Schreiber, Wouter Bolsterlee]
-    * Collapse 'Advanced Options' in PGP key generate dialog 
+    * Collapse 'Advanced Options' in PGP key generate dialog
       by default. [Stef Walter]
 
 seahorse 2.25.91
@@ -46,9 +56,9 @@ seahorse 2.25.91
     * Translation and doc fixes. [Adam Schreiber]
     * Build PKCS#11 support properly. [Stef Walter]
     * 64-bit fixes [Joe Marcus Clarke, Scott McVittie]
-    * Only autostart seahorse-daemon when key sharing is 
+    * Only autostart seahorse-daemon when key sharing is
       enabled. [Adam Schreiber]
-    * seahorse-daemon no longer times out login of 
+    * seahorse-daemon no longer times out login of
       session. [Adam Schreiber]
     * Fix libcryptui regressions. [Stef Walter]
     * Remove explicit line breaks from glade files. [Gabor Kelemen]
@@ -63,7 +73,7 @@ seahorse 2.25.90
     * gtk-doc for libcryptui [Adam Schreiber]
     * Remove bits of libcryptui	that are now handled by the gcr library
     from gnome-keyring. [Stef Walter]
-    
+
     Translations
     * es.po: [Jorge Gonzalez]
     * sv.po: [Daniel Nylander]
@@ -90,18 +100,18 @@ seahorse 2.25.3
     * Autostart seahorse-daemon [F. Steinel]
     * Various fixes [Jeff Cai]
     * Fix connecting to ssh servers not on port 22 [Adam Schreiber]
-    
+
     Translations
     * pt_BR.po [Leonardo Ferreira Fontenelle]
     * es.po [Jorge Gonzalez]
     * cs.po [Petr Kovar]
-    
+
 seahorse 2.25.1
 ---------------
 
     * Clean up GLib and GTK+ includes (GNOME Goal) [Adam Schreiber]
     * Clean up errors in declaration of signal handlers. [Adam Schreiber]
-    
+
     Translations
     * ar [Usama Akkad]
     * el [Nick Agianniotis]
@@ -110,7 +120,7 @@ seahorse 2.25.1
 seahorse 2.24.1
 ---------------
 
-    * Fix problems with seahorse crashing when searching for 
+    * Fix problems with seahorse crashing when searching for
       remote keys. [Adam Schreiber]
     * Build fixes on Solaris [Jeff Cai]
     * Fix selection of keys in libcryptui. [Philip Withnall]
@@ -119,18 +129,18 @@ seahorse 2.24.1
 seahorse 2.24.0
 ---------------
 
-    * Some tweaks to the password prompt window, including allowing 
+    * Some tweaks to the password prompt window, including allowing
       minimizing to release the keyboard grab.
-    * Fix compiler warnings for gcc 4.3. 
-    * Return a 'cancelled' error when from the daemon crypto dbus 
+    * Fix compiler warnings for gcc 4.3.
+    * Return a 'cancelled' error when from the daemon crypto dbus
       methods when a user cancels out of a password prompt.
     * Show revoked subkeys properly in details view of PGP keys.
     * Fix problem deleting SSH keys.
-    * Fix dialog prompt column widths, and elipsize long text in 
+    * Fix dialog prompt column widths, and elipsize long text in
       key listing. [Adam Schreiber]
-    * Fix problem with 'no keys available' when trying to sign a 
+    * Fix problem with 'no keys available' when trying to sign a
       PGP key from within the key manager.
-    * Add 'exportable' flag to objects/keys and don't enable export 
+    * Add 'exportable' flag to objects/keys and don't enable export
       UI if selected objects are not exportable.
     * Build fixes [Joe Orton, Adam Schreiber]
     * Crash and other fixes. [Christian Persch]
@@ -141,14 +151,14 @@ seahorse 2.23.92
     * Fix crash when changing a stored Gnome Keyring password.
     * Fix certain crashes on syncing, searching and other operations.
     * Fix dumb 'Couldn't import keys' error message when success.
-    
+
 seahorse 2.23.91
 ----------------
 
     * Fix copying keys to the clipboard. [Adam Schreiber]
     * Fix double free crash when importing keys.
-    * Fix crasher when deleting a key. 
-    * Don't add extra null bytes to SSH authorized_keys and 
+    * Fix crasher when deleting a key.
+    * Don't add extra null bytes to SSH authorized_keys and
       similar files. [Adam Schreiber]
     * Documentation fixes. [Adam Schreiber]
     * Don't repeatedly load gnome-keyring items. [Adam Schreiber]
@@ -176,25 +186,25 @@ seahorse 2.23.5
 
     * Fix importing keys from key servers [Mackenzie Morgan]
     * Factor out seahorse-plugins to a different module.
-    * Add XDS drag and drop support. 
+    * Add XDS drag and drop support.
     * Remove gnome-vfs dependency and use gio instead.
     * Return key id of signer from DBus service even when key
       is not found locally [Adam Schreiber]
-    * Refactor UI code internally into modules. 
+    * Refactor UI code internally into modules.
     * Remove hard GPG and GPGME dependency.
-    * Replace signer drop down in key chooser with just a check 
+    * Replace signer drop down in key chooser with just a check
       button when only one secret key exists. [Adam Schreiber]
-    * Set sync button insensitive when no server is selected. 
+    * Set sync button insensitive when no server is selected.
       [Adam Schreiber]
     * Test for secure memory before using it. [Coleman Kane]
     * Change trust model used to match GPG's. [Adam Schreiber]
     * Remove libgnome and libgnomeui dependencies. [Saleem Abdulrasool]
-    * Grab keyboard focus when prompting for password. 
+    * Grab keyboard focus when prompting for password.
       [Josselin Mouette]
     * Use the vala programming language for some code.
     * Add initial infrastructure for PKCS#11 key/certificate support.
     * Save and load window sizes from gconf. [Adam Schreiber]
-    * Build fixes [Brian Cameron, Saleem Abdulrasool, Alexis Ballier, 
+    * Build fixes [Brian Cameron, Saleem Abdulrasool, Alexis Ballier,
       Christian Persch, Rodrigo Moya]
 
 seahorse 2.22.0
@@ -211,7 +221,7 @@ seahorse 2.21.92
 seahorse 2.21.91
 ----------------
 
-    * Adapt to new Epiphany API for 2.21.  People with GNOME 2.20.x or older 
+    * Adapt to new Epiphany API for 2.21.  People with GNOME 2.20.x or older
     should not experience build problems. [Adam Schreiber]
 
 seahorse 2.21.90
@@ -224,8 +234,8 @@ seahorse 2.21.90
     * Don't add extra dot to encrypted or compressed files [Kip Warner]
     * Fix build problems with nautilus 2.21.x and later [Wouter Bolsterlee]
     * Install nautilus extension to correct directory [Brian Pepple]
-    * Support better dropping of text keys onto main window [Christian Persch] 
-    
+    * Support better dropping of text keys onto main window [Christian Persch]
+
 seahorse 2.21.4
 ---------------
 
@@ -233,14 +243,14 @@ seahorse 2.21.4
     * Add support for managing gnome-keyring item ACLs.
     * Add support for managing gnome-keyring keyrings.~/
     * Better feedback when importing PGP keys from nautilus. [Adam Schreiber]
-    * Add UI to show/hide the PGP passphrase cache icon. 
+    * Add UI to show/hide the PGP passphrase cache icon.
 
 seahorse 2.21.3
 ---------------
 
     * Remove SSH proxy since gnome-keyring now has a real SSH agent.
     * Don't hardcode epiphany extensions directory [Josselin Mouette]
-    * Use secure memory API from gnome-keyring. 
+    * Use secure memory API from gnome-keyring.
     * UI and HIG fixes [Adam Schreiber, Christian Persch, Luca Ferretti]
     * Disable automatic key uploading/retrieval by default [Adam Schreiber]
 
@@ -253,7 +263,7 @@ seahorse 2.20.1
 
 seahorse 2.20
 -------------
-    
+
     * Make 'Auto Retrieve Keys' option work correctly [Adam Schreiber]
     * Fix build problems.
 
@@ -265,8 +275,8 @@ seahorse 2.19.91
     * Properly escape markup characters in a gnome-keyring item name.
     * Fix supirious assertions when looking through photo ids on a GPG key.
     * Show progress windows in the window list.
-    * Hide agent icon. 
-    
+    * Hide agent icon.
+
 seahorse 2.19.90
 ----------------
 
@@ -279,20 +289,20 @@ seahorse 2.19.5
 ---------------
 
     * Add swedish applet documentation [Daniel Nylander]
-    * Initialize seahorse-agent properly when only using SSH 
+    * Initialize seahorse-agent properly when only using SSH
       functionality [Ted Percival]
     * Internationalize SSH password dialog [Gabor Kelemen]
-      
+
 seahorse 2.19.4
 ---------------
 
-    * Added ability to change gnome-keyring master password 
+    * Added ability to change gnome-keyring master password
       [Adam Schreiber]
     * Display more details about imported keys [Adam Schreiber]
     * Internationalize notification area properly [Adam Schreiber]
     * Now builds with gpg 2.0.x again [Adam Schreiber]
     * Update man pages [Sebastian Dröge]
-    * Easier selection of archive extensions when encrypting 
+    * Easier selection of archive extensions when encrypting
       multiple files. [Adam Schreiber]
     * Make all dialogs properly transient [Adam Schreiber]
     * Builds with latest epiphany [Sebastian Dröge]
@@ -304,25 +314,25 @@ seahorse 2.19.2
     * Adam Schreiber is now a co-maintainer
     * Proper selection of bit length when generating DSA ssh keys.
       [Adam Schreiber]
-    * Use GtkComboBox instead of GtkOptionMenu in dialogs 
+    * Use GtkComboBox instead of GtkOptionMenu in dialogs
       [Adam Schreiber]
     * Use a more descriptive 'decrypt failed' error message.
-    * Recognize encrypted SSH private keys properly. 
+    * Recognize encrypted SSH private keys properly.
     * Fix problem with internalionalized expiry dates [Adam Schreiber]
-    * Translation and install fixes. 
+    * Translation and install fixes.
 
 seahorse 1.0.1
 --------------
- 
+
     * Fix a crash when deleting keys.
     * Require GTK+ 2.10 without which 1.0 didn't build
-    * Use /tmp directory for agent sockets, so that seahorse 
+    * Use /tmp directory for agent sockets, so that seahorse
       works for people with home directories on NFS/AFS
     * Fixed importing of private keys from ssh-keygen
     * Fixed checks for memory locking
     * Epiphany plugin now builds with Epiphany 2.18 [Adam Schreiber]
     * Set a default icon for all seahorse windows.
-    * Now able to use ports other than '22' when sending an SSH 
+    * Now able to use ports other than '22' when sending an SSH
       key to another computer.
     * Internationalization fixes [Bjoern Voigt]
     * Handle openssh's authorized_keys file more cleanly
@@ -334,11 +344,11 @@ seahorse 1.0
 ------------
 
     * Seahorse requires an install of GPG 1.x
-    * Fixed crash when pasting from an empty clipboard into Key 
+    * Fixed crash when pasting from an empty clipboard into Key
       Manager window [Adam Schreiber]
     * Put seahorse in appropriate GNOME menu categories [Adam Schreiber]
     * Setup correct enviornment variables for processes started from
-      seahorse-agent 
+      seahorse-agent
     * Localization fixes [Nickolay V. Shmyrev]
     * Fix building on multiple cores [Gilles Dartiguelongue]
 
@@ -353,12 +363,12 @@ seahorse 0.9.91
 ---------------
 
     * Agent is now works better with GPG v2. [Alon Bar-Lev]
-    * Fix checkbox for showing gnome-keyring item password. 
+    * Fix checkbox for showing gnome-keyring item password.
       [Sertaç Ö. Yıldız]
     * Get secure entry bullet invisible char from GtkEntry.
       [Vitaliy Ischenko]
-    * Fix crash in agent during symmetric (ie: password only, 
-      no recipients) encryption of a file. 
+    * Fix crash in agent during symmetric (ie: password only,
+      no recipients) encryption of a file.
     * Build fixes due to gnome-doc-utils changes. [Joseph Sacco]
     * Lots of string and message fixes [Adam Schreiber]
 
@@ -367,12 +377,12 @@ seahorse 0.9.10
 
     * Add a strike through for revoked, disabled, expired
       keys [Adam Schreiber]
-    * Fix problem with not refreshing after adding or 
+    * Fix problem with not refreshing after adding or
       deleting keys.
     * No copious polling in the background for daemons.
-    * Use GOption for parsing command line arguments 
+    * Use GOption for parsing command line arguments
     * Use GtkStatusIcon from GTK 2.10 [chpe]
-    * Fix repeated loading of keys. 
+    * Fix repeated loading of keys.
     * Don't show expiry date for remote keys [Adam Schreiber]
     * Rename 'scaleable' pixmaps directory to 'scalable'
     * Fix assertion when no gnome-keyring key ring exists.
@@ -383,11 +393,11 @@ seahorse 0.9.9
 
     * Documentation fixes by <milo_casagrande@yahoo.it>
     * Split Agent and DBus daemon into separate processes.
-    * Fix crasher when selecting and filtering keys. 
-    * Fix crashes in the agent, and handling of invalid 
-      protocol data. 
+    * Fix crasher when selecting and filtering keys.
+    * Fix crashes in the agent, and handling of invalid
+      protocol data.
     * Ability to hide tray icon for cached secrets.
-    * Fix crash when typing passwords. 
+    * Fix crash when typing passwords.
     * Better configuration for agent, now sets 'use-agent'
       in configuration file.
     * Fix crash when closing window or deleting keys.
@@ -396,9 +406,9 @@ seahorse 0.9.9
 seahorse 0.9.8
 --------------
 
-    * Tons of Manual and Documentation updates by 
+    * Tons of Manual and Documentation updates by
       <milo_casagrande@yahoo.it>
-    * Work out how seahorse-daemon should be started properly. 
+    * Work out how seahorse-daemon should be started properly.
       See: http://live.gnome.org/Seahorse/SessionIntegration
     * GUI fixes:
       * Generate dialogs are now more consistent.
@@ -414,12 +424,12 @@ seahorse 0.9.8
     * Don't set daemon setuid when not needed for secure memory.
     * Fix problems when built without LDAP support.
 
-seahorse 0.9.7 
+seahorse 0.9.7
 --------------
 
-    * Use the new gnome-keyring functionality for accessing items 
+    * Use the new gnome-keyring functionality for accessing items
       without secrets, thus avoiding a waterfall of prompts.
-    * Cleanup the key loading code, fixes crashes caused by race 
+    * Cleanup the key loading code, fixes crashes caused by race
       conditions.
     * Install helper programs to lib/seahorse instead of libexec
     * Stop using some LDAP deprecated functions.
@@ -432,14 +442,14 @@ seahorse 0.9.6
     * Epiphany encryption plugin [Adam Schreiber, Jean-François Rameau]
     * Don't display duplicated UIDs after double clicking on a key.
     * Displays an error when PGP keys to import are in the future.
-    * Added usability suggestions to SSH dialogs [Matthew Paul Thomas, 
+    * Added usability suggestions to SSH dialogs [Matthew Paul Thomas,
       usability@gnome.org]
     * No more 'error: success' dialogs [Adam Schreiber]
     * Fix SSH crasher on X64 systems [Gustavo Carneiro]
     * Better tracking of progress in progress dialog and bar
     * Use GtkStatusbar instead of GnomeAppbar
     * Quick UI review [Alan Horkan]
-    * Don't show seahorse context menu items on desktop items like 
+    * Don't show seahorse context menu items on desktop items like
       computer or trash [Gilles Dartiguelongue]
     * Fix a bunch of crashers.
 
@@ -450,12 +460,12 @@ seahorse 0.9.5
     * Export SSH public keys with proper new line at the end.
     * Fix build problem with libcryptui #defines [Adam Schreiber,
       Joseph Sacco]
-    * Syncing now works again, and doesn't open an insane 
+    * Syncing now works again, and doesn't open an insane
       amount of parallel connections when syncing lots of keys.
-    * Removed some dubious async operation logic that was 
-      causing crashes. 
+    * Removed some dubious async operation logic that was
+      causing crashes.
     * Better progress calculations for operations.
-    * Add version number to desktop files so bugzilla can 
+    * Add version number to desktop files so bugzilla can
       figure out the version.
 
 seahorse 0.9.4
@@ -465,7 +475,7 @@ seahorse 0.9.4
       - Less 'punctuation' on the main key listing.
       - Clearer and simpler key properties first page.
       - Simplify the encryption preferences dialog
-      - Expired, revoked or disabled keys don't show up 
+      - Expired, revoked or disabled keys don't show up
         on the trusted tab.
       - Show validity properly and display per UID
       - Follow keys that move around in the UI due to changes
@@ -483,57 +493,57 @@ seahorse 0.9.4
     * Use correct DNS-SD service record. [nafallo@magicalforest.se]
     * Other fixes.
 
-seahorse 0.9.3 
+seahorse 0.9.3
 --------------
 
-    * Now manages the authorized_keys file and can add keys 
+    * Now manages the authorized_keys file and can add keys
       to it from the SSH key properties.
     * Added support for importing SSH keys.
-    * SSH keys cached in the agent now show up in the 
+    * SSH keys cached in the agent now show up in the
       'Cached Encryption Keys' window
-    * Fix problem with SSH agent messages not being 
+    * Fix problem with SSH agent messages not being
       passed on fully by the proxy.
-    * More reliable SSH passphrase prompting. 
-    * Better UI for SSH passphrases. 
+    * More reliable SSH passphrase prompting.
+    * Better UI for SSH passphrases.
     * Secure password entry box now looks just like a normal
       GTK entry box.
-    * When editing the key server list, the selection in the 
+    * When editing the key server list, the selection in the
       'Publish to' box no longer jumps around.
     * Better compatibility with PGP key servers.
     * Safer munging of gpg.conf
     * Added simpler dialog for generating PGP keys
-    * Show the owner trust properly in the PGP key properties 
+    * Show the owner trust properly in the PGP key properties
       dialog [Adam Schreiber].
     * Removed old-style MIME support.
     * Removed old nautilus (< 2.8) extension.
     * HIG fix [chpe]
     * Other fixes.
-    
+
 seahorse 0.9.2.1
 ----------------
 
     * Fix crasher when importing keys from a key server.
     * Select keys after importing.
-    
+
 seahorse 0.9.2
 --------------
 
     * Can cache PGP key passphrases in gnome-keyring
     * Automatically loads SSH keys when needed
     * Can save SSH key passwords in gnome-keyring
-    * Automatically retrieves PGP keys from key servers on 
+    * Automatically retrieves PGP keys from key servers on
       verification and elsewhere.
     * Sync with key server after key changes [Adam Schreiber]
     * libcryptui now respects user settings.
     * Ignore key server URIs with unsupported schema
     * Make background of tray icons transparent.
     * Don't display expire date for remote keys.
-    * Fix problems with seahorse-agent leaving temp directories 
+    * Fix problems with seahorse-agent leaving temp directories
       in ~/.gnome2/
     * Drag and drop support for photo id [Jim Pharis]
     * Better interaction between the GPG agent and multi screen
       displays [Sam Morris]
-    * Key server requests now use asynchronous DNS lookups 
+    * Key server requests now use asynchronous DNS lookups
     * GUI polish [Adam Schreiber]
     * Added manual pages for tools [Michael Mende]
     * Improvements to the DBUS API.
@@ -543,7 +553,7 @@ seahorse 0.9.1
 --------------
 
     * New Tango style icons
-    * Completely reworked personal key properties dialog 
+    * Completely reworked personal key properties dialog
     * SSH Key Generation
     * Add libcryptui library for standardization of key selection
     * DBUS interface for encryption and key management
@@ -551,12 +561,12 @@ seahorse 0.9.1
     * Progress dialog while generating keys [Jim Pharis]
     * Automatically resize and convert photos that are added
       to a key.
-    * Now uses the GNOME proxy settings when accessing key 
+    * Now uses the GNOME proxy settings when accessing key
       servers [Adam Schreiber]
-    * New UI for signing keys 
+    * New UI for signing keys
     * HIG fixes for dialogs [chpe]
     * Many crasher and stability fixes.
-    
+
 seahorse 0.9.0
 --------------
 
@@ -569,11 +579,11 @@ seahorse 0.9.0
     * Better help documentation [Adam Schreiber]
     * Display photo IDs on OpenPGP keys [Adam Schreiber]
     * Tons of other smaller UI enhancements and bug fixes
-    
+
 seahorse 0.8
 ------------
 
-    * Fixed crasher in seahorse-agent when used with GPG 1.4.2 
+    * Fixed crasher in seahorse-agent when used with GPG 1.4.2
     * Now works with gedit 2.12 [Mike Gardiner]
     * Many crasher and smaller fixes.
 
@@ -589,10 +599,10 @@ seahorse 0.7.9
     * Cleaned up menus with GNOME features like dynamic
       accelerator assignment (using GtkUIManager now).
     * HIG polish and UI fixes. [Jim Pharis]
-    * Better command line handling and aded command line 
+    * Better command line handling and aded command line
       help. [Adam Schreiber]
     * Many bug and crasher fixes.
-    
+
 seahorse 0.7.8
 --------------
 
@@ -605,22 +615,22 @@ seahorse 0.7.8
     * Keep agent window on top [Adam Schreiber]
     * Removed libeel dependency.
     * Better keyboard handling in the recipients dialog.
-    * Fix some rare gnome-vfs problems. 
+    * Fix some rare gnome-vfs problems.
     * Many smaller bug fixes.
-    
+
 seahorse 0.7.7
 --------------
 
     * Working keyserver sync (including upload) support.
     * Compatibility with GNOME 2.10.
     * Nautilus plugin now works with Nautilus 2.10 [Fernando Herrera]
-    * Cleaned up and simplified columns in the Key Manager. 
+    * Cleaned up and simplified columns in the Key Manager.
     * Fix problems with entering expiry dates.
     * Remove 'Text Mode' option. Clarify 'ASCII Armor' option.
-    * Removed lots of 'jargon' from the interface. 
+    * Removed lots of 'jargon' from the interface.
     * Can now drag keys from a key list to nautilus.
     * Many smaller bug fixes.
-    
+
 seahorse 0.7.6
 --------------
 
@@ -628,9 +638,9 @@ seahorse 0.7.6
     * Initial LDAP key server searching and importing support.
     * Show descriptive icons (eg: secret, public keys) in the main
       Key Manager window. [Adam Schreiber]
-    * Monitor key ring and refresh key list automatically across 
+    * Monitor key ring and refresh key list automatically across
       processes, such as gedit plugin, recipient selection etc...
-    * Decryption 'Open With' in nautilus for PGP encrypted and 
+    * Decryption 'Open With' in nautilus for PGP encrypted and
       signed files. [Adam Schreiber]
     * Added Backup Keyrings functionality. [Adam Schreiber]
     * Prompt for signer when no default key is selected.
@@ -650,14 +660,14 @@ seahorse 0.7.5
 --------------
 
 	* Loading large key rings is now many orders of magnitude faster
-	* A simple panel with common tasks shows up in the key manager the 
+	* A simple panel with common tasks shows up in the key manager the
 	  first time a new user starts [Adam Schreiber]
 	* Gnome HIG (Human Interface Guidelines) compliancy fixes
 	* gedit plugin compiles with GNOME 2.8
 	* gedit plugin now works on BSD [Julio M. Merino Vidal]
 	* seahorse-agent now works properly on BSD [Julio M. Merino Vidal]
 	* disable password caching prefs when using a different agent
-	* seahorse-agent restores gpg.conf when exiting 
+	* seahorse-agent restores gpg.conf when exiting
 	* seahorse-agent icon now shows properly in the notification area
 	* Properly detect mlock for secure memory usage.
 	* Fixed crash when changing expiry date on a subkey
@@ -665,14 +675,14 @@ seahorse 0.7.5
 	* Default key selection now works properly in edge cases.
 	* Updated RPM spec file
 	* A multitude of smaller bug fixes
-		
+
 seahorse 0.7.4
 --------------
 
 	* Key manager now uses new file chooser dialogs
 	* For detached signatures, prompt when missing plain text files
 	* Import/Export to clipboard implemented as copy/paste
-	* Dragging keys into the key manager import 
+	* Dragging keys into the key manager import
 	* All file operations work with gnome-vfs remote URIs (ie: smb, ftp, http etc...)
 	* Proper sort support for key listings
 	* Filter support on key manager and recipients windows
@@ -690,7 +700,7 @@ seahorse 0.7.4
 	* Fixed startup crashers
 	* New Key generation assistant (wizard/druid)
 	* A multitude of smaller bug fixes
-	
+
 seahorse 0.7.3
 --------------
 
