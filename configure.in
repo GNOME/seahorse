@@ -189,7 +189,7 @@ if test "$enable_pgp" = "yes"; then
         AC_DEFINE(WITH_PGP, 1, [With PGP Support])
 fi
 
-AM_CONDITIONAL(WITH_PGP, test "$enable_pgp" == "yes")
+AM_CONDITIONAL(WITH_PGP, test "$enable_pgp" = "yes")
 
 dnl ******************************************************************************
 dnl LDAP [from gpg]
@@ -440,14 +440,14 @@ if test "$enable_pkcs11" = "no"; then
 	enable_pkcs11="no"
 else
 	PKG_CHECK_MODULES(GP11, gp11-0 >= 2.25.5 gcr-0 >= 2.25.5, enable_pkcs11="yes", enable_pkcs11="no")
-	if test "$enable_pkcs11" == "yes"; then
+	if test "$enable_pkcs11" = "yes"; then
 		AC_DEFINE(WITH_PKCS11, 1, [gp11 library available])
 		SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GP11_CFLAGS"
 		SEAHORSE_LIBS="$SEAHORSE_LIBS $GP11_LIBS"
 	fi
 fi
 
-AM_CONDITIONAL(WITH_PKCS11, test "$enable_pkcs11" == "yes")
+AM_CONDITIONAL(WITH_PKCS11, test "$enable_pkcs11" = "yes")
 
 dnl ****************************************************************************
 dnl  SSH 
@@ -474,7 +474,7 @@ else
     
 fi
 
-AM_CONDITIONAL(WITH_SSH, test "$enable_ssh" == "yes")
+AM_CONDITIONAL(WITH_SSH, test "$enable_ssh" = "yes")
 
 dnl ****************************************************************************
 
@@ -512,7 +512,7 @@ if test "$enable_tests" != "yes"; then
     enable_tests="no"
 fi
 
-AM_CONDITIONAL(WITH_TESTS, test "$enable_tests" == "yes")
+AM_CONDITIONAL(WITH_TESTS, test "$enable_tests" = "yes")
 
 dnl ****************************************************************************
 dnl LIBCRYPTUI
