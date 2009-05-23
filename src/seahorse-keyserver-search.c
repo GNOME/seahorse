@@ -353,6 +353,7 @@ seahorse_keyserver_search_show (GtkWindow *parent)
     search = seahorse_gconf_get_string (LASTSEARCH_KEY);
     if (search != NULL) {
         gtk_entry_set_text (GTK_ENTRY (w), search);
+        gtk_editable_select_region (GTK_EDITABLE (w), 0, -1);
         g_free (search);
     }
    
