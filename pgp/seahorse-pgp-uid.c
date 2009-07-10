@@ -515,14 +515,21 @@ seahorse_pgp_uid_calc_markup (const gchar *name, const gchar *email,
 {
 	const gchar *format;
 	gboolean strike = FALSE;
+	gboolean grayed = FALSE;
 
 	g_return_val_if_fail (name, NULL);
 	
 	if (flags & SEAHORSE_FLAG_EXPIRED || flags & SEAHORSE_FLAG_REVOKED || 
 	    flags & SEAHORSE_FLAG_DISABLED)
 		strike = TRUE;
+	if (!(flags & SEAHORSE_FLAG_TRUSTED))
+		grayed = TRUE;
 	    
-	if (strike)
+	if (strike && grayed)
+		format = "<span strikethrough='true' foreground='#555555'>%s<span size='small' rise='0'>%s%s%s%s%s</span></span>";
+	else if (grayed)
+		format = "<span foreground='#555555'>%s<span size='small' rise='0'>%s%s%s%s%s</span></span>";
+	else if (strike)
 		format = "<span strikethrough='true'>%s<span foreground='#555555' size='small' rise='0'>%s%s%s%s%s</span></span>";
 	else
 		format = "%s<span foreground='#555555' size='small' rise='0'>%s%s%s%s%s</span>";
