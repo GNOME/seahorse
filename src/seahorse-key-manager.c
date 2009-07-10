@@ -66,7 +66,6 @@ enum  {
 
 enum  {
 	TAB_PUBLIC = 0,
-	TAB_TRUSTED,
 	TAB_PRIVATE,
 	TAB_PASSWORD,
 	TAB_NUM_TABS
@@ -79,17 +78,6 @@ static SeahorseObjectPredicate pred_public = {
 	SEAHORSE_LOCATION_LOCAL, 
 	SEAHORSE_USAGE_PUBLIC_KEY, 
 	0, 
-	SEAHORSE_FLAG_TRUSTED | SEAHORSE_FLAG_IS_VALID, 
-	NULL 
-};
-
-static SeahorseObjectPredicate pred_trusted = {
-	0, 
-	0, 
-	0, 
-	SEAHORSE_LOCATION_LOCAL, 
-	SEAHORSE_USAGE_PUBLIC_KEY, 
-	SEAHORSE_FLAG_TRUSTED | SEAHORSE_FLAG_IS_VALID, 
 	0, 
 	NULL
 };
@@ -969,7 +957,6 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	
 	/* Initialize the tabs, and associate them up */
 	initialize_tab (self, "pub-key-tab", TAB_PUBLIC, "pub-key-list", &pred_public);
-	initialize_tab (self, "trust-key-tab", TAB_TRUSTED, "trust-key-list", &pred_trusted);
 	initialize_tab (self, "sec-key-tab", TAB_PRIVATE, "sec-key-list", &pred_private);
 	pred_password.tag = SEAHORSE_GKR_TYPE;
 	initialize_tab (self, "password-tab", TAB_PASSWORD, "password-list", &pred_password);
