@@ -31,6 +31,7 @@
 #include "seahorse-secure-entry.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
+#include "seahorse-widget.h"
 
 #include "common/seahorse-registry.h"
 
@@ -73,9 +74,7 @@ keyserver_cell_edited (GtkCellRendererText *cell, gchar *path, gchar *text,
 static void
 keyserver_sel_changed (GtkTreeSelection *selection, SeahorseWidget *swidget)
 {
-    GtkWidget *widget;
-    
-    widget = glade_xml_get_widget (swidget->xml, "keyserver_remove");
+    GtkWidget *widget = seahorse_widget_get_widget (swidget, "keyserver_remove");
     gtk_widget_set_sensitive (widget, (gtk_tree_selection_count_selected_rows (selection) > 0));
 }
 
@@ -87,13 +86,13 @@ remove_row (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer 
 }
 
 /* User wants to remove selected rows */
-static void
-keyserver_remove_clicked (GtkWidget *button, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_prefs_keyserver_remove_clicked (GtkWidget *button, SeahorseWidget *swidget)
 {
     GtkTreeView *treeview;
     GtkTreeSelection *selection;
     
-    treeview = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, "keyservers"));
+    treeview = GTK_TREE_VIEW (seahorse_widget_get_widget (swidget, "keyservers"));
     selection = gtk_tree_view_get_selection (treeview);
     gtk_tree_selection_selected_foreach (selection, remove_row, NULL);
 }
@@ -156,7 +155,7 @@ populate_keyservers (SeahorseWidget *swidget, GSList *ks)
     gboolean cont;
     gchar *v;
         
-    treeview = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, "keyservers"));
+    treeview = GTK_TREE_VIEW (seahorse_widget_get_widget (swidget, "keyservers"));
     model = gtk_tree_view_get_model (treeview);
     store = GTK_TREE_STORE (model);
     
@@ -246,21 +245,20 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
     gchar *uri;
 
     /* Figure out the scheme */
-    widget = glade_xml_get_widget (swidget->xml, "keyserver-type");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-type"));
     g_return_val_if_fail (widget != NULL, NULL);
 
     active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
-    g_return_val_if_fail (active >= 0, NULL);
-    
-    types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
-    g_return_val_if_fail (types != NULL, NULL);
-    
-    scheme = (const gchar*)g_slist_nth_data (types, active);
-    if (scheme && !scheme[0])
-        scheme = NULL;
+    if (active >= 0) {
+	    types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
+	    g_return_val_if_fail (types != NULL, NULL);
+	    scheme = (const gchar*)g_slist_nth_data (types, active);
+	    if (scheme && !scheme[0])
+		    scheme = NULL;
+    }
     
     /* The host */
-    widget = glade_xml_get_widget (swidget->xml, "keyserver-host");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-host"));
     g_return_val_if_fail (widget != NULL, NULL);
     
     host = gtk_entry_get_text (GTK_ENTRY (widget));
@@ -274,7 +272,7 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
     }
     
     /* The port */
-    widget = glade_xml_get_widget (swidget->xml, "keyserver-port");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-port"));
     g_return_val_if_fail (widget != NULL, NULL);
     
     port = gtk_entry_get_text (GTK_ENTRY (widget));
@@ -290,34 +288,33 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
     return uri; 
 }
 
-static void
-uri_changed (GtkWidget *button, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_prefs_add_keyserver_uri_changed (GtkWidget *button, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     GSList *types;
     gchar *t;
     gint active;
 
-    widget = glade_xml_get_widget (swidget->xml, "ok");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "ok"));
     g_return_if_fail (widget != NULL);
     
     t = calculate_keyserver_uri (swidget);
     gtk_widget_set_sensitive (widget, t != NULL);
     g_free (t);
 
-    widget = glade_xml_get_widget (swidget->xml, "keyserver-type");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-type"));
     g_return_if_fail (widget != NULL);
 
     /* Show or hide the port section based on whether 'custom' is selected */    
     active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
     if (active > -1) {
-        
         types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
         g_return_if_fail (types != NULL);
-        
-        widget = glade_xml_get_widget (swidget->xml, "port-block");
+
+        widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "port-block"));
         g_return_if_fail (widget != NULL);
-        
+
         t = (gchar*)g_slist_nth_data (types, active);
         if (t && t[0])
             gtk_widget_show (widget);
@@ -326,8 +323,8 @@ uri_changed (GtkWidget *button, SeahorseWidget *swidget)
     }
 }
 
-static void
-keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
+G_MODULE_EXPORT void
+on_prefs_keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
 {
     SeahorseWidget *swidget;
     GSList *types, *descriptions, *l;
@@ -340,10 +337,10 @@ keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
     GtkTreeIter iter;
     
     swidget = seahorse_widget_new_allow_multiple ("add-keyserver",
-                                                  GTK_WINDOW (glade_xml_get_widget (sw->xml, sw->name)));
+                                                  GTK_WINDOW (seahorse_widget_get_widget (sw, sw->name)));
     g_return_if_fail (swidget != NULL);
     
-    widget = glade_xml_get_widget (swidget->xml, "keyserver-type");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-type"));
     g_return_if_fail (widget != NULL);
     
     /* The list of types */
@@ -366,16 +363,12 @@ keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
     g_object_set_data_full (G_OBJECT (swidget), "keyserver-types", types, 
                             (GDestroyNotify)seahorse_util_string_slist_free);
 
-    glade_xml_signal_connect_data (swidget->xml, "on_uri_changed", 
-                                   G_CALLBACK (uri_changed), swidget);
-
     response = gtk_dialog_run (GTK_DIALOG (seahorse_widget_get_toplevel (swidget)));
     if (response == GTK_RESPONSE_ACCEPT) {
-        
         result = calculate_keyserver_uri (swidget);
         if (result != NULL) {        
             
-            treeview = GTK_TREE_VIEW (glade_xml_get_widget (sw->xml, "keyservers"));
+            treeview = GTK_TREE_VIEW (seahorse_widget_get_widget (sw, "keyservers"));
             g_return_if_fail (treeview != NULL);
             
             store = GTK_TREE_STORE (gtk_tree_view_get_model (treeview));
@@ -400,48 +393,45 @@ setup_keyservers (SeahorseWidget *swidget)
     GtkWidget *w;
     GSList *ks;
     guint notify_id;
-    
+
     ks = seahorse_servers_get_uris ();
     populate_keyservers (swidget, ks);
     seahorse_util_string_slist_free (ks);
-    
-    treeview = GTK_TREE_VIEW (glade_xml_get_widget (swidget->xml, "keyservers"));
+
+    treeview = GTK_TREE_VIEW (seahorse_widget_get_widget (swidget, "keyservers"));
     model = gtk_tree_view_get_model (treeview);
     g_signal_connect (model, "row-changed", G_CALLBACK (keyserver_row_changed), swidget);
     g_signal_connect (model, "row-deleted", G_CALLBACK (keyserver_row_deleted), swidget);
-    
+
     selection = gtk_tree_view_get_selection (treeview);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
     g_signal_connect (selection, "changed", G_CALLBACK (keyserver_sel_changed), swidget);
 
-    glade_xml_signal_connect_data (swidget->xml, "keyserver_remove_clicked",
-            G_CALLBACK (keyserver_remove_clicked), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "keyserver_add_clicked",
-            G_CALLBACK (keyserver_add_clicked), swidget);
-            
+    gtk_builder_connect_signals (swidget->gtkbuilder, swidget);
+
     notify_id = seahorse_gconf_notify (KEYSERVER_KEY, (GConfClientNotifyFunc)gconf_notify, 
                                        swidget);
     g_signal_connect (seahorse_widget_get_toplevel (swidget), "destroy", 
                         G_CALLBACK (gconf_unnotify), GINT_TO_POINTER (notify_id));
-                        
-    w = glade_xml_get_widget (swidget->xml, "keyserver-publish");
+
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-publish"));
     g_return_if_fail (w != NULL);
-    
+
     skc = seahorse_keyserver_control_new (PUBLISH_TO_KEY, _("None: Don't publish keys"));
     gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (skc));
     gtk_widget_show_all (w);
 
-    w = glade_xml_get_widget (swidget->xml, "keyserver-publish-to-label");
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-publish-to-label"));
     gtk_label_set_mnemonic_widget (GTK_LABEL (w), GTK_WIDGET (skc));
-    
-    w = glade_xml_get_widget(swidget->xml, "auto_retrieve");
+
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "auto_retrieve"));
     g_return_if_fail (w != NULL);
-    
+
     seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON(w), AUTORETRIEVE_KEY);
-    
-    w = glade_xml_get_widget(swidget->xml, "auto_sync");
+
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "auto_sync"));
     g_return_if_fail (w != NULL);
-    
+
     seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON(w), AUTOSYNC_KEY);
 }
 
@@ -487,7 +477,7 @@ seahorse_prefs_new (GtkWindow *parent)
 #ifdef WITH_KEYSERVER
         setup_keyservers (swidget);
 #else
-        widget = glade_xml_get_widget (swidget->xml, "keyserver-tab");
+        widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-tab"));
         g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
         seahorse_prefs_remove_tab (swidget, widget);
 #endif
@@ -495,7 +485,7 @@ seahorse_prefs_new (GtkWindow *parent)
 #ifdef WITH_SHARING
         setup_sharing (swidget);
 #else
-        widget = glade_xml_get_widget (swidget->xml, "sharing-tab");
+        widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "sharing-tab"));
         g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
         seahorse_prefs_remove_tab (swidget, widget);
 #endif    
@@ -503,7 +493,7 @@ seahorse_prefs_new (GtkWindow *parent)
         seahorse_widget_show (swidget);
     } else {
         swidget = seahorse_widget_find ("prefs");
-        gtk_window_present (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
+        gtk_window_present (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)));
     }
     
     return swidget;
@@ -519,7 +509,7 @@ void
 seahorse_prefs_add_tab (SeahorseWidget *swidget, GtkWidget *label, GtkWidget *tab)
 {
     GtkWidget *widget;
-    widget = glade_xml_get_widget (swidget->xml, "notebook");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "notebook"));
     gtk_widget_show (label);
     gtk_notebook_prepend_page (GTK_NOTEBOOK (widget), tab, label);
 }
@@ -532,13 +522,13 @@ seahorse_prefs_select_tab (SeahorseWidget *swidget, GtkWidget *tab)
     
     g_return_if_fail (GTK_IS_WIDGET (tab));
     
-    tabs = glade_xml_get_widget (swidget->xml, "notebook");
+    tabs = GTK_WIDGET (seahorse_widget_get_widget (swidget, "notebook"));
     g_return_if_fail (GTK_IS_NOTEBOOK (tabs));
     
     pos = gtk_notebook_page_num (GTK_NOTEBOOK (tabs), tab);
     if (pos != -1)
         gtk_notebook_set_current_page (GTK_NOTEBOOK (tabs), pos);
-}    
+}
 
 void 
 seahorse_prefs_remove_tab (SeahorseWidget *swidget, GtkWidget *tab)
@@ -548,7 +538,7 @@ seahorse_prefs_remove_tab (SeahorseWidget *swidget, GtkWidget *tab)
     
     g_return_if_fail (GTK_IS_WIDGET (tab));
     
-    tabs = glade_xml_get_widget (swidget->xml, "notebook");
+    tabs = GTK_WIDGET (seahorse_widget_get_widget (swidget, "notebook"));
     g_return_if_fail (GTK_IS_NOTEBOOK (tabs));
     
     pos = gtk_notebook_page_num (GTK_NOTEBOOK (tabs), tab);

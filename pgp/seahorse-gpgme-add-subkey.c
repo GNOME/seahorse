@@ -39,15 +39,15 @@ enum {
   N_COLUMNS
 };
 
-static void
-type_changed (GtkComboBox *combo, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+hanlder_gpgme_add_subkey_type_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 {
 	gint type;
 	GtkSpinButton *length;
     GtkTreeModel *model;
     GtkTreeIter iter;
     	
-	length = GTK_SPIN_BUTTON (glade_xml_get_widget (swidget->xml, LENGTH));
+	length = GTK_SPIN_BUTTON (seahorse_widget_get_widget (swidget, LENGTH));
 	
 	model = gtk_combo_box_get_model (combo);
 	gtk_combo_box_get_active_iter (combo, &iter);
@@ -71,8 +71,8 @@ type_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 	}
 }
 
-static void
-never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_add_subkey_never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
 
@@ -83,8 +83,8 @@ never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
                               !gtk_toggle_button_get_active (togglebutton));
 }
 
-static void
-ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_add_subkey_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	SeahorseObjectWidget *skwidget;
 	SeahorseKeyEncType real_type;
@@ -99,7 +99,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	skwidget = SEAHORSE_OBJECT_WIDGET (swidget);
 	
-	combo = GTK_COMBO_BOX (glade_xml_get_widget (swidget->xml, "type"));
+	combo = GTK_COMBO_BOX (seahorse_widget_get_widget (swidget, "type"));
 	gtk_combo_box_get_active_iter (combo, &iter);
 	model = gtk_combo_box_get_model (combo);
 	gtk_tree_model_get (model, &iter,
@@ -107,10 +107,10 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
                         -1);	
 		
 	length = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (
-		glade_xml_get_widget (swidget->xml, LENGTH)));
+		seahorse_widget_get_widget (swidget, LENGTH)));
 	
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-	glade_xml_get_widget (swidget->xml, "never_expires"))))
+	seahorse_widget_get_widget (swidget, "never_expires"))))
 		expires = 0;
 	else {
         widget = GTK_WIDGET (g_object_get_data (G_OBJECT (swidget), "expires-datetime"));
@@ -134,7 +134,7 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 			break;
 	}
 	
-	widget = glade_xml_get_widget (swidget->xml, swidget->name);
+	widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
 	gtk_widget_set_sensitive (widget, FALSE);
 	err = seahorse_gpgme_key_op_add_subkey (SEAHORSE_GPGME_KEY (skwidget->object), 
 	                                        real_type, length, expires);
@@ -159,10 +159,10 @@ seahorse_gpgme_add_subkey_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 	swidget = seahorse_object_widget_new ("add-subkey", parent, SEAHORSE_OBJECT (pkey));
 	g_return_if_fail (swidget != NULL);
 	
-	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
+	gtk_window_set_title (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)),
 		g_strdup_printf (_("Add subkey to %s"), seahorse_object_get_label (SEAHORSE_OBJECT (pkey))));
     
-    combo = GTK_COMBO_BOX (glade_xml_get_widget (swidget->xml, "type"));
+    combo = GTK_COMBO_BOX (seahorse_widget_get_widget (swidget, "type"));
     model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_INT));
     
     gtk_combo_box_set_model (combo, model);
@@ -200,14 +200,6 @@ seahorse_gpgme_add_subkey_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
                         COMBO_INT, 3,
                         -1);
     
-    glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
-		G_CALLBACK (ok_clicked), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "never_expires_toggled",
-		G_CALLBACK (never_expires_toggled), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "type_changed",
-		G_CALLBACK (type_changed), swidget);
-
-	
 	widget = seahorse_widget_get_widget (swidget, "datetime-placeholder");
 	g_return_if_fail (widget != NULL);
 

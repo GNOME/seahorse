@@ -32,6 +32,7 @@
 #include "seahorse-secure-memory.h"
 #include "seahorse-secure-entry.h"
 #include "seahorse-util.h"
+#include "seahorse-widget.h"
 
 #include "common/seahorse-bind.h"
 
@@ -256,8 +257,8 @@ password_focus_out (SeahorseSecureEntry* entry, GdkEventFocus *event, SeahorseWi
     return FALSE;
 }
 
-static void 
-show_password_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
+G_MODULE_EXPORT void 
+on_item_show_password_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     
@@ -266,8 +267,8 @@ show_password_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
                                           gtk_toggle_button_get_active (button));
 }
 
-static void
-password_expander_activate (GtkExpander *expander, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_item_password_expander_activate (GtkExpander *expander, SeahorseWidget *swidget)
 {
     SeahorseObject *object;
     SeahorseGkrItem *git;
@@ -290,8 +291,8 @@ password_expander_activate (GtkExpander *expander, SeahorseWidget *swidget)
     transfer_password (git, swidget);
 }
 
-static void
-description_activate (GtkWidget *entry, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_item_description_activate (GtkWidget *entry, SeahorseWidget *swidget)
 {
 	SeahorseObject *object;
 	SeahorseGkrItem *git;
@@ -351,10 +352,10 @@ description_activate (GtkWidget *entry, SeahorseWidget *swidget)
 	g_object_set_data (G_OBJECT (swidget), "updating-description", NULL);
 }
 
-static gboolean
-description_focus_out (GtkWidget* widget, GdkEventFocus *event, SeahorseWidget *swidget)
+G_MODULE_EXPORT gboolean
+on_item_description_focus_out (GtkWidget* widget, GdkEventFocus *event, SeahorseWidget *swidget)
 {
-	description_activate (widget, swidget);
+	on_item_description_activate (widget, swidget);
 	return FALSE;
 }
 
@@ -365,18 +366,6 @@ setup_main (SeahorseWidget *swidget)
 	SeahorseObject *object;
 	GtkWidget *widget;
 	GtkWidget *box;
-	
-	widget = seahorse_widget_get_widget (swidget, "password-expander");
-	g_return_if_fail (widget);
-	g_signal_connect_after (widget, "activate", G_CALLBACK (password_expander_activate), swidget);
-
-	glade_xml_signal_connect_data (swidget->xml, "show_password_toggled", 
-	                               G_CALLBACK (show_password_toggled), swidget);
-
-	widget = seahorse_widget_get_widget (swidget, "description-field");
-	g_return_if_fail (widget != NULL);
-	g_signal_connect (widget, "activate", G_CALLBACK (description_activate), swidget);
-	g_signal_connect (widget, "focus-out-event", G_CALLBACK (description_focus_out), swidget);
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 
@@ -574,8 +563,8 @@ merge_toggle_button_access (SeahorseWidget *swidget, const gchar *identifier,
 		*access &= ~type;
 }
 
-static void
-application_access_toggled (GtkCheckButton *check, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_item_application_access_toggled (GtkCheckButton *check, SeahorseWidget *swidget)
 {
 	SeahorseObject *object;
 	SeahorseGkrItem *git;
@@ -755,7 +744,7 @@ seahorse_gkr_item_properties_show (SeahorseGkrItem *git, GtkWindow *parent)
 
     seahorse_object_refresh (object);
 
-    widget = glade_xml_get_widget (swidget->xml, swidget->name);
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
     g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
 
     /* 
@@ -768,9 +757,6 @@ seahorse_gkr_item_properties_show (SeahorseGkrItem *git, GtkWindow *parent)
     setup_details (swidget);
     setup_application (swidget);
     
-    glade_xml_signal_connect_data (swidget->xml, "application_access_toggled", 
-                                   G_CALLBACK (application_access_toggled), swidget);
-
     widget = seahorse_widget_get_widget (swidget, "application-list");
     g_return_if_fail (GTK_IS_TREE_VIEW (widget));
     

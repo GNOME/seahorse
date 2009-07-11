@@ -98,7 +98,7 @@ for_each_commands (SeahorseViewer *self, ForEachCommandsFunc func, gpointer user
 	}
 }
 
-static void 
+G_MODULE_EXPORT void
 on_app_preferences (GtkAction* action, SeahorseViewer* self) 
 {
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
@@ -692,7 +692,7 @@ seahorse_viewer_constructor (GType type, guint n_props, GObjectConstructParam *p
 
 		/* The widgts get added in an idle loop later */
 		name = seahorse_widget_get_name (SEAHORSE_WIDGET (self));
-		path = g_strdup_printf ("%sseahorse-%s.ui", SEAHORSE_GLADEDIR, name);
+		path = g_strdup_printf ("%sseahorse-%s.ui", SEAHORSE_UIDIR, name);
 		if (!gtk_ui_manager_add_ui_from_file (pv->ui_manager, path, &error)) {
 			g_warning ("couldn't load ui description for '%s': %s", name, error->message);
 			g_clear_error (&error);

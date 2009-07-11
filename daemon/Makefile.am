@@ -1,5 +1,4 @@
 
-gladedir = $(datadir)/seahorse/glade/
 localedir = $(datadir)/locale
 pixmapsdir = $(datadir)/pixmaps/
 
@@ -10,7 +9,6 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
-	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
 	-DLOCALEDIR=\""$(localedir)"\" \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
@@ -63,8 +61,6 @@ seahorse_daemon_LDADD = \
 
 man_MANS = seahorse-daemon.1
 
-glade_DATA = 
-
 #autostart
 desktopdir = $(sysconfdir)/xdg/autostart
 desktop_in_files = seahorse-daemon.desktop.in 
@@ -73,7 +69,6 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = \
     $(man_MANS) \
-    $(glade_DATA) \
     seahorse-daemon.desktop.in \
     seahorse-service.xml \
     seahorse-service-keyset.xml \
@@ -83,7 +78,7 @@ EXTRA_DIST = \
     seahorse-service-crypto-bindings.h \
     org.gnome.seahorse.service.in
 
-CLEANFILES = *.gladep* *.bak \
+CLEANFILES = *.bak \
     $(desktop_DATA) \
     seahorse-daemon.desktop.in \
     org.gnome.seahorse.service

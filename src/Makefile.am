@@ -1,5 +1,5 @@
 
-gladedir = $(datadir)/seahorse/glade/
+uidir = $(datadir)/seahorse/ui/
 localedir = $(datadir)/locale
 pixmapsdir = $(datadir)/pixmaps/
 
@@ -10,7 +10,7 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
-	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
+	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
@@ -65,15 +65,15 @@ seahorse_LDADD = \
 	$(top_builddir)/libegg/libeggdatetime.la \
 	$(SEAHORSE_LIBS)
 
-glade_DATA = \
-	seahorse-key-manager.glade \
+ui_DATA = \
 	seahorse-key-manager.ui \
-	seahorse-change-passphrase.glade \
-	seahorse-generate-select.glade \
-	seahorse-keyserver-search.glade \
-	seahorse-keyserver-results.glade \
+	seahorse-key-manager.xml \
+	seahorse-change-passphrase.xml \
+	seahorse-generate-select.xml \
+	seahorse-keyserver-search.xml \
 	seahorse-keyserver-results.ui \
-	seahorse-keyserver-sync.glade 
+	seahorse-keyserver-results.xml \
+	seahorse-keyserver-sync.xml
 
 desktopdir = $(datadir)/applications
 desktop_in_files = seahorse.desktop.in 
@@ -81,9 +81,9 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 EXTRA_DIST = \
-	$(glade_DATA) \
+	$(ui_DATA) \
 	seahorse.desktop.in.in
 
-CLEANFILES = *.gladep* *.bak \
+CLEANFILES = *.xmlp* *.bak \
     $(desktop_DATA) \
     seahorse.desktop.in 

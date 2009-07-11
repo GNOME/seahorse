@@ -82,8 +82,8 @@ setup_main (SeahorseWidget *swidget)
  * GENERAL
  */
 
-static void
-properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_keyring_properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 {
 	if (response == GTK_RESPONSE_HELP) {
 		seahorse_widget_show_help (swidget);
@@ -98,16 +98,11 @@ seahorse_gkr_keyring_properties_show (SeahorseGkrKeyring *gkr, GtkWindow *parent
 {
 	SeahorseObject *object = SEAHORSE_OBJECT (gkr);
 	SeahorseWidget *swidget = NULL;
-	GtkWidget *widget;
 	
 	swidget = seahorse_object_widget_new ("gkr-keyring", parent, object);
     
 	/* This happens if the window is already open */
 	if (swidget == NULL)
 		return;
-
-	widget = glade_xml_get_widget (swidget->xml, swidget->name);
-	g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
-
 	setup_main (swidget);
 }

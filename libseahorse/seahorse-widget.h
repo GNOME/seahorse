@@ -21,7 +21,7 @@
  */
 
 /**
- * SeahorseWidget: A window created from a glade file.
+ * SeahorseWidget: A window created from a gtkbuilder file.
  * 
  * - All SeahorseWidget objects are destroyed when the SeahorseContext 
  *   goes bye-bye.
@@ -31,14 +31,14 @@
  *   destroy: The window was destroyed.
  *
  * Properties: 
- *   name: (gchar*) The name of the glade file to load. 
+ *   name: (gchar*) The name of the gtkbuilder file to load.
  */
  
 #ifndef __SEAHORSE_WIDGET_H__
 #define __SEAHORSE_WIDGET_H__
 
 #include <glib.h>
-#include <glade/glade-xml.h>
+#include <gtk/gtkbuilder.h>
 
 #include "seahorse-context.h"
 
@@ -56,7 +56,7 @@ struct _SeahorseWidget {
     GtkObject parent;
 
     /*< public >*/
-    GladeXML *xml;
+    GtkBuilder *gtkbuilder;
     gchar *name;
     
     /*< private >*/
@@ -95,11 +95,6 @@ void             seahorse_widget_set_visible        (SeahorseWidget   *swidget,
 void             seahorse_widget_set_sensitive      (SeahorseWidget   *swidget,
                                                      const char       *identifier,
                                                      gboolean         sensitive);
-
-void             seahorse_widget_connect_glade_signal (SeahorseWidget *swidget, 
-                                                       const char     *event,
-                                                       GtkCallback    callback,
-                                                       gpointer       userdata);
 
 void             seahorse_widget_destroy            (SeahorseWidget   *swidget);
 

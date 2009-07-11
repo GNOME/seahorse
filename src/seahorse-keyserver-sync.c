@@ -65,8 +65,8 @@ sync_export_complete (SeahorseOperation *op, SeahorseSource *sksrc)
     }    
 }
 
-static void
-ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_sync_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
     GList *keys;
     
@@ -79,10 +79,10 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     g_list_free (keys);
 }
 
-static void
-configure_clicked (GtkButton *button, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_sync_configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    seahorse_preferences_show (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), "keyserver-tab");
+    seahorse_preferences_show (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)), "keyserver-tab");
 }
 
 static void
@@ -91,9 +91,9 @@ update_message (SeahorseWidget *swidget)
     GtkWidget *w, *w2, *sync_button;
     gchar *t;
     
-    w = glade_xml_get_widget (swidget->xml, "publish-message");
-    w2 = glade_xml_get_widget (swidget->xml, "sync-message");
-    sync_button = glade_xml_get_widget (swidget->xml, "sync-button");
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "publish-message"));
+    w2 = GTK_WIDGET (seahorse_widget_get_widget (swidget, "sync-message"));
+    sync_button = GTK_WIDGET (seahorse_widget_get_widget (swidget, "sync-button"));
 
     t = seahorse_gconf_get_string (PUBLISH_TO_KEY);
     if (t && t[0]) {
@@ -148,14 +148,14 @@ seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
     swidget = seahorse_widget_new_allow_multiple ("keyserver-sync", parent);
     g_return_val_if_fail (swidget != NULL, NULL);
     
-    win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
+    win = GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name));
     
     /* The details message */
     n = g_list_length (keys);
     t = g_strdup_printf (ngettext ("<b>%d key is selected for synchronizing</b>", 
                                    "<b>%d keys are selected for synchronizing</b>", n), n);
     
-    w = glade_xml_get_widget (swidget->xml, "detail-message");
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "detail-message"));
     g_return_val_if_fail (swidget != NULL, win);
     gtk_label_set_markup (GTK_LABEL (w), t);
     g_free (t);
@@ -171,11 +171,6 @@ seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
     g_object_set_data_full (G_OBJECT (swidget), "publish-keys", keys, 
                             (GDestroyNotify)g_list_free);
     
-    glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
-                                   G_CALLBACK (ok_clicked), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "configure_clicked",
-                                   G_CALLBACK (configure_clicked), swidget);
-
     return win;
 }
 

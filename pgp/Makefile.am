@@ -1,5 +1,5 @@
 
-gladedir = $(datadir)/seahorse/glade/
+uidir = $(datadir)/seahorse/ui/
 localedir = $(datadir)/locale
 seahorselibexecbindir = $(libdir)/seahorse/
 
@@ -10,7 +10,7 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
-	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
+	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DLDAP_DEPRECATED \
@@ -82,17 +82,17 @@ seahorselibexecbin_PROGRAMS = xloadimage
 
 xloadimage_SOURCES = seahorse-xloadimage.c
 
-glade_DATA = \
-	seahorse-add-subkey.glade \
-	seahorse-add-uid.glade \
-	seahorse-expires.glade \
-	seahorse-pgp-public-key-properties.glade \
-	seahorse-pgp-private-key-properties.glade \
-	seahorse-pgp-generate.glade \
-	seahorse-revoke.glade \
-	seahorse-sign.glade \
-	seahorse-signer.glade
+ui_DATA = \
+	seahorse-add-subkey.xml \
+	seahorse-add-uid.xml \
+	seahorse-expires.xml \
+	seahorse-pgp-public-key-properties.xml \
+	seahorse-pgp-private-key-properties.xml \
+	seahorse-pgp-generate.xml \
+	seahorse-revoke.xml \
+	seahorse-sign.xml \
+	seahorse-signer.xml
 
 EXTRA_DIST = \
-	$(glade_DATA)
+	$(ui_DATA)
 

@@ -43,8 +43,6 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#include <glade/glade-xml.h>
-
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"

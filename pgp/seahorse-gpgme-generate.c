@@ -130,8 +130,8 @@ get_expiry_date (SeahorseWidget *swidget)
     return widget;
 }
 
-static void
-on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_generate_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
 {
     SeahorseGpgmeSource *sksrc;
     SeahorseOperation *op;
@@ -233,8 +233,8 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     g_free (name);
 }
 
-static void
-entry_changed(GtkEditable *editable, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_generate_entry_changed (GtkEditable *editable, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     gchar *name;
@@ -251,8 +251,8 @@ entry_changed(GtkEditable *editable, SeahorseWidget *swidget)
     g_free (name);
 }
 
-static void
-expires_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_generate_expires_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     
@@ -262,14 +262,14 @@ expires_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
     gtk_widget_set_sensitive (widget, !gtk_toggle_button_get_active (button));
 }
 
-static void
-algorithm_changed (GtkComboBox *combo, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_generate_algorithm_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     gint idx;
     
     idx = gtk_combo_box_get_active (combo);
-    g_assert (idx < G_N_ELEMENTS (available_algorithms));
+    g_assert (idx < (int)G_N_ELEMENTS (available_algorithms));
     
     widget = seahorse_widget_get_widget (swidget, "bits-entry");
     g_return_if_fail (widget != NULL);
@@ -305,7 +305,7 @@ seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent)
     for(i = 0; i < G_N_ELEMENTS(available_algorithms); i++)
         gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _(available_algorithms[i].desc));
     gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-    algorithm_changed (GTK_COMBO_BOX (widget), swidget);
+    on_gpgme_generate_algorithm_changed (GTK_COMBO_BOX (widget), swidget);
     
     expires = time (NULL);
     expires += (60 * 60 * 24 * 365); /* Seconds in a year */
@@ -320,15 +320,6 @@ seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent)
     
     g_object_ref (sksrc);
     g_object_set_data_full (G_OBJECT (swidget), "source", sksrc, g_object_unref);
-    
-    glade_xml_signal_connect_data (swidget->xml, "on_entry_changed",
-                                   G_CALLBACK (entry_changed), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "on_expires_toggled",
-                                   G_CALLBACK (expires_toggled), swidget);
-    glade_xml_signal_connect_data (swidget->xml, "on_algorithm_changed", 
-                                   G_CALLBACK (algorithm_changed), swidget);
-    entry_changed (NULL, swidget);
-
-    g_signal_connect (seahorse_widget_get_toplevel (swidget), "response", 
-                      G_CALLBACK (on_response), swidget);
+	
+    on_gpgme_generate_entry_changed (NULL, swidget);
 }

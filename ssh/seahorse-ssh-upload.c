@@ -47,18 +47,18 @@ upload_complete (SeahorseOperation *op, gpointer dummy)
     }    
 }
 
-static void
-input_changed (GtkWidget *dummy, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_upload_input_changed (GtkWidget *dummy, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
     const gchar *user, *host, *port;
     gchar *t = NULL;
 
-    widget = glade_xml_get_widget (swidget->xml, "user-label");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "user-label"));
     user = gtk_entry_get_text (GTK_ENTRY (widget));
     g_return_if_fail (user && g_utf8_validate (user, -1, NULL));
 
-    widget = glade_xml_get_widget (swidget->xml, "host-label");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "host-label"));
     host = gtk_entry_get_text (GTK_ENTRY (widget));
     g_return_if_fail (host && g_utf8_validate (host, -1, NULL));
     
@@ -71,7 +71,7 @@ input_changed (GtkWidget *dummy, SeahorseWidget *swidget)
         host = t = g_strndup (host, port - host);
     }
 
-    widget = glade_xml_get_widget (swidget->xml, "ok");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "ok"));
     gtk_widget_set_sensitive (widget, host[0] && !seahorse_util_string_is_whitespace (host) && 
                                       user[0] && !seahorse_util_string_is_whitespace (user));
     
@@ -142,11 +142,11 @@ upload_keys (SeahorseWidget *swidget)
     keys = (GList*)g_object_steal_data (G_OBJECT (swidget), "upload-keys");
     g_return_if_fail (keys != NULL);
 
-    widget = glade_xml_get_widget (swidget->xml, "user-label");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "user-label"));
     cuser = gtk_entry_get_text (GTK_ENTRY (widget));
     g_return_if_fail (cuser && g_utf8_validate (cuser, -1, NULL));
     
-    widget = glade_xml_get_widget (swidget->xml, "host-label");
+    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "host-label"));
     chost = (gchar*)gtk_entry_get_text (GTK_ENTRY (widget));
     g_return_if_fail (chost && g_utf8_validate (chost, -1, NULL));
     
@@ -200,24 +200,21 @@ seahorse_ssh_upload_prompt (GList *keys, GtkWindow *parent)
     swidget = seahorse_widget_new_allow_multiple ("ssh-upload", parent);
     g_return_if_fail (swidget != NULL);
     
-    win = GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name));
+    win = GTK_WINDOW (GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name)));
 
     /* Default to the users current name */
-    w = glade_xml_get_widget (swidget->xml, "user-label");
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "user-label"));
     gtk_entry_set_text (GTK_ENTRY (w), g_get_user_name ());
  
     /* Focus the host */
-    w = glade_xml_get_widget (swidget->xml, "host-label");
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "host-label"));
     gtk_widget_grab_focus (w);    
 
     keys = g_list_copy (keys);
     g_object_set_data_full (G_OBJECT (swidget), "upload-keys", keys, 
                             (GDestroyNotify)g_list_free);
 
-    glade_xml_signal_connect_data (swidget->xml, "input_changed", 
-                                   G_CALLBACK (input_changed), swidget);
-
-    input_changed (NULL, swidget);
+    on_upload_input_changed (NULL, swidget);
 
     for (;;) {
         switch (gtk_dialog_run (GTK_DIALOG (win))) {

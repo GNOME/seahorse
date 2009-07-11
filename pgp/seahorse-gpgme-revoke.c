@@ -40,8 +40,8 @@ enum {
   N_COLUMNS
 };
 
-static void
-ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_revoke_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	SeahorseRevokeReason reason;
 	SeahorseGpgmeSubkey *subkey;
@@ -52,16 +52,16 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	GtkTreeIter iter;
 	GValue value;
 	
-	widget = glade_xml_get_widget (swidget->xml, "reason");
+	widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "reason"));
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 	gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter);
 	
-	memset(&value, 0, sizeof(value));
+	memset (&value, 0, sizeof(value));
 	gtk_tree_model_get_value (model, &iter, COLUMN_INT, &value);
 	reason = g_value_get_int (&value);
 	g_value_unset (&value);
 	
-	description = gtk_entry_get_text (GTK_ENTRY (glade_xml_get_widget (swidget->xml, "description")));
+	description = gtk_entry_get_text (GTK_ENTRY (seahorse_widget_get_widget (swidget, "description")));
 	subkey = g_object_get_data (G_OBJECT (swidget), "subkey");
 	g_return_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey));
 	
@@ -87,13 +87,10 @@ seahorse_gpgme_revoke_new (SeahorseGpgmeSubkey *subkey, GtkWindow *parent)
 	swidget = seahorse_widget_new ("revoke", parent);
 	g_return_if_fail (swidget != NULL);
 	
-	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
-		G_CALLBACK (ok_clicked), swidget);
-	
 	label = seahorse_pgp_subkey_get_description (SEAHORSE_PGP_SUBKEY (subkey));
 	title = g_strdup_printf (_("Revoke: %s"), label);
-	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), title);
-	g_free (title);;
+	gtk_window_set_title (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)), title);
+	g_free (title);
 	
 	g_object_set_data (G_OBJECT (swidget), "subkey", subkey);
 
@@ -129,7 +126,7 @@ seahorse_gpgme_revoke_new (SeahorseGpgmeSubkey *subkey, GtkWindow *parent)
 	                    -1);
                         
 	/* Finish Setting Up Combo Box */
-	widget = glade_xml_get_widget (swidget->xml, "reason");
+	widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "reason"));
     
 	gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);

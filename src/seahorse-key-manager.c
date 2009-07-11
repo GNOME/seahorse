@@ -261,17 +261,6 @@ on_tab_changed (GtkNotebook* notebook, void* unused, guint page_num, SeahorseKey
 }
 
 static void 
-on_help_show (GtkButton* button, SeahorseKeyManager* self) 
-{
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (GTK_IS_BUTTON (button));
-	seahorse_widget_show_help (SEAHORSE_WIDGET (self));
-}
-
-
-
-
-static void 
 on_view_selection_changed (GtkTreeSelection* selection, SeahorseKeyManager* self) 
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
@@ -279,9 +268,9 @@ on_view_selection_changed (GtkTreeSelection* selection, SeahorseKeyManager* self
 	g_idle_add ((GSourceFunc)fire_selection_changed, self);
 }
 
-static void 
-on_row_activated (GtkTreeView* view, GtkTreePath* path, 
-                  GtkTreeViewColumn* column, SeahorseKeyManager* self) 
+G_MODULE_EXPORT void
+on_keymanager_row_activated (GtkTreeView* view, GtkTreePath* path, 
+                                  GtkTreeViewColumn* column, SeahorseKeyManager* self) 
 {
 	SeahorseObject* obj;
 
@@ -295,8 +284,8 @@ on_row_activated (GtkTreeView* view, GtkTreePath* path,
 		seahorse_viewer_show_properties (SEAHORSE_VIEWER (self), obj);
 }
 
-static gboolean 
-on_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKeyManager* self) 
+G_MODULE_EXPORT gboolean
+on_keymanager_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKeyManager* self) 
 {
 	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER (self), FALSE);
 	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
@@ -307,8 +296,8 @@ on_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKe
 	return FALSE;
 }
 
-static gboolean 
-on_key_list_popup_menu (GtkTreeView* view, SeahorseKeyManager* self) 
+G_MODULE_EXPORT gboolean
+on_keymanager_key_list_popup_menu (GtkTreeView* view, SeahorseKeyManager* self) 
 {
 	SeahorseObject* obj;
 
@@ -329,8 +318,8 @@ on_file_new (GtkAction* action, SeahorseKeyManager* self)
 	seahorse_generate_select_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
 }
 
-static void 
-on_new_button_clicked (GtkButton* button, SeahorseKeyManager* self) 
+G_MODULE_EXPORT void 
+on_keymanager_new_button (GtkButton* button, SeahorseKeyManager* self) 
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_BUTTON (button));
@@ -365,9 +354,6 @@ initialize_tab (SeahorseKeyManager* self, const char* tabwidget, guint tabid, co
 	selection = gtk_tree_view_get_selection (view);
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect (selection, "changed", G_CALLBACK (on_view_selection_changed), self);
-	g_signal_connect (view, "row-activated", G_CALLBACK (on_row_activated), self);
-	g_signal_connect (view, "button-press-event", G_CALLBACK (on_key_list_button_pressed), self);
-	g_signal_connect (view, "popup-menu", G_CALLBACK (on_key_list_popup_menu), self);
 	gtk_widget_realize (GTK_WIDGET (view));
 
 	/* Add new key store and associate it */
@@ -514,8 +500,8 @@ on_key_import_file (GtkAction* action, SeahorseKeyManager* self)
 	import_prompt (self);
 }
 
-static void 
-on_import_button_clicked (GtkButton* button, SeahorseKeyManager* self) 
+G_MODULE_EXPORT void 
+on_keymanager_import_button (GtkButton* button, SeahorseKeyManager* self) 
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_BUTTON (button));
@@ -899,12 +885,10 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	                         "delete-event", G_CALLBACK (on_delete_event), self, 0);
 	
 	/* first time signals */
-	g_signal_connect_object (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "help-button"), 
-	                         "clicked", G_CALLBACK (on_help_show), self, 0);
 	g_signal_connect_object (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "import-button"), 
-	                         "clicked", G_CALLBACK (on_import_button_clicked), self, 0);
+	                         "clicked", G_CALLBACK (on_keymanager_import_button), self, 0);
 	g_signal_connect_object (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "new-button"), 
-	                         "clicked", G_CALLBACK (on_new_button_clicked), self, 0);
+	                         "clicked", G_CALLBACK (on_keymanager_new_button), self, 0);
 	
 	/* The notebook */
 	g_signal_connect_object (self->pv->notebook, "switch-page", G_CALLBACK (on_tab_changed), self, G_CONNECT_AFTER);

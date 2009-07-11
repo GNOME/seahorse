@@ -134,7 +134,7 @@ on_row_activated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *colum
 		seahorse_viewer_show_properties (SEAHORSE_VIEWER (self), obj);
 }
 
-static gboolean 
+G_MODULE_EXPORT gboolean 
 on_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKeyserverResults* self) 
 {
 	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self), FALSE);
@@ -144,7 +144,7 @@ on_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKe
 	return FALSE;
 }
 
-static gboolean 
+G_MODULE_EXPORT gboolean 
 on_key_list_popup_menu (GtkTreeView* view, SeahorseKeyserverResults* self) 
 {
 	SeahorseObject* key;

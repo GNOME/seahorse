@@ -197,13 +197,13 @@ progress_operation_update (SeahorseOperation *operation, const gchar *message,
     GtkWidget *w;
     const gchar *t;
     
-    w = glade_xml_get_widget (swidget->xml, "operation-details");
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "operation-details"));
     g_return_if_fail (w != NULL);
     
     t = seahorse_operation_get_message (operation);
     gtk_label_set_text (GTK_LABEL (w), t ? t : "");
     
-    progress = GTK_PROGRESS_BAR (glade_xml_get_widget (swidget->xml, "operation-bar"));
+    progress = GTK_PROGRESS_BAR (seahorse_widget_get_widget (swidget, "operation-bar"));
     g_return_if_fail (w != NULL);
     
     if (fract >= 0.0) {
@@ -214,8 +214,8 @@ progress_operation_update (SeahorseOperation *operation, const gchar *message,
     }
 }
 
-static void
-progress_operation_cancel (GtkButton *button, SeahorseOperation *operation)
+G_MODULE_EXPORT void
+on_progress_operation_cancel (GtkButton *button, SeahorseOperation *operation)
 {
     if (seahorse_operation_is_running (operation))
         seahorse_operation_cancel (operation);
@@ -232,7 +232,7 @@ progress_delete_event (GtkWidget *widget, GdkEvent *event,
                        SeahorseOperation *operation)
 {
     /* When window close we simulate a cancel */
-    progress_operation_cancel (NULL, operation);
+    on_progress_operation_cancel (NULL, operation);
     
     /* Allow window to close regardless of outcome */
     return TRUE;
@@ -271,7 +271,7 @@ progress_show (SeahorseOperation *operation)
     g_object_set_data_full (G_OBJECT (swidget), "operation", operation, 
                             (GDestroyNotify)g_object_unref);    
 
-    w = glade_xml_get_widget (swidget->xml, swidget->name);
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
     gtk_window_move (GTK_WINDOW (w), 10, 10);
 
     /* Setup the title */
@@ -279,12 +279,12 @@ progress_show (SeahorseOperation *operation)
     if (title) {
             
         /* The window title */
-        w = glade_xml_get_widget (swidget->xml, swidget->name);
+        w = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
         g_return_val_if_fail (w != NULL, FALSE);
         gtk_window_set_title (GTK_WINDOW (w), title);
             
         /* The main message title */
-        w = glade_xml_get_widget (swidget->xml, "operation-title");
+        w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "operation-title"));
         g_return_val_if_fail (w != NULL, FALSE);
         t = g_strdup_printf ("<b>%s</b>", title);
         gtk_label_set_markup (GTK_LABEL (w), t);
@@ -298,13 +298,11 @@ progress_show (SeahorseOperation *operation)
                       G_CALLBACK (progress_operation_update), swidget);
 
     /* Cancel events */
-    glade_xml_signal_connect_data (swidget->xml, "cancel_clicked",
-                                   G_CALLBACK (progress_operation_cancel), operation);
     g_signal_connect (seahorse_widget_get_toplevel (swidget), "delete_event",
                       G_CALLBACK (progress_delete_event), operation);
     
     /* Done and cleanup */
-    w = glade_xml_get_widget (swidget->xml, swidget->name);
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
     g_signal_connect (w, "destroy", G_CALLBACK (progress_destroy), operation);
     g_signal_connect (operation, "done", G_CALLBACK (progress_operation_done), swidget);
 

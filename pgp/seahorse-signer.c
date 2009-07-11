@@ -78,7 +78,7 @@ seahorse_signer_get (GtkWindow *parent)
     swidget = seahorse_widget_new ("signer", parent);
     g_return_val_if_fail (swidget != NULL, NULL);
             
-    combo = glade_xml_get_widget (swidget->xml, "signer-select");
+    combo = GTK_WIDGET (seahorse_widget_get_widget (swidget, "signer-select"));
     g_return_val_if_fail (combo != NULL, NULL);
     seahorse_combo_keys_attach (GTK_COMBO_BOX (combo), skset, NULL);
     g_object_unref (skset);

@@ -137,15 +137,15 @@ keyring_add_done (GnomeKeyringResult result, gpointer data)
 	seahorse_widget_destroy (swidget);
 }
 
-static void
-keyring_name_changed (GtkEntry *entry, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_add_keyring_name_changed (GtkEntry *entry, SeahorseWidget *swidget)
 {
 	const gchar *keyring = gtk_entry_get_text (entry);
 	seahorse_widget_set_sensitive (swidget, "ok", keyring && keyring[0]);
 }
 
-static void
-properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_add_keyring_properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 {
 	GtkEntry *entry;
 	const gchar *keyring;
@@ -183,13 +183,9 @@ seahorse_gkr_add_keyring_show (GtkWindow *parent)
 
 	entry = GTK_ENTRY (seahorse_widget_get_widget (swidget, "keyring-name"));
 	g_return_if_fail (entry); 
-
-	glade_xml_signal_connect_data (swidget->xml, "keyring_name_changed", 
-	                               G_CALLBACK (keyring_name_changed), swidget);
-	keyring_name_changed (entry, swidget);
+	on_add_keyring_name_changed (entry, swidget);
 
 	widget = seahorse_widget_get_toplevel (swidget);
-	g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
 	
 	gtk_widget_show (widget);
 	gtk_window_present (GTK_WINDOW (widget));

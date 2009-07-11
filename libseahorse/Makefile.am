@@ -1,5 +1,5 @@
 
-gladedir = $(datadir)/seahorse/glade/
+uidir = $(datadir)/seahorse/ui/
 localedir = $(datadir)/locale
 pixmapsdir = $(datadir)/pixmaps/seahorse/
 seahorselibexecbindir = $(libdir)/seahorse/
@@ -9,7 +9,7 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir)/libcryptui \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
-	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
+	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
@@ -75,11 +75,11 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	echo "#include \"seahorse-marshal.h\"" > $@ && \
 	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse_marshal >> $@
 
-glade_DATA = \
-	seahorse-prefs.glade \
-	seahorse-add-keyserver.glade \
-	seahorse-progress.glade \
-	seahorse-notify.glade
+ui_DATA = \
+	seahorse-prefs.xml \
+	seahorse-add-keyserver.xml \
+	seahorse-progress.xml \
+	seahorse-notify.xml
 
-EXTRA_DIST = $(glade_DATA) \
+EXTRA_DIST = $(ui_DATA) \
 	seahorse-marshal.list

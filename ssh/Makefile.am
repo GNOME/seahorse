@@ -1,5 +1,5 @@
 
-gladedir = $(datadir)/seahorse/glade/
+uidir = $(datadir)/seahorse/ui/
 localedir = $(datadir)/locale
 seahorselibexecbindir = $(libdir)/seahorse/
 
@@ -9,7 +9,7 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
-	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
+	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
@@ -45,11 +45,11 @@ seahorse_ssh_askpass_LDADD = \
 	$(top_builddir)/libcryptui/libcryptui.la \
 	$(SEAHORSE_LIBS)
 
-glade_DATA = \
-	seahorse-ssh-key-properties.glade \
-	seahorse-ssh-generate.glade \
-	seahorse-ssh-upload.glade 
+ui_DATA = \
+	seahorse-ssh-key-properties.xml \
+	seahorse-ssh-generate.xml \
+	seahorse-ssh-upload.xml
 
 EXTRA_DIST = \
-	$(glade_DATA)
+	$(ui_DATA)
 

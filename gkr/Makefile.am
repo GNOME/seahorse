@@ -1,5 +1,5 @@
 
-gladedir = $(datadir)/seahorse/glade/
+uidir = $(datadir)/seahorse/ui/
 localedir = $(datadir)/locale
 seahorselibexecbindir = $(libdir)/seahorse/
 
@@ -9,7 +9,7 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
-	-DSEAHORSE_GLADEDIR=\""$(gladedir)"\" \
+	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
@@ -36,11 +36,11 @@ libseahorse_gkr_la_LIBADD = \
 	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libcryptui/libcryptui.la
 
-glade_DATA = \
-	seahorse-add-keyring.glade \
-	seahorse-gkr-item-properties.glade \
-	seahorse-gkr-keyring.glade
+ui_DATA = \
+	seahorse-add-keyring.xml \
+	seahorse-gkr-item-properties.xml \
+	seahorse-gkr-keyring.xml
 
 EXTRA_DIST = \
-	$(glade_DATA)
+	$(ui_DATA)
 

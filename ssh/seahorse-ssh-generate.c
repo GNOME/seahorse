@@ -111,7 +111,7 @@ upload_handler (SeahorseOperation *op, SeahorseWidget *swidget)
 	}
 	
     keys = g_list_append (NULL, skey);
-    seahorse_ssh_upload_prompt (keys, GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)));
+    seahorse_ssh_upload_prompt (keys, GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)));
     g_list_free (keys);
 	seahorse_widget_destroy (swidget);
 }

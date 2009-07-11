@@ -33,8 +33,8 @@
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-gpgme-subkey.h"
 
-static void
-ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_expire_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	GtkWidget *widget; 
 	SeahorseGpgmeSubkey *subkey;
@@ -44,11 +44,11 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	
 	subkey = SEAHORSE_GPGME_SUBKEY (g_object_get_data (G_OBJECT (swidget), "subkey"));
 	
-	widget = glade_xml_get_widget (swidget->xml, "expire");
+	widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "expire"));
 	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 		
 		memset (&when, 0, sizeof (when));            
-		widget = glade_xml_get_widget (swidget->xml, "calendar");
+		widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "calendar"));
 		gtk_calendar_get_date (GTK_CALENDAR (widget), (guint*)&(when.tm_year), 
 		                       (guint*)&(when.tm_mon), (guint*)&(when.tm_mday));
 		when.tm_year -= 1900;
@@ -77,14 +77,14 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	seahorse_widget_destroy (swidget);
 }
 
-void
-expires_toggled (GtkWidget *widget, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_expire_toggled (GtkWidget *widget, SeahorseWidget *swidget)
 {
 	GtkWidget *expire;
 	GtkWidget *cal;
 	
-	expire = glade_xml_get_widget (swidget->xml, "expire");
-	cal = glade_xml_get_widget (swidget->xml, "calendar");
+	expire = GTK_WIDGET (seahorse_widget_get_widget (swidget, "expire"));
+	cal = GTK_WIDGET (seahorse_widget_get_widget (swidget, "calendar"));
 
 	gtk_widget_set_sensitive (cal, !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (expire)));
 }
@@ -105,16 +105,10 @@ seahorse_gpgme_expires_new (SeahorseGpgmeSubkey *subkey, GtkWindow *parent)
 	g_object_set_data_full (G_OBJECT (swidget), "subkey", 
 	                        g_object_ref (subkey), g_object_unref);
 	
-	glade_xml_signal_connect_data (swidget->xml, "on_calendar_change_button_clicked",
-	                               G_CALLBACK (ok_clicked), swidget);
-    
-	date = glade_xml_get_widget (swidget->xml, "calendar");    
+	date = GTK_WIDGET (seahorse_widget_get_widget (swidget, "calendar"));
 	g_return_if_fail (date != NULL);
 
-	expire = glade_xml_get_widget (swidget->xml, "expire");
-	glade_xml_signal_connect_data (swidget->xml, "on_expire_toggled",
-	                               G_CALLBACK (expires_toggled), swidget);
-	
+	expire = GTK_WIDGET (seahorse_widget_get_widget (swidget, "expire"));
 	expires = seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (subkey)); 
 	if (!expires) {
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (expire), TRUE);
@@ -135,6 +129,6 @@ seahorse_gpgme_expires_new (SeahorseGpgmeSubkey *subkey, GtkWindow *parent)
 	
 	label = seahorse_pgp_subkey_get_description (SEAHORSE_PGP_SUBKEY (subkey));
 	title = g_strdup_printf (_("Expiry: %s"), label);
-	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)), title);
+	gtk_window_set_title (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)), title);
 	g_free (title);
 }

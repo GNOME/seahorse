@@ -41,30 +41,30 @@ check_ok (SeahorseWidget *swidget)
 	
 	/* must be at least 5 characters */
 	name = gtk_entry_get_text (GTK_ENTRY (
-		glade_xml_get_widget (swidget->xml, NAME)));
+		seahorse_widget_get_widget (swidget, NAME)));
 	/* must be empty or be *@* */
 	email = gtk_entry_get_text (GTK_ENTRY (
-		glade_xml_get_widget (swidget->xml, EMAIL)));
+		seahorse_widget_get_widget (swidget, EMAIL)));
 	
-	gtk_widget_set_sensitive (glade_xml_get_widget (swidget->xml, "ok"),
+	gtk_widget_set_sensitive (GTK_WIDGET (seahorse_widget_get_widget (swidget, "ok")),
 		strlen (name) >= 5 && (strlen (email) == 0  ||
 		(g_pattern_match_simple ("?*@?*", email))));
 }
 
-static void
-name_changed (GtkEditable *editable, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_add_uid_name_changed (GtkEditable *editable, SeahorseWidget *swidget)
 {
 	check_ok (swidget);
 }
 
-static void
-email_changed (GtkEditable *editable, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_add_uid_email_changed (GtkEditable *editable, SeahorseWidget *swidget)
 {
 	check_ok (swidget);
 }
 
-static void
-ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+G_MODULE_EXPORT void
+on_gpgme_add_uid_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
 	SeahorseObject *object;
 	const gchar *name, *email, *comment;
@@ -73,11 +73,11 @@ ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 	
 	name = gtk_entry_get_text (GTK_ENTRY (
-		glade_xml_get_widget (swidget->xml, NAME)));
+		seahorse_widget_get_widget (swidget, NAME)));
 	email = gtk_entry_get_text (GTK_ENTRY (
-		glade_xml_get_widget (swidget->xml, EMAIL)));
+		seahorse_widget_get_widget (swidget, EMAIL)));
 	comment = gtk_entry_get_text (GTK_ENTRY (
-		glade_xml_get_widget (swidget->xml, "comment")));
+		seahorse_widget_get_widget (swidget, "comment")));
 	
 	err = seahorse_gpgme_key_op_add_uid (SEAHORSE_GPGME_KEY (object),
 	                                     name, email, comment);
@@ -103,13 +103,6 @@ seahorse_gpgme_add_uid_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 	g_return_if_fail (swidget != NULL);
 	
 	userid = seahorse_object_get_label (SEAHORSE_OBJECT (pkey));
-	gtk_window_set_title (GTK_WINDOW (glade_xml_get_widget (swidget->xml, swidget->name)),
+	gtk_window_set_title (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)),
 		g_strdup_printf (_("Add user ID to %s"), userid));
-  
-	glade_xml_signal_connect_data (swidget->xml, "ok_clicked",
-		G_CALLBACK (ok_clicked), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "name_changed",
-		G_CALLBACK (name_changed), swidget);
-	glade_xml_signal_connect_data (swidget->xml, "email_changed",
-		G_CALLBACK (email_changed), swidget);
 }

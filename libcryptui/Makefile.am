@@ -72,13 +72,11 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	$(LIBCRYPTUI_CFLAGS) \
 	-DLIBCRYPTUI_BUILD=1 \
-	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
-	-DUIDIR=\""$(uidir)"\"
+	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
 
 EXTRA_DIST = \
 	cryptui-marshal.list \
-	cryptui.pc.in \
-	$(GLADE_FILES)
+	cryptui.pc.in
     
 CLEANFILES = \
 	cryptui-marshal.h \
