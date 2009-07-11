@@ -45,6 +45,7 @@ static const gchar *seahorse_icons[] = {
 static const gchar *themed_icons[] = {
     SEAHORSE_THEMED_WEBBROWSER,
     SEAHORSE_THEMED_FOLDER,
+    "emblem-readonly",
     NULL
 };
 

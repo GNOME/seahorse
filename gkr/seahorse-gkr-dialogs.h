@@ -26,13 +26,20 @@
 
 #include "seahorse-gkr-item.h"
 #include "seahorse-gkr-keyring.h"
+#include "seahorse-widget.h"
 
 void            seahorse_gkr_add_keyring_register     (void);
+
+void            seahorse_gkr_add_item_show            (GtkWindow *parent);
 
 void            seahorse_gkr_add_keyring_show         (GtkWindow *parent);
 
 void            seahorse_gkr_item_properties_show     (SeahorseGkrItem *git, GtkWindow *parent);
 
 void            seahorse_gkr_keyring_properties_show  (SeahorseGkrKeyring *gkr, GtkWindow *parent);
+
+void            seahorse_gkr_dialog_begin_request     (SeahorseWidget *swidget, gpointer request);
+
+void            seahorse_gkr_dialog_complete_request  (SeahorseWidget *swidget, gboolean cancel);
 
 #endif /* __SEAHORSE_GKR_DIALOGS__ */

@@ -362,6 +362,7 @@ seahorse_gkr_keyring_realize (SeahorseObject *obj)
 	              "description", "",
 	              "flags", 0,
 	              "icon", "folder",
+	              "usage", SEAHORSE_USAGE_OTHER,
 	              NULL);
 	
 	g_free (name);

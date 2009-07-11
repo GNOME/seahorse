@@ -83,9 +83,18 @@ on_gkr_add_keyring (GtkAction *action, gpointer unused)
 	seahorse_gkr_add_keyring_show (NULL);
 }
 
+static void
+on_gkr_add_item (GtkAction *action, gpointer unused)
+{
+	g_return_if_fail (GTK_IS_ACTION (action));
+	seahorse_gkr_add_item_show (NULL);
+}
+
 static const GtkActionEntry ENTRIES_NEW[] = {
 	{ "gkr-add-keyring", "folder", N_("Password Keyring"), "",
-	  N_("Used to store application and network passwords"), G_CALLBACK (on_gkr_add_keyring) }
+	  N_("Used to store application and network passwords"), G_CALLBACK (on_gkr_add_keyring) },
+	{ "gkr-add-item", "emblem-readonly", N_("Stored Password"), "",
+	  N_("Safely store a password or secret."), G_CALLBACK (on_gkr_add_item) }
 };
 
 static void

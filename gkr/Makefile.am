@@ -19,8 +19,9 @@ noinst_LTLIBRARIES = libseahorse-gkr.la
 
 libseahorse_gkr_la_SOURCES = \
 	seahorse-gkr.c seahorse-gkr.h \
+	seahorse-gkr-add-item.c \
 	seahorse-gkr-add-keyring.c \
-	seahorse-gkr-dialogs.h \
+	seahorse-gkr-dialogs.h seahorse-gkr-dialogs.c \
 	seahorse-gkr-item.c seahorse-gkr-item.h \
 	seahorse-gkr-item-commands.c seahorse-gkr-item-commands.h \
 	seahorse-gkr-item-properties.c \
@@ -38,6 +39,7 @@ libseahorse_gkr_la_LIBADD = \
 
 ui_DATA = \
 	seahorse-add-keyring.xml \
+	seahorse-gkr-add-item.xml \
 	seahorse-gkr-item-properties.xml \
 	seahorse-gkr-keyring.xml
 
