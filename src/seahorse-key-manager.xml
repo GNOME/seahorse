@@ -58,6 +58,20 @@
               </object>
             </child>
             <child type="tab">
+              <object class="GtkLabel" id="label29">
+                <property name="visible">True</property>
+                <property name="xpad">3</property>
+                <property name="label" translatable="yes">_Passwords</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
               <object class="GtkLabel" id="label26">
                 <property name="visible">True</property>
                 <property name="xpad">3</property>
@@ -65,6 +79,7 @@
                 <property name="use_underline">True</property>
               </object>
               <packing>
+                <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -94,45 +109,11 @@
               <object class="GtkLabel" id="label28">
                 <property name="visible">True</property>
                 <property name="xpad">3</property>
-                <property name="label" translatable="yes">Other _Collected Keys</property>
+                <property name="label" translatable="yes">Other _Keys</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="position">2</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow" id="password-tab">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="border_width">3</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <child>
-                  <object class="GtkTreeView" id="password-list">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="border_width">12</property>
-                    <property name="rules_hint">True</property>
-                    <signal name="button_press_event" handler="on_keymanager_key_list_button_pressed"/>
-                    <signal name="row_activated" handler="on_keymanager_row_activated"/>
-                    <signal name="popup_menu" handler="on_keymanager_key_list_popup_menu"/>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label29">
-                <property name="visible">True</property>
-                <property name="xpad">3</property>
-                <property name="label" translatable="yes">_Passwords</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="position">3</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -234,7 +215,6 @@
                                   <object class="GtkImage" id="image2">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-open</property>
-                                    <property name="icon-size">4</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
