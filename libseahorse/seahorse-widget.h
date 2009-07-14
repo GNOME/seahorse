@@ -38,7 +38,7 @@
 #define __SEAHORSE_WIDGET_H__
 
 #include <glib.h>
-#include <gtk/gtkbuilder.h>
+#include <gtk/gtk.h>
 
 #include "seahorse-context.h"
 
