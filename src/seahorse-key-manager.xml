@@ -39,13 +39,13 @@
             <property name="can_focus">True</property>
             <property name="border_width">3</property>
             <child>
-              <object class="GtkScrolledWindow" id="sec-key-tab">
+              <object class="GtkScrolledWindow" id="password-tab">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="border_width">3</property>
                 <property name="hscrollbar_policy">automatic</property>
                 <child>
-                  <object class="GtkTreeView" id="sec-key-list">
+                  <object class="GtkTreeView" id="password-list">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="border_width">12</property>
@@ -69,7 +69,26 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkScrolledWindow" id="sec-key-tab">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="border_width">3</property>
+                <property name="hscrollbar_policy">automatic</property>
+                <child>
+                  <object class="GtkTreeView" id="sec-key-list">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="border_width">12</property>
+                    <property name="rules_hint">True</property>
+                    <signal name="button_press_event" handler="on_keymanager_key_list_button_pressed"/>
+                    <signal name="row_activated" handler="on_keymanager_row_activated"/>
+                    <signal name="popup_menu" handler="on_keymanager_key_list_popup_menu"/>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="label26">
