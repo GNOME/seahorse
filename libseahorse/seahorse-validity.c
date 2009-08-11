@@ -26,6 +26,12 @@
 
 #include "seahorse-validity.h"
 
+/**
+ * seahorse_validity_get_string:
+ * @validity: The validity ID
+ *
+ * Returns: A string describing the validity. Must not be freed
+ */
 const gchar*
 seahorse_validity_get_string (SeahorseValidity validity)
 {

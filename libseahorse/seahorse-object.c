@@ -30,6 +30,24 @@
 
 #include <glib/gi18n.h>
 
+/**
+ * @PROP_0:
+ * @PROP_CONTEXT:
+ * @PROP_SOURCE:
+ * @PROP_PREFERRED:
+ * @PROP_PARENT:
+ * @PROP_ID:
+ * @PROP_TAG:
+ * @PROP_LABEL:
+ * @PROP_MARKUP:
+ * @PROP_NICKNAME:
+ * @PROP_DESCRIPTION:
+ * @PROP_ICON:
+ * @PROP_IDENTIFIER:
+ * @PROP_LOCATION:
+ * @PROP_USAGE:
+ * @PROP_FLAGS:
+ */
 enum {
 	PROP_0,
 	PROP_CONTEXT,
@@ -49,6 +67,32 @@ enum {
 	PROP_FLAGS
 };
 
+/**
+ * _SeahorseObjectPrivate:
+ * @id: the id of the object
+ * @tag: DBUS: "ktype"
+ * @tag_explicit: If TRUE the tag will not be set automatically
+ * @source: Where did the object come from ?
+ * @context:
+ * @preferred: Points to the object to prefer over this one
+ * @parent: the object's parent
+ * @children: a list of children the object has
+ * @label: DBUS: "display-name"
+ * @markup: Markup text
+ * @markup_explicit: If TRUE the markup will not be set automatically
+ * @nickname: DBUS: "simple-name"
+ * @nickname_explicit: If TRUE the nickname will not be set automatically
+ * @description:  Description text DBUS: "key-desc"
+ * @description_explicit: If TRUE the description will not be set automatically
+ * @icon: DBUS: "stock-id"
+ * @identifier: DBUS: "key-id", "display-id", "raw-id"
+ * @identifier_explicit:
+ * @location: describes the loaction of the object (local, remte, invalid...)
+ * @usage: DBUS: "etype"
+ * @flags:
+ * @realizing: set while the object is realizing
+ * @realized: set as soon as the object is realized
+ */
 struct _SeahorseObjectPrivate {
 	GQuark id;
 	GQuark tag;
@@ -60,21 +104,21 @@ struct _SeahorseObjectPrivate {
 	SeahorseObject *parent;
 	GList *children;
 	
-	gchar *label;
-	gchar *markup;
-	gboolean markup_explicit;
-	gchar *nickname;
-	gboolean nickname_explicit;
-	gchar *description;
-	gboolean description_explicit;
-	gchar *icon;
-	gchar *identifier;
-	gboolean identifier_explicit;
-	
-	SeahorseLocation location;
-	SeahorseUsage usage;
-	guint flags;
-	
+    gchar *label;             
+    gchar *markup;
+    gboolean markup_explicit;
+    gchar *nickname;
+    gboolean nickname_explicit;
+    gchar *description;
+    gboolean description_explicit;
+    gchar *icon;
+    gchar *identifier;
+    gboolean identifier_explicit;
+
+    SeahorseLocation location;
+    SeahorseUsage usage;
+    guint flags;
+
 	gboolean realized;
 	gboolean realizing;
 };
@@ -85,6 +129,14 @@ G_DEFINE_TYPE (SeahorseObject, seahorse_object, G_TYPE_OBJECT);
  * INTERNAL 
  */
 
+/**
+ * register_child:
+ * @self: The parent
+ * @child: The new child
+ *
+ *
+ * Sets @child as a child of @self
+ */
 static void 
 register_child (SeahorseObject* self, SeahorseObject* child) 
 {
@@ -97,6 +149,14 @@ register_child (SeahorseObject* self, SeahorseObject* child)
 	self->pv->children = g_list_append (self->pv->children, child);
 }
 
+/**
+ * unregister_child:
+ * @self: The parent
+ * @child: child to remove
+ *
+ *
+ * removes @child from the children list in @self
+ */
 static void 
 unregister_child (SeahorseObject* self, SeahorseObject* child) 
 {
@@ -109,6 +169,15 @@ unregister_child (SeahorseObject* self, SeahorseObject* child)
 	self->pv->children = g_list_remove (self->pv->children, child);
 }
 
+/**
+ * set_string_storage:
+ * @value: The value to store
+ * @storage: The datastore to write the value to
+ *
+ * When storing, new memory will be allocated and the value copied
+ *
+ * Returns: TRUE if the value has been set new, FALSE else
+ */
 static gboolean
 set_string_storage (const gchar *value, gchar **storage)
 {
@@ -126,6 +195,15 @@ set_string_storage (const gchar *value, gchar **storage)
 	return FALSE;
 }
 
+/**
+ * take_string_storage:
+ * @value: The value to store
+ * @storage: The datastore to write the value to
+ *
+ * When storing, the pointer to value is used. No new memory will be allocated
+ *
+ * Returns: TRUE if the value has been set new, FALSE else
+ */
 static gboolean
 take_string_storage (gchar *value, gchar **storage)
 {
@@ -144,6 +222,13 @@ take_string_storage (gchar *value, gchar **storage)
 	return FALSE;
 }
 
+/**
+ * recalculate_id:
+ * @self: object to calculate for
+ *
+ * recalculates tag and identifier from id
+ *
+ */
 static void
 recalculate_id (SeahorseObject *self)
 {
@@ -189,6 +274,13 @@ recalculate_id (SeahorseObject *self)
 	}
 }
 
+/**
+ * recalculate_label:
+ * @self: object to recalculate label for
+ *
+ * Recalculates nickname and markup from the label
+ *
+ */
 static void
 recalculate_label (SeahorseObject *self)
 {
@@ -204,6 +296,14 @@ recalculate_label (SeahorseObject *self)
 	}
 }
 
+/**
+ * recalculate_usage:
+ * @self: The #SeahorseObject to recalculate the usage decription for
+ *
+ * Basing on the usage identifiere this function will calculate a usage
+ * description and store it in the object.
+ *
+ */
 static void
 recalculate_usage (SeahorseObject *self)
 {
@@ -246,6 +346,13 @@ recalculate_usage (SeahorseObject *self)
  * OBJECT 
  */
 
+/**
+ * seahorse_object_init:
+ * @self: The object to initialise
+ *
+ * Initialises the object with default data
+ *
+ */
 static void
 seahorse_object_init (SeahorseObject *self)
 {
@@ -260,6 +367,14 @@ seahorse_object_init (SeahorseObject *self)
 	self->pv->usage = SEAHORSE_USAGE_NONE;
 }
 
+
+/**
+ * seahorse_object_dispose:
+ * @obj: A #SeahorseObject to dispose
+ *
+ * Before this object is disposed, all it's children get new parents
+ *
+ */
 static void
 seahorse_object_dispose (GObject *obj)
 {
@@ -308,6 +423,11 @@ seahorse_object_dispose (GObject *obj)
 	G_OBJECT_CLASS (seahorse_object_parent_class)->dispose (obj);	
 }
 
+/**
+ * seahorse_object_finalize:
+ * @obj: #SeahorseObject to finalize
+ *
+ */
 static void
 seahorse_object_finalize (GObject *obj)
 {
@@ -340,6 +460,17 @@ seahorse_object_finalize (GObject *obj)
 	G_OBJECT_CLASS (seahorse_object_parent_class)->finalize (obj);
 }
 
+
+/**
+ * seahorse_object_get_property:
+ * @obj: The object to get the property for
+ * @prop_id: The property requested
+ * @value: out - the value as #GValue
+ * @pspec: a #GParamSpec for the warning
+ *
+ * Returns: The property of the object @obj defined by the id @prop_id in @value.
+ *
+ */
 static void
 seahorse_object_get_property (GObject *obj, guint prop_id, GValue *value, 
                            GParamSpec *pspec)
@@ -398,6 +529,16 @@ seahorse_object_get_property (GObject *obj, guint prop_id, GValue *value,
 	}
 }
 
+/**
+ * seahorse_object_set_property:
+ * @obj: Object to set the property in
+ * @prop_id: the property to set
+ * @value: the value to set
+ * @pspec: To be used for warnings. #GParamSpec
+ *
+ * Sets a property in this object
+ *
+ */
 static void
 seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value, 
                               GParamSpec *pspec)
@@ -514,6 +655,13 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 	}
 }
 
+/**
+ * seahorse_object_real_realize:
+ * @self: The object
+ *
+ * To be overridden
+ *
+ */
 static void 
 seahorse_object_real_realize (SeahorseObject *self)
 {
@@ -525,6 +673,13 @@ seahorse_object_real_realize (SeahorseObject *self)
 	self->pv->realized = TRUE;
 }
 
+/**
+ * seahorse_object_real_refresh:
+ * @self: The object
+ *
+ * To be overridden
+ *
+ */
 static void 
 seahorse_object_real_refresh (SeahorseObject *self)
 {
@@ -534,6 +689,13 @@ seahorse_object_real_refresh (SeahorseObject *self)
 	 */
 }
 
+/**
+ * seahorse_object_class_init:
+ * @klass: the object class
+ *
+ * Initialises the object class
+ *
+ */
 static void
 seahorse_object_class_init (SeahorseObjectClass *klass)
 {
@@ -615,6 +777,12 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
  * PUBLIC 
  */
 
+/**
+ * seahorse_object_get_id:
+ * @self: Object
+ *
+ * Returns: the id of the object @self
+ */
 GQuark
 seahorse_object_get_id (SeahorseObject *self)
 {
@@ -622,6 +790,12 @@ seahorse_object_get_id (SeahorseObject *self)
 	return self->pv->id;
 }
 
+/**
+ * seahorse_object_get_tag:
+ * @self: Object
+ *
+ * Returns: the tag of the object @self
+ */
 GQuark
 seahorse_object_get_tag (SeahorseObject *self)
 {
@@ -631,6 +805,12 @@ seahorse_object_get_tag (SeahorseObject *self)
 	return self->pv->tag;	
 }
 
+/**
+ * seahorse_object_get_source:
+ * @self: Object
+ *
+ * Returns: the source of the object @self
+ */
 SeahorseSource*
 seahorse_object_get_source (SeahorseObject *self)
 {
@@ -638,6 +818,14 @@ seahorse_object_get_source (SeahorseObject *self)
 	return self->pv->source;	
 }
 
+
+/**
+ * seahorse_object_set_source:
+ * @self: The object to set a new source for
+ * @value: The source to set
+ *
+ * sets the source for the object
+ */
 void
 seahorse_object_set_source (SeahorseObject *self, SeahorseSource *value)
 {
@@ -656,6 +844,12 @@ seahorse_object_set_source (SeahorseObject *self, SeahorseSource *value)
 	g_object_notify (G_OBJECT (self), "source");
 }
 
+/**
+ * seahorse_object_get_context:
+ * @self: Object
+ *
+ * Returns: the context of the object @self
+ */
 SeahorseContext*
 seahorse_object_get_context (SeahorseObject *self)
 {
@@ -663,6 +857,12 @@ seahorse_object_get_context (SeahorseObject *self)
 	return self->pv->context;
 }
 
+/**
+ * seahorse_object_get_preferred:
+ * @self: Object
+ *
+ * Returns: the preferred of the object @self
+ */
 SeahorseObject*
 seahorse_object_get_preferred (SeahorseObject *self)
 {
@@ -670,6 +870,13 @@ seahorse_object_get_preferred (SeahorseObject *self)
 	return self->pv->preferred;
 }
 
+/**
+ * seahorse_object_set_preferred:
+ * @self: the object to set the preferred object for
+ * @value: the preferred object
+ *
+ *
+ */
 void
 seahorse_object_set_preferred (SeahorseObject *self, SeahorseObject *value)
 {
@@ -688,6 +895,12 @@ seahorse_object_set_preferred (SeahorseObject *self, SeahorseObject *value)
 	g_object_notify (G_OBJECT (self), "preferred");
 }
 
+/**
+ * seahorse_object_get_parent:
+ * @self: Object
+ *
+ * Returns: the parent of the object @self
+ */
 SeahorseObject*
 seahorse_object_get_parent (SeahorseObject *self)
 {
@@ -695,6 +908,13 @@ seahorse_object_get_parent (SeahorseObject *self)
 	return self->pv->parent;
 }
 
+/**
+ * seahorse_object_set_parent:
+ * @self: the child
+ * @value: the parent
+ *
+ * register @value as the parent of @self:
+ */
 void
 seahorse_object_set_parent (SeahorseObject *self, SeahorseObject *value)
 {
@@ -716,7 +936,13 @@ seahorse_object_set_parent (SeahorseObject *self, SeahorseObject *value)
 
 	g_object_notify (G_OBJECT (self), "parent");
 }
- 
+
+/**
+ * seahorse_object_get_children:
+ * @self: Object
+ *
+ * Returns: the children of the object @self
+ */
 GList*
 seahorse_object_get_children (SeahorseObject *self)
 {
@@ -725,6 +951,13 @@ seahorse_object_get_children (SeahorseObject *self)
 	return g_list_copy (self->pv->children);
 }
 
+/**
+ * seahorse_object_get_nth_child:
+ * @self: Object
+ * @index: the number of the child to return
+ *
+ * Returns: the child number @index
+ */
 SeahorseObject*
 seahorse_object_get_nth_child (SeahorseObject *self, guint index)
 {
@@ -732,6 +965,12 @@ seahorse_object_get_nth_child (SeahorseObject *self, guint index)
 	return SEAHORSE_OBJECT (g_list_nth_data (self->pv->children, index));
 }
 
+/**
+ * seahorse_object_get_label:
+ * @self: Object
+ *
+ * Returns: the label of the object @self
+ */
 const gchar*
 seahorse_object_get_label (SeahorseObject *self)
 {
@@ -740,6 +979,12 @@ seahorse_object_get_label (SeahorseObject *self)
 	return self->pv->label;
 }
 
+/**
+ * seahorse_object_get_markup:
+ * @self: Object
+ *
+ * Returns: the markup of the object @self
+ */
 const gchar*
 seahorse_object_get_markup (SeahorseObject *self)
 {
@@ -748,6 +993,12 @@ seahorse_object_get_markup (SeahorseObject *self)
 	return self->pv->markup;
 }
 
+/**
+ * seahorse_object_get_nickname:
+ * @self: Object
+ *
+ * Returns: the nickname of the object @self
+ */
 const gchar*
 seahorse_object_get_nickname (SeahorseObject *self)
 {
@@ -756,6 +1007,12 @@ seahorse_object_get_nickname (SeahorseObject *self)
 	return self->pv->nickname;
 }
 
+/**
+ * seahorse_object_get_description:
+ * @self: Object
+ *
+ * Returns: the description of the object @self
+ */
 const gchar*
 seahorse_object_get_description (SeahorseObject *self)
 {
@@ -764,6 +1021,12 @@ seahorse_object_get_description (SeahorseObject *self)
 	return self->pv->description;
 }
 
+/**
+ * seahorse_object_get_icon:
+ * @self: Object
+ *
+ * Returns: the icon of the object @self
+ */
 const gchar*
 seahorse_object_get_icon (SeahorseObject *self)
 {
@@ -772,6 +1035,12 @@ seahorse_object_get_icon (SeahorseObject *self)
 	return self->pv->icon;
 }
 
+/**
+ * seahorse_object_get_identifier:
+ * @self: Object
+ *
+ * Returns: the identifier of the object @self
+ */
 const gchar*
 seahorse_object_get_identifier (SeahorseObject *self)
 {
@@ -780,6 +1049,12 @@ seahorse_object_get_identifier (SeahorseObject *self)
 	return self->pv->identifier;	
 }
 
+/**
+ * seahorse_object_get_location:
+ * @self: Object
+ *
+ * Returns: the location of the object @self
+ */
 SeahorseLocation
 seahorse_object_get_location (SeahorseObject *self)
 {
@@ -789,6 +1064,12 @@ seahorse_object_get_location (SeahorseObject *self)
 	return self->pv->location;
 }
 
+/**
+ * seahorse_object_get_usage:
+ * @self: Object
+ *
+ * Returns: the usage of the object @self
+ */
 SeahorseUsage
 seahorse_object_get_usage (SeahorseObject *self)
 {
@@ -798,6 +1079,12 @@ seahorse_object_get_usage (SeahorseObject *self)
 	return self->pv->usage;	
 }
 
+/**
+ * seahorse_object_get_flags:
+ * @self: Object
+ *
+ * Returns: the flags of the object @self
+ */
 guint
 seahorse_object_get_flags (SeahorseObject *self)
 {
@@ -806,6 +1093,16 @@ seahorse_object_get_flags (SeahorseObject *self)
 	return self->pv->flags;	
 }
 
+/**
+ * seahorse_object_lookup_property:
+ * @self: the object to look up the property
+ * @field: the field to lookup
+ * @value: the returned value
+ *
+ * Looks up the property @field in the object @self and returns it in @value
+ *
+ * Returns: TRUE if a property was found
+ */
 gboolean
 seahorse_object_lookup_property (SeahorseObject *self, const gchar *field, GValue *value)
 {
@@ -850,6 +1147,13 @@ seahorse_object_lookup_property (SeahorseObject *self, const gchar *field, GValu
 	return TRUE; 
 }
 
+/**
+ * seahorse_object_realize:
+ * @self: the object to realize
+ *
+ *
+ * Realizes an object. Calls the klass method
+ */
 void
 seahorse_object_realize (SeahorseObject *self)
 {
@@ -866,6 +1170,13 @@ seahorse_object_realize (SeahorseObject *self)
 	self->pv->realizing = FALSE;
 }
 
+/**
+ * seahorse_object_refresh:
+ * @self: object to refresh
+ *
+ * calls the class refresh function
+ *
+ */
 void
 seahorse_object_refresh (SeahorseObject *self)
 {
@@ -876,6 +1187,14 @@ seahorse_object_refresh (SeahorseObject *self)
 	(klass->refresh) (self);
 }
 
+/**
+ * seahorse_object_delete:
+ * @self: object to delete
+ *
+ * calls the class delete function
+ *
+ * Returns: NULL on error
+ */
 SeahorseOperation*
 seahorse_object_delete (SeahorseObject *self)
 {
@@ -886,6 +1205,15 @@ seahorse_object_delete (SeahorseObject *self)
 	return (klass->delete) (self);
 }
 
+/**
+ * seahorse_object_predicate_match:
+ * @self: the object to test
+ * @obj: The predicate to match
+ *
+ * matches a seahorse object and a predicate
+ *
+ * Returns: FALSE if predicate does not match the #SeahorseObject, TRUE else
+ */
 gboolean 
 seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* obj) 
 {
@@ -921,6 +1249,12 @@ seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* 
 	return TRUE;
 }
 
+/**
+ * seahorse_object_predicate_clear:
+ * @self: The predicate to clean
+ *
+ * Clears a seahorse predicate (#SeahorseObjectPredicate)
+ */
 void
 seahorse_object_predicate_clear (SeahorseObjectPredicate *self)
 {

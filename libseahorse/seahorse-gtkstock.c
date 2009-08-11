@@ -49,6 +49,15 @@ static const gchar *themed_icons[] = {
     NULL
 };
 
+/**
+ * make_theme_source:
+ * @icon: The full icon file name
+ * @size: The size. If this is -1, gtk_icon_source_set_size_wildcarded will be set
+ *
+ * Creates a new GtkIconSource, containing the file icon
+ *
+ * Returns: The GtkIconSource
+ */
 static GtkIconSource*
 make_theme_source (const gchar *icon, GtkIconSize size)
 {
@@ -69,6 +78,17 @@ make_theme_source (const gchar *icon, GtkIconSize size)
     return source;
 }
 
+/**
+ * make_icon_source:
+ * @icon: The icon name
+ * @base: Base path 
+ * @ext: File extension of the icon
+ * @size: The size. If this is -1, gtk_icon_source_set_size_wildcarded will be set
+ *
+ * Creates a new GtkIconSource, containing the file PIXMAPSDIR/base/icon.ext
+ *
+ * Returns: The GtkIconSource
+ */
 static GtkIconSource*
 make_icon_source (const gchar *icon, const gchar *base, const gchar *ext, 
                   GtkIconSize size)
@@ -95,6 +115,14 @@ make_icon_source (const gchar *icon, const gchar *base, const gchar *ext,
     return source;
 }
 
+
+/**
+ * add_icons:
+ * @icons: Icons to add
+ * @themed: Themed icons to add
+ *
+ * Adds different sized icons to the icon factory.
+ */
 static void
 add_icons (const gchar **icons, const gchar **themed)
 {
@@ -169,6 +197,12 @@ add_icons (const gchar **icons, const gchar **themed)
     g_object_unref (factory);
 }
 
+/**
+ * seahorse_gtkstock_init:
+ *
+ * Adds the default icons to the icon factory
+ *
+ */
 void
 seahorse_gtkstock_init(void)
 {
@@ -183,6 +217,12 @@ seahorse_gtkstock_init(void)
     add_icons (seahorse_icons, themed_icons);
 }
 
+/**
+ * seahorse_gtkstock_add_icons:
+ * @icons: The icons to add to the default factory
+ *
+ * Adds icons to the factory
+ */
 void
 seahorse_gtkstock_add_icons (const gchar **icons)
 {

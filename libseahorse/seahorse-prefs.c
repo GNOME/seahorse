@@ -502,6 +502,8 @@ seahorse_prefs_new (GtkWindow *parent)
 /**
  * seahorse_prefs_add_tab
  * @swidget: The preferences window
+ * @label: Label for the tab to be added
+ * @tab: Tab to be added
  * 
  * Add a tab to the preferences window
  **/
@@ -514,6 +516,13 @@ seahorse_prefs_add_tab (SeahorseWidget *swidget, GtkWidget *label, GtkWidget *ta
     gtk_notebook_prepend_page (GTK_NOTEBOOK (widget), tab, label);
 }
 
+/**
+ * seahorse_prefs_select_tab:
+ * @swidget: The preferences window
+ * @tab: The tab to be set active
+ *
+ * Sets the input tab to be the active one
+ **/
 void                
 seahorse_prefs_select_tab (SeahorseWidget *swidget, GtkWidget *tab)
 {
@@ -530,6 +539,13 @@ seahorse_prefs_select_tab (SeahorseWidget *swidget, GtkWidget *tab)
         gtk_notebook_set_current_page (GTK_NOTEBOOK (tabs), pos);
 }
 
+/**
+ * seahorse_prefs_remove_tab:
+ * @swidget: The preferences window
+ * @tab: The tab to be removed
+ *
+ * Removes a tab from the preferences window
+ **/
 void 
 seahorse_prefs_remove_tab (SeahorseWidget *swidget, GtkWidget *tab)
 {

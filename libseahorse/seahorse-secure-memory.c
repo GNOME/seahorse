@@ -33,6 +33,15 @@
   /* extern declared in seahorse-secure-memory.h */
   gboolean seahorse_use_secure_mem = FALSE;
 
+/**
+ * switch_malloc:
+ * @size: The size of the new memory buffer
+ *
+ * Transparent alternative. Depending on the setting for secure memory, the
+ * function calls the default-C version or the GTK version for non-pageable memory
+ *
+ * Returns: The pointer to the new buffer
+ */
 static gpointer
 switch_malloc (gsize size)
 {
@@ -47,6 +56,16 @@ switch_malloc (gsize size)
     return p;
 }
 
+/**
+ * switch_calloc:
+ * @num: Number of blocks to allocate
+ * @size: Size of a block
+ *
+ * Transparent alternative. Depending on the setting for secure memory, the
+ * function calls the default-C version or the GTK version for non-pageable memory
+ *
+ * Returns: The pointer to a buffer sized num*size
+ */
 static gpointer
 switch_calloc (gsize num, gsize size)
 {
@@ -61,6 +80,16 @@ switch_calloc (gsize num, gsize size)
     return p;
 }
 
+/**
+ * switch_realloc:
+ * @mem: The old memory to resize
+ * @size: The new size
+ *
+ * Transparent alternative. Depending on the setting for secure memory, the
+ * function calls the default-C version or the GTK version for non-pageable memory
+ *
+ * Returns: The pointer to the resized memory
+ */
 static gpointer
 switch_realloc (gpointer mem, gsize size)
 {
@@ -83,6 +112,13 @@ switch_realloc (gpointer mem, gsize size)
     return p;
 }
 
+/**
+ * switch_free:
+ * @mem: The memory to free
+ *
+ * Transparent alternative. Depending on the setting for secure memory, the
+ * function calls the default-C version or the GTK version for non-pageable memory
+ */
 static void
 switch_free (gpointer mem)
 {
@@ -94,6 +130,12 @@ switch_free (gpointer mem)
     }
 }
 
+/**
+ * seahorse_try_gk_secure_memory:
+ *
+ *
+ * Returns: TRUE if non-pageable memory is available
+ */
 static gboolean
 seahorse_try_gk_secure_memory ()
 {
@@ -108,6 +150,16 @@ seahorse_try_gk_secure_memory ()
     return FALSE;
 }
 
+/**
+ * seahorse_secure_memory_init:
+ *
+ * Configures non-pageable (secure) memory. Must be called before the first
+ * memory allocation.
+ *
+ * This function sets the #GMemVTable to use the switch* function implemented in
+ * this files
+ *
+ */
 void
 seahorse_secure_memory_init ()
 {

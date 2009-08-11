@@ -25,6 +25,12 @@
 
 static GConfClient *global_gconf_client = NULL;
 
+/**
+ * global_client_free:
+ *
+ * Removes the registered dirs and frees the global gconf client
+ *
+ */
 static void
 global_client_free (void)
 {
@@ -38,6 +44,14 @@ global_client_free (void)
     global_gconf_client = NULL;
 }
 
+/**
+ * handle_error:
+ * @error:the error to report
+ *
+ * The error is reported as a warning (#g_warning) and freed afterwards.
+ *
+ * Returns: TRUE if an error has been handled, FALSE else
+ */
 static gboolean
 handle_error (GError **error)
 {
@@ -53,7 +67,15 @@ handle_error (GError **error)
 
     return FALSE;
 }
- 
+
+/**
+ * get_global_client:
+ *
+ * Initializes the global gconf client if needed. Can be called with a client
+ * already initialized.
+ *
+ * Returns: The global GConfClient
+ */
 static GConfClient*
 get_global_client (void)
 {
@@ -87,12 +109,27 @@ get_global_client (void)
     return global_gconf_client;
 }
 
+/**
+ * seahorse_gconf_disconnect:
+ *
+ * Remove registered dirs and free the global gconf client
+ *
+ */
 void
 seahorse_gconf_disconnect ()
 {
     global_client_free ();
 }
 
+/**
+ * seahorse_gconf_set_boolean:
+ * @key: The key
+ * @boolean_value: The value to set
+ *
+ * Set a value for a boolean key in the GConf storage
+ *
+ * Errors are handled internally and are mapped to a warning
+ */
 void
 seahorse_gconf_set_boolean (const char *key, gboolean boolean_value)
 {
@@ -108,6 +145,14 @@ seahorse_gconf_set_boolean (const char *key, gboolean boolean_value)
 	handle_error (&error);
 }
 
+/**
+ * seahorse_gconf_get_boolean:
+ * @key: The key to read
+ *
+ * Read a boolean key from the GConf storage
+ *
+ * Returns: It returns the read value. On error it returns FALSE
+ */
 gboolean
 seahorse_gconf_get_boolean (const char *key)
 {
@@ -124,6 +169,15 @@ seahorse_gconf_get_boolean (const char *key)
 	return handle_error (&error) ? FALSE : result;
 }
 
+/**
+ * seahorse_gconf_set_integer:
+ * @key: The key
+ * @int_value: The value to set
+ *
+ * Set a value for an integer key in the GConf storage
+ *
+ * Errors are handled internally and are mapped to a warning
+ */
 void
 seahorse_gconf_set_integer (const char *key, int int_value)
 {
@@ -139,6 +193,14 @@ seahorse_gconf_set_integer (const char *key, int int_value)
 	handle_error (&error);
 }
 
+/**
+ * seahorse_gconf_get_integer:
+ * @key: The key to read
+ *
+ * Read an integer key from the GConf storage
+ *
+ * Returns: It returns the read value. On error it returns 0.
+ */
 int
 seahorse_gconf_get_integer (const char *key)
 {
@@ -155,6 +217,16 @@ seahorse_gconf_get_integer (const char *key)
     return handle_error (&error) ? 0 : result;
 }
 
+
+/**
+ * seahorse_gconf_set_string:
+ * @key: The key
+ * @string_value: The value to set
+ *
+ * Set a value for a string key in the GConf storage
+ *
+ * Errors are handled internally and are mapped to a warning
+ */
 void
 seahorse_gconf_set_string (const char *key, const char *string_value)
 {
@@ -170,6 +242,15 @@ seahorse_gconf_set_string (const char *key, const char *string_value)
 	handle_error (&error);
 }
 
+/**
+ * seahorse_gconf_get_string:
+ * @key: The key to read
+ *
+ * Read a string key from the GConf storage
+ *
+ * Returns: It returns the read value. On error it returns "". The returned string should be 
+ * freed with #g_free when no longer needed.
+ */
 char *
 seahorse_gconf_get_string (const char *key)
 {
@@ -186,6 +267,15 @@ seahorse_gconf_get_string (const char *key)
 	return handle_error (&error) ? g_strdup ("") : result;
 }
 
+/**
+ * seahorse_gconf_set_string_list:
+ * @key: The key
+ * @slist: The list to set
+ *
+ * Set a value for a string list (linked list of strings) key in the GConf storage
+ *
+ * Errors are handled internally and are mapped to a warning
+ */
 void
 seahorse_gconf_set_string_list (const char *key, const GSList *slist)
 {
@@ -202,6 +292,16 @@ seahorse_gconf_set_string_list (const char *key, const GSList *slist)
 	handle_error (&error);
 }
 
+/**
+ * seahorse_gconf_get_string_list:
+ * @key: The key to read
+ *
+ * Read a string list (linked list of strings) key from the GConf storage
+ *
+ * Returns: It returns the read value. On error it returns NULL. Each returned
+ * string should be freed with #g_free when no longer needed. The list must be
+ * freed with #g_slist_free
+ */
 GSList*
 seahorse_gconf_get_string_list (const char *key)
 {
@@ -218,6 +318,15 @@ seahorse_gconf_get_string_list (const char *key)
     return handle_error (&error) ? NULL : slist;
 }
 
+/**
+ * seahorse_gconf_get_entry:
+ * @key: The key to read
+ *
+ * Get an entry key from the GConf storage
+ *
+ * Returns: It returns the read value. On error it returns NULL. Must be freed
+ * with #gconf_entry_free
+ */
 GConfEntry*
 seahorse_gconf_get_entry (const char *key)
 {
@@ -234,6 +343,14 @@ seahorse_gconf_get_entry (const char *key)
     return handle_error (&error) ? NULL : entry;
 }
 
+/**
+ * seahorse_gconf_notify:
+ * @key: The key to add the notification for
+ * @notification_callback: The callback function to add
+ * @callback_data: user data to pass to the callback function
+ *
+ * Returns: The connection ID. On error it returns 0
+ */
 guint
 seahorse_gconf_notify (const char *key, GConfClientNotifyFunc notification_callback,
 				       gpointer callback_data)
@@ -261,6 +378,12 @@ seahorse_gconf_notify (const char *key, GConfClientNotifyFunc notification_callb
 	return notification_id;
 }
 
+/**
+ * internal_gconf_unnotify:
+ * @data: Casts the pointer to an integer ID and removes the notification with
+ * this ID
+ *
+ */
 static void
 internal_gconf_unnotify (gpointer data)
 {
@@ -268,6 +391,18 @@ internal_gconf_unnotify (gpointer data)
     seahorse_gconf_unnotify (notify_id);
 }
 
+/**
+ * seahorse_gconf_notify_lazy:
+ * @key: The key to add the notification for
+ * @notification_callback: The callback function to add
+ * @callback_data: user data to pass to the callback function
+ * @lifetime: a GObject to bind the callback to
+ *
+ * The callback is bound to the object (#g_object_set_data_full) and
+ * the notification is automatically unnotified as soon as the object is
+ * destroyed
+ *
+ */
 void
 seahorse_gconf_notify_lazy (const char *key, GConfClientNotifyFunc notification_callback,
                             gpointer callback_data, gpointer lifetime)
@@ -283,6 +418,12 @@ seahorse_gconf_notify_lazy (const char *key, GConfClientNotifyFunc notification_
     }
 }
 
+/**
+ * seahorse_gconf_unnotify:
+ * @notification_id: ID to remove
+ *
+ * Removes a notification identified by the ID
+ */
 void
 seahorse_gconf_unnotify (guint notification_id)
 {

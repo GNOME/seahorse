@@ -50,6 +50,17 @@
 
 static const gchar *bad_filename_chars = "/\\<>|";
 
+/**
+ * seahorse_util_show_error:
+ * @parent: The parent widget. Can be NULL
+ * @heading: The heading of the dialog
+ * @message: The message to display
+ *
+ * This displays an error dialog.
+ * The parent widget can be any widget. The dialog will be a child of the window
+ * the widget is in.
+ *
+ */
 void
 seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *message)
 {
@@ -89,6 +100,14 @@ seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *
 	gtk_widget_destroy (dialog);
 }
 
+/**
+ * seahorse_util_handle_error:
+ * @err: The #GError to print.
+ * @desc: The heading of the box
+ * @...: Parameters to insert into the format string desc.
+ *
+ * Displays an error box. The message is the error message.
+ */
 void
 seahorse_util_handle_error (GError* err, const char* desc, ...)
 {
@@ -110,6 +129,15 @@ seahorse_util_handle_error (GError* err, const char* desc, ...)
     g_free(t);
 }    
 
+/**
+ * seahorse_util_prompt_delete:
+ * @text: The text to display in the delete-dialog
+ * @parent: The widget to display the dialog for. Can be NULL
+ *
+ * Displays a modal dialog with "cancel" and "delete"
+ *
+ * Returns: TRUE if the user pressed "delete", FALSE else
+ */
 gboolean
 seahorse_util_prompt_delete (const gchar *text, GtkWidget *parent)
 {
@@ -147,7 +175,8 @@ seahorse_util_prompt_delete (const gchar *text, GtkWidget *parent)
 }
 
 /**
- * seahorse_util_error_domain
+ * seahorse_util_error_domain:
+ *
  * Returns: The GError domain for generic seahorse errors
  **/
 GQuark
@@ -165,7 +194,8 @@ seahorse_util_error_domain ()
  *
  * Creates a string representation of @time for use with gpg.
  *
- * Returns: A string representing @time
+ * Returns: A string representing @time. The returned string should be freed
+ * with #g_free when no longer needed.
  **/
 gchar*
 seahorse_util_get_date_string (const time_t time)
@@ -189,7 +219,8 @@ seahorse_util_get_date_string (const time_t time)
  *
  * Creates a string representation of @time for display in the UI.
  *
- * Returns: A string representing @time
+ * Returns: A string representing @time. The returned string should be freed 
+ * with #g_free when no longer needed.
  **/
 gchar*
 seahorse_util_get_display_date_string (const time_t time)
@@ -207,6 +238,15 @@ seahorse_util_get_display_date_string (const time_t time)
 	return created_string;
 }
 
+/**
+ * seahorse_util_get_text_view_text:
+ * @view: The text view #GtkTextView to extract text from
+ *
+ * Returns the whole text buffer
+ *
+ * Returns: The text buffer extracted. The returned string should be freed with 
+ * #g_free when no longer needed.
+ */
 gchar*
 seahorse_util_get_text_view_text (GtkTextView *view)
 {
@@ -223,6 +263,13 @@ seahorse_util_get_text_view_text (GtkTextView *view)
     return text;
 }
 
+/**
+ * seahorse_util_set_text_view_string:
+ * @view: The view to set the text for (#GtkTextView)
+ * @string: The string to set (#GString)
+ *
+ *
+ */
 void
 seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
 {
@@ -235,12 +282,13 @@ seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
 
 /**
  * seahorse_util_read_to_memory:
- * @data: Data to write
- * @len: Length of the data
+ * @input: Data to read. The #GInputStream is read till the end.
+ * @len: Length of the data read (out)
  *
- * Converts @data to a string. 
+ * Reads data from the input stream and returns them as #guchar
  *
- * Returns: The string read from data
+ * Returns: The string read from data. The returned string should be freed
+ * with #g_free when no longer needed.
  **/
 guchar*
 seahorse_util_read_to_memory (GInputStream *input, guint *len)
@@ -272,15 +320,14 @@ seahorse_util_read_to_memory (GInputStream *input, guint *len)
 }
 
 /** 
- * seahorse_util_read_data_block
- * 
- * Breaks out one block of data (usually a key)
- * 
+ * seahorse_util_read_data_block:
  * @buf: A string buffer to write the data to.
  * @input: The input stream to read from.
  * @start: The start signature to look for.
  * @end: The end signature to look for.
- * 
+ *
+ * Breaks out one block of data (usually a key)
+ *
  * Returns: The number of bytes copied.
  */
 guint
@@ -327,6 +374,13 @@ seahorse_util_read_data_block (GString *buf, GInputStream *input,
     return copied;
 }
 
+/**
+ * seahorse_util_memory_input_string:
+ * @string: The string to create the stream from
+ * @length: The length of this string
+ *
+ * Returns: The new input stream of type #GMemoryInputStream
+ */
 GMemoryInputStream*
 seahorse_util_memory_input_string (const gchar *string, gsize length)
 {
@@ -334,6 +388,14 @@ seahorse_util_memory_input_string (const gchar *string, gsize length)
 	return G_MEMORY_INPUT_STREAM (g_memory_input_stream_new_from_data (g_strndup (string, length), length, g_free));
 }
 
+/**
+ * seahorse_util_memory_output_length:
+ * @output: a stream
+ *
+ * A replacement for #g_memory_output_stream_get_data_size (since 2.18)
+ *
+ * Returns: The length of the stream
+ */
 gsize
 seahorse_util_memory_output_length (GMemoryOutputStream *output)
 {
@@ -367,9 +429,9 @@ seahorse_util_memory_output_length (GMemoryOutputStream *output)
 /** 
  * seahorse_util_printf_fd:
  * @fd: The file descriptor to write to
- * @fmt: The data to write
+ * @s:  The data to write
  *
- * Returns: Whether the operation was successful or not.
+ * Returns: FALSE on error, TRUE on success
  **/
 gboolean 
 seahorse_util_print_fd (int fd, const char* s)
@@ -402,8 +464,9 @@ seahorse_util_print_fd (int fd, const char* s)
  * seahorse_util_printf_fd:
  * @fd: The file descriptor to write to
  * @fmt: The printf format of the data to write
+ * @...: The parameters to insert
  *
- * Returns: Whether the operation was successful or not.
+ * Returns: TRUE on success, FALSE on error
  **/
 gboolean 
 seahorse_util_printf_fd (int fd, const char* fmt, ...)
@@ -421,7 +484,18 @@ seahorse_util_printf_fd (int fd, const char* fmt, ...)
     return ret;
 }
 
-
+/**
+ * seahorse_util_filename_for_objects:
+ * @objects: A list of objects
+ *
+ * If the single object has a nickname, this will be returned (with .asc attached)
+ * If there are multiple objects, "Multiple Keys.asc" will be returned.
+ * Single objects default to "Key Data.asc".
+ * Results are internationalized
+ *
+ * Returns: NULL on error, the filename else. The returned string should be
+ * freed with #g_free when no longer needed.
+ */
 gchar*      
 seahorse_util_filename_for_objects (GList *objects)
 {
@@ -476,7 +550,7 @@ seahorse_util_uri_get_last (const gchar* uri)
 }    
 
 /**
- * seahorse_util_uri_split_last
+ * seahorse_util_uri_split_last:
  * @uri: The uri to split
  * 
  * Splits the uri in two at it's last component. The result
@@ -498,12 +572,12 @@ seahorse_util_uri_split_last (gchar* uri)
 }
 
 /**
- * seahurse_util_uri_exists
+ * seahorse_util_uri_exists:
  * @uri: The uri to check
  * 
  * Verify whether a given uri exists or not.
  * 
- * Returns: Whether it exists or not.
+ * Returns: FALSE if it does not exist, TRUE else
  **/
 gboolean
 seahorse_util_uri_exists (const gchar* uri)
@@ -521,7 +595,7 @@ seahorse_util_uri_exists (const gchar* uri)
 }       
     
 /**
- * seahorse_util_uri_unique
+ * seahorse_util_uri_unique:
  * @uri: The uri to guarantee is unique
  * 
  * Creates a URI based on @uri that does not exist.
@@ -580,13 +654,14 @@ seahorse_util_uri_unique (const gchar* uri)
 }
 
 /**
- * seahorse_util_uri_replace_ext
+ * seahorse_util_uri_replace_ext:
  * @uri: The uri with old extension
  * @ext: The new extension
- * 
+ *
  * Replaces the extension on @uri
- * 
- * Returns: Newly allocated URI string with new extension.
+ *
+ * Returns: Newly allocated URI string with new extension. The returned string
+ * should be freed with #g_free when no longer needed.
  **/
 gchar* 
 seahorse_util_uri_replace_ext (const gchar *uri, const gchar *ext)
@@ -623,13 +698,13 @@ seahorse_util_uri_replace_ext (const gchar *uri, const gchar *ext)
 }
 
 /**
- * seahorse_util_uris_package
+ * seahorse_util_uris_package:
  * @package: Package uri
  * @uris: null-terminated array of uris to package 
  * 
  * Package uris into an archive. The uris must be local.
  * 
- * Returns: Success or failure
+ * Returns: TRUE on success or FALSE on failure
  */
 gboolean
 seahorse_util_uris_package (const gchar* package, const char** uris)
@@ -707,6 +782,14 @@ seahorse_util_uris_package (const gchar* package, const char** uris)
     return TRUE;
 }
 
+/**
+ * seahorse_util_detect_mime_type:
+ * @mime: The mime string
+ *
+ * Return the mime type depending on the mime string
+ *
+ * Returns: SEAHORSE_PGP, SEAHORSE_SSH or 0
+ */
 GQuark
 seahorse_util_detect_mime_type (const gchar *mime)
 {
@@ -730,6 +813,13 @@ seahorse_util_detect_mime_type (const gchar *mime)
 	return 0;
 }
 
+/**
+ * seahorse_util_detect_data_type:
+ * @data: The buffer to test for content type
+ * @length: The length of this buffer
+ *
+ * Returns: SEAHORSE_PGP, SEAHORSE_SSH or 0
+ */
 GQuark
 seahorse_util_detect_data_type (const gchar *data, guint length)
 {
@@ -746,6 +836,12 @@ seahorse_util_detect_data_type (const gchar *data, guint length)
 	return type;
 }
 
+/**
+ * seahorse_util_detect_file_type:
+ * @uri: The file uri to test for content type
+ *
+ * Returns: SEAHORSE_PGP, SEAHORSE_SSH or 0
+ */
 GQuark
 seahorse_util_detect_file_type (const gchar *uri)
 {
@@ -762,6 +858,14 @@ seahorse_util_detect_file_type (const gchar *uri)
 	return type;
 }
 
+/**
+ * seahorse_util_write_file_private:
+ * @filename: file to write to
+ * @contents: nul-terminated string to write to the file
+ * @err: error of the write operation
+ *
+ * Returns: #TRUE on success, #FALSE if an error occured
+ */
 gboolean
 seahorse_util_write_file_private (const gchar* filename, const gchar* contents, GError **err)
 {
@@ -771,6 +875,15 @@ seahorse_util_write_file_private (const gchar* filename, const gchar* contents, 
     return ret;
 }
 
+/**
+ * seahorse_util_chooser_save_new:
+ * @title: The title of the dialog
+ * @parent: The parent of the dialog
+ *
+ * Creates a file chooser dialog to save files.
+ *
+ * Returns: The new save dialog
+ */
 GtkDialog*
 seahorse_util_chooser_save_new (const gchar *title, GtkWindow *parent)
 {
@@ -787,6 +900,15 @@ seahorse_util_chooser_save_new (const gchar *title, GtkWindow *parent)
     return dialog;
 }
 
+/**
+ * seahorse_util_chooser_open_new:
+ * @title: The title of the dialog
+ * @parent: The parent of the dialog
+ *
+ * Creates a file chooser dialog to open files.
+ *
+ * Returns: The new open dialog
+ */
 GtkDialog*
 seahorse_util_chooser_open_new (const gchar *title, GtkWindow *parent)
 {
@@ -802,6 +924,15 @@ seahorse_util_chooser_open_new (const gchar *title, GtkWindow *parent)
     gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
     return dialog;
 }
+
+/**
+ * seahorse_util_chooser_show_key_files:
+ * @dialog: the dialog to add the filter for
+ *
+ * Adds a key file filter and a "All files" filter. The key filter
+ * is used.
+ *
+ */
 void
 seahorse_util_chooser_show_key_files (GtkDialog *dialog)
 {
@@ -825,6 +956,14 @@ seahorse_util_chooser_show_key_files (GtkDialog *dialog)
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);       
 }
 
+/**
+ * seahorse_util_chooser_show_archive_files:
+ * @dialog: the dialog to add the filter for
+ *
+ * Adds a archive file filter and a "All files" filter. The archive filter
+ * is used.
+ *
+ */
 void
 seahorse_util_chooser_show_archive_files (GtkDialog *dialog)
 {
@@ -865,6 +1004,13 @@ seahorse_util_chooser_show_archive_files (GtkDialog *dialog)
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);   
 }
 
+/**
+ * seahorse_util_chooser_set_filename_full:
+ * @dialog: The dialog to pre set the name
+ * @objects: generate the file name from this object
+ *
+ *
+ */
 void
 seahorse_util_chooser_set_filename_full (GtkDialog *dialog, GList *objects)
 {
@@ -877,6 +1023,12 @@ seahorse_util_chooser_set_filename_full (GtkDialog *dialog, GList *objects)
     }
 }
 
+/**
+ * seahorse_util_chooser_set_filename:
+ * @dialog: set the dialog for this
+ * @object: The object to use for the filename. #SeahorseObject
+ *
+ */
 void
 seahorse_util_chooser_set_filename (GtkDialog *dialog, SeahorseObject *object)
 {
@@ -884,7 +1036,15 @@ seahorse_util_chooser_set_filename (GtkDialog *dialog, SeahorseObject *object)
 	seahorse_util_chooser_set_filename_full (dialog, objects);
 	g_list_free (objects);
 }
-    
+
+/**
+ * seahorse_util_chooser_save_prompt:
+ * @dialog: save dialog to show
+ *
+ * If the selected file already exists, a confirmation dialog will be displayed
+ *
+ * Returns: the uri of the chosen file or NULL
+ */
 gchar*      
 seahorse_util_chooser_save_prompt (GtkDialog *dialog)
 {
@@ -925,6 +1085,14 @@ seahorse_util_chooser_save_prompt (GtkDialog *dialog)
     return uri;
 }
 
+/**
+ * seahorse_util_chooser_open_prompt:
+ * @dialog: open dialog to display
+ *
+ * Display an open dialog
+ *
+ * Returns: The uri of the file to open or NULL
+ */
 gchar*      
 seahorse_util_chooser_open_prompt (GtkDialog *dialog)
 {
@@ -940,7 +1108,7 @@ seahorse_util_chooser_open_prompt (GtkDialog *dialog)
 /**
  * seahorse_util_check_suffix:
  * @path: Path of file to check
- * @suffix: Suffix type to check for
+ * @suffix: Suffix type to check for.
  *
  * Checks that @path has a suffix specified by @suffix.
  *
@@ -960,7 +1128,6 @@ seahorse_util_check_suffix (const gchar *path, SeahorseSuffix suffix)
 
 /**
  * seahorse_util_add_suffix:
- * @ctx: Gpgme Context
  * @path: Path of an existing file
  * @suffix: Suffix type
  * @prompt: Overwrite prompt text
@@ -1044,6 +1211,14 @@ seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
     return uri;
 }
 
+/**
+ * seahorse_util_strvec_dup:
+ * @vec: the string table to copy
+ *
+ * Copy a string table
+ *
+ * Returns: the new char **
+ */
 gchar**
 seahorse_util_strvec_dup (const gchar** vec)
 {
@@ -1064,6 +1239,14 @@ seahorse_util_strvec_dup (const gchar** vec)
     return ret;
 }
 
+/**
+ * seahorse_util_strvec_length:
+ * @vec: The string table
+ *
+ * Calculates the length of the string table
+ *
+ * Returns: The length of the string table
+ */
 guint 
 seahorse_util_strvec_length (const gchar **vec)
 {
@@ -1073,6 +1256,17 @@ seahorse_util_strvec_length (const gchar **vec)
     return len;
 }
 
+
+/**
+ * sort_objects_by_source:
+ * @k1: the first seahorse object
+ * @k2: The second seahorse object
+ *
+ * Sorts the seahorse objects by their source
+ *
+ * Returns: if source of k1<k2 it returns -1,
+ *          1 will be returned  if k1>k2. If the sources are equal it returns 0
+ */
 static gint 
 sort_objects_by_source (SeahorseObject *k1, SeahorseObject *k2)
 {
@@ -1090,12 +1284,30 @@ sort_objects_by_source (SeahorseObject *k1, SeahorseObject *k2)
     return sk1 < sk2 ? -1 : 1;
 }
 
+
+/**
+ * seahorse_util_objects_sort:
+ * @objects: #SeahorseObject #GList to sort
+ *
+ * The objects are sorted by their source
+ *
+ * Returns: The sorted list
+ */
 GList*        
 seahorse_util_objects_sort (GList *objects)
 {
     return g_list_sort (objects, (GCompareFunc)sort_objects_by_source);
 }
 
+
+/**
+ * seahorse_util_objects_splice:
+ * @objects: A #GList of #SeahorseObject. Must be sorted
+ *
+ * Splices the list at the source disconuity
+ *
+ * Returns: The second part of the list.
+ */
 GList*       
 seahorse_util_objects_splice (GList *objects)
 {
@@ -1128,6 +1340,15 @@ seahorse_util_objects_splice (GList *objects)
     return NULL;
 }
 
+/**
+ * seahorse_util_string_equals:
+ * @s1: String, can be NULL
+ * @s2: String, can be NULL
+ *
+ * Compares two string. If they are equal, it returns TRUE
+ *
+ * Returns: TRUE if strings are equal, FALSE else
+ */
 gboolean    
 seahorse_util_string_equals (const gchar *s1, const gchar *s2)
 {
@@ -1138,6 +1359,15 @@ seahorse_util_string_equals (const gchar *s1, const gchar *s2)
     return g_str_equal (s1, s2);
 }
 
+/**
+ * seahorse_util_string_up_first:
+ * @orig: The utf8 string to work with
+ *
+ * Upper case the first char in the UTF8 string
+ *
+ * Returns: a new string, with the first char upper cased. The returned string
+ * should be freed with #g_free when no longer needed.
+ */
 gchar*
 seahorse_util_string_up_first (const gchar *orig)
 {
@@ -1164,7 +1394,13 @@ seahorse_util_string_up_first (const gchar *orig)
     
     return ret;
 }
-    
+
+/**
+ * seahorse_util_string_lower:
+ * @s: ASCII string to change
+ *
+ * The whole ASCII string will be lower cased.
+ */
 void        
 seahorse_util_string_lower (gchar *s)
 {
@@ -1172,9 +1408,16 @@ seahorse_util_string_lower (gchar *s)
         *s = g_ascii_tolower (*s);
 }
 
-/* Free a GSList along with string values */
+/**
+ * seahorse_util_string_slist_free:
+ * @slist: the #GSList to free
+ *
+ * Free a GSList along with string values
+ *
+ * Returns: NULL
+ */
 GSList*
-seahorse_util_string_slist_free (GSList *list)
+seahorse_util_string_slist_free (GSList* list)
 {
     GSList *l;
     for (l = list; l; l = l->next)
@@ -1183,7 +1426,14 @@ seahorse_util_string_slist_free (GSList *list)
     return NULL;
 }
 
-/* Copy a GSList along with string values */
+/**
+ * seahorse_util_string_slist_copy:
+ * @slist: The list to copy
+ *
+ * Copy a #GSList along with string values
+ *
+ * Returns: the new list
+ */
 GSList*
 seahorse_util_string_slist_copy (GSList *list)
 {
@@ -1193,7 +1443,15 @@ seahorse_util_string_slist_copy (GSList *list)
     return l;
 }
 
-/* Compare two string GSLists */
+/**
+ * seahorse_util_string_slist_equal:
+ * @sl1: the first string list
+ * @sl2: the second string list
+ *
+ * Compare two string GSLists.
+ *
+ * Returns: TRUE if all the string are equal
+ */
 gboolean    
 seahorse_util_string_slist_equal (GSList *l1, GSList *l2)
 {
@@ -1207,6 +1465,13 @@ seahorse_util_string_slist_equal (GSList *l1, GSList *l2)
     return !l1 && !l2;   
 }
 
+/**
+ * seahorse_util_string_is_whitespace:
+ * @text: The UTF8 string to test
+ *
+ *
+ * Returns: TRUE if @text consists of whitespaces
+ */
 gboolean 
 seahorse_util_string_is_whitespace (const gchar *text)
 {
@@ -1221,6 +1486,12 @@ seahorse_util_string_is_whitespace (const gchar *text)
     return TRUE;
 }
 
+/**
+ * seahorse_util_string_trim_whitespace:
+ * @text: The text to trim (UTF8)
+ *
+ * Whitespaces will be removed from the start and the end of the text.
+ */
 void
 seahorse_util_string_trim_whitespace (gchar *text)
 {
@@ -1250,6 +1521,16 @@ seahorse_util_string_trim_whitespace (gchar *text)
     g_memmove (text, b, (e + 1) - b);
 }
 
+/**
+ * seahorse_util_hex_encode:
+ * @value: a buffer containing data
+ * @length: The length of this buffer
+ *
+ * Creates a string contining the @value in hex for printing.
+ *
+ * Returns: The hex encoded @value. The returned string should be freed
+ * with #g_free when no longer needed.
+ */
 gchar*
 seahorse_util_hex_encode (gconstpointer value, gsize length)
 {
@@ -1267,7 +1548,18 @@ seahorse_util_hex_encode (gconstpointer value, gsize length)
 	return g_string_free (result, FALSE);
 }
 
-/* Callback to determine where a popup menu should be placed */
+/**
+ * seahorse_util_determine_popup_menu_position:
+ * @menu: The menu to place
+ * @x: (out) x pos of the menu
+ * @y: (out) y pos of the menu
+ * @push_in: (out) will be set to TRUE
+ * @gdata: GTK_WIDGET for which the menu is
+ *
+ *
+ * Callback to determine where a popup menu should be placed
+ *
+ */
 void
 seahorse_util_determine_popup_menu_position (GtkMenu *menu, int *x, int *y,
                                              gboolean *push_in, gpointer  gdata)
