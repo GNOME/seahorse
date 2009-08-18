@@ -334,7 +334,14 @@ seahorse_source_export_raw (SeahorseSource *sksrc, GSList *ids, GOutputStream *o
 	g_list_free (objects);
 	return op;
 }
-                                     
+
+/**
+* seahorse_source_get_tag:
+* @sksrc: The seahorse source object
+*
+*
+* Returns: The source-tag property of the object. As #GQuark
+*/
 GQuark              
 seahorse_source_get_tag (SeahorseSource *sksrc)
 {

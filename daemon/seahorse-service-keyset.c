@@ -382,7 +382,15 @@ seahorse_service_keyset_class_init (SeahorseServiceKeysetClass *klass)
 /* -----------------------------------------------------------------------------
  * PUBLIC METHODS
  */
- 
+
+/**
+* seahorse_service_keyset_new:
+* @ktype: The  key type
+* @location: the location of the key
+*
+*
+* Returns: a new keyset of type #SeahorseSet
+*/
 SeahorseSet* 
 seahorse_service_keyset_new (GQuark ktype, SeahorseLocation location)
 {

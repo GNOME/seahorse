@@ -207,6 +207,11 @@ seahorse_context_finalize (GObject *gobject)
     G_OBJECT_CLASS (seahorse_context_parent_class)->finalize (gobject);
 }
 
+/**
+* seahorse_context_for_app:
+*
+* Returns: the application main context as #SeahorseContext
+*/
 SeahorseContext*
 seahorse_context_for_app (void)
 {
@@ -362,6 +367,16 @@ seahorse_context_find_source (SeahorseContext *sctx, GQuark ktype,
     return NULL;
 }
 
+
+/**
+* seahorse_context_find_sources:
+* @sctx: the context to work with
+* @ktype: the type of the key to match. Or SEAHORSE_TAG_INVALID
+* @location: the location to match. Or SEAHORSE_LOCATION_INVALID
+*
+* Returns: A list of seahorse sources matching @ktype and @location as #GSList. Must
+*  be freed with #g_slist_free
+*/
 GSList*
 seahorse_context_find_sources (SeahorseContext *sctx, GQuark ktype,
                                SeahorseLocation location)

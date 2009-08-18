@@ -43,6 +43,16 @@
 
 G_DEFINE_TYPE (SeahorseService, seahorse_service, G_TYPE_OBJECT);
 
+/**
+* copy_to_array:
+* @type: a string (#gchar)
+* @dummy: not used
+* @a: an array (#GArray)
+*
+* Adds a copy of @type to @a
+*
+* Returns:
+*/
 static void
 copy_to_array (const gchar *type, gpointer dummy, GArray *a)
 {
@@ -50,6 +60,15 @@ copy_to_array (const gchar *type, gpointer dummy, GArray *a)
     g_array_append_val (a, v);
 }
 
+/**
+* add_key_source:
+* @svc: the seahorse context
+* @ktype: the key source to add
+*
+* Adds DBus ids for the keysets. The keysets @ktype of the service will be set to the
+* local keyset.
+*
+*/
 static void 
 add_key_source (SeahorseService *svc, GQuark ktype)
 {
@@ -82,6 +101,17 @@ add_key_source (SeahorseService *svc, GQuark ktype)
  * DBUS METHODS 
  */
 
+/**
+* seahorse_service_get_key_types:
+* @svc: the seahorse context
+* @ret: the supported keytypes of seahorse
+* @error: an error var, not used
+*
+* DBus: GetKeyTypes
+*
+*
+* Returns: True
+*/
 gboolean 
 seahorse_service_get_key_types (SeahorseService *svc, gchar ***ret, 
                                 GError **error)
@@ -101,6 +131,17 @@ seahorse_service_get_key_types (SeahorseService *svc, gchar ***ret,
     return TRUE;
 }
 
+/**
+* seahorse_service_get_keyset:
+* @svc: the seahorse context
+* @ktype: the type of the key
+* @path: the path to the keyset
+* @error: set if the key type was not found
+*
+* DBus: GetKeyset
+*
+* Returns: False if there is no matching keyset, True else
+*/
 gboolean
 seahorse_service_get_keyset (SeahorseService *svc, gchar *ktype, 
                              gchar **path, GError **error)
@@ -285,6 +326,13 @@ seahorse_service_changed (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseS
  * OBJECT 
  */
 
+/**
+* seahorse_service_dispose:
+* @gobject:
+*
+* Disposes the seahorse dbus service
+*
+*/
 static void
 seahorse_service_dispose (GObject *gobject)
 {
@@ -300,6 +348,12 @@ seahorse_service_dispose (GObject *gobject)
     G_OBJECT_CLASS (seahorse_service_parent_class)->dispose (gobject);
 }
 
+/**
+* seahorse_service_class_init:
+* @klass: The class to init
+*
+*
+*/
 static void
 seahorse_service_class_init (SeahorseServiceClass *klass)
 {
@@ -311,6 +365,15 @@ seahorse_service_class_init (SeahorseServiceClass *klass)
     gobject_class->dispose = seahorse_service_dispose;
 }
 
+
+/**
+* seahorse_service_init:
+* @svc:
+*
+*
+* Initialises the service, adds local key sources and connects the signals.
+*
+*/
 static void
 seahorse_service_init (SeahorseService *svc)
 {

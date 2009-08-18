@@ -42,6 +42,12 @@ SeahorseServiceCrypto *the_crypto = NULL;
 #endif
 DBusGConnection *connection = NULL;
 
+/**
+* seahorse_dbus_server_init:
+*
+* Initialisation for the dbus service.
+*
+*/
 void 
 seahorse_dbus_server_init ()
 {
@@ -96,12 +102,25 @@ seahorse_dbus_server_init ()
 #endif 
 }
 
+/**
+* seahorse_dbus_server_get_connection:
+*
+*
+*
+* Returns: The DBus connection #DBusGConnection
+*/
 DBusGConnection*    
 seahorse_dbus_server_get_connection ()
 {
     return connection;
 }
 
+/**
+* seahorse_dbus_server_cleanup:
+*
+* Cleans up the dbus service
+*
+*/
 void 
 seahorse_dbus_server_cleanup ()
 {
