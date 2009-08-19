@@ -817,9 +817,9 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
 /**
  * seahorse_gpgme_key_op_set_trust:
  * @skey: #SeahorseKey whose trust will be changed
- * @trust: New trust value that must be at least SEAHORSE_VALIDITY_UNKNOWN.
- * If @skey is a #SeahorseKeyPair, then @trust cannot be SEAHORSE_VALIDITY_UNKNOWN.
- * If @skey is not a #SeahorseKeyPair, then @trust cannot be SEAHORSE_VALIDITY_ULTIMATE.
+ * @trust: New trust value that must be at least #SEAHORSE_VALIDITY_UNKNOWN.
+ * If @skey is a #SeahorseKeyPair, then @trust cannot be #SEAHORSE_VALIDITY_UNKNOWN.
+ * If @skey is not a #SeahorseKeyPair, then @trust cannot be #SEAHORSE_VALIDITY_ULTIMATE.
  *
  * Tries to change the owner trust of @skey to @trust.
  *
