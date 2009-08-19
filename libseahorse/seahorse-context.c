@@ -44,6 +44,13 @@
 #include "pgp/seahorse-server-source.h"
 #endif
 
+/**
+ * SECTION:seahorse-context
+ * @short_description: This is where all the action in a Seahorse process comes together.
+ * @include:libseahorse/seahorse-context.h
+ *
+ **/
+
 /* The application main context */
 SeahorseContext* app_context = NULL;
 
@@ -776,10 +783,12 @@ seahorse_context_remove_object (SeahorseContext *sctx, SeahorseObject *sobj)
  */
 
 /**
- * seahorse_context_get_default_key
+ * seahorse_context_get_default_key:
  * @sctx: Current #SeahorseContext
- * 
- * Returns: the secret key that's the default key 
+ *
+ * Returns: the secret key that's the default key
+ *
+ * Deprecated: No replacement
  */
 SeahorseObject*
 seahorse_context_get_default_key (SeahorseContext *sctx)
@@ -805,12 +814,14 @@ seahorse_context_get_default_key (SeahorseContext *sctx)
 }
 
 /**
- * seahorse_context_get_discovery
+ * seahorse_context_get_discovery:
  * @sctx: #SeahorseContext object
- * 
+ *
  * Gets the Service Discovery object for this context.
  *
- * Return: The Service Discovery object. 
+ * Returns: The Service Discovery object.
+ *
+ * Deprecated: No replacement
  */
 SeahorseServiceDiscovery*
 seahorse_context_get_discovery (SeahorseContext *sctx)

@@ -463,7 +463,7 @@ seahorse_util_print_fd (int fd, const char* s)
 /** 
  * seahorse_util_printf_fd:
  * @fd: The file descriptor to write to
- * @fmt: The printf format of the data to write
+ * @data: The printf format of the data to write
  * @...: The parameters to insert
  *
  * Returns: TRUE on success, FALSE on error

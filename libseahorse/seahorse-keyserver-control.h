@@ -18,17 +18,6 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
-/**
- * SeahorseKeyServerControl: A control which allows you to select from a set
- * of keyservers. 
- * 
- * - Also displays shares for keys found via DNS-SD over the network.
- * 
- * Properties:
- *   gconf-key: (gchar*) The GConf key to retrieve and set keyservers.
- *   none-option: (gchar*) Text to display for 'no key server'
- */
  
 #ifndef __SEAHORSE_KEYSERVER_CONTROL_H__
 #define __SEAHORSE_KEYSERVER_CONTROL_H__
@@ -44,6 +33,20 @@
 
 typedef struct _SeahorseKeyserverControl SeahorseKeyserverControl;
 typedef struct _SeahorseKeyserverControlClass SeahorseKeyserverControlClass;
+
+/**
+ * SeahorseKeyServerControl:
+ * @parent_instance: The parent #GtkComboBox
+ *
+ * A control which allows you to select from a set
+ * of keyservers.
+ *
+ * - Also displays shares for keys found via DNS-SD over the network.
+ *
+ * Properties:
+ *   gconf-key: (gchar*) The GConf key to retrieve and set keyservers.
+ *   none-option: (gchar*) Text to display for 'no key server'
+ */
 
 struct _SeahorseKeyserverControl {
     GtkComboBox parent_instance;

@@ -31,6 +31,7 @@
 #include <glib/gi18n.h>
 
 /**
+ * _SeahorseObjectProps:
  * @PROP_0:
  * @PROP_CONTEXT:
  * @PROP_SOURCE:
@@ -48,7 +49,7 @@
  * @PROP_USAGE:
  * @PROP_FLAGS:
  */
-enum {
+enum _SeahorseObjectProps {
 	PROP_0,
 	PROP_CONTEXT,
 	PROP_SOURCE,

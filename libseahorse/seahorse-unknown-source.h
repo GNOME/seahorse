@@ -18,19 +18,6 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
-/** 
- * SeahorseUnknownSource: A  source for unknown objects
- * 
- * - Derived from SeahorseSource
- * - Is used for objects that haven't been found on a key server. 
- * 
- * Properties:
- *  ktype: (GQuark) The ktype (ie: SKEY_UNKNOWN) of keys originating from this 
-           key source.
- *  location: (SeahorseLocation) The location of objects that come from this 
- *         source. (ie: SEAHORSE_LOCATION_MISSING)
- */
  
 #ifndef __SEAHORSE_UNKNOWN_SOURCE_H__
 #define __SEAHORSE_UNKNOWN_SOURCE_H__
@@ -48,6 +35,23 @@
 typedef struct _SeahorseUnknownSource SeahorseUnknownSource;
 typedef struct _SeahorseUnknownSourceClass SeahorseUnknownSourceClass;
 typedef struct _SeahorseUnknownSourcePrivate SeahorseUnknownSourcePrivate;
+
+/**
+ * SeahorseUnknownSource:
+ * @parent: The parent #GObject
+ * @ktype: The #GQuark key type for the source
+ *
+ * A  source for unknown objects
+ *
+ * - Derived from SeahorseSource
+ * - Is used for objects that haven't been found on a key server.
+ *
+ * Properties:
+ *  ktype: (GQuark) The ktype (ie: SKEY_UNKNOWN) of keys originating from this
+           key source.
+ *  location: (SeahorseLocation) The location of objects that come from this
+ *         source. (ie: SEAHORSE_LOCATION_MISSING)
+ */
 
 struct _SeahorseUnknownSource {
 	GObject parent;

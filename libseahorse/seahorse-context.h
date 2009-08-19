@@ -20,24 +20,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/** 
- * SeahorseContext: This is where all the action in a Seahorse process comes
- * together. 
- *
- * - Usually there's only one SeahorseContext per process created by passing 
- *   |SEAHORSE_CONTEXT_APP| to |seahorse_context_new|, and accessed via 
- *   the |SCTX_APP| macro.
- * - Retains the list of all valid struct _SeahorseObject objects. 
- * - Has a collection of SeahorseSource objects which add objects to the 
- *   SeahorseContext. 
- * 
- * Signals:
- *   added: A object was added to the context.
- *   removed: A object was removed from the context.
- *   changed: A object changed.
- *   destroy: The context was destroyed.
- */
- 
 #ifndef __SEAHORSE_CONTEXT_H__
 #define __SEAHORSE_CONTEXT_H__
 
@@ -60,6 +42,28 @@ struct _SeahorseObjectPredicate;
 typedef struct _SeahorseContext SeahorseContext;
 typedef struct _SeahorseContextClass SeahorseContextClass;
 typedef struct _SeahorseContextPrivate SeahorseContextPrivate;
+
+/**
+ * SeahorseContext:
+ * @parent: The parent #GtkObject
+ * @is_daemon: a #gboolean indicating whether the context is being used in a
+ *             program that is daemonized
+ *
+ * This is where all the action in a Seahorse process comes together.
+ *
+ * - Usually there's only one #SeahorseContext per process created by passing
+ *   %SEAHORSE_CONTEXT_APP to seahorse_context_new(), and accessed via
+ *   the %SCTX_APP macro.
+ * - Retains the list of all valid struct _SeahorseObject objects.
+ * - Has a collection of #SeahorseSource objects which add objects to the
+ *   #SeahorseContext.
+ *
+ * Signals:
+ *   added: A object was added to the context.
+ *   removed: A object was removed from the context.
+ *   changed: A object changed.
+ *   destroy: The context was destroyed.
+ */
 
 struct _SeahorseContext {
     GtkObject               parent;

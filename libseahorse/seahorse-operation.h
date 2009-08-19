@@ -19,31 +19,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/**
- * SeahorseOperation: An operation taking place over time. 
- * 
- * - Generally this class is derived and a base class actually hooks in and 
- *   performs the operation, keeps the properties updated etc...
- * - Used all over to represent things like key loading operations, search 
- * - SeahorseMultiOperation allows you to combine multiple operations into
- *   a single one. Used when searching multiple key servers for example.
- * - Can be tied to a progress bar (see seahorse-progress.h)
- * - Holds a reference to itself while the operation is in progress.
- * - The seahorse_operation_mark_* are used by derived classes to update 
- *   properties of the operation as things progress.
- *
- * Signals:
- *   done: The operation is complete.
- *   progress: The operation has progressed, or changed state somehow.
- * 
- * Properties:
- *   result: The 'result' of the operation (if applicable). 
- *           This depends on the derived operation class.
- *   progress: A fraction between 0.0 and 1.0 inclusive representing how far 
- *           along this operation is. 0.0 = indeterminate, and 1.0 is done.
- *   message: A progress message to display to the user.
- */
- 
 #ifndef __SEAHORSE_OPERATION_H__
 #define __SEAHORSE_OPERATION_H__
 
@@ -58,6 +33,40 @@
 #define SEAHORSE_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_OPERATION, SeahorseOperationClass))
 
 struct _SeahorseOperation;
+
+/**
+ * SeahorseOperation:
+ * @parent: The parent #GObject
+ * @message: Progress status details ie: "foobar.jpg"
+ * @progress: The current progress position, -1 for indeterminate
+ * @is_running: If the operation is running or not
+ * @is_done: Operation is done or not
+ * @is_cancelled: Operation is cancelled or not
+ * @error: #GError for the operation
+ *
+ * An operation taking place over time.
+ *
+ * - Generally this class is derived and a base class actually hooks in and
+ *   performs the operation, keeps the properties updated etc...
+ * - Used all over to represent things like key loading operations, search
+ * - SeahorseMultiOperation allows you to combine multiple operations into
+ *   a single one. Used when searching multiple key servers for example.
+ * - Can be tied to a progress bar (see seahorse-progress.h)
+ * - Holds a reference to itself while the operation is in progress.
+ * - The seahorse_operation_mark_* are used by derived classes to update
+ *   properties of the operation as things progress.
+ *
+ * Signals:
+ *   done: The operation is complete.
+ *   progress: The operation has progressed, or changed state somehow.
+ *
+ * Properties:
+ *   result: The 'result' of the operation (if applicable).
+ *           This depends on the derived operation class.
+ *   progress: A fraction between 0.0 and 1.0 inclusive representing how far
+ *           along this operation is. 0.0 = indeterminate, and 1.0 is done.
+ *   message: A progress message to display to the user.
+ */
 
 typedef struct _SeahorseOperation {
     GObject parent;

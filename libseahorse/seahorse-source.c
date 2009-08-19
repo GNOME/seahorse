@@ -82,11 +82,11 @@ seahorse_source_get_type (void)
 /**
  * seahorse_source_load
  * @sksrc: A #SeahorseSource object
- * 
- * Refreshes the #SeahorseSource's internal object listing. 
- * 
- * Returns the asynchronous refresh operation. 
- **/   
+ *
+ * Refreshes the #SeahorseSource's internal object listing.
+ *
+ * Returns: the asynchronous refresh operation.
+ **/
 SeahorseOperation*
 seahorse_source_load (SeahorseSource *sksrc)
 {
@@ -135,7 +135,7 @@ seahorse_source_load_async (SeahorseSource *sksrc)
  * 
  * Refreshes the #SeahorseSource's internal listing. 
  * 
- * Returns the asynchronous refresh operation. 
+ * Returns: the asynchronous refresh operation.
  **/   
 SeahorseOperation*
 seahorse_source_search (SeahorseSource *sksrc, const gchar *match)

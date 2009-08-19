@@ -458,7 +458,8 @@ setup_sharing (SeahorseWidget *swidget)
 /* -------------------------------------------------------------------------- */
 
 /**
- * seahorse_prefs_new
+ * seahorse_prefs_new:
+ * @parent: The #GtkWindow to set as the preferences dialog's parent
  * 
  * Create a new preferences window.
  * 
@@ -468,7 +469,10 @@ SeahorseWidget *
 seahorse_prefs_new (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
+
+#if !(WITH_KEYSERVER && WITH_SHARING)
     GtkWidget *widget = NULL;
+#endif
 
     swidget = seahorse_widget_new ("prefs", parent);
     

@@ -18,14 +18,6 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
-/**
- * SeahorseObjectModel: A GtkTreeModel that can assign certain rows as 
- *   'key rows' which are updated when a key is updated. 
- *
- * Signals:
- *   update-row: A request to update a row 
- */
  
 #ifndef __SEAHORSE_OBJECT_MODEL_H__
 #define __SEAHORSE_OBJECT_MODEL_H__
@@ -43,7 +35,18 @@
 
 typedef struct _SeahorseObjectModel SeahorseObjectModel;
 typedef struct _SeahorseObjectModelClass SeahorseObjectModelClass;
-    
+
+/**
+ * SeahorseObjectModel:
+ * @parent: The parent #GtkTreeStore
+ *
+ * A GtkTreeModel that can assign certain rows as
+ * 'key rows' which are updated when a key is updated.
+ *
+ * Signals:
+ *   update-row: A request to update a row
+ */
+
 struct _SeahorseObjectModel {
     GtkTreeStore parent;
 };

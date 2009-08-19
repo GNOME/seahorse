@@ -18,11 +18,6 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
-/**
- * SeahorseSetModel: A GtkTreeModel which represents all objects
- *   in a SeahorseSet 
- */
  
 #ifndef __SEAHORSE_SET_MODEL_H__
 #define __SEAHORSE_SET_MODEL_H__
@@ -46,6 +41,14 @@ typedef struct _SeahorseSetModelColumn {
 
 typedef struct _SeahorseSetModel SeahorseSetModel;
 typedef struct _SeahorseSetModelClass SeahorseSetModelClass;
+
+/**
+ * SeahorseSetModel:
+ * @parent: #GObject #SeahorseSetModel inherits from
+ * @set: #SeahorseSet that belongs to the model
+ *
+ * A GtkTreeModel which represents all objects in a SeahorseSet
+ */
 
 struct _SeahorseSetModel {
 	GObject parent;
