@@ -29,6 +29,7 @@
 #include <unistd.h>
 
 #include <glib/gstdio.h>
+#include <glib/gi18n.h>
 
 #include "seahorse-util.h"
 #include "seahorse-libdialogs.h"
@@ -294,6 +295,10 @@ edit_gpgme_key (gpgme_ctx_t ctx, gpgme_key_t key, SeahorseEditParm *parms)
     
 	/* do edit callback, release data */
 	gerr = gpgme_op_edit (ctx, key, seahorse_gpgme_key_op_edit, parms, out);
+
+	if (gpgme_err_code (gerr) == GPG_ERR_CANCELED) {
+		seahorse_util_show_error(NULL, _("Wrong password"), _("This was the third time you entered a wrong password. Please try again."));
+	}
 	
 	seahorse_gpgme_data_release (out);
     
