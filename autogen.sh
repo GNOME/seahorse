@@ -13,7 +13,7 @@ PKG_NAME="seahorse"
 }
 
 which gnome-autogen.sh || {
-    echo "You need to install gnome-common from the GNOME CVS"
+    echo "You need to install gnome-common from the GNOME Git"
     exit 1
 }
 
