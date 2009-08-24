@@ -780,7 +780,7 @@ is_hex_keyid (const gchar *match)
     if (strlen (match) != 8)
         return FALSE;
     
-    while (*t != NULL) {
+    while (*t != '\0') {
         if (!((*t >= 0x30 && *t <= 0x39) || (*t >= 0x41 && *t <= 0x46) || (*t >= 0x61 && *t <= 0x66)))
             return FALSE;
             

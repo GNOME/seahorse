@@ -71,7 +71,7 @@ seahorse_ssh_generate_register (void)
 	gtk_action_group_add_actions (actions, ACTION_ENTRIES, G_N_ELEMENTS (ACTION_ENTRIES), NULL);
 	
 	/* Register this as a generator */
-	seahorse_registry_register_object (NULL, actions, SEAHORSE_SSH_TYPE_STR, "generator", NULL);
+	seahorse_registry_register_object (NULL, G_OBJECT (actions), SEAHORSE_SSH_TYPE_STR, "generator", NULL);
 }
 
 /* --------------------------------------------------------------------

@@ -231,13 +231,13 @@ do_main (SeahorseWidget *swidget)
     skey = SEAHORSE_SSH_KEY (object);
 
     /* Image */
-    widget = gtk_builder_get_object (swidget->gtkbuilder, "key-image");
+    widget = GTK_WIDGET (gtk_builder_get_object (swidget->gtkbuilder, "key-image"));
     if (widget)
         gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_KEY_SSH, GTK_ICON_SIZE_DIALOG);
 
     /* Name and title */
     label = seahorse_object_get_label (object);
-    widget = gtk_builder_get_object (swidget->gtkbuilder, "comment-entry");
+    widget = GTK_WIDGET (gtk_builder_get_object (swidget->gtkbuilder, "comment-entry"));
     if (widget)
         gtk_entry_set_text (GTK_ENTRY (widget), label);
     widget = seahorse_widget_get_toplevel (swidget);

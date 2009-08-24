@@ -195,7 +195,7 @@ static const GtkActionEntry UI_ENTRIES[] = {
 	{ "edit-menu", NULL, N_("_Edit") },
 	{ "view-menu", NULL, N_("_View") },
 	{ "help-menu", NULL, N_("_Help") },
-#ifdef  WITH_KEYSERVER || WITH_SHARING
+#if defined (WITH_KEYSERVER) || defined (WITH_SHARING)
 	{ "app-preferences", GTK_STOCK_PREFERENCES, N_("Prefere_nces"), NULL,
 	  N_("Change preferences for this program"), G_CALLBACK (on_app_preferences) },
 #endif
