@@ -28,10 +28,10 @@ MARSHALLERS = \
     cryptui-marshal.c cryptui-marshal.h
 
 cryptui-marshal.h: cryptui-marshal.list $(GLIB_GENMARSHAL)
-	$(GLIB_GENMARSHAL) $< --header --prefix=cryptui_marshal > $@
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) $< --header --prefix=cryptui_marshal > $@
 
 cryptui-marshal.c: cryptui-marshal.list $(GLIB_GENMARSHAL)
-	echo "#include \"cryptui-marshal.h\"" > $@ && \
+	$(AM_V_GEN) echo "#include \"cryptui-marshal.h\"" > $@ && \
 	$(GLIB_GENMARSHAL) $< --body --prefix=cryptui_marshal >> $@
 	
 
@@ -63,7 +63,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cryptui-$(LIBCRYPTUI_MAJOR).pc
 
 cryptui-$(LIBCRYPTUI_MAJOR).pc: cryptui.pc
-	cp cryptui.pc cryptui-$(LIBCRYPTUI_MAJOR).pc
+	$(AM_V_GEN) cp cryptui.pc cryptui-$(LIBCRYPTUI_MAJOR).pc
 
 # ------------------------------------------------------------------
 # COMMON
