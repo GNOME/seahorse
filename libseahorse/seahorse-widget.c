@@ -393,6 +393,13 @@ seahorse_widget_get_toplevel (SeahorseWidget     *swidget)
     return widget;
 }
 
+/**
+ * seahorse_widget_get_widget:
+ * @swidget: a #SeahorseWidget
+ * @identifier: the name of the widget to get
+ *
+ * Returns: the widget named @identifier in @swidget
+ */
 GtkWidget*
 seahorse_widget_get_widget (SeahorseWidget *swidget, const char *identifier)
 {
@@ -431,6 +438,14 @@ seahorse_widget_set_visible (SeahorseWidget *swidget, const char *identifier,
         gtk_widget_hide (widget);
 }
 
+/**
+ * seahorse_widget_set_sensitive:
+ * @swidget: the #SeahorseWidget to find the widget @identifier in
+ * @identifier: the name of the widget to et sensitive
+ * @sensitive: TRUE if the widget should be switched to sensitive
+ *
+ * Sets the widget @identifier 's sensitivity to @sensitive
+ */
 void             
 seahorse_widget_set_sensitive (SeahorseWidget *swidget, const char *identifier,
                                gboolean sensitive)

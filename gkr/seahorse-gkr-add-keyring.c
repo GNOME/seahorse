@@ -29,6 +29,20 @@
 
 #include <glib/gi18n.h>
 
+/**
+ * SECTION:seahorse-gkr-add-keyring
+ * @short_description: Contains the functions to add a new gnome-keyring keyring
+ *
+ **/
+
+/**
+ * keyring_add_done:
+ * @result:GNOME_KEYRING_RESULT_CANCELLED or GNOME_KEYRING_RESULT_OK
+ * @data: the swidget
+ *
+ * This callback is called when the new keyring was created. It updates the
+ * internal seahorse list of keyrings
+ */
 static void
 keyring_add_done (GnomeKeyringResult result, gpointer data)
 {
@@ -63,6 +77,14 @@ keyring_add_done (GnomeKeyringResult result, gpointer data)
 	seahorse_widget_destroy (swidget);
 }
 
+/**
+ * on_add_keyring_name_changed:
+ * @entry: the entry widget
+ * @swidget: the seahorse widget
+ *
+ * Sets the widget named "ok" in the @swidget to sensitive as soon as the
+ * entry @entry contains text
+ */
 G_MODULE_EXPORT void
 on_add_keyring_name_changed (GtkEntry *entry, SeahorseWidget *swidget)
 {
@@ -70,6 +92,16 @@ on_add_keyring_name_changed (GtkEntry *entry, SeahorseWidget *swidget)
 	seahorse_widget_set_sensitive (swidget, "ok", keyring && keyring[0]);
 }
 
+/**
+ * on_add_keyring_properties_response:
+ * @dialog: ignored
+ * @response: the response of the choose-keyring-name dialog
+ * @swidget: the seahorse widget
+ *
+ * Requests a password using #gnome_keyring_create - the name of the keyring
+ * was already entered by the user. The password will be requested in a window
+ * provided by gnome-keyring
+ */
 G_MODULE_EXPORT void
 on_add_keyring_properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 {
@@ -97,6 +129,13 @@ on_add_keyring_properties_response (GtkDialog *dialog, int response, SeahorseWid
 	}
 }
 
+/**
+ * seahorse_gkr_add_keyring_show:
+ * @parent: the parent widget of the new window
+ *
+ * Displays the window requesting the keyring name. Starts the whole
+ * "create a new keyring" process.
+ */
 void
 seahorse_gkr_add_keyring_show (GtkWindow *parent)
 {

@@ -94,6 +94,13 @@ refresh_all_keyrings (SeahorseCommands *self)
 	g_object_unref (op);
 }
 
+/**
+ * on_gkr_add_keyring:
+ * @action:
+ * @unused: ignored
+ *
+ * calls the function that shows the add keyring window
+ */
 static void
 on_gkr_add_keyring (GtkAction *action, gpointer unused)
 {
