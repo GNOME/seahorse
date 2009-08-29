@@ -2,6 +2,14 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkImage" id="passphrase-image">
+    <property name="stock">gtk-edit</property>
+    <property name="icon-size">4</property>
+  </object>
+  <object class="GtkImage" id="export-image">
+    <property name="stock">gtk-save-as</property>
+    <property name="icon-size">4</property>
+  </object>
   <object class="GtkDialog" id="ssh-key-properties">
     <property name="visible">True</property>
     <property name="border_width">5</property>
@@ -190,44 +198,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="image">passphrase-image</property>
+                        <property name="label" translatable="yes">Change _Passphrase</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="on_ssh_passphrase_button_clicked"/>
-                        <child>
-                          <object class="GtkAlignment" id="alignment43">
-                            <property name="visible">True</property>
-                            <property name="xscale">0</property>
-                            <property name="yscale">0</property>
-                            <child>
-                              <object class="GtkHBox" id="hbox58">
-                                <property name="visible">True</property>
-                                <property name="spacing">2</property>
-                                <child>
-                                  <object class="GtkImage" id="image38">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-edit</property>
-                                    <property name="icon-size">4</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label22224">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Change _Passphrase</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
                       </object>
                     </child>
                   </object>
@@ -494,44 +468,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="image">export-image</property>
+                        <property name="label" translatable="yes">E_xport Complete Key</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="on_ssh_export_button_clicked"/>
-                        <child>
-                          <object class="GtkAlignment" id="alignment45">
-                            <property name="visible">True</property>
-                            <property name="xscale">0</property>
-                            <property name="yscale">0</property>
-                            <child>
-                              <object class="GtkHBox" id="hbox59">
-                                <property name="visible">True</property>
-                                <property name="spacing">2</property>
-                                <child>
-                                  <object class="GtkImage" id="image39">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-save-as</property>
-                                    <property name="icon-size">4</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label22225">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">E_xport Complete Key</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
                       </object>
                     </child>
                   </object>
