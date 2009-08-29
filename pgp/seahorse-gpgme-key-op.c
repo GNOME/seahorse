@@ -716,7 +716,7 @@ typedef enum
 static gpgme_error_t
 edit_trust_action (guint state, gpointer data, int fd)
 {
-	gint trust = (gint)data;
+	gint trust = GPOINTER_TO_INT (data);
 	
 	switch (state) {
 		/* enter command */
@@ -863,7 +863,7 @@ seahorse_gpgme_key_op_set_trust (SeahorseGpgmeKey *pkey, SeahorseValidity trust)
     }
 	
 	parms = seahorse_edit_parm_new (TRUST_START, edit_trust_action,
-		edit_trust_transit, (gpointer)menu_choice);
+		edit_trust_transit, GINT_TO_POINTER (menu_choice));
 	
 	return edit_key (pkey, parms);
 }
@@ -1541,7 +1541,7 @@ del_key_action (guint state, gpointer data, int fd)
 	switch (state) {
 		/* select key */
 		case DEL_KEY_SELECT:
-            PRINTF ((fd, "key %d", (guint)data));
+			PRINTF ((fd, "key %d", GPOINTER_TO_UINT (data)));
 			break;
 		case DEL_KEY_COMMAND:
             PRINT ((fd, "delkey"));

@@ -254,7 +254,7 @@ filter_callback (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
 static gboolean
 refilter_now (SeahorseKeyManagerStore* skstore)
 {
-    g_return_if_fail (skstore->priv->filter);
+    g_return_val_if_fail (skstore->priv->filter, FALSE);
     seahorse_set_refresh (SEAHORSE_SET_MODEL (skstore)->set);
     gtk_tree_model_filter_refilter (skstore->priv->filter);    
     skstore->priv->filter_stag = 0;

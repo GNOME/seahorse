@@ -201,7 +201,7 @@ io_ssh_write (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *
         case G_IO_STATUS_AGAIN:
             break;
         default:
-            DEBUG_OPERATION (("SSHOP: Wrote %d bytes to SSH\n", written));
+            DEBUG_OPERATION (("SSHOP: Wrote %d bytes to SSH\n", (gint)written));
             g_string_erase (pv->sin, 0, written);
             break;
         }

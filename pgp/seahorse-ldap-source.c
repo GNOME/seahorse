@@ -958,6 +958,7 @@ start_search_operation (SeahorseLDAPSource *lsrc, const gchar *pattern)
     return lop;
 }
 
+#if 0 /* UNUSED */
 /* Initiate a search operation by fingerprint */
 static SeahorseLDAPOperation *
 start_search_operation_fpr (SeahorseLDAPSource *lsrc, const gchar *fpr)
@@ -984,6 +985,7 @@ start_search_operation_fpr (SeahorseLDAPSource *lsrc, const gchar *fpr)
     
     return lop;
 }
+#endif /* UNUSED */
 
 /* -----------------------------------------------------------------------------
  *  GET OPERATION 

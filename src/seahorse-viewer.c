@@ -443,7 +443,6 @@ on_key_delete (GtkAction* action, SeahorseViewer* self)
 	GList *objects = NULL;
 	GList *all_objects = NULL;
 	GList *l;
-	guint num;
 
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
@@ -457,13 +456,8 @@ on_key_delete (GtkAction* action, SeahorseViewer* self)
 		SeahorseObject* object = l->data;
 		
 		if (seahorse_object_get_usage (object) == SEAHORSE_USAGE_PRIVATE_KEY) {
-			gchar* prompt = NULL;
-			if (num == 1)
-				prompt = g_strdup_printf (_("%s is a private key. Are you sure you want to proceed?"), 
-				                          seahorse_object_get_label (object));
-			else
-				prompt = g_strdup (_("One or more of the deleted keys are private keys. Are you sure you want to proceed?"));
-						
+			gchar* prompt = g_strdup_printf (_("%s is a private key. Are you sure you want to proceed?"), 
+			                                 seahorse_object_get_label (object));
 			if (!seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))))) {
 				g_free (prompt);
 				g_list_free (objects);
