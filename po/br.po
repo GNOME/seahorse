@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-13 10:48+0000\n"
-"PO-Revision-Date: 2009-05-27 05:09+0100\n"
-"Last-Translator: Denis ARNAUD <denisarnuad@yahoo.fr>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse&component=general\n"
+"POT-Creation-Date: 2009-07-28 12:11+0000\n"
+"PO-Revision-Date: 2009-08-28 16:08+0100\n"
+"Last-Translator: denis <denisarnuad@yahoo.fr>\n"
 "Language-Team: Britton <br@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,6 +17,26 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2009-05-18 14:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+
+#: ../daemon/seahorse-daemon.c:69
+msgid "Do not run seahorse-daemon as a daemon"
+msgstr ""
+
+#: ../daemon/seahorse-daemon.c:87
+msgid "couldn't fork process"
+msgstr ""
+
+#: ../daemon/seahorse-daemon.c:93
+msgid "couldn't create new process group"
+msgstr ""
+
+#: ../daemon/seahorse-daemon.c:207
+msgid "Encryption Daemon (Seahorse)"
+msgstr "Droukspered enrinegañ (Seahorse)"
+
+#: ../daemon/seahorse-daemon.desktop.in.in.h:1
+msgid "Seahorse Daemon"
+msgstr "Droukspered Seahorse"
 
 #: ../daemon/seahorse-service.c:110
 #: ../daemon/seahorse-service.c:134
@@ -31,9 +51,20 @@ msgstr "Rizh an alch'wez didalvoudek pe dianavezet :%s"
 msgid "Invalid or unrecognized key: %s"
 msgstr "Alc'hwez didalvoudek pe dianavezet :%s"
 
+#. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
+#: ../daemon/seahorse-service-crypto.c:160
+#, c-format
+msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
+msgstr "Sinet gant <i><key id='%s'/> <b>diamzeret</b></i> d'an %s."
+
 #: ../daemon/seahorse-service-crypto.c:161
 msgid "Invalid Signature"
 msgstr "Sinadur didalvoudek"
+
+#: ../daemon/seahorse-service-crypto.c:167
+#, c-format
+msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
+msgstr "Sinet gant <i><key id='%s'/></i> d'an %s <b>Diamzeret</b>."
 
 #: ../daemon/seahorse-service-crypto.c:168
 msgid "Expired Signature"
@@ -58,13 +89,25 @@ msgstr "Sinet gant <i><key id='%s'/></i> e %s."
 msgid "Good Signature"
 msgstr "Sinadur mat"
 
+#: ../daemon/seahorse-service-crypto.c:187
+msgid "Signing key not in keyring."
+msgstr ""
+
 #: ../daemon/seahorse-service-crypto.c:188
 msgid "Unknown Signature"
 msgstr "Sinadur dianav"
 
+#: ../daemon/seahorse-service-crypto.c:192
+msgid "Bad or forged signature. The signed data was modified."
+msgstr ""
+
 #: ../daemon/seahorse-service-crypto.c:193
 msgid "Bad Signature"
 msgstr "Sinadur fall"
+
+#: ../daemon/seahorse-service-crypto.c:201
+msgid "Couldn't verify signature."
+msgstr ""
 
 #: ../daemon/seahorse-service-crypto.c:257
 #: ../daemon/seahorse-service-crypto.c:364
@@ -83,6 +126,11 @@ msgstr "N'eo ket talvoudek an alc'hwez evit ar sinadur :%s"
 msgid "Invalid or unrecognized recipient: %s"
 msgstr "Digemerer didalvoudek pe dianavezet :%s"
 
+#: ../daemon/seahorse-service-crypto.c:284
+#, c-format
+msgid "Key is not a valid recipient for encryption: %s"
+msgstr ""
+
 #: ../daemon/seahorse-service-crypto.c:293
 #, c-format
 msgid "No recipients specified"
@@ -92,1475 +140,6 @@ msgstr "N'eus anv digemerer erspizet ebet"
 #, c-format
 msgid "No signer specified"
 msgstr "N'eus anv siner erspizet ebet"
-
-#: ../daemon/seahorse-service-keyset.c:200
-#, c-format
-msgid "Invalid key id: %s"
-msgstr "ID an alc'hwez : %s didalvoudek"
-
-#: ../daemon/seahorse-sharing.c:72
-#: ../daemon/seahorse-sharing.c:216
-msgid "Couldn't share keys"
-msgstr "N'em eus ket rannañ an alc'hwezioù"
-
-#. Translators: The %s will get filled in with the user name
-#. of the user, to form a genitive. If this is difficult to
-#. translate correctly so that it will work correctly in your
-#. language, you may use something equivalent to
-#. "Shared keys of %s".
-#: ../daemon/seahorse-sharing.c:93
-#, c-format
-msgid "%s's encryption keys"
-msgstr "alc'hwezioù enrinegañ %s"
-
-#: ../data/seahorse.schemas.in.h:2
-msgid "Auto Retrieve Keys"
-msgstr "Adtapout an alc'hwezioù emgefreek"
-
-#: ../data/seahorse.schemas.in.h:3
-msgid "Auto Sync Keys"
-msgstr "Sinkronaat an alc'hwezioù emgefreek"
-
-#: ../data/seahorse.schemas.in.h:8
-msgid "Enable DNS-SD sharing"
-msgstr "Gweredekaat ar rannañ DNS-SD"
-
-#: ../data/seahorse.schemas.in.h:10
-msgid "ID of the default key"
-msgstr "ID an alc'hwez dre-ziouer"
-
-#: ../data/seahorse.schemas.in.h:16
-msgid "PGP Key servers"
-msgstr "Servijerien an alc'hwezioù PGP"
-
-#: ../data/seahorse.schemas.in.h:19
-msgid "Show trust column in key manager"
-msgstr "Diskouez bann fiziañs e-barzh an ardoer alc'hwezioù"
-
-#: ../data/seahorse.schemas.in.h:20
-msgid "Show type column in key manager"
-msgstr "Diskouez bann rizh an ardoer alc'hwezioù"
-
-#: ../data/seahorse.schemas.in.h:21
-msgid "Show validity column in key manager"
-msgstr "Diskouez bann talvoudegezh e-barzh an ardoer alc'hwezioù"
-
-#: ../gkr/seahorse-gkr-item.c:472
-msgid "Network Password"
-msgstr "Ger-tremen ar rouedad"
-
-#: ../gkr/seahorse-gkr-item.c:474
-#: ../gkr/seahorse-gkr-item-properties.c:106
-msgid "Password"
-msgstr "Ger tremen"
-
-#: ../gkr/seahorse-gkr-item-properties.c:71
-msgid "Unlocks a PGP key"
-msgstr "Dibrennañ un alc'hwez PGP"
-
-#: ../gkr/seahorse-gkr-item-properties.c:74
-msgid "Unlocks a Secure Shell key"
-msgstr "Dibrennañ un alc'hwezioù SSH"
-
-#: ../gkr/seahorse-gkr-item-properties.c:77
-msgid "Saved password or login"
-msgstr "Ger tremen pe anv-implijer enrollet"
-
-#: ../gkr/seahorse-gkr-item-properties.c:244
-msgid "Couldn't change password."
-msgstr "N'em eus ket kemmañ an ger-tremen"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:1
-msgid "<b>Password:</b>"
-msgstr "<b>Ger-tremen :</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:2
-msgid "<b>Path:</b>"
-msgstr "<b>Treug :</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:3
-msgid "<b>Permissions:</b>"
-msgstr "<b>Aotreoù :</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:4
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:9
-#: ../ssh/seahorse-ssh-key-properties.glade.h:9
-msgid "<b>Technical Details:</b>"
-msgstr "<b>Munudoù kalvezel</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:5
-msgid "Applications"
-msgstr "Arloadoù"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:6
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:23
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:20
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
-#: ../ssh/seahorse-ssh-key-properties.glade.h:17
-msgid "Details"
-msgstr "Munudoù"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:7
-#: ../pgp/seahorse-pgp-subkey.c:366
-#: ../ssh/seahorse-ssh-key-properties.glade.h:19
-msgid "Key"
-msgstr "Alc'hwez"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:8
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:30
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:30
-#: ../ssh/seahorse-ssh-key-properties.glade.h:20
-msgid "Key Properties"
-msgstr "Perzhioù an alc'hwezioù"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:9
-msgid "Login:"
-msgstr "Anv tremen :"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:10
-msgid "Server:"
-msgstr "Dafariad :"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:11
-msgid "Show pass_word"
-msgstr "Diskouez ar _ger-tremen"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:12
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:42
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:36
-msgid "Type:"
-msgstr "Rizh :"
-
-#. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-item-properties.glade.h:14
-msgid "Use:"
-msgstr "Implijit :"
-
-#. To translators: This is the infinitive not the imperative.  This string refers to the ability of an application to delete this secret from its key ring.
-#: ../gkr/seahorse-gkr-item-properties.glade.h:16
-msgid "_Delete"
-msgstr "_Dilemel"
-
-#: ../gkr/seahorse-gkr-item-properties.glade.h:17
-#: ../pgp/seahorse-revoke.glade.h:5
-msgid "_Description:"
-msgstr "_Deskrivadur :"
-
-#. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkr-item-properties.glade.h:19
-msgid "_Read"
-msgstr "_Lenn"
-
-#. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkr-item-properties.glade.h:21
-msgid "_Write"
-msgstr "_Skrivañ"
-
-#: ../gkr/seahorse-gkr-keyring.c:354
-#, c-format
-msgid "Passwords: %s"
-msgstr "Gerioù tremen : %s"
-
-#: ../gkr/seahorse-gkr-keyring.c:355
-#, c-format
-msgid "<b>Passwords:</b> %s"
-msgstr "<b>Gerioù tremen :</b> %s"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:250
-msgid "_Lock"
-msgstr "_Prennañ"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:252
-msgid "_Unlock"
-msgstr "_Dibrennañ"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:256
-msgid "Change _Password"
-msgstr "Kemmañ ar _ger tremen"
-
-#. -----------------------------------------------------------------------------
-#. * PUBLIC
-#.
-#. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-keyring.glade.h:2
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:20
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:19
-msgid "Created:"
-msgstr "Krouet :"
-
-#: ../gkr/seahorse-gkr-keyring.glade.h:5
-msgid "_Name:"
-msgstr "_Anv :"
-
-#: ../gkr/seahorse-gkr-operation.c:238
-#: ../gkr/seahorse-gkr-operation.c:264
-msgid "Saving item..."
-msgstr "Oc'h enrollañ an ergorenn..."
-
-#: ../gkr/seahorse-gkr-operation.c:300
-msgid "Deleting item..."
-msgstr "O dilemel an ergorenn..."
-
-#: ../libcryptui/cryptui-key-chooser.c:173
-msgid "All Keys"
-msgstr "An holl alc'hwezioù"
-
-#: ../libcryptui/cryptui-key-chooser.c:174
-msgid "Selected Recipients"
-msgstr "Degemererien dibabet"
-
-#: ../libcryptui/cryptui-key-chooser.c:175
-msgid "Search Results"
-msgstr "Disoc'hoù ar c'hlask"
-
-#. Filter Label
-#: ../libcryptui/cryptui-key-chooser.c:185
-msgid "Search _for:"
-msgstr "_Klask :"
-
-#: ../libcryptui/cryptui-key-chooser.c:243
-msgid "None (Don't Sign)"
-msgstr "Tra ebet (Ne sinañ ket)"
-
-#. TODO: Icons
-#. The name column
-#: ../libcryptui/cryptui-key-list.c:121
-#: ../pgp/seahorse-pgp-key-properties.c:890
-#: ../src/seahorse-key-manager-store.c:828
-msgid "Name"
-msgstr "Anv"
-
-#. The keyid column
-#: ../libcryptui/cryptui-key-list.c:126
-#: ../pgp/seahorse-pgp-key-properties.c:1823
-#: ../src/seahorse-key-manager-store.c:840
-msgid "Key ID"
-msgstr "ID an alc'hwez"
-
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
-#.
-#: ../libegg/egg-datetime.c:470
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
-
-#: ../libegg/egg-datetime.c:492
-msgid "Date"
-msgstr "Deiziad"
-
-#: ../libegg/egg-datetime.c:499
-msgid "Select Date"
-msgstr "Diuz an deiziad"
-
-#: ../libegg/egg-datetime.c:517
-#: ../libegg/egg-datetime.c:2192
-msgid "Time"
-msgstr "Eur"
-
-#: ../libegg/egg-datetime.c:524
-msgid "Select Time"
-msgstr "Diuz an eur"
-
-#. Translators: set this to anything else if you want to use a
-#. * 24 hour clock.
-#.
-#: ../libegg/egg-datetime.c:791
-msgid "24hr: no"
-msgstr "24hr:"
-
-#: ../libegg/egg-datetime.c:795
-#: ../libegg/egg-datetime.c:1253
-#: ../libegg/egg-datetime.c:1257
-msgid "AM"
-msgstr "DB"
-
-#: ../libegg/egg-datetime.c:797
-#: ../libegg/egg-datetime.c:1254
-#: ../libegg/egg-datetime.c:1261
-msgid "PM"
-msgstr "GM"
-
-#. Translators: This is hh:mm:ss AM/PM.
-#: ../libegg/egg-datetime.c:805
-#, c-format
-msgid "%02d:%02d:%02d %s"
-msgstr "%02d:%02d:%02d %s"
-
-#. Translators: This is hh:mm AM/PM.
-#: ../libegg/egg-datetime.c:808
-#, c-format
-msgid "%02d:%02d %s"
-msgstr "%02d:%02d %s"
-
-#. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:812
-#, c-format
-msgid "%02d:%02d:%02d"
-msgstr "%02d:%02d:%02d"
-
-#. Translators: This is hh:mm.
-#: ../libegg/egg-datetime.c:815
-#, c-format
-msgid "%02d:%02d"
-msgstr "%02d:%02d"
-
-#. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1234
-#, c-format
-msgid "%u:%u:%u"
-msgstr "%u:%u:%u"
-
-#: ../libegg/eggdesktopfile.c:958
-#, c-format
-msgid "Starting %s"
-msgstr "O kregiñ %s"
-
-#: ../libegg/eggdesktopfile.c:1392
-#, c-format
-msgid "Not a launchable item"
-msgstr "N'eo ket un dra da zigeriñ"
-
-#: ../libegg/eggsmclient.c:228
-msgid "FILE"
-msgstr "RESTR"
-
-#: ../libegg/eggsmclient.c:231
-#: ../pgp/seahorse-pgp-key-properties.c:1378
-msgid "ID"
-msgstr "Hennader (ID)"
-
-#: ../libseahorse/seahorse-add-keyserver.glade.h:1
-msgid ":"
-msgstr ":"
-
-#: ../libseahorse/seahorse-add-keyserver.glade.h:2
-msgid "Add Key Server"
-msgstr "Ouzhpennañ ur servijer an alc'hwezioù :"
-
-#: ../libseahorse/seahorse-add-keyserver.glade.h:3
-msgid "Host:"
-msgstr "Ostiz :"
-
-#: ../libseahorse/seahorse-add-keyserver.glade.h:4
-msgid "Key Server Type:"
-msgstr "Rizh ar servijer an alc'hwezioù :"
-
-#: ../libseahorse/seahorse-notification.c:566
-#: ../libseahorse/seahorse-notification.c:594
-msgid "Key Imported"
-msgid_plural "Keys Imported"
-msgstr[0] "Alc'hwez enporzhiet"
-msgstr[1] "Alc'hwezioù enporzhiet"
-
-#: ../libseahorse/seahorse-notification.c:570
-#: ../libseahorse/seahorse-notification.c:593
-#, c-format
-msgid "Imported %i key"
-msgid_plural "Imported %i keys"
-msgstr[0] "Alc'hwez enporzhiet %i"
-msgstr[1] "Alc'hwezioù enporzhiet %i"
-
-#: ../libseahorse/seahorse-object.c:219
-msgid "Public Key"
-msgstr "Alc'hwez foran"
-
-#: ../libseahorse/seahorse-object.c:222
-msgid "Private Key"
-msgstr "Alc'hwez prevez"
-
-#.
-#. * Translators: "This object is a means of storing items such as
-#. * name, email address, etc. that make up one's digital identity.
-#.
-#: ../libseahorse/seahorse-object.c:232
-msgid "Identity"
-msgstr "Naoudi"
-
-#: ../libseahorse/seahorse-passphrase.c:196
-msgid "Passphrase"
-msgstr "Lavarenn-tremen"
-
-#: ../libseahorse/seahorse-passphrase.c:199
-#: ../ssh/seahorse-ssh-operation.c:480
-msgid "Password:"
-msgstr "Ger-tremen :"
-
-#: ../libseahorse/seahorse-passphrase.c:262
-msgid "Confirm:"
-msgstr "Kadarnaat :"
-
-#: ../libseahorse/seahorse-prefs.c:174
-msgid "URL"
-msgstr "URL"
-
-#: ../libseahorse/seahorse-prefs.c:356
-msgid "Custom"
-msgstr "Personelaet"
-
-#: ../libseahorse/seahorse-prefs.c:430
-msgid "None: Don't publish keys"
-msgstr "Tra ebet : N'embann ket"
-
-#: ../libseahorse/seahorse-prefs.glade.h:3
-msgid "Key Servers"
-msgstr "Servijerien an alc'hwezioù"
-
-#: ../libseahorse/seahorse-prefs.glade.h:4
-msgid "Key Sharing"
-msgstr "Rannañ alc'hwezioù"
-
-#: ../libseahorse/seahorse-prefs.glade.h:5
-msgid "Preferences"
-msgstr "Gwellvezioù"
-
-#: ../libseahorse/seahorse-unknown.c:67
-msgid "Unavailable"
-msgstr "Dizimplijadus"
-
-#: ../libseahorse/seahorse-util.c:206
-msgid "%Y-%m-%d"
-msgstr "%Y-%m-%d"
-
-#: ../libseahorse/seahorse-util.c:439
-msgid "Key Data"
-msgstr "Roadennoù an alc'hwez"
-
-#: ../libseahorse/seahorse-util.c:441
-msgid "Multiple Keys"
-msgstr "Alc'hwezioù lies"
-
-#: ../libseahorse/seahorse-util.c:823
-#: ../libseahorse/seahorse-util.c:863
-#: ../pgp/seahorse-gpgme-photos.c:242
-msgid "All files"
-msgstr "An holl restroù"
-
-#: ../libseahorse/seahorse-util.c:908
-msgid "_Replace"
-msgstr "E_rlec'hiañ"
-
-#: ../libseahorse/seahorse-validity.c:34
-#: ../pgp/seahorse-gpgme-subkey.c:197
-#: ../pgp/seahorse-pgp-key-properties.c:1182
-msgid "Unknown"
-msgstr "Dianav"
-
-#: ../libseahorse/seahorse-validity.c:36
-#: ../pgp/seahorse-pgp-key-properties.c:1188
-msgctxt "Validity"
-msgid "Never"
-msgstr "Biken"
-
-#: ../libseahorse/seahorse-validity.c:40
-#: ../pgp/seahorse-pgp-key-properties.c:1201
-msgid "Full"
-msgstr "Leun"
-
-#: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1415
-msgid "Disabled"
-msgstr "Diweredekaet"
-
-#: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1411
-msgid "Revoked"
-msgstr "Dizorniet"
-
-#: ../libseahorse/seahorse-widget.c:367
-#, c-format
-msgid "Could not display help: %s"
-msgstr "Ne oa ket tu diskouezh ar skoazell: %s"
-
-#: ../pgp/seahorse-add-subkey.glade.h:1
-msgid "Expiration Date:"
-msgstr "Deiziad termen :"
-
-#: ../pgp/seahorse-add-subkey.glade.h:4
-msgid "Key _Length:"
-msgstr "_Hirder an alc'hwez :"
-
-#: ../pgp/seahorse-add-subkey.glade.h:5
-msgid "Key _Type:"
-msgstr "_Rizh an alc'hwez :"
-
-#: ../pgp/seahorse-add-uid.glade.h:1
-msgid "Add User ID"
-msgstr "Ouzhpennañ an ID an arveriad"
-
-#: ../pgp/seahorse-add-uid.glade.h:8
-#: ../pgp/seahorse-pgp-generate.glade.h:14
-msgid "_Email Address:"
-msgstr "Chomlec'h post_el"
-
-#: ../pgp/seahorse-expires.glade.h:1
-msgid "C_hange"
-msgstr "_Kemmañ"
-
-#: ../pgp/seahorse-expires.glade.h:2
-#: ../pgp/seahorse-revoke.glade.h:4
-msgid "Revoke key"
-msgstr "Dizorniañ an alc'hwez"
-
-#: ../pgp/seahorse-gpgme-add-subkey.c:179
-#: ../pgp/seahorse-gpgme-generate.c:96
-msgid "DSA (sign only)"
-msgstr "DSA (sinañ hepken)"
-
-#: ../pgp/seahorse-gpgme-add-subkey.c:187
-msgid "ElGamal (encrypt only)"
-msgstr "ElGamal (enrinegañ hepken)"
-
-#: ../pgp/seahorse-gpgme-add-subkey.c:193
-#: ../pgp/seahorse-gpgme-generate.c:97
-msgid "RSA (sign only)"
-msgstr "RSA (sinañ hepken)"
-
-#: ../pgp/seahorse-gpgme-add-subkey.c:199
-msgid "RSA (encrypt only)"
-msgstr "RSA (enrinegañ hepken)"
-
-#: ../pgp/seahorse-gpgme-expires.c:72
-msgid "Couldn't change expiry date"
-msgstr "N'haller ket kemmañ deiziad termen"
-
-#: ../pgp/seahorse-gpgme-generate.c:65
-msgid "PGP Key"
-msgstr "Alch'hwez PGP"
-
-#: ../pgp/seahorse-gpgme-generate.c:95
-msgid "DSA Elgamal"
-msgstr "DSA Elgamal"
-
-#: ../pgp/seahorse-gpgme-generate.c:106
-msgid "Couldn't generate PGP key"
-msgstr "N'em eus ket krouiñ an alc'hwez PGP"
-
-#: ../pgp/seahorse-gpgme-generate.c:213
-msgid "Passphrase for New PGP Key"
-msgstr "Lavarenn-tremen evit ar alc'hwez PGP nevez"
-
-#: ../pgp/seahorse-gpgme-generate.c:225
-msgid "Generating key"
-msgstr "Emaon o krouiñ an alc'hwez"
-
-#: ../pgp/seahorse-gpgme-photos.c:78
-msgid "_Don't Resize"
-msgstr "_N'admentañ ket"
-
-#: ../pgp/seahorse-gpgme-photos.c:79
-msgid "_Resize"
-msgstr "Ad_mentañ"
-
-#: ../pgp/seahorse-gpgme-photos.c:224
-msgid "All image files"
-msgstr "An holl restroù skeudenn"
-
-#: ../pgp/seahorse-gpgme-photos.c:237
-msgid "All JPEG files"
-msgstr "An holl restroù JPEG"
-
-#: ../pgp/seahorse-gpgme-photos.c:290
-#: ../pgp/seahorse-gpgme-photos.c:294
-msgid "Couldn't add photo"
-msgstr "N'em eus ket ouzhpennañ an foto"
-
-#: ../pgp/seahorse-gpgme-photos.c:333
-msgid "Couldn't delete photo"
-msgstr "N'em eus ket dilemel al luc'hskeudenn"
-
-#: ../pgp/seahorse-gpgme-revoke.c:94
-#, c-format
-msgid "Revoke: %s"
-msgstr "Dizorniañ : %s"
-
-#: ../pgp/seahorse-gpgme-revoke.c:105
-msgid "No reason"
-msgstr "Abeg ebet"
-
-#: ../pgp/seahorse-gpgme-revoke.c:112
-msgid "Compromised"
-msgstr "Lakaet en arvar"
-
-#: ../pgp/seahorse-gpgme-revoke.c:113
-msgid "Key has been compromised"
-msgstr "Lakaet eo bet an alc'hwez en arvar"
-
-#: ../pgp/seahorse-gpgme-revoke.c:119
-msgid "Superseded"
-msgstr "Diamzeret"
-
-#: ../pgp/seahorse-gpgme-revoke.c:120
-msgid "Key has been superseded"
-msgstr "Diamzeret eo bet an alc'hwez"
-
-#: ../pgp/seahorse-gpgme-revoke.c:126
-msgid "Not Used"
-msgstr "Ket arveret"
-
-#: ../pgp/seahorse-gpgme-revoke.c:127
-msgid "Key is no longer used"
-msgstr "N'eo ket ken implijet"
-
-#: ../pgp/seahorse-gpgme-sign.c:96
-msgid "Couldn't sign key"
-msgstr "N'em eus ket sinañ an alc'hwez"
-
-#: ../pgp/seahorse-gpgme-source.c:99
-#, c-format
-msgid "Wrong passphrase."
-msgstr "Lavarenn-tremen fall"
-
-#: ../pgp/seahorse-gpgme-source.c:103
-#, c-format
-msgid "Enter new passphrase for '%s'"
-msgstr "Roit al lavarenn-tremen nevez evit '%s'"
-
-#: ../pgp/seahorse-gpgme-source.c:105
-#, c-format
-msgid "Enter passphrase for '%s'"
-msgstr "Roit al lavarenn-tremen evit '%s'"
-
-#: ../pgp/seahorse-gpgme-source.c:108
-#: ../src/seahorse-change-passphrase.glade.h:4
-msgid "Enter new passphrase"
-msgstr "Roit al lavarenn-tremen nevez"
-
-#: ../pgp/seahorse-gpgme-source.c:110
-msgid "Enter passphrase"
-msgstr "Roit al lavarenn-tremen"
-
-#: ../pgp/seahorse-gpgme-source.c:777
-msgid "Loading Keys..."
-msgstr "Emaon o kargañ an alc'hwezioù ..."
-
-#: ../pgp/seahorse-gpgme-source.c:910
-#: ../src/seahorse-key-manager.c:564
-msgid "Importing Keys"
-msgstr "Oc'h enporzhiañ alc'hwezioù"
-
-#: ../pgp/seahorse-gpgme-source.c:946
-msgid "Exporting Keys"
-msgstr "Oc'h ezporzhiañ alc'hwezioù"
-
-#: ../pgp/seahorse-gpgme-subkey.c:199
-msgid "ElGamal"
-msgstr "ElGamal"
-
-#: ../pgp/seahorse-hkp-source.c:332
-#, c-format
-msgid "Couldn't communicate with server '%s': %s"
-msgstr "N'haller ket mont e darempred gant an dafariad '%s': %s"
-
-#: ../pgp/seahorse-hkp-source.c:576
-msgid "Searching for keys..."
-msgstr "O klask alc'hwezioù ..."
-
-#: ../pgp/seahorse-hkp-source.c:725
-msgid "Retrieving keys..."
-msgstr "Oc'h adtapout an alc'hwezioù ..."
-
-#: ../pgp/seahorse-hkp-source.c:831
-#, c-format
-msgid "Searching for keys on: %s"
-msgstr "Klask an alc'hwezioù war : %s"
-
-#. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:908
-#: ../pgp/seahorse-hkp-source.c:981
-#: ../pgp/seahorse-ldap-source.c:668
-#, c-format
-msgid "Connecting to: %s"
-msgstr "O kennaskañ ouzh : %s"
-
-#: ../pgp/seahorse-hkp-source.c:1005
-msgid "HTTP Key Server"
-msgstr "Servijer an alc'hwezioù HTTP"
-
-#: ../pgp/seahorse-ldap-source.c:459
-#, c-format
-msgid "Couldn't communicate with '%s': %s"
-msgstr "N'haller ket mont e darempred gant '%s' : %s"
-
-#: ../pgp/seahorse-ldap-source.c:982
-#, c-format
-msgid "Searching for key id '%s'..."
-msgstr "O klask id alc'hwez '%s' ..."
-
-#: ../pgp/seahorse-ldap-source.c:1087
-msgid "Retrieving remote keys..."
-msgstr "Oc'h adtapout an alc'hwezioù a-bell ..."
-
-#: ../pgp/seahorse-ldap-source.c:1421
-msgid "LDAP Key Server"
-msgstr "Servijer an alc'hwezioù LDAP"
-
-#: ../pgp/seahorse-pgp-commands.c:103
-msgid "_Sign Key..."
-msgstr "_Sinañ an alc'hwez..."
-
-#: ../pgp/seahorse-pgp-commands.c:103
-msgid "Sign public key"
-msgstr "Sinañ an alc'hwez foran"
-
-#: ../pgp/seahorse-pgp-generate.glade.h:4
-msgid "C_reate"
-msgstr "K_rouiñ"
-
-#: ../pgp/seahorse-pgp-generate.glade.h:5
-msgid "Create a PGP Key"
-msgstr "Krouiñ un alc'hwez PGP"
-
-#: ../pgp/seahorse-pgp-generate.glade.h:6
-msgid "E_xpiration Date:"
-msgstr "Dei_ziad termen"
-
-#: ../pgp/seahorse-pgp-generate.glade.h:7
-#: ../ssh/seahorse-ssh-generate.glade.h:4
-msgid "Encryption _Type:"
-msgstr "_Rizh an enrinegadur"
-
-#: ../pgp/seahorse-pgp-generate.glade.h:9
-msgid "Generate a new key"
-msgstr "Krouiñ an alc'hwez nevez"
-
-#: ../pgp/seahorse-pgp-generate.glade.h:10
-#: ../ssh/seahorse-ssh-generate.glade.h:6
-msgid "Key _Strength (bits):"
-msgstr "Nerzh an alc'hwez (bits) :"
-
-#: ../pgp/seahorse-pgp-generate.glade.h:12
-msgid "New PGP Key"
-msgstr "Alc'hwez PGP nevez"
-
-#: ../pgp/seahorse-pgp-generate.glade.h:13
-msgid "_Comment:"
-msgstr "_Askelenn :"
-
-#: ../pgp/seahorse-pgp-key.c:201
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:36
-msgid "Private PGP Key"
-msgstr "Alc'hwez PGP prevez"
-
-#: ../pgp/seahorse-pgp-key.c:204
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:32
-msgid "Public PGP Key"
-msgstr "Alc'hwez PGP foran"
-
-#: ../pgp/seahorse-pgp-key.c:583
-#: ../pgp/seahorse-pgp-key-properties.c:1413
-msgid "Expired"
-msgstr "Diamzeret"
-
-#: ../pgp/seahorse-pgp-key-properties.c:333
-#: ../pgp/seahorse-pgp-key-properties.c:1526
-msgid "[Unknown]"
-msgstr "[Dianav]"
-
-#: ../pgp/seahorse-pgp-key-properties.c:426
-#: ../pgp/seahorse-pgp-key-properties.c:1820
-msgid "Name/Email"
-msgstr "Anv/Postel"
-
-#: ../pgp/seahorse-pgp-key-properties.c:431
-msgid "Signature ID"
-msgstr "ID an sinadur"
-
-#: ../pgp/seahorse-pgp-key-properties.c:826
-msgid "(unknown)"
-msgstr "(dianav)"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1042
-#: ../pgp/seahorse-pgp-key-properties.c:1489
-msgid "Unable to change trust"
-msgstr "N'haller ket kemman ar fiziañs"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1331
-#: ../pgp/seahorse-pgp-key-properties.c:1420
-msgctxt "Expires"
-msgid "Never"
-msgstr "Biken"
-
-#. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1381
-#: ../src/seahorse-key-manager-store.c:859
-msgid "Type"
-msgstr "Rizh"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1384
-msgid "Created"
-msgstr "Krouet"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1387
-msgid "Expires"
-msgstr "Echuiñ a ra"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1390
-msgid "Status"
-msgstr "Stad"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1393
-msgid "Strength"
-msgstr "Nerzh"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1417
-msgid "Good"
-msgstr "Mad"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>Obererezhioù</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:1
-msgid "<b>Comment:</b>"
-msgstr "<b>Askelenn :</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:3
-msgid "<b>Dates</b>"
-msgstr "<b>deiziadoù</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:4
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:3
-msgid "<b>Email:</b>"
-msgstr "<b>Postel :</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:5
-msgid "<b>Fingerprint</b>"
-msgstr "<b>Roudoù biz</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:6
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:6
-msgid "<b>Key ID:</b>"
-msgstr "<b>ID an alc'hwez :</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:7
-msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>Anvioù alc'hwez ha sinadurioù</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:8
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:7
-#: ../ssh/seahorse-ssh-key-properties.glade.h:7
-msgid "<b>Name:</b>"
-msgstr "<b>Anv :</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:9
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:8
-msgid "<b>Photo </b>"
-msgstr "<b>Luc'hskeudenn </b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:10
-msgid "<b>Technical Details</b>"
-msgstr "<b>Munudoù kalvezel</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:11
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:10
-msgid "<b>This key has been revoked</b>"
-msgstr "<b>Dizorniet eo bet an alc'hwez-mañ</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:13
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:12
-#: ../ssh/seahorse-ssh-key-properties.glade.h:11
-msgid "<b>Type:</b>"
-msgstr "<b>Rizh :</b>"
-
-#. To translators: This is the noun not the verb.
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:15
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:14
-#: ../ssh/seahorse-ssh-key-properties.glade.h:13
-msgid "<b>Use:</b>"
-msgstr "<b>Implijout :</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:16
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:18
-msgid "<b>_Subkeys</b>"
-msgstr "<b>_Is-alc'hwezioù</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:17
-msgid "Add"
-msgstr "Ouzhpennañ"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:19
-#: ../ssh/seahorse-ssh-key-properties.glade.h:16
-msgid "Change _Passphrase"
-msgstr "Kemmañ al _Lavarenn- tremen"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:22
-msgid "Delete"
-msgstr "Dilemel"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:25
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:22
-msgid "Expires:"
-msgstr "Echuiñ a ra :"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:26
-msgid "Export"
-msgstr "Ezporzhiañ"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:29
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:29
-msgid "Key ID:"
-msgstr "ID an alc'hwez :"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:32
-msgid "Names and Signatures"
-msgstr "Anvioù ha sinadurioù"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:34
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:31
-msgid "Owner"
-msgstr "Perc'henner"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:35
-msgid "Primary"
-msgstr "Kentañ"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:38
-msgid "Revoke"
-msgstr "Dizorniañ"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:39
-msgid "Sign"
-msgstr "Sinañ"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:40
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:33
-msgid "Strength:"
-msgstr "Nerzh :"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:43
-msgid ""
-"Unknown\n"
-"Never\n"
-"Marginal\n"
-"Full\n"
-"Ultimate"
-msgstr ""
-"Dianav\n"
-"Biken\n"
-"A eil izel\n"
-"Leun\n"
-"Diharz"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:48
-msgid "_Add Name"
-msgstr "Ouzhpenn_añ an anv"
-
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:49
-msgid "_Export Complete Key:"
-msgstr "E_zporzhiañ an alc'hwez en e bezh"
-
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:2
-msgid "<b>Dates:</b>"
-msgstr "<b>deiziadoù :</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:4
-#: ../ssh/seahorse-ssh-key-properties.glade.h:4
-msgid "<b>Fingerprint:</b>"
-msgstr "<b>Roudoù biz :</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:5
-msgid "<b>Indicate Trust:</b>"
-msgstr "<b>Diskouez an fiziañs :</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:16
-msgid "<b>_Other Names:</b>"
-msgstr "<b>Anvioù _all :</b>"
-
-#. Trust column
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:35
-#: ../src/seahorse-key-manager-store.c:853
-msgid "Trust"
-msgstr "Fiziañ"
-
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:45
-msgid "_Revoke Signature"
-msgstr "Dizo_rniañ an sinadur"
-
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:46
-msgid "_Sign this Key"
-msgstr "_Sinañ an alc'hwez-mañ"
-
-#: ../pgp/seahorse-revoke.glade.h:2
-msgid "Re_voke"
-msgstr "Di_zorniañ"
-
-#: ../pgp/seahorse-revoke.glade.h:6
-msgid "_Reason:"
-msgstr "_Abeg :"
-
-#: ../pgp/seahorse-signer.glade.h:1
-msgid "_Sign message with key:"
-msgstr "_Sinañ ar gemennadenn gant an alc'hwez :"
-
-#: ../pgp/seahorse-sign.glade.h:3
-msgid "<b>Sign key as:</b>"
-msgstr "<b>Sinañ an alc'hwez evel :</b>"
-
-#: ../pgp/seahorse-sign.glade.h:5
-msgid "<i>Key Name</i>"
-msgstr "<i>Anv an alc'hwez</i>"
-
-#: ../pgp/seahorse-sign.glade.h:10
-msgid "Sign Key"
-msgstr "Sinañ an alc'hwez"
-
-#: ../pgp/seahorse-sign.glade.h:13
-msgid "_Not at all"
-msgstr "_Damm ebet"
-
-#: ../pgp/seahorse-sign.glade.h:15
-msgid "_Sign"
-msgstr "_Sinañ"
-
-#: ../pgp/seahorse-sign.glade.h:16
-msgid "_Signer:"
-msgstr "_Siner :"
-
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
-msgid "Certificate"
-msgstr "Testeni"
-
-#: ../src/seahorse-change-passphrase.glade.h:1
-msgid "Change Passphrase"
-msgstr "Kemmañ al lavarenn-tremen"
-
-#: ../src/seahorse-change-passphrase.glade.h:3
-msgid "Confirm new passphrase"
-msgstr "Kadarnaat al lavarenn-tremen nevez"
-
-#: ../src/seahorse-change-passphrase.glade.h:5
-msgid "New _Passphrase:"
-msgstr "_Lavarenn tremen nevez"
-
-#: ../src/seahorse.desktop.in.in.h:1
-msgid "Manage your passwords and encryption keys"
-msgstr "Ardeiñ ho tremengerioù hag alc'hwezioù enrinegañ"
-
-#: ../src/seahorse.desktop.in.in.h:2
-#: ../src/seahorse-key-manager.c:879
-msgid "Passwords and Encryption Keys"
-msgstr "Gerioù-tremen hag alc'hwezioù enrinegañ"
-
-#: ../src/seahorse-generate-select.glade.h:2
-msgid "C_ontinue"
-msgstr "K_enderc'hel"
-
-#: ../src/seahorse-key-manager.c:430
-#: ../src/seahorse-key-manager.c:490
-#: ../src/seahorse-key-manager.c:553
-#: ../src/seahorse-keyserver-results.c:194
-msgid "Couldn't import keys"
-msgstr "N'em eus ket enporzhiañ an alc'hwezioù"
-
-#: ../src/seahorse-key-manager.c:507
-#: ../ssh/seahorse-ssh-operation.c:1017
-msgid "Import Key"
-msgstr "Enporzhiañ an alc'hwez"
-
-#: ../src/seahorse-key-manager.c:747
-#: ../src/seahorse-keyserver-results.c:245
-msgid "_Remote"
-msgstr "A-_bell"
-
-#: ../src/seahorse-key-manager.c:749
-msgid "Close this program"
-msgstr "Serriñ an meziant-mañ"
-
-#: ../src/seahorse-key-manager.c:750
-msgid "_New..."
-msgstr "_Nevez..."
-
-#: ../src/seahorse-key-manager.c:752
-msgid "_Import..."
-msgstr "E_nporzhiañ..."
-
-#: ../src/seahorse-key-manager.c:760
-#: ../src/seahorse-keyserver-results.c:255
-msgid "_Find Remote Keys..."
-msgstr "_Kavout alc'hwezioù a-bell"
-
-#: ../src/seahorse-key-manager.c:762
-msgid "_Sync and Publish Keys..."
-msgstr "_Sinkronaat ha embann an alc'hwezioù..."
-
-#: ../src/seahorse-key-manager.c:768
-msgid "T_ypes"
-msgstr "R_izhoù"
-
-#: ../src/seahorse-key-manager.c:768
-msgid "Show type column"
-msgstr "Diskouez bann rizh"
-
-#: ../src/seahorse-key-manager.c:772
-msgid "_Trust"
-msgstr "_Fiziañ"
-
-#: ../src/seahorse-key-manager.c:774
-msgid "_Validity"
-msgstr "Tal_voudegezh"
-
-#: ../src/seahorse-key-manager.c:950
-msgid "Filter:"
-msgstr "Sil :"
-
-#: ../src/seahorse-key-manager.glade.h:1
-msgid "<big><b>First time options:</b></big>"
-msgstr "<big><b>Dibarzhioù ar wech kentañ :</b></big>"
-
-#: ../src/seahorse-key-manager.glade.h:2
-msgid "Generate a new key of your own: "
-msgstr "Krouiñ hoc'h alc'hwez nevez deoc'h-c'hwi : "
-
-#: ../src/seahorse-key-manager.glade.h:3
-msgid "Import existing keys from a file:"
-msgstr "Enporzhiañ un alc'hwez a zo anezhañ diouzh ur restr"
-
-#: ../src/seahorse-key-manager.glade.h:4
-msgid "My _Personal Keys"
-msgstr "Ma alc'hwezioù _personel"
-
-#: ../src/seahorse-key-manager.glade.h:5
-msgid "Other _Collected Keys"
-msgstr "Alc'hwezioù _dastumet all"
-
-#: ../src/seahorse-key-manager.glade.h:7
-#: ../src/seahorse-keyserver-results.c:260
-msgid "_Import"
-msgstr "Enporzh_iañ"
-
-#: ../src/seahorse-key-manager.glade.h:8
-msgid "_Passwords"
-msgstr "_Gerioù-tremen"
-
-#: ../src/seahorse-key-manager.glade.h:9
-msgid "_Trusted Keys"
-msgstr "Alc'hwezioù a _fiziañs"
-
-#: ../src/seahorse-key-manager-store.c:846
-msgid "Validity"
-msgstr "Talvoudegezh"
-
-#. Expiry date column
-#: ../src/seahorse-key-manager-store.c:865
-msgid "Expiration Date"
-msgstr "Deiziad termen"
-
-#: ../src/seahorse-keyserver-results.c:247
-msgid "Close this window"
-msgstr "Serriñ ar prenestr-mañ"
-
-#: ../src/seahorse-keyserver-results.c:250
-msgid "_Collapse All"
-msgstr "_Bihanaat pep tra"
-
-#: ../src/seahorse-keyserver-results.c:318
-msgid "Remote Keys"
-msgstr "Alc'hwezioù a-bell"
-
-#: ../src/seahorse-keyserver-search.glade.h:1
-msgid "<b>Key Servers:</b>"
-msgstr "<b>Servijerien an alc'hwezioù :</b>"
-
-#: ../src/seahorse-keyserver-search.glade.h:3
-msgid "Find Remote Keys"
-msgstr "Kavout alc'hwezioù a-bell"
-
-#: ../src/seahorse-keyserver-search.glade.h:6
-msgid "_Search"
-msgstr "_Klask"
-
-#: ../src/seahorse-keyserver-sync.c:61
-#, c-format
-msgid "Couldn't retrieve keys from server: %s"
-msgstr "N'hall ket adtapout an alc'hwezioù diouzh ar servijer : %s"
-
-#: ../src/seahorse-keyserver-sync.c:221
-msgid "Synchronizing keys"
-msgstr "O sinkronaat an alc'hwezioù"
-
-#. Show the progress window if necessary
-#: ../src/seahorse-keyserver-sync.c:253
-msgid "Synchronizing keys..."
-msgstr "O sinkronaat an alc'hwezioù"
-
-#: ../src/seahorse-keyserver-sync.glade.h:2
-msgid "Sync Keys"
-msgstr "Sink an alc'hwezioù"
-
-#: ../src/seahorse-keyserver-sync.glade.h:5
-msgid "_Key Servers"
-msgstr "Servijer alc'h_wezioù"
-
-#: ../src/seahorse-keyserver-sync.glade.h:6
-msgid "_Sync"
-msgstr "_Sink"
-
-#: ../src/seahorse-main.c:72
-#: ../src/seahorse-viewer.c:168
-msgid "Encryption Key Manager"
-msgstr "Ardoer alc'hwezioù enrinegañ"
-
-#: ../src/seahorse-viewer.c:170
-msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Denis ARNAUD https://launchpad.net/~bibar\n"
-"\n"
-"Launchpad Contributions:\n"
-"  Denis https://launchpad.net/~bibar"
-
-#: ../src/seahorse-viewer.c:173
-msgid "Seahorse Project Homepage"
-msgstr "Pennbajenn an Raktres Seahorse"
-
-#. Top menu items
-#: ../src/seahorse-viewer.c:192
-msgid "_File"
-msgstr "_Restr"
-
-#: ../src/seahorse-viewer.c:193
-msgid "_Edit"
-msgstr "_Embann"
-
-#: ../src/seahorse-viewer.c:194
-msgid "_View"
-msgstr "G_welout"
-
-#: ../src/seahorse-viewer.c:195
-msgid "_Help"
-msgstr "_Skoazell"
-
-#: ../src/seahorse-viewer.c:197
-msgid "Prefere_nces"
-msgstr "_Gwellvezioù"
-
-#: ../src/seahorse-viewer.c:198
-msgid "Change preferences for this program"
-msgstr "Kemmañ ar gwellvezioù evit an meziant-mañ"
-
-#: ../src/seahorse-viewer.c:201
-msgid "About this program"
-msgstr "A-zivout an meziant-mañ"
-
-#: ../src/seahorse-viewer.c:202
-msgid "_Contents"
-msgstr "Endal_c'hadoù"
-
-#: ../src/seahorse-viewer.c:203
-msgid "Show Seahorse help"
-msgstr "Diskouez skoazell Seahorse"
-
-#: ../src/seahorse-viewer.c:300
-msgid "Export public key"
-msgstr "Ezporzhiañ an alc'hwez foran"
-
-#: ../src/seahorse-viewer.c:318
-msgid "Exporting keys"
-msgstr "Oc'h ezporzhiañ alc'hwezioù"
-
-#: ../src/seahorse-viewer.c:343
-msgid "Couldn't retrieve data from key server"
-msgstr "N'hall ket adtapout an roadennoù diouzh ar servijer alc'hwez"
-
-#: ../src/seahorse-viewer.c:431
-msgid "Deleting..."
-msgstr "O dilemel..."
-
-#: ../src/seahorse-viewer.c:498
-msgctxt "This text refers to deleting an item from its type's backing store."
-msgid "_Delete"
-msgstr "_Dilemel"
-
-#: ../src/seahorse-viewer.c:503
-msgid "E_xport..."
-msgstr "E_zporzhiañ..."
-
-#: ../ssh/seahorse-ssh-generate.glade.h:7
-msgid "New Secure Shell Key"
-msgstr "Alc'hwez SSH nevez"
-
-#: ../ssh/seahorse-ssh-generate.glade.h:10
-msgid "_Key Description:"
-msgstr "Deskrivadur an _alc'wez :"
-
-#: ../ssh/seahorse-ssh-key.c:105
-msgid "Invalid"
-msgstr "Didalvoudek"
-
-#: ../ssh/seahorse-ssh-key.c:116
-msgid "Private Secure Shell Key"
-msgstr "Alc'hwez SSH prevez"
-
-#: ../ssh/seahorse-ssh-key.c:119
-msgid "Public Secure Shell Key"
-msgstr "Alc'hwez SSH foran"
-
-#: ../ssh/seahorse-ssh-key-properties.c:71
-msgid "Couldn't rename key."
-msgstr "N'em eus ket adenvel an alc'hwez"
-
-#: ../ssh/seahorse-ssh-key-properties.glade.h:1
-msgid "/home/nate/.ssh/blah_rsa"
-msgstr "/home/nate/.ssh/blah_rsa"
-
-#: ../ssh/seahorse-ssh-key-properties.glade.h:2
-msgid "00:00:00:00:00"
-msgstr "00:00:00:00:00"
-
-#: ../ssh/seahorse-ssh-key-properties.glade.h:3
-msgid "<b>Algorithm:</b>"
-msgstr "<b>Treol :</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.glade.h:5
-msgid "<b>Identifier:</b>"
-msgstr "<b>Naoudi :</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.glade.h:6
-msgid "<b>Location:</b>"
-msgstr "<b>Lec'hiadur :</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.glade.h:8
-msgid "<b>Strength:</b>"
-msgstr "<b>Nerzh :</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.glade.h:10
-msgid "<b>Trust</b>"
-msgstr "<b>Fiziañs</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.glade.h:18
-msgid "E_xport Complete Key"
-msgstr "E_zporzhiañ an alc'hwez en e bezh"
-
-#: ../ssh/seahorse-ssh-operation.c:151
-#: ../ssh/seahorse-ssh-operation.c:739
-msgid "The SSH command failed."
-msgstr "Sac'het eo an urzhiad SSH"
-
-#: ../ssh/seahorse-ssh-operation.c:445
-#: ../ssh/seahorse-ssh-operation.c:477
-msgid "Secure Shell key"
-msgstr "Alc'hwez SSH"
-
-#: ../ssh/seahorse-ssh-operation.c:448
-msgid "Passphrase:"
-msgstr "Lavarenn-tremen :"
-
-#. Just prompt over and over again
-#: ../ssh/seahorse-ssh-operation.c:762
-msgid "Remote Host Password"
-msgstr "Ger tremen ostiz a-bell"
-
-#: ../ssh/seahorse-ssh-operation.c:850
-msgid "Old Key Passphrase"
-msgstr "Lavarenn-tremen kozh alc'hwez"
-
-#: ../ssh/seahorse-ssh-operation.c:851
-#, c-format
-msgid "Enter the old passphrase for: %s"
-msgstr "Roit al lavarenn-tremen kozh evit : %s"
-
-#: ../ssh/seahorse-ssh-operation.c:855
-msgid "New Key Passphrase"
-msgstr "Lavarenn-tremen nevez alc'hwez"
-
-#: ../ssh/seahorse-ssh-operation.c:856
-#, c-format
-msgid "Enter the new passphrase for: %s"
-msgstr "Roit al lavarenn-tremen nevez evit : %s"
-
-#: ../ssh/seahorse-ssh-operation.c:864
-msgid "Enter Key Passphrase"
-msgstr "Roit lavarenn-tremen alc'hwez"
-
-#: ../ssh/seahorse-ssh-operation.c:931
-msgid "Passphrase for New Secure Shell Key"
-msgstr "Lavarenn tremen evit an alc'hwez SSH nevez"
-
-#: ../ssh/seahorse-ssh-operation.c:932
-msgid "Enter a passphrase for your new Secure Shell key."
-msgstr "Roit al lavarenn tremen evit hoc'h alc'hwez SSH nevez."
-
-#: ../ssh/seahorse-ssh-operation.c:1013
-#, c-format
-msgid "Importing key: %s"
-msgstr "Oc'h enporzhiañ alc'hwezioù : %s"
-
-#: ../ssh/seahorse-ssh-operation.c:1015
-msgid "Importing key. Enter passphrase"
-msgstr "Oc'h enporzhiañ alc'hwezioù. Roit an lavarenn tremen"
-
-#. Show the progress window if necessary
-#: ../ssh/seahorse-ssh-upload.c:181
-msgid "Configuring Secure Shell Keys..."
-msgstr "O kefluniañ alc'hwezioù SSH..."
-
-#: ../ssh/seahorse-ssh-upload.glade.h:1
-msgid "<i>eg: fileserver.example.com:port</i>"
-msgstr "<i>sk : dafariadrestrou.skouer.com:porzh</i>"
-
-#: ../ssh/seahorse-ssh-upload.glade.h:5
-msgid "_Computer Name:"
-msgstr "Anv an _urzhiataer :"
-
-#: ../ssh/seahorse-ssh-upload.glade.h:6
-msgid "_Login Name:"
-msgstr "Anv ar_veriad :"
-
-#: ../ssh/seahorse-ssh-upload.glade.h:7
-msgid "_Set Up"
-msgstr "_Arventennoù"
-
-#: ../daemon/seahorse-daemon.c:69
-msgid "Do not run seahorse-daemon as a daemon"
-msgstr ""
-
-#: ../daemon/seahorse-daemon.c:87
-msgid "couldn't fork process"
-msgstr ""
-
-#: ../daemon/seahorse-daemon.c:93
-msgid "couldn't create new process group"
-msgstr ""
-
-#: ../daemon/seahorse-daemon.c:207
-msgid "Encryption Daemon (Seahorse)"
-msgstr "Droukspered enrinegañ (Seahorse)"
-
-#: ../daemon/seahorse-daemon.desktop.in.in.h:1
-msgid "Seahorse Daemon"
-msgstr "Droukspered Seahorse"
-
-#. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:160
-#, c-format
-msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:167
-#, c-format
-msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:187
-msgid "Signing key not in keyring."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:192
-msgid "Bad or forged signature. The signed data was modified."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:201
-msgid "Couldn't verify signature."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:284
-#, c-format
-msgid "Key is not a valid recipient for encryption: %s"
-msgstr ""
 
 #: ../daemon/seahorse-service-crypto.c:414
 #, c-format
@@ -1572,13 +151,41 @@ msgstr ""
 msgid "Invalid key type for verifying: %s"
 msgstr ""
 
+#: ../daemon/seahorse-service-keyset.c:200
+#, c-format
+msgid "Invalid key id: %s"
+msgstr "ID an alc'hwez : %s didalvoudek"
+
+#: ../daemon/seahorse-sharing.c:72
+#: ../daemon/seahorse-sharing.c:216
+msgid "Couldn't share keys"
+msgstr "N'em eus ket rannañ an alc'hwezioù"
+
 #: ../daemon/seahorse-sharing.c:73
 msgid "Can't publish discovery information on the network."
 msgstr ""
 
+#. Translators: The %s will get filled in with the user name
+#. of the user, to form a genitive. If this is difficult to
+#. translate correctly so that it will work correctly in your
+#. language, you may use something equivalent to
+#. "Shared keys of %s".
+#: ../daemon/seahorse-sharing.c:93
+#, c-format
+msgid "%s's encryption keys"
+msgstr "alc'hwezioù enrinegañ %s"
+
 #: ../data/seahorse.schemas.in.h:1
 msgid "A list of key server URIs to search for remote PGP keys. In later versions a display name can be included, by appending a space and then the name."
 msgstr ""
+
+#: ../data/seahorse.schemas.in.h:2
+msgid "Auto Retrieve Keys"
+msgstr "Adtapout an alc'hwezioù emgefreek"
+
+#: ../data/seahorse.schemas.in.h:3
+msgid "Auto Sync Keys"
+msgstr "Sinkronaat an alc'hwezioù emgefreek"
 
 #: ../data/seahorse.schemas.in.h:4
 msgid "Controls the visibility of the expires column for the key manager."
@@ -1596,9 +203,17 @@ msgstr ""
 msgid "Controls the visibility of the validity column for the key manager."
 msgstr ""
 
+#: ../data/seahorse.schemas.in.h:8
+msgid "Enable DNS-SD sharing"
+msgstr "Gweredekaat ar rannañ DNS-SD"
+
 #: ../data/seahorse.schemas.in.h:9
 msgid "Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be running and must be built with HKP and DNS-SD support."
 msgstr ""
+
+#: ../data/seahorse.schemas.in.h:10
+msgid "ID of the default key"
+msgstr "ID an alc'hwez dre-ziouer"
 
 #: ../data/seahorse.schemas.in.h:11
 msgid "If set to true, then files encrypted with seahorse will be ASCII armor encoded."
@@ -1620,6 +235,10 @@ msgstr ""
 msgid "Last key used to sign a message."
 msgstr ""
 
+#: ../data/seahorse.schemas.in.h:16
+msgid "PGP Key servers"
+msgstr "Servijerien an alc'hwezioù PGP"
+
 #: ../data/seahorse.schemas.in.h:17
 msgid "Publish keys to this key server."
 msgstr ""
@@ -1627,6 +246,18 @@ msgstr ""
 #: ../data/seahorse.schemas.in.h:18
 msgid "Show expires column in key manager"
 msgstr ""
+
+#: ../data/seahorse.schemas.in.h:19
+msgid "Show trust column in key manager"
+msgstr "Diskouez bann fiziañs e-barzh an ardoer alc'hwezioù"
+
+#: ../data/seahorse.schemas.in.h:20
+msgid "Show type column in key manager"
+msgstr "Diskouez bann rizh an ardoer alc'hwezioù"
+
+#: ../data/seahorse.schemas.in.h:21
+msgid "Show validity column in key manager"
+msgstr "Diskouez bann talvoudegezh e-barzh an ardoer alc'hwezioù"
 
 #: ../data/seahorse.schemas.in.h:22
 msgid "Specify the column to sort the recipients window by. Columns are: 'name' and 'id'. Put a '-' in front of the column name to sort in descending order."
@@ -1680,31 +311,68 @@ msgstr ""
 msgid "Whether to use ASCII Armor"
 msgstr ""
 
-#: ../gkr/seahorse-add-keyring.glade.h:1
+#: ../gkr/seahorse-add-keyring.xml.h:1
 msgid "Add Password Keyring"
 msgstr ""
 
-#: ../gkr/seahorse-add-keyring.glade.h:2
+#: ../gkr/seahorse-add-keyring.xml.h:2
 msgid "New Keyring Name:"
 msgstr ""
 
-#: ../gkr/seahorse-add-keyring.glade.h:3
+#: ../gkr/seahorse-add-keyring.xml.h:3
 msgid "Please choose a name for the new keyring. You will be prompted for an unlock password."
 msgstr ""
 
-#: ../gkr/seahorse-add-keyring.glade.h:4
-#: ../libseahorse/seahorse-add-keyserver.glade.h:5
-#: ../ssh/seahorse-ssh-upload.glade.h:3
+#: ../gkr/seahorse-add-keyring.xml.h:4
+#: ../libseahorse/seahorse-add-keyserver.xml.h:5
+#: ../ssh/seahorse-ssh-upload.xml.h:3
 msgid "The host name or address of the server."
 msgstr ""
 
-#: ../gkr/seahorse-gkr-add-keyring.c:133
+#: ../gkr/seahorse-gkr-add-item.c:60
+#: ../gkr/seahorse-gkr-add-keyring.c:59
 msgid "Couldn't add keyring"
 msgstr ""
+
+#: ../gkr/seahorse-gkr-add-item.xml.h:1
+#| msgid "Password"
+msgid "Add Password"
+msgstr "Ouzhpennañ ar ger-tremen"
+
+#: ../gkr/seahorse-gkr-add-item.xml.h:2
+#: ../gkr/seahorse-gkr-item-properties.xml.h:17
+#: ../pgp/seahorse-revoke.xml.h:5
+msgid "_Description:"
+msgstr "_Deskrivadur :"
+
+#: ../gkr/seahorse-gkr-add-item.xml.h:3
+#, fuzzy
+#| msgid "Key Sharing"
+msgid "_Keyring:"
+msgstr "Duil_had alc'hwezioù :"
+
+#: ../gkr/seahorse-gkr-add-item.xml.h:4
+#| msgid "Password:"
+msgid "_Password:"
+msgstr "_Ger-tremen :"
+
+#: ../gkr/seahorse-gkr-add-item.xml.h:5
+#| msgid "Show pass_word"
+msgid "_Show Password"
+msgstr "Diskouez ar ger-tremen"
 
 #: ../gkr/seahorse-gkr-item.c:470
 msgid "Web Password"
 msgstr ""
+
+#: ../gkr/seahorse-gkr-item.c:472
+msgid "Network Password"
+msgstr "Ger-tremen ar rouedad"
+
+#: ../gkr/seahorse-gkr-item.c:474
+#: ../gkr/seahorse-gkr-item-properties.c:107
+msgid "Password"
+msgstr "Ger tremen"
 
 #: ../gkr/seahorse-gkr-item-commands.c:78
 #, c-format
@@ -1718,86 +386,229 @@ msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../gkr/seahorse-gkr-item-properties.c:65
+#: ../gkr/seahorse-gkr-item-properties.c:66
 msgid "Access a network share or resource"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-item-properties.c:68
+#: ../gkr/seahorse-gkr-item-properties.c:69
 msgid "Access a website"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-item-properties.c:101
+#: ../gkr/seahorse-gkr-item-properties.c:72
+msgid "Unlocks a PGP key"
+msgstr "Dibrennañ un alc'hwez PGP"
+
+#: ../gkr/seahorse-gkr-item-properties.c:75
+msgid "Unlocks a Secure Shell key"
+msgstr "Dibrennañ un alc'hwezioù SSH"
+
+#: ../gkr/seahorse-gkr-item-properties.c:78
+msgid "Saved password or login"
+msgstr "Ger tremen pe anv-implijer enrollet"
+
+#: ../gkr/seahorse-gkr-item-properties.c:102
 msgid "Network Credentials"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-item-properties.c:346
+#: ../gkr/seahorse-gkr-item-properties.c:245
+msgid "Couldn't change password."
+msgstr "N'em eus ket kemmañ an ger-tremen"
+
+#: ../gkr/seahorse-gkr-item-properties.c:347
 msgid "Couldn't set description."
 msgstr ""
 
-#: ../gkr/seahorse-gkr-item-properties.c:652
+#: ../gkr/seahorse-gkr-item-properties.c:641
 msgid "Couldn't set application access."
 msgstr ""
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:1
+msgid "<b>Password:</b>"
+msgstr "<b>Ger-tremen :</b>"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:2
+msgid "<b>Path:</b>"
+msgstr "<b>Treug :</b>"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:3
+msgid "<b>Permissions:</b>"
+msgstr "<b>Aotreoù :</b>"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:4
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
+msgid "<b>Technical Details:</b>"
+msgstr "<b>Munudoù kalvezel</b>"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:5
+msgid "Applications"
+msgstr "Arloadoù"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:6
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
+msgid "Details"
+msgstr "Munudoù"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:7
+#: ../pgp/seahorse-pgp-subkey.c:366
+#: ../ssh/seahorse-ssh-key-properties.xml.h:19
+msgid "Key"
+msgstr "Alc'hwez"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:8
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
+#: ../ssh/seahorse-ssh-key-properties.xml.h:20
+msgid "Key Properties"
+msgstr "Perzhioù an alc'hwezioù"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:9
+msgid "Login:"
+msgstr "Anv tremen :"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:10
+msgid "Server:"
+msgstr "Dafariad :"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:11
+msgid "Show pass_word"
+msgstr "Diskouez ar _ger-tremen"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:12
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
+msgid "Type:"
+msgstr "Rizh :"
+
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-item-properties.xml.h:14
+msgid "Use:"
+msgstr "Implijit :"
+
+#. To translators: This is the infinitive not the imperative.  This string refers to the ability of an application to delete this secret from its key ring.
+#: ../gkr/seahorse-gkr-item-properties.xml.h:16
+msgid "_Delete"
+msgstr "_Dilemel"
+
+#. To translators: This is the infinitive not the imperative.
+#: ../gkr/seahorse-gkr-item-properties.xml.h:19
+msgid "_Read"
+msgstr "_Lenn"
+
+#. To translators: This is the infinitive not the imperative.
+#: ../gkr/seahorse-gkr-item-properties.xml.h:21
+msgid "_Write"
+msgstr "_Skrivañ"
 
 #: ../gkr/seahorse-gkr-keyring.c:193
 msgid "Listing passwords"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:87
+#: ../gkr/seahorse-gkr-keyring.c:354
+#, c-format
+msgid "Passwords: %s"
+msgstr "Gerioù tremen : %s"
+
+#: ../gkr/seahorse-gkr-keyring.c:355
+#, c-format
+msgid "<b>Passwords:</b> %s"
+msgstr "<b>Gerioù tremen :</b> %s"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:94
 msgid "Password Keyring"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:88
+#: ../gkr/seahorse-gkr-keyring-commands.c:95
 msgid "Used to store application and network passwords"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:101
+#: ../gkr/seahorse-gkr-keyring-commands.c:96
+#| msgid "Network Password"
+msgid "Stored Password"
+msgstr "Ger-tremen kadavet"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:97
+msgid "Safely store a password or secret."
+msgstr ""
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:110
 msgid "Couldn't unlock keyring"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:141
+#: ../gkr/seahorse-gkr-keyring-commands.c:150
 msgid "Couldn't lock keyring"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:181
+#: ../gkr/seahorse-gkr-keyring-commands.c:190
 msgid "Couldn't set default keyring"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:219
+#: ../gkr/seahorse-gkr-keyring-commands.c:228
 msgid "Couldn't change keyring password"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:251
+#: ../gkr/seahorse-gkr-keyring-commands.c:259
+msgid "_Lock"
+msgstr "_Prennañ"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:260
 msgid "Lock the password storage keyring so a master password is required to unlock it."
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:253
+#: ../gkr/seahorse-gkr-keyring-commands.c:261
+msgid "_Unlock"
+msgstr "_Dibrennañ"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:262
 msgid "Unlock the password storage keyring with a master password so it is available for use."
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:254
+#: ../gkr/seahorse-gkr-keyring-commands.c:263
+#, fuzzy
 msgid "_Set as default"
-msgstr ""
+msgstr "Arventenniñ evel dre ziouer"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:255
+#: ../gkr/seahorse-gkr-keyring-commands.c:264
 msgid "Applications usually store new passwords in the default keyring."
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:257
+#: ../gkr/seahorse-gkr-keyring-commands.c:265
+msgid "Change _Password"
+msgstr "Kemmañ ar _ger tremen"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:266
 msgid "Change the unlock password of the password storage keyring"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:321
+#: ../gkr/seahorse-gkr-keyring-commands.c:330
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring.glade.h:3
+#. -----------------------------------------------------------------------------
+#. * PUBLIC
+#.
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-keyring.xml.h:2
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
+msgid "Created:"
+msgstr "Krouet :"
+
+#: ../gkr/seahorse-gkr-keyring.xml.h:3
 msgid "Keyring"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring.glade.h:4
+#: ../gkr/seahorse-gkr-keyring.xml.h:4
 msgid "Keyring Properties"
 msgstr ""
+
+#: ../gkr/seahorse-gkr-keyring.xml.h:5
+msgid "_Name:"
+msgstr "_Anv :"
 
 #: ../gkr/seahorse-gkr-operation.c:168
 msgid "Access to the key ring was denied"
@@ -1827,6 +638,15 @@ msgstr "An ergorenn zo anezhi endeo !"
 msgid "Internal error accessing gnome-keyring"
 msgstr ""
 
+#: ../gkr/seahorse-gkr-operation.c:238
+#: ../gkr/seahorse-gkr-operation.c:264
+msgid "Saving item..."
+msgstr "Oc'h enrollañ an ergorenn..."
+
+#: ../gkr/seahorse-gkr-operation.c:300
+msgid "Deleting item..."
+msgstr "O dilemel an ergorenn..."
+
 #: ../gkr/seahorse-gkr-operation.c:325
 msgid "Deleting keyring..."
 msgstr ""
@@ -1835,9 +655,30 @@ msgstr ""
 msgid "Listing password keyrings"
 msgstr ""
 
-#: ../libcryptui/cryptui.c:270
+#: ../libcryptui/cryptui.c:272
 msgid "No encryption keys were found with which to perform the operation you requested.  The program <b>Passwords and Encryption Keys</b> will now be started so that you may either create a key or import one."
 msgstr ""
+
+#: ../libcryptui/cryptui-key-chooser.c:173
+msgid "All Keys"
+msgstr "An holl alc'hwezioù"
+
+#: ../libcryptui/cryptui-key-chooser.c:174
+msgid "Selected Recipients"
+msgstr "Degemererien dibabet"
+
+#: ../libcryptui/cryptui-key-chooser.c:175
+msgid "Search Results"
+msgstr "Disoc'hoù ar c'hlask"
+
+#. Filter Label
+#: ../libcryptui/cryptui-key-chooser.c:185
+msgid "Search _for:"
+msgstr "_Klask :"
+
+#: ../libcryptui/cryptui-key-chooser.c:243
+msgid "None (Don't Sign)"
+msgstr "Tra ebet (Ne sinañ ket)"
 
 #: ../libcryptui/cryptui-key-chooser.c:256
 #, c-format
@@ -1848,6 +689,21 @@ msgstr ""
 #: ../libcryptui/cryptui-key-chooser.c:278
 msgid "_Sign message as:"
 msgstr "_Sinañ ar gemennadenn evel"
+
+#. TODO: Icons
+#. The name column
+#: ../libcryptui/cryptui-key-list.c:140
+#: ../pgp/seahorse-pgp-key-properties.c:839
+#: ../src/seahorse-key-manager-store.c:828
+msgid "Name"
+msgstr "Anv"
+
+#. The keyid column
+#: ../libcryptui/cryptui-key-list.c:145
+#: ../pgp/seahorse-pgp-key-properties.c:1743
+#: ../src/seahorse-key-manager-store.c:840
+msgid "Key ID"
+msgstr "ID an alc'hwez"
 
 #: ../libegg/egg-datetime.c:313
 msgid "Display flags"
@@ -2009,21 +865,90 @@ msgstr ""
 msgid "Second part of the upper time limit"
 msgstr ""
 
+#. Translate to calendar:week_start:1 if you want Monday to be the
+#. * first day of the week; otherwise translate to calendar:week_start:0.
+#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
+#. * or calendar:week_start:0 it will not work.
+#.
+#: ../libegg/egg-datetime.c:470
+msgid "calendar:week_start:0"
+msgstr "calendar:week_start:1"
+
+#: ../libegg/egg-datetime.c:492
+msgid "Date"
+msgstr "Deiziad"
+
 #: ../libegg/egg-datetime.c:492
 msgid "Enter the date directly"
 msgstr ""
+
+#: ../libegg/egg-datetime.c:499
+msgid "Select Date"
+msgstr "Diuz an deiziad"
 
 #: ../libegg/egg-datetime.c:499
 msgid "Select the date from a calendar"
 msgstr "Diuzit un deiz en deiziadur"
 
 #: ../libegg/egg-datetime.c:517
+#: ../libegg/egg-datetime.c:2192
+msgid "Time"
+msgstr "Eur"
+
+#: ../libegg/egg-datetime.c:517
 msgid "Enter the time directly"
 msgstr ""
 
 #: ../libegg/egg-datetime.c:524
+msgid "Select Time"
+msgstr "Diuz an eur"
+
+#: ../libegg/egg-datetime.c:524
 msgid "Select the time from a list"
 msgstr "Diuzit un eur en el listenn"
+
+#. Translators: set this to anything else if you want to use a
+#. * 24 hour clock.
+#.
+#: ../libegg/egg-datetime.c:791
+msgid "24hr: no"
+msgstr "24hr:"
+
+#: ../libegg/egg-datetime.c:795
+#: ../libegg/egg-datetime.c:1253
+#: ../libegg/egg-datetime.c:1257
+msgid "AM"
+msgstr "DB"
+
+#: ../libegg/egg-datetime.c:797
+#: ../libegg/egg-datetime.c:1254
+#: ../libegg/egg-datetime.c:1261
+msgid "PM"
+msgstr "GM"
+
+#. Translators: This is hh:mm:ss AM/PM.
+#: ../libegg/egg-datetime.c:805
+#, c-format
+msgid "%02d:%02d:%02d %s"
+msgstr "%02d:%02d:%02d %s"
+
+#. Translators: This is hh:mm AM/PM.
+#: ../libegg/egg-datetime.c:808
+#, c-format
+msgid "%02d:%02d %s"
+msgstr "%02d:%02d %s"
+
+#. Translators: This is hh:mm:ss.
+#: ../libegg/egg-datetime.c:812
+#, c-format
+msgid "%02d:%02d:%02d"
+msgstr "%02d:%02d:%02d"
+
+#. Translators: This is hh:mm.
+#: ../libegg/egg-datetime.c:815
+#, c-format
+msgid "%02d:%02d"
+msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
@@ -2031,6 +956,12 @@ msgstr "Diuzit un eur en el listenn"
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%02d-%02d-%04d"
+
+#. Translators: This is hh:mm:ss.
+#: ../libegg/egg-datetime.c:1234
+#, c-format
+msgid "%u:%u:%u"
+msgstr "%u:%u:%u"
 
 #: ../libegg/eggdesktopfile.c:165
 #, c-format
@@ -2042,32 +973,51 @@ msgstr "N'eo ket mat ar restr .desktop"
 msgid "Unrecognized desktop file Version '%s'"
 msgstr "N'eo ket anavet an handelv restr desktop '%s'"
 
+#: ../libegg/eggdesktopfile.c:958
+#, c-format
+msgid "Starting %s"
+msgstr "O kregiñ %s"
+
 #: ../libegg/eggdesktopfile.c:1100
 #, c-format
 msgid "Application does not accept documents on command line"
-msgstr ""
+msgstr "An arload ne zedegemer ket an teulioù dre arroudennoù arc'had"
 
 #: ../libegg/eggdesktopfile.c:1168
 #, c-format
 msgid "Unrecognized launch option: %d"
-msgstr ""
+msgstr "Dibarzh lañsañ dianavezet : %d"
 
 #: ../libegg/eggdesktopfile.c:1373
 #, c-format
 msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
-msgstr ""
+msgstr "N'haller lakaat URIoù an teul da dremen d'un enankad war ar burev evel 'Type=Link'"
+
+#: ../libegg/eggdesktopfile.c:1392
+#, c-format
+msgid "Not a launchable item"
+msgstr "N'eo ket un dra a c'haller lañsañ"
 
 #: ../libegg/eggsmclient.c:225
 msgid "Disable connection to session manager"
-msgstr ""
+msgstr "Lazhañ kennask ouzh ardoer an estez"
 
 #: ../libegg/eggsmclient.c:228
 msgid "Specify file containing saved configuration"
-msgstr ""
+msgstr "Erspizit ar restr gant ar c'hefluniadur enrollet enni"
+
+#: ../libegg/eggsmclient.c:228
+msgid "FILE"
+msgstr "RESTR"
 
 #: ../libegg/eggsmclient.c:231
 msgid "Specify session management ID"
-msgstr ""
+msgstr "Dibab ID ardoadur an estez"
+
+#: ../libegg/eggsmclient.c:231
+#: ../pgp/seahorse-pgp-key-properties.c:1312
+msgid "ID"
+msgstr "Hennader (ID)"
 
 #: ../libegg/eggsmclient.c:252
 msgid "Session management options:"
@@ -2077,9 +1027,44 @@ msgstr "Dibarzhioù ardeiñ an estez :"
 msgid "Show session management options"
 msgstr "Diskouez dibarzhioù ardeiñ an estez"
 
-#: ../libseahorse/seahorse-add-keyserver.glade.h:6
+#: ../libseahorse/seahorse-add-keyserver.xml.h:1
+msgid ":"
+msgstr ":"
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:2
+msgid "Add Key Server"
+msgstr "Ouzhpennañ ur servijer an alc'hwezioù :"
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:3
+msgid "Host:"
+msgstr "Ostiz :"
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:4
+msgid "Key Server Type:"
+msgstr "Rizh ar servijer an alc'hwezioù :"
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:6
 msgid "The port to access the server on."
 msgstr ""
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:7
+msgid "initial temporary item"
+msgstr ""
+
+#: ../libseahorse/seahorse-notification.c:566
+#: ../libseahorse/seahorse-notification.c:594
+msgid "Key Imported"
+msgid_plural "Keys Imported"
+msgstr[0] "Alc'hwez enporzhiet"
+msgstr[1] "Alc'hwezioù enporzhiet"
+
+#: ../libseahorse/seahorse-notification.c:570
+#: ../libseahorse/seahorse-notification.c:593
+#, c-format
+msgid "Imported %i key"
+msgid_plural "Imported %i keys"
+msgstr[0] "Alc'hwez enporzhiet %i"
+msgstr[1] "Alc'hwezioù enporzhiet %i"
 
 #: ../libseahorse/seahorse-notification.c:572
 #, c-format
@@ -2088,56 +1073,125 @@ msgid_plural "Imported keys for"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../libseahorse/seahorse-notify.glade.h:1
+#: ../libseahorse/seahorse-notify.xml.h:1
 msgid "Notification Messages"
-msgstr ""
+msgstr "Kemenadennoù rebuziñ"
 
 #: ../libseahorse/seahorse-object.c:216
 msgid "Symmetric Key"
-msgstr ""
+msgstr "Alc'hwez kemparzhek"
+
+#: ../libseahorse/seahorse-object.c:219
+msgid "Public Key"
+msgstr "Alc'hwez foran"
+
+#: ../libseahorse/seahorse-object.c:222
+msgid "Private Key"
+msgstr "Alc'hwez prevez"
 
 #: ../libseahorse/seahorse-object.c:225
 msgid "Credentials"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.c:62
+#.
+#. * Translators: "This object is a means of storing items such as
+#. * name, email address, etc. that make up one's digital identity.
+#.
+#: ../libseahorse/seahorse-object.c:232
+msgid "Identity"
+msgstr "Naoudi"
+
+#: ../libseahorse/seahorse-passphrase.c:194
+msgid "Passphrase"
+msgstr "Lavarenn-tremen"
+
+#: ../libseahorse/seahorse-passphrase.c:197
+#: ../ssh/seahorse-ssh-operation.c:480
+msgid "Password:"
+msgstr "Ger-tremen :"
+
+#: ../libseahorse/seahorse-passphrase.c:260
+msgid "Confirm:"
+msgstr "Kadarnaat :"
+
+#: ../libseahorse/seahorse-prefs.c:63
 msgid "Not a valid Key Server address."
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.c:63
+#: ../libseahorse/seahorse-prefs.c:64
 msgid "For help contact your system adminstrator or the administrator of the key server."
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:1
+#: ../libseahorse/seahorse-prefs.c:173
+msgid "URL"
+msgstr "URL"
+
+#: ../libseahorse/seahorse-prefs.c:353
+msgid "Custom"
+msgstr "Personelaet"
+
+#: ../libseahorse/seahorse-prefs.c:420
+msgid "None: Don't publish keys"
+msgstr "Tra ebet : N'embann ket"
+
+#: ../libseahorse/seahorse-prefs.xml.h:1
 msgid "Automatically retrieve keys from _key servers"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:2
+#: ../libseahorse/seahorse-prefs.xml.h:2
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:6
+#: ../libseahorse/seahorse-prefs.xml.h:3
+msgid "Key Servers"
+msgstr "Servijerien an alc'hwezioù"
+
+#: ../libseahorse/seahorse-prefs.xml.h:4
+msgid "Key Sharing"
+msgstr "Rannañ alc'hwezioù"
+
+#: ../libseahorse/seahorse-prefs.xml.h:5
+msgid "Preferences"
+msgstr "Gwellvezioù"
+
+#: ../libseahorse/seahorse-prefs.xml.h:6
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've collected. This means they can automatically encrypt things for you or those you know, without you having to send them your key.\n"
 "\n"
 "<b>Note:</b> Your personal keys will not be compromised."
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:9
+#: ../libseahorse/seahorse-prefs.xml.h:9
 msgid "_Find keys via:"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:10
+#: ../libseahorse/seahorse-prefs.xml.h:10
 msgid "_Publish keys to:"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.glade.h:11
+#: ../libseahorse/seahorse-prefs.xml.h:11
 msgid "_Share my keys with others on my network"
 msgstr ""
 
-#: ../libseahorse/seahorse-progress.glade.h:1
+#: ../libseahorse/seahorse-progress.xml.h:1
 msgid "Progress Title"
 msgstr ""
+
+#: ../libseahorse/seahorse-unknown.c:67
+msgid "Unavailable"
+msgstr "Dizimplijadus"
+
+#: ../libseahorse/seahorse-util.c:206
+msgid "%Y-%m-%d"
+msgstr "%Y-%m-%d"
+
+#: ../libseahorse/seahorse-util.c:439
+msgid "Key Data"
+msgstr "Roadennoù an alc'hwez"
+
+#: ../libseahorse/seahorse-util.c:441
+msgid "Multiple Keys"
+msgstr "Alc'hwezioù lies"
 
 #: ../libseahorse/seahorse-util.c:696
 msgid "Couldn't run file-roller"
@@ -2157,6 +1211,12 @@ msgstr ""
 msgid "All key files"
 msgstr "An holl restroù alc'hwez"
 
+#: ../libseahorse/seahorse-util.c:823
+#: ../libseahorse/seahorse-util.c:863
+#: ../pgp/seahorse-gpgme-photos.c:242
+msgid "All files"
+msgstr "An holl restroù"
+
 #: ../libseahorse/seahorse-util.c:856
 msgid "Archive files"
 msgstr ""
@@ -2168,58 +1228,129 @@ msgid ""
 "Do you want to replace it with a new file?"
 msgstr ""
 
+#: ../libseahorse/seahorse-util.c:908
+msgid "_Replace"
+msgstr "E_rlec'hiañ"
+
+#: ../libseahorse/seahorse-validity.c:34
+#: ../pgp/seahorse-gpgme-subkey.c:197
+#: ../pgp/seahorse-pgp-key-properties.c:1131
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+msgid "Unknown"
+msgstr "Dianav"
+
+#: ../libseahorse/seahorse-validity.c:36
+#: ../pgp/seahorse-pgp-key-properties.c:1137
+msgctxt "Validity"
+msgid "Never"
+msgstr "Biken"
+
 #: ../libseahorse/seahorse-validity.c:38
-#: ../pgp/seahorse-pgp-key-properties.c:1195
+#: ../pgp/seahorse-pgp-key-properties.c:1144
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:33
 msgid "Marginal"
 msgstr ""
 
+#: ../libseahorse/seahorse-validity.c:40
+#: ../pgp/seahorse-pgp-key-properties.c:1150
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
+msgid "Full"
+msgstr "Leun"
+
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1207
+#: ../pgp/seahorse-pgp-key-properties.c:1156
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 msgid "Ultimate"
 msgstr ""
 
-#: ../pgp/seahorse-add-subkey.glade.h:2
+#: ../libseahorse/seahorse-validity.c:44
+#: ../pgp/seahorse-pgp-key-properties.c:1349
+msgid "Disabled"
+msgstr "Diweredekaet"
+
+#: ../libseahorse/seahorse-validity.c:46
+#: ../pgp/seahorse-pgp-key-properties.c:1345
+msgid "Revoked"
+msgstr "Dizorniet"
+
+#: ../libseahorse/seahorse-widget.c:362
+#, c-format
+msgid "Could not display help: %s"
+msgstr "Ne oa ket tu diskouezh ar skoazell: %s"
+
+#: ../pgp/seahorse-add-subkey.xml.h:1
+msgid "Expiration Date:"
+msgstr "Deiziad termen :"
+
+#: ../pgp/seahorse-add-subkey.xml.h:2
 msgid "Generate a new subkey"
 msgstr "Krouiñ an is-alc'hwez nevez"
 
-#: ../pgp/seahorse-add-subkey.glade.h:3
+#: ../pgp/seahorse-add-subkey.xml.h:3
 msgid "If key never expires"
 msgstr ""
 
-#: ../pgp/seahorse-add-subkey.glade.h:6
+#: ../pgp/seahorse-add-subkey.xml.h:4
+msgid "Key _Length:"
+msgstr "_Hirder an alc'hwez :"
+
+#: ../pgp/seahorse-add-subkey.xml.h:5
+msgid "Key _Type:"
+msgstr "_Rizh an alc'hwez :"
+
+#: ../pgp/seahorse-add-subkey.xml.h:6
 msgid "Length of Key"
 msgstr "Hirder an alc'hwez"
 
-#: ../pgp/seahorse-add-subkey.glade.h:7
+#: ../pgp/seahorse-add-subkey.xml.h:7
 msgid "Never E_xpires"
 msgstr ""
 
-#: ../pgp/seahorse-add-uid.glade.h:2
+#: ../pgp/seahorse-add-uid.xml.h:1
+msgid "Add User ID"
+msgstr "Ouzhpennañ an ID an arveriad"
+
+#: ../pgp/seahorse-add-uid.xml.h:2
 msgid "Create the new user ID"
 msgstr ""
 
-#: ../pgp/seahorse-add-uid.glade.h:3
-#: ../pgp/seahorse-pgp-generate.glade.h:8
+#: ../pgp/seahorse-add-uid.xml.h:3
+#: ../pgp/seahorse-pgp-generate.xml.h:7
 msgid "Full _Name:"
-msgstr ""
+msgstr "A_nv hag anv-bihan :"
 
-#: ../pgp/seahorse-add-uid.glade.h:4
+#: ../pgp/seahorse-add-uid.xml.h:4
 msgid "Key Co_mment:"
 msgstr ""
 
-#: ../pgp/seahorse-add-uid.glade.h:5
+#: ../pgp/seahorse-add-uid.xml.h:5
 msgid "Must be at least 5 characters long"
 msgstr ""
 
-#: ../pgp/seahorse-add-uid.glade.h:6
+#: ../pgp/seahorse-add-uid.xml.h:6
 msgid "Optional comment describing key"
 msgstr ""
 
-#: ../pgp/seahorse-add-uid.glade.h:7
+#: ../pgp/seahorse-add-uid.xml.h:7
 msgid "Optional email address"
 msgstr ""
 
-#: ../pgp/seahorse-expires.glade.h:3
+#: ../pgp/seahorse-add-uid.xml.h:8
+#: ../pgp/seahorse-pgp-generate.xml.h:13
+msgid "_Email Address:"
+msgstr "Chomlec'h post_el"
+
+#: ../pgp/seahorse-expires.xml.h:1
+msgid "C_hange"
+msgstr "_Kemmañ"
+
+#: ../pgp/seahorse-expires.xml.h:2
+#: ../pgp/seahorse-revoke.xml.h:4
+msgid "Revoke key"
+msgstr "Dizorniañ an alc'hwez"
+
+#: ../pgp/seahorse-expires.xml.h:3
 msgid "_Never expires"
 msgstr ""
 
@@ -2231,6 +1362,24 @@ msgstr "N'em eus ket ouzhpennañ an is-alc'hwez"
 #, c-format
 msgid "Add subkey to %s"
 msgstr ""
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:179
+#: ../pgp/seahorse-gpgme-generate.c:96
+msgid "DSA (sign only)"
+msgstr "DSA (sinañ hepken)"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:187
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (enrinegañ hepken)"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:193
+#: ../pgp/seahorse-gpgme-generate.c:97
+msgid "RSA (sign only)"
+msgstr "RSA (sinañ hepken)"
+
+#: ../pgp/seahorse-gpgme-add-subkey.c:199
+msgid "RSA (encrypt only)"
+msgstr "RSA (enrinegañ hepken)"
 
 #: ../pgp/seahorse-gpgme-add-uid.c:85
 msgid "Couldn't add user id"
@@ -2253,14 +1402,34 @@ msgstr ""
 msgid "The expiry date must be in the future"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-expires.c:137
+#: ../pgp/seahorse-gpgme-expires.c:72
+msgid "Couldn't change expiry date"
+msgstr "N'haller ket kemmañ deiziad termen"
+
+#: ../pgp/seahorse-gpgme-expires.c:131
 #, c-format
 msgid "Expiry: %s"
 msgstr ""
 
+#: ../pgp/seahorse-gpgme-generate.c:65
+msgid "PGP Key"
+msgstr "Alch'hwez PGP"
+
 #: ../pgp/seahorse-gpgme-generate.c:66
 msgid "Used to encrypt email and files"
 msgstr ""
+
+#: ../pgp/seahorse-gpgme-generate.c:95
+msgid "DSA Elgamal"
+msgstr "DSA Elgamal"
+
+#: ../pgp/seahorse-gpgme-generate.c:106
+msgid "Couldn't generate PGP key"
+msgstr "N'em eus ket krouiñ an alc'hwez PGP"
+
+#: ../pgp/seahorse-gpgme-generate.c:213
+msgid "Passphrase for New PGP Key"
+msgstr "Lavarenn-tremen evit ar alc'hwez PGP nevez"
 
 #: ../pgp/seahorse-gpgme-generate.c:214
 msgid "Enter the passphrase for your new key twice."
@@ -2270,6 +1439,10 @@ msgstr ""
 msgid "Couldn't generate key"
 msgstr "N'em eus ket krouiñ an alc'hwez"
 
+#: ../pgp/seahorse-gpgme-generate.c:225
+msgid "Generating key"
+msgstr "Emaon o krouiñ an alc'hwez"
+
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
 msgid ""
@@ -2277,14 +1450,35 @@ msgid ""
 "The recommended size for a photo on your key is %d x %d pixels."
 msgstr ""
 
+#: ../pgp/seahorse-gpgme-photos.c:78
+msgid "_Don't Resize"
+msgstr "_N'admentañ ket"
+
+#: ../pgp/seahorse-gpgme-photos.c:79
+msgid "_Resize"
+msgstr "Ad_mentañ"
+
 #: ../pgp/seahorse-gpgme-photos.c:128
 #, c-format
 msgid "This is not a image file, or an unrecognized kind of image file. Try to use a JPEG image."
 msgstr ""
 
+#: ../pgp/seahorse-gpgme-photos.c:224
+msgid "All image files"
+msgstr "An holl restroù skeudenn"
+
+#: ../pgp/seahorse-gpgme-photos.c:237
+msgid "All JPEG files"
+msgstr "An holl restroù JPEG"
+
 #: ../pgp/seahorse-gpgme-photos.c:261
 msgid "Choose Photo to Add to Key"
 msgstr ""
+
+#: ../pgp/seahorse-gpgme-photos.c:290
+#: ../pgp/seahorse-gpgme-photos.c:294
+msgid "Couldn't add photo"
+msgstr "N'em eus ket ouzhpennañ an foto"
 
 #: ../pgp/seahorse-gpgme-photos.c:291
 msgid "The file could not be loaded. It may be in an invalid format"
@@ -2294,22 +1488,63 @@ msgstr ""
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr ""
 
+#: ../pgp/seahorse-gpgme-photos.c:333
+msgid "Couldn't delete photo"
+msgstr "N'em eus ket dilemel al luc'hskeudenn"
+
 #: ../pgp/seahorse-gpgme-revoke.c:70
 msgid "Couldn't revoke subkey"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:106
+#: ../pgp/seahorse-gpgme-revoke.c:91
+#, c-format
+msgid "Revoke: %s"
+msgstr "Dizorniañ : %s"
+
+#: ../pgp/seahorse-gpgme-revoke.c:102
+msgid "No reason"
+msgstr "Abeg ebet"
+
+#: ../pgp/seahorse-gpgme-revoke.c:103
 msgid "No reason for revoking key"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:164
+#: ../pgp/seahorse-gpgme-revoke.c:109
+msgid "Compromised"
+msgstr "Lakaet en arvar"
+
+#: ../pgp/seahorse-gpgme-revoke.c:110
+msgid "Key has been compromised"
+msgstr "Lakaet eo bet an alc'hwez en arvar"
+
+#: ../pgp/seahorse-gpgme-revoke.c:116
+msgid "Superseded"
+msgstr "Diamzeret"
+
+#: ../pgp/seahorse-gpgme-revoke.c:117
+msgid "Key has been superseded"
+msgstr "Diamzeret eo bet an alc'hwez"
+
+#: ../pgp/seahorse-gpgme-revoke.c:123
+msgid "Not Used"
+msgstr "Ket arveret"
+
+#: ../pgp/seahorse-gpgme-revoke.c:124
+msgid "Key is no longer used"
+msgstr "N'eo ket ken implijet"
+
+#: ../pgp/seahorse-gpgme-revoke.c:161
 #, c-format
 msgid "You are about to add %s as a revoker for %s. This operation cannot be undone! Are you sure you want to continue?"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:176
+#: ../pgp/seahorse-gpgme-revoke.c:173
 msgid "Couldn't add revoker"
 msgstr ""
+
+#: ../pgp/seahorse-gpgme-sign.c:96
+msgid "Couldn't sign key"
+msgstr "N'em eus ket sinañ an alc'hwez"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
@@ -2322,6 +1557,30 @@ msgstr ""
 msgid "You have no personal PGP keys that can be used to indicate your trust of this key."
 msgstr ""
 
+#: ../pgp/seahorse-gpgme-source.c:99
+#, c-format
+msgid "Wrong passphrase."
+msgstr "Lavarenn-tremen fall"
+
+#: ../pgp/seahorse-gpgme-source.c:103
+#, c-format
+msgid "Enter new passphrase for '%s'"
+msgstr "Roit al lavarenn-tremen nevez evit '%s'"
+
+#: ../pgp/seahorse-gpgme-source.c:105
+#, c-format
+msgid "Enter passphrase for '%s'"
+msgstr "Roit al lavarenn-tremen evit '%s'"
+
+#: ../pgp/seahorse-gpgme-source.c:108
+#: ../src/seahorse-change-passphrase.xml.h:4
+msgid "Enter new passphrase"
+msgstr "Roit al lavarenn-tremen nevez"
+
+#: ../pgp/seahorse-gpgme-source.c:110
+msgid "Enter passphrase"
+msgstr "Roit al lavarenn-tremen"
+
 #. TODO: We can use the GPGME progress to make this more accurate
 #: ../pgp/seahorse-gpgme-source.c:722
 #, c-format
@@ -2330,18 +1589,70 @@ msgid_plural "Loaded %d keys"
 msgstr[0] ""
 msgstr[1] ""
 
+#: ../pgp/seahorse-gpgme-source.c:777
+msgid "Loading Keys..."
+msgstr "Emaon o kargañ an alc'hwezioù ..."
+
 #: ../pgp/seahorse-gpgme-source.c:820
 msgid "Invalid key data (missing UIDs). This may be due to a computer with a date set in the future or a missing self-signature."
 msgstr ""
+
+#: ../pgp/seahorse-gpgme-source.c:910
+#: ../src/seahorse-key-manager.c:538
+msgid "Importing Keys"
+msgstr "Oc'h enporzhiañ alc'hwezioù"
+
+#: ../pgp/seahorse-gpgme-source.c:946
+msgid "Exporting Keys"
+msgstr "Oc'h ezporzhiañ alc'hwezioù"
+
+#: ../pgp/seahorse-gpgme-subkey.c:199
+msgid "ElGamal"
+msgstr "ElGamal"
 
 #: ../pgp/seahorse-hkp-source.c:330
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 
+#: ../pgp/seahorse-hkp-source.c:332
+#, c-format
+msgid "Couldn't communicate with server '%s': %s"
+msgstr "N'haller ket mont e darempred gant an dafariad '%s': %s"
+
+#: ../pgp/seahorse-hkp-source.c:576
+msgid "Searching for keys..."
+msgstr "O klask alc'hwezioù ..."
+
 #: ../pgp/seahorse-hkp-source.c:647
 msgid "Uploading keys..."
 msgstr ""
+
+#: ../pgp/seahorse-hkp-source.c:725
+msgid "Retrieving keys..."
+msgstr "Oc'h adtapout an alc'hwezioù ..."
+
+#: ../pgp/seahorse-hkp-source.c:831
+#, c-format
+msgid "Searching for keys on: %s"
+msgstr "Klask an alc'hwezioù war : %s"
+
+#. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
+#: ../pgp/seahorse-hkp-source.c:908
+#: ../pgp/seahorse-hkp-source.c:981
+#: ../pgp/seahorse-ldap-source.c:668
+#, c-format
+msgid "Connecting to: %s"
+msgstr "O kennaskañ ouzh : %s"
+
+#: ../pgp/seahorse-hkp-source.c:1005
+msgid "HTTP Key Server"
+msgstr "Servijer an alc'hwezioù HTTP"
+
+#: ../pgp/seahorse-ldap-source.c:459
+#, c-format
+msgid "Couldn't communicate with '%s': %s"
+msgstr "N'haller ket mont e darempred gant '%s' : %s"
 
 #: ../pgp/seahorse-ldap-source.c:641
 #, c-format
@@ -2358,14 +1669,35 @@ msgstr ""
 msgid "Searching for keys containing '%s'..."
 msgstr ""
 
+#: ../pgp/seahorse-ldap-source.c:982
+#, c-format
+msgid "Searching for key id '%s'..."
+msgstr "O klask id alc'hwez '%s' ..."
+
+#: ../pgp/seahorse-ldap-source.c:1087
+msgid "Retrieving remote keys..."
+msgstr "Oc'h adtapout an alc'hwezioù a-bell ..."
+
 #: ../pgp/seahorse-ldap-source.c:1219
 msgid "Sending keys to key server..."
 msgstr ""
 
+#: ../pgp/seahorse-ldap-source.c:1421
+msgid "LDAP Key Server"
+msgstr "Servijer an alc'hwezioù LDAP"
+
+#: ../pgp/seahorse-pgp-commands.c:103
+msgid "_Sign Key..."
+msgstr "_Sinañ an alc'hwez..."
+
+#: ../pgp/seahorse-pgp-commands.c:103
+msgid "Sign public key"
+msgstr "Sinañ an alc'hwez foran"
+
 #: ../pgp/seahorse-pgp-commands.c:171
-#, c-format
+#, fuzzy, c-format
 msgid "Are you sure you want to permanently delete %s?"
-msgstr ""
+msgstr "Ha sur oc'h e fell deoc'h diverkañ \"%s\" da viken?"
 
 #: ../pgp/seahorse-pgp-commands.c:176
 #, c-format
@@ -2382,22 +1714,67 @@ msgstr ""
 msgid "Are you sure you want to permanently delete %d identities?"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-generate.glade.h:1
-#: ../ssh/seahorse-ssh-generate.glade.h:1
+#: ../pgp/seahorse-pgp-generate.xml.h:1
+#: ../ssh/seahorse-ssh-generate.xml.h:1
 msgid "<b>_Advanced key options</b>"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-generate.glade.h:2
+#: ../pgp/seahorse-pgp-generate.xml.h:2
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
 
-#: ../pgp/seahorse-pgp-generate.glade.h:3
+#: ../pgp/seahorse-pgp-generate.xml.h:3
 msgid "Algorithms here"
 msgstr "Treolioù amañ"
 
-#: ../pgp/seahorse-pgp-generate.glade.h:11
+#: ../pgp/seahorse-pgp-generate.xml.h:4
+msgid "C_reate"
+msgstr "K_rouiñ"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:5
+msgid "E_xpiration Date:"
+msgstr "Dei_ziad termen"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:6
+#: ../ssh/seahorse-ssh-generate.xml.h:5
+msgid "Encryption _Type:"
+msgstr "_Rizh an enrinegadur"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:8
+msgid "Generate a new key"
+msgstr "Krouiñ an alc'hwez nevez"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:9
+#: ../ssh/seahorse-ssh-generate.xml.h:7
+msgid "Key _Strength (bits):"
+msgstr "Nerzh an alc'hwez (bits) :"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:10
 msgid "Ne_ver Expires"
 msgstr ""
+
+#: ../pgp/seahorse-pgp-generate.xml.h:11
+msgid "New PGP Key"
+msgstr "Alc'hwez PGP nevez"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:12
+msgid "_Comment:"
+msgstr "_Askelenn :"
+
+#: ../pgp/seahorse-pgp-key.c:201
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+msgid "Private PGP Key"
+msgstr "Alc'hwez PGP prevez"
+
+#: ../pgp/seahorse-pgp-key.c:204
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
+msgid "Public PGP Key"
+msgstr "Alc'hwez PGP foran"
+
+#: ../pgp/seahorse-pgp-key.c:583
+#: ../pgp/seahorse-pgp-key-properties.c:1347
+msgid "Expired"
+msgstr "Diamzeret"
 
 #: ../pgp/seahorse-pgp-key-properties.c:224
 msgid "Couldn't change primary user ID"
@@ -2412,191 +1789,459 @@ msgstr ""
 msgid "Couldn't delete user ID"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:566
+#: ../pgp/seahorse-pgp-key-properties.c:333
+#: ../pgp/seahorse-pgp-key-properties.c:1462
+msgid "[Unknown]"
+msgstr "[Dianav]"
+
+#: ../pgp/seahorse-pgp-key-properties.c:426
+#: ../pgp/seahorse-pgp-key-properties.c:1740
+msgid "Name/Email"
+msgstr "Anv/Postel"
+
+#: ../pgp/seahorse-pgp-key-properties.c:431
+msgid "Signature ID"
+msgstr "ID an sinadur"
+
+#: ../pgp/seahorse-pgp-key-properties.c:552
 msgid "Couldn't change primary photo"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:829
+#: ../pgp/seahorse-pgp-key-properties.c:775
+msgid "(unknown)"
+msgstr "(dianav)"
+
+#: ../pgp/seahorse-pgp-key-properties.c:778
 #, c-format
 msgid "This key expired on: %s"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:997
+#: ../pgp/seahorse-pgp-key-properties.c:946
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:1006
+#: ../pgp/seahorse-pgp-key-properties.c:955
 msgid "Couldn't delete subkey"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:1056
-#: ../src/seahorse-viewer.c:313
+#: ../pgp/seahorse-pgp-key-properties.c:991
+#: ../pgp/seahorse-pgp-key-properties.c:1425
+msgid "Unable to change trust"
+msgstr "N'haller ket kemman ar fiziañs"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1005
+#: ../src/seahorse-viewer.c:315
 #: ../ssh/seahorse-ssh-key-properties.c:167
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:1084
+#: ../pgp/seahorse-pgp-key-properties.c:1033
 #: ../ssh/seahorse-ssh-key-properties.c:191
 msgid "Export Complete Key"
-msgstr ""
+msgstr "E_zporzhiañ an alc'hwez en e bezh"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1109
+#: ../pgp/seahorse-pgp-key-properties.c:1058
 #: ../ssh/seahorse-ssh-key-properties.c:213
 msgid "Couldn't export key."
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:12
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:11
+#: ../pgp/seahorse-pgp-key-properties.c:1265
+#: ../pgp/seahorse-pgp-key-properties.c:1354
+msgctxt "Expires"
+msgid "Never"
+msgstr "Biken"
+
+#. The key type column
+#: ../pgp/seahorse-pgp-key-properties.c:1315
+#: ../src/seahorse-key-manager-store.c:859
+msgid "Type"
+msgstr "Rizh"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1318
+msgid "Created"
+msgstr "Krouet"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1321
+msgid "Expires"
+msgstr "Echuiñ a ra"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1324
+msgid "Status"
+msgstr "Stad"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1327
+msgid "Strength"
+msgstr "Nerzh"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1351
+msgid "Good"
+msgstr "Mad"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
+msgid "<b>Actions</b>"
+msgstr "<b>Obererezhioù</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
+msgid "<b>Comment:</b>"
+msgstr "<b>Askelenn :</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
+msgid "<b>Dates</b>"
+msgstr "<b>deiziadoù</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
+msgid "<b>Email:</b>"
+msgstr "<b>Postel :</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
+msgid "<b>Fingerprint</b>"
+msgstr "<b>Roudoù biz</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
+msgid "<b>Key ID:</b>"
+msgstr "<b>ID an alc'hwez :</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
+msgid "<b>Key Names and Signatures</b>"
+msgstr "<b>Anvioù alc'hwez ha sinadurioù</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
+#: ../ssh/seahorse-ssh-key-properties.xml.h:7
+msgid "<b>Name:</b>"
+msgstr "<b>Anv :</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
+msgid "<b>Photo </b>"
+msgstr "<b>Luc'hskeudenn </b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
+msgid "<b>Technical Details</b>"
+msgstr "<b>Munudoù kalvezel</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:10
+msgid "<b>This key has been revoked</b>"
+msgstr "<b>Dizorniet eo bet an alc'hwez-mañ</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
 msgid "<b>This key has expired</b>"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:18
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:13
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:12
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
+msgid "<b>Type:</b>"
+msgstr "<b>Rizh :</b>"
+
+#. To translators: This is the noun not the verb.
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:15
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
+#: ../ssh/seahorse-ssh-key-properties.xml.h:13
+msgid "<b>Use:</b>"
+msgstr "<b>Implijout :</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
+msgid "<b>_Subkeys</b>"
+msgstr "<b>_Is-alc'hwezioù</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
+msgid "Add"
+msgstr "Ouzhpennañ"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:18
 msgid "Add a photo to this key"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:21
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-key-properties.xml.h:16
+msgid "Change _Passphrase"
+msgstr "Kemmañ al _Lavarenn- tremen"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
 msgid "Decrypt files and email sent to you."
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:24
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:22
+msgid "Delete"
+msgstr "Dilemel"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
 msgid "Expire"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:27
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
+msgid "Expires:"
+msgstr "Echuiñ a ra :"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
+msgid "Export"
+msgstr "Ezporzhiañ"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
 msgid "Go to next photo"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:28
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
 msgid "Go to previous photo"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:31
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
+msgid "Key ID:"
+msgstr "ID an alc'hwez :"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
 msgid "Make this photo the primary photo"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:33
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
+msgid "Names and Signatures"
+msgstr "Anvioù ha sinadurioù"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
+#| msgctxt "Validity"
+#| msgid "Never"
+msgid "Never"
+msgstr "Morse"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:36
 msgid "Override Owner _Trust:"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:37
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
+msgid "Owner"
+msgstr "Perc'henner"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
+msgid "Primary"
+msgstr "Kentañ"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
 msgid "Remove this photo from this key"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.glade.h:41
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:34
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
+msgid "Revoke"
+msgstr "Dizorniañ"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
+msgid "Sign"
+msgstr "Sinañ"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
+msgid "Strength:"
+msgstr "Nerzh :"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:15
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+msgid "_Add Name"
+msgstr "Ouzhpenn_añ an anv"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
+msgid "_Export Complete Key:"
+msgstr "E_zporzhiañ an alc'hwez en e bezh"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
+msgid "<b>Dates:</b>"
+msgstr "<b>deiziadoù :</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
+#: ../ssh/seahorse-ssh-key-properties.xml.h:4
+msgid "<b>Fingerprint:</b>"
+msgstr "<b>Roudoù biz :</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
+msgid "<b>Indicate Trust:</b>"
+msgstr "<b>Diskouez an fiziañs :</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
 msgid "<b>Your trust of this key</b>"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:17
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:16
+msgid "<b>_Other Names:</b>"
+msgstr "<b>Anvioù _all :</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
 msgid "<b>_People who have signed this key:</b>"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:21
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
 msgid "Encrypt files and email to the key's owner "
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
+#| msgid "Full"
+msgid "Fully"
+msgstr "Leun"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
 #, no-c-format
 msgid "I trust signatures from '%s' on other keys"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:26
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:27
 #, no-c-format
 msgid "If you believe that the person that owns this key is '%s', <i>sign</i> this key:"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:28
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:29
 #, no-c-format
 msgid "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:37
-msgid ""
-"Unknown\n"
-"Never\n"
-"Marginally\n"
-"Fully\n"
-"Ultimately"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
+msgid "Marginally"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:42
+#. Trust column
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
+#: ../src/seahorse-key-manager-store.c:853
+msgid "Trust"
+msgstr "Fiziañ"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+msgid "Ultimately"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
 msgid "You _Trust the Owner:"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:43
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.glade.h:44
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
 msgid "_Only display the signatures of people I trust"
 msgstr ""
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+msgid "_Revoke Signature"
+msgstr "Dizo_rniañ an sinadur"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+msgid "_Sign this Key"
+msgstr "_Sinañ an alc'hwez-mañ"
 
 #: ../pgp/seahorse-pgp-subkey.c:371
 #, c-format
 msgid "Subkey %d of %s"
 msgstr ""
 
-#: ../pgp/seahorse-revoke.glade.h:1
+#: ../pgp/seahorse-revoke.xml.h:1
 msgid "Optional description of revocation"
 msgstr ""
 
-#: ../pgp/seahorse-revoke.glade.h:3
+#: ../pgp/seahorse-revoke.xml.h:2
+msgid "Re_voke"
+msgstr "Di_zorniañ"
+
+#: ../pgp/seahorse-revoke.xml.h:3
 msgid "Reason for revoking the key"
 msgstr ""
+
+#: ../pgp/seahorse-revoke.xml.h:6
+msgid "_Reason:"
+msgstr "_Abeg :"
 
 #: ../pgp/seahorse-signer.c:62
 msgid "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:1
+#: ../pgp/seahorse-sign.xml.h:1
 msgid "<b>How carefully have you checked this key?</b>"
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:2
+#: ../pgp/seahorse-sign.xml.h:2
 msgid "<b>How others will see this signature:</b>"
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:4
+#: ../pgp/seahorse-sign.xml.h:3
+msgid "<b>Sign key as:</b>"
+msgstr "<b>Sinañ an alc'hwez evel :</b>"
+
+#: ../pgp/seahorse-sign.xml.h:4
 msgid "<i>Casually:</i> means you have done a casual verification that the key is owned by the person who claims to own it. For example, you could read the key fingerprint to the owner over the phone. "
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:6
+#: ../pgp/seahorse-sign.xml.h:5
+msgid "<i>Key Name</i>"
+msgstr "<i>Anv an alc'hwez</i>"
+
+#: ../pgp/seahorse-sign.xml.h:6
 msgid "<i>Not at all:</i> means you believe the key is owned by the person who claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:7
+#: ../pgp/seahorse-sign.xml.h:7
 msgid "<i>Very Carefully:</i> Select this only if you are absolutely sure that this key is genuine."
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:8
+#: ../pgp/seahorse-sign.xml.h:8
 msgid "By signing you indicate your trust that this key belongs to:"
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:9
+#: ../pgp/seahorse-sign.xml.h:9
 msgid "I can _revoke this signature at a later date."
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:11
+#: ../pgp/seahorse-sign.xml.h:10
+msgid "Sign Key"
+msgstr "Sinañ an alc'hwez"
+
+#: ../pgp/seahorse-sign.xml.h:11
 msgid "You could use a hard to forge photo identification (such as a passport) to personally check that the name on the key is correct. You should have also used email to check that the email address belongs to the owner."
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:12
+#: ../pgp/seahorse-sign.xml.h:12
 msgid "_Casually"
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:14
+#: ../pgp/seahorse-sign.xml.h:13
+msgid "_Not at all"
+msgstr "_Damm ebet"
+
+#: ../pgp/seahorse-sign.xml.h:14
 msgid "_Others may not see this signature"
 msgstr ""
 
-#: ../pgp/seahorse-sign.glade.h:17
+#: ../pgp/seahorse-sign.xml.h:15
+msgid "_Sign"
+msgstr "_Sinañ"
+
+#: ../pgp/seahorse-sign.xml.h:16
+msgid "_Signer:"
+msgstr "_Siner :"
+
+#: ../pgp/seahorse-sign.xml.h:17
 msgid "_Very Carefully"
 msgstr ""
+
+#: ../pgp/seahorse-signer.xml.h:1
+msgid "_Sign message with key:"
+msgstr "_Sinañ ar gemennadenn gant an alc'hwez :"
+
+#: ../pkcs11/seahorse-pkcs11-certificate.c:107
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+msgid "Certificate"
+msgstr "Testeni"
 
 #: ../pkcs11/seahorse-pkcs11-commands.c:108
 #, c-format
@@ -2610,19 +2255,44 @@ msgid_plural "Are you sure you want to delete %d certificates?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/seahorse-change-passphrase.glade.h:2
+#: ../src/seahorse-change-passphrase.xml.h:1
+msgid "Change Passphrase"
+msgstr "Kemmañ al lavarenn-tremen"
+
+#: ../src/seahorse-change-passphrase.xml.h:2
 msgid "Con_firm Passphrase:"
 msgstr "_Kadarnaat ar lavarenn-tremen :"
 
-#: ../src/seahorse-generate-select.glade.h:1
+#: ../src/seahorse-change-passphrase.xml.h:3
+msgid "Confirm new passphrase"
+msgstr "Kadarnaat al lavarenn-tremen nevez"
+
+#: ../src/seahorse-change-passphrase.xml.h:5
+msgid "New _Passphrase:"
+msgstr "_Lavarenn tremen nevez"
+
+#: ../src/seahorse.desktop.in.in.h:1
+msgid "Manage your passwords and encryption keys"
+msgstr "Ardeiñ ho tremengerioù hag alc'hwezioù enrinegañ"
+
+#: ../src/seahorse.desktop.in.in.h:2
+#: ../src/seahorse-key-manager.c:853
+msgid "Passwords and Encryption Keys"
+msgstr "Gerioù-tremen hag alc'hwezioù enrinegañ"
+
+#: ../src/seahorse-generate-select.xml.h:1
 msgid "<b>_Select the type of item to create:</b>"
 msgstr ""
 
-#: ../src/seahorse-generate-select.glade.h:3
+#: ../src/seahorse-generate-select.xml.h:2
+msgid "C_ontinue"
+msgstr "K_enderc'hel"
+
+#: ../src/seahorse-generate-select.xml.h:3
 msgid "Create New ..."
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:245
+#: ../src/seahorse-key-manager.c:233
 #: ../src/seahorse-keyserver-results.c:108
 #, c-format
 msgid "Selected %d key"
@@ -2630,109 +2300,227 @@ msgid_plural "Selected %d keys"
 msgstr[0] "%d alc'hwez diuzet"
 msgstr[1] "%d alc'hwezioù diuzet"
 
-#: ../src/seahorse-key-manager.c:435
-#: ../src/seahorse-keyserver-results.c:199
+#: ../src/seahorse-key-manager.c:404
+#: ../src/seahorse-key-manager.c:464
+#: ../src/seahorse-key-manager.c:527
+#: ../src/seahorse-viewer.c:488
+msgid "Couldn't import keys"
+msgstr "N'em eus ket enporzhiañ an alc'hwezioù"
+
+#: ../src/seahorse-key-manager.c:409
+#: ../src/seahorse-viewer.c:493
 msgid "Imported keys"
 msgstr "Alc'hwezioù enporzhiet"
 
-#: ../src/seahorse-key-manager.c:484
+#: ../src/seahorse-key-manager.c:458
 msgid "Importing keys"
 msgstr "Alc'hwezioù enporzhiet"
 
-#: ../src/seahorse-key-manager.c:553
+#: ../src/seahorse-key-manager.c:481
+#: ../ssh/seahorse-ssh-operation.c:1017
+msgid "Import Key"
+msgstr "Enporzhiañ an alc'hwez"
+
+#: ../src/seahorse-key-manager.c:527
 msgid "Unrecognized key type, or invalid data format"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:751
+#: ../src/seahorse-key-manager.c:721
+#: ../src/seahorse-keyserver-results.c:207
+msgid "_Remote"
+msgstr "A-_bell"
+
+#: ../src/seahorse-key-manager.c:723
+msgid "Close this program"
+msgstr "Serriñ an meziant-mañ"
+
+#: ../src/seahorse-key-manager.c:724
+msgid "_New..."
+msgstr "_Nevez..."
+
+#: ../src/seahorse-key-manager.c:725
 msgid "Create a new key or item"
 msgstr "Krouiñ un alc'hwez pe ergorenn nevez"
 
-#: ../src/seahorse-key-manager.c:753
+#: ../src/seahorse-key-manager.c:726
+msgid "_Import..."
+msgstr "E_nporzhiañ..."
+
+#: ../src/seahorse-key-manager.c:727
 msgid "Import from a file"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:755
+#: ../src/seahorse-key-manager.c:729
 msgid "Import from the clipboard"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:761
-#: ../src/seahorse-keyserver-results.c:256
+#: ../src/seahorse-key-manager.c:734
+#: ../src/seahorse-keyserver-results.c:217
+msgid "_Find Remote Keys..."
+msgstr "_Kavout alc'hwezioù a-bell"
+
+#: ../src/seahorse-key-manager.c:735
+#: ../src/seahorse-keyserver-results.c:218
 msgid "Search for keys on a key server"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:763
+#: ../src/seahorse-key-manager.c:736
+msgid "_Sync and Publish Keys..."
+msgstr "_Sinkronaat ha embann an alc'hwezioù..."
+
+#: ../src/seahorse-key-manager.c:737
 msgid "Publish and/or synchronize your keys with those online."
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:770
+#: ../src/seahorse-key-manager.c:742
+msgid "T_ypes"
+msgstr "R_izhoù"
+
+#: ../src/seahorse-key-manager.c:742
+msgid "Show type column"
+msgstr "Diskouez bann rizh"
+
+#: ../src/seahorse-key-manager.c:744
 msgid "_Expiry"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:770
+#: ../src/seahorse-key-manager.c:744
 msgid "Show expiry column"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:772
+#: ../src/seahorse-key-manager.c:746
+msgid "_Trust"
+msgstr "_Fiziañ"
+
+#: ../src/seahorse-key-manager.c:746
 msgid "Show owner trust column"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:774
+#: ../src/seahorse-key-manager.c:748
+msgid "_Validity"
+msgstr "Tal_voudegezh"
+
+#: ../src/seahorse-key-manager.c:748
 msgid "Show validity column"
 msgstr ""
 
-#: ../src/seahorse-key-manager.glade.h:6
+#: ../src/seahorse-key-manager.c:922
+msgid "Filter:"
+msgstr "Sil :"
+
+#: ../src/seahorse-key-manager.xml.h:1
+msgid "<big><b>First time options:</b></big>"
+msgstr "<big><b>Dibarzhioù ar wech kentañ :</b></big>"
+
+#: ../src/seahorse-key-manager.xml.h:2
+msgid "Generate a new key of your own: "
+msgstr "Krouiñ hoc'h alc'hwez nevez deoc'h-c'hwi : "
+
+#: ../src/seahorse-key-manager.xml.h:3
+msgid "Import existing keys from a file:"
+msgstr "Enporzhiañ un alc'hwez a zo anezhañ diouzh ur restr"
+
+#: ../src/seahorse-key-manager.xml.h:4
+msgid "My _Personal Keys"
+msgstr "Ma alc'hwezioù _personel"
+
+#: ../src/seahorse-key-manager.xml.h:5
+#| msgid "Other _Collected Keys"
+msgid "Other _Keys"
+msgstr "Alc'hwezioù _dastumet all"
+
+#: ../src/seahorse-key-manager.xml.h:6
 msgid "To get started with encryption you will need keys."
 msgstr ""
 
+#: ../src/seahorse-key-manager.xml.h:7
+#: ../src/seahorse-viewer.c:552
+msgid "_Import"
+msgstr "Enporzh_iañ"
+
+#: ../src/seahorse-key-manager.xml.h:8
+msgid "_Passwords"
+msgstr "_Gerioù-tremen"
+
 #: ../src/seahorse-key-manager-store.c:648
-#: ../src/seahorse-viewer.c:280
+#: ../src/seahorse-viewer.c:282
 msgid "Couldn't export keys"
 msgstr ""
 
-#: ../src/seahorse-keyserver-results.c:218
-msgid "Importing keys from key servers"
-msgstr ""
+#: ../src/seahorse-key-manager-store.c:846
+msgid "Validity"
+msgstr "Talvoudegezh"
 
-#: ../src/seahorse-keyserver-results.c:248
+#. Expiry date column
+#: ../src/seahorse-key-manager-store.c:865
+msgid "Expiration Date"
+msgstr "Deiziad termen"
+
+#: ../src/seahorse-keyserver-results.c:209
+msgid "Close this window"
+msgstr "Serriñ ar prenestr-mañ"
+
+#: ../src/seahorse-keyserver-results.c:210
 msgid "_Expand All"
 msgstr ""
 
-#: ../src/seahorse-keyserver-results.c:249
+#: ../src/seahorse-keyserver-results.c:211
 msgid "Expand all listings"
 msgstr ""
 
-#: ../src/seahorse-keyserver-results.c:251
+#: ../src/seahorse-keyserver-results.c:212
+msgid "_Collapse All"
+msgstr "_Bihanaat pep tra"
+
+#: ../src/seahorse-keyserver-results.c:213
 msgid "Collapse all listings"
 msgstr ""
 
-#: ../src/seahorse-keyserver-results.c:261
-msgid "Import selected keys to local key ring"
-msgstr ""
+#: ../src/seahorse-keyserver-results.c:275
+msgid "Remote Keys"
+msgstr "Alc'hwezioù a-bell"
 
-#: ../src/seahorse-keyserver-results.c:320
+#: ../src/seahorse-keyserver-results.c:277
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr ""
 
-#: ../src/seahorse-keyserver-search.glade.h:2
+#: ../src/seahorse-keyserver-search.xml.h:1
+msgid "<b>Key Servers:</b>"
+msgstr "<b>Servijerien an alc'hwezioù :</b>"
+
+#: ../src/seahorse-keyserver-search.xml.h:2
 msgid "<b>Shared Keys Near Me:</b>"
 msgstr ""
 
-#: ../src/seahorse-keyserver-search.glade.h:4
+#: ../src/seahorse-keyserver-search.xml.h:3
+msgid "Find Remote Keys"
+msgstr "Kavout alc'hwezioù a-bell"
+
+#: ../src/seahorse-keyserver-search.xml.h:4
 msgid "This will find keys for others on the Internet. These keys can then be imported into your local key ring."
 msgstr ""
 
-#: ../src/seahorse-keyserver-search.glade.h:5
+#: ../src/seahorse-keyserver-search.xml.h:5
 msgid "Where to search:"
 msgstr ""
 
-#: ../src/seahorse-keyserver-search.glade.h:7
+#: ../src/seahorse-keyserver-search.xml.h:6
+msgid "_Search"
+msgstr "_Klask"
+
+#: ../src/seahorse-keyserver-search.xml.h:7
 msgid "_Search for keys containing: "
 msgstr ""
 
 #: ../src/seahorse-keyserver-sync.c:45
 msgid "Couldn't publish keys to server"
 msgstr ""
+
+#: ../src/seahorse-keyserver-sync.c:61
+#, c-format
+msgid "Couldn't retrieve keys from server: %s"
+msgstr "N'hall ket adtapout an alc'hwezioù diouzh ar servijer : %s"
 
 #: ../src/seahorse-keyserver-sync.c:155
 #, c-format
@@ -2741,59 +2529,172 @@ msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/seahorse-keyserver-sync.glade.h:1
+#: ../src/seahorse-keyserver-sync.c:216
+msgid "Synchronizing keys"
+msgstr "O sinkronaat an alc'hwezioù"
+
+#. Show the progress window if necessary
+#: ../src/seahorse-keyserver-sync.c:248
+msgid "Synchronizing keys..."
+msgstr "O sinkronaat an alc'hwezioù"
+
+#: ../src/seahorse-keyserver-sync.xml.h:1
 msgid "<b>X keys are selected for synchronizing</b>"
 msgstr ""
 
-#: ../src/seahorse-keyserver-sync.glade.h:3
+#: ../src/seahorse-keyserver-sync.xml.h:2
+msgid "Sync Keys"
+msgstr "Sink an alc'hwezioù"
+
+#: ../src/seahorse-keyserver-sync.xml.h:3
 msgid "This will publish the keys in your key ring so they're available for others to use. You'll also get any changes others have made since you received their keys."
 msgstr ""
 
-#: ../src/seahorse-keyserver-sync.glade.h:4
+#: ../src/seahorse-keyserver-sync.xml.h:4
 msgid "This will retrieve any changes others have made since you received their keys. No key server has been chosen for publishing, so your keys will not be made available to others."
 msgstr ""
 
-#: ../src/seahorse-viewer.c:139
+#: ../src/seahorse-keyserver-sync.xml.h:5
+msgid "_Key Servers"
+msgstr "Servijer alc'h_wezioù"
+
+#: ../src/seahorse-keyserver-sync.xml.h:6
+msgid "_Sync"
+msgstr "_Sink"
+
+#: ../src/seahorse-main.c:62
+msgid "Version of this application"
+msgstr "Handelv an arload-mañ"
+
+#: ../src/seahorse-main.c:78
+#: ../src/seahorse-viewer.c:170
+msgid "Encryption Key Manager"
+msgstr "Ardoer alc'hwezioù enrinegañ"
+
+#: ../src/seahorse-viewer.c:141
 msgid "Contributions:"
 msgstr ""
 
+#: ../src/seahorse-viewer.c:172
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Denis ARNAUD https://launchpad.net/~bibar\n"
+"\n"
+"Launchpad Contributions:\n"
+"  Denis https://launchpad.net/~bibar"
+
+#: ../src/seahorse-viewer.c:175
+msgid "Seahorse Project Homepage"
+msgstr "Pennbajenn an Raktres Seahorse"
+
+#. Top menu items
+#: ../src/seahorse-viewer.c:194
+msgid "_File"
+msgstr "_Restr"
+
+#: ../src/seahorse-viewer.c:195
+msgid "_Edit"
+msgstr "_Embann"
+
+#: ../src/seahorse-viewer.c:196
+msgid "_View"
+msgstr "G_welout"
+
+#: ../src/seahorse-viewer.c:197
+msgid "_Help"
+msgstr "_Skoazell"
+
+#: ../src/seahorse-viewer.c:199
+msgid "Prefere_nces"
+msgstr "_Gwellvezioù"
+
+#: ../src/seahorse-viewer.c:200
+msgid "Change preferences for this program"
+msgstr "Kemmañ ar gwellvezioù evit an meziant-mañ"
+
+#: ../src/seahorse-viewer.c:203
+msgid "About this program"
+msgstr "A-zivout an meziant-mañ"
+
+#: ../src/seahorse-viewer.c:204
+msgid "_Contents"
+msgstr "Endal_c'hadoù"
+
+#: ../src/seahorse-viewer.c:205
+msgid "Show Seahorse help"
+msgstr "Diskouez skoazell Seahorse"
+
+#: ../src/seahorse-viewer.c:302
+msgid "Export public key"
+msgstr "Ezporzhiañ an alc'hwez foran"
+
+#: ../src/seahorse-viewer.c:320
+msgid "Exporting keys"
+msgstr "Oc'h ezporzhiañ alc'hwezioù"
+
+#: ../src/seahorse-viewer.c:345
+msgid "Couldn't retrieve data from key server"
+msgstr "N'hall ket adtapout an roadennoù diouzh ar servijer alc'hwez"
+
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:362
+#: ../src/seahorse-viewer.c:364
 msgid "Copied keys"
 msgstr "Alc'hwezioù eilet"
 
-#: ../src/seahorse-viewer.c:382
+#: ../src/seahorse-viewer.c:384
 msgid "Retrieving keys"
 msgstr "Oc'h adtapout an alc'hwezioù"
 
-#: ../src/seahorse-viewer.c:397
+#: ../src/seahorse-viewer.c:399
 msgid "Couldn't delete."
 msgstr ""
 
-#: ../src/seahorse-viewer.c:460
+#: ../src/seahorse-viewer.c:433
+msgid "Deleting..."
+msgstr "O dilemel..."
+
+#: ../src/seahorse-viewer.c:462
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr ""
 
-#: ../src/seahorse-viewer.c:463
+#: ../src/seahorse-viewer.c:465
 msgid "One or more of the deleted keys are private keys. Are you sure you want to proceed?"
 msgstr ""
 
-#: ../src/seahorse-viewer.c:497
+#: ../src/seahorse-viewer.c:513
+msgid "Importing keys from key servers"
+msgstr ""
+
+#: ../src/seahorse-viewer.c:539
 msgid "Show properties"
 msgstr "Diskouez perzhioù"
 
-#: ../src/seahorse-viewer.c:499
+#: ../src/seahorse-viewer.c:540
+msgctxt "This text refers to deleting an item from its type's backing store."
+msgid "_Delete"
+msgstr "_Dilemel"
+
+#: ../src/seahorse-viewer.c:541
 msgid "Delete selected items"
 msgstr ""
 
-#: ../src/seahorse-viewer.c:504
+#: ../src/seahorse-viewer.c:545
+msgid "E_xport..."
+msgstr "E_zporzhiañ..."
+
+#: ../src/seahorse-viewer.c:546
 msgid "Export to a file"
 msgstr ""
 
-#: ../src/seahorse-viewer.c:506
+#: ../src/seahorse-viewer.c:548
 msgid "Copy to the clipboard"
 msgstr "Eilañ er golver"
+
+#: ../src/seahorse-viewer.c:553
+msgid "Import selected keys to local key ring"
+msgstr ""
 
 #: ../ssh/seahorse-ssh-askpass.c:99
 msgid "Enter your Secure Shell passphrase:"
@@ -2820,7 +2721,7 @@ msgstr ""
 #: ../ssh/seahorse-ssh-generate.c:59
 #: ../ssh/seahorse-ssh-key.c:91
 #: ../ssh/seahorse-ssh-key.c:95
-#: ../ssh/seahorse-ssh-key-properties.glade.h:21
+#: ../ssh/seahorse-ssh-key-properties.xml.h:21
 msgid "Secure Shell Key"
 msgstr "Alc'hwez SSH"
 
@@ -2836,29 +2737,61 @@ msgstr ""
 msgid "Creating Secure Shell Key"
 msgstr "Krouiñ un alc'hwez SSH"
 
-#: ../ssh/seahorse-ssh-generate.glade.h:2
+#: ../ssh/seahorse-ssh-generate.xml.h:2
 msgid "<i>Use your email address, and any other reminder you need about what this key is for.</i>"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-generate.glade.h:3
+#: ../ssh/seahorse-ssh-generate.xml.h:3
 msgid "A Secure Shell (SSH) key lets you connect securely to trusted computers using SSH, without entering a different password for each of them."
 msgstr ""
 
-#: ../ssh/seahorse-ssh-generate.glade.h:5
+#: ../ssh/seahorse-ssh-generate.xml.h:4
+msgid "DSA"
+msgstr "DSA"
+
+#: ../ssh/seahorse-ssh-generate.xml.h:6
 msgid "If there is already a computer you want to use this key with, you can set up that computer to recognize your key now. "
 msgstr ""
 
-#: ../ssh/seahorse-ssh-generate.glade.h:8
-msgid "_Create and Set Up"
-msgstr ""
+#: ../ssh/seahorse-ssh-generate.xml.h:8
+msgid "New Secure Shell Key"
+msgstr "Alc'hwez SSH nevez"
 
-#: ../ssh/seahorse-ssh-generate.glade.h:9
+#: ../ssh/seahorse-ssh-generate.xml.h:9
+msgid "RSA"
+msgstr "RSA"
+
+#: ../ssh/seahorse-ssh-generate.xml.h:10
+msgid "_Create and Set Up"
+msgstr "_Krouiñ hag arventenniñ"
+
+#: ../ssh/seahorse-ssh-generate.xml.h:11
 msgid "_Just Create Key"
 msgstr ""
+
+#: ../ssh/seahorse-ssh-generate.xml.h:12
+msgid "_Key Description:"
+msgstr "Deskrivadur an _alc'wez :"
 
 #: ../ssh/seahorse-ssh-key.c:87
 msgid "(Unreadable Secure Shell Key)"
 msgstr ""
+
+#: ../ssh/seahorse-ssh-key.c:105
+msgid "Invalid"
+msgstr "Didalvoudek"
+
+#: ../ssh/seahorse-ssh-key.c:116
+msgid "Private Secure Shell Key"
+msgstr "Alc'hwez SSH prevez"
+
+#: ../ssh/seahorse-ssh-key.c:119
+msgid "Public Secure Shell Key"
+msgstr "Alc'hwez SSH foran"
+
+#: ../ssh/seahorse-ssh-key-properties.c:71
+msgid "Couldn't rename key."
+msgstr "N'em eus ket adenvel an alc'hwez"
 
 #: ../ssh/seahorse-ssh-key-properties.c:112
 msgid "Couldn't change authorization for key."
@@ -2868,16 +2801,48 @@ msgstr ""
 msgid "Couldn't change passphrase for key."
 msgstr ""
 
-#: ../ssh/seahorse-ssh-key-properties.glade.h:15
+#: ../ssh/seahorse-ssh-key-properties.xml.h:1
+msgid "/home/nate/.ssh/blah_rsa"
+msgstr "/home/nate/.ssh/blah_rsa"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:2
+msgid "00:00:00:00:00"
+msgstr "00:00:00:00:00"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
+msgid "<b>Algorithm:</b>"
+msgstr "<b>Treol :</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:5
+msgid "<b>Identifier:</b>"
+msgstr "<b>Naoudi :</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:6
+msgid "<b>Location:</b>"
+msgstr "<b>Lec'hiadur :</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:8
+msgid "<b>Strength:</b>"
+msgstr "<b>Nerzh :</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:10
+msgid "<b>Trust</b>"
+msgstr "<b>Fiziañs</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:15
 #, no-c-format
 msgid "<i>This only applies to the '%s'</i> account."
 msgstr ""
 
-#: ../ssh/seahorse-ssh-key-properties.glade.h:22
+#: ../ssh/seahorse-ssh-key-properties.xml.h:18
+msgid "E_xport Complete Key"
+msgstr "E_zporzhiañ an alc'hwez en e bezh"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:22
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-key-properties.glade.h:23
+#: ../ssh/seahorse-ssh-key-properties.xml.h:23
 msgid "Used to connect to other computers."
 msgstr ""
 
@@ -2887,6 +2852,64 @@ msgstr ""
 msgid "The SSH command was terminated unexpectedly."
 msgstr ""
 
+#: ../ssh/seahorse-ssh-operation.c:151
+#: ../ssh/seahorse-ssh-operation.c:739
+msgid "The SSH command failed."
+msgstr "Sac'het eo an urzhiad SSH"
+
+#: ../ssh/seahorse-ssh-operation.c:445
+#: ../ssh/seahorse-ssh-operation.c:477
+msgid "Secure Shell key"
+msgstr "Alc'hwez SSH"
+
+#: ../ssh/seahorse-ssh-operation.c:448
+msgid "Passphrase:"
+msgstr "Lavarenn-tremen :"
+
+#. Just prompt over and over again
+#: ../ssh/seahorse-ssh-operation.c:762
+msgid "Remote Host Password"
+msgstr "Ger tremen ostiz a-bell"
+
+#: ../ssh/seahorse-ssh-operation.c:850
+msgid "Old Key Passphrase"
+msgstr "Lavarenn-tremen kozh alc'hwez"
+
+#: ../ssh/seahorse-ssh-operation.c:851
+#, c-format
+msgid "Enter the old passphrase for: %s"
+msgstr "Roit al lavarenn-tremen kozh evit : %s"
+
+#: ../ssh/seahorse-ssh-operation.c:855
+msgid "New Key Passphrase"
+msgstr "Lavarenn-tremen nevez alc'hwez"
+
+#: ../ssh/seahorse-ssh-operation.c:856
+#, c-format
+msgid "Enter the new passphrase for: %s"
+msgstr "Roit al lavarenn-tremen nevez evit : %s"
+
+#: ../ssh/seahorse-ssh-operation.c:864
+msgid "Enter Key Passphrase"
+msgstr "Roit lavarenn-tremen alc'hwez"
+
+#: ../ssh/seahorse-ssh-operation.c:931
+msgid "Passphrase for New Secure Shell Key"
+msgstr "Lavarenn tremen evit an alc'hwez SSH nevez"
+
+#: ../ssh/seahorse-ssh-operation.c:932
+msgid "Enter a passphrase for your new Secure Shell key."
+msgstr "Roit al lavarenn tremen evit hoc'h alc'hwez SSH nevez."
+
+#: ../ssh/seahorse-ssh-operation.c:1013
+#, c-format
+msgid "Importing key: %s"
+msgstr "Oc'h enporzhiañ alc'hwezioù : %s"
+
+#: ../ssh/seahorse-ssh-operation.c:1015
+msgid "Importing key. Enter passphrase"
+msgstr "Oc'h enporzhiañ alc'hwezioù. Roit an lavarenn tremen"
+
 #: ../ssh/seahorse-ssh-source.c:825
 msgid "No private key file is available for this key."
 msgstr ""
@@ -2895,11 +2918,49 @@ msgstr ""
 msgid "Couldn't configure Secure Shell keys on remote computer."
 msgstr ""
 
-#: ../ssh/seahorse-ssh-upload.glade.h:2
+#. Show the progress window if necessary
+#: ../ssh/seahorse-ssh-upload.c:181
+msgid "Configuring Secure Shell Keys..."
+msgstr "O kefluniañ alc'hwezioù SSH..."
+
+#: ../ssh/seahorse-ssh-upload.xml.h:1
+msgid "<i>eg: fileserver.example.com:port</i>"
+msgstr "<i>sk : dafariadrestrou.skouer.com:porzh</i>"
+
+#: ../ssh/seahorse-ssh-upload.xml.h:2
 msgid "Set Up Computer for SSH Connection"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-upload.glade.h:4
+#: ../ssh/seahorse-ssh-upload.xml.h:4
 msgid "To use your Secure Shell key with another computer that uses SSH, you must already have a login account on that computer."
 msgstr ""
+
+#: ../ssh/seahorse-ssh-upload.xml.h:5
+msgid "_Computer Name:"
+msgstr "Anv an _urzhiataer :"
+
+#: ../ssh/seahorse-ssh-upload.xml.h:6
+msgid "_Login Name:"
+msgstr "Anv ar_veriad :"
+
+#: ../ssh/seahorse-ssh-upload.xml.h:7
+msgid "_Set Up"
+msgstr "_Arventennoù"
+
+#~ msgid "Create a PGP Key"
+#~ msgstr "Krouiñ un alc'hwez PGP"
+#~ msgid ""
+#~ "Unknown\n"
+#~ "Never\n"
+#~ "Marginal\n"
+#~ "Full\n"
+#~ "Ultimate"
+#~ msgstr ""
+#~ "Dianav\n"
+#~ "Biken\n"
+#~ "A eil izel\n"
+#~ "Leun\n"
+#~ "Diharz"
+#~ msgid "_Trusted Keys"
+#~ msgstr "Alc'hwezioù a _fiziañs"
 
