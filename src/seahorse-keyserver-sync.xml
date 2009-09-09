@@ -1,210 +1,173 @@
 <?xml version="1.0"?>
-<!--*- mode: xml -*-->
 <interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkImage" id="configure-image">
     <property name="stock">gtk-properties</property>
-    <property name="icon_size">4</property>
   </object>
   <object class="GtkImage" id="sync-image">
     <property name="stock">gtk-refresh</property>
-    <property name="icon_size">4</property>
   </object>
   <object class="GtkDialog" id="keyserver-sync">
-    <property name="border_width">5</property>
     <property name="visible">True</property>
+    <property name="border_width">5</property>
     <property name="title" translatable="yes">Sync Keys</property>
-    <property name="type">GTK_WINDOW_TOPLEVEL</property>
-    <property name="window_position">GTK_WIN_POS_CENTER</property>
-    <property name="modal">False</property>
-    <property name="resizable">True</property>
-    <property name="destroy_with_parent">False</property>
-    <property name="decorated">True</property>
-    <property name="skip_taskbar_hint">False</property>
-    <property name="skip_pager_hint">False</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
-    <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-    <property name="focus_on_map">True</property>
-    <property name="urgency_hint">False</property>
+    <property name="window_position">center</property>
+    <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
-        <property name="homogeneous">False</property>
         <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
-            <child>
-              <object class="GtkButton" id="configure">
-                <property name="visible">True</property>
-                <property name="can_default">True</property>
-                <property name="can_focus">True</property>
-                <property name="relief">GTK_RELIEF_NORMAL</property>
-                <property name="focus_on_click">True</property>
-                <property name="image">configure-image</property>
-                <property name="label" translatable="yes">_Key Servers</property>
-                <property name="use_underline">True</property>
-                <signal handler="on_sync_configure_clicked" last_modification_time="Sun, 03 Apr 2005 22:45:26 GMT" name="clicked"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="button3">
-                <property name="visible">True</property>
-                <property name="can_default">True</property>
-                <property name="can_focus">True</property>
-                <property name="label">gtk-cancel</property>
-                <property name="use_stock">True</property>
-                <property name="relief">GTK_RELIEF_NORMAL</property>
-                <property name="focus_on_click">True</property>
-                <signal handler="on_widget_closed" last_modification_time="Wed, 31 Dec 2003 03:32:28 GMT" name="clicked"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="sync-button">
-                <property name="visible">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
-                <property name="relief">GTK_RELIEF_NORMAL</property>
-                <property name="focus_on_click">True</property>
-                <property name="image">sync-image</property>
-                <property name="label" translatable="yes">_Sync</property>
-                <property name="use_underline">True</property>
-                <signal handler="on_sync_ok_clicked" last_modification_time="Wed, 31 Dec 2003 00:41:45 GMT" name="clicked"/>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="padding">0</property>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">GTK_PACK_END</property>
-          </packing>
-        </child>
         <child>
           <object class="GtkVBox" id="vbox1">
-            <property name="border_width">5</property>
             <property name="visible">True</property>
-            <property name="homogeneous">False</property>
+            <property name="border_width">5</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkHBox" id="hbox2">
                 <property name="visible">True</property>
-                <property name="homogeneous">False</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkImage" id="image2">
                     <property name="visible">True</property>
-                    <property name="stock">gtk-network</property>
-                    <property name="icon_size">5</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
-                    <property name="xpad">0</property>
-                    <property name="ypad">0</property>
+                    <property name="stock">gtk-network</property>
+                    <property name="icon-size">5</property>
                   </object>
                   <packing>
-                    <property name="padding">0</property>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkVBox" id="vbox2">
                     <property name="visible">True</property>
-                    <property name="homogeneous">False</property>
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="publish-message">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">This will publish the keys in your key ring so they're available for others to use. You'll also get any changes others have made since you received their keys.</property>
-                        <property name="use_underline">False</property>
-                        <property name="use_markup">False</property>
-                        <property name="justify">GTK_JUSTIFY_LEFT</property>
-                        <property name="wrap">True</property>
-                        <property name="selectable">False</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0</property>
-                        <property name="xpad">0</property>
-                        <property name="ypad">0</property>
-                        <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-                        <property name="width_chars">-1</property>
-                        <property name="single_line_mode">False</property>
-                        <property name="angle">0</property>
+                        <property name="label" translatable="yes">This will publish the keys in your key ring so they're available for others to use. You'll also get any changes others have made since you received their keys.</property>
+                        <property name="wrap">True</property>
                       </object>
                       <packing>
-                        <property name="padding">0</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="sync-message">
-                        <property name="label" translatable="yes">This will retrieve any changes others have made since you received their keys. No key server has been chosen for publishing, so your keys will not be made available to others.</property>
-                        <property name="use_underline">False</property>
-                        <property name="use_markup">False</property>
-                        <property name="justify">GTK_JUSTIFY_LEFT</property>
-                        <property name="wrap">True</property>
-                        <property name="selectable">False</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0</property>
-                        <property name="xpad">0</property>
-                        <property name="ypad">0</property>
-                        <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-                        <property name="width_chars">-1</property>
-                        <property name="single_line_mode">False</property>
-                        <property name="angle">0</property>
+                        <property name="label" translatable="yes">This will retrieve any changes others have made since you received their keys. No key server has been chosen for publishing, so your keys will not be made available to others.</property>
+                        <property name="wrap">True</property>
                       </object>
                       <packing>
-                        <property name="padding">0</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="detail-message">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;X keys are selected for synchronizing&lt;/b&gt;</property>
-                        <property name="use_underline">False</property>
-                        <property name="use_markup">True</property>
-                        <property name="justify">GTK_JUSTIFY_LEFT</property>
-                        <property name="wrap">True</property>
-                        <property name="selectable">False</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0</property>
-                        <property name="xpad">0</property>
-                        <property name="ypad">0</property>
-                        <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-                        <property name="width_chars">-1</property>
-                        <property name="single_line_mode">False</property>
-                        <property name="angle">0</property>
+                        <property name="label" translatable="yes">&lt;b&gt;X keys are selected for synchronizing&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="wrap">True</property>
                       </object>
                       <packing>
-                        <property name="padding">0</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="padding">0</property>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="padding">0</property>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
+                <property name="position">0</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="padding">0</property>
             <property name="expand">False</property>
-            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area1">
+            <property name="visible">True</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="configure">
+                <property name="label" translatable="yes">_Key Servers</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="image">configure-image</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="on_sync_configure_clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button3">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_widget_closed"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="sync-button">
+                <property name="label" translatable="yes">_Sync</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="image">sync-image</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="on_sync_ok_clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>
