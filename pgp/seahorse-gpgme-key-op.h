@@ -34,7 +34,13 @@
 #include "pgp/seahorse-gpgme-source.h"
 #include "pgp/seahorse-gpgme-photo.h"
 
-/* Key type options. */
+/* 
+ * Key type options. 
+ * Sadly these are not consistent between versions of GPG.
+ */
+#if ( GPG_MAJOR_VERSION == 2 &&   GPG_MINOR_VERSION == 0 && GPG_MICRO_VERSION < 12 ) || \
+    ( GPG_MAJOR_VERSION == 1 && ( GPG_MINOR_VERSION <  4 || GPG_MICRO_VERSION < 10 ) )
+
 typedef enum {
 	/* DSA key with ElGamal subkey. The DSA key will have length of 1024,
 	 * while the ElGamal length is variable within #ELGAMAL_MIN and
@@ -58,6 +64,19 @@ typedef enum {
 	 */
 	RSA_ENCRYPT = 6
 } SeahorseKeyEncType;
+
+#else /* GPG version >=1.4.10 or >=2.0.12 */
+
+typedef enum {
+	RSA_RSA = 1,
+	DSA_ELGAMAL = 2,
+	DSA = 3,
+	RSA_SIGN = 4,
+	ELGAMAL = 5,
+	RSA_ENCRYPT = 6
+} SeahorseKeyEncType;
+
+#endif /* GPG version >=1.4.10 or >=2.0.12 */
 
 /* Length ranges for key types */
 typedef enum {
