@@ -27,6 +27,19 @@
 
 #include <glib/gi18n.h>
 
+/**
+ * SECTION:seahorse-gpgme
+ * @short_description: gpgme specific error and data conversion functions
+ * @include:seahorse-gpgme.h
+ *
+ **/
+
+/**
+ * seahorse_gpgme_error_domain:
+ *
+ *
+ * Returns: A Quark with the content "seahorse-gpgme-error"
+ */
 GQuark
 seahorse_gpgme_error_domain (void)
 {
@@ -36,6 +49,14 @@ seahorse_gpgme_error_domain (void)
 	return q;
 }
 
+/**
+ * seahorse_gpgme_to_error:
+ * @gerr: The gpgme error
+ * @err: The glib error to create
+ *
+ * Creates a glib error out of a gpgme error
+ *
+ */
 void    
 seahorse_gpgme_to_error (gpgme_error_t gerr, GError** err)
 {
@@ -55,6 +76,19 @@ seahorse_gpgme_to_error (gpgme_error_t gerr, GError** err)
     	}
 }
 
+/**
+ * seahorse_gpgme_handle_error:
+ * @err: the gpgme error to handle (display)
+ * @desc: a printf formated string
+ * @...: varargs to fill into this string
+ *
+ * Creates the heading of an error out of desc and the varargs. Displays the error
+ *
+ * The content of the error box is supported by gpgme (#gpgme_strerror)
+ *
+ * Some errors are not displayed.
+ *
+ */
 void
 seahorse_gpgme_handle_error (gpgme_error_t err, const char* desc, ...)
 {
@@ -81,6 +115,14 @@ seahorse_gpgme_handle_error (gpgme_error_t err, const char* desc, ...)
 	g_free(t);
 }
 
+/**
+ * ref_return_key:
+ * @key: the gpgme key
+ *
+ * Acquires an additional gpgme reference for the key
+ *
+ * Returns: the key
+ */
 static gpgme_key_t
 ref_return_key (gpgme_key_t key)
 {
@@ -88,7 +130,13 @@ ref_return_key (gpgme_key_t key)
 	return key;
 }
 
-
+/**
+ * seahorse_gpgme_boxed_key_type:
+ *
+ * Creates a new boxed type "gpgme_key_t"
+ *
+ * Returns: the new boxed type
+ */
 GType
 seahorse_gpgme_boxed_key_type (void)
 {
@@ -100,6 +148,14 @@ seahorse_gpgme_boxed_key_type (void)
 	return type;
 }
 
+/**
+ * seahorse_gpgme_convert_validity:
+ * @validity: the gpgme validity of a key
+ *
+ * converts the gpgme validity to the seahorse validity
+ *
+ * Returns: The seahorse validity
+ */
 SeahorseValidity
 seahorse_gpgme_convert_validity (gpgme_validity_t validity)
 {
