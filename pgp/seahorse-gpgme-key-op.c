@@ -296,7 +296,7 @@ edit_gpgme_key (gpgme_ctx_t ctx, gpgme_key_t key, SeahorseEditParm *parms)
 	/* do edit callback, release data */
 	gerr = gpgme_op_edit (ctx, key, seahorse_gpgme_key_op_edit, parms, out);
 
-	if (gpgme_err_code (gerr) == GPG_ERR_CANCELED) {
+	if (gpgme_err_code (gerr) == GPG_ERR_BAD_PASSPHRASE) {
 		seahorse_util_show_error(NULL, _("Wrong password"), _("This was the third time you entered a wrong password. Please try again."));
 	}
 	
@@ -648,7 +648,7 @@ edit_pass_transit (guint current_state, gpgme_status_code_t status,
         
         /* If all tries for passphrase were wrong, we get here */
         else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT)) {
-            *err = GPG_E (GPG_ERR_CANCELED);
+            *err = GPG_E (GPG_ERR_BAD_PASSPHRASE);
             next_state = PASS_ERROR;
         
         /* No idea how we got here ... */
