@@ -80,7 +80,7 @@ seahorse_view_register_commands (SeahorseView *self, SeahorseObjectPredicate *pr
                                  SeahorseCommands *commands)
 {
 	g_return_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->register_commands);
-	return SEAHORSE_VIEW_GET_INTERFACE (self)->register_commands (self, pred, commands);
+	SEAHORSE_VIEW_GET_INTERFACE (self)->register_commands (self, pred, commands);
 }
 
 void
@@ -88,7 +88,7 @@ seahorse_view_register_ui (SeahorseView *self, SeahorseObjectPredicate *pred,
                            const gchar *ui_definition, GtkActionGroup *actions)
 {
 	g_return_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->register_ui);
-	return SEAHORSE_VIEW_GET_INTERFACE (self)->register_ui (self, pred, ui_definition, actions);
+	SEAHORSE_VIEW_GET_INTERFACE (self)->register_ui (self, pred, ui_definition, actions);
 }
 
 static void 
