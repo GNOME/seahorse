@@ -44,10 +44,24 @@
 
 #include "common/seahorse-registry.h"
 
+/**
+ * SECTION:seahorse-gpgme-generate
+ * @short_description: This file contains creation dialogs for pgp key creation.
+ *
+ **/
+
 /* --------------------------------------------------------------------------
  * ACTIONS
  */
 
+/**
+ * on_pgp_generate_key:
+ * @action: verified to be an action, not more
+ * @unused: not used
+ *
+ * Calls the function that displays the key creation dialog
+ *
+ */
 static void
 on_pgp_generate_key (GtkAction *action, gpointer unused)
 {
@@ -66,6 +80,12 @@ static const GtkActionEntry ACTION_ENTRIES[] = {
 	  N_("Used to encrypt email and files"), G_CALLBACK (on_pgp_generate_key) }
 };
 
+/**
+ * seahorse_gpgme_generate_register:
+ *
+ * Registers the action group for the pgp key creation dialog
+ *
+ */
 void
 seahorse_gpgme_generate_register (void)
 {
@@ -97,6 +117,13 @@ static AlgorithmDesc available_algorithms[] = {
     { N_("RSA (sign only)"), RSA_SIGN,    RSA_MIN,     LENGTH_MAX  }
 };
 
+/**
+ * completion_handler:
+ * @op: the seahorse operation
+ * @data: ignored
+ *
+ * If the key generation caused errors, these will be displayed in this function
+ */
 static void
 completion_handler (SeahorseOperation *op, gpointer data)
 {
@@ -108,6 +135,13 @@ completion_handler (SeahorseOperation *op, gpointer data)
     }
 }
 
+
+/**
+ * get_expiry_date:
+ * @swidget: the seahorse main widget
+ *
+ * Returns: the expiry date widget
+ */
 static GtkWidget *
 get_expiry_date (SeahorseWidget *swidget)
 {
@@ -130,6 +164,16 @@ get_expiry_date (SeahorseWidget *swidget)
     return widget;
 }
 
+/**
+ * on_gpgme_generate_response:
+ * @dialog:
+ * @response: the user's response
+ * @swidget: the seahorse main widget
+ *
+ * If everything is allright, a passphrase is requested and the key will be
+ * generated
+ *
+ */
 G_MODULE_EXPORT void
 on_gpgme_generate_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
 {
@@ -233,6 +277,14 @@ on_gpgme_generate_response (GtkDialog *dialog, guint response, SeahorseWidget *s
     g_free (name);
 }
 
+/**
+ * on_gpgme_generate_entry_changed:
+ * @editable: ignored
+ * @swidget: The main seahorse widget
+ *
+ * If the name has more than 5 characters, this sets the ok button sensitive
+ *
+ */
 G_MODULE_EXPORT void
 on_gpgme_generate_entry_changed (GtkEditable *editable, SeahorseWidget *swidget)
 {
@@ -251,6 +303,13 @@ on_gpgme_generate_entry_changed (GtkEditable *editable, SeahorseWidget *swidget)
     g_free (name);
 }
 
+/**
+ * on_gpgme_generate_expires_toggled:
+ * @button: the toggle button
+ * @swidget: Main seahorse widget
+ *
+ * Handles the expires toggle button feedback
+ */
 G_MODULE_EXPORT void
 on_gpgme_generate_expires_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
 {
@@ -262,6 +321,14 @@ on_gpgme_generate_expires_toggled (GtkToggleButton *button, SeahorseWidget *swid
     gtk_widget_set_sensitive (widget, !gtk_toggle_button_get_active (button));
 }
 
+/**
+ * on_gpgme_generate_algorithm_changed:
+ * @combo: the algorithm combo
+ * @swidget: the main seahorse widget
+ *
+ * Sets the bit range depending on the algorithm set
+ *
+ */
 G_MODULE_EXPORT void
 on_gpgme_generate_algorithm_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 {
@@ -279,6 +346,14 @@ on_gpgme_generate_algorithm_changed (GtkComboBox *combo, SeahorseWidget *swidget
                                available_algorithms[idx].max);
 }
 
+/**
+ * seahorse_gpgme_generate_show:
+ * @sksrc: the gpgme source
+ * @parent: the parent window
+ *
+ * Shows the gpg key generation dialog, sets default entries.
+ *
+ */
 void
 seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent)
 {
