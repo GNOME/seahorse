@@ -108,15 +108,6 @@ value_equal (const GValue *a, const GValue *b)
 		else
 			retval = FALSE;
 		break;
-	case G_TYPE_ENUM:
-		/* this is somewhat bogus. */
-		if (g_value_get_enum (a) < g_value_get_enum (b))
-			retval = FALSE;
-		else if (g_value_get_enum (a) == g_value_get_enum (b))
-			retval = TRUE;
-		else
-			retval = FALSE;
-		break;
 	case G_TYPE_FLAGS:
 		/* this is even more bogus. */
 		if (g_value_get_flags (a) < g_value_get_flags (b))
@@ -162,8 +153,12 @@ value_equal (const GValue *a, const GValue *b)
 		retval = (g_value_get_object (a) == g_value_get_object (b));
 		break;
 	default:
-		/* Default case is not equal */
-		retval = FALSE;
+        if (G_VALUE_HOLDS_ENUM (a)) {
+            retval = (g_value_get_enum (a) == g_value_get_enum (b));
+        } else {
+            /* Default case is not equal */
+            retval = FALSE;
+        }
 		break;
 	}
 	
