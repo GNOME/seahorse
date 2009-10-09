@@ -381,7 +381,7 @@ seahorse_object_dispose (GObject *obj)
 {
 	SeahorseObject *self = SEAHORSE_OBJECT (obj);
 	SeahorseObject *parent;
-	GList *l;
+	GList *l, *children;
 	
 	if (self->pv->context != NULL) {
 		seahorse_context_remove_object (self->pv->context, self);
@@ -407,11 +407,13 @@ seahorse_object_dispose (GObject *obj)
 	parent = self->pv->parent;
 	if (parent)
 		g_object_ref (parent);
-	
-	for (l = self->pv->children; l; l = g_list_next (l)) {
+
+	children = g_list_copy (self->pv->children);
+	for (l = children; l; l = g_list_next (l)) {
 		g_return_if_fail (SEAHORSE_IS_OBJECT (l->data));
 		seahorse_object_set_parent (l->data, parent);
 	}
+	g_list_free (children);
 
 	if (parent)
 		g_object_unref (parent);
