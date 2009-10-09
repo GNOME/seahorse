@@ -530,6 +530,11 @@ PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-2.0 >= 2.10.0 gconf-2.0)
 cryptuitargetlib=libcryptui.la
 AC_SUBST(cryptuitargetlib)
 
+LIBCRYPTUI_CFLAGS="$LIBCRYPTUI_CFLAGS $DBUS_CFLAGS"
+LIBCRYPTUI_LIBS="$LIBCRYPTUI_CFLAGS $DBUS_LIBS"
+AC_SUBST(LIBCRYPTUI_CFLAGS)
+AC_SUBST(LIBCRYPTUI_LIBS)
+
 GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
 ATK_PREFIX="`$PKG_CONFIG --variable=prefix atk`"
 PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
@@ -539,9 +544,6 @@ AC_SUBST(GLIB_PREFIX)
 AC_SUBST(ATK_PREFIX)
 AC_SUBST(PANGO_PREFIX)
 AC_SUBST(CAIRO_PREFIX) 
-
-AC_SUBST(LIBCRYPTUI_CFLAGS)
-AC_SUBST(LIBCRYPTUI_LIBS)
 
 dnl ****************************************************************************
 
