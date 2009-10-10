@@ -38,8 +38,8 @@
  * Key type options. 
  * Sadly these are not consistent between versions of GPG.
  */
-#if ( GPG_MAJOR_VERSION == 2 &&   GPG_MINOR_VERSION == 0 && GPG_MICRO_VERSION < 12 ) || \
-    ( GPG_MAJOR_VERSION == 1 && ( GPG_MINOR_VERSION <  4 || GPG_MICRO_VERSION < 10 ) )
+#if ( GPG_MAJOR == 2 &&   GPG_MINOR == 0 && GPG_MICRO < 12 ) || \
+    ( GPG_MAJOR == 1 && ( GPG_MINOR <  4 || GPG_MICRO < 10 ) )
 
 typedef enum {
 	/* DSA key with ElGamal subkey. The DSA key will have length of 1024,
