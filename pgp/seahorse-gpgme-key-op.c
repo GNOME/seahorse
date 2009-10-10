@@ -144,7 +144,7 @@ seahorse_gpgme_key_op_generate (SeahorseGpgmeSource *psrc, const gchar *name,
     /* Subkey xml */
     if (type == DSA_ELGAMAL)
         parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\n%s",
-                                 start, DSA_MAX, length, common);
+                                 start, (length < DSA_MAX) ? length : DSA_MAX, length, common);
     else
         parms = g_strdup_printf ("%s%d\n%s", start, length, common);
 

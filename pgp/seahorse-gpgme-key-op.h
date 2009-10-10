@@ -42,9 +42,10 @@
     ( GPG_MAJOR == 1 && ( GPG_MINOR <  4 || GPG_MICRO < 10 ) )
 
 typedef enum {
-	/* DSA key with ElGamal subkey. The DSA key will have length of 1024,
-	 * while the ElGamal length is variable within #ELGAMAL_MIN and
-	 * #LENGTH_MAX. Only used in seahorse_ops_key_generate().
+	/* DSA key with ElGamal subkey. The ElGamal length is variable
+	 * within #ELGAMAL_MIN and #LENGTH_MAX. The DSA key will have a
+	 * length equal to the ElGamal key's up to a limit of #DSA_MAX.
+	 * Only used in seahorse_ops_key_generate().
 	 */
 	DSA_ELGAMAL = 1,
 	/* DSA key, sign only. Can be a subkey or a primary key.
@@ -83,7 +84,12 @@ typedef enum {
 	/* Minimum length for #DSA. */
 	DSA_MIN = 768,
 	/* Maximum length for #DSA. */
+#if ( GPG_MAJOR == 2 &&   GPG_MINOR == 0 && GPG_MICRO < 12 ) || \
+    ( GPG_MAJOR == 1 && ( GPG_MINOR <  4 || GPG_MICRO < 10 ) )
 	DSA_MAX = 1024,
+#else
+	DSA_MAX = 3072,
+#endif
 	/* Minimum length for #ELGAMAL. Maximum length is #LENGTH_MAX. */
 	ELGAMAL_MIN = 768,
 	/* Minimum length of #RSA_SIGN and #RSA_ENCRYPT. Maximum length is
