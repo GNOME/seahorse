@@ -135,15 +135,15 @@ seahorse_gpgme_key_op_generate (SeahorseGpgmeSource *psrc, const gchar *name,
         common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
 
     if (type == RSA_SIGN)
-        key_type = "Key-Type: RSA";
+        key_type = "Key-Type: RSA\nKey-Usage: sign";
     else
-        key_type = "Key-Type: DSA";
+        key_type = "Key-Type: DSA\nKey-Usage: sign";
 
     start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
 
     /* Subkey xml */
     if (type == DSA_ELGAMAL)
-        parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\n%s",
+        parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
                                  start, (length < DSA_MAX) ? length : DSA_MAX, length, common);
     else
         parms = g_strdup_printf ("%s%d\n%s", start, length, common);
