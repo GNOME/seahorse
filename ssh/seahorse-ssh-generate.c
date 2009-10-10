@@ -217,21 +217,22 @@ seahorse_ssh_generate_show (SeahorseSSHSource *src, GtkWindow *parent)
     /* Widget already present */
     if (swidget == NULL)
         return;
-    
+
+    g_object_ref (src);
+    g_object_set_data_full (G_OBJECT (swidget), "source", src, g_object_unref);
+
+    g_signal_connect (G_OBJECT (seahorse_widget_get_widget (swidget, "algorithm-choice")), "changed", 
+                    G_CALLBACK (on_change), swidget);
+
+    g_signal_connect (seahorse_widget_get_toplevel (swidget), "response", 
+                    G_CALLBACK (on_response), swidget);
+
     widget = seahorse_widget_get_widget (swidget, "ssh-image");
     g_return_if_fail (widget != NULL);
     gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_KEY_SSH, GTK_ICON_SIZE_DIALOG);
-    
+
+    /* on_change() gets called, bits entry is setup */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
     g_return_if_fail (widget != NULL);
     gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-    
-    g_object_ref (src);
-    g_object_set_data_full (G_OBJECT (swidget), "source", src, g_object_unref);
-    
-    g_signal_connect (G_OBJECT (seahorse_widget_get_widget (swidget, "algorithm-choice")), "changed", 
-                    G_CALLBACK (on_change), swidget);
-    
-    g_signal_connect (seahorse_widget_get_toplevel (swidget), "response", 
-                    G_CALLBACK (on_response), swidget);
 }
