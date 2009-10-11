@@ -44,14 +44,20 @@
 G_DEFINE_TYPE (SeahorseService, seahorse_service, G_TYPE_OBJECT);
 
 /**
-* copy_to_array:
-* @type: a string (#gchar)
-* @dummy: not used
-* @a: an array (#GArray)
+ * SECTION:seahorse-service
+ * @short_description: Seahorse service DBus methods. The other DBus methods can
+ * be found in other files
+ * @include:seahorse-service.h
+ *
+ **/
+
+/**
+* type: a string (gchar)
+* dummy: not used
+* a: an array (GArray)
 *
-* Adds a copy of @type to @a
+* Adds a copy of "type" to "a"
 *
-* Returns:
 */
 static void
 copy_to_array (const gchar *type, gpointer dummy, GArray *a)
@@ -61,11 +67,10 @@ copy_to_array (const gchar *type, gpointer dummy, GArray *a)
 }
 
 /**
-* add_key_source:
-* @svc: the seahorse context
-* @ktype: the key source to add
+* svc: the seahorse context
+* ktype: the key source to add
 *
-* Adds DBus ids for the keysets. The keysets @ktype of the service will be set to the
+* Adds DBus ids for the keysets. The keysets "ktype" of the service will be set to the
 * local keyset.
 *
 */
@@ -109,6 +114,7 @@ add_key_source (SeahorseService *svc, GQuark ktype)
 *
 * DBus: GetKeyTypes
 *
+* Returns all available keytypes
 *
 * Returns: True
 */
@@ -156,6 +162,20 @@ seahorse_service_get_keyset (SeahorseService *svc, gchar *ktype,
     return TRUE;
 }
 
+/**
+* seahorse_service_import_keys:
+* @svc: the seahorse context
+* @ktype: the keytype (example: "openpgp")
+* @data: ASCII armored key data (one or more keys)
+* @keys: the keys that have been imorted (out)
+* @error: the error
+*
+* DBus: ImportKeys
+*
+* Imports a buffer containing one or more keys. Returns the keyids
+*
+* Returns: True on success
+*/
 gboolean
 seahorse_service_import_keys (SeahorseService *svc, gchar *ktype, 
                               gchar *data, gchar ***keys, GError **error)
@@ -202,6 +222,21 @@ seahorse_service_import_keys (SeahorseService *svc, gchar *ktype,
 	return TRUE;
 }
 
+/**
+* seahorse_service_export_keys:
+* @svc: the seahorse context
+* @ktype: the keytype (example: "openpgp")
+* @keys: the keys to export (keyids)
+* @data: ASCII armored key data (one or more keys) (out)
+* @error: the error
+*
+* DBus: ExportKeys
+*
+* Exports keys. Keys to export are defined by keyid. The result is a buffer
+* containing ASCII armored keys
+*
+* Returns: True on success
+*/
 gboolean
 seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
                               gchar **keys, gchar **data, GError **error)
@@ -278,6 +313,21 @@ seahorse_service_export_keys (SeahorseService *svc, gchar *ktype,
     return TRUE;
 }
 
+/**
+* seahorse_service_display_notification:
+* @svc: the seahorse context
+* @heading: the heading of the notification
+* @text: the text of the notification
+* @icon: the icon of the notification
+* @urgent: set to TRUE if the message is urgent
+* @error: the error
+*
+* DBus: DisplayNotification
+*
+* Displays a notification
+*
+* Returns: True
+*/
 gboolean
 seahorse_service_display_notification (SeahorseService *svc, gchar *heading,
                                        gchar *text, gchar *icon, gboolean urgent, 
@@ -307,6 +357,14 @@ seahorse_service_match_save (SeahorseService *svc, gchar *ktype, gint flags,
  * SIGNAL HANDLERS 
  */
 
+/**
+* sctx: ignored
+* sobj: seahorse object
+* svc: seahorse service
+*
+* Handler to update added key sources
+*
+*/
 static void
 seahorse_service_added (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseService *svc)
 {
@@ -314,6 +372,14 @@ seahorse_service_added (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseSer
     add_key_source (svc, ktype);
 }
 
+/**
+* sctx: ignored
+* sobj: seahorse object
+* svc: seahorse service
+*
+* Handler to update changing key sources
+*
+*/
 static void
 seahorse_service_changed (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseService *svc)
 {
@@ -327,8 +393,7 @@ seahorse_service_changed (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseS
  */
 
 /**
-* seahorse_service_dispose:
-* @gobject:
+* gobject:
 *
 * Disposes the seahorse dbus service
 *
@@ -349,8 +414,7 @@ seahorse_service_dispose (GObject *gobject)
 }
 
 /**
-* seahorse_service_class_init:
-* @klass: The class to init
+* klass: The class to init
 *
 *
 */
@@ -367,8 +431,7 @@ seahorse_service_class_init (SeahorseServiceClass *klass)
 
 
 /**
-* seahorse_service_init:
-* @svc:
+* svc:
 *
 *
 * Initialises the service, adds local key sources and connects the signals.
