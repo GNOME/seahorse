@@ -46,10 +46,22 @@ G_DEFINE_TYPE (SeahorseServiceCrypto, seahorse_service_crypto, G_TYPE_OBJECT);
    to other processes in the case of notifications */
 #define ICON_PREFIX     DATA_DIR "/pixmaps/seahorse/48x48/"
 
+/**
+ * SECTION:seahorse-service-crypto
+ * @short_description: Seahorse service crypto DBus methods. The other
+ * DBus methods can be found in other files
+ *
+ **/
+
 /* -----------------------------------------------------------------------------
  * PUBLIC METHODS
  */
- 
+
+/**
+*
+* Creates and returns a new crypto service
+* (SEAHORSE_TYPE_SERVICE_CRYPTO)
+*/
 SeahorseServiceCrypto* 
 seahorse_service_crypto_new ()
 {
@@ -61,6 +73,17 @@ seahorse_service_crypto_new ()
  */
 
 /* Returns result in result. Frees pop and cryptdata */
+/**
+* pop: a seahorse operation
+* gstarterr: the gpgme error that could have occured earlier
+* cryptdata: gpgme cryptdata
+* result: the result of the gpgme operation (out)
+* error: will be set on error
+*
+* Finishes the gpgme processing and returns the result
+*
+* returns: TRUE on successful operation, FALSE else
+*/
 static gboolean
 process_crypto_result (SeahorseGpgmeOperation *pop, gpgme_error_t gstarterr, 
                        gpgme_data_t cryptdata, gchar **result, GError **error)
@@ -105,6 +128,12 @@ process_crypto_result (SeahorseGpgmeOperation *pop, gpgme_error_t gstarterr,
     }
 }
 
+/**
+* keys: (GList)
+*
+* Creates a gpgme_key_t array out of the keylist.
+*
+*/
 static gpgme_key_t* 
 keylist_to_keys (GList *keys)
 {
@@ -122,6 +151,13 @@ keylist_to_keys (GList *keys)
 	return recips;
 }
 
+
+/**
+* keys: gpgme_key_t list of keys
+*
+* Frees the keys
+*
+*/
 static void
 free_keys (gpgme_key_t* keys)
 {
@@ -133,7 +169,13 @@ free_keys (gpgme_key_t* keys)
 	g_free (keys);
 }
 
-
+/**
+* data: optional, will be added to the title, can be NULL
+* status: the gpgme status
+*
+* Basing on the status a notification is created an displayed
+*
+*/
 static void
 notify_signatures (const gchar* data, gpgme_verify_result_t status)
 {
@@ -229,6 +271,21 @@ notify_signatures (const gchar* data, gpgme_verify_result_t status)
  * DBUS METHODS 
  */
 
+/**
+ * seahorse_service_crypto_encrypt_text:
+ * @crypto: the crypto service (#SeahorseServiceCrypto)
+ * @recipients: A list of recipients (keyids "openpgp:B8098FB063E2C811")
+ * @signer: optional
+ * @flags: 0, not used
+ * @cleartext: the text to encrypt
+ * @crypttext: the decrypted text (out)
+ * @error: an error (out)
+ *
+ * DBus: EncryptText
+ *
+ *
+ * Returns: TRUE on success
+ */
 gboolean
 seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto, 
                                       const char **recipients, const char *signer, 
@@ -337,6 +394,21 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
     return ret;
 }
 
+/**
+ * seahorse_service_crypto_sign_text:
+ * @crypto: SeahorseServiceCrypto
+ * @signer: the signer keyid
+ * @flags: 0 (ignored)
+ * @cleartext: the text to sign
+ * @crypttext: the clear text signature (out) (GPGME_SIG_MODE_CLEAR)
+ * @error: an error to return
+ *
+ * DBus: SignText
+ *
+ * Signs the @cleartext and returns the signature in @crypttext
+ *
+ * Returns: TRUE on success
+ */
 gboolean
 seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *signer, 
                                    int flags, const char *cleartext, char **crypttext,
@@ -396,6 +468,23 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
     return ret;
 }
 
+/**
+ * seahorse_service_crypto_decrypt_text:
+ * @crypto: #SeahorseServiceCrypto context
+ * @ktype: "openpgp"
+ * @flags: FLAG_QUIET for no notification
+ * @crypttext: the text to decrypt
+ * @cleartext: the decrypted text (out)
+ * @signer: the signer if the text is signed (out)
+ * @error: a potential error (out)
+ *
+ * DBus: DecryptText
+ *
+ * Decrypts the @crypttext and returns it in @cleartext. If the text
+ * was signed, the signed is returned.
+ *
+ * Returns: TRUE on success
+ */
 gboolean
 seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto, 
                                       const char *ktype, int flags, 
@@ -459,6 +548,23 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
     return ret;
 }
 
+/**
+ * seahorse_service_crypto_verify_text:
+ * @crypto: #SeahorseServiceCrypto context
+ * @ktype: "openpgp"
+ * @flags: FLAG_QUIET for no notification
+ * @crypttext: the text to decrypt
+ * @cleartext: the plaintext after verification (out)
+ * @signer: the signer if the text is signed (out)
+ * @error: a potential error (out)
+ *
+ * DBus: VerifyText
+ *
+ * Decrypts the @crypttext and returns it in @cleartext. If the text
+ * was signed, the signed is returned.
+ *
+ * Returns: TRUE on success
+ */
 gboolean
 seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto, 
                                      const gchar *ktype, int flags, 
