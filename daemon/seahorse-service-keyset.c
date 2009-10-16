@@ -33,6 +33,13 @@
 /* Flags for seahorse_service_keyset_match_keys */
 #define MATCH_KEYS_LOCAL_ONLY       0x00000010
 
+/**
+ * SECTION:seahorse-service-keyset
+ * @short_description: Seahorse service Keyset DBus methods. The other DBus
+ * methods can be found in other files
+ *
+ **/
+
 enum {
     KEY_ADDED,
     KEY_REMOVED,
@@ -47,6 +54,12 @@ static guint signals[LAST_SIGNAL] = { 0 };
  * HELPERS 
  */
 
+/**
+* value: the value to free
+*
+* Clears and frees a pointer containing a GValue
+*
+**/
 static void
 value_free (gpointer value)
 {
@@ -54,6 +67,13 @@ value_free (gpointer value)
     g_free (value);
 }
 
+/**
+* patterns: an array containing casefold-ed patterns
+* value: the haystack. Tries to match patterns in here
+*
+* Tries to match the patterns. Matched patterns are removed from the array
+* Returns: TRUE if one or more pattern matched
+**/
 static gboolean
 match_remove_patterns (GArray *patterns, const gchar *value)
 {
@@ -87,6 +107,16 @@ match_remove_patterns (GArray *patterns, const gchar *value)
  * DBUS METHODS 
  */
 
+/**
+ * seahorse_service_keyset_list_keys:
+ * @keyset: The SeahorseServiceKeyset context
+ * @keys: a list of keys (out)
+ * @error: to return potential errors
+ *
+ * Returns all stored keys by id
+ *
+ * Returns: TRUE
+ */
 gboolean        
 seahorse_service_keyset_list_keys (SeahorseServiceKeyset *keyset, gchar ***keys, 
                                    GError **error)
@@ -123,6 +153,21 @@ seahorse_service_keyset_list_keys (SeahorseServiceKeyset *keyset, gchar ***keys,
 	return TRUE;
 }
 
+/**
+ * seahorse_service_keyset_get_key_field:
+ * @svc: The SeahorseService context
+ * @key: the key to get information for
+ * @field: the information field to extract
+ * @has: TRUE if value is valid (out)
+ * @value: the return value. @field in @key (out)
+ * @error: to return potential errors
+ *
+ * DBus: GetKeyField
+ *
+ * Extracts the information stored in @field of @key
+ *
+ * Returns: TRUE on success
+ */
 gboolean
 seahorse_service_keyset_get_key_field (SeahorseService *svc, gchar *key, gchar *field,
                                        gboolean *has, GValue *value, GError **error)
@@ -151,6 +196,20 @@ seahorse_service_keyset_get_key_field (SeahorseService *svc, gchar *key, gchar *
     return TRUE;
 }
 
+/**
+ * seahorse_service_keyset_get_key_fields:
+ * @svc: The SeahorseService context
+ * @key: the key to get information for
+ * @fields: the information field to extract
+ * @values: a hash table field->value
+ * @error: to return potential errors
+ *
+ * DBus: GetKeyFields
+ *
+ * Extracts the information stored in @fields of @key and returns a hash table
+ *
+ * Returns: TRUE on success
+ */
 gboolean
 seahorse_service_keyset_get_key_fields (SeahorseService *svc, gchar *key, gchar **fields,
                                         GHashTable **values, GError **error)
@@ -181,6 +240,20 @@ seahorse_service_keyset_get_key_fields (SeahorseService *svc, gchar *key, gchar 
 	return TRUE; 
 }
 
+/**
+ * seahorse_service_keyset_discover_keys:
+ * @keyset: The SeahorseServiceKeyset context
+ * @keyids: a list of keyids to import
+ * @flags: ignored
+ * @keys: the found keys
+ * @error: to return potential errors
+ *
+ * DBus: DiscoverKeys
+ *
+ * finds and imports the @keyids keys and returns the found @keys
+ *
+ * Returns: TRUE on success
+ */
 gboolean        
 seahorse_service_keyset_discover_keys (SeahorseServiceKeyset *keyset, const gchar **keyids, 
                                        gint flags, gchar ***keys, GError **error)
@@ -219,6 +292,21 @@ seahorse_service_keyset_discover_keys (SeahorseServiceKeyset *keyset, const gcha
     return TRUE;
 }
 
+/**
+ * seahorse_service_keyset_match_keys:
+ * @keyset: The SeahorseServiceKeyset context
+ * @patterns: the patterns to match to name and keyid of the keys
+ * @flags: MATCH_KEYS_LOCAL_ONLY to do local only lookups
+ * @keys: the matched keys
+ * @unmatched: the unmatched patterns
+ * @error: to return potential errors
+ *
+ * DBus: MatchKeys
+ *
+ * Matches name and main id of the key with the list of patterns
+ *
+ * Returns: TRUE
+ */
 gboolean
 seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patterns, 
                                     gint flags, gchar ***keys, gchar***unmatched, 
@@ -294,6 +382,11 @@ seahorse_service_keyset_match_keys (SeahorseServiceKeyset *keyset, gchar **patte
  * DBUS SIGNALS 
  */
 
+/**
+*
+* Signal handler for keyset added
+*
+**/
 static void
 seahorse_service_keyset_added (SeahorseSet *skset, SeahorseObject *sobj, 
                                gpointer userdata)
@@ -315,6 +408,11 @@ seahorse_service_keyset_added (SeahorseSet *skset, SeahorseObject *sobj,
 	g_list_free (children);
 }
 
+/**
+*
+* Signal handler for keyset removed
+*
+**/
 static void
 seahorse_service_keyset_removed (SeahorseSet *skset, SeahorseObject *sobj, 
                                  gpointer closure, gpointer userdata)
@@ -336,6 +434,11 @@ seahorse_service_keyset_removed (SeahorseSet *skset, SeahorseObject *sobj,
 	g_list_free (children);
 }
 
+/**
+*
+* Signal handler for the changed event
+*
+**/
 static void
 seahorse_service_keyset_changed (SeahorseSet *skset, SeahorseObject *sobj, 
                                  gpointer closure, gpointer userdata)
@@ -351,6 +454,11 @@ seahorse_service_keyset_changed (SeahorseSet *skset, SeahorseObject *sobj,
  * OBJECT 
  */
 
+/**
+*
+* Connects the signals
+*
+**/
 static void
 seahorse_service_keyset_init (SeahorseServiceKeyset *keyset)
 {
