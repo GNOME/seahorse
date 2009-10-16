@@ -29,6 +29,14 @@
 
 #include "pgp/seahorse-gpgme.h"
 
+/**
+ * SECTION:seahorse-hkp-server
+ * @short_description: Implements the HKP Server ( HTTP Keyserver Protocol) Server
+ *
+ * http://tools.ietf.org/html/draft-shaw-openpgp-hkp-00
+ *
+ **/
+
 /* 
  * DEBUG: Set to number other than zero, in order to run HKP 
  * server on a specific port 
@@ -80,6 +88,13 @@
 static SoupServer *soup_server = NULL;
 static gpgme_ctx_t gpgme_ctx = NULL;
 
+/**
+* str: the string to return parts of
+* len: the length of the returned part
+*
+* returns the last "len" bytes of "str"
+*
+**/
 static const gchar*
 last_x (const gchar *str, guint len)
 {
@@ -89,6 +104,13 @@ last_x (const gchar *str, guint len)
     return str;
 }
 
+/**
+* str: the str to replace characters in
+*
+* replaces critical characters '<>&"'
+*
+* returns a gchar with the escaped characters
+**/
 static gchar*
 escape_html (const gchar *str)
 {
@@ -125,6 +147,13 @@ escape_html (const gchar *str)
     return g_string_free (html, FALSE);
 }
 
+/**
+* key: the gpgme key
+*
+* formats a fingerprint by adding a space every 4 characters
+*
+* returns a gchar* containing the formated fingerprint
+**/
 static gchar*
 format_key_fingerprint (gpgme_key_t key)
 {
@@ -148,6 +177,15 @@ format_key_fingerprint (gpgme_key_t key)
     return g_string_free (string, FALSE);
 }
 
+/**
+* name: optional. The user name
+* keyid: the keyid
+* email: optional. The user's email
+*
+* uses name, email and keyid to created formated output
+*
+* returns the gchar * containing the formated key data
+**/
 static gchar*
 format_key_uid (const gchar *name, const gchar *keyid, const gchar *email)
 {
@@ -162,7 +200,11 @@ format_key_uid (const gchar *name, const gchar *keyid, const gchar *email)
     return g_strdup("");
 }
 
-
+/**
+* key: the gpgme key
+*
+* returns the algorithm letter depending on the pubkey of "key"
+**/
 static const gchar*
 get_key_algo_letter (gpgme_key_t key)
 {
@@ -183,6 +225,16 @@ get_key_algo_letter (gpgme_key_t key)
     }
 }
 
+
+/**
+* response: the first part of the response. Will be extended
+* key: the gpgme key to add
+* verbose: TRUE if signatures should be added
+* fingerprints: TRUE if fingerprints should be added
+*
+* Adds key-info lines to the reponse
+*
+**/
 static void
 append_key_info (GString *response, gpgme_key_t key, gboolean verbose, 
                  gboolean fingerprints)
@@ -259,6 +311,15 @@ append_key_info (GString *response, gpgme_key_t key, gboolean verbose,
     }
 }
 
+/**
+* msg: a soup message
+* details: The details to add to the server response
+* gerr: used to print a warning
+*
+* Adds an error resonse body to the message
+*
+* returns SOUP_STATUS_OK
+**/
 static guint
 lookup_handle_error (SoupMessage *msg, const gchar *details, gpgme_error_t gerr)
 {
@@ -272,6 +333,16 @@ lookup_handle_error (SoupMessage *msg, const gchar *details, gpgme_error_t gerr)
     return SOUP_STATUS_OK;
 }
 
+/**
+* msg: the message to add to
+* args: the arguments to parse
+* verbose: TRUE to get more information (vindex)
+*
+* Parses the arguments and creates a hkp index response
+*
+*
+* returns SOUP_STATUS_OK on success
+**/
 static guint
 lookup_handle_index (SoupMessage *msg, GHashTable *args, gboolean verbose)
 {
@@ -335,6 +406,14 @@ lookup_handle_index (SoupMessage *msg, GHashTable *args, gboolean verbose)
     return SOUP_STATUS_OK;
 }
 
+/**
+* msg: the message to add data to
+* args: the arguments to parse
+*
+* Adds the requested key to the message
+*
+* returns SOUP_STATUS_OK on success
+**/
 static guint
 lookup_handle_get (SoupMessage *msg, GHashTable *args)
 {
@@ -381,6 +460,17 @@ lookup_handle_get (SoupMessage *msg, GHashTable *args)
     return SOUP_STATUS_OK;
 }
 
+/**
+* server: SoupServer
+* msg: Soup message
+* path: part of the request
+* args: part of the request
+* context: additional client information
+* data: User data
+*
+* Handles index and get requests
+*
+**/
 static void
 lookup_callback (SoupServer *server, SoupMessage *msg,
                  const gchar *path, GHashTable *args,
@@ -423,6 +513,17 @@ lookup_callback (SoupServer *server, SoupMessage *msg,
     soup_message_set_status (msg, code);
 }
 
+/**
+* server: SoupServer
+* msg: Soup message
+* path: part of the request
+* args: part of the request
+* context: additional client information
+* data: User data
+*
+* Sends and error (adding keys is not allowed)
+*
+**/
 static void
 add_callback (SoupServer *server, SoupMessage *msg,
               const gchar *path, GHashTable *args,
@@ -434,6 +535,17 @@ add_callback (SoupServer *server, SoupMessage *msg,
     soup_message_headers_append (msg->response_headers, "Connection", "close");
 }
 
+/**
+* server: SoupServer
+* msg: Soup message
+* path: part of the request
+* args: part of the request
+* context: additional client information
+* data: User data
+*
+* Sends the default error message
+*
+**/
 static void
 default_callback (SoupServer *server, SoupMessage *msg,
                   const char *path, GHashTable *args,
@@ -445,6 +557,13 @@ default_callback (SoupServer *server, SoupMessage *msg,
     soup_message_headers_append (msg->response_headers, "Connection", "close");
 }    
 
+
+/**
+ * seahorse_hkp_server_error_domain:
+ *
+ *
+ * Returns: the error domain for the hkp server
+ */
 GQuark
 seahorse_hkp_server_error_domain ()
 {
@@ -454,6 +573,14 @@ seahorse_hkp_server_error_domain ()
     return q;
 }
 
+/**
+ * seahorse_hkp_server_start:
+ * @err: the error to return
+ *
+ * Starts an async soup server and adds callbacks
+ *
+ * Returns: FALSE on error
+ */
 gboolean
 seahorse_hkp_server_start(GError **err)
 {
@@ -495,6 +622,12 @@ seahorse_hkp_server_start(GError **err)
     return TRUE;
 }
 
+/**
+ * seahorse_hkp_server_stop:
+ *
+ * Stops the hkp server
+ *
+ */
 void 
 seahorse_hkp_server_stop()
 {
@@ -509,12 +642,24 @@ seahorse_hkp_server_stop()
     }
 }
 
+/**
+ * seahorse_hkp_server_is_running:
+ *
+ *
+ * Returns: TRUE if the hkp server is running
+ */
 gboolean
 seahorse_hkp_server_is_running()
 {
     return soup_server != NULL;
 }
 
+/**
+ * seahorse_hkp_server_get_port:
+ *
+ *
+ * Returns: The port of the hkp server (0 on error)
+ */
 guint
 seahorse_hkp_server_get_port()
 {
