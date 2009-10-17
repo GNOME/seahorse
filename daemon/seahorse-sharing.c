@@ -36,6 +36,12 @@
 
 #define HKP_SERVICE_TYPE "_pgpkey-hkp._tcp."
 
+/**
+ * SECTION:seahorse-sharing
+ * @short_description: Starts the HKP service and offers it using Avahi
+ *
+ **/
+
 /* TODO: Need to be able to advertize in real DNS domains */
 
 static void start_sharing ();
@@ -53,6 +59,12 @@ static AvahiClient *avahi_client = NULL;
 static gchar *share_name = NULL;
 static int share_alternate = 0;
 
+/**
+* errmsg: if TRUE an error message will be shown
+*
+* Stops the Avahi service
+*
+**/
 static void
 stop_publishing (gboolean errmsg)
 {
@@ -74,6 +86,13 @@ stop_publishing (gboolean errmsg)
     }
 }
 
+/**
+*
+* Calcs a share name and stores it in share_name
+*
+* TODO: The share name must be < 63 characters. Or avahi_entry_group_add_service
+* will fail. (happens only in EXTREME circumstances or never at all)
+**/
 static void
 calc_share_name ()
 {
@@ -100,6 +119,12 @@ calc_share_name ()
     }
 }
 
+/**
+*
+* Adds the HKP service to the avahi_group the port advertised is the one of
+* the hkp server
+*
+**/
 static void
 add_service ()
 {
@@ -118,7 +143,15 @@ add_service ()
     }
 }
 
-
+/**
+* group: the group
+* state: the new state the group is in
+* userdata: ignored
+*
+* Callback called whenever the state of the group changes
+*
+* Acts on collisions and failure
+**/
 static void 
 services_callback(AvahiEntryGroup *group, AvahiEntryGroupState state, 
                   AVAHI_GCC_UNUSED void *userdata) 
@@ -146,6 +179,15 @@ services_callback(AvahiEntryGroup *group, AvahiEntryGroupState state,
     };
 }
 
+/**
+* client: the Avahi client
+* state: the state in which the client is now
+* userdata: ignored
+*
+* Callback called whenever the state of the Avahi client changes
+*
+* Adds a group on startup and a service, acts on collisions and failures
+**/
 static void 
 client_callback (AvahiClient *client, AvahiClientState state, 
                  AVAHI_GCC_UNUSED void * userdata) 
@@ -186,6 +228,12 @@ client_callback (AvahiClient *client, AvahiClientState state,
     };
 }
 
+/**
+*
+* Calcs a new share name and starts a new Avahi client
+*
+* Returns FALSE on error
+**/
 static gboolean
 start_publishing ()
 {
@@ -205,6 +253,11 @@ start_publishing ()
 
 /* -------------------------------------------------------------------------- */
 
+/**
+*
+* starts the hkp server and the Avahi client
+*
+**/
 static void
 start_sharing ()
 {
@@ -227,6 +280,11 @@ start_sharing ()
     }
 }
 
+/**
+*
+* Stops the hkp server and the Avahi publishing of the service
+*
+**/
 static void
 stop_sharing ()
 {
@@ -236,6 +294,16 @@ stop_sharing ()
         seahorse_hkp_server_stop ();
 }
 
+/**
+* client: ignored
+* id: ignored
+* entry: The KEYSHARING_KEY GConf entry
+* data: user data, ignored
+*
+* A callback function to listen for GConf changes. Starts and stops HKP and
+* Avahi depending on the settings.
+*
+**/
 static void
 gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
 {
@@ -247,6 +315,13 @@ gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
     }
 }
 
+/**
+ * seahorse_sharing_init:
+ *
+ * Starts Avahi depending on the GConf settings. Also adds a callback to listen
+ * for GConf changes. Also starts the HKP server.
+ *
+ */
 void 
 seahorse_sharing_init ()
 {
@@ -256,6 +331,12 @@ seahorse_sharing_init ()
         start_sharing();
 }
 
+/**
+ * seahorse_sharing_cleanup:
+ *
+ * Removes the gconf callback and stops Avahi
+ *
+ */
 void 
 seahorse_sharing_cleanup ()
 {
