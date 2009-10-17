@@ -70,6 +70,18 @@ static const GOptionEntry options[] = {
     { NULL }
 };
 
+/**
+ * SECTION:seahorse-daemon
+ * @short_description: The seahorse-daemon. Offering services like DBus, HKP and
+ * Avahi
+ *
+ **/
+
+/**
+*
+* Daemonizing and some special handling for GPGME
+*
+**/
 static void
 daemonize ()
 {
@@ -118,6 +130,11 @@ daemonize ()
         exit (0);
 }
 
+/**
+*
+* The signal handler for termination
+*
+**/
 static void
 unix_signal (int signal)
 {
@@ -126,6 +143,13 @@ unix_signal (int signal)
         gtk_main_quit ();
 }
 
+/**
+* smclient: ignored
+* data: ignored
+*
+* The handler for the "quit" signal
+*
+**/
 static void
 smclient_quit (EggSMClient *smclient, gpointer data)
 {
@@ -134,6 +158,15 @@ smclient_quit (EggSMClient *smclient, gpointer data)
         gtk_main_quit ();    
 }
 
+/**
+* log_domain: will be added to the message. Can be NULL
+* log_level: the log level
+* message: the log message
+* user_data: passed to g_log_default_handler, nothing else
+*
+* Writes log messages
+*
+**/
 static void
 log_handler (const gchar *log_domain, GLogLevelFlags log_level, 
              const gchar *message, gpointer user_data)
@@ -176,6 +209,11 @@ log_handler (const gchar *log_domain, GLogLevelFlags log_level,
     g_log_default_handler (log_domain, log_level, message, user_data); 
 }
 
+/**
+*
+* Prepares the logging, sets the log handler to the function "log_handler"
+*
+**/
 static void
 prepare_logging ()
 {
@@ -191,6 +229,16 @@ prepare_logging ()
     g_log_set_handler ("Gnome", flags, log_handler, NULL);
 }
 
+
+/**
+ * main:
+ * @argc: default arguments
+ * @argv: default arguments
+ *
+ * Parses the options, daemonizes, starts HKP, DBus and Avahi
+ *
+ * Returns: 0 on success
+ */
 int main(int argc, char* argv[])
 {
     GOptionContext *octx = NULL;
