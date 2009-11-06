@@ -846,14 +846,26 @@ GQuark
 seahorse_util_detect_file_type (const gchar *uri)
 {
 	gboolean uncertain;
-	gchar *mime;
+	gchar *mime = NULL;
 	GQuark type;
+	GFile *file;
+	GFileInfo *info;
+
+	file = g_file_new_for_uri (uri);
+	info = g_file_query_info (file,
+                G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                0,
+                NULL,
+                NULL);
+
+	g_return_val_if_fail (info, 0);
+
+	mime = g_file_info_get_content_type (info);
 	
-	mime = g_content_type_guess (uri, NULL, 0, &uncertain);
 	g_return_val_if_fail (mime, 0);
 	
 	type = seahorse_util_detect_mime_type (mime);
-	g_free (mime);
+	g_object_unref (info);
 	
 	return type;
 }
