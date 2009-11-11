@@ -29,14 +29,34 @@
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 
+/**
+ * SECTION:seahorse-keyserver-search
+ * @short_description: Contains the functions to start a search for keys on a
+ * keyserver.
+ **/
+
+/**
+ * KeyserverSelection:
+ * @names: A list of keyserver names
+ * @uris: A list of keyserver URIs
+ * @all: TRUE if all keyservers are selected
+ **/
 typedef struct _KeyserverSelection {
     GSList *names;
     GSList *uris;
     gboolean all;
 } KeyserverSelection;
 
+
 /* Selection Retrieval ------------------------------------------------------ */
 
+/**
+ * widget: CHECK_BUTTON widget to read
+ * selection: will be updated depending on the state of the widget
+ *
+ * Adds the name/uri of the checked widget to the selection
+ *
+ **/
 static void
 get_checks (GtkWidget *widget, KeyserverSelection *selection)
 {
@@ -54,6 +74,14 @@ get_checks (GtkWidget *widget, KeyserverSelection *selection)
     }
 }
 
+/**
+ * swidget: the window/main widget
+ *
+ * extracts all keyservers in the sub-widgets "key-server-list" and
+ * "shared-keys-list" and fills a KeyserverSelection structure.
+ *
+ * returns the selection
+ **/
 static KeyserverSelection*
 get_keyserver_selection (SeahorseWidget *swidget)
 {
@@ -76,6 +104,12 @@ get_keyserver_selection (SeahorseWidget *swidget)
     return selection;
 }
 
+/**
+ * selection: The selection to free
+ *
+ * All data (string lists, structures) are freed
+ *
+ **/
 static void
 free_keyserver_selection (KeyserverSelection *selection)
 {
@@ -86,6 +120,11 @@ free_keyserver_selection (KeyserverSelection *selection)
     }
 }
 
+/**
+ * widget: a CHECK_BUTTON
+ * checked: out- TRUE if the button is active, stays the same else.
+ *
+ **/
 static void
 have_checks (GtkWidget *widget, gboolean *checked)
 {
@@ -95,6 +134,12 @@ have_checks (GtkWidget *widget, gboolean *checked)
     }
 }
 
+/**
+ * swidget: sub widgets in here will be  checked
+ *
+ * returns TRUE if at least one of the CHECK_BUTTONS in "key-server-list" or
+ * "shared-keys-list" is TRUE
+ **/
 static gboolean
 have_keyserver_selection (SeahorseWidget *swidget)
 {
@@ -114,6 +159,15 @@ have_keyserver_selection (SeahorseWidget *swidget)
     return checked;
 }
 
+/**
+ * on_keyserver_search_control_changed:
+ * @widget: ignored
+ * @swidget: main widget
+ *
+ *
+ * Enables the "search" button if the edit-field contains text and at least a
+ * server is selected
+ */
 G_MODULE_EXPORT void
 on_keyserver_search_control_changed (GtkWidget *widget, SeahorseWidget *swidget)
 {
@@ -140,6 +194,14 @@ on_keyserver_search_control_changed (GtkWidget *widget, SeahorseWidget *swidget)
 
 /* Initial Selection -------------------------------------------------------- */
 
+/**
+ * widget: a toggle button
+ * names: a list of names
+ *
+ * If the label of the toggle button is in the list of names it will be
+ * set active
+ *
+ **/
 static void
 select_checks (GtkWidget *widget, GSList *names)
 {
@@ -154,6 +216,12 @@ select_checks (GtkWidget *widget, GSList *names)
     }
 }
 
+/**
+ * swidget: the main widget
+ *
+ * Reads key servers from gconf and updates the UI content.
+ *
+ **/
 static void
 select_inital_keyservers (SeahorseWidget *swidget)
 {
@@ -185,6 +253,14 @@ select_inital_keyservers (SeahorseWidget *swidget)
 
 /* Populating Lists --------------------------------------------------------- */
 
+/**
+ * widget: a check button
+ * unchecked: a hash table containing the state of the servers
+ *
+ * If the button is not checked, the hash table entry associate with it will be
+ * replaced with ""
+ *
+ **/
 static void
 remove_checks (GtkWidget *widget, GHashTable *unchecked)
 {
@@ -198,6 +274,15 @@ remove_checks (GtkWidget *widget, GHashTable *unchecked)
     }
 }
 
+/**
+* swidget: the main widget
+* box: the GTK_CONTAINER with the checkboxes
+* uris: the uri list of the keyservers
+* names: the keyserver names
+*
+* Updates the box and adds checkboxes containing names/uris. The check-status
+* of already existing check boxes is not changed.
+**/
 static void
 populate_keyserver_list (SeahorseWidget *swidget, GtkWidget *box, GSList *uris, 
                          GSList *names)
@@ -239,6 +324,14 @@ populate_keyserver_list (SeahorseWidget *swidget, GtkWidget *box, GSList *uris,
         gtk_widget_hide (box);
 }
 
+/**
+* client: ignored
+* id: ignored
+* entry: used only for initial test
+* swidget: the main SeahorseWidget
+*
+* refreshes the "key-server-list". It reads the data from GConf
+**/
 static void
 refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry, SeahorseWidget *swidget)
 {
@@ -259,6 +352,14 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry, SeahorseWi
     seahorse_util_string_slist_free (names);        
 }
 
+/**
+* ssd: the SeahorseServiceDiscovery. List-data is read from there
+* name: ignored
+* swidget: The SeahorseWidget
+*
+* refreshes the "shared-keys-list"
+*
+**/
 static void 
 refresh_shared_keys (SeahorseServiceDiscovery *ssd, const gchar *name, SeahorseWidget *swidget)
 {
@@ -278,6 +379,16 @@ refresh_shared_keys (SeahorseServiceDiscovery *ssd, const gchar *name, SeahorseW
 
 /* -------------------------------------------------------------------------- */
  
+/**
+ * on_keyserver_search_ok_clicked:
+ * @button: ignored
+ * @swidget: The SeahorseWidget to work with
+ *
+ * Extracts data, stores it in GConf and starts a search using the entered
+ * search data.
+ *
+ * This function gets the things done
+ */
 G_MODULE_EXPORT void
 on_keyserver_search_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
@@ -313,6 +424,13 @@ on_keyserver_search_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
     seahorse_widget_destroy (swidget);
 }
 
+/**
+* widget: ignored
+* swidget: the SeahorseWidget to remove the signals from
+*
+* Disconnects the added/removed signals
+*
+**/
 static void
 cleanup_signals (GtkWidget *widget, SeahorseWidget *swidget)
 {
@@ -320,13 +438,15 @@ cleanup_signals (GtkWidget *widget, SeahorseWidget *swidget)
     g_signal_handlers_disconnect_by_func (ssd, refresh_shared_keys, swidget);
 }
 
+
 /**
- * seahorse_keyserver_search_show
- * 
+ * seahorse_keyserver_search_show:
+ * @parent: the parent window to connect this window to
+ *
  * Shows a remote search window.
- * 
- * Returns the new window.
- **/
+ *
+ * Returns: the new window.
+ */
 GtkWindow*
 seahorse_keyserver_search_show (GtkWindow *parent)
 {
