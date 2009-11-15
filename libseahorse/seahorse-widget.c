@@ -30,6 +30,13 @@
 #include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
 
+/**
+ * SECTION:seahorse-widget
+ * @short_description: wrapping gtk-builder widgets to simplify usage.
+ * @include:seahorse-widget.h
+ *
+ **/
+
 #define STATUS "status"
 
 enum {
@@ -75,6 +82,13 @@ static GtkObjectClass *parent_class = NULL;
 /* Hash of widgets with name as key */
 static GHashTable *widgets = NULL;
 
+/**
+ * seahorse_widget_get_type:
+ *
+ * Registers the widget type "SeahorseWidget"
+ *
+ * Returns: The widget identifier
+ */
 GType
 seahorse_widget_get_type (void)
 {
@@ -94,6 +108,12 @@ seahorse_widget_get_type (void)
 	return widget_type;
 }
 
+/**
+* klass: the #SeahorseWidgetClass
+*
+* Initialises the SeahorseWidgetClass
+*
+**/
 static void
 class_init (SeahorseWidgetClass *klass)
 {
@@ -112,13 +132,25 @@ class_init (SeahorseWidgetClass *klass)
                              NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
-/* Destroy widget when context is destroyed */
+/**
+* object: ignored
+* swidget: The swidget being destroyed
+*
+* Destroy widget when context is destroyed
+*
+**/
 static void
 context_destroyed (GtkObject *object, SeahorseWidget *swidget)
 {
 	seahorse_widget_destroy (swidget);
 }
 
+/**
+* swidget: The #SeahorseWidget being initialised
+*
+* Connects the destroy-signal
+*
+**/
 static void
 object_init (SeahorseWidget *swidget)
 {
@@ -126,6 +158,15 @@ object_init (SeahorseWidget *swidget)
                 G_CALLBACK (context_destroyed), swidget);
 }
 
+/**
+* type: the #GType to construct
+* n_props: number of properties
+* props: properties
+*
+*
+*
+* Returns the initialised object
+**/
 static GObject*  
 seahorse_widget_constructor (GType type, guint n_props, GObjectConstructParam* props)
 {
@@ -158,8 +199,14 @@ seahorse_widget_constructor (GType type, guint n_props, GObjectConstructParam* p
     return obj;
 }
 
-/* Disconnects callbacks, destroys main window widget,
- * and frees the xml definition and any other data */
+
+/**
+* gobject: The #SeahorseWidget to finalize
+*
+* Disconnects callbacks, destroys main window widget,
+* and frees the xml definition and any other data
+*
+**/
 static void
 object_finalize (GObject *gobject)
 {
@@ -188,6 +235,15 @@ object_finalize (GObject *gobject)
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
+/**
+* object: the object to set the value for
+* prop_id: the id of the property to set
+* value: the value to set
+* pspec: ignored
+*
+* Only property PROP_NAME is available so far
+*
+**/
 static void
 object_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
 {
@@ -220,8 +276,18 @@ object_set_property (GObject *object, guint prop_id, const GValue *value, GParam
     }
 }
 
+/**
+* object: the object to get the property for
+* prop_id: ID of the property
+* value: Value to return
+* pspec: ignored
+*
+* Only the property PROP_NAME is available so far
+*
+**/
 static void
 object_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec)
+
 {
 	SeahorseWidget *swidget;
 	swidget = SEAHORSE_WIDGET (object);
@@ -235,12 +301,29 @@ object_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *
 	}
 }
 
+/**
+ * on_widget_help:
+ * @widget: The widget
+ * @swidget: The #SeahorseWidget
+ *
+ * Shows help to the widget
+ *
+ */
 G_MODULE_EXPORT void
 on_widget_help (GtkWidget *widget, SeahorseWidget *swidget)
 {
     seahorse_widget_show_help (swidget);
 }
 
+
+/**
+ * on_widget_closed:
+ * @widget: ignored
+ * @swidget: The #SeahorseWidget
+ *
+ * Closes the widget, calls destroy-function
+ *
+ */
 /* Destroys widget */
 G_MODULE_EXPORT void
 on_widget_closed (GtkWidget *widget, SeahorseWidget *swidget)
@@ -248,6 +331,17 @@ on_widget_closed (GtkWidget *widget, SeahorseWidget *swidget)
 	seahorse_widget_destroy (swidget);
 }
 
+
+/**
+ * on_widget_delete_event:
+ * @widget: the widget being deleted
+ * @event: ignored
+ * @swidget: the #SeahorseWidget
+ *
+ *
+ *
+ * Returns: FALSE
+ */
 /* Closed widget */
 G_MODULE_EXPORT gboolean
 on_widget_delete_event (GtkWidget *widget, GdkEvent *event, SeahorseWidget *swidget)
@@ -261,7 +355,8 @@ on_widget_delete_event (GtkWidget *widget, GdkEvent *event, SeahorseWidget *swid
  * @name: Name of widget, filename part of gtkbuilder file, and name of main window
  * @parent: GtkWindow to make the parent of the new swidget
  *
- * Creates a new #SeahorseWidget.
+ * Creates a new #SeahorseWidget. Date is read from the gtk-builder file
+ * seahorse-%name%.xml
  *
  * Returns: The new #SeahorseWidget, or NULL if the widget already exists
  **/
@@ -327,8 +422,15 @@ seahorse_widget_new_allow_multiple (const gchar *name, GtkWindow *parent)
     return swidget;
 }
 
+/**
+ * seahorse_widget_find:
+ * @name: The name to look for
+ *
+ * Returns: The widget with the @name or NULL if not found
+ */
 SeahorseWidget*
 seahorse_widget_find (const gchar *name)
+
 {
     /* Check if have widget hash */
     if (widgets != NULL)
@@ -337,7 +439,7 @@ seahorse_widget_find (const gchar *name)
 }
 
 /**
- * seahorse_widget_show_help
+ * seahorse_widget_show_help:
  * @swidget: The #SeahorseWidget.
  * 
  * Show help appropriate for the top level widget.
@@ -370,6 +472,12 @@ seahorse_widget_show_help (SeahorseWidget *swidget)
         g_error_free (error);
 }
 
+/**
+ * seahorse_widget_get_name:
+ * @swidget: The widget to get the name for
+ *
+ * Returns: The name of the widget
+ */
 const gchar*
 seahorse_widget_get_name (SeahorseWidget   *swidget)
 {
@@ -378,7 +486,7 @@ seahorse_widget_get_name (SeahorseWidget   *swidget)
 }
 
 /**
- * seahorse_widget_get_toplevel
+ * seahorse_widget_get_toplevel:
  * @swidget: The seahorse widget
  * 
  * Return the top level widget in this seahorse widget
@@ -425,9 +533,17 @@ seahorse_widget_show (SeahorseWidget *swidget)
     gtk_widget_show (widget);
 }
  
+/**
+ * seahorse_widget_set_visible:
+ * @swidget: the #SeahorseWidget
+ * @identifier: The identifier of the widget to set visibility for
+ * @visible: TRUE to show the widget, FALSE to hide it
+ *
+ */
 void             
 seahorse_widget_set_visible (SeahorseWidget *swidget, const char *identifier,
                              gboolean visible)
+
 {
     GtkWidget *widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, identifier));
     g_return_if_fail (widget != NULL);
@@ -441,7 +557,7 @@ seahorse_widget_set_visible (SeahorseWidget *swidget, const char *identifier,
 /**
  * seahorse_widget_set_sensitive:
  * @swidget: the #SeahorseWidget to find the widget @identifier in
- * @identifier: the name of the widget to et sensitive
+ * @identifier: the name of the widget to set sensitive
  * @sensitive: TRUE if the widget should be switched to sensitive
  *
  * Sets the widget @identifier 's sensitivity to @sensitive
