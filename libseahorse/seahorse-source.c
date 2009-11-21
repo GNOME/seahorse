@@ -29,10 +29,24 @@
 
 #include "common/seahorse-registry.h"
 
+/**
+ * SECTION:seahorse-source
+ * @short_description: This class stores and handles key sources
+ * @include:seahorse-source.h
+ *
+ **/
+
+
 /* ---------------------------------------------------------------------------------
  * INTERFACE
  */
 
+/**
+* gobject_class: The object class to init
+*
+* Adds the interfaces "source-tag" and "source-location"
+*
+**/
 static void
 seahorse_source_base_init (gpointer gobject_class)
 {
@@ -52,6 +66,13 @@ seahorse_source_base_init (gpointer gobject_class)
 	}
 }
 
+/**
+ * seahorse_source_get_type:
+ *
+ * Registers the type of G_TYPE_INTERFACE
+ *
+ * Returns: the type id
+ */
 GType
 seahorse_source_get_type (void)
 {
@@ -80,7 +101,7 @@ seahorse_source_get_type (void)
  */
 
 /**
- * seahorse_source_load
+ * seahorse_source_load:
  * @sksrc: A #SeahorseSource object
  *
  * Refreshes the #SeahorseSource's internal object listing.
@@ -100,11 +121,11 @@ seahorse_source_load (SeahorseSource *sksrc)
 }
 
 /**
- * seahorse_source_load_sync
+ * seahorse_source_load_sync:
  * @sksrc: A #SeahorseSource object
  * 
  * Refreshes the #SeahorseSource's internal object listing, and waits for it to complete.
- **/   
+ **/
 void
 seahorse_source_load_sync (SeahorseSource *sksrc)
 {
@@ -115,11 +136,11 @@ seahorse_source_load_sync (SeahorseSource *sksrc)
 }
 
 /**
- * seahorse_source_load_sync
+ * seahorse_source_load_sync:
  * @sksrc: A #SeahorseSource object
  * 
  * Refreshes the #SeahorseSource's internal object listing. Completes in the background.
- **/   
+ **/
 void
 seahorse_source_load_async (SeahorseSource *sksrc)
 {
@@ -129,14 +150,14 @@ seahorse_source_load_async (SeahorseSource *sksrc)
 }
 
 /**
- * seahorse_source_search
+ * seahorse_source_search:
  * @sksrc: A #SeahorseSource object
  * @match: Text to search for
  * 
  * Refreshes the #SeahorseSource's internal listing. 
  * 
  * Returns: the asynchronous refresh operation.
- **/   
+ **/
 SeahorseOperation*
 seahorse_source_search (SeahorseSource *sksrc, const gchar *match)
 {
@@ -149,6 +170,15 @@ seahorse_source_search (SeahorseSource *sksrc, const gchar *match)
     return (*klass->search) (sksrc, match);
 }
 
+/**
+ * seahorse_source_import:
+ * @sksrc: A #SeahorseSource object
+ * @input: A stream of data to import
+ *
+ * Imports data from the stream
+ *
+ * Returns: the asynchronous import operation
+ */
 SeahorseOperation* 
 seahorse_source_import (SeahorseSource *sksrc, GInputStream *input)
 {
@@ -163,6 +193,16 @@ seahorse_source_import (SeahorseSource *sksrc, GInputStream *input)
 	return (*klass->import) (sksrc, input);  
 }
 
+/**
+ * seahorse_source_import_sync:
+ * @sksrc: The #SeahorseSource
+ * @input: the input data
+ * @err: error
+ *
+ * Imports data from the stream
+ *
+ * Returns: Imports the stream, synchronous
+ */
 gboolean            
 seahorse_source_import_sync (SeahorseSource *sksrc, GInputStream *input,
                              GError **err)
@@ -184,6 +224,15 @@ seahorse_source_import_sync (SeahorseSource *sksrc, GInputStream *input,
 	return ret;    
 }
 
+/**
+ * seahorse_source_export_objects:
+ * @objects: The objects to export
+ * @output: The output stream to export the objects to
+ *
+ * Exports objects. The objects are sorted by source.
+ *
+ * Returns: The #SeahorseOperation created to export the data
+ */
 SeahorseOperation*
 seahorse_source_export_objects (GList *objects, GOutputStream *output)
 {
@@ -242,6 +291,14 @@ seahorse_source_export_objects (GList *objects, GOutputStream *output)
     return op;
 }
 
+/**
+ * seahorse_source_delete_objects:
+ * @objects: A list of objects to delete
+ *
+ * Deletes a list of objects
+ *
+ * Returns: The #SeahorseOperation to delete the objects
+ */
 SeahorseOperation*
 seahorse_source_delete_objects (GList *objects)
 {
@@ -274,6 +331,16 @@ seahorse_source_delete_objects (GList *objects)
 	return op;
 }
 
+/**
+ * seahorse_source_export:
+ * @sksrc: The SeahorseSource
+ * @objects: The objects to export
+ * @output: The resulting output stream
+ *
+ *
+ *
+ * Returns: An export Operation (#SeahorseOperation)
+ */
 SeahorseOperation* 
 seahorse_source_export (SeahorseSource *sksrc, GList *objects, GOutputStream *output)
 {
@@ -301,6 +368,16 @@ seahorse_source_export (SeahorseSource *sksrc, GList *objects, GOutputStream *ou
 	return op;
 }
 
+/**
+ * seahorse_source_export_raw:
+ * @sksrc: The SeahorseSource
+ * @ids: A list of IDs to export
+ * @output: The resulting output stream
+ *
+ *
+ *
+ * Returns: An export Operation (#SeahorseOperation)
+ */
 SeahorseOperation* 
 seahorse_source_export_raw (SeahorseSource *sksrc, GSList *ids, GOutputStream *output)
 {
@@ -350,6 +427,14 @@ seahorse_source_get_tag (SeahorseSource *sksrc)
     return ktype;
 }
 
+/**
+ * seahorse_source_get_location:
+ * @sksrc: The seahorse source object
+ *
+ *
+ *
+ * Returns: The location (#SeahorseLocation) of this object
+ */
 SeahorseLocation   
 seahorse_source_get_location (SeahorseSource *sksrc)
 {
