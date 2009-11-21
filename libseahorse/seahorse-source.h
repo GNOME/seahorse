@@ -100,27 +100,26 @@ struct _SeahorseSourceIface {
 	 * export
 	 * @sksrc: The #SeahorseSource to export from.
 	 * @objects: A list of objects to export.
-	 * @complete: Whether to export the secret objects too.
-	 * @data: Output stream to export to.
+	 * @output: Output stream to export to.
 	 *
 	 * Import objects into the object source. When operation is 'done' the result
 	 * of the operation will be a GOutputStream
 	 * 
 	 * Returns: The export operation
-	 */    
+	 */
 	SeahorseOperation* (*export) (SeahorseSource *sksrc, GList *objects, GOutputStream *output);
 
 	/**
 	 * export_raw
 	 * @sksrc: The #SeahorseSource to export from.
-	 * @objects: A list of ids to export.
+	 * @ids: A list of ids to export.
 	 * @data: output stream to export to.
 	 *
 	 * Import objects into the source. When operation is 'done' the result
 	 * of the operation will be a GOutputStream
 	 * 
 	 * Returns: The export operation
-	 */    
+	 */
 	SeahorseOperation* (*export_raw) (SeahorseSource *sksrc, GSList *ids, 
 	                                  GOutputStream *output);
     
