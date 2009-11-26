@@ -845,8 +845,7 @@ seahorse_util_detect_data_type (const gchar *data, guint length)
 GQuark
 seahorse_util_detect_file_type (const gchar *uri)
 {
-	gboolean uncertain;
-	gchar *mime = NULL;
+	const gchar *mime = NULL;
 	GQuark type;
 	GFile *file;
 	GFileInfo *info;

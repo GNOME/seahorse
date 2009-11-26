@@ -577,7 +577,7 @@ on_clipboard_received (GtkClipboard* board, const char* text, SeahorseKeyManager
 	g_return_if_fail (text != NULL);
 
     g_assert(self->pv->filter_entry);
-    if (gtk_widget_is_focus (self->pv->filter_entry) == TRUE)
+    if (gtk_widget_is_focus (GTK_WIDGET (self->pv->filter_entry)) == TRUE)
 	    gtk_editable_paste_clipboard (GTK_EDITABLE (self->pv->filter_entry));
     else	
     	if (text != NULL && g_utf8_strlen (text, -1) > 0)
