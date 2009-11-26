@@ -24,6 +24,13 @@
 #include "seahorse-marshal.h"
 #include "seahorse-operation.h"
 
+/**
+ * SECTION:seahorse-operation
+ * @short_description: Contains code for operations and multi operations (container for several operations)
+ * @include:seahorse-operation.h
+ *
+ **/
+
 /* Override the DEBUG_OPERATION_ENABLE switch here */
 #define DEBUG_OPERATION_ENABLE 0
 
@@ -64,13 +71,30 @@ G_DEFINE_TYPE (SeahorseOperation, seahorse_operation, G_TYPE_OBJECT);
 
 /* OBJECT ------------------------------------------------------------------- */
 
+/**
+* operation:the #SeahorseOperation to initialise
+*
+* Initialises an operation
+*
+**/
 static void
 seahorse_operation_init (SeahorseOperation *operation)
 {
+
     /* This is the state of non-started operation. all other flags are zero */
     operation->progress = -1;
 }
 
+/**
+* object: an object of the type SEAHORSE_OPERATION
+* prop_id: the id of the property to set
+* value: The value to set
+* pspec: ignored
+*
+* Sets a property of the SEAHORSE_OPERATION passed
+* At the moment only PROP_MESSAGE is supported
+*
+**/
 static void
 seahorse_operation_set_property (GObject *object, guint prop_id, 
                                  const GValue *value, GParamSpec *pspec)
@@ -85,6 +109,16 @@ seahorse_operation_set_property (GObject *object, guint prop_id,
     }
 }
 
+/**
+* object: an object of the type SEAHORSE_OPERATION
+* prop_id: the id of the property to get
+* value: The returned value
+* pspec: ignored
+*
+* Gets a property of the SEAHORSE_OPERATION passed
+* Supported properties are: PROP_PROGRESS, PROP_MESSAGE, PROP_RESULT
+*
+**/
 static void
 seahorse_operation_get_property (GObject *object, guint prop_id, 
                                  GValue *value, GParamSpec *pspec)
@@ -104,7 +138,12 @@ seahorse_operation_get_property (GObject *object, guint prop_id,
     }
 }
 
-/* dispose of all our internal references */
+/**
+* gobject: The operation to dispose
+*
+* dispose of all our internal references
+*
+**/
 static void
 seahorse_operation_dispose (GObject *gobject)
 {
@@ -123,7 +162,13 @@ seahorse_operation_dispose (GObject *gobject)
     G_OBJECT_CLASS (seahorse_operation_parent_class)->dispose (gobject);
 }
 
-/* free private vars */
+
+/**
+* gobject: The #SEAHORSE_OPERATION to finalize
+*
+* free private vars
+*
+**/
 static void
 seahorse_operation_finalize (GObject *gobject)
 {
@@ -141,6 +186,12 @@ seahorse_operation_finalize (GObject *gobject)
     G_OBJECT_CLASS (seahorse_operation_parent_class)->finalize (gobject);
 }
 
+/**
+* klass: The #SeahorseOperationClass to initialise
+*
+* Initialises the class, adds properties and signals
+*
+**/
 static void
 seahorse_operation_class_init (SeahorseOperationClass *klass)
 {
@@ -178,6 +229,14 @@ seahorse_operation_class_init (SeahorseOperationClass *klass)
 
 /* PUBLIC ------------------------------------------------------------------- */
 
+/**
+ * seahorse_operation_new_complete:
+ * @err: an optional error to set
+ *
+ * Creates a new operation and sets it's state to done
+ *
+ * Returns: the operation
+ */
 SeahorseOperation*  
 seahorse_operation_new_complete (GError *err)
 {
@@ -189,6 +248,13 @@ seahorse_operation_new_complete (GError *err)
     return operation;
 }
 
+/**
+ * seahorse_operation_new_cancelled:
+ *
+ * Creates a new operation and sets in to cancelled  state
+ *
+ * Returns: The new operation
+ */
 SeahorseOperation*
 seahorse_operation_new_cancelled ()
 {
@@ -200,6 +266,13 @@ seahorse_operation_new_cancelled ()
     return operation;
 }
 
+/**
+ * seahorse_operation_cancel:
+ * @op: the #SeahorseOperation to cancel
+ *
+ * Cancels the operation
+ *
+ */
 void
 seahorse_operation_cancel (SeahorseOperation *op)
 {
@@ -223,6 +296,14 @@ seahorse_operation_cancel (SeahorseOperation *op)
     g_object_unref (op);
 }
 
+/**
+ * seahorse_operation_copy_error:
+ * @op: the #SeahorseOperation
+ * @err: The resulting error
+ *
+ * Copies an internal error from the #SeahorseOperation to @err
+ *
+ */
 void
 seahorse_operation_copy_error  (SeahorseOperation *op, GError **err)
 {
@@ -233,6 +314,14 @@ seahorse_operation_copy_error  (SeahorseOperation *op, GError **err)
 		*err = op->error ? g_error_copy (op->error) : NULL;
 }
 
+/**
+ * seahorse_operation_get_error:
+ * @op: A #SeahorseOperation
+ *
+ * Directly return the error from operation
+ *
+ * Returns: the #GError error from the operation
+ */
 const GError*       
 seahorse_operation_get_error (SeahorseOperation *op)
 {
@@ -240,6 +329,15 @@ seahorse_operation_get_error (SeahorseOperation *op)
 	return op->error;
 }
 
+/**
+ * seahorse_operation_display_error:
+ * @operation: a #SeahorseOperation
+ * @title: The title of the error box
+ * @parent: ignored
+ *
+ * Displays an error box if there is an error in the operation
+ *
+ */
 void
 seahorse_operation_display_error (SeahorseOperation *operation, 
                                   const gchar *title, GtkWidget *parent)
@@ -249,6 +347,14 @@ seahorse_operation_display_error (SeahorseOperation *operation,
 	seahorse_util_handle_error (operation->error, "%s", title);
 }
 
+/**
+ * seahorse_operation_get_result:
+ * @op: a #SeahorseOperation
+ *
+ *
+ *
+ * Returns: the results of this operation
+ */
 gpointer
 seahorse_operation_get_result (SeahorseOperation *op)
 {
@@ -256,6 +362,13 @@ seahorse_operation_get_result (SeahorseOperation *op)
 	return op->result;
 }
 
+/**
+ * seahorse_operation_wait:
+ * @op: The operation to wait for
+ *
+ * Waits till the #SeahorseOperation finishes.
+ *
+ */
 void                
 seahorse_operation_wait (SeahorseOperation *op)
 {
@@ -266,6 +379,17 @@ seahorse_operation_wait (SeahorseOperation *op)
 	g_object_unref (op);
 }
 
+/**
+ * seahorse_operation_watch:
+ * @operation: The operation to watch
+ * @done_callback: callback when done
+ * @donedata: data for this callback
+ * @progress_callback: Callback when in progress mode
+ * @progdata: data for this callback
+ *
+ * If the operation already finished, calls the done callback. Does progress
+ * handling else.
+ */
 void
 seahorse_operation_watch (SeahorseOperation *operation, SeahorseDoneFunc done_callback,
                           gpointer donedata, SeahorseProgressFunc progress_callback, gpointer progdata)
@@ -291,6 +415,13 @@ seahorse_operation_watch (SeahorseOperation *operation, SeahorseDoneFunc done_ca
 
 /* METHODS FOR DERIVED CLASSES ---------------------------------------------- */
 
+/**
+ * seahorse_operation_mark_start:
+ * @op: a #SeahorseOperation
+ *
+ * Sets everything in the seahorse operation to the start state
+ *
+ */
 void
 seahorse_operation_mark_start (SeahorseOperation *op)
 {
@@ -307,6 +438,15 @@ seahorse_operation_mark_start (SeahorseOperation *op)
     op->message = NULL;
 }
 
+/**
+ * seahorse_operation_mark_progress:
+ * @op: A #SeahorseOperation to set
+ * @message: The new message of the operation, Can be NULL
+ * @progress: the new progress of the operation
+ *
+ * Sets the new message and the new progress. After a change
+ * it emits the progress signal
+ */
 void 
 seahorse_operation_mark_progress (SeahorseOperation *op, const gchar *message, 
                                   gdouble progress)
@@ -331,6 +471,16 @@ seahorse_operation_mark_progress (SeahorseOperation *op, const gchar *message,
         g_signal_emit (G_OBJECT (op), signals[PROGRESS], 0, op->message, progress);
 }
 
+/**
+ * seahorse_operation_mark_progress_full:
+ * @op: The operation to set the progress for
+ * @message: an optional message (can be NULL)
+ * @current: the current value of the progress
+ * @total: the max. value of the progress
+ *
+ *
+ *
+ */
 void
 seahorse_operation_mark_progress_full (SeahorseOperation *op, const gchar *message,
                                        gdouble current, gdouble total)
@@ -341,6 +491,15 @@ seahorse_operation_mark_progress_full (SeahorseOperation *op, const gchar *messa
 }
 
 
+/**
+ * seahorse_operation_mark_done:
+ * @op: a #SeahorseOperation
+ * @cancelled: TRUE if this operation was cancelled
+ * @error: An error to set
+ *
+ * Sets everything in the seahorse operation to the end state
+ *
+ */
 void                
 seahorse_operation_mark_done (SeahorseOperation *op, gboolean cancelled,
                               GError *error)
@@ -365,6 +524,15 @@ seahorse_operation_mark_done (SeahorseOperation *op, gboolean cancelled,
     g_object_unref (op);
 }
 
+/**
+ * seahorse_operation_mark_result:
+ * @op: A #SeahorseOperation
+ * @result: a result
+ * @destroy_func: a destroy function
+ *
+ * If @op already has a result and a destroy function, the function is called.
+ * If there is none, it will be set to @result and @destroy_func
+ */
 void
 seahorse_operation_mark_result (SeahorseOperation *op, gpointer result,
                                 GDestroyNotify destroy_func)
@@ -390,6 +558,16 @@ G_DEFINE_TYPE (SeahorseMultiOperation, seahorse_multi_operation, SEAHORSE_TYPE_O
 
 /* HELPERS ------------------------------------------------------------------ */
 
+/**
+* operation: the operation that contains progress and message
+* message: the message, will be set by this function
+* fract: ignored
+* mop: a #SeahorseMultiOperation container
+*
+* Calculates the combined progress of all the contained operations, sets this
+* as progress for @mop
+*
+**/
 static void
 multi_operation_progress (SeahorseOperation *operation, const gchar *message, 
                           gdouble fract, SeahorseMultiOperation *mop)
@@ -455,6 +633,14 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
     }
 }
 
+/**
+* op: an operation that is done and will be cleaned
+* mop: multi operation to process
+*
+* Sets a multi-operation to done. If one of the sub operations is running it
+* just handles the progress.
+*
+**/
 static void
 multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
 {
@@ -502,13 +688,24 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
 
 /* OBJECT ------------------------------------------------------------------- */
 
+/**
+* mop: The #SeahorseMultiOperation object to initialise
+*
+* Initializes @mop
+*
+**/
 static void
 seahorse_multi_operation_init (SeahorseMultiOperation *mop)
 {
     mop->operations = NULL;
 }
 
-/* dispose of all our internal references */
+/**
+* gobject: A #SEAHORSE_MULTI_OPERATION
+*
+* dispose of all our internal references, frees the stored operations
+*
+**/
 static void
 seahorse_multi_operation_dispose (GObject *gobject)
 {
@@ -529,9 +726,17 @@ seahorse_multi_operation_dispose (GObject *gobject)
     G_OBJECT_CLASS (seahorse_multi_operation_parent_class)->dispose (gobject);
 }
 
-/* free private vars */
+
+/**
+* gobject: a #SEAHORSE_MULTI_OPERATION
+*
+*
+* finalizes the multi operation
+*
+**/
 static void
 seahorse_multi_operation_finalize (GObject *gobject)
+
 {
     SeahorseMultiOperation *mop;
     mop = SEAHORSE_MULTI_OPERATION (gobject);
@@ -541,6 +746,12 @@ seahorse_multi_operation_finalize (GObject *gobject)
     G_OBJECT_CLASS (seahorse_multi_operation_parent_class)->finalize (gobject);
 }
 
+/**
+* operation: A #SeahorseMultiOperation
+*
+* Cancels a multi operation and all the operations within
+*
+**/
 static void 
 seahorse_multi_operation_cancel (SeahorseOperation *operation)
 {
@@ -555,6 +766,13 @@ seahorse_multi_operation_cancel (SeahorseOperation *operation)
     mop->operations = seahorse_operation_list_purge (mop->operations);
 }
 
+/**
+* klass: The Class to init
+*
+* Initialises the multi-operation class. This is a container for several
+* operations
+*
+**/
 static void
 seahorse_multi_operation_class_init (SeahorseMultiOperationClass *klass)
 {
@@ -571,6 +789,13 @@ seahorse_multi_operation_class_init (SeahorseMultiOperationClass *klass)
 
 /* PUBLIC ------------------------------------------------------------------- */
 
+/**
+ * seahorse_multi_operation_new:
+ *
+ * Creates a new multi operation
+ *
+ * Returns: the new multi operation
+ */
 SeahorseMultiOperation*  
 seahorse_multi_operation_new ()
 {
@@ -578,6 +803,14 @@ seahorse_multi_operation_new ()
     return mop;
 }
 
+/**
+ * seahorse_multi_operation_take:
+ * @mop: the multi operation container
+ * @op: an operation to add
+ *
+ * Adds @op to @mop
+ *
+ */
 void
 seahorse_multi_operation_take (SeahorseMultiOperation* mop, SeahorseOperation *op)
 {
@@ -603,6 +836,15 @@ seahorse_multi_operation_take (SeahorseMultiOperation* mop, SeahorseOperation *o
  * OPERATION LIST FUNCTIONS
  */
 
+/**
+ * seahorse_operation_list_add:
+ * @list: a #GSList
+ * @operation: a #SeahorseOperation to add to the lit
+ *
+ * Prepends the seahorse operation to the list
+ *
+ * Returns: the list
+ */
 GSList*
 seahorse_operation_list_add (GSList *list, SeahorseOperation *operation)
 {
@@ -610,6 +852,15 @@ seahorse_operation_list_add (GSList *list, SeahorseOperation *operation)
     return g_slist_prepend (list, operation);
 }
 
+/**
+ * seahorse_operation_list_remove:
+ * @list: A list to remove an operation from
+ * @operation: the operation to remove
+ *
+ * Removes an operation from the list
+ *
+ * Returns: The new list
+ */
 GSList*             
 seahorse_operation_list_remove (GSList *list, SeahorseOperation *operation)
 {
@@ -625,6 +876,13 @@ seahorse_operation_list_remove (GSList *list, SeahorseOperation *operation)
    return list;
 }
 
+/**
+ * seahorse_operation_list_cancel:
+ * @list: a list of Seahorse operations
+ *
+ * Cancels every operation in the list
+ *
+ */
 void             
 seahorse_operation_list_cancel (GSList *list)
 {
@@ -639,6 +897,14 @@ seahorse_operation_list_cancel (GSList *list)
     }
 }
 
+/**
+ * seahorse_operation_list_purge:
+ * @list: A list of operations
+ *
+ * Purges a list of Seahorse operations
+ *
+ * Returns: the purged list
+ */
 GSList*             
 seahorse_operation_list_purge (GSList *list)
 {
@@ -656,12 +922,20 @@ seahorse_operation_list_purge (GSList *list)
 
             list = g_slist_remove_link (list, l);
             g_slist_free (l);
-        }         
+        }
     }
     
     return list;
 }
 
+/**
+ * seahorse_operation_list_free:
+ * @list: A #GSList of #SEAHORSE_OPERATION s
+ *
+ * Frees the list of seahorse operations
+ *
+ * Returns: NULL
+ */
 GSList*
 seahorse_operation_list_free (GSList *list)
 {
