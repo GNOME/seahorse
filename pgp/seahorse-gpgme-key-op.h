@@ -63,7 +63,11 @@ typedef enum {
 	/* RSA subkey, encrypt only. See #RSA_MIN and #RSA_MAX.
 	 * Only used in seahorse_ops_key_add_subkey().
 	 */
-	RSA_ENCRYPT = 6
+	RSA_ENCRYPT = 6,
+	/* RSA sign-only key with RSA encrypt-only subkey. See #RSA_MIN and
+	 * #LENGTH_MAX. Only used in seahorse_ops_key_generate().
+	 */
+	RSA_RSA = 11
 } SeahorseKeyEncType;
 
 #else /* GPG version >=1.4.10 or >=2.0.12 */

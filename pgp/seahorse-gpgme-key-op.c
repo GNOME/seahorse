@@ -78,7 +78,7 @@
  * @email: Optional user ID email
  * @comment: Optional user ID comment
  * @passphrase: Passphrase for key
- * @type: Key type. Supported types are #DSA_ELGAMAL, #DSA, and #RSA_SIGN
+ * @type: Key type. Supported types are #DSA_ELGAMAL, #DSA, #RSA_SIGN, and #RSA_RSA
  * @length: Length of key, must be within the range of @type specified by #SeahorseKeyLength
  * @expires: Expiration date of key
  * @err: Catches errors in the params
@@ -112,7 +112,7 @@ seahorse_gpgme_key_op_generate (SeahorseGpgmeSource *psrc, const gchar *name,
         if (length < DSA_MIN || length > DSA_MAX)
             *err = GPG_E (GPG_ERR_INV_VALUE);
         break;
-    case RSA_SIGN:
+    case RSA_RSA: RSA_SIGN:
         if (length < RSA_MIN || length > LENGTH_MAX)
             *err = GPG_E (GPG_ERR_INV_VALUE);
         break;
@@ -134,10 +134,10 @@ seahorse_gpgme_key_op_generate (SeahorseGpgmeSource *psrc, const gchar *name,
     if (comment != NULL && strlen (comment) > 0)
         common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
 
-    if (type == RSA_SIGN)
-        key_type = "Key-Type: RSA\nKey-Usage: sign";
-    else
+    if (type == DSA || type == DSA_ELGAMAL)
         key_type = "Key-Type: DSA\nKey-Usage: sign";
+    else
+        key_type = "Key-Type: RSA\nKey-Usage: sign";
 
     start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
 
@@ -145,6 +145,9 @@ seahorse_gpgme_key_op_generate (SeahorseGpgmeSource *psrc, const gchar *name,
     if (type == DSA_ELGAMAL)
         parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
                                  start, (length < DSA_MAX) ? length : DSA_MAX, length, common);
+    else if (type == RSA_RSA)
+        parms = g_strdup_printf ("%s%d\nSubkey-Type: RSA\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
+                                 start, length, length, common);
     else
         parms = g_strdup_printf ("%s%d\n%s", start, length, common);
 
