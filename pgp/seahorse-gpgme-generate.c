@@ -345,6 +345,12 @@ on_gpgme_generate_algorithm_changed (GtkComboBox *combo, SeahorseWidget *swidget
     gtk_spin_button_set_range (GTK_SPIN_BUTTON (widget), 
                                available_algorithms[idx].min, 
                                available_algorithms[idx].max);
+
+    /* Set sane default key length */
+    if (2048 > available_algorithms[idx].max)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), available_algorithms[idx].max);
+    else
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 2048);
 }
 
 /**
