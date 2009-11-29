@@ -80,7 +80,10 @@ desktop_in_files = seahorse.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
+man_MANS = seahorse.1
+
 EXTRA_DIST = \
+	$(man_MANS) \
 	$(ui_DATA) \
 	seahorse.desktop.in.in
 
