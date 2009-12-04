@@ -41,13 +41,19 @@ cryptui-marshal.c: cryptui-marshal.list $(GLIB_GENMARSHAL)
 
 lib_LTLIBRARIES = libcryptui.la
 
+libcryptui_src = \
+    cryptui.c \
+    cryptui-keyset.c \
+    cryptui-key-store.c \
+    cryptui-key-combo.c \
+    cryptui-key-list.c \
+    cryptui-key-chooser.c
+
 libcryptui_la_SOURCES = \
-    cryptui.h cryptui.c cryptui-defines.h cryptui-priv.h \
-    cryptui-keyset.h cryptui-keyset.c \
-    cryptui-key-store.h cryptui-key-store.c \
-    cryptui-key-combo.h cryptui-key-combo.c \
-    cryptui-key-list.h cryptui-key-list.c \
-    cryptui-key-chooser.h cryptui-key-chooser.c \
+    cryptui-defines.h \
+    cryptui-priv.h \
+    $(inc_HEADERS) \
+    $(libcryptui_src) \
     $(MARSHALLERS)
     
 libcryptui_la_LDFLAGS = \
@@ -85,3 +91,37 @@ CLEANFILES = \
 
 BUILT_SOURCES = \
 	$(MARSHALLERS)
+
+# ------------------------------------------------------------------
+# GObject Introspection
+BUILT_GIRSOURCES =
+
+if HAVE_INTROSPECTION
+CryptUI-@LIBCRYPTUI_MAJOR@.gir: $(INTROSPECTION_SCANNER) libcryptui.la
+	$(QUIET_GEN)$(INTROSPECTION_SCANNER) -v \
+	--namespace CryptUI --nsversion=@LIBCRYPTUI_MAJOR@ \
+    --strip-prefix=CryptUI \
+	$(INCLUDES) \
+	--include=Gtk-2.0 \
+	--library=libcryptui.la \
+    --pkg gtk+-2.0 \
+    --output $@ \
+	$(inc_HEADERS) \
+	$(libcryptui_src)
+
+BUILT_GIRSOURCES += CryptUI-@LIBCRYPTUI_MAJOR@.gir
+
+# INTROSPECTION_GIRDIR/INTROSPECTION_TYPELIBDIR aren't the right place to
+# install anything - we need to install inside our prefix.
+girdir = $(datadir)/gir-1.0
+gir_DATA = $(BUILT_GIRSOURCES)
+
+typelibsdir = $(libdir)/girepository-1.0/
+
+typelibs_DATA = $(BUILT_GIRSOURCES:.gir=.typelib)
+
+%.typelib: %.gir $(INTROSPECTION_COMPILER)
+	$(QUIET_GEN)$(DEBUG) $(INTROSPECTION_COMPILER) --includedir=$(srcdir) --includedir=. $(INTROSPECTION_COMPILER_OPTS) $< -o $(builddir)/$(@F)
+
+CLEANFILES += $(BUILT_GIRSOURCES) $(typelibs_DATA)
+endif # HAVE_INTROSPECTION

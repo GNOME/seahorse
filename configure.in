@@ -544,7 +544,13 @@ CAIRO_PREFIX="`pkg-config --variable=prefix cairo`"
 AC_SUBST(GLIB_PREFIX)
 AC_SUBST(ATK_PREFIX)
 AC_SUBST(PANGO_PREFIX)
-AC_SUBST(CAIRO_PREFIX) 
+AC_SUBST(CAIRO_PREFIX)
+
+dnl ****************************************************************************
+dnl GObject Introspection
+dnl ****************************************************************************
+
+GOBJECT_INTROSPECTION_CHECK([0.6.4])
 
 dnl ****************************************************************************
 
@@ -617,14 +623,15 @@ dnl  SUMMARY
 dnl ****************************************************************************
 
 echo "
-PKCS11 Support:          $enable_pkcs11
-PGP Support:		 $enable_pgp
-  GnuPG Version:         $have_gpg
-  GPGME Version:         $have_gpgme
-SSH Support:             $enable_ssh
-Keyserver Support:       $with_keyserver
-  LDAP:                  $with_ldap
-  HKP:                   $enable_hkp
-  Key Sharing:           $enable_sharing
-Notification Support:    $enable_libnotify
+PKCS11 Support:             $enable_pkcs11
+PGP Support:                $enable_pgp
+  GnuPG Version:            $have_gpg
+  GPGME Version:            $have_gpgme
+SSH Support:                $enable_ssh
+Keyserver Support:          $with_keyserver
+  LDAP:                     $with_ldap
+  HKP:                      $enable_hkp
+  Key Sharing:              $enable_sharing
+Notification Support:       $enable_libnotify
+Build introspection data:   ${enable_introspection}
 "
