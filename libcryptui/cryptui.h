@@ -52,7 +52,7 @@ typedef enum {
     CRYPTUI_ENCTYPE_PRIVATE =    3,
     
     /* Used internally */
-    _CRYPTUI_ENCTYPE_MAXVALUE
+    CRYPTUI_ENCTYPE_MAXVALUE
 } CryptUIEncType;
 
 /**
