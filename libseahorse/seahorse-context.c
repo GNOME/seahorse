@@ -94,6 +94,12 @@ static void seahorse_context_finalize   (GObject *gobject);
 static void refresh_keyservers          (GConfClient *client, guint id, 
                                          GConfEntry *entry, SeahorseContext *sctx);
 
+/**
+* klass: The class to initialise
+*
+* Inits the #SeahorseContextClass. Adds the signals "added", "removed", "changed"
+* and "refreshing"
+**/
 static void
 seahorse_context_class_init (SeahorseContextClass *klass)
 {
@@ -120,6 +126,12 @@ seahorse_context_class_init (SeahorseContextClass *klass)
 }
 
 /* init context, private vars, set prefs, connect signals */
+/**
+* sctx: The context to initialise
+*
+* Initialises the Sahorse Context @sctx
+*
+**/
 static void
 seahorse_context_init (SeahorseContext *sctx)
 {
@@ -140,13 +152,27 @@ seahorse_context_init (SeahorseContext *sctx)
     g_object_ref (sctx);
 }
 
+/**
+* object: ignored
+* value: the value to prepend
+* user_data: GSList ** to prepend to
+*
+* Prepends #value to #user_data
+*
+**/
 static void
 hash_to_ref_slist (gpointer object, gpointer value, gpointer user_data)
 {
 	*((GSList**)user_data) = g_slist_prepend (*((GSList**)user_data), g_object_ref (value));
 }
 
-/* release all references */
+
+/**
+* gobject: the object to dispose (#SeahorseContext)
+*
+* release all references
+*
+**/
 static void
 seahorse_context_dispose (GObject *gobject)
 {
@@ -192,7 +218,13 @@ seahorse_context_dispose (GObject *gobject)
     G_OBJECT_CLASS (seahorse_context_parent_class)->dispose (gobject);
 }
 
-/* destroy all objects, free private vars */
+
+/**
+* gobject: The #SeahorseContext to finalize
+*
+* destroy all objects, free private vars
+*
+**/
 static void
 seahorse_context_finalize (GObject *gobject)
 {
@@ -226,6 +258,17 @@ seahorse_context_for_app (void)
     return app_context;
 }
    
+/**
+ * seahorse_context_new:
+ * @flags: Flags define the type of the context to create.
+ *
+ * Creates a new #SeahorseContext.
+ * Flags:
+ * SEAHORSE_CONTEXT_DAEMON: internal daemon flag will be set
+ * SEAHORSE_CONTEXT_APP: will support DNS-SD discovery and remote key sources
+ *
+ * Returns: The new context
+ */
 SeahorseContext*
 seahorse_context_new (guint flags)
 {
@@ -278,6 +321,14 @@ seahorse_context_destroy (SeahorseContext *sctx)
         app_context = NULL;
 }
 
+/**
+* sctx: #SeahorseContext to add the source to
+* sksrc: #SeahorseSource to add
+*
+* Adds the source to the context
+*
+* Returns TRUE if the source was added, FALSE if it was already there
+**/
 static gboolean                
 take_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 {
@@ -290,6 +341,14 @@ take_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 	return FALSE;
 }
 
+/**
+ * seahorse_context_take_source:
+ * @sctx: A context to add a source to, can be NULL
+ * @sksrc: The source to add
+ *
+ * Adds @sksrc to the @sctx. If @sctx is NULL it will use the application context.
+ *
+ */
 void                
 seahorse_context_take_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 {
@@ -302,6 +361,14 @@ seahorse_context_take_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 	take_source (sctx, sksrc);
 }
 
+/**
+ * seahorse_context_add_source:
+ * @sctx: A context to add a source to, can be NULL
+ * @sksrc: The source to add
+ *
+ * Adds @sksrc to the @sctx. If @sctx is NULL it will use the application context.
+ * It also adds a reference to the new added source.
+ */
 void
 seahorse_context_add_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 {
@@ -315,6 +382,14 @@ seahorse_context_add_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 		g_object_ref (sksrc);
 }
     
+/**
+ * seahorse_context_remove_source:
+ * @sctx: Context to remove objects from
+ * @sksrc: The source to remove
+ *
+ * Remove all objects from source @sksrc from the #SeahorseContext @sctx
+ *
+ */
 void
 seahorse_context_remove_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 {
@@ -339,6 +414,16 @@ seahorse_context_remove_source (SeahorseContext *sctx, SeahorseSource *sksrc)
     g_object_unref (sksrc);
 }
 
+/**
+ * seahorse_context_find_source:
+ * @sctx: A #SeahorseContext
+ * @ktype: A seahorse tag (SEAHORSE_TAG_INVALID is wildcard)
+ * @location: A location (SEAHORSE_LOCATION_INVALID is wildcard)
+ *
+ * Finds a context where @ktype and @location match
+ *
+ * Returns: The context
+ */
 SeahorseSource*  
 seahorse_context_find_source (SeahorseContext *sctx, GQuark ktype,
                               SeahorseLocation location)
@@ -413,6 +498,16 @@ seahorse_context_find_sources (SeahorseContext *sctx, GQuark ktype,
     return sources;
 }
 
+/**
+ * seahorse_context_remote_source:
+ * @sctx: the context to add the source to (can be NULL)
+ * @uri: An URI to add as remote source
+ *
+ * Add a remote source to the Context @sctx. If it already exists, the source
+ * object will be returned.
+ *
+ * Returns: The #SeahorseSource with this URI
+ */
 SeahorseSource*  
 seahorse_context_remote_source (SeahorseContext *sctx, const gchar *uri)
 {
@@ -460,19 +555,44 @@ seahorse_context_remote_source (SeahorseContext *sctx, const gchar *uri)
 }
 
 
+/**
+* sobj: SeahorseObject, sending the signal
+* spec: ignored
+* sctx: The instance to emit the signal on (#SeahorseContext)
+*
+* Emits a changed signal.
+*
+**/
 static void
 object_notify (SeahorseObject *sobj, GParamSpec *spec, SeahorseContext *sctx)
 {
 	g_signal_emit (sctx, signals[CHANGED], 0, sobj);
 }
 
+/**
+* sksrc: a #SeahorseSource, part of the hash
+* id: an id, part of the hash
+*
+* Creates a hash out of @sksrc and @id
+*
+* Returns an int stored in a pointer, representing the hash
+**/
 static gpointer                 
 hashkey_by_source (SeahorseSource *sksrc, GQuark id)
+
 {
     return GINT_TO_POINTER (g_direct_hash (sksrc) ^ 
                             g_str_hash (g_quark_to_string (id)));
 }
 
+/**
+* a: the first #SeahorseObject
+* b: the second #SeahorseObject
+*
+* Compares the locations of the two objects
+*
+* Returns 0 if a==b, -1 or 1 on difference
+**/
 static gint
 sort_by_location (gconstpointer a, gconstpointer b)
 {
@@ -489,6 +609,15 @@ sort_by_location (gconstpointer a, gconstpointer b)
     return aloc > bloc ? -1 : 1;
 }
 
+/**
+* sctx: The seahorse context to manipulate
+* sobj: The object to add/remove
+* add: TRUE if the object should be added
+*
+* Either adds or removes an object from sctx->pv->objects_by_type.
+* The new list will be sorted by location.
+*
+**/
 static void
 setup_objects_by_type (SeahorseContext *sctx, SeahorseObject *sobj, gboolean add)
 {
@@ -534,6 +663,14 @@ setup_objects_by_type (SeahorseContext *sctx, SeahorseObject *sobj, gboolean add
     g_list_free (objects);
 }
 
+/**
+ * seahorse_context_add_object:
+ * @sctx: The context to add the object to
+ * @sobj: The object to add
+ *
+ * Adds @sobj to @sctx. References @sobj
+ *
+ */
 void
 seahorse_context_add_object (SeahorseContext *sctx, SeahorseObject *sobj)
 {
@@ -545,6 +682,14 @@ seahorse_context_add_object (SeahorseContext *sctx, SeahorseObject *sobj)
     seahorse_context_take_object (sctx, sobj);
 }
 
+/**
+ * seahorse_context_take_object:
+ * @sctx: The #SeahorseContext context to add an object to
+ * @sobj: The #SeahorseObject object to add
+ *
+ * Adds @sobj to @sctx. If a similar object exists, it will be overwritten.
+ * Emits the "added" signal.
+ */
 void
 seahorse_context_take_object (SeahorseContext *sctx, SeahorseObject *sobj)
 {
@@ -572,6 +717,14 @@ seahorse_context_take_object (SeahorseContext *sctx, SeahorseObject *sobj)
     g_signal_connect (sobj, "notify", G_CALLBACK (object_notify), sctx);
 }
 
+/**
+ * seahorse_context_get_count:
+ * @sctx: The context. If NULL is passed it will take the application context
+ *
+ *
+ *
+ * Returns: The number of objects in this context
+ */
 guint
 seahorse_context_get_count (SeahorseContext *sctx)
 {
@@ -581,6 +734,16 @@ seahorse_context_get_count (SeahorseContext *sctx)
     return g_hash_table_size (sctx->pv->objects_by_source);
 }
 
+/**
+ * seahorse_context_get_object:
+ * @sctx: The #SeahorseContext to look in
+ * @sksrc: The source to match
+ * @id: the id to match
+ *
+ * Finds the object with the source @sksrc and @id in the context and returns it
+ *
+ * Returns: The matching object
+ */
 SeahorseObject*        
 seahorse_context_get_object (SeahorseContext *sctx, SeahorseSource *sksrc,
                              GQuark id)
@@ -596,6 +759,15 @@ seahorse_context_get_object (SeahorseContext *sctx, SeahorseSource *sksrc,
     return SEAHORSE_OBJECT (g_hash_table_lookup (sctx->pv->objects_by_source, k));
 }
 
+/**
+ * ObjectMatcher:
+ * @kp: A #SeahorseObjectPredicate to compare an object to
+ * @many: TRUE if there can be several matches
+ * @func: A function to call for every match
+ * @user_data: user data to pass to the function
+ *
+ *
+ **/
 typedef struct _ObjectMatcher {
 	SeahorseObjectPredicate *kp;
 	gboolean many;
@@ -603,6 +775,17 @@ typedef struct _ObjectMatcher {
 	gpointer user_data;
 } ObjectMatcher;
 
+/**
+ * find_matching_objects:
+ * @key: ignored
+ * @sobj: the object to match
+ * @km: an #ObjectMatcher
+ *
+ * Calls km->func for every matched object
+ *
+ * Returns: TRUE if the search terminates, FALSE if there could be another
+ * match or nothing was found
+ */
 gboolean
 find_matching_objects (gpointer key, SeahorseObject *sobj, ObjectMatcher *km)
 {
@@ -621,6 +804,13 @@ find_matching_objects (gpointer key, SeahorseObject *sobj, ObjectMatcher *km)
 	return FALSE;
 }
 
+/**
+* object: A #SeahorseObject to add to the list
+* user_data: a #GList to add the object to
+*
+* Does not return anything....
+*
+**/
 static void
 add_object_to_list (SeahorseObject *object, gpointer user_data)
 {
@@ -628,6 +818,15 @@ add_object_to_list (SeahorseObject *object, gpointer user_data)
 	*list = g_list_prepend (*list, object);
 }
 
+/**
+ * seahorse_context_find_objects_full:
+ * @self: The #SeahorseContext to match objects in
+ * @pred: #SeahorseObjectPredicate containing some data to match
+ *
+ * Finds matching objects and adds them to the list
+ *
+ * Returns: a #GList list containing the matching objects
+ */
 GList*
 seahorse_context_find_objects_full (SeahorseContext *self, SeahorseObjectPredicate *pred)
 {
@@ -649,6 +848,16 @@ seahorse_context_find_objects_full (SeahorseContext *self, SeahorseObjectPredica
 	return list; 
 }
 
+/**
+ * seahorse_context_for_objects_full:
+ * @self: #SeahorseContext to work with
+ * @pred: #SeahorseObjectPredicate to match
+ * @func: Function to call for matching objects
+ * @user_data: Data to pass to this function
+ *
+ * Calls @func for every object in @self matching the criteria in @pred. @user_data
+ * is passed to this function
+ */
 void
 seahorse_context_for_objects_full (SeahorseContext *self, SeahorseObjectPredicate *pred,
                                    SeahorseObjectFunc func, gpointer user_data)
@@ -670,6 +879,15 @@ seahorse_context_for_objects_full (SeahorseContext *self, SeahorseObjectPredicat
 	g_hash_table_find (self->pv->objects_by_source, (GHRFunc)find_matching_objects, &km);
 }
 
+/**
+ * seahorse_context_get_objects:
+ * @self: A #SeahorseContext to find objects in
+ * @source: A #SeahorseSource that must match
+ *
+ *
+ *
+ * Returns: A #GList of objects from @self that match the source @source
+ */
 GList*
 seahorse_context_get_objects (SeahorseContext *self, SeahorseSource *source)
 {
@@ -686,6 +904,17 @@ seahorse_context_get_objects (SeahorseContext *self, SeahorseSource *source)
 	return seahorse_context_find_objects_full (self, &pred);
 }
 
+/**
+ * seahorse_context_find_object:
+ * @sctx: The #SeahorseContext to work with (can be NULL)
+ * @id: The id to look for
+ * @location: The location to look for (at least)
+ *
+ * Finds the object with the id @id at location @location or better.
+ * Local is better than remote...
+ *
+ * Returns: the matching #SeahorseObject or NULL if none is found
+ */
 SeahorseObject*        
 seahorse_context_find_object (SeahorseContext *sctx, GQuark id, SeahorseLocation location)
 {
@@ -712,6 +941,18 @@ seahorse_context_find_object (SeahorseContext *sctx, GQuark id, SeahorseLocation
     return NULL;
 }
 
+
+/**
+ * seahorse_context_find_objects:
+ * @sctx: A #SeahorseContext to look in (can be NULL)
+ * @ktype: The tag to look for
+ * @usage: the usage (#SeahorseUsage)
+ * @location: the location to look for
+ *
+ *
+ *
+ * Returns: A list of matching objects
+ */
 GList*
 seahorse_context_find_objects (SeahorseContext *sctx, GQuark ktype, 
                                SeahorseUsage usage, SeahorseLocation location)
@@ -730,6 +971,14 @@ seahorse_context_find_objects (SeahorseContext *sctx, GQuark ktype,
     return seahorse_context_find_objects_full (sctx, &pred);
 }
 
+/**
+* key: a pointer to a key to verify (hashkey)
+* value: a seahorse object
+* user_data: ignored
+*
+* Asserts that the @key is the same as the one stored in @value
+*
+**/
 static void
 verify_each_object (gpointer key, gpointer value, gpointer user_data)
 {
@@ -741,6 +990,13 @@ verify_each_object (gpointer key, gpointer value, gpointer user_data)
 	g_assert (k == key);
 }
 
+/**
+ * seahorse_context_verify_objects:
+ * @self: A #SeahorseContext to verify
+ *
+ * Verifies each key in the given context.
+ * An assertion handles failure.
+ */
 void
 seahorse_context_verify_objects (SeahorseContext *self)
 {
@@ -750,6 +1006,14 @@ seahorse_context_verify_objects (SeahorseContext *self)
 	g_hash_table_foreach (self->pv->objects_by_source, verify_each_object, self);
 }
 
+/**
+ * seahorse_context_remove_object:
+ * @sctx: The #SeahorseContext (can be NULL)
+ * @sobj: The #SeahorseObject to remove
+ *
+ * Removes the object from the context
+ *
+ */
 void 
 seahorse_context_remove_object (SeahorseContext *sctx, SeahorseObject *sobj)
 {
@@ -834,6 +1098,13 @@ seahorse_context_get_discovery (SeahorseContext *sctx)
     return sctx->pv->discovery;
 }
 
+/**
+ * seahorse_context_refresh_auto:
+ * @sctx: A #SeahorseContext (can be NULL)
+ *
+ * Starts a new refresh operation and emits the "refreshing" signal
+ *
+ */
 void
 seahorse_context_refresh_auto (SeahorseContext *sctx)
 {
@@ -863,6 +1134,15 @@ seahorse_context_refresh_auto (SeahorseContext *sctx)
 	g_signal_emit (sctx, signals[REFRESHING], 0, sctx->pv->refresh_ops);
 }
 
+/**
+ * seahorse_context_search_remote:
+ * @sctx: A #SeahorseContext (can be NULL)
+ * @search: a keyword (name, email address...) to search for
+ *
+ * Searches for the key matching @search o the remote servers
+ *
+ * Returns: The created search operation
+ */
 SeahorseOperation*  
 seahorse_context_search_remote (SeahorseContext *sctx, const gchar *search)
 {
@@ -919,12 +1199,29 @@ seahorse_context_search_remote (SeahorseContext *sctx, const gchar *search)
 #ifdef WITH_KEYSERVER
 #ifdef WITH_PGP
 /* For copying the keys */
+/**
+* uri: the uri of the source
+* sksrc: the source to add or replace
+* ht: the hash table to modify
+*
+* Adds the @sksrc to the hash table @ht
+*
+**/
 static void 
 auto_source_to_hash (const gchar *uri, SeahorseSource *sksrc, GHashTable *ht)
+
 {
     g_hash_table_replace (ht, (gpointer)uri, sksrc);
 }
 
+/**
+* uri: The uri of this source
+* sksrc: The source to remove
+* sctx: The Context to remove data from
+*
+*
+*
+**/
 static void
 auto_source_remove (const gchar* uri, SeahorseSource *sksrc, SeahorseContext *sctx)
 {
@@ -934,6 +1231,15 @@ auto_source_remove (const gchar* uri, SeahorseSource *sksrc, SeahorseContext *sc
 #endif 
 #endif
 
+/**
+* client: ignored
+* id: ignored
+* entry: used for validation only
+* sctx: The context to work with
+*
+* Refreshes the sources generated from the keyservers
+*
+**/
 static void
 refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry, 
                     SeahorseContext *sctx)
@@ -984,6 +1290,16 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry,
 #endif /* WITH_KEYSERVER */
 }
 
+/**
+ * seahorse_context_transfer_objects:
+ * @sctx: The #SeahorseContext (can be NULL)
+ * @objects: the objects to import
+ * @to: a source to import to (can be NULL)
+ *
+ *
+ *
+ * Returns: A transfer operation
+ */
 SeahorseOperation*
 seahorse_context_transfer_objects (SeahorseContext *sctx, GList *objects, 
                                    SeahorseSource *to)
@@ -1069,6 +1385,17 @@ seahorse_context_transfer_objects (SeahorseContext *sctx, GList *objects,
     return mop ? SEAHORSE_OPERATION (mop) : op;
 }
 
+/**
+ * seahorse_context_retrieve_objects:
+ * @sctx: A #SeahorsecContext
+ * @ktype: The type of the keys to transfer
+ * @ids: The key ids to transfer
+ * @to: A #SeahorseSource. If NULL, it will use @ktype to find a source
+ *
+ * Copies remote objects to a local source
+ *
+ * Returns: A #SeahorseOperation
+ */
 SeahorseOperation*
 seahorse_context_retrieve_objects (SeahorseContext *sctx, GQuark ktype, 
                                    GSList *ids, SeahorseSource *to)
@@ -1118,6 +1445,16 @@ seahorse_context_retrieve_objects (SeahorseContext *sctx, GQuark ktype,
 }
 
 
+/**
+ * seahorse_context_discover_objects:
+ * @sctx: the context to work with (can be NULL)
+ * @ktype: the type of key to discover
+ * @rawids: a list of ids to discover
+ *
+ * Downloads a list of keys from the keyserver
+ *
+ * Returns: The imported keys
+ */
 GList*
 seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype, 
                                    GSList *rawids)
@@ -1211,6 +1548,15 @@ seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype,
     return robjects;
 }
 
+/**
+ * seahorse_context_object_from_dbus:
+ * @sctx: A #SeahorseContext
+ * @key: the string id of the object to get
+ *
+ * Finds an object basing on the @key
+ *
+ * Returns: The #SeahorseObject found. NULL on not found.
+ */
 SeahorseObject*
 seahorse_context_object_from_dbus (SeahorseContext *sctx, const gchar *key)
 {
@@ -1223,18 +1569,45 @@ seahorse_context_object_from_dbus (SeahorseContext *sctx, const gchar *key)
     return sobj;
 }
 
+/**
+ * seahorse_context_object_to_dbus:
+ * @sctx: A seahorse context
+ * @sobj: the object
+ *
+ * Translates an object to a string id
+ *
+ * Returns: The string id of the object. Free with #g_free
+ */
 gchar*
 seahorse_context_object_to_dbus (SeahorseContext *sctx, SeahorseObject *sobj)
 {
     return seahorse_context_id_to_dbus (sctx, seahorse_object_get_id (sobj));
 }
 
+/**
+ * seahorse_context_id_to_dbus:
+ * @sctx: ignored
+ * @id: the id to translate
+ *
+ * Translates an id to a dbus compatible string
+ *
+ * Returns: A string, free with #g_free
+ */
 gchar*
 seahorse_context_id_to_dbus (SeahorseContext* sctx, GQuark id)
 {
 	return g_strdup (g_quark_to_string (id));
 }
 
+/**
+ * seahorse_context_canonize_id:
+ * @ktype: a keytype defining the canonization function
+ * @id: The id to canonize
+ *
+ *
+ *
+ * Returns: A canonized GQuark
+ */
 GQuark
 seahorse_context_canonize_id (GQuark ktype, const gchar *id)
 {
