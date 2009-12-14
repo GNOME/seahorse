@@ -43,7 +43,7 @@
 #define  GPG_VERSION_PREFIX1   "1."
 #define  GPG_VERSION_PREFIX2   "2."
 
-static gchar gpg_homedir[MAXPATHLEN];
+static gchar *gpg_homedir;
 static gboolean gpg_options_inited = FALSE;
 
 static gboolean
@@ -76,6 +76,9 @@ find_config_file (gboolean read, GError **err)
 
     g_assert (gpg_options_inited);
     g_assert (!err || !*err);
+
+    if (!gpg_homedir)
+        return NULL;
 
     /* Check for and open ~/.gnupg/gpg.conf */
     conf = g_strconcat (gpg_homedir, "/gpg.conf", NULL);
@@ -208,16 +211,14 @@ parse_home_directory (gpgme_engine_info_t engine, GError **err)
                     *x = 0;
                     g_strstrip (t);
 
-                    gpg_homedir[0] = 0;
+                    g_free (gpg_homedir);
 
                     /* If it's not a rooted path then expand */
                     if (t[0] == '~') {
-                        g_strlcpy (gpg_homedir, g_get_home_dir (),
-                                   sizeof (gpg_homedir));
-                        t++;
+                        gpg_homedir = g_strconcat (g_get_home_dir(), ++t);
+                    } else {
+                        gpg_homedir = g_strdup (t);
                     }
-
-                    g_strlcat (gpg_homedir, t, sizeof (gpg_homedir));
                     found = TRUE;
                 }
             }
