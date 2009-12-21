@@ -78,6 +78,7 @@ seahorse_service_crypto_new ()
 * gstarterr: the gpgme error that could have occured earlier
 * cryptdata: gpgme cryptdata
 * result: the result of the gpgme operation (out)
+* resultlength: length of the created buffer (out) (can be NULL)
 * error: will be set on error
 *
 * Finishes the gpgme processing and returns the result
@@ -86,7 +87,7 @@ seahorse_service_crypto_new ()
 */
 static gboolean
 process_crypto_result (SeahorseGpgmeOperation *pop, gpgme_error_t gstarterr, 
-                       gpgme_data_t cryptdata, gchar **result, GError **error)
+                       gpgme_data_t cryptdata, gchar **result, gsize *resultlength, GError **error)
 {
     size_t len;
     char *data;
@@ -112,8 +113,9 @@ process_crypto_result (SeahorseGpgmeOperation *pop, gpgme_error_t gstarterr,
         
         data = gpgme_data_release_and_get_mem (cryptdata, &len);
         *result = g_strndup (data, len);
+        if (resultlength != NULL)
+            *resultlength = (gsize)len;
         g_free (data);
-        
         return TRUE;
         
     } else {
@@ -267,30 +269,30 @@ notify_signatures (const gchar* data, gpgme_verify_result_t status)
 	g_free(body);
 }    
 
-/* -----------------------------------------------------------------------------
- * DBUS METHODS 
- */
 
 /**
- * seahorse_service_crypto_encrypt_text:
- * @crypto: the crypto service (#SeahorseServiceCrypto)
- * @recipients: A list of recipients (keyids "openpgp:B8098FB063E2C811")
- * @signer: optional
- * @flags: 0, not used
- * @cleartext: the text to encrypt
- * @crypttext: the decrypted text (out)
- * @error: an error (out)
- *
- * DBus: EncryptText
- *
- *
- * Returns: TRUE on success
- */
-gboolean
-seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto, 
-                                      const char **recipients, const char *signer, 
-                                      int flags, const char *cleartext, 
-                                      char **crypttext, GError **error)
+* crypto: the crypto service (#SeahorseServiceCrypto)
+* recipients: A list of recipients (keyids "openpgp:B8098FB063E2C811")
+* signer: optional, the keyid of the signer
+* flags: 0, not used
+* cleartext: the text to encrypt
+* clearlength: Length of the cleartext
+* crypttext: the encrypted text (out)
+* cryptlength: the length of this text (out)
+* textmode: TRUE if gpgme should use textmode
+* ascii_armor: TRUE if GPGME should use ascii armor
+* error: The Error
+*
+* Handles encryption in a generic way. Can be used by several DBus APIs
+*
+* Returns TRUE on success
+**/
+static gboolean
+crypto_encrypt_generic (SeahorseServiceCrypto *crypto,
+                        const char **recipients, const char *signer,
+                        int flags, const char *cleartext, gsize clearlength,
+                        char **crypttext, gsize *cryptlength, gboolean textmode,
+                        gboolean ascii_armor, GError **error)
 {
     GList *recipkeys = NULL;
     SeahorseGpgmeOperation *pop; 
@@ -305,7 +307,6 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
      * TODO: Once we support different kinds of keys that support encryption
      * then all this logic will need to change. 
      */
-    
     /* The signer */
     if (signer && signer[0]) {
         signkey = seahorse_context_object_from_dbus (SCTX_APP (), signer);
@@ -322,7 +323,6 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
             return FALSE;
         }
     }
-    
     /* The recipients */
     for( ; recipients[0]; recipients++)
     {
@@ -350,18 +350,17 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
                      _("No recipients specified"));
         return FALSE;
     }
-    
     pop = seahorse_gpgme_operation_new (NULL);
     
     /* new data form text */
-    gerr = gpgme_data_new_from_mem (&plain, cleartext, strlen (cleartext), FALSE);
+    gerr = gpgme_data_new_from_mem (&plain, cleartext, clearlength, FALSE);
     g_return_val_if_fail (GPG_IS_OK (gerr), FALSE);
     gerr = gpgme_data_new (&cipher);
     g_return_val_if_fail (GPG_IS_OK (gerr), FALSE);
    
     /* encrypt with armor */
-    gpgme_set_textmode (pop->gctx, TRUE);
-    gpgme_set_armor (pop->gctx, TRUE);
+    gpgme_set_textmode (pop->gctx, textmode);
+    gpgme_set_armor (pop->gctx, ascii_armor);
 
     /* Add the default key if set and necessary */
     if (seahorse_gconf_get_boolean (ENCRYPTSELF_KEY)) {
@@ -383,15 +382,224 @@ seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
         gerr = gpgme_op_encrypt_start (pop->gctx, recips, GPGME_ENCRYPT_ALWAYS_TRUST, 
                                        plain, cipher);
     }
-    
     free_keys (recips);
 
     /* Frees cipher */
-    ret = process_crypto_result (pop, gerr, cipher, crypttext, error);
-    
+    ret = process_crypto_result (pop, gerr, cipher, crypttext, cryptlength, error);
     g_object_unref (pop);
     gpgme_data_release (plain);
     return ret;
+}
+
+
+
+
+/**
+* crypto: SeahorseServiceCrypto context
+* ktype: "openpgp"
+* flags: FLAG_QUIET for no notification
+* crypttext: the text to decrypt
+* cryptlength: the length of the crypto text
+* cleartext: the decrypted text (out)
+* clearlength: The length of the clear text (out)
+* signer: the signer if the text is signed (out)
+* textmode: TRUE to switch textmode on
+* ascii_armor: TRUE to switch ascii armor on
+* error: a potential error (out)
+*
+* Decrypts any buffer (text and data). Can be used by DBus API functions
+*
+* Returns TRUE on success
+**/
+static gboolean
+crypto_decrypt_generic (SeahorseServiceCrypto *crypto,
+                        const char *ktype, int flags,
+                        const char *crypttext, gsize cryptlength,
+                        char **cleartext, gsize *clearlength,
+                        char **signer, gboolean textmode,
+                        gboolean ascii_armor, GError **error)
+
+{
+    gpgme_verify_result_t status;
+    gpgme_error_t gerr;
+    SeahorseGpgmeOperation *pop;
+    gpgme_data_t plain, cipher;
+    gboolean ret = TRUE;
+    GQuark keyid;
+
+    if (!g_str_equal (ktype, g_quark_to_string (SEAHORSE_PGP))) {
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
+                     _("Invalid key type for decryption: %s"), ktype);
+        return FALSE;
+    }
+
+    /*
+     * TODO: Once we support different kinds of keys that support encryption
+     * then all this logic will need to change.
+     */
+
+    pop = seahorse_gpgme_operation_new (NULL);
+
+    /* new data from text */
+    gerr = gpgme_data_new_from_mem (&cipher, crypttext, cryptlength, FALSE);
+    g_return_val_if_fail (GPG_IS_OK (gerr), FALSE);
+    gerr = gpgme_data_new (&plain);
+    g_return_val_if_fail (GPG_IS_OK (gerr), FALSE);
+
+    /* encrypt with armor */
+    gpgme_set_textmode (pop->gctx, textmode);
+    gpgme_set_armor (pop->gctx, ascii_armor);
+
+    /* Do the decryption */
+    gerr = gpgme_op_decrypt_verify_start (pop->gctx, cipher, plain);
+
+    /* Frees plain */
+    ret = process_crypto_result (pop, gerr, plain, cleartext, clearlength, error);
+
+    if (ret) {
+        *signer = NULL;
+        status = gpgme_op_verify_result (pop->gctx);
+
+        if (status->signatures) {
+            if (!(flags & FLAG_QUIET))
+                notify_signatures (NULL, status);
+            if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
+                status->signatures->summary & GPGME_SIGSUM_VALID ||
+                status->signatures->summary & GPGME_SIGSUM_KEY_MISSING) {
+                keyid = seahorse_pgp_key_canonize_id (status->signatures->fpr);
+                *signer = seahorse_context_id_to_dbus (SCTX_APP (), keyid);
+            }
+        }
+    }
+
+    g_object_unref (pop);
+    gpgme_data_release (cipher);
+    return ret;
+}
+
+/* -----------------------------------------------------------------------------
+ * DBUS METHODS
+ */
+
+/**
+ * seahorse_service_crypto_encrypt_text:
+ * @crypto: the crypto service (#SeahorseServiceCrypto)
+ * @recipients: A list of recipients (keyids "openpgp:B8098FB063E2C811")
+ * @signer: optional, the keyid of the signer
+ * @flags: 0, not used
+ * @cleartext: the text to encrypt
+ * @crypttext: the encrypted text (out)
+ * @error: an error (out)
+ *
+ * DBus: EncryptText
+ *
+ *
+ * Returns: TRUE on success
+ */
+gboolean
+seahorse_service_crypto_encrypt_text (SeahorseServiceCrypto *crypto,
+                                      const char **recipients, const char *signer,
+                                      int flags, const char *cleartext,
+                                      char **crypttext, GError **error)
+{
+
+    return crypto_encrypt_generic (crypto,
+                                      recipients, signer,
+                                      flags, cleartext, strlen(cleartext),
+                                      crypttext, NULL, TRUE, TRUE,
+                                      error);
+}
+
+
+/**
+ * seahorse_service_crypto_encrypt_file:
+ * @crypto: the crypto service (#SeahorseServiceCrypto)
+ * @recipients: A list of recipients (keyids "openpgp:B8098FB063E2C811")
+ * @signer: optional
+ * @flags: 0, not used
+ * @clearuri: the data of an inout file. This will be encrypted
+ * @crypturi: the uri of the output file. Will be overwritten
+ * @error: an error (out)
+ *
+ * DBus: EncryptFile
+ *
+ * This function encrypts a file and stores the results in another file (@crypturi)
+ *
+ * Returns: TRUE on success
+ */
+gboolean
+seahorse_service_crypto_encrypt_file (SeahorseServiceCrypto *crypto,
+                                      const char **recipients, const char *signer,
+                                      int flags, const char * clearuri, const char *crypturi,
+                                      GError **error)
+{
+    char         *lcrypttext = NULL;
+    char         *in_data = NULL;
+    gsize        in_length;
+    gboolean     res = FALSE;
+    GFile        *in = NULL;
+    GFile        *out = NULL;
+    gsize        cryptlength;
+
+    if ((clearuri == NULL) || (clearuri[0] == 0))
+    {
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, _("Please set clearuri"));
+        return FALSE;
+    }
+
+    if ((crypturi == NULL) || (crypturi[0] == 0))
+    {
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, _("Please set crypturi"));
+        return FALSE;
+    }
+
+    in = g_file_new_for_uri(clearuri);
+
+    g_file_load_contents (in, NULL, &in_data, &in_length, NULL, error);
+
+    if (*error != NULL){
+        g_object_unref (in);
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, _("Error openin clearuri"));
+        return FALSE;
+    }
+
+
+    else{
+        res = crypto_encrypt_generic (crypto,
+            recipients, signer,
+            flags, in_data, in_length,
+            &lcrypttext,&cryptlength, TRUE, TRUE,
+            error);
+
+        if (*error != NULL){
+            g_object_unref (in);
+            g_free (in_data);
+            return FALSE;
+        }
+
+        out = g_file_new_for_uri (crypturi);
+        g_file_replace_contents (out,
+            lcrypttext,
+            cryptlength,
+            NULL,
+            FALSE,
+            G_FILE_CREATE_PRIVATE|G_FILE_CREATE_REPLACE_DESTINATION,
+            NULL,
+            NULL,
+            error);
+
+        if (*error != NULL){
+            g_free (in_data);
+            g_free (lcrypttext);
+            g_object_unref (in);
+            return FALSE;
+        }
+
+        g_free (in_data);
+        g_free (lcrypttext);
+        g_object_unref (in);
+    }
+    return res;
 }
 
 /**
@@ -461,7 +669,7 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
     gerr = gpgme_op_sign_start (pop->gctx, plain, cipher, GPGME_SIG_MODE_CLEAR);
 
     /* Frees cipher */
-    ret = process_crypto_result (pop, gerr, cipher, crypttext, error);
+    ret = process_crypto_result (pop, gerr, cipher, crypttext, NULL, error);
     
     g_object_unref (pop);
     gpgme_data_release (plain);
@@ -481,7 +689,7 @@ seahorse_service_crypto_sign_text (SeahorseServiceCrypto *crypto, const char *si
  * DBus: DecryptText
  *
  * Decrypts the @crypttext and returns it in @cleartext. If the text
- * was signed, the signed is returned.
+ * was signed, the signer is returned.
  *
  * Returns: TRUE on success
  */
@@ -491,61 +699,98 @@ seahorse_service_crypto_decrypt_text (SeahorseServiceCrypto *crypto,
                                       const char *crypttext, char **cleartext,
                                       char **signer, GError **error)
 {
-    gpgme_verify_result_t status;
-    gpgme_error_t gerr;
-    SeahorseGpgmeOperation *pop; 
-    gpgme_data_t plain, cipher;
-    gboolean ret = TRUE;
-    GQuark keyid;
-    
-    if (!g_str_equal (ktype, g_quark_to_string (SEAHORSE_PGP))) {
-        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
-                     _("Invalid key type for decryption: %s"), ktype);
-        return FALSE;        
+    return crypto_decrypt_generic (crypto,
+                                   ktype,flags,
+                                   crypttext, strlen(crypttext),
+                                   cleartext, NULL,
+                                   signer, TRUE,
+                                   TRUE, error);
+}
+
+
+/**
+ * seahorse_service_crypto_decrypt_file:
+ * @crypto: the crypto service (#SeahorseServiceCrypto)
+ * @recipients: A list of recipients (keyids "openpgp:B8098FB063E2C811")
+ * @signer: optional, if the text was signed, the signer's keyid will be returned
+ * @flags: FLAG_QUIET for no notification
+ * @crypturi: the data of an inout file. This will be encrypted
+ * @clearuri: the uri of the output file. Will be overwritten
+ * @error: an error (out)
+ *
+ * DBus: DecryptFile
+ *
+ * This function decrypts a file and stores the results in another file (@crypturi)
+ *
+ * Returns: TRUE on success
+ */
+gboolean
+seahorse_service_crypto_decrypt_file (SeahorseServiceCrypto *crypto,
+                                      const char *ktype, int flags,
+                                      const char * crypturi, const char *clearuri,
+                                      char **signer, GError **error)
+{
+    char         *lcleartext = NULL;
+    char         *in_data = NULL;
+    gsize        in_length;
+    gboolean     res = FALSE;
+    GFile        *in = NULL;
+    GFile        *out = NULL;
+    gsize        clearlength;
+
+
+    if ((clearuri == NULL) || (clearuri[0] == 0))
+    {
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, _("Please set clearuri"));
+        return FALSE;
+    }
+
+    if ((crypturi == NULL) || (crypturi[0] == 0))
+    {
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, _("Please set crypturi"));
+        return FALSE;
     }
     
-    /* 
-     * TODO: Once we support different kinds of keys that support encryption
-     * then all this logic will need to change. 
-     */
-    
-    pop = seahorse_gpgme_operation_new (NULL);
-    
-    /* new data from text */
-    gerr = gpgme_data_new_from_mem (&cipher, crypttext, strlen (crypttext), FALSE);
-    g_return_val_if_fail (GPG_IS_OK (gerr), FALSE);
-    gerr = gpgme_data_new (&plain);
-    g_return_val_if_fail (GPG_IS_OK (gerr), FALSE);
-   
-    /* encrypt with armor */
-    gpgme_set_textmode (pop->gctx, TRUE);
-    gpgme_set_armor (pop->gctx, TRUE);
-
-    /* Do the decryption */
-    gerr = gpgme_op_decrypt_verify_start (pop->gctx, cipher, plain);
-
-    /* Frees plain */
-    ret = process_crypto_result (pop, gerr, plain, cleartext, error);
-    
-    if (ret) {
-        *signer = NULL;
-        status = gpgme_op_verify_result (pop->gctx);
-    
-        if (status->signatures) {
-            if (!(flags & FLAG_QUIET))
-                notify_signatures (NULL, status);
-            if (status->signatures->summary & GPGME_SIGSUM_GREEN ||
-                status->signatures->summary & GPGME_SIGSUM_VALID ||
-                status->signatures->summary & GPGME_SIGSUM_KEY_MISSING) {
-                keyid = seahorse_pgp_key_canonize_id (status->signatures->fpr);
-                *signer = seahorse_context_id_to_dbus (SCTX_APP (), keyid);
-            }
+    in = g_file_new_for_uri(crypturi);
+    g_file_load_contents(in,NULL, &in_data, &in_length, NULL, error);
+    if (*error != NULL){
+        g_object_unref (in);
+        return FALSE;
+    }
+    else{
+        res = crypto_decrypt_generic (crypto,
+                                      ktype,flags,
+                                      in_data, in_length,
+                                      &lcleartext, &clearlength,
+                                      signer, TRUE,
+                                      TRUE, error);
+        if (*error != NULL){
+            g_object_unref (in);
+            g_free (in_data);
+            return FALSE;
         }
-    }
+        out = g_file_new_for_uri (clearuri);
+        g_file_replace_contents (out,
+            lcleartext,
+            clearlength,
+            NULL,
+            FALSE,
+            G_FILE_CREATE_PRIVATE|G_FILE_CREATE_REPLACE_DESTINATION,
+            NULL,
+            NULL,
+            error);
+        if (*error != NULL){
+            g_object_unref (in);
+            g_free (in_data);
+            g_free (lcleartext);
+            return FALSE;
+        }
 
-    g_object_unref (pop);
-    gpgme_data_release (cipher);
-    return ret;
+        g_free (lcleartext);
+        g_free (in_data);
+        g_object_unref (in);
+    }
+    return res;
 }
 
 /**
@@ -605,7 +850,7 @@ seahorse_service_crypto_verify_text (SeahorseServiceCrypto *crypto,
     gerr = gpgme_op_verify_start (pop->gctx, cipher, NULL, plain);
 
     /* Frees plain */
-    ret = process_crypto_result (pop, gerr, plain, cleartext, error);
+    ret = process_crypto_result (pop, gerr, plain, cleartext, NULL, error);
     
     if (ret) {
         *signer = NULL;

@@ -22,6 +22,16 @@
             <arg type="s" name="crypttext" direction="out"/>
         </method>
         
+        <method name="EncryptFile">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol"
+                value="seahorse_service_crypto_encrypt_file"/>
+            <arg type="as" name="recipients" direction="in"/>
+            <arg type="s" name="signer" direction="in"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="s" name="clearuri" direction="in"/>
+            <arg type="s" name="crypturi" direction="in"/>
+        </method>
+
         <method name="SignText">
             <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
                 value="seahorse_service_crypto_sign_text"/>
@@ -41,6 +51,16 @@
             <arg type="s" name="signer" direction="out"/>
         </method>
         
+        <method name="DecryptFile">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol"
+                value="seahorse_service_crypto_decrypt_file"/>
+            <arg type="s" name="ktype" direction="in"/>
+            <arg type="i" name="flags" direction="in"/>
+            <arg type="s" name="crypturi" direction="in"/>
+            <arg type="s" name="clearuri" direction="in"/>
+            <arg type="s" name="signer" direction="out"/>
+        </method>
+
         <method name="VerifyText">
             <annotation name="org.freedesktop.DBus.GLib.CSymbol" 
                 value="seahorse_service_crypto_verify_text"/>

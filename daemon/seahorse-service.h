@@ -178,6 +178,22 @@ gboolean                seahorse_service_crypto_encrypt_text    (SeahorseService
                                                                  const gchar *cleartext, 
                                                                  gchar **crypttext, GError **error);
 
+gboolean                seahorse_service_crypto_encrypt_file    (SeahorseServiceCrypto *crypto,
+                                                                 const char **recipients,
+                                                                 const char *signer,
+                                                                 int flags,
+                                                                 const char  *clearuri,
+                                                                 const char  *crypturi,
+                                                                 GError **error);
+
+gboolean                seahorse_service_crypto_decrypt_file    (SeahorseServiceCrypto *crypto,
+                                                                 const char *ktype,
+                                                                 int flags,
+                                                                 const char * crypturi,
+                                                                 const char *clearuri,
+                                                                 char **signer,
+                                                                 GError **error);
+
 gboolean                seahorse_service_crypto_sign_text       (SeahorseServiceCrypto *crypto, 
                                                                  const gchar *signer, int flags, 
                                                                  const gchar *cleartext, 
