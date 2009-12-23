@@ -181,7 +181,7 @@ seahorse_pkcs11_refresher_constructor (GType type, guint n_props, GObjectConstru
 
 	/* Step 1. Load the session */
 	slot = seahorse_pkcs11_source_get_slot (self->source);
-	gp11_slot_open_session_async (slot, CKF_RW_SESSION, self->cancellable, 
+	gp11_slot_open_session_async (slot, CKF_RW_SESSION, NULL, NULL, self->cancellable,
 	                              (GAsyncReadyCallback)on_open_session, self);
 	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
 	
