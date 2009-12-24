@@ -13,12 +13,12 @@ SUBDIRS = . $(TESTS_DIR)
 incdir = $(includedir)/libcryptui
 
 inc_HEADERS = \
-    cryptui.h \
-    cryptui-keyset.h \
-    cryptui-key-store.h \
-    cryptui-key-combo.h \
-    cryptui-key-list.h \
-    cryptui-key-chooser.h
+    $(srcdir)/cryptui.h \
+    $(srcdir)/cryptui-keyset.h \
+    $(srcdir)/cryptui-key-store.h \
+    $(srcdir)/cryptui-key-combo.h \
+    $(srcdir)/cryptui-key-list.h \
+    $(srcdir)/cryptui-key-chooser.h
 
 # -----------------------------------------------------------------
 # MARSHALLERS
@@ -42,12 +42,12 @@ cryptui-marshal.c: cryptui-marshal.list $(GLIB_GENMARSHAL)
 lib_LTLIBRARIES = libcryptui.la
 
 libcryptui_src = \
-    cryptui.c \
-    cryptui-keyset.c \
-    cryptui-key-store.c \
-    cryptui-key-combo.c \
-    cryptui-key-list.c \
-    cryptui-key-chooser.c
+    $(srcdir)/cryptui.c \
+    $(srcdir)/cryptui-keyset.c \
+    $(srcdir)/cryptui-key-store.c \
+    $(srcdir)/cryptui-key-combo.c \
+    $(srcdir)/cryptui-key-list.c \
+    $(srcdir)/cryptui-key-chooser.c
 
 libcryptui_la_SOURCES = \
     cryptui-defines.h \
