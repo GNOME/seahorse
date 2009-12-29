@@ -215,7 +215,7 @@ parse_home_directory (gpgme_engine_info_t engine, GError **err)
 
                     /* If it's not a rooted path then expand */
                     if (t[0] == '~') {
-                        gpg_homedir = g_strconcat (g_get_home_dir(), ++t);
+                        gpg_homedir = g_strconcat (g_get_home_dir(), ++t, NULL);
                     } else {
                         gpg_homedir = g_strdup (t);
                     }
