@@ -174,3 +174,68 @@ seahorse_gpgme_convert_validity (gpgme_validity_t validity)
 		return SEAHORSE_VALIDITY_UNKNOWN;
 	}	
 }
+
+/*
+ * Based on the values in ask_algo() in gnupg's g10/keygen.c
+ * http://cvs.gnupg.org/cgi-bin/viewcvs.cgi/trunk/g10/keygen.c?rev=HEAD&root=GnuPG&view=log
+ */
+const struct _SeahorseKeyTypeTable KEYTYPES_2012 =
+	{ .rsa_sign=4, .rsa_enc=6, .dsa_sign=3, .elgamal_enc=5 };
+const struct _SeahorseKeyTypeTable KEYTYPES_140 =
+	{ .rsa_sign=5, .rsa_enc=6, .dsa_sign=2, .elgamal_enc=4 };
+const struct _SeahorseKeyTypeTable KEYTYPES_124 =
+	{ .rsa_sign=4, .rsa_enc=5, .dsa_sign=2, .elgamal_enc=3 };
+const struct _SeahorseKeyTypeTable KEYTYPES_120 =
+	{ .rsa_sign=5, .rsa_enc=6, .dsa_sign=2, .elgamal_enc=3 };
+
+const SeahorseVersion VER_2012 = ((SeahorseVersion)2 << 48)
+                               + ((SeahorseVersion)12 << 16);
+const SeahorseVersion VER_190  = ((SeahorseVersion)1 << 48) + ((SeahorseVersion)9 << 32);
+const SeahorseVersion VER_1410 = ((SeahorseVersion)1 << 48) + ((SeahorseVersion)4 << 32)
+                               + ((SeahorseVersion)10 << 16);
+const SeahorseVersion VER_140  = ((SeahorseVersion)1 << 48) + ((SeahorseVersion)4 << 32);
+const SeahorseVersion VER_124  = ((SeahorseVersion)1 << 48) + ((SeahorseVersion)2 << 32)
+                               + ((SeahorseVersion)4 << 16);
+const SeahorseVersion VER_120  = ((SeahorseVersion)1 << 48) + ((SeahorseVersion)2 << 32);
+
+/**
+ * seahorse_gpgme_get_keytype_table:
+ *
+ * @table: The requested keytype table
+ *
+ * Based on the gpg version in use, sets @table
+ * to contain the numbers that gpg uses in its CLI
+ * for adding new subkeys. This tends to get broken
+ * at random by new versions of gpg, but there's no good
+ * API for this.
+ *
+ * Returns GPG_ERR_USER_2 if gpg is too old.
+ *
+ * Returns: gpgme_error_t
+ **/
+gpgme_error_t
+seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table)
+{
+	gpgme_error_t gerr;
+	gpgme_engine_info_t engine;
+	SeahorseVersion ver;
+	
+	gerr = gpgme_get_engine_info (&engine);
+	g_return_val_if_fail (GPG_IS_OK (gerr), gerr);
+	
+	ver = seahorse_util_parse_version (engine->version);
+	
+	if (ver >= VER_2012 || (ver >= VER_1410 && ver < VER_190))
+		*table = &KEYTYPES_2012;
+	else if (ver >= VER_140 || ver >= VER_190)
+		*table = &KEYTYPES_140;
+	else if (ver >= VER_124)
+		*table = &KEYTYPES_124;
+	else if (ver >= VER_120)
+		*table = &KEYTYPES_120;
+	else	// older versions not supported
+		gerr = GPG_E (GPG_ERR_USER_2);
+	
+	return gerr;
+}
+

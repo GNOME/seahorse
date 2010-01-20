@@ -29,6 +29,12 @@
 
 #include "seahorse-validity.h"
 
+typedef struct _SeahorseKeyTypeTable *SeahorseKeyTypeTable;
+
+struct _SeahorseKeyTypeTable {
+	int rsa_sign, rsa_enc, dsa_sign, elgamal_enc;
+};
+
 /* TODO: I think these are extraneous and can be removed. In actuality OK == 0 */
 #define GPG_IS_OK(e)        (gpgme_err_code (e) == GPG_ERR_NO_ERROR)
 #define GPG_OK              (gpgme_error (GPG_ERR_NO_ERROR))
@@ -48,5 +54,7 @@ void               seahorse_gpgme_handle_error      (gpgme_error_t err,
 GType              seahorse_gpgme_boxed_key_type    (void);
 
 SeahorseValidity   seahorse_gpgme_convert_validity  (gpgme_validity_t validity);
+
+gpgme_error_t      seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table);
 
 #endif /* SEAHORSEGPGME_H_ */
