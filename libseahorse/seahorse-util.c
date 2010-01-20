@@ -1598,7 +1598,33 @@ seahorse_util_determine_popup_menu_position (GtkMenu *menu, int *x, int *y,
         *x = menu_xpos;
         *y = menu_ypos;
         *push_in = TRUE;
-}            
+}
+
+/**
+ * seahorse_util_parse_version:
+ *
+ * @version: Version number string in the form xx.yy.zz
+ *
+ * Converts an (up to) four-part version number into a 64-bit
+ * unsigned integer for simple comparison.
+ *
+ * Returns: SeahorseVersion
+ **/
+SeahorseVersion
+seahorse_util_parse_version (const char *version)
+{
+	SeahorseVersion ret = 0, tmp = 0;
+	int offset = 48;
+	gchar **tokens = g_strsplit(version, ".", 5);
+	int i;
+	for (i=0; tokens[i] && offset >= 0; i++) {
+		tmp = atoi(tokens[i]);
+		ret += tmp << offset;
+		offset -= 16;
+	}
+	g_strfreev(tokens);
+	return ret;
+}
 
 /* -----------------------------------------------------------------------------
  * DNS-SD Stuff 

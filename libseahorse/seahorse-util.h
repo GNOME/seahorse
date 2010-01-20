@@ -45,6 +45,8 @@ typedef enum {
     SEAHORSE_SIG_SUFFIX,
 } SeahorseSuffix;
 
+typedef guint64 SeahorseVersion;
+
 #define SEAHORSE_EXT_ASC ".asc"
 #define SEAHORSE_EXT_SIG ".sig"
 #define SEAHORSE_EXT_PGP ".pgp"
@@ -175,6 +177,8 @@ void        seahorse_util_determine_popup_menu_position  (GtkMenu *menu,
                                                            int *y,
                                                            gboolean *push_in,
                                                            gpointer gdata);
+
+SeahorseVersion seahorse_util_parse_version   (const char *version);
 
 #define     seahorse_util_wait_until(expr)                \
     while (!(expr)) {                                     \
