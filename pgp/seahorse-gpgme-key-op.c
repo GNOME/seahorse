@@ -1397,7 +1397,7 @@ typedef enum {
 } AddKeyState;
 
 typedef struct {
-	SeahorseKeyEncType  type;
+	guint               type;
 	guint               length;
 	time_t              expires;
 } SubkeyParm;
@@ -1503,19 +1503,31 @@ seahorse_gpgme_key_op_add_subkey (SeahorseGpgmeKey *pkey, const SeahorseKeyEncTy
 {
 	SeahorseEditParm *parms;
 	SubkeyParm *key_parm;
+	guint real_type;
+	SeahorseKeyTypeTable table;
+	gpgme_error_t gerr;
 	
     g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
     g_return_val_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
+	gerr = seahorse_gpgme_get_keytype_table (&table);
+	g_return_val_if_fail (GPG_IS_OK (gerr), gerr);
+	
 	/* Check length range & type */
 	switch (type) {
 		case DSA:
+			real_type = table->dsa_sign;
 			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, GPG_E (GPG_ERR_INV_VALUE));
 			break;
 		case ELGAMAL:
+			real_type = table->elgamal_enc;
 			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
 			break;
 		case RSA_SIGN: case RSA_ENCRYPT:
+			if (type == RSA_SIGN)
+				real_type = table->rsa_sign;
+			else
+				real_type = table->rsa_enc;
 			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
 			break;
 		default:
@@ -1524,7 +1536,7 @@ seahorse_gpgme_key_op_add_subkey (SeahorseGpgmeKey *pkey, const SeahorseKeyEncTy
 	}
 	
 	key_parm = g_new (SubkeyParm, 1);
-	key_parm->type = type;
+	key_parm->type = real_type;
 	key_parm->length = length;
 	key_parm->expires = expires;
 	
