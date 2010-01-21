@@ -47,7 +47,6 @@ libseahorse_la_SOURCES = \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-progress.c seahorse-progress.h \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
-	seahorse-secure-entry.c seahorse-secure-entry.h \
 	seahorse-servers.c seahorse-servers.h \
 	seahorse-set.c seahorse-set.h \
 	seahorse-set-model.c seahorse-set-model.h \

@@ -24,9 +24,10 @@
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-source.h"
 
-#include "seahorse-secure-entry.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
+
+#include "common/seahorse-secure-buffer.h"
 
 #include <glib/gi18n.h>
 
@@ -74,11 +75,8 @@ on_add_item_label_changed (GtkEntry *entry, SeahorseWidget *swidget)
 G_MODULE_EXPORT void 
 on_add_item_password_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
 {
-    GtkWidget *widget;
-    
-    widget = g_object_get_data (G_OBJECT (swidget), "gkr-secure-entry");
-    seahorse_secure_entry_set_visibility (SEAHORSE_SECURE_ENTRY (widget), 
-                                          gtk_toggle_button_get_active (button));
+	GtkWidget *widget= g_object_get_data (G_OBJECT (swidget), "gkr-secure-entry");
+	gtk_entry_set_visibility (GTK_ENTRY (widget), gtk_toggle_button_get_active (button));
 }
 
 G_MODULE_EXPORT void
@@ -101,7 +99,7 @@ on_add_item_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 		g_return_if_fail (label && label[0]);
 		
 		widget = g_object_get_data (G_OBJECT (swidget), "gkr-secure-entry");
-		secret = seahorse_secure_entry_get_text (SEAHORSE_SECURE_ENTRY (widget));
+		secret = gtk_entry_get_text (GTK_ENTRY (widget));
 		
 		widget = seahorse_widget_get_widget (swidget, "item-keyring");
 		keyring = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
@@ -126,6 +124,7 @@ void
 seahorse_gkr_add_item_show (GtkWindow *parent)
 {
 	SeahorseWidget *swidget = NULL;
+	GtkEntryBuffer *buffer;
 	GtkWidget *entry, *widget;
 	GList *keyrings, *l;
 	GtkCellRenderer *cell;
@@ -161,10 +160,15 @@ seahorse_gkr_add_item_show (GtkWindow *parent)
 	
 	widget = seahorse_widget_get_widget (swidget, "password-area");
 	g_return_if_fail (widget);
-	entry = seahorse_secure_entry_new ();
+	buffer = seahorse_secure_buffer_new ();
+	entry = gtk_entry_new_with_buffer (buffer);
+	g_object_unref (buffer);
 	gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (entry));
 	gtk_widget_show (GTK_WIDGET (entry));
 	g_object_set_data (G_OBJECT (swidget), "gkr-secure-entry", entry);
+
+	widget = seahorse_widget_get_widget (swidget, "show-password");
+	on_add_item_password_toggled (GTK_TOGGLE_BUTTON (widget), swidget);
 
 	widget = seahorse_widget_get_toplevel (swidget);
 	gtk_widget_show (widget);

@@ -30,11 +30,11 @@
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-secure-memory.h"
-#include "seahorse-secure-entry.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 
 #include "common/seahorse-bind.h"
+#include "common/seahorse-secure-buffer.h"
 
 GType
 boxed_access_control_type (void)
@@ -171,9 +171,9 @@ static void
 transfer_password (SeahorseGkrItem *git, SeahorseWidget *swidget)
 {
 	GtkWidget *expander;
-	SeahorseSecureEntry *entry;
+	GtkEntry *entry;
 	const gchar *secret;
-	
+
 	expander = seahorse_widget_get_widget (swidget, "password-expander");
 	g_return_if_fail (expander);
 
@@ -182,15 +182,15 @@ transfer_password (SeahorseGkrItem *git, SeahorseWidget *swidget)
 
 	if (gtk_expander_get_expanded (GTK_EXPANDER (expander))) {
 		secret = seahorse_gkr_item_get_secret (git);
-		seahorse_secure_entry_set_text (entry, secret ? secret : "");
+		gtk_entry_set_text (entry, secret ? secret : "");
 	} else {
-		seahorse_secure_entry_set_text (entry, "");
+		gtk_entry_set_text (entry, "");
 	}
-	seahorse_secure_entry_reset_changed (entry);
+	g_object_set_data (G_OBJECT (entry), "changed", NULL);
 }
 
 static void
-password_activate (SeahorseSecureEntry *entry, SeahorseWidget *swidget)
+password_activate (GtkEntry *entry, SeahorseWidget *swidget)
 {
 	SeahorseObject *object;
 	SeahorseGkrItem *git;
@@ -210,7 +210,7 @@ password_activate (SeahorseSecureEntry *entry, SeahorseWidget *swidget)
 		return;
 
 	entry = g_object_get_data (G_OBJECT (swidget), "secure-password-entry");
-	if (!seahorse_secure_entry_get_changed (entry))
+	if (!g_object_get_data (G_OBJECT (entry), "changed"))
 		return;
 
 	if (g_object_get_data (G_OBJECT (swidget), "updating-password"))
@@ -225,7 +225,7 @@ password_activate (SeahorseSecureEntry *entry, SeahorseWidget *swidget)
 	seahorse_util_wait_until (seahorse_gkr_item_get_info (git));
     
 	info = gnome_keyring_item_info_copy (seahorse_gkr_item_get_info (git));
-	gnome_keyring_item_info_set_secret (info, seahorse_secure_entry_get_text (entry));
+	gnome_keyring_item_info_set_secret (info, gtk_entry_get_text (entry));
 
 	op = seahorse_gkr_operation_update_info (git, info);
 	gnome_keyring_item_info_free (info);
@@ -250,8 +250,14 @@ password_activate (SeahorseSecureEntry *entry, SeahorseWidget *swidget)
 
 }
 
+static void
+password_changed (GtkEditable *editable, SeahorseWidget *swidget)
+{
+	g_object_set_data (G_OBJECT (editable), "changed", "changed");
+}
+
 static gboolean
-password_focus_out (SeahorseSecureEntry* entry, GdkEventFocus *event, SeahorseWidget *swidget)
+password_focus_out (GtkEntry* entry, GdkEventFocus *event, SeahorseWidget *swidget)
 {
     password_activate (entry, swidget);
     return FALSE;
@@ -260,11 +266,8 @@ password_focus_out (SeahorseSecureEntry* entry, GdkEventFocus *event, SeahorseWi
 G_MODULE_EXPORT void 
 on_item_show_password_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
 {
-    GtkWidget *widget;
-    
-    widget = g_object_get_data (G_OBJECT (swidget), "secure-password-entry");
-    seahorse_secure_entry_set_visibility (SEAHORSE_SECURE_ENTRY (widget), 
-                                          gtk_toggle_button_get_active (button));
+	GtkWidget *widget = g_object_get_data (G_OBJECT (swidget), "secure-password-entry");
+	gtk_entry_set_visibility (GTK_ENTRY (widget), gtk_toggle_button_get_active (button));
 }
 
 G_MODULE_EXPORT void
@@ -364,6 +367,7 @@ static void
 setup_main (SeahorseWidget *swidget)
 {
 	SeahorseObject *object;
+	GtkEntryBuffer *buffer;
 	GtkWidget *widget;
 	GtkWidget *box;
 
@@ -403,10 +407,12 @@ setup_main (SeahorseWidget *swidget)
 	/* User name */
 	seahorse_bind_property_full ("item-attributes", object, transform_attributes_user, "label", 
 	                             seahorse_widget_get_widget (swidget, "login-field"), NULL);
-	
+
 	/* Create the password entry */
-	widget = seahorse_secure_entry_new ();
-	        
+	buffer = seahorse_secure_buffer_new ();
+	widget = gtk_entry_new_with_buffer (buffer);
+	g_object_unref (buffer);
+
 	box = seahorse_widget_get_widget (swidget, "password-box-area");
 	g_return_if_fail (box != NULL);
 	gtk_container_add (GTK_CONTAINER (box), widget);
@@ -415,13 +421,17 @@ setup_main (SeahorseWidget *swidget)
 	        
 	/* Now watch for changes in the password */
 	g_signal_connect (widget, "activate", G_CALLBACK (password_activate), swidget);
+	g_signal_connect (widget, "changed", G_CALLBACK (password_changed), swidget);
 	g_signal_connect_after (widget, "focus-out-event", G_CALLBACK (password_focus_out), swidget);
-	    
+
 	/* Sensitivity of the password entry */
 	seahorse_bind_property ("has-secret", object, "sensitive", widget);
-	
+
 	/* Updating of the password entry */
 	seahorse_bind_objects ("has-secret", object, (SeahorseTransfer)transfer_password, swidget);
+
+	widget = seahorse_widget_get_widget (swidget, "show-password-check");
+	on_item_show_password_toggled (widget, swidget);
 }
 
 /* -----------------------------------------------------------------------------
