@@ -61,15 +61,8 @@ seahorse_daemon_LDADD = \
 
 man_MANS = seahorse-daemon.1
 
-#autostart
-desktopdir = $(sysconfdir)/xdg/autostart
-desktop_in_files = seahorse-daemon.desktop.in 
-desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
-
 EXTRA_DIST = \
     $(man_MANS) \
-    seahorse-daemon.desktop.in \
     seahorse-service.xml \
     seahorse-service-keyset.xml \
     seahorse-service-crypto.xml \
@@ -79,7 +72,6 @@ EXTRA_DIST = \
     org.gnome.seahorse.service.in
 
 CLEANFILES = *.bak \
-    $(desktop_DATA) \
     seahorse-daemon.desktop.in \
     org.gnome.seahorse.service
 
