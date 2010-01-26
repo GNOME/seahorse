@@ -1,13 +1,10 @@
 If you want to hack or commit something to seahorse, please first send patches to 
-seahorse-devel@lists.sourceforge.net or submitted on bugzilla.gnome.org if possible.
+seahorse-list@gnome.org or submitted on bugzilla.gnome.org if possible.
 
 For a todo list, first check bugzilla, then look at TODO. Bugzilla is also updated 
 with possible enhancements and any current bugs.
 
 Here is a description of the modules:
-
- o agent: GPG Password caching agent. This is compiled into seahorse-daemon. 
-   (See 'daemon' below)
 
  o daemon: Various background servers and processes run in this daemon including
    the gpg agent, dbus server, etc...
@@ -19,20 +16,6 @@ Here is a description of the modules:
  o libseahorse: Common static library of code for seahorse. Any code that is depended 
    on by multiple modules, such as src/ and plugins/nautilus, is placed here. 
    Currently this includes SeahorseContext & keys, operations, and common dialogs.
-
- o plugins: Contains subdirs for any possible apps in which seahorse can provide 
-   a plugin. Currently this includes nautilus and gedit. Future possibilities are 
-   AbiWord and Gaim.
-
- o plugins/nautilus: Contains the seahorse-tool for nautilus encryption. Also has 
-   the seahorse-prefercences capplet (which should be moved once we get into SVN).
-   The MIME data is also located here.
-
- o plugins/nautilus-ext: An extension for Nautilus 2.10 and later.
-
- o plugins/gedit: The gedit plugin.
- 
- o plugins/applet: Clipboard encryption panel applet
 
  o src: The key manager program. This currently includes the main window & dialogs.
 
@@ -126,4 +109,4 @@ INDENTATION STYLE
   * Function arguments follow the function call on the same line, and if 
     lengthy are (where possible) wrapped to the column of the first brace.
  
-last updated 2006-09-09
+last updated 2010-01-26
