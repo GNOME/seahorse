@@ -559,7 +559,7 @@ seahorse_service_crypto_encrypt_file (SeahorseServiceCrypto *crypto,
 
     if (*error != NULL){
         g_object_unref (in);
-        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, _("Error openin clearuri"));
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID, _("Error opening clearuri"));
         return FALSE;
     }
 
