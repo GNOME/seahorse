@@ -36,6 +36,10 @@
 #include "seahorse-source.h"
 #include "seahorse-util.h"
 
+#include "../pgp/seahorse-pgp.h"
+#include "../pgp/seahorse-gpgme-source.h"
+#include "../pgp/seahorse-gpgme-key-op.h"
+
 #include <gio/gio.h>
 
 #define KEYSET_PATH "/org/gnome/seahorse/keys/%s"
@@ -161,6 +165,74 @@ seahorse_service_get_keyset (SeahorseService *svc, gchar *ktype,
     *path = g_strdup_printf (KEYSET_PATH, ktype);
     return TRUE;
 }
+
+
+/**
+* seahorse_service_generate_credentials:
+* @svc: the seahorse context
+* @ktype: the keytype (example: "openpgp")
+* @values: key-value pairs
+* @error: the error
+*
+* DBus: GenerateCredentials
+*
+* Generates credentials. Will pop up the data input window (name, email, comment)
+* pre-filled with the supplied data. A password dialog will be next. After that
+* the key is created.
+*
+* Returns: True on success
+*/
+gboolean
+seahorse_service_generate_credentials (SeahorseService *svc, gchar *ktype,
+                                       GHashTable *values, GError **error)
+{
+    SeahorseSource *sksrc;
+    GValue  val={0};
+    GValue  *pval=NULL;
+    gchar   *name=NULL;
+    gchar   *email=NULL;
+    gchar   *comment=NULL;
+    SeahorseWidget *swidget;
+
+    sksrc = seahorse_context_find_source (seahorse_context_for_app (),
+                                          SEAHORSE_PGP_TYPE,
+                                          SEAHORSE_LOCATION_LOCAL);
+    g_return_val_if_fail (sksrc != NULL, FALSE);
+
+    pval = &val;
+
+    if (g_strcmp0 (ktype,"openpgp")==0) {
+        pval = (GValue *)g_hash_table_lookup (values,"name");
+        if ((pval) && (G_VALUE_TYPE (pval) == G_TYPE_STRING))
+            name=g_value_dup_string (pval);
+
+        pval = g_hash_table_lookup (values,"email");
+        if ((pval) && (G_VALUE_TYPE (pval) == G_TYPE_STRING))
+            email=g_value_dup_string (pval);
+
+        pval = g_hash_table_lookup (values,"comment");
+        if ((pval) && (G_VALUE_TYPE (pval) == G_TYPE_STRING))
+            comment=g_value_dup_string (pval);
+
+        seahorse_gpgme_generate_key(sksrc, name, email, comment,
+                        DSA_ELGAMAL, 2048,0);
+
+        g_free (name);
+        name = NULL;
+        g_free (email);
+        email = NULL;
+        g_free (comment);
+        comment = NULL;
+    }
+    else {
+        g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
+                     _("This keytype is not supported: %s"), ktype);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 
 /**
 * seahorse_service_import_keys:

@@ -72,7 +72,7 @@ on_pgp_generate_key (GtkAction *action, gpointer unused)
 	sksrc = seahorse_context_find_source (seahorse_context_for_app (), SEAHORSE_PGP_TYPE, SEAHORSE_LOCATION_LOCAL);
 	g_return_if_fail (sksrc != NULL);
 	
-	seahorse_gpgme_generate_show (SEAHORSE_GPGME_SOURCE (sksrc), NULL);
+	seahorse_gpgme_generate_show (SEAHORSE_GPGME_SOURCE (sksrc), NULL, NULL, NULL, NULL);
 }
 
 static const GtkActionEntry ACTION_ENTRIES[] = {
@@ -165,6 +165,53 @@ get_expiry_date (SeahorseWidget *swidget)
     return widget;
 }
 
+
+/**
+ * gpgme_generate_key:
+ * @sksrc: the seahorse source
+ * @name: the user's full name
+ * @email: the user's email address
+ * @comment: a comment, added to the key
+ * @type: key type like DSA_ELGAMAL
+ * @bits: the number of bits for the key to generate (2048)
+ * @expires: expiry date can be 0
+ *
+ * Displays a password generation box and creates a key afterwards. For the key
+ * data it uses @name @email and @comment ncryption is chosen by @type and @bits
+ * @expire sets the expiry date
+ *
+ */
+void seahorse_gpgme_generate_key (SeahorseGpgmeSource *sksrc, const gchar *name, const gchar *email,
+                            const gchar *comment, guint type, guint bits, time_t expires)
+{
+    SeahorseOperation *op;
+    const gchar *pass;
+    gpgme_error_t gerr;
+    GtkDialog *dialog;
+
+
+
+    dialog = seahorse_passphrase_prompt_show (_("Passphrase for New PGP Key"),
+                                              _("Enter the passphrase for your new key twice."),
+                                              NULL, NULL, TRUE);
+    if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT)
+    {
+        pass = seahorse_passphrase_prompt_get (dialog);
+        op = seahorse_gpgme_key_op_generate (sksrc, name, email, comment,
+                                             pass, type, bits, expires, &gerr);
+
+        if (!GPG_IS_OK (gerr)) {
+            seahorse_gpgme_handle_error (gerr, _("Couldn't generate key"));
+        } else {
+            seahorse_progress_show (op, _("Generating key"), TRUE);
+            seahorse_operation_watch (op, (SeahorseDoneFunc)completion_handler, NULL, NULL, NULL);
+            g_object_unref (op);
+        }
+    }
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+
 /**
  * on_gpgme_generate_response:
  * @dialog:
@@ -195,12 +242,12 @@ on_gpgme_generate_response (GtkDialog *dialog, guint response, SeahorseWidget *s
         seahorse_widget_show_help (swidget);
         return;
     }
-    
+
     if (response != GTK_RESPONSE_OK) {
         seahorse_widget_destroy (swidget);
         return;
     }
-    
+
     /* The name */
     widget = seahorse_widget_get_widget (swidget, "name-entry");
     g_return_if_fail (widget != NULL);
@@ -210,17 +257,17 @@ on_gpgme_generate_response (GtkDialog *dialog, guint response, SeahorseWidget *s
     /* Make sure it's the right length. Should have been checked earlier */
     name = g_strstrip (name);
     g_return_if_fail (strlen(name) >= 5);
-    
+
     /* The email address */
     widget = seahorse_widget_get_widget (swidget, "email-entry");
     g_return_if_fail (widget != NULL);
     email = gtk_entry_get_text (GTK_ENTRY (widget));
-    
+
     /* The comment */
     widget = seahorse_widget_get_widget (swidget, "comment-entry");
     g_return_if_fail (widget != NULL);
     comment = gtk_entry_get_text (GTK_ENTRY (widget));
-    
+
     /* The algorithm */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
     g_return_if_fail (widget != NULL);
@@ -251,29 +298,13 @@ on_gpgme_generate_response (GtkDialog *dialog, guint response, SeahorseWidget *s
 
     sksrc = SEAHORSE_GPGME_SOURCE (g_object_get_data (G_OBJECT (swidget), "source"));
     g_assert (SEAHORSE_IS_GPGME_SOURCE (sksrc));
-    
+
     /* Less confusing with less on the screen */
     gtk_widget_hide (seahorse_widget_get_toplevel (swidget));
-    
-    dialog = seahorse_passphrase_prompt_show (_("Passphrase for New PGP Key"), 
-                                              _("Enter the passphrase for your new key twice."), 
-                                              NULL, NULL, TRUE);
-    if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT)
-    {
-        pass = seahorse_passphrase_prompt_get (dialog);
-        op = seahorse_gpgme_key_op_generate (sksrc, name, email, comment,
-                                             pass, type, bits, expires, &gerr);
-    
-        if (!GPG_IS_OK (gerr)) {
-            seahorse_gpgme_handle_error (gerr, _("Couldn't generate key"));
-        } else {
-            seahorse_progress_show (op, _("Generating key"), TRUE);
-            seahorse_operation_watch (op, (SeahorseDoneFunc)completion_handler, NULL, NULL, NULL);
-            g_object_unref (op);
-        }
-    }
-        
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+
+    seahorse_gpgme_generate_key (sksrc, name, email, comment, type, bits, expires);
+
+
     seahorse_widget_destroy (swidget);
     g_free (name);
 }
@@ -357,12 +388,15 @@ on_gpgme_generate_algorithm_changed (GtkComboBox *combo, SeahorseWidget *swidget
  * seahorse_gpgme_generate_show:
  * @sksrc: the gpgme source
  * @parent: the parent window
+ * @name: The user name, can be NULL if not available
+ * @email: The user's email address, can be NULL if not available
+ * @comment: The comment to add to the key. Can be NULL
  *
  * Shows the gpg key generation dialog, sets default entries.
  *
  */
 void
-seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent)
+seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent, const gchar * name, const gchar *email, const gchar *comment)
 {
     SeahorseWidget *swidget;
     GtkWidget *widget, *datetime;
@@ -374,6 +408,27 @@ seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent)
     /* Widget already present */
     if (swidget == NULL)
         return;
+
+    if (name)
+    {
+        widget = seahorse_widget_get_widget (swidget, "name-entry");
+        g_return_if_fail (widget != NULL);
+        gtk_entry_set_text(GTK_ENTRY(widget),name);
+    }
+
+    if (email)
+    {
+        widget = seahorse_widget_get_widget (swidget, "email-entry");
+        g_return_if_fail (widget != NULL);
+        gtk_entry_set_text(GTK_ENTRY(widget),email);
+    }
+
+    if (comment)
+    {
+        widget = seahorse_widget_get_widget (swidget, "comment-entry");
+        g_return_if_fail (widget != NULL);
+        gtk_entry_set_text(GTK_ENTRY(widget),comment);
+    }
     
     widget = seahorse_widget_get_widget (swidget, "pgp-image");
     g_return_if_fail (widget != NULL);

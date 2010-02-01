@@ -68,6 +68,9 @@ gboolean       seahorse_service_get_key_types         (SeahorseService *svc, gch
 gboolean        seahorse_service_get_keyset           (SeahorseService *svc, gchar *ktype, 
                                                        gchar **path, GError **error);
 
+gboolean       seahorse_service_generate_credentials  (SeahorseService *svc, gchar *ktype,
+                              GHashTable *values, GError **error);
+
 gboolean        seahorse_service_import_keys           (SeahorseService *svc, gchar *ktype, 
                                                         gchar *data, gchar ***keys, GError **error);
                               

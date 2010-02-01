@@ -53,6 +53,13 @@
             <arg type="as" name="keys" direction="in"/>
         </method>
 -->
+
+        <method name="GenerateCredentials">
+            <annotation name="org.freedesktop.DBus.GLib.CSymbol"
+                value="seahorse_service_generate_credentials"/>
+            <arg type="s" name="keytype" direction="in"/>
+            <arg type="a{sv}" name="values" direction="in"/>
+        </method>
     </interface>
 
 </node>
