@@ -188,15 +188,12 @@ const struct _SeahorseKeyTypeTable KEYTYPES_124 =
 const struct _SeahorseKeyTypeTable KEYTYPES_120 =
 	{ .rsa_sign=5, .rsa_enc=6, .dsa_sign=2, .elgamal_enc=3 };
 
-const SeahorseVersion VER_2012 = ((SeahorseVersion)2 << 48)
-                               + ((SeahorseVersion)12 << 16);
-const SeahorseVersion VER_190  = ((SeahorseVersion)1 << 48) + ((SeahorseVersion)9 << 32);
-const SeahorseVersion VER_1410 = ((SeahorseVersion)1 << 48) + ((SeahorseVersion)4 << 32)
-                               + ((SeahorseVersion)10 << 16);
-const SeahorseVersion VER_140  = ((SeahorseVersion)1 << 48) + ((SeahorseVersion)4 << 32);
-const SeahorseVersion VER_124  = ((SeahorseVersion)1 << 48) + ((SeahorseVersion)2 << 32)
-                               + ((SeahorseVersion)4 << 16);
-const SeahorseVersion VER_120  = ((SeahorseVersion)1 << 48) + ((SeahorseVersion)2 << 32);
+const SeahorseVersion VER_2012 = seahorse_util_version(2,0,12,0);
+const SeahorseVersion VER_190  = seahorse_util_version(1,9,0,0);
+const SeahorseVersion VER_1410 = seahorse_util_version(1,4,10,0);
+const SeahorseVersion VER_140  = seahorse_util_version(1,4,0,0);
+const SeahorseVersion VER_124  = seahorse_util_version(1,2,4,0);
+const SeahorseVersion VER_120  = seahorse_util_version(1,2,0,0);
 
 /**
  * seahorse_gpgme_get_keytype_table:
