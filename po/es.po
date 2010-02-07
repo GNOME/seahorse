@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&component=general\n"
-"POT-Creation-Date: 2010-01-29 21:21+0000\n"
-"PO-Revision-Date: 2010-02-01 19:15+0100\n"
+"POT-Creation-Date: 2010-02-07 20:16+0000\n"
+"PO-Revision-Date: 2010-02-07 21:41+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -41,12 +41,18 @@ msgstr "Demonio de cifrado (Seahorse)"
 msgid "Seahorse Daemon"
 msgstr "Demonio de Seahorse"
 
-#: ../daemon/seahorse-service.c:157 ../daemon/seahorse-service.c:195
+#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Tipo de clave inválida o no reconocida: %s"
 
-#: ../daemon/seahorse-service.c:259 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service.c:229
+#, c-format
+#| msgid "This key expired on: %s"
+msgid "This keytype is not supported: %s"
+msgstr "No se soporta este tipo de clave: %s"
+
+#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -1518,21 +1524,32 @@ msgstr "DSA ElGamal"
 msgid "Couldn't generate PGP key"
 msgstr "No se pudo generar la clave PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:258
+#: ../pgp/seahorse-gpgme-generate.c:194
 msgid "Passphrase for New PGP Key"
 msgstr "Frase de paso para la nueva clave PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:259
+#: ../pgp/seahorse-gpgme-generate.c:195
 msgid "Enter the passphrase for your new key twice."
 msgstr "Introduzca la frase de paso para su clave nueva dos veces."
 
-#: ../pgp/seahorse-gpgme-generate.c:268
+#: ../pgp/seahorse-gpgme-generate.c:204
 msgid "Couldn't generate key"
 msgstr "No se pudo generar la clave"
 
-#: ../pgp/seahorse-gpgme-generate.c:270
+#: ../pgp/seahorse-gpgme-generate.c:206
 msgid "Generating key"
 msgstr "Generando clave"
+
+#: ../pgp/seahorse-gpgme-key-op.c:300
+#| msgid "Show pass_word"
+msgid "Wrong password"
+msgstr "Contraseña errónea"
+
+#: ../pgp/seahorse-gpgme-key-op.c:300
+msgid "This was the third time you entered a wrong password. Please try again."
+msgstr ""
+"Es la tercera vez que ha introducido una contraseña errónea. Inténtelo de "
+"nuevo."
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
