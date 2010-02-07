@@ -1615,7 +1615,7 @@ seahorse_util_parse_version (const char *version)
 {
 	SeahorseVersion ret = 0, tmp = 0;
 	int offset = 48;
-	gchar **tokens = g_strsplit(version, ".", 5);
+	gchar **tokens = g_strsplit (version, ".", 5);
 	int i;
 	for (i=0; tokens[i] && offset >= 0; i++) {
 		tmp = atoi(tokens[i]);
