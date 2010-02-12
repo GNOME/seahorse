@@ -1745,8 +1745,8 @@ do_trust (SeahorseWidget *swidget)
 			
 			gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL(filter));
 			widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "signatures-toggle"));
+			g_signal_connect (widget, "toggled", G_CALLBACK (on_pgp_trusted_toggled), filter);
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-			on_pgp_trusted_toggled (GTK_TOGGLE_BUTTON (widget), filter);
 		}
 	}
 
