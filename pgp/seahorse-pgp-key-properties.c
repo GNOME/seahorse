@@ -996,16 +996,18 @@ static void
 export_complete (GFile *file, GAsyncResult *result, gchar *contents)
 {
 	GError *err = NULL;
-	gchar *uri;
+	gchar *uri, *unesc_uri;
 	
 	g_free (contents);
 
 	if (!g_file_replace_contents_finish (file, result, NULL, &err)) {
 		uri = g_file_get_uri (file);
-	        seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
-	                                    seahorse_util_uri_get_last (uri));
-	        g_clear_error (&err);
-	        g_free (uri);
+		unesc_uri = g_uri_unescape_string (seahorse_util_uri_get_last (uri), NULL);
+        seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
+                                    unesc_uri);
+        g_clear_error (&err);
+        g_free (uri);
+        g_free (unesc_uri);
 	}
 }
 

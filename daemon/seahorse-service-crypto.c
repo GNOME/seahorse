@@ -183,7 +183,7 @@ notify_signatures (const gchar* data, gpgme_verify_result_t status)
 {
 	const gchar *icon = NULL;
 	SeahorseObject *object;
-	gchar *title, *body;
+	gchar *title, *body, *unesc_data;
 	gboolean sig = FALSE;
 	GSList *rawids;
 	GList *keys;
@@ -258,7 +258,9 @@ notify_signatures (const gchar* data, gpgme_verify_result_t status)
 
 	if (data) {
 		data = seahorse_util_uri_get_last (data);
-		title = g_strdup_printf ("%s: %s", data, title);
+	    unesc_data = g_uri_unescape_string (data, NULL);
+		title = g_strdup_printf ("%s: %s", unesc_data, title);
+		g_free (unesc_data);
 	} else {
 		title = g_strdup (title);
 	}

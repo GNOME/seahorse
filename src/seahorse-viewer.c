@@ -287,9 +287,9 @@ static void
 on_key_export_file (GtkAction* action, SeahorseViewer* self) 
 {
 	GError *error = NULL;
-	GList* objects;
-	GtkDialog* dialog;
-	char* uri;
+	GList *objects;
+	GtkDialog *dialog;
+	gchar *uri, *unesc_uri;
 	
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
@@ -312,9 +312,11 @@ on_key_export_file (GtkAction* action, SeahorseViewer* self)
 		file = g_file_new_for_uri (uri);
 		output = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, 0, NULL, &error));
 		if (output == NULL) {
+		    unesc_uri = g_uri_unescape_string (seahorse_util_uri_get_last (uri), NULL);
 			seahorse_util_handle_error (error, _ ("Couldn't export key to \"%s\""), 
-			                            seahorse_util_uri_get_last (uri), NULL);
+			                            unesc_uri, NULL);
 			g_clear_error (&error);
+			g_free (unesc_uri);
 		} else {
 			op = seahorse_source_export_objects (objects, output);
 			seahorse_progress_show (op, _("Exporting keys"), TRUE);
