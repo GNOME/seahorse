@@ -431,7 +431,7 @@ setup_main (SeahorseWidget *swidget)
 	seahorse_bind_objects ("has-secret", object, (SeahorseTransfer)transfer_password, swidget);
 
 	widget = seahorse_widget_get_widget (swidget, "show-password-check");
-	on_item_show_password_toggled (widget, swidget);
+	on_item_show_password_toggled (GTK_TOGGLE_BUTTON (widget), swidget);
 }
 
 /* -----------------------------------------------------------------------------

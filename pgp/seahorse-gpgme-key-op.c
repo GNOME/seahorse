@@ -113,7 +113,8 @@ seahorse_gpgme_key_op_generate (SeahorseGpgmeSource *psrc, const gchar *name,
         if (length < DSA_MIN || length > DSA_MAX)
             *err = GPG_E (GPG_ERR_INV_VALUE);
         break;
-    case RSA_RSA: RSA_SIGN:
+    case RSA_RSA:
+    case RSA_SIGN:
         if (length < RSA_MIN || length > LENGTH_MAX)
             *err = GPG_E (GPG_ERR_INV_VALUE);
         break;
