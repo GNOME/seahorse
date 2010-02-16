@@ -220,6 +220,10 @@ seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table)
 	gerr = gpgme_get_engine_info (&engine);
 	g_return_val_if_fail (GPG_IS_OK (gerr), gerr);
 	
+	while (engine && engine->protocol != GPGME_PROTOCOL_OpenPGP)
+		engine = engine->next;
+	g_return_val_if_fail (engine != NULL, GPG_E (GPG_ERR_GENERAL));
+	
 	ver = seahorse_util_parse_version (engine->version);
 	
 	if (ver >= VER_2012 || (ver >= VER_1410 && ver < VER_190))
