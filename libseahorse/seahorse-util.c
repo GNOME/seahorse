@@ -427,7 +427,7 @@ seahorse_util_memory_output_length (GMemoryOutputStream *output)
 }
 
 /** 
- * seahorse_util_printf_fd:
+ * seahorse_util_print_fd:
  * @fd: The file descriptor to write to
  * @s:  The data to write
  *
@@ -456,14 +456,14 @@ seahorse_util_print_fd (int fd, const char* s)
             l -= r;
         }
     }
-    
+
     return TRUE;
 }
 
 /** 
  * seahorse_util_printf_fd:
  * @fd: The file descriptor to write to
- * @data: The printf format of the data to write
+ * @fmt: The printf format of the data to write
  * @...: The parameters to insert
  *
  * Returns: TRUE on success, FALSE on error

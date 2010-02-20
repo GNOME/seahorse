@@ -1707,11 +1707,10 @@ rev_subkey_action (guint state, gpointer data, int fd)
             PRINTF ((fd, "%d", parm->reason));
 			break;
 		case REV_SUBKEY_DESCRIPTION:
-            PRINTF ((fd, "%s\n", parm->description));
+            PRINTF ((fd, "%s", parm->description));
 			break;
-		/* Need empty line */
 		case REV_SUBKEY_ENDDESC:
-            PRINT ((fd, "\n"));
+            /* Need empty line, which is written at the end */
 			break;
 		case REV_SUBKEY_QUIT:
             PRINT ((fd, QUIT));
@@ -1730,7 +1729,7 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 		    const gchar *args, gpointer data, gpgme_error_t *err)
 {
 	guint next_state;
-	
+
 	switch (current_state) {
 		/* start, select key */
 		case REV_SUBKEY_START:
@@ -1794,7 +1793,12 @@ rev_subkey_transit (guint current_state, gpgme_status_code_t status,
 			break;
 		/* ended description, confirm */
 		case REV_SUBKEY_ENDDESC:
-			next_state = REV_SUBKEY_CONFIRM;
+			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, "ask_revocation_reason.okay"))
+				next_state = REV_SUBKEY_CONFIRM;
+			else {
+                *err = GPG_E (GPG_ERR_GENERAL);
+                g_return_val_if_reached (REV_SUBKEY_ERROR);
+			}
 			break;
 		/* quit, confirm(=save) */
 		case REV_SUBKEY_QUIT:
