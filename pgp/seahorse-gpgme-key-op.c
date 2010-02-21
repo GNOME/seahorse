@@ -538,11 +538,7 @@ sign_process (gpgme_key_t signed_key, gpgme_key_t signing_key, guint sign_index,
 	g_free (parms);
 	 
 	gpgme_release (ctx);
-	
-	/* If it was already signed then it's not an error */
-	if (gpgme_err_code (gerr) == GPG_ERR_EALREADY)
-		gerr = GPG_OK;
-	    
+
 	return gerr;
 }
 

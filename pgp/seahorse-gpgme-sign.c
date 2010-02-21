@@ -36,7 +36,7 @@
 #include <glib/gi18n.h>
 
 G_MODULE_EXPORT gboolean
-on_gpgme_sign_ok_clicked (SeahorseWidget *swidget)
+on_gpgme_sign_ok_clicked (SeahorseWidget *swidget, GtkWindow *parent)
 {
     SeahorseSignCheck check;
     SeahorseSignOptions options = 0;
@@ -92,9 +92,17 @@ on_gpgme_sign_ok_clicked (SeahorseWidget *swidget)
     else
 	    g_assert (FALSE);
     
-    if (!GPG_IS_OK (err))
-        seahorse_gpgme_handle_error (err, _("Couldn't sign key"));
-    
+
+    if (!GPG_IS_OK (err)) {
+        if (gpgme_err_code (err) == GPG_ERR_EALREADY) {
+            w = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
+                                        _("This key was already signed by\n\"%s\""), seahorse_object_get_label (signer));
+            gtk_dialog_run (GTK_DIALOG (w));
+            gtk_widget_destroy (w);
+        } else
+            seahorse_gpgme_handle_error (err, _("Couldn't sign key"));
+    }
+
     seahorse_widget_destroy (swidget);
     
     return TRUE;
@@ -211,7 +219,7 @@ sign_internal (SeahorseObject *to_sign, GtkWindow *parent)
         case GTK_RESPONSE_HELP:
             break;
         case GTK_RESPONSE_OK:
-            do_sign = !on_gpgme_sign_ok_clicked (swidget);
+            do_sign = !on_gpgme_sign_ok_clicked (swidget, parent);
             break;
         default:
             do_sign = FALSE;
