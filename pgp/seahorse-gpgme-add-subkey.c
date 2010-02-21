@@ -59,14 +59,17 @@ hanlder_gpgme_add_subkey_type_changed (GtkComboBox *combo, SeahorseWidget *swidg
 		/* DSA */
 		case 0:
 			gtk_spin_button_set_range (length, DSA_MIN, DSA_MAX);
+			gtk_spin_button_set_value (length, DSA_MAX);
 			break;
 		/* ElGamal */
 		case 1:
 			gtk_spin_button_set_range (length, ELGAMAL_MIN, LENGTH_MAX);
+			gtk_spin_button_set_value (length, LENGTH_MAX / 2);
 			break;
 		/* RSA */
 		default:
 			gtk_spin_button_set_range (length, RSA_MIN, LENGTH_MAX);
+			gtk_spin_button_set_value (length, LENGTH_MAX / 2);
 			break;
 	}
 }
