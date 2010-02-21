@@ -226,13 +226,10 @@ G_MODULE_EXPORT void
 on_gpgme_generate_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
 {
     SeahorseGpgmeSource *sksrc;
-    SeahorseOperation *op;
     GtkWidget *widget;
     gchar *name;
     const gchar *email;
     const gchar *comment;
-    const gchar *pass;
-    gpgme_error_t gerr;
     gint sel;
     guint type;
     time_t expires;
