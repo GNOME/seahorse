@@ -821,12 +821,12 @@ edit_trust_transit (guint current_state, gpgme_status_code_t status,
 
 /**
  * seahorse_gpgme_key_op_set_trust:
- * @skey: #SeahorseKey whose trust will be changed
- * @trust: New trust value that must be at least #SEAHORSE_VALIDITY_UNKNOWN.
- * If @skey is a #SeahorseKeyPair, then @trust cannot be #SEAHORSE_VALIDITY_UNKNOWN.
- * If @skey is not a #SeahorseKeyPair, then @trust cannot be #SEAHORSE_VALIDITY_ULTIMATE.
+ * @pkey: #SeahorseGpgmeKey whose trust will be changed
+ * @trust: New trust value that must be at least #SEAHORSE_VALIDITY_NEVER.
+ * If @pkey is a #SeahorseKeyPair, then @trust cannot be #SEAHORSE_VALIDITY_UNKNOWN.
+ * If @pkey is not a #SeahorseKeyPair, then @trust cannot be #SEAHORSE_VALIDITY_ULTIMATE.
  *
- * Tries to change the owner trust of @skey to @trust.
+ * Tries to change the owner trust of @pkey to @trust.
  *
  * Returns: Error value
  **/
@@ -839,7 +839,7 @@ seahorse_gpgme_key_op_set_trust (SeahorseGpgmeKey *pkey, SeahorseValidity trust)
 	DEBUG_OPERATION(("[GPGME_KEY_OP] set_trust: trust = %i",trust));
 	
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	g_return_val_if_fail (trust >= GPGME_VALIDITY_UNKNOWN, GPG_E (GPG_ERR_INV_VALUE));
+	g_return_val_if_fail (trust >= SEAHORSE_VALIDITY_NEVER, GPG_E (GPG_ERR_INV_VALUE));
 	g_return_val_if_fail (seahorse_gpgme_key_get_trust (pkey) != trust, GPG_E (GPG_ERR_INV_VALUE));
 	
 	if (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY)
@@ -848,11 +848,11 @@ seahorse_gpgme_key_op_set_trust (SeahorseGpgmeKey *pkey, SeahorseValidity trust)
 		g_return_val_if_fail (trust != SEAHORSE_VALIDITY_ULTIMATE, GPG_E (GPG_ERR_INV_VALUE));
 	
 	switch (trust) {
-        case SEAHORSE_VALIDITY_UNKNOWN:
-            menu_choice = GPG_UNKNOWN;
-            break;
         case SEAHORSE_VALIDITY_NEVER:
             menu_choice = GPG_NEVER;
+            break;
+        case SEAHORSE_VALIDITY_UNKNOWN:
+            menu_choice = GPG_UNKNOWN;
             break;
         case SEAHORSE_VALIDITY_MARGINAL:
             menu_choice = GPG_MARGINAL;
