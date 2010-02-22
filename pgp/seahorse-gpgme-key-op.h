@@ -101,7 +101,9 @@ typedef enum {
 	 */
 	RSA_MIN = 1024,
 	/* Maximum length for #ELGAMAL, #RSA_SIGN, and #RSA_ENCRYPT. */
-	LENGTH_MAX = 4096
+	LENGTH_MAX = 4096,
+	/* Default length for #ELGAMAL, #RSA_SIGN, #RSA_ENCRYPT, and #DSA. */
+	LENGTH_DEFAULT = 2048
 } SeahorseKeyLength;
 
 typedef enum {

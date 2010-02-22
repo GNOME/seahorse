@@ -109,13 +109,14 @@ typedef struct _AlgorithmDesc {
     guint type;
     guint min;
     guint max;
+    guint def;
 } AlgorithmDesc;
 
 static AlgorithmDesc available_algorithms[] = {
-    { N_("RSA"),             RSA_RSA,     RSA_MIN,     LENGTH_MAX  },
-    { N_("DSA Elgamal"),     DSA_ELGAMAL, ELGAMAL_MIN, LENGTH_MAX  },
-    { N_("DSA (sign only)"), DSA,         DSA_MIN,     DSA_MAX     },
-    { N_("RSA (sign only)"), RSA_SIGN,    RSA_MIN,     LENGTH_MAX  }
+    { N_("RSA"),             RSA_RSA,     RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  },
+    { N_("DSA Elgamal"),     DSA_ELGAMAL, ELGAMAL_MIN, LENGTH_MAX, LENGTH_DEFAULT  },
+    { N_("DSA (sign only)"), DSA,         DSA_MIN,     DSA_MAX,    LENGTH_DEFAULT  },
+    { N_("RSA (sign only)"), RSA_SIGN,    RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  }
 };
 
 /**
@@ -276,9 +277,9 @@ on_gpgme_generate_response (GtkDialog *dialog, guint response, SeahorseWidget *s
     widget = seahorse_widget_get_widget (swidget, "bits-entry");
     g_return_if_fail (widget != NULL);
     bits = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
-    if (bits < 512 || bits > 8192) {
-        g_message ("invalid key size: %s defaulting to 2048", available_algorithms[sel].desc);
-        bits = 2048;
+    if (bits < available_algorithms[sel].min || bits > available_algorithms[sel].max) {
+        bits = available_algorithms[sel].def;
+        g_message ("invalid key size: %s defaulting to %u", available_algorithms[sel].desc, bits);
     }
     
     /* The expiry */
@@ -362,23 +363,23 @@ G_MODULE_EXPORT void
 on_gpgme_generate_algorithm_changed (GtkComboBox *combo, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
-    gint idx;
+    gint sel;
     
-    idx = gtk_combo_box_get_active (combo);
-    g_assert (idx < (int)G_N_ELEMENTS (available_algorithms));
+    sel = gtk_combo_box_get_active (combo);
+    g_assert (sel < (int)G_N_ELEMENTS (available_algorithms));
     
     widget = seahorse_widget_get_widget (swidget, "bits-entry");
     g_return_if_fail (widget != NULL);
     
     gtk_spin_button_set_range (GTK_SPIN_BUTTON (widget), 
-                               available_algorithms[idx].min, 
-                               available_algorithms[idx].max);
+                               available_algorithms[sel].min,
+                               available_algorithms[sel].max);
 
     /* Set sane default key length */
-    if (2048 > available_algorithms[idx].max)
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), available_algorithms[idx].max);
+    if (available_algorithms[sel].def > available_algorithms[sel].max)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), available_algorithms[sel].max);
     else
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 2048);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), available_algorithms[sel].def);
 }
 
 /**
