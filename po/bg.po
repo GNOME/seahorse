@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 12:18+0200\n"
-"PO-Revision-Date: 2010-01-25 12:18+0200\n"
+"POT-Creation-Date: 2010-02-23 07:40+0200\n"
+"PO-Revision-Date: 2010-02-23 07:39+0200\n"
 "Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,16 +33,17 @@ msgstr "неуспех при създаването на нова група п
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Демон за шифриране (Seahorse)"
 
-#: ../daemon/seahorse-daemon.desktop.in.in.h:1
-msgid "Seahorse Daemon"
-msgstr "Демон на Seahorse"
-
-#: ../daemon/seahorse-service.c:157 ../daemon/seahorse-service.c:195
+#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Грешен или неразпознат вид ключ: %s"
 
-#: ../daemon/seahorse-service.c:259 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service.c:229
+#, c-format
+msgid "This keytype is not supported: %s"
+msgstr "Този вид ключ не се поддържа: %s"
+
+#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -106,61 +107,61 @@ msgstr "Неправилен подпис"
 msgid "Couldn't verify signature."
 msgstr "Подписът не може да бъде проверен."
 
-#: ../daemon/seahorse-service-crypto.c:315
-#: ../daemon/seahorse-service-crypto.c:644
+#: ../daemon/seahorse-service-crypto.c:317
+#: ../daemon/seahorse-service-crypto.c:646
 #, c-format
 msgid "Invalid or unrecognized signer: %s"
 msgstr "Грешен или неразпознат подписал: %s"
 
-#: ../daemon/seahorse-service-crypto.c:322
-#: ../daemon/seahorse-service-crypto.c:651
+#: ../daemon/seahorse-service-crypto.c:324
+#: ../daemon/seahorse-service-crypto.c:653
 #, c-format
 msgid "Key is not valid for signing: %s"
 msgstr "Грешен ключ за подписване: %s"
 
-#: ../daemon/seahorse-service-crypto.c:333
+#: ../daemon/seahorse-service-crypto.c:335
 #, c-format
 msgid "Invalid or unrecognized recipient: %s"
 msgstr "Грешен или неразпознат получател: %s"
 
-#: ../daemon/seahorse-service-crypto.c:341
+#: ../daemon/seahorse-service-crypto.c:343
 #, c-format
 msgid "Key is not a valid recipient for encryption: %s"
 msgstr "Ключът не може да шифрира: %s"
 
-#: ../daemon/seahorse-service-crypto.c:350
+#: ../daemon/seahorse-service-crypto.c:352
 #, c-format
 msgid "No recipients specified"
 msgstr "Не са указани получатели"
 
-#: ../daemon/seahorse-service-crypto.c:432
+#: ../daemon/seahorse-service-crypto.c:434
 #, c-format
 msgid "Invalid key type for decryption: %s"
 msgstr "Грешен вид на ключ за дешифриране: %s"
 
-#: ../daemon/seahorse-service-crypto.c:546
-#: ../daemon/seahorse-service-crypto.c:744
+#: ../daemon/seahorse-service-crypto.c:548
+#: ../daemon/seahorse-service-crypto.c:746
 #, c-format
 msgid "Please set clearuri"
 msgstr "Задайте адрес clearuri"
 
-#: ../daemon/seahorse-service-crypto.c:552
-#: ../daemon/seahorse-service-crypto.c:750
+#: ../daemon/seahorse-service-crypto.c:554
+#: ../daemon/seahorse-service-crypto.c:752
 #, c-format
 msgid "Please set crypturi"
 msgstr "Задайте адрес crypturi"
 
-#: ../daemon/seahorse-service-crypto.c:562
+#: ../daemon/seahorse-service-crypto.c:564
 #, c-format
-msgid "Error openin clearuri"
-msgstr "Грешка при отваряне на адреса clearuri"
+msgid "Error opening clearuri"
+msgstr "Грешка при отваряне на clearuri"
 
-#: ../daemon/seahorse-service-crypto.c:639
+#: ../daemon/seahorse-service-crypto.c:641
 #, c-format
 msgid "No signer specified"
 msgstr "Не е указан подписал"
 
-#: ../daemon/seahorse-service-crypto.c:828
+#: ../daemon/seahorse-service-crypto.c:830
 #, c-format
 msgid "Invalid key type for verifying: %s"
 msgstr "Грешен вид на ключ за проверка: %s"
@@ -768,7 +769,7 @@ msgstr "Име"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
-#: ../pgp/seahorse-pgp-key-properties.c:1743
+#: ../pgp/seahorse-pgp-key-properties.c:1745
 #: ../src/seahorse-key-manager-store.c:841
 msgid "Key ID"
 msgstr "Идентификатор"
@@ -1038,27 +1039,27 @@ msgstr "Файлът не е във формат .desktop"
 msgid "Unrecognized desktop file Version '%s'"
 msgstr "Непозната версия на файла: %s"
 
-#: ../libegg/eggdesktopfile.c:958
+#: ../libegg/eggdesktopfile.c:968
 #, c-format
 msgid "Starting %s"
 msgstr "Стартиране на %s"
 
-#: ../libegg/eggdesktopfile.c:1100
+#: ../libegg/eggdesktopfile.c:1110
 #, c-format
 msgid "Application does not accept documents on command line"
 msgstr "Програмата не приема документи през командния ред"
 
-#: ../libegg/eggdesktopfile.c:1168
+#: ../libegg/eggdesktopfile.c:1178
 #, c-format
 msgid "Unrecognized launch option: %d"
 msgstr "Непозната опция при стартиране „%d“"
 
-#: ../libegg/eggdesktopfile.c:1373
+#: ../libegg/eggdesktopfile.c:1383
 #, c-format
 msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
 msgstr "В обекти от вида „Type=Link“ не може да се подават адреси на документи"
 
-#: ../libegg/eggdesktopfile.c:1392
+#: ../libegg/eggdesktopfile.c:1404
 #, c-format
 msgid "Not a launchable item"
 msgstr "Не е обект за стартиране"
@@ -1079,7 +1080,7 @@ msgstr "ФАЙЛ"
 msgid "Specify session management ID"
 msgstr "Указване на идентификатор за управлението на сесиите"
 
-#: ../libegg/eggsmclient.c:231 ../pgp/seahorse-pgp-key-properties.c:1312
+#: ../libegg/eggsmclient.c:231 ../pgp/seahorse-pgp-key-properties.c:1314
 msgid "ID"
 msgstr "ИДЕНТИФИКАТОР"
 
@@ -1174,7 +1175,7 @@ msgstr "Парола"
 msgid "Password:"
 msgstr "Парола:"
 
-#: ../libseahorse/seahorse-passphrase.c:264
+#: ../libseahorse/seahorse-passphrase.c:265
 msgid "Confirm:"
 msgstr "Потвърждаване:"
 
@@ -1311,43 +1312,43 @@ msgid "_Replace"
 msgstr "_Замяна"
 
 #: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
-#: ../pgp/seahorse-pgp-key-properties.c:1131
+#: ../pgp/seahorse-pgp-key-properties.c:1133
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
 msgid "Unknown"
 msgstr "Неизвестно"
 
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1137
+#: ../pgp/seahorse-pgp-key-properties.c:1139
 msgctxt "Validity"
 msgid "Never"
 msgstr "Никога"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1144
+#: ../pgp/seahorse-pgp-key-properties.c:1146
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:33
 msgid "Marginal"
 msgstr "донякъде"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1150
+#: ../pgp/seahorse-pgp-key-properties.c:1152
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
 msgid "Full"
 msgstr "пълно"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1156
+#: ../pgp/seahorse-pgp-key-properties.c:1158
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 msgid "Ultimate"
 msgstr "най-пълно"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1349
+#: ../pgp/seahorse-pgp-key-properties.c:1351
 msgid "Disabled"
 msgstr "Изключена"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1345
+#: ../pgp/seahorse-pgp-key-properties.c:1347
 msgid "Revoked"
 msgstr "Анулиран"
 
@@ -1428,28 +1429,28 @@ msgstr "Анулиране на ключ"
 msgid "_Never expires"
 msgstr "_Не изтича никога"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:144
+#: ../pgp/seahorse-gpgme-add-subkey.c:147
 msgid "Couldn't add subkey"
 msgstr "Неуспех при добавянето на подключ"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:163
+#: ../pgp/seahorse-gpgme-add-subkey.c:166
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Добавяне на подключ към %s"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:179 ../pgp/seahorse-gpgme-generate.c:117
+#: ../pgp/seahorse-gpgme-add-subkey.c:182 ../pgp/seahorse-gpgme-generate.c:117
 msgid "DSA (sign only)"
 msgstr "DSA (само подписване)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:187
+#: ../pgp/seahorse-gpgme-add-subkey.c:190
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (само шифриране)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:193 ../pgp/seahorse-gpgme-generate.c:118
+#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:118
 msgid "RSA (sign only)"
 msgstr "RSA (само подписване)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:199
+#: ../pgp/seahorse-gpgme-add-subkey.c:202
 msgid "RSA (encrypt only)"
 msgstr "RSA (само шифриране)"
 
@@ -1503,21 +1504,29 @@ msgstr "DSA ElGamal"
 msgid "Couldn't generate PGP key"
 msgstr "Неуспех при създаването на ключ за PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:258
+#: ../pgp/seahorse-gpgme-generate.c:194
 msgid "Passphrase for New PGP Key"
 msgstr "Парола за новия ключ за PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:259
+#: ../pgp/seahorse-gpgme-generate.c:195
 msgid "Enter the passphrase for your new key twice."
 msgstr "Въведете двукратно паролата за новия си ключ."
 
-#: ../pgp/seahorse-gpgme-generate.c:268
+#: ../pgp/seahorse-gpgme-generate.c:204
 msgid "Couldn't generate key"
 msgstr "Неуспех при създаването на ключ"
 
-#: ../pgp/seahorse-gpgme-generate.c:270
+#: ../pgp/seahorse-gpgme-generate.c:206
 msgid "Generating key"
 msgstr "Създаване на ключ"
+
+#: ../pgp/seahorse-gpgme-key-op.c:301
+msgid "Wrong password"
+msgstr "Грешна парола"
+
+#: ../pgp/seahorse-gpgme-key-op.c:301
+msgid "This was the third time you entered a wrong password. Please try again."
+msgstr "Трети пореден път въвеждате неправилна парола. Пробвайте отново."
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -1861,7 +1870,7 @@ msgstr "Частен ключ за PGP"
 msgid "Public PGP Key"
 msgstr "Публичен ключ за PGP"
 
-#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1347
+#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1349
 msgid "Expired"
 msgstr "Изтекъл"
 
@@ -1881,12 +1890,12 @@ msgid "Couldn't delete user ID"
 msgstr "Неуспех при изтриването на идентификатора на потребител"
 
 #: ../pgp/seahorse-pgp-key-properties.c:333
-#: ../pgp/seahorse-pgp-key-properties.c:1462
+#: ../pgp/seahorse-pgp-key-properties.c:1464
 msgid "[Unknown]"
 msgstr "[Неизвестно]"
 
 #: ../pgp/seahorse-pgp-key-properties.c:426
-#: ../pgp/seahorse-pgp-key-properties.c:1740
+#: ../pgp/seahorse-pgp-key-properties.c:1742
 msgid "Name/Email"
 msgstr "Име/е-поща"
 
@@ -1917,55 +1926,55 @@ msgid "Couldn't delete subkey"
 msgstr "Неуспех при изтриването на подключ"
 
 #: ../pgp/seahorse-pgp-key-properties.c:991
-#: ../pgp/seahorse-pgp-key-properties.c:1425
+#: ../pgp/seahorse-pgp-key-properties.c:1427
 msgid "Unable to change trust"
 msgstr "Доверието не може да се промени"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1005 ../src/seahorse-viewer.c:315
-#: ../ssh/seahorse-ssh-key-properties.c:167
+#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:316
+#: ../ssh/seahorse-ssh-key-properties.c:168
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Неуспех при изнасянето на ключ към „%s“"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1033
-#: ../ssh/seahorse-ssh-key-properties.c:191
+#: ../pgp/seahorse-pgp-key-properties.c:1035
+#: ../ssh/seahorse-ssh-key-properties.c:193
 msgid "Export Complete Key"
 msgstr "Изнасяне на пълен ключ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1058
-#: ../ssh/seahorse-ssh-key-properties.c:213
+#: ../pgp/seahorse-pgp-key-properties.c:1060
+#: ../ssh/seahorse-ssh-key-properties.c:215
 msgid "Couldn't export key."
 msgstr "Неуспех при изнасянето на ключ."
 
-#: ../pgp/seahorse-pgp-key-properties.c:1265
-#: ../pgp/seahorse-pgp-key-properties.c:1354
+#: ../pgp/seahorse-pgp-key-properties.c:1267
+#: ../pgp/seahorse-pgp-key-properties.c:1356
 msgctxt "Expires"
 msgid "Never"
 msgstr "Никога"
 
 #. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1315
+#: ../pgp/seahorse-pgp-key-properties.c:1317
 #: ../src/seahorse-key-manager-store.c:860
 msgid "Type"
 msgstr "Вид"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1318
+#: ../pgp/seahorse-pgp-key-properties.c:1320
 msgid "Created"
 msgstr "Създаден"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1321
+#: ../pgp/seahorse-pgp-key-properties.c:1323
 msgid "Expires"
 msgstr "Изтича на"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1324
+#: ../pgp/seahorse-pgp-key-properties.c:1326
 msgid "Status"
 msgstr "Състояние:"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1327
+#: ../pgp/seahorse-pgp-key-properties.c:1329
 msgid "Strength"
 msgstr "Сила"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1351
+#: ../pgp/seahorse-pgp-key-properties.c:1353
 msgid "Good"
 msgstr "Добро"
 
@@ -2417,11 +2426,11 @@ msgstr[0] "Избран е %d ключ"
 msgstr[1] "Избрани са %d ключа"
 
 #: ../src/seahorse-key-manager.c:404 ../src/seahorse-key-manager.c:464
-#: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:482
+#: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:484
 msgid "Couldn't import keys"
 msgstr "Ключовете не могат да бъдат внесени"
 
-#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:487
+#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:489
 msgid "Imported keys"
 msgstr "Внесени ключове"
 
@@ -2541,7 +2550,7 @@ msgstr "_Други ключове"
 msgid "To get started with encryption you will need keys."
 msgstr "Трябват ви ключове, за да шифрирате."
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:546
+#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:548
 msgid "_Import"
 msgstr "_Внасяне"
 
@@ -2747,66 +2756,66 @@ msgstr "Показване на ръководството на Seahorse"
 msgid "Export public key"
 msgstr "Изнасяне на публичен ключ"
 
-#: ../src/seahorse-viewer.c:320
+#: ../src/seahorse-viewer.c:322
 msgid "Exporting keys"
 msgstr "Изнасяне на ключове"
 
-#: ../src/seahorse-viewer.c:345
+#: ../src/seahorse-viewer.c:347
 msgid "Couldn't retrieve data from key server"
 msgstr "Данните не бяха получени от сървъра с ключове"
 
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:364
+#: ../src/seahorse-viewer.c:366
 msgid "Copied keys"
 msgstr "Копирани ключове"
 
-#: ../src/seahorse-viewer.c:384
+#: ../src/seahorse-viewer.c:386
 msgid "Retrieving keys"
 msgstr "Получаване на ключове"
 
-#: ../src/seahorse-viewer.c:399
+#: ../src/seahorse-viewer.c:401
 msgid "Couldn't delete."
 msgstr "Неуспех при изтриването."
 
-#: ../src/seahorse-viewer.c:433
+#: ../src/seahorse-viewer.c:435
 msgid "Deleting..."
 msgstr "Изтриване…"
 
-#: ../src/seahorse-viewer.c:459
+#: ../src/seahorse-viewer.c:461
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s e частен ключ. Сигурни ли сте, че искате да продължите?"
 
-#: ../src/seahorse-viewer.c:507
+#: ../src/seahorse-viewer.c:509
 msgid "Importing keys from key servers"
 msgstr "Внасяне на ключове от сървъри с ключове"
 
-#: ../src/seahorse-viewer.c:533
+#: ../src/seahorse-viewer.c:535
 msgid "Show properties"
 msgstr "Показване на настройките"
 
-#: ../src/seahorse-viewer.c:534
+#: ../src/seahorse-viewer.c:536
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "_Изтриване"
 
-#: ../src/seahorse-viewer.c:535
+#: ../src/seahorse-viewer.c:537
 msgid "Delete selected items"
 msgstr "Изтриване на избраните обекти"
 
-#: ../src/seahorse-viewer.c:539
+#: ../src/seahorse-viewer.c:541
 msgid "E_xport..."
 msgstr "_Изнасяне…"
 
-#: ../src/seahorse-viewer.c:540
+#: ../src/seahorse-viewer.c:542
 msgid "Export to a file"
 msgstr "Изнасяне към файл"
 
-#: ../src/seahorse-viewer.c:542
+#: ../src/seahorse-viewer.c:544
 msgid "Copy to the clipboard"
 msgstr "Изнасяне към буфера за обмен"
 
-#: ../src/seahorse-viewer.c:547
+#: ../src/seahorse-viewer.c:549
 msgid "Import selected keys to local key ring"
 msgstr "Внасяне на избраните ключове в локалния ключодържател"
 
