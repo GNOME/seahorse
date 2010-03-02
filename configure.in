@@ -128,6 +128,7 @@ else
 	if test	"$DO_CHECK" = "yes"; then
 		accepted_versions="1.2 1.4 2.0"
 		AC_PATH_PROGS(GNUPG, [gpg gpg2], no)
+		AC_DEFINE_UNQUOTED(GNUPG, "$GNUPG", [Path to gpg executable.])
 		ok="no"
 		if test "$GNUPG" != "no"; then
 			AC_MSG_CHECKING(for appropriate GnuPG version)

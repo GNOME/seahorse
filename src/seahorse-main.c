@@ -82,7 +82,8 @@ main (int argc, char **argv)
     }
 
     if (show_version) {
-        g_print ("%s %s\n", argv [0], VERSION);
+        g_print ("%s\n", PACKAGE_STRING);
+        g_print ("GNUPG: %s (%d.%d.%d)\n", GNUPG, GPG_MAJOR, GPG_MINOR, GPG_MICRO);
         exit (1);
     }
 
