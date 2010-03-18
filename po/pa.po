@@ -4,15 +4,15 @@
 #
 # ASB <aalam@users.sf.net>, 2004, 2007.
 # Amanpreet Singh Alam <aalam@users.sf.net>, 2008.
-# A S Alam <aalam@users.sf.net>, 2009.
+# A S Alam <aalam@users.sf.net>, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse&component=general\n"
-"POT-Creation-Date: 2009-09-09 08:46+0000\n"
-"PO-Revision-Date: 2009-09-13 21:59+0530\n"
+"POT-Creation-Date: 2010-02-07 21:07+0000\n"
+"PO-Revision-Date: 2010-03-18 07:53+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
-"Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
+"Language-Team: Punjabi/Panjabi <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,143 +23,162 @@ msgstr ""
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "ਸੀ-ਹਾਰਸ-ਡੈਮਨ ਇੱਕ ਡੈਮਨ ਵਾਂਗ ਨਾ ਚਲਾਓ"
 
-#: ../daemon/seahorse-daemon.c:87
+#: ../daemon/seahorse-daemon.c:99
 msgid "couldn't fork process"
 msgstr "ਕਾਰਜ ਅੱਡ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: ../daemon/seahorse-daemon.c:93
+#: ../daemon/seahorse-daemon.c:105
 msgid "couldn't create new process group"
 msgstr "ਨਵਾਂ ਕਾਰਜ ਗਰੁੱਪ ਬਣਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ"
 
-#: ../daemon/seahorse-daemon.c:207
+#: ../daemon/seahorse-daemon.c:255
 msgid "Encryption Daemon (Seahorse)"
 msgstr "ਇੰਕ੍ਰਿਪਸ਼ਨ ਡੈਮਨ (ਸੀ-ਹਾਰਸ)"
 
-#: ../daemon/seahorse-daemon.desktop.in.in.h:1
-msgid "Seahorse Daemon"
-msgstr "ਸੀ-ਹਾਰਸ ਡੈਮਨ"
-
-#: ../daemon/seahorse-service.c:151 ../daemon/seahorse-service.c:175
+#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "ਗਲਤ ਜਾਂ ਅਣਜਾਣ ਕੁੰਜੀ ਕਿਸਮ: %s"
 
-#: ../daemon/seahorse-service.c:224 ../daemon/seahorse-service-keyset.c:135
-#: ../daemon/seahorse-service-keyset.c:164
+#: ../daemon/seahorse-service.c:229
+#, c-format
+#| msgid "This key expired on: %s"
+msgid "This keytype is not supported: %s"
+msgstr "ਇਹ ਕੁੰਜੀ-ਕਿਸਮ ਸਹਾਇਕ ਨਹੀਂ: %s"
+
+#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
 msgstr "ਅਵੈਧ ਜਾਂ ਬੇਪਛਾਣ ਕੁੰਜੀ: %s"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:160
+#: ../daemon/seahorse-service-crypto.c:204
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
 msgstr "<i><key id='%s'/> ਵਲੋਂ ਸਾਇਨ <b>ਮਿਆਦ</b></i> %s ਤੱਕ।"
 
-#: ../daemon/seahorse-service-crypto.c:161
+#: ../daemon/seahorse-service-crypto.c:205
 msgid "Invalid Signature"
 msgstr "ਗਲਤ ਦਸਤਖਤ"
 
-#: ../daemon/seahorse-service-crypto.c:167
+#: ../daemon/seahorse-service-crypto.c:211
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
 msgstr "<i><key id='%s'/> ਵਲੋਂ </i> %s ਉੱਤੇ ਸਾਇਨਾਂ ਦੀ <b>ਮਿਆਦ ਪੁੱਗੀ</b>।"
 
-#: ../daemon/seahorse-service-crypto.c:168
+#: ../daemon/seahorse-service-crypto.c:212
 msgid "Expired Signature"
 msgstr "ਦਸਤਖਤਾਂ ਦੀ ਮਿਆਦ ਪੁੱਗੀ"
 
-#: ../daemon/seahorse-service-crypto.c:174
+#: ../daemon/seahorse-service-crypto.c:218
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
 msgstr "<i><key id='%s'/> ਵਲੋਂ ਸਾਇਨ <b>ਵਾਪਸ ਲਏ</b></i> %s ਉੱਤੇ।"
 
-#: ../daemon/seahorse-service-crypto.c:175
+#: ../daemon/seahorse-service-crypto.c:219
 msgid "Revoked Signature"
 msgstr "ਦਸਤਖਤ ਮਨਸੂਖ"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:181
+#: ../daemon/seahorse-service-crypto.c:225
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s."
 msgstr "<i><key id='%s'/>ਰਾਹੀਂ </i> %s ਉੱਤੇ ਸਾਇਨ।"
 
-#: ../daemon/seahorse-service-crypto.c:182
+#: ../daemon/seahorse-service-crypto.c:226
 msgid "Good Signature"
 msgstr "ਵਧੀਆ ਦਸਤਖਤ"
 
-#: ../daemon/seahorse-service-crypto.c:187
+#: ../daemon/seahorse-service-crypto.c:231
 msgid "Signing key not in keyring."
 msgstr "ਸਾਇਨ ਕੁੰਜੀ ਕੀਰਿੰਗ 'ਚ ਨਹੀਂ ਹੈ।"
 
-#: ../daemon/seahorse-service-crypto.c:188
+#: ../daemon/seahorse-service-crypto.c:232
 msgid "Unknown Signature"
 msgstr "ਅਣਜਾਣ ਦਸਤਖਤ"
 
-#: ../daemon/seahorse-service-crypto.c:192
+#: ../daemon/seahorse-service-crypto.c:236
 msgid "Bad or forged signature. The signed data was modified."
 msgstr "ਗਲਤ ਜਾਂ ਭੁੱਲੇ ਦਸਤਖਤ ਹਨ। ਸਾਇਨ ਡਾਟਾ ਸੋਧਿਆ ਗਿਆ ਹੈ।"
 
-#: ../daemon/seahorse-service-crypto.c:193
+#: ../daemon/seahorse-service-crypto.c:237
 msgid "Bad Signature"
 msgstr "ਗਲਤ ਦਸਤਖਤ"
 
-#: ../daemon/seahorse-service-crypto.c:201
+#: ../daemon/seahorse-service-crypto.c:245
 msgid "Couldn't verify signature."
 msgstr "ਦਸਤਖਤਾਂ ਦੀ ਜਾਂਚ ਨਹੀਂ ਹੋ ਸਕਦੀ"
 
-#: ../daemon/seahorse-service-crypto.c:257
-#: ../daemon/seahorse-service-crypto.c:364
+#: ../daemon/seahorse-service-crypto.c:315
+#: ../daemon/seahorse-service-crypto.c:644
 #, c-format
 msgid "Invalid or unrecognized signer: %s"
 msgstr "ਅਵੈਧ ਜਾਂ ਬੇਪਛਾਣ ਸਾਇਨਰ: %s"
 
-#: ../daemon/seahorse-service-crypto.c:264
-#: ../daemon/seahorse-service-crypto.c:371
+#: ../daemon/seahorse-service-crypto.c:322
+#: ../daemon/seahorse-service-crypto.c:651
 #, c-format
 msgid "Key is not valid for signing: %s"
 msgstr "ਕੁੰਜੀ ਸਾਇਨ ਕਰਨ ਲਈ ਵੈਧ ਨਹੀਂ: %s"
 
-#: ../daemon/seahorse-service-crypto.c:276
+#: ../daemon/seahorse-service-crypto.c:333
 #, c-format
 msgid "Invalid or unrecognized recipient: %s"
 msgstr "ਅਵੈਧ ਜਾਂ ਬੇਪਛਾਣ ਪ੍ਰਾਪਤ ਕਰਤਾ: %s"
 
-#: ../daemon/seahorse-service-crypto.c:284
+#: ../daemon/seahorse-service-crypto.c:341
 #, c-format
 msgid "Key is not a valid recipient for encryption: %s"
 msgstr "ਕੁੰਜੀ ਇੰਕ੍ਰਿਪਸ਼ਨ ਲਈ ਵੈਧ ਪ੍ਰਾਪਤ ਕਰਤਾ ਨਹੀਂ ਹੈ: %s"
 
-#: ../daemon/seahorse-service-crypto.c:293
+#: ../daemon/seahorse-service-crypto.c:350
 #, c-format
 msgid "No recipients specified"
 msgstr "ਕੋਈ ਪ੍ਰਾਪਤ ਕਰਤਾ ਨਹੀਂ ਦਿੱਤਾ"
 
-#: ../daemon/seahorse-service-crypto.c:359
-#, c-format
-msgid "No signer specified"
-msgstr "ਕੋਈ ਸਾਇਨਰ ਦਿੱਤਾ ਨਹੀਂ"
-
-#: ../daemon/seahorse-service-crypto.c:414
+#: ../daemon/seahorse-service-crypto.c:432
 #, c-format
 msgid "Invalid key type for decryption: %s"
 msgstr "ਡਿਕ੍ਰਿਪਸ਼ਨ ਲਈ ਗਲਤ ਕੁੰਜੀ ਕਿਸਮ: %s"
 
-#: ../daemon/seahorse-service-crypto.c:477
+#: ../daemon/seahorse-service-crypto.c:546
+#: ../daemon/seahorse-service-crypto.c:744
+#, c-format
+msgid "Please set clearuri"
+msgstr "clearuri ਸੈੱਟ ਕਰੋ"
+
+#: ../daemon/seahorse-service-crypto.c:552
+#: ../daemon/seahorse-service-crypto.c:750
+#, c-format
+msgid "Please set crypturi"
+msgstr "crypturi ਸੈੱਟ ਕਰੋ"
+
+#: ../daemon/seahorse-service-crypto.c:562
+#, c-format
+msgid "Error opening clearuri"
+msgstr "clearuri ਖੋਲ੍ਹਣ ਦੌਰਾਨ ਗਲਤੀ"
+
+#: ../daemon/seahorse-service-crypto.c:639
+#, c-format
+msgid "No signer specified"
+msgstr "ਕੋਈ ਸਾਇਨਰ ਦਿੱਤਾ ਨਹੀਂ"
+
+#: ../daemon/seahorse-service-crypto.c:828
 #, c-format
 msgid "Invalid key type for verifying: %s"
 msgstr "ਜਾਂਚ ਲਈ ਗਲਤ ਕੁੰਜੀ ਕਿਸਮ: %s"
 
-#: ../daemon/seahorse-service-keyset.c:200
+#: ../daemon/seahorse-service-keyset.c:273
 #, c-format
 msgid "Invalid key id: %s"
 msgstr "ਗਲਤ ਕੁੰਜੀ id: %s"
 
-#: ../daemon/seahorse-sharing.c:72 ../daemon/seahorse-sharing.c:216
+#: ../daemon/seahorse-sharing.c:84 ../daemon/seahorse-sharing.c:269
 msgid "Couldn't share keys"
 msgstr "ਕੁੰਜੀਆਂ ਸਾਂਝੀਆਂ ਨਹੀਂ ਕੀਤੀਆਂ ਜਾ ਸਕੀਆਂ"
 
-#: ../daemon/seahorse-sharing.c:73
+#: ../daemon/seahorse-sharing.c:85
 msgid "Can't publish discovery information on the network."
 msgstr "ਨੈੱਟਵਰਕ ਉੱਤੇ ਖੋਜ ਜਾਣਕਾਰੀ ਪਬਲਿਸ਼ ਕੀਤੀ ਨਹੀਂ ਜਾ ਸਕਦੀ।"
 
@@ -168,7 +187,7 @@ msgstr "ਨੈੱਟਵਰਕ ਉੱਤੇ ਖੋਜ ਜਾਣਕਾਰੀ ਪ�
 #. translate correctly so that it will work correctly in your
 #. language, you may use something equivalent to
 #. "Shared keys of %s".
-#: ../daemon/seahorse-sharing.c:93
+#: ../daemon/seahorse-sharing.c:112
 #, c-format
 msgid "%s's encryption keys"
 msgstr "%s ਦੀਆਂ ਇੰਕ੍ਰਿਪਸ਼ਨ ਕੁੰਜੀਆਂ"
@@ -356,12 +375,11 @@ msgstr "ਨਵੇਂ ਕੀਰਿੰਗ ਲਈ ਇੱਕ ਨਾਂ ਦਿਓ। 
 msgid "The host name or address of the server."
 msgstr "ਸਰਵਰ ਦਾ ਹੋਸਟ ਨਾਂ ਜਾਂ ਐਡਰੈੱਸ।"
 
-#: ../gkr/seahorse-gkr-add-item.c:60 ../gkr/seahorse-gkr-add-keyring.c:59
+#: ../gkr/seahorse-gkr-add-item.c:61 ../gkr/seahorse-gkr-add-keyring.c:73
 msgid "Couldn't add keyring"
 msgstr "ਕੀਰਿੰਗ ਸ਼ਾਮਲ  ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:1
-#| msgid "Password"
 msgid "Add Password"
 msgstr "ਪਾਸਵਰਡ ਸ਼ਾਮਲ"
 
@@ -371,17 +389,14 @@ msgid "_Description:"
 msgstr "ਵੇਰਵਾ(_D):"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:3
-#| msgid "Keyring"
 msgid "_Keyring:"
 msgstr "ਕੀਰਿੰਗ(_K):"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:4
-#| msgid "Password:"
 msgid "_Password:"
 msgstr "ਪਾਸਵਰਡ(_P):"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:5
-#| msgid "Show pass_word"
 msgid "_Show Password"
 msgstr "ਪਾਸਵਰਡ ਵੇਖੋ(_S)"
 
@@ -437,11 +452,11 @@ msgstr "ਨੈੱਟਵਰਕ ਕਰਿਡਿਨਟੀਸ"
 msgid "Couldn't change password."
 msgstr "ਪਾਸਵਰਡ ਬਦਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ ਹੈ।"
 
-#: ../gkr/seahorse-gkr-item-properties.c:347
+#: ../gkr/seahorse-gkr-item-properties.c:350
 msgid "Couldn't set description."
 msgstr "ਵੇਰਵਾ ਸੈੱਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ ਹੈ।"
 
-#: ../gkr/seahorse-gkr-item-properties.c:641
+#: ../gkr/seahorse-gkr-item-properties.c:651
 msgid "Couldn't set application access."
 msgstr "ਐਪਲੀਕੇਸ਼ਨ ਅਸੈੱਸ ਸੈੱਟ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ।"
 
@@ -459,7 +474,7 @@ msgstr "<b>ਅਧਿਕਾਰ:</b>"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:4
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
+#: ../ssh/seahorse-ssh-key-properties.xml.h:7
 msgid "<b>Technical Details:</b>"
 msgstr "<b>ਤਕਨੀਕੀ ਵੇਰਵਾ:</b>"
 
@@ -471,20 +486,20 @@ msgstr "ਐਪਲੀਕੇਸ਼ਨ"
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
 #: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
+#: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Details"
 msgstr "ਵੇਰਵਾ"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:7
 #: ../pgp/seahorse-pgp-subkey.c:366
-#: ../ssh/seahorse-ssh-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
 msgid "Key"
 msgstr "ਕੁੰਜੀ"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:8
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
-#: ../ssh/seahorse-ssh-key-properties.xml.h:20
+#: ../ssh/seahorse-ssh-key-properties.xml.h:18
 msgid "Key Properties"
 msgstr "ਕੁੰਜੀ ਵਿਸ਼ੇਸ਼ਤਾ"
 
@@ -540,55 +555,53 @@ msgstr "ਪਾਸਵਰਡ: %s"
 msgid "<b>Passwords:</b> %s"
 msgstr "<b>ਪਾਸਵਰਡ:</b> %s"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:112
+#: ../gkr/seahorse-gkr-keyring-commands.c:119
 msgid "Password Keyring"
 msgstr "ਪਾਸਵਰਡ ਕੀਰਿੰਗ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:113
+#: ../gkr/seahorse-gkr-keyring-commands.c:120
 msgid "Used to store application and network passwords"
 msgstr "ਐਪਲੀਕੇਸ਼ਨ ਅਤੇ ਨੈੱਟਵਰਕ ਪਾਸਵਰਡ ਸੰਭਾਲਣ ਲਈ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:114
-#| msgid "Network Password"
+#: ../gkr/seahorse-gkr-keyring-commands.c:121
 msgid "Stored Password"
 msgstr "ਸਟੋਰ ਕੀਤੇ ਪਾਸਵਰਡ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:115
-#| msgid "Where to store cached passwords."
+#: ../gkr/seahorse-gkr-keyring-commands.c:122
 msgid "Safely store a password or secret."
 msgstr "ਪਾਸਵਰਡ ਜਾਂ ਭੇਦ ਸੁਰੱਖਿਅਤ ਢੰਗ ਨਾਲ ਸਟੋਰ ਕਰੋ।"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:129
+#: ../gkr/seahorse-gkr-keyring-commands.c:136
 msgid "Couldn't unlock keyring"
 msgstr "ਕੀਰਿੰਗ ਅਣ-ਲਾਕ  ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:170
+#: ../gkr/seahorse-gkr-keyring-commands.c:177
 msgid "Couldn't lock keyring"
 msgstr "ਕੀਰਿੰਗ ਲਾਕ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:211
+#: ../gkr/seahorse-gkr-keyring-commands.c:218
 msgid "Couldn't set default keyring"
 msgstr "ਡਿਫਾਲਟ ਕੀਰਿੰਗ ਸੈੱਟ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:250
+#: ../gkr/seahorse-gkr-keyring-commands.c:257
 msgid "Couldn't change keyring password"
 msgstr "ਕੀਰਿੰਗ ਪਾਸਵਰਡ ਬਦਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:281
+#: ../gkr/seahorse-gkr-keyring-commands.c:288
 msgid "_Lock"
 msgstr "ਲਾਕ ਕਰੋ(_L)"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:282
+#: ../gkr/seahorse-gkr-keyring-commands.c:289
 msgid ""
 "Lock the password storage keyring so a master password is required to unlock "
 "it."
 msgstr "ਪਾਸਵਰਡ ਸਟੋਰੇਜ਼ ਕੀਰਿੰਗ ਲਾਕ ਕਰੋ ਤਾਂ ਕਿ ਇਸ ਨੂੰ ਅਣ-ਲਾਕ ਕਰਨ ਲਈ ਮਾਸਟਰ ਪਾਸਵਰਡ ਦੀ ਲੋੜ ਹੋਵੇ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:283
+#: ../gkr/seahorse-gkr-keyring-commands.c:290
 msgid "_Unlock"
 msgstr "ਅਣ-ਲਾਕ(_U)"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:284
+#: ../gkr/seahorse-gkr-keyring-commands.c:291
 msgid ""
 "Unlock the password storage keyring with a master password so it is "
 "available for use."
@@ -596,23 +609,23 @@ msgstr ""
 "ਪਾਸਵਰਡ ਸਟੋਰੇਜ਼ ਕੀਰਿੰਗ ਨੂੰ ਇੱਕ ਮਾਸਟਰ ਪਾਸਵਰਡ ਨਾਲ ਅਣ-ਲਾਕ ਕਰੋ ਤਾਂ ਕਿ ਇਸ ਨੂੰ ਵਰਤਣ ਲਈ ਉਪਲੱਬਧ "
 "ਕਰਵਾਇਆ ਜਾ ਸਕੇ।"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:285
+#: ../gkr/seahorse-gkr-keyring-commands.c:292
 msgid "_Set as default"
 msgstr "ਡਿਫਾਲਟ ਸੈੱਟ ਕਰੋ(_S)"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:286
+#: ../gkr/seahorse-gkr-keyring-commands.c:293
 msgid "Applications usually store new passwords in the default keyring."
 msgstr "ਐਪਲੀਕੇਸ਼ਨਾਂ ਅਕਸਰ ਨਵੇਂ ਪਾਸਵਰਡ ਡਿਫਾਲਟ ਕੀਰਿੰਗ ਵਿੱਚ ਸੰਭਾਲਦੀਆਂ ਹਨ।"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:287
+#: ../gkr/seahorse-gkr-keyring-commands.c:294
 msgid "Change _Password"
 msgstr "ਪਾਸਵਰਡ ਬਦਲੋ(_P)"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:288
+#: ../gkr/seahorse-gkr-keyring-commands.c:295
 msgid "Change the unlock password of the password storage keyring"
 msgstr "ਪਾਸਵਰਡ ਸਟੋਰੇਜ਼ ਕੀਰਿੰਗ ਲਈ ਅਣ-ਲਾਕ ਪਾਸਵਰਡ ਬਦਲੋ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:353
+#: ../gkr/seahorse-gkr-keyring-commands.c:360
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "ਕੀ ਤੁਸੀਂ '%s' ਕੀਰਿੰਗ ਪਾਸਵਰਡ ਨੂੰ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
@@ -728,14 +741,14 @@ msgstr "ਦਸਤਖਤੀ ਸੁਨੇਹਾ ਵਾਂਗ(_S):"
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:140
 #: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:828
+#: ../src/seahorse-key-manager-store.c:829
 msgid "Name"
 msgstr "ਨਾਂ"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
 #: ../pgp/seahorse-pgp-key-properties.c:1743
-#: ../src/seahorse-key-manager-store.c:840
+#: ../src/seahorse-key-manager-store.c:841
 msgid "Key ID"
 msgstr "ਕੁੰਜੀ ID"
 
@@ -1004,27 +1017,27 @@ msgstr "ਫਾਇਲ ਢੁੱਕਵੀਂ .desktop ਫਾਇਲ ਨਹੀਂ �
 msgid "Unrecognized desktop file Version '%s'"
 msgstr "ਬੇਪਛਾਣ ਡੈਸਕਟਾਪ ਫਾਇਲ ਵਰਜਨ '%s'"
 
-#: ../libegg/eggdesktopfile.c:958
+#: ../libegg/eggdesktopfile.c:968
 #, c-format
 msgid "Starting %s"
 msgstr "%s ਸ਼ੁਰੂ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: ../libegg/eggdesktopfile.c:1100
+#: ../libegg/eggdesktopfile.c:1110
 #, c-format
 msgid "Application does not accept documents on command line"
 msgstr "ਐਪਲੀਕੇਸ਼ਨ ਕਮਾਂਡ ਲਾਈਨ ਉੱਤੇ ਡੌਕੂਮੈਂਟ ਮਨਜ਼ੂਰ ਨਹੀਂ ਕਰਦਾ ਹੈ"
 
-#: ../libegg/eggdesktopfile.c:1168
+#: ../libegg/eggdesktopfile.c:1178
 #, c-format
 msgid "Unrecognized launch option: %d"
 msgstr "ਬੇਪਛਾਣ ਲਾਂਚ ਚੋਣ: %d"
 
-#: ../libegg/eggdesktopfile.c:1373
+#: ../libegg/eggdesktopfile.c:1383
 #, c-format
 msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
 msgstr "ਡੌਕੂਮੈਂਟ URI 'Type=Link' ਡੈਸਕਟਾਪ ਐਂਟਰੀ ਨਹੀਂ ਦਿੱਤਾ ਨਹੀਂ ਜਾ ਸਕਦਾ"
 
-#: ../libegg/eggdesktopfile.c:1392
+#: ../libegg/eggdesktopfile.c:1404
 #, c-format
 msgid "Not a launchable item"
 msgstr "ਕੋਈ ਚਲਾਉਣਯੋਗ ਆਈਟਮ ਨਹੀਂ"
@@ -1131,38 +1144,38 @@ msgstr "ਕਰਿਡਿਨਟੀਸ"
 msgid "Identity"
 msgstr "ਪਛਾਣ"
 
-#: ../libseahorse/seahorse-passphrase.c:194
+#: ../libseahorse/seahorse-passphrase.c:196
 msgid "Passphrase"
 msgstr "ਪ੍ਹੈਰਾ"
 
-#: ../libseahorse/seahorse-passphrase.c:197
+#: ../libseahorse/seahorse-passphrase.c:199
 #: ../ssh/seahorse-ssh-operation.c:480
 msgid "Password:"
 msgstr "ਪਾਸਵਰਡ:"
 
-#: ../libseahorse/seahorse-passphrase.c:260
+#: ../libseahorse/seahorse-passphrase.c:264
 msgid "Confirm:"
 msgstr "ਪੁਸ਼ਟੀ:"
 
-#: ../libseahorse/seahorse-prefs.c:63
+#: ../libseahorse/seahorse-prefs.c:62
 msgid "Not a valid Key Server address."
 msgstr "ਇੱਕ ਠੀਕ ਕੁੰਜੀ ਸਰਵਰ ਐਡਰੈੱਸ ਨਹੀਂ ਹੈ।"
 
-#: ../libseahorse/seahorse-prefs.c:64
+#: ../libseahorse/seahorse-prefs.c:63
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 msgstr "ਮੱਦਦ ਲਈ ਆਪਣੇ ਸਿਸਟਮ ਪਰਸ਼ਾਸ਼ਕ ਜਾਂ ਕੁੰਜੀ ਸਰਵਰ ਦੇ ਪਰਸ਼ਾਸ਼ਕ ਨਾਲ ਸੰਪਰਕ ਕਰੋ।"
 
-#: ../libseahorse/seahorse-prefs.c:173
+#: ../libseahorse/seahorse-prefs.c:172
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:353
+#: ../libseahorse/seahorse-prefs.c:352
 msgid "Custom"
 msgstr "ਕਸਟਮ"
 
-#: ../libseahorse/seahorse-prefs.c:420
+#: ../libseahorse/seahorse-prefs.c:419
 msgid "None: Don't publish keys"
 msgstr "ਕੋਈ ਨਹੀਂ: ਕੁੰਜੀਆਂ ਪਬਲਿਸ਼ ਨਾ ਕਰੋ"
 
@@ -1246,20 +1259,20 @@ msgstr "ਫਾਇਲ ਰੋਲਰ ਕਾਰਵਾਈ ਪੂਰੀ ਤਰ੍ਹ�
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:943
+#: ../libseahorse/seahorse-util.c:954
 msgid "All key files"
 msgstr "ਸਭ ਕੁੰਜੀ ਫਾਇਲਾਂ"
 
-#: ../libseahorse/seahorse-util.c:954 ../libseahorse/seahorse-util.c:1002
+#: ../libseahorse/seahorse-util.c:965 ../libseahorse/seahorse-util.c:1013
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "ਸਭ ਫਾਇਲਾਂ"
 
-#: ../libseahorse/seahorse-util.c:995
+#: ../libseahorse/seahorse-util.c:1006
 msgid "Archive files"
 msgstr "ਅਕਾਇਵ ਫਾਇਲਾਂ"
 
-#: ../libseahorse/seahorse-util.c:1065
+#: ../libseahorse/seahorse-util.c:1076
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1269,7 +1282,7 @@ msgstr ""
 "\n"
 "ਕੀ ਤੁਸੀਂ ਇਸ ਨੂੰ ਨਵੀਂ ਫਾਇਲ ਨਾਲ ਬਦਲਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: ../libseahorse/seahorse-util.c:1068
+#: ../libseahorse/seahorse-util.c:1079
 msgid "_Replace"
 msgstr "ਬਦਲੋ(_R)"
 
@@ -1314,7 +1327,7 @@ msgstr "ਆਯੋਗ"
 msgid "Revoked"
 msgstr "ਮਨਸੂਖ"
 
-#: ../libseahorse/seahorse-widget.c:362
+#: ../libseahorse/seahorse-widget.c:464
 #, c-format
 msgid "Could not display help: %s"
 msgstr "ਮੱਦਦ ਵੇਖਾਈ ਨਹੀਂ ਜਾ ਸਕੀ: %s"
@@ -1400,7 +1413,7 @@ msgstr "ਸਬ-ਕੁੰਜੀ ਸ਼ਾਮਲ ਨਹੀਂ ਕੀਤੀ ਜਾ 
 msgid "Add subkey to %s"
 msgstr "%s ਵਿੱਚ ਸਬ-ਕੁੰਜੀ ਸ਼ਾਮਲ"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:179 ../pgp/seahorse-gpgme-generate.c:96
+#: ../pgp/seahorse-gpgme-add-subkey.c:179 ../pgp/seahorse-gpgme-generate.c:117
 msgid "DSA (sign only)"
 msgstr "DSA (ਸਿਰਫ਼ ਸਾਇਨ)"
 
@@ -1408,7 +1421,7 @@ msgstr "DSA (ਸਿਰਫ਼ ਸਾਇਨ)"
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (ਸਿਰਫ਼ ਇੰਕ੍ਰਿਪਟ)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:193 ../pgp/seahorse-gpgme-generate.c:97
+#: ../pgp/seahorse-gpgme-add-subkey.c:193 ../pgp/seahorse-gpgme-generate.c:118
 msgid "RSA (sign only)"
 msgstr "RSA (ਕੇਵਲ ਸਾਇਨ)"
 
@@ -1425,7 +1438,7 @@ msgstr "ਯੂਜ਼ਰ id ਸ਼ਾਮਲ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸ�
 msgid "Add user ID to %s"
 msgstr "%s ਲਈ ਯੂਜ਼ਰ ID ਸ਼ਾਮਲ"
 
-#: ../pgp/seahorse-gpgme.c:51
+#: ../pgp/seahorse-gpgme.c:72
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "ਡਿ-ਕ੍ਰਿਪਸ਼ਨ ਫੇਲ੍ਹ ਹੋਈ। ਸ਼ਾਇਦ ਤੁਹਾਡੇ ਕੋਲ ਡਿ-ਕ੍ਰਿਪਟ ਕੁੰਜੀ ਨਹੀਂ ਹੈ।"
 
@@ -1446,37 +1459,50 @@ msgstr "ਮਿਆਦ ਮਿਤੀ ਬਦਲੀ ਨਹੀਂ ਜਾ ਸਕਦੀ"
 msgid "Expiry: %s"
 msgstr "ਮਿਆਦ: %s"
 
-#: ../pgp/seahorse-gpgme-generate.c:65
+#: ../pgp/seahorse-gpgme-generate.c:79
 msgid "PGP Key"
 msgstr "PGP ਕੁੰਜੀ"
 
-#: ../pgp/seahorse-gpgme-generate.c:66
+#: ../pgp/seahorse-gpgme-generate.c:80
 msgid "Used to encrypt email and files"
 msgstr "ਈ-ਮੇਲ ਅਤੇ ਫਾਇਲਾਂ ਦੀ ਇੰਕ੍ਰਿਪਸ਼ਨ ਲਈ ਵਰਤੀ ਜਾਂਦੀ"
 
-#: ../pgp/seahorse-gpgme-generate.c:95
+#: ../pgp/seahorse-gpgme-generate.c:115 ../ssh/seahorse-ssh-generate.xml.h:9
+msgid "RSA"
+msgstr "RSA"
+
+#: ../pgp/seahorse-gpgme-generate.c:116
 msgid "DSA Elgamal"
 msgstr "DSA Elgamal"
 
-#: ../pgp/seahorse-gpgme-generate.c:106
+#: ../pgp/seahorse-gpgme-generate.c:134
 msgid "Couldn't generate PGP key"
 msgstr "PGP ਕੁੰਜੀ ਤਿਆਰ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕਦੀ"
 
-#: ../pgp/seahorse-gpgme-generate.c:213
+#: ../pgp/seahorse-gpgme-generate.c:194
 msgid "Passphrase for New PGP Key"
 msgstr "ਨਵੀਂ PGP ਕੁੰਜੀ ਲਈ ਪ੍ਹੈਰਾ"
 
-#: ../pgp/seahorse-gpgme-generate.c:214
+#: ../pgp/seahorse-gpgme-generate.c:195
 msgid "Enter the passphrase for your new key twice."
 msgstr "ਆਪਣੀ ਨਵੀਂ ਕੁੰਜੀ ਲਈ ਪ੍ਹੈਰਾ ਦੋ ਵਾਰ ਦਿਓ।"
 
-#: ../pgp/seahorse-gpgme-generate.c:223
+#: ../pgp/seahorse-gpgme-generate.c:204
 msgid "Couldn't generate key"
 msgstr "ਕੁੰਜੀ ਬਣਾਈ ਨਹੀਂ ਜਾ ਸਕੀ"
 
-#: ../pgp/seahorse-gpgme-generate.c:225
+#: ../pgp/seahorse-gpgme-generate.c:206
 msgid "Generating key"
 msgstr "ਕੁੰਜੀ ਤਿਆਰ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ"
+
+#: ../pgp/seahorse-gpgme-key-op.c:300
+#| msgid "Show pass_word"
+msgid "Wrong password"
+msgstr "ਗਲਤ ਪਾਸਵਰਡ"
+
+#: ../pgp/seahorse-gpgme-key-op.c:300
+msgid "This was the third time you entered a wrong password. Please try again."
+msgstr "ਇਹ ਤੁਸੀਂ ਤੀਜੀ ਵਾਰ ਗਲਤ ਪਾਸਵਰਡ ਦਿੱਤਾ ਹੈ। ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ ਜੀ।"
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -1895,7 +1921,7 @@ msgstr "ਕਦੇ ਨਹੀਂ"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1315
-#: ../src/seahorse-key-manager-store.c:859
+#: ../src/seahorse-key-manager-store.c:860
 msgid "Type"
 msgstr "ਕਿਸਮ"
 
@@ -1952,7 +1978,7 @@ msgstr "<b>ਕੁੰਜੀ ਨਾਂ ਅਤੇ ਦਸਤਖਤ</b>"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-#: ../ssh/seahorse-ssh-key-properties.xml.h:7
+#: ../ssh/seahorse-ssh-key-properties.xml.h:5
 msgid "<b>Name:</b>"
 msgstr "<b>ਨਾਂ:</b>"
 
@@ -1977,14 +2003,14 @@ msgstr "<b>ਇਹ ਕੁੰਜੀ ਦੀ ਮਿਆਦ ਪੁੱਗੀ</b>"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:13
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:12
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
 msgid "<b>Type:</b>"
 msgstr "<b>ਕਿਸਮ:</b>"
 
 #. To translators: This is the noun not the verb.
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:15
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
-#: ../ssh/seahorse-ssh-key-properties.xml.h:13
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
 msgid "<b>Use:</b>"
 msgstr "<b>ਵਰਤੋਂ:</b>"
 
@@ -2002,7 +2028,7 @@ msgid "Add a photo to this key"
 msgstr "ਇਹ ਕੁੰਜੀ ਲਈ ਇੱਕ ਫੋਟੋ ਜੋੜੋ"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
-#: ../ssh/seahorse-ssh-key-properties.xml.h:16
+#: ../ssh/seahorse-ssh-key-properties.xml.h:14
 msgid "Change _Passphrase"
 msgstr "ਪ੍ਹੈਰਾ ਬਦਲੋ(_P)"
 
@@ -2050,8 +2076,6 @@ msgstr "ਨਾਂ ਅਤੇ ਦਸਤਖਤ"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
-#| msgctxt "Validity"
-#| msgid "Never"
 msgid "Never"
 msgstr "ਕਦੇ ਨਹੀਂ"
 
@@ -2103,7 +2127,7 @@ msgid "<b>Dates:</b>"
 msgstr "<b>ਤਾਰੀਖ:</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
-#: ../ssh/seahorse-ssh-key-properties.xml.h:4
+#: ../ssh/seahorse-ssh-key-properties.xml.h:2
 msgid "<b>Fingerprint:</b>"
 msgstr "<b>ਫਿੰਗਰ-ਪ੍ਰਿੰਟ:</b>"
 
@@ -2128,7 +2152,6 @@ msgid "Encrypt files and email to the key's owner "
 msgstr "ਕੁੰਜੀ ਦੇ ਓਨਰ ਤੋਂ ਇੰਕ੍ਰਿਪਟ ਫਾਇਲਾਂ ਅਤੇ ਈਮੇਲ"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
-#| msgid "Full"
 msgid "Fully"
 msgstr "ਪੂਰਾ"
 
@@ -2150,18 +2173,16 @@ msgid "If you no longer trust that '%s' owns this key, <i>revoke</i> your signat
 msgstr "ਜੇ ਤੁਸੀਂ ਇਹ ਭਰੋਸਾ ਨਹੀਂ ਕਰਦੇ ਹੋ ਕਿ '%s' ਇਹ ਕੁੰਜੀ ਰੱਖਦਾ ਹੈ ਤਾਂ ਆਪਣੇ ਦਸਤਖਤ <i>ਮਨਸੂਖ</i> ਕਰੋ:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
-#| msgid "Marginal"
 msgid "Marginally"
 msgstr "ਅਧੂਰਾ"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:853
+#: ../src/seahorse-key-manager-store.c:854
 msgid "Trust"
 msgstr "ਟਰੱਸਟ"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
-#| msgid "Ultimate"
 msgid "Ultimately"
 msgstr "ਬੇਅੰਤ"
 
@@ -2338,7 +2359,7 @@ msgstr "ਨਵਾਂ ਪ੍ਹੈਰਾ(_P):"
 msgid "Manage your passwords and encryption keys"
 msgstr "ਆਪਣੇ ਪਾਸਵਰਡ ਅਤੇ ਇੰਕ੍ਰਿਪਸ਼ਨ ਕੁੰਜੀਆਂ ਦੀ ਦੇਖਭਾਲ ਕਰੋ"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:853
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:857
 msgid "Passwords and Encryption Keys"
 msgstr "ਪਾਸਵਰਡ ਅਤੇ ਇੰਕ੍ਰਿਪਸ਼ਨ ਕੁੰਜੀਆਂ"
 
@@ -2382,83 +2403,83 @@ msgstr "ਕੁੰਜੀ ਇੰਪੋਰਟ"
 msgid "Unrecognized key type, or invalid data format"
 msgstr "ਬੇਪਛਾਣ ਕੁੰਜੀ ਕਿਸਮ ਹੈ ਜਾਂ ਗਲਤ ਡਾਟਾ ਫਾਰਮੈਟ"
 
-#: ../src/seahorse-key-manager.c:721 ../src/seahorse-keyserver-results.c:207
+#: ../src/seahorse-key-manager.c:725 ../src/seahorse-keyserver-results.c:207
 msgid "_Remote"
 msgstr "ਰਿਮੋਟ(_R)"
 
-#: ../src/seahorse-key-manager.c:723
+#: ../src/seahorse-key-manager.c:727
 msgid "Close this program"
 msgstr "ਇਹ ਪਰੋਗਰਾਮ ਬੰਦ ਕਰੋ"
 
-#: ../src/seahorse-key-manager.c:724
+#: ../src/seahorse-key-manager.c:728
 msgid "_New..."
 msgstr "ਨਵਾਂ(_N)..."
 
-#: ../src/seahorse-key-manager.c:725
+#: ../src/seahorse-key-manager.c:729
 msgid "Create a new key or item"
 msgstr "ਨਵੀਂ ਕੁੰਜੀ ਜਾਂ ਆਈਟਮ ਬਣਾਓ"
 
-#: ../src/seahorse-key-manager.c:726
+#: ../src/seahorse-key-manager.c:730
 msgid "_Import..."
 msgstr "ਇੰਪੋਰਟ(_I)"
 
-#: ../src/seahorse-key-manager.c:727
+#: ../src/seahorse-key-manager.c:731
 msgid "Import from a file"
 msgstr "ਫਾਇਲ ਤੋਂ ਇੰਪੋਰਟ ਕਰੋ"
 
-#: ../src/seahorse-key-manager.c:729
+#: ../src/seahorse-key-manager.c:733
 msgid "Import from the clipboard"
 msgstr "ਕਲਿੱਪਬੋਰਡ ਤੋਂ ਇੰਪੋਰਟ ਕਰੋ"
 
-#: ../src/seahorse-key-manager.c:734 ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:738 ../src/seahorse-keyserver-results.c:217
 msgid "_Find Remote Keys..."
 msgstr "ਰਿਮੋਟ ਕੁੰਜੀਆਂ ਖੋਜ(_F)..."
 
-#: ../src/seahorse-key-manager.c:735 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:739 ../src/seahorse-keyserver-results.c:218
 msgid "Search for keys on a key server"
 msgstr "ਇੱਕ ਕੁੰਜੀ ਸਰਵਰ ਉੱਤੇ ਕੁੰਜੀਆਂ ਲਈ ਖੋਜ"
 
-#: ../src/seahorse-key-manager.c:736
+#: ../src/seahorse-key-manager.c:740
 msgid "_Sync and Publish Keys..."
 msgstr "ਕੁੰਜੀਆਂ ਸਮਕਾਲੀ ਅਤੇ ਪਬਲਿਸ਼ ਕਰੋ(_S)..."
 
-#: ../src/seahorse-key-manager.c:737
+#: ../src/seahorse-key-manager.c:741
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "ਉਨ੍ਹਾਂ ਆਨਲਾਇਨ ਨਾਲ ਆਪਣੀਆਂ ਕੁੰਜੀਆਂ ਪਬਲਿਸ਼ ਕਰੋ ਅਤੇ/ਜਾਂ ਸਿਕਰੋਨਾਈਜ਼ ਕਰੋ।"
 
-#: ../src/seahorse-key-manager.c:742
+#: ../src/seahorse-key-manager.c:746
 msgid "T_ypes"
 msgstr "ਟਾਈਪ(_y)"
 
-#: ../src/seahorse-key-manager.c:742
+#: ../src/seahorse-key-manager.c:746
 msgid "Show type column"
 msgstr "ਟਾਈਪ ਕਾਲਮ ਵੇਖੋ"
 
-#: ../src/seahorse-key-manager.c:744
+#: ../src/seahorse-key-manager.c:748
 msgid "_Expiry"
 msgstr "ਮਿਆਦ(_E)"
 
-#: ../src/seahorse-key-manager.c:744
+#: ../src/seahorse-key-manager.c:748
 msgid "Show expiry column"
 msgstr "ਮਿਆਦ ਕਾਲਮ ਵੇਖੋ"
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:750
 msgid "_Trust"
 msgstr "ਟਰੱਸਟ(_T)"
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:750
 msgid "Show owner trust column"
 msgstr "ਓਨਰ ਟਰੱਸਟ ਕਾਲਮ ਵੇਖੋ"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:752
 msgid "_Validity"
 msgstr "ਵੈਧਤਾ(_V)"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:752
 msgid "Show validity column"
 msgstr "ਵੈਧਤਾ ਕਾਲਮ ਵੇਖੋ"
 
-#: ../src/seahorse-key-manager.c:922
+#: ../src/seahorse-key-manager.c:926
 msgid "Filter:"
 msgstr "ਫਿਲਟਰ:"
 
@@ -2479,7 +2500,6 @@ msgid "My _Personal Keys"
 msgstr "ਮੇਰੀਆਂ ਨਿੱਜੀਆਂ ਕੁੰਜੀਆਂ(_P)"
 
 #: ../src/seahorse-key-manager.xml.h:5
-#| msgid "Paste _Keys"
 msgid "Other _Keys"
 msgstr "ਹੋਰ ਕੁੰਜੀਆਂ(_K)"
 
@@ -2495,16 +2515,16 @@ msgstr "ਇੰਪੋਰਟ(_I)"
 msgid "_Passwords"
 msgstr "ਪਾਸਵਰਡ(_P)"
 
-#: ../src/seahorse-key-manager-store.c:648 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:649 ../src/seahorse-viewer.c:282
 msgid "Couldn't export keys"
 msgstr "ਕੁੰਜੀ ਐਕਸਪੋਰਟ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ"
 
-#: ../src/seahorse-key-manager-store.c:846
+#: ../src/seahorse-key-manager-store.c:847
 msgid "Validity"
 msgstr "ਵੈਧਤਾ"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:865
+#: ../src/seahorse-key-manager-store.c:866
 msgid "Expiration Date"
 msgstr "ਮਿਆਦ"
 
@@ -2595,14 +2615,10 @@ msgid "Synchronizing keys..."
 msgstr "ਕੁੰਜੀਆਂ ਸਿਕਰੋਨਾਈਜ਼ ਕੀਤੀਆਂ ਜਾ ਰਹੀਆਂ ਹਨ..."
 
 #: ../src/seahorse-keyserver-sync.xml.h:1
-msgid "<b>X keys are selected for synchronizing</b>"
-msgstr "<b>X ਕੁੰਜੀਆਂ ਸਿਕਰੋਨਾਈਜ਼ ਕਰਨ ਲਈ ਚੁਣੀਆਂ ਗਈਆਂ ਹਨ</b>"
-
-#: ../src/seahorse-keyserver-sync.xml.h:2
 msgid "Sync Keys"
 msgstr "ਕੁੰਜੀਆਂ ਸਿਕਰੋਨਾਈਜ਼"
 
-#: ../src/seahorse-keyserver-sync.xml.h:3
+#: ../src/seahorse-keyserver-sync.xml.h:2
 msgid ""
 "This will publish the keys in your key ring so they're available for others "
 "to use. You'll also get any changes others have made since you received "
@@ -2611,7 +2627,7 @@ msgstr ""
 "ਇਸ ਨਾਲ ਤੁਹਾਡੀ ਕੀਰਿੰਗ ਵਿੱਚੋਂ ਕੁੰਜੀਆਂ ਨੂੰ ਪਬਲਿਸ਼ ਕੀਤਾ ਜਾਵੇਗਾ ਤਾਂ ਕਿ ਉਹਨਾਂ ਨੂੰ ਹੋਰਾਂ ਨੂੰ ਵਰਤਣ ਵਾਸਤੇ "
 "ਉਪਲੱਬਧ ਕਰਵਾਇਆ ਜਾਵੇ। ਤੁਸੀਂ ਹੋਰਾਂ ਵਲੋਂ ਕੀਤੇ ਬਦਲਾਅ ਵੀ ਵੇਖ ਸਕੋਗੇ, ਜਦੋਂ ਤੁਸੀਂ ਉਨ੍ਹਾਂ ਦੀਆਂ ਕੁੰਜੀਆਂ ਲੈ ਲਈਆਂ।"
 
-#: ../src/seahorse-keyserver-sync.xml.h:4
+#: ../src/seahorse-keyserver-sync.xml.h:3
 msgid ""
 "This will retrieve any changes others have made since you received their "
 "keys. No key server has been chosen for publishing, so your keys will not be "
@@ -2620,11 +2636,11 @@ msgstr ""
 "ਇਹ ਹੋਰਾਂ ਵਲੋਂ ਕੀਤੇ ਕੋਈ ਵੀ ਬਦਲਾਅ ਲਵੇਗਾ, ਜਦੋਂ ਤੋਂ ਤੁਸੀ ਉਨ੍ਹਾਂ ਦੀਆਂ ਕੁੰਜੀਆਂ ਲਈਆਂ ਹਨ। ਪਬਲਿਸ਼ ਕਰਨ ਲਈ "
 "ਕੋਈ ਕੁੰਜੀ ਸਰਵਰ ਨਹੀਂ ਚੁਣਿਆ ਗਿਆ, ਇਸ ਕਰਕੇ ਤੁਹਾਡੀਆਂ ਕੁੰਜੀਆਂ ਨੂੰ ਹੋਰਾਂ ਲਈ ਉਪਲੱਬਧ ਨਹੀਂ ਕਰਵਾਇਆ ਜਾਵੇਗਾ।"
 
-#: ../src/seahorse-keyserver-sync.xml.h:5
+#: ../src/seahorse-keyserver-sync.xml.h:4
 msgid "_Key Servers"
 msgstr "ਕੁੰਜੀ ਸਰਵਰ(_K)"
 
-#: ../src/seahorse-keyserver-sync.xml.h:6
+#: ../src/seahorse-keyserver-sync.xml.h:5
 msgid "_Sync"
 msgstr "ਸੈਕਰੋ(_S)"
 
@@ -2780,7 +2796,7 @@ msgid "Are you sure you want to delete %d secure shell keys?"
 msgstr "ਕੀ ਤੁਸੀਂ %d ਸੁਰੱਖਿਅਤ ਸ਼ੈੱਲ ਸਵਿੱਚਾਂ ਨੂੰ ਹਮੇਸ਼ਾਂ ਲਈ ਹਟਾਉਣ ਵਾਸਤੇ ਤਿਆਰ ਹੋ?"
 
 #: ../ssh/seahorse-ssh-generate.c:59 ../ssh/seahorse-ssh-key.c:91
-#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:21
+#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:19
 msgid "Secure Shell Key"
 msgstr "ਸੁਰੱਖਿਅਤ ਸ਼ੈਲ ਕੁੰਜੀ"
 
@@ -2828,10 +2844,6 @@ msgstr ""
 msgid "New Secure Shell Key"
 msgstr "ਨਵੀਂ ਸੁਰੱਖਿਅਤ ਸ਼ੈਲ ਕੁੰਜੀ"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:9
-msgid "RSA"
-msgstr "RSA"
-
 #: ../ssh/seahorse-ssh-generate.xml.h:10
 msgid "_Create and Set Up"
 msgstr "ਬਣਾਓ ਅਤੇ ਸੈੱਟਅੱਪ ਕਰੋ(_C)"
@@ -2873,47 +2885,39 @@ msgid "Couldn't change passphrase for key."
 msgstr "ਕੁੰਜੀ ਲਈ ਪ੍ਹੈਰਾ ਨਹੀਂ ਬਦਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ।"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:1
-msgid "/home/nate/.ssh/blah_rsa"
-msgstr "/home/nate/.ssh/blah_rsa"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "00:00:00:00:00"
-msgstr "00:00:00:00:00"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
 msgid "<b>Algorithm:</b>"
 msgstr "<b>ਐਲੋਗਰਥਿਮ:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:5
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
 msgid "<b>Identifier:</b>"
 msgstr "<b>ਪਛਾਣਕਰਤਾ:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:6
+#: ../ssh/seahorse-ssh-key-properties.xml.h:4
 msgid "<b>Location:</b>"
 msgstr "<b>ਟਿਕਾਣਾ:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:8
+#: ../ssh/seahorse-ssh-key-properties.xml.h:6
 msgid "<b>Strength:</b>"
 msgstr "<b>ਤਾਕਤ:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:10
+#: ../ssh/seahorse-ssh-key-properties.xml.h:8
 msgid "<b>Trust</b>"
 msgstr "<b>ਟਰੱਸਟ</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:15
+#: ../ssh/seahorse-ssh-key-properties.xml.h:13
 #, no-c-format
 msgid "<i>This only applies to the '%s'</i> account."
 msgstr "<i>ਇਹ ਸਿਰਫ਼ %s</i> ਅਕਾਊਂਟ ਉੱਤੇ ਹੀ ਲਾਗੂ ਹੁੰਦਾ ਹੈ।"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:18
+#: ../ssh/seahorse-ssh-key-properties.xml.h:16
 msgid "E_xport Complete Key"
 msgstr "ਪੂਰੀ ਕੁੰਜੀ ਐਕਸਪੋਰਟ(_x)"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:22
+#: ../ssh/seahorse-ssh-key-properties.xml.h:20
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr "ਇਹ ਕੁੰਜੀ ਦਾ ਮਾਲਕ ਇਹ ਕੰਪਿਊਟਰ ਨਾਲ ਜੁੜ ਸਕਦਾ ਹੈ(_a)"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:23
+#: ../ssh/seahorse-ssh-key-properties.xml.h:21
 msgid "Used to connect to other computers."
 msgstr "ਹੋਰ ਕੰਪਿਊਟਰਾਂ ਨਾਲ ਜੁੜਨ ਲਈ ਵਰਤੋਂ।"
 
@@ -3018,6 +3022,18 @@ msgstr "ਲਾਗਇਨ ਨਾਂ(_L):"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "ਸੈੱਟਅੱਪ(_S)"
+
+#~ msgid "Seahorse Daemon"
+#~ msgstr "ਸੀ-ਹਾਰਸ ਡੈਮਨ"
+
+#~ msgid "<b>X keys are selected for synchronizing</b>"
+#~ msgstr "<b>X ਕੁੰਜੀਆਂ ਸਿਕਰੋਨਾਈਜ਼ ਕਰਨ ਲਈ ਚੁਣੀਆਂ ਗਈਆਂ ਹਨ</b>"
+
+#~ msgid "/home/nate/.ssh/blah_rsa"
+#~ msgstr "/home/nate/.ssh/blah_rsa"
+
+#~ msgid "00:00:00:00:00"
+#~ msgstr "00:00:00:00:00"
 
 #~ msgid "Create a PGP Key"
 #~ msgstr "ਇੱਕ PGP ਕੁੰਜੀ ਬਣਾਓ"
