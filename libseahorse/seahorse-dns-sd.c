@@ -60,6 +60,15 @@
  */
 /* #define DISCOVER_THIS_HOST 1 */
 
+
+/**
+ * SECTION:seahorse-dns-sd
+ * @short_description: Seahorse Service Discovery handles (finds, removes,...) Avahi services
+ * @include:libseahorse/seahorse-dns-sd.h
+ *
+ **/
+
+
 struct _SeahorseServiceDiscoveryPriv {
 #ifdef WITH_SHARING
     AvahiClient *client;
@@ -85,6 +94,12 @@ G_DEFINE_TYPE (SeahorseServiceDiscovery, seahorse_service_discovery, G_TYPE_OBJE
 
 #ifdef WITH_SHARING
 
+/**
+* ssd: A SeahorseServiceDiscovery object
+*
+* Disconnects avahi
+*
+**/
 static void
 disconnect (SeahorseServiceDiscovery *ssd)
 {
@@ -97,6 +112,24 @@ disconnect (SeahorseServiceDiscovery *ssd)
     ssd->priv->client = NULL;
 }
 
+/**
+* resolver: The avahi resolver
+* iface: The avahi interface
+* proto: The avahi protocol
+* event: the avahi event
+* name: name of the service
+* type: must be HKP_SERVICE_TYPE
+* domain: ignored
+* host_name: ignored
+* address: address of the service
+* port: port of the service
+* txt: ignored
+* flags:
+* data: userdata
+*
+* Resolves the avahi callback (AvahiServiceResolverCallback)
+*
+**/
 static void 
 resolve_callback (AvahiServiceResolver *resolver, AvahiIfIndex iface, AvahiProtocol proto, 
                   AvahiResolverEvent event, const char *name, const char *type, const char *domain,
@@ -158,6 +191,21 @@ resolve_callback (AvahiServiceResolver *resolver, AvahiIfIndex iface, AvahiProto
     avahi_service_resolver_free (resolver);
 }
 
+/**
+* browser: The avahi browser
+* iface: the interface
+* proto: the protocol
+* event: the event that happened while browsing (failure, new, remove)
+* name: name of the service
+* type: HKP_SERVICE_TYPE is expected
+* domain: domain of the service
+* flags: ignored
+* data: userdata, type SeahorseServiceDiscovery
+*
+* Called when a service is discovered while browsing.
+* It is a AvahiServiceBrowserCallback
+*
+**/
 static void 
 browse_callback(AvahiServiceBrowser *browser, AvahiIfIndex iface, AvahiProtocol proto,
                 AvahiBrowserEvent event, const char *name, const char *type, 
@@ -209,6 +257,14 @@ browse_callback(AvahiServiceBrowser *browser, AvahiIfIndex iface, AvahiProtocol 
     }
 }
 
+/**
+* client: Will be part of a potential error message
+* state: the state of the avahi connection
+* data: A SeahorseServiceDiscovery object
+*
+* Handles AVAHI_CLIENT_FAILURE errors in state
+*
+**/
 static void 
 client_callback (AvahiClient *client, AvahiClientState state, void *data) 
 {
@@ -227,6 +283,14 @@ client_callback (AvahiClient *client, AvahiClientState state, void *data)
 
 #endif /* WITH_SHARING */
 
+/**
+* key: Will be prepeded to the list
+* value: ignored
+* arg: A GSList, the key will be prepended
+*
+*
+*
+**/
 static void
 service_key_list (const gchar* key, const gchar* value, GSList **arg)
 {
@@ -239,6 +303,12 @@ service_key_list (const gchar* key, const gchar* value, GSList **arg)
  */
 
 
+/**
+* ssd: The SeahorseServiceDiscovery to init
+*
+* When compiled WITH_SHARING avahi will also be initialised and it will browse
+* for avahi services.
+**/
 static void
 seahorse_service_discovery_init (SeahorseServiceDiscovery *ssd)
 {
@@ -267,6 +337,12 @@ seahorse_service_discovery_init (SeahorseServiceDiscovery *ssd)
 #endif /* WITH_SHARING */
 }
 
+/**
+* gobject: A SeahorseServiceDiscovery object
+*
+* Disposes the object
+*
+**/
 static void
 seahorse_service_discovery_dispose (GObject *gobject)
 {
@@ -278,7 +354,13 @@ seahorse_service_discovery_dispose (GObject *gobject)
     G_OBJECT_CLASS (seahorse_service_discovery_parent_class)->dispose (gobject);
 }
 
-/* free private vars */
+
+/**
+* gobject: A SeahorseServiceDiscovery object
+*
+* free private vars
+*
+**/
 static void
 seahorse_service_discovery_finalize (GObject *gobject)
 {
@@ -299,6 +381,12 @@ seahorse_service_discovery_finalize (GObject *gobject)
     G_OBJECT_CLASS (seahorse_service_discovery_parent_class)->finalize (gobject);
 }
 
+/**
+* klass: The SeahorseServiceDiscoveryClass to initialise
+*
+* The class will use the signals "added" and "removed"
+*
+**/
 static void
 seahorse_service_discovery_class_init (SeahorseServiceDiscoveryClass *klass)
 {
@@ -322,12 +410,27 @@ seahorse_service_discovery_class_init (SeahorseServiceDiscoveryClass *klass)
  * PUBLIC 
  */
 
+/**
+ * seahorse_service_discovery_new:
+ *
+ *
+ *
+ * Returns: A new #SeahorseServiceDiscovery object
+ */
 SeahorseServiceDiscovery*   
 seahorse_service_discovery_new ()
 {
     return g_object_new (SEAHORSE_TYPE_SERVICE_DISCOVERY, NULL);
 }
 
+/**
+ * seahorse_service_discovery_list:
+ * @ssd:  A #SeahorseServiceDiscovery. It's services will be added to the list
+ *
+ *
+ *
+ * Returns: A #GSList containing the services in @ssd
+ */
 GSList*                     
 seahorse_service_discovery_list (SeahorseServiceDiscovery *ssd)
 {
@@ -339,6 +442,15 @@ seahorse_service_discovery_list (SeahorseServiceDiscovery *ssd)
     return *arg;
 }
 
+/**
+ * seahorse_service_discovery_get_uri:
+ * @ssd: Service discovery object
+ * @service: The service to get the uri for
+ *
+ *
+ *
+ * Returns: The URI of the service @service in @ssd
+ */
 const gchar*                
 seahorse_service_discovery_get_uri (SeahorseServiceDiscovery *ssd, const gchar *service)
 {
@@ -346,6 +458,15 @@ seahorse_service_discovery_get_uri (SeahorseServiceDiscovery *ssd, const gchar *
     return (const gchar*)g_hash_table_lookup (ssd->services, service);
 }
 
+/**
+ * seahorse_service_discovery_get_uris:
+ * @ssd: The service discovery object
+ * @services: A #GSList of services
+ *
+ * The returned uris in the list are copied and must be freed with g_free.
+ *
+ * Returns: A #GSList of uris for the services
+ */
 GSList*
 seahorse_service_discovery_get_uris (SeahorseServiceDiscovery *ssd, GSList *services)
 {
