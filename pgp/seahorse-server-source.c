@@ -35,6 +35,13 @@
 
 #include "common/seahorse-registry.h"
 
+/**
+ * SECTION:seahorse-server-source
+ * @short_description: Objects for handling of internet sources of keys (hkp/ldap)
+ * @include:seahorse-server-source.h
+ *
+ **/
+
 enum {
     PROP_0,
     PROP_SOURCE_TAG,
@@ -71,7 +78,13 @@ static SeahorseOperation*  seahorse_server_source_load (SeahorseSource *src);
 
 static GObjectClass *parent_class = NULL;
 
-/* Initialize the basic class stuff */
+
+/**
+* klass: Class to initialize
+*
+* Initialize the basic class stuff
+*
+**/
 static void
 seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 {
@@ -101,22 +114,42 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 	seahorse_registry_register_function (NULL, seahorse_pgp_key_canonize_id, "canonize", SEAHORSE_PGP_STR, NULL);
 }
 
+/**
+* iface: The #SeahorseSourceIface to init
+*
+* Sets the load function in @iface
+*
+* This is the init function of the interface SEAHORSE_TYPE_SOURCE
+*
+**/
 static void 
 seahorse_source_iface (SeahorseSourceIface *iface)
 {
 	iface->load = seahorse_server_source_load;
 }
 
-/* init context, private vars, set prefs, connect signals */
+/**
+* ssrc: A #SeahorseServerSource object
+*
+* init context, private vars, set prefs, connect signals
+*
+**/
 static void
 seahorse_server_source_init (SeahorseServerSource *ssrc)
+
 {
     /* init private vars */
     ssrc->priv = g_new0 (SeahorseServerSourcePrivate, 1);
     ssrc->priv->mop = seahorse_multi_operation_new ();
 }
 
-/* dispose of all our internal references */
+
+/**
+* gobject: A #SeahorseServerSource object
+*
+* dispose of all our internal references
+*
+**/
 static void
 seahorse_server_source_dispose (GObject *gobject)
 {
@@ -146,7 +179,13 @@ seahorse_server_source_dispose (GObject *gobject)
     G_OBJECT_CLASS (parent_class)->dispose (gobject);
 }
 
-/* free private vars */
+
+/**
+* gobject: A #SeahorseServerSource object
+*
+* free private vars
+*
+**/
 static void
 seahorse_server_source_finalize (GObject *gobject)
 {
@@ -163,6 +202,16 @@ seahorse_server_source_finalize (GObject *gobject)
     G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
+/**
+* object: A SeahorseServerSource object
+* prop_id: The ID of the property to set
+* value: The value to set
+* pspec: ignored
+*
+* Properties that can be set:
+* PROP_KEY_SERVER, PROP_URI
+*
+**/
 static void 
 seahorse_server_set_property (GObject *object, guint prop_id, 
                               const GValue *value, GParamSpec *pspec)
@@ -185,6 +234,16 @@ seahorse_server_set_property (GObject *object, guint prop_id,
     }  
 }
 
+/**
+* object: A #SeahorseServerSource object
+* prop_id: The id of the property
+* value: The value to get
+* pspec: ignored
+*
+* The properties that can be read are:
+* PROP_KEY_SERVER, PROP_URI, PROP_SOURCE_TAG, PROP_SOURCE_LOCATION
+*
+**/
 static void 
 seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
                               GParamSpec *pspec)
@@ -212,6 +271,14 @@ seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
  * HELPERS 
  */
 
+/**
+ * seahorse_server_source_take_operation:
+ * @ssrc: the #SeahorseServerSource to add the @op to
+ * @op: add this to the multioperations stored in @ssrc
+ *
+ *
+ *
+ */
 void
 seahorse_server_source_take_operation (SeahorseServerSource *ssrc, SeahorseOperation *op)
 {
@@ -225,6 +292,13 @@ seahorse_server_source_take_operation (SeahorseServerSource *ssrc, SeahorseOpera
  * METHODS
  */
 
+/**
+* src: #SeahorseSource
+*
+* This function is a stub
+*
+* Returns NULL
+**/
 static SeahorseOperation*
 seahorse_server_source_load (SeahorseSource *src)
 {
@@ -237,7 +311,16 @@ seahorse_server_source_load (SeahorseSource *src)
     return NULL;
 }
 
-/* Code adapted from GnuPG (file g10/keyserver.c) */
+/**
+* uri: the uri to parse
+* scheme: the scheme ("http") of this uri
+* host: the host part of the uri
+*
+*
+* Code adapted from GnuPG (file g10/keyserver.c)
+*
+* Returns FALSE if the separation failed
+**/
 static gboolean 
 parse_keyserver_uri (char *uri, const char **scheme, const char **host)
 {
@@ -278,6 +361,16 @@ parse_keyserver_uri (char *uri, const char **scheme, const char **host)
     return TRUE;
 }
 
+/**
+ * seahorse_server_source_new:
+ * @server: The server uri to create an object for
+ *
+ * Creates a #SeahorseServerSource object out of @server. Depending
+ * on the defines at compilation time other sources are supported
+ * (ldap, hkp)
+ *
+ * Returns: A new SeahorseServerSource or NULL
+ */
 SeahorseServerSource* 
 seahorse_server_source_new (const gchar *server)
 {
