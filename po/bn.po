@@ -8,14 +8,14 @@
 # Runa Bhattacharjee <runab@redhat.com>, 2008, 2009.
 # Maruf Ovee <maruf@ankur.org.bd>, 2009.
 # Israt Jahan <israt@ankur.org.bd>, 2010.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: bn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&component=general\n"
-"POT-Creation-Date: 2010-01-18 23:26+0000\n"
-"PO-Revision-Date: 2010-01-28 12:07+0600\n"
+"POT-Creation-Date: 2010-02-07 21:07+0000\n"
+"PO-Revision-Date: 2010-03-25 12:07+0600\n"
 "Last-Translator: Israt Jahan <israt@ankur.org.bd>\n"
 "Language-Team: Bengali <ankur-bd-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -39,16 +39,17 @@ msgstr "নতুন প্রসেস গ্রুপ নির্মাণ �
 msgid "Encryption Daemon (Seahorse)"
 msgstr "এনক্রিপশন ডেমন (Seahorse)"
 
-#: ../daemon/seahorse-daemon.desktop.in.in.h:1
-msgid "Seahorse Daemon"
-msgstr "Seahorse ডেমন"
-
-#: ../daemon/seahorse-service.c:157 ../daemon/seahorse-service.c:195
+#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "অকার্যকর অথবা অজানা কী-এর ধরন: %s"
 
-#: ../daemon/seahorse-service.c:259 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service.c:229
+#| msgid "This key expired on: %s"
+msgid "This keytype is not supported: %s"
+msgstr "কী টাইপ সমর্থিত নয়: %s"
+
+#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -159,9 +160,9 @@ msgid "Please set crypturi"
 msgstr "অনুগ্রহ করে crypturi সেট করুন"
 
 #: ../daemon/seahorse-service-crypto.c:562
-#, c-format
-msgid "Error openin clearuri"
-msgstr "openin clearuri ত্রুটি"
+#| msgid "Error openin clearuri"
+msgid "Error opening clearuri"
+msgstr "clearuri খুলতে ত্রুটি"
 
 #: ../daemon/seahorse-service-crypto.c:639
 #, c-format
@@ -390,7 +391,7 @@ msgstr ""
 msgid "The host name or address of the server."
 msgstr "সার্ভারের হোস্ট-নেম অথবা ঠিকানা।"
 
-#: ../gkr/seahorse-gkr-add-item.c:60 ../gkr/seahorse-gkr-add-keyring.c:73
+#: ../gkr/seahorse-gkr-add-item.c:61 ../gkr/seahorse-gkr-add-keyring.c:73
 msgid "Couldn't add keyring"
 msgstr "কী-রিং যোগ করতে ব্যর্থ"
 
@@ -401,11 +402,11 @@ msgstr "পাসওয়ার্ড যোগ করুন"
 #: ../gkr/seahorse-gkr-add-item.xml.h:2
 #: ../gkr/seahorse-gkr-item-properties.xml.h:17 ../pgp/seahorse-revoke.xml.h:5
 msgid "_Description:"
-msgstr "বিবরণ :(_D)"
+msgstr "বিবরণ (_D):"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:3
 msgid "_Keyring:"
-msgstr "কী-রিং: (_K)"
+msgstr "কী-রিং (_K):"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:4
 msgid "_Password:"
@@ -467,11 +468,11 @@ msgstr "নেটওয়ার্ক-এর বৈশিষ্ট্য"
 msgid "Couldn't change password."
 msgstr "পাসওয়ার্ড পরিবর্তন করা সম্ভব হয়নি।"
 
-#: ../gkr/seahorse-gkr-item-properties.c:347
+#: ../gkr/seahorse-gkr-item-properties.c:350
 msgid "Couldn't set description."
 msgstr "বর্ণনা স্থাপন করা সম্ভব হয়নি।"
 
-#: ../gkr/seahorse-gkr-item-properties.c:641
+#: ../gkr/seahorse-gkr-item-properties.c:651
 msgid "Couldn't set application access."
 msgstr "অ্যাপ্লিকেশন-এর সংযোগ স্থাপন সম্ভব হয়নি।"
 
@@ -528,7 +529,7 @@ msgstr "সার্ভার:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:11
 msgid "Show pass_word"
-msgstr "পাসওয়ার্ড প্রদর্শন করুন(_w)"
+msgstr "পাসওয়ার্ড প্রদর্শন করুন (_w)"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:12
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
@@ -554,7 +555,7 @@ msgstr "পাঠ (_R)"
 #. To translators: This is the infinitive not the imperative.
 #: ../gkr/seahorse-gkr-item-properties.xml.h:21
 msgid "_Write"
-msgstr "লিখুন(_W)"
+msgstr "লিখুন (_W)"
 
 #: ../gkr/seahorse-gkr-keyring.c:193
 msgid "Listing passwords"
@@ -568,7 +569,7 @@ msgstr "পাসওয়ার্ড: %s"
 #: ../gkr/seahorse-gkr-keyring.c:355
 #, c-format
 msgid "<b>Passwords:</b> %s"
-msgstr "<b>পাসওয়ার্ড::</b> %s"
+msgstr "<b>পাসওয়ার্ড:</b> %s"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:119
 msgid "Password Keyring"
@@ -1035,27 +1036,27 @@ msgstr "এটি বৈধ .desktop ফাইল নয়"
 msgid "Unrecognized desktop file Version '%s'"
 msgstr "ডেস্কটপ ফাইলের অজ্ঞাত সংস্করণ '%s'"
 
-#: ../libegg/eggdesktopfile.c:958
+#: ../libegg/eggdesktopfile.c:968
 #, c-format
 msgid "Starting %s"
 msgstr "%s আরম্ভ করা হচ্ছে"
 
-#: ../libegg/eggdesktopfile.c:1100
+#: ../libegg/eggdesktopfile.c:1110
 #, c-format
 msgid "Application does not accept documents on command line"
 msgstr "অ্যাপ্লিকেশন দ্বারা কমান্ড-লাইনের মাধ্যমে নথি গ্রহণ করা হয় না"
 
-#: ../libegg/eggdesktopfile.c:1168
+#: ../libegg/eggdesktopfile.c:1178
 #, c-format
 msgid "Unrecognized launch option: %d"
 msgstr "প্রারম্ভিক অপশন অজানা: %d"
 
-#: ../libegg/eggdesktopfile.c:1373
+#: ../libegg/eggdesktopfile.c:1383
 #, c-format
 msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
 msgstr "'Type=Link' ডেস্কটপ এনট্রির ক্ষেত্রে নথিপত্রের URI উল্লেখ করা সম্ভব নয়"
 
-#: ../libegg/eggdesktopfile.c:1392
+#: ../libegg/eggdesktopfile.c:1404
 #, c-format
 msgid "Not a launchable item"
 msgstr "প্রারম্ভ করার যোগ্য বস্তু নয়"
@@ -1144,11 +1145,11 @@ msgstr "সিমেট্রিক কী"
 
 #: ../libseahorse/seahorse-object.c:320
 msgid "Public Key"
-msgstr "সার্বজনীন কি"
+msgstr "পাবলিক কী"
 
 #: ../libseahorse/seahorse-object.c:323
 msgid "Private Key"
-msgstr "ব্যক্তিগত-কি"
+msgstr "প্রাইভেট কী"
 
 #: ../libseahorse/seahorse-object.c:326
 msgid "Credentials"
@@ -1162,39 +1163,39 @@ msgstr "পরিচিতি তথ্য"
 msgid "Identity"
 msgstr "পরিচয়"
 
-#: ../libseahorse/seahorse-passphrase.c:194
+#: ../libseahorse/seahorse-passphrase.c:196
 msgid "Passphrase"
 msgstr "পরিচিত-পংক্তি"
 
-#: ../libseahorse/seahorse-passphrase.c:197
+#: ../libseahorse/seahorse-passphrase.c:199
 #: ../ssh/seahorse-ssh-operation.c:480
 msgid "Password:"
 msgstr "পাসওয়ার্ড:"
 
-#: ../libseahorse/seahorse-passphrase.c:260
+#: ../libseahorse/seahorse-passphrase.c:264
 msgid "Confirm:"
 msgstr "নিশ্চায়ণ:"
 
-#: ../libseahorse/seahorse-prefs.c:63
+#: ../libseahorse/seahorse-prefs.c:62
 msgid "Not a valid Key Server address."
 msgstr "কী সার্ভারের বৈধ ঠিকানা নয়"
 
-#: ../libseahorse/seahorse-prefs.c:64
+#: ../libseahorse/seahorse-prefs.c:63
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 msgstr ""
 "সাহায্যের জন্য সিস্টেম প্রশাসকের অথবা কি-সার্ভারের প্রশাসকের সাথে যোগাযোগ করুন।"
 
-#: ../libseahorse/seahorse-prefs.c:173
+#: ../libseahorse/seahorse-prefs.c:172
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:353
+#: ../libseahorse/seahorse-prefs.c:352
 msgid "Custom"
 msgstr "স্বনির্ধারিত"
 
-#: ../libseahorse/seahorse-prefs.c:420
+#: ../libseahorse/seahorse-prefs.c:419
 msgid "None: Don't publish keys"
 msgstr "একটিও না: কী প্রকাশ করা হবে না"
 
@@ -1499,21 +1500,30 @@ msgstr "DSA Elgamal"
 msgid "Couldn't generate PGP key"
 msgstr "PGP-কী নির্মাণ করতে ব্যর্থ"
 
-#: ../pgp/seahorse-gpgme-generate.c:258
+#: ../pgp/seahorse-gpgme-generate.c:194
 msgid "Passphrase for New PGP Key"
 msgstr "নতুন PGP-কী এর পরিচয়-পংক্তি"
 
-#: ../pgp/seahorse-gpgme-generate.c:259
+#: ../pgp/seahorse-gpgme-generate.c:195
 msgid "Enter the passphrase for your new key twice."
 msgstr "নতুন কী-এর পরিচয়-পংক্তি দুইবার লেখা আবশ্যক।"
 
-#: ../pgp/seahorse-gpgme-generate.c:268
+#: ../pgp/seahorse-gpgme-generate.c:204
 msgid "Couldn't generate key"
 msgstr "কী নির্মাণ করতে ব্যর্থ"
 
-#: ../pgp/seahorse-gpgme-generate.c:270
+#: ../pgp/seahorse-gpgme-generate.c:206
 msgid "Generating key"
 msgstr "কী নির্মাণ করতে ব্যর্থ"
+
+#: ../pgp/seahorse-gpgme-key-op.c:300
+#| msgid "Show pass_word"
+msgid "Wrong password"
+msgstr "ভুল পাসওয়ার্ড (_w)"
+
+#: ../pgp/seahorse-gpgme-key-op.c:300
+msgid "This was the third time you entered a wrong password. Please try again."
+msgstr "তৃতীয়বারের মত ভুল পাসওয়ার্ড দিয়েছেন। অনুগ্রহ করে আবার চেষ্টা করুন।"
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -2691,7 +2701,10 @@ msgstr "অংশগ্রহকারী:"
 
 #: ../src/seahorse-viewer.c:172
 msgid "translator-credits"
-msgstr "রুণা ভট্টাচার্য্য (runab@redhat.com)"
+msgstr "অঙ্কুর প্রকল্পের পক্ষে, রুণা ভট্টাচার্য্য (runab@redhat.com)\n"
+"সঙ্কর্ষণ মুখোপাধ্যায় (sankarshan@randomink.org)\n"
+"মারুফ অভি <maruf@ankur.org.bd>\n"
+"ইসরাত জাহান <israt@ankur.org.bd>"
 
 #: ../src/seahorse-viewer.c:175
 msgid "Seahorse Project Homepage"
@@ -3056,6 +3069,9 @@ msgstr "লগ-ইন নাম: (_L)"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "সেট আপ (_S)"
+
+#~ msgid "Seahorse Daemon"
+#~ msgstr "Seahorse ডেমন"
 
 #~ msgid "<b>X keys are selected for synchronizing</b>"
 #~ msgstr "<b>সুসংগতির উদ্দেশ্যে X-টি কি নির্বাচন করা হয়েছে</b>"
