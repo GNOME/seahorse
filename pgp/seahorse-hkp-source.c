@@ -42,6 +42,14 @@
 
 #include <libsoup/soup.h>
 
+/**
+ * SECTION: seahorse-hkp-source
+ * @short_description: Implements the HKP (HTTP Keyserver protocol) Source object
+ * @include: seahorse-hkp-source.h
+ *
+ * See: http://tools.ietf.org/html/draft-shaw-openpgp-hkp-00
+ **/
+
 #ifdef WITH_HKP
 
 /* Override the DEBUG_HKP_ENABLE switch here */
@@ -72,6 +80,11 @@
 #define GCONF_AUTH_USER         "/system/http_proxy/authentication_user"
 #define GCONF_AUTH_PASS         "/system/http_proxy/authentication_password"
 
+/**
+*
+* Returns The GQuark for the HKP error
+*
+**/
 static GQuark
 get_hkp_error_domain ()
 {
@@ -81,6 +94,14 @@ get_hkp_error_domain ()
     return q;
 }
 
+/**
+* src: The SeahorseSource to use as server for the uri
+* path: The path to add to the SOUP uri
+*
+*
+*
+* Returns A Soup uri with server, port and paths
+**/
 static SoupURI*
 get_http_server_uri (SeahorseSource *src, const char *path)
 {
@@ -133,6 +154,12 @@ END_DECLARE_OPERATION
 
 IMPLEMENT_OPERATION (HKP, hkp)
 
+/**
+* hop: A SeahorseHKPOperation to init
+*
+* Reads settings from GConf and creates a new operation with a running Soup
+*
+**/
 static void 
 seahorse_hkp_operation_init (SeahorseHKPOperation *hop)
 {
@@ -186,6 +213,12 @@ seahorse_hkp_operation_init (SeahorseHKPOperation *hop)
 #endif
 }
 
+/**
+* gobject: A SeahorseHKPOperation to dispose
+*
+*
+*
+**/
 static void 
 seahorse_hkp_operation_dispose (GObject *gobject)
 {
@@ -204,6 +237,12 @@ seahorse_hkp_operation_dispose (GObject *gobject)
     G_OBJECT_CLASS (hkp_operation_parent_class)->dispose (gobject);  
 }
 
+/**
+* gobject: A SeahorseHKPOperation to finalize
+*
+*
+*
+**/
 static void 
 seahorse_hkp_operation_finalize (GObject *gobject)
 {
@@ -215,6 +254,12 @@ seahorse_hkp_operation_finalize (GObject *gobject)
     G_OBJECT_CLASS (hkp_operation_parent_class)->finalize (gobject);  
 }
 
+/**
+* operation: A SeahorseHKPOperation
+*
+* Cancels the operation, aborts the soup session
+*
+**/
 static void 
 seahorse_hkp_operation_cancel (SeahorseOperation *operation)
 {
@@ -233,14 +278,18 @@ seahorse_hkp_operation_cancel (SeahorseOperation *operation)
 }
 
 /* Thanks to GnuPG */
+/**
+* line: The line to modify
+*
+*
+* Remove anything <between brackets> and de-urlencode in place.  Note
+* that this requires all brackets to be closed on the same line.  It
+* also means that the result is never larger than the input.
+*
+**/
 static void
 dehtmlize(gchar *line)
 {
-    /* 
-     * Remove anything <between brackets> and de-urlencode in place.  Note
-     * that this requires all brackets to be closed on the same line.  It
-     * also means that the result is never larger than the input. 
-     */
     int parsedindex = 0;
     gchar *parsed = line;
     
@@ -301,7 +350,15 @@ dehtmlize(gchar *line)
     }
 }
 
-/* Cancels operation and marks the HKP operation as failed */
+/**
+* hop: The running SeahorseHKPOperation
+* msg: The optional Soup error message
+* text: The optional error text
+*
+* Either text or msg is needed
+*
+* Cancels operation and marks the HKP operation as failed
+**/
 static void
 fail_hkp_operation (SeahorseHKPOperation *hop, SoupMessage *msg, const gchar *text)
 {
@@ -342,6 +399,13 @@ fail_hkp_operation (SeahorseHKPOperation *hop, SoupMessage *msg, const gchar *te
     g_free (server);
 }
 
+/**
+* hsrc: The SeahorseHKPSource to set in the new object
+*
+*
+*
+* Returns A new SeahorseHKPOperation
+**/
 static SeahorseHKPOperation*
 setup_hkp_operation (SeahorseHKPSource *hsrc)
 {
@@ -357,6 +421,14 @@ setup_hkp_operation (SeahorseHKPSource *hsrc)
     return hop;    
 }
 
+/**
+ * parse_hkp_date:
+ * @text: The date string to parse, YYYY-MM-DD
+ *
+ *
+ *
+ * Returns: 0 on error or the timestamp
+ */
 unsigned int
 parse_hkp_date (const gchar *text)
 {
@@ -384,6 +456,13 @@ parse_hkp_date (const gchar *text)
     return stamp == (time_t)-1 ? 0 : stamp;
 }
 
+/**
+* response: The HKP server response to parse
+*
+* Extracts the key data from the HKP server response
+*
+* Returns A GList of keys
+**/
 static GList*
 parse_hkp_index (const gchar *response)
 {
@@ -531,6 +610,13 @@ parse_hkp_index (const gchar *response)
 	return keys; 
 }
 
+/**
+* ssrc: The SeahorseHKPSource to add
+* key: The SeahorsePgpKey to add
+*
+* Adds the key with the source ssrc to the application context
+*
+**/
 static void
 add_key (SeahorseHKPSource *ssrc, SeahorsePgpKey *key)
 {
@@ -551,6 +637,15 @@ add_key (SeahorseHKPSource *ssrc, SeahorsePgpKey *key)
 	seahorse_context_add_object (SCTX_APP (), SEAHORSE_OBJECT (key));
 }
 
+/**
+* session: The soup session
+* msg: The soup message
+* hop: The SeahorseHKPOperation involved
+*
+* Called from soup_session_queue_message-when a soup message got completed
+* Adds the new keys to the application context.
+*
+**/
 static void 
 refresh_callback (SoupSession *session, SoupMessage *msg, SeahorseHKPOperation *hop) 
 {
@@ -577,6 +672,15 @@ refresh_callback (SoupSession *session, SoupMessage *msg, SeahorseHKPOperation *
                                                hop->requests, hop->total);
 }
 
+/**
+* response: The server response
+*
+* Parses the response and extracts an error message
+*
+* Free the error message with g_free after usage
+*
+* Returns NULL if there was no error. The error message else
+**/
 static gchar*
 get_send_result (const gchar *response)
 {
@@ -618,6 +722,14 @@ get_send_result (const gchar *response)
     return last;
 }
 
+/**
+* session: The soup session the message belongs to
+* msg: The message that has finished
+* hop: The SeahorseHKPOperation associated
+*
+* Callback for soup_session_queue_message from seahorse_hkp_source_import
+*
+**/
 static void 
 send_callback (SoupSession *session, SoupMessage *msg, SeahorseHKPOperation *hop) 
 {
@@ -648,6 +760,17 @@ send_callback (SoupSession *session, SoupMessage *msg, SeahorseHKPOperation *hop
                                                hop->requests, hop->total);
 }
 
+/**
+ * detect_key:
+ * @text: The ASCII armoured key
+ * @len: Length of the ASCII block or -1
+ * @start: Returned, start of the key
+ * @end: Returned, end of the key
+ *
+ * Finds a key in a char* block
+ *
+ * Returns: FALSE if no key is contained, TRUE else
+ */
 gboolean
 detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
 {
@@ -671,6 +794,15 @@ detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
     return TRUE; 
 }
 
+/**
+* session: The associated soup session
+* msg: The message received
+* hop: SeahorseHKPOperation associated
+*
+* Callback for soup_session_queue_message from seahorse_hkp_source_export_raw
+* Extracts keys from the message and writes them to the results of the SeahorseOperation
+*
+**/
 static void 
 get_callback (SoupSession *session, SoupMessage *msg, SeahorseHKPOperation *hop) 
 {
@@ -749,6 +881,15 @@ seahorse_hkp_source_init (SeahorseHKPSource *hsrc)
 
 }
 
+/**
+* object: ignored
+* prop_id: id of the property
+* value: the resulting value
+* pspec: ignored
+*
+* Returns data for PROP_SOURCE_TAG and PROP_SOURCE_LOCATION
+*
+**/
 static void 
 seahorse_hkp_source_get_property (GObject *object, guint prop_id, GValue *value,
                                   GParamSpec *pspec)
@@ -760,7 +901,7 @@ seahorse_hkp_source_get_property (GObject *object, guint prop_id, GValue *value,
     case PROP_SOURCE_LOCATION:
         g_value_set_enum (value, SEAHORSE_LOCATION_REMOTE);
         break;
-    };        
+    };
 }
 
 static void 
@@ -770,6 +911,13 @@ seahorse_hkp_source_set_property (GObject *object, guint prop_id, const GValue *
 
 }
 
+/**
+* match: the \0 terminated string to test
+*
+*
+*
+* Returns TRUE if it is a hex keyid
+**/
 static gboolean
 is_hex_keyid (const gchar *match)
 {
@@ -790,6 +938,14 @@ is_hex_keyid (const gchar *match)
     return TRUE;
 }
 
+/**
+* src: The HKP source to search in
+* match: The value to match (keyid or anything else)
+*
+* Creates a search operation, finds data on the keyserver
+*
+* Returns A running Seahorse search operation
+**/
 static SeahorseOperation*
 seahorse_hkp_source_search (SeahorseSource *src, const gchar *match)
 {
@@ -840,6 +996,14 @@ seahorse_hkp_source_search (SeahorseSource *src, const gchar *match)
     return SEAHORSE_OPERATION (hop);
 }
 
+/**
+* sksrc: The HKP source to use
+* input: The input stream to add
+*
+* Imports a list of keys from the input stream to the keyserver
+*
+* Returns A running input operation (or NULL on error)
+**/
 static SeahorseOperation* 
 seahorse_hkp_source_import (SeahorseSource *sksrc, GInputStream *input)
 {
@@ -917,6 +1081,15 @@ seahorse_hkp_source_import (SeahorseSource *sksrc, GInputStream *input)
     return SEAHORSE_OPERATION (hop);
 }
 
+/**
+* sksrc: A HKP source
+* keyids: the keyids to look up
+* output: The output stream the data will end in
+*
+* Gets data from the keyserver, writes it to the output stream
+*
+* Returns A new Seahorse operation
+**/
 static SeahorseOperation*  
 seahorse_hkp_source_export_raw (SeahorseSource *sksrc, GSList *keyids,
                                 GOutputStream *output)
@@ -986,7 +1159,13 @@ seahorse_hkp_source_export_raw (SeahorseSource *sksrc, GSList *keyids,
     return SEAHORSE_OPERATION (hop);    
 }
 
-/* Initialize the basic class stuff */
+
+/**
+* klass:
+*
+* Initialize the basic class stuff
+*
+**/
 static void
 seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 {
@@ -1007,6 +1186,12 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 	seahorse_registry_register_function (NULL, seahorse_pgp_key_canonize_id, "canonize", SEAHORSE_PGP_STR, NULL);
 }
 
+/**
+* iface: The interface to set
+*
+* Set up the default SeahorseSourceIface
+*
+**/
 static void 
 seahorse_source_iface (SeahorseSourceIface *iface)
 {
