@@ -77,7 +77,7 @@ seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *
 		} else {
 			if (!GTK_IS_WINDOW (parent)) 
 				parent = gtk_widget_get_toplevel (parent);
-			if (!GTK_IS_WINDOW (parent) && GTK_WIDGET_TOPLEVEL (parent))
+			if (!GTK_IS_WINDOW (parent) && gtk_widget_is_toplevel (parent))
 				parent = NULL;
 		}
 	}
@@ -151,7 +151,7 @@ seahorse_util_prompt_delete (const gchar *text, GtkWidget *parent)
 		} else {
 			if (!GTK_IS_WINDOW (parent)) 
 				parent = gtk_widget_get_toplevel (parent);
-			if (!GTK_IS_WINDOW (parent) && GTK_WIDGET_TOPLEVEL (parent))
+			if (!GTK_IS_WINDOW (parent) && gtk_widget_is_toplevel (parent))
 				parent = NULL;
 		}
 	}
