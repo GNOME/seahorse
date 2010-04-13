@@ -29,11 +29,11 @@ update_wait_cursor (GtkWidget *dialog, gpointer unused)
 {
 	GdkCursor *cursor;
     
-	g_return_if_fail (dialog->window);
+	g_return_if_fail (gtk_widget_get_window (dialog));
     
 	/* No request active? */
 	if (!g_object_get_data (G_OBJECT (dialog), "gkr-request")) {
-		gdk_window_set_cursor (dialog->window, NULL);
+		gdk_window_set_cursor (gtk_widget_get_window (dialog), NULL);
 		return;
 	}
     
@@ -49,7 +49,7 @@ update_wait_cursor (GtkWidget *dialog, gpointer unused)
 	}
     
 	/* Indicate that we're loading stuff */
-	gdk_window_set_cursor (dialog->window, cursor);
+	gdk_window_set_cursor (gtk_widget_get_window (dialog), cursor);
 }
 
 void
@@ -71,8 +71,12 @@ seahorse_gkr_dialog_begin_request (SeahorseWidget *swidget, gpointer request)
 	 */ 
 	g_object_set_data_full (G_OBJECT (dialog), "gkr-request", request, 
 				gnome_keyring_cancel_request); 
-    
+
+#if GTK_CHECK_VERSION(2,20,0)
+	if (gtk_widget_get_realized (dialog))
+#else
 	if (GTK_WIDGET_REALIZED (dialog))
+#endif
 		update_wait_cursor (dialog, NULL);
 	else
 		g_signal_connect (dialog, "realize", G_CALLBACK (update_wait_cursor), dialog);
@@ -92,8 +96,12 @@ seahorse_gkr_dialog_complete_request (SeahorseWidget *swidget, gboolean cancel)
 	request = g_object_steal_data (G_OBJECT (dialog), "gkr-request");
 	if (request && cancel)
 		gnome_keyring_cancel_request (request);
-	        
+
+#if GTK_CHECK_VERSION(2,20,0)
+	if (gtk_widget_get_realized (dialog))
+#else
 	if (GTK_WIDGET_REALIZED (dialog))
+#endif
 		update_wait_cursor (dialog, NULL);
 	gtk_widget_set_sensitive (dialog, TRUE);
 }

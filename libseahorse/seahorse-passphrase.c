@@ -94,7 +94,7 @@ grab_keyboard (GtkWidget *win, GdkEvent *event, gpointer data)
 {
 #ifndef _DEBUG
 	if (!g_object_get_data (G_OBJECT (win), "keyboard-grabbed"))
-		if (gdk_keyboard_grab (win->window, FALSE, gdk_event_get_time (event)))
+		if (gdk_keyboard_grab (gtk_widget_get_window (win), FALSE, gdk_event_get_time (event)))
 			g_message ("could not grab keyboard");
 	g_object_set_data (G_OBJECT (win), "keyboard-grabbed", GINT_TO_POINTER (TRUE));
 #endif
@@ -145,7 +145,7 @@ entry_changed (GtkEditable *editable, GtkDialog *dialog)
 static gboolean
 window_state_changed (GtkWidget *win, GdkEventWindowState *event, gpointer data)
 {
-	GdkWindowState state = gdk_window_get_state (win->window);
+	GdkWindowState state = gdk_window_get_state (gtk_widget_get_window (win));
 	
 	if (state & GDK_WINDOW_STATE_WITHDRAWN ||
 	    state & GDK_WINDOW_STATE_ICONIFIED ||
@@ -209,7 +209,7 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     g_signal_connect (G_OBJECT (dialog), "window-state-event", G_CALLBACK (window_state_changed), NULL); 
 
     wvbox = gtk_vbox_new (FALSE, HIG_LARGE * 2);
-    gtk_container_add (GTK_CONTAINER (dialog->vbox), wvbox);
+    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (dialog)), wvbox);
     gtk_container_set_border_width (GTK_CONTAINER (wvbox), HIG_LARGE);
 
     chbox = gtk_hbox_new (FALSE, HIG_LARGE);
@@ -291,11 +291,11 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     
     w = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
     gtk_dialog_add_action_widget (dialog, w, GTK_RESPONSE_REJECT);
-    GTK_WIDGET_SET_FLAGS (w, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (w, TRUE);
 
     w = gtk_button_new_from_stock (GTK_STOCK_OK);
     gtk_dialog_add_action_widget (dialog, w, GTK_RESPONSE_ACCEPT);
-    GTK_WIDGET_SET_FLAGS (w, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (w, TRUE);
     g_signal_connect_object (G_OBJECT (entry), "focus_in_event",
                              G_CALLBACK (gtk_widget_grab_default), G_OBJECT (w), 0);
     gtk_widget_grab_default (w);
@@ -307,7 +307,7 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     gtk_window_set_type_hint (GTK_WINDOW (dialog), GDK_WINDOW_TYPE_HINT_NORMAL);
     gtk_window_set_keep_above (GTK_WINDOW (dialog), TRUE);
     gtk_widget_show_all (GTK_WIDGET (dialog));
-    gdk_window_focus (GTK_WIDGET (dialog)->window, GDK_CURRENT_TIME);
+    gdk_window_focus (gtk_widget_get_window (GTK_WIDGET (dialog)), GDK_CURRENT_TIME);
 
     if (confirm)
         entry_changed (NULL, dialog);

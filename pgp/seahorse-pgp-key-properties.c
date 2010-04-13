@@ -490,7 +490,7 @@ on_pgp_owner_photo_drag_received (GtkWidget *widget, GdkDragContext *context, gi
      * and there has to be a better way to get rid of the trailing \r\n appended
      * to the end of the path after the call to g_filename_from_uri
      */
-    if((sel_data != NULL) && (sel_data->length >= 0)) {
+    if((sel_data != NULL) && (gtk_selection_data_get_length (sel_data) >= 0)) {
         g_return_if_fail (target_type == TARGET_URI);
         
         uri_list = gtk_selection_data_get_uris (sel_data);
