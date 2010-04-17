@@ -1595,7 +1595,8 @@ seahorse_util_determine_popup_menu_position (GtkMenu *menu, int *x, int *y,
         if (menu_ypos > gdk_screen_get_height (gtk_widget_get_screen (widget)) / 2)
                 menu_ypos -= requisition.height;
         else
-           
+                menu_ypos += allocation.height;
+
         *x = menu_xpos;
         *y = menu_ypos;
         *push_in = TRUE;
