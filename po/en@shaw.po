@@ -4,122 +4,184 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2009-11-06 19:17+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse&component=general\n"
+"POT-Creation-Date: 2010-04-29 21:30+0000\n"
+"PO-Revision-Date: 2010-05-12 18:38 -0400\n"
 "Last-Translator: Thomas Thurman <tthurman@gnome.org>\n"
-"Language-Team: Shavian <ubuntu-l10n-en-shaw@lists.launchpad.net>\n"
+"Language-Team: Shavian <ubuntu-l10n-en-shaw@launchpad.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
 
-#: ../daemon/seahorse-service.c:157 ../daemon/seahorse-service.c:195
+#, fuzzy
+#: ../daemon/seahorse-daemon.c:69
+msgid "Do not run seahorse-daemon as a daemon"
+msgstr "𐑛𐑵 𐑯𐑪𐑑 𐑮𐑳𐑯 seahorse-𐑛𐑰𐑥𐑩𐑯 𐑨𐑟 𐑩 𐑛𐑰𐑥𐑩𐑯"
+
+#, fuzzy
+#: ../daemon/seahorse-daemon.c:99
+msgid "couldn't fork process"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑓𐑹𐑒 𐑐𐑮𐑴𐑕𐑧𐑕"
+
+#, fuzzy
+#: ../daemon/seahorse-daemon.c:105
+msgid "couldn't create new process group"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑒𐑮𐑦𐑱𐑑 𐑯𐑿 𐑐𐑮𐑴𐑕𐑧𐑕 𐑜𐑮𐑵𐑐"
+
+#, fuzzy
+#: ../daemon/seahorse-daemon.c:255
+msgid "Encryption Daemon (Seahorse)"
+msgstr "𐑦𐑯𐑒𐑮𐑦𐑐𐑖𐑩𐑯 𐑛𐑰𐑥𐑩𐑯 (Seahorse)"
+
 #, c-format
+#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
 msgid "Invalid or unrecognized key type: %s"
 msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑹 𐑩𐑯𐑮𐑧𐑒𐑩𐑜𐑯𐑲𐑟𐑛 𐑒𐑰 𐑑𐑲𐑐: %s"
 
-#: ../daemon/seahorse-service.c:259 ../daemon/seahorse-service-keyset.c:135
-#: ../daemon/seahorse-service-keyset.c:164
+#, fuzzy, c-format
+#: ../daemon/seahorse-service.c:229
+msgid "This keytype is not supported: %s"
+msgstr "𐑞𐑦𐑕 𐑒𐑰 𐑦𐑒𐑕𐑐𐑲𐑮𐑛 𐑪𐑯: %s"
+
 #, c-format
+#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service-keyset.c:223
 msgid "Invalid or unrecognized key: %s"
 msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑹 𐑩𐑯𐑮𐑧𐑒𐑩𐑜𐑯𐑲𐑟𐑛 𐑒𐑰: %s"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:202
 #, c-format
+#: ../daemon/seahorse-service-crypto.c:204
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
 msgstr "𐑕𐑲𐑯𐑛 𐑚𐑲 <i><key id='%s'/> <b>𐑦𐑒𐑕𐑐𐑲𐑮𐑛</b></i> 𐑪𐑯 %s."
 
-#: ../daemon/seahorse-service-crypto.c:203
+#: ../daemon/seahorse-service-crypto.c:205
 msgid "Invalid Signature"
 msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑕𐑦𐑜𐑯𐑩𐑗𐑼"
 
-#: ../daemon/seahorse-service-crypto.c:209
 #, c-format
+#: ../daemon/seahorse-service-crypto.c:211
 msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
 msgstr "𐑕𐑲𐑯𐑛 𐑚𐑲 <i><key id='%s'/></i> 𐑪𐑯 %s <b>𐑦𐑒𐑕𐑐𐑲𐑮𐑛</b>."
 
-#: ../daemon/seahorse-service-crypto.c:210
+#: ../daemon/seahorse-service-crypto.c:212
 msgid "Expired Signature"
 msgstr "𐑦𐑒𐑕𐑐𐑲𐑮𐑛 𐑕𐑦𐑜𐑯𐑩𐑗𐑼"
 
-#: ../daemon/seahorse-service-crypto.c:216
 #, c-format
+#: ../daemon/seahorse-service-crypto.c:218
 msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
 msgstr "𐑕𐑲𐑯𐑛 𐑚𐑲 <i><key id='%s'/> <b>𐑮𐑦𐑝𐑴𐑒𐑑</b></i> 𐑪𐑯 %s."
 
-#: ../daemon/seahorse-service-crypto.c:217
+#: ../daemon/seahorse-service-crypto.c:219
 msgid "Revoked Signature"
 msgstr "𐑮𐑦𐑝𐑴𐑒𐑑 𐑕𐑦𐑜𐑯𐑩𐑗𐑼"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:223
 #, c-format
+#: ../daemon/seahorse-service-crypto.c:225
 msgid "Signed by <i><key id='%s'/></i> on %s."
 msgstr "𐑕𐑲𐑯𐑛 𐑚𐑲 <i><key id='%s'/></i> 𐑪𐑯 %s."
 
-#: ../daemon/seahorse-service-crypto.c:224
+#: ../daemon/seahorse-service-crypto.c:226
 msgid "Good Signature"
 msgstr "𐑜𐑫𐑛 𐑕𐑦𐑜𐑯𐑩𐑗𐑼"
 
-#: ../daemon/seahorse-service-crypto.c:229
+#: ../daemon/seahorse-service-crypto.c:231
 msgid "Signing key not in keyring."
 msgstr "𐑕𐑲𐑯𐑦𐑙 𐑒𐑰 𐑯𐑪𐑑 𐑦𐑯 𐑒𐑰𐑮𐑦𐑙."
 
-#: ../daemon/seahorse-service-crypto.c:230
+#: ../daemon/seahorse-service-crypto.c:232
 msgid "Unknown Signature"
 msgstr "𐑳𐑯𐑴𐑯 𐑕𐑦𐑜𐑯𐑩𐑗𐑼"
 
-#: ../daemon/seahorse-service-crypto.c:234
+#: ../daemon/seahorse-service-crypto.c:236
 msgid "Bad or forged signature. The signed data was modified."
 msgstr "𐑚𐑨𐑛 𐑹 𐑓𐑪𐑮𐑡𐑛 𐑕𐑦𐑜𐑯𐑩𐑗𐑼. 𐑞 𐑕𐑲𐑯𐑛 𐑛𐑱𐑑𐑩 𐑢𐑪𐑟 𐑥𐑪𐑛𐑦𐑓𐑲𐑛."
 
-#: ../daemon/seahorse-service-crypto.c:235
+#: ../daemon/seahorse-service-crypto.c:237
 msgid "Bad Signature"
 msgstr "𐑚𐑨𐑛 𐑕𐑦𐑜𐑯𐑩𐑗𐑼"
 
-#: ../daemon/seahorse-service-crypto.c:314
-#: ../daemon/seahorse-service-crypto.c:436
+#, fuzzy
+#: ../daemon/seahorse-service-crypto.c:245
+msgid "Couldn't verify signature."
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑝𐑧𐑮𐑦𐑓𐑲 𐑕𐑦𐑜𐑯𐑩𐑗𐑼."
+
 #, c-format
+#: ../daemon/seahorse-service-crypto.c:317
+#: ../daemon/seahorse-service-crypto.c:646
 msgid "Invalid or unrecognized signer: %s"
 msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑹 𐑩𐑯𐑮𐑧𐑒𐑩𐑜𐑯𐑲𐑟𐑛 𐑕𐑲𐑯𐑻: %s"
 
-#: ../daemon/seahorse-service-crypto.c:321
-#: ../daemon/seahorse-service-crypto.c:443
 #, c-format
+#: ../daemon/seahorse-service-crypto.c:324
+#: ../daemon/seahorse-service-crypto.c:653
 msgid "Key is not valid for signing: %s"
 msgstr "𐑒𐑰 𐑦𐑟 𐑯𐑪𐑑 𐑝𐑨𐑤𐑦𐑛 𐑓𐑹 𐑕𐑲𐑯𐑦𐑙: %s"
 
-#: ../daemon/seahorse-service-crypto.c:333
 #, c-format
+#: ../daemon/seahorse-service-crypto.c:335
 msgid "Invalid or unrecognized recipient: %s"
 msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑹 𐑩𐑯𐑮𐑧𐑒𐑩𐑜𐑯𐑲𐑟𐑛 𐑮𐑩𐑕𐑦𐑐𐑰𐑩𐑯𐑑: %s"
 
-#: ../daemon/seahorse-service-crypto.c:341
 #, c-format
+#: ../daemon/seahorse-service-crypto.c:343
 msgid "Key is not a valid recipient for encryption: %s"
 msgstr "𐑒𐑰 𐑦𐑟 𐑯𐑪𐑑 𐑩 𐑝𐑨𐑤𐑦𐑛 𐑮𐑩𐑕𐑦𐑐𐑰𐑩𐑯𐑑 𐑓𐑹 𐑦𐑯𐑒𐑮𐑦𐑐𐑖𐑩𐑯: %s"
 
-#: ../daemon/seahorse-service-crypto.c:350
 #, c-format
+#: ../daemon/seahorse-service-crypto.c:352
 msgid "No recipients specified"
 msgstr "𐑯𐑴 𐑮𐑦𐑕𐑦𐑐𐑰𐑩𐑯𐑑𐑕 𐑕𐑐𐑧𐑕𐑦𐑓𐑲𐑛"
 
-#: ../daemon/seahorse-service-crypto.c:431
+#, fuzzy, c-format
+#: ../daemon/seahorse-service-crypto.c:434
+msgid "Invalid key type for decryption: %s"
+msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑒𐑰 𐑑𐑲𐑐 𐑓𐑹 𐑝𐑧𐑮𐑦𐑓𐑲𐑦𐑙: %s"
+
 #, c-format
+#, fuzzy
+#: ../daemon/seahorse-service-crypto.c:548
+#: ../daemon/seahorse-service-crypto.c:746
+msgid "Please set clearuri"
+msgstr "𐑐𐑤𐑰𐑟 𐑕𐑧𐑑 clearuri"
+
+#, c-format
+#, fuzzy
+#: ../daemon/seahorse-service-crypto.c:554
+#: ../daemon/seahorse-service-crypto.c:752
+msgid "Please set crypturi"
+msgstr "𐑐𐑤𐑰𐑟 𐑕𐑧𐑑 crypturi"
+
+#, c-format
+#, fuzzy
+#: ../daemon/seahorse-service-crypto.c:564
+msgid "Error opening clearuri"
+msgstr "𐑻𐑼 𐑴𐑐𐑩𐑯𐑦𐑙 clearuri"
+
+#, c-format
+#: ../daemon/seahorse-service-crypto.c:641
 msgid "No signer specified"
 msgstr "𐑯𐑴 𐑕𐑲𐑯𐑻 𐑕𐑐𐑧𐑕𐑦𐑓𐑲𐑛"
 
-#: ../daemon/seahorse-service-crypto.c:583
 #, c-format
+#: ../daemon/seahorse-service-crypto.c:830
 msgid "Invalid key type for verifying: %s"
 msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑒𐑰 𐑑𐑲𐑐 𐑓𐑹 𐑝𐑧𐑮𐑦𐑓𐑲𐑦𐑙: %s"
 
-#: ../daemon/seahorse-service-keyset.c:200
 #, c-format
+#: ../daemon/seahorse-service-keyset.c:273
 msgid "Invalid key id: %s"
 msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑒𐑰 ID: %s"
 
-#: ../daemon/seahorse-sharing.c:73
+#, fuzzy
+#: ../daemon/seahorse-sharing.c:84 ../daemon/seahorse-sharing.c:269
+msgid "Couldn't share keys"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑖𐑺 𐑒𐑰𐑟"
+
+#: ../daemon/seahorse-sharing.c:85
 msgid "Can't publish discovery information on the network."
 msgstr "𐑒𐑭𐑯𐑑 𐑐𐑳𐑚𐑤𐑦𐑖 𐑛𐑦𐑕𐑒𐑳𐑝𐑼𐑦 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯 𐑪𐑯 𐑞 𐑯𐑧𐑑𐑢𐑻𐑒."
 
@@ -128,10 +190,19 @@ msgstr "𐑒𐑭𐑯𐑑 𐑐𐑳𐑚𐑤𐑦𐑖 𐑛𐑦𐑕𐑒𐑳𐑝𐑼�
 #. translate correctly so that it will work correctly in your
 #. language, you may use something equivalent to
 #. "Shared keys of %s".
-#: ../daemon/seahorse-sharing.c:93
 #, c-format
+#: ../daemon/seahorse-sharing.c:112
 msgid "%s's encryption keys"
 msgstr "%s'𐑕 𐑦𐑯𐑒𐑮𐑦𐑐𐑖𐑩𐑯 𐑒𐑰𐑟"
+
+#, fuzzy
+#: ../data/seahorse.schemas.in.h:1
+msgid ""
+"A list of key server URIs to search for remote PGP keys. In later versions a "
+"display name can be included, by appending a space and then the name."
+msgstr ""
+"𐑩 𐑤𐑦𐑕𐑑 𐑝 𐑒𐑰 𐑕𐑻𐑝𐑼 URIs 𐑑 𐑕𐑻𐑗 𐑓𐑹 𐑮𐑦𐑥𐑴𐑑 PGP 𐑒𐑰𐑟. 𐑦𐑯 𐑤𐑱𐑑𐑼 𐑝𐑻𐑠𐑩𐑯𐑟 𐑩 𐑛𐑦𐑕𐑐𐑤𐑱 𐑯𐑱𐑥 𐑒𐑨𐑯 "
+"𐑚𐑰 𐑦𐑯𐑒𐑤𐑵𐑛𐑩𐑛, 𐑚𐑲 appending 𐑩 𐑕𐑐𐑱𐑕 𐑯 𐑞𐑧𐑯 𐑞 𐑯𐑱𐑥."
 
 #: ../data/seahorse.schemas.in.h:2
 msgid "Auto Retrieve Keys"
@@ -157,9 +228,31 @@ msgstr "𐑒𐑩𐑯𐑑𐑮𐑴𐑤𐑟 𐑞 𐑝𐑦𐑟𐑦𐑚𐑦𐑤𐑦�
 msgid "Controls the visibility of the validity column for the key manager."
 msgstr "𐑒𐑩𐑯𐑑𐑮𐑴𐑤𐑟 𐑞 𐑝𐑦𐑟𐑦𐑚𐑦𐑤𐑦𐑑𐑦 𐑝 𐑞 𐑝𐑩𐑤𐑦𐑛𐑩𐑑𐑰 𐑒𐑪𐑤𐑩𐑥 𐑓𐑹 𐑞 𐑒𐑰 𐑥𐑨𐑯𐑩𐑡𐑼."
 
+#, fuzzy
+#: ../data/seahorse.schemas.in.h:8
+msgid "Enable DNS-SD sharing"
+msgstr "𐑦𐑯𐑱𐑚𐑩𐑤 DNS-SD 𐑖𐑺𐑦𐑙"
+
+#, fuzzy
+#: ../data/seahorse.schemas.in.h:9
+msgid ""
+"Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be "
+"running and must be built with HKP and DNS-SD support."
+msgstr ""
+"𐑦𐑯𐑱𐑚𐑩𐑤𐑟 DNS-SD (𐑨𐑐𐑤 𐑚𐑩𐑯𐑠𐑫𐑮) 𐑖𐑺𐑦𐑙 𐑝 𐑒𐑰𐑟. seahorse-𐑛𐑰𐑥𐑩𐑯 𐑥𐑳𐑕𐑑 𐑚𐑰 𐑮𐑳𐑯𐑦𐑙 𐑯 𐑥𐑳𐑕𐑑 "
+"𐑚𐑰 𐑚𐑦𐑤𐑑 𐑢𐑦𐑞 HKP 𐑯 DNS-SD 𐑕𐑩𐑐𐑹𐑑."
+
 #: ../data/seahorse.schemas.in.h:10
 msgid "ID of the default key"
 msgstr "ID 𐑝 𐑞 𐑛𐑦𐑓𐑷𐑤𐑑 𐑒𐑰"
+
+#, fuzzy
+#: ../data/seahorse.schemas.in.h:11
+msgid ""
+"If set to true, then files encrypted with seahorse will be ASCII armor "
+"encoded."
+msgstr ""
+"𐑦𐑓 𐑕𐑧𐑑 𐑑 𐑑𐑮𐑵, 𐑞𐑧𐑯 𐑓𐑲𐑤𐑟 𐑦𐑯𐑒𐑮𐑦𐑐𐑑𐑩𐑛 𐑢𐑦𐑞 seahorse 𐑢𐑦𐑤 𐑚𐑰 ·𐑩·𐑕·𐑒·𐑦·𐑦 𐑸𐑥𐑼 𐑧𐑯𐑒𐑴𐑛𐑩𐑛."
 
 #: ../data/seahorse.schemas.in.h:12
 msgid ""
@@ -180,6 +273,11 @@ msgstr "𐑤𐑭𐑕𐑑 𐑒𐑰 𐑕𐑻𐑝𐑼𐑟 𐑿𐑕𐑑"
 #: ../data/seahorse.schemas.in.h:15
 msgid "Last key used to sign a message."
 msgstr "𐑤𐑭𐑕𐑑 𐑒𐑰 𐑿𐑕𐑑 𐑑 𐑕𐑲𐑯 𐑩 𐑥𐑧𐑕𐑦𐑡."
+
+#, fuzzy
+#: ../data/seahorse.schemas.in.h:16
+msgid "PGP Key servers"
+msgstr "PGP 𐑒𐑰 𐑕𐑻𐑝𐑼𐑟"
 
 #: ../data/seahorse.schemas.in.h:17
 msgid "Publish keys to this key server."
@@ -206,8 +304,19 @@ msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name' and "
 "'id'. Put a '-' in front of the column name to sort in descending order."
 msgstr ""
-"𐑕𐑐𐑧𐑕𐑦𐑓𐑲 𐑞 𐑒𐑪𐑤𐑩𐑥 𐑑 𐑕𐑹𐑑 𐑞 𐑮𐑦𐑕𐑦𐑐𐑰𐑩𐑯𐑑𐑕 𐑢𐑦𐑯𐑛𐑴 𐑚𐑲. 𐑒𐑪𐑤𐑩𐑥𐑟 𐑸: '𐑯𐑱𐑥' 𐑯 'ID'. 𐑐𐑫𐑑 𐑩 '-"
-"' 𐑦𐑯 𐑓𐑮𐑳𐑯𐑑 𐑝 𐑞 𐑒𐑪𐑤𐑩𐑥 𐑯𐑱𐑥 𐑑 𐑕𐑹𐑑 𐑦𐑯 𐑛𐑦𐑕𐑧𐑯𐑛𐑦𐑙 𐑹𐑛𐑼."
+"𐑕𐑐𐑧𐑕𐑦𐑓𐑲 𐑞 𐑒𐑪𐑤𐑩𐑥 𐑑 𐑕𐑹𐑑 𐑞 𐑮𐑦𐑕𐑦𐑐𐑰𐑩𐑯𐑑𐑕 𐑢𐑦𐑯𐑛𐑴 𐑚𐑲. 𐑒𐑪𐑤𐑩𐑥𐑟 𐑸: '𐑯𐑱𐑥' 𐑯 'ID'. 𐑐𐑫𐑑 𐑩 "
+"'-' 𐑦𐑯 𐑓𐑮𐑳𐑯𐑑 𐑝 𐑞 𐑒𐑪𐑤𐑩𐑥 𐑯𐑱𐑥 𐑑 𐑕𐑹𐑑 𐑦𐑯 𐑛𐑦𐑕𐑧𐑯𐑛𐑦𐑙 𐑹𐑛𐑼."
+
+#, fuzzy
+#: ../data/seahorse.schemas.in.h:23
+msgid ""
+"Specify the column to sort the seahorse key manager main window by. Columns "
+"are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
+"front of the column name to sort in descending order."
+msgstr ""
+"𐑕𐑐𐑧𐑕𐑦𐑓𐑲 𐑞 𐑒𐑪𐑤𐑩𐑥 𐑑 𐑕𐑹𐑑 𐑞 seahorse 𐑒𐑰 𐑥𐑨𐑯𐑩𐑡𐑼 𐑥𐑱𐑯 𐑢𐑦𐑯𐑛𐑴 𐑚𐑲. 𐑒𐑪𐑤𐑩𐑥𐑟 𐑸: '𐑯𐑱𐑥', "
+"'𐑦𐑛', '𐑝𐑩𐑤𐑦𐑛𐑩𐑑𐑰', '𐑦𐑒𐑕𐑐𐑲𐑻𐑟', '𐑑𐑮𐑳𐑕𐑑', 𐑯 '𐑑𐑲𐑐'. 𐑐𐑫𐑑 𐑩 '-' 𐑦𐑯 𐑓𐑮𐑳𐑯𐑑 𐑝 𐑞 𐑒𐑪𐑤𐑩𐑥 "
+"𐑯𐑱𐑥 𐑑 𐑕𐑹𐑑 𐑦𐑯 𐑛𐑦𐑕𐑧𐑯𐑛𐑦𐑙 𐑹𐑛𐑼."
 
 #: ../data/seahorse.schemas.in.h:24
 msgid "The ID of the last secret key used to sign a message."
@@ -216,6 +325,18 @@ msgstr "𐑞 ID 𐑝 𐑞 𐑤𐑭𐑕𐑑 𐑕𐑰𐑒𐑮𐑩𐑑 𐑒𐑰 �
 #: ../data/seahorse.schemas.in.h:25
 msgid "The column to sort the recipients by"
 msgstr "𐑞 𐑒𐑪𐑤𐑩𐑥 𐑑 𐑕𐑹𐑑 𐑞 𐑮𐑦𐑕𐑦𐑐𐑰𐑩𐑯𐑑𐑕 𐑚𐑲"
+
+#, fuzzy
+#: ../data/seahorse.schemas.in.h:26
+msgid "The column to sort the seahorse keys by"
+msgstr "𐑞 𐑒𐑪𐑤𐑩𐑥 𐑑 𐑕𐑹𐑑 𐑞 seahorse 𐑒𐑰𐑟 𐑚𐑲"
+
+#, fuzzy
+#: ../data/seahorse.schemas.in.h:27
+msgid ""
+"The key server to publish PGP keys to. Or empty to suppress publishing of PGP "
+"keys."
+msgstr "𐑞 𐑒𐑰 𐑕𐑻𐑝𐑼 𐑑 𐑐𐑳𐑚𐑤𐑦𐑖 PGP 𐑒𐑰𐑟 𐑑. 𐑹 𐑧𐑥𐑐𐑑𐑦 𐑑 𐑕𐑳𐑐𐑮𐑧𐑕 𐑐𐑳𐑚𐑤𐑦𐑖𐑦𐑙 𐑝 PGP 𐑒𐑰𐑟."
 
 #: ../data/seahorse.schemas.in.h:28
 msgid ""
@@ -233,8 +354,16 @@ msgid ""
 msgstr "𐑞𐑦𐑕 𐑕𐑐𐑧𐑕𐑦𐑓𐑲𐑟 𐑞 𐑛𐑦𐑓𐑷𐑤𐑑 𐑒𐑰 𐑑 𐑿𐑕 𐑓𐑹 𐑕𐑻𐑑𐑩𐑯 𐑪𐑐𐑼𐑱𐑖𐑩𐑯𐑟, 𐑥𐑱𐑯𐑤𐑦 𐑕𐑲𐑯𐑦𐑙."
 
 #: ../data/seahorse.schemas.in.h:31
-msgid "Whether or not keys should be automatically retrieved from key servers."
+msgid ""
+"Whether or not keys should be automatically retrieved from key servers."
 msgstr "𐑢𐑧𐑞𐑼 𐑹 𐑯𐑪𐑑 𐑒𐑰𐑟 𐑖𐑫𐑛 𐑚𐑰 𐑷𐑑𐑩𐑥𐑨𐑑𐑦𐑒𐑤𐑦 𐑮𐑦𐑑𐑮𐑰𐑝𐑛 𐑓𐑮𐑪𐑥 𐑒𐑰 𐑕𐑻𐑝𐑼𐑟."
+
+#, fuzzy
+#: ../data/seahorse.schemas.in.h:32
+msgid ""
+"Whether or not modified keys should be automatically synced with the default "
+"key server."
+msgstr "𐑢𐑧𐑞𐑼 𐑹 𐑯𐑪𐑑 𐑥𐑪𐑛𐑦𐑓𐑲𐑛 𐑒𐑰𐑟 𐑖𐑫𐑛 𐑚𐑰 𐑷𐑑𐑩𐑥𐑨𐑑𐑦𐑒𐑤𐑦 synced 𐑢𐑦𐑞 𐑞 𐑛𐑦𐑓𐑷𐑤𐑑 𐑒𐑰 𐑕𐑻𐑝𐑼."
 
 #: ../data/seahorse.schemas.in.h:33
 msgid "Whether to always encrypt to default key"
@@ -263,6 +392,11 @@ msgstr "𐑐𐑤𐑰𐑟 𐑗𐑵𐑟 𐑩 𐑯𐑱𐑥 𐑓𐑹 𐑞 𐑯𐑿 �
 #: ../ssh/seahorse-ssh-upload.xml.h:3
 msgid "The host name or address of the server."
 msgstr "𐑞 𐑣𐑴𐑕𐑑 𐑯𐑱𐑥 𐑹 𐑩𐑛𐑮𐑧𐑕 𐑝 𐑞 𐑕𐑻𐑝𐑼."
+
+#, fuzzy
+#: ../gkr/seahorse-gkr-add-item.c:61 ../gkr/seahorse-gkr-add-keyring.c:73
+msgid "Couldn't add keyring"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑨𐑛 𐑒𐑰𐑮𐑦𐑙"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:1
 msgid "Add Password"
@@ -297,10 +431,17 @@ msgstr "𐑯𐑧𐑑𐑢𐑻𐑒 𐑐𐑭𐑕𐑢𐑼𐑛"
 msgid "Password"
 msgstr "𐑐𐑭𐑕𐑢𐑼𐑛"
 
-#: ../gkr/seahorse-gkr-item-commands.c:78
 #, c-format
+#: ../gkr/seahorse-gkr-item-commands.c:78
 msgid "Are you sure you want to delete the password '%s'?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑛𐑦𐑤𐑰𐑑 𐑞 𐑐𐑭𐑕𐑢𐑼𐑛 '%s'?"
+
+#, fuzzy, c-format
+#: ../gkr/seahorse-gkr-item-commands.c:81
+msgid "Are you sure you want to delete %d password?"
+msgid_plural "Are you sure you want to delete %d passwords?"
+msgstr[0] "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑛𐑦𐑤𐑰𐑑 𐑞 𐑐𐑭𐑕𐑢𐑼𐑛 '%s'?"
+msgstr[1] "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑛𐑦𐑤𐑰𐑑 𐑞 𐑐𐑭𐑕𐑢𐑼𐑛 '%s'?"
 
 #: ../gkr/seahorse-gkr-item-properties.c:66
 msgid "Access a network share or resource"
@@ -310,6 +451,16 @@ msgstr "𐑨𐑒𐑕𐑧𐑕 𐑩 𐑯𐑧𐑑𐑢𐑻𐑒 𐑖𐑺 𐑹 𐑮�
 msgid "Access a website"
 msgstr "𐑨𐑒𐑕𐑧𐑕 𐑩 𐑢𐑧𐑚𐑕𐑲𐑑"
 
+#, fuzzy
+#: ../gkr/seahorse-gkr-item-properties.c:72
+msgid "Unlocks a PGP key"
+msgstr "Unlocks 𐑩 PGP 𐑒𐑰"
+
+#, fuzzy
+#: ../gkr/seahorse-gkr-item-properties.c:75
+msgid "Unlocks a Secure Shell key"
+msgstr "Unlocks 𐑩 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰"
+
 #: ../gkr/seahorse-gkr-item-properties.c:78
 msgid "Saved password or login"
 msgstr "𐑕𐑱𐑝𐑛 𐑐𐑭𐑕𐑢𐑼𐑛 𐑹 𐑤𐑪𐑜𐑦𐑯"
@@ -317,6 +468,21 @@ msgstr "𐑕𐑱𐑝𐑛 𐑐𐑭𐑕𐑢𐑼𐑛 𐑹 𐑤𐑪𐑜𐑦𐑯"
 #: ../gkr/seahorse-gkr-item-properties.c:102
 msgid "Network Credentials"
 msgstr "𐑯𐑧𐑑𐑢𐑻𐑒 𐑒𐑮𐑩𐑛𐑧𐑯𐑖𐑩𐑤𐑟"
+
+#, fuzzy
+#: ../gkr/seahorse-gkr-item-properties.c:245
+msgid "Couldn't change password."
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑗𐑱𐑯𐑡 𐑐𐑭𐑕𐑢𐑼𐑛."
+
+#, fuzzy
+#: ../gkr/seahorse-gkr-item-properties.c:350
+msgid "Couldn't set description."
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑕𐑧𐑑 𐑛𐑦𐑕𐑒𐑮𐑦𐑐𐑖𐑩𐑯."
+
+#, fuzzy
+#: ../gkr/seahorse-gkr-item-properties.c:651
+msgid "Couldn't set application access."
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑕𐑧𐑑 𐑩𐑐𐑤𐑦𐑒𐑱𐑕𐑩𐑯 𐑨𐑒𐑕𐑧𐑕."
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:1
 msgid "<b>Password:</b>"
@@ -349,7 +515,8 @@ msgid "Details"
 msgstr "𐑛𐑰𐑑𐑱𐑤𐑟"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:7
-#: ../pgp/seahorse-pgp-subkey.c:366 ../ssh/seahorse-ssh-key-properties.xml.h:17
+#: ../pgp/seahorse-pgp-subkey.c:366
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
 msgid "Key"
 msgstr "𐑒𐑰"
 
@@ -367,6 +534,11 @@ msgstr "𐑤𐑪𐑜𐑦𐑯:"
 #: ../gkr/seahorse-gkr-item-properties.xml.h:10
 msgid "Server:"
 msgstr "𐑕𐑻𐑝𐑼:"
+
+#, fuzzy
+#: ../gkr/seahorse-gkr-item-properties.xml.h:11
+msgid "Show pass_word"
+msgstr "𐑖𐑴 pass_word"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:12
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
@@ -398,13 +570,13 @@ msgstr "_𐑮𐑲𐑑"
 msgid "Listing passwords"
 msgstr "𐑤𐑦𐑕𐑑𐑦𐑙 𐑐𐑭𐑕𐑢𐑼𐑛𐑟"
 
-#: ../gkr/seahorse-gkr-keyring.c:354
 #, c-format
+#: ../gkr/seahorse-gkr-keyring.c:354
 msgid "Passwords: %s"
 msgstr "𐑐𐑭𐑕𐑢𐑼𐑛𐑟: %s"
 
-#: ../gkr/seahorse-gkr-keyring.c:355
 #, c-format
+#: ../gkr/seahorse-gkr-keyring.c:355
 msgid "<b>Passwords:</b> %s"
 msgstr "<b>𐑐𐑭𐑕𐑢𐑼𐑛𐑟:</b> %s"
 
@@ -424,6 +596,26 @@ msgstr "𐑕𐑑𐑹𐑛 𐑐𐑭𐑕𐑢𐑼𐑛"
 msgid "Safely store a password or secret."
 msgstr "𐑕𐑱𐑓𐑤𐑦 𐑕𐑑𐑹 𐑩 𐑐𐑭𐑕𐑢𐑼𐑛 𐑹 𐑕𐑰𐑒𐑮𐑩𐑑."
 
+#, fuzzy
+#: ../gkr/seahorse-gkr-keyring-commands.c:136
+msgid "Couldn't unlock keyring"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑩𐑯𐑤𐑭𐑒 𐑒𐑰𐑮𐑦𐑙"
+
+#, fuzzy
+#: ../gkr/seahorse-gkr-keyring-commands.c:177
+msgid "Couldn't lock keyring"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑤𐑪𐑒 𐑒𐑰𐑮𐑦𐑙"
+
+#, fuzzy
+#: ../gkr/seahorse-gkr-keyring-commands.c:218
+msgid "Couldn't set default keyring"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑕𐑧𐑑 𐑛𐑦𐑓𐑷𐑤𐑑 𐑒𐑰𐑮𐑦𐑙"
+
+#, fuzzy
+#: ../gkr/seahorse-gkr-keyring-commands.c:257
+msgid "Couldn't change keyring password"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑗𐑱𐑯𐑡 𐑒𐑰𐑮𐑦𐑙 𐑐𐑭𐑕𐑢𐑼𐑛"
+
 #: ../gkr/seahorse-gkr-keyring-commands.c:288
 msgid "_Lock"
 msgstr "_𐑤𐑪𐑒"
@@ -440,9 +632,10 @@ msgstr "_𐑩𐑯𐑤𐑭𐑒"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:291
 msgid ""
-"Unlock the password storage keyring with a master password so it is "
-"available for use."
-msgstr "𐑩𐑯𐑤𐑭𐑒 𐑞 𐑐𐑭𐑕𐑢𐑼𐑛 𐑕𐑑𐑹𐑦𐑡 𐑒𐑰𐑮𐑦𐑙 𐑢𐑦𐑞 𐑩 𐑥𐑭𐑕𐑑𐑼 𐑐𐑭𐑕𐑢𐑼𐑛 𐑕𐑴 𐑦𐑑 𐑦𐑟 𐑩𐑝𐑱𐑤𐑩𐑚𐑩𐑤 𐑓𐑹 𐑿𐑕."
+"Unlock the password storage keyring with a master password so it is available "
+"for use."
+msgstr ""
+"𐑩𐑯𐑤𐑭𐑒 𐑞 𐑐𐑭𐑕𐑢𐑼𐑛 𐑕𐑑𐑹𐑦𐑡 𐑒𐑰𐑮𐑦𐑙 𐑢𐑦𐑞 𐑩 𐑥𐑭𐑕𐑑𐑼 𐑐𐑭𐑕𐑢𐑼𐑛 𐑕𐑴 𐑦𐑑 𐑦𐑟 𐑩𐑝𐑱𐑤𐑩𐑚𐑩𐑤 𐑓𐑹 𐑿𐑕."
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:292
 msgid "_Set as default"
@@ -460,8 +653,8 @@ msgstr "𐑗𐑱𐑯𐑡 _𐑐𐑭𐑕𐑢𐑼𐑛"
 msgid "Change the unlock password of the password storage keyring"
 msgstr "𐑗𐑱𐑯𐑡 𐑞 𐑩𐑯𐑤𐑭𐑒 𐑐𐑭𐑕𐑢𐑼𐑛 𐑝 𐑞 𐑐𐑭𐑕𐑢𐑼𐑛 𐑕𐑑𐑹𐑦𐑡 𐑒𐑰𐑮𐑦𐑙"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:360
 #, c-format
+#: ../gkr/seahorse-gkr-keyring-commands.c:360
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑛𐑦𐑤𐑰𐑑 𐑞 𐑐𐑭𐑕𐑢𐑼𐑛 𐑒𐑰𐑮𐑦𐑙 '%s'?"
 
@@ -503,6 +696,11 @@ msgstr "𐑞 𐑒𐑰 𐑮𐑦𐑙 𐑣𐑨𐑟 𐑷𐑤𐑮𐑧𐑛𐑦 𐑚�
 msgid "No such key ring exists"
 msgstr "𐑯𐑴 𐑕𐑳𐑗 𐑒𐑰 𐑮𐑦𐑙 𐑧𐑒𐑟𐑦𐑕𐑑𐑕"
 
+#, fuzzy
+#: ../gkr/seahorse-gkr-operation.c:180
+msgid "Couldn't communicate with key ring daemon"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑒𐑩𐑥𐑿𐑯𐑦𐑒𐑱𐑑 𐑢𐑦𐑞 𐑒𐑰 𐑮𐑦𐑙 𐑛𐑰𐑥𐑩𐑯"
+
 #: ../gkr/seahorse-gkr-operation.c:183
 msgid "The item already exists"
 msgstr "𐑞 𐑲𐑑𐑩𐑥 𐑷𐑤𐑮𐑧𐑛𐑦 𐑧𐑒𐑟𐑦𐑕𐑑𐑕"
@@ -534,8 +732,8 @@ msgid ""
 "started so that you may either create a key or import one."
 msgstr ""
 "𐑯𐑴 𐑦𐑯𐑒𐑮𐑦𐑐𐑖𐑩𐑯 𐑒𐑰𐑟 𐑢𐑻 𐑓𐑬𐑯𐑛 𐑢𐑦𐑞 𐑢𐑦𐑗 𐑑 𐑐𐑼𐑓𐑹𐑥 𐑞 𐑪𐑐𐑼𐑱𐑖𐑩𐑯 𐑿 𐑮𐑦𐑒𐑢𐑧𐑕𐑑𐑩𐑛.  𐑞 𐑐𐑮𐑴𐑜𐑮𐑨𐑥 "
-"<b>𐑐𐑭𐑕𐑢𐑼𐑛𐑟 𐑯 𐑦𐑯𐑒𐑮𐑦𐑐𐑖𐑩𐑯 𐑒𐑰𐑟</b> 𐑢𐑦𐑤 𐑯𐑬 𐑚𐑰 𐑕𐑑𐑸𐑑𐑩𐑛 𐑕𐑴 𐑞𐑨𐑑 𐑿 𐑥𐑱 𐑲𐑞𐑼 𐑒𐑮𐑦𐑱𐑑 𐑩 𐑒𐑰 "
-"𐑹 𐑦𐑥𐑐𐑹𐑑 𐑢𐑳𐑯."
+"<b>𐑐𐑭𐑕𐑢𐑼𐑛𐑟 𐑯 𐑦𐑯𐑒𐑮𐑦𐑐𐑖𐑩𐑯 𐑒𐑰𐑟</b> 𐑢𐑦𐑤 𐑯𐑬 𐑚𐑰 𐑕𐑑𐑸𐑑𐑩𐑛 𐑕𐑴 𐑞𐑨𐑑 𐑿 𐑥𐑱 𐑲𐑞𐑼 𐑒𐑮𐑦𐑱𐑑 𐑩 𐑒𐑰 𐑹 "
+"𐑦𐑥𐑐𐑹𐑑 𐑢𐑳𐑯."
 
 #: ../libcryptui/cryptui-key-chooser.c:173
 msgid "All Keys"
@@ -558,8 +756,8 @@ msgstr "𐑕𐑻𐑗 _𐑓𐑹:"
 msgid "None (Don't Sign)"
 msgstr "𐑯𐑳𐑯 (𐑛𐑴𐑯𐑑 𐑕𐑲𐑯)"
 
-#: ../libcryptui/cryptui-key-chooser.c:256
 #, c-format
+#: ../libcryptui/cryptui-key-chooser.c:256
 msgid "Sign this message as %s"
 msgstr "𐑕𐑲𐑯 𐑞𐑦𐑕 𐑥𐑧𐑕𐑦𐑡 𐑨𐑟 %s"
 
@@ -572,14 +770,14 @@ msgstr "_𐑕𐑲𐑯 𐑥𐑧𐑕𐑦𐑡 𐑨𐑟:"
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:140
 #: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:828
+#: ../src/seahorse-key-manager-store.c:829
 msgid "Name"
 msgstr "𐑯𐑱𐑥"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
-#: ../pgp/seahorse-pgp-key-properties.c:1743
-#: ../src/seahorse-key-manager-store.c:840
+#: ../pgp/seahorse-pgp-key-properties.c:1745
+#: ../src/seahorse-key-manager-store.c:841
 msgid "Key ID"
 msgstr "𐑒𐑰 ID"
 
@@ -594,6 +792,11 @@ msgstr "𐑛𐑩𐑕𐑐𐑤𐑱𐑛 𐑛𐑱𐑑 𐑯/𐑹 𐑑𐑲𐑥 𐑐�
 #: ../libegg/egg-datetime.c:319
 msgid "Lazy mode"
 msgstr "𐑤𐑱𐑟𐑦 𐑥𐑴𐑛"
+
+#, fuzzy
+#: ../libegg/egg-datetime.c:320
+msgid "Lazy mode doesn't normalize entered date and time values"
+msgstr "𐑤𐑱𐑟𐑦 𐑥𐑴𐑛 𐑛𐑳𐑟𐑯𐑑 𐑯𐑪𐑮𐑥𐑩𐑤𐑲𐑟 𐑧𐑯𐑑𐑻𐑛 𐑛𐑱𐑑 𐑯 𐑑𐑲𐑥 𐑝𐑨𐑤𐑿𐑟"
 
 #: ../libegg/egg-datetime.c:325
 msgid "Year"
@@ -764,7 +967,7 @@ msgstr "𐑕𐑩𐑤𐑧𐑒𐑑 𐑛𐑱𐑑"
 msgid "Select the date from a calendar"
 msgstr "𐑕𐑩𐑤𐑧𐑒𐑑 𐑞 𐑛𐑱𐑑 𐑓𐑮𐑪𐑥 𐑩 𐑒𐑨𐑤𐑩𐑯𐑛𐑼"
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2192
+#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2194
 msgid "Time"
 msgstr "𐑑𐑲𐑥"
 
@@ -787,77 +990,89 @@ msgstr "𐑕𐑩𐑤𐑧𐑒𐑑 𐑞 𐑑𐑲𐑥 𐑓𐑮𐑪𐑥 𐑩 𐑤�
 msgid "24hr: no"
 msgstr "24hr: no"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1253
-#: ../libegg/egg-datetime.c:1257
+#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1255
+#: ../libegg/egg-datetime.c:1259
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1254
-#: ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1256
+#: ../libegg/egg-datetime.c:1263
 msgid "PM"
 msgstr "PM"
 
 #. Translators: This is hh:mm:ss AM/PM.
-#: ../libegg/egg-datetime.c:805
 #, c-format
+#: ../libegg/egg-datetime.c:805
 msgid "%02d:%02d:%02d %s"
 msgstr "%02d:%02d:%02d %s"
 
 #. Translators: This is hh:mm AM/PM.
-#: ../libegg/egg-datetime.c:808
 #, c-format
+#: ../libegg/egg-datetime.c:808
 msgid "%02d:%02d %s"
 msgstr "%02d:%02d %s"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:812
 #, c-format
+#: ../libegg/egg-datetime.c:812
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
 #. Translators: This is hh:mm.
-#: ../libegg/egg-datetime.c:815
 #, c-format
+#: ../libegg/egg-datetime.c:815
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1169
 #, c-format
+#: ../libegg/egg-datetime.c:1171
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1234
 #, c-format
+#: ../libegg/egg-datetime.c:1236
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
-#: ../libegg/eggdesktopfile.c:165
 #, c-format
+#: ../libegg/eggdesktopfile.c:165
 msgid "File is not a valid .desktop file"
 msgstr "𐑓𐑲𐑤 𐑦𐑟 𐑯𐑪𐑑 𐑩 𐑝𐑨𐑤𐑦𐑛 .desktop 𐑓𐑲𐑤"
 
-#: ../libegg/eggdesktopfile.c:188
 #, c-format
+#: ../libegg/eggdesktopfile.c:188
 msgid "Unrecognized desktop file Version '%s'"
 msgstr "𐑩𐑯𐑮𐑧𐑒𐑩𐑜𐑯𐑲𐑟𐑛 𐑛𐑧𐑕𐑒𐑑𐑪𐑐 𐑓𐑲𐑤 𐑝𐑻𐑠𐑩𐑯 '%s'"
 
-#: ../libegg/eggdesktopfile.c:958
 #, c-format
+#: ../libegg/eggdesktopfile.c:968
 msgid "Starting %s"
 msgstr "𐑕𐑑𐑸𐑑𐑦𐑙 %s"
 
-#: ../libegg/eggdesktopfile.c:1100
 #, c-format
+#: ../libegg/eggdesktopfile.c:1110
 msgid "Application does not accept documents on command line"
 msgstr "𐑩𐑐𐑤𐑦𐑒𐑱𐑕𐑩𐑯 𐑛𐑳𐑟 𐑯𐑪𐑑 𐑨𐑒𐑕𐑧𐑐𐑑 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑𐑕 𐑪𐑯 𐑒𐑩𐑥𐑭𐑯𐑛 𐑤𐑲𐑯"
 
-#: ../libegg/eggdesktopfile.c:1168
 #, c-format
+#: ../libegg/eggdesktopfile.c:1178
 msgid "Unrecognized launch option: %d"
 msgstr "𐑩𐑯𐑮𐑧𐑒𐑩𐑜𐑯𐑲𐑟𐑛 𐑤𐑷𐑯𐑗 𐑪𐑐𐑖𐑩𐑯: %d"
+
+#, c-format
+#, fuzzy
+#: ../libegg/eggdesktopfile.c:1383
+msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+msgstr "𐑒𐑭𐑯𐑑 𐑐𐑭𐑕 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑 URIs 𐑑 𐑩 '𐑑𐑲𐑐=𐑤𐑦𐑙𐑒' 𐑛𐑧𐑕𐑒𐑑𐑪𐑐 𐑧𐑯𐑑𐑮𐑦"
+
+#, c-format
+#, fuzzy
+#: ../libegg/eggdesktopfile.c:1404
+msgid "Not a launchable item"
+msgstr "𐑯𐑪𐑑 𐑩 launchable 𐑲𐑑𐑩𐑥"
 
 #: ../libegg/eggsmclient.c:225
 msgid "Disable connection to session manager"
@@ -875,7 +1090,7 @@ msgstr "𐑓𐑲𐑤"
 msgid "Specify session management ID"
 msgstr "𐑕𐑐𐑧𐑕𐑦𐑓𐑲 𐑕𐑧𐑖𐑩𐑯 𐑥𐑨𐑯𐑩𐑡𐑥𐑩𐑯𐑑 ID"
 
-#: ../libegg/eggsmclient.c:231 ../pgp/seahorse-pgp-key-properties.c:1312
+#: ../libegg/eggsmclient.c:231 ../pgp/seahorse-pgp-key-properties.c:1314
 msgid "ID"
 msgstr "ID"
 
@@ -911,9 +1126,37 @@ msgstr "𐑞 𐑐𐑹𐑑 𐑑 𐑨𐑒𐑕𐑧𐑕 𐑞 𐑕𐑻𐑝𐑼 𐑪�
 msgid "initial temporary item"
 msgstr "𐑦𐑯𐑦𐑖𐑩𐑤 𐑑𐑧𐑥𐑐𐑼𐑼𐑦 𐑲𐑑𐑩𐑥"
 
+#, fuzzy
+#: ../libseahorse/seahorse-notification.c:566
+#: ../libseahorse/seahorse-notification.c:594
+msgid "Key Imported"
+msgid_plural "Keys Imported"
+msgstr[0] "𐑒𐑰 𐑦𐑥𐑐𐑹𐑑𐑩𐑛"
+msgstr[1] "𐑒𐑰𐑟 𐑦𐑥𐑐𐑹𐑑𐑩𐑛"
+
+#, fuzzy, c-format
+#: ../libseahorse/seahorse-notification.c:570
+#: ../libseahorse/seahorse-notification.c:593
+msgid "Imported %i key"
+msgid_plural "Imported %i keys"
+msgstr[0] "𐑦𐑥𐑐𐑹𐑑𐑩𐑛 𐑒𐑰𐑟"
+msgstr[1] "𐑦𐑥𐑐𐑹𐑑𐑩𐑛 𐑒𐑰𐑟"
+
+#, fuzzy, c-format
+#: ../libseahorse/seahorse-notification.c:572
+msgid "Imported a key for"
+msgid_plural "Imported keys for"
+msgstr[0] "𐑦𐑥𐑐𐑹𐑑𐑩𐑛 𐑒𐑰𐑟"
+msgstr[1] "𐑦𐑥𐑐𐑹𐑑𐑩𐑛 𐑒𐑰𐑟"
+
 #: ../libseahorse/seahorse-notify.xml.h:1
 msgid "Notification Messages"
 msgstr "𐑯𐑴𐑑𐑦𐑓𐑦𐑒𐑱𐑖𐑩𐑯 𐑥𐑧𐑕𐑦𐑡𐑩𐑟"
+
+#, fuzzy
+#: ../libseahorse/seahorse-object.c:317
+msgid "Symmetric Key"
+msgstr "Symmetric 𐑒𐑰"
 
 #: ../libseahorse/seahorse-object.c:320
 msgid "Public Key"
@@ -935,27 +1178,40 @@ msgstr "𐑒𐑮𐑩𐑛𐑧𐑯𐑖𐑩𐑤𐑟"
 msgid "Identity"
 msgstr "𐑲𐑛𐑧𐑯𐑑𐑦𐑑𐑦"
 
-#: ../libseahorse/seahorse-passphrase.c:197 ../ssh/seahorse-ssh-operation.c:480
+#, fuzzy
+#: ../libseahorse/seahorse-passphrase.c:196
+msgid "Passphrase"
+msgstr "Passphrase"
+
+#: ../libseahorse/seahorse-passphrase.c:199
+#: ../ssh/seahorse-ssh-operation.c:480
 msgid "Password:"
 msgstr "𐑐𐑭𐑕𐑢𐑼𐑛:"
 
-#: ../libseahorse/seahorse-passphrase.c:260
+#: ../libseahorse/seahorse-passphrase.c:265
 msgid "Confirm:"
 msgstr "𐑒𐑪𐑯𐑓𐑻𐑥:"
 
-#: ../libseahorse/seahorse-prefs.c:63
+#: ../libseahorse/seahorse-prefs.c:62
 msgid "Not a valid Key Server address."
 msgstr "𐑯𐑪𐑑 𐑩 𐑝𐑨𐑤𐑦𐑛 𐑒𐑰 𐑕𐑻𐑝𐑼 𐑩𐑛𐑮𐑧𐑕."
 
-#: ../libseahorse/seahorse-prefs.c:173
+#, fuzzy
+#: ../libseahorse/seahorse-prefs.c:63
+msgid ""
+"For help contact your system adminstrator or the administrator of the key "
+"server."
+msgstr "𐑓𐑹 𐑣𐑧𐑤𐑐 𐑒𐑪𐑯𐑑𐑨𐑒𐑑 𐑿𐑼 𐑕𐑦𐑕𐑑𐑩𐑥 adminstrator 𐑹 𐑞 𐑩𐑛𐑥𐑦𐑯𐑦𐑕𐑑𐑮𐑱𐑑𐑼 𐑝 𐑞 𐑒𐑰 𐑕𐑻𐑝𐑼."
+
+#: ../libseahorse/seahorse-prefs.c:172
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:353
+#: ../libseahorse/seahorse-prefs.c:352
 msgid "Custom"
 msgstr "𐑒𐑳𐑕𐑑𐑩𐑥"
 
-#: ../libseahorse/seahorse-prefs.c:420
+#: ../libseahorse/seahorse-prefs.c:419
 msgid "None: Don't publish keys"
 msgstr "𐑯𐑳𐑯: 𐑛𐑴𐑯𐑑 𐑐𐑳𐑚𐑤𐑦𐑖 𐑒𐑰𐑟"
 
@@ -983,15 +1239,12 @@ msgstr "𐑐𐑮𐑧𐑓𐑼𐑩𐑯𐑕𐑩𐑟"
 msgid ""
 "Sharing your keys allows other people on your network to use the keys you've "
 "collected. This means they can automatically encrypt things for you or those "
-"you know, without you having to send them your key.\n"
-"\n"
-"<b>Note:</b> Your personal keys will not be compromised."
+"you know, without you having to send them your key.\n\n<b>Note:</b> Your "
+"personal keys will not be compromised."
 msgstr ""
 "𐑖𐑺𐑦𐑙 𐑿𐑼 𐑒𐑰𐑟 𐑩𐑤𐑬𐑟 𐑳𐑞𐑼 𐑐𐑰𐑐𐑩𐑤 𐑪𐑯 𐑿𐑼 𐑯𐑧𐑑𐑢𐑻𐑒 𐑑 𐑿𐑕 𐑞 𐑒𐑰𐑟 𐑿'𐑝 𐑒𐑩𐑤𐑧𐑒𐑑𐑦𐑛. 𐑞𐑦𐑕 𐑥𐑰𐑯𐑟 𐑞𐑱 "
-"𐑒𐑨𐑯 𐑷𐑑𐑩𐑥𐑨𐑑𐑦𐑒𐑤𐑦 𐑦𐑯𐑒𐑮𐑦𐑐𐑑 𐑔𐑦𐑙𐑟 𐑓𐑹 𐑿 𐑹 𐑞𐑴𐑟 𐑿 𐑯𐑴, 𐑢𐑦𐑞𐑬𐑑 𐑿 𐑣𐑨𐑝𐑦𐑙 𐑑 𐑕𐑧𐑯𐑛 𐑞𐑧𐑥 𐑿𐑼 𐑒𐑰."
-"\n"
-"\n"
-"<b>𐑯𐑴𐑑:</b> 𐑿𐑼 𐑐𐑻𐑕𐑩𐑯𐑩𐑤 𐑒𐑰𐑟 𐑢𐑦𐑤 𐑯𐑪𐑑 𐑚𐑰 𐑒𐑭𐑥𐑐𐑮𐑩𐑥𐑲𐑟𐑛."
+"𐑒𐑨𐑯 𐑷𐑑𐑩𐑥𐑨𐑑𐑦𐑒𐑤𐑦 𐑦𐑯𐑒𐑮𐑦𐑐𐑑 𐑔𐑦𐑙𐑟 𐑓𐑹 𐑿 𐑹 𐑞𐑴𐑟 𐑿 𐑯𐑴, 𐑢𐑦𐑞𐑬𐑑 𐑿 𐑣𐑨𐑝𐑦𐑙 𐑑 𐑕𐑧𐑯𐑛 𐑞𐑧𐑥 𐑿𐑼 "
+"𐑒𐑰.\n\n<b>𐑯𐑴𐑑:</b> 𐑿𐑼 𐑐𐑻𐑕𐑩𐑯𐑩𐑤 𐑒𐑰𐑟 𐑢𐑦𐑤 𐑯𐑪𐑑 𐑚𐑰 𐑒𐑭𐑥𐑐𐑮𐑩𐑥𐑲𐑟𐑛."
 
 #: ../libseahorse/seahorse-prefs.xml.h:9
 msgid "_Find keys via:"
@@ -1025,88 +1278,101 @@ msgstr "𐑒𐑰 𐑛𐑱𐑑𐑩"
 msgid "Multiple Keys"
 msgstr "𐑥𐑳𐑤𐑑𐑦𐑐𐑩𐑤 𐑒𐑰𐑟"
 
+#, fuzzy
+#: ../libseahorse/seahorse-util.c:771
+msgid "Couldn't run file-roller"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑮𐑳𐑯 𐑓𐑲𐑤-𐑮𐑴𐑤𐑼"
+
+#, fuzzy
+#: ../libseahorse/seahorse-util.c:777
+msgid "Couldn't package files"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑐𐑨𐑒𐑦𐑡 𐑓𐑲𐑤𐑟"
+
 #: ../libseahorse/seahorse-util.c:778
 msgid "The file-roller process did not complete successfully"
 msgstr "𐑞 𐑓𐑲𐑤-𐑮𐑴𐑤𐑼 𐑐𐑮𐑴𐑕𐑧𐑕 𐑛𐑦𐑛 𐑯𐑪𐑑 𐑒𐑩𐑥𐑐𐑤𐑰𐑑 𐑕𐑩𐑒𐑕𐑧𐑕𐑓𐑩𐑤𐑦"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:943
+#: ../libseahorse/seahorse-util.c:954
 msgid "All key files"
 msgstr "𐑷𐑤 𐑒𐑰 𐑓𐑲𐑤𐑟"
 
-#: ../libseahorse/seahorse-util.c:954 ../libseahorse/seahorse-util.c:1002
+#: ../libseahorse/seahorse-util.c:965 ../libseahorse/seahorse-util.c:1013
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "𐑷𐑤 𐑓𐑲𐑤𐑟"
 
-#: ../libseahorse/seahorse-util.c:995
+#: ../libseahorse/seahorse-util.c:1006
 msgid "Archive files"
 msgstr "𐑸𐑒𐑲𐑝 𐑓𐑲𐑤𐑟"
 
-#: ../libseahorse/seahorse-util.c:1065
+#: ../libseahorse/seahorse-util.c:1076
 msgid ""
-"<b>A file already exists with this name.</b>\n"
-"\n"
-"Do you want to replace it with a new file?"
+"<b>A file already exists with this name.</b>\n\nDo you want to replace it "
+"with a new file?"
 msgstr ""
-"<b>𐑩 𐑓𐑲𐑤 𐑷𐑤𐑮𐑧𐑛𐑦 𐑧𐑒𐑟𐑦𐑕𐑑𐑕 𐑢𐑦𐑞 𐑞𐑦𐑕 𐑯𐑱𐑥.</b>\n"
-"\n"
-"𐑛𐑵 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑮𐑦𐑐𐑤𐑱𐑕 𐑦𐑑 𐑢𐑦𐑞 𐑩 𐑯𐑿 𐑓𐑲𐑤?"
+"<b>𐑩 𐑓𐑲𐑤 𐑷𐑤𐑮𐑧𐑛𐑦 𐑧𐑒𐑟𐑦𐑕𐑑𐑕 𐑢𐑦𐑞 𐑞𐑦𐑕 𐑯𐑱𐑥.</b>\n\n𐑛𐑵 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑮𐑦𐑐𐑤𐑱𐑕 𐑦𐑑 𐑢𐑦𐑞 𐑩 𐑯𐑿 "
+"𐑓𐑲𐑤?"
 
-#: ../libseahorse/seahorse-util.c:1068
+#: ../libseahorse/seahorse-util.c:1079
 msgid "_Replace"
 msgstr "_𐑮𐑦𐑐𐑤𐑱𐑕"
 
 #: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
-#: ../pgp/seahorse-pgp-key-properties.c:1131
+#: ../pgp/seahorse-pgp-key-properties.c:1133
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
 msgid "Unknown"
 msgstr "𐑳𐑯𐑴𐑯"
 
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1137
+#: ../pgp/seahorse-pgp-key-properties.c:1139
 msgctxt "Validity"
 msgid "Never"
 msgstr "𐑯𐑧𐑝𐑼"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1144
+#: ../pgp/seahorse-pgp-key-properties.c:1146
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:33
 msgid "Marginal"
 msgstr "𐑥𐑸𐑡𐑦𐑯𐑩𐑤"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1150
+#: ../pgp/seahorse-pgp-key-properties.c:1152
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
 msgid "Full"
 msgstr "𐑓𐑫𐑤"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1156
+#: ../pgp/seahorse-pgp-key-properties.c:1158
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 msgid "Ultimate"
 msgstr "𐑩𐑤𐑑𐑩𐑥𐑩𐑑"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1349
+#: ../pgp/seahorse-pgp-key-properties.c:1351
 msgid "Disabled"
 msgstr "𐑛𐑦𐑕𐑱𐑚𐑩𐑤𐑛"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1345
+#: ../pgp/seahorse-pgp-key-properties.c:1347
 msgid "Revoked"
 msgstr "𐑮𐑦𐑝𐑴𐑒𐑑"
 
-#: ../libseahorse/seahorse-widget.c:362
 #, c-format
+#: ../libseahorse/seahorse-widget.c:464
 msgid "Could not display help: %s"
 msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑛𐑩𐑕𐑐𐑤𐑱 𐑣𐑧𐑤𐑐: %s"
 
 #: ../pgp/seahorse-add-subkey.xml.h:1
 msgid "Expiration Date:"
 msgstr "𐑧𐑒𐑕𐑐𐑻𐑱𐑖𐑩𐑯 𐑛𐑱𐑑:"
+
+#, fuzzy
+#: ../pgp/seahorse-add-subkey.xml.h:2
+msgid "Generate a new subkey"
+msgstr "𐑡𐑧𐑯𐑼𐑱𐑑 𐑩 𐑯𐑿 subkey"
 
 #: ../pgp/seahorse-add-subkey.xml.h:3
 msgid "If key never expires"
@@ -1124,6 +1390,11 @@ msgstr "𐑒𐑰 _𐑑𐑲𐑐:"
 msgid "Length of Key"
 msgstr "𐑤𐑧𐑙𐑔 𐑝 𐑒𐑰"
 
+#, fuzzy
+#: ../pgp/seahorse-add-subkey.xml.h:7
+msgid "Never E_xpires"
+msgstr "𐑯𐑧𐑝𐑼 E_xpires"
+
 #: ../pgp/seahorse-add-uid.xml.h:1
 msgid "Add User ID"
 msgstr "𐑨𐑛 𐑿𐑟𐑼 ID"
@@ -1135,6 +1406,11 @@ msgstr "𐑒𐑮𐑦𐑱𐑑 𐑞 𐑯𐑿 𐑿𐑟𐑼 ID"
 #: ../pgp/seahorse-add-uid.xml.h:3 ../pgp/seahorse-pgp-generate.xml.h:7
 msgid "Full _Name:"
 msgstr "𐑓𐑫𐑤 _𐑯𐑱𐑥:"
+
+#, fuzzy
+#: ../pgp/seahorse-add-uid.xml.h:4
+msgid "Key Co_mment:"
+msgstr "𐑒𐑰 Co_mment:"
 
 #: ../pgp/seahorse-add-uid.xml.h:5
 msgid "Must be at least 5 characters long"
@@ -1152,6 +1428,11 @@ msgstr "𐑪𐑐𐑖𐑩𐑯𐑩𐑤 𐑰𐑥𐑱𐑤 𐑩𐑛𐑮𐑧𐑕"
 msgid "_Email Address:"
 msgstr "_𐑰𐑥𐑱𐑤 𐑩𐑛𐑮𐑧𐑕:"
 
+#, fuzzy
+#: ../pgp/seahorse-expires.xml.h:1
+msgid "C_hange"
+msgstr "C_hange"
+
 #: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:4
 msgid "Revoke key"
 msgstr "𐑮𐑦𐑝𐑴𐑒 𐑒𐑰"
@@ -1160,10 +1441,50 @@ msgstr "𐑮𐑦𐑝𐑴𐑒 𐑒𐑰"
 msgid "_Never expires"
 msgstr "_𐑯𐑧𐑝𐑼 𐑦𐑒𐑕𐑐𐑲𐑻𐑟"
 
-#: ../pgp/seahorse-gpgme-add-uid.c:107
+#, fuzzy
+#: ../pgp/seahorse-gpgme-add-subkey.c:147
+msgid "Couldn't add subkey"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑨𐑛 subkey"
+
+#, fuzzy, c-format
+#: ../pgp/seahorse-gpgme-add-subkey.c:166
+msgid "Add subkey to %s"
+msgstr "𐑨𐑛 𐑿𐑟𐑼 ID 𐑑 %s"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-add-subkey.c:182 ../pgp/seahorse-gpgme-generate.c:117
+msgid "DSA (sign only)"
+msgstr "DSA (𐑕𐑲𐑯 𐑴𐑯𐑤𐑦)"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-add-subkey.c:190
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (𐑦𐑯𐑒𐑮𐑦𐑐𐑑 𐑴𐑯𐑤𐑦)"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:118
+msgid "RSA (sign only)"
+msgstr "RSA (𐑕𐑲𐑯 𐑴𐑯𐑤𐑦)"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-add-subkey.c:202
+msgid "RSA (encrypt only)"
+msgstr "RSA (𐑦𐑯𐑒𐑮𐑦𐑐𐑑 𐑴𐑯𐑤𐑦)"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-add-uid.c:85
+msgid "Couldn't add user id"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑨𐑛 𐑿𐑟𐑼 𐑦𐑛"
+
 #, c-format
+#: ../pgp/seahorse-gpgme-add-uid.c:107
 msgid "Add user ID to %s"
 msgstr "𐑨𐑛 𐑿𐑟𐑼 ID 𐑑 %s"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme.c:72
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr "Decryption 𐑓𐑱𐑤𐑛. 𐑿 𐑐𐑮𐑪𐑚𐑩𐑚𐑤𐑦 𐑛𐑵 𐑯𐑪𐑑 𐑣𐑨𐑝 𐑞 decryption 𐑒𐑰."
 
 #: ../pgp/seahorse-gpgme-expires.c:58
 msgid "Invalid expiry date"
@@ -1173,27 +1494,78 @@ msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑧𐑒𐑕𐑐𐑲𐑮𐑰 𐑛𐑱𐑑"
 msgid "The expiry date must be in the future"
 msgstr "𐑞 𐑧𐑒𐑕𐑐𐑲𐑮𐑰 𐑛𐑱𐑑 𐑥𐑳𐑕𐑑 𐑚𐑰 𐑦𐑯 𐑞 𐑓𐑿𐑗𐑼"
 
-#: ../pgp/seahorse-gpgme-expires.c:131
+#, fuzzy
+#: ../pgp/seahorse-gpgme-expires.c:72
+msgid "Couldn't change expiry date"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑗𐑱𐑯𐑡 𐑧𐑒𐑕𐑐𐑲𐑮𐑰 𐑛𐑱𐑑"
+
 #, c-format
+#: ../pgp/seahorse-gpgme-expires.c:131
 msgid "Expiry: %s"
 msgstr "𐑧𐑒𐑕𐑐𐑲𐑮𐑰: %s"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-generate.c:79
+msgid "PGP Key"
+msgstr "PGP 𐑒𐑰"
 
 #: ../pgp/seahorse-gpgme-generate.c:80
 msgid "Used to encrypt email and files"
 msgstr "𐑿𐑕𐑑 𐑑 𐑦𐑯𐑒𐑮𐑦𐑐𐑑 𐑰𐑥𐑱𐑤 𐑯 𐑓𐑲𐑤𐑟"
 
-#: ../pgp/seahorse-gpgme-generate.c:269
+#, fuzzy
+#: ../pgp/seahorse-gpgme-generate.c:115 ../ssh/seahorse-ssh-generate.xml.h:9
+msgid "RSA"
+msgstr "RSA"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-generate.c:116
+msgid "DSA Elgamal"
+msgstr "DSA Elgamal"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-generate.c:134
+msgid "Couldn't generate PGP key"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑡𐑧𐑯𐑼𐑱𐑑 PGP 𐑒𐑰"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-generate.c:194
+msgid "Passphrase for New PGP Key"
+msgstr "Passphrase 𐑓𐑹 𐑯𐑿 PGP 𐑒𐑰"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-generate.c:195
+msgid "Enter the passphrase for your new key twice."
+msgstr "𐑧𐑯𐑑𐑼 𐑞 passphrase 𐑓𐑹 𐑿𐑼 𐑯𐑿 𐑒𐑰 𐑑𐑢𐑲𐑕."
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-generate.c:204
+msgid "Couldn't generate key"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑡𐑧𐑯𐑼𐑱𐑑 𐑒𐑰"
+
+#: ../pgp/seahorse-gpgme-generate.c:206
 msgid "Generating key"
 msgstr "𐑡𐑧𐑯𐑼𐑱𐑑𐑦𐑙 𐑒𐑰"
 
-#: ../pgp/seahorse-gpgme-photos.c:73
-#, c-format
+#, fuzzy
+#: ../pgp/seahorse-gpgme-key-op.c:301
+msgid "Wrong password"
+msgstr "𐑮𐑪𐑙 𐑐𐑭𐑕𐑢𐑼𐑛"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-key-op.c:301
 msgid ""
-"<big><b>The photo is too large</b></big>\n"
-"The recommended size for a photo on your key is %d x %d pixels."
+"This was the third time you entered a wrong password. Please try again."
+msgstr "𐑞𐑦𐑕 𐑢𐑪𐑟 𐑞 𐑔𐑻𐑛 𐑑𐑲𐑥 𐑿 𐑧𐑯𐑑𐑻𐑛 𐑩 𐑮𐑪𐑙 𐑐𐑭𐑕𐑢𐑼𐑛. 𐑐𐑤𐑰𐑟 𐑑𐑮𐑲 𐑩𐑜𐑱𐑯."
+
+#, c-format
+#: ../pgp/seahorse-gpgme-photos.c:73
+msgid ""
+"<big><b>The photo is too large</b></big>\nThe recommended size for a photo on "
+"your key is %d x %d pixels."
 msgstr ""
-"<big><b>𐑞 𐑓𐑴𐑑𐑴 𐑦𐑟 𐑑𐑵 𐑤𐑸𐑡</b></big>\n"
-"𐑞 𐑮𐑧𐑒𐑩𐑥𐑧𐑯𐑛𐑩𐑛 𐑕𐑲𐑟 𐑓𐑹 𐑩 𐑓𐑴𐑑𐑴 𐑪𐑯 𐑿𐑼 𐑒𐑰 𐑦𐑟 %d 𐑧𐑒𐑕 %d 𐑐𐑦𐑒𐑕𐑩𐑤𐑟."
+"<big><b>𐑞 𐑓𐑴𐑑𐑴 𐑦𐑟 𐑑𐑵 𐑤𐑸𐑡</b></big>\n𐑞 𐑮𐑧𐑒𐑩𐑥𐑧𐑯𐑛𐑩𐑛 𐑕𐑲𐑟 𐑓𐑹 𐑩 𐑓𐑴𐑑𐑴 𐑪𐑯 𐑿𐑼 𐑒𐑰 𐑦𐑟 %d "
+"𐑧𐑒𐑕 %d 𐑐𐑦𐑒𐑕𐑩𐑤𐑟."
 
 #: ../pgp/seahorse-gpgme-photos.c:78
 msgid "_Don't Resize"
@@ -1203,13 +1575,32 @@ msgstr "_𐑛𐑴𐑯𐑑 𐑮𐑰𐑕𐑲𐑟"
 msgid "_Resize"
 msgstr "_𐑮𐑰𐑕𐑲𐑟"
 
+#, c-format
+#, fuzzy
+#: ../pgp/seahorse-gpgme-photos.c:128
+msgid ""
+"This is not a image file, or an unrecognized kind of image file. Try to use a "
+"JPEG image."
+msgstr ""
+"𐑞𐑦𐑕 𐑦𐑟 𐑯𐑪𐑑 𐑩 𐑦𐑥𐑦𐑡 𐑓𐑲𐑤, 𐑹 𐑩𐑯 𐑩𐑯𐑮𐑧𐑒𐑩𐑜𐑯𐑲𐑟𐑛 𐑒𐑲𐑯𐑛 𐑝 𐑦𐑥𐑦𐑡 𐑓𐑲𐑤. 𐑑𐑮𐑲 𐑑 𐑿𐑕 𐑩 JPEG 𐑦𐑥𐑦𐑡."
+
 #: ../pgp/seahorse-gpgme-photos.c:224
 msgid "All image files"
 msgstr "𐑷𐑤 𐑦𐑥𐑦𐑡 𐑓𐑲𐑤𐑟"
 
+#, fuzzy
+#: ../pgp/seahorse-gpgme-photos.c:237
+msgid "All JPEG files"
+msgstr "𐑷𐑤 JPEG 𐑓𐑲𐑤𐑟"
+
 #: ../pgp/seahorse-gpgme-photos.c:261
 msgid "Choose Photo to Add to Key"
 msgstr "𐑗𐑵𐑟 𐑓𐑴𐑑𐑴 𐑑 𐑨𐑛 𐑑 𐑒𐑰"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-photos.c:290 ../pgp/seahorse-gpgme-photos.c:294
+msgid "Couldn't add photo"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑨𐑛 𐑓𐑴𐑑𐑴"
 
 #: ../pgp/seahorse-gpgme-photos.c:291
 msgid "The file could not be loaded. It may be in an invalid format"
@@ -1219,8 +1610,18 @@ msgstr "𐑞 𐑓𐑲𐑤 𐑒𐑫𐑛 𐑯𐑪𐑑 𐑚𐑰 𐑤𐑴𐑛𐑩�
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑮𐑦𐑥𐑵𐑝 𐑞 𐑒𐑳𐑮𐑩𐑯𐑑 𐑓𐑴𐑑𐑴 𐑓𐑮𐑪𐑥 𐑿𐑼 𐑒𐑰?"
 
-#: ../pgp/seahorse-gpgme-revoke.c:91
+#, fuzzy
+#: ../pgp/seahorse-gpgme-photos.c:333
+msgid "Couldn't delete photo"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑛𐑦𐑤𐑰𐑑 𐑓𐑴𐑑𐑴"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-revoke.c:70
+msgid "Couldn't revoke subkey"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑮𐑦𐑝𐑴𐑒 subkey"
+
 #, c-format
+#: ../pgp/seahorse-gpgme-revoke.c:91
 msgid "Revoke: %s"
 msgstr "𐑮𐑦𐑝𐑴𐑒: %s"
 
@@ -1256,15 +1657,89 @@ msgstr "𐑯𐑪𐑑 𐑿𐑕𐑑"
 msgid "Key is no longer used"
 msgstr "𐑒𐑰 𐑦𐑟 𐑯𐑴 𐑤𐑪𐑙𐑜𐑼 𐑿𐑕𐑑"
 
+#, c-format
+#, fuzzy
+#: ../pgp/seahorse-gpgme-revoke.c:161
+msgid ""
+"You are about to add %s as a revoker for %s. This operation cannot be undone! "
+"Are you sure you want to continue?"
+msgstr ""
+"𐑿 𐑸 𐑩𐑚𐑬𐑑 𐑑 𐑨𐑛 %s 𐑨𐑟 𐑩 revoker 𐑓𐑹 %s. 𐑞𐑦𐑕 𐑪𐑐𐑼𐑱𐑖𐑩𐑯 𐑒𐑨𐑯𐑪𐑑 𐑚𐑰 𐑳𐑯𐑛𐑳𐑯! 𐑸 𐑿 𐑖𐑫𐑼 𐑿 "
+"𐑢𐑪𐑯𐑑 𐑑 𐑒𐑩𐑯𐑑𐑦𐑯𐑿?"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-revoke.c:173
+msgid "Couldn't add revoker"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑨𐑛 revoker"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-sign.c:96
+msgid "Couldn't sign key"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑕𐑲𐑯 𐑒𐑰"
+
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
 #: ../pgp/seahorse-gpgme-sign.c:149 ../pgp/seahorse-signer.c:61
 msgid "No keys usable for signing"
 msgstr "𐑯𐑴 𐑒𐑰𐑟 𐑘𐑵𐑟𐑩𐑚𐑩𐑤 𐑓𐑹 𐑕𐑲𐑯𐑦𐑙"
 
+#, fuzzy
+#: ../pgp/seahorse-gpgme-sign.c:150
+msgid ""
+"You have no personal PGP keys that can be used to indicate your trust of this "
+"key."
+msgstr "𐑿 𐑣𐑨𐑝 𐑯𐑴 𐑐𐑻𐑕𐑩𐑯𐑩𐑤 PGP 𐑒𐑰𐑟 𐑞𐑨𐑑 𐑒𐑨𐑯 𐑚𐑰 𐑿𐑟𐑛 𐑑 𐑦𐑯𐑛𐑦𐑒𐑱𐑑 𐑿𐑼 𐑑𐑮𐑳𐑕𐑑 𐑝 𐑞𐑦𐑕 𐑒𐑰."
+
+#, c-format
+#, fuzzy
+#: ../pgp/seahorse-gpgme-source.c:99
+msgid "Wrong passphrase."
+msgstr "𐑮𐑪𐑙 passphrase."
+
+#, c-format
+#, fuzzy
+#: ../pgp/seahorse-gpgme-source.c:103
+msgid "Enter new passphrase for '%s'"
+msgstr "𐑧𐑯𐑑𐑼 𐑯𐑿 passphrase 𐑓𐑹 '%s'"
+
+#, c-format
+#, fuzzy
+#: ../pgp/seahorse-gpgme-source.c:105
+msgid "Enter passphrase for '%s'"
+msgstr "𐑧𐑯𐑑𐑼 passphrase 𐑓𐑹 '%s'"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-source.c:108
+#: ../src/seahorse-change-passphrase.xml.h:4
+msgid "Enter new passphrase"
+msgstr "𐑧𐑯𐑑𐑼 𐑯𐑿 passphrase"
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-source.c:110
+msgid "Enter passphrase"
+msgstr "𐑧𐑯𐑑𐑼 passphrase"
+
+#. TODO: We can use the GPGME progress to make this more accurate
+#, c-format
+#, fuzzy
+#: ../pgp/seahorse-gpgme-source.c:722
+msgid "Loaded %d key"
+msgid_plural "Loaded %d keys"
+msgstr[0] "𐑤𐑴𐑛𐑩𐑛 %d 𐑒𐑰"
+msgstr[1] "𐑤𐑴𐑛𐑩𐑛 %d 𐑒𐑰𐑟"
+
 #: ../pgp/seahorse-gpgme-source.c:777
 msgid "Loading Keys..."
 msgstr "𐑤𐑴𐑛𐑦𐑙 𐑒𐑰𐑟..."
+
+#, fuzzy
+#: ../pgp/seahorse-gpgme-source.c:820
+msgid ""
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
+msgstr ""
+"𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑒𐑰 𐑛𐑱𐑑𐑩 (𐑥𐑦𐑕𐑦𐑙 UIDs). 𐑞𐑦𐑕 𐑥𐑱 𐑚𐑰 𐑛𐑿 𐑑 𐑩 𐑒𐑩𐑥𐑐𐑿𐑑𐑼 𐑢𐑦𐑞 𐑩 𐑛𐑱𐑑 𐑕𐑧𐑑 𐑦𐑯 𐑞 "
+"𐑓𐑿𐑗𐑼 𐑹 𐑩 𐑥𐑦𐑕𐑦𐑙 𐑕𐑧𐑤𐑓-𐑕𐑦𐑜𐑯𐑩𐑗𐑼."
 
 #: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:538
 msgid "Importing Keys"
@@ -1274,51 +1749,73 @@ msgstr "𐑦𐑥𐑐𐑹𐑑𐑦𐑙 𐑒𐑰𐑟"
 msgid "Exporting Keys"
 msgstr "𐑧𐑒𐑕𐑐𐑹𐑑𐑦𐑙 𐑒𐑰𐑟"
 
-#: ../pgp/seahorse-hkp-source.c:330
+#, fuzzy
+#: ../pgp/seahorse-gpgme-subkey.c:199
+msgid "ElGamal"
+msgstr "ElGamal"
+
 #, c-format
+#: ../pgp/seahorse-hkp-source.c:387
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "𐑕𐑻𐑗 𐑢𐑪𐑟 𐑯𐑪𐑑 𐑕𐑐𐑩𐑕𐑦𐑓𐑦𐑒 𐑦𐑯𐑳𐑓. 𐑕𐑻𐑝𐑼 '%s' 𐑓𐑬𐑯𐑛 𐑑𐑵 𐑥𐑧𐑯𐑦 𐑒𐑰𐑟."
 
-#: ../pgp/seahorse-hkp-source.c:576
+#, c-format
+#, fuzzy
+#: ../pgp/seahorse-hkp-source.c:389
+msgid "Couldn't communicate with server '%s': %s"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑒𐑩𐑥𐑿𐑯𐑦𐑒𐑱𐑑 𐑢𐑦𐑞 𐑕𐑻𐑝𐑼 '%s': %s"
+
+#: ../pgp/seahorse-hkp-source.c:671
 msgid "Searching for keys..."
 msgstr "𐑕𐑻𐑗𐑦𐑙 𐑓𐑹 𐑒𐑰𐑟..."
 
-#: ../pgp/seahorse-hkp-source.c:647
+#: ../pgp/seahorse-hkp-source.c:759
 msgid "Uploading keys..."
 msgstr "𐑳𐑐𐑤𐑴𐑛𐑦𐑙 𐑒𐑰𐑟..."
 
-#: ../pgp/seahorse-hkp-source.c:725
+#: ../pgp/seahorse-hkp-source.c:857
 msgid "Retrieving keys..."
 msgstr "𐑮𐑦𐑑𐑮𐑰𐑝𐑦𐑙 𐑒𐑰𐑟..."
 
-#: ../pgp/seahorse-hkp-source.c:831
 #, c-format
+#: ../pgp/seahorse-hkp-source.c:987
 msgid "Searching for keys on: %s"
 msgstr "𐑕𐑻𐑗𐑦𐑙 𐑓𐑹 𐑒𐑰𐑟 𐑪𐑯: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:908 ../pgp/seahorse-hkp-source.c:981
-#: ../pgp/seahorse-ldap-source.c:668
 #, c-format
+#: ../pgp/seahorse-hkp-source.c:1072 ../pgp/seahorse-hkp-source.c:1154
+#: ../pgp/seahorse-ldap-source.c:668
 msgid "Connecting to: %s"
 msgstr "𐑒𐑩𐑯𐑧𐑒𐑑𐑦𐑙 𐑑: %s"
 
-#: ../pgp/seahorse-hkp-source.c:1005
+#: ../pgp/seahorse-hkp-source.c:1184
 msgid "HTTP Key Server"
 msgstr "HTTP 𐑒𐑰 𐑕𐑻𐑝𐑼"
 
-#: ../pgp/seahorse-ldap-source.c:719
 #, c-format
+#, fuzzy
+#: ../pgp/seahorse-ldap-source.c:459
+msgid "Couldn't communicate with '%s': %s"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑒𐑩𐑥𐑿𐑯𐑦𐑒𐑱𐑑 𐑢𐑦𐑞 '%s': %s"
+
+#, fuzzy, c-format
+#: ../pgp/seahorse-ldap-source.c:641
+msgid "Couldn't resolve address: %s"
+msgstr "𐑮𐑦𐑟𐑪𐑤𐑝𐑦𐑙 𐑕𐑻𐑝𐑼 𐑩𐑛𐑮𐑧𐑕: %s"
+
+#, c-format
+#: ../pgp/seahorse-ldap-source.c:719
 msgid "Resolving server address: %s"
 msgstr "𐑮𐑦𐑟𐑪𐑤𐑝𐑦𐑙 𐑕𐑻𐑝𐑼 𐑩𐑛𐑮𐑧𐑕: %s"
 
-#: ../pgp/seahorse-ldap-source.c:955
 #, c-format
+#: ../pgp/seahorse-ldap-source.c:955
 msgid "Searching for keys containing '%s'..."
 msgstr "𐑕𐑻𐑗𐑦𐑙 𐑓𐑹 𐑒𐑰𐑟 𐑒𐑩𐑯𐑑𐑱𐑯𐑦𐑙 '%s'..."
 
-#: ../pgp/seahorse-ldap-source.c:983
 #, c-format
+#: ../pgp/seahorse-ldap-source.c:983
 msgid "Searching for key id '%s'..."
 msgstr "𐑕𐑻𐑗𐑦𐑙 𐑓𐑹 𐑒𐑰 𐑦𐑛 '%s'..."
 
@@ -1342,23 +1839,23 @@ msgstr "_𐑕𐑲𐑯 𐑒𐑰..."
 msgid "Sign public key"
 msgstr "𐑕𐑲𐑯 𐑐𐑳𐑚𐑤𐑦𐑒 𐑒𐑰"
 
-#: ../pgp/seahorse-pgp-commands.c:171
 #, c-format
+#: ../pgp/seahorse-pgp-commands.c:171
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑐𐑻𐑥𐑩𐑯𐑩𐑯𐑑𐑤𐑦 𐑛𐑦𐑤𐑰𐑑 %s?"
 
-#: ../pgp/seahorse-pgp-commands.c:176
 #, c-format
+#: ../pgp/seahorse-pgp-commands.c:176
 msgid "Are you sure you want to permanently delete %d keys and identities?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑐𐑻𐑥𐑩𐑯𐑩𐑯𐑑𐑤𐑦 𐑛𐑦𐑤𐑰𐑑 %d 𐑒𐑰𐑟 𐑯 𐑲𐑛𐑧𐑯𐑑𐑦𐑑𐑦𐑟?"
 
-#: ../pgp/seahorse-pgp-commands.c:178
 #, c-format
+#: ../pgp/seahorse-pgp-commands.c:178
 msgid "Are you sure you want to permanently delete %d keys?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑐𐑻𐑥𐑩𐑯𐑩𐑯𐑑𐑤𐑦 𐑛𐑦𐑤𐑰𐑑 %d 𐑒𐑰𐑟?"
 
-#: ../pgp/seahorse-pgp-commands.c:180
 #, c-format
+#: ../pgp/seahorse-pgp-commands.c:180
 msgid "Are you sure you want to permanently delete %d identities?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑐𐑻𐑥𐑩𐑯𐑩𐑯𐑑𐑤𐑦 𐑛𐑦𐑤𐑰𐑑 %d 𐑲𐑛𐑧𐑯𐑑𐑦𐑑𐑦𐑟?"
 
@@ -1366,9 +1863,24 @@ msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑐𐑻𐑥𐑩𐑯�
 msgid "<b>_Advanced key options</b>"
 msgstr "<b>_𐑩𐑛𐑝𐑭𐑯𐑕𐑑 𐑒𐑰 𐑪𐑐𐑖𐑩𐑯𐑟</b>"
 
+#, fuzzy
+#: ../pgp/seahorse-pgp-generate.xml.h:2
+msgid "A PGP key allows you to encrypt email or files to other people."
+msgstr "𐑩 PGP 𐑒𐑰 𐑩𐑤𐑬𐑟 𐑿 𐑑 𐑦𐑯𐑒𐑮𐑦𐑐𐑑 𐑰𐑥𐑱𐑤 𐑹 𐑓𐑲𐑤𐑟 𐑑 𐑳𐑞𐑼 𐑐𐑰𐑐𐑩𐑤."
+
 #: ../pgp/seahorse-pgp-generate.xml.h:3
 msgid "Algorithms here"
 msgstr "𐑨𐑤𐑜𐑻𐑦𐑞𐑩𐑥𐑟 𐑣𐑽"
+
+#, fuzzy
+#: ../pgp/seahorse-pgp-generate.xml.h:4
+msgid "C_reate"
+msgstr "C_reate"
+
+#, fuzzy
+#: ../pgp/seahorse-pgp-generate.xml.h:5
+msgid "E_xpiration Date:"
+msgstr "E_xpiration 𐑛𐑱𐑑:"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:5
 msgid "Encryption _Type:"
@@ -1382,26 +1894,58 @@ msgstr "𐑡𐑧𐑯𐑼𐑱𐑑 𐑩 𐑯𐑿 𐑒𐑰"
 msgid "Key _Strength (bits):"
 msgstr "𐑒𐑰 _𐑕𐑑𐑮𐑧𐑙𐑔 (𐑚𐑦𐑑𐑕):"
 
+#, fuzzy
+#: ../pgp/seahorse-pgp-generate.xml.h:10
+msgid "Ne_ver Expires"
+msgstr "Ne_ver 𐑦𐑒𐑕𐑐𐑲𐑻𐑟"
+
+#, fuzzy
+#: ../pgp/seahorse-pgp-generate.xml.h:11
+msgid "New PGP Key"
+msgstr "𐑯𐑿 PGP 𐑒𐑰"
+
 #: ../pgp/seahorse-pgp-generate.xml.h:12
 msgid "_Comment:"
 msgstr "_𐑒𐑳𐑥𐑥𐑩𐑯𐑑:"
 
-#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1347
+#, fuzzy
+#: ../pgp/seahorse-pgp-key.c:201
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+msgid "Private PGP Key"
+msgstr "𐑐𐑮𐑲𐑝𐑩𐑑 PGP 𐑒𐑰"
+
+#, fuzzy
+#: ../pgp/seahorse-pgp-key.c:204
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
+msgid "Public PGP Key"
+msgstr "𐑐𐑳𐑚𐑤𐑦𐑒 PGP 𐑒𐑰"
+
+#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1349
 msgid "Expired"
 msgstr "𐑦𐑒𐑕𐑐𐑲𐑮𐑛"
 
-#: ../pgp/seahorse-pgp-key-properties.c:241
+#, fuzzy
+#: ../pgp/seahorse-pgp-key-properties.c:224
+msgid "Couldn't change primary user ID"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑗𐑱𐑯𐑡 𐑐𐑮𐑲𐑥𐑩𐑮𐑦 𐑿𐑟𐑼 𐑦𐑛"
+
 #, c-format
+#: ../pgp/seahorse-pgp-key-properties.c:241
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑐𐑻𐑥𐑩𐑯𐑩𐑯𐑑𐑤𐑦 𐑛𐑦𐑤𐑰𐑑 𐑞 '%s' 𐑿𐑟𐑼 ID?"
 
+#, fuzzy
+#: ../pgp/seahorse-pgp-key-properties.c:251
+msgid "Couldn't delete user ID"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑛𐑦𐑤𐑰𐑑 𐑿𐑟𐑼 𐑦𐑛"
+
 #: ../pgp/seahorse-pgp-key-properties.c:333
-#: ../pgp/seahorse-pgp-key-properties.c:1462
+#: ../pgp/seahorse-pgp-key-properties.c:1464
 msgid "[Unknown]"
 msgstr "[𐑳𐑯𐑴𐑯]"
 
 #: ../pgp/seahorse-pgp-key-properties.c:426
-#: ../pgp/seahorse-pgp-key-properties.c:1740
+#: ../pgp/seahorse-pgp-key-properties.c:1742
 msgid "Name/Email"
 msgstr "𐑯𐑱𐑥/𐑰𐑥𐑱𐑤"
 
@@ -1409,54 +1953,82 @@ msgstr "𐑯𐑱𐑥/𐑰𐑥𐑱𐑤"
 msgid "Signature ID"
 msgstr "𐑕𐑦𐑜𐑯𐑩𐑗𐑼 ID"
 
+#, fuzzy
+#: ../pgp/seahorse-pgp-key-properties.c:552
+msgid "Couldn't change primary photo"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑗𐑱𐑯𐑡 𐑐𐑮𐑲𐑥𐑩𐑮𐑦 𐑓𐑴𐑑𐑴"
+
 #: ../pgp/seahorse-pgp-key-properties.c:775
 msgid "(unknown)"
 msgstr "(𐑳𐑯𐑴𐑯)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:778
 #, c-format
+#: ../pgp/seahorse-pgp-key-properties.c:778
 msgid "This key expired on: %s"
 msgstr "𐑞𐑦𐑕 𐑒𐑰 𐑦𐑒𐑕𐑐𐑲𐑮𐑛 𐑪𐑯: %s"
 
+#, fuzzy, c-format
+#: ../pgp/seahorse-pgp-key-properties.c:946
+msgid "Are you sure you want to permanently delete subkey %d of %s?"
+msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑐𐑻𐑥𐑩𐑯𐑩𐑯𐑑𐑤𐑦 𐑛𐑦𐑤𐑰𐑑 %s?"
+
+#, fuzzy
+#: ../pgp/seahorse-pgp-key-properties.c:955
+msgid "Couldn't delete subkey"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑛𐑦𐑤𐑰𐑑 subkey"
+
 #: ../pgp/seahorse-pgp-key-properties.c:991
-#: ../pgp/seahorse-pgp-key-properties.c:1425
+#: ../pgp/seahorse-pgp-key-properties.c:1427
 msgid "Unable to change trust"
 msgstr "𐑳𐑯𐑱𐑚𐑩𐑤 𐑑 𐑗𐑱𐑯𐑡 𐑑𐑮𐑳𐑕𐑑"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1033
-#: ../ssh/seahorse-ssh-key-properties.c:191
+#, c-format
+#, fuzzy
+#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:316
+#: ../ssh/seahorse-ssh-key-properties.c:168
+msgid "Couldn't export key to \"%s\""
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑧𐑒𐑕𐑐𐑹𐑑 𐑒𐑰 𐑑 \"%s\""
+
+#: ../pgp/seahorse-pgp-key-properties.c:1035
+#: ../ssh/seahorse-ssh-key-properties.c:193
 msgid "Export Complete Key"
 msgstr "𐑧𐑒𐑕𐑐𐑹𐑑 𐑒𐑩𐑥𐑐𐑤𐑰𐑑 𐑒𐑰"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1265
-#: ../pgp/seahorse-pgp-key-properties.c:1354
+#, fuzzy
+#: ../pgp/seahorse-pgp-key-properties.c:1060
+#: ../ssh/seahorse-ssh-key-properties.c:215
+msgid "Couldn't export key."
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑧𐑒𐑕𐑐𐑹𐑑 𐑒𐑰."
+
+#: ../pgp/seahorse-pgp-key-properties.c:1267
+#: ../pgp/seahorse-pgp-key-properties.c:1356
 msgctxt "Expires"
 msgid "Never"
 msgstr "𐑯𐑧𐑝𐑼"
 
 #. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1315
-#: ../src/seahorse-key-manager-store.c:859
+#: ../pgp/seahorse-pgp-key-properties.c:1317
+#: ../src/seahorse-key-manager-store.c:860
 msgid "Type"
 msgstr "𐑑𐑲𐑐"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1318
+#: ../pgp/seahorse-pgp-key-properties.c:1320
 msgid "Created"
 msgstr "𐑒𐑮𐑦𐑱𐑑𐑩𐑛"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1321
+#: ../pgp/seahorse-pgp-key-properties.c:1323
 msgid "Expires"
 msgstr "𐑦𐑒𐑕𐑐𐑲𐑻𐑟"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1324
+#: ../pgp/seahorse-pgp-key-properties.c:1326
 msgid "Status"
 msgstr "𐑕𐑑𐑱𐑑𐑫𐑕"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1327
+#: ../pgp/seahorse-pgp-key-properties.c:1329
 msgid "Strength"
 msgstr "𐑕𐑑𐑮𐑧𐑙𐑔"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1351
+#: ../pgp/seahorse-pgp-key-properties.c:1353
 msgid "Good"
 msgstr "𐑜𐑫𐑛"
 
@@ -1529,6 +2101,12 @@ msgstr "<b>𐑑𐑲𐑐:</b>"
 msgid "<b>Use:</b>"
 msgstr "<b>𐑿𐑟:</b>"
 
+#, fuzzy
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
+msgid "<b>_Subkeys</b>"
+msgstr "<𐑚𐑰>_Subkeys</𐑚𐑰>"
+
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
 msgid "Add"
 msgstr "𐑨𐑛"
@@ -1536,6 +2114,12 @@ msgstr "𐑨𐑛"
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:18
 msgid "Add a photo to this key"
 msgstr "𐑨𐑛 𐑩 𐑓𐑴𐑑𐑴 𐑑 𐑞𐑦𐑕 𐑒𐑰"
+
+#, fuzzy
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-key-properties.xml.h:14
+msgid "Change _Passphrase"
+msgstr "𐑗𐑱𐑯𐑡 _Passphrase"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
 msgid "Decrypt files and email sent to you."
@@ -1660,20 +2244,20 @@ msgstr "𐑦𐑯𐑒𐑮𐑦𐑐𐑑 𐑓𐑲𐑤𐑟 𐑯 𐑰𐑥𐑱𐑤 𐑑
 msgid "Fully"
 msgstr "𐑓𐑫𐑤𐑦"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
 #, no-c-format
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
 msgid "I trust signatures from '%s' on other keys"
 msgstr "𐑲 𐑑𐑮𐑳𐑕𐑑 𐑕𐑦𐑜𐑯𐑩𐑗𐑼𐑟 𐑓𐑮𐑪𐑥 '%s' 𐑪𐑯 𐑳𐑞𐑼 𐑒𐑰𐑟"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:27
 #, no-c-format
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:27
 msgid ""
 "If you believe that the person that owns this key is '%s', <i>sign</i> this "
 "key:"
 msgstr "𐑦𐑓 𐑿 𐑚𐑦𐑤𐑰𐑝 𐑞𐑨𐑑 𐑞 𐑐𐑻𐑕𐑩𐑯 𐑞𐑨𐑑 𐑴𐑯𐑟 𐑞𐑦𐑕 𐑒𐑰 𐑦𐑟 '%s', <i>𐑕𐑲𐑯</i> 𐑞𐑦𐑕 𐑒𐑰:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:29
 #, no-c-format
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:29
 msgid ""
 "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
 msgstr "𐑦𐑓 𐑿 𐑯𐑴 𐑤𐑪𐑙𐑜𐑼 𐑑𐑮𐑳𐑕𐑑 𐑞𐑨𐑑 '%s' 𐑴𐑯𐑟 𐑞𐑦𐑕 𐑒𐑰, <i>𐑮𐑦𐑝𐑴𐑒</i> 𐑿𐑼 𐑕𐑦𐑜𐑯𐑩𐑗𐑼:"
@@ -1684,7 +2268,7 @@ msgstr "𐑥𐑸𐑡𐑦𐑯𐑩𐑤𐑦"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:853
+#: ../src/seahorse-key-manager-store.c:854
 msgid "Trust"
 msgstr "𐑑𐑮𐑳𐑕𐑑"
 
@@ -1712,9 +2296,20 @@ msgstr "_𐑮𐑦𐑝𐑴𐑒 𐑕𐑦𐑜𐑯𐑩𐑗𐑼"
 msgid "_Sign this Key"
 msgstr "_𐑕𐑲𐑯 𐑞𐑦𐑕 𐑒𐑰"
 
+#, c-format
+#, fuzzy
+#: ../pgp/seahorse-pgp-subkey.c:371
+msgid "Subkey %d of %s"
+msgstr "Subkey %d 𐑝 %s"
+
 #: ../pgp/seahorse-revoke.xml.h:1
 msgid "Optional description of revocation"
 msgstr "𐑪𐑐𐑖𐑩𐑯𐑩𐑤 𐑛𐑦𐑕𐑒𐑮𐑦𐑐𐑖𐑩𐑯 𐑝 𐑮𐑧𐑝𐑩𐑒𐑱𐑖𐑩𐑯"
+
+#, fuzzy
+#: ../pgp/seahorse-revoke.xml.h:2
+msgid "Re_voke"
+msgstr "Re_voke"
 
 #: ../pgp/seahorse-revoke.xml.h:3
 msgid "Reason for revoking the key"
@@ -1723,6 +2318,12 @@ msgstr "𐑮𐑰𐑟𐑩𐑯 𐑓𐑹 𐑮𐑦𐑝𐑴𐑒𐑦𐑙 𐑞 𐑒𐑰
 #: ../pgp/seahorse-revoke.xml.h:6
 msgid "_Reason:"
 msgstr "_𐑮𐑰𐑟𐑩𐑯:"
+
+#, fuzzy
+#: ../pgp/seahorse-signer.c:62
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr "𐑿 𐑣𐑨𐑝 𐑯𐑴 𐑐𐑻𐑕𐑩𐑯𐑩𐑤 PGP 𐑒𐑰𐑟 𐑞𐑨𐑑 𐑒𐑨𐑯 𐑚𐑰 𐑿𐑟𐑛 𐑑 𐑕𐑲𐑯 𐑩 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑 𐑹 𐑥𐑧𐑕𐑦𐑡."
 
 #: ../pgp/seahorse-sign.xml.h:1
 msgid "<b>How carefully have you checked this key?</b>"
@@ -1739,8 +2340,8 @@ msgstr "<b>𐑕𐑲𐑯 𐑒𐑰 𐑨𐑟:</b>"
 #: ../pgp/seahorse-sign.xml.h:4
 msgid ""
 "<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone. "
+"owned by the person who claims to own it. For example, you could read the key "
+"fingerprint to the owner over the phone. "
 msgstr ""
 "<i>𐑒𐑨𐑠𐑵𐑩𐑤𐑦:</i> 𐑥𐑰𐑯𐑟 𐑿 𐑣𐑨𐑝 𐑛𐑳𐑯 𐑩 𐑒𐑨𐑠𐑵𐑩𐑤 𐑝𐑧𐑮𐑩𐑓𐑩𐑒𐑱𐑖𐑩𐑯 𐑞𐑨𐑑 𐑞 𐑒𐑰 𐑦𐑟 𐑴𐑯𐑛 𐑚𐑲 𐑞 "
 "𐑐𐑻𐑕𐑩𐑯 𐑣𐑵 𐑒𐑤𐑱𐑥𐑟 𐑑 𐑴𐑯 𐑦𐑑. 𐑓𐑹 𐑦𐑜𐑟𐑭𐑥𐑐𐑩𐑤, 𐑿 𐑒𐑫𐑛 𐑮𐑰𐑛 𐑞 𐑒𐑰 𐑓𐑦𐑙𐑜𐑼𐑐𐑮𐑦𐑯𐑑 𐑑 𐑞 𐑴𐑯𐑼 𐑴𐑝𐑼 𐑞 "
@@ -1755,8 +2356,8 @@ msgid ""
 "<i>Not at all:</i> means you believe the key is owned by the person who "
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
-"<i>𐑯𐑪𐑑 𐑨𐑑 𐑷𐑤:</i> 𐑥𐑰𐑯𐑟 𐑿 𐑚𐑦𐑤𐑰𐑝 𐑞 𐑒𐑰 𐑦𐑟 𐑴𐑯𐑛 𐑚𐑲 𐑞 𐑐𐑻𐑕𐑩𐑯 𐑣𐑵 𐑒𐑤𐑱𐑥𐑟 𐑑 𐑴𐑯 𐑦𐑑, 𐑚𐑳𐑑 "
-"𐑿 𐑒𐑫𐑛 𐑯𐑪𐑑 𐑹 𐑛𐑦𐑛 𐑯𐑪𐑑 𐑝𐑧𐑮𐑦𐑓𐑲 𐑞𐑦𐑕 𐑑 𐑚𐑰 𐑩 𐑓𐑨𐑒𐑑."
+"<i>𐑯𐑪𐑑 𐑨𐑑 𐑷𐑤:</i> 𐑥𐑰𐑯𐑟 𐑿 𐑚𐑦𐑤𐑰𐑝 𐑞 𐑒𐑰 𐑦𐑟 𐑴𐑯𐑛 𐑚𐑲 𐑞 𐑐𐑻𐑕𐑩𐑯 𐑣𐑵 𐑒𐑤𐑱𐑥𐑟 𐑑 𐑴𐑯 𐑦𐑑, 𐑚𐑳𐑑 𐑿 "
+"𐑒𐑫𐑛 𐑯𐑪𐑑 𐑹 𐑛𐑦𐑛 𐑯𐑪𐑑 𐑝𐑧𐑮𐑦𐑓𐑲 𐑞𐑦𐑕 𐑑 𐑚𐑰 𐑩 𐑓𐑨𐑒𐑑."
 
 #: ../pgp/seahorse-sign.xml.h:7
 msgid ""
@@ -1784,9 +2385,9 @@ msgid ""
 "personally check that the name on the key is correct. You should have also "
 "used email to check that the email address belongs to the owner."
 msgstr ""
-"𐑿 𐑒𐑫𐑛 𐑿𐑕 𐑩 𐑣𐑸𐑛 𐑑 𐑓𐑪𐑮𐑡 𐑓𐑴𐑑𐑴 𐑲𐑛𐑧𐑯𐑑𐑦𐑓𐑦𐑒𐑱𐑖𐑩𐑯 (𐑕𐑳𐑗 𐑨𐑟 𐑩 𐑐𐑭𐑕𐑐𐑹𐑑) 𐑑 𐑐𐑻𐑕𐑩𐑯𐑩𐑤𐑦 𐑗𐑧𐑒 "
-"𐑞𐑨𐑑 𐑞 𐑯𐑱𐑥 𐑪𐑯 𐑞 𐑒𐑰 𐑦𐑟 𐑒𐑼𐑧𐑒𐑑. 𐑿 𐑖𐑫𐑛 𐑣𐑨𐑝 𐑷𐑤𐑕𐑴 𐑿𐑕𐑑 𐑰𐑥𐑱𐑤 𐑑 𐑗𐑧𐑒 𐑞𐑨𐑑 𐑞 𐑰𐑥𐑱𐑤 𐑩𐑛𐑮𐑧𐑕 "
-"𐑚𐑦𐑤𐑪𐑙𐑟 𐑑 𐑞 𐑴𐑯𐑼."
+"𐑿 𐑒𐑫𐑛 𐑿𐑕 𐑩 𐑣𐑸𐑛 𐑑 𐑓𐑪𐑮𐑡 𐑓𐑴𐑑𐑴 𐑲𐑛𐑧𐑯𐑑𐑦𐑓𐑦𐑒𐑱𐑖𐑩𐑯 (𐑕𐑳𐑗 𐑨𐑟 𐑩 𐑐𐑭𐑕𐑐𐑹𐑑) 𐑑 𐑐𐑻𐑕𐑩𐑯𐑩𐑤𐑦 𐑗𐑧𐑒 𐑞𐑨𐑑 "
+"𐑞 𐑯𐑱𐑥 𐑪𐑯 𐑞 𐑒𐑰 𐑦𐑟 𐑒𐑼𐑧𐑒𐑑. 𐑿 𐑖𐑫𐑛 𐑣𐑨𐑝 𐑷𐑤𐑕𐑴 𐑿𐑕𐑑 𐑰𐑥𐑱𐑤 𐑑 𐑗𐑧𐑒 𐑞𐑨𐑑 𐑞 𐑰𐑥𐑱𐑤 𐑩𐑛𐑮𐑧𐑕 𐑚𐑦𐑤𐑪𐑙𐑟 "
+"𐑑 𐑞 𐑴𐑯𐑼."
 
 #: ../pgp/seahorse-sign.xml.h:12
 msgid "_Casually"
@@ -1821,10 +2422,37 @@ msgstr "_𐑕𐑲𐑯 𐑥𐑧𐑕𐑦𐑡 𐑢𐑦𐑞 𐑒𐑰:"
 msgid "Certificate"
 msgstr "𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:108
 #, c-format
+#: ../pkcs11/seahorse-pkcs11-commands.c:108
 msgid "Are you sure you want to delete the certificate '%s'?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑛𐑦𐑤𐑰𐑑 𐑞 𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑 '%s'?"
+
+#, fuzzy, c-format
+#: ../pkcs11/seahorse-pkcs11-commands.c:111
+msgid "Are you sure you want to delete %d certificate?"
+msgid_plural "Are you sure you want to delete %d certificates?"
+msgstr[0] "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑛𐑦𐑤𐑰𐑑 𐑞 𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑 '%s'?"
+msgstr[1] "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑛𐑦𐑤𐑰𐑑 𐑞 𐑕𐑩𐑑𐑦𐑓𐑦𐑒𐑩𐑑 '%s'?"
+
+#, fuzzy
+#: ../src/seahorse-change-passphrase.xml.h:1
+msgid "Change Passphrase"
+msgstr "𐑗𐑱𐑯𐑡 Passphrase"
+
+#, fuzzy
+#: ../src/seahorse-change-passphrase.xml.h:2
+msgid "Con_firm Passphrase:"
+msgstr "Con_firm Passphrase:"
+
+#, fuzzy
+#: ../src/seahorse-change-passphrase.xml.h:3
+msgid "Confirm new passphrase"
+msgstr "𐑒𐑪𐑯𐑓𐑻𐑥 𐑯𐑿 passphrase"
+
+#, fuzzy
+#: ../src/seahorse-change-passphrase.xml.h:5
+msgid "New _Passphrase:"
+msgstr "𐑯𐑿 _Passphrase:"
 
 #: ../src/seahorse.desktop.in.in.h:1
 msgid "Manage your passwords and encryption keys"
@@ -1838,11 +2466,29 @@ msgstr "𐑐𐑭𐑕𐑢𐑼𐑛𐑟 𐑯 𐑦𐑯𐑒𐑮𐑦𐑐𐑖𐑩𐑯 �
 msgid "<b>_Select the type of item to create:</b>"
 msgstr "<b>_𐑕𐑩𐑤𐑧𐑒𐑑 𐑞 𐑑𐑲𐑐 𐑝 𐑲𐑑𐑩𐑥 𐑑 𐑒𐑮𐑦𐑱𐑑:</b>"
 
+#, fuzzy
+#: ../src/seahorse-generate-select.xml.h:2
+msgid "C_ontinue"
+msgstr "C_ontinue"
+
 #: ../src/seahorse-generate-select.xml.h:3
 msgid "Create New ..."
 msgstr "𐑒𐑮𐑦𐑱𐑑 𐑯𐑿 ..."
 
-#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:487
+#, fuzzy, c-format
+#: ../src/seahorse-key-manager.c:233 ../src/seahorse-keyserver-results.c:108
+msgid "Selected %d key"
+msgid_plural "Selected %d keys"
+msgstr[0] "𐑕𐑩𐑤𐑧𐑒𐑑 𐑛𐑱𐑑"
+msgstr[1] "𐑕𐑩𐑤𐑧𐑒𐑑 𐑛𐑱𐑑"
+
+#, fuzzy
+#: ../src/seahorse-key-manager.c:404 ../src/seahorse-key-manager.c:464
+#: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:484
+msgid "Couldn't import keys"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑦𐑥𐑐𐑹𐑑 𐑒𐑰𐑟"
+
+#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:489
 msgid "Imported keys"
 msgstr "𐑦𐑥𐑐𐑹𐑑𐑩𐑛 𐑒𐑰𐑟"
 
@@ -1902,6 +2548,11 @@ msgstr "_𐑕𐑦𐑙𐑒 𐑯 𐑐𐑳𐑚𐑤𐑦𐑖 𐑒𐑰𐑟..."
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "𐑐𐑳𐑚𐑤𐑦𐑖 𐑯/𐑹 𐑕𐑦𐑙𐑒𐑮𐑩𐑯𐑲𐑟 𐑿𐑼 𐑒𐑰𐑟 𐑢𐑦𐑞 𐑞𐑴𐑟 𐑪𐑯𐑤𐑲𐑯."
 
+#, fuzzy
+#: ../src/seahorse-key-manager.c:746
+msgid "T_ypes"
+msgstr "T_ypes"
+
 #: ../src/seahorse-key-manager.c:746
 msgid "Show type column"
 msgstr "𐑖𐑴 𐑑𐑲𐑐 𐑒𐑪𐑤𐑩𐑥"
@@ -1958,7 +2609,7 @@ msgstr "𐑳𐑞𐑼 _𐑒𐑰𐑟"
 msgid "To get started with encryption you will need keys."
 msgstr "𐑑 𐑜𐑧𐑑 𐑕𐑑𐑸𐑑𐑩𐑛 𐑢𐑦𐑞 𐑦𐑯𐑒𐑮𐑦𐑐𐑖𐑩𐑯 𐑿 𐑢𐑦𐑤 𐑯𐑰𐑛 𐑒𐑰𐑟."
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:546
+#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:548
 msgid "_Import"
 msgstr "_𐑦𐑥𐑐𐑹𐑑"
 
@@ -1966,12 +2617,17 @@ msgstr "_𐑦𐑥𐑐𐑹𐑑"
 msgid "_Passwords"
 msgstr "_𐑐𐑭𐑕𐑢𐑼𐑛𐑟"
 
-#: ../src/seahorse-key-manager-store.c:846
+#, fuzzy
+#: ../src/seahorse-key-manager-store.c:649 ../src/seahorse-viewer.c:282
+msgid "Couldn't export keys"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑧𐑒𐑕𐑐𐑹𐑑 𐑒𐑰𐑟"
+
+#: ../src/seahorse-key-manager-store.c:847
 msgid "Validity"
 msgstr "𐑝𐑩𐑤𐑦𐑛𐑩𐑑𐑰"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:865
+#: ../src/seahorse-key-manager-store.c:866
 msgid "Expiration Date"
 msgstr "𐑧𐑒𐑕𐑐𐑻𐑱𐑖𐑩𐑯 𐑛𐑱𐑑"
 
@@ -1999,8 +2655,8 @@ msgstr "𐑒𐑩𐑤𐑨𐑐𐑕 𐑷𐑤 𐑤𐑦𐑕𐑑𐑦𐑙𐑟"
 msgid "Remote Keys"
 msgstr "𐑮𐑦𐑥𐑴𐑑 𐑒𐑰𐑟"
 
-#: ../src/seahorse-keyserver-results.c:277
 #, c-format
+#: ../src/seahorse-keyserver-results.c:277
 msgid "Remote Keys Containing '%s'"
 msgstr "𐑮𐑦𐑥𐑴𐑑 𐑒𐑰𐑟 𐑒𐑩𐑯𐑑𐑱𐑯𐑦𐑙 '%s'"
 
@@ -2036,6 +2692,24 @@ msgstr "_𐑕𐑻𐑗"
 msgid "_Search for keys containing: "
 msgstr "_𐑕𐑻𐑗 𐑓𐑹 𐑒𐑰𐑟 𐑒𐑩𐑯𐑑𐑱𐑯𐑦𐑙: "
 
+#, fuzzy
+#: ../src/seahorse-keyserver-sync.c:45
+msgid "Couldn't publish keys to server"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑐𐑳𐑚𐑤𐑦𐑖 𐑒𐑰𐑟 𐑑 𐑕𐑻𐑝𐑼"
+
+#, fuzzy, c-format
+#: ../src/seahorse-keyserver-sync.c:61
+msgid "Couldn't retrieve keys from server: %s"
+msgstr "𐑷𐑑𐑩𐑥𐑨𐑑𐑦𐑒𐑤𐑦 𐑮𐑦𐑑𐑮𐑰𐑝 𐑒𐑰𐑟 𐑓𐑮𐑪𐑥 _𐑒𐑰 𐑕𐑻𐑝𐑼𐑟"
+
+#, c-format
+#, fuzzy
+#: ../src/seahorse-keyserver-sync.c:155
+msgid "<b>%d key is selected for synchronizing</b>"
+msgid_plural "<b>%d keys are selected for synchronizing</b>"
+msgstr[0] "<𐑚𐑰>%d 𐑒𐑰 𐑦𐑟 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑓𐑹 𐑕𐑦𐑙𐑒𐑮𐑩𐑯𐑲𐑟𐑦𐑙</𐑚𐑰>"
+msgstr[1] "<𐑚𐑰>%d 𐑒𐑰𐑟 𐑸 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑓𐑹 𐑕𐑦𐑙𐑒𐑮𐑩𐑯𐑲𐑟𐑦𐑙</𐑚𐑰>"
+
 #: ../src/seahorse-keyserver-sync.c:216
 msgid "Synchronizing keys"
 msgstr "𐑕𐑦𐑙𐑒𐑮𐑩𐑯𐑲𐑟𐑦𐑙 𐑒𐑰𐑟"
@@ -2052,8 +2726,8 @@ msgstr "𐑕𐑦𐑙𐑒 𐑒𐑰𐑟"
 #: ../src/seahorse-keyserver-sync.xml.h:2
 msgid ""
 "This will publish the keys in your key ring so they're available for others "
-"to use. You'll also get any changes others have made since you received "
-"their keys."
+"to use. You'll also get any changes others have made since you received their "
+"keys."
 msgstr ""
 "𐑞𐑦𐑕 𐑢𐑦𐑤 𐑐𐑳𐑚𐑤𐑦𐑖 𐑞 𐑒𐑰𐑟 𐑦𐑯 𐑿𐑼 𐑒𐑰 𐑮𐑦𐑙 𐑕𐑴 𐑞𐑱'𐑮𐑰 𐑩𐑝𐑱𐑤𐑩𐑚𐑩𐑤 𐑓𐑹 𐑳𐑞𐑼𐑟 𐑑 𐑿𐑕. 𐑿'𐑤 𐑷𐑤𐑕𐑴 "
 "𐑜𐑧𐑑 𐑧𐑯𐑦 𐑗𐑱𐑯𐑡𐑩𐑟 𐑳𐑞𐑼𐑟 𐑣𐑨𐑝 𐑥𐑱𐑛 𐑕𐑦𐑯𐑕 𐑿 𐑮𐑦𐑕𐑰𐑝𐑛 𐑞𐑺 𐑒𐑰𐑟."
@@ -2091,6 +2765,11 @@ msgstr "𐑒𐑪𐑯𐑑𐑮𐑦𐑚𐑿𐑖𐑩𐑯𐑟:"
 msgid "translator-credits"
 msgstr "·𐑑𐑪𐑥𐑩𐑕 ·𐑔𐑻𐑥𐑩𐑯"
 
+#, fuzzy
+#: ../src/seahorse-viewer.c:175
+msgid "Seahorse Project Homepage"
+msgstr "Seahorse 𐑐𐑮𐑩𐑡𐑧𐑒𐑑 Homepage"
+
 #. Top menu items
 #: ../src/seahorse-viewer.c:194
 msgid "_File"
@@ -2108,6 +2787,11 @@ msgstr "_𐑝𐑿"
 msgid "_Help"
 msgstr "_𐑣𐑧𐑤𐑐"
 
+#, fuzzy
+#: ../src/seahorse-viewer.c:199
+msgid "Prefere_nces"
+msgstr "Prefere_nces"
+
 #: ../src/seahorse-viewer.c:200
 msgid "Change preferences for this program"
 msgstr "𐑗𐑱𐑯𐑡 𐑐𐑮𐑧𐑓𐑼𐑩𐑯𐑕𐑩𐑟 𐑓𐑹 𐑞𐑦𐑕 𐑐𐑮𐑴𐑜𐑮𐑨𐑥"
@@ -2120,60 +2804,85 @@ msgstr "𐑩𐑚𐑬𐑑 𐑞𐑦𐑕 𐑐𐑮𐑴𐑜𐑮𐑨𐑥"
 msgid "_Contents"
 msgstr "_𐑒𐑪𐑯𐑑𐑩𐑯𐑑𐑕"
 
+#, fuzzy
+#: ../src/seahorse-viewer.c:205
+msgid "Show Seahorse help"
+msgstr "𐑖𐑴 Seahorse 𐑣𐑧𐑤𐑐"
+
 #: ../src/seahorse-viewer.c:302
 msgid "Export public key"
 msgstr "𐑧𐑒𐑕𐑐𐑹𐑑 𐑐𐑳𐑚𐑤𐑦𐑒 𐑒𐑰"
 
-#: ../src/seahorse-viewer.c:320
+#: ../src/seahorse-viewer.c:322
 msgid "Exporting keys"
 msgstr "𐑧𐑒𐑕𐑐𐑹𐑑𐑦𐑙 𐑒𐑰𐑟"
 
+#, fuzzy
+#: ../src/seahorse-viewer.c:347
+msgid "Couldn't retrieve data from key server"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑮𐑦𐑑𐑮𐑰𐑝 𐑛𐑱𐑑𐑩 𐑓𐑮𐑪𐑥 𐑒𐑰 𐑕𐑻𐑝𐑼"
+
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:364
+#: ../src/seahorse-viewer.c:366
 msgid "Copied keys"
 msgstr "𐑒𐑪𐑐𐑦𐑛 𐑒𐑰𐑟"
 
-#: ../src/seahorse-viewer.c:384
+#: ../src/seahorse-viewer.c:386
 msgid "Retrieving keys"
 msgstr "𐑮𐑦𐑑𐑮𐑰𐑝𐑦𐑙 𐑒𐑰𐑟"
 
-#: ../src/seahorse-viewer.c:433
+#, fuzzy
+#: ../src/seahorse-viewer.c:401
+msgid "Couldn't delete."
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑛𐑦𐑤𐑰𐑑."
+
+#: ../src/seahorse-viewer.c:435
 msgid "Deleting..."
 msgstr "𐑛𐑦𐑤𐑰𐑑𐑦𐑙..."
 
-#: ../src/seahorse-viewer.c:459
 #, c-format
+#: ../src/seahorse-viewer.c:461
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s 𐑦𐑟 𐑩 𐑐𐑮𐑲𐑝𐑩𐑑 𐑒𐑰. 𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑐𐑮𐑩𐑕𐑰𐑛?"
 
-#: ../src/seahorse-viewer.c:507
+#: ../src/seahorse-viewer.c:509
 msgid "Importing keys from key servers"
 msgstr "𐑦𐑥𐑐𐑹𐑑𐑦𐑙 𐑒𐑰𐑟 𐑓𐑮𐑪𐑥 𐑒𐑰 𐑕𐑻𐑝𐑼𐑟"
 
-#: ../src/seahorse-viewer.c:533
+#: ../src/seahorse-viewer.c:535
 msgid "Show properties"
 msgstr "𐑖𐑴 𐑐𐑮𐑪𐑐𐑼𐑑𐑦𐑟"
 
-#: ../src/seahorse-viewer.c:534
+#: ../src/seahorse-viewer.c:536
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "_𐑛𐑦𐑤𐑰𐑑"
 
-#: ../src/seahorse-viewer.c:535
+#: ../src/seahorse-viewer.c:537
 msgid "Delete selected items"
 msgstr "𐑛𐑦𐑤𐑰𐑑 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑲𐑑𐑩𐑥𐑟"
 
-#: ../src/seahorse-viewer.c:540
+#, fuzzy
+#: ../src/seahorse-viewer.c:541
+msgid "E_xport..."
+msgstr "E_xport..."
+
+#: ../src/seahorse-viewer.c:542
 msgid "Export to a file"
 msgstr "𐑧𐑒𐑕𐑐𐑹𐑑 𐑑 𐑩 𐑓𐑲𐑤"
 
-#: ../src/seahorse-viewer.c:542
+#: ../src/seahorse-viewer.c:544
 msgid "Copy to the clipboard"
 msgstr "𐑒𐑪𐑐𐑦 𐑑 𐑞 𐑒𐑤𐑦𐑐𐑚𐑹𐑛"
 
-#: ../src/seahorse-viewer.c:547
+#: ../src/seahorse-viewer.c:549
 msgid "Import selected keys to local key ring"
 msgstr "𐑦𐑥𐑐𐑹𐑑 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑒𐑰𐑟 𐑑 𐑤𐑴𐑒𐑩𐑤 𐑒𐑰 𐑮𐑦𐑙"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-askpass.c:99
+msgid "Enter your Secure Shell passphrase:"
+msgstr "𐑧𐑯𐑑𐑼 𐑿𐑼 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 passphrase:"
 
 #: ../ssh/seahorse-ssh-commands.c:85
 msgid "Configure Key for _Secure Shell..."
@@ -2181,17 +2890,17 @@ msgstr "𐑒𐑩𐑯𐑓𐑦𐑜𐑘𐑼 𐑒𐑰 𐑓𐑹 _𐑕𐑦𐑒𐑘𐑫
 
 #: ../ssh/seahorse-ssh-commands.c:86
 msgid ""
-"Send public Secure Shell key to another machine, and enable logins using "
-"that key."
+"Send public Secure Shell key to another machine, and enable logins using that "
+"key."
 msgstr "𐑕𐑧𐑯𐑛 𐑐𐑳𐑚𐑤𐑦𐑒 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰 𐑑 𐑩𐑯𐑳𐑞𐑼 𐑥𐑩𐑖𐑰𐑯, 𐑯 𐑦𐑯𐑱𐑚𐑩𐑤 𐑤𐑪𐑜𐑦𐑯𐑟 𐑿𐑟𐑦𐑙 𐑞𐑨𐑑 𐑒𐑰."
 
-#: ../ssh/seahorse-ssh-commands.c:115
 #, c-format
+#: ../ssh/seahorse-ssh-commands.c:115
 msgid "Are you sure you want to delete the secure shell key '%s'?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑛𐑦𐑤𐑰𐑑 𐑞 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰 '%s'?"
 
-#: ../ssh/seahorse-ssh-commands.c:118
 #, c-format
+#: ../ssh/seahorse-ssh-commands.c:118
 msgid "Are you sure you want to delete %d secure shell keys?"
 msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑛𐑦𐑤𐑰𐑑 %d 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰𐑟?"
 
@@ -2199,6 +2908,16 @@ msgstr "𐑸 𐑿 𐑖𐑫𐑼 𐑿 𐑢𐑪𐑯𐑑 𐑑 𐑛𐑦𐑤𐑰𐑑 %
 #: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:19
 msgid "Secure Shell Key"
 msgstr "𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-generate.c:60
+msgid "Used to access other computers (eg: via a terminal)"
+msgstr "𐑿𐑕𐑑 𐑑 𐑨𐑒𐑕𐑧𐑕 𐑳𐑞𐑼 𐑒𐑩𐑥𐑐𐑿𐑑𐑼𐑟 (eg: 𐑝𐑲𐑩 𐑩 𐑑𐑻𐑥𐑦𐑯𐑩𐑤)"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-generate.c:90
+msgid "Couldn't generate Secure Shell key"
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑡𐑧𐑯𐑼𐑱𐑑 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰"
 
 #: ../ssh/seahorse-ssh-generate.c:205
 msgid "Creating Secure Shell Key"
@@ -2210,6 +2929,20 @@ msgid ""
 "key is for.</i>"
 msgstr ""
 "<i>𐑿𐑟 𐑿𐑼 𐑰𐑥𐑱𐑤 𐑩𐑛𐑮𐑧𐑕, 𐑯 𐑧𐑯𐑦 𐑳𐑞𐑼 𐑮𐑦𐑥𐑲𐑯𐑛𐑼 𐑿 𐑯𐑰𐑛 𐑩𐑚𐑬𐑑 𐑢𐑪𐑑 𐑞𐑦𐑕 𐑒𐑰 𐑦𐑟 𐑓𐑹.</i>"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-generate.xml.h:3
+msgid ""
+"A Secure Shell (SSH) key lets you connect securely to trusted computers using "
+"SSH, without entering a different password for each of them."
+msgstr ""
+"𐑩 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 (SSH) 𐑒𐑰 𐑤𐑧𐑑𐑕 𐑿 𐑒𐑩𐑯𐑧𐑒𐑑 𐑕𐑦𐑒𐑘𐑫𐑼𐑤𐑦 𐑑 𐑑𐑮𐑳𐑕𐑑𐑩𐑛 𐑒𐑩𐑥𐑐𐑿𐑑𐑼𐑟 𐑿𐑟𐑦𐑙 SSH, "
+"𐑢𐑦𐑞𐑬𐑑 𐑧𐑯𐑑𐑼𐑦𐑙 𐑩 𐑛𐑦𐑓𐑼𐑩𐑯𐑑 𐑐𐑭𐑕𐑢𐑼𐑛 𐑓𐑹 𐑰𐑗 𐑝 𐑞𐑧𐑥."
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-generate.xml.h:4
+msgid "DSA"
+msgstr "DSA"
 
 #: ../ssh/seahorse-ssh-generate.xml.h:6
 msgid ""
@@ -2251,6 +2984,21 @@ msgstr "𐑐𐑮𐑲𐑝𐑩𐑑 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰"
 msgid "Public Secure Shell Key"
 msgstr "𐑐𐑳𐑚𐑤𐑦𐑒 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰"
 
+#, fuzzy
+#: ../ssh/seahorse-ssh-key-properties.c:71
+msgid "Couldn't rename key."
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑮𐑰𐑯𐑱𐑥 𐑒𐑰."
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-key-properties.c:112
+msgid "Couldn't change authorization for key."
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑗𐑱𐑯𐑡 𐑷𐑔𐑼𐑦𐑟𐑱𐑖𐑩𐑯 𐑓𐑹 𐑒𐑰."
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-key-properties.c:127
+msgid "Couldn't change passphrase for key."
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑗𐑱𐑯𐑡 passphrase 𐑓𐑹 𐑒𐑰."
+
 #: ../ssh/seahorse-ssh-key-properties.xml.h:1
 msgid "<b>Algorithm:</b>"
 msgstr "<b>𐑨𐑤𐑜𐑻𐑦𐑞𐑩𐑥:</b>"
@@ -2271,10 +3019,15 @@ msgstr "<b>𐑕𐑑𐑮𐑧𐑙𐑔:</b>"
 msgid "<b>Trust</b>"
 msgstr "<b>𐑑𐑮𐑳𐑕𐑑</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:13
 #, no-c-format
+#: ../ssh/seahorse-ssh-key-properties.xml.h:13
 msgid "<i>This only applies to the '%s'</i> account."
 msgstr "<i>𐑞𐑦𐑕 𐑴𐑯𐑤𐑦 𐑩𐑐𐑤𐑲𐑟 𐑑 𐑞 '%s'</i> 𐑩𐑒𐑬𐑯𐑑."
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-key-properties.xml.h:16
+msgid "E_xport Complete Key"
+msgstr "E_xport 𐑒𐑩𐑥𐑐𐑤𐑰𐑑 𐑒𐑰"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:20
 msgid "The owner of this key is _authorized to connect to this computer"
@@ -2284,28 +3037,110 @@ msgstr "𐑞 𐑴𐑯𐑼 𐑝 𐑞𐑦𐑕 𐑒𐑰 𐑦𐑟 _𐑪𐑔𐑻𐑲�
 msgid "Used to connect to other computers."
 msgstr "𐑿𐑕𐑑 𐑑 𐑒𐑩𐑯𐑧𐑒𐑑 𐑑 𐑳𐑞𐑼 𐑒𐑩𐑥𐑐𐑿𐑑𐑼𐑟."
 
+#, c-format
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:143 ../ssh/seahorse-ssh-operation.c:732
+msgid "The SSH command was terminated unexpectedly."
+msgstr "𐑞 SSH 𐑒𐑩𐑥𐑭𐑯𐑛 𐑢𐑪𐑟 𐑑𐑻𐑥𐑩𐑯𐑱𐑑𐑩𐑛 𐑩𐑯𐑦𐑒𐑕𐑐𐑧𐑒𐑑𐑦𐑛𐑤𐑰."
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:151 ../ssh/seahorse-ssh-operation.c:739
+msgid "The SSH command failed."
+msgstr "𐑞 SSH 𐑒𐑩𐑥𐑭𐑯𐑛 𐑓𐑱𐑤𐑛."
+
 #: ../ssh/seahorse-ssh-operation.c:445 ../ssh/seahorse-ssh-operation.c:477
 msgid "Secure Shell key"
 msgstr "𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:448
+msgid "Passphrase:"
+msgstr "Passphrase:"
 
 #. Just prompt over and over again
 #: ../ssh/seahorse-ssh-operation.c:762
 msgid "Remote Host Password"
 msgstr "𐑮𐑦𐑥𐑴𐑑 𐑣𐑴𐑕𐑑 𐑐𐑭𐑕𐑢𐑼𐑛"
 
-#: ../ssh/seahorse-ssh-operation.c:1013
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:850
+msgid "Old Key Passphrase"
+msgstr "𐑴𐑤𐑛 𐑒𐑰 Passphrase"
+
 #, c-format
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:851
+msgid "Enter the old passphrase for: %s"
+msgstr "𐑧𐑯𐑑𐑼 𐑞 𐑴𐑤𐑛 passphrase 𐑓𐑹: %s"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:855
+msgid "New Key Passphrase"
+msgstr "𐑯𐑿 𐑒𐑰 Passphrase"
+
+#, c-format
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:856
+msgid "Enter the new passphrase for: %s"
+msgstr "𐑧𐑯𐑑𐑼 𐑞 𐑯𐑿 passphrase 𐑓𐑹: %s"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:864
+msgid "Enter Key Passphrase"
+msgstr "𐑧𐑯𐑑𐑼 𐑒𐑰 Passphrase"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:931
+msgid "Passphrase for New Secure Shell Key"
+msgstr "Passphrase 𐑓𐑹 𐑯𐑿 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:932
+msgid "Enter a passphrase for your new Secure Shell key."
+msgstr "𐑧𐑯𐑑𐑼 𐑩 passphrase 𐑓𐑹 𐑿𐑼 𐑯𐑿 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰."
+
+#, c-format
+#: ../ssh/seahorse-ssh-operation.c:1013
 msgid "Importing key: %s"
 msgstr "𐑦𐑥𐑐𐑹𐑑𐑦𐑙 𐑒𐑰: %s"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-operation.c:1015
+msgid "Importing key. Enter passphrase"
+msgstr "𐑦𐑥𐑐𐑹𐑑𐑦𐑙 𐑒𐑰. 𐑧𐑯𐑑𐑼 passphrase"
 
 #: ../ssh/seahorse-ssh-source.c:825
 msgid "No private key file is available for this key."
 msgstr "𐑯𐑴 𐑐𐑮𐑲𐑝𐑩𐑑 𐑒𐑰 𐑓𐑲𐑤 𐑦𐑟 𐑩𐑝𐑱𐑤𐑩𐑚𐑩𐑤 𐑓𐑹 𐑞𐑦𐑕 𐑒𐑰."
 
+#, fuzzy
+#: ../ssh/seahorse-ssh-upload.c:45
+msgid "Couldn't configure Secure Shell keys on remote computer."
+msgstr "𐑒𐑫𐑛𐑯𐑑 𐑒𐑩𐑯𐑓𐑦𐑜𐑘𐑼 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰𐑟 𐑪𐑯 𐑮𐑦𐑥𐑴𐑑 𐑒𐑩𐑥𐑐𐑿𐑑𐑼."
+
 #. Show the progress window if necessary
 #: ../ssh/seahorse-ssh-upload.c:181
 msgid "Configuring Secure Shell Keys..."
 msgstr "𐑒𐑩𐑯𐑓𐑦𐑜𐑘𐑼𐑦𐑙 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰𐑟..."
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-upload.xml.h:1
+msgid "<i>eg: fileserver.example.com:port</i>"
+msgstr "<𐑲>eg: fileserver.𐑦𐑜𐑟𐑭𐑥𐑐𐑩𐑤.𐑒𐑪𐑥:𐑐𐑹𐑑</𐑲>"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-upload.xml.h:2
+msgid "Set Up Computer for SSH Connection"
+msgstr "𐑕𐑧𐑑 𐑳𐑐 𐑒𐑩𐑥𐑐𐑿𐑑𐑼 𐑓𐑹 SSH 𐑒𐑩𐑯𐑧𐑒𐑖𐑩𐑯"
+
+#, fuzzy
+#: ../ssh/seahorse-ssh-upload.xml.h:4
+msgid ""
+"To use your Secure Shell key with another computer that uses SSH, you must "
+"already have a login account on that computer."
+msgstr ""
+"𐑑 𐑿𐑕 𐑿𐑼 𐑕𐑦𐑒𐑘𐑫𐑼 𐑖𐑧𐑤 𐑒𐑰 𐑢𐑦𐑞 𐑩𐑯𐑳𐑞𐑼 𐑒𐑩𐑥𐑐𐑿𐑑𐑼 𐑞𐑨𐑑 𐑿𐑕𐑩𐑟 SSH, 𐑿 𐑥𐑳𐑕𐑑 𐑷𐑤𐑮𐑧𐑛𐑦 𐑣𐑨𐑝 𐑩 "
+"𐑤𐑪𐑜𐑦𐑯 𐑩𐑒𐑬𐑯𐑑 𐑪𐑯 𐑞𐑨𐑑 𐑒𐑩𐑥𐑐𐑿𐑑𐑼."
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
 msgid "_Computer Name:"
@@ -2318,3 +3153,4 @@ msgstr "_𐑤𐑪𐑜𐑦𐑯 𐑯𐑱𐑥:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_𐑕𐑧𐑑 𐑳𐑐"
+
