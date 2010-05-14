@@ -441,12 +441,18 @@ if test "$enable_pkcs11" = "no"; then
 	echo "disabling pkcs11 support"
 	enable_pkcs11="no"
 else
-	PKG_CHECK_MODULES(GP11, gp11-0 >= 2.29.4 gcr-0 >= 2.25.5, enable_pkcs11="yes", enable_pkcs11="no")
-	if test "$enable_pkcs11" = "yes"; then
-		AC_DEFINE(WITH_PKCS11, 1, [gp11 library available])
+	PKG_CHECK_MODULES(GCR, gcr-0 >= 2.25.5, gcr_is_present="yes", gcr_is_present="no")
+    if test "$gcr_is_present" = "no"; then
+	    echo "disabling pkcs11 support"
+    fi
+	PKG_CHECK_MODULES(GP11, gp11-0 >= 2.29.4, enable_pkcs11="yes", enable_pkcs11="no")
+	if test "$enable_pkcs11" = "yes" && test "$gcr_is_present" = "yes"; then
+	    AC_DEFINE(WITH_PKCS11, 1, [gp11 library available])
 		SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GP11_CFLAGS"
 		SEAHORSE_LIBS="$SEAHORSE_LIBS $GP11_LIBS"
-	fi
+    else
+        enable_pkcs11="no"
+    fi
 fi
 
 AM_CONDITIONAL(WITH_PKCS11, test "$enable_pkcs11" = "yes")
