@@ -75,7 +75,7 @@ seahorse_pkcs11_commands_show_properties (SeahorseCommands *cmds, SeahorseObject
 	previous = g_object_get_qdata (G_OBJECT (object), slot_certificate_window);
 	if (GTK_IS_WINDOW (previous)) {
 		window = GTK_WINDOW (previous);
-		if (GTK_WIDGET_VISIBLE (window)) {
+		if (gtk_widget_get_visible (GTK_WIDGET (window))) {
 			gtk_window_present (window);
 			return;
 		}
