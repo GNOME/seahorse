@@ -25,10 +25,22 @@
 /* -----------------------------------------------------------------------------
  *  GENERIC PROGRESS BAR HANDLING 
  */
- 
+
+/**
+ * SECTION:seahorse-progress
+ * @short_description: Progress bar handling
+ *
+ **/
+
 static void     disconnect_progress     (SeahorseWidget *widget, SeahorseOperation *op);
- 
-/* Called to keep the progress bar cycle when we're in pulse mode */
+
+/**
+* progress: The progress bar to pulse
+*
+* Called to pulse the progress bar when we're in pulse mode
+*
+* Returns TRUE if the bar pulsed
+**/
 static gboolean
 pulse_timer (GtkProgressBar *progress)
 {
@@ -42,6 +54,12 @@ pulse_timer (GtkProgressBar *progress)
     return FALSE;
 }
 
+/**
+* progress: The progress bar to init
+*
+* Inits the progress bar and sets a timer function.
+*
+**/
 static void
 start_pulse (GtkProgressBar *progress)
 {
@@ -59,6 +77,12 @@ start_pulse (GtkProgressBar *progress)
     }   
 }
 
+/**
+* progress: The progress bar
+*
+* Stops progress bar pulsing
+*
+**/
 static void
 stop_pulse (GtkProgressBar *progress)
 {
@@ -68,9 +92,18 @@ stop_pulse (GtkProgressBar *progress)
     g_object_set_data (G_OBJECT (progress), "pulse-timer", NULL);
 }
 
-/* This gets called whenever an operation updates it's progress status thingy.
- * We update the appbar as appropriate. If operation != NULL then we only 
- * display the latest operation in our special list  */
+
+/**
+* operation: The operation to process
+* message: The message that will be pushed to the status bar
+* fract: The fraction of the progress bar to fill
+* swidget: The SeahorseWidget to extract the gtk widgets from
+*
+* This gets called whenever an operation updates it's progress status thingy.
+* We update the appbar as appropriate. If operation != NULL then we only
+* display the latest operation in our special list
+*
+**/
 static void
 operation_progress (SeahorseOperation *operation, const gchar *message, 
                     gdouble fract, SeahorseWidget *swidget)
@@ -104,6 +137,14 @@ operation_progress (SeahorseOperation *operation, const gchar *message,
     }
 }
 
+/**
+* operation: The finished operation
+* swidget: The SeahorseWidget to get the progress bar from
+*
+* Handles the progress bar display of finished operations.
+* If there is an error in the operation, it will be displayed.
+*
+**/
 static void
 operation_done (SeahorseOperation *operation, SeahorseWidget *swidget)
 {
@@ -123,6 +164,14 @@ operation_done (SeahorseOperation *operation, SeahorseWidget *swidget)
     g_object_set_data (G_OBJECT (swidget), "operation", NULL);
 }
 
+/**
+* widget: SeahorseWidget that is used for display
+* op: SeahorseOperation to disconnect
+*
+* Disconnect the operation_progress and the operation_done functions from the
+* operation
+*
+**/
 static void
 disconnect_progress (SeahorseWidget *widget, SeahorseOperation *op)
 {
@@ -130,6 +179,14 @@ disconnect_progress (SeahorseWidget *widget, SeahorseOperation *op)
     g_signal_handlers_disconnect_by_func (op, operation_done, widget);
 }
 
+/**
+ * seahorse_progress_status_set_operation:
+ * @swidget: The SeahorseWidget to add the operation to
+ * @operation: The operation to add
+ *
+ * Adds the operation to the widget.
+ *
+ */
 void 
 seahorse_progress_status_set_operation (SeahorseWidget *swidget, 
                                         SeahorseOperation *operation)
@@ -179,6 +236,14 @@ seahorse_progress_status_set_operation (SeahorseWidget *swidget,
     g_signal_connect (operation, "progress", G_CALLBACK (operation_progress), swidget);
 }
 
+/**
+ * seahorse_progress_status_get_operation:
+ * @swidget: The SeahorseWidget to extract the operation from
+ *
+ *
+ *
+ * Returns: The operation stored in the widget
+ */
 SeahorseOperation*
 seahorse_progress_status_get_operation (SeahorseWidget *swidget)
 {
@@ -189,6 +254,15 @@ seahorse_progress_status_get_operation (SeahorseWidget *swidget)
  *  PROGRESS WINDOWS 
  */
 
+/**
+* operation: The SeahorseOperation to use
+* message: An optional message to display
+* fract: The fraction finished
+* swidget: the SeahorseWidget to get the widgets from
+*
+* Progress window update. Similar to operation_progress
+*
+**/
 static void
 progress_operation_update (SeahorseOperation *operation, const gchar *message, 
                            gdouble fract, SeahorseWidget *swidget)
@@ -214,6 +288,14 @@ progress_operation_update (SeahorseOperation *operation, const gchar *message,
     }
 }
 
+/**
+ * on_progress_operation_cancel:
+ * @button: ignored
+ * @operation: The operation to cancel
+ *
+ * Cancels an operation
+ *
+ */
 G_MODULE_EXPORT void
 on_progress_operation_cancel (GtkButton *button, SeahorseOperation *operation)
 {
@@ -221,12 +303,28 @@ on_progress_operation_cancel (GtkButton *button, SeahorseOperation *operation)
         seahorse_operation_cancel (operation);
 }
 
+/**
+* operation: ignored
+* swidget: The SeahorseWidget to destroy
+*
+* Cleans up after the operation is done
+*
+**/
 static void
 progress_operation_done (SeahorseOperation *operation, SeahorseWidget *swidget)
 {
     seahorse_widget_destroy (swidget);
 }
 
+/**
+* widget:
+* event: ignored
+* operation: The operation
+*
+* Closing the windows cancels the operation
+*
+* Returns TRUE
+**/
 static int
 progress_delete_event (GtkWidget *widget, GdkEvent *event, 
                        SeahorseOperation *operation)
@@ -238,6 +336,13 @@ progress_delete_event (GtkWidget *widget, GdkEvent *event,
     return TRUE;
 }
 
+/**
+* swidget: The SeahorseWidget relevant
+* operation: The operation to disconnect handlers from
+*
+* Disconnects the handlers from the functions
+*
+**/
 static void        
 progress_destroy (SeahorseWidget *swidget, SeahorseOperation *operation)
 {
@@ -250,6 +355,13 @@ progress_destroy (SeahorseWidget *swidget, SeahorseOperation *operation)
     g_signal_handlers_disconnect_by_func (operation, operation_progress, swidget);
 }
 
+/**
+* operation: The operation to create a new progress window for
+*
+* Creates a new progress window and adds the operation to it.
+*
+* Returns FALSE
+**/
 static gboolean
 progress_show (SeahorseOperation *operation)
 {
@@ -309,6 +421,15 @@ progress_show (SeahorseOperation *operation)
     return FALSE;
 }
 
+/**
+ * seahorse_progress_show:
+ * @operation: The operation to create a progress window for
+ * @title: Optional title of this window
+ * @delayed: TRUE: wait 1 second before displaying the window
+ *
+ * Displays a progress window and adds an operation to it.
+ *
+ */
 void
 seahorse_progress_show (SeahorseOperation *operation, const gchar *title, 
                         gboolean delayed)
