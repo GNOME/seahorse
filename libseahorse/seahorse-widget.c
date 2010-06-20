@@ -268,7 +268,6 @@ object_set_property (GObject *object, guint prop_id, const GValue *value, GParam
         gtk_builder_connect_signals (swidget->gtkbuilder, swidget);
         
         w = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
-		GTK_WIDGET_SET_FLAGS (GTK_WINDOW (w), GTK_TOPLEVEL);
         /*TODO: glade_xml_ensure_accel (swidget->gtkbuilder);*/
         
         gtk_window_set_icon_name (GTK_WINDOW (w), "seahorse");
