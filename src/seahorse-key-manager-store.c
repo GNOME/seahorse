@@ -25,6 +25,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include "seahorse-gconf.h"
@@ -402,12 +403,25 @@ append_text_column (SeahorseKeyManagerStore *skstore, GtkTreeView *view,
 static char *
 xds_get_atom_value (GdkDragContext *context)
 {
+  	#if GTK_CHECK_VERSION (2,22,0)
+        GdkWindow *source_window;
+    #endif
 	char *ret;
 
 	g_return_val_if_fail (context != NULL, NULL);
-	g_return_val_if_fail (context->source_window != NULL, NULL);
-
-	if (gdk_property_get (context->source_window,
+	
+	#if GTK_CHECK_VERSION (2,22,0)
+	    source_window = gdk_drag_context_get_source_window (context);
+	    g_return_val_if_fail (source_window != NULL, NULL);
+	#else
+	    g_return_val_if_fail (context->source_window != NULL, NULL);
+    #endif
+    
+    #if GTK_CHECK_VERSION (2,22,0)
+        if (gdk_property_get (source_window,
+    #else
+	    if (gdk_property_get (context->source_window,
+    #endif
 			      XDS_ATOM, TEXT_ATOM,
 			      0, MAX_XDS_ATOM_VAL_LEN,
 			      FALSE, NULL, NULL, NULL,
@@ -420,7 +434,15 @@ xds_get_atom_value (GdkDragContext *context)
 static gboolean
 xds_context_offers_target (GdkDragContext *context, GdkAtom target)
 {
-	return (g_list_find (context->targets, target) != NULL);
+    #if GTK_CHECK_VERSION (2,22,0)
+        GList *targets;
+
+    	targets = gdk_drag_context_list_targets (context);
+
+    	return (g_list_find (targets, target) != NULL);
+    #else
+	    return (g_list_find (context->targets, target) != NULL);
+    #endif
 }
 
 static gboolean
@@ -446,6 +468,10 @@ static gboolean
 drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore *skstore)
 {
 	GtkTreeView *view = GTK_TREE_VIEW (widget);
+	
+	#if GTK_CHECK_VERSION (2,22,0)
+        GdkWindow *source_window;
+    #endif
     
 	DBG_PRINT (("drag_begin -->\n"));
 
@@ -456,10 +482,20 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore 
 	
 	g_list_free (skstore->priv->drag_objects);
 	skstore->priv->drag_objects = seahorse_key_manager_store_get_selected_objects (view);
-	if (skstore->priv->drag_objects)
-		gdk_property_change (context->source_window, XDS_ATOM, TEXT_ATOM, 
+	
+    #if GTK_CHECK_VERSION (2,22,0)
+        if (skstore->priv->drag_objects) {
+		    source_window = gdk_drag_context_get_source_window (context);
+		    gdk_property_change (source_window, XDS_ATOM, TEXT_ATOM,
+    #else
+	    if (skstore->priv->drag_objects)
+		    gdk_property_change (context->source_window, XDS_ATOM, TEXT_ATOM, 
+	#endif
 		                     8, GDK_PROP_MODE_REPLACE, (guchar*)XDS_FILENAME,
 		                     strlen (XDS_FILENAME));
+    #if GTK_CHECK_VERSION (2,22,0)
+        }
+    #endif
 	
 	DBG_PRINT (("drag_begin <--\n"));
 	return skstore->priv->drag_objects ? TRUE : FALSE;
