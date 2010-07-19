@@ -36,9 +36,11 @@
 #include "seahorse-source.h"
 #include "seahorse-util.h"
 
-#include "../pgp/seahorse-pgp.h"
-#include "../pgp/seahorse-gpgme-source.h"
-#include "../pgp/seahorse-gpgme-key-op.h"
+#if WITH_PGP
+    #include "../pgp/seahorse-pgp.h"
+    #include "../pgp/seahorse-gpgme-source.h"
+    #include "../pgp/seahorse-gpgme-key-op.h"
+#endif
 
 #include <gio/gio.h>
 
@@ -194,43 +196,51 @@ seahorse_service_generate_credentials (SeahorseService *svc, gchar *ktype,
     gchar   *comment=NULL;
     SeahorseWidget *swidget;
 
-    sksrc = seahorse_context_find_source (seahorse_context_for_app (),
-                                          SEAHORSE_PGP_TYPE,
-                                          SEAHORSE_LOCATION_LOCAL);
-    g_return_val_if_fail (sksrc != NULL, FALSE);
+    #if WITH_PGP
+        sksrc = seahorse_context_find_source (seahorse_context_for_app (),
+                                              SEAHORSE_PGP_TYPE,
+                                              SEAHORSE_LOCATION_LOCAL);
+        g_return_val_if_fail (sksrc != NULL, FALSE);
 
-    pval = &val;
+        pval = &val;
 
-    if (g_strcmp0 (ktype,"openpgp")==0) {
-        pval = (GValue *)g_hash_table_lookup (values,"name");
-        if ((pval) && (G_VALUE_TYPE (pval) == G_TYPE_STRING))
-            name=g_value_dup_string (pval);
+        if (g_strcmp0 (ktype,"openpgp")==0) {
+            
+                pval = (GValue *)g_hash_table_lookup (values,"name");
+                if ((pval) && (G_VALUE_TYPE (pval) == G_TYPE_STRING))
+                    name=g_value_dup_string (pval);
 
-        pval = g_hash_table_lookup (values,"email");
-        if ((pval) && (G_VALUE_TYPE (pval) == G_TYPE_STRING))
-            email=g_value_dup_string (pval);
+                pval = g_hash_table_lookup (values,"email");
+                if ((pval) && (G_VALUE_TYPE (pval) == G_TYPE_STRING))
+                    email=g_value_dup_string (pval);
 
-        pval = g_hash_table_lookup (values,"comment");
-        if ((pval) && (G_VALUE_TYPE (pval) == G_TYPE_STRING))
-            comment=g_value_dup_string (pval);
+                pval = g_hash_table_lookup (values,"comment");
+                if ((pval) && (G_VALUE_TYPE (pval) == G_TYPE_STRING))
+                    comment=g_value_dup_string (pval);
 
-        seahorse_gpgme_generate_key(sksrc, name, email, comment,
-                        DSA_ELGAMAL, 2048,0);
+                seahorse_gpgme_generate_key(sksrc, name, email, comment,
+                                DSA_ELGAMAL, 2048,0);
 
-        g_free (name);
-        name = NULL;
-        g_free (email);
-        email = NULL;
-        g_free (comment);
-        comment = NULL;
-    }
-    else {
+                g_free (name);
+                name = NULL;
+                g_free (email);
+                email = NULL;
+                g_free (comment);
+                comment = NULL;
+            
+        }
+        else {
+            g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
+                         _("This keytype is not supported: %s"), ktype);
+            return FALSE;
+        }
+
+        return TRUE;
+    #else
         g_set_error (error, SEAHORSE_DBUS_ERROR, SEAHORSE_DBUS_ERROR_INVALID,
-                     _("This keytype is not supported: %s"), ktype);
+                 _("Support for this feature was not enabled at build time"), NULL);
         return FALSE;
-    }
-
-    return TRUE;
+    #endif
 }
 
 
