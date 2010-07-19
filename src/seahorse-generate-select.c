@@ -141,7 +141,7 @@ seahorse_generate_select_constructor (GType type, guint n_props, GObjectConstruc
 	g_return_val_if_fail (self->pv->view, NULL);
 	
 	pixcell = gtk_cell_renderer_pixbuf_new ();
-	g_object_set (pixcell, "stock-size", GTK_ICON_SIZE_DIALOG, NULL);
+	g_object_set (pixcell, "stock-size", GTK_ICON_SIZE_DND, NULL);
 	gtk_tree_view_insert_column_with_attributes (self->pv->view, -1, "", pixcell, "stock-id", COLUMN_ICON, NULL);
 	gtk_tree_view_insert_column_with_attributes (self->pv->view, -1, "", gtk_cell_renderer_text_new (), "markup", COLUMN_TEXT, NULL);
 	gtk_tree_view_set_model (self->pv->view, GTK_TREE_MODEL (self->pv->store));
