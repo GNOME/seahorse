@@ -448,8 +448,8 @@ else
 	PKG_CHECK_MODULES(GP11, gp11-0 >= 2.29.4, enable_pkcs11="yes", enable_pkcs11="no")
 	if test "$enable_pkcs11" = "yes" && test "$gcr_is_present" = "yes"; then
 	    AC_DEFINE(WITH_PKCS11, 1, [gp11 library available])
-		SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GP11_CFLAGS"
-		SEAHORSE_LIBS="$SEAHORSE_LIBS $GP11_LIBS"
+		SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GP11_CFLAGS $GCR_CFLAGS"
+		SEAHORSE_LIBS="$SEAHORSE_LIBS $GP11_LIBS $GCR_LIBS"
     else
         enable_pkcs11="no"
     fi
