@@ -4,7 +4,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Dr.T.Vasudevan <agnihot3@gmail.com>, 2007, 2008, 2009.
+# Dr.T.Vasudevan <agnihot3@gmail.com>, 2007, 2008, 2009, 2010.
 # I felix <ifelix@redhat.com>, 2007.
 # I. Felix <ifelix@redhat.com>, 2008, 2009.
 # Dr.T.vasudevan <agnihot3@gmail.com>, 2009.
@@ -13,10 +13,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-18 10:16+0530\n"
-"PO-Revision-Date: 2010-02-18 10:20+0530\n"
-"Last-Translator: Dr,T,Vasudevan <agnihot3@gmail.com>\n"
-"Language-Team: Tamil <Ubuntu-l10n-tam@lists.ubuntu.com>>\n"
+"POT-Creation-Date: 2010-07-24 20:00+0530\n"
+"PO-Revision-Date: 2010-07-24 20:01+0530\n"
+"Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
+"Language-Team: Tamil <<Ubuntu-l10n-tam@lists.ubuntu.com>>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,7 +25,7 @@ msgstr ""
 "\n"
 "\n"
 "\n"
-"X-Generator: Lokalize 0.3\n"
+"X-Generator: Lokalize 1.0\n"
 
 #: ../daemon/seahorse-daemon.c:69
 msgid "Do not run seahorse-daemon as a daemon"
@@ -43,16 +43,22 @@ msgstr "புதிய செயல்பாட்டு குழுவை உ
 msgid "Encryption Daemon (Seahorse)"
 msgstr "மறையாக்க கிங்கரன் (சீஹார்ஸ்)"
 
-#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
+#: ../daemon/seahorse-service.c:163 ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "செல்லுபடியாகாத அல்லது அடையாளம் தெரியாத விசை வகை: %s"
 
-#: ../daemon/seahorse-service.c:229, c-format
+#: ../daemon/seahorse-service.c:234
+#, c-format
 msgid "This keytype is not supported: %s"
 msgstr "இந்த விசை வகைக்கு ஆதரவு இல்லை: %s"
 
-#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service.c:241
+#, c-format
+msgid "Support for this feature was not enabled at build time"
+msgstr "இந்த செயலுக்கு ஆதரவு கட்டுமானம் ஆகும்போது செயலாக்கப்படவில்லை."
+
+#: ../daemon/seahorse-service.c:341 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -752,14 +758,14 @@ msgstr "_S செய்தியை இப்படி கையொப்பம�
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:140
 #: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:829
+#: ../src/seahorse-key-manager-store.c:865
 msgid "Name"
 msgstr "பெயர்"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
 #: ../pgp/seahorse-pgp-key-properties.c:1745
-#: ../src/seahorse-key-manager-store.c:841
+#: ../src/seahorse-key-manager-store.c:877
 msgid "Key ID"
 msgstr "விசை அடையாளம்"
 
@@ -948,7 +954,7 @@ msgstr "தேதியை தேர்ந்தெடு"
 msgid "Select the date from a calendar"
 msgstr "தேதியை ஒரு நாள்காட்டியிலிருந்து தேர்ந்தெடு"
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2192
+#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2194
 msgid "Time"
 msgstr "நேரம்"
 
@@ -971,13 +977,13 @@ msgstr "நேரத்தை ஒரு பட்டியலில் இரு
 msgid "24hr: no"
 msgstr "24hr: இல்லை"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1253
-#: ../libegg/egg-datetime.c:1257
+#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1255
+#: ../libegg/egg-datetime.c:1259
 msgid "AM"
 msgstr "முற்பகல்"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1254
-#: ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1256
+#: ../libegg/egg-datetime.c:1263
 msgid "PM"
 msgstr "பிற்பகல்"
 
@@ -1007,13 +1013,13 @@ msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1169
+#: ../libegg/egg-datetime.c:1171
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1234
+#: ../libegg/egg-datetime.c:1236
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -1336,7 +1342,7 @@ msgstr "இயலுமை நீக்கிய"
 msgid "Revoked"
 msgstr "ரத்து செய்யப்பட்டது"
 
-#: ../libseahorse/seahorse-widget.c:464
+#: ../libseahorse/seahorse-widget.c:463
 #, c-format
 msgid "Could not display help: %s"
 msgstr "உதவியைக் காட்ட முடியவில்லை: %s"
@@ -1413,28 +1419,28 @@ msgstr "விசையை இரத்து செய்க"
 msgid "_Never expires"
 msgstr "_N ஒரு போதும் காலாவதி ஆகாது"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:144
+#: ../pgp/seahorse-gpgme-add-subkey.c:147
 msgid "Couldn't add subkey"
 msgstr "துணை விசையை சேர்க்க முடியவில்லை"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:163
+#: ../pgp/seahorse-gpgme-add-subkey.c:166
 #, c-format
 msgid "Add subkey to %s"
 msgstr "%s க்கு துணை விசையை சேர்க்கவும்"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:179 ../pgp/seahorse-gpgme-generate.c:117
+#: ../pgp/seahorse-gpgme-add-subkey.c:182 ../pgp/seahorse-gpgme-generate.c:117
 msgid "DSA (sign only)"
 msgstr "டிஎஸ்ஏ(DSA) (கையெழுத்திட மட்டும்)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:187
+#: ../pgp/seahorse-gpgme-add-subkey.c:190
 msgid "ElGamal (encrypt only)"
 msgstr "எல் காமல் (மறையாக்கம் மட்டும்)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:193 ../pgp/seahorse-gpgme-generate.c:118
+#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:118
 msgid "RSA (sign only)"
 msgstr "ஆர்எஸ்ஏ(RSA) (கையெழுத்திட மட்டும்)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:199
+#: ../pgp/seahorse-gpgme-add-subkey.c:202
 msgid "RSA (encrypt only)"
 msgstr "ஆர்எஸ்ஏ(RSA) (மறையாக்கம் மட்டும்)"
 
@@ -1692,41 +1698,41 @@ msgstr "விசைகளை ஏற்றுமதி செய்கிறத�
 msgid "ElGamal"
 msgstr "எல் காமல்"
 
-#: ../pgp/seahorse-hkp-source.c:330
+#: ../pgp/seahorse-hkp-source.c:387
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "தேடல் குறிப்பாக இல்லை. சேவையகம் '%s'  இல் பல விசைகள் உள்ளன."
 
-#: ../pgp/seahorse-hkp-source.c:332
+#: ../pgp/seahorse-hkp-source.c:389
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "சேவையகம் '%s' உடன் தொடர்பு கொள்ள முடியவில்லை:%s"
 
-#: ../pgp/seahorse-hkp-source.c:576
+#: ../pgp/seahorse-hkp-source.c:671
 msgid "Searching for keys..."
 msgstr "விசைகளுக்கு தேடுகிறது..."
 
-#: ../pgp/seahorse-hkp-source.c:647
+#: ../pgp/seahorse-hkp-source.c:759
 msgid "Uploading keys..."
 msgstr "விசைகளை மேலேற்றுகிறது..."
 
-#: ../pgp/seahorse-hkp-source.c:725
+#: ../pgp/seahorse-hkp-source.c:857
 msgid "Retrieving keys..."
 msgstr "விசைகளை மீட்டெடுக்கிறது..."
 
-#: ../pgp/seahorse-hkp-source.c:831
+#: ../pgp/seahorse-hkp-source.c:987
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "விசைகளை இங்கு தேடுகிறது: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:908 ../pgp/seahorse-hkp-source.c:981
+#: ../pgp/seahorse-hkp-source.c:1072 ../pgp/seahorse-hkp-source.c:1154
 #: ../pgp/seahorse-ldap-source.c:668
 #, c-format
 msgid "Connecting to: %s"
 msgstr "%s க்கு இணைக்கிறது"
 
-#: ../pgp/seahorse-hkp-source.c:1005
+#: ../pgp/seahorse-hkp-source.c:1184
 msgid "HTTP Key Server"
 msgstr "HTTP விசை சேவகன்"
 
@@ -1933,7 +1939,7 @@ msgstr "ஒரு போதும் இல்லை"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1317
-#: ../src/seahorse-key-manager-store.c:860
+#: ../src/seahorse-key-manager-store.c:896
 msgid "Type"
 msgstr "வகை"
 
@@ -2190,7 +2196,7 @@ msgstr "விளிம்பில்"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:854
+#: ../src/seahorse-key-manager-store.c:890
 msgid "Trust"
 msgstr "நம்பு"
 
@@ -2527,16 +2533,16 @@ msgstr "_I இறக்குமதி செய்"
 msgid "_Passwords"
 msgstr "_P கடவுச்சொற்கள்"
 
-#: ../src/seahorse-key-manager-store.c:649 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:282
 msgid "Couldn't export keys"
 msgstr "விசைகளை ஏற்றுமதி செய்ய முடியவில்லை"
 
-#: ../src/seahorse-key-manager-store.c:847
+#: ../src/seahorse-key-manager-store.c:883
 msgid "Validity"
 msgstr "செல்லுபடி"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:866
+#: ../src/seahorse-key-manager-store.c:902
 msgid "Expiration Date"
 msgstr "காலாவதி தேதி"
 
