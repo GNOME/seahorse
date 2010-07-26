@@ -6,13 +6,14 @@
 # Copyright (C) 2002, 2003.
 # This file is distributed under the same license as the Seahorse package.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&component=general\n"
-"POT-Creation-Date: 2010-03-30 23:13+0000\n"
-"PO-Revision-Date: 2010-03-31 17:47+0200\n"
+"POT-Creation-Date: 2010-07-19 20:50+0000\n"
+"PO-Revision-Date: 2010-07-26 21:22+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -37,17 +38,23 @@ msgstr "no se pudo crear un grupo de proceso nuevo"
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Demonio de cifrado (Seahorse)"
 
-#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
+#: ../daemon/seahorse-service.c:163 ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Tipo de clave inválida o no reconocida: %s"
 
-#: ../daemon/seahorse-service.c:229
+#: ../daemon/seahorse-service.c:234
 #, c-format
 msgid "This keytype is not supported: %s"
 msgstr "No se soporta este tipo de clave: %s"
 
-#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service.c:241
+#, c-format
+msgid "Support for this feature was not enabled at build time"
+msgstr ""
+"No se activó el soporte para esta característica al construir la aplicación"
+
+#: ../daemon/seahorse-service.c:341 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -249,9 +256,6 @@ msgid "ID of the default key"
 msgstr "ID de la clave predeterminada"
 
 #: ../data/seahorse.schemas.in.h:11
-#| msgid ""
-#| "If!set to true, then files encrypted with seahorse will be ASCII armor "
-#| "encoded."
 msgid ""
 "If set to true, then files encrypted with seahorse will be ASCII armor "
 "encoded."
@@ -284,7 +288,6 @@ msgid "PGP Key servers"
 msgstr "Servidores de claves PGP"
 
 #: ../data/seahorse.schemas.in.h:17
-#| msgid "Publish keys uo this key server."
 msgid "Publish keys to this key server."
 msgstr "Publicar claves en este servidor de claves."
 
@@ -382,7 +385,6 @@ msgid "Whether to always encrypt to default key"
 msgstr "Indica si se debe cifrar siempre con la clave predeterminada"
 
 #: ../data/seahorse.schemas.in.h:34
-#| msgid "Whe|her to use ASCII Armor"
 msgid "Whether to use ASCII Armor"
 msgstr "Indica si se debe usar armadura ASCII"
 
@@ -780,14 +782,14 @@ msgstr "_Firmar mensaje como:"
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:140
 #: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:829
+#: ../src/seahorse-key-manager-store.c:865
 msgid "Name"
 msgstr "Nombre"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
 #: ../pgp/seahorse-pgp-key-properties.c:1745
-#: ../src/seahorse-key-manager-store.c:841
+#: ../src/seahorse-key-manager-store.c:877
 msgid "Key ID"
 msgstr "Identificador"
 
@@ -976,7 +978,7 @@ msgstr "Seleccionar fecha"
 msgid "Select the date from a calendar"
 msgstr "Seleccionar la fecha desde un calendario"
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2192
+#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2194
 msgid "Time"
 msgstr "Hora"
 
@@ -999,13 +1001,13 @@ msgstr "Seleccionar la hora de una lista"
 msgid "24hr: no"
 msgstr "24hr: si"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1253
-#: ../libegg/egg-datetime.c:1257
+#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1255
+#: ../libegg/egg-datetime.c:1259
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1254
-#: ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1256
+#: ../libegg/egg-datetime.c:1263
 msgid "PM"
 msgstr "PM"
 
@@ -1035,13 +1037,13 @@ msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1169
+#: ../libegg/egg-datetime.c:1171
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1234
+#: ../libegg/egg-datetime.c:1236
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -1372,7 +1374,7 @@ msgstr "Deshabilitada"
 msgid "Revoked"
 msgstr "Revocada"
 
-#: ../libseahorse/seahorse-widget.c:464
+#: ../libseahorse/seahorse-widget.c:463
 #, c-format
 msgid "Could not display help: %s"
 msgstr "No se pudo mostrar la ayuda: %s"
@@ -1976,7 +1978,7 @@ msgstr "Nunca"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1317
-#: ../src/seahorse-key-manager-store.c:860
+#: ../src/seahorse-key-manager-store.c:896
 msgid "Type"
 msgstr "Tipo"
 
@@ -2237,7 +2239,7 @@ msgstr "Marginal"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:854
+#: ../src/seahorse-key-manager-store.c:890
 msgid "Trust"
 msgstr "Confianza"
 
@@ -2581,16 +2583,16 @@ msgstr "_Importar"
 msgid "_Passwords"
 msgstr "Contrase_ñas"
 
-#: ../src/seahorse-key-manager-store.c:649 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:282
 msgid "Couldn't export keys"
 msgstr "No se pudo exportar las claves"
 
-#: ../src/seahorse-key-manager-store.c:847
+#: ../src/seahorse-key-manager-store.c:883
 msgid "Validity"
 msgstr "Validez"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:866
+#: ../src/seahorse-key-manager-store.c:902
 msgid "Expiration Date"
 msgstr "Fecha de caducidad"
 
