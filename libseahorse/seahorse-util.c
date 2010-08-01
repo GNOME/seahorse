@@ -48,6 +48,8 @@
 #include <errno.h>
 #include <glib/gi18n.h>
 
+#include <sys/types.h>
+
 static const gchar *bad_filename_chars = "/\\<>|";
 
 /**
