@@ -111,6 +111,13 @@ fire_selection_changed (SeahorseKeyserverResults* self)
 	return FALSE;
 }
 
+/**
+* selection:
+* self: the results object
+*
+* Adds fire_selection_changed as idle function
+*
+**/
 static void 
 on_view_selection_changed (GtkTreeSelection *selection, SeahorseKeyserverResults *self) 
 {
@@ -159,6 +166,13 @@ on_key_list_popup_menu (GtkTreeView* view, SeahorseKeyserverResults* self)
 	return TRUE;
 }
 
+/**
+* action:
+* self: The result object to expand the nodes in
+*
+* Expands all the nodes in the view of the object
+*
+**/
 static void 
 on_view_expand_all (GtkAction* action, SeahorseKeyserverResults* self) 
 {
@@ -168,14 +182,29 @@ on_view_expand_all (GtkAction* action, SeahorseKeyserverResults* self)
 }
 
 
+/**
+* action:
+* self: The result object to collapse the nodes in
+*
+* Collapses all the nodes in the view of the object
+*
+**/
 static void 
 on_view_collapse_all (GtkAction* action, SeahorseKeyserverResults* self) 
+
 {
 	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 	gtk_tree_view_collapse_all (self->pv->view);
 }
 
+/**
+* action: the closing action or NULL
+* self: The SeahorseKeyServerResults widget to destroy
+*
+* destroys the widget
+*
+**/
 static void 
 on_app_close (GtkAction* action, SeahorseKeyserverResults* self) 
 {
@@ -193,7 +222,16 @@ on_remote_find (GtkAction* action, SeahorseKeyserverResults* self)
 }
 
 
-/* When this window closes we quit seahorse */
+
+/**
+* widget: sending widget
+* event: ignored
+* self: The SeahorseKeyserverResults widget to destroy
+*
+* When this window closes we quit seahorse
+*
+* Returns TRUE on success
+**/
 static gboolean 
 on_delete_event (GtkWidget* widget, GdkEvent* event, SeahorseKeyserverResults* self) 
 {
@@ -259,6 +297,15 @@ seahorse_keyserver_results_set_selected (SeahorseViewer* base, SeahorseObject* v
 }
 
 
+/**
+* type: The type identifying this object
+* n_props: Number of properties
+* props: Properties
+*
+* Creates a new SeahorseKeyserverResults object, shows the resulting window
+*
+* Returns The SeahorseKeyserverResults object as GObject
+**/
 static GObject* 
 seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstructParam *props) 
 {
@@ -324,12 +371,24 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	return G_OBJECT (self);
 }
 
+/**
+* self: The SeahorseKeyserverResults object to init
+*
+* Inits the results object
+*
+**/
 static void
 seahorse_keyserver_results_init (SeahorseKeyserverResults *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResultsPrivate);
 }
 
+/**
+* obj: SeahorseKeyserverResults object
+*
+* Finalize the results object
+*
+**/
 static void
 seahorse_keyserver_results_finalize (GObject *obj)
 {
@@ -357,6 +416,15 @@ seahorse_keyserver_results_finalize (GObject *obj)
 	G_OBJECT_CLASS (seahorse_keyserver_results_parent_class)->finalize (obj);
 }
 
+/**
+* obj: The SeahorseKeyserverResults object to set
+* prop_id: Property to set
+* value: Value of this property
+* pspec: GParamSpec for the warning
+*
+* Supported properties are PROP_SEARCH and PROP_SELECTED
+*
+**/
 static void
 seahorse_keyserver_results_set_property (GObject *obj, guint prop_id, const GValue *value, 
                            GParamSpec *pspec)
@@ -383,6 +451,15 @@ seahorse_keyserver_results_set_property (GObject *obj, guint prop_id, const GVal
 	}
 }
 
+/**
+* obj: The SeahorseKeyserverResults object to get properties from
+* prop_id: the ide of the property to get
+* value: Value returned
+* pspec: GParamSpec for the warning
+*
+* Supported properties: PROP_SEARCH and PROP_SELECTED
+*
+**/
 static void
 seahorse_keyserver_results_get_property (GObject *obj, guint prop_id, GValue *value, 
                            GParamSpec *pspec)
@@ -402,6 +479,12 @@ seahorse_keyserver_results_get_property (GObject *obj, guint prop_id, GValue *va
 	}
 }
 
+/**
+* klass: The SeahorseKeyserverResultsClass
+*
+* Inits the class
+*
+**/
 static void
 seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
 {
@@ -431,6 +514,15 @@ seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
  * PUBLIC 
  */
 
+/**
+ * seahorse_keyserver_results_show:
+ * @op: The search operation
+ * @parent: A GTK window as parent (or NULL)
+ * @search_text: The test to search for
+ *
+ * Creates a search results window and adds the operation to it's progress status.
+ *
+ */
 void 
 seahorse_keyserver_results_show (SeahorseOperation* op, GtkWindow* parent, const char* search_text) 
 {
@@ -454,6 +546,14 @@ seahorse_keyserver_results_show (SeahorseOperation* op, GtkWindow* parent, const
 	seahorse_progress_status_set_operation (SEAHORSE_WIDGET (res), op);
 }
 
+/**
+ * seahorse_keyserver_results_get_search:
+ * @self:  SeahorseKeyserverResults object to get the search string from
+ *
+ *
+ *
+ * Returns: The search string in from the results
+ */
 const gchar* 
 seahorse_keyserver_results_get_search (SeahorseKeyserverResults* self) 
 {
