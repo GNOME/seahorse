@@ -1,5 +1,6 @@
-# seahorse.zh_CN.po
+# Chinese (China) translation fo seahorse.
 # Copyright (C) 2002, 2004, 2007, 2008, 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the seahorse package.
 # Zipeco <Zipeco@btamail.net.cn>, 2002.
 # Funda Wang <fundawang@linux.net.cn>, 2004.
 # Deng Xiyue <manphiz@gmail.com> 2007, 2008, 2009.
@@ -9,11 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=seahorse&component=general\n"
-"POT-Creation-Date: 2010-07-21 12:52+0000\n"
-"PO-Revision-Date: 2010-07-23 21:08+0800\n"
-"Last-Translator: Yinghua Wang <wantinghard@gmail.com>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-08-13 17:44+0800\n"
+"PO-Revision-Date: 2010-08-13 18:00+0800\n"
+"Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: ../daemon/seahorse-daemon.c:69
 msgid "Do not run seahorse-daemon as a daemon"
-msgstr "不要以守护进程方式运行 seahorse-daemon"
+msgstr "不以守护进程方式运行 seahorse-daemon"
 
 #: ../daemon/seahorse-daemon.c:99
 msgid "couldn't fork process"
@@ -61,11 +61,11 @@ msgstr "无效或者无法识别的密钥：%s"
 #: ../daemon/seahorse-service-crypto.c:204
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
-msgstr "签署者 <i><key id='%s'/><b>已过期</b></i>，于 %s。"
+msgstr "签署者 <i><key id='%s'/></i>，已于 %s </i><b>过期</b></i>。"
 
 #: ../daemon/seahorse-service-crypto.c:205
 msgid "Invalid Signature"
-msgstr "无效的签名"
+msgstr "签名无效"
 
 #: ../daemon/seahorse-service-crypto.c:211
 #, c-format
@@ -74,7 +74,7 @@ msgstr "由 <i><key id='%s'/></i> 签署，已于 %s <b>过期</b>。"
 
 #: ../daemon/seahorse-service-crypto.c:212
 msgid "Expired Signature"
-msgstr "已过期的签名"
+msgstr "签名已过期"
 
 #: ../daemon/seahorse-service-crypto.c:218
 #, c-format
@@ -83,7 +83,7 @@ msgstr "由 <i><key id='%s'/></i> 签署，已于 %s <b>撤销</b>"
 
 #: ../daemon/seahorse-service-crypto.c:219
 msgid "Revoked Signature"
-msgstr "已撤销的签名"
+msgstr "签名已撤销"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
 #: ../daemon/seahorse-service-crypto.c:225
@@ -93,7 +93,7 @@ msgstr "由 <i><key id='%s'/></i> 于 %s 签署。"
 
 #: ../daemon/seahorse-service-crypto.c:226
 msgid "Good Signature"
-msgstr "有效的签名"
+msgstr "签名有效"
 
 #: ../daemon/seahorse-service-crypto.c:231
 msgid "Signing key not in keyring."
@@ -101,7 +101,7 @@ msgstr "用来签署的密钥不在密钥环中"
 
 #: ../daemon/seahorse-service-crypto.c:232
 msgid "Unknown Signature"
-msgstr "未知的签名"
+msgstr "签名未知"
 
 #: ../daemon/seahorse-service-crypto.c:236
 msgid "Bad or forged signature. The signed data was modified."
@@ -109,7 +109,7 @@ msgstr "错误的或伪造的签名。签署的资料已被修改。"
 
 #: ../daemon/seahorse-service-crypto.c:237
 msgid "Bad Signature"
-msgstr "错误的签名"
+msgstr "签名错误"
 
 #: ../daemon/seahorse-service-crypto.c:245
 msgid "Couldn't verify signature."
@@ -1205,10 +1205,10 @@ msgid ""
 "\n"
 "<b>Note:</b> Your personal keys will not be compromised."
 msgstr ""
-"共享您的密钥允许您网络上的其他人使用您搜集的密钥。这意味着他们可以自动为您或"
-"您认识的人加密，而无须您将您的密钥发送给他们。\n"
+"共享您的密钥允许您网络上的其他人使用您搜集的密钥，这些密钥一般指的是公钥。这意味着他们可以自动为您或"
+"您认识的人加密，而无须您再将您或您认识的人的公钥发送给他们。\n"
 "\n"
-"<b>注意：</b>您的个人密钥不会被泄露。"
+"<b>注意：</b>您的私钥不会被泄露。"
 
 #: ../libseahorse/seahorse-prefs.xml.h:9
 msgid "_Find keys via:"
@@ -1230,46 +1230,46 @@ msgstr "进度条"
 msgid "Unavailable"
 msgstr "不可用"
 
-#: ../libseahorse/seahorse-util.c:237
+#: ../libseahorse/seahorse-util.c:239
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:513
+#: ../libseahorse/seahorse-util.c:515
 msgid "Key Data"
 msgstr "密钥数据"
 
-#: ../libseahorse/seahorse-util.c:515
+#: ../libseahorse/seahorse-util.c:517
 msgid "Multiple Keys"
 msgstr "多个密钥"
 
-#: ../libseahorse/seahorse-util.c:771
+#: ../libseahorse/seahorse-util.c:773
 msgid "Couldn't run file-roller"
 msgstr "无法运行 file-roller"
 
-#: ../libseahorse/seahorse-util.c:777
+#: ../libseahorse/seahorse-util.c:779
 msgid "Couldn't package files"
 msgstr "无法打包文件"
 
-#: ../libseahorse/seahorse-util.c:778
+#: ../libseahorse/seahorse-util.c:780
 msgid "The file-roller process did not complete successfully"
 msgstr "file-roller 进程没有成功完成"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:954
+#: ../libseahorse/seahorse-util.c:956
 msgid "All key files"
 msgstr "所有密钥文件"
 
-#: ../libseahorse/seahorse-util.c:965 ../libseahorse/seahorse-util.c:1013
+#: ../libseahorse/seahorse-util.c:967 ../libseahorse/seahorse-util.c:1015
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "所有文件"
 
-#: ../libseahorse/seahorse-util.c:1006
+#: ../libseahorse/seahorse-util.c:1008
 msgid "Archive files"
 msgstr "档案文件"
 
-#: ../libseahorse/seahorse-util.c:1076
+#: ../libseahorse/seahorse-util.c:1078
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1279,7 +1279,7 @@ msgstr ""
 "\n"
 "您想用新的文件替换它吗？"
 
-#: ../libseahorse/seahorse-util.c:1079
+#: ../libseahorse/seahorse-util.c:1081
 msgid "_Replace"
 msgstr "替换(_R)"
 
@@ -2183,7 +2183,7 @@ msgstr "彻底"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
 msgid "You _Trust the Owner:"
-msgstr "您相信此所有者(_T)："
+msgstr "对此密钥的信任度(_T)："
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
 msgid "Your trust is manually specified on the <i>Details</i> tab."
@@ -2394,7 +2394,7 @@ msgstr "导入密钥"
 msgid "Unrecognized key type, or invalid data format"
 msgstr "无法识别的密钥类型，或无效的数据格式"
 
-#: ../src/seahorse-key-manager.c:725 ../src/seahorse-keyserver-results.c:207
+#: ../src/seahorse-key-manager.c:725 ../src/seahorse-keyserver-results.c:245
 msgid "_Remote"
 msgstr "远程(_R)"
 
@@ -2422,11 +2422,11 @@ msgstr "从文件导入"
 msgid "Import from the clipboard"
 msgstr "从剪贴板导入"
 
-#: ../src/seahorse-key-manager.c:738 ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:738 ../src/seahorse-keyserver-results.c:255
 msgid "_Find Remote Keys..."
 msgstr "寻找远程密钥(_F)..."
 
-#: ../src/seahorse-key-manager.c:739 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:739 ../src/seahorse-keyserver-results.c:256
 msgid "Search for keys on a key server"
 msgstr "在密钥服务器搜索密钥"
 
@@ -2519,31 +2519,31 @@ msgstr "有效性"
 msgid "Expiration Date"
 msgstr "有效期"
 
-#: ../src/seahorse-keyserver-results.c:209
+#: ../src/seahorse-keyserver-results.c:247
 msgid "Close this window"
 msgstr "关闭此窗口"
 
-#: ../src/seahorse-keyserver-results.c:210
+#: ../src/seahorse-keyserver-results.c:248
 msgid "_Expand All"
 msgstr "全部展开(_E)"
 
-#: ../src/seahorse-keyserver-results.c:211
+#: ../src/seahorse-keyserver-results.c:249
 msgid "Expand all listings"
 msgstr "展开全部列表"
 
-#: ../src/seahorse-keyserver-results.c:212
+#: ../src/seahorse-keyserver-results.c:250
 msgid "_Collapse All"
 msgstr "全部折叠(_C)"
 
-#: ../src/seahorse-keyserver-results.c:213
+#: ../src/seahorse-keyserver-results.c:251
 msgid "Collapse all listings"
 msgstr "折叠全部列表"
 
-#: ../src/seahorse-keyserver-results.c:275
+#: ../src/seahorse-keyserver-results.c:322
 msgid "Remote Keys"
 msgstr "远程密钥"
 
-#: ../src/seahorse-keyserver-results.c:277
+#: ../src/seahorse-keyserver-results.c:324
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "远程密钥包含 '%s'"
