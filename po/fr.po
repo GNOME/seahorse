@@ -1,5 +1,5 @@
 # French translation of seahorse.
-# Copyright (C) 2000-2009 Free Software Foundation, Inc.
+# Copyright (C) 2000-2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the seahorse package.
 #
 # Gaël Quéri <gqueri@mail.dotcom.fr>, 2000.
@@ -7,7 +7,7 @@
 # Christophe Merlet <redfox@redfoxcenter.org>. 2003-2006.
 # David Soulayrol <david.soulayrol.2000@anciens.enib.fr>, 2005.
 # Jonathan Ernst <jonathan@ernstfamily.ch>, 2006-2007.
-# Claude Paroz <claude@2xlibre.net>, 2007-2009.
+# Claude Paroz <claude@2xlibre.net>, 2007-2010.
 # Stéphane Raimbault <stephane.raimbault@gmail.com>, 2007-2008.
 # Robert-André Mauchin <zebob.m@pengzone.org>, 2008.
 # Bruno Brouard <annoa.b@gmail.com>, 2009
@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&component=general\n"
-"POT-Creation-Date: 2010-02-07 21:07+0000\n"
-"PO-Revision-Date: 2009-09-19 20:43+0200\n"
+"POT-Creation-Date: 2010-07-19 20:50+0000\n"
+"PO-Revision-Date: 2010-08-14 22:27+0200\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <<gnomefr@traduc.org>>\n"
 "MIME-Version: 1.0\n"
@@ -42,17 +42,24 @@ msgstr "impossible de créer un nouveau groupe de processus"
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Démon de clés de chiffrement (Seahorse)"
 
-#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
+#: ../daemon/seahorse-service.c:163 ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Type de clé non valide ou inconnu : %s"
 
-#: ../daemon/seahorse-service.c:229
+#: ../daemon/seahorse-service.c:234
 #, c-format
 msgid "This keytype is not supported: %s"
 msgstr "Ce type de clé n'est pas pris en charge : %s"
 
-#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service.c:241
+#, c-format
+msgid "Support for this feature was not enabled at build time"
+msgstr ""
+"La prise en charge de cette fonctionnalité n'a pas été activée lors de la "
+"compilation"
+
+#: ../daemon/seahorse-service.c:341 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -119,61 +126,61 @@ msgstr "Signature non valide"
 msgid "Couldn't verify signature."
 msgstr "Impossible de vérifier la signature."
 
-#: ../daemon/seahorse-service-crypto.c:315
-#: ../daemon/seahorse-service-crypto.c:644
+#: ../daemon/seahorse-service-crypto.c:317
+#: ../daemon/seahorse-service-crypto.c:646
 #, c-format
 msgid "Invalid or unrecognized signer: %s"
 msgstr "Signataire non valide ou inconnu : %s"
 
-#: ../daemon/seahorse-service-crypto.c:322
-#: ../daemon/seahorse-service-crypto.c:651
+#: ../daemon/seahorse-service-crypto.c:324
+#: ../daemon/seahorse-service-crypto.c:653
 #, c-format
 msgid "Key is not valid for signing: %s"
 msgstr "La clé n'est pas valide pour signer : %s"
 
-#: ../daemon/seahorse-service-crypto.c:333
+#: ../daemon/seahorse-service-crypto.c:335
 #, c-format
 msgid "Invalid or unrecognized recipient: %s"
 msgstr "Destinataire non valide ou inconnu : %s"
 
-#: ../daemon/seahorse-service-crypto.c:341
+#: ../daemon/seahorse-service-crypto.c:343
 #, c-format
 msgid "Key is not a valid recipient for encryption: %s"
 msgstr "La clé n'est pas un destinataire valide pour le chiffrement : %s"
 
-#: ../daemon/seahorse-service-crypto.c:350
+#: ../daemon/seahorse-service-crypto.c:352
 #, c-format
 msgid "No recipients specified"
 msgstr "Aucun destinataire indiqué"
 
-#: ../daemon/seahorse-service-crypto.c:432
+#: ../daemon/seahorse-service-crypto.c:434
 #, c-format
 msgid "Invalid key type for decryption: %s"
 msgstr "Type de clé non valide pour le déchiffrement : %s"
 
-#: ../daemon/seahorse-service-crypto.c:546
-#: ../daemon/seahorse-service-crypto.c:744
+#: ../daemon/seahorse-service-crypto.c:548
+#: ../daemon/seahorse-service-crypto.c:746
 #, c-format
 msgid "Please set clearuri"
 msgstr "Définissez la clé clearuri"
 
-#: ../daemon/seahorse-service-crypto.c:552
-#: ../daemon/seahorse-service-crypto.c:750
+#: ../daemon/seahorse-service-crypto.c:554
+#: ../daemon/seahorse-service-crypto.c:752
 #, c-format
 msgid "Please set crypturi"
 msgstr "Définissez la clé clearuri"
 
-#: ../daemon/seahorse-service-crypto.c:562
+#: ../daemon/seahorse-service-crypto.c:564
 #, c-format
 msgid "Error opening clearuri"
 msgstr "Erreur à l'ouverture de clearuri"
 
-#: ../daemon/seahorse-service-crypto.c:639
+#: ../daemon/seahorse-service-crypto.c:641
 #, c-format
 msgid "No signer specified"
 msgstr "Aucun signataire indiqué"
 
-#: ../daemon/seahorse-service-crypto.c:828
+#: ../daemon/seahorse-service-crypto.c:830
 #, c-format
 msgid "Invalid key type for verifying: %s"
 msgstr "Type de clé non valide pour la vérification : %s"
@@ -609,7 +616,8 @@ msgstr "Mot de passe enregistré"
 #: ../gkr/seahorse-gkr-keyring-commands.c:122
 msgid "Safely store a password or secret."
 msgstr ""
-"Enregistre de manière sécurisée un mot de passe ou autre élément confidentiel."
+"Enregistre de manière sécurisée un mot de passe ou autre élément "
+"confidentiel."
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:136
 msgid "Couldn't unlock keyring"
@@ -787,14 +795,14 @@ msgstr "_Signer le message comme :"
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:140
 #: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:829
+#: ../src/seahorse-key-manager-store.c:865
 msgid "Name"
 msgstr "Nom"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
-#: ../pgp/seahorse-pgp-key-properties.c:1743
-#: ../src/seahorse-key-manager-store.c:841
+#: ../pgp/seahorse-pgp-key-properties.c:1745
+#: ../src/seahorse-key-manager-store.c:877
 msgid "Key ID"
 msgstr "Identifiant de la clé"
 
@@ -984,7 +992,7 @@ msgstr "Sélectionnez la date"
 msgid "Select the date from a calendar"
 msgstr "Sélectionnez la date dans un calendrier"
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2192
+#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2194
 msgid "Time"
 msgstr "Heure"
 
@@ -1007,13 +1015,13 @@ msgstr "Sélectionnez l'heure dans une liste"
 msgid "24hr: no"
 msgstr "24hr: yes"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1253
-#: ../libegg/egg-datetime.c:1257
+#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1255
+#: ../libegg/egg-datetime.c:1259
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1254
-#: ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1256
+#: ../libegg/egg-datetime.c:1263
 msgid "PM"
 msgstr "PM"
 
@@ -1043,13 +1051,13 @@ msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1169
+#: ../libegg/egg-datetime.c:1171
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%3$02d/%2$02d/%1$04d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1234
+#: ../libegg/egg-datetime.c:1236
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -1107,7 +1115,7 @@ msgstr "FICHIER"
 msgid "Specify session management ID"
 msgstr "Indique l'ID pour la gestion des sessions"
 
-#: ../libegg/eggsmclient.c:231 ../pgp/seahorse-pgp-key-properties.c:1312
+#: ../libegg/eggsmclient.c:231 ../pgp/seahorse-pgp-key-properties.c:1314
 msgid "ID"
 msgstr "ID"
 
@@ -1202,7 +1210,7 @@ msgstr "Phrase de passe"
 msgid "Password:"
 msgstr "Mot de passe :"
 
-#: ../libseahorse/seahorse-passphrase.c:264
+#: ../libseahorse/seahorse-passphrase.c:265
 msgid "Confirm:"
 msgstr "Confirmation :"
 
@@ -1340,47 +1348,47 @@ msgid "_Replace"
 msgstr "_Remplacer"
 
 #: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
-#: ../pgp/seahorse-pgp-key-properties.c:1131
+#: ../pgp/seahorse-pgp-key-properties.c:1133
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
 msgid "Unknown"
 msgstr "Inconnue"
 
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1137
+#: ../pgp/seahorse-pgp-key-properties.c:1139
 msgctxt "Validity"
 msgid "Never"
 msgstr "Jamais"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1144
+#: ../pgp/seahorse-pgp-key-properties.c:1146
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:33
 msgid "Marginal"
 msgstr "Marginale"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1150
+#: ../pgp/seahorse-pgp-key-properties.c:1152
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
 msgid "Full"
 msgstr "Complète"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1156
+#: ../pgp/seahorse-pgp-key-properties.c:1158
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 msgid "Ultimate"
 msgstr "Ultime"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1349
+#: ../pgp/seahorse-pgp-key-properties.c:1351
 msgid "Disabled"
 msgstr "Désactivée"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1345
+#: ../pgp/seahorse-pgp-key-properties.c:1347
 msgid "Revoked"
 msgstr "Révoquée"
 
-#: ../libseahorse/seahorse-widget.c:464
+#: ../libseahorse/seahorse-widget.c:463
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Impossible d'afficher l'aide : %s"
@@ -1457,28 +1465,28 @@ msgstr "Révoquer la clé"
 msgid "_Never expires"
 msgstr "_N'expire jamais"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:144
+#: ../pgp/seahorse-gpgme-add-subkey.c:147
 msgid "Couldn't add subkey"
 msgstr "Impossible d'ajouter une sous-clé"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:163
+#: ../pgp/seahorse-gpgme-add-subkey.c:166
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Ajouter une sous-clé à %s"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:179 ../pgp/seahorse-gpgme-generate.c:117
+#: ../pgp/seahorse-gpgme-add-subkey.c:182 ../pgp/seahorse-gpgme-generate.c:117
 msgid "DSA (sign only)"
 msgstr "DSA (signature seule)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:187
+#: ../pgp/seahorse-gpgme-add-subkey.c:190
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (chiffrement seul)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:193 ../pgp/seahorse-gpgme-generate.c:118
+#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:118
 msgid "RSA (sign only)"
 msgstr "RSA (signature seule)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:199
+#: ../pgp/seahorse-gpgme-add-subkey.c:202
 msgid "RSA (encrypt only)"
 msgstr "RSA (chiffrement seul)"
 
@@ -1550,13 +1558,15 @@ msgstr "Impossible de générer la clé"
 msgid "Generating key"
 msgstr "Génération de clé"
 
-#: ../pgp/seahorse-gpgme-key-op.c:300
+#: ../pgp/seahorse-gpgme-key-op.c:301
 msgid "Wrong password"
 msgstr "Mauvais mot de passe"
 
-#: ../pgp/seahorse-gpgme-key-op.c:300
+#: ../pgp/seahorse-gpgme-key-op.c:301
 msgid "This was the third time you entered a wrong password. Please try again."
-msgstr "C'est la troisième fois que vous saisissez un mauvais mot de passe. Essayez à nouveau."
+msgstr ""
+"C'est la troisième fois que vous saisissez un mauvais mot de passe. Essayez "
+"à nouveau."
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -1742,43 +1752,43 @@ msgstr "Exportation de clés"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: ../pgp/seahorse-hkp-source.c:330
+#: ../pgp/seahorse-hkp-source.c:387
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 "La requête n'était pas assez spécifique. Le serveur « %s » a trouvé trop de "
 "clés."
 
-#: ../pgp/seahorse-hkp-source.c:332
+#: ../pgp/seahorse-hkp-source.c:389
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Impossible de communiquer avec le serveur « %s » : %s"
 
-#: ../pgp/seahorse-hkp-source.c:576
+#: ../pgp/seahorse-hkp-source.c:671
 msgid "Searching for keys..."
 msgstr "Recherche de clés..."
 
-#: ../pgp/seahorse-hkp-source.c:647
+#: ../pgp/seahorse-hkp-source.c:759
 msgid "Uploading keys..."
 msgstr "Exportation des clés en cours..."
 
-#: ../pgp/seahorse-hkp-source.c:725
+#: ../pgp/seahorse-hkp-source.c:857
 msgid "Retrieving keys..."
 msgstr "Récupération des clés..."
 
-#: ../pgp/seahorse-hkp-source.c:831
+#: ../pgp/seahorse-hkp-source.c:987
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Recherche de clés sur : %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:908 ../pgp/seahorse-hkp-source.c:981
+#: ../pgp/seahorse-hkp-source.c:1072 ../pgp/seahorse-hkp-source.c:1154
 #: ../pgp/seahorse-ldap-source.c:668
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Connexion à : %s"
 
-#: ../pgp/seahorse-hkp-source.c:1005
+#: ../pgp/seahorse-hkp-source.c:1184
 msgid "HTTP Key Server"
 msgstr "Serveur de clés HTTP"
 
@@ -1903,7 +1913,7 @@ msgstr "Clé PGP privée"
 msgid "Public PGP Key"
 msgstr "Clé PGP publique"
 
-#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1347
+#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1349
 msgid "Expired"
 msgstr "Expiré"
 
@@ -1922,12 +1932,12 @@ msgid "Couldn't delete user ID"
 msgstr "Impossible de supprimer l'identifiant utilisateur"
 
 #: ../pgp/seahorse-pgp-key-properties.c:333
-#: ../pgp/seahorse-pgp-key-properties.c:1462
+#: ../pgp/seahorse-pgp-key-properties.c:1464
 msgid "[Unknown]"
 msgstr "[Inconnue]"
 
 #: ../pgp/seahorse-pgp-key-properties.c:426
-#: ../pgp/seahorse-pgp-key-properties.c:1740
+#: ../pgp/seahorse-pgp-key-properties.c:1742
 msgid "Name/Email"
 msgstr "Nom/Courriel"
 
@@ -1959,55 +1969,55 @@ msgid "Couldn't delete subkey"
 msgstr "Impossible de supprimer la sous-clé"
 
 #: ../pgp/seahorse-pgp-key-properties.c:991
-#: ../pgp/seahorse-pgp-key-properties.c:1425
+#: ../pgp/seahorse-pgp-key-properties.c:1427
 msgid "Unable to change trust"
 msgstr "Impossible de modifier la confiance"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1005 ../src/seahorse-viewer.c:315
-#: ../ssh/seahorse-ssh-key-properties.c:167
+#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:316
+#: ../ssh/seahorse-ssh-key-properties.c:168
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "Impossible d'exporter la clé vers « %s »"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1033
-#: ../ssh/seahorse-ssh-key-properties.c:191
+#: ../pgp/seahorse-pgp-key-properties.c:1035
+#: ../ssh/seahorse-ssh-key-properties.c:193
 msgid "Export Complete Key"
 msgstr "Exporter la clé complète"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1058
-#: ../ssh/seahorse-ssh-key-properties.c:213
+#: ../pgp/seahorse-pgp-key-properties.c:1060
+#: ../ssh/seahorse-ssh-key-properties.c:215
 msgid "Couldn't export key."
 msgstr "Impossible d'exporter la clé."
 
-#: ../pgp/seahorse-pgp-key-properties.c:1265
-#: ../pgp/seahorse-pgp-key-properties.c:1354
+#: ../pgp/seahorse-pgp-key-properties.c:1267
+#: ../pgp/seahorse-pgp-key-properties.c:1356
 msgctxt "Expires"
 msgid "Never"
 msgstr "Jamais"
 
 #. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1315
-#: ../src/seahorse-key-manager-store.c:860
+#: ../pgp/seahorse-pgp-key-properties.c:1317
+#: ../src/seahorse-key-manager-store.c:896
 msgid "Type"
 msgstr "Type"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1318
+#: ../pgp/seahorse-pgp-key-properties.c:1320
 msgid "Created"
 msgstr "Créée le"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1321
+#: ../pgp/seahorse-pgp-key-properties.c:1323
 msgid "Expires"
 msgstr "Expire"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1324
+#: ../pgp/seahorse-pgp-key-properties.c:1326
 msgid "Status"
 msgstr "État"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1327
+#: ../pgp/seahorse-pgp-key-properties.c:1329
 msgid "Strength"
 msgstr "Force"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1351
+#: ../pgp/seahorse-pgp-key-properties.c:1353
 msgid "Good"
 msgstr "Bon"
 
@@ -2254,7 +2264,7 @@ msgstr "Marginale"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:854
+#: ../src/seahorse-key-manager-store.c:890
 msgid "Trust"
 msgstr "Confiance"
 
@@ -2471,11 +2481,11 @@ msgstr[0] "%d clé sélectionnée"
 msgstr[1] "%d clés sélectionnées"
 
 #: ../src/seahorse-key-manager.c:404 ../src/seahorse-key-manager.c:464
-#: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:482
+#: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:484
 msgid "Couldn't import keys"
 msgstr "Impossible d'importer les clés"
 
-#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:487
+#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:489
 msgid "Imported keys"
 msgstr "Clés importées"
 
@@ -2595,7 +2605,7 @@ msgstr "_Autres clés"
 msgid "To get started with encryption you will need keys."
 msgstr "Pour débuter avec le chiffrement, vous aurez besoin de clés."
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:546
+#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:548
 msgid "_Import"
 msgstr "_Importer"
 
@@ -2603,16 +2613,16 @@ msgstr "_Importer"
 msgid "_Passwords"
 msgstr "_Mots de passe"
 
-#: ../src/seahorse-key-manager-store.c:649 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:282
 msgid "Couldn't export keys"
 msgstr "Impossible d'exporter les clés"
 
-#: ../src/seahorse-key-manager-store.c:847
+#: ../src/seahorse-key-manager-store.c:883
 msgid "Validity"
 msgstr "Validité"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:866
+#: ../src/seahorse-key-manager-store.c:902
 msgid "Expiration Date"
 msgstr "Date d'expiration"
 
@@ -2803,66 +2813,66 @@ msgstr "Affiche l'aide de Seahorse"
 msgid "Export public key"
 msgstr "Exporter la clé publique"
 
-#: ../src/seahorse-viewer.c:320
+#: ../src/seahorse-viewer.c:322
 msgid "Exporting keys"
 msgstr "Exportation des clés"
 
-#: ../src/seahorse-viewer.c:345
+#: ../src/seahorse-viewer.c:347
 msgid "Couldn't retrieve data from key server"
 msgstr "Impossible de récupérer les données depuis le serveur de clés"
 
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:364
+#: ../src/seahorse-viewer.c:366
 msgid "Copied keys"
 msgstr "Clés copiées"
 
-#: ../src/seahorse-viewer.c:384
+#: ../src/seahorse-viewer.c:386
 msgid "Retrieving keys"
 msgstr "Récupération des clés"
 
-#: ../src/seahorse-viewer.c:399
+#: ../src/seahorse-viewer.c:401
 msgid "Couldn't delete."
 msgstr "Suppression impossible."
 
-#: ../src/seahorse-viewer.c:433
+#: ../src/seahorse-viewer.c:435
 msgid "Deleting..."
 msgstr "Suppression..."
 
-#: ../src/seahorse-viewer.c:459
+#: ../src/seahorse-viewer.c:461
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s est une clé privée. Voulez-vous vraiment poursuivre l'opération ?"
 
-#: ../src/seahorse-viewer.c:507
+#: ../src/seahorse-viewer.c:509
 msgid "Importing keys from key servers"
 msgstr "Importer des clés depuis les serveurs de clés"
 
-#: ../src/seahorse-viewer.c:533
+#: ../src/seahorse-viewer.c:535
 msgid "Show properties"
 msgstr "Affiche les propriétés"
 
-#: ../src/seahorse-viewer.c:534
+#: ../src/seahorse-viewer.c:536
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "_Supprimer"
 
-#: ../src/seahorse-viewer.c:535
+#: ../src/seahorse-viewer.c:537
 msgid "Delete selected items"
 msgstr "Efface les éléments sélectionnés"
 
-#: ../src/seahorse-viewer.c:539
+#: ../src/seahorse-viewer.c:541
 msgid "E_xport..."
 msgstr "E_xporter..."
 
-#: ../src/seahorse-viewer.c:540
+#: ../src/seahorse-viewer.c:542
 msgid "Export to a file"
 msgstr "Exporte dans un fichier"
 
-#: ../src/seahorse-viewer.c:542
+#: ../src/seahorse-viewer.c:544
 msgid "Copy to the clipboard"
 msgstr "Copie vers le presse-papiers"
 
-#: ../src/seahorse-viewer.c:547
+#: ../src/seahorse-viewer.c:549
 msgid "Import selected keys to local key ring"
 msgstr "Importer les clés sélectionnées dans le trousseau local"
 
@@ -3125,9 +3135,6 @@ msgstr "Identifiant de _connexion :"
 msgid "_Set Up"
 msgstr "_Configurer"
 
-#~ msgid "Seahorse Daemon"
-#~ msgstr "Démon Seahorse"
-
 #~ msgid "<b>X keys are selected for synchronizing</b>"
 #~ msgstr "<b>X clés sont sélectionnées pour synchronisation</b>"
 
@@ -3137,12 +3144,6 @@ msgstr "_Configurer"
 #~ msgstr ""
 #~ "Une ou plusieurs clés supprimées sont des clés privées. Voulez-vous "
 #~ "vraiment poursuivre l'opération ?"
-
-#~ msgid "/home/nate/.ssh/blah_rsa"
-#~ msgstr "/home/nate/.ssh/blah_rsa"
-
-#~ msgid "00:00:00:00:00"
-#~ msgstr "00:00:00:00:00"
 
 #~ msgid "Create a PGP Key"
 #~ msgstr "Création d'une clé PGP"
