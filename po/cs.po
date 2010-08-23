@@ -15,10 +15,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-11 16:49+0200\n"
-"PO-Revision-Date: 2010-06-28 19:45+0200\n"
+"POT-Creation-Date: 2010-08-23 22:26+0200\n"
+"PO-Revision-Date: 2010-08-05 10:43+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -41,17 +42,22 @@ msgstr "nebylo možno vytvořit novou skupinu procesů"
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Šifrovací démon (Seahorse)"
 
-#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
+#: ../daemon/seahorse-service.c:163 ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Neplatný nebo nerozpoznaný typ klíče: %s"
 
-#: ../daemon/seahorse-service.c:229
+#: ../daemon/seahorse-service.c:234
 #, c-format
 msgid "This keytype is not supported: %s"
 msgstr "Tento typ klíče není podporován: %s"
 
-#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service.c:241
+#, c-format
+msgid "Support for this feature was not enabled at build time"
+msgstr "Podpora této funkce nebyla povolena při překladu"
+
+#: ../daemon/seahorse-service.c:341 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -764,14 +770,14 @@ msgstr "Podep_sat zprávu jako:"
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:140
 #: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:829
+#: ../src/seahorse-key-manager-store.c:865
 msgid "Name"
 msgstr "Jméno"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
 #: ../pgp/seahorse-pgp-key-properties.c:1745
-#: ../src/seahorse-key-manager-store.c:841
+#: ../src/seahorse-key-manager-store.c:877
 msgid "Key ID"
 msgstr "ID klíče"
 
@@ -1259,46 +1265,46 @@ msgstr "Nadpis průběhu"
 msgid "Unavailable"
 msgstr "Není k dispozici"
 
-#: ../libseahorse/seahorse-util.c:237
+#: ../libseahorse/seahorse-util.c:239
 msgid "%Y-%m-%d"
 msgstr "%d.%m.%Y"
 
-#: ../libseahorse/seahorse-util.c:513
+#: ../libseahorse/seahorse-util.c:515
 msgid "Key Data"
 msgstr "Data klíče"
 
-#: ../libseahorse/seahorse-util.c:515
+#: ../libseahorse/seahorse-util.c:517
 msgid "Multiple Keys"
 msgstr "Více klíčů"
 
-#: ../libseahorse/seahorse-util.c:771
+#: ../libseahorse/seahorse-util.c:773
 msgid "Couldn't run file-roller"
 msgstr "Nebylo možno spustit file-roller"
 
-#: ../libseahorse/seahorse-util.c:777
+#: ../libseahorse/seahorse-util.c:779
 msgid "Couldn't package files"
 msgstr "Nebylo možno zabalit soubory"
 
-#: ../libseahorse/seahorse-util.c:778
+#: ../libseahorse/seahorse-util.c:780
 msgid "The file-roller process did not complete successfully"
 msgstr "Proces file-roller neskončil úspěšně"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:954
+#: ../libseahorse/seahorse-util.c:956
 msgid "All key files"
 msgstr "Všechny soubory klíčů"
 
-#: ../libseahorse/seahorse-util.c:965 ../libseahorse/seahorse-util.c:1013
+#: ../libseahorse/seahorse-util.c:967 ../libseahorse/seahorse-util.c:1015
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "Všechny soubory"
 
-#: ../libseahorse/seahorse-util.c:1006
+#: ../libseahorse/seahorse-util.c:1008
 msgid "Archive files"
 msgstr "Soubory archivů"
 
-#: ../libseahorse/seahorse-util.c:1076
+#: ../libseahorse/seahorse-util.c:1078
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1308,7 +1314,7 @@ msgstr ""
 "\n"
 "Chcete jej nahradit novým souborem?"
 
-#: ../libseahorse/seahorse-util.c:1079
+#: ../libseahorse/seahorse-util.c:1081
 msgid "_Replace"
 msgstr "Na_hradit"
 
@@ -1955,7 +1961,7 @@ msgstr "Nikdy"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1317
-#: ../src/seahorse-key-manager-store.c:860
+#: ../src/seahorse-key-manager-store.c:896
 msgid "Type"
 msgstr "Typ"
 
@@ -2217,7 +2223,7 @@ msgstr "Nepatrně"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:854
+#: ../src/seahorse-key-manager-store.c:890
 msgid "Trust"
 msgstr "Důvěra"
 
@@ -2450,7 +2456,7 @@ msgstr "Importovat klíč"
 msgid "Unrecognized key type, or invalid data format"
 msgstr "Nerozpoznaný typ klíče, nebo neplatný formát dat"
 
-#: ../src/seahorse-key-manager.c:725 ../src/seahorse-keyserver-results.c:207
+#: ../src/seahorse-key-manager.c:725 ../src/seahorse-keyserver-results.c:245
 msgid "_Remote"
 msgstr "_Vzdálené"
 
@@ -2478,11 +2484,11 @@ msgstr "Importovat ze souboru"
 msgid "Import from the clipboard"
 msgstr "Importovat ze schránky"
 
-#: ../src/seahorse-key-manager.c:738 ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:738 ../src/seahorse-keyserver-results.c:255
 msgid "_Find Remote Keys..."
 msgstr "_Hledat vzdálené klíče…"
 
-#: ../src/seahorse-key-manager.c:739 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:739 ../src/seahorse-keyserver-results.c:256
 msgid "Search for keys on a key server"
 msgstr "Hledat klíče na serveru klíčů"
 
@@ -2562,44 +2568,44 @@ msgstr "_Importovat"
 msgid "_Passwords"
 msgstr "_Hesla"
 
-#: ../src/seahorse-key-manager-store.c:649 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:282
 msgid "Couldn't export keys"
 msgstr "Nelze exportovat klíče"
 
-#: ../src/seahorse-key-manager-store.c:847
+#: ../src/seahorse-key-manager-store.c:883
 msgid "Validity"
 msgstr "Platnost"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:866
+#: ../src/seahorse-key-manager-store.c:902
 msgid "Expiration Date"
 msgstr "Datum vypršení"
 
-#: ../src/seahorse-keyserver-results.c:209
+#: ../src/seahorse-keyserver-results.c:247
 msgid "Close this window"
 msgstr "Zavřít toto okno"
 
-#: ../src/seahorse-keyserver-results.c:210
+#: ../src/seahorse-keyserver-results.c:248
 msgid "_Expand All"
 msgstr "_Rozbalit vše"
 
-#: ../src/seahorse-keyserver-results.c:211
+#: ../src/seahorse-keyserver-results.c:249
 msgid "Expand all listings"
 msgstr "Rozbalit všechny výpisy"
 
-#: ../src/seahorse-keyserver-results.c:212
+#: ../src/seahorse-keyserver-results.c:250
 msgid "_Collapse All"
 msgstr "_Sbalit vše"
 
-#: ../src/seahorse-keyserver-results.c:213
+#: ../src/seahorse-keyserver-results.c:251
 msgid "Collapse all listings"
 msgstr "Sbalit všechny výpisy"
 
-#: ../src/seahorse-keyserver-results.c:275
+#: ../src/seahorse-keyserver-results.c:322
 msgid "Remote Keys"
 msgstr "Vzdálené klíče"
 
-#: ../src/seahorse-keyserver-results.c:277
+#: ../src/seahorse-keyserver-results.c:324
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Vzdálené klíče obsahující „%s“"
