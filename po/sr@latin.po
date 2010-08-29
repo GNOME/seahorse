@@ -6,20 +6,21 @@
 # Maintainer: Dušan Živojnov <calvin@verat.net>
 # Translated on 2009-05-09 by: Branko Kokanović <branko.kokanovic@gmail.com>
 # Miloš Popović <gpopac@gmail.com>, 2010.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&component=general\n"
-"POT-Creation-Date: 2010-03-28 13:26+0000\n"
-"PO-Revision-Date: 2010-03-29 01:48+0200\n"
+"POT-Creation-Date: 2010-07-19 20:50+0000\n"
+"PO-Revision-Date: 2010-08-29 21:09+0200\n"
 "Last-Translator: Miloš Popović <gpopac@gmail.com>\n"
-"Language-Team: Serbian <gnome@prevod.org>\n"
+"Language-Team: Serbian <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4;    plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 :    n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../daemon/seahorse-daemon.c:69
 msgid "Do not run seahorse-daemon as a daemon"
@@ -37,17 +38,22 @@ msgstr "ne mogu da napravim novu grupu procesa"
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Uslužni program za šifrovanje (Morski konjić)"
 
-#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
+#: ../daemon/seahorse-service.c:163 ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Nevažeći ili neprepoznat tip ključa: %s"
 
-#: ../daemon/seahorse-service.c:229
+#: ../daemon/seahorse-service.c:234
 #, c-format
 msgid "This keytype is not supported: %s"
 msgstr "Tip ovog ključa nije podržan: %s"
 
-#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service.c:241
+#, c-format
+msgid "Support for this feature was not enabled at build time"
+msgstr "Podrška za ovu mogućnost nije uključena tokom izgradnje programa"
+
+#: ../daemon/seahorse-service.c:341 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -442,6 +448,7 @@ msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "Da li sigurno želite da izbrišete %d lozinku?"
 msgstr[1] "Da li sigurno želite da izbrišete %d lozinke?"
 msgstr[2] "Da li sigurno želite da izbrišete %d lozinki?"
+msgstr[3] "Da li sigurno želite da izbrišete lozinku?"
 
 #: ../gkr/seahorse-gkr-item-properties.c:66
 msgid "Access a network share or resource"
@@ -761,14 +768,14 @@ msgstr "Potpi_sati poruku kao:"
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:140
 #: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:829
+#: ../src/seahorse-key-manager-store.c:865
 msgid "Name"
 msgstr "Ime"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
 #: ../pgp/seahorse-pgp-key-properties.c:1745
-#: ../src/seahorse-key-manager-store.c:841
+#: ../src/seahorse-key-manager-store.c:877
 msgid "Key ID"
 msgstr "IB ključa"
 
@@ -957,7 +964,7 @@ msgstr "Odaberi datum"
 msgid "Select the date from a calendar"
 msgstr "Odaberite datum iz kalendara"
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2192
+#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2194
 msgid "Time"
 msgstr "Vreme"
 
@@ -980,13 +987,13 @@ msgstr "Odaberite vreme iz liste"
 msgid "24hr: no"
 msgstr "24hr: ne"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1253
-#: ../libegg/egg-datetime.c:1257
+#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1255
+#: ../libegg/egg-datetime.c:1259
 msgid "AM"
 msgstr "prepodne"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1254
-#: ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1256
+#: ../libegg/egg-datetime.c:1263
 msgid "PM"
 msgstr "popodne"
 
@@ -1016,13 +1023,13 @@ msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1169
+#: ../libegg/egg-datetime.c:1171
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1234
+#: ../libegg/egg-datetime.c:1236
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -1122,6 +1129,7 @@ msgid_plural "Keys Imported"
 msgstr[0] "Ključ je uvežen"
 msgstr[1] "Ključ je uvežen"
 msgstr[2] "Ključevi su uveženi"
+msgstr[3] "Ključ je uvežen"
 
 #: ../libseahorse/seahorse-notification.c:570
 #: ../libseahorse/seahorse-notification.c:593
@@ -1131,6 +1139,7 @@ msgid_plural "Imported %i keys"
 msgstr[0] "Uvezen %i ključ"
 msgstr[1] "Uvezen %i ključ"
 msgstr[2] "Uvezeno %i ključeva"
+msgstr[3] "Uvezen %i ključ"
 
 #: ../libseahorse/seahorse-notification.c:572
 #, c-format
@@ -1139,6 +1148,7 @@ msgid_plural "Imported keys for"
 msgstr[0] "Uvežen ključ za"
 msgstr[1] "Uvežen ključ za"
 msgstr[2] "Uveženi ključevi za"
+msgstr[3] "Uvežen ključ za"
 
 #: ../libseahorse/seahorse-notify.xml.h:1
 msgid "Notification Messages"
@@ -1353,7 +1363,7 @@ msgstr "Onemogućeno"
 msgid "Revoked"
 msgstr "Povučen"
 
-#: ../libseahorse/seahorse-widget.c:464
+#: ../libseahorse/seahorse-widget.c:463
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Ne mogu da prikažem pomoć: %s"
@@ -1684,7 +1694,8 @@ msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Učitao sam %d ključ"
 msgstr[1] "Učitao sam %d ključa"
-msgstr[2] "Učitah %d ključeva"
+msgstr[2] "Učitao sam %d ključeva"
+msgstr[3] "Učitao sam ključ"
 
 #: ../pgp/seahorse-gpgme-source.c:777
 msgid "Loading Keys..."
@@ -1953,7 +1964,7 @@ msgstr "Nikad"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1317
-#: ../src/seahorse-key-manager-store.c:860
+#: ../src/seahorse-key-manager-store.c:896
 msgid "Type"
 msgstr "Tip"
 
@@ -2213,7 +2224,7 @@ msgstr "Površno"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:854
+#: ../src/seahorse-key-manager-store.c:890
 msgid "Trust"
 msgstr "Poverenje"
 
@@ -2379,6 +2390,7 @@ msgid_plural "Are you sure you want to delete %d certificates?"
 msgstr[0] "Da li sigurno želite da uklonite %d sertifikat?"
 msgstr[1] "Da li sigurno želite da uklonite %d sertifikata?"
 msgstr[2] "Da li sigurno želite da uklonite %d sertifikata?"
+msgstr[3] "Da li sigurno želite da uklonite sertifikat?"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
@@ -2420,9 +2432,10 @@ msgstr "Napravi novi..."
 #, c-format
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
-msgstr[0] "Izabran %d ključ"
-msgstr[1] "Izabrano %d ključeva"
-msgstr[2] "Izabrano %d ključeva"
+msgstr[0] "Izabran je %d ključ"
+msgstr[1] "Izabrana su %d ključa"
+msgstr[2] "Izabrano je %d ključeva"
+msgstr[3] "Izabran je %d ključ"
 
 #: ../src/seahorse-key-manager.c:404 ../src/seahorse-key-manager.c:464
 #: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:484
@@ -2558,16 +2571,16 @@ msgstr "_Uvezi"
 msgid "_Passwords"
 msgstr "_Lozinke"
 
-#: ../src/seahorse-key-manager-store.c:649 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:282
 msgid "Couldn't export keys"
 msgstr "Ne mogu da izvezem ključeve"
 
-#: ../src/seahorse-key-manager-store.c:847
+#: ../src/seahorse-key-manager-store.c:883
 msgid "Validity"
 msgstr "Ispravnost"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:866
+#: ../src/seahorse-key-manager-store.c:902
 msgid "Expiration Date"
 msgstr "Datum isteka"
 
@@ -2648,6 +2661,7 @@ msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d ključ je izabran za sinhornizaciju</b>"
 msgstr[1] "<b>%d ključeva je izabrano za sinhronizaciju</b>"
 msgstr[2] "<b>%d ključeva je izabrano za sinhronizaciju</b>"
+msgstr[3] "<b>%d ključ je izabran za sinhornizaciju</b>"
 
 #: ../src/seahorse-keyserver-sync.c:216
 msgid "Synchronizing keys"
