@@ -436,24 +436,6 @@ setup_keyservers (SeahorseWidget *swidget)
 
 #endif /* WITH_KEYSERVER */
 
-#ifdef WITH_SHARING 
-
-/* Key Sharing Prefs -------------------------------------------------------- */
-
-static void
-setup_sharing (SeahorseWidget *swidget)
-{
-    GtkWidget *widget = seahorse_widget_get_widget (swidget, "enable-sharing");
-    g_return_if_fail (widget != NULL);
-    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON (widget), KEYSHARING_KEY);
-    
-    widget = seahorse_widget_get_widget (swidget, "key-sharing-image");
-    g_return_if_fail (widget != NULL);
-    gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_SHARING, GTK_ICON_SIZE_DIALOG);
-}
-
-#endif /* WITH_SHARING */
-
 /* -------------------------------------------------------------------------- */
 
 /**
@@ -484,14 +466,6 @@ seahorse_prefs_new (GtkWindow *parent)
         g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
         seahorse_prefs_remove_tab (swidget, widget);
 #endif
-
-#ifdef WITH_SHARING
-        setup_sharing (swidget);
-#else
-        widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "sharing-tab"));
-        g_return_val_if_fail (GTK_IS_WIDGET (widget), swidget);
-        seahorse_prefs_remove_tab (swidget, widget);
-#endif    
 
         seahorse_widget_show (swidget);
     } else {

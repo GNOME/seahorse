@@ -59,11 +59,6 @@ static gboolean daemon_no_daemonize = FALSE;
 static gboolean daemon_running = FALSE;
 static gboolean daemon_quit = FALSE;
 
-static const gchar *daemon_icons[] = {
-    SEAHORSE_ICON_SHARING,
-    NULL
-};
-
 static const GOptionEntry options[] = {
     { "no-daemonize", 'd', 0, G_OPTION_ARG_NONE, &daemon_no_daemonize, 
         N_("Do not run seahorse-daemon as a daemon"), NULL },
@@ -281,7 +276,6 @@ int main(int argc, char* argv[])
 
     /* Insert Icons into Stock */
     seahorse_gtkstock_init ();
-    seahorse_gtkstock_add_icons (daemon_icons); 
    
     /* Make the default SeahorseContext */
     seahorse_context_new (SEAHORSE_CONTEXT_APP | SEAHORSE_CONTEXT_DAEMON);
@@ -299,10 +293,6 @@ int main(int argc, char* argv[])
     /* Initialize the various daemon components */
     seahorse_dbus_server_init ();
 
-#ifdef WITH_SHARING
-    seahorse_sharing_init ();
-#endif
-
     /* Sometimes we've already gotten a quit signal */
     if(!daemon_quit) {
         daemon_running = TRUE;
@@ -310,11 +300,6 @@ int main(int argc, char* argv[])
         g_message ("left gtk_main\n");
     }
 
-    /* And now clean them all up */
-#ifdef WITH_SHARING
-    seahorse_sharing_cleanup ();
-#endif
-    
     seahorse_dbus_server_cleanup ();
 
     g_option_context_free (octx);

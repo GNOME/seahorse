@@ -21,12 +21,6 @@ BUILT_SOURCES = \
 	seahorse-service-keyset-bindings.h \
 	seahorse-service-crypto-bindings.h 
 
-if WITH_SHARING
-SHARING_SRCS = seahorse-hkp-server.c seahorse-sharing.c 
-else
-SHARING_SRCS = 
-endif
-
 if WITH_PGP
 PGP_LDADD = $(top_builddir)/pgp/libseahorse-pgp.la
 PGP_SRCS = seahorse-service-crypto.c
@@ -45,9 +39,7 @@ seahorse_daemon_SOURCES = \
     seahorse-daemon.c seahorse-daemon.h \
     seahorse-dbus-server.c seahorse-service.c seahorse-service.h \
     seahorse-service-keyset.c \
-    $(PGP_SRCS) \
-    $(SHARING_SRCS)
-
+    $(PGP_SRCS)
 
 seahorse_daemon_LDADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
