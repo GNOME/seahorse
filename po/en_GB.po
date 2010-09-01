@@ -2,15 +2,15 @@
 # Copyright (C) 2004 THE seahorse's COPYRIGHT HOLDER
 # This file is distributed under the same license as the seahorse package.
 # Gareth Owen <gowen72@yahoo.com>, David Lodge <dave@cirt.net>, 2004.
-# Philip Withnall <philip@tecnocode.co.uk>, 2009.
+# Philip Withnall <philip@tecnocode.co.uk>, 2009, 2010.
 # Bruce Cowan <bcowan@fastmail.co.uk>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-24 17:33+0000\n"
+"POT-Creation-Date: 2010-09-01 09:37+0100\n"
 "PO-Revision-Date: 2010-02-24 17:34+0100\n"
-"Last-Translator: Bruce Cowan <bcowan@fastmail.co.uk>\n"
+"Last-Translator: Philip Withnall <philip@tecnocode.co.uk>\n"
 "Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
@@ -35,17 +35,22 @@ msgstr "couldn't create new process group"
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Encryption Daemon (Seahorse)"
 
-#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
+#: ../daemon/seahorse-service.c:163 ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Invalid or unrecognised key type: %s"
 
-#: ../daemon/seahorse-service.c:229
+#: ../daemon/seahorse-service.c:234
 #, c-format
 msgid "This keytype is not supported: %s"
 msgstr "This keytype is not supported: %s"
 
-#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service.c:241
+#, c-format
+msgid "Support for this feature was not enabled at build time"
+msgstr "Support for this feature was not enabled at build time"
+
+#: ../daemon/seahorse-service.c:341 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -758,14 +763,14 @@ msgstr "_Sign message as:"
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:140
 #: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:829
+#: ../src/seahorse-key-manager-store.c:865
 msgid "Name"
 msgstr "Name"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
 #: ../pgp/seahorse-pgp-key-properties.c:1745
-#: ../src/seahorse-key-manager-store.c:841
+#: ../src/seahorse-key-manager-store.c:877
 msgid "Key ID"
 msgstr "Key ID"
 
@@ -954,7 +959,7 @@ msgstr "Select Date"
 msgid "Select the date from a calendar"
 msgstr "Select the date from a calendar"
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2192
+#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2194
 msgid "Time"
 msgstr "Time"
 
@@ -977,13 +982,13 @@ msgstr "Select the time from a list"
 msgid "24hr: no"
 msgstr "24hr: no"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1253
-#: ../libegg/egg-datetime.c:1257
+#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1255
+#: ../libegg/egg-datetime.c:1259
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1254
-#: ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1256
+#: ../libegg/egg-datetime.c:1263
 msgid "PM"
 msgstr "PM"
 
@@ -1013,13 +1018,13 @@ msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1169
+#: ../libegg/egg-datetime.c:1171
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1234
+#: ../libegg/egg-datetime.c:1236
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -1252,46 +1257,46 @@ msgstr "Progress Title"
 msgid "Unavailable"
 msgstr "Unavailable"
 
-#: ../libseahorse/seahorse-util.c:237
+#: ../libseahorse/seahorse-util.c:239
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:513
+#: ../libseahorse/seahorse-util.c:515
 msgid "Key Data"
 msgstr "Key Data"
 
-#: ../libseahorse/seahorse-util.c:515
+#: ../libseahorse/seahorse-util.c:517
 msgid "Multiple Keys"
 msgstr "Multiple Keys"
 
-#: ../libseahorse/seahorse-util.c:771
+#: ../libseahorse/seahorse-util.c:773
 msgid "Couldn't run file-roller"
 msgstr "Couldn't run file-roller"
 
-#: ../libseahorse/seahorse-util.c:777
+#: ../libseahorse/seahorse-util.c:779
 msgid "Couldn't package files"
 msgstr "Couldn't package files"
 
-#: ../libseahorse/seahorse-util.c:778
+#: ../libseahorse/seahorse-util.c:780
 msgid "The file-roller process did not complete successfully"
 msgstr "The file-roller process did not complete successfully"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:954
+#: ../libseahorse/seahorse-util.c:956
 msgid "All key files"
 msgstr "All key files"
 
-#: ../libseahorse/seahorse-util.c:965 ../libseahorse/seahorse-util.c:1013
+#: ../libseahorse/seahorse-util.c:967 ../libseahorse/seahorse-util.c:1015
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "All files"
 
-#: ../libseahorse/seahorse-util.c:1006
+#: ../libseahorse/seahorse-util.c:1008
 msgid "Archive files"
 msgstr "Archive files"
 
-#: ../libseahorse/seahorse-util.c:1076
+#: ../libseahorse/seahorse-util.c:1078
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1301,7 +1306,7 @@ msgstr ""
 "\n"
 "Do you want to replace it with a new file?"
 
-#: ../libseahorse/seahorse-util.c:1079
+#: ../libseahorse/seahorse-util.c:1081
 msgid "_Replace"
 msgstr "_Replace"
 
@@ -1346,7 +1351,7 @@ msgstr "Disabled"
 msgid "Revoked"
 msgstr "Revoked"
 
-#: ../libseahorse/seahorse-widget.c:464
+#: ../libseahorse/seahorse-widget.c:463
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Could not display help: %s"
@@ -1520,7 +1525,8 @@ msgstr "Wrong password"
 
 #: ../pgp/seahorse-gpgme-key-op.c:301
 msgid "This was the third time you entered a wrong password. Please try again."
-msgstr "This was the third time you entered a wrong password. Please try again."
+msgstr ""
+"This was the third time you entered a wrong password. Please try again."
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -1704,41 +1710,41 @@ msgstr "Exporting Keys"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: ../pgp/seahorse-hkp-source.c:330
+#: ../pgp/seahorse-hkp-source.c:387
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "Search was not specific enough. Server '%s' found too many keys."
 
-#: ../pgp/seahorse-hkp-source.c:332
+#: ../pgp/seahorse-hkp-source.c:389
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Couldn't communicate with server '%s': %s"
 
-#: ../pgp/seahorse-hkp-source.c:576
+#: ../pgp/seahorse-hkp-source.c:671
 msgid "Searching for keys..."
 msgstr "Searching for keys…"
 
-#: ../pgp/seahorse-hkp-source.c:647
+#: ../pgp/seahorse-hkp-source.c:759
 msgid "Uploading keys..."
 msgstr "Uploading keys…"
 
-#: ../pgp/seahorse-hkp-source.c:725
+#: ../pgp/seahorse-hkp-source.c:857
 msgid "Retrieving keys..."
 msgstr "Retrieving keys…"
 
-#: ../pgp/seahorse-hkp-source.c:831
+#: ../pgp/seahorse-hkp-source.c:987
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "Searching for keys on: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:908 ../pgp/seahorse-hkp-source.c:981
+#: ../pgp/seahorse-hkp-source.c:1072 ../pgp/seahorse-hkp-source.c:1154
 #: ../pgp/seahorse-ldap-source.c:668
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Connecting to: %s"
 
-#: ../pgp/seahorse-hkp-source.c:1005
+#: ../pgp/seahorse-hkp-source.c:1184
 msgid "HTTP Key Server"
 msgstr "HTTP Key Server"
 
@@ -1943,7 +1949,7 @@ msgstr "Never"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1317
-#: ../src/seahorse-key-manager-store.c:860
+#: ../src/seahorse-key-manager-store.c:896
 msgid "Type"
 msgstr "Type"
 
@@ -2204,7 +2210,7 @@ msgstr "Marginally"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:854
+#: ../src/seahorse-key-manager-store.c:890
 msgid "Trust"
 msgstr "Trust"
 
@@ -2432,7 +2438,7 @@ msgstr "Import Key"
 msgid "Unrecognized key type, or invalid data format"
 msgstr "Unrecognised key type, or invalid data format"
 
-#: ../src/seahorse-key-manager.c:725 ../src/seahorse-keyserver-results.c:207
+#: ../src/seahorse-key-manager.c:725 ../src/seahorse-keyserver-results.c:245
 msgid "_Remote"
 msgstr "_Remote"
 
@@ -2460,11 +2466,11 @@ msgstr "Import from a file"
 msgid "Import from the clipboard"
 msgstr "Import from the clipboard"
 
-#: ../src/seahorse-key-manager.c:738 ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:738 ../src/seahorse-keyserver-results.c:255
 msgid "_Find Remote Keys..."
 msgstr "_Find Remote Keys…"
 
-#: ../src/seahorse-key-manager.c:739 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:739 ../src/seahorse-keyserver-results.c:256
 msgid "Search for keys on a key server"
 msgstr "Search for keys on a key server"
 
@@ -2544,44 +2550,44 @@ msgstr "_Import"
 msgid "_Passwords"
 msgstr "_Passwords"
 
-#: ../src/seahorse-key-manager-store.c:649 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:282
 msgid "Couldn't export keys"
 msgstr "Couldn't export keys"
 
-#: ../src/seahorse-key-manager-store.c:847
+#: ../src/seahorse-key-manager-store.c:883
 msgid "Validity"
 msgstr "Validity"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:866
+#: ../src/seahorse-key-manager-store.c:902
 msgid "Expiration Date"
 msgstr "Expiration Date"
 
-#: ../src/seahorse-keyserver-results.c:209
+#: ../src/seahorse-keyserver-results.c:247
 msgid "Close this window"
 msgstr "Close this window"
 
-#: ../src/seahorse-keyserver-results.c:210
+#: ../src/seahorse-keyserver-results.c:248
 msgid "_Expand All"
 msgstr "_Expand All"
 
-#: ../src/seahorse-keyserver-results.c:211
+#: ../src/seahorse-keyserver-results.c:249
 msgid "Expand all listings"
 msgstr "Expand all listings"
 
-#: ../src/seahorse-keyserver-results.c:212
+#: ../src/seahorse-keyserver-results.c:250
 msgid "_Collapse All"
 msgstr "_Collapse All"
 
-#: ../src/seahorse-keyserver-results.c:213
+#: ../src/seahorse-keyserver-results.c:251
 msgid "Collapse all listings"
 msgstr "Collapse all listings"
 
-#: ../src/seahorse-keyserver-results.c:275
+#: ../src/seahorse-keyserver-results.c:322
 msgid "Remote Keys"
 msgstr "Remote Keys"
 
-#: ../src/seahorse-keyserver-results.c:277
+#: ../src/seahorse-keyserver-results.c:324
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Remote Keys Containing '%s'"
