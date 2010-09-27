@@ -69,7 +69,8 @@ DISTCLEANFILES = \
 DISTCHECK_CONFIGURE_FLAGS = \
     --disable-scrollkeeper \
     --disable-update-mime-database \
-    --enable-gtk-doc
+    --enable-gtk-doc \
+    --disable-debug
     
 CHANGELOG_START = \
 	d2f8367dc600080b6cf3edbe4e2fc204f929471e
