@@ -3,7 +3,6 @@ iconsvg_DATA =  seahorse-key.svg \
                 seahorse-key-personal.svg \
                 seahorse-key-ssh.svg \
                 seahorse-person.svg \
-                seahorse-share-keys.svg \
                 seahorse-sign.svg \
                 seahorse-sign-bad.svg \
                 seahorse-sign-ok.svg \

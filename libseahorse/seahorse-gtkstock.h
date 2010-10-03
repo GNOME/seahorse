@@ -37,7 +37,6 @@
 #define SEAHORSE_STOCK_SIGN_OK      "seahorse-sign-ok"
 #define SEAHORSE_STOCK_SIGN_BAD     "seahorse-sign-bad"
 #define SEAHORSE_STOCK_SIGN_UNKNOWN "seahorse-sign-unknown"
-#define SEAHORSE_STOCK_SHARING      "seahorse-share-keys"
 
 #define SEAHORSE_THEMED_WEBBROWSER  "web-browser"
 #define SEAHORSE_THEMED_FOLDER      "folder"

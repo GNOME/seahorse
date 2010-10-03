@@ -25,35 +25,6 @@
 #include "config.h"
 #include <dbus/dbus-glib-bindings.h>
 
-#define SEAHORSE_ICON_SHARING   "seahorse-share-keys"
-
-/* seahorse-sharing.c ------------------------------------------------------- */
-
-#ifdef WITH_SHARING
-
-void                seahorse_sharing_init();
-
-void                seahorse_sharing_cleanup();
-
-#endif 
-
-/* seahorse-hkp-server.c ---------------------------------------------------- */
-
-#ifdef WITH_HKP
-
-gboolean            seahorse_hkp_server_start (GError **err);
-
-void                seahorse_hkp_server_stop ();
-
-guint               seahorse_hkp_server_get_port ();
-
-gboolean            seahorse_hkp_server_is_running ();
-
-#define HKP_SERVER_ERROR  (seahorse_hkp_server_error_domain ())
-GQuark              seahorse_hkp_server_error_domain ();
-
-#endif
-
 /* seahorse-dbus-server.c --------------------------------------------------- */
 
 
