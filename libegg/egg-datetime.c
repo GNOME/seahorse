@@ -26,8 +26,11 @@
 #include <string.h>
 #include <time.h>
 
-#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+#if GTK_CHECK_VERSION (2,90,0)
+#include <gdk/gdkkeysyms-compat.h>
+#endif
 
 #include "egg-datetime.h"
 
@@ -230,7 +233,12 @@ static void  egg_datetime_get_property (GObject    *object,
                    GValue        *value,
                    GParamSpec    *pspec);
 
-static void  egg_datetime_destroy      (GtkObject *object);
+#if GTK_CHECK_VERSION (2, 90, 0)
+static void  egg_datetime_destroy      (GtkWidget *widget);
+#else
+static void  egg_datetime_destroy      (GtkObject *widget);
+#endif
+
 static void  egg_datetime_finalize     (GObject    *object);
 
 static gchar   *get_time_string     (guint8 hour, guint8 minute, guint8 second);
@@ -294,18 +302,22 @@ static void
 egg_datetime_class_init (EggDateTimeClass *klass)
 {
    GObjectClass *o_class;
-   GtkObjectClass *go_class;
    GParamSpec *pspec;
 
    parent_class = g_type_class_peek_parent (klass);
 
    o_class  = (GObjectClass *)   klass;
-   go_class = (GtkObjectClass *) klass;
 
    o_class->finalize     = egg_datetime_finalize;
         o_class->set_property = egg_datetime_set_property;
         o_class->get_property = egg_datetime_get_property;
-   go_class->destroy     = egg_datetime_destroy;
+
+#if GTK_CHECK_VERSION (2,90,0)
+        ((GtkWidgetClass*)klass)->destroy     = egg_datetime_destroy;
+#else
+        ((GtkObjectClass*)klass)->destroy     = egg_datetime_destroy;
+#endif
+
 
    /* Properties */
 
@@ -547,8 +559,6 @@ egg_datetime_init (EggDateTime *edt)
 
    priv->calendar = gtk_calendar_new ();
    cal_options = GTK_CALENDAR_SHOW_DAY_NAMES | GTK_CALENDAR_SHOW_HEADING;
-   if (priv->week_start_monday)
-      cal_options |= GTK_CALENDAR_WEEK_START_MONDAY;
    gtk_calendar_set_display_options (GTK_CALENDAR (priv->calendar), cal_options);
         gtk_container_add (GTK_CONTAINER (priv->cal_popup), priv->calendar);
    g_signal_connect_swapped (G_OBJECT (priv->calendar), "day-selected",
@@ -734,9 +744,13 @@ egg_datetime_get_property (GObject  *object,
 }
 
 static void
-egg_datetime_destroy (GtkObject *object)
+#if GTK_CHECK_VERSION (2, 90, 0)
+egg_datetime_destroy (GtkWidget *widget)
+#else
+egg_datetime_destroy (GtkObject *widget)
+#endif
 {
-   EggDateTime *edt = EGG_DATETIME (object);
+   EggDateTime *edt = EGG_DATETIME (widget);
    EggDateTimePrivate *priv = edt->priv;
 
    if (priv->cal_popup) {
@@ -749,8 +763,13 @@ egg_datetime_destroy (GtkObject *object)
       priv->time_popup = NULL;
    }
 
-   if (GTK_OBJECT_CLASS (parent_class)->destroy)
-      (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+#if GTK_CHECK_VERSION (2, 90, 0)
+	if (GTK_WIDGET_CLASS (parent_class)->destroy)
+		(* GTK_WIDGET_CLASS (parent_class)->destroy) (widget);
+#else
+	if (GTK_OBJECT_CLASS (parent_class)->destroy)
+		(* GTK_OBJECT_CLASS (parent_class)->destroy) (widget);
+#endif
 }
 
 static void

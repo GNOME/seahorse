@@ -58,18 +58,22 @@ typedef struct _SeahorseWidgetClass SeahorseWidgetClass;
  */
 
 struct _SeahorseWidget {
-    GtkObject parent;
+	GObject parent;
 
-    /*< public >*/
-    GtkBuilder *gtkbuilder;
-    gchar *name;
-    
-    /*< private >*/
-    gboolean destroying;
+	/*< public >*/
+	GtkBuilder *gtkbuilder;
+	gchar *name;
+
+	/*< private >*/
+	gboolean destroying;
+	gboolean in_destruction;
 };
 
 struct _SeahorseWidgetClass {
-    GtkObjectClass parent_class;
+	GObjectClass parent_class;
+
+	/*< signals >*/
+	void (*destroy) (SeahorseWidget *swidget);
 };
 
 GType            seahorse_widget_get_type ();

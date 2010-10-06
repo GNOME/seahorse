@@ -65,8 +65,6 @@ G_DEFINE_TYPE_EXTENDED (SeahorseViewer, seahorse_viewer, SEAHORSE_TYPE_WIDGET, 0
 #define SEAHORSE_VIEWER_GET_PRIVATE(o) \
 	(G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_TYPE_VIEWER, SeahorseViewerPrivate))
 
-static gboolean about_initialized = FALSE;
-
 /* Predicates which control export and delete commands, inited in class_init */
 static SeahorseObjectPredicate exportable_predicate = { 0, };
 static SeahorseObjectPredicate deletable_predicate = { 0, };
@@ -108,25 +106,6 @@ on_app_preferences (GtkAction* action, SeahorseViewer* self)
 }
 
 static void 
-on_about_link_clicked (GtkAboutDialog* about, const char* url, gpointer unused) 
-{
-	GError *error = NULL;
-	GAppLaunchContext* ctx;
-	
-	g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
-	g_return_if_fail (url != NULL);
-	
-	
-	ctx = g_app_launch_context_new ();
-	if (!g_app_info_launch_default_for_uri (url, ctx, &error)) {
-		g_warning ("couldn't launch url: %s: %s", url, error->message);
-		g_clear_error (&error);
-	}
-	
-	g_object_unref (ctx);
-}
-
-static void 
 on_app_about (GtkAction* action, SeahorseViewer* self) 
 {
 	GtkAboutDialog *about;
@@ -157,11 +136,6 @@ on_app_about (GtkAction* action, SeahorseViewer* self)
 		NULL
 	};
 
-	if (!about_initialized) {
-		about_initialized = TRUE;
-		gtk_about_dialog_set_url_hook (on_about_link_clicked, NULL, NULL);
-	}
-	
 	about = GTK_ABOUT_DIALOG (gtk_about_dialog_new ());
 	gtk_about_dialog_set_artists (about, artists);
 	gtk_about_dialog_set_authors (about, authors);

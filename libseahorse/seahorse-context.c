@@ -59,12 +59,13 @@ enum {
     REMOVED,
     CHANGED,
     REFRESHING,
+    DESTROY,
     LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (SeahorseContext, seahorse_context, GTK_TYPE_OBJECT);
+G_DEFINE_TYPE (SeahorseContext, seahorse_context, G_TYPE_OBJECT);
 
 /* 
  * Two hashtables are used to keep track of the objects:
@@ -85,6 +86,7 @@ struct _SeahorseContextPrivate {
     guint notify_id;                        /* Notify for GConf watch */
     SeahorseMultiOperation *refresh_ops;    /* Operations for refreshes going on */
     SeahorseServiceDiscovery *discovery;    /* Adds sources from DNS-SD */
+    gboolean in_destruction;                /* In destroy signal */
 };
 
 static void seahorse_context_dispose    (GObject *gobject);
@@ -123,6 +125,9 @@ seahorse_context_class_init (SeahorseContextClass *klass)
     signals[REFRESHING] = g_signal_new ("refreshing", SEAHORSE_TYPE_CONTEXT, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseContextClass, refreshing),
                 NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_OPERATION);    
+    signals[DESTROY] = g_signal_new ("destroy", SEAHORSE_TYPE_CONTEXT,
+                G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseContextClass, destroy),
+                NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 /* init context, private vars, set prefs, connect signals */
@@ -214,8 +219,14 @@ seahorse_context_dispose (GObject *gobject)
     if (sctx->pv->refresh_ops)
 	    g_object_unref (sctx->pv->refresh_ops);
     sctx->pv->refresh_ops = NULL;
-    
-    G_OBJECT_CLASS (seahorse_context_parent_class)->dispose (gobject);
+
+	if (!sctx->pv->in_destruction) {
+		sctx->pv->in_destruction = TRUE;
+		g_signal_emit (sctx, signals[DESTROY], 0);
+		sctx->pv->in_destruction = FALSE;
+	}
+
+	G_OBJECT_CLASS (seahorse_context_parent_class)->dispose (gobject);
 }
 
 
@@ -313,12 +324,10 @@ seahorse_context_new (guint flags)
 void
 seahorse_context_destroy (SeahorseContext *sctx)
 {
-	g_return_if_fail (GTK_IS_OBJECT (sctx));
-	
-	gtk_object_destroy (GTK_OBJECT (sctx));
-    
-    if (sctx == app_context)
-        app_context = NULL;
+	g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
+	g_object_run_dispose (G_OBJECT (sctx));
+	if (sctx == app_context)
+		app_context = NULL;
 }
 
 /**

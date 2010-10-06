@@ -29,15 +29,15 @@ typedef struct _CryptUIKeysetClass CryptUIKeysetClass;
 typedef struct _CryptUIKeysetPrivate CryptUIKeysetPrivate;
 
 struct _CryptUIKeyset {
-    GtkObject parent;
+	GObject parent;
 
-    /*<private>*/
-    CryptUIKeysetPrivate *priv;
+	/*<private>*/
+	CryptUIKeysetPrivate *priv;
 };
 
 struct _CryptUIKeysetClass {
-    GtkObjectClass      parent_class;
-    
+	GObjectClass parent_class;
+
     /* signals --------------------------------------------------------- */
     
     /* A key was added to this view */

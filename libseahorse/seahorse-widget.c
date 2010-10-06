@@ -44,9 +44,17 @@ enum {
 	PROP_NAME
 };
 
+enum {
+	DESTROY,
+	LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 static void     class_init          (SeahorseWidgetClass    *klass);
 static void     object_init         (SeahorseWidget         *swidget);
 
+static void     object_dispose     (GObject                *gobject);
 static void     object_finalize     (GObject                *gobject);
 
 static void     object_set_property (GObject                *object,
@@ -74,10 +82,10 @@ G_MODULE_EXPORT gboolean on_widget_delete_event  (GtkWidget             *widget,
                                                        GdkEvent              *event,
                                                        SeahorseWidget        *swidget);
 
-static void     context_destroyed    (GtkObject             *object,
+static void     context_destroyed    (SeahorseContext       *sctx,
                                       SeahorseWidget        *swidget);
 
-static GtkObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = NULL;
 
 /* Hash of widgets with name as key */
 static GHashTable *widgets = NULL;
@@ -100,9 +108,9 @@ seahorse_widget_get_type (void)
 			(GClassInitFunc) class_init,
 			NULL, NULL, sizeof (SeahorseWidget), 0, (GInstanceInitFunc) object_init
 		};
-		
-        widget_type = g_type_register_static (GTK_TYPE_OBJECT, "SeahorseWidget", 
-                                              &widget_info, 0);
+
+		widget_type = g_type_register_static (G_TYPE_OBJECT, "SeahorseWidget",
+		                                      &widget_info, 0);
 	}
 	
 	return widget_type;
@@ -123,24 +131,29 @@ class_init (SeahorseWidgetClass *klass)
 	gobject_class = G_OBJECT_CLASS (klass);
 	
 	gobject_class->constructor = seahorse_widget_constructor;
+	gobject_class->dispose = object_dispose;
 	gobject_class->finalize = object_finalize;
 	gobject_class->set_property = object_set_property;
 	gobject_class->get_property = object_get_property;
-	
-    g_object_class_install_property (gobject_class, PROP_NAME,
-        g_param_spec_string ("name", "Widget name", "Name of gtkbuilder file and main widget",
-                             NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (gobject_class, PROP_NAME,
+	           g_param_spec_string ("name", "Widget name", "Name of gtkbuilder file and main widget",
+	                                NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	signals[DESTROY] = g_signal_new ("destroy", SEAHORSE_TYPE_WIDGET,
+	                                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseWidgetClass, destroy),
+	                                 NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 /**
-* object: ignored
+* sctx: ignored
 * swidget: The swidget being destroyed
 *
 * Destroy widget when context is destroyed
 *
 **/
 static void
-context_destroyed (GtkObject *object, SeahorseWidget *swidget)
+context_destroyed (SeahorseContext *sctx, SeahorseWidget *swidget)
 {
 	seahorse_widget_destroy (swidget);
 }
@@ -154,8 +167,8 @@ context_destroyed (GtkObject *object, SeahorseWidget *swidget)
 static void
 object_init (SeahorseWidget *swidget)
 {
-    g_signal_connect_after (SCTX_APP(), "destroy", 
-                G_CALLBACK (context_destroyed), swidget);
+	g_signal_connect_after (SCTX_APP(), "destroy",
+	                        G_CALLBACK (context_destroyed), swidget);
 }
 
 /**
@@ -199,6 +212,19 @@ seahorse_widget_constructor (GType type, guint n_props, GObjectConstructParam* p
     return obj;
 }
 
+static void
+object_dispose (GObject *object)
+{
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (object);
+
+	if (!swidget->in_destruction) {
+		swidget->in_destruction = TRUE;
+		g_signal_emit (swidget, signals[DESTROY], 0);
+		swidget->in_destruction = FALSE;
+	}
+
+	G_OBJECT_CLASS (parent_class)->dispose (object);
+}
 
 /**
 * gobject: The #SeahorseWidget to finalize
@@ -383,11 +409,6 @@ seahorse_widget_new (const gchar *name, GtkWindow *parent)
         gtk_window_set_transient_for (window, parent);
     }
 
-    /* We don't care about this floating business */
-    g_object_ref (GTK_OBJECT (swidget));
-    g_object_ref_sink (GTK_OBJECT (swidget));
-    g_object_unref (GTK_OBJECT (swidget));
-
     return swidget;
 }
 
@@ -403,22 +424,18 @@ seahorse_widget_new (const gchar *name, GtkWindow *parent)
 SeahorseWidget*
 seahorse_widget_new_allow_multiple (const gchar *name, GtkWindow *parent)
 {
-    GtkWindow *window;
-    SeahorseWidget *swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name,  NULL);
-    
-    if (parent != NULL) {
-        window = GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name));
-        gtk_window_set_transient_for (window, parent);
-    }
+	GtkWindow *window;
+	SeahorseWidget *swidget;
+
+	swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name,  NULL);
+
+	if (parent != NULL) {
+		window = GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name));
+		gtk_window_set_transient_for (window, parent);
+	}
 
 	gtk_builder_connect_signals (swidget->gtkbuilder, NULL);
-    
-    /* We don't care about this floating business */
-    g_object_ref (GTK_OBJECT (swidget));
-    g_object_ref_sink (GTK_OBJECT (swidget));
-    g_object_unref (GTK_OBJECT (swidget));
-
-    return swidget;
+	return swidget;
 }
 
 /**

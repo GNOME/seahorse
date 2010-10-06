@@ -64,8 +64,7 @@ EXTRA_DIST = \
     org.gnome.seahorse.service.in
 
 CLEANFILES = *.bak \
-    seahorse-daemon.desktop.in \
-    org.gnome.seahorse.service
+	org.gnome.seahorse.service
 
 # DBUS binding files
 seahorse-service-bindings.h: seahorse-service.xml

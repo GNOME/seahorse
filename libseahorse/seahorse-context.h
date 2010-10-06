@@ -66,18 +66,18 @@ typedef struct _SeahorseContextPrivate SeahorseContextPrivate;
  */
 
 struct _SeahorseContext {
-    GtkObject               parent;
-    
-    /*< public >*/
-    gboolean                is_daemon;
-    
-    /*< private >*/
-    SeahorseContextPrivate  *pv;
+	GObject parent;
+
+	/*< public >*/
+	gboolean is_daemon;
+
+	/*< private >*/
+	SeahorseContextPrivate  *pv;
 };
 
 struct _SeahorseContextClass {
-    GtkObjectClass parent_class;
-    
+	GObjectClass parent_class;
+
     /* signals --------------------------------------------------------- */
     
     /* A object was added to this source */
@@ -91,6 +91,8 @@ struct _SeahorseContextClass {
     
     /* The source is being refreshed */
     void (*refreshing) (SeahorseContext *sctx, SeahorseOperation *op);
+
+	void (*destroy) (SeahorseContext *sctx);
 };
 
 enum SeahorseContextType {

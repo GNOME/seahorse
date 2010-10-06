@@ -41,7 +41,11 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#if GTK_CHECK_VERSION (2,90,0)
+#include <gdk/gdkkeysyms-compat.h>
+#endif
 
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
@@ -198,7 +202,7 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     if (!prompt)
         prompt = _("Password:"); 
     
-    w = gtk_dialog_new_with_buttons (title, NULL, GTK_DIALOG_NO_SEPARATOR, NULL);
+    w = gtk_dialog_new_with_buttons (title, NULL, 0, NULL);
     gtk_window_set_icon_name (GTK_WINDOW (w), GTK_STOCK_DIALOG_AUTHENTICATION);
 
     dialog = GTK_DIALOG (w);

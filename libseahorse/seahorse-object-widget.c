@@ -259,13 +259,5 @@ seahorse_object_widget_create (gchar *name, GtkWindow *parent, SeahorseObject *o
 SeahorseWidget*
 seahorse_object_widget_new (gchar *name, GtkWindow *parent, SeahorseObject *object)
 {
-    SeahorseWidget *swidget;
-    
-    swidget = seahorse_object_widget_create (name, parent, object);
-    
-    /* We don't care about this floating business */
-    g_object_ref (GTK_OBJECT (swidget));
-    g_object_ref_sink (GTK_OBJECT (swidget));
-    g_object_unref (GTK_OBJECT (swidget));
-    return swidget;
+	return seahorse_object_widget_create (name, parent, object);
 }

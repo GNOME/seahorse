@@ -100,12 +100,11 @@ if HAVE_INTROSPECTION
 CryptUI-@LIBCRYPTUI_MAJOR@.gir: $(INTROSPECTION_SCANNER) libcryptui.la
 	$(QUIET_GEN)$(INTROSPECTION_SCANNER) -v \
 	--namespace CryptUI --nsversion=@LIBCRYPTUI_MAJOR@ \
-    --strip-prefix=CryptUI \
 	$(INCLUDES) \
 	--include=Gtk-2.0 \
 	--library=libcryptui.la \
-    --pkg gtk+-2.0 \
-    --output $@ \
+	--pkg gtk+-2.0 \
+	--output $@ \
 	$(inc_HEADERS) \
 	$(libcryptui_src)
 

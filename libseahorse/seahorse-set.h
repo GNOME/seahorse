@@ -65,15 +65,15 @@ typedef struct _SeahorseSetPrivate SeahorseSetPrivate;
  */
 
 struct _SeahorseSet {
-    GtkObject parent;
-    
-    /*<private>*/
-    SeahorseSetPrivate   *pv;
+	GObject parent;
+
+	/*<private>*/
+	SeahorseSetPrivate   *pv;
 };
 
 struct _SeahorseSetClass {
-    GtkObjectClass parent_class;
-    
+	GObjectClass parent_class;
+
     /* signals --------------------------------------------------------- */
     
     /* A key was added to this view */

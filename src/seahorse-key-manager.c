@@ -882,7 +882,7 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->pv->view_actions);
 	
 	/* Notify us when gconf stuff changes under this key */
-	seahorse_gconf_notify_lazy (LISTING_SCHEMAS, (GConfClientNotifyFunc)on_gconf_notify, self, GTK_OBJECT (self));
+	seahorse_gconf_notify_lazy (LISTING_SCHEMAS, (GConfClientNotifyFunc)on_gconf_notify, self, self);
 	
 	/* close event */
 	g_signal_connect_object (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)), 
