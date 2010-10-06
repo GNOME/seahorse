@@ -72,10 +72,10 @@ seahorse_pkcs11_string_to_klass (const char* str)
 }
 
 GQuark 
-seahorse_pkcs11_id_from_attributes (GP11Attributes* attrs) 
+seahorse_pkcs11_id_from_attributes (GckAttributes* attrs)
 {
 	gulong klass;
-	GP11Attribute* attr;
+	GckAttribute* attr;
 	gchar *id, *encoded, *klass_str;
 	GQuark quark;
 	
@@ -84,12 +84,12 @@ seahorse_pkcs11_id_from_attributes (GP11Attributes* attrs)
 	/* These cases should have been covered by the programmer */
 
 	klass = 0;
-	if (!gp11_attributes_find_ulong (attrs, CKA_CLASS, &klass)) {
+	if (!gck_attributes_find_ulong (attrs, CKA_CLASS, &klass)) {
 		g_warning ("Cannot create object id. PKCS#11 attribute set did not contain CKA_CLASS.");
 		return 0;
 	}
 	
-	attr = gp11_attributes_find (attrs, CKA_ID);
+	attr = gck_attributes_find (attrs, CKA_ID);
 	if (attr == NULL) {
 		g_warning ("Cannot create object id. PKCS#11 attribute set did not contain CKA_ID");
 		return 0;
@@ -109,7 +109,7 @@ seahorse_pkcs11_id_from_attributes (GP11Attributes* attrs)
 
 
 gboolean 
-seahorse_pkcs11_id_to_attributes (GQuark id, GP11Attributes* attrs) 
+seahorse_pkcs11_id_to_attributes (GQuark id, GckAttributes* attrs)
 {
 	const gchar* value;
 	guchar *ckid;
@@ -143,10 +143,10 @@ seahorse_pkcs11_id_to_attributes (GQuark id, GP11Attributes* attrs)
 	if (!id) 
 		return FALSE;
 		
-	gp11_attributes_add_ulong (attrs, CKA_CLASS, klass);
-	gp11_attributes_add_data (attrs, CKA_ID, ckid, n_ckid);
+	gck_attributes_add_ulong (attrs, CKA_CLASS, klass);
+	gck_attributes_add_data (attrs, CKA_ID, ckid, n_ckid);
 	g_free (ckid);
-	
+
 	return TRUE;
 }
 

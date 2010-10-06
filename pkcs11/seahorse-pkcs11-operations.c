@@ -29,7 +29,7 @@
 
 #include <pkcs11.h>
 #include <pkcs11g.h>
-#include <gp11.h>
+#include <gck/gck.h>
 
 #include <glib/gi18n.h>
 
@@ -64,7 +64,7 @@ struct _SeahorsePkcs11Refresher {
 	SeahorseOperation parent;
 	GCancellable *cancellable;
 	SeahorsePkcs11Source *source;
-	GP11Session *session;
+	GckSession *session;
 	GHashTable *checks;
 };
 
@@ -99,7 +99,7 @@ remove_each_object (gpointer key, gpointer value, gpointer data)
 }
 
 static void 
-on_find_objects(GP11Session *session, GAsyncResult *result, SeahorsePkcs11Refresher *self)
+on_find_objects(GckSession *session, GAsyncResult *result, SeahorsePkcs11Refresher *self)
 {
 	GList *objects, *l;
 	GError *err = NULL;
@@ -107,7 +107,7 @@ on_find_objects(GP11Session *session, GAsyncResult *result, SeahorsePkcs11Refres
 	
 	g_assert (SEAHORSE_IS_PKCS11_REFRESHER (self));
 	
-	objects = gp11_session_find_objects_finish (session, result, &err);
+	objects = gck_session_find_objects_finish (session, result, &err);
 	if (err != NULL) {
 		seahorse_pkcs11_mark_complete (SEAHORSE_OPERATION (self), err);
 		return;
@@ -116,7 +116,7 @@ on_find_objects(GP11Session *session, GAsyncResult *result, SeahorsePkcs11Refres
 	/* Remove all objects that were found, from the check table */
 	for (l = objects; l; l = g_list_next (l)) {
 		seahorse_pkcs11_source_receive_object (self->source, l->data);
-		handle = gp11_object_get_handle (l->data);
+		handle = gck_object_get_handle (l->data);
 		g_hash_table_remove (self->checks, &handle);
 	}
 
@@ -127,26 +127,26 @@ on_find_objects(GP11Session *session, GAsyncResult *result, SeahorsePkcs11Refres
 }
 
 static void 
-on_open_session(GP11Slot *slot, GAsyncResult *result, SeahorsePkcs11Refresher *self) 
+on_open_session(GckSlot *slot, GAsyncResult *result, SeahorsePkcs11Refresher *self)
 {
 	GError *err = NULL;
-	GP11Attributes *attrs;
-	
+	GckAttributes *attrs;
+
 	g_return_if_fail (SEAHORSE_IS_PKCS11_REFRESHER (self));
-	
-	self->session = gp11_slot_open_session_finish (slot, result, &err);
+
+	self->session = gck_slot_open_session_finish (slot, result, &err);
 	if (!self->session) {
 		seahorse_pkcs11_mark_complete (SEAHORSE_OPERATION (self), err);
 		return;
 	}
 	
 	/* Step 2. Load all the objects that we want */
-	attrs = gp11_attributes_new ();
-	gp11_attributes_add_boolean (attrs, CKA_TOKEN, TRUE);
-	gp11_attributes_add_ulong (attrs, CKA_CLASS, CKO_CERTIFICATE);
-	gp11_session_find_objects_async (self->session, attrs, self->cancellable, 
-	                                 (GAsyncReadyCallback)on_find_objects, self);
-	gp11_attributes_unref (attrs);
+	attrs = gck_attributes_new ();
+	gck_attributes_add_boolean (attrs, CKA_TOKEN, TRUE);
+	gck_attributes_add_ulong (attrs, CKA_CLASS, CKO_CERTIFICATE);
+	gck_session_find_objects_async (self->session, attrs, self->cancellable,
+	                                (GAsyncReadyCallback)on_find_objects, self);
+	gck_attributes_unref (attrs);
 }
 
 static void
@@ -161,7 +161,7 @@ static GObject*
 seahorse_pkcs11_refresher_constructor (GType type, guint n_props, GObjectConstructParam *props) 
 {
 	SeahorsePkcs11Refresher *self = SEAHORSE_PKCS11_REFRESHER (G_OBJECT_CLASS (seahorse_pkcs11_refresher_parent_class)->constructor(type, n_props, props));
-	GP11Slot *slot;
+	GckSlot *slot;
 	GList *objects, *l;
 	gulong handle;
 
@@ -181,7 +181,7 @@ seahorse_pkcs11_refresher_constructor (GType type, guint n_props, GObjectConstru
 
 	/* Step 1. Load the session */
 	slot = seahorse_pkcs11_source_get_slot (self->source);
-	gp11_slot_open_session_async (slot, CKF_RW_SESSION, NULL, NULL, self->cancellable,
+	gck_slot_open_session_async (slot, GCK_SESSION_READ_WRITE, self->cancellable,
 	                              (GAsyncReadyCallback)on_open_session, self);
 	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
 	
@@ -312,13 +312,13 @@ enum {
 G_DEFINE_TYPE (SeahorsePkcs11Deleter, seahorse_pkcs11_deleter, SEAHORSE_TYPE_OPERATION);
 
 static void 
-on_deleted (GP11Object *object, GAsyncResult *result, SeahorsePkcs11Deleter *self) 
+on_deleted (GckObject *object, GAsyncResult *result, SeahorsePkcs11Deleter *self)
 {
 	GError *err = NULL;
 	
 	g_return_if_fail (SEAHORSE_IS_PKCS11_DELETER (self));
 	
-	if (!gp11_object_destroy_finish (object, result, &err)) {
+	if (!gck_object_destroy_finish (object, result, &err)) {
 
 		/* Ignore objects that have gone away */
 		if (err->code != CKR_OBJECT_HANDLE_INVALID) { 
@@ -350,8 +350,8 @@ seahorse_pkcs11_deleter_constructor (GType type, guint n_props, GObjectConstruct
 	g_return_val_if_fail (self->object, NULL);
 
 	/* Start the delete */
-	gp11_object_destroy_async (seahorse_pkcs11_object_get_pkcs11_object (self->object),
-	                           self->cancellable, (GAsyncReadyCallback)on_deleted, self);
+	gck_object_destroy_async (seahorse_pkcs11_object_get_pkcs11_object (self->object),
+	                          self->cancellable, (GAsyncReadyCallback)on_deleted, self);
 	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
 	
 	return G_OBJECT (self);

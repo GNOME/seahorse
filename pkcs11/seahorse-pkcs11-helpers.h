@@ -23,10 +23,10 @@
 #define __SEAHORSE_PKCS11_HELPERS_H__
 
 #include <glib.h>
-#include <gp11.h>
+#include <gck/gck.h>
 
-GQuark seahorse_pkcs11_id_from_attributes (GP11Attributes* attrs);
-gboolean seahorse_pkcs11_id_to_attributes (GQuark id, GP11Attributes* attrs);
+GQuark seahorse_pkcs11_id_from_attributes (GckAttributes* attrs);
+gboolean seahorse_pkcs11_id_to_attributes (GQuark id, GckAttributes* attrs);
 
 
 #endif

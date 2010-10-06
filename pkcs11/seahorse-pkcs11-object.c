@@ -46,10 +46,9 @@ enum {
 };
 
 struct _SeahorsePkcs11ObjectPrivate {
-	GP11Object *pkcs11_object;
-	GP11Attributes* pkcs11_attributes;
+	GckObject *pkcs11_object;
+	GckAttributes* pkcs11_attributes;
 	GCancellable *request_attributes;
-	
 };
 
 G_DEFINE_TYPE (SeahorsePkcs11Object, seahorse_pkcs11_object, SEAHORSE_TYPE_OBJECT);
@@ -62,10 +61,10 @@ static void
 received_object_attributes (GObject *object, GAsyncResult *result, gpointer user_data)
 {
 	SeahorsePkcs11Object *self = SEAHORSE_PKCS11_OBJECT (user_data);
-	GP11Attributes *attrs;
+	GckAttributes *attrs;
 	GError *err = NULL;
 	
-	attrs = gp11_object_get_finish (GP11_OBJECT (object), result, &err);
+	attrs = gck_object_get_finish (GCK_OBJECT (object), result, &err);
 	if (err && err->code == CKR_FUNCTION_CANCELED)
 		return;
 
@@ -86,19 +85,19 @@ load_object_attributes (SeahorsePkcs11Object *self, const gulong *attr_types,
                         gsize n_attr_types)
 {
 	gboolean added = FALSE;
-	GP11Attributes *attrs;
-	GP11Attribute *attr;
+	GckAttribute *attr;
+	GArray *types;
 	gsize i;
-	
+
 	g_assert (SEAHORSE_PKCS11_IS_OBJECT (self));
 	g_assert (self->pv->pkcs11_attributes);
 	g_assert (self->pv->pkcs11_object);
 
 	/* Add in any attirbutes not found, as invalid */
 	for (i = 0; i < n_attr_types; ++i) {
-		attr = gp11_attributes_find (self->pv->pkcs11_attributes, attr_types[i]);
+		attr = gck_attributes_find (self->pv->pkcs11_attributes, attr_types[i]);
 		if (attr == NULL) {
-			gp11_attributes_add_invalid (self->pv->pkcs11_attributes, attr_types[i]);
+			gck_attributes_add_invalid (self->pv->pkcs11_attributes, attr_types[i]);
 			added = TRUE;
 		}
 			
@@ -121,20 +120,20 @@ load_object_attributes (SeahorsePkcs11Object *self, const gulong *attr_types,
 	 * Build up an array of attribute types to load, from the 
 	 * ones that we alrady have plus the ones that are requested.
 	 */
-	
-	attrs = gp11_attributes_new ();
-	for (i = 0; i < gp11_attributes_count (self->pv->pkcs11_attributes); ++i) {
-		attr = gp11_attributes_at (self->pv->pkcs11_attributes, i);
+
+	types = g_array_new (FALSE, TRUE, sizeof (gulong));
+	for (i = 0; i < gck_attributes_count (self->pv->pkcs11_attributes); ++i) {
+		attr = gck_attributes_at (self->pv->pkcs11_attributes, i);
 		g_return_if_fail (attr);
-		gp11_attributes_add_empty (attrs, attr->type);
+		g_array_append_val (types, attr->type);
 	}
 
 	/* Off we go to load them all */
 	self->pv->request_attributes = g_cancellable_new ();
-	gp11_object_get_async (self->pv->pkcs11_object, attrs, self->pv->request_attributes, 
-	                       received_object_attributes, g_object_ref (self));
-	
-	gp11_attributes_unref (attrs);
+	gck_object_get_async (self->pv->pkcs11_object, (gulong*)types->data, types->len,
+	                      self->pv->request_attributes, received_object_attributes, g_object_ref (self));
+
+	g_array_free (types, TRUE);
 }
 
 /* -----------------------------------------------------------------------------
@@ -156,10 +155,10 @@ seahorse_pkcs11_object_realize (SeahorseObject *obj)
 	g_assert (SEAHORSE_PKCS11_IS_OBJECT (obj));
 
 	flags = 0;
-	if (gp11_attributes_find_boolean (self->pv->pkcs11_attributes, CKA_EXTRACTABLE, &exportable) && exportable)
+	if (gck_attributes_find_boolean (self->pv->pkcs11_attributes, CKA_EXTRACTABLE, &exportable) && exportable)
 		flags |= SEAHORSE_FLAG_EXPORTABLE;
 
-	gp11_attributes_find_string (self->pv->pkcs11_attributes, CKA_LABEL, &label);
+	gck_attributes_find_string (self->pv->pkcs11_attributes, CKA_LABEL, &label);
 	g_object_set (self,
 		      "label", label,
 		      "location", SEAHORSE_LOCATION_LOCAL,
@@ -200,14 +199,14 @@ static void
 seahorse_pkcs11_object_init (SeahorsePkcs11Object *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_PKCS11_TYPE_OBJECT, SeahorsePkcs11ObjectPrivate));
-	self->pv->pkcs11_attributes = gp11_attributes_new ();
+	self->pv->pkcs11_attributes = gck_attributes_new ();
 }
 
 static void
 seahorse_pkcs11_object_dispose (GObject *obj)
 {
 	SeahorsePkcs11Object *self = SEAHORSE_PKCS11_OBJECT (obj);
-    
+
 	if (self->pv->pkcs11_object)
 		g_object_unref (self->pv->pkcs11_object);
 	self->pv->pkcs11_object = NULL;
@@ -223,7 +222,7 @@ seahorse_pkcs11_object_finalize (GObject *obj)
 	g_assert (self->pv->pkcs11_object == NULL);
 	
 	if (self->pv->pkcs11_attributes)
-		gp11_attributes_unref (self->pv->pkcs11_attributes);
+		gck_attributes_unref (self->pv->pkcs11_attributes);
 	self->pv->pkcs11_attributes = NULL;
 	
 	G_OBJECT_CLASS (seahorse_pkcs11_object_parent_class)->finalize (obj);
@@ -293,11 +292,11 @@ seahorse_pkcs11_object_class_init (SeahorsePkcs11ObjectClass *klass)
 	seahorse_class->delete = seahorse_pkcs11_object_delete;
 	
 	g_object_class_install_property (gobject_class, PROP_PKCS11_OBJECT, 
-	         g_param_spec_object ("pkcs11-object", "pkcs11-object", "pkcs11-object", GP11_TYPE_OBJECT, 
+	         g_param_spec_object ("pkcs11-object", "pkcs11-object", "pkcs11-object", GCK_TYPE_OBJECT,
 	                              G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 	
 	g_object_class_install_property (gobject_class, PROP_PKCS11_ATTRIBUTES, 
-	         g_param_spec_boxed ("pkcs11-attributes", "pkcs11-attributes", "pkcs11-attributes", GP11_TYPE_ATTRIBUTES, 
+	         g_param_spec_boxed ("pkcs11-attributes", "pkcs11-attributes", "pkcs11-attributes", GCK_TYPE_ATTRIBUTES,
 	                             G_PARAM_READABLE | G_PARAM_WRITABLE));
 	
 	g_object_class_install_property (gobject_class, PROP_PKCS11_HANDLE, 
@@ -310,20 +309,20 @@ seahorse_pkcs11_object_class_init (SeahorsePkcs11ObjectClass *klass)
  */
 
 SeahorsePkcs11Object*
-seahorse_pkcs11_object_new (GP11Object* object)
+seahorse_pkcs11_object_new (GckObject* object)
 {
 	return g_object_new (SEAHORSE_PKCS11_TYPE_OBJECT, 
 	                     "pkcs11-object", object, NULL);
 }
 
-GP11Object* 
+GckObject*
 seahorse_pkcs11_object_get_pkcs11_object (SeahorsePkcs11Object* self) 
 {
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_OBJECT (self), NULL);
 	return self->pv->pkcs11_object;
 }
 
-GP11Attributes* 
+GckAttributes*
 seahorse_pkcs11_object_get_pkcs11_attributes (SeahorsePkcs11Object* self) 
 {
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_OBJECT (self), NULL);
@@ -332,7 +331,7 @@ seahorse_pkcs11_object_get_pkcs11_attributes (SeahorsePkcs11Object* self)
 
 
 void 
-seahorse_pkcs11_object_set_pkcs11_attributes (SeahorsePkcs11Object* self, GP11Attributes* value) 
+seahorse_pkcs11_object_set_pkcs11_attributes (SeahorsePkcs11Object* self, GckAttributes* value)
 {
 	GObject *obj;
 	
@@ -340,9 +339,9 @@ seahorse_pkcs11_object_set_pkcs11_attributes (SeahorsePkcs11Object* self, GP11At
 	g_return_if_fail (value);
 	
 	if (value)
-		gp11_attributes_ref (value);
+		gck_attributes_ref (value);
 	if (self->pv->pkcs11_attributes)
-		gp11_attributes_unref (self->pv->pkcs11_attributes);
+		gck_attributes_unref (self->pv->pkcs11_attributes);
 	self->pv->pkcs11_attributes = value;
 	
 	obj = G_OBJECT (self);
@@ -350,8 +349,8 @@ seahorse_pkcs11_object_set_pkcs11_attributes (SeahorsePkcs11Object* self, GP11At
 	seahorse_pkcs11_object_realize (SEAHORSE_OBJECT (obj));
 	g_object_notify (obj, "pkcs11-attributes");
 	g_object_thaw_notify (obj);
-	
-	gp11_attributes_find (self->pv->pkcs11_attributes, CKA_LABEL);
+
+	gck_attributes_find (self->pv->pkcs11_attributes, CKA_LABEL);
 }
 
 gulong
@@ -359,21 +358,21 @@ seahorse_pkcs11_object_get_pkcs11_handle (SeahorsePkcs11Object* self)
 {
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_OBJECT (self), 0);
 	if (self->pv->pkcs11_object)
-		return gp11_object_get_handle (self->pv->pkcs11_object);
-	return GP11_INVALID;
+		return gck_object_get_handle (self->pv->pkcs11_object);
+	return GCK_INVALID;
 }
 
-GP11Attribute*
+GckAttribute*
 seahorse_pkcs11_object_require_attribute (SeahorsePkcs11Object *self, gulong attr_type)
 {
-	GP11Attribute* attr;
-	
+	GckAttribute* attr;
+
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_OBJECT (self), NULL);
-	
-	attr = gp11_attributes_find (self->pv->pkcs11_attributes, attr_type);
+
+	attr = gck_attributes_find (self->pv->pkcs11_attributes, attr_type);
 	if (attr == NULL)
 		load_object_attributes (self, &attr_type, 1);
-	if (gp11_attribute_is_invalid (attr))
+	if (gck_attribute_is_invalid (attr))
 		attr = NULL;
 	
 	return attr;
@@ -389,7 +388,7 @@ seahorse_pkcs11_object_require_attributes (SeahorsePkcs11Object *self, const gul
 	
 	/* See if we have these attributes loaded */
 	for (i = 0; i < n_attr_types; ++i) {
-		if (!gp11_attributes_find (self->pv->pkcs11_attributes, attr_types[i]))
+		if (!gck_attributes_find (self->pv->pkcs11_attributes, attr_types[i]))
 			break;
 	}
 		
@@ -402,17 +401,25 @@ seahorse_pkcs11_object_require_attributes (SeahorsePkcs11Object *self, const gul
 }
 
 GQuark
-seahorse_pkcs11_object_cannonical_id (GP11Object *object)
+seahorse_pkcs11_object_cannonical_id (GckObject *object)
 {
+	GckSession *session;
+	GckSlot *slot;
 	GQuark quark;
 	gchar *text;
-	
+
 	/* TODO: This whole ID thing needs rethinking */
-	
+
+	session = gck_object_get_session (object);
+	slot = gck_session_get_slot (session);
+
 	text = g_strdup_printf("%s:%lu/%lu", SEAHORSE_PKCS11_TYPE_STR, 
-                                         gp11_slot_get_handle (gp11_object_get_slot (object)),
-                                         gp11_object_get_handle (object));
-	
+	                       gck_slot_get_handle (slot),
+	                       gck_object_get_handle (object));
+
+	g_object_unref (session);
+	g_object_unref (slot);
+
 	quark = g_quark_from_string (text);
 	g_free (text);
 	return quark;	

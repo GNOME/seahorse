@@ -49,7 +49,7 @@ enum {
 };
 
 struct _SeahorsePkcs11SourcePrivate {
-	GP11Slot *slot;    
+	GckSlot *slot;
 };
 
 static void seahorse_source_iface (SeahorseSourceIface *iface);
@@ -165,8 +165,8 @@ seahorse_pkcs11_source_class_init (SeahorsePkcs11SourceClass *klass)
     
 	g_object_class_install_property (gobject_class, PROP_SLOT,
 	         g_param_spec_object ("slot", "Slot", "Pkcs#11 SLOT",
-	                              GP11_TYPE_SLOT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-    
+	                              GCK_TYPE_SLOT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
 	g_object_class_install_property (gobject_class, PROP_FLAGS,
 	         g_param_spec_uint ("flags", "Flags", "Object Source flags.", 
 	                            0, G_MAXUINT, 0, G_PARAM_READABLE));
@@ -188,12 +188,12 @@ seahorse_source_iface (SeahorseSourceIface *iface)
  */
 
 SeahorsePkcs11Source*
-seahorse_pkcs11_source_new (GP11Slot *slot)
+seahorse_pkcs11_source_new (GckSlot *slot)
 {
 	return g_object_new (SEAHORSE_TYPE_PKCS11_SOURCE, "slot", slot, NULL);
-}   
+}
 
-GP11Slot*
+GckSlot*
 seahorse_pkcs11_source_get_slot (SeahorsePkcs11Source *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_PKCS11_SOURCE (self), NULL);
@@ -201,7 +201,7 @@ seahorse_pkcs11_source_get_slot (SeahorsePkcs11Source *self)
 }
 
 void
-seahorse_pkcs11_source_receive_object (SeahorsePkcs11Source *self, GP11Object *obj)
+seahorse_pkcs11_source_receive_object (SeahorsePkcs11Source *self, GckObject *obj)
 {
 	GQuark id = seahorse_pkcs11_object_cannonical_id (obj);
 	SeahorsePkcs11Certificate *cert;

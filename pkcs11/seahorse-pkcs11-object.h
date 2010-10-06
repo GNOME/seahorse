@@ -22,7 +22,7 @@
 #ifndef __SEAHORSE_PKCS11_OBJECT_H__
 #define __SEAHORSE_PKCS11_OBJECT_H__
 
-#include <gp11.h>
+#include <gck/gck.h>
 
 #include <glib-object.h>
 
@@ -50,24 +50,24 @@ struct _SeahorsePkcs11ObjectClass {
 
 GType                       seahorse_pkcs11_object_get_type               (void);
 
-SeahorsePkcs11Object*       seahorse_pkcs11_object_new                    (GP11Object* object);
+SeahorsePkcs11Object*       seahorse_pkcs11_object_new                    (GckObject* object);
 
 gulong                      seahorse_pkcs11_object_get_pkcs11_handle      (SeahorsePkcs11Object* self);
 
-GP11Object*                 seahorse_pkcs11_object_get_pkcs11_object      (SeahorsePkcs11Object* self);
+GckObject*                  seahorse_pkcs11_object_get_pkcs11_object      (SeahorsePkcs11Object* self);
 
-GP11Attributes*             seahorse_pkcs11_object_get_pkcs11_attributes  (SeahorsePkcs11Object* self);
+GckAttributes*              seahorse_pkcs11_object_get_pkcs11_attributes  (SeahorsePkcs11Object* self);
 
 void                        seahorse_pkcs11_object_set_pkcs11_attributes  (SeahorsePkcs11Object* self, 
-                                                                           GP11Attributes* value);
+                                                                           GckAttributes* value);
 
-GP11Attribute*              seahorse_pkcs11_object_require_attribute      (SeahorsePkcs11Object *self,
+GckAttribute*               seahorse_pkcs11_object_require_attribute      (SeahorsePkcs11Object *self,
                                                                            gulong attr_type);
 
 gboolean                    seahorse_pkcs11_object_require_attributes     (SeahorsePkcs11Object *self,
                                                                            const gulong *attr_types,
                                                                            gsize n_attr_types);
 
-GQuark                      seahorse_pkcs11_object_cannonical_id          (GP11Object *object);
+GQuark                      seahorse_pkcs11_object_cannonical_id          (GckObject *object);
 
 #endif /* __SEAHORSE_PKCS11_OBJECT_H__ */

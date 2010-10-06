@@ -29,13 +29,13 @@
 #include "seahorse-gconf.h"
 #include "seahorse-util.h"
 
-#include <gp11.h>
+#include <gck/gck.h>
 
 void
 seahorse_pkcs11_module_init (void)
 {
 	SeahorseSource *source;
-	GP11Module *module;
+	GckModule *module;
 	GSList *l, *module_paths;
 	GList *slots, *s;
 	GError *err = NULL;
@@ -43,24 +43,23 @@ seahorse_pkcs11_module_init (void)
 	/* Load each module in turn, and each slot for each module */
 	module_paths = seahorse_gconf_get_string_list ("/system/pkcs11/modules");
 	for (l = module_paths; l; l = g_slist_next (l)) {
-		
-		module = gp11_module_initialize (l->data, NULL, &err);
+
+		module = gck_module_initialize (l->data, NULL, 0, &err);
 		if (!module) {
 			g_warning ("couldn't initialize %s pkcs11 module: %s", 
 			           (gchar*)l->data, err ? err->message : NULL);
 			g_clear_error (&err);
 			continue;
 		}
-		
-		gp11_module_set_pool_sessions (module, TRUE);
-		slots = gp11_module_get_slots (module, FALSE);
+
+		slots = gck_module_get_slots (module, FALSE);
 		for (s = slots; s; s = g_list_next (s)) {
 			source = SEAHORSE_SOURCE (seahorse_pkcs11_source_new (s->data));
 			seahorse_context_take_source (NULL, source);
 		}
 
 		/* These will have been refed by the source above */
-		gp11_list_unref_free (slots);
+		gck_list_unref_free (slots);
 		g_object_unref (module);
 	}
 

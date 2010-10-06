@@ -25,7 +25,7 @@
 
 #include "seahorse-source.h"
 
-#include <gp11.h>
+#include <gck/gck.h>
 
 #define SEAHORSE_TYPE_PKCS11_SOURCE            (seahorse_pkcs11_source_get_type ())
 #define SEAHORSE_PKCS11_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PKCS11_SOURCE, SeahorsePkcs11Source))
@@ -49,10 +49,10 @@ struct _SeahorsePkcs11SourceClass {
 
 GType                  seahorse_pkcs11_source_get_type          (void);
 
-SeahorsePkcs11Source*  seahorse_pkcs11_source_new               (GP11Slot *slot);
+SeahorsePkcs11Source*  seahorse_pkcs11_source_new               (GckSlot *slot);
 
-GP11Slot*              seahorse_pkcs11_source_get_slot          (SeahorsePkcs11Source *self);
+GckSlot*               seahorse_pkcs11_source_get_slot          (SeahorsePkcs11Source *self);
 
-void                   seahorse_pkcs11_source_receive_object    (SeahorsePkcs11Source *self, GP11Object *obj);
+void                   seahorse_pkcs11_source_receive_object    (SeahorsePkcs11Source *self, GckObject *obj);
 
 #endif /* __SEAHORSE_PKCS11_SOURCE_H__ */

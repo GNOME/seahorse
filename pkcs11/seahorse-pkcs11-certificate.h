@@ -22,7 +22,7 @@
 #ifndef __SEAHORSE_PKCS11_CERTIFICATE_H__
 #define __SEAHORSE_PKCS11_CERTIFICATE_H__
 
-#include <gp11.h>
+#include <gck/gck.h>
 
 #include <glib-object.h>
 
@@ -50,7 +50,7 @@ struct _SeahorsePkcs11CertificateClass {
 
 GType                       seahorse_pkcs11_certificate_get_type               (void);
 
-SeahorsePkcs11Certificate*  seahorse_pkcs11_certificate_new                    (GP11Object* object);
+SeahorsePkcs11Certificate*  seahorse_pkcs11_certificate_new                    (GckObject* object);
 
 gchar*                      seahorse_pkcs11_certificate_get_fingerprint        (SeahorsePkcs11Certificate* self);
 

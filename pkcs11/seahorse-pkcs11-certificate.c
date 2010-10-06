@@ -55,7 +55,7 @@ enum {
 };
 
 struct _SeahorsePkcs11CertificatePrivate {
-	GP11Attribute der_value;
+	GckAttribute der_value;
 };
 
 static void seahorse_pkcs11_certificate_iface (GcrCertificateIface *iface);
@@ -138,7 +138,7 @@ static void
 seahorse_pkcs11_certificate_init (SeahorsePkcs11Certificate *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_PKCS11_TYPE_CERTIFICATE, SeahorsePkcs11CertificatePrivate));
-	gp11_attribute_init_invalid (&self->pv->der_value, CKA_VALUE);
+	gck_attribute_init_invalid (&self->pv->der_value, CKA_VALUE);
 }
 
 static void
@@ -165,8 +165,8 @@ seahorse_pkcs11_certificate_finalize (GObject *obj)
 {
 	SeahorsePkcs11Certificate *self = SEAHORSE_PKCS11_CERTIFICATE (obj);
 
-	gp11_attribute_clear (&self->pv->der_value);
-	
+	gck_attribute_clear (&self->pv->der_value);
+
 	G_OBJECT_CLASS (seahorse_pkcs11_certificate_parent_class)->finalize (obj);
 }
 
@@ -266,9 +266,9 @@ seahorse_pkcs11_certificate_get_der_data (GcrCertificate *cert, gsize *n_length)
 {
 	SeahorsePkcs11Object *obj = SEAHORSE_PKCS11_OBJECT (cert);
 	SeahorsePkcs11Certificate *self = SEAHORSE_PKCS11_CERTIFICATE (cert);
-	GP11Attributes *attrs;
-	GP11Attribute *attr;
-	
+	GckAttributes *attrs;
+	GckAttribute *attr;
+
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (cert), NULL);
 	
 	if (!seahorse_pkcs11_object_require_attributes (obj, REQUIRED_ATTRS, 
@@ -277,16 +277,16 @@ seahorse_pkcs11_certificate_get_der_data (GcrCertificate *cert, gsize *n_length)
 	
 	/* TODO: This whole copying and possibly freeing memory in use is risky */
 
-	if (gp11_attribute_is_invalid (&self->pv->der_value)) {
+	if (gck_attribute_is_invalid (&self->pv->der_value)) {
 		attrs = seahorse_pkcs11_object_get_pkcs11_attributes (obj);
 		g_return_val_if_fail (attrs, NULL);
-		attr = gp11_attributes_find (attrs, CKA_VALUE);
+		attr = gck_attributes_find (attrs, CKA_VALUE);
 		g_return_val_if_fail (attr, NULL);
-		gp11_attribute_clear (&self->pv->der_value);
-		gp11_attribute_init_copy (&self->pv->der_value, attr);
+		gck_attribute_clear (&self->pv->der_value);
+		gck_attribute_init_copy (&self->pv->der_value, attr);
 	}
 	
-	g_return_val_if_fail (!gp11_attribute_is_invalid (&self->pv->der_value), NULL);
+	g_return_val_if_fail (!gck_attribute_is_invalid (&self->pv->der_value), NULL);
 	*n_length = self->pv->der_value.length;
 	return self->pv->der_value.value;
 }
@@ -302,7 +302,7 @@ seahorse_pkcs11_certificate_iface (GcrCertificateIface *iface)
  */
 
 SeahorsePkcs11Certificate*
-seahorse_pkcs11_certificate_new (GP11Object* object)
+seahorse_pkcs11_certificate_new (GckObject* object)
 {
 	return g_object_new (SEAHORSE_PKCS11_TYPE_CERTIFICATE, 
 	                     "pkcs11-object", object, NULL);
@@ -311,8 +311,8 @@ seahorse_pkcs11_certificate_new (GP11Object* object)
 gchar* 
 seahorse_pkcs11_certificate_get_fingerprint (SeahorsePkcs11Certificate* self) 
 {
-	GP11Attribute* attr;
-	
+	GckAttribute* attr;
+
 	/* TODO: We should be using the fingerprint off the DER */
 	attr = seahorse_pkcs11_object_require_attribute (SEAHORSE_PKCS11_OBJECT (self), CKA_ID);
 	if (attr == NULL)
@@ -340,12 +340,12 @@ seahorse_pkcs11_certificate_get_validity_str (SeahorsePkcs11Certificate* self)
 guint 
 seahorse_pkcs11_certificate_get_trust (SeahorsePkcs11Certificate* self) 
 {
-	GP11Attribute *attr;
+	GckAttribute *attr;
 
 	g_return_val_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (self), 0);
 
 	attr = seahorse_pkcs11_object_require_attribute (SEAHORSE_PKCS11_OBJECT (self), CKA_TRUSTED);
-	if (attr && gp11_attribute_get_boolean (attr))
+	if (attr && gck_attribute_get_boolean (attr))
 		return SEAHORSE_VALIDITY_FULL;
 
 	return SEAHORSE_VALIDITY_UNKNOWN;
@@ -362,7 +362,7 @@ seahorse_pkcs11_certificate_get_trust_str (SeahorsePkcs11Certificate* self)
 gulong
 seahorse_pkcs11_certificate_get_expires (SeahorsePkcs11Certificate* self) 
 {
-	GP11Attribute *attr;
+	GckAttribute *attr;
 	GDate date = { 0 };
 	struct tm time = { 0 };
 
@@ -371,8 +371,8 @@ seahorse_pkcs11_certificate_get_expires (SeahorsePkcs11Certificate* self)
 	attr = seahorse_pkcs11_object_require_attribute (SEAHORSE_PKCS11_OBJECT (self), CKA_END_DATE);
 	if (attr == NULL)
 		return 0;
-	
-	gp11_attribute_get_date (attr, &date);
+
+	gck_attribute_get_date (attr, &date);
 	g_date_to_struct_tm (&date, &time);
 	return (gulong)(mktime (&time));
 }
