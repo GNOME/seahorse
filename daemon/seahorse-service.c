@@ -37,9 +37,10 @@
 #include "seahorse-util.h"
 
 #if WITH_PGP
-    #include "../pgp/seahorse-pgp.h"
-    #include "../pgp/seahorse-gpgme-source.h"
-    #include "../pgp/seahorse-gpgme-key-op.h"
+#include "pgp/seahorse-pgp.h"
+#include "pgp/seahorse-gpgme-source.h"
+#include "pgp/seahorse-gpgme-dialogs.h"
+#include "pgp/seahorse-gpgme-key-op.h"
 #endif
 
 #include <gio/gio.h>
@@ -194,7 +195,6 @@ seahorse_service_generate_credentials (SeahorseService *svc, gchar *ktype,
     gchar   *name=NULL;
     gchar   *email=NULL;
     gchar   *comment=NULL;
-    SeahorseWidget *swidget;
 
     #if WITH_PGP
         sksrc = seahorse_context_find_source (seahorse_context_for_app (),
@@ -218,8 +218,8 @@ seahorse_service_generate_credentials (SeahorseService *svc, gchar *ktype,
                 if ((pval) && (G_VALUE_TYPE (pval) == G_TYPE_STRING))
                     comment=g_value_dup_string (pval);
 
-                seahorse_gpgme_generate_key(sksrc, name, email, comment,
-                                DSA_ELGAMAL, 2048,0);
+                seahorse_gpgme_generate_key(SEAHORSE_GPGME_SOURCE (sksrc),
+                                            name, email, comment, DSA_ELGAMAL, 2048,0);
 
                 g_free (name);
                 name = NULL;

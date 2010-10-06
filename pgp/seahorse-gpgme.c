@@ -227,13 +227,13 @@ seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table)
 	ver = seahorse_util_parse_version (engine->version);
 	
 	if (ver >= VER_2012 || (ver >= VER_1410 && ver < VER_190))
-		*table = &KEYTYPES_2012;
+		*table = (SeahorseKeyTypeTable)&KEYTYPES_2012;
 	else if (ver >= VER_140 || ver >= VER_190)
-		*table = &KEYTYPES_140;
+		*table = (SeahorseKeyTypeTable)&KEYTYPES_140;
 	else if (ver >= VER_124)
-		*table = &KEYTYPES_124;
+		*table = (SeahorseKeyTypeTable)&KEYTYPES_124;
 	else if (ver >= VER_120)
-		*table = &KEYTYPES_120;
+		*table = (SeahorseKeyTypeTable)&KEYTYPES_120;
 	else	// older versions not supported
 		gerr = GPG_E (GPG_ERR_USER_2);
 	
