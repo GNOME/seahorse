@@ -24,8 +24,7 @@
 #include "seahorse-pkcs11-certificate.h"
 #include "seahorse-pkcs11-certificate-props.h"
 
-#include <gcr/gcr-certificate-basics-widget.h>
-#include <gcr/gcr-certificate-details-widget.h>
+#include <gcr/gcr-certificate-widget.h>
 
 enum {
 	PROP_0,
@@ -34,8 +33,7 @@ enum {
 
 struct _SeahorsePkcs11CertificatePropsPrivate {
 	GtkNotebook *tabs;
-	GcrCertificateBasicsWidget *basics;
-	GcrCertificateDetailsWidget *details;
+	GcrCertificateWidget *widget;
 };
 
 G_DEFINE_TYPE (SeahorsePkcs11CertificateProps, seahorse_pkcs11_certificate_props, GTK_TYPE_DIALOG);
@@ -64,13 +62,9 @@ seahorse_pkcs11_certificate_props_init (SeahorsePkcs11CertificateProps *self)
 	gtk_container_set_border_width (GTK_CONTAINER (pv->tabs), 5);
 	gtk_widget_show (GTK_WIDGET (pv->tabs));
 	
-	pv->basics = gcr_certificate_basics_widget_new (NULL);
-	seahorse_pkcs11_certificate_props_add_view (self, _("Certificate"), GTK_WIDGET (pv->basics));
-	gtk_widget_show (GTK_WIDGET (pv->basics));
-	
-	pv->details = gcr_certificate_details_widget_new (NULL);
-	seahorse_pkcs11_certificate_props_add_view (self, _("Details"), GTK_WIDGET (pv->details));
-	gtk_widget_show (GTK_WIDGET (pv->details));
+	pv->widget = gcr_certificate_widget_new (NULL);
+	seahorse_pkcs11_certificate_props_add_view (self, _("Certificate"), GTK_WIDGET (pv->widget));
+	gtk_widget_show (GTK_WIDGET (pv->widget));
 	
 	button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
 	gtk_dialog_add_action_widget (GTK_DIALOG (self), button, GTK_RESPONSE_CLOSE);
@@ -85,14 +79,9 @@ seahorse_pkcs11_certificate_props_dispose (GObject *obj)
 	SeahorsePkcs11CertificateProps *self = SEAHORSE_PKCS11_CERTIFICATE_PROPS (obj);
 	SeahorsePkcs11CertificatePropsPrivate *pv = SEAHORSE_PKCS11_CERTIFICATE_PROPS_GET_PRIVATE (self);
 	
-	if (pv->basics) {
-		seahorse_pkcs11_certificate_props_remove_view (self, GTK_WIDGET (pv->basics));
-		pv->basics = NULL;
-	}
-
-	if (pv->details) {
-		seahorse_pkcs11_certificate_props_remove_view (self, GTK_WIDGET (pv->details));
-		pv->details = NULL;
+	if (pv->widget) {
+		seahorse_pkcs11_certificate_props_remove_view (self, GTK_WIDGET (pv->widget));
+		pv->widget = NULL;
 	}
     
 	G_OBJECT_CLASS (seahorse_pkcs11_certificate_props_parent_class)->dispose (obj);
@@ -104,8 +93,7 @@ seahorse_pkcs11_certificate_props_finalize (GObject *obj)
 	SeahorsePkcs11CertificateProps *self = SEAHORSE_PKCS11_CERTIFICATE_PROPS (obj);
 	SeahorsePkcs11CertificatePropsPrivate *pv = SEAHORSE_PKCS11_CERTIFICATE_PROPS_GET_PRIVATE (self);
 
-	g_assert (pv->basics == NULL);
-	g_assert (pv->details == NULL);
+	g_assert (pv->widget == NULL);
 	
 	G_OBJECT_CLASS (seahorse_pkcs11_certificate_props_parent_class)->finalize (obj);
 }
@@ -176,8 +164,7 @@ seahorse_pkcs11_certificate_props_set_certificate (SeahorsePkcs11CertificateProp
 	SeahorsePkcs11CertificatePropsPrivate *pv = SEAHORSE_PKCS11_CERTIFICATE_PROPS_GET_PRIVATE (self);
 	g_return_if_fail (SEAHORSE_IS_PKCS11_CERTIFICATE_PROPS (self));
 	
-	gcr_certificate_basics_widget_set_certificate (pv->basics, cert);
-	gcr_certificate_details_widget_set_certificate (pv->details, cert);
+	gcr_certificate_widget_set_certificate (pv->widget, cert);
 	g_object_notify (G_OBJECT (self), "certificate");
 }
 
@@ -187,7 +174,7 @@ seahorse_pkcs11_certificate_props_get_certificate (SeahorsePkcs11CertificateProp
 	SeahorsePkcs11CertificatePropsPrivate *pv = SEAHORSE_PKCS11_CERTIFICATE_PROPS_GET_PRIVATE (self);
 	g_return_val_if_fail (SEAHORSE_IS_PKCS11_CERTIFICATE_PROPS (self), NULL);
 	
-	return gcr_certificate_basics_widget_get_certificate (pv->basics);
+	return gcr_certificate_widget_get_certificate (pv->widget);
 }
 
 void
