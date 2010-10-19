@@ -57,7 +57,7 @@ seahorse_pkcs11_certificate_props_init (SeahorsePkcs11CertificateProps *self)
 	GtkWidget *button;
 	
 	pv->tabs = GTK_NOTEBOOK (gtk_notebook_new ());
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG (self)->vbox), GTK_WIDGET (pv->tabs));
+	gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (self))), GTK_WIDGET (pv->tabs));
 	gtk_container_set_border_width (GTK_CONTAINER (self), 5);
 	gtk_container_set_border_width (GTK_CONTAINER (pv->tabs), 5);
 	gtk_widget_show (GTK_WIDGET (pv->tabs));
@@ -69,8 +69,6 @@ seahorse_pkcs11_certificate_props_init (SeahorsePkcs11CertificateProps *self)
 	button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
 	gtk_dialog_add_action_widget (GTK_DIALOG (self), button, GTK_RESPONSE_CLOSE);
 	gtk_widget_show (button);
-	
-	gtk_dialog_set_has_separator (GTK_DIALOG (self), FALSE);
 }
 
 static void
