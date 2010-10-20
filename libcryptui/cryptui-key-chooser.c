@@ -169,10 +169,17 @@ construct_recipients (CryptUIKeyChooser *chooser, GtkBox *box)
     hbox = gtk_hbox_new (FALSE, 12);
     
     /* Filter Combo */
+#if GTK_CHECK_VERSION (2,91,2)
+    chooser->priv->filtermode = GTK_COMBO_BOX (gtk_combo_box_text_new ());
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (chooser->priv->filtermode), _("All Keys"));
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (chooser->priv->filtermode), _("Selected Recipients"));
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (chooser->priv->filtermode), _("Search Results"));
+#else
     chooser->priv->filtermode = GTK_COMBO_BOX (gtk_combo_box_new_text ());
     gtk_combo_box_append_text (chooser->priv->filtermode, _("All Keys"));
     gtk_combo_box_append_text (chooser->priv->filtermode, _("Selected Recipients"));
     gtk_combo_box_append_text (chooser->priv->filtermode, _("Search Results"));
+#endif
     gtk_combo_box_set_active (chooser->priv->filtermode, 0);
     g_signal_connect (chooser->priv->filtermode, "changed", 
                         G_CALLBACK (filtermode_changed), chooser);
