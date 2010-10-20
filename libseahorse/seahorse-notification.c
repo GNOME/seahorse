@@ -37,6 +37,11 @@
 
 #ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
+
+#ifndef NOTIFY_CHECK_VERSION
+#define NOTIFY_CHECK_VERSION 0
+#endif
+
 #endif
 
 /* -----------------------------------------------------------------------------
@@ -230,8 +235,13 @@ setup_libnotify_notification (SeahorseNotification *snotif, gboolean urgent,
     
     heading = format_key_text (snotif->heading);
     message = format_key_text (snotif->message);
-    
+
+/* libnotify 0.7.0 and later has no support for attaching to widgets */
+#if NOTIFY_CHECK_VERSION(0,7,0)
+    notif = notify_notification_new (heading, message, snotif->icon);
+#else
     notif = notify_notification_new (heading, message, snotif->icon, attachto);
+#endif
     
     g_free (heading);
     g_free (message);
