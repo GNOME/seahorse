@@ -5,7 +5,7 @@ AC_PREREQ(2.52)
 dnl ****************************************************************************
 dnl MAIN SEAHORSE VERSION (update after release)
 
-AC_INIT(seahorse, 2.91.2)
+AC_INIT(seahorse, 2.91.1.1)
 
 dnl ****************************************************************************
 dnl LIBCRYPTUI libtool versioning
@@ -465,11 +465,11 @@ if test "$enable_pkcs11" = "no"; then
 	echo "disabling pkcs11 support"
 	enable_pkcs11="no"
 else
-	PKG_CHECK_MODULES(GCR, $GCR_LIBRARY >= 2.25.5, gcr_is_present="yes", gcr_is_present="no")
+	PKG_CHECK_MODULES(GCR, $GCR_LIBRARY >= 2.91.2, gcr_is_present="yes", gcr_is_present="no")
 	if test "$gcr_is_present" = "no"; then
 		echo "disabling pkcs11 support"
 	fi
-	PKG_CHECK_MODULES(GCK, gck-0 >= 2.91.0, enable_pkcs11="yes", enable_pkcs11="no")
+	PKG_CHECK_MODULES(GCK, gck-0 >= 2.91.2, enable_pkcs11="yes", enable_pkcs11="no")
 	if test "$enable_pkcs11" = "yes" && test "$gcr_is_present" = "yes"; then
 		AC_DEFINE(WITH_PKCS11, 1, [gck library available])
 		SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GCK_CFLAGS $GCR_CFLAGS"
