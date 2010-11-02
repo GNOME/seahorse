@@ -39,7 +39,7 @@
 #include <libnotify/notify.h>
 
 #ifndef NOTIFY_CHECK_VERSION
-#define NOTIFY_CHECK_VERSION 0
+#define NOTIFY_CHECK_VERSION(x,y,z) 0
 #endif
 
 #endif
