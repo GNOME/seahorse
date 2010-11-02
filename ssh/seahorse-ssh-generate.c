@@ -125,7 +125,11 @@ on_change (GtkComboBox *combo, SeahorseWidget *swidget)
     widget = seahorse_widget_get_widget (swidget, "bits-entry");
     g_return_if_fail (widget != NULL);
     
+#if GTK_CHECK_VERSION (2,91,2)
+    t = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (combo));
+#else
     t = gtk_combo_box_get_active_text (combo);
+#endif
     if (t && strstr (t, "DSA")) {
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), DSA_SIZE);
         gtk_widget_set_sensitive (widget, FALSE);
@@ -169,7 +173,11 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     /* The algorithm */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
     g_return_if_fail (widget != NULL);
+#if GTK_CHECK_VERSION (2,91,2)
+    t = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
+#else
     t = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+#endif
     if (t && strstr (t, "DSA"))
         type = SSH_ALGO_DSA;
     else

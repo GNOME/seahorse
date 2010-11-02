@@ -435,9 +435,15 @@ seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent, con
     /* The algoritms */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
     g_return_if_fail (widget != NULL);
+#if GTK_CHECK_VERSION (2,91,2)
+    gtk_combo_box_text_remove (GTK_COMBO_BOX_TEXT (widget), 0);
+    for(i = 0; i < G_N_ELEMENTS(available_algorithms); i++)
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), _(available_algorithms[i].desc));
+#else
     gtk_combo_box_remove_text (GTK_COMBO_BOX (widget), 0);
     for(i = 0; i < G_N_ELEMENTS(available_algorithms); i++)
         gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _(available_algorithms[i].desc));
+#endif
     gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
     on_gpgme_generate_algorithm_changed (GTK_COMBO_BOX (widget), swidget);
     
