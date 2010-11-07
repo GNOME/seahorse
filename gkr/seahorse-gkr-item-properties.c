@@ -444,6 +444,7 @@ transform_item_details (const GValue *from, GValue *to)
 	GnomeKeyringAttributeList *attrs;
 	GnomeKeyringAttribute *attr;
 	GString *details;
+	gchar *text;
 	guint i;
 
 	g_return_val_if_fail (G_VALUE_TYPE (to) == G_TYPE_STRING, FALSE);
@@ -457,7 +458,9 @@ transform_item_details (const GValue *from, GValue *to)
 			g_string_append_printf (details, "<b>%s</b>: ", attr->name);
 			switch (attr->type) {
 			case GNOME_KEYRING_ATTRIBUTE_TYPE_STRING:
-				g_string_append_printf (details, "%s\n", attr->value.string);
+				text = g_markup_escape_text (attr->value.string, -1);
+				g_string_append_printf (details, "%s\n", text);
+				g_free (text);
 				break;
 			case GNOME_KEYRING_ATTRIBUTE_TYPE_UINT32:
 				g_string_append_printf (details, "%u\n", attr->value.integer);
@@ -468,7 +471,7 @@ transform_item_details (const GValue *from, GValue *to)
 			}
 		}
 	}
-	    
+
 	g_value_take_string (to, g_string_free (details, FALSE));
 	return TRUE;
 }
