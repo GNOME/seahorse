@@ -2,48 +2,54 @@
 # Copyright (C) 2007-2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the seahorse package.
 # Theppitak Karoonboonyanan <thep@linux.thai.net>, 2007-2010.
+# Sira Nokyoongtong <gumaraa@gmail.com>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&component=general\n"
-"POT-Creation-Date: 2010-05-20 23:39+0000\n"
-"PO-Revision-Date: 2010-06-07 11:34+0700\n"
-"Last-Translator: Sira Nokyoongtong <gumaraa@gmail.com>\n"
+"POT-Creation-Date: 2010-10-13 19:36+0000\n"
+"PO-Revision-Date: 2010-11-23 17:39+0700\n"
+"Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../daemon/seahorse-daemon.c:69
+#: ../daemon/seahorse-daemon.c:64
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "ไม่ต้องเรียกทำงาน seahorse-daemon แบบดีมอน"
 
-#: ../daemon/seahorse-daemon.c:99
+#: ../daemon/seahorse-daemon.c:94
 msgid "couldn't fork process"
 msgstr "ไม่สามารถ fork โพรเซสได้"
 
-#: ../daemon/seahorse-daemon.c:105
+#: ../daemon/seahorse-daemon.c:100
 msgid "couldn't create new process group"
 msgstr "ไม่สามารถสร้างกลุ่มโพรเซสใหม่ได้"
 
-#: ../daemon/seahorse-daemon.c:255
+#: ../daemon/seahorse-daemon.c:250
 msgid "Encryption Daemon (Seahorse)"
 msgstr "ดีมอนเข้ารหัสลับ (Seahorse)"
 
-#: ../daemon/seahorse-service.c:161 ../daemon/seahorse-service.c:267
+#: ../daemon/seahorse-service.c:164 ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "ชนิดกุญแจผิดพลาดหรือไม่รู้จัก: %s"
 
-#: ../daemon/seahorse-service.c:229
+#: ../daemon/seahorse-service.c:234
 #, c-format
 msgid "This keytype is not supported: %s"
 msgstr "ไม่รองรับกุญแจชนิดนี้: %s"
 
-#: ../daemon/seahorse-service.c:331 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service.c:241
+#, c-format
+msgid "Support for this feature was not enabled at build time"
+msgstr "การรองรับความสามารถนี้ไม่ได้เปิดไว้ขณะประกอบสร้าง"
+
+#: ../daemon/seahorse-service.c:341 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
@@ -170,24 +176,6 @@ msgstr "ชนิดกุญแจไม่ถูกต้องสำหรั
 #, c-format
 msgid "Invalid key id: %s"
 msgstr "หมายเลขกุญแจไม่ถูกต้อง: %s"
-
-#: ../daemon/seahorse-sharing.c:84 ../daemon/seahorse-sharing.c:269
-msgid "Couldn't share keys"
-msgstr "ไม่สามารถเปิดกุญแจให้ใช้ร่วมได้"
-
-#: ../daemon/seahorse-sharing.c:85
-msgid "Can't publish discovery information on the network."
-msgstr "ไม่สามารถประกาศข้อมูลสำหรับการตรวจหาลงในเครือข่ายได้"
-
-#. Translators: The %s will get filled in with the user name
-#. of the user, to form a genitive. If this is difficult to
-#. translate correctly so that it will work correctly in your
-#. language, you may use something equivalent to
-#. "Shared keys of %s".
-#: ../daemon/seahorse-sharing.c:112
-#, c-format
-msgid "%s's encryption keys"
-msgstr "กุญแจเข้ารหัสลับของ %s"
 
 #: ../data/seahorse.schemas.in.h:1
 msgid ""
@@ -485,7 +473,6 @@ msgstr "โปรแกรมประยุกต์"
 #: ../gkr/seahorse-gkr-item-properties.xml.h:6
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Details"
 msgstr "รายละเอียด"
@@ -738,174 +725,174 @@ msgstr "เ_ซ็นกำกับข้อความในนาม:"
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:140
 #: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:829
+#: ../src/seahorse-key-manager-store.c:865
 msgid "Name"
 msgstr "ชื่อ"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
 #: ../pgp/seahorse-pgp-key-properties.c:1745
-#: ../src/seahorse-key-manager-store.c:841
+#: ../src/seahorse-key-manager-store.c:877
 msgid "Key ID"
 msgstr "หมายเลขกุญแจ"
 
-#: ../libegg/egg-datetime.c:313
+#: ../libegg/egg-datetime.c:325
 msgid "Display flags"
 msgstr "แฟล็กการแสดงผล"
 
-#: ../libegg/egg-datetime.c:314
+#: ../libegg/egg-datetime.c:326
 msgid "Displayed date and/or time properties"
 msgstr "ตัวเลือกสำหรับการแสดงวันที่ และ/หรือ เวลา"
 
-#: ../libegg/egg-datetime.c:319
+#: ../libegg/egg-datetime.c:331
 msgid "Lazy mode"
 msgstr "โหมดเกียจคร้าน"
 
-#: ../libegg/egg-datetime.c:320
+#: ../libegg/egg-datetime.c:332
 msgid "Lazy mode doesn't normalize entered date and time values"
 msgstr "โหมดเกียจคร้านจะไม่ปรับรูปแบบวันที่และเวลาที่ป้อนให้เข้ารูป"
 
-#: ../libegg/egg-datetime.c:325
+#: ../libegg/egg-datetime.c:337
 msgid "Year"
 msgstr "ปี"
 
-#: ../libegg/egg-datetime.c:326
+#: ../libegg/egg-datetime.c:338
 msgid "Displayed year"
 msgstr "ปีที่แสดง"
 
-#: ../libegg/egg-datetime.c:331
+#: ../libegg/egg-datetime.c:343
 msgid "Month"
 msgstr "เดือน"
 
-#: ../libegg/egg-datetime.c:332
+#: ../libegg/egg-datetime.c:344
 msgid "Displayed month"
 msgstr "เดือนที่แสดง"
 
-#: ../libegg/egg-datetime.c:337
+#: ../libegg/egg-datetime.c:349
 msgid "Day"
 msgstr "วันที่"
 
-#: ../libegg/egg-datetime.c:338
+#: ../libegg/egg-datetime.c:350
 msgid "Displayed day of month"
 msgstr "วันที่ที่แสดง"
 
-#: ../libegg/egg-datetime.c:343
+#: ../libegg/egg-datetime.c:355
 msgid "Hour"
 msgstr "ชั่วโมง"
 
-#: ../libegg/egg-datetime.c:344
+#: ../libegg/egg-datetime.c:356
 msgid "Displayed hour"
 msgstr "ชั่วโมงที่แสดง"
 
-#: ../libegg/egg-datetime.c:349
+#: ../libegg/egg-datetime.c:361
 msgid "Minute"
 msgstr "นาที"
 
-#: ../libegg/egg-datetime.c:350
+#: ../libegg/egg-datetime.c:362
 msgid "Displayed minute"
 msgstr "นาทีที่แสดง"
 
-#: ../libegg/egg-datetime.c:355
+#: ../libegg/egg-datetime.c:367
 msgid "Second"
 msgstr "วินาที"
 
-#: ../libegg/egg-datetime.c:356
+#: ../libegg/egg-datetime.c:368
 msgid "Displayed second"
 msgstr "วินาทีที่แสดง"
 
-#: ../libegg/egg-datetime.c:361
+#: ../libegg/egg-datetime.c:373
 msgid "Lower limit year"
 msgstr "ปีของกำหนดวันต่ำสุด"
 
-#: ../libegg/egg-datetime.c:362
+#: ../libegg/egg-datetime.c:374
 msgid "Year part of the lower date limit"
 msgstr "ปีของกำหนดวันต่ำสุด"
 
-#: ../libegg/egg-datetime.c:367
+#: ../libegg/egg-datetime.c:379
 msgid "Upper limit year"
 msgstr "ปีของกำหนดวันสูงสุด"
 
-#: ../libegg/egg-datetime.c:368
+#: ../libegg/egg-datetime.c:380
 msgid "Year part of the upper date limit"
 msgstr "ปีของกำหนดวันสูงสุด"
 
-#: ../libegg/egg-datetime.c:373
+#: ../libegg/egg-datetime.c:385
 msgid "Lower limit month"
 msgstr "เดือนของกำหนดวันต่ำสุด"
 
-#: ../libegg/egg-datetime.c:374
+#: ../libegg/egg-datetime.c:386
 msgid "Month part of the lower date limit"
 msgstr "เดือนของกำหนดวันต่ำสุด"
 
-#: ../libegg/egg-datetime.c:379
+#: ../libegg/egg-datetime.c:391
 msgid "Upper limit month"
 msgstr "เดือนของกำหนดวันสูงสุด"
 
-#: ../libegg/egg-datetime.c:380
+#: ../libegg/egg-datetime.c:392
 msgid "Month part of the upper date limit"
 msgstr "เดือนของกำหนดวันสูงสุด"
 
-#: ../libegg/egg-datetime.c:385
+#: ../libegg/egg-datetime.c:397
 msgid "Lower limit day"
 msgstr "วันที่ของกำหนดวันต่ำสุด"
 
-#: ../libegg/egg-datetime.c:386
+#: ../libegg/egg-datetime.c:398
 msgid "Day of month part of the lower date limit"
 msgstr "วันที่ของกำหนดวันต่ำสุด"
 
-#: ../libegg/egg-datetime.c:391
+#: ../libegg/egg-datetime.c:403
 msgid "Upper limit day"
 msgstr "วันที่ของกำหนดวันสูงสุด"
 
-#: ../libegg/egg-datetime.c:392
+#: ../libegg/egg-datetime.c:404
 msgid "Day of month part of the upper date limit"
 msgstr "วันที่ของกำหนดวันสูงสุด"
 
-#: ../libegg/egg-datetime.c:397
+#: ../libegg/egg-datetime.c:409
 msgid "Lower limit hour"
 msgstr "ชั่วโมงของกำหนดเวลาต่ำสุด"
 
-#: ../libegg/egg-datetime.c:398
+#: ../libegg/egg-datetime.c:410
 msgid "Hour part of the lower time limit"
 msgstr "ชั่วโมงของกำหนดเวลาต่ำสุด"
 
-#: ../libegg/egg-datetime.c:403
+#: ../libegg/egg-datetime.c:415
 msgid "Upper limit hour"
 msgstr "ชั่วโมงของกำหนดเวลาสูงสุด"
 
-#: ../libegg/egg-datetime.c:404
+#: ../libegg/egg-datetime.c:416
 msgid "Hour part of the upper time limit"
 msgstr "ชั่วโมงของกำหนดเวลาสูงสุด"
 
-#: ../libegg/egg-datetime.c:409
+#: ../libegg/egg-datetime.c:421
 msgid "Lower limit minute"
 msgstr "นาทีของกำหนดเวลาต่ำสุด"
 
-#: ../libegg/egg-datetime.c:410
+#: ../libegg/egg-datetime.c:422
 msgid "Minute part of the lower time limit"
 msgstr "นาทีของกำหนดเวลาต่ำสุด"
 
-#: ../libegg/egg-datetime.c:415
+#: ../libegg/egg-datetime.c:427
 msgid "Upper limit minute"
 msgstr "นาทีของกำหนดเวลาสูงสุด"
 
-#: ../libegg/egg-datetime.c:416
+#: ../libegg/egg-datetime.c:428
 msgid "Minute part of the upper time limit"
 msgstr "นาทีของกำหนดเวลาสูงสุด"
 
-#: ../libegg/egg-datetime.c:421
+#: ../libegg/egg-datetime.c:433
 msgid "Lower limit second"
 msgstr "วินาทีของกำหนดเวลาต่ำสุด"
 
-#: ../libegg/egg-datetime.c:422
+#: ../libegg/egg-datetime.c:434
 msgid "Second part of the lower time limit"
 msgstr "วินาทีของกำหนดเวลาต่ำสุด"
 
-#: ../libegg/egg-datetime.c:427
+#: ../libegg/egg-datetime.c:439
 msgid "Upper limit second"
 msgstr "วินาทีของกำหนดเวลาสูงสุด"
 
-#: ../libegg/egg-datetime.c:428
+#: ../libegg/egg-datetime.c:440
 msgid "Second part of the upper time limit"
 msgstr "วินาทีของกำหนดเวลาสูงสุด"
 
@@ -914,92 +901,92 @@ msgstr "วินาทีของกำหนดเวลาสูงสุด
 #. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
 #. * or calendar:week_start:0 it will not work.
 #.
-#: ../libegg/egg-datetime.c:470
+#: ../libegg/egg-datetime.c:482
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:504
 msgid "Date"
 msgstr "วันที่"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:504
 msgid "Enter the date directly"
 msgstr "ป้อนวันที่โดยตรง"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:511
 msgid "Select Date"
 msgstr "เลือกวันที่"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:511
 msgid "Select the date from a calendar"
 msgstr "เลือกวันที่จากปฏิทิน"
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2194
+#: ../libegg/egg-datetime.c:529 ../libegg/egg-datetime.c:2213
 msgid "Time"
 msgstr "เวลา"
 
-#: ../libegg/egg-datetime.c:517
+#: ../libegg/egg-datetime.c:529
 msgid "Enter the time directly"
 msgstr "ป้อนเวลาโดยตรง"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:536
 msgid "Select Time"
 msgstr "เลือกเวลา"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:536
 msgid "Select the time from a list"
 msgstr "เลือกเวลาจากรายการ"
 
 #. Translators: set this to anything else if you want to use a
 #. * 24 hour clock.
 #.
-#: ../libegg/egg-datetime.c:791
+#: ../libegg/egg-datetime.c:810
 msgid "24hr: no"
 msgstr "24hr: yes"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1255
-#: ../libegg/egg-datetime.c:1259
+#: ../libegg/egg-datetime.c:814 ../libegg/egg-datetime.c:1274
+#: ../libegg/egg-datetime.c:1278
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1256
-#: ../libegg/egg-datetime.c:1263
+#: ../libegg/egg-datetime.c:816 ../libegg/egg-datetime.c:1275
+#: ../libegg/egg-datetime.c:1282
 msgid "PM"
 msgstr "PM"
 
 #. Translators: This is hh:mm:ss AM/PM.
-#: ../libegg/egg-datetime.c:805
+#: ../libegg/egg-datetime.c:824
 #, c-format
 msgid "%02d:%02d:%02d %s"
 msgstr "%02d:%02d:%02d %s"
 
 #. Translators: This is hh:mm AM/PM.
-#: ../libegg/egg-datetime.c:808
+#: ../libegg/egg-datetime.c:827
 #, c-format
 msgid "%02d:%02d %s"
 msgstr "%02d:%02d %s"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:812
+#: ../libegg/egg-datetime.c:831
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
 #. Translators: This is hh:mm.
-#: ../libegg/egg-datetime.c:815
+#: ../libegg/egg-datetime.c:834
 #, c-format
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1171
+#: ../libegg/egg-datetime.c:1190
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1236
+#: ../libegg/egg-datetime.c:1255
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -1138,16 +1125,16 @@ msgstr "รหัสลับ"
 msgid "Identity"
 msgstr "เอกลักษณ์บุคคล"
 
-#: ../libseahorse/seahorse-passphrase.c:196
+#: ../libseahorse/seahorse-passphrase.c:200
 msgid "Passphrase"
 msgstr "วลีรหัสผ่าน"
 
-#: ../libseahorse/seahorse-passphrase.c:199
+#: ../libseahorse/seahorse-passphrase.c:203
 #: ../ssh/seahorse-ssh-operation.c:480
 msgid "Password:"
 msgstr "รหัสผ่าน:"
 
-#: ../libseahorse/seahorse-passphrase.c:265
+#: ../libseahorse/seahorse-passphrase.c:269
 msgid "Confirm:"
 msgstr "ยืนยัน:"
 
@@ -1187,38 +1174,16 @@ msgid "Key Servers"
 msgstr "เซิร์ฟเวอร์กุญแจ"
 
 #: ../libseahorse/seahorse-prefs.xml.h:4
-msgid "Key Sharing"
-msgstr "การเปิดกุญแจให้ใช้ร่วม"
-
-#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "Preferences"
 msgstr "ปรับแต่ง"
 
-#: ../libseahorse/seahorse-prefs.xml.h:6
-msgid ""
-"Sharing your keys allows other people on your network to use the keys you've "
-"collected. This means they can automatically encrypt things for you or those "
-"you know, without you having to send them your key.\n"
-"\n"
-"<b>Note:</b> Your personal keys will not be compromised."
-msgstr ""
-"การเปิดกุญแจของคุณให้ผู้อื่นใช้ร่วม ทำให้ผู้อื่นในเครือข่ายของคุณสามารถใช้กุญแจต่างๆ ที่คุณเก็บไว้ได้ "
-"ซึ่งหมายความว่า พวกเขาจะสามารถเข้ารหัสลับข้อมูลต่างๆ ส่งถึงคุณหรือคนที่คุณรู้จักได้โดยอัตโนมัติ "
-"โดยที่คุณไม่ต้องส่งกุญแจของคุณให้กับพวกเขา\n"
-"\n"
-"<b>หมายเหตุ:</b> กุญแจส่วนตัวของคุณจะไม่ถูกเปิดเผย"
-
-#: ../libseahorse/seahorse-prefs.xml.h:9
+#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "_Find keys via:"
 msgstr "_หากุญแจผ่าน:"
 
-#: ../libseahorse/seahorse-prefs.xml.h:10
+#: ../libseahorse/seahorse-prefs.xml.h:6
 msgid "_Publish keys to:"
 msgstr "_ประกาศกุญแจไปที่:"
-
-#: ../libseahorse/seahorse-prefs.xml.h:11
-msgid "_Share my keys with others on my network"
-msgstr "เปิดกุญแจของฉันให้ผู้อื่นใ_ช้ร่วมในเครือข่าย"
 
 #: ../libseahorse/seahorse-progress.xml.h:1
 msgid "Progress Title"
@@ -1228,46 +1193,46 @@ msgstr "ชื่อเรื่องของความคืบหน้า
 msgid "Unavailable"
 msgstr "ไม่มี"
 
-#: ../libseahorse/seahorse-util.c:237
+#: ../libseahorse/seahorse-util.c:240
 msgid "%Y-%m-%d"
 msgstr "%d/%m/%Ey"
 
-#: ../libseahorse/seahorse-util.c:513
+#: ../libseahorse/seahorse-util.c:516
 msgid "Key Data"
 msgstr "ข้อมูลกุญแจ"
 
-#: ../libseahorse/seahorse-util.c:515
+#: ../libseahorse/seahorse-util.c:518
 msgid "Multiple Keys"
 msgstr "กุญแจหลายดอก"
 
-#: ../libseahorse/seahorse-util.c:771
+#: ../libseahorse/seahorse-util.c:774
 msgid "Couldn't run file-roller"
 msgstr "ไม่สามารถเรียก file-roller"
 
-#: ../libseahorse/seahorse-util.c:777
+#: ../libseahorse/seahorse-util.c:780
 msgid "Couldn't package files"
 msgstr "ไม่สามารถจัดเก็บแฟ้ม"
 
-#: ../libseahorse/seahorse-util.c:778
+#: ../libseahorse/seahorse-util.c:781
 msgid "The file-roller process did not complete successfully"
 msgstr "โพรเซส file-roller ทำงานไม่สำเร็จสมบูรณ์"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:954
+#: ../libseahorse/seahorse-util.c:957
 msgid "All key files"
 msgstr "แฟ้มกุญแจทั้งหมด"
 
-#: ../libseahorse/seahorse-util.c:965 ../libseahorse/seahorse-util.c:1013
+#: ../libseahorse/seahorse-util.c:968 ../libseahorse/seahorse-util.c:1016
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "แฟ้มทั้งหมด"
 
-#: ../libseahorse/seahorse-util.c:1006
+#: ../libseahorse/seahorse-util.c:1009
 msgid "Archive files"
 msgstr "แฟ้มจัดเก็บ"
 
-#: ../libseahorse/seahorse-util.c:1076
+#: ../libseahorse/seahorse-util.c:1079
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1277,7 +1242,7 @@ msgstr ""
 "\n"
 "คุณต้องการเขียนทับด้วยแฟ้มใหม่หรือไม่?"
 
-#: ../libseahorse/seahorse-util.c:1079
+#: ../libseahorse/seahorse-util.c:1082
 msgid "_Replace"
 msgstr "เขียน_ทับ"
 
@@ -1322,7 +1287,7 @@ msgstr "ปิดใช้งาน"
 msgid "Revoked"
 msgstr "เพิกถอน"
 
-#: ../libseahorse/seahorse-widget.c:464
+#: ../libseahorse/seahorse-widget.c:480
 #, c-format
 msgid "Could not display help: %s"
 msgstr "ไม่สามารถแสดงวิธีใช้: %s"
@@ -1664,7 +1629,7 @@ msgstr ""
 "สาเหตุอาจเกิดจากการตั้งเวลาของเครื่องคอมพิวเตอร์ไว้เป็นเวลาอนาคต "
 "หรือกุญแจไม่มีลายเซ็นเจ้าของกำกับ"
 
-#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:538
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:544
 msgid "Importing Keys"
 msgstr "กำลังนำเข้ากุญแจ"
 
@@ -1891,7 +1856,7 @@ msgstr "ไม่สามารถลบกุญแจย่อย"
 msgid "Unable to change trust"
 msgstr "ไม่สามารถเปลี่ยนค่าความเชื่อถือ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:316
+#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:290
 #: ../ssh/seahorse-ssh-key-properties.c:168
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -1915,7 +1880,7 @@ msgstr "ไม่มีวันหมดอายุ"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1317
-#: ../src/seahorse-key-manager-store.c:860
+#: ../src/seahorse-key-manager-store.c:896
 msgid "Type"
 msgstr "ชนิด"
 
@@ -2174,7 +2139,7 @@ msgstr "ก้ำกึ่ง"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:854
+#: ../src/seahorse-key-manager-store.c:890
 msgid "Trust"
 msgstr "เชื่อถือ"
 
@@ -2319,7 +2284,7 @@ msgid "_Sign message with key:"
 msgstr "เ_ซ็นกำกับข้อความด้วยกุญแจ:"
 
 #: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
 msgid "Certificate"
 msgstr "ใบรับรอง"
 
@@ -2354,7 +2319,7 @@ msgstr "วลีรหัสผ่านให_ม่:"
 msgid "Manage your passwords and encryption keys"
 msgstr "จัดการรหัสผ่านและกุญแจเข้ารหัสลับของคุณ"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:857
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:862
 msgid "Passwords and Encryption Keys"
 msgstr "รหัสผ่านและกุญแจเข้ารหัสลับ"
 
@@ -2376,104 +2341,104 @@ msgid "Selected %d key"
 msgid_plural "Selected %d keys"
 msgstr[0] "เลือกกุญแจ %d ดอก"
 
-#: ../src/seahorse-key-manager.c:404 ../src/seahorse-key-manager.c:464
-#: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:484
+#: ../src/seahorse-key-manager.c:410 ../src/seahorse-key-manager.c:470
+#: ../src/seahorse-key-manager.c:533 ../src/seahorse-viewer.c:458
 msgid "Couldn't import keys"
 msgstr "ไม่สามารถนำเข้ากุญแจ"
 
-#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:489
+#: ../src/seahorse-key-manager.c:415 ../src/seahorse-viewer.c:463
 msgid "Imported keys"
 msgstr "กุญแจนำเข้า"
 
-#: ../src/seahorse-key-manager.c:458
+#: ../src/seahorse-key-manager.c:464
 msgid "Importing keys"
 msgstr "กำลังนำเข้ากุญแจ"
 
-#: ../src/seahorse-key-manager.c:481 ../ssh/seahorse-ssh-operation.c:1017
+#: ../src/seahorse-key-manager.c:487 ../ssh/seahorse-ssh-operation.c:1017
 msgid "Import Key"
 msgstr "นำเข้ากุญแจ"
 
-#: ../src/seahorse-key-manager.c:527
+#: ../src/seahorse-key-manager.c:533
 msgid "Unrecognized key type, or invalid data format"
 msgstr "ไม่รู้จักชนิดกุญแจ หรือรูปแบบข้อมูลไม่ถูกต้อง"
 
-#: ../src/seahorse-key-manager.c:725 ../src/seahorse-keyserver-results.c:207
+#: ../src/seahorse-key-manager.c:731 ../src/seahorse-keyserver-results.c:245
 msgid "_Remote"
 msgstr "เ_ครือข่าย"
 
-#: ../src/seahorse-key-manager.c:727
+#: ../src/seahorse-key-manager.c:733
 msgid "Close this program"
 msgstr "ปิดโปรแกรมนี้"
 
-#: ../src/seahorse-key-manager.c:728
+#: ../src/seahorse-key-manager.c:734
 msgid "_New..."
 msgstr "ใ_หม่..."
 
-#: ../src/seahorse-key-manager.c:729
+#: ../src/seahorse-key-manager.c:735
 msgid "Create a new key or item"
 msgstr "สร้างกุญแจหรือรายการใหม่"
 
-#: ../src/seahorse-key-manager.c:730
+#: ../src/seahorse-key-manager.c:736
 msgid "_Import..."
 msgstr "_นำเข้า..."
 
-#: ../src/seahorse-key-manager.c:731
+#: ../src/seahorse-key-manager.c:737
 msgid "Import from a file"
 msgstr "นำเข้าจากแฟ้ม"
 
-#: ../src/seahorse-key-manager.c:733
+#: ../src/seahorse-key-manager.c:739
 msgid "Import from the clipboard"
 msgstr "นำเข้าจากคลิปบอร์ด"
 
-#: ../src/seahorse-key-manager.c:738 ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:744 ../src/seahorse-keyserver-results.c:255
 msgid "_Find Remote Keys..."
 msgstr "_หากุญแจในเครือข่าย..."
 
-#: ../src/seahorse-key-manager.c:739 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:745 ../src/seahorse-keyserver-results.c:256
 msgid "Search for keys on a key server"
 msgstr "ค้นหากุญแจในเซิร์ฟเวอร์กุญแจ"
 
-#: ../src/seahorse-key-manager.c:740
+#: ../src/seahorse-key-manager.c:746
 msgid "_Sync and Publish Keys..."
 msgstr "_ปรับและประกาศกุญแจ..."
 
-#: ../src/seahorse-key-manager.c:741
+#: ../src/seahorse-key-manager.c:747
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "ประกาศ และ/หรือ ปรับข้อมูลกุญแจของคุณกับค่าออนไลน์ให้ตรงกัน"
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:752
 msgid "T_ypes"
 msgstr "_ชนิด"
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:752
 msgid "Show type column"
 msgstr "แสดงคอลัมน์ชนิดกุญแจ"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:754
 msgid "_Expiry"
 msgstr "วันห_มดอายุ"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:754
 msgid "Show expiry column"
 msgstr "แสดงคอลัมน์วันหมดอายุกุญแจ"
 
-#: ../src/seahorse-key-manager.c:750
+#: ../src/seahorse-key-manager.c:756
 msgid "_Trust"
 msgstr "ความเชื่อ_ถือ"
 
-#: ../src/seahorse-key-manager.c:750
+#: ../src/seahorse-key-manager.c:756
 msgid "Show owner trust column"
 msgstr "แสดงคอลัมน์ความเชื่อถือของเจ้าของ"
 
-#: ../src/seahorse-key-manager.c:752
+#: ../src/seahorse-key-manager.c:758
 msgid "_Validity"
 msgstr "สถานะ_มีผลใช้งาน"
 
-#: ../src/seahorse-key-manager.c:752
+#: ../src/seahorse-key-manager.c:758
 msgid "Show validity column"
 msgstr "แสดงคอลัมน์สถานะมีผลใช้งาน"
 
-#: ../src/seahorse-key-manager.c:926
+#: ../src/seahorse-key-manager.c:931
 msgid "Filter:"
 msgstr "ตัวกรอง:"
 
@@ -2501,7 +2466,7 @@ msgstr "กุญแจ_อื่นๆ"
 msgid "To get started with encryption you will need keys."
 msgstr "เพื่อจะเริ่มเข้ารหัสลับข้อมูล คุณต้องมีกุญแจเสียก่อน"
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:548
+#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:522
 msgid "_Import"
 msgstr "_นำเข้า"
 
@@ -2509,44 +2474,44 @@ msgstr "_นำเข้า"
 msgid "_Passwords"
 msgstr "_รหัสผ่าน"
 
-#: ../src/seahorse-key-manager-store.c:649 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:256
 msgid "Couldn't export keys"
 msgstr "ไม่สามารถส่งออกกุญแจ"
 
-#: ../src/seahorse-key-manager-store.c:847
+#: ../src/seahorse-key-manager-store.c:883
 msgid "Validity"
 msgstr "มีผลใช้งาน"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:866
+#: ../src/seahorse-key-manager-store.c:902
 msgid "Expiration Date"
 msgstr "วันหมดอายุ"
 
-#: ../src/seahorse-keyserver-results.c:209
+#: ../src/seahorse-keyserver-results.c:247
 msgid "Close this window"
 msgstr "ปิดหน้าต่างนี้"
 
-#: ../src/seahorse-keyserver-results.c:210
+#: ../src/seahorse-keyserver-results.c:248
 msgid "_Expand All"
 msgstr "_ขยายทั้งหมด"
 
-#: ../src/seahorse-keyserver-results.c:211
+#: ../src/seahorse-keyserver-results.c:249
 msgid "Expand all listings"
 msgstr "ขยายรายการทั้งหมด"
 
-#: ../src/seahorse-keyserver-results.c:212
+#: ../src/seahorse-keyserver-results.c:250
 msgid "_Collapse All"
 msgstr "ยุ_บทั้งหมด"
 
-#: ../src/seahorse-keyserver-results.c:213
+#: ../src/seahorse-keyserver-results.c:251
 msgid "Collapse all listings"
 msgstr "ยุบรายการทั้งหมด"
 
-#: ../src/seahorse-keyserver-results.c:275
+#: ../src/seahorse-keyserver-results.c:322
 msgid "Remote Keys"
 msgstr "กุญแจจากเครือข่าย"
 
-#: ../src/seahorse-keyserver-results.c:277
+#: ../src/seahorse-keyserver-results.c:324
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "กุญแจจากเครือข่ายที่มี '%s'"
@@ -2641,123 +2606,123 @@ msgstr "_ปรับข้อมูล"
 msgid "Version of this application"
 msgstr "รุ่นของโปรแกรมนี้"
 
-#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:170
+#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:144
 msgid "Encryption Key Manager"
 msgstr "โปรแกรมจัดการกุญแจเข้ารหัสลับ"
 
-#: ../src/seahorse-viewer.c:141
+#: ../src/seahorse-viewer.c:120
 msgid "Contributions:"
 msgstr "ผู้ร่วมสมทบ:"
 
-#: ../src/seahorse-viewer.c:172
+#: ../src/seahorse-viewer.c:146
 msgid "translator-credits"
 msgstr "เทพพิทักษ์ การุญบุญญานันท์ <thep@linux.thai.net>"
 
-#: ../src/seahorse-viewer.c:175
+#: ../src/seahorse-viewer.c:149
 msgid "Seahorse Project Homepage"
 msgstr "โฮมเพจโครงการ Seahorse"
 
 #. Top menu items
-#: ../src/seahorse-viewer.c:194
+#: ../src/seahorse-viewer.c:168
 msgid "_File"
 msgstr "แ_ฟ้ม"
 
-#: ../src/seahorse-viewer.c:195
+#: ../src/seahorse-viewer.c:169
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
-#: ../src/seahorse-viewer.c:196
+#: ../src/seahorse-viewer.c:170
 msgid "_View"
 msgstr "มุ_มมอง"
 
-#: ../src/seahorse-viewer.c:197
+#: ../src/seahorse-viewer.c:171
 msgid "_Help"
 msgstr "_วิธีใช้"
 
-#: ../src/seahorse-viewer.c:199
+#: ../src/seahorse-viewer.c:173
 msgid "Prefere_nces"
 msgstr "ปรับแ_ต่ง"
 
-#: ../src/seahorse-viewer.c:200
+#: ../src/seahorse-viewer.c:174
 msgid "Change preferences for this program"
 msgstr "ปรับแต่งโปรแกรมนี้"
 
-#: ../src/seahorse-viewer.c:203
+#: ../src/seahorse-viewer.c:177
 msgid "About this program"
 msgstr "เกี่ยวกับโปรแกรมนี้"
 
-#: ../src/seahorse-viewer.c:204
+#: ../src/seahorse-viewer.c:178
 msgid "_Contents"
 msgstr "เนื้อ_หา"
 
-#: ../src/seahorse-viewer.c:205
+#: ../src/seahorse-viewer.c:179
 msgid "Show Seahorse help"
 msgstr "แสดงวิธีใช้ Seahorse"
 
-#: ../src/seahorse-viewer.c:302
+#: ../src/seahorse-viewer.c:276
 msgid "Export public key"
 msgstr "ส่งออกกุญแจสาธารณะ"
 
-#: ../src/seahorse-viewer.c:322
+#: ../src/seahorse-viewer.c:296
 msgid "Exporting keys"
 msgstr "กำลังส่งออกกุญแจ"
 
-#: ../src/seahorse-viewer.c:347
+#: ../src/seahorse-viewer.c:321
 msgid "Couldn't retrieve data from key server"
 msgstr "ไม่สามารถดึงข้อมูลจากเซิร์ฟเวอร์กุญแจ"
 
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:366
+#: ../src/seahorse-viewer.c:340
 msgid "Copied keys"
 msgstr "ทำสำเนากุญแจแล้ว"
 
-#: ../src/seahorse-viewer.c:386
+#: ../src/seahorse-viewer.c:360
 msgid "Retrieving keys"
 msgstr "กำลังดึงข้อมูลกุญแจ"
 
-#: ../src/seahorse-viewer.c:401
+#: ../src/seahorse-viewer.c:375
 msgid "Couldn't delete."
 msgstr "ไม่สามารถลบ"
 
-#: ../src/seahorse-viewer.c:435
+#: ../src/seahorse-viewer.c:409
 msgid "Deleting..."
 msgstr "กำลังลบ..."
 
-#: ../src/seahorse-viewer.c:461
+#: ../src/seahorse-viewer.c:435
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s เป็นกุญแจส่วนตัว คุณยังคงต้องการดำเนินการต่อไปหรือไม่?"
 
-#: ../src/seahorse-viewer.c:509
+#: ../src/seahorse-viewer.c:483
 msgid "Importing keys from key servers"
 msgstr "กำลังนำเข้ากุญแจจากเซิร์ฟเวอร์พวงกุญแจ"
 
-#: ../src/seahorse-viewer.c:535
+#: ../src/seahorse-viewer.c:509
 msgid "Show properties"
 msgstr "แสดงคุณสมบัติ"
 
-#: ../src/seahorse-viewer.c:536
+#: ../src/seahorse-viewer.c:510
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "_ลบ"
 
-#: ../src/seahorse-viewer.c:537
+#: ../src/seahorse-viewer.c:511
 msgid "Delete selected items"
 msgstr "ลบรายการที่เลือก"
 
-#: ../src/seahorse-viewer.c:541
+#: ../src/seahorse-viewer.c:515
 msgid "E_xport..."
 msgstr "_ส่งออก..."
 
-#: ../src/seahorse-viewer.c:542
+#: ../src/seahorse-viewer.c:516
 msgid "Export to a file"
 msgstr "ส่งออกลงในแฟ้ม"
 
-#: ../src/seahorse-viewer.c:544
+#: ../src/seahorse-viewer.c:518
 msgid "Copy to the clipboard"
 msgstr "คัดลอกเข้าคลิปบอร์ด"
 
-#: ../src/seahorse-viewer.c:549
+#: ../src/seahorse-viewer.c:523
 msgid "Import selected keys to local key ring"
 msgstr "นำเข้ากุญแจที่เลือกเข้าในพวงกุญแจในเครื่อง"
 
@@ -3009,6 +2974,34 @@ msgstr "ชื่อเ_ข้าระบบ:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_ตั้งค่า"
+
+#~ msgid "Couldn't share keys"
+#~ msgstr "ไม่สามารถเปิดกุญแจให้ใช้ร่วมได้"
+
+#~ msgid "Can't publish discovery information on the network."
+#~ msgstr "ไม่สามารถประกาศข้อมูลสำหรับการตรวจหาลงในเครือข่ายได้"
+
+#~ msgid "%s's encryption keys"
+#~ msgstr "กุญแจเข้ารหัสลับของ %s"
+
+#~ msgid "Key Sharing"
+#~ msgstr "การเปิดกุญแจให้ใช้ร่วม"
+
+#~ msgid ""
+#~ "Sharing your keys allows other people on your network to use the keys "
+#~ "you've collected. This means they can automatically encrypt things for "
+#~ "you or those you know, without you having to send them your key.\n"
+#~ "\n"
+#~ "<b>Note:</b> Your personal keys will not be compromised."
+#~ msgstr ""
+#~ "การเปิดกุญแจของคุณให้ผู้อื่นใช้ร่วม ทำให้ผู้อื่นในเครือข่ายของคุณสามารถใช้กุญแจต่างๆ "
+#~ "ที่คุณเก็บไว้ได้ ซึ่งหมายความว่า พวกเขาจะสามารถเข้ารหัสลับข้อมูลต่างๆ "
+#~ "ส่งถึงคุณหรือคนที่คุณรู้จักได้โดยอัตโนมัติ โดยที่คุณไม่ต้องส่งกุญแจของคุณให้กับพวกเขา\n"
+#~ "\n"
+#~ "<b>หมายเหตุ:</b> กุญแจส่วนตัวของคุณจะไม่ถูกเปิดเผย"
+
+#~ msgid "_Share my keys with others on my network"
+#~ msgstr "เปิดกุญแจของฉันให้ผู้อื่นใ_ช้ร่วมในเครือข่าย"
 
 #~ msgid "Seahorse Daemon"
 #~ msgstr "ดีมอน Seahorse"
