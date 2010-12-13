@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-20 16:58+0300\n"
-"PO-Revision-Date: 2010-07-20 16:59+0200\n"
+"POT-Creation-Date: 2010-12-13 23:37+0200\n"
+"PO-Revision-Date: 2010-12-13 23:37+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,23 +16,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../daemon/seahorse-daemon.c:69
+#: ../daemon/seahorse-daemon.c:64
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "Do not run seahorse-daemon as a daemon"
 
-#: ../daemon/seahorse-daemon.c:99
+#: ../daemon/seahorse-daemon.c:94
 msgid "couldn't fork process"
 msgstr "couldn't fork process"
 
-#: ../daemon/seahorse-daemon.c:105
+#: ../daemon/seahorse-daemon.c:100
 msgid "couldn't create new process group"
 msgstr "couldn't create new process group"
 
-#: ../daemon/seahorse-daemon.c:255
+#: ../daemon/seahorse-daemon.c:250
 msgid "Encryption Daemon (Seahorse)"
 msgstr "מנוע הצפנה (Seahorse)"
 
-#: ../daemon/seahorse-service.c:163 ../daemon/seahorse-service.c:277
+#: ../daemon/seahorse-service.c:164 ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "סוג מפתח לא תקין או לא מוכר: %s"
@@ -174,24 +174,6 @@ msgstr "סוג מפתח לא תקף עבור וידוא: %s"
 #, c-format
 msgid "Invalid key id: %s"
 msgstr "מזהה מפתח לא תקף: %s"
-
-#: ../daemon/seahorse-sharing.c:84 ../daemon/seahorse-sharing.c:269
-msgid "Couldn't share keys"
-msgstr "לא ניתן לשתף מפתחות"
-
-#: ../daemon/seahorse-sharing.c:85
-msgid "Can't publish discovery information on the network."
-msgstr "לא ניתן לפרסם את נתוני הגילוי ברשת."
-
-#. Translators: The %s will get filled in with the user name
-#. of the user, to form a genitive. If this is difficult to
-#. translate correctly so that it will work correctly in your
-#. language, you may use something equivalent to
-#. "Shared keys of %s".
-#: ../daemon/seahorse-sharing.c:112
-#, c-format
-msgid "%s's encryption keys"
-msgstr "מפתחות ההצפנה של %s"
 
 #: ../data/seahorse.schemas.in.h:1
 msgid ""
@@ -471,7 +453,7 @@ msgstr "לא ניתן לשנות ססמה."
 msgid "Couldn't set description."
 msgstr "לא ניתן לקבוע תיאור"
 
-#: ../gkr/seahorse-gkr-item-properties.c:651
+#: ../gkr/seahorse-gkr-item-properties.c:654
 msgid "Couldn't set application access."
 msgstr "לא ניתן להגדיר את הגישה ליישום."
 
@@ -500,7 +482,6 @@ msgstr "יישומים"
 #: ../gkr/seahorse-gkr-item-properties.xml.h:6
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Details"
 msgstr "פרטים"
@@ -719,34 +700,37 @@ msgstr ""
 "לא נמצאו מפתחות הצפנה שבאמצעותם ניתן לבצע את הפעולה הנדרשת. התכנית <b>ססמאות "
 "ומפתחות הצפנה</b> תופעל כעת כדי שתהיה באפשרותך ליצור מפתח או לייבא אחד."
 
-#: ../libcryptui/cryptui-key-chooser.c:173
+#: ../libcryptui/cryptui-key-chooser.c:174
+#: ../libcryptui/cryptui-key-chooser.c:179
 msgid "All Keys"
 msgstr "כל המפתחות"
 
-#: ../libcryptui/cryptui-key-chooser.c:174
+#: ../libcryptui/cryptui-key-chooser.c:175
+#: ../libcryptui/cryptui-key-chooser.c:180
 msgid "Selected Recipients"
 msgstr "הנמענים הנבחרים"
 
-#: ../libcryptui/cryptui-key-chooser.c:175
+#: ../libcryptui/cryptui-key-chooser.c:176
+#: ../libcryptui/cryptui-key-chooser.c:181
 msgid "Search Results"
 msgstr "תוצאות חיפוש"
 
 #. Filter Label
-#: ../libcryptui/cryptui-key-chooser.c:185
+#: ../libcryptui/cryptui-key-chooser.c:192
 msgid "Search _for:"
 msgstr "חפש _עבור:"
 
-#: ../libcryptui/cryptui-key-chooser.c:243
+#: ../libcryptui/cryptui-key-chooser.c:250
 msgid "None (Don't Sign)"
 msgstr "ללא (אל תחתום)"
 
-#: ../libcryptui/cryptui-key-chooser.c:256
+#: ../libcryptui/cryptui-key-chooser.c:263
 #, c-format
 msgid "Sign this message as %s"
 msgstr "חתימהעל ההודעה כ־%s"
 
 #. Sign Label
-#: ../libcryptui/cryptui-key-chooser.c:278
+#: ../libcryptui/cryptui-key-chooser.c:285
 msgid "_Sign message as:"
 msgstr "_חתימה על ההודעה בתור:"
 
@@ -765,163 +749,163 @@ msgstr "שם"
 msgid "Key ID"
 msgstr "זיהוי מפתח"
 
-#: ../libegg/egg-datetime.c:313
+#: ../libegg/egg-datetime.c:325
 msgid "Display flags"
 msgstr "הצגת דגלים"
 
-#: ../libegg/egg-datetime.c:314
+#: ../libegg/egg-datetime.c:326
 msgid "Displayed date and/or time properties"
 msgstr "מאפייני תאריך ו/או שעה מוצגים"
 
-#: ../libegg/egg-datetime.c:319
+#: ../libegg/egg-datetime.c:331
 msgid "Lazy mode"
 msgstr "מצב עצל"
 
-#: ../libegg/egg-datetime.c:320
+#: ../libegg/egg-datetime.c:332
 msgid "Lazy mode doesn't normalize entered date and time values"
 msgstr "מצב עצל אינו מנרמל את ערכי הזמן והתאריך שהוזנו"
 
-#: ../libegg/egg-datetime.c:325
+#: ../libegg/egg-datetime.c:337
 msgid "Year"
 msgstr "שנה"
 
-#: ../libegg/egg-datetime.c:326
+#: ../libegg/egg-datetime.c:338
 msgid "Displayed year"
 msgstr "השנה המוצגת"
 
-#: ../libegg/egg-datetime.c:331
+#: ../libegg/egg-datetime.c:343
 msgid "Month"
 msgstr "חודש"
 
-#: ../libegg/egg-datetime.c:332
+#: ../libegg/egg-datetime.c:344
 msgid "Displayed month"
 msgstr "החודש המוצג"
 
-#: ../libegg/egg-datetime.c:337
+#: ../libegg/egg-datetime.c:349
 msgid "Day"
 msgstr "יום"
 
-#: ../libegg/egg-datetime.c:338
+#: ../libegg/egg-datetime.c:350
 msgid "Displayed day of month"
 msgstr "היום בחודש שמוצג"
 
-#: ../libegg/egg-datetime.c:343
+#: ../libegg/egg-datetime.c:355
 msgid "Hour"
 msgstr "שעה"
 
-#: ../libegg/egg-datetime.c:344
+#: ../libegg/egg-datetime.c:356
 msgid "Displayed hour"
 msgstr "השעה המוצגת"
 
-#: ../libegg/egg-datetime.c:349
+#: ../libegg/egg-datetime.c:361
 msgid "Minute"
 msgstr "דקה"
 
-#: ../libegg/egg-datetime.c:350
+#: ../libegg/egg-datetime.c:362
 msgid "Displayed minute"
 msgstr "הדקה המוצגת"
 
-#: ../libegg/egg-datetime.c:355
+#: ../libegg/egg-datetime.c:367
 msgid "Second"
 msgstr "שניה"
 
-#: ../libegg/egg-datetime.c:356
+#: ../libegg/egg-datetime.c:368
 msgid "Displayed second"
 msgstr "השנייה המוצגת"
 
-#: ../libegg/egg-datetime.c:361
+#: ../libegg/egg-datetime.c:373
 msgid "Lower limit year"
 msgstr "שנה מהגבול התחתון"
 
-#: ../libegg/egg-datetime.c:362
+#: ../libegg/egg-datetime.c:374
 msgid "Year part of the lower date limit"
 msgstr "שנה שהיא חלק מגבול התאריכים התחתון"
 
-#: ../libegg/egg-datetime.c:367
+#: ../libegg/egg-datetime.c:379
 msgid "Upper limit year"
 msgstr "שנה מהגבול העליון"
 
-#: ../libegg/egg-datetime.c:368
+#: ../libegg/egg-datetime.c:380
 msgid "Year part of the upper date limit"
 msgstr "שנה שהיא חלק מגבול התאריכים העליון"
 
-#: ../libegg/egg-datetime.c:373
+#: ../libegg/egg-datetime.c:385
 msgid "Lower limit month"
 msgstr "חודש מהגבול התחתון"
 
-#: ../libegg/egg-datetime.c:374
+#: ../libegg/egg-datetime.c:386
 msgid "Month part of the lower date limit"
 msgstr "חודש שהוא חלק מגבול התאריכים התחתון"
 
-#: ../libegg/egg-datetime.c:379
+#: ../libegg/egg-datetime.c:391
 msgid "Upper limit month"
 msgstr "חודש מהגבול העליון"
 
-#: ../libegg/egg-datetime.c:380
+#: ../libegg/egg-datetime.c:392
 msgid "Month part of the upper date limit"
 msgstr "חודש שהוא חלק מגבול התאריכים העליון"
 
-#: ../libegg/egg-datetime.c:385
+#: ../libegg/egg-datetime.c:397
 msgid "Lower limit day"
 msgstr "יום מהגבול התחתון"
 
-#: ../libegg/egg-datetime.c:386
+#: ../libegg/egg-datetime.c:398
 msgid "Day of month part of the lower date limit"
 msgstr "יום בחודש שהוא חלק מגבול התאריכים התחתון"
 
-#: ../libegg/egg-datetime.c:391
+#: ../libegg/egg-datetime.c:403
 msgid "Upper limit day"
 msgstr "יום מהגבול העליון"
 
-#: ../libegg/egg-datetime.c:392
+#: ../libegg/egg-datetime.c:404
 msgid "Day of month part of the upper date limit"
 msgstr "ים בחודש שהוא חלק מגבול התאריכים העליון"
 
-#: ../libegg/egg-datetime.c:397
+#: ../libegg/egg-datetime.c:409
 msgid "Lower limit hour"
 msgstr "שעה מהגבול התחתון"
 
-#: ../libegg/egg-datetime.c:398
+#: ../libegg/egg-datetime.c:410
 msgid "Hour part of the lower time limit"
 msgstr "שעה שהיא חלק מגבול התאריכים התחתון"
 
-#: ../libegg/egg-datetime.c:403
+#: ../libegg/egg-datetime.c:415
 msgid "Upper limit hour"
 msgstr "שעה מהגבול העליון"
 
-#: ../libegg/egg-datetime.c:404
+#: ../libegg/egg-datetime.c:416
 msgid "Hour part of the upper time limit"
 msgstr "שעה שהיא חלק מגבול התאריכים העליון"
 
-#: ../libegg/egg-datetime.c:409
+#: ../libegg/egg-datetime.c:421
 msgid "Lower limit minute"
 msgstr "דקה מהגבול התחתון"
 
-#: ../libegg/egg-datetime.c:410
+#: ../libegg/egg-datetime.c:422
 msgid "Minute part of the lower time limit"
 msgstr "דקה שהיא חלק מגבול התאריכים התחתון"
 
-#: ../libegg/egg-datetime.c:415
+#: ../libegg/egg-datetime.c:427
 msgid "Upper limit minute"
 msgstr "דקה מהגבול העליון"
 
-#: ../libegg/egg-datetime.c:416
+#: ../libegg/egg-datetime.c:428
 msgid "Minute part of the upper time limit"
 msgstr "דקה שהיא חלק מגבול התאריכים העליון"
 
-#: ../libegg/egg-datetime.c:421
+#: ../libegg/egg-datetime.c:433
 msgid "Lower limit second"
 msgstr "שנייה מהגבול התחתון"
 
-#: ../libegg/egg-datetime.c:422
+#: ../libegg/egg-datetime.c:434
 msgid "Second part of the lower time limit"
 msgstr "שנייה שהיא חלק מגבול התאריכים התחתון"
 
-#: ../libegg/egg-datetime.c:427
+#: ../libegg/egg-datetime.c:439
 msgid "Upper limit second"
 msgstr "שנייה מהגבול העליון"
 
-#: ../libegg/egg-datetime.c:428
+#: ../libegg/egg-datetime.c:440
 msgid "Second part of the upper time limit"
 msgstr "שנייה שהיא חלק מגבול התאריכים העליון"
 
@@ -930,92 +914,92 @@ msgstr "שנייה שהיא חלק מגבול התאריכים העליון"
 #. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
 #. * or calendar:week_start:0 it will not work.
 #.
-#: ../libegg/egg-datetime.c:470
+#: ../libegg/egg-datetime.c:482
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:504
 msgid "Date"
 msgstr "תאריך"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:504
 msgid "Enter the date directly"
 msgstr "הכנס את התאריך ישירות"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:511
 msgid "Select Date"
 msgstr "בחר תאריך"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:511
 msgid "Select the date from a calendar"
 msgstr "בחר את התאריך מיומן"
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2194
+#: ../libegg/egg-datetime.c:529 ../libegg/egg-datetime.c:2213
 msgid "Time"
 msgstr "שעה"
 
-#: ../libegg/egg-datetime.c:517
+#: ../libegg/egg-datetime.c:529
 msgid "Enter the time directly"
 msgstr "הכנס את השעה ישירות"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:536
 msgid "Select Time"
 msgstr "בחר שעה"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:536
 msgid "Select the time from a list"
 msgstr "בחר את השעה מרשימה"
 
 #. Translators: set this to anything else if you want to use a
 #. * 24 hour clock.
 #.
-#: ../libegg/egg-datetime.c:791
+#: ../libegg/egg-datetime.c:810
 msgid "24hr: no"
 msgstr "24 שעות: לא"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1255
-#: ../libegg/egg-datetime.c:1259
+#: ../libegg/egg-datetime.c:814 ../libegg/egg-datetime.c:1274
+#: ../libegg/egg-datetime.c:1278
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1256
-#: ../libegg/egg-datetime.c:1263
+#: ../libegg/egg-datetime.c:816 ../libegg/egg-datetime.c:1275
+#: ../libegg/egg-datetime.c:1282
 msgid "PM"
 msgstr "PM"
 
 #. Translators: This is hh:mm:ss AM/PM.
-#: ../libegg/egg-datetime.c:805
+#: ../libegg/egg-datetime.c:824
 #, c-format
 msgid "%02d:%02d:%02d %s"
 msgstr "‏‎%02d:%02d:%02d %s‏"
 
 #. Translators: This is hh:mm AM/PM.
-#: ../libegg/egg-datetime.c:808
+#: ../libegg/egg-datetime.c:827
 #, c-format
 msgid "%02d:%02d %s"
 msgstr "‏‎%02d:%02d %s‏"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:812
+#: ../libegg/egg-datetime.c:831
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
 #. Translators: This is hh:mm.
-#: ../libegg/egg-datetime.c:815
+#: ../libegg/egg-datetime.c:834
 #, c-format
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1171
+#: ../libegg/egg-datetime.c:1190
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1236
+#: ../libegg/egg-datetime.c:1255
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -1107,22 +1091,22 @@ msgstr "השער דרכו לגשת לשרת."
 msgid "initial temporary item"
 msgstr "פריט זמני ראשוני"
 
-#: ../libseahorse/seahorse-notification.c:566
-#: ../libseahorse/seahorse-notification.c:594
+#: ../libseahorse/seahorse-notification.c:576
+#: ../libseahorse/seahorse-notification.c:604
 msgid "Key Imported"
 msgid_plural "Keys Imported"
 msgstr[0] "מפתח יובא"
 msgstr[1] "מפתחות יובאו"
 
-#: ../libseahorse/seahorse-notification.c:570
-#: ../libseahorse/seahorse-notification.c:593
+#: ../libseahorse/seahorse-notification.c:580
+#: ../libseahorse/seahorse-notification.c:603
 #, c-format
 msgid "Imported %i key"
 msgid_plural "Imported %i keys"
 msgstr[0] "מפתח אחד יובא"
 msgstr[1] "%i מפתחות יובאו"
 
-#: ../libseahorse/seahorse-notification.c:572
+#: ../libseahorse/seahorse-notification.c:582
 #, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
@@ -1157,16 +1141,16 @@ msgstr "פרטי זיהוי"
 msgid "Identity"
 msgstr "זהות"
 
-#: ../libseahorse/seahorse-passphrase.c:196
+#: ../libseahorse/seahorse-passphrase.c:200
 msgid "Passphrase"
 msgstr "מילת צופן"
 
-#: ../libseahorse/seahorse-passphrase.c:199
+#: ../libseahorse/seahorse-passphrase.c:203
 #: ../ssh/seahorse-ssh-operation.c:480
 msgid "Password:"
 msgstr "ססמה:"
 
-#: ../libseahorse/seahorse-passphrase.c:265
+#: ../libseahorse/seahorse-passphrase.c:269
 msgid "Confirm:"
 msgstr "אישור:"
 
@@ -1188,7 +1172,7 @@ msgstr "כתובת"
 msgid "Custom"
 msgstr "מותאם אישית"
 
-#: ../libseahorse/seahorse-prefs.c:419
+#: ../libseahorse/seahorse-prefs.c:425
 msgid "None: Don't publish keys"
 msgstr "ללא: אל תפרסם מפתחות"
 
@@ -1205,38 +1189,16 @@ msgid "Key Servers"
 msgstr "שרתי מפתח"
 
 #: ../libseahorse/seahorse-prefs.xml.h:4
-msgid "Key Sharing"
-msgstr "שיתוף מפתחות"
-
-#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "Preferences"
 msgstr "העדפות"
 
-#: ../libseahorse/seahorse-prefs.xml.h:6
-msgid ""
-"Sharing your keys allows other people on your network to use the keys you've "
-"collected. This means they can automatically encrypt things for you or those "
-"you know, without you having to send them your key.\n"
-"\n"
-"<b>Note:</b> Your personal keys will not be compromised."
-msgstr ""
-"שיתוף המפתחות שלך יאפשר לאנשים אחרים ברשת שלך להשתמש במפתחות אותם אספת. "
-"משמעות הדבר היה שהם יוכלו להצפין דברים עבורך מבלי ידיעתך וללא צורך בשליחת "
-"המפתח שלך אליהם.\n"
-"\n"
-"<b>לתשומת לבך:</b> לא יתבצע כל שינוי במפתחות האישיים שלך."
-
-#: ../libseahorse/seahorse-prefs.xml.h:9
+#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "_Find keys via:"
 msgstr "_חפש מפתחות בעזרת:"
 
-#: ../libseahorse/seahorse-prefs.xml.h:10
+#: ../libseahorse/seahorse-prefs.xml.h:6
 msgid "_Publish keys to:"
 msgstr "_פרסם מפתחות ל:"
-
-#: ../libseahorse/seahorse-prefs.xml.h:11
-msgid "_Share my keys with others on my network"
-msgstr "_שתף את המפתחות שלי עם אחרים ברשת שלי"
 
 #: ../libseahorse/seahorse-progress.xml.h:1
 msgid "Progress Title"
@@ -1246,46 +1208,46 @@ msgstr "כותרת התקדמות"
 msgid "Unavailable"
 msgstr "לא זמין"
 
-#: ../libseahorse/seahorse-util.c:237
+#: ../libseahorse/seahorse-util.c:240
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:513
+#: ../libseahorse/seahorse-util.c:516
 msgid "Key Data"
 msgstr "מידע מפתח"
 
-#: ../libseahorse/seahorse-util.c:515
+#: ../libseahorse/seahorse-util.c:518
 msgid "Multiple Keys"
 msgstr "מפתחות  מרובים"
 
-#: ../libseahorse/seahorse-util.c:771
+#: ../libseahorse/seahorse-util.c:774
 msgid "Couldn't run file-roller"
 msgstr "לא ניתן להריץ את file-roller"
 
-#: ../libseahorse/seahorse-util.c:777
+#: ../libseahorse/seahorse-util.c:780
 msgid "Couldn't package files"
 msgstr "לא ניתן לארוז קבצים"
 
-#: ../libseahorse/seahorse-util.c:778
+#: ../libseahorse/seahorse-util.c:781
 msgid "The file-roller process did not complete successfully"
 msgstr "תהליך ה-'file-roller' לא הסתיים בהצלחה"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:954
+#: ../libseahorse/seahorse-util.c:957
 msgid "All key files"
 msgstr "כל קבצי המפתחות"
 
-#: ../libseahorse/seahorse-util.c:965 ../libseahorse/seahorse-util.c:1013
+#: ../libseahorse/seahorse-util.c:968 ../libseahorse/seahorse-util.c:1016
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "כל הקבצים"
 
-#: ../libseahorse/seahorse-util.c:1006
+#: ../libseahorse/seahorse-util.c:1009
 msgid "Archive files"
 msgstr "קבצי ארכיון"
 
-#: ../libseahorse/seahorse-util.c:1076
+#: ../libseahorse/seahorse-util.c:1079
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1295,7 +1257,7 @@ msgstr ""
 "\n"
 "האם ברצונך להחליף אותו בקובץ חדש?"
 
-#: ../libseahorse/seahorse-util.c:1079
+#: ../libseahorse/seahorse-util.c:1082
 msgid "_Replace"
 msgstr "_החלף"
 
@@ -1340,7 +1302,7 @@ msgstr "כבוי"
 msgid "Revoked"
 msgstr "בוטל"
 
-#: ../libseahorse/seahorse-widget.c:463
+#: ../libseahorse/seahorse-widget.c:480
 #, c-format
 msgid "Could not display help: %s"
 msgstr "לא ניתן להציג עזרה: %s"
@@ -1426,7 +1388,7 @@ msgstr "לא ניתן להוסיף תת־מפתח"
 msgid "Add subkey to %s"
 msgstr "הוספת תת־מפתח ל־%s"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:182 ../pgp/seahorse-gpgme-generate.c:117
+#: ../pgp/seahorse-gpgme-add-subkey.c:182 ../pgp/seahorse-gpgme-generate.c:118
 msgid "DSA (sign only)"
 msgstr "‏DSA (חתימה בלבד)"
 
@@ -1434,7 +1396,7 @@ msgstr "‏DSA (חתימה בלבד)"
 msgid "ElGamal (encrypt only)"
 msgstr "אל־גמאל (הצפנה בלבד)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:118
+#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:119
 msgid "RSA (sign only)"
 msgstr "‏RSA (חתימה בלבד)"
 
@@ -1480,31 +1442,31 @@ msgstr "מפתח PGP"
 msgid "Used to encrypt email and files"
 msgstr "משמש להצפנת דוא\"ל וקבצים"
 
-#: ../pgp/seahorse-gpgme-generate.c:115 ../ssh/seahorse-ssh-generate.xml.h:9
+#: ../pgp/seahorse-gpgme-generate.c:116 ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:116
+#: ../pgp/seahorse-gpgme-generate.c:117
 msgid "DSA Elgamal"
 msgstr "‏DSA אל־גמאל"
 
-#: ../pgp/seahorse-gpgme-generate.c:134
+#: ../pgp/seahorse-gpgme-generate.c:135
 msgid "Couldn't generate PGP key"
 msgstr "לא ניתן לייצר מפתח PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:194
+#: ../pgp/seahorse-gpgme-generate.c:195
 msgid "Passphrase for New PGP Key"
 msgstr "מילת צפון עבור מפתח ה־PGP החדש"
 
-#: ../pgp/seahorse-gpgme-generate.c:195
+#: ../pgp/seahorse-gpgme-generate.c:196
 msgid "Enter the passphrase for your new key twice."
 msgstr "יש להזין את מילת הצופן עבור המפתח החדש שלך פעמיים."
 
-#: ../pgp/seahorse-gpgme-generate.c:204
+#: ../pgp/seahorse-gpgme-generate.c:205
 msgid "Couldn't generate key"
 msgstr "לא ניתן לייצר מפתח"
 
-#: ../pgp/seahorse-gpgme-generate.c:206
+#: ../pgp/seahorse-gpgme-generate.c:207
 msgid "Generating key"
 msgstr "יוצר מפתח"
 
@@ -1624,17 +1586,26 @@ msgstr ""
 msgid "Couldn't add revoker"
 msgstr "לא ניתן להוסיף מורשה שלילה"
 
-#: ../pgp/seahorse-gpgme-sign.c:96
+#: ../pgp/seahorse-gpgme-sign.c:99
+#, c-format
+msgid ""
+"This key was already signed by\n"
+"\"%s\""
+msgstr ""
+"מקש זה כבר הוקצה על ידי\n"
+"\"%s\""
+
+#: ../pgp/seahorse-gpgme-sign.c:103
 msgid "Couldn't sign key"
 msgstr "לא ניתן לחתום על המפתח"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:149 ../pgp/seahorse-signer.c:61
+#: ../pgp/seahorse-gpgme-sign.c:157 ../pgp/seahorse-signer.c:61
 msgid "No keys usable for signing"
 msgstr "אין מפתחות שמתאימים להצפנה"
 
-#: ../pgp/seahorse-gpgme-sign.c:150
+#: ../pgp/seahorse-gpgme-sign.c:158
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
@@ -1684,7 +1655,7 @@ msgstr ""
 "נתוני המפתח שגויים (חסרים UID). שגיאה זאת נגרמה עקב מחשב ששעונו ממהר או "
 "חתימה עצמית חסרה."
 
-#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:538
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:544
 msgid "Importing Keys"
 msgstr "מפתחות מיובאים"
 
@@ -1911,7 +1882,7 @@ msgstr "לא ניתן למחוק תת-מפתח"
 msgid "Unable to change trust"
 msgstr "לא ניתן לשנות את המהימנות"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:316
+#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:290
 #: ../ssh/seahorse-ssh-key-properties.c:168
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2340,7 +2311,7 @@ msgid "_Sign message with key:"
 msgstr "_חתום על הודעה עם מפתח:"
 
 #: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
 msgid "Certificate"
 msgstr "תעודה"
 
@@ -2376,7 +2347,7 @@ msgstr "מילת צופן _חדשה:"
 msgid "Manage your passwords and encryption keys"
 msgstr "ניהול הססמאות ומפתחות ההצפנה שלך"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:857
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:862
 msgid "Passwords and Encryption Keys"
 msgstr "ססמאות ומפתחות הצפנה"
 
@@ -2399,104 +2370,104 @@ msgid_plural "Selected %d keys"
 msgstr[0] "מפתח אחד נבחר"
 msgstr[1] "%d מפתחות נבחרו"
 
-#: ../src/seahorse-key-manager.c:404 ../src/seahorse-key-manager.c:464
-#: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:484
+#: ../src/seahorse-key-manager.c:410 ../src/seahorse-key-manager.c:470
+#: ../src/seahorse-key-manager.c:533 ../src/seahorse-viewer.c:458
 msgid "Couldn't import keys"
 msgstr "לא ניתן לייבא מפתחות"
 
-#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:489
+#: ../src/seahorse-key-manager.c:415 ../src/seahorse-viewer.c:463
 msgid "Imported keys"
 msgstr "מפתחות מיובאים"
 
-#: ../src/seahorse-key-manager.c:458
+#: ../src/seahorse-key-manager.c:464
 msgid "Importing keys"
 msgstr "מייבא מפתחות"
 
-#: ../src/seahorse-key-manager.c:481 ../ssh/seahorse-ssh-operation.c:1017
+#: ../src/seahorse-key-manager.c:487 ../ssh/seahorse-ssh-operation.c:1017
 msgid "Import Key"
 msgstr "יבא מפתח"
 
-#: ../src/seahorse-key-manager.c:527
+#: ../src/seahorse-key-manager.c:533
 msgid "Unrecognized key type, or invalid data format"
 msgstr "סוג מפתח לא מזוהה, או תצורת מידע שגויה"
 
-#: ../src/seahorse-key-manager.c:725 ../src/seahorse-keyserver-results.c:207
+#: ../src/seahorse-key-manager.c:731 ../src/seahorse-keyserver-results.c:245
 msgid "_Remote"
 msgstr "_מרוחק"
 
-#: ../src/seahorse-key-manager.c:727
+#: ../src/seahorse-key-manager.c:733
 msgid "Close this program"
 msgstr "סגור את תוכנית זאת"
 
-#: ../src/seahorse-key-manager.c:728
+#: ../src/seahorse-key-manager.c:734
 msgid "_New..."
 msgstr "_חדש..."
 
-#: ../src/seahorse-key-manager.c:729
+#: ../src/seahorse-key-manager.c:735
 msgid "Create a new key or item"
 msgstr "צור מפתח או פריט חדשים"
 
-#: ../src/seahorse-key-manager.c:730
+#: ../src/seahorse-key-manager.c:736
 msgid "_Import..."
 msgstr "_יבא"
 
-#: ../src/seahorse-key-manager.c:731
+#: ../src/seahorse-key-manager.c:737
 msgid "Import from a file"
 msgstr "ייבוא מקובץ"
 
-#: ../src/seahorse-key-manager.c:733
+#: ../src/seahorse-key-manager.c:739
 msgid "Import from the clipboard"
 msgstr "ייבוא מלוח הגזירים"
 
-#: ../src/seahorse-key-manager.c:738 ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:744 ../src/seahorse-keyserver-results.c:255
 msgid "_Find Remote Keys..."
 msgstr "_חפש מפתחות מרוחקים..."
 
-#: ../src/seahorse-key-manager.c:739 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:745 ../src/seahorse-keyserver-results.c:256
 msgid "Search for keys on a key server"
 msgstr "חפש מפתחות בשרת מפתחות"
 
-#: ../src/seahorse-key-manager.c:740
+#: ../src/seahorse-key-manager.c:746
 msgid "_Sync and Publish Keys..."
 msgstr "_סנכרן ופרסם מפתחות..."
 
-#: ../src/seahorse-key-manager.c:741
+#: ../src/seahorse-key-manager.c:747
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "פרסום ו/או סנכרון מפתחותיך עם אלו באופן מקוון."
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:752
 msgid "T_ypes"
 msgstr "_סוגים"
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:752
 msgid "Show type column"
 msgstr "הצג את עמודת הסוג"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:754
 msgid "_Expiry"
 msgstr "_תפוגה"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:754
 msgid "Show expiry column"
 msgstr "הצג את עמודת התפוגה"
 
-#: ../src/seahorse-key-manager.c:750
+#: ../src/seahorse-key-manager.c:756
 msgid "_Trust"
 msgstr "_מהימנות"
 
-#: ../src/seahorse-key-manager.c:750
+#: ../src/seahorse-key-manager.c:756
 msgid "Show owner trust column"
 msgstr "הצגת מהימנות הבעלים"
 
-#: ../src/seahorse-key-manager.c:752
+#: ../src/seahorse-key-manager.c:758
 msgid "_Validity"
 msgstr "_תוקף"
 
-#: ../src/seahorse-key-manager.c:752
+#: ../src/seahorse-key-manager.c:758
 msgid "Show validity column"
 msgstr "הצגת עמודת התוקף"
 
-#: ../src/seahorse-key-manager.c:926
+#: ../src/seahorse-key-manager.c:931
 msgid "Filter:"
 msgstr "מסנן:"
 
@@ -2524,7 +2495,7 @@ msgstr "מפתחות _אחרים"
 msgid "To get started with encryption you will need keys."
 msgstr "על מנת להתחיל בהצפנה יש צורך במפתחות."
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:548
+#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:522
 msgid "_Import"
 msgstr "_יבא"
 
@@ -2532,7 +2503,7 @@ msgstr "_יבא"
 msgid "_Passwords"
 msgstr "_ססמאות"
 
-#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:256
 msgid "Couldn't export keys"
 msgstr "לא ניתן לייצא מפתחות"
 
@@ -2545,31 +2516,31 @@ msgstr "תוקף"
 msgid "Expiration Date"
 msgstr "תאריך תפוגה"
 
-#: ../src/seahorse-keyserver-results.c:209
+#: ../src/seahorse-keyserver-results.c:247
 msgid "Close this window"
 msgstr "סגור את חלון זה"
 
-#: ../src/seahorse-keyserver-results.c:210
+#: ../src/seahorse-keyserver-results.c:248
 msgid "_Expand All"
 msgstr "ה_רחב הכל"
 
-#: ../src/seahorse-keyserver-results.c:211
+#: ../src/seahorse-keyserver-results.c:249
 msgid "Expand all listings"
 msgstr "הרחבת כל הרשומות"
 
-#: ../src/seahorse-keyserver-results.c:212
+#: ../src/seahorse-keyserver-results.c:250
 msgid "_Collapse All"
 msgstr "קפל ה_כל"
 
-#: ../src/seahorse-keyserver-results.c:213
+#: ../src/seahorse-keyserver-results.c:251
 msgid "Collapse all listings"
 msgstr "צמצום כל הרשומות"
 
-#: ../src/seahorse-keyserver-results.c:275
+#: ../src/seahorse-keyserver-results.c:322
 msgid "Remote Keys"
 msgstr "מפתחות מרוחקים"
 
-#: ../src/seahorse-keyserver-results.c:277
+#: ../src/seahorse-keyserver-results.c:324
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "מפתחות מרוחקים שמכילים '%s'"
@@ -2665,15 +2636,15 @@ msgstr "_סנכרן"
 msgid "Version of this application"
 msgstr "גרסת יישום זה"
 
-#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:170
+#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:144
 msgid "Encryption Key Manager"
 msgstr "מנהל מפתח הצפנה"
 
-#: ../src/seahorse-viewer.c:141
+#: ../src/seahorse-viewer.c:120
 msgid "Contributions:"
 msgstr "תורמים:"
 
-#: ../src/seahorse-viewer.c:172
+#: ../src/seahorse-viewer.c:146
 msgid "translator-credits"
 msgstr ""
 "יאיר הרשקוביץ <yairhr@gmail.com>\n"
@@ -2681,111 +2652,111 @@ msgstr ""
 "פרוייקט תרגום GNOME לעברית\n"
 "‏http://gnome-il.berlios.de"
 
-#: ../src/seahorse-viewer.c:175
+#: ../src/seahorse-viewer.c:149
 msgid "Seahorse Project Homepage"
 msgstr "דף הבית של פרוייקט Seahorse"
 
 #. Top menu items
-#: ../src/seahorse-viewer.c:194
+#: ../src/seahorse-viewer.c:168
 msgid "_File"
 msgstr "_קובץ:"
 
-#: ../src/seahorse-viewer.c:195
+#: ../src/seahorse-viewer.c:169
 msgid "_Edit"
 msgstr "_עריכה"
 
-#: ../src/seahorse-viewer.c:196
+#: ../src/seahorse-viewer.c:170
 msgid "_View"
 msgstr "_תצוגה"
 
-#: ../src/seahorse-viewer.c:197
+#: ../src/seahorse-viewer.c:171
 msgid "_Help"
 msgstr "_עזרה"
 
-#: ../src/seahorse-viewer.c:199
+#: ../src/seahorse-viewer.c:173
 msgid "Prefere_nces"
 msgstr "ה_עדפות"
 
-#: ../src/seahorse-viewer.c:200
+#: ../src/seahorse-viewer.c:174
 msgid "Change preferences for this program"
 msgstr "שנה את העדפות תוכנית זאת"
 
-#: ../src/seahorse-viewer.c:203
+#: ../src/seahorse-viewer.c:177
 msgid "About this program"
 msgstr "אודות תוכנית זאת"
 
-#: ../src/seahorse-viewer.c:204
+#: ../src/seahorse-viewer.c:178
 msgid "_Contents"
 msgstr "_תכנים"
 
-#: ../src/seahorse-viewer.c:205
+#: ../src/seahorse-viewer.c:179
 msgid "Show Seahorse help"
 msgstr "הצג עזרה עבור Seahorse"
 
-#: ../src/seahorse-viewer.c:302
+#: ../src/seahorse-viewer.c:276
 msgid "Export public key"
 msgstr "יצא מפתח ציבורי"
 
-#: ../src/seahorse-viewer.c:322
+#: ../src/seahorse-viewer.c:296
 msgid "Exporting keys"
 msgstr "מייצא מפתחות"
 
-#: ../src/seahorse-viewer.c:347
+#: ../src/seahorse-viewer.c:321
 msgid "Couldn't retrieve data from key server"
 msgstr "לא ניתן לקבל מידע משרת המפתחות"
 
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:366
+#: ../src/seahorse-viewer.c:340
 msgid "Copied keys"
 msgstr "מפתחות מועתקים"
 
-#: ../src/seahorse-viewer.c:386
+#: ../src/seahorse-viewer.c:360
 msgid "Retrieving keys"
 msgstr "מקבל מפתחות"
 
-#: ../src/seahorse-viewer.c:401
+#: ../src/seahorse-viewer.c:375
 msgid "Couldn't delete."
 msgstr "לא ניתן למחוק."
 
-#: ../src/seahorse-viewer.c:435
+#: ../src/seahorse-viewer.c:409
 msgid "Deleting..."
 msgstr "מוחק..."
 
-#: ../src/seahorse-viewer.c:461
+#: ../src/seahorse-viewer.c:435
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "‏%s הוא מפתח פרטי. להמשיך?"
 
-#: ../src/seahorse-viewer.c:509
+#: ../src/seahorse-viewer.c:483
 msgid "Importing keys from key servers"
 msgstr "מייבא מפתחות משרת מפתחות"
 
-#: ../src/seahorse-viewer.c:535
+#: ../src/seahorse-viewer.c:509
 msgid "Show properties"
 msgstr "הצג מאפיינים"
 
-#: ../src/seahorse-viewer.c:536
+#: ../src/seahorse-viewer.c:510
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "מ_חק"
 
-#: ../src/seahorse-viewer.c:537
+#: ../src/seahorse-viewer.c:511
 msgid "Delete selected items"
 msgstr "מחק את הפריטים שנבחרו"
 
-#: ../src/seahorse-viewer.c:541
+#: ../src/seahorse-viewer.c:515
 msgid "E_xport..."
 msgstr "_יצא..."
 
-#: ../src/seahorse-viewer.c:542
+#: ../src/seahorse-viewer.c:516
 msgid "Export to a file"
 msgstr "ייצוא לקובץ"
 
-#: ../src/seahorse-viewer.c:544
+#: ../src/seahorse-viewer.c:518
 msgid "Copy to the clipboard"
 msgstr "העתקה ללוח הגזירים"
 
-#: ../src/seahorse-viewer.c:549
+#: ../src/seahorse-viewer.c:523
 msgid "Import selected keys to local key ring"
 msgstr "ייבור המפתחות הנבחרים לקבוצת מפתחות מקומית"
 
@@ -2826,7 +2797,7 @@ msgstr "משמש לגישה למחשבים אחרים"
 msgid "Couldn't generate Secure Shell key"
 msgstr "לא ניתן ליצר מפתח SSH"
 
-#: ../ssh/seahorse-ssh-generate.c:205
+#: ../ssh/seahorse-ssh-generate.c:213
 msgid "Creating Secure Shell Key"
 msgstr "יוצר מפתח SSH"
 
@@ -3040,6 +3011,34 @@ msgstr "_שם התחברות:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_הגדר"
+
+#~ msgid "Couldn't share keys"
+#~ msgstr "לא ניתן לשתף מפתחות"
+
+#~ msgid "Can't publish discovery information on the network."
+#~ msgstr "לא ניתן לפרסם את נתוני הגילוי ברשת."
+
+#~ msgid "%s's encryption keys"
+#~ msgstr "מפתחות ההצפנה של %s"
+
+#~ msgid "Key Sharing"
+#~ msgstr "שיתוף מפתחות"
+
+#~ msgid ""
+#~ "Sharing your keys allows other people on your network to use the keys "
+#~ "you've collected. This means they can automatically encrypt things for "
+#~ "you or those you know, without you having to send them your key.\n"
+#~ "\n"
+#~ "<b>Note:</b> Your personal keys will not be compromised."
+#~ msgstr ""
+#~ "שיתוף המפתחות שלך יאפשר לאנשים אחרים ברשת שלך להשתמש במפתחות אותם אספת. "
+#~ "משמעות הדבר היה שהם יוכלו להצפין דברים עבורך מבלי ידיעתך וללא צורך בשליחת "
+#~ "המפתח שלך אליהם.\n"
+#~ "\n"
+#~ "<b>לתשומת לבך:</b> לא יתבצע כל שינוי במפתחות האישיים שלך."
+
+#~ msgid "_Share my keys with others on my network"
+#~ msgstr "_שתף את המפתחות שלי עם אחרים ברשת שלי"
 
 #~| msgid "seahorse"
 #~ msgid "Seahorse Daemon"
