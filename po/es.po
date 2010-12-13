@@ -1,4 +1,4 @@
-# translation of seahorse.HEAD.po to Español
+# translation of seahorse.master.po to Español
 # José Carlos García Sogo <jsogo@debian.org>, 2002, 2003.
 # Q&A, Germán Poo-Caamaño <gpoo@ubiobio.cl>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2004, 2005, 2006.
@@ -9,11 +9,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: seahorse.HEAD\n"
+"Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&component=general\n"
-"POT-Creation-Date: 2010-08-14 20:28+0000\n"
-"PO-Revision-Date: 2010-08-15 23:12+0200\n"
+"POT-Creation-Date: 2010-12-13 09:54+0000\n"
+"PO-Revision-Date: 2010-12-13 19:58+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,23 +22,23 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../daemon/seahorse-daemon.c:69
+#: ../daemon/seahorse-daemon.c:64
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "No ejecutar seahorse-daemon como un demonio"
 
-#: ../daemon/seahorse-daemon.c:99
+#: ../daemon/seahorse-daemon.c:94
 msgid "couldn't fork process"
 msgstr "no se pudo bifurcar el proceso"
 
-#: ../daemon/seahorse-daemon.c:105
+#: ../daemon/seahorse-daemon.c:100
 msgid "couldn't create new process group"
 msgstr "no se pudo crear un grupo de proceso nuevo"
 
-#: ../daemon/seahorse-daemon.c:255
+#: ../daemon/seahorse-daemon.c:250
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Demonio de cifrado (Seahorse)"
 
-#: ../daemon/seahorse-service.c:163 ../daemon/seahorse-service.c:277
+#: ../daemon/seahorse-service.c:164 ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "Tipo de clave inválida o no reconocida: %s"
@@ -182,24 +182,6 @@ msgstr "Tipo de clave inválido para verificación: %s"
 msgid "Invalid key id: %s"
 msgstr "Id de clave inválido: %s"
 
-#: ../daemon/seahorse-sharing.c:84 ../daemon/seahorse-sharing.c:269
-msgid "Couldn't share keys"
-msgstr "No se pueden compartir las claves"
-
-#: ../daemon/seahorse-sharing.c:85
-msgid "Can't publish discovery information on the network."
-msgstr "No se puede publicar la información de descubrimiento en la red."
-
-#. Translators: The %s will get filled in with the user name
-#. of the user, to form a genitive. If this is difficult to
-#. translate correctly so that it will work correctly in your
-#. language, you may use something equivalent to
-#. "Shared keys of %s".
-#: ../daemon/seahorse-sharing.c:112
-#, c-format
-msgid "%s's encryption keys"
-msgstr "Claves de cifrado de %s"
-
 #: ../data/seahorse.schemas.in.h:1
 msgid ""
 "A list of key server URIs to search for remote PGP keys. In later versions a "
@@ -313,8 +295,8 @@ msgid ""
 "'id'. Put a '-' in front of the column name to sort in descending order."
 msgstr ""
 "Especificar la columna por la que ordenar la ventana de destinatarios. Las "
-"columnas son: «nombre» e «id». Ponga un «-» en frente del nombre de la columna "
-"para ordenarlos en orden descendente."
+"columnas son: «nombre» e «id». Ponga un «-» en frente del nombre de la "
+"columna para ordenarlos en orden descendente."
 
 #: ../data/seahorse.schemas.in.h:23
 msgid ""
@@ -491,7 +473,7 @@ msgstr "No se puede cambiar la contraseña."
 msgid "Couldn't set description."
 msgstr "No se pudo establecer la descripción."
 
-#: ../gkr/seahorse-gkr-item-properties.c:651
+#: ../gkr/seahorse-gkr-item-properties.c:654
 msgid "Couldn't set application access."
 msgstr "No se pudo establecer el acceso de la aplicación."
 
@@ -520,7 +502,6 @@ msgstr "Aplicaciones"
 #: ../gkr/seahorse-gkr-item-properties.xml.h:6
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Details"
 msgstr "Detalles"
@@ -747,34 +728,37 @@ msgstr ""
 "solicitó. Ahora se iniciará el programa <b>Contraseñas y claves de cifrado</"
 "b> para que puede crear una clave o importarla."
 
-#: ../libcryptui/cryptui-key-chooser.c:173
+#: ../libcryptui/cryptui-key-chooser.c:174
+#: ../libcryptui/cryptui-key-chooser.c:179
 msgid "All Keys"
 msgstr "Todas las claves"
 
-#: ../libcryptui/cryptui-key-chooser.c:174
+#: ../libcryptui/cryptui-key-chooser.c:175
+#: ../libcryptui/cryptui-key-chooser.c:180
 msgid "Selected Recipients"
 msgstr "Destinatarios$seleccionados"
 
-#: ../libcryptui/cryptui-key-chooser.c:175
+#: ../libcryptui/cryptui-key-chooser.c:176
+#: ../libcryptui/cryptui-key-chooser.c:181
 msgid "Search Results"
 msgstr "Resultados de la búsqueda"
 
 #. Filter Label
-#: ../libcryptui/cryptui-key-chooser.c:185
+#: ../libcryptui/cryptui-key-chooser.c:192
 msgid "Search _for:"
 msgstr "_Buscar:"
 
-#: ../libcryptui/cryptui-key-chooser.c:243
+#: ../libcryptui/cryptui-key-chooser.c:250
 msgid "None (Don't Sign)"
 msgstr "Ninguno (No firmar)"
 
-#: ../libcryptui/cryptui-key-chooser.c:256
+#: ../libcryptui/cryptui-key-chooser.c:263
 #, c-format
 msgid "Sign this message as %s"
 msgstr "Firmar mensaje como %s"
 
 #. Sign Label
-#: ../libcryptui/cryptui-key-chooser.c:278
+#: ../libcryptui/cryptui-key-chooser.c:285
 msgid "_Sign message as:"
 msgstr "_Firmar mensaje como:"
 
@@ -793,163 +777,163 @@ msgstr "Nombre"
 msgid "Key ID"
 msgstr "Identificador"
 
-#: ../libegg/egg-datetime.c:313
+#: ../libegg/egg-datetime.c:325
 msgid "Display flags"
 msgstr "Mostrar opciones"
 
-#: ../libegg/egg-datetime.c:314
+#: ../libegg/egg-datetime.c:326
 msgid "Displayed date and/or time properties"
 msgstr "Propiedades de fecha y/o hora mostradas"
 
-#: ../libegg/egg-datetime.c:319
+#: ../libegg/egg-datetime.c:331
 msgid "Lazy mode"
 msgstr "Modo vago"
 
-#: ../libegg/egg-datetime.c:320
+#: ../libegg/egg-datetime.c:332
 msgid "Lazy mode doesn't normalize entered date and time values"
 msgstr "El modo vago no normaliza los valores de fecha y hora introducidos"
 
-#: ../libegg/egg-datetime.c:325
+#: ../libegg/egg-datetime.c:337
 msgid "Year"
 msgstr "Año"
 
-#: ../libegg/egg-datetime.c:326
+#: ../libegg/egg-datetime.c:338
 msgid "Displayed year"
 msgstr "Año mostrado"
 
-#: ../libegg/egg-datetime.c:331
+#: ../libegg/egg-datetime.c:343
 msgid "Month"
 msgstr "Mes"
 
-#: ../libegg/egg-datetime.c:332
+#: ../libegg/egg-datetime.c:344
 msgid "Displayed month"
 msgstr "Mes mostrado"
 
-#: ../libegg/egg-datetime.c:337
+#: ../libegg/egg-datetime.c:349
 msgid "Day"
 msgstr "Día"
 
-#: ../libegg/egg-datetime.c:338
+#: ../libegg/egg-datetime.c:350
 msgid "Displayed day of month"
 msgstr "Día del mes mostrado"
 
-#: ../libegg/egg-datetime.c:343
+#: ../libegg/egg-datetime.c:355
 msgid "Hour"
 msgstr "Hora"
 
-#: ../libegg/egg-datetime.c:344
+#: ../libegg/egg-datetime.c:356
 msgid "Displayed hour"
 msgstr "Hora mostrada"
 
-#: ../libegg/egg-datetime.c:349
+#: ../libegg/egg-datetime.c:361
 msgid "Minute"
 msgstr "Minuto"
 
-#: ../libegg/egg-datetime.c:350
+#: ../libegg/egg-datetime.c:362
 msgid "Displayed minute"
 msgstr "Minuto mostrado"
 
-#: ../libegg/egg-datetime.c:355
+#: ../libegg/egg-datetime.c:367
 msgid "Second"
 msgstr "Segundo"
 
-#: ../libegg/egg-datetime.c:356
+#: ../libegg/egg-datetime.c:368
 msgid "Displayed second"
 msgstr "Segundo mostrado"
 
-#: ../libegg/egg-datetime.c:361
+#: ../libegg/egg-datetime.c:373
 msgid "Lower limit year"
 msgstr "Año límite inferior"
 
-#: ../libegg/egg-datetime.c:362
+#: ../libegg/egg-datetime.c:374
 msgid "Year part of the lower date limit"
 msgstr "Parte del año de la fecha límite inferior"
 
-#: ../libegg/egg-datetime.c:367
+#: ../libegg/egg-datetime.c:379
 msgid "Upper limit year"
 msgstr "Año límite superior"
 
-#: ../libegg/egg-datetime.c:368
+#: ../libegg/egg-datetime.c:380
 msgid "Year part of the upper date limit"
 msgstr "Parte del año de la fecha límite superior"
 
-#: ../libegg/egg-datetime.c:373
+#: ../libegg/egg-datetime.c:385
 msgid "Lower limit month"
 msgstr "Mes límite inferior"
 
-#: ../libegg/egg-datetime.c:374
+#: ../libegg/egg-datetime.c:386
 msgid "Month part of the lower date limit"
 msgstr "Parte del mes de la fecha límite inferior"
 
-#: ../libegg/egg-datetime.c:379
+#: ../libegg/egg-datetime.c:391
 msgid "Upper limit month"
 msgstr "Mes límite superior"
 
-#: ../libegg/egg-datetime.c:380
+#: ../libegg/egg-datetime.c:392
 msgid "Month part of the upper date limit"
 msgstr "Parte del mes de la fecha límite superior"
 
-#: ../libegg/egg-datetime.c:385
+#: ../libegg/egg-datetime.c:397
 msgid "Lower limit day"
 msgstr "Día límite inferior"
 
-#: ../libegg/egg-datetime.c:386
+#: ../libegg/egg-datetime.c:398
 msgid "Day of month part of the lower date limit"
 msgstr "Día de la parte del mes de la fecha límite inferior"
 
-#: ../libegg/egg-datetime.c:391
+#: ../libegg/egg-datetime.c:403
 msgid "Upper limit day"
 msgstr "Día límite superior"
 
-#: ../libegg/egg-datetime.c:392
+#: ../libegg/egg-datetime.c:404
 msgid "Day of month part of the upper date limit"
 msgstr "Día de la parte del mes de la fecha límite superior"
 
-#: ../libegg/egg-datetime.c:397
+#: ../libegg/egg-datetime.c:409
 msgid "Lower limit hour"
 msgstr "Hora límite inferior"
 
-#: ../libegg/egg-datetime.c:398
+#: ../libegg/egg-datetime.c:410
 msgid "Hour part of the lower time limit"
 msgstr "Parte de la hora de la hora límite inferior"
 
-#: ../libegg/egg-datetime.c:403
+#: ../libegg/egg-datetime.c:415
 msgid "Upper limit hour"
 msgstr "Hora límite superior"
 
-#: ../libegg/egg-datetime.c:404
+#: ../libegg/egg-datetime.c:416
 msgid "Hour part of the upper time limit"
 msgstr "Parte de la hora de la hora límite superior"
 
-#: ../libegg/egg-datetime.c:409
+#: ../libegg/egg-datetime.c:421
 msgid "Lower limit minute"
 msgstr "Reducir el minuto limite"
 
-#: ../libegg/egg-datetime.c:410
+#: ../libegg/egg-datetime.c:422
 msgid "Minute part of the lower time limit"
 msgstr "Parte del minuto de la hora límite inferior"
 
-#: ../libegg/egg-datetime.c:415
+#: ../libegg/egg-datetime.c:427
 msgid "Upper limit minute"
 msgstr "Aumentar el minuto limite"
 
-#: ../libegg/egg-datetime.c:416
+#: ../libegg/egg-datetime.c:428
 msgid "Minute part of the upper time limit"
 msgstr "Parte del minuto de la hora límite superior"
 
-#: ../libegg/egg-datetime.c:421
+#: ../libegg/egg-datetime.c:433
 msgid "Lower limit second"
 msgstr "Reducir el segundo limite"
 
-#: ../libegg/egg-datetime.c:422
+#: ../libegg/egg-datetime.c:434
 msgid "Second part of the lower time limit"
 msgstr "Parte del segundo de la hora límite inferior"
 
-#: ../libegg/egg-datetime.c:427
+#: ../libegg/egg-datetime.c:439
 msgid "Upper limit second"
 msgstr "Reducir el segundo limite"
 
-#: ../libegg/egg-datetime.c:428
+#: ../libegg/egg-datetime.c:440
 msgid "Second part of the upper time limit"
 msgstr "Parte del segundo de la hora límite superior"
 
@@ -958,92 +942,92 @@ msgstr "Parte del segundo de la hora límite superior"
 #. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
 #. * or calendar:week_start:0 it will not work.
 #.
-#: ../libegg/egg-datetime.c:470
+#: ../libegg/egg-datetime.c:482
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:504
 msgid "Date"
 msgstr "Fecha"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:504
 msgid "Enter the date directly"
 msgstr "Introducir la fecha directamente"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:511
 msgid "Select Date"
 msgstr "Seleccionar fecha"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:511
 msgid "Select the date from a calendar"
 msgstr "Seleccionar la fecha desde un calendario"
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2194
+#: ../libegg/egg-datetime.c:529 ../libegg/egg-datetime.c:2213
 msgid "Time"
 msgstr "Hora"
 
-#: ../libegg/egg-datetime.c:517
+#: ../libegg/egg-datetime.c:529
 msgid "Enter the time directly"
 msgstr "Introducir la hora directamente"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:536
 msgid "Select Time"
 msgstr "Seleccionar hora"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:536
 msgid "Select the time from a list"
 msgstr "Seleccionar la hora de una lista"
 
 #. Translators: set this to anything else if you want to use a
 #. * 24 hour clock.
 #.
-#: ../libegg/egg-datetime.c:791
+#: ../libegg/egg-datetime.c:810
 msgid "24hr: no"
 msgstr "24hr: si"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1255
-#: ../libegg/egg-datetime.c:1259
+#: ../libegg/egg-datetime.c:814 ../libegg/egg-datetime.c:1274
+#: ../libegg/egg-datetime.c:1278
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1256
-#: ../libegg/egg-datetime.c:1263
+#: ../libegg/egg-datetime.c:816 ../libegg/egg-datetime.c:1275
+#: ../libegg/egg-datetime.c:1282
 msgid "PM"
 msgstr "PM"
 
 #. Translators: This is hh:mm:ss AM/PM.
-#: ../libegg/egg-datetime.c:805
+#: ../libegg/egg-datetime.c:824
 #, c-format
 msgid "%02d:%02d:%02d %s"
 msgstr "%02d:%02d:%02d %s"
 
 #. Translators: This is hh:mm AM/PM.
-#: ../libegg/egg-datetime.c:808
+#: ../libegg/egg-datetime.c:827
 #, c-format
 msgid "%02d:%02d %s"
 msgstr "%02d:%02d %s"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:812
+#: ../libegg/egg-datetime.c:831
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
 #. Translators: This is hh:mm.
-#: ../libegg/egg-datetime.c:815
+#: ../libegg/egg-datetime.c:834
 #, c-format
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1171
+#: ../libegg/egg-datetime.c:1190
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1236
+#: ../libegg/egg-datetime.c:1255
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -1136,22 +1120,22 @@ msgstr "El puerto por el que acceder al servidor."
 msgid "initial temporary item"
 msgstr "elemento temporal inicial"
 
-#: ../libseahorse/seahorse-notification.c:566
-#: ../libseahorse/seahorse-notification.c:594
+#: ../libseahorse/seahorse-notification.c:576
+#: ../libseahorse/seahorse-notification.c:604
 msgid "Key Imported"
 msgid_plural "Keys Imported"
 msgstr[0] "Clave importada"
 msgstr[1] "Claves importadas"
 
-#: ../libseahorse/seahorse-notification.c:570
-#: ../libseahorse/seahorse-notification.c:593
+#: ../libseahorse/seahorse-notification.c:580
+#: ../libseahorse/seahorse-notification.c:603
 #, c-format
 msgid "Imported %i key"
 msgid_plural "Imported %i keys"
 msgstr[0] "Se importó %i clave"
 msgstr[1] "Se importaron %i claves"
 
-#: ../libseahorse/seahorse-notification.c:572
+#: ../libseahorse/seahorse-notification.c:582
 #, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
@@ -1186,16 +1170,16 @@ msgstr "Credenciales"
 msgid "Identity"
 msgstr "Identidad"
 
-#: ../libseahorse/seahorse-passphrase.c:196
+#: ../libseahorse/seahorse-passphrase.c:200
 msgid "Passphrase"
 msgstr "Frase de paso"
 
-#: ../libseahorse/seahorse-passphrase.c:199
+#: ../libseahorse/seahorse-passphrase.c:203
 #: ../ssh/seahorse-ssh-operation.c:480
 msgid "Password:"
 msgstr "Contraseña:"
 
-#: ../libseahorse/seahorse-passphrase.c:265
+#: ../libseahorse/seahorse-passphrase.c:269
 msgid "Confirm:"
 msgstr "Confirmar:"
 
@@ -1219,7 +1203,7 @@ msgstr "URL"
 msgid "Custom"
 msgstr "Personalizado"
 
-#: ../libseahorse/seahorse-prefs.c:419
+#: ../libseahorse/seahorse-prefs.c:425
 msgid "None: Don't publish keys"
 msgstr "Ninguno: no publicar claves"
 
@@ -1238,39 +1222,16 @@ msgid "Key Servers"
 msgstr "Servidores de claves"
 
 #: ../libseahorse/seahorse-prefs.xml.h:4
-msgid "Key Sharing"
-msgstr "Compartición de claves"
-
-#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: ../libseahorse/seahorse-prefs.xml.h:6
-msgid ""
-"Sharing your keys allows other people on your network to use the keys you've "
-"collected. This means they can automatically encrypt things for you or those "
-"you know, without you having to send them your key.\n"
-"\n"
-"<b>Note:</b> Your personal keys will not be compromised."
-msgstr ""
-"Compartir sus claves permite a otras personas en su red usar las claves que "
-"usted ha reunido. Esto significa que puede cifrar automáticamente cosas para "
-"usted o aquellos a los que usted conoce sin tener que que enviarles a ellos "
-"su clave.\n"
-"\n"
-"<b>Nota:</b> Sus claves personales no serán comprometidas."
-
-#: ../libseahorse/seahorse-prefs.xml.h:9
+#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "_Find keys via:"
 msgstr "_Buscar claves vía:"
 
-#: ../libseahorse/seahorse-prefs.xml.h:10
+#: ../libseahorse/seahorse-prefs.xml.h:6
 msgid "_Publish keys to:"
 msgstr "_Publicar claves en:"
-
-#: ../libseahorse/seahorse-prefs.xml.h:11
-msgid "_Share my keys with others on my network"
-msgstr "Co_mpartir mis claves con otros en mi red"
 
 #: ../libseahorse/seahorse-progress.xml.h:1
 msgid "Progress Title"
@@ -1280,46 +1241,46 @@ msgstr "Título del progreso"
 msgid "Unavailable"
 msgstr "No disponible"
 
-#: ../libseahorse/seahorse-util.c:239
+#: ../libseahorse/seahorse-util.c:240
 msgid "%Y-%m-%d"
 msgstr "%d/%m/%Y"
 
-#: ../libseahorse/seahorse-util.c:515
+#: ../libseahorse/seahorse-util.c:516
 msgid "Key Data"
 msgstr "Datos de la clave"
 
-#: ../libseahorse/seahorse-util.c:517
+#: ../libseahorse/seahorse-util.c:518
 msgid "Multiple Keys"
 msgstr "Claves múltiples"
 
-#: ../libseahorse/seahorse-util.c:773
+#: ../libseahorse/seahorse-util.c:774
 msgid "Couldn't run file-roller"
 msgstr "No se pudo ejecutar file-roller"
 
-#: ../libseahorse/seahorse-util.c:779
+#: ../libseahorse/seahorse-util.c:780
 msgid "Couldn't package files"
 msgstr "No se pudieron empaquetar los archivos"
 
-#: ../libseahorse/seahorse-util.c:780
+#: ../libseahorse/seahorse-util.c:781
 msgid "The file-roller process did not complete successfully"
 msgstr "El proceso de file-roller no terminó completamente"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:956
+#: ../libseahorse/seahorse-util.c:957
 msgid "All key files"
 msgstr "Todos los archivos de claves"
 
-#: ../libseahorse/seahorse-util.c:967 ../libseahorse/seahorse-util.c:1015
+#: ../libseahorse/seahorse-util.c:968 ../libseahorse/seahorse-util.c:1016
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "Todos los archivos"
 
-#: ../libseahorse/seahorse-util.c:1008
+#: ../libseahorse/seahorse-util.c:1009
 msgid "Archive files"
 msgstr "Archivar ficheros"
 
-#: ../libseahorse/seahorse-util.c:1078
+#: ../libseahorse/seahorse-util.c:1079
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1329,7 +1290,7 @@ msgstr ""
 "\n"
 "¿Quiere reemplazarlo por uno nuevo?"
 
-#: ../libseahorse/seahorse-util.c:1081
+#: ../libseahorse/seahorse-util.c:1082
 msgid "_Replace"
 msgstr "_Reemplazar"
 
@@ -1374,7 +1335,7 @@ msgstr "Deshabilitada"
 msgid "Revoked"
 msgstr "Revocada"
 
-#: ../libseahorse/seahorse-widget.c:463
+#: ../libseahorse/seahorse-widget.c:480
 #, c-format
 msgid "Could not display help: %s"
 msgstr "No se pudo mostrar la ayuda: %s"
@@ -1660,17 +1621,26 @@ msgstr ""
 msgid "Couldn't add revoker"
 msgstr "No se pudo añadir revocador"
 
-#: ../pgp/seahorse-gpgme-sign.c:96
+#: ../pgp/seahorse-gpgme-sign.c:99
+#, c-format
+msgid ""
+"This key was already signed by\n"
+"\"%s\""
+msgstr ""
+"Esta clave ya estaba firmada por\n"
+"«%s»"
+
+#: ../pgp/seahorse-gpgme-sign.c:103
 msgid "Couldn't sign key"
 msgstr "No se pudo firmar la clave"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:149 ../pgp/seahorse-signer.c:61
+#: ../pgp/seahorse-gpgme-sign.c:157 ../pgp/seahorse-signer.c:61
 msgid "No keys usable for signing"
 msgstr "No hay claves disponibles para firmar"
 
-#: ../pgp/seahorse-gpgme-sign.c:150
+#: ../pgp/seahorse-gpgme-sign.c:158
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
@@ -1722,7 +1692,7 @@ msgstr ""
 "Datos de clave inválidos (faltan UID). Esto puede ser debido a un equipo con "
 "una fecha establecida en el futuro o una autofirma faltante."
 
-#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:538
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:544
 msgid "Importing Keys"
 msgstr "Importando claves"
 
@@ -1954,7 +1924,7 @@ msgstr "No se pudo borrar la subclave"
 msgid "Unable to change trust"
 msgstr "Imposible cambiar la confianza"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:316
+#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:290
 #: ../ssh/seahorse-ssh-key-properties.c:168
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2230,8 +2200,8 @@ msgstr ""
 msgid ""
 "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
 msgstr ""
-"Si no confía más en que «%s» sea el propietario de esta clave, <i>revoque</i> "
-"su firma:"
+"Si no confía más en que «%s» sea el propietario de esta clave, <i>revoque</"
+"i> su firma:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
 msgid "Marginally"
@@ -2391,7 +2361,7 @@ msgid "_Sign message with key:"
 msgstr "_Firmar mensaje con la clave:"
 
 #: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
 msgid "Certificate"
 msgstr "Certificado"
 
@@ -2427,7 +2397,7 @@ msgstr "_Frase de paso nueva:"
 msgid "Manage your passwords and encryption keys"
 msgstr "Administre sus claves y contraseñas de cifrado"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:857
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:862
 msgid "Passwords and Encryption Keys"
 msgstr "Contraseñas y claves de cifrado"
 
@@ -2450,104 +2420,104 @@ msgid_plural "Selected %d keys"
 msgstr[0] "%d clave seleccionada"
 msgstr[1] "%d claves seleccionadas"
 
-#: ../src/seahorse-key-manager.c:404 ../src/seahorse-key-manager.c:464
-#: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:484
+#: ../src/seahorse-key-manager.c:410 ../src/seahorse-key-manager.c:470
+#: ../src/seahorse-key-manager.c:533 ../src/seahorse-viewer.c:458
 msgid "Couldn't import keys"
 msgstr "No se pudieron importar las claves"
 
-#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:489
+#: ../src/seahorse-key-manager.c:415 ../src/seahorse-viewer.c:463
 msgid "Imported keys"
 msgstr "Claves importadas"
 
-#: ../src/seahorse-key-manager.c:458
+#: ../src/seahorse-key-manager.c:464
 msgid "Importing keys"
 msgstr "Importando claves"
 
-#: ../src/seahorse-key-manager.c:481 ../ssh/seahorse-ssh-operation.c:1017
+#: ../src/seahorse-key-manager.c:487 ../ssh/seahorse-ssh-operation.c:1017
 msgid "Import Key"
 msgstr "Importar clave"
 
-#: ../src/seahorse-key-manager.c:527
+#: ../src/seahorse-key-manager.c:533
 msgid "Unrecognized key type, or invalid data format"
 msgstr "Tipo de clave no reconocido, o formato de datos inválido"
 
-#: ../src/seahorse-key-manager.c:725 ../src/seahorse-keyserver-results.c:245
+#: ../src/seahorse-key-manager.c:731 ../src/seahorse-keyserver-results.c:245
 msgid "_Remote"
 msgstr "_Remota"
 
-#: ../src/seahorse-key-manager.c:727
+#: ../src/seahorse-key-manager.c:733
 msgid "Close this program"
 msgstr "Cerrar este programa"
 
-#: ../src/seahorse-key-manager.c:728
+#: ../src/seahorse-key-manager.c:734
 msgid "_New..."
 msgstr "_Nueva…"
 
-#: ../src/seahorse-key-manager.c:729
+#: ../src/seahorse-key-manager.c:735
 msgid "Create a new key or item"
 msgstr "Crear una clave o elemento nuevo"
 
-#: ../src/seahorse-key-manager.c:730
+#: ../src/seahorse-key-manager.c:736
 msgid "_Import..."
 msgstr "_Importar…"
 
-#: ../src/seahorse-key-manager.c:731
+#: ../src/seahorse-key-manager.c:737
 msgid "Import from a file"
 msgstr "Importar desde un archivo"
 
-#: ../src/seahorse-key-manager.c:733
+#: ../src/seahorse-key-manager.c:739
 msgid "Import from the clipboard"
 msgstr "Importar desde el portapapeles"
 
-#: ../src/seahorse-key-manager.c:738 ../src/seahorse-keyserver-results.c:255
+#: ../src/seahorse-key-manager.c:744 ../src/seahorse-keyserver-results.c:255
 msgid "_Find Remote Keys..."
 msgstr "_Buscar claves remotas…"
 
-#: ../src/seahorse-key-manager.c:739 ../src/seahorse-keyserver-results.c:256
+#: ../src/seahorse-key-manager.c:745 ../src/seahorse-keyserver-results.c:256
 msgid "Search for keys on a key server"
 msgstr "Buscar claves en un servidor de claves"
 
-#: ../src/seahorse-key-manager.c:740
+#: ../src/seahorse-key-manager.c:746
 msgid "_Sync and Publish Keys..."
 msgstr "_Sincronizar y publicar claves…"
 
-#: ../src/seahorse-key-manager.c:741
+#: ../src/seahorse-key-manager.c:747
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Publicar y/o sincronizar sus claves con las que estén en línea."
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:752
 msgid "T_ypes"
 msgstr "_Tipos"
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:752
 msgid "Show type column"
 msgstr "Mostrar la columna del tipo"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:754
 msgid "_Expiry"
 msgstr "_Caducidad"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:754
 msgid "Show expiry column"
 msgstr "Mostrar la columna de caducidad"
 
-#: ../src/seahorse-key-manager.c:750
+#: ../src/seahorse-key-manager.c:756
 msgid "_Trust"
 msgstr "Co_nfianza"
 
-#: ../src/seahorse-key-manager.c:750
+#: ../src/seahorse-key-manager.c:756
 msgid "Show owner trust column"
 msgstr "Mostrar la columna de confianza del propietario"
 
-#: ../src/seahorse-key-manager.c:752
+#: ../src/seahorse-key-manager.c:758
 msgid "_Validity"
 msgstr "_Validez"
 
-#: ../src/seahorse-key-manager.c:752
+#: ../src/seahorse-key-manager.c:758
 msgid "Show validity column"
 msgstr "Mostrar la columna de validez"
 
-#: ../src/seahorse-key-manager.c:926
+#: ../src/seahorse-key-manager.c:931
 msgid "Filter:"
 msgstr "Filtro:"
 
@@ -2575,7 +2545,7 @@ msgstr "_Otras claves"
 msgid "To get started with encryption you will need keys."
 msgstr "Para cifrar necesitará claves."
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:548
+#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:522
 msgid "_Import"
 msgstr "_Importar"
 
@@ -2583,7 +2553,7 @@ msgstr "_Importar"
 msgid "_Passwords"
 msgstr "Contrase_ñas"
 
-#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:256
 msgid "Couldn't export keys"
 msgstr "No se pudo exportar las claves"
 
@@ -2718,15 +2688,15 @@ msgstr "_Sincronizar"
 msgid "Version of this application"
 msgstr "Versión de esta aplicación"
 
-#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:170
+#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:144
 msgid "Encryption Key Manager"
 msgstr "Administrador de claves de cifrado"
 
-#: ../src/seahorse-viewer.c:141
+#: ../src/seahorse-viewer.c:120
 msgid "Contributions:"
 msgstr "Contribuciones:"
 
-#: ../src/seahorse-viewer.c:172
+#: ../src/seahorse-viewer.c:146
 msgid "translator-credits"
 msgstr ""
 "Jorge González <jorgegonz@svn.gnome.org>, 2007-2010\n"
@@ -2734,111 +2704,111 @@ msgstr ""
 "Germán Poo-Caamaño <gpoo@ubiobio.cl>, 2003\n"
 "José Carlos García Sogo <jsogo@debian.org>, 2002, 2003"
 
-#: ../src/seahorse-viewer.c:175
+#: ../src/seahorse-viewer.c:149
 msgid "Seahorse Project Homepage"
 msgstr "Página web de Seahorse"
 
 #. Top menu items
-#: ../src/seahorse-viewer.c:194
+#: ../src/seahorse-viewer.c:168
 msgid "_File"
 msgstr "_Archivo"
 
-#: ../src/seahorse-viewer.c:195
+#: ../src/seahorse-viewer.c:169
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/seahorse-viewer.c:196
+#: ../src/seahorse-viewer.c:170
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/seahorse-viewer.c:197
+#: ../src/seahorse-viewer.c:171
 msgid "_Help"
 msgstr "Ay_uda"
 
-#: ../src/seahorse-viewer.c:199
+#: ../src/seahorse-viewer.c:173
 msgid "Prefere_nces"
 msgstr "Prefere_ncias"
 
-#: ../src/seahorse-viewer.c:200
+#: ../src/seahorse-viewer.c:174
 msgid "Change preferences for this program"
 msgstr "Cambia las preferencias de este programa"
 
-#: ../src/seahorse-viewer.c:203
+#: ../src/seahorse-viewer.c:177
 msgid "About this program"
 msgstr "Acerca de este programa"
 
-#: ../src/seahorse-viewer.c:204
+#: ../src/seahorse-viewer.c:178
 msgid "_Contents"
 msgstr "Índ_ice"
 
-#: ../src/seahorse-viewer.c:205
+#: ../src/seahorse-viewer.c:179
 msgid "Show Seahorse help"
 msgstr "Mostrar ayuda de seahorse"
 
-#: ../src/seahorse-viewer.c:302
+#: ../src/seahorse-viewer.c:276
 msgid "Export public key"
 msgstr "Exportar clave pública"
 
-#: ../src/seahorse-viewer.c:322
+#: ../src/seahorse-viewer.c:296
 msgid "Exporting keys"
 msgstr "Exportando claves"
 
-#: ../src/seahorse-viewer.c:347
+#: ../src/seahorse-viewer.c:321
 msgid "Couldn't retrieve data from key server"
 msgstr "No se puede obtener los datos del servidor de claves"
 
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:366
+#: ../src/seahorse-viewer.c:340
 msgid "Copied keys"
 msgstr "Claves copiadas"
 
-#: ../src/seahorse-viewer.c:386
+#: ../src/seahorse-viewer.c:360
 msgid "Retrieving keys"
 msgstr "Obteniendo claves"
 
-#: ../src/seahorse-viewer.c:401
+#: ../src/seahorse-viewer.c:375
 msgid "Couldn't delete."
 msgstr "No se pudo borrar."
 
-#: ../src/seahorse-viewer.c:435
+#: ../src/seahorse-viewer.c:409
 msgid "Deleting..."
 msgstr "Borrando…"
 
-#: ../src/seahorse-viewer.c:461
+#: ../src/seahorse-viewer.c:435
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s es una clave privada. ¿Seguro que quiere continuar?"
 
-#: ../src/seahorse-viewer.c:509
+#: ../src/seahorse-viewer.c:483
 msgid "Importing keys from key servers"
 msgstr "Importando claves desde servidores de claves"
 
-#: ../src/seahorse-viewer.c:535
+#: ../src/seahorse-viewer.c:509
 msgid "Show properties"
 msgstr "Mostrar propiedades de la clave"
 
-#: ../src/seahorse-viewer.c:536
+#: ../src/seahorse-viewer.c:510
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "_Borrar"
 
-#: ../src/seahorse-viewer.c:537
+#: ../src/seahorse-viewer.c:511
 msgid "Delete selected items"
 msgstr "Borrar las claves seleccionadas"
 
-#: ../src/seahorse-viewer.c:541
+#: ../src/seahorse-viewer.c:515
 msgid "E_xport..."
 msgstr "E_xportar…"
 
-#: ../src/seahorse-viewer.c:542
+#: ../src/seahorse-viewer.c:516
 msgid "Export to a file"
 msgstr "Exportar parte de la clave pública a un archivo"
 
-#: ../src/seahorse-viewer.c:544
+#: ../src/seahorse-viewer.c:518
 msgid "Copy to the clipboard"
 msgstr "Importar claves desde el portapapeles"
 
-#: ../src/seahorse-viewer.c:549
+#: ../src/seahorse-viewer.c:523
 msgid "Import selected keys to local key ring"
 msgstr "Importar las claves seleccionadas en el depósito local"
 
@@ -2881,7 +2851,7 @@ msgstr "Usada para acceder a otros equipos (ej: a través de un terminal)"
 msgid "Couldn't generate Secure Shell key"
 msgstr "No se pudo generar la clave de shell segura"
 
-#: ../ssh/seahorse-ssh-generate.c:205
+#: ../ssh/seahorse-ssh-generate.c:213
 msgid "Creating Secure Shell Key"
 msgstr "Crear la clave de shell segura"
 
@@ -3097,6 +3067,35 @@ msgstr "_Usuario:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "Co_nfigurar"
+
+#~ msgid "Couldn't share keys"
+#~ msgstr "No se pueden compartir las claves"
+
+#~ msgid "Can't publish discovery information on the network."
+#~ msgstr "No se puede publicar la información de descubrimiento en la red."
+
+#~ msgid "%s's encryption keys"
+#~ msgstr "Claves de cifrado de %s"
+
+#~ msgid "Key Sharing"
+#~ msgstr "Compartición de claves"
+
+#~ msgid ""
+#~ "Sharing your keys allows other people on your network to use the keys "
+#~ "you've collected. This means they can automatically encrypt things for "
+#~ "you or those you know, without you having to send them your key.\n"
+#~ "\n"
+#~ "<b>Note:</b> Your personal keys will not be compromised."
+#~ msgstr ""
+#~ "Compartir sus claves permite a otras personas en su red usar las claves "
+#~ "que usted ha reunido. Esto significa que puede cifrar automáticamente "
+#~ "cosas para usted o aquellos a los que usted conoce sin tener que que "
+#~ "enviarles a ellos su clave.\n"
+#~ "\n"
+#~ "<b>Nota:</b> Sus claves personales no serán comprometidas."
+
+#~ msgid "_Share my keys with others on my network"
+#~ msgstr "Co_mpartir mis claves con otros en mi red"
 
 #~ msgid "Seahorse Daemon"
 #~ msgstr "Demonio de Seahorse"
