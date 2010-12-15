@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse&component=general\n"
-"POT-Creation-Date: 2010-07-24 14:32+0000\n"
-"PO-Revision-Date: 2010-08-16 18:44+0100\n"
+"POT-Creation-Date: 2010-12-13 21:38+0000\n"
+"PO-Revision-Date: 2010-12-14 08:08+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -21,23 +21,23 @@ msgstr ""
 "X-Poedit-Country: SLOVENIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../daemon/seahorse-daemon.c:69
+#: ../daemon/seahorse-daemon.c:64
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "Ne zaganjaj seahorse ozadnjega programa"
 
-#: ../daemon/seahorse-daemon.c:99
+#: ../daemon/seahorse-daemon.c:94
 msgid "couldn't fork process"
 msgstr "ni mogoče razvejiti opravila"
 
-#: ../daemon/seahorse-daemon.c:105
+#: ../daemon/seahorse-daemon.c:100
 msgid "couldn't create new process group"
 msgstr "ni mogoče ustvariti nove opravilne skupine"
 
-#: ../daemon/seahorse-daemon.c:255
+#: ../daemon/seahorse-daemon.c:250
 msgid "Encryption Daemon (Seahorse)"
 msgstr "Šifrirni ozadnji program (Seahorse)"
 
-#: ../daemon/seahorse-service.c:163
+#: ../daemon/seahorse-service.c:164
 #: ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
@@ -181,25 +181,6 @@ msgstr "Neveljavna vrsta ključa za overitev: %s"
 #, c-format
 msgid "Invalid key id: %s"
 msgstr "Neveljaven ID ključa: %s"
-
-#: ../daemon/seahorse-sharing.c:84
-#: ../daemon/seahorse-sharing.c:269
-msgid "Couldn't share keys"
-msgstr "Ni mogoča souporaba ključev"
-
-#: ../daemon/seahorse-sharing.c:85
-msgid "Can't publish discovery information on the network."
-msgstr "Ni mogoče objaviti zaznanih podrobnosti na omrežju."
-
-#. Translators: The %s will get filled in with the user name
-#. of the user, to form a genitive. If this is difficult to
-#. translate correctly so that it will work correctly in your
-#. language, you may use something equivalent to
-#. "Shared keys of %s".
-#: ../daemon/seahorse-sharing.c:112
-#, c-format
-msgid "%s's encryption keys"
-msgstr "Uporabnik %s: šifrirni ključi"
 
 #: ../data/seahorse.schemas.in.h:1
 msgid "A list of key server URIs to search for remote PGP keys. In later versions a display name can be included, by appending a space and then the name."
@@ -441,7 +422,7 @@ msgstr "Ni mogoče spremeniti gesla."
 msgid "Couldn't set description."
 msgstr "Ni mogoče določiti opisa."
 
-#: ../gkr/seahorse-gkr-item-properties.c:651
+#: ../gkr/seahorse-gkr-item-properties.c:654
 msgid "Couldn't set application access."
 msgstr "Ni mogoče določiti dostopa programa."
 
@@ -470,7 +451,6 @@ msgstr "Programi"
 #: ../gkr/seahorse-gkr-item-properties.xml.h:6
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
 #: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Details"
 msgstr "Podrobnosti"
@@ -680,34 +660,37 @@ msgstr "Seznam zbirk ključev"
 msgid "No encryption keys were found with which to perform the operation you requested.  The program <b>Passwords and Encryption Keys</b> will now be started so that you may either create a key or import one."
 msgstr "Ni najdenih šifrirnih ključev, ki bi izvedli zahtevano nalogo. Program <b>Gesla in šifrirni ključi</b> bo zagnan zato, da boste lahko ustvarili ali naložili ustrezen ključ."
 
-#: ../libcryptui/cryptui-key-chooser.c:173
+#: ../libcryptui/cryptui-key-chooser.c:174
+#: ../libcryptui/cryptui-key-chooser.c:179
 msgid "All Keys"
 msgstr "Vsi ključi"
 
-#: ../libcryptui/cryptui-key-chooser.c:174
+#: ../libcryptui/cryptui-key-chooser.c:175
+#: ../libcryptui/cryptui-key-chooser.c:180
 msgid "Selected Recipients"
 msgstr "Izbor prejemnikov"
 
-#: ../libcryptui/cryptui-key-chooser.c:175
+#: ../libcryptui/cryptui-key-chooser.c:176
+#: ../libcryptui/cryptui-key-chooser.c:181
 msgid "Search Results"
 msgstr "Rezultati iskanja"
 
 #. Filter Label
-#: ../libcryptui/cryptui-key-chooser.c:185
+#: ../libcryptui/cryptui-key-chooser.c:192
 msgid "Search _for:"
 msgstr "_Poišči:"
 
-#: ../libcryptui/cryptui-key-chooser.c:243
+#: ../libcryptui/cryptui-key-chooser.c:250
 msgid "None (Don't Sign)"
 msgstr "Brez (ne podpiši)"
 
-#: ../libcryptui/cryptui-key-chooser.c:256
+#: ../libcryptui/cryptui-key-chooser.c:263
 #, c-format
 msgid "Sign this message as %s"
 msgstr "Podpiši sporočilo kot %s"
 
 #. Sign Label
-#: ../libcryptui/cryptui-key-chooser.c:278
+#: ../libcryptui/cryptui-key-chooser.c:285
 msgid "_Sign message as:"
 msgstr "_Podpiši sporočilo kot:"
 
@@ -726,163 +709,163 @@ msgstr "Ime"
 msgid "Key ID"
 msgstr "ID ključa"
 
-#: ../libegg/egg-datetime.c:313
+#: ../libegg/egg-datetime.c:325
 msgid "Display flags"
 msgstr "Pokaži zastavice"
 
-#: ../libegg/egg-datetime.c:314
+#: ../libegg/egg-datetime.c:326
 msgid "Displayed date and/or time properties"
 msgstr "Prikazane lastnosti datuma in časa"
 
-#: ../libegg/egg-datetime.c:319
+#: ../libegg/egg-datetime.c:331
 msgid "Lazy mode"
 msgstr "Leni način"
 
-#: ../libegg/egg-datetime.c:320
+#: ../libegg/egg-datetime.c:332
 msgid "Lazy mode doesn't normalize entered date and time values"
 msgstr "Leni način ne normalizira vnesenih vrednosti datuma in časa"
 
-#: ../libegg/egg-datetime.c:325
+#: ../libegg/egg-datetime.c:337
 msgid "Year"
 msgstr "Leto"
 
-#: ../libegg/egg-datetime.c:326
+#: ../libegg/egg-datetime.c:338
 msgid "Displayed year"
 msgstr "Prikazano leto"
 
-#: ../libegg/egg-datetime.c:331
+#: ../libegg/egg-datetime.c:343
 msgid "Month"
 msgstr "Mesec"
 
-#: ../libegg/egg-datetime.c:332
+#: ../libegg/egg-datetime.c:344
 msgid "Displayed month"
 msgstr "Prikazan mesec"
 
-#: ../libegg/egg-datetime.c:337
+#: ../libegg/egg-datetime.c:349
 msgid "Day"
 msgstr "Dan"
 
-#: ../libegg/egg-datetime.c:338
+#: ../libegg/egg-datetime.c:350
 msgid "Displayed day of month"
 msgstr "Prikazan dan v mesecu"
 
-#: ../libegg/egg-datetime.c:343
+#: ../libegg/egg-datetime.c:355
 msgid "Hour"
 msgstr "Ura"
 
-#: ../libegg/egg-datetime.c:344
+#: ../libegg/egg-datetime.c:356
 msgid "Displayed hour"
 msgstr "Prikazana ura"
 
-#: ../libegg/egg-datetime.c:349
+#: ../libegg/egg-datetime.c:361
 msgid "Minute"
 msgstr "Minuta"
 
-#: ../libegg/egg-datetime.c:350
+#: ../libegg/egg-datetime.c:362
 msgid "Displayed minute"
 msgstr "Prikazana minuta"
 
-#: ../libegg/egg-datetime.c:355
+#: ../libegg/egg-datetime.c:367
 msgid "Second"
 msgstr "Sekunda"
 
-#: ../libegg/egg-datetime.c:356
+#: ../libegg/egg-datetime.c:368
 msgid "Displayed second"
 msgstr "Prikazana sekunda"
 
-#: ../libegg/egg-datetime.c:361
+#: ../libegg/egg-datetime.c:373
 msgid "Lower limit year"
 msgstr "Spodnja meja leta"
 
-#: ../libegg/egg-datetime.c:362
+#: ../libegg/egg-datetime.c:374
 msgid "Year part of the lower date limit"
 msgstr "Leto kot spodnja omejitev"
 
-#: ../libegg/egg-datetime.c:367
+#: ../libegg/egg-datetime.c:379
 msgid "Upper limit year"
 msgstr "Zgornja meja leta"
 
-#: ../libegg/egg-datetime.c:368
+#: ../libegg/egg-datetime.c:380
 msgid "Year part of the upper date limit"
 msgstr "Leto kot zgornja omejitev"
 
-#: ../libegg/egg-datetime.c:373
+#: ../libegg/egg-datetime.c:385
 msgid "Lower limit month"
 msgstr "Spodnja meja meseca"
 
-#: ../libegg/egg-datetime.c:374
+#: ../libegg/egg-datetime.c:386
 msgid "Month part of the lower date limit"
 msgstr "Mesec kot spodnja omejitev"
 
-#: ../libegg/egg-datetime.c:379
+#: ../libegg/egg-datetime.c:391
 msgid "Upper limit month"
 msgstr "Zgornja meja meseca"
 
-#: ../libegg/egg-datetime.c:380
+#: ../libegg/egg-datetime.c:392
 msgid "Month part of the upper date limit"
 msgstr "Mesec kot zgornja omejitev"
 
-#: ../libegg/egg-datetime.c:385
+#: ../libegg/egg-datetime.c:397
 msgid "Lower limit day"
 msgstr "Spodnja meja dneva"
 
-#: ../libegg/egg-datetime.c:386
+#: ../libegg/egg-datetime.c:398
 msgid "Day of month part of the lower date limit"
 msgstr "Dan meseca kot spodnja omejitev"
 
-#: ../libegg/egg-datetime.c:391
+#: ../libegg/egg-datetime.c:403
 msgid "Upper limit day"
 msgstr "Zgornja meja dneva"
 
-#: ../libegg/egg-datetime.c:392
+#: ../libegg/egg-datetime.c:404
 msgid "Day of month part of the upper date limit"
 msgstr "Dan meseca kot zgornja omejitev"
 
-#: ../libegg/egg-datetime.c:397
+#: ../libegg/egg-datetime.c:409
 msgid "Lower limit hour"
 msgstr "Spodnja meja ure"
 
-#: ../libegg/egg-datetime.c:398
+#: ../libegg/egg-datetime.c:410
 msgid "Hour part of the lower time limit"
 msgstr "Ura kot spodnja omejitev časa"
 
-#: ../libegg/egg-datetime.c:403
+#: ../libegg/egg-datetime.c:415
 msgid "Upper limit hour"
 msgstr "Zgornja meja ure"
 
-#: ../libegg/egg-datetime.c:404
+#: ../libegg/egg-datetime.c:416
 msgid "Hour part of the upper time limit"
 msgstr "Ura kot zgornja omejitev časa"
 
-#: ../libegg/egg-datetime.c:409
+#: ../libegg/egg-datetime.c:421
 msgid "Lower limit minute"
 msgstr "Spodnja meja minute"
 
-#: ../libegg/egg-datetime.c:410
+#: ../libegg/egg-datetime.c:422
 msgid "Minute part of the lower time limit"
 msgstr "Minuta kot spodnja omejitev"
 
-#: ../libegg/egg-datetime.c:415
+#: ../libegg/egg-datetime.c:427
 msgid "Upper limit minute"
 msgstr "Zgornja meja minute"
 
-#: ../libegg/egg-datetime.c:416
+#: ../libegg/egg-datetime.c:428
 msgid "Minute part of the upper time limit"
 msgstr "Minuta kot zgornja omejitev"
 
-#: ../libegg/egg-datetime.c:421
+#: ../libegg/egg-datetime.c:433
 msgid "Lower limit second"
 msgstr "Spodnja meja sekunde"
 
-#: ../libegg/egg-datetime.c:422
+#: ../libegg/egg-datetime.c:434
 msgid "Second part of the lower time limit"
 msgstr "Sekunda kot spodnja omejitev"
 
-#: ../libegg/egg-datetime.c:427
+#: ../libegg/egg-datetime.c:439
 msgid "Upper limit second"
 msgstr "Zgornja meja sekunde"
 
-#: ../libegg/egg-datetime.c:428
+#: ../libegg/egg-datetime.c:440
 msgid "Second part of the upper time limit"
 msgstr "Sekunda kot zgornja omejitev"
 
@@ -891,95 +874,95 @@ msgstr "Sekunda kot zgornja omejitev"
 #. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
 #. * or calendar:week_start:0 it will not work.
 #.
-#: ../libegg/egg-datetime.c:470
+#: ../libegg/egg-datetime.c:482
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:504
 msgid "Date"
 msgstr "Datum"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:504
 msgid "Enter the date directly"
 msgstr "Neposreden vnos datuma"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:511
 msgid "Select Date"
 msgstr "Izbor datuma"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:511
 msgid "Select the date from a calendar"
 msgstr "Izbor datuma iz koledarja"
 
-#: ../libegg/egg-datetime.c:517
-#: ../libegg/egg-datetime.c:2194
+#: ../libegg/egg-datetime.c:529
+#: ../libegg/egg-datetime.c:2213
 msgid "Time"
 msgstr "Čas"
 
-#: ../libegg/egg-datetime.c:517
+#: ../libegg/egg-datetime.c:529
 msgid "Enter the time directly"
 msgstr "Neposreden vnos časa"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:536
 msgid "Select Time"
 msgstr "Izbor časa"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:536
 msgid "Select the time from a list"
 msgstr "Izbor časa iz seznama"
 
 #. Translators: set this to anything else if you want to use a
 #. * 24 hour clock.
 #.
-#: ../libegg/egg-datetime.c:791
+#: ../libegg/egg-datetime.c:810
 msgid "24hr: no"
 msgstr "24hr: da"
 
-#: ../libegg/egg-datetime.c:795
-#: ../libegg/egg-datetime.c:1255
-#: ../libegg/egg-datetime.c:1259
+#: ../libegg/egg-datetime.c:814
+#: ../libegg/egg-datetime.c:1274
+#: ../libegg/egg-datetime.c:1278
 msgid "AM"
 msgstr "dop"
 
-#: ../libegg/egg-datetime.c:797
-#: ../libegg/egg-datetime.c:1256
-#: ../libegg/egg-datetime.c:1263
+#: ../libegg/egg-datetime.c:816
+#: ../libegg/egg-datetime.c:1275
+#: ../libegg/egg-datetime.c:1282
 msgid "PM"
 msgstr "pop"
 
 #. Translators: This is hh:mm:ss AM/PM.
-#: ../libegg/egg-datetime.c:805
+#: ../libegg/egg-datetime.c:824
 #, c-format
 msgid "%02d:%02d:%02d %s"
 msgstr "%02d:%02d:%02d %s"
 
 #. Translators: This is hh:mm AM/PM.
-#: ../libegg/egg-datetime.c:808
+#: ../libegg/egg-datetime.c:827
 #, c-format
 msgid "%02d:%02d %s"
 msgstr "%02d:%02d %s"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:812
+#: ../libegg/egg-datetime.c:831
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
 #. Translators: This is hh:mm.
-#: ../libegg/egg-datetime.c:815
+#: ../libegg/egg-datetime.c:834
 #, c-format
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1171
+#: ../libegg/egg-datetime.c:1190
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1236
+#: ../libegg/egg-datetime.c:1255
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -1072,8 +1055,8 @@ msgstr "Vrata preko katerih je mogoč dostop do strežnika."
 msgid "initial temporary item"
 msgstr "začetni začasni predmet"
 
-#: ../libseahorse/seahorse-notification.c:566
-#: ../libseahorse/seahorse-notification.c:594
+#: ../libseahorse/seahorse-notification.c:576
+#: ../libseahorse/seahorse-notification.c:604
 msgid "Key Imported"
 msgid_plural "Keys Imported"
 msgstr[0] "uvoženih ključev"
@@ -1081,8 +1064,8 @@ msgstr[1] "uvožen ključ"
 msgstr[2] "uvožena ključa"
 msgstr[3] "uvoženi ključi"
 
-#: ../libseahorse/seahorse-notification.c:570
-#: ../libseahorse/seahorse-notification.c:593
+#: ../libseahorse/seahorse-notification.c:580
+#: ../libseahorse/seahorse-notification.c:603
 #, c-format
 msgid "Imported %i key"
 msgid_plural "Imported %i keys"
@@ -1091,7 +1074,7 @@ msgstr[1] "Uvožen %i ključ"
 msgstr[2] "Uvožena %i ključa"
 msgstr[3] "Uvoženi %i ključi"
 
-#: ../libseahorse/seahorse-notification.c:572
+#: ../libseahorse/seahorse-notification.c:582
 #, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
@@ -1128,16 +1111,16 @@ msgstr "Omrežna poverila"
 msgid "Identity"
 msgstr "Istovetnost"
 
-#: ../libseahorse/seahorse-passphrase.c:196
+#: ../libseahorse/seahorse-passphrase.c:200
 msgid "Passphrase"
 msgstr "Šifrirno geslo"
 
-#: ../libseahorse/seahorse-passphrase.c:199
+#: ../libseahorse/seahorse-passphrase.c:203
 #: ../ssh/seahorse-ssh-operation.c:480
 msgid "Password:"
 msgstr "Geslo:"
 
-#: ../libseahorse/seahorse-passphrase.c:265
+#: ../libseahorse/seahorse-passphrase.c:269
 msgid "Confirm:"
 msgstr "Potrditev:"
 
@@ -1157,7 +1140,7 @@ msgstr "URL"
 msgid "Custom"
 msgstr "Po meri"
 
-#: ../libseahorse/seahorse-prefs.c:419
+#: ../libseahorse/seahorse-prefs.c:425
 msgid "None: Don't publish keys"
 msgstr "Brez: Ne objavi ključev"
 
@@ -1174,34 +1157,16 @@ msgid "Key Servers"
 msgstr "Strežniki ključev"
 
 #: ../libseahorse/seahorse-prefs.xml.h:4
-msgid "Key Sharing"
-msgstr "Souporaba ključev"
-
-#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "Preferences"
 msgstr "Možnosti"
 
-#: ../libseahorse/seahorse-prefs.xml.h:6
-msgid ""
-"Sharing your keys allows other people on your network to use the keys you've collected. This means they can automatically encrypt things for you or those you know, without you having to send them your key.\n"
-"\n"
-"<b>Note:</b> Your personal keys will not be compromised."
-msgstr ""
-"Souporaba ključev omogoča drugim uporabnikom v omrežju uporabljanje ključev, ki ste jih zbrali. To pomeni, da lahko šifrirajo sporočila za tiste, ki jih poznate vi, s tem, da jim ključa ni treba poslati.\n"
-"\n"
-"<b>Opomba:</b> vaši osebni ključi ostanejo varni."
-
-#: ../libseahorse/seahorse-prefs.xml.h:9
+#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "_Find keys via:"
 msgstr "_Poišči ključe preko:"
 
-#: ../libseahorse/seahorse-prefs.xml.h:10
+#: ../libseahorse/seahorse-prefs.xml.h:6
 msgid "_Publish keys to:"
 msgstr "_Objava ključev na:"
-
-#: ../libseahorse/seahorse-prefs.xml.h:11
-msgid "_Share my keys with others on my network"
-msgstr "_Souporaba ključev z drugimi v omrežju"
 
 #: ../libseahorse/seahorse-progress.xml.h:1
 msgid "Progress Title"
@@ -1211,47 +1176,47 @@ msgstr "Naslov napredovanja"
 msgid "Unavailable"
 msgstr "Nedostopno"
 
-#: ../libseahorse/seahorse-util.c:237
+#: ../libseahorse/seahorse-util.c:240
 msgid "%Y-%m-%d"
 msgstr "%d.%m.%Y"
 
-#: ../libseahorse/seahorse-util.c:513
+#: ../libseahorse/seahorse-util.c:516
 msgid "Key Data"
 msgstr "Podatki ključa"
 
-#: ../libseahorse/seahorse-util.c:515
+#: ../libseahorse/seahorse-util.c:518
 msgid "Multiple Keys"
 msgstr "Več ključev"
 
-#: ../libseahorse/seahorse-util.c:771
+#: ../libseahorse/seahorse-util.c:774
 msgid "Couldn't run file-roller"
 msgstr "Ni mogoče zagnati programa file-roller"
 
-#: ../libseahorse/seahorse-util.c:777
+#: ../libseahorse/seahorse-util.c:780
 msgid "Couldn't package files"
 msgstr "Ni mogoče pakirati datotek"
 
-#: ../libseahorse/seahorse-util.c:778
+#: ../libseahorse/seahorse-util.c:781
 msgid "The file-roller process did not complete successfully"
 msgstr "Naloge programa file-roller niso bile uspešno končane"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:954
+#: ../libseahorse/seahorse-util.c:957
 msgid "All key files"
 msgstr "Vse datoteke ključev"
 
-#: ../libseahorse/seahorse-util.c:965
-#: ../libseahorse/seahorse-util.c:1013
+#: ../libseahorse/seahorse-util.c:968
+#: ../libseahorse/seahorse-util.c:1016
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "Vse datoteke"
 
-#: ../libseahorse/seahorse-util.c:1006
+#: ../libseahorse/seahorse-util.c:1009
 msgid "Archive files"
 msgstr "Arhivske datoteke"
 
-#: ../libseahorse/seahorse-util.c:1076
+#: ../libseahorse/seahorse-util.c:1079
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1261,7 +1226,7 @@ msgstr ""
 "\n"
 "Ali želite obstoječo datoteko prepisati?"
 
-#: ../libseahorse/seahorse-util.c:1079
+#: ../libseahorse/seahorse-util.c:1082
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
@@ -1307,7 +1272,7 @@ msgstr "Onemogočeno"
 msgid "Revoked"
 msgstr "Preklicano"
 
-#: ../libseahorse/seahorse-widget.c:463
+#: ../libseahorse/seahorse-widget.c:480
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Pomoči ni mogoče prikazati: %s"
@@ -1397,7 +1362,7 @@ msgid "Add subkey to %s"
 msgstr "Dodaj podključ v %s"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:182
-#: ../pgp/seahorse-gpgme-generate.c:117
+#: ../pgp/seahorse-gpgme-generate.c:118
 msgid "DSA (sign only)"
 msgstr "DSA (le podpis)"
 
@@ -1406,7 +1371,7 @@ msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (le šifriranje)"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:196
-#: ../pgp/seahorse-gpgme-generate.c:118
+#: ../pgp/seahorse-gpgme-generate.c:119
 msgid "RSA (sign only)"
 msgstr "RSA (le podpis)"
 
@@ -1452,32 +1417,32 @@ msgstr "PGP ključ"
 msgid "Used to encrypt email and files"
 msgstr "Uporablja se za šifriranje sporočil in datotek"
 
-#: ../pgp/seahorse-gpgme-generate.c:115
+#: ../pgp/seahorse-gpgme-generate.c:116
 #: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:116
+#: ../pgp/seahorse-gpgme-generate.c:117
 msgid "DSA Elgamal"
 msgstr "DSA ElGamal"
 
-#: ../pgp/seahorse-gpgme-generate.c:134
+#: ../pgp/seahorse-gpgme-generate.c:135
 msgid "Couldn't generate PGP key"
 msgstr "Ni mogoče ustvariti PGP ključa"
 
-#: ../pgp/seahorse-gpgme-generate.c:194
+#: ../pgp/seahorse-gpgme-generate.c:195
 msgid "Passphrase for New PGP Key"
 msgstr "Šifrirno geslo za nov PGP ključ"
 
-#: ../pgp/seahorse-gpgme-generate.c:195
+#: ../pgp/seahorse-gpgme-generate.c:196
 msgid "Enter the passphrase for your new key twice."
 msgstr "Dvakrat vnesite šifrirno geslo za vaš novi ključ."
 
-#: ../pgp/seahorse-gpgme-generate.c:204
+#: ../pgp/seahorse-gpgme-generate.c:205
 msgid "Couldn't generate key"
 msgstr "Ni mogoče ustvariti ključa"
 
-#: ../pgp/seahorse-gpgme-generate.c:206
+#: ../pgp/seahorse-gpgme-generate.c:207
 msgid "Generating key"
 msgstr "Ustvari ključ"
 
@@ -1590,18 +1555,27 @@ msgstr "Dodali boste %s kot preklicnika %s. Postopka ni mogoče povrniti. Ali za
 msgid "Couldn't add revoker"
 msgstr "Ni mogoče dodati preklicnika"
 
-#: ../pgp/seahorse-gpgme-sign.c:96
+#: ../pgp/seahorse-gpgme-sign.c:99
+#, c-format
+msgid ""
+"This key was already signed by\n"
+"\"%s\""
+msgstr ""
+"Ključ je že podpisan s podpisom\n"
+"\"%s\""
+
+#: ../pgp/seahorse-gpgme-sign.c:103
 msgid "Couldn't sign key"
 msgstr "Ni mogoče podpisati ključa"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:149
+#: ../pgp/seahorse-gpgme-sign.c:157
 #: ../pgp/seahorse-signer.c:61
 msgid "No keys usable for signing"
 msgstr "Za podpisovanje ni uporabnih ključev"
 
-#: ../pgp/seahorse-gpgme-sign.c:150
+#: ../pgp/seahorse-gpgme-sign.c:158
 msgid "You have no personal PGP keys that can be used to indicate your trust of this key."
 msgstr "Ni določenih vašega osebnega PGP ključa s katerim bi lahko potrdili zaupanje."
 
@@ -1648,7 +1622,7 @@ msgid "Invalid key data (missing UIDs). This may be due to a computer with a dat
 msgstr "Neveljavni podatki ključa (manjkajoči UID). Morda je datum računalnika nastavljen nepravilno ali manjkajoče samodejno podpisovanje."
 
 #: ../pgp/seahorse-gpgme-source.c:910
-#: ../src/seahorse-key-manager.c:538
+#: ../src/seahorse-key-manager.c:544
 msgid "Importing Keys"
 msgstr "Uvažanje ključev"
 
@@ -1881,7 +1855,7 @@ msgid "Unable to change trust"
 msgstr "Ni mogoče zamenjati zaupanja"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1006
-#: ../src/seahorse-viewer.c:316
+#: ../src/seahorse-viewer.c:290
 #: ../ssh/seahorse-ssh-key-properties.c:168
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -2286,7 +2260,7 @@ msgid "_Sign message with key:"
 msgstr "_Podpis sporočila s ključem:"
 
 #: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
 msgid "Certificate"
 msgstr "Potrdilo"
 
@@ -2325,7 +2299,7 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Upravljanje z gesli in šifrirnimi ključi"
 
 #: ../src/seahorse.desktop.in.in.h:2
-#: ../src/seahorse-key-manager.c:857
+#: ../src/seahorse-key-manager.c:862
 msgid "Passwords and Encryption Keys"
 msgstr "Gesla in šifrirni ključi"
 
@@ -2351,111 +2325,111 @@ msgstr[1] "Izbran %d ključ"
 msgstr[2] "Izbrana %d ključa"
 msgstr[3] "Izbrani %d ključi"
 
-#: ../src/seahorse-key-manager.c:404
-#: ../src/seahorse-key-manager.c:464
-#: ../src/seahorse-key-manager.c:527
-#: ../src/seahorse-viewer.c:484
+#: ../src/seahorse-key-manager.c:410
+#: ../src/seahorse-key-manager.c:470
+#: ../src/seahorse-key-manager.c:533
+#: ../src/seahorse-viewer.c:458
 msgid "Couldn't import keys"
 msgstr "Ni mogoče uvoziti ključev"
 
-#: ../src/seahorse-key-manager.c:409
-#: ../src/seahorse-viewer.c:489
+#: ../src/seahorse-key-manager.c:415
+#: ../src/seahorse-viewer.c:463
 msgid "Imported keys"
 msgstr "Uvoženi ključi"
 
-#: ../src/seahorse-key-manager.c:458
+#: ../src/seahorse-key-manager.c:464
 msgid "Importing keys"
 msgstr "Uvažanje ključev"
 
-#: ../src/seahorse-key-manager.c:481
+#: ../src/seahorse-key-manager.c:487
 #: ../ssh/seahorse-ssh-operation.c:1017
 msgid "Import Key"
 msgstr "Uvozi ključ"
 
-#: ../src/seahorse-key-manager.c:527
+#: ../src/seahorse-key-manager.c:533
 msgid "Unrecognized key type, or invalid data format"
 msgstr "Neznana vrsta ključa ali neveljavna oblika podatkov"
 
-#: ../src/seahorse-key-manager.c:725
-#: ../src/seahorse-keyserver-results.c:207
+#: ../src/seahorse-key-manager.c:731
+#: ../src/seahorse-keyserver-results.c:245
 msgid "_Remote"
 msgstr "_Oddaljeno"
 
-#: ../src/seahorse-key-manager.c:727
+#: ../src/seahorse-key-manager.c:733
 msgid "Close this program"
 msgstr "Izhod iz programa"
 
-#: ../src/seahorse-key-manager.c:728
+#: ../src/seahorse-key-manager.c:734
 msgid "_New..."
 msgstr "_Novo ..."
 
-#: ../src/seahorse-key-manager.c:729
+#: ../src/seahorse-key-manager.c:735
 msgid "Create a new key or item"
 msgstr "Ustvari nov ključ ali predmet"
 
-#: ../src/seahorse-key-manager.c:730
+#: ../src/seahorse-key-manager.c:736
 msgid "_Import..."
 msgstr "_Uvozi ..."
 
-#: ../src/seahorse-key-manager.c:731
+#: ../src/seahorse-key-manager.c:737
 msgid "Import from a file"
 msgstr "Uvozi iz datoteke"
 
-#: ../src/seahorse-key-manager.c:733
+#: ../src/seahorse-key-manager.c:739
 msgid "Import from the clipboard"
 msgstr "Uvozi iz odložišča"
 
-#: ../src/seahorse-key-manager.c:738
-#: ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:744
+#: ../src/seahorse-keyserver-results.c:255
 msgid "_Find Remote Keys..."
 msgstr "_Poišči oddaljene ključe ..."
 
-#: ../src/seahorse-key-manager.c:739
-#: ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:745
+#: ../src/seahorse-keyserver-results.c:256
 msgid "Search for keys on a key server"
 msgstr "Poišči ključe na strežniku ključev"
 
-#: ../src/seahorse-key-manager.c:740
+#: ../src/seahorse-key-manager.c:746
 msgid "_Sync and Publish Keys..."
 msgstr "_Uskladi in objavi ključe ..."
 
-#: ../src/seahorse-key-manager.c:741
+#: ../src/seahorse-key-manager.c:747
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Objavljanje in usklajevanje ključev s ključi v omrežju."
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:752
 msgid "T_ypes"
 msgstr "_Vrste"
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:752
 msgid "Show type column"
 msgstr "Pokaži stolpec vrste ključa"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:754
 msgid "_Expiry"
 msgstr "_Datum preteka ključa"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:754
 msgid "Show expiry column"
 msgstr "Pokaži stolpec preteka ključa"
 
-#: ../src/seahorse-key-manager.c:750
+#: ../src/seahorse-key-manager.c:756
 msgid "_Trust"
 msgstr "_Zaupanje"
 
-#: ../src/seahorse-key-manager.c:750
+#: ../src/seahorse-key-manager.c:756
 msgid "Show owner trust column"
 msgstr "Pokaži stolpec zaupanja lastniku"
 
-#: ../src/seahorse-key-manager.c:752
+#: ../src/seahorse-key-manager.c:758
 msgid "_Validity"
 msgstr "_Veljavnost"
 
-#: ../src/seahorse-key-manager.c:752
+#: ../src/seahorse-key-manager.c:758
 msgid "Show validity column"
 msgstr "Pokaži stolpec veljavnosti"
 
-#: ../src/seahorse-key-manager.c:926
+#: ../src/seahorse-key-manager.c:931
 msgid "Filter:"
 msgstr "Filter:"
 
@@ -2484,7 +2458,7 @@ msgid "To get started with encryption you will need keys."
 msgstr "Za šifriranje je treba imeti ustrezne šifrirne ključe."
 
 #: ../src/seahorse-key-manager.xml.h:7
-#: ../src/seahorse-viewer.c:548
+#: ../src/seahorse-viewer.c:522
 msgid "_Import"
 msgstr "_Uvozi"
 
@@ -2493,7 +2467,7 @@ msgid "_Passwords"
 msgstr "_Gesla"
 
 #: ../src/seahorse-key-manager-store.c:685
-#: ../src/seahorse-viewer.c:282
+#: ../src/seahorse-viewer.c:256
 msgid "Couldn't export keys"
 msgstr "Ni mogoče izvoziti ključev"
 
@@ -2506,31 +2480,31 @@ msgstr "Veljavnost"
 msgid "Expiration Date"
 msgstr "Datum preteka"
 
-#: ../src/seahorse-keyserver-results.c:209
+#: ../src/seahorse-keyserver-results.c:247
 msgid "Close this window"
 msgstr "Zapri to okno"
 
-#: ../src/seahorse-keyserver-results.c:210
+#: ../src/seahorse-keyserver-results.c:248
 msgid "_Expand All"
 msgstr "_Razširi vse"
 
-#: ../src/seahorse-keyserver-results.c:211
+#: ../src/seahorse-keyserver-results.c:249
 msgid "Expand all listings"
 msgstr "Razširi izpise"
 
-#: ../src/seahorse-keyserver-results.c:212
+#: ../src/seahorse-keyserver-results.c:250
 msgid "_Collapse All"
 msgstr "_Zloži vse"
 
-#: ../src/seahorse-keyserver-results.c:213
+#: ../src/seahorse-keyserver-results.c:251
 msgid "Collapse all listings"
 msgstr "Zloži izpise"
 
-#: ../src/seahorse-keyserver-results.c:275
+#: ../src/seahorse-keyserver-results.c:322
 msgid "Remote Keys"
 msgstr "Oddaljeni ključi"
 
-#: ../src/seahorse-keyserver-results.c:277
+#: ../src/seahorse-keyserver-results.c:324
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Oddaljeni ključi ki vsebujejo '%s'"
@@ -2615,123 +2589,123 @@ msgid "Version of this application"
 msgstr "Različica programa"
 
 #: ../src/seahorse-main.c:78
-#: ../src/seahorse-viewer.c:170
+#: ../src/seahorse-viewer.c:144
 msgid "Encryption Key Manager"
 msgstr "Upravljalnik s šifrirnimi ključi"
 
-#: ../src/seahorse-viewer.c:141
+#: ../src/seahorse-viewer.c:120
 msgid "Contributions:"
 msgstr "Podpora:"
 
-#: ../src/seahorse-viewer.c:172
+#: ../src/seahorse-viewer.c:146
 msgid "translator-credits"
 msgstr "Matej Urbančič <mateju@svn.gnome.org>"
 
-#: ../src/seahorse-viewer.c:175
+#: ../src/seahorse-viewer.c:149
 msgid "Seahorse Project Homepage"
 msgstr "Spletna stran projekta Seahorse"
 
 #. Top menu items
-#: ../src/seahorse-viewer.c:194
+#: ../src/seahorse-viewer.c:168
 msgid "_File"
 msgstr "_Datoteka"
 
-#: ../src/seahorse-viewer.c:195
+#: ../src/seahorse-viewer.c:169
 msgid "_Edit"
 msgstr "_Uredi"
 
-#: ../src/seahorse-viewer.c:196
+#: ../src/seahorse-viewer.c:170
 msgid "_View"
 msgstr "_Pogled"
 
-#: ../src/seahorse-viewer.c:197
+#: ../src/seahorse-viewer.c:171
 msgid "_Help"
 msgstr "Pomo_č"
 
-#: ../src/seahorse-viewer.c:199
+#: ../src/seahorse-viewer.c:173
 msgid "Prefere_nces"
 msgstr "_Lastnosti"
 
-#: ../src/seahorse-viewer.c:200
+#: ../src/seahorse-viewer.c:174
 msgid "Change preferences for this program"
 msgstr "Spremeni možnosti programa"
 
-#: ../src/seahorse-viewer.c:203
+#: ../src/seahorse-viewer.c:177
 msgid "About this program"
 msgstr "O programu"
 
-#: ../src/seahorse-viewer.c:204
+#: ../src/seahorse-viewer.c:178
 msgid "_Contents"
 msgstr "_Vsebina"
 
-#: ../src/seahorse-viewer.c:205
+#: ../src/seahorse-viewer.c:179
 msgid "Show Seahorse help"
 msgstr "Pokaži pomoč programa"
 
-#: ../src/seahorse-viewer.c:302
+#: ../src/seahorse-viewer.c:276
 msgid "Export public key"
 msgstr "Izvozi javni ključ"
 
-#: ../src/seahorse-viewer.c:322
+#: ../src/seahorse-viewer.c:296
 msgid "Exporting keys"
 msgstr "Izvažanje ključev"
 
-#: ../src/seahorse-viewer.c:347
+#: ../src/seahorse-viewer.c:321
 msgid "Couldn't retrieve data from key server"
 msgstr "Ni mogoče prebrati podatkov s strežnika"
 
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:366
+#: ../src/seahorse-viewer.c:340
 msgid "Copied keys"
 msgstr "Kopirani ključi"
 
-#: ../src/seahorse-viewer.c:386
+#: ../src/seahorse-viewer.c:360
 msgid "Retrieving keys"
 msgstr "Pridobivanje ključev"
 
-#: ../src/seahorse-viewer.c:401
+#: ../src/seahorse-viewer.c:375
 msgid "Couldn't delete."
 msgstr "Ni mogoče izbrisati."
 
-#: ../src/seahorse-viewer.c:435
+#: ../src/seahorse-viewer.c:409
 msgid "Deleting..."
 msgstr "Brisanje ..."
 
-#: ../src/seahorse-viewer.c:461
+#: ../src/seahorse-viewer.c:435
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s je osebni ključ. Ali zares želite ključ izbrisati?"
 
-#: ../src/seahorse-viewer.c:509
+#: ../src/seahorse-viewer.c:483
 msgid "Importing keys from key servers"
 msgstr "Uvoz ključev s strežnikov"
 
-#: ../src/seahorse-viewer.c:535
+#: ../src/seahorse-viewer.c:509
 msgid "Show properties"
 msgstr "Pokaži lastnosti"
 
-#: ../src/seahorse-viewer.c:536
+#: ../src/seahorse-viewer.c:510
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "_Izbriši"
 
-#: ../src/seahorse-viewer.c:537
+#: ../src/seahorse-viewer.c:511
 msgid "Delete selected items"
 msgstr "Izbriši izbrane predmete"
 
-#: ../src/seahorse-viewer.c:541
+#: ../src/seahorse-viewer.c:515
 msgid "E_xport..."
 msgstr "_Izvozi ..."
 
-#: ../src/seahorse-viewer.c:542
+#: ../src/seahorse-viewer.c:516
 msgid "Export to a file"
 msgstr "Izvozi v datoteko"
 
-#: ../src/seahorse-viewer.c:544
+#: ../src/seahorse-viewer.c:518
 msgid "Copy to the clipboard"
 msgstr "Kopiraj v odložišče"
 
-#: ../src/seahorse-viewer.c:549
+#: ../src/seahorse-viewer.c:523
 msgid "Import selected keys to local key ring"
 msgstr "Uvozi izbrane ključe v osebno zbirko ključev"
 
@@ -2772,7 +2746,7 @@ msgstr "Uporabno pri dostopu do drugih računalnikov (npr.: preko terminala)"
 msgid "Couldn't generate Secure Shell key"
 msgstr "Ni mogoče ustvariti ključa varne lupine"
 
-#: ../ssh/seahorse-ssh-generate.c:205
+#: ../ssh/seahorse-ssh-generate.c:213
 msgid "Creating Secure Shell Key"
 msgstr "Ustvarjanje ključa varne lupine"
 
@@ -2973,3 +2947,31 @@ msgstr "_Uporabniško ime:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_Nastavitev"
+
+#~ msgid "Couldn't share keys"
+#~ msgstr "Ni mogoča souporaba ključev"
+
+#~ msgid "Can't publish discovery information on the network."
+#~ msgstr "Ni mogoče objaviti zaznanih podrobnosti na omrežju."
+
+#~ msgid "%s's encryption keys"
+#~ msgstr "Uporabnik %s: šifrirni ključi"
+
+#~ msgid "Key Sharing"
+#~ msgstr "Souporaba ključev"
+
+#~ msgid ""
+#~ "Sharing your keys allows other people on your network to use the keys "
+#~ "you've collected. This means they can automatically encrypt things for "
+#~ "you or those you know, without you having to send them your key.\n"
+#~ "\n"
+#~ "<b>Note:</b> Your personal keys will not be compromised."
+#~ msgstr ""
+#~ "Souporaba ključev omogoča drugim uporabnikom v omrežju uporabljanje "
+#~ "ključev, ki ste jih zbrali. To pomeni, da lahko šifrirajo sporočila za "
+#~ "tiste, ki jih poznate vi, s tem, da jim ključa ni treba poslati.\n"
+#~ "\n"
+#~ "<b>Opomba:</b> vaši osebni ključi ostanejo varni."
+
+#~ msgid "_Share my keys with others on my network"
+#~ msgstr "_Souporaba ključev z drugimi v omrežju"
