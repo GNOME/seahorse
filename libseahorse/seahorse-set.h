@@ -39,7 +39,7 @@ typedef struct _SeahorseSetPrivate SeahorseSetPrivate;
 
 /**
  * SeahorseSet:
- * @parent: The parent #GtkObject
+ * @parent: The parent #GObject
  *
  * A subset list of the keys in the SeahorseContext.
  *

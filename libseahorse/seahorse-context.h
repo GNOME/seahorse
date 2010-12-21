@@ -46,7 +46,7 @@ typedef struct _SeahorseContextPrivate SeahorseContextPrivate;
 
 /**
  * SeahorseContext:
- * @parent: The parent #GtkObject
+ * @parent: The parent #GObject
  * @is_daemon: a #gboolean indicating whether the context is being used in a
  *             program that is daemonized
  *

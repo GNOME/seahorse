@@ -40,7 +40,7 @@ typedef struct _SeahorseWidgetClass SeahorseWidgetClass;
 
 /**
  * SeahorseWidget:
- * @parent: The parent #GtkObject
+ * @parent: The parent #GObject
  * @gtkbuilder: The #GtkBuilder object for the #SeahorseWidget
  * @name: The name of the gtkbuilder file
  *
