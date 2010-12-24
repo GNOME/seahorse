@@ -25,7 +25,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pkcs11.h>
-#include <pkcs11g.h>
 
 static char* 
 seahorse_pkcs11_klass_to_string (gulong klass) 

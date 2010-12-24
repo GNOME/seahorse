@@ -24,7 +24,7 @@
 #include "seahorse-pkcs11-certificate.h"
 #include "seahorse-pkcs11-certificate-props.h"
 
-#include <gcr/gcr-certificate-widget.h>
+#include <gcr/gcr.h>
 
 enum {
 	PROP_0,

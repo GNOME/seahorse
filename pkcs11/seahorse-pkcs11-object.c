@@ -29,7 +29,6 @@
 #include "seahorse-util.h"
 
 #include <pkcs11.h>
-#include <pkcs11g.h>
 
 #include <glib/gi18n-lib.h>
 

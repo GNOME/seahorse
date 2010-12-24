@@ -22,7 +22,7 @@
 #ifndef __SEAHORSE_PKCS11_CERTIFICATE_PROPS_H__
 #define __SEAHORSE_PKCS11_CERTIFICATE_PROPS_H__
 
-#include <gcr/gcr-certificate.h>
+#include <gcr/gcr.h>
 
 #include <gtk/gtk.h>
 

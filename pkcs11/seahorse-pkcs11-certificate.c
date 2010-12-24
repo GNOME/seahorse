@@ -29,10 +29,9 @@
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 
-#include <gcr/gcr-certificate.h>
+#include <gcr/gcr.h>
 
 #include <pkcs11.h>
-#include <pkcs11g.h>
 
 #include <glib/gi18n-lib.h>
 

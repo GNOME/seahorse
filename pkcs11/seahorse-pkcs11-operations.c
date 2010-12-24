@@ -28,7 +28,6 @@
 #include "common/seahorse-object-list.h"
 
 #include <pkcs11.h>
-#include <pkcs11g.h>
 #include <gck/gck.h>
 
 #include <glib/gi18n.h>
