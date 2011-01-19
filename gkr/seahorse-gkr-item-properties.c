@@ -455,7 +455,9 @@ transform_item_details (const GValue *from, GValue *to)
 		/* Build up the display string */
 		for(i = 0; i < attrs->len; ++i) {
 			attr = &(gnome_keyring_attribute_list_index (attrs, i));
-			g_string_append_printf (details, "<b>%s</b>: ", attr->name);
+			text = g_markup_escape_text (attr->name, -1);
+			g_string_append_printf (details, "<b>%s</b>: ", text);
+			g_free (text);
 			switch (attr->type) {
 			case GNOME_KEYRING_ATTRIBUTE_TYPE_STRING:
 				text = g_markup_escape_text (attr->value.string, -1);
