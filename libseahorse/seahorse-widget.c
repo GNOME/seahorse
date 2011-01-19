@@ -622,6 +622,7 @@ seahorse_widget_destroy (SeahorseWidget *swidget)
     /* Destroy Widget */
     if (!swidget->destroying) {
         swidget->destroying = TRUE;
+        gtk_widget_destroy (seahorse_widget_get_toplevel (swidget));
         g_object_unref (swidget);
     }
 }
