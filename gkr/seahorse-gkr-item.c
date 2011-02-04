@@ -70,8 +70,9 @@ struct _SeahorseGkrItemPrivate {
 	GnomeKeyringAttributeList *item_attrs;
 	
 	gpointer req_acl;
+	gboolean got_acl;
 	GList *item_acl;
-	
+
 	gpointer req_secret;
 	gchar *item_secret;
 };
@@ -231,8 +232,10 @@ received_item_acl (GnomeKeyringResult result, GList *acl, gpointer data)
 {
 	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (data);
 	self->pv->req_acl = NULL;
-	if (received_result (self, result))
+	if (received_result (self, result)) {
+		self->pv->got_acl = TRUE;
 		seahorse_gkr_item_set_acl (self, acl);
+	}
 }
 
 static void
@@ -251,9 +254,9 @@ load_item_acl (SeahorseGkrItem *self)
 static gboolean
 require_item_acl (SeahorseGkrItem *self)
 {
-	if (!self->pv->item_acl)
+	if (!self->pv->got_acl)
 		load_item_acl (self);
-	return self->pv->item_acl != NULL;
+	return self->pv->got_acl;
 }
 
 static guint32
@@ -522,7 +525,7 @@ seahorse_gkr_item_refresh (SeahorseObject *obj)
 		load_item_info (self);
 	if (self->pv->item_attrs)
 		load_item_attrs (self);
-	if (self->pv->item_acl)
+	if (self->pv->got_acl)
 		load_item_acl (self);
 	if (self->pv->item_secret)
 		load_item_secret (self);
@@ -644,11 +647,12 @@ seahorse_gkr_item_finalize (GObject *gobject)
 		gnome_keyring_attribute_list_free (self->pv->item_attrs);
 	self->pv->item_attrs = NULL;
 	g_assert (self->pv->req_attrs == NULL);
-    
+
 	gnome_keyring_acl_free (self->pv->item_acl);
 	self->pv->item_acl = NULL;
+	self->pv->got_acl = FALSE;
 	g_assert (self->pv->req_acl == NULL);
-	
+
 	g_free (self->pv->item_secret);
 	self->pv->item_secret = NULL;
 	g_assert (self->pv->req_secret == NULL);
