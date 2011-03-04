@@ -3,19 +3,19 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Subhransu Behera <arya_subhransu@yahoo.co.in>, 2007.
-# Manoj Kumar Giri <mgiri@redhat.com>, 2009.
+# Manoj Kumar Giri <mgiri@redhat.com>, 2009, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master.or\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse&component=general\n"
-"POT-Creation-Date: 2009-08-31 14:52+0000\n"
-"PO-Revision-Date: 2009-09-22 19:40+0530\n"
+"POT-Creation-Date: 2011-01-19 20:34+0000\n"
+"PO-Revision-Date: 2011-03-04 17:43+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"Plural-Forms:  nplurals=2; plural=(n!=1);\n"
 "\n"
 "\n"
 "\n"
@@ -27,161 +27,168 @@ msgstr ""
 "\n"
 "\n"
 "\n"
-"X-Generator: KBabel 1.11.4\n"
+"\n"
+"X-Generator: Lokalize 1.1\n"
 
-#: ../daemon/seahorse-daemon.c:69
+#: ../daemon/seahorse-daemon.c:64
 msgid "Do not run seahorse-daemon as a daemon"
 msgstr "seahorse-daemon କୁ ଗୋଟିଏ ଡେମନ ଭାବରେ ଚଳାନ୍ତୁ ନାହିଁ"
 
-#: ../daemon/seahorse-daemon.c:87
+#: ../daemon/seahorse-daemon.c:94
 msgid "couldn't fork process"
 msgstr "ପ୍ରକ୍ରିୟା ମାନଙ୍କୁ fork କରିପାରିଲା ନାହିଁ"
 
-#: ../daemon/seahorse-daemon.c:93
+#: ../daemon/seahorse-daemon.c:100
 msgid "couldn't create new process group"
 msgstr "ନୂତନ ପ୍ରକ୍ରିୟା ସମୂହ ସୃଷ୍ଟି କରିପାରିଲା ନାହିଁ"
 
-#: ../daemon/seahorse-daemon.c:207
+#: ../daemon/seahorse-daemon.c:250
 msgid "Encryption Daemon (Seahorse)"
 msgstr "ଗୋପନୀୟ ଡେମନ (Seahorse)"
 
-#: ../daemon/seahorse-daemon.desktop.in.in.h:1
-msgid "Seahorse Daemon"
-msgstr "Seahorse ଡେମନ"
-
-#: ../daemon/seahorse-service.c:151 ../daemon/seahorse-service.c:175
+#: ../daemon/seahorse-service.c:164 ../daemon/seahorse-service.c:277
 #, c-format
 msgid "Invalid or unrecognized key type: %s"
 msgstr "ଅବୈଧ କିମ୍ବା ଅଚିହ୍ନିତ ଚାବି ପ୍ରକାର: %s"
 
-#: ../daemon/seahorse-service.c:224 ../daemon/seahorse-service-keyset.c:135
-#: ../daemon/seahorse-service-keyset.c:164
+#: ../daemon/seahorse-service.c:234
+#, c-format
+#| msgid "This key expired on: %s"
+msgid "This keytype is not supported: %s"
+msgstr "ଏହି କିପ୍ରକାରଟି ସମର୍ଥିତ ନୁହଁ: %s"
+
+#: ../daemon/seahorse-service.c:241
+#, c-format
+msgid "Support for this feature was not enabled at build time"
+msgstr "ଏହି ବିଶେଷତାର ସହାୟତା ନିର୍ମାଣ ସମୟରେ ସକ୍ରିୟ ହୋଇନଥିଲା "
+
+#: ../daemon/seahorse-service.c:341 ../daemon/seahorse-service-keyset.c:180
+#: ../daemon/seahorse-service-keyset.c:223
 #, c-format
 msgid "Invalid or unrecognized key: %s"
 msgstr "ଅବୈଧ କିମ୍ବା ଅଚିହ୍ନିତ ଚାବି: %s"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:160
+#: ../daemon/seahorse-service-crypto.c:204
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
 msgstr "%s ରେ <i><key id='%s'/> <b>expired</b></i> ଦ୍ୱାରା ହସ୍ତାକ୍ଷର ହୋଇଛି।"
 
-#: ../daemon/seahorse-service-crypto.c:161
+#: ../daemon/seahorse-service-crypto.c:205
 msgid "Invalid Signature"
 msgstr "ଅବୈଧ ହସ୍ତକ୍ଷର"
 
-#: ../daemon/seahorse-service-crypto.c:167
+#: ../daemon/seahorse-service-crypto.c:211
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
 msgstr "%s ରେ <i><key id='%s'/></i> ଦ୍ୱାରା ହସ୍ତାକ୍ଷର ହୋଇଛି <b>ସମୟ ସମାପ୍ତ</b>।"
 
-#: ../daemon/seahorse-service-crypto.c:168
+#: ../daemon/seahorse-service-crypto.c:212
 msgid "Expired Signature"
 msgstr "ସମୟ ସମାପ୍ତ ହୋଇଥିବା ହସ୍ତାକ୍ଷର"
 
-#: ../daemon/seahorse-service-crypto.c:174
+#: ../daemon/seahorse-service-crypto.c:218
 #, c-format
 msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
 msgstr "%s ରେ <i><key id='%s'/> ଦ୍ୱାରା ହସ୍ତାକ୍ଷର ହୋଇଛି <b>ଓଲଟାଇ ଦିଆଯାଇଛି</b></i>।"
 
-#: ../daemon/seahorse-service-crypto.c:175
+#: ../daemon/seahorse-service-crypto.c:219
 msgid "Revoked Signature"
 msgstr "ଓଲଟା ହସ୍ତାକ୍ଷର"
 
 #. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:181
+#: ../daemon/seahorse-service-crypto.c:225
 #, c-format
 msgid "Signed by <i><key id='%s'/></i> on %s."
 msgstr "%s ରେ <i><key id='%s'/></i> ଦ୍ୱାରା ହସ୍ତାକ୍ଷର ହୋଇଛି।"
 
-#: ../daemon/seahorse-service-crypto.c:182
+#: ../daemon/seahorse-service-crypto.c:226
 msgid "Good Signature"
 msgstr "ଭଲ ହସ୍ତାକ୍ଷର"
 
-#: ../daemon/seahorse-service-crypto.c:187
+#: ../daemon/seahorse-service-crypto.c:231
 msgid "Signing key not in keyring."
 msgstr "କିରିଙ୍ଗରେ ହସ୍ତାକ୍ଷର କି ନାହିଁ।"
 
-#: ../daemon/seahorse-service-crypto.c:188
+#: ../daemon/seahorse-service-crypto.c:232
 msgid "Unknown Signature"
 msgstr "ଅଜଣା ହସ୍ତାକ୍ଷର"
 
-#: ../daemon/seahorse-service-crypto.c:192
+#: ../daemon/seahorse-service-crypto.c:236
 msgid "Bad or forged signature. The signed data was modified."
 msgstr "ଖରାପ କିମ୍ବା ନକଲି ହସ୍ତାକ୍ଷର। ହସ୍ତାକ୍ଷର ହୋଇଥିବା ତଥ୍ୟକୁ ପରିବର୍ତ୍ତନ କରାହୋଇଛି।"
 
-#: ../daemon/seahorse-service-crypto.c:193
+#: ../daemon/seahorse-service-crypto.c:237
 msgid "Bad Signature"
 msgstr "ଖରାପ ହସ୍ତାକ୍ଷର"
 
-#: ../daemon/seahorse-service-crypto.c:201
+#: ../daemon/seahorse-service-crypto.c:245
 msgid "Couldn't verify signature."
 msgstr "ହସ୍ତାକ୍ଷରକୁ ଯାଞ୍ଚ କରିହେଲା ନାହିଁ।"
 
-#: ../daemon/seahorse-service-crypto.c:257
-#: ../daemon/seahorse-service-crypto.c:364
+#: ../daemon/seahorse-service-crypto.c:317
+#: ../daemon/seahorse-service-crypto.c:646
 #, c-format
 msgid "Invalid or unrecognized signer: %s"
 msgstr "ଅବୈଧ କିମ୍ବା ଅଚିହ୍ନିତ ହସ୍ତାକ୍ଷରକ: %s"
 
-#: ../daemon/seahorse-service-crypto.c:264
-#: ../daemon/seahorse-service-crypto.c:371
+#: ../daemon/seahorse-service-crypto.c:324
+#: ../daemon/seahorse-service-crypto.c:653
 #, c-format
 msgid "Key is not valid for signing: %s"
 msgstr "ହସ୍ତାକ୍ଷରଣ ପାଇଁ ଚାବିଟି ବୈଧ ନୁହେଁ: %s"
 
-#: ../daemon/seahorse-service-crypto.c:276
+#: ../daemon/seahorse-service-crypto.c:335
 #, c-format
 msgid "Invalid or unrecognized recipient: %s"
 msgstr "ଅବୈଧ କିମ୍ବା ଅଚିହ୍ନିତ ଗ୍ରାହକ: %s"
 
-#: ../daemon/seahorse-service-crypto.c:284
+#: ../daemon/seahorse-service-crypto.c:343
 #, c-format
 msgid "Key is not a valid recipient for encryption: %s"
 msgstr "ଗୋପନୀୟତା ପାଇଁ ଚାବିଟି ଗୋଟିଏ ବୈଧ ଗ୍ରାହକ ନୁହେଁ: %s"
 
-#: ../daemon/seahorse-service-crypto.c:293
+#: ../daemon/seahorse-service-crypto.c:352
 #, c-format
 msgid "No recipients specified"
 msgstr "କୌଣସି ଗ୍ରାହକକୁ ନିର୍ଦ୍ଦିଷ୍ଟ କରାଯାଇ ନାହିଁ"
 
-#: ../daemon/seahorse-service-crypto.c:359
-#, c-format
-msgid "No signer specified"
-msgstr "କୌଣସି ହସ୍ତାକ୍ଷରକକୁ ନିର୍ଦ୍ଦିଷ୍ଟ କରାଯାଇ ନାହିଁ"
-
-#: ../daemon/seahorse-service-crypto.c:414
+#: ../daemon/seahorse-service-crypto.c:434
 #, c-format
 msgid "Invalid key type for decryption: %s"
 msgstr "ଅଗୋପନୀୟତା ପାଇଁ ଅବୈଧ ଚାବି ପ୍ରକାର: %s"
 
-#: ../daemon/seahorse-service-crypto.c:477
+#: ../daemon/seahorse-service-crypto.c:548
+#: ../daemon/seahorse-service-crypto.c:746
+#, c-format
+msgid "Please set clearuri"
+msgstr "ଦୟାକରି clearuri ସେଟ କରନ୍ତୁ"
+
+#: ../daemon/seahorse-service-crypto.c:554
+#: ../daemon/seahorse-service-crypto.c:752
+#, c-format
+msgid "Please set crypturi"
+msgstr "ଦୟାକରି crypturi ସେଟ କରନ୍ତୁ"
+
+#: ../daemon/seahorse-service-crypto.c:564
+#, c-format
+msgid "Error opening clearuri"
+msgstr "clearuri କୁ ଖୋଲିବା ସମୟରେ ତ୍ରୁଟି"
+
+#: ../daemon/seahorse-service-crypto.c:641
+#, c-format
+msgid "No signer specified"
+msgstr "କୌଣସି ହସ୍ତାକ୍ଷରକକୁ ନିର୍ଦ୍ଦିଷ୍ଟ କରାଯାଇ ନାହିଁ"
+
+#: ../daemon/seahorse-service-crypto.c:830
 #, c-format
 msgid "Invalid key type for verifying: %s"
 msgstr "ନିରୀକ୍ଷଣ ପାଇଁ ଅବୈଧ ଚାବି ପ୍ରକାର: %s"
 
-#: ../daemon/seahorse-service-keyset.c:200
+#: ../daemon/seahorse-service-keyset.c:273
 #, c-format
 msgid "Invalid key id: %s"
 msgstr "ଅବୈଧ ଚାବି ପରିଚୟ: %s"
-
-#: ../daemon/seahorse-sharing.c:72 ../daemon/seahorse-sharing.c:216
-msgid "Couldn't share keys"
-msgstr "ଚାବି ମାନଙ୍କୁ ସହଭାଗ କରିପାରିଲା ନାହିଁ"
-
-#: ../daemon/seahorse-sharing.c:73
-msgid "Can't publish discovery information on the network."
-msgstr "ନେଟୱାର୍କରେ ଅନୁସନ୍ଧାନ ସୂଚନାକୁ ପ୍ରକାଶିତ କରିପାରିବ ନାହିଁ।"
-
-#. Translators: The %s will get filled in with the user name
-#. of the user, to form a genitive. If this is difficult to
-#. translate correctly so that it will work correctly in your
-#. language, you may use something equivalent to
-#. "Shared keys of %s".
-#: ../daemon/seahorse-sharing.c:93
-#, c-format
-msgid "%s's encryption keys"
-msgstr "%s ର ଗୋପନୀୟ ଚାବି"
 
 #: ../data/seahorse.schemas.in.h:1
 msgid ""
@@ -288,8 +295,8 @@ msgid ""
 "Specify the column to sort the recipients window by. Columns are: 'name' and "
 "'id'. Put a '-' in front of the column name to sort in descending order."
 msgstr ""
-"ଗ୍ରହଣକର୍ତ୍ତାଙ୍କ ୱିଣ୍ଡୋଗୁଡ଼ିକୁ କ୍ରମରେ ସଜାଡ଼ିବା ପାଇଁ ସ୍ତମ୍ଭକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ। ସ୍ତମ୍ଭଗୁଡ଼ିକ ହେଉଛି: 'name' ଏବଂ "
-"'id'.ସ୍ତମ୍ଭ ନାମ ସାମ୍ନାରେ ଅବରୋହୀ କ୍ରମରେ ସଜାଡ଼ିବା ପାଇଁ ଗୋଟିଏ '-' ଚିହ୍ନ ଦିଅନ୍ତୁ।"
+"ଗ୍ରହଣକର୍ତ୍ତାଙ୍କ ୱିଣ୍ଡୋଗୁଡ଼ିକୁ କ୍ରମରେ ସଜାଡ଼ିବା ପାଇଁ ସ୍ତମ୍ଭକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ। ସ୍ତମ୍ଭଗୁଡ଼ିକ ହେଉଛି: 'name' "
+"ଏବଂ 'id'.ସ୍ତମ୍ଭ ନାମ ସାମ୍ନାରେ ଅବରୋହୀ କ୍ରମରେ ସଜାଡ଼ିବା ପାଇଁ ଗୋଟିଏ '-' ଚିହ୍ନ ଦିଅନ୍ତୁ।"
 
 #: ../data/seahorse.schemas.in.h:23
 msgid ""
@@ -297,9 +304,9 @@ msgid ""
 "are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
 "front of the column name to sort in descending order."
 msgstr ""
-"seahorse କି ପରିଚାଳକ ମୂକ୍ୟ ୱିଣ୍ଡୋ ଦ୍ୱାରା ସ୍ତମ୍ଭକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ। ସ୍ତମ୍ଭଗୁଡ଼ିକ ହେଉଛି: "
-"'name', 'id', 'validity', 'expires', 'trust', ଏବଂ 'type'। ଅବରୋହୀ କ୍ରମରେ "
-"ସଜାଡ଼ିବା ପାଇଁ ଗୋଟିଏ '-' କୁ ସ୍ତମ୍ଭ ନାମ ସାମ୍ନାରେ ରଖନ୍ତୁ।"
+"seahorse କି ପରିଚାଳକ ମୂକ୍ୟ ୱିଣ୍ଡୋ ଦ୍ୱାରା ସ୍ତମ୍ଭକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ। ସ୍ତମ୍ଭଗୁଡ଼ିକ ହେଉଛି: 'name', "
+"'id', 'validity', 'expires', 'trust', ଏବଂ 'type'। ଅବରୋହୀ କ୍ରମରେ ସଜାଡ଼ିବା ପାଇଁ "
+"ଗୋଟିଏ '-' କୁ ସ୍ତମ୍ଭ ନାମ ସାମ୍ନାରେ ରଖନ୍ତୁ।"
 
 #: ../data/seahorse.schemas.in.h:24
 msgid "The ID of the last secret key used to sign a message."
@@ -333,7 +340,8 @@ msgstr "ଗୋଟିଏ କି ସର୍ଭରକୁ ଖୋଜିବା ପା�
 
 #: ../data/seahorse.schemas.in.h:30
 msgid "This specifies the default key to use for certain operations, mainly signing."
-msgstr "କିଛି ପ୍ରୟୋଗ ପାଇଁ ବ୍ୟବହାର ହେବାକୁ ଥିବା ପୂର୍ବନିର୍ଦ୍ଧାରିତ କିକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ, ମୂଖ୍ୟତଃ ହସ୍ତାକ୍ଷର କରୁଅଛି।"
+msgstr ""
+"କିଛି ପ୍ରୟୋଗ ପାଇଁ ବ୍ୟବହାର ହେବାକୁ ଥିବା ପୂର୍ବନିର୍ଦ୍ଧାରିତ କିକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ, ମୂଖ୍ୟତଃ ହସ୍ତାକ୍ଷର କରୁଅଛି।"
 
 #: ../data/seahorse.schemas.in.h:31
 msgid "Whether or not keys should be automatically retrieved from key servers."
@@ -373,7 +381,7 @@ msgstr "ନୂତନ କିରିଙ୍ଗ ପାଇଁ ଗୋଟିଏ ନା�
 msgid "The host name or address of the server."
 msgstr "ସର୍ଭରର ଆଧାର ନାମ ଅଥବା ଠିକଣା।"
 
-#: ../gkr/seahorse-gkr-add-item.c:60 ../gkr/seahorse-gkr-add-keyring.c:59
+#: ../gkr/seahorse-gkr-add-item.c:61 ../gkr/seahorse-gkr-add-keyring.c:73
 msgid "Couldn't add keyring"
 msgstr "କି ରିଙ୍ଗକୁ ଯୋଗ କରିପାରିଲା ନାହିଁ"
 
@@ -382,7 +390,7 @@ msgid "Add Password"
 msgstr "ପ୍ରବେଶ ସଙ୍କେତ ଯୋଗକରନ୍ତୁ"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:2
-#: ../gkr/seahorse-gkr-item-properties.xml.h:17 ../pgp/seahorse-revoke.xml.h:5
+#: ../gkr/seahorse-gkr-item-properties.xml.h:15 ../pgp/seahorse-revoke.xml.h:5
 msgid "_Description:"
 msgstr "ବର୍ଣ୍ଣନା (_D):"
 
@@ -450,11 +458,11 @@ msgstr "ନେଟୱର୍କ ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକ"
 msgid "Couldn't change password."
 msgstr "ପ୍ରବେଶ ସଂକେତକୁ ପରିବର୍ତ୍ତନ କରିହେଲା ନାହିଁ।"
 
-#: ../gkr/seahorse-gkr-item-properties.c:347
+#: ../gkr/seahorse-gkr-item-properties.c:350
 msgid "Couldn't set description."
 msgstr "ବର୍ଣ୍ଣନା ସେଟ କରିହେଲା ନାହିଁ।"
 
-#: ../gkr/seahorse-gkr-item-properties.c:641
+#: ../gkr/seahorse-gkr-item-properties.c:654
 msgid "Couldn't set application access."
 msgstr "ପ୍ରୟୋଗ ଅଭିଗମ୍ୟତାକୁ ସେଟ କରିପାରିଲା ନାହିଁ।"
 
@@ -471,8 +479,8 @@ msgid "<b>Permissions:</b>"
 msgstr "<b>ଅନୁମତି:</b>"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:4
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
+#: ../ssh/seahorse-ssh-key-properties.xml.h:7
 msgid "<b>Technical Details:</b>"
 msgstr "<b>ଯାନ୍ତ୍ରିକ ବିବରଣୀ:</b>"
 
@@ -481,23 +489,22 @@ msgid "Applications"
 msgstr "ପ୍ରୟୋଗ"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:6
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:22
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Details"
 msgstr "ବିସ୍ତୃତ ବିବରଣୀ"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:7
 #: ../pgp/seahorse-pgp-subkey.c:366
-#: ../ssh/seahorse-ssh-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
 msgid "Key"
 msgstr "ଚାବି"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:8
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
-#: ../ssh/seahorse-ssh-key-properties.xml.h:20
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
+#: ../ssh/seahorse-ssh-key-properties.xml.h:18
 msgid "Key Properties"
 msgstr "କି ଗୁଣଧର୍ମ"
 
@@ -514,8 +521,8 @@ msgid "Show pass_word"
 msgstr "ପ୍ରବେଶ ସଙ୍କେତ ଦେଖାନ୍ତୁ (_w)"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:12
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
 msgid "Type:"
 msgstr "ପ୍ରକାର:"
 
@@ -524,20 +531,21 @@ msgstr "ପ୍ରକାର:"
 msgid "Use:"
 msgstr "ଉପଯୋଗିତା:"
 
-#. To translators: This is the infinitive not the imperative.  This string refers to the ability of an application to delete this secret from its key ring.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:16
-msgid "_Delete"
-msgstr "ଅପସାରଣ କରନ୍ତୁ (_D)"
-
 #. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:19
+#: ../gkr/seahorse-gkr-item-properties.xml.h:17
 msgid "_Read"
 msgstr "ପଢନ୍ତୁ (_R)"
 
 #. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:21
+#: ../gkr/seahorse-gkr-item-properties.xml.h:19
 msgid "_Write"
 msgstr "ଲେଖନ୍ତୁ (_W)"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:20
+#| msgid "_Delete"
+msgctxt "infinitive"
+msgid "_Delete"
+msgstr "ଅପସାରଣ କରନ୍ତୁ (_D)"
 
 #: ../gkr/seahorse-gkr-keyring.c:193
 msgid "Listing passwords"
@@ -553,43 +561,43 @@ msgstr "ପ୍ରବେଶ ସଙ୍କେତ:: %s"
 msgid "<b>Passwords:</b> %s"
 msgstr "<b>ପ୍ରବେଶ ସଙ୍କେତ:</b> %s"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:112
+#: ../gkr/seahorse-gkr-keyring-commands.c:119
 msgid "Password Keyring"
 msgstr "ପ୍ରବେଶ ସଙ୍କେତ କି ରିଙ୍ଗ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:113
+#: ../gkr/seahorse-gkr-keyring-commands.c:120
 msgid "Used to store application and network passwords"
 msgstr "ପ୍ରୟୋଗ ଏବଂ ନେଟୱର୍କ ପ୍ରବେଶ ସଂକେତଗୁଡ଼ିକୁ ବ୍ୟବହାର କରିବା ପାଇଁ ସଂରକ୍ଷଣ କରାଯାଏ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:114
+#: ../gkr/seahorse-gkr-keyring-commands.c:121
 msgid "Stored Password"
 msgstr "ସଂରକ୍ଷିତ ପ୍ରବେଶ ସଙ୍କେତ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:115
+#: ../gkr/seahorse-gkr-keyring-commands.c:122
 msgid "Safely store a password or secret."
 msgstr "ଗୋଟିଏ ପ୍ରବେଶ ସଂକେତ ଅଥବା ଗୁପ୍ତ ତଥ୍ୟକୁ ସଂରକ୍ଷଣ କରନ୍ତୁ।"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:129
+#: ../gkr/seahorse-gkr-keyring-commands.c:136
 msgid "Couldn't unlock keyring"
 msgstr "କି-ରିଙ୍ଗକୁ ଖୋଲି ପାରିଲା ନାହିଁ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:170
+#: ../gkr/seahorse-gkr-keyring-commands.c:177
 msgid "Couldn't lock keyring"
 msgstr "କି-ରିଙ୍ଗକୁ ଅପରିବର୍ତ୍ତନୀୟ କରିପାରିଲା ନାହିଁ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:211
+#: ../gkr/seahorse-gkr-keyring-commands.c:218
 msgid "Couldn't set default keyring"
 msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ କି-ରିଙ୍ଗକୁ ସେଟ କରିପାରିଲା ନାହିଁ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:250
+#: ../gkr/seahorse-gkr-keyring-commands.c:257
 msgid "Couldn't change keyring password"
 msgstr "କି-ରିଙ୍ଗ ପ୍ରବେଶ ସଂକେତକୁ ପରିବର୍ତ୍ତନ କରିପାରିଲା ନାହିଁ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:281
+#: ../gkr/seahorse-gkr-keyring-commands.c:288
 msgid "_Lock"
 msgstr "ଅପରିବର୍ତ୍ତନୀୟ କରନ୍ତୁ (_L)"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:282
+#: ../gkr/seahorse-gkr-keyring-commands.c:289
 msgid ""
 "Lock the password storage keyring so a master password is required to unlock "
 "it."
@@ -597,11 +605,11 @@ msgstr ""
 "ପ୍ରବେଶ ସଂକେତ ସଂରକ୍ଷଣ କି-ରିଙ୍ଗକୁ ଅପରିବର୍ତ୍ତନୀୟ କରନ୍ତୁ ଯେପରି ଏହାକୁ ଖୋଲିବା ପାଇଁ ଗୋଟିଏ ମୂଖ୍ୟ ପ୍ରବେଶ "
 "ସଂକେତ ଆବଶ୍ୟକ ହେବ।"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:283
+#: ../gkr/seahorse-gkr-keyring-commands.c:290
 msgid "_Unlock"
 msgstr "ଖୋଲନ୍ତୁ (_U)"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:284
+#: ../gkr/seahorse-gkr-keyring-commands.c:291
 msgid ""
 "Unlock the password storage keyring with a master password so it is "
 "available for use."
@@ -609,23 +617,23 @@ msgstr ""
 "ପ୍ରବେଶ ସଂକେତ ସଂରକ୍ଷଣ କି-ରିଙ୍ଗକୁ ମୂଖ୍ୟ ପ୍ରବେଶ ସଂକେତ ସହାୟତାରେ ଖୋଲନ୍ତୁ ଯାହାଫଳରେ ଏହା ବ୍ୟବହାର "
 "ପାଇଁ ଉପଲବ୍ଧ ହେବ।"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:285
+#: ../gkr/seahorse-gkr-keyring-commands.c:292
 msgid "_Set as default"
 msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଭାବରେ ସେଟ କରନ୍ତୁ (_S)"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:286
+#: ../gkr/seahorse-gkr-keyring-commands.c:293
 msgid "Applications usually store new passwords in the default keyring."
 msgstr "ପ୍ରୟୋଗଗୁଡ଼ିକ ସାଧାରଣତଃ ନୂତନ ପ୍ରବେଶ ସଂକେତଗୁଡ଼ିକୁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ କିରିଙ୍ଗରେ ସଂରକ୍ଷଣ କରିଥାଏ।"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:287
+#: ../gkr/seahorse-gkr-keyring-commands.c:294
 msgid "Change _Password"
 msgstr "ପ୍ରବେଶ ସଙ୍କେତ ପରିବର୍ତ୍ତନ କରନ୍ତୁ (_P)"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:288
+#: ../gkr/seahorse-gkr-keyring-commands.c:295
 msgid "Change the unlock password of the password storage keyring"
 msgstr "ପ୍ରବେଶ ସଂକେତ ସଂରକ୍ଷଣ କିରିଙ୍ଗକୁ ଖୋଲିବା ପାଇଁ ବ୍ୟବହୃତ ପ୍ରବେଶ ସଂକେତକୁ ପରିବର୍ତ୍ତନ କରନ୍ତୁ"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:353
+#: ../gkr/seahorse-gkr-keyring-commands.c:360
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "ପ୍ରବେଶ ସଂକେତ କି-ରିଙ୍ଗ '%s' କୁ ଅପସାରଣ କରିବେ ବୋଲି ଆପଣ ନିଶ୍ଚିତ କି?"
@@ -635,8 +643,8 @@ msgstr "ପ୍ରବେଶ ସଂକେତ କି-ରିଙ୍ଗ '%s' କୁ �
 #.
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.xml.h:2
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
 msgid "Created:"
 msgstr "ସୃଷ୍ଟି କରାହୋଇଥିବା:"
 
@@ -702,38 +710,41 @@ msgid ""
 "requested.  The program <b>Passwords and Encryption Keys</b> will now be "
 "started so that you may either create a key or import one."
 msgstr ""
-"କୌଣସି ସଂଗୁପ୍ତ କି ମିଳିଲା ନାହିଁ ଯାହା ସହିତ ସେହି ପ୍ରୟୋଗକୁ ପାଳନ କରିବେ ବୋଲି ଆପଣ ଅନୁରୋଧ କରିଥିଲେ। "
-"ସେହି ପ୍ରଗ୍ରାମ <b>ପ୍ରବେଶ ସଂକେତ ଏବଂ ସଂଗୁପ୍ତ କିଗୁଡ଼ିକ</b> ବର୍ତ୍ତମାନ ଆରମ୍ଭ ହେବ, ଯାହାଫଳରେ ଆପଣ "
-"ଗୋଟିଏ କି ନିର୍ମାଣ କରିବେ ଅଥବା ଆମଦାନୀ କରିବେ।"
+"କୌଣସି ସଂଗୁପ୍ତ କି ମିଳିଲା ନାହିଁ ଯାହା ସହିତ ସେହି ପ୍ରୟୋଗକୁ ପାଳନ କରିବେ ବୋଲି ଆପଣ ଅନୁରୋଧ କରିଥିଲେ। ସେହି "
+"ପ୍ରଗ୍ରାମ <b>ପ୍ରବେଶ ସଂକେତ ଏବଂ ସଂଗୁପ୍ତ କିଗୁଡ଼ିକ</b> ବର୍ତ୍ତମାନ ଆରମ୍ଭ ହେବ, ଯାହାଫଳରେ ଆପଣ ଗୋଟିଏ "
+"କି ନିର୍ମାଣ କରିବେ ଅଥବା ଆମଦାନୀ କରିବେ।"
 
-#: ../libcryptui/cryptui-key-chooser.c:173
+#: ../libcryptui/cryptui-key-chooser.c:174
+#: ../libcryptui/cryptui-key-chooser.c:179
 msgid "All Keys"
 msgstr "ସମସ୍ତ କିଗୁଡ଼ିକ"
 
-#: ../libcryptui/cryptui-key-chooser.c:174
+#: ../libcryptui/cryptui-key-chooser.c:175
+#: ../libcryptui/cryptui-key-chooser.c:180
 msgid "Selected Recipients"
 msgstr "ବଚ୍ଛିତ ଗ୍ରହଣକାରୀ"
 
-#: ../libcryptui/cryptui-key-chooser.c:175
+#: ../libcryptui/cryptui-key-chooser.c:176
+#: ../libcryptui/cryptui-key-chooser.c:181
 msgid "Search Results"
 msgstr "ସନ୍ଧାନ ଫଳାଫଳ"
 
 #. Filter Label
-#: ../libcryptui/cryptui-key-chooser.c:185
+#: ../libcryptui/cryptui-key-chooser.c:192
 msgid "Search _for:"
 msgstr "ଏହା ପାଇଁ ସନ୍ଧାନ କରନ୍ତୁ (_f):"
 
-#: ../libcryptui/cryptui-key-chooser.c:243
+#: ../libcryptui/cryptui-key-chooser.c:250
 msgid "None (Don't Sign)"
 msgstr "କେହିନୁହଁ (ହସ୍ତାକ୍ଷର କରନ୍ତୁ ନାହିଁ)"
 
-#: ../libcryptui/cryptui-key-chooser.c:256
+#: ../libcryptui/cryptui-key-chooser.c:263
 #, c-format
 msgid "Sign this message as %s"
 msgstr "ଏହି ସନ୍ଦେଶକୁ %s ପରି ହସ୍ତାକ୍ଷର କରନ୍ତୁ"
 
 #. Sign Label
-#: ../libcryptui/cryptui-key-chooser.c:278
+#: ../libcryptui/cryptui-key-chooser.c:285
 msgid "_Sign message as:"
 msgstr "ସନ୍ଦେଶକୁ ଏହିପରି ହସ୍ତାକ୍ଷର କରନ୍ତୁ (_S):"
 
@@ -741,174 +752,174 @@ msgstr "ସନ୍ଦେଶକୁ ଏହିପରି ହସ୍ତାକ୍ଷର 
 #. The name column
 #: ../libcryptui/cryptui-key-list.c:140
 #: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:828
+#: ../src/seahorse-key-manager-store.c:865
 msgid "Name"
 msgstr "ନାମ"
 
 #. The keyid column
 #: ../libcryptui/cryptui-key-list.c:145
-#: ../pgp/seahorse-pgp-key-properties.c:1743
-#: ../src/seahorse-key-manager-store.c:840
+#: ../pgp/seahorse-pgp-key-properties.c:1745
+#: ../src/seahorse-key-manager-store.c:877
 msgid "Key ID"
 msgstr "କି ID"
 
-#: ../libegg/egg-datetime.c:313
+#: ../libegg/egg-datetime.c:325
 msgid "Display flags"
 msgstr "ସୂଚକଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ"
 
-#: ../libegg/egg-datetime.c:314
+#: ../libegg/egg-datetime.c:326
 msgid "Displayed date and/or time properties"
 msgstr "ତାରିଖ ଏବଂ/ଅଥବା ସମୟ ଗୁଣଧର୍ମଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ"
 
-#: ../libegg/egg-datetime.c:319
+#: ../libegg/egg-datetime.c:331
 msgid "Lazy mode"
 msgstr "ଅଳସୁଆ ଅବସ୍ଥା"
 
-#: ../libegg/egg-datetime.c:320
+#: ../libegg/egg-datetime.c:332
 msgid "Lazy mode doesn't normalize entered date and time values"
 msgstr "ଅଳସୁଆ ଅବସ୍ଥା ଭରଣ କରାଯାଇଥିବା ତାରିଖ ଏବଂ ସମୟ ମୂଲ୍ୟଗୁଡ଼ିକୁ ସାମାନ୍ୟ କରିପାରିନଥାଏ"
 
-#: ../libegg/egg-datetime.c:325
+#: ../libegg/egg-datetime.c:337
 msgid "Year"
 msgstr "ବର୍ଷ"
 
-#: ../libegg/egg-datetime.c:326
+#: ../libegg/egg-datetime.c:338
 msgid "Displayed year"
 msgstr "ଦର୍ଶାଯାଇଥିବା ବର୍ଷ"
 
-#: ../libegg/egg-datetime.c:331
+#: ../libegg/egg-datetime.c:343
 msgid "Month"
 msgstr "ମାସ"
 
-#: ../libegg/egg-datetime.c:332
+#: ../libegg/egg-datetime.c:344
 msgid "Displayed month"
 msgstr "ଦର୍ଶାଯାଇଥିବା ମାସ"
 
-#: ../libegg/egg-datetime.c:337
+#: ../libegg/egg-datetime.c:349
 msgid "Day"
 msgstr "ଦିନ"
 
-#: ../libegg/egg-datetime.c:338
+#: ../libegg/egg-datetime.c:350
 msgid "Displayed day of month"
 msgstr "ଦର୍ଶାଯାଇଥିବା ମାସର ଦିନ"
 
-#: ../libegg/egg-datetime.c:343
+#: ../libegg/egg-datetime.c:355
 msgid "Hour"
 msgstr "ଘଣ୍ଟା"
 
-#: ../libegg/egg-datetime.c:344
+#: ../libegg/egg-datetime.c:356
 msgid "Displayed hour"
 msgstr "ଦର୍ଶାଯାଇଥିବା ଘଣ୍ଟା"
 
-#: ../libegg/egg-datetime.c:349
+#: ../libegg/egg-datetime.c:361
 msgid "Minute"
 msgstr "ମିନଟ"
 
-#: ../libegg/egg-datetime.c:350
+#: ../libegg/egg-datetime.c:362
 msgid "Displayed minute"
 msgstr "ଦର୍ଶାଯାଇଥିବା ମିନଟ"
 
-#: ../libegg/egg-datetime.c:355
+#: ../libegg/egg-datetime.c:367
 msgid "Second"
 msgstr "ସେକଣ୍ଡ"
 
-#: ../libegg/egg-datetime.c:356
+#: ../libegg/egg-datetime.c:368
 msgid "Displayed second"
 msgstr "ଦର୍ଶାଯାଇଥିବା ସେକଣ୍ଡ"
 
-#: ../libegg/egg-datetime.c:361
+#: ../libegg/egg-datetime.c:373
 msgid "Lower limit year"
 msgstr "ନିମ୍ନ ସୀମା ବର୍ଷ"
 
-#: ../libegg/egg-datetime.c:362
+#: ../libegg/egg-datetime.c:374
 msgid "Year part of the lower date limit"
 msgstr "ନିମ୍ନ ତାରିଖ ସୀମାର ବର୍ଷ"
 
-#: ../libegg/egg-datetime.c:367
+#: ../libegg/egg-datetime.c:379
 msgid "Upper limit year"
 msgstr "ଉପର ସୀମା ବର୍ଷ"
 
-#: ../libegg/egg-datetime.c:368
+#: ../libegg/egg-datetime.c:380
 msgid "Year part of the upper date limit"
 msgstr "ଉପର ତାରିଖ ସୀମାର ବର୍ଷ ଭାଗ"
 
-#: ../libegg/egg-datetime.c:373
+#: ../libegg/egg-datetime.c:385
 msgid "Lower limit month"
 msgstr "ନିମ୍ନ ସୀମା ମାସ"
 
-#: ../libegg/egg-datetime.c:374
+#: ../libegg/egg-datetime.c:386
 msgid "Month part of the lower date limit"
 msgstr "ନିମ୍ନ ତାରିଖ ସୀମାର ମାସ ଅଂଶ"
 
-#: ../libegg/egg-datetime.c:379
+#: ../libegg/egg-datetime.c:391
 msgid "Upper limit month"
 msgstr "ଉପର ସୀମା ମାସ"
 
-#: ../libegg/egg-datetime.c:380
+#: ../libegg/egg-datetime.c:392
 msgid "Month part of the upper date limit"
 msgstr "ଉପର ତାରିଖ ସୀମାର ମାସ ଅଂଶ"
 
-#: ../libegg/egg-datetime.c:385
+#: ../libegg/egg-datetime.c:397
 msgid "Lower limit day"
 msgstr "ନିମ୍ନ ସୀମା ଦିବସ"
 
-#: ../libegg/egg-datetime.c:386
+#: ../libegg/egg-datetime.c:398
 msgid "Day of month part of the lower date limit"
 msgstr "ନିମ୍ନ ତାରିଖ ସୀମାର ମାସ ଅଂଶର ଦିନ"
 
-#: ../libegg/egg-datetime.c:391
+#: ../libegg/egg-datetime.c:403
 msgid "Upper limit day"
 msgstr "ଉପର ସୀମା ଦିବସ"
 
-#: ../libegg/egg-datetime.c:392
+#: ../libegg/egg-datetime.c:404
 msgid "Day of month part of the upper date limit"
 msgstr "ଉପର ତାରିଖ ସୀମାର ମାସ ଅଂଶର ଦିବସ"
 
-#: ../libegg/egg-datetime.c:397
+#: ../libegg/egg-datetime.c:409
 msgid "Lower limit hour"
 msgstr "ନିମ୍ନ ସୀମା ଘଣ୍ଟା"
 
-#: ../libegg/egg-datetime.c:398
+#: ../libegg/egg-datetime.c:410
 msgid "Hour part of the lower time limit"
 msgstr "ନିମ୍ନ ସମୟ ସୀମାର ଘଣ୍ଟା ଅଂଶ"
 
-#: ../libegg/egg-datetime.c:403
+#: ../libegg/egg-datetime.c:415
 msgid "Upper limit hour"
 msgstr "ଉପର ସୀମା ଘଣ୍ଟା"
 
-#: ../libegg/egg-datetime.c:404
+#: ../libegg/egg-datetime.c:416
 msgid "Hour part of the upper time limit"
 msgstr "ଉପର ସମୟ ସୀମାର ଘଣ୍ଟା ଅଂଶ"
 
-#: ../libegg/egg-datetime.c:409
+#: ../libegg/egg-datetime.c:421
 msgid "Lower limit minute"
 msgstr "ନିମ୍ନ ସୀମା ମିନଟ"
 
-#: ../libegg/egg-datetime.c:410
+#: ../libegg/egg-datetime.c:422
 msgid "Minute part of the lower time limit"
 msgstr "ନିମ୍ନ ସମୟ ସୀମାର ମିନଟ ଅଂଶ"
 
-#: ../libegg/egg-datetime.c:415
+#: ../libegg/egg-datetime.c:427
 msgid "Upper limit minute"
 msgstr "ଉପର ସୀମା ମିନଟ"
 
-#: ../libegg/egg-datetime.c:416
+#: ../libegg/egg-datetime.c:428
 msgid "Minute part of the upper time limit"
 msgstr "ଉପର ସମୟ ସୀମାର ମିନଟ ଅଂଶ"
 
-#: ../libegg/egg-datetime.c:421
+#: ../libegg/egg-datetime.c:433
 msgid "Lower limit second"
 msgstr "ନିମ୍ନ ସୀମା ସେକଣ୍ଡ"
 
-#: ../libegg/egg-datetime.c:422
+#: ../libegg/egg-datetime.c:434
 msgid "Second part of the lower time limit"
 msgstr "ନିମ୍ନ ସମୟ ସୀମାର ସେକଣ୍ଡ ଅଂଶ"
 
-#: ../libegg/egg-datetime.c:427
+#: ../libegg/egg-datetime.c:439
 msgid "Upper limit second"
 msgstr "ଉପର ସୀମା ସେକଣ୍ଡ"
 
-#: ../libegg/egg-datetime.c:428
+#: ../libegg/egg-datetime.c:440
 msgid "Second part of the upper time limit"
 msgstr "ଉପର ସମୟ ସୀମାର ସେକଣ୍ଡ ଅଂଶ"
 
@@ -917,92 +928,92 @@ msgstr "ଉପର ସମୟ ସୀମାର ସେକଣ୍ଡ ଅଂଶ"
 #. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
 #. * or calendar:week_start:0 it will not work.
 #.
-#: ../libegg/egg-datetime.c:470
+#: ../libegg/egg-datetime.c:482
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:504
 msgid "Date"
 msgstr "ତାରିଖ"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:504
 msgid "Enter the date directly"
 msgstr "ସିଧାସଳଖ ଭାବରେ ତାରିଖ ଭରଣ କରନ୍ତୁ"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:511
 msgid "Select Date"
 msgstr "ତାରିଖ ଚୟନ କରନ୍ତୁ"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:511
 msgid "Select the date from a calendar"
 msgstr "କ୍ଯାଲେଣ୍ଡରରୁ ତାରିଖକୁ ଚୟନ କରନ୍ତୁ"
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2192
+#: ../libegg/egg-datetime.c:529 ../libegg/egg-datetime.c:2213
 msgid "Time"
 msgstr "ସମୟ"
 
-#: ../libegg/egg-datetime.c:517
+#: ../libegg/egg-datetime.c:529
 msgid "Enter the time directly"
 msgstr "ସିଧାସଳଖ ଭାବରେ ସମୟ ଭରଣ କରନ୍ତୁ"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:536
 msgid "Select Time"
 msgstr "ସମୟ ଚୟନ କରନ୍ତୁ"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:536
 msgid "Select the time from a list"
 msgstr "ଗୋଟିଏ ତାଲିକାରୁ ସମୟ ଚୟନ କରନ୍ତୁ"
 
 #. Translators: set this to anything else if you want to use a
 #. * 24 hour clock.
 #.
-#: ../libegg/egg-datetime.c:791
+#: ../libegg/egg-datetime.c:810
 msgid "24hr: no"
 msgstr "24hr: no"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1253
-#: ../libegg/egg-datetime.c:1257
+#: ../libegg/egg-datetime.c:814 ../libegg/egg-datetime.c:1274
+#: ../libegg/egg-datetime.c:1278
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1254
-#: ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:816 ../libegg/egg-datetime.c:1275
+#: ../libegg/egg-datetime.c:1282
 msgid "PM"
 msgstr "PM"
 
 #. Translators: This is hh:mm:ss AM/PM.
-#: ../libegg/egg-datetime.c:805
+#: ../libegg/egg-datetime.c:824
 #, c-format
 msgid "%02d:%02d:%02d %s"
 msgstr "%02d:%02d:%02d %s"
 
 #. Translators: This is hh:mm AM/PM.
-#: ../libegg/egg-datetime.c:808
+#: ../libegg/egg-datetime.c:827
 #, c-format
 msgid "%02d:%02d %s"
 msgstr "%02d:%02d %s"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:812
+#: ../libegg/egg-datetime.c:831
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
 #. Translators: This is hh:mm.
-#: ../libegg/egg-datetime.c:815
+#: ../libegg/egg-datetime.c:834
 #, c-format
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1169
+#: ../libegg/egg-datetime.c:1190
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1234
+#: ../libegg/egg-datetime.c:1255
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -1017,27 +1028,27 @@ msgstr "ଫାଇଲଟି ବୈଧ .desktop ଫାଇଲ ନୁହଁ"
 msgid "Unrecognized desktop file Version '%s'"
 msgstr "ଅଚିହ୍ନା ଡେସ୍କଟପ ଫାଇଲ ସଂସ୍କରଣ '%s'"
 
-#: ../libegg/eggdesktopfile.c:958
+#: ../libegg/eggdesktopfile.c:968
 #, c-format
 msgid "Starting %s"
 msgstr "%sକୁ ଆରମ୍ଭ କରୁଅଛି"
 
-#: ../libegg/eggdesktopfile.c:1100
+#: ../libegg/eggdesktopfile.c:1110
 #, c-format
 msgid "Application does not accept documents on command line"
 msgstr "ନିର୍ଦ୍ଦେଶ ନାମାରେ ପ୍ରୟୋଗ ଦଲିଲ ଗ୍ରହଣ କରେନାହିଁ"
 
-#: ../libegg/eggdesktopfile.c:1168
+#: ../libegg/eggdesktopfile.c:1178
 #, c-format
 msgid "Unrecognized launch option: %d"
 msgstr "ଅଚିହ୍ନା ଆରମ୍ଭ ବିକଳ୍ପ: %d"
 
-#: ../libegg/eggdesktopfile.c:1373
+#: ../libegg/eggdesktopfile.c:1383
 #, c-format
 msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
 msgstr "ଦଲିଲ URI ଗୁଡ଼ିକୁ 'Type=Link' ଡେସ୍କଟପ ଭରଣ ମଧ୍ଯଦେଇ ପାସ କରିହେବ ନାହିଁ"
 
-#: ../libegg/eggdesktopfile.c:1392
+#: ../libegg/eggdesktopfile.c:1404
 #, c-format
 msgid "Not a launchable item"
 msgstr "ଗୋଟିଏ ଆରମ୍ଭଯୋଗ୍ୟ ବସ୍ତୁ ନୁହଁ"
@@ -1058,7 +1069,7 @@ msgstr "FILE"
 msgid "Specify session management ID"
 msgstr "ଅଧିବେଶନ ପରିଚାଳନା ID ଉଲ୍ଲେଖ କରନ୍ତୁ"
 
-#: ../libegg/eggsmclient.c:231 ../pgp/seahorse-pgp-key-properties.c:1312
+#: ../libegg/eggsmclient.c:231 ../pgp/seahorse-pgp-key-properties.c:1314
 msgid "ID"
 msgstr "ପରିଚୟ"
 
@@ -1094,22 +1105,22 @@ msgstr "ସର୍ଭରକୁ ଅଭିଗମ୍ୟ କରିବା ପାଇଁ
 msgid "initial temporary item"
 msgstr "ପ୍ରାରମ୍ଭିକ ଅସ୍ଥାୟୀ ବସ୍ତୁ"
 
-#: ../libseahorse/seahorse-notification.c:566
-#: ../libseahorse/seahorse-notification.c:594
+#: ../libseahorse/seahorse-notification.c:576
+#: ../libseahorse/seahorse-notification.c:604
 msgid "Key Imported"
 msgid_plural "Keys Imported"
 msgstr[0] "କି ଆମଦାନି କରାଯାଇଛି"
 msgstr[1] "କି ଆମଦାନି କରାଯାଇଛି"
 
-#: ../libseahorse/seahorse-notification.c:570
-#: ../libseahorse/seahorse-notification.c:593
+#: ../libseahorse/seahorse-notification.c:580
+#: ../libseahorse/seahorse-notification.c:603
 #, c-format
 msgid "Imported %i key"
 msgid_plural "Imported %i keys"
 msgstr[0] "%i କି ଆମଦାନି କରାଯାଇଛି"
 msgstr[1] "%i କି ଆମଦାନି କରାଯାଇଛି"
 
-#: ../libseahorse/seahorse-notification.c:572
+#: ../libseahorse/seahorse-notification.c:582
 #, c-format
 msgid "Imported a key for"
 msgid_plural "Imported keys for"
@@ -1144,38 +1155,38 @@ msgstr "ପ୍ରମାଣପତ୍ର"
 msgid "Identity"
 msgstr "ପରିଚୟ"
 
-#: ../libseahorse/seahorse-passphrase.c:194
+#: ../libseahorse/seahorse-passphrase.c:200
 msgid "Passphrase"
 msgstr "ପ୍ରବେଶ ସଙ୍କେତ"
 
-#: ../libseahorse/seahorse-passphrase.c:197
+#: ../libseahorse/seahorse-passphrase.c:203
 #: ../ssh/seahorse-ssh-operation.c:480
 msgid "Password:"
 msgstr "ପ୍ରବେଶ ସଙ୍କେତ:"
 
-#: ../libseahorse/seahorse-passphrase.c:260
+#: ../libseahorse/seahorse-passphrase.c:269
 msgid "Confirm:"
 msgstr "ନିଶ୍ଚିତ କରନ୍ତୁ:"
 
-#: ../libseahorse/seahorse-prefs.c:63
+#: ../libseahorse/seahorse-prefs.c:62
 msgid "Not a valid Key Server address."
 msgstr "ଗୋଟିଏ ବୈଧ କି ସର୍ଭର ଠିକଣା ନୁହଁ।"
 
-#: ../libseahorse/seahorse-prefs.c:64
+#: ../libseahorse/seahorse-prefs.c:63
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 msgstr "ସହାୟତା ପାଇଁ ଆପଣଙ୍କର ତନ୍ତ୍ର ପ୍ରଶାସକଙ୍କ ଅଥବା କି ସର୍ଭରର ପ୍ରଶାସକଙ୍କ ସହିତ ଯୋଗାଯୋଗ କରନ୍ତୁ।"
 
-#: ../libseahorse/seahorse-prefs.c:173
+#: ../libseahorse/seahorse-prefs.c:172
 msgid "URL"
 msgstr "ୟୁ.ଆର.ଏଲ."
 
-#: ../libseahorse/seahorse-prefs.c:353
+#: ../libseahorse/seahorse-prefs.c:352
 msgid "Custom"
 msgstr "ଇଚ୍ଛାରୂପଣ"
 
-#: ../libseahorse/seahorse-prefs.c:420
+#: ../libseahorse/seahorse-prefs.c:425
 msgid "None: Don't publish keys"
 msgstr "କେହିନୁହଁ: କିଗୁଡ଼ିକୁ ପ୍ରକାଶ କରନ୍ତୁ ନାହିଁ"
 
@@ -1192,38 +1203,16 @@ msgid "Key Servers"
 msgstr "କି ସର୍ଭରଗୁଡ଼ିକ"
 
 #: ../libseahorse/seahorse-prefs.xml.h:4
-msgid "Key Sharing"
-msgstr "କି ସହଭାଗ"
-
-#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "Preferences"
 msgstr "ପସନ୍ଦ"
 
-#: ../libseahorse/seahorse-prefs.xml.h:6
-msgid ""
-"Sharing your keys allows other people on your network to use the keys you've "
-"collected. This means they can automatically encrypt things for you or those "
-"you know, without you having to send them your key.\n"
-"\n"
-"<b>Note:</b> Your personal keys will not be compromised."
-msgstr ""
-"ଆପଣଙ୍କର କି କୁ ସହଭାଗ କରିବା ଫଳରେ ଅନ୍ୟମାନଙ୍କୁ ନେଟୱର୍କରେ କିଗୁଡ଼ିକୁ ବ୍ୟବହାର କରିବା "
-"ପାଇଁ ଅନୁମତି ଦେଇଥାଏ। ଏହା ଅର୍ଥ ସେମାନେ ସ୍ୱୟଂଚାଳିତ ଭାବରେ ବସ୍ତୁଗୁଡ଼ିକୁ ସଂଗୁପ୍ତ "
-"କରିପାରିବେ ଅଥବା, ଆପଣ ସେମାନଙ୍କୁ କି ନପଠାଇ କରି।\n"
-"\n"
-"<b>ଟିପ୍ପଣୀ:</b> ଆପଣଙ୍କର ବ୍ୟକ୍ତିଗତ କିଗୁଡ଼ିକ ସହିତ କୌଣସି ବୁଝାମଣା କରାଯିବ ନାହିଁ।"
-
-#: ../libseahorse/seahorse-prefs.xml.h:9
+#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "_Find keys via:"
 msgstr "ମାଧ୍ଯମରେ କିଗୁଡ଼ିକୁ ଖୋଜନ୍ତୁ (_F):"
 
-#: ../libseahorse/seahorse-prefs.xml.h:10
+#: ../libseahorse/seahorse-prefs.xml.h:6
 msgid "_Publish keys to:"
 msgstr "କିଗୁଡ଼ିକୁ ରେ ପ୍ରକାଶ କରନ୍ତୁ (_P):"
-
-#: ../libseahorse/seahorse-prefs.xml.h:11
-msgid "_Share my keys with others on my network"
-msgstr "ମୋର କିଗୁଡ଼ିକୁ ମୋର ନେଟୱର୍କରେ ଥିବା ଅନ୍ୟମାନଙ୍କ ସହିତ ସହଭାଗ କରନ୍ତୁ (_S)"
 
 #: ../libseahorse/seahorse-progress.xml.h:1
 msgid "Progress Title"
@@ -1233,46 +1222,46 @@ msgstr "ଉନ୍ନତି ଶୀର୍ଷକ"
 msgid "Unavailable"
 msgstr "ଉପଲବ୍ଧନାହିଁ"
 
-#: ../libseahorse/seahorse-util.c:237
+#: ../libseahorse/seahorse-util.c:240
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:513
+#: ../libseahorse/seahorse-util.c:516
 msgid "Key Data"
 msgstr "କି ତଥ୍ୟ"
 
-#: ../libseahorse/seahorse-util.c:515
+#: ../libseahorse/seahorse-util.c:518
 msgid "Multiple Keys"
 msgstr "ଏକାଧିକ କିଗୁଡ଼ିକ"
 
-#: ../libseahorse/seahorse-util.c:771
+#: ../libseahorse/seahorse-util.c:774
 msgid "Couldn't run file-roller"
 msgstr "file-rollerକୁ ଚଲାଇପାରିଲା ନାହିଁ"
 
-#: ../libseahorse/seahorse-util.c:777
+#: ../libseahorse/seahorse-util.c:780
 msgid "Couldn't package files"
 msgstr "ଫାଇଲଗୁଡ଼ିକୁ ପ୍ୟାକେଜ କରିପାରିଲା ନାହିଁ"
 
-#: ../libseahorse/seahorse-util.c:778
+#: ../libseahorse/seahorse-util.c:781
 msgid "The file-roller process did not complete successfully"
 msgstr "file-roller ପଦ୍ଧତିଟି ସଫଳତାର ସହିତ ସମ୍ପୂର୍ଣ୍ଣ ହୋଇନଥିଲା"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:943
+#: ../libseahorse/seahorse-util.c:957
 msgid "All key files"
 msgstr "ସମସ୍ତ କି ଫାଇଲଗୁଡ଼ିକ"
 
-#: ../libseahorse/seahorse-util.c:954 ../libseahorse/seahorse-util.c:1002
+#: ../libseahorse/seahorse-util.c:968 ../libseahorse/seahorse-util.c:1016
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "ସମସ୍ତ ଫାଇଲ"
 
-#: ../libseahorse/seahorse-util.c:995
+#: ../libseahorse/seahorse-util.c:1009
 msgid "Archive files"
 msgstr "ଆଲେଖୀ ଫାଇଲଗୁଡ଼ିକ"
 
-#: ../libseahorse/seahorse-util.c:1065
+#: ../libseahorse/seahorse-util.c:1079
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1282,52 +1271,52 @@ msgstr ""
 "\n"
 "ଆପଣ ଏହାକୁ ଗୋଟିଏ ନୂତନ ଫାଇଲ ଆକାରରେ ସ୍ଥାନାନ୍ତରିତ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?"
 
-#: ../libseahorse/seahorse-util.c:1068
+#: ../libseahorse/seahorse-util.c:1082
 msgid "_Replace"
 msgstr "ବଦଳାନ୍ତୁ (_R)"
 
 #: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
-#: ../pgp/seahorse-pgp-key-properties.c:1131
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-key-properties.c:1133
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
 msgid "Unknown"
 msgstr "ଅଜଣା"
 
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1137
+#: ../pgp/seahorse-pgp-key-properties.c:1139
 msgctxt "Validity"
 msgid "Never"
 msgstr "କଦାପି ନୁହଁ"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1144
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:33
+#: ../pgp/seahorse-pgp-key-properties.c:1146
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
 msgid "Marginal"
 msgstr "ସାମାନ୍ୟ"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1150
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
+#: ../pgp/seahorse-pgp-key-properties.c:1152
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
 msgid "Full"
 msgstr "ପୂର୍ଣ୍ଣ"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1156
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+#: ../pgp/seahorse-pgp-key-properties.c:1158
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
 msgid "Ultimate"
 msgstr "ଅତି ଉତ୍ତମ"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1349
+#: ../pgp/seahorse-pgp-key-properties.c:1351
 msgid "Disabled"
 msgstr "ନିଷ୍କ୍ରିୟ କରାଯାଇଛି"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1345
+#: ../pgp/seahorse-pgp-key-properties.c:1347
 msgid "Revoked"
 msgstr "ପ୍ରତିସଂହରଣ"
 
-#: ../libseahorse/seahorse-widget.c:362
+#: ../libseahorse/seahorse-widget.c:480
 #, c-format
 msgid "Could not display help: %s"
 msgstr "ସହାୟତା ଦର୍ଶାଇପାରିବେ ନାହିଁ: %s"
@@ -1404,28 +1393,28 @@ msgstr "କି କୁ ପ୍ରତିସଂହରଣ କରନ୍ତୁ"
 msgid "_Never expires"
 msgstr "କଦାପି ସମୟ ସମାପ୍ତି ହୋଇନଥାଏ (_N)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:144
+#: ../pgp/seahorse-gpgme-add-subkey.c:147
 msgid "Couldn't add subkey"
 msgstr "ଉପ-କି ଗୁଡ଼ିକୁ ଯୋଗ କରିପାରିଲା ନାହିଁ"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:163
+#: ../pgp/seahorse-gpgme-add-subkey.c:166
 #, c-format
 msgid "Add subkey to %s"
 msgstr "%s ରେ ଉପ କି ଯୋଗ କରନ୍ତୁ"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:179 ../pgp/seahorse-gpgme-generate.c:96
+#: ../pgp/seahorse-gpgme-add-subkey.c:182 ../pgp/seahorse-gpgme-generate.c:118
 msgid "DSA (sign only)"
 msgstr "DSA (କେବଳ ହସ୍ତାକ୍ଷର)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:187
+#: ../pgp/seahorse-gpgme-add-subkey.c:190
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (କେବଳ ସଂଗୁପ୍ତ କରିଥାଏ)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:193 ../pgp/seahorse-gpgme-generate.c:97
+#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:119
 msgid "RSA (sign only)"
 msgstr "RSA (କେବଳ ହସ୍ତାକ୍ଷର)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:199
+#: ../pgp/seahorse-gpgme-add-subkey.c:202
 msgid "RSA (encrypt only)"
 msgstr "RSA (କେବଳ ସଂଗୁପ୍ତ କରିଥାଏ)"
 
@@ -1438,7 +1427,7 @@ msgstr "ଚାଳକ id ଯୋଗ କରିପାରିଲା ନାହିଁ"
 msgid "Add user ID to %s"
 msgstr "%s ରେ ଚାଳକ ID ଯୋଗ କରନ୍ତୁ"
 
-#: ../pgp/seahorse-gpgme.c:51
+#: ../pgp/seahorse-gpgme.c:72
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "ଅସଂଗୁପ୍ତ ବିଫଳ ହୋଇଛି। ଆପଣଙ୍କ ପାଖରେ ସମ୍ଭବତଃ ଅସଂଗୁପ୍ତ କି ନାହିଁ।"
 
@@ -1459,37 +1448,50 @@ msgstr "ସମୟ ସମାପ୍ତି ତାରିଖକୁ ପରିବର୍
 msgid "Expiry: %s"
 msgstr "ସମୟ ସମାପ୍ତି: %s"
 
-#: ../pgp/seahorse-gpgme-generate.c:65
+#: ../pgp/seahorse-gpgme-generate.c:79
 msgid "PGP Key"
 msgstr "PGP କି"
 
-#: ../pgp/seahorse-gpgme-generate.c:66
+#: ../pgp/seahorse-gpgme-generate.c:80
 msgid "Used to encrypt email and files"
 msgstr "ଇମେଲ ଏବଂ ଫାଇଲଗୁଡ଼ିକୁ ସଂଗୁପ୍ତ କରିବାରେ ବ୍ୟବହୃତ ହୋଇଥାଏ"
 
-#: ../pgp/seahorse-gpgme-generate.c:95
+#: ../pgp/seahorse-gpgme-generate.c:116 ../ssh/seahorse-ssh-generate.xml.h:9
+msgid "RSA"
+msgstr "RSA"
+
+#: ../pgp/seahorse-gpgme-generate.c:117
 msgid "DSA Elgamal"
 msgstr "DSA Elgamal"
 
-#: ../pgp/seahorse-gpgme-generate.c:106
+#: ../pgp/seahorse-gpgme-generate.c:135
 msgid "Couldn't generate PGP key"
 msgstr "PGP କି ସୃଷ୍ଟି କରିପାରିଲା ନାହିଁ"
 
-#: ../pgp/seahorse-gpgme-generate.c:213
+#: ../pgp/seahorse-gpgme-generate.c:195
 msgid "Passphrase for New PGP Key"
 msgstr "ନୂତନ PGP କି ପାଇଁ ପ୍ରବେଶ ସଂକେତ"
 
-#: ../pgp/seahorse-gpgme-generate.c:214
+#: ../pgp/seahorse-gpgme-generate.c:196
 msgid "Enter the passphrase for your new key twice."
 msgstr "ଆପଣଙ୍କର ନୂତନ କି ପାଇଁ ଦୁଇଥର ପ୍ରବେଶ ସଂକେତ ଭରଣ କରନ୍ତୁ।"
 
-#: ../pgp/seahorse-gpgme-generate.c:223
+#: ../pgp/seahorse-gpgme-generate.c:205
 msgid "Couldn't generate key"
 msgstr "କି ସୃଷ୍ଟି କରିପାରିଲା ନାହିଁ"
 
-#: ../pgp/seahorse-gpgme-generate.c:225
+#: ../pgp/seahorse-gpgme-generate.c:207
 msgid "Generating key"
 msgstr "କି ସୃଷ୍ଟି କରୁଅଛି"
+
+#: ../pgp/seahorse-gpgme-key-op.c:301
+#| msgid "Show pass_word"
+msgid "Wrong password"
+msgstr "ଭୁଲ ପ୍ରବେଶ ସଙ୍କେତ"
+
+#: ../pgp/seahorse-gpgme-key-op.c:301
+msgid "This was the third time you entered a wrong password. Please try again."
+msgstr "ଆପଣ ତୃତୀୟ ଥର ପାଇଁ ଭୁଲ ପ୍ରବେଶ ସଂକେତ ଭରଣ କରିଛନ୍ତି। ଦୟାକରି ପୁଣିଥରେ ଚେଷ୍ଟାକରନ୍ତୁ।"
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -1514,8 +1516,8 @@ msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
 msgstr ""
-"ଏହା ଗୋଟିଏ ପ୍ରତିଛବି ଫାଇଲ, ଅଥବା ଅଚିହ୍ନା ପ୍ରକାରର ପ୍ରତିଛବି ଫାଇଲ ନୁହଁ। ଗୋଟିଏ "
-"JPEG ପ୍ରତିଛବି ବ୍ୟବହାର କରିବାକୁ ଚେଷ୍ଟାକରନ୍ତୁ।"
+"ଏହା ଗୋଟିଏ ପ୍ରତିଛବି ଫାଇଲ, ଅଥବା ଅଚିହ୍ନା ପ୍ରକାରର ପ୍ରତିଛବି ଫାଇଲ ନୁହଁ। ଗୋଟିଏ JPEG ପ୍ରତିଛବି ବ୍ୟବହାର "
+"କରିବାକୁ ଚେଷ୍ଟାକରନ୍ତୁ।"
 
 #: ../pgp/seahorse-gpgme-photos.c:224
 msgid "All image files"
@@ -1592,28 +1594,38 @@ msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr ""
-"ଆପଣ %s କୁ %s ପାଇଁ ପ୍ରତିସଂହରଣକାରୀ ଭାବରେ ଯୋଗ କରିବାକୁ ଯାଉଛନ୍ତି। ଏହି ପ୍ରୟୋଗର "
-"ପଦକ୍ଷେପ ବାତିଲ କରିପାରିବେ ନାହିଁ! ଆପଣ ଅଗ୍ରସର ହେବାକୁ ଚାହୁଁଛନ୍ତି ବୋଲି ନିଶ୍ଚିତ କି?"
+"ଆପଣ %s କୁ %s ପାଇଁ ପ୍ରତିସଂହରଣକାରୀ ଭାବରେ ଯୋଗ କରିବାକୁ ଯାଉଛନ୍ତି। ଏହି ପ୍ରୟୋଗର ପଦକ୍ଷେପ ବାତିଲ "
+"କରିପାରିବେ ନାହିଁ! ଆପଣ ଅଗ୍ରସର ହେବାକୁ ଚାହୁଁଛନ୍ତି ବୋଲି ନିଶ୍ଚିତ କି?"
 
 #: ../pgp/seahorse-gpgme-revoke.c:173
 msgid "Couldn't add revoker"
 msgstr "ପ୍ରତିସଂହରଣକାରୀକୁ ଯୋଗ କରିପାରିଲା ନାହିଁ"
 
-#: ../pgp/seahorse-gpgme-sign.c:96
+#: ../pgp/seahorse-gpgme-sign.c:99
+#, c-format
+msgid ""
+"This key was already signed by\n"
+"\"%s\""
+msgstr ""
+"ଏହି କି ଟି \"%s\" ଦ୍ୱାରା ପୂର୍ବରୁ ହସ୍ତାକ୍ଷର\n"
+"ହୋଇଛି"
+
+#: ../pgp/seahorse-gpgme-sign.c:103
 msgid "Couldn't sign key"
 msgstr "କି କୁ ହସ୍ତାକ୍ଷର କରିପାରିଲା ନାହିଁ"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:149 ../pgp/seahorse-signer.c:61
+#: ../pgp/seahorse-gpgme-sign.c:157 ../pgp/seahorse-signer.c:61
 msgid "No keys usable for signing"
 msgstr "ହସ୍ତାକ୍ଷର ପାଇଁ କୌଣସି କି ବ୍ୟବହାର ଉପୋଯୋଗୀ ନୁହଁ"
 
-#: ../pgp/seahorse-gpgme-sign.c:150
+#: ../pgp/seahorse-gpgme-sign.c:158
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
-msgstr "ଆପଣଙ୍କ ପାଖରେ କୌଣସି ବ୍ୟକ୍ତିଗତ PGP କି ଗୁଡ଼ିକ ନାହିଁ ଯାହାକୁକି ଏହି କି ପ୍ରତି ଆପଣଙ୍କର ବିଶ୍ୱାସକୁ ସୂଚାଇଥାଏ।"
+msgstr ""
+"ଆପଣଙ୍କ ପାଖରେ କୌଣସି ବ୍ୟକ୍ତିଗତ PGP କି ଗୁଡ଼ିକ ନାହିଁ ଯାହାକୁକି ଏହି କି ପ୍ରତି ଆପଣଙ୍କର ବିଶ୍ୱାସକୁ ସୂଚାଇଥାଏ।"
 
 #: ../pgp/seahorse-gpgme-source.c:99
 #, c-format
@@ -1656,10 +1668,10 @@ msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
 msgstr ""
-"ଅବୈଧ କି ତଥ୍ୟ (ଅନୁପସ୍ଥିତ UIDs)। ଏହା ହୁଏତ ଭବିଷ୍ୟତରେ ତାରିଖ ସେଟ ବିଶିଷ୍ଟ କମ୍ପୁଟର ସହିତ "
-"ହୋଇଥାଏ ଅଥବା ଗୋଟିଏ ଅନୁପସ୍ଥିତ ସ୍ୱୟଂ-ହସ୍ତକୃତ ହୋଇଥାଏ।"
+"ଅବୈଧ କି ତଥ୍ୟ (ଅନୁପସ୍ଥିତ UIDs)। ଏହା ହୁଏତ ଭବିଷ୍ୟତରେ ତାରିଖ ସେଟ ବିଶିଷ୍ଟ କମ୍ପୁଟର ସହିତ ହୋଇଥାଏ "
+"ଅଥବା ଗୋଟିଏ ଅନୁପସ୍ଥିତ ସ୍ୱୟଂ-ହସ୍ତକୃତ ହୋଇଥାଏ।"
 
-#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:538
+#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:544
 msgid "Importing Keys"
 msgstr "କିଗୁଡ଼ିକୁ ଆମଦାନୀ କରୁଅଛି"
 
@@ -1671,41 +1683,41 @@ msgstr "କିଗୁଡ଼ିକୁ ରପ୍ତାନୀ କରୁଅଛି"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: ../pgp/seahorse-hkp-source.c:330
+#: ../pgp/seahorse-hkp-source.c:387
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "ସନ୍ଧାନ ଯଥେଷ୍ଟ ନିର୍ଦ୍ଧିଷ୍ଟ ନୁହଁ। ସର୍ଭର '%s' ରେ ଅତ୍ୟଧିକ କି ମିଳିଛି।"
 
-#: ../pgp/seahorse-hkp-source.c:332
+#: ../pgp/seahorse-hkp-source.c:389
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "ସର୍ଭର '%s' ସହିତ ଯୋଗାଯୋଗ କରିପାରିଲା ନାହିଁ: %s"
 
-#: ../pgp/seahorse-hkp-source.c:576
+#: ../pgp/seahorse-hkp-source.c:671
 msgid "Searching for keys..."
 msgstr "କିଗୁଡ଼ିକୁ ଖୋଜୁଅଛି..."
 
-#: ../pgp/seahorse-hkp-source.c:647
+#: ../pgp/seahorse-hkp-source.c:759
 msgid "Uploading keys..."
 msgstr "କିଗୁଡ଼ିକୁ ଧାରଣ କରୁଅଛି..."
 
-#: ../pgp/seahorse-hkp-source.c:725
+#: ../pgp/seahorse-hkp-source.c:857
 msgid "Retrieving keys..."
 msgstr "କିଗୁଡ଼ିକୁ କାଢ଼ୁଅଛି..."
 
-#: ../pgp/seahorse-hkp-source.c:831
+#: ../pgp/seahorse-hkp-source.c:987
 #, c-format
 msgid "Searching for keys on: %s"
 msgstr "ଏଥିରେ କିଗୁଡ଼ିକୁ ଖୋଜୁଅଛି: %s"
 
 #. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:908 ../pgp/seahorse-hkp-source.c:981
+#: ../pgp/seahorse-hkp-source.c:1072 ../pgp/seahorse-hkp-source.c:1154
 #: ../pgp/seahorse-ldap-source.c:668
 #, c-format
 msgid "Connecting to: %s"
 msgstr "ଏହା ସହିତ ସଂଯୋଗ କରୁଅଛି: %s"
 
-#: ../pgp/seahorse-hkp-source.c:1005
+#: ../pgp/seahorse-hkp-source.c:1184
 msgid "HTTP Key Server"
 msgstr "HTTP କି ସର୍ଭର"
 
@@ -1819,16 +1831,16 @@ msgid "_Comment:"
 msgstr "_ମନ୍ତବ୍ଯ:"
 
 #: ../pgp/seahorse-pgp-key.c:201
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
 msgid "Private PGP Key"
 msgstr "ବ୍ୟକ୍ତିଗତ PGP କି"
 
 #: ../pgp/seahorse-pgp-key.c:204
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
 msgid "Public PGP Key"
 msgstr "ସାମଗ୍ରିକ PGP କି"
 
-#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1347
+#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1349
 msgid "Expired"
 msgstr "ସମୟ ସମାପ୍ତି"
 
@@ -1846,12 +1858,12 @@ msgid "Couldn't delete user ID"
 msgstr "ଚାଳକ ID କୁ ଅପସାରଣ କରିପାରିଲା ନାହିଁ"
 
 #: ../pgp/seahorse-pgp-key-properties.c:333
-#: ../pgp/seahorse-pgp-key-properties.c:1462
+#: ../pgp/seahorse-pgp-key-properties.c:1464
 msgid "[Unknown]"
 msgstr "[ଅଜଣା]"
 
 #: ../pgp/seahorse-pgp-key-properties.c:426
-#: ../pgp/seahorse-pgp-key-properties.c:1740
+#: ../pgp/seahorse-pgp-key-properties.c:1742
 msgid "Name/Email"
 msgstr "ନାମ/ଇମେଲ"
 
@@ -1882,55 +1894,55 @@ msgid "Couldn't delete subkey"
 msgstr "ଉପ-କିକୁ ଅପସାରଣ କରିପାରିଲା ନାହିଁ"
 
 #: ../pgp/seahorse-pgp-key-properties.c:991
-#: ../pgp/seahorse-pgp-key-properties.c:1425
+#: ../pgp/seahorse-pgp-key-properties.c:1427
 msgid "Unable to change trust"
 msgstr "ବିଶ୍ୱାସକୁ ପରିବର୍ତ୍ତନ କରିବାରେ ଅସମର୍ଥ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1005 ../src/seahorse-viewer.c:315
-#: ../ssh/seahorse-ssh-key-properties.c:167
+#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:290
+#: ../ssh/seahorse-ssh-key-properties.c:168
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "\"%s\" କୁ କି ରପ୍ତାନୀ କରିପାରିଲା ନାହିଁ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1033
-#: ../ssh/seahorse-ssh-key-properties.c:191
+#: ../pgp/seahorse-pgp-key-properties.c:1035
+#: ../ssh/seahorse-ssh-key-properties.c:193
 msgid "Export Complete Key"
 msgstr "ରପ୍ତାନୀ ସମ୍ପୂର୍ଣ୍ଣ କି"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1058
-#: ../ssh/seahorse-ssh-key-properties.c:213
+#: ../pgp/seahorse-pgp-key-properties.c:1060
+#: ../ssh/seahorse-ssh-key-properties.c:215
 msgid "Couldn't export key."
 msgstr "କିଗୁଡ଼ିକୁ ରପ୍ତାନୀ କରିପାରିଲା ନାହିଁ।"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1265
-#: ../pgp/seahorse-pgp-key-properties.c:1354
+#: ../pgp/seahorse-pgp-key-properties.c:1267
+#: ../pgp/seahorse-pgp-key-properties.c:1356
 msgctxt "Expires"
 msgid "Never"
 msgstr "କେବେ ନୁହେଁ"
 
 #. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1315
-#: ../src/seahorse-key-manager-store.c:859
+#: ../pgp/seahorse-pgp-key-properties.c:1317
+#: ../src/seahorse-key-manager-store.c:896
 msgid "Type"
 msgstr "ପ୍ରକାର"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1318
+#: ../pgp/seahorse-pgp-key-properties.c:1320
 msgid "Created"
 msgstr "ସୃଷ୍ଟିହୋଇଥିବା"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1321
+#: ../pgp/seahorse-pgp-key-properties.c:1323
 msgid "Expires"
 msgstr "ସମୟ ସମାପ୍ତ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1324
+#: ../pgp/seahorse-pgp-key-properties.c:1326
 msgid "Status"
 msgstr "ଅବସ୍ଥିତି"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1327
+#: ../pgp/seahorse-pgp-key-properties.c:1329
 msgid "Strength"
 msgstr "ଶକ୍ତି"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1351
+#: ../pgp/seahorse-pgp-key-properties.c:1353
 msgid "Good"
 msgstr "ଉତ୍ତମ"
 
@@ -1967,156 +1979,157 @@ msgstr "<b>କି ନାମ ଏବଂ ହସ୍ତାକ୍ଷରଗୁଡ଼ି
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-#: ../ssh/seahorse-ssh-key-properties.xml.h:7
-msgid "<b>Name:</b>"
-msgstr "<b>ନାମ:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
 msgid "<b>Photo </b>"
 msgstr "<b>ଫୋଟୋ </b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
 msgid "<b>Technical Details</b>"
 msgstr "<b>ଯାନ୍ତ୍ରିକ ବିବରଣୀ</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:10
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
 msgid "<b>This key has been revoked</b>"
 msgstr "<b>ଏହି କିକୁ ପ୍ରତି ସଂହରଣ କରାଯାଇଛି</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:10
 msgid "<b>This key has expired</b>"
 msgstr "<b>ଏହି କିର ସମୟ ସମାପ୍ତି ହୋଇଛି</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:13
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:12
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
 msgid "<b>Type:</b>"
 msgstr "<b>ପ୍ରକାର:</b>"
 
 #. To translators: This is the noun not the verb.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:15
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
-#: ../ssh/seahorse-ssh-key-properties.xml.h:13
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:14
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
 msgid "<b>Use:</b>"
 msgstr "<b>ବ୍ୟବହାର:</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:15
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
 msgid "<b>_Subkeys</b>"
 msgstr "<b>ଉପ-କିଗୁଡ଼ିକ (_S)</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
 msgid "Add"
 msgstr "ଯୋଗ କରନ୍ତୁ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:18
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
 msgid "Add a photo to this key"
 msgstr "ଏହି କି ସହିତ ଗୋଟିଏ ଫୋଟୋ ଯୋଗ କରନ୍ତୁ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
-#: ../ssh/seahorse-ssh-key-properties.xml.h:16
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:18
+#: ../ssh/seahorse-ssh-key-properties.xml.h:14
 msgid "Change _Passphrase"
 msgstr "ପ୍ରବେଶ ସଂକେତ ପରିବର୍ତ୍ତନ କରନ୍ତୁ (_P)"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
 msgid "Decrypt files and email sent to you."
 msgstr "ଆପଣଙ୍କ ପାଖକୁ ପଠାଯାଇଥିବା ଫାଇଲ ଏବଂ ଇମେଲଗୁଡ଼ିକୁ ବିଗୁଢନ କରନ୍ତୁ।"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:22
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
 msgid "Delete"
 msgstr "ଅପସାରଣ କରନ୍ତୁ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
 msgid "Expire"
 msgstr "ସମାପ୍ତ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
 msgid "Expires:"
 msgstr "ସମାପ୍ତ ହୋଇଥାଏ:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
 msgid "Export"
 msgstr "ରତ୍ପାନୀ କର"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
 msgid "Go to next photo"
 msgstr "ପରବର୍ତ୍ତୀ ଫୋଟୋକୁ ଯାଆନ୍ତୁ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
 msgid "Go to previous photo"
 msgstr "ପୂର୍ବ ଫୋଟୋକୁ ଯାଆନ୍ତୁ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:29
 msgid "Key ID:"
 msgstr "କି ID:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
 msgid "Make this photo the primary photo"
 msgstr "ଏହି ଫୋଟୋକୁ ପ୍ରାଥମିକ ଫୋଟୋ କରନ୍ତୁ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:33
 msgid "Names and Signatures"
 msgstr "ନାମ ଏବଂ ହସ୍ତାକ୍ଷରଗୁଡ଼ିକ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
 msgid "Never"
 msgstr "କେବେ ନୁହେଁ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:36
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
 msgid "Override Owner _Trust:"
 msgstr "ମାଲିକ ବିଶ୍ୱାସକୁ ନବଲିଖନ କରନ୍ତୁ (_T):"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:36
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
 msgid "Owner"
 msgstr "ମାଲିକ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
 msgid "Primary"
 msgstr "ପ୍ରାଥମିକ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
 msgid "Remove this photo from this key"
 msgstr "ଏହି କିରୁ ଏହି ଫୋଟୋକୁ କାଢ଼ିଦିଅନ୍ତୁ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
 msgid "Revoke"
 msgstr "ପ୍ରତିସଂହରଣ କରନ୍ତୁ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
 msgid "Sign"
 msgstr "ହସ୍ତାକ୍ଷର କରନ୍ତୁ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
 msgid "Strength:"
 msgstr "ଶକ୍ତି:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "କି ର ମାଲିକ କିକୁ ପ୍ରତିସଂହରଣ କରିଥାଏ। ଏହାକୁ ଏବେ ଆଉ ବ୍ୟବହାର କରାଯାଏ ନାହିଁ।"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
 msgid "_Add Name"
 msgstr "ନାମ ଯୋଗ କରନ୍ତୁ (_A)"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
 msgid "_Export Complete Key:"
 msgstr "ସମ୍ପୂର୍ଣ୍ଣ କିକୁ ରପ୍ତାନୀ କରନ୍ତୁ (_E):"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+#| msgid "<b>Name:</b>"
+msgctxt "name-of-key"
+msgid "<b>Name:</b>"
+msgstr "<b>ନାମ:</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
 msgid "<b>Dates:</b>"
 msgstr "<b>ତାରିଖଗୁଡ଼ିକ:</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
-#: ../ssh/seahorse-ssh-key-properties.xml.h:4
+#: ../ssh/seahorse-ssh-key-properties.xml.h:2
 msgid "<b>Fingerprint:</b>"
 msgstr "<b>ଅଙ୍ଗୁଳି ଚିହ୍ନ:</b>"
 
@@ -2124,76 +2137,76 @@ msgstr "<b>ଅଙ୍ଗୁଳି ଚିହ୍ନ:</b>"
 msgid "<b>Indicate Trust:</b>"
 msgstr "<b>ବିଶ୍ୱାସ ସୂଚାଏ:</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
 msgid "<b>Your trust of this key</b>"
 msgstr "<b>ଏହି କି ପାଇଁ ଆପଣଙ୍କର ବିଶ୍ୱାସ</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:16
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
 msgid "<b>_Other Names:</b>"
 msgstr "<b>ଅନ୍ୟାନ୍ୟ ନାମଗୁଡ଼ିକ (_O):</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:16
 msgid "<b>_People who have signed this key:</b>"
 msgstr "<b>ଏହି କି କୁ ହସ୍ତାକ୍ଷର କରିଥିବା ବ୍ୟକ୍ତି (_P):</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
 msgid "Encrypt files and email to the key's owner "
 msgstr "କି ମାଲିକ ପାଇଁ ଫାଇଲ ଏବଂ ଇମେଲକୁ ସଂଗୁପ୍ତ କରନ୍ତୁ"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
 msgid "Fully"
 msgstr "ସମ୍ପୂର୍ଣ୍ଣ ଭାବରେ"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:24
 #, no-c-format
 msgid "I trust signatures from '%s' on other keys"
 msgstr "ମୁଁ '%s' ରୁ ଅନ୍ୟ କିଗୁଡ଼ିକ ପାଇଁ ହସ୍ତାକ୍ଷରକୁ ବିଶ୍ୱାସ କରେ"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:27
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
 #, no-c-format
 msgid ""
 "If you believe that the person that owns this key is '%s', <i>sign</i> this "
 "key:"
-msgstr ""
-"ଯଦି ଆପଣ ବିଶ୍ୱାସ କରନ୍ତି ଯେ ଯେଉଁମାନେ କି ଅଧିକାର କରିଥାନ୍ତି '%s', <i>sign</i> "
-"ଏହି କି:"
+msgstr "ଯଦି ଆପଣ ବିଶ୍ୱାସ କରନ୍ତି ଯେ ଯେଉଁମାନେ କି ଅଧିକାର କରିଥାନ୍ତି '%s', <i>sign</i> ଏହି କି:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:29
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:28
 #, no-c-format
 msgid "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
-msgstr "ଯଦି ଆପଣ ଏବେ ଆଉ ବିଶ୍ୱାସ ନକରନ୍ତି ଯେ '%s' ଏହି କିକୁ ଅଧିକାର କରିଛନ୍ତି, <i>revoke</i> ଆପଣଙ୍କର ହସ୍ତାକ୍ଷର:"
+msgstr ""
+"ଯଦି ଆପଣ ଏବେ ଆଉ ବିଶ୍ୱାସ ନକରନ୍ତି ଯେ '%s' ଏହି କିକୁ ଅଧିକାର କରିଛନ୍ତି, <i>revoke</i> ଆପଣଙ୍କର "
+"ହସ୍ତାକ୍ଷର:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
 msgid "Marginally"
 msgstr "ସୀମାତୀତ"
 
 #. Trust column
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:853
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
+#: ../src/seahorse-key-manager-store.c:890
 msgid "Trust"
 msgstr "ବିଶ୍ୱାସ"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
 msgid "Ultimately"
 msgstr "ଅନ୍ତତଃ"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
 msgid "You _Trust the Owner:"
 msgstr "ଆପଣ ମାଲିକଙ୍କୁ ବିଶ୍ୱାସ କରନ୍ତି (_T):"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr "ଆପଣଙ୍କର ବିଶ୍ୱାସ ହସ୍ତକୃତ ଭାବରେ <i>ବିବରଣୀ</i> ଟ୍ୟାବରେ ଉଲ୍ଲେଖ କରାହୋଇଛି।"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
 msgid "_Only display the signatures of people I trust"
 msgstr "କେବଳ ମୁଁ ବିଶ୍ୱାସ କରୁଥିବା ବ୍ୟକ୍ତିମାନଙ୍କର ହସ୍ତାକ୍ଷର ଦର୍ଶାନ୍ତୁ (_O)"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
 msgid "_Revoke Signature"
 msgstr "ହସ୍ତାକ୍ଷର ପ୍ରତ୍ୟାବୃତ କରନ୍ତୁ (_R)"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
 msgid "_Sign this Key"
 msgstr "ଏହି କିରେ ହସ୍ତାକ୍ଷର କରନ୍ତୁ (_S)"
 
@@ -2221,8 +2234,8 @@ msgstr "କାରଣ (_R):"
 #: ../pgp/seahorse-signer.c:62
 msgid "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
-"ଆପଣଙ୍କ ପାଖରେ ବ୍ୟକ୍ତିଗତ PGP କି ନାହିଁ ଯାହାକୁକି ଗୋଚିଏ ଦଲିଲ ଅଥବା ସନ୍ଦେଶକୁ "
-"ହସ୍ତାକ୍ଷର କରିବା ପାଇଁ ବ୍ୟବହାର କରାଯାଇପାରିବ।"
+"ଆପଣଙ୍କ ପାଖରେ ବ୍ୟକ୍ତିଗତ PGP କି ନାହିଁ ଯାହାକୁକି ଗୋଚିଏ ଦଲିଲ ଅଥବା ସନ୍ଦେଶକୁ ହସ୍ତାକ୍ଷର କରିବା ପାଇଁ "
+"ବ୍ୟବହାର କରାଯାଇପାରିବ।"
 
 #: ../pgp/seahorse-sign.xml.h:1
 msgid "<b>How carefully have you checked this key?</b>"
@@ -2254,16 +2267,14 @@ msgid ""
 "<i>Not at all:</i> means you believe the key is owned by the person who "
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
-"<i>କଦାପି ନୁହଁ:</i> ମାନେ ଆପଣ ବିଶ୍ୱାସ କରନ୍ତି ଯେ ସେହି କି ଟି ଗୋଟିଏ ବ୍ୟକ୍ତି ଦ୍ୱାରା ଅଧିକୃତ "
-"ଯିଏକି ଏହାକୁ ଅଧିକାର କରିବା ପାଇଁ ମାଗିଛି, କିନ୍ତୁ ଆପଣ ଏହାକୁ ଯାଞ୍ଚ କରିପାରିଲେ ନାହିଁ।"
+"<i>କଦାପି ନୁହଁ:</i> ମାନେ ଆପଣ ବିଶ୍ୱାସ କରନ୍ତି ଯେ ସେହି କି ଟି ଗୋଟିଏ ବ୍ୟକ୍ତି ଦ୍ୱାରା ଅଧିକୃତ ଯିଏକି ଏହାକୁ "
+"ଅଧିକାର କରିବା ପାଇଁ ମାଗିଛି, କିନ୍ତୁ ଆପଣ ଏହାକୁ ଯାଞ୍ଚ କରିପାରିଲେ ନାହିଁ।"
 
 #: ../pgp/seahorse-sign.xml.h:7
 msgid ""
 "<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
 "key is genuine."
-msgstr ""
-"<i>ଅତି ଯତ୍ନ ସହକାରେ:</i> କେବଳ ଏହାକୁ ବାଛନ୍ତୁ ଯଦି ଆପଣ ନିଶ୍ଚିତ ଯେ "
-"ଏହି କି ଟି ଯୁକ୍ତିଯକ୍ତ ଅଟେ।"
+msgstr "<i>ଅତି ଯତ୍ନ ସହକାରେ:</i> କେବଳ ଏହାକୁ ବାଛନ୍ତୁ ଯଦି ଆପଣ ନିଶ୍ଚିତ ଯେ ଏହି କି ଟି ଯୁକ୍ତିଯକ୍ତ ଅଟେ।"
 
 #: ../pgp/seahorse-sign.xml.h:8
 msgid "By signing you indicate your trust that this key belongs to:"
@@ -2283,9 +2294,9 @@ msgid ""
 "personally check that the name on the key is correct. You should have also "
 "used email to check that the email address belongs to the owner."
 msgstr ""
-"ଆପଣ ଫୋଟୋ ପରିଚୟ ପାଇଁ ଗୋଟିଏ ଶକ୍ତି ବ୍ୟବହାର କରିପାରିବେ (ଯେପରିକି ପାସପୋର୍ଟ) ବ୍ୟକ୍ତିଗତ "
-"ଭାବରେ ଯାଞ୍ଚ କରିଥାଏ ଯେ ସେହି କି ଟି ସଠିକ। ଆପଣଙ୍କୁ ସେହି ଇମେଲ ଠିକଣାଟି ମାଲିକଙ୍କର କି ନୁହଁ "
-"ତାହା ଯାଞ୍ଚ କରିବା ପାଇଁ ଇମେଲ ବ୍ୟବହାର କରିବା ଉଚିତ।"
+"ଆପଣ ଫୋଟୋ ପରିଚୟ ପାଇଁ ଗୋଟିଏ ଶକ୍ତି ବ୍ୟବହାର କରିପାରିବେ (ଯେପରିକି ପାସପୋର୍ଟ) ବ୍ୟକ୍ତିଗତ ଭାବରେ ଯାଞ୍ଚ "
+"କରିଥାଏ ଯେ ସେହି କି ଟି ସଠିକ। ଆପଣଙ୍କୁ ସେହି ଇମେଲ ଠିକଣାଟି ମାଲିକଙ୍କର କି ନୁହଁ ତାହା ଯାଞ୍ଚ କରିବା ପାଇଁ "
+"ଇମେଲ ବ୍ୟବହାର କରିବା ଉଚିତ।"
 
 #: ../pgp/seahorse-sign.xml.h:12
 msgid "_Casually"
@@ -2315,8 +2326,8 @@ msgstr "ଅତି ଯତ୍ନ ସହକାରେ (_V)"
 msgid "_Sign message with key:"
 msgstr "ସନ୍ଦେଶକୁ କି ଦ୍ୱାରା ହସ୍ତାକ୍ଷର କରନ୍ତୁ (_S):"
 
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+#: ../pkcs11/seahorse-pkcs11-certificate.c:106
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
 msgid "Certificate"
 msgstr "ପ୍ରମାଣପତ୍ର"
 
@@ -2352,7 +2363,7 @@ msgstr "ନୂତନ ପ୍ରବେଶ ସଂକେତ (_P):"
 msgid "Manage your passwords and encryption keys"
 msgstr "ଆପଣଙ୍କର ପ୍ରବେଶ ସଂକେତ ଏବଂ ସଂଗୁପ୍ତ କି କୁ ପରିଚାଳନା କରନ୍ତୁ"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:853
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:862
 msgid "Passwords and Encryption Keys"
 msgstr "ପ୍ରବେଶ ସଂକେତ ଏବଂ ସଂଗୁପ୍ତ କିଗୁଡ଼ିକ"
 
@@ -2375,104 +2386,104 @@ msgid_plural "Selected %d keys"
 msgstr[0] "ବଚ୍ଛିତ %d କି"
 msgstr[1] "ବଚ୍ଛିତ %d କିଗୁଡ଼ିକ"
 
-#: ../src/seahorse-key-manager.c:404 ../src/seahorse-key-manager.c:464
-#: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:482
+#: ../src/seahorse-key-manager.c:410 ../src/seahorse-key-manager.c:470
+#: ../src/seahorse-key-manager.c:533 ../src/seahorse-viewer.c:458
 msgid "Couldn't import keys"
 msgstr "କିଗୁଡ଼ିକୁ ଆମଦାନି କରିପାରିଲା ନାହିଁ"
 
-#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:487
+#: ../src/seahorse-key-manager.c:415 ../src/seahorse-viewer.c:463
 msgid "Imported keys"
 msgstr "ଆମଦାନୀ ହୋଇଥିବା କିଗୁଡ଼ିକ"
 
-#: ../src/seahorse-key-manager.c:458
+#: ../src/seahorse-key-manager.c:464
 msgid "Importing keys"
 msgstr "କିଗୁଡ଼ିକୁ ଆମଦାନୀ କରୁଅଛି"
 
-#: ../src/seahorse-key-manager.c:481 ../ssh/seahorse-ssh-operation.c:1017
+#: ../src/seahorse-key-manager.c:487 ../ssh/seahorse-ssh-operation.c:1017
 msgid "Import Key"
 msgstr "କି ଆମଦାନି କରନ୍ତୁ"
 
-#: ../src/seahorse-key-manager.c:527
+#: ../src/seahorse-key-manager.c:533
 msgid "Unrecognized key type, or invalid data format"
 msgstr "ଅଚିହ୍ନା କି ପ୍ରକାର, ଅଥବା ଅବୈଧ ତଥ୍ୟ ସଜ୍ଜିକରଣ ଶୈଳୀ"
 
-#: ../src/seahorse-key-manager.c:721 ../src/seahorse-keyserver-results.c:207
+#: ../src/seahorse-key-manager.c:731 ../src/seahorse-keyserver-results.c:245
 msgid "_Remote"
 msgstr "ଦୂର (_R)"
 
-#: ../src/seahorse-key-manager.c:723
+#: ../src/seahorse-key-manager.c:733
 msgid "Close this program"
 msgstr "ଏହି ପ୍ରଗ୍ରାମକୁ ବନ୍ଦ କରନ୍ତୁ"
 
-#: ../src/seahorse-key-manager.c:724
+#: ../src/seahorse-key-manager.c:734
 msgid "_New..."
 msgstr "ନୂତନ (_N)..."
 
-#: ../src/seahorse-key-manager.c:725
+#: ../src/seahorse-key-manager.c:735
 msgid "Create a new key or item"
 msgstr "ନୂତନ କି ଅଥବା ବସ୍ତୁ ନିର୍ମାଣ କରନ୍ତୁ"
 
-#: ../src/seahorse-key-manager.c:726
+#: ../src/seahorse-key-manager.c:736
 msgid "_Import..."
 msgstr "_ଆମଦାନୀ ..."
 
-#: ../src/seahorse-key-manager.c:727
+#: ../src/seahorse-key-manager.c:737
 msgid "Import from a file"
 msgstr "ଗୋଟିଏ ଫାଇଲରୁ ଆମଦାନୀ କରନ୍ତୁ"
 
-#: ../src/seahorse-key-manager.c:729
+#: ../src/seahorse-key-manager.c:739
 msgid "Import from the clipboard"
 msgstr "କ୍ଲିପବୋର୍ଡରୁ ଆମଦାନୀ କରନ୍ତୁ"
 
-#: ../src/seahorse-key-manager.c:734 ../src/seahorse-keyserver-results.c:217
+#: ../src/seahorse-key-manager.c:744 ../src/seahorse-keyserver-results.c:255
 msgid "_Find Remote Keys..."
 msgstr "ସୁଦୂର କିଗୁଡିକୁ ଖୋଜନ୍ତୁ (_F)..."
 
-#: ../src/seahorse-key-manager.c:735 ../src/seahorse-keyserver-results.c:218
+#: ../src/seahorse-key-manager.c:745 ../src/seahorse-keyserver-results.c:256
 msgid "Search for keys on a key server"
 msgstr "କି ସର୍ଭରରେ କିଗୁଡ଼ିକୁ ସନ୍ଧାନ କରନ୍ତୁ"
 
-#: ../src/seahorse-key-manager.c:736
+#: ../src/seahorse-key-manager.c:746
 msgid "_Sync and Publish Keys..."
 msgstr "କିଗୁଡ଼ିକୁ ସମକାଳୀନ କରନ୍ତୁ ଏବଂ ପ୍ରକାଶ କରନ୍ତୁ (_S)..."
 
-#: ../src/seahorse-key-manager.c:737
+#: ../src/seahorse-key-manager.c:747
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "ଆପଣଙ୍କର କିଗୁଡ଼ିକୁ ଅନଲାଇନରେ ପ୍ରକାଶନ କରନ୍ତୁ ଏବଂ/ଅଥବା ସମକାଳୀନ କରନ୍ତୁ।"
 
-#: ../src/seahorse-key-manager.c:742
+#: ../src/seahorse-key-manager.c:752
 msgid "T_ypes"
 msgstr "ପ୍ରକାରଗୁଡ଼ିକ (_y)"
 
-#: ../src/seahorse-key-manager.c:742
+#: ../src/seahorse-key-manager.c:752
 msgid "Show type column"
 msgstr "ପ୍ରକାର ସ୍ତମ୍ଭକୁ ଦର୍ଶାନ୍ତୁ"
 
-#: ../src/seahorse-key-manager.c:744
+#: ../src/seahorse-key-manager.c:754
 msgid "_Expiry"
 msgstr "ସମୟ ସମାପ୍ତି (_E)"
 
-#: ../src/seahorse-key-manager.c:744
+#: ../src/seahorse-key-manager.c:754
 msgid "Show expiry column"
 msgstr "ସମୟ ସମାପ୍ତ ହୋଇଥିବା ସ୍ତମ୍ଭକୁ ଦର୍ଶାନ୍ତୁ"
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:756
 msgid "_Trust"
 msgstr "ବିଶ୍ୱାସ (_T)"
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:756
 msgid "Show owner trust column"
 msgstr "ମାଲିକ ବିଶ୍ୱାସ ସ୍ଥମ୍ଭକୁ ଦର୍ଶାନ୍ତୁ"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:758
 msgid "_Validity"
 msgstr "ବୈଧତା (_V)"
 
-#: ../src/seahorse-key-manager.c:748
+#: ../src/seahorse-key-manager.c:758
 msgid "Show validity column"
 msgstr "ବୈଧତା ସ୍ତମ୍ଭକୁ ଦର୍ଶାନ୍ତୁ"
 
-#: ../src/seahorse-key-manager.c:922
+#: ../src/seahorse-key-manager.c:931
 msgid "Filter:"
 msgstr "ଫିଲଟର:"
 
@@ -2500,7 +2511,7 @@ msgstr "ଅନ୍ୟାନ୍ୟ କିଗୁଡ଼ିକ (_K)"
 msgid "To get started with encryption you will need keys."
 msgstr "ସଂଗୁପ୍ତ ଆରମ୍ଭ କରିବା ପାଇଁ ଆପଣ କିଗୁଡ଼ିକୁ ଆବଶ୍ୟକ କରିବେ।"
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:546
+#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:522
 msgid "_Import"
 msgstr "_ଆମଦାନୀ କର"
 
@@ -2508,44 +2519,44 @@ msgstr "_ଆମଦାନୀ କର"
 msgid "_Passwords"
 msgstr "ପ୍ରବେଶ ସଂକେତଗୁଡ଼ିକ (_P)"
 
-#: ../src/seahorse-key-manager-store.c:648 ../src/seahorse-viewer.c:282
+#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:256
 msgid "Couldn't export keys"
 msgstr "କି ଗୁଡ଼ିକୁ ରପ୍ତାନୀ କରିପାରିଲା ନାହିଁ"
 
-#: ../src/seahorse-key-manager-store.c:846
+#: ../src/seahorse-key-manager-store.c:883
 msgid "Validity"
 msgstr "ସଠିକତା"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:865
+#: ../src/seahorse-key-manager-store.c:902
 msgid "Expiration Date"
 msgstr "ସମୟ ସମାପ୍ତି ତାରିଖ"
 
-#: ../src/seahorse-keyserver-results.c:209
+#: ../src/seahorse-keyserver-results.c:247
 msgid "Close this window"
 msgstr "ଏହି ୱିଣ୍ଡୋକୁ ବନ୍ଦ କରନ୍ତୁ"
 
-#: ../src/seahorse-keyserver-results.c:210
+#: ../src/seahorse-keyserver-results.c:248
 msgid "_Expand All"
 msgstr "ସମସ୍ତଙ୍କୁ ବଢାନ୍ତୁ (_E)"
 
-#: ../src/seahorse-keyserver-results.c:211
+#: ../src/seahorse-keyserver-results.c:249
 msgid "Expand all listings"
 msgstr "ସମସ୍ତ ତାଲିକାକୁ ବିସ୍ତାର କରନ୍ତୁ"
 
-#: ../src/seahorse-keyserver-results.c:212
+#: ../src/seahorse-keyserver-results.c:250
 msgid "_Collapse All"
 msgstr "ସମସ୍ତଙ୍କୁ ଅବସନ୍ନ କରି ଦିଅନ୍ତୁ (_C)"
 
-#: ../src/seahorse-keyserver-results.c:213
+#: ../src/seahorse-keyserver-results.c:251
 msgid "Collapse all listings"
 msgstr "ସମସ୍ତ ତାଲିକାକୁ ଭାଙ୍ଗନ୍ତୁ"
 
-#: ../src/seahorse-keyserver-results.c:275
+#: ../src/seahorse-keyserver-results.c:322
 msgid "Remote Keys"
 msgstr "ସୁଦୂର କିଗୁଡ଼ିକ"
 
-#: ../src/seahorse-keyserver-results.c:277
+#: ../src/seahorse-keyserver-results.c:324
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "'%s' କୁ ଧାରଣ କରିଥିବା ସୁଦୂର କିଗୁଡ଼ିକ"
@@ -2567,8 +2578,8 @@ msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
 msgstr ""
-"ଏହା ଇଣ୍ଟରନେଟରେ ଅନ୍ୟମାନଙ୍କ ପାଇଁ କିଗୁଡ଼ିକୁ ପାଇବେ। ଏହି କିଗୁଡ଼ିକୁ ଆପଣଙ୍କର ସ୍ଥାନୀୟ କିରିଙ୍ଗକୁ"
-"ଆମଦାନୀ କରିପାରିବେ।"
+"ଏହା ଇଣ୍ଟରନେଟରେ ଅନ୍ୟମାନଙ୍କ ପାଇଁ କିଗୁଡ଼ିକୁ ପାଇବେ। ଏହି କିଗୁଡ଼ିକୁ ଆପଣଙ୍କର ସ୍ଥାନୀୟ କିରିଙ୍ଗକୁଆମଦାନୀ "
+"କରିପାରିବେ।"
 
 #: ../src/seahorse-keyserver-search.xml.h:5
 msgid "Where to search:"
@@ -2608,37 +2619,32 @@ msgid "Synchronizing keys..."
 msgstr "କି ଗୁଡ଼ିକୁ ସନ୍ତୁଳନ କରାଯାଉଛି..."
 
 #: ../src/seahorse-keyserver-sync.xml.h:1
-msgid "<b>X keys are selected for synchronizing</b>"
-msgstr "<b>X କିଗୁଡ଼ିକୁ ସନ୍ତୁଳନ ପାଇଁ ବଛାହୋଇଛି</b>"
-
-#: ../src/seahorse-keyserver-sync.xml.h:2
 msgid "Sync Keys"
 msgstr "Sync କିଗୁଡ଼ିକ"
 
-#: ../src/seahorse-keyserver-sync.xml.h:3
+#: ../src/seahorse-keyserver-sync.xml.h:2
 msgid ""
 "This will publish the keys in your key ring so they're available for others "
 "to use. You'll also get any changes others have made since you received "
 "their keys."
 msgstr ""
-"ଏହା ଆପଣଙ୍କର କିରିଙ୍ଗରେ କିଗୁଡ଼ିକୁ ପ୍ରକାଶ କରିବ ତେଣୁ ସେମାନେ ଅନ୍ୟମାନଙ୍କର ବ୍ୟବହାର ପାଇଁ "
-"ଉପଲବ୍ଧ ହେବେ। ଆପଣ ମଧ୍ଯ କିଗୁଡ଼ିକରେ ଅନ୍ୟମାନେ କରିଥିବା କୌଣସି ପରିବର୍ତ୍ତନଗୁଡ଼ିକୁ ପାଇପାରିବେ।"
+"ଏହା ଆପଣଙ୍କର କିରିଙ୍ଗରେ କିଗୁଡ଼ିକୁ ପ୍ରକାଶ କରିବ ତେଣୁ ସେମାନେ ଅନ୍ୟମାନଙ୍କର ବ୍ୟବହାର ପାଇଁ ଉପଲବ୍ଧ ହେବେ। "
+"ଆପଣ ମଧ୍ଯ କିଗୁଡ଼ିକରେ ଅନ୍ୟମାନେ କରିଥିବା କୌଣସି ପରିବର୍ତ୍ତନଗୁଡ଼ିକୁ ପାଇପାରିବେ।"
 
-#: ../src/seahorse-keyserver-sync.xml.h:4
+#: ../src/seahorse-keyserver-sync.xml.h:3
 msgid ""
 "This will retrieve any changes others have made since you received their "
 "keys. No key server has been chosen for publishing, so your keys will not be "
 "made available to others."
 msgstr ""
-"ଏହା ଅନ୍ୟମାନେ କରିଥିବା ଯେକୌଣସି ପରିବର୍ତ୍ତନକୁ କାଢ଼ି ପାରିବ ଯେହେତୁ ଆପଣ ସେମାନଙ୍କର "
-"କିଗୁଡ଼ିକୁ ଗ୍ରହଣ କରିଛନ୍ତି। କି ସର୍ଭର ପ୍ରକାଶନ ପାଇଁ ବଛାହୋଇଛି, ତେଣୁ ଆପଣଙ୍କର କିକୁ "
-"ଅନ୍ୟମାନଙ୍କ ପାଇଁ ଉପଲବ୍ଧ କରାଯିବ ନାହିଁ।"
+"ଏହା ଅନ୍ୟମାନେ କରିଥିବା ଯେକୌଣସି ପରିବର୍ତ୍ତନକୁ କାଢ଼ି ପାରିବ ଯେହେତୁ ଆପଣ ସେମାନଙ୍କର କିଗୁଡ଼ିକୁ ଗ୍ରହଣ "
+"କରିଛନ୍ତି। କି ସର୍ଭର ପ୍ରକାଶନ ପାଇଁ ବଛାହୋଇଛି, ତେଣୁ ଆପଣଙ୍କର କିକୁ ଅନ୍ୟମାନଙ୍କ ପାଇଁ ଉପଲବ୍ଧ କରାଯିବ ନାହିଁ।"
 
-#: ../src/seahorse-keyserver-sync.xml.h:5
+#: ../src/seahorse-keyserver-sync.xml.h:4
 msgid "_Key Servers"
 msgstr "କି ସର୍ଭରଗୁଡ଼ିକ (_K)"
 
-#: ../src/seahorse-keyserver-sync.xml.h:6
+#: ../src/seahorse-keyserver-sync.xml.h:5
 msgid "_Sync"
 msgstr "Sync (_S)"
 
@@ -2646,123 +2652,123 @@ msgstr "Sync (_S)"
 msgid "Version of this application"
 msgstr "ଏହି ପ୍ରୟୋଗର ସଂସ୍କରଣ"
 
-#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:170
+#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:144
 msgid "Encryption Key Manager"
 msgstr "ସଂଗୁପ୍ତ କି ପରିଚାଳକ"
 
-#: ../src/seahorse-viewer.c:141
+#: ../src/seahorse-viewer.c:120
 msgid "Contributions:"
 msgstr "ସହଯୋଗ:"
 
-#: ../src/seahorse-viewer.c:172
+#: ../src/seahorse-viewer.c:146
 msgid "translator-credits"
 msgstr "ଶୁଭ୍ରାଂଶୁ ବେହେରା <arya_subhransu@yahoo.co.in>"
 
-#: ../src/seahorse-viewer.c:175
+#: ../src/seahorse-viewer.c:149
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse ପ୍ରକଳ୍ପ ମୂଳ ସ୍ଥାନ"
 
 #. Top menu items
-#: ../src/seahorse-viewer.c:194
+#: ../src/seahorse-viewer.c:168
 msgid "_File"
 msgstr "ଫାଇଲ (_F)"
 
-#: ../src/seahorse-viewer.c:195
+#: ../src/seahorse-viewer.c:169
 msgid "_Edit"
 msgstr "ସମ୍ପାଦନ କରନ୍ତୁ (_E)"
 
-#: ../src/seahorse-viewer.c:196
+#: ../src/seahorse-viewer.c:170
 msgid "_View"
 msgstr "ଦୃଶ୍ଯ (_V)"
 
-#: ../src/seahorse-viewer.c:197
+#: ../src/seahorse-viewer.c:171
 msgid "_Help"
 msgstr "ସହାୟତା (_H)"
 
-#: ../src/seahorse-viewer.c:199
+#: ../src/seahorse-viewer.c:173
 msgid "Prefere_nces"
 msgstr "ପସନ୍ଦ (_n)"
 
-#: ../src/seahorse-viewer.c:200
+#: ../src/seahorse-viewer.c:174
 msgid "Change preferences for this program"
 msgstr "ଏହି ପ୍ରଗ୍ରାମ ପାଇଁ ପସନ୍ଦକୁ ପରିବର୍ତ୍ତନ କରନ୍ତୁ"
 
-#: ../src/seahorse-viewer.c:203
+#: ../src/seahorse-viewer.c:177
 msgid "About this program"
 msgstr "ଏହି ପ୍ରଗ୍ରାମ ବିଷୟରେ"
 
-#: ../src/seahorse-viewer.c:204
+#: ../src/seahorse-viewer.c:178
 msgid "_Contents"
 msgstr "ସୂଚୀପତ୍ର (_C)"
 
-#: ../src/seahorse-viewer.c:205
+#: ../src/seahorse-viewer.c:179
 msgid "Show Seahorse help"
 msgstr "Seahorse ସହାୟତା ଦର୍ଶାଇଥାଏ"
 
-#: ../src/seahorse-viewer.c:302
+#: ../src/seahorse-viewer.c:276
 msgid "Export public key"
 msgstr "ସର୍ବସାଧାରଣ କିକୁ ରପ୍ତାନି କରିଥାଏ"
 
-#: ../src/seahorse-viewer.c:320
+#: ../src/seahorse-viewer.c:296
 msgid "Exporting keys"
 msgstr "କିଗୁଡ଼ିକୁ ରପ୍ତାନି କରୁଅଛି"
 
-#: ../src/seahorse-viewer.c:345
+#: ../src/seahorse-viewer.c:321
 msgid "Couldn't retrieve data from key server"
 msgstr "କି ସର୍ଭରରୁ ତଥ୍ୟକୁ କାଢ଼ିପାରିଲା ନାହିଁ"
 
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:364
+#: ../src/seahorse-viewer.c:340
 msgid "Copied keys"
 msgstr "କିଗୁଡ଼ିକୁ ନକଲ କରାଯାଇଛି"
 
-#: ../src/seahorse-viewer.c:384
+#: ../src/seahorse-viewer.c:360
 msgid "Retrieving keys"
 msgstr "କିଗୁଡ଼ିକୁ କାଢ଼ୁଅଛି"
 
-#: ../src/seahorse-viewer.c:399
+#: ../src/seahorse-viewer.c:375
 msgid "Couldn't delete."
 msgstr "ଅପସାରଣ କରିପାରିଲା ନାହିଁ।"
 
-#: ../src/seahorse-viewer.c:433
+#: ../src/seahorse-viewer.c:409
 msgid "Deleting..."
 msgstr "ଅପସାରଣ କରୁଅଛି..."
 
-#: ../src/seahorse-viewer.c:459
+#: ../src/seahorse-viewer.c:435
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s ଟି ଗୋଟିଏ ବ୍ୟକ୍ତିଗତ କି। ଆପଣ ଅଗ୍ରସର ହେବାକୁ ଚାହୁଁଛନ୍ତି ବୋଲି ନିଶ୍ଚିତ କି?"
 
-#: ../src/seahorse-viewer.c:507
+#: ../src/seahorse-viewer.c:483
 msgid "Importing keys from key servers"
 msgstr "କି ସର୍ଭରରୁ କିଗୁଡ଼ିକୁ ଆମଦାନୀ କରୁଅଛି"
 
-#: ../src/seahorse-viewer.c:533
+#: ../src/seahorse-viewer.c:509
 msgid "Show properties"
 msgstr "ଗୁଣଧର୍ମ ଦର୍ଶାଇଥାଏ (_r)"
 
-#: ../src/seahorse-viewer.c:534
+#: ../src/seahorse-viewer.c:510
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "ଅପସାରଣ କରନ୍ତୁ (_D)"
 
-#: ../src/seahorse-viewer.c:535
+#: ../src/seahorse-viewer.c:511
 msgid "Delete selected items"
 msgstr "ବଚ୍ଛିତ ବସ୍ତୁଗୁଡ଼ିକୁ ଅପସାରଣ କରନ୍ତୁ"
 
-#: ../src/seahorse-viewer.c:539
+#: ../src/seahorse-viewer.c:515
 msgid "E_xport..."
 msgstr "ରପ୍ତାନୀ କରନ୍ତୁ (_x)..."
 
-#: ../src/seahorse-viewer.c:540
+#: ../src/seahorse-viewer.c:516
 msgid "Export to a file"
 msgstr "ଗୋଟିଏ ଫାଇଲ ମଧ୍ଯକୁ ରପ୍ତାନୀ କରନ୍ତୁ"
 
-#: ../src/seahorse-viewer.c:542
+#: ../src/seahorse-viewer.c:518
 msgid "Copy to the clipboard"
 msgstr "କ୍ଲିପବୋର୍ଡ ମଧ୍ଯକୁ ନକଲ କରନ୍ତୁ"
 
-#: ../src/seahorse-viewer.c:547
+#: ../src/seahorse-viewer.c:523
 msgid "Import selected keys to local key ring"
 msgstr "ସ୍ଥାନୀୟ କିରିଙ୍ଗରେ ବଚ୍ଛିତ କିଗୁଡ଼ିକୁ ଆମଦାନୀ କରନ୍ତୁ"
 
@@ -2779,8 +2785,7 @@ msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
 msgstr ""
-"ବ୍ୟକ୍ତିଗତ ସୁରକ୍ଷିତ ସେଲକୁ ଅନ୍ୟଏକ ଯନ୍ତ୍ରକୁ ପଠାନ୍ତୁ, ଏବଂ ସେହି କିକୁ ବ୍ୟବହାର କରି "
-"ଲଗଇନକୁ ସକ୍ରିୟ କରନ୍ତୁ।"
+"ବ୍ୟକ୍ତିଗତ ସୁରକ୍ଷିତ ସେଲକୁ ଅନ୍ୟଏକ ଯନ୍ତ୍ରକୁ ପଠାନ୍ତୁ, ଏବଂ ସେହି କିକୁ ବ୍ୟବହାର କରି ଲଗଇନକୁ ସକ୍ରିୟ କରନ୍ତୁ।"
 
 #: ../ssh/seahorse-ssh-commands.c:115
 #, c-format
@@ -2793,7 +2798,7 @@ msgid "Are you sure you want to delete %d secure shell keys?"
 msgstr "ସୁରକ୍ଷିତ ସେଲ କି %d କୁ ଅପସାରଣ କରିବେ ବୋଲି ଆପଣ ନିଶ୍ଚିତ କି?"
 
 #: ../ssh/seahorse-ssh-generate.c:59 ../ssh/seahorse-ssh-key.c:91
-#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:21
+#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:19
 msgid "Secure Shell Key"
 msgstr "ସୁରକ୍ଷିତ ସେଲ କି"
 
@@ -2805,7 +2810,7 @@ msgstr "ଅନ୍ୟ କମ୍ପୁଟରରେ ପ୍ରବେଶ କରିବ
 msgid "Couldn't generate Secure Shell key"
 msgstr "ସୁରକ୍ଷିତ ସେଲ କି କୁ ସୃଷ୍ଟି କରିପାରିଲା ନାହିଁ"
 
-#: ../ssh/seahorse-ssh-generate.c:205
+#: ../ssh/seahorse-ssh-generate.c:213
 msgid "Creating Secure Shell Key"
 msgstr "ସୁରକ୍ଷିତ ସେଲ କି ନିର୍ମାଣ କରୁଅଛି"
 
@@ -2813,17 +2818,15 @@ msgstr "ସୁରକ୍ଷିତ ସେଲ କି ନିର୍ମାଣ କର�
 msgid ""
 "<i>Use your email address, and any other reminder you need about what this "
 "key is for.</i>"
-msgstr ""
-"<i>ଏହି କି ବିଷୟରେ ଜାଣିବା ପାଇଁ ଆପଣଙ୍କର ଇମେଲ ଠିକଣା, ଏବଂ "
-"ଅନ୍ୟକୌଣସି ସ୍ମାରକକୁ ବ୍ୟବହାର କରନ୍ତୁ।</i>"
+msgstr "<i>ଏହି କି ବିଷୟରେ ଜାଣିବା ପାଇଁ ଆପଣଙ୍କର ଇମେଲ ଠିକଣା, ଏବଂ ଅନ୍ୟକୌଣସି ସ୍ମାରକକୁ ବ୍ୟବହାର କରନ୍ତୁ।</i>"
 
 #: ../ssh/seahorse-ssh-generate.xml.h:3
 msgid ""
 "A Secure Shell (SSH) key lets you connect securely to trusted computers "
 "using SSH, without entering a different password for each of them."
 msgstr ""
-"ଗୋଟିଏ ସୁରକ୍ଷିତ ସେଲ (SSH) କି ସହିତ ସୁରକ୍ଷିତ ଭାବରେ SSH ବ୍ୟବହାର କରି ବିଶ୍ୱସ୍ତ କମ୍ପୁଟରଗୁଡ଼ିକ "
-"ସହିତ ସଂଯୋଗ କରିଥାଏ, ସେମାନଙ୍କ ମଧ୍ଯରୁ କାହା ପାଇଁ ଭିନ୍ନ ପ୍ରବେଶ ସଂକେତ ଭରଣ ନକରି।"
+"ଗୋଟିଏ ସୁରକ୍ଷିତ ସେଲ (SSH) କି ସହିତ ସୁରକ୍ଷିତ ଭାବରେ SSH ବ୍ୟବହାର କରି ବିଶ୍ୱସ୍ତ କମ୍ପୁଟରଗୁଡ଼ିକ ସହିତ "
+"ସଂଯୋଗ କରିଥାଏ, ସେମାନଙ୍କ ମଧ୍ଯରୁ କାହା ପାଇଁ ଭିନ୍ନ ପ୍ରବେଶ ସଂକେତ ଭରଣ ନକରି।"
 
 #: ../ssh/seahorse-ssh-generate.xml.h:4
 msgid "DSA"
@@ -2840,10 +2843,6 @@ msgstr ""
 #: ../ssh/seahorse-ssh-generate.xml.h:8
 msgid "New Secure Shell Key"
 msgstr "ନୂତନ ସୁରକ୍ଷିତ ସେଲ କି"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:9
-msgid "RSA"
-msgstr "RSA"
 
 #: ../ssh/seahorse-ssh-generate.xml.h:10
 msgid "_Create and Set Up"
@@ -2886,47 +2885,43 @@ msgid "Couldn't change passphrase for key."
 msgstr "କି ପାଇଁ ପ୍ରବେଶ ସଂକେତକୁ ପରିବର୍ତ୍ତନ କରିପାରିଲା ନାହିଁ।"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:1
-msgid "/home/nate/.ssh/blah_rsa"
-msgstr "/home/nate/.ssh/blah_rsa"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "00:00:00:00:00"
-msgstr "00:00:00:00:00"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
 msgid "<b>Algorithm:</b>"
 msgstr "<b>ଆଲଗୋରିଦମ:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:5
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
 msgid "<b>Identifier:</b>"
 msgstr "<b>ପରିଚାୟକ:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:6
+#: ../ssh/seahorse-ssh-key-properties.xml.h:4
 msgid "<b>Location:</b>"
 msgstr "<b>ସ୍ଥାନ /ଅବସ୍ଥିତି:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:8
+#: ../ssh/seahorse-ssh-key-properties.xml.h:5
+msgid "<b>Name:</b>"
+msgstr "<b>ନାମ:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:6
 msgid "<b>Strength:</b>"
 msgstr "<b>ଶକ୍ତି:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:10
+#: ../ssh/seahorse-ssh-key-properties.xml.h:8
 msgid "<b>Trust</b>"
 msgstr "<b>ବିଶ୍ୱାସ</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:15
+#: ../ssh/seahorse-ssh-key-properties.xml.h:13
 #, no-c-format
 msgid "<i>This only applies to the '%s'</i> account."
 msgstr "<i>ଏହା କେବଳ '%s'</i> ଖାତାରେ ପ୍ରୟୋଗ କରାଯାଇଥାଏ।"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:18
+#: ../ssh/seahorse-ssh-key-properties.xml.h:16
 msgid "E_xport Complete Key"
 msgstr "ରପ୍ତାନୀ ସମ୍ପୂର୍ଣ୍ଣତା କି (_x)"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:22
+#: ../ssh/seahorse-ssh-key-properties.xml.h:20
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr "କି ର ମାଲିକ ଏହି କମ୍ପୁଟର ସହିତ ସଂଯୁକ୍ତ ହେବା ପାଇଁ ବୈଧିକୃତ (_a)"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:23
+#: ../ssh/seahorse-ssh-key-properties.xml.h:21
 msgid "Used to connect to other computers."
 msgstr "ଅନ୍ୟ କମ୍ପୁଟରଗୁଡ଼ିକ ସହିତ ସଂଯୁକ୍ତ ହେବା ପାଇଁ ବ୍ୟବହାର ହୋଇଥାଏ।"
 
@@ -3017,8 +3012,8 @@ msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
 msgstr ""
-"ଆପଣଙ୍କର ସୁରକ୍ଷିତ ସେଲ କିକୁ ଅନ୍ୟ କମ୍ପୁଟର ଯିଏକି SSH ବ୍ୟବହାର କରେ ସେଥିରେ ବ୍ୟବହାର କରିବା ପାଇଁ,"
-"ସେହି କମ୍ପୁଟରରେ ଆପଣଙ୍କର ଗୋଟିଏ ଲଗଇନ ଖାତା ଥିବା ଉଚିତ।"
+"ଆପଣଙ୍କର ସୁରକ୍ଷିତ ସେଲ କିକୁ ଅନ୍ୟ କମ୍ପୁଟର ଯିଏକି SSH ବ୍ୟବହାର କରେ ସେଥିରେ ବ୍ୟବହାର କରିବା ପାଇଁ,ସେହି "
+"କମ୍ପୁଟରରେ ଆପଣଙ୍କର ଗୋଟିଏ ଲଗଇନ ଖାତା ଥିବା ଉଚିତ।"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
 msgid "_Computer Name:"
@@ -3032,3 +3027,42 @@ msgstr "ଲଗଇନ ନାମ (_L):"
 msgid "_Set Up"
 msgstr "ବିନ୍ୟାସ (_S)"
 
+#~ msgid "Seahorse Daemon"
+#~ msgstr "Seahorse ଡେମନ"
+
+#~ msgid "Couldn't share keys"
+#~ msgstr "ଚାବି ମାନଙ୍କୁ ସହଭାଗ କରିପାରିଲା ନାହିଁ"
+
+#~ msgid "Can't publish discovery information on the network."
+#~ msgstr "ନେଟୱାର୍କରେ ଅନୁସନ୍ଧାନ ସୂଚନାକୁ ପ୍ରକାଶିତ କରିପାରିବ ନାହିଁ।"
+
+#~ msgid "%s's encryption keys"
+#~ msgstr "%s ର ଗୋପନୀୟ ଚାବି"
+
+#~ msgid "Key Sharing"
+#~ msgstr "କି ସହଭାଗ"
+
+#~ msgid ""
+#~ "Sharing your keys allows other people on your network to use the keys "
+#~ "you've collected. This means they can automatically encrypt things for "
+#~ "you or those you know, without you having to send them your key.\n"
+#~ "\n"
+#~ "<b>Note:</b> Your personal keys will not be compromised."
+#~ msgstr ""
+#~ "ଆପଣଙ୍କର କି କୁ ସହଭାଗ କରିବା ଫଳରେ ଅନ୍ୟମାନଙ୍କୁ ନେଟୱର୍କରେ କିଗୁଡ଼ିକୁ ବ୍ୟବହାର କରିବା ପାଇଁ ଅନୁମତି "
+#~ "ଦେଇଥାଏ। ଏହା ଅର୍ଥ ସେମାନେ ସ୍ୱୟଂଚାଳିତ ଭାବରେ ବସ୍ତୁଗୁଡ଼ିକୁ ସଂଗୁପ୍ତ କରିପାରିବେ ଅଥବା, ଆପଣ "
+#~ "ସେମାନଙ୍କୁ କି ନପଠାଇ କରି।\n"
+#~ "\n"
+#~ "<b>ଟିପ୍ପଣୀ:</b> ଆପଣଙ୍କର ବ୍ୟକ୍ତିଗତ କିଗୁଡ଼ିକ ସହିତ କୌଣସି ବୁଝାମଣା କରାଯିବ ନାହିଁ।"
+
+#~ msgid "_Share my keys with others on my network"
+#~ msgstr "ମୋର କିଗୁଡ଼ିକୁ ମୋର ନେଟୱର୍କରେ ଥିବା ଅନ୍ୟମାନଙ୍କ ସହିତ ସହଭାଗ କରନ୍ତୁ (_S)"
+
+#~ msgid "<b>X keys are selected for synchronizing</b>"
+#~ msgstr "<b>X କିଗୁଡ଼ିକୁ ସନ୍ତୁଳନ ପାଇଁ ବଛାହୋଇଛି</b>"
+
+#~ msgid "/home/nate/.ssh/blah_rsa"
+#~ msgstr "/home/nate/.ssh/blah_rsa"
+
+#~ msgid "00:00:00:00:00"
+#~ msgstr "00:00:00:00:00"
