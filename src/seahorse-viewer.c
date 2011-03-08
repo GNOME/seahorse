@@ -149,6 +149,7 @@ on_app_about (GtkAction* action, SeahorseViewer* self)
 	gtk_about_dialog_set_website_label (about, _("Seahorse Project Homepage"));
 	
 	g_signal_connect (about, "response", G_CALLBACK (gtk_widget_hide), NULL);
+	gtk_window_set_transient_for (GTK_WINDOW (about), seahorse_viewer_get_window (self));
 	
 	gtk_dialog_run (GTK_DIALOG (about));
 	gtk_widget_destroy (GTK_WIDGET (about));
