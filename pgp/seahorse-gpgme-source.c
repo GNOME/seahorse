@@ -88,10 +88,13 @@ passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
     gchar *label = NULL;
     gchar *errmsg = NULL;
     const gchar *pass;
-    
-    if (passphrase_info && strlen(passphrase_info) < 16)
+    gboolean confirm = FALSE;
+
+    if (passphrase_info && strlen(passphrase_info) < 16) {
         flags |= SEAHORSE_PASS_NEW;
-    
+        confirm = TRUE;
+    }
+
     if (passphrase_hint)
         split_uid = g_strsplit (passphrase_hint, " ", 2);
 
@@ -113,7 +116,7 @@ passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
     g_strfreev (split_uid);
 
     dialog = seahorse_passphrase_prompt_show (NULL, errmsg ? errmsg : label, 
-                                              NULL, NULL, FALSE);
+                                              NULL, NULL, confirm);
     g_free (label);
     g_free (errmsg);
     
