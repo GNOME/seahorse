@@ -261,6 +261,10 @@ seahorse_ssh_key_data_parse (const gchar *data, SeahorseSSHPublicKeyParsed publi
                 if (!(secret_cb) (secdata, arg))
                     break;
             }
+
+            if (!*l)
+                break;
+            line = *l;
         }
         
         /* Comments and empty lines, not a parse error, but no data */
