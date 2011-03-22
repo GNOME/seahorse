@@ -918,6 +918,12 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 				GtkSeparatorToolItem* sep;
 				GtkBox* box;
 				GtkToolItem* item;
+
+#if GTK_CHECK_VERSION (3, 0, 0)
+                                gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (toolbar)),
+                                                             GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
+                                gtk_widget_reset_style (GTK_WIDGET (toolbar));
+#endif
 				
 				/* Insert a separator to right align the filter */
 				sep = GTK_SEPARATOR_TOOL_ITEM (gtk_separator_tool_item_new ());
