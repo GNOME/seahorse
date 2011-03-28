@@ -29,7 +29,6 @@
 #ifndef __SEAHORSE_LDAP_SOURCE_H__
 #define __SEAHORSE_LDAP_SOURCE_H__
 
-#include "config.h"
 #include "seahorse-server-source.h"
 
 #ifdef WITH_LDAP

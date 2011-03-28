@@ -22,7 +22,6 @@
 #ifndef _SEAHORSE_DAEMON_H_
 #define _SEAHORSE_DAEMON_H_
 
-#include "config.h"
 #include <dbus/dbus-glib-bindings.h>
 
 /* seahorse-dbus-server.c --------------------------------------------------- */

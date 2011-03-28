@@ -25,6 +25,10 @@
  * Minor modifications by Stef Walter <stef@memberwebs.com>
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <string.h>
 
 void seahorse_md5_transform(unsigned int buf[4], unsigned int const in[16]);

@@ -30,7 +30,6 @@
 #include <gtk/gtk.h>
 #include <time.h>
 
-#include "config.h"
 #include "seahorse-context.h"
 
 #ifdef WITH_SHARING
