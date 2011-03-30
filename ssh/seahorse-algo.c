@@ -4,6 +4,8 @@
  * time as we can depend on them either in GTK or OS
  */
 
+#include <config.h>
+
 #include "seahorse-algo.h"
 
 /*
@@ -24,10 +26,6 @@
  *
  * Minor modifications by Stef Walter <stef@memberwebs.com>
  */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <string.h>
 
