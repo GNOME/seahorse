@@ -310,8 +310,11 @@ seahorse_util_read_to_memory (GInputStream *input, guint *len)
 	string = g_string_new ("");
 	buffer = g_new (gchar, size);
     
-	while (g_input_stream_read_all (input, buffer, size, &nread, NULL, NULL) && nread == size)
+	while (g_input_stream_read_all (input, buffer, size, &nread, NULL, NULL)) {
 		string = g_string_append_len (string, buffer, nread);
+		if (nread != size)
+			break;
+	}
 
 	if (len)
 		*len = string->len;
