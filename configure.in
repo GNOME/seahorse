@@ -5,7 +5,7 @@ AC_PREREQ(2.52)
 dnl ****************************************************************************
 dnl MAIN SEAHORSE VERSION (update after release)
 
-AC_INIT(seahorse, 2.91.93)
+AC_INIT(seahorse, 3.0.1)
 
 dnl ****************************************************************************
 dnl LIBCRYPTUI libtool versioning
@@ -47,24 +47,26 @@ AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 
 AC_MSG_CHECKING([which GTK+ version to compile against])
 AC_ARG_WITH([gtk],
-	[AS_HELP_STRING([--with-gtk=2.0|3.0],[which GTK+ version to compile against (default: 2.0)])],
+	[AS_HELP_STRING([--with-gtk=2|3],[which GTK+ version to compile against (default: 3)])],
 	[case "$with_gtk" in
-		2.0|3.0) ;;
+		2*|3*) ;;
 		*) AC_MSG_ERROR([invalid GTK+ version specified]) ;;
 	esac],
-	[with_gtk=2.0])
+	[with_gtk=3])
 AC_MSG_RESULT([$with_gtk])
 
 case "$with_gtk" in
-	2.0)
+	2*)
 		GCR_LIBRARY=gcr-0
 		GTK_API_VERSION=2.0
 		GTK_REQUIRED=2.20.0
+		with_gtk=2.0
 	;;
-	3.0)
+	3*)
 		GCR_LIBRARY=gcr-3
 		GTK_API_VERSION=3.0
 		GTK_REQUIRED=2.90.0
+		with_gtk=3.0
 	;;
 esac
 

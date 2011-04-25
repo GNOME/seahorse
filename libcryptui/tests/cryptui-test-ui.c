@@ -44,7 +44,7 @@ show_ui_dialog (CryptUIKeyset *keyset)
     
     box = GTK_CONTAINER (gtk_vbox_new (FALSE, 6));
     gtk_container_set_border_width (box, 6);
-    gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), GTK_WIDGET (box));
+    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), GTK_WIDGET (box));
 
     list_store = cryptui_key_store_new (keyset, TRUE, NULL);
     list = cryptui_key_list_new (list_store, CRYPTUI_KEY_LIST_CHECKS);

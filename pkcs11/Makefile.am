@@ -32,7 +32,8 @@ libseahorse_pkcs11_la_SOURCES = \
 
 libseahorse_pkcs11_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
-	$(top_builddir)/libcryptui/libcryptui.la
+	$(top_builddir)/libcryptui/libcryptui.la \
+	$(GCR_LIBS)
 
 ui_DATA =
 
