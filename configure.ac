@@ -468,7 +468,7 @@ if test "$enable_pkcs11" = "no"; then
 	echo "disabling pkcs11 support"
 	enable_pkcs11="no"
 else
-	PKG_CHECK_MODULES(GCR, $GCR_LIBRARY >= 2.91.2, gcr_is_present="yes", gcr_is_present="no")
+	PKG_CHECK_MODULES(GCR, $GCR_LIBRARY >= 3.0.0, gcr_is_present="yes", gcr_is_present="no")
 	if test "$gcr_is_present" = "no"; then
 		echo "disabling pkcs11 support"
 	fi

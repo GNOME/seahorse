@@ -59,8 +59,10 @@ struct _SeahorsePkcs11CertificatePrivate {
 
 static void seahorse_pkcs11_certificate_iface (GcrCertificateIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (SeahorsePkcs11Certificate, seahorse_pkcs11_certificate, SEAHORSE_PKCS11_TYPE_OBJECT, 
-                         G_IMPLEMENT_INTERFACE (GCR_TYPE_CERTIFICATE, seahorse_pkcs11_certificate_iface));
+G_DEFINE_TYPE_WITH_CODE (SeahorsePkcs11Certificate, seahorse_pkcs11_certificate, SEAHORSE_PKCS11_TYPE_OBJECT,
+                         GCR_CERTIFICATE_MIXIN_IMPLEMENT_COMPARABLE ();
+                         G_IMPLEMENT_INTERFACE (GCR_TYPE_CERTIFICATE, seahorse_pkcs11_certificate_iface);
+);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
@@ -198,7 +200,7 @@ seahorse_pkcs11_certificate_get_property (GObject *obj, guint prop_id, GValue *v
 		g_value_take_string (value, seahorse_pkcs11_certificate_get_expires_str (self));
 		break;
 	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		gcr_certificate_mixin_get_property (obj, prop_id, value, pspec);
 		break;
 	}
 }
@@ -258,6 +260,8 @@ seahorse_pkcs11_certificate_class_init (SeahorsePkcs11CertificateClass *klass)
 	g_object_class_install_property (gobject_class, PROP_EXPIRES_STR, 
 	         g_param_spec_string ("expires-str", "expires-str", "expires-str", NULL, 
 	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+
+	gcr_certificate_mixin_class_init (gobject_class);
 }
 
 const guchar*
