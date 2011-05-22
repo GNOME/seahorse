@@ -1,6 +1,6 @@
 # Vietnamese translation for Seahorse.
 # Copyright © 2009 Free Software Foundation, Inc.
-# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2007.
+# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2007,2011.
 # Clytie Siddall <clytie@riverland.net.au>, 2006-2009.
 #
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-03-29 11:47+0000\n"
-"PO-Revision-Date: 2009-02-08 18:36+0930\n"
+"PO-Revision-Date: 2011-05-22 12:53+0700\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -40,15 +40,15 @@ msgid "Invalid or unrecognized key type: %s"
 msgstr "Kiểu khoá không hợp lệ hay không được nhận ra: %s"
 
 #: ../daemon/seahorse-service.c:234
-#, fuzzy, c-format
+#, c-format
 #| msgid "This key expired on: %s"
 msgid "This keytype is not supported: %s"
-msgstr "Khoá này đã hết hạn vào : %s"
+msgstr "Kiểu khoá này không được hỗ trợ: %s"
 
 #: ../daemon/seahorse-service.c:241
 #, c-format
 msgid "Support for this feature was not enabled at build time"
-msgstr ""
+msgstr "Tính năng này không được chọn hỗ trợ lúc biên dịch"
 
 #: ../daemon/seahorse-service.c:341 ../daemon/seahorse-service-keyset.c:180
 #: ../daemon/seahorse-service-keyset.c:223
@@ -96,7 +96,7 @@ msgstr "Chữ ký tốt"
 
 #: ../daemon/seahorse-service-crypto.c:231
 msgid "Signing key not in keyring."
-msgstr "Khóa ký không nằm trong vòng khoá."
+msgstr "Khóa ký không nằm trong xâu khoá."
 
 #: ../daemon/seahorse-service-crypto.c:232
 msgid "Unknown Signature"
@@ -150,18 +150,18 @@ msgstr "Kiểu khoá không hợp lệ để giải mã: %s"
 #: ../daemon/seahorse-service-crypto.c:746
 #, c-format
 msgid "Please set clearuri"
-msgstr ""
+msgstr "Vui lòng đặt clearuri"
 
 #: ../daemon/seahorse-service-crypto.c:554
 #: ../daemon/seahorse-service-crypto.c:752
 #, c-format
 msgid "Please set crypturi"
-msgstr ""
+msgstr "Vui lòng đặt crypturi"
 
 #: ../daemon/seahorse-service-crypto.c:564
 #, c-format
 msgid "Error opening clearuri"
-msgstr ""
+msgstr "Lỗi mở clearuri"
 
 #: ../daemon/seahorse-service-crypto.c:641
 #, c-format
@@ -360,18 +360,18 @@ msgstr "Có nên dùng bọc kim ASCII hay không"
 
 #: ../gkr/seahorse-add-keyring.xml.h:1
 msgid "Add Password Keyring"
-msgstr "Thêm vòng khoá mật khẩu"
+msgstr "Thêm xâu khoá mật khẩu"
 
 #: ../gkr/seahorse-add-keyring.xml.h:2
 msgid "New Keyring Name:"
-msgstr "Tên vòng khoá mới:"
+msgstr "Tên xâu khoá mới:"
 
 #: ../gkr/seahorse-add-keyring.xml.h:3
 msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
 msgstr ""
-"Hãy chọn tên cho vòng khoá mới. Bạn sẽ được nhắc nhập mật khẩu gỡ khoá."
+"Hãy chọn tên cho xâu khoá mới. Bạn sẽ được nhắc nhập mật khẩu gỡ khoá."
 
 #: ../gkr/seahorse-add-keyring.xml.h:4
 #: ../libseahorse/seahorse-add-keyserver.xml.h:5
@@ -381,13 +381,12 @@ msgstr "Tên máy hay địa chỉ của máy phục vụ."
 
 #: ../gkr/seahorse-gkr-add-item.c:61 ../gkr/seahorse-gkr-add-keyring.c:73
 msgid "Couldn't add keyring"
-msgstr "Không thể thêm vòng khoá"
+msgstr "Không thể thêm xâu khoá"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:1
-#, fuzzy
 #| msgid "Password"
 msgid "Add Password"
-msgstr "Mật khẩu"
+msgstr "Thêm mật khẩu"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:2
 #: ../gkr/seahorse-gkr-item-properties.xml.h:15 ../pgp/seahorse-revoke.xml.h:5
@@ -395,19 +394,16 @@ msgid "_Description:"
 msgstr "_Mô tả:"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:3
-#, fuzzy
 #| msgid "Keyring"
 msgid "_Keyring:"
-msgstr "Vòng khoá"
+msgstr "_Xâu khoá:"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:4
-#, fuzzy
 #| msgid "Password:"
 msgid "_Password:"
-msgstr "Mật khẩu :"
+msgstr "_Mật khẩu:"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:5
-#, fuzzy
 #| msgid "Show pass_word"
 msgid "_Show Password"
 msgstr "Hiện _mật khẩu"
@@ -547,7 +543,6 @@ msgid "_Write"
 msgstr "_Ghi"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:20
-#, fuzzy
 #| msgid "_Delete"
 msgctxt "infinitive"
 msgid "_Delete"
@@ -558,50 +553,49 @@ msgid "Listing passwords"
 msgstr "Đang liệt kê các mật khẩu"
 
 #: ../gkr/seahorse-gkr-keyring.c:354
-#, fuzzy, c-format
+#, c-format
 #| msgid "Password:"
 msgid "Passwords: %s"
-msgstr "Mật khẩu :"
+msgstr "Mật khẩu: %s"
 
 #: ../gkr/seahorse-gkr-keyring.c:355
-#, fuzzy, c-format
+#, c-format
 #| msgid "<b>Password:</b>"
 msgid "<b>Passwords:</b> %s"
-msgstr "<b>Mật khẩu :</b>"
+msgstr "<b>Mật khẩu:</b> %s"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:119
 msgid "Password Keyring"
-msgstr "Vòng khoá Mật khẩu"
+msgstr "xâu khoá Mật khẩu"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:120
 msgid "Used to store application and network passwords"
 msgstr "Dùng để lưu trữ các mật khẩu kiểu ứng dụng và mạng"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:121
-#, fuzzy
 #| msgid "Network Password"
 msgid "Stored Password"
-msgstr "Mật khẩu mạng"
+msgstr "Mật khẩu đã lưu"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:122
 msgid "Safely store a password or secret."
-msgstr ""
+msgstr "Lưu an toàn mật khẩu oặc bí mật."
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:136
 msgid "Couldn't unlock keyring"
-msgstr "Không thể mở khoá vòng khoá"
+msgstr "Không thể mở khoá xâu khoá"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:177
 msgid "Couldn't lock keyring"
-msgstr "Không thể khoá vòng khoá"
+msgstr "Không thể khoá xâu khoá"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:218
 msgid "Couldn't set default keyring"
-msgstr "Không thể đặt vòng khoá mặc định"
+msgstr "Không thể đặt xâu khoá mặc định"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:257
 msgid "Couldn't change keyring password"
-msgstr "Không thể thay đổi mật khẩu của vòng khoá"
+msgstr "Không thể thay đổi mật khẩu của xâu khoá"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:288
 msgid "_Lock"
@@ -612,7 +606,7 @@ msgid ""
 "Lock the password storage keyring so a master password is required to unlock "
 "it."
 msgstr ""
-"Khoá vòng khoá lưu trữ mật khẩu để yêu cầu một mật khẩu chủ để mở khoá nó."
+"Khoá xâu khoá lưu trữ mật khẩu để yêu cầu một mật khẩu chủ để mở khoá nó."
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:290
 msgid "_Unlock"
@@ -623,7 +617,7 @@ msgid ""
 "Unlock the password storage keyring with a master password so it is "
 "available for use."
 msgstr ""
-"Mở khoá vòng khoá lưu trữ mật khẩu dùng một mật khẩu chủ để nó sẵn sàng sử "
+"Mở khoá xâu khoá lưu trữ mật khẩu dùng một mật khẩu chủ để nó sẵn sàng sử "
 "dụng."
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:292
@@ -632,7 +626,7 @@ msgstr "Đặt là _mặc định"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:293
 msgid "Applications usually store new passwords in the default keyring."
-msgstr "Ứng dụng thường lưu mật khẩu mới vào vòng khoá mặc định."
+msgstr "Ứng dụng thường lưu mật khẩu mới vào xâu khoá mặc định."
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:294
 msgid "Change _Password"
@@ -640,12 +634,12 @@ msgstr "Đổi _mật khẩu"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:295
 msgid "Change the unlock password of the password storage keyring"
-msgstr "Thay đổi mật khẩu sẽ mở khoá vòng khoá lưu trữ mật khẩu"
+msgstr "Thay đổi mật khẩu sẽ mở khoá xâu khoá lưu trữ mật khẩu"
 
 #: ../gkr/seahorse-gkr-keyring-commands.c:360
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
-msgstr "Bạn có chắc muốn xoá vòng khoá mật khẩu « %s » không?"
+msgstr "Bạn có chắc muốn xoá xâu khoá mật khẩu « %s » không?"
 
 #. -----------------------------------------------------------------------------
 #. * PUBLIC
@@ -659,11 +653,11 @@ msgstr "Tạo :"
 
 #: ../gkr/seahorse-gkr-keyring.xml.h:3
 msgid "Keyring"
-msgstr "Vòng khoá"
+msgstr "xâu khoá"
 
 #: ../gkr/seahorse-gkr-keyring.xml.h:4
 msgid "Keyring Properties"
-msgstr "Thuộc tính Vòng khoá"
+msgstr "Thuộc tính xâu khoá"
 
 #: ../gkr/seahorse-gkr-keyring.xml.h:5
 msgid "_Name:"
@@ -671,23 +665,23 @@ msgstr "Tê_n:"
 
 #: ../gkr/seahorse-gkr-operation.c:168
 msgid "Access to the key ring was denied"
-msgstr "Truy cập vòng khoá bị từ chối"
+msgstr "Truy cập xâu khoá bị từ chối"
 
 #: ../gkr/seahorse-gkr-operation.c:171
 msgid "The gnome-keyring daemon is not running"
-msgstr "Trình nền vòng khoá gnome-keyring hiện thời không chạy"
+msgstr "Trình nền xâu khoá gnome-keyring hiện thời không chạy"
 
 #: ../gkr/seahorse-gkr-operation.c:174
 msgid "The key ring has already been unlocked"
-msgstr "Vòng khoá đã được mở"
+msgstr "xâu khoá đã được mở"
 
 #: ../gkr/seahorse-gkr-operation.c:177
 msgid "No such key ring exists"
-msgstr "Không có vòng khoá như vậy"
+msgstr "Không có xâu khoá như vậy"
 
 #: ../gkr/seahorse-gkr-operation.c:180
 msgid "Couldn't communicate with key ring daemon"
-msgstr "Không thể liên lạc với trình nền vòng khoá"
+msgstr "Không thể liên lạc với trình nền xâu khoá"
 
 #: ../gkr/seahorse-gkr-operation.c:183
 msgid "The item already exists"
@@ -707,11 +701,11 @@ msgstr "Đang xoá mục..."
 
 #: ../gkr/seahorse-gkr-operation.c:325
 msgid "Deleting keyring..."
-msgstr "Đang xoá vòng khoá..."
+msgstr "Đang xoá xâu khoá..."
 
 #: ../gkr/seahorse-gkr-source.c:234
 msgid "Listing password keyrings"
-msgstr "Đang liệt kê các vòng khoá mật khẩu"
+msgstr "Đang liệt kê các xâu khoá mật khẩu"
 
 #: ../libcryptui/cryptui.c:272
 msgid ""
@@ -1114,7 +1108,7 @@ msgstr "Cổng nơi cần truy cập máy phục vụ."
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:7
 msgid "initial temporary item"
-msgstr ""
+msgstr "mục tạm ban đầu"
 
 #: ../libseahorse/seahorse-notification.c:576
 #: ../libseahorse/seahorse-notification.c:604
@@ -1468,7 +1462,7 @@ msgstr "Dùng để mã hoá thư điện tử và tập tin"
 
 #: ../pgp/seahorse-gpgme-generate.c:116 ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
-msgstr ""
+msgstr "RSA"
 
 # Name: don't translate/Tên: đừng dịch
 #: ../pgp/seahorse-gpgme-generate.c:117
@@ -1496,14 +1490,13 @@ msgid "Generating key"
 msgstr "Đang tạo ra khoá"
 
 #: ../pgp/seahorse-gpgme-key-op.c:301
-#, fuzzy
 #| msgid "Show pass_word"
 msgid "Wrong password"
-msgstr "Hiện _mật khẩu"
+msgstr "Mật khẩu sai"
 
 #: ../pgp/seahorse-gpgme-key-op.c:301
 msgid "This was the third time you entered a wrong password. Please try again."
-msgstr ""
+msgstr "Đây là lần thứ ba bạn nhập sai mật khẩu. Hãy thử lại lần nữa."
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -1619,6 +1612,8 @@ msgid ""
 "This key was already signed by\n"
 "\"%s\""
 msgstr ""
+"Khoá này được ký bởi\n"
+"\"%s\""
 
 #: ../pgp/seahorse-gpgme-sign.c:103
 msgid "Couldn't sign key"
@@ -2084,7 +2079,6 @@ msgstr "Tên và Chữ ký"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
-#, fuzzy
 #| msgctxt "Validity"
 #| msgid "Never"
 msgid "Never"
@@ -2135,7 +2129,6 @@ msgstr "_Xuất toàn bộ khoá:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
-#, fuzzy
 #| msgid "<b>Name:</b>"
 msgctxt "name-of-key"
 msgid "<b>Name:</b>"
@@ -2171,7 +2164,6 @@ msgid "Encrypt files and email to the key's owner "
 msgstr "Mã hoá tập tin và thư cho người sử hữu khoá này "
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
-#, fuzzy
 #| msgid "Full"
 msgid "Fully"
 msgstr "Đầy"
@@ -2198,10 +2190,9 @@ msgstr ""
 "của bạn:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
-#, fuzzy
 #| msgid "Marginal"
 msgid "Marginally"
-msgstr "Sát giới hạn"
+msgstr "Biên"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
@@ -2210,7 +2201,6 @@ msgid "Trust"
 msgstr "Tin cậy"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
-#, fuzzy
 #| msgid "Ultimate"
 msgid "Ultimately"
 msgstr "Cuối cùng"
@@ -2365,7 +2355,7 @@ msgid "Are you sure you want to delete the certificate '%s'?"
 msgstr "Bạn có chắc muốn xoá chứng nhận « %s » không?"
 
 #: ../pkcs11/seahorse-pkcs11-commands.c:111
-#, fuzzy, c-format
+#, c-format
 #| msgid "Are you sure you want to delete %d certificates?"
 msgid "Are you sure you want to delete %d certificate?"
 msgid_plural "Are you sure you want to delete %d certificates?"
@@ -2408,32 +2398,29 @@ msgid "Create New ..."
 msgstr "Tạo mục mới..."
 
 #: ../src/seahorse-key-manager.c:233 ../src/seahorse-keyserver-results.c:108
-#, fuzzy, c-format
+#, c-format
 #| msgid "Loaded %d key"
 #| msgid_plural "Loaded %d keys"
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
-msgstr[0] "Đã nạp %d khoá"
+msgstr[0] "%d khoá được chọn"
 
 #: ../src/seahorse-key-manager.c:410 ../src/seahorse-key-manager.c:470
 #: ../src/seahorse-key-manager.c:533 ../src/seahorse-viewer.c:459
-#, fuzzy
 #| msgid "Couldn't export keys"
 msgid "Couldn't import keys"
-msgstr "Không thể xuất khoá"
+msgstr "Không thể nhập khoá"
 
 #: ../src/seahorse-key-manager.c:415 ../src/seahorse-viewer.c:464
-#, fuzzy
 #| msgid "Imported %i key"
 #| msgid_plural "Imported %i keys"
 msgid "Imported keys"
-msgstr "Đã nhập %i khoá"
+msgstr "Khoá đã nhậ"
 
 #: ../src/seahorse-key-manager.c:464
-#, fuzzy
 #| msgid "Importing Keys"
 msgid "Importing keys"
-msgstr "Đang nhập khoá"
+msgstr "Nhập khoá"
 
 #: ../src/seahorse-key-manager.c:487 ../ssh/seahorse-ssh-operation.c:1017
 msgid "Import Key"
@@ -2441,122 +2428,105 @@ msgstr "Nhập khoá"
 
 #: ../src/seahorse-key-manager.c:533
 msgid "Unrecognized key type, or invalid data format"
-msgstr ""
+msgstr "Không nhận ra loại khoá, hoặc định dạng ngày không hợp lệ"
 
 #: ../src/seahorse-key-manager.c:731 ../src/seahorse-keyserver-results.c:245
-#, fuzzy
 #| msgid "Revoke"
 msgid "_Remote"
-msgstr "Hủy bỏ"
+msgstr "Ở _xa"
 
 #: ../src/seahorse-key-manager.c:733
-#, fuzzy
 #| msgid "About this program"
 msgid "Close this program"
-msgstr "Giới thiệu về chương trình này"
+msgstr "Đóng chương trình"
 
 #: ../src/seahorse-key-manager.c:734
 msgid "_New..."
-msgstr ""
+msgstr "_Mới..."
 
 #: ../src/seahorse-key-manager.c:735
-#, fuzzy
 #| msgid "Generate a new key"
 msgid "Create a new key or item"
-msgstr "Tạo ra một khoá mới"
+msgstr "Tạo mục hoặc khoá mới"
 
 #: ../src/seahorse-key-manager.c:736
-#, fuzzy
 #| msgid "_Import"
 msgid "_Import..."
-msgstr "_Nhập"
+msgstr "_Nhập..."
 
 #: ../src/seahorse-key-manager.c:737
-#, fuzzy
 #| msgid "Export to a file"
 msgid "Import from a file"
-msgstr "Xuất vào tập tin"
+msgstr "Nhập từ tập tin"
 
 #: ../src/seahorse-key-manager.c:739
-#, fuzzy
 #| msgid "Copy to the clipboard"
 msgid "Import from the clipboard"
-msgstr "Chép sang bảng nháp"
+msgstr "Nhập từ bảng nháp"
 
 #: ../src/seahorse-key-manager.c:744 ../src/seahorse-keyserver-results.c:255
-#, fuzzy
 #| msgid "Find Remote Keys"
 msgid "_Find Remote Keys..."
-msgstr "Tìm khoá từ xa"
+msgstr "_Tìm khoá từ xa..."
 
 #: ../src/seahorse-key-manager.c:745 ../src/seahorse-keyserver-results.c:256
-#, fuzzy
 #| msgid "Searching for keys on: %s"
 msgid "Search for keys on a key server"
-msgstr "Đang tìm kiếm khoá trên: %s"
+msgstr "Tìm khoá trên máy phục vụ khoá"
 
 #: ../src/seahorse-key-manager.c:746
 msgid "_Sync and Publish Keys..."
-msgstr ""
+msgstr "Đồn_g bộ và công bố khoá..."
 
 #: ../src/seahorse-key-manager.c:747
 msgid "Publish and/or synchronize your keys with those online."
-msgstr ""
+msgstr "Công bố và/hoặc đồng bộ khoá với trên mạng."
 
 #: ../src/seahorse-key-manager.c:752
-#, fuzzy
 #| msgid "Type"
 msgid "T_ypes"
-msgstr "Kiểu"
+msgstr "_Kiểu"
 
 #: ../src/seahorse-key-manager.c:752
-#, fuzzy
 #| msgid "Show type column in key manager"
 msgid "Show type column"
-msgstr "Hiện cột « kiểu » trong bộ quản lý khoá"
+msgstr "Hiện cột kiểu"
 
 #: ../src/seahorse-key-manager.c:754
-#, fuzzy
 #| msgid "Expire"
 msgid "_Expiry"
-msgstr "Hết hạn"
+msgstr "_Hết hạn"
 
 #: ../src/seahorse-key-manager.c:754
-#, fuzzy
 #| msgid "Show expires column in key manager"
 msgid "Show expiry column"
-msgstr "Hiện cột « hết hạn » trong bộ quản lý khoá"
+msgstr "Hiện cột hết hạn"
 
 #: ../src/seahorse-key-manager.c:756
-#, fuzzy
 #| msgid "Trust"
 msgid "_Trust"
-msgstr "Tin cậy"
+msgstr "_Tin cậy"
 
 #: ../src/seahorse-key-manager.c:756
-#, fuzzy
 #| msgid "Show trust column in key manager"
 msgid "Show owner trust column"
-msgstr "Hiện cột « tin cậy » trong bộ quản lý khoá"
+msgstr "Hiện cột tin cậy sở hữu"
 
 # Name: don't translate / Tên: đừng dịch
 #: ../src/seahorse-key-manager.c:758
-#, fuzzy
 #| msgid "Validity"
 msgid "_Validity"
-msgstr "Hợp lệ"
+msgstr "_Hợp lệ"
 
 #: ../src/seahorse-key-manager.c:758
-#, fuzzy
 #| msgid "Show validity column in key manager"
 msgid "Show validity column"
-msgstr "Hiện cột « độ hợp lệ » trong bộ quản lý khoá"
+msgstr "Hiện cột hợp lệ"
 
 #: ../src/seahorse-key-manager.c:937
-#, fuzzy
 #| msgid "_File"
 msgid "Filter:"
-msgstr "_Tập tin"
+msgstr "Bộ lọc:"
 
 #: ../src/seahorse-key-manager.xml.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -2575,10 +2545,9 @@ msgid "My _Personal Keys"
 msgstr "Khoá _cá nhân của tôi"
 
 #: ../src/seahorse-key-manager.xml.h:5
-#, fuzzy
 #| msgid "Other _Collected Keys"
 msgid "Other _Keys"
-msgstr "_Các khoá đã tập hợp khác"
+msgstr "_Khoá khác"
 
 #: ../src/seahorse-key-manager.xml.h:6
 msgid "To get started with encryption you will need keys."
@@ -2608,35 +2577,34 @@ msgstr "Ngày hết hạn"
 
 #: ../src/seahorse-keyserver-results.c:247
 msgid "Close this window"
-msgstr ""
+msgstr "Đóng cửa sổ"
 
 #: ../src/seahorse-keyserver-results.c:248
 msgid "_Expand All"
-msgstr ""
+msgstr "_Bung hết"
 
 #: ../src/seahorse-keyserver-results.c:249
 msgid "Expand all listings"
-msgstr ""
+msgstr "Bung mọi danh mục"
 
 #: ../src/seahorse-keyserver-results.c:250
 msgid "_Collapse All"
-msgstr ""
+msgstr "_Co hết"
 
 #: ../src/seahorse-keyserver-results.c:251
 msgid "Collapse all listings"
-msgstr ""
+msgstr "Co mọi danh mục"
 
 #: ../src/seahorse-keyserver-results.c:322
-#, fuzzy
 #| msgid "Find Remote Keys"
 msgid "Remote Keys"
-msgstr "Tìm khoá từ xa"
+msgstr "Khoá ở xa"
 
 #: ../src/seahorse-keyserver-results.c:324
-#, fuzzy, c-format
+#, c-format
 #| msgid "Searching for keys containing '%s'..."
 msgid "Remote Keys Containing '%s'"
-msgstr "Đang tìm kiếm khoá chứa « %s »..."
+msgstr "Khoá ở xa chứa '%s'"
 
 #: ../src/seahorse-keyserver-search.xml.h:1
 msgid "<b>Key Servers:</b>"
@@ -2656,7 +2624,7 @@ msgid ""
 "imported into your local key ring."
 msgstr ""
 "Việc này sẽ tìm khoá của người khác trên Mạng. Tìm được thì có thể nhập khoá "
-"vào vòng khoá của bạn."
+"vào xâu khoá của bạn."
 
 #: ../src/seahorse-keyserver-search.xml.h:5
 msgid "Where to search:"
@@ -2704,7 +2672,7 @@ msgid ""
 "to use. You'll also get any changes others have made since you received "
 "their keys."
 msgstr ""
-"Việc này sẽ xuất các khoá trong vòng khoá của bạn, để người khác sử dụng. "
+"Việc này sẽ xuất các khoá trong xâu khoá của bạn, để người khác sử dụng. "
 "Bạn sẽ cũng nhận thay đổi nào của người khác kể từ lần bạn nhận khoá họ cuối "
 "cùng."
 
@@ -2728,7 +2696,7 @@ msgstr "Đồng _bộ"
 
 #: ../src/seahorse-main.c:62
 msgid "Version of this application"
-msgstr ""
+msgstr "Phiên bản của ứng dụng này"
 
 #: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:144
 msgid "Encryption Key Manager"
@@ -2818,17 +2786,15 @@ msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s là một khoá riêng. Bạn có chắc muốn tiếp tục không?"
 
 #: ../src/seahorse-viewer.c:484
-#, fuzzy
 #| msgid "Sending keys to key server..."
 msgid "Importing keys from key servers"
-msgstr "Đang gửi khoá cho máy phục..."
+msgstr "Nhập khoá cho máy phục vụ khoá"
 
 #: ../src/seahorse-viewer.c:510
 msgid "Show properties"
 msgstr "Hiện thuộc tính"
 
 #: ../src/seahorse-viewer.c:511
-#, fuzzy
 #| msgid "_Delete"
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
@@ -2852,7 +2818,7 @@ msgstr "Chép sang bảng nháp"
 
 #: ../src/seahorse-viewer.c:524
 msgid "Import selected keys to local key ring"
-msgstr ""
+msgstr "Nhập khoá được chọn vào xâu khoá cục bộ"
 
 #: ../ssh/seahorse-ssh-askpass.c:99
 msgid "Enter your Secure Shell passphrase:"
@@ -2915,7 +2881,7 @@ msgstr ""
 
 #: ../ssh/seahorse-ssh-generate.xml.h:4
 msgid "DSA"
-msgstr ""
+msgstr "DSA"
 
 #: ../ssh/seahorse-ssh-generate.xml.h:6
 msgid ""
