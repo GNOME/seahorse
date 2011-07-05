@@ -88,7 +88,8 @@ on_add_item_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 	const gchar *label;
 	gpointer request;
 	GArray *attributes;
-	
+	GtkTreeIter iter;
+
 	if (response == GTK_RESPONSE_HELP) {
 		seahorse_widget_show_help (swidget);
 		
@@ -102,14 +103,15 @@ on_add_item_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 		secret = gtk_entry_get_text (GTK_ENTRY (widget));
 		
 		widget = seahorse_widget_get_widget (swidget, "item-keyring");
-#if GTK_CHECK_VERSION (2,91,2)
-		keyring = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (widget));
-#else
-		keyring = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
-#endif
+		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
+			gtk_tree_model_get (gtk_combo_box_get_model (GTK_COMBO_BOX (widget)),
+			                    &iter, 0, &keyring, -1);
+		} else {
+			keyring = NULL;
+		}
 
 		attributes = gnome_keyring_attribute_list_new ();
-	    
+
 		request = gnome_keyring_item_create (keyring, GNOME_KEYRING_ITEM_NOTE, label, 
 		                                     attributes, secret, FALSE, item_add_done, 
 		                                     g_object_ref (swidget), g_object_unref);
