@@ -101,9 +101,9 @@ CryptUI-@LIBCRYPTUI_MAJOR@.gir: $(INTROSPECTION_SCANNER) libcryptui.la
 	$(QUIET_GEN)$(INTROSPECTION_SCANNER) -v \
 	--namespace CryptUI --nsversion=@LIBCRYPTUI_MAJOR@ \
 	$(INCLUDES) \
-	--include=Gtk-$(GTK_API_VERSION) \
+	--include=Gtk-3.0 \
 	--library=libcryptui.la \
-	--pkg gtk+-$(GTK_API_VERSION) \
+	--pkg gtk+-3.0 \
 	--output $@ \
 	$(inc_HEADERS) \
 	$(libcryptui_src)

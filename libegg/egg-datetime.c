@@ -30,9 +30,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#if GTK_CHECK_VERSION (2,90,0)
 #include <gdk/gdkkeysyms-compat.h>
-#endif
 
 #include "egg-datetime.h"
 
@@ -235,11 +233,7 @@ static void  egg_datetime_get_property (GObject    *object,
                    GValue        *value,
                    GParamSpec    *pspec);
 
-#if GTK_CHECK_VERSION (2, 90, 0)
 static void  egg_datetime_destroy      (GtkWidget *widget);
-#else
-static void  egg_datetime_destroy      (GtkObject *widget);
-#endif
 
 static void  egg_datetime_finalize     (GObject    *object);
 
@@ -314,11 +308,7 @@ egg_datetime_class_init (EggDateTimeClass *klass)
         o_class->set_property = egg_datetime_set_property;
         o_class->get_property = egg_datetime_get_property;
 
-#if GTK_CHECK_VERSION (2,90,0)
-        ((GtkWidgetClass*)klass)->destroy     = egg_datetime_destroy;
-#else
-        ((GtkObjectClass*)klass)->destroy     = egg_datetime_destroy;
-#endif
+    ((GtkWidgetClass*)klass)->destroy     = egg_datetime_destroy;
 
 
    /* Properties */
@@ -746,11 +736,7 @@ egg_datetime_get_property (GObject  *object,
 }
 
 static void
-#if GTK_CHECK_VERSION (2, 90, 0)
 egg_datetime_destroy (GtkWidget *widget)
-#else
-egg_datetime_destroy (GtkObject *widget)
-#endif
 {
    EggDateTime *edt = EGG_DATETIME (widget);
    EggDateTimePrivate *priv = edt->priv;
@@ -765,13 +751,8 @@ egg_datetime_destroy (GtkObject *widget)
       priv->time_popup = NULL;
    }
 
-#if GTK_CHECK_VERSION (2, 90, 0)
 	if (GTK_WIDGET_CLASS (parent_class)->destroy)
 		(* GTK_WIDGET_CLASS (parent_class)->destroy) (widget);
-#else
-	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-		(* GTK_OBJECT_CLASS (parent_class)->destroy) (widget);
-#endif
 }
 
 static void

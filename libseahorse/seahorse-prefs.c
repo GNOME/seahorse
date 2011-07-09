@@ -351,15 +351,9 @@ on_prefs_keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
 	    descriptions = g_slist_append (descriptions, seahorse_servers_get_description (l->data));
     descriptions = g_slist_append (descriptions, g_strdup (_("Custom")));
 
-#if GTK_CHECK_VERSION (2,91,2)
     gtk_combo_box_text_remove (GTK_COMBO_BOX_TEXT (widget), 0);
     for (l = descriptions; l; l = g_slist_next (l))
         gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), l->data ? l->data : "");
-#else
-    gtk_combo_box_remove_text (GTK_COMBO_BOX (widget), 0);
-    for (l = descriptions; l; l = g_slist_next (l))
-        gtk_combo_box_append_text (GTK_COMBO_BOX (widget), l->data ? l->data : "");
-#endif
     gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
     seahorse_util_string_slist_free (descriptions);
 

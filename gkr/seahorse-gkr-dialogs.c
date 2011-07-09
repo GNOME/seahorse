@@ -72,11 +72,7 @@ seahorse_gkr_dialog_begin_request (SeahorseWidget *swidget, gpointer request)
 	g_object_set_data_full (G_OBJECT (dialog), "gkr-request", request, 
 				gnome_keyring_cancel_request); 
 
-#if GTK_CHECK_VERSION(2,20,0)
 	if (gtk_widget_get_realized (dialog))
-#else
-	if (GTK_WIDGET_REALIZED (dialog))
-#endif
 		update_wait_cursor (dialog, NULL);
 	else
 		g_signal_connect (dialog, "realize", G_CALLBACK (update_wait_cursor), dialog);
@@ -97,11 +93,7 @@ seahorse_gkr_dialog_complete_request (SeahorseWidget *swidget, gboolean cancel)
 	if (request && cancel)
 		gnome_keyring_cancel_request (request);
 
-#if GTK_CHECK_VERSION(2,20,0)
 	if (gtk_widget_get_realized (dialog))
-#else
-	if (GTK_WIDGET_REALIZED (dialog))
-#endif
 		update_wait_cursor (dialog, NULL);
 	gtk_widget_set_sensitive (dialog, TRUE);
 }

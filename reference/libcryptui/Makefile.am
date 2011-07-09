@@ -36,10 +36,6 @@ CPPFLAGS += \
 	-UGTK_DISABLE_SINGLE_INCLUDES
 
 GTKDOC_LIBS = $(top_builddir)/libcryptui/$(cryptuitargetlib)
-#	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-#	$(top_builddir)/gdk/$(gdktargetlib)        			\
-#	$(top_builddir)/gtk/$(gtktargetlib)
-
 
 # Extra options to supply to gtkdoc-mkdb
 MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=cryptui

@@ -31,7 +31,7 @@
 
 #include <gcr/gcr.h>
 
-#include <pkcs11.h>
+#include <gck/pkcs11.h>
 
 #include <glib/gi18n-lib.h>
 

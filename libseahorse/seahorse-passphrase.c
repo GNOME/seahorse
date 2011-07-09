@@ -43,9 +43,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#if GTK_CHECK_VERSION (2,90,0)
 #include <gdk/gdkkeysyms-compat.h>
-#endif
 
 #include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"

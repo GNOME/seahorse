@@ -44,7 +44,7 @@ seahorse_pkcs11_module_init (void)
 	module_paths = seahorse_gconf_get_string_list ("/system/pkcs11/modules");
 	for (l = module_paths; l; l = g_slist_next (l)) {
 
-		module = gck_module_initialize (l->data, NULL, 0, &err);
+		module = gck_module_initialize (l->data, &err);
 		if (!module) {
 			g_warning ("couldn't initialize %s pkcs11 module: %s", 
 			           (gchar*)l->data, err ? err->message : NULL);

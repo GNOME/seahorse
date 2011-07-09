@@ -45,39 +45,13 @@ AC_CHECK_FUNCS(strsep)
 
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 
-AC_MSG_CHECKING([which GTK+ version to compile against])
-AC_ARG_WITH([gtk],
-	[AS_HELP_STRING([--with-gtk=2|3],[which GTK+ version to compile against (default: 3)])],
-	[case "$with_gtk" in
-		2*|3*) ;;
-		*) AC_MSG_ERROR([invalid GTK+ version specified]) ;;
-	esac],
-	[with_gtk=3])
-AC_MSG_RESULT([$with_gtk])
+GTK_REQUIRED=2.90.0
 
-case "$with_gtk" in
-	2*)
-		GCR_LIBRARY=gcr-0
-		GTK_API_VERSION=2.0
-		GTK_REQUIRED=2.20.0
-		with_gtk=2.0
-	;;
-	3*)
-		GCR_LIBRARY=gcr-3
-		GTK_API_VERSION=3.0
-		GTK_REQUIRED=2.90.0
-		with_gtk=3.0
-	;;
-esac
-
-AC_SUBST(GTK_API_VERSION)
-AM_CONDITIONAL([WITH_GTK3],[test "$with_gtk" = "3.0"])
-
-PKG_CHECK_MODULES(GTK, gtk+-$GTK_API_VERSION >= $GTK_REQUIRED)
+PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQUIRED)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
-PKG_CHECK_MODULES(SEAHORSE, gmodule-2.0 gio-2.0 gconf-2.0 gthread-2.0 gtk+-$GTK_API_VERSION >= $GTK_REQUIRED)
+PKG_CHECK_MODULES(SEAHORSE, gmodule-2.0 gio-2.0 gconf-2.0 gthread-2.0 gtk+-3.0 >= $GTK_REQUIRED)
 
 AC_MSG_CHECKING([for some Win32 platform])
 case "$host" in
@@ -468,11 +442,11 @@ if test "$enable_pkcs11" = "no"; then
 	echo "disabling pkcs11 support"
 	enable_pkcs11="no"
 else
-	PKG_CHECK_MODULES(GCR, $GCR_LIBRARY >= 3.0.0, gcr_is_present="yes", gcr_is_present="no")
+	PKG_CHECK_MODULES(GCR, gcr-3 >= 3.0.0, gcr_is_present="yes", gcr_is_present="no")
 	if test "$gcr_is_present" = "no"; then
 		echo "disabling pkcs11 support"
 	fi
-	PKG_CHECK_MODULES(GCK, gck-0 >= 2.91.2, enable_pkcs11="yes", enable_pkcs11="no")
+	PKG_CHECK_MODULES(GCK, gck-1 >= 3.1.2, enable_pkcs11="yes", enable_pkcs11="no")
 	if test "$enable_pkcs11" = "yes" && test "$gcr_is_present" = "yes"; then
 		AC_DEFINE(WITH_PKCS11, 1, [gck library available])
 		SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GCK_CFLAGS $GCR_CFLAGS"
@@ -559,7 +533,7 @@ AC_SUBST(LIBCRYPTUI_LT_RELEASE)
 LIBCRYPTUI_MAJOR=$LIBCRYPTUI_CURRENT.$LIBCRYPTUI_REVISION
 AC_SUBST(LIBCRYPTUI_MAJOR)
 
-PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-$GTK_API_VERSION >= $GTK_REQUIRED gconf-2.0)
+PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-3.0 >= $GTK_REQUIRED gconf-2.0)
 
 cryptuitargetlib=libcryptui.la
 AC_SUBST(cryptuitargetlib)
@@ -609,11 +583,11 @@ AM_GLIB_GNU_GETTEXT
 
 dnl ****************************************************************************
 ## here we get the flags we'll actually use
-PKG_CHECK_MODULES(EGG, gtk+-$GTK_API_VERSION >= $GTK_REQUIRED)
+PKG_CHECK_MODULES(EGG, gtk+-3.0 >= $GTK_REQUIRED)
 AC_SUBST(EGG_LIBS)
 AC_SUBST(EGG_CFLAGS)
 
-PKG_CHECK_MODULES(EGG_SMCLIENT, gtk+-$GTK_API_VERSION)
+PKG_CHECK_MODULES(EGG_SMCLIENT, gtk+-3.0)
 AC_SUBST(EGG_SMCLIENT_LIBS)
 AC_SUBST(EGG_SMCLIENT_CFLAGS)
 
@@ -655,7 +629,6 @@ dnl  SUMMARY
 dnl ****************************************************************************
 
 echo "
-GTK+ Version:               $GTK_API_VERSION
 PKCS11 Support:             $enable_pkcs11
 PGP Support:                $enable_pgp
   GnuPG Version:            $have_gpg
