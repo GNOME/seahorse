@@ -5,14 +5,12 @@ seahorselibexecbindir = $(libdir)/seahorse/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
-	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
-	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
 	-DGCR_API_SUBJECT_TO_CHANGE \
 	-DGCK_API_SUBJECT_TO_CHANGE \
 	-DGETTEXT_PACKAGE=\""seahorse\""
@@ -32,7 +30,6 @@ libseahorse_pkcs11_la_SOURCES = \
 
 libseahorse_pkcs11_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
-	$(top_builddir)/libcryptui/libcryptui.la \
 	$(GCR_LIBS)
 
 ui_DATA =

@@ -34,7 +34,6 @@
 
 #include "seahorse-operation.h"
 #include "seahorse-util.h"
-#include "seahorse-libdialogs.h"
 #include "seahorse-passphrase.h"
 
 #include "common/seahorse-registry.h"

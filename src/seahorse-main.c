@@ -24,7 +24,6 @@
 
 #include "seahorse-context.h"
 #include "seahorse-util.h"
-#include "seahorse-libdialogs.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-secure-memory.h"
 
@@ -91,7 +90,7 @@ main (int argc, char **argv)
     seahorse_gtkstock_init ();
     
     /* Make the default SeahorseContext */
-    seahorse_context_new (SEAHORSE_CONTEXT_APP);
+    seahorse_context_create ();
 
     /* Initialize the various components */
 #ifdef WITH_PGP

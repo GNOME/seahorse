@@ -95,20 +95,15 @@ struct _SeahorseContextClass {
 	void (*destroy) (SeahorseContext *sctx);
 };
 
-enum SeahorseContextType {
-    SEAHORSE_CONTEXT_APP = 1,
-    SEAHORSE_CONTEXT_DAEMON = 2,
-};
-
 typedef void (*SeahorseObjectFunc) (struct _SeahorseObject *obj, gpointer user_data);
 
-#define             SCTX_APP()                          (seahorse_context_for_app ())
+#define             SCTX_APP()                          (seahorse_context_instance ())
 
 GType               seahorse_context_get_type           (void);
 
-SeahorseContext*    seahorse_context_for_app            (void);
+SeahorseContext*    seahorse_context_instance           (void);
 
-SeahorseContext*    seahorse_context_new                (guint              flags);
+void                seahorse_context_create             (void);
 
 void                seahorse_context_destroy            (SeahorseContext    *sctx);
 
@@ -167,8 +162,6 @@ void                seahorse_context_for_objects_full   (SeahorseContext *self,
                                                          SeahorseObjectFunc func,
                                                          gpointer user_data);
 
-void                seahorse_context_verify_objects     (SeahorseContext *self);
-
 void                seahorse_context_remove_object      (SeahorseContext *sctx,
                                                          struct _SeahorseObject *sobj);
 
@@ -195,16 +188,6 @@ SeahorseOperation*  seahorse_context_retrieve_objects   (SeahorseContext    *sct
 GList*              seahorse_context_discover_objects   (SeahorseContext    *sctx, 
                                                          GQuark             ktype, 
                                                          GSList             *ids);
-
-struct _SeahorseObject*     seahorse_context_object_from_dbus   (SeahorseContext    *sctx,
-                                                         const gchar        *dbusid);
-
-gchar*              seahorse_context_object_to_dbus     (SeahorseContext    *sctx,
-                                                         struct _SeahorseObject *sobj);
-
-gchar*              seahorse_context_id_to_dbus         (SeahorseContext    *sctx,
-                                                         GQuark             id);
-
 
 typedef GQuark (*SeahorseCanonizeFunc) (const gchar *id);
 

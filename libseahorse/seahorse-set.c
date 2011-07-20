@@ -50,24 +50,18 @@ G_DEFINE_TYPE (SeahorseSet, seahorse_set, G_TYPE_OBJECT);
  */
 
 static gboolean
-remove_update (SeahorseObject *sobj, gpointer closure, SeahorseSet *skset)
+remove_update (SeahorseObject *sobj, SeahorseSet *skset)
 {
-    if (closure == GINT_TO_POINTER (TRUE))
-        closure = NULL;
-    
-    g_signal_emit (skset, signals[REMOVED], 0, sobj, closure);
+    g_signal_emit (skset, signals[REMOVED], 0, sobj);
     g_signal_emit (skset, signals[SET_CHANGED], 0);
     return TRUE;
 }
 
 static void
-remove_object  (SeahorseObject *sobj, gpointer closure, SeahorseSet *skset)
+remove_object  (SeahorseObject *sobj, SeahorseSet *skset)
 {
-    if (!closure)
-        closure = g_hash_table_lookup (skset->pv->objects, sobj);
-    
     g_hash_table_remove (skset->pv->objects, sobj);
-    remove_update (sobj, closure, skset);
+    remove_update (sobj, skset);
 }
 
 static gboolean
@@ -97,7 +91,7 @@ maybe_remove_object (SeahorseSet *skset, SeahorseObject *sobj)
     if (skset->pv->pred && seahorse_object_predicate_match (skset->pv->pred, sobj))
         return FALSE;
     
-    remove_object (sobj, NULL, skset);
+    remove_object (sobj, skset);
     return TRUE;
 }
 
@@ -117,28 +111,21 @@ object_removed (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseSet *skset)
     g_assert (SEAHORSE_IS_SET (skset));
 
     if (g_hash_table_lookup (skset->pv->objects, sobj))
-        remove_object (sobj, NULL, skset);
+        remove_object (sobj, skset);
 }
 
 static void
 object_changed (SeahorseContext *sctx, SeahorseObject *sobj, SeahorseSet *skset)
 {
-    gpointer closure = g_hash_table_lookup (skset->pv->objects, sobj);
-
     g_assert (SEAHORSE_IS_OBJECT (sobj));
     g_assert (SEAHORSE_IS_SET (skset));
 
-    if (closure) {
-        
+    if (g_hash_table_lookup (skset->pv->objects, sobj)) {
+
         /* See if needs to be removed, otherwise emit signal */
-        if (!maybe_remove_object (skset, sobj)) {
-            
-            if (closure == GINT_TO_POINTER (TRUE))
-                closure = NULL;
-            
-            g_signal_emit (skset, signals[CHANGED], 0, sobj, closure);
-        }
-        
+        if (!maybe_remove_object (skset, sobj))
+            g_signal_emit (skset, signals[CHANGED], 0, sobj);
+
     /* Not in our set yet */
     } else 
         maybe_add_object (skset, sobj);
@@ -251,11 +238,11 @@ seahorse_set_class_init (SeahorseSetClass *klass)
     
     signals[REMOVED] = g_signal_new ("removed", SEAHORSE_TYPE_SET, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseSetClass, removed),
-                NULL, NULL, seahorse_marshal_VOID__OBJECT_POINTER, G_TYPE_NONE, 2, SEAHORSE_TYPE_OBJECT, G_TYPE_POINTER);    
+                NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_OBJECT);
     
     signals[CHANGED] = g_signal_new ("changed", SEAHORSE_TYPE_SET, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseSetClass, changed),
-                NULL, NULL, seahorse_marshal_VOID__OBJECT_POINTER, G_TYPE_NONE, 2, SEAHORSE_TYPE_OBJECT, G_TYPE_POINTER);
+                NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_OBJECT);
                 
     signals[SET_CHANGED] = g_signal_new ("set-changed", SEAHORSE_TYPE_SET,
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseSetClass, set_changed),
@@ -348,31 +335,4 @@ seahorse_set_refresh (SeahorseSet *skset)
     
     g_hash_table_foreach (check, (GHFunc)remove_object, skset);
     g_hash_table_destroy (check);
-}
-
-gpointer
-seahorse_set_get_closure (SeahorseSet *skset, SeahorseObject *sobj)
-{
-    gpointer closure = g_hash_table_lookup (skset->pv->objects, sobj);
-    g_return_val_if_fail (closure != NULL, NULL);
-
-    /* |TRUE| means no closure has been set */
-    if (closure == GINT_TO_POINTER (TRUE))
-        return NULL;
-    
-    return closure;
-}
-
-void
-seahorse_set_set_closure (SeahorseSet *skset, SeahorseObject *sobj, 
-                             gpointer closure)
-{
-    /* Make sure we have the object */
-    g_return_if_fail (g_hash_table_lookup (skset->pv->objects, sobj) != NULL);
-    
-    /* |TRUE| means no closure has been set */
-    if (closure == NULL)
-        closure = GINT_TO_POINTER (TRUE);
-
-    g_hash_table_insert (skset->pv->objects, sobj, closure);    
 }

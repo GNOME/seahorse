@@ -535,7 +535,7 @@ import_text (SeahorseKeyManager* self, const char* text)
 	}
 	
 	/* All our supported key types have a local key source */
-	sksrc = seahorse_context_find_source (seahorse_context_for_app (), ktype, SEAHORSE_LOCATION_LOCAL);
+	sksrc = seahorse_context_find_source (seahorse_context_instance (), ktype, SEAHORSE_LOCATION_LOCAL);
 	g_return_if_fail (sksrc != NULL);
 
 	input = seahorse_util_memory_input_string (text, len);
@@ -632,7 +632,7 @@ on_remote_sync (GtkAction* action, SeahorseKeyManager* self)
 static gboolean
 quit_app_later (gpointer unused)
 {
-	seahorse_context_destroy (seahorse_context_for_app ());
+	seahorse_context_destroy (seahorse_context_instance ());
 	return FALSE;
 }
 
@@ -998,7 +998,7 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	/* To show first time dialog */
 	g_timeout_add_seconds (1, (GSourceFunc)on_first_timer, self);
 	
-	g_signal_connect (seahorse_context_for_app (), "refreshing", G_CALLBACK (on_refreshing), self);
+	g_signal_connect (seahorse_context_instance (), "refreshing", G_CALLBACK (on_refreshing), self);
 
 	return G_OBJECT (self);
 }

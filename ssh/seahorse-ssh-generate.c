@@ -49,7 +49,7 @@ on_ssh_generate_key (GtkAction *action, gpointer unused)
 	
 	g_return_if_fail (GTK_IS_ACTION (action));
 	
-	sksrc = seahorse_context_find_source (seahorse_context_for_app (), SEAHORSE_SSH_TYPE, SEAHORSE_LOCATION_LOCAL);
+	sksrc = seahorse_context_find_source (seahorse_context_instance (), SEAHORSE_SSH_TYPE, SEAHORSE_LOCATION_LOCAL);
 	g_return_if_fail (sksrc != NULL);
 	
 	seahorse_ssh_generate_show (SEAHORSE_SSH_SOURCE (sksrc), NULL);

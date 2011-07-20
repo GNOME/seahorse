@@ -6,14 +6,12 @@ seahorselibexecbindir = $(libdir)/seahorse/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
-	-I$(top_srcdir)/libcryptui \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
-	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
-	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE
+	-DEXECDIR=\""$(seahorselibexecbindir)"\"
 
 MARSHAL_SRCS = \
 	seahorse-marshal.c seahorse-marshal.h
@@ -37,8 +35,6 @@ libseahorse_la_SOURCES = \
 	seahorse-dns-sd.c seahorse-dns-sd.h \
 	seahorse-gconf.c seahorse-gconf.h \
 	seahorse-gtkstock.c seahorse-gtkstock.h \
-	seahorse-libdialogs.h \
-	seahorse-notification.c \
 	seahorse-object.c seahorse-object.h \
 	seahorse-object-model.c seahorse-object-model.h \
 	seahorse-object-widget.c seahorse-object-widget.h \
@@ -64,8 +60,7 @@ libseahorse_la_SOURCES = \
 	$(KEYSERVER_SRCS)
 	
 libseahorse_la_LIBADD = \
-	$(top_builddir)/common/libseahorse-common.la \
-	$(top_builddir)/libcryptui/libcryptui.la
+	$(top_builddir)/common/libseahorse-common.la
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@
@@ -77,8 +72,7 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 ui_DATA = \
 	seahorse-prefs.xml \
 	seahorse-add-keyserver.xml \
-	seahorse-progress.xml \
-	seahorse-notify.xml
+	seahorse-progress.xml
 
 EXTRA_DIST = $(ui_DATA) \
 	seahorse-marshal.list

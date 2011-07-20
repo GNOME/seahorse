@@ -50,8 +50,6 @@ typedef struct _SeahorseSetPrivate SeahorseSetPrivate;
  * - Uses a SeahorseObjectPredicate to match keys.
  * - Sends out events when keys get added and removed from it's view. Or a
  *   key in the view changes etc...
- * - Supports per key event 'closures'. When a closure is set for a key, it's
- *   then passed as an argument to the 'changed' and 'removed' events.
  *
  * Signals:
  *   added: A key was added to this keyset.
@@ -80,10 +78,10 @@ struct _SeahorseSetClass {
     void (*added)   (SeahorseSet *skset, SeahorseObject *sobj);
 
     /* Removed a key from this view */
-    void (*removed) (SeahorseSet *skset, SeahorseObject *sobj, gpointer closure);
+    void (*removed) (SeahorseSet *skset, SeahorseObject *sobj);
     
     /* One of the key's attributes has changed */
-    void (*changed) (SeahorseSet *skset, SeahorseObject *sobj, gpointer closure);
+    void (*changed) (SeahorseSet *skset, SeahorseObject *sobj);
     
     /* The set of keys changed */
     void (*set_changed) (SeahorseSet *skset);
@@ -107,12 +105,5 @@ GList*              seahorse_set_get_objects            (SeahorseSet *skset);
 guint               seahorse_set_get_count              (SeahorseSet *skset);
 
 void                seahorse_set_refresh                (SeahorseSet *skset);
-
-gpointer            seahorse_set_get_closure            (SeahorseSet *skset,
-                                                         SeahorseObject *sobj);
-
-void                seahorse_set_set_closure            (SeahorseSet *skset,
-                                                         SeahorseObject *sobj,
-                                                         gpointer closure);
 
 #endif /* __SEAHORSE_SET_H__ */

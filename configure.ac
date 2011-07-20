@@ -8,17 +8,6 @@ dnl MAIN SEAHORSE VERSION (update after release)
 AC_INIT(seahorse, 3.1.2)
 
 dnl ****************************************************************************
-dnl LIBCRYPTUI libtool versioning
-dnl CURRENT : REVISION : AGE
-dnl   +1    :     0    : +1   == new interface that does not break old one.
-dnl   +1    :     0    :  0   == removed an interface. Breaks old apps.
-dnl    ?    :    +1    :  ?   == internal changes that doesn't break anything.
-
-LIBCRYPTUI_CURRENT=0
-LIBCRYPTUI_REVISION=0
-LIBCRYPTUI_AGE=0
-
-dnl ****************************************************************************
 
 AC_CONFIG_SRCDIR(src/seahorse-main.c)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
@@ -381,55 +370,6 @@ fi
 
 AM_CONDITIONAL(WITH_SHARING, test "$enable_sharing" = "yes")
 
-
-dnl ****************************************************************************
-dnl DBUS
-dnl ****************************************************************************
-
-DBUS_GLIB_REQUIRED=0.35
-
-PKG_CHECK_MODULES([DBUS], [dbus-glib-1 >= $DBUS_GLIB_REQUIRED], [enable_dbus=yes],[enable_dbus=no])
-if test "$enable_dbus" = "no"; then
-    AC_MSG_ERROR([dbus or dbus-glib-1 bindings not found.])
-fi
-
-AC_SUBST([DBUS_CFLAGS])
-AC_SUBST([DBUS_LIBS])
-
-AC_PATH_PROG([DBUS_BINDING_TOOL], [dbus-binding-tool], [no])
-if test x$DBUS_BINDING_TOOL = "xno" ; then
-    AC_MSG_ERROR([dbus-binding-tool executable not found in your path - should be installed with dbus glib bindings])
-fi
-
-SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $DBUS_CFLAGS"
-SEAHORSE_LIBS="$SEAHORSE_LIBS $DBUS_LIBS"
-
-dnl *******************
-dnl LIBNOTIFY
-dnl *******************
-
-LIBNOTIFY_REQUIRED=0.3
-
-# Allow libnotify to be disabled
-AC_ARG_ENABLE(libnotify, 
-        AC_HELP_STRING([--disable-libnotify],
-        [Don't compile in libnotify support]))   
-        
-if test "x$enable_libnotify" = "xno"; then
-    echo "disabling libnotify support"
-else
-
-    PKG_CHECK_MODULES(LIBNOTIFY, [libnotify >= $LIBNOTIFY_REQUIRED], 
-                      enable_libnotify=yes, enable_libnotify=no)
-    if test "$enable_libnotify" = "yes"; then
-        
-        AC_DEFINE(HAVE_LIBNOTIFY, 1, [libnotify available])
-        
-        SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $LIBNOTIFY_CFLAGS"
-        SEAHORSE_LIBS="$SEAHORSE_LIBS $LIBNOTIFY_LIBS"
-    fi
-fi
-
 dnl ****************************************************************************
 dnl  PKCS11
 dnl ****************************************************************************
@@ -523,26 +463,6 @@ fi
 
 AM_CONDITIONAL(WITH_TESTS, test "$enable_tests" = "yes")
 
-dnl ****************************************************************************
-dnl LIBCRYPTUI
-dnl ****************************************************************************
-   
-LIBCRYPTUI_LT_RELEASE=$LIBCRYPTUI_CURRENT:$LIBCRYPTUI_REVISION:$LIBCRYPTUI_AGE
-AC_SUBST(LIBCRYPTUI_LT_RELEASE)
-
-LIBCRYPTUI_MAJOR=$LIBCRYPTUI_CURRENT.$LIBCRYPTUI_REVISION
-AC_SUBST(LIBCRYPTUI_MAJOR)
-
-PKG_CHECK_MODULES(LIBCRYPTUI, gtk+-3.0 >= $GTK_REQUIRED gconf-2.0)
-
-cryptuitargetlib=libcryptui.la
-AC_SUBST(cryptuitargetlib)
-
-LIBCRYPTUI_CFLAGS="$LIBCRYPTUI_CFLAGS $DBUS_CFLAGS"
-LIBCRYPTUI_LIBS="$LIBCRYPTUI_LIBS $DBUS_LIBS"
-AC_SUBST(LIBCRYPTUI_CFLAGS)
-AC_SUBST(LIBCRYPTUI_LIBS)
-
 GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
 ATK_PREFIX="`$PKG_CONFIG --variable=prefix atk`"
 PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
@@ -552,12 +472,6 @@ AC_SUBST(GLIB_PREFIX)
 AC_SUBST(ATK_PREFIX)
 AC_SUBST(PANGO_PREFIX)
 AC_SUBST(CAIRO_PREFIX)
-
-dnl ****************************************************************************
-dnl GObject Introspection
-dnl ****************************************************************************
-
-GOBJECT_INTROSPECTION_CHECK([0.6.4])
 
 dnl ****************************************************************************
 
@@ -595,12 +509,8 @@ dnl ****************************************************************************
 
 AC_OUTPUT([
 Makefile
-seahorse.spec
 common/Makefile
 gkr/Makefile
-libcryptui/cryptui.pc
-libcryptui/Makefile
-libcryptui/tests/Makefile
 libegg/Makefile
 libseahorse/Makefile
 pgp/Makefile
@@ -616,10 +526,7 @@ pkcs11/Makefile
 src/Makefile
 src/seahorse.desktop.in
 ssh/Makefile
-daemon/Makefile
 reference/Makefile
-reference/libcryptui/Makefile
-reference/libcryptui/version.xml
 reference/libseahorse/Makefile
 reference/libseahorse/version.xml
 ])
@@ -638,6 +545,4 @@ Keyserver Support:          $with_keyserver
   LDAP:                     $with_ldap
   HKP:                      $enable_hkp
   Key Sharing:              $enable_sharing
-Notification Support:       $enable_libnotify
-Build introspection data:   ${enable_introspection}
 "

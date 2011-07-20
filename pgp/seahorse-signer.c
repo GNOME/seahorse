@@ -27,7 +27,6 @@
 
 #include "seahorse-operation.h"
 #include "seahorse-progress.h"
-#include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-validity.h"
 #include "seahorse-combo-keys.h"

@@ -1,2 +1,1 @@
-SUBDIRS = libcryptui \
-          libseahorse
+SUBDIRS = libseahorse

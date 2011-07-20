@@ -26,7 +26,6 @@
 #include <glib/gi18n.h>
  
 #include "seahorse-object-widget.h"
-#include "seahorse-libdialogs.h"
 #include "seahorse-util.h"
 
 #include "seahorse-gpgme-dialogs.h"

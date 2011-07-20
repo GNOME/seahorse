@@ -55,13 +55,10 @@ object_added (SeahorseSet *skset, SeahorseObject *object, GtkComboBox *combo)
                         COMBO_STRING, userid,
                         COMBO_POINTER, object,
                         -1);
-    
-    seahorse_set_set_closure (skset, object, GINT_TO_POINTER (TRUE));
 }
 
 static void
-object_changed (SeahorseSet *skset, SeahorseObject *object, 
-                GtkWidget *closure, GtkComboBox *combo)
+object_changed (SeahorseSet *skset, SeahorseObject *object, GtkComboBox *combo)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
@@ -96,8 +93,7 @@ object_changed (SeahorseSet *skset, SeahorseObject *object,
 }
 
 static void
-object_removed (SeahorseSet *skset, SeahorseObject *object, 
-                GtkWidget *closure, GtkComboBox *combo)
+object_removed (SeahorseSet *skset, SeahorseObject *object, GtkComboBox *combo)
 {
     GtkTreeModel *model;
     GtkTreeIter iter;

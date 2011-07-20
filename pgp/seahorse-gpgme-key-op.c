@@ -32,7 +32,6 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-util.h"
-#include "seahorse-libdialogs.h"
 
 #include "common/seahorse-object-list.h"
 

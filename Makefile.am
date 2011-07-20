@@ -21,7 +21,6 @@ PGP_DIR =
 endif
 
 SUBDIRS = libegg \
-	libcryptui \
 	common \
 	libseahorse \
 	gkr \
@@ -33,14 +32,12 @@ SUBDIRS = libegg \
 	data \
 	help \
 	pixmaps \
-	daemon \
 	reference
 
 EXTRA_DIST = \
     AUTHORS \
     COPYING \
     COPYING-DOCS \
-    COPYING-LIBCRYPTUI \
     ChangeLog \
     ChangeLog.pre-auto \
     ChangeLog.pre-1.0 \

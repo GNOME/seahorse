@@ -45,7 +45,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkkeysyms-compat.h>
 
-#include "seahorse-libdialogs.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-passphrase.h"

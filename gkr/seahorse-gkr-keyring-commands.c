@@ -88,7 +88,7 @@ refresh_all_keyrings (SeahorseCommands *self)
 	 * so for now we're just going to let any viewers listen in on this
 	 * operation like so:
 	 */
-	g_signal_emit_by_name (seahorse_context_for_app (), "refreshing", op);
+	g_signal_emit_by_name (seahorse_context_instance (), "refreshing", op);
 
 	seahorse_operation_watch (op, on_refresh_done, g_object_ref (self), NULL, NULL);
 	g_object_unref (op);

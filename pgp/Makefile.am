@@ -6,7 +6,6 @@ seahorselibexecbindir = $(libdir)/seahorse/
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libegg \
-	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
@@ -14,7 +13,6 @@ INCLUDES = -I$(top_builddir) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DLDAP_DEPRECATED \
-	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
 noinst_LTLIBRARIES = libseahorse-pgp.la
@@ -75,8 +73,7 @@ libseahorse_pgp_la_SOURCES = \
 
 libseahorse_pgp_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
-	$(top_builddir)/common/libseahorse-common.la \
-	$(top_builddir)/libcryptui/libcryptui.la
+	$(top_builddir)/common/libseahorse-common.la
 
 seahorselibexecbin_PROGRAMS = xloadimage
 

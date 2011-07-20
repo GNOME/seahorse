@@ -317,8 +317,7 @@ find_node_in_set (GNode *node, gpointer user_data)
 }
 
 static void
-set_removed (SeahorseSet *set, SeahorseObject *sobj, gpointer closure, 
-             SeahorseSetModel *smodel) 
+set_removed (SeahorseSet *set, SeahorseObject *sobj, SeahorseSetModel *smodel)
 {
 	SeahorseSetModelPrivate *pv = SEAHORSE_SET_MODEL_GET_PRIVATE (smodel);
 	find_node_in_set_args args = { set, FALSE };
@@ -342,8 +341,7 @@ set_removed (SeahorseSet *set, SeahorseObject *sobj, gpointer closure,
 }
 
 static void
-set_changed (SeahorseSet *set, SeahorseObject *sobj, 
-             gpointer closure, SeahorseSetModel *smodel)
+set_changed (SeahorseSet *set, SeahorseObject *sobj, SeahorseSetModel *smodel)
 {
 	SeahorseSetModelPrivate *pv = SEAHORSE_SET_MODEL_GET_PRIVATE (smodel);
 	GtkTreeIter iter;

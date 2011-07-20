@@ -480,7 +480,7 @@ on_key_import_keyring (GtkAction* action, SeahorseViewer* self)
 	if (objects == NULL) 
 		return;
 
-	op = seahorse_context_transfer_objects (seahorse_context_for_app (), objects, NULL);
+	op = seahorse_context_transfer_objects (seahorse_context_instance (), objects, NULL);
 	seahorse_progress_show (op, _ ("Importing keys from key servers"), TRUE);
 	seahorse_operation_watch (op, (SeahorseDoneFunc)imported_keys, self, NULL, NULL);
 	

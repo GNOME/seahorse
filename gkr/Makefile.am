@@ -5,14 +5,12 @@ seahorselibexecbindir = $(libdir)/seahorse/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
-	-I$(top_srcdir)/libcryptui \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
-	-DLIBCRYPTUI_API_SUBJECT_TO_CHANGE \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
 noinst_LTLIBRARIES = libseahorse-gkr.la
@@ -34,8 +32,7 @@ libseahorse_gkr_la_SOURCES = \
 	
 libseahorse_gkr_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
-	$(top_builddir)/common/libseahorse-common.la \
-	$(top_builddir)/libcryptui/libcryptui.la
+	$(top_builddir)/common/libseahorse-common.la
 
 ui_DATA = \
 	seahorse-add-keyring.xml \

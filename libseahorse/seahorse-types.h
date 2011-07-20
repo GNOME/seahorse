@@ -25,8 +25,6 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "libcryptui/cryptui.h"
-
 G_BEGIN_DECLS
 
 
@@ -35,7 +33,7 @@ G_BEGIN_DECLS
 #define SEAHORSE_TYPE_USAGE (seahorse_usage_get_type ())
 
 /* 
- * These types should never change. These values are exported via DBUS. In the 
+ * These types should never change. These values are exported. In the
  * case of a key being in multiple locations, the highest location always 'wins'.
  */
 typedef enum  {
@@ -62,15 +60,15 @@ typedef enum  {
 GType seahorse_usage_get_type (void);
 
 typedef enum {
-	SEAHORSE_FLAG_IS_VALID =    CRYPTUI_FLAG_IS_VALID,
-	SEAHORSE_FLAG_CAN_ENCRYPT = CRYPTUI_FLAG_CAN_ENCRYPT,
-	SEAHORSE_FLAG_CAN_SIGN =    CRYPTUI_FLAG_CAN_SIGN,
-	SEAHORSE_FLAG_EXPIRED =     CRYPTUI_FLAG_EXPIRED,
-	SEAHORSE_FLAG_REVOKED =     CRYPTUI_FLAG_REVOKED,
-	SEAHORSE_FLAG_DISABLED =    CRYPTUI_FLAG_DISABLED,
-	SEAHORSE_FLAG_TRUSTED =     CRYPTUI_FLAG_TRUSTED,
-	SEAHORSE_FLAG_EXPORTABLE =  CRYPTUI_FLAG_EXPORTABLE,
-	SEAHORSE_FLAG_DELETABLE = 0x10000000
+	SEAHORSE_FLAG_IS_VALID =    0x00000001,
+	SEAHORSE_FLAG_CAN_ENCRYPT = 0x00000002,
+	SEAHORSE_FLAG_CAN_SIGN =    0x00000004,
+	SEAHORSE_FLAG_EXPIRED =     0x00000100,
+	SEAHORSE_FLAG_REVOKED =     0x00000200,
+	SEAHORSE_FLAG_DISABLED =    0x00000400,
+	SEAHORSE_FLAG_TRUSTED =     0x00001000,
+	SEAHORSE_FLAG_EXPORTABLE =  0x00100000,
+	SEAHORSE_FLAG_DELETABLE =   0x10000000
 } SeahorseKeyFlags;
 
 #define SEAHORSE_TAG_INVALID               0

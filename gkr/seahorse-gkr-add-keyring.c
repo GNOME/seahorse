@@ -64,7 +64,7 @@ keyring_add_done (GnomeKeyringResult result, gpointer data)
 		 * so for now we're just going to let any viewers listen in on this
 		 * operation like so:
 		 */
-		g_signal_emit_by_name (seahorse_context_for_app (), "refreshing", op);
+		g_signal_emit_by_name (seahorse_context_instance (), "refreshing", op);
 		g_object_unref (op);
 
 	/* Setting the default keyring failed */
