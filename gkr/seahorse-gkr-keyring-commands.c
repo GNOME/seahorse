@@ -144,7 +144,6 @@ static void
 on_keyring_unlock (GtkAction *action, SeahorseGkrKeyringCommands *self)
 {
 	SeahorseView *view;
-	SeahorseGkrKeyring *keyring;
 	GList *keys, *l;
 
 	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self));
@@ -154,7 +153,6 @@ on_keyring_unlock (GtkAction *action, SeahorseGkrKeyringCommands *self)
 	keys = seahorse_view_get_selected_matching (view, &keyring_predicate);
 
 	for (l = keys; l; l = g_list_next (l)) {
-		keyring = SEAHORSE_GKR_KEYRING (l->data);
 		g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (l->data));
 		gnome_keyring_unlock (seahorse_gkr_keyring_get_name (l->data), NULL, 
 		                      on_keyring_unlock_done, g_object_ref (self), g_object_unref);
@@ -185,7 +183,6 @@ static void
 on_keyring_lock (GtkAction *action, SeahorseGkrKeyringCommands *self)
 {
 	SeahorseView *view;
-	SeahorseGkrKeyring *keyring;
 	GList *keyrings, *l;
 
 	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self));
@@ -195,7 +192,6 @@ on_keyring_lock (GtkAction *action, SeahorseGkrKeyringCommands *self)
 	keyrings = seahorse_view_get_selected_matching (view, &keyring_predicate);
 
 	for (l = keyrings; l; l = g_list_next (l)) {
-		keyring = SEAHORSE_GKR_KEYRING (l->data);
 		g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (l->data));
 		gnome_keyring_lock (seahorse_gkr_keyring_get_name (l->data), 
 		                    on_keyring_lock_done, g_object_ref (self), g_object_unref);
@@ -265,7 +261,6 @@ static void
 on_keyring_password (GtkAction *action, SeahorseGkrKeyringCommands *self)
 {
 	SeahorseView *view;
-	SeahorseGkrKeyring *keyring;
 	GList *keys, *l;
 
 	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self));
@@ -275,7 +270,6 @@ on_keyring_password (GtkAction *action, SeahorseGkrKeyringCommands *self)
 	keys = seahorse_view_get_selected_matching (view, &keyring_predicate);
 
 	for (l = keys; l; l = g_list_next (l)) {
-		keyring = SEAHORSE_GKR_KEYRING (l->data);
 		g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (l->data));
 		gnome_keyring_change_password (seahorse_gkr_keyring_get_name (l->data), NULL, NULL,
 		                               on_change_password_done, g_object_ref (self), g_object_unref);

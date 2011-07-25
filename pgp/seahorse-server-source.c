@@ -154,8 +154,7 @@ static void
 seahorse_server_source_dispose (GObject *gobject)
 {
     SeahorseServerSource *ssrc;
-    SeahorseSource *sksrc;
-    
+
     /*
      * Note that after this executes the rest of the object should
      * still work without a segfault. This basically nullifies the 
@@ -165,7 +164,6 @@ seahorse_server_source_dispose (GObject *gobject)
      */
   
     ssrc = SEAHORSE_SERVER_SOURCE (gobject);
-    sksrc = SEAHORSE_SOURCE (gobject);
     g_assert (ssrc->priv);
     
     /* Clear out all the operations */
@@ -302,10 +300,7 @@ seahorse_server_source_take_operation (SeahorseServerSource *ssrc, SeahorseOpera
 static SeahorseOperation*
 seahorse_server_source_load (SeahorseSource *src)
 {
-    SeahorseServerSource *ssrc;
-    
     g_assert (SEAHORSE_IS_SOURCE (src));
-    ssrc = SEAHORSE_SERVER_SOURCE (src);
 
     /* We should never be called directly */
     return NULL;

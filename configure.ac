@@ -222,7 +222,7 @@ if test "$try_ldap" = yes ; then
     LIBS="$MY_LDAPLIBS $NETLIBS $LIBS"
 
     AC_MSG_CHECKING([whether LDAP via \"$MY_LDAPLIBS\" is present and sane])
-    AC_TRY_LINK([#include <ldap.h>],[ldap_open("foobar",1234);],
+    AC_TRY_LINK([#include <ldap.h>],[ldap_open("foobar",1234); ber_free(NULL, 0);],
                 [cv_func_ldap_init=yes],[cv_func_ldap_init=no])
     AC_MSG_RESULT([$cv_func_ldap_init])
 
@@ -425,21 +425,33 @@ fi
 
 AM_CONDITIONAL(WITH_SSH, test "$enable_ssh" = "yes")
 
-dnl ****************************************************************************
-
+# -----------------------------------------------------------------------------
 # Debug mode
-AC_ARG_ENABLE(debug, 
-	    AC_HELP_STRING([--enable-debug],
-	    [Compile binaries in debug mode]))
+#
 
-if test "$enable_debug" = "yes"; then
-  CFLAGS="$CFLAGS -g -O0 -DBONOBO_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -Wall"
-  AC_DEFINE_UNQUOTED(_DEBUG, 1, [In debug mode])
-  echo "enabling debug compile mode"
-else 
-  dnl AC_DEFINE_UNQUOTED(G_DISABLE_ASSERT, 1, [Disable glib assertions])
-  echo "disabling debug compile mode"
+AC_MSG_CHECKING([for debug mode])
+AC_ARG_ENABLE(debug,
+              AC_HELP_STRING([--enable-debug=no/yes/full],
+              [Turn on or off debugging]))
+
+if test "$enable_debug" != "no"; then
+	AC_DEFINE_UNQUOTED(WITH_DEBUG, 1, [Print debug output])
+	AC_DEFINE_UNQUOTED(_DEBUG, 1, [In debug mode])
 fi
+
+if test "$enable_debug" = "full"; then
+	debug_status="full"
+	CFLAGS="$CFLAGS -g -O0 -Werror -Wall"
+	CFLAGS="$CFLAGS -DG_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED"
+	CFLAGS="$CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
+elif test "$enable_debug" = "no"; then
+	debug_status="no"
+	AC_DEFINE_UNQUOTED(G_DISABLE_ASSERT, 1, [Disable glib assertions])
+else
+	debug_status="yes"
+fi
+
+AC_MSG_RESULT($debug_status)
 
 # Fatal Messages mode
 AC_ARG_ENABLE(fatal-messages, 

@@ -44,8 +44,7 @@ update_wait_cursor (GtkWidget *dialog, gpointer unused)
 	cursor = (GdkCursor*)g_object_get_data (G_OBJECT (dialog), "wait-cursor");
 	if (!cursor) {
 		cursor = gdk_cursor_new (GDK_WATCH);
-		g_object_set_data_full (G_OBJECT (dialog), "wait-cursor", cursor, 
-		                        (GDestroyNotify)gdk_cursor_unref);
+		g_object_set_data_full (G_OBJECT (dialog), "wait-cursor", cursor, g_object_unref);
 	}
     
 	/* Indicate that we're loading stuff */

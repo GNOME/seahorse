@@ -1589,7 +1589,7 @@ seahorse_util_determine_popup_menu_position (GtkMenu *menu, int *x, int *y,
 
         widget = GTK_WIDGET (gdata);
 
-        gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
+        gtk_widget_get_preferred_size (GTK_WIDGET (menu), &requisition, NULL);
 
         gdk_window_get_origin (gtk_widget_get_window (widget), &menu_xpos, &menu_ypos);
 

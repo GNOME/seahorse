@@ -187,7 +187,6 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     GtkDialog *dialog;
     GtkWidget *w;
     GtkWidget *box;
-    GtkWidget *ebox;
     GtkTable *table;
     GtkWidget *wvbox;
     GtkWidget *chbox;
@@ -243,7 +242,6 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
 
     /* The first entry if we have one */
     if (confirm) {
-        ebox = gtk_hbox_new (FALSE, HIG_LARGE);
         msg = utf8_validate (prompt);
         w = gtk_label_new (msg);
         g_free (msg);
@@ -262,7 +260,6 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     }
 
     /* The second and main entry */
-    ebox = gtk_hbox_new (FALSE, HIG_LARGE);
     msg = utf8_validate (confirm ? _("Confirm:") : prompt);
     w = gtk_label_new (msg);
     g_free (msg);

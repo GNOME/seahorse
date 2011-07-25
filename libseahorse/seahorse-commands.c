@@ -60,22 +60,6 @@ seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj)
 	return NULL;
 }
 
-static GObject* 
-seahorse_commands_constructor (GType type, guint n_props, GObjectConstructParam *props) 
-{
-	GObject *obj = G_OBJECT_CLASS (seahorse_commands_parent_class)->constructor (type, n_props, props);
-	SeahorseCommands *self = NULL;
-	SeahorseCommandsPrivate *pv;
-	
-	if (obj) {
-		pv = SEAHORSE_COMMANDS_GET_PRIVATE (obj);
-		self = SEAHORSE_COMMANDS (obj);
-		
-	}
-	
-	return obj;
-}
-
 static void
 seahorse_commands_init (SeahorseCommands *self)
 {
@@ -147,7 +131,6 @@ seahorse_commands_class_init (SeahorseCommandsClass *klass)
 	seahorse_commands_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseCommandsPrivate));
 
-	gobject_class->constructor = seahorse_commands_constructor;
 	gobject_class->dispose = seahorse_commands_dispose;
 	gobject_class->finalize = seahorse_commands_finalize;
 	gobject_class->set_property = seahorse_commands_set_property;

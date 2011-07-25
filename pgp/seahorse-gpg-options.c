@@ -392,14 +392,12 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
     gchar *t;
     gchar *n;
     gchar *line;
-    gsize length;
     guint i, j;
 
     for (j = 0; j < lines->len; j++) {
         line = g_array_index (lines, gchar*, j);
         g_assert (line != NULL);        
-        length = strlen(line);
-        
+
         /* 
          * Does this line have an ending? 
          * We use this below when appending lines.

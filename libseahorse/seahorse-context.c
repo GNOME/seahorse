@@ -968,25 +968,6 @@ seahorse_context_find_objects (SeahorseContext *sctx, GQuark ktype,
 }
 
 /**
-* key: a pointer to a key to verify (hashkey)
-* value: a seahorse object
-* user_data: ignored
-*
-* Asserts that the @key is the same as the one stored in @value
-*
-**/
-static void
-verify_each_object (gpointer key, gpointer value, gpointer user_data)
-{
-	gpointer k;
-
-	g_assert (SEAHORSE_IS_OBJECT (value));
-	k = hashkey_by_source (seahorse_object_get_source (value), 
-	                       seahorse_object_get_id (value));
-	g_assert (k == key);
-}
-
-/**
  * seahorse_context_remove_object:
  * @sctx: The #SeahorseContext (can be NULL)
  * @sobj: The #SeahorseObject to remove

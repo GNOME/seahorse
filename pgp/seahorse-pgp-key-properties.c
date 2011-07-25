@@ -1635,12 +1635,11 @@ do_trust (SeahorseWidget *swidget)
     /* Local keys */
     } else {
         guint trust;
-        gboolean trusted, managed;
+        gboolean managed;
         const gchar *icon = NULL;
         
         trust = seahorse_pgp_key_get_trust (pkey);
-    
-        trusted = FALSE;
+
         managed = FALSE;
         
         switch (trust) {
@@ -1652,14 +1651,12 @@ do_trust (SeahorseWidget *swidget)
         
         /* Trust is specified manually */
         case SEAHORSE_VALIDITY_ULTIMATE:
-            trusted = TRUE;
             managed = FALSE;
             icon = SEAHORSE_STOCK_SIGN_OK;
             break;
         
         /* Trust is specified manually */
         case SEAHORSE_VALIDITY_NEVER:
-            trusted = FALSE;
             managed = FALSE;
             icon = SEAHORSE_STOCK_SIGN_BAD;
             break;
@@ -1667,14 +1664,12 @@ do_trust (SeahorseWidget *swidget)
         /* We manage the trust through this page */
         case SEAHORSE_VALIDITY_FULL:
         case SEAHORSE_VALIDITY_MARGINAL:
-            trusted = TRUE;
             managed = TRUE;
             icon = SEAHORSE_STOCK_SIGN_OK;
             break;
         
         /* We manage the trust through this page */
         case SEAHORSE_VALIDITY_UNKNOWN:
-            trusted = FALSE;
             managed = TRUE;
             icon = SEAHORSE_STOCK_SIGN;
             break;

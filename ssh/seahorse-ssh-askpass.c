@@ -37,7 +37,7 @@ static gchar*
 askpass_command (const gchar *cmd, const gchar *arg)
 {
     const gchar* env;
-    gchar *t, *ret;
+    gchar *t;
     int fd;
         
     /* Try an open the connection with seahorse */
@@ -68,8 +68,8 @@ askpass_command (const gchar *cmd, const gchar *arg)
     
     /* Read the setting */
     t = g_new0 (gchar, 512);
-    ret = fgets (t, 512, seahorse_link);
-    
+    fgets (t, 512, seahorse_link);
+
     /* Make sure it worked */
     if (ferror (seahorse_link)) {
         g_warning ("error reading from seahorse");

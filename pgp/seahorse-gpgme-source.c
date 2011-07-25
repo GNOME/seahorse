@@ -732,14 +732,12 @@ static SeahorseLoadOperation*
 seahorse_load_operation_start (SeahorseGpgmeSource *psrc, const gchar **pattern, 
                                guint parts, gboolean secret)
 {
-    SeahorseGpgmeSourcePrivate *priv;
     SeahorseLoadOperation *lop;
     gpgme_error_t err;
     GList *keys, *l;
     SeahorseObject *sobj;
     
     g_assert (SEAHORSE_IS_GPGME_SOURCE (psrc));
-    priv = psrc->pv;
 
     lop = g_object_new (SEAHORSE_TYPE_LOAD_OPERATION, NULL);    
     lop->psrc = psrc;
@@ -932,7 +930,6 @@ static SeahorseOperation*
 seahorse_gpgme_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *output)
 {
 	SeahorseGpgmeOperation *pop;
-	SeahorseGpgmeSource *psrc;
 	SeahorseGpgmeKey *pkey;
 	SeahorseObject *object;
 	ExportContext *ctx;
@@ -942,8 +939,6 @@ seahorse_gpgme_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream 
     
     	g_return_val_if_fail (SEAHORSE_IS_GPGME_SOURCE (sksrc), NULL);
     	g_return_val_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output), NULL);
-    
-    	psrc = SEAHORSE_GPGME_SOURCE (sksrc);
 
     	pop = seahorse_gpgme_operation_new (_("Exporting Keys"));
     	g_return_val_if_fail (pop != NULL, NULL);

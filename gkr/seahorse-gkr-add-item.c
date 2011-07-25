@@ -136,8 +136,7 @@ seahorse_gkr_add_item_show (GtkWindow *parent)
 	GtkCellRenderer *cell;
 	GtkListStore *store;
 	GtkTreeIter iter;
-	gint i;
-	
+
 	swidget = seahorse_widget_new_allow_multiple ("gkr-add-item", parent);
 	g_return_if_fail (swidget);
 	
@@ -151,7 +150,7 @@ seahorse_gkr_add_item_show (GtkWindow *parent)
 	                                    
 	keyrings = seahorse_context_find_objects (NULL, SEAHORSE_GKR, SEAHORSE_USAGE_OTHER, 
 	                                          SEAHORSE_LOCATION_LOCAL);
-	for (i = 0, l = keyrings; l; l = g_list_next (l)) {
+	for (l = keyrings; l; l = g_list_next (l)) {
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter, 0, seahorse_gkr_keyring_get_name (l->data), -1);
 		if (seahorse_gkr_keyring_get_is_default (l->data))

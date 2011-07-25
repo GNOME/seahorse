@@ -827,7 +827,7 @@ popup_position (GtkWidget *widget, GtkWindow *popup)
    GtkRequisition requisition;
    gint x, y, width, height;
 
-   gtk_widget_size_request (GTK_WIDGET (popup), &requisition);
+   gtk_widget_get_preferred_size (GTK_WIDGET (popup), &requisition, NULL);
    gdk_window_get_origin (gtk_widget_get_window (widget), &x, &y);
 
    gtk_widget_get_allocation (widget, &allocation);
@@ -857,12 +857,14 @@ popup_show (GtkWindow *popup)
    gtk_grab_add (GTK_WIDGET (popup));
 
    cursor = gdk_cursor_new (GDK_ARROW);
-   gdk_pointer_grab (gtk_widget_get_window (GTK_WIDGET (popup)), TRUE,
-           (GDK_BUTTON_PRESS_MASK
-            | GDK_BUTTON_RELEASE_MASK
-            | GDK_POINTER_MOTION_MASK),
-           NULL, cursor, GDK_CURRENT_TIME);
-   gdk_cursor_unref (cursor);
+   gdk_device_grab (gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_display_get_default ())),
+                    gtk_widget_get_window (GTK_WIDGET (popup)),
+                    GDK_OWNERSHIP_APPLICATION,
+                    TRUE,
+                    (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK),
+                    cursor,
+                    GDK_CURRENT_TIME);
+   g_object_unref (cursor);
 }
 
 static void
@@ -870,7 +872,8 @@ popup_hide (GtkWindow *popup)
 {
    gtk_widget_hide (GTK_WIDGET (popup));
    gtk_grab_remove (GTK_WIDGET (popup));
-   gdk_pointer_ungrab (GDK_CURRENT_TIME);
+   gdk_device_ungrab (gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_display_get_default ())),
+                      GDK_CURRENT_TIME);
 }
 
 /*

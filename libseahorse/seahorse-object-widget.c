@@ -141,11 +141,9 @@ seahorse_object_widget_set_property (GObject *object, guint prop_id,
 				  const GValue *value, GParamSpec *pspec)
 {
 	SeahorseObjectWidget *self;
-	SeahorseWidget *swidget;
-	
+
 	self = SEAHORSE_OBJECT_WIDGET (object);
-	swidget = SEAHORSE_WIDGET (object);
-	
+
 	switch (prop_id) {
 		/* Watches object for destroy */
 		case PROP_OBJECT:
