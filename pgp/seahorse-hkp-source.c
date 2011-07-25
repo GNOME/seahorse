@@ -42,6 +42,9 @@
 
 #include <libsoup/soup.h>
 
+#define DEBUG_FLAG SEAHORSE_DEBUG_HKP
+#include "seahorse-debug.h"
+
 /**
  * SECTION: seahorse-hkp-source
  * @short_description: Implements the HKP (HTTP Keyserver protocol) Source object
@@ -51,17 +54,6 @@
  **/
 
 #ifdef WITH_HKP
-
-/* Override the DEBUG_HKP_ENABLE switch here */
-/* #define DEBUG_HKP_ENABLE 1 */
-
-#ifndef DEBUG_HKP_ENABLE
-#if _DEBUG
-#define DEBUG_HKP_ENABLE 1
-#else
-#define DEBUG_HKP_ENABLE 0
-#endif
-#endif
 
 #define PGP_KEY_BEGIN   "-----BEGIN PGP PUBLIC KEY BLOCK-----"
 #define PGP_KEY_END     "-----END PGP PUBLIC KEY BLOCK-----"
@@ -165,7 +157,7 @@ seahorse_hkp_operation_init (SeahorseHKPOperation *hop)
 {
     SoupURI *uri;
     gchar *host;
-#if DEBUG_HKP_ENABLE
+#if WITH_DEBUG
     SoupLogger *logger;
 #endif
     
@@ -206,10 +198,12 @@ seahorse_hkp_operation_init (SeahorseHKPOperation *hop)
     if (!hop->session)
         hop->session = soup_session_async_new ();
 
-#if DEBUG_HKP_ENABLE
-    logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
-    soup_logger_attach (logger, hop->session);
-    g_object_unref (logger);
+#if WITH_DEBUG
+	if (seahorse_debugging) {
+		logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
+		soup_logger_attach (logger, hop->session);
+		g_object_unref (logger);
+	}
 #endif
 }
 
@@ -490,9 +484,8 @@ parse_hkp_index (const gchar *response)
 
 		line = *l;	
 		dehtmlize (line);
-#if DEBUG_HKP_ENABLE
-        fprintf(stderr,"%s\n", line);
-#endif
+
+		seahorse_debug ("%s", line);
 
 		/* Start a new key */
 		if (g_ascii_strncasecmp (line, "pub ", 4) == 0) {

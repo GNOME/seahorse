@@ -41,23 +41,8 @@
 
 #include <glib/gi18n.h>
 
-/* Override DEBUG switches here */
-#define DEBUG_REFRESH_ENABLE 0
-/* #define DEBUG_OPERATION_ENABLE 1 */
-
-#ifndef DEBUG_REFRESH_ENABLE
-#if _DEBUG
-#define DEBUG_REFRESH_ENABLE 1
-#else
-#define DEBUG_REFRESH_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_REFRESH_ENABLE
-#define DEBUG_REFRESH(x)    g_printerr x
-#else
-#define DEBUG_REFRESH(x)
-#endif
+#define DEBUG_FLAG SEAHORSE_DEBUG_LOAD
+#include "seahorse-debug.h"
 
 enum {
     PROP_0,
@@ -145,7 +130,7 @@ static void
 cancel_scheduled_refresh (SeahorseSSHSource *ssrc)
 {
     if (ssrc->priv->scheduled_refresh != 0) {
-        DEBUG_REFRESH ("cancelling scheduled refresh event\n");
+        seahorse_debug ("cancelling scheduled refresh event");
         g_source_remove (ssrc->priv->scheduled_refresh);
         ssrc->priv->scheduled_refresh = 0;
     }
@@ -166,7 +151,7 @@ remove_key_from_context (gpointer hkey, SeahorseObject *dummy, SeahorseSSHSource
 static gboolean
 scheduled_refresh (SeahorseSSHSource *ssrc)
 {
-    DEBUG_REFRESH ("scheduled refresh event ocurring now\n");
+    seahorse_debug ("scheduled refresh event ocurring now");
     cancel_scheduled_refresh (ssrc);
     seahorse_source_load_async (SEAHORSE_SOURCE (ssrc));
     return FALSE; /* don't run again */    
@@ -175,7 +160,7 @@ scheduled_refresh (SeahorseSSHSource *ssrc)
 static gboolean
 scheduled_dummy (SeahorseSSHSource *ssrc)
 {
-    DEBUG_REFRESH ("dummy refresh event occurring now\n");
+    seahorse_debug ("dummy refresh event occurring now");
     ssrc->priv->scheduled_refresh = 0;
     return FALSE; /* don't run again */    
 }
@@ -218,7 +203,7 @@ monitor_ssh_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
 	}
 
 	g_free (path);
-	DEBUG_REFRESH ("scheduling refresh event due to file changes\n");
+	seahorse_debug ("scheduling refresh event due to file changes");
 	ssrc->priv->scheduled_refresh = g_timeout_add (500, (GSourceFunc)scheduled_refresh, ssrc);
 }
 
@@ -420,7 +405,7 @@ seahorse_ssh_source_load (SeahorseSource *sksrc)
     /* Schedule a dummy refresh. This blocks all monitoring for a while */
     cancel_scheduled_refresh (ssrc);
     ssrc->priv->scheduled_refresh = g_timeout_add (500, (GSourceFunc)scheduled_dummy, ssrc);
-    DEBUG_REFRESH ("scheduled a dummy refresh\n");
+    seahorse_debug ("scheduled a dummy refresh");
 
     /* List the .ssh directory for private keys */
     dir = g_dir_open (ssrc->priv->ssh_homedir, 0, &err);
@@ -559,7 +544,7 @@ seahorse_ssh_source_export (SeahorseSource *sksrc, GList *keys,
         /* We should already have the data loaded */
         if (keydata->pubfile) { 
             g_assert (keydata->rawdata);
-            results = g_strdup_printf ("%s\n", keydata->rawdata);
+            results = g_strdup_printf ("%s", keydata->rawdata);
             
         /* Public key without identity.pub. Export it. */
         } else if (!keydata->pubfile) {

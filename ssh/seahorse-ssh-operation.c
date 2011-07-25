@@ -35,21 +35,10 @@
 #include "seahorse-util.h"
 #include "seahorse-passphrase.h"
 
+#define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
+#include "seahorse-debug.h"
+
 #include <gnome-keyring.h>
-
-#ifndef DEBUG_OPERATION_ENABLE
-#if _DEBUG
-#define DEBUG_OPERATION_ENABLE 1
-#else
-#define DEBUG_OPERATION_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_OPERATION_ENABLE
-#define DEBUG_OPERATION(x)  g_printerr x
-#else
-#define DEBUG_OPERATION(x)
-#endif
 
 /* -----------------------------------------------------------------------------
  * DEFINITIONS
@@ -127,8 +116,8 @@ static void
 watch_ssh_process (GPid pid, gint status, SeahorseSSHOperation *sop)
 {
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
-    
-    DEBUG_OPERATION (("SSHOP: SSH process done\n"));
+
+    seahorse_debug ("SSHOP: SSH process done");
 
     /* Close off the askpass io channel etc... */
     if(pv->stag_askpass)
@@ -190,8 +179,8 @@ io_ssh_write (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *
     gsize written = 0;
 
     if (seahorse_operation_is_running (SEAHORSE_OPERATION (sop)) && pv->sin) {
-        DEBUG_OPERATION (("SSHOP: SSH ready for input\n"));
-        
+        seahorse_debug ("SSHOP: SSH ready for input");
+
         status = g_io_channel_write_chars (pv->iin, pv->sin->str, pv->sin->len,
                                            &written, &error);
         switch (status) {
@@ -201,20 +190,20 @@ io_ssh_write (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *
         case G_IO_STATUS_AGAIN:
             break;
         default:
-            DEBUG_OPERATION (("SSHOP: Wrote %d bytes to SSH\n", (gint)written));
+            seahorse_debug ("SSHOP: Wrote %d bytes to SSH", (gint)written);
             g_string_erase (pv->sin, 0, written);
             break;
         }
     }
     
     if (pv->sin && !pv->sin->len) {
-        DEBUG_OPERATION (("SSHOP: Finished writing SSH input\n"));
+        seahorse_debug ("SSHOP: Finished writing SSH input");
         g_string_free (pv->sin, TRUE);
         pv->sin = NULL;
     }
     
     if (!seahorse_operation_is_running (SEAHORSE_OPERATION (sop)) || !pv->sin) {
-        DEBUG_OPERATION (("SSHOP: Closing SSH input channel\n"));
+        seahorse_debug ("SSHOP: Closing SSH input channel");
         g_io_channel_unref (pv->iin);
         pv->iin = NULL;
         g_source_remove (pv->win);
@@ -241,10 +230,10 @@ io_ssh_read (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *s
     /* Figure out which buffer we're writing into */
     if (source == pv->iout) {
         str = pv->sout;
-        DEBUG_OPERATION (("SSHOP: SSH output: "));    
+        seahorse_debug ("SSHOP: SSH output: ");
     } else if(source == pv->ierr) {
         str = pv->serr;
-        DEBUG_OPERATION (("SSHOP: SSH errout: "));
+        seahorse_debug ("SSHOP: SSH errout: ");
     } else
         g_assert_not_reached ();
 
@@ -260,7 +249,7 @@ io_ssh_read (GIOChannel *source, GIOCondition condition, SeahorseSSHOperation *s
             break;
         default:
             g_string_append_len (str, buf, read);
-            DEBUG_OPERATION (("%s\n", str->str + (str->len - read)));
+            seahorse_debug ("%s", str->str + (str->len - read));
             break;
         }
     } while (read == sizeof (buf));
@@ -295,8 +284,8 @@ askpass_handler (GIOChannel *source, GIOCondition condition, SeahorseSSHOperatio
         if (string && ret) {
             
             string[length] = 0;
-            DEBUG_OPERATION (("SSHOP: seahorse-ssh-askpass request: %s\n", string));
-            
+            seahorse_debug ("SSHOP: seahorse-ssh-askpass request: \"%s\"", string);
+
             if (g_ascii_strncasecmp (COMMAND_PASSWORD, string, COMMAND_PASSWORD_LEN) == 0) {
                 line = g_strstrip (string + COMMAND_PASSWORD_LEN);
                 
@@ -308,7 +297,7 @@ askpass_handler (GIOChannel *source, GIOCondition condition, SeahorseSSHOperatio
                     if (!result) {
                         if (seahorse_operation_is_running (SEAHORSE_OPERATION (sop)))
                             seahorse_operation_cancel (SEAHORSE_OPERATION (sop));
-                        DEBUG_OPERATION (("SSHOP: password prompt cancelled\n"));
+                        seahorse_debug ("SSHOP: password prompt cancelled");
                         ret = FALSE;
                     }
                 }
@@ -318,11 +307,11 @@ askpass_handler (GIOChannel *source, GIOCondition condition, SeahorseSSHOperatio
             
             if (ret) {
                 /* And write the result back out to seahorse-ssh-askpass */
-                DEBUG_OPERATION (("SSHOP: seahorse-ssh-askpass response: %s\n", result ? result : ""));
+                seahorse_debug ("SSHOP: seahorse-ssh-askpass response: %s", result ? result : "");
                 if (result)
                     g_io_channel_write_chars (pv->io_askpass, result, strlen (result), &length, &err);
                 if (err == NULL)
-                    g_io_channel_write_chars (pv->io_askpass, "\n", 1, &length, &err);
+                    g_io_channel_write_chars (pv->io_askpass, "", 1, &length, &err);
                 if (err == NULL)
                     g_io_channel_flush (pv->io_askpass, &err);
                 if (err != NULL) {
@@ -623,7 +612,7 @@ seahorse_ssh_operation_new (SeahorseSSHSource *ssrc, const gchar *command,
     g_return_val_if_fail (command && command[0], NULL);
     
     if (!g_shell_parse_argv (command, &argc, &argv, NULL)) {
-        g_critical ("couldn't parse ssh command line: %s\n", command);
+        g_critical ("couldn't parse ssh command line: %s", command);
         g_return_val_if_reached (NULL);
     }
     
@@ -632,9 +621,9 @@ seahorse_ssh_operation_new (SeahorseSSHSource *ssrc, const gchar *command,
 
     sop->sksrc = ssrc;
     pv->prompt_skey = SEAHORSE_OBJECT (skey);
-    
-    DEBUG_OPERATION (("SSHOP: Executing SSH command: %s\n", command));
-    
+
+    seahorse_debug ("SSHOP: Executing SSH command: %s", command);
+
     /* And off we go to run the program */
     r = g_spawn_async_with_pipes (NULL, argv, NULL, 
                                   G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN 	, 
@@ -648,8 +637,8 @@ seahorse_ssh_operation_new (SeahorseSSHSource *ssrc, const gchar *command,
     /* Copy the input for later writing */
     if (input) {
         pv->sin = g_string_new_len (input, length == -1 ? strlen (input) : length);
-        DEBUG_OPERATION (("SSHOP: Will send SSH input: %s", pv->sin->str));    
-        
+        seahorse_debug ("SSHOP: Will send SSH input: %s", pv->sin->str);
+
         fcntl (fin, F_SETFL, O_NONBLOCK | fcntl (fin, F_GETFL));
         pv->iin = g_io_channel_unix_new (fin);
         g_io_channel_set_encoding (pv->iin, NULL, NULL);
@@ -712,12 +701,12 @@ seahorse_ssh_operation_sync (SeahorseSSHSource *ssrc, const gchar *command,
         error = &err;
     
     if (!g_shell_parse_argv (command, &argc, &argv, NULL)) {
-        g_critical ("couldn't parse ssh command line: %s\n", command);
+        g_critical ("couldn't parse ssh command line: %s", command);
         return NULL;
     }
-    
-    DEBUG_OPERATION (("SSHOP: executing SSH command: %s\n", command));
-    
+
+    seahorse_debug ("SSHOP: executing SSH command: %s", command);
+
     r = g_spawn_sync (NULL, argv, NULL, 0, ssh_sync_child_setup, NULL, 
                       &sout, &serr, &status, error);
     g_strfreev (argv);
@@ -756,7 +745,7 @@ seahorse_ssh_operation_sync (SeahorseSSHSource *ssrc, const gchar *command,
 static const gchar*
 upload_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
 {
-    DEBUG_OPERATION (("in upload_password_cb\n"));
+    seahorse_debug ("in upload_password_cb");
 
     /* Just prompt over and over again */
     return prompt_password (sop, _("Remote Host Password"), msg, NULL, FALSE);
@@ -842,9 +831,9 @@ change_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
 
     lcase = g_strdup (msg ? msg : "");
     seahorse_util_string_lower (lcase);
-    
-    DEBUG_OPERATION (("in change_password_cb\n"));
-    
+
+    seahorse_debug ("in change_password_cb");
+
     /* Need the old passphrase */
     if (strstr (lcase, "old pass"))
         ret = prompt_passphrase (sop, _("Old Key Passphrase"), 
@@ -924,7 +913,7 @@ static const gchar*
 generate_password_cb (SeahorseSSHOperation *sop, const gchar* msg)
 {
     SeahorseSSHOperationPrivate *pv = SEAHORSE_SSH_OPERATION_GET_PRIVATE (sop);
-    DEBUG_OPERATION (("in generate_password_cb\n"));
+    seahorse_debug ("in generate_password_cb");
 
     /* If the first time then prompt */
     if (!pv->prompt_dialog) {
@@ -1190,9 +1179,9 @@ seahorse_ssh_operation_rename (SeahorseSSHSource *ssrc, SeahorseSSHKey *skey,
     
     if (!change_raw_comment (keydata, newcomment ? newcomment : ""))
         g_return_val_if_reached (NULL);
-    
-    DEBUG_OPERATION (("renaming key to: %s", newcomment));
-    
+
+    seahorse_debug ("renaming key to: %s", newcomment);
+
     /* Just part of a file for this key */
     if (keydata->partial) {
         g_assert (keydata->pubfile);

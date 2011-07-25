@@ -48,24 +48,8 @@
 
 #ifdef WITH_LDAP
 
-/* Override the DEBUG_LDAP_ENABLE switch here */
-/* #define DEBUG_LDAP_ENABLE 1 */
-
-#ifndef DEBUG_LDAP_ENABLE
-#if _DEBUG
-#define DEBUG_LDAP_ENABLE 1
-#else
-#define DEBUG_LDAP_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_LDAP_ENABLE
-#define DEBUG_LDAP(x) g_printerr x
-#define DEBUG_LDAP_ENTRY(a,b) dump_ldap_entry(a,b)
-#else
-#define DEBUG_LDAP(x) 
-#define DEBUG_LDAP_ENTRY(a,b) 
-#endif
+#define DEBUG_FLAG SEAHORSE_DEBUG_LDAP
+#include "seahorse-debug.h"
 
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 30
@@ -146,7 +130,7 @@ get_ldap_values (LDAP *ld, LDAPMessage *entry, const char *attribute)
     return (gchar**)g_array_free (array, FALSE);
 }
 
-#if DEBUG_LDAP_ENABLE
+#if WITH_DEBUG
 
 static void
 dump_ldap_entry (LDAP *ld, LDAPMessage *res)
@@ -174,7 +158,7 @@ dump_ldap_entry (LDAP *ld, LDAPMessage *res)
     ber_free (pos, 0);
 }
 
-#endif
+#endif /* WITH_DEBUG */
 
 static GQuark
 get_ldap_error_domain ()
@@ -531,8 +515,11 @@ done_info_start_op (SeahorseOperation *op, LDAPMessage *result)
         /* If we have results then fill in the server info */
         if (r == LDAP_RES_SEARCH_ENTRY) {
 
-            DEBUG_LDAP (("[ldap] Server Info Result:\n"));
-            DEBUG_LDAP_ENTRY (lop->ldap, result);
+			seahorse_debug ("Server Info Result:");
+#ifdef WITH_DEBUG
+			if (seahorse_debugging)
+				dump_ldap_entry (lop->ldap, result);
+#endif
 
             /* NOTE: When adding attributes here make sure to add them to kServerAttributes */
             sinfo = g_new0 (LDAPServerInfo, 1);
@@ -860,10 +847,13 @@ search_entry (SeahorseOperation *op, LDAPMessage *result)
      
     /* An LDAP entry */
     if (r == LDAP_RES_SEARCH_ENTRY) {
-        
-        DEBUG_LDAP (("[ldap] Retrieved Key Entry:\n"));
-        DEBUG_LDAP_ENTRY (lop->ldap, result);
-        
+
+		seahorse_debug ("Retrieved Key Entry:");
+#ifdef WITH_DEBUG
+		if (seahorse_debugging)
+			dump_ldap_entry (lop->ldap, result);
+#endif
+
         parse_key_from_ldap_entry (lop, result);
         return TRUE;
         
@@ -918,8 +908,8 @@ start_search (SeahorseOperation *op, LDAPMessage *result)
     
     sinfo = get_ldap_server_info (lop->lsrc, TRUE);
 
-    DEBUG_LDAP (("[ldap] Searching Server ... base: %s, filter: %s\n", 
-                 sinfo->base_dn, filter));
+    seahorse_debug ("Searching Server ... base: %s, filter: %s",
+                    sinfo->base_dn, filter);
     
     r = ldap_search_ext (lop->ldap, sinfo->base_dn, LDAP_SCOPE_SUBTREE,
                          filter, (char**)kPGPAttributes, 0,
@@ -1015,9 +1005,12 @@ get_callback (SeahorseOperation *op, LDAPMessage *result)
      
     /* An LDAP Entry */
     if (r == LDAP_RES_SEARCH_ENTRY) {
-        
-        DEBUG_LDAP (("[ldap] Retrieved Key Data:\n"));
-        DEBUG_LDAP_ENTRY (lop->ldap, result);
+
+		seahorse_debug ("Server Info Result:");
+#ifdef WITH_DEBUG
+		if (seahorse_debugging)
+			dump_ldap_entry (lop->ldap, result);
+#endif
 
         key = get_string_attribute (lop->ldap, result, sinfo->key_attr);
         

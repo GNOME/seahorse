@@ -32,6 +32,7 @@ libseahorse_la_SOURCES = \
 	seahorse-combo-keys.c seahorse-combo-keys.h \
 	seahorse-commands.c seahorse-commands.h \
 	seahorse-context.c seahorse-context.h \
+	seahorse-debug.c seahorse-debug.h \
 	seahorse-dns-sd.c seahorse-dns-sd.h \
 	seahorse-gconf.c seahorse-gconf.h \
 	seahorse-gtkstock.c seahorse-gtkstock.h \

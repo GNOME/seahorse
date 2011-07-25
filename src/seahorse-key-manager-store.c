@@ -34,6 +34,9 @@
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 
+#define DEBUG_FLAG SEAHORSE_DEBUG_DRAG
+#include "seahorse-debug.h"
+
 #include "eggtreemultidnd.h"
 
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
@@ -471,9 +474,9 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore 
 	
 	#if GTK_CHECK_VERSION (2,22,0)
         GdkWindow *source_window;
-    #endif
-    
-	DBG_PRINT (("drag_begin -->\n"));
+#endif
+
+	seahorse_debug ("drag_begin -->");
 
 	g_free (skstore->priv->drag_destination);
 	skstore->priv->drag_destination = NULL;
@@ -497,7 +500,7 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore 
         }
     #endif
 	
-	DBG_PRINT (("drag_begin <--\n"));
+	seahorse_debug ("drag_begin <--");
 	return skstore->priv->drag_objects ? TRUE : FALSE;
 }
 
@@ -512,7 +515,7 @@ export_keys_to_output (GList *objects, GOutputStream *output, GError **error)
 	gboolean ret;
 	
 	objects = seahorse_util_objects_sort (objects);
-	DBG_PRINT (("exporting %d objects\n", g_list_length (objects)));
+	seahorse_debug ("exporting %d objects", g_list_length (objects));
 	
 	while (objects) {
 		
@@ -565,7 +568,7 @@ export_to_text (SeahorseKeyManagerStore *skstore, GtkSelectionData *selection_da
 	g_return_val_if_fail (skstore->priv->drag_objects, FALSE);
 	keys = g_list_copy (skstore->priv->drag_objects);
 
-	DBG_PRINT (("exporting to text\n"));
+	seahorse_debug ("exporting to text");
 
 	output = g_memory_output_stream_new (NULL, 0, g_realloc, g_free);
 	g_return_val_if_fail (output, FALSE);
@@ -574,7 +577,7 @@ export_to_text (SeahorseKeyManagerStore *skstore, GtkSelectionData *selection_da
 	ret = export_keys_to_output (keys, output, &skstore->priv->drag_error) &&
 	       g_output_stream_close (output, NULL, &skstore->priv->drag_error);
 	if (ret) {
-		DBG_PRINT (("setting selection text\n"));
+		seahorse_debug ("setting selection text");
 		gtk_selection_data_set_text (selection_data, 
 		                             g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output)), 
 		                             seahorse_util_memory_output_length (G_MEMORY_OUTPUT_STREAM (output)));
@@ -596,8 +599,8 @@ export_to_filename (SeahorseKeyManagerStore *skstore, const gchar *filename)
 	gchar *uri;
 	GFile *file;
 	GList *keys;
-	
-	DBG_PRINT (("exporting to %s\n", filename));
+
+	seahorse_debug ("exporting to %s", filename);
 
 	ret = FALSE;
 	g_return_val_if_fail (skstore->priv->drag_objects, FALSE);
@@ -630,13 +633,13 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context, GtkSelectionData *sel
 	gchar *destination;
 	gboolean ret;
 
-	DBG_PRINT (("drag_data_get %d -->\n", info)); 
+	seahorse_debug ("drag_data_get %d -->", info);
 	
 	g_return_val_if_fail (skstore->priv->drag_objects, FALSE);
 
 	/* The caller wants plain text */
 	if (info == DRAG_INFO_TEXT) {
-		DBG_PRINT (("returning object text\n"));
+		seahorse_debug ("returning object text");
 		export_to_text (skstore, selection_data);
 		
 	/* The caller wants XDS */
@@ -654,10 +657,10 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context, GtkSelectionData *sel
 		
 	/* Unrecognized format */
 	} else {
-		DBG_PRINT (("Unrecognized format: %d\n", info));
+		seahorse_debug ("Unrecognized format: %d", info);
 	}
 	
-	DBG_PRINT(("drag_data_get <--\n"));
+	seahorse_debug ("drag_data_get <--");
 	return ret;
 }
 
@@ -665,9 +668,9 @@ static void
 drag_end (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore *skstore)
 {
 	gchar *filename, *name;
-	
-	DBG_PRINT (("drag_end -->\n"));
-	
+
+	seahorse_debug ("drag_end -->");
+
 	if (skstore->priv->drag_destination && !skstore->priv->drag_error) {
 		g_return_if_fail (skstore->priv->drag_objects);
 	
@@ -691,8 +694,8 @@ drag_end (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore *s
 	skstore->priv->drag_objects = NULL;
 	g_free (skstore->priv->drag_destination);
 	skstore->priv->drag_destination = NULL;
-	
-	DBG_PRINT (("drag_end <--\n"));
+
+	seahorse_debug ("drag_end <--");
 }
 
 static gint 

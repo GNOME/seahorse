@@ -33,20 +33,6 @@
 
 #include <gnome-keyring.h>
 
-#ifndef DEBUG_OPERATION_ENABLE
-#if _DEBUG
-#define DEBUG_OPERATION_ENABLE 1
-#else
-#define DEBUG_OPERATION_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_OPERATION_ENABLE
-#define DEBUG_OPERATION(x)  g_printerr x
-#else
-#define DEBUG_OPERATION(x)
-#endif
-
 /* -----------------------------------------------------------------------------
  * DEFINITIONS
  */

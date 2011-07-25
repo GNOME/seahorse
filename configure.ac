@@ -217,7 +217,7 @@ dnl fails, the user can play guess-the-dependency by using something
 dnl like LDAP_LIBS="-lfoo" ./configure
 
 if test "$try_ldap" = yes ; then
-  for MY_LDAPLIBS in ${LDAP_LIBS+"$LDAP_LIBS"} "-lldap" "-lldap -llber" "-lldap -llber -lresolv"; do
+  for MY_LDAPLIBS in ${LDAP_LIBS+"$LDAP_LIBS"} "-lldap -llber" "-lldap" "-lldap -llber -lresolv"; do
     _ldap_save_libs=$LIBS
     LIBS="$MY_LDAPLIBS $NETLIBS $LIBS"
 

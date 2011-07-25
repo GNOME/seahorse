@@ -41,23 +41,6 @@
 
 #include <gnome-keyring.h>
 
-/* Override the DEBUG_REFRESH_ENABLE switch here */
-#define DEBUG_REFRESH_ENABLE 0
-
-#ifndef DEBUG_REFRESH_ENABLE
-#if _DEBUG
-#define DEBUG_REFRESH_ENABLE 1
-#else
-#define DEBUG_REFRESH_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_REFRESH_ENABLE
-#define DEBUG_REFRESH(x)    g_printerr(x)
-#else
-#define DEBUG_REFRESH(x)
-#endif
-
 enum {
     PROP_0,
     PROP_SOURCE_TAG,

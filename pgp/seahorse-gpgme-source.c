@@ -44,24 +44,10 @@
 #include <libintl.h>
 #include <locale.h>
 
+#define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
+#include "seahorse-debug.h"
+
 /* TODO: Verify properly that all keys we deal with are PGP keys */
-
-/* Override the DEBUG_REFRESH_ENABLE switch here */
-#define DEBUG_REFRESH_ENABLE 0
-
-#ifndef DEBUG_REFRESH_ENABLE
-#if _DEBUG
-#define DEBUG_REFRESH_ENABLE 1
-#else
-#define DEBUG_REFRESH_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_REFRESH_ENABLE
-#define DEBUG_REFRESH(x)    g_printerr(x)
-#else
-#define DEBUG_REFRESH(x)
-#endif
 
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 200
@@ -538,7 +524,7 @@ scheduled_refresh (gpointer data)
 {
     SeahorseGpgmeSource *psrc = SEAHORSE_GPGME_SOURCE (data);
 
-    DEBUG_REFRESH ("scheduled refresh event ocurring now\n");
+    seahorse_debug ("scheduled refresh event ocurring now");
     cancel_scheduled_refresh (psrc);
     seahorse_source_load_async (SEAHORSE_SOURCE (psrc));
     
@@ -549,7 +535,7 @@ static gboolean
 scheduled_dummy (gpointer data)
 {
     SeahorseGpgmeSource *psrc = SEAHORSE_GPGME_SOURCE (data);
-    DEBUG_REFRESH ("dummy refresh event occurring now\n");
+    seahorse_debug ("dummy refresh event occurring now");
     psrc->pv->scheduled_refresh = 0;
     return FALSE; /* don't run again */    
 }
@@ -558,7 +544,7 @@ static void
 cancel_scheduled_refresh (SeahorseGpgmeSource *psrc)
 {
     if (psrc->pv->scheduled_refresh != 0) {
-        DEBUG_REFRESH ("cancelling scheduled refresh event\n");
+        seahorse_debug ("cancelling scheduled refresh event");
         g_source_remove (psrc->pv->scheduled_refresh);
         psrc->pv->scheduled_refresh = 0;
     }
@@ -578,7 +564,7 @@ monitor_gpg_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
 		name = g_file_get_basename (file);
 		if (g_str_has_suffix (name, SEAHORSE_EXT_GPG)) {
 			if (psrc->pv->scheduled_refresh == 0) {
-				DEBUG_REFRESH ("scheduling refresh event due to file changes\n");
+				seahorse_debug ("scheduling refresh event due to file changes");
 				psrc->pv->scheduled_refresh = g_timeout_add (500, scheduled_refresh, psrc);
 			}
 		}
@@ -878,9 +864,9 @@ seahorse_gpgme_source_load (SeahorseSource *src)
     /* Schedule a dummy refresh. This blocks all monitoring for a while */
     cancel_scheduled_refresh (psrc);
     psrc->pv->scheduled_refresh = g_timeout_add (500, scheduled_dummy, psrc);
-    DEBUG_REFRESH ("scheduled a dummy refresh\n");
+    seahorse_debug ("scheduled a dummy refresh");
  
-    DEBUG_REFRESH ("refreshing keys...\n");
+    seahorse_debug ("refreshing keys...");
 
     /* Secret keys */
     lop = seahorse_load_operation_start (psrc, NULL, 0, FALSE);

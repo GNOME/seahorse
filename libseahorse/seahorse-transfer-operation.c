@@ -26,19 +26,8 @@
 #include "seahorse-transfer-operation.h"
 #include "seahorse-util.h"
 
-#ifndef DEBUG_OPERATION_ENABLE
-#if _DEBUG
-#define DEBUG_OPERATION_ENABLE 1
-#else
-#define DEBUG_OPERATION_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_OPERATION_ENABLE
-#define DEBUG_OPERATION(x) g_printerr x
-#else
-#define DEBUG_OPERATION(x) 
-#endif
+#define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
+#include "seahorse-debug.h"
 
 /* -----------------------------------------------------------------------------
  * DEFINITIONS
@@ -92,9 +81,9 @@ import_progress (SeahorseOperation *op, const gchar *message,
     SeahorseTransferOperationPrivate *pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
     
     g_assert (op == pv->operation);
-    
-    DEBUG_OPERATION (("[transfer] import progress: %lf\n", fract));
-    
+
+    seahorse_debug ("[transfer] import progress: %lf", fract);
+
     if (seahorse_operation_is_running (SEAHORSE_OPERATION (top))) {
         message = pv->message ? pv->message : message;
         fract = fract <= 0 ? 0.5 : (0.5 + (fract / 2.0));
@@ -110,7 +99,7 @@ import_done (SeahorseOperation *op, SeahorseTransferOperation *top)
     GError *err = NULL;
     
     g_assert (op == pv->operation);
-    DEBUG_OPERATION (("[transfer] import done\n"));
+    seahorse_debug ("[transfer] import done");
     
     /* A release guard */
     g_object_ref (top);
@@ -142,8 +131,8 @@ export_progress (SeahorseOperation *op, const gchar *message,
     SeahorseTransferOperationPrivate *pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
     
     g_assert (op == pv->operation);
-    DEBUG_OPERATION (("[transfer] export progress: %lf\n", fract));
-    
+    seahorse_debug ("[transfer] export progress: %lf", fract);
+
     if (seahorse_operation_is_running (SEAHORSE_OPERATION (top)))
         seahorse_operation_mark_progress (SEAHORSE_OPERATION (top), 
                                           pv->message ? pv->message : message, 
@@ -161,7 +150,7 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
     gsize size;
     
     g_assert (op == pv->operation);
-    DEBUG_OPERATION (("[transfer] export done\n"));
+    seahorse_debug ("[transfer] export done");
 
     /* A release guard */
     g_object_ref (top);
@@ -181,13 +170,13 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
     
     /* End release guard */
     g_object_unref (top);
-    
-    if (done) {
-        DEBUG_OPERATION (("[transfer] stopped after export\n"));
-        return;
-    }
-    
-    	/* Build an input stream for this */
+
+	if (done) {
+		seahorse_debug ("[transfer] stopped after export");
+		return;
+	}
+
+	/* Build an input stream for this */
 	data = g_memory_output_stream_get_data (pv->output);
 	size = seahorse_util_memory_output_length (pv->output);
 	
@@ -195,9 +184,9 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
 		seahorse_operation_mark_done (SEAHORSE_OPERATION (top), FALSE, NULL);
 		return;
 	}
-	
-	DEBUG_OPERATION (("[transfer] starting import\n"));
-	    
+
+	seahorse_debug ("[transfer] starting import");
+
 	g_return_if_fail (data);
 
 	input = g_memory_input_stream_new_from_data (g_memdup (data, size), size, g_free);
@@ -375,8 +364,8 @@ seahorse_transfer_operation_new (const gchar *message, SeahorseSource *from,
     
     top = g_object_new (SEAHORSE_TYPE_TRANSFER_OPERATION, "message", message, 
                         "from-key-source", from, "to-key-source", to, NULL);
-    
-    DEBUG_OPERATION (("[transfer] starting export\n"));
+
+    seahorse_debug ("[transfer] starting export");
 
     /* A list of quarks, so a deep copy is not necessary */
     g_object_set_data_full (G_OBJECT (top), "transfer-key-ids", g_slist_copy (keyids), 

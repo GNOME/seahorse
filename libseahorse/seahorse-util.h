@@ -189,10 +189,4 @@ SeahorseVersion seahorse_util_parse_version   (const char *version);
         g_thread_yield ();                                \
     }
 
-#ifdef _DEBUG
-#define DBG_PRINT(x) g_printerr x
-#else
-#define DBG_PRINT(x)
-#endif
-
 #endif /* __SEAHORSE_UTIL_H__ */

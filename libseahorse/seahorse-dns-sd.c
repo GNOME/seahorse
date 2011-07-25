@@ -35,22 +35,8 @@
 #include "pgp/seahorse-server-source.h"
 #endif
 
-/* Override the DEBUG_DNSSD_ENABLE switch here */
-/* #define DEBUG_DNSSD_ENABLE 1 */
-
-#ifndef DEBUG_DNSSD_ENABLE
-#if _DEBUG
-#define DEBUG_DNSSD_ENABLE 1
-#else
-#define DEBUG_DNSSD_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_DNSSD_ENABLE
-#define DEBUG_DNSSD(x) g_printerr x
-#else
-#define DEBUG_DNSSD(x) 
-#endif
+#define DEBUG_FLAG SEAHORSE_DEBUG_DNSSD
+#include "seahorse-debug.h"
 
 #define HKP_SERVICE_TYPE "_pgpkey-hkp._tcp."
 
@@ -180,7 +166,7 @@ resolve_callback (AvahiServiceResolver *resolver, AvahiIfIndex iface, AvahiProto
             seahorse_context_add_source (SCTX_APP (), SEAHORSE_SOURCE (ssrc));
         }
     
-        DEBUG_DNSSD (("DNS-SD added: %s %s\n", service_name, service_uri));
+        seahorse_debug ("added: %s %s\n", service_name, service_uri);
         break;
         
     default:
@@ -248,7 +234,7 @@ browse_callback(AvahiServiceBrowser *browser, AvahiIfIndex iface, AvahiProtocol 
         /* And remove it from our tables */
         g_hash_table_remove (ssd->services, name);
         g_signal_emit (ssd, signals[REMOVED], 0, name);
-        DEBUG_DNSSD (("DNS-SD removed: %s\n", name));
+        seahorse_debug ("removed: %s\n", name);
         break;
         
     

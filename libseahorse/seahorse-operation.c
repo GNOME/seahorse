@@ -24,29 +24,15 @@
 #include "seahorse-marshal.h"
 #include "seahorse-operation.h"
 
+#define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
+#include "seahorse-debug.h"
+
 /**
  * SECTION:seahorse-operation
  * @short_description: Contains code for operations and multi operations (container for several operations)
  * @include:seahorse-operation.h
  *
  **/
-
-/* Override the DEBUG_OPERATION_ENABLE switch here */
-#define DEBUG_OPERATION_ENABLE 0
-
-#ifndef DEBUG_OPERATION_ENABLE
-#if _DEBUG
-#define DEBUG_OPERATION_ENABLE 1
-#else
-#define DEBUG_OPERATION_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_OPERATION_ENABLE
-#define DEBUG_OPERATION(x) g_printerr x
-#else
-#define DEBUG_OPERATION(x) 
-#endif
 
 /* -----------------------------------------------------------------------------
  * SEAHORSE OPERATION
@@ -585,9 +571,9 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
     /* One or two operations, simple */
     if (g_slist_length (list) <= 1) {
 
-        DEBUG_OPERATION (("[multi-operation 0x%08X] single progress: %s %lf\n", (guint)mop, 
-            seahorse_operation_get_message (operation), operation->progress));
-        
+		seahorse_debug ("[multi-operation %p] single progress: %s %lf", mop,
+		                seahorse_operation_get_message (operation), operation->progress);
+
         seahorse_operation_mark_progress (SEAHORSE_OPERATION (mop), 
                             seahorse_operation_get_message (operation), 
                             operation->progress);
@@ -620,14 +606,14 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
                     current += (seahorse_operation_is_running (op) ? 0 : 1);
                 else
                     current += op->progress;
-                DEBUG_OPERATION (("    progres is: %lf\n", op->progress));
+                seahorse_debug ("    progres is: %lf", op->progress);
             }
         } 
         
         progress = total ? current / total : -1;
 
-        DEBUG_OPERATION (("[multi-operation 0x%08X] multi progress: %s %lf\n", (guint)mop, 
-                          message, progress));
+        seahorse_debug ("[multi-operation %p] multi progress: %s %lf", mop,
+                          message, progress);
         
         seahorse_operation_mark_progress (SEAHORSE_OPERATION (mop), message, progress);
     }
@@ -656,8 +642,8 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
     if (!seahorse_operation_is_successful (op) && !SEAHORSE_OPERATION (mop)->error)
         seahorse_operation_copy_error (op, &(SEAHORSE_OPERATION (mop)->error));
 
-    DEBUG_OPERATION (("[multi-operation 0x%08X] part complete (%d): 0x%08X/%s\n", (guint)mop, 
-                g_slist_length (mop->operations), (guint)op, seahorse_operation_get_message (op)));
+    seahorse_debug ("[multi-operation %p] part complete (%d): %p/%s", mop,
+                    g_slist_length (mop->operations), op, seahorse_operation_get_message (op));
         
     /* Are we done with all of them? */
     for (l = mop->operations; l; l = g_slist_next (l)) {
@@ -671,7 +657,7 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
         return;
     }
 
-    DEBUG_OPERATION (("[multi-operation 0x%08X] complete\n", (guint)mop));
+    seahorse_debug ("[multi-operation %p] complete", mop);
 
     /* Remove all the listeners */
     for (l = mop->operations; l; l = g_slist_next (l)) {
@@ -821,11 +807,11 @@ seahorse_multi_operation_take (SeahorseMultiOperation* mop, SeahorseOperation *o
     g_return_if_fail (SEAHORSE_OPERATION (op) != SEAHORSE_OPERATION (mop));
     
     if(mop->operations == NULL) {
-        DEBUG_OPERATION (("[multi-operation 0x%08X] start\n", (guint)mop));
+        seahorse_debug ("[multi-operation %p] start", mop);
         seahorse_operation_mark_start (SEAHORSE_OPERATION (mop));
     }
     
-    DEBUG_OPERATION (("[multi-operation 0x%08X] adding part: 0x%08X\n", (guint)mop, (guint)op));
+    seahorse_debug ("[multi-operation %p] adding part: %p", mop, op);
     
     mop->operations = seahorse_operation_list_add (mop->operations, op);
     seahorse_operation_watch (op, (SeahorseDoneFunc)multi_operation_done, mop,

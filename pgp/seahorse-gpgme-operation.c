@@ -27,21 +27,8 @@
 #include "pgp/seahorse-gpgme-operation.h"
 #include "pgp/seahorse-gpgme-source.h"
 
-#define DEBUG_OPERATION_ENABLE 0
-
-#ifndef DEBUG_OPERATION_ENABLE
-#if _DEBUG
-#define DEBUG_OPERATION_ENABLE 1
-#else
-#define DEBUG_OPERATION_ENABLE 0
-#endif
-#endif
-
-#if DEBUG_OPERATION_ENABLE
-#define DEBUG_OPERATION(x) g_printerr x
-#else
-#define DEBUG_OPERATION(x) 
-#endif
+#define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
+#include "seahorse-debug.h"
 
 /* -----------------------------------------------------------------------------
  * DEFINITIONS
@@ -122,7 +109,7 @@ END_IMPLEMENT_OPERATION_PROPS
 static gboolean
 io_callback (GIOChannel *source, GIOCondition condition, WatchData *watch)
 {
-    DEBUG_OPERATION (("GPGME OP: io for GPGME on %d\n", watch->fd));
+    seahorse_debug ("GPGME OP: io for GPGME on %d", watch->fd);
     (watch->fnc) (watch->fnc_data, g_io_channel_unix_get_fd (source));
     return TRUE;
 }
@@ -135,9 +122,9 @@ register_watch (WatchData *watch)
     
     if (watch->registered)
         return;
-    
-    DEBUG_OPERATION (("GPGME OP: registering watch %d\n", watch->fd));
-    
+
+    seahorse_debug ("GPGME OP: registering watch %d", watch->fd);
+
     channel = g_io_channel_unix_new (watch->fd);
     watch->stag = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT, 
                                        watch->dir ? READ_CONDITION : WRITE_CONDITION,
@@ -152,9 +139,9 @@ unregister_watch (WatchData *watch)
 {
     if (!watch->registered)
         return;
-    
-    DEBUG_OPERATION (("GPGME OP: unregistering watch %d\n", watch->fd));
-    
+
+    seahorse_debug ("GPGME OP: unregistering watch %d", watch->fd);
+
     g_source_remove (watch->stag);
     watch->stag = 0;
     watch->registered = FALSE;
@@ -171,9 +158,9 @@ progress_cb (void *data, const char *what, int type,
 {
     SeahorseGpgmeOperation *pop = SEAHORSE_GPGME_OPERATION (data);
     SeahorseGpgmeOperationPrivate *pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (pop);
-    
-    DEBUG_OPERATION (("GPGME OP: got progress: %s %d/%d\n", what, current, total));
-    
+
+    seahorse_debug ("GPGME OP: got progress: %s %d/%d", what, current, total);
+
     if (total <= 0)
         total = pv->def_total;
     
@@ -191,9 +178,9 @@ register_cb (void *data, int fd, int dir, gpgme_io_cb_t fnc, void *fnc_data,
     SeahorseGpgmeOperation *pop = SEAHORSE_GPGME_OPERATION (data);
     SeahorseGpgmeOperationPrivate *pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (pop);
     WatchData *watch;
-    
-    DEBUG_OPERATION (("PGPOP: request to register watch %d\n", fd));
-    
+
+    seahorse_debug ("PGPOP: request to register watch %d", fd);
+
     watch = g_new0 (WatchData, 1);
     watch->registered = FALSE;
     watch->fd = fd;
@@ -224,7 +211,7 @@ remove_cb (void *tag)
 
     pv = SEAHORSE_GPGME_OPERATION_GET_PRIVATE (watch->op);
 
-    DEBUG_OPERATION (("PGPOP: request to remove watch %d\n", watch->fd));
+    seahorse_debug ("PGPOP: request to remove watch %d", watch->fd);
     
     pv->watches = g_list_remove (pv->watches, watch);
     unregister_watch (watch);
@@ -246,9 +233,9 @@ event_cb (void *data, gpgme_event_io_t type, void *type_data)
     /* Called when the GPGME context starts an operation */
     case GPGME_EVENT_START:
         pv->busy = TRUE;
-    
-        DEBUG_OPERATION (("PGPOP: start event\n"));
-        
+
+        seahorse_debug ("PGPOP: start event");
+
         /* Since we weren't supposed to register these before, do it now */
         for (list = pv->watches; list; list = g_list_next (list))
             register_watch ((WatchData*)(list->data));
@@ -266,9 +253,9 @@ event_cb (void *data, gpgme_event_io_t type, void *type_data)
     case GPGME_EVENT_DONE:
         pv->busy = FALSE;
         gerr = (gpgme_error_t*)type_data;
-    
-        DEBUG_OPERATION (("PGPOP: done event (err: %d)\n", *gerr));
-        
+
+        seahorse_debug ("PGPOP: done event (err: %d)", *gerr);
+
         /* Make sure we have no extra watches left over */
         for (list = pv->watches; list; list = g_list_next (list))
             unregister_watch ((WatchData*)(list->data));
