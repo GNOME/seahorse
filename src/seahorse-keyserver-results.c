@@ -45,6 +45,7 @@ struct _SeahorseKeyserverResultsPrivate {
 	SeahorseKeyManagerStore *store;
 	SeahorseSet *objects;
 	SeahorseObjectPredicate pred;
+	GSettings *settings;
 };
 
 G_DEFINE_TYPE (SeahorseKeyserverResults, seahorse_keyserver_results, SEAHORSE_TYPE_VIEWER);
@@ -106,7 +107,8 @@ fire_selection_changed (SeahorseKeyserverResults* self)
 	selection = gtk_tree_view_get_selection (self->pv->view);
 	rows = gtk_tree_selection_count_selected_rows (selection);
 	seahorse_viewer_set_numbered_status (SEAHORSE_VIEWER (self), ngettext ("Selected %d key", "Selected %d keys", rows), rows);
-	gtk_action_group_set_sensitive (self->pv->object_actions, rows > 0);
+	if (self->pv->object_actions)
+		gtk_action_group_set_sensitive (self->pv->object_actions, rows > 0);
 	g_signal_emit_by_name (G_OBJECT (SEAHORSE_VIEW (self)), "selection-changed");
 	return FALSE;
 }
@@ -365,7 +367,8 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	
 	/* Our set all nicely filtered */
 	self->pv->objects = seahorse_set_new_full (&self->pv->pred);
-	self->pv->store = seahorse_key_manager_store_new (self->pv->objects, self->pv->view);
+	self->pv->store = seahorse_key_manager_store_new (self->pv->objects, self->pv->view,
+	                                                  self->pv->settings);
 	on_view_selection_changed (selection, self);
 	
 	return G_OBJECT (self);
@@ -381,6 +384,7 @@ static void
 seahorse_keyserver_results_init (SeahorseKeyserverResults *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResultsPrivate);
+	self->pv->settings = g_settings_new ("org.gnome.seahorse.manager");
 }
 
 /**
@@ -412,7 +416,9 @@ seahorse_keyserver_results_finalize (GObject *obj)
 	if (self->pv->view)
 		gtk_tree_view_set_model (self->pv->view, NULL);
 	self->pv->view = NULL;
-	
+
+	g_clear_object (&self->pv->settings);
+
 	G_OBJECT_CLASS (seahorse_keyserver_results_parent_class)->finalize (obj);
 }
 

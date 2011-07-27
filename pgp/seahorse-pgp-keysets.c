@@ -21,7 +21,6 @@
 
 #include "config.h"
 
-#include "seahorse-gconf.h"
 #include "seahorse-object.h"
 
 #include "seahorse-pgp-module.h"
@@ -32,11 +31,12 @@
  */
 
 static void
-pgp_signers_gconf_notify (GConfClient *client, guint id, GConfEntry *entry, 
-                          SeahorseSet *skset)
+on_settings_default_key_changed (GSettings *settings, const gchar *key, gpointer user_data)
 {
-    /* Default key changed, refresh */
-    seahorse_set_refresh (skset);
+	SeahorseSet *skset = SEAHORSE_SET (user_data);
+
+	/* Default key changed, refresh */
+	seahorse_set_refresh (skset);
 }
 
 static gboolean 
@@ -71,9 +71,9 @@ seahorse_keyset_pgp_signers_new ()
     
     skset = seahorse_set_new_full (pred);
     g_object_set_data_full (G_OBJECT (skset), "pgp-signers-predicate", pred, g_free);
-    
-    seahorse_gconf_notify_lazy (SEAHORSE_DEFAULT_KEY, 
-                                (GConfClientNotifyFunc)pgp_signers_gconf_notify, 
-                                skset, skset);
+
+    g_signal_connect_object (seahorse_context_pgp_settings (NULL), "changed::default-key",
+                             G_CALLBACK (on_settings_default_key_changed), skset, 0);
+
     return skset;
 }

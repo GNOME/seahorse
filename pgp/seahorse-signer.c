@@ -30,7 +30,6 @@
 #include "seahorse-widget.h"
 #include "seahorse-validity.h"
 #include "seahorse-combo-keys.h"
-#include "seahorse-gconf.h"
 #include "seahorse-util.h"
 
 #include "pgp/seahorse-pgp-key.h"
@@ -47,6 +46,7 @@ seahorse_signer_get (GtkWindow *parent)
     gint response;
     gboolean done = FALSE;
     gboolean ok = FALSE;
+    GSettings *settings;
     gchar *id;
     guint nkeys;
 
@@ -81,9 +81,11 @@ seahorse_signer_get (GtkWindow *parent)
     g_return_val_if_fail (combo != NULL, NULL);
     seahorse_combo_keys_attach (GTK_COMBO_BOX (combo), skset, NULL);
     g_object_unref (skset);
-    
+
+    settings = seahorse_context_pgp_settings (NULL);
+
     /* Select the last key used */
-    id = seahorse_gconf_get_string (SEAHORSE_LASTSIGNER_KEY);
+    id = g_settings_get_string (settings, "last-signer");
     seahorse_combo_keys_set_active_id (GTK_COMBO_BOX (combo), g_quark_from_string (id));
     g_free (id); 
     
@@ -108,8 +110,8 @@ seahorse_signer_get (GtkWindow *parent)
         g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (object), NULL);
 
         /* Save this as the last key signed with */
-        seahorse_gconf_set_string (SEAHORSE_LASTSIGNER_KEY, object == NULL ? 
-                        "" : g_quark_to_string (seahorse_object_get_id (object)));
+        g_settings_set_string (settings, "last-signer",
+                               object == NULL ? "" : g_quark_to_string (seahorse_object_get_id (object)));
     }
     
     seahorse_widget_destroy (swidget);

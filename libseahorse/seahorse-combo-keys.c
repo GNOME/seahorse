@@ -23,7 +23,6 @@
 
 #include "seahorse-combo-keys.h"
 
-#include "seahorse-gconf.h"
 #include "seahorse-object.h"
 
 enum {

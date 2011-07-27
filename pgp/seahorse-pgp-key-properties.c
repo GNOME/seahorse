@@ -29,7 +29,6 @@
   
 #include <glib/gi18n.h>
 
-#include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-object.h"
 #include "seahorse-object-model.h"

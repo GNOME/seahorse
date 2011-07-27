@@ -19,8 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "seahorse-context.h"
 #include "seahorse-servers.h"
-#include "seahorse-gconf.h"
 
 #include "common/seahorse-cleanup.h"
 
@@ -97,45 +97,46 @@ seahorse_servers_register_type (const char* type, const char* description,
 }
 
 
-GSList* 
-seahorse_servers_get_uris (void) 
+gchar **
+seahorse_servers_get_uris (void)
 {
-	GSList* servers, *l;
-	gchar *name, *value;
-	
-	servers = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-	
+	gchar **servers;
+	gchar *name;
+	guint i;
+
+	servers = g_settings_get_strv (seahorse_context_pgp_settings (NULL), "keyservers");
+
 	/* The values are 'uri name', remove the name part */
-	for (l = servers; l; l = g_slist_next (l)) {
-		value = l->data;
-		g_strstrip (value);
-		name = strchr (value, ' ');
-		if (name)
-			*name = 0;
+	for (i = 0; servers[i] != NULL; i++) {
+		g_strstrip (servers[i]);
+		name = strchr (servers[i], ' ');
+		if (name != NULL)
+			*name = '\0';
 	}
-	
+
 	return servers;
 }
 
-GSList* 
-seahorse_servers_get_names (void) 
+gchar **
+seahorse_servers_get_names (void)
 {
-	GSList* servers, *l;
-	gchar *name, *value;
+	gchar **servers;
+	gchar *name;
+	guint i;
 
-	servers = seahorse_gconf_get_string_list (KEYSERVER_KEY);
-	
-	/* The values are 'uri name', remove the name part */
-	for (l = servers; l; l = g_slist_next (l)) {
-		value = l->data;
-		g_strstrip (value);
-		name = strchr (value, ' ');
-		if (name) {
-			memset (value, ' ', name - value);
-			g_strstrip (value);
+	servers = g_settings_get_strv (seahorse_context_pgp_settings (NULL),
+	                               "keyservers");
+
+	/* The values are 'uri name', remove the value part */
+	for (i = 0; servers[i] != NULL; i++) {
+		g_strstrip (servers[i]);
+		name = strchr (servers[i], ' ');
+		if (name != NULL) {
+			memset (servers[i], ' ', name - servers[i]);
+			g_strstrip (servers[i]);
 		}
 	}
-	
+
 	return servers;
 }
 

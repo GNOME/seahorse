@@ -24,7 +24,6 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-context.h"
-#include "seahorse-gconf.h"
 #include "seahorse-keyserver-sync.h"
 #include "seahorse-object.h"
 #include "seahorse-progress.h"
@@ -38,14 +37,18 @@
 static void 
 sync_import_complete (SeahorseOperation *op, SeahorseSource *sksrc)
 {
-    GError *err = NULL;
-    
-    if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't publish keys to server"), 
-                                    seahorse_gconf_get_string (PUBLISH_TO_KEY));
-        g_clear_error (&err);
-    }    
+	GError *error = NULL;
+	gchar *publish_to;
+
+	if (!seahorse_operation_is_successful (op)) {
+		seahorse_operation_copy_error (op, &error);
+		publish_to = g_settings_get_string (seahorse_context_settings (NULL),
+		                                    "server-publish-to");
+		seahorse_util_handle_error (error, _("Couldn't publish keys to server"),
+		                            publish_to);
+		g_free (publish_to);
+		g_clear_error (&error);
+	}
 }
 
 static void
@@ -88,44 +91,34 @@ on_sync_configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 static void
 update_message (SeahorseWidget *swidget)
 {
-    GtkWidget *w, *w2, *sync_button;
-    gchar *t;
-    
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "publish-message"));
-    w2 = GTK_WIDGET (seahorse_widget_get_widget (swidget, "sync-message"));
-    sync_button = GTK_WIDGET (seahorse_widget_get_widget (swidget, "sync-button"));
+	GtkWidget *widget;
+	GtkWidget *widget2;
+	GtkWidget *sync_button;
+	gchar *text;
 
-    t = seahorse_gconf_get_string (PUBLISH_TO_KEY);
-    if (t && t[0]) {
-        gtk_widget_show (w);
-        gtk_widget_hide (w2);
-        
-        gtk_widget_set_sensitive (sync_button, TRUE);
-    } else {
-        gtk_widget_hide (w);
-        gtk_widget_show (w2);
-        
-        gtk_widget_set_sensitive (sync_button, FALSE);
-    }
-    g_free (t);
+	widget = seahorse_widget_get_widget (swidget, "publish-message");
+	widget2 = seahorse_widget_get_widget (swidget, "sync-message");
+	sync_button = seahorse_widget_get_widget (swidget, "sync-button");
+
+	text = g_settings_get_string (seahorse_context_settings (NULL),
+	                              "server-publish-to");
+	if (text && text[0]) {
+		gtk_widget_show (widget);
+		gtk_widget_hide (widget2);
+		gtk_widget_set_sensitive (sync_button, TRUE);
+	} else {
+		gtk_widget_hide (widget);
+		gtk_widget_show (widget2);
+		gtk_widget_set_sensitive (sync_button, FALSE);
+	}
+	g_free (text);
 }
 
 static void
-gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
+on_settings_publish_to_changed (GSettings *settings, const gchar *key, gpointer user_data)
 {
-    SeahorseWidget *swidget;
-
-    if (g_str_equal (PUBLISH_TO_KEY, gconf_entry_get_key (entry))) {
-        swidget = SEAHORSE_WIDGET (data);
-        update_message (swidget);
-    }
-}
-
-static void
-unhook_notification (GtkWidget *widget, gpointer data)
-{
-    guint notify_id = GPOINTER_TO_INT (data);
-    seahorse_gconf_unnotify (notify_id);
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+	update_message (swidget);
 }
 
 /**
@@ -142,7 +135,7 @@ seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
     SeahorseWidget *swidget;
     GtkWindow *win;
     GtkWidget *w;
-    guint n, notify_id;
+    guint n;
     gchar *t;
     
     swidget = seahorse_widget_new_allow_multiple ("keyserver-sync", parent);
@@ -159,12 +152,11 @@ seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
     g_return_val_if_fail (swidget != NULL, win);
     gtk_label_set_markup (GTK_LABEL (w), t);
     g_free (t);
-            
+
     /* The right help message */
     update_message (swidget);
-    notify_id = seahorse_gconf_notify (PUBLISH_TO_KEY, gconf_notify, swidget);
-    g_signal_connect (win, "destroy", G_CALLBACK (unhook_notification), 
-                      GINT_TO_POINTER (notify_id));
+    g_signal_connect_object (seahorse_context_settings (NULL), "changed::server-publish-to",
+                             G_CALLBACK (on_settings_publish_to_changed), swidget, 0);
 
     keys = g_list_copy (keys);
     g_return_val_if_fail (!keys || SEAHORSE_IS_OBJECT (keys->data), win);
@@ -182,10 +174,11 @@ seahorse_keyserver_sync (GList *keys)
     SeahorseMultiOperation *mop;
     SeahorseOperation *op;
     gchar *keyserver;
-    GSList *ks, *l;
+    gchar **keyservers;
     GList *k;
     GSList *keyids = NULL;
-    
+    guint i;
+
     if (!keys)
         return;
     
@@ -199,11 +192,9 @@ seahorse_keyserver_sync (GList *keys)
     mop = seahorse_multi_operation_new ();
 
     /* And now synchronizing keys from the servers */
-    ks = seahorse_servers_get_uris ();
-    
-    for (l = ks; l; l = g_slist_next (l)) {
-        
-        sksrc = seahorse_context_remote_source (SCTX_APP (), (const gchar*)(l->data));
+    keyservers = seahorse_servers_get_uris ();
+    for (i = 0; keyservers[i] != NULL; i++) {
+        sksrc = seahorse_context_remote_source (SCTX_APP (), keyservers[i]);
 
         /* This can happen if the URI scheme is not supported */
         if (sksrc == NULL)
@@ -220,13 +211,13 @@ seahorse_keyserver_sync (GList *keys)
             seahorse_operation_watch (op, (SeahorseDoneFunc) sync_export_complete, sksrc, NULL, NULL);
         }
     }
-    
-    seahorse_util_string_slist_free (ks);
-    
-    /* Publishing keys online */    
-    keyserver = seahorse_gconf_get_string (PUBLISH_TO_KEY);
+
+    g_strfreev (keyservers);
+
+    /* Publishing keys online */
+    keyserver = g_settings_get_string (seahorse_context_settings (NULL),
+                                       "server-publish-to");
     if (keyserver && keyserver[0]) {
-        
         sksrc = seahorse_context_remote_source (SCTX_APP (), keyserver);
 
         /* This can happen if the URI scheme is not supported */

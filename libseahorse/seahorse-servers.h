@@ -23,14 +23,15 @@
 #define __SEAHORSE_SERVERS_H__
 
 #include <glib.h>
+#include <gio/gio.h>
 
 GSList*         seahorse_servers_get_types              (void);
 
-GSList*         seahorse_servers_get_names              (void);
+gchar **        seahorse_servers_get_names              (void);
 
 char*           seahorse_servers_get_description        (const char* type);
 
-GSList*         seahorse_servers_get_uris               (void);
+gchar **        seahorse_servers_get_uris               (void);
 
 gboolean        seahorse_servers_is_valid_uri           (const char* uri);
 

@@ -28,7 +28,6 @@
 
 #include "seahorse-context.h"
 #include "seahorse-dns-sd.h"
-#include "seahorse-gconf.h"
 #include "seahorse-marshal.h"
 #include "seahorse-servers.h"
 #include "seahorse-transfer-operation.h"
@@ -86,21 +85,79 @@ struct _SeahorseContextPrivate {
     SeahorseMultiOperation *refresh_ops;    /* Operations for refreshes going on */
     SeahorseServiceDiscovery *discovery;    /* Adds sources from DNS-SD */
     gboolean in_destruction;                /* In destroy signal */
+    GSettings *seahorse_settings;
+    GSettings *crypto_pgp_settings;
 };
 
 static void seahorse_context_dispose    (GObject *gobject);
 static void seahorse_context_finalize   (GObject *gobject);
 
-/* Forward declarations */
-static void refresh_keyservers          (GConfClient *client, guint id, 
-                                         GConfEntry *entry, SeahorseContext *sctx);
+#ifdef WITH_KEYSERVER
+
+static void
+on_settings_keyservers_changed (GSettings *settings, gchar *key, gpointer user_data)
+{
+#ifdef WITH_PGP
+	SeahorseContext *self = SEAHORSE_CONTEXT (user_data);
+	SeahorseServerSource *source;
+	gchar **keyservers;
+	GHashTable *check;
+	const gchar *uri;
+	GHashTableIter iter;
+	guint i;
+
+	if (!self->pv->auto_sources)
+		return;
+
+	/* Make a light copy of the auto_source table */
+	check = g_hash_table_new (g_str_hash, g_str_equal);
+	g_hash_table_iter_init (&iter, self->pv->auto_sources);
+	while (g_hash_table_iter_next (&iter, (gpointer*)&uri, (gpointer*)&source))
+		g_hash_table_replace (check, (gpointer)uri, source);
+
+	/* Load and strip names from keyserver list */
+	keyservers = seahorse_servers_get_uris ();
+
+	for (i = 0; keyservers[i] != NULL; i++) {
+		uri = keyservers[i];
+
+		/* If we don't have a keysource then add it */
+		if (!g_hash_table_lookup (self->pv->auto_sources, uri)) {
+			source = seahorse_server_source_new (uri);
+			if (source != NULL) {
+				seahorse_context_take_source (self, SEAHORSE_SOURCE (source));
+				g_hash_table_replace (self->pv->auto_sources, g_strdup (uri), source);
+			}
+		}
+
+		/* Mark this one as present */
+		g_hash_table_remove (check, uri);
+	}
+
+	/* Now remove any extras */
+	g_hash_table_iter_init (&iter, check);
+	while (g_hash_table_iter_next (&iter, (gpointer*)&uri, (gpointer*)&source)) {
+		g_hash_table_remove (self->pv->auto_sources, uri);
+		seahorse_context_remove_source (self, SEAHORSE_SOURCE (source));
+	}
+
+	g_hash_table_destroy (check);
+	g_strfreev (keyservers);
+#endif /* WITH_PGP */
+}
+
+#endif /* WITH_KEYSERVER */
 
 static void
 seahorse_context_constructed (GObject *obj)
 {
 	SeahorseContext *self = SEAHORSE_CONTEXT (obj);
 
+	g_return_if_fail (app_context == NULL);
+
 	G_OBJECT_CLASS(seahorse_context_parent_class)->constructed (obj);
+
+	app_context = self;
 
 	/* DNS-SD discovery */
 	self->pv->discovery = seahorse_service_discovery_new ();
@@ -109,12 +166,21 @@ seahorse_context_constructed (GObject *obj)
 	self->pv->auto_sources = g_hash_table_new_full (g_str_hash, g_str_equal,
 	                                                g_free, NULL);
 
-	/* Listen for new gconf remote key sources automatically */
-	self->pv->notify_id = seahorse_gconf_notify (KEYSERVER_KEY,
-	                                             (GConfClientNotifyFunc)refresh_keyservers, self);
+	self->pv->seahorse_settings = g_settings_new ("org.gnome.seahorse");
 
-	refresh_keyservers (NULL, 0, NULL, self);
+#ifdef WITH_PGP
+	/* This is installed by gnome-keyring */
+	self->pv->crypto_pgp_settings = g_settings_new ("org.gnome.crypto.pgp");
 
+#ifdef WITH_KEYSERVER
+	g_signal_connect (self->pv->crypto_pgp_settings, "changed::keyservers",
+	                  G_CALLBACK (on_settings_keyservers_changed), self);
+
+	/* Initial loading */
+	on_settings_keyservers_changed (self->pv->crypto_pgp_settings, "keyservers", self);
+#endif
+
+#endif
 }
 /**
 * klass: The class to initialise
@@ -213,11 +279,15 @@ seahorse_context_dispose (GObject *gobject)
     }
     g_slist_free (objects);
 
-    /* Gconf notification */
-    if (sctx->pv->notify_id)
-        seahorse_gconf_unnotify (sctx->pv->notify_id);
-    sctx->pv->notify_id = 0;
-    
+#ifdef WITH_KEYSERVER
+	if (sctx->pv->crypto_pgp_settings) {
+		g_signal_handlers_disconnect_by_func (sctx->pv->crypto_pgp_settings,
+		                                      on_settings_keyservers_changed, sctx);
+		g_clear_object (&sctx->pv->crypto_pgp_settings);
+	}
+#endif
+	g_clear_object (&sctx->pv->seahorse_settings);
+
     /* Auto sources */
     if (sctx->pv->auto_sources) 
         g_hash_table_destroy (sctx->pv->auto_sources);
@@ -298,7 +368,8 @@ void
 seahorse_context_create (void)
 {
 	g_return_if_fail (app_context == NULL);
-	app_context = g_object_new (SEAHORSE_TYPE_CONTEXT, NULL);
+	g_object_new (SEAHORSE_TYPE_CONTEXT, NULL);
+	g_return_if_fail (app_context != NULL);
 }
 
 /**
@@ -1011,31 +1082,30 @@ seahorse_context_remove_object (SeahorseContext *sctx, SeahorseObject *sobj)
  * seahorse_context_get_default_key:
  * @sctx: Current #SeahorseContext
  *
- * Returns: the secret key that's the default key
+ * Returns: the PGP secret key that's the default key
  *
  * Deprecated: No replacement
  */
 SeahorseObject*
-seahorse_context_get_default_key (SeahorseContext *sctx)
+seahorse_context_get_default_key (SeahorseContext *self)
 {
-    SeahorseObject *sobj = NULL;
-    gchar *id;
-    
-    if (!sctx)
-        sctx = seahorse_context_instance ();
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
+	SeahorseObject *key = NULL;
+	gchar *keyid;
 
-    /* TODO: All of this needs to take multiple key types into account */
-    
-    id = seahorse_gconf_get_string (SEAHORSE_DEFAULT_KEY);
-    if (id != NULL && id[0]) {
-        GQuark keyid = g_quark_from_string (id);
-        sobj = seahorse_context_find_object (sctx, keyid, SEAHORSE_LOCATION_LOCAL);
-    }
-    
-    g_free (id);
-    
-    return sobj;
+	if (self == NULL)
+		self = seahorse_context_instance ();
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (self), NULL);
+
+	if (self->pv->crypto_pgp_settings) {
+		keyid = g_settings_get_string (self->pv->crypto_pgp_settings, "default-key");
+		if (keyid != NULL && keyid[0]) {
+			key = seahorse_context_find_object (self, g_quark_from_string (keyid),
+			                                    SEAHORSE_LOCATION_LOCAL);
+		}
+		g_free (keyid);
+	}
+
+	return key;
 }
 
 /**
@@ -1110,22 +1180,25 @@ seahorse_context_search_remote (SeahorseContext *sctx, const gchar *search)
     SeahorseSource *ks;
     SeahorseMultiOperation *mop = NULL;
     SeahorseOperation *op = NULL;
-    GSList *l, *names;
+    gchar **names;
     GHashTable *servers = NULL;
     gchar *uri;
-    
+    GSList *l;
+    guint i;
+
     if (!sctx)
         sctx = seahorse_context_instance ();
     g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
-    
-    /* Get a list of all selected key servers */
-    names = seahorse_gconf_get_string_list (LASTSERVERS_KEY);
-    if (names) {
-        servers = g_hash_table_new (g_str_hash, g_str_equal);
-        for (l = names; l; l = g_slist_next (l)) 
-            g_hash_table_insert (servers, l->data, GINT_TO_POINTER (TRUE));
-    }
-        
+
+	/* Get a list of all selected key servers */
+	names = g_settings_get_strv (sctx->pv->seahorse_settings, "last-search-servers");
+	if (names != NULL) {
+		servers = g_hash_table_new (g_str_hash, g_str_equal);
+		for (i = 0; names[i] != NULL; i++)
+			g_hash_table_insert (servers, names[i], GINT_TO_POINTER (TRUE));
+		g_strfreev (names);
+	}
+
     for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
         
@@ -1153,102 +1226,7 @@ seahorse_context_search_remote (SeahorseContext *sctx, const gchar *search)
             seahorse_multi_operation_take (mop, op);
     }   
 
-    seahorse_util_string_slist_free (names);
     return mop ? SEAHORSE_OPERATION (mop) : op;  
-}
-
-#ifdef WITH_KEYSERVER
-#ifdef WITH_PGP
-/* For copying the keys */
-/**
-* uri: the uri of the source
-* sksrc: the source to add or replace
-* ht: the hash table to modify
-*
-* Adds the @sksrc to the hash table @ht
-*
-**/
-static void 
-auto_source_to_hash (const gchar *uri, SeahorseSource *sksrc, GHashTable *ht)
-
-{
-    g_hash_table_replace (ht, (gpointer)uri, sksrc);
-}
-
-/**
-* uri: The uri of this source
-* sksrc: The source to remove
-* sctx: The Context to remove data from
-*
-*
-*
-**/
-static void
-auto_source_remove (const gchar* uri, SeahorseSource *sksrc, SeahorseContext *sctx)
-{
-    seahorse_context_remove_source (sctx, sksrc);
-    g_hash_table_remove (sctx->pv->auto_sources, uri);
-}
-#endif 
-#endif
-
-/**
-* client: ignored
-* id: ignored
-* entry: used for validation only
-* sctx: The context to work with
-*
-* Refreshes the sources generated from the keyservers
-*
-**/
-static void
-refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry, 
-                    SeahorseContext *sctx)
-{
-#ifdef WITH_KEYSERVER
-#ifdef WITH_PGP
-    SeahorseServerSource *ssrc;
-    GSList *keyservers, *l;
-    GHashTable *check;
-    const gchar *uri;
-    
-    if (!sctx->pv->auto_sources)
-        return;
-    
-    if (entry && !g_str_equal (KEYSERVER_KEY, gconf_entry_get_key (entry)))
-        return;
-
-    /* Make a light copy of the auto_source table */    
-    check = g_hash_table_new (g_str_hash, g_str_equal);
-    g_hash_table_foreach (sctx->pv->auto_sources, (GHFunc)auto_source_to_hash, check);
-
-    
-    /* Load and strip names from keyserver list */
-    keyservers = seahorse_servers_get_uris ();
-    
-    for (l = keyservers; l; l = g_slist_next (l)) {
-        uri = (const gchar*)(l->data);
-        
-        /* If we don't have a keysource then add it */
-        if (!g_hash_table_lookup (sctx->pv->auto_sources, uri)) {
-            ssrc = seahorse_server_source_new (uri);
-            if (ssrc != NULL) {
-                seahorse_context_take_source (sctx, SEAHORSE_SOURCE (ssrc));
-                g_hash_table_replace (sctx->pv->auto_sources, g_strdup (uri), ssrc);
-            }
-        }
-        
-        /* Mark this one as present */
-        g_hash_table_remove (check, uri);
-    }
-    
-    /* Now remove any extras */
-    g_hash_table_foreach (check, (GHFunc)auto_source_remove, sctx);
-    
-    g_hash_table_destroy (check);
-    seahorse_util_string_slist_free (keyservers);
-#endif /* WITH_PGP */
-#endif /* WITH_KEYSERVER */
 }
 
 /**
@@ -1486,13 +1464,14 @@ seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype,
         g_object_unref (op);
     }
 
-    /* Start a discover process on all todiscover */
-    if (seahorse_gconf_get_boolean (AUTORETRIEVE_KEY) && todiscover) {
-        op = seahorse_context_retrieve_objects (sctx, ktype, todiscover, NULL);
-        
-        /* Running operations ref themselves */
-        g_object_unref (op);
-    }
+	/* Start a discover process on all todiscover */
+	if (todiscover != NULL &&
+	    g_settings_get_boolean (sctx->pv->seahorse_settings, "server-auto-retrieve")) {
+
+		op = seahorse_context_retrieve_objects (sctx, ktype, todiscover, NULL);
+		/* Running operations ref themselves */
+		g_object_unref (op);
+	}
 
     /* Add unknown objects for all these */
     sksrc = seahorse_context_find_source (sctx, ktype, SEAHORSE_LOCATION_MISSING);
@@ -1530,4 +1509,24 @@ seahorse_context_canonize_id (GQuark ktype, const gchar *id)
 		return 0;
 	
 	return (canonize) (id);
+}
+
+GSettings *
+seahorse_context_settings (SeahorseContext *self)
+{
+	if (self == NULL)
+		self = seahorse_context_instance ();
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (self), NULL);
+
+	return self->pv->seahorse_settings;
+}
+
+GSettings *
+seahorse_context_pgp_settings (SeahorseContext *self)
+{
+	if (self == NULL)
+		self = seahorse_context_instance ();
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (self), NULL);
+
+	return self->pv->crypto_pgp_settings;
 }

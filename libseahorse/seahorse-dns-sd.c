@@ -269,21 +269,6 @@ client_callback (AvahiClient *client, AvahiClientState state, void *data)
 
 #endif /* WITH_SHARING */
 
-/**
-* key: Will be prepeded to the list
-* value: ignored
-* arg: A GSList, the key will be prepended
-*
-*
-*
-**/
-static void
-service_key_list (const gchar* key, const gchar* value, GSList **arg)
-{
-    *arg = g_slist_prepend (*arg, g_strdup (key));
-}
-
-
 /* -----------------------------------------------------------------------------
  * OBJECT 
  */
@@ -307,7 +292,7 @@ seahorse_service_discovery_init (SeahorseServiceDiscovery *ssd)
 		ssd->priv->client = avahi_client_new (seahorse_util_dns_sd_get_poll (), 
 		                                      0, client_callback, ssd, &aerr);
 		if (!ssd->priv->client) {
-			g_warning ("DNS-SD initialization failed: %s", avahi_strerror (aerr));
+			g_message ("DNS-SD initialization failed: %s", avahi_strerror (aerr));
 			return;
 		}
     
@@ -315,7 +300,7 @@ seahorse_service_discovery_init (SeahorseServiceDiscovery *ssd)
 		                                                AVAHI_PROTO_UNSPEC, HKP_SERVICE_TYPE, NULL, 0, 
 		                                                browse_callback, ssd);
 		if (!ssd->priv->browser) {
-			g_warning ("Browsing for DNS-SD services failed: %s", 
+			g_message ("Browsing for DNS-SD services failed: %s",
 			           avahi_strerror (avahi_client_errno (ssd->priv->client)));
 			return;
 		}
@@ -415,17 +400,21 @@ seahorse_service_discovery_new ()
  *
  *
  *
- * Returns: A #GSList containing the services in @ssd
+ * Returns: the services in @ssd
  */
-GSList*                     
+gchar **
 seahorse_service_discovery_list (SeahorseServiceDiscovery *ssd)
 {
-    GSList *list = NULL;
-    GSList **arg = &list;
-    
-    g_return_val_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd), NULL);
-    g_hash_table_foreach (ssd->services, (GHFunc)service_key_list, arg);
-    return *arg;
+	GHashTableIter iter;
+	GPtrArray *result = g_ptr_array_new ();
+	gpointer key;
+
+	g_return_val_if_fail (SEAHORSE_IS_SERVICE_DISCOVERY (ssd), NULL);
+	g_hash_table_iter_init (&iter, ssd->services);
+	while (g_hash_table_iter_next (&iter, &key, NULL))
+		g_ptr_array_add (result, g_strdup (key));
+
+	return (gchar **)g_ptr_array_free (result, FALSE);
 }
 
 /**
@@ -451,19 +440,20 @@ seahorse_service_discovery_get_uri (SeahorseServiceDiscovery *ssd, const gchar *
  *
  * The returned uris in the list are copied and must be freed with g_free.
  *
- * Returns: A #GSList of uris for the services
+ * Returns: uris for the services
  */
-GSList*
-seahorse_service_discovery_get_uris (SeahorseServiceDiscovery *ssd, GSList *services)
+gchar **
+seahorse_service_discovery_get_uris (SeahorseServiceDiscovery *ssd, const gchar **services)
 {
-    GSList *uris = NULL;
-    const gchar *uri;
-    
-    while (services) {
-        uri = (const gchar*)g_hash_table_lookup (ssd->services, services->data);    
-        uris = g_slist_append (uris, uri ? g_strdup (uri) : NULL);
-        services = g_slist_next (services);
-    }
+	GPtrArray *result = g_ptr_array_new ();
+	const gchar *uri;
+	guint i;
 
-    return uris;
+	for (i = 0; services && services[i] != NULL; i++) {
+		uri = g_hash_table_lookup (ssd->services, services[i]);
+		g_ptr_array_add (result, g_strdup (uri));
+	}
+
+	g_ptr_array_add (result, NULL);
+	return (gchar **)g_ptr_array_free (result, FALSE);
 }

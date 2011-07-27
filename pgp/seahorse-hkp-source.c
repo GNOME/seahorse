@@ -32,7 +32,6 @@
 #include "seahorse-pgp-subkey.h"
 #include "seahorse-pgp-uid.h"
 
-#include "seahorse-gconf.h"
 #include "seahorse-operation.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
@@ -146,6 +145,74 @@ END_DECLARE_OPERATION
 
 IMPLEMENT_OPERATION (HKP, hkp)
 
+static gboolean
+check_for_http_proxy_schema__with_love_to_ryan ()
+{
+	const gchar * const* schemas;
+	guint i;
+
+	/*
+	 * This isn't very efficient, but it's the only way to use this schema
+	 * without our GSettings killing our process if the schema doesn't exist.
+	 *
+	 * Groan.
+	 */
+
+	schemas = g_settings_list_schemas ();
+	for (i = 0; schemas[i] != NULL; i++) {
+		if (g_str_equal (schemas[i], "org.gnome.system.proxy.http"))
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+static SoupSession *
+create_proxy_session (void)
+{
+	SoupSession *session = NULL;
+	SoupURI *uri;
+	GSettings *settings;
+	gchar *host;
+	gchar *user;
+	gchar *password;
+
+	if (!check_for_http_proxy_schema__with_love_to_ryan ())
+		return NULL;
+
+	settings = g_settings_new ("org.gnome.system.proxy.http");
+	if (g_settings_get_boolean (settings, "enabled")) {
+		host = g_settings_get_string (settings, "host");
+		if (host) {
+			uri = soup_uri_new (NULL);
+			if (!uri) {
+				g_warning ("creation of SoupURI from '%s' failed", host);
+			} else {
+				soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTP);
+				soup_uri_set_host (uri, host);
+			}
+			g_free (host);
+			soup_uri_set_port (uri, g_settings_get_int (settings, "port"));
+
+			if (g_settings_get_boolean (settings, "use-authentication")) {
+				user = g_settings_get_string (settings, "authentication-user");
+				soup_uri_set_user (uri, user);
+				g_free (user);
+
+				password = g_settings_get_string (settings, "authentication-password");
+				soup_uri_set_password (uri, password);
+				g_free (password);
+			}
+
+			session = soup_session_async_new_with_options (SOUP_SESSION_PROXY_URI, uri, NULL);
+			soup_uri_free (uri);
+		}
+	}
+
+	g_object_unref (settings);
+	return session;
+}
+
 /**
 * hop: A SeahorseHKPOperation to init
 *
@@ -155,48 +222,15 @@ IMPLEMENT_OPERATION (HKP, hkp)
 static void 
 seahorse_hkp_operation_init (SeahorseHKPOperation *hop)
 {
-    SoupURI *uri;
-    gchar *host;
 #if WITH_DEBUG
-    SoupLogger *logger;
+	SoupLogger *logger;
 #endif
-    
-    if (seahorse_gconf_get_boolean (GCONF_USE_HTTP_PROXY)) {
-        
-        host = seahorse_gconf_get_string (GCONF_HTTP_PROXY_HOST);
-        if (host) {
-            uri = soup_uri_new (NULL);
-            
-            if (!uri) {
-                g_warning ("creation of SoupURI from '%s' failed", host);
-                
-            } else {
 
-                soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTP);
-                soup_uri_set_host (uri, host);
-                g_free (host);
-                soup_uri_set_port (uri, seahorse_gconf_get_integer (GCONF_PROXY_PORT));
-                
-                if (seahorse_gconf_get_boolean (GCONF_USE_AUTH)) {
-                    char *user, *pass;
+	hop->session = create_proxy_session ();
 
-                    user = seahorse_gconf_get_string (GCONF_AUTH_USER);
-                    soup_uri_set_user (uri, user);
-                    g_free (user);
-                    pass = seahorse_gconf_get_string (GCONF_AUTH_PASS);
-                    soup_uri_set_password (uri, pass);
-                    g_free (pass);
-                }
-                
-                hop->session = soup_session_async_new_with_options (SOUP_SESSION_PROXY_URI, uri, NULL);
-                soup_uri_free (uri);
-            }
-        }
-    }
-    
-    /* Without a proxy */
-    if (!hop->session)
-        hop->session = soup_session_async_new ();
+	/* Without a proxy */
+	if (hop->session == NULL)
+		hop->session = soup_session_async_new ();
 
 #if WITH_DEBUG
 	if (seahorse_debugging) {

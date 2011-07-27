@@ -50,22 +50,17 @@ typedef struct _SeahorseKeyserverControlClass SeahorseKeyserverControlClass;
 
 struct _SeahorseKeyserverControl {
     GtkComboBox parent_instance;
-    
+
     /* <public> */
-    gchar *gconf_key;
+    gchar *settings_key;
     gchar *none_option;
-    
-    /* <private> */
-    guint notify_id;
-    guint notify_id_list;
-    gboolean changed;
 };
 
 struct _SeahorseKeyserverControlClass {
 	GtkComboBoxClass parent_class;
 };
 
-SeahorseKeyserverControl*   seahorse_keyserver_control_new         (const gchar *gconf_key,
+SeahorseKeyserverControl*   seahorse_keyserver_control_new         (const gchar *settings_key,
                                                                     const gchar *none_option);
 
 gchar*                      seahorse_keyserver_control_selected    (SeahorseKeyserverControl *skc);

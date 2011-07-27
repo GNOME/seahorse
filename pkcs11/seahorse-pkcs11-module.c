@@ -26,7 +26,6 @@
 #include "seahorse-pkcs11-commands.h"
 #include "seahorse-pkcs11-source.h"
 
-#include "seahorse-gconf.h"
 #include "seahorse-util.h"
 
 #include <gck/gck.h>
@@ -34,19 +33,18 @@
 void
 seahorse_pkcs11_module_init (void)
 {
+	/* TODO: Use modules from p11-kit via gck */
+#if 0
 	SeahorseSource *source;
 	GckModule *module;
-	GSList *l, *module_paths;
 	GList *slots, *s;
 	GError *err = NULL;
-	
-	/* Load each module in turn, and each slot for each module */
-	module_paths = seahorse_gconf_get_string_list ("/system/pkcs11/modules");
+
 	for (l = module_paths; l; l = g_slist_next (l)) {
 
 		module = gck_module_initialize (l->data, &err);
 		if (!module) {
-			g_warning ("couldn't initialize %s pkcs11 module: %s", 
+			g_warning ("couldn't initialize %s pkcs11 module: %s",
 			           (gchar*)l->data, err ? err->message : NULL);
 			g_clear_error (&err);
 			continue;
@@ -62,8 +60,7 @@ seahorse_pkcs11_module_init (void)
 		gck_list_unref_free (slots);
 		g_object_unref (module);
 	}
-
-	seahorse_util_string_slist_free (module_paths);
+#endif
 
 	/* Let these register themselves */
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PKCS11_SOURCE));

@@ -22,9 +22,7 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-check-button-control.h"
 #include "seahorse-combo-keys.h"
-#include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-prefs.h"
@@ -100,21 +98,23 @@ on_prefs_keyserver_remove_clicked (GtkWidget *button, SeahorseWidget *swidget)
 static void
 save_keyservers (GtkTreeModel *model)
 {
-    GSList *ks = NULL;
-    GtkTreeIter iter;
-    gchar *v;
-    
-    if (gtk_tree_model_get_iter_first (model, &iter)) {
-        
-        do {
-            gtk_tree_model_get (model, &iter, KEYSERVER_COLUMN, &v, -1);
-            g_return_if_fail (v != NULL);
-            ks = g_slist_append (ks, v);
-        } while (gtk_tree_model_iter_next (model, &iter));
-    }
-    
-    seahorse_gconf_set_string_list (KEYSERVER_KEY, ks);
-    seahorse_util_string_slist_free (ks);
+	GPtrArray *values;
+	GtkTreeIter iter;
+	gchar *keyserver;
+
+	values = g_ptr_array_new_with_free_func (g_free);
+	if (gtk_tree_model_get_iter_first (model, &iter)) {
+		do {
+			gtk_tree_model_get (model, &iter, KEYSERVER_COLUMN, &keyserver, -1);
+			g_return_if_fail (keyserver != NULL);
+			g_ptr_array_add (values, keyserver);
+		} while (gtk_tree_model_iter_next (model, &iter));
+	}
+
+	g_ptr_array_add (values, NULL);
+	g_settings_set_strv (seahorse_context_pgp_settings (NULL), "keyservers",
+	                     (const gchar* const*)values->pdata);
+	g_ptr_array_free (values, TRUE);
 }
 
 /* Called when values in a row changes */
@@ -143,7 +143,7 @@ keyserver_row_deleted (GtkTreeModel *model, GtkTreePath *arg1,
 
 /* Fill in the list with values in ks */
 static void
-populate_keyservers (SeahorseWidget *swidget, GSList *ks)
+populate_keyservers (SeahorseWidget *swidget, gchar **keyservers)
 {
     GtkTreeView *treeview;
     GtkTreeStore *store;
@@ -152,8 +152,9 @@ populate_keyservers (SeahorseWidget *swidget, GSList *ks)
     GtkTreeViewColumn *column;
     GtkTreeIter iter;
     gboolean cont;
-    gchar *v;
-        
+    gchar *value;
+    guint i = 0;
+
     treeview = GTK_TREE_VIEW (seahorse_widget_get_widget (swidget, "keyservers"));
     model = gtk_tree_view_get_model (treeview);
     store = GTK_TREE_STORE (model);
@@ -174,62 +175,45 @@ populate_keyservers (SeahorseWidget *swidget, GSList *ks)
         gtk_tree_view_append_column (treeview, column);        
     }
 
-    /* Mark this so we can ignore events */
-    g_object_set_data (G_OBJECT (model), UPDATING_MODEL, GINT_TO_POINTER (1));
-    
-    /* We try and be inteligent about updating so we don't throw
-     * away selections and stuff like that */
-     
-    if (gtk_tree_model_get_iter_first (model, &iter)) {
-        do {
-            gtk_tree_model_get (model, &iter, KEYSERVER_COLUMN, &v, -1);
-            
-            if (ks && v && g_utf8_collate (ks->data, v) == 0) {
-                ks = ks->next;
-                cont = gtk_tree_model_iter_next (model, &iter);
-            } else {
-                cont = gtk_tree_store_remove (store, &iter);
-            }
-            
-            g_free (v);
-        }    
-        while (cont);
-    }
-     
-    /* Any remaining extra rows */           
-    for ( ; ks; ks = ks->next) {
-        gtk_tree_store_append (store, &iter, NULL);        
-        gtk_tree_store_set (store, &iter, KEYSERVER_COLUMN, (gchar*)ks->data, -1);
-    }
-    
-    /* Done updating */
-    g_object_set_data (G_OBJECT (model), UPDATING_MODEL, NULL);
+	/* Mark this so we can ignore events */
+	g_object_set_data (G_OBJECT (model), UPDATING_MODEL, GINT_TO_POINTER (1));
+
+	/* We try and be inteligent about updating so we don't throw
+	 * away selections and stuff like that */
+
+	if (gtk_tree_model_get_iter_first (model, &iter)) {
+		do {
+			gtk_tree_model_get (model, &iter, KEYSERVER_COLUMN, &value, -1);
+			if (keyservers[i] != NULL && value != NULL &&
+			    g_utf8_collate (keyservers[i], value) == 0) {
+				cont = gtk_tree_model_iter_next (model, &iter);
+				i++;
+			} else {
+				cont = gtk_tree_store_remove (store, &iter);
+			}
+			g_free (value);
+		} while (cont);
+	}
+
+	/* Any remaining extra rows */
+	for ( ; keyservers[i] != NULL; i++) {
+		gtk_tree_store_append (store, &iter, NULL);
+		gtk_tree_store_set (store, &iter, KEYSERVER_COLUMN, keyservers[i], -1);
+	}
+
+	/* Done updating */
+	g_object_set_data (G_OBJECT (model), UPDATING_MODEL, NULL);
 }
 
-/* Callback for changes on keyserver key */
 static void
-gconf_notify (GConfClient *client, guint id, GConfEntry *entry, SeahorseWidget *swidget)
+on_settings_keyserver_changed (GSettings *settings, const gchar *key, gpointer user_data)
 {
-    GSList *l, *ks;
-    GConfValue *value;
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+	gchar **keyservers;
 
-    if (g_str_equal (KEYSERVER_KEY, gconf_entry_get_key (entry))) {    
-        value = gconf_entry_get_value (entry);
-        g_return_if_fail (gconf_value_get_list_type (value) == GCONF_VALUE_STRING);
-    
-        /* Change list of GConfValue to list of strings */
-        for (ks = NULL, l = gconf_value_get_list (value); l; l = l->next) 
-            ks = g_slist_append (ks, (gchar*)gconf_value_get_string (l->data));
-        populate_keyservers (swidget, ks);
-        g_slist_free (l); /* We don't own string values */
-    }
-}
-
-/* Remove gconf notification */
-static void
-gconf_unnotify (GtkWidget *widget, guint notify_id)
-{
-    seahorse_gconf_unnotify (notify_id);
+	keyservers = g_settings_get_strv (settings, key);
+	populate_keyservers (swidget, keyservers);
+	g_strfreev (keyservers);
 }
 
 static gchar*
@@ -250,7 +234,6 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
     active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
     if (active >= 0) {
 	    types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
-	    g_return_val_if_fail (types != NULL, NULL);
 	    scheme = (const gchar*)g_slist_nth_data (types, active);
 	    if (scheme && !scheme[0])
 		    scheme = NULL;
@@ -309,7 +292,6 @@ on_prefs_add_keyserver_uri_changed (GtkWidget *button, SeahorseWidget *swidget)
     active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
     if (active > -1) {
         types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
-        g_return_if_fail (types != NULL);
 
         widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "port-block"));
         g_return_if_fail (widget != NULL);
@@ -385,53 +367,49 @@ on_prefs_keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
 static void
 setup_keyservers (SeahorseWidget *swidget)
 {
-    GtkTreeView *treeview;
-    SeahorseKeyserverControl *skc;
-    GtkTreeModel *model;
-    GtkTreeSelection *selection;
-    GtkWidget *w;
-    GSList *ks;
-    guint notify_id;
+	GtkTreeView *treeview;
+	SeahorseKeyserverControl *skc;
+	GtkTreeModel *model;
+	GtkTreeSelection *selection;
+	GtkWidget *widget;
+	gchar **keyservers;
 
-    ks = seahorse_servers_get_uris ();
-    populate_keyservers (swidget, ks);
-    seahorse_util_string_slist_free (ks);
+	keyservers = seahorse_servers_get_uris ();
+	populate_keyservers (swidget, keyservers);
+	g_strfreev (keyservers);
 
-    treeview = GTK_TREE_VIEW (seahorse_widget_get_widget (swidget, "keyservers"));
-    model = gtk_tree_view_get_model (treeview);
-    g_signal_connect (model, "row-changed", G_CALLBACK (keyserver_row_changed), swidget);
-    g_signal_connect (model, "row-deleted", G_CALLBACK (keyserver_row_deleted), swidget);
+	treeview = GTK_TREE_VIEW (seahorse_widget_get_widget (swidget, "keyservers"));
+	model = gtk_tree_view_get_model (treeview);
+	g_signal_connect (model, "row-changed", G_CALLBACK (keyserver_row_changed), swidget);
+	g_signal_connect (model, "row-deleted", G_CALLBACK (keyserver_row_deleted), swidget);
 
-    selection = gtk_tree_view_get_selection (treeview);
-    gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
-    g_signal_connect (selection, "changed", G_CALLBACK (keyserver_sel_changed), swidget);
+	selection = gtk_tree_view_get_selection (treeview);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
+	g_signal_connect (selection, "changed", G_CALLBACK (keyserver_sel_changed), swidget);
 
-    gtk_builder_connect_signals (swidget->gtkbuilder, swidget);
+	gtk_builder_connect_signals (swidget->gtkbuilder, swidget);
+	g_signal_connect_object (seahorse_context_pgp_settings (NULL), "changed::keyserver",
+	                         G_CALLBACK (on_settings_keyserver_changed), swidget, 0);
 
-    notify_id = seahorse_gconf_notify (KEYSERVER_KEY, (GConfClientNotifyFunc)gconf_notify, 
-                                       swidget);
-    g_signal_connect (seahorse_widget_get_toplevel (swidget), "destroy", 
-                        G_CALLBACK (gconf_unnotify), GINT_TO_POINTER (notify_id));
+	widget = seahorse_widget_get_widget (swidget, "keyserver-publish");
+	g_return_if_fail (widget != NULL);
 
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-publish"));
-    g_return_if_fail (w != NULL);
+	skc = seahorse_keyserver_control_new ("server-publish-to", _("None: Don't publish keys"));
+	gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (skc));
+	gtk_widget_show_all (widget);
 
-    skc = seahorse_keyserver_control_new (PUBLISH_TO_KEY, _("None: Don't publish keys"));
-    gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (skc));
-    gtk_widget_show_all (w);
+	widget = seahorse_widget_get_widget (swidget, "keyserver-publish-to-label");
+	gtk_label_set_mnemonic_widget (GTK_LABEL (widget), GTK_WIDGET (skc));
 
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-publish-to-label"));
-    gtk_label_set_mnemonic_widget (GTK_LABEL (w), GTK_WIDGET (skc));
+	widget = seahorse_widget_get_widget (swidget, "auto_retrieve");
+	g_return_if_fail (widget != NULL);
+	g_settings_bind (seahorse_context_settings (NULL), "server-auto-retrieve",
+	                 widget, "active", G_SETTINGS_BIND_DEFAULT);
 
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "auto_retrieve"));
-    g_return_if_fail (w != NULL);
-
-    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON(w), AUTORETRIEVE_KEY);
-
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "auto_sync"));
-    g_return_if_fail (w != NULL);
-
-    seahorse_check_button_gconf_attach (GTK_CHECK_BUTTON(w), AUTOSYNC_KEY);
+	widget = seahorse_widget_get_widget (swidget, "auto_sync");
+	g_return_if_fail (widget != NULL);
+	g_settings_bind (seahorse_context_settings (NULL), "server-auto-publish",
+	                 widget, "active", G_SETTINGS_BIND_DEFAULT);
 }
 
 #endif /* WITH_KEYSERVER */

@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include "seahorse-combo-keys.h"
-#include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-set.h"
@@ -197,7 +196,7 @@ sign_internal (SeahorseObject *to_sign, GtkWindow *parent)
     /* Signature area */
     w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "signer-frame"));
     g_return_if_fail (w != NULL);
-    g_signal_connect (skset, "set-changed", G_CALLBACK (keyset_changed), w);
+    g_signal_connect_object (skset, "set-changed", G_CALLBACK (keyset_changed), w, 0);
     keyset_changed (skset, w);
 
     /* Signer box */

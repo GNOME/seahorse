@@ -7,6 +7,8 @@ dnl MAIN SEAHORSE VERSION (update after release)
 
 AC_INIT(seahorse, 3.1.5)
 
+GCR_REQUIRED=3.1.5
+
 dnl ****************************************************************************
 
 AC_CONFIG_SRCDIR(src/seahorse-main.c)
@@ -41,6 +43,8 @@ AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
 PKG_CHECK_MODULES(SEAHORSE, gmodule-2.0 gio-2.0 gconf-2.0 gthread-2.0 gtk+-3.0 >= $GTK_REQUIRED)
+
+GLIB_GSETTINGS
 
 AC_MSG_CHECKING([for some Win32 platform])
 case "$host" in
@@ -382,7 +386,7 @@ if test "$enable_pkcs11" = "no"; then
 	echo "disabling pkcs11 support"
 	enable_pkcs11="no"
 else
-	PKG_CHECK_MODULES(GCR, gcr-3 >= 3.0.0, gcr_is_present="yes", gcr_is_present="no")
+	PKG_CHECK_MODULES(GCR, gcr-3 >= $GCR_REQUIRED, gcr_is_present="yes", gcr_is_present="no")
 	if test "$gcr_is_present" = "no"; then
 		echo "disabling pkcs11 support"
 	fi

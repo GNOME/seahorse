@@ -27,7 +27,6 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-widget.h"
-#include "seahorse-gconf.h"
 #include "seahorse-gtkstock.h"
 
 /**
@@ -66,10 +65,6 @@ static void     object_get_property (GObject                *object,
                                      guint                  prop_id,
                                      GValue                 *value,
                                      GParamSpec             *pspec);
-                                     
-static GObject* seahorse_widget_constructor (GType                  type, 
-                                             guint                  n_props, 
-                                             GObjectConstructParam* props);                    
 
 /* signal functions */
 G_MODULE_EXPORT void on_widget_closed   (GtkWidget             *widget,
@@ -116,6 +111,31 @@ seahorse_widget_get_type (void)
 	return widget_type;
 }
 
+static void
+seahorse_widget_constructed (GObject *object)
+{
+	SeahorseWidget *self = SEAHORSE_WIDGET (object);
+	GtkWindow *window;
+	gint width, height;
+	gchar *path;
+
+	G_OBJECT_CLASS (parent_class)->constructed (object);
+
+	/* Load window size for windows that aren't dialogs */
+	window = GTK_WINDOW (seahorse_widget_get_toplevel (self));
+	if (!GTK_IS_DIALOG (window)) {
+		path = g_strdup_printf ("/apps/seahorse/windows/%s/", self->name);
+		self->settings = g_settings_new_with_path ("org.gnome.seahorse.window", path);
+		g_free (path);
+
+		width = g_settings_get_int (self->settings, "width");
+		height = g_settings_get_int (self->settings, "height");
+
+		if (width > 0 && height > 0)
+			gtk_window_resize (window, width, height);
+	}
+}
+
 /**
 * klass: the #SeahorseWidgetClass
 *
@@ -129,8 +149,8 @@ class_init (SeahorseWidgetClass *klass)
 	
 	parent_class = g_type_class_peek_parent (klass);
 	gobject_class = G_OBJECT_CLASS (klass);
-	
-	gobject_class->constructor = seahorse_widget_constructor;
+
+	gobject_class->constructed = seahorse_widget_constructed;
 	gobject_class->dispose = object_dispose;
 	gobject_class->finalize = object_finalize;
 	gobject_class->set_property = object_set_property;
@@ -171,47 +191,6 @@ object_init (SeahorseWidget *swidget)
 	                        G_CALLBACK (context_destroyed), swidget);
 }
 
-/**
-* type: the #GType to construct
-* n_props: number of properties
-* props: properties
-*
-*
-*
-* Returns the initialised object
-**/
-static GObject*  
-seahorse_widget_constructor (GType type, guint n_props, GObjectConstructParam* props)
-{
-    SeahorseWidget *swidget;
-    GObject *obj;
-    
-    GtkWindow *window;
-    gint width, height;
-    gchar *widthkey, *heightkey;
-    
-    obj = G_OBJECT_CLASS (parent_class)->constructor (type, n_props, props);
-    swidget = SEAHORSE_WIDGET (obj);
-
-    /* Load window size for windows that aren't dialogs */
-    window = GTK_WINDOW (seahorse_widget_get_toplevel (swidget));
-    if (!GTK_IS_DIALOG (window)) {
-	    widthkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_width");
-	    width = seahorse_gconf_get_integer (widthkey);
-    
-	    heightkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_height");
-	    height = seahorse_gconf_get_integer (heightkey);
-
-	    if (width > 0 && height > 0)
-		    gtk_window_resize (window, width, height);
-
-	    g_free (widthkey);
-	    g_free (heightkey);
-    }
-    
-    return obj;
-}
-
 static void
 object_dispose (GObject *object)
 {
@@ -250,12 +229,14 @@ object_finalize (GObject *gobject)
     }
 
 	g_signal_handlers_disconnect_by_func (SCTX_APP (), context_destroyed, swidget);
+
     if (seahorse_widget_get_widget (swidget, swidget->name))
         gtk_widget_destroy (GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name)));
 	
 	g_object_unref (swidget->gtkbuilder);
 	swidget->gtkbuilder = NULL;
-	
+
+	g_clear_object (&swidget->settings);
 	g_free (swidget->name);
 	
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
@@ -589,40 +570,32 @@ seahorse_widget_set_sensitive (SeahorseWidget *swidget, const char *identifier,
 
 /**
  * seahorse_widget_destroy:
- * @swidget: #SeahorseWidget to destroy
+ * @self: #SeahorseWidget to destroy
  *
  * Unrefs @swidget.
  **/
 void
-seahorse_widget_destroy (SeahorseWidget *swidget)
+seahorse_widget_destroy (SeahorseWidget *self)
 {
-    GtkWidget *widget;
-    gchar *widthkey, *heightkey;
-    gint width, height;
+	GtkWidget *widget;
+	gint width, height;
 
-    g_return_if_fail (swidget != NULL && SEAHORSE_IS_WIDGET (swidget));
-    widget = seahorse_widget_get_toplevel (swidget);
-    
-    /* Don't save window size for dialogs */
-    if (!GTK_IS_DIALOG (widget)) {
+	g_return_if_fail (self != NULL && SEAHORSE_IS_WIDGET (self));
+	widget = seahorse_widget_get_toplevel (self);
 
-	    /* Save window size */
-	    gtk_window_get_size (GTK_WINDOW (widget), &width, &height);
-    
-	    widthkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_width");
-	    seahorse_gconf_set_integer (widthkey, width);
-    
-	    heightkey = g_strdup_printf ("%s%s%s", WINDOW_SIZE, swidget->name, "_height");
-	    seahorse_gconf_set_integer (heightkey, height);
-    
-	    g_free (widthkey);
-	    g_free (heightkey);
-    }
-    
-    /* Destroy Widget */
-    if (!swidget->destroying) {
-        swidget->destroying = TRUE;
-        gtk_widget_destroy (seahorse_widget_get_toplevel (swidget));
-        g_object_unref (swidget);
-    }
+	/* Save window size */
+	if (self->settings) {
+
+		gtk_window_get_size (GTK_WINDOW (widget), &width, &height);
+
+		g_settings_set_int (self->settings, "width", width);
+		g_settings_set_int (self->settings, "height", height);
+	}
+
+	/* Destroy Widget */
+	if (!self->destroying) {
+		self->destroying = TRUE;
+		gtk_widget_destroy (seahorse_widget_get_toplevel (self));
+		g_object_unref (self);
+	}
 }
