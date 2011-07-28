@@ -81,7 +81,6 @@ struct _SeahorseContextPrivate {
     GHashTable *auto_sources;               /* Automatically added sources (keyservers) */
     GHashTable *objects_by_source;          /* See explanation above */
     GHashTable *objects_by_type;            /* See explanation above */
-    guint notify_id;                        /* Notify for GConf watch */
     SeahorseMultiOperation *refresh_ops;    /* Operations for refreshes going on */
     SeahorseServiceDiscovery *discovery;    /* Adds sources from DNS-SD */
     gboolean in_destruction;                /* In destroy signal */

@@ -94,7 +94,7 @@ on_prefs_keyserver_remove_clicked (GtkWidget *button, SeahorseWidget *swidget)
     gtk_tree_selection_selected_foreach (selection, remove_row, NULL);
 }
 
-/* Write key server list to gconf */
+/* Write key server list to settings */
 static void
 save_keyservers (GtkTreeModel *model)
 {

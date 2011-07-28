@@ -281,7 +281,7 @@ on_pgp_names_revoke_clicked (GtkWidget *widget, SeahorseWidget *swidget)
         seahorse_revoke_show (SEAHORSE_PGP_KEY (skey), index - 1);
 
 #ifdef WITH_KEYSERVER
-        if (seahorse_gconf_get_boolean(AUTOSYNC_KEY) == TRUE) {
+        if (g_settings_get_boolean(AUTOSYNC_KEY) == TRUE) {
             keys = g_list_append (keys, skey);
             seahorse_keyserver_sync (keys);
             g_list_free(keys);

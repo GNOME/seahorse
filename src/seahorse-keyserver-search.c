@@ -228,7 +228,7 @@ foreach_child_select_checks (GtkWidget *widget, gpointer user_data)
 /**
  * swidget: the main widget
  *
- * Reads key servers from gconf and updates the UI content.
+ * Reads key servers from settings and updates the UI content.
  *
  **/
 static void
@@ -387,7 +387,7 @@ refresh_shared_keys (SeahorseServiceDiscovery *ssd, const gchar *name, SeahorseW
  * @button: ignored
  * @swidget: The SeahorseWidget to work with
  *
- * Extracts data, stores it in GConf and starts a search using the entered
+ * Extracts data, stores it in settings and starts a search using the entered
  * search data.
  *
  * This function gets the things done

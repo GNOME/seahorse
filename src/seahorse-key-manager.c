@@ -879,7 +879,7 @@ seahorse_key_manager_constructed (GObject *object)
 	gtk_toggle_action_set_active (action, g_settings_get_boolean (self->pv->settings, "show-validity"));
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->pv->view_actions);
 	
-	/* Notify us when gconf stuff changes under this key */
+	/* Notify us when settings change */
 	g_signal_connect_object (self->pv->settings, "changed", G_CALLBACK (on_manager_settings_changed), self, 0);
 
 	/* close event */

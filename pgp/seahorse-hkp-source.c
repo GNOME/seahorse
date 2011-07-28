@@ -64,13 +64,6 @@
     
 #define HKP_ERROR_DOMAIN (get_hkp_error_domain())
 
-#define GCONF_USE_HTTP_PROXY    "/system/http_proxy/use_http_proxy"
-#define GCONF_HTTP_PROXY_HOST   "/system/http_proxy/host"
-#define GCONF_PROXY_PORT        "/system/http_proxy/port"
-#define GCONF_USE_AUTH          "/system/http_proxy/use_authentication"
-#define GCONF_AUTH_USER         "/system/http_proxy/authentication_user"
-#define GCONF_AUTH_PASS         "/system/http_proxy/authentication_password"
-
 /**
 *
 * Returns The GQuark for the HKP error
@@ -216,7 +209,7 @@ create_proxy_session (void)
 /**
 * hop: A SeahorseHKPOperation to init
 *
-* Reads settings from GConf and creates a new operation with a running Soup
+* Reads settings and creates a new operation with a running Soup
 *
 **/
 static void 

@@ -44,7 +44,7 @@ typedef struct _SeahorseKeyserverControlClass SeahorseKeyserverControlClass;
  * - Also displays shares for keys found via DNS-SD over the network.
  *
  * Properties:
- *   gconf-key: (gchar*) The GConf key to retrieve and set keyservers.
+ *   settings-key: (gchar*) The GSettings key to retrieve and set keyservers.
  *   none-option: (gchar*) Text to display for 'no key server'
  */
 
