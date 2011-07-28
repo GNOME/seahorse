@@ -1064,7 +1064,8 @@ get_key_from_ldap (SeahorseOperation *op, LDAPMessage *result)
     SeahorseLDAPOperation *lop = SEAHORSE_LDAP_OPERATION (op);  
     LDAPServerInfo *sinfo;
     GOutputStream *output;
-    GSList *fingerprints, *fprfull;
+    gchar **fingerprints;
+    gchar **fprfull;
     gchar *filter;
     char *attrs[2];
     const gchar *fpr;
@@ -1073,24 +1074,23 @@ get_key_from_ldap (SeahorseOperation *op, LDAPMessage *result)
     
     g_assert (lop->ldap != NULL);
     g_assert (lop->ldap_op == -1);
-    
-    fingerprints = (GSList*)g_object_get_data (G_OBJECT (lop), "fingerprints");
-    fprfull = (GSList*)g_object_get_data (G_OBJECT (lop), "fingerprints-full");
 
-    l = g_slist_length (fprfull);
+    fingerprints = (gchar **)g_object_get_data (G_OBJECT (lop), "fingerprints");
+    fprfull = (gchar **)g_object_get_data (G_OBJECT (lop), "fingerprints-full");
+
+    l = g_strv_length (fprfull);
     seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (lop), 
                                            _("Retrieving remote keys..."), 
-                                           l - g_slist_length (fingerprints), l);
-    
-    if (fingerprints) {
-     
-        fpr = (const gchar*)(fingerprints->data);
-        g_assert (fpr != NULL);
+                                           l - g_strv_length (fingerprints), l);
+
+    if (fingerprints[0]) {
+
+        fpr = fingerprints[0];
 
         /* Keep track of the ones that have already been done */
-        fingerprints = g_slist_next (fingerprints);
+        fingerprints++;
         g_object_set_data (G_OBJECT (lop), "fingerprints", fingerprints);
-                
+
         l = strlen (fpr);
         if (l > 16)
             fpr += (l - 16);
@@ -1126,25 +1126,25 @@ get_key_from_ldap (SeahorseOperation *op, LDAPMessage *result)
 
 /* Starts a get operation for multiple keys */
 static SeahorseLDAPOperation *
-start_get_operation_multiple (SeahorseLDAPSource *lsrc, GSList *fingerprints, 
+start_get_operation_multiple (SeahorseLDAPSource *lsrc, gchar **fingerprints,
                               GOutputStream *output)
 {
 	SeahorseLDAPOperation *lop;
-    
-    	g_assert (g_slist_length (fingerprints) > 0);
-    	g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
-    
-    	lop = seahorse_ldap_operation_start (lsrc, get_key_from_ldap, 
-    	                                     g_slist_length (fingerprints));
-    	g_return_val_if_fail (lop != NULL, NULL);
-        
+
+	g_assert (fingerprints && fingerprints[0]);
+	g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
+
+	lop = seahorse_ldap_operation_start (lsrc, get_key_from_ldap,
+	                                     g_strv_length (fingerprints));
+	g_return_val_if_fail (lop != NULL, NULL);
+
 	g_object_ref (output);
 	seahorse_operation_mark_result (SEAHORSE_OPERATION (lop), output, 
 	                                g_object_unref);
 
 	g_object_set_data (G_OBJECT (lop), "fingerprints", fingerprints);
 	g_object_set_data_full (G_OBJECT (lop), "fingerprints-full", fingerprints, 
-	                        (GDestroyNotify)seahorse_util_string_slist_free);
+	                        (GDestroyNotify)g_strfreev);
 
     	return lop;
 }
@@ -1194,7 +1194,7 @@ send_key_to_ldap (SeahorseOperation *op, LDAPMessage *result)
 {
     SeahorseLDAPOperation *lop = SEAHORSE_LDAP_OPERATION (op);  
     LDAPServerInfo *sinfo;
-    GSList *keys, *keysfull;
+    gchar **keys, **keysfull;
     gchar *key;
     gchar *base;
     LDAPMod mod;
@@ -1205,22 +1205,20 @@ send_key_to_ldap (SeahorseOperation *op, LDAPMessage *result)
 
     g_assert (lop->ldap != NULL);
     g_assert (lop->ldap_op == -1);
-    
-    keys = (GSList*)g_object_get_data (G_OBJECT (lop), "key-data");
-    keysfull = (GSList*)g_object_get_data (G_OBJECT (lop), "key-data-full");
-    
-    l = g_slist_length (keysfull);
+
+    keys = (gchar **)g_object_get_data (G_OBJECT (lop), "key-data");
+    keysfull = (gchar **)g_object_get_data (G_OBJECT (lop), "key-data-full");
+
+    l = g_strv_length (keysfull);
     seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (lop), 
                                            _("Sending keys to key server..."), 
-                                           l - g_slist_length (keys), l);
+                                           l - g_strv_length (keys), l);
     
-    if (keys) {
-     
-        key = (gchar*)(keys->data);
-        g_assert (key != NULL);
+    if (keys[0]) {
+        key = keys[0];
 
         /* Keep track of the ones that have already been done */
-        keys = g_slist_next (keys);
+        keys++;
         g_object_set_data (G_OBJECT (lop), "key-data", keys);
 
         sinfo = get_ldap_server_info (lop->lsrc, TRUE);
@@ -1258,19 +1256,19 @@ send_key_to_ldap (SeahorseOperation *op, LDAPMessage *result)
 
 /* Start a key send operation for multiple keys */
 static SeahorseLDAPOperation *
-start_send_operation_multiple (SeahorseLDAPSource *lsrc, GSList *keys)
+start_send_operation_multiple (SeahorseLDAPSource *lsrc, gchar **keys)
 {
     SeahorseLDAPOperation *lop;
 
-    g_assert (g_slist_length (keys) > 0);
-    
+    g_assert (g_strv_length (keys) > 0);
+
     lop = seahorse_ldap_operation_start (lsrc, send_key_to_ldap, 
-                                         g_slist_length (keys));
+                                         g_strv_length (keys));
     g_return_val_if_fail (lop != NULL, NULL);
 
     g_object_set_data (G_OBJECT (lop), "key-data", keys);
     g_object_set_data_full (G_OBJECT (lop), "key-data-full", keys, 
-                            (GDestroyNotify)seahorse_util_string_slist_free);
+                            (GDestroyNotify)g_strfreev);
 
     return lop;
 }
@@ -1340,16 +1338,17 @@ seahorse_ldap_source_import (SeahorseSource *sksrc, GInputStream *input)
 {
     SeahorseLDAPOperation *lop;
     SeahorseLDAPSource *lsrc;
-    GSList *keydata = NULL;
+    GPtrArray *keydata;
     GString *buf = NULL;
     guint len;
-    
-    	g_return_val_if_fail (SEAHORSE_IS_LDAP_SOURCE (sksrc), NULL);
-    	lsrc = SEAHORSE_LDAP_SOURCE (sksrc);
-    
-    	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
-    	g_object_ref (input);
-    
+
+    g_return_val_if_fail (SEAHORSE_IS_LDAP_SOURCE (sksrc), NULL);
+    lsrc = SEAHORSE_LDAP_SOURCE (sksrc);
+
+    g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
+    g_object_ref (input);
+
+    keydata = g_ptr_array_new_with_free_func (g_free);
     for (;;) {
      
         buf = g_string_sized_new (2048);
@@ -1357,44 +1356,45 @@ seahorse_ldap_source_import (SeahorseSource *sksrc, GInputStream *input)
                                              "-----END PGP PUBLIC KEY BLOCK-----");
     
         if (len > 0) {
-            keydata = g_slist_prepend (keydata, g_string_free (buf, FALSE));
+            g_ptr_array_add (keydata, g_string_free (buf, FALSE));
         } else {
             g_string_free (buf, TRUE);
             break;
         }
     }
-    
-    keydata = g_slist_reverse (keydata);
-    
-    lop = start_send_operation_multiple (lsrc, keydata);
+
+    g_ptr_array_add (keydata, NULL);
+    lop = start_send_operation_multiple (lsrc, (gchar **)g_ptr_array_free (keydata, FALSE));
     g_return_val_if_fail (lop != NULL, NULL);
-    
-    	g_object_unref (input);
-    	return SEAHORSE_OPERATION (lop);
+
+    g_object_unref (input);
+    return SEAHORSE_OPERATION (lop);
 }
 
 static SeahorseOperation* 
-seahorse_ldap_source_export_raw (SeahorseSource *sksrc, GSList *keyids, 
+seahorse_ldap_source_export_raw (SeahorseSource *sksrc, GList *keyids,
                                  GOutputStream *output)
 {
     SeahorseLDAPOperation *lop;
     SeahorseLDAPSource *lsrc;
-    GSList *l, *fingerprints = NULL;
+    GList *l;
+    GPtrArray *fingerprints;
     
     g_return_val_if_fail (SEAHORSE_IS_LDAP_SOURCE (sksrc), NULL);
     g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
 
     lsrc = SEAHORSE_LDAP_SOURCE (sksrc);
-    
-    for (l = keyids; l; l = g_slist_next (l)) 
-        fingerprints = g_slist_prepend (fingerprints, 
-            g_strdup (seahorse_pgp_key_calc_rawid (GPOINTER_TO_UINT (l->data))));
-    fingerprints = g_slist_reverse (fingerprints);
 
-    lop = start_get_operation_multiple (lsrc, fingerprints, output);
+    fingerprints = g_ptr_array_new_with_free_func (g_free);
+    for (l = keyids; l; l = g_list_next (l))
+        g_ptr_array_add (fingerprints,
+            g_strdup (seahorse_pgp_key_calc_rawid (GPOINTER_TO_UINT (l->data))));
+    g_ptr_array_add (fingerprints, NULL);
+
+    lop = start_get_operation_multiple (lsrc, (gchar **)g_ptr_array_free (fingerprints, FALSE), output);
     g_return_val_if_fail (lop != NULL, NULL);
-    
-    return SEAHORSE_OPERATION (lop);    
+
+    return SEAHORSE_OPERATION (lop);
 }
 
 /* Initialize the basic class stuff */

@@ -40,7 +40,7 @@ seahorse_pkcs11_module_init (void)
 	GList *slots, *s;
 	GError *err = NULL;
 
-	for (l = module_paths; l; l = g_slist_next (l)) {
+	for (l = module_paths; l; l = g_list_next (l)) {
 
 		module = gck_module_initialize (l->data, &err);
 		if (!module) {

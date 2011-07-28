@@ -164,8 +164,8 @@ typedef struct _Binding {
 	GObject *obj_src;
 	GParamSpec *prop_src;
 	GParamSpec *prop_dest;
-	GSList *obj_dests;
-	
+	GList *obj_dests;
+
 	gulong connection;
 	SeahorseTransform transform;
 	gboolean processing;
@@ -189,13 +189,13 @@ static void
 binding_dest_gone (gpointer data, GObject *was)
 {
 	Binding *binding = (Binding*)data;
-	GSList *at;
+	GList *at;
 
-	at = g_slist_find (binding->obj_dests, was);
+	at = g_list_find (binding->obj_dests, was);
 	g_assert (at != NULL);
 	
 	/* Remove it from the list */
-	binding->obj_dests = g_slist_delete_link (binding->obj_dests, at);
+	binding->obj_dests = g_list_delete_link (binding->obj_dests, at);
 	
 	/* If no more destination objects, then go away */
 	if (!binding->obj_dests)
@@ -212,7 +212,7 @@ binding_ref (Binding *binding)
 static void
 binding_unref (Binding *binding)
 {
-	GSList *l;
+	GList *l;
 
 	g_assert (binding);
 	
@@ -227,11 +227,11 @@ binding_unref (Binding *binding)
 		binding->obj_src = NULL;
 	}
 	
-	for (l = binding->obj_dests; l; l = g_slist_next (l)) {
+	for (l = binding->obj_dests; l; l = g_list_next (l)) {
 		if (G_IS_OBJECT (l->data))
 			g_object_weak_unref (l->data, binding_dest_gone, binding);
 	}
-	g_slist_free (binding->obj_dests);
+	g_list_free (binding->obj_dests);
 	binding->obj_dests = NULL;
 	
 	g_assert (binding->prop_src);
@@ -257,8 +257,8 @@ static void
 bind_transfer (Binding *binding, gboolean forward)
 {
 	GValue src, dest, check;
-	GSList *l;
-	
+	GList *l;
+
 	g_assert (binding->obj_src);
 	g_assert (binding->obj_dests);
 	
@@ -277,7 +277,7 @@ bind_transfer (Binding *binding, gboolean forward)
 	if ((binding->transform) (&src, &dest)) {
 
 
-		for (l = binding->obj_dests; l; l = g_slist_next (l)) {
+		for (l = binding->obj_dests; l; l = g_list_next (l)) {
 
 			/* Get the current value of the destination object */
 			memset (&check, 0, sizeof (check));
@@ -348,7 +348,7 @@ seahorse_bind_property_full (const gchar *prop_src, gpointer obj_src,
 	Binding *binding;
 	gchar *detail;
 	GObject *dest;
-	GSList *dests, *l;
+	GList *dests, *l;
 	va_list va;
 
 	g_return_val_if_fail (transform, NULL);
@@ -388,7 +388,7 @@ seahorse_bind_property_full (const gchar *prop_src, gpointer obj_src,
 			return NULL;
 		} 
 		
-		dests = g_slist_prepend (dests, dest);
+		dests = g_list_prepend (dests, dest);
 		spec_dest = spec;
 	}
 
@@ -409,7 +409,7 @@ seahorse_bind_property_full (const gchar *prop_src, gpointer obj_src,
 	binding->obj_dests = dests;
 	binding->prop_dest = spec_dest;
 	g_param_spec_ref (spec_dest);
-	for (l = binding->obj_dests; l; l = g_slist_next (l))
+	for (l = binding->obj_dests; l; l = g_list_next (l))
 		g_object_weak_ref (l->data, binding_dest_gone, binding);
 
 	binding->references = 1;

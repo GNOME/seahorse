@@ -1228,52 +1228,6 @@ seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
 }
 
 /**
- * seahorse_util_strvec_dup:
- * @vec: the string table to copy
- *
- * Copy a string table
- *
- * Returns: the new char **
- */
-gchar**
-seahorse_util_strvec_dup (const gchar** vec)
-{
-    gint len = 0;
-    gchar** ret;
-    const gchar** v;
-    
-    if (vec) {
-        for(v = vec; *v; v++)
-            len++;
-    }
-   
-    ret = (gchar**)g_new0(gchar*, len + 1);
-
-    while((--len) >= 0)
-        ret[len] = g_strdup(vec[len]);
-    
-    return ret;
-}
-
-/**
- * seahorse_util_strvec_length:
- * @vec: The string table
- *
- * Calculates the length of the string table
- *
- * Returns: The length of the string table
- */
-guint 
-seahorse_util_strvec_length (const gchar **vec)
-{
-    guint len = 0;
-    while (*(vec++))
-        len++;
-    return len;
-}
-
-
-/**
  * sort_objects_by_source:
  * @k1: the first seahorse object
  * @k2: The second seahorse object
@@ -1376,42 +1330,6 @@ seahorse_util_string_equals (const gchar *s1, const gchar *s2)
 }
 
 /**
- * seahorse_util_string_up_first:
- * @orig: The utf8 string to work with
- *
- * Upper case the first char in the UTF8 string
- *
- * Returns: a new string, with the first char upper cased. The returned string
- * should be freed with #g_free when no longer needed.
- */
-gchar*
-seahorse_util_string_up_first (const gchar *orig)
-{
-    gchar *t, *t2, *ret;
-    
-    if (g_utf8_validate (orig, -1, NULL)) {
-        
-        t = g_utf8_find_next_char (orig, NULL); 
-        if (t != NULL) {
-            t2 = g_utf8_strup (orig, t - orig);
-            ret = g_strdup_printf ("%s%s", t2, t);
-            g_free (t2);
-            
-        /* Can't find first UTF8 char */
-        } else {
-            ret = g_strdup (orig);
-        }
-    
-    /* Just use ASCII functions when not UTF8 */        
-    } else {
-        ret = g_strdup (orig);
-        ret[0] = g_ascii_toupper (ret[0]);
-    }
-    
-    return ret;
-}
-
-/**
  * seahorse_util_string_lower:
  * @s: ASCII string to change
  *
@@ -1422,63 +1340,6 @@ seahorse_util_string_lower (gchar *s)
 {
     for ( ; *s; s++)
         *s = g_ascii_tolower (*s);
-}
-
-/**
- * seahorse_util_string_slist_free:
- * @slist: the #GSList to free
- *
- * Free a GSList along with string values
- *
- * Returns: NULL
- */
-GSList*
-seahorse_util_string_slist_free (GSList* list)
-{
-    GSList *l;
-    for (l = list; l; l = l->next)
-        g_free (l->data);
-    g_slist_free (list);
-    return NULL;
-}
-
-/**
- * seahorse_util_string_slist_copy:
- * @slist: The list to copy
- *
- * Copy a #GSList along with string values
- *
- * Returns: the new list
- */
-GSList*
-seahorse_util_string_slist_copy (GSList *list)
-{
-    GSList *l = NULL;
-    for ( ; list; list = g_slist_next(list))
-        l = g_slist_append (l, g_strdup(list->data));
-    return l;
-}
-
-/**
- * seahorse_util_string_slist_equal:
- * @sl1: the first string list
- * @sl2: the second string list
- *
- * Compare two string GSLists.
- *
- * Returns: TRUE if all the string are equal
- */
-gboolean    
-seahorse_util_string_slist_equal (GSList *l1, GSList *l2)
-{
-    while (l1 && l2) {
-        if (!g_str_equal ((const gchar*)l1->data, (const gchar*)l2->data))
-            break;
-        l1 = g_slist_next (l1);
-        l2 = g_slist_next (l2);
-    }
-    
-    return !l1 && !l2;   
 }
 
 /**

@@ -213,11 +213,11 @@ start_transfer (SeahorseTransferOperation *top)
 {
     SeahorseTransferOperationPrivate *pv = SEAHORSE_TRANSFER_OPERATION_GET_PRIVATE (top);
     SeahorseSource *from;
-    GSList *keyids;
-    
+    GList *keyids;
+
     g_assert (pv->operation == NULL);
 
-    keyids = (GSList*)g_object_get_data (G_OBJECT (top), "transfer-key-ids");
+    keyids = (GList*)g_object_get_data (G_OBJECT (top), "transfer-key-ids");
     g_object_get (top, "from-key-source", &from, NULL);
     g_assert (keyids && from);
     
@@ -352,7 +352,7 @@ seahorse_transfer_operation_cancel (SeahorseOperation *operation)
 
 SeahorseOperation*
 seahorse_transfer_operation_new (const gchar *message, SeahorseSource *from,
-                                 SeahorseSource *to, GSList *keyids)
+                                 SeahorseSource *to, GList *keyids)
 {
     SeahorseTransferOperation *top;
     
@@ -368,9 +368,9 @@ seahorse_transfer_operation_new (const gchar *message, SeahorseSource *from,
     seahorse_debug ("[transfer] starting export");
 
     /* A list of quarks, so a deep copy is not necessary */
-    g_object_set_data_full (G_OBJECT (top), "transfer-key-ids", g_slist_copy (keyids), 
-                            (GDestroyNotify)g_slist_free);
-    
+    g_object_set_data_full (G_OBJECT (top), "transfer-key-ids", g_list_copy (keyids),
+                            (GDestroyNotify)g_list_free);
+
     /* And mark us as started */
     seahorse_operation_mark_start (SEAHORSE_OPERATION (top));
     seahorse_operation_mark_progress (SEAHORSE_OPERATION (top), message, 0.0);

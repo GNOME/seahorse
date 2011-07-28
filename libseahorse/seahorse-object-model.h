@@ -76,12 +76,12 @@ void                seahorse_object_model_set_row_object          (SeahorseObjec
 SeahorseObject*     seahorse_object_model_get_row_key             (SeahorseObjectModel *self,
                                                                    GtkTreeIter *iter);
 
-GSList*             seahorse_object_model_get_rows_for_object     (SeahorseObjectModel *self,
+GList*             seahorse_object_model_get_rows_for_object     (SeahorseObjectModel *self,
                                                                    SeahorseObject *object);
 
 void                seahorse_object_model_remove_rows_for_object  (SeahorseObjectModel *self,
                                                                    SeahorseObject *object);
 
-void                seahorse_object_model_free_rows               (GSList *rows);
+void                seahorse_object_model_free_rows               (GList *rows);
 
 #endif /* __SEAHORSE_OBJECT_MODEL_H__ */

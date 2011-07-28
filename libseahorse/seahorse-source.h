@@ -120,7 +120,7 @@ struct _SeahorseSourceIface {
 	 * 
 	 * Returns: The export operation
 	 */
-	SeahorseOperation* (*export_raw) (SeahorseSource *sksrc, GSList *ids, 
+	SeahorseOperation* (*export_raw) (SeahorseSource *sksrc, GList *ids,
 	                                  GOutputStream *output);
     
 };
@@ -158,7 +158,7 @@ SeahorseOperation*  seahorse_source_export                (SeahorseSource *sksrc
                                                            GOutputStream *output);
 
 SeahorseOperation*  seahorse_source_export_raw            (SeahorseSource *sksrc, 
-                                                           GSList *ids, 
+                                                           GList *ids,
                                                            GOutputStream *output);
 
 GQuark              seahorse_source_get_tag               (SeahorseSource *sksrc);

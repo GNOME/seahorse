@@ -413,11 +413,11 @@ seahorse_object_model_remove_rows_for_object (SeahorseObjectModel *self, Seahors
     g_hash_table_remove (pv->rows, object);
 }
 
-GSList*
+GList*
 seahorse_object_model_get_rows_for_object (SeahorseObjectModel *self, SeahorseObject *object)
 {
     SeahorseObjectModelPrivate *pv = SEAHORSE_OBJECT_MODEL_GET_PRIVATE (self);
-    GSList *rows = NULL;
+    GList *rows = NULL;
     SeahorseObjectRow *skrow;
     GtkTreeIter *iter;
     GtkTreePath *path;
@@ -436,7 +436,7 @@ seahorse_object_model_get_rows_for_object (SeahorseObjectModel *self, SeahorseOb
         if (path) {
             iter = g_new0(GtkTreeIter, 1);
             gtk_tree_model_get_iter (GTK_TREE_MODEL (self), iter, path);
-            rows = g_slist_prepend (rows, iter);
+            rows = g_list_prepend (rows, iter);
             gtk_tree_path_free (path);
         }
     }
@@ -445,10 +445,10 @@ seahorse_object_model_get_rows_for_object (SeahorseObjectModel *self, SeahorseOb
 }
 
 void
-seahorse_object_model_free_rows (GSList *rows)
+seahorse_object_model_free_rows (GList *rows)
 {
-    GSList *l;
-    for (l = rows; l; l = g_slist_next (l))
+    GList *l;
+    for (l = rows; l; l = g_list_next (l))
         g_free (l->data);
-    g_slist_free (rows);
+    g_list_free (rows);
 }

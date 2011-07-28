@@ -77,7 +77,7 @@ G_DEFINE_TYPE (SeahorseContext, seahorse_context, G_TYPE_OBJECT);
  */
 
 struct _SeahorseContextPrivate {
-    GSList *sources;                        /* Sources which add keys to this context */
+    GList *sources;                         /* Sources which add keys to this context */
     GHashTable *auto_sources;               /* Automatically added sources (keyservers) */
     GHashTable *objects_by_source;          /* See explanation above */
     GHashTable *objects_by_type;            /* See explanation above */
@@ -243,15 +243,15 @@ seahorse_context_init (SeahorseContext *sctx)
 /**
 * object: ignored
 * value: the value to prepend
-* user_data: GSList ** to prepend to
+* user_data: GList ** to prepend to
 *
 * Prepends #value to #user_data
 *
 **/
 static void
-hash_to_ref_slist (gpointer object, gpointer value, gpointer user_data)
+hash_to_ref_list (gpointer object, gpointer value, gpointer user_data)
 {
-	*((GSList**)user_data) = g_slist_prepend (*((GSList**)user_data), g_object_ref (value));
+	*((GList**)user_data) = g_list_prepend (*((GList**)user_data), g_object_ref (value));
 }
 
 
@@ -265,18 +265,18 @@ static void
 seahorse_context_dispose (GObject *gobject)
 {
     SeahorseContext *sctx;
-    GSList *objects, *l;
+    GList *objects, *l;
     
     sctx = SEAHORSE_CONTEXT (gobject);
     
     /* Release all the objects */
     objects = NULL;
-    g_hash_table_foreach (sctx->pv->objects_by_source, hash_to_ref_slist, &objects);
-    for (l = objects; l; l = g_slist_next (l)) {
+    g_hash_table_foreach (sctx->pv->objects_by_source, hash_to_ref_list, &objects);
+    for (l = objects; l; l = g_list_next (l)) {
             seahorse_context_remove_object (sctx, l->data);
             g_object_unref (G_OBJECT (l->data));
     }
-    g_slist_free (objects);
+    g_list_free (objects);
 
 #ifdef WITH_KEYSERVER
 	if (sctx->pv->crypto_pgp_settings) {
@@ -298,9 +298,9 @@ seahorse_context_dispose (GObject *gobject)
     sctx->pv->discovery = NULL;
         
     /* Release all the sources */
-    for (l = sctx->pv->sources; l; l = g_slist_next (l))
+    for (l = sctx->pv->sources; l; l = g_list_next (l))
         g_object_unref (SEAHORSE_SOURCE (l->data));
-    g_slist_free (sctx->pv->sources);
+    g_list_free (sctx->pv->sources);
     sctx->pv->sources = NULL;
     
     if (sctx->pv->refresh_ops)
@@ -399,8 +399,8 @@ static gboolean
 take_source (SeahorseContext *sctx, SeahorseSource *sksrc)
 {
 	g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), FALSE);
-	if (!g_slist_find (sctx->pv->sources, sksrc)) {
-		sctx->pv->sources = g_slist_append (sctx->pv->sources, sksrc);
+	if (!g_list_find (sctx->pv->sources, sksrc)) {
+		sctx->pv->sources = g_list_append (sctx->pv->sources, sksrc);
 		return TRUE;
 	}
 	
@@ -467,7 +467,7 @@ seahorse_context_remove_source (SeahorseContext *sctx, SeahorseSource *sksrc)
         sctx = seahorse_context_instance ();
     g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
 
-    if (!g_slist_find (sctx->pv->sources, sksrc)) 
+    if (!g_list_find (sctx->pv->sources, sksrc))
         return;
 
     /* Remove all objects from this source */    
@@ -476,7 +476,7 @@ seahorse_context_remove_source (SeahorseContext *sctx, SeahorseSource *sksrc)
         seahorse_context_remove_object (sctx, SEAHORSE_OBJECT (l->data));
     
     /* Remove the source itself */
-    sctx->pv->sources = g_slist_remove (sctx->pv->sources, sksrc);
+    sctx->pv->sources = g_list_remove (sctx->pv->sources, sksrc);
     g_object_unref (sksrc);
 }
 
@@ -495,13 +495,13 @@ seahorse_context_find_source (SeahorseContext *sctx, GQuark ktype,
                               SeahorseLocation location)
 {
     SeahorseSource *ks;
-    GSList *l;
+    GList *l;
     
     if (!sctx)
         sctx = seahorse_context_instance ();
     g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
-    for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
+    for (l = sctx->pv->sources; l; l = g_list_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
         
         if (ktype != SEAHORSE_TAG_INVALID && 
@@ -532,22 +532,22 @@ seahorse_context_find_source (SeahorseContext *sctx, GQuark ktype,
 * @ktype: the type of the key to match. Or SEAHORSE_TAG_INVALID
 * @location: the location to match. Or SEAHORSE_LOCATION_INVALID
 *
-* Returns: A list of seahorse sources matching @ktype and @location as #GSList. Must
-*  be freed with #g_slist_free
+* Returns: A list of seahorse sources matching @ktype and @location as #GList. Must
+*  be freed with #g_list_free
 */
-GSList*
+GList*
 seahorse_context_find_sources (SeahorseContext *sctx, GQuark ktype,
                                SeahorseLocation location)
 {
     SeahorseSource *ks;
-    GSList *sources = NULL;
-    GSList *l;
+    GList *sources = NULL;
+    GList *l;
     
     if (!sctx)
         sctx = seahorse_context_instance ();
     g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
-    for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
+    for (l = sctx->pv->sources; l; l = g_list_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
         
         if (ktype != SEAHORSE_TAG_INVALID && 
@@ -558,7 +558,7 @@ seahorse_context_find_sources (SeahorseContext *sctx, GQuark ktype,
             seahorse_source_get_location (ks) != location)
             continue;
         
-        sources = g_slist_append (sources, ks);
+        sources = g_list_append (sources, ks);
     }
     
     return sources;
@@ -580,7 +580,7 @@ seahorse_context_remote_source (SeahorseContext *sctx, const gchar *uri)
     SeahorseSource *ks = NULL;
     gboolean found = FALSE;
     gchar *ks_uri;
-    GSList *l;
+    GList *l;
     
     g_return_val_if_fail (uri && *uri, NULL);
 
@@ -588,7 +588,7 @@ seahorse_context_remote_source (SeahorseContext *sctx, const gchar *uri)
         sctx = seahorse_context_instance ();
     g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
-    for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
+    for (l = sctx->pv->sources; l; l = g_list_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
         
         if (seahorse_source_get_location (ks) != SEAHORSE_LOCATION_REMOTE)
@@ -1140,8 +1140,8 @@ seahorse_context_refresh_auto (SeahorseContext *sctx)
 {
 	SeahorseSource *ks;
 	SeahorseOperation *op = NULL;
-	GSList *l;
-    
+	GList *l;
+
 	if (!sctx)
 		sctx = seahorse_context_instance ();
 	g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
@@ -1149,7 +1149,7 @@ seahorse_context_refresh_auto (SeahorseContext *sctx)
 	if (!sctx->pv->refresh_ops)
 		sctx->pv->refresh_ops = seahorse_multi_operation_new ();
 
-	for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
+	for (l = sctx->pv->sources; l; l = g_list_next (l)) {
 		ks = SEAHORSE_SOURCE (l->data);
         
 		if (seahorse_source_get_location (ks) == SEAHORSE_LOCATION_LOCAL) {
@@ -1182,7 +1182,7 @@ seahorse_context_search_remote (SeahorseContext *sctx, const gchar *search)
     gchar **names;
     GHashTable *servers = NULL;
     gchar *uri;
-    GSList *l;
+    GList *l;
     guint i;
 
     if (!sctx)
@@ -1198,7 +1198,7 @@ seahorse_context_search_remote (SeahorseContext *sctx, const gchar *search)
 		g_strfreev (names);
 	}
 
-    for (l = sctx->pv->sources; l; l = g_slist_next (l)) {
+    for (l = sctx->pv->sources; l; l = g_list_next (l)) {
         ks = SEAHORSE_SOURCE (l->data);
         
         if (seahorse_source_get_location (ks) != SEAHORSE_LOCATION_REMOTE)
@@ -1246,7 +1246,7 @@ seahorse_context_transfer_objects (SeahorseContext *sctx, GList *objects,
     SeahorseOperation *op = NULL;
     SeahorseMultiOperation *mop = NULL;
     SeahorseObject *sobj;
-    GSList *ids = NULL;
+    GList *ids = NULL;
     GList *next, *l;
     GQuark ktype;
 
@@ -1299,14 +1299,14 @@ seahorse_context_transfer_objects (SeahorseContext *sctx, GList *objects,
             
             /* Build id list */
             for (l = objects; l; l = g_list_next (l)) 
-                ids = g_slist_prepend (ids, GUINT_TO_POINTER (seahorse_object_get_id (l->data)));
-            ids = g_slist_reverse (ids);
+                ids = g_list_prepend (ids, GUINT_TO_POINTER (seahorse_object_get_id (l->data)));
+            ids = g_list_reverse (ids);
         
             /* Start a new transfer operation between the two sources */
             op = seahorse_transfer_operation_new (NULL, from, to, ids);
             g_return_val_if_fail (op != NULL, FALSE);
             
-            g_slist_free (ids);
+            g_list_free (ids);
             ids = NULL;
         }
 
@@ -1336,12 +1336,12 @@ seahorse_context_transfer_objects (SeahorseContext *sctx, GList *objects,
  */
 SeahorseOperation*
 seahorse_context_retrieve_objects (SeahorseContext *sctx, GQuark ktype, 
-                                   GSList *ids, SeahorseSource *to)
+                                   GList *ids, SeahorseSource *to)
 {
     SeahorseMultiOperation *mop = NULL;
     SeahorseOperation *op = NULL;
     SeahorseSource *sksrc;
-    GSList *sources, *l;
+    GList *sources, *l;
     
     if (!sctx)
         sctx = seahorse_context_instance ();
@@ -1363,7 +1363,7 @@ seahorse_context_retrieve_objects (SeahorseContext *sctx, GQuark ktype,
         return seahorse_operation_new_complete (NULL);
     }
 
-    for (l = sources; l; l = g_slist_next (l)) {
+    for (l = sources; l; l = g_list_next (l)) {
         
         sksrc = SEAHORSE_SOURCE (l->data);
         g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
@@ -1395,24 +1395,24 @@ seahorse_context_retrieve_objects (SeahorseContext *sctx, GQuark ktype,
  */
 GList*
 seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype, 
-                                   GSList *rawids)
+                                   GList *rawids)
 {
     SeahorseOperation *op = NULL;
     GList *robjects = NULL;
     GQuark id = 0;
-    GSList *todiscover = NULL;
+    GList *todiscover = NULL;
     GList *toimport = NULL;
     SeahorseSource *sksrc;
     SeahorseObject* sobj;
     SeahorseLocation loc;
-    GSList *l;
+    GList *l;
 
     if (!sctx)
         sctx = seahorse_context_instance ();
     g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
 
     /* Check all the ids */
-    for (l = rawids; l; l = g_slist_next (l)) {
+    for (l = rawids; l; l = g_list_next (l)) {
         
         id = seahorse_context_canonize_id (ktype, (gchar*)l->data);
         if (!id) {
@@ -1426,7 +1426,7 @@ seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype,
 
         /* No such object anywhere, discover it */
         if (!sobj) {
-            todiscover = g_slist_prepend (todiscover, GUINT_TO_POINTER (id));
+            todiscover = g_list_prepend (todiscover, GUINT_TO_POINTER (id));
             id = 0;
             continue;
         }
@@ -1474,7 +1474,7 @@ seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype,
 
     /* Add unknown objects for all these */
     sksrc = seahorse_context_find_source (sctx, ktype, SEAHORSE_LOCATION_MISSING);
-    for (l = todiscover; l; l = g_slist_next (l)) {
+    for (l = todiscover; l; l = g_list_next (l)) {
         if (sksrc) {
             sobj = seahorse_unknown_source_add_object (SEAHORSE_UNKNOWN_SOURCE (sksrc), 
                                                        GPOINTER_TO_UINT (l->data), op);
@@ -1482,7 +1482,7 @@ seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype,
         }
     }
 
-    g_slist_free (todiscover);
+    g_list_free (todiscover);
 
     return robjects;
 }

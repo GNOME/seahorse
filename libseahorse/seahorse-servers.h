@@ -25,7 +25,7 @@
 #include <glib.h>
 #include <gio/gio.h>
 
-GSList*         seahorse_servers_get_types              (void);
+gchar **        seahorse_servers_get_types              (void);
 
 gchar **        seahorse_servers_get_names              (void);
 

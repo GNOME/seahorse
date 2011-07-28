@@ -145,25 +145,13 @@ gchar*		seahorse_util_add_suffix		(const gchar        *path,
 gchar*      seahorse_util_remove_suffix     (const gchar        *path,
                                              const gchar        *prompt);
 
-gchar**     seahorse_util_strvec_dup        (const gchar        **vec);
+GList*      seahorse_util_objects_sort       (GList *objects);
 
-guint       seahorse_util_strvec_length       (const gchar      **vec);
-
-GList*       seahorse_util_objects_sort       (GList *objects);
-
-GList*       seahorse_util_objects_splice     (GList *objects);
+GList*      seahorse_util_objects_splice     (GList *objects);
 
 gboolean    seahorse_util_string_equals       (const gchar *s1, const gchar *s2);
 
-gchar*      seahorse_util_string_up_first     (const gchar *orig);
-
 void        seahorse_util_string_lower        (gchar *s);
-
-GSList*     seahorse_util_string_slist_free   (GSList *slist);
-
-GSList*     seahorse_util_string_slist_copy   (GSList *slist);
-
-gboolean    seahorse_util_string_slist_equal  (GSList *sl1, GSList *sl2);
 
 gboolean    seahorse_util_string_is_whitespace (const gchar *text);
 

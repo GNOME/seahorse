@@ -157,17 +157,17 @@ gpointer            seahorse_operation_get_result  (SeahorseOperation *operation
                                                       
 /* Helpers for Tracking Operation Lists ------------------------------ */
 
-GSList*             seahorse_operation_list_add    (GSList *list,
+GList*             seahorse_operation_list_add    (GList *list,
                                                     SeahorseOperation *operation);
 
-GSList*             seahorse_operation_list_remove (GSList *list,
+GList*             seahorse_operation_list_remove (GList *list,
                                                     SeahorseOperation *operation);
 
-void                seahorse_operation_list_cancel (GSList *list);
+void                seahorse_operation_list_cancel (GList *list);
 
-GSList*             seahorse_operation_list_purge  (GSList *list);
+GList*             seahorse_operation_list_purge  (GList *list);
                                                     
-GSList*             seahorse_operation_list_free   (GSList *list);
+GList*             seahorse_operation_list_free   (GList *list);
                            
 /* Combining parallel operations ------------------------------------- */
 
@@ -182,7 +182,7 @@ typedef struct _SeahorseMultiOperation {
     SeahorseOperation parent;
     
     /*< public >*/
-    GSList *operations;
+    GList *operations;
     
 } SeahorseMultiOperation;
 

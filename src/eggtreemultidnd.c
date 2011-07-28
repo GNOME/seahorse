@@ -35,7 +35,7 @@ typedef struct
   guint motion_notify_handler;
   guint button_release_handler;
   guint drag_data_get_handler;
-  GSList *event_list;
+  GList *event_list;
 } EggTreeMultiDndData;
 
 /* CUT-N-PASTE from gtktreeview.c */
@@ -166,14 +166,14 @@ static void
 stop_drag_check (GtkWidget *widget)
 {
   EggTreeMultiDndData *priv_data;
-  GSList *l;
+  GList *l;
 
   priv_data = g_object_get_data (G_OBJECT (widget), EGG_TREE_MULTI_DND_STRING);
   
   for (l = priv_data->event_list; l != NULL; l = l->next)
     gdk_event_free (l->data);
   
-  g_slist_free (priv_data->event_list);
+  g_list_free (priv_data->event_list);
   priv_data->event_list = NULL;
   g_signal_handler_disconnect (widget, priv_data->motion_notify_handler);
   g_signal_handler_disconnect (widget, priv_data->button_release_handler);
@@ -185,7 +185,7 @@ egg_tree_multi_drag_button_release_event (GtkWidget      *widget,
 					  gpointer        data)
 {
   EggTreeMultiDndData *priv_data;
-  GSList *l;
+  GList *l;
 
   priv_data = g_object_get_data (G_OBJECT (widget), EGG_TREE_MULTI_DND_STRING);
 
@@ -356,13 +356,13 @@ egg_tree_multi_drag_button_press_event (GtkWidget      *widget,
       g_object_set_data (G_OBJECT (tree_view), EGG_TREE_MULTI_DND_STRING, priv_data);
     }
 
-  if (g_slist_find (priv_data->event_list, event)) 
+  if (g_list_find (priv_data->event_list, event))
     return FALSE;
 
   if (priv_data->event_list) 
     {
       /* save the event to be propagated in order */
-      priv_data->event_list = g_slist_append (priv_data->event_list, gdk_event_copy ((GdkEvent*)event));
+      priv_data->event_list = g_list_append (priv_data->event_list, gdk_event_copy ((GdkEvent*)event));
       return TRUE;
     }
   
@@ -381,7 +381,7 @@ egg_tree_multi_drag_button_press_event (GtkWidget      *widget,
       priv_data->pressed_button = event->button;
       priv_data->x = event->x;
       priv_data->y = event->y;
-      priv_data->event_list = g_slist_append (priv_data->event_list, gdk_event_copy ((GdkEvent*)event));
+      priv_data->event_list = g_list_append (priv_data->event_list, gdk_event_copy ((GdkEvent*)event));
       priv_data->motion_notify_handler =
 	g_signal_connect (G_OBJECT (tree_view), "motion_notify_event", G_CALLBACK (egg_tree_multi_drag_motion_event), NULL);
       priv_data->button_release_handler =

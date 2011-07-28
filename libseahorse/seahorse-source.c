@@ -346,7 +346,7 @@ seahorse_source_export (SeahorseSource *sksrc, GList *objects, GOutputStream *ou
 {
 	SeahorseSourceIface *klass;
 	SeahorseOperation *op;
-	GSList *ids = NULL;
+	GList *ids = NULL;
 	GList *l;
     
 	g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
@@ -360,11 +360,11 @@ seahorse_source_export (SeahorseSource *sksrc, GList *objects, GOutputStream *ou
 	g_return_val_if_fail (klass->export_raw != NULL, NULL);
     
 	for (l = objects; l; l = g_list_next (l)) 
-		ids = g_slist_prepend (ids, GUINT_TO_POINTER (seahorse_object_get_id (l->data)));
-    
-	ids = g_slist_reverse (ids);
+		ids = g_list_prepend (ids, GUINT_TO_POINTER (seahorse_object_get_id (l->data)));
+
+	ids = g_list_reverse (ids);
 	op = (*klass->export_raw) (sksrc, ids, output);	
-	g_slist_free (ids);
+	g_list_free (ids);
 	return op;
 }
 
@@ -379,14 +379,14 @@ seahorse_source_export (SeahorseSource *sksrc, GList *objects, GOutputStream *ou
  * Returns: An export Operation (#SeahorseOperation)
  */
 SeahorseOperation* 
-seahorse_source_export_raw (SeahorseSource *sksrc, GSList *ids, GOutputStream *output)
+seahorse_source_export_raw (SeahorseSource *sksrc, GList *ids, GOutputStream *output)
 {
 	SeahorseSourceIface *klass;
 	SeahorseOperation *op;
 	SeahorseObject *sobj;
 	GList *objects = NULL;
-	GSList *l;
-    
+	GList *l;
+
 	g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
 	g_return_val_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output), NULL);
 
@@ -397,8 +397,8 @@ seahorse_source_export_raw (SeahorseSource *sksrc, GSList *ids, GOutputStream *o
 		return (*klass->export_raw)(sksrc, ids, output);
     
 	g_return_val_if_fail (klass->export != NULL, NULL);
-        
-	for (l = ids; l; l = g_slist_next (l)) {
+
+	for (l = ids; l; l = g_list_next (l)) {
 		sobj = seahorse_context_get_object (SCTX_APP (), sksrc, GPOINTER_TO_UINT (l->data));
         
 		/* TODO: A proper error message here 'not found' */

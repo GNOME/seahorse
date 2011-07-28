@@ -558,8 +558,8 @@ static void
 multi_operation_progress (SeahorseOperation *operation, const gchar *message, 
                           gdouble fract, SeahorseMultiOperation *mop)
 {
-    GSList *list;
-    
+    GList *list;
+
     g_assert (SEAHORSE_IS_MULTI_OPERATION (mop));
     g_assert (SEAHORSE_IS_OPERATION (operation));
     
@@ -569,7 +569,7 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
     list = mop->operations;
     
     /* One or two operations, simple */
-    if (g_slist_length (list) <= 1) {
+    if (g_list_length (list) <= 1) {
 
 		seahorse_debug ("[multi-operation %p] single progress: %s %lf", mop,
 		                seahorse_operation_get_message (operation), operation->progress);
@@ -592,7 +592,7 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
         /* Get the total progress */
         while (list) {
             op = SEAHORSE_OPERATION (list->data);
-            list = g_slist_next (list);
+            list = g_list_next (list);
 
             if (message && !message[0])
                 message = NULL;
@@ -630,7 +630,7 @@ multi_operation_progress (SeahorseOperation *operation, const gchar *message,
 static void
 multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
 {
-    GSList *l;
+    GList *l;
     gboolean done = TRUE;
     
     g_assert (SEAHORSE_IS_MULTI_OPERATION (mop));
@@ -643,10 +643,10 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
         seahorse_operation_copy_error (op, &(SEAHORSE_OPERATION (mop)->error));
 
     seahorse_debug ("[multi-operation %p] part complete (%d): %p/%s", mop,
-                    g_slist_length (mop->operations), op, seahorse_operation_get_message (op));
+                    g_list_length (mop->operations), op, seahorse_operation_get_message (op));
         
     /* Are we done with all of them? */
-    for (l = mop->operations; l; l = g_slist_next (l)) {
+    for (l = mop->operations; l; l = g_list_next (l)) {
         if (seahorse_operation_is_running (SEAHORSE_OPERATION (l->data))) 
             done = FALSE;
     }
@@ -660,7 +660,7 @@ multi_operation_done (SeahorseOperation *op, SeahorseMultiOperation *mop)
     seahorse_debug ("[multi-operation %p] complete", mop);
 
     /* Remove all the listeners */
-    for (l = mop->operations; l; l = g_slist_next (l)) {
+    for (l = mop->operations; l; l = g_list_next (l)) {
         g_signal_handlers_disconnect_by_func (l->data, multi_operation_done, mop);
         g_signal_handlers_disconnect_by_func (l->data, multi_operation_progress, mop);
     }
@@ -696,12 +696,12 @@ static void
 seahorse_multi_operation_dispose (GObject *gobject)
 {
     SeahorseMultiOperation *mop;
-    GSList *l;
-    
+    GList *l;
+
     mop = SEAHORSE_MULTI_OPERATION (gobject);
     
     /* Remove all the listeners */
-    for (l = mop->operations; l; l = g_slist_next (l)) {
+    for (l = mop->operations; l; l = g_list_next (l)) {
         g_signal_handlers_disconnect_by_func (l->data, multi_operation_done, mop);
         g_signal_handlers_disconnect_by_func (l->data, multi_operation_progress, mop);
     }
@@ -824,18 +824,18 @@ seahorse_multi_operation_take (SeahorseMultiOperation* mop, SeahorseOperation *o
 
 /**
  * seahorse_operation_list_add:
- * @list: a #GSList
+ * @list: a #GList
  * @operation: a #SeahorseOperation to add to the lit
  *
  * Prepends the seahorse operation to the list
  *
  * Returns: the list
  */
-GSList*
-seahorse_operation_list_add (GSList *list, SeahorseOperation *operation)
+GList*
+seahorse_operation_list_add (GList *list, SeahorseOperation *operation)
 {
     /* This assumes the main reference */
-    return g_slist_prepend (list, operation);
+    return g_list_prepend (list, operation);
 }
 
 /**
@@ -847,16 +847,16 @@ seahorse_operation_list_add (GSList *list, SeahorseOperation *operation)
  *
  * Returns: The new list
  */
-GSList*             
-seahorse_operation_list_remove (GSList *list, SeahorseOperation *operation)
+GList*
+seahorse_operation_list_remove (GList *list, SeahorseOperation *operation)
 {
-   GSList *element;
-   
-   element = g_slist_find (list, operation);
+   GList *element;
+
+   element = g_list_find (list, operation);
    if (element) {
         g_object_unref (operation);
-        list = g_slist_remove_link (list, element);
-        g_slist_free (element);
+        list = g_list_remove_link (list, element);
+        g_list_free (element);
    } 
    
    return list;
@@ -870,13 +870,13 @@ seahorse_operation_list_remove (GSList *list, SeahorseOperation *operation)
  *
  */
 void             
-seahorse_operation_list_cancel (GSList *list)
+seahorse_operation_list_cancel (GList *list)
 {
     SeahorseOperation *operation;
     
     while (list) {
         operation = SEAHORSE_OPERATION (list->data);
-        list = g_slist_next (list);
+        list = g_list_next (list);
         
         if (seahorse_operation_is_running (operation))
             seahorse_operation_cancel (operation);
@@ -891,23 +891,23 @@ seahorse_operation_list_cancel (GSList *list)
  *
  * Returns: the purged list
  */
-GSList*             
-seahorse_operation_list_purge (GSList *list)
+GList*
+seahorse_operation_list_purge (GList *list)
 {
-    GSList *l, *p;
+    GList *l, *p;
     
     p = list;
     
     while (p != NULL) {
 
         l = p;
-        p = g_slist_next (p);
-        
+        p = g_list_next (p);
+
         if (!seahorse_operation_is_running (SEAHORSE_OPERATION (l->data))) {
             g_object_unref (G_OBJECT (l->data));
 
-            list = g_slist_remove_link (list, l);
-            g_slist_free (l);
+            list = g_list_remove_link (list, l);
+            g_list_free (l);
         }
     }
     
@@ -916,22 +916,22 @@ seahorse_operation_list_purge (GSList *list)
 
 /**
  * seahorse_operation_list_free:
- * @list: A #GSList of #SEAHORSE_OPERATION s
+ * @list: A #GList of #SEAHORSE_OPERATION s
  *
  * Frees the list of seahorse operations
  *
  * Returns: NULL
  */
-GSList*
-seahorse_operation_list_free (GSList *list)
+GList*
+seahorse_operation_list_free (GList *list)
 {
-    GSList *l;
-    
-    for (l = list; l; l = g_slist_next (l)) {
+    GList *l;
+
+    for (l = list; l; l = g_list_next (l)) {
         g_assert (SEAHORSE_IS_OPERATION (l->data));
         g_object_unref (G_OBJECT (l->data));
     }
-    
-    g_slist_free (list);
+
+    g_list_free (list);
     return NULL;
 }
