@@ -538,7 +538,8 @@ import_text (SeahorseKeyManager* self, const char* text)
 	sksrc = seahorse_context_find_source (seahorse_context_instance (), ktype, SEAHORSE_LOCATION_LOCAL);
 	g_return_if_fail (sksrc != NULL);
 
-	input = seahorse_util_memory_input_string (text, len);
+	input = G_MEMORY_INPUT_STREAM (g_memory_input_stream_new_from_data (g_strndup (text, len),
+	                                                                    len, g_free));
 	op = seahorse_source_import (sksrc, G_INPUT_STREAM (input));
 	
 	seahorse_progress_show (op, _("Importing Keys"), TRUE);

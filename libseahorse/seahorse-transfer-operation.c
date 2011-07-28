@@ -178,7 +178,7 @@ export_done (SeahorseOperation *op, SeahorseTransferOperation *top)
 
 	/* Build an input stream for this */
 	data = g_memory_output_stream_get_data (pv->output);
-	size = seahorse_util_memory_output_length (pv->output);
+	size = g_memory_output_stream_get_data_size (pv->output);
 	
 	if(!size) {
 		seahorse_operation_mark_done (SEAHORSE_OPERATION (top), FALSE, NULL);
