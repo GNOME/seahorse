@@ -35,24 +35,13 @@ void
 seahorse_pkcs11_module_init (void)
 {
 	SeahorseSource *source;
-	GckModule *module;
-	GSList *l, *module_paths;
 	GList *slots, *s;
-	GError *err = NULL;
-	
-	/* Load each module in turn, and each slot for each module */
-	module_paths = seahorse_gconf_get_string_list ("/system/pkcs11/modules");
-	for (l = module_paths; l; l = g_slist_next (l)) {
+	GList *modules, *m;
 
-		module = gck_module_initialize (l->data, &err);
-		if (!module) {
-			g_warning ("couldn't initialize %s pkcs11 module: %s", 
-			           (gchar*)l->data, err ? err->message : NULL);
-			g_clear_error (&err);
-			continue;
-		}
+	modules = gck_modules_initialize_registered ();
 
-		slots = gck_module_get_slots (module, FALSE);
+	for (m = modules; m != NULL; m = g_list_next (m)) {
+		slots = gck_module_get_slots (m->data, FALSE);
 		for (s = slots; s; s = g_list_next (s)) {
 			source = SEAHORSE_SOURCE (seahorse_pkcs11_source_new (s->data));
 			seahorse_context_take_source (NULL, source);
@@ -60,10 +49,9 @@ seahorse_pkcs11_module_init (void)
 
 		/* These will have been refed by the source above */
 		gck_list_unref_free (slots);
-		g_object_unref (module);
 	}
 
-	seahorse_util_string_slist_free (module_paths);
+	gck_list_unref_free (modules);
 
 	/* Let these register themselves */
 	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PKCS11_SOURCE));
