@@ -28,7 +28,6 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "seahorse-gconf.h"
 #include "seahorse-key-manager-store.h"
 #include "seahorse-preferences.h"
 #include "seahorse-util.h"
@@ -42,9 +41,10 @@
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
 
 enum {
-    PROP_0,
-    PROP_MODE,
-    PROP_FILTER
+	PROP_0,
+	PROP_MODE,
+	PROP_FILTER,
+	PROP_SETTINGS
 };
 
 enum {
@@ -91,10 +91,11 @@ static GtkTargetEntry store_targets[] = {
 	{ "XdndDirectSave0", 0, DRAG_INFO_XDS }
 };
 
-struct _SeahorseKeyManagerStorePriv {    
-    GtkTreeModelFilter      *filter;
-    GtkTreeModelSort        *sort;
-    
+struct _SeahorseKeyManagerStorePriv {
+	GtkTreeModelFilter *filter;
+	GtkTreeModelSort *sort;
+	GSettings *settings;
+
     SeahorseKeyManagerStoreMode    filter_mode;
     gchar*                  filter_text;
     guint                   filter_stag;
@@ -317,69 +318,64 @@ set_sort_to (SeahorseKeyManagerStore *skstore, const gchar *name)
 static void
 sort_changed (GtkTreeSortable *sort, gpointer user_data)
 {
-    gint id;
-    GtkSortType ord;
-    SeahorseKeyManagerStore *skstore;
-    const gchar* t;
-    gchar* x;
-    
-    skstore = SEAHORSE_KEY_MANAGER_STORE (user_data);
-    g_return_if_fail (skstore->priv->sort);
-    
-    /* We have a sort so save it */
-    if (gtk_tree_sortable_get_sort_column_id (sort, &id, &ord)) {
-        if (id >= 0 && id < N_COLS) {
-            t = column_info[id].data;
-            if (t != NULL) {
-                x = g_strconcat (ord == GTK_SORT_DESCENDING ? "-" : "", t, NULL);
-                seahorse_gconf_set_string (KEY_MANAGER_SORT_KEY, x);
-                g_free (x);
-            }
-        }
-    }
-    
-    /* No sort so save blank */
-    else {
-        seahorse_gconf_set_string (KEY_MANAGER_SORT_KEY, "");
-    }
+	SeahorseKeyManagerStore *self = SEAHORSE_KEY_MANAGER_STORE (user_data);
+	GtkSortType ord;
+	gchar* value;
+	gint column_id;
+
+	g_return_if_fail (self->priv->sort);
+	if (!self->priv->settings)
+		return;
+
+	/* We have a sort so save it */
+	if (gtk_tree_sortable_get_sort_column_id (sort, &column_id, &ord)) {
+		if (column_id >= 0 && column_id < N_COLS) {
+			if (column_info[column_id].data != NULL) {
+				value = g_strconcat (ord == GTK_SORT_DESCENDING ? "-" : "",
+				                     column_info[column_id].data, NULL);
+				g_settings_set_string (self->priv->settings, "sort-by", value);
+				g_free (value);
+			}
+		}
+
+	/* No sort so save blank */
+	} else if (self->priv->settings) {
+		g_settings_set_string (self->priv->settings, "sort-by", "");
+	}
 }
 
 static void
-gconf_notification (GConfClient *gclient, guint id, GConfEntry *entry, GtkTreeView *view)
+on_manager_settings_changed (GSettings *settings, const gchar *key, gpointer user_data)
 {
-    SeahorseKeyManagerStore *skstore;
-    GtkTreeViewColumn *col = NULL;
-    GList *columns, *l;
-    GConfValue *value;
-    const gchar *key;
-    const gchar *t;
+	SeahorseKeyManagerStore *self;
+	GtkTreeViewColumn *col = NULL;
+	GtkTreeView *view = GTK_TREE_VIEW (user_data);
+	const gchar *col_key = NULL;
+	GList *columns, *l;
+	gchar *sort_by;
 
-    key = gconf_entry_get_key (entry);
+	if (g_str_equal (key, "sort-by")) {
+		self = key_store_from_model (gtk_tree_view_get_model (view));
+		g_return_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (self));
+		sort_by = g_settings_get_string (settings, key);
+		set_sort_to (self, sort_by);
+		g_free (sort_by);
+		return;
+	}
 
-    g_assert (key != NULL);
-    g_assert (GTK_IS_TREE_VIEW (view));
-    
-    if (g_str_equal (key, KEY_MANAGER_SORT_KEY)) {
-        skstore = key_store_from_model (gtk_tree_view_get_model (view));
-        g_return_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (skstore));
-        set_sort_to (skstore, gconf_value_get_string (gconf_entry_get_value (entry)));
-    }
-    
-    columns = gtk_tree_view_get_columns (view);
-    for (l = columns; l; l = g_list_next (l)) {
-        t = (const gchar*)g_object_get_data (G_OBJECT (l->data), "gconf-key");
-        if (t && g_str_equal (t, key)) {
-            col = GTK_TREE_VIEW_COLUMN (l->data);
-            break;
-        }
-    }
-    
-    if (col != NULL) {
-        value = gconf_entry_get_value (entry);
-        gtk_tree_view_column_set_visible (col, gconf_value_get_bool (value));
-    }
-    
-    g_list_free (columns);
+	columns = gtk_tree_view_get_columns (view);
+	for (l = columns; l; l = g_list_next (l)) {
+		col_key = g_object_get_data (G_OBJECT (l->data), "settings-key");
+		if (col_key && g_str_equal (col_key, key)) {
+			col = GTK_TREE_VIEW_COLUMN (l->data);
+			break;
+		}
+	}
+
+	if (col != NULL)
+		gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, key));
+
+	g_list_free (columns);
 }
 
 static GtkTreeViewColumn*
@@ -729,7 +725,11 @@ seahorse_key_manager_store_get_property (GObject *gobject, guint prop_id,
     case PROP_MODE:
         g_value_set_uint (value, skstore->priv->filter_mode);
         break;
-        
+
+    case PROP_SETTINGS:
+        g_value_set_object (value, skstore->priv->settings);
+        break;
+
     /* The filter text. Note that we act as if we don't have any 
      * filter text when not in filtering mode */
     case PROP_FILTER:
@@ -758,7 +758,11 @@ seahorse_key_manager_store_set_property (GObject *gobject, guint prop_id,
             refilter_later (skstore);
         }
         break;
-        
+
+    case PROP_SETTINGS:
+        skstore->priv->settings = g_value_dup_object (value);
+        break;
+
     /* The filter text */
     case PROP_FILTER:
         t = g_value_get_string (value);
@@ -826,6 +830,10 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
     g_object_class_install_property (gobject_class, PROP_FILTER,
         g_param_spec_string ("filter", "Key Store Filter", "Key store filter for when in filtered mode",
                              "", G_PARAM_READWRITE));
+
+    g_object_class_install_property (gobject_class, PROP_SETTINGS,
+        g_param_spec_object ("settings", "Settings", "Manager Settings",
+                             G_TYPE_SETTINGS, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 /* -----------------------------------------------------------------------------
@@ -833,16 +841,16 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
  */
 
 SeahorseKeyManagerStore*
-seahorse_key_manager_store_new (SeahorseSet *skset, GtkTreeView *view)
+seahorse_key_manager_store_new (SeahorseSet *skset, GtkTreeView *view, GSettings *settings)
 {
     SeahorseKeyManagerStore *skstore;
     GtkTreeViewColumn *col;
     SeahorseObjectPredicate *pred;
     GtkCellRenderer *renderer;
-    gchar *sort;
+    gchar *sort_by;
     gint last;
-    
-    skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "set", skset, NULL);
+
+    skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "set", skset, "settings", settings, NULL);
     last = seahorse_set_model_set_columns (SEAHORSE_SET_MODEL (skstore), column_info, N_COLS);
     g_return_val_if_fail (last == N_COLS - 1, NULL);
 
@@ -884,42 +892,41 @@ seahorse_key_manager_store_new (SeahorseSet *skset, GtkTreeView *view)
     /* Public keys show validity */
     if (pred->usage == SEAHORSE_USAGE_PUBLIC_KEY) {
         col = append_text_column (skstore, view, _("Validity"), COL_VALIDITY_STR);
-        g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_VALIDITY_KEY);
-        gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_VALIDITY_KEY));
+        g_object_set_data (G_OBJECT (col), "settings-key", "show-validity");
+        gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-validity"));
         gtk_tree_view_column_set_sort_column_id (col, COL_VALIDITY);
     }
 
     /* Trust column */
     col = append_text_column (skstore, view, _("Trust"), COL_TRUST_STR);
-    g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_TRUST_KEY);
-    gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_TRUST_KEY));
+    g_object_set_data (G_OBJECT (col), "settings-key", "show-trust");
+    gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-trust"));
     gtk_tree_view_column_set_sort_column_id (col, COL_TRUST);
-    
+
     /* The key type column */
     col = append_text_column (skstore, view, _("Type"), COL_TYPE);
-    g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_TYPE_KEY);
-    gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_TYPE_KEY));
+    g_object_set_data (G_OBJECT (col), "settings-key", "show-type");
+    gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-type"));
     gtk_tree_view_column_set_sort_column_id (col, COL_TYPE);
 
     /* Expiry date column */
     col = append_text_column (skstore, view, _("Expiration Date"), COL_EXPIRES_STR);
-    g_object_set_data (G_OBJECT (col), "gconf-key", SHOW_EXPIRES_KEY);
-    gtk_tree_view_column_set_visible (col, seahorse_gconf_get_boolean (SHOW_EXPIRES_KEY));
+    g_object_set_data (G_OBJECT (col), "settings-key", "show-expiry");
+    gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-expiry"));
     gtk_tree_view_column_set_sort_column_id (col, COL_EXPIRES);
 
     /* Also watch for sort-changed on the store */
     g_signal_connect (skstore->priv->sort, "sort-column-changed", G_CALLBACK (sort_changed), skstore);
 
     /* Update sort order in case the sorted column was added */
-    if ((sort = seahorse_gconf_get_string (KEY_MANAGER_SORT_KEY)) != NULL) {
-        set_sort_to (skstore, sort);
-        g_free (sort);
+    if ((sort_by = g_settings_get_string (settings, "sort-by")) != NULL) {
+        set_sort_to (skstore, sort_by);
+        g_free (sort_by);
     } 
     
     gtk_tree_view_set_enable_search (view, FALSE);
-    
-    seahorse_gconf_notify_lazy (LISTING_SCHEMAS, (GConfClientNotifyFunc)gconf_notification, 
-                                view, GTK_WIDGET (view));
+
+    g_signal_connect_object (settings, "changed", G_CALLBACK (on_manager_settings_changed), view, 0);
 
     /* Tree drag */
     egg_tree_multi_drag_add_drag_support (view);    

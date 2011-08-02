@@ -22,7 +22,6 @@
 #include <config.h>
 
 #include "seahorse-context.h"
-#include "seahorse-gconf.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
@@ -30,9 +29,9 @@
 #define UPDATING    "updating"
 
 enum {
-    PROP_0,
-    PROP_GCONF_KEY,
-    PROP_NONE_OPTION
+	PROP_0,
+	PROP_SETTINGS_KEY,
+	PROP_NONE_OPTION
 };
 
 enum {
@@ -47,13 +46,10 @@ enum {
 };
 
 /* Forward declaration */
-static void populate_combo (SeahorseKeyserverControl *combo, gboolean gconf);
+static void populate_combo (SeahorseKeyserverControl *combo, gboolean with_key);
 
 static void    seahorse_keyserver_control_class_init      (SeahorseKeyserverControlClass *klass);
 static void    seahorse_keyserver_control_init            (SeahorseKeyserverControl *skc);
-static GObject *seahorse_keyserver_control_constructor    (GType type, guint n_construct_properties,
-                                                           GObjectConstructParam *construct_params);
-static void    seahorse_keyserver_control_finalize        (GObject *gobject);
 static void    seahorse_keyserver_control_set_property    (GObject *object, guint prop_id,
                                                            const GValue *value, GParamSpec *pspec);
 static void    seahorse_keyserver_control_get_property    (GObject *object, guint prop_id,
@@ -62,13 +58,74 @@ static void    seahorse_keyserver_control_get_property    (GObject *object, guin
 G_DEFINE_TYPE(SeahorseKeyserverControl, seahorse_keyserver_control, GTK_TYPE_COMBO_BOX)
 
 static void
+on_keyserver_changed (GtkComboBox *widget, SeahorseKeyserverControl *self)
+{
+	gchar *text;
+
+	/* If currently updating (see populate_combo) ignore */
+	if (g_object_get_data (G_OBJECT (self), UPDATING) != NULL)
+		return;
+
+	if (self->settings_key) {
+		text = seahorse_keyserver_control_selected (self);
+		g_settings_set_string (seahorse_context_settings (NULL),
+		                       self->settings_key, text ? text : "");
+		g_free (text);
+	}
+}
+
+static void
+on_settings_keyserver_changed (GSettings *settings, const gchar *key, gpointer user_data)
+{
+	SeahorseKeyserverControl *self = SEAHORSE_KEYSERVER_CONTROL (user_data);
+	populate_combo (self, FALSE);
+}
+
+static void
+on_settings_key_changed (GSettings *settings, const gchar *key, gpointer user_data)
+{
+	SeahorseKeyserverControl *self = SEAHORSE_KEYSERVER_CONTROL (user_data);
+	populate_combo (self, TRUE);
+}
+
+static void
+seahorse_keyserver_control_constructed (GObject *object)
+{
+	SeahorseKeyserverControl *self = SEAHORSE_KEYSERVER_CONTROL (object);
+	gchar *detailed;
+
+	G_OBJECT_CLASS (seahorse_keyserver_control_parent_class)->constructed (object);
+
+	populate_combo (self, TRUE);
+	g_signal_connect_object (self, "changed", G_CALLBACK (on_keyserver_changed), self, 0);
+	g_signal_connect_object (seahorse_context_pgp_settings (NULL), "changed::keyserver",
+	                         G_CALLBACK (on_settings_keyserver_changed), self, 0);
+	if (self->settings_key) {
+		detailed = g_strdup_printf ("changed::%s", self->settings_key);
+		g_signal_connect_object (seahorse_context_settings (NULL), detailed,
+		                         G_CALLBACK (on_settings_key_changed), self, 0);
+		g_free (detailed);
+	}
+}
+
+static void
+seahorse_keyserver_control_finalize (GObject *gobject)
+{
+	SeahorseKeyserverControl *skc = SEAHORSE_KEYSERVER_CONTROL (gobject);
+
+	g_free (skc->settings_key);
+
+	G_OBJECT_CLASS (seahorse_keyserver_control_parent_class)->finalize (gobject);
+}
+
+static void
 seahorse_keyserver_control_class_init (SeahorseKeyserverControlClass *klass)
 {
     GObjectClass *gobject_class;
     
     gobject_class = G_OBJECT_CLASS (klass);
-    
-    gobject_class->constructor = seahorse_keyserver_control_constructor;
+
+    gobject_class->constructed = seahorse_keyserver_control_constructed;
     gobject_class->set_property = seahorse_keyserver_control_set_property;
     gobject_class->get_property = seahorse_keyserver_control_get_property;
     gobject_class->finalize = seahorse_keyserver_control_finalize;
@@ -77,36 +134,10 @@ seahorse_keyserver_control_class_init (SeahorseKeyserverControlClass *klass)
             g_param_spec_string ("none-option", "No key option", "Puts in an option for 'no key server'",
                                   NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
-    g_object_class_install_property (gobject_class, PROP_GCONF_KEY,
-            g_param_spec_string ("gconf-key", "GConf key", "GConf key to read/write selection",
+    g_object_class_install_property (gobject_class, PROP_SETTINGS_KEY,
+            g_param_spec_string ("settings-key", "Settings key", "Settings key to read/write selection",
                                   NULL, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
     
-}
-
-static void
-keyserver_changed (GtkComboBox *widget, SeahorseKeyserverControl *skc)
-{
-    /* If currently updating (see populate_combo) ignore */
-    if (g_object_get_data (G_OBJECT (skc), UPDATING) != NULL)
-        return;
-    
-    if (skc->gconf_key) {
-        gchar *t = seahorse_keyserver_control_selected (skc);
-        seahorse_gconf_set_string (skc->gconf_key, t ? t : "");
-        g_free (t);
-    }
-}
-
-static void
-gconf_notify (GConfClient *client, guint id, GConfEntry *entry, gpointer data)
-{
-    SeahorseKeyserverControl *skc = SEAHORSE_KEYSERVER_CONTROL (data);   
-    const gchar *key = gconf_entry_get_key (entry);
-
-    if (g_str_equal (KEYSERVER_KEY, key))
-        populate_combo (skc, FALSE);
-    else if (skc->gconf_key && g_str_equal (skc->gconf_key, key))
-        populate_combo (skc, TRUE);
 }
 
 static gint
@@ -157,26 +188,6 @@ seahorse_keyserver_control_init (SeahorseKeyserverControl *skc)
                                           NULL, NULL);
 }
 
-static GObject *
-seahorse_keyserver_control_constructor (GType type, guint n_construct_properties,
-                                        GObjectConstructParam *construct_params)
-{
-    GObject *object;
-    SeahorseKeyserverControl *skc;
-
-    object = G_OBJECT_CLASS (seahorse_keyserver_control_parent_class)->constructor
-                                (type, n_construct_properties, construct_params);
-    skc = SEAHORSE_KEYSERVER_CONTROL (object);
-
-    populate_combo (skc, TRUE);
-    g_signal_connect (skc, "changed", G_CALLBACK (keyserver_changed), skc);
-    skc->notify_id_list = seahorse_gconf_notify (KEYSERVER_KEY, gconf_notify, skc);
-    if (skc->gconf_key)
-        skc->notify_id = seahorse_gconf_notify (skc->gconf_key, gconf_notify, skc);
-
-    return object;
-}
-
 static void
 seahorse_keyserver_control_set_property (GObject *object, guint prop_id,
                                          const GValue *value, GParamSpec *pspec)
@@ -184,8 +195,8 @@ seahorse_keyserver_control_set_property (GObject *object, guint prop_id,
     SeahorseKeyserverControl *control = SEAHORSE_KEYSERVER_CONTROL (object);
     
     switch (prop_id) {
-    case PROP_GCONF_KEY:
-        control->gconf_key = g_value_dup_string (value);
+    case PROP_SETTINGS_KEY:
+        control->settings_key = g_value_dup_string (value);
         break;
         
     case PROP_NONE_OPTION:
@@ -208,8 +219,8 @@ seahorse_keyserver_control_get_property (GObject *object, guint prop_id,
             g_value_set_string (value, control->none_option);
             break;
 
-        case PROP_GCONF_KEY:
-            g_value_set_string (value, control->gconf_key);
+        case PROP_SETTINGS_KEY:
+            g_value_set_string (value, control->settings_key);
             break;
         
         default:
@@ -218,39 +229,20 @@ seahorse_keyserver_control_get_property (GObject *object, guint prop_id,
 }
 
 static void
-seahorse_keyserver_control_finalize (GObject *gobject)
-{
-    SeahorseKeyserverControl *skc = SEAHORSE_KEYSERVER_CONTROL (gobject);
-    
-    if (skc->notify_id >= 0) {
-        seahorse_gconf_unnotify (skc->notify_id);
-        skc->notify_id = 0;
-    }
-
-    if (skc->notify_id_list >= 0) {
-        seahorse_gconf_unnotify (skc->notify_id_list);
-        skc->notify_id_list = 0;
-    }
-
-    g_free (skc->gconf_key);
-
-    G_OBJECT_CLASS (seahorse_keyserver_control_parent_class)->finalize (gobject);
-}
-
-static void
-populate_combo (SeahorseKeyserverControl *skc, gboolean gconf)
+populate_combo (SeahorseKeyserverControl *skc, gboolean with_key)
 {
     GtkComboBox *combo = GTK_COMBO_BOX (skc);
-    GSList *l, *ks;
+    gchar **keyservers;
     gchar *chosen = NULL;
     gint chosen_info = OPTION_KEYSERVER;
     GtkListStore *store;
     GtkTreeIter iter, none_iter, chosen_iter;
     gboolean chosen_iter_set = FALSE;
+    guint i;
 
     /* Get the appropriate selection */
-    if (gconf && skc->gconf_key)
-        chosen = seahorse_gconf_get_string (skc->gconf_key);
+    if (with_key && skc->settings_key)
+        chosen = g_settings_get_string (seahorse_context_settings (NULL), skc->settings_key);
     else {
         if (gtk_combo_box_get_active_iter (combo, &iter)) {
             gtk_tree_model_get (gtk_combo_box_get_model (combo), &iter,
@@ -281,10 +273,10 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf)
                                            -1);
     }
 
-    ks = seahorse_servers_get_uris ();
+    keyservers = seahorse_servers_get_uris ();
 
-    for (l = ks; l != NULL; l = g_slist_next (l)) {
-        const gchar *keyserver = (const gchar *) l->data;
+    for (i = 0; keyservers[i] != NULL; i++) {
+        const gchar *keyserver = keyservers[i];
 
         g_assert (keyserver != NULL);
         gtk_list_store_insert_with_values (store, &iter, 0,
@@ -296,7 +288,7 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf)
             chosen_iter_set = TRUE;
         }
     }
-    seahorse_util_string_slist_free (ks);
+    g_strfreev (keyservers);
     g_free (chosen);
 
     /* Turn on sorting after populating the store, since that's faster */
@@ -318,11 +310,11 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean gconf)
     g_object_set_data (G_OBJECT (skc), UPDATING, NULL);    
 }
 
-SeahorseKeyserverControl*  
-seahorse_keyserver_control_new (const gchar *gconf_key, const gchar *none_option)
+SeahorseKeyserverControl*
+seahorse_keyserver_control_new (const gchar *settings_key, const gchar *none_option)
 {
     return g_object_new (SEAHORSE_TYPE_KEYSERVER_CONTROL, 
-                         "gconf-key", gconf_key, "none-option", none_option, NULL);
+                         "settings-key", settings_key, "none-option", none_option, NULL);
 }
 
 gchar *

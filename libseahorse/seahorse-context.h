@@ -193,4 +193,8 @@ typedef GQuark (*SeahorseCanonizeFunc) (const gchar *id);
 
 GQuark              seahorse_context_canonize_id        (GQuark ktype, const gchar *id);
 
+GSettings *         seahorse_context_settings           (SeahorseContext *self);
+
+GSettings *         seahorse_context_pgp_settings       (SeahorseContext *self);
+
 #endif /* __SEAHORSE_CONTEXT_H__ */

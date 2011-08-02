@@ -67,6 +67,7 @@ struct _SeahorseWidget {
 	/*< private >*/
 	gboolean destroying;
 	gboolean in_destruction;
+	GSettings *settings;
 };
 
 struct _SeahorseWidgetClass {

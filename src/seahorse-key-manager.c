@@ -28,7 +28,6 @@
 #include "seahorse-windows.h"
 #include "seahorse-keyserver-results.h"
 
-#include "seahorse-gconf.h"
 #include "seahorse-operation.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
@@ -57,6 +56,7 @@ struct _SeahorseKeyManagerPrivate {
 	GQuark track_selected_id;
 	guint track_selected_tab;
 	TabInfo* tabs;
+	GSettings *settings;
 };
 
 enum  {
@@ -357,7 +357,7 @@ initialize_tab (SeahorseKeyManager* self, const char* tabwidget, guint tabid, co
 	gtk_widget_realize (GTK_WIDGET (view));
 
 	/* Add new key store and associate it */
-	self->pv->tabs[tabid].store = seahorse_key_manager_store_new (objects, view);
+	self->pv->tabs[tabid].store = seahorse_key_manager_store_new (objects, view, self->pv->settings);
 }
 
 static gboolean 
@@ -660,7 +660,7 @@ on_view_type_activate (GtkToggleAction* action, SeahorseKeyManager* self)
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
-	seahorse_gconf_set_boolean (SHOW_TYPE_KEY, gtk_toggle_action_get_active (action));
+	g_settings_set_boolean (self->pv->settings, "show-type", gtk_toggle_action_get_active (action));
 }
 
 
@@ -669,7 +669,7 @@ on_view_expires_activate (GtkToggleAction* action, SeahorseKeyManager* self)
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
-	seahorse_gconf_set_boolean (SHOW_EXPIRES_KEY, gtk_toggle_action_get_active (action));
+	g_settings_set_boolean (self->pv->settings, "show-expiry", gtk_toggle_action_get_active (action));
 }
 
 
@@ -678,7 +678,7 @@ on_view_validity_activate (GtkToggleAction* action, SeahorseKeyManager* self)
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
-	seahorse_gconf_set_boolean (SHOW_VALIDITY_KEY, gtk_toggle_action_get_active (action));
+	g_settings_set_boolean (self->pv->settings, "show-validity", gtk_toggle_action_get_active (action));
 }
 
 static void 
@@ -686,38 +686,31 @@ on_view_trust_activate (GtkToggleAction* action, SeahorseKeyManager* self)
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
-	seahorse_gconf_set_boolean (SHOW_TRUST_KEY, gtk_toggle_action_get_active (action));
+	g_settings_set_boolean (self->pv->settings, "show-trust", gtk_toggle_action_get_active (action));
 }
 
-static void 
-on_gconf_notify (GConfClient* client, guint cnxn_id, GConfEntry* entry, SeahorseKeyManager* self) 
+static void
+on_manager_settings_changed (GSettings *settings, const gchar *key, gpointer user_data)
 {
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
 	GtkToggleAction* action;
-	const gchar* key;
-	const char* name;
+	const gchar* name;
 
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (GCONF_IS_CLIENT (client));
-	g_return_if_fail (entry != NULL);
-	
-	key = entry->key;
-	g_return_if_fail (key);
-	
-	if (g_str_equal (key, SHOW_TRUST_KEY)) 
+	if (g_str_equal (key, "show-trust"))
 		name = "view-trust";
-	else if (g_str_equal (key, SHOW_TYPE_KEY)) 
+	else if (g_str_equal (key, "show-type"))
 		name = "view-type";
-	else if (g_str_equal (key, SHOW_EXPIRES_KEY)) 
+	else if (g_str_equal (key, "show-expiry"))
 		name = "view-expires";
-	else if (g_str_equal (key, SHOW_VALIDITY_KEY)) 
+	else if (g_str_equal (key, "show-validity"))
 		name = "view-validity";
 	else
 		return;
-	
+
 	action = GTK_TOGGLE_ACTION (gtk_action_group_get_action (self->pv->view_actions, name));
 	g_return_if_fail (action != NULL);
-	
-	gtk_toggle_action_set_active (action, gconf_value_get_bool (entry->value));
+
+	gtk_toggle_action_set_active (action, g_settings_get_boolean (settings, key));
 }
 
 static void
@@ -845,16 +838,16 @@ seahorse_key_manager_set_selected (SeahorseViewer* base, SeahorseObject* value)
 	g_object_notify (G_OBJECT (self), "selected");
 }
 
-static GObject* 
-seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructParam *props) 
+static void
+seahorse_key_manager_constructed (GObject *object)
 {
-	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (G_OBJECT_CLASS (seahorse_key_manager_parent_class)->constructor(type, n_props, props));
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (object);
 	GtkActionGroup* actions;
 	GtkToggleAction* action;
 	GtkTargetList* targets;
 	GtkWidget* widget;
 
-	g_return_val_if_fail (self, NULL);	
+	G_OBJECT_CLASS (seahorse_key_manager_parent_class)->constructed (object);
 
 	self->pv->tabs = g_new0 (TabInfo, TAB_NUM_TABS);
 
@@ -877,18 +870,18 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	gtk_action_group_set_translation_domain (self->pv->view_actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_toggle_actions (self->pv->view_actions, VIEW_ENTRIES, G_N_ELEMENTS (VIEW_ENTRIES), self);
 	action = GTK_TOGGLE_ACTION (gtk_action_group_get_action (self->pv->view_actions, "view-type"));
-	gtk_toggle_action_set_active (action, seahorse_gconf_get_boolean (SHOW_TYPE_KEY));
+	gtk_toggle_action_set_active (action, g_settings_get_boolean (self->pv->settings, "show-type"));
 	action = GTK_TOGGLE_ACTION (gtk_action_group_get_action (self->pv->view_actions, "view-expires"));
-	gtk_toggle_action_set_active (action, seahorse_gconf_get_boolean (SHOW_EXPIRES_KEY));
+	gtk_toggle_action_set_active (action, g_settings_get_boolean (self->pv->settings, "show-expiry"));
 	action = GTK_TOGGLE_ACTION (gtk_action_group_get_action (self->pv->view_actions, "view-trust"));
-	gtk_toggle_action_set_active (action, seahorse_gconf_get_boolean (SHOW_TRUST_KEY));
+	gtk_toggle_action_set_active (action, g_settings_get_boolean (self->pv->settings, "show-trust"));
 	action = GTK_TOGGLE_ACTION (gtk_action_group_get_action (self->pv->view_actions, "view-validity"));
-	gtk_toggle_action_set_active (action, seahorse_gconf_get_boolean (SHOW_VALIDITY_KEY));
+	gtk_toggle_action_set_active (action, g_settings_get_boolean (self->pv->settings, "show-validity"));
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->pv->view_actions);
 	
-	/* Notify us when gconf stuff changes under this key */
-	seahorse_gconf_notify_lazy (LISTING_SCHEMAS, (GConfClientNotifyFunc)on_gconf_notify, self, self);
-	
+	/* Notify us when settings change */
+	g_signal_connect_object (self->pv->settings, "changed", G_CALLBACK (on_manager_settings_changed), self, 0);
+
 	/* close event */
 	g_signal_connect_object (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)), 
 	                         "delete-event", G_CALLBACK (on_delete_event), self, 0);
@@ -999,15 +992,13 @@ seahorse_key_manager_constructor (GType type, guint n_props, GObjectConstructPar
 	g_timeout_add_seconds (1, (GSourceFunc)on_first_timer, self);
 	
 	g_signal_connect (seahorse_context_instance (), "refreshing", G_CALLBACK (on_refreshing), self);
-
-	return G_OBJECT (self);
 }
 
 static void
 seahorse_key_manager_init (SeahorseKeyManager *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_KEY_MANAGER, SeahorseKeyManagerPrivate);
-
+	self->pv->settings = g_settings_new ("org.gnome.seahorse.manager");
 }
 
 static void
@@ -1032,6 +1023,8 @@ seahorse_key_manager_finalize (GObject *obj)
 		g_free (self->pv->tabs);
 		self->pv->tabs = NULL;
 	}
+
+	g_clear_object (&self->pv->settings);
 
 	G_OBJECT_CLASS (seahorse_key_manager_parent_class)->finalize (obj);
 }
@@ -1076,7 +1069,7 @@ seahorse_key_manager_class_init (SeahorseKeyManagerClass *klass)
 	seahorse_key_manager_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseKeyManagerPrivate));
 
-	gobject_class->constructor = seahorse_key_manager_constructor;
+	gobject_class->constructed = seahorse_key_manager_constructed;
 	gobject_class->finalize = seahorse_key_manager_finalize;
 	gobject_class->set_property = seahorse_key_manager_set_property;
 	gobject_class->get_property = seahorse_key_manager_get_property;

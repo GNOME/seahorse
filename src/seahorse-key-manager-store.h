@@ -57,7 +57,8 @@ struct _SeahorseKeyManagerStoreClass {
 };
 
 SeahorseKeyManagerStore*   seahorse_key_manager_store_new                    (SeahorseSet *skset,
-                                                                              GtkTreeView *view);
+                                                                              GtkTreeView *view,
+                                                                              GSettings *settings);
 
 SeahorseObject*            seahorse_key_manager_store_get_object_from_path   (GtkTreeView *view,
                                                                               GtkTreePath *path);

@@ -26,7 +26,6 @@
 #include "seahorse-pkcs11-commands.h"
 #include "seahorse-pkcs11-source.h"
 
-#include "seahorse-gconf.h"
 #include "seahorse-util.h"
 
 #include <gck/gck.h>

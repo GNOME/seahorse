@@ -72,12 +72,12 @@ GType                       seahorse_service_discovery_get_type  (void);
 
 SeahorseServiceDiscovery*   seahorse_service_discovery_new       ();
 
-GSList*                     seahorse_service_discovery_list      (SeahorseServiceDiscovery *ssd);
+gchar **                    seahorse_service_discovery_list      (SeahorseServiceDiscovery *ssd);
 
 const gchar*                seahorse_service_discovery_get_uri   (SeahorseServiceDiscovery *ssd,
                                                                   const gchar *service);
 
-GSList*                     seahorse_service_discovery_get_uris  (SeahorseServiceDiscovery *ssd,
-                                                                  GSList *services);
+gchar **                    seahorse_service_discovery_get_uris  (SeahorseServiceDiscovery *ssd,
+                                                                  const gchar **services);
 
 #endif /* __SEAHORSE_KEY_H__ */

@@ -23,7 +23,6 @@
 
 #include "seahorse-context.h"
 #include "seahorse-dns-sd.h"
-#include "seahorse-gconf.h"
 #include "seahorse-keyserver-results.h"
 #include "seahorse-preferences.h"
 #include "seahorse-servers.h"
@@ -43,9 +42,9 @@
  * @all: TRUE if all keyservers are selected
  **/
 typedef struct _KeyserverSelection {
-    GSList *names;
-    GSList *uris;
-    gboolean all;
+	GPtrArray *names;
+	GPtrArray *uris;
+	gboolean all;
 } KeyserverSelection;
 
 
@@ -61,18 +60,22 @@ typedef struct _KeyserverSelection {
 static void
 get_checks (GtkWidget *widget, KeyserverSelection *selection)
 {
-    if (GTK_IS_CHECK_BUTTON (widget)) {
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
-            /* Pull in the selected name and uri */
-            selection->names = g_slist_prepend (selection->names, 
-                    g_strdup (gtk_button_get_label (GTK_BUTTON (widget))));
-            selection->uris = g_slist_prepend (selection->uris, 
-                    g_strdup (g_object_get_data (G_OBJECT (widget), "keyserver-uri")));
-        } else {
-            /* Note that not all checks are selected */
-            selection->all = FALSE;
-        }
-    }
+	const gchar *value;
+
+	if (!GTK_IS_CHECK_BUTTON (widget))
+		return;
+
+	/* Pull in the selected name and uri */
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		value = gtk_button_get_label (GTK_BUTTON (widget));
+		g_ptr_array_add (selection->names, g_strdup (value));
+		value = g_object_get_data (G_OBJECT (widget), "keyserver-uri");
+		g_ptr_array_add (selection->uris, g_strdup (value));
+
+	/* Note that not all checks are selected */
+	} else {
+		selection->all = FALSE;
+	}
 }
 
 /**
@@ -86,23 +89,28 @@ get_checks (GtkWidget *widget, KeyserverSelection *selection)
 static KeyserverSelection*
 get_keyserver_selection (SeahorseWidget *swidget)
 {
-    KeyserverSelection *selection;
-    GtkWidget *w;
-    
-    selection = g_new0(KeyserverSelection, 1);
-    selection->all = TRUE;
-    
-    /* Key servers */
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "key-server-list"));
-    g_return_val_if_fail (w != NULL, selection);
-    gtk_container_foreach (GTK_CONTAINER (w), (GtkCallback)get_checks, selection);
+	KeyserverSelection *selection;
+	GtkWidget *widget;
 
-    /* Shared Key */
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "shared-keys-list"));
-    g_return_val_if_fail (w != NULL, selection);
-    gtk_container_foreach (GTK_CONTAINER (w), (GtkCallback)get_checks, selection);    
-    
-    return selection;
+	selection = g_new0 (KeyserverSelection, 1);
+	selection->all = TRUE;
+	selection->uris = g_ptr_array_new_with_free_func (g_free);
+	selection->names = g_ptr_array_new_with_free_func (g_free);
+
+	/* Key servers */
+	widget = seahorse_widget_get_widget (swidget, "key-server-list");
+	g_return_val_if_fail (widget != NULL, selection);
+	gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback)get_checks, selection);
+
+	/* Shared Key */
+	widget = seahorse_widget_get_widget (swidget, "shared-keys-list");
+	g_return_val_if_fail (widget != NULL, selection);
+	gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback)get_checks, selection);
+
+	g_ptr_array_add (selection->uris, NULL);
+	g_ptr_array_add (selection->names, NULL);
+
+	return selection;
 }
 
 /**
@@ -114,11 +122,11 @@ get_keyserver_selection (SeahorseWidget *swidget)
 static void
 free_keyserver_selection (KeyserverSelection *selection)
 {
-    if (selection) {
-        seahorse_util_string_slist_free (selection->uris);
-        seahorse_util_string_slist_free (selection->names);
-        g_free (selection);
-    }
+	if (selection) {
+		g_ptr_array_free (selection->uris, TRUE);
+		g_ptr_array_free (selection->names, TRUE);
+		g_free (selection);
+	}
 }
 
 /**
@@ -195,61 +203,63 @@ on_keyserver_search_control_changed (GtkWidget *widget, SeahorseWidget *swidget)
 
 /* Initial Selection -------------------------------------------------------- */
 
-/**
- * widget: a toggle button
- * names: a list of names
- *
- * If the label of the toggle button is in the list of names it will be
- * set active
- *
- **/
 static void
-select_checks (GtkWidget *widget, GSList *names)
+foreach_child_select_checks (GtkWidget *widget, gpointer user_data)
 {
-    if (GTK_IS_CHECK_BUTTON (widget)) {
+	gchar **names = user_data;
+	gboolean checked;
+	gchar *name;
+	guint i;
 
-        gchar *t = g_utf8_casefold (gtk_button_get_label (GTK_BUTTON (widget)), -1);
-        gboolean checked = !names || 
-                    g_slist_find_custom (names, t, (GCompareFunc)g_utf8_collate);
-        g_free (t);
-        
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
-    }
+	if (GTK_IS_CHECK_BUTTON (widget)) {
+		name = g_utf8_casefold (gtk_button_get_label (GTK_BUTTON (widget)), -1);
+		checked = names ? FALSE : TRUE;
+		for (i = 0; names && names[i] != NULL; i++) {
+			if (g_utf8_collate (names[i], name) == 0) {
+				checked = TRUE;
+				break;
+			}
+		}
+		g_free (name);
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
+	}
 }
 
 /**
  * swidget: the main widget
  *
- * Reads key servers from gconf and updates the UI content.
+ * Reads key servers from settings and updates the UI content.
  *
  **/
 static void
 select_inital_keyservers (SeahorseWidget *swidget)
 {
-    GSList *l, *names;
-    GtkWidget *w;
-    
-    names = seahorse_gconf_get_string_list (LASTSERVERS_KEY);
+	gchar **names;
+	GtkWidget *widget;
+	gchar *name;
+	guint i;
 
-    /* Close the expander if all servers are selected */
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "search-where"));
-    g_return_if_fail (w != NULL);
-    gtk_expander_set_expanded (GTK_EXPANDER (w), names != NULL);
-    
-    /* We do case insensitive matches */    
-    for (l = names; l; l = g_slist_next (l)) {
-        gchar *t = g_utf8_casefold (l->data, -1);
-        g_free (l->data);
-        l->data = t;
-    }
-    
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "key-server-list"));
-    g_return_if_fail (w != NULL);
-    gtk_container_foreach (GTK_CONTAINER (w), (GtkCallback)select_checks, names);
+	names = g_settings_get_strv (seahorse_context_settings (NULL), "last-search-servers");
 
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "shared-keys-list"));
-    g_return_if_fail (w != NULL);
-    gtk_container_foreach (GTK_CONTAINER (w), (GtkCallback)select_checks, names);
+	/* Close the expander if all servers are selected */
+	widget = seahorse_widget_get_widget (swidget, "search-where");
+	g_return_if_fail (widget != NULL);
+	gtk_expander_set_expanded (GTK_EXPANDER (widget), names != NULL);
+
+	/* We do case insensitive matches */
+	for (i = 0; names[i] != NULL; i++) {
+		name = g_utf8_casefold (names[i], -1);
+		g_free (names[i]);
+		names[i] = name;
+	}
+
+	widget = seahorse_widget_get_widget (swidget, "key-server-list");
+	g_return_if_fail (widget != NULL);
+	gtk_container_foreach (GTK_CONTAINER (widget), foreach_child_select_checks, names);
+
+	widget = seahorse_widget_get_widget (swidget, "shared-keys-list");
+	g_return_if_fail (widget != NULL);
+	gtk_container_foreach (GTK_CONTAINER (widget), foreach_child_select_checks, names);
 }
 
 /* Populating Lists --------------------------------------------------------- */
@@ -285,72 +295,63 @@ remove_checks (GtkWidget *widget, GHashTable *unchecked)
 * of already existing check boxes is not changed.
 **/
 static void
-populate_keyserver_list (SeahorseWidget *swidget, GtkWidget *box, GSList *uris, 
-                         GSList *names)
+populate_keyserver_list (SeahorseWidget *swidget, GtkWidget *box, gchar **uris,
+                         gchar **names)
 {
-    GtkContainer *cont = GTK_CONTAINER (box);
-    GHashTable *unchecked;
-    gboolean any = FALSE;
-    GtkWidget *check;
-    GSList *l, *n;
-    
-    /* Remove all checks, and note which ones were unchecked */
-    unchecked = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-    gtk_container_foreach (cont, (GtkCallback)remove_checks, unchecked);
-    
-    /* Now add the new ones back */
-    for (l = uris, n = names; l && n; l = g_slist_next (l), n = g_slist_next (n)) {
-        any = TRUE;
+	GtkContainer *cont = GTK_CONTAINER (box);
+	GHashTable *unchecked;
+	gboolean any = FALSE;
+	GtkWidget *check;
+	guint i;
 
-        /* A new checkbox with this the name as the label */        
-        check = gtk_check_button_new_with_label ((const gchar*)n->data);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), 
-                                      g_hash_table_lookup (unchecked, (gchar*)n->data) == NULL);
-        g_signal_connect (check, "toggled", G_CALLBACK (on_keyserver_search_control_changed), swidget);
-        gtk_widget_show (check);
+	/* Remove all checks, and note which ones were unchecked */
+	unchecked = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+	gtk_container_foreach (cont, (GtkCallback)remove_checks, unchecked);
 
-        /* Save URI and set it as the tooltip */
-        g_object_set_data_full (G_OBJECT (check), "keyserver-uri", g_strdup ((gchar*)l->data), g_free);
-        gtk_widget_set_tooltip_text (check, (gchar*)l->data);
-        
-        gtk_container_add (cont, check);
-    }
+	/* Now add the new ones back */
+	for (i = 0; uris && uris[i] && names && names[i]; i++) {
+		any = TRUE;
 
-    g_hash_table_destroy (unchecked);   
+		/* A new checkbox with this the name as the label */
+		check = gtk_check_button_new_with_label (names[i]);
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check),
+		                              g_hash_table_lookup (unchecked, names[i]) == NULL);
+		g_signal_connect (check, "toggled", G_CALLBACK (on_keyserver_search_control_changed), swidget);
+		gtk_widget_show (check);
 
-    /* Only display the container if we had some checks */
-    if (any)
-        gtk_widget_show (box);
-    else
-        gtk_widget_hide (box);
+		/* Save URI and set it as the tooltip */
+		g_object_set_data_full (G_OBJECT (check), "keyserver-uri", g_strdup (uris[i]), g_free);
+		gtk_widget_set_tooltip_text (check, uris[i]);
+
+		gtk_container_add (cont, check);
+	}
+
+	g_hash_table_destroy (unchecked);
+
+	/* Only display the container if we had some checks */
+	if (any)
+		gtk_widget_show (box);
+	else
+		gtk_widget_hide (box);
 }
 
-/**
-* client: ignored
-* id: ignored
-* entry: used only for initial test
-* swidget: the main SeahorseWidget
-*
-* refreshes the "key-server-list". It reads the data from GConf
-**/
 static void
-refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry, SeahorseWidget *swidget)
+on_settings_keyservers_changed (GSettings *settings, const gchar *key, gpointer user_data)
 {
-    GSList *keyservers, *names;
-    GtkWidget *w;
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+	GtkWidget *widget;
+	gchar **keyservers;
+	gchar **names;
 
-	if (entry && !g_str_equal (KEYSERVER_KEY, gconf_entry_get_key (entry)))
-        return;
+	widget = seahorse_widget_get_widget (swidget, "key-server-list");
+	g_return_if_fail (widget != NULL);
 
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "key-server-list"));
-    g_return_if_fail (w != NULL);
+	keyservers = seahorse_servers_get_uris ();
+	names = seahorse_servers_get_names ();
+	populate_keyserver_list (swidget, widget, keyservers, names);
 
-    keyservers = seahorse_servers_get_uris ();
-    names = seahorse_servers_get_names ();
-    populate_keyserver_list (swidget, w, keyservers, names);
-    
-    seahorse_util_string_slist_free (keyservers);
-    seahorse_util_string_slist_free (names);        
+	g_strfreev (keyservers);
+	g_strfreev (names);
 }
 
 /**
@@ -364,18 +365,19 @@ refresh_keyservers (GConfClient *client, guint id, GConfEntry *entry, SeahorseWi
 static void 
 refresh_shared_keys (SeahorseServiceDiscovery *ssd, const gchar *name, SeahorseWidget *swidget)
 {
-    GSList *keyservers, *names;
-    GtkWidget *w;
-    
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "shared-keys-list"));
-    g_return_if_fail (w != NULL);
+	gchar **keyservers;
+	gchar **names;
+	GtkWidget *widget;
 
-    names = seahorse_service_discovery_list (ssd);
-    keyservers = seahorse_service_discovery_get_uris (ssd, names);
-    populate_keyserver_list (swidget, w, keyservers, names);
+	widget = seahorse_widget_get_widget (swidget, "shared-keys-list");
+	g_return_if_fail (widget != NULL);
 
-    seahorse_util_string_slist_free (keyservers);
-    seahorse_util_string_slist_free (names);    
+	names = seahorse_service_discovery_list (ssd);
+	keyservers = seahorse_service_discovery_get_uris (ssd, (const gchar **)names);
+	populate_keyserver_list (swidget, widget, keyservers, names);
+
+	g_strfreev (keyservers);
+	g_strfreev (names);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -385,7 +387,7 @@ refresh_shared_keys (SeahorseServiceDiscovery *ssd, const gchar *name, SeahorseW
  * @button: ignored
  * @swidget: The SeahorseWidget to work with
  *
- * Extracts data, stores it in GConf and starts a search using the entered
+ * Extracts data, stores it in settings and starts a search using the entered
  * search data.
  *
  * This function gets the things done
@@ -393,36 +395,36 @@ refresh_shared_keys (SeahorseServiceDiscovery *ssd, const gchar *name, SeahorseW
 G_MODULE_EXPORT void
 on_keyserver_search_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    SeahorseOperation *op;
-    KeyserverSelection *selection;
-    const gchar *search;
-	GtkWidget *w;
-            
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "search-text"));
-    g_return_if_fail (w != NULL);
-    
-    /* Get search text and save it for next time */
-    search = gtk_entry_get_text (GTK_ENTRY (w));
-    g_return_if_fail (search != NULL && search[0] != 0);
-    seahorse_gconf_set_string (LASTSEARCH_KEY, search);
-    
-    /* The keyservers to search, and save for next time */    
-    selection = get_keyserver_selection (swidget);
-    g_return_if_fail (selection->uris != NULL);
-    seahorse_gconf_set_string_list (LASTSERVERS_KEY, 
-                                    selection->all ? NULL : selection->names);
-                                    
-    op = seahorse_context_search_remote (SCTX_APP(), search);
-    if (op == NULL)
-        return;
-    
-    /* Open the new result window */    
-    seahorse_keyserver_results_show (op, 
-                                     GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)),
-                                     search);
+	SeahorseOperation *op;
+	KeyserverSelection *selection;
+	const gchar *search;
+	GtkWidget *widget;
 
-    free_keyserver_selection (selection);
-    seahorse_widget_destroy (swidget);
+	widget = seahorse_widget_get_widget (swidget, "search-text");
+	g_return_if_fail (widget != NULL);
+
+	/* Get search text and save it for next time */
+	search = gtk_entry_get_text (GTK_ENTRY (widget));
+	g_return_if_fail (search != NULL && search[0] != 0);
+	g_settings_set_string (seahorse_context_settings (NULL), "last-search-text", search);
+
+	/* The keyservers to search, and save for next time */
+	selection = get_keyserver_selection (swidget);
+	g_return_if_fail (selection->uris != NULL);
+	g_settings_set_strv (seahorse_context_settings (NULL), "last-search-servers",
+	                     selection->all ? NULL : (const gchar * const*)selection->names->pdata);
+
+	op = seahorse_context_search_remote (SCTX_APP(), search);
+	if (op == NULL)
+		return;
+
+	/* Open the new result window */
+	seahorse_keyserver_results_show (op,
+	                                 GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)),
+	                                 search);
+
+	free_keyserver_selection (selection);
+	seahorse_widget_destroy (swidget);
 }
 
 /**
@@ -451,47 +453,44 @@ cleanup_signals (GtkWidget *widget, SeahorseWidget *swidget)
 GtkWindow*
 seahorse_keyserver_search_show (GtkWindow *parent)
 {
-    SeahorseServiceDiscovery *ssd;
+	SeahorseServiceDiscovery *ssd;
 	SeahorseWidget *swidget;
-    GtkWindow *win;
-    GtkWidget *w;
-    gchar *search;
-        
+	GtkWindow *window;
+	GtkWidget *widget;
+	GSettings *settings;
+	gchar *search;
+
 	swidget = seahorse_widget_new ("keyserver-search", parent);
 	g_return_val_if_fail (swidget != NULL, NULL);
- 
-    win = GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name));
 
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "search-text"));
-    g_return_val_if_fail (w != NULL, win);
+	window = GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name));
 
-    search = seahorse_gconf_get_string (LASTSEARCH_KEY);
-    if (search != NULL) {
-        gtk_entry_set_text (GTK_ENTRY (w), search);
-        gtk_editable_select_region (GTK_EDITABLE (w), 0, -1);
-        g_free (search);
-    }
-   
-	/*CHECK: unknown key:
-	glade_xml_signal_connect_data (swidget->xml, "configure_clicked",
-		                           G_CALLBACK (configure_clicked), swidget);
-	*/
+	widget = seahorse_widget_get_widget (swidget, "search-text");
+	g_return_val_if_fail (widget != NULL, window);
 
-    /* The key servers to list */
-    refresh_keyservers (NULL, 0, NULL, swidget);
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
-    seahorse_gconf_notify_lazy (KEYSERVER_KEY, (GConfClientNotifyFunc)refresh_keyservers, 
-                                swidget, GTK_WIDGET (win));
-    
-    /* Any shared keys to list */    
-    ssd = seahorse_context_get_discovery (SCTX_APP ());
-    refresh_shared_keys (ssd, NULL, swidget);
-    g_signal_connect (ssd, "added", G_CALLBACK (refresh_shared_keys), swidget);
-    g_signal_connect (ssd, "removed", G_CALLBACK (refresh_shared_keys), swidget);
-    g_signal_connect (win, "destroy", G_CALLBACK (cleanup_signals), swidget);
-    
-    select_inital_keyservers (swidget);
-    on_keyserver_search_control_changed (NULL, swidget);       
-    
-    return win;
+	search = g_settings_get_string (seahorse_context_settings (NULL),
+	                                "last-search-text");
+	if (search != NULL) {
+		gtk_entry_set_text (GTK_ENTRY (widget), search);
+		gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
+		g_free (search);
+	}
+
+	/* The key servers to list */
+	settings = seahorse_context_pgp_settings (NULL);
+	on_settings_keyservers_changed (settings, "keyservers", swidget);
+	g_signal_connect_object (settings, "changed::keyservers",
+	                         G_CALLBACK (on_settings_keyservers_changed), swidget, 0);
+
+	/* Any shared keys to list */
+	ssd = seahorse_context_get_discovery (NULL);
+	refresh_shared_keys (ssd, NULL, swidget);
+	g_signal_connect (ssd, "added", G_CALLBACK (refresh_shared_keys), swidget);
+	g_signal_connect (ssd, "removed", G_CALLBACK (refresh_shared_keys), swidget);
+	g_signal_connect (window, "destroy", G_CALLBACK (cleanup_signals), swidget);
+
+	select_inital_keyservers (swidget);
+	on_keyserver_search_control_changed (NULL, swidget);
+
+	return window;
 }

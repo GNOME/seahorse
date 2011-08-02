@@ -1,24 +1,20 @@
 SUBDIRS = icons
 
-@INTLTOOL_SCHEMAS_RULE@
 
-schemasdir = $(GCONF_SCHEMA_FILE_DIR)
-schemas_in_files = seahorse.schemas.in
-schemas_DATA = $(schemas_in_files:.schemas.in=.schemas)
+gsettings_SCHEMAS = \
+	org.gnome.seahorse.gschema.xml \
+	org.gnome.seahorse.manager.gschema.xml \
+	org.gnome.seahorse.window.gschema.xml
 
-if GCONF_SCHEMAS_INSTALL
-install-data-local:
-	@GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) gconftool-2 \
-		--makefile-install-rule $(schemas_DATA) || \
-		(echo ;\
-		echo "*****************************************************"; \
-		echo "Installation of schemas failed, install them manually"; \
-		echo "*****************************************************";)
-	@true
-else
-install-data-local:
-endif
+@GSETTINGS_RULES@
 
-EXTRA_DIST = $(schemas_in_files)
+convert_DATA = \
+	org.gnome.seahorse.convert \
+	org.gnome.seahorse.manager.convert
 
-CLEANFILES = $(schemas_DATA)
+convertdir = \
+	$(datarootdir)/GConf/gsettings
+
+EXTRA_DIST = \
+	$(convert_DATA) \
+	$(gsettings_SCHEMAS)

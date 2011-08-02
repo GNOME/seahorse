@@ -21,7 +21,6 @@
 
 #include "seahorse-set.h"
 #include "seahorse-marshal.h"
-#include "seahorse-gconf.h"
 
 enum {
     PROP_0,
@@ -50,7 +49,7 @@ G_DEFINE_TYPE (SeahorseSet, seahorse_set, G_TYPE_OBJECT);
  */
 
 static gboolean
-remove_update (SeahorseObject *sobj, SeahorseSet *skset)
+remove_update (SeahorseObject *sobj, gpointer unused, SeahorseSet *skset)
 {
     g_signal_emit (skset, signals[REMOVED], 0, sobj);
     g_signal_emit (skset, signals[SET_CHANGED], 0);
@@ -61,7 +60,7 @@ static void
 remove_object  (SeahorseObject *sobj, SeahorseSet *skset)
 {
     g_hash_table_remove (skset->pv->objects, sobj);
-    remove_update (sobj, skset);
+    remove_update (sobj, NULL, skset);
 }
 
 static gboolean
@@ -150,16 +149,16 @@ objects_to_hash (SeahorseObject *sobj, gpointer *c, GHashTable *ht)
 static void
 seahorse_set_dispose (GObject *gobject)
 {
-    SeahorseSet *skset = SEAHORSE_SET (gobject);
-    
-    /* Release all our pointers and stuff */
-    g_hash_table_foreach_remove (skset->pv->objects, (GHRFunc)remove_update, skset);
-    skset->pv->pred = NULL;
-    
-    g_signal_handlers_disconnect_by_func (SCTX_APP (), object_added, skset);    
-    g_signal_handlers_disconnect_by_func (SCTX_APP (), object_removed, skset);    
-    g_signal_handlers_disconnect_by_func (SCTX_APP (), object_changed, skset);    
-    
+	SeahorseSet *skset = SEAHORSE_SET (gobject);
+
+	g_signal_handlers_disconnect_by_func (SCTX_APP (), object_added, skset);
+	g_signal_handlers_disconnect_by_func (SCTX_APP (), object_removed, skset);
+	g_signal_handlers_disconnect_by_func (SCTX_APP (), object_changed, skset);
+
+	/* Release all our pointers and stuff */
+	g_hash_table_foreach_remove (skset->pv->objects, (GHRFunc)remove_update, skset);
+	skset->pv->pred = NULL;
+
 	G_OBJECT_CLASS (seahorse_set_parent_class)->dispose (gobject);
 }
 
