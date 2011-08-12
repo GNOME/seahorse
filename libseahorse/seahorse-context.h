@@ -122,7 +122,7 @@ SeahorseSource*     seahorse_context_find_source        (SeahorseContext    *sct
                                                          GQuark             ktype,
                                                          SeahorseLocation   location);
 
-GSList*             seahorse_context_find_sources       (SeahorseContext    *sctx,
+GList*             seahorse_context_find_sources       (SeahorseContext    *sctx,
                                                          GQuark             ktype,
                                                          SeahorseLocation   location);
                                                          
@@ -182,12 +182,12 @@ SeahorseOperation*  seahorse_context_transfer_objects   (SeahorseContext    *sct
 
 SeahorseOperation*  seahorse_context_retrieve_objects   (SeahorseContext    *sctx, 
                                                          GQuark             ktype, 
-                                                         GSList             *ids, 
+                                                         GList             *ids,
                                                          SeahorseSource  *to);
 
 GList*              seahorse_context_discover_objects   (SeahorseContext    *sctx, 
                                                          GQuark             ktype, 
-                                                         GSList             *ids);
+                                                         GList             *ids);
 
 typedef GQuark (*SeahorseCanonizeFunc) (const gchar *id);
 

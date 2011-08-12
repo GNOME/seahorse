@@ -48,17 +48,17 @@ free_server_info (gpointer data)
 static void
 types_to_slist (gpointer key, gpointer value, gpointer data)
 {
-	GSList **list = (GSList**)data;
-	*list = g_slist_prepend (*list, g_strdup (((ServerInfo*)value)->type));
+	g_ptr_array_add (data, g_strdup (((ServerInfo*)value)->type));
 }
 
-GSList* 
+gchar **
 seahorse_servers_get_types (void) 
 {
-	GSList* results = NULL;
+	GPtrArray *result = g_ptr_array_new_with_free_func (g_free);
 	if (server_types)
-		g_hash_table_foreach (server_types, types_to_slist, &results);
-	return results;
+		g_hash_table_foreach (server_types, types_to_slist, result);
+	g_ptr_array_add (result, NULL);
+	return (gchar **)g_ptr_array_free (result, FALSE);
 }
 
 gchar* 

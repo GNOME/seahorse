@@ -1030,12 +1030,12 @@ seahorse_hkp_source_import (SeahorseSource *sksrc, GInputStream *input)
     SeahorseHKPOperation *hop;
     SeahorseHKPSource *hsrc;
     SoupMessage *message;
-    GSList *keydata = NULL;
+    GList *keydata = NULL;
     GString *buf = NULL;
     GHashTable *form;
     gchar *key, *t;
     SoupURI *uri;
-    GSList *l;
+    GList *l;
     guint len;
     
     g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (sksrc), NULL);
@@ -1051,14 +1051,14 @@ seahorse_hkp_source_import (SeahorseSource *sksrc, GInputStream *input)
                                              "-----END PGP PUBLIC KEY BLOCK-----");
     
         if (len > 0) {
-            keydata = g_slist_prepend (keydata, g_string_free (buf, FALSE));
+            keydata = g_list_prepend (keydata, g_string_free (buf, FALSE));
         } else {
             g_string_free (buf, TRUE);
             break;
         }
     }
     
-    	if (g_slist_length (keydata) == 0) {
+	if (g_list_length (keydata) == 0) {
     		g_object_unref (input);
     		return seahorse_operation_new_complete (NULL);
     	}
@@ -1068,11 +1068,11 @@ seahorse_hkp_source_import (SeahorseSource *sksrc, GInputStream *input)
     g_return_val_if_fail (uri, FALSE);
 
     /* New operation and away we go */
-    keydata = g_slist_reverse (keydata);   
+    keydata = g_list_reverse (keydata);
     hop = setup_hkp_operation (hsrc);
     
     form = g_hash_table_new (g_str_hash, g_str_equal);
-    for (l = keydata; l; l = g_slist_next (l)) {
+    for (l = keydata; l; l = g_list_next (l)) {
         g_assert (l->data != NULL);
 
         g_hash_table_insert (form, "keytext", l->data);
@@ -1094,10 +1094,12 @@ seahorse_hkp_source_import (SeahorseSource *sksrc, GInputStream *input)
     g_free (t);
 
     soup_uri_free (uri);
-    
-    	seahorse_util_string_slist_free (keydata);
-    	g_object_unref (input);
-    
+
+    for (l = keydata; l != NULL; l = g_list_next (l))
+        g_free (l->data);
+    g_list_free (keydata);
+    g_object_unref (input);
+
     return SEAHORSE_OPERATION (hop);
 }
 
@@ -1111,7 +1113,7 @@ seahorse_hkp_source_import (SeahorseSource *sksrc, GInputStream *input)
 * Returns A new Seahorse operation
 **/
 static SeahorseOperation*  
-seahorse_hkp_source_export_raw (SeahorseSource *sksrc, GSList *keyids,
+seahorse_hkp_source_export_raw (SeahorseSource *sksrc, GList *keyids,
                                 GOutputStream *output)
 {
     SeahorseHKPOperation *hop;
@@ -1123,14 +1125,14 @@ seahorse_hkp_source_export_raw (SeahorseSource *sksrc, GSList *keyids,
     gchar hexfpr[11];
     GHashTable *form;
     guint len;
-    GSList *l;
+    GList *l;
     
     g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (sksrc), NULL);
     g_return_val_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output), NULL);
 
     hsrc = SEAHORSE_HKP_SOURCE (sksrc);
     
-    if (g_slist_length (keyids) == 0)
+    if (g_list_length (keyids) == 0)
         return seahorse_operation_new_complete (NULL);
 
     uri = get_http_server_uri (sksrc, "/pks/lookup");
@@ -1146,7 +1148,7 @@ seahorse_hkp_source_export_raw (SeahorseSource *sksrc, GSList *keyids,
     strncpy(hexfpr, "0x", 3);
 
     form = g_hash_table_new (g_str_hash, g_str_equal);
-    for (l = keyids; l; l = g_slist_next (l)) {
+    for (l = keyids; l; l = g_list_next (l)) {
 
         /* Get the key id and limit it to 8 characters */
         fpr = seahorse_pgp_key_calc_rawid (GPOINTER_TO_UINT (l->data));

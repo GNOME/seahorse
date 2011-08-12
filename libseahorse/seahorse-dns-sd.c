@@ -436,7 +436,7 @@ seahorse_service_discovery_get_uri (SeahorseServiceDiscovery *ssd, const gchar *
 /**
  * seahorse_service_discovery_get_uris:
  * @ssd: The service discovery object
- * @services: A #GSList of services
+ * @services: A list of services
  *
  * The returned uris in the list are copied and must be freed with g_free.
  *

@@ -379,58 +379,6 @@ seahorse_util_read_data_block (GString *buf, GInputStream *input,
     return copied;
 }
 
-/**
- * seahorse_util_memory_input_string:
- * @string: The string to create the stream from
- * @length: The length of this string
- *
- * Returns: The new input stream of type #GMemoryInputStream
- */
-GMemoryInputStream*
-seahorse_util_memory_input_string (const gchar *string, gsize length)
-{
-	g_return_val_if_fail (string, NULL);
-	return G_MEMORY_INPUT_STREAM (g_memory_input_stream_new_from_data (g_strndup (string, length), length, g_free));
-}
-
-/**
- * seahorse_util_memory_output_length:
- * @output: a stream
- *
- * A replacement for #g_memory_output_stream_get_data_size (since 2.18)
- *
- * Returns: The length of the stream
- */
-gsize
-seahorse_util_memory_output_length (GMemoryOutputStream *output)
-{
-	GSeekable *seekable;
-	goffset offset, end;
-	
-	/* 
-	 * This is a replacement for g_memory_output_stream_get_data_size()
-	 * which is not available in current version of glib.
-	 */
-	
-	g_return_val_if_fail (G_IS_MEMORY_OUTPUT_STREAM (output), 0);
-	g_return_val_if_fail (G_IS_SEEKABLE (output), 0);
-	
-	seekable = G_SEEKABLE (output);
-	offset = g_seekable_tell (seekable);
-	
-	if (!g_seekable_seek (seekable, 0, G_SEEK_END, NULL, NULL))
-		g_return_val_if_reached (0);
-	
-	end = g_seekable_tell (seekable);
-	
-	if (offset != end) {
-		if (!g_seekable_seek (seekable, offset, G_SEEK_SET, NULL, NULL))
-			g_return_val_if_reached (0);
-	}
-	
-	return (gsize)end;
-}
-
 /** 
  * seahorse_util_print_fd:
  * @fd: The file descriptor to write to
@@ -555,28 +503,6 @@ seahorse_util_uri_get_last (const gchar* uri)
 }    
 
 /**
- * seahorse_util_uri_split_last:
- * @uri: The uri to split
- * 
- * Splits the uri in two at it's last component. The result
- * is still part of the same string, so don't free it. This 
- * modifies the @uri argument.
- * 
- * Returns: The last component
- **/
-const gchar* 
-seahorse_util_uri_split_last (gchar* uri)
-{
-    gchar* t;
-    
-    t = (gchar*)seahorse_util_uri_get_last (uri);
-    if(t != uri)
-        *(t - 1) = 0;
-        
-    return t;
-}
-
-/**
  * seahorse_util_uri_exists:
  * @uri: The uri to check
  * 
@@ -656,135 +582,6 @@ seahorse_util_uri_unique (const gchar* uri)
     g_free (suffix);    
     g_free (prefix);
     return uri_try ? uri_try : g_strdup (uri);       
-}
-
-/**
- * seahorse_util_uri_replace_ext:
- * @uri: The uri with old extension
- * @ext: The new extension
- *
- * Replaces the extension on @uri
- *
- * Returns: Newly allocated URI string with new extension. The returned string
- * should be freed with #g_free when no longer needed.
- **/
-gchar* 
-seahorse_util_uri_replace_ext (const gchar *uri, const gchar *ext)
-{
-    gchar* ret;
-    gchar* dot;
-    gchar* slash;
-    guint len;
-    
-    len = strlen (uri);
-    ret = g_new0 (gchar, len + strlen(ext) + 16);
-    strcpy (ret, uri);
- 
-    /* Always take off a slash at end */
-    g_return_val_if_fail (len > 1, ret);
-    if (ret[len - 1] == '/')
-        ret[len - 1] = 0;
-        
-    dot = strrchr (ret, '.');
-    if (dot != NULL) {
-        slash = strrchr (ret, '/');
-        if (slash == NULL || dot > slash)
-            *dot = 0;
-    }
- 
-    /* Only begin extension with . if provided extension doesn't start with
-       one already. */
-    if(ext[0] != '.')
-        strcat (ret, ".");
-
-    /* Finally append the caller's provided extension. */
-    strcat (ret, ext);
-    return ret;
-}
-
-/**
- * seahorse_util_uris_package:
- * @package: Package uri
- * @uris: null-terminated array of uris to package 
- * 
- * Package uris into an archive. The uris must be local.
- * 
- * Returns: TRUE on success or FALSE on failure
- */
-gboolean
-seahorse_util_uris_package (const gchar* package, const char** uris)
-{
-    GError* err = NULL;
-    gchar *out = NULL;
-    gint status;
-    gboolean r;
-    GString *str;
-    gchar *cmd;
-    gchar *t;
-    gchar *x;
-    GFile *file, *fpackage;
-    
-    	fpackage = g_file_new_for_uri (package);
-    	t = g_file_get_path (fpackage);
-    	x = g_shell_quote (t);
-    	g_free (t);
-    
-    	/* create execution */
-    	str = g_string_new ("");
-    	g_string_printf (str, "file-roller --add-to=%s", x);
-    	g_free (x);
-    
-    	while(*uris) {
-    		/* We should never be passed any remote uris at this point */
-    		x = g_uri_parse_scheme (*uris);
-    		if (x) 
-    			file = g_file_new_for_uri (*uris);
-    		else
-    			file = g_file_new_for_path (*uris);
-    		g_free (x);
-    		
-    		t = g_file_get_path (file);
-    		g_object_unref (file);
-    		g_return_val_if_fail (t != NULL, FALSE);
-
-    		x = g_shell_quote (t);
-    		g_free (t);
-
-    		g_string_append_printf (str, " %s", x);
-    		g_free (x);
-        
-    		uris++;
-    	}
-        
-    	/* Execute the command */
-    	cmd = g_string_free (str, FALSE);
-    	r = g_spawn_command_line_sync (cmd, &out, NULL, &status, &err);
-    	g_free (cmd); 
-    
-    	/* TODO: This won't work for remote packages if we support them in the future */
-    	t = g_file_get_path (fpackage);
-	g_chmod (t, S_IRUSR | S_IWUSR);
-	g_free (t);
-    	g_object_unref (fpackage);
-
-    if (out) {
-        g_print ("%s", out);
-        g_free (out);
-    }
-    
-    if (!r) {
-        seahorse_util_handle_error (err, _("Couldn't run file-roller"));
-        g_clear_error (&err);
-        return FALSE;
-    }
-    
-    if(!(WIFEXITED(status) && WEXITSTATUS(status) == 0)) {
-        seahorse_util_show_error(NULL, _("Couldn't package files"), 
-                                 _("The file-roller process did not complete successfully"));
-        return FALSE;
-    }
-    
-    return TRUE;
 }
 
 /**
@@ -1122,158 +919,6 @@ seahorse_util_chooser_open_prompt (GtkDialog *dialog)
 }
 
 /**
- * seahorse_util_check_suffix:
- * @path: Path of file to check
- * @suffix: Suffix type to check for.
- *
- * Checks that @path has a suffix specified by @suffix.
- *
- * Returns: TRUE if the file has a correct suffix, FALSE otherwise
- **/
-gboolean
-seahorse_util_check_suffix (const gchar *path, SeahorseSuffix suffix)
-{
-	if (suffix == SEAHORSE_SIG_SUFFIX)
-        return g_str_has_suffix (path, SEAHORSE_EXT_SIG) || 
-               g_str_has_suffix (path, SEAHORSE_EXT_ASC);
-	else
-        return g_str_has_suffix (path, SEAHORSE_EXT_PGP) ||
-               g_str_has_suffix (path, SEAHORSE_EXT_GPG) ||
-               g_str_has_suffix (path, SEAHORSE_EXT_ASC);
-}
-
-/**
- * seahorse_util_add_suffix:
- * @path: Path of an existing file
- * @suffix: Suffix type
- * @prompt: Overwrite prompt text
- *
- * Constructs a new path for a file based on @path plus a suffix determined by
- * @suffix. If ASCII Armor is enabled, the suffix will be '.asc'. Otherwise the 
- * suffix will be '.pgp' if @suffix is %SEAHORSE_CRYPT_SUFFIX or '.sig' if 
- * @suffix is %SEAHORSE_SIG_SUFFIX.
- *
- * Returns: A new path with the suffix appended to @path. NULL if prompt cancelled
- **/
-gchar*
-seahorse_util_add_suffix (const gchar *path, SeahorseSuffix suffix, const gchar *prompt)
-{
-    GtkDialog *dialog;
-    const gchar *ext;
-    gchar *uri;
-    gchar *t;
-    
-    if (suffix == SEAHORSE_CRYPT_SUFFIX)
-        ext = SEAHORSE_EXT_PGP;
-    else
-        ext = SEAHORSE_EXT_SIG;
-    
-    uri = g_strdup_printf ("%s%s", path, ext);
-    
-    if (prompt && uri && seahorse_util_uri_exists (uri)) {
-            
-        t = g_strdup_printf (prompt, seahorse_util_uri_get_last (uri));
-        dialog = seahorse_util_chooser_save_new (t, NULL);
-        g_free (t);
-
-        seahorse_util_chooser_show_key_files (dialog);
-        gtk_file_chooser_select_uri (GTK_FILE_CHOOSER (dialog), uri);
-
-        g_free (uri);                
-        uri = NULL;
-            
-        uri = seahorse_util_chooser_save_prompt (dialog);
-        gtk_widget_destroy (GTK_WIDGET (dialog));
-    }
-
-    return uri;         
-}
-
-/**
- * seahorse_util_remove_suffix:
- * @path: Path with a suffix
- * @prompt:Overwrite prompt text
- *
- * Removes a suffix from @path. Does not check if @path actually has a suffix.
- *
- * Returns: @path without a suffix. NULL if prompt cancelled
- **/
-gchar*
-seahorse_util_remove_suffix (const gchar *path, const gchar *prompt)
-{
-    GtkDialog *dialog;
-    gchar *uri;
-    gchar *t;
-    
-    g_return_val_if_fail (path != NULL, NULL);
-    uri =  g_strndup (path, strlen (path) - 4);
-   
-    if (prompt && uri && seahorse_util_uri_exists (uri)) {
-            
-        t = g_strdup_printf (prompt, seahorse_util_uri_get_last (uri));
-        dialog = seahorse_util_chooser_save_new (t, NULL);
-        g_free (t);
-
-        seahorse_util_chooser_show_key_files (dialog);
-		gtk_file_chooser_select_uri (GTK_FILE_CHOOSER (dialog), uri);
-		
-        g_free (uri);                
-        uri = NULL;
-            
-        uri = seahorse_util_chooser_save_prompt (dialog);
-        gtk_widget_destroy (GTK_WIDGET (dialog));
-    }   
-    
-    return uri;
-}
-
-/**
- * seahorse_util_strvec_dup:
- * @vec: the string table to copy
- *
- * Copy a string table
- *
- * Returns: the new char **
- */
-gchar**
-seahorse_util_strvec_dup (const gchar** vec)
-{
-    gint len = 0;
-    gchar** ret;
-    const gchar** v;
-    
-    if (vec) {
-        for(v = vec; *v; v++)
-            len++;
-    }
-   
-    ret = (gchar**)g_new0(gchar*, len + 1);
-
-    while((--len) >= 0)
-        ret[len] = g_strdup(vec[len]);
-    
-    return ret;
-}
-
-/**
- * seahorse_util_strvec_length:
- * @vec: The string table
- *
- * Calculates the length of the string table
- *
- * Returns: The length of the string table
- */
-guint 
-seahorse_util_strvec_length (const gchar **vec)
-{
-    guint len = 0;
-    while (*(vec++))
-        len++;
-    return len;
-}
-
-
-/**
  * sort_objects_by_source:
  * @k1: the first seahorse object
  * @k2: The second seahorse object
@@ -1376,42 +1021,6 @@ seahorse_util_string_equals (const gchar *s1, const gchar *s2)
 }
 
 /**
- * seahorse_util_string_up_first:
- * @orig: The utf8 string to work with
- *
- * Upper case the first char in the UTF8 string
- *
- * Returns: a new string, with the first char upper cased. The returned string
- * should be freed with #g_free when no longer needed.
- */
-gchar*
-seahorse_util_string_up_first (const gchar *orig)
-{
-    gchar *t, *t2, *ret;
-    
-    if (g_utf8_validate (orig, -1, NULL)) {
-        
-        t = g_utf8_find_next_char (orig, NULL); 
-        if (t != NULL) {
-            t2 = g_utf8_strup (orig, t - orig);
-            ret = g_strdup_printf ("%s%s", t2, t);
-            g_free (t2);
-            
-        /* Can't find first UTF8 char */
-        } else {
-            ret = g_strdup (orig);
-        }
-    
-    /* Just use ASCII functions when not UTF8 */        
-    } else {
-        ret = g_strdup (orig);
-        ret[0] = g_ascii_toupper (ret[0]);
-    }
-    
-    return ret;
-}
-
-/**
  * seahorse_util_string_lower:
  * @s: ASCII string to change
  *
@@ -1422,63 +1031,6 @@ seahorse_util_string_lower (gchar *s)
 {
     for ( ; *s; s++)
         *s = g_ascii_tolower (*s);
-}
-
-/**
- * seahorse_util_string_slist_free:
- * @slist: the #GSList to free
- *
- * Free a GSList along with string values
- *
- * Returns: NULL
- */
-GSList*
-seahorse_util_string_slist_free (GSList* list)
-{
-    GSList *l;
-    for (l = list; l; l = l->next)
-        g_free (l->data);
-    g_slist_free (list);
-    return NULL;
-}
-
-/**
- * seahorse_util_string_slist_copy:
- * @slist: The list to copy
- *
- * Copy a #GSList along with string values
- *
- * Returns: the new list
- */
-GSList*
-seahorse_util_string_slist_copy (GSList *list)
-{
-    GSList *l = NULL;
-    for ( ; list; list = g_slist_next(list))
-        l = g_slist_append (l, g_strdup(list->data));
-    return l;
-}
-
-/**
- * seahorse_util_string_slist_equal:
- * @sl1: the first string list
- * @sl2: the second string list
- *
- * Compare two string GSLists.
- *
- * Returns: TRUE if all the string are equal
- */
-gboolean    
-seahorse_util_string_slist_equal (GSList *l1, GSList *l2)
-{
-    while (l1 && l2) {
-        if (!g_str_equal ((const gchar*)l1->data, (const gchar*)l2->data))
-            break;
-        l1 = g_slist_next (l1);
-        l2 = g_slist_next (l2);
-    }
-    
-    return !l1 && !l2;   
 }
 
 /**
@@ -1659,7 +1211,7 @@ free_avahi ()
 }
 
 const AvahiPoll*
-seahorse_util_dns_sd_get_poll ()
+seahorse_util_dns_sd_get_poll (void)
 {
     if (!avahi_poll) {
         

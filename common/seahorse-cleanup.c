@@ -26,9 +26,9 @@ typedef struct _SeahorseCleanup {
 	gpointer user_data;
 } SeahorseCleanup; 
 
-static GSList *registered_cleanups = NULL;
+static GList *registered_cleanups = NULL;
 
-void    
+void
 seahorse_cleanup_register (GDestroyNotify notify, gpointer user_data)
 {
 	SeahorseCleanup *cleanup = g_new0 (SeahorseCleanup, 1);
@@ -38,19 +38,19 @@ seahorse_cleanup_register (GDestroyNotify notify, gpointer user_data)
 	cleanup->user_data = user_data;
 	
 	/* Note we're reversing the order, so calls happen that way */
-	registered_cleanups = g_slist_prepend (registered_cleanups, cleanup);
+	registered_cleanups = g_list_prepend (registered_cleanups, cleanup);
 }
 
 void
 seahorse_cleanup_unregister (GDestroyNotify notify, gpointer user_data)
 {
 	SeahorseCleanup *cleanup;
-	GSList *l;
-	
-	for (l = registered_cleanups; l; l = g_slist_next (l)) {
+	GList *l;
+
+	for (l = registered_cleanups; l; l = g_list_next (l)) {
 		cleanup = (SeahorseCleanup*)l->data;
 		if (cleanup->notify == notify && cleanup->user_data == user_data) {
-			registered_cleanups = g_slist_remove (registered_cleanups, cleanup);
+			registered_cleanups = g_list_remove (registered_cleanups, cleanup);
 			break;
 		}
 	}
@@ -60,9 +60,9 @@ seahorse_cleanup_unregister (GDestroyNotify notify, gpointer user_data)
 void    
 seahorse_cleanup_perform (void)
 {
-	GSList *cleanups, *l;
+	GList *cleanups, *l;
 	SeahorseCleanup *cleanup;
-	
+
 	while (registered_cleanups) {
 		
 		/* 
@@ -73,7 +73,7 @@ seahorse_cleanup_perform (void)
 		cleanups = registered_cleanups;
 		registered_cleanups = NULL;
 		
-		for (l = cleanups; l; l = g_slist_next (l)) {
+		for (l = cleanups; l; l = g_list_next (l)) {
 			cleanup = (SeahorseCleanup*)l->data;
 			g_assert (cleanup->notify);
 			
@@ -81,6 +81,6 @@ seahorse_cleanup_perform (void)
 			g_free (cleanup);
 		}
 		
-		g_slist_free (cleanups);
+		g_list_free (cleanups);
 	}
 }

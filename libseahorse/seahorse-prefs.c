@@ -223,7 +223,7 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
     const gchar *host = NULL;
     const gchar *port = NULL;
     GtkWidget *widget;
-    GSList *types;
+    GList *types;
     gint active;
     gchar *uri;
 
@@ -231,14 +231,14 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
     widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-type"));
     g_return_val_if_fail (widget != NULL, NULL);
 
-    active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
-    if (active >= 0) {
-	    types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
-	    scheme = (const gchar*)g_slist_nth_data (types, active);
-	    if (scheme && !scheme[0])
-		    scheme = NULL;
-    }
-    
+	active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
+	if (active >= 0) {
+		types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
+		scheme = (const gchar*)g_list_nth_data (types, active);
+		if (scheme && !scheme[0])
+			scheme = NULL;
+	}
+
     /* The host */
     widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-host"));
     g_return_val_if_fail (widget != NULL, NULL);
@@ -274,7 +274,7 @@ G_MODULE_EXPORT void
 on_prefs_add_keyserver_uri_changed (GtkWidget *button, SeahorseWidget *swidget)
 {
     GtkWidget *widget;
-    GSList *types;
+    gchar **types;
     gchar *t;
     gint active;
 
@@ -296,8 +296,7 @@ on_prefs_add_keyserver_uri_changed (GtkWidget *button, SeahorseWidget *swidget)
         widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "port-block"));
         g_return_if_fail (widget != NULL);
 
-        t = (gchar*)g_slist_nth_data (types, active);
-        if (t && t[0])
+        if (types && types[active] && types[active][0])
             gtk_widget_show (widget);
         else
             gtk_widget_hide (widget);
@@ -308,15 +307,15 @@ G_MODULE_EXPORT void
 on_prefs_keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
 {
     SeahorseWidget *swidget;
-    GSList *types, *descriptions, *l;
+    gchar **types;
     GtkWidget *widget;
     gint response;
     gchar *result = NULL;
-    
     GtkTreeView *treeview;
     GtkTreeStore *store;
     GtkTreeIter iter;
-    
+    guint i;
+
     swidget = seahorse_widget_new_allow_multiple ("add-keyserver",
                                                   GTK_WINDOW (seahorse_widget_get_widget (sw, sw->name)));
     g_return_if_fail (swidget != NULL);
@@ -326,23 +325,19 @@ on_prefs_keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
     
     /* The list of types */
     types = seahorse_servers_get_types ();
-    
-    /* The description for the key server types, plus custom */
-    descriptions = NULL;
-    for (l = types; l; l = g_slist_next (l))
-	    descriptions = g_slist_append (descriptions, seahorse_servers_get_description (l->data));
-    descriptions = g_slist_append (descriptions, g_strdup (_("Custom")));
 
+    /* The description for the key server types, plus custom */
+    for (i = 0; types[i] != NULL; i++)
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget),
+                                        seahorse_servers_get_description (types[i]));
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget),
+                                    _("Custom"));
     gtk_combo_box_text_remove (GTK_COMBO_BOX_TEXT (widget), 0);
-    for (l = descriptions; l; l = g_slist_next (l))
-        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), l->data ? l->data : "");
     gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-    seahorse_util_string_slist_free (descriptions);
 
     /* Save these away for later */
-    types = g_slist_append (types, g_strdup (""));
     g_object_set_data_full (G_OBJECT (swidget), "keyserver-types", types, 
-                            (GDestroyNotify)seahorse_util_string_slist_free);
+                            (GDestroyNotify)g_strfreev);
 
     response = gtk_dialog_run (GTK_DIALOG (seahorse_widget_get_toplevel (swidget)));
     if (response == GTK_RESPONSE_ACCEPT) {

@@ -176,7 +176,7 @@ seahorse_keyserver_sync (GList *keys)
     gchar *keyserver;
     gchar **keyservers;
     GList *k;
-    GSList *keyids = NULL;
+    GList *keyids = NULL;
     guint i;
 
     if (!keys)
@@ -186,7 +186,7 @@ seahorse_keyserver_sync (GList *keys)
     
     /* Build a keyid list */
     for (k = keys; k; k = g_list_next (k)) 
-        keyids = g_slist_prepend (keyids, 
+        keyids = g_list_prepend (keyids,
                     GUINT_TO_POINTER (seahorse_object_get_id (SEAHORSE_OBJECT (k->data))));
 
     mop = seahorse_multi_operation_new ();
@@ -232,7 +232,7 @@ seahorse_keyserver_sync (GList *keys)
         }
     }
 
-    g_slist_free (keyids);
+    g_list_free (keyids);
     g_free (keyserver);
     
     /* Show the progress window if necessary */

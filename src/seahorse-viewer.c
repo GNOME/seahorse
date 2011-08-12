@@ -329,8 +329,8 @@ on_copy_complete (SeahorseOperation* op, SeahorseViewer* self)
 	
 	text = g_memory_output_stream_get_data (output);
 	g_return_if_fail (text != NULL);
-	
-	size = seahorse_util_memory_output_length (output);
+
+	size = g_memory_output_stream_get_data_size (output);
 	g_return_if_fail (size >= 0);
 	
 	atom = gdk_atom_intern ("CLIPBOARD", FALSE);

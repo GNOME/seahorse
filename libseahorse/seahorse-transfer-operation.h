@@ -56,6 +56,6 @@ END_DECLARE_OPERATION
 SeahorseOperation*      seahorse_transfer_operation_new     (const gchar *message,
                                                              SeahorseSource *from,
                                                              SeahorseSource *to,
-                                                             GSList *keyids);
+                                                             GList *keyids);
 
 #endif /* __SEAHORSE_TRANSFER_OPERATION_H__ */

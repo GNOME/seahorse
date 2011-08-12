@@ -163,16 +163,16 @@ on_pgp_signature_row_activated (GtkTreeView *treeview, GtkTreePath *path, GtkTre
 	}
 }
 
-static GSList*
-unique_slist_strings (GSList *keyids)
+static GList*
+unique_slist_strings (GList *keyids)
 {
-    GSList *l;
+    GList *l;
     
-    keyids = g_slist_sort (keyids, (GCompareFunc)g_ascii_strcasecmp);
-    for (l = keyids; l; l = g_slist_next (l)) {
+    keyids = g_list_sort (keyids, (GCompareFunc)g_ascii_strcasecmp);
+    for (l = keyids; l; l = g_list_next (l)) {
         while (l->next && l->data && l->next->data && 
                g_ascii_strcasecmp (l->data, l->next->data) == 0)
-            keyids = g_slist_delete_link (keyids, l->next);
+            keyids = g_list_delete_link (keyids, l->next);
     }    
     
     return keyids;
@@ -341,7 +341,7 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePgpKey *pk
 {
 	SeahorseObject *object;
 	GtkTreeIter uiditer, sigiter;
-	GSList *rawids = NULL;
+	GList *rawids = NULL;
 	SeahorsePgpUid *uid;
 	GList *keys, *l;
 	GList *uids, *u;
@@ -368,12 +368,12 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePgpKey *pk
 			/* Never show self signatures, they're implied */
 			if (seahorse_pgp_key_has_keyid (pkey, seahorse_pgp_signature_get_keyid (s->data)))
 				continue;
-			rawids = g_slist_prepend (rawids, (gpointer)seahorse_pgp_signature_get_keyid (s->data));
+			rawids = g_list_prepend (rawids, (gpointer)seahorse_pgp_signature_get_keyid (s->data));
 		}
         
 		/* Pass it to 'DiscoverKeys' for resolution/download */
 		keys = seahorse_context_discover_objects (SCTX_APP (), SEAHORSE_PGP, rawids);
-		g_slist_free (rawids);
+		g_list_free (rawids);
 		rawids = NULL;
         
 		/* Add the keys to the store */
@@ -1477,7 +1477,7 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseObjectModel *skmodel
 	GtkTreeIter iter;
 	GtkWidget *widget;
 	gboolean have_sigs = FALSE;
-	GSList *rawids = NULL;
+	GList *rawids = NULL;
 	GList *keys, *l, *uids;
 	GList *sigs, *s;
 
@@ -1496,7 +1496,7 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseObjectModel *skmodel
 			if (seahorse_pgp_key_has_keyid (pkey, seahorse_pgp_signature_get_keyid (s->data)))
 				continue;
 			have_sigs = TRUE;
-			rawids = g_slist_prepend (rawids, (gpointer)seahorse_pgp_signature_get_keyid (s->data));
+			rawids = g_list_prepend (rawids, (gpointer)seahorse_pgp_signature_get_keyid (s->data));
 		}
 	}
     
@@ -1510,7 +1510,7 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseObjectModel *skmodel
         
 		/* Pass it to 'DiscoverKeys' for resolution/download */
 		keys = seahorse_context_discover_objects (SCTX_APP (), SEAHORSE_PGP, rawids);
-		g_slist_free (rawids);
+		g_list_free (rawids);
 		rawids = NULL;
         
 		/* Add the keys to the store */

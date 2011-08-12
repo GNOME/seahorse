@@ -576,7 +576,7 @@ export_to_text (SeahorseKeyManagerStore *skstore, GtkSelectionData *selection_da
 		seahorse_debug ("setting selection text");
 		gtk_selection_data_set_text (selection_data, 
 		                             g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output)), 
-		                             seahorse_util_memory_output_length (G_MEMORY_OUTPUT_STREAM (output)));
+		                             g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (output)));
 	} else {
 		g_message ("error occurred on export: %s", 
 		           skstore->priv->drag_error && skstore->priv->drag_error->message ? 

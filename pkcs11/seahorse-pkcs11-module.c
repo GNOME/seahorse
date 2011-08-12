@@ -38,7 +38,6 @@ seahorse_pkcs11_module_init (void)
 	GList *modules, *m;
 
 	modules = gck_modules_initialize_registered ();
-
 	for (m = modules; m != NULL; m = g_list_next (m)) {
 		slots = gck_module_get_slots (m->data, FALSE);
 		for (s = slots; s; s = g_list_next (s)) {
