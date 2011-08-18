@@ -68,7 +68,7 @@ struct _SeahorseGpgmeKeyPrivate {
 static gboolean 
 load_gpgme_key (GQuark id, int mode, int secret, gpgme_key_t *key)
 {
-	GError *err = NULL;
+	GError *error = NULL;
 	gpgme_ctx_t ctx;
 	gpgme_error_t gerr;
 	
@@ -81,10 +81,10 @@ load_gpgme_key (GQuark id, int mode, int secret, gpgme_key_t *key)
 	}
 
 	gpgme_release (ctx);
-	
-	if (!GPG_IS_OK (gerr)) {
-		seahorse_gpgme_to_error (gerr, &err);
-		g_message ("couldn't load GPGME key: %s", err->message);
+
+	if (seahorse_gpgme_propagate_error (gerr, &error)) {
+		g_message ("couldn't load GPGME key: %s", error->message);
+		g_clear_error (&error);
 		return FALSE;
 	}
 	
@@ -324,7 +324,7 @@ seahorse_gpgme_key_realize (SeahorseObject *obj)
 	realize_subkeys (self);
 
 	/* The flags */
-	flags = SEAHORSE_FLAG_EXPORTABLE;
+	flags = SEAHORSE_FLAG_EXPORTABLE | SEAHORSE_FLAG_DELETABLE;
 
 	if (!self->pv->pubkey->disabled && !self->pv->pubkey->expired && 
 	    !self->pv->pubkey->revoked && !self->pv->pubkey->invalid) {
@@ -378,24 +378,6 @@ seahorse_gpgme_key_refresh (SeahorseObject *obj)
 		load_key_photos (self);
 
 	SEAHORSE_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->refresh (obj);
-}
-
-static SeahorseOperation*
-seahorse_gpgme_key_delete (SeahorseObject *obj)
-{
-	SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (obj);
-	gpgme_error_t gerr;
-	GError *err = NULL;
-	
-	if (self->pv->seckey)
-		gerr = seahorse_gpgme_key_op_delete_pair (self);
-	else
-		gerr = seahorse_gpgme_key_op_delete (self);
-	
-	if (!GPG_IS_OK (gerr))
-		seahorse_gpgme_to_error (gerr, &err);
-	
-	return seahorse_operation_new_complete (err);
 }
 
 static GList*
@@ -550,8 +532,7 @@ seahorse_gpgme_key_class_init (SeahorseGpgmeKeyClass *klass)
 	
 	seahorse_class->refresh = seahorse_gpgme_key_refresh;
 	seahorse_class->realize = seahorse_gpgme_key_realize;
-	seahorse_class->delete = seahorse_gpgme_key_delete;
-	
+
 	pgp_class->get_uids = seahorse_gpgme_key_get_uids;
 	pgp_class->set_uids = seahorse_gpgme_key_set_uids;
 	pgp_class->get_subkeys = seahorse_gpgme_key_get_subkeys;

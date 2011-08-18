@@ -37,30 +37,14 @@ enum {
     PROP_CONSTRUCT_TAG,
 };
 
-static void seahorse_source_iface (SeahorseSourceIface *iface);
+static void     seahorse_source_iface    (SeahorseSourceIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (SeahorseUnknownSource, seahorse_unknown_source, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
 
 /* -----------------------------------------------------------------------------
- * INTERNAL
- */
-
-static void
-search_done (SeahorseOperation *op, SeahorseObject *sobj)
-{
-	g_object_set (sobj, "location", SEAHORSE_LOCATION_MISSING, NULL);
-}
-
-/* -----------------------------------------------------------------------------
  * OBJECT
  */
-
-static SeahorseOperation*
-seahorse_unknown_source_load (SeahorseSource *src)
-{ 
-	return seahorse_operation_new_complete (NULL);
-}
 
 static void 
 seahorse_unknown_source_set_property (GObject *object, guint prop_id, const GValue *value, 
@@ -125,42 +109,83 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_UNKNOWN_SOURCE, "source", NULL);
 }
 
+
+static void
+seahorse_unknown_source_load_async (SeahorseSource *source,
+                                    GCancellable *cancellable,
+                                    GAsyncReadyCallback callback,
+                                    gpointer user_data)
+{
+	GSimpleAsyncResult *res;
+
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	                                 seahorse_unknown_source_load_async);
+
+	g_simple_async_result_complete_in_idle (res);
+	g_object_unref (res);
+}
+
+static gboolean
+seahorse_unknown_source_load_finish (SeahorseSource *source,
+                                     GAsyncResult *result,
+                                     GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_unknown_source_load_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
 static void 
 seahorse_source_iface (SeahorseSourceIface *iface)
 {
-	iface->load = seahorse_unknown_source_load;
+	iface->load_async = seahorse_unknown_source_load_async;
+	iface->load_finish = seahorse_unknown_source_load_finish;
 }
-
-/* -----------------------------------------------------------------------------
- * PUBLIC 
- */
 
 SeahorseUnknownSource*
 seahorse_unknown_source_new (GQuark ktype)
 {
-   return g_object_new (SEAHORSE_TYPE_UNKNOWN_SOURCE, "construct-tag", ktype, NULL);
+	return g_object_new (SEAHORSE_TYPE_UNKNOWN_SOURCE,
+	                     "construct-tag", ktype,
+	                     NULL);
 }
 
-SeahorseObject*                     
-seahorse_unknown_source_add_object (SeahorseUnknownSource *usrc, GQuark id,
-                                    SeahorseOperation *search)
+static void
+on_cancellable_gone (gpointer user_data,
+                     GObject *where_the_object_was)
 {
-    SeahorseObject *sobj;
+	SeahorseObject *object = SEAHORSE_OBJECT (user_data);
+	g_object_set (object, "location", SEAHORSE_LOCATION_MISSING, NULL);
+}
 
-    g_return_val_if_fail (id != 0, NULL);
+SeahorseObject *
+seahorse_unknown_source_add_object (SeahorseUnknownSource *self,
+                                    GQuark id,
+                                    GCancellable *cancellable)
+{
+	SeahorseObject *object;
+	SeahorseContext *context;
 
-    sobj = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (usrc), id);
-    if (!sobj) {
-        sobj = SEAHORSE_OBJECT (seahorse_unknown_new (usrc, id, NULL));
-        seahorse_context_add_object (SCTX_APP (), sobj);
-    }
-    
-    if (search) {
-        g_object_set (sobj, "location", SEAHORSE_LOCATION_SEARCHING, NULL);
-        seahorse_operation_watch (search, (SeahorseDoneFunc) search_done, sobj, NULL, NULL);
-    } else {
-        g_object_set (sobj, "location", SEAHORSE_LOCATION_MISSING, NULL);
-    }
-    
-    return sobj;
+	g_return_val_if_fail (id != 0, NULL);
+	g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
+
+	context = seahorse_context_instance ();
+	object = seahorse_context_get_object (context, SEAHORSE_SOURCE (self), id);
+	if (!object) {
+		object = SEAHORSE_OBJECT (seahorse_unknown_new (self, id, NULL));
+		seahorse_context_add_object (context, object);
+	}
+
+	if (cancellable) {
+		g_object_set (object, "location", SEAHORSE_LOCATION_SEARCHING, NULL);
+		g_object_weak_ref (G_OBJECT (cancellable), on_cancellable_gone, object);
+	} else {
+		g_object_set (object, "location", SEAHORSE_LOCATION_MISSING, NULL);
+	}
+
+	return object;
 }

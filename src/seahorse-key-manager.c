@@ -28,7 +28,6 @@
 #include "seahorse-windows.h"
 #include "seahorse-keyserver-results.h"
 
-#include "seahorse-operation.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
@@ -401,35 +400,37 @@ on_filter_changed (GtkEntry* entry, SeahorseKeyManager* self)
 }
 
 static void 
-imported_keys (SeahorseOperation* op, SeahorseKeyManager* self) 
+on_import_complete (GObject *source,
+                    GAsyncResult *result,
+                    gpointer user_data)
 {
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
-	
-	if (!seahorse_operation_is_successful (op)) {
-		seahorse_operation_display_error (op, _("Couldn't import keys"), 
-		                                  GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))));
-		return;
+	SeahorseKeyManager* self = SEAHORSE_KEY_MANAGER (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_source_import_finish (SEAHORSE_SOURCE (source), result, &error)) {
+		seahorse_util_handle_error (&error, seahorse_viewer_get_window (SEAHORSE_VIEWER (self)),
+		                            "%s", _("Couldn't import keys"));
+	} else {
+		seahorse_viewer_set_status (SEAHORSE_VIEWER (self), _("Imported keys"));
 	}
-	
-	seahorse_viewer_set_status (SEAHORSE_VIEWER (self), _("Imported keys"));
+
+	g_object_unref (self);
 }
 
 static void 
 import_files (SeahorseKeyManager* self, const gchar** uris) 
 {
 	GError *error = NULL;
-	SeahorseMultiOperation* mop;
 	GFileInputStream* input;
-	SeahorseOperation* op;
+	GCancellable *cancellable;
 	const gchar *uri;
 	GString *errmsg;
 	GFile* file;
-	
+
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	mop = g_object_new (SEAHORSE_TYPE_MULTI_OPERATION, NULL);
 	errmsg = g_string_new ("");
-	
+	cancellable = g_cancellable_new ();
+
 	for (uri = *uris; uri; uris++, uri = *uris) {
 		GQuark ktype;
 		SeahorseSource* sksrc;
@@ -454,23 +455,20 @@ import_files (SeahorseKeyManager* self, const gchar** uris)
 			g_string_append_printf (errmsg, "%s: %s\n", uri, error->message);
 			g_clear_error (&error);
 			continue;
-		}			
-		
-		op = seahorse_source_import (sksrc, G_INPUT_STREAM (input));
-		seahorse_multi_operation_take (mop, op);
+		}
+
+		seahorse_source_import_async (sksrc, G_INPUT_STREAM (input),
+		                              cancellable, on_import_complete,
+		                              g_object_ref (self));
 	}
-	
-	if (seahorse_operation_is_running (SEAHORSE_OPERATION (mop))) {
-		seahorse_progress_show (SEAHORSE_OPERATION (mop), _("Importing keys"), TRUE);
-		seahorse_operation_watch (SEAHORSE_OPERATION (mop), (SeahorseDoneFunc)imported_keys, self, NULL, NULL);
-	}
-	
+
+	seahorse_progress_show (cancellable, _("Importing keys"), TRUE);
+	g_object_unref (cancellable);
+
 	if (errmsg->len > 0)
 		seahorse_util_show_error (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), 
 		                          _("Couldn't import keys"), errmsg->str);
 
-	
-	g_object_unref (mop);
 	g_string_free (errmsg, TRUE);
 }
 
@@ -521,8 +519,8 @@ import_text (SeahorseKeyManager* self, const char* text)
 	GQuark ktype;
 	SeahorseSource* sksrc;
 	GMemoryInputStream* input;
-	SeahorseOperation* op;
-	
+	GCancellable *cancellable;
+
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (text != NULL);
 	
@@ -540,13 +538,15 @@ import_text (SeahorseKeyManager* self, const char* text)
 
 	input = G_MEMORY_INPUT_STREAM (g_memory_input_stream_new_from_data (g_strndup (text, len),
 	                                                                    len, g_free));
-	op = seahorse_source_import (sksrc, G_INPUT_STREAM (input));
-	
-	seahorse_progress_show (op, _("Importing Keys"), TRUE);
-	seahorse_operation_watch (op, (SeahorseDoneFunc)imported_keys, self, NULL, NULL);
+
+	cancellable = g_cancellable_new ();
+	seahorse_source_import_async (sksrc, G_INPUT_STREAM (input), cancellable,
+	                              on_import_complete, g_object_ref (self));
+
+	seahorse_progress_show (cancellable, _("Importing Keys"), TRUE);
+	g_object_unref (cancellable);
 
 	g_object_unref (input);
-	g_object_unref (op);
 }
 
 static void 
@@ -713,13 +713,6 @@ on_manager_settings_changed (GSettings *settings, const gchar *key, gpointer use
 
 	gtk_toggle_action_set_active (action, g_settings_get_boolean (settings, key));
 }
-
-static void
-on_refreshing (SeahorseContext *sctx, SeahorseOperation *operation, SeahorseWidget *swidget)
-{
-	seahorse_progress_status_set_operation (swidget, operation);
-}
-
 
 static const GtkActionEntry GENERAL_ENTRIES[] = {
 	{ "remote-menu", NULL, N_("_Remote") }, 
@@ -991,8 +984,6 @@ seahorse_key_manager_constructed (GObject *object)
 	
 	/* To show first time dialog */
 	g_timeout_add_seconds (1, (GSourceFunc)on_first_timer, self);
-	
-	g_signal_connect (seahorse_context_instance (), "refreshing", G_CALLBACK (on_refreshing), self);
 }
 
 static void

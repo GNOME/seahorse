@@ -66,8 +66,8 @@ GType                seahorse_ssh_source_get_type           (void);
 
 SeahorseSSHSource*   seahorse_ssh_source_new                (void);
 
-struct _SeahorseSSHKey*      
-                     seahorse_ssh_source_key_for_filename   (SeahorseSSHSource *ssrc, 
+struct _SeahorseSSHKey*
+                     seahorse_ssh_source_key_for_filename   (SeahorseSSHSource *ssrc,
                                                              const gchar *privfile);
 
 gchar*               seahorse_ssh_source_file_for_public    (SeahorseSSHSource *ssrc,

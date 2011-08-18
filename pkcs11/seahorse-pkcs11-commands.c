@@ -26,7 +26,9 @@
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-certificate.h"
 #include "seahorse-pkcs11-certificate-props.h"
+#include "seahorse-pkcs11-operations.h"
 
+#include "seahorse-progress.h"
 #include "seahorse-util.h"
 
 #include "common/seahorse-registry.h"
@@ -91,15 +93,32 @@ seahorse_pkcs11_commands_show_properties (SeahorseCommands *cmds, SeahorseObject
 	g_signal_connect (window, "response", G_CALLBACK (properties_response), NULL);
 }
 
-static SeahorseOperation*
+static void
+on_delete_completed (GObject *source,
+                     GAsyncResult *result,
+                     gpointer user_data)
+{
+	SeahorseCommands *self = SEAHORSE_COMMANDS (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_pkcs11_delete_finish (result, &error))
+		seahorse_util_handle_error (&error, seahorse_view_get_window (seahorse_commands_get_view (self)),
+		                            _("Couldn't delete"));
+
+	g_object_unref (self);
+}
+
+static gboolean
 seahorse_pkcs11_commands_delete_objects (SeahorseCommands *cmds, GList *objects)
 {
+	GCancellable *cancellable;
 	gchar *prompt;
 	const gchar *display;
+	GtkWidget *parent;
 	gboolean ret;
 	guint num;
-	
-	g_return_val_if_fail (SEAHORSE_PKCS11_IS_COMMANDS (cmds), NULL);
+
+	g_return_val_if_fail (SEAHORSE_PKCS11_IS_COMMANDS (cmds), FALSE);
 
 	num = g_list_length (objects);
 	
@@ -112,14 +131,20 @@ seahorse_pkcs11_commands_delete_objects (SeahorseCommands *cmds, GList *objects)
 				"Are you sure you want to delete %d certificates?",
 				num), num);
 	}
-	
-	ret = seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (cmds))));
+
+	parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (cmds)));
+	ret = seahorse_util_prompt_delete (prompt, parent);
 	g_free (prompt);
-	
-	if (ret)
-		return seahorse_source_delete_objects (objects);
-	else
-		return NULL;
+
+	if (ret) {
+		cancellable = g_cancellable_new ();
+		seahorse_pkcs11_delete_async (objects, cancellable,
+		                              on_delete_completed, g_object_ref (cmds));
+		seahorse_progress_show (cancellable, _("Deleting"), TRUE);
+		g_object_unref (cancellable);
+	}
+
+	return ret;
 }
 
 static GObject* 

@@ -73,8 +73,6 @@ struct _SeahorseObjectClass {
 	void (*realize) (SeahorseObject *self);
 	
 	void (*refresh) (SeahorseObject *self);
-	
-	SeahorseOperation* (*delete) (SeahorseObject *self);
 };
 
 GType               seahorse_object_get_type               (void);
@@ -84,8 +82,6 @@ SeahorseObject*     seahorse_object_new                    (void);
 void                seahorse_object_realize                (SeahorseObject *self);
 
 void                seahorse_object_refresh                (SeahorseObject *self);
-
-SeahorseOperation*  seahorse_object_delete                 (SeahorseObject *self);
 
 GQuark              seahorse_object_get_id                 (SeahorseObject *self);
 

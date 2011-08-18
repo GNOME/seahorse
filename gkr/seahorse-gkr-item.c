@@ -54,7 +54,6 @@ enum {
     PROP_ITEM_ID,
     PROP_ITEM_INFO,
     PROP_ITEM_ATTRIBUTES,
-    PROP_ITEM_ACL,
     PROP_HAS_SECRET,
     PROP_USE
 };
@@ -68,10 +67,6 @@ struct _SeahorseGkrItemPrivate {
 	
 	gpointer req_attrs;
 	GnomeKeyringAttributeList *item_attrs;
-	
-	gpointer req_acl;
-	gboolean got_acl;
-	GList *item_acl;
 
 	gpointer req_secret;
 	gchar *item_secret;
@@ -225,38 +220,6 @@ require_item_attrs (SeahorseGkrItem *self)
 	if (!self->pv->item_attrs)
 		load_item_attrs (self);
 	return self->pv->item_attrs != NULL;
-}
-
-static void
-received_item_acl (GnomeKeyringResult result, GList *acl, gpointer data)
-{
-	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (data);
-	self->pv->req_acl = NULL;
-	if (received_result (self, result)) {
-		self->pv->got_acl = TRUE;
-		seahorse_gkr_item_set_acl (self, acl);
-	}
-}
-
-static void
-load_item_acl (SeahorseGkrItem *self)
-{
-	/* Already in progress */
-	if (!self->pv->req_acl) {
-		g_object_ref (self);
-		self->pv->req_acl = gnome_keyring_item_get_acl (self->pv->keyring_name,
-		                                                self->pv->item_id,
-		                                                received_item_acl,
-		                                                self, g_object_unref);
-	}
-}
-
-static gboolean
-require_item_acl (SeahorseGkrItem *self)
-{
-	if (!self->pv->got_acl)
-		load_item_acl (self);
-	return self->pv->got_acl;
 }
 
 static guint32
@@ -503,7 +466,7 @@ seahorse_gkr_item_realize (SeahorseObject *obj)
 		      "markup", markup,
 		      "identifier", identifier,
 		      "description", description,
-		      "flags", 0,
+		      "flags", SEAHORSE_FLAG_DELETABLE,
 		      NULL);
 	
 	g_free (display);
@@ -525,19 +488,10 @@ seahorse_gkr_item_refresh (SeahorseObject *obj)
 		load_item_info (self);
 	if (self->pv->item_attrs)
 		load_item_attrs (self);
-	if (self->pv->got_acl)
-		load_item_acl (self);
 	if (self->pv->item_secret)
 		load_item_secret (self);
 
 	SEAHORSE_OBJECT_CLASS (seahorse_gkr_item_parent_class)->refresh (obj);
-}
-
-static SeahorseOperation*
-seahorse_gkr_item_delete (SeahorseObject *obj)
-{
-	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (obj);
-	return seahorse_gkr_operation_delete_item (self);
 }
 
 static void
@@ -585,9 +539,6 @@ seahorse_gkr_item_get_property (GObject *object, guint prop_id,
 	case PROP_ITEM_ATTRIBUTES:
 		g_value_set_boxed (value, seahorse_gkr_item_get_attributes (self));
 		break;
-	case PROP_ITEM_ACL:
-		g_value_set_boxed (value, seahorse_gkr_item_get_acl (self));
-		break;
 	case PROP_HAS_SECRET:
 		g_value_set_boolean (value, self->pv->item_secret != NULL);
 		break;
@@ -621,9 +572,6 @@ seahorse_gkr_item_set_property (GObject *object, guint prop_id, const GValue *va
 	case PROP_ITEM_ATTRIBUTES:
 		seahorse_gkr_item_set_attributes (self, g_value_get_boxed (value));
 		break;
-	case PROP_ITEM_ACL:
-		seahorse_gkr_item_set_acl (self, g_value_get_boxed (value));
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -647,11 +595,6 @@ seahorse_gkr_item_finalize (GObject *gobject)
 		gnome_keyring_attribute_list_free (self->pv->item_attrs);
 	self->pv->item_attrs = NULL;
 	g_assert (self->pv->req_attrs == NULL);
-
-	gnome_keyring_acl_free (self->pv->item_acl);
-	self->pv->item_acl = NULL;
-	self->pv->got_acl = FALSE;
-	g_assert (self->pv->req_acl == NULL);
 
 	g_free (self->pv->item_secret);
 	self->pv->item_secret = NULL;
@@ -677,8 +620,7 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 	seahorse_class = SEAHORSE_OBJECT_CLASS (klass);
 	seahorse_class->realize = seahorse_gkr_item_realize;
 	seahorse_class->refresh = seahorse_gkr_item_refresh;
-	seahorse_class->delete = seahorse_gkr_item_delete;
-	
+
 	g_type_class_add_private (klass, sizeof (SeahorseGkrItemPrivate));
     
 	g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,
@@ -696,10 +638,6 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 	g_object_class_install_property (gobject_class, PROP_ITEM_ATTRIBUTES,
                 g_param_spec_boxed ("item-attributes", "Item Attributes", "GNOME Keyring Item Attributes",
                                     boxed_attributes_type (), G_PARAM_READWRITE));
-
-	g_object_class_install_property (gobject_class, PROP_ITEM_ACL,
-                g_param_spec_boxed ("item-acl", "Item ACL", "GNOME Keyring Item ACL",
-                                    boxed_acl_type (),  G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_USE,
 	        g_param_spec_uint ("use", "Use", "Item is used for", 
@@ -747,7 +685,8 @@ void
 seahorse_gkr_item_set_info (SeahorseGkrItem *self, GnomeKeyringItemInfo* info)
 {
 	GObject *obj;
-	
+	gchar *secret;
+
 	g_return_if_fail (SEAHORSE_IS_GKR_ITEM (self));
 	
 	if (self->pv->item_info)
@@ -764,11 +703,13 @@ seahorse_gkr_item_set_info (SeahorseGkrItem *self, GnomeKeyringItemInfo* info)
 	g_object_notify (obj, "use");
 	
 	/* Get the secret out of the item info, if not already loaded */
-	if (!self->pv->item_secret && self->pv->item_info && !self->pv->req_secret) {
-		WITH_SECURE_MEM (self->pv->item_secret = gnome_keyring_item_info_get_secret (self->pv->item_info));
+	WITH_SECURE_MEM (secret = gnome_keyring_item_info_get_secret (self->pv->item_info));
+	if (secret != NULL) {
+		gnome_keyring_free_password (self->pv->item_secret);
+		self->pv->item_secret = secret;
 		g_object_notify (obj, "has-secret");
 	}
-		
+
 	g_object_thaw_notify (obj);
 }
 
@@ -842,35 +783,6 @@ seahorse_gkr_find_string_attribute (GnomeKeyringAttributeList *attrs, const gcha
 	}
 	    
 	return NULL;	
-}
-
-GList*
-seahorse_gkr_item_get_acl (SeahorseGkrItem *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (self), NULL);
-	require_item_acl (self);
-	return self->pv->item_acl;
-}
-
-void
-seahorse_gkr_item_set_acl (SeahorseGkrItem *self, GList* acl)
-{
-	GObject *obj;
-	
-	g_return_if_fail (SEAHORSE_IS_GKR_ITEM (self));
-	
-	if (self->pv->item_acl)
-		gnome_keyring_acl_free (self->pv->item_acl);
-	if (acl)
-		self->pv->item_acl = gnome_keyring_acl_copy (acl);
-	else
-		self->pv->item_acl = NULL;
-	
-	obj = G_OBJECT (self);
-	g_object_freeze_notify (obj);
-	seahorse_gkr_item_realize (SEAHORSE_OBJECT (self));
-	g_object_notify (obj, "item-acl");
-	g_object_thaw_notify (obj);
 }
 
 GQuark

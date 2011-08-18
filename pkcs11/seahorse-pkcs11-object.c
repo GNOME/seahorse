@@ -153,7 +153,7 @@ seahorse_pkcs11_object_realize (SeahorseObject *obj)
 	
 	g_assert (SEAHORSE_PKCS11_IS_OBJECT (obj));
 
-	flags = 0;
+	flags = SEAHORSE_FLAG_DELETABLE;
 	if (gck_attributes_find_boolean (self->pv->pkcs11_attributes, CKA_EXTRACTABLE, &exportable) && exportable)
 		flags |= SEAHORSE_FLAG_EXPORTABLE;
 
@@ -173,12 +173,6 @@ seahorse_pkcs11_object_refresh (SeahorseObject *obj)
 	/* Reload the same attributes */
 	load_object_attributes (SEAHORSE_PKCS11_OBJECT (obj), NULL, 0);
 	SEAHORSE_OBJECT_CLASS (seahorse_pkcs11_object_parent_class)->refresh (obj);
-}
-
-static SeahorseOperation*
-seahorse_pkcs11_object_delete (SeahorseObject *obj)
-{
-	return seahorse_pkcs11_deleter_new (SEAHORSE_PKCS11_OBJECT (obj));
 }
 
 static GObject* 
@@ -288,8 +282,7 @@ seahorse_pkcs11_object_class_init (SeahorsePkcs11ObjectClass *klass)
 
 	seahorse_class->realize = seahorse_pkcs11_object_realize;
 	seahorse_class->refresh = seahorse_pkcs11_object_refresh;
-	seahorse_class->delete = seahorse_pkcs11_object_delete;
-	
+
 	g_object_class_install_property (gobject_class, PROP_PKCS11_OBJECT, 
 	         g_param_spec_object ("pkcs11-object", "pkcs11-object", "pkcs11-object", GCK_TYPE_OBJECT,
 	                              G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));

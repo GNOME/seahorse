@@ -248,14 +248,18 @@ has_matching_objects (SeahorseObjectPredicate *pred, GList *objects)
 }
 
 static void 
-on_export_done (SeahorseOperation* op, SeahorseViewer* self) 
+on_file_export_completed (GObject *source,
+                          GAsyncResult *result,
+                          gpointer user_data)
 {
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
-	
-	if (!seahorse_operation_is_successful (op))
-		seahorse_operation_display_error (op, _ ("Couldn't export keys"), 
-		                                  GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))));
+	SeahorseViewer* self = SEAHORSE_VIEWER (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_source_export_auto_finish (result, &error))
+		seahorse_util_handle_error (&error, seahorse_view_get_window (SEAHORSE_VIEW (self)),
+		                            _("Couldn't export keys"));
+
+	g_object_unref (self);
 }
 
 static void 
@@ -282,21 +286,21 @@ on_key_export_file (GtkAction* action, SeahorseViewer* self)
 	if (uri != NULL) {
 		GFile* file;
 		GOutputStream* output;
-		SeahorseOperation* op;
-		
+		GCancellable *cancellable;
+
 		file = g_file_new_for_uri (uri);
 		output = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, 0, NULL, &error));
 		if (output == NULL) {
 		    unesc_uri = g_uri_unescape_string (seahorse_util_uri_get_last (uri), NULL);
-			seahorse_util_handle_error (error, _ ("Couldn't export key to \"%s\""), 
+			seahorse_util_handle_error (&error, NULL, _ ("Couldn't export key to \"%s\""),
 			                            unesc_uri, NULL);
-			g_clear_error (&error);
 			g_free (unesc_uri);
 		} else {
-			op = seahorse_source_export_objects (objects, output);
-			seahorse_progress_show (op, _("Exporting keys"), TRUE);
-			seahorse_operation_watch (op, (SeahorseDoneFunc)on_export_done, self, NULL, NULL);
-			g_object_unref (op);
+			cancellable = g_cancellable_new ();
+			seahorse_source_export_auto_async (objects, output, cancellable,
+			                                   on_file_export_completed, g_object_ref (self));
+			seahorse_progress_show (cancellable, _("Exporting keys"), TRUE);
+			g_object_unref (cancellable);
 		}
 		
 
@@ -304,41 +308,41 @@ on_key_export_file (GtkAction* action, SeahorseViewer* self)
 		g_object_unref (output);
 		g_free (uri);
 	}
+
+	g_list_free (objects);
 }
 
 static void 
-on_copy_complete (SeahorseOperation* op, SeahorseViewer* self) 
+on_copy_export_complete (GObject *source,
+                         GAsyncResult *result,
+                         gpointer user_data)
 {
-	GMemoryOutputStream* output;
+	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	GOutputStream* output;
+	GError *error = NULL;
 	const gchar* text;
 	guint size;
 	GdkAtom atom;
 	GtkClipboard* board;
-	
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
-	
-	if (!seahorse_operation_is_successful (op)) {
-		seahorse_operation_display_error (op, _ ("Couldn't retrieve data from key server"), 
-		                                  GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))));
+
+	output = seahorse_source_export_auto_finish (result, &error);
+	if (error != NULL) {
+		seahorse_util_handle_error (&error, seahorse_view_get_window (SEAHORSE_VIEW (self)),
+		                            _("Couldn't retrieve data from key server"));
 		return;
 	}
-	
-	output = G_MEMORY_OUTPUT_STREAM (seahorse_operation_get_result (op));
-	g_return_if_fail (G_IS_MEMORY_OUTPUT_STREAM (output));
-	
-	text = g_memory_output_stream_get_data (output);
-	g_return_if_fail (text != NULL);
 
-	size = g_memory_output_stream_get_data_size (output);
-	g_return_if_fail (size >= 0);
-	
+	text = g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output));
+	size = g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (output));
+
 	atom = gdk_atom_intern ("CLIPBOARD", FALSE);
-
 	board = gtk_clipboard_get (atom);
 	gtk_clipboard_set_text (board, text, (gint)size);
+
 	/* Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys" */
 	seahorse_viewer_set_status (self, _ ("Copied keys"));
+
+	g_object_unref (self);
 }
 
 static void 
@@ -346,45 +350,36 @@ on_key_export_clipboard (GtkAction* action, SeahorseViewer* self)
 {
 	GList* objects;
 	GOutputStream* output;
-	SeahorseOperation* op;
-	
+	GCancellable *cancellable;
+
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	
+
 	objects = seahorse_viewer_get_selected_objects (self);
 	objects = objects_prune_non_exportable (objects);
 	if (objects == NULL)
 		return;
 
 	output = G_OUTPUT_STREAM (g_memory_output_stream_new (NULL, 0, g_realloc, g_free));
-	op = seahorse_source_export_objects (objects, output);
-	seahorse_progress_show (op, _ ("Retrieving keys"), TRUE);
-	seahorse_operation_watch (op, (SeahorseDoneFunc)on_copy_complete, self, NULL, NULL);
-	
+
+	cancellable = g_cancellable_new ();
+	seahorse_source_export_auto_async (objects, output, cancellable,
+	                                   on_copy_export_complete, g_object_ref (self));
+	seahorse_progress_show (cancellable, _ ("Retrieving keys"), TRUE);
+	g_object_unref (cancellable);
+
 	g_list_free (objects);
 	g_object_unref (output);
-	g_object_unref (op);
-}
-
-static void 
-on_delete_complete (SeahorseOperation* op, SeahorseViewer* self) 
-{
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
-	
-	if (!seahorse_operation_is_successful (op))
-		seahorse_operation_display_error (op, _ ("Couldn't delete."), 
-		                                  GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))));
 }
 
 static gboolean
 delete_objects_for_selected (SeahorseViewer *self, SeahorseCommands *commands, 
                              SeahorseObjectPredicate *pred, gpointer user_data)
 {
-	SeahorseOperation* op;
 	GList **all_objects;
 	GList *objects;
-	
+	gboolean ret;
+
 	all_objects = (GList**)user_data;
 	
 	/* Stop the enumeration if nothing still selected */
@@ -399,19 +394,11 @@ delete_objects_for_selected (SeahorseViewer *self, SeahorseCommands *commands,
 	
 	/* Indicate to our users what is being operated on */
 	seahorse_viewer_set_selected_objects (self, objects);
-	
-	op = seahorse_commands_delete_objects (commands, objects);
-	g_list_free (objects);
-	
-	/* Did the user cancel? */
-	if (op == NULL)
-		return FALSE;
 
-	seahorse_progress_show (op, _ ("Deleting..."), TRUE);
-	seahorse_operation_watch (op, (SeahorseDoneFunc)on_delete_complete, self, NULL, NULL);
-	g_object_unref (op);
-	
-	return TRUE;
+	ret = seahorse_commands_delete_objects (commands, objects);
+	g_list_free (objects);
+
+	return ret;
 }
 
 static void
@@ -450,25 +437,28 @@ on_key_delete (GtkAction* action, SeahorseViewer* self)
 }
 
 static void 
-imported_keys (SeahorseOperation* op, SeahorseViewer* self) 
+on_import_complete (GObject *source,
+                    GAsyncResult *result,
+                    gpointer user_data)
 {
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
-	
-	if (!seahorse_operation_is_successful (op)) {
-		seahorse_operation_display_error (op, _ ("Couldn't import keys"), 
-		                                  GTK_WIDGET (seahorse_viewer_get_window (self)));
-		return;
-	}
-	
-	seahorse_viewer_set_status (self, _ ("Imported keys"));
+	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_context_transfer_objects_finish (SEAHORSE_CONTEXT (source),
+	                                               result, &error))
+		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
+		                            _("Couldn't import keys"));
+	else
+		seahorse_viewer_set_status (self, _ ("Imported keys"));
+
+	g_object_unref (self);
 }
 
 static void 
 on_key_import_keyring (GtkAction* action, SeahorseViewer* self) 
 {
+	GCancellable *cancellable;
 	GList* objects;
-	SeahorseOperation* op;
 
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
@@ -480,11 +470,13 @@ on_key_import_keyring (GtkAction* action, SeahorseViewer* self)
 	if (objects == NULL) 
 		return;
 
-	op = seahorse_context_transfer_objects (seahorse_context_instance (), objects, NULL);
-	seahorse_progress_show (op, _ ("Importing keys from key servers"), TRUE);
-	seahorse_operation_watch (op, (SeahorseDoneFunc)imported_keys, self, NULL, NULL);
-	
-	g_object_unref (op);
+	cancellable = g_cancellable_new ();
+	seahorse_context_transfer_objects_async (seahorse_context_instance (),
+	                                         objects, NULL, cancellable,
+	                                         on_import_complete, g_object_ref (self));
+	seahorse_progress_show (cancellable, _ ("Importing keys from key servers"), TRUE);
+	g_object_unref (cancellable);
+
 	g_list_free (objects);
 }
 

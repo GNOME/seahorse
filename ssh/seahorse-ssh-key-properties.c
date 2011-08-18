@@ -35,45 +35,64 @@
 
 #define NOTEBOOK "notebook"
 
-G_MODULE_EXPORT void
-on_ssh_comment_activate (GtkWidget *entry, SeahorseWidget *swidget)
-{
-    SeahorseObject *object;
-    SeahorseSSHKey *skey;
-    SeahorseSource *sksrc;
-    SeahorseOperation *op;
-    const gchar *text;
-    gchar *comment;
-    GError *err = NULL;
-    
-    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
-    skey = SEAHORSE_SSH_KEY (object);
-    sksrc = seahorse_object_get_source (object);
-    g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
-    
-    text = gtk_entry_get_text (GTK_ENTRY (entry));
-    
-    /* Make sure not the same */
-    if (skey->keydata->comment && g_utf8_collate (text, skey->keydata->comment) == 0)
-        return;
+typedef struct {
+	SeahorseWidget *swidget;
+	GtkEntry *entry;
+	gchar *original;
+} ssh_rename_closure;
 
-    gtk_widget_set_sensitive (entry, FALSE);
-    
-    comment = g_strdup (text);
-    op = seahorse_ssh_operation_rename (SEAHORSE_SSH_SOURCE (sksrc), skey, comment);
-    g_free (comment);
-    
-    /* This is usually a quick operation */
-    seahorse_operation_wait (op);
-    
-    if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't rename key."));
-        g_clear_error (&err);
-        gtk_entry_set_text (GTK_ENTRY (entry), skey->keydata->comment ? skey->keydata->comment : "");
-    }
-    
-    gtk_widget_set_sensitive (entry, TRUE);
+static void
+ssh_rename_free (gpointer data)
+{
+	ssh_rename_closure *closure = data;
+	g_object_unref (closure->swidget);
+	g_free (closure->original);
+	g_free (closure);
+}
+
+static void
+on_rename_complete (GObject *source,
+                    GAsyncResult *result,
+                    gpointer user_data)
+{
+	ssh_rename_closure *closure = user_data;
+	GError *error = NULL;
+
+	if (!seahorse_ssh_op_rename_finish (SEAHORSE_SSH_SOURCE (source), result, &error)) {
+		seahorse_util_handle_error (&error, closure->swidget, _("Couldn't rename key."));
+		gtk_entry_set_text (closure->entry, closure->original);
+	}
+
+	gtk_widget_set_sensitive (GTK_WIDGET (closure->entry), TRUE);
+	ssh_rename_free (closure);
+}
+
+G_MODULE_EXPORT void
+on_ssh_comment_activate (GtkWidget *entry,
+                         SeahorseWidget *swidget)
+{
+	SeahorseSSHKey *skey;
+	SeahorseSSHSource *source;
+	const gchar *text;
+	ssh_rename_closure *closure;
+
+	skey = SEAHORSE_SSH_KEY (SEAHORSE_OBJECT_WIDGET (swidget)->object);
+	source = SEAHORSE_SSH_SOURCE (seahorse_object_get_source (SEAHORSE_OBJECT (skey)));
+
+	text = gtk_entry_get_text (GTK_ENTRY (entry));
+
+	/* Make sure not the same */
+	if (skey->keydata->comment && g_utf8_collate (text, skey->keydata->comment) == 0)
+		return;
+
+	gtk_widget_set_sensitive (entry, FALSE);
+
+	closure = g_new0 (ssh_rename_closure, 1);
+	closure->swidget = g_object_ref (swidget);
+	closure->entry = GTK_ENTRY (entry);
+	closure->original = g_strdup (skey->keydata->comment ? skey->keydata->comment : "");
+	seahorse_ssh_op_rename_async (source, skey, text,
+	                              NULL, on_rename_complete, closure);
 }
 
 G_MODULE_EXPORT gboolean
@@ -83,75 +102,72 @@ on_ssh_comment_focus_out (GtkWidget* widget, GdkEventFocus *event, SeahorseWidge
     return FALSE;
 }
 
-G_MODULE_EXPORT void
-on_ssh_trust_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
+static void
+on_authorize_complete (GObject *source,
+                       GAsyncResult *result,
+                       gpointer user_data)
 {
-    SeahorseSource *sksrc;
-    SeahorseOperation *op;
-    SeahorseObject *object;
-    SeahorseSSHKey *skey;
-    gboolean authorize;
-    GError *err = NULL;
+	GtkToggleButton *button = GTK_TOGGLE_BUTTON (user_data);
+	GError *error = NULL;
 
-    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
-    skey = SEAHORSE_SSH_KEY (object);
-    sksrc = seahorse_object_get_source (object);
-    g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
-    
-    authorize = gtk_toggle_button_get_active (button);
-    gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
-    
-    op = seahorse_ssh_operation_authorize (SEAHORSE_SSH_SOURCE (sksrc), skey, authorize);
-    g_return_if_fail (op);
-    
-    /* A very fast op, so just wait */
-    seahorse_operation_wait (op);
-    
-    if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't change authorization for key."));
-        g_clear_error (&err);
-    }
-    
-    gtk_widget_set_sensitive (GTK_WIDGET (button), TRUE);
+	if (!seahorse_ssh_op_authorize_finish (SEAHORSE_SSH_SOURCE (source), result, &error)) {
+		seahorse_util_handle_error (&error, GTK_WIDGET (button),
+		                            _("Couldn't change authorization for key."));
+	}
+
+	gtk_widget_set_sensitive (GTK_WIDGET (button), TRUE);
+	g_object_unref (button);
+}
+
+G_MODULE_EXPORT void
+on_ssh_trust_toggled (GtkToggleButton *button,
+                      SeahorseWidget *swidget)
+{
+	SeahorseSSHSource *source;
+	SeahorseSSHKey *skey;
+	gboolean authorize;
+
+	skey = SEAHORSE_SSH_KEY (SEAHORSE_OBJECT_WIDGET (swidget)->object);
+	source = SEAHORSE_SSH_SOURCE (seahorse_object_get_source (SEAHORSE_OBJECT (skey)));
+
+	authorize = gtk_toggle_button_get_active (button);
+	gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
+
+	seahorse_ssh_op_authorize_async (source, skey, authorize,
+	                                 NULL, on_authorize_complete, g_object_ref (button));
 }
 
 static void
-passphrase_done (SeahorseOperation *op, SeahorseWidget *swidget)
+on_passphrase_complete (GObject *source,
+                        GAsyncResult *result,
+                        gpointer user_data)
 {
-    GError *err = NULL;
-    GtkWidget *w;
+	GtkWidget *button = GTK_WIDGET (user_data);
+	GError *error = NULL;
 
-    if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't change passphrase for key."));
-        g_clear_error (&err);
-    }
-    
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "passphrase-button"));
-    g_return_if_fail (w != NULL);
-    gtk_widget_set_sensitive (w, TRUE);
+	if (!seahorse_ssh_op_change_passphrase_finish (SEAHORSE_SSH_KEY (source),
+	                                               result, &error)) {
+		seahorse_util_handle_error (&error, button, _("Couldn't change passphrase for key."));
+	}
+
+	gtk_widget_set_sensitive (button, TRUE);
+	g_object_unref (button);
 }
 
 G_MODULE_EXPORT void
-on_ssh_passphrase_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
+on_ssh_passphrase_button_clicked (GtkWidget *widget,
+                                  SeahorseWidget *swidget)
 {
-    SeahorseOperation *op;
-    SeahorseObject *object;
-    GtkWidget *w;
-    
-    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
-    g_assert (SEAHORSE_IS_SSH_KEY (object));
+	SeahorseObject *object;
+	GtkWidget *button;
 
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "passphrase-button"));
-    g_return_if_fail (w != NULL);
-    gtk_widget_set_sensitive (w, FALSE);
-    
-    op = seahorse_ssh_operation_change_passphrase (SEAHORSE_SSH_KEY (object));
-    seahorse_operation_watch (op, (SeahorseDoneFunc)passphrase_done, swidget, NULL, NULL);
+	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 
-    /* Running operations ref themselves */
-    g_object_unref (op);
+	button = seahorse_widget_get_widget (swidget, "passphrase-button");
+	gtk_widget_set_sensitive (button, FALSE);
+
+	seahorse_ssh_op_change_passphrase_async (SEAHORSE_SSH_KEY (object), NULL,
+	                                         on_passphrase_complete, g_object_ref (button));
 }
 
 static void
@@ -165,9 +181,8 @@ export_complete (GFile *file, GAsyncResult *result, guchar *contents)
 	if (!g_file_replace_contents_finish (file, result, NULL, &err)) {
 		uri = g_file_get_uri (file);
 		unesc_uri = g_uri_unescape_string (seahorse_util_uri_get_last (uri), NULL);
-        seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
-                                    unesc_uri);
-        g_clear_error (&err);
+		seahorse_util_handle_error (&err, NULL, _("Couldn't export key to \"%s\""),
+		                            unesc_uri);
         g_free (uri);
         g_free (unesc_uri);
 	}
@@ -211,11 +226,9 @@ on_ssh_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 		                               (GAsyncReadyCallback)export_complete, results);
 	}
 	
-	if (err) {
-	        seahorse_util_handle_error (err, _("Couldn't export key."));
-	        g_clear_error (&err);
-	}
-	
+	if (err)
+		seahorse_util_handle_error (&err, swidget, _("Couldn't export key."));
+
 	g_free (uri);
 }
 

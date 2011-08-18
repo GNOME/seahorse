@@ -45,7 +45,6 @@ libseahorse_pgp_la_SOURCES = \
 	seahorse-gpgme-generate.c \
 	seahorse-gpgme-key.c seahorse-gpgme-key.h \
 	seahorse-gpgme-key-op.c seahorse-gpgme-key-op.h \
-	seahorse-gpgme-operation.c seahorse-gpgme-operation.h \
 	seahorse-gpgme-photo.c seahorse-gpgme-photo.h \
 	seahorse-gpgme-photos.c \
 	seahorse-gpgme-revoke.c \

@@ -213,7 +213,7 @@ foreach_child_select_checks (GtkWidget *widget, gpointer user_data)
 
 	if (GTK_IS_CHECK_BUTTON (widget)) {
 		name = g_utf8_casefold (gtk_button_get_label (GTK_BUTTON (widget)), -1);
-		checked = names ? FALSE : TRUE;
+		checked = names != NULL && names[0] != NULL ? FALSE : TRUE;
 		for (i = 0; names && names[i] != NULL; i++) {
 			if (g_utf8_collate (names[i], name) == 0) {
 				checked = TRUE;
@@ -244,7 +244,7 @@ select_inital_keyservers (SeahorseWidget *swidget)
 	/* Close the expander if all servers are selected */
 	widget = seahorse_widget_get_widget (swidget, "search-where");
 	g_return_if_fail (widget != NULL);
-	gtk_expander_set_expanded (GTK_EXPANDER (widget), names != NULL);
+	gtk_expander_set_expanded (GTK_EXPANDER (widget), names != NULL && names[0] != NULL);
 
 	/* We do case insensitive matches */
 	for (i = 0; names[i] != NULL; i++) {
@@ -395,7 +395,6 @@ refresh_shared_keys (SeahorseServiceDiscovery *ssd, const gchar *name, SeahorseW
 G_MODULE_EXPORT void
 on_keyserver_search_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-	SeahorseOperation *op;
 	KeyserverSelection *selection;
 	const gchar *search;
 	GtkWidget *widget;
@@ -412,16 +411,10 @@ on_keyserver_search_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	selection = get_keyserver_selection (swidget);
 	g_return_if_fail (selection->uris != NULL);
 	g_settings_set_strv (seahorse_context_settings (NULL), "last-search-servers",
-	                     selection->all ? NULL : (const gchar * const*)selection->names->pdata);
-
-	op = seahorse_context_search_remote (SCTX_APP(), search);
-	if (op == NULL)
-		return;
+	                     selection->all ? NULL : (const gchar * const*)selection->uris->pdata);
 
 	/* Open the new result window */
-	seahorse_keyserver_results_show (op,
-	                                 GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)),
-	                                 search);
+	seahorse_keyserver_results_show (search);
 
 	free_keyserver_selection (selection);
 	seahorse_widget_destroy (swidget);

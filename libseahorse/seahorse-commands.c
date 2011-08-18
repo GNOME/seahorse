@@ -52,12 +52,12 @@ seahorse_commands_real_show_properties (SeahorseCommands* self, SeahorseObject* 
 	return;
 }
 
-static SeahorseOperation* 
-seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj) 
+static gboolean
+seahorse_commands_real_delete_objects (SeahorseCommands* self, GList* obj)
 {
-	g_critical ("Type `%s' does not implement abstract method `seahorse_commands_delete_objects'", 
+	g_critical ("Type `%s' does not implement abstract method `seahorse_commands_delete_objects'",
 	            g_type_name (G_TYPE_FROM_INSTANCE (self)));
-	return NULL;
+	return FALSE;
 }
 
 static void
@@ -135,10 +135,10 @@ seahorse_commands_class_init (SeahorseCommandsClass *klass)
 	gobject_class->finalize = seahorse_commands_finalize;
 	gobject_class->set_property = seahorse_commands_set_property;
 	gobject_class->get_property = seahorse_commands_get_property;
-    
+
 	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_commands_real_show_properties;
 	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_commands_real_delete_objects;
-	
+
 	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_VIEW, 
 	         g_param_spec_object ("view", "view", "view", SEAHORSE_TYPE_VIEW, 
 	                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
@@ -167,11 +167,13 @@ seahorse_commands_show_properties (SeahorseCommands* self, SeahorseObject* obj)
 	SEAHORSE_COMMANDS_GET_CLASS (self)->show_properties (self, obj);
 }
 
-SeahorseOperation* 
-seahorse_commands_delete_objects (SeahorseCommands* self, GList* obj) 
+gboolean
+seahorse_commands_delete_objects (SeahorseCommands *self,
+                                  GList *objects)
 {
-	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), NULL);
-	return SEAHORSE_COMMANDS_GET_CLASS (self)->delete_objects (self, obj);
+	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), FALSE);
+	g_return_val_if_fail (SEAHORSE_COMMANDS_GET_CLASS (self)->delete_objects, FALSE);
+	return SEAHORSE_COMMANDS_GET_CLASS (self)->delete_objects (self, objects);
 }
 
 SeahorseView*

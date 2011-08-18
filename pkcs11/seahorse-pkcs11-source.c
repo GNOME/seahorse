@@ -27,7 +27,6 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-operation.h"
 #include "seahorse-util.h"
 #include "seahorse-secure-memory.h"
 #include "seahorse-passphrase.h"
@@ -119,10 +118,23 @@ seahorse_pkcs11_source_set_property (GObject *object, guint prop_id, const GValu
 	};
 }
 
-static SeahorseOperation*
-seahorse_pkcs11_source_load (SeahorseSource *src)
+static void
+seahorse_pkcs11_source_load_async (SeahorseSource *source,
+                                   GCancellable *cancellable,
+                                   GAsyncReadyCallback callback,
+                                   gpointer user_data)
 {
-	return seahorse_pkcs11_refresher_new (SEAHORSE_PKCS11_SOURCE (src));
+	seahorse_pkcs11_refresh_async (SEAHORSE_PKCS11_SOURCE (source),
+	                               cancellable, callback, user_data);
+}
+
+static gboolean
+seahorse_pkcs11_source_load_finish (SeahorseSource *source,
+                                    GAsyncResult *result,
+                                    GError **error)
+{
+	return seahorse_pkcs11_refresh_finish (SEAHORSE_PKCS11_SOURCE (source),
+	                                       result, error);
 }
 
 static void
@@ -180,7 +192,8 @@ seahorse_pkcs11_source_class_init (SeahorsePkcs11SourceClass *klass)
 static void 
 seahorse_source_iface (SeahorseSourceIface *iface)
 {
-	iface->load = seahorse_pkcs11_source_load;
+	iface->load_async = seahorse_pkcs11_source_load_async;
+	iface->load_finish = seahorse_pkcs11_source_load_finish;
 }
 
 /* -------------------------------------------------------------------------- 

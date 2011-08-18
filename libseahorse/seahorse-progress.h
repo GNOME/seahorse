@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2004 Stefan Walter
+ * Copyright (C) 2011 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,31 +20,41 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/**
- * Functions for tying SeahorseOperation objects to the UI.
- */
- 
+/* Parts from evolution-data-server */
+
 #ifndef __SEAHORSE_PROGRESS_H__
 #define __SEAHORSE_PROGRESS_H__
 
-#include "seahorse-operation.h"
+#include <gio/gio.h>
+
 #include "seahorse-widget.h"
-#include "seahorse-context.h"
 
-/* -----------------------------------------------------------------------------
- * SEAHORSE APPBAR HOOKS
- */
+void          seahorse_progress_prep            (GCancellable *cancellable,
+                                                 gconstpointer progress_tag,
+                                                 const gchar *detail,
+                                                 ...);
 
-/* Updates two glade widgets 'status' and 'progress' in the SeahorseWidget */
-void                seahorse_progress_status_set_operation      (SeahorseWidget *swidget,
-                                                                 SeahorseOperation *operation);
+void          seahorse_progress_begin           (GCancellable *cancellable,
+                                                 gconstpointer progress_tag);
 
-/* Gets the operation set with above function */
-SeahorseOperation*  seahorse_progress_status_get_operation      (SeahorseWidget *swidget);
+void          seahorse_progress_prep_and_begin  (GCancellable *cancellable,
+                                                 gconstpointer progress_tag,
+                                                 const gchar *detail,
+                                                 ...);
 
-/* Keeps operation refed until progress dialog goes away */
-void                seahorse_progress_show                      (SeahorseOperation *operation,
-                                                                 const gchar *title,
-                                                                 gboolean delayed);
+void          seahorse_progress_update          (GCancellable *cancellable,
+                                                 gconstpointer progress_tag,
+                                                 const gchar *detail,
+                                                 ...);
+
+void          seahorse_progress_end             (GCancellable *cancellable,
+                                                 gconstpointer progress_tag);
+
+void          seahorse_progress_show            (GCancellable *cancellable,
+                                                 const gchar *title,
+                                                 gboolean delayed);
+
+void          seahorse_progress_attach          (GCancellable *cancellable,
+                                                 SeahorseWidget *swidget);
 
 #endif /* __SEAHORSE_PROGRESS_H__ */

@@ -246,7 +246,7 @@ gpg_options_init (GError **err)
 
         gerr = gpgme_get_engine_info (&engine);
         g_return_val_if_fail (GPG_IS_OK (gerr),
-                              (seahorse_gpgme_to_error (gerr, err), FALSE));
+                              (seahorse_gpgme_propagate_error (gerr, err), FALSE));
 
         /* Look for the OpenPGP engine */
         while (engine && engine->protocol != GPGME_PROTOCOL_OpenPGP)
@@ -259,7 +259,7 @@ gpg_options_init (GError **err)
         g_return_val_if_fail (engine && engine->version && engine->file_name &&
                               (g_str_has_prefix (engine->version, GPG_VERSION_PREFIX1) ||
                                g_str_has_prefix (engine->version, GPG_VERSION_PREFIX2)),
-                              (seahorse_gpgme_to_error (GPG_E (GPG_ERR_INV_ENGINE), err), FALSE));
+                              (seahorse_gpgme_propagate_error (GPG_E (GPG_ERR_INV_ENGINE), err), FALSE));
 
         /* Now run the binary and read in the home directory */
         if (!parse_home_directory (engine, err))

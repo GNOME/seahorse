@@ -130,7 +130,7 @@ changed_key (SeahorseSSHKey *self)
 	              "description", description,
 	              "location", SEAHORSE_LOCATION_LOCAL,
 	              "identifier", identifier,
-	              "flags", (self->keydata->authorized ? SEAHORSE_FLAG_TRUSTED : 0) | SEAHORSE_FLAG_EXPORTABLE,
+	              "flags", (self->keydata->authorized ? SEAHORSE_FLAG_TRUSTED : 0) | SEAHORSE_FLAG_EXPORTABLE | SEAHORSE_FLAG_DELETABLE,
 	              NULL);
 	
 	g_free (identifier);
@@ -161,49 +161,6 @@ seahorse_ssh_key_refresh (SeahorseObject *sobj)
 {
 	/* TODO: Need to work on key refreshing */
 	SEAHORSE_OBJECT_CLASS (seahorse_ssh_key_parent_class)->refresh (sobj);
-}
-
-static SeahorseOperation*
-seahorse_ssh_key_delete (SeahorseObject *sobj)
-{
-	SeahorseSSHKeyData *keydata = NULL;
-	gboolean ret = TRUE;
-	GError *err = NULL;
-    
-	g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (sobj), NULL);
-
-	g_object_get (sobj, "key-data", &keydata, NULL);
-	g_return_val_if_fail (keydata, FALSE);
-    
-	/* Just part of a file for this key */
-	if (keydata->partial) {
-	
-		/* Take just that line out of the file */
-		if (keydata->pubfile)
-			seahorse_ssh_key_data_filter_file (keydata->pubfile, NULL, keydata, &err);
-	
-	/* A full file for this key */
-	} else {
-	
-		if (keydata->pubfile) {
-			if (g_unlink (keydata->pubfile) == -1) {
-				g_set_error (&err, G_FILE_ERROR, g_file_error_from_errno (errno), 
-				             "%s", g_strerror (errno));
-			}
-		}
-
-		if (ret && keydata->privfile) {
-			if (g_unlink (keydata->privfile) == -1) {
-				g_set_error (&err, G_FILE_ERROR, g_file_error_from_errno (errno), 
-				             "%s", g_strerror (errno));
-			}
-		}
-	}
-
-	if (err == NULL)
-		seahorse_context_remove_object (SCTX_APP (), sobj);
-
-	return seahorse_operation_new_complete (err);
 }
 
 static void
@@ -281,8 +238,7 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
     gobject_class->finalize = seahorse_ssh_key_finalize;
     gobject_class->set_property = seahorse_ssh_key_set_property;
     gobject_class->get_property = seahorse_ssh_key_get_property;
-    
-    seahorse_class->delete = seahorse_ssh_key_delete;
+
     seahorse_class->refresh = seahorse_ssh_key_refresh;
     
     g_object_class_install_property (gobject_class, PROP_KEY_DATA,

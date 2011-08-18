@@ -27,7 +27,6 @@
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 
-#include "seahorse-operation.h"
 #include "seahorse-util.h"
 
 #include "common/seahorse-registry.h"
@@ -56,19 +55,6 @@ struct _SeahorseSSHSourcePrivate {
     guint scheduled_refresh;                /* Source for refresh timeout */
     GFileMonitor *monitor_handle;           /* For monitoring the .ssh directory */
 };
-
-typedef struct _LoadContext {
-    SeahorseSSHSource *ssrc;
-    GHashTable *loaded;
-    GHashTable *checks;
-    gchar *pubfile;
-    gchar *privfile;
-} LoadContext;
-
-typedef struct _ImportContext {
-    SeahorseSSHSource *ssrc;
-    SeahorseMultiOperation *mop;
-} ImportContext;
 
 static void seahorse_source_iface (SeahorseSourceIface *iface);
 
@@ -153,7 +139,7 @@ scheduled_refresh (SeahorseSSHSource *ssrc)
 {
     seahorse_debug ("scheduled refresh event ocurring now");
     cancel_scheduled_refresh (ssrc);
-    seahorse_source_load_async (SEAHORSE_SOURCE (ssrc));
+    seahorse_source_load_async (SEAHORSE_SOURCE (ssrc), NULL, NULL, NULL);
     return FALSE; /* don't run again */    
 }
 
@@ -220,370 +206,6 @@ merge_keydata (SeahorseSSHKey *prev, SeahorseSSHKeyData *keydata)
         g_object_set (prev, "key-data", prev->keydata, NULL);
     }
         
-}
-
-static SeahorseSSHKey*
-ssh_key_from_data (SeahorseSSHSource *ssrc, LoadContext *ctx, 
-                   SeahorseSSHKeyData *keydata)
-{   
-    SeahorseSource *sksrc = SEAHORSE_SOURCE (ssrc);
-    SeahorseSSHKey *skey;
-    SeahorseObject *prev;
-    GQuark keyid;
-
-    g_assert (ctx);
-
-    if (!seahorse_ssh_key_data_is_valid (keydata)) {
-        seahorse_ssh_key_data_free (keydata);
-        return NULL;
-    }
-
-    /* Make sure it's valid */
-    keyid = seahorse_ssh_key_calc_cannonical_id (keydata->fingerprint);
-    g_return_val_if_fail (keyid, NULL);
-
-    /* Does this key exist in the context? */
-    prev = seahorse_context_get_object (SCTX_APP (), sksrc, keyid);
-    
-    /* Mark this key as seen */
-    if (ctx->checks)
-        g_hash_table_remove (ctx->checks, GUINT_TO_POINTER (keyid));
-
-    if (ctx->loaded) {
-
-        /* See if we've already gotten a key like this in this load batch */
-        if (g_hash_table_lookup (ctx->loaded, GUINT_TO_POINTER (keyid))) {
-            
-            /* 
-             * Sometimes later keys loaded have more information (for 
-             * example keys loaded from authorized_keys), so propogate 
-             * that up to the previously loaded key 
-             */
-            merge_keydata (SEAHORSE_SSH_KEY (prev), keydata);
-            
-            seahorse_ssh_key_data_free (keydata);
-            return NULL;
-        }
-        
-        /* Mark this key as loaded */
-        g_hash_table_insert (ctx->loaded, GUINT_TO_POINTER (keyid), 
-                                          GUINT_TO_POINTER (TRUE));
-    }
-     
-    /* If we already have this key then just transfer ownership of keydata */
-    if (prev) {
-        g_object_set (prev, "key-data", keydata, NULL);
-        return SEAHORSE_SSH_KEY (prev);
-    }
-
-    /* Create a new key */        
-    g_assert (keydata);
-    skey = seahorse_ssh_key_new (sksrc, keydata);
-
-    seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (skey));
-    return skey;
-}
-
-static gboolean
-parsed_authorized_key (SeahorseSSHKeyData *data, gpointer arg)
-{
-    LoadContext *ctx = (LoadContext*)arg;
-    
-    g_assert (ctx);
-    g_assert (SEAHORSE_IS_SSH_SOURCE (ctx->ssrc));
-
-    data->pubfile = g_strdup (ctx->pubfile);
-    data->partial = TRUE;
-    data->authorized = TRUE;
-    
-    /* Check and register thet key with the context, frees keydata */
-    ssh_key_from_data (ctx->ssrc, ctx, data);
-    
-    return TRUE;
-}
-
-static gboolean
-parsed_other_key (SeahorseSSHKeyData *data, gpointer arg)
-{
-    LoadContext *ctx = (LoadContext*)arg;
-    
-    g_assert (ctx);
-    g_assert (SEAHORSE_IS_SSH_SOURCE (ctx->ssrc));
-
-    data->pubfile = g_strdup (ctx->pubfile);
-    data->partial = TRUE;
-    data->authorized = FALSE;
-    
-    /* Check and register thet key with the context, frees keydata */
-    ssh_key_from_data (ctx->ssrc, ctx, data);
-    
-    return TRUE;
-}
-
-static gboolean
-parsed_public_key (SeahorseSSHKeyData *data, gpointer arg)
-{
-    LoadContext *ctx = (LoadContext*)arg;
-    
-    g_assert (ctx);
-    g_assert (SEAHORSE_IS_SSH_SOURCE (ctx->ssrc));
-
-    data->pubfile = g_strdup (ctx->pubfile);
-    data->privfile = g_strdup (ctx->privfile);
-    data->partial = FALSE;
-    
-    /* Check and register thet key with the context, frees keydata */
-    ssh_key_from_data (ctx->ssrc, ctx, data);
-    
-    return TRUE;
-}
-
-static GHashTable*
-load_present_keys (SeahorseSource *sksrc)
-{
-    GList *keys, *l;
-    GHashTable *checks;
-
-    checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-    keys = seahorse_context_get_objects (SCTX_APP (), sksrc);
-    for (l = keys; l; l = g_list_next (l))
-        g_hash_table_insert (checks, GUINT_TO_POINTER (seahorse_object_get_id (l->data)), 
-                                     GUINT_TO_POINTER (TRUE));
-    g_list_free (keys);
-    return checks;
-}
-
-static gboolean
-import_public_key (SeahorseSSHKeyData *data, gpointer arg)
-{
-    ImportContext *ctx = (ImportContext*)arg;
-    gchar *fullpath;
-    
-    g_assert (data->rawdata);
-    g_assert (SEAHORSE_IS_MULTI_OPERATION (ctx->mop));
-    g_assert (SEAHORSE_IS_SSH_SOURCE (ctx->ssrc));
-
-    fullpath = seahorse_ssh_source_file_for_public (ctx->ssrc, FALSE);
-    seahorse_multi_operation_take (ctx->mop, 
-                seahorse_ssh_operation_import_public (ctx->ssrc, data, fullpath));
-    g_free (fullpath);
-    seahorse_ssh_key_data_free (data);
-    return TRUE;
-}
-
-static gboolean
-import_private_key (SeahorseSSHSecData *data, gpointer arg)
-{
-    ImportContext *ctx = (ImportContext*)arg;
-    
-    g_assert (SEAHORSE_IS_MULTI_OPERATION (ctx->mop));
-    g_assert (SEAHORSE_IS_SSH_SOURCE (ctx->ssrc));
-    
-    seahorse_multi_operation_take (ctx->mop, 
-                seahorse_ssh_operation_import_private (ctx->ssrc, data, NULL));
-    
-    seahorse_ssh_sec_data_free (data);
-    return TRUE;
-}
-
-/* -----------------------------------------------------------------------------
- * OBJECT
- */
-
-static SeahorseOperation*
-seahorse_ssh_source_load (SeahorseSource *sksrc)
-{
-    SeahorseSSHSource *ssrc;
-    GError *err = NULL;
-    LoadContext ctx;
-    const gchar *filename;
-    GDir *dir;
-    
-    g_assert (SEAHORSE_IS_SSH_SOURCE (sksrc));
-    ssrc = SEAHORSE_SSH_SOURCE (sksrc);
- 
-    /* Schedule a dummy refresh. This blocks all monitoring for a while */
-    cancel_scheduled_refresh (ssrc);
-    ssrc->priv->scheduled_refresh = g_timeout_add (500, (GSourceFunc)scheduled_dummy, ssrc);
-    seahorse_debug ("scheduled a dummy refresh");
-
-    /* List the .ssh directory for private keys */
-    dir = g_dir_open (ssrc->priv->ssh_homedir, 0, &err);
-    if (!dir)
-        return seahorse_operation_new_complete (err);
-
-    memset (&ctx, 0, sizeof (ctx));
-    ctx.ssrc = ssrc;
-    
-    /* Since we can find duplicate keys, limit them with this hash */
-    ctx.loaded = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-    
-    /* Keys that currently exist, so we can remove any that disappeared */
-    ctx.checks = load_present_keys (sksrc);
-
-    /* For each private key file */
-    for(;;) {
-        filename = g_dir_read_name (dir);
-        if (filename == NULL)
-            break;
-
-        ctx.privfile = g_build_filename (ssrc->priv->ssh_homedir, filename, NULL);
-        ctx.pubfile = g_strconcat (ctx.privfile, ".pub", NULL);
-        
-        /* possibly an SSH key? */
-        if (g_file_test (ctx.privfile, G_FILE_TEST_EXISTS) && 
-            g_file_test (ctx.pubfile, G_FILE_TEST_EXISTS) &&
-            check_file_for_ssh_private (ssrc, ctx.privfile)) {
-                
-            seahorse_ssh_key_data_parse_file (ctx.pubfile, parsed_public_key, NULL, &ctx, &err);
-            if (err != NULL) {
-                g_warning ("couldn't read SSH file: %s (%s)", ctx.pubfile, err->message);
-                g_clear_error (&err);
-            }
-        }
-        
-        g_free (ctx.privfile);
-        g_free (ctx.pubfile);
-        ctx.privfile = ctx.pubfile = NULL;
-    }
-
-    g_dir_close (dir);
-    
-    /* Now load the authorized file */
-    ctx.privfile = NULL;
-    ctx.pubfile = seahorse_ssh_source_file_for_public (ssrc, TRUE);
-        
-    if (g_file_test (ctx.pubfile, G_FILE_TEST_EXISTS)) {
-        seahorse_ssh_key_data_parse_file (ctx.pubfile, parsed_authorized_key, NULL, &ctx, &err);
-        if (err != NULL) {
-            g_warning ("couldn't read SSH file: %s (%s)", ctx.pubfile, err->message);
-            g_clear_error (&err);
-        }
-    }
-        
-    g_free (ctx.pubfile);
-    ctx.pubfile = NULL;
-    
-    /* Load the other keys file */
-    ctx.privfile = NULL;
-    ctx.pubfile = seahorse_ssh_source_file_for_public (ssrc, FALSE);
-    if (g_file_test (ctx.pubfile, G_FILE_TEST_EXISTS)) {
-        seahorse_ssh_key_data_parse_file (ctx.pubfile, parsed_other_key, NULL, &ctx, &err);
-        if (err != NULL) {
-            g_warning ("couldn't read SSH file: %s (%s)", ctx.pubfile, err->message);
-            g_clear_error (&err);
-        }
-    }
-        
-    g_free (ctx.pubfile);
-    ctx.pubfile = NULL;
-
-    /* Clean up and done */
-    if (ctx.checks) {
-        g_hash_table_foreach (ctx.checks, (GHFunc)remove_key_from_context, ssrc);
-        g_hash_table_destroy (ctx.checks);
-    }
-    
-    g_hash_table_destroy (ctx.loaded);
-
-    return seahorse_operation_new_complete (NULL);
-}
-
-static SeahorseOperation* 
-seahorse_ssh_source_import (SeahorseSource *sksrc, GInputStream *input)
-{
-    SeahorseSSHSource *ssrc = SEAHORSE_SSH_SOURCE (sksrc);
-    ImportContext ctx;
-    gchar *contents;
-    
-    	g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
-    	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
-
-    	contents = (gchar*)seahorse_util_read_to_memory (input, NULL);
-    
-    memset (&ctx, 0, sizeof (ctx));
-    ctx.ssrc = ssrc;
-    ctx.mop = seahorse_multi_operation_new ();
-    
-    seahorse_ssh_key_data_parse (contents, import_public_key, import_private_key, &ctx);
-    g_free (contents);
-    
-    /* TODO: The list of keys imported? */
-    
-    return SEAHORSE_OPERATION (ctx.mop);
-}
-
-static SeahorseOperation* 
-seahorse_ssh_source_export (SeahorseSource *sksrc, GList *keys, 
-                            GOutputStream *output)
-{
-    SeahorseSSHKeyData *keydata;
-    SeahorseOperation *op;
-    gchar *results = NULL;
-    gchar *raw = NULL;
-    GError *error = NULL;
-    SeahorseObject *object;
-    GList *l;
-    gsize written;
-    
-    g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc), NULL);
-    g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
-    
-    for (l = keys; l; l = g_list_next (l)) {
-        object = SEAHORSE_OBJECT (l->data);
-        
-        g_assert (SEAHORSE_IS_SSH_KEY (object));
-        
-        results = NULL;
-        raw = NULL;
-        
-        keydata = NULL;
-        g_object_get (object, "key-data", &keydata, NULL);
-        g_return_val_if_fail (keydata, NULL);
-        
-        /* We should already have the data loaded */
-        if (keydata->pubfile) { 
-            g_assert (keydata->rawdata);
-            results = g_strdup_printf ("%s", keydata->rawdata);
-            
-        /* Public key without identity.pub. Export it. */
-        } else if (!keydata->pubfile) {
-            
-            /* 
-             * TODO: We should be able to get at this data by using ssh-keygen 
-             * to make a public key from the private 
-             */
-            g_warning ("private key without public, not exporting: %s", keydata->privfile);
-        }
-        
-        	/* Write the data out */
-        	if (results) {
-        		if (g_output_stream_write_all (output, results, strlen (results), 
-        		                               &written, NULL, &error))
-        			g_output_stream_flush (output, NULL, &error);
-        		g_free (results);
-        	}
-
-        	g_free (raw);
-        
-        	if (error != NULL)
-        		break;
-    	}
-    
-    	if (error == NULL)
-    		g_output_stream_close (output, NULL, &error);
-    
-    	op = seahorse_operation_new_complete (error);
-    	g_object_ref (output);
-    	seahorse_operation_mark_result (op, output, g_object_unref);
-    	return op;
-}
-
-static void 
-seahorse_ssh_source_set_property (GObject *object, guint prop_id, const GValue *value, 
-                                  GParamSpec *pspec)
-{
-    
 }
 
 static void 
@@ -676,12 +298,9 @@ static void
 seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-   
-    seahorse_ssh_source_parent_class = g_type_class_peek_parent (klass);
-    
+
     gobject_class->dispose = seahorse_ssh_source_dispose;
     gobject_class->finalize = seahorse_ssh_source_finalize;
-    gobject_class->set_property = seahorse_ssh_source_set_property;
     gobject_class->get_property = seahorse_ssh_source_get_property;
     
 	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
@@ -696,12 +315,506 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
 	seahorse_registry_register_function (NULL, seahorse_ssh_key_calc_cannonical_id, "canonize", SEAHORSE_SSH_STR, NULL);
 }
 
+
+typedef struct {
+	SeahorseSSHSource *source;
+	GHashTable *loaded;
+	GHashTable *checks;
+	gchar *pubfile;
+	gchar *privfile;
+} source_load_closure;
+
+static void
+source_load_free (gpointer data)
+{
+	source_load_closure *closure = data;
+	g_object_unref (closure->source);
+	g_hash_table_destroy (closure->loaded);
+	g_hash_table_destroy (closure->checks);
+	g_free (closure->pubfile);
+	g_free (closure->privfile);
+	g_free (closure);
+}
+
+static SeahorseSSHKey *
+ssh_key_from_data (SeahorseSSHSource *self,
+                   source_load_closure *closure,
+                   SeahorseSSHKeyData *keydata)
+{
+	SeahorseSource *source = SEAHORSE_SOURCE (self);
+	SeahorseSSHKey *skey;
+	SeahorseObject *prev;
+	GQuark keyid;
+
+	if (!seahorse_ssh_key_data_is_valid (keydata)) {
+		seahorse_ssh_key_data_free (keydata);
+		return NULL;
+	}
+
+	/* Make sure it's valid */
+	keyid = seahorse_ssh_key_calc_cannonical_id (keydata->fingerprint);
+	g_return_val_if_fail (keyid, NULL);
+
+	/* Does this key exist in the context? */
+	prev = seahorse_context_get_object (SCTX_APP (), source, keyid);
+
+	/* Mark this key as seen */
+	if (closure->checks)
+		g_hash_table_remove (closure->checks, GUINT_TO_POINTER (keyid));
+
+	if (closure->loaded) {
+
+		/* See if we've already gotten a key like this in this load batch */
+		if (g_hash_table_lookup (closure->loaded, GUINT_TO_POINTER (keyid))) {
+
+			/*
+			 * Sometimes later keys loaded have more information (for
+			 * example keys loaded from authorized_keys), so propogate
+			 * that up to the previously loaded key
+			 */
+			merge_keydata (SEAHORSE_SSH_KEY (prev), keydata);
+			seahorse_ssh_key_data_free (keydata);
+			return NULL;
+		}
+
+		/* Mark this key as loaded */
+		g_hash_table_insert (closure->loaded, GUINT_TO_POINTER (keyid),
+		                     GUINT_TO_POINTER (TRUE));
+	}
+
+	/* If we already have this key then just transfer ownership of keydata */
+	if (prev) {
+		g_object_set (prev, "key-data", keydata, NULL);
+		return SEAHORSE_SSH_KEY (prev);
+	}
+
+	/* Create a new key */
+	g_assert (keydata);
+	skey = seahorse_ssh_key_new (source, keydata);
+
+	seahorse_context_take_object (seahorse_context_instance (),
+	                              SEAHORSE_OBJECT (skey));
+	return skey;
+}
+
+static GHashTable*
+load_present_keys (SeahorseSSHSource *self)
+{
+	GList *keys, *l;
+	GHashTable *checks;
+
+	checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+	keys = seahorse_context_get_objects (seahorse_context_instance (),
+	                                     SEAHORSE_SOURCE (self));
+	for (l = keys; l != NULL; l = g_list_next (l))
+		g_hash_table_insert (checks,
+		                     GUINT_TO_POINTER (seahorse_object_get_id (l->data)),
+		                     GUINT_TO_POINTER (TRUE));
+	g_list_free (keys);
+	return checks;
+}
+
+static gboolean
+on_load_found_authorized_key (SeahorseSSHKeyData *data,
+                              gpointer user_data)
+{
+	source_load_closure *closure = user_data;
+
+	data->pubfile = g_strdup (closure->pubfile);
+	data->partial = TRUE;
+	data->authorized = TRUE;
+
+	/* Check and register thet key with the context, frees keydata */
+	ssh_key_from_data (closure->source, closure, data);
+	return TRUE;
+}
+
+static gboolean
+on_load_found_other_key (SeahorseSSHKeyData *data,
+                         gpointer user_data)
+{
+	source_load_closure *closure = user_data;
+
+	data->pubfile = g_strdup (closure->pubfile);
+	data->partial = TRUE;
+	data->authorized = FALSE;
+
+	/* Check and register thet key with the context, frees keydata */
+	ssh_key_from_data (closure->source, closure, data);
+	return TRUE;
+}
+
+static gboolean
+on_load_found_public_key (SeahorseSSHKeyData *data,
+                          gpointer user_data)
+{
+	source_load_closure *closure = user_data;
+
+	data->pubfile = g_strdup (closure->pubfile);
+	data->privfile = g_strdup (closure->privfile);
+	data->partial = FALSE;
+
+	/* Check and register thet key with the context, frees keydata */
+	ssh_key_from_data (closure->source, closure, data);
+	return TRUE;
+}
+
+static void
+seahorse_ssh_source_load_async (SeahorseSource *source,
+                                GCancellable *cancellable,
+                                GAsyncReadyCallback callback,
+                                gpointer user_data)
+{
+	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (source);
+	GSimpleAsyncResult *res;
+	source_load_closure *closure;
+	GError *error = NULL;
+	const gchar *filename;
+	GDir *dir;
+
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	                                 seahorse_ssh_source_load_async);
+	closure = g_new0 (source_load_closure, 1);
+	closure->source = g_object_ref (self);
+
+	/* Since we can find duplicate keys, limit them with this hash */
+	closure->loaded = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+
+	/* Keys that currently exist, so we can remove any that disappeared */
+	closure->checks = load_present_keys (self);
+
+	g_simple_async_result_set_op_res_gpointer (res, closure, source_load_free);
+
+	/* Schedule a dummy refresh. This blocks all monitoring for a while */
+	cancel_scheduled_refresh (self);
+	self->priv->scheduled_refresh = g_timeout_add (500, (GSourceFunc)scheduled_dummy, self);
+	seahorse_debug ("scheduled a dummy refresh");
+
+	/* List the .ssh directory for private keys */
+	dir = g_dir_open (self->priv->ssh_homedir, 0, &error);
+	if (dir == NULL) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete_in_idle (res);
+		g_object_unref (res);
+		return;
+	}
+
+	/* For each private key file */
+	for(;;) {
+		filename = g_dir_read_name (dir);
+		if (filename == NULL)
+			break;
+
+		closure->privfile = g_build_filename (self->priv->ssh_homedir, filename, NULL);
+		closure->pubfile = g_strconcat (closure->privfile, ".pub", NULL);
+
+		/* possibly an SSH key? */
+		if (g_file_test (closure->privfile, G_FILE_TEST_EXISTS) &&
+		    g_file_test (closure->pubfile, G_FILE_TEST_EXISTS) &&
+		    check_file_for_ssh_private (self, closure->privfile)) {
+
+			seahorse_ssh_key_data_parse_file (closure->pubfile, on_load_found_public_key,
+			                                  NULL, closure, &error);
+			if (error != NULL) {
+				g_warning ("couldn't read SSH file: %s (%s)",
+				           closure->pubfile, error->message);
+				g_clear_error (&error);
+			}
+		}
+
+		g_free (closure->privfile);
+		g_free (closure->pubfile);
+		closure->privfile = closure->pubfile = NULL;
+	}
+
+	g_dir_close (dir);
+
+	/* Now load the authorized file */
+	closure->privfile = NULL;
+	closure->pubfile = seahorse_ssh_source_file_for_public (self, TRUE);
+
+	if (g_file_test (closure->pubfile, G_FILE_TEST_EXISTS)) {
+		seahorse_ssh_key_data_parse_file (closure->pubfile, on_load_found_authorized_key,
+		                                  NULL, closure, &error);
+		if (error != NULL) {
+			g_warning ("couldn't read SSH file: %s (%s)",
+			           closure->pubfile, error->message);
+			g_clear_error (&error);
+		}
+	}
+
+	g_free (closure->pubfile);
+	closure->pubfile = NULL;
+
+	/* Load the other keys file */
+	closure->privfile = NULL;
+	closure->pubfile = seahorse_ssh_source_file_for_public (self, FALSE);
+	if (g_file_test (closure->pubfile, G_FILE_TEST_EXISTS)) {
+		seahorse_ssh_key_data_parse_file (closure->pubfile, on_load_found_other_key,
+		                                  NULL, closure, &error);
+		if (error != NULL) {
+			g_warning ("couldn't read SSH file: %s (%s)",
+			           closure->pubfile, error->message);
+			g_clear_error (&error);
+		}
+	}
+
+	g_free (closure->pubfile);
+	closure->pubfile = NULL;
+
+	/* Clean up and done */
+	g_hash_table_foreach (closure->checks, (GHFunc)remove_key_from_context, self);
+
+	g_simple_async_result_complete_in_idle (res);
+	g_object_unref (res);
+}
+
+static gboolean
+seahorse_ssh_source_load_finish (SeahorseSource *source,
+                                 GAsyncResult *result,
+                                 GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_ssh_source_load_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
+typedef struct {
+	SeahorseSSHSource *source;
+	GCancellable *cancellable;
+	gint imports;
+} source_import_closure;
+
+static void
+source_import_free (gpointer data)
+{
+	source_import_closure *closure = data;
+	g_object_unref (closure->source);
+	g_clear_object (&closure->cancellable);
+	g_free (closure);
+}
+
+static void
+on_import_public_complete (GObject *source,
+                           GAsyncResult *result,
+                           gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	source_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+	gchar *path;
+
+	g_assert (closure->imports > 0);
+	closure->imports--;
+
+	path = seahorse_ssh_op_import_public_finish (closure->source, result, &error);
+	if (error != NULL)
+		g_simple_async_result_take_error (res, error);
+	g_free (path);
+
+	if (closure->imports == 0)
+		g_simple_async_result_complete (res);
+
+	g_object_unref (res);
+}
+
+static gboolean
+on_import_found_public_key (SeahorseSSHKeyData *data,
+                      gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	source_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	gchar *fullpath;
+
+	fullpath = seahorse_ssh_source_file_for_public (closure->source, FALSE);
+	seahorse_ssh_op_import_public_async (closure->source, data, fullpath,
+	                                     closure->cancellable, on_import_public_complete,
+	                                     g_object_ref (res));
+	closure->imports++;
+	g_free (fullpath);
+	seahorse_ssh_key_data_free (data);
+
+	return TRUE;
+}
+
+static void
+on_import_private_complete (GObject *source,
+                            GAsyncResult *result,
+                            gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	source_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+	gchar *path;
+
+	g_assert (closure->imports > 0);
+	closure->imports--;
+
+	path = seahorse_ssh_op_import_private_finish (closure->source, result, &error);
+	if (error != NULL)
+		g_simple_async_result_take_error (res, error);
+	g_free (path);
+
+	if (closure->imports == 0)
+		g_simple_async_result_complete (res);
+
+	g_object_unref (res);
+}
+
+static gboolean
+on_import_found_private_key (SeahorseSSHSecData *data,
+                             gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	source_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+
+	seahorse_ssh_op_import_private_async (closure->source, data, NULL,
+	                                      closure->cancellable, on_import_private_complete,
+	                                      g_object_ref (res));
+
+	seahorse_ssh_sec_data_free (data);
+	return TRUE;
+}
+
+static void
+seahorse_ssh_source_import_async (SeahorseSource *source,
+                                  GInputStream *input,
+                                  GCancellable *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer user_data)
+{
+	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (source);
+	source_import_closure *closure;
+	gchar *contents;
+	GSimpleAsyncResult *res;
+	guint count;
+
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	                                 seahorse_ssh_source_import_async);
+	closure = g_new0 (source_import_closure, 1);
+	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+	closure->source = g_object_ref (self);
+	g_simple_async_result_set_op_res_gpointer (res, closure, source_import_free);
+
+	contents = (gchar*)seahorse_util_read_to_memory (input, NULL);
+	count = seahorse_ssh_key_data_parse (contents, on_import_found_public_key,
+	                                     on_import_found_private_key, res);
+	g_assert (count == closure->imports);
+	g_free (contents);
+
+	if (count == 0)
+		g_simple_async_result_complete_in_idle (res);
+	g_object_unref (res);
+}
+
+static GList *
+seahorse_ssh_source_import_finish (SeahorseSource *source,
+                                   GAsyncResult *result,
+                                   GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_ssh_source_import_async), NULL);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return NULL;
+
+	/* TODO: The list of keys imported? */
+	return NULL;
+}
+
+static void
+seahorse_ssh_source_export_async (SeahorseSource *source,
+                                  GList *keys,
+                                  GOutputStream *output,
+                                  GCancellable *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer user_data)
+{
+	GSimpleAsyncResult *res;
+	SeahorseSSHKeyData *keydata;
+	gchar *results = NULL;
+	gchar *raw = NULL;
+	GError *error = NULL;
+	SeahorseObject *object;
+	GList *l;
+	gsize written;
+
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	                                 seahorse_ssh_source_export_async);
+
+	for (l = keys; l; l = g_list_next (l)) {
+		object = SEAHORSE_OBJECT (l->data);
+		g_assert (SEAHORSE_IS_SSH_KEY (object));
+
+		results = NULL;
+		raw = NULL;
+
+		keydata = NULL;
+		g_object_get (object, "key-data", &keydata, NULL);
+		g_assert (keydata);
+
+		/* We should already have the data loaded */
+		if (keydata->pubfile) {
+			g_assert (keydata->rawdata);
+			results = g_strdup_printf ("%s", keydata->rawdata);
+
+		} else if (!keydata->pubfile) {
+
+			/*
+			 * TODO: We should be able to get at this data by using ssh-keygen
+			 * to make a public key from the private
+			 */
+			g_warning ("private key without public, not exporting: %s", keydata->privfile);
+		}
+
+		/* Write the data out */
+		if (results) {
+			if (g_output_stream_write_all (output, results, strlen (results),
+			                               &written, NULL, &error))
+				g_output_stream_flush (output, NULL, &error);
+			g_free (results);
+		}
+
+		g_free (raw);
+
+		if (error != NULL) {
+			g_simple_async_result_take_error (res, error);
+			break;
+		}
+	}
+
+	g_simple_async_result_set_op_res_gpointer (res, g_object_ref (output), g_object_unref);
+	g_simple_async_result_complete_in_idle (res);
+	g_object_unref (res);
+}
+
+static GOutputStream *
+seahorse_ssh_source_export_finish (SeahorseSource *source,
+                                   GAsyncResult *result,
+                                   GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_ssh_source_export_async), NULL);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return NULL;
+
+	return g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
+}
+
 static void 
 seahorse_source_iface (SeahorseSourceIface *iface)
 {
-	iface->load = seahorse_ssh_source_load;
-	iface->import = seahorse_ssh_source_import;
-	iface->export = seahorse_ssh_source_export;
+	iface->load_async = seahorse_ssh_source_load_async;
+	iface->load_finish = seahorse_ssh_source_load_finish;
+	iface->import_async = seahorse_ssh_source_import_async;
+	iface->import_finish = seahorse_ssh_source_import_finish;
+	iface->export_async = seahorse_ssh_source_export_async;
+	iface->export_finish = seahorse_ssh_source_export_finish;
 }
 
 /* -----------------------------------------------------------------------------
@@ -715,36 +828,28 @@ seahorse_ssh_source_new (void)
 }
 
 SeahorseSSHKey*
-seahorse_ssh_source_key_for_filename (SeahorseSSHSource *ssrc, const gchar *privfile)
+seahorse_ssh_source_key_for_filename (SeahorseSSHSource *ssrc,
+                                      const gchar *privfile)
 {
-    SeahorseSSHKeyData *data;
-    GList *keys, *l;
-    int i;
-    
-    g_assert (privfile);
-    g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
-    
-    for (i = 0; i < 2; i++) {
-    
-        /* Try to find it first */
-        keys = seahorse_context_get_objects (SCTX_APP (), SEAHORSE_SOURCE (ssrc));
-        for (l = keys; l; l = g_list_next (l)) {
-            
-            g_object_get (l->data, "key-data", &data, NULL);
-            g_return_val_if_fail (data, NULL);
-        
-            /* If it's already loaded then just leave it at that */
-            if (data->privfile && strcmp (privfile, data->privfile) == 0)
-                return SEAHORSE_SSH_KEY (l->data);
-        }
-        
-        /* Force loading of all new keys */
-        if (!i) {
-            seahorse_source_load_sync (SEAHORSE_SOURCE (ssrc));
-        }
-    }
-    
-    return NULL;
+	SeahorseSSHKeyData *data;
+	GList *keys, *l;
+
+	g_return_val_if_fail (privfile, NULL);
+	g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (ssrc), NULL);
+
+	/* Try to find it first */
+	keys = seahorse_context_get_objects (SCTX_APP (), SEAHORSE_SOURCE (ssrc));
+	for (l = keys; l; l = g_list_next (l)) {
+
+		g_object_get (l->data, "key-data", &data, NULL);
+		g_return_val_if_fail (data, NULL);
+
+		/* If it's already loaded then just leave it at that */
+		if (data->privfile && strcmp (privfile, data->privfile) == 0)
+			return SEAHORSE_SSH_KEY (l->data);
+	}
+
+	return NULL;
 }
 
 gchar*

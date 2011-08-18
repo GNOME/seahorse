@@ -27,8 +27,6 @@
 
 #include "seahorse-commands.h"
 #include "seahorse-object.h"
-#include <seahorse-operation.h>
-
 
 #define SEAHORSE_TYPE_PGP_COMMANDS                 (seahorse_pgp_commands_get_type ())
 #define SEAHORSE_PGP_COMMANDS(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_COMMANDS, SeahorsePgpCommands))

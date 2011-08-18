@@ -26,7 +26,6 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-operation.h"
 #include "seahorse-ldap-source.h"
 #include "seahorse-hkp-source.h"
 #include "seahorse-server-source.h"
@@ -55,7 +54,6 @@ enum {
  */
  
 struct _SeahorseServerSourcePrivate {
-    SeahorseMultiOperation *mop;
     gchar *server;
     gchar *uri;
 };
@@ -66,18 +64,11 @@ G_DEFINE_TYPE_EXTENDED (SeahorseServerSource, seahorse_server_source, G_TYPE_OBJ
                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
 
 /* GObject handlers */
-static void seahorse_server_source_dispose    (GObject *gobject);
 static void seahorse_server_source_finalize   (GObject *gobject);
 static void seahorse_server_get_property      (GObject *object, guint prop_id,
                                                GValue *value, GParamSpec *pspec);
 static void seahorse_server_set_property      (GObject *object, guint prop_id,
                                                const GValue *value, GParamSpec *pspec);
-                                               
-/* SeahorseSource methods */
-static SeahorseOperation*  seahorse_server_source_load (SeahorseSource *src);
-
-static GObjectClass *parent_class = NULL;
-
 
 /**
 * klass: Class to initialize
@@ -89,11 +80,9 @@ static void
 seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 {
     GObjectClass *gobject_class;
-   
-    parent_class = g_type_class_peek_parent (klass);
+
     gobject_class = G_OBJECT_CLASS (klass);
     
-    gobject_class->dispose = seahorse_server_source_dispose;
     gobject_class->finalize = seahorse_server_source_finalize;
     gobject_class->set_property = seahorse_server_set_property;
     gobject_class->get_property = seahorse_server_get_property;
@@ -114,6 +103,34 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 	seahorse_registry_register_function (NULL, seahorse_pgp_key_canonize_id, "canonize", SEAHORSE_PGP_STR, NULL);
 }
 
+static void
+seahorse_server_source_load_async (SeahorseSource *source,
+                                   GCancellable *cancellable,
+                                   GAsyncReadyCallback callback,
+                                   gpointer user_data)
+{
+	GSimpleAsyncResult *res;
+
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	                                 seahorse_server_source_load_async);
+	g_simple_async_result_complete_in_idle (res);
+	g_object_unref (res);
+}
+
+static gboolean
+seahorse_server_source_load_finish (SeahorseSource *source,
+                                    GAsyncResult *result,
+                                    GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_server_source_load_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
 /**
 * iface: The #SeahorseSourceIface to init
 *
@@ -125,7 +142,8 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 static void 
 seahorse_source_iface (SeahorseSourceIface *iface)
 {
-	iface->load = seahorse_server_source_load;
+	iface->load_async = seahorse_server_source_load_async;
+	iface->load_finish = seahorse_server_source_load_finish;
 }
 
 /**
@@ -140,43 +158,7 @@ seahorse_server_source_init (SeahorseServerSource *ssrc)
 {
     /* init private vars */
     ssrc->priv = g_new0 (SeahorseServerSourcePrivate, 1);
-    ssrc->priv->mop = seahorse_multi_operation_new ();
 }
-
-
-/**
-* gobject: A #SeahorseServerSource object
-*
-* dispose of all our internal references
-*
-**/
-static void
-seahorse_server_source_dispose (GObject *gobject)
-{
-    SeahorseServerSource *ssrc;
-
-    /*
-     * Note that after this executes the rest of the object should
-     * still work without a segfault. This basically nullifies the 
-     * object, but doesn't free it.
-     * 
-     * This function should also be able to run multiple times.
-     */
-  
-    ssrc = SEAHORSE_SERVER_SOURCE (gobject);
-    g_assert (ssrc->priv);
-    
-    /* Clear out all the operations */
-    if (ssrc->priv->mop) {
-        if(seahorse_operation_is_running (SEAHORSE_OPERATION (ssrc->priv->mop)))
-            seahorse_operation_cancel (SEAHORSE_OPERATION (ssrc->priv->mop));
-        g_object_unref (ssrc->priv->mop);
-        ssrc->priv->mop = NULL;
-    }
- 
-    G_OBJECT_CLASS (parent_class)->dispose (gobject);
-}
-
 
 /**
 * gobject: A #SeahorseServerSource object
@@ -194,10 +176,9 @@ seahorse_server_source_finalize (GObject *gobject)
     
     g_free (ssrc->priv->server);
     g_free (ssrc->priv->uri);
-    g_assert (ssrc->priv->mop == NULL);    
     g_free (ssrc->priv);
  
-    G_OBJECT_CLASS (parent_class)->finalize (gobject);
+    G_OBJECT_CLASS (seahorse_server_source_parent_class)->finalize (gobject);
 }
 
 /**
@@ -264,47 +245,9 @@ seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
     }        
 }
 
-
-/* --------------------------------------------------------------------------
- * HELPERS 
- */
-
-/**
- * seahorse_server_source_take_operation:
- * @ssrc: the #SeahorseServerSource to add the @op to
- * @op: add this to the multioperations stored in @ssrc
- *
- *
- *
- */
-void
-seahorse_server_source_take_operation (SeahorseServerSource *ssrc, SeahorseOperation *op)
-{
-    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
-    g_return_if_fail (SEAHORSE_IS_OPERATION (op));
-    
-    seahorse_multi_operation_take (ssrc->priv->mop, op);
-}
-
 /* --------------------------------------------------------------------------
  * METHODS
  */
-
-/**
-* src: #SeahorseSource
-*
-* This function is a stub
-*
-* Returns NULL
-**/
-static SeahorseOperation*
-seahorse_server_source_load (SeahorseSource *src)
-{
-    g_assert (SEAHORSE_IS_SOURCE (src));
-
-    /* We should never be called directly */
-    return NULL;
-}
 
 /**
 * uri: the uri to parse

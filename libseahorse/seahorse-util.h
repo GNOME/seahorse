@@ -56,8 +56,10 @@ void        seahorse_util_show_error            (GtkWidget          *parent,
                                                  const gchar        *heading,
                                                  const gchar        *message);
 
-void        seahorse_util_handle_error          (GError*            err,
-                                                 const char*        desc, ...);
+void        seahorse_util_handle_error          (GError **error,
+                                                 gpointer parent,
+                                                 const gchar* description,
+                                                 ...);
 
 gboolean    seahorse_util_prompt_delete         (const gchar *text,
                                                  GtkWidget *parent);

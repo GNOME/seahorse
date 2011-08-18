@@ -25,7 +25,6 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "seahorse-operation.h"
 #include "seahorse-object.h"
 #include "seahorse-view.h"
 
@@ -49,16 +48,19 @@ struct _SeahorseCommandsClass {
 	
 	/* Virtual methods */
 	
-	void                 (*show_properties)      (SeahorseCommands *self, SeahorseObject *obj);
-	
-	SeahorseOperation *  (*delete_objects)       (SeahorseCommands *self, GList *obj);
+	void        (*show_properties)         (SeahorseCommands *self,
+	                                        SeahorseObject *obj);
+
+	gboolean    (*delete_objects)          (SeahorseCommands *self,
+	                                        GList *obj);
 };
 
 GType                 seahorse_commands_get_type                 (void);
 
 void                  seahorse_commands_show_properties          (SeahorseCommands *self, SeahorseObject *obj);
 
-SeahorseOperation *   seahorse_commands_delete_objects           (SeahorseCommands *self, GList *obj);
+gboolean              seahorse_commands_delete_objects           (SeahorseCommands *self,
+                                                                  GList *obj);
 
 SeahorseView *        seahorse_commands_get_view                 (SeahorseCommands *self);
 

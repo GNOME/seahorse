@@ -31,6 +31,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
+#include "seahorse-progress.h"
 #include "seahorse-util.h"
 
 #include "common/seahorse-object-list.h"
@@ -39,7 +40,6 @@
 #include "pgp/seahorse-gpgme-data.h"
 #include "pgp/seahorse-gpg-op.h"
 #include "pgp/seahorse-gpgme-key-op.h"
-#include "pgp/seahorse-gpgme-operation.h"
 
 #define DEBUG_FLAG SEAHORSE_DEBUG_KEYS
 #include "seahorse-debug.h"
@@ -59,6 +59,50 @@
 #define GPG_FULL        4
 #define GPG_ULTIMATE    5
 
+typedef struct {
+	GCancellable *cancellable;
+	gpgme_ctx_t gctx;
+} key_op_generate_closure;
+
+static void
+key_op_generate_free (gpointer data)
+{
+	key_op_generate_closure *closure = data;
+	g_clear_object (&closure->cancellable);
+	gpgme_release (closure->gctx);
+	g_free (closure);
+}
+
+static void
+on_key_op_generate_progress (void *opaque,
+                             const char *what,
+                             int type,
+                             int current,
+                             int total)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (opaque);
+	key_op_generate_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	seahorse_progress_update (closure->cancellable, res, "%s", what);
+}
+
+static gboolean
+on_key_op_generate_complete (gpgme_error_t gerr,
+                             gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	key_op_generate_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+
+	if (seahorse_gpgme_propagate_error (gerr, &error)) {
+		g_simple_async_result_take_error (res, error);
+	}
+
+	seahorse_progress_end (closure->cancellable, res);
+	g_simple_async_result_complete (res);
+	return FALSE; /* don't call again */
+}
+
+
 /**
  * seahorse_gpgme_key_op_generate:
  * @sksrc: #SeahorseSource
@@ -69,88 +113,126 @@
  * @type: Key type. Supported types are #DSA_ELGAMAL, #DSA, #RSA_SIGN, and #RSA_RSA
  * @length: Length of key, must be within the range of @type specified by #SeahorseKeyLength
  * @expires: Expiration date of key
- * @err: Catches errors in the params
  * 
  * Tries to generate a new key based on given parameters.
- *
- * Returns: SeahorseOperation*
  **/
-SeahorseOperation*
-seahorse_gpgme_key_op_generate (SeahorseGpgmeSource *psrc, const gchar *name,
-                                const gchar *email, const gchar *comment,
-                                const gchar *passphrase, const SeahorseKeyEncType type,
-                                const guint length, const time_t expires, gpgme_error_t *err)
+void
+seahorse_gpgme_key_op_generate_async (SeahorseGpgmeSource *source,
+                                      const gchar *name,
+                                      const gchar *email,
+                                      const gchar *comment,
+                                      const gchar *passphrase,
+                                      const SeahorseKeyEncType type,
+                                      const guint length,
+                                      const time_t expires,
+                                      GCancellable *cancellable,
+                                      GAsyncReadyCallback callback,
+                                      gpointer user_data)
 {
-    SeahorseGpgmeOperation *pop = NULL;
-    gchar *common, *key_type, *start, *expires_date;
-    const gchar *parms;
-    
-    *err = GPG_OK;
+	gchar *common, *key_type, *start, *expires_date;
+	key_op_generate_closure *closure;
+	GSimpleAsyncResult *res;
+	GError *error = NULL;
+	const gchar *parms;
+	gpgme_error_t gerr;
+	GSource *gsource;
 
-    if (strlen (name) < 5)
-        *err = GPG_E (GPG_ERR_INV_VALUE);
+	g_return_if_fail (SEAHORSE_IS_GPGME_SOURCE (source));
+	g_return_if_fail (name);
+	g_return_if_fail (strlen (name) > 4);
+	g_return_if_fail (passphrase);
 
-    /* Check lengths for each type */
-    switch (type) {
-    case DSA_ELGAMAL:
-        if (length < ELGAMAL_MIN || length > LENGTH_MAX)
-            *err = GPG_E (GPG_ERR_INV_VALUE);
-        break;
-    case DSA:
-        if (length < DSA_MIN || length > DSA_MAX)
-            *err = GPG_E (GPG_ERR_INV_VALUE);
-        break;
-    case RSA_RSA:
-    case RSA_SIGN:
-        if (length < RSA_MIN || length > LENGTH_MAX)
-            *err = GPG_E (GPG_ERR_INV_VALUE);
-        break;
-    default:
-        *err = GPG_E (GPG_ERR_INV_VALUE);
-        break;
-    }
+	/* Check lengths for each type */
+	switch (type) {
+	case DSA_ELGAMAL:
+		g_return_if_fail (length >= ELGAMAL_MIN || length <= LENGTH_MAX);
+		break;
+	case DSA:
+		g_return_if_fail (length >= DSA_MIN || length <= DSA_MAX);
+		break;
+	case RSA_RSA:
+	case RSA_SIGN:
+		g_return_if_fail (length >= RSA_MIN || length <= LENGTH_MAX);
+		break;
+	default:
+		g_return_if_reached ();
+		break;
+	}
 
-    if (0 != expires)
-        expires_date = seahorse_util_get_date_string (expires);
-    else
-        expires_date = g_strdup ("0");
+	if (expires != 0)
+		expires_date = seahorse_util_get_date_string (expires);
+	else
+		expires_date = g_strdup ("0");
 
-    /* Common xml */
-    common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\nPassphrase: %s\n"
-                              "</GnupgKeyParms>", name, expires_date, passphrase);
-    if (email != NULL && strlen (email) > 0)
-        common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
-    if (comment != NULL && strlen (comment) > 0)
-        common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
+	/* Common xml */
+	common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\nPassphrase: %s\n"
+			"</GnupgKeyParms>", name, expires_date, passphrase);
+	if (email != NULL && strlen (email) > 0)
+		common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
+	if (comment != NULL && strlen (comment) > 0)
+		common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
 
-    if (type == DSA || type == DSA_ELGAMAL)
-        key_type = "Key-Type: DSA\nKey-Usage: sign";
-    else
-        key_type = "Key-Type: RSA\nKey-Usage: sign";
+	if (type == DSA || type == DSA_ELGAMAL)
+		key_type = "Key-Type: DSA\nKey-Usage: sign";
+	else
+		key_type = "Key-Type: RSA\nKey-Usage: sign";
 
-    start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
+	start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
 
-    /* Subkey xml */
-    if (type == DSA_ELGAMAL)
-        parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
-                                 start, (length < DSA_MAX) ? length : DSA_MAX, length, common);
-    else if (type == RSA_RSA)
-        parms = g_strdup_printf ("%s%d\nSubkey-Type: RSA\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
-                                 start, length, length, common);
-    else
-        parms = g_strdup_printf ("%s%d\n%s", start, length, common);
+	/* Subkey xml */
+	if (type == DSA_ELGAMAL)
+		parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
+		                         start, (length < DSA_MAX) ? length : DSA_MAX, length, common);
+	else if (type == RSA_RSA)
+		parms = g_strdup_printf ("%s%d\nSubkey-Type: RSA\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
+		                         start, length, length, common);
+	else
+		parms = g_strdup_printf ("%s%d\n%s", start, length, common);
 
-    if (GPG_IS_OK (*err)) {
-        pop = seahorse_gpgme_operation_new (NULL);
-        *err = gpgme_op_genkey_start (pop->gctx, parms, NULL, NULL);
-     }
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	                                 seahorse_gpgme_key_op_generate_async);
 
-    /* Free xmls */
-    g_free (start);
-    g_free (common);
-    g_free (expires_date);
+	closure = g_new0 (key_op_generate_closure, 1);
+	closure->gctx = seahorse_gpgme_source_new_context ();
+	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+	gpgme_set_progress_cb (closure->gctx, on_key_op_generate_progress, res);
+	g_simple_async_result_set_op_res_gpointer (res, closure, key_op_generate_free);
 
-    return pop ? SEAHORSE_OPERATION (pop) : NULL;
+	seahorse_progress_prep_and_begin (cancellable, res, NULL);
+	gsource = seahorse_gpgme_gsource_new (closure->gctx, cancellable);
+	g_source_set_callback (gsource, (GSourceFunc)on_key_op_generate_complete,
+	                       g_object_ref (res), g_object_unref);
+
+	gerr = gpgme_op_genkey_start (closure->gctx, parms, NULL, NULL);
+	if (seahorse_gpgme_propagate_error (gerr, &error)) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete_in_idle (res);
+	} else {
+		g_source_attach (gsource, g_main_context_default ());
+	}
+
+	g_source_unref (gsource);
+
+	/* Free xmls */
+	g_free (start);
+	g_free (common);
+	g_free (expires_date);
+
+	g_object_unref (res);
+}
+
+gboolean
+seahorse_gpgme_key_op_generate_finish (SeahorseGpgmeSource *source,
+                                       GAsyncResult *result,
+                                       GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_gpgme_key_op_generate_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
 }
 
 /* helper function for deleting @skey */

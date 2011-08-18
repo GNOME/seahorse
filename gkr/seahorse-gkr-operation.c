@@ -28,128 +28,30 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-gkr-operation.h"
+#include "seahorse-progress.h"
 #include "seahorse-util.h"
 #include "seahorse-passphrase.h"
 
 #include <gnome-keyring.h>
-
-/* -----------------------------------------------------------------------------
- * DEFINITIONS
- */
- 
-struct _SeahorseGkrOperationPrivate {
-	gpointer request;
-	SeahorseObject *object;   
-};
-
-G_DEFINE_TYPE (SeahorseGkrOperation, seahorse_gkr_operation, SEAHORSE_TYPE_OPERATION);
-
-/* -----------------------------------------------------------------------------
- * HELPERS 
- */
-
-static gboolean
-check_operation_result (SeahorseGkrOperation *self, GnomeKeyringResult result)
-{
-    GError *err = NULL;
-    gboolean success;
-    
-    /* This only gets called when we cancel, so ignore */
-    if (result == GNOME_KEYRING_RESULT_CANCELLED)
-        return FALSE;
-    
-    success = seahorse_gkr_operation_parse_error (result, &err);
-    g_assert (!success || !err);
-    
-    seahorse_operation_mark_done (SEAHORSE_OPERATION (self), FALSE, err);
-    return success;
-}
-
-/* -----------------------------------------------------------------------------
- * OBJECT 
- */
-
-static void 
-seahorse_gkr_operation_init (SeahorseGkrOperation *self)
-{
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_OPERATION, SeahorseGkrOperationPrivate);
-
-}
-
-static void 
-seahorse_gkr_operation_dispose (GObject *gobject)
-{
-	SeahorseGkrOperation *self = SEAHORSE_GKR_OPERATION (gobject);
-
-	if (seahorse_operation_is_running (SEAHORSE_OPERATION (self)))
-		seahorse_operation_cancel (SEAHORSE_OPERATION (self));
-	g_assert (!seahorse_operation_is_running (SEAHORSE_OPERATION (self)));
-    
-	if (self->pv->object)
-		g_object_unref (self->pv->object);
-	self->pv->object = NULL;
-    
-	/* The above cancel should have stopped this */
-	g_assert (self->pv->request == NULL);
-    
-	G_OBJECT_CLASS (seahorse_gkr_operation_parent_class)->dispose (gobject);  
-}
-
-static void 
-seahorse_gkr_operation_finalize (GObject *gobject)
-{
-	SeahorseGkrOperation *self = SEAHORSE_GKR_OPERATION (gobject);
-    
-	g_assert (!self->pv->request);
-    
-	G_OBJECT_CLASS (seahorse_gkr_operation_parent_class)->finalize (gobject);  
-}
-
-static void 
-seahorse_gkr_operation_cancel (SeahorseOperation *operation)
-{
-	SeahorseGkrOperation *self = SEAHORSE_GKR_OPERATION (operation);    
-
-	if (self->pv->request)
-		gnome_keyring_cancel_request (self->pv->request);
-	self->pv->request = NULL;
-    
-	if (seahorse_operation_is_running (operation))
-		seahorse_operation_mark_done (operation, TRUE, NULL);    
-}
-
-static void
-seahorse_gkr_operation_class_init (SeahorseGkrOperationClass *klass)
-{
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    
-	seahorse_gkr_operation_parent_class = g_type_class_peek_parent (klass);
-	g_type_class_add_private (klass, sizeof (SeahorseGkrOperationPrivate));
-
-	gobject_class->dispose = seahorse_gkr_operation_dispose;
-	gobject_class->finalize = seahorse_gkr_operation_finalize;
-	
-	SEAHORSE_OPERATION_CLASS (klass)->cancel = seahorse_gkr_operation_cancel;
-}
-
-/* -----------------------------------------------------------------------------
- * PUBLIC 
- */
+#include <gnome-keyring-memory.h>
 
 gboolean
-seahorse_gkr_operation_parse_error (GnomeKeyringResult result, GError **err)
+seahorse_gkr_propagate_error (GnomeKeyringResult result, GError **error)
 {
     static GQuark errorq = 0;
     const gchar *message = NULL;
+    gint code = (gint)result;
 
     if (result == GNOME_KEYRING_RESULT_OK)
-        return TRUE;
-    
-    /* These should be handled in the callbacks */
-    g_assert (result != GNOME_KEYRING_RESULT_CANCELLED);
-    
+        return FALSE;
+
     /* An error mark it as such */
     switch (result) {
+    case GNOME_KEYRING_RESULT_CANCELLED:
+        message = _("The operation was cancelled");
+        code = G_IO_ERROR_CANCELLED;
+        errorq = G_IO_ERROR;
+        break;
     case GNOME_KEYRING_RESULT_DENIED:
         message = _("Access to the key ring was denied");
         break;
@@ -178,137 +80,419 @@ seahorse_gkr_operation_parse_error (GnomeKeyringResult result, GError **err)
     
     if (!errorq) 
         errorq = g_quark_from_static_string ("seahorse-gnome-keyring");
-    
-    g_set_error (err, errorq, result, "%s", message);
-    return FALSE;
+
+    g_set_error (error, errorq, code, "%s", message);
+    return TRUE;
 }
 
-/* -----------------------------------------------------------------------------
- * UPDATE INFO OPERATION
- */
+typedef struct {
+	GnomeKeyringItemInfo *info;
+	gchar *secret;
+	SeahorseGkrItem *item;
+	GCancellable *cancellable;
+	gulong cancelled_sig;
+	gpointer request;
+} update_secret_closure;
+
+static void
+update_secret_free (gpointer data)
+{
+	update_secret_closure *closure = data;
+	gnome_keyring_free_password (closure->secret);
+	g_object_unref (closure->item);
+	if (closure->cancellable && closure->cancelled_sig)
+		g_signal_handler_disconnect (closure->cancellable,
+		                             closure->cancelled_sig);
+	g_clear_object (&closure->cancellable);
+	gnome_keyring_item_info_free (closure->info);
+	g_assert (closure->request == NULL);
+	g_free (closure);
+}
+
+static void
+on_update_secret_set_info_complete (GnomeKeyringResult result,
+                                    gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	update_secret_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+
+	closure->request = NULL;
+	seahorse_progress_end (closure->cancellable, res);
+
+	if (seahorse_gkr_propagate_error (result, &error))
+		g_simple_async_result_take_error (res, error);
+	else
+		seahorse_gkr_item_set_info (closure->item, closure->info);
+
+	g_simple_async_result_complete_in_idle (res);
+}
+
+static void
+on_update_secret_get_info_complete (GnomeKeyringResult result,
+                                    GnomeKeyringItemInfo *info,
+                                    gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	update_secret_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+
+	closure->request = NULL;
+
+	/* Operation to get info failed */
+	if (seahorse_gkr_propagate_error (result, &error)) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete_in_idle (res);
+		seahorse_progress_end (closure->cancellable, res);
+
+	/* Update the description */
+	} else {
+		closure->info = gnome_keyring_item_info_copy (info);
+		gnome_keyring_item_info_set_secret (closure->info, closure->secret);
+
+		closure->request = gnome_keyring_item_set_info (seahorse_gkr_item_get_keyring_name (closure->item),
+		                                                seahorse_gkr_item_get_item_id (closure->item),
+		                                                closure->info, on_update_secret_set_info_complete,
+		                                                g_object_ref (res), g_object_unref);
+	}
+
+	gnome_keyring_free_password (closure->secret);
+	closure->secret = NULL;
+}
+
+static void
+on_update_secret_cancelled (GCancellable *cancellable,
+                            gpointer user_data)
+{
+	update_secret_closure *closure = user_data;
+
+	if (closure->request)
+		gnome_keyring_cancel_request (closure->request);
+}
+
+void
+seahorse_gkr_update_secret_async (SeahorseGkrItem *item,
+                                  const gchar *secret,
+                                  GCancellable *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer user_data)
+{
+	GSimpleAsyncResult *res;
+	update_secret_closure *closure;
+
+	g_return_if_fail (SEAHORSE_IS_GKR_ITEM (item));
+	g_return_if_fail (secret);
+
+	res = g_simple_async_result_new (G_OBJECT (item), callback, user_data,
+	                                 seahorse_gkr_update_secret_async);
+
+	closure = g_new0 (update_secret_closure, 1);
+	closure->item = g_object_ref (item);
+	closure->secret = gnome_keyring_memory_strdup (secret);
+	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+	g_simple_async_result_set_op_res_gpointer (res, closure, update_secret_free);
+
+	seahorse_progress_prep_and_begin (cancellable, res, NULL);
+	closure->request = gnome_keyring_item_get_info (seahorse_gkr_item_get_keyring_name (item),
+	                                                seahorse_gkr_item_get_item_id (item),
+	                                                on_update_secret_get_info_complete,
+	                                                g_object_ref (res), g_object_unref);
+
+	if (cancellable)
+		closure->cancelled_sig = g_cancellable_connect (cancellable,
+		                                                G_CALLBACK (on_update_secret_cancelled),
+		                                                closure, NULL);
+	g_object_unref (res);
+}
+
+gboolean
+seahorse_gkr_update_secret_finish (SeahorseGkrItem *item,
+                                   GAsyncResult *result,
+                                   GError **error)
+{
+	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (item), FALSE);
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (item),
+	                      seahorse_gkr_update_secret_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
+typedef struct {
+	GnomeKeyringItemInfo *info;
+	gchar *description;
+	SeahorseGkrItem *item;
+	gpointer request;
+	GCancellable *cancellable;
+	gulong cancelled_sig;
+} update_description_closure;
+
+static void
+update_description_free (gpointer data)
+{
+	update_description_closure *closure = data;
+	g_free (closure->description);
+	g_object_unref (closure->item);
+	if (closure->cancellable && closure->cancelled_sig)
+		g_signal_handler_disconnect (closure->cancellable,
+		                             closure->cancelled_sig);
+	g_clear_object (&closure->cancellable);
+	gnome_keyring_item_info_free (closure->info);
+	g_assert (closure->request == NULL);
+	g_free (closure);
+}
+
+static void
+on_update_description_set_info_complete (GnomeKeyringResult result,
+                                         gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	update_description_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+
+	closure->request = NULL;
+	seahorse_progress_end (closure->cancellable, res);
+
+	if (seahorse_gkr_propagate_error (result, &error))
+		g_simple_async_result_take_error (res, error);
+	else
+		seahorse_gkr_item_set_info (closure->item, closure->info);
+
+	g_simple_async_result_complete_in_idle (res);
+}
+
+static void
+on_update_description_get_info_complete (GnomeKeyringResult result,
+                                         GnomeKeyringItemInfo *info,
+                                         gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	update_description_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+
+	closure->request = NULL;
+
+	/* Operation to get info failed */
+	if (seahorse_gkr_propagate_error (result, &error)) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete_in_idle (res);
+		seahorse_progress_end (closure->cancellable, res);
+
+	/* The description hasn't changed */
+	} else if (g_str_equal (closure->description,
+	                        gnome_keyring_item_info_get_display_name (info))) {
+		g_simple_async_result_complete_in_idle (res);
+		seahorse_progress_end (closure->cancellable, res);
+
+	/* Update the description */
+	} else {
+		closure->info = gnome_keyring_item_info_copy (info);
+		gnome_keyring_item_info_set_display_name (closure->info, closure->description);
+
+		closure->request = gnome_keyring_item_set_info (seahorse_gkr_item_get_keyring_name (closure->item),
+		                                                seahorse_gkr_item_get_item_id (closure->item),
+		                                                closure->info, on_update_description_set_info_complete,
+		                                                g_object_ref (res), g_object_unref);
+	}
+}
+
+static void
+on_update_description_cancelled (GCancellable *cancellable,
+                                 gpointer user_data)
+{
+	update_description_closure *closure = user_data;
+
+	if (closure->request)
+		gnome_keyring_cancel_request (closure->request);
+}
+
+void
+seahorse_gkr_update_description_async (SeahorseGkrItem *item,
+                                       const gchar *description,
+                                       GCancellable *cancellable,
+                                       GAsyncReadyCallback callback,
+                                       gpointer user_data)
+{
+	GSimpleAsyncResult *res;
+	update_description_closure *closure;
+
+	g_return_if_fail (SEAHORSE_IS_GKR_ITEM (item));
+	g_return_if_fail (description);
+
+	res = g_simple_async_result_new (G_OBJECT (item), callback, user_data,
+	                                 seahorse_gkr_update_description_async);
+
+	closure = g_new0 (update_description_closure, 1);
+	closure->item = g_object_ref (item);
+	closure->description = g_strdup (description);
+	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+	g_simple_async_result_set_op_res_gpointer (res, closure, update_description_free);
+
+	seahorse_progress_prep_and_begin (cancellable, res, NULL);
+	closure->request = gnome_keyring_item_get_info (seahorse_gkr_item_get_keyring_name (item),
+	                                                seahorse_gkr_item_get_item_id (item),
+	                                                on_update_description_get_info_complete,
+	                                                g_object_ref (res), g_object_unref);
+
+	if (cancellable)
+		closure->cancelled_sig = g_cancellable_connect (cancellable,
+		                                                G_CALLBACK (on_update_description_cancelled),
+		                                                closure, NULL);
+	g_object_unref (res);
+}
+
+gboolean
+seahorse_gkr_update_description_finish (SeahorseGkrItem *item,
+                                        GAsyncResult *result,
+                                        GError **error)
+{
+	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (item), FALSE);
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (item),
+	                      seahorse_gkr_update_description_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
+typedef struct {
+	gpointer request;
+	GQueue *objects;
+	GCancellable *cancellable;
+	gulong cancelled_sig;
+} delete_gkr_closure;
+
+static void
+delete_gkr_free (gpointer data)
+{
+	delete_gkr_closure *closure = data;
+	g_queue_foreach (closure->objects, (GFunc)g_object_unref, NULL);
+	g_queue_free (closure->objects);
+	if (closure->cancellable && closure->cancelled_sig)
+		g_signal_handler_disconnect (closure->cancellable,
+		                             closure->cancelled_sig);
+	g_clear_object (&closure->cancellable);
+	g_assert (!closure->request);
+	g_free (closure);
+}
+
+static void            delete_gkr_one_object         (GSimpleAsyncResult *res);
 
 static void 
-basic_operation_done (GnomeKeyringResult result, SeahorseGkrOperation *self)
+on_delete_gkr_complete (GnomeKeyringResult result,
+                        gpointer user_data)
 {
-	g_assert (SEAHORSE_IS_GKR_OPERATION (self));
-	self->pv->request = NULL;
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	delete_gkr_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+	SeahorseObject *object;
 
-	if (!check_operation_result (self, result))
+	closure->request = NULL;
+	object = g_queue_pop_head (closure->objects);
+	seahorse_progress_end (closure->cancellable, object);
+
+	if (seahorse_gkr_propagate_error (result, &error)) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete_in_idle (res);
+
+	} else {
+		seahorse_context_remove_object (seahorse_context_instance (),
+		                                object);
+		delete_gkr_one_object (res);
+	}
+
+	g_object_unref (object);
+}
+
+static void
+on_delete_gkr_cancelled (GCancellable *cancellable,
+                         gpointer user_data)
+{
+	delete_gkr_closure *closure = user_data;
+
+	if (closure->request)
+		gnome_keyring_cancel_request (closure->request);
+}
+
+static void
+delete_gkr_one_object (GSimpleAsyncResult *res)
+{
+	delete_gkr_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	SeahorseObject *object;
+	const gchar *keyring;
+	guint32 item;
+
+	if (g_queue_is_empty (closure->objects)) {
+		g_simple_async_result_complete_in_idle (res);
 		return;
-    
-	/* When operation is successful reload the key */
-	seahorse_object_refresh (SEAHORSE_OBJECT (self->pv->object));
+	}
+
+	g_assert (!closure->request);
+	object = g_queue_peek_head (closure->objects);
+
+	seahorse_progress_begin (closure->cancellable, object);
+	if (SEAHORSE_IS_GKR_ITEM (object)) {
+		keyring = seahorse_gkr_item_get_keyring_name (SEAHORSE_GKR_ITEM (object));
+		item = seahorse_gkr_item_get_item_id (SEAHORSE_GKR_ITEM (object));
+		closure->request = gnome_keyring_item_delete (keyring, item,
+		                                              on_delete_gkr_complete,
+		                                              g_object_ref (res), g_object_unref);
+	} else if (SEAHORSE_IS_GKR_KEYRING (object)) {
+		keyring = seahorse_gkr_keyring_get_name (SEAHORSE_GKR_KEYRING (object));
+		closure->request = gnome_keyring_delete (keyring,
+		                                         on_delete_gkr_complete,
+		                                         g_object_ref (res), g_object_unref);
+	} else {
+		g_assert_not_reached ();
+	}
 }
 
-SeahorseOperation*
-seahorse_gkr_operation_update_info (SeahorseGkrItem *item, GnomeKeyringItemInfo *info)
+void
+seahorse_gkr_delete_async (GList *objects,
+                           GCancellable *cancellable,
+                           GAsyncReadyCallback callback,
+                           gpointer user_data)
 {
-	SeahorseGkrOperation *self;
-    
-	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (item), NULL);
-    
-	self = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, NULL);
-    
-	g_object_ref (item);
-	self->pv->object = SEAHORSE_OBJECT (item);
-    
-	/* Start actual save request */
-	g_object_ref (self);
-	self->pv->request = gnome_keyring_item_set_info (seahorse_gkr_item_get_keyring_name (item),
-	                                                 seahorse_gkr_item_get_item_id (item), info, 
-	                                                 (GnomeKeyringOperationDoneCallback)basic_operation_done,
-	                                                 self, g_object_unref);
-	g_return_val_if_fail (self->pv->request, NULL);
-    
-	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
-	seahorse_operation_mark_progress (SEAHORSE_OPERATION (self), _("Saving item..."), -1);
+	GSimpleAsyncResult *res;
+	delete_gkr_closure *closure;
+	GList *l;
 
-	return SEAHORSE_OPERATION (self);
+	res = g_simple_async_result_new (NULL, callback, user_data,
+	                                 seahorse_gkr_delete_async);
+
+	closure = g_new0 (delete_gkr_closure, 1);
+	closure->objects = g_queue_new ();
+	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+	g_simple_async_result_set_op_res_gpointer (res, closure, delete_gkr_free);
+
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		g_return_if_fail (SEAHORSE_IS_GKR_ITEM (l->data) || SEAHORSE_IS_GKR_KEYRING (l->data));
+		g_queue_push_tail (closure->objects, g_object_ref (l->data));
+		seahorse_progress_prep (cancellable, l->data, NULL);
+	}
+
+	delete_gkr_one_object (res);
+
+	if (cancellable)
+		closure->cancelled_sig = g_cancellable_connect (cancellable,
+		                                                G_CALLBACK (on_delete_gkr_cancelled),
+		                                                closure, NULL);
+
+	g_object_unref (res);
 }
 
-SeahorseOperation*
-seahorse_gkr_operation_update_acl (SeahorseGkrItem *item, GList *acl)
+gboolean
+seahorse_gkr_delete_finish (GAsyncResult *result,
+                            GError **error)
 {
-	SeahorseGkrOperation *self;
-    
-	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (item), NULL);
-    
-	self = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, NULL);
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, NULL,
+	                      seahorse_gkr_delete_async), FALSE);
 
-	g_object_ref (item);
-	self->pv->object = SEAHORSE_OBJECT (item);
-    
-	/* Start actual save request */
-	g_object_ref (self);
-	self->pv->request = gnome_keyring_item_set_acl (seahorse_gkr_item_get_keyring_name (item), 
-	                                                seahorse_gkr_item_get_item_id (item), acl, 
-	                                                (GnomeKeyringOperationDoneCallback)basic_operation_done,
-	                                                self, g_object_unref);
-	g_return_val_if_fail (self->pv->request, NULL);
-    
-	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
-	seahorse_operation_mark_progress (SEAHORSE_OPERATION (self), _("Saving item..."), -1);
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
 
-	return SEAHORSE_OPERATION (self);
-}
-
-static void 
-delete_operation_done (GnomeKeyringResult result, SeahorseGkrOperation *self)
-{
-	g_assert (SEAHORSE_IS_GKR_OPERATION (self));
-
-	self->pv->request = NULL;
-	if (check_operation_result (self, result))
-		seahorse_context_remove_object (NULL, self->pv->object);
-}
-
-SeahorseOperation*
-seahorse_gkr_operation_delete_item (SeahorseGkrItem *item)
-{
-	SeahorseGkrOperation *self;
-	    
-	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (item), NULL);
-	    
-	self = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, NULL);
-	    
-	g_object_ref (item);
-	self->pv->object = SEAHORSE_OBJECT (item);
-	    
-	/* Start actual save request */
-	g_object_ref (self);
-	self->pv->request = gnome_keyring_item_delete (seahorse_gkr_item_get_keyring_name (item), 
-	                                               seahorse_gkr_item_get_item_id (item), 
-	                                               (GnomeKeyringOperationDoneCallback)delete_operation_done,
-	                                               self, g_object_unref);
-	g_return_val_if_fail (self->pv->request, NULL);
-	
-	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
-	seahorse_operation_mark_progress (SEAHORSE_OPERATION (self), _("Deleting item..."), -1);
-	
-	return SEAHORSE_OPERATION (self);
-}
-
-SeahorseOperation*
-seahorse_gkr_operation_delete_keyring (SeahorseGkrKeyring *keyring)
-{
-	SeahorseGkrOperation *self;
-	    
-	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (keyring), NULL);
-	    
-	self = g_object_new (SEAHORSE_TYPE_GKR_OPERATION, NULL);
-	
-	g_object_ref (keyring);
-	self->pv->object = SEAHORSE_OBJECT (keyring);
-	    
-	/* Start actual save request */
-	g_object_ref (self);
-	self->pv->request = gnome_keyring_delete (seahorse_gkr_keyring_get_name (keyring), 
-	                                          (GnomeKeyringOperationDoneCallback)delete_operation_done,
-	                                          self, g_object_unref);
-	g_return_val_if_fail (self->pv->request, NULL);
-	
-	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
-	seahorse_operation_mark_progress (SEAHORSE_OPERATION (self), _("Deleting keyring..."), -1);
-	
-	return SEAHORSE_OPERATION (self);
+	return TRUE;
 }

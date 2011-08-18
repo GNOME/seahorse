@@ -24,6 +24,7 @@
 
 #include "seahorse-object.h"
 #include "seahorse-util.h"
+#include "seahorse-widget.h"
 
 #include "pgp/seahorse-pgp-module.h"
 
@@ -67,11 +68,11 @@ void
 seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *message)
 {
 	GtkWidget *dialog;
-    
+
 	g_return_if_fail (message || heading);
 	if (!message)
 		message = "";
-    
+
 	if (parent) {
 		if (!GTK_IS_WIDGET (parent)) {
 			g_warn_if_reached ();
@@ -104,32 +105,50 @@ seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *
 
 /**
  * seahorse_util_handle_error:
- * @err: The #GError to print.
+ * @error: The #GError to print, and clear
  * @desc: The heading of the box
  * @...: Parameters to insert into the format string desc.
  *
  * Displays an error box. The message is the error message.
+ * Won't display cancel errors.
  */
 void
-seahorse_util_handle_error (GError* err, const char* desc, ...)
+seahorse_util_handle_error (GError **error,
+                            gpointer parent,
+                            const char* description,
+                            ...)
 {
-    gchar *t = NULL;
-    
-    va_list ap;
-    
-    if(!err)
-        return;
+	gchar *text = NULL;
+	GtkWidget *widget = NULL;
+	va_list ap;
 
-    va_start(ap, desc);
-  
-    if (desc)
-        t = g_strdup_vprintf (desc, ap);
-    
-    va_end(ap);        
-    
-    seahorse_util_show_error (NULL, t, err->message ? err->message : "");
-    g_free(t);
-}    
+	if (!error || !(*error) ||
+	    g_error_matches (*error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+		g_clear_error (error);
+		return;
+	}
+
+	va_start (ap, description);
+	if (description)
+		text = g_strdup_vprintf (description, ap);
+	va_end (ap);
+
+	if (parent == NULL)
+		widget = NULL;
+	else if (GTK_IS_WIDGET (parent))
+		widget = GTK_WIDGET (parent);
+	else if (GTK_IS_WINDOW (parent))
+		widget = GTK_WIDGET (parent);
+	else if (SEAHORSE_IS_WIDGET (parent))
+		widget = seahorse_widget_get_toplevel (parent);
+	else
+		g_warning ("unsupported 'parent' argument passed to seahorse_util_handle_error() ");
+
+	seahorse_util_show_error (widget, text,
+	                          (*error)->message ? (*error)->message : "");
+	g_free (text);
+	g_clear_error (error);
+}
 
 /**
  * seahorse_util_prompt_delete:

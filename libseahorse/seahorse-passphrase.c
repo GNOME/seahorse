@@ -159,24 +159,6 @@ window_state_changed (GtkWidget *win, GdkEventWindowState *event, gpointer data)
 	return FALSE;
 }
 
-static void
-constrain_size (GtkWidget *win, GtkRequisition *req, gpointer data)
-{
-    static gint width, height;
-    GdkGeometry geo;
-
-    if (req->width == width && req->height == height)
-        return;
-
-    width = req->width;
-    height = req->height;
-    geo.min_width = width;
-    geo.max_width = 10000;  /* limit is arbitrary, INT_MAX breaks other things */
-    geo.min_height = geo.max_height = height;
-    gtk_window_set_geometry_hints (GTK_WINDOW (win), NULL, &geo,
-                                   GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE);
-}
-
 GtkDialog*
 seahorse_passphrase_prompt_show (const gchar *title, const gchar *description, 
                                  const gchar *prompt, const gchar *check,
@@ -203,7 +185,6 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
 
     dialog = GTK_DIALOG (w);
 
-    g_signal_connect (G_OBJECT (dialog), "size-request", G_CALLBACK (constrain_size), NULL);
     g_signal_connect (G_OBJECT (dialog), "map-event", G_CALLBACK (grab_keyboard), NULL);
     g_signal_connect (G_OBJECT (dialog), "unmap-event", G_CALLBACK (ungrab_keyboard), NULL);
     g_signal_connect (G_OBJECT (dialog), "window-state-event", G_CALLBACK (window_state_changed), NULL); 
@@ -294,8 +275,6 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     w = gtk_button_new_from_stock (GTK_STOCK_OK);
     gtk_dialog_add_action_widget (dialog, w, GTK_RESPONSE_ACCEPT);
     gtk_widget_set_can_default (w, TRUE);
-    g_signal_connect_object (G_OBJECT (entry), "focus_in_event",
-                             G_CALLBACK (gtk_widget_grab_default), G_OBJECT (w), 0);
     gtk_widget_grab_default (w);
     
     g_signal_connect (dialog, "key_press_event", G_CALLBACK (key_press), NULL);

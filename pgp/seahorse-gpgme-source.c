@@ -28,11 +28,10 @@
 #include "seahorse-gpgme-data.h"
 #include "seahorse-gpgme.h"
 #include "seahorse-gpgme-key-op.h"
-#include "seahorse-gpgme-operation.h"
 #include "seahorse-gpg-options.h"
 #include "seahorse-pgp-key.h"
 
-#include "seahorse-operation.h"
+#include "seahorse-progress.h"
 #include "seahorse-util.h"
 #include "seahorse-passphrase.h"
 
@@ -143,99 +142,10 @@ init_gpgme (gpgme_ctx_t *ctx)
     return err;
 }
 
-/* -----------------------------------------------------------------------------
- * LOAD OPERATION 
- */
- 
-
-#define SEAHORSE_TYPE_LOAD_OPERATION            (seahorse_load_operation_get_type ())
-#define SEAHORSE_LOAD_OPERATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_LOAD_OPERATION, SeahorseLoadOperation))
-#define SEAHORSE_LOAD_OPERATION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_LOAD_OPERATION, SeahorseLoadOperationClass))
-#define SEAHORSE_IS_LOAD_OPERATION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_LOAD_OPERATION))
-#define SEAHORSE_IS_LOAD_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_LOAD_OPERATION))
-#define SEAHORSE_LOAD_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_LOAD_OPERATION, SeahorseLoadOperationClass))
-
-DECLARE_OPERATION (Load, load)
-    /*< private >*/
-    SeahorseGpgmeSource *psrc;        /* Key source to add keys to when found */
-    gpgme_ctx_t ctx;                /* GPGME context we're loading from */
-    gboolean secret;                /* Loading secret keys */
-    guint loaded;                   /* Number of keys we've loaded */
-    guint batch;                    /* Number to load in a batch, or 0 for synchronous */
-    guint stag;                     /* The event source handler id (for stopping a load) */
-    guint parts;                    /* Parts to load*/
-    GHashTable *checks;             /* When refreshing this is our set of missing keys */
-END_DECLARE_OPERATION        
-
-IMPLEMENT_OPERATION (Load, load)
-
-static SeahorseLoadOperation*   seahorse_load_operation_start   (SeahorseGpgmeSource *psrc, 
-                                                                 const gchar **pattern, 
-                                                                 guint parts,
-                                                                 gboolean secret);
-
-static gboolean                 scheduled_dummy                 (gpointer data);
-
-/* -----------------------------------------------------------------------------
- * EXPORT 
- */
- 
-typedef struct _ExportContext {
-    GArray *keyids;
-    guint at;
-    gpgme_data_t data;
-} ExportContext;
-
-static void
-free_export_context (gpointer p)
-{
-    ExportContext *ctx = (ExportContext*)p;
-    if (!ctx)
-        return;
-    gpgme_data_release (ctx->data);
-    g_array_free (ctx->keyids, TRUE);
-    g_free (ctx);
-}
-
-static void
-export_key_callback (SeahorseGpgmeOperation *pop, ExportContext *ctx)
-{
-    gpgme_error_t gerr;
-    GError *err = NULL;
-    GOutputStream *output;
-    
-    if (seahorse_operation_is_running (SEAHORSE_OPERATION (pop)))
-        seahorse_operation_mark_progress_full (SEAHORSE_OPERATION (pop), NULL, 
-                                               ctx->at, ctx->keyids->len);
-    
-    /* Done, close the output stream */
-    if (ctx->at >= ctx->keyids->len) {
-	    output = seahorse_operation_get_result (SEAHORSE_OPERATION (pop));
-	    g_return_if_fail (G_IS_OUTPUT_STREAM (output));
-	    if (!g_output_stream_close (output, NULL, &err))
-		    seahorse_operation_mark_done (SEAHORSE_OPERATION (pop), FALSE, err);
-	    return;
-    }
-    
-    /* Do the next key in the list */
-    gerr = gpgme_op_export_start (pop->gctx, g_array_index (ctx->keyids, const char*, ctx->at), 
-                                  0, ctx->data);
-    ctx->at++;
-    
-    if (!GPG_IS_OK (gerr))
-        seahorse_gpgme_operation_mark_failed (pop, gerr);
-}
-
-
-/* -----------------------------------------------------------------------------
- * PGP Source
- */
-    
 struct _SeahorseGpgmeSourcePrivate {
-    guint scheduled_refresh;                /* Source for refresh timeout */
-    GFileMonitor *monitor_handle;           /* For monitoring the .gnupg directory */
-    SeahorseMultiOperation *operations;     /* A list of all current operations */    
-    GList *orphan_secret;                   /* Orphan secret keys */
+	guint scheduled_refresh;                /* Source for refresh timeout */
+	GFileMonitor *monitor_handle;           /* For monitoring the .gnupg directory */
+	GList *orphan_secret;                   /* Orphan secret keys */
 };
 
 static void seahorse_source_iface (SeahorseSourceIface *iface);
@@ -243,209 +153,34 @@ static void seahorse_source_iface (SeahorseSourceIface *iface);
 G_DEFINE_TYPE_EXTENDED (SeahorseGpgmeSource, seahorse_gpgme_source, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
 
-/* GObject handlers */
-static void seahorse_gpgme_source_dispose         (GObject *gobject);
-static void seahorse_gpgme_source_finalize        (GObject *gobject);
-static void seahorse_gpgme_source_set_property    (GObject *object, guint prop_id, 
-                                                 const GValue *value, GParamSpec *pspec);
-static void seahorse_gpgme_source_get_property    (GObject *object, guint prop_id,
-                                                 GValue *value, GParamSpec *pspec);
+typedef struct {
+	SeahorseGpgmeSource *source;
+	GCancellable *cancellable;
+	gulong cancelled_sig;
+	gpgme_ctx_t gctx;
+	GHashTable *checks;
+	gint parts;
+	gint loaded;
+} source_list_closure;
 
-/* SeahorseSource methods */
-static SeahorseOperation*  seahorse_gpgme_source_load             (SeahorseSource *src);
-
-static SeahorseOperation*  seahorse_gpgme_source_import           (SeahorseSource *sksrc, 
-                                                                 GInputStream *input);
-static SeahorseOperation*  seahorse_gpgme_source_export           (SeahorseSource *sksrc, 
-                                                                 GList *keys,
-                                                                 GOutputStream *output);
-
-/* Other forward decls */
-static void                monitor_gpg_homedir                  (GFileMonitor *handle, 
-                                                                 GFile *file,
-                                                                 GFile *other_file,
-                                                                 GFileMonitorEvent event_type,
-                                                                 gpointer user_data);
-static void                cancel_scheduled_refresh             (SeahorseGpgmeSource *psrc);
-                                                                 
-static GObjectClass *parent_class = NULL;
-
-/* Initialize the basic class stuff */
 static void
-seahorse_gpgme_source_class_init (SeahorseGpgmeSourceClass *klass)
+source_list_free (gpointer data)
 {
-    GObjectClass *gobject_class;
-    
-    g_message ("init gpgme version %s", gpgme_check_version (NULL));
-    
-#ifdef ENABLE_NLS
-    gpgme_set_locale (NULL, LC_CTYPE, setlocale (LC_CTYPE, NULL));
-    gpgme_set_locale (NULL, LC_MESSAGES, setlocale (LC_MESSAGES, NULL));
-#endif
-   
-    parent_class = g_type_class_peek_parent (klass);
-    gobject_class = G_OBJECT_CLASS (klass);
-    gobject_class->dispose = seahorse_gpgme_source_dispose;
-    gobject_class->finalize = seahorse_gpgme_source_finalize;
-    gobject_class->set_property = seahorse_gpgme_source_set_property;
-    gobject_class->get_property = seahorse_gpgme_source_get_property;
- 
-	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
-	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
-	
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GPGME_SOURCE, "source", "local", SEAHORSE_PGP_STR, NULL);
-
-	seahorse_registry_register_function (NULL, seahorse_pgp_key_canonize_id, "canonize", SEAHORSE_PGP_STR, NULL);
-}
-
-static void 
-seahorse_source_iface (SeahorseSourceIface *iface)
-{
-	iface->load = seahorse_gpgme_source_load;
-	iface->import = seahorse_gpgme_source_import;
-	iface->export = seahorse_gpgme_source_export;
-}
-
-
-/* init context, private vars, set prefs, connect signals */
-static void
-seahorse_gpgme_source_init (SeahorseGpgmeSource *psrc)
-{
-	gpgme_error_t gerr;
-	GError *err = NULL;
-	const gchar *gpg_homedir;
-	GFile *file;
-    
-	gerr = init_gpgme (&(psrc->gctx));
-	g_return_if_fail (GPG_IS_OK (gerr));
-    
-	/* init private vars */
-	psrc->pv = g_new0 (SeahorseGpgmeSourcePrivate, 1);
-    
-	psrc->pv->operations = seahorse_multi_operation_new ();
-    
-	psrc->pv->scheduled_refresh = 0;
-	psrc->pv->monitor_handle = NULL;
-    
-	gpg_homedir = seahorse_gpg_homedir ();
-	file = g_file_new_for_path (gpg_homedir);
-	g_return_if_fail (file != NULL);
-    
-	psrc->pv->monitor_handle = g_file_monitor_directory (file, G_FILE_MONITOR_NONE, NULL, &err);
-	g_object_unref (file);
-	
-	if (psrc->pv->monitor_handle) {
-		g_signal_connect (psrc->pv->monitor_handle, "changed", 
-		                  G_CALLBACK (monitor_gpg_homedir), psrc);
-	} else {
-		g_warning ("couldn't monitor the GPG home directory: %s: %s", 
-		           gpg_homedir, err && err->message ? err->message : "");
-	}
-}
-
-/* dispose of all our internal references */
-static void
-seahorse_gpgme_source_dispose (GObject *gobject)
-{
-    SeahorseGpgmeSource *psrc;
-    GList *l;
-    
-    /*
-     * Note that after this executes the rest of the object should
-     * still work without a segfault. This basically nullifies the 
-     * object, but doesn't free it.
-     * 
-     * This function should also be able to run multiple times.
-     */
-  
-    psrc = SEAHORSE_GPGME_SOURCE (gobject);
-    g_assert (psrc->pv);
-    
-    /* Clear out all operations */
-    if (psrc->pv->operations) {
-        if(seahorse_operation_is_running (SEAHORSE_OPERATION (psrc->pv->operations)))
-            seahorse_operation_cancel (SEAHORSE_OPERATION (psrc->pv->operations));
-        g_object_unref (psrc->pv->operations);
-        psrc->pv->operations = NULL;
-    }
-
-    cancel_scheduled_refresh (psrc);    
-    
-	if (psrc->pv->monitor_handle) {
-		g_object_unref (psrc->pv->monitor_handle);
-		psrc->pv->monitor_handle = NULL;
-	}
-    
-    for (l = psrc->pv->orphan_secret; l; l = g_list_next (l)) 
-        g_object_unref (l->data);
-    g_list_free (psrc->pv->orphan_secret);
-    psrc->pv->orphan_secret = NULL;
-    
-    if (psrc->gctx)
-        gpgme_release (psrc->gctx);
-    
-    G_OBJECT_CLASS (parent_class)->dispose (gobject);
-}
-
-/* free private vars */
-static void
-seahorse_gpgme_source_finalize (GObject *gobject)
-{
-    SeahorseGpgmeSource *psrc;
-  
-    psrc = SEAHORSE_GPGME_SOURCE (gobject);
-    g_assert (psrc->pv);
-    
-    /* All monitoring and scheduling should be done */
-    g_assert (psrc->pv->scheduled_refresh == 0);
-    g_assert (psrc->pv->monitor_handle == 0);
-    
-    g_free (psrc->pv);
- 
-    G_OBJECT_CLASS (parent_class)->finalize (gobject);
-}
-
-static void 
-seahorse_gpgme_source_set_property (GObject *object, guint prop_id, const GValue *value, 
-                                  GParamSpec *pspec)
-{
-    
-}
-
-static void 
-seahorse_gpgme_source_get_property (GObject *object, guint prop_id, GValue *value, 
-                                  GParamSpec *pspec)
-{
-    switch (prop_id) {
-    case PROP_SOURCE_TAG:
-        g_value_set_uint (value, SEAHORSE_PGP);
-        break;
-    case PROP_SOURCE_LOCATION:
-        g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
-        break;
-    }
-}
-
-/* --------------------------------------------------------------------------
- * HELPERS 
- */
-
-/* Remove the given key from the context */
-static void
-remove_key_from_context (gpointer kt, SeahorseObject *dummy, SeahorseGpgmeSource *psrc)
-{
-    /* This function gets called as a GHRFunc on the lctx->checks hashtable. */
-    GQuark keyid = GPOINTER_TO_UINT (kt);
-    SeahorseObject *sobj;
-    
-    sobj = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (psrc), keyid);
-    if (sobj != NULL)
-        seahorse_context_remove_object (SCTX_APP (), sobj);
+	source_list_closure *closure = data;
+	gpgme_release (closure->gctx);
+	if (closure->checks)
+		g_hash_table_destroy (closure->checks);
+	g_cancellable_disconnect (closure->cancellable,
+	                          closure->cancelled_sig);
+	g_clear_object (&closure->cancellable);
+	g_clear_object (&closure->source);
+	g_free (closure);
 }
 
 /* Add a key to the context  */
 static SeahorseGpgmeKey*
-add_key_to_context (SeahorseGpgmeSource *psrc, gpgme_key_t key)
+add_key_to_context (SeahorseGpgmeSource *self,
+                    gpgme_key_t key)
 {
 	SeahorseGpgmeKey *pkey = NULL;
 	SeahorseGpgmeKey *prev;
@@ -453,525 +188,844 @@ add_key_to_context (SeahorseGpgmeSource *psrc, gpgme_key_t key)
 	gpgme_key_t seckey;
 	GQuark keyid;
 	GList *l;
-    
+
 	g_return_val_if_fail (key->subkeys && key->subkeys->keyid, NULL);
-    
+
 	id = key->subkeys->keyid;
 	keyid = seahorse_pgp_key_canonize_id (id);
 	g_return_val_if_fail (keyid, NULL);
-    
-	g_assert (SEAHORSE_IS_GPGME_SOURCE (psrc));
-	prev = SEAHORSE_GPGME_KEY (seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (psrc), keyid));
-    
+
+	g_assert (SEAHORSE_IS_GPGME_SOURCE (self));
+	prev = SEAHORSE_GPGME_KEY (seahorse_context_get_object (seahorse_context_instance (),
+	                                                        SEAHORSE_SOURCE (self), keyid));
+
 	/* Check if we can just replace the key on the object */
 	if (prev != NULL) {
-		if (key->secret) 
+		if (key->secret)
 			g_object_set (prev, "seckey", key, NULL);
 		else
 			g_object_set (prev, "pubkey", key, NULL);
 		return prev;
 	}
-    
-	/* Create a new key with secret */    
+
+	/* Create a new key with secret */
 	if (key->secret) {
-		pkey = seahorse_gpgme_key_new (SEAHORSE_SOURCE (psrc), NULL, key);
-        
+		pkey = seahorse_gpgme_key_new (SEAHORSE_SOURCE (self), NULL, key);
+
 		/* Since we don't have a public key yet, save this away */
-		psrc->pv->orphan_secret = g_list_append (psrc->pv->orphan_secret, pkey);
-        
+		self->pv->orphan_secret = g_list_append (self->pv->orphan_secret, pkey);
+
 		/* No key was loaded as far as everyone is concerned */
 		return NULL;
 	}
- 
+
 	/* Just a new public key */
 
 	/* Check for orphans */
-	for (l = psrc->pv->orphan_secret; l; l = g_list_next (l)) {
-        
+	for (l = self->pv->orphan_secret; l; l = g_list_next (l)) {
+
 		seckey = seahorse_gpgme_key_get_private (l->data);
 		g_return_val_if_fail (seckey && seckey->subkeys && seckey->subkeys->keyid, NULL);
 		g_assert (seckey);
-		
+
 		/* Look for a matching key */
 		if (g_str_equal (id, seckey->subkeys->keyid)) {
-            
+
 			/* Set it up properly */
 			pkey = SEAHORSE_GPGME_KEY (l->data);
 			g_object_set (pkey, "pubkey", key, NULL);
-            
+
 			/* Remove item from orphan list cleanly */
-			psrc->pv->orphan_secret = g_list_remove_link (psrc->pv->orphan_secret, l);
+			self->pv->orphan_secret = g_list_remove_link (self->pv->orphan_secret, l);
 			g_list_free (l);
 			break;
 		}
 	}
 
 	if (pkey == NULL)
-		pkey = seahorse_gpgme_key_new (SEAHORSE_SOURCE (psrc), key, NULL);
-    
-	/* Add to context */ 
+		pkey = seahorse_gpgme_key_new (SEAHORSE_SOURCE (self), key, NULL);
+
+	/* Add to context */
 	seahorse_context_take_object (SCTX_APP (), SEAHORSE_OBJECT (pkey));
 
-	return pkey; 
+	return pkey;
 }
 
-/* -----------------------------------------------------------------------------
- *  GPG HOME DIR MONITORING
- */
-
-static gboolean
-scheduled_refresh (gpointer data)
+/* Remove the given key from the context */
+static void
+remove_key_from_context (gpointer hash_key,
+                         SeahorseObject *dummy,
+                         SeahorseGpgmeSource *self)
 {
-    SeahorseGpgmeSource *psrc = SEAHORSE_GPGME_SOURCE (data);
+	/* This function gets called as a GHRFunc on the lctx->checks hashtable. */
+	GQuark keyid = GPOINTER_TO_UINT (hash_key);
+	SeahorseObject *object;
 
-    seahorse_debug ("scheduled refresh event ocurring now");
-    cancel_scheduled_refresh (psrc);
-    seahorse_source_load_async (SEAHORSE_SOURCE (psrc));
-    
-    return FALSE; /* don't run again */
+	object = seahorse_context_get_object (seahorse_context_instance (),
+	                                      SEAHORSE_SOURCE (self), keyid);
+	if (object != NULL)
+		seahorse_context_remove_object (seahorse_context_instance (), object);
 }
 
+/* Completes one batch of key loading */
 static gboolean
-scheduled_dummy (gpointer data)
+on_idle_list_batch_of_keys (gpointer data)
 {
-    SeahorseGpgmeSource *psrc = SEAHORSE_GPGME_SOURCE (data);
-    seahorse_debug ("dummy refresh event occurring now");
-    psrc->pv->scheduled_refresh = 0;
-    return FALSE; /* don't run again */    
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (data);
+	source_list_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	SeahorseGpgmeKey *pkey;
+	gpgme_key_t key;
+	guint batch;
+	GQuark keyid;
+	gchar *detail;
+
+	/* We load until done if batch is zero */
+	batch = DEFAULT_LOAD_BATCH;
+
+	while (batch-- > 0) {
+
+		if (!GPG_IS_OK (gpgme_op_keylist_next (closure->gctx, &key))) {
+
+			gpgme_op_keylist_end (closure->gctx);
+
+			/* If we were a refresh loader, then we remove the keys we didn't find */
+			if (closure->checks)
+				g_hash_table_foreach (closure->checks, (GHFunc)remove_key_from_context,
+				                      closure->source);
+
+			seahorse_progress_end (closure->cancellable, res);
+			g_simple_async_result_complete (res);
+			return FALSE; /* Remove event handler */
+		}
+
+		g_return_val_if_fail (key->subkeys && key->subkeys->keyid, FALSE);
+		keyid = seahorse_pgp_key_canonize_id (key->subkeys->keyid);
+
+		/* Invalid id from GPG ? */
+		if (keyid == 0) {
+			gpgme_key_unref (key);
+			continue;
+		}
+
+		/* During a refresh if only new or removed keys */
+		if (closure->checks) {
+
+			/* Make note that this key exists in key ring */
+			g_hash_table_remove (closure->checks, GUINT_TO_POINTER (keyid));
+
+		}
+
+		pkey = add_key_to_context (closure->source, key);
+
+		/* Load additional info */
+		if (pkey && closure->parts & LOAD_PHOTOS)
+			seahorse_gpgme_key_op_photos_load (pkey);
+
+		gpgme_key_unref (key);
+		closure->loaded++;
+	}
+
+	detail = g_strdup_printf (ngettext("Loaded %d key", "Loaded %d keys", closure->loaded), closure->loaded);
+	seahorse_progress_update (closure->cancellable, res, detail);
+	g_free (detail);
+
+	return TRUE;
 }
 
 static void
-cancel_scheduled_refresh (SeahorseGpgmeSource *psrc)
+on_source_list_cancelled (GCancellable *cancellable, gpointer user_data)
 {
-    if (psrc->pv->scheduled_refresh != 0) {
-        seahorse_debug ("cancelling scheduled refresh event");
-        g_source_remove (psrc->pv->scheduled_refresh);
-        psrc->pv->scheduled_refresh = 0;
-    }
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	source_list_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+
+	gpgme_op_keylist_end (closure->gctx);
 }
-        
+
+static void
+seahorse_gpgme_source_list_async (SeahorseGpgmeSource *self,
+                                  const gchar **patterns,
+                                  gint parts,
+                                  gboolean secret,
+                                  GCancellable *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer user_data)
+{
+	source_list_closure *closure;
+	GSimpleAsyncResult *res;
+	SeahorseObject *object;
+	gpgme_error_t gerr;
+	GList *keys, *l;
+
+	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
+	                                 seahorse_gpgme_source_list_async);
+
+	closure = g_new0 (source_list_closure, 1);
+	closure->parts = parts;
+	closure->gctx = seahorse_gpgme_source_new_context ();
+	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+	closure->source = g_object_ref (self);
+	g_simple_async_result_set_op_res_gpointer (res, closure, source_list_free);
+
+	if (parts & LOAD_FULL) {
+		gpgme_set_keylist_mode (closure->gctx, GPGME_KEYLIST_MODE_SIGS |
+		                        gpgme_get_keylist_mode (closure->gctx));
+	}
+
+	/* Start the key listing */
+	if (patterns)
+		gerr = gpgme_op_keylist_ext_start (closure->gctx, patterns, secret, 0);
+	else
+		gerr = gpgme_op_keylist_start (closure->gctx, NULL, secret);
+	g_return_if_fail (GPG_IS_OK (gerr));
+
+	/* Loading all the keys? */
+	if (patterns == NULL) {
+
+		closure->checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+		keys = seahorse_context_get_objects (seahorse_context_instance (),
+		                                     SEAHORSE_SOURCE (self));
+		for (l = keys; l != NULL; l = g_list_next (l)) {
+			object = SEAHORSE_OBJECT (l->data);
+			if ((secret && seahorse_object_get_usage (object) == SEAHORSE_USAGE_PRIVATE_KEY) ||
+			    (!secret && seahorse_object_get_usage (object) == SEAHORSE_USAGE_PUBLIC_KEY)) {
+				g_hash_table_insert (closure->checks,
+				                     GUINT_TO_POINTER (seahorse_object_get_id (l->data)),
+				                     GUINT_TO_POINTER (TRUE));
+			}
+		}
+		g_list_free (keys);
+
+	}
+
+	seahorse_progress_prep_and_begin (cancellable, res, NULL);
+	if (cancellable)
+		closure->cancelled_sig = g_cancellable_connect (cancellable,
+		                                                G_CALLBACK (on_source_list_cancelled),
+		                                                res, NULL);
+
+	g_idle_add_full (G_PRIORITY_DEFAULT, on_idle_list_batch_of_keys,
+	                 g_object_ref (res), g_object_unref);
+
+	g_object_unref (res);
+}
+
+static gboolean
+seahorse_gpgme_source_list_finish (SeahorseGpgmeSource *source,
+                                   GAsyncResult *result,
+                                   GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_gpgme_source_list_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
+static void
+cancel_scheduled_refresh (SeahorseGpgmeSource *self)
+{
+	if (self->pv->scheduled_refresh != 0) {
+		seahorse_debug ("cancelling scheduled refresh event");
+		g_source_remove (self->pv->scheduled_refresh);
+		self->pv->scheduled_refresh = 0;
+	}
+}
+
+static gboolean
+scheduled_dummy (gpointer user_data)
+{
+	SeahorseGpgmeSource *self = SEAHORSE_GPGME_SOURCE (user_data);
+	seahorse_debug ("dummy refresh event occurring now");
+	self->pv->scheduled_refresh = 0;
+	return FALSE; /* don't run again */
+}
+
+typedef struct {
+	gboolean public_done;
+	gboolean secret_done;
+} source_load_closure;
+
+static void
+on_source_secret_list_complete (GObject *source,
+                                GAsyncResult *result,
+                                gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	source_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+
+	if (!seahorse_gpgme_source_list_finish (SEAHORSE_GPGME_SOURCE (source),
+	                                        result, &error))
+		g_simple_async_result_take_error (res, error);
+
+	closure->secret_done = TRUE;
+	if (closure->public_done)
+		g_simple_async_result_complete (res);
+
+	g_object_unref (res);
+}
+
+static void
+on_source_public_list_complete (GObject *source,
+                                GAsyncResult *result,
+                                gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	source_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+
+	if (!seahorse_gpgme_source_list_finish (SEAHORSE_GPGME_SOURCE (source),
+	                                        result, &error))
+		g_simple_async_result_take_error (res, error);
+
+	closure->public_done = TRUE;
+	if (closure->secret_done)
+		g_simple_async_result_complete (res);
+
+	g_object_unref (res);
+}
+
+static void
+seahorse_gpgme_source_load_full_async (SeahorseGpgmeSource *source,
+                                       const gchar **patterns,
+                                       gint parts,
+                                       GCancellable *cancellable,
+                                       GAsyncReadyCallback callback,
+                                       gpointer user_data)
+{
+	SeahorseGpgmeSource *self = SEAHORSE_GPGME_SOURCE (source);
+	GSimpleAsyncResult *res;
+	source_load_closure *closure;
+
+	/* Schedule a dummy refresh. This blocks all monitoring for a while */
+	cancel_scheduled_refresh (self);
+	self->pv->scheduled_refresh = g_timeout_add (500, scheduled_dummy, self);
+	seahorse_debug ("scheduled a dummy refresh");
+
+	seahorse_debug ("refreshing keys...");
+
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	                                 seahorse_gpgme_source_load_full_async);
+	closure = g_new0 (source_load_closure, 1);
+	g_simple_async_result_set_op_res_gpointer (res, closure, g_free);
+
+	/* Secret keys */
+	seahorse_gpgme_source_list_async (self, patterns, 0, TRUE, cancellable,
+	                                  on_source_secret_list_complete,
+	                                  g_object_ref (res));
+
+	/* Public keys */
+	seahorse_gpgme_source_list_async (self, patterns, 0, FALSE, cancellable,
+	                                  on_source_public_list_complete,
+	                                  g_object_ref (res));
+
+	g_object_unref (res);
+}
+
+static void
+seahorse_gpgme_source_load_async (SeahorseSource *source,
+                                  GCancellable *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer user_data)
+{
+	seahorse_gpgme_source_load_full_async (SEAHORSE_GPGME_SOURCE (source),
+	                                       NULL, 0, cancellable, callback,
+	                                       user_data);
+}
+
+static gboolean
+seahorse_gpgme_source_load_finish (SeahorseSource *source,
+                                   GAsyncResult *result,
+                                   GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_gpgme_source_load_full_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
+typedef struct {
+	GCancellable *cancellable;
+	SeahorseGpgmeSource *source;
+	gpgme_ctx_t gctx;
+	gpgme_data_t data;
+	gchar **patterns;
+	GList *keys;
+} source_import_closure;
+
+static void
+source_import_free (gpointer data)
+{
+	source_import_closure *closure = data;
+	g_clear_object (&closure->cancellable);
+	gpgme_release (closure->gctx);
+	gpgme_data_release (closure->data);
+	g_object_unref (closure->source);
+	g_strfreev (closure->patterns);
+	g_list_free (closure->keys);
+	g_free (closure);
+}
+
+static void
+on_source_import_loaded (GObject *source,
+                         GAsyncResult *result,
+                         gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	source_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	SeahorseObject *object;
+	GQuark keyid;
+	guint i;
+
+	for (i = 0; closure->patterns[i] != NULL; i++) {
+		keyid = seahorse_pgp_key_canonize_id (closure->patterns[i]);
+		if (!keyid) {
+			g_warning ("imported non key with strange keyid: %s",
+			           closure->patterns[i]);
+			continue;
+		}
+
+		object = seahorse_context_get_object (seahorse_context_instance (),
+		                                      SEAHORSE_SOURCE (closure->source),
+		                                      keyid);
+		if (object == NULL) {
+			g_warning ("imported key but then couldn't find it in keyring: %s",
+			           closure->patterns[i]);
+			continue;
+		}
+
+		closure->keys = g_list_prepend (closure->keys, object);
+	}
+
+	seahorse_progress_end (closure->cancellable, res);
+	g_simple_async_result_complete (res);
+	g_object_unref (res);
+}
+
+static gboolean
+on_source_import_complete (gpgme_error_t gerr,
+                           gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	source_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	gpgme_import_result_t results;
+	gpgme_import_status_t import;
+	GError *error = NULL;
+	const gchar *msg;
+	guint i;
+
+	if (seahorse_gpgme_propagate_error (gerr, &error)) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete (res);
+		return FALSE; /* don't call again */
+	}
+
+	/* Figure out which keys were imported */
+	results = gpgme_op_import_result (closure->gctx);
+	if (results == NULL) {
+		g_simple_async_result_complete (res);
+		return FALSE; /* don't call again */
+	}
+
+	/* Dig out all the fingerprints for use as load patterns */
+	closure->patterns = g_new0 (gchar*, results->considered + 1);
+	for (i = 0, import = results->imports;
+	     i < results->considered && import;
+	     import = import->next) {
+		if (GPG_IS_OK (import->result))
+			closure->patterns[i++] = g_strdup (import->fpr);
+	}
+
+	/* See if we've managed to import any ... */
+	if (closure->patterns[0] == NULL) {
+
+		/* ... try and find out why */
+		if (results->considered > 0 && results->no_user_id) {
+			msg = _("Invalid key data (missing UIDs). This may be due to a computer with a date set in the future or a missing self-signature.");
+			g_simple_async_result_set_error (res, SEAHORSE_ERROR, -1, "%s", msg);
+		}
+
+		g_simple_async_result_complete (res);
+		return FALSE; /* don't call again */
+	}
+
+	/* Reload public keys */
+	seahorse_gpgme_source_load_full_async (closure->source, (const gchar **)closure->patterns,
+	                                       LOAD_FULL, closure->cancellable,
+	                                       on_source_import_loaded, g_object_ref (res));
+
+	return FALSE; /* don't call again */
+}
+
+static void
+seahorse_gpgme_source_import_async (SeahorseSource *source,
+                                    GInputStream *input,
+                                    GCancellable *cancellable,
+                                    GAsyncReadyCallback callback,
+                                    gpointer user_data)
+{
+	SeahorseGpgmeSource *self = SEAHORSE_GPGME_SOURCE (source);
+	GSimpleAsyncResult *res;
+	source_import_closure *closure;
+	gpgme_error_t gerr;
+	GError *error = NULL;
+	GSource *gsource;
+
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	                                 seahorse_gpgme_source_import_async);
+	closure = g_new0 (source_import_closure, 1);
+	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+	closure->gctx = seahorse_gpgme_source_new_context ();
+	closure->data = seahorse_gpgme_data_input (input);
+	closure->source = g_object_ref (self);
+	g_simple_async_result_set_op_res_gpointer (res, closure, source_import_free);
+
+	seahorse_progress_prep_and_begin (cancellable, res, NULL);
+	gsource = seahorse_gpgme_gsource_new (closure->gctx, cancellable);
+	g_source_set_callback (gsource, (GSourceFunc)on_source_import_complete,
+	                       g_object_ref (res), g_object_unref);
+
+	gerr = gpgme_op_import_start (closure->gctx, closure->data);
+
+	if (seahorse_gpgme_propagate_error (gerr, &error)) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete_in_idle (res);
+
+	} else {
+		g_source_attach (gsource, g_main_context_default ());
+	}
+
+	g_source_unref (gsource);
+	g_object_unref (res);
+}
+
+static GList *
+seahorse_gpgme_source_import_finish (SeahorseSource *source,
+                                     GAsyncResult *result,
+                                     GError **error)
+{
+	source_import_closure *closure;
+	GList *results;
+
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_gpgme_source_import_async), NULL);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return NULL;
+
+	closure = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
+	results = closure->keys;
+	closure->keys = NULL;
+	return results;
+}
+
+typedef struct {
+	GPtrArray *keyids;
+	gint at;
+	gpgme_data_t data;
+	gpgme_ctx_t gctx;
+	GOutputStream *output;
+	GCancellable *cancellable;
+	gulong cancelled_sig;
+} source_export_closure;
+
+static void
+source_export_free (gpointer data)
+{
+	source_export_closure *closure = data;
+	g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
+	g_clear_object (&closure->cancellable);
+	gpgme_data_release (closure->data);
+	gpgme_release (closure->gctx);
+	g_ptr_array_free (closure->keyids, TRUE);
+	g_object_unref (closure->output);
+	g_free (closure);
+}
+
+static gboolean
+on_source_export_complete (gpgme_error_t gerr,
+                           gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	source_export_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+
+	if (seahorse_gpgme_propagate_error (gerr, &error)) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete (res);
+		return FALSE; /* don't call again */
+	}
+
+	if (closure->at >= 0)
+		seahorse_progress_end (closure->cancellable,
+		                       closure->keyids->pdata[closure->at]);
+
+	g_assert (closure->at < (gint)closure->keyids->len);
+	closure->at++;
+
+	if (closure->at == closure->keyids->len) {
+		g_simple_async_result_complete (res);
+		return FALSE; /* don't run this again */
+	}
+
+	/* Do the next key in the list */
+	gerr = gpgme_op_export_start (closure->gctx, closure->keyids->pdata[closure->at],
+	                              0, closure->data);
+
+	if (seahorse_gpgme_propagate_error (gerr, &error)) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete (res);
+		return FALSE; /* don't run this again */
+	}
+
+	seahorse_progress_begin (closure->cancellable,
+	                         closure->keyids->pdata[closure->at]);
+	return TRUE; /* call this source again */
+}
+
+static void
+seahorse_gpgme_source_export_async (SeahorseSource *source,
+                                    GList *objects,
+                                    GOutputStream *output,
+                                    GCancellable *cancellable,
+                                    GAsyncReadyCallback callback,
+                                    gpointer user_data)
+{
+	GSimpleAsyncResult *res;
+	source_export_closure *closure;
+	SeahorsePgpKey *key;
+	gchar *keyid;
+	GSource *gsource;
+	GList *l;
+
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	                                 seahorse_gpgme_source_export_async);
+	closure = g_new0 (source_export_closure, 1);
+	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+	closure->gctx = seahorse_gpgme_source_new_context ();
+	closure->data = seahorse_gpgme_data_output (output);
+	closure->keyids = g_ptr_array_new_with_free_func (g_free);
+	closure->output = g_object_ref (output);
+	closure->at = -1;
+	g_simple_async_result_set_op_res_gpointer (res, closure, source_export_free);
+
+	gpgme_set_armor (closure->gctx, TRUE);
+	gpgme_set_textmode (closure->gctx, TRUE);
+
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+
+		/* Ignore PGP Uids */
+		if (SEAHORSE_IS_PGP_UID (l->data))
+			continue;
+
+		g_return_if_fail (SEAHORSE_IS_PGP_KEY (l->data));
+		key = SEAHORSE_PGP_KEY (l->data);
+		g_return_if_fail (seahorse_object_get_source (SEAHORSE_OBJECT (key)) == source);
+
+		/* Building list */
+		keyid = g_strdup (seahorse_pgp_key_get_keyid (key));
+		seahorse_progress_prep (closure->cancellable, keyid, NULL);
+		g_ptr_array_add (closure->keyids, keyid);
+	}
+
+	gsource = seahorse_gpgme_gsource_new (closure->gctx, cancellable);
+	g_source_set_callback (gsource, (GSourceFunc)on_source_export_complete,
+	                       g_object_ref (res), g_object_unref);
+
+	/* Get things started */
+	if (on_source_export_complete (0, res))
+		g_source_attach (gsource, g_main_context_default ());
+
+	g_source_unref (gsource);
+	g_object_unref (res);
+}
+
+static GOutputStream *
+seahorse_gpgme_source_export_finish (SeahorseSource *source,
+                                     GAsyncResult *result,
+                                     GError **error)
+{
+	source_export_closure *closure;
+
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_gpgme_source_export_async), NULL);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return NULL;
+
+	closure = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
+	return closure->output;
+}
+
+static gboolean
+scheduled_refresh (gpointer user_data)
+{
+	SeahorseGpgmeSource *self = SEAHORSE_GPGME_SOURCE (user_data);
+
+	seahorse_debug ("scheduled refresh event ocurring now");
+	cancel_scheduled_refresh (self);
+	seahorse_source_load_async (SEAHORSE_SOURCE (self), NULL, NULL, NULL);
+
+	return FALSE; /* don't run again */
+}
+
 static void
 monitor_gpg_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
                      GFileMonitorEvent event_type, gpointer user_data)
 {
-	SeahorseGpgmeSource *psrc = SEAHORSE_GPGME_SOURCE (user_data);
+	SeahorseGpgmeSource *self = SEAHORSE_GPGME_SOURCE (user_data);
 	gchar *name;
-	
-	if (event_type == G_FILE_MONITOR_EVENT_CHANGED || 
+
+	if (event_type == G_FILE_MONITOR_EVENT_CHANGED ||
 	    event_type == G_FILE_MONITOR_EVENT_DELETED ||
 	    event_type == G_FILE_MONITOR_EVENT_CREATED) {
 
 		name = g_file_get_basename (file);
 		if (g_str_has_suffix (name, SEAHORSE_EXT_GPG)) {
-			if (psrc->pv->scheduled_refresh == 0) {
+			if (self->pv->scheduled_refresh == 0) {
 				seahorse_debug ("scheduling refresh event due to file changes");
-				psrc->pv->scheduled_refresh = g_timeout_add (500, scheduled_refresh, psrc);
+				self->pv->scheduled_refresh = g_timeout_add (500, scheduled_refresh, self);
 			}
 		}
 	}
 }
 
-/* --------------------------------------------------------------------------
- *  OPERATION STUFF 
- */
- 
-static void 
-seahorse_load_operation_init (SeahorseLoadOperation *lop)
+static void
+seahorse_gpgme_source_init (SeahorseGpgmeSource *self)
 {
-    gpgme_error_t err;
-    
-    err = init_gpgme (&(lop->ctx));
-    if (!GPG_IS_OK (err)) 
-        g_return_if_reached ();
-    
-    lop->checks = NULL;
-    lop->batch = DEFAULT_LOAD_BATCH;
-    lop->stag = 0;
+	gpgme_error_t gerr;
+	GError *err = NULL;
+	const gchar *gpg_homedir;
+	GFile *file;
+
+	gerr = init_gpgme (&self->gctx);
+	g_return_if_fail (GPG_IS_OK (gerr));
+
+	/* init private vars */
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GPGME_SOURCE, SeahorseGpgmeSourcePrivate);
+
+	self->pv->scheduled_refresh = 0;
+	self->pv->monitor_handle = NULL;
+
+	gpg_homedir = seahorse_gpg_homedir ();
+	file = g_file_new_for_path (gpg_homedir);
+	g_return_if_fail (file != NULL);
+
+	self->pv->monitor_handle = g_file_monitor_directory (file, G_FILE_MONITOR_NONE, NULL, &err);
+	g_object_unref (file);
+
+	if (self->pv->monitor_handle) {
+		g_signal_connect (self->pv->monitor_handle, "changed",
+		                  G_CALLBACK (monitor_gpg_homedir), self);
+	} else {
+		g_warning ("couldn't monitor the GPG home directory: %s: %s", 
+		           gpg_homedir, err && err->message ? err->message : "");
+	}
 }
-
-static void 
-seahorse_load_operation_dispose (GObject *gobject)
-{
-    SeahorseLoadOperation *lop = SEAHORSE_LOAD_OPERATION (gobject);
-    
-    /*
-     * Note that after this executes the rest of the object should
-     * still work without a segfault. This basically nullifies the 
-     * object, but doesn't free it.
-     * 
-     * This function should also be able to run multiple times.
-     */
-  
-    if (lop->stag) {
-        g_source_remove (lop->stag);
-        lop->stag = 0;
-    }
-
-    if (lop->psrc) {
-        g_object_unref (lop->psrc);
-        lop->psrc = NULL;
-    }
-
-    G_OBJECT_CLASS (load_operation_parent_class)->dispose (gobject);
-}
-
-static void 
-seahorse_load_operation_finalize (GObject *gobject)
-{
-    SeahorseLoadOperation *lop = SEAHORSE_LOAD_OPERATION (gobject);
-    
-    if (lop->checks)    
-        g_hash_table_destroy (lop->checks);
-
-    g_assert (lop->stag == 0);
-    g_assert (lop->psrc == NULL);
-
-    if (lop->ctx)
-        gpgme_release (lop->ctx);
-        
-    G_OBJECT_CLASS (load_operation_parent_class)->finalize (gobject);
-}
-
-static void 
-seahorse_load_operation_cancel (SeahorseOperation *operation)
-{
-    SeahorseLoadOperation *lop = SEAHORSE_LOAD_OPERATION (operation);    
-
-    gpgme_op_keylist_end (lop->ctx);
-    seahorse_operation_mark_done (operation, TRUE, NULL);
-}
-
-/* Completes one batch of key loading */
-static gboolean
-keyload_handler (SeahorseLoadOperation *lop)
-{
-    SeahorseGpgmeKey *pkey;
-    gpgme_key_t key;
-    guint batch;
-    GQuark keyid;
-    gchar *t;
-    
-    g_assert (SEAHORSE_IS_LOAD_OPERATION (lop));
-    
-    /* We load until done if batch is zero */
-    batch = lop->batch == 0 ? ~0 : lop->batch;
-
-    while (batch-- > 0) {
-    
-        if (!GPG_IS_OK (gpgme_op_keylist_next (lop->ctx, &key))) {
-        
-            gpgme_op_keylist_end (lop->ctx);
-        
-            /* If we were a refresh loader, then we remove the keys we didn't find */
-            if (lop->checks) 
-                g_hash_table_foreach (lop->checks, (GHFunc)remove_key_from_context, lop->psrc);
-            
-            seahorse_operation_mark_done (SEAHORSE_OPERATION (lop), FALSE, NULL);         
-            return FALSE; /* Remove event handler */
-        }
-        
-        g_return_val_if_fail (key->subkeys && key->subkeys->keyid, FALSE);
-        keyid = seahorse_pgp_key_canonize_id (key->subkeys->keyid);
-        
-        /* Invalid id from GPG ? */
-        if (!keyid) {
-            gpgme_key_unref (key);
-            continue;
-        }
-        
-        /* During a refresh if only new or removed keys */
-        if (lop->checks) {
-
-            /* Make note that this key exists in key ring */
-            g_hash_table_remove (lop->checks, GUINT_TO_POINTER (keyid));
-
-        }
-        
-        pkey = add_key_to_context (lop->psrc, key);
-
-        /* Load additional info */
-        if (pkey && lop->parts & LOAD_PHOTOS)
-        	seahorse_gpgme_key_op_photos_load (pkey);
-
-        gpgme_key_unref (key);
-        lop->loaded++;
-    }
-    
-    /* More to do, so queue for next round */        
-    if (lop->stag == 0) {
-    
-        /* If it returns TRUE (like any good GSourceFunc) it means
-         * it needs to stick around, so we register an idle handler */
-        lop->stag = g_idle_add_full (G_PRIORITY_LOW, (GSourceFunc)keyload_handler, 
-                                     lop, NULL);
-    }
-    
-    /* TODO: We can use the GPGME progress to make this more accurate */
-    t = g_strdup_printf (ngettext("Loaded %d key", "Loaded %d keys", lop->loaded), lop->loaded);
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), t, 0.0);
-    g_free (t);
-    
-    return TRUE; 
-}
-
-static SeahorseLoadOperation*
-seahorse_load_operation_start (SeahorseGpgmeSource *psrc, const gchar **pattern, 
-                               guint parts, gboolean secret)
-{
-    SeahorseLoadOperation *lop;
-    gpgme_error_t err;
-    GList *keys, *l;
-    SeahorseObject *sobj;
-    
-    g_assert (SEAHORSE_IS_GPGME_SOURCE (psrc));
-
-    lop = g_object_new (SEAHORSE_TYPE_LOAD_OPERATION, NULL);    
-    lop->psrc = psrc;
-    lop->secret = secret;
-    g_object_ref (psrc);
-    
-    /* See which extra parts we should load */
-    lop->parts = parts;
-    if (parts & LOAD_FULL) 
-        gpgme_set_keylist_mode (lop->ctx, GPGME_KEYLIST_MODE_SIGS | 
-                gpgme_get_keylist_mode (lop->ctx));
-    
-    /* Start the key listing */
-    if (pattern)
-        err = gpgme_op_keylist_ext_start (lop->ctx, pattern, secret, 0);
-    else
-        err = gpgme_op_keylist_start (lop->ctx, NULL, secret);
-    g_return_val_if_fail (GPG_IS_OK (err), lop);
-    
-    /* Loading all the keys? */
-    if (!pattern) {
-     
-        lop->checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-        keys = seahorse_context_get_objects (SCTX_APP (), SEAHORSE_SOURCE (psrc));
-        for (l = keys; l; l = g_list_next (l)) {
-            sobj = SEAHORSE_OBJECT (l->data);
-            if (secret && seahorse_object_get_usage (sobj) != SEAHORSE_USAGE_PRIVATE_KEY) 
-                continue;
-            g_hash_table_insert (lop->checks, GUINT_TO_POINTER (seahorse_object_get_id (l->data)), 
-                                              GUINT_TO_POINTER (TRUE));
-        }
-        g_list_free (keys);
-        
-    }
-    
-    seahorse_operation_mark_start (SEAHORSE_OPERATION (lop));
-    seahorse_operation_mark_progress (SEAHORSE_OPERATION (lop), _("Loading Keys..."), 0.0);
-    
-    /* Run one iteration of the handler */
-    keyload_handler (lop);
- 
-    return lop;
-}    
 
 static void
-prepare_import_results (SeahorseGpgmeOperation *pop, SeahorseGpgmeSource *psrc)
+seahorse_gpgme_source_dispose (GObject *object)
 {
-    SeahorseObject *sobj;
-    SeahorseLoadOperation *lop;
-    gpgme_import_result_t results;
-    gpgme_import_status_t import;
-    SeahorseSource *sksrc;
-    GList *keys = NULL;
-    const gchar **patterns = NULL;
-    GError *err = NULL;
-    gchar *msg;
-    GQuark keyid;
-    guint i;
-    
-    sksrc = SEAHORSE_SOURCE (psrc);
-
-    /* Figure out which keys were imported */
-    results = gpgme_op_import_result (pop->gctx);
-    if (results) {
-            
-        /* Dig out all the fingerprints for use as load patterns */
-        patterns = (const gchar**)g_new0(gchar*, results->considered + 1);
-        for (i = 0, import = results->imports; 
-             i < results->considered && import; 
-             import = import->next) {
-            if (GPG_IS_OK (import->result))
-                patterns[i++] = import->fpr;
-        }
-        
-        /* See if we've managed to import any ... */
-        if (!patterns[0] && results->considered > 0) {
-            
-            /* ... try and find out why */
-            if (results->no_user_id) {
-                msg = _("Invalid key data (missing UIDs). This may be due to a computer with a date set in the future or a missing self-signature.");
-                g_set_error (&err, SEAHORSE_ERROR, -1, "%s", msg);
-                seahorse_operation_mark_done (SEAHORSE_OPERATION (pop), FALSE, err);
-                return;
-            }
-        }
-
-        /* Reload public keys */
-        lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL, FALSE);
-        seahorse_operation_wait (SEAHORSE_OPERATION (lop));
-        g_object_unref (lop);
-
-        /* Reload secret keys */
-        lop = seahorse_load_operation_start (psrc, patterns, LOAD_FULL, TRUE);
-        seahorse_operation_wait (SEAHORSE_OPERATION (lop));
-        g_object_unref (lop);
-            
-        g_free (patterns);
-            
-        /* Now get a list of the new keys */
-        for (import = results->imports; import; import = import->next) {
-            if (!GPG_IS_OK (import->result))
-                continue;
-            
-            keyid = seahorse_pgp_key_canonize_id (import->fpr);
-            if (!keyid) {
-                g_warning ("imported non key with strange keyid: %s", import->fpr);
-                continue;
-            }
-            
-            sobj = seahorse_context_get_object (SCTX_APP (), sksrc, keyid);
-            if (sobj == NULL) {
-                g_warning ("imported key but then couldn't find it in keyring: %s", 
-                           import->fpr);
-                continue;
-            }
-            
-            keys = g_list_prepend (keys, sobj);
-        }
-    }
-    
-    seahorse_operation_mark_result (SEAHORSE_OPERATION (pop), keys, 
-                                    (GDestroyNotify)g_list_free);
-}
-
-/* --------------------------------------------------------------------------
- * METHODS
- */
-
-static SeahorseOperation*
-seahorse_gpgme_source_load (SeahorseSource *src)
-{
-    SeahorseGpgmeSource *psrc;
-    SeahorseLoadOperation *lop;
-    
-    g_assert (SEAHORSE_IS_SOURCE (src));
-    psrc = SEAHORSE_GPGME_SOURCE (src);
-    
-    /* Schedule a dummy refresh. This blocks all monitoring for a while */
-    cancel_scheduled_refresh (psrc);
-    psrc->pv->scheduled_refresh = g_timeout_add (500, scheduled_dummy, psrc);
-    seahorse_debug ("scheduled a dummy refresh");
- 
-    seahorse_debug ("refreshing keys...");
-
-    /* Secret keys */
-    lop = seahorse_load_operation_start (psrc, NULL, 0, FALSE);
-    seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
-
-    /* Public keys */
-    lop = seahorse_load_operation_start (psrc, NULL, 0, TRUE);
-    seahorse_multi_operation_take (psrc->pv->operations, SEAHORSE_OPERATION (lop));
-
-    g_object_ref (psrc->pv->operations);
-    return SEAHORSE_OPERATION (psrc->pv->operations);
-}
-
-static SeahorseOperation* 
-seahorse_gpgme_source_import (SeahorseSource *sksrc, GInputStream *input)
-{
-	SeahorseGpgmeOperation *pop;
-	SeahorseGpgmeSource *psrc;
-	gpgme_error_t gerr;
-	gpgme_data_t data;
-    
-    	g_return_val_if_fail (SEAHORSE_IS_GPGME_SOURCE (sksrc), NULL);
-    	psrc = SEAHORSE_GPGME_SOURCE (sksrc);
-    
-    	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
-    
-    	pop = seahorse_gpgme_operation_new (_("Importing Keys"));
-    	g_return_val_if_fail (pop != NULL, NULL);
-    
-	data = seahorse_gpgme_data_input (input);
-	g_return_val_if_fail (data, NULL);
-    
-	gerr = gpgme_op_import_start (pop->gctx, data);
-    
-	g_signal_connect (pop, "results", G_CALLBACK (prepare_import_results), psrc);
-	g_object_set_data_full (G_OBJECT (pop), "source-data", data, 
-	                        (GDestroyNotify)gpgme_data_release);
-    
-	/* Couldn't start import */
-	if (!GPG_IS_OK (gerr))
-		seahorse_gpgme_operation_mark_failed (pop, gerr);
-    
-	return SEAHORSE_OPERATION (pop);
-}
-
-static SeahorseOperation* 
-seahorse_gpgme_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream *output)
-{
-	SeahorseGpgmeOperation *pop;
-	SeahorseGpgmeKey *pkey;
-	SeahorseObject *object;
-	ExportContext *ctx;
-	gpgme_data_t data;
-	const gchar *keyid;
+	SeahorseGpgmeSource *self = SEAHORSE_GPGME_SOURCE (object);
 	GList *l;
-    
-    	g_return_val_if_fail (SEAHORSE_IS_GPGME_SOURCE (sksrc), NULL);
-    	g_return_val_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output), NULL);
 
-    	pop = seahorse_gpgme_operation_new (_("Exporting Keys"));
-    	g_return_val_if_fail (pop != NULL, NULL);
+	/*
+	 * Note that after this executes the rest of the object should
+	 * still work without a segfault. This basically nullifies the
+	 * object, but doesn't free it.
+	 *
+	 * This function should also be able to run multiple times.
+	 */
 
-	g_object_ref (output);
-        seahorse_operation_mark_result (SEAHORSE_OPERATION (pop), output, 
-                                        (GDestroyNotify)g_object_unref);
-    	
-        gpgme_set_armor (pop->gctx, TRUE);
-        gpgme_set_textmode (pop->gctx, TRUE);
-        
-        data = seahorse_gpgme_data_output (output);
-        g_return_val_if_fail (data, NULL);
+	cancel_scheduled_refresh (self);
+	if (self->pv->monitor_handle) {
+		g_object_unref (self->pv->monitor_handle);
+		self->pv->monitor_handle = NULL;
+	}
 
-        /* Export context for asynchronous export */
-        ctx = g_new0 (ExportContext, 1);
-        ctx->keyids = g_array_new (TRUE, TRUE, sizeof (gchar*));
-        ctx->at = 0;
-        ctx->data = data;
-        g_object_set_data_full (G_OBJECT (pop), "export-context", ctx, free_export_context);
-    
-        for (l = keys; l != NULL; l = g_list_next (l)) {
-        	
-        	/* Ignore PGP Uids */
-        	if (SEAHORSE_IS_PGP_UID (l->data))
-        		continue;
-        
-        	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (l->data), NULL);
-        	pkey = SEAHORSE_GPGME_KEY (l->data);
-        
-        	object = SEAHORSE_OBJECT (l->data);
-        	g_return_val_if_fail (seahorse_object_get_source (object) == sksrc, NULL);
-        
-        	/* Building list */
-        	keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (pkey));
-        	g_array_append_val (ctx->keyids, keyid);
-        }
+	for (l = self->pv->orphan_secret; l != NULL; l = g_list_next (l))
+		g_object_unref (l->data);
+	g_list_free (self->pv->orphan_secret);
+	self->pv->orphan_secret = NULL;
 
-        g_signal_connect (pop, "results", G_CALLBACK (export_key_callback), ctx);
-        export_key_callback (pop, ctx);
-    
-        return SEAHORSE_OPERATION (pop);
+	if (self->gctx)
+		gpgme_release (self->gctx);
+
+	G_OBJECT_CLASS (seahorse_gpgme_source_parent_class)->dispose (object);
 }
 
-/* -------------------------------------------------------------------------- 
- * FUNCTIONS
- */
+static void
+seahorse_gpgme_source_finalize (GObject *object)
+{
+	SeahorseGpgmeSource *self = SEAHORSE_GPGME_SOURCE (object);
+
+	/* All monitoring and scheduling should be done */
+	g_assert (self->pv->scheduled_refresh == 0);
+	g_assert (self->pv->monitor_handle == 0);
+
+	G_OBJECT_CLASS (seahorse_gpgme_source_parent_class)->finalize (object);
+}
+
+static void 
+seahorse_gpgme_source_get_property (GObject *object,
+                                    guint prop_id,
+                                    GValue *value,
+                                    GParamSpec *pspec)
+{
+	switch (prop_id) {
+	case PROP_SOURCE_TAG:
+		g_value_set_uint (value, SEAHORSE_PGP);
+		break;
+	case PROP_SOURCE_LOCATION:
+		g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+seahorse_gpgme_source_class_init (SeahorseGpgmeSourceClass *klass)
+{
+	GObjectClass *gobject_class;
+
+	g_message ("init gpgme version %s", gpgme_check_version (NULL));
+
+#ifdef ENABLE_NLS
+	gpgme_set_locale (NULL, LC_CTYPE, setlocale (LC_CTYPE, NULL));
+	gpgme_set_locale (NULL, LC_MESSAGES, setlocale (LC_MESSAGES, NULL));
+#endif
+
+	gobject_class = G_OBJECT_CLASS (klass);
+	gobject_class->dispose = seahorse_gpgme_source_dispose;
+	gobject_class->finalize = seahorse_gpgme_source_finalize;
+	gobject_class->get_property = seahorse_gpgme_source_get_property;
+
+	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
+	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
+
+	g_type_class_add_private (klass, sizeof (SeahorseGpgmeSourcePrivate));
+
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GPGME_SOURCE, "source", "local", SEAHORSE_PGP_STR, NULL);
+	seahorse_registry_register_function (NULL, seahorse_pgp_key_canonize_id, "canonize", SEAHORSE_PGP_STR, NULL);
+}
+
+static void
+seahorse_source_iface (SeahorseSourceIface *iface)
+{
+	iface->load_async = seahorse_gpgme_source_load_async;
+	iface->load_finish = seahorse_gpgme_source_load_finish;
+	iface->import_async = seahorse_gpgme_source_import_async;
+	iface->import_finish = seahorse_gpgme_source_import_finish;
+	iface->export_async = seahorse_gpgme_source_export_async;
+	iface->export_finish = seahorse_gpgme_source_export_finish;
+}
 
 /**
  * seahorse_gpgme_source_new
@@ -980,16 +1034,16 @@ seahorse_gpgme_source_export (SeahorseSource *sksrc, GList *keys, GOutputStream 
  * 
  * Returns: The key source.
  **/
-SeahorseGpgmeSource*
+SeahorseGpgmeSource *
 seahorse_gpgme_source_new (void)
 {
-   return g_object_new (SEAHORSE_TYPE_GPGME_SOURCE, NULL);
-}   
+	return g_object_new (SEAHORSE_TYPE_GPGME_SOURCE, NULL);
+}
 
-gpgme_ctx_t          
-seahorse_gpgme_source_new_context ()
+gpgme_ctx_t
+seahorse_gpgme_source_new_context (void)
 {
-    gpgme_ctx_t ctx = NULL;
-    g_return_val_if_fail (GPG_IS_OK (init_gpgme (&ctx)), NULL);
-    return ctx;
+	gpgme_ctx_t ctx = NULL;
+	g_return_val_if_fail (GPG_IS_OK (init_gpgme (&ctx)), NULL);
+	return ctx;
 }

@@ -66,8 +66,8 @@ GType                    seahorse_unknown_source_get_type      (void);
 
 SeahorseUnknownSource*   seahorse_unknown_source_new           (GQuark ktype);
 
-SeahorseObject*          seahorse_unknown_source_add_object    (SeahorseUnknownSource *usrc,
+SeahorseObject*          seahorse_unknown_source_add_object    (SeahorseUnknownSource *self,
                                                                 GQuark id,
-                                                                SeahorseOperation *search);
+                                                                GCancellable *cancellable);
 
 #endif /* __SEAHORSE_UNKNOWN_SOURCE_H__ */

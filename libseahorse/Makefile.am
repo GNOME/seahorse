@@ -37,7 +37,6 @@ libseahorse_la_SOURCES = \
 	seahorse-object.c seahorse-object.h \
 	seahorse-object-model.c seahorse-object-model.h \
 	seahorse-object-widget.c seahorse-object-widget.h \
-	seahorse-operation.c seahorse-operation.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-progress.c seahorse-progress.h \
@@ -46,7 +45,7 @@ libseahorse_la_SOURCES = \
 	seahorse-set.c seahorse-set.h \
 	seahorse-set-model.c seahorse-set-model.h \
 	seahorse-source.c seahorse-source.h \
-	seahorse-transfer-operation.c seahorse-transfer-operation.h \
+	seahorse-transfer.c seahorse-transfer.h \
 	seahorse-types.c seahorse-types.h \
 	seahorse-unix-signal.c seahorse-unix-signal.h \
 	seahorse-unknown.c seahorse-unknown.h \

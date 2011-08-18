@@ -25,7 +25,6 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-operation.h"
 #include "seahorse-progress.h"
 #include "seahorse-widget.h"
 #include "seahorse-validity.h"

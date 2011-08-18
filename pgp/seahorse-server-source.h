@@ -41,7 +41,6 @@
 #define __SEAHORSE_SERVER_SOURCE_H__
 
 #include "seahorse-source.h"
-#include "seahorse-operation.h"
 
 #define SEAHORSE_TYPE_SERVER_SOURCE            (seahorse_server_source_get_type ())
 #define SEAHORSE_SERVER_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SERVER_SOURCE, SeahorseServerSource))
@@ -63,11 +62,8 @@ struct _SeahorseServerSourceClass {
 	GObjectClass parent_class;
 };
 
-GType        seahorse_server_source_get_type         (void);
+GType                  seahorse_server_source_get_type         (void);
 
-void         seahorse_server_source_take_operation   (SeahorseServerSource *ssrc,
-                                                      SeahorseOperation *operation);
-
-SeahorseServerSource* seahorse_server_source_new     (const gchar *uri);
+SeahorseServerSource*  seahorse_server_source_new              (const gchar *uri);
 
 #endif /* __SEAHORSE_SERVER_SOURCE_H__ */

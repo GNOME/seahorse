@@ -26,10 +26,12 @@
 #include "seahorse-gkr.h"
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-dialogs.h"
+#include "seahorse-gkr-operation.h"
 #include "seahorse-gkr-source.h"
 
 #include "common/seahorse-registry.h"
 
+#include "seahorse-progress.h"
 #include "seahorse-source.h"
 #include "seahorse-util.h"
 
@@ -62,9 +64,11 @@ static void on_view_selection_changed (SeahorseView *view, gpointer user_data);
  */
 
 static void
-on_refresh_done (SeahorseOperation *op, gpointer user_data)
+on_refresh_all_keyrings_complete (GObject *source,
+                                  GAsyncResult *result,
+                                  gpointer user_data)
 {
-	SeahorseCommands *self = user_data;
+	SeahorseCommands *self = SEAHORSE_COMMANDS (user_data);
 	SeahorseView *view;
 
 	g_return_if_fail (SEAHORSE_IS_COMMANDS (self));
@@ -79,19 +83,9 @@ on_refresh_done (SeahorseOperation *op, gpointer user_data)
 static void
 refresh_all_keyrings (SeahorseCommands *self)
 {
-	SeahorseOperation *op;
-
-	op = seahorse_source_load (SEAHORSE_SOURCE (seahorse_gkr_source_default ()));
-	
-	/* 
-	 * HACK: Major hack alert. This whole area needs some serious refactoring,
-	 * so for now we're just going to let any viewers listen in on this
-	 * operation like so:
-	 */
-	g_signal_emit_by_name (seahorse_context_instance (), "refreshing", op);
-
-	seahorse_operation_watch (op, on_refresh_done, g_object_ref (self), NULL, NULL);
-	g_object_unref (op);
+	seahorse_source_load_async (SEAHORSE_SOURCE (seahorse_gkr_source_default ()),
+	                            NULL, on_refresh_all_keyrings_complete,
+	                            g_object_ref (self));
 }
 
 /**
@@ -342,24 +336,50 @@ seahorse_gkr_keyring_commands_show_properties (SeahorseCommands* base, SeahorseO
 		g_return_if_reached ();
 }
 
-static SeahorseOperation* 
-seahorse_gkr_keyring_commands_delete_objects (SeahorseCommands* base, GList* objects) 
+static void
+on_delete_objects_complete (GObject *source, GAsyncResult *result, gpointer user_data)
 {
-	SeahorseOperation *oper = NULL;
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (user_data);
+	GError *error = NULL;
+	GtkWidget *parent;
+
+	if (!seahorse_gkr_delete_finish (result, &error)) {
+		parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (commands)));
+		seahorse_util_show_error (parent, _("Couldn't delete keyring"), error->message);
+		g_error_free (error);
+	}
+
+	g_object_unref (commands);
+}
+
+static gboolean
+seahorse_gkr_keyring_commands_delete_objects (SeahorseCommands* commands,
+                                              GList* objects)
+{
+	GCancellable *cancellable;
 	gchar *prompt;
-	
+	gboolean ret;
+
 	if (!objects)
-		return NULL;
+		return TRUE;
 
 	prompt = g_strdup_printf (_ ("Are you sure you want to delete the password keyring '%s'?"), 
 	                          seahorse_object_get_label (objects->data));
 
-	if (seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_commands_get_window (base))))
-		oper = seahorse_object_delete (objects->data);
-		
+	ret = seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_commands_get_window (commands)));
+
+	if (ret) {
+		cancellable = g_cancellable_new ();
+		seahorse_gkr_delete_async (objects, cancellable,
+		                           on_delete_objects_complete,
+		                           g_object_ref (commands));
+		seahorse_progress_show (cancellable, ngettext (_("Deleting keyring"), _("Deleting keyrings"),
+		                                               g_list_length (objects)), TRUE);
+		g_object_unref (cancellable);
+	}
+
 	g_free (prompt);
-	
-	return oper;
+	return ret;
 }
 
 static GObject* 
@@ -427,7 +447,7 @@ seahorse_gkr_keyring_commands_class_init (SeahorseGkrKeyringCommandsClass *klass
 
 	cmd_class->show_properties = seahorse_gkr_keyring_commands_show_properties;
 	cmd_class->delete_objects = seahorse_gkr_keyring_commands_delete_objects;
-	
+
 	g_type_class_add_private (gobject_class, sizeof (SeahorseGkrKeyringCommandsPrivate));
 
 	/* Setup the predicate for these commands */

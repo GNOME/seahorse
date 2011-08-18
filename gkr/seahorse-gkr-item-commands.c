@@ -26,9 +26,11 @@
 #include "seahorse-gkr.h"
 #include "seahorse-gkr-item.h"
 #include "seahorse-gkr-dialogs.h"
+#include "seahorse-gkr-operation.h"
 
 #include "common/seahorse-registry.h"
 
+#include "seahorse-progress.h"
 #include "seahorse-source.h"
 #include "seahorse-util.h"
 
@@ -62,17 +64,37 @@ seahorse_gkr_item_commands_show_properties (SeahorseCommands* base, SeahorseObje
 		g_return_if_reached ();
 }
 
-static SeahorseOperation* 
-seahorse_gkr_item_commands_delete_objects (SeahorseCommands* base, GList* objects) 
+static void
+on_delete_objects (GObject *source,
+                   GAsyncResult *result,
+                   gpointer user_data)
 {
-	gchar *prompt;
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (user_data);
+	GError *error = NULL;
 	GtkWidget *parent;
+
+	if (!seahorse_gkr_delete_finish (result, &error)) {
+		parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (commands)));
+		seahorse_util_show_error (parent, _("Couldn't delete item"), error->message);
+		g_error_free (error);
+	}
+
+	g_object_unref (commands);
+}
+
+static gboolean
+seahorse_gkr_item_commands_delete_objects (SeahorseCommands* commands,
+                                           GList* objects)
+{
+	GCancellable *cancellable;
+	GtkWidget *parent;
+	gchar *prompt;
 	gboolean ret;
 	guint num;
 
 	num = g_list_length (objects);
 	if (num == 0)
-		return NULL;
+		return TRUE;
 
 	if (num == 1) {
 		prompt = g_strdup_printf (_ ("Are you sure you want to delete the password '%s'?"), 
@@ -83,14 +105,18 @@ seahorse_gkr_item_commands_delete_objects (SeahorseCommands* base, GList* object
 		                                    num), num);
 	}
 	
-	parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (base)));
+	parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (commands)));
 	ret = seahorse_util_prompt_delete (prompt, parent);
-	g_free (prompt);
-	
-	if (!ret)
-		return NULL;
 
-	return seahorse_source_delete_objects (objects);
+	if (ret) {
+		cancellable = g_cancellable_new ();
+		seahorse_gkr_delete_async (objects, cancellable, on_delete_objects, g_object_ref (commands));
+		seahorse_progress_show (cancellable, ngettext (_("Deleting item"), _("Deleting items"), num), TRUE);
+		g_object_unref (cancellable);
+	}
+
+	g_free (prompt);
+	return ret;
 }
 
 static GObject* 
@@ -128,7 +154,7 @@ seahorse_gkr_item_commands_class_init (SeahorseGkrItemCommandsClass *klass)
 
 	cmd_class->show_properties = seahorse_gkr_item_commands_show_properties;
 	cmd_class->delete_objects = seahorse_gkr_item_commands_delete_objects;
-	
+
 	/* Setup the predicate that matches our commands */
 	commands_predicate.type = SEAHORSE_TYPE_GKR_ITEM;
 

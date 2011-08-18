@@ -126,17 +126,6 @@ static AlgorithmDesc available_algorithms[] = {
  *
  * If the key generation caused errors, these will be displayed in this function
  */
-static void
-completion_handler (SeahorseOperation *op, gpointer data)
-{
-    GError *error = NULL;
-    if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_copy_error (op, &error);
-        seahorse_util_handle_error (error, _("Couldn't generate PGP key"));
-        g_clear_error (&error);
-    }
-}
-
 
 /**
  * get_expiry_date:
@@ -166,6 +155,16 @@ get_expiry_date (SeahorseWidget *swidget)
     return widget;
 }
 
+static void
+on_generate_key_complete (GObject *source,
+                          GAsyncResult *result,
+                          gpointer user_data)
+{
+	GError *error = NULL;
+
+	if (!seahorse_gpgme_key_op_generate_finish (SEAHORSE_GPGME_SOURCE (source), result, &error))
+		seahorse_util_handle_error (&error, NULL, _("Couldn't generate PGP key"));
+}
 
 /**
  * gpgme_generate_key:
@@ -182,34 +181,34 @@ get_expiry_date (SeahorseWidget *swidget)
  * @expire sets the expiry date
  *
  */
-void seahorse_gpgme_generate_key (SeahorseGpgmeSource *sksrc, const gchar *name, const gchar *email,
-                            const gchar *comment, guint type, guint bits, time_t expires)
+void
+seahorse_gpgme_generate_key (SeahorseGpgmeSource *source,
+                             const gchar *name,
+                             const gchar *email,
+                             const gchar *comment,
+                             guint type,
+                             guint bits,
+                             time_t expires)
 {
-    SeahorseOperation *op;
-    const gchar *pass;
-    gpgme_error_t gerr;
-    GtkDialog *dialog;
+	GCancellable *cancellable;
+	const gchar *pass;
+	GtkDialog *dialog;
 
+	dialog = seahorse_passphrase_prompt_show (_("Passphrase for New PGP Key"),
+	                                          _("Enter the passphrase for your new key twice."),
+	                                          NULL, NULL, TRUE);
+	if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT) {
+		pass = seahorse_passphrase_prompt_get (dialog);
+		cancellable = g_cancellable_new ();
+		seahorse_gpgme_key_op_generate_async (source, name, email, comment,
+		                                      pass, type, bits, expires,
+		                                      cancellable, on_generate_key_complete,
+		                                      NULL);
+		seahorse_progress_show (cancellable, _("Generating key"), FALSE);
+		g_object_unref (cancellable);
+	}
 
-
-    dialog = seahorse_passphrase_prompt_show (_("Passphrase for New PGP Key"),
-                                              _("Enter the passphrase for your new key twice."),
-                                              NULL, NULL, TRUE);
-    if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT)
-    {
-        pass = seahorse_passphrase_prompt_get (dialog);
-        op = seahorse_gpgme_key_op_generate (sksrc, name, email, comment,
-                                             pass, type, bits, expires, &gerr);
-
-        if (!GPG_IS_OK (gerr)) {
-            seahorse_gpgme_handle_error (gerr, _("Couldn't generate key"));
-        } else {
-            seahorse_progress_show (op, _("Generating key"), TRUE);
-            seahorse_operation_watch (op, (SeahorseDoneFunc)completion_handler, NULL, NULL, NULL);
-            g_object_unref (op);
-        }
-    }
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 

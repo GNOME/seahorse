@@ -29,43 +29,49 @@
 #include "seahorse-progress.h"
 #include "seahorse-preferences.h"
 #include "seahorse-servers.h"
-#include "seahorse-transfer-operation.h"
+#include "seahorse-transfer.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 #include "seahorse-windows.h"
 
-static void 
-sync_import_complete (SeahorseOperation *op, SeahorseSource *sksrc)
+static void
+on_transfer_upload_complete (GObject *object,
+                             GAsyncResult *result,
+                             gpointer user_data)
 {
+	SeahorseSource *source = SEAHORSE_SOURCE (user_data);
 	GError *error = NULL;
 	gchar *publish_to;
 
-	if (!seahorse_operation_is_successful (op)) {
-		seahorse_operation_copy_error (op, &error);
+	if (!seahorse_context_transfer_objects_finish (SEAHORSE_CONTEXT (object),
+	                                               result, &error)) {
 		publish_to = g_settings_get_string (seahorse_context_settings (NULL),
 		                                    "server-publish-to");
-		seahorse_util_handle_error (error, _("Couldn't publish keys to server"),
-		                            publish_to);
+		seahorse_util_handle_error (&error, NULL,
+		                            _("Couldn't publish keys to server"), publish_to);
 		g_free (publish_to);
-		g_clear_error (&error);
 	}
+
+	g_object_unref (source);
 }
 
 static void
-sync_export_complete (SeahorseOperation *op, SeahorseSource *sksrc)
+on_transfer_download_complete (GObject *object,
+                               GAsyncResult *result,
+                               gpointer user_data)
 {
-    GError *err = NULL;
-    gchar *keyserver;
+	SeahorseSource *source = SEAHORSE_SOURCE (user_data);
+	GError *error = NULL;
+	gchar *keyserver;
 
-    if (!seahorse_operation_is_successful (op)) {
-        g_object_get (sksrc, "key-server", &keyserver, NULL);
+	if (!seahorse_transfer_finish (result, &error)) {
+		g_object_get (source, "key-server", &keyserver, NULL);
+		seahorse_util_handle_error (&error, NULL,
+		                            _("Couldn't retrieve keys from server: %s"), keyserver);
+		g_free (keyserver);
+	}
 
-        seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't retrieve keys from server: %s"), 
-                                    keyserver);
-        g_clear_error (&err);
-        g_free (keyserver);
-    }    
+	g_object_unref (source);
 }
 
 G_MODULE_EXPORT void
@@ -169,73 +175,68 @@ seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
 void
 seahorse_keyserver_sync (GList *keys)
 {
-    SeahorseSource *sksrc;
-    SeahorseSource *lsksrc;
-    SeahorseMultiOperation *mop;
-    SeahorseOperation *op;
-    gchar *keyserver;
-    gchar **keyservers;
-    GList *k;
-    GList *keyids = NULL;
-    guint i;
+	SeahorseSource *source;
+	SeahorseSource *local_source;
+	gchar *keyserver;
+	GList *k, *keyids = NULL;
+	GCancellable *cancellable;
+	gchar **keyservers;
+	guint i;
 
-    if (!keys)
-        return;
-    
-    g_assert (SEAHORSE_IS_OBJECT (keys->data));
-    
-    /* Build a keyid list */
-    for (k = keys; k; k = g_list_next (k)) 
-        keyids = g_list_prepend (keyids,
-                    GUINT_TO_POINTER (seahorse_object_get_id (SEAHORSE_OBJECT (k->data))));
+	if (!keys)
+		return;
 
-    mop = seahorse_multi_operation_new ();
+	/* Build a keyid list */
+	for (k = keys; k != NULL; k = g_list_next (k))
+		keyids = g_list_prepend (keyids,
+		                         GUINT_TO_POINTER (seahorse_object_get_id (k->data)));
 
-    /* And now synchronizing keys from the servers */
-    keyservers = seahorse_servers_get_uris ();
-    for (i = 0; keyservers[i] != NULL; i++) {
-        sksrc = seahorse_context_remote_source (SCTX_APP (), keyservers[i]);
+	cancellable = g_cancellable_new ();
 
-        /* This can happen if the URI scheme is not supported */
-        if (sksrc == NULL)
-            continue;
-        
-        lsksrc = seahorse_context_find_source (SCTX_APP (), 
-                        seahorse_source_get_tag (sksrc), SEAHORSE_LOCATION_LOCAL);
-        
-        if (lsksrc) {
-            op = seahorse_transfer_operation_new (_("Synchronizing keys"), sksrc, lsksrc, keyids);
-            g_return_if_fail (op != NULL);
+	/* And now synchronizing keys from the servers */
+	keyservers = seahorse_servers_get_uris ();
+	for (i = 0; keyservers[i] != NULL; i++) {
+		source = seahorse_context_remote_source (seahorse_context_instance (),
+		                                         keyservers[i]);
 
-            seahorse_multi_operation_take (mop, op);
-            seahorse_operation_watch (op, (SeahorseDoneFunc) sync_export_complete, sksrc, NULL, NULL);
-        }
-    }
+		/* This can happen if the URI scheme is not supported */
+		if (source == NULL)
+			continue;
 
-    g_strfreev (keyservers);
+		local_source = seahorse_context_find_source (seahorse_context_instance (),
+		                                             seahorse_source_get_tag (source),
+		                                             SEAHORSE_LOCATION_LOCAL);
 
-    /* Publishing keys online */
-    keyserver = g_settings_get_string (seahorse_context_settings (NULL),
-                                       "server-publish-to");
-    if (keyserver && keyserver[0]) {
-        sksrc = seahorse_context_remote_source (SCTX_APP (), keyserver);
+		if (local_source) {
+			seahorse_transfer_async (source, local_source, keyids,
+			                         cancellable, on_transfer_download_complete,
+			                         g_object_ref (source));
+		}
+	}
 
-        /* This can happen if the URI scheme is not supported */
-        if (sksrc != NULL) {
+	g_strfreev (keyservers);
 
-            op = seahorse_context_transfer_objects (SCTX_APP (), keys, sksrc);
-            g_return_if_fail (sksrc != NULL);
+	/* Publishing keys online */
+	keyserver = g_settings_get_string (seahorse_context_settings (NULL),
+	                                   "server-publish-to");
+	if (keyserver && keyserver[0]) {
+		source = seahorse_context_remote_source (seahorse_context_instance (),
+		                                         keyserver);
 
-            seahorse_multi_operation_take (mop, op);
-            seahorse_operation_watch (op, (SeahorseDoneFunc) sync_import_complete, sksrc, NULL, NULL);
+		/* This can happen if the URI scheme is not supported */
+		if (source != NULL) {
 
-        }
-    }
+			seahorse_context_transfer_objects_async (seahorse_context_instance (),
+			                                         keys, source, cancellable,
+			                                         on_transfer_upload_complete,
+			                                         g_object_ref (source));
+		}
+	}
 
-    g_list_free (keyids);
-    g_free (keyserver);
-    
-    /* Show the progress window if necessary */
-    seahorse_progress_show (SEAHORSE_OPERATION (mop), _("Synchronizing keys..."), FALSE);
-    g_object_unref (mop);
+	g_free (keyserver);
+
+	g_list_free (keyids);
+
+	seahorse_progress_show (cancellable, _("Synchronizing keys..."), FALSE);
+	g_object_unref (cancellable);
 }

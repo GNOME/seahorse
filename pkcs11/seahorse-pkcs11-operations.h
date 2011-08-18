@@ -24,13 +24,24 @@
 
 #include <glib-object.h>
 
-#include "seahorse-operation.h"
-
 #include "seahorse-pkcs11-object.h"
 #include "seahorse-pkcs11-source.h"
 
-SeahorseOperation*         seahorse_pkcs11_refresher_new   (SeahorsePkcs11Source *source);
+void          seahorse_pkcs11_refresh_async    (SeahorsePkcs11Source *source,
+                                                GCancellable *cancellable,
+                                                GAsyncReadyCallback callback,
+                                                gpointer user_data);
 
-SeahorseOperation*         seahorse_pkcs11_deleter_new     (SeahorsePkcs11Object *object);
+gboolean      seahorse_pkcs11_refresh_finish   (SeahorsePkcs11Source *source,
+                                                GAsyncResult *result,
+                                                GError **error);
+
+void          seahorse_pkcs11_delete_async     (GList *objects,
+                                                GCancellable *cancellable,
+                                                GAsyncReadyCallback callback,
+                                                gpointer user_data);
+
+gboolean      seahorse_pkcs11_delete_finish    (GAsyncResult *result,
+                                                GError **error);
 
 #endif /* __SEAHORSE_PKCS11_OPERATIONS_H__ */

@@ -643,10 +643,6 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 		break;
 	case PROP_FLAGS:
 		flags = g_value_get_uint (value);
-		if (SEAHORSE_OBJECT_GET_CLASS (obj)->delete)
-			flags |= SEAHORSE_FLAG_DELETABLE;
-		else 
-			flags &= ~SEAHORSE_FLAG_DELETABLE;
 		if (flags != self->pv->flags) {
 			self->pv->flags = flags;
 			g_object_notify (obj, "flags");
@@ -1188,24 +1184,6 @@ seahorse_object_refresh (SeahorseObject *self)
 	klass = SEAHORSE_OBJECT_GET_CLASS (self);
 	g_return_if_fail (klass->refresh);
 	(klass->refresh) (self);
-}
-
-/**
- * seahorse_object_delete:
- * @self: object to delete
- *
- * calls the class delete function
- *
- * Returns: NULL on error
- */
-SeahorseOperation*
-seahorse_object_delete (SeahorseObject *self)
-{
-	SeahorseObjectClass *klass;
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	klass = SEAHORSE_OBJECT_GET_CLASS (self);
-	g_return_val_if_fail (klass->delete, NULL);
-	return (klass->delete) (self);
 }
 
 /**

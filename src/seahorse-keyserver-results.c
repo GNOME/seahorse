@@ -25,7 +25,6 @@
 #include "seahorse-key-manager-store.h"
 #include "seahorse-windows.h"
 
-#include "seahorse-operation.h"
 #include "seahorse-progress.h"
 
 #include <glib/gi18n.h>
@@ -516,13 +515,25 @@ seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
 	g_object_class_override_property (G_OBJECT_CLASS (klass), PROP_SELECTED, "selected");
 }
 
-/* -----------------------------------------------------------------------------
- * PUBLIC 
- */
+static void
+on_search_completed (GObject *source,
+                     GAsyncResult *result,
+                     gpointer user_data)
+{
+	SeahorseKeyserverResults *self = SEAHORSE_KEYSERVER_RESULTS (user_data);
+	GError *error = NULL;
 
+	seahorse_context_search_remote_finish (seahorse_context_instance (),
+	                                       result, &error);
+	if (error != NULL) {
+		seahorse_viewer_set_status (SEAHORSE_VIEWER (self), error->message);
+		g_error_free (error);
+	}
+
+	g_object_unref (self);
+}
 /**
  * seahorse_keyserver_results_show:
- * @op: The search operation
  * @parent: A GTK window as parent (or NULL)
  * @search_text: The test to search for
  *
@@ -530,26 +541,30 @@ seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
  *
  */
 void 
-seahorse_keyserver_results_show (SeahorseOperation* op, GtkWindow* parent, const char* search_text) 
+seahorse_keyserver_results_show (const char* search_text)
 {
-	SeahorseKeyserverResults* res;
-	GtkWindow *window;
-	
-	g_return_if_fail (SEAHORSE_IS_OPERATION (op));
-	g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
-	g_return_if_fail (search_text != NULL);
-	
-	res = g_object_new (SEAHORSE_TYPE_KEYSERVER_RESULTS, "name", "keyserver-results", "search", search_text, NULL);
-	
-	/* Destorys itself with destroy */
-	g_object_ref_sink (res);
-	
-	if (parent != NULL) {
-		window = GTK_WINDOW (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (res)));
-		gtk_window_set_transient_for (window, parent);
-	}
+	SeahorseKeyserverResults* self;
+	GCancellable *cancellable;
 
-	seahorse_progress_status_set_operation (SEAHORSE_WIDGET (res), op);
+	g_return_if_fail (search_text != NULL);
+
+	self = g_object_new (SEAHORSE_TYPE_KEYSERVER_RESULTS,
+	                     "name", "keyserver-results",
+	                     "search", search_text,
+	                     NULL);
+
+	/* Destorys itself with destroy */
+	g_object_ref_sink (self);
+
+	cancellable = g_cancellable_new ();
+	seahorse_context_search_remote_async (seahorse_context_instance (),
+	                                      search_text, cancellable,
+	                                      on_search_completed,
+	                                      g_object_ref (self));
+
+	seahorse_progress_attach (cancellable, SEAHORSE_WIDGET (self));
+
+	g_object_unref (cancellable);
 }
 
 /**

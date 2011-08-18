@@ -78,120 +78,143 @@ struct _SeahorseContext {
 struct _SeahorseContextClass {
 	GObjectClass parent_class;
 
-    /* signals --------------------------------------------------------- */
-    
-    /* A object was added to this source */
-    void (*added) (SeahorseContext *sctx, struct _SeahorseObject *sobj);
+	/* signals --------------------------------------------------------- */
 
-    /* Removed a object from this source */
-    void (*removed) (SeahorseContext *sctx, struct _SeahorseObject *sobj);
-    
-    /* This object has changed */
-    void (*changed) (SeahorseContext *sctx, struct _SeahorseObject *sobj);
-    
-    /* The source is being refreshed */
-    void (*refreshing) (SeahorseContext *sctx, SeahorseOperation *op);
+	/* A object was added to this source */
+	void     (*added)              (SeahorseContext *self,
+	                                struct _SeahorseObject *sobj);
 
-	void (*destroy) (SeahorseContext *sctx);
+	/* Removed a object from this source */
+	void     (*removed)            (SeahorseContext *self,
+	                                struct _SeahorseObject *sobj);
+
+	/* This object has changed */
+	void     (*changed)            (SeahorseContext *self,
+	                                struct _SeahorseObject *sobj);
+
+	void     (*destroy)            (SeahorseContext *self);
 };
 
-typedef void (*SeahorseObjectFunc) (struct _SeahorseObject *obj, gpointer user_data);
+typedef void       (*SeahorseObjectFunc)                     (struct _SeahorseObject *obj,
+                                                              gpointer user_data);
 
-#define             SCTX_APP()                          (seahorse_context_instance ())
+#define             SCTX_APP()                               (seahorse_context_instance ())
 
-GType               seahorse_context_get_type           (void);
+GType               seahorse_context_get_type                (void);
 
-SeahorseContext*    seahorse_context_instance           (void);
+SeahorseContext*    seahorse_context_instance                (void);
 
-void                seahorse_context_create             (void);
+void                seahorse_context_create                  (void);
 
-void                seahorse_context_destroy            (SeahorseContext    *sctx);
+void                seahorse_context_destroy                 (SeahorseContext *self);
 
-#define             seahorse_context_is_daemon(ctx)     ((ctx)->is_daemon)
+#define             seahorse_context_is_daemon(ctx)          ((ctx)->is_daemon)
 
-void                seahorse_context_add_source         (SeahorseContext    *sctx,
-                                                         SeahorseSource  *sksrc);
+void                seahorse_context_add_source              (SeahorseContext *self,
+                                                              SeahorseSource *sksrc);
 
-void                seahorse_context_take_source        (SeahorseContext    *sctx,
-                                                         SeahorseSource  *sksrc);
+void                seahorse_context_take_source             (SeahorseContext *self,
+                                                              SeahorseSource *sksrc);
 
-void                seahorse_context_remove_source      (SeahorseContext    *sctx,
-                                                         SeahorseSource  *sksrc);
+void                seahorse_context_remove_source           (SeahorseContext *self,
+                                                              SeahorseSource *sksrc);
 
-SeahorseSource*     seahorse_context_find_source        (SeahorseContext    *sctx,
-                                                         GQuark             ktype,
-                                                         SeahorseLocation   location);
+SeahorseSource*     seahorse_context_find_source             (SeahorseContext *self,
+                                                              GQuark ktype,
+                                                              SeahorseLocation location);
 
-GList*             seahorse_context_find_sources       (SeahorseContext    *sctx,
-                                                         GQuark             ktype,
-                                                         SeahorseLocation   location);
-                                                         
+GList*             seahorse_context_find_sources             (SeahorseContext    *sctx,
+                                                              GQuark             ktype,
+                                                              SeahorseLocation   location);
 
-SeahorseSource*     seahorse_context_remote_source      (SeahorseContext    *sctx,
-                                                         const gchar        *uri);
+SeahorseSource*     seahorse_context_remote_source           (SeahorseContext *self,
+                                                              const gchar *uri);
 
-void                seahorse_context_add_object         (SeahorseContext    *sctx,
-                                                         struct _SeahorseObject     *sobj);
+void                seahorse_context_add_object              (SeahorseContext *self,
+                                                              struct _SeahorseObject *sobj);
 
-void                seahorse_context_take_object        (SeahorseContext    *sctx, 
-                                                         struct _SeahorseObject     *sobj);
+void                seahorse_context_take_object             (SeahorseContext *self,
+                                                              struct _SeahorseObject *sobj);
 
-guint               seahorse_context_get_count          (SeahorseContext    *sctx);
+guint               seahorse_context_get_count               (SeahorseContext *self);
 
-struct _SeahorseObject*     seahorse_context_get_object  (SeahorseContext    *sctx,
-                                                         SeahorseSource  *sksrc,
-                                                         GQuark             id);
+struct _SeahorseObject*     seahorse_context_get_object      (SeahorseContext *self,
+                                                              SeahorseSource *sksrc,
+                                                              GQuark id);
 
-GList*              seahorse_context_get_objects        (SeahorseContext    *sctx, 
-                                                         SeahorseSource  *sksrc);
+GList*              seahorse_context_get_objects             (SeahorseContext *self,
+                                                              SeahorseSource *sksrc);
 
-struct _SeahorseObject*     seahorse_context_find_object (SeahorseContext    *sctx,
-                                                         GQuark             id,
-                                                         SeahorseLocation   location);
+struct _SeahorseObject*     seahorse_context_find_object     (SeahorseContext *self,
+                                                              GQuark id,
+                                                              SeahorseLocation location);
 
-GList*              seahorse_context_find_objects       (SeahorseContext    *sctx,
-                                                         GQuark             ktype,
-                                                         SeahorseUsage      usage,
-                                                         SeahorseLocation   location);
+GList*              seahorse_context_find_objects            (SeahorseContext *self,
+                                                              GQuark ktype,
+                                                              SeahorseUsage usage,
+                                                              SeahorseLocation location);
 
-GList*              seahorse_context_find_objects_full  (SeahorseContext *self,
-                                                         struct _SeahorseObjectPredicate *skpred);
+GList*              seahorse_context_find_objects_full       (SeahorseContext *self,
+                                                              struct _SeahorseObjectPredicate *skpred);
 
-void                seahorse_context_for_objects_full   (SeahorseContext *self,
-                                                         struct _SeahorseObjectPredicate *skpred,
-                                                         SeahorseObjectFunc func,
-                                                         gpointer user_data);
+void                seahorse_context_for_objects_full        (SeahorseContext *self,
+                                                              struct _SeahorseObjectPredicate *skpred,
+                                                              SeahorseObjectFunc func,
+                                                              gpointer user_data);
 
-void                seahorse_context_remove_object      (SeahorseContext *sctx,
-                                                         struct _SeahorseObject *sobj);
+void                seahorse_context_remove_object           (SeahorseContext *self,
+                                                              struct _SeahorseObject *sobj);
 
 SeahorseServiceDiscovery*
-                    seahorse_context_get_discovery      (SeahorseContext    *sctx);
+                    seahorse_context_get_discovery           (SeahorseContext    *self);
 
 struct _SeahorseObject*   
-                    seahorse_context_get_default_key    (SeahorseContext    *sctx);
+                    seahorse_context_get_default_key         (SeahorseContext    *self);
 
-void                seahorse_context_refresh_auto       (SeahorseContext *sctx);
+void                seahorse_context_refresh_auto            (SeahorseContext *self);
 
-SeahorseOperation*  seahorse_context_search_remote      (SeahorseContext    *sctx,
-                                                         const gchar        *search);
+void                seahorse_context_search_remote_async     (SeahorseContext *self,
+                                                              const gchar *search,
+                                                              GCancellable *cancellable,
+                                                              GAsyncReadyCallback callback,
+                                                              gpointer user_data);
 
-SeahorseOperation*  seahorse_context_transfer_objects   (SeahorseContext    *sctx, 
-                                                         GList              *objs, 
-                                                         SeahorseSource  *to);
+GList *             seahorse_context_search_remote_finish    (SeahorseContext *self,
+                                                              GAsyncResult *result,
+                                                              GError **error);
 
-SeahorseOperation*  seahorse_context_retrieve_objects   (SeahorseContext    *sctx, 
-                                                         GQuark             ktype, 
-                                                         GList             *ids,
-                                                         SeahorseSource  *to);
+void                seahorse_context_transfer_objects_async  (SeahorseContext *self,
+                                                              GList *objects,
+                                                              SeahorseSource *to,
+                                                              GCancellable *cancellable,
+                                                              GAsyncReadyCallback callback,
+                                                              gpointer user_data);
 
-GList*              seahorse_context_discover_objects   (SeahorseContext    *sctx, 
-                                                         GQuark             ktype, 
-                                                         GList             *ids);
+gboolean            seahorse_context_transfer_objects_finish (SeahorseContext *self,
+                                                              GAsyncResult *result,
+                                                              GError **error);
 
-typedef GQuark (*SeahorseCanonizeFunc) (const gchar *id);
+void                seahorse_context_retrieve_objects_async  (SeahorseContext *self,
+                                                              GQuark ktype,
+                                                              GList *ids,
+                                                              SeahorseSource *to,
+                                                              GCancellable *cancellable,
+                                                              GAsyncReadyCallback callback,
+                                                              gpointer user_data);
 
-GQuark              seahorse_context_canonize_id        (GQuark ktype, const gchar *id);
+gboolean            seahorse_context_retrieve_objects_finish (SeahorseContext *self,
+                                                              GAsyncResult *result,
+                                                              GError **error);
+
+GList*              seahorse_context_discover_objects        (SeahorseContext *self,
+                                                              GQuark ktype,
+                                                              GList *rawids,
+                                                              GCancellable *cancellable);
+
+typedef GQuark     (*SeahorseCanonizeFunc)                   (const gchar *id);
+
+GQuark              seahorse_context_canonize_id             (GQuark ktype,
+                                                              const gchar *id);
 
 GSettings *         seahorse_context_settings           (SeahorseContext *self);
 

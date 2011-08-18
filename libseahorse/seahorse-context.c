@@ -29,8 +29,9 @@
 #include "seahorse-context.h"
 #include "seahorse-dns-sd.h"
 #include "seahorse-marshal.h"
+#include "seahorse-progress.h"
 #include "seahorse-servers.h"
-#include "seahorse-transfer-operation.h"
+#include "seahorse-transfer.h"
 #include "seahorse-unknown.h"
 #include "seahorse-unknown-source.h"
 #include "seahorse-util.h"
@@ -56,7 +57,6 @@ enum {
     ADDED,
     REMOVED,
     CHANGED,
-    REFRESHING,
     DESTROY,
     LAST_SIGNAL
 };
@@ -81,7 +81,6 @@ struct _SeahorseContextPrivate {
     GHashTable *auto_sources;               /* Automatically added sources (keyservers) */
     GHashTable *objects_by_source;          /* See explanation above */
     GHashTable *objects_by_type;            /* See explanation above */
-    SeahorseMultiOperation *refresh_ops;    /* Operations for refreshes going on */
     SeahorseServiceDiscovery *discovery;    /* Adds sources from DNS-SD */
     gboolean in_destruction;                /* In destroy signal */
     GSettings *seahorse_settings;
@@ -185,7 +184,6 @@ seahorse_context_constructed (GObject *obj)
 * klass: The class to initialise
 *
 * Inits the #SeahorseContextClass. Adds the signals "added", "removed", "changed"
-* and "refreshing"
 **/
 static void
 seahorse_context_class_init (SeahorseContextClass *klass)
@@ -208,9 +206,6 @@ seahorse_context_class_init (SeahorseContextClass *klass)
     signals[CHANGED] = g_signal_new ("changed", SEAHORSE_TYPE_CONTEXT, 
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseContextClass, changed),
                 NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_OBJECT);    
-    signals[REFRESHING] = g_signal_new ("refreshing", SEAHORSE_TYPE_CONTEXT, 
-                G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseContextClass, refreshing),
-                NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, SEAHORSE_TYPE_OPERATION);    
     signals[DESTROY] = g_signal_new ("destroy", SEAHORSE_TYPE_CONTEXT,
                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseContextClass, destroy),
                 NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
@@ -302,10 +297,6 @@ seahorse_context_dispose (GObject *gobject)
         g_object_unref (SEAHORSE_SOURCE (l->data));
     g_list_free (sctx->pv->sources);
     sctx->pv->sources = NULL;
-    
-    if (sctx->pv->refresh_ops)
-	    g_object_unref (sctx->pv->refresh_ops);
-    sctx->pv->refresh_ops = NULL;
 
 	if (!sctx->pv->in_destruction) {
 		sctx->pv->in_destruction = TRUE;
@@ -338,7 +329,6 @@ seahorse_context_finalize (GObject *gobject)
     g_assert (sctx->pv->sources == NULL);
     g_assert (sctx->pv->auto_sources == NULL);
     g_assert (sctx->pv->discovery == NULL);
-    g_assert (sctx->pv->refresh_ops == NULL);
     g_free (sctx->pv);
     
     G_OBJECT_CLASS (seahorse_context_parent_class)->finalize (gobject);
@@ -1128,363 +1118,493 @@ seahorse_context_get_discovery (SeahorseContext *sctx)
     return sctx->pv->discovery;
 }
 
+static void
+on_source_refresh_load_ready (GObject *object, GAsyncResult *result, gpointer user_data)
+{
+	GError *error = NULL;
+
+	if (!seahorse_source_load_finish (SEAHORSE_SOURCE (object), result, &error)) {
+		g_message ("failed to refresh: %s", error->message);
+		g_clear_error (&error);
+	}
+}
+
 /**
  * seahorse_context_refresh_auto:
  * @sctx: A #SeahorseContext (can be NULL)
  *
- * Starts a new refresh operation and emits the "refreshing" signal
+ * Starts a new refresh operation
  *
  */
 void
 seahorse_context_refresh_auto (SeahorseContext *sctx)
 {
 	SeahorseSource *ks;
-	SeahorseOperation *op = NULL;
 	GList *l;
 
 	if (!sctx)
 		sctx = seahorse_context_instance ();
 	g_return_if_fail (SEAHORSE_IS_CONTEXT (sctx));
-	
-	if (!sctx->pv->refresh_ops)
-		sctx->pv->refresh_ops = seahorse_multi_operation_new ();
 
 	for (l = sctx->pv->sources; l; l = g_list_next (l)) {
 		ks = SEAHORSE_SOURCE (l->data);
-        
-		if (seahorse_source_get_location (ks) == SEAHORSE_LOCATION_LOCAL) {
-
-			op = seahorse_source_load (ks);
-			g_return_if_fail (op);
-			seahorse_multi_operation_take (sctx->pv->refresh_ops, op);
-		}
-		
+		if (seahorse_source_get_location (ks) == SEAHORSE_LOCATION_LOCAL)
+			seahorse_source_load_async (ks, NULL,
+			                            on_source_refresh_load_ready, NULL);
 	}
-	
-	g_signal_emit (sctx, signals[REFRESHING], 0, sctx->pv->refresh_ops);
 }
 
-/**
- * seahorse_context_search_remote:
- * @sctx: A #SeahorseContext (can be NULL)
- * @search: a keyword (name, email address...) to search for
- *
- * Searches for the key matching @search o the remote servers
- *
- * Returns: The created search operation
- */
-SeahorseOperation*  
-seahorse_context_search_remote (SeahorseContext *sctx, const gchar *search)
-{
-    SeahorseSource *ks;
-    SeahorseMultiOperation *mop = NULL;
-    SeahorseOperation *op = NULL;
-    gchar **names;
-    GHashTable *servers = NULL;
-    gchar *uri;
-    GList *l;
-    guint i;
+typedef struct {
+	GCancellable *cancellable;
+	gint num_searches;
+	GList *objects;
+} seahorse_context_search_remote_closure;
 
-    if (!sctx)
-        sctx = seahorse_context_instance ();
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
+static void
+seahorse_context_search_remote_free (gpointer user_data)
+{
+	seahorse_context_search_remote_closure *closure = user_data;
+	g_clear_object (&closure->cancellable);
+	g_list_free (closure->objects);
+	g_free (closure);
+}
+
+static void
+on_source_search_ready (GObject *source,
+                        GAsyncResult *result,
+                        gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	seahorse_context_search_remote_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+	GList *objects;
+
+	g_return_if_fail (closure->num_searches > 0);
+
+	objects = seahorse_source_search_finish (SEAHORSE_SOURCE (source), result, &error);
+	closure->objects = g_list_concat (closure->objects, objects);
+
+	if (error != NULL)
+		g_simple_async_result_take_error (res, error);
+
+	closure->num_searches--;
+	seahorse_progress_end (closure->cancellable, GINT_TO_POINTER (closure->num_searches));
+
+	if (closure->num_searches == 0)
+		g_simple_async_result_complete (res);
+
+	g_object_unref (user_data);
+}
+
+void
+seahorse_context_search_remote_async (SeahorseContext *self,
+                                      const gchar *search,
+                                      GCancellable *cancellable,
+                                      GAsyncReadyCallback callback,
+                                      gpointer user_data)
+{
+	seahorse_context_search_remote_closure *closure;
+	GSimpleAsyncResult *res;
+	SeahorseSource *source;
+	GHashTable *servers = NULL;
+	gchar **names;
+	gchar *uri;
+	GList *l;
+	guint i;
+
+	if (self == NULL)
+		self = seahorse_context_instance ();
+
+	g_return_if_fail (SEAHORSE_IS_CONTEXT (self));
 
 	/* Get a list of all selected key servers */
-	names = g_settings_get_strv (sctx->pv->seahorse_settings, "last-search-servers");
-	if (names != NULL) {
+	names = g_settings_get_strv (self->pv->seahorse_settings, "last-search-servers");
+	if (names != NULL && names[0] != NULL) {
 		servers = g_hash_table_new (g_str_hash, g_str_equal);
 		for (i = 0; names[i] != NULL; i++)
 			g_hash_table_insert (servers, names[i], GINT_TO_POINTER (TRUE));
 		g_strfreev (names);
 	}
 
-    for (l = sctx->pv->sources; l; l = g_list_next (l)) {
-        ks = SEAHORSE_SOURCE (l->data);
-        
-        if (seahorse_source_get_location (ks) != SEAHORSE_LOCATION_REMOTE)
-            continue;
+	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
+	                                 seahorse_context_search_remote_async);
+	closure = g_new0 (seahorse_context_search_remote_closure, 1);
+	g_simple_async_result_set_op_res_gpointer (res, closure,
+	                                           seahorse_context_search_remote_free);
+	if (cancellable)
+		closure->cancellable = g_object_ref (cancellable);
 
-        if (servers) {
-            g_object_get (ks, "uri", &uri, NULL);
-            if (!g_hash_table_lookup (servers, uri)) {
-                g_free (uri);
-                continue;
-            }
-            
-            g_free (uri);
-        }
+	for (l = self->pv->sources; l; l = g_list_next (l)) {
+		source = SEAHORSE_SOURCE (l->data);
 
-        if (mop == NULL && op != NULL) {
-            mop = seahorse_multi_operation_new ();
-            seahorse_multi_operation_take (mop, op);
-        }
-            
-        op = seahorse_source_search (ks, search);
-            
-        if (mop != NULL)
-            seahorse_multi_operation_take (mop, op);
-    }   
+		if (seahorse_source_get_location (source) != SEAHORSE_LOCATION_REMOTE)
+			continue;
 
-    return mop ? SEAHORSE_OPERATION (mop) : op;  
+		if (servers) {
+			g_object_get (source, "uri", &uri, NULL);
+			if (!g_hash_table_lookup (servers, uri)) {
+				g_free (uri);
+				continue;
+			}
+			g_free (uri);
+		}
+
+		seahorse_progress_prep_and_begin (closure->cancellable, GINT_TO_POINTER (closure->num_searches), NULL);
+		seahorse_source_search_async (source, search, closure->cancellable,
+		                              on_source_search_ready, g_object_ref (res));
+		closure->num_searches++;
+	}
+
+	if (closure->num_searches == 0)
+		g_simple_async_result_complete_in_idle (res);
+
+	g_object_unref (res);
 }
 
-/**
- * seahorse_context_transfer_objects:
- * @sctx: The #SeahorseContext (can be NULL)
- * @objects: the objects to import
- * @to: a source to import to (can be NULL)
- *
- *
- *
- * Returns: A transfer operation
- */
-SeahorseOperation*
-seahorse_context_transfer_objects (SeahorseContext *sctx, GList *objects, 
-                                   SeahorseSource *to)
+GList *
+seahorse_context_search_remote_finish (SeahorseContext *self,
+                                       GAsyncResult *result,
+                                       GError **error)
 {
-    SeahorseSource *from;
-    SeahorseOperation *op = NULL;
-    SeahorseMultiOperation *mop = NULL;
-    SeahorseObject *sobj;
-    GList *ids = NULL;
-    GList *next, *l;
-    GQuark ktype;
+	seahorse_context_search_remote_closure *closure;
+	GSimpleAsyncResult *res;
+	GList *results;
 
-    if (!sctx)
-        sctx = seahorse_context_instance ();
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
+	if (self == NULL)
+		self = seahorse_context_instance ();
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (self), NULL);
 
-    objects = g_list_copy (objects);
-    
-    /* Sort by key source */
-    objects = seahorse_util_objects_sort (objects);
-    
-    while (objects) {
-        
-        /* break off one set (same keysource) */
-        next = seahorse_util_objects_splice (objects);
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
+	                      seahorse_context_search_remote_async), NULL);
 
-        g_assert (SEAHORSE_IS_OBJECT (objects->data));
-        sobj = SEAHORSE_OBJECT (objects->data);
+	res = G_SIMPLE_ASYNC_RESULT (result);
 
-        /* Export from this key source */
-        from = seahorse_object_get_source (sobj);
-        g_return_val_if_fail (from != NULL, FALSE);
-        ktype = seahorse_source_get_tag (from);
-        
-        /* Find a local keysource to import to */
-        if (!to) {
-            to = seahorse_context_find_source (sctx, ktype, SEAHORSE_LOCATION_LOCAL);
-            if (!to) {
-                /* TODO: How can we warn caller about this. Do we need to? */
-                g_warning ("couldn't find a local source for: %s", 
-                           g_quark_to_string (ktype));
-            }
-        }
-        
-        /* Make sure it's the same type */
-        if (ktype != seahorse_source_get_tag (to)) {
-            /* TODO: How can we warn caller about this. Do we need to? */
-            g_warning ("destination is not of type: %s", 
-                       g_quark_to_string (ktype));
-        }
-        
-        if (to != NULL && from != to) {
-            
-            if (op != NULL) {
-                if (mop == NULL)
-                    mop = seahorse_multi_operation_new ();
-                seahorse_multi_operation_take (mop, op);
-            }
-            
-            /* Build id list */
-            for (l = objects; l; l = g_list_next (l)) 
-                ids = g_list_prepend (ids, GUINT_TO_POINTER (seahorse_object_get_id (l->data)));
-            ids = g_list_reverse (ids);
-        
-            /* Start a new transfer operation between the two sources */
-            op = seahorse_transfer_operation_new (NULL, from, to, ids);
-            g_return_val_if_fail (op != NULL, FALSE);
-            
-            g_list_free (ids);
-            ids = NULL;
-        }
+	if (g_simple_async_result_propagate_error (res, error))
+		return NULL;
 
-        g_list_free (objects);
-        objects = next;
-    } 
-    
-    /* No objects done, just return success */
-    if (!mop && !op) {
-        g_warning ("no valid objects to transfer found");
-        return seahorse_operation_new_complete (NULL);
-    }
-    
-    return mop ? SEAHORSE_OPERATION (mop) : op;
+	closure = g_simple_async_result_get_op_res_gpointer (res);
+	results = closure->objects;
+	closure->objects = NULL;
+
+	return results;
 }
 
-/**
- * seahorse_context_retrieve_objects:
- * @sctx: A #SeahorsecContext
- * @ktype: The type of the keys to transfer
- * @ids: The key ids to transfer
- * @to: A #SeahorseSource. If NULL, it will use @ktype to find a source
- *
- * Copies remote objects to a local source
- *
- * Returns: A #SeahorseOperation
- */
-SeahorseOperation*
-seahorse_context_retrieve_objects (SeahorseContext *sctx, GQuark ktype, 
-                                   GList *ids, SeahorseSource *to)
+typedef struct {
+	GCancellable *cancellable;
+	gint num_transfers;
+} seahorse_context_transfer_closure;
+
+static void
+seahorse_context_transfer_free (gpointer user_data)
 {
-    SeahorseMultiOperation *mop = NULL;
-    SeahorseOperation *op = NULL;
-    SeahorseSource *sksrc;
-    GList *sources, *l;
-    
-    if (!sctx)
-        sctx = seahorse_context_instance ();
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
+	seahorse_context_search_remote_closure *closure = user_data;
+	g_clear_object (&closure->cancellable);
+	g_free (closure);
+}
 
-    if (!to) {
-        to = seahorse_context_find_source (sctx, ktype, SEAHORSE_LOCATION_LOCAL);
-        if (!to) {
-            /* TODO: How can we warn caller about this. Do we need to? */
-            g_warning ("couldn't find a local source for: %s", 
-                       g_quark_to_string (ktype));
-            return seahorse_operation_new_complete (NULL);
-        }
-    }
-    
-    sources = seahorse_context_find_sources (sctx, ktype, SEAHORSE_LOCATION_REMOTE);
-    if (!sources) {
-        g_warning ("no sources found for type: %s", g_quark_to_string (ktype));
-        return seahorse_operation_new_complete (NULL);
-    }
+static void
+on_source_transfer_ready (GObject *source,
+                          GAsyncResult *result,
+                          gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	seahorse_context_transfer_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
 
-    for (l = sources; l; l = g_list_next (l)) {
-        
-        sksrc = SEAHORSE_SOURCE (l->data);
-        g_return_val_if_fail (SEAHORSE_IS_SOURCE (sksrc), NULL);
-        
-        if (op != NULL) {
-            if (mop == NULL)
-                mop = seahorse_multi_operation_new ();
-            seahorse_multi_operation_take (mop, op);
-        }
-        
-        /* Start a new transfer operation between the two key sources */
-        op = seahorse_transfer_operation_new (NULL, sksrc, to, ids);
-        g_return_val_if_fail (op != NULL, FALSE);
-    }
-    
-    return mop ? SEAHORSE_OPERATION (mop) : op;
+	g_return_if_fail (closure->num_transfers > 0);
+
+	seahorse_transfer_finish (result, &error);
+	if (error != NULL)
+		g_simple_async_result_take_error (res, error);
+
+	closure->num_transfers--;
+	seahorse_progress_end (closure->cancellable, GINT_TO_POINTER (closure->num_transfers));
+
+	if (closure->num_transfers == 0) {
+		g_simple_async_result_complete (res);
+	}
+
+	g_object_unref (user_data);
 }
 
 
-/**
- * seahorse_context_discover_objects:
- * @sctx: the context to work with (can be NULL)
- * @ktype: the type of key to discover
- * @rawids: a list of ids to discover
- *
- * Downloads a list of keys from the keyserver
- *
- * Returns: The imported keys
- */
+void
+seahorse_context_transfer_objects_async (SeahorseContext *self,
+                                         GList *objects,
+                                         SeahorseSource *to,
+                                         GCancellable *cancellable,
+                                         GAsyncReadyCallback callback,
+                                         gpointer user_data)
+{
+	seahorse_context_transfer_closure *closure;
+	SeahorseObject *object;
+	GSimpleAsyncResult *res;
+	SeahorseSource *from;
+	GQuark ktype;
+	GList *next, *l;
+	GList *ids = NULL;
+
+	if (self == NULL)
+		self = seahorse_context_instance ();
+	g_return_if_fail (SEAHORSE_IS_CONTEXT (self));
+
+	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
+	                                 seahorse_context_transfer_objects_async);
+	closure = g_new0 (seahorse_context_transfer_closure, 1);
+	g_simple_async_result_set_op_res_gpointer (res, closure,
+	                                           seahorse_context_transfer_free);
+	if (cancellable)
+		closure->cancellable = g_object_ref (cancellable);
+
+	objects = g_list_copy (objects);
+
+	/* Sort by key source */
+	objects = seahorse_util_objects_sort (objects);
+
+	while (objects) {
+
+		/* break off one set (same keysource) */
+		next = seahorse_util_objects_splice (objects);
+
+		g_assert (SEAHORSE_IS_OBJECT (objects->data));
+		object = SEAHORSE_OBJECT (objects->data);
+
+		/* Export from this key source */
+		from = seahorse_object_get_source (object);
+		g_return_if_fail (from != NULL);
+		ktype = seahorse_source_get_tag (from);
+
+		/* Find a local keysource to import to */
+		if (!to) {
+			to = seahorse_context_find_source (self, ktype, SEAHORSE_LOCATION_LOCAL);
+			if (!to) {
+				/* TODO: How can we warn caller about this. Do we need to? */
+				g_warning ("couldn't find a local source for: %s",
+				           g_quark_to_string (ktype));
+			}
+		}
+
+		/* Make sure it's the same type */
+		if (ktype != seahorse_source_get_tag (to)) {
+			/* TODO: How can we warn caller about this. Do we need to? */
+			g_warning ("destination is not of type: %s",
+			           g_quark_to_string (ktype));
+		}
+
+		if (to != NULL && from != to) {
+
+			/* Build id list */
+			for (l = objects; l; l = g_list_next (l))
+				ids = g_list_prepend (ids, GUINT_TO_POINTER (seahorse_object_get_id (l->data)));
+			ids = g_list_reverse (ids);
+
+			/* Start a new transfer operation between the two sources */
+			seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
+			seahorse_transfer_async (from, to, ids, cancellable,
+			                         on_source_transfer_ready, g_object_ref (res));
+			closure->num_transfers++;
+
+			g_list_free (ids);
+			ids = NULL;
+		}
+
+		g_list_free (objects);
+		objects = next;
+	}
+
+	if (closure->num_transfers == 0)
+		g_simple_async_result_complete_in_idle (res);
+
+	g_object_unref (res);
+}
+
+gboolean
+seahorse_context_transfer_objects_finish (SeahorseContext *self,
+                                          GAsyncResult *result,
+                                          GError **error)
+{
+	GSimpleAsyncResult *res;
+
+	if (self == NULL)
+		self = seahorse_context_instance ();
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (self), FALSE);
+
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
+	                      seahorse_context_transfer_objects_async), FALSE);
+
+	res = G_SIMPLE_ASYNC_RESULT (result);
+
+	if (g_simple_async_result_propagate_error (res, error))
+		return FALSE;
+
+	return TRUE;
+}
+
+void
+seahorse_context_retrieve_objects_async (SeahorseContext *self,
+                                         GQuark ktype,
+                                         GList *ids,
+                                         SeahorseSource *to,
+                                         GCancellable *cancellable,
+                                         GAsyncReadyCallback callback,
+                                         gpointer user_data)
+{
+	seahorse_context_transfer_closure *closure;
+	GSimpleAsyncResult *res;
+	SeahorseSource *source;
+	GList *sources, *l;
+
+	if (self == NULL)
+		self = seahorse_context_instance ();
+	g_return_if_fail (SEAHORSE_IS_CONTEXT (self));
+
+	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
+	                                 seahorse_context_retrieve_objects_async);
+	closure = g_new0 (seahorse_context_transfer_closure, 1);
+	g_simple_async_result_set_op_res_gpointer (res, closure,
+	                                           seahorse_context_transfer_free);
+	if (cancellable)
+		closure->cancellable = g_object_ref (cancellable);
+
+	if (to == NULL) {
+		to = seahorse_context_find_source (self, ktype, SEAHORSE_LOCATION_LOCAL);
+		if (to == NULL) {
+			/* TODO: How can we warn caller about this. Do we need to? */
+			g_warning ("couldn't find a local source for: %s",
+			           g_quark_to_string (ktype));
+		}
+	}
+
+	sources = seahorse_context_find_sources (self, ktype, SEAHORSE_LOCATION_REMOTE);
+	for (l = sources; to != NULL && l != NULL; l = g_list_next (l)) {
+		source = SEAHORSE_SOURCE (l->data);
+
+		/* Start a new transfer operation between the two key sources */
+		seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
+		seahorse_transfer_async (source, to, ids, cancellable,
+		                         on_source_transfer_ready, g_object_ref (res));
+		closure->num_transfers++;
+	}
+
+	if (closure->num_transfers == 0)
+		g_simple_async_result_complete_in_idle (res);
+
+	g_object_unref (res);
+}
+
+
+gboolean
+seahorse_context_retrieve_objects_finish  (SeahorseContext *self,
+                                           GAsyncResult *result,
+                                           GError **error)
+{
+	GSimpleAsyncResult *res;
+
+	if (self == NULL)
+		self = seahorse_context_instance ();
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (self), FALSE);
+
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
+	                      seahorse_context_retrieve_objects_async), FALSE);
+
+	res = G_SIMPLE_ASYNC_RESULT (result);
+
+	if (g_simple_async_result_propagate_error (res, error))
+		return FALSE;
+
+	return TRUE;
+}
+
 GList*
-seahorse_context_discover_objects (SeahorseContext *sctx, GQuark ktype, 
-                                   GList *rawids)
+seahorse_context_discover_objects (SeahorseContext *self,
+                                   GQuark ktype,
+                                   GList *rawids,
+                                   GCancellable *cancellable)
 {
-    SeahorseOperation *op = NULL;
-    GList *robjects = NULL;
-    GQuark id = 0;
-    GList *todiscover = NULL;
-    GList *toimport = NULL;
-    SeahorseSource *sksrc;
-    SeahorseObject* sobj;
-    SeahorseLocation loc;
-    GList *l;
+	GList *robjects = NULL;
+	GQuark id = 0;
+	GList *todiscover = NULL;
+	GList *toimport = NULL;
+	SeahorseSource *source;
+	SeahorseObject* object;
+	SeahorseLocation loc;
+	GList *l;
 
-    if (!sctx)
-        sctx = seahorse_context_instance ();
-    g_return_val_if_fail (SEAHORSE_IS_CONTEXT (sctx), NULL);
+	if (self == NULL)
+		self = seahorse_context_instance ();
+	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (self), NULL);
 
-    /* Check all the ids */
-    for (l = rawids; l; l = g_list_next (l)) {
-        
-        id = seahorse_context_canonize_id (ktype, (gchar*)l->data);
-        if (!id) {
-            /* TODO: Try and match this partial id */
-            g_warning ("invalid id: %s", (gchar*)l->data);
-            continue;
-        }
-        
-        /* Do we know about this object? */
-        sobj = seahorse_context_find_object (sctx, id, SEAHORSE_LOCATION_INVALID);
+	/* Check all the ids */
+	for (l = rawids; l != NULL; l = g_list_next (l)) {
 
-        /* No such object anywhere, discover it */
-        if (!sobj) {
-            todiscover = g_list_prepend (todiscover, GUINT_TO_POINTER (id));
-            id = 0;
-            continue;
-        }
-        
-        /* Our return value */
-        robjects = g_list_prepend (robjects, sobj);
-        
-        /* We know about this object, check where it is */
-        loc = seahorse_object_get_location (sobj);
-        g_assert (loc != SEAHORSE_LOCATION_INVALID);
-        
-        /* Do nothing for local objects */
-        if (loc >= SEAHORSE_LOCATION_LOCAL)
-            continue;
-        
-        /* Remote objects get imported */
-        else if (loc >= SEAHORSE_LOCATION_REMOTE)
-            toimport = g_list_prepend (toimport, sobj);
-        
-        /* Searching objects are ignored */
-        else if (loc >= SEAHORSE_LOCATION_SEARCHING)
-            continue;
-        
-        /* TODO: Should we try SEAHORSE_LOCATION_MISSING objects again? */
-    }
-    
-    /* Start an import process on all toimport */
-    if (toimport) {
-        op = seahorse_context_transfer_objects (sctx, toimport, NULL);
-        
-        g_list_free (toimport);
-        
-        /* Running operations ref themselves */
-        g_object_unref (op);
-    }
+		id = seahorse_context_canonize_id (ktype, (gchar*)l->data);
+		if (!id) {
+			/* TODO: Try and match this partial id */
+			g_warning ("invalid id: %s", (gchar*)l->data);
+			continue;
+		}
+
+		/* Do we know about this object? */
+		object = seahorse_context_find_object (self, id, SEAHORSE_LOCATION_INVALID);
+
+		/* No such object anywhere, discover it */
+		if (object == NULL) {
+			todiscover = g_list_prepend (todiscover, GUINT_TO_POINTER (id));
+			id = 0;
+			continue;
+		}
+
+		/* Our return value */
+		robjects = g_list_prepend (robjects, object);
+
+		/* We know about this object, check where it is */
+		loc = seahorse_object_get_location (object);
+		g_assert (loc != SEAHORSE_LOCATION_INVALID);
+
+		/* Do nothing for local objects */
+		if (loc >= SEAHORSE_LOCATION_LOCAL)
+			continue;
+
+		/* Remote objects get imported */
+		else if (loc >= SEAHORSE_LOCATION_REMOTE)
+			toimport = g_list_prepend (toimport, object);
+
+		/* Searching objects are ignored */
+		else if (loc >= SEAHORSE_LOCATION_SEARCHING)
+			continue;
+
+		/* TODO: Should we try SEAHORSE_LOCATION_MISSING objects again? */
+	}
+
+	/* Start an import process on all toimport */
+	if (toimport) {
+		seahorse_context_transfer_objects_async (self, toimport, NULL,
+		                                         cancellable, NULL, NULL);
+
+		g_list_free (toimport);
+	}
 
 	/* Start a discover process on all todiscover */
 	if (todiscover != NULL &&
-	    g_settings_get_boolean (sctx->pv->seahorse_settings, "server-auto-retrieve")) {
-
-		op = seahorse_context_retrieve_objects (sctx, ktype, todiscover, NULL);
-		/* Running operations ref themselves */
-		g_object_unref (op);
+	    g_settings_get_boolean (self->pv->seahorse_settings, "server-auto-retrieve")) {
+		seahorse_context_retrieve_objects_async (self, ktype, todiscover, NULL,
+		                                         cancellable, NULL, NULL);
 	}
 
-    /* Add unknown objects for all these */
-    sksrc = seahorse_context_find_source (sctx, ktype, SEAHORSE_LOCATION_MISSING);
-    for (l = todiscover; l; l = g_list_next (l)) {
-        if (sksrc) {
-            sobj = seahorse_unknown_source_add_object (SEAHORSE_UNKNOWN_SOURCE (sksrc), 
-                                                       GPOINTER_TO_UINT (l->data), op);
-            robjects = g_list_prepend (robjects, sobj);
-        }
-    }
+	/* Add unknown objects for all these */
+	source = seahorse_context_find_source (self, ktype, SEAHORSE_LOCATION_MISSING);
+	for (l = todiscover; l != NULL; l = g_list_next (l)) {
+		if (source) {
+			object = seahorse_unknown_source_add_object (SEAHORSE_UNKNOWN_SOURCE (source),
+			                                             GPOINTER_TO_UINT (l->data),
+			                                             cancellable);
+			robjects = g_list_prepend (robjects, object);
+		}
+	}
 
-    g_list_free (todiscover);
+	g_list_free (todiscover);
 
-    return robjects;
+	return robjects;
 }
 
 /**
@@ -1502,11 +1622,11 @@ seahorse_context_canonize_id (GQuark ktype, const gchar *id)
 	SeahorseCanonizeFunc canonize;
 
 	g_return_val_if_fail (id != NULL, 0);
-    
+
 	canonize = seahorse_registry_lookup_function (NULL, "canonize", g_quark_to_string (ktype), NULL);
-	if (!canonize) 
+	if (!canonize)
 		return 0;
-	
+
 	return (canonize) (id);
 }
 

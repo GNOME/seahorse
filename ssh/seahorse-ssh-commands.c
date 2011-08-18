@@ -26,6 +26,7 @@
 #include "seahorse-ssh.h"
 #include "seahorse-ssh-commands.h"
 #include "seahorse-ssh-dialogs.h"
+#include "seahorse-ssh-operation.h"
 
 #include "common/seahorse-registry.h"
 
@@ -101,28 +102,40 @@ seahorse_ssh_commands_show_properties (SeahorseCommands* base, SeahorseObject* o
 	seahorse_ssh_key_properties_show (SEAHORSE_SSH_KEY (obj), seahorse_commands_get_window (base));
 }
 
-static SeahorseOperation*
+static gboolean
 seahorse_ssh_commands_delete_objects (SeahorseCommands* base, GList* objects) 
 {
-	SeahorseOperation* op = NULL;
 	guint num;
 	gchar* prompt;
+	GList *l;
+	GtkWidget *parent;
+	GError *error = NULL;
 
 	num = g_list_length (objects);
 	if (num == 0) {
-		return NULL;
+		return TRUE;
 	} else if (num == 1) {
 		prompt = g_strdup_printf (_("Are you sure you want to delete the secure shell key '%s'?"), 
 		                          seahorse_object_get_label (objects->data));
 	} else {
 		prompt = g_strdup_printf (_("Are you sure you want to delete %d secure shell keys?"), num);
 	}
-	
-	if (seahorse_util_prompt_delete (prompt, NULL))
-		op = seahorse_source_delete_objects (objects);
-	
+
+	parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (base)));
+	if (!seahorse_util_prompt_delete (prompt, NULL)) {
+		g_free (prompt);
+		return FALSE;
+	}
+
 	g_free (prompt);
-	return op;
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		if (!seahorse_ssh_op_delete_sync (l->data, &error)) {
+			seahorse_util_handle_error (&error, parent, _("Couldn't delete key"));
+			return FALSE;
+		}
+	}
+
+	return TRUE;
 }
 
 static GObject* 

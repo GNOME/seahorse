@@ -25,6 +25,7 @@
 #include "seahorse-pkcs11-operations.h"
 #include "seahorse-pkcs11-source.h"
 
+#include "seahorse-progress.h"
 #include "common/seahorse-object-list.h"
 
 #include <gck/gck.h>
@@ -32,51 +33,23 @@
 
 #include <glib/gi18n.h>
 
-static void 
-seahorse_pkcs11_mark_complete (SeahorseOperation *self, GError *error) 
-{
-	SeahorseOperation *operation = SEAHORSE_OPERATION (self);
-	if (error == NULL) 
-		seahorse_operation_mark_done (operation, FALSE, NULL);
-	else if (error->code == CKR_FUNCTION_CANCELED)
-		seahorse_operation_mark_done (operation, TRUE, NULL);
-	else 	
-		seahorse_operation_mark_done (operation, FALSE, error);
-	g_clear_error (&error);
-}
-
-/* -----------------------------------------------------------------------------
- * REFRESHER OPERATION
- */
-
-#define SEAHORSE_TYPE_PKCS11_REFRESHER               (seahorse_pkcs11_refresher_get_type ())
-#define SEAHORSE_PKCS11_REFRESHER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PKCS11_REFRESHER, SeahorsePkcs11Refresher))
-#define SEAHORSE_PKCS11_REFRESHER_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PKCS11_REFRESHER, SeahorsePkcs11RefresherClass))
-#define SEAHORSE_IS_PKCS11_REFRESHER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PKCS11_REFRESHER))
-#define SEAHORSE_IS_PKCS11_REFRESHER_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PKCS11_REFRESHER))
-#define SEAHORSE_PKCS11_REFRESHER_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PKCS11_REFRESHER, SeahorsePkcs11RefresherClass))
-
-typedef struct _SeahorsePkcs11Refresher SeahorsePkcs11Refresher;
-typedef struct _SeahorsePkcs11RefresherClass SeahorsePkcs11RefresherClass;
-    
-struct _SeahorsePkcs11Refresher {
-	SeahorseOperation parent;
-	GCancellable *cancellable;
+typedef struct {
 	SeahorsePkcs11Source *source;
-	GckSession *session;
+	GCancellable *cancellable;
 	GHashTable *checks;
-};
+	GckSession *session;
+} pkcs11_refresh_closure;
 
-struct _SeahorsePkcs11RefresherClass {
-	SeahorseOperationClass parent_class;
-};
-
-enum {
-	PROP_0,
-	PROP_SOURCE
-};
-
-G_DEFINE_TYPE (SeahorsePkcs11Refresher, seahorse_pkcs11_refresher, SEAHORSE_TYPE_OPERATION);
+static void
+pkcs11_refresh_free (gpointer data)
+{
+	pkcs11_refresh_closure *closure = data;
+	g_object_unref (closure->source);
+	g_clear_object (&closure->cancellable);
+	g_hash_table_destroy (closure->checks);
+	g_clear_object (&closure->session);
+	g_free (closure);
+}
 
 static guint
 ulong_hash (gconstpointer k)
@@ -98,345 +71,226 @@ remove_each_object (gpointer key, gpointer value, gpointer data)
 }
 
 static void 
-on_find_objects(GckSession *session, GAsyncResult *result, SeahorsePkcs11Refresher *self)
+on_refresh_find_objects (GckSession *session,
+                         GAsyncResult *result,
+                         gpointer user_data)
 {
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	pkcs11_refresh_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GList *objects, *l;
-	GError *err = NULL;
+	GError *error = NULL;
 	gulong handle;
-	
-	g_assert (SEAHORSE_IS_PKCS11_REFRESHER (self));
-	
-	objects = gck_session_find_objects_finish (session, result, &err);
-	if (err != NULL) {
-		seahorse_pkcs11_mark_complete (SEAHORSE_OPERATION (self), err);
-		return;
+
+	objects = gck_session_find_objects_finish (session, result, &error);
+	if (error != NULL) {
+		g_simple_async_result_take_error (res, error);
+	} else {
+
+		/* Remove all objects that were found, from the check table */
+		for (l = objects; l; l = g_list_next (l)) {
+			seahorse_pkcs11_source_receive_object (closure->source, l->data);
+			handle = gck_object_get_handle (l->data);
+			g_hash_table_remove (closure->checks, &handle);
+		}
+
+		/* Remove everything not found from the context */
+		g_hash_table_foreach_remove (closure->checks, remove_each_object, NULL);
 	}
 
-	/* Remove all objects that were found, from the check table */
-	for (l = objects; l; l = g_list_next (l)) {
-		seahorse_pkcs11_source_receive_object (self->source, l->data);
-		handle = gck_object_get_handle (l->data);
-		g_hash_table_remove (self->checks, &handle);
-	}
-
-	/* Remove everything not found from the context */
-	g_hash_table_foreach_remove (self->checks, remove_each_object, NULL);
-
-	seahorse_pkcs11_mark_complete (SEAHORSE_OPERATION (self), NULL);
-}
-
-static void 
-on_open_session(GckSlot *slot, GAsyncResult *result, SeahorsePkcs11Refresher *self)
-{
-	GError *err = NULL;
-	GckAttributes *attrs;
-
-	g_return_if_fail (SEAHORSE_IS_PKCS11_REFRESHER (self));
-
-	self->session = gck_slot_open_session_finish (slot, result, &err);
-	if (!self->session) {
-		seahorse_pkcs11_mark_complete (SEAHORSE_OPERATION (self), err);
-		return;
-	}
-	
-	/* Step 2. Load all the objects that we want */
-	attrs = gck_attributes_new ();
-	gck_attributes_add_boolean (attrs, CKA_TOKEN, TRUE);
-	gck_attributes_add_ulong (attrs, CKA_CLASS, CKO_CERTIFICATE);
-	gck_session_find_objects_async (self->session, attrs, self->cancellable,
-	                                (GAsyncReadyCallback)on_find_objects, self);
-	gck_attributes_unref (attrs);
+	g_simple_async_result_complete (res);
+	g_object_unref (res);
 }
 
 static void
-seahorse_pkcs11_refresher_cancel (SeahorseOperation *operation) 
+on_refresh_open_session (GObject *source,
+                         GAsyncResult *result,
+                         gpointer user_data)
 {
-	SeahorsePkcs11Refresher *self = SEAHORSE_PKCS11_REFRESHER (operation);
-	g_return_if_fail (SEAHORSE_IS_PKCS11_REFRESHER (self));
-	g_cancellable_cancel (self->cancellable);
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	pkcs11_refresh_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+	GckAttributes *attrs;
+
+	closure->session = gck_slot_open_session_finish (GCK_SLOT (source), result, &error);
+	if (!closure->session) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete (res);
+
+	/* Step 2. Load all the objects that we want */
+	} else {
+		attrs = gck_attributes_new ();
+		gck_attributes_add_boolean (attrs, CKA_TOKEN, TRUE);
+		gck_attributes_add_ulong (attrs, CKA_CLASS, CKO_CERTIFICATE);
+		gck_session_find_objects_async (closure->session, attrs, closure->cancellable,
+		                                (GAsyncReadyCallback)on_refresh_find_objects,
+		                                g_object_ref (res));
+		gck_attributes_unref (attrs);
+	}
+
+	g_object_unref (res);
 }
 
-static GObject* 
-seahorse_pkcs11_refresher_constructor (GType type, guint n_props, GObjectConstructParam *props) 
+void
+seahorse_pkcs11_refresh_async (SeahorsePkcs11Source *source,
+                               GCancellable *cancellable,
+                               GAsyncReadyCallback callback,
+                               gpointer user_data)
 {
-	SeahorsePkcs11Refresher *self = SEAHORSE_PKCS11_REFRESHER (G_OBJECT_CLASS (seahorse_pkcs11_refresher_parent_class)->constructor(type, n_props, props));
+	GSimpleAsyncResult *res;
+	pkcs11_refresh_closure *closure;
 	GckSlot *slot;
 	GList *objects, *l;
 	gulong handle;
 
-	g_return_val_if_fail (self, NULL);	
-	g_return_val_if_fail (self->source, NULL);	
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	                                 seahorse_pkcs11_refresh_async);
+	closure = g_new0 (pkcs11_refresh_closure, 1);
+	closure->checks = g_hash_table_new_full (ulong_hash, ulong_equal,
+	                                         g_free, g_object_unref);
+	closure->source = g_object_ref (source);
+	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+	g_simple_async_result_set_op_res_gpointer (res, closure, pkcs11_refresh_free);
 
-	objects = seahorse_context_get_objects (NULL, SEAHORSE_SOURCE (self->source));
+	/* Make note of all the objects that were there */
+	objects = seahorse_context_get_objects (seahorse_context_instance (),
+	                                        SEAHORSE_SOURCE (source));
 	for (l = objects; l; l = g_list_next (l)) {
 		if (g_object_class_find_property (G_OBJECT_GET_CLASS (l->data), "pkcs11-handle")) {
 			g_object_get (l->data, "pkcs11-handle", &handle, NULL);
-			g_hash_table_insert (self->checks, g_memdup (&handle, sizeof (handle)), g_object_ref (l->data));
+			g_hash_table_insert (closure->checks,
+			                     g_memdup (&handle, sizeof (handle)),
+			                     g_object_ref (l->data));
 		}
-		
 	}
-
 	g_list_free (objects);
 
 	/* Step 1. Load the session */
-	slot = seahorse_pkcs11_source_get_slot (self->source);
-	gck_slot_open_session_async (slot, GCK_SESSION_READ_WRITE, self->cancellable,
-	                              (GAsyncReadyCallback)on_open_session, self);
-	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
-	
-	return G_OBJECT (self);
+	slot = seahorse_pkcs11_source_get_slot (closure->source);
+	gck_slot_open_session_async (slot, GCK_SESSION_READ_WRITE, closure->cancellable,
+	                             on_refresh_open_session, g_object_ref (res));
+
+	g_object_unref (res);
 }
 
-static void
-seahorse_pkcs11_refresher_init (SeahorsePkcs11Refresher *self)
+gboolean
+seahorse_pkcs11_refresh_finish (SeahorsePkcs11Source *source,
+                                GAsyncResult *result,
+                                GError **error)
 {
-	self->cancellable = g_cancellable_new ();
-	self->checks = g_hash_table_new_full (ulong_hash, ulong_equal, g_free, g_object_unref);
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	                      seahorse_pkcs11_refresh_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+
 }
 
-static void
-seahorse_pkcs11_refresher_finalize (GObject *obj)
-{
-	SeahorsePkcs11Refresher *self = SEAHORSE_PKCS11_REFRESHER (obj);
-	
-	if (self->cancellable)
-		g_object_unref (self->cancellable);
-	self->cancellable = NULL;
-	
-	if (self->source)
-		g_object_unref (self->source);
-	self->source = NULL;
-
-	if (self->session)
-		g_object_unref (self->session);
-	self->session = NULL;
-
-	g_hash_table_destroy (self->checks);
-
-	G_OBJECT_CLASS (seahorse_pkcs11_refresher_parent_class)->finalize (obj);
-}
-
-static void
-seahorse_pkcs11_refresher_set_property (GObject *obj, guint prop_id, const GValue *value, 
-                                      GParamSpec *pspec)
-{
-	SeahorsePkcs11Refresher *self = SEAHORSE_PKCS11_REFRESHER (obj);
-	
-	switch (prop_id) {
-	case PROP_SOURCE:
-		g_return_if_fail (!self->source);
-		self->source = g_value_get_object (value);
-		g_return_if_fail (self->source);
-		g_object_ref (self->source);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-seahorse_pkcs11_refresher_get_property (GObject *obj, guint prop_id, GValue *value, 
-                                      GParamSpec *pspec)
-{
-	SeahorsePkcs11Refresher *self = SEAHORSE_PKCS11_REFRESHER (obj);
-	
-	switch (prop_id) {
-	case PROP_SOURCE:
-		g_value_set_object (value, self->source);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-seahorse_pkcs11_refresher_class_init (SeahorsePkcs11RefresherClass *klass)
-{
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-	SeahorseOperationClass *operation_class = SEAHORSE_OPERATION_CLASS (klass);
-	
-	seahorse_pkcs11_refresher_parent_class = g_type_class_peek_parent (klass);
-
-	gobject_class->constructor = seahorse_pkcs11_refresher_constructor;
-	gobject_class->finalize = seahorse_pkcs11_refresher_finalize;
-	gobject_class->set_property = seahorse_pkcs11_refresher_set_property;
-	gobject_class->get_property = seahorse_pkcs11_refresher_get_property;
-	
-	operation_class->cancel = seahorse_pkcs11_refresher_cancel;
-	
-	g_object_class_install_property (gobject_class, PROP_SOURCE,
-	           g_param_spec_object ("source", "Source", "Source", 
-	                                SEAHORSE_TYPE_SOURCE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-    
-}
-
-SeahorseOperation*
-seahorse_pkcs11_refresher_new (SeahorsePkcs11Source *source)
-{
-	return g_object_new (SEAHORSE_TYPE_PKCS11_REFRESHER, "source", source, NULL);
-}
-
-
-/* -----------------------------------------------------------------------------
- * DELETER OPERATION
- */
-
-#define SEAHORSE_TYPE_PKCS11_DELETER               (seahorse_pkcs11_deleter_get_type ())
-#define SEAHORSE_PKCS11_DELETER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PKCS11_DELETER, SeahorsePkcs11Deleter))
-#define SEAHORSE_PKCS11_DELETER_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PKCS11_DELETER, SeahorsePkcs11DeleterClass))
-#define SEAHORSE_IS_PKCS11_DELETER(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PKCS11_DELETER))
-#define SEAHORSE_IS_PKCS11_DELETER_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PKCS11_DELETER))
-#define SEAHORSE_PKCS11_DELETER_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PKCS11_DELETER, SeahorsePkcs11DeleterClass))
-
-typedef struct _SeahorsePkcs11Deleter SeahorsePkcs11Deleter;
-typedef struct _SeahorsePkcs11DeleterClass SeahorsePkcs11DeleterClass;
-    
-struct _SeahorsePkcs11Deleter {
-	SeahorseOperation parent;
-	SeahorsePkcs11Object *object;
+typedef struct {
+	GQueue *objects;
 	GCancellable *cancellable;
-};
+} pkcs11_delete_closure;
 
-struct _SeahorsePkcs11DeleterClass {
-	SeahorseOperationClass parent_class;
-};
-
-enum {
-	PROP_D0,
-	PROP_OBJECT
-};
-
-G_DEFINE_TYPE (SeahorsePkcs11Deleter, seahorse_pkcs11_deleter, SEAHORSE_TYPE_OPERATION);
-
-static void 
-on_deleted (GckObject *object, GAsyncResult *result, SeahorsePkcs11Deleter *self)
+static void
+pkcs11_delete_free (gpointer data)
 {
-	GError *err = NULL;
-	
-	g_return_if_fail (SEAHORSE_IS_PKCS11_DELETER (self));
-	
-	if (!gck_object_destroy_finish (object, result, &err)) {
+	pkcs11_delete_closure *closure = data;
+	g_queue_foreach (closure->objects, (GFunc)g_object_unref, NULL);
+	g_queue_free (closure->objects);
+	g_clear_object (&closure->cancellable);
+	g_free (closure);
+}
+
+static void pkcs11_delete_one_object (GSimpleAsyncResult *res);
+
+static void
+on_delete_object_completed (GObject *source,
+                            GAsyncResult *result,
+                            gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	pkcs11_delete_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+	SeahorseObject *object;
+
+	object = g_queue_pop_head (closure->objects);
+	seahorse_progress_end (closure->cancellable, object);
+
+	if (!gck_object_destroy_finish (GCK_OBJECT (source), result, &error)) {
 
 		/* Ignore objects that have gone away */
-		if (err->code != CKR_OBJECT_HANDLE_INVALID) { 
-			seahorse_pkcs11_mark_complete (SEAHORSE_OPERATION (self), err);
-			return;
+		if (g_error_matches (error, GCK_ERROR, CKR_OBJECT_HANDLE_INVALID)) {
+			g_clear_error (&error);
+		} else {
+			g_simple_async_result_take_error (res, error);
+			g_simple_async_result_complete (res);
 		}
-		
-		g_error_free (err);
+
 	}
-	
-	seahorse_context_remove_object (NULL, SEAHORSE_OBJECT (self->object));
-	seahorse_pkcs11_mark_complete (SEAHORSE_OPERATION (self), NULL);
-}
-			
-static void
-seahorse_pkcs11_deleter_cancel (SeahorseOperation *operation) 
-{
-	SeahorsePkcs11Deleter *self = SEAHORSE_PKCS11_DELETER (operation);
-	g_return_if_fail (SEAHORSE_IS_PKCS11_DELETER (self));
-	g_cancellable_cancel (self->cancellable);
-}
 
-static GObject* 
-seahorse_pkcs11_deleter_constructor (GType type, guint n_props, GObjectConstructParam *props) 
-{
-	SeahorsePkcs11Deleter *self = SEAHORSE_PKCS11_DELETER (G_OBJECT_CLASS (seahorse_pkcs11_deleter_parent_class)->constructor(type, n_props, props));
-	
-	g_return_val_if_fail (self, NULL);
-	g_return_val_if_fail (self->object, NULL);
-
-	/* Start the delete */
-	gck_object_destroy_async (seahorse_pkcs11_object_get_pkcs11_object (self->object),
-	                          self->cancellable, (GAsyncReadyCallback)on_deleted, self);
-	seahorse_operation_mark_start (SEAHORSE_OPERATION (self));
-	
-	return G_OBJECT (self);
-}
-
-static void
-seahorse_pkcs11_deleter_init (SeahorsePkcs11Deleter *self)
-{
-	self->cancellable = g_cancellable_new ();
-}
-
-static void
-seahorse_pkcs11_deleter_finalize (GObject *obj)
-{
-	SeahorsePkcs11Deleter *self = SEAHORSE_PKCS11_DELETER (obj);
-	
-	if (self->cancellable)
-		g_object_unref (self->cancellable);
-	self->cancellable = NULL;
-	
-	if (self->object)
-		g_object_unref (self->object);
-	self->object = NULL;
-
-	G_OBJECT_CLASS (seahorse_pkcs11_deleter_parent_class)->finalize (obj);
-}
-
-static void
-seahorse_pkcs11_deleter_set_property (GObject *obj, guint prop_id, const GValue *value, 
-                                      GParamSpec *pspec)
-{
-	SeahorsePkcs11Deleter *self = SEAHORSE_PKCS11_DELETER (obj);
-	
-	switch (prop_id) {
-	case PROP_OBJECT:
-		g_return_if_fail (!self->object);
-		self->object = g_value_get_object (value);
-		g_return_if_fail (self->object);
-		g_object_ref (self->object);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
+	if (error == NULL) {
+		seahorse_context_remove_object (seahorse_context_instance (),
+		                                object);
+		pkcs11_delete_one_object (res);
 	}
+
+	g_object_unref (object);
+	g_object_unref (res);
 }
 
 static void
-seahorse_pkcs11_deleter_get_property (GObject *obj, guint prop_id, GValue *value, 
-                                      GParamSpec *pspec)
+pkcs11_delete_one_object (GSimpleAsyncResult *res)
 {
-	SeahorsePkcs11Deleter *self = SEAHORSE_PKCS11_DELETER (obj);
-	
-	switch (prop_id) {
-	case PROP_OBJECT:
-		g_value_set_object (value, self->object);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
+	pkcs11_delete_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	SeahorseObject *object;
+
+	if (g_queue_is_empty (closure->objects)) {
+		g_simple_async_result_complete_in_idle (res);
+		return;
 	}
+
+	object = g_queue_peek_head (closure->objects);
+	seahorse_progress_begin (closure->cancellable, object);
+
+	gck_object_destroy_async (seahorse_pkcs11_object_get_pkcs11_object (SEAHORSE_PKCS11_OBJECT (object)),
+	                          closure->cancellable, on_delete_object_completed, g_object_ref (res));
 }
 
-static void
-seahorse_pkcs11_deleter_class_init (SeahorsePkcs11DeleterClass *klass)
+void
+seahorse_pkcs11_delete_async (GList *objects,
+                              GCancellable *cancellable,
+                              GAsyncReadyCallback callback,
+                              gpointer user_data)
 {
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-	SeahorseOperationClass *operation_class = SEAHORSE_OPERATION_CLASS (klass);
-	
-	seahorse_pkcs11_deleter_parent_class = g_type_class_peek_parent (klass);
+	GSimpleAsyncResult *res;
+	pkcs11_delete_closure *closure;
+	GList *l;
 
-	gobject_class->constructor = seahorse_pkcs11_deleter_constructor;
-	gobject_class->finalize = seahorse_pkcs11_deleter_finalize;
-	gobject_class->set_property = seahorse_pkcs11_deleter_set_property;
-	gobject_class->get_property = seahorse_pkcs11_deleter_get_property;
-	
-	operation_class->cancel = seahorse_pkcs11_deleter_cancel;
-	
-	g_object_class_install_property (gobject_class, PROP_OBJECT,
-	           g_param_spec_object ("object", "Object", "Deleting Object", 
-	                                SEAHORSE_PKCS11_TYPE_OBJECT, 
-	                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-    
+	res = g_simple_async_result_new (NULL, callback, user_data,
+	                                 seahorse_pkcs11_delete_async);
+	closure = g_new0 (pkcs11_delete_closure, 1);
+	closure->objects = g_queue_new ();
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		g_queue_push_tail (closure->objects, g_object_ref (l->data));
+		seahorse_progress_prep (cancellable, l->data, NULL);
+	}
+	g_simple_async_result_set_op_res_gpointer (res, closure, pkcs11_delete_free);
+
+	pkcs11_delete_one_object (res);
+
+	g_object_unref (res);
 }
 
-SeahorseOperation*
-seahorse_pkcs11_deleter_new (SeahorsePkcs11Object *object)
+gboolean
+seahorse_pkcs11_delete_finish (GAsyncResult *result,
+                               GError **error)
 {
-	return g_object_new (SEAHORSE_TYPE_PKCS11_DELETER, "object", object, NULL);
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, NULL,
+	                      seahorse_pkcs11_delete_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
 }

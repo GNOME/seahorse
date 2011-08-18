@@ -107,7 +107,7 @@ seahorse_pkcs11_certificate_realize (SeahorseObject *obj)
 	if (!seahorse_object_get_label (obj))
 		g_object_set (self, "label", _("Certificate"), NULL);
 	
-	flags = seahorse_object_get_flags (obj);
+	flags = seahorse_object_get_flags (obj) | SEAHORSE_FLAG_DELETABLE;
 
 	/* TODO: Expiry, revoked, disabled etc... */
 	if (seahorse_pkcs11_certificate_get_trust (self) >= SEAHORSE_VALIDITY_MARGINAL)

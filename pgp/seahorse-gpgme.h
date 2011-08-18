@@ -44,7 +44,8 @@ struct _SeahorseKeyTypeTable {
 
 GQuark             seahorse_gpgme_error_domain      (void);
 
-void               seahorse_gpgme_to_error          (gpgme_error_t gerr, GError** err);
+gboolean           seahorse_gpgme_propagate_error   (gpgme_error_t gerr,
+                                                     GError** error);
 
 void               seahorse_gpgme_handle_error      (gpgme_error_t err, 
                                                      const gchar* desc, ...);
@@ -56,5 +57,8 @@ GType              seahorse_gpgme_boxed_key_type    (void);
 SeahorseValidity   seahorse_gpgme_convert_validity  (gpgme_validity_t validity);
 
 gpgme_error_t      seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table);
+
+GSource *          seahorse_gpgme_gsource_new       (gpgme_ctx_t gctx,
+                                                     GCancellable *cancellable);
 
 #endif /* SEAHORSEGPGME_H_ */

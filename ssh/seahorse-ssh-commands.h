@@ -27,8 +27,6 @@
 
 #include "seahorse-commands.h"
 #include "seahorse-object.h"
-#include <seahorse-operation.h>
-
 
 #define SEAHORSE_TYPE_SSH_COMMANDS                 (seahorse_ssh_commands_get_type ())
 #define SEAHORSE_SSH_COMMANDS(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SSH_COMMANDS, SeahorseSshCommands))

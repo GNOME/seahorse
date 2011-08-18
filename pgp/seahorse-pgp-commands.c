@@ -25,6 +25,7 @@
 
 #include "seahorse-gpgme-dialogs.h"
 #include "seahorse-gpgme-key.h"
+#include "seahorse-gpgme-key-op.h"
 #include "seahorse-gpgme-uid.h"
 #include "seahorse-pgp.h"
 #include "seahorse-pgp-commands.h"
@@ -122,7 +123,7 @@ seahorse_pgp_commands_show_properties (SeahorseCommands* base, SeahorseObject* o
 	seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (obj), seahorse_commands_get_window (base));
 }
 
-static SeahorseOperation*
+static gboolean
 seahorse_pgp_commands_delete_objects (SeahorseCommands* base, GList* objects) 
 {
 	guint num;
@@ -131,12 +132,14 @@ seahorse_pgp_commands_delete_objects (SeahorseCommands* base, GList* objects)
 	char* message;
 	SeahorseObject *obj;
 	GList* to_delete, *l;
-	SeahorseOperation *op;
+	GtkWidget *parent;
+	gpgme_error_t gerr;
 	guint length;
+	GError *error = NULL;
 
 	num = g_list_length (objects);
 	if (num == 0)
-		return NULL;
+		return TRUE;
 
 	num_keys = 0;
 	num_identities = 0;
@@ -148,7 +151,7 @@ seahorse_pgp_commands_delete_objects (SeahorseCommands* base, GList* objects)
 	 * chopping block.
 	 */
 	to_delete = NULL;
-	
+
 	for (l = objects; l; l = g_list_next (l)) {
 		obj = SEAHORSE_OBJECT (l->data);
 		if (G_OBJECT_TYPE (obj) == SEAHORSE_TYPE_GPGME_UID) {
@@ -166,7 +169,7 @@ seahorse_pgp_commands_delete_objects (SeahorseCommands* base, GList* objects)
 	length = g_list_length (to_delete);
 	switch (length) {
 	case 0:
-		return NULL;
+		return TRUE;
 	case 1:
 		message = g_strdup_printf (_ ("Are you sure you want to permanently delete %s?"), 
 		                           seahorse_object_get_label (to_delete->data));
@@ -183,19 +186,36 @@ seahorse_pgp_commands_delete_objects (SeahorseCommands* base, GList* objects)
 		}
 		break;
 	}
-	
-	if (!seahorse_util_prompt_delete (message, GTK_WIDGET (seahorse_commands_get_window (base)))) {
+
+	parent = GTK_WIDGET (seahorse_commands_get_window (base));
+	if (!seahorse_util_prompt_delete (message, parent)) {
 		g_free (message);
-		return NULL;
-
+		return FALSE;
 	}
-	
-	op = seahorse_source_delete_objects (to_delete);
 
-	g_free (message);
-	g_list_free (to_delete);
-	
-	return op;
+	gerr = 0;
+	for (l = objects; l; l = g_list_next (l)) {
+		obj = SEAHORSE_OBJECT (l->data);
+		if (SEAHORSE_IS_GPGME_UID (obj)) {
+			gerr = seahorse_gpgme_key_op_del_uid (SEAHORSE_GPGME_UID (obj));
+			message = _("Couldn't delete user ID");
+		} else if (SEAHORSE_IS_GPGME_KEY (obj)) {
+			if (seahorse_object_get_usage (obj) == SEAHORSE_USAGE_PRIVATE_KEY) {
+				gerr = seahorse_gpgme_key_op_delete_pair (SEAHORSE_GPGME_KEY (obj));
+				message = _("Couldn't delete private key");
+			} else {
+				gerr = seahorse_gpgme_key_op_delete (SEAHORSE_GPGME_KEY (obj));
+				message = _("Couldn't delete public key");
+			}
+		}
+
+		if (seahorse_gpgme_propagate_error (gerr, &error)) {
+			seahorse_util_handle_error (&error, parent, "%s", message);
+			return FALSE;
+		}
+	}
+
+	return TRUE;
 }
 
 static GObject* 

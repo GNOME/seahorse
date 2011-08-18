@@ -500,78 +500,30 @@ drag_begin (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore 
 	return skstore->priv->drag_objects ? TRUE : FALSE;
 }
 
-static gboolean
-export_keys_to_output (GList *objects, GOutputStream *output, GError **error)
-{
-	SeahorseMultiOperation *mop = NULL;
-	SeahorseOperation *op;
-	SeahorseSource *sksrc;
-	SeahorseObject *sobj;
-	GList *next;
-	gboolean ret;
-	
-	objects = seahorse_util_objects_sort (objects);
-	seahorse_debug ("exporting %d objects", g_list_length (objects));
-	
-	while (objects) {
-		
-		/* Break off one set (same keysource) */
-		next = seahorse_util_objects_splice (objects);
+typedef struct {
+	SeahorseKeyManagerStore *skstore;
 
-		g_assert (SEAHORSE_IS_OBJECT (objects->data));
-		sobj = SEAHORSE_OBJECT (objects->data);
-
-		/* Export from this key source */        
-		sksrc = seahorse_object_get_source (sobj);
-		g_return_val_if_fail (sksrc != NULL, FALSE);
-
-		if (!mop) 
-			mop = seahorse_multi_operation_new ();
-
-		/* We pass our own data object, to which data is appended */
-		op = seahorse_source_export (sksrc, objects, output);
-		g_return_val_if_fail (op != NULL, FALSE);
-
-		seahorse_multi_operation_take (mop, op);
-		
-		g_list_free (objects);
-		objects = next;		
-	}
-	
-	/* Make sure it's complete before we can return data */
-	op = SEAHORSE_OPERATION (mop);
-	seahorse_operation_wait (op);
-
-	ret = TRUE;
-	if (!seahorse_operation_is_successful (op)) { 
-		seahorse_operation_copy_error (op, error);
-		ret = FALSE;
-	}
-	
-	g_object_unref (mop);
-	return ret;
-}
+	gint exports;
+	gboolean failures;
+} export_keys_to_output_closure;
 
 static gboolean
-export_to_text (SeahorseKeyManagerStore *skstore, GtkSelectionData *selection_data)
+export_to_text (SeahorseKeyManagerStore *skstore,
+                GtkSelectionData *selection_data)
 {
 	GOutputStream *output;
-	gboolean ret;
-	GList *keys;
-	
-	ret = FALSE;
-	
-	g_return_val_if_fail (skstore->priv->drag_objects, FALSE);
-	keys = g_list_copy (skstore->priv->drag_objects);
+	gboolean ret = FALSE;
 
+	g_return_val_if_fail (skstore->priv->drag_objects, FALSE);
 	seahorse_debug ("exporting to text");
 
 	output = g_memory_output_stream_new (NULL, 0, g_realloc, g_free);
 	g_return_val_if_fail (output, FALSE);
 
-	/* This modifies and frees keys */
-	ret = export_keys_to_output (keys, output, &skstore->priv->drag_error) &&
-	       g_output_stream_close (output, NULL, &skstore->priv->drag_error);
+	ret = seahorse_source_export_auto_wait (skstore->priv->drag_objects, output,
+	                                        &skstore->priv->drag_error) &&
+	      g_output_stream_close (output, NULL, &skstore->priv->drag_error);
+
 	if (ret) {
 		seahorse_debug ("setting selection text");
 		gtk_selection_data_set_text (selection_data, 
@@ -613,9 +565,9 @@ export_to_filename (SeahorseKeyManagerStore *skstore, const gchar *filename)
 	
 	if (output) {
 		/* This modifies and frees keys */
-		ret = export_keys_to_output (keys, output, &skstore->priv->drag_error) &&
+		ret = seahorse_source_export_auto_wait (keys, output, &skstore->priv->drag_error) &&
 		      g_output_stream_close (output, NULL, &skstore->priv->drag_error);
-		
+
 		g_object_unref (output);
 	}
 	

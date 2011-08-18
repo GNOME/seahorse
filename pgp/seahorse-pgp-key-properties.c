@@ -346,6 +346,7 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePgpKey *pk
 	GList *keys, *l;
 	GList *uids, *u;
 	GList *sigs, *s;
+	GCancellable *cancellable;
 
 	/* Insert all the fun-ness */
 	uids = seahorse_pgp_key_get_uids (pkey);
@@ -370,9 +371,15 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePgpKey *pk
 				continue;
 			rawids = g_list_prepend (rawids, (gpointer)seahorse_pgp_signature_get_keyid (s->data));
 		}
-        
-		/* Pass it to 'DiscoverKeys' for resolution/download */
-		keys = seahorse_context_discover_objects (SCTX_APP (), SEAHORSE_PGP, rawids);
+
+		/*
+		 * Pass it to 'DiscoverKeys' for resolution/download, cancellable
+		 * ties search scope together
+		 */
+		cancellable = g_cancellable_new ();
+		keys = seahorse_context_discover_objects (seahorse_context_instance (),
+		                                          SEAHORSE_PGP, rawids, cancellable);
+		g_object_unref (cancellable);
 		g_list_free (rawids);
 		rawids = NULL;
         
@@ -1005,9 +1012,8 @@ export_complete (GFile *file, GAsyncResult *result, gchar *contents)
 	if (!g_file_replace_contents_finish (file, result, NULL, &err)) {
 		uri = g_file_get_uri (file);
 		unesc_uri = g_uri_unescape_string (seahorse_util_uri_get_last (uri), NULL);
-        seahorse_util_handle_error (err, _("Couldn't export key to \"%s\""),
-                                    unesc_uri);
-        g_clear_error (&err);
+		seahorse_util_handle_error (&err, NULL, _("Couldn't export key to \"%s\""),
+		                            unesc_uri);
         g_free (uri);
         g_free (unesc_uri);
 	}
@@ -1058,9 +1064,8 @@ on_pgp_details_export_button (GtkWidget *widget, SeahorseWidget *swidget)
 		                               G_FILE_CREATE_PRIVATE, NULL, 
 		                               (GAsyncReadyCallback)export_complete, results);
 	} else {
-		seahorse_gpgme_to_error (gerr, &err);
-		seahorse_util_handle_error (err, _("Couldn't export key."));
-		g_clear_error (&err);
+		seahorse_gpgme_propagate_error (gerr, &err);
+		seahorse_util_handle_error (&err, NULL, _("Couldn't export key."));
 	}
 	
 	g_free (uri);
@@ -1480,6 +1485,7 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseObjectModel *skmodel
 	GList *rawids = NULL;
 	GList *keys, *l, *uids;
 	GList *sigs, *s;
+	GCancellable *cancellable;
 
 	pkey = SEAHORSE_PGP_KEY (SEAHORSE_OBJECT_WIDGET (swidget)->object);
 	widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "signatures-tree"));
@@ -1507,9 +1513,15 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseObjectModel *skmodel
     
 		/* String out duplicates */
 		rawids = unique_slist_strings (rawids);
-        
-		/* Pass it to 'DiscoverKeys' for resolution/download */
-		keys = seahorse_context_discover_objects (SCTX_APP (), SEAHORSE_PGP, rawids);
+
+		/*
+		 * Pass it to 'DiscoverKeys' for resolution/download. cancellable ties
+		 * search scope together
+		 */
+		cancellable = g_cancellable_new ();
+		keys = seahorse_context_discover_objects (seahorse_context_instance (), SEAHORSE_PGP,
+		                                          rawids, cancellable);
+		g_object_unref (cancellable);
 		g_list_free (rawids);
 		rawids = NULL;
         

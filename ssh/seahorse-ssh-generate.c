@@ -82,41 +82,6 @@ seahorse_ssh_generate_register (void)
 #define DEFAULT_RSA_SIZE 2048
 
 static void
-completion_handler (SeahorseOperation *op, gpointer data)
-{
-    GError *error = NULL;
-    if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_copy_error (op, &error);
-        seahorse_util_handle_error (error, _("Couldn't generate Secure Shell key"));
-        g_clear_error (&error);
-    }
-}
-
-static void
-upload_handler (SeahorseOperation *op, SeahorseWidget *swidget)
-{
-    SeahorseSSHKey *skey;
-    GList *keys;
-    
-    if (!seahorse_operation_is_successful (op) ||
-        seahorse_operation_is_cancelled (op)) {
-		seahorse_widget_destroy (swidget);
-        return;
-	}
-    
-    skey = SEAHORSE_SSH_KEY (seahorse_operation_get_result (op));
-	if (!SEAHORSE_IS_SSH_KEY (skey)) {
-		seahorse_widget_destroy (swidget);
-		return;
-	}
-	
-    keys = g_list_append (NULL, skey);
-    seahorse_ssh_upload_prompt (keys, GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)));
-    g_list_free (keys);
-	seahorse_widget_destroy (swidget);
-}
-
-static void
 on_change (GtkComboBox *combo, SeahorseWidget *swidget)
 {
     const gchar *t;    
@@ -136,10 +101,52 @@ on_change (GtkComboBox *combo, SeahorseWidget *swidget)
 }
 
 static void
+on_generate_complete (GObject *source,
+                      GAsyncResult *result,
+                      gpointer user_data)
+{
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+	GError *error = NULL;
+
+	seahorse_ssh_op_generate_finish (SEAHORSE_SSH_SOURCE (source),
+	                                 result, &error);
+
+	if (error != NULL)
+		seahorse_util_handle_error (&error, swidget, _("Couldn't generate Secure Shell key"));
+
+	g_object_unref (swidget);
+}
+
+static void
+on_generate_complete_and_upload (GObject *source,
+                                 GAsyncResult *result,
+                                 gpointer user_data)
+{
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+	GError *error = NULL;
+	SeahorseObject *object;
+	GList *keys;
+
+	object = seahorse_ssh_op_generate_finish (SEAHORSE_SSH_SOURCE (source),
+	                                          result, &error);
+
+	if (error != NULL) {
+		seahorse_util_handle_error (&error, swidget, _("Couldn't generate Secure Shell key"));
+
+	} else {
+		keys = g_list_append (NULL, object);
+		seahorse_ssh_upload_prompt (keys, GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)));
+		g_list_free (keys);
+	}
+
+	g_object_unref (swidget);
+}
+
+static void
 on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
 {
     SeahorseSSHSource *src;
-    SeahorseOperation *op;
+    GCancellable *cancellable;
     GtkWidget *widget;
     const gchar *email;
     const gchar *t;
@@ -186,24 +193,14 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     
     src = SEAHORSE_SSH_SOURCE (g_object_get_data (G_OBJECT (swidget), "source"));
     g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (src));
-    
+
     /* We start creation */
-    op = seahorse_ssh_operation_generate (src, email, type, bits);
-    g_return_if_fail (op != NULL);
-    
-    /* Watch for errors so we can display */
-    seahorse_operation_watch (op, (SeahorseDoneFunc)completion_handler, NULL, NULL, NULL);
-    
-    /* When completed upload */
-    if (upload) {
-        seahorse_operation_watch (op, (SeahorseDoneFunc)upload_handler, swidget, NULL, NULL);
-		seahorse_widget_set_visible (swidget, swidget->name, FALSE);
-	}
-	else
-		seahorse_widget_destroy (swidget);
-    
-    seahorse_progress_show (op, _("Creating Secure Shell Key"), TRUE);
-    g_object_unref (op);
+    cancellable = g_cancellable_new ();
+    seahorse_ssh_op_generate_async (src, email, type, bits, cancellable,
+                                    upload ? on_generate_complete_and_upload : on_generate_complete,
+                                    g_object_ref (swidget));
+    seahorse_progress_show (cancellable, _("Creating Secure Shell Key"), FALSE);
+    g_object_unref (cancellable);
 }
 
 void
@@ -234,5 +231,5 @@ seahorse_ssh_generate_show (SeahorseSSHSource *src, GtkWindow *parent)
     /* on_change() gets called, bits entry is setup */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
     g_return_if_fail (widget != NULL);
-    gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+    /* gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0); */
 }

@@ -25,7 +25,6 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-object.h"
-#include "seahorse-operation.h"
 #include "seahorse-source.h"
 #include "seahorse-validity.h"
 
@@ -73,8 +72,15 @@ const gchar*            seahorse_ssh_key_get_algo_str         (SeahorseSSHKey *s
 guint                   seahorse_ssh_key_get_strength         (SeahorseSSHKey *skey);
 
 const gchar*            seahorse_ssh_key_get_location         (SeahorseSSHKey *skey);
-                                                                   
-SeahorseOperation*      seahorse_ssh_key_op_change_passphrase (SeahorseSSHKey *skey);
+
+void             seahorse_ssh_key_op_change_passphrase_async  (SeahorseSSHKey *self,
+                                                               GCancellable *cancellable,
+                                                               GAsyncReadyCallback callback,
+                                                               gpointer user_data);
+
+gboolean         seahorse_ssh_key_op_change_passphrase_finish (SeahorseSSHKey *self,
+                                                               GAsyncResult *result,
+                                                               GError **error);
 
 SeahorseValidity        seahorse_ssh_key_get_trust            (SeahorseSSHKey *self);
 

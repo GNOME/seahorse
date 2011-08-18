@@ -27,7 +27,6 @@
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
-#include "seahorse-operation.h"
 #include "seahorse-progress.h"
 #include "seahorse-gtkstock.h"
 
@@ -36,15 +35,17 @@
 #include "ssh/seahorse-ssh-operation.h"
 
 static void 
-upload_complete (SeahorseOperation *op, gpointer dummy)
+on_upload_complete (GObject *source,
+                    GAsyncResult *result,
+                    gpointer user_data)
 {
-    GError *err = NULL;
-    
-    if (!seahorse_operation_is_successful (op)) {
-        seahorse_operation_copy_error (op, &err);
-        seahorse_util_handle_error (err, _("Couldn't configure Secure Shell keys on remote computer."));
-        g_clear_error (&err);
-    }    
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_ssh_op_upload_finish (SEAHORSE_SSH_SOURCE (source), result, &error))
+		seahorse_util_handle_error (&error, swidget, _("Couldn't configure Secure Shell keys on remote computer."));
+
+	g_object_unref (swidget);
 }
 
 G_MODULE_EXPORT void
@@ -79,68 +80,18 @@ on_upload_input_changed (GtkWidget *dummy, SeahorseWidget *swidget)
     g_free (t);
 }
 
-
-static SeahorseOperation*
-upload_via_source (const gchar *user, const gchar *host, const gchar *port, GList *keys)
-{
-    SeahorseMultiOperation *mop = NULL;
-    SeahorseOperation *op = NULL;
-    SeahorseSource *sksrc;
-    SeahorseObject *object;
-    GList *next;
-    
-    seahorse_util_objects_sort (keys);
-    g_assert (keys);
-    
-    while (keys) {
-     
-        /* Break off one set (same keysource) */
-        next = seahorse_util_objects_splice (keys);
-        
-        g_assert (SEAHORSE_IS_OBJECT (keys->data));
-        object = SEAHORSE_OBJECT (keys->data);
-
-        /* Upload via this key source */        
-        sksrc = seahorse_object_get_source (object);
-        g_return_val_if_fail (sksrc != NULL, NULL);
-        
-        g_return_val_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc), NULL);
-
-        /* If more than one operation start combining */
-        if (op != NULL) {
-            g_assert (mop == NULL);
-            mop = seahorse_multi_operation_new ();
-            seahorse_multi_operation_take (mop, op);
-        }
-
-        /* Start an upload process */
-        op = seahorse_ssh_operation_upload (SEAHORSE_SSH_SOURCE (sksrc), keys, user, host, port);
-        g_return_val_if_fail (op != NULL, NULL);
-
-        /* And combine if necessary */
-        if (mop != NULL) {
-            seahorse_multi_operation_take (mop, op);
-            op = NULL;
-        }
-        
-        g_list_free (keys);
-        keys = next;
-    }
-    
-    return mop ? SEAHORSE_OPERATION (mop) : op;
-}
-
 static void
 upload_keys (SeahorseWidget *swidget)
 {
-    SeahorseOperation *op;
     GtkWidget *widget;
     const gchar *cuser, *chost;
     gchar *user, *host, *port;
     GList *keys;
+    GCancellable *cancellable;
 
     keys = (GList*)g_object_steal_data (G_OBJECT (swidget), "upload-keys");
-    g_return_if_fail (keys != NULL);
+    if (keys == NULL)
+        return;
 
     widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "user-label"));
     cuser = gtk_entry_get_text (GTK_ENTRY (widget));
@@ -167,19 +118,18 @@ upload_keys (SeahorseWidget *swidget)
 
     seahorse_util_string_trim_whitespace (host);
     seahorse_util_string_trim_whitespace (user);
-    
-    /* This frees |keys| */
-    op = upload_via_source (user, host, port, keys);
+
+    cancellable = g_cancellable_new ();
+
+    /* Start an upload process */
+    seahorse_ssh_op_upload_async (SEAHORSE_SSH_SOURCE (seahorse_object_get_source (keys->data)),
+                                  keys, user, host, port, cancellable, on_upload_complete, NULL);
 
     g_free (host);
     g_free (user);
 
-    g_return_if_fail (op != NULL);
-    seahorse_operation_watch (op, (SeahorseDoneFunc)upload_complete, NULL, NULL, NULL);
-    
-    /* Show the progress window if necessary */
-    seahorse_progress_show (op, _("Configuring Secure Shell Keys..."), FALSE);
-    g_object_unref (op);
+    seahorse_progress_show (cancellable, _("Configuring Secure Shell Keys..."), FALSE);
+    g_object_unref (cancellable);
 }
 
 /**

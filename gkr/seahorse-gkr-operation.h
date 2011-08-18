@@ -19,58 +19,42 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/** 
- * SeahorseGkrOperation: Operations to be done on gnome-keyring items
- * 
- * - Derived from SeahorseOperation
- */
- 
 #ifndef __SEAHORSE_GKR_OPERATION_H__
 #define __SEAHORSE_GKR_OPERATION_H__
 
-#include "seahorse-operation.h"
 #include "seahorse-gkr-source.h"
 #include "seahorse-gkr-item.h"
 #include "seahorse-gkr-keyring.h"
 
-#define SEAHORSE_TYPE_GKR_OPERATION            (seahorse_gkr_operation_get_type ())
-#define SEAHORSE_GKR_OPERATION(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GKR_OPERATION, SeahorseGkrOperation))
-#define SEAHORSE_GKR_OPERATION_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GKR_OPERATION, SeahorseGkrOperationClass))
-#define SEAHORSE_IS_GKR_OPERATION(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GKR_OPERATION))
-#define SEAHORSE_IS_GKR_OPERATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GKR_OPERATION))
-#define SEAHORSE_GKR_OPERATION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GKR_OPERATION, SeahorseGkrOperationClass))
+gboolean      seahorse_gkr_propagate_error           (GnomeKeyringResult result,
+                                                      GError **err);
 
-typedef struct _SeahorseGkrOperation SeahorseGkrOperation;
-typedef struct _SeahorseGkrOperationClass SeahorseGkrOperationClass;
-typedef struct _SeahorseGkrOperationPrivate SeahorseGkrOperationPrivate;
-    
-struct _SeahorseGkrOperation {
-	SeahorseOperation parent;
-	SeahorseGkrOperationPrivate *pv;
-};
+void          seahorse_gkr_update_description_async  (SeahorseGkrItem *item,
+                                                      const gchar *description,
+                                                      GCancellable *cancellable,
+                                                      GAsyncReadyCallback callback,
+                                                      gpointer user_data);
 
-struct _SeahorseGkrOperationClass {
-	SeahorseOperationClass parent_class;
-};
+gboolean      seahorse_gkr_update_description_finish (SeahorseGkrItem *item,
+                                                      GAsyncResult *result,
+                                                      GError **error);
 
-GType                seahorse_gkr_operation_get_type               (void);
+void          seahorse_gkr_update_secret_async       (SeahorseGkrItem *item,
+                                                      const gchar *secret,
+                                                      GCancellable *cancellable,
+                                                      GAsyncReadyCallback callback,
+                                                      gpointer user_data);
 
+gboolean      seahorse_gkr_update_secret_finish      (SeahorseGkrItem *item,
+                                                      GAsyncResult *result,
+                                                      GError **error);
 
-gboolean             seahorse_gkr_operation_parse_error       (GnomeKeyringResult result, 
-                                                               GError **err);
+void          seahorse_gkr_delete_async              (GList *objects,
+                                                      GCancellable *cancellable,
+                                                      GAsyncReadyCallback callback,
+                                                      gpointer user_data);
 
-/* result: nothing */
-SeahorseOperation*   seahorse_gkr_operation_update_info       (SeahorseGkrItem *git,
-                                                               GnomeKeyringItemInfo *info);
-
-/* result: nothing */
-SeahorseOperation*   seahorse_gkr_operation_update_acl        (SeahorseGkrItem *git,
-                                                               GList *acl);
-
-/* result: nothing */
-SeahorseOperation*   seahorse_gkr_operation_delete_item       (SeahorseGkrItem *git);
-
-/* result: nothing */
-SeahorseOperation*   seahorse_gkr_operation_delete_keyring    (SeahorseGkrKeyring *git);
+gboolean      seahorse_gkr_delete_finish             (GAsyncResult *result,
+                                                      GError **error);
 
 #endif /* __SEAHORSE_GKR_OPERATION_H__ */

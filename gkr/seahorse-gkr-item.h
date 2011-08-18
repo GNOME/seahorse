@@ -90,11 +90,6 @@ const gchar*                 seahorse_gkr_item_get_attribute      (SeahorseGkrIt
 const gchar* 		     seahorse_gkr_find_string_attribute   (GnomeKeyringAttributeList *attrs, 
              		                                           const gchar *name);
 
-GList*                       seahorse_gkr_item_get_acl            (SeahorseGkrItem *self);
-
-void                         seahorse_gkr_item_set_acl            (SeahorseGkrItem *self,
-                                                                   GList* acl);
-
 GQuark                       seahorse_gkr_item_get_cannonical     (const gchar *keyring_name, 
                                                                    guint32 item_id);
 

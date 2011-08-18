@@ -26,9 +26,8 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include <seahorse-viewer.h>
-#include <seahorse-operation.h>
-#include <seahorse-object.h>
+#include "seahorse-viewer.h"
+#include "seahorse-object.h"
 
 G_BEGIN_DECLS
 
@@ -55,8 +54,7 @@ struct _SeahorseKeyserverResultsClass {
 
 GType            seahorse_keyserver_results_get_type         (void);
 
-void             seahorse_keyserver_results_show             (SeahorseOperation* op, GtkWindow* parent, 
-                                                              const char* search_text);
+void             seahorse_keyserver_results_show             (const gchar *search_text);
 
 const gchar*     seahorse_keyserver_results_get_search       (SeahorseKeyserverResults* self);
 

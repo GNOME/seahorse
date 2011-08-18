@@ -274,10 +274,8 @@ seahorse_gpgme_photo_add (SeahorseGpgmeKey *pkey, GtkWindow *parent, const gchar
     }
     
     if (!prepare_photo_id (parent, filename, &tempfile, &error)) {
-        if (error) {
-            seahorse_util_handle_error (error, "Couldn't prepare photo");
-            g_clear_error (&error);
-        }
+        if (error)
+            seahorse_util_handle_error (&error, NULL, _("Couldn't prepare photo"));
         return FALSE;
     }
     

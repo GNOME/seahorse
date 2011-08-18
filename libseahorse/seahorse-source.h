@@ -41,7 +41,6 @@
 #ifndef __SEAHORSE_SOURCE_H__
 #define __SEAHORSE_SOURCE_H__
 
-#include "seahorse-operation.h"
 #include "seahorse-types.h"
 
 #include <gio/gio.h>
@@ -59,110 +58,131 @@ typedef struct _SeahorseSourceIface SeahorseSourceIface;
 
 struct _SeahorseSourceIface {
 	GTypeInterface parent;
-    
+
 	/* virtual methods ------------------------------------------------- */
 
-	/**
-	 * load
-	 * @sksrc: The #SeahorseSource.
-	 * 
-	 * Loads the requested objects, and add the objects to SeahorseContext. 
-	 * 
-	 * Returns: The load operation.
-	 */
-	SeahorseOperation* (*load) (SeahorseSource *sksrc);
+	void            (*load_async)                (SeahorseSource *source,
+	                                              GCancellable *cancellable,
+	                                              GAsyncReadyCallback callback,
+	                                              gpointer user_data);
 
-	/**
-	 * search
-	 * @sksrc: The #SeahorseSource 
-	 * @match: Match text
-	 *
-	 * Searches for objects in the source.
-	 *
-	 * Returns: The search operation.
-	 */
-	SeahorseOperation* (*search) (SeahorseSource *sksrc, const gchar *match);
+	gboolean        (*load_finish)               (SeahorseSource *source,
+	                                              GAsyncResult *result,
+	                                              GError **error);
 
-    
-	/**
-	 * import
-	 * @sksrc: The #SeahorseSource to import into.
-	 * @input: The data to import.
-	 *
-	 * Import objects into the source. When operation is 'done' a GList of 
-	 * updated objects may be found as the operation result. 
-	 * 
-	 * Returns: The import operation
-	 */
-	SeahorseOperation* (*import) (SeahorseSource *sksrc, GInputStream *input);
+	void            (*search_async)              (SeahorseSource *source,
+	                                              const gchar *match,
+	                                              GCancellable *cancellable,
+	                                              GAsyncReadyCallback callback,
+	                                              gpointer user_data);
 
-	/**
-	 * export
-	 * @sksrc: The #SeahorseSource to export from.
-	 * @objects: A list of objects to export.
-	 * @output: Output stream to export to.
-	 *
-	 * Import objects into the object source. When operation is 'done' the result
-	 * of the operation will be a GOutputStream
-	 * 
-	 * Returns: The export operation
-	 */
-	SeahorseOperation* (*export) (SeahorseSource *sksrc, GList *objects, GOutputStream *output);
+	GList *         (*search_finish)             (SeahorseSource *source,
+	                                              GAsyncResult *result,
+	                                              GError **error);
 
-	/**
-	 * export_raw
-	 * @sksrc: The #SeahorseSource to export from.
-	 * @ids: A list of ids to export.
-	 * @data: output stream to export to.
-	 *
-	 * Import objects into the source. When operation is 'done' the result
-	 * of the operation will be a GOutputStream
-	 * 
-	 * Returns: The export operation
-	 */
-	SeahorseOperation* (*export_raw) (SeahorseSource *sksrc, GList *ids,
-	                                  GOutputStream *output);
-    
+	void            (*import_async)              (SeahorseSource *source,
+	                                              GInputStream *input,
+	                                              GCancellable *cancellable,
+	                                              GAsyncReadyCallback callback,
+	                                              gpointer user_data);
+
+	GList *         (*import_finish)             (SeahorseSource *source,
+	                                              GAsyncResult *result,
+	                                              GError **error);
+
+	void            (*export_async)              (SeahorseSource *source,
+	                                              GList *objects,
+	                                              GOutputStream *output,
+	                                              GCancellable *cancellable,
+	                                              GAsyncReadyCallback callback,
+	                                              gpointer user_data);
+
+	GOutputStream * (*export_finish)             (SeahorseSource *source,
+	                                              GAsyncResult *result,
+	                                              GError **error);
+
+	void            (*export_raw_async)          (SeahorseSource *source,
+	                                              GList *ids,
+	                                              GOutputStream *output,
+	                                              GCancellable *cancellable,
+	                                              GAsyncReadyCallback callback,
+	                                              gpointer user_data);
+
+	GOutputStream * (*export_raw_finish)         (SeahorseSource *source,
+	                                              GAsyncResult *result,
+	                                              GError **error);
 };
 
-GType               seahorse_source_get_type             (void) G_GNUC_CONST;
+GType            seahorse_source_get_type             (void) G_GNUC_CONST;
 
 /* Method helper functions ------------------------------------------- */
 
+void             seahorse_source_load_async           (SeahorseSource *source,
+                                                       GCancellable *cancellable,
+                                                       GAsyncReadyCallback callback,
+                                                       gpointer user_data);
 
-SeahorseOperation*  seahorse_source_load                  (SeahorseSource *sksrc);
-                                                          
-void                seahorse_source_load_sync             (SeahorseSource *sksrc);
+gboolean         seahorse_source_load_finish          (SeahorseSource *source,
+                                                       GAsyncResult *result,
+                                                       GError **error);
 
-void                seahorse_source_load_async            (SeahorseSource *sksrc);
+void             seahorse_source_search_async         (SeahorseSource *source,
+                                                       const gchar *match,
+                                                       GCancellable *cancellable,
+                                                       GAsyncReadyCallback callback,
+                                                       gpointer user_data);
 
-SeahorseOperation*  seahorse_source_search                (SeahorseSource *sksrc,
-                                                           const gchar *match);
+GList *          seahorse_source_search_finish        (SeahorseSource *source,
+                                                       GAsyncResult *result,
+                                                       GError **error);
 
-/* Takes ownership of |data| */
-SeahorseOperation*  seahorse_source_import                (SeahorseSource *sksrc,
-                                                           GInputStream *input);
+void             seahorse_source_import_async         (SeahorseSource *source,
+                                                       GInputStream *input,
+                                                       GCancellable *cancellable,
+                                                       GAsyncReadyCallback callback,
+                                                       gpointer user_data);
 
-/* Takes ownership of |data| */
-gboolean            seahorse_source_import_sync           (SeahorseSource *sksrc,
-                                                           GInputStream *input,
-                                                           GError **err);
+GList *          seahorse_source_import_finish        (SeahorseSource *source,
+                                                       GAsyncResult *result,
+                                                       GError **error);
 
-SeahorseOperation*  seahorse_source_export_objects        (GList *objects, 
-                                                           GOutputStream *output);
+void             seahorse_source_export_async         (SeahorseSource *source,
+                                                       GList *objects,
+                                                       GOutputStream *output,
+                                                       GCancellable *cancellable,
+                                                       GAsyncReadyCallback callback,
+                                                       gpointer user_data);
 
-SeahorseOperation*  seahorse_source_delete_objects        (GList *objects);
+GOutputStream *  seahorse_source_export_finish        (SeahorseSource *source,
+                                                       GAsyncResult *result,
+                                                       GError **error);
 
-SeahorseOperation*  seahorse_source_export                (SeahorseSource *sksrc,
-                                                           GList *objects,
-                                                           GOutputStream *output);
+void             seahorse_source_export_auto_async    (GList *objects,
+                                                       GOutputStream *output,
+                                                       GCancellable *cancellable,
+                                                       GAsyncReadyCallback callback,
+                                                       gpointer user_data);
 
-SeahorseOperation*  seahorse_source_export_raw            (SeahorseSource *sksrc, 
-                                                           GList *ids,
-                                                           GOutputStream *output);
+GOutputStream *  seahorse_source_export_auto_finish   (GAsyncResult *result,
+                                                       GError **error);
 
-GQuark              seahorse_source_get_tag               (SeahorseSource *sksrc);
+gboolean         seahorse_source_export_auto_wait     (GList *objects,
+                                                       GOutputStream *output,
+                                                       GError **error);
 
-SeahorseLocation    seahorse_source_get_location          (SeahorseSource *sksrc);
+void             seahorse_source_export_raw_async     (SeahorseSource *source,
+                                                       GList *ids,
+                                                       GOutputStream *output,
+                                                       GCancellable *cancellable,
+                                                       GAsyncReadyCallback callback,
+                                                       gpointer user_data);
+
+GOutputStream *  seahorse_source_export_raw_finish    (SeahorseSource *source,
+                                                       GAsyncResult *result,
+                                                       GError **error);
+
+GQuark           seahorse_source_get_tag              (SeahorseSource *source);
+
+SeahorseLocation seahorse_source_get_location         (SeahorseSource *source);
 
 #endif /* __SEAHORSE_SOURCE_H__ */

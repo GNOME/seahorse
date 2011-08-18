@@ -34,13 +34,6 @@ G_DEFINE_TYPE (SeahorseUnknown, seahorse_unknown, SEAHORSE_TYPE_OBJECT);
  */
 
 
-static SeahorseOperation*           
-seahorse_unknown_delete (SeahorseObject *sobj)
-{
-    seahorse_context_remove_object (SCTX_APP (), sobj);
-    return seahorse_operation_new_complete (NULL);
-}
-
 static void
 seahorse_unknown_init (SeahorseUnknown *self)
 {
@@ -50,8 +43,7 @@ seahorse_unknown_init (SeahorseUnknown *self)
 static void
 seahorse_unknown_class_init (SeahorseUnknownClass *klass)
 {
-	seahorse_unknown_parent_class = g_type_class_peek_parent (klass);
-	SEAHORSE_OBJECT_CLASS (klass)->delete = seahorse_unknown_delete;
+
 }
 
 /* -----------------------------------------------------------------------------
@@ -62,10 +54,10 @@ SeahorseUnknown*
 seahorse_unknown_new (SeahorseUnknownSource *source, GQuark id, const gchar *display)
 {
 	SeahorseUnknown *self;
-    
+
 	if (!display)
 		display = _("Unavailable");
-    
+
 	self = g_object_new (SEAHORSE_TYPE_UNKNOWN, "source", source, 
 	                     "label", display, "id", id, NULL);
 	return self;
