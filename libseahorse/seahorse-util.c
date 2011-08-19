@@ -629,8 +629,8 @@ seahorse_util_detect_mime_type (const gchar *mime)
 	         g_ascii_strcasecmp (mime, "application/x-pem-key") == 0)
 		return SEAHORSE_SSH;
 #endif 
-    
-	g_warning ("unsupported type of key data: %s", mime);
+
+	g_message ("unsupported type of key data: %s", mime);
 	return 0;
 }
 

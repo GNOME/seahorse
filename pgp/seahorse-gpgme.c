@@ -318,8 +318,8 @@ seahorse_gpgme_gsource_dispatch (GSource *gsource,
 		if (watch->registered && watch->poll_fd.revents) {
 			seahorse_debug ("GPGME OP: io for GPGME on %d", watch->poll_fd.fd);
 			g_assert (watch->fnc);
-			(watch->fnc) (watch->fnc_data, watch->poll_fd.fd);
 			watch->poll_fd.revents = 0;
+			(watch->fnc) (watch->fnc_data, watch->poll_fd.fd);
 		}
 	}
 	g_list_free (watches);
@@ -338,7 +338,6 @@ seahorse_gpgme_gsource_finalize (GSource *gsource)
 	g_cancellable_disconnect (gpgme_gsource->cancellable,
 	                          gpgme_gsource->cancelled_sig);
 	g_clear_object (&gpgme_gsource->cancellable);
-	gpgme_set_io_cbs (gpgme_gsource->gctx, NULL);
 }
 
 static GSourceFuncs seahorse_gpgme_gsource_funcs = {

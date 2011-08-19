@@ -262,9 +262,9 @@ on_watch_ssh_process (GPid pid,
 
 	/* Command failed */
 	} else if (WEXITSTATUS (status) != 0) {
-		g_warning ("SSH command failed: (%d)", WEXITSTATUS (status));
+		g_message ("SSH command failed: (%d)", WEXITSTATUS (status));
 		if (closure->serr->len)
-			g_warning ("SSH error output: %s", closure->serr->str);
+			g_message ("SSH error output: %s", closure->serr->str);
 		g_simple_async_result_set_error (res, SEAHORSE_ERROR, 0, "%s",
 		                                 closure->serr->len ? closure->serr->str : _("The SSH command failed."));
 
@@ -859,7 +859,7 @@ seahorse_ssh_op_change_passphrase_async  (SeahorseSSHKey *key,
 	source = seahorse_object_get_source (SEAHORSE_OBJECT (key));
 	g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (source));
 
-	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (key), callback, user_data,
 	                                 seahorse_ssh_op_change_passphrase_async);
 	g_simple_async_result_set_op_res_gpointer (res, g_object_ref (key), g_object_unref);
 
@@ -877,10 +877,7 @@ seahorse_ssh_op_change_passphrase_finish (SeahorseSSHKey *key,
                                           GAsyncResult *result,
                                           GError **error)
 {
-	SeahorseSource *source;
-
-	source = seahorse_object_get_source (SEAHORSE_OBJECT (key));
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (key),
 	                      seahorse_ssh_op_change_passphrase_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
