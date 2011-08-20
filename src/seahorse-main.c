@@ -22,15 +22,14 @@
 
 #include "config.h"
 
+#include "seahorse-cleanup.h"
 #include "seahorse-context.h"
-#include "seahorse-util.h"
 #include "seahorse-gtkstock.h"
+#include "seahorse-registry.h"
 #include "seahorse-secure-memory.h"
+#include "seahorse-util.h"
 
 #include "seahorse-key-manager.h"
-
-#include "common/seahorse-cleanup.h"
-#include "common/seahorse-registry.h"
 
 #ifdef WITH_PGP
 #include "pgp/seahorse-pgp-module.h"

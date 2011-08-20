@@ -27,13 +27,13 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-ldap-source.h"
 #include "seahorse-hkp-source.h"
-#include "seahorse-server-source.h"
-#include "seahorse-util.h"
+#include "seahorse-ldap-source.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-server-source.h"
 
-#include "common/seahorse-registry.h"
+#include "seahorse-registry.h"
+#include "seahorse-util.h"
 
 /**
  * SECTION:seahorse-server-source

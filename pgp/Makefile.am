@@ -71,8 +71,7 @@ libseahorse_pgp_la_SOURCES = \
 	$(HKP_SRCS)
 
 libseahorse_pgp_la_LIBADD = \
-	$(top_builddir)/libseahorse/libseahorse.la \
-	$(top_builddir)/common/libseahorse-common.la
+	$(top_builddir)/libseahorse/libseahorse.la
 
 seahorselibexecbin_PROGRAMS = xloadimage
 

@@ -27,18 +27,17 @@
 #include <string.h>
 #include <libintl.h>
 
+#include "seahorse-bind.h"
 #include "seahorse-context.h"
 #include "seahorse-dns-sd.h"
 #include "seahorse-marshal.h"
 #include "seahorse-progress.h"
+#include "seahorse-registry.h"
 #include "seahorse-servers.h"
 #include "seahorse-transfer.h"
 #include "seahorse-unknown.h"
 #include "seahorse-unknown-source.h"
 #include "seahorse-util.h"
-
-#include "common/seahorse-bind.h"
-#include "common/seahorse-registry.h"
 
 #ifdef WITH_PGP
 #include "pgp/seahorse-server-source.h"

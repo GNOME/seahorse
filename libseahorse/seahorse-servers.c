@@ -19,10 +19,9 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "seahorse-cleanup.h"
 #include "seahorse-context.h"
 #include "seahorse-servers.h"
-
-#include "common/seahorse-cleanup.h"
 
 #include <string.h>
 

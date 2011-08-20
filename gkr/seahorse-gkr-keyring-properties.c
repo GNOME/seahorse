@@ -25,12 +25,11 @@
 
 #include <glib/gi18n.h>
 
+#include "seahorse-bind.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-util.h"
-
-#include "common/seahorse-bind.h"
 
 /* -----------------------------------------------------------------------------
  * MAIN TAB 

@@ -24,10 +24,9 @@
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-source.h"
 
+#include "seahorse-secure-buffer.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
-
-#include "common/seahorse-secure-buffer.h"
 
 #include <glib/gi18n.h>
 

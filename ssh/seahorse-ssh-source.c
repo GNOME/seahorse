@@ -28,9 +28,8 @@
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 
+#include "seahorse-registry.h"
 #include "seahorse-util.h"
-
-#include "common/seahorse-registry.h"
 
 #include <glib/gstdio.h>
 

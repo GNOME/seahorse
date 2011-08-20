@@ -29,9 +29,8 @@
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-operation.h"
 
-#include "common/seahorse-registry.h"
-
 #include "seahorse-progress.h"
+#include "seahorse-registry.h"
 #include "seahorse-source.h"
 #include "seahorse-util.h"
 

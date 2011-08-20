@@ -29,12 +29,12 @@
  
 #include "egg-datetime.h"
 
-#include "seahorse-widget.h"
-#include "seahorse-util.h"
-#include "seahorse-progress.h"
 #include "seahorse-gtkstock.h"
+#include "seahorse-registry.h"
 #include "seahorse-passphrase.h"
-#include "seahorse-gtkstock.h"
+#include "seahorse-progress.h"
+#include "seahorse-util.h"
+#include "seahorse-widget.h"
 
 #include "seahorse-pgp.h"
 #include "seahorse-gpgme.h"
@@ -42,8 +42,6 @@
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-gpgme-source.h"
-
-#include "common/seahorse-registry.h"
 
 /**
  * SECTION:seahorse-gpgme-generate

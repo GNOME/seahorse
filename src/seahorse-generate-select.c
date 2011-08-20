@@ -23,8 +23,8 @@
 
 #include "seahorse-generate-select.h"
 
-#include "common/seahorse-object-list.h"
-#include "common/seahorse-registry.h"
+#include "seahorse-object-list.h"
+#include "seahorse-registry.h"
 
 typedef enum  {
 	COLUMN_ICON,

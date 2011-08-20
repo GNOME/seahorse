@@ -524,7 +524,6 @@ dnl ****************************************************************************
 
 AC_OUTPUT([
 Makefile
-common/Makefile
 gkr/Makefile
 libegg/Makefile
 libseahorse/Makefile

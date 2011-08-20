@@ -32,10 +32,9 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
+#include "seahorse-object-list.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
-
-#include "common/seahorse-object-list.h"
 
 #include "pgp/seahorse-gpgme.h"
 #include "pgp/seahorse-gpgme-data.h"

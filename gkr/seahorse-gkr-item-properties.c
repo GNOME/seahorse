@@ -27,16 +27,15 @@
 #include "seahorse-gkr-source.h"
 #include "seahorse-gkr-operation.h"
 
+#include "seahorse-bind.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-progress.h"
+#include "seahorse-secure-buffer.h"
 #include "seahorse-secure-memory.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
-
-#include "common/seahorse-bind.h"
-#include "common/seahorse-secure-buffer.h"
 
 GType
 boxed_access_control_type (void)

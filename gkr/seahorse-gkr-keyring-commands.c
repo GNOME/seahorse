@@ -30,9 +30,8 @@
 #include "seahorse-gkr-operation.h"
 #include "seahorse-gkr-source.h"
 
-#include "common/seahorse-registry.h"
-
 #include "seahorse-progress.h"
+#include "seahorse-registry.h"
 #include "seahorse-source.h"
 #include "seahorse-util.h"
 

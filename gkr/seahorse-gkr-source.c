@@ -28,17 +28,16 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-util.h"
-#include "seahorse-secure-memory.h"
 #include "seahorse-passphrase.h"
 #include "seahorse-progress.h"
+#include "seahorse-registry.h"
+#include "seahorse-secure-memory.h"
+#include "seahorse-util.h"
 
 #include "seahorse-gkr-item.h"
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-operation.h"
 #include "seahorse-gkr-source.h"
-
-#include "common/seahorse-registry.h"
 
 #include <gnome-keyring.h>
 

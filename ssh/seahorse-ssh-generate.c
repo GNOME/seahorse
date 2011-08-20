@@ -32,12 +32,12 @@
 #include "seahorse-ssh.h"
 #include "seahorse-ssh-operation.h"
 
-#include "seahorse-widget.h"
-#include "seahorse-util.h"
-#include "seahorse-progress.h"
 #include "seahorse-gtkstock.h"
+#include "seahorse-progress.h"
+#include "seahorse-registry.h"
+#include "seahorse-util.h"
+#include "seahorse-widget.h"
 
-#include "common/seahorse-registry.h"
 
 /* --------------------------------------------------------------------------
  * ACTIONS

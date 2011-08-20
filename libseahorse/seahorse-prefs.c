@@ -26,11 +26,10 @@
 #include "seahorse-gtkstock.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-prefs.h"
+#include "seahorse-registry.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
-
-#include "common/seahorse-registry.h"
 
 /* From seahorse-prefs-cache.c */
 void seahorse_prefs_cache (SeahorseWidget *widget);

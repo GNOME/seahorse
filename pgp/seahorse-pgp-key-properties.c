@@ -30,6 +30,7 @@
   
 #include <glib/gi18n.h>
 
+#include "seahorse-bind.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-object.h"
 #include "seahorse-object-model.h"
@@ -45,8 +46,6 @@
 #include "seahorse-pgp-uid.h"
 #include "seahorse-pgp-signature.h"
 #include "seahorse-pgp-subkey.h"
-
-#include "common/seahorse-bind.h"
 
 #define DEBUG_FLAG SEAHORSE_DEBUG_KEYS
 #include "seahorse-debug.h"

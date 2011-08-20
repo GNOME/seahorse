@@ -31,8 +31,7 @@ libseahorse_gkr_la_SOURCES = \
 	seahorse-gkr-source.c seahorse-gkr-source.h
 	
 libseahorse_gkr_la_LIBADD = \
-	$(top_builddir)/libseahorse/libseahorse.la \
-	$(top_builddir)/common/libseahorse-common.la
+	$(top_builddir)/libseahorse/libseahorse.la
 
 ui_DATA = \
 	seahorse-add-keyring.xml \

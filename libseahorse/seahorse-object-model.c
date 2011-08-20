@@ -23,10 +23,9 @@
 
 #include <string.h>
 
+#include "seahorse-bind.h"
 #include "seahorse-object-model.h"
 #include "seahorse-marshal.h"
-
-#include "common/seahorse-bind.h"
 
 enum {
     PROP_0,

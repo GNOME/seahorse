@@ -28,6 +28,8 @@ KEYSERVER_SRCS =
 endif
 
 libseahorse_la_SOURCES = \
+	seahorse-bind.c seahorse-bind.h \
+	seahorse-cleanup.c seahorse-cleanup.h \
 	seahorse-combo-keys.c seahorse-combo-keys.h \
 	seahorse-commands.c seahorse-commands.h \
 	seahorse-context.c seahorse-context.h \
@@ -35,12 +37,15 @@ libseahorse_la_SOURCES = \
 	seahorse-dns-sd.c seahorse-dns-sd.h \
 	seahorse-gtkstock.c seahorse-gtkstock.h \
 	seahorse-object.c seahorse-object.h \
+	seahorse-object-list.c seahorse-object-list.h \
 	seahorse-object-model.c seahorse-object-model.h \
 	seahorse-object-widget.c seahorse-object-widget.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-progress.c seahorse-progress.h \
+	seahorse-registry.c seahorse-registry.h \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
+	seahorse-secure-buffer.c seahorse-secure-buffer.h \
 	seahorse-servers.c seahorse-servers.h \
 	seahorse-set.c seahorse-set.h \
 	seahorse-set-model.c seahorse-set-model.h \
@@ -52,12 +57,9 @@ libseahorse_la_SOURCES = \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-view.c seahorse-view.h \
-	seahorse-widget.c seahorse-widget.h \
+	seahorse-widget.c seahorse-widget.h \	
 	$(MARSHAL_SRCS) \
 	$(KEYSERVER_SRCS)
-	
-libseahorse_la_LIBADD = \
-	$(top_builddir)/common/libseahorse-common.la
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@

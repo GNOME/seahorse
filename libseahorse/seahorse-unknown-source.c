@@ -27,9 +27,8 @@
 #include "seahorse-unknown-source.h"
 
 #include "seahorse-context.h"
+#include "seahorse-registry.h"
 #include "seahorse-unknown.h"
-
-#include "common/seahorse-registry.h"
 
 enum {
     PROP_0,

@@ -46,11 +46,10 @@
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkkeysyms-compat.h>
 
-#include "seahorse-widget.h"
-#include "seahorse-util.h"
 #include "seahorse-passphrase.h"
-
-#include "common/seahorse-secure-buffer.h"
+#include "seahorse-secure-buffer.h"
+#include "seahorse-util.h"
+#include "seahorse-widget.h"
 
 #define HIG_SMALL      6        /* gnome hig small space in pixels */
 #define HIG_LARGE     12        /* gnome hig large space in pixels */

@@ -38,7 +38,7 @@
 #include "seahorse-pkcs11-operations.h"
 #include "seahorse-pkcs11-source.h"
 
-#include "common/seahorse-registry.h"
+#include "seahorse-registry.h"
 
 enum {
     PROP_0,

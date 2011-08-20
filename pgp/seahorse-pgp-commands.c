@@ -32,9 +32,8 @@
 #include "seahorse-pgp-commands.h"
 #include "seahorse-pgp-dialogs.h"
 
-#include "common/seahorse-registry.h"
-
 #include "seahorse-object.h"
+#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 enum {

@@ -22,6 +22,8 @@
 #ifndef __SEAHORSE_PASSPHRASE__
 #define __SEAHORSE_PASSPHRASE__
 
+#include <gtk/gtk.h>
+
 #define SEAHORSE_PASS_BAD    0x00000001
 #define SEAHORSE_PASS_NEW    0x01000000
 

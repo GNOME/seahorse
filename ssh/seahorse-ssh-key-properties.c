@@ -21,13 +21,12 @@
  */
 #include "config.h"
 
+#include "seahorse-bind.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
-
-#include "common/seahorse-bind.h"
 
 #include "ssh/seahorse-ssh-key.h"
 #include "ssh/seahorse-ssh-operation.h"

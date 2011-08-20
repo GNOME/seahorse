@@ -25,10 +25,9 @@
 #include "seahorse-context.h"
 #include "seahorse-marshal.h"
 #include "seahorse-object.h"
+#include "seahorse-registry.h"
 #include "seahorse-source.h"
 #include "seahorse-util.h"
-
-#include "common/seahorse-registry.h"
 
 /**
  * SECTION:seahorse-source

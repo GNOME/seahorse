@@ -24,14 +24,14 @@
 
 #include "seahorse-commands.h"
 #include "seahorse-object.h"
+#include "seahorse-object-list.h"
 #include "seahorse-preferences.h"
 #include "seahorse-progress.h"
+#include "seahorse-registry.h"
 #include "seahorse-util.h"
 #include "seahorse-view.h"
 #include "seahorse-viewer.h"
 
-#include "common/seahorse-object-list.h"
-#include "common/seahorse-registry.h"
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>

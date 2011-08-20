@@ -58,7 +58,6 @@ seahorse_LDADD = \
 	$(SSH_LDADD) \
 	$(PKCS11_LDADD) \
 	$(top_builddir)/gkr/libseahorse-gkr.la \
-	$(top_builddir)/common/libseahorse-common.la \
 	$(top_builddir)/libegg/libeggdatetime.la \
 	$(SEAHORSE_LIBS)
 

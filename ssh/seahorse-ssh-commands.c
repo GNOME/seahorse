@@ -29,9 +29,8 @@
 #include "seahorse-ssh-dialogs.h"
 #include "seahorse-ssh-operation.h"
 
-#include "common/seahorse-registry.h"
-
 #include "seahorse-object.h"
+#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 enum {

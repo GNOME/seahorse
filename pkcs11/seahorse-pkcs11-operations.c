@@ -26,8 +26,8 @@
 #include "seahorse-pkcs11-operations.h"
 #include "seahorse-pkcs11-source.h"
 
+#include "seahorse-object-list.h"
 #include "seahorse-progress.h"
-#include "common/seahorse-object-list.h"
 
 #include <gck/gck.h>
 #include <gck/pkcs11.h>

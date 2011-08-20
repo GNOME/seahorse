@@ -26,11 +26,10 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-context.h"
+#include "seahorse-object-list.h"
 #include "seahorse-source.h"
 #include "seahorse-gtkstock.h"
 #include "seahorse-util.h"
-
-#include "common/seahorse-object-list.h"
 
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-gpgme.h"

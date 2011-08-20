@@ -34,11 +34,10 @@
 #include "seahorse-pgp-uid.h"
 #include "seahorse-servers.h"
 
+#include "seahorse-object-list.h"
 #include "seahorse-progress.h"
+#include "seahorse-registry.h"
 #include "seahorse-util.h"
-
-#include "common/seahorse-registry.h"
-#include "common/seahorse-object-list.h"
 
 #include <libsoup/soup.h>
 
