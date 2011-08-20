@@ -47,7 +47,6 @@ libseahorse_la_SOURCES = \
 	seahorse-source.c seahorse-source.h \
 	seahorse-transfer.c seahorse-transfer.h \
 	seahorse-types.c seahorse-types.h \
-	seahorse-unix-signal.c seahorse-unix-signal.h \
 	seahorse-unknown.c seahorse-unknown.h \
 	seahorse-unknown-source.c seahorse-unknown-source.h \
 	seahorse-util.c seahorse-util.h \
