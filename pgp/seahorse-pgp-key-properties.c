@@ -4,6 +4,7 @@
  * Copyright (C) 2003 Jacob Perkins
  * Copyright (C) 2005 Jim Pharis
  * Copyright (C) 2005-2006 Stefan Walter
+ * Copyright (C) 2011 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
