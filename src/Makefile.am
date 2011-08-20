@@ -43,7 +43,6 @@ bin_PROGRAMS = seahorse
 
 seahorse_SOURCES = \
 	seahorse-preferences.c seahorse-preferences.h \
-	eggtreemultidnd.c eggtreemultidnd.h \
 	seahorse-generate-select.c seahorse-generate-select.h \
 	seahorse-key-manager.c seahorse-key-manager.h \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
@@ -59,6 +58,7 @@ seahorse_LDADD = \
 	$(PKCS11_LDADD) \
 	$(top_builddir)/gkr/libseahorse-gkr.la \
 	$(top_builddir)/libegg/libeggdatetime.la \
+	$(top_builddir)/libegg/libeggtreemultidnd.la \
 	$(SEAHORSE_LIBS)
 
 ui_DATA = \
