@@ -3,369 +3,21 @@
 # This file is distributed under the same license as the Seahorse package.
 # Josep Monés i Teixidor <jmones@puntbarra.com>, 2003.
 # Josep Puigdemont i Casamajó <josep.puigdemont@gmail.com>, 2005, 2006, 2007.
-# Gil Forcada <gilforcada@guifi.net>, 2007, 2008, 2009, 2010.
+# Gil Forcada <gilforcada@guifi.net>, 2007, 2008, 2009, 2010, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=seahorse&component=general\n"
-"POT-Creation-Date: 2011-02-27 08:34+0000\n"
-"PO-Revision-Date: 2011-04-04 23:16+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-08-21 14:01+0200\n"
+"PO-Revision-Date: 2011-08-21 16:42+0200\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Language: ca\n"
+"Content-Transfer-Encoding: 8bits\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-
-#: ../daemon/seahorse-daemon.c:64
-msgid "Do not run seahorse-daemon as a daemon"
-msgstr "No executis el seahorse-daemon com a un dimoni"
-
-#: ../daemon/seahorse-daemon.c:94
-msgid "couldn't fork process"
-msgstr "no s'ha pogut bifurcar el procés"
-
-#: ../daemon/seahorse-daemon.c:100
-msgid "couldn't create new process group"
-msgstr "no s'ha pogut crear un grup de procés nou"
-
-#: ../daemon/seahorse-daemon.c:250
-msgid "Encryption Daemon (Seahorse)"
-msgstr "Dimoni de xifratge (Seahorse)"
-
-#: ../daemon/seahorse-service.c:164 ../daemon/seahorse-service.c:277
-#, c-format
-msgid "Invalid or unrecognized key type: %s"
-msgstr "El tipus de clau no és vàlid o no s'ha reconegut: %s"
-
-#: ../daemon/seahorse-service.c:234
-#, c-format
-msgid "This keytype is not supported: %s"
-msgstr "Aquest tipus de clau no està implementada: %s"
-
-#: ../daemon/seahorse-service.c:241
-#, c-format
-msgid "Support for this feature was not enabled at build time"
-msgstr ""
-"La compatibilitat amb aquesta funció no s'habilità en el moment de muntar"
-
-#: ../daemon/seahorse-service.c:341 ../daemon/seahorse-service-keyset.c:180
-#: ../daemon/seahorse-service-keyset.c:223
-#, c-format
-msgid "Invalid or unrecognized key: %s"
-msgstr "La clau no és vàlida o no s'ha reconegut: %s"
-
-# FIXME si "%s" és "dijous blah", l'article a "el %s" hi sobra (josep)
-#. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:204
-#, c-format
-msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
-msgstr "Signat per <i><key id='%s'/>, <b>expirà</b></i> el %s."
-
-#: ../daemon/seahorse-service-crypto.c:205
-msgid "Invalid Signature"
-msgstr "La signatura no és vàlida"
-
-#: ../daemon/seahorse-service-crypto.c:211
-#, c-format
-msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
-msgstr "Signat per <i><key id='%s'/></i> el %s <b>Expirat</b>."
-
-#: ../daemon/seahorse-service-crypto.c:212
-msgid "Expired Signature"
-msgstr "La signatura ha vençut"
-
-#: ../daemon/seahorse-service-crypto.c:218
-#, c-format
-msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
-msgstr "Signat per <i><key id='%s'/>, <b>revocat</b></i> el %s."
-
-#: ../daemon/seahorse-service-crypto.c:219
-msgid "Revoked Signature"
-msgstr "La signatura ha estat revocada"
-
-#. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:225
-#, c-format
-msgid "Signed by <i><key id='%s'/></i> on %s."
-msgstr "Signat per <i><key id='%s'/></i> el %s."
-
-#: ../daemon/seahorse-service-crypto.c:226
-msgid "Good Signature"
-msgstr "La signatura és bona"
-
-#: ../daemon/seahorse-service-crypto.c:231
-msgid "Signing key not in keyring."
-msgstr "La clau de signatura no és a l'anell de claus."
-
-#: ../daemon/seahorse-service-crypto.c:232
-msgid "Unknown Signature"
-msgstr "La signatura és desconeguda"
-
-#: ../daemon/seahorse-service-crypto.c:236
-msgid "Bad or forged signature. The signed data was modified."
-msgstr ""
-"La signatura no és bona, o bé ha estat falsificada. Les dades signades han "
-"estat modificades."
-
-#: ../daemon/seahorse-service-crypto.c:237
-msgid "Bad Signature"
-msgstr "La signatura no és bona"
-
-#: ../daemon/seahorse-service-crypto.c:245
-msgid "Couldn't verify signature."
-msgstr "No s'ha pogut verificar la signatura."
-
-#: ../daemon/seahorse-service-crypto.c:317
-#: ../daemon/seahorse-service-crypto.c:646
-#, c-format
-msgid "Invalid or unrecognized signer: %s"
-msgstr "El signant no és vàlid o no s'ha reconegut: %s"
-
-#: ../daemon/seahorse-service-crypto.c:324
-#: ../daemon/seahorse-service-crypto.c:653
-#, c-format
-msgid "Key is not valid for signing: %s"
-msgstr "La clau no és vàlida per signar: %s"
-
-#: ../daemon/seahorse-service-crypto.c:335
-#, c-format
-msgid "Invalid or unrecognized recipient: %s"
-msgstr "El destinatari no és vàlid o no s'ha reconegut: %s"
-
-# FIXME
-#: ../daemon/seahorse-service-crypto.c:343
-#, c-format
-msgid "Key is not a valid recipient for encryption: %s"
-msgstr "La clau del destinatari no és vàlida per xifrar: %s"
-
-#: ../daemon/seahorse-service-crypto.c:352
-#, c-format
-msgid "No recipients specified"
-msgstr "No s'ha especificat cap destinatari"
-
-#: ../daemon/seahorse-service-crypto.c:434
-#, c-format
-msgid "Invalid key type for decryption: %s"
-msgstr "La clau no és del tipus adequat per desxifrar: %s"
-
-#: ../daemon/seahorse-service-crypto.c:548
-#: ../daemon/seahorse-service-crypto.c:746
-#, c-format
-msgid "Please set clearuri"
-msgstr "Establiu el clearuri"
-
-#: ../daemon/seahorse-service-crypto.c:554
-#: ../daemon/seahorse-service-crypto.c:752
-#, c-format
-msgid "Please set crypturi"
-msgstr "Establiu el crypturi"
-
-#: ../daemon/seahorse-service-crypto.c:564
-#, c-format
-msgid "Error opening clearuri"
-msgstr "S'ha produït un error en obrir el clearuri"
-
-#: ../daemon/seahorse-service-crypto.c:641
-#, c-format
-msgid "No signer specified"
-msgstr "No s'ha especificat cap firmant"
-
-#: ../daemon/seahorse-service-crypto.c:830
-#, c-format
-msgid "Invalid key type for verifying: %s"
-msgstr "La clau no és del tipus adequat per verificar: %s"
-
-#: ../daemon/seahorse-service-keyset.c:273
-#, c-format
-msgid "Invalid key id: %s"
-msgstr "L'identificador de la clau no és vàlid: %s"
-
-#: ../data/seahorse.schemas.in.h:1
-msgid ""
-"A list of key server URIs to search for remote PGP keys. In later versions a "
-"display name can be included, by appending a space and then the name."
-msgstr ""
-"Una llista d'URI de servidors de claus on cercar claus PGP remotes. En "
-"versions recents s'hi pot incloure un nom descriptiu, afegint un espai i "
-"després el nom."
-
-#: ../data/seahorse.schemas.in.h:2
-msgid "Auto Retrieve Keys"
-msgstr "Recupera les claus automàticament"
-
-#: ../data/seahorse.schemas.in.h:3
-msgid "Auto Sync Keys"
-msgstr "Sincronitza les claus automàticament"
-
-#: ../data/seahorse.schemas.in.h:4
-msgid "Controls the visibility of the expires column for the key manager."
-msgstr "Controla la visibilitat de la columna venciment en el gestor de claus."
-
-#: ../data/seahorse.schemas.in.h:5
-msgid "Controls the visibility of the trust column for the key manager."
-msgstr "Controla la visibilitat de la columna confiança en el gestor de claus."
-
-#: ../data/seahorse.schemas.in.h:6
-msgid "Controls the visibility of the type column for the key manager."
-msgstr "Controla la visibilitat de la columna tipus en el gestor de claus."
-
-#: ../data/seahorse.schemas.in.h:7
-msgid "Controls the visibility of the validity column for the key manager."
-msgstr "Controla la visibilitat de la columna validesa en el gestor de claus."
-
-#: ../data/seahorse.schemas.in.h:8
-msgid "Enable DNS-SD sharing"
-msgstr "Habilita la compartició amb DNS-SD"
-
-#: ../data/seahorse.schemas.in.h:9
-msgid ""
-"Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be "
-"running and must be built with HKP and DNS-SD support."
-msgstr ""
-"Habilita la compartició de claus amb DNS-SD (Apple Bonjour). El seahorse-"
-"daemon s'ha d'executar i s'ha d'haver muntat per permetre l'ús de HKP i DNS-"
-"SD."
-
-#: ../data/seahorse.schemas.in.h:10
-msgid "ID of the default key"
-msgstr "ID de la clau predeterminada"
-
-#: ../data/seahorse.schemas.in.h:11
-msgid ""
-"If set to true, then files encrypted with seahorse will be ASCII armor "
-"encoded."
-msgstr ""
-"Si s'estableix a cert, es codificaran els fitxers xifrats amb el seahorse  "
-"amb una armadura ASCII."
-
-#: ../data/seahorse.schemas.in.h:12
-msgid ""
-"If set to true, then the default key will always be added to an encryption "
-"recipients list."
-msgstr ""
-"Si s'estableix a cert, sempre s'afegirà la clau predeterminada a la llista "
-"de destinataris."
-
-#: ../data/seahorse.schemas.in.h:13
-msgid "Last key server search pattern"
-msgstr "Darrer patró de cerca en un servidor de claus"
-
-#: ../data/seahorse.schemas.in.h:14
-msgid "Last key servers used"
-msgstr "Darrers servidors de claus emprats"
-
-#: ../data/seahorse.schemas.in.h:15
-msgid "Last key used to sign a message."
-msgstr "Darrera clau emprada per signar un missatge."
-
-#: ../data/seahorse.schemas.in.h:16
-msgid "PGP Key servers"
-msgstr "Servidors de claus PGP"
-
-#: ../data/seahorse.schemas.in.h:17
-msgid "Publish keys to this key server."
-msgstr "Publica les claus a aquest servidor de claus."
-
-#: ../data/seahorse.schemas.in.h:18
-msgid "Show expires column in key manager"
-msgstr "Mostra la columna venciment en el gestor de claus"
-
-#: ../data/seahorse.schemas.in.h:19
-msgid "Show trust column in key manager"
-msgstr "Mostra la columna confiança en el gestor de claus"
-
-#: ../data/seahorse.schemas.in.h:20
-msgid "Show type column in key manager"
-msgstr "Mostra la columna tipus en el gestor de claus"
-
-#: ../data/seahorse.schemas.in.h:21
-msgid "Show validity column in key manager"
-msgstr "Mostra la columna validesa en el gestor de claus"
-
-#: ../data/seahorse.schemas.in.h:22
-msgid ""
-"Specify the column to sort the recipients window by. Columns are: 'name' and "
-"'id'. Put a '-' in front of the column name to sort in descending order."
-msgstr ""
-"Especifiqueu la columna amb la qual s'ordenarà la finestra de destinataris. "
-"Les columnes són: «name», i «id». Poseu un «-» al davant del nom de la columna "
-"per ordenar-la al revés."
-
-#: ../data/seahorse.schemas.in.h:23
-msgid ""
-"Specify the column to sort the seahorse key manager main window by. Columns "
-"are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
-"front of the column name to sort in descending order."
-msgstr ""
-"Especifiqueu la columna amb la qual s'ordenarà la finestra principal del "
-"gestor de claus Seahorse. Les columnes són: «name», «id», «validity», «expires», "
-"«trust», «length» i «type». Poseu un «-» al davant del nom de la columna per "
-"ordenar-la al revés."
-
-#: ../data/seahorse.schemas.in.h:24
-msgid "The ID of the last secret key used to sign a message."
-msgstr "L'ID de la darrera clau secreta emprada per signar un missatge."
-
-#: ../data/seahorse.schemas.in.h:25
-msgid "The column to sort the recipients by"
-msgstr "La columna amb la qual ordenar els destinataris"
-
-#: ../data/seahorse.schemas.in.h:26
-msgid "The column to sort the seahorse keys by"
-msgstr "La columna amb la qual ordenar les claus del seahorse"
-
-#: ../data/seahorse.schemas.in.h:27
-msgid ""
-"The key server to publish PGP keys to. Or empty to suppress publishing of "
-"PGP keys."
-msgstr ""
-"El servidor de claus on publicar les claus PGP. Deixeu-ho buit per no "
-"publicar les claus PGP."
-
-#: ../data/seahorse.schemas.in.h:28
-msgid ""
-"The last key server a search was performed against or empty for all key "
-"servers."
-msgstr ""
-"El darrer servidor de claus on es va fer una cerca, o buit per a tots els "
-"servidors de claus."
-
-#: ../data/seahorse.schemas.in.h:29
-msgid "The last search pattern searched for against a key server."
-msgstr ""
-"El darrer patró de cerca fet servir per cercar en un servidor de claus."
-
-#: ../data/seahorse.schemas.in.h:30
-msgid ""
-"This specifies the default key to use for certain operations, mainly signing."
-msgstr ""
-"Això especifica la clau predeterminada que s'emprarà per certes operacions, "
-"principalment de signat."
-
-#: ../data/seahorse.schemas.in.h:31
-msgid "Whether or not keys should be automatically retrieved from key servers."
-msgstr ""
-"Si les claus s'han de recuperar automàticament dels servidors de claus."
-
-#: ../data/seahorse.schemas.in.h:32
-msgid ""
-"Whether or not modified keys should be automatically synced with the default "
-"key server."
-msgstr ""
-"Si les claus modificades s'han de sincronitzar automàticament amb el "
-"servidor de claus per defecte."
-
-#: ../data/seahorse.schemas.in.h:33
-msgid "Whether to always encrypt to default key"
-msgstr "Si sempre es xifra amb la clau predeterminada"
-
-#: ../data/seahorse.schemas.in.h:34
-msgid "Whether to use ASCII Armor"
-msgstr "Si s'ha de fer servir una armadura ASCII"
 
 #: ../gkr/seahorse-add-keyring.xml.h:1
 msgid "Add Password Keyring"
@@ -380,8 +32,8 @@ msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
 msgstr ""
-"Trieu un nom per a l'anell de claus nou. Se us demanarà una contrasenya "
-"per desblocar-lo."
+"Trieu un nom per a l'anell de claus nou. Se us demanarà una contrasenya per "
+"desblocar-lo."
 
 #: ../gkr/seahorse-add-keyring.xml.h:4
 #: ../libseahorse/seahorse-add-keyserver.xml.h:5
@@ -389,7 +41,7 @@ msgstr ""
 msgid "The host name or address of the server."
 msgstr "El nom o l'adreça del servidor."
 
-#: ../gkr/seahorse-gkr-add-item.c:61 ../gkr/seahorse-gkr-add-keyring.c:73
+#: ../gkr/seahorse-gkr-add-item.c:51 ../gkr/seahorse-gkr-add-keyring.c:65
 msgid "Couldn't add keyring"
 msgstr "No s'ha pogut afegir l'anell de claus"
 
@@ -399,7 +51,7 @@ msgstr "Afegeix una contrasenya"
 
 #
 #: ../gkr/seahorse-gkr-add-item.xml.h:2
-#: ../gkr/seahorse-gkr-item-properties.xml.h:15 ../pgp/seahorse-revoke.xml.h:5
+#: ../gkr/seahorse-gkr-item-properties.xml.h:12 ../pgp/seahorse-revoke.xml.h:5
 msgid "_Description:"
 msgstr "_Descripció:"
 
@@ -415,200 +67,180 @@ msgstr "_Contrasenya:"
 msgid "_Show Password"
 msgstr "Mostra la contrasen_ya"
 
-#: ../gkr/seahorse-gkr-item.c:473
+#: ../gkr/seahorse-gkr-item.c:437
 msgid "Web Password"
 msgstr "Contrasenya web"
 
-#: ../gkr/seahorse-gkr-item.c:475
+#: ../gkr/seahorse-gkr-item.c:439
 msgid "Network Password"
 msgstr "Contrasenya de xarxa"
 
-#: ../gkr/seahorse-gkr-item.c:477 ../gkr/seahorse-gkr-item-properties.c:107
+#: ../gkr/seahorse-gkr-item.c:441 ../gkr/seahorse-gkr-item-properties.c:108
 msgid "Password"
 msgstr "Contrasenya"
 
 #: ../gkr/seahorse-gkr-item-commands.c:78
+msgid "Couldn't delete item"
+msgstr "No s'ha pogut suprimir l'element"
+
+#: ../gkr/seahorse-gkr-item-commands.c:100
 #, c-format
 msgid "Are you sure you want to delete the password '%s'?"
 msgstr "Segur que voleu suprimir la contrasenya «%s»?"
 
-#: ../gkr/seahorse-gkr-item-commands.c:81
+#: ../gkr/seahorse-gkr-item-commands.c:103
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "Segur que voleu suprimir %d contrasenya?"
 msgstr[1] "Segur que voleu suprimir %d contrasenyes?"
 
-#: ../gkr/seahorse-gkr-item-properties.c:66
+#: ../gkr/seahorse-gkr-item-commands.c:114
+msgid "Deleting item"
+msgstr "S'està suprimint l'element"
+
+#: ../gkr/seahorse-gkr-item-commands.c:114
+msgid "Deleting items"
+msgstr "S'estan suprimint els elements"
+
+#: ../gkr/seahorse-gkr-item-properties.c:67
 msgid "Access a network share or resource"
 msgstr "Accedeix a un recurs compartit de xarxa"
 
-#: ../gkr/seahorse-gkr-item-properties.c:69
+#: ../gkr/seahorse-gkr-item-properties.c:70
 msgid "Access a website"
 msgstr "Accedeix a un lloc web"
 
-#: ../gkr/seahorse-gkr-item-properties.c:72
+#: ../gkr/seahorse-gkr-item-properties.c:73
 msgid "Unlocks a PGP key"
 msgstr "Desbloca una clau PGP"
 
-#: ../gkr/seahorse-gkr-item-properties.c:75
+#: ../gkr/seahorse-gkr-item-properties.c:76
 msgid "Unlocks a Secure Shell key"
 msgstr "Desbloca una clau d'intèrpret d'ordres segur"
 
 # FIXME
-#: ../gkr/seahorse-gkr-item-properties.c:78
+#: ../gkr/seahorse-gkr-item-properties.c:79
 msgid "Saved password or login"
 msgstr "Contrasenya desada o entrada"
 
-#: ../gkr/seahorse-gkr-item-properties.c:102
+#: ../gkr/seahorse-gkr-item-properties.c:103
 msgid "Network Credentials"
 msgstr "Credencials de xarxa"
 
-#: ../gkr/seahorse-gkr-item-properties.c:245
+#: ../gkr/seahorse-gkr-item-properties.c:208
 msgid "Couldn't change password."
 msgstr "No s'ha pogut canviar la contrasenya."
 
-#: ../gkr/seahorse-gkr-item-properties.c:350
+#: ../gkr/seahorse-gkr-item-properties.c:253
+#: ../gkr/seahorse-gkr-item-properties.c:369
+msgid "Updating password"
+msgstr "S'està actualitzant la contrasenya"
+
+#: ../gkr/seahorse-gkr-item-properties.c:330
 msgid "Couldn't set description."
 msgstr "No s'ha pogut establir la descripció."
-
-#: ../gkr/seahorse-gkr-item-properties.c:656
-msgid "Couldn't set application access."
-msgstr "No s'ha pogut establir l'accés de l'aplicació."
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:1
 msgid "<b>Password:</b>"
 msgstr "<b>Contrasenya:</b>"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:2
-msgid "<b>Path:</b>"
-msgstr "<b>Camí:</b>"
-
-#
-#: ../gkr/seahorse-gkr-item-properties.xml.h:3
-msgid "<b>Permissions:</b>"
-msgstr "<b>Permisos:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:4
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
 #: ../ssh/seahorse-ssh-key-properties.xml.h:7
 msgid "<b>Technical Details:</b>"
 msgstr "<b>Detalls tècnics:</b>"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:5
-msgid "Applications"
-msgstr "Aplicacions"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:6
+#: ../gkr/seahorse-gkr-item-properties.xml.h:3
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:22
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
 #: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Details"
 msgstr "Detalls"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:7
+#: ../gkr/seahorse-gkr-item-properties.xml.h:4
 #: ../pgp/seahorse-pgp-subkey.c:366
 #: ../ssh/seahorse-ssh-key-properties.xml.h:17
 msgid "Key"
 msgstr "Clau"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:8
+#: ../gkr/seahorse-gkr-item-properties.xml.h:5
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
 #: ../ssh/seahorse-ssh-key-properties.xml.h:18
 msgid "Key Properties"
 msgstr "Propietats de la clau"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:9
+#: ../gkr/seahorse-gkr-item-properties.xml.h:6
 msgid "Login:"
 msgstr "Nom d'usuari:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:10
+#: ../gkr/seahorse-gkr-item-properties.xml.h:7
 msgid "Server:"
 msgstr "Servidor:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:11
+#: ../gkr/seahorse-gkr-item-properties.xml.h:8
 msgid "Show pass_word"
 msgstr "Mostra la contrasen_ya"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:12
+#: ../gkr/seahorse-gkr-item-properties.xml.h:9
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
 msgid "Type:"
 msgstr "Tipus:"
 
 #. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:14
+#: ../gkr/seahorse-gkr-item-properties.xml.h:11
 msgid "Use:"
 msgstr "Ús:"
 
-#. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:17
-msgid "_Read"
-msgstr "_Lectura"
-
-#. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:19
-msgid "_Write"
-msgstr "_Escriptura"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:20
-msgctxt "infinitive"
-msgid "_Delete"
-msgstr "_Suprimeix"
-
-#: ../gkr/seahorse-gkr-keyring.c:193
-msgid "Listing passwords"
-msgstr "S'estan mostrant les contrasenyes"
-
-#: ../gkr/seahorse-gkr-keyring.c:354
+#: ../gkr/seahorse-gkr-keyring.c:121
 #, c-format
 msgid "Passwords: %s"
 msgstr "Contrasenya: %s"
 
-#: ../gkr/seahorse-gkr-keyring.c:355
+#: ../gkr/seahorse-gkr-keyring.c:122
 #, c-format
 msgid "<b>Passwords:</b> %s"
 msgstr "<b>Contrasenyes:</b> %s"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:119
+#: ../gkr/seahorse-gkr-keyring-commands.c:113
 msgid "Password Keyring"
 msgstr "Anell de claus de contrasenyes"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:120
+#: ../gkr/seahorse-gkr-keyring-commands.c:114
 msgid "Used to store application and network passwords"
-msgstr ""
-"S'utilitza per emmagatzemar les contrasenyes d'aplicacions i de xarxes"
+msgstr "S'utilitza per emmagatzemar les contrasenyes d'aplicacions i de xarxes"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:121
+#: ../gkr/seahorse-gkr-keyring-commands.c:115
 msgid "Stored Password"
 msgstr "Contrasenya desada"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:122
+#: ../gkr/seahorse-gkr-keyring-commands.c:116
 msgid "Safely store a password or secret."
 msgstr "Emmagatzema de forma segura una contrasenya o un secret."
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:136
+#: ../gkr/seahorse-gkr-keyring-commands.c:130
 msgid "Couldn't unlock keyring"
 msgstr "No s'ha pogut desblocar l'anell de claus"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:177
+#: ../gkr/seahorse-gkr-keyring-commands.c:169
 msgid "Couldn't lock keyring"
 msgstr "No s'ha pogut blocar l'anell de claus"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:218
+#: ../gkr/seahorse-gkr-keyring-commands.c:208
 msgid "Couldn't set default keyring"
 msgstr "No s'ha pogut establir l'anell de claus predeterminat"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:257
+#: ../gkr/seahorse-gkr-keyring-commands.c:247
 msgid "Couldn't change keyring password"
 msgstr "No s'ha pogut canviar la contrasenya de l'anell de claus"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:288
+#: ../gkr/seahorse-gkr-keyring-commands.c:276
 msgid "_Lock"
 msgstr "_Bloca"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:289
+#: ../gkr/seahorse-gkr-keyring-commands.c:277
 msgid ""
 "Lock the password storage keyring so a master password is required to unlock "
 "it."
@@ -616,11 +248,11 @@ msgstr ""
 "Bloca l'anell de claus d'emmagatzematge de contrasenyes de manera que faci "
 "falta una contrasenya mestra per desblocar-lo."
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:290
+#: ../gkr/seahorse-gkr-keyring-commands.c:278
 msgid "_Unlock"
 msgstr "_Desbloca"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:291
+#: ../gkr/seahorse-gkr-keyring-commands.c:279
 msgid ""
 "Unlock the password storage keyring with a master password so it is "
 "available for use."
@@ -628,30 +260,42 @@ msgstr ""
 "Desbloca l'anell de claus d'emmagatzematge de contrasenyes amb una "
 "contrasenya mestra de manera que estigui disponible per utilitzar-se."
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:292
+#: ../gkr/seahorse-gkr-keyring-commands.c:280
 msgid "_Set as default"
 msgstr "_Estableix-lo com a predeterminat"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:293
+#: ../gkr/seahorse-gkr-keyring-commands.c:281
 msgid "Applications usually store new passwords in the default keyring."
 msgstr ""
 "Les aplicacions normalment emmagatzemen les contrasenyes en l'anell de claus "
 "predeterminat."
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:294
+#: ../gkr/seahorse-gkr-keyring-commands.c:282
 msgid "Change _Password"
 msgstr "Canvia la _contrasenya"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:295
+#: ../gkr/seahorse-gkr-keyring-commands.c:283
 msgid "Change the unlock password of the password storage keyring"
 msgstr ""
 "Canvia la contrasenya de desblocat de l'anell de claus d'emmagatzematge de "
 "contrasenyes"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:360
+#: ../gkr/seahorse-gkr-keyring-commands.c:348
+msgid "Couldn't delete keyring"
+msgstr "No s'ha pogut suprimir l'anell de claus"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:366
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "Segur que voleu suprimir l'anell de claus de contrasenyes «%s»?"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:376
+msgid "Deleting keyring"
+msgstr "S'està suprimint l'anell de claus"
+
+#: ../gkr/seahorse-gkr-keyring-commands.c:376
+msgid "Deleting keyrings"
+msgstr "S'estan suprimint els anells de claus"
 
 #. -----------------------------------------------------------------------------
 #. * PUBLIC
@@ -675,266 +319,196 @@ msgstr "Propietats de l'anell de claus"
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: ../gkr/seahorse-gkr-operation.c:168
+#: ../gkr/seahorse-gkr-operation.c:52 ../pgp/seahorse-gpgme.c:73
+#: ../pgp/seahorse-hkp-source.c:662 ../ssh/seahorse-ssh-operation.c:257
+msgid "The operation was cancelled"
+msgstr "S'ha cancel·lat l'operació"
+
+#: ../gkr/seahorse-gkr-operation.c:57
 msgid "Access to the key ring was denied"
 msgstr "S'ha denegat l'accés a l'anell de claus"
 
-#: ../gkr/seahorse-gkr-operation.c:171
+#: ../gkr/seahorse-gkr-operation.c:60
 msgid "The gnome-keyring daemon is not running"
 msgstr "El dimoni de l'anell de claus del GNOME no s'està executant"
 
-#: ../gkr/seahorse-gkr-operation.c:174
+#: ../gkr/seahorse-gkr-operation.c:63
 msgid "The key ring has already been unlocked"
 msgstr "Ja s'ha desblocat l'anell de claus"
 
-#: ../gkr/seahorse-gkr-operation.c:177
+#: ../gkr/seahorse-gkr-operation.c:66
 msgid "No such key ring exists"
 msgstr "Aquest anell de claus no existeix"
 
-#: ../gkr/seahorse-gkr-operation.c:180
+#: ../gkr/seahorse-gkr-operation.c:69
 msgid "Couldn't communicate with key ring daemon"
 msgstr "No s'ha pogut comunicar amb el dimoni de l'anell de claus"
 
-#: ../gkr/seahorse-gkr-operation.c:183
+#: ../gkr/seahorse-gkr-operation.c:72
 msgid "The item already exists"
 msgstr "L'element ja existeix"
 
-#: ../gkr/seahorse-gkr-operation.c:189
+#: ../gkr/seahorse-gkr-operation.c:78
 msgid "Internal error accessing gnome-keyring"
 msgstr "S'ha produït un error intern en accedir a l'anell de claus del GNOME"
 
-#: ../gkr/seahorse-gkr-operation.c:238 ../gkr/seahorse-gkr-operation.c:264
-msgid "Saving item..."
-msgstr "S'està desant l'element..."
-
-#: ../gkr/seahorse-gkr-operation.c:300
-msgid "Deleting item..."
-msgstr "S'està suprimint l'element..."
-
-#: ../gkr/seahorse-gkr-operation.c:325
-msgid "Deleting keyring..."
-msgstr "S'està suprimint l'anell de claus..."
-
-#: ../gkr/seahorse-gkr-source.c:234
-msgid "Listing password keyrings"
-msgstr "S'estan llistant els anells de claus de contrasenyes"
-
-#: ../libcryptui/cryptui.c:272
-msgid ""
-"No encryption keys were found with which to perform the operation you "
-"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
-"started so that you may either create a key or import one."
-msgstr ""
-"No s'ha trobat cap clau de xifratge amb la qual realitzar l'acció que heu "
-"sol·licitat. S'iniciarà el programa <b>Contrasenyes i claus de xifratge</b> "
-"de manera que pugueu crear una clau, o bé importar-ne una."
-
-#: ../libcryptui/cryptui-key-chooser.c:174
-#: ../libcryptui/cryptui-key-chooser.c:179
-msgid "All Keys"
-msgstr "Totes les claus"
-
-#: ../libcryptui/cryptui-key-chooser.c:175
-#: ../libcryptui/cryptui-key-chooser.c:180
-msgid "Selected Recipients"
-msgstr "Els destinataris seleccionats"
-
-#: ../libcryptui/cryptui-key-chooser.c:176
-#: ../libcryptui/cryptui-key-chooser.c:181
-msgid "Search Results"
-msgstr "Resultats de la cerca"
-
-#. Filter Label
-#: ../libcryptui/cryptui-key-chooser.c:192
-msgid "Search _for:"
-msgstr "Ce_rca:"
-
-#: ../libcryptui/cryptui-key-chooser.c:250
-msgid "None (Don't Sign)"
-msgstr "Cap (no signis)"
-
-#: ../libcryptui/cryptui-key-chooser.c:263
-#, c-format
-msgid "Sign this message as %s"
-msgstr "Signa el missatge com a %s"
-
-#. Sign Label
-#: ../libcryptui/cryptui-key-chooser.c:285
-msgid "_Sign message as:"
-msgstr "_Signa el missatge com a:"
-
-#. TODO: Icons
-#. The name column
-#: ../libcryptui/cryptui-key-list.c:140
-#: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:865
-msgid "Name"
-msgstr "Nom"
-
-#. The keyid column
-#: ../libcryptui/cryptui-key-list.c:145
-#: ../pgp/seahorse-pgp-key-properties.c:1745
-#: ../src/seahorse-key-manager-store.c:877
-msgid "Key ID"
-msgstr "ID de la clau"
-
-#: ../libegg/egg-datetime.c:325
+#: ../libegg/egg-datetime.c:317
 msgid "Display flags"
 msgstr "Mostra els senyaladors"
 
-#: ../libegg/egg-datetime.c:326
+#: ../libegg/egg-datetime.c:318
 msgid "Displayed date and/or time properties"
 msgstr "Propietats de la data i/o hora mostrades"
 
-#: ../libegg/egg-datetime.c:331
+#: ../libegg/egg-datetime.c:323
 msgid "Lazy mode"
 msgstr "Mode gandul"
 
-#: ../libegg/egg-datetime.c:332
+#: ../libegg/egg-datetime.c:324
 msgid "Lazy mode doesn't normalize entered date and time values"
 msgstr "El mode gandul no normalitza els valors de la data i l'hora introduïts"
 
-#: ../libegg/egg-datetime.c:337
+#: ../libegg/egg-datetime.c:329
 msgid "Year"
 msgstr "Any"
 
-#: ../libegg/egg-datetime.c:338
+#: ../libegg/egg-datetime.c:330
 msgid "Displayed year"
 msgstr "Any mostrat"
 
-#: ../libegg/egg-datetime.c:343
+#: ../libegg/egg-datetime.c:335
 msgid "Month"
 msgstr "Mes"
 
-#: ../libegg/egg-datetime.c:344
+#: ../libegg/egg-datetime.c:336
 msgid "Displayed month"
 msgstr "Mes mostrat"
 
-#: ../libegg/egg-datetime.c:349
+#: ../libegg/egg-datetime.c:341
 msgid "Day"
 msgstr "Dia"
 
-#: ../libegg/egg-datetime.c:350
+#: ../libegg/egg-datetime.c:342
 msgid "Displayed day of month"
 msgstr "Dia del mes mostrat"
 
-#: ../libegg/egg-datetime.c:355
+#: ../libegg/egg-datetime.c:347
 msgid "Hour"
 msgstr "Hora"
 
-#: ../libegg/egg-datetime.c:356
+#: ../libegg/egg-datetime.c:348
 msgid "Displayed hour"
 msgstr "Hora mostrada"
 
-#: ../libegg/egg-datetime.c:361
+#: ../libegg/egg-datetime.c:353
 msgid "Minute"
 msgstr "Minut"
 
-#: ../libegg/egg-datetime.c:362
+#: ../libegg/egg-datetime.c:354
 msgid "Displayed minute"
 msgstr "Minut mostrat"
 
-#: ../libegg/egg-datetime.c:367
+#: ../libegg/egg-datetime.c:359
 msgid "Second"
 msgstr "Segon"
 
-#: ../libegg/egg-datetime.c:368
+#: ../libegg/egg-datetime.c:360
 msgid "Displayed second"
 msgstr "Segon mostrat"
 
-#: ../libegg/egg-datetime.c:373
+#: ../libegg/egg-datetime.c:365
 msgid "Lower limit year"
 msgstr "Any límit més antic"
 
-#: ../libegg/egg-datetime.c:374
+#: ../libegg/egg-datetime.c:366
 msgid "Year part of the lower date limit"
 msgstr "Part de l'any de la data límit més antiga"
 
-#: ../libegg/egg-datetime.c:379
+#: ../libegg/egg-datetime.c:371
 msgid "Upper limit year"
 msgstr "Any límit més modern"
 
-#: ../libegg/egg-datetime.c:380
+#: ../libegg/egg-datetime.c:372
 msgid "Year part of the upper date limit"
 msgstr "Part de l'any de la data límit més moderna"
 
-#: ../libegg/egg-datetime.c:385
+#: ../libegg/egg-datetime.c:377
 msgid "Lower limit month"
 msgstr "Mes límit més antic"
 
-#: ../libegg/egg-datetime.c:386
+#: ../libegg/egg-datetime.c:378
 msgid "Month part of the lower date limit"
 msgstr "Part del mes de la data límit més antiga"
 
-#: ../libegg/egg-datetime.c:391
+#: ../libegg/egg-datetime.c:383
 msgid "Upper limit month"
 msgstr "Mes límit més modern"
 
-#: ../libegg/egg-datetime.c:392
+#: ../libegg/egg-datetime.c:384
 msgid "Month part of the upper date limit"
 msgstr "Part del mes de la data límit més moderna"
 
-#: ../libegg/egg-datetime.c:397
+#: ../libegg/egg-datetime.c:389
 msgid "Lower limit day"
 msgstr "Dia límit més antic"
 
-#: ../libegg/egg-datetime.c:398
+#: ../libegg/egg-datetime.c:390
 msgid "Day of month part of the lower date limit"
 msgstr "Part del dia del mes de la data límit més antiga"
 
-#: ../libegg/egg-datetime.c:403
+#: ../libegg/egg-datetime.c:395
 msgid "Upper limit day"
 msgstr "Dia límit més modern"
 
-#: ../libegg/egg-datetime.c:404
+#: ../libegg/egg-datetime.c:396
 msgid "Day of month part of the upper date limit"
 msgstr "Part del dia del mes de la data límit més moderna"
 
-#: ../libegg/egg-datetime.c:409
+#: ../libegg/egg-datetime.c:401
 msgid "Lower limit hour"
 msgstr "Hora límit més antiga"
 
-#: ../libegg/egg-datetime.c:410
+#: ../libegg/egg-datetime.c:402
 msgid "Hour part of the lower time limit"
 msgstr "Part de l'hora del temps límit més antic"
 
-#: ../libegg/egg-datetime.c:415
+#: ../libegg/egg-datetime.c:407
 msgid "Upper limit hour"
 msgstr "Hora límit més moderna"
 
-#: ../libegg/egg-datetime.c:416
+#: ../libegg/egg-datetime.c:408
 msgid "Hour part of the upper time limit"
 msgstr "Part de l'hora del temps límit més modern"
 
-#: ../libegg/egg-datetime.c:421
+#: ../libegg/egg-datetime.c:413
 msgid "Lower limit minute"
 msgstr "Minut límit més antic"
 
-#: ../libegg/egg-datetime.c:422
+#: ../libegg/egg-datetime.c:414
 msgid "Minute part of the lower time limit"
 msgstr "Part del minut del temps límit més antic"
 
-#: ../libegg/egg-datetime.c:427
+#: ../libegg/egg-datetime.c:419
 msgid "Upper limit minute"
 msgstr "Minut límit més modern"
 
-#: ../libegg/egg-datetime.c:428
+#: ../libegg/egg-datetime.c:420
 msgid "Minute part of the upper time limit"
 msgstr "Part del minut del temps límit més modern"
 
-#: ../libegg/egg-datetime.c:433
+#: ../libegg/egg-datetime.c:425
 msgid "Lower limit second"
 msgstr "Segon límit més antic"
 
-#: ../libegg/egg-datetime.c:434
+#: ../libegg/egg-datetime.c:426
 msgid "Second part of the lower time limit"
 msgstr "Part del segon del temps límit més antic"
 
-#: ../libegg/egg-datetime.c:439
+#: ../libegg/egg-datetime.c:431
 msgid "Upper limit second"
 msgstr "Segon límit més modern"
 
-#: ../libegg/egg-datetime.c:440
+#: ../libegg/egg-datetime.c:432
 msgid "Second part of the upper time limit"
 msgstr "Part del segon del temps límit més modern"
 
@@ -943,160 +517,95 @@ msgstr "Part del segon del temps límit més modern"
 #. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
 #. * or calendar:week_start:0 it will not work.
 #.
-#: ../libegg/egg-datetime.c:482
+#: ../libegg/egg-datetime.c:474
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
-#: ../libegg/egg-datetime.c:504
+#: ../libegg/egg-datetime.c:496
 msgid "Date"
 msgstr "Data"
 
-#: ../libegg/egg-datetime.c:504
+#: ../libegg/egg-datetime.c:496
 msgid "Enter the date directly"
 msgstr "Introduïu la data directament"
 
-#: ../libegg/egg-datetime.c:511
+#: ../libegg/egg-datetime.c:503
 msgid "Select Date"
 msgstr "Seleccioneu la data"
 
-#: ../libegg/egg-datetime.c:511
+#: ../libegg/egg-datetime.c:503
 msgid "Select the date from a calendar"
 msgstr "Seleccioneu la data en un calendari"
 
-#: ../libegg/egg-datetime.c:529 ../libegg/egg-datetime.c:2213
+#: ../libegg/egg-datetime.c:521 ../libegg/egg-datetime.c:2199
 msgid "Time"
 msgstr "Temps"
 
-#: ../libegg/egg-datetime.c:529
+#: ../libegg/egg-datetime.c:521
 msgid "Enter the time directly"
 msgstr "Introduïu l'hora directament"
 
-#: ../libegg/egg-datetime.c:536
+#: ../libegg/egg-datetime.c:528
 msgid "Select Time"
 msgstr "Seleccioneu l'hora"
 
-#: ../libegg/egg-datetime.c:536
+#: ../libegg/egg-datetime.c:528
 msgid "Select the time from a list"
 msgstr "Seleccioneu l'hora d'una llista"
 
 #. Translators: set this to anything else if you want to use a
 #. * 24 hour clock.
 #.
-#: ../libegg/egg-datetime.c:810
+#: ../libegg/egg-datetime.c:793
 msgid "24hr: no"
 msgstr "24hr"
 
-#: ../libegg/egg-datetime.c:814 ../libegg/egg-datetime.c:1274
-#: ../libegg/egg-datetime.c:1278
+#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1260
+#: ../libegg/egg-datetime.c:1264
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:816 ../libegg/egg-datetime.c:1275
-#: ../libegg/egg-datetime.c:1282
+#: ../libegg/egg-datetime.c:799 ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:1268
 msgid "PM"
 msgstr "PM"
 
 #. Translators: This is hh:mm:ss AM/PM.
-#: ../libegg/egg-datetime.c:824
+#: ../libegg/egg-datetime.c:807
 #, c-format
 msgid "%02d:%02d:%02d %s"
 msgstr "%02d:%02d:%02d %s"
 
 #. Translators: This is hh:mm AM/PM.
-#: ../libegg/egg-datetime.c:827
+#: ../libegg/egg-datetime.c:810
 #, c-format
 msgid "%02d:%02d %s"
 msgstr "%02d:%02d %s"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:831
+#: ../libegg/egg-datetime.c:814
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
 #. Translators: This is hh:mm.
-#: ../libegg/egg-datetime.c:834
+#: ../libegg/egg-datetime.c:817
 #, c-format
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1190
+#: ../libegg/egg-datetime.c:1176
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%3$02d/%2$02d/%1$04d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1255
+#: ../libegg/egg-datetime.c:1241
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
-
-#: ../libegg/eggdesktopfile.c:165
-#, c-format
-msgid "File is not a valid .desktop file"
-msgstr "El fitxer no és un fitxer .desktop vàlid"
-
-#: ../libegg/eggdesktopfile.c:188
-#, c-format
-msgid "Unrecognized desktop file Version '%s'"
-msgstr "No s'ha reconegut la versió «%s» del fitxer d'escriptori"
-
-#: ../libegg/eggdesktopfile.c:968
-#, c-format
-msgid "Starting %s"
-msgstr "S'està iniciant %s"
-
-#: ../libegg/eggdesktopfile.c:1110
-#, c-format
-msgid "Application does not accept documents on command line"
-msgstr "L'aplicació no accepta documents des de la línia d'ordres"
-
-#: ../libegg/eggdesktopfile.c:1178
-#, c-format
-msgid "Unrecognized launch option: %d"
-msgstr "No s'ha reconegut l'opció de llançament: %d"
-
-#: ../libegg/eggdesktopfile.c:1383
-#, c-format
-msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
-msgstr ""
-"No es poden passar URI de documents a una entrada d'escriptori de tipus "
-"«Type=Link»"
-
-#: ../libegg/eggdesktopfile.c:1404
-#, c-format
-msgid "Not a launchable item"
-msgstr "No és un element executable"
-
-#: ../libegg/eggsmclient.c:225
-msgid "Disable connection to session manager"
-msgstr "Inhabilita la connexió al gestor de sessió"
-
-#: ../libegg/eggsmclient.c:228
-msgid "Specify file containing saved configuration"
-msgstr "Especifica el fitxer que conté la configuració desada"
-
-#: ../libegg/eggsmclient.c:228
-msgid "FILE"
-msgstr "FITXER"
-
-#: ../libegg/eggsmclient.c:231
-msgid "Specify session management ID"
-msgstr "Especifica l'identificador del gestor de sessió"
-
-#: ../libegg/eggsmclient.c:231 ../pgp/seahorse-pgp-key-properties.c:1314
-msgid "ID"
-msgstr "ID"
-
-#: ../libegg/eggsmclient.c:252
-msgid "Session management options:"
-msgstr "Opcions del gestor de sessió:"
-
-#: ../libegg/eggsmclient.c:253
-msgid "Show session management options"
-msgstr "Mostra les opcions del gestor de sessió"
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:1
 msgid ":"
@@ -1122,45 +631,19 @@ msgstr "El port des d'on accedir al servidor."
 msgid "initial temporary item"
 msgstr "element temporal inicial"
 
-#: ../libseahorse/seahorse-notification.c:576
-#: ../libseahorse/seahorse-notification.c:604
-msgid "Key Imported"
-msgid_plural "Keys Imported"
-msgstr[0] "S'ha importat la clau"
-msgstr[1] "S'han importat les claus"
-
-#: ../libseahorse/seahorse-notification.c:580
-#: ../libseahorse/seahorse-notification.c:603
-#, c-format
-msgid "Imported %i key"
-msgid_plural "Imported %i keys"
-msgstr[0] "S'ha importat %i clau"
-msgstr[1] "S'han importat %i claus"
-
-#: ../libseahorse/seahorse-notification.c:582
-#, c-format
-msgid "Imported a key for"
-msgid_plural "Imported keys for"
-msgstr[0] "Clau importada per a"
-msgstr[1] "Claus importades per a"
-
-#: ../libseahorse/seahorse-notify.xml.h:1
-msgid "Notification Messages"
-msgstr "Missatges de notificació"
-
-#: ../libseahorse/seahorse-object.c:317
+#: ../libseahorse/seahorse-object.c:318
 msgid "Symmetric Key"
 msgstr "Clau simètrica"
 
-#: ../libseahorse/seahorse-object.c:320
+#: ../libseahorse/seahorse-object.c:321
 msgid "Public Key"
 msgstr "Clau pública"
 
-#: ../libseahorse/seahorse-object.c:323
+#: ../libseahorse/seahorse-object.c:324
 msgid "Private Key"
 msgstr "Clau privada"
 
-#: ../libseahorse/seahorse-object.c:326
+#: ../libseahorse/seahorse-object.c:327
 msgid "Credentials"
 msgstr "Credencials"
 
@@ -1168,28 +651,29 @@ msgstr "Credencials"
 #. * Translators: "This object is a means of storing items such as
 #. * name, email address, etc. that make up one's digital identity.
 #.
-#: ../libseahorse/seahorse-object.c:333
+#: ../libseahorse/seahorse-object.c:334
 msgid "Identity"
 msgstr "Identitat"
 
-#: ../libseahorse/seahorse-passphrase.c:200
+#: ../libseahorse/seahorse-passphrase.c:178
 msgid "Passphrase"
 msgstr "Contrasenya"
 
-#: ../libseahorse/seahorse-passphrase.c:203
-#: ../ssh/seahorse-ssh-operation.c:480
+#: ../libseahorse/seahorse-passphrase.c:181
+#: ../ssh/seahorse-ssh-operation.c:207
 msgid "Password:"
 msgstr "Contrasenya:"
 
-#: ../libseahorse/seahorse-passphrase.c:269
+#. The second and main entry
+#: ../libseahorse/seahorse-passphrase.c:244
 msgid "Confirm:"
 msgstr "Confirmeu:"
 
-#: ../libseahorse/seahorse-prefs.c:62
+#: ../libseahorse/seahorse-prefs.c:59
 msgid "Not a valid Key Server address."
 msgstr "No és una adreça de servidor de claus vàlida."
 
-#: ../libseahorse/seahorse-prefs.c:63
+#: ../libseahorse/seahorse-prefs.c:60
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
@@ -1201,11 +685,11 @@ msgstr ""
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:352
+#: ../libseahorse/seahorse-prefs.c:333
 msgid "Custom"
 msgstr "Personalitzat"
 
-#: ../libseahorse/seahorse-prefs.c:425
+#: ../libseahorse/seahorse-prefs.c:391
 msgid "None: Don't publish keys"
 msgstr "Cap: No publiquis les claus"
 
@@ -1234,55 +718,54 @@ msgstr "_Cerca les claus a través de:"
 msgid "_Publish keys to:"
 msgstr "_Publica les claus a:"
 
-# FIXME
-#: ../libseahorse/seahorse-progress.xml.h:1
-msgid "Progress Title"
-msgstr "Títol del progrés"
+#: ../libseahorse/seahorse-transfer.c:178
+msgid "Retrieving data"
+msgstr "S'estan recuperant les dades"
 
-#: ../libseahorse/seahorse-unknown.c:67
+#: ../libseahorse/seahorse-transfer.c:178
+msgid "Exporting data"
+msgstr "S'estan exportant les dades"
+
+#: ../libseahorse/seahorse-transfer.c:182
+msgid "Importing data"
+msgstr "S'estan important les dades"
+
+#: ../libseahorse/seahorse-transfer.c:182
+msgid "Sending data"
+msgstr "S'està enviant les dades"
+
+#: ../libseahorse/seahorse-unknown.c:59
 msgid "Unavailable"
 msgstr "No disponible"
 
-#: ../libseahorse/seahorse-util.c:240
+#: ../libseahorse/seahorse-util.c:259
 msgid "%Y-%m-%d"
 msgstr "%d-%m-%Y"
 
-#: ../libseahorse/seahorse-util.c:516
+#: ../libseahorse/seahorse-util.c:486
 msgid "Key Data"
 msgstr "Dades de la clau"
 
-#: ../libseahorse/seahorse-util.c:518
+#: ../libseahorse/seahorse-util.c:488
 msgid "Multiple Keys"
 msgstr "Diverses claus"
 
-#: ../libseahorse/seahorse-util.c:774
-msgid "Couldn't run file-roller"
-msgstr "No s'ha pogut executar el file-roller"
-
-#: ../libseahorse/seahorse-util.c:780
-msgid "Couldn't package files"
-msgstr "No s'han pogut empaquetar els fitxers"
-
-#: ../libseahorse/seahorse-util.c:781
-msgid "The file-roller process did not complete successfully"
-msgstr "El procés del gestor d'arxius no s'ha executat correctament"
-
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:957
+#: ../libseahorse/seahorse-util.c:776
 msgid "All key files"
 msgstr "Tots els fitxers de claus"
 
-#: ../libseahorse/seahorse-util.c:968 ../libseahorse/seahorse-util.c:1016
+#: ../libseahorse/seahorse-util.c:787 ../libseahorse/seahorse-util.c:835
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "Tots els fitxers"
 
-#: ../libseahorse/seahorse-util.c:1009
+#: ../libseahorse/seahorse-util.c:828
 msgid "Archive files"
 msgstr "Arxius"
 
-#: ../libseahorse/seahorse-util.c:1079
+#: ../libseahorse/seahorse-util.c:898
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -1292,52 +775,52 @@ msgstr ""
 "\n"
 "Voleu reemplaçar-lo per un fitxer nou?"
 
-#: ../libseahorse/seahorse-util.c:1082
+#: ../libseahorse/seahorse-util.c:901
 msgid "_Replace"
 msgstr "_Reemplaça"
 
 #: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
-#: ../pgp/seahorse-pgp-key-properties.c:1133
+#: ../pgp/seahorse-pgp-key-properties.c:1140
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
 msgid "Unknown"
 msgstr "Desconegut"
 
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1139
+#: ../pgp/seahorse-pgp-key-properties.c:1146
 msgctxt "Validity"
 msgid "Never"
 msgstr "Mai"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1146
+#: ../pgp/seahorse-pgp-key-properties.c:1153
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
 msgid "Marginal"
 msgstr "Marginal"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1152
+#: ../pgp/seahorse-pgp-key-properties.c:1159
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
 msgid "Full"
 msgstr "Completa"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1158
+#: ../pgp/seahorse-pgp-key-properties.c:1165
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
 msgid "Ultimate"
 msgstr "Absoluta"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1351
+#: ../pgp/seahorse-pgp-key-properties.c:1358
 msgid "Disabled"
 msgstr "Inhabilitada"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1347
+#: ../pgp/seahorse-pgp-key-properties.c:1354
 msgid "Revoked"
 msgstr "Revocada"
 
-#: ../libseahorse/seahorse-widget.c:480
+#: ../libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "No s'ha pogut mostrar l'ajuda: %s"
@@ -1425,22 +908,22 @@ msgstr "No s'ha pogut afegir la subclau"
 msgid "Add subkey to %s"
 msgstr "Afegeix una subclau a %s"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:182 ../pgp/seahorse-gpgme-generate.c:118
+#: ../pgp/seahorse-gpgme-add-subkey.c:182 ../pgp/seahorse-gpgme-generate.c:117
 msgid "DSA (sign only)"
 msgstr "DSA (només signatura)"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:190
 msgid "ElGamal (encrypt only)"
-msgstr "ElGamal (només xifratge)"
+msgstr "ElGamal (només encriptació)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:119
+#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:118
 msgid "RSA (sign only)"
 msgstr "RSA (només signatura)"
 
 #
 #: ../pgp/seahorse-gpgme-add-subkey.c:202
 msgid "RSA (encrypt only)"
-msgstr "RSA (només xifratge)"
+msgstr "RSA (només encriptació)"
 
 #: ../pgp/seahorse-gpgme-add-uid.c:85
 msgid "Couldn't add user id"
@@ -1452,68 +935,64 @@ msgstr "No s'ha pogut afegir l'id d'usuari"
 msgid "Add user ID to %s"
 msgstr "Afegeix l'id d'usuari a %s"
 
-#: ../pgp/seahorse-gpgme.c:72
+#: ../pgp/seahorse-gpgme.c:69
 msgid "Decryption failed. You probably do not have the decryption key."
-msgstr "No s'ha pogut desxifrar. Possiblement no teniu la clau de desxifratge."
+msgstr "No s'ha pogut desencriptar. Possiblement no teniu la clau de desencriptació."
 
-#: ../pgp/seahorse-gpgme-expires.c:58
+#: ../pgp/seahorse-gpgme-expires.c:57
 msgid "Invalid expiry date"
 msgstr "La data de venciment no és vàlida"
 
-#: ../pgp/seahorse-gpgme-expires.c:59
+#: ../pgp/seahorse-gpgme-expires.c:58
 msgid "The expiry date must be in the future"
 msgstr "La data de venciment ha de ser en el futur"
 
-#: ../pgp/seahorse-gpgme-expires.c:72
+#: ../pgp/seahorse-gpgme-expires.c:71
 msgid "Couldn't change expiry date"
 msgstr "No s'ha pogut canviar la data de venciment"
 
-#: ../pgp/seahorse-gpgme-expires.c:131
+#: ../pgp/seahorse-gpgme-expires.c:130
 #, c-format
 msgid "Expiry: %s"
 msgstr "Venciment: %s"
 
-#: ../pgp/seahorse-gpgme-generate.c:79
+#: ../pgp/seahorse-gpgme-generate.c:78
 msgid "PGP Key"
 msgstr "Clau PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:80
+#: ../pgp/seahorse-gpgme-generate.c:79
 msgid "Used to encrypt email and files"
-msgstr "Emprades per xifrar correus i fitxers"
+msgstr "Emprades per l'encriptació de correus i de fitxers"
 
-#: ../pgp/seahorse-gpgme-generate.c:116 ../ssh/seahorse-ssh-generate.xml.h:9
+#: ../pgp/seahorse-gpgme-generate.c:115 ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:117
+#: ../pgp/seahorse-gpgme-generate.c:116
 msgid "DSA Elgamal"
 msgstr "DSA ElGamal"
 
-#: ../pgp/seahorse-gpgme-generate.c:135
+#: ../pgp/seahorse-gpgme-generate.c:165
 msgid "Couldn't generate PGP key"
 msgstr "No s'ha pogut generar la clau PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:195
+#: ../pgp/seahorse-gpgme-generate.c:196
 msgid "Passphrase for New PGP Key"
 msgstr "Contrasenya per a la clau PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:196
+#: ../pgp/seahorse-gpgme-generate.c:197
 msgid "Enter the passphrase for your new key twice."
 msgstr "Introduïu dues vegades la contrasenya per a la clau nova."
 
-#: ../pgp/seahorse-gpgme-generate.c:205
-msgid "Couldn't generate key"
-msgstr "No s'ha pogut generar la clau"
-
-#: ../pgp/seahorse-gpgme-generate.c:207
+#: ../pgp/seahorse-gpgme-generate.c:206
 msgid "Generating key"
 msgstr "S'està generant la clau"
 
-#: ../pgp/seahorse-gpgme-key-op.c:301
+#: ../pgp/seahorse-gpgme-key-op.c:370
 msgid "Wrong password"
 msgstr "La contrasenya és incorrecta"
 
-#: ../pgp/seahorse-gpgme-key-op.c:301
+#: ../pgp/seahorse-gpgme-key-op.c:370
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 "Heu introduït malament la contrasenya per tercera vegada, torneu-ho a provar."
@@ -1556,65 +1035,69 @@ msgstr "Tots els fitxers JPEG"
 msgid "Choose Photo to Add to Key"
 msgstr "Trieu la fotografia per afegir a la clau"
 
-#: ../pgp/seahorse-gpgme-photos.c:290 ../pgp/seahorse-gpgme-photos.c:294
+#: ../pgp/seahorse-gpgme-photos.c:278
+msgid "Couldn't prepare photo"
+msgstr "No s'ha pogut preparar la fotografia"
+
+#: ../pgp/seahorse-gpgme-photos.c:288 ../pgp/seahorse-gpgme-photos.c:292
 msgid "Couldn't add photo"
 msgstr "No s'ha pogut afegir la fotografia"
 
-#: ../pgp/seahorse-gpgme-photos.c:291
+#: ../pgp/seahorse-gpgme-photos.c:289
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr ""
 "No s'ha pogut carregar el fitxer, pot ser que estigui en un format no vàlid."
 
-#: ../pgp/seahorse-gpgme-photos.c:320
+#: ../pgp/seahorse-gpgme-photos.c:318
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "Segur que voleu suprimir la fotografia actual de la vostra clau?"
 
-#: ../pgp/seahorse-gpgme-photos.c:333
+#: ../pgp/seahorse-gpgme-photos.c:331
 msgid "Couldn't delete photo"
 msgstr "No s'ha pogut suprimir la fotografia"
 
-#: ../pgp/seahorse-gpgme-revoke.c:70
+#: ../pgp/seahorse-gpgme-revoke.c:69
 msgid "Couldn't revoke subkey"
 msgstr "No s'ha pogut revocar la subclau"
 
-#: ../pgp/seahorse-gpgme-revoke.c:91
+#: ../pgp/seahorse-gpgme-revoke.c:90
 #, c-format
 msgid "Revoke: %s"
 msgstr "Revoca: %s"
 
-#: ../pgp/seahorse-gpgme-revoke.c:102
+#: ../pgp/seahorse-gpgme-revoke.c:101
 msgid "No reason"
 msgstr "Sense motiu"
 
-#: ../pgp/seahorse-gpgme-revoke.c:103
+#: ../pgp/seahorse-gpgme-revoke.c:102
 msgid "No reason for revoking key"
 msgstr "Cap motiu per la revocació de la clau"
 
-#: ../pgp/seahorse-gpgme-revoke.c:109
+#: ../pgp/seahorse-gpgme-revoke.c:108
 msgid "Compromised"
 msgstr "Compromesa"
 
-#: ../pgp/seahorse-gpgme-revoke.c:110
+#: ../pgp/seahorse-gpgme-revoke.c:109
 msgid "Key has been compromised"
 msgstr "La clau ha estat compromesa"
 
-#: ../pgp/seahorse-gpgme-revoke.c:116
+#: ../pgp/seahorse-gpgme-revoke.c:115
 msgid "Superseded"
 msgstr "Reemplaçada"
 
-#: ../pgp/seahorse-gpgme-revoke.c:117
+#: ../pgp/seahorse-gpgme-revoke.c:116
 msgid "Key has been superseded"
 msgstr "La clau ha estat reemplaçada"
 
-#: ../pgp/seahorse-gpgme-revoke.c:123
+#: ../pgp/seahorse-gpgme-revoke.c:122
 msgid "Not Used"
 msgstr "No es fa servir"
 
-#: ../pgp/seahorse-gpgme-revoke.c:124
+#: ../pgp/seahorse-gpgme-revoke.c:123
 msgid "Key is no longer used"
 msgstr "La clau no es fa servir més"
 
-#: ../pgp/seahorse-gpgme-revoke.c:161
+#: ../pgp/seahorse-gpgme-revoke.c:160
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -1623,11 +1106,11 @@ msgstr ""
 "Ara afegireu %s com a revocador de %s. Aquesta operació no es pot desfer. "
 "Segur que voleu continuar?"
 
-#: ../pgp/seahorse-gpgme-revoke.c:173
+#: ../pgp/seahorse-gpgme-revoke.c:172
 msgid "Couldn't add revoker"
 msgstr "No s'ha pogut afegir el revocador"
 
-#: ../pgp/seahorse-gpgme-sign.c:99
+#: ../pgp/seahorse-gpgme-sign.c:98
 #, c-format
 msgid ""
 "This key was already signed by\n"
@@ -1636,17 +1119,17 @@ msgstr ""
 "Aquest clau ja estava signada per\n"
 "«%s»"
 
-#: ../pgp/seahorse-gpgme-sign.c:103
+#: ../pgp/seahorse-gpgme-sign.c:102
 msgid "Couldn't sign key"
 msgstr "No s'ha pogut signar la clau"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:157 ../pgp/seahorse-signer.c:61
+#: ../pgp/seahorse-gpgme-sign.c:156 ../pgp/seahorse-signer.c:60
 msgid "No keys usable for signing"
 msgstr "No hi ha claus que es puguin fer servir per signar"
 
-#: ../pgp/seahorse-gpgme-sign.c:158
+#: ../pgp/seahorse-gpgme-sign.c:157
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
@@ -1654,43 +1137,37 @@ msgstr ""
 "No teniu cap clau PGP que es pugui emprar per a indicar que confieu en "
 "aquesta clau."
 
-#: ../pgp/seahorse-gpgme-source.c:99
+#: ../pgp/seahorse-gpgme-source.c:86
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Contrasenya equivocada."
 
-#: ../pgp/seahorse-gpgme-source.c:103
+#: ../pgp/seahorse-gpgme-source.c:90
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "Introduïu una contrasenya nova per a «%s»"
 
-#: ../pgp/seahorse-gpgme-source.c:105
+#: ../pgp/seahorse-gpgme-source.c:92
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Introduïu la contrasenya per a «%s»"
 
-#: ../pgp/seahorse-gpgme-source.c:108
-#: ../src/seahorse-change-passphrase.xml.h:4
+#: ../pgp/seahorse-gpgme-source.c:95 ../src/seahorse-change-passphrase.xml.h:4
 msgid "Enter new passphrase"
 msgstr "Introduïu una contrasenya nova"
 
-#: ../pgp/seahorse-gpgme-source.c:110
+#: ../pgp/seahorse-gpgme-source.c:97
 msgid "Enter passphrase"
 msgstr "Introduïu la contrasenya"
 
-#. TODO: We can use the GPGME progress to make this more accurate
-#: ../pgp/seahorse-gpgme-source.c:722
+#: ../pgp/seahorse-gpgme-source.c:328
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "S'ha carregat %d clau"
 msgstr[1] "S'han carregat %d claus"
 
-#: ../pgp/seahorse-gpgme-source.c:777
-msgid "Loading Keys..."
-msgstr "S'estan carregant claus..."
-
-#: ../pgp/seahorse-gpgme-source.c:820
+#: ../pgp/seahorse-gpgme-source.c:649
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1698,121 +1175,88 @@ msgstr ""
 "Les dades de la clau no són vàlides (hi manquen els UID). Pot ser que sigui "
 "perquè un ordinador té la data al futur, o que manqui una autosignatura."
 
-#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:544
-msgid "Importing Keys"
-msgstr "S'estan important les claus"
-
-#: ../pgp/seahorse-gpgme-source.c:946
-msgid "Exporting Keys"
-msgstr "S'estan exportant les claus"
-
 #: ../pgp/seahorse-gpgme-subkey.c:199
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: ../pgp/seahorse-hkp-source.c:387
+#: ../pgp/seahorse-hkp-source.c:645
+msgid "HTTP Key Server"
+msgstr "Servidors de claus HTTP"
+
+#: ../pgp/seahorse-hkp-source.c:680
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 "La cerca no ha estat prou específica. El servidor «%s» ha trobat massa claus."
 
-#: ../pgp/seahorse-hkp-source.c:389
+#: ../pgp/seahorse-hkp-source.c:683
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "No s'ha pogut comunicar amb el servidor «%s»: %s"
 
-#: ../pgp/seahorse-hkp-source.c:671
-msgid "Searching for keys..."
-msgstr "S'estan cercant claus..."
-
-#: ../pgp/seahorse-hkp-source.c:759
-msgid "Uploading keys..."
-msgstr "S'estan carregant claus..."
-
-#: ../pgp/seahorse-hkp-source.c:857
-msgid "Retrieving keys..."
-msgstr "S'estan recuperant claus..."
-
-#: ../pgp/seahorse-hkp-source.c:987
-#, c-format
-msgid "Searching for keys on: %s"
-msgstr "S'estan cercant claus a: %s"
-
-#. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:1072 ../pgp/seahorse-hkp-source.c:1154
-#: ../pgp/seahorse-ldap-source.c:668
-#, c-format
-msgid "Connecting to: %s"
-msgstr "S'està connectant a: %s"
-
-#: ../pgp/seahorse-hkp-source.c:1184
-msgid "HTTP Key Server"
-msgstr "Servidors de claus HTTP"
-
-#: ../pgp/seahorse-ldap-source.c:459
+#: ../pgp/seahorse-ldap-source.c:440
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "No s'ha pogut comunicar amb «%s»: %s"
 
-#: ../pgp/seahorse-ldap-source.c:641
+#: ../pgp/seahorse-ldap-source.c:651
+#, c-format
+msgid "Connecting to: %s"
+msgstr "S'està connectant a: %s"
+
+#: ../pgp/seahorse-ldap-source.c:657
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "No s'ha pogut resoldre l'adreça: %s"
 
-#: ../pgp/seahorse-ldap-source.c:719
+#: ../pgp/seahorse-ldap-source.c:701
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "S'està resolent l'adreça del servidor: %s"
 
-#: ../pgp/seahorse-ldap-source.c:955
-#, c-format
-msgid "Searching for keys containing '%s'..."
-msgstr "S'estan cercant claus que continguin «%s»..."
-
-#: ../pgp/seahorse-ldap-source.c:983
-#, c-format
-msgid "Searching for key id '%s'..."
-msgstr "S'està cercant la clau amb l'identificador «%s»..."
-
-#: ../pgp/seahorse-ldap-source.c:1089
-msgid "Retrieving remote keys..."
-msgstr "S'estan recuperant claus remotes..."
-
-#: ../pgp/seahorse-ldap-source.c:1221
-msgid "Sending keys to key server..."
-msgstr "S'estan enviant claus al servidor..."
-
-#: ../pgp/seahorse-ldap-source.c:1423
+#: ../pgp/seahorse-ldap-source.c:781
 msgid "LDAP Key Server"
 msgstr "Servidor de claus LDAP"
 
-#: ../pgp/seahorse-pgp-commands.c:103
+#: ../pgp/seahorse-pgp-commands.c:104
 msgid "_Sign Key..."
 msgstr "Si_gna la clau..."
 
-#: ../pgp/seahorse-pgp-commands.c:103
+#: ../pgp/seahorse-pgp-commands.c:104
 msgid "Sign public key"
 msgstr "Signa la clau pública"
 
-#: ../pgp/seahorse-pgp-commands.c:171
+#: ../pgp/seahorse-pgp-commands.c:174
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Segur que voleu suprimir permanentment %s?"
 
-#: ../pgp/seahorse-pgp-commands.c:176
+#: ../pgp/seahorse-pgp-commands.c:179
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys and identities?"
 msgstr "Segur que voleu suprimir permanentment %d claus i identitats?"
 
-#: ../pgp/seahorse-pgp-commands.c:178
+#: ../pgp/seahorse-pgp-commands.c:181
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys?"
 msgstr "Segur que voleu suprimir permanentment %d claus?"
 
-#: ../pgp/seahorse-pgp-commands.c:180
+#: ../pgp/seahorse-pgp-commands.c:183
 #, c-format
 msgid "Are you sure you want to permanently delete %d identities?"
 msgstr "Segur que voleu suprimir permanentment %d identitats?"
+
+#: ../pgp/seahorse-pgp-commands.c:201 ../pgp/seahorse-pgp-key-properties.c:253
+msgid "Couldn't delete user ID"
+msgstr "No s'ha pogut suprimir l'identificador d'usuari"
+
+#: ../pgp/seahorse-pgp-commands.c:205
+msgid "Couldn't delete private key"
+msgstr "No s'ha pogut suprimir la clau privada"
+
+#: ../pgp/seahorse-pgp-commands.c:208
+msgid "Couldn't delete public key"
+msgstr "No s'ha pogut suprimir la clau pública"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:1 ../ssh/seahorse-ssh-generate.xml.h:1
 msgid "<b>_Advanced key options</b>"
@@ -1820,7 +1264,7 @@ msgstr "<b>Opcions _avançades de la clau</b>"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:2
 msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr "Una clau PGP us permet xifrar correus o fitxers per a altres persones."
+msgstr "Una clau PGP us permet encriptar correus o fitxers per a altres persones."
 
 #: ../pgp/seahorse-pgp-generate.xml.h:3
 msgid "Algorithms here"
@@ -1836,7 +1280,7 @@ msgstr "_Data de venciment:"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:5
 msgid "Encryption _Type:"
-msgstr "Tipus de _xifratge:"
+msgstr "Tipus d'_encriptació:"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:8
 msgid "Generate a new key"
@@ -1858,122 +1302,132 @@ msgstr "Clau PGP nova"
 msgid "_Comment:"
 msgstr "C_omentari:"
 
-#: ../pgp/seahorse-pgp-key.c:201
+#: ../pgp/seahorse-pgp-key.c:200
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
 msgid "Private PGP Key"
 msgstr "Clau PGP privada"
 
-#: ../pgp/seahorse-pgp-key.c:204
+#: ../pgp/seahorse-pgp-key.c:203
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
 msgid "Public PGP Key"
 msgstr "Clau PGP pública"
 
-#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1349
+#: ../pgp/seahorse-pgp-key.c:582 ../pgp/seahorse-pgp-key-properties.c:1356
 msgid "Expired"
 msgstr "Ha vençut"
 
-#: ../pgp/seahorse-pgp-key-properties.c:224
+#: ../pgp/seahorse-pgp-key-properties.c:226
 msgid "Couldn't change primary user ID"
 msgstr "No s'ha pogut canviar l'identificador primari de l'usuari"
 
-#: ../pgp/seahorse-pgp-key-properties.c:241
+#: ../pgp/seahorse-pgp-key-properties.c:243
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr "Segur que voleu suprimir permanentment l'identificador d'usuari «%s»?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:251
-msgid "Couldn't delete user ID"
-msgstr "No s'ha pogut suprimir l'identificador d'usuari"
-
-#: ../pgp/seahorse-pgp-key-properties.c:333
-#: ../pgp/seahorse-pgp-key-properties.c:1464
+#: ../pgp/seahorse-pgp-key-properties.c:335
+#: ../pgp/seahorse-pgp-key-properties.c:1471
 msgid "[Unknown]"
 msgstr "[Desconegut]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:426
-#: ../pgp/seahorse-pgp-key-properties.c:1742
+#: ../pgp/seahorse-pgp-key-properties.c:435
+#: ../pgp/seahorse-pgp-key-properties.c:1751
 msgid "Name/Email"
 msgstr "Nom/adreça electrònica"
 
-#: ../pgp/seahorse-pgp-key-properties.c:431
+#: ../pgp/seahorse-pgp-key-properties.c:440
 msgid "Signature ID"
 msgstr "Identificador de la signatura"
 
-#: ../pgp/seahorse-pgp-key-properties.c:552
+#: ../pgp/seahorse-pgp-key-properties.c:561
 msgid "Couldn't change primary photo"
 msgstr "No s'ha pogut canviar la fotografia primària"
 
-#: ../pgp/seahorse-pgp-key-properties.c:775
+#: ../pgp/seahorse-pgp-key-properties.c:784
 msgid "(unknown)"
 msgstr "(desconegut)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:778
+#: ../pgp/seahorse-pgp-key-properties.c:787
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Aquesta clau va vèncer el: %s"
 
-#: ../pgp/seahorse-pgp-key-properties.c:946
+#: ../pgp/seahorse-pgp-key-properties.c:848
+#: ../src/seahorse-key-manager-store.c:829
+msgid "Name"
+msgstr "Nom"
+
+#: ../pgp/seahorse-pgp-key-properties.c:955
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Segur que voleu suprimir permanentment la subclau %d de %s?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:955
+#: ../pgp/seahorse-pgp-key-properties.c:964
 msgid "Couldn't delete subkey"
 msgstr "No s'ha pogut suprimir la subclau"
 
-#: ../pgp/seahorse-pgp-key-properties.c:991
-#: ../pgp/seahorse-pgp-key-properties.c:1427
+#: ../pgp/seahorse-pgp-key-properties.c:1000
+#: ../pgp/seahorse-pgp-key-properties.c:1434
 msgid "Unable to change trust"
 msgstr "No s'ha pogut canviar la confiança"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1006 ../src/seahorse-viewer.c:290
-#: ../ssh/seahorse-ssh-key-properties.c:168
+#: ../pgp/seahorse-pgp-key-properties.c:1015 ../src/seahorse-viewer.c:296
+#: ../ssh/seahorse-ssh-key-properties.c:184
 #, c-format
 msgid "Couldn't export key to \"%s\""
 msgstr "No s'ha pogut exportar la clau a «%s»"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1035
-#: ../ssh/seahorse-ssh-key-properties.c:193
+#: ../pgp/seahorse-pgp-key-properties.c:1043
+#: ../ssh/seahorse-ssh-key-properties.c:208
 msgid "Export Complete Key"
 msgstr "Exporta la clau sencera"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1060
-#: ../ssh/seahorse-ssh-key-properties.c:215
+#: ../pgp/seahorse-pgp-key-properties.c:1068
+#: ../ssh/seahorse-ssh-key-properties.c:230
 msgid "Couldn't export key."
 msgstr "No s'ha pogut exportar la clau."
 
-#: ../pgp/seahorse-pgp-key-properties.c:1267
-#: ../pgp/seahorse-pgp-key-properties.c:1356
+#: ../pgp/seahorse-pgp-key-properties.c:1274
+#: ../pgp/seahorse-pgp-key-properties.c:1363
 msgctxt "Expires"
 msgid "Never"
 msgstr "Mai"
 
+#: ../pgp/seahorse-pgp-key-properties.c:1321
+msgid "ID"
+msgstr "ID"
+
 #. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1317
-#: ../src/seahorse-key-manager-store.c:896
+#: ../pgp/seahorse-pgp-key-properties.c:1324
+#: ../src/seahorse-key-manager-store.c:860
 msgid "Type"
 msgstr "Tipus"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1320
+#: ../pgp/seahorse-pgp-key-properties.c:1327
 msgid "Created"
 msgstr "Creada"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1323
+#: ../pgp/seahorse-pgp-key-properties.c:1330
 msgid "Expires"
 msgstr "Venç"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1326
+#: ../pgp/seahorse-pgp-key-properties.c:1333
 msgid "Status"
 msgstr "Estat"
 
 # FIXME FIXME FIXME (josep)
-#: ../pgp/seahorse-pgp-key-properties.c:1329
+#: ../pgp/seahorse-pgp-key-properties.c:1336
 msgid "Strength"
 msgstr "Força"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1353
+#: ../pgp/seahorse-pgp-key-properties.c:1360
 msgid "Good"
 msgstr "Correcte"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1754
+#: ../src/seahorse-key-manager-store.c:841
+msgid "Key ID"
+msgstr "ID de la clau"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
 msgid "<b>Actions</b>"
@@ -2058,7 +1512,7 @@ msgstr "Canvia la contrasen_ya"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
 msgid "Decrypt files and email sent to you."
-msgstr "Desxifreu fitxers i correus que us enviïn."
+msgstr "Desencripteu fitxers i correus que us enviïn."
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
 msgid "Delete"
@@ -2183,7 +1637,7 @@ msgstr "<b>_Persones que han signat aquesta clau:</b>"
 # "propietari de la clau" ? (David)
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
 msgid "Encrypt files and email to the key's owner "
-msgstr "Xifra fitxers i correus al propietari de la clau "
+msgstr "Encripta fitxers i correus al propietari de la clau "
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
 msgid "Fully"
@@ -2215,7 +1669,7 @@ msgstr "Marginal"
 
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
-#: ../src/seahorse-key-manager-store.c:890
+#: ../src/seahorse-key-manager-store.c:854
 msgid "Trust"
 msgstr "Confiança"
 
@@ -2267,12 +1721,12 @@ msgstr "Motiu pel qual es revoca la clau"
 msgid "_Reason:"
 msgstr "_Motiu:"
 
-#: ../pgp/seahorse-signer.c:62
+#: ../pgp/seahorse-signer.c:61
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
-"No teniu claus PGP personals que es puguin emprar per signar cap document "
-"o missatge."
+"No teniu claus PGP personals que es puguin emprar per signar cap document o "
+"missatge."
 
 #: ../pgp/seahorse-sign.xml.h:1
 msgid "<b>How carefully have you checked this key?</b>"
@@ -2336,8 +1790,8 @@ msgid ""
 msgstr ""
 "Podríeu emprar una fotografia que sigui difícil de falsificar (com ara un "
 "passaport) per verificar personalment que el nom a la clau és correcte. "
-"També hauríeu d'haver emprat el correu per verificar que l'adreça pertany "
-"al seu propietari."
+"També hauríeu d'haver emprat el correu per verificar que l'adreça pertany al "
+"seu propietari."
 
 #: ../pgp/seahorse-sign.xml.h:12
 msgid "_Casually"
@@ -2367,22 +1821,30 @@ msgstr "Amb _molt deteniment"
 msgid "_Sign message with key:"
 msgstr "_Signa el fitxer amb la clau:"
 
-#: ../pkcs11/seahorse-pkcs11-certificate.c:106
+#: ../pkcs11/seahorse-pkcs11-certificate.c:109
 #: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
 msgid "Certificate"
 msgstr "Certificat"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:108
+#: ../pkcs11/seahorse-pkcs11-commands.c:106
+msgid "Couldn't delete"
+msgstr "No s'ha pogut suprimir"
+
+#: ../pkcs11/seahorse-pkcs11-commands.c:127
 #, c-format
 msgid "Are you sure you want to delete the certificate '%s'?"
 msgstr "Segur que voleu suprimir el certificat «%s»?"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#: ../pkcs11/seahorse-pkcs11-commands.c:130
 #, c-format
 msgid "Are you sure you want to delete %d certificate?"
 msgid_plural "Are you sure you want to delete %d certificates?"
 msgstr[0] "Segur que voleu suprimir %d certificat?"
 msgstr[1] "Segur que voleu suprimir %d certificats?"
+
+#: ../pkcs11/seahorse-pkcs11-commands.c:143
+msgid "Deleting"
+msgstr "S'està suprimint"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
@@ -2402,11 +1864,11 @@ msgstr "Contrasen_ya nova:"
 
 #: ../src/seahorse.desktop.in.in.h:1
 msgid "Manage your passwords and encryption keys"
-msgstr "Gestioneu les contrasenyes i claus de xifratge"
+msgstr "Gestioneu les contrasenyes i claus d'encriptació"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:862
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:850
 msgid "Passwords and Encryption Keys"
-msgstr "Contrasenyes i claus de xifratge"
+msgstr "Contrasenyes i claus d'encriptació"
 
 #: ../src/seahorse-generate-select.xml.h:1
 msgid "<b>_Select the type of item to create:</b>"
@@ -2420,114 +1882,118 @@ msgstr "C_ontinua"
 msgid "Create New ..."
 msgstr "Crea una nova..."
 
-#: ../src/seahorse-key-manager.c:233 ../src/seahorse-keyserver-results.c:108
+#: ../src/seahorse-key-manager.c:233 ../src/seahorse-keyserver-results.c:109
 #, c-format
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
 msgstr[0] "S'ha seleccionat %d clau"
 msgstr[1] "S'han seleccionat %d claus"
 
-#: ../src/seahorse-key-manager.c:410 ../src/seahorse-key-manager.c:470
-#: ../src/seahorse-key-manager.c:533 ../src/seahorse-viewer.c:458
+#: ../src/seahorse-key-manager.c:413 ../src/seahorse-key-manager.c:471
+#: ../src/seahorse-key-manager.c:532 ../src/seahorse-viewer.c:451
 msgid "Couldn't import keys"
 msgstr "No s'han pogut importar les claus"
 
-#: ../src/seahorse-key-manager.c:415 ../src/seahorse-viewer.c:463
+#: ../src/seahorse-key-manager.c:415 ../src/seahorse-viewer.c:453
 msgid "Imported keys"
 msgstr "Claus importades"
 
-#: ../src/seahorse-key-manager.c:464
+#: ../src/seahorse-key-manager.c:466
 msgid "Importing keys"
 msgstr "S'estan important les claus"
 
-#: ../src/seahorse-key-manager.c:487 ../ssh/seahorse-ssh-operation.c:1017
+#: ../src/seahorse-key-manager.c:486 ../ssh/seahorse-ssh-operation.c:1089
 msgid "Import Key"
 msgstr "Importa clau"
 
-#: ../src/seahorse-key-manager.c:533
+#: ../src/seahorse-key-manager.c:532
 msgid "Unrecognized key type, or invalid data format"
 msgstr ""
 "No s'ha reconegut el tipus de clau, o el format de les dades no és vàlid"
 
-#: ../src/seahorse-key-manager.c:731 ../src/seahorse-keyserver-results.c:245
+#: ../src/seahorse-key-manager.c:547
+msgid "Importing Keys"
+msgstr "S'estan important les claus"
+
+#: ../src/seahorse-key-manager.c:719 ../src/seahorse-keyserver-results.c:247
 msgid "_Remote"
 msgstr "_Remot"
 
-#: ../src/seahorse-key-manager.c:733
+#: ../src/seahorse-key-manager.c:721
 msgid "Close this program"
 msgstr "Surt d'aquest programa"
 
-#: ../src/seahorse-key-manager.c:734
+#: ../src/seahorse-key-manager.c:722
 msgid "_New..."
 msgstr "_Nova..."
 
-#: ../src/seahorse-key-manager.c:735
+#: ../src/seahorse-key-manager.c:723
 msgid "Create a new key or item"
 msgstr "Crea una clau o un element nou"
 
-#: ../src/seahorse-key-manager.c:736
+#: ../src/seahorse-key-manager.c:724
 msgid "_Import..."
 msgstr "_Importa..."
 
-#: ../src/seahorse-key-manager.c:737
+#: ../src/seahorse-key-manager.c:725
 msgid "Import from a file"
 msgstr "Importa des d'un fitxer"
 
-#: ../src/seahorse-key-manager.c:739
+#: ../src/seahorse-key-manager.c:727
 msgid "Import from the clipboard"
 msgstr "Importa des del porta-retalls"
 
-#: ../src/seahorse-key-manager.c:744 ../src/seahorse-keyserver-results.c:255
+#: ../src/seahorse-key-manager.c:732 ../src/seahorse-keyserver-results.c:257
 msgid "_Find Remote Keys..."
 msgstr "_Cerca claus remotes..."
 
-#: ../src/seahorse-key-manager.c:745 ../src/seahorse-keyserver-results.c:256
+#: ../src/seahorse-key-manager.c:733 ../src/seahorse-keyserver-results.c:258
 msgid "Search for keys on a key server"
 msgstr "Cerca claus en un servidor de claus"
 
-#: ../src/seahorse-key-manager.c:746
+#: ../src/seahorse-key-manager.c:734
 msgid "_Sync and Publish Keys..."
 msgstr "_Sincronitza i publica les claus..."
 
-#: ../src/seahorse-key-manager.c:747
+#: ../src/seahorse-key-manager.c:735
 msgid "Publish and/or synchronize your keys with those online."
 msgstr ""
 "Publiqueu o sincronitzeu les vostres claus amb les que hi hagi en línia."
 
-#: ../src/seahorse-key-manager.c:752
+#: ../src/seahorse-key-manager.c:740
 msgid "T_ypes"
 msgstr "_Tipus"
 
-#: ../src/seahorse-key-manager.c:752
+#: ../src/seahorse-key-manager.c:740
 msgid "Show type column"
 msgstr "Mostra la columna tipus"
 
 #
-#: ../src/seahorse-key-manager.c:754
+#: ../src/seahorse-key-manager.c:742
 msgid "_Expiry"
 msgstr "V_enciment"
 
-#: ../src/seahorse-key-manager.c:754
+#: ../src/seahorse-key-manager.c:742
 msgid "Show expiry column"
 msgstr "Mostra la columna de venciment de la clau"
 
-#: ../src/seahorse-key-manager.c:756
+#: ../src/seahorse-key-manager.c:744
 msgid "_Trust"
 msgstr "_Confiança"
 
-#: ../src/seahorse-key-manager.c:756
+#: ../src/seahorse-key-manager.c:744
 msgid "Show owner trust column"
 msgstr "Mostra la columna de confiança"
 
-#: ../src/seahorse-key-manager.c:758
+#: ../src/seahorse-key-manager.c:746
 msgid "_Validity"
 msgstr "_Validesa"
 
-#: ../src/seahorse-key-manager.c:758
+#: ../src/seahorse-key-manager.c:746
 msgid "Show validity column"
 msgstr "Mostra la columna de la validesa"
 
-#: ../src/seahorse-key-manager.c:931
+#: ../src/seahorse-key-manager.c:923
 msgid "Filter:"
 msgstr "Fitxer:"
 
@@ -2554,9 +2020,9 @@ msgstr "Altres _claus"
 
 #: ../src/seahorse-key-manager.xml.h:6
 msgid "To get started with encryption you will need keys."
-msgstr "Per poder començar a xifrar, us caldran claus."
+msgstr "Per poder començar a encriptar us caldran claus."
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:522
+#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:516
 msgid "_Import"
 msgstr "_Importa"
 
@@ -2564,44 +2030,44 @@ msgstr "_Importa"
 msgid "_Passwords"
 msgstr "Contrasen_ya"
 
-#: ../src/seahorse-key-manager-store.c:685 ../src/seahorse-viewer.c:256
+#: ../src/seahorse-key-manager-store.c:637 ../src/seahorse-viewer.c:261
 msgid "Couldn't export keys"
 msgstr "No s'han pogut exportar les claus"
 
-#: ../src/seahorse-key-manager-store.c:883
+#: ../src/seahorse-key-manager-store.c:847
 msgid "Validity"
 msgstr "Validesa"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:902
+#: ../src/seahorse-key-manager-store.c:866
 msgid "Expiration Date"
 msgstr "Data de venciment"
 
-#: ../src/seahorse-keyserver-results.c:247
+#: ../src/seahorse-keyserver-results.c:249
 msgid "Close this window"
 msgstr "Tanca aquesta finestra"
 
-#: ../src/seahorse-keyserver-results.c:248
+#: ../src/seahorse-keyserver-results.c:250
 msgid "_Expand All"
 msgstr "_Expandeix-ho tot"
 
-#: ../src/seahorse-keyserver-results.c:249
+#: ../src/seahorse-keyserver-results.c:251
 msgid "Expand all listings"
 msgstr "Expandeix tots els llistats"
 
-#: ../src/seahorse-keyserver-results.c:250
+#: ../src/seahorse-keyserver-results.c:252
 msgid "_Collapse All"
 msgstr "_Redueix-ho tot"
 
-#: ../src/seahorse-keyserver-results.c:251
+#: ../src/seahorse-keyserver-results.c:253
 msgid "Collapse all listings"
 msgstr "Redueix tots els llistats"
 
-#: ../src/seahorse-keyserver-results.c:322
+#: ../src/seahorse-keyserver-results.c:324
 msgid "Remote Keys"
 msgstr "Claus remotes"
 
-#: ../src/seahorse-keyserver-results.c:324
+#: ../src/seahorse-keyserver-results.c:326
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Claus remotes que contenen «%s»"
@@ -2638,11 +2104,11 @@ msgstr "_Cerca"
 msgid "_Search for keys containing: "
 msgstr "Ce_rca claus que continguin: "
 
-#: ../src/seahorse-keyserver-sync.c:45
+#: ../src/seahorse-keyserver-sync.c:52
 msgid "Couldn't publish keys to server"
 msgstr "No s'han pogut publicar les claus al servidor"
 
-#: ../src/seahorse-keyserver-sync.c:61
+#: ../src/seahorse-keyserver-sync.c:71
 #, c-format
 msgid "Couldn't retrieve keys from server: %s"
 msgstr "No s'han pogut recuperar les claus del servidor: %s"
@@ -2654,12 +2120,7 @@ msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>S'ha seleccionat %d clau per sincronitzar</b>"
 msgstr[1] "<b>S'han seleccionat %d claus per sincronitzar</b>"
 
-#: ../src/seahorse-keyserver-sync.c:216
-msgid "Synchronizing keys"
-msgstr "Sincronització de claus"
-
-#. Show the progress window if necessary
-#: ../src/seahorse-keyserver-sync.c:248
+#: ../src/seahorse-keyserver-sync.c:241
 msgid "Synchronizing keys..."
 msgstr "S'estan sincronitzant les claus..."
 
@@ -2695,129 +2156,121 @@ msgstr "_Servidors de claus"
 msgid "_Sync"
 msgstr "_Sincronitza"
 
-#: ../src/seahorse-main.c:62
+#: ../src/seahorse-main.c:60
 msgid "Version of this application"
 msgstr "Versió de l'aplicació"
 
-#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:144
+#: ../src/seahorse-main.c:76 ../src/seahorse-viewer.c:145
 msgid "Encryption Key Manager"
-msgstr "Gestor de claus de xifratge"
+msgstr "Gestor de claus d'encriptació"
 
-#: ../src/seahorse-viewer.c:120
+#: ../src/seahorse-viewer.c:121
 msgid "Contributions:"
 msgstr "Col·laboracions:"
 
-#: ../src/seahorse-viewer.c:146
+#: ../src/seahorse-viewer.c:147
 msgid "translator-credits"
 msgstr ""
 "Josep Monés i Teixidor <jmones@puntbarra.com>\n"
 "Josep Puigdemont i Casamajó <josep.puigdemont@gmail.com>"
 
-#: ../src/seahorse-viewer.c:149
+#: ../src/seahorse-viewer.c:150
 msgid "Seahorse Project Homepage"
 msgstr "Pàgina inicial del projecte Seahorse"
 
 #. Top menu items
-#: ../src/seahorse-viewer.c:168
+#: ../src/seahorse-viewer.c:170
 msgid "_File"
 msgstr "_Fitxer"
 
-#: ../src/seahorse-viewer.c:169
+#: ../src/seahorse-viewer.c:171
 msgid "_Edit"
 msgstr "_Edita"
 
-#: ../src/seahorse-viewer.c:170
+#: ../src/seahorse-viewer.c:172
 msgid "_View"
 msgstr "_Visualitza"
 
-#: ../src/seahorse-viewer.c:171
+#: ../src/seahorse-viewer.c:173
 msgid "_Help"
 msgstr "A_juda"
 
-#: ../src/seahorse-viewer.c:173
+#: ../src/seahorse-viewer.c:175
 msgid "Prefere_nces"
 msgstr "Preferè_ncies"
 
-#: ../src/seahorse-viewer.c:174
+#: ../src/seahorse-viewer.c:176
 msgid "Change preferences for this program"
 msgstr "Canvia les preferències per a aquest programa"
 
-#: ../src/seahorse-viewer.c:177
+#: ../src/seahorse-viewer.c:179
 msgid "About this program"
 msgstr "Quant a aquest programa"
 
-#: ../src/seahorse-viewer.c:178
+#: ../src/seahorse-viewer.c:180
 msgid "_Contents"
 msgstr "_Contingut"
 
-#: ../src/seahorse-viewer.c:179
+#: ../src/seahorse-viewer.c:181
 msgid "Show Seahorse help"
 msgstr "Mostra l'ajuda del Seahorse"
 
-#: ../src/seahorse-viewer.c:276
+#: ../src/seahorse-viewer.c:282
 msgid "Export public key"
 msgstr "Exporta una clau pública"
 
-#: ../src/seahorse-viewer.c:296
+#: ../src/seahorse-viewer.c:303
 msgid "Exporting keys"
 msgstr "S'estan exportant les claus"
 
-#: ../src/seahorse-viewer.c:321
+#: ../src/seahorse-viewer.c:332
 msgid "Couldn't retrieve data from key server"
 msgstr "No s'han pogut recuperar dades del servidor de claus"
 
 #. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:340
+#: ../src/seahorse-viewer.c:344
 msgid "Copied keys"
 msgstr "Claus copiades"
 
-#: ../src/seahorse-viewer.c:360
+#: ../src/seahorse-viewer.c:369
 msgid "Retrieving keys"
 msgstr "S'estan recuperant les claus"
 
-#: ../src/seahorse-viewer.c:375
-msgid "Couldn't delete."
-msgstr "No s'ha pogut suprimir."
-
-#: ../src/seahorse-viewer.c:409
-msgid "Deleting..."
-msgstr "S'està suprimint..."
-
-#: ../src/seahorse-viewer.c:435
+#: ../src/seahorse-viewer.c:424
 #, c-format
 msgid "%s is a private key. Are you sure you want to proceed?"
 msgstr "%s és una clau privada. Segur que voleu continuar?"
 
-#: ../src/seahorse-viewer.c:483
+#: ../src/seahorse-viewer.c:478
 msgid "Importing keys from key servers"
 msgstr "S'estan important claus dels servidors de claus"
 
-#: ../src/seahorse-viewer.c:509
+#: ../src/seahorse-viewer.c:503
 msgid "Show properties"
 msgstr "Mostra les propietats"
 
-#: ../src/seahorse-viewer.c:510
+#: ../src/seahorse-viewer.c:504
 msgctxt "This text refers to deleting an item from its type's backing store."
 msgid "_Delete"
 msgstr "_Suprimeix"
 
-#: ../src/seahorse-viewer.c:511
+#: ../src/seahorse-viewer.c:505
 msgid "Delete selected items"
 msgstr "Suprimeix els elements seleccionats"
 
-#: ../src/seahorse-viewer.c:515
+#: ../src/seahorse-viewer.c:509
 msgid "E_xport..."
 msgstr "E_xporta..."
 
-#: ../src/seahorse-viewer.c:516
+#: ../src/seahorse-viewer.c:510
 msgid "Export to a file"
 msgstr "Exporta a un fitxer"
 
-#: ../src/seahorse-viewer.c:518
+#: ../src/seahorse-viewer.c:512
 msgid "Copy to the clipboard"
 msgstr "Copia-ho al porta-retalls"
 
-#: ../src/seahorse-viewer.c:523
+#: ../src/seahorse-viewer.c:517
 msgid "Import selected keys to local key ring"
 msgstr "Importa les claus seleccionades a l'anell de claus local"
 
@@ -2825,11 +2278,11 @@ msgstr "Importa les claus seleccionades a l'anell de claus local"
 msgid "Enter your Secure Shell passphrase:"
 msgstr "Introduïu la contrasenya de l'intèrpret d'ordres segur:"
 
-#: ../ssh/seahorse-ssh-commands.c:85
+#: ../ssh/seahorse-ssh-commands.c:86
 msgid "Configure Key for _Secure Shell..."
 msgstr "Configura la clau per a l'intèrpret d'ordres _segur..."
 
-#: ../ssh/seahorse-ssh-commands.c:86
+#: ../ssh/seahorse-ssh-commands.c:87
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
@@ -2837,30 +2290,34 @@ msgstr ""
 "Envia la clau pública de l'intèrpret d'ordres segur a un altre ordinador, i "
 "habilita connexions que emprin aquesta clau."
 
-#: ../ssh/seahorse-ssh-commands.c:115
+#: ../ssh/seahorse-ssh-commands.c:118
 #, c-format
 msgid "Are you sure you want to delete the secure shell key '%s'?"
 msgstr "Segur que voleu suprimir la clau de l'intèrpret d'ordres segur «%s»?"
 
-#: ../ssh/seahorse-ssh-commands.c:118
+#: ../ssh/seahorse-ssh-commands.c:121
 #, c-format
 msgid "Are you sure you want to delete %d secure shell keys?"
 msgstr "Segur que voleu suprimir %d claus d'intèrpret d'ordres segur?"
 
-#: ../ssh/seahorse-ssh-generate.c:59 ../ssh/seahorse-ssh-key.c:91
-#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-commands.c:133
+msgid "Couldn't delete key"
+msgstr "No s'ha pogut suprimir la clau"
+
+#: ../ssh/seahorse-ssh-generate.c:60 ../ssh/seahorse-ssh-key.c:92
+#: ../ssh/seahorse-ssh-key.c:96 ../ssh/seahorse-ssh-key-properties.xml.h:19
 msgid "Secure Shell Key"
 msgstr "Clau d'intèrpret d'ordres segur"
 
-#: ../ssh/seahorse-ssh-generate.c:60
+#: ../ssh/seahorse-ssh-generate.c:61
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Emprades per accedir a ordinadors (p. ex.: via un terminal)"
 
-#: ../ssh/seahorse-ssh-generate.c:90
+#: ../ssh/seahorse-ssh-generate.c:116 ../ssh/seahorse-ssh-generate.c:135
 msgid "Couldn't generate Secure Shell key"
 msgstr "No s'ha pogut generar la clau per a l'intèrpret d'ordres segur"
 
-#: ../ssh/seahorse-ssh-generate.c:213
+#: ../ssh/seahorse-ssh-generate.c:203
 msgid "Creating Secure Shell Key"
 msgstr "S'està creant la clau per a l'intèrpret d'ordres segur"
 
@@ -2910,32 +2367,32 @@ msgstr "_Només crea la clau"
 msgid "_Key Description:"
 msgstr "_Descripció de la clau:"
 
-#: ../ssh/seahorse-ssh-key.c:87
+#: ../ssh/seahorse-ssh-key.c:88
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(No és possible llegir la clau de l'intèrpret d'ordres segur)"
 
 # La signatura/contrasenya (josep)
-#: ../ssh/seahorse-ssh-key.c:105
+#: ../ssh/seahorse-ssh-key.c:106
 msgid "Invalid"
 msgstr "No vàlida"
 
-#: ../ssh/seahorse-ssh-key.c:116
+#: ../ssh/seahorse-ssh-key.c:117
 msgid "Private Secure Shell Key"
 msgstr "Clau privada d'intèrpret d'ordres segur"
 
-#: ../ssh/seahorse-ssh-key.c:119
+#: ../ssh/seahorse-ssh-key.c:120
 msgid "Public Secure Shell Key"
 msgstr "Clau pública d'intèrpret d'ordres segur"
 
-#: ../ssh/seahorse-ssh-key-properties.c:71
+#: ../ssh/seahorse-ssh-key-properties.c:62
 msgid "Couldn't rename key."
 msgstr "No s'ha pogut canviar el nom a la clau."
 
-#: ../ssh/seahorse-ssh-key-properties.c:112
+#: ../ssh/seahorse-ssh-key-properties.c:115
 msgid "Couldn't change authorization for key."
 msgstr "No s'ha pogut canviar l'autorització de la clau."
 
-#: ../ssh/seahorse-ssh-key-properties.c:127
+#: ../ssh/seahorse-ssh-key-properties.c:150
 msgid "Couldn't change passphrase for key."
 msgstr "No s'ha pogut canviar la contrasenya de la clau."
 
@@ -2981,80 +2438,74 @@ msgstr ""
 msgid "Used to connect to other computers."
 msgstr "Emprades per connectar a altres ordinadors."
 
-#: ../ssh/seahorse-ssh-operation.c:143 ../ssh/seahorse-ssh-operation.c:732
-#, c-format
-msgid "The SSH command was terminated unexpectedly."
-msgstr "L'ordre SSH ha acabat inesperadament."
-
-#: ../ssh/seahorse-ssh-operation.c:151 ../ssh/seahorse-ssh-operation.c:739
-msgid "The SSH command failed."
-msgstr "Ha fallat l'ordre SSH."
-
-#: ../ssh/seahorse-ssh-operation.c:445 ../ssh/seahorse-ssh-operation.c:477
+#: ../ssh/seahorse-ssh-operation.c:204
 msgid "Secure Shell key"
 msgstr "Clau d'intèrpret d'ordres segur"
 
-#: ../ssh/seahorse-ssh-operation.c:448
-msgid "Passphrase:"
-msgstr "Contrasenya:"
+#: ../ssh/seahorse-ssh-operation.c:262
+msgid "The SSH command was terminated unexpectedly."
+msgstr "L'ordre SSH ha acabat inesperadament."
+
+#: ../ssh/seahorse-ssh-operation.c:270
+msgid "The SSH command failed."
+msgstr "Ha fallat l'ordre SSH."
 
 #. Just prompt over and over again
-#: ../ssh/seahorse-ssh-operation.c:762
+#: ../ssh/seahorse-ssh-operation.c:678
 msgid "Remote Host Password"
 msgstr "Contrasenya de l'ordinador remot"
 
-#: ../ssh/seahorse-ssh-operation.c:850
+#: ../ssh/seahorse-ssh-operation.c:808
 msgid "Old Key Passphrase"
 msgstr "Contrasenya de la clau antiga"
 
-#: ../ssh/seahorse-ssh-operation.c:851
+#: ../ssh/seahorse-ssh-operation.c:809
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "Introduïu una contrasenya antiga de: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:855
+#: ../ssh/seahorse-ssh-operation.c:813
 msgid "New Key Passphrase"
 msgstr "Contrasenya de la clau nova"
 
-#: ../ssh/seahorse-ssh-operation.c:856
+#: ../ssh/seahorse-ssh-operation.c:814
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "Introduïu una contrasenya nova de: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:864
+#: ../ssh/seahorse-ssh-operation.c:822
 msgid "Enter Key Passphrase"
 msgstr "Introduïu la contrasenya de la clau"
 
-#: ../ssh/seahorse-ssh-operation.c:931
+#: ../ssh/seahorse-ssh-operation.c:942
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Contrasenya per a la clau nova de l'intèrpret d'ordres segur"
 
-#: ../ssh/seahorse-ssh-operation.c:932
+#: ../ssh/seahorse-ssh-operation.c:943
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr ""
 "Introduïu una contrasenya per a la nova clau de l'intèrpret d'ordres segur."
 
-#: ../ssh/seahorse-ssh-operation.c:1013
+#: ../ssh/seahorse-ssh-operation.c:1085
 #, c-format
 msgid "Importing key: %s"
 msgstr "S'està important la clau: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:1015
+#: ../ssh/seahorse-ssh-operation.c:1087
 msgid "Importing key. Enter passphrase"
 msgstr "S'està important la clau. Introduïu la contrasenya"
 
-#: ../ssh/seahorse-ssh-source.c:825
+#: ../ssh/seahorse-ssh-source.c:915
 msgid "No private key file is available for this key."
 msgstr "No hi ha disponible cap fitxer de clau privada per aquesta clau."
 
-#: ../ssh/seahorse-ssh-upload.c:45
+#: ../ssh/seahorse-ssh-upload.c:47
 msgid "Couldn't configure Secure Shell keys on remote computer."
 msgstr ""
 "No s'han pogut configurar les claus de l'intèrpret d'ordres segur en "
 "l'ordinador remot."
 
-#. Show the progress window if necessary
-#: ../ssh/seahorse-ssh-upload.c:181
+#: ../ssh/seahorse-ssh-upload.c:132
 msgid "Configuring Secure Shell Keys..."
 msgstr "S'estan configurant les claus de l'intèrpret d'ordres segur..."
 
@@ -3086,6 +2537,430 @@ msgstr "Nom d'_usuari:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_Configuració"
+
+#~ msgid "Do not run seahorse-daemon as a daemon"
+#~ msgstr "No executis el seahorse-daemon com a un dimoni"
+
+#~ msgid "couldn't fork process"
+#~ msgstr "no s'ha pogut bifurcar el procés"
+
+#~ msgid "couldn't create new process group"
+#~ msgstr "no s'ha pogut crear un grup de procés nou"
+
+#~ msgid "Encryption Daemon (Seahorse)"
+#~ msgstr "Dimoni de xifratge (Seahorse)"
+
+#~ msgid "Invalid or unrecognized key type: %s"
+#~ msgstr "El tipus de clau no és vàlid o no s'ha reconegut: %s"
+
+#~ msgid "This keytype is not supported: %s"
+#~ msgstr "Aquest tipus de clau no està implementada: %s"
+
+#~ msgid "Support for this feature was not enabled at build time"
+#~ msgstr ""
+#~ "La compatibilitat amb aquesta funció no s'habilità en el moment de muntar"
+
+#~ msgid "Invalid or unrecognized key: %s"
+#~ msgstr "La clau no és vàlida o no s'ha reconegut: %s"
+
+# FIXME si "%s" és "dijous blah", l'article a "el %s" hi sobra (josep)
+#~ msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
+#~ msgstr "Signat per <i><key id='%s'/>, <b>expirà</b></i> el %s."
+
+#~ msgid "Invalid Signature"
+#~ msgstr "La signatura no és vàlida"
+
+#~ msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
+#~ msgstr "Signat per <i><key id='%s'/></i> el %s <b>Expirat</b>."
+
+#~ msgid "Expired Signature"
+#~ msgstr "La signatura ha vençut"
+
+#~ msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
+#~ msgstr "Signat per <i><key id='%s'/>, <b>revocat</b></i> el %s."
+
+#~ msgid "Revoked Signature"
+#~ msgstr "La signatura ha estat revocada"
+
+#~ msgid "Signed by <i><key id='%s'/></i> on %s."
+#~ msgstr "Signat per <i><key id='%s'/></i> el %s."
+
+#~ msgid "Good Signature"
+#~ msgstr "La signatura és bona"
+
+#~ msgid "Signing key not in keyring."
+#~ msgstr "La clau de signatura no és a l'anell de claus."
+
+#~ msgid "Unknown Signature"
+#~ msgstr "La signatura és desconeguda"
+
+#~ msgid "Bad or forged signature. The signed data was modified."
+#~ msgstr ""
+#~ "La signatura no és bona, o bé ha estat falsificada. Les dades signades "
+#~ "han estat modificades."
+
+#~ msgid "Bad Signature"
+#~ msgstr "La signatura no és bona"
+
+#~ msgid "Couldn't verify signature."
+#~ msgstr "No s'ha pogut verificar la signatura."
+
+#~ msgid "Invalid or unrecognized signer: %s"
+#~ msgstr "El signant no és vàlid o no s'ha reconegut: %s"
+
+#~ msgid "Key is not valid for signing: %s"
+#~ msgstr "La clau no és vàlida per signar: %s"
+
+#~ msgid "Invalid or unrecognized recipient: %s"
+#~ msgstr "El destinatari no és vàlid o no s'ha reconegut: %s"
+
+# FIXME
+#~ msgid "Key is not a valid recipient for encryption: %s"
+#~ msgstr "La clau del destinatari no és vàlida per xifrar: %s"
+
+#~ msgid "No recipients specified"
+#~ msgstr "No s'ha especificat cap destinatari"
+
+#~ msgid "Invalid key type for decryption: %s"
+#~ msgstr "La clau no és del tipus adequat per desxifrar: %s"
+
+#~ msgid "Please set clearuri"
+#~ msgstr "Establiu el clearuri"
+
+#~ msgid "Please set crypturi"
+#~ msgstr "Establiu el crypturi"
+
+#~ msgid "Error opening clearuri"
+#~ msgstr "S'ha produït un error en obrir el clearuri"
+
+#~ msgid "No signer specified"
+#~ msgstr "No s'ha especificat cap firmant"
+
+#~ msgid "Invalid key type for verifying: %s"
+#~ msgstr "La clau no és del tipus adequat per verificar: %s"
+
+#~ msgid "Invalid key id: %s"
+#~ msgstr "L'identificador de la clau no és vàlid: %s"
+
+#~ msgid ""
+#~ "A list of key server URIs to search for remote PGP keys. In later "
+#~ "versions a display name can be included, by appending a space and then "
+#~ "the name."
+#~ msgstr ""
+#~ "Una llista d'URI de servidors de claus on cercar claus PGP remotes. En "
+#~ "versions recents s'hi pot incloure un nom descriptiu, afegint un espai i "
+#~ "després el nom."
+
+#~ msgid "Auto Retrieve Keys"
+#~ msgstr "Recupera les claus automàticament"
+
+#~ msgid "Auto Sync Keys"
+#~ msgstr "Sincronitza les claus automàticament"
+
+#~ msgid "Controls the visibility of the expires column for the key manager."
+#~ msgstr ""
+#~ "Controla la visibilitat de la columna venciment en el gestor de claus."
+
+#~ msgid "Controls the visibility of the trust column for the key manager."
+#~ msgstr ""
+#~ "Controla la visibilitat de la columna confiança en el gestor de claus."
+
+#~ msgid "Controls the visibility of the type column for the key manager."
+#~ msgstr "Controla la visibilitat de la columna tipus en el gestor de claus."
+
+#~ msgid "Controls the visibility of the validity column for the key manager."
+#~ msgstr ""
+#~ "Controla la visibilitat de la columna validesa en el gestor de claus."
+
+#~ msgid "Enable DNS-SD sharing"
+#~ msgstr "Habilita la compartició amb DNS-SD"
+
+#~ msgid ""
+#~ "Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be "
+#~ "running and must be built with HKP and DNS-SD support."
+#~ msgstr ""
+#~ "Habilita la compartició de claus amb DNS-SD (Apple Bonjour). El seahorse-"
+#~ "daemon s'ha d'executar i s'ha d'haver muntat per permetre l'ús de HKP i "
+#~ "DNS-SD."
+
+#~ msgid "ID of the default key"
+#~ msgstr "ID de la clau predeterminada"
+
+#~ msgid ""
+#~ "If set to true, then files encrypted with seahorse will be ASCII armor "
+#~ "encoded."
+#~ msgstr ""
+#~ "Si s'estableix a cert, es codificaran els fitxers xifrats amb el "
+#~ "seahorse  amb una armadura ASCII."
+
+#~ msgid ""
+#~ "If set to true, then the default key will always be added to an "
+#~ "encryption recipients list."
+#~ msgstr ""
+#~ "Si s'estableix a cert, sempre s'afegirà la clau predeterminada a la "
+#~ "llista de destinataris."
+
+#~ msgid "Last key server search pattern"
+#~ msgstr "Darrer patró de cerca en un servidor de claus"
+
+#~ msgid "Last key servers used"
+#~ msgstr "Darrers servidors de claus emprats"
+
+#~ msgid "Last key used to sign a message."
+#~ msgstr "Darrera clau emprada per signar un missatge."
+
+#~ msgid "PGP Key servers"
+#~ msgstr "Servidors de claus PGP"
+
+#~ msgid "Publish keys to this key server."
+#~ msgstr "Publica les claus a aquest servidor de claus."
+
+#~ msgid "Show expires column in key manager"
+#~ msgstr "Mostra la columna venciment en el gestor de claus"
+
+#~ msgid "Show trust column in key manager"
+#~ msgstr "Mostra la columna confiança en el gestor de claus"
+
+#~ msgid "Show type column in key manager"
+#~ msgstr "Mostra la columna tipus en el gestor de claus"
+
+#~ msgid "Show validity column in key manager"
+#~ msgstr "Mostra la columna validesa en el gestor de claus"
+
+#~ msgid ""
+#~ "Specify the column to sort the recipients window by. Columns are: 'name' "
+#~ "and 'id'. Put a '-' in front of the column name to sort in descending "
+#~ "order."
+#~ msgstr ""
+#~ "Especifiqueu la columna amb la qual s'ordenarà la finestra de "
+#~ "destinataris. Les columnes són: «name», i «id». Poseu un «-» al davant "
+#~ "del nom de la columna per ordenar-la al revés."
+
+#~ msgid ""
+#~ "Specify the column to sort the seahorse key manager main window by. "
+#~ "Columns are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. "
+#~ "Put a '-' in front of the column name to sort in descending order."
+#~ msgstr ""
+#~ "Especifiqueu la columna amb la qual s'ordenarà la finestra principal del "
+#~ "gestor de claus Seahorse. Les columnes són: «name», «id», «validity», "
+#~ "«expires», «trust», «length» i «type». Poseu un «-» al davant del nom de "
+#~ "la columna per ordenar-la al revés."
+
+#~ msgid "The ID of the last secret key used to sign a message."
+#~ msgstr "L'ID de la darrera clau secreta emprada per signar un missatge."
+
+#~ msgid "The column to sort the recipients by"
+#~ msgstr "La columna amb la qual ordenar els destinataris"
+
+#~ msgid "The column to sort the seahorse keys by"
+#~ msgstr "La columna amb la qual ordenar les claus del seahorse"
+
+#~ msgid ""
+#~ "The key server to publish PGP keys to. Or empty to suppress publishing of "
+#~ "PGP keys."
+#~ msgstr ""
+#~ "El servidor de claus on publicar les claus PGP. Deixeu-ho buit per no "
+#~ "publicar les claus PGP."
+
+#~ msgid ""
+#~ "The last key server a search was performed against or empty for all key "
+#~ "servers."
+#~ msgstr ""
+#~ "El darrer servidor de claus on es va fer una cerca, o buit per a tots els "
+#~ "servidors de claus."
+
+#~ msgid "The last search pattern searched for against a key server."
+#~ msgstr ""
+#~ "El darrer patró de cerca fet servir per cercar en un servidor de claus."
+
+#~ msgid ""
+#~ "This specifies the default key to use for certain operations, mainly "
+#~ "signing."
+#~ msgstr ""
+#~ "Això especifica la clau predeterminada que s'emprarà per certes "
+#~ "operacions, principalment de signat."
+
+#~ msgid ""
+#~ "Whether or not keys should be automatically retrieved from key servers."
+#~ msgstr ""
+#~ "Si les claus s'han de recuperar automàticament dels servidors de claus."
+
+#~ msgid ""
+#~ "Whether or not modified keys should be automatically synced with the "
+#~ "default key server."
+#~ msgstr ""
+#~ "Si les claus modificades s'han de sincronitzar automàticament amb el "
+#~ "servidor de claus per defecte."
+
+#~ msgid "Whether to always encrypt to default key"
+#~ msgstr "Si sempre es xifra amb la clau predeterminada"
+
+#~ msgid "Whether to use ASCII Armor"
+#~ msgstr "Si s'ha de fer servir una armadura ASCII"
+
+#~ msgid "Couldn't set application access."
+#~ msgstr "No s'ha pogut establir l'accés de l'aplicació."
+
+#~ msgid "<b>Path:</b>"
+#~ msgstr "<b>Camí:</b>"
+
+#
+#~ msgid "<b>Permissions:</b>"
+#~ msgstr "<b>Permisos:</b>"
+
+#~ msgid "Applications"
+#~ msgstr "Aplicacions"
+
+#~ msgid "_Read"
+#~ msgstr "_Lectura"
+
+#~ msgid "_Write"
+#~ msgstr "_Escriptura"
+
+#~ msgctxt "infinitive"
+#~ msgid "_Delete"
+#~ msgstr "_Suprimeix"
+
+#~ msgid "Saving item..."
+#~ msgstr "S'està desant l'element..."
+
+#~ msgid "Listing password keyrings"
+#~ msgstr "S'estan llistant els anells de claus de contrasenyes"
+
+#~ msgid ""
+#~ "No encryption keys were found with which to perform the operation you "
+#~ "requested.  The program <b>Passwords and Encryption Keys</b> will now be "
+#~ "started so that you may either create a key or import one."
+#~ msgstr ""
+#~ "No s'ha trobat cap clau de xifratge amb la qual realitzar l'acció que heu "
+#~ "sol·licitat. S'iniciarà el programa <b>Contrasenyes i claus de xifratge</"
+#~ "b> de manera que pugueu crear una clau, o bé importar-ne una."
+
+#~ msgid "All Keys"
+#~ msgstr "Totes les claus"
+
+#~ msgid "Selected Recipients"
+#~ msgstr "Els destinataris seleccionats"
+
+#~ msgid "Search Results"
+#~ msgstr "Resultats de la cerca"
+
+#~ msgid "Search _for:"
+#~ msgstr "Ce_rca:"
+
+#~ msgid "None (Don't Sign)"
+#~ msgstr "Cap (no signis)"
+
+#~ msgid "Sign this message as %s"
+#~ msgstr "Signa el missatge com a %s"
+
+#~ msgid "_Sign message as:"
+#~ msgstr "_Signa el missatge com a:"
+
+#~ msgid "File is not a valid .desktop file"
+#~ msgstr "El fitxer no és un fitxer .desktop vàlid"
+
+#~ msgid "Unrecognized desktop file Version '%s'"
+#~ msgstr "No s'ha reconegut la versió «%s» del fitxer d'escriptori"
+
+#~ msgid "Starting %s"
+#~ msgstr "S'està iniciant %s"
+
+#~ msgid "Application does not accept documents on command line"
+#~ msgstr "L'aplicació no accepta documents des de la línia d'ordres"
+
+#~ msgid "Unrecognized launch option: %d"
+#~ msgstr "No s'ha reconegut l'opció de llançament: %d"
+
+#~ msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
+#~ msgstr ""
+#~ "No es poden passar URI de documents a una entrada d'escriptori de tipus "
+#~ "«Type=Link»"
+
+#~ msgid "Not a launchable item"
+#~ msgstr "No és un element executable"
+
+#~ msgid "Disable connection to session manager"
+#~ msgstr "Inhabilita la connexió al gestor de sessió"
+
+#~ msgid "Specify file containing saved configuration"
+#~ msgstr "Especifica el fitxer que conté la configuració desada"
+
+#~ msgid "FILE"
+#~ msgstr "FITXER"
+
+#~ msgid "Specify session management ID"
+#~ msgstr "Especifica l'identificador del gestor de sessió"
+
+#~ msgid "Session management options:"
+#~ msgstr "Opcions del gestor de sessió:"
+
+#~ msgid "Show session management options"
+#~ msgstr "Mostra les opcions del gestor de sessió"
+
+#~ msgid "Key Imported"
+#~ msgid_plural "Keys Imported"
+#~ msgstr[0] "S'ha importat la clau"
+#~ msgstr[1] "S'han importat les claus"
+
+#~ msgid "Imported %i key"
+#~ msgid_plural "Imported %i keys"
+#~ msgstr[0] "S'ha importat %i clau"
+#~ msgstr[1] "S'han importat %i claus"
+
+#~ msgid "Imported a key for"
+#~ msgid_plural "Imported keys for"
+#~ msgstr[0] "Clau importada per a"
+#~ msgstr[1] "Claus importades per a"
+
+#~ msgid "Notification Messages"
+#~ msgstr "Missatges de notificació"
+
+# FIXME
+#~ msgid "Progress Title"
+#~ msgstr "Títol del progrés"
+
+#~ msgid "Couldn't run file-roller"
+#~ msgstr "No s'ha pogut executar el file-roller"
+
+#~ msgid "Couldn't package files"
+#~ msgstr "No s'han pogut empaquetar els fitxers"
+
+#~ msgid "The file-roller process did not complete successfully"
+#~ msgstr "El procés del gestor d'arxius no s'ha executat correctament"
+
+#~ msgid "Loading Keys..."
+#~ msgstr "S'estan carregant claus..."
+
+#~ msgid "Searching for keys..."
+#~ msgstr "S'estan cercant claus..."
+
+#~ msgid "Uploading keys..."
+#~ msgstr "S'estan carregant claus..."
+
+#~ msgid "Retrieving keys..."
+#~ msgstr "S'estan recuperant claus..."
+
+#~ msgid "Searching for keys on: %s"
+#~ msgstr "S'estan cercant claus a: %s"
+
+#~ msgid "Searching for keys containing '%s'..."
+#~ msgstr "S'estan cercant claus que continguin «%s»..."
+
+#~ msgid "Searching for key id '%s'..."
+#~ msgstr "S'està cercant la clau amb l'identificador «%s»..."
+
+#~ msgid "Retrieving remote keys..."
+#~ msgstr "S'estan recuperant claus remotes..."
+
+#~ msgid "Sending keys to key server..."
+#~ msgstr "S'estan enviant claus al servidor..."
+
+#~ msgid "Synchronizing keys"
+#~ msgstr "Sincronització de claus"
+
+#~ msgid "Passphrase:"
+#~ msgstr "Contrasenya:"
 
 #~ msgid "Couldn't share keys"
 #~ msgstr "No s'han pogut compartir les claus"
@@ -3189,9 +3064,6 @@ msgstr "_Configuració"
 
 #~ msgid "Unavailable Key"
 #~ msgstr "La clau no està disponible"
-
-#~ msgid "Retrieving key"
-#~ msgstr "S'està recuperant la clau"
 
 #~ msgid "Removing item"
 #~ msgstr "S'està suprimint l'element"
@@ -3603,8 +3475,8 @@ msgstr "_Configuració"
 
 #~ msgid "Use PGP/GPG to encrypt/decrypt/sign/verify/import the clipboard."
 #~ msgstr ""
-#~ "Empra el PGP/GPG per xifrar, desxifrar, signar, verificar, o importar "
-#~ "el porta-retalls."
+#~ "Empra el PGP/GPG per xifrar, desxifrar, signar, verificar, o importar el "
+#~ "porta-retalls."
 
 #~ msgid "Choose Recipient Keys"
 #~ msgstr "Trieu les claus dels destinataris"
@@ -3850,9 +3722,6 @@ msgstr "_Configuració"
 #~ msgid "Couldn't sign file: %s"
 #~ msgstr "No s'ha pogut signar el fitxer: %s"
 
-#~ msgid "Importing"
-#~ msgstr "S'està important"
-
 #~ msgid "Couldn't import keys from file: %s"
 #~ msgstr "No s'han pogut importar les claus del fitxer: %s"
 
@@ -3986,8 +3855,8 @@ msgstr "_Configuració"
 #~ "<b>Note:</b> The 'seahorse-agent' program has been started. This program "
 #~ "is necessary in order to cache passphrases. "
 #~ msgstr ""
-#~ "<b>Nota:</b> S'ha iniciat el programa «seahorse-agent». Aquest programa és "
-#~ "necessari per a poder encauar contrasenyes. "
+#~ "<b>Nota:</b> S'ha iniciat el programa «seahorse-agent». Aquest programa "
+#~ "és necessari per a poder encauar contrasenyes. "
 
 #~ msgid ""
 #~ "<b>Warning:</b> The 'seahorse-agent' program is not running. This program "
@@ -4224,7 +4093,8 @@ msgstr "_Configuració"
 
 #~ msgid ""
 #~ "The program 'seahorse-daemon' is necessary for the caching of passphrases"
-#~ msgstr "Cal el programa «seahorse-daemon» per a poder encauar contrasenyes. "
+#~ msgstr ""
+#~ "Cal el programa «seahorse-daemon» per a poder encauar contrasenyes. "
 
 #~ msgid "_Armor Encode Files"
 #~ msgstr "Codifica amb _armadura els fitxers"
