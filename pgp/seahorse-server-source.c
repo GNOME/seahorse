@@ -360,7 +360,7 @@ seahorse_server_source_new (const gchar *server)
         } else
 #endif /* WITH_HKP */
         
-            g_warning ("unsupported key server uri scheme: %s", scheme);
+            g_message ("unsupported key server uri scheme: %s", scheme);
     }
     
     g_free (uri);
