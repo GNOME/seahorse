@@ -36,7 +36,6 @@
  * 
  * markup: string: The markup string label of this object.
  * identifier: string: The displayable key identifier for this object.
- * description: string: The description of the type of object.
  *
  * The following can optionally be set:
  *  
@@ -106,8 +105,6 @@ const gchar*        seahorse_object_get_markup             (SeahorseObject *self
 
 const gchar*        seahorse_object_get_identifier         (SeahorseObject *self);
 
-const gchar*        seahorse_object_get_description        (SeahorseObject *self);
-
 const gchar*        seahorse_object_get_nickname           (SeahorseObject *self);
 
 const gchar*        seahorse_object_get_icon               (SeahorseObject *self);
@@ -118,10 +115,6 @@ SeahorseLocation    seahorse_object_get_location           (SeahorseObject *self
 SeahorseUsage       seahorse_object_get_usage              (SeahorseObject *self);
 
 guint               seahorse_object_get_flags              (SeahorseObject *self);
-
-gboolean            seahorse_object_lookup_property        (SeahorseObject *self, 
-                                                            const gchar *field, 
-                                                            GValue *value);
 
 typedef gboolean (*SeahorseObjectPredicateFunc) (SeahorseObject *obj, void *user_data);
 

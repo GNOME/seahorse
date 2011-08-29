@@ -125,7 +125,6 @@ seahorse_gkr_keyring_realize (SeahorseGkrKeyring *self)
 	              "markup", markup,
 	              "nickname", self->pv->keyring_name,
 	              "identifier", "",
-	              "description", "",
 	              "flags", SEAHORSE_FLAG_DELETABLE,
 	              "icon", "folder",
 	              "usage", SEAHORSE_USAGE_OTHER,

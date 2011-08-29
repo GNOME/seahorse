@@ -125,7 +125,7 @@ seahorse_gpgme_expires_new (SeahorseGpgmeSubkey *subkey, GtkWindow *parent)
 			gtk_calendar_select_day (GTK_CALENDAR (date), t.tm_mday);
 		}
 	}
-	
+
 	label = seahorse_pgp_subkey_get_description (SEAHORSE_PGP_SUBKEY (subkey));
 	title = g_strdup_printf (_("Expiry: %s"), label);
 	gtk_window_set_title (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)), title);

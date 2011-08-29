@@ -43,7 +43,6 @@
  * @PROP_LABEL:
  * @PROP_MARKUP:
  * @PROP_NICKNAME:
- * @PROP_DESCRIPTION:
  * @PROP_ICON:
  * @PROP_IDENTIFIER:
  * @PROP_LOCATION:
@@ -61,7 +60,6 @@ enum _SeahorseObjectProps {
 	PROP_LABEL,
 	PROP_MARKUP,
 	PROP_NICKNAME,
-	PROP_DESCRIPTION,
 	PROP_ICON,
 	PROP_IDENTIFIER,
 	PROP_LOCATION,
@@ -84,8 +82,6 @@ enum _SeahorseObjectProps {
  * @markup_explicit: If TRUE the markup will not be set automatically
  * @nickname: DBUS: "simple-name"
  * @nickname_explicit: If TRUE the nickname will not be set automatically
- * @description:  Description text DBUS: "key-desc"
- * @description_explicit: If TRUE the description will not be set automatically
  * @icon: DBUS: "stock-id"
  * @identifier: DBUS: "key-id", "display-id", "raw-id"
  * @identifier_explicit:
@@ -109,8 +105,6 @@ struct _SeahorseObjectPrivate {
     gboolean markup_explicit;
     gchar *nickname;
     gboolean nickname_explicit;
-    gchar *description;
-    gboolean description_explicit;
     gchar *icon;
     gchar *identifier;
     gboolean identifier_explicit;
@@ -293,52 +287,6 @@ recalculate_label (SeahorseObject *self)
 	}
 }
 
-/**
- * recalculate_usage:
- * @self: The #SeahorseObject to recalculate the usage decription for
- *
- * Basing on the usage identifiere this function will calculate a usage
- * description and store it in the object.
- *
- */
-static void
-recalculate_usage (SeahorseObject *self)
-{
-	const gchar *desc;
-	
-	if (!self->pv->description_explicit) {
-		
-		switch (self->pv->usage) {
-		case SEAHORSE_USAGE_SYMMETRIC_KEY:
-			desc = _("Symmetric Key");
-			break;
-		case SEAHORSE_USAGE_PUBLIC_KEY:
-			desc = _("Public Key");
-			break;
-		case SEAHORSE_USAGE_PRIVATE_KEY:
-			desc = _("Private Key");
-			break;
-		case SEAHORSE_USAGE_CREDENTIALS:
-			desc = _("Credentials");
-			break;
-		case SEAHORSE_USAGE_IDENTITY:
-		    /*
-		     * Translators: "This object is a means of storing items such as 
-		     * name, email address, etc. that make up one's digital identity.
-		     */
-			desc = _("Identity");
-			break;
-		default:
-			desc = "";
-			break;
-		}
-		
-		if (set_string_storage (desc, &self->pv->description))
-			g_object_notify (G_OBJECT (self), "description");
-	}
-}
-
-
 /* -----------------------------------------------------------------------------
  * OBJECT 
  */
@@ -357,7 +305,6 @@ seahorse_object_init (SeahorseObject *self)
 	                                        SeahorseObjectPrivate);
 	self->pv->label = g_strdup ("");
 	self->pv->markup = g_strdup ("");
-	self->pv->description = g_strdup ("");
 	self->pv->icon = g_strdup ("gtk-missing-image");
 	self->pv->identifier = g_strdup ("");
 	self->pv->location = SEAHORSE_LOCATION_INVALID;
@@ -446,10 +393,7 @@ seahorse_object_finalize (GObject *obj)
 	
 	g_free (self->pv->nickname);
 	self->pv->nickname = NULL;
-	
-	g_free (self->pv->description);
-	self->pv->description = NULL;
-	
+
 	g_free (self->pv->icon);
 	self->pv->icon = NULL;
 	
@@ -503,9 +447,6 @@ seahorse_object_get_property (GObject *obj, guint prop_id, GValue *value,
 		break;
 	case PROP_MARKUP:
 		g_value_set_string (value, seahorse_object_get_markup (self));
-		break;
-	case PROP_DESCRIPTION:
-		g_value_set_string (value, seahorse_object_get_description (self));
 		break;
 	case PROP_ICON:
 		g_value_set_string (value, seahorse_object_get_icon (self));
@@ -604,12 +545,6 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 			g_object_notify (obj, "markup");
 		}
 		break;
-	case PROP_DESCRIPTION:
-		if (set_string_storage (g_value_get_string (value), &self->pv->description)) {
-			self->pv->description_explicit = TRUE;
-			g_object_notify (obj, "description");
-		}
-		break;
 	case PROP_ICON:
 		if (set_string_storage (g_value_get_string (value), &self->pv->icon))
 			g_object_notify (obj, "icon");
@@ -633,7 +568,6 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 			self->pv->usage = usage;
 			g_object_freeze_notify (obj);
 			g_object_notify (obj, "usage");
-			recalculate_usage (self);
 			g_object_thaw_notify (obj);
 		}
 		break;
@@ -709,11 +643,7 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
 	g_object_class_install_property (gobject_class, PROP_MARKUP,
 	           g_param_spec_string ("markup", "Object Display Markup", "This object's displayable markup.", 
 	                                "", G_PARAM_READWRITE));
-	
-	g_object_class_install_property (gobject_class, PROP_DESCRIPTION,
-	           g_param_spec_string ("description", "Object Description", "Description of the type of object", 
-	                                "", G_PARAM_READWRITE));
-	
+
 	g_object_class_install_property (gobject_class, PROP_IDENTIFIER,
 	           g_param_spec_string ("identifier", "Object Identifier", "Displayable ID for the object.", 
 	                                "", G_PARAM_READWRITE));
@@ -960,19 +890,6 @@ seahorse_object_get_nickname (SeahorseObject *self)
 }
 
 /**
- * seahorse_object_get_description:
- * @self: Object
- *
- * Returns: the description of the object @self
- */
-const gchar*
-seahorse_object_get_description (SeahorseObject *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	return self->pv->description;
-}
-
-/**
  * seahorse_object_get_icon:
  * @self: Object
  *
@@ -1035,60 +952,6 @@ seahorse_object_get_flags (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
 	return self->pv->flags;	
-}
-
-/**
- * seahorse_object_lookup_property:
- * @self: the object to look up the property
- * @field: the field to lookup
- * @value: the returned value
- *
- * Looks up the property @field in the object @self and returns it in @value
- *
- * Returns: TRUE if a property was found
- */
-gboolean
-seahorse_object_lookup_property (SeahorseObject *self, const gchar *field, GValue *value)
-{
-	GParamSpec *spec;
-	
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), FALSE);
-	g_return_val_if_fail (field, FALSE);
-	g_return_val_if_fail (value, FALSE);
-	
-	spec = g_object_class_find_property (G_OBJECT_GET_CLASS (self), field);
-	if (!spec) {
-		/* Some name mapping to new style names */
-		if (g_str_equal (field, "simple-name"))
-			field = "nickname";
-		else if (g_str_equal (field, "key-id"))
-			field = "identifier";
-		else if (g_str_equal (field, "display-name"))
-			field = "label";
-		else if (g_str_equal (field, "key-desc"))
-			field = "description";
-		else if (g_str_equal (field, "ktype"))
-			field = "tag";
-		else if (g_str_equal (field, "etype"))
-			field = "usage";
-		else if (g_str_equal (field, "display-id"))
-			field = "identifier";
-		else if (g_str_equal (field, "stock-id"))
-			field = "icon";
-		else if (g_str_equal (field, "raw-id"))
-			field = "identifier";
-		else 
-			return FALSE;
-	
-		/* Try again */
-		spec = g_object_class_find_property (G_OBJECT_GET_CLASS (self), field);
-		if (!spec)
-			return FALSE;
-	}
-
-	g_value_init (value, spec->value_type);
-	g_object_get_property (G_OBJECT (self), field, value);
-	return TRUE; 
 }
 
 /**

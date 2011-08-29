@@ -426,18 +426,10 @@ calc_item_type (SeahorseGkrItem *self)
 void
 seahorse_gkr_item_realize (SeahorseGkrItem *self)
 {
-	const gchar *description;
 	gchar *display;
 	gchar *markup;
 	gchar *identifier;
 	const gchar *icon;
-
-	if (is_network_item (self, "http")) 
-		description = _("Web Password");
-	else if (is_network_item (self, NULL)) 
-		description = _("Network Password");
-	else
-		description = _("Password");
 
 	display = calc_display_name (self, TRUE);
 	markup = calc_name_markup(self);
@@ -465,7 +457,6 @@ seahorse_gkr_item_realize (SeahorseGkrItem *self)
 		      "icon", icon,
 		      "markup", markup,
 		      "identifier", identifier,
-		      "description", description,
 		      "flags", SEAHORSE_FLAG_DELETABLE,
 		      NULL);
 	

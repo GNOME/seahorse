@@ -364,10 +364,10 @@ seahorse_pgp_subkey_calc_description (const gchar *name, guint index)
 {
 	if (name == NULL)
 		name = _("Key");
-	
+
 	if (index == 0)
 		return g_strdup (name);
-	
+
 	return g_strdup_printf (_("Subkey %d of %s"), index, name);
 }
 

@@ -91,8 +91,8 @@ const gchar*        seahorse_pgp_subkey_get_description   (SeahorsePgpSubkey *se
 void                seahorse_pgp_subkey_set_description   (SeahorsePgpSubkey *self,
                                                            const gchar *description);
 
-gchar*              seahorse_pgp_subkey_calc_description  (const gchar *name, 
-                                                           guint index); 
+gchar*              seahorse_pgp_subkey_calc_description  (const gchar *name,
+                                                           guint index);
 
 const gchar*        seahorse_pgp_subkey_get_fingerprint   (SeahorsePgpSubkey *self);
 

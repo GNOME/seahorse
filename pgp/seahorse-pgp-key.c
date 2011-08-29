@@ -172,7 +172,7 @@ void
 seahorse_pgp_key_realize (SeahorsePgpKey *self)
 {
 	const gchar *nickname, *keyid;
-	const gchar *description, *icon;
+	const gchar *icon;
 	gchar *markup, *name, *identifier;
 	SeahorseUsage usage;
 	GList *subkeys;
@@ -193,10 +193,8 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
 
 	/* The type */
 	if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
-		description = _("Private PGP Key");
 		icon = SEAHORSE_STOCK_SECRET;
 	} else {
-		description = _("Public PGP Key");
 		icon = SEAHORSE_STOCK_KEY;
 		if (usage == SEAHORSE_USAGE_NONE)
 			g_object_set (self, "usage", SEAHORSE_USAGE_PUBLIC_KEY, NULL);
@@ -207,7 +205,6 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
 		      "markup", markup,
 		      "nickname", nickname,
 		      "identifier", identifier,
-		      "description", description,
 		      "icon", icon,
 		      NULL);
 		

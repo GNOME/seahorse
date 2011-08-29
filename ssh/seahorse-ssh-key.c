@@ -71,7 +71,6 @@ changed_key (SeahorseSSHKey *self)
 {
 	SeahorseObject *obj = SEAHORSE_OBJECT (self);
 	SeahorseUsage usage;
-	const gchar *description = NULL;
 	const gchar *display = NULL;
 	gchar *identifier;
 	gchar *simple = NULL;
@@ -103,7 +102,6 @@ changed_key (SeahorseSSHKey *self)
 		              "label", "",
 		              "icon", NULL,
 		              "usage", SEAHORSE_USAGE_NONE,
-		              "description", _("Invalid"),		              
 		              "nickname", "",
 		              "location", SEAHORSE_LOCATION_INVALID,
 		              "flags", SEAHORSE_FLAG_DISABLED,
@@ -112,14 +110,11 @@ changed_key (SeahorseSSHKey *self)
 		
 	} 
 
-	if (self->keydata->privfile) {
+	if (self->keydata->privfile)
 		usage = SEAHORSE_USAGE_PRIVATE_KEY;
-		description = _("Private Secure Shell Key");
-	} else {
+	else
 		usage = SEAHORSE_USAGE_PUBLIC_KEY;
-		description = _("Public Secure Shell Key");
-	}
-	
+
 	identifier = seahorse_ssh_key_calc_identifier (self->keydata->fingerprint);
 
 	g_object_set (obj,
@@ -128,7 +123,6 @@ changed_key (SeahorseSSHKey *self)
 	              "icon", SEAHORSE_STOCK_KEY_SSH,
 	              "usage", usage,
 	              "nickname", simple,
-	              "description", description,
 	              "location", SEAHORSE_LOCATION_LOCAL,
 	              "identifier", identifier,
 	              "flags", (self->keydata->authorized ? SEAHORSE_FLAG_TRUSTED : 0) | SEAHORSE_FLAG_EXPORTABLE | SEAHORSE_FLAG_DELETABLE,
