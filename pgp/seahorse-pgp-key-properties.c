@@ -1864,18 +1864,15 @@ seahorse_pgp_key_properties_show (SeahorsePgpKey *pkey, GtkWindow *parent)
     SeahorseObject *sobj = SEAHORSE_OBJECT (pkey);
     SeahorseSource *sksrc;
     SeahorseWidget *swidget;
-    gboolean remote;
-
-    remote = seahorse_object_get_location (sobj) == SEAHORSE_LOCATION_REMOTE;
 
     /* Reload the key to make sure to get all the props */
     sksrc = seahorse_object_get_source (sobj);
     g_return_if_fail (sksrc != NULL);
     
     /* Don't trigger the import of remote keys if possible */
-    if (!remote) {
+    if (SEAHORSE_IS_GPGME_KEY (pkey)) {
         /* This causes the key source to get any specific info about the key */
-        seahorse_object_refresh (SEAHORSE_OBJECT (pkey));
+        seahorse_gpgme_key_refresh (SEAHORSE_GPGME_KEY (pkey));
         sobj = seahorse_context_get_object (SCTX_APP(), sksrc, seahorse_object_get_id (sobj));
         g_return_if_fail (sobj != NULL);
     }

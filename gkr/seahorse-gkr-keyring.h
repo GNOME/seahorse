@@ -52,6 +52,10 @@ GType                seahorse_gkr_keyring_get_type         (void);
 
 SeahorseGkrKeyring*  seahorse_gkr_keyring_new              (const gchar *keyring_name);
 
+void                 seahorse_gkr_keyring_refresh          (SeahorseGkrKeyring *self);
+
+void                 seahorse_gkr_keyring_realize          (SeahorseGkrKeyring *self);
+
 const gchar*         seahorse_gkr_keyring_get_name         (SeahorseGkrKeyring *self);
 
 GnomeKeyringInfo*    seahorse_gkr_keyring_get_info         (SeahorseGkrKeyring *self);

@@ -157,11 +157,10 @@ calc_trust (SeahorseSSHKey *skey)
  * OBJECT 
  */
 
-static void
-seahorse_ssh_key_refresh (SeahorseObject *sobj)
+void
+seahorse_ssh_key_refresh (SeahorseSSHKey *self)
 {
 	/* TODO: Need to work on key refreshing */
-	SEAHORSE_OBJECT_CLASS (seahorse_ssh_key_parent_class)->refresh (sobj);
 }
 
 static void
@@ -232,16 +231,13 @@ static void
 seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    SeahorseObjectClass *seahorse_class = SEAHORSE_OBJECT_CLASS (klass);
-    
+
     seahorse_ssh_key_parent_class = g_type_class_peek_parent (klass);
     
     gobject_class->finalize = seahorse_ssh_key_finalize;
     gobject_class->set_property = seahorse_ssh_key_set_property;
     gobject_class->get_property = seahorse_ssh_key_get_property;
 
-    seahorse_class->refresh = seahorse_ssh_key_refresh;
-    
     g_object_class_install_property (gobject_class, PROP_KEY_DATA,
         g_param_spec_pointer ("key-data", "SSH Key Data", "SSH key data pointer",
                               G_PARAM_READWRITE));

@@ -53,6 +53,10 @@ SeahorseGpgmeKey* seahorse_gpgme_key_new                 (SeahorseSource *sksrc,
                                                           gpgme_key_t pubkey,
                                                           gpgme_key_t seckey);
 
+void              seahorse_gpgme_key_refresh              (SeahorseGpgmeKey *self);
+
+void              seahorse_gpgme_key_realize              (SeahorseGpgmeKey *self);
+
 GType             seahorse_gpgme_key_get_type             (void);
 
 gpgme_key_t       seahorse_gpgme_key_get_public           (SeahorseGpgmeKey *self);

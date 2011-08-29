@@ -168,19 +168,15 @@ _seahorse_pgp_key_set_photos (SeahorsePgpKey *self, GList *photos)
 	g_object_notify (G_OBJECT (self), "photos");
 }
 
-static void
-seahorse_pgp_key_realize (SeahorseObject *obj)
+void
+seahorse_pgp_key_realize (SeahorsePgpKey *self)
 {
-	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (obj);
 	const gchar *nickname, *keyid;
 	const gchar *description, *icon;
 	gchar *markup, *name, *identifier;
 	SeahorseUsage usage;
 	GList *subkeys;
-	
-	
-	SEAHORSE_OBJECT_CLASS (seahorse_pgp_key_parent_class)->realize (obj);
-	
+
 	subkeys = seahorse_pgp_key_get_subkeys (self);
 	if (subkeys) {
 		keyid = seahorse_pgp_subkey_get_keyid (subkeys->data);
@@ -190,11 +186,11 @@ seahorse_pgp_key_realize (SeahorseObject *obj)
 	}
 
 	name = calc_name (self);
-	markup = calc_markup (self, seahorse_object_get_flags (obj));
+	markup = calc_markup (self, seahorse_object_get_flags (SEAHORSE_OBJECT (self)));
 	nickname = calc_short_name (self);
-	
-	g_object_get (obj, "usage", &usage, NULL);
-		
+
+	g_object_get (self, "usage", &usage, NULL);
+
 	/* The type */
 	if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
 		description = _("Private PGP Key");
@@ -203,10 +199,10 @@ seahorse_pgp_key_realize (SeahorseObject *obj)
 		description = _("Public PGP Key");
 		icon = SEAHORSE_STOCK_KEY;
 		if (usage == SEAHORSE_USAGE_NONE)
-			g_object_set (obj, "usage", SEAHORSE_USAGE_PUBLIC_KEY, NULL);
+			g_object_set (self, "usage", SEAHORSE_USAGE_PUBLIC_KEY, NULL);
 	}
-	
-	g_object_set (obj,
+
+	g_object_set (self,
 		      "label", name,
 		      "markup", markup,
 		      "nickname", nickname,
@@ -332,8 +328,7 @@ static void
 seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-	SeahorseObjectClass *seahorse_class = SEAHORSE_OBJECT_CLASS (klass);
-	
+
 	seahorse_pgp_key_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePgpKeyPrivate));
 
@@ -341,9 +336,7 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
 	gobject_class->finalize = seahorse_pgp_key_object_finalize;
 	gobject_class->set_property = seahorse_pgp_key_set_property;
 	gobject_class->get_property = seahorse_pgp_key_get_property;
-	
-	seahorse_class->realize = seahorse_pgp_key_realize;
-	
+
 	klass->get_uids = _seahorse_pgp_key_get_uids;
 	klass->set_uids = _seahorse_pgp_key_set_uids;
 	klass->get_subkeys = _seahorse_pgp_key_get_subkeys;

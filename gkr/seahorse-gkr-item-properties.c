@@ -537,7 +537,7 @@ seahorse_gkr_item_properties_show (SeahorseGkrItem *git, GtkWindow *parent)
     if (swidget == NULL)
         return;
 
-    seahorse_object_refresh (object);
+    seahorse_gkr_item_refresh (git);
 
     widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
     g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);

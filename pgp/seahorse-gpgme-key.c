@@ -294,22 +294,21 @@ realize_subkeys (SeahorseGpgmeKey *self)
 }
 
 static void
-refresh_each_object (SeahorseObject *object, gpointer data)
+refresh_each_gpgme_key (SeahorseObject *object, gpointer data)
 {
-	seahorse_object_refresh (object);
+	seahorse_gpgme_key_refresh (SEAHORSE_GPGME_KEY (object));
 }
 
 /* -----------------------------------------------------------------------------
  * OBJECT 
  */
 
-static void
-seahorse_gpgme_key_realize (SeahorseObject *obj)
+void
+seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 {
-	SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (obj);
 	SeahorseUsage usage;
 	guint flags;
-	
+
 	if (!self->pv->pubkey)
 		return;
 	
@@ -350,34 +349,28 @@ seahorse_gpgme_key_realize (SeahorseObject *obj)
 	    !self->pv->pubkey->expired)
 		flags |= SEAHORSE_FLAG_TRUSTED;
 
-	g_object_set (obj, "flags", flags, NULL);
-	
+	g_object_set (self, "flags", flags, NULL);
+
 	/* The type */
 	if (self->pv->seckey)
 		usage = SEAHORSE_USAGE_PRIVATE_KEY;
 	else
 		usage = SEAHORSE_USAGE_PUBLIC_KEY;
 
-	g_object_set (obj, "usage", usage, NULL);
-	
-	++self->pv->block_loading;
-	SEAHORSE_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->realize (obj);
-	--self->pv->block_loading;
+	g_object_set (self, "usage", usage, NULL);
+
+	seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (self));
 }
 
-static void
-seahorse_gpgme_key_refresh (SeahorseObject *obj)
+void
+seahorse_gpgme_key_refresh (SeahorseGpgmeKey *self)
 {
-	SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (obj);
-	
 	if (self->pv->pubkey)
 		load_key_public (self, self->pv->list_mode);
 	if (self->pv->seckey)
 		load_key_private (self);
 	if (self->pv->photos_loaded)
 		load_key_photos (self);
-
-	SEAHORSE_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->refresh (obj);
 }
 
 static GList*
@@ -441,6 +434,16 @@ seahorse_gpgme_key_init (SeahorseGpgmeKey *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GPGME_KEY, SeahorseGpgmeKeyPrivate);
 	g_object_set (self, "location", SEAHORSE_LOCATION_LOCAL, NULL);
+}
+
+static void
+seahorse_gpgme_key_object_constructed (GObject *object)
+{
+	SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (object);
+
+	G_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->constructed (object);
+
+	seahorse_gpgme_key_realize (self);
 }
 
 static void
@@ -519,19 +522,16 @@ static void
 seahorse_gpgme_key_class_init (SeahorseGpgmeKeyClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-	SeahorseObjectClass *seahorse_class = SEAHORSE_OBJECT_CLASS (klass);
 	SeahorsePgpKeyClass *pgp_class = SEAHORSE_PGP_KEY_CLASS (klass);
 	
 	seahorse_gpgme_key_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseGpgmeKeyPrivate));
 
+	gobject_class->constructed = seahorse_gpgme_key_object_constructed;
 	gobject_class->dispose = seahorse_gpgme_key_object_dispose;
 	gobject_class->finalize = seahorse_gpgme_key_object_finalize;
 	gobject_class->set_property = seahorse_gpgme_key_set_property;
 	gobject_class->get_property = seahorse_gpgme_key_get_property;
-	
-	seahorse_class->refresh = seahorse_gpgme_key_refresh;
-	seahorse_class->realize = seahorse_gpgme_key_realize;
 
 	pgp_class->get_uids = seahorse_gpgme_key_get_uids;
 	pgp_class->set_uids = seahorse_gpgme_key_set_uids;
@@ -602,7 +602,7 @@ seahorse_gpgme_key_set_public (SeahorseGpgmeKey *self, gpgme_key_t key)
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
-	seahorse_gpgme_key_realize (SEAHORSE_OBJECT (self));
+	seahorse_gpgme_key_realize (self);
 	g_object_notify (obj, "fingerprint");
 	g_object_notify (obj, "validity");
 	g_object_notify (obj, "validity-str");
@@ -639,7 +639,7 @@ seahorse_gpgme_key_set_private (SeahorseGpgmeKey *self, gpgme_key_t key)
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
-	seahorse_gpgme_key_realize (SEAHORSE_OBJECT (self));
+	seahorse_gpgme_key_realize (self);
 	g_object_thaw_notify (obj);
 }
 
@@ -681,6 +681,6 @@ seahorse_gpgme_key_refresh_matching (gpgme_key_t key)
 	memset (&pred, 0, sizeof (pred));
 	pred.type = SEAHORSE_TYPE_GPGME_KEY;
 	pred.id = seahorse_pgp_key_canonize_id (key->subkeys->keyid);
-	
-	seahorse_context_for_objects_full (NULL, &pred, refresh_each_object, NULL);
+
+	seahorse_context_for_objects_full (NULL, &pred, refresh_each_gpgme_key, NULL);
 }

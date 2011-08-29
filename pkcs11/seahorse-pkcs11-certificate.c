@@ -93,22 +93,19 @@ calc_display_id (SeahorsePkcs11Certificate* self)
  * OBJECT 
  */
 
-static void
-seahorse_pkcs11_certificate_realize (SeahorseObject *obj)
+void
+seahorse_pkcs11_certificate_realize (SeahorsePkcs11Certificate *self)
 {
-	SeahorsePkcs11Certificate *self = SEAHORSE_PKCS11_CERTIFICATE (obj);
 	gchar *identifier = NULL;
 	guint flags;
 
-	SEAHORSE_OBJECT_CLASS (seahorse_pkcs11_certificate_parent_class)->realize (obj);
-
 	seahorse_pkcs11_object_require_attributes (SEAHORSE_PKCS11_OBJECT (self), 
 	                                           REQUIRED_ATTRS, G_N_ELEMENTS (REQUIRED_ATTRS));
-	
-	if (!seahorse_object_get_label (obj))
+
+	if (!seahorse_object_get_label (SEAHORSE_OBJECT (self)))
 		g_object_set (self, "label", _("Certificate"), NULL);
 	
-	flags = seahorse_object_get_flags (obj) | SEAHORSE_FLAG_DELETABLE;
+	flags = seahorse_object_get_flags (SEAHORSE_OBJECT (self)) | SEAHORSE_FLAG_DELETABLE;
 
 	/* TODO: Expiry, revoked, disabled etc... */
 	if (seahorse_pkcs11_certificate_get_trust (self) >= SEAHORSE_VALIDITY_MARGINAL)
@@ -221,8 +218,7 @@ static void
 seahorse_pkcs11_certificate_class_init (SeahorsePkcs11CertificateClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-	SeahorseObjectClass *seahorse_class = SEAHORSE_OBJECT_CLASS (klass);
-	
+
 	seahorse_pkcs11_certificate_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePkcs11CertificatePrivate));
 
@@ -232,8 +228,6 @@ seahorse_pkcs11_certificate_class_init (SeahorsePkcs11CertificateClass *klass)
 	gobject_class->get_property = seahorse_pkcs11_certificate_get_property;
 	gobject_class->notify = seahorse_pkcs11_certificate_notify;
 
-	seahorse_class->realize = seahorse_pkcs11_certificate_realize;
-	
 	g_object_class_install_property (gobject_class, PROP_FINGERPRINT, 
 	         g_param_spec_string ("fingerprint", "fingerprint", "fingerprint", NULL, 
 	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));

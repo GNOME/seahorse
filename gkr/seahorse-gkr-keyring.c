@@ -112,10 +112,9 @@ require_keyring_info (SeahorseGkrKeyring *self)
  * OBJECT 
  */
 
-static void
-seahorse_gkr_keyring_realize (SeahorseObject *obj)
+void
+seahorse_gkr_keyring_realize (SeahorseGkrKeyring *self)
 {
-	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
 	gchar *name, *markup;
 	
 	name = g_strdup_printf (_("Passwords: %s"), self->pv->keyring_name);
@@ -134,19 +133,13 @@ seahorse_gkr_keyring_realize (SeahorseObject *obj)
 	
 	g_free (name);
 	g_free (markup);
-	
-	SEAHORSE_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->realize (obj);
 }
 
-static void
-seahorse_gkr_keyring_refresh (SeahorseObject *obj)
+void
+seahorse_gkr_keyring_refresh (SeahorseGkrKeyring *self)
 {
-	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
-
 	if (self->pv->keyring_info)
 		load_keyring_info (self);
-	
-	SEAHORSE_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->refresh (obj);
 }
 
 typedef struct {
@@ -447,8 +440,7 @@ static void
 seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-	SeahorseObjectClass *seahorse_class;
-	
+
 	seahorse_gkr_keyring_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseGkrKeyringPrivate));
 
@@ -456,10 +448,6 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 	gobject_class->finalize = seahorse_gkr_keyring_finalize;
 	gobject_class->set_property = seahorse_gkr_keyring_set_property;
 	gobject_class->get_property = seahorse_gkr_keyring_get_property;
-
-	seahorse_class = SEAHORSE_OBJECT_CLASS (klass);
-	seahorse_class->realize = seahorse_gkr_keyring_realize;
-	seahorse_class->refresh = seahorse_gkr_keyring_refresh;
 
 	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
 	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
@@ -525,7 +513,7 @@ seahorse_gkr_keyring_set_info (SeahorseGkrKeyring *self, GnomeKeyringInfo *info)
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
-	seahorse_gkr_keyring_realize (SEAHORSE_OBJECT (self));
+	seahorse_gkr_keyring_realize (self);
 	g_object_notify (obj, "keyring-info");
 	g_object_thaw_notify (obj);
 }

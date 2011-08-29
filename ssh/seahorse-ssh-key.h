@@ -64,6 +64,8 @@ struct _SeahorseSSHKeyClass {
 SeahorseSSHKey*         seahorse_ssh_key_new                  (SeahorseSource *sksrc, 
                                                                SeahorseSSHKeyData *data);
 
+void                    seahorse_ssh_key_refresh              (SeahorseSSHKey *self);
+
 GType                   seahorse_ssh_key_get_type             (void);
 
 guint                   seahorse_ssh_key_get_algo             (SeahorseSSHKey *skey);

@@ -836,7 +836,7 @@ on_change_passphrase_complete (GObject *source,
 	GError *error = NULL;
 
 	if (seahorse_ssh_operation_finish (SEAHORSE_SSH_SOURCE (source), result, &error))
-		seahorse_object_refresh (SEAHORSE_OBJECT (key));
+		seahorse_ssh_key_refresh (key);
 	else
 		g_simple_async_result_take_error (res, error);
 
@@ -1248,7 +1248,7 @@ seahorse_ssh_op_authorize_async (SeahorseSSHSource *source,
 
 	/* Just reload that one key */
 	if (!error)
-		seahorse_object_refresh (SEAHORSE_OBJECT (key));
+		seahorse_ssh_key_refresh (key);
 
 	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
 	                                 seahorse_ssh_op_authorize_async);

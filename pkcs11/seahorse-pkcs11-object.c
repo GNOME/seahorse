@@ -140,19 +140,14 @@ load_object_attributes (SeahorsePkcs11Object *self, const gulong *attr_types,
  * OBJECT 
  */
 
-static void
-seahorse_pkcs11_object_realize (SeahorseObject *obj)
+void
+seahorse_pkcs11_object_realize (SeahorsePkcs11Object *self)
 {
-	SeahorsePkcs11Object *self = SEAHORSE_PKCS11_OBJECT (obj);
 	gboolean exportable;
 	gchar *label = NULL;
 	guint flags;
 
-	SEAHORSE_OBJECT_CLASS (seahorse_pkcs11_object_parent_class)->realize (obj);
-
 	seahorse_pkcs11_object_require_attributes (self, REQUIRED_ATTRS, G_N_ELEMENTS (REQUIRED_ATTRS));
-	
-	g_assert (SEAHORSE_PKCS11_IS_OBJECT (obj));
 
 	flags = SEAHORSE_FLAG_DELETABLE;
 	if (gck_attributes_find_boolean (self->pv->pkcs11_attributes, CKA_EXTRACTABLE, &exportable) && exportable)
@@ -168,12 +163,11 @@ seahorse_pkcs11_object_realize (SeahorseObject *obj)
 	g_free (label);
 }
 
-static void
-seahorse_pkcs11_object_refresh (SeahorseObject *obj)
+void
+seahorse_pkcs11_object_refresh (SeahorsePkcs11Object *self)
 {
 	/* Reload the same attributes */
-	load_object_attributes (SEAHORSE_PKCS11_OBJECT (obj), NULL, 0);
-	SEAHORSE_OBJECT_CLASS (seahorse_pkcs11_object_parent_class)->refresh (obj);
+	load_object_attributes (self, NULL, 0);
 }
 
 static GObject* 
@@ -270,8 +264,7 @@ static void
 seahorse_pkcs11_object_class_init (SeahorsePkcs11ObjectClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-	SeahorseObjectClass *seahorse_class = SEAHORSE_OBJECT_CLASS (klass);
-	
+
 	seahorse_pkcs11_object_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePkcs11ObjectPrivate));
 
@@ -280,9 +273,6 @@ seahorse_pkcs11_object_class_init (SeahorsePkcs11ObjectClass *klass)
 	gobject_class->finalize = seahorse_pkcs11_object_finalize;
 	gobject_class->set_property = seahorse_pkcs11_object_set_property;
 	gobject_class->get_property = seahorse_pkcs11_object_get_property;
-
-	seahorse_class->realize = seahorse_pkcs11_object_realize;
-	seahorse_class->refresh = seahorse_pkcs11_object_refresh;
 
 	g_object_class_install_property (gobject_class, PROP_PKCS11_OBJECT, 
 	         g_param_spec_object ("pkcs11-object", "pkcs11-object", "pkcs11-object", GCK_TYPE_OBJECT,
@@ -339,7 +329,7 @@ seahorse_pkcs11_object_set_pkcs11_attributes (SeahorsePkcs11Object* self, GckAtt
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
-	seahorse_pkcs11_object_realize (SEAHORSE_OBJECT (obj));
+	seahorse_pkcs11_object_realize (self);
 	g_object_notify (obj, "pkcs11-attributes");
 	g_object_thaw_notify (obj);
 

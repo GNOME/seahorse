@@ -69,6 +69,8 @@ GType             seahorse_pgp_key_get_type             (void);
 
 SeahorsePgpKey*   seahorse_pgp_key_new                  (void);
 
+void              seahorse_pgp_key_realize              (SeahorsePgpKey *self);
+
 GList*            seahorse_pgp_key_get_subkeys          (SeahorsePgpKey *self);
 
 void              seahorse_pgp_key_set_subkeys          (SeahorsePgpKey *self,

@@ -423,10 +423,9 @@ calc_item_type (SeahorseGkrItem *self)
  * OBJECT 
  */
 
-static void
-seahorse_gkr_item_realize (SeahorseObject *obj)
+void
+seahorse_gkr_item_realize (SeahorseGkrItem *self)
 {
-	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (obj);
 	const gchar *description;
 	gchar *display;
 	gchar *markup;
@@ -476,23 +475,17 @@ seahorse_gkr_item_realize (SeahorseObject *obj)
 	
 	g_object_notify (G_OBJECT (self), "has-secret");
 	g_object_notify (G_OBJECT (self), "use");
-	
-	SEAHORSE_OBJECT_CLASS (seahorse_gkr_item_parent_class)->realize (obj);
 }
 
-static void
-seahorse_gkr_item_refresh (SeahorseObject *obj)
+void
+seahorse_gkr_item_refresh (SeahorseGkrItem *self)
 {
-	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (obj);
-	
 	if (self->pv->item_info)
 		load_item_info (self);
 	if (self->pv->item_attrs)
 		load_item_attrs (self);
 	if (self->pv->item_secret)
 		load_item_secret (self);
-
-	SEAHORSE_OBJECT_CLASS (seahorse_gkr_item_parent_class)->refresh (obj);
 }
 
 static void
@@ -502,23 +495,20 @@ seahorse_gkr_item_init (SeahorseGkrItem *self)
 	g_object_set (self, "usage", SEAHORSE_USAGE_CREDENTIALS, "tag", SEAHORSE_GKR_TYPE, "location", SEAHORSE_LOCATION_LOCAL, NULL);
 }
 
-static GObject* 
-seahorse_gkr_item_constructor (GType type, guint n_props, GObjectConstructParam *props) 
+static void
+seahorse_gkr_item_constructed (GObject *object)
 {
-	GObject *obj = G_OBJECT_CLASS (seahorse_gkr_item_parent_class)->constructor (type, n_props, props);
-	SeahorseGkrItem *self = NULL;
+	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (object);
 	GQuark id;
-	
-	if (obj) {
-		self = SEAHORSE_GKR_ITEM (obj);
-		
-		id = seahorse_gkr_item_get_cannonical (self->pv->keyring_name, 
-		                                        self->pv->item_id);
-		g_object_set (self, "id", id, 
-		              "usage", SEAHORSE_USAGE_CREDENTIALS, NULL); 
-	}
-	
-	return obj;
+
+	G_OBJECT_CLASS (seahorse_gkr_item_parent_class)->constructed (object);
+
+	id = seahorse_gkr_item_get_cannonical (self->pv->keyring_name,
+	                                       self->pv->item_id);
+	g_object_set (self, "id", id,
+	              "usage", SEAHORSE_USAGE_CREDENTIALS, NULL);
+
+	seahorse_gkr_item_realize (self);
 }
 
 static void
@@ -608,19 +598,14 @@ static void
 seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 {
 	GObjectClass *gobject_class;
-	SeahorseObjectClass *seahorse_class;
-    
+
 	seahorse_gkr_item_parent_class = g_type_class_peek_parent (klass);
 	gobject_class = G_OBJECT_CLASS (klass);
 	
-	gobject_class->constructor = seahorse_gkr_item_constructor;
+	gobject_class->constructed = seahorse_gkr_item_constructed;
 	gobject_class->finalize = seahorse_gkr_item_finalize;
 	gobject_class->set_property = seahorse_gkr_item_set_property;
 	gobject_class->get_property = seahorse_gkr_item_get_property;
-	
-	seahorse_class = SEAHORSE_OBJECT_CLASS (klass);
-	seahorse_class->realize = seahorse_gkr_item_realize;
-	seahorse_class->refresh = seahorse_gkr_item_refresh;
 
 	g_type_class_add_private (klass, sizeof (SeahorseGkrItemPrivate));
     
@@ -699,7 +684,7 @@ seahorse_gkr_item_set_info (SeahorseGkrItem *self, GnomeKeyringItemInfo* info)
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
-	seahorse_gkr_item_realize (SEAHORSE_OBJECT (self));
+	seahorse_gkr_item_realize (self);
 	g_object_notify (obj, "item-info");
 	g_object_notify (obj, "use");
 	
@@ -753,7 +738,7 @@ seahorse_gkr_item_set_attributes (SeahorseGkrItem *self, GnomeKeyringAttributeLi
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
-	seahorse_gkr_item_realize (SEAHORSE_OBJECT (self));
+	seahorse_gkr_item_realize (self);
 	g_object_notify (obj, "item-attributes");
 	g_object_notify (obj, "use");
 	g_object_thaw_notify (obj);

@@ -67,6 +67,10 @@ SeahorseGkrItem*             seahorse_gkr_item_new                (SeahorseSourc
                                                                    const gchar *keyring_name,
                                                                    guint32 item_id);
 
+void                         seahorse_gkr_item_refresh            (SeahorseGkrItem *self);
+
+void                         seahorse_gkr_item_realize            (SeahorseGkrItem *self);
+
 guint32                      seahorse_gkr_item_get_item_id        (SeahorseGkrItem *self);
 
 const gchar*                 seahorse_gkr_item_get_keyring_name   (SeahorseGkrItem *self);

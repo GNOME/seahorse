@@ -199,10 +199,9 @@ parse_user_id (const gchar *uid, gchar **name, gchar **email, gchar **comment)
  * OBJECT 
  */
 
-static void
-seahorse_pgp_uid_realize (SeahorseObject *obj)
+void
+seahorse_pgp_uid_realize (SeahorsePgpUid *self)
 {
-	SeahorsePgpUid *self = SEAHORSE_PGP_UID (obj);
 	gchar *markup;
 
 	/* Don't realize if no name present */
@@ -210,7 +209,6 @@ seahorse_pgp_uid_realize (SeahorseObject *obj)
 		return;
 
 	self->pv->realized = TRUE;
-	SEAHORSE_OBJECT_CLASS (seahorse_pgp_uid_parent_class)->realize (obj);
 
 	g_object_set (self, "label", self->pv->name ? self->pv->name : "", NULL);
 	markup = seahorse_pgp_uid_calc_markup (self->pv->name, self->pv->email, self->pv->comment, 0);
@@ -224,6 +222,13 @@ seahorse_pgp_uid_init (SeahorsePgpUid *self)
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_PGP_UID, SeahorsePgpUidPrivate);
 	g_object_set (self, "icon", "", "usage", SEAHORSE_USAGE_IDENTITY, NULL);
 	g_object_set (self, "tag", SEAHORSE_PGP_TYPE, NULL);
+}
+
+static void
+seahorse_pgp_uid_constructed (GObject *object)
+{
+	G_OBJECT_CLASS (seahorse_pgp_uid_parent_class)->constructed (object);
+	seahorse_pgp_uid_realize (SEAHORSE_PGP_UID (object));
 }
 
 static void
@@ -307,12 +312,11 @@ seahorse_pgp_uid_class_init (SeahorsePgpUidClass *klass)
 	seahorse_pgp_uid_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePgpUidPrivate));
 
+	gobject_class->constructed = seahorse_pgp_uid_constructed;
 	gobject_class->finalize = seahorse_pgp_uid_object_finalize;
 	gobject_class->set_property = seahorse_pgp_uid_set_property;
 	gobject_class->get_property = seahorse_pgp_uid_get_property;
-    
-	SEAHORSE_OBJECT_CLASS (klass)->realize = seahorse_pgp_uid_realize;
-	
+
 	g_object_class_install_property (gobject_class, PROP_VALIDITY,
 	        g_param_spec_uint ("validity", "Validity", "Validity of this identity",
 	                           0, G_MAXUINT, 0, G_PARAM_READWRITE));
@@ -423,8 +427,8 @@ seahorse_pgp_uid_set_name (SeahorsePgpUid *self, const gchar *name)
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
-	if (self->pv->realized)
-		seahorse_pgp_uid_realize (SEAHORSE_OBJECT (self));
+	if (!self->pv->realized)
+		seahorse_pgp_uid_realize (self);
 	g_object_notify (obj, "name");
 	g_object_thaw_notify (obj);
 }
@@ -450,8 +454,8 @@ seahorse_pgp_uid_set_email (SeahorsePgpUid *self, const gchar *email)
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
-	if (self->pv->realized)
-		seahorse_pgp_uid_realize (SEAHORSE_OBJECT (self));
+	if (!self->pv->realized)
+		seahorse_pgp_uid_realize (self);
 	g_object_notify (obj, "email");
 	g_object_thaw_notify (obj);
 }
@@ -477,8 +481,8 @@ seahorse_pgp_uid_set_comment (SeahorsePgpUid *self, const gchar *comment)
 	
 	obj = G_OBJECT (self);
 	g_object_freeze_notify (obj);
-	if (self->pv->realized)
-		seahorse_pgp_uid_realize (SEAHORSE_OBJECT (self));
+	if (!self->pv->realized)
+		seahorse_pgp_uid_realize (self);
 	g_object_notify (obj, "comment");
 	g_object_thaw_notify (obj);
 }

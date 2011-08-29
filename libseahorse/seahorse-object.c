@@ -92,8 +92,6 @@ enum _SeahorseObjectProps {
  * @location: describes the loaction of the object (local, remte, invalid...)
  * @usage: DBUS: "etype"
  * @flags:
- * @realizing: set while the object is realizing
- * @realized: set as soon as the object is realized
  */
 struct _SeahorseObjectPrivate {
 	GQuark id;
@@ -120,9 +118,6 @@ struct _SeahorseObjectPrivate {
     SeahorseLocation location;
     SeahorseUsage usage;
     guint flags;
-
-	gboolean realized;
-	gboolean realizing;
 };
 
 G_DEFINE_TYPE (SeahorseObject, seahorse_object, G_TYPE_OBJECT);
@@ -656,40 +651,6 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 }
 
 /**
- * seahorse_object_real_realize:
- * @self: The object
- *
- * To be overridden
- *
- */
-static void 
-seahorse_object_real_realize (SeahorseObject *self)
-{
-	/* 
-	 * We do nothing by default. It's up to the derived class
-	 * to override this and realize themselves when called.
-	 */
-	
-	self->pv->realized = TRUE;
-}
-
-/**
- * seahorse_object_real_refresh:
- * @self: The object
- *
- * To be overridden
- *
- */
-static void 
-seahorse_object_real_refresh (SeahorseObject *self)
-{
-	/* 
-	 * We do nothing by default. It's up to the derived class
-	 * to override this and refresh themselves when called.
-	 */
-}
-
-/**
  * seahorse_object_class_init:
  * @klass: the object class
  *
@@ -708,10 +669,7 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
 	gobject_class->finalize = seahorse_object_finalize;
 	gobject_class->set_property = seahorse_object_set_property;
 	gobject_class->get_property = seahorse_object_get_property;
-	
-	klass->realize = seahorse_object_real_realize;
-	klass->refresh = seahorse_object_real_refresh;
-	
+
 	g_object_class_install_property (gobject_class, PROP_SOURCE,
 	           g_param_spec_object ("source", "Object Source", "Source the Object came from", 
 	                                SEAHORSE_TYPE_SOURCE, G_PARAM_READWRITE));
@@ -800,9 +758,7 @@ GQuark
 seahorse_object_get_tag (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
-	if (!self->pv->tag)
-		seahorse_object_realize (self);
-	return self->pv->tag;	
+	return self->pv->tag;
 }
 
 /**
@@ -947,7 +903,6 @@ GList*
 seahorse_object_get_children (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
 	return g_list_copy (self->pv->children);
 }
 
@@ -975,7 +930,6 @@ const gchar*
 seahorse_object_get_label (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
 	return self->pv->label;
 }
 
@@ -989,7 +943,6 @@ const gchar*
 seahorse_object_get_markup (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
 	return self->pv->markup;
 }
 
@@ -1003,7 +956,6 @@ const gchar*
 seahorse_object_get_nickname (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
 	return self->pv->nickname;
 }
 
@@ -1017,7 +969,6 @@ const gchar*
 seahorse_object_get_description (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
 	return self->pv->description;
 }
 
@@ -1031,7 +982,6 @@ const gchar*
 seahorse_object_get_icon (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
 	return self->pv->icon;
 }
 
@@ -1045,8 +995,7 @@ const gchar*
 seahorse_object_get_identifier (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	seahorse_object_realize (self);
-	return self->pv->identifier;	
+	return self->pv->identifier;
 }
 
 /**
@@ -1059,8 +1008,6 @@ SeahorseLocation
 seahorse_object_get_location (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), SEAHORSE_LOCATION_INVALID);
-	if (self->pv->location == SEAHORSE_LOCATION_INVALID)
-		seahorse_object_realize (self);
 	return self->pv->location;
 }
 
@@ -1074,8 +1021,6 @@ SeahorseUsage
 seahorse_object_get_usage (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), SEAHORSE_USAGE_NONE);
-	if (self->pv->usage == SEAHORSE_USAGE_NONE)
-		seahorse_object_realize (self);
 	return self->pv->usage;	
 }
 
@@ -1089,7 +1034,6 @@ guint
 seahorse_object_get_flags (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), 0);
-	seahorse_object_realize (self);
 	return self->pv->flags;	
 }
 
@@ -1148,46 +1092,6 @@ seahorse_object_lookup_property (SeahorseObject *self, const gchar *field, GValu
 }
 
 /**
- * seahorse_object_realize:
- * @self: the object to realize
- *
- *
- * Realizes an object. Calls the klass method
- */
-void
-seahorse_object_realize (SeahorseObject *self)
-{
-	SeahorseObjectClass *klass;
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	if (self->pv->realized)
-		return;
-	if (self->pv->realizing)
-		return;
-	klass = SEAHORSE_OBJECT_GET_CLASS (self);
-	g_return_if_fail (klass->realize);
-	self->pv->realizing = TRUE;
-	(klass->realize) (self);
-	self->pv->realizing = FALSE;
-}
-
-/**
- * seahorse_object_refresh:
- * @self: object to refresh
- *
- * calls the class refresh function
- *
- */
-void
-seahorse_object_refresh (SeahorseObject *self)
-{
-	SeahorseObjectClass *klass;
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	klass = SEAHORSE_OBJECT_GET_CLASS (self);
-	g_return_if_fail (klass->refresh);
-	(klass->refresh) (self);
-}
-
-/**
  * seahorse_object_predicate_match:
  * @self: the object to test
  * @obj: The predicate to match
@@ -1203,9 +1107,7 @@ seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* 
 	
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (obj), FALSE);
 	pv = obj->pv;
-	
-	seahorse_object_realize (obj);
-	
+
 	/* Check all the fields */
 	if (self->tag != 0 && self->tag != pv->tag)
 		return FALSE;

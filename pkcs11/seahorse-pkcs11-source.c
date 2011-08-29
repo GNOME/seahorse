@@ -227,7 +227,7 @@ seahorse_pkcs11_source_receive_object (SeahorsePkcs11Source *self, GckObject *ob
 	
 	prev = seahorse_context_get_object (NULL, SEAHORSE_SOURCE (self), id);
 	if (prev) {
-		seahorse_object_refresh (prev);
+		seahorse_pkcs11_object_refresh (SEAHORSE_PKCS11_OBJECT (prev));
 		g_object_unref (obj);
 		return;
 	}

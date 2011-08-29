@@ -52,6 +52,10 @@ GType                       seahorse_pkcs11_object_get_type               (void)
 
 SeahorsePkcs11Object*       seahorse_pkcs11_object_new                    (GckObject* object);
 
+void                        seahorse_pkcs11_object_refresh                (SeahorsePkcs11Object *self);
+
+void                        seahorse_pkcs11_object_realize                (SeahorsePkcs11Object *self);
+
 gulong                      seahorse_pkcs11_object_get_pkcs11_handle      (SeahorsePkcs11Object* self);
 
 GckObject*                  seahorse_pkcs11_object_get_pkcs11_object      (SeahorsePkcs11Object* self);
