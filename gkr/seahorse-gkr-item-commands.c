@@ -111,7 +111,7 @@ seahorse_gkr_item_commands_delete_objects (SeahorseCommands* commands,
 	if (ret) {
 		cancellable = g_cancellable_new ();
 		seahorse_gkr_delete_async (objects, cancellable, on_delete_objects, g_object_ref (commands));
-		seahorse_progress_show (cancellable, ngettext (_("Deleting item"), _("Deleting items"), num), TRUE);
+		seahorse_progress_show (cancellable, ngettext ("Deleting item", "Deleting items", num), TRUE);
 		g_object_unref (cancellable);
 	}
 

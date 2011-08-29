@@ -373,7 +373,7 @@ seahorse_gkr_keyring_commands_delete_objects (SeahorseCommands* commands,
 		seahorse_gkr_delete_async (objects, cancellable,
 		                           on_delete_objects_complete,
 		                           g_object_ref (commands));
-		seahorse_progress_show (cancellable, ngettext (_("Deleting keyring"), _("Deleting keyrings"),
+		seahorse_progress_show (cancellable, ngettext ("Deleting keyring", "Deleting keyrings",
 		                                               g_list_length (objects)), TRUE);
 		g_object_unref (cancellable);
 	}
