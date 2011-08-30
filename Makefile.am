@@ -30,8 +30,7 @@ SUBDIRS = libegg \
 	po \
 	data \
 	help \
-	pixmaps \
-	reference
+	pixmaps
 
 EXTRA_DIST = \
     AUTHORS \
@@ -65,7 +64,6 @@ DISTCLEANFILES = \
 DISTCHECK_CONFIGURE_FLAGS = \
     --disable-scrollkeeper \
     --disable-update-mime-database \
-    --enable-gtk-doc \
     --disable-debug
     
 CHANGELOG_START = \

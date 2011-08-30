@@ -23,7 +23,6 @@ AC_PROG_CXX
 AC_PROG_INTLTOOL([0.35.0])
 AM_PROG_LIBTOOL
 GNOME_DOC_INIT
-GTK_DOC_CHECK([1.9])
 
 dnl Get the off_t size right
 AC_SYS_LARGEFILE
@@ -540,9 +539,6 @@ pkcs11/Makefile
 src/Makefile
 src/seahorse.desktop.in
 ssh/Makefile
-reference/Makefile
-reference/libseahorse/Makefile
-reference/libseahorse/version.xml
 ])
 
 dnl ****************************************************************************
