@@ -267,7 +267,7 @@ static void  update_date_label      (EggDateTime *edt);
 static void  update_time_label      (EggDateTime *edt);
 
 
-static GtkHBoxClass *parent_class = NULL;
+static GtkBoxClass *parent_class = NULL;
 
 
 GType
@@ -288,7 +288,7 @@ egg_datetime_get_type (void)
          (GInstanceInitFunc) egg_datetime_init
       };
 
-      datetime_type = g_type_register_static (GTK_TYPE_HBOX, "EggDateTime", &datetime_info, 0);
+      datetime_type = g_type_register_static (GTK_TYPE_BOX, "EggDateTime", &datetime_info, 0);
    }
 
    return datetime_type;
@@ -488,7 +488,7 @@ egg_datetime_init (EggDateTime *edt)
 
    /* Date Widgets */
 
-   priv->date_box = gtk_hbox_new (FALSE, 0);
+   priv->date_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
    gtk_box_pack_start (GTK_BOX (edt), priv->date_box, TRUE, TRUE, 0);
 
    priv->date_entry = gtk_entry_new ();
@@ -513,7 +513,7 @@ egg_datetime_init (EggDateTime *edt)
 
    /* Time Widgets */
 
-   priv->time_box = gtk_hbox_new (FALSE, 0);
+   priv->time_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
    gtk_box_pack_start (GTK_BOX (edt), priv->time_box, TRUE, TRUE, 0);
 
    priv->time_entry = gtk_entry_new ();
@@ -1384,7 +1384,7 @@ egg_datetime_new (void)
 {
    EggDateTime *edt;
 
-   edt = g_object_new (EGG_TYPE_DATETIME, NULL);
+   edt = g_object_new (EGG_TYPE_DATETIME, "orientation", GTK_ORIENTATION_HORIZONTAL, NULL);
    egg_datetime_set_from_time_t (edt, time (NULL));
 
    return GTK_WIDGET (edt);

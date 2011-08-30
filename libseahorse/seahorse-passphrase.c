@@ -189,11 +189,11 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     g_signal_connect (G_OBJECT (dialog), "unmap-event", G_CALLBACK (ungrab_keyboard), NULL);
     g_signal_connect (G_OBJECT (dialog), "window-state-event", G_CALLBACK (window_state_changed), NULL); 
 
-    wvbox = gtk_vbox_new (FALSE, HIG_LARGE * 2);
+    wvbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, HIG_LARGE * 2);
     gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (dialog)), wvbox);
     gtk_container_set_border_width (GTK_CONTAINER (wvbox), HIG_LARGE);
 
-    chbox = gtk_hbox_new (FALSE, HIG_LARGE);
+    chbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, HIG_LARGE);
     gtk_box_pack_start (GTK_BOX (wvbox), chbox, FALSE, FALSE, 0);
 
     /* The image */
@@ -201,7 +201,7 @@ seahorse_passphrase_prompt_show (const gchar *title, const gchar *description,
     gtk_misc_set_alignment (GTK_MISC (w), 0.0, 0.0);
     gtk_box_pack_start (GTK_BOX (chbox), w, FALSE, FALSE, 0);
 
-    box = gtk_vbox_new (FALSE, HIG_SMALL);
+    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, HIG_SMALL);
     gtk_box_pack_start (GTK_BOX (chbox), box, TRUE, TRUE, 0);
 
     /* The description text */

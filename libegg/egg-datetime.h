@@ -68,14 +68,14 @@ typedef struct _EggDateTimePrivate  EggDateTimePrivate;
 
 struct _EggDateTime
 {
-   GtkHBox parent;
+   GtkBox parent;
 
    EggDateTimePrivate *priv;
 };
 
 struct _EggDateTimeClass
 {
-   GtkHBoxClass parent_class;
+   GtkBoxClass parent_class;
 
    /* Signals */
 

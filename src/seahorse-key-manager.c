@@ -919,7 +919,7 @@ seahorse_key_manager_constructed (GObject *object)
 				gtk_toolbar_insert (toolbar, GTK_TOOL_ITEM (sep), -1);
 				
 				/* Insert a filter bar */
-				box = GTK_BOX (gtk_hbox_new (FALSE, 0));
+				box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
 				gtk_box_pack_start (box, GTK_WIDGET (gtk_label_new (_("Filter:"))), FALSE, TRUE, 3);
 				
 				self->pv->filter_entry = GTK_ENTRY (gtk_entry_new ());
