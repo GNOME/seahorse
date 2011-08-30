@@ -154,6 +154,7 @@ seahorse_generate_select_constructor (GType type, guint n_props, GObjectConstruc
 	gtk_tree_selection_select_iter (selection, &iter);
 
 	g_signal_connect (self->pv->view, "row-activated", G_CALLBACK (on_row_activated), self);
+	g_object_set (self->pv->view, "height-request", 410, NULL);
 
 	self->pv->dialog = GTK_DIALOG (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)));
 	g_signal_connect (self->pv->dialog, "response", G_CALLBACK (on_response), self);

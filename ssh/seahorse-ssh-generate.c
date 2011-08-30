@@ -232,5 +232,5 @@ seahorse_ssh_generate_show (SeahorseSSHSource *src, GtkWindow *parent)
     /* on_change() gets called, bits entry is setup */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
     g_return_if_fail (widget != NULL);
-    /* gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0); */
+    gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
 }
