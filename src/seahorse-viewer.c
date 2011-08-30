@@ -142,7 +142,7 @@ on_app_about (GtkAction* action, SeahorseViewer* self)
 	gtk_about_dialog_set_authors (about, authors);
 	gtk_about_dialog_set_documenters (about, documenters);
 	gtk_about_dialog_set_version (about, VERSION);
-	gtk_about_dialog_set_comments (about, _("Encryption Key Manager"));
+	gtk_about_dialog_set_comments (about, _("Passwords and Keys"));
 	gtk_about_dialog_set_copyright (about, "Copyright \xc2\xa9 2002 - 2010 Seahorse Project");
 	gtk_about_dialog_set_translator_credits (about, _("translator-credits"));
 	gtk_about_dialog_set_logo_icon_name (about, "seahorse");
