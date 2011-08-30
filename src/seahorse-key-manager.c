@@ -847,7 +847,7 @@ seahorse_key_manager_constructed (GObject *object)
 	self->pv->tabs = g_new0 (TabInfo, TAB_NUM_TABS);
 
 	self->pv->notebook = GTK_NOTEBOOK (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "notebook"));
-	gtk_window_set_title (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)), _("Passwords and Encryption Keys"));
+	gtk_window_set_title (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)), _("Passwords and Keys"));
 	
 	actions = gtk_action_group_new ("general");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);

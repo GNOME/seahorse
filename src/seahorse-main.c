@@ -73,7 +73,7 @@ main (int argc, char **argv)
     textdomain (GETTEXT_PACKAGE);
 #endif
 
-    if (!gtk_init_with_args (&argc, &argv, _("Encryption Key Manager"), options, GETTEXT_PACKAGE, &error)) {
+    if (!gtk_init_with_args (&argc, &argv, _("Passwords and Keys"), options, GETTEXT_PACKAGE, &error)) {
         g_printerr ("seahorse: %s\n", error->message);
         g_error_free (error);
         exit (1);
