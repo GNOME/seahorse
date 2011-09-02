@@ -39,7 +39,6 @@
 enum {
 	PROP_0,
 	PROP_SELECTED,
-	PROP_CURRENT_SET,
 	PROP_WINDOW
 };
 
@@ -761,9 +760,6 @@ seahorse_viewer_get_property (GObject *obj, guint prop_id, GValue *value,
 	case PROP_SELECTED:
 		g_value_set_object (value, seahorse_viewer_get_selected (self));
 		break;
-	case PROP_CURRENT_SET:
-		g_value_set_object (value, seahorse_viewer_get_current_set (self));
-		break;
 	case PROP_WINDOW:
 		g_value_set_object (value, seahorse_view_get_window (SEAHORSE_VIEW (self)));
 		break;
@@ -810,11 +806,7 @@ seahorse_viewer_class_init (SeahorseViewerClass *klass)
 	g_object_class_install_property (gobject_class, PROP_WINDOW,
 	           g_param_spec_object ("window", "Window", "Window of View",
 	                                GTK_TYPE_WIDGET, G_PARAM_READABLE));
-	
-	g_object_class_install_property (gobject_class, PROP_CURRENT_SET,
-	           g_param_spec_object ("current-set", "Current Set", "Currently visible set of objects",
-	                                SEAHORSE_TYPE_SET, G_PARAM_READABLE));
-	
+
 	exportable_predicate.flags = SEAHORSE_FLAG_EXPORTABLE;
 	deletable_predicate.flags = SEAHORSE_FLAG_DELETABLE;
 	importable_predicate.flags = SEAHORSE_FLAG_EXPORTABLE;
@@ -830,7 +822,6 @@ seahorse_viewer_implement_view (SeahorseViewIface *iface)
 	iface->get_selected = (gpointer)seahorse_viewer_get_selected;
 	iface->set_selected = (gpointer)seahorse_viewer_set_selected;
 	iface->get_selected_matching = (gpointer)seahorse_viewer_get_selected_matching;
-	iface->get_current_set = (gpointer)seahorse_viewer_get_current_set;
 	iface->get_window = (gpointer)seahorse_viewer_get_window;
 	iface->register_ui = (gpointer)seahorse_viewer_register_ui;
 	iface->register_commands = (gpointer)seahorse_viewer_register_commands;
@@ -956,15 +947,6 @@ seahorse_viewer_set_selected (SeahorseViewer* self, SeahorseObject* value)
 	g_return_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->set_selected);
 	
 	SEAHORSE_VIEWER_GET_CLASS (self)->set_selected (self, value);
-}
-
-SeahorseSet*
-seahorse_viewer_get_current_set (SeahorseViewer* self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
-	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_current_set, NULL);
-	
-	return SEAHORSE_VIEWER_GET_CLASS (self)->get_current_set (self);
 }
 
 GtkWindow* 

@@ -58,9 +58,7 @@ struct _SeahorseViewerClass {
 	SeahorseObject* (*get_selected) (SeahorseViewer* self);
 	
 	void (*set_selected) (SeahorseViewer* self, SeahorseObject* value);
-	
-	SeahorseSet* (*get_current_set) (SeahorseViewer* self);
-    
+
 	/* signals --------------------------------------------------------- */
     
 	void (*signal)   (SeahorseViewer *viewer);
@@ -99,8 +97,6 @@ SeahorseObject*     seahorse_viewer_get_selected                    (SeahorseVie
 
 void                seahorse_viewer_set_selected                    (SeahorseViewer* self, 
                                                                      SeahorseObject* value);
-
-SeahorseSet*        seahorse_viewer_get_current_set                 (SeahorseViewer* self);
 
 GtkWindow*          seahorse_viewer_get_window                      (SeahorseViewer* self);
 

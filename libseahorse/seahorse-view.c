@@ -59,15 +59,6 @@ seahorse_view_set_selected (SeahorseView* self, SeahorseObject* value)
 	SEAHORSE_VIEW_GET_INTERFACE (self)->set_selected (self, value);
 }
 
-
-SeahorseSet* 
-seahorse_view_get_current_set (SeahorseView* self) 
-{
-	g_return_val_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->get_current_set, NULL);
-	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_current_set (self);
-}
-
-
 GtkWindow* 
 seahorse_view_get_window (SeahorseView* self) 
 {
@@ -100,11 +91,7 @@ seahorse_view_base_init (SeahorseViewIface * iface)
 		g_object_interface_install_property (iface, 
 		         g_param_spec_object ("selected", "selected", "selected", 
 		                              SEAHORSE_TYPE_OBJECT, G_PARAM_READWRITE));
-		
-		g_object_interface_install_property (iface, 
-		         g_param_spec_object ("current-set", "current-set", "current-set", 
-		                              SEAHORSE_TYPE_SET, G_PARAM_READABLE));
-		
+
 		g_object_interface_install_property (iface, 
 		         g_param_spec_object ("window", "window", "window", 
 		                              GTK_TYPE_WINDOW, G_PARAM_READABLE));

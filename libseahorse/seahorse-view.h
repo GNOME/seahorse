@@ -54,9 +54,7 @@ struct _SeahorseViewIface {
 	
 	void            (*set_selected)           (SeahorseView *self, 
 	                                           SeahorseObject *value);
-	
-	SeahorseSet*    (*get_current_set)        (SeahorseView *self);
-	
+
 	GtkWindow*      (*get_window)             (SeahorseView *self);
 	
 	void            (*register_commands)      (SeahorseView *self, 
@@ -84,8 +82,6 @@ SeahorseObject*   seahorse_view_get_selected                (SeahorseView *self)
 
 void              seahorse_view_set_selected                (SeahorseView *self, 
                                                              SeahorseObject *value);
-
-SeahorseSet*      seahorse_view_get_current_set             (SeahorseView *self);
 
 GtkWindow*        seahorse_view_get_window                  (SeahorseView *self);
 
