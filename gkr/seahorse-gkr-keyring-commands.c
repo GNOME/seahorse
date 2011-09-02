@@ -81,11 +81,11 @@ on_refresh_all_keyrings_complete (GObject *source,
 }
 
 static void
-refresh_all_keyrings (SeahorseCommands *self)
+refresh_all_keyrings (SeahorseCommands *commands)
 {
 	seahorse_source_load_async (SEAHORSE_SOURCE (seahorse_gkr_source_default ()),
 	                            NULL, on_refresh_all_keyrings_complete,
-	                            g_object_ref (self));
+	                            g_object_ref (commands));
 }
 
 /**
@@ -119,19 +119,17 @@ static const GtkActionEntry ENTRIES_NEW[] = {
 static void
 on_keyring_unlock_done (GnomeKeyringResult result, gpointer user_data)
 {
-	SeahorseCommands *self = SEAHORSE_COMMANDS (user_data);
-	SeahorseView *view;
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (user_data);
 
 	if (result != GNOME_KEYRING_RESULT_OK &&
 	    result != GNOME_KEYRING_RESULT_DENIED &&
 	    result != GNOME_KEYRING_RESULT_CANCELLED) {
-		view = seahorse_commands_get_view (self);
-		seahorse_util_show_error (GTK_WIDGET (seahorse_view_get_window (view)),
+		seahorse_util_show_error (GTK_WIDGET (seahorse_commands_get_window (commands)),
 		                          _("Couldn't unlock keyring"),
 		                          gnome_keyring_result_to_message (result));
 	}
-	
-	refresh_all_keyrings (self);
+
+	refresh_all_keyrings (commands);
 }
 
 static void 
@@ -158,19 +156,17 @@ on_keyring_unlock (GtkAction *action, SeahorseGkrKeyringCommands *self)
 static void
 on_keyring_lock_done (GnomeKeyringResult result, gpointer user_data)
 {
-	SeahorseCommands *self = SEAHORSE_COMMANDS (user_data);
-	SeahorseView *view;
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (user_data);
 
 	if (result != GNOME_KEYRING_RESULT_OK &&
 	    result != GNOME_KEYRING_RESULT_DENIED &&
 	    result != GNOME_KEYRING_RESULT_CANCELLED) {
-		view = seahorse_commands_get_view (self);
-		seahorse_util_show_error (GTK_WIDGET (seahorse_view_get_window (view)),
+		seahorse_util_show_error (GTK_WIDGET (seahorse_commands_get_window (commands)),
 		                          _("Couldn't lock keyring"),
 		                          gnome_keyring_result_to_message (result));
 	}
 
-	refresh_all_keyrings (self);
+	refresh_all_keyrings (commands);
 }
 
 static void 
@@ -197,19 +193,17 @@ on_keyring_lock (GtkAction *action, SeahorseGkrKeyringCommands *self)
 static void
 on_set_default_keyring_done (GnomeKeyringResult result, gpointer user_data)
 {
-	SeahorseCommands *self = SEAHORSE_COMMANDS (user_data);
-	SeahorseView *view;
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (user_data);
 
 	if (result != GNOME_KEYRING_RESULT_OK &&
 	    result != GNOME_KEYRING_RESULT_DENIED &&
 	    result != GNOME_KEYRING_RESULT_CANCELLED) {
-		view = seahorse_commands_get_view (self);
-		seahorse_util_show_error (GTK_WIDGET (seahorse_view_get_window (view)),
+		seahorse_util_show_error (GTK_WIDGET (seahorse_commands_get_window (commands)),
 		                          _("Couldn't set default keyring"),
 		                          gnome_keyring_result_to_message (result));
 	}
-	
-	refresh_all_keyrings (self);
+
+	refresh_all_keyrings (commands);
 }
 
 static void
@@ -236,19 +230,17 @@ on_keyring_default (GtkAction *action, SeahorseGkrKeyringCommands *self)
 static void
 on_change_password_done (GnomeKeyringResult result, gpointer user_data)
 {
-	SeahorseCommands *self = SEAHORSE_COMMANDS (user_data);
-	SeahorseView *view;
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (user_data);
 
 	if (result != GNOME_KEYRING_RESULT_OK &&
 	    result != GNOME_KEYRING_RESULT_DENIED &&
 	    result != GNOME_KEYRING_RESULT_CANCELLED) {
-		view = seahorse_commands_get_view (self);
-		seahorse_util_show_error (GTK_WIDGET (seahorse_view_get_window (view)),
+		seahorse_util_show_error (GTK_WIDGET (seahorse_commands_get_window (commands)),
 		                          _("Couldn't change keyring password"),
 		                          gnome_keyring_result_to_message (result));
 	}
-	
-	refresh_all_keyrings (self);
+
+	refresh_all_keyrings (commands);
 }
 
 static void
@@ -328,7 +320,7 @@ seahorse_gkr_keyring_commands_show_properties (SeahorseCommands* base, SeahorseO
 	g_return_if_fail (SEAHORSE_IS_OBJECT (object));
 	g_return_if_fail (seahorse_object_get_tag (object) == SEAHORSE_GKR_TYPE);
 
-	window = seahorse_view_get_window (seahorse_commands_get_view (base));
+	window = seahorse_commands_get_window (base);
 	if (G_OBJECT_TYPE (object) == SEAHORSE_TYPE_GKR_KEYRING) 
 		seahorse_gkr_keyring_properties_show (SEAHORSE_GKR_KEYRING (object), window);
 	
@@ -344,7 +336,7 @@ on_delete_objects_complete (GObject *source, GAsyncResult *result, gpointer user
 	GtkWidget *parent;
 
 	if (!seahorse_gkr_delete_finish (result, &error)) {
-		parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (commands)));
+		parent = GTK_WIDGET (seahorse_commands_get_window (commands));
 		seahorse_util_show_error (parent, _("Couldn't delete keyring"), error->message);
 		g_error_free (error);
 	}

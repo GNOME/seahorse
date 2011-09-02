@@ -85,7 +85,7 @@ seahorse_pkcs11_commands_show_properties (SeahorseCommands *cmds, SeahorseObject
 	
 	/* Create a new dialog for the certificate */
 	window = GTK_WINDOW (seahorse_pkcs11_certificate_props_new (GCR_CERTIFICATE (object)));
-	gtk_window_set_transient_for (window, seahorse_view_get_window (seahorse_commands_get_view (cmds)));
+	gtk_window_set_transient_for (window, seahorse_commands_get_window (cmds));
 	g_object_set_qdata (G_OBJECT (object), slot_certificate_window, window);
 	gtk_widget_show (GTK_WIDGET (window));
 
@@ -102,7 +102,7 @@ on_delete_completed (GObject *source,
 	GError *error = NULL;
 
 	if (!seahorse_pkcs11_delete_finish (result, &error))
-		seahorse_util_handle_error (&error, seahorse_view_get_window (seahorse_commands_get_view (self)),
+		seahorse_util_handle_error (&error, seahorse_commands_get_window (self),
 		                            _("Couldn't delete"));
 
 	g_object_unref (self);
@@ -132,7 +132,7 @@ seahorse_pkcs11_commands_delete_objects (SeahorseCommands *cmds, GList *objects)
 				num), num);
 	}
 
-	parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (cmds)));
+	parent = GTK_WIDGET (seahorse_commands_get_window (cmds));
 	ret = seahorse_util_prompt_delete (prompt, parent);
 	g_free (prompt);
 

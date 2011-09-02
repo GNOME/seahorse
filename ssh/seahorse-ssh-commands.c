@@ -121,7 +121,7 @@ seahorse_ssh_commands_delete_objects (SeahorseCommands* base, GList* objects)
 		prompt = g_strdup_printf (_("Are you sure you want to delete %d secure shell keys?"), num);
 	}
 
-	parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (base)));
+	parent = GTK_WIDGET (seahorse_commands_get_window (base));
 	if (!seahorse_util_prompt_delete (prompt, NULL)) {
 		g_free (prompt);
 		return FALSE;

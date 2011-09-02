@@ -102,7 +102,7 @@ on_app_preferences (GtkAction* action, SeahorseViewer* self)
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	seahorse_preferences_show (seahorse_view_get_window (SEAHORSE_VIEW (self)), NULL);
+	seahorse_preferences_show (seahorse_viewer_get_window (self), NULL);
 }
 
 static void 
@@ -256,7 +256,7 @@ on_file_export_completed (GObject *source,
 	GError *error = NULL;
 
 	if (!seahorse_source_export_auto_finish (result, &error))
-		seahorse_util_handle_error (&error, seahorse_view_get_window (SEAHORSE_VIEW (self)),
+		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
 		                            _("Couldn't export keys"));
 
 	g_object_unref (self);
@@ -279,7 +279,7 @@ on_key_export_file (GtkAction* action, SeahorseViewer* self)
 		return;
 
 	dialog = seahorse_util_chooser_save_new (_("Export public key"), 
-	                                         seahorse_view_get_window (SEAHORSE_VIEW (self)));
+	                                         seahorse_viewer_get_window (self));
 	seahorse_util_chooser_show_key_files (dialog);
 	seahorse_util_chooser_set_filename_full (dialog, objects);
 	uri = seahorse_util_chooser_save_prompt (dialog);
@@ -327,7 +327,7 @@ on_copy_export_complete (GObject *source,
 
 	output = seahorse_source_export_auto_finish (result, &error);
 	if (error != NULL) {
-		seahorse_util_handle_error (&error, seahorse_view_get_window (SEAHORSE_VIEW (self)),
+		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
 		                            _("Couldn't retrieve data from key server"));
 		return;
 	}
@@ -422,7 +422,7 @@ on_key_delete (GtkAction* action, SeahorseViewer* self)
 		if (seahorse_object_get_usage (object) == SEAHORSE_USAGE_PRIVATE_KEY) {
 			gchar* prompt = g_strdup_printf (_("%s is a private key. Are you sure you want to proceed?"), 
 			                                 seahorse_object_get_label (object));
-			if (!seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_view_get_window (SEAHORSE_VIEW (self))))) {
+			if (!seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_viewer_get_window (self)))) {
 				g_free (prompt);
 				g_list_free (objects);
 				return;

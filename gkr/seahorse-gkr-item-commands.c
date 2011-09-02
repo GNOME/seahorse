@@ -56,7 +56,7 @@ seahorse_gkr_item_commands_show_properties (SeahorseCommands* base, SeahorseObje
 	g_return_if_fail (SEAHORSE_IS_OBJECT (object));
 	g_return_if_fail (seahorse_object_get_tag (object) == SEAHORSE_GKR_TYPE);
 
-	window = seahorse_view_get_window (seahorse_commands_get_view (base));
+	window = seahorse_commands_get_window (base);
 	if (G_OBJECT_TYPE (object) == SEAHORSE_TYPE_GKR_ITEM) 
 		seahorse_gkr_item_properties_show (SEAHORSE_GKR_ITEM (object), window); 
 	
@@ -74,7 +74,7 @@ on_delete_objects (GObject *source,
 	GtkWidget *parent;
 
 	if (!seahorse_gkr_delete_finish (result, &error)) {
-		parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (commands)));
+		parent = GTK_WIDGET (seahorse_commands_get_window (commands));
 		seahorse_util_show_error (parent, _("Couldn't delete item"), error->message);
 		g_error_free (error);
 	}
@@ -105,7 +105,7 @@ seahorse_gkr_item_commands_delete_objects (SeahorseCommands* commands,
 		                                    num), num);
 	}
 	
-	parent = GTK_WIDGET (seahorse_view_get_window (seahorse_commands_get_view (commands)));
+	parent = GTK_WIDGET (seahorse_commands_get_window (commands));
 	ret = seahorse_util_prompt_delete (prompt, parent);
 
 	if (ret) {
