@@ -568,7 +568,7 @@ seahorse_set_model_iter_nth_child (GtkTreeModel *tree_model, GtkTreeIter *iter,
 	GNode *node;
 
 	g_return_val_if_fail (SEAHORSE_SET_MODEL (tree_model), FALSE);
-	node = node_for_iter (pv, parent);
+	node = parent ? node_for_iter (pv, parent) : pv->root_node;
 	g_return_val_if_fail (node != NULL, FALSE);
 	node = g_node_nth_child (node, n);
 	if (node == NULL)
