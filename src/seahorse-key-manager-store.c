@@ -50,7 +50,7 @@ enum {
 
 enum {
     COL_USAGE,
-    COL_STOCK_ID,
+    COL_ICON,
     COL_NAME,
     COL_KEYID,
     COL_VALIDITY_STR,
@@ -65,7 +65,7 @@ enum {
 
 static SeahorseSetModelColumn column_info[] = {
 	{ "usage", G_TYPE_UINT, "usage" },
-	{ "icon", G_TYPE_STRING, NULL },
+	{ "icon", 0 /* later */, NULL },
 	{ "markup", G_TYPE_STRING, "label" },
 	{ "identifier", G_TYPE_STRING, "id" },
 	{ "validity-str", G_TYPE_STRING, "validity" },
@@ -744,6 +744,7 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
     
     /* Some simple checks to make sure all column info is on the same page */
     g_assert (N_COLS == G_N_ELEMENTS (column_info));
+    column_info[1].type = G_TYPE_ICON;
 
     gobject_class->finalize = seahorse_key_manager_store_finalize;
     gobject_class->set_property = seahorse_key_manager_store_set_property;
@@ -792,7 +793,7 @@ seahorse_key_manager_store_new (SeahorseSet *skset, GtkTreeView *view, GSettings
     renderer = gtk_cell_renderer_pixbuf_new ();
     g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
     g_object_set (renderer, "xpad", 6, NULL);
-    col = gtk_tree_view_column_new_with_attributes ("", renderer, "stock-id", COL_STOCK_ID, NULL);
+    col = gtk_tree_view_column_new_with_attributes ("", renderer, "gicon", COL_ICON, NULL);
     gtk_tree_view_column_set_resizable (col, FALSE);
     gtk_tree_view_append_column (view, col);
     gtk_tree_view_column_set_sort_column_id (col, COL_USAGE);

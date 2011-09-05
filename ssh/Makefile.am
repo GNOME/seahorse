@@ -7,7 +7,6 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
-	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \

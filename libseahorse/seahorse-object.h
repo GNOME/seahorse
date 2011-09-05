@@ -29,7 +29,7 @@
  * id: GQuark: Unique identifier for this object.
  * tag: GQuark: The module (openpgp, pkcs11, etc...) that handles this object. 
  * label: string: The displayable string label of this object.
- * icon: string: The stock ID of an icon to show for this object.
+ * icon: A GIcon.
  * usage: SeahorseUsage: The usage of this object.
  *  
  * The following will be calculated automatically if not set:
@@ -106,9 +106,6 @@ const gchar*        seahorse_object_get_markup             (SeahorseObject *self
 const gchar*        seahorse_object_get_identifier         (SeahorseObject *self);
 
 const gchar*        seahorse_object_get_nickname           (SeahorseObject *self);
-
-const gchar*        seahorse_object_get_icon               (SeahorseObject *self);
-
 
 SeahorseLocation    seahorse_object_get_location           (SeahorseObject *self);
 

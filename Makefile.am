@@ -29,8 +29,7 @@ SUBDIRS = libegg \
 	src \
 	po \
 	data \
-	help \
-	pixmaps
+	help
 
 EXTRA_DIST = \
     AUTHORS \

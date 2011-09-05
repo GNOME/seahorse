@@ -1,16 +1,15 @@
 
 uidir = $(datadir)/seahorse/ui/
 localedir = $(datadir)/locale
-pixmapsdir = $(datadir)/pixmaps/seahorse/
 seahorselibexecbindir = $(libdir)/seahorse/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	$(SEAHORSE_CFLAGS) \
+	-DPKGDATADIR=\""$(pkgdatadir)/"\" \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
-	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\"
 
 MARSHAL_SRCS = \
@@ -35,7 +34,7 @@ libseahorse_la_SOURCES = \
 	seahorse-context.c seahorse-context.h \
 	seahorse-debug.c seahorse-debug.h \
 	seahorse-dns-sd.c seahorse-dns-sd.h \
-	seahorse-gtkstock.c seahorse-gtkstock.h \
+	seahorse-icons.c seahorse-icons.h \
 	seahorse-object.c seahorse-object.h \
 	seahorse-object-list.c seahorse-object-list.h \
 	seahorse-object-model.c seahorse-object-model.h \

@@ -26,10 +26,10 @@
 
 #include <glib/gi18n.h>
 
+#include "seahorse-icons.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-progress.h"
-#include "seahorse-gtkstock.h"
 
 #include "ssh/seahorse-ssh-dialogs.h"
 #include "ssh/seahorse-ssh-source.h"

@@ -31,7 +31,7 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-bind.h"
-#include "seahorse-gtkstock.h"
+#include "seahorse-icons.h"
 #include "seahorse-object.h"
 #include "seahorse-object-model.h"
 #include "seahorse-object-widget.h"
@@ -152,14 +152,16 @@ show_gtkbuilder_widget (SeahorseWidget *swidget, const gchar *name, gboolean sho
 }
 
 static void
-set_gtkbuilder_image (SeahorseWidget *swidget, const gchar *name, const gchar *stock)
+set_gtkbuilder_image (SeahorseWidget *swidget,
+                      const gchar *name,
+                      const gchar *icon_name)
 {
     GtkWidget *widget = GTK_WIDGET (gtk_builder_get_object (swidget->gtkbuilder, name));
     
     if (!widget)
         return;
     
-    gtk_image_set_from_stock (GTK_IMAGE (widget), stock, GTK_ICON_SIZE_DIALOG);
+    gtk_image_set_from_icon_name (GTK_IMAGE (widget), icon_name, GTK_ICON_SIZE_DIALOG);
 }
 
 static void
@@ -279,9 +281,9 @@ enum {
     UIDSIG_N_COLUMNS
 };
 
-const GType uidsig_columns[] = {
+static GType uidsig_columns[] = {
     G_TYPE_OBJECT,  /* index */
-    G_TYPE_STRING,  /* icon */
+    0 /* later */,  /* icon */
     G_TYPE_STRING,  /* name */
     G_TYPE_STRING   /* keyid */
 };
@@ -409,7 +411,7 @@ names_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
                   GtkTreeIter *iter, SeahorseWidget *swidget)
 {
 	SeahorseObject *preferred;
-	const gchar *icon;
+	GIcon *icon;
 	const gchar *name, *id;
     
 	/* Always use the most preferred key for this keyid */
@@ -422,8 +424,8 @@ names_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
 		seahorse_object_model_set_row_object (skmodel, iter, object);
 	}
 
-	icon = seahorse_object_get_location (object) < SEAHORSE_LOCATION_LOCAL ? 
-	                 GTK_STOCK_DIALOG_QUESTION : SEAHORSE_STOCK_SIGN;
+	icon = g_themed_icon_new (seahorse_object_get_location (object) < SEAHORSE_LOCATION_LOCAL ?
+	                          GTK_STOCK_DIALOG_QUESTION : SEAHORSE_ICON_SIGN);
 	name = seahorse_object_get_markup (object);
 	id = seahorse_object_get_identifier (object);
 	
@@ -432,6 +434,7 @@ names_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
 	                    UIDSIG_ICON, icon,
 	                    UIDSIG_NAME, name ? name : _("[Unknown]"),
 	                    UIDSIG_KEYID, id, -1);
+	g_object_unref (icon);
 }
 
 static void
@@ -445,6 +448,7 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePgpKey *pk
 	GList *uids, *u;
 	GList *sigs, *s;
 	GCancellable *cancellable;
+	GIcon *icon;
 
 	/* Insert all the fun-ness */
 	uids = seahorse_pgp_key_get_uids (pkey);
@@ -452,15 +456,15 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePgpKey *pk
 	for (u = uids; u; u = g_list_next (u)) {
 
 		uid = SEAHORSE_PGP_UID (u->data);
-
+		icon = g_themed_icon_new (SEAHORSE_ICON_PERSON);
 		gtk_tree_store_append (store, &uiditer, NULL);
 		gtk_tree_store_set (store, &uiditer,  
 		                    UIDSIG_OBJECT, uid,
-		                    UIDSIG_ICON, SEAHORSE_STOCK_PERSON,
+		                    UIDSIG_ICON, icon,
 		                    UIDSIG_NAME, seahorse_object_get_markup (SEAHORSE_OBJECT (uid)),
 		                    -1);
-        
-        
+		g_object_unref (icon);
+
 		/* Build a list of all the keyids */
 		sigs = seahorse_pgp_uid_get_signatures (uid);
 		for (s = sigs; s; s = g_list_next (s)) {
@@ -516,9 +520,11 @@ do_names (SeahorseWidget *swidget)
         gtk_tree_store_clear (store);
         
     } else {
-        
+	    g_assert (UIDSIG_N_COLUMNS == G_N_ELEMENTS (uidsig_columns));
+	    uidsig_columns[UIDSIG_ICON] = G_TYPE_ICON;
+
         /* This is our first time so create a store */
-        store = GTK_TREE_STORE (seahorse_object_model_new (UIDSIG_N_COLUMNS, (GType*)uidsig_columns));
+        store = GTK_TREE_STORE (seahorse_object_model_new (UIDSIG_N_COLUMNS, uidsig_columns));
         g_signal_connect (store, "update-row", G_CALLBACK (names_update_row), swidget);
         
         /* Icon column */
@@ -526,7 +532,7 @@ do_names (SeahorseWidget *swidget)
         g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
                                                      -1, "", renderer,
-                                                     "stock-id", UIDSIG_ICON, NULL);
+                                                     "gicon", UIDSIG_ICON, NULL);
 
         /* The name column */
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
@@ -722,9 +728,9 @@ set_photoid_state (SeahorseWidget *swidget, SeahorsePgpKey *pkey)
 	if (pixbuf)
 		gtk_image_set_from_pixbuf (GTK_IMAGE (photo_image), pixbuf);
 	else if (etype == SEAHORSE_USAGE_PRIVATE_KEY)
-		gtk_image_set_from_stock (GTK_IMAGE (photo_image), SEAHORSE_STOCK_SECRET, (GtkIconSize)-1);
+		gtk_image_set_from_icon_name (GTK_IMAGE (photo_image), SEAHORSE_ICON_SECRET, (GtkIconSize)-1);
 	else 
-		gtk_image_set_from_stock (GTK_IMAGE (photo_image), SEAHORSE_STOCK_KEY, (GtkIconSize)-1);
+		gtk_image_set_from_icon_name (GTK_IMAGE (photo_image), SEAHORSE_ICON_KEY, (GtkIconSize)-1);
 }
 
 static void
@@ -825,9 +831,9 @@ enum {
     UID_N_COLUMNS
 };
 
-const GType uid_columns[] = {
+static GType uid_columns[] = {
     G_TYPE_OBJECT,  /* object */
-    G_TYPE_STRING,  /* icon */
+    0 /* later */,  /* icon */
     G_TYPE_STRING,  /* name */
     G_TYPE_STRING,  /* email */
     G_TYPE_STRING   /* comment */
@@ -882,6 +888,7 @@ do_owner (SeahorseWidget *swidget)
 	const gchar *markup;
 	const gchar *label;
 	GList *uids, *l;
+	GIcon *icon;
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 	pkey = SEAHORSE_PGP_KEY (object);
@@ -952,7 +959,9 @@ do_owner (SeahorseWidget *swidget)
 			gtk_list_store_clear (GTK_LIST_STORE (store));
             
 		} else {
-    
+			g_assert (UID_N_COLUMNS != G_N_ELEMENTS (uid_columns));
+			uid_columns[1] = G_TYPE_ICON;
+
 			/* This is our first time so create a store */
 			store = gtk_list_store_newv (UID_N_COLUMNS, (GType*)uid_columns);
     
@@ -961,7 +970,7 @@ do_owner (SeahorseWidget *swidget)
 			g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
 			gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
 			                                             -1, "", renderer,
-			                                             "stock-id", UID_ICON, NULL);
+			                                             "gicon", UID_ICON, NULL);
 
 			gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
 			                                             -1, _("Name"), gtk_cell_renderer_text_new (), 
@@ -971,11 +980,13 @@ do_owner (SeahorseWidget *swidget)
 		for (l = uids; l; l = g_list_next (l)) {
     
 			markup = seahorse_object_get_markup (l->data);
+			icon = g_themed_icon_new (SEAHORSE_ICON_PERSON);
 			gtk_list_store_append (store, &iter);
 			gtk_list_store_set (store, &iter,  
 			                    UID_OBJECT, l->data,
-			                    UID_ICON, SEAHORSE_STOCK_PERSON,
+			                    UID_ICON, icon,
 			                    UID_MARKUP, markup, -1);
+			g_object_unref (icon);
 		} 
         
 		gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL(store));
@@ -1529,7 +1540,7 @@ enum {
 
 const GType sign_columns[] = {
     G_TYPE_STRING,
-    G_TYPE_STRING,
+    0 /* later */,
     G_TYPE_STRING,
     G_TYPE_BOOLEAN
 };
@@ -1575,7 +1586,7 @@ trust_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
 {
 	SeahorseObject *preferred;
 	gboolean trusted = FALSE;
-	const gchar *icon;
+	GIcon *icon;
 	const gchar *name, *id;
     
     	/* Always use the most preferred key for this keyid */
@@ -1593,18 +1604,19 @@ trust_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
 		trusted = TRUE;
 	else if (seahorse_object_get_flags (object) & SEAHORSE_FLAG_TRUSTED)
 		trusted = TRUE;
-    
-	icon = seahorse_object_get_location (object) < SEAHORSE_LOCATION_LOCAL ? 
-	                GTK_STOCK_DIALOG_QUESTION : SEAHORSE_STOCK_SIGN;
+
+	icon = g_themed_icon_new (seahorse_object_get_location (object) < SEAHORSE_LOCATION_LOCAL ?
+	                          GTK_STOCK_DIALOG_QUESTION : SEAHORSE_ICON_SIGN);
 	name = seahorse_object_get_label (object);
 	id = seahorse_object_get_identifier (object);
-	
+
 	gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter,
 	                    SIGN_ICON, icon,
 	                    SIGN_NAME, name ? name : _("[Unknown]"),
 	                    SIGN_KEYID, id,
 	                    SIGN_TRUSTED, trusted,
-                        -1);
+	                    -1);
+	g_object_unref (icon);
 }
 
 static void
@@ -1778,7 +1790,7 @@ do_trust (SeahorseWidget *swidget)
         show_gtkbuilder_widget (swidget, "sign-area", FALSE);
         show_gtkbuilder_widget (swidget, "revoke-area", FALSE);
         sensitive_gtkbuilder_widget (swidget, "trust-marginal-check", FALSE);
-        set_gtkbuilder_image (swidget, "sign-image", SEAHORSE_STOCK_SIGN_UNKNOWN);
+        set_gtkbuilder_image (swidget, "sign-image", SEAHORSE_ICON_SIGN_UNKNOWN);
         
     /* Local keys */
     } else {
@@ -1800,26 +1812,26 @@ do_trust (SeahorseWidget *swidget)
         /* Trust is specified manually */
         case SEAHORSE_VALIDITY_ULTIMATE:
             managed = FALSE;
-            icon = SEAHORSE_STOCK_SIGN_OK;
+            icon = SEAHORSE_ICON_SIGN_OK;
             break;
         
         /* Trust is specified manually */
         case SEAHORSE_VALIDITY_NEVER:
             managed = FALSE;
-            icon = SEAHORSE_STOCK_SIGN_BAD;
+            icon = SEAHORSE_ICON_SIGN_BAD;
             break;
         
         /* We manage the trust through this page */
         case SEAHORSE_VALIDITY_FULL:
         case SEAHORSE_VALIDITY_MARGINAL:
             managed = TRUE;
-            icon = SEAHORSE_STOCK_SIGN_OK;
+            icon = SEAHORSE_ICON_SIGN_OK;
             break;
         
         /* We manage the trust through this page */
         case SEAHORSE_VALIDITY_UNKNOWN:
             managed = TRUE;
-            icon = SEAHORSE_STOCK_SIGN;
+            icon = SEAHORSE_ICON_SIGN;
             break;
         
         default:
@@ -1880,7 +1892,7 @@ do_trust (SeahorseWidget *swidget)
 			g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
 			gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
 			                                             -1, "", renderer,
-			                                             "stock-id", SIGN_ICON, NULL);
+			                                             "gicon", SIGN_ICON, NULL);
 			gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
 			                                             -1, _("Name/Email"), gtk_cell_renderer_text_new (), 
 			                                             "text", SIGN_NAME, NULL);

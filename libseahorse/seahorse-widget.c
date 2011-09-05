@@ -26,8 +26,8 @@
 
 #include <glib/gi18n.h>
 
+#include "seahorse-icons.h"
 #include "seahorse-widget.h"
-#include "seahorse-gtkstock.h"
 
 /**
  * SECTION:seahorse-widget

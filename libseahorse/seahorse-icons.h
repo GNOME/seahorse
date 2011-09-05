@@ -6,8 +6,8 @@
  * Gaim is the legal property of its developers, whose names are too numerous
  * to list here.  Please refer to the COPYRIGHT file distributed with the gaim
  * source distribution.
- * 
- * Also (c) 2005 Adam Schreiber <sadam@clemson.edu> 
+ *
+ * Also (c) 2005 Adam Schreiber <sadam@clemson.edu>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,26 +23,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef _SEAHORSE_GTKSTOCK_H_
-#define _SEAHORSE_GTKSTOCK_H_
+
+#ifndef _SEAHORSE_ICONS_H_
+#define _SEAHORSE_ICONS_H_
 
 #include <glib.h>
 
-/* The default stock icons */
-#define SEAHORSE_STOCK_KEY          "seahorse-key"
-#define SEAHORSE_STOCK_SECRET       "seahorse-key-personal"
-#define SEAHORSE_STOCK_KEY_SSH      "seahorse-key-ssh"
-#define SEAHORSE_STOCK_PERSON       "seahorse-person"
-#define SEAHORSE_STOCK_SIGN         "seahorse-sign"
-#define SEAHORSE_STOCK_SIGN_OK      "seahorse-sign-ok"
-#define SEAHORSE_STOCK_SIGN_BAD     "seahorse-sign-bad"
-#define SEAHORSE_STOCK_SIGN_UNKNOWN "seahorse-sign-unknown"
+/* The seahorse icons */
+#define SEAHORSE_ICON_KEY          "seahorse-key"
+#define SEAHORSE_ICON_SECRET       "seahorse-key-personal"
+#define SEAHORSE_ICON_KEY_SSH      "seahorse-key-ssh"
+#define SEAHORSE_ICON_PERSON       "seahorse-person"
+#define SEAHORSE_ICON_SIGN         "seahorse-sign"
+#define SEAHORSE_ICON_SIGN_OK      "seahorse-sign-ok"
+#define SEAHORSE_ICON_SIGN_BAD     "seahorse-sign-bad"
+#define SEAHORSE_ICON_SIGN_UNKNOWN "seahorse-sign-unknown"
 
-#define SEAHORSE_THEMED_WEBBROWSER  "web-browser"
-#define SEAHORSE_THEMED_FOLDER      "folder"
+#define SEAHORSE_ICON_WEBBROWSER  "web-browser"
+#define SEAHORSE_ICON_FOLDER      "folder"
 
-void    seahorse_gtkstock_init          (void);
+void    seahorse_icons_init          (void);
 
-void    seahorse_gtkstock_add_icons     (const gchar **icons);
-
-#endif /* _SEAHORSE_GTKSTOCK_H_ */
+#endif /* _SEAHORSE_ICONS_H_ */

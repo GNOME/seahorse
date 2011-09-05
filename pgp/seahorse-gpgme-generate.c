@@ -29,7 +29,7 @@
  
 #include "egg-datetime.h"
 
-#include "seahorse-gtkstock.h"
+#include "seahorse-icons.h"
 #include "seahorse-registry.h"
 #include "seahorse-passphrase.h"
 #include "seahorse-progress.h"
@@ -450,9 +450,9 @@ seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent, con
     
     widget = seahorse_widget_get_widget (swidget, "pgp-image");
     g_return_if_fail (widget != NULL);
-    gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_SECRET, 
-                              GTK_ICON_SIZE_DIALOG);
-    
+    gtk_image_set_from_icon_name (GTK_IMAGE (widget), SEAHORSE_ICON_SECRET,
+                                  GTK_ICON_SIZE_DIALOG);
+
     /* The algoritms */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
     g_return_if_fail (widget != NULL);

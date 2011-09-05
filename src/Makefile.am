@@ -1,17 +1,14 @@
 
 uidir = $(datadir)/seahorse/ui/
 localedir = $(datadir)/locale
-pixmapsdir = $(datadir)/pixmaps/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libegg \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
-	-DDATA_DIR=\""$(datadir)"\" \
 	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
-	-DPIXMAPSDIR=\""$(pixmapsdir)"\" \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
 if WITH_KEYSERVER

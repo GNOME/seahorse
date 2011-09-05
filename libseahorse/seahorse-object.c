@@ -82,7 +82,7 @@ enum _SeahorseObjectProps {
  * @markup_explicit: If TRUE the markup will not be set automatically
  * @nickname: DBUS: "simple-name"
  * @nickname_explicit: If TRUE the nickname will not be set automatically
- * @icon: DBUS: "stock-id"
+ * @icon: GIcon
  * @identifier: DBUS: "key-id", "display-id", "raw-id"
  * @identifier_explicit:
  * @location: describes the loaction of the object (local, remte, invalid...)
@@ -105,7 +105,7 @@ struct _SeahorseObjectPrivate {
     gboolean markup_explicit;
     gchar *nickname;
     gboolean nickname_explicit;
-    gchar *icon;
+    GIcon *icon;
     gchar *identifier;
     gboolean identifier_explicit;
 
@@ -305,7 +305,7 @@ seahorse_object_init (SeahorseObject *self)
 	                                        SeahorseObjectPrivate);
 	self->pv->label = g_strdup ("");
 	self->pv->markup = g_strdup ("");
-	self->pv->icon = g_strdup ("gtk-missing-image");
+	self->pv->icon = g_themed_icon_new ("gtk-missing-image");
 	self->pv->identifier = g_strdup ("");
 	self->pv->location = SEAHORSE_LOCATION_INVALID;
 	self->pv->usage = SEAHORSE_USAGE_NONE;
@@ -394,9 +394,8 @@ seahorse_object_finalize (GObject *obj)
 	g_free (self->pv->nickname);
 	self->pv->nickname = NULL;
 
-	g_free (self->pv->icon);
-	self->pv->icon = NULL;
-	
+	g_clear_object (&self->pv->icon);
+
 	g_free (self->pv->identifier);
 	self->pv->identifier = NULL;
 
@@ -449,7 +448,7 @@ seahorse_object_get_property (GObject *obj, guint prop_id, GValue *value,
 		g_value_set_string (value, seahorse_object_get_markup (self));
 		break;
 	case PROP_ICON:
-		g_value_set_string (value, seahorse_object_get_icon (self));
+		g_value_set_object (value, self->pv->icon);
 		break;
 	case PROP_IDENTIFIER:
 		g_value_set_string (value, seahorse_object_get_identifier (self));
@@ -546,8 +545,9 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 		}
 		break;
 	case PROP_ICON:
-		if (set_string_storage (g_value_get_string (value), &self->pv->icon))
-			g_object_notify (obj, "icon");
+		g_clear_object (&self->pv->icon);
+		self->pv->icon = g_value_dup_object (value);
+		g_object_notify (obj, "icon");
 		break;
 	case PROP_IDENTIFIER:
 		if (set_string_storage (g_value_get_string (value), &self->pv->identifier)) {
@@ -637,8 +637,8 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
 	                                "", G_PARAM_READWRITE));
 	
 	g_object_class_install_property (gobject_class, PROP_ICON,
-	           g_param_spec_string ("icon", "Object Icon", "Stock ID for object.", 
-	                                "", G_PARAM_READWRITE));
+	           g_param_spec_object ("icon", "Object Icon", "Stock ID for object.",
+	                                G_TYPE_ICON, G_PARAM_READWRITE));
 	
 	g_object_class_install_property (gobject_class, PROP_MARKUP,
 	           g_param_spec_string ("markup", "Object Display Markup", "This object's displayable markup.", 
@@ -887,19 +887,6 @@ seahorse_object_get_nickname (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
 	return self->pv->nickname;
-}
-
-/**
- * seahorse_object_get_icon:
- * @self: Object
- *
- * Returns: the icon of the object @self
- */
-const gchar*
-seahorse_object_get_icon (SeahorseObject *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	return self->pv->icon;
 }
 
 /**

@@ -1,5 +1,6 @@
 
-uidir = $(datadir)/seahorse/ui/
+pkgdatadir = $(datadir)/seahorse
+uidir = $(pkgdatadir)/ui
 localedir = $(datadir)/locale
 seahorselibexecbindir = $(libdir)/seahorse/
 
@@ -7,8 +8,7 @@ INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
-	-DDATA_DIR=\""$(datadir)"\" \
-	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
+	-DSEAHORSE_UIDIR=\""$(uidir)/"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DGETTEXT_PACKAGE=\""seahorse\""

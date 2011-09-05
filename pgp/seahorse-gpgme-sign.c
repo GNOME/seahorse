@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include "seahorse-combo-keys.h"
-#include "seahorse-gtkstock.h"
+#include "seahorse-icons.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-set.h"
 #include "seahorse-util.h"
@@ -212,8 +212,8 @@ sign_internal (SeahorseObject *to_sign, GtkWindow *parent)
     /* Image */
     w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "sign-image"));
     g_return_if_fail (w != NULL);
-    gtk_image_set_from_stock (GTK_IMAGE (w), SEAHORSE_STOCK_SIGN, GTK_ICON_SIZE_DIALOG);
-    
+    gtk_image_set_from_icon_name (GTK_IMAGE (w), SEAHORSE_ICON_SIGN, GTK_ICON_SIZE_DIALOG);
+
     g_object_unref (skset);
     seahorse_widget_show (swidget);
     

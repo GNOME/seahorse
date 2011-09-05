@@ -24,7 +24,7 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-gtkstock.h"
+#include "seahorse-icons.h"
 #include "seahorse-object-list.h"
 #include "seahorse-source.h"
 #include "seahorse-util.h"
@@ -172,10 +172,11 @@ void
 seahorse_pgp_key_realize (SeahorsePgpKey *self)
 {
 	const gchar *nickname, *keyid;
-	const gchar *icon;
+	const gchar *icon_name;
 	gchar *markup, *name, *identifier;
 	SeahorseUsage usage;
 	GList *subkeys;
+	GIcon *icon;
 
 	subkeys = seahorse_pgp_key_get_subkeys (self);
 	if (subkeys) {
@@ -193,13 +194,14 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
 
 	/* The type */
 	if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
-		icon = SEAHORSE_STOCK_SECRET;
+		icon_name = SEAHORSE_ICON_SECRET;
 	} else {
-		icon = SEAHORSE_STOCK_KEY;
+		icon_name = SEAHORSE_ICON_KEY;
 		if (usage == SEAHORSE_USAGE_NONE)
 			g_object_set (self, "usage", SEAHORSE_USAGE_PUBLIC_KEY, NULL);
 	}
 
+	icon = g_themed_icon_new (icon_name);
 	g_object_set (self,
 		      "label", name,
 		      "markup", markup,
@@ -207,7 +209,8 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
 		      "identifier", identifier,
 		      "icon", icon,
 		      NULL);
-		
+
+	g_object_unref (icon);
 	g_free (identifier);
 	g_free (markup);
 	g_free (name);

@@ -32,7 +32,7 @@
 #include "seahorse-ssh.h"
 #include "seahorse-ssh-operation.h"
 
-#include "seahorse-gtkstock.h"
+#include "seahorse-icons.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
@@ -223,7 +223,7 @@ seahorse_ssh_generate_show (SeahorseSSHSource *src, GtkWindow *parent)
 
     widget = seahorse_widget_get_widget (swidget, "ssh-image");
     g_return_if_fail (widget != NULL);
-    gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_KEY_SSH, GTK_ICON_SIZE_DIALOG);
+    gtk_image_set_from_icon_name (GTK_IMAGE (widget), SEAHORSE_ICON_KEY_SSH, GTK_ICON_SIZE_DIALOG);
 
     /* on_change() gets called, bits entry is setup */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");

@@ -553,10 +553,6 @@ po/Makefile.in
 help/Makefile
 data/Makefile
 data/icons/Makefile
-pixmaps/Makefile
-pixmaps/22x22/Makefile
-pixmaps/48x48/Makefile
-pixmaps/scalable/Makefile
 pkcs11/Makefile
 src/Makefile
 src/seahorse.desktop.in

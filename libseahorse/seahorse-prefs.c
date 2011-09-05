@@ -23,7 +23,7 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-combo-keys.h"
-#include "seahorse-gtkstock.h"
+#include "seahorse-icons.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-prefs.h"
 #include "seahorse-registry.h"

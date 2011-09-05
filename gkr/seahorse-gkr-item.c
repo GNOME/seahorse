@@ -27,8 +27,8 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-context.h"
+#include "seahorse-icons.h"
 #include "seahorse-source.h"
-#include "seahorse-gtkstock.h"
 #include "seahorse-util.h"
 #include "seahorse-secure-memory.h"
 
@@ -418,7 +418,8 @@ seahorse_gkr_item_realize (SeahorseGkrItem *self)
 	gchar *display;
 	gchar *markup;
 	gchar *identifier;
-	const gchar *icon;
+	const gchar *icon_name;
+	GIcon *icon;
 
 	display = calc_display_name (self, TRUE);
 	markup = calc_name_markup(self);
@@ -428,19 +429,20 @@ seahorse_gkr_item_realize (SeahorseGkrItem *self)
 	switch (calc_item_type (self))
 	{
 	case GNOME_KEYRING_ITEM_GENERIC_SECRET:
-		icon = GNOME_STOCK_AUTHENTICATION;
+		icon_name = GNOME_STOCK_AUTHENTICATION;
 		break;
 	case GNOME_KEYRING_ITEM_NETWORK_PASSWORD:
-		icon = is_network_item (self, "http") ? SEAHORSE_THEMED_WEBBROWSER : GTK_STOCK_NETWORK;
+		icon_name = is_network_item (self, "http") ? SEAHORSE_ICON_WEBBROWSER : GTK_STOCK_NETWORK;
 		break;
 	case GNOME_KEYRING_ITEM_NOTE:
-		icon = GNOME_STOCK_BOOK_OPEN;
+		icon_name = GNOME_STOCK_BOOK_OPEN;
 		break;
 	default:
-		icon = GNOME_STOCK_BLANK;
+		icon_name = GNOME_STOCK_BLANK;
 		break;
 	}
-	
+
+	icon = g_themed_icon_new (icon_name);
 	g_object_set (self,
 		      "label", display,
 		      "icon", icon,
@@ -448,7 +450,7 @@ seahorse_gkr_item_realize (SeahorseGkrItem *self)
 		      "identifier", identifier,
 		      "flags", SEAHORSE_FLAG_DELETABLE,
 		      NULL);
-	
+	g_object_unref (icon);
 	g_free (display);
 	g_free (markup);
 	g_free (identifier);

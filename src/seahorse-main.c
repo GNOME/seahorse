@@ -24,7 +24,7 @@
 
 #include "seahorse-cleanup.h"
 #include "seahorse-context.h"
-#include "seahorse-gtkstock.h"
+#include "seahorse-icons.h"
 #include "seahorse-registry.h"
 #include "seahorse-secure-memory.h"
 #include "seahorse-util.h"
@@ -86,8 +86,8 @@ main (int argc, char **argv)
     }
 
     /* Insert Icons into Stock */ 
-    seahorse_gtkstock_init ();
-    
+    seahorse_icons_init ();
+
     /* Make the default SeahorseContext */
     seahorse_context_create ();
 

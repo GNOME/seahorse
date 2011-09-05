@@ -101,23 +101,24 @@ static GObject*
 seahorse_generate_select_constructor (GType type, guint n_props, GObjectConstructParam *props) 
 {
 	SeahorseGenerateSelect *self = SEAHORSE_GENERATE_SELECT (G_OBJECT_CLASS (seahorse_generate_select_parent_class)->constructor(type, n_props, props));
-	gchar *text, *icon;
+	gchar *text;
 	gchar *label, *tooltip;
 	GtkCellRenderer *pixcell;
 	GtkTreeSelection *selection;
 	GtkTreeIter iter;
 	GList *l;
-	
+	GIcon *icon;
+
 	g_return_val_if_fail (self, NULL);	
 
-	self->pv->store = gtk_list_store_new (COLUMN_N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, GTK_TYPE_ACTION);
+	self->pv->store = gtk_list_store_new (COLUMN_N_COLUMNS, G_TYPE_ICON, G_TYPE_STRING, GTK_TYPE_ACTION);
 
 	self->pv->action_groups = seahorse_registry_object_instances (NULL, "generator", NULL);
 	for (l = self->pv->action_groups; l; l = g_list_next (l)) {
 		GList *k, *actions = gtk_action_group_list_actions (l->data);
 		for (k = actions; k; k = g_list_next (k)) {
 			
-			g_object_get (k->data, "label", &label, "tooltip", &tooltip, "stock-id", &icon, NULL);
+			g_object_get (k->data, "label", &label, "tooltip", &tooltip, "gicon", &icon, NULL);
 			text = g_strdup_printf (TEMPLATE, label, tooltip);
 
 			gtk_list_store_append (self->pv->store, &iter);
@@ -129,7 +130,7 @@ seahorse_generate_select_constructor (GType type, guint n_props, GObjectConstruc
 			
 			g_free (text);
 			g_free (label);
-			g_free (icon);
+			g_clear_object (&icon);
 			g_free (tooltip);
 		}
 		
@@ -142,7 +143,7 @@ seahorse_generate_select_constructor (GType type, guint n_props, GObjectConstruc
 	
 	pixcell = gtk_cell_renderer_pixbuf_new ();
 	g_object_set (pixcell, "stock-size", GTK_ICON_SIZE_DND, NULL);
-	gtk_tree_view_insert_column_with_attributes (self->pv->view, -1, "", pixcell, "stock-id", COLUMN_ICON, NULL);
+	gtk_tree_view_insert_column_with_attributes (self->pv->view, -1, "", pixcell, "gicon", COLUMN_ICON, NULL);
 	gtk_tree_view_insert_column_with_attributes (self->pv->view, -1, "", gtk_cell_renderer_text_new (), "markup", COLUMN_TEXT, NULL);
 	gtk_tree_view_set_model (self->pv->view, GTK_TREE_MODEL (self->pv->store));
 

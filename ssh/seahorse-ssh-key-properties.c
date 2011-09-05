@@ -22,7 +22,7 @@
 #include "config.h"
 
 #include "seahorse-bind.h"
-#include "seahorse-gtkstock.h"
+#include "seahorse-icons.h"
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-util.h"
@@ -265,7 +265,7 @@ do_main (SeahorseWidget *swidget)
     /* Image */
     widget = GTK_WIDGET (gtk_builder_get_object (swidget->gtkbuilder, "key-image"));
     if (widget)
-        gtk_image_set_from_stock (GTK_IMAGE (widget), SEAHORSE_STOCK_KEY_SSH, GTK_ICON_SIZE_DIALOG);
+        gtk_image_set_from_icon_name (GTK_IMAGE (widget), SEAHORSE_ICON_KEY_SSH, GTK_ICON_SIZE_DIALOG);
 
     /* Name and title */
     label = seahorse_object_get_label (object);

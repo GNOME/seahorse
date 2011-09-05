@@ -36,7 +36,7 @@
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
-#include "seahorse-gtkstock.h"
+#include "seahorse-icons.h"
 #include "seahorse-validity.h"
 
 enum {
@@ -74,7 +74,8 @@ changed_key (SeahorseSSHKey *self)
 	const gchar *display = NULL;
 	gchar *identifier;
 	gchar *simple = NULL;
-    
+	GIcon *icon;
+
 	if (self->keydata) {
 
   		 /* Try to make display and simple names */
@@ -117,17 +118,18 @@ changed_key (SeahorseSSHKey *self)
 
 	identifier = seahorse_ssh_key_calc_identifier (self->keydata->fingerprint);
 
+	icon = g_themed_icon_new (SEAHORSE_ICON_KEY_SSH);
 	g_object_set (obj,
 	              "id", seahorse_ssh_key_calc_cannonical_id (self->keydata->fingerprint),
 	              "label", display,
-	              "icon", SEAHORSE_STOCK_KEY_SSH,
+	              "icon", icon,
 	              "usage", usage,
 	              "nickname", simple,
 	              "location", SEAHORSE_LOCATION_LOCAL,
 	              "identifier", identifier,
 	              "flags", (self->keydata->authorized ? SEAHORSE_FLAG_TRUSTED : 0) | SEAHORSE_FLAG_EXPORTABLE | SEAHORSE_FLAG_DELETABLE,
 	              NULL);
-	
+	g_object_unref (icon);
 	g_free (identifier);
 }
 

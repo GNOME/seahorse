@@ -116,20 +116,23 @@ void
 seahorse_gkr_keyring_realize (SeahorseGkrKeyring *self)
 {
 	gchar *name, *markup;
-	
+	GIcon *icon;
+
 	name = g_strdup_printf (_("Passwords: %s"), self->pv->keyring_name);
 	markup = g_markup_printf_escaped (_("<b>Passwords:</b> %s"), self->pv->keyring_name);
-	
+	icon = g_themed_icon_new ("folder");
+
 	g_object_set (self,
 	              "label", name,
 	              "markup", markup,
 	              "nickname", self->pv->keyring_name,
 	              "identifier", "",
 	              "flags", SEAHORSE_FLAG_DELETABLE,
-	              "icon", "folder",
+	              "icon", icon,
 	              "usage", SEAHORSE_USAGE_OTHER,
 	              NULL);
-	
+
+	g_object_unref (icon);
 	g_free (name);
 	g_free (markup);
 }

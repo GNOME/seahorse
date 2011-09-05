@@ -1,4 +1,5 @@
 NULL =
+pkgdatadir = $(datadir)/seahorse
 
 public_icons = \
 	hicolor_apps_16x16_seahorse.png \
@@ -15,6 +16,21 @@ public_icons = \
 	$(NULL)
 
 private_icons = \
+	hicolor_apps_22x22_seahorse-key.png \
+	hicolor_apps_22x22_seahorse-key-personal.png \
+	hicolor_apps_22x22_seahorse-key-ssh.png \
+	hicolor_apps_22x22_seahorse-person.png \
+	hicolor_apps_48x48_seahorse-key.png \
+	hicolor_apps_48x48_seahorse-key-personal.png \
+	hicolor_apps_48x48_seahorse-key-ssh.png \
+	hicolor_apps_48x48_seahorse-person.png \
+	hicolor_status_22x22_seahorse-sign.png \
+	hicolor_status_22x22_seahorse-sign-bad.png \
+	hicolor_status_22x22_seahorse-sign-ok.png \
+	hicolor_status_48x48_seahorse-sign.png \
+	hicolor_status_48x48_seahorse-sign-bad.png \
+	hicolor_status_48x48_seahorse-sign-ok.png \
+	hicolor_status_48x48_seahorse-sign-unknown.png \
 	$(NULL)
 
 noinst_DATA = \
@@ -54,7 +70,7 @@ install-icons:
 		SIZE=`echo $$icon | cut -d_ -f3`; \
 		ICONFILE=`echo $$icon | cut -d_ -f4`; \
 		mkdir -p $(DESTDIR)$(pkgdatadir)/$(BASE_VERSION)/icons/$$THEME/$$SIZE/$$CONTEXT; \
-		$(INSTALL_DATA) $(srcdir)/$$icon $(DESTDIR)$(pkgdatadir)/$(BASE_VERSION)/icons/$$THEME/$$SIZE/$$CONTEXT/$$ICONFILE; \
+		$(INSTALL_DATA) $(srcdir)/$$icon $(DESTDIR)$(pkgdatadir)/icons/$$THEME/$$SIZE/$$CONTEXT/$$ICONFILE; \
 	done
 
 uninstall-icons:
@@ -70,7 +86,7 @@ uninstall-icons:
 		CONTEXT=`echo $$icon | cut -d_ -f2`; \
 		SIZE=`echo $$icon | cut -d_ -f3`; \
 		ICONFILE=`echo $$icon | cut -d_ -f4`; \
-		rm -f $(DESTDIR)$(pkgdatadir)/$(BASE_VERSION)/icons/$$THEME/$$SIZE/$$CONTEXT/$$ICONFILE; \
+		rm -f $(DESTDIR)$(pkgdatadir)/icons/$$THEME/$$SIZE/$$CONTEXT/$$ICONFILE; \
 	done
 
 install-data-local: install-icons update-icon-cache

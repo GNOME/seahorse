@@ -26,7 +26,7 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-bind.h"
-#include "seahorse-gtkstock.h"
+#include "seahorse-icons.h"
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-util.h"
@@ -65,7 +65,7 @@ setup_main (SeahorseWidget *swidget)
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 
 	/* Setup the image properly */
-	seahorse_bind_property ("icon", object, "stock", 
+	seahorse_bind_property ("icon", object, "gicon",
 	                        seahorse_widget_get_widget (swidget, "keyring-image"));
 
 	/* The window title */
