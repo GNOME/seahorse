@@ -55,7 +55,7 @@ static const char* UI_DEFINITION = ""\
 "	</popup>"\
 "</ui>";
 
-static SeahorseObjectPredicate commands_predicate = { 0, };
+static SeahorsePredicate commands_predicate = { 0, };
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 

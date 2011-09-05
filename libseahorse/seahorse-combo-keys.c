@@ -36,99 +36,109 @@ enum {
  */
 
 static void
-object_added (SeahorseSet *skset, SeahorseObject *object, GtkComboBox *combo)
+on_label_changed (GObject *obj,
+                  GParamSpec *param,
+                  gpointer user_data)
 {
-    GtkListStore *model;
-    GtkTreeIter iter;
-    const gchar *userid;
-    
-    g_return_if_fail (SEAHORSE_IS_OBJECT (object));
-    g_return_if_fail (combo != NULL);
-    
-    model = GTK_LIST_STORE (gtk_combo_box_get_model (combo));
-    
-    userid = seahorse_object_get_label (object);
+	SeahorseObject *object = SEAHORSE_OBJECT (obj);
+	GtkComboBox *combo = GTK_COMBO_BOX (user_data);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gboolean valid;
+	const gchar *userid;
+	gpointer pntr;
+	SeahorseObject *frommodel;
 
-    gtk_list_store_append (model, &iter);
-    gtk_list_store_set (model, &iter,
-                        COMBO_STRING, userid,
-                        COMBO_POINTER, object,
-                        -1);
+	model = gtk_combo_box_get_model (combo);
+	valid = gtk_tree_model_get_iter_first (model, &iter);
+
+	while (valid) {
+		gtk_tree_model_get (model, &iter,
+		                    COMBO_POINTER, &pntr,
+		                    -1);
+
+		frommodel = SEAHORSE_OBJECT (pntr);
+		if (frommodel == object) {
+			userid = seahorse_object_get_label (object);
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+			                    COMBO_STRING, userid,
+			                    -1);
+			break;
+		}
+
+		valid = gtk_tree_model_iter_next (model, &iter);
+	}
 }
 
 static void
-object_changed (SeahorseSet *skset, SeahorseObject *object, GtkComboBox *combo)
+on_collection_added (GcrCollection *collection,
+                     GObject *obj,
+                     gpointer user_data)
 {
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    gboolean valid;
-    const gchar *userid;
-    gpointer pntr;
-    SeahorseObject *frommodel;
-    
-    g_return_if_fail (SEAHORSE_IS_OBJECT (object));
+	SeahorseObject *object = SEAHORSE_OBJECT (obj);
+	GtkComboBox *combo = GTK_COMBO_BOX (user_data);
+	GtkListStore *model;
+	GtkTreeIter iter;
+	const gchar *userid;
 
-    model = gtk_combo_box_get_model (combo);
-    valid = gtk_tree_model_get_iter_first (model, &iter);
-    
-    while (valid) {
-        gtk_tree_model_get (model, &iter,
-                            COMBO_POINTER, &pntr,
-                            -1);
-                            
-        frommodel = SEAHORSE_OBJECT (pntr);
-        
-        if (frommodel == object) {
-        userid = seahorse_object_get_label (object);
-            gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-                                COMBO_STRING, userid,
-                                -1);
-                                
-            break;
-        }
-    
-        valid = gtk_tree_model_iter_next (model, &iter);
-    }
+	model = GTK_LIST_STORE (gtk_combo_box_get_model (combo));
+	userid = seahorse_object_get_label (object);
+
+	gtk_list_store_append (model, &iter);
+	gtk_list_store_set (model, &iter,
+	                    COMBO_STRING, userid,
+	                    COMBO_POINTER, object,
+	                    -1);
+
+	g_signal_connect (object, "notify::label", G_CALLBACK (on_label_changed), combo);
 }
 
 static void
-object_removed (SeahorseSet *skset, SeahorseObject *object, GtkComboBox *combo)
+on_collection_removed (GcrCollection *collection,
+                       GObject *obj,
+                       gpointer user_data)
 {
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    gpointer pntr;
-    gboolean valid;
-    SeahorseObject *frommodel;
-    
-    g_return_if_fail (SEAHORSE_IS_OBJECT (object));
-    g_return_if_fail (combo != NULL);
+	SeahorseObject *object = SEAHORSE_OBJECT (obj);
+	GtkComboBox *combo = GTK_COMBO_BOX (user_data);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gpointer pntr;
+	gboolean valid;
+	SeahorseObject *frommodel;
 
-    model = gtk_combo_box_get_model (combo);
-    valid = gtk_tree_model_get_iter_first (model, &iter);
-    
-    while (valid) {
-        gtk_tree_model_get (model, &iter,
-                            COMBO_POINTER, &pntr,
-                            -1);
-                            
-        frommodel = SEAHORSE_OBJECT (pntr);
-        
-        if (frommodel == object) {
-            gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
-                                
-            break;
-        }
-        
-        valid = gtk_tree_model_iter_next (model, &iter);
-    }
+	model = gtk_combo_box_get_model (combo);
+	valid = gtk_tree_model_get_iter_first (model, &iter);
+
+	while (valid) {
+		gtk_tree_model_get (model, &iter,
+		                    COMBO_POINTER, &pntr,
+		                    -1);
+
+		frommodel = SEAHORSE_OBJECT (pntr);
+		if (frommodel == object) {
+			gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+			break;
+		}
+
+		valid = gtk_tree_model_iter_next (model, &iter);
+	}
+
+	g_signal_handlers_disconnect_by_func (object, on_label_changed, combo);
 }
 
 static void
-combo_destroyed (GtkComboBox *combo, SeahorseSet *skset)
+on_combo_destroy (GtkComboBox *combo,
+                  gpointer user_data)
 {
-    g_signal_handlers_disconnect_by_func (skset, object_added, combo);
-    g_signal_handlers_disconnect_by_func (skset, object_changed, combo);
-    g_signal_handlers_disconnect_by_func (skset, object_removed, combo);
+	GcrCollection *collection = GCR_COLLECTION (user_data);
+	GList *objects, *l;
+
+	objects = gcr_collection_get_objects (collection);
+	for (l = objects; l != NULL; l = g_list_next (l))
+		g_signal_handlers_disconnect_by_func (l->data, on_label_changed, combo);
+	g_list_free (objects);
+	g_signal_handlers_disconnect_by_func (collection, on_collection_added, combo);
+	g_signal_handlers_disconnect_by_func (collection, on_collection_removed, combo);
 }
 
 /* -----------------------------------------------------------------------------
@@ -136,57 +146,51 @@ combo_destroyed (GtkComboBox *combo, SeahorseSet *skset)
  */
 
 void 
-seahorse_combo_keys_attach (GtkComboBox *combo, SeahorseSet *skset,
+seahorse_combo_keys_attach (GtkComboBox *combo,
+                            GcrCollection *collection,
                             const gchar *none_option)
 {
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    GtkCellRenderer *renderer;
-    SeahorseObject *object;
-    GList *l, *objects;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	GtkCellRenderer *renderer;
+	GList *l, *objects;
 
-    /* Setup the None Option */
-    model = gtk_combo_box_get_model (combo);
-    if (!model) {
-        model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER));
-        gtk_combo_box_set_model (combo, model);
-        
-        gtk_cell_layout_clear (GTK_CELL_LAYOUT (combo));
-        renderer = gtk_cell_renderer_text_new ();
-        
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-        gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combo), renderer,
-                                       "text", COMBO_STRING);                            
-    }
+	/* Setup the None Option */
+	model = gtk_combo_box_get_model (combo);
+	if (!model) {
+		model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER));
+		gtk_combo_box_set_model (combo, model);
 
-    /* Setup the object list */
-    objects = seahorse_set_get_objects (skset);  
-    for (l = objects; l != NULL; l = g_list_next (l)) {
-        object = SEAHORSE_OBJECT (l->data);
-        object_added (skset, object, combo);
-    }
-    g_list_free (objects);
+		gtk_cell_layout_clear (GTK_CELL_LAYOUT (combo));
+		renderer = gtk_cell_renderer_text_new ();
 
-    g_signal_connect_after (skset, "added", G_CALLBACK (object_added), combo);
-    g_signal_connect_after (skset, "changed", G_CALLBACK (object_changed), combo);
-    g_signal_connect_after (skset, "removed", G_CALLBACK (object_removed), combo);
+		gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
+		gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combo), renderer,
+		                               "text", COMBO_STRING);
+	}
 
-    if (none_option) {
-        gtk_list_store_prepend (GTK_LIST_STORE (model), &iter);
-        gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-                            COMBO_STRING, none_option,
-                            COMBO_POINTER, NULL,
-                            -1);    
-    }
+	/* Setup the object list */
+	objects = gcr_collection_get_objects (collection);
+	for (l = objects; l != NULL; l = g_list_next (l))
+		on_collection_added (collection, l->data, combo);
+	g_list_free (objects);
 
-    gtk_tree_model_get_iter_first (model, &iter);
-    
-    gtk_combo_box_set_active_iter (combo, &iter);
-    
-    /* Cleanup */
-    g_object_ref (skset);
-    g_object_set_data_full (G_OBJECT (combo), "skset", skset, g_object_unref);
-    g_signal_connect (combo, "destroy", G_CALLBACK (combo_destroyed), skset);
+	g_signal_connect_after (collection, "added", G_CALLBACK (on_collection_added), combo);
+	g_signal_connect_after (collection, "removed", G_CALLBACK (on_collection_removed), combo);
+
+	if (none_option) {
+		gtk_list_store_prepend (GTK_LIST_STORE (model), &iter);
+		gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+		                    COMBO_STRING, none_option,
+		                    COMBO_POINTER, NULL,
+		                    -1);
+	}
+
+	gtk_tree_model_get_iter_first (model, &iter);
+	gtk_combo_box_set_active_iter (combo, &iter);
+
+	g_signal_connect_data (combo, "destroy", G_CALLBACK (on_combo_destroy),
+	                       g_object_ref (collection), (GClosureNotify)g_object_unref, 0);
 }
 
 void

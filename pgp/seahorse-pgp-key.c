@@ -41,11 +41,8 @@ enum {
 	PROP_UIDS,
 	PROP_FINGERPRINT,
 	PROP_VALIDITY,
-	PROP_VALIDITY_STR,
 	PROP_TRUST,
-	PROP_TRUST_STR,
 	PROP_EXPIRES,
-	PROP_EXPIRES_STR,
 	PROP_LENGTH,
 	PROP_ALGO
 };
@@ -241,17 +238,8 @@ seahorse_pgp_key_get_property (GObject *object, guint prop_id,
 	case PROP_FINGERPRINT:
 		g_value_set_string (value, seahorse_pgp_key_get_fingerprint (self));
 		break;
-	case PROP_VALIDITY_STR:
-		g_value_set_string (value, seahorse_pgp_key_get_validity_str (self));
-		break;
-	case PROP_TRUST_STR:
-		g_value_set_string (value, seahorse_pgp_key_get_trust_str (self));
-		break;
 	case PROP_EXPIRES:
 		g_value_set_ulong (value, seahorse_pgp_key_get_expires (self));
-		break;
-	case PROP_EXPIRES_STR:
-		g_value_take_string (value, seahorse_pgp_key_get_expires_str (self));
 		break;
 	case PROP_LENGTH:
 		g_value_set_uint (value, seahorse_pgp_key_get_length (self));
@@ -364,25 +352,13 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
 	        g_param_spec_uint ("validity", "Validity", "Validity of this key",
                                    0, G_MAXUINT, 0, G_PARAM_READABLE));
 
-        g_object_class_install_property (gobject_class, PROP_VALIDITY_STR,
-                g_param_spec_string ("validity-str", "Validity String", "Validity of this key as a string",
-                                     "", G_PARAM_READABLE));
-
         g_object_class_install_property (gobject_class, PROP_TRUST,
                 g_param_spec_uint ("trust", "Trust", "Trust in this key",
                                    0, G_MAXUINT, 0, G_PARAM_READABLE));
 
-        g_object_class_install_property (gobject_class, PROP_TRUST_STR,
-                g_param_spec_string ("trust-str", "Trust String", "Trust in this key as a string",
-                                     "", G_PARAM_READABLE));
-
         g_object_class_install_property (gobject_class, PROP_EXPIRES,
                 g_param_spec_ulong ("expires", "Expires On", "Date this key expires on",
                                     0, G_MAXULONG, 0, G_PARAM_READABLE));
-
- 	g_object_class_install_property (gobject_class, PROP_EXPIRES_STR,
- 	        g_param_spec_string ("expires-str", "Expires String", "Readable expiry date",
- 	                             "", G_PARAM_READABLE));
 
  	g_object_class_install_property (gobject_class, PROP_LENGTH,
  	        g_param_spec_uint ("length", "Length", "The length of this key.",
@@ -538,12 +514,6 @@ seahorse_pgp_key_get_validity (SeahorsePgpKey *self)
 	return validity;
 }
 
-const gchar*
-seahorse_pgp_key_get_validity_str (SeahorsePgpKey *self)
-{
-	return seahorse_validity_get_string (seahorse_pgp_key_get_validity (self));
-}
-
 gulong
 seahorse_pgp_key_get_expires (SeahorsePgpKey *self)
 {
@@ -558,37 +528,12 @@ seahorse_pgp_key_get_expires (SeahorsePgpKey *self)
 	return seahorse_pgp_subkey_get_expires (subkeys->data);
 }
 
-gchar*
-seahorse_pgp_key_get_expires_str (SeahorsePgpKey *self)
-{
-	GTimeVal timeval;
-	gulong expires;
-	
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), NULL);
-	
-	expires = seahorse_pgp_key_get_expires (self);
-	if (expires == 0)
-		return g_strdup ("");
-	
-	g_get_current_time (&timeval);
-	if (timeval.tv_sec > expires)
-		return g_strdup (_("Expired"));
-	
-	return seahorse_util_get_date_string (expires);
-}
-
 SeahorseValidity
 seahorse_pgp_key_get_trust (SeahorsePgpKey *self)
 {
 	guint trust = SEAHORSE_VALIDITY_UNKNOWN;
 	g_object_get (self, "trust", &trust, NULL);
 	return trust;
-}
-
-const gchar*
-seahorse_pgp_key_get_trust_str (SeahorsePgpKey *self)
-{
-	return seahorse_validity_get_string (seahorse_pgp_key_get_trust (self));
 }
 
 guint

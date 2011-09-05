@@ -25,7 +25,6 @@
 #include "seahorse-combo-keys.h"
 #include "seahorse-icons.h"
 #include "seahorse-object-widget.h"
-#include "seahorse-set.h"
 #include "seahorse-util.h"
 
 #include "pgp/seahorse-gpgme-dialogs.h"
@@ -111,12 +110,15 @@ sign_ok_clicked (SeahorseWidget *swidget, GtkWindow *parent)
 }
 
 static void
-keyset_changed (SeahorseSet *skset, GtkWidget *widget)
+on_collection_changed (GcrCollection *collection,
+                       GObject *object,
+                       gpointer user_data)
 {
-    if (seahorse_set_get_count (skset) <= 1)
-        gtk_widget_hide (widget);
-    else
-        gtk_widget_show (widget);
+	GtkWidget *widget = GTK_WIDGET (user_data);
+	if (gcr_collection_get_length (collection) <= 1)
+		gtk_widget_hide (widget);
+	else
+		gtk_widget_show (widget);
 }
 
 G_MODULE_EXPORT void
@@ -144,7 +146,7 @@ on_gpgme_sign_choice_toggled (GtkToggleButton *toggle,
 static void
 sign_internal (SeahorseObject *to_sign, GtkWindow *parent)
 {
-    SeahorseSet *skset;
+    GcrCollection *collection;
     GtkWidget *w;
     gint response;
     SeahorseWidget *swidget;
@@ -152,10 +154,10 @@ sign_internal (SeahorseObject *to_sign, GtkWindow *parent)
     gchar *userid;
 
     /* Some initial checks */
-    skset = seahorse_keyset_pgp_signers_new ();
-    
+    collection = seahorse_keyset_pgp_signers_new ();
+
     /* If no signing keys then we can't sign */
-    if (seahorse_set_get_count (skset) == 0) {
+    if (gcr_collection_get_length (collection) == 0) {
         /* TODO: We should be giving an error message that allows them to 
            generate or import a key */
         seahorse_util_show_error (NULL, _("No keys usable for signing"), 
@@ -201,20 +203,21 @@ sign_internal (SeahorseObject *to_sign, GtkWindow *parent)
     /* Signature area */
     w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "signer-frame"));
     g_return_if_fail (w != NULL);
-    g_signal_connect_object (skset, "set-changed", G_CALLBACK (keyset_changed), w, 0);
-    keyset_changed (skset, w);
+    g_signal_connect_object (collection, "added", G_CALLBACK (on_collection_changed), w, 0);
+    g_signal_connect_object (collection, "removed", G_CALLBACK (on_collection_changed), w, 0);
+    on_collection_changed (collection, NULL, w);
 
     /* Signer box */
     w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "signer-select"));
     g_return_if_fail (w != NULL);
-    seahorse_combo_keys_attach (GTK_COMBO_BOX (w), skset, NULL);
+    seahorse_combo_keys_attach (GTK_COMBO_BOX (w), collection, NULL);
 
     /* Image */
     w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "sign-image"));
     g_return_if_fail (w != NULL);
     gtk_image_set_from_icon_name (GTK_IMAGE (w), SEAHORSE_ICON_SIGN, GTK_ICON_SIZE_DIALOG);
 
-    g_object_unref (skset);
+    g_object_unref (collection);
     seahorse_widget_show (swidget);
     
     while (do_sign) {

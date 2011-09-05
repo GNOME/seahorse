@@ -48,33 +48,74 @@ enum {
 	PROP_SETTINGS
 };
 
+static void
+on_transform_validity_to_string (const GValue *source,
+                                 GValue *dest)
+{
+	g_return_if_fail (G_VALUE_TYPE (source) == G_TYPE_UINT);
+	g_value_set_string (dest, seahorse_validity_get_string (g_value_get_uint (source)));
+}
+
+static void
+on_transform_trust_to_string (const GValue *source,
+                              GValue *dest)
+{
+	g_return_if_fail (G_VALUE_TYPE (source) == G_TYPE_UINT);
+	g_value_set_string (dest, seahorse_validity_get_string (g_value_get_uint (source)));
+}
+
+static void
+on_transform_expires_to_string (const GValue *source,
+                                GValue *dest)
+{
+	GTimeVal timeval;
+	gulong expires;
+
+	g_return_if_fail (G_VALUE_TYPE (source) == G_TYPE_ULONG);
+	expires = g_value_get_ulong (source);
+
+	if (expires == 0) {
+		g_value_set_string (dest, "");
+	} else {
+		g_get_current_time (&timeval);
+		if (timeval.tv_sec > expires) {
+			g_value_set_string (dest, _("Expired"));
+		} else {
+			g_value_take_string (dest, seahorse_util_get_date_string (expires));
+		}
+	}
+}
+
 enum {
-    COL_USAGE,
-    COL_ICON,
-    COL_NAME,
-    COL_KEYID,
-    COL_VALIDITY_STR,
-    COL_TRUST_STR,
-    COL_TYPE,
-    COL_EXPIRES_STR,
-    COL_VALIDITY,
-    COL_EXPIRES,
-    COL_TRUST,
-    N_COLS
+	COL_ICON,
+	COL_USAGE,
+	COL_NAME,
+	COL_KEYID,
+	COL_VALIDITY,
+	COL_TRUST,
+	COL_TYPE,
+	COL_EXPIRES,
+	N_COLS
 };
 
-static SeahorseSetModelColumn column_info[] = {
-	{ "usage", G_TYPE_UINT, "usage" },
-	{ "icon", 0 /* later */, NULL },
-	{ "markup", G_TYPE_STRING, "label" },
-	{ "identifier", G_TYPE_STRING, "id" },
-	{ "validity-str", G_TYPE_STRING, "validity" },
-	{ "trust-str", G_TYPE_STRING, "trust" },
-	{ "type", G_TYPE_STRING, "type" },
-	{ "expires-str", G_TYPE_STRING, "expires" },
-	{ "validity", G_TYPE_UINT, "validity" },
-	{ "expires", G_TYPE_ULONG, "expires" },
-	{ "trust", G_TYPE_UINT, "trust" }
+static GcrColumn columns[] = {
+	{ "icon", /* later */ 0, /* later */ 0, NULL,
+	  0, NULL, NULL },
+	{ "usage", G_TYPE_UINT, G_TYPE_UINT, NULL,
+	  GCR_COLUMN_SORTABLE, NULL, "usage" },
+	{ "markup", G_TYPE_STRING, G_TYPE_STRING, NULL,
+	  GCR_COLUMN_SORTABLE, NULL, "label" },
+	{ "identifier", G_TYPE_STRING, G_TYPE_STRING, NULL,
+	  GCR_COLUMN_SORTABLE, NULL, "id" },
+	{ "validity", G_TYPE_UINT, G_TYPE_STRING, NULL,
+	  GCR_COLUMN_SORTABLE, on_transform_validity_to_string, "validity" },
+	{ "trust", G_TYPE_UINT, G_TYPE_STRING, NULL,
+	  GCR_COLUMN_SORTABLE, on_transform_trust_to_string, "trust" },
+	{ "type", G_TYPE_STRING, G_TYPE_STRING, NULL,
+	  GCR_COLUMN_SORTABLE, NULL, "type" },
+	{ "expires", G_TYPE_ULONG, G_TYPE_STRING, NULL,
+	  GCR_COLUMN_SORTABLE, on_transform_expires_to_string, "expires" },
+	{ NULL }
 };
 
 enum {
@@ -93,8 +134,6 @@ static GtkTargetEntry store_targets[] = {
 };
 
 struct _SeahorseKeyManagerStorePriv {
-	GtkTreeModelFilter *filter;
-	GtkTreeModelSort *sort;
 	GSettings *settings;
 
     SeahorseKeyManagerStoreMode    filter_mode;
@@ -106,165 +145,88 @@ struct _SeahorseKeyManagerStorePriv {
 	GList *drag_objects;
 };
 
-G_DEFINE_TYPE (SeahorseKeyManagerStore, seahorse_key_manager_store, SEAHORSE_TYPE_SET_MODEL);
-
-/* -----------------------------------------------------------------------------
- * INTERNAL 
- */
-
-/* Given a treeview iter, get the base store iterator */
-static void 
-get_base_iter (SeahorseKeyManagerStore *skstore, GtkTreeIter *base_iter, 
-               const GtkTreeIter *iter)
-{
-	GtkTreeIter i;
-	g_return_if_fail (skstore->priv->sort && skstore->priv->filter);
-	gtk_tree_model_sort_convert_iter_to_child_iter (skstore->priv->sort, &i, (GtkTreeIter*)iter);
-	gtk_tree_model_filter_convert_iter_to_child_iter (skstore->priv->filter, base_iter, &i);
-}
-
-/* Given a base store iter, get the treeview iter */
-static gboolean 
-get_upper_iter (SeahorseKeyManagerStore *skstore, GtkTreeIter *upper_iter, 
-                const GtkTreeIter *iter)
-{
-    GtkTreeIter i;
-    GtkTreePath *child_path, *path;
-    gboolean ret;
-    
-    g_return_val_if_fail (skstore->priv->filter, FALSE);
-    child_path = gtk_tree_model_get_path (gtk_tree_model_filter_get_model (skstore->priv->filter), 
-                                          (GtkTreeIter*)iter);
-    g_return_val_if_fail (child_path != NULL, FALSE);
-    path = gtk_tree_model_filter_convert_child_path_to_path (skstore->priv->filter, child_path);
-    gtk_tree_path_free (child_path);
-
-    if (!path)
-        return FALSE;
-
-    ret = gtk_tree_model_get_iter (GTK_TREE_MODEL (skstore->priv->filter), &i, path);
-    gtk_tree_path_free (path);
-    
-    if (!ret)
-        return FALSE;
-  
-    g_return_val_if_fail (skstore->priv->sort, FALSE);
-    gtk_tree_model_sort_convert_child_iter_to_iter (skstore->priv->sort, upper_iter, &i);
-    return TRUE;
-}
-
-/* Try to find our key store given a tree model */
-static SeahorseKeyManagerStore* 
-key_store_from_model (GtkTreeModel *model)
-{
-    /* Sort models are what's set on the tree */
-    if (GTK_IS_TREE_MODEL_SORT (model))
-        model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (model));
-    if (GTK_IS_TREE_MODEL_FILTER (model)) 
-        model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
-    if (SEAHORSE_IS_KEY_MANAGER_STORE (model))
-        return SEAHORSE_KEY_MANAGER_STORE (model);
-    
-    g_return_val_if_reached (NULL);
-}
-
-/* Given an iterator find the associated object */
-static SeahorseObject*
-object_from_iterator (GtkTreeModel* model, GtkTreeIter* iter)
-{
-	GtkTreeIter i;
-    
-	/* Convert to base iter if necessary */
-	if (!SEAHORSE_IS_KEY_MANAGER_STORE (model)) {
-		SeahorseKeyManagerStore* skstore = key_store_from_model (model);
-		g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (skstore), NULL);
-		get_base_iter (skstore, &i, iter);
-        
-		iter = &i;
-		model = GTK_TREE_MODEL (skstore);
-	}
-    
-	return seahorse_set_model_object_for_iter (SEAHORSE_SET_MODEL (model), iter);
-}
+G_DEFINE_TYPE (SeahorseKeyManagerStore, seahorse_key_manager_store, GCR_TYPE_COLLECTION_MODEL);
 
 /* Search through row for text */
 static gboolean
-row_contains_filtered_text (GtkTreeModel* model, GtkTreeIter* iter, const gchar* text)
+object_contains_filtered_text (SeahorseObject *object,
+                               const gchar* text)
 {
-    gchar* name = NULL;
-    gchar* id = NULL;
-    gchar* t;
-    gboolean ret = FALSE;
-    
-    /* Empty search text results in a match */
-    if (!text || !text[0])
-        return TRUE;
-    
-    /* Note that we only search the name and id */
-    gtk_tree_model_get (model, iter, COL_NAME, &name, COL_KEYID, &id, -1);
-    
-    if(name) {
-        t = g_utf8_strdown (name, -1);
-        if (strstr (t, text))
-            ret = TRUE;
-        g_free (t);
-    }
-    
-    if (!ret && id) {
-        t = g_utf8_strdown (id, -1);
-        if (strstr (t, text))
-            ret = TRUE;
-        g_free (t);
-    }
-    
-    g_free (name);
-    g_free (id);
-    return ret;
+	gchar* name = NULL;
+	gchar* id = NULL;
+	gchar* lower;
+	gboolean ret = FALSE;
+
+	/* Empty search text results in a match */
+	if (!text || !text[0])
+		return TRUE;
+
+	g_object_get (object, "label", &name, NULL);
+	if (name != NULL) {
+		lower = g_utf8_strdown (name, -1);
+		if (strstr (lower, text))
+			ret = TRUE;
+		g_free (lower);
+		g_free (name);
+	}
+
+	if (!ret && g_object_class_find_property (G_OBJECT_GET_CLASS (object), "identifier")) {
+		g_object_get (object, "identifier", &id, NULL);
+		if (id != NULL) {
+			lower = g_utf8_strdown (id, -1);
+			if (strstr (lower, text))
+				ret = TRUE;
+			g_free (lower);
+			g_free (id);
+		}
+	}
+
+	return ret;
 }
 
 /* Called to filter each row */
-static gboolean 
-filter_callback (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+static gboolean
+on_filter_visible (SeahorseObject *object,
+                   gpointer user_data)
 {
-    SeahorseKeyManagerStore* skstore = SEAHORSE_KEY_MANAGER_STORE(data);
-    GtkTreeIter child;
-    gboolean ret = FALSE;
-    
-    /* Check the row requested */
-    switch (skstore->priv->filter_mode)
-    {
-    case KEY_STORE_MODE_FILTERED:
-        ret = row_contains_filtered_text (model, iter, skstore->priv->filter_text);
-        break;
-        
-    case KEY_STORE_MODE_ALL:
-        ret = TRUE;
-        break;
-        
-    default:
-        g_assert_not_reached ();
-        break;
-    };
-    
-    /* If current is not being shown, double check with children */
-    if (!ret && gtk_tree_model_iter_children (model, &child, iter)) {
-        do {
-            ret = filter_callback (model, &child, data);
-        } while (!ret && gtk_tree_model_iter_next (model, &child));
-    }
+	SeahorseKeyManagerStore* self = SEAHORSE_KEY_MANAGER_STORE (user_data);
+	GList *children, *l;
+	gboolean ret = FALSE;
 
-    return ret;
+	/* Check the row requested */
+	switch (self->priv->filter_mode) {
+	case KEY_STORE_MODE_FILTERED:
+		ret = object_contains_filtered_text (object, self->priv->filter_text);
+		break;
+
+	case KEY_STORE_MODE_ALL:
+		ret = TRUE;
+		break;
+
+	default:
+		g_assert_not_reached ();
+		break;
+	};
+
+	/* If current is not being shown, double check with children */
+	if (!ret && GCR_IS_COLLECTION (object)) {
+		children = gcr_collection_get_objects (GCR_COLLECTION (object));
+		for (l = children; !ret && l != NULL; l = g_list_next (l))
+			ret = on_filter_visible (l->data, user_data);
+	}
+
+	return ret;
 }
 
 /* Refilter the tree */
 static gboolean
-refilter_now (SeahorseKeyManagerStore* skstore)
+refilter_now (gpointer user_data)
 {
-    g_return_val_if_fail (skstore->priv->filter, FALSE);
-    seahorse_set_refresh (SEAHORSE_SET_MODEL (skstore)->set);
-    gtk_tree_model_filter_refilter (skstore->priv->filter);    
-    skstore->priv->filter_stag = 0;
-    return FALSE;
+	SeahorseKeyManagerStore* self = SEAHORSE_KEY_MANAGER_STORE (user_data);
+	GcrCollection *collection = gcr_collection_model_get_collection (GCR_COLLECTION_MODEL (self));
+	seahorse_collection_refresh (SEAHORSE_COLLECTION (collection));
+	self->priv->filter_stag = 0;
+	return FALSE;
 }
 
 /* Refilter the tree after a timeout has passed */
@@ -280,7 +242,6 @@ refilter_later (SeahorseKeyManagerStore* skstore)
 static void
 set_sort_to (SeahorseKeyManagerStore *skstore, const gchar *name)
 {
-    GtkTreeSortable* sort;
     gint i, id = -1;
     GtkSortType ord = GTK_SORT_ASCENDING;
     const gchar* n;
@@ -301,39 +262,36 @@ set_sort_to (SeahorseKeyManagerStore *skstore, const gchar *name)
     
     /* Find the column sort id */
     for (i = N_COLS - 1; i >= 0 ; i--) {
-        n = column_info[i].data;
+        n = columns[i].user_data;
         if (n && g_ascii_strcasecmp (name, n) == 0) {
             id = i;
             break;
         }
     }
-    
-    if (id != -1) {
-        g_return_if_fail (skstore->priv->sort);
-        sort = GTK_TREE_SORTABLE (skstore->priv->sort);
-        gtk_tree_sortable_set_sort_column_id (sort, id, ord);
-    }
+
+    if (id != -1)
+        gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (skstore), id, ord);
 }
 
 /* Called when the column sort is changed */
 static void
-sort_changed (GtkTreeSortable *sort, gpointer user_data)
+on_sort_column_changed (GtkTreeSortable *sort,
+                        gpointer user_data)
 {
 	SeahorseKeyManagerStore *self = SEAHORSE_KEY_MANAGER_STORE (user_data);
 	GtkSortType ord;
 	gchar* value;
 	gint column_id;
 
-	g_return_if_fail (self->priv->sort);
 	if (!self->priv->settings)
 		return;
 
 	/* We have a sort so save it */
-	if (gtk_tree_sortable_get_sort_column_id (sort, &column_id, &ord)) {
+	if (gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (self), &column_id, &ord)) {
 		if (column_id >= 0 && column_id < N_COLS) {
-			if (column_info[column_id].data != NULL) {
+			if (columns[column_id].user_data != NULL) {
 				value = g_strconcat (ord == GTK_SORT_DESCENDING ? "-" : "",
-				                     column_info[column_id].data, NULL);
+				                     columns[column_id].user_data, NULL);
 				g_settings_set_string (self->priv->settings, "sort-by", value);
 				g_free (value);
 			}
@@ -356,7 +314,7 @@ on_manager_settings_changed (GSettings *settings, const gchar *key, gpointer use
 	gchar *sort_by;
 
 	if (g_str_equal (key, "sort-by")) {
-		self = key_store_from_model (gtk_tree_view_get_model (view));
+		self = SEAHORSE_KEY_MANAGER_STORE (gtk_tree_view_get_model (view));
 		g_return_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (self));
 		sort_by = g_settings_get_string (settings, key);
 		set_sort_to (self, sort_by);
@@ -719,17 +677,8 @@ seahorse_key_manager_store_finalize (GObject *gobject)
 {
     SeahorseKeyManagerStore *skstore = SEAHORSE_KEY_MANAGER_STORE (gobject);
 
-    if (skstore->priv->sort) {
-        g_signal_handlers_disconnect_by_func (skstore->priv->sort, sort_changed, skstore);
-        g_object_remove_weak_pointer (G_OBJECT (skstore->priv->sort), (gpointer*)&skstore->priv->sort);
-        skstore->priv->sort = NULL;
-    }
-    
-    if (skstore->priv->filter) {
-        g_object_remove_weak_pointer (G_OBJECT (skstore->priv->filter), (gpointer*)&skstore->priv->filter);
-        skstore->priv->filter = NULL;
-    }
-     
+    g_signal_handlers_disconnect_by_func (skstore, on_sort_column_changed, skstore);
+
     /* Allocated in property setter */
     g_free (skstore->priv->filter_text); 
     
@@ -739,28 +688,31 @@ seahorse_key_manager_store_finalize (GObject *gobject)
 static void
 seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
 {
-    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    seahorse_key_manager_store_parent_class = g_type_class_peek_parent (klass);
-    
-    /* Some simple checks to make sure all column info is on the same page */
-    g_assert (N_COLS == G_N_ELEMENTS (column_info));
-    column_info[1].type = G_TYPE_ICON;
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-    gobject_class->finalize = seahorse_key_manager_store_finalize;
-    gobject_class->set_property = seahorse_key_manager_store_set_property;
-    gobject_class->get_property = seahorse_key_manager_store_get_property;
-  
-    g_object_class_install_property (gobject_class, PROP_MODE,
-        g_param_spec_uint ("mode", "Key Store Mode", "Key store mode controls which keys to display",
-                           0, KEY_STORE_MODE_FILTERED, KEY_STORE_MODE_ALL, G_PARAM_READWRITE));
+	columns[COL_ICON].column_type = G_TYPE_ICON;
+	columns[COL_ICON].property_type = G_TYPE_ICON;
 
-    g_object_class_install_property (gobject_class, PROP_FILTER,
-        g_param_spec_string ("filter", "Key Store Filter", "Key store filter for when in filtered mode",
-                             "", G_PARAM_READWRITE));
+	gobject_class->finalize = seahorse_key_manager_store_finalize;
+	gobject_class->set_property = seahorse_key_manager_store_set_property;
+	gobject_class->get_property = seahorse_key_manager_store_get_property;
 
-    g_object_class_install_property (gobject_class, PROP_SETTINGS,
-        g_param_spec_object ("settings", "Settings", "Manager Settings",
-                             G_TYPE_SETTINGS, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (gobject_class, PROP_MODE,
+	        g_param_spec_uint ("mode", "Key Store Mode", "Key store mode controls which keys to display",
+	                           0, KEY_STORE_MODE_FILTERED, KEY_STORE_MODE_ALL, G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_FILTER,
+	        g_param_spec_string ("filter", "Key Store Filter", "Key store filter for when in filtered mode",
+	                             "", G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_SETTINGS,
+	        g_param_spec_object ("settings", "Settings", "Manager Settings",
+	                             G_TYPE_SETTINGS, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+	/* Couldn't initialize this earlier */
+	g_assert (N_COLS + 1 == G_N_ELEMENTS (columns));
+	columns[0].property_type = G_TYPE_ICON;
+	columns[0].column_type = G_TYPE_ICON;
 }
 
 /* -----------------------------------------------------------------------------
@@ -768,110 +720,111 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
  */
 
 SeahorseKeyManagerStore*
-seahorse_key_manager_store_new (SeahorseSet *skset, GtkTreeView *view, GSettings *settings)
+seahorse_key_manager_store_new (SeahorseCollection *collection,
+                                GtkTreeView *view,
+                                GSettings *settings)
 {
-    SeahorseKeyManagerStore *skstore;
-    GtkTreeViewColumn *col;
-    SeahorseObjectPredicate *pred;
-    GtkCellRenderer *renderer;
-    gchar *sort_by;
-    gint last;
+	SeahorseKeyManagerStore *self;
+	GtkTreeViewColumn *col;
+	SeahorsePredicate *pred;
+	GtkCellRenderer *renderer;
+	gchar *sort_by;
+	guint last;
 
-    skstore = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE, "set", skset, "settings", settings, NULL);
-    last = seahorse_set_model_set_columns (SEAHORSE_SET_MODEL (skstore), column_info, N_COLS);
-    g_return_val_if_fail (last == N_COLS - 1, NULL);
+	self = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE,
+	                     "collection", collection,
+	                     "settings", settings,
+	                     NULL);
+	last = gcr_collection_model_set_columns (GCR_COLLECTION_MODEL (self), columns);
+	g_return_val_if_fail (last == N_COLS, NULL);
 
-    /* Setup the sort and filter */
-    skstore->priv->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (skstore), NULL));
-    gtk_tree_model_filter_set_visible_func (skstore->priv->filter, filter_callback, skstore, NULL);
-    skstore->priv->sort = GTK_TREE_MODEL_SORT (gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (skstore->priv->filter)));
+	/* We assume we're the only user for this collection :( */
+	pred = seahorse_collection_get_predicate (collection);
+	g_assert (pred->custom == NULL);
+	pred->custom = on_filter_visible;
+	pred->custom_target = self;
 
-    /* The sorted model is the top level model */
-    gtk_tree_view_set_model (view, GTK_TREE_MODEL (skstore->priv->sort));
+	/* The sorted model is the top level model */
+	gtk_tree_view_set_model (view, GTK_TREE_MODEL (self));
 
-    /* add the icon column */
-    renderer = gtk_cell_renderer_pixbuf_new ();
-    g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
-    g_object_set (renderer, "xpad", 6, NULL);
-    col = gtk_tree_view_column_new_with_attributes ("", renderer, "gicon", COL_ICON, NULL);
-    gtk_tree_view_column_set_resizable (col, FALSE);
-    gtk_tree_view_append_column (view, col);
-    gtk_tree_view_column_set_sort_column_id (col, COL_USAGE);
-    
-    /* Name column */
-    renderer = gtk_cell_renderer_text_new ();
-    col = gtk_tree_view_column_new_with_attributes (_("Name"), renderer, "markup", COL_NAME, NULL);
-    gtk_tree_view_column_set_resizable (col, TRUE);
-    gtk_tree_view_column_set_expand (col, TRUE);
-    gtk_tree_view_append_column (view, col);
-    gtk_tree_view_set_expander_column (view, col);
-    gtk_tree_view_column_set_sort_column_id (col, COL_NAME);
+	/* add the icon column */
+	renderer = gtk_cell_renderer_pixbuf_new ();
+	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
+	g_object_set (renderer, "xpad", 6, NULL);
+	col = gtk_tree_view_column_new_with_attributes ("", renderer, "gicon", COL_ICON, NULL);
+	gtk_tree_view_column_set_resizable (col, FALSE);
+	gtk_tree_view_append_column (view, col);
+	gtk_tree_view_column_set_sort_column_id (col, COL_USAGE);
 
-    /* Use predicate to figure out which columns to add */
-    g_object_get (skset, "predicate", &pred, NULL);
-    
-    /* Key ID column, don't show for passwords */
-    if (pred->usage != SEAHORSE_USAGE_CREDENTIALS) {
-        col = append_text_column (skstore, view, _("Key ID"), COL_KEYID);
-        gtk_tree_view_column_set_sort_column_id (col, COL_KEYID);
-    }
+	/* Name column */
+	renderer = gtk_cell_renderer_text_new ();
+	col = gtk_tree_view_column_new_with_attributes (_("Name"), renderer, "markup", COL_NAME, NULL);
+	gtk_tree_view_column_set_resizable (col, TRUE);
+	gtk_tree_view_column_set_expand (col, TRUE);
+	gtk_tree_view_append_column (view, col);
+	gtk_tree_view_set_expander_column (view, col);
+	gtk_tree_view_column_set_sort_column_id (col, COL_NAME);
 
-    /* Public keys show validity */
-    if (pred->usage == SEAHORSE_USAGE_PUBLIC_KEY) {
-        col = append_text_column (skstore, view, _("Validity"), COL_VALIDITY_STR);
-        g_object_set_data (G_OBJECT (col), "settings-key", "show-validity");
-        gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-validity"));
-        gtk_tree_view_column_set_sort_column_id (col, COL_VALIDITY);
-    }
+	/* Use predicate to figure out which columns to add */
+	pred = seahorse_collection_get_predicate (collection);
+	g_return_val_if_fail (pred != NULL, NULL);
 
-    /* Trust column */
-    col = append_text_column (skstore, view, _("Trust"), COL_TRUST_STR);
-    g_object_set_data (G_OBJECT (col), "settings-key", "show-trust");
-    gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-trust"));
-    gtk_tree_view_column_set_sort_column_id (col, COL_TRUST);
+	/* Key ID column, don't show for passwords */
+	if (pred->usage != SEAHORSE_USAGE_CREDENTIALS) {
+		col = append_text_column (self, view, _("Key ID"), COL_KEYID);
+		gtk_tree_view_column_set_sort_column_id (col, COL_KEYID);
+	}
 
-    /* The key type column */
-    col = append_text_column (skstore, view, _("Type"), COL_TYPE);
-    g_object_set_data (G_OBJECT (col), "settings-key", "show-type");
-    gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-type"));
-    gtk_tree_view_column_set_sort_column_id (col, COL_TYPE);
+	/* Public keys show validity */
+	if (pred->usage == SEAHORSE_USAGE_PUBLIC_KEY) {
+		col = append_text_column (self, view, _("Validity"), COL_VALIDITY);
+		g_object_set_data (G_OBJECT (col), "settings-key", "show-validity");
+		gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-validity"));
+		gtk_tree_view_column_set_sort_column_id (col, COL_VALIDITY);
+	}
 
-    /* Expiry date column */
-    col = append_text_column (skstore, view, _("Expiration Date"), COL_EXPIRES_STR);
-    g_object_set_data (G_OBJECT (col), "settings-key", "show-expiry");
-    gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-expiry"));
-    gtk_tree_view_column_set_sort_column_id (col, COL_EXPIRES);
+	/* Trust column */
+	col = append_text_column (self, view, _("Trust"), COL_TRUST);
+	g_object_set_data (G_OBJECT (col), "settings-key", "show-trust");
+	gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-trust"));
+	gtk_tree_view_column_set_sort_column_id (col, COL_TRUST);
 
-    /* Also watch for sort-changed on the store */
-    g_signal_connect (skstore->priv->sort, "sort-column-changed", G_CALLBACK (sort_changed), skstore);
+	/* The key type column */
+	col = append_text_column (self, view, _("Type"), COL_TYPE);
+	g_object_set_data (G_OBJECT (col), "settings-key", "show-type");
+	gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-type"));
+	gtk_tree_view_column_set_sort_column_id (col, COL_TYPE);
 
-    /* Update sort order in case the sorted column was added */
-    if ((sort_by = g_settings_get_string (settings, "sort-by")) != NULL) {
-        set_sort_to (skstore, sort_by);
-        g_free (sort_by);
-    } 
-    
-    gtk_tree_view_set_enable_search (view, FALSE);
+	/* Expiry date column */
+	col = append_text_column (self, view, _("Expiration Date"), COL_EXPIRES);
+	g_object_set_data (G_OBJECT (col), "settings-key", "show-expiry");
+	gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-expiry"));
+	gtk_tree_view_column_set_sort_column_id (col, COL_EXPIRES);
 
-    g_signal_connect_object (settings, "changed", G_CALLBACK (on_manager_settings_changed), view, 0);
+	/* Also watch for sort-changed on the store */
+	g_signal_connect (self, "sort-column-changed", G_CALLBACK (on_sort_column_changed), self);
 
-    /* Tree drag */
-    egg_tree_multi_drag_add_drag_support (view);    
-    
-    g_signal_connect (G_OBJECT (view), "drag_data_get", G_CALLBACK (drag_data_get), skstore);
-    g_signal_connect (G_OBJECT (view), "drag_begin",  G_CALLBACK (drag_begin), skstore);
-    g_signal_connect (G_OBJECT (view), "drag_end",  G_CALLBACK (drag_end), skstore);
+	/* Update sort order in case the sorted column was added */
+	if ((sort_by = g_settings_get_string (settings, "sort-by")) != NULL) {
+		set_sort_to (self, sort_by);
+		g_free (sort_by);
+	}
 
-    gtk_drag_source_set (GTK_WIDGET (view), GDK_BUTTON1_MASK,
-                         store_targets, G_N_ELEMENTS (store_targets), GDK_ACTION_COPY);
+	gtk_tree_view_set_enable_search (view, FALSE);
 
-    /* We keep track of these but not as a strong reference */
-    g_object_add_weak_pointer (G_OBJECT (skstore->priv->filter), (gpointer*)&skstore->priv->filter);
-    g_object_unref (skstore->priv->filter);
-    g_object_add_weak_pointer (G_OBJECT (skstore->priv->sort), (gpointer*)&skstore->priv->sort);
-    g_object_unref (skstore->priv->sort);
-    
-    return skstore;
+	g_signal_connect_object (settings, "changed", G_CALLBACK (on_manager_settings_changed), view, 0);
+
+	/* Tree drag */
+	egg_tree_multi_drag_add_drag_support (view);
+
+	g_signal_connect (G_OBJECT (view), "drag_data_get", G_CALLBACK (drag_data_get), self);
+	g_signal_connect (G_OBJECT (view), "drag_begin",  G_CALLBACK (drag_begin), self);
+	g_signal_connect (G_OBJECT (view), "drag_end",  G_CALLBACK (drag_end), self);
+
+	gtk_drag_source_set (GTK_WIDGET (view), GDK_BUTTON1_MASK,
+	                     store_targets, G_N_ELEMENTS (store_targets), GDK_ACTION_COPY);
+
+	return self;
 }
 
 SeahorseObject*
@@ -885,7 +838,7 @@ seahorse_key_manager_store_get_object_from_path (GtkTreeView *view, GtkTreePath 
     
     model = gtk_tree_view_get_model (view);
     g_return_val_if_fail (gtk_tree_model_get_iter (model, &iter, path), NULL);
-    return object_from_iterator (model, &iter);
+    return SEAHORSE_OBJECT (gcr_collection_model_object_for_iter (GCR_COLLECTION_MODEL (model), &iter));
 }
 
 GList*
@@ -894,9 +847,9 @@ seahorse_key_manager_store_get_all_objects (GtkTreeView *view)
     SeahorseKeyManagerStore* skstore;
     
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
-    skstore = key_store_from_model (gtk_tree_view_get_model (view));
+    skstore = SEAHORSE_KEY_MANAGER_STORE (gtk_tree_view_get_model (view));
     g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (skstore), NULL);
-    return seahorse_set_get_objects (SEAHORSE_SET_MODEL (skstore)->set);
+    return gcr_collection_get_objects (gcr_collection_model_get_collection (GCR_COLLECTION_MODEL (skstore)));
 }
 
 GList*
@@ -909,7 +862,7 @@ seahorse_key_manager_store_get_selected_objects (GtkTreeView *view)
     GtkTreeSelection *selection;    
     
     g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
-    skstore = key_store_from_model (gtk_tree_view_get_model (view));
+    skstore = SEAHORSE_KEY_MANAGER_STORE (gtk_tree_view_get_model (view));
     g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (skstore), NULL);
     
     selection = gtk_tree_view_get_selection (view);
@@ -949,25 +902,21 @@ seahorse_key_manager_store_set_selected_objects (GtkTreeView *view, GList* objec
 	g_return_if_fail (GTK_IS_TREE_VIEW (view));
 	selection = gtk_tree_view_get_selection (view);
 	gtk_tree_selection_unselect_all (selection);
-    
-	skstore = key_store_from_model (gtk_tree_view_get_model (view));
+
+	skstore = SEAHORSE_KEY_MANAGER_STORE (gtk_tree_view_get_model (view));
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (skstore));
     
 	for (l = objects; l; l = g_list_next (l)) {
-		if (seahorse_set_model_iter_for_object (SEAHORSE_SET_MODEL (skstore), 
-		                                        SEAHORSE_OBJECT (l->data), &iter)) {
-			/* And select them ... */
-			if (get_upper_iter (skstore, &upper, &iter)) {
+		if (gcr_collection_model_iter_for_object (GCR_COLLECTION_MODEL (skstore),
+		                                          l->data, &iter)) {
+			gtk_tree_selection_select_iter (selection, &upper);
 
-				gtk_tree_selection_select_iter (selection, &upper);
-		                
-				/* Scroll the first row selected into view */
-				if (first) {
-					path = gtk_tree_model_get_path (gtk_tree_view_get_model (view), &upper);
-					gtk_tree_view_scroll_to_cell (view, path, NULL, FALSE, 0.0, 0.0);
-					gtk_tree_path_free (path);
-					first = FALSE;
-				}
+			/* Scroll the first row selected into view */
+			if (first) {
+				path = gtk_tree_model_get_path (gtk_tree_view_get_model (view), &upper);
+				gtk_tree_view_scroll_to_cell (view, path, NULL, FALSE, 0.0, 0.0);
+				gtk_tree_path_free (path);
+				first = FALSE;
 			}
 		}
 	}
@@ -982,7 +931,7 @@ seahorse_key_manager_store_get_selected_object (GtkTreeView *view)
 	GtkTreeSelection *selection;
     
 	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), NULL);
-	skstore = key_store_from_model (gtk_tree_view_get_model (view));
+	skstore = SEAHORSE_KEY_MANAGER_STORE (gtk_tree_view_get_model (view));
 	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (skstore), NULL);
     
 	selection = gtk_tree_view_get_selection (view);

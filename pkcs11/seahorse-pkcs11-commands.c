@@ -48,7 +48,7 @@ G_DEFINE_TYPE (SeahorsePkcs11Commands, seahorse_pkcs11_commands, SEAHORSE_TYPE_C
 #define SEAHORSE_PKCS11_COMMANDS_GET_PRIVATE(o) \
 	(G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_PKCS11_TYPE_COMMANDS, SeahorsePkcs11CommandsPrivate))
 
-static SeahorseObjectPredicate commands_predicate = { 0, };
+static SeahorsePredicate commands_predicate = { 0, };
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 

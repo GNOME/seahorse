@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "seahorse-collection.h"
 #include "seahorse-generate-select.h"
 #include "seahorse-key-manager.h"
 #include "seahorse-key-manager-store.h"
@@ -62,7 +63,7 @@ typedef struct _TabInfo {
 	guint id;
 	gint page;
 	GtkTreeView* view;
-	SeahorseSet* objects;
+	SeahorseCollection* collection;
 	GtkWidget* widget;
 	SeahorseKeyManagerStore* store;
 } TabInfo;
@@ -89,7 +90,7 @@ enum  {
 	TAB_NUM_TABS
 } SeahorseKeyManagerTabs;
 
-static SeahorseObjectPredicate pred_public = {
+static SeahorsePredicate pred_public = {
 	0, 
 	0, 
 	0, 
@@ -100,7 +101,7 @@ static SeahorseObjectPredicate pred_public = {
 	NULL
 };
 
-static SeahorseObjectPredicate pred_private = {
+static SeahorsePredicate pred_private = {
 	0, 
 	0, 
 	0, 
@@ -111,7 +112,7 @@ static SeahorseObjectPredicate pred_private = {
 	NULL
 };
 
-static SeahorseObjectPredicate pred_password = {
+static SeahorsePredicate pred_password = {
 	0, 
 	0, /* Tag filled in later */ 
 	0, 
@@ -138,7 +139,7 @@ get_tab_for_object (SeahorseKeyManager* self, SeahorseObject* obj)
 	
 	for (i = 0; i < TAB_NUM_TABS; ++i) {
 		TabInfo* tab = &self->pv->tabs[i];
-		if (seahorse_set_has_object (tab->objects, obj))
+		if (seahorse_collection_has_object (tab->collection, obj))
 			return tab;
 	}
 	
@@ -346,9 +347,9 @@ on_keymanager_new_button (GtkButton* button, SeahorseKeyManager* self)
 
 static void 
 initialize_tab (SeahorseKeyManager* self, const char* tabwidget, guint tabid, const char* viewwidget, 
-                const SeahorseObjectPredicate* pred) 
+                const SeahorsePredicate* pred)
 {
-	SeahorseSet *objects;
+	SeahorseCollection *collection;
 	GtkTreeSelection *selection;
 	GtkTreeView *view;
 	
@@ -360,9 +361,9 @@ initialize_tab (SeahorseKeyManager* self, const char* tabwidget, guint tabid, co
 	
 	self->pv->tabs[tabid].page = gtk_notebook_page_num (self->pv->notebook, self->pv->tabs[tabid].widget);
 	g_return_if_fail (self->pv->tabs[tabid].page >= 0);
-	
-	objects = seahorse_set_new_full ((SeahorseObjectPredicate*)pred);
-	self->pv->tabs[tabid].objects = objects;
+
+	collection = seahorse_collection_new_for_predicate ((SeahorsePredicate*)pred, NULL);
+	self->pv->tabs[tabid].collection = SEAHORSE_COLLECTION (collection);
 
 	/* Init key list & selection settings */
 	view = GTK_TREE_VIEW (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), viewwidget));
@@ -375,7 +376,8 @@ initialize_tab (SeahorseKeyManager* self, const char* tabwidget, guint tabid, co
 	gtk_widget_realize (GTK_WIDGET (view));
 
 	/* Add new key store and associate it */
-	self->pv->tabs[tabid].store = seahorse_key_manager_store_new (objects, view, self->pv->settings);
+	self->pv->tabs[tabid].store = seahorse_key_manager_store_new (collection, view,
+	                                                              self->pv->settings);
 }
 
 static gboolean 
@@ -1026,10 +1028,8 @@ seahorse_key_manager_finalize (GObject *obj)
 	
 	if (self->pv->tabs) {
 		for (i = 0; i < TAB_NUM_TABS; ++i) {
-			if (self->pv->tabs[i].store)
-				g_object_unref (self->pv->tabs[i].store);
-			if (self->pv->tabs[i].objects)
-				g_object_unref (self->pv->tabs[i].objects);
+			g_clear_object (&self->pv->tabs[i].store);
+			g_clear_object (&self->pv->tabs[i].collection);
 		}
 		g_free (self->pv->tabs);
 		self->pv->tabs = NULL;

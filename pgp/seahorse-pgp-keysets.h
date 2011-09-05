@@ -22,12 +22,12 @@
 #ifndef SEAPGPKEYSETS_H_
 #define SEAPGPKEYSETS_H_
 
-#include "seahorse-set.h"
+#include <gcr/gcr.h>
 
 /* -----------------------------------------------------------------------------
  * SOME COMMON KEYSETS 
  */
  
-SeahorseSet*     seahorse_keyset_pgp_signers_new     (void);
+GcrCollection *     seahorse_keyset_pgp_signers_new     (void);
 
 #endif /*SEAPGPKEYSETS_H_*/

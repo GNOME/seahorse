@@ -50,8 +50,8 @@ struct _SeahorseKeyserverResultsPrivate {
 	GtkTreeView *view;
 	GtkActionGroup *object_actions;
 	SeahorseKeyManagerStore *store;
-	SeahorseSet *objects;
-	SeahorseObjectPredicate pred;
+	SeahorseCollection *collection;
+	SeahorsePredicate pred;
 	GSettings *settings;
 };
 
@@ -369,12 +369,12 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	/* Our predicate for filtering keys */
 	self->pv->pred.tag = g_quark_from_string ("openpgp");
 	self->pv->pred.location = SEAHORSE_LOCATION_REMOTE;
-	self->pv->pred.custom = (SeahorseObjectPredicateFunc)on_filter_objects;
+	self->pv->pred.custom = (SeahorsePredicateFunc)on_filter_objects;
 	self->pv->pred.custom_target = self;
 	
 	/* Our set all nicely filtered */
-	self->pv->objects = seahorse_set_new_full (&self->pv->pred);
-	self->pv->store = seahorse_key_manager_store_new (self->pv->objects, self->pv->view,
+	self->pv->collection = seahorse_collection_new_for_predicate (&self->pv->pred, NULL);
+	self->pv->store = seahorse_key_manager_store_new (self->pv->collection, self->pv->view,
 	                                                  self->pv->settings);
 	on_view_selection_changed (selection, self);
 	
@@ -411,11 +411,9 @@ seahorse_keyserver_results_finalize (GObject *obj)
 	if (self->pv->object_actions)
 		g_object_unref (self->pv->object_actions);
 	self->pv->object_actions = NULL;
-	
-	if (self->pv->objects)
-		g_object_unref (self->pv->objects);
-	self->pv->objects = NULL;
-	
+
+	g_clear_object (&self->pv->collection);
+
 	if (self->pv->store)
 		g_object_unref (self->pv->store);
 	self->pv->store = NULL;

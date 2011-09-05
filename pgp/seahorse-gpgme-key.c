@@ -27,6 +27,7 @@
 
 #include "seahorse-context.h"
 #include "seahorse-icons.h"
+#include "seahorse-predicate.h"
 #include "seahorse-object-list.h"
 #include "seahorse-source.h"
 #include "seahorse-util.h"
@@ -605,11 +606,8 @@ seahorse_gpgme_key_set_public (SeahorseGpgmeKey *self, gpgme_key_t key)
 	seahorse_gpgme_key_realize (self);
 	g_object_notify (obj, "fingerprint");
 	g_object_notify (obj, "validity");
-	g_object_notify (obj, "validity-str");
 	g_object_notify (obj, "trust");
-	g_object_notify (obj, "trust-str");
 	g_object_notify (obj, "expires");
-	g_object_notify (obj, "expires-str");
 	g_object_notify (obj, "length");
 	g_object_notify (obj, "algo");
 	g_object_thaw_notify (obj);
@@ -674,8 +672,8 @@ seahorse_gpgme_key_get_trust (SeahorseGpgmeKey *self)
 void
 seahorse_gpgme_key_refresh_matching (gpgme_key_t key)
 {
-	SeahorseObjectPredicate pred;
-	
+	SeahorsePredicate pred;
+
 	g_return_if_fail (key->subkeys->keyid);
 	
 	memset (&pred, 0, sizeof (pred));

@@ -23,11 +23,11 @@
 #ifndef __SEAHORSE_KEY_MANAGER_STORE_H__
 #define __SEAHORSE_KEY_MANAGER_STORE_H__
 
-#include <gtk/gtk.h>
+#include "seahorse-collection.h"
+#include "seahorse-object.h"
 
-#include "seahorse-context.h"
-#include "seahorse-set.h"
-#include "seahorse-set-model.h"
+#include <gtk/gtk.h>
+#include <gcr/gcr.h>
 
 #define SEAHORSE_TYPE_KEY_MANAGER_STORE             (seahorse_key_manager_store_get_type ())
 #define SEAHORSE_KEY_MANAGER_STORE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_MANAGER_STORE, SeahorseKeyManagerStore))
@@ -46,19 +46,19 @@ typedef enum _SeahorseKeyManagerStoreMode {
 } SeahorseKeyManagerStoreMode;
 
 struct _SeahorseKeyManagerStore {
-	SeahorseSetModel               parent;
-	
+	GcrCollectionModel parent;
+
 	/*< private >*/
-	SeahorseKeyManagerStorePriv    *priv;
+	SeahorseKeyManagerStorePriv *priv;
 };
 
 struct _SeahorseKeyManagerStoreClass {
-	SeahorseSetModelClass           parent_class;
+	GcrCollectionModelClass parent_class;
 };
 
 GType                      seahorse_key_manager_store_get_type               (void) G_GNUC_CONST;
 
-SeahorseKeyManagerStore*   seahorse_key_manager_store_new                    (SeahorseSet *skset,
+SeahorseKeyManagerStore*   seahorse_key_manager_store_new                    (SeahorseCollection *collection,
                                                                               GtkTreeView *view,
                                                                               GSettings *settings);
 

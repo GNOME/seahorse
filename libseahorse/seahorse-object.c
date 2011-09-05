@@ -22,9 +22,9 @@
 
 #include "config.h"
 
-#include "seahorse-object.h"
-
 #include "seahorse-context.h"
+#include "seahorse-object.h"
+#include "seahorse-predicate.h"
 #include "seahorse-source.h"
 
 #include "string.h"
@@ -942,7 +942,7 @@ seahorse_object_get_flags (SeahorseObject *self)
 }
 
 /**
- * seahorse_object_predicate_match:
+ * seahorse_predicate_match:
  * @self: the object to test
  * @obj: The predicate to match
  *
@@ -950,26 +950,27 @@ seahorse_object_get_flags (SeahorseObject *self)
  *
  * Returns: FALSE if predicate does not match the #SeahorseObject, TRUE else
  */
-gboolean 
-seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* obj) 
+gboolean
+seahorse_predicate_match (SeahorsePredicate *self,
+                          SeahorseObject* object)
 {
 	SeahorseObjectPrivate *pv;
-	
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (obj), FALSE);
-	pv = obj->pv;
+
+	g_return_val_if_fail (SEAHORSE_IS_OBJECT (object), FALSE);
+	pv = object->pv;
 
 	/* Check all the fields */
 	if (self->tag != 0 && self->tag != pv->tag)
 		return FALSE;
 	if (self->id != 0 && self->id != pv->id)
 		return FALSE;
-	if (self->type != 0 && self->type != G_OBJECT_TYPE (obj))
+	if (self->type != 0 && self->type != G_OBJECT_TYPE (object))
 		return FALSE;
 	if (self->location != 0 && self->location != pv->location)
 		return FALSE;
-	if (self->usage != 0 && self->usage != pv->usage) 
+	if (self->usage != 0 && self->usage != pv->usage)
 		return FALSE;
-	if (self->flags != 0 && (self->flags & pv->flags) == 0) 
+	if (self->flags != 0 && (self->flags & pv->flags) == 0)
 		return FALSE;
 	if (self->nflags != 0 && (self->nflags & pv->flags) != 0)
 		return FALSE;
@@ -977,20 +978,20 @@ seahorse_object_predicate_match (SeahorseObjectPredicate *self, SeahorseObject* 
 		return FALSE;
 
 	/* And any custom stuff */
-	if (self->custom != NULL && !self->custom (obj, self->custom_target)) 
+	if (self->custom != NULL && !self->custom (object, self->custom_target))
 		return FALSE;
 
 	return TRUE;
 }
 
 /**
- * seahorse_object_predicate_clear:
+ * seahorse_predicate_clear:
  * @self: The predicate to clean
  *
- * Clears a seahorse predicate (#SeahorseObjectPredicate)
+ * Clears a seahorse predicate (#SeahorsePredicate)
  */
 void
-seahorse_object_predicate_clear (SeahorseObjectPredicate *self)
+seahorse_predicate_clear (SeahorsePredicate *self)
 {
 	memset (self, 0, sizeof (*self));
 }

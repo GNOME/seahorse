@@ -36,7 +36,6 @@ enum {
 	PROP_0,
 	PROP_SIGNATURES,
 	PROP_VALIDITY,
-	PROP_VALIDITY_STR,
 	PROP_NAME,
 	PROP_EMAIL,
 	PROP_COMMENT
@@ -244,9 +243,6 @@ seahorse_pgp_uid_get_property (GObject *object, guint prop_id,
 	case PROP_VALIDITY:
 		g_value_set_uint (value, seahorse_pgp_uid_get_validity (self));
 		break;
-	case PROP_VALIDITY_STR:
-		g_value_set_string (value, seahorse_pgp_uid_get_validity_str (self));
-		break;
 	case PROP_NAME:
 		g_value_set_string (value, seahorse_pgp_uid_get_name (self));
 		break;
@@ -321,10 +317,6 @@ seahorse_pgp_uid_class_init (SeahorsePgpUidClass *klass)
 	        g_param_spec_uint ("validity", "Validity", "Validity of this identity",
 	                           0, G_MAXUINT, 0, G_PARAM_READWRITE));
 
-        g_object_class_install_property (gobject_class, PROP_VALIDITY_STR,
-                g_param_spec_string ("validity-str", "Validity String", "Validity of this identity as a string",
-                                     "", G_PARAM_READABLE));
-        
         g_object_class_install_property (gobject_class, PROP_NAME,
                 g_param_spec_string ("name", "Name", "User ID name",
                                      "", G_PARAM_READWRITE));
@@ -397,13 +389,6 @@ seahorse_pgp_uid_set_validity (SeahorsePgpUid *self, SeahorseValidity validity)
 	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
 	self->pv->validity = validity;
 	g_object_notify (G_OBJECT (self), "validity");
-	g_object_notify (G_OBJECT (self), "validity-str");
-}
-
-const gchar*
-seahorse_pgp_uid_get_validity_str (SeahorsePgpUid *self)
-{
-	return seahorse_validity_get_string (seahorse_pgp_uid_get_validity (self));
 }
 
 const gchar*

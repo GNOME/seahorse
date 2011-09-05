@@ -38,7 +38,7 @@
 
 G_DEFINE_TYPE (SeahorseGkrItemCommands, seahorse_gkr_item_commands, SEAHORSE_TYPE_COMMANDS);
 
-static SeahorseObjectPredicate commands_predicate = { 0, };
+static SeahorsePredicate commands_predicate = { 0, };
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 

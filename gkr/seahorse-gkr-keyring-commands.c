@@ -55,7 +55,7 @@ static const char* UI_KEYRING = ""\
 "	</popup>"\
 "</ui>";
 
-static SeahorseObjectPredicate keyring_predicate = { 0, };
+static SeahorsePredicate keyring_predicate = { 0, };
 
 static void on_view_selection_changed (SeahorseView *view, gpointer user_data);
 

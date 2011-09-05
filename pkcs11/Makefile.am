@@ -10,8 +10,6 @@ INCLUDES = -I$(top_builddir) \
 	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
-	-DGCR_API_SUBJECT_TO_CHANGE \
-	-DGCK_API_SUBJECT_TO_CHANGE \
 	-DGETTEXT_PACKAGE=\""seahorse\""
 
 noinst_LTLIBRARIES = libseahorse-pkcs11.la

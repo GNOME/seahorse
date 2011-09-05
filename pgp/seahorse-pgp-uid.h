@@ -64,9 +64,6 @@ SeahorseValidity  seahorse_pgp_uid_get_validity         (SeahorsePgpUid *self);
 void              seahorse_pgp_uid_set_validity         (SeahorsePgpUid *self,
                                                          SeahorseValidity validity);
 
-const gchar*      seahorse_pgp_uid_get_validity_str     (SeahorsePgpUid *self);
-
-
 const gchar*      seahorse_pgp_uid_get_name             (SeahorsePgpUid *self);
 
 void              seahorse_pgp_uid_set_name             (SeahorsePgpUid *self,

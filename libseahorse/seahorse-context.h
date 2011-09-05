@@ -38,7 +38,7 @@
 
 struct _SeahorseKey;
 struct _SeahorseObject;
-struct _SeahorseObjectPredicate;
+struct _SeahorsePredicate;
 
 typedef struct _SeahorseContext SeahorseContext;
 typedef struct _SeahorseContextClass SeahorseContextClass;
@@ -156,10 +156,10 @@ GList*              seahorse_context_find_objects            (SeahorseContext *s
                                                               SeahorseLocation location);
 
 GList*              seahorse_context_find_objects_full       (SeahorseContext *self,
-                                                              struct _SeahorseObjectPredicate *skpred);
+                                                              struct _SeahorsePredicate *skpred);
 
 void                seahorse_context_for_objects_full        (SeahorseContext *self,
-                                                              struct _SeahorseObjectPredicate *skpred,
+                                                              struct _SeahorsePredicate *skpred,
                                                               SeahorseObjectFunc func,
                                                               gpointer user_data);
 

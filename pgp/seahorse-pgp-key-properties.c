@@ -246,7 +246,7 @@ on_pgp_signature_row_activated (GtkTreeView *treeview,
 		model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
         
 	g_return_if_fail (gtk_tree_model_get_iter (model, &iter, path));
-    
+
 	object = seahorse_object_model_get_row_key (SEAHORSE_OBJECT_MODEL (model), &iter);
 	if (object != NULL && SEAHORSE_IS_PGP_KEY (object)) {
 		seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (object), 

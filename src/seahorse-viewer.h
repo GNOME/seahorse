@@ -25,7 +25,6 @@
 #include <glib-object.h>
 
 #include "seahorse-object.h"
-#include "seahorse-set.h"
 #include "seahorse-view.h"
 #include "seahorse-widget.h"
 
@@ -101,12 +100,12 @@ void                seahorse_viewer_set_selected                    (SeahorseVie
 GtkWindow*          seahorse_viewer_get_window                      (SeahorseViewer* self);
 
 void                seahorse_viewer_register_ui                     (SeahorseViewer *self, 
-                                                                     SeahorseObjectPredicate *pred,
+                                                                     SeahorsePredicate *pred,
                                                                      const gchar *uidef, 
                                                                      GtkActionGroup *actions);
 
 void                seahorse_viewer_register_commands               (SeahorseViewer *self, 
-                                                                     SeahorseObjectPredicate *pred,
+                                                                     SeahorsePredicate *pred,
                                                                      SeahorseCommands *commands);
 
 #endif /* __SEAHORSE_VIEWER_H__ */

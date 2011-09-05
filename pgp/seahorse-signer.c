@@ -40,7 +40,7 @@ SeahorsePgpKey*
 seahorse_signer_get (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
-    SeahorseSet *skset;
+    GcrCollection *collection;
     SeahorseObject *object = NULL;
     GtkWidget *combo;
     GtkWidget *widget;
@@ -51,9 +51,9 @@ seahorse_signer_get (GtkWindow *parent)
     gchar *id;
     guint nkeys;
 
-    skset = seahorse_keyset_pgp_signers_new ();
-    nkeys = seahorse_set_get_count (skset);
-    
+    collection = seahorse_keyset_pgp_signers_new ();
+    nkeys = gcr_collection_get_length (collection);
+
     /* If no signing keys then we can't sign */
     if (nkeys == 0) {
         /* TODO: We should be giving an error message that allows them to 
@@ -65,11 +65,11 @@ seahorse_signer_get (GtkWindow *parent)
     
     /* If only one key (probably default) then return it immediately */
     if (nkeys == 1) {
-        GList *keys = seahorse_set_get_objects (skset);
+        GList *keys = gcr_collection_get_objects (collection);
         object = SEAHORSE_OBJECT (keys->data);
         
         g_list_free (keys);
-        g_object_unref (skset);
+        g_object_unref (collection);
 
         g_assert (SEAHORSE_IS_PGP_KEY (object));
         return SEAHORSE_PGP_KEY (object);
@@ -80,8 +80,8 @@ seahorse_signer_get (GtkWindow *parent)
             
     combo = GTK_WIDGET (seahorse_widget_get_widget (swidget, "signer-select"));
     g_return_val_if_fail (combo != NULL, NULL);
-    seahorse_combo_keys_attach (GTK_COMBO_BOX (combo), skset, NULL);
-    g_object_unref (skset);
+    seahorse_combo_keys_attach (GTK_COMBO_BOX (combo), collection, NULL);
+    g_object_unref (collection);
 
     settings = seahorse_context_pgp_settings (NULL);
 

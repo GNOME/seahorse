@@ -31,6 +31,7 @@
 #include "seahorse-context.h"
 #include "seahorse-dns-sd.h"
 #include "seahorse-marshal.h"
+#include "seahorse-predicate.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
 #include "seahorse-servers.h"
@@ -825,7 +826,7 @@ seahorse_context_get_object (SeahorseContext *sctx, SeahorseSource *sksrc,
  *
  **/
 typedef struct _ObjectMatcher {
-	SeahorseObjectPredicate *kp;
+	SeahorsePredicate *kp;
 	gboolean many;
 	SeahorseObjectFunc func;
 	gpointer user_data;
@@ -846,8 +847,8 @@ static gboolean
 find_matching_objects (gpointer key, SeahorseObject *sobj, ObjectMatcher *km)
 {
 	gboolean matched;
-	
-	if (km->kp && seahorse_object_predicate_match (km->kp, SEAHORSE_OBJECT (sobj))) {
+
+	if (km->kp && seahorse_predicate_match (km->kp, SEAHORSE_OBJECT (sobj))) {
 		matched = TRUE;
 		(km->func) (sobj, km->user_data);
 	}
@@ -884,7 +885,8 @@ add_object_to_list (SeahorseObject *object, gpointer user_data)
  * Returns: a #GList list containing the matching objects
  */
 GList*
-seahorse_context_find_objects_full (SeahorseContext *self, SeahorseObjectPredicate *pred)
+seahorse_context_find_objects_full (SeahorseContext *self,
+                                    SeahorsePredicate *pred)
 {
 	GList *list = NULL;
 	ObjectMatcher km;
@@ -915,8 +917,10 @@ seahorse_context_find_objects_full (SeahorseContext *self, SeahorseObjectPredica
  * is passed to this function
  */
 void
-seahorse_context_for_objects_full (SeahorseContext *self, SeahorseObjectPredicate *pred,
-                                   SeahorseObjectFunc func, gpointer user_data)
+seahorse_context_for_objects_full (SeahorseContext *self,
+                                   SeahorsePredicate *pred,
+                                   SeahorseObjectFunc func,
+                                   gpointer user_data)
 {
 	ObjectMatcher km;
 
@@ -947,14 +951,14 @@ seahorse_context_for_objects_full (SeahorseContext *self, SeahorseObjectPredicat
 GList*
 seahorse_context_get_objects (SeahorseContext *self, SeahorseSource *source)
 {
-	SeahorseObjectPredicate pred;
+	SeahorsePredicate pred;
 
 	if (!self)
 		self = seahorse_context_instance ();
 	g_return_val_if_fail (SEAHORSE_IS_CONTEXT (self), NULL);
 	g_return_val_if_fail (source == NULL || SEAHORSE_IS_SOURCE (source), NULL);
 
-	seahorse_object_predicate_clear (&pred);
+	seahorse_predicate_clear (&pred);
 	pred.source = source;
 	
 	return seahorse_context_find_objects_full (self, &pred);
@@ -1013,7 +1017,7 @@ GList*
 seahorse_context_find_objects (SeahorseContext *sctx, GQuark ktype, 
                                SeahorseUsage usage, SeahorseLocation location)
 {
-    SeahorseObjectPredicate pred;
+    SeahorsePredicate pred;
     memset (&pred, 0, sizeof (pred));
 
     if (!sctx)

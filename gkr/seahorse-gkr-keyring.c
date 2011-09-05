@@ -26,6 +26,7 @@
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-operation.h"
 
+#include "seahorse-predicate.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
@@ -193,7 +194,7 @@ on_keyring_load_list_item_ids (GnomeKeyringResult result,
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
 	keyring_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	SeahorseObjectPredicate pred;
+	SeahorsePredicate pred;
 	SeahorseGkrItem *git;
 	const gchar *keyring_name;
 	GError *error = NULL;
@@ -214,7 +215,7 @@ on_keyring_load_list_item_ids (GnomeKeyringResult result,
 
 	/* When loading new keys prepare a list of current */
 	checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-	seahorse_object_predicate_clear (&pred);
+	seahorse_predicate_clear (&pred);
 	pred.source = SEAHORSE_SOURCE (closure->keyring);
 	pred.type = SEAHORSE_TYPE_GKR_ITEM;
 	seahorse_context_for_objects_full (SCTX_APP (), &pred, insert_id_hashtable, checks);

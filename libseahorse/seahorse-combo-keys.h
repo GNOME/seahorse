@@ -30,12 +30,12 @@
 #define __SEAHORSE_COMBO_KEYS_H__
 
 #include "seahorse-object.h"
-#include "seahorse-set.h"
 
 #include <gtk/gtk.h>
+#include <gcr/gcr.h>
 
 void                        seahorse_combo_keys_attach              (GtkComboBox *combo,
-                                                                     SeahorseSet *skset,
+                                                                     GcrCollection *collection,
                                                                      const gchar *none_option);
 
 void                        seahorse_combo_keys_set_active_id       (GtkComboBox *combo,

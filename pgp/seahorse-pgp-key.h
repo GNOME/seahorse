@@ -90,15 +90,9 @@ const gchar*      seahorse_pgp_key_get_fingerprint      (SeahorsePgpKey *self);
 
 SeahorseValidity  seahorse_pgp_key_get_validity         (SeahorsePgpKey *self);
 
-const gchar*      seahorse_pgp_key_get_validity_str     (SeahorsePgpKey *self);
-
 gulong            seahorse_pgp_key_get_expires          (SeahorsePgpKey *self);
 
-gchar*            seahorse_pgp_key_get_expires_str      (SeahorsePgpKey *self);
-
 SeahorseValidity  seahorse_pgp_key_get_trust            (SeahorsePgpKey *self);
-
-const gchar*      seahorse_pgp_key_get_trust_str        (SeahorsePgpKey *self);
 
 guint             seahorse_pgp_key_get_length           (SeahorsePgpKey *self);
 

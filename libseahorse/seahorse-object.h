@@ -113,26 +113,4 @@ SeahorseUsage       seahorse_object_get_usage              (SeahorseObject *self
 
 guint               seahorse_object_get_flags              (SeahorseObject *self);
 
-typedef gboolean (*SeahorseObjectPredicateFunc) (SeahorseObject *obj, void *user_data);
-
-typedef struct _SeahorseObjectPredicate SeahorseObjectPredicate;
-
-struct _SeahorseObjectPredicate {
-	GQuark tag;
-	GQuark id;
-	GType type;
-	SeahorseLocation location;
-	SeahorseUsage usage;
-	guint flags;
-	guint nflags;
-	SeahorseSource *source;
-	SeahorseObjectPredicateFunc custom;
-	gpointer custom_target;
-};
-
-void               seahorse_object_predicate_clear         (SeahorseObjectPredicate *self);
-
-gboolean           seahorse_object_predicate_match         (SeahorseObjectPredicate *self, 
-                                                            SeahorseObject *obj);
-
 #endif /* __SEAHORSE_OBJECT_H__ */

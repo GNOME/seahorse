@@ -58,14 +58,8 @@ gchar*                      seahorse_pkcs11_certificate_get_fingerprint        (
 
 guint                       seahorse_pkcs11_certificate_get_validity           (SeahorsePkcs11Certificate* self);
 
-const gchar*                seahorse_pkcs11_certificate_get_validity_str       (SeahorsePkcs11Certificate* self);
-
 guint                       seahorse_pkcs11_certificate_get_trust              (SeahorsePkcs11Certificate* self);
 
-const gchar*                seahorse_pkcs11_certificate_get_trust_str          (SeahorsePkcs11Certificate* self);
-
 gulong                      seahorse_pkcs11_certificate_get_expires            (SeahorsePkcs11Certificate* self);
-
-gchar*                      seahorse_pkcs11_certificate_get_expires_str        (SeahorsePkcs11Certificate* self);
 
 #endif /* __SEAHORSE_PKCS11_CERTIFICATE_H__ */

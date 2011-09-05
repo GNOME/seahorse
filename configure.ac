@@ -40,7 +40,8 @@ PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQUIRED)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
-PKG_CHECK_MODULES(SEAHORSE, gmodule-2.0 gio-2.0 gthread-2.0 gtk+-3.0 >= $GTK_REQUIRED)
+PKG_CHECK_MODULES(SEAHORSE, gmodule-2.0 gio-2.0 gthread-2.0 gtk+-3.0 >= $GTK_REQUIRED gcr-3 >= $GCR_REQUIRED)
+SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS -DGCR_API_SUBJECT_TO_CHANGE -DGCK_API_SUBJECT_TO_CHANGE"
 
 GLIB_GSETTINGS
 
@@ -384,12 +385,8 @@ if test "$enable_pkcs11" = "no"; then
 	echo "disabling pkcs11 support"
 	enable_pkcs11="no"
 else
-	PKG_CHECK_MODULES(GCR, gcr-3 >= $GCR_REQUIRED, gcr_is_present="yes", gcr_is_present="no")
-	if test "$gcr_is_present" = "no"; then
-		echo "disabling pkcs11 support"
-	fi
 	PKG_CHECK_MODULES(GCK, gck-1 >= 3.1.2, enable_pkcs11="yes", enable_pkcs11="no")
-	if test "$enable_pkcs11" = "yes" && test "$gcr_is_present" = "yes"; then
+	if test "$enable_pkcs11" = "yes"; then
 		AC_DEFINE(WITH_PKCS11, 1, [gck library available])
 		SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GCK_CFLAGS $GCR_CFLAGS"
 		SEAHORSE_LIBS="$SEAHORSE_LIBS $GCK_LIBS $GCR_LIBS"

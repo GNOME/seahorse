@@ -29,6 +29,7 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-passphrase.h"
+#include "seahorse-predicate.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
 #include "seahorse-secure-memory.h"
@@ -181,7 +182,7 @@ on_source_load_default_keyring (GnomeKeyringResult result,
                                 gpointer user_data)
 {
 	SeahorseGkrSource *self = SEAHORSE_GKR_SOURCE (user_data);
-	SeahorseObjectPredicate pred;
+	SeahorsePredicate pred;
 
 	if (result != GNOME_KEYRING_RESULT_OK) {
 		if (result != GNOME_KEYRING_RESULT_CANCELLED)
@@ -189,7 +190,7 @@ on_source_load_default_keyring (GnomeKeyringResult result,
 		return;
 	}
 
-	seahorse_object_predicate_clear (&pred);
+	seahorse_predicate_clear (&pred);
 	pred.source = SEAHORSE_SOURCE (self);
 	pred.type = SEAHORSE_TYPE_GKR_KEYRING;
 	seahorse_context_for_objects_full (NULL, &pred, update_each_default_keyring, (gpointer)default_name);
@@ -241,7 +242,7 @@ on_source_load_list_keyring_names_complete (GnomeKeyringResult result,
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
 	source_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	SeahorseGkrKeyring *keyring;
-	SeahorseObjectPredicate pred;
+	SeahorsePredicate pred;
 	GError *error = NULL;
 	gchar *keyring_name;
 	GHashTable *checks;
@@ -257,7 +258,7 @@ on_source_load_list_keyring_names_complete (GnomeKeyringResult result,
 
 	/* Load up a list of all the current names */
 	checks = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
-	seahorse_object_predicate_clear (&pred);
+	seahorse_predicate_clear (&pred);
 	pred.source = SEAHORSE_SOURCE (closure->source);
 	pred.type = SEAHORSE_TYPE_GKR_KEYRING;
 	seahorse_context_for_objects_full (NULL, &pred, insert_each_keyring_in_hashtable, checks);

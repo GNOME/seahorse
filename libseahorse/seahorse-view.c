@@ -38,7 +38,8 @@ seahorse_view_set_selected_objects (SeahorseView* self, GList* objects)
 
 
 GList*
-seahorse_view_get_selected_matching (SeahorseView *self, SeahorseObjectPredicate *pred)
+seahorse_view_get_selected_matching (SeahorseView *self,
+                                     SeahorsePredicate *pred)
 {
 	g_return_val_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected_matching, NULL);
 	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected_matching (self, pred);
@@ -67,7 +68,8 @@ seahorse_view_get_window (SeahorseView* self)
 }
 
 void
-seahorse_view_register_commands (SeahorseView *self, SeahorseObjectPredicate *pred,
+seahorse_view_register_commands (SeahorseView *self,
+                                 SeahorsePredicate *pred,
                                  SeahorseCommands *commands)
 {
 	g_return_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->register_commands);
@@ -75,8 +77,10 @@ seahorse_view_register_commands (SeahorseView *self, SeahorseObjectPredicate *pr
 }
 
 void
-seahorse_view_register_ui (SeahorseView *self, SeahorseObjectPredicate *pred, 
-                           const gchar *ui_definition, GtkActionGroup *actions)
+seahorse_view_register_ui (SeahorseView *self,
+                           SeahorsePredicate *pred,
+                           const gchar *ui_definition,
+                           GtkActionGroup *actions)
 {
 	g_return_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->register_ui);
 	SEAHORSE_VIEW_GET_INTERFACE (self)->register_ui (self, pred, ui_definition, actions);
