@@ -283,13 +283,6 @@ seahorse_collection_has_object (SeahorseCollection *self,
 	if (g_hash_table_lookup (self->pv->objects, object))
 		return TRUE;
 
-	/*
-	 * This happens when the object has changed state, but we have
-	 * not yet received the signal.
-	 */
-	if (maybe_add_object (self, object))
-		return TRUE;
-
 	return FALSE;
 }
 

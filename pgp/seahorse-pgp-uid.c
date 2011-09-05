@@ -34,6 +34,7 @@
 
 enum {
 	PROP_0,
+	PROP_PARENT,
 	PROP_SIGNATURES,
 	PROP_VALIDITY,
 	PROP_NAME,
@@ -44,6 +45,7 @@ enum {
 G_DEFINE_TYPE (SeahorsePgpUid, seahorse_pgp_uid, SEAHORSE_TYPE_OBJECT);
 
 struct _SeahorsePgpUidPrivate {
+	SeahorsePgpKey *parent;
 	GList *signatures;
 	SeahorseValidity validity;
 	gboolean realized;
@@ -202,6 +204,7 @@ void
 seahorse_pgp_uid_realize (SeahorsePgpUid *self)
 {
 	gchar *markup;
+	gchar *label;
 
 	/* Don't realize if no name present */
 	if (!self->pv->name)
@@ -209,10 +212,11 @@ seahorse_pgp_uid_realize (SeahorsePgpUid *self)
 
 	self->pv->realized = TRUE;
 
-	g_object_set (self, "label", self->pv->name ? self->pv->name : "", NULL);
+	label = seahorse_pgp_uid_calc_label (self->pv->name, self->pv->email, self->pv->comment);
 	markup = seahorse_pgp_uid_calc_markup (self->pv->name, self->pv->email, self->pv->comment, 0);
-	g_object_set (self, "markup", markup, NULL);
+	g_object_set (self, "markup", markup, "label", label, NULL);
 	g_free (markup);
+	g_free (label);
 }
 
 static void
@@ -240,6 +244,9 @@ seahorse_pgp_uid_get_property (GObject *object, guint prop_id,
 	case PROP_SIGNATURES:
 		g_value_set_boxed (value, seahorse_pgp_uid_get_signatures (self));
 		break;
+	case PROP_PARENT:
+		g_value_set_object (value, seahorse_pgp_uid_get_parent (self));
+		break;
 	case PROP_VALIDITY:
 		g_value_set_uint (value, seahorse_pgp_uid_get_validity (self));
 		break;
@@ -264,6 +271,10 @@ seahorse_pgp_uid_set_property (GObject *object, guint prop_id, const GValue *val
 	switch (prop_id) {
 	case PROP_SIGNATURES:
 		seahorse_pgp_uid_set_signatures (self, g_value_get_boxed (value));
+		break;
+	case PROP_PARENT:
+		g_return_if_fail (self->pv->parent == NULL);
+		self->pv->parent = g_value_get_object (value);
 		break;
 	case PROP_VALIDITY:
 		seahorse_pgp_uid_set_validity (self, g_value_get_uint (value));
@@ -317,6 +328,10 @@ seahorse_pgp_uid_class_init (SeahorsePgpUidClass *klass)
 	        g_param_spec_uint ("validity", "Validity", "Validity of this identity",
 	                           0, G_MAXUINT, 0, G_PARAM_READWRITE));
 
+	g_object_class_install_property (gobject_class, PROP_PARENT,
+	        g_param_spec_object ("parent", "Parent Key", "Parent Key",
+	                             SEAHORSE_TYPE_PGP_KEY, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
         g_object_class_install_property (gobject_class, PROP_NAME,
                 g_param_spec_string ("name", "Name", "User ID name",
                                      "", G_PARAM_READWRITE));
@@ -338,8 +353,9 @@ seahorse_pgp_uid_class_init (SeahorsePgpUidClass *klass)
  * PUBLIC 
  */
 
-SeahorsePgpUid*
-seahorse_pgp_uid_new (const gchar *uid_string)
+SeahorsePgpUid *
+seahorse_pgp_uid_new (SeahorsePgpKey *parent,
+                      const gchar *uid_string)
 {
 	SeahorsePgpUid *uid;
 	gchar *name = NULL;
@@ -348,14 +364,26 @@ seahorse_pgp_uid_new (const gchar *uid_string)
 	
 	if (uid_string)
 		parse_user_id (uid_string, &name, &email, &comment);
-	
-	uid = g_object_new (SEAHORSE_TYPE_PGP_UID, "name", name, "email", email, "comment", comment, NULL);
-	
+
+	uid = g_object_new (SEAHORSE_TYPE_PGP_UID,
+	                    "parent", parent,
+	                    "name", name,
+	                    "email", email,
+	                    "comment", comment,
+	                    NULL);
+
 	g_free (name);
 	g_free (comment);
 	g_free (email);
 	
 	return uid;
+}
+
+SeahorsePgpKey *
+seahorse_pgp_uid_get_parent (SeahorsePgpUid *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
+	return self->pv->parent;
 }
 
 GList*

@@ -34,6 +34,8 @@
 #include "pgp/seahorse-pgp-uid.h"
 #include "pgp/seahorse-pgp-subkey.h"
 
+#include <gcr/gcr.h>
+
 enum {
 	PROP_0,
 	PROP_PHOTOS,
@@ -47,7 +49,11 @@ enum {
 	PROP_ALGO
 };
 
-G_DEFINE_TYPE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT);
+static void      seahorse_pgp_key_collection_iface_init (GcrCollectionIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_pgp_key_collection_iface_init);
+);
 
 struct _SeahorsePgpKeyPrivate {
 	GList *uids;			/* All the UID objects */
@@ -98,28 +104,38 @@ _seahorse_pgp_key_get_uids (SeahorsePgpKey *self)
 static void
 _seahorse_pgp_key_set_uids (SeahorsePgpKey *self, GList *uids)
 {
+	GHashTable *checks;
+	GHashTableIter iter;
+	GObject *uid;
 	guint index;
 	GQuark id;
 	GList *l;
-	
+
 	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
 
 	id = seahorse_object_get_id (SEAHORSE_OBJECT (self));
-	
-	/* Remove the parent on each old one */
-	for (l = self->pv->uids; l; l = g_list_next (l))
-		seahorse_object_set_parent (l->data, NULL);
+
+	checks = g_hash_table_new (g_direct_hash, g_direct_equal);
+	for (l = self->pv->uids; l; l = g_list_next (l)) {
+		g_hash_table_insert (checks, l->data, l->data);
+	}
 
 	seahorse_object_list_free (self->pv->uids);
 	self->pv->uids = seahorse_object_list_copy (uids);
 	
 	/* Set parent and source on each new one, except the first */
 	for (l = self->pv->uids, index = 0; l; l = g_list_next (l), ++index) {
-		g_object_set (l->data, "id", seahorse_pgp_uid_calc_id (id, index), NULL);
-		if (l != self->pv->uids)
-			seahorse_object_set_parent (l->data, SEAHORSE_OBJECT (self));
+		uid = l->data;
+		g_object_set (uid, "id", seahorse_pgp_uid_calc_id (id, index), NULL);
+		if (!g_hash_table_remove (checks, uid))
+			gcr_collection_emit_added (GCR_COLLECTION (self), uid);
 	}
-	
+
+	g_hash_table_iter_init (&iter, checks);
+	while (g_hash_table_iter_next (&iter, (gpointer *)&uid, NULL))
+		gcr_collection_emit_removed (GCR_COLLECTION (self), uid);
+	g_hash_table_destroy (checks);
+
 	g_object_notify (G_OBJECT (self), "uids");
 }
 
@@ -280,12 +296,6 @@ seahorse_pgp_key_object_dispose (GObject *obj)
 {
 	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (obj);
 
-	GList *l;
-	
-	/* Free all the attached UIDs */
-	for (l = self->pv->uids; l; l = g_list_next (l))
-		seahorse_object_set_parent (l->data, NULL);
-
 	seahorse_object_list_free (self->pv->uids);
 	self->pv->uids = NULL;
 
@@ -367,6 +377,32 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
  	g_object_class_install_property (gobject_class, PROP_ALGO,
  	        g_param_spec_string ("algo", "Algorithm", "The algorithm of this key.",
  	                             "", G_PARAM_READABLE));
+}
+
+static guint
+seahorse_pgp_key_collection_get_length (GcrCollection *collection)
+{
+	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (collection);
+	guint length = g_list_length (self->pv->uids);
+
+	/* First UID is displayed as the key itself */
+	return length ? length - 1 : 0;
+}
+
+static GList *
+seahorse_pgp_key_collection_get_objects (GcrCollection *collection)
+{
+	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (collection);
+
+	/* First UID is displayed as the key itself */
+	return g_list_copy (self->pv->uids ? self->pv->uids->next : NULL);
+}
+
+static void
+seahorse_pgp_key_collection_iface_init (GcrCollectionIface *iface)
+{
+	iface->get_length = seahorse_pgp_key_collection_get_length;
+	iface->get_objects = seahorse_pgp_key_collection_get_objects;
 }
 
 

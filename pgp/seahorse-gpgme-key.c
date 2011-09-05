@@ -260,7 +260,7 @@ realize_uids (SeahorseGpgmeKey *self)
 
 	/* Add new UIDs */
 	while (guid != NULL) {
-		uid = seahorse_gpgme_uid_new (self->pv->pubkey, guid);
+		uid = seahorse_gpgme_uid_new (self, guid);
 		changed = TRUE;
 		results = seahorse_object_list_append (results, uid);
 		g_object_unref (uid);

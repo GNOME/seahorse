@@ -88,14 +88,7 @@ SeahorseObject*     seahorse_object_get_preferred          (SeahorseObject *self
 
 void                seahorse_object_set_preferred          (SeahorseObject *self, 
                                                             SeahorseObject *value);
-
-SeahorseObject*     seahorse_object_get_parent             (SeahorseObject *self);
-
-void                seahorse_object_set_parent             (SeahorseObject *self, 
-                                                            SeahorseObject *value);
  
-GList*              seahorse_object_get_children           (SeahorseObject *self);
-
 SeahorseObject*     seahorse_object_get_nth_child          (SeahorseObject *self,
                                                             guint index);
 

@@ -400,8 +400,7 @@ on_delete_gkr_complete (GnomeKeyringResult result,
 		g_simple_async_result_complete_in_idle (res);
 
 	} else {
-		seahorse_context_remove_object (seahorse_context_instance (),
-		                                object);
+		g_object_run_dispose (G_OBJECT (object));
 		delete_gkr_one_object (res);
 	}
 

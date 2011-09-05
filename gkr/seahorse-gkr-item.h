@@ -27,6 +27,7 @@
 #include <gnome-keyring.h>
 
 #include "seahorse-gkr-module.h"
+#include "seahorse-gkr-keyring.h"
 
 #include "seahorse-object.h"
 #include "seahorse-source.h"
@@ -63,7 +64,7 @@ struct _SeahorseGkrItemClass {
 
 GType                        seahorse_gkr_item_get_type           (void);
 
-SeahorseGkrItem*             seahorse_gkr_item_new                (SeahorseSource *source,
+SeahorseGkrItem *            seahorse_gkr_item_new                (SeahorseGkrKeyring *keyring,
                                                                    const gchar *keyring_name,
                                                                    guint32 item_id);
 

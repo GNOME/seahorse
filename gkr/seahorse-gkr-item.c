@@ -34,6 +34,7 @@
 
 #include "seahorse-gkr.h"
 #include "seahorse-gkr-item.h"
+#include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-operation.h"
 
 /* For gnome-keyring secret type ids */
@@ -552,6 +553,20 @@ seahorse_gkr_item_set_property (GObject *object, guint prop_id, const GValue *va
 }
 
 static void
+seahorse_gkr_item_dispose (GObject *obj)
+{
+	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (obj);
+	SeahorseSource *source;
+
+	source = seahorse_object_get_source (SEAHORSE_OBJECT (self));
+	if (source != NULL)
+		seahorse_gkr_keyring_remove_item (SEAHORSE_GKR_KEYRING (source),
+		                                  self->pv->item_id);
+
+	G_OBJECT_CLASS (seahorse_gkr_item_parent_class)->dispose (obj);
+}
+
+static void
 seahorse_gkr_item_finalize (GObject *gobject)
 {
 	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (gobject);
@@ -585,6 +600,7 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 	gobject_class = G_OBJECT_CLASS (klass);
 	
 	gobject_class->constructed = seahorse_gkr_item_constructed;
+	gobject_class->dispose = seahorse_gkr_item_dispose;
 	gobject_class->finalize = seahorse_gkr_item_finalize;
 	gobject_class->set_property = seahorse_gkr_item_set_property;
 	gobject_class->get_property = seahorse_gkr_item_get_property;
@@ -620,10 +636,12 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
  * PUBLIC 
  */
 
-SeahorseGkrItem* 
-seahorse_gkr_item_new (SeahorseSource *source, const gchar *keyring_name, guint32 item_id)
+SeahorseGkrItem *
+seahorse_gkr_item_new (SeahorseGkrKeyring *keyring,
+                       const gchar *keyring_name,
+                       guint32 item_id)
 {
-	return g_object_new (SEAHORSE_TYPE_GKR_ITEM, "source", source, 
+	return g_object_new (SEAHORSE_TYPE_GKR_ITEM, "source", keyring,
 	                     "item-id", item_id, "keyring-name", keyring_name, NULL);
 }
 

@@ -113,10 +113,9 @@ static void
 seahorse_pgp_commands_show_properties (SeahorseCommands* base, SeahorseObject* obj) 
 {
 	g_return_if_fail (SEAHORSE_IS_OBJECT (obj));
-	
-	if (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_PGP_UID || 
-	    G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_GPGME_UID)
-		obj = seahorse_object_get_parent (obj);
+
+	if (SEAHORSE_IS_PGP_UID (obj))
+		obj = SEAHORSE_OBJECT (seahorse_pgp_uid_get_parent (SEAHORSE_PGP_UID (obj)));
 
 	g_return_if_fail (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_PGP_KEY || 
 	                  G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_GPGME_KEY);
@@ -154,8 +153,8 @@ seahorse_pgp_commands_delete_objects (SeahorseCommands* base, GList* objects)
 
 	for (l = objects; l; l = g_list_next (l)) {
 		obj = SEAHORSE_OBJECT (l->data);
-		if (G_OBJECT_TYPE (obj) == SEAHORSE_TYPE_GPGME_UID) {
-			if (g_list_find (objects, seahorse_object_get_parent (obj)) == NULL) {
+		if (SEAHORSE_IS_PGP_UID (obj)) {
+			if (g_list_find (objects, seahorse_pgp_uid_get_parent (SEAHORSE_PGP_UID (obj))) == NULL) {
 				to_delete = g_list_prepend (to_delete, obj);
 				++num_identities;
 			}

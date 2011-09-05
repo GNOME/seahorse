@@ -27,6 +27,8 @@
 #include "seahorse-object.h"
 #include "seahorse-validity.h"
 
+#include "seahorse-pgp-key.h"
+
 #define SEAHORSE_TYPE_PGP_UID            (seahorse_pgp_uid_get_type ())
 
 #define SEAHORSE_PGP_UID(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_UID, SeahorsePgpUid))
@@ -50,7 +52,10 @@ struct _SeahorsePgpUidClass {
 
 GType             seahorse_pgp_uid_get_type             (void);
 
-SeahorsePgpUid*   seahorse_pgp_uid_new                  (const gchar *uid_string);
+SeahorsePgpUid*   seahorse_pgp_uid_new                  (SeahorsePgpKey *parent,
+                                                         const gchar *uid_string);
+
+SeahorsePgpKey *  seahorse_pgp_uid_get_parent           (SeahorsePgpUid *self);
 
 void              seahorse_pgp_uid_realize              (SeahorsePgpUid *self);
 

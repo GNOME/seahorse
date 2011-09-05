@@ -260,10 +260,12 @@ seahorse_gpgme_uid_class_init (SeahorseGpgmeUidClass *klass)
  */
 
 SeahorseGpgmeUid* 
-seahorse_gpgme_uid_new (gpgme_key_t pubkey, gpgme_user_id_t userid) 
+seahorse_gpgme_uid_new (SeahorseGpgmeKey *parent,
+                        gpgme_user_id_t userid)
 {
-	return g_object_new (SEAHORSE_TYPE_GPGME_UID, 
-	                     "pubkey", pubkey, 
+	return g_object_new (SEAHORSE_TYPE_GPGME_UID,
+	                     "parent", parent,
+	                     "pubkey", seahorse_gpgme_key_get_public (parent),
 	                     "userid", userid, NULL);
 }
 
@@ -318,19 +320,19 @@ seahorse_gpgme_uid_set_userid (SeahorseGpgmeUid *self, gpgme_user_id_t userid)
 	g_object_notify (obj, "gpgme_index");
 	
 	base = SEAHORSE_PGP_UID (self);
-	
-	string = convert_string (userid->name);
-	seahorse_pgp_uid_set_name (base, string);
-	g_free (string);
-	
-	string = convert_string (userid->email);
-	seahorse_pgp_uid_set_email (base, string);
-	g_free (string);
-	
+
 	string = convert_string (userid->comment);
 	seahorse_pgp_uid_set_comment (base, string);
 	g_free (string);
-	
+
+	string = convert_string (userid->email);
+	seahorse_pgp_uid_set_email (base, string);
+	g_free (string);
+
+	string = convert_string (userid->name);
+	seahorse_pgp_uid_set_name (base, string);
+	g_free (string);
+
 	realize_signatures (self);
 
 	seahorse_pgp_uid_set_validity (base, seahorse_gpgme_convert_validity (userid->validity));

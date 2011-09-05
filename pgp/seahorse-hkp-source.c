@@ -434,7 +434,7 @@ parse_hkp_index (const gchar *response)
 
 				/* And the UID if one was found */                
 				if (has_uid) {
-					SeahorsePgpUid *uid = seahorse_pgp_uid_new (v[2]);
+					SeahorsePgpUid *uid = seahorse_pgp_uid_new (key, v[2]);
 					uids = g_list_prepend (uids, uid);
 				}
 			}
@@ -447,7 +447,7 @@ parse_hkp_index (const gchar *response)
 			SeahorsePgpUid *uid;
 			
 			g_strstrip (line);
-			uid = seahorse_pgp_uid_new (line);
+			uid = seahorse_pgp_uid_new (key, line);
 			uids = g_list_prepend (uids, uid);
             
 		/* Signatures */

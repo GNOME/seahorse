@@ -38,7 +38,7 @@
 typedef struct _SeahorseGkrKeyring SeahorseGkrKeyring;
 typedef struct _SeahorseGkrKeyringClass SeahorseGkrKeyringClass;
 typedef struct _SeahorseGkrKeyringPrivate SeahorseGkrKeyringPrivate;
-    
+
 struct _SeahorseGkrKeyring {
 	SeahorseObject parent;
 	SeahorseGkrKeyringPrivate *pv;
@@ -55,6 +55,9 @@ SeahorseGkrKeyring*  seahorse_gkr_keyring_new              (const gchar *keyring
 void                 seahorse_gkr_keyring_refresh          (SeahorseGkrKeyring *self);
 
 void                 seahorse_gkr_keyring_realize          (SeahorseGkrKeyring *self);
+
+void                 seahorse_gkr_keyring_remove_item      (SeahorseGkrKeyring *self,
+                                                            guint32 item_id);
 
 const gchar*         seahorse_gkr_keyring_get_name         (SeahorseGkrKeyring *self);
 

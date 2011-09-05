@@ -886,13 +886,14 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
 			flags |= SEAHORSE_FLAG_DISABLED;
 		seahorse_pgp_subkey_set_flags (subkey, flags);
 
+		key = seahorse_pgp_key_new ();
+
 		/* Build up a uid */
-		uid = seahorse_pgp_uid_new (uidstr);
+		uid = seahorse_pgp_uid_new (key, uidstr);
 		if (revoked)
 			seahorse_pgp_uid_set_validity (uid, SEAHORSE_VALIDITY_REVOKED);
 
 		/* Now build them into a key */
-		key = seahorse_pgp_key_new ();
 		list = g_list_prepend (NULL, uid);
 		seahorse_pgp_key_set_uids (key, list);
 		seahorse_object_list_free (list);

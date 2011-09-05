@@ -30,6 +30,8 @@
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
+#include <gcr/gcr.h>
+
 #include <glib/gi18n.h>
 
 enum {
@@ -42,17 +44,21 @@ enum {
 };
 
 struct _SeahorseGkrKeyringPrivate {
+	GHashTable *items;
 	gchar *keyring_name;
 	gboolean is_default;
-	
+
 	gpointer req_info;
 	GnomeKeyringInfo *keyring_info;
 };
 
-static void seahorse_source_iface (SeahorseSourceIface *iface);
+static void     seahorse_keyring_source_iface        (SeahorseSourceIface *iface);
+static void     seahorse_keyring_collection_iface    (GcrCollectionIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
+G_DEFINE_TYPE_WITH_CODE (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_keyring_source_iface);
+                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_keyring_collection_iface);
+);
 
 static GType
 boxed_type_keyring_info (void)
@@ -145,6 +151,24 @@ seahorse_gkr_keyring_refresh (SeahorseGkrKeyring *self)
 		load_keyring_info (self);
 }
 
+void
+seahorse_gkr_keyring_remove_item (SeahorseGkrKeyring *self,
+                                  guint32 item_id)
+{
+	SeahorseGkrItem *item;
+
+	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (self));
+
+	item = g_hash_table_lookup (self->pv->items, GUINT_TO_POINTER (item_id));
+	if (item != NULL) {
+		g_object_ref (item);
+		g_object_set (item, "source", NULL, NULL);
+		g_hash_table_remove (self->pv->items, GUINT_TO_POINTER (item_id));
+		gcr_collection_emit_removed (GCR_COLLECTION (self), G_OBJECT (item));
+		g_object_unref (item);
+	}
+}
+
 typedef struct {
 	SeahorseGkrKeyring *keyring;
 	gpointer request;
@@ -168,23 +192,13 @@ keyring_load_free (gpointer data)
 
 /* Remove the given key from the context */
 static void
-remove_key_from_context (gpointer kt, SeahorseObject *dummy, SeahorseSource *sksrc)
+remove_key_from_context (gpointer kt,
+                         gpointer value,
+                         gpointer user_data)
 {
 	/* This function gets called as a GHFunc on the self->checks hashtable. */
-	GQuark keyid = GPOINTER_TO_UINT (kt);
-	SeahorseObject *sobj;
-
-	sobj = seahorse_context_get_object (SCTX_APP (), sksrc, keyid);
-	if (sobj != NULL)
-		seahorse_context_remove_object (SCTX_APP (), sobj);
-}
-
-static void
-insert_id_hashtable (SeahorseObject *object, gpointer user_data)
-{
-	g_hash_table_insert ((GHashTable*)user_data,
-	                     GUINT_TO_POINTER (seahorse_object_get_id (object)),
-	                     GUINT_TO_POINTER (TRUE));
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (user_data);
+	seahorse_gkr_keyring_remove_item (self, GPOINTER_TO_UINT (kt));
 }
 
 static void
@@ -194,13 +208,12 @@ on_keyring_load_list_item_ids (GnomeKeyringResult result,
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
 	keyring_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	SeahorsePredicate pred;
-	SeahorseGkrItem *git;
+	SeahorseGkrItem *item;
 	const gchar *keyring_name;
 	GError *error = NULL;
 	GHashTable *checks;
-	guint32 item_id;
-	GQuark id;
+	GHashTableIter iter;
+	gpointer key;
 
 	closure->request = NULL;
 
@@ -214,27 +227,24 @@ on_keyring_load_list_item_ids (GnomeKeyringResult result,
 	g_return_if_fail (keyring_name);
 
 	/* When loading new keys prepare a list of current */
-	checks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
-	seahorse_predicate_clear (&pred);
-	pred.source = SEAHORSE_SOURCE (closure->keyring);
-	pred.type = SEAHORSE_TYPE_GKR_ITEM;
-	seahorse_context_for_objects_full (SCTX_APP (), &pred, insert_id_hashtable, checks);
+	checks = g_hash_table_new (g_direct_hash, g_direct_equal);
+	g_hash_table_iter_init (&iter, closure->keyring->pv->items);
+	while (g_hash_table_iter_next (&iter, &key, NULL))
+		g_hash_table_insert (checks, key, key);
 
 	while (list) {
-		item_id = GPOINTER_TO_UINT (list->data);
-		id = seahorse_gkr_item_get_cannonical (keyring_name, item_id);
+		item = g_hash_table_lookup (closure->keyring->pv->items, list->data);
 
-		git = SEAHORSE_GKR_ITEM (seahorse_context_get_object (seahorse_context_instance (),
-		                                                      SEAHORSE_SOURCE (closure->keyring), id));
-		if (!git) {
-			git = seahorse_gkr_item_new (SEAHORSE_SOURCE (closure->keyring), keyring_name, item_id);
+		if (item == NULL) {
+			item = seahorse_gkr_item_new (closure->keyring, keyring_name,
+			                              GPOINTER_TO_UINT (list->data));
 
 			/* Add to context */
-			seahorse_object_set_parent (SEAHORSE_OBJECT (git), SEAHORSE_OBJECT (closure->keyring));
-			seahorse_context_take_object (seahorse_context_instance (), SEAHORSE_OBJECT (git));
+			g_hash_table_insert (closure->keyring->pv->items, list->data, item);
+			gcr_collection_emit_added (GCR_COLLECTION (closure->keyring), G_OBJECT (item));
 		}
 
-		g_hash_table_remove (checks, GUINT_TO_POINTER (id));
+		g_hash_table_remove (checks, list->data);
 		list = g_list_next (list);
 	}
 
@@ -364,6 +374,7 @@ static void
 seahorse_gkr_keyring_init (SeahorseGkrKeyring *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_KEYRING, SeahorseGkrKeyringPrivate);
+	self->pv->items = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);
 	g_object_set (self, "tag", SEAHORSE_GKR_TYPE, "location", SEAHORSE_LOCATION_LOCAL, NULL);
 }
 
@@ -371,7 +382,9 @@ static void
 seahorse_gkr_keyring_finalize (GObject *obj)
 {
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
-	
+
+	g_hash_table_destroy (self->pv->items);
+
 	if (self->pv->keyring_info)
 		gnome_keyring_info_free (self->pv->keyring_info);
 	self->pv->keyring_info = NULL;
@@ -468,11 +481,32 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 	                                 FALSE, G_PARAM_READWRITE));
 }
 
-static void 
-seahorse_source_iface (SeahorseSourceIface *iface)
+static void
+seahorse_keyring_source_iface (SeahorseSourceIface *iface)
 {
 	iface->load_async = seahorse_gkr_keyring_load_async;
 	iface->load_finish = seahorse_gkr_keyring_load_finish;
+}
+
+static guint
+seahorse_gkr_keyring_get_length (GcrCollection *collection)
+{
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (collection);
+	return g_hash_table_size (self->pv->items);
+}
+
+static GList *
+seahorse_gkr_keyring_get_objects (GcrCollection *collection)
+{
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (collection);
+	return g_hash_table_get_values (self->pv->items);
+}
+
+static void
+seahorse_keyring_collection_iface (GcrCollectionIface *iface)
+{
+	iface->get_length = seahorse_gkr_keyring_get_length;
+	iface->get_objects = seahorse_gkr_keyring_get_objects;
 }
 
 /* -----------------------------------------------------------------------------

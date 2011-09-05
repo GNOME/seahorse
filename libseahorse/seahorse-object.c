@@ -76,7 +76,6 @@ enum _SeahorseObjectProps {
  * @context:
  * @preferred: Points to the object to prefer over this one
  * @parent: the object's parent
- * @children: a list of children the object has
  * @label: DBUS: "display-name"
  * @markup: Markup text
  * @markup_explicit: If TRUE the markup will not be set automatically
@@ -97,9 +96,7 @@ struct _SeahorseObjectPrivate {
 	SeahorseSource *source;
 	SeahorseContext *context;
 	SeahorseObject *preferred;
-	SeahorseObject *parent;
-	GList *children;
-	
+
     gchar *label;             
     gchar *markup;
     gboolean markup_explicit;
@@ -119,46 +116,6 @@ G_DEFINE_TYPE (SeahorseObject, seahorse_object, G_TYPE_OBJECT);
 /* -----------------------------------------------------------------------------
  * INTERNAL 
  */
-
-/**
- * register_child:
- * @self: The parent
- * @child: The new child
- *
- *
- * Sets @child as a child of @self
- */
-static void 
-register_child (SeahorseObject* self, SeahorseObject* child) 
-{
-	g_assert (SEAHORSE_IS_OBJECT (self));
-	g_assert (SEAHORSE_IS_OBJECT (child));
-	g_assert (self != child);
-	g_assert (child->pv->parent == NULL);
-	
-	child->pv->parent = self;
-	self->pv->children = g_list_append (self->pv->children, child);
-}
-
-/**
- * unregister_child:
- * @self: The parent
- * @child: child to remove
- *
- *
- * removes @child from the children list in @self
- */
-static void 
-unregister_child (SeahorseObject* self, SeahorseObject* child) 
-{
-	g_assert (SEAHORSE_IS_OBJECT (self));
-	g_assert (SEAHORSE_IS_OBJECT (child));
-	g_assert (self != child);
-	g_assert (child->pv->parent == self);
-	
-	child->pv->parent = NULL;
-	self->pv->children = g_list_remove (self->pv->children, child);
-}
 
 /**
  * set_string_storage:
@@ -316,16 +273,13 @@ seahorse_object_init (SeahorseObject *self)
  * seahorse_object_dispose:
  * @obj: A #SeahorseObject to dispose
  *
- * Before this object is disposed, all it's children get new parents
  *
  */
 static void
 seahorse_object_dispose (GObject *obj)
 {
 	SeahorseObject *self = SEAHORSE_OBJECT (obj);
-	SeahorseObject *parent;
-	GList *l, *children;
-	
+
 	if (self->pv->context != NULL) {
 		seahorse_context_remove_object (self->pv->context, self);
 		g_assert (self->pv->context == NULL);
@@ -341,31 +295,6 @@ seahorse_object_dispose (GObject *obj)
 		self->pv->preferred = NULL;
 	}
 
-	/* 
-	 * When an object is destroyed, we reparent all
-	 * children to this objects parent. If no parent
-	 * of this object, all children become root objects.
-	 */
-
-	parent = self->pv->parent;
-	if (parent)
-		g_object_ref (parent);
-
-	children = g_list_copy (self->pv->children);
-	for (l = children; l; l = g_list_next (l)) {
-		g_return_if_fail (SEAHORSE_IS_OBJECT (l->data));
-		seahorse_object_set_parent (l->data, parent);
-	}
-	g_list_free (children);
-
-	if (parent)
-		g_object_unref (parent);
-	
-	g_assert (self->pv->children == NULL);
-	
-	/* Now remove this object from its parent */
-	seahorse_object_set_parent (self, NULL);
-	
 	G_OBJECT_CLASS (seahorse_object_parent_class)->dispose (obj);	
 }
 
@@ -381,10 +310,8 @@ seahorse_object_finalize (GObject *obj)
 	
 	g_assert (self->pv->source == NULL);
 	g_assert (self->pv->preferred == NULL);
-	g_assert (self->pv->parent == NULL);
 	g_assert (self->pv->context == NULL);
-	g_assert (self->pv->children == NULL);
-	
+
 	g_free (self->pv->label);
 	self->pv->label = NULL;
 	
@@ -428,9 +355,6 @@ seahorse_object_get_property (GObject *obj, guint prop_id, GValue *value,
 		break;
 	case PROP_PREFERRED:
 		g_value_set_object (value, seahorse_object_get_preferred (self));
-		break;
-	case PROP_PARENT:
-		g_value_set_object (value, seahorse_object_get_parent (self));
 		break;
 	case PROP_ID:
 		g_value_set_uint (value, seahorse_object_get_id (self));
@@ -502,9 +426,6 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 		break;
 	case PROP_PREFERRED:
 		seahorse_object_set_preferred (self, SEAHORSE_OBJECT (g_value_get_object (value)));
-		break;
-	case PROP_PARENT:
-		seahorse_object_set_parent (self, SEAHORSE_OBJECT (g_value_get_object (value)));
 		break;
 	case PROP_ID:
 		quark = g_value_get_uint (value);
@@ -615,11 +536,7 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
 	g_object_class_install_property (gobject_class, PROP_PREFERRED,
 	           g_param_spec_object ("preferred", "Preferred Object", "An object to prefer over this one", 
 	                                SEAHORSE_TYPE_OBJECT, G_PARAM_READWRITE));
-    
-	g_object_class_install_property (gobject_class, PROP_PREFERRED,
-	           g_param_spec_object ("parent", "Parent Object", "This object's parent in the tree.", 
-	                                SEAHORSE_TYPE_OBJECT, G_PARAM_READWRITE));
-	
+
 	g_object_class_install_property (gobject_class, PROP_ID,
 	           g_param_spec_uint ("id", "Object ID", "This object's ID.", 
 	                              0, G_MAXUINT, 0, G_PARAM_READWRITE));
@@ -779,75 +696,6 @@ seahorse_object_set_preferred (SeahorseObject *self, SeahorseObject *value)
 		g_object_add_weak_pointer (G_OBJECT (self->pv->preferred), (gpointer*)&self->pv->preferred);
 
 	g_object_notify (G_OBJECT (self), "preferred");
-}
-
-/**
- * seahorse_object_get_parent:
- * @self: Object
- *
- * Returns: the parent of the object @self
- */
-SeahorseObject*
-seahorse_object_get_parent (SeahorseObject *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	return self->pv->parent;
-}
-
-/**
- * seahorse_object_set_parent:
- * @self: the child
- * @value: the parent
- *
- * register @value as the parent of @self:
- */
-void
-seahorse_object_set_parent (SeahorseObject *self, SeahorseObject *value)
-{
-	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	g_return_if_fail (self->pv->parent != self);
-	g_return_if_fail (value != self);
-	
-	if (value == self->pv->parent)
-		return;
-	
-	/* Set the new parent/child relationship */
-	if (self->pv->parent != NULL)
-		unregister_child (self->pv->parent, self);
-
-	if (value != NULL)
-		register_child (value, self);
-	
-	g_assert (self->pv->parent == value);
-
-	g_object_notify (G_OBJECT (self), "parent");
-}
-
-/**
- * seahorse_object_get_children:
- * @self: Object
- *
- * Returns: the children of the object @self
- */
-GList*
-seahorse_object_get_children (SeahorseObject *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	return g_list_copy (self->pv->children);
-}
-
-/**
- * seahorse_object_get_nth_child:
- * @self: Object
- * @index: the number of the child to return
- *
- * Returns: the child number @index
- */
-SeahorseObject*
-seahorse_object_get_nth_child (SeahorseObject *self, guint index)
-{
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	return SEAHORSE_OBJECT (g_list_nth_data (self->pv->children, index));
 }
 
 /**

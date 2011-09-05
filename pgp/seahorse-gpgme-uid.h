@@ -28,6 +28,7 @@
 
 #include "seahorse-object.h"
 
+#include "pgp/seahorse-gpgme-key.h"
 #include "pgp/seahorse-pgp-uid.h"
 
 #define SEAHORSE_TYPE_GPGME_UID            (seahorse_gpgme_uid_get_type ())
@@ -52,7 +53,7 @@ struct _SeahorseGpgmeUidClass {
 
 GType               seahorse_gpgme_uid_get_type             (void);
 
-SeahorseGpgmeUid*   seahorse_gpgme_uid_new                  (gpgme_key_t pubkey,
+SeahorseGpgmeUid*   seahorse_gpgme_uid_new                  (SeahorseGpgmeKey *parent,
                                                              gpgme_user_id_t userid);
 
 gpgme_key_t         seahorse_gpgme_uid_get_pubkey           (SeahorseGpgmeUid *self);
