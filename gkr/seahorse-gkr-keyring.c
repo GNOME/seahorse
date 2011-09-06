@@ -502,11 +502,25 @@ seahorse_gkr_keyring_get_objects (GcrCollection *collection)
 	return g_hash_table_get_values (self->pv->items);
 }
 
+static gboolean
+seahorse_gkr_keyring_contains (GcrCollection *collection,
+                               GObject *object)
+{
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (collection);
+	guint32 item_id;
+
+	if (!SEAHORSE_IS_GKR_ITEM (object))
+		return FALSE;
+	item_id = seahorse_gkr_item_get_item_id (SEAHORSE_GKR_ITEM (object));
+	return g_hash_table_lookup (self->pv->items, GUINT_TO_POINTER (item_id)) ? TRUE : FALSE;
+}
+
 static void
 seahorse_keyring_collection_iface (GcrCollectionIface *iface)
 {
 	iface->get_length = seahorse_gkr_keyring_get_length;
 	iface->get_objects = seahorse_gkr_keyring_get_objects;
+	iface->contains = seahorse_gkr_keyring_contains;
 }
 
 /* -----------------------------------------------------------------------------

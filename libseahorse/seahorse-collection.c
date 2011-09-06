@@ -255,11 +255,20 @@ seahorse_collection_get_objects (GcrCollection *collection)
 	return objs;
 }
 
+static gboolean
+seahorse_collection_contains (GcrCollection *collection,
+                              GObject *object)
+{
+	SeahorseCollection *self = SEAHORSE_COLLECTION (collection);
+	return g_hash_table_lookup (self->pv->objects, object) ? TRUE : FALSE;
+}
+
 static void
 seahorse_collection_iface_init (GcrCollectionIface *iface)
 {
 	iface->get_length = seahorse_collection_get_length;
 	iface->get_objects = seahorse_collection_get_objects;
+	iface->contains = seahorse_collection_contains;
 }
 
 SeahorseCollection *
@@ -274,16 +283,6 @@ seahorse_collection_new_for_predicate (SeahorsePredicate *pred,
 
 	collection->pv->destroy_func = destroy_func;
 	return collection;
-}
-
-gboolean
-seahorse_collection_has_object (SeahorseCollection *self,
-                                SeahorseObject *object)
-{
-	if (g_hash_table_lookup (self->pv->objects, object))
-		return TRUE;
-
-	return FALSE;
 }
 
 void

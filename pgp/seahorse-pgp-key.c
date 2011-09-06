@@ -398,11 +398,22 @@ seahorse_pgp_key_collection_get_objects (GcrCollection *collection)
 	return g_list_copy (self->pv->uids ? self->pv->uids->next : NULL);
 }
 
+static gboolean
+seahorse_pgp_key_collection_contains (GcrCollection *collection,
+                                      GObject *object)
+{
+	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (collection);
+
+	/* First UID is displayed as the key itself */
+	return g_list_find (self->pv->uids ? self->pv->uids->next : NULL, object) != NULL;
+}
+
 static void
 seahorse_pgp_key_collection_iface_init (GcrCollectionIface *iface)
 {
 	iface->get_length = seahorse_pgp_key_collection_get_length;
 	iface->get_objects = seahorse_pgp_key_collection_get_objects;
+	iface->contains = seahorse_pgp_key_collection_contains;
 }
 
 

@@ -56,9 +56,6 @@ SeahorseCollection * seahorse_collection_new_for_predicate    (SeahorsePredicate
 
 SeahorsePredicate *  seahorse_collection_get_predicate        (SeahorseCollection *self);
 
-gboolean             seahorse_collection_has_object           (SeahorseCollection *self,
-                                                               SeahorseObject *object);
-
 void                 seahorse_collection_refresh              (SeahorseCollection *self);
 
 #endif /* __SEAHORSE_COLLECTION_H__ */

@@ -139,7 +139,8 @@ get_tab_for_object (SeahorseKeyManager* self, SeahorseObject* obj)
 	
 	for (i = 0; i < TAB_NUM_TABS; ++i) {
 		TabInfo* tab = &self->pv->tabs[i];
-		if (seahorse_collection_has_object (tab->collection, obj))
+		if (gcr_collection_contains (GCR_COLLECTION (tab->collection),
+		                             G_OBJECT (obj)))
 			return tab;
 	}
 	
