@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-08-20 13:29+0000\n"
-"PO-Revision-Date: 2011-08-20 21:30+0700\n"
+"POT-Creation-Date: 2011-09-02 10:17+0000\n"
+"PO-Revision-Date: 2011-09-06 13:39+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: GNOME Indonesian Translation Team <gnome@i15n.org>\n"
 "MIME-Version: 1.0\n"
@@ -39,8 +39,7 @@ msgstr "Silakan pilih suatu nama bagi ring kunci baru. Anda akan ditanyai kata s
 msgid "The host name or address of the server."
 msgstr "Nama host atau alamat dari server."
 
-#: ../gkr/seahorse-gkr-add-item.c:52
-#: ../gkr/seahorse-gkr-add-keyring.c:64
+#: ../gkr/seahorse-gkr-add-item.c:51 ../gkr/seahorse-gkr-add-keyring.c:65
 msgid "Couldn't add keyring"
 msgstr "Tak bisa menambah ring kunci"
 
@@ -49,8 +48,7 @@ msgid "Add Password"
 msgstr "Tambah Sandi"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:2
-#: ../gkr/seahorse-gkr-item-properties.xml.h:12
-#: ../pgp/seahorse-revoke.xml.h:5
+#: ../gkr/seahorse-gkr-item-properties.xml.h:12 ../pgp/seahorse-revoke.xml.h:5
 msgid "_Description:"
 msgstr "Ke_terangan:"
 
@@ -66,21 +64,7 @@ msgstr "_Sandi:"
 msgid "_Show Password"
 msgstr "Tampilkan _Sandi"
 
-#: ../gkr/seahorse-gkr-item.c:436
-msgid "Web Password"
-msgstr "Sandi Web"
-
-#: ../gkr/seahorse-gkr-item.c:438
-msgid "Network Password"
-msgstr "Sandi Jaringan"
-
-#: ../gkr/seahorse-gkr-item.c:440
-#: ../gkr/seahorse-gkr-item-properties.c:108
-msgid "Password"
-msgstr "Sandi"
-
 #: ../gkr/seahorse-gkr-item-commands.c:78
-#| msgid "Couldn't delete."
 msgid "Couldn't delete item"
 msgstr "Tak bisa menghapus butir"
 
@@ -96,14 +80,10 @@ msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "Anda yakin ingin menghapus %d sandi?"
 
 #: ../gkr/seahorse-gkr-item-commands.c:114
-#| msgid "Deleting item..."
+#| msgid "Deleting item"
 msgid "Deleting item"
-msgstr "Menghapus butir"
-
-#: ../gkr/seahorse-gkr-item-commands.c:114
-#| msgid "Deleting item..."
-msgid "Deleting items"
-msgstr "Menghapus butir-butir"
+msgid_plural "Deleting items"
+msgstr[0] "Menghapus butir"
 
 #: ../gkr/seahorse-gkr-item-properties.c:67
 msgid "Access a network share or resource"
@@ -129,13 +109,16 @@ msgstr "Sandi atau log masuk tersimpan"
 msgid "Network Credentials"
 msgstr "Kredensial Jaringan"
 
+#: ../gkr/seahorse-gkr-item-properties.c:108
+msgid "Password"
+msgstr "Sandi"
+
 #: ../gkr/seahorse-gkr-item-properties.c:208
 msgid "Couldn't change password."
 msgstr "Tak bisa mengubah sandi."
 
 #: ../gkr/seahorse-gkr-item-properties.c:253
 #: ../gkr/seahorse-gkr-item-properties.c:369
-#| msgid "Listing passwords"
 msgid "Updating password"
 msgstr "Memutakhirkan sandi"
 
@@ -222,73 +205,68 @@ msgstr "Sandi Tersimpan"
 msgid "Safely store a password or secret."
 msgstr "Menyimpan suatu sandi atau rahasia secara aman."
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:130
+#: ../gkr/seahorse-gkr-keyring-commands.c:128
 msgid "Couldn't unlock keyring"
 msgstr "Tak bisa membuka ring kunci"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:169
+#: ../gkr/seahorse-gkr-keyring-commands.c:165
 msgid "Couldn't lock keyring"
 msgstr "Tak bisa mengunci ring kunci"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:208
+#: ../gkr/seahorse-gkr-keyring-commands.c:202
 msgid "Couldn't set default keyring"
 msgstr "Tak bisa menata ring kunci baku"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:247
+#: ../gkr/seahorse-gkr-keyring-commands.c:239
 msgid "Couldn't change keyring password"
 msgstr "Tak bisa mengubah sandi ring kunci"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:276
+#: ../gkr/seahorse-gkr-keyring-commands.c:268
 msgid "_Lock"
 msgstr "_Mengunci"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:277
+#: ../gkr/seahorse-gkr-keyring-commands.c:269
 msgid "Lock the password storage keyring so a master password is required to unlock it."
 msgstr "Kunci ring kunci tempat menyimpan sandi sehingga sandi utama diperlukan untuk membuka kuncinya."
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:278
+#: ../gkr/seahorse-gkr-keyring-commands.c:270
 msgid "_Unlock"
 msgstr "B_uka kunci"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:279
+#: ../gkr/seahorse-gkr-keyring-commands.c:271
 msgid "Unlock the password storage keyring with a master password so it is available for use."
 msgstr "Buka kunci ring kunci tempat menyimpan sandi dengan sandi utama sehingga dapat dipakai."
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:280
+#: ../gkr/seahorse-gkr-keyring-commands.c:272
 msgid "_Set as default"
 msgstr "Tata _sebagai baku"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:281
+#: ../gkr/seahorse-gkr-keyring-commands.c:273
 msgid "Applications usually store new passwords in the default keyring."
 msgstr "Aplikasi biasanya menyimpan sandi baru pada ring kunci baku."
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:282
+#: ../gkr/seahorse-gkr-keyring-commands.c:274
 msgid "Change _Password"
 msgstr "Ubah _Sandi"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:283
+#: ../gkr/seahorse-gkr-keyring-commands.c:275
 msgid "Change the unlock password of the password storage keyring"
 msgstr "Ubah sandi pembuka kunci dari ring kunci penyimpan sandi"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:348
-#| msgid "Couldn't delete subkey"
+#: ../gkr/seahorse-gkr-keyring-commands.c:340
 msgid "Couldn't delete keyring"
 msgstr "Tak bisa menghapus ring kunci"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:366
+#: ../gkr/seahorse-gkr-keyring-commands.c:358
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "Anda yakin ingin menghapus ring kunci sandi '%s'?"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:376
-#| msgid "Deleting keyring..."
+#: ../gkr/seahorse-gkr-keyring-commands.c:368
+#| msgid "Deleting keyring"
 msgid "Deleting keyring"
-msgstr "Menghapus ring kunci"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:376
-#| msgid "Deleting keyring..."
-msgid "Deleting keyrings"
-msgstr "Menghapus ring-ring kunci"
+msgid_plural "Deleting keyrings"
+msgstr[0] "Menghapus ring kunci"
 
 #. -----------------------------------------------------------------------------
 #. * PUBLIC
@@ -312,38 +290,36 @@ msgstr "Properti Ring Kunci"
 msgid "_Name:"
 msgstr "_Nama:"
 
-#: ../gkr/seahorse-gkr-operation.c:51
-#: ../pgp/seahorse-gpgme.c:72
-#: ../pgp/seahorse-hkp-source.c:662
-#: ../ssh/seahorse-ssh-operation.c:256
+#: ../gkr/seahorse-gkr-operation.c:52 ../pgp/seahorse-gpgme.c:73
+#: ../pgp/seahorse-hkp-source.c:662 ../ssh/seahorse-ssh-operation.c:257
 msgid "The operation was cancelled"
 msgstr "Operasi dibatalkan"
 
-#: ../gkr/seahorse-gkr-operation.c:56
+#: ../gkr/seahorse-gkr-operation.c:57
 msgid "Access to the key ring was denied"
 msgstr "Akses ke ring kunci ditolak"
 
-#: ../gkr/seahorse-gkr-operation.c:59
+#: ../gkr/seahorse-gkr-operation.c:60
 msgid "The gnome-keyring daemon is not running"
 msgstr "Daemon gnome-keyring tak sedang berjalan"
 
-#: ../gkr/seahorse-gkr-operation.c:62
+#: ../gkr/seahorse-gkr-operation.c:63
 msgid "The key ring has already been unlocked"
 msgstr "Ring kunci telah dibuka kuncinya"
 
-#: ../gkr/seahorse-gkr-operation.c:65
+#: ../gkr/seahorse-gkr-operation.c:66
 msgid "No such key ring exists"
 msgstr "Ring kunci itu tak ada"
 
-#: ../gkr/seahorse-gkr-operation.c:68
+#: ../gkr/seahorse-gkr-operation.c:69
 msgid "Couldn't communicate with key ring daemon"
 msgstr "Tak bisa berkomunikasi dengan daemon ring kunci"
 
-#: ../gkr/seahorse-gkr-operation.c:71
+#: ../gkr/seahorse-gkr-operation.c:72
 msgid "The item already exists"
 msgstr "Butir sudah ada"
 
-#: ../gkr/seahorse-gkr-operation.c:77
+#: ../gkr/seahorse-gkr-operation.c:78
 msgid "Internal error accessing gnome-keyring"
 msgstr "Galat internal saat mengakses gnome-keyring"
 
@@ -532,8 +508,7 @@ msgstr "Pilih Tanggal"
 msgid "Select the date from a calendar"
 msgstr "Pilih tanggal dari suatu kalender"
 
-#: ../libegg/egg-datetime.c:521
-#: ../libegg/egg-datetime.c:2199
+#: ../libegg/egg-datetime.c:521 ../libegg/egg-datetime.c:2199
 msgid "Time"
 msgstr "Waktu"
 
@@ -556,14 +531,12 @@ msgstr "Pilih waktu dari suatu daftar"
 msgid "24hr: no"
 msgstr "24hr: yes"
 
-#: ../libegg/egg-datetime.c:797
-#: ../libegg/egg-datetime.c:1260
+#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1260
 #: ../libegg/egg-datetime.c:1264
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:799
-#: ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:799 ../libegg/egg-datetime.c:1261
 #: ../libegg/egg-datetime.c:1268
 msgid "PM"
 msgstr "PM"
@@ -629,36 +602,12 @@ msgstr "Nomor port untuk mengakses server."
 msgid "initial temporary item"
 msgstr "butir awal sementara "
 
-#: ../libseahorse/seahorse-object.c:317
-msgid "Symmetric Key"
-msgstr "Kunci Simetrik"
-
-#: ../libseahorse/seahorse-object.c:320
-msgid "Public Key"
-msgstr "Kunci Publik"
-
-#: ../libseahorse/seahorse-object.c:323
-msgid "Private Key"
-msgstr "Kunci Pribadi"
-
-#: ../libseahorse/seahorse-object.c:326
-msgid "Credentials"
-msgstr "Kredensial"
-
-#.
-#. * Translators: "This object is a means of storing items such as
-#. * name, email address, etc. that make up one's digital identity.
-#.
-#: ../libseahorse/seahorse-object.c:333
-msgid "Identity"
-msgstr "Identitas"
-
 #: ../libseahorse/seahorse-passphrase.c:178
 msgid "Passphrase"
 msgstr "Frase Sandi"
 
 #: ../libseahorse/seahorse-passphrase.c:181
-#: ../ssh/seahorse-ssh-operation.c:206
+#: ../ssh/seahorse-ssh-operation.c:207
 msgid "Password:"
 msgstr "Sandi:"
 
@@ -667,23 +616,23 @@ msgstr "Sandi:"
 msgid "Confirm:"
 msgstr "Konfirmasi:"
 
-#: ../libseahorse/seahorse-prefs.c:60
+#: ../libseahorse/seahorse-prefs.c:59
 msgid "Not a valid Key Server address."
 msgstr "Bukan alamat Server Kunci yang valid."
 
-#: ../libseahorse/seahorse-prefs.c:61
+#: ../libseahorse/seahorse-prefs.c:60
 msgid "For help contact your system adminstrator or the administrator of the key server."
 msgstr "Untuk bantuan silakan hubung administrator sistem Anda atau administrator server kunci."
 
-#: ../libseahorse/seahorse-prefs.c:173
+#: ../libseahorse/seahorse-prefs.c:172
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:334
+#: ../libseahorse/seahorse-prefs.c:333
 msgid "Custom"
 msgstr "Gubahan"
 
-#: ../libseahorse/seahorse-prefs.c:392
+#: ../libseahorse/seahorse-prefs.c:391
 msgid "None: Don't publish keys"
 msgstr "Tak satupun: Jangan publikasikan kunci"
 
@@ -711,22 +660,19 @@ msgstr "_Cari kunci melalui:"
 msgid "_Publish keys to:"
 msgstr "_Publikasikan kunci ke:"
 
-#: ../libseahorse/seahorse-transfer.c:177
-#| msgid "Retrieving keys"
+#: ../libseahorse/seahorse-transfer.c:178
 msgid "Retrieving data"
 msgstr "Mengambil data"
 
-#: ../libseahorse/seahorse-transfer.c:177
-#| msgid "Exporting Keys"
+#: ../libseahorse/seahorse-transfer.c:178
 msgid "Exporting data"
 msgstr "Mengekspor data"
 
-#: ../libseahorse/seahorse-transfer.c:181
-#| msgid "Importing Keys"
+#: ../libseahorse/seahorse-transfer.c:182
 msgid "Importing data"
 msgstr "Mengimpor data"
 
-#: ../libseahorse/seahorse-transfer.c:181
+#: ../libseahorse/seahorse-transfer.c:182
 msgid "Sending data"
 msgstr "Mengirim data"
 
@@ -734,35 +680,34 @@ msgstr "Mengirim data"
 msgid "Unavailable"
 msgstr "Tak tersedia"
 
-#: ../libseahorse/seahorse-util.c:258
+#: ../libseahorse/seahorse-util.c:259
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:485
+#: ../libseahorse/seahorse-util.c:486
 msgid "Key Data"
 msgstr "Data Kunci"
 
-#: ../libseahorse/seahorse-util.c:487
+#: ../libseahorse/seahorse-util.c:488
 msgid "Multiple Keys"
 msgstr "Kunci Berganda"
 
 #. Filter for PGP keys. We also include *.asc, as in many
 #. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:775
+#: ../libseahorse/seahorse-util.c:776
 msgid "All key files"
 msgstr "Semua berkas kunci"
 
-#: ../libseahorse/seahorse-util.c:786
-#: ../libseahorse/seahorse-util.c:834
+#: ../libseahorse/seahorse-util.c:787 ../libseahorse/seahorse-util.c:835
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "Semua berkas"
 
-#: ../libseahorse/seahorse-util.c:827
+#: ../libseahorse/seahorse-util.c:828
 msgid "Archive files"
 msgstr "Berkas arsip"
 
-#: ../libseahorse/seahorse-util.c:897
+#: ../libseahorse/seahorse-util.c:898
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -772,12 +717,11 @@ msgstr ""
 "\n"
 "Anda ingin menggantikannya dengan suatu berkas baru?"
 
-#: ../libseahorse/seahorse-util.c:900
+#: ../libseahorse/seahorse-util.c:901
 msgid "_Replace"
 msgstr "_Gantikan"
 
-#: ../libseahorse/seahorse-validity.c:40
-#: ../pgp/seahorse-gpgme-subkey.c:197
+#: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
 #: ../pgp/seahorse-pgp-key-properties.c:1140
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
@@ -859,8 +803,7 @@ msgstr "Tambah ID Pengguna"
 msgid "Create the new user ID"
 msgstr "Buat ID pengguna baru"
 
-#: ../pgp/seahorse-add-uid.xml.h:3
-#: ../pgp/seahorse-pgp-generate.xml.h:7
+#: ../pgp/seahorse-add-uid.xml.h:3 ../pgp/seahorse-pgp-generate.xml.h:7
 msgid "Full _Name:"
 msgstr "_Nama Lengkap:"
 
@@ -880,8 +823,7 @@ msgstr "Komentar tambahan yang menjelaskan kunci"
 msgid "Optional email address"
 msgstr "Alamat surel tambahan"
 
-#: ../pgp/seahorse-add-uid.xml.h:8
-#: ../pgp/seahorse-pgp-generate.xml.h:13
+#: ../pgp/seahorse-add-uid.xml.h:8 ../pgp/seahorse-pgp-generate.xml.h:13
 msgid "_Email Address:"
 msgstr "Alamat _Email:"
 
@@ -889,8 +831,7 @@ msgstr "Alamat _Email:"
 msgid "C_hange"
 msgstr "Uba_h"
 
-#: ../pgp/seahorse-expires.xml.h:2
-#: ../pgp/seahorse-revoke.xml.h:4
+#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:4
 msgid "Revoke key"
 msgstr "Cabut Kunci"
 
@@ -907,8 +848,7 @@ msgstr "Tak bisa menambah sub kunci"
 msgid "Add subkey to %s"
 msgstr "Tambah sub kunci ke %s"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:182
-#: ../pgp/seahorse-gpgme-generate.c:118
+#: ../pgp/seahorse-gpgme-add-subkey.c:182 ../pgp/seahorse-gpgme-generate.c:117
 msgid "DSA (sign only)"
 msgstr "DSA (hanya tanda tangan)"
 
@@ -916,8 +856,7 @@ msgstr "DSA (hanya tanda tangan)"
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (hanya menyandi)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:196
-#: ../pgp/seahorse-gpgme-generate.c:119
+#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:118
 msgid "RSA (sign only)"
 msgstr "RSA (hanya tanda tangan)"
 
@@ -934,7 +873,7 @@ msgstr "Tak bisa menambah id pengguna"
 msgid "Add user ID to %s"
 msgstr "Menambah ID pengguna ke %s"
 
-#: ../pgp/seahorse-gpgme.c:68
+#: ../pgp/seahorse-gpgme.c:69
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Pengawa-sandian gagal. Anda barangkali tidak memiliki kunci pengawa-sandian."
 
@@ -955,36 +894,35 @@ msgstr "Tak bisa mengubah tanggal kadaluarsa"
 msgid "Expiry: %s"
 msgstr "Kadaluarsa: %s"
 
-#: ../pgp/seahorse-gpgme-generate.c:79
+#: ../pgp/seahorse-gpgme-generate.c:78
 msgid "PGP Key"
 msgstr "Kunci PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:80
+#: ../pgp/seahorse-gpgme-generate.c:79
 msgid "Used to encrypt email and files"
 msgstr "Dipakai untuk menyandikan surel dan berkas"
 
-#: ../pgp/seahorse-gpgme-generate.c:116
-#: ../ssh/seahorse-ssh-generate.xml.h:9
+#: ../pgp/seahorse-gpgme-generate.c:115 ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:117
+#: ../pgp/seahorse-gpgme-generate.c:116
 msgid "DSA Elgamal"
 msgstr "DSA Elgamal"
 
-#: ../pgp/seahorse-gpgme-generate.c:166
+#: ../pgp/seahorse-gpgme-generate.c:165
 msgid "Couldn't generate PGP key"
 msgstr "Tak bisa membuat kunci PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:197
+#: ../pgp/seahorse-gpgme-generate.c:196
 msgid "Passphrase for New PGP Key"
 msgstr "Frasa sandi bagi kunci PGP Baru"
 
-#: ../pgp/seahorse-gpgme-generate.c:198
+#: ../pgp/seahorse-gpgme-generate.c:197
 msgid "Enter the passphrase for your new key twice."
 msgstr "Masukkan frasa sandi bagi kunci Anda dua kali."
 
-#: ../pgp/seahorse-gpgme-generate.c:207
+#: ../pgp/seahorse-gpgme-generate.c:206
 msgid "Generating key"
 msgstr "Menjangkitkan kunci"
 
@@ -1031,12 +969,10 @@ msgid "Choose Photo to Add to Key"
 msgstr "Pilih Foto untuk Ditambahkan ke Kunci"
 
 #: ../pgp/seahorse-gpgme-photos.c:278
-#| msgid "Couldn't add photo"
 msgid "Couldn't prepare photo"
 msgstr "Tak bisa menyiapkan foto"
 
-#: ../pgp/seahorse-gpgme-photos.c:288
-#: ../pgp/seahorse-gpgme-photos.c:292
+#: ../pgp/seahorse-gpgme-photos.c:288 ../pgp/seahorse-gpgme-photos.c:292
 msgid "Couldn't add photo"
 msgstr "Tak bisa menambah foto"
 
@@ -1117,8 +1053,7 @@ msgstr "Tak bisa menandatangani kunci"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:156
-#: ../pgp/seahorse-signer.c:59
+#: ../pgp/seahorse-gpgme-sign.c:156 ../pgp/seahorse-signer.c:60
 msgid "No keys usable for signing"
 msgstr "Tak ada kunci yang dapat dipakai untuk menanda-tangani"
 
@@ -1141,8 +1076,7 @@ msgstr "Masukkan frasa kunci baru bagi '%s'"
 msgid "Enter passphrase for '%s'"
 msgstr "Masukkan frasa sandi untuk '%s'"
 
-#: ../pgp/seahorse-gpgme-source.c:95
-#: ../src/seahorse-change-passphrase.xml.h:4
+#: ../pgp/seahorse-gpgme-source.c:95 ../src/seahorse-change-passphrase.xml.h:4
 msgid "Enter new passphrase"
 msgstr "Masukkan frasa kunci baru"
 
@@ -1230,23 +1164,19 @@ msgstr "Anda yakin ingin menghapus %d kunci secara permanen?"
 msgid "Are you sure you want to permanently delete %d identities?"
 msgstr "Anda yakin ingin menghapus %d identitas secara permanen?"
 
-#: ../pgp/seahorse-pgp-commands.c:201
-#: ../pgp/seahorse-pgp-key-properties.c:253
+#: ../pgp/seahorse-pgp-commands.c:201 ../pgp/seahorse-pgp-key-properties.c:253
 msgid "Couldn't delete user ID"
 msgstr "Tak bisa menghapus ID pengguna"
 
 #: ../pgp/seahorse-pgp-commands.c:205
-#| msgid "Couldn't generate key"
 msgid "Couldn't delete private key"
 msgstr "Tak bisa menghapus kunci privat"
 
 #: ../pgp/seahorse-pgp-commands.c:208
-#| msgid "Couldn't delete subkey"
 msgid "Couldn't delete public key"
 msgstr "Tak bisa menghapus kunci publik"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:1
-#: ../ssh/seahorse-ssh-generate.xml.h:1
+#: ../pgp/seahorse-pgp-generate.xml.h:1 ../ssh/seahorse-ssh-generate.xml.h:1
 msgid "<b>_Advanced key options</b>"
 msgstr "<b>Opsi kunci tingk_at lanjut</b>"
 
@@ -1266,8 +1196,7 @@ msgstr "_Buat"
 msgid "E_xpiration Date:"
 msgstr "Tanggal _Kadaluarsa:"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:6
-#: ../ssh/seahorse-ssh-generate.xml.h:5
+#: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:5
 msgid "Encryption _Type:"
 msgstr "_Tipe Penyandian:"
 
@@ -1275,8 +1204,7 @@ msgstr "_Tipe Penyandian:"
 msgid "Generate a new key"
 msgstr "Buat suatu kunci baru"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:9
-#: ../ssh/seahorse-ssh-generate.xml.h:7
+#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:7
 msgid "Key _Strength (bits):"
 msgstr "_Kekuatan Kunci (bit):"
 
@@ -1292,18 +1220,7 @@ msgstr "Kunci PGP Baru"
 msgid "_Comment:"
 msgstr "_Komentar:"
 
-#: ../pgp/seahorse-pgp-key.c:201
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
-msgid "Private PGP Key"
-msgstr "Kunci PGP Privat"
-
-#: ../pgp/seahorse-pgp-key.c:204
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
-msgid "Public PGP Key"
-msgstr "Kunci PGP Publik"
-
-#: ../pgp/seahorse-pgp-key.c:583
-#: ../pgp/seahorse-pgp-key-properties.c:1356
+#: ../pgp/seahorse-pgp-key.c:572 ../pgp/seahorse-pgp-key-properties.c:1356
 msgid "Expired"
 msgstr "Kadaluarsa   "
 
@@ -1344,7 +1261,7 @@ msgid "This key expired on: %s"
 msgstr "Kunci ini kedaluarsa pada: %s"
 
 #: ../pgp/seahorse-pgp-key-properties.c:848
-#: ../src/seahorse-key-manager-store.c:828
+#: ../src/seahorse-key-manager-store.c:829
 msgid "Name"
 msgstr "Nama"
 
@@ -1362,8 +1279,7 @@ msgstr "Tak bisa menghapus sub kunci"
 msgid "Unable to change trust"
 msgstr "Tak bisa mengubah kepercayaan"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1015
-#: ../src/seahorse-viewer.c:295
+#: ../pgp/seahorse-pgp-key-properties.c:1015 ../src/seahorse-viewer.c:295
 #: ../ssh/seahorse-ssh-key-properties.c:184
 #, c-format
 msgid "Couldn't export key to \"%s\""
@@ -1391,7 +1307,7 @@ msgstr "ID"
 
 #. The key type column
 #: ../pgp/seahorse-pgp-key-properties.c:1324
-#: ../src/seahorse-key-manager-store.c:859
+#: ../src/seahorse-key-manager-store.c:860
 msgid "Type"
 msgstr "Jenis"
 
@@ -1416,7 +1332,7 @@ msgid "Good"
 msgstr "Bagus"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1754
-#: ../src/seahorse-key-manager-store.c:840
+#: ../src/seahorse-key-manager-store.c:841
 msgid "Key ID"
 msgstr "ID Kunci"
 
@@ -1561,6 +1477,10 @@ msgstr "Pemilik"
 msgid "Primary"
 msgstr "Utama"
 
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
+msgid "Private PGP Key"
+msgstr "Kunci PGP Privat"
+
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
 msgid "Remove this photo from this key"
 msgstr "Hapus foto ini dari kunci ini"
@@ -1649,9 +1569,13 @@ msgstr "Bila Anda tak lagi percaya bahwa '%s' memiliki kunci ini, <i>cabut</i> t
 msgid "Marginally"
 msgstr "Sekedarnya"
 
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
+msgid "Public PGP Key"
+msgstr "Kunci PGP Publik"
+
 #. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
-#: ../src/seahorse-key-manager-store.c:853
+#: ../src/seahorse-key-manager-store.c:854
 msgid "Trust"
 msgstr "Percaya"
 
@@ -1700,7 +1624,7 @@ msgstr "Alasan mencabut kunci"
 msgid "_Reason:"
 msgstr "_Alasan:"
 
-#: ../pgp/seahorse-signer.c:60
+#: ../pgp/seahorse-signer.c:61
 msgid "You have no personal PGP keys that can be used to sign a document or message."
 msgstr "Anda tak memiliki kunci PGP personal yang dapat dipakai untuk menanda tangani dokumen atau pesan."
 
@@ -1776,13 +1700,12 @@ msgstr "Dengan Sangat _Hati-hati"
 msgid "_Sign message with key:"
 msgstr "Tanda tangani pe_san dengan kunci:"
 
-#: ../pkcs11/seahorse-pkcs11-certificate.c:108
+#: ../pkcs11/seahorse-pkcs11-certificate.c:106
 #: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
 msgid "Certificate"
 msgstr "Sertifikat"
 
 #: ../pkcs11/seahorse-pkcs11-commands.c:106
-#| msgid "Couldn't delete."
 msgid "Couldn't delete"
 msgstr "Tak bisa menghapus"
 
@@ -1798,7 +1721,6 @@ msgid_plural "Are you sure you want to delete %d certificates?"
 msgstr[0] "Anda yakin ingin menghapus %d sertifikat?"
 
 #: ../pkcs11/seahorse-pkcs11-commands.c:143
-#| msgid "Deleting..."
 msgid "Deleting"
 msgstr "Menghapus"
 
@@ -1822,10 +1744,11 @@ msgstr "_Frasa Sandi Baru:"
 msgid "Manage your passwords and encryption keys"
 msgstr "Kelola sandi dan kunci penyandian Anda"
 
-#: ../src/seahorse.desktop.in.in.h:2
-#: ../src/seahorse-key-manager.c:849
-msgid "Passwords and Encryption Keys"
-msgstr "Sandi dan Kunci Penyandian"
+#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:850
+#: ../src/seahorse-main.c:76 ../src/seahorse-viewer.c:144
+#| msgid "Passwords and Encryption Keys"
+msgid "Passwords and Keys"
+msgstr "Sandi dan Kunci"
 
 #: ../src/seahorse-generate-select.xml.h:1
 msgid "<b>_Select the type of item to create:</b>"
@@ -1839,122 +1762,114 @@ msgstr "L_anjutkan"
 msgid "Create New ..."
 msgstr "Buat Baru ..."
 
-#: ../src/seahorse-key-manager.c:232
-#: ../src/seahorse-keyserver-results.c:108
+#: ../src/seahorse-key-manager.c:233 ../src/seahorse-keyserver-results.c:109
 #, c-format
 msgid "Selected %d key"
 msgid_plural "Selected %d keys"
 msgstr[0] "%d kunci dipilih"
 
-#: ../src/seahorse-key-manager.c:412
-#: ../src/seahorse-key-manager.c:470
-#: ../src/seahorse-key-manager.c:531
-#: ../src/seahorse-viewer.c:450
+#: ../src/seahorse-key-manager.c:413 ../src/seahorse-key-manager.c:471
+#: ../src/seahorse-key-manager.c:532 ../src/seahorse-viewer.c:450
 msgid "Couldn't import keys"
 msgstr "Tak bisa mengimpor kunci"
 
-#: ../src/seahorse-key-manager.c:414
-#: ../src/seahorse-viewer.c:452
+#: ../src/seahorse-key-manager.c:415 ../src/seahorse-viewer.c:452
 msgid "Imported keys"
 msgstr "Kunci diimpor"
 
-#: ../src/seahorse-key-manager.c:465
+#: ../src/seahorse-key-manager.c:466
 msgid "Importing keys"
 msgstr "Mengimpor kunci"
 
-#: ../src/seahorse-key-manager.c:485
-#: ../ssh/seahorse-ssh-operation.c:1088
+#: ../src/seahorse-key-manager.c:486 ../ssh/seahorse-ssh-operation.c:1089
 msgid "Import Key"
 msgstr "Impor Kunci"
 
-#: ../src/seahorse-key-manager.c:531
+#: ../src/seahorse-key-manager.c:532
 msgid "Unrecognized key type, or invalid data format"
 msgstr "Jenis kunci tak dikenal, atau bentuk data tak valid"
 
-#: ../src/seahorse-key-manager.c:546
+#: ../src/seahorse-key-manager.c:547
 msgid "Importing Keys"
 msgstr "Mengimpor Kunci"
 
-#: ../src/seahorse-key-manager.c:718
-#: ../src/seahorse-keyserver-results.c:246
+#: ../src/seahorse-key-manager.c:719 ../src/seahorse-keyserver-results.c:247
 msgid "_Remote"
 msgstr "_Jauh"
 
-#: ../src/seahorse-key-manager.c:720
+#: ../src/seahorse-key-manager.c:721
 msgid "Close this program"
 msgstr "Tutup program ini"
 
-#: ../src/seahorse-key-manager.c:721
+#: ../src/seahorse-key-manager.c:722
 msgid "_New..."
 msgstr "_Baru..."
 
-#: ../src/seahorse-key-manager.c:722
+#: ../src/seahorse-key-manager.c:723
 msgid "Create a new key or item"
 msgstr "Buat suatu butir atau kunci baru"
 
-#: ../src/seahorse-key-manager.c:723
+#: ../src/seahorse-key-manager.c:724
 msgid "_Import..."
 msgstr "_Impor..."
 
-#: ../src/seahorse-key-manager.c:724
+#: ../src/seahorse-key-manager.c:725
 msgid "Import from a file"
 msgstr "Impor dari sebuah berkas"
 
-#: ../src/seahorse-key-manager.c:726
+#: ../src/seahorse-key-manager.c:727
 msgid "Import from the clipboard"
 msgstr "Impor dari clipboard"
 
-#: ../src/seahorse-key-manager.c:731
-#: ../src/seahorse-keyserver-results.c:256
+#: ../src/seahorse-key-manager.c:732 ../src/seahorse-keyserver-results.c:257
 msgid "_Find Remote Keys..."
 msgstr "_Cari Kunci Jauh..."
 
-#: ../src/seahorse-key-manager.c:732
-#: ../src/seahorse-keyserver-results.c:257
+#: ../src/seahorse-key-manager.c:733 ../src/seahorse-keyserver-results.c:258
 msgid "Search for keys on a key server"
 msgstr "Cari kunci di server kunci"
 
-#: ../src/seahorse-key-manager.c:733
+#: ../src/seahorse-key-manager.c:734
 msgid "_Sync and Publish Keys..."
 msgstr "_Selaraskan dari Publikasikan Kunci..."
 
-#: ../src/seahorse-key-manager.c:734
+#: ../src/seahorse-key-manager.c:735
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Publikasikan dan/atau selaraskan kunci Anda dengan yang daring."
 
-#: ../src/seahorse-key-manager.c:739
+#: ../src/seahorse-key-manager.c:740
 msgid "T_ypes"
 msgstr "T_ipe"
 
-#: ../src/seahorse-key-manager.c:739
+#: ../src/seahorse-key-manager.c:740
 msgid "Show type column"
 msgstr "Tampilkan kolom tipe"
 
-#: ../src/seahorse-key-manager.c:741
+#: ../src/seahorse-key-manager.c:742
 msgid "_Expiry"
 msgstr "Ka_daluarsa"
 
-#: ../src/seahorse-key-manager.c:741
+#: ../src/seahorse-key-manager.c:742
 msgid "Show expiry column"
 msgstr "Tampilkan kolom kadaluarsa"
 
-#: ../src/seahorse-key-manager.c:743
+#: ../src/seahorse-key-manager.c:744
 msgid "_Trust"
 msgstr "_Kepercayaan"
 
-#: ../src/seahorse-key-manager.c:743
+#: ../src/seahorse-key-manager.c:744
 msgid "Show owner trust column"
 msgstr "Tampilkan kolom kepercayaan pemilik"
 
-#: ../src/seahorse-key-manager.c:745
+#: ../src/seahorse-key-manager.c:746
 msgid "_Validity"
 msgstr "_Validitas"
 
-#: ../src/seahorse-key-manager.c:745
+#: ../src/seahorse-key-manager.c:746
 msgid "Show validity column"
 msgstr "Tampilkan kolom validitas"
 
-#: ../src/seahorse-key-manager.c:922
+#: ../src/seahorse-key-manager.c:923
 msgid "Filter:"
 msgstr "Penyaring:"
 
@@ -1982,8 +1897,7 @@ msgstr "_Kunci Lain"
 msgid "To get started with encryption you will need keys."
 msgstr "Untuk mulai menyandi Anda perlu kunci."
 
-#: ../src/seahorse-key-manager.xml.h:7
-#: ../src/seahorse-viewer.c:515
+#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:515
 msgid "_Import"
 msgstr "_Impor"
 
@@ -1991,45 +1905,44 @@ msgstr "_Impor"
 msgid "_Passwords"
 msgstr "_Sandi"
 
-#: ../src/seahorse-key-manager-store.c:636
-#: ../src/seahorse-viewer.c:260
+#: ../src/seahorse-key-manager-store.c:637 ../src/seahorse-viewer.c:260
 msgid "Couldn't export keys"
 msgstr "Tak bisa mengekspor kunci"
 
-#: ../src/seahorse-key-manager-store.c:846
+#: ../src/seahorse-key-manager-store.c:847
 msgid "Validity"
 msgstr "Validitas"
 
 #. Expiry date column
-#: ../src/seahorse-key-manager-store.c:865
+#: ../src/seahorse-key-manager-store.c:866
 msgid "Expiration Date"
 msgstr "Tanggal Kadaluarsa"
 
-#: ../src/seahorse-keyserver-results.c:248
+#: ../src/seahorse-keyserver-results.c:249
 msgid "Close this window"
 msgstr "Tutup jendela ini"
 
-#: ../src/seahorse-keyserver-results.c:249
+#: ../src/seahorse-keyserver-results.c:250
 msgid "_Expand All"
 msgstr "K_embangkan Semua"
 
-#: ../src/seahorse-keyserver-results.c:250
+#: ../src/seahorse-keyserver-results.c:251
 msgid "Expand all listings"
 msgstr "Kembangkan semua daftar"
 
-#: ../src/seahorse-keyserver-results.c:251
+#: ../src/seahorse-keyserver-results.c:252
 msgid "_Collapse All"
 msgstr "_Lipat Semua"
 
-#: ../src/seahorse-keyserver-results.c:252
+#: ../src/seahorse-keyserver-results.c:253
 msgid "Collapse all listings"
 msgstr "Lipat semua daftar"
 
-#: ../src/seahorse-keyserver-results.c:323
+#: ../src/seahorse-keyserver-results.c:324
 msgid "Remote Keys"
 msgstr "Kunci Jauh"
 
-#: ../src/seahorse-keyserver-results.c:325
+#: ../src/seahorse-keyserver-results.c:326
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Kunci Jauh Memuat '%s'"
@@ -2062,22 +1975,22 @@ msgstr "_Cari"
 msgid "_Search for keys containing: "
 msgstr "_Cari kunci yang memuat:"
 
-#: ../src/seahorse-keyserver-sync.c:51
+#: ../src/seahorse-keyserver-sync.c:52
 msgid "Couldn't publish keys to server"
 msgstr "Tak bisa mempublikasikan kunci ke server"
 
-#: ../src/seahorse-keyserver-sync.c:70
+#: ../src/seahorse-keyserver-sync.c:71
 #, c-format
 msgid "Couldn't retrieve keys from server: %s"
 msgstr "Tak bisa mengambil kunci dari server: %s"
 
-#: ../src/seahorse-keyserver-sync.c:154
+#: ../src/seahorse-keyserver-sync.c:155
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d kunci dipilih untuk penyelarasan</b>"
 
-#: ../src/seahorse-keyserver-sync.c:240
+#: ../src/seahorse-keyserver-sync.c:241
 msgid "Synchronizing keys..."
 msgstr "Menyelaraskan kunci..."
 
@@ -2101,14 +2014,9 @@ msgstr "Server _Kunci"
 msgid "_Sync"
 msgstr "_Selaraskan"
 
-#: ../src/seahorse-main.c:61
+#: ../src/seahorse-main.c:60
 msgid "Version of this application"
 msgstr "Versi aplikasi ini"
-
-#: ../src/seahorse-main.c:77
-#: ../src/seahorse-viewer.c:144
-msgid "Encryption Key Manager"
-msgstr "Manajer Kunci Penyandian"
 
 #: ../src/seahorse-viewer.c:120
 msgid "Contributions:"
@@ -2116,7 +2024,9 @@ msgstr "Kontribusi:"
 
 #: ../src/seahorse-viewer.c:146
 msgid "translator-credits"
-msgstr "Andika Triwidada <andika@gmail.com>, 2010."
+msgstr ""
+"Andika Triwidada <andika@gmail.com>, 2010, 2011.\n"
+"Dirgita <dirgitadevina@yahoo.co.id>, 2011."
 
 #: ../src/seahorse-viewer.c:149
 msgid "Seahorse Project Homepage"
@@ -2241,27 +2151,23 @@ msgid "Are you sure you want to delete %d secure shell keys?"
 msgstr "Anda yakin ingin menghapus %d kunci secure shell?"
 
 #: ../ssh/seahorse-ssh-commands.c:133
-#| msgid "Couldn't delete subkey"
 msgid "Couldn't delete key"
 msgstr "Tak bisa menghapus kunci"
 
-#: ../ssh/seahorse-ssh-generate.c:59
-#: ../ssh/seahorse-ssh-key.c:91
-#: ../ssh/seahorse-ssh-key.c:95
-#: ../ssh/seahorse-ssh-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-generate.c:60 ../ssh/seahorse-ssh-key.c:91
+#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:19
 msgid "Secure Shell Key"
 msgstr "Kunci Secure Shell"
 
-#: ../ssh/seahorse-ssh-generate.c:60
+#: ../ssh/seahorse-ssh-generate.c:61
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Dipakai untuk mengakses komputer lain (mis: lewat terminal)"
 
-#: ../ssh/seahorse-ssh-generate.c:115
-#: ../ssh/seahorse-ssh-generate.c:134
+#: ../ssh/seahorse-ssh-generate.c:116 ../ssh/seahorse-ssh-generate.c:135
 msgid "Couldn't generate Secure Shell key"
 msgstr "Tak bisa membuat kunci Secure Shell"
 
-#: ../ssh/seahorse-ssh-generate.c:202
+#: ../ssh/seahorse-ssh-generate.c:203
 msgid "Creating Secure Shell Key"
 msgstr "Membuat Kunci Secure Shell"
 
@@ -2300,18 +2206,6 @@ msgstr "_Keterangan Kunci:"
 #: ../ssh/seahorse-ssh-key.c:87
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Kunci Secure Shell Tak Dapat Dibaca)"
-
-#: ../ssh/seahorse-ssh-key.c:105
-msgid "Invalid"
-msgstr "Tak Valid"
-
-#: ../ssh/seahorse-ssh-key.c:116
-msgid "Private Secure Shell Key"
-msgstr "Kunci Secure Shell Privat"
-
-#: ../ssh/seahorse-ssh-key.c:119
-msgid "Public Secure Shell Key"
-msgstr "Kunci Secure Shell Publik"
 
 #: ../ssh/seahorse-ssh-key-properties.c:62
 msgid "Couldn't rename key."
@@ -2366,59 +2260,59 @@ msgstr "Pemilik kunci ini diijink_an untuk menyambung ke komputer ini"
 msgid "Used to connect to other computers."
 msgstr "Dipakai untuk menyambung ke komputer lain."
 
-#: ../ssh/seahorse-ssh-operation.c:203
+#: ../ssh/seahorse-ssh-operation.c:204
 msgid "Secure Shell key"
 msgstr "Kunci Secure Shell"
 
-#: ../ssh/seahorse-ssh-operation.c:261
+#: ../ssh/seahorse-ssh-operation.c:262
 msgid "The SSH command was terminated unexpectedly."
 msgstr "Perintah SSH tak tersangka-sangka diakhiri."
 
-#: ../ssh/seahorse-ssh-operation.c:269
+#: ../ssh/seahorse-ssh-operation.c:270
 msgid "The SSH command failed."
 msgstr "Perintah SSH gagal."
 
 #. Just prompt over and over again
-#: ../ssh/seahorse-ssh-operation.c:677
+#: ../ssh/seahorse-ssh-operation.c:678
 msgid "Remote Host Password"
 msgstr "Sandi Host Jauh"
 
-#: ../ssh/seahorse-ssh-operation.c:807
+#: ../ssh/seahorse-ssh-operation.c:808
 msgid "Old Key Passphrase"
 msgstr "Frasa Sandi Kunci Lama"
 
-#: ../ssh/seahorse-ssh-operation.c:808
+#: ../ssh/seahorse-ssh-operation.c:809
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "Masukkan frasa sandi lama bagi: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:812
+#: ../ssh/seahorse-ssh-operation.c:813
 msgid "New Key Passphrase"
 msgstr "Frasa Sandi Kunci Baru"
 
-#: ../ssh/seahorse-ssh-operation.c:813
+#: ../ssh/seahorse-ssh-operation.c:814
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "Masukkan frasa sandi baru bagi: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:821
+#: ../ssh/seahorse-ssh-operation.c:822
 msgid "Enter Key Passphrase"
 msgstr "Masukkan Frasa Sandi Kunci"
 
-#: ../ssh/seahorse-ssh-operation.c:941
+#: ../ssh/seahorse-ssh-operation.c:942
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Frasa Sandi bagi Kunci Secure Shell Baru"
 
-#: ../ssh/seahorse-ssh-operation.c:942
+#: ../ssh/seahorse-ssh-operation.c:943
 msgid "Enter a passphrase for your new Secure Shell key."
 msgstr "Masukkan suatu frasa kunci bagi kunci Secure Shell baru Anda."
 
-#: ../ssh/seahorse-ssh-operation.c:1084
+#: ../ssh/seahorse-ssh-operation.c:1085
 #, c-format
 msgid "Importing key: %s"
 msgstr "Mengimpor kunci: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:1086
+#: ../ssh/seahorse-ssh-operation.c:1087
 msgid "Importing key. Enter passphrase"
 msgstr "Mengimpor kunci. Masukkan frasa kunci"
 
@@ -2426,11 +2320,11 @@ msgstr "Mengimpor kunci. Masukkan frasa kunci"
 msgid "No private key file is available for this key."
 msgstr "Tak tersedia kunci pribadi bagi kunci publik ini."
 
-#: ../ssh/seahorse-ssh-upload.c:46
+#: ../ssh/seahorse-ssh-upload.c:47
 msgid "Couldn't configure Secure Shell keys on remote computer."
 msgstr "Tak bisa menata kunci Secure Shell pada komputer jauh."
 
-#: ../ssh/seahorse-ssh-upload.c:131
+#: ../ssh/seahorse-ssh-upload.c:132
 msgid "Configuring Secure Shell Keys..."
 msgstr "Menata Kunci Secure Shell.."
 
@@ -2457,4 +2351,3 @@ msgstr "Nama _Log Masuk:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_Atur"
-
