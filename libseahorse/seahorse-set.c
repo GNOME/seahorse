@@ -155,8 +155,7 @@ seahorse_set_dispose (GObject *gobject)
 	g_signal_handlers_disconnect_by_func (SCTX_APP (), object_removed, skset);
 	g_signal_handlers_disconnect_by_func (SCTX_APP (), object_changed, skset);
 
-	/* Release all our pointers and stuff */
-	g_hash_table_foreach_remove (skset->pv->objects, (GHRFunc)remove_update, skset);
+	g_hash_table_remove_all (skset->pv->objects);
 	skset->pv->pred = NULL;
 
 	G_OBJECT_CLASS (seahorse_set_parent_class)->dispose (gobject);
