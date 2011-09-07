@@ -56,10 +56,43 @@ G_DEFINE_TYPE_WITH_CODE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT,
 );
 
 struct _SeahorsePgpKeyPrivate {
+	gchar *keyid;
 	GList *uids;			/* All the UID objects */
 	GList *subkeys;                 /* All the Subkey objects */
 	GList *photos;                  /* List of photos */
 };
+
+/*
+ * PGP key ids can be of varying lengths. Shorter keyids are the last
+ * characters of the longer ones. When hashing match on the last 8
+ * characters.
+ */
+
+guint
+seahorse_pgp_keyid_hash (gconstpointer v)
+{
+	const gchar *keyid = v;
+	gsize len = strlen (keyid);
+	if (len > 8)
+		keyid += len - 8;
+	return g_str_hash (keyid);
+}
+
+gboolean
+seahorse_pgp_keyid_equal (gconstpointer v1,
+                          gconstpointer v2)
+{
+	const gchar *keyid_1 = v1;
+	const gchar *keyid_2 = v2;
+	gsize len_1 = strlen (keyid_1);
+	gsize len_2 = strlen (keyid_2);
+
+	if (len_1 != len_2 && len_1 >= 8 && len_2 >= 8) {
+		keyid_1 += len_1 - 8;
+		keyid_2 += len_2 - 8;
+	}
+	return g_str_equal (keyid_1, keyid_2);
+}
 
 /* -----------------------------------------------------------------------------
  * INTERNAL HELPERS
@@ -107,26 +140,21 @@ _seahorse_pgp_key_set_uids (SeahorsePgpKey *self, GList *uids)
 	GHashTable *checks;
 	GHashTableIter iter;
 	GObject *uid;
-	guint index;
-	GQuark id;
 	GList *l;
 
 	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
 
-	id = seahorse_object_get_id (SEAHORSE_OBJECT (self));
-
-	checks = g_hash_table_new (g_direct_hash, g_direct_equal);
-	for (l = self->pv->uids; l; l = g_list_next (l)) {
-		g_hash_table_insert (checks, l->data, l->data);
-	}
+	checks = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+	                                g_object_unref, NULL);
+	for (l = self->pv->uids; l; l = g_list_next (l))
+		g_hash_table_insert (checks, g_object_ref (l->data), l->data);
 
 	seahorse_object_list_free (self->pv->uids);
 	self->pv->uids = seahorse_object_list_copy (uids);
 	
 	/* Set parent and source on each new one, except the first */
-	for (l = self->pv->uids, index = 0; l; l = g_list_next (l), ++index) {
+	for (l = self->pv->uids; l; l = g_list_next (l)) {
 		uid = l->data;
-		g_object_set (uid, "id", seahorse_pgp_uid_calc_id (id, index), NULL);
 		if (!g_hash_table_remove (checks, uid))
 			gcr_collection_emit_added (GCR_COLLECTION (self), uid);
 	}
@@ -149,17 +177,30 @@ _seahorse_pgp_key_get_subkeys (SeahorsePgpKey *self)
 static void
 _seahorse_pgp_key_set_subkeys (SeahorsePgpKey *self, GList *subkeys)
 {
-	GQuark id;
-	
+	const gchar *keyid = NULL;
+
 	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
 	g_return_if_fail (subkeys);
-	
+
+	keyid = seahorse_pgp_subkey_get_keyid (subkeys->data);
+	g_return_if_fail (keyid);
+
+	/* The keyid can't change */
+	if (self->pv->keyid) {
+		if (g_strcmp0 (self->pv->keyid, keyid) != 0) {
+			g_warning ("The keyid of a SeahorsePgpKey changed by "
+			           "setting a different subkey on it: %s != %s",
+			           self->pv->keyid, keyid);
+			return;
+		}
+
+	} else {
+		self->pv->keyid = g_strdup (keyid);
+	}
+
 	seahorse_object_list_free (self->pv->subkeys);
 	self->pv->subkeys = seahorse_object_list_copy (subkeys);
-	
-	id = seahorse_pgp_key_canonize_id (seahorse_pgp_subkey_get_keyid (subkeys->data));
-	g_object_set (self, "id", id, NULL); 
-	
+
 	g_object_notify (G_OBJECT (self), "subkeys");
 }
 
@@ -315,6 +356,7 @@ seahorse_pgp_key_object_finalize (GObject *obj)
 {
 	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (obj);
 
+	g_free (self->pv->keyid);
 	g_assert (self->pv->uids == NULL);
 	g_assert (self->pv->photos == NULL);
 	g_assert (self->pv->subkeys == NULL);
@@ -327,7 +369,6 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-	seahorse_pgp_key_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePgpKeyPrivate));
 
 	gobject_class->dispose = seahorse_pgp_key_object_dispose;
@@ -420,53 +461,6 @@ seahorse_pgp_key_collection_iface_init (GcrCollectionIface *iface)
 /* -----------------------------------------------------------------------------
  * PUBLIC 
  */
-
-GQuark
-seahorse_pgp_key_canonize_id (const gchar *keyid)
-{
-	gchar *str;
-	GQuark id;
-	
-	str = seahorse_pgp_key_calc_id (keyid, 0);
-	g_return_val_if_fail (str, 0);
-	
-	id = g_quark_from_string (str);
-	g_free (str);
-	
-	return id;
-}
-
-gchar*
-seahorse_pgp_key_calc_id (const gchar *keyid, guint index)
-{
-	guint len;
-	
-	g_return_val_if_fail (keyid, 0);
-	len = strlen (keyid);
-    
-	if (len < 16)
-		g_message ("invalid keyid (less than 16 chars): %s", keyid);
-    
-	if (len > 16)
-		keyid += len - 16;
-    
-	if (index == 0)
-		return g_strdup_printf ("%s:%s", SEAHORSE_PGP_STR, keyid);
-	else
-		return g_strdup_printf ("%s:%s:%u", SEAHORSE_PGP_STR, keyid, index);
-}
-
-const gchar* 
-seahorse_pgp_key_calc_rawid (GQuark id)
-{
-	const gchar* keyid, *strid;
-	
-	strid = g_quark_to_string (id);
-	g_return_val_if_fail (strid != NULL, NULL);
-	
-	keyid = strchr (strid, ':');
-	return keyid ? keyid + 1 : strid;
-}
 
 gchar*
 seahorse_pgp_key_calc_identifier (const gchar *keyid)

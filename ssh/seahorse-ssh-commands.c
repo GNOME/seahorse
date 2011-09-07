@@ -96,7 +96,6 @@ static void
 seahorse_ssh_commands_show_properties (SeahorseCommands* base, SeahorseObject* obj) 
 {
 	g_return_if_fail (SEAHORSE_IS_OBJECT (obj));
-	g_return_if_fail (seahorse_object_get_tag (obj) == SEAHORSE_SSH_TYPE);
 	g_return_if_fail (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_SSH_TYPE_KEY);
 	
 	seahorse_ssh_key_properties_show (SEAHORSE_SSH_KEY (obj), seahorse_commands_get_window (base));

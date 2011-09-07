@@ -31,19 +31,10 @@
 
 #include "seahorse-key-manager.h"
 
-#ifdef WITH_PGP
-#include "pgp/seahorse-pgp-module.h"
-#endif
-
-#ifdef WITH_SSH
-#include "ssh/seahorse-ssh-module.h"
-#endif
-
-#ifdef WITH_PKCS11
-#include "pkcs11/seahorse-pkcs11-module.h"
-#endif
-
-#include "gkr/seahorse-gkr-module.h"
+#include "gkr/seahorse-gkr.h"
+#include "pgp/seahorse-pgp.h"
+#include "ssh/seahorse-ssh.h"
+#include "pkcs11/seahorse-pkcs11.h"
 
 #include <locale.h>
 #include <stdlib.h>
@@ -56,6 +47,10 @@ static gboolean show_version = FALSE;
 int
 main (int argc, char **argv)
 {
+	SeahorseWidget *swidget;
+	GcrUnionCollection *sources;
+	SeahorseContext *context;
+
     static GOptionEntry options[] = {
         { "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("Version of this application"), NULL },
         { NULL, 0, 0, 0, NULL, NULL, NULL }
@@ -90,28 +85,26 @@ main (int argc, char **argv)
 
     /* Make the default SeahorseContext */
     seahorse_context_create ();
+    context = seahorse_context_instance ();
+
+    sources = GCR_UNION_COLLECTION (gcr_union_collection_new ());
 
     /* Initialize the various components */
-#ifdef WITH_PGP
-    seahorse_pgp_module_init ();
-#endif
-#ifdef WITH_SSH
-    seahorse_ssh_module_init ();
-#endif
-#ifdef WITH_PKCS11
-    seahorse_pkcs11_module_init ();
-#endif
-    seahorse_gkr_module_init ();
+    gcr_union_collection_take (sources, seahorse_pgp_backend_initialize ());
+    gcr_union_collection_take (sources, seahorse_ssh_backend_initialize ());
+    gcr_union_collection_take (sources, seahorse_pkcs11_backend_initialize ());
+    gcr_union_collection_take (sources, seahorse_gkr_backend_initialize ());
 
-    seahorse_key_manager_show ();
+    swidget = seahorse_key_manager_show (GCR_COLLECTION (sources));
+    g_object_unref (sources);
 
-    /* Start the refreshing of the keys */
-    seahorse_context_refresh_auto (NULL);
+    g_object_ref (context);
+    g_signal_connect_after (context, "destroy", gtk_main_quit, NULL);
 
-    g_signal_connect_after (SCTX_APP (), "destroy", gtk_main_quit, NULL);
-    
     gtk_main ();
 
+    g_object_unref (swidget);
+    g_object_unref (context);
 
     seahorse_cleanup_perform ();
     return ret;

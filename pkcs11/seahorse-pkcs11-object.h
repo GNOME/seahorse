@@ -72,6 +72,4 @@ gboolean                    seahorse_pkcs11_object_require_attributes     (Seaho
                                                                            const gulong *attr_types,
                                                                            gsize n_attr_types);
 
-GQuark                      seahorse_pkcs11_object_cannonical_id          (GckObject *object);
-
 #endif /* __SEAHORSE_PKCS11_OBJECT_H__ */

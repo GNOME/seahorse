@@ -138,20 +138,6 @@ seahorse_gpgme_uid_init (SeahorseGpgmeUid *self)
 	self->pv->actual_index = -1;
 }
 
-static GObject*
-seahorse_gpgme_uid_constructor (GType type, guint n_props, GObjectConstructParam *props)
-{
-	GObject *obj = G_OBJECT_CLASS (seahorse_gpgme_uid_parent_class)->constructor (type, n_props, props);
-	SeahorseGpgmeUid *self = NULL;
-	
-	if (obj) {
-		self = SEAHORSE_GPGME_UID (obj);
-		g_object_set (self, "location", SEAHORSE_LOCATION_LOCAL, NULL);
-	}
-	
-	return obj;
-}
-
 static void
 seahorse_gpgme_uid_get_property (GObject *object, guint prop_id,
                                GValue *value, GParamSpec *pspec)
@@ -233,7 +219,6 @@ seahorse_gpgme_uid_class_init (SeahorseGpgmeUidClass *klass)
 	seahorse_gpgme_uid_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseGpgmeUidPrivate));
 
-	gobject_class->constructor = seahorse_gpgme_uid_constructor;
 	gobject_class->finalize = seahorse_gpgme_uid_object_finalize;
 	gobject_class->set_property = seahorse_gpgme_uid_set_property;
 	gobject_class->get_property = seahorse_gpgme_uid_get_property;

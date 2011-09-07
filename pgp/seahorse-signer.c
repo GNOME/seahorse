@@ -41,13 +41,14 @@ seahorse_signer_get (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
     GcrCollection *collection;
-    SeahorseObject *object = NULL;
+    SeahorsePgpKey *key = NULL;
     GtkWidget *combo;
     GtkWidget *widget;
     gint response;
     gboolean done = FALSE;
     gboolean ok = FALSE;
     GSettings *settings;
+    const gchar *keyid;
     gchar *id;
     guint nkeys;
 
@@ -66,13 +67,10 @@ seahorse_signer_get (GtkWindow *parent)
     /* If only one key (probably default) then return it immediately */
     if (nkeys == 1) {
         GList *keys = gcr_collection_get_objects (collection);
-        object = SEAHORSE_OBJECT (keys->data);
-        
+        key = keys->data;
         g_list_free (keys);
         g_object_unref (collection);
-
-        g_assert (SEAHORSE_IS_PGP_KEY (object));
-        return SEAHORSE_PGP_KEY (object);
+        return key;
     }
     
     swidget = seahorse_widget_new ("signer", parent);
@@ -87,7 +85,13 @@ seahorse_signer_get (GtkWindow *parent)
 
     /* Select the last key used */
     id = g_settings_get_string (settings, "last-signer");
-    seahorse_combo_keys_set_active_id (GTK_COMBO_BOX (combo), g_quark_from_string (id));
+    if (!id || !id[0])
+        keyid = NULL;
+    else if (g_str_has_prefix (id, "openpgp:"))
+        keyid = id + strlen ("openpgp:");
+    else
+        keyid = id;
+    seahorse_combo_keys_set_active_id (GTK_COMBO_BOX (combo), keyid);
     g_free (id); 
     
     widget = seahorse_widget_get_toplevel (swidget);
@@ -107,14 +111,13 @@ seahorse_signer_get (GtkWindow *parent)
     }
 
     if (ok) {
-        object = seahorse_combo_keys_get_active (GTK_COMBO_BOX (combo));
-        g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (object), NULL);
+        key = seahorse_combo_keys_get_active (GTK_COMBO_BOX (combo));
 
         /* Save this as the last key signed with */
         g_settings_set_string (settings, "last-signer",
-                               object == NULL ? "" : g_quark_to_string (seahorse_object_get_id (object)));
+                               key ? seahorse_pgp_key_get_keyid (key) : NULL);
     }
     
     seahorse_widget_destroy (swidget);
-    return SEAHORSE_PGP_KEY (object);
+    return key;
 }

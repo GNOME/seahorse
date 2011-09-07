@@ -27,9 +27,9 @@
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 
-#include "pgp/seahorse-pgp-module.h"
+#include "pgp/seahorse-pgp.h"
 
-#include "ssh/seahorse-ssh-module.h"
+#include "ssh/seahorse-ssh.h"
 
 #include <gio/gio.h>
 #include <glib/gstdio.h>

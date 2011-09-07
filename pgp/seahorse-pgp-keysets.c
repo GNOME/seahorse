@@ -21,11 +21,14 @@
 
 #include "config.h"
 
+#include "seahorse-context.h"
 #include "seahorse-collection.h"
 #include "seahorse-object.h"
 #include "seahorse-predicate.h"
 
-#include "seahorse-pgp-module.h"
+#include "seahorse-gpgme-key.h"
+#include "seahorse-pgp-backend.h"
+#include "seahorse-pgp-key.h"
 #include "seahorse-pgp-keysets.h"
 
 /* -----------------------------------------------------------------------------
@@ -43,18 +46,20 @@ static gboolean
 pgp_signers_match (SeahorseObject *obj,
                    gpointer data)
 {
-    SeahorseObject *defkey;
-    
-    if (!SEAHORSE_IS_OBJECT (obj))
-	    return FALSE;
-    
-    defkey = seahorse_context_get_default_key (SCTX_APP ());
-    
-    /* Default key overrides all, and becomes the only signer available*/
-    if (defkey && seahorse_object_get_id (obj) != seahorse_object_get_id (defkey))
-        return FALSE;
-    
-    return TRUE;
+	SeahorsePgpKey *defkey;
+
+	if (!SEAHORSE_IS_PGP_KEY (obj))
+		return FALSE;
+
+	defkey = seahorse_pgp_backend_get_default_key (NULL);
+
+	/* Default key overrides all, and becomes the only signer available*/
+	if (defkey != NULL &&
+	    g_strcmp0 (seahorse_pgp_key_get_keyid (defkey),
+	               seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (obj))) != 0)
+		return FALSE;
+
+	return TRUE;
 }
 
 GcrCollection *
@@ -62,15 +67,17 @@ seahorse_keyset_pgp_signers_new (void)
 {
 	SeahorsePredicate *predicate = g_new0 (SeahorsePredicate, 1);
 	SeahorseCollection *collection;
+	SeahorseGpgmeKeyring *keyring;
 
-	predicate->location = SEAHORSE_LOCATION_LOCAL;
-	predicate->tag = SEAHORSE_PGP;
+	predicate->type = SEAHORSE_TYPE_GPGME_KEY;
 	predicate->usage = SEAHORSE_USAGE_PRIVATE_KEY;
 	predicate->flags = SEAHORSE_FLAG_CAN_SIGN;
 	predicate->nflags = SEAHORSE_FLAG_EXPIRED | SEAHORSE_FLAG_REVOKED | SEAHORSE_FLAG_DISABLED;
 	predicate->custom = pgp_signers_match;
 
-	collection = seahorse_collection_new_for_predicate (predicate, g_free);
+	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+	collection = seahorse_collection_new_for_predicate (GCR_COLLECTION (keyring),
+	                                                    predicate, g_free);
 
 	g_signal_connect_object (seahorse_context_pgp_settings (NULL), "changed::default-key",
 	                         G_CALLBACK (on_settings_default_key_changed), collection, 0);

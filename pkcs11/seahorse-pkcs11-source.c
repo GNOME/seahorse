@@ -34,6 +34,7 @@
 
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-certificate.h"
+#include "seahorse-pkcs11-helpers.h"
 #include "seahorse-pkcs11-object.h"
 #include "seahorse-pkcs11-operations.h"
 #include "seahorse-pkcs11-source.h"
@@ -43,19 +44,22 @@
 enum {
     PROP_0,
     PROP_SLOT,
-    PROP_SOURCE_TAG,
-    PROP_SOURCE_LOCATION,
     PROP_FLAGS
 };
 
 struct _SeahorsePkcs11SourcePrivate {
 	GckSlot *slot;
+	GHashTable *objects;
 };
 
-static void seahorse_source_iface (SeahorseSourceIface *iface);
+static void          seahorse_pkcs11_source_iface      (SeahorseSourceIface *iface);
+
+static void          seahorse_pkcs11_collection_iface  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (SeahorsePkcs11Source, seahorse_pkcs11_source, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
+                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_pkcs11_source_iface);
+                        G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_pkcs11_collection_iface);
+);
 
 /* -----------------------------------------------------------------------------
  * OBJECT
@@ -65,6 +69,9 @@ static void
 seahorse_pkcs11_source_init (SeahorsePkcs11Source *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_PKCS11_SOURCE, SeahorsePkcs11SourcePrivate));
+	self->pv->objects = g_hash_table_new_full (seahorse_pkcs11_ulong_hash,
+	                                           seahorse_pkcs11_ulong_equal,
+	                                           g_free, g_object_unref);
 }
 
 static GObject*  
@@ -91,12 +98,6 @@ seahorse_pkcs11_source_get_property (GObject *object, guint prop_id, GValue *val
 	case PROP_SLOT:
 		g_value_set_object (value, self->pv->slot);
 		break;
-	case PROP_SOURCE_TAG:
-		g_value_set_uint (value, SEAHORSE_PKCS11_TYPE);
-		break;
-	case PROP_SOURCE_LOCATION:
-		g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
-		break;
 	case PROP_FLAGS:
 		g_value_set_uint (value, 0);
 		break;
@@ -120,25 +121,6 @@ seahorse_pkcs11_source_set_property (GObject *object, guint prop_id, const GValu
 }
 
 static void
-seahorse_pkcs11_source_load_async (SeahorseSource *source,
-                                   GCancellable *cancellable,
-                                   GAsyncReadyCallback callback,
-                                   gpointer user_data)
-{
-	seahorse_pkcs11_refresh_async (SEAHORSE_PKCS11_SOURCE (source),
-	                               cancellable, callback, user_data);
-}
-
-static gboolean
-seahorse_pkcs11_source_load_finish (SeahorseSource *source,
-                                    GAsyncResult *result,
-                                    GError **error)
-{
-	return seahorse_pkcs11_refresh_finish (SEAHORSE_PKCS11_SOURCE (source),
-	                                       result, error);
-}
-
-static void
 seahorse_pkcs11_source_dispose (GObject *obj)
 {
 	SeahorsePkcs11Source *self = SEAHORSE_PKCS11_SOURCE (obj);
@@ -155,7 +137,8 @@ static void
 seahorse_pkcs11_source_finalize (GObject *obj)
 {
 	SeahorsePkcs11Source *self = SEAHORSE_PKCS11_SOURCE (obj);
-  
+
+	g_hash_table_destroy (self->pv->objects);
 	g_assert (self->pv->slot == NULL);
     
 	G_OBJECT_CLASS (seahorse_pkcs11_source_parent_class)->finalize (obj);
@@ -184,17 +167,50 @@ seahorse_pkcs11_source_class_init (SeahorsePkcs11SourceClass *klass)
 	         g_param_spec_uint ("flags", "Flags", "Object Source flags.", 
 	                            0, G_MAXUINT, 0, G_PARAM_READABLE));
 
-	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
-	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
-    
 	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_PKCS11_SOURCE, "source", "local", SEAHORSE_PKCS11_TYPE_STR, NULL);
 }
 
 static void 
-seahorse_source_iface (SeahorseSourceIface *iface)
+seahorse_pkcs11_source_iface (SeahorseSourceIface *iface)
 {
-	iface->load_async = seahorse_pkcs11_source_load_async;
-	iface->load_finish = seahorse_pkcs11_source_load_finish;
+
+}
+
+
+static guint
+seahorse_pkcs11_source_get_length (GcrCollection *collection)
+{
+	SeahorsePkcs11Source *self = SEAHORSE_PKCS11_SOURCE (collection);
+	return g_hash_table_size (self->pv->objects);
+}
+
+static GList *
+seahorse_pkcs11_source_get_objects (GcrCollection *collection)
+{
+	SeahorsePkcs11Source *self = SEAHORSE_PKCS11_SOURCE (collection);
+	return g_hash_table_get_values (self->pv->objects);
+}
+
+static gboolean
+seahorse_pkcs11_source_contains (GcrCollection *collection,
+                                 GObject *object)
+{
+	SeahorsePkcs11Source *self = SEAHORSE_PKCS11_SOURCE (collection);
+	gulong handle;
+
+	if (!SEAHORSE_PKCS11_IS_OBJECT (object))
+		return FALSE;
+
+	handle = seahorse_pkcs11_object_get_pkcs11_handle (SEAHORSE_PKCS11_OBJECT (object));
+	return g_hash_table_lookup (self->pv->objects, &handle) == object;
+}
+
+static void
+seahorse_pkcs11_collection_iface (GcrCollectionIface *iface)
+{
+	iface->get_length = seahorse_pkcs11_source_get_length;
+	iface->get_objects = seahorse_pkcs11_source_get_objects;
+	iface->contains = seahorse_pkcs11_source_contains;
 }
 
 /* -------------------------------------------------------------------------- 
@@ -215,18 +231,18 @@ seahorse_pkcs11_source_get_slot (SeahorsePkcs11Source *self)
 }
 
 void
-seahorse_pkcs11_source_receive_object (SeahorsePkcs11Source *self, GckObject *obj)
+seahorse_pkcs11_source_receive_object (SeahorsePkcs11Source *self,
+                                       GckObject *obj)
 {
-	GQuark id = seahorse_pkcs11_object_cannonical_id (obj);
 	SeahorsePkcs11Certificate *cert;
 	SeahorseObject *prev;
-	
+	gulong handle;
+
 	g_return_if_fail (SEAHORSE_IS_PKCS11_SOURCE (self));
-	
-	/* TODO: This will need to change once we get other kinds of objects */
-	
-	prev = seahorse_context_get_object (NULL, SEAHORSE_SOURCE (self), id);
-	if (prev) {
+
+	handle = gck_object_get_handle (obj);
+	prev = g_hash_table_lookup (self->pv->objects, &handle);
+	if (prev != NULL) {
 		seahorse_pkcs11_object_refresh (SEAHORSE_PKCS11_OBJECT (prev));
 		g_object_unref (obj);
 		return;
@@ -234,5 +250,27 @@ seahorse_pkcs11_source_receive_object (SeahorsePkcs11Source *self, GckObject *ob
 
 	cert = seahorse_pkcs11_certificate_new (obj);
 	g_object_set (cert, "source", self, NULL);
-	seahorse_context_add_object (NULL, SEAHORSE_OBJECT (cert));
+
+	g_hash_table_insert (self->pv->objects, g_memdup (&handle, sizeof (handle)), cert);
+	gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (cert));
+}
+
+void
+seahorse_pkcs11_source_remove_object (SeahorsePkcs11Source *self,
+                                      SeahorsePkcs11Object *object)
+{
+	gulong handle;
+
+	g_return_if_fail (SEAHORSE_IS_PKCS11_SOURCE (self));
+	g_return_if_fail (SEAHORSE_PKCS11_IS_OBJECT (object));
+
+	g_object_ref (object);
+
+	handle = seahorse_pkcs11_object_get_pkcs11_handle (object);
+	g_return_if_fail (g_hash_table_lookup (self->pv->objects, &handle) == object);
+
+	g_hash_table_remove (self->pv->objects, &handle);
+	gcr_collection_emit_removed (GCR_COLLECTION (self), G_OBJECT (object));
+
+	g_object_unref (object);
 }

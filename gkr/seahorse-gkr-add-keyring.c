@@ -21,9 +21,9 @@
  */
 #include "config.h"
 
+#include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-keyring.h"
-#include "seahorse-gkr-source.h"
 
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
@@ -63,8 +63,7 @@ keyring_add_done (GnomeKeyringResult result, gpointer data)
 
 	/* Successful. Update the listings and stuff. */
 	if (result == GNOME_KEYRING_RESULT_OK) {
-		seahorse_source_load_async (SEAHORSE_SOURCE (seahorse_gkr_source_default ()),
-		                            NULL, NULL, NULL);
+		seahorse_gkr_backend_load_async (NULL, NULL, NULL, NULL);
 
 	/* Setting the default keyring failed */
 	} else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     

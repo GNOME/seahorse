@@ -26,8 +26,6 @@
 /* 
  * Derived classes must set the following properties:
  * 
- * id: GQuark: Unique identifier for this object.
- * tag: GQuark: The module (openpgp, pkcs11, etc...) that handles this object. 
  * label: string: The displayable string label of this object.
  * icon: A GIcon.
  * usage: SeahorseUsage: The usage of this object.
@@ -43,7 +41,6 @@
  * flags: guint: Flags from the SEAHORSE_FLAG_ set. 
  */
 
-#include "seahorse-context.h"
 #include "seahorse-source.h"
 #include "seahorse-types.h"
 
@@ -73,24 +70,10 @@ GType               seahorse_object_get_type               (void);
 
 SeahorseObject*     seahorse_object_new                    (void);
 
-GQuark              seahorse_object_get_id                 (SeahorseObject *self);
-
-GQuark              seahorse_object_get_tag                (SeahorseObject *self);
-
 SeahorseSource*     seahorse_object_get_source             (SeahorseObject *self);
 
 void                seahorse_object_set_source             (SeahorseObject *self, 
                                                             SeahorseSource *value);
-
-SeahorseContext*    seahorse_object_get_context            (SeahorseObject *self);
-
-SeahorseObject*     seahorse_object_get_preferred          (SeahorseObject *self);
-
-void                seahorse_object_set_preferred          (SeahorseObject *self, 
-                                                            SeahorseObject *value);
- 
-SeahorseObject*     seahorse_object_get_nth_child          (SeahorseObject *self,
-                                                            guint index);
 
 const gchar*        seahorse_object_get_label              (SeahorseObject *self);
 
@@ -99,8 +82,6 @@ const gchar*        seahorse_object_get_markup             (SeahorseObject *self
 const gchar*        seahorse_object_get_identifier         (SeahorseObject *self);
 
 const gchar*        seahorse_object_get_nickname           (SeahorseObject *self);
-
-SeahorseLocation    seahorse_object_get_location           (SeahorseObject *self);
 
 SeahorseUsage       seahorse_object_get_usage              (SeahorseObject *self);
 

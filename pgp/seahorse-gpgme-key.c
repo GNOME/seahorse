@@ -25,18 +25,18 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-context.h"
 #include "seahorse-icons.h"
 #include "seahorse-predicate.h"
 #include "seahorse-object-list.h"
 #include "seahorse-source.h"
 #include "seahorse-util.h"
 
+#include "seahorse-pgp-backend.h"
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-gpgme.h"
 #include "pgp/seahorse-gpgme-key-op.h"
 #include "pgp/seahorse-gpgme-photo.h"
-#include "pgp/seahorse-gpgme-source.h"
+#include "pgp/seahorse-gpgme-keyring.h"
 #include "pgp/seahorse-gpgme-uid.h"
 
 enum {
@@ -67,15 +67,18 @@ struct _SeahorseGpgmeKeyPrivate {
  */
 
 static gboolean 
-load_gpgme_key (GQuark id, int mode, int secret, gpgme_key_t *key)
+load_gpgme_key (const gchar *keyid,
+                int mode,
+                int secret,
+                gpgme_key_t *key)
 {
 	GError *error = NULL;
 	gpgme_ctx_t ctx;
 	gpgme_error_t gerr;
-	
-	ctx = seahorse_gpgme_source_new_context ();
+
+	ctx = seahorse_gpgme_keyring_new_context ();
 	gpgme_set_keylist_mode (ctx, mode);
-	gerr = gpgme_op_keylist_start (ctx, seahorse_pgp_key_calc_rawid (id), secret);
+	gerr = gpgme_op_keylist_start (ctx, keyid, secret);
 	if (GPG_IS_OK (gerr)) {
 		gerr = gpgme_op_keylist_next (ctx, key);
 		gpgme_op_keylist_end (ctx);
@@ -96,18 +99,16 @@ static void
 load_key_public (SeahorseGpgmeKey *self, int list_mode)
 {
 	gpgme_key_t key = NULL;
+	const gchar *keyid;
 	gboolean ret;
-	GQuark id;
-	
+
 	if (self->pv->block_loading)
 		return;
 	
 	list_mode |= self->pv->list_mode;
-	
-	id = seahorse_object_get_id (SEAHORSE_OBJECT (self));
-	g_return_if_fail (id);
-	
-	ret = load_gpgme_key (id, list_mode, FALSE, &key);
+
+	keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (self));
+	ret = load_gpgme_key (keyid, list_mode, FALSE, &key);
 	if (ret) {
 		self->pv->list_mode = list_mode;
 		seahorse_gpgme_key_set_public (self, key);
@@ -127,16 +128,14 @@ static void
 load_key_private (SeahorseGpgmeKey *self)
 {
 	gpgme_key_t key = NULL;
+	const gchar *keyid;
 	gboolean ret;
-	GQuark id;
-	
+
 	if (!self->pv->has_secret || self->pv->block_loading)
 		return;
-	
-	id = seahorse_object_get_id (SEAHORSE_OBJECT (self));
-	g_return_if_fail (id);
-	
-	ret = load_gpgme_key (id, GPGME_KEYLIST_MODE_LOCAL, TRUE, &key);
+
+	keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (self));
+	ret = load_gpgme_key (keyid, GPGME_KEYLIST_MODE_LOCAL, TRUE, &key);
 	if (ret) {
 		seahorse_gpgme_key_set_private (self, key);
 		gpgme_key_unref (key);
@@ -294,16 +293,6 @@ realize_subkeys (SeahorseGpgmeKey *self)
 	seahorse_object_list_free (list);
 }
 
-static void
-refresh_each_gpgme_key (SeahorseObject *object, gpointer data)
-{
-	seahorse_gpgme_key_refresh (SEAHORSE_GPGME_KEY (object));
-}
-
-/* -----------------------------------------------------------------------------
- * OBJECT 
- */
-
 void
 seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 {
@@ -386,21 +375,12 @@ static void
 seahorse_gpgme_key_set_uids (SeahorsePgpKey *base, GList *uids)
 {
 	SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (base);
-	GList *l;
-	
+
 	SEAHORSE_PGP_KEY_CLASS (seahorse_gpgme_key_parent_class)->set_uids (base, uids);
-	
-	/* Remove the parent on each old one */
-	for (l = self->pv->uids; l; l = g_list_next (l))
-		seahorse_context_remove_object (seahorse_context_instance (), l->data);
 
 	/* Keep our own copy of the UID list */
 	seahorse_object_list_free (self->pv->uids);
 	self->pv->uids = seahorse_object_list_copy (uids);
-	
-	/* Add UIDS to context so that they show up */
-	for (l = self->pv->uids; l; l = g_list_next (l))
-		seahorse_context_add_object (seahorse_context_instance (), l->data);
 
 	renumber_actual_uids (self);
 }
@@ -434,7 +414,6 @@ static void
 seahorse_gpgme_key_init (SeahorseGpgmeKey *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GPGME_KEY, SeahorseGpgmeKeyPrivate);
-	g_object_set (self, "location", SEAHORSE_LOCATION_LOCAL, NULL);
 }
 
 static void
@@ -489,11 +468,6 @@ static void
 seahorse_gpgme_key_object_dispose (GObject *obj)
 {
 	SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (obj);
-	GList *l;
-	
-	/* Remove the attached UIDs */
-	for (l = self->pv->uids; l; l = g_list_next (l))
-		seahorse_context_remove_object (seahorse_context_instance (), l->data);
 
 	if (self->pv->pubkey)
 		gpgme_key_unref (self->pv->pubkey);
@@ -562,17 +536,9 @@ SeahorseGpgmeKey*
 seahorse_gpgme_key_new (SeahorseSource *sksrc, gpgme_key_t pubkey, 
                         gpgme_key_t seckey)
 {
-	const gchar *keyid;
-
 	g_return_val_if_fail (pubkey || seckey, NULL);
-	
-	if (pubkey != NULL)
-		keyid = pubkey->subkeys->keyid;
-	else
-		keyid = seckey->subkeys->keyid;
-	
+
 	return g_object_new (SEAHORSE_TYPE_GPGME_KEY, "source", sksrc,
-	                     "id", seahorse_pgp_key_canonize_id (keyid),
 	                     "pubkey", pubkey, "seckey", seckey, 
 	                     NULL);
 }
@@ -672,13 +638,12 @@ seahorse_gpgme_key_get_trust (SeahorseGpgmeKey *self)
 void
 seahorse_gpgme_key_refresh_matching (gpgme_key_t key)
 {
-	SeahorsePredicate pred;
+	SeahorseGpgmeKey *gkey;
 
 	g_return_if_fail (key->subkeys->keyid);
-	
-	memset (&pred, 0, sizeof (pred));
-	pred.type = SEAHORSE_TYPE_GPGME_KEY;
-	pred.id = seahorse_pgp_key_canonize_id (key->subkeys->keyid);
 
-	seahorse_context_for_objects_full (NULL, &pred, refresh_each_gpgme_key, NULL);
+	gkey = seahorse_gpgme_keyring_lookup (seahorse_pgp_backend_get_default_keyring (NULL),
+	                                      key->subkeys->keyid);
+	if (gkey != NULL)
+		seahorse_gpgme_key_refresh (gkey);
 }

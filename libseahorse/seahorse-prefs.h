@@ -26,7 +26,6 @@
 #ifndef __SEAHORSE_PREFS_H__
 #define __SEAHORSE_PREFS_H__
 
-#include "seahorse-context.h"
 #include "seahorse-widget.h"
 
 SeahorseWidget *    seahorse_prefs_new          (GtkWindow *parent);

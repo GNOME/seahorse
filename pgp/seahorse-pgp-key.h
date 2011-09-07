@@ -24,8 +24,6 @@
 
 #include <glib-object.h>
 
-#include "pgp/seahorse-pgp-module.h"
-
 #include "seahorse-object.h"
 #include "seahorse-validity.h"
 
@@ -53,7 +51,7 @@ struct _SeahorsePgpKey {
 
 struct _SeahorsePgpKeyClass {
 	SeahorseObjectClass parent_class;
-	
+
 	/* virtual methods */
 	GList* (*get_uids) (SeahorsePgpKey *self);
 	void   (*set_uids) (SeahorsePgpKey *self, GList *uids);
@@ -67,7 +65,7 @@ struct _SeahorsePgpKeyClass {
 
 GType             seahorse_pgp_key_get_type             (void);
 
-SeahorsePgpKey*   seahorse_pgp_key_new                  (void);
+SeahorsePgpKey *  seahorse_pgp_key_new                  (void);
 
 void              seahorse_pgp_key_realize              (SeahorsePgpKey *self);
 
@@ -105,11 +103,9 @@ gboolean          seahorse_pgp_key_has_keyid            (SeahorsePgpKey *self,
 
 gchar*            seahorse_pgp_key_calc_identifier      (const gchar *keyid);
 
-gchar*            seahorse_pgp_key_calc_id              (const gchar *keyid,
-                                                         guint index);
+guint             seahorse_pgp_keyid_hash               (gconstpointer v);
 
-const gchar*      seahorse_pgp_key_calc_rawid           (GQuark id);
-
-GQuark            seahorse_pgp_key_canonize_id          (const gchar *keyid);
+gboolean          seahorse_pgp_keyid_equal              (gconstpointer v1,
+                                                         gconstpointer v2);
 
 #endif /* __SEAHORSE_KEY_H__ */

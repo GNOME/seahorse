@@ -25,11 +25,20 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <gcr/gcr.h>
+
 G_BEGIN_DECLS
 
+#ifdef WITH_PGP
+
+#define SEAHORSE_PGP g_quark_from_string ("openpgp")
 #define SEAHORSE_PGP_TYPE_STR "openpgp"
 #define SEAHORSE_PGP_TYPE g_quark_from_string ("openpgp")
 #define SEAHORSE_PGP_STOCK_ICON "seahorse-key-personal"
+
+GcrCollection *       seahorse_pgp_backend_initialize    (void);
+
+#endif /* WITH_PGP */
 
 G_END_DECLS
 

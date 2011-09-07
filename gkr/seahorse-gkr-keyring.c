@@ -36,8 +36,6 @@
 
 enum {
 	PROP_0,
-	PROP_SOURCE_TAG,
-	PROP_SOURCE_LOCATION,
 	PROP_KEYRING_NAME,
 	PROP_KEYRING_INFO,
 	PROP_IS_DEFAULT
@@ -299,19 +297,14 @@ on_keyring_load_cancelled (GCancellable *cancellable,
 		gnome_keyring_cancel_request (closure->request);
 }
 
-static void
-seahorse_gkr_keyring_load_async (SeahorseSource *source,
+void
+seahorse_gkr_keyring_load_async (SeahorseGkrKeyring *self,
                                  GCancellable *cancellable,
                                  GAsyncReadyCallback callback,
                                  gpointer user_data)
 {
-	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (source);
 	keyring_load_closure *closure;
 	GSimpleAsyncResult *res;
-#if TODO
-/* cancellable = g_cancellable_new ();
-g_cancellable_cancel (cancellable); */
-#endif
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_gkr_keyring_load_async);
@@ -334,12 +327,12 @@ g_cancellable_cancel (cancellable); */
 	g_object_unref (res);
 }
 
-static gboolean
-seahorse_gkr_keyring_load_finish (SeahorseSource *source,
+gboolean
+seahorse_gkr_keyring_load_finish (SeahorseGkrKeyring *self,
                                   GAsyncResult *result,
                                   GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
 	                      seahorse_gkr_keyring_load_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -348,26 +341,15 @@ seahorse_gkr_keyring_load_finish (SeahorseSource *source,
 	return TRUE;
 }
 
-static GObject* 
-seahorse_gkr_keyring_constructor (GType type, guint n_props, GObjectConstructParam *props) 
+static void
+seahorse_gkr_keyring_constructed (GObject *obj)
 {
-	GObject *obj = G_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->constructor (type, n_props, props);
-	SeahorseGkrKeyring *self = NULL;
-	gchar *id;
-	
-	if (obj) {
-		self = SEAHORSE_GKR_KEYRING (obj);
-		
-		g_return_val_if_fail (self->pv->keyring_name, obj);
-		id = g_strdup_printf ("%s:%s", SEAHORSE_GKR_TYPE_STR, self->pv->keyring_name);
-		g_object_set (self, 
-		              "id", g_quark_from_string (id), 
-		              "usage", SEAHORSE_USAGE_NONE, 
-		              NULL);
-		g_free (id);
-	}
-	
-	return obj;
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
+
+	G_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->constructed (obj);
+
+	g_return_if_fail (self->pv->keyring_name);
+	g_object_set (self, "usage", SEAHORSE_USAGE_NONE, NULL);
 }
 
 static void
@@ -375,7 +357,6 @@ seahorse_gkr_keyring_init (SeahorseGkrKeyring *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_KEYRING, SeahorseGkrKeyringPrivate);
 	self->pv->items = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);
-	g_object_set (self, "tag", SEAHORSE_GKR_TYPE, "location", SEAHORSE_LOCATION_LOCAL, NULL);
 }
 
 static void
@@ -431,12 +412,6 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
 	
 	switch (prop_id) {
-	case PROP_SOURCE_TAG:
-		g_value_set_uint (value, SEAHORSE_GKR_TYPE);
-		break;
-	case PROP_SOURCE_LOCATION:
-		g_value_set_enum (value, SEAHORSE_LOCATION_LOCAL);
-		break;
 	case PROP_KEYRING_NAME:
 		g_value_set_string (value, seahorse_gkr_keyring_get_name (self));
 		break;
@@ -457,16 +432,12 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-	seahorse_gkr_keyring_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseGkrKeyringPrivate));
 
-	gobject_class->constructor = seahorse_gkr_keyring_constructor;
+	gobject_class->constructed = seahorse_gkr_keyring_constructed;
 	gobject_class->finalize = seahorse_gkr_keyring_finalize;
 	gobject_class->set_property = seahorse_gkr_keyring_set_property;
 	gobject_class->get_property = seahorse_gkr_keyring_get_property;
-
-	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
-	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
 
 	g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,
 	           g_param_spec_string ("keyring-name", "Gnome Keyring Name", "Name of keyring.", 
@@ -484,8 +455,7 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 static void
 seahorse_keyring_source_iface (SeahorseSourceIface *iface)
 {
-	iface->load_async = seahorse_gkr_keyring_load_async;
-	iface->load_finish = seahorse_gkr_keyring_load_finish;
+
 }
 
 static guint

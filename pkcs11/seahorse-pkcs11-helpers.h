@@ -25,8 +25,10 @@
 #include <glib.h>
 #include <gck/gck.h>
 
-GQuark seahorse_pkcs11_id_from_attributes (GckAttributes* attrs);
-gboolean seahorse_pkcs11_id_to_attributes (GQuark id, GckAttributes* attrs);
+guint               seahorse_pkcs11_ulong_hash              (gconstpointer v);
+
+gboolean            seahorse_pkcs11_ulong_equal             (gconstpointer v1,
+                                                             gconstpointer v2);
 
 
 #endif

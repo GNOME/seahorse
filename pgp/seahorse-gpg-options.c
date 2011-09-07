@@ -34,7 +34,6 @@
 #include <sys/stat.h>
 
 #include "seahorse-util.h"
-#include "seahorse-context.h"
 
 #include "pgp/seahorse-gpgme.h"
 #include "pgp/seahorse-gpg-options.h"

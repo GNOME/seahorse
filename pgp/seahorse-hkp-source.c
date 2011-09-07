@@ -363,7 +363,7 @@ parse_hkp_index (const gchar *response)
             
 			v = g_strsplit_set (t, " ", 3);
 			if (!v[0] || !v[1] || !v[2]) {
-				g_warning ("Invalid key line from server: %s", line);
+				g_message ("Invalid key line from server: %s", line);
                 
 			} else {
 				gchar *fingerprint, *fpr = NULL;
@@ -376,7 +376,7 @@ parse_hkp_index (const gchar *response)
 				/* Cut the length and fingerprint */
 				fpr = strchr (v[0], '/');
 				if (fpr == NULL) {
-					g_warning ("couldn't find key fingerprint in line from server: %s", line);
+					g_message ("couldn't find key fingerprint in line from server: %s", line);
 					fpr = "";
 				} else {
 					*(fpr++) = 0;
@@ -411,15 +411,15 @@ parse_hkp_index (const gchar *response)
 					seahorse_object_list_free (uids);
 					seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
 					seahorse_object_list_free (subkeys);
+					seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
 					uids = subkeys = NULL;
 					key = NULL;
 				}
 
 				key = seahorse_pgp_key_new ();
 				keys = g_list_prepend (keys, key);
-		        	g_object_set (key, "location", SEAHORSE_LOCATION_REMOTE, "flags", 
-		        	              flags, NULL);
-		        	
+				g_object_set (key, "flags", flags, NULL);
+
 				/* Add all the info to the key */
 				subkey = seahorse_pgp_subkey_new ();
 				seahorse_pgp_subkey_set_keyid (subkey, fpr);
@@ -465,36 +465,10 @@ parse_hkp_index (const gchar *response)
 		seahorse_object_list_free (uids);
 		seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), g_list_reverse (subkeys));
 		seahorse_object_list_free (subkeys);
+		seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
 	}
 	
 	return keys; 
-}
-
-/**
-* ssrc: The SeahorseHKPSource to add
-* key: The SeahorsePgpKey to add
-*
-* Adds the key with the source ssrc to the application context
-*
-**/
-static void
-add_key (SeahorseHKPSource *ssrc, SeahorsePgpKey *key)
-{
-	SeahorseObject *prev;
-	GQuark keyid;
-       
-	keyid = seahorse_pgp_key_canonize_id (seahorse_pgp_key_get_keyid (key));
-	prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
-	if (prev != NULL) {
-		g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
-		seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (prev), seahorse_pgp_key_get_uids (key));
-		seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (prev), seahorse_pgp_key_get_subkeys (key));
-		return;
-	}
-
-	/* Add to context */ 
-	seahorse_object_set_source (SEAHORSE_OBJECT (key), SEAHORSE_SOURCE (ssrc));
-	seahorse_context_add_object (SCTX_APP (), SEAHORSE_OBJECT (key));
 }
 
 /**
@@ -585,12 +559,6 @@ detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
  *  SEAHORSE HKP SOURCE
  */
 
-enum {
-    PROP_0,
-    PROP_SOURCE_TAG,
-    PROP_SOURCE_LOCATION
-};
-
 static void seahorse_source_iface (SeahorseSourceIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (SeahorseHKPSource, seahorse_hkp_source, SEAHORSE_TYPE_SERVER_SOURCE, 0,
@@ -600,51 +568,6 @@ static void
 seahorse_hkp_source_init (SeahorseHKPSource *hsrc)
 {
 
-}
-
-/**
-* object: ignored
-* prop_id: id of the property
-* value: the resulting value
-* pspec: ignored
-*
-* Returns data for PROP_SOURCE_TAG and PROP_SOURCE_LOCATION
-*
-**/
-static void 
-seahorse_hkp_source_get_property (GObject *object, guint prop_id, GValue *value,
-                                  GParamSpec *pspec)
-{
-    switch (prop_id) {
-    case PROP_SOURCE_TAG:
-        g_value_set_uint (value, SEAHORSE_PGP);
-        break;
-    case PROP_SOURCE_LOCATION:
-        g_value_set_enum (value, SEAHORSE_LOCATION_REMOTE);
-        break;
-    };
-}
-
-/**
-* klass:
-*
-* Initialize the basic class stuff
-*
-**/
-static void
-seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
-{
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-	gobject_class->get_property = seahorse_hkp_source_get_property;
-
-	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
-	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
-
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_HKP_SOURCE, "source", "remote", SEAHORSE_PGP_STR, NULL);
-	seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
-
-	seahorse_registry_register_function (NULL, seahorse_pgp_key_canonize_id, "canonize", SEAHORSE_PGP_STR, NULL);
 }
 
 static gboolean
@@ -702,7 +625,7 @@ typedef struct {
 	gulong cancelled_sig;
 	SoupSession *session;
 	gint requests;
-	GList *keys;
+	GcrSimpleCollection *results;
 } source_search_closure;
 
 static void
@@ -713,7 +636,7 @@ source_search_free (gpointer data)
 	g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
 	g_clear_object (&closure->cancellable);
 	g_object_unref (closure->session);
-	seahorse_object_list_free (closure->keys);
+	g_clear_object (&closure->results);
 	g_free (closure);
 }
 
@@ -735,8 +658,8 @@ on_search_message_complete (SoupSession *session,
 	} else {
 		keys = parse_hkp_index (message->response_body->data);
 		for (l = keys; l; l = g_list_next (l))
-			add_key (closure->source, SEAHORSE_PGP_KEY (l->data));
-		closure->keys = keys;
+			gcr_simple_collection_add (closure->results, l->data);
+		g_list_free_full (keys, g_object_unref);
 	}
 
 	g_simple_async_result_complete_in_idle (res);
@@ -762,8 +685,9 @@ is_hex_keyid (const gchar *match)
 	return TRUE;
 }
 static void
-seahorse_hkp_source_search_async (SeahorseSource *source,
+seahorse_hkp_source_search_async (SeahorseServerSource *source,
                                   const gchar *match,
+                                  GcrSimpleCollection *results,
                                   GCancellable *cancellable,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
@@ -782,6 +706,7 @@ seahorse_hkp_source_search_async (SeahorseSource *source,
 	closure->source = g_object_ref (self);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	closure->session = create_hkp_soup_session ();
+	closure->results = g_object_ref (results);
 	g_simple_async_result_set_op_res_gpointer (res, closure, source_search_free);
 
 	uri = get_http_server_uri (self, "/pks/lookup");
@@ -816,24 +741,18 @@ seahorse_hkp_source_search_async (SeahorseSource *source,
 	g_object_unref (res);
 }
 
-static GList *
-seahorse_hkp_source_search_finish (SeahorseSource *source,
+static gboolean
+seahorse_hkp_source_search_finish (SeahorseServerSource *source,
                                    GAsyncResult *result,
                                    GError **error)
 {
-	source_search_closure *closure;
-	GList *keys;
-
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
-	                      seahorse_hkp_source_search_async), NULL);
+	                      seahorse_hkp_source_search_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return NULL;
+		return FALSE;
 
-	closure = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-	keys = closure->keys;
-	closure->keys = NULL;
-	return keys;
+	return TRUE;
 }
 
 typedef struct {
@@ -1010,12 +929,12 @@ typedef struct {
 	gulong cancelled_sig;
 	SoupSession *session;
 	gint requests;
-} source_export_raw_closure;
+} source_export_closure;
 
 static void
-source_export_raw_free (gpointer data)
+source_export_free (gpointer data)
 {
-	source_export_raw_closure *closure = data;
+	source_export_closure *closure = data;
 	g_object_unref (closure->source);
 	g_object_unref (closure->output);
 	g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
@@ -1030,7 +949,7 @@ on_export_message_complete (SoupSession *session,
                             gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	source_export_raw_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	source_export_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
 	const gchar *start;
 	const gchar *end;
@@ -1088,15 +1007,15 @@ on_export_message_complete (SoupSession *session,
 * Gets data from the keyserver, writes it to the output stream
 **/
 static void
-seahorse_hkp_source_export_raw_async (SeahorseSource *source,
-                                      GList *keyids,
-                                      GOutputStream *output,
-                                      GCancellable *cancellable,
-                                      GAsyncReadyCallback callback,
-                                      gpointer user_data)
+seahorse_hkp_source_export_async (SeahorseServerSource *source,
+                                  GList *keyids,
+                                  GOutputStream *output,
+                                  GCancellable *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer user_data)
 {
 	SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
-	source_export_raw_closure *closure;
+	source_export_closure *closure;
 	GSimpleAsyncResult *res;
 	SoupMessage *message;
 	SoupURI *uri;
@@ -1107,13 +1026,13 @@ seahorse_hkp_source_export_raw_async (SeahorseSource *source,
 	GList *l;
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_hkp_source_export_raw_async);
-	closure = g_new0 (source_export_raw_closure, 1);
+	                                 seahorse_hkp_source_export_async);
+	closure = g_new0 (source_export_closure, 1);
 	closure->source = g_object_ref (self);
 	closure->output = g_object_ref (output);
 	closure->session = create_hkp_soup_session ();
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	g_simple_async_result_set_op_res_gpointer (res, closure, source_export_raw_free);
+	g_simple_async_result_set_op_res_gpointer (res, closure, source_export_free);
 
 	if (g_list_length (keyids) == 0) {
 		g_simple_async_result_complete_in_idle (res);
@@ -1133,7 +1052,7 @@ seahorse_hkp_source_export_raw_async (SeahorseSource *source,
 		g_hash_table_remove_all (form);
 
 		/* Get the key id and limit it to 8 characters */
-		fpr = seahorse_pgp_key_calc_rawid (GPOINTER_TO_UINT (l->data));
+		fpr = l->data;
 		len = strlen (fpr);
 		if (len > 8)
 			fpr += (len - 8);
@@ -1165,14 +1084,14 @@ seahorse_hkp_source_export_raw_async (SeahorseSource *source,
 }
 
 static GOutputStream *
-seahorse_hkp_source_export_raw_finish (SeahorseSource *source,
-                                       GAsyncResult *result,
-                                       GError **error)
+seahorse_hkp_source_export_finish (SeahorseServerSource *source,
+                                   GAsyncResult *result,
+                                   GError **error)
 {
-	source_export_raw_closure *closure;
+	source_export_closure *closure;
 
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
-	                      seahorse_hkp_source_export_raw_async), NULL);
+	                      seahorse_hkp_source_export_async), NULL);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
 		return NULL;
@@ -1190,14 +1109,29 @@ seahorse_hkp_source_export_raw_finish (SeahorseSource *source,
 static void 
 seahorse_source_iface (SeahorseSourceIface *iface)
 {
-	iface->search_async = seahorse_hkp_source_search_async;
-	iface->search_finish = seahorse_hkp_source_search_finish;
 	iface->import_async = seahorse_hkp_source_import_async;
 	iface->import_finish = seahorse_hkp_source_import_finish;
-	iface->export_raw_async = seahorse_hkp_source_export_raw_async;
-	iface->export_raw_finish = seahorse_hkp_source_export_raw_finish;
 }
 
+/**
+* klass:
+*
+* Initialize the basic class stuff
+*
+**/
+static void
+seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
+{
+	SeahorseServerSourceClass *server_class = SEAHORSE_SERVER_SOURCE_CLASS (klass);
+
+	server_class->search_async = seahorse_hkp_source_search_async;
+	server_class->search_finish = seahorse_hkp_source_search_finish;
+	server_class->export_async = seahorse_hkp_source_export_async;
+	server_class->export_finish = seahorse_hkp_source_export_finish;
+
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_HKP_SOURCE, "source", "remote", NULL);
+	seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
+}
 /**
  * seahorse_hkp_source_new
  * @uri: The server to connect to 

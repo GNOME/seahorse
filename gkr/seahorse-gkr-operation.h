@@ -23,7 +23,6 @@
 #ifndef __SEAHORSE_GKR_OPERATION_H__
 #define __SEAHORSE_GKR_OPERATION_H__
 
-#include "seahorse-gkr-source.h"
 #include "seahorse-gkr-item.h"
 #include "seahorse-gkr-keyring.h"
 

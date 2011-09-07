@@ -62,25 +62,6 @@ struct _SeahorseSourceIface {
 
 	/* virtual methods ------------------------------------------------- */
 
-	void            (*load_async)                (SeahorseSource *source,
-	                                              GCancellable *cancellable,
-	                                              GAsyncReadyCallback callback,
-	                                              gpointer user_data);
-
-	gboolean        (*load_finish)               (SeahorseSource *source,
-	                                              GAsyncResult *result,
-	                                              GError **error);
-
-	void            (*search_async)              (SeahorseSource *source,
-	                                              const gchar *match,
-	                                              GCancellable *cancellable,
-	                                              GAsyncReadyCallback callback,
-	                                              gpointer user_data);
-
-	GList *         (*search_finish)             (SeahorseSource *source,
-	                                              GAsyncResult *result,
-	                                              GError **error);
-
 	void            (*import_async)              (SeahorseSource *source,
 	                                              GInputStream *input,
 	                                              GCancellable *cancellable,
@@ -101,41 +82,11 @@ struct _SeahorseSourceIface {
 	GOutputStream * (*export_finish)             (SeahorseSource *source,
 	                                              GAsyncResult *result,
 	                                              GError **error);
-
-	void            (*export_raw_async)          (SeahorseSource *source,
-	                                              GList *ids,
-	                                              GOutputStream *output,
-	                                              GCancellable *cancellable,
-	                                              GAsyncReadyCallback callback,
-	                                              gpointer user_data);
-
-	GOutputStream * (*export_raw_finish)         (SeahorseSource *source,
-	                                              GAsyncResult *result,
-	                                              GError **error);
 };
 
 GType            seahorse_source_get_type             (void) G_GNUC_CONST;
 
 /* Method helper functions ------------------------------------------- */
-
-void             seahorse_source_load_async           (SeahorseSource *source,
-                                                       GCancellable *cancellable,
-                                                       GAsyncReadyCallback callback,
-                                                       gpointer user_data);
-
-gboolean         seahorse_source_load_finish          (SeahorseSource *source,
-                                                       GAsyncResult *result,
-                                                       GError **error);
-
-void             seahorse_source_search_async         (SeahorseSource *source,
-                                                       const gchar *match,
-                                                       GCancellable *cancellable,
-                                                       GAsyncReadyCallback callback,
-                                                       gpointer user_data);
-
-GList *          seahorse_source_search_finish        (SeahorseSource *source,
-                                                       GAsyncResult *result,
-                                                       GError **error);
 
 void             seahorse_source_import_async         (SeahorseSource *source,
                                                        GInputStream *input,
@@ -170,20 +121,5 @@ GOutputStream *  seahorse_source_export_auto_finish   (GAsyncResult *result,
 gboolean         seahorse_source_export_auto_wait     (GList *objects,
                                                        GOutputStream *output,
                                                        GError **error);
-
-void             seahorse_source_export_raw_async     (SeahorseSource *source,
-                                                       GList *ids,
-                                                       GOutputStream *output,
-                                                       GCancellable *cancellable,
-                                                       GAsyncReadyCallback callback,
-                                                       gpointer user_data);
-
-GOutputStream *  seahorse_source_export_raw_finish    (SeahorseSource *source,
-                                                       GAsyncResult *result,
-                                                       GError **error);
-
-GQuark           seahorse_source_get_tag              (SeahorseSource *source);
-
-SeahorseLocation seahorse_source_get_location         (SeahorseSource *source);
 
 #endif /* __SEAHORSE_SOURCE_H__ */

@@ -25,6 +25,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <gtk/gtk.h>
+
 #include "seahorse-object.h"
 #include "seahorse-predicate.h"
 

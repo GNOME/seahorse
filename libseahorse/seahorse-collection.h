@@ -51,7 +51,8 @@ struct _SeahorseCollectionClass {
 
 GType                seahorse_collection_get_type             (void);
 
-SeahorseCollection * seahorse_collection_new_for_predicate    (SeahorsePredicate *predicate,
+SeahorseCollection * seahorse_collection_new_for_predicate    (GcrCollection *base,
+                                                               SeahorsePredicate *predicate,
                                                                GDestroyNotify destroy_func);
 
 SeahorsePredicate *  seahorse_collection_get_predicate        (SeahorseCollection *self);

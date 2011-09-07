@@ -30,11 +30,15 @@ endif
 
 if WITH_KEYSERVER
 KEYSERVER_SRCS = seahorse-server-source.c seahorse-server-source.h 
+KEYSERVER_SRCS += seahorse-keyserver-search.c seahorse-keyserver-sync.c seahorse-keyserver-sync.h
+KEYSERVER_SRCS += seahorse-keyserver-results.c seahorse-keyserver-results.h
 else
 KEYSERVER_SRCS = 
 endif
 
 libseahorse_pgp_la_SOURCES = \
+	seahorse-combo-keys.c seahorse-combo-keys.h \
+	seahorse-discovery.c seahorse-discovery.h \
 	seahorse-gpgme.c seahorse-gpgme.h \
 	seahorse-gpgme-add-subkey.c \
 	seahorse-gpgme-add-uid.c \
@@ -44,26 +48,29 @@ libseahorse_pgp_la_SOURCES = \
 	seahorse-gpgme-generate.c \
 	seahorse-gpgme-key.c seahorse-gpgme-key.h \
 	seahorse-gpgme-key-op.c seahorse-gpgme-key-op.h \
+	seahorse-gpgme-keyring.c seahorse-gpgme-keyring.h \
 	seahorse-gpgme-photo.c seahorse-gpgme-photo.h \
 	seahorse-gpgme-photos.c \
 	seahorse-gpgme-revoke.c \
 	seahorse-gpgme-sign.c \
-	seahorse-gpgme-source.c seahorse-gpgme-source.h \
 	seahorse-gpgme-subkey.c seahorse-gpgme-subkey.h \
 	seahorse-gpgme-uid.c seahorse-gpgme-uid.h \
 	seahorse-gpg-op.h seahorse-gpg-op.c \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-pgp.c seahorse-pgp.h \
+	seahorse-pgp-backend.c seahorse-pgp-backend.h \
 	seahorse-pgp-commands.c seahorse-pgp-commands.h \
 	seahorse-pgp-key.c seahorse-pgp-key.h \
 	seahorse-pgp-key-properties.c \
 	seahorse-pgp-keysets.c seahorse-pgp-keysets.h \
 	seahorse-pgp-photo.c seahorse-pgp-photo.h \
-	seahorse-pgp-module.c seahorse-pgp-module.h \
 	seahorse-pgp-signature.c seahorse-pgp-signature.h \
 	seahorse-pgp-subkey.c seahorse-pgp-subkey.h \
 	seahorse-pgp-uid.c seahorse-pgp-uid.h \
 	seahorse-signer.c seahorse-pgp-dialogs.h \
+	seahorse-transfer.c seahorse-transfer.h \
+	seahorse-unknown.c seahorse-unknown.h \
+	seahorse-unknown-source.c seahorse-unknown-source.h \
 	$(VALA_CFILES) $(VALA_HFILES) \
 	$(KEYSERVER_SRCS) \
 	$(LDAP_SRCS) \

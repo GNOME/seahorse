@@ -23,8 +23,8 @@ endif
 SUBDIRS = libegg \
 	libseahorse \
 	gkr \
-	$(PKCS11_DIR) \
 	$(PGP_DIR) \
+	$(PKCS11_DIR) \
 	$(SSH_DIR) \
 	src \
 	po \

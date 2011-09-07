@@ -22,9 +22,17 @@
 #ifndef __SEAHORSE_PKCS11_H__
 #define __SEAHORSE_PKCS11_H__
 
+#ifdef WITH_PKCS11
+
 #include <glib.h>
+
+#include <gcr/gcr.h>
 
 #define SEAHORSE_PKCS11_TYPE_STR "pkcs11"
 #define SEAHORSE_PKCS11_TYPE g_quark_from_string ("pkcs11")
+
+GcrCollection *       seahorse_pkcs11_backend_initialize    (void);
+
+#endif /* WITH_PKCS11 */
 
 #endif

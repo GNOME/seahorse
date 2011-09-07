@@ -21,11 +21,12 @@
 
 #include "config.h"
 
-#include "seahorse-pgp.h"
+#include "seahorse-gpgme-key.h"
+#include "seahorse-gpgme-keyring.h"
+#include "seahorse-pgp-backend.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-signature.h"
 
-#include "seahorse-context.h"
 #include "seahorse-object.h"
 
 #include <string.h>
@@ -185,18 +186,20 @@ seahorse_pgp_signature_set_keyid (SeahorsePgpSignature *self, const gchar *keyid
 guint
 seahorse_pgp_signature_get_sigtype (SeahorsePgpSignature *self)
 {
-	SeahorseObject *sobj;
-	GQuark id;
+	SeahorseGpgmeKeyring *keyring;
+	SeahorseGpgmeKey *key;
+	SeahorseObject *obj;
 
 	g_return_val_if_fail (SEAHORSE_IS_PGP_SIGNATURE (self), 0);
-    
-	id = seahorse_pgp_key_canonize_id (self->pv->keyid);
-	sobj = seahorse_context_find_object (SCTX_APP (), id, SEAHORSE_LOCATION_LOCAL);
-    
-	if (sobj) {
-		if (seahorse_object_get_usage (sobj) == SEAHORSE_USAGE_PRIVATE_KEY) 
+
+	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+	key = seahorse_gpgme_keyring_lookup (keyring, self->pv->keyid);
+
+	if (key != NULL) {
+		obj = SEAHORSE_OBJECT (key);
+		if (seahorse_object_get_usage (obj) == SEAHORSE_USAGE_PRIVATE_KEY)
 			return SKEY_PGPSIG_TRUSTED | SKEY_PGPSIG_PERSONAL;
-		if (seahorse_object_get_flags (sobj) & SEAHORSE_FLAG_TRUSTED)
+		if (seahorse_object_get_flags (obj) & SEAHORSE_FLAG_TRUSTED)
 			return SKEY_PGPSIG_TRUSTED;
 	}
 

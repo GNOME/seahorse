@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 #include <gnome-keyring.h>
 
-#include "seahorse-gkr-module.h"
+#include "seahorse-gkr.h"
 #include "seahorse-gkr-keyring.h"
 
 #include "seahorse-object.h"
@@ -95,9 +95,6 @@ const gchar*                 seahorse_gkr_item_get_attribute      (SeahorseGkrIt
 
 const gchar* 		     seahorse_gkr_find_string_attribute   (GnomeKeyringAttributeList *attrs, 
              		                                           const gchar *name);
-
-GQuark                       seahorse_gkr_item_get_cannonical     (const gchar *keyring_name, 
-                                                                   guint32 item_id);
 
 SeahorseGkrUse               seahorse_gkr_item_get_use            (SeahorseGkrItem *self);
 

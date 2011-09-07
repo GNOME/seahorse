@@ -45,7 +45,7 @@ typedef struct _SeahorseLDAPSourceClass SeahorseLDAPSourceClass;
 
 struct _SeahorseLDAPSource {
     SeahorseServerSource parent;
-    
+
     /*< private >*/
 };
 

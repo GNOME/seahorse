@@ -41,7 +41,9 @@
 #ifndef __SEAHORSE_SERVER_SOURCE_H__
 #define __SEAHORSE_SERVER_SOURCE_H__
 
-#include "seahorse-source.h"
+#include "seahorse-pgp-key.h"
+
+#include <gcr/gcr.h>
 
 #define SEAHORSE_TYPE_SERVER_SOURCE            (seahorse_server_source_get_type ())
 #define SEAHORSE_SERVER_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SERVER_SOURCE, SeahorseServerSource))
@@ -61,10 +63,54 @@ struct _SeahorseServerSource {
 
 struct _SeahorseServerSourceClass {
 	GObjectClass parent_class;
+
+	void            (*export_async)          (SeahorseServerSource *source,
+	                                          GList *ids,
+	                                          GOutputStream *output,
+	                                          GCancellable *cancellable,
+	                                          GAsyncReadyCallback callback,
+	                                          gpointer user_data);
+
+	GOutputStream * (*export_finish)         (SeahorseServerSource *source,
+	                                          GAsyncResult *result,
+	                                          GError **error);
+
+	void            (*search_async)          (SeahorseServerSource *source,
+	                                          const gchar *match,
+	                                          GcrSimpleCollection *results,
+	                                          GCancellable *cancellable,
+	                                          GAsyncReadyCallback callback,
+	                                          gpointer user_data);
+
+	gboolean        (*search_finish)         (SeahorseServerSource *source,
+	                                          GAsyncResult *result,
+	                                          GError **error);
 };
 
 GType                  seahorse_server_source_get_type         (void);
 
 SeahorseServerSource*  seahorse_server_source_new              (const gchar *uri);
+
+void                   seahorse_server_source_search_async     (SeahorseServerSource *self,
+                                                                const gchar *match,
+                                                                GcrSimpleCollection *results,
+                                                                GCancellable *cancellable,
+                                                                GAsyncReadyCallback callback,
+                                                                gpointer user_data);
+
+gboolean               seahorse_server_source_search_finish    (SeahorseServerSource *self,
+                                                                GAsyncResult *result,
+                                                                GError **error);
+
+void                   seahorse_server_source_export_async     (SeahorseServerSource *self,
+                                                                GList *ids,
+                                                                GOutputStream *output,
+                                                                GCancellable *cancellable,
+                                                                GAsyncReadyCallback callback,
+                                                                gpointer user_data);
+
+GOutputStream *        seahorse_server_source_export_finish    (SeahorseServerSource *self,
+                                                                GAsyncResult *result,
+                                                                GError **error);
 
 #endif /* __SEAHORSE_SERVER_SOURCE_H__ */

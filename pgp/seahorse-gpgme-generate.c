@@ -37,11 +37,12 @@
 #include "seahorse-widget.h"
 
 #include "seahorse-pgp.h"
+#include "seahorse-pgp-backend.h"
 #include "seahorse-gpgme.h"
 #include "seahorse-gpgme-dialogs.h"
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
-#include "seahorse-gpgme-source.h"
+#include "seahorse-gpgme-keyring.h"
 
 /**
  * SECTION:seahorse-gpgme-generate
@@ -77,14 +78,14 @@ void           on_gpgme_generate_algorithm_changed           (GtkComboBox *combo
 static void
 on_pgp_generate_key (GtkAction *action, gpointer unused)
 {
-	SeahorseSource* sksrc;
-	
+	SeahorseGpgmeKeyring* keyring;
+
 	g_return_if_fail (GTK_IS_ACTION (action));
-	
-	sksrc = seahorse_context_find_source (seahorse_context_instance (), SEAHORSE_PGP_TYPE, SEAHORSE_LOCATION_LOCAL);
-	g_return_if_fail (sksrc != NULL);
-	
-	seahorse_gpgme_generate_show (SEAHORSE_GPGME_SOURCE (sksrc), NULL, NULL, NULL, NULL);
+
+	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+	g_return_if_fail (keyring != NULL);
+
+	seahorse_gpgme_generate_show (keyring, NULL, NULL, NULL, NULL);
 }
 
 static const GtkActionEntry ACTION_ENTRIES[] = {
@@ -174,7 +175,7 @@ on_generate_key_complete (GObject *source,
 {
 	GError *error = NULL;
 
-	if (!seahorse_gpgme_key_op_generate_finish (SEAHORSE_GPGME_SOURCE (source), result, &error))
+	if (!seahorse_gpgme_key_op_generate_finish (SEAHORSE_GPGME_KEYRING (source), result, &error))
 		seahorse_util_handle_error (&error, NULL, _("Couldn't generate PGP key"));
 }
 
@@ -194,7 +195,7 @@ on_generate_key_complete (GObject *source,
  *
  */
 void
-seahorse_gpgme_generate_key (SeahorseGpgmeSource *source,
+seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
                              const gchar *name,
                              const gchar *email,
                              const gchar *comment,
@@ -212,7 +213,7 @@ seahorse_gpgme_generate_key (SeahorseGpgmeSource *source,
 	if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT) {
 		pass = seahorse_passphrase_prompt_get (dialog);
 		cancellable = g_cancellable_new ();
-		seahorse_gpgme_key_op_generate_async (source, name, email, comment,
+		seahorse_gpgme_key_op_generate_async (keyring, name, email, comment,
 		                                      pass, type, bits, expires,
 		                                      cancellable, on_generate_key_complete,
 		                                      NULL);
@@ -240,7 +241,7 @@ on_gpgme_generate_response (GtkDialog *dialog,
                             gpointer user_data)
 {
     SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
-    SeahorseGpgmeSource *sksrc;
+    SeahorseGpgmeKeyring *keyring;
     GtkWidget *widget;
     gchar *name;
     const gchar *email;
@@ -308,13 +309,13 @@ on_gpgme_generate_response (GtkDialog *dialog,
         egg_datetime_get_as_time_t (EGG_DATETIME (widget), &expires);
     }
 
-    sksrc = SEAHORSE_GPGME_SOURCE (g_object_get_data (G_OBJECT (swidget), "source"));
-    g_assert (SEAHORSE_IS_GPGME_SOURCE (sksrc));
+    keyring = SEAHORSE_GPGME_KEYRING (g_object_get_data (G_OBJECT (swidget), "source"));
+    g_assert (SEAHORSE_IS_GPGME_KEYRING (keyring));
 
     /* Less confusing with less on the screen */
     gtk_widget_hide (seahorse_widget_get_toplevel (swidget));
 
-    seahorse_gpgme_generate_key (sksrc, name, email, comment, type, bits, expires);
+    seahorse_gpgme_generate_key (keyring, name, email, comment, type, bits, expires);
 
 
     seahorse_widget_destroy (swidget);
@@ -404,7 +405,7 @@ on_gpgme_generate_algorithm_changed (GtkComboBox *combo,
 
 /**
  * seahorse_gpgme_generate_show:
- * @sksrc: the gpgme source
+ * @keyring: the gpgme source
  * @parent: the parent window
  * @name: The user name, can be NULL if not available
  * @email: The user's email address, can be NULL if not available
@@ -414,7 +415,11 @@ on_gpgme_generate_algorithm_changed (GtkComboBox *combo,
  *
  */
 void
-seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent, const gchar * name, const gchar *email, const gchar *comment)
+seahorse_gpgme_generate_show (SeahorseGpgmeKeyring *keyring,
+                              GtkWindow *parent,
+                              const gchar * name,
+                              const gchar *email,
+                              const gchar *comment)
 {
     SeahorseWidget *swidget;
     GtkWidget *widget, *datetime;
@@ -472,9 +477,8 @@ seahorse_gpgme_generate_show (SeahorseGpgmeSource *sksrc, GtkWindow *parent, con
     gtk_box_pack_start (GTK_BOX (widget), datetime, TRUE, TRUE, 0);
     gtk_widget_set_sensitive (datetime, FALSE);
     gtk_widget_show_all (widget);
-    
-    g_object_ref (sksrc);
-    g_object_set_data_full (G_OBJECT (swidget), "source", sksrc, g_object_unref);
-	
+
+    g_object_set_data_full (G_OBJECT (swidget), "source", g_object_ref (keyring), g_object_unref);
+
     on_gpgme_generate_entry_changed (NULL, swidget);
 }

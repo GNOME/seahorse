@@ -29,7 +29,6 @@
 #include "seahorse-source.h"
 #include "seahorse-validity.h"
 
-#include "seahorse-ssh-module.h"
 #include "seahorse-ssh-key-data.h"
 
 /* For vala's sake */
@@ -89,8 +88,6 @@ SeahorseValidity        seahorse_ssh_key_get_trust            (SeahorseSSHKey *s
 
 gchar*                  seahorse_ssh_key_get_fingerprint      (SeahorseSSHKey *self);
 
-GQuark                  seahorse_ssh_key_calc_cannonical_id    (const gchar *id);
-
 gchar*                  seahorse_ssh_key_calc_identifier      (const gchar *id);
 
-#endif /* __SEAHORSE_KEY_H__ */
+#endif /* __SEAHORSE_SSH_KEY_H__ */

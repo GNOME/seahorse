@@ -15,10 +15,10 @@ INCLUDES = -I$(top_builddir) \
 noinst_LTLIBRARIES = libseahorse-pkcs11.la
 
 libseahorse_pkcs11_la_SOURCES = \
+	seahorse-pkcs11-backend.c seahorse-pkcs11-backend.h \
 	seahorse-pkcs11-certificate.c seahorse-pkcs11-certificate.h \
 	seahorse-pkcs11-certificate-props.c seahorse-pkcs11-certificate-props.h \
 	seahorse-pkcs11-commands.c seahorse-pkcs11-commands.h \
-	seahorse-pkcs11-module.c seahorse-pkcs11-module.h \
 	seahorse-pkcs11-helpers.c seahorse-pkcs11-helpers.h \
 	seahorse-pkcs11-object.c seahorse-pkcs11-object.h \
 	seahorse-pkcs11-operations.c seahorse-pkcs11-operations.h \

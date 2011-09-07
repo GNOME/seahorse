@@ -25,7 +25,6 @@
 
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-item.h"
-#include "seahorse-gkr-source.h"
 #include "seahorse-gkr-operation.h"
 
 #include "seahorse-bind.h"

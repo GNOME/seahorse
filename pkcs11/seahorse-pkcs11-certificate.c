@@ -111,7 +111,6 @@ seahorse_pkcs11_certificate_realize (SeahorsePkcs11Certificate *self)
 	identifier = calc_display_id (self);
 
 	g_object_set (self,
-		      "location", SEAHORSE_LOCATION_LOCAL,
 		      "usage", SEAHORSE_USAGE_PUBLIC_KEY,
 		      "flags", flags,
 		      "identifier", identifier,

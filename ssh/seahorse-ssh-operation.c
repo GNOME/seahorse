@@ -1117,6 +1117,7 @@ seahorse_ssh_op_delete_sync (SeahorseSSHKey *key,
                              GError **error)
 {
 	SeahorseSSHKeyData *keydata = NULL;
+	SeahorseSSHSource *source;
 	gboolean ret = TRUE;
 
 	g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (key), FALSE);
@@ -1149,10 +1150,10 @@ seahorse_ssh_op_delete_sync (SeahorseSSHKey *key,
 		}
 	}
 
-	if (ret)
-		seahorse_context_remove_object (seahorse_context_instance (),
-		                                SEAHORSE_OBJECT (key));
+	if (ret) {
+		source = SEAHORSE_SSH_SOURCE (seahorse_object_get_source (SEAHORSE_OBJECT (key)));
+		seahorse_ssh_source_remove_object (source, key);
+	}
 
 	return ret;
 }
-

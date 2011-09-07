@@ -156,7 +156,6 @@ seahorse_pkcs11_object_realize (SeahorsePkcs11Object *self)
 	gck_attributes_find_string (self->pv->pkcs11_attributes, CKA_LABEL, &label);
 	g_object_set (self,
 		      "label", label,
-		      "location", SEAHORSE_LOCATION_LOCAL,
 		      "flags", flags,
 		      NULL);
 
@@ -174,12 +173,9 @@ static GObject*
 seahorse_pkcs11_object_constructor (GType type, guint n_props, GObjectConstructParam *props) 
 {
 	SeahorsePkcs11Object *self = SEAHORSE_PKCS11_OBJECT (G_OBJECT_CLASS (seahorse_pkcs11_object_parent_class)->constructor(type, n_props, props));
-	
-	g_return_val_if_fail (self, NULL);	
 
 	g_return_val_if_fail (self->pv->pkcs11_object, NULL);
-	g_object_set (self, "id", seahorse_pkcs11_object_cannonical_id (self->pv->pkcs11_object), NULL);
-	
+
 	return G_OBJECT (self);
 }
 
@@ -381,29 +377,4 @@ seahorse_pkcs11_object_require_attributes (SeahorsePkcs11Object *self, const gul
 	/* Go ahead and load these attributes */
 	load_object_attributes (self, attr_types, n_attr_types);
 	return FALSE;
-}
-
-GQuark
-seahorse_pkcs11_object_cannonical_id (GckObject *object)
-{
-	GckSession *session;
-	GckSlot *slot;
-	GQuark quark;
-	gchar *text;
-
-	/* TODO: This whole ID thing needs rethinking */
-
-	session = gck_object_get_session (object);
-	slot = gck_session_get_slot (session);
-
-	text = g_strdup_printf("%s:%lu/%lu", SEAHORSE_PKCS11_TYPE_STR, 
-	                       gck_slot_get_handle (slot),
-	                       gck_object_get_handle (object));
-
-	g_object_unref (session);
-	g_object_unref (slot);
-
-	quark = g_quark_from_string (text);
-	g_free (text);
-	return quark;	
 }

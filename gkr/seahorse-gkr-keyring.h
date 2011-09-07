@@ -71,4 +71,13 @@ gboolean             seahorse_gkr_keyring_get_is_default   (SeahorseGkrKeyring *
 void                 seahorse_gkr_keyring_set_is_default   (SeahorseGkrKeyring *self,
                                                             gboolean is_default);
 
+void                 seahorse_gkr_keyring_load_async       (SeahorseGkrKeyring *self,
+                                                            GCancellable *cancellable,
+                                                            GAsyncReadyCallback callback,
+                                                            gpointer user_data);
+
+gboolean             seahorse_gkr_keyring_load_finish      (SeahorseGkrKeyring *self,
+                                                            GAsyncResult *result,
+                                                            GError **error);
+
 #endif /* __SEAHORSE_GKR_KEYRING_H__ */

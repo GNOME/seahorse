@@ -25,10 +25,11 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <gcr/gcr.h>
+
 G_BEGIN_DECLS
 
-#define SEAHORSE_GKR_TYPE_STR "gnome-keyring"
-#define SEAHORSE_GKR_TYPE g_quark_from_string ("gnome-keyring")
+GcrCollection *       seahorse_gkr_backend_initialize    (void);
 
 G_END_DECLS
 

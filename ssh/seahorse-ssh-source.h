@@ -77,10 +77,21 @@ gchar*               seahorse_ssh_source_file_for_public    (SeahorseSSHSource *
 gchar*               seahorse_ssh_source_file_for_algorithm (SeahorseSSHSource *ssrc,
                                                              guint algo);
 
+void                 seahorse_ssh_source_remove_object      (SeahorseSSHSource *self,
+                                                             SeahorseSSHKey *skey);
+
 guchar*              seahorse_ssh_source_export_private     (SeahorseSSHSource *ssrc,
                                                              SeahorseSSHKey *skey,
                                                              gsize *n_results,
                                                              GError **err);
 
+void                 seahorse_ssh_source_load_async         (SeahorseSSHSource *self,
+                                                             GCancellable *cancellable,
+                                                             GAsyncReadyCallback callback,
+                                                             gpointer user_data);
+
+gboolean             seahorse_ssh_source_load_finish        (SeahorseSSHSource *self,
+                                                             GAsyncResult *result,
+                                                             GError **error);
 
 #endif /* __SEAHORSE_SSH_SOURCE_H__ */

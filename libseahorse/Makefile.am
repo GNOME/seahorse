@@ -5,6 +5,7 @@ seahorselibexecbindir = $(libdir)/seahorse/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
+	-I$(top_srcdir)/libegg \
 	$(SEAHORSE_CFLAGS) \
 	-DPKGDATADIR=\""$(pkgdatadir)/"\" \
 	-DDATA_DIR=\""$(datadir)"\" \
@@ -30,12 +31,11 @@ libseahorse_la_SOURCES = \
 	seahorse-bind.c seahorse-bind.h \
 	seahorse-cleanup.c seahorse-cleanup.h \
 	seahorse-collection.c seahorse-collection.h \
-	seahorse-combo-keys.c seahorse-combo-keys.h \
 	seahorse-commands.c seahorse-commands.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-debug.c seahorse-debug.h \
-	seahorse-dns-sd.c seahorse-dns-sd.h \
 	seahorse-icons.c seahorse-icons.h \
+	seahorse-key-manager-store.c seahorse-key-manager-store.h \
 	seahorse-object.c seahorse-object.h \
 	seahorse-object-list.c seahorse-object-list.h \
 	seahorse-object-model.c seahorse-object-model.h \
@@ -43,19 +43,18 @@ libseahorse_la_SOURCES = \
 	seahorse-passphrase.c seahorse-passphrase.h \
 	seahorse-predicate.h \
 	seahorse-prefs.c seahorse-prefs.h \
+	seahorse-preferences.c seahorse-preferences.h \
 	seahorse-progress.c seahorse-progress.h \
 	seahorse-registry.c seahorse-registry.h \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
 	seahorse-secure-buffer.c seahorse-secure-buffer.h \
 	seahorse-servers.c seahorse-servers.h \
 	seahorse-source.c seahorse-source.h \
-	seahorse-transfer.c seahorse-transfer.h \
 	seahorse-types.c seahorse-types.h \
-	seahorse-unknown.c seahorse-unknown.h \
-	seahorse-unknown-source.c seahorse-unknown-source.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-view.c seahorse-view.h \
+	seahorse-viewer.c seahorse-viewer.h \
 	seahorse-widget.c seahorse-widget.h \
 	$(MARSHAL_SRCS) \
 	$(KEYSERVER_SRCS)

@@ -24,11 +24,10 @@
 
 #include "seahorse-gkr-keyring-commands.h"
 
-#include "seahorse-gkr.h"
+#include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-operation.h"
-#include "seahorse-gkr-source.h"
 
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
@@ -83,9 +82,9 @@ on_refresh_all_keyrings_complete (GObject *source,
 static void
 refresh_all_keyrings (SeahorseCommands *commands)
 {
-	seahorse_source_load_async (SEAHORSE_SOURCE (seahorse_gkr_source_default ()),
-	                            NULL, on_refresh_all_keyrings_complete,
-	                            g_object_ref (commands));
+	seahorse_gkr_backend_load_async (NULL, NULL,
+	                                 on_refresh_all_keyrings_complete,
+	                                 g_object_ref (commands));
 }
 
 /**
@@ -318,7 +317,6 @@ seahorse_gkr_keyring_commands_show_properties (SeahorseCommands* base, SeahorseO
 	GtkWindow *window;
 
 	g_return_if_fail (SEAHORSE_IS_OBJECT (object));
-	g_return_if_fail (seahorse_object_get_tag (object) == SEAHORSE_GKR_TYPE);
 
 	window = seahorse_commands_get_window (base);
 	if (G_OBJECT_TYPE (object) == SEAHORSE_TYPE_GKR_KEYRING) 
@@ -446,14 +444,15 @@ seahorse_gkr_keyring_commands_class_init (SeahorseGkrKeyringCommandsClass *klass
 	keyring_predicate.type = SEAHORSE_TYPE_GKR_KEYRING;
 	
 	/* Register this class as a commands */
-	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_TYPE_GKR_KEYRING_COMMANDS, 
-	                                 SEAHORSE_GKR_TYPE_STR, "commands", NULL, NULL);
+	seahorse_registry_register_type (seahorse_registry_get (),
+	                                 SEAHORSE_TYPE_GKR_KEYRING_COMMANDS,
+	                                 "commands", NULL, NULL);
 	
 	/* Register this as a generator */
 	actions = gtk_action_group_new ("gkr-generate");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, ENTRIES_NEW, G_N_ELEMENTS (ENTRIES_NEW), NULL);
-	seahorse_registry_register_object (NULL, G_OBJECT (actions), SEAHORSE_GKR_TYPE_STR, "generator", NULL);
+	seahorse_registry_register_object (NULL, G_OBJECT (actions), "generator", NULL);
 }
 
 /* -----------------------------------------------------------------------------

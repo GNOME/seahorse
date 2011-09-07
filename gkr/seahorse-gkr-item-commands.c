@@ -54,7 +54,6 @@ seahorse_gkr_item_commands_show_properties (SeahorseCommands* base, SeahorseObje
 	GtkWindow *window;
 
 	g_return_if_fail (SEAHORSE_IS_OBJECT (object));
-	g_return_if_fail (seahorse_object_get_tag (object) == SEAHORSE_GKR_TYPE);
 
 	window = seahorse_commands_get_window (base);
 	if (G_OBJECT_TYPE (object) == SEAHORSE_TYPE_GKR_ITEM) 
@@ -159,8 +158,9 @@ seahorse_gkr_item_commands_class_init (SeahorseGkrItemCommandsClass *klass)
 	commands_predicate.type = SEAHORSE_TYPE_GKR_ITEM;
 
 	/* Register this class as a commands */
-	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_TYPE_GKR_ITEM_COMMANDS, 
-	                                 SEAHORSE_GKR_TYPE_STR, "commands", NULL, NULL);
+	seahorse_registry_register_type (seahorse_registry_get (),
+	                                 SEAHORSE_TYPE_GKR_ITEM_COMMANDS,
+	                                 "commands", NULL);
 }
 
 /* -----------------------------------------------------------------------------

@@ -28,9 +28,11 @@
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-gpgme-uid.h"
-#include "seahorse-pgp.h"
+#include "seahorse-pgp-backend.h"
 #include "seahorse-pgp-commands.h"
 #include "seahorse-pgp-dialogs.h"
+#include "seahorse-keyserver-search.h"
+#include "seahorse-keyserver-sync.h"
 
 #include "seahorse-object.h"
 #include "seahorse-registry.h"
@@ -49,11 +51,17 @@ G_DEFINE_TYPE (SeahorsePgpCommands, seahorse_pgp_commands, SEAHORSE_TYPE_COMMAND
 static const char* UI_DEFINITION = ""\
 "<ui>"\
 "	<menubar>"\
-"		<menu name='File' action='file-menu'> "\
+"		<menu name='File' action='file-menu'>"\
 "			<placeholder name='FileCommands'>"\
 "				<menuitem action='key-sign'/>"\
 "			</placeholder>"\
 "		</menu>"\
+"		<placeholder name='RemoteMenu'>"\
+"			<menu name='Remote' action='remote-menu'>"\
+"				<menuitem action='remote-find'/>"\
+"				<menuitem action='remote-sync'/>"\
+"			</menu>"\
+"		</placeholder>"\
 "	</menubar>"\
 "	<toolbar name='MainToolbar'>"\
 "		<placeholder name='ToolItems'>"\
@@ -65,8 +73,10 @@ static const char* UI_DEFINITION = ""\
 "	</popup>"\
 "</ui>";
 
-static SeahorsePredicate actions_predicate = { 0 };
-static SeahorsePredicate commands_predicate = { 0 };
+static SeahorsePredicate actions_key_predicate = { 0 };
+static SeahorsePredicate actions_uid_predicate = { 0 };
+static SeahorsePredicate commands_key_predicate = { 0 };
+static SeahorsePredicate commands_uid_predicate = { 0 };
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
@@ -83,10 +93,13 @@ on_key_sign (GtkAction* action, SeahorsePgpCommands* self)
 	g_return_if_fail (GTK_IS_ACTION (action));
 	
 	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
-	keys = seahorse_view_get_selected_matching (view, &actions_predicate);
-	
-	if (keys == NULL)
-		return;
+	keys = seahorse_view_get_selected_matching (view, &actions_key_predicate);
+
+	if (keys == NULL) {
+		keys = seahorse_view_get_selected_matching (view, &actions_uid_predicate);
+		if (keys == NULL)
+			return;
+	}
 
 	/* Indicate what we're actually going to operate on */
 	seahorse_view_set_selected (view, keys->data);
@@ -100,8 +113,40 @@ on_key_sign (GtkAction* action, SeahorsePgpCommands* self)
 	}
 }
 
+static void
+on_remote_find (GtkAction* action,
+                gpointer user_data)
+{
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (user_data);
+	seahorse_keyserver_search_show (seahorse_commands_get_window (commands));
+}
+
+static void
+on_remote_sync (GtkAction* action,
+                gpointer user_data)
+{
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (user_data);
+	SeahorseView *view = seahorse_commands_get_view (commands);
+	SeahorseGpgmeKeyring *keyring;
+	GList* objects;
+
+	objects = seahorse_view_get_selected_objects (view);
+	if (objects == NULL) {
+		keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+		objects = gcr_collection_get_objects (GCR_COLLECTION (keyring));
+	}
+
+	seahorse_keyserver_sync_show (objects, seahorse_commands_get_window (commands));
+	g_list_free (objects);
+}
+
 static const GtkActionEntry COMMAND_ENTRIES[] = {
-	{ "key-sign", GTK_STOCK_INDEX, N_("_Sign Key..."), "", N_("Sign public key"), G_CALLBACK (on_key_sign) }
+	{ "key-sign", GTK_STOCK_INDEX, N_("_Sign Key..."), "",
+	  N_("Sign public key"), G_CALLBACK (on_key_sign) },
+	{ "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
+	  N_("Search for keys on a key server"), G_CALLBACK (on_remote_find) },
+	{ "remote-sync", GTK_STOCK_REFRESH, N_("_Sync and Publish Keys..."), "",
+	  N_("Publish and/or synchronize your keys with those online."), G_CALLBACK (on_remote_sync) }
 };
 
 
@@ -236,9 +281,10 @@ seahorse_pgp_commands_constructor (GType type, guint n_props, GObjectConstructPa
 		gtk_action_group_set_translation_domain (self->pv->command_actions, GETTEXT_PACKAGE);
 		gtk_action_group_add_actions (self->pv->command_actions, COMMAND_ENTRIES, 
 		                              G_N_ELEMENTS (COMMAND_ENTRIES), self);
-		
-		seahorse_view_register_commands (view, &commands_predicate, base);
-		seahorse_view_register_ui (view, &actions_predicate, UI_DEFINITION, self->pv->command_actions);
+
+		seahorse_view_register_commands (view, &commands_key_predicate, base);
+		seahorse_view_register_commands (view, &commands_uid_predicate, base);
+		seahorse_view_register_ui (view, &actions_key_predicate, UI_DEFINITION, self->pv->command_actions);
 	}
 	
 	return obj;
@@ -313,13 +359,14 @@ seahorse_pgp_commands_class_init (SeahorsePgpCommandsClass *klass)
 	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_pgp_commands_delete_objects;
 	
 	/* Setup predicate for matching entries for these commands */
-	commands_predicate.tag = SEAHORSE_PGP_TYPE;
-	actions_predicate.tag = SEAHORSE_PGP_TYPE;
-	actions_predicate.location = SEAHORSE_LOCATION_LOCAL;
+	commands_key_predicate.type = SEAHORSE_TYPE_PGP_KEY;
+	commands_uid_predicate.type = SEAHORSE_TYPE_PGP_UID;
+	actions_key_predicate.type = SEAHORSE_TYPE_PGP_KEY;
+	actions_uid_predicate.type = SEAHORSE_TYPE_PGP_UID;
 
 	/* Register this class as a commands */
 	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_TYPE_PGP_COMMANDS, 
-	                                 SEAHORSE_PGP_TYPE_STR, "commands", NULL, NULL);
+	                                 "commands", NULL, NULL);
 }
 
 /* -----------------------------------------------------------------------------

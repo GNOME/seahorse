@@ -32,7 +32,7 @@
 #include "pgp/seahorse-gpgme-key.h"
 #include "pgp/seahorse-gpgme-photo.h"
 #include "pgp/seahorse-gpgme-subkey.h"
-#include "pgp/seahorse-gpgme-source.h"
+#include "pgp/seahorse-gpgme-keyring.h"
 #include "pgp/seahorse-gpgme-uid.h"
 #include "libseahorse/seahorse-widget.h"
 
@@ -44,13 +44,13 @@ void            seahorse_gpgme_sign_prompt_uid     (SeahorseGpgmeUid *uid,
 
 void            seahorse_gpgme_generate_register    (void);
 
-void            seahorse_gpgme_generate_show        (SeahorseGpgmeSource *sksrc,
+void            seahorse_gpgme_generate_show        (SeahorseGpgmeKeyring *keyring,
                                                      GtkWindow *parent,
                                                      const char * name,
                                                      const char *email,
                                                      const gchar *comment);
 
-void            seahorse_gpgme_generate_key         (SeahorseGpgmeSource *sksrc,
+void            seahorse_gpgme_generate_key         (SeahorseGpgmeKeyring *keyring,
                                                      const gchar *name,
                                                      const gchar *email,
                                                      const gchar *comment,

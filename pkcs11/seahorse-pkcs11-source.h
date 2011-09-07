@@ -24,6 +24,7 @@
 #define __SEAHORSE_PKCS11_SOURCE_H__
 
 #include "seahorse-source.h"
+#include "seahorse-pkcs11-object.h"
 
 #include <gck/gck.h>
 
@@ -54,5 +55,8 @@ SeahorsePkcs11Source*  seahorse_pkcs11_source_new               (GckSlot *slot);
 GckSlot*               seahorse_pkcs11_source_get_slot          (SeahorsePkcs11Source *self);
 
 void                   seahorse_pkcs11_source_receive_object    (SeahorsePkcs11Source *self, GckObject *obj);
+
+void                   seahorse_pkcs11_source_remove_object     (SeahorsePkcs11Source *self,
+                                                                 SeahorsePkcs11Object *object);
 
 #endif /* __SEAHORSE_PKCS11_SOURCE_H__ */

@@ -18,7 +18,7 @@ noinst_LTLIBRARIES = libseahorse-ssh.la
 
 libseahorse_ssh_la_SOURCES = \
 	seahorse-ssh.h seahorse-ssh.c \
-	seahorse-ssh-module.c seahorse-ssh-module.h \
+	seahorse-ssh-backend.c seahorse-ssh-backend.h \
 	seahorse-ssh-commands.c seahorse-ssh-commands.h \
 	seahorse-ssh-dialogs.h \
 	seahorse-ssh-generate.c \

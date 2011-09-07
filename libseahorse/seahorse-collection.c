@@ -26,16 +26,24 @@
 
 enum {
 	PROP_0,
+	PROP_BASE,
 	PROP_PREDICATE
 };
 
 struct _SeahorseCollectionPrivate {
+	GcrCollection *base;
 	GHashTable *objects;
 	SeahorsePredicate *pred;
 	GDestroyNotify destroy_func;
 };
 
 static void      seahorse_collection_iface_init     (GcrCollectionIface *iface);
+
+static gboolean  maybe_add_object                   (SeahorseCollection *self,
+                                                     SeahorseObject *object);
+
+static gboolean  maybe_remove_object                (SeahorseCollection *self,
+                                                     SeahorseObject *object);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseCollection, seahorse_collection, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_collection_iface_init);
@@ -50,6 +58,19 @@ remove_update (SeahorseObject *object,
 	return TRUE;
 }
 
+
+static void
+on_object_changed (SeahorseObject *object,
+                   GParamSpec *spec,
+                   gpointer user_data)
+{
+	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
+	if (g_hash_table_lookup (self->pv->objects, object))
+		maybe_remove_object (self, object);
+	else
+		maybe_add_object (self, object);
+}
+
 static void
 remove_object (gpointer key,
                gpointer value,
@@ -58,6 +79,7 @@ remove_object (gpointer key,
 	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
 	SeahorseObject *object = SEAHORSE_OBJECT (key);
 	g_hash_table_remove (self->pv->objects, object);
+	g_signal_handlers_disconnect_by_func (object, on_object_changed, self);
 	remove_update (object, NULL, self);
 }
 
@@ -72,6 +94,7 @@ maybe_add_object (SeahorseCollection *self,
 		return FALSE;
 
 	g_hash_table_replace (self->pv->objects, object, GINT_TO_POINTER (TRUE));
+	g_signal_connect (object, "notify", G_CALLBACK (on_object_changed), self);
 	gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (object));
 	return TRUE;
 }
@@ -91,9 +114,9 @@ maybe_remove_object (SeahorseCollection *self,
 }
 
 static void
-on_context_object_added (SeahorseContext *context,
-                         SeahorseObject *object,
-                         gpointer user_data)
+on_base_added (GcrCollection *base,
+               SeahorseObject *object,
+               gpointer user_data)
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
 
@@ -101,26 +124,14 @@ on_context_object_added (SeahorseContext *context,
 }
 
 static void
-on_context_object_removed (SeahorseContext *context,
-                           SeahorseObject *object,
-                           gpointer user_data)
+on_base_removed (GcrCollection *base,
+                 SeahorseObject *object,
+                 gpointer user_data)
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
 
 	if (g_hash_table_lookup (self->pv->objects, object))
 		remove_object (object, NULL, self);
-}
-
-static void
-on_context_object_changed (SeahorseContext *context,
-                           SeahorseObject *object,
-                           gpointer user_data)
-{
-	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
-	if (g_hash_table_lookup (self->pv->objects, object))
-		maybe_remove_object (self, object);
-	else
-		maybe_add_object (self, object);
 }
 
 static void
@@ -136,16 +147,33 @@ objects_to_hash (SeahorseObject *sobj, gpointer *c, GHashTable *ht)
 }
 
 static void
+seahorse_collection_init (SeahorseCollection *self)
+{
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_COLLECTION,
+	                                        SeahorseCollectionPrivate);
+	self->pv->objects = g_hash_table_new (g_direct_hash, g_direct_equal);
+}
+
+static void
+seahorse_collection_constructed (GObject *obj)
+{
+	SeahorseCollection *self = SEAHORSE_COLLECTION (obj);
+
+	g_return_if_fail (self->pv->base);
+
+	G_OBJECT_CLASS (seahorse_collection_parent_class)->constructed (obj);
+
+	g_signal_connect (self->pv->base, "added", G_CALLBACK (on_base_added), self);
+	g_signal_connect (self->pv->base, "removed", G_CALLBACK (on_base_removed), self);
+}
+
+static void
 seahorse_collection_dispose (GObject *obj)
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (obj);
 
-	g_signal_handlers_disconnect_by_func (seahorse_context_instance (),
-	                                      on_context_object_added, self);
-	g_signal_handlers_disconnect_by_func (seahorse_context_instance (),
-	                                      on_context_object_removed, self);
-	g_signal_handlers_disconnect_by_func (seahorse_context_instance (),
-	                                      on_context_object_changed, self);
+	g_signal_handlers_disconnect_by_func (self->pv->base, on_base_added, self);
+	g_signal_handlers_disconnect_by_func (self->pv->base, on_base_removed, self);
 
 	/* Release all our pointers and stuff */
 	g_hash_table_foreach_remove (self->pv->objects, (GHRFunc)remove_update, self);
@@ -158,6 +186,7 @@ seahorse_collection_finalize (GObject *obj)
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (obj);
 
+	g_clear_object (&self->pv->base);
 	g_hash_table_destroy (self->pv->objects);
 
 	if (self->pv->destroy_func)
@@ -175,10 +204,19 @@ seahorse_collection_set_property (GObject *obj,
 	SeahorseCollection *self = SEAHORSE_COLLECTION (obj);
 
 	switch (prop_id) {
+	case PROP_BASE:
+		g_return_if_fail (self->pv->base == NULL);
+		self->pv->base = g_value_dup_object (value);
+		g_return_if_fail (self->pv->base != NULL);
+		if (self->pv->pred)
+			seahorse_collection_refresh (self);
+		break;
 	case PROP_PREDICATE:
 		g_return_if_fail (self->pv->pred == NULL);
 		self->pv->pred = g_value_get_pointer (value);
-		seahorse_collection_refresh (self);
+		g_return_if_fail (self->pv->pred != NULL);
+		if (self->pv->base)
+			seahorse_collection_refresh (self);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -195,6 +233,9 @@ seahorse_collection_get_property (GObject *obj,
 	SeahorseCollection *self = SEAHORSE_COLLECTION (obj);
 
 	switch (prop_id) {
+	case PROP_BASE:
+		g_value_set_object (value, self->pv->base);
+		break;
 	case PROP_PREDICATE:
 		g_value_set_pointer (value, self->pv->pred);
 		break;
@@ -205,30 +246,20 @@ seahorse_collection_get_property (GObject *obj,
 }
 
 static void
-seahorse_collection_init (SeahorseCollection *self)
-{
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_COLLECTION,
-	                                        SeahorseCollectionPrivate);
-
-	self->pv->objects = g_hash_table_new (g_direct_hash, g_direct_equal);
-
-	g_signal_connect (seahorse_context_instance (), "added",
-	                  G_CALLBACK (on_context_object_added), self);
-	g_signal_connect (seahorse_context_instance (), "removed",
-	                  G_CALLBACK (on_context_object_removed), self);
-	g_signal_connect (seahorse_context_instance (), "changed",
-	                  G_CALLBACK (on_context_object_changed), self);
-}
-
-static void
 seahorse_collection_class_init (SeahorseCollectionClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+	gobject_class->constructed = seahorse_collection_constructed;
 	gobject_class->dispose = seahorse_collection_dispose;
 	gobject_class->finalize = seahorse_collection_finalize;
 	gobject_class->set_property = seahorse_collection_set_property;
 	gobject_class->get_property = seahorse_collection_get_property;
+
+	g_object_class_install_property (gobject_class, PROP_BASE,
+	          g_param_spec_object ("base", "Base", "Base collection",
+	                               GCR_TYPE_COLLECTION, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
 
 	g_object_class_install_property (gobject_class, PROP_PREDICATE,
 	          g_param_spec_pointer ("predicate", "Predicate", "Predicate for matching objects into this set.",
@@ -272,12 +303,16 @@ seahorse_collection_iface_init (GcrCollectionIface *iface)
 }
 
 SeahorseCollection *
-seahorse_collection_new_for_predicate (SeahorsePredicate *pred,
+seahorse_collection_new_for_predicate (GcrCollection *base,
+                                       SeahorsePredicate *pred,
                                        GDestroyNotify destroy_func)
 {
 	SeahorseCollection *collection;
 
+	g_return_val_if_fail (GCR_IS_COLLECTION (base), NULL);
+
 	collection = g_object_new (SEAHORSE_TYPE_COLLECTION,
+	                           "base", base,
 	                           "predicate", pred,
 	                           NULL);
 
@@ -291,13 +326,12 @@ seahorse_collection_refresh (SeahorseCollection *self)
 	GHashTable *check = g_hash_table_new (g_direct_hash, g_direct_equal);
 	GList *l, *objects = NULL;
 
+	g_return_if_fail (SEAHORSE_IS_COLLECTION (self));
+
 	/* Make note of all the objects we had prior to refresh */
 	g_hash_table_foreach (self->pv->objects, (GHFunc)objects_to_hash, check);
 
-	if (self->pv->pred)
-		objects = seahorse_context_find_objects_full (seahorse_context_instance (),
-		                                              self->pv->pred);
-
+	objects = gcr_collection_get_objects (self->pv->base);
 	for (l = objects; l != NULL; l = g_list_next (l)) {
 
 		/* Make note that we've seen this object */
@@ -306,7 +340,6 @@ seahorse_collection_refresh (SeahorseCollection *self)
 		/* This will add to set */
 		maybe_add_object (self, l->data);
 	}
-
 	g_list_free (objects);
 
 	g_hash_table_foreach (check, remove_object, self);

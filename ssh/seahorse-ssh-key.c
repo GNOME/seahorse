@@ -31,7 +31,6 @@
 
 #include <errno.h>
 
-#include "seahorse-context.h"
 #include "seahorse-source.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
@@ -99,12 +98,10 @@ changed_key (SeahorseSSHKey *self)
 	if (!self->keydata || !self->keydata->fingerprint) {
         
 		g_object_set (self,
-		              "id", 0,
 		              "label", "",
 		              "icon", NULL,
 		              "usage", SEAHORSE_USAGE_NONE,
 		              "nickname", "",
-		              "location", SEAHORSE_LOCATION_INVALID,
 		              "flags", SEAHORSE_FLAG_DISABLED,
 		              NULL);
 		return;
@@ -120,12 +117,10 @@ changed_key (SeahorseSSHKey *self)
 
 	icon = g_themed_icon_new (SEAHORSE_ICON_KEY_SSH);
 	g_object_set (obj,
-	              "id", seahorse_ssh_key_calc_cannonical_id (self->keydata->fingerprint),
 	              "label", display,
 	              "icon", icon,
 	              "usage", usage,
 	              "nickname", simple,
-	              "location", SEAHORSE_LOCATION_LOCAL,
 	              "identifier", identifier,
 	              "flags", (self->keydata->authorized ? SEAHORSE_FLAG_TRUSTED : 0) | SEAHORSE_FLAG_EXPORTABLE | SEAHORSE_FLAG_DELETABLE,
 	              NULL);
@@ -313,33 +308,6 @@ seahorse_ssh_key_get_location (SeahorseSSHKey *skey)
     return skey->keydata->privfile ? 
                     skey->keydata->privfile : skey->keydata->pubfile;
 }
-
-GQuark
-seahorse_ssh_key_calc_cannonical_id (const gchar *id)
-{
-    #define SSH_ID_SIZE 16
-    gchar *hex, *canonical_id = g_malloc0 (SSH_ID_SIZE + 1);
-    gint i, off, len = strlen (id);
-    GQuark ret;
-
-    /* Strip out all non alpha numeric chars and limit length to SSH_ID_SIZE */
-    for (i = len, off = SSH_ID_SIZE; i >= 0 && off > 0; --i) {
-         if (g_ascii_isalnum (id[i]))
-             canonical_id[--off] = g_ascii_toupper (id[i]);
-    }
-    
-    /* Not enough characters */
-    g_return_val_if_fail (off == 0, 0);
-
-    hex = g_strdup_printf ("%s:%s", SEAHORSE_SSH_STR, canonical_id);
-    ret = g_quark_from_string (hex);
-    
-    g_free (canonical_id);
-    g_free (hex);
-    
-    return ret;
-}
-
 
 gchar*
 seahorse_ssh_key_calc_identifier (const gchar *id)

@@ -26,7 +26,6 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-context.h"
 #include "seahorse-icons.h"
 #include "seahorse-source.h"
 #include "seahorse-util.h"
@@ -475,21 +474,15 @@ static void
 seahorse_gkr_item_init (SeahorseGkrItem *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_ITEM, SeahorseGkrItemPrivate);
-	g_object_set (self, "usage", SEAHORSE_USAGE_CREDENTIALS, "tag", SEAHORSE_GKR_TYPE, "location", SEAHORSE_LOCATION_LOCAL, NULL);
+	g_object_set (self, "usage", SEAHORSE_USAGE_CREDENTIALS, NULL);
 }
 
 static void
 seahorse_gkr_item_constructed (GObject *object)
 {
 	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (object);
-	GQuark id;
 
 	G_OBJECT_CLASS (seahorse_gkr_item_parent_class)->constructed (object);
-
-	id = seahorse_gkr_item_get_cannonical (self->pv->keyring_name,
-	                                       self->pv->item_id);
-	g_object_set (self, "id", id,
-	              "usage", SEAHORSE_USAGE_CREDENTIALS, NULL);
 
 	seahorse_gkr_item_realize (self);
 }
@@ -769,15 +762,6 @@ seahorse_gkr_find_string_attribute (GnomeKeyringAttributeList *attrs, const gcha
 	}
 	    
 	return NULL;	
-}
-
-GQuark
-seahorse_gkr_item_get_cannonical (const gchar *keyring_name, guint32 item_id)
-{
-	gchar *buf = g_strdup_printf ("%s:%s-%08X", SEAHORSE_GKR_STR, keyring_name, item_id);
-	GQuark id = g_quark_from_string (buf);
-	g_free (buf);
-	return id;
 }
 
 SeahorseGkrUse

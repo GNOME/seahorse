@@ -44,24 +44,12 @@
 /**
 * gobject_class: The object class to init
 *
-* Adds the interfaces "source-tag" and "source-location"
-*
 **/
 static void
 seahorse_source_base_init (gpointer gobject_class)
 {
 	static gboolean initialized = FALSE;
 	if (!initialized) {
-		
-		/* Add properties and signals to the interface */
-		g_object_interface_install_property (gobject_class,
-		        g_param_spec_uint ("source-tag", "Source Tag", "Tag of objects that come from this source.", 
-		                           0, G_MAXUINT, SEAHORSE_TAG_INVALID, G_PARAM_READABLE));
-
-		g_object_interface_install_property (gobject_class, 
-		        g_param_spec_enum ("source-location", "Source Location", "Objects in this source are at this location. See SeahorseLocation", 
-		                           SEAHORSE_TYPE_LOCATION, SEAHORSE_LOCATION_LOCAL, G_PARAM_READABLE));
-		
 		initialized = TRUE;
 	}
 }
@@ -101,57 +89,6 @@ seahorse_source_get_type (void)
  */
 
 void
-seahorse_source_load_async (SeahorseSource *source,
-                            GCancellable *cancellable,
-                            GAsyncReadyCallback callback,
-                            gpointer user_data)
-{
-	g_return_if_fail (SEAHORSE_IS_SOURCE (source));
-	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-	g_return_if_fail (SEAHORSE_SOURCE_GET_INTERFACE (source)->load_async);
-	SEAHORSE_SOURCE_GET_INTERFACE (source)->load_async (source, cancellable,
-	                                                  callback, user_data);
-}
-
-gboolean
-seahorse_source_load_finish (SeahorseSource *source,
-                             GAsyncResult *result,
-                             GError **error)
-{
-	g_return_val_if_fail (SEAHORSE_IS_SOURCE (source), FALSE);
-	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-	g_return_val_if_fail (SEAHORSE_SOURCE_GET_INTERFACE (source)->load_finish, FALSE);
-	return SEAHORSE_SOURCE_GET_INTERFACE (source)->load_finish (source, result, error);
-}
-
-void
-seahorse_source_search_async (SeahorseSource *source,
-                              const gchar *match,
-                              GCancellable *cancellable,
-                              GAsyncReadyCallback callback,
-                              gpointer user_data)
-{
-	g_return_if_fail (SEAHORSE_IS_SOURCE (source));
-	g_return_if_fail (match != NULL);
-	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-	g_return_if_fail (SEAHORSE_SOURCE_GET_INTERFACE (source)->search_async);
-	SEAHORSE_SOURCE_GET_INTERFACE (source)->search_async (source, match, cancellable,
-	                                                    callback, user_data);
-}
-
-GList *
-seahorse_source_search_finish (SeahorseSource *source, GAsyncResult *result,
-                               GError **error)
-{
-	g_return_val_if_fail (SEAHORSE_IS_SOURCE (source), NULL);
-	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-	g_return_val_if_fail (SEAHORSE_SOURCE_GET_INTERFACE (source)->search_finish, NULL);
-	return SEAHORSE_SOURCE_GET_INTERFACE (source)->search_finish (source, result, error);
-}
-
-void
 seahorse_source_import_async (SeahorseSource *source,
                               GInputStream *input,
                               GCancellable *cancellable,
@@ -187,28 +124,16 @@ seahorse_source_export_async (SeahorseSource *source,
                               gpointer user_data)
 {
 	SeahorseSourceIface *iface;
-	GList *l;
-	GList *ids;
 
 	g_return_if_fail (SEAHORSE_IS_SOURCE (source));
 	g_return_if_fail (G_IS_OUTPUT_STREAM (output));
 	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
 	iface = SEAHORSE_SOURCE_GET_INTERFACE (source);
-	g_return_if_fail (iface->export_async != NULL || iface->export_raw_async != NULL);
+	g_return_if_fail (iface->export_async != NULL);
 
-	if (iface->export_async) {
-		iface->export_async (source, objects, output,
-		                     cancellable, callback, user_data);
-		return;
-	}
-
-	for (l = objects; l != NULL; l = g_list_next (l))
-		ids = g_list_prepend (ids, GUINT_TO_POINTER (seahorse_object_get_id (l->data)));
-
-	ids = g_list_reverse (ids);
-	(iface->export_raw_async) (source, ids, output, cancellable, callback, user_data);
-	g_list_free (ids);
+	iface->export_async (source, objects, output,
+	                     cancellable, callback, user_data);
 }
 
 GOutputStream *
@@ -223,15 +148,9 @@ seahorse_source_export_finish (SeahorseSource *source,
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	iface = SEAHORSE_SOURCE_GET_INTERFACE (source);
-	g_return_val_if_fail (iface->export_async != NULL || iface->export_raw_async != NULL, NULL);
-
-	if (iface->export_async) {
-		g_return_val_if_fail (iface->export_finish, NULL);
-		return (iface->export_finish) (source, result, error);
-	} else {
-		g_return_val_if_fail (iface->export_raw_finish, NULL);
-		return (iface->export_raw_finish) (source, result, error);
-	}
+	g_return_val_if_fail (iface->export_async != NULL, NULL);
+	g_return_val_if_fail (iface->export_finish, NULL);
+	return (iface->export_finish) (source, result, error);
 }
 
 typedef struct {
@@ -361,99 +280,4 @@ seahorse_source_export_auto_wait (GList *objects,
 	ret = seahorse_source_export_auto_finish (result, error) != NULL;
 	g_object_unref (result);
 	return ret;
-}
-
-void
-seahorse_source_export_raw_async (SeahorseSource *source,
-                                  GList *ids,
-                                  GOutputStream *output,
-                                  GCancellable *cancellable,
-                                  GAsyncReadyCallback callback,
-                                  gpointer user_data)
-{
-	SeahorseSourceIface *iface;
-	SeahorseObject *object;
-	GList *objects = NULL;
-	GList *l;
-
-	g_return_if_fail (SEAHORSE_IS_SOURCE (source));
-	g_return_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output));
-	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-
-	iface = SEAHORSE_SOURCE_GET_INTERFACE (source);
-
-	/* Either export or export_raw must be implemented */
-	if (iface->export_raw_async) {
-		(iface->export_raw_async) (source, ids, output, cancellable, callback, user_data);
-		return;
-	}
-
-	g_return_if_fail (iface->export_async != NULL);
-
-	for (l = ids; l != NULL; l = g_list_next (l)) {
-		object = seahorse_context_get_object (seahorse_context_instance (),
-		                                      source, GPOINTER_TO_UINT (l->data));
-
-		/* TODO: A proper error message here 'not found' */
-		if (object != NULL)
-			objects = g_list_prepend (objects, object);
-	}
-
-	objects = g_list_reverse (objects);
-	(iface->export_async) (source, objects, output, cancellable, callback, user_data);
-	g_list_free (objects);
-}
-
-GOutputStream *
-seahorse_source_export_raw_finish (SeahorseSource *source,
-                                   GAsyncResult *result,
-                                   GError **error)
-{
-	SeahorseSourceIface *iface;
-
-	g_return_val_if_fail (SEAHORSE_IS_SOURCE (source), NULL);
-	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-	iface = SEAHORSE_SOURCE_GET_INTERFACE (source);
-	g_return_val_if_fail (iface->export_async != NULL || iface->export_raw_async != NULL, NULL);
-
-	if (iface->export_raw_async) {
-		g_return_val_if_fail (iface->export_raw_finish, NULL);
-		return (iface->export_raw_finish) (source, result, error);
-	} else {
-		g_return_val_if_fail (iface->export_finish, NULL);
-		return (iface->export_finish) (source, result, error);
-	}
-}
-
-/**
-* seahorse_source_get_tag:
-* @sksrc: The seahorse source object
-*
-*
-* Returns: The source-tag property of the object. As #GQuark
-*/
-GQuark              
-seahorse_source_get_tag (SeahorseSource *sksrc)
-{
-    GQuark ktype;
-    g_object_get (sksrc, "source-tag", &ktype, NULL);
-    return ktype;
-}
-
-/**
- * seahorse_source_get_location:
- * @sksrc: The seahorse source object
- *
- *
- *
- * Returns: The location (#SeahorseLocation) of this object
- */
-SeahorseLocation   
-seahorse_source_get_location (SeahorseSource *sksrc)
-{
-    SeahorseLocation loc;
-    g_object_get (sksrc, "source-location", &loc, NULL);
-    return loc;
 }

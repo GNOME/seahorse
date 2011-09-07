@@ -26,10 +26,11 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
+#include <gcr/gcr.h>
+
 #include "seahorse-viewer.h"
 
 G_BEGIN_DECLS
-
 
 #define SEAHORSE_TYPE_KEY_MANAGER 	      (seahorse_key_manager_get_type ())
 #define SEAHORSE_KEY_MANAGER(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEY_MANAGER, SeahorseKeyManager))
@@ -51,12 +52,8 @@ struct _SeahorseKeyManagerClass {
 	SeahorseViewerClass parent_class;
 };
 
-/* 
- * The various tabs. If adding a tab be sure to fix 
- * logic throughout this file. 
- */
+SeahorseWidget * seahorse_key_manager_show         (GcrCollection *sources);
 
-GtkWindow*       seahorse_key_manager_show         (void);
 GType            seahorse_key_manager_get_type     (void);
 
 

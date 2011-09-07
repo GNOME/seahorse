@@ -20,9 +20,9 @@
  */
 #include "config.h"
 
+#include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-keyring.h"
-#include "seahorse-gkr-source.h"
 
 #include "seahorse-secure-buffer.h"
 #include "seahorse-widget.h"
@@ -52,8 +52,7 @@ item_add_done (GnomeKeyringResult result, guint32 item, gpointer data)
 
 	/* Successful. Update the listings and stuff. */
 	if (result == GNOME_KEYRING_RESULT_OK) {
-		seahorse_source_load_async (SEAHORSE_SOURCE (seahorse_gkr_source_default ()),
-		                            NULL, NULL, NULL);
+		seahorse_gkr_backend_load_async (NULL, NULL, NULL, NULL);
 
 	/* Setting the default keyring failed */
 	} else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     
@@ -154,16 +153,16 @@ seahorse_gkr_add_item_show (GtkWindow *parent)
 	cell = gtk_cell_renderer_text_new ();
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), cell, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (widget), cell, "text", 0);
-	                                    
-	keyrings = seahorse_context_find_objects (NULL, SEAHORSE_GKR, SEAHORSE_USAGE_OTHER, 
-	                                          SEAHORSE_LOCATION_LOCAL);
+
+	keyrings = seahorse_gkr_backend_get_keyrings (NULL);
 	for (l = keyrings; l; l = g_list_next (l)) {
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter, 0, seahorse_gkr_keyring_get_name (l->data), -1);
 		if (seahorse_gkr_keyring_get_is_default (l->data))
 			gtk_combo_box_set_active_iter (GTK_COMBO_BOX (widget), &iter);
 	}
-	
+	g_list_free (keyrings);
+
 	g_object_unref (store);
 
 	widget = seahorse_widget_get_widget (swidget, "item-label");

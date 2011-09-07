@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "seahorse-pkcs11-helpers.h"
 #include "seahorse-pkcs11-object.h"
 #include "seahorse-pkcs11-operations.h"
 #include "seahorse-pkcs11-source.h"
@@ -32,6 +33,8 @@
 #include <gck/pkcs11.h>
 
 #include <glib/gi18n.h>
+
+#include <gcr/gcr.h>
 
 typedef struct {
 	SeahorsePkcs11Source *source;
@@ -51,22 +54,14 @@ pkcs11_refresh_free (gpointer data)
 	g_free (closure);
 }
 
-static guint
-ulong_hash (gconstpointer k)
-{
-	return (guint)*((gulong*)k); 
-}
-
 static gboolean
-ulong_equal (gconstpointer a, gconstpointer b)
+remove_each_object (gpointer key,
+                    gpointer value,
+                    gpointer user_data)
 {
-	return *((gulong*)a) == *((gulong*)b); 
-}
-
-static gboolean
-remove_each_object (gpointer key, gpointer value, gpointer data)
-{
-	seahorse_context_remove_object (NULL, value);
+	SeahorsePkcs11Source *source = SEAHORSE_PKCS11_SOURCE (user_data);
+	SeahorsePkcs11Object *object = SEAHORSE_PKCS11_OBJECT (value);
+	seahorse_pkcs11_source_remove_object (source, object);
 	return TRUE;
 }
 
@@ -94,7 +89,7 @@ on_refresh_find_objects (GckSession *session,
 		}
 
 		/* Remove everything not found from the context */
-		g_hash_table_foreach_remove (closure->checks, remove_each_object, NULL);
+		g_hash_table_foreach_remove (closure->checks, remove_each_object, closure->source);
 	}
 
 	g_simple_async_result_complete (res);
@@ -145,15 +140,15 @@ seahorse_pkcs11_refresh_async (SeahorsePkcs11Source *source,
 	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
 	                                 seahorse_pkcs11_refresh_async);
 	closure = g_new0 (pkcs11_refresh_closure, 1);
-	closure->checks = g_hash_table_new_full (ulong_hash, ulong_equal,
+	closure->checks = g_hash_table_new_full (seahorse_pkcs11_ulong_hash,
+	                                         seahorse_pkcs11_ulong_equal,
 	                                         g_free, g_object_unref);
 	closure->source = g_object_ref (source);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	g_simple_async_result_set_op_res_gpointer (res, closure, pkcs11_refresh_free);
 
 	/* Make note of all the objects that were there */
-	objects = seahorse_context_get_objects (seahorse_context_instance (),
-	                                        SEAHORSE_SOURCE (source));
+	objects = gcr_collection_get_objects (GCR_COLLECTION (source));
 	for (l = objects; l; l = g_list_next (l)) {
 		if (g_object_class_find_property (G_OBJECT_GET_CLASS (l->data), "pkcs11-handle")) {
 			g_object_get (l->data, "pkcs11-handle", &handle, NULL);
@@ -213,6 +208,7 @@ on_delete_object_completed (GObject *source,
 	pkcs11_delete_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
 	SeahorseObject *object;
+	SeahorsePkcs11Source *pkcs11_source;
 
 	object = g_queue_pop_head (closure->objects);
 	seahorse_progress_end (closure->cancellable, object);
@@ -230,8 +226,8 @@ on_delete_object_completed (GObject *source,
 	}
 
 	if (error == NULL) {
-		seahorse_context_remove_object (seahorse_context_instance (),
-		                                object);
+		pkcs11_source = SEAHORSE_PKCS11_SOURCE (seahorse_object_get_source (object));
+		seahorse_pkcs11_source_remove_object (pkcs11_source, SEAHORSE_PKCS11_OBJECT (object));
 		pkcs11_delete_one_object (res);
 	}
 

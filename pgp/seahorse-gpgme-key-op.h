@@ -27,9 +27,9 @@
 #include <time.h>
 
 #include "pgp/seahorse-gpgme-key.h"
+#include "pgp/seahorse-gpgme-keyring.h"
 #include "pgp/seahorse-gpgme-subkey.h"
 #include "pgp/seahorse-gpgme-uid.h"
-#include "pgp/seahorse-gpgme-source.h"
 #include "pgp/seahorse-gpgme-photo.h"
 
 /* 
@@ -135,7 +135,7 @@ typedef enum {
 	REVOKE_NOT_USED = 3
 } SeahorseRevokeReason;
 
-void                  seahorse_gpgme_key_op_generate_async   (SeahorseGpgmeSource *source,
+void                  seahorse_gpgme_key_op_generate_async   (SeahorseGpgmeKeyring *keyring,
                                                               const gchar *name,
                                                               const gchar *email,
                                                               const gchar *comment,
@@ -147,7 +147,7 @@ void                  seahorse_gpgme_key_op_generate_async   (SeahorseGpgmeSourc
                                                               GAsyncReadyCallback callback,
                                                               gpointer user_data);
 
-gboolean              seahorse_gpgme_key_op_generate_finish  (SeahorseGpgmeSource *source,
+gboolean              seahorse_gpgme_key_op_generate_finish  (SeahorseGpgmeKeyring *keyring,
                                                               GAsyncResult *Result,
                                                               GError **error);
 

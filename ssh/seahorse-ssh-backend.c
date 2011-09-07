@@ -1,0 +1,141 @@
+/*
+ * Seahorse
+ *
+ * Copyright (C) 2008 Stefan Walter
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ * 02111-1307, USA.
+ */
+
+#include "config.h"
+
+#include "seahorse-ssh-backend.h"
+#include "seahorse-ssh-commands.h"
+#include "seahorse-ssh-dialogs.h"
+#include "seahorse-ssh-source.h"
+
+static SeahorseSshBackend *ssh_backend = NULL;
+
+struct _SeahorseSshBackend {
+	GObject parent;
+	SeahorseSSHSource *dot_ssh;
+};
+
+struct _SeahorseSshBackendClass {
+	GObjectClass parent_class;
+};
+
+static void         seahorse_ssh_backend_collection_init  (GcrCollectionIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (SeahorseSshBackend, seahorse_ssh_backend, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_ssh_backend_collection_init));
+
+static void
+seahorse_ssh_backend_init (SeahorseSshBackend *self)
+{
+	g_return_if_fail (ssh_backend == NULL);
+	ssh_backend = self;
+
+	/* Let these classes register themselves, when the backend is created */
+	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_SSH_COMMANDS));
+
+	seahorse_ssh_generate_register ();
+}
+
+static void
+seahorse_ssh_backend_constructed (GObject *obj)
+{
+	SeahorseSshBackend *self = SEAHORSE_SSH_BACKEND (obj);
+
+	G_OBJECT_CLASS (seahorse_ssh_backend_parent_class)->constructed (obj);
+
+	self->dot_ssh = seahorse_ssh_source_new ();
+	seahorse_ssh_source_load_async (self->dot_ssh, NULL, NULL, NULL);
+}
+
+static void
+seahorse_ssh_backend_finalize (GObject *obj)
+{
+	SeahorseSshBackend *self = SEAHORSE_SSH_BACKEND (obj);
+
+	g_clear_object (&self->dot_ssh);
+	g_return_if_fail (ssh_backend == self);
+	ssh_backend = NULL;
+
+	G_OBJECT_CLASS (seahorse_ssh_backend_parent_class)->finalize (obj);
+}
+
+static void
+seahorse_ssh_backend_class_init (SeahorseSshBackendClass *klass)
+{
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	gobject_class->constructed = seahorse_ssh_backend_constructed;
+	gobject_class->finalize = seahorse_ssh_backend_finalize;
+}
+
+static guint
+seahorse_ssh_backend_get_length (GcrCollection *collection)
+{
+	return 1;
+}
+
+static GList *
+seahorse_ssh_backend_get_objects (GcrCollection *collection)
+{
+	SeahorseSshBackend *self = SEAHORSE_SSH_BACKEND (collection);
+	return g_list_append (NULL, self->dot_ssh);
+}
+
+static gboolean
+seahorse_ssh_backend_contains (GcrCollection *collection,
+                               GObject *object)
+{
+	SeahorseSshBackend *self = SEAHORSE_SSH_BACKEND (collection);
+	return G_OBJECT (self->dot_ssh) == object;
+}
+
+static void
+seahorse_ssh_backend_collection_init (GcrCollectionIface *iface)
+{
+	iface->contains = seahorse_ssh_backend_contains;
+	iface->get_length = seahorse_ssh_backend_get_length;
+	iface->get_objects = seahorse_ssh_backend_get_objects;
+}
+
+GcrCollection *
+seahorse_ssh_backend_initialize (void)
+{
+	SeahorseSshBackend *self;
+
+	self = g_object_new (SEAHORSE_TYPE_SSH_BACKEND, NULL);
+
+	return GCR_COLLECTION (self);
+}
+
+SeahorseSshBackend *
+seahorse_ssh_backend_get (void)
+{
+	g_return_val_if_fail (ssh_backend, NULL);
+	return ssh_backend;
+}
+
+SeahorseSSHSource *
+seahorse_ssh_backend_get_dot_ssh (SeahorseSshBackend *self)
+{
+	self = self ? self : seahorse_ssh_backend_get ();
+	g_return_val_if_fail (SEAHORSE_IS_SSH_BACKEND (self), NULL);
+	g_return_val_if_fail (self->dot_ssh, NULL);
+	return self->dot_ssh;
+}

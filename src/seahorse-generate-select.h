@@ -47,9 +47,9 @@ struct _SeahorseGenerateSelectClass {
 	SeahorseWidgetClass parent_class;
 };
 
-void seahorse_generate_select_show (GtkWindow* parent);
 GType seahorse_generate_select_get_type (void);
 
+void        seahorse_generate_select_show       (GtkWindow *parent);
 
 G_END_DECLS
 

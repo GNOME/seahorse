@@ -26,10 +26,10 @@
  
 #include <glib/gi18n.h>
 
+#include "seahorse-ssh-backend.h"
 #include "seahorse-ssh-dialogs.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
-#include "seahorse-ssh.h"
 #include "seahorse-ssh-operation.h"
 
 #include "seahorse-icons.h"
@@ -46,14 +46,7 @@
 static void
 on_ssh_generate_key (GtkAction *action, gpointer unused)
 {
-	SeahorseSource* sksrc;
-	
-	g_return_if_fail (GTK_IS_ACTION (action));
-	
-	sksrc = seahorse_context_find_source (seahorse_context_instance (), SEAHORSE_SSH_TYPE, SEAHORSE_LOCATION_LOCAL);
-	g_return_if_fail (sksrc != NULL);
-	
-	seahorse_ssh_generate_show (SEAHORSE_SSH_SOURCE (sksrc), NULL);
+	seahorse_ssh_generate_show (seahorse_ssh_backend_get_dot_ssh (NULL), NULL);
 }
 
 static const GtkActionEntry ACTION_ENTRIES[] = {

@@ -23,7 +23,6 @@
 #ifndef __SEAHORSE_PREDICATE_H__
 #define __SEAHORSE_PREDICATE_H__
 
-#include "seahorse-context.h"
 #include "seahorse-object.h"
 #include "seahorse-source.h"
 #include "seahorse-types.h"
@@ -36,10 +35,7 @@ typedef gboolean (*SeahorsePredicateFunc) (SeahorseObject *object,
 typedef struct _SeahorsePredicate SeahorsePredicate;
 
 struct _SeahorsePredicate {
-	GQuark tag;
-	GQuark id;
 	GType type;
-	SeahorseLocation location;
 	SeahorseUsage usage;
 	guint flags;
 	guint nflags;

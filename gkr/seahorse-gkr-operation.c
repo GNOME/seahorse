@@ -28,10 +28,12 @@
 
 #include <glib/gi18n.h>
 
+#include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-operation.h"
+
+#include "seahorse-passphrase.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
-#include "seahorse-passphrase.h"
 
 #include <gnome-keyring.h>
 #include <gnome-keyring-memory.h>
@@ -390,6 +392,8 @@ on_delete_gkr_complete (GnomeKeyringResult result,
 	delete_gkr_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
 	SeahorseObject *object;
+	SeahorseGkrKeyring *keyring;
+	SeahorseGkrItem *item;
 
 	closure->request = NULL;
 	object = g_queue_pop_head (closure->objects);
@@ -399,8 +403,16 @@ on_delete_gkr_complete (GnomeKeyringResult result,
 		g_simple_async_result_take_error (res, error);
 		g_simple_async_result_complete_in_idle (res);
 
-	} else {
-		g_object_run_dispose (G_OBJECT (object));
+	} else if (SEAHORSE_IS_GKR_ITEM (object)) {
+		keyring = SEAHORSE_GKR_KEYRING (seahorse_object_get_source (object));
+		item = SEAHORSE_GKR_ITEM (object);
+		seahorse_gkr_keyring_remove_item (keyring, seahorse_gkr_item_get_item_id (item));
+
+		delete_gkr_one_object (res);
+	} else if (SEAHORSE_IS_GKR_KEYRING (object)) {
+		keyring = SEAHORSE_GKR_KEYRING (object);
+		seahorse_gkr_backend_remove_keyring (NULL, keyring);
+
 		delete_gkr_one_object (res);
 	}
 

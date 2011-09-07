@@ -27,7 +27,6 @@ typedef struct _SeahorseRegistryPrivate SeahorseRegistryPrivate;
 struct _SeahorseRegistryPrivate {
 	GHashTable *types;
 	GHashTable *objects;
-	GHashTable *functions;
 };
 
 #define SEAHORSE_REGISTRY_GET_PRIVATE(o) \
@@ -159,8 +158,6 @@ seahorse_registry_init (SeahorseRegistry *obj)
 	                                   NULL, (GDestroyNotify)g_hash_table_destroy);
 	pv->objects = g_hash_table_new_full (g_direct_hash, g_direct_equal, 
 	                                     NULL, (GDestroyNotify)g_hash_table_destroy);
-	pv->functions = g_hash_table_new_full (g_direct_hash, g_direct_equal, 
-	                                       NULL, (GDestroyNotify)g_hash_table_destroy);
 }
 
 static void
@@ -257,33 +254,6 @@ seahorse_registry_register_object (SeahorseRegistry *registry, GObject *object,
 		if (!category)
 			break;
 		register_value_for_category (pv->objects, g_quark_from_string (category), g_object_ref (object), g_object_unref);
-	}
-	va_end (cats);
-}
-
-void
-seahorse_registry_register_function (SeahorseRegistry *registry, gpointer func, 
-                                     const gchar *category, ...)
-{
-	SeahorseRegistryPrivate *pv;
-	va_list cats;
-
-	if (!registry)
-		registry = seahorse_registry_get ();
-	
-	g_return_if_fail (SEAHORSE_IS_REGISTRY (registry));
-	g_return_if_fail (func);
-	g_return_if_fail (category);
-
-	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
-	register_value_for_category (pv->functions, g_quark_from_string (category), func, NULL);
-	
-	va_start (cats, category);
-	for (;;) {
-		category = va_arg (cats, const gchar*);
-		if (!category)
-			break;
-		register_value_for_category (pv->functions, g_quark_from_string (category), func, NULL);
 	}
 	va_end (cats);
 }
@@ -386,24 +356,4 @@ seahorse_registry_object_instances (SeahorseRegistry *registry, const gchar *cat
 	
 	g_list_free (types);
 	return objects;
-}
-
-gpointer
-seahorse_registry_lookup_function (SeahorseRegistry *registry, const gchar *category, ...)
-{
-	SeahorseRegistryPrivate *pv;
-	va_list cats;
-	gpointer func;
-	
-	if (!registry)
-		registry = seahorse_registry_get ();
-	
-	g_return_val_if_fail (SEAHORSE_IS_REGISTRY (registry), 0);
-	pv = SEAHORSE_REGISTRY_GET_PRIVATE (registry);
-
-	va_start (cats, category);
-	func = lookup_category_value (pv->functions, category, cats);
-	va_end (cats);
-
-	return func;
 }

@@ -44,8 +44,6 @@
 
 enum {
     PROP_0,
-    PROP_SOURCE_TAG,
-    PROP_SOURCE_LOCATION,
     PROP_KEY_SERVER,
     PROP_URI
 };
@@ -88,9 +86,6 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
     gobject_class->set_property = seahorse_server_set_property;
     gobject_class->get_property = seahorse_server_get_property;
 
-	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
-	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
-	
     g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
             g_param_spec_string ("key-server", "Key Server",
                                  "Key Server to search on", "",
@@ -100,36 +95,6 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
             g_param_spec_string ("uri", "Key Server URI",
                                  "Key Server full URI", "",
                                  G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
-    
-	seahorse_registry_register_function (NULL, seahorse_pgp_key_canonize_id, "canonize", SEAHORSE_PGP_STR, NULL);
-}
-
-static void
-seahorse_server_source_load_async (SeahorseSource *source,
-                                   GCancellable *cancellable,
-                                   GAsyncReadyCallback callback,
-                                   gpointer user_data)
-{
-	GSimpleAsyncResult *res;
-
-	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
-	                                 seahorse_server_source_load_async);
-	g_simple_async_result_complete_in_idle (res);
-	g_object_unref (res);
-}
-
-static gboolean
-seahorse_server_source_load_finish (SeahorseSource *source,
-                                    GAsyncResult *result,
-                                    GError **error)
-{
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
-	                      seahorse_server_source_load_async), FALSE);
-
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return FALSE;
-
-	return TRUE;
 }
 
 /**
@@ -143,8 +108,7 @@ seahorse_server_source_load_finish (SeahorseSource *source,
 static void 
 seahorse_source_iface (SeahorseSourceIface *iface)
 {
-	iface->load_async = seahorse_server_source_load_async;
-	iface->load_finish = seahorse_server_source_load_finish;
+
 }
 
 /**
@@ -221,7 +185,7 @@ seahorse_server_set_property (GObject *object, guint prop_id,
 * pspec: ignored
 *
 * The properties that can be read are:
-* PROP_KEY_SERVER, PROP_URI, PROP_SOURCE_TAG, PROP_SOURCE_LOCATION
+* PROP_KEY_SERVER, PROP_URI
 *
 **/
 static void 
@@ -237,13 +201,7 @@ seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
     case PROP_URI:
         g_value_set_string (value, ssrc->priv->uri);
         break;
-    case PROP_SOURCE_TAG:
-        g_value_set_uint (value, SEAHORSE_PGP);
-        break;
-    case PROP_SOURCE_LOCATION:
-        g_value_set_enum (value, SEAHORSE_LOCATION_REMOTE);
-        break;
-    }        
+    }
 }
 
 /* --------------------------------------------------------------------------
@@ -365,4 +323,68 @@ seahorse_server_source_new (const gchar *server)
     
     g_free (uri);
     return ssrc;
+}
+
+void
+seahorse_server_source_search_async (SeahorseServerSource *self,
+                                     const gchar *match,
+                                     GcrSimpleCollection *results,
+                                     GCancellable *cancellable,
+                                     GAsyncReadyCallback callback,
+                                     gpointer user_data)
+{
+	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (self));
+	g_return_if_fail (match != NULL);
+	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+	g_return_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_async);
+	SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_async (self, match, results,
+	                                                       cancellable, callback, user_data);
+}
+
+gboolean
+seahorse_server_source_search_finish (SeahorseServerSource *self,
+                                      GAsyncResult *result,
+                                      GError **error)
+{
+	g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (self), FALSE);
+	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_finish, FALSE);
+	return SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_finish (self, result, error);
+}
+
+void
+seahorse_server_source_export_async (SeahorseServerSource *self,
+                                     GList *keyids,
+                                     GOutputStream *output,
+                                     GCancellable *cancellable,
+                                     GAsyncReadyCallback callback,
+                                     gpointer user_data)
+{
+	SeahorseServerSourceClass *klass;
+
+	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (self));
+	g_return_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output));
+	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+
+	klass = SEAHORSE_SERVER_SOURCE_GET_CLASS (self);
+	g_return_if_fail (klass->export_async);
+	(klass->export_async) (self, keyids, output, cancellable, callback, user_data);
+}
+
+GOutputStream *
+seahorse_server_source_export_finish (SeahorseServerSource *self,
+                                      GAsyncResult *result,
+                                      GError **error)
+{
+	SeahorseServerSourceClass *klass;
+
+	g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (self), NULL);
+	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	klass = SEAHORSE_SERVER_SOURCE_GET_CLASS (self);
+	g_return_val_if_fail (klass->export_async != NULL, NULL);
+	g_return_val_if_fail (klass->export_finish != NULL, NULL);
+	return (klass->export_finish) (self, result, error);
 }

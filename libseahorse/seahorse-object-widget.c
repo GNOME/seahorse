@@ -99,23 +99,21 @@ seahorse_object_widget_finalize (GObject *gobject)
     SeahorseWidget *swidget;
     SeahorseObjectWidget *self;
     GHashTable *widgets = NULL;
-    GQuark id;
     GtkWidget *widget;
     
     self = SEAHORSE_OBJECT_WIDGET (gobject);
     swidget = SEAHORSE_WIDGET (self);
     
     g_return_if_fail (SEAHORSE_IS_OBJECT (self->object));
-    id = seahorse_object_get_id (self->object);
-    
+
     /* get widgets hash from types */
-    widgets = g_hash_table_lookup (types, GUINT_TO_POINTER (id));
+    widgets = g_hash_table_lookup (types, self->object);
     /* if have a widgets hash, remove the widget */
     if (widgets != NULL) {
         g_hash_table_remove (widgets, swidget->name);
         /* if there are no more widgets, remove the hash */
         if (g_hash_table_size (widgets) == 0) {
-            g_hash_table_remove (types, GUINT_TO_POINTER (id));
+            g_hash_table_remove (types, self->object);
             /* if there are no more objects, destroy types */
             if (g_hash_table_size (types) == 0) {
                 g_hash_table_destroy (types);
@@ -193,12 +191,9 @@ seahorse_object_widget_create (gchar *name, GtkWindow *parent, SeahorseObject *o
 {
     SeahorseWidget *swidget = NULL;     // widget to lookup or create
     GHashTable *widgets = NULL;         // hash of widgets from types
-    GQuark id;                          // hash key
     GtkWindowGroup *group = NULL;       // window group from groups
     GtkWidget *widget;                  // main window widget of swidget
-    
-    id = seahorse_object_get_id (object);
-    
+
     /* if don't have a types hash, create one */
     if (types == NULL)
         types = g_hash_table_new_full (g_direct_hash, g_direct_equal,
@@ -206,12 +201,12 @@ seahorse_object_widget_create (gchar *name, GtkWindow *parent, SeahorseObject *o
     
     /* otherwise lookup the widgets hash for the object */
     else
-        widgets = g_hash_table_lookup (types, GUINT_TO_POINTER (id));
+        widgets = g_hash_table_lookup (types, object);
     
     /* if don't have a widgets hash for a object, create one and insert it */
     if (widgets == NULL) {
         widgets = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-        g_hash_table_insert (types, GUINT_TO_POINTER (id), widgets);
+        g_hash_table_insert (types, object, widgets);
         
     /* otherwise lookup the widget */
     } else {
@@ -236,12 +231,12 @@ seahorse_object_widget_create (gchar *name, GtkWindow *parent, SeahorseObject *o
     
     /* otherwise lookup the group for that object */
     else
-        group = g_hash_table_lookup (groups, GUINT_TO_POINTER (id));
+        group = g_hash_table_lookup (groups, object);
     
     /* if don't have a group for the object, create one and insert it */
     if (group == NULL) {
         group = gtk_window_group_new ();
-        g_hash_table_insert (groups, GUINT_TO_POINTER (id), group);
+        g_hash_table_insert (groups, object, group);
     }
     
     /* get window, add it to the group, return it */

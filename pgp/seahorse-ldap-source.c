@@ -735,58 +735,22 @@ seahorse_ldap_source_connect_finish (SeahorseLDAPSource *source,
 	return ldap;
 }
 
-enum {
-	PROP_0,
-	PROP_SOURCE_TAG,
-	PROP_SOURCE_LOCATION
-};
-
 static void seahorse_source_iface (SeahorseSourceIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (SeahorseLDAPSource, seahorse_ldap_source, SEAHORSE_TYPE_SERVER_SOURCE, 0,
                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
 
 static void 
-seahorse_ldap_source_init (SeahorseLDAPSource *lsrc)
+seahorse_ldap_source_init (SeahorseLDAPSource *self)
 {
 
-}
-
-static void 
-seahorse_ldap_source_get_property (GObject *object, guint prop_id, GValue *value,
-                                   GParamSpec *pspec)
-{
-    switch (prop_id) {
-    case PROP_SOURCE_TAG:
-        g_value_set_uint (value, SEAHORSE_PGP);
-        break;
-    case PROP_SOURCE_LOCATION:
-        g_value_set_enum (value, SEAHORSE_LOCATION_REMOTE);
-        break;
-    };        
-}
-
-/* Initialize the basic class stuff */
-static void
-seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
-{
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-	gobject_class->get_property = seahorse_ldap_source_get_property;
-
-	g_object_class_override_property (gobject_class, PROP_SOURCE_TAG, "source-tag");
-	g_object_class_override_property (gobject_class, PROP_SOURCE_LOCATION, "source-location");
-
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_LDAP_SOURCE, "source", "remote", SEAHORSE_PGP_STR, NULL);
-	seahorse_servers_register_type ("ldap", _("LDAP Key Server"), seahorse_ldap_is_valid_uri);
-	seahorse_registry_register_function (NULL, seahorse_pgp_key_canonize_id, "canonize", SEAHORSE_PGP_STR, NULL);
 }
 
 typedef struct {
 	GCancellable *cancellable;
 	gchar *filter;
 	LDAP *ldap;
-	GList *results;
+	GcrSimpleCollection *results;
 } source_search_closure;
 
 static void
@@ -794,7 +758,7 @@ source_search_free (gpointer data)
 {
 	source_search_closure *closure = data;
 	g_clear_object (&closure->cancellable);
-	g_list_free (closure->results);
+	g_clear_object (&closure->results);
 	g_free (closure->filter);
 	if (closure->ldap)
 		ldap_unbind_ext (closure->ldap, NULL, NULL);
@@ -813,34 +777,13 @@ static const char *PGP_ATTRIBUTES[] = {
 	NULL
 };
 
-static void
-add_key (SeahorseLDAPSource *ssrc, SeahorsePgpKey *key)
-{
-	SeahorseObject *prev;
-	GQuark keyid;
-
-	keyid = seahorse_pgp_key_canonize_id (seahorse_pgp_key_get_keyid (key));
-	prev = seahorse_context_get_object (SCTX_APP (), SEAHORSE_SOURCE (ssrc), keyid);
-
-	if (prev != NULL) {
-		g_return_if_fail (SEAHORSE_IS_PGP_KEY (prev));
-		seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (prev), seahorse_pgp_key_get_uids (key));
-		seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (prev), seahorse_pgp_key_get_subkeys (key));
-		return;
-	}
-
-	/* Add to context */
-	seahorse_object_set_source (SEAHORSE_OBJECT (key), SEAHORSE_SOURCE (ssrc));
-	seahorse_context_add_object (SCTX_APP (), SEAHORSE_OBJECT (key));
-}
-
 /* Add a key to the key source from an LDAP entry */
-static SeahorseObject *
+static void
 search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
+                                  GcrSimpleCollection *results,
                                   LDAP *ldap,
                                   LDAPMessage *res)
 {
-	SeahorseObject *result = NULL;
 	const gchar *algo;
 	long int timestamp;
 	long int expires;
@@ -850,7 +793,7 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
 	gboolean disabled;
 	int length;
 
-	g_return_val_if_fail (ldap_msgtype (res) == LDAP_RES_SEARCH_ENTRY, NULL);
+	g_return_if_fail (ldap_msgtype (res) == LDAP_RES_SEARCH_ENTRY);
 
 	fpr = get_string_attribute (ldap, res, "pgpcertid");
 	uidstr = get_string_attribute (ldap, res, "pgpuserid");
@@ -900,18 +843,15 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
 		list = g_list_prepend (NULL, subkey);
 		seahorse_pgp_key_set_subkeys (key, list);
 		seahorse_object_list_free (list);
-		g_object_set (key, "location", SEAHORSE_LOCATION_REMOTE,
-		              "flags", flags, NULL);
+		g_object_set (key, "flags", flags, NULL);
 
-		add_key (self, key);
+		seahorse_pgp_key_realize (key);
+		gcr_simple_collection_add (results, G_OBJECT (key));
 		g_object_unref (key);
-		result = SEAHORSE_OBJECT (key);
 	}
 
 	g_free (fpr);
 	g_free (uidstr);
-
-	return result;
 }
 
 static gboolean
@@ -922,7 +862,6 @@ on_search_search_completed (LDAPMessage *result,
 	source_search_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	SeahorseLDAPSource *self = SEAHORSE_LDAP_SOURCE (g_async_result_get_source_object (user_data));
 	GError *error = NULL;
-	SeahorseObject *key;
 	char *message;
 	int code;
 	int type;
@@ -939,9 +878,8 @@ on_search_search_completed (LDAPMessage *result,
 			dump_ldap_entry (closure->ldap, result);
 #endif
 
-		key = search_parse_key_from_ldap_entry (self, closure->ldap, result);
-		if (key != NULL)
-			closure->results = g_list_prepend (closure->results, key);
+		search_parse_key_from_ldap_entry (self, closure->results,
+		                                  closure->ldap, result);
 		return TRUE; /* keep calling this callback */
 
 	/* All entries done */
@@ -1020,8 +958,9 @@ on_search_connect_completed (GObject *source,
 
 
 static void
-seahorse_ldap_source_search_async (SeahorseSource *source,
+seahorse_ldap_source_search_async (SeahorseServerSource *source,
                                    const gchar *match,
+                                   GcrSimpleCollection *results,
                                    GCancellable *cancellable,
                                    GAsyncReadyCallback callback,
                                    gpointer user_data)
@@ -1035,6 +974,7 @@ seahorse_ldap_source_search_async (SeahorseSource *source,
 	                                 seahorse_ldap_source_search_async);
 	closure = g_new0 (source_search_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+	closure->results = g_object_ref (results);
 	text = escape_ldap_value (match);
 	closure->filter = g_strdup_printf ("(pgpuserid=*%s*)", text);
 	g_free (text);
@@ -1049,24 +989,18 @@ seahorse_ldap_source_search_async (SeahorseSource *source,
 	g_object_unref (res);
 }
 
-static GList *
-seahorse_ldap_source_search_finish (SeahorseSource *source,
+static gboolean
+seahorse_ldap_source_search_finish (SeahorseServerSource *source,
                                     GAsyncResult *result,
                                     GError **error)
 {
-	source_search_closure *closure;
-	GList *keys;
-
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
-	                      seahorse_ldap_source_search_async), NULL);
+	                      seahorse_ldap_source_search_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return NULL;
+		return FALSE;
 
-	closure = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-	keys = closure->results;
-	closure->results = NULL;
-	return keys;
+	return TRUE;
 }
 
 typedef struct {
@@ -1441,12 +1375,12 @@ on_export_connect_completed (GObject *source,
 }
 
 static void
-seahorse_ldap_source_export_raw_async (SeahorseSource *source,
-                                       GList *keyids,
-                                       GOutputStream *output,
-                                       GCancellable *cancellable,
-                                       GAsyncReadyCallback callback,
-                                       gpointer user_data)
+seahorse_ldap_source_export_async (SeahorseServerSource *source,
+                                   GList *keyids,
+                                   GOutputStream *output,
+                                   GCancellable *cancellable,
+                                   GAsyncReadyCallback callback,
+                                   gpointer user_data)
 {
 	SeahorseLDAPSource *self = SEAHORSE_LDAP_SOURCE (source);
 	source_export_closure *closure;
@@ -1455,13 +1389,13 @@ seahorse_ldap_source_export_raw_async (SeahorseSource *source,
 	GList *l;
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_ldap_source_export_raw_async);
+	                                 seahorse_ldap_source_export_async);
 	closure = g_new0 (source_export_closure, 1);
 	closure->output = g_object_ref (output);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	closure->fingerprints = g_ptr_array_new_with_free_func (g_free);
 	for (l = keyids; l; l = g_list_next (l)) {
-		fingerprint = g_strdup (seahorse_pgp_key_calc_rawid (GPOINTER_TO_UINT (l->data)));
+		fingerprint = g_strdup (l->data);
 		g_ptr_array_add (closure->fingerprints, fingerprint);
 		seahorse_progress_prep (closure->cancellable, fingerprint, NULL);
 	}
@@ -1476,14 +1410,14 @@ seahorse_ldap_source_export_raw_async (SeahorseSource *source,
 }
 
 static GOutputStream *
-seahorse_ldap_source_export_raw_finish (SeahorseSource *source,
-                                        GAsyncResult *result,
-                                        GError **error)
+seahorse_ldap_source_export_finish (SeahorseServerSource *source,
+                                    GAsyncResult *result,
+                                    GError **error)
 {
 	source_export_closure *closure;
 
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
-	                      seahorse_ldap_source_export_raw_async), FALSE);
+	                      seahorse_ldap_source_export_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
 		return FALSE;
@@ -1495,12 +1429,23 @@ seahorse_ldap_source_export_raw_finish (SeahorseSource *source,
 static void 
 seahorse_source_iface (SeahorseSourceIface *iface)
 {
-	iface->search_async = seahorse_ldap_source_search_async;
-	iface->search_finish = seahorse_ldap_source_search_finish;
 	iface->import_async = seahorse_ldap_source_import_async;
 	iface->import_finish = seahorse_ldap_source_import_finish;
-	iface->export_raw_async = seahorse_ldap_source_export_raw_async;
-	iface->export_raw_finish = seahorse_ldap_source_export_raw_finish;
+}
+
+/* Initialize the basic class stuff */
+static void
+seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
+{
+	SeahorseServerSourceClass *server_class = SEAHORSE_SERVER_SOURCE_CLASS (klass);
+
+	server_class->search_async = seahorse_ldap_source_search_async;
+	server_class->search_finish = seahorse_ldap_source_search_finish;
+	server_class->export_async = seahorse_ldap_source_export_async;
+	server_class->export_finish = seahorse_ldap_source_export_finish;
+
+	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_LDAP_SOURCE, "source", "remote", NULL);
+	seahorse_servers_register_type ("ldap", _("LDAP Key Server"), seahorse_ldap_is_valid_uri);
 }
 
 /**

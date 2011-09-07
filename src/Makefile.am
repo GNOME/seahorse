@@ -4,19 +4,11 @@ localedir = $(datadir)/locale
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
-	-I$(top_srcdir)/libegg \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DGETTEXT_PACKAGE=\""seahorse\""
-
-if WITH_KEYSERVER
-KEYSERVER_SRCS = seahorse-keyserver-search.c seahorse-keyserver-sync.c seahorse-keyserver-sync.h
-KEYSERVER_SRCS += seahorse-keyserver-results.c seahorse-keyserver-results.h
-else
-KEYSERVER_SRCS = 
-endif
 
 if WITH_PGP
 PGP_LDADD = $(top_builddir)/pgp/libseahorse-pgp.la
@@ -39,12 +31,9 @@ endif
 bin_PROGRAMS = seahorse
 
 seahorse_SOURCES = \
-	seahorse-preferences.c seahorse-preferences.h \
 	seahorse-generate-select.c seahorse-generate-select.h \
 	seahorse-key-manager.c seahorse-key-manager.h \
-	seahorse-key-manager-store.c seahorse-key-manager-store.h \
 	seahorse-main.c \
-	seahorse-viewer.c seahorse-viewer.h \
 	seahorse-windows.h \
 	$(KEYSERVER_SRCS)
 
