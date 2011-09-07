@@ -77,7 +77,7 @@ struct _SeahorseWidgetClass {
 	void (*destroy) (SeahorseWidget *swidget);
 };
 
-GType            seahorse_widget_get_type ();
+GType            seahorse_widget_get_type           (void) G_GNUC_CONST;
 
 SeahorseWidget*  seahorse_widget_new                (const gchar      *name,
                                                      GtkWindow        *parent);

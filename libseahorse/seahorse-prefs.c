@@ -32,7 +32,16 @@
 #include "seahorse-widget.h"
 
 /* From seahorse-prefs-cache.c */
-void seahorse_prefs_cache (SeahorseWidget *widget);
+void           seahorse_prefs_cache                     (SeahorseWidget *widget);
+
+void           on_prefs_keyserver_add_clicked           (GtkButton *button,
+                                                         gpointer user_data);
+
+void           on_prefs_keyserver_remove_clicked        (GtkWidget *button,
+                                                         gpointer user_data);
+
+void           on_prefs_add_keyserver_uri_changed       (GtkWidget *button,
+                                                         gpointer user_data);
 
 /* Key Server Prefs --------------------------------------------------------- */
 
@@ -83,8 +92,10 @@ remove_row (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer 
 
 /* User wants to remove selected rows */
 G_MODULE_EXPORT void
-on_prefs_keyserver_remove_clicked (GtkWidget *button, SeahorseWidget *swidget)
+on_prefs_keyserver_remove_clicked (GtkWidget *button,
+                                   gpointer user_data)
 {
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     GtkTreeView *treeview;
     GtkTreeSelection *selection;
     
@@ -270,8 +281,10 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
 }
 
 G_MODULE_EXPORT void
-on_prefs_add_keyserver_uri_changed (GtkWidget *button, SeahorseWidget *swidget)
+on_prefs_add_keyserver_uri_changed (GtkWidget *button,
+                                    gpointer user_data)
 {
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     GtkWidget *widget;
     gchar **types;
     gchar *t;
@@ -303,8 +316,10 @@ on_prefs_add_keyserver_uri_changed (GtkWidget *button, SeahorseWidget *swidget)
 }
 
 G_MODULE_EXPORT void
-on_prefs_keyserver_add_clicked (GtkButton *button, SeahorseWidget *sw)
+on_prefs_keyserver_add_clicked (GtkButton *button,
+                                gpointer user_data)
 {
+    SeahorseWidget *sw = SEAHORSE_WIDGET (user_data);
     SeahorseWidget *swidget;
     gchar **types;
     GtkWidget *widget;

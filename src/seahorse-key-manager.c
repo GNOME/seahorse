@@ -36,6 +36,24 @@
 
 #include <glib/gi18n.h>
 
+void           on_keymanager_row_activated              (GtkTreeView* view,
+                                                         GtkTreePath* path,
+                                                         GtkTreeViewColumn* column,
+                                                         SeahorseKeyManager* self);
+
+gboolean       on_keymanager_key_list_button_pressed    (GtkTreeView* view,
+                                                         GdkEventButton* event,
+                                                         SeahorseKeyManager* self);
+
+gboolean       on_keymanager_key_list_popup_menu        (GtkTreeView* view,
+                                                         SeahorseKeyManager* self);
+
+void           on_keymanager_new_button                 (GtkButton* button,
+                                                         SeahorseKeyManager* self);
+
+void           on_keymanager_import_button              (GtkButton* button,
+                                                         SeahorseKeyManager* self);
+
 enum {
 	PROP_0,
 	PROP_SELECTED

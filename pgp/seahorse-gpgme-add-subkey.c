@@ -39,9 +39,20 @@ enum {
   N_COLUMNS
 };
 
+void             hanlder_gpgme_add_subkey_type_changed          (GtkComboBox *combo,
+                                                                 gpointer user_data);
+
+void             on_gpgme_add_subkey_never_expires_toggled      (GtkToggleButton *togglebutton,
+                                                                 gpointer user_data);
+
+void             on_gpgme_add_subkey_ok_clicked                 (GtkButton *button,
+                                                                 gpointer user_data);
+
 G_MODULE_EXPORT void
-hanlder_gpgme_add_subkey_type_changed (GtkComboBox *combo, SeahorseWidget *swidget)
+hanlder_gpgme_add_subkey_type_changed (GtkComboBox *combo,
+                                       gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	gint type;
 	GtkSpinButton *length;
     GtkTreeModel *model;
@@ -75,8 +86,10 @@ hanlder_gpgme_add_subkey_type_changed (GtkComboBox *combo, SeahorseWidget *swidg
 }
 
 G_MODULE_EXPORT void
-on_gpgme_add_subkey_never_expires_toggled (GtkToggleButton *togglebutton, SeahorseWidget *swidget)
+on_gpgme_add_subkey_never_expires_toggled (GtkToggleButton *togglebutton,
+                                           gpointer user_data)
 {
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     GtkWidget *widget;
 
     widget = GTK_WIDGET (g_object_get_data (G_OBJECT (swidget), "expires-datetime"));
@@ -87,8 +100,10 @@ on_gpgme_add_subkey_never_expires_toggled (GtkToggleButton *togglebutton, Seahor
 }
 
 G_MODULE_EXPORT void
-on_gpgme_add_subkey_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+on_gpgme_add_subkey_ok_clicked (GtkButton *button,
+                                gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	SeahorseObjectWidget *skwidget;
 	SeahorseKeyEncType real_type;
 	gint type;

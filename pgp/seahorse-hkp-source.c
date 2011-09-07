@@ -290,7 +290,7 @@ dehtmlize(gchar *line)
  *
  * Returns: 0 on error or the timestamp
  */
-unsigned int
+static unsigned int
 parse_hkp_date (const gchar *text)
 {
     int year, month, day;
@@ -558,7 +558,7 @@ get_send_result (const gchar *response)
  *
  * Returns: FALSE if no key is contained, TRUE else
  */
-gboolean
+static gboolean
 detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
 {
     const gchar *t;

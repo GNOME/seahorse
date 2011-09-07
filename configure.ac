@@ -443,7 +443,7 @@ fi
 
 if test "$enable_debug" = "full"; then
 	debug_status="full"
-	CFLAGS="$CFLAGS -g -O0 -Werror -Wall"
+	CFLAGS="$CFLAGS -g -O0 -Werror"
 	CFLAGS="$CFLAGS -DG_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED"
 	CFLAGS="$CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
 elif test "$enable_debug" = "no"; then
@@ -477,15 +477,37 @@ fi
 
 AM_CONDITIONAL(WITH_TESTS, test "$enable_tests" = "yes")
 
-GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
-ATK_PREFIX="`$PKG_CONFIG --variable=prefix atk`"
-PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
-CAIRO_PREFIX="`pkg-config --variable=prefix cairo`" 
+# -------------------------------------------------------------------
+# More warnings
 
-AC_SUBST(GLIB_PREFIX)
-AC_SUBST(ATK_PREFIX)
-AC_SUBST(PANGO_PREFIX)
-AC_SUBST(CAIRO_PREFIX)
+AC_MSG_CHECKING(for more warnings)
+if test "$GCC" = "yes"; then
+	AC_MSG_RESULT(yes)
+	CFLAGS="\
+	-Wall \
+	-Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes \
+	-Wnested-externs -Wpointer-arith \
+	-Wcast-align -Wsign-compare \
+	$CFLAGS"
+
+	for option in -Wno-strict-aliasing -Wno-sign-compare; do
+		SAVE_CFLAGS="$CFLAGS"
+		CFLAGS="$CFLAGS $option"
+		AC_MSG_CHECKING([whether gcc understands $option])
+		AC_TRY_COMPILE([], [],
+			has_option=yes,
+			has_option=no,)
+		if test $has_option = no; then
+			CFLAGS="$SAVE_CFLAGS"
+		fi
+		AC_MSG_RESULT($has_option)
+		unset has_option
+		unset SAVE_CFLAGS
+	done
+	unset option
+else
+	AC_MSG_RESULT(no)
+fi
 
 dnl ****************************************************************************
 

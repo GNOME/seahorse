@@ -56,6 +56,8 @@ struct _SeahorseKeyManagerStoreClass {
 	SeahorseSetModelClass           parent_class;
 };
 
+GType                      seahorse_key_manager_store_get_type               (void) G_GNUC_CONST;
+
 SeahorseKeyManagerStore*   seahorse_key_manager_store_new                    (SeahorseSet *skset,
                                                                               GtkTreeView *view,
                                                                               GSettings *settings);

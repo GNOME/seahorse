@@ -155,7 +155,7 @@ parse_key_data (gchar *line, SeahorseSSHKeyData *data)
     return TRUE;
 }
 
-gchar*
+static gchar *
 parse_lines_block (gchar ***lx, const gchar *start, const gchar* end)
 {
     GString *result;

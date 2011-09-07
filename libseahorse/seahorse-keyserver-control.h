@@ -60,6 +60,8 @@ struct _SeahorseKeyserverControlClass {
 	GtkComboBoxClass parent_class;
 };
 
+GType                       seahorse_keyserver_control_get_type    (void) G_GNUC_CONST;
+
 SeahorseKeyserverControl*   seahorse_keyserver_control_new         (const gchar *settings_key,
                                                                     const gchar *none_option);
 

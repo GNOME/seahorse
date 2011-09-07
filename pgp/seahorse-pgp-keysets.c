@@ -56,8 +56,8 @@ pgp_signers_match (SeahorseObject *obj, gpointer data)
     return TRUE;
 }
 
-SeahorseSet*     
-seahorse_keyset_pgp_signers_new ()
+SeahorseSet *
+seahorse_keyset_pgp_signers_new (void)
 {
     SeahorseObjectPredicate *pred = g_new0 (SeahorseObjectPredicate, 1);
     SeahorseSet *skset;

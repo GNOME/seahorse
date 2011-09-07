@@ -32,9 +32,17 @@
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-gpgme-subkey.h"
 
+void              on_gpgme_expire_ok_clicked             (GtkButton *button,
+                                                          gpointer user_data);
+
+void              on_gpgme_expire_toggled                (GtkWidget *widget,
+                                                          gpointer user_data);
+
 G_MODULE_EXPORT void
-on_gpgme_expire_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+on_gpgme_expire_ok_clicked (GtkButton *button,
+                            gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	GtkWidget *widget; 
 	SeahorseGpgmeSubkey *subkey;
 	gpgme_error_t err;
@@ -77,8 +85,10 @@ on_gpgme_expire_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 }
 
 G_MODULE_EXPORT void
-on_gpgme_expire_toggled (GtkWidget *widget, SeahorseWidget *swidget)
+on_gpgme_expire_toggled (GtkWidget *widget,
+                         gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	GtkWidget *expire;
 	GtkWidget *cal;
 	

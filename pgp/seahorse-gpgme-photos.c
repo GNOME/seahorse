@@ -101,7 +101,7 @@ save_to_fd (const gchar *buf, gsize count, GError **error, gpointer data)
     return TRUE;
 }
 
-gboolean
+static gboolean
 prepare_photo_id (GtkWindow *parent, gchar *path, gchar **result, GError **error)
 {
     GdkPixbuf *pixbuf = NULL;

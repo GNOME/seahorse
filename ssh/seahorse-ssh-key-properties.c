@@ -28,12 +28,29 @@
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 
+#include "ssh/seahorse-ssh-dialogs.h"
 #include "ssh/seahorse-ssh-key.h"
 #include "ssh/seahorse-ssh-operation.h"
 
 #include <glib/gi18n.h>
 
 #define NOTEBOOK "notebook"
+
+void            on_ssh_comment_activate            (GtkWidget *entry,
+                                                    SeahorseWidget *swidget);
+
+gboolean        on_ssh_comment_focus_out           (GtkWidget* widget,
+                                                    GdkEventFocus *event,
+                                                    SeahorseWidget *swidget);
+
+void            on_ssh_trust_toggled               (GtkToggleButton *button,
+                                                    SeahorseWidget *swidget);
+
+void            on_ssh_passphrase_button_clicked   (GtkWidget *widget,
+                                                    SeahorseWidget *swidget);
+
+void            on_ssh_export_button_clicked       (GtkWidget *widget,
+                                                    SeahorseWidget *swidget);
 
 typedef struct {
 	SeahorseWidget *swidget;

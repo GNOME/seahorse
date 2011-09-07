@@ -261,48 +261,6 @@ seahorse_util_get_display_date_string (const time_t time)
 }
 
 /**
- * seahorse_util_get_text_view_text:
- * @view: The text view #GtkTextView to extract text from
- *
- * Returns the whole text buffer
- *
- * Returns: The text buffer extracted. The returned string should be freed with 
- * #g_free when no longer needed.
- */
-gchar*
-seahorse_util_get_text_view_text (GtkTextView *view)
-{
-	GtkTextBuffer *buffer;
-	GtkTextIter start;                                                      
-    GtkTextIter end;
-	gchar *text;
-	
-    g_return_val_if_fail (view != NULL, "");	
-	
-	buffer = gtk_text_view_get_buffer (view);                                                
-    gtk_text_buffer_get_bounds (buffer, &start, &end);                      
-    text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);   
-    return text;
-}
-
-/**
- * seahorse_util_set_text_view_string:
- * @view: The view to set the text for (#GtkTextView)
- * @string: The string to set (#GString)
- *
- *
- */
-void
-seahorse_util_set_text_view_string (GtkTextView *view, GString *string)
-{
-    GtkTextBuffer *buffer;
-	g_return_if_fail (view != NULL && string != NULL);
-	
-	buffer = gtk_text_view_get_buffer (view);
-	gtk_text_buffer_set_text (buffer, string->str, string->len);
-}
-
-/**
  * seahorse_util_read_to_memory:
  * @input: Data to read. The #GInputStream is read till the end.
  * @len: Length of the data read (out)

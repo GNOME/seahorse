@@ -32,6 +32,13 @@
 
 #include <string.h>
 
+gboolean              on_key_list_button_pressed           (GtkTreeView* view,
+                                                            GdkEventButton* event,
+                                                            SeahorseKeyserverResults* self);
+
+gboolean              on_key_list_popup_menu               (GtkTreeView* view,
+                                                            SeahorseKeyserverResults* self);
+
 enum {
 	PROP_0,
 	PROP_SEARCH,

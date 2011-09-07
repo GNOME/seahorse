@@ -69,6 +69,6 @@ GType                seahorse_gpgme_source_get_type       (void);
 
 SeahorseGpgmeSource*   seahorse_gpgme_source_new            (void);
 
-gpgme_ctx_t          seahorse_gpgme_source_new_context    ();
+gpgme_ctx_t          seahorse_gpgme_source_new_context    (void);
 
 #endif /* __SEAHORSE_GPGME_SOURCE_H__ */

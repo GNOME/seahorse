@@ -79,7 +79,7 @@ G_DEFINE_TYPE (SeahorseGkrItem, seahorse_gkr_item, SEAHORSE_TYPE_OBJECT);
  * INTERNAL HELPERS
  */
 
-GType
+static GType
 boxed_item_info_type (void)
 {
 	static GType type = 0;
@@ -90,7 +90,7 @@ boxed_item_info_type (void)
 	return type;
 }
 
-GType
+static GType
 boxed_attributes_type (void)
 {
 	static GType type = 0;
@@ -98,17 +98,6 @@ boxed_attributes_type (void)
 		type = g_boxed_type_register_static ("GnomeKeyringAttributeList", 
 		                                     (GBoxedCopyFunc)gnome_keyring_attribute_list_copy,
 		                                     (GBoxedFreeFunc)gnome_keyring_attribute_list_free);
-	return type;
-}
-
-GType
-boxed_acl_type (void)
-{
-	static GType type = 0;
-	if (!type)
-		type = g_boxed_type_register_static ("GnomeKeyringAcl", 
-		                                     (GBoxedCopyFunc)gnome_keyring_acl_copy,
-		                                     (GBoxedFreeFunc)gnome_keyring_acl_free);
 	return type;
 }
 

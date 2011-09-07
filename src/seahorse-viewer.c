@@ -36,6 +36,9 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
+void                on_app_preferences                (GtkAction* action,
+                                                       SeahorseViewer* self);
+
 enum {
 	PROP_0,
 	PROP_SELECTED,

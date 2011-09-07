@@ -259,7 +259,7 @@ seahorse_pkcs11_certificate_class_init (SeahorsePkcs11CertificateClass *klass)
 	gcr_certificate_mixin_class_init (gobject_class);
 }
 
-const guchar*
+static const guchar*
 seahorse_pkcs11_certificate_get_der_data (GcrCertificate *cert, gsize *n_length)
 {
 	SeahorsePkcs11Object *obj = SEAHORSE_PKCS11_OBJECT (cert);

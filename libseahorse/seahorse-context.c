@@ -842,7 +842,7 @@ typedef struct _ObjectMatcher {
  * Returns: TRUE if the search terminates, FALSE if there could be another
  * match or nothing was found
  */
-gboolean
+static gboolean
 find_matching_objects (gpointer key, SeahorseObject *sobj, ObjectMatcher *km)
 {
 	gboolean matched;

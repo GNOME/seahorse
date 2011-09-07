@@ -39,9 +39,15 @@ enum {
   N_COLUMNS
 };
 
+
+void               on_gpgme_revoke_ok_clicked               (GtkButton *button,
+                                                             gpointer user_data);
+
 G_MODULE_EXPORT void
-on_gpgme_revoke_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+on_gpgme_revoke_ok_clicked (GtkButton *button,
+                            gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	SeahorseRevokeReason reason;
 	SeahorseGpgmeSubkey *subkey;
 	const gchar *description;

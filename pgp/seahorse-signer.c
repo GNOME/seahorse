@@ -26,6 +26,7 @@
 
 #include <glib/gi18n.h>
 
+#include "seahorse-pgp-dialogs.h"
 #include "seahorse-progress.h"
 #include "seahorse-widget.h"
 #include "seahorse-validity.h"

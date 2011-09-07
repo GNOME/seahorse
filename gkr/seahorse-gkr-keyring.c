@@ -53,7 +53,7 @@ static void seahorse_source_iface (SeahorseSourceIface *iface);
 G_DEFINE_TYPE_EXTENDED (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
 
-GType
+static GType
 boxed_type_keyring_info (void)
 {
 	static GType type = 0;

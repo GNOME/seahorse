@@ -31,6 +31,10 @@
 #include "seahorse-object-widget.h"
 #include "seahorse-util.h"
 
+void              on_keyring_properties_response          (GtkDialog *dialog,
+                                                           int response,
+                                                           gpointer user_data);
+
 /* -----------------------------------------------------------------------------
  * MAIN TAB 
  */
@@ -82,8 +86,11 @@ setup_main (SeahorseWidget *swidget)
  */
 
 G_MODULE_EXPORT void
-on_keyring_properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
+on_keyring_properties_response (GtkDialog *dialog,
+                                int response,
+                                gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	if (response == GTK_RESPONSE_HELP) {
 		seahorse_widget_show_help (swidget);
 		return;

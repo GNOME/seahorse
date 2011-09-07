@@ -23,6 +23,7 @@
 
 #include <glib/gi18n.h>
 
+#include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-item.h"
 #include "seahorse-gkr-source.h"
 #include "seahorse-gkr-operation.h"
@@ -37,16 +38,18 @@
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 
-GType
-boxed_access_control_type (void)
-{
-	static GType type = 0;
-	if (!type)
-		type = g_boxed_type_register_static ("GnomeKeyringAccessControl", 
-		                                     (GBoxedCopyFunc)gnome_keyring_access_control_copy,
-		                                     (GBoxedFreeFunc)gnome_keyring_access_control_free);
-	return type;
-}
+void            on_item_show_password_toggled            (GtkToggleButton *button,
+                                                          gpointer user_data);
+
+void            on_item_password_expander_activate       (GtkExpander *expander,
+                                                          gpointer user_data);
+
+void            on_item_description_activate             (GtkWidget *entry,
+                                                          gpointer user_data);
+
+gboolean        on_item_description_focus_out            (GtkWidget* widget,
+                                                          GdkEventFocus *event,
+                                                          gpointer user_data);
 
 /* -----------------------------------------------------------------------------
  * MAIN TAB 
@@ -268,15 +271,19 @@ password_focus_out (GtkEntry* entry, GdkEventFocus *event, SeahorseWidget *swidg
 }
 
 G_MODULE_EXPORT void 
-on_item_show_password_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
+on_item_show_password_toggled (GtkToggleButton *button,
+                               gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	GtkWidget *widget = g_object_get_data (G_OBJECT (swidget), "secure-password-entry");
 	gtk_entry_set_visibility (GTK_ENTRY (widget), gtk_toggle_button_get_active (button));
 }
 
 G_MODULE_EXPORT void
-on_item_password_expander_activate (GtkExpander *expander, SeahorseWidget *swidget)
+on_item_password_expander_activate (GtkExpander *expander,
+                                    gpointer user_data)
 {
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     SeahorseObject *object;
     SeahorseGkrItem *git;
     GtkWidget *widget;
@@ -339,8 +346,9 @@ on_item_description_complete (GObject *source,
 
 G_MODULE_EXPORT void
 on_item_description_activate (GtkWidget *entry,
-                              SeahorseWidget *swidget)
+                              gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	item_description_closure *closure;
 	GCancellable *cancellable;
 	SeahorseObject *object;
@@ -371,8 +379,11 @@ on_item_description_activate (GtkWidget *entry,
 }
 
 G_MODULE_EXPORT gboolean
-on_item_description_focus_out (GtkWidget* widget, GdkEventFocus *event, SeahorseWidget *swidget)
+on_item_description_focus_out (GtkWidget* widget,
+                               GdkEventFocus *event,
+                               gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	on_item_description_activate (widget, swidget);
 	return FALSE;
 }

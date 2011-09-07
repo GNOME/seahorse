@@ -24,17 +24,25 @@
 
 #include "seahorse-context.h"
 #include "seahorse-dns-sd.h"
-#include "seahorse-keyserver-results.h"
 #include "seahorse-preferences.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
+
+#include "seahorse-keyserver-results.h"
+#include "seahorse-windows.h"
 
 /**
  * SECTION:seahorse-keyserver-search
  * @short_description: Contains the functions to start a search for keys on a
  * keyserver.
  **/
+
+void            on_keyserver_search_control_changed         (GtkWidget *widget,
+                                                             SeahorseWidget *swidget);
+
+void            on_keyserver_search_ok_clicked              (GtkButton *button,
+                                                             SeahorseWidget *swidget);
 
 /**
  * KeyserverSelection:

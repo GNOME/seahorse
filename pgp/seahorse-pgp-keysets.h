@@ -28,6 +28,6 @@
  * SOME COMMON KEYSETS 
  */
  
-SeahorseSet*     seahorse_keyset_pgp_signers_new     ();
+SeahorseSet*     seahorse_keyset_pgp_signers_new     (void);
 
 #endif /*SEAPGPKEYSETS_H_*/

@@ -389,7 +389,7 @@ seahorse_service_discovery_class_init (SeahorseServiceDiscoveryClass *klass)
  * Returns: A new #SeahorseServiceDiscovery object
  */
 SeahorseServiceDiscovery*   
-seahorse_service_discovery_new ()
+seahorse_service_discovery_new (void)
 {
     return g_object_new (SEAHORSE_TYPE_SERVICE_DISCOVERY, NULL);
 }

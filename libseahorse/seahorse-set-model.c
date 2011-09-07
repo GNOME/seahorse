@@ -110,7 +110,7 @@ key_hierarchy (SeahorseObject *sobj, GParamSpec *spec, SeahorseSetModel *smodel)
 	add_object (smodel, sobj);
 }
 
-void
+static void
 gone_object (SeahorseSetModel *smodel, gpointer was_sobj)
 {
 	SeahorseSetModelPrivate *pv = SEAHORSE_SET_MODEL_GET_PRIVATE (smodel);

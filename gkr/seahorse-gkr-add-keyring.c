@@ -36,6 +36,13 @@
  *
  **/
 
+void             on_add_keyring_name_changed         (GtkEntry *entry,
+                                                      gpointer user_data);
+
+void             on_add_keyring_properties_response  (GtkDialog *dialog,
+                                                      int response,
+                                                      gpointer user_data);
+
 /**
  * keyring_add_done:
  * @result:GNOME_KEYRING_RESULT_CANCELLED or GNOME_KEYRING_RESULT_OK
@@ -78,8 +85,10 @@ keyring_add_done (GnomeKeyringResult result, gpointer data)
  * entry @entry contains text
  */
 G_MODULE_EXPORT void
-on_add_keyring_name_changed (GtkEntry *entry, SeahorseWidget *swidget)
+on_add_keyring_name_changed (GtkEntry *entry,
+                             gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	const gchar *keyring = gtk_entry_get_text (entry);
 	seahorse_widget_set_sensitive (swidget, "ok", keyring && keyring[0]);
 }
@@ -95,8 +104,11 @@ on_add_keyring_name_changed (GtkEntry *entry, SeahorseWidget *swidget)
  * provided by gnome-keyring
  */
 G_MODULE_EXPORT void
-on_add_keyring_properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
+on_add_keyring_properties_response (GtkDialog *dialog,
+                                    int response,
+                                    gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	GtkEntry *entry;
 	const gchar *keyring;
 	gpointer request;

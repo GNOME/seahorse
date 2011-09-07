@@ -34,8 +34,11 @@
 
 #include <glib/gi18n.h>
 
-G_MODULE_EXPORT gboolean
-on_gpgme_sign_ok_clicked (SeahorseWidget *swidget, GtkWindow *parent)
+void              on_gpgme_sign_choice_toggled         (GtkToggleButton *toggle,
+                                                        gpointer user_data);
+
+static gboolean
+sign_ok_clicked (SeahorseWidget *swidget, GtkWindow *parent)
 {
     SeahorseSignCheck check;
     SeahorseSignOptions options = 0;
@@ -117,8 +120,10 @@ keyset_changed (SeahorseSet *skset, GtkWidget *widget)
 }
 
 G_MODULE_EXPORT void
-on_gpgme_sign_choice_toggled (GtkToggleButton *toggle, SeahorseWidget *swidget)
+on_gpgme_sign_choice_toggled (GtkToggleButton *toggle,
+                              gpointer user_data)
 {
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     GtkWidget *w;
     
     /* Figure out choice */
@@ -218,7 +223,7 @@ sign_internal (SeahorseObject *to_sign, GtkWindow *parent)
         case GTK_RESPONSE_HELP:
             break;
         case GTK_RESPONSE_OK:
-            do_sign = !on_gpgme_sign_ok_clicked (swidget, parent);
+            do_sign = !sign_ok_clicked (swidget, parent);
             break;
         default:
             do_sign = FALSE;

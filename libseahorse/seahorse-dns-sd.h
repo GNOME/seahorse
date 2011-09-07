@@ -70,7 +70,7 @@ struct _SeahorseServiceDiscoveryClass {
 
 GType                       seahorse_service_discovery_get_type  (void);
 
-SeahorseServiceDiscovery*   seahorse_service_discovery_new       ();
+SeahorseServiceDiscovery*   seahorse_service_discovery_new       (void);
 
 gchar **                    seahorse_service_discovery_list      (SeahorseServiceDiscovery *ssd);
 
@@ -80,4 +80,4 @@ const gchar*                seahorse_service_discovery_get_uri   (SeahorseServic
 gchar **                    seahorse_service_discovery_get_uris  (SeahorseServiceDiscovery *ssd,
                                                                   const gchar **services);
 
-#endif /* __SEAHORSE_KEY_H__ */
+#endif /* __SEAHORSE_DNS_SD_H__ */

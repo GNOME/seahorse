@@ -31,9 +31,13 @@
 #include "seahorse-progress.h"
 #include "seahorse-gtkstock.h"
 
+#include "ssh/seahorse-ssh-dialogs.h"
 #include "ssh/seahorse-ssh-source.h"
 #include "ssh/seahorse-ssh-key.h"
 #include "ssh/seahorse-ssh-operation.h"
+
+void              on_upload_input_changed                 (GtkWidget *dummy,
+                                                           SeahorseWidget *swidget);
 
 static void 
 on_upload_complete (GObject *source,

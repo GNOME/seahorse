@@ -35,6 +35,12 @@
 #include "seahorse-widget.h"
 #include "seahorse-windows.h"
 
+void            on_sync_ok_clicked                (GtkButton *button,
+                                                   SeahorseWidget *swidget);
+
+void            on_sync_configure_clicked         (GtkButton *button,
+                                                   SeahorseWidget *swidget);
+
 static void
 on_transfer_upload_complete (GObject *object,
                              GAsyncResult *result,

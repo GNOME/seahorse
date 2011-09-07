@@ -34,6 +34,15 @@
 #define NAME "name"
 #define EMAIL "email"
 
+void            on_gpgme_add_uid_name_changed          (GtkEditable *editable,
+                                                        gpointer user_data);
+
+void            on_gpgme_add_uid_email_changed         (GtkEditable *editable,
+                                                        gpointer user_data);
+
+void            on_gpgme_add_uid_ok_clicked            (GtkButton *button,
+                                                        gpointer user_data);
+
 static void
 check_ok (SeahorseWidget *swidget)
 {
@@ -52,20 +61,26 @@ check_ok (SeahorseWidget *swidget)
 }
 
 G_MODULE_EXPORT void
-on_gpgme_add_uid_name_changed (GtkEditable *editable, SeahorseWidget *swidget)
+on_gpgme_add_uid_name_changed (GtkEditable *editable,
+                               gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	check_ok (swidget);
 }
 
 G_MODULE_EXPORT void
-on_gpgme_add_uid_email_changed (GtkEditable *editable, SeahorseWidget *swidget)
+on_gpgme_add_uid_email_changed (GtkEditable *editable,
+                                gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	check_ok (swidget);
 }
 
 G_MODULE_EXPORT void
-on_gpgme_add_uid_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
+on_gpgme_add_uid_ok_clicked (GtkButton *button,
+                             gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	SeahorseObject *object;
 	const gchar *name, *email, *comment;
 	gpgme_error_t err;

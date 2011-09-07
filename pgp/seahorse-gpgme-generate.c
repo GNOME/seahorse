@@ -49,6 +49,19 @@
  *
  **/
 
+void           on_gpgme_generate_response                    (GtkDialog *dialog,
+                                                              guint response,
+                                                              gpointer user_data);
+
+void           on_gpgme_generate_entry_changed               (GtkEditable *editable,
+                                                              gpointer user_data);
+
+void           on_gpgme_generate_expires_toggled             (GtkToggleButton *button,
+                                                              gpointer user_data);
+
+void           on_gpgme_generate_algorithm_changed           (GtkComboBox *combo,
+                                                              gpointer user_data);
+
 /* --------------------------------------------------------------------------
  * ACTIONS
  */
@@ -222,8 +235,11 @@ seahorse_gpgme_generate_key (SeahorseGpgmeSource *source,
  *
  */
 G_MODULE_EXPORT void
-on_gpgme_generate_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
+on_gpgme_generate_response (GtkDialog *dialog,
+                            guint response,
+                            gpointer user_data)
 {
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     SeahorseGpgmeSource *sksrc;
     GtkWidget *widget;
     gchar *name;
@@ -314,8 +330,10 @@ on_gpgme_generate_response (GtkDialog *dialog, guint response, SeahorseWidget *s
  *
  */
 G_MODULE_EXPORT void
-on_gpgme_generate_entry_changed (GtkEditable *editable, SeahorseWidget *swidget)
+on_gpgme_generate_entry_changed (GtkEditable *editable,
+                                 gpointer user_data)
 {
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     GtkWidget *widget;
     gchar *name;
 
@@ -339,8 +357,10 @@ on_gpgme_generate_entry_changed (GtkEditable *editable, SeahorseWidget *swidget)
  * Handles the expires toggle button feedback
  */
 G_MODULE_EXPORT void
-on_gpgme_generate_expires_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
+on_gpgme_generate_expires_toggled (GtkToggleButton *button,
+                                   gpointer user_data)
 {
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     GtkWidget *widget;
     
     widget = get_expiry_date (swidget);
@@ -358,8 +378,10 @@ on_gpgme_generate_expires_toggled (GtkToggleButton *button, SeahorseWidget *swid
  *
  */
 G_MODULE_EXPORT void
-on_gpgme_generate_algorithm_changed (GtkComboBox *combo, SeahorseWidget *swidget)
+on_gpgme_generate_algorithm_changed (GtkComboBox *combo,
+                                     gpointer user_data)
 {
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     GtkWidget *widget;
     gint sel;
     

@@ -30,6 +30,16 @@
 
 #include <glib/gi18n.h>
 
+void             on_add_item_label_changed                (GtkEntry *entry,
+                                                           gpointer user_data);
+
+void             on_add_item_password_toggled             (GtkToggleButton *button,
+                                                           gpointer user_data);
+
+void             on_add_item_response                     (GtkDialog *dialog,
+                                                           int response,
+                                                           gpointer user_data);
+
 static void
 item_add_done (GnomeKeyringResult result, guint32 item, gpointer data)
 {
@@ -56,22 +66,29 @@ item_add_done (GnomeKeyringResult result, guint32 item, gpointer data)
 }
 
 G_MODULE_EXPORT void
-on_add_item_label_changed (GtkEntry *entry, SeahorseWidget *swidget)
+on_add_item_label_changed (GtkEntry *entry,
+                           gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	const gchar *keyring = gtk_entry_get_text (entry);
 	seahorse_widget_set_sensitive (swidget, "ok", keyring && keyring[0]);
 }
 
 G_MODULE_EXPORT void 
-on_add_item_password_toggled (GtkToggleButton *button, SeahorseWidget *swidget)
+on_add_item_password_toggled (GtkToggleButton *button,
+                              gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	GtkWidget *widget= g_object_get_data (G_OBJECT (swidget), "gkr-secure-entry");
 	gtk_entry_set_visibility (GTK_ENTRY (widget), gtk_toggle_button_get_active (button));
 }
 
 G_MODULE_EXPORT void
-on_add_item_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
+on_add_item_response (GtkDialog *dialog,
+                      int response,
+                      gpointer user_data)
 {
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	GtkWidget *widget;
 	gchar *keyring;
 	const gchar *secret;

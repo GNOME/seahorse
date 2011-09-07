@@ -277,7 +277,7 @@ gpg_options_init (GError **err)
  * Returns: The home dir that GPG uses for it's keys and configuration
  **/
 const gchar*
-seahorse_gpg_homedir ()
+seahorse_gpg_homedir (void)
 {
     /* THis shouldn't normally fail, and as such we return an invalid 
      * directory to avoid NULL memory access */

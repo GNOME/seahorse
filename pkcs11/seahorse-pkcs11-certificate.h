@@ -52,6 +52,8 @@ GType                       seahorse_pkcs11_certificate_get_type               (
 
 SeahorsePkcs11Certificate*  seahorse_pkcs11_certificate_new                    (GckObject* object);
 
+void                        seahorse_pkcs11_certificate_realize                (SeahorsePkcs11Certificate *self);
+
 gchar*                      seahorse_pkcs11_certificate_get_fingerprint        (SeahorsePkcs11Certificate* self);
 
 guint                       seahorse_pkcs11_certificate_get_validity           (SeahorsePkcs11Certificate* self);
