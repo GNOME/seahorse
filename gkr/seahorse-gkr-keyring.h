@@ -61,6 +61,8 @@ void                 seahorse_gkr_keyring_remove_item      (SeahorseGkrKeyring *
 
 const gchar*         seahorse_gkr_keyring_get_name         (SeahorseGkrKeyring *self);
 
+const gchar *        seahorse_gkr_keyring_get_description  (SeahorseGkrKeyring *self);
+
 GnomeKeyringInfo*    seahorse_gkr_keyring_get_info         (SeahorseGkrKeyring *self);
 
 void                 seahorse_gkr_keyring_set_info         (SeahorseGkrKeyring *self,

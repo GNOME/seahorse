@@ -36,6 +36,7 @@
 
 enum {
 	PROP_0,
+	PROP_DESCRIPTION,
 	PROP_KEYRING_NAME,
 	PROP_KEYRING_INFO,
 	PROP_IS_DEFAULT
@@ -54,8 +55,8 @@ static void     seahorse_keyring_source_iface        (SeahorseSourceIface *iface
 static void     seahorse_keyring_collection_iface    (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_keyring_source_iface);
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_keyring_collection_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_keyring_source_iface);
 );
 
 static GType
@@ -120,16 +121,18 @@ require_keyring_info (SeahorseGkrKeyring *self)
 void
 seahorse_gkr_keyring_realize (SeahorseGkrKeyring *self)
 {
-	gchar *name, *markup;
+	const gchar *name;
 	GIcon *icon;
 
-	name = g_strdup_printf (_("Passwords: %s"), self->pv->keyring_name);
-	markup = g_markup_printf_escaped (_("<b>Passwords:</b> %s"), self->pv->keyring_name);
+	if (self->pv->keyring_name && g_str_equal (self->pv->keyring_name, "login"))
+		name = _("Login keyring");
+	else
+		name = self->pv->keyring_name;
+
 	icon = g_themed_icon_new ("folder");
 
 	g_object_set (self,
 	              "label", name,
-	              "markup", markup,
 	              "nickname", self->pv->keyring_name,
 	              "identifier", "",
 	              "flags", SEAHORSE_FLAG_DELETABLE,
@@ -138,8 +141,6 @@ seahorse_gkr_keyring_realize (SeahorseGkrKeyring *self)
 	              NULL);
 
 	g_object_unref (icon);
-	g_free (name);
-	g_free (markup);
 }
 
 void
@@ -412,6 +413,9 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
 	
 	switch (prop_id) {
+	case PROP_DESCRIPTION:
+		g_value_set_string (value, seahorse_gkr_keyring_get_description (self));
+		break;
 	case PROP_KEYRING_NAME:
 		g_value_set_string (value, seahorse_gkr_keyring_get_name (self));
 		break;
@@ -438,6 +442,8 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 	gobject_class->finalize = seahorse_gkr_keyring_finalize;
 	gobject_class->set_property = seahorse_gkr_keyring_set_property;
 	gobject_class->get_property = seahorse_gkr_keyring_get_property;
+
+	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 
 	g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,
 	           g_param_spec_string ("keyring-name", "Gnome Keyring Name", "Name of keyring.", 
@@ -508,6 +514,13 @@ seahorse_gkr_keyring_get_name (SeahorseGkrKeyring *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), NULL);
 	return self->pv->keyring_name;
+}
+
+const gchar *
+seahorse_gkr_keyring_get_description (SeahorseGkrKeyring *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), NULL);
+	return _("To do Keyring");
 }
 
 GnomeKeyringInfo*

@@ -28,10 +28,9 @@
 
 #include <gcr/gcr.h>
 
-#define SEAHORSE_PKCS11_TYPE_STR "pkcs11"
-#define SEAHORSE_PKCS11_TYPE g_quark_from_string ("pkcs11")
+#define SEAHORSE_PKCS11_NAME "pkcs11"
 
-GcrCollection *       seahorse_pkcs11_backend_initialize    (void);
+void       seahorse_pkcs11_backend_initialize    (void);
 
 #endif /* WITH_PKCS11 */
 

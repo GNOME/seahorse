@@ -29,6 +29,7 @@
 
 #include <gcr/gcr.h>
 
+#include "seahorse-pgp.h"
 #include "seahorse-discovery.h"
 #include "seahorse-gpgme-keyring.h"
 #include "seahorse-pgp-key.h"
@@ -47,8 +48,6 @@ typedef struct _SeahorsePgpBackend SeahorsePgpBackend;
 typedef struct _SeahorsePgpBackendClass SeahorsePgpBackendClass;
 
 GType                  seahorse_pgp_backend_get_type             (void) G_GNUC_CONST;
-
-GcrCollection *        seahorse_pgp_backend_initialize           (void);
 
 SeahorsePgpBackend *   seahorse_pgp_backend_get                  (void);
 

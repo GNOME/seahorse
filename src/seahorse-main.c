@@ -48,7 +48,6 @@ int
 main (int argc, char **argv)
 {
 	SeahorseWidget *swidget;
-	GcrUnionCollection *sources;
 	SeahorseContext *context;
 
     static GOptionEntry options[] = {
@@ -87,25 +86,23 @@ main (int argc, char **argv)
     seahorse_context_create ();
     context = seahorse_context_instance ();
 
-    sources = GCR_UNION_COLLECTION (gcr_union_collection_new ());
-
     /* Initialize the various components */
-    gcr_union_collection_take (sources, seahorse_pgp_backend_initialize ());
-    gcr_union_collection_take (sources, seahorse_ssh_backend_initialize ());
-    gcr_union_collection_take (sources, seahorse_pkcs11_backend_initialize ());
-    gcr_union_collection_take (sources, seahorse_gkr_backend_initialize ());
+    seahorse_pgp_backend_initialize ();
+    seahorse_ssh_backend_initialize ();
+    seahorse_pkcs11_backend_initialize ();
+    seahorse_gkr_backend_initialize ();
 
-    swidget = seahorse_key_manager_show (GCR_COLLECTION (sources));
-    g_object_unref (sources);
+    swidget = seahorse_key_manager_show ();
 
     g_object_ref (context);
     g_signal_connect_after (context, "destroy", gtk_main_quit, NULL);
 
     gtk_main ();
 
+    seahorse_cleanup_perform ();
+
     g_object_unref (swidget);
     g_object_unref (context);
 
-    seahorse_cleanup_perform ();
     return ret;
 }

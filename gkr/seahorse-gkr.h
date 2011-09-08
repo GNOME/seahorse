@@ -29,7 +29,9 @@
 
 G_BEGIN_DECLS
 
-GcrCollection *       seahorse_gkr_backend_initialize    (void);
+#define SEAHORSE_GKR_NAME "gkr"
+
+void       seahorse_gkr_backend_initialize    (void);
 
 G_END_DECLS
 

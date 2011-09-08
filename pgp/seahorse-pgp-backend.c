@@ -28,13 +28,24 @@
 #include "seahorse-transfer.h"
 #include "seahorse-unknown-source.h"
 
+#include "seahorse-backend.h"
 #include "seahorse-progress.h"
+#include "seahorse-registry.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 
 #include <gnome-keyring.h>
 
+#include <glib/gi18n.h>
+
 #include <string.h>
+
+enum {
+	PROP_0,
+	PROP_NAME,
+	PROP_LABEL,
+	PROP_DESCRIPTION
+};
 
 static SeahorsePgpBackend *pgp_backend = NULL;
 
@@ -50,10 +61,13 @@ struct _SeahorsePgpBackendClass {
 	GObjectClass parent_class;
 };
 
+static void         seahorse_pgp_backend_iface_init       (SeahorseBackendIface *iface);
+
 static void         seahorse_pgp_backend_collection_init  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorsePgpBackend, seahorse_pgp_backend, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_pgp_backend_collection_init);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_pgp_backend_iface_init);
 );
 
 static void
@@ -144,6 +158,28 @@ seahorse_pgp_backend_constructed (GObject *obj)
 }
 
 static void
+seahorse_pgp_backend_get_property (GObject *obj,
+                                   guint prop_id,
+                                   GValue *value,
+                                   GParamSpec *pspec)
+{
+	switch (prop_id) {
+	case PROP_NAME:
+		g_value_set_string (value, SEAHORSE_PGP_NAME);
+		break;
+	case PROP_LABEL:
+		g_value_set_string (value, _("PGP Keys"));
+		break;
+	case PROP_DESCRIPTION:
+		g_value_set_string (value, _("PGP keys are for encrypting email or files"));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
+}
+
+static void
 seahorse_pgp_backend_finalize (GObject *obj)
 {
 	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
@@ -169,6 +205,11 @@ seahorse_pgp_backend_class_init (SeahorsePgpBackendClass *klass)
 
 	gobject_class->constructed = seahorse_pgp_backend_constructed;
 	gobject_class->finalize = seahorse_pgp_backend_finalize;
+	gobject_class->get_property = seahorse_pgp_backend_get_property;
+
+	g_object_class_override_property (gobject_class, PROP_NAME, "name");
+	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
+	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 }
 
 static guint
@@ -200,6 +241,12 @@ seahorse_pgp_backend_collection_init (GcrCollectionIface *iface)
 	iface->get_objects = seahorse_pgp_backend_get_objects;
 }
 
+static void
+seahorse_pgp_backend_iface_init (SeahorseBackendIface *iface)
+{
+
+}
+
 SeahorsePgpBackend *
 seahorse_pgp_backend_get (void)
 {
@@ -207,14 +254,18 @@ seahorse_pgp_backend_get (void)
 	return pgp_backend;
 }
 
-GcrCollection *
+void
 seahorse_pgp_backend_initialize (void)
 {
 	SeahorsePgpBackend *self;
 
+	g_return_if_fail (pgp_backend == NULL);
 	self = g_object_new (SEAHORSE_TYPE_PGP_BACKEND, NULL);
 
-	return GCR_COLLECTION (self);
+	seahorse_registry_register_object (NULL, G_OBJECT (self), "backend", "openpgp", NULL);
+	g_object_unref (self);
+
+	g_return_if_fail (pgp_backend != NULL);
 }
 
 SeahorseGpgmeKeyring *

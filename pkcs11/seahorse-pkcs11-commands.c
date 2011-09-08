@@ -248,7 +248,7 @@ seahorse_pkcs11_commands_class_init (SeahorsePkcs11CommandsClass *klass)
 		
 	/* Register this as a source of commands */
 	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_PKCS11_TYPE_COMMANDS, 
-	                                 SEAHORSE_PKCS11_TYPE_STR, "commands", NULL);
+	                                 SEAHORSE_PKCS11_NAME, "commands", NULL);
 }
 
 /* -----------------------------------------------------------------------------

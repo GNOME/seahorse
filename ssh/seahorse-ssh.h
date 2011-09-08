@@ -29,12 +29,12 @@
 
 #include <gcr/gcr.h>
 
-#define SEAHORSE_SSH                         (g_quark_from_static_string ("openssh"))
-#define SEAHORSE_SSH_TYPE_STR "openssh"
-#define SEAHORSE_SSH_TYPE g_quark_from_string ("openssh")
+#define SEAHORSE_SSH_NAME "openssh"
+#define SEAHORSE_SSH_TYPE_STR SEAHORSE_SSH_NAME
+#define SEAHORSE_SSH (g_quark_from_static_string (SEAHORSE_PGP_NAME))
 #define SEAHORSE_SSH_STOCK_ICON "seahorse-key-ssh"
 
-GcrCollection *       seahorse_ssh_backend_initialize    (void);
+void       seahorse_ssh_backend_initialize    (void);
 
 #endif /* WITH_SSH */
 

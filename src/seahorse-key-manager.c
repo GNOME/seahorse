@@ -22,12 +22,14 @@
 
 #include "config.h"
 
-#include "seahorse-collection.h"
 #include "seahorse-generate-select.h"
 #include "seahorse-key-manager.h"
 #include "seahorse-key-manager-store.h"
 #include "seahorse-preferences.h"
+#include "seahorse-sidebar.h"
 
+#include "seahorse-collection.h"
+#include "seahorse-registry.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
@@ -74,7 +76,10 @@ struct _SeahorseKeyManagerPrivate {
 	GtkActionGroup* view_actions;
 	GtkEntry* filter_entry;
 	TabInfo* tabs;
+
 	GSettings *settings;
+	gint sidebar_width;
+	guint sidebar_width_sig;
 };
 
 enum  {
@@ -755,6 +760,52 @@ seahorse_key_manager_set_selected (SeahorseViewer* base, SeahorseObject* value)
 	g_object_notify (G_OBJECT (self), "selected");
 }
 
+static gboolean
+on_idle_save_sidebar_width (gpointer user_data)
+{
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
+
+	self->pv->sidebar_width_sig = 0;
+	g_settings_set_int (self->pv->settings, "sidebar-width", self->pv->sidebar_width);
+
+	return FALSE;
+}
+
+static void
+on_sidebar_panes_size_allocate (GtkWidget *widget,
+                                GtkAllocation *allocation,
+                                gpointer user_data)
+{
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
+
+	if (self->pv->sidebar_width_sig != 0) {
+		g_source_remove (self->pv->sidebar_width_sig);
+		self->pv->sidebar_width_sig = 0;
+	}
+
+	if (allocation->width != self->pv->sidebar_width && allocation->width > 1) {
+		self->pv->sidebar_width = allocation->width;
+		self->pv->sidebar_width_sig = g_idle_add (on_idle_save_sidebar_width, self);
+	}
+}
+
+static void
+setup_sidebar (SeahorseKeyManager *self)
+{
+	SeahorseSidebar *sidebar;
+	GtkWidget *widget;
+
+	sidebar = seahorse_sidebar_new ();
+	widget = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-area");
+	gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sidebar));
+	gtk_widget_show (GTK_WIDGET (sidebar));
+
+	self->pv->sidebar_width = g_settings_get_int (self->pv->settings, "sidebar-width");
+	widget = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-panes");
+	gtk_paned_set_position (GTK_PANED (widget), self->pv->sidebar_width);
+	g_signal_connect (sidebar, "size_allocate", G_CALLBACK (on_sidebar_panes_size_allocate), self);
+}
+
 static void
 seahorse_key_manager_constructed (GObject *object)
 {
@@ -765,6 +816,8 @@ seahorse_key_manager_constructed (GObject *object)
 	GtkWidget* widget;
 
 	G_OBJECT_CLASS (seahorse_key_manager_parent_class)->constructed (object);
+
+	setup_sidebar (self);
 
 	self->pv->tabs = g_new0 (TabInfo, TAB_NUM_TABS);
 
@@ -919,6 +972,11 @@ seahorse_key_manager_finalize (GObject *obj)
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (obj);
 	gint i;
 
+	if (self->pv->sidebar_width_sig != 0) {
+		g_source_remove (self->pv->sidebar_width_sig);
+		self->pv->sidebar_width_sig = 0;
+	}
+
 	if (self->pv->view_actions)
 		g_object_unref (self->pv->view_actions);
 	self->pv->view_actions = NULL;
@@ -1016,12 +1074,26 @@ seahorse_key_manager_class_init (SeahorseKeyManagerClass *klass)
 
 
 SeahorseWidget *
-seahorse_key_manager_show (GcrCollection *sources)
+seahorse_key_manager_show (void)
 {
-	SeahorseKeyManager *man = g_object_new (SEAHORSE_TYPE_KEY_MANAGER,
-	                                        "name", "key-manager",
-	                                        "sources", sources,
-	                                        NULL);
-	g_object_ref_sink (man);
-	return SEAHORSE_WIDGET (man);
+	SeahorseKeyManager *self;
+	GcrUnionCollection *sources;
+	GList *backends, *l;
+
+	sources = GCR_UNION_COLLECTION (gcr_union_collection_new ());
+
+	backends = seahorse_registry_object_instances (NULL, "backend", NULL);
+	for (l = backends; l != NULL; l = g_list_next (l))
+		gcr_union_collection_take (sources, GCR_COLLECTION (l->data));
+	g_list_free (backends);
+
+	self = g_object_new (SEAHORSE_TYPE_KEY_MANAGER,
+	                     "name", "key-manager",
+	                     "sources", sources,
+	                     NULL);
+
+	g_object_unref (sources);
+	g_object_ref_sink (self);
+
+	return SEAHORSE_WIDGET (self);
 }

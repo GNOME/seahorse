@@ -52,9 +52,9 @@ struct _SeahorseKeyManagerClass {
 	SeahorseViewerClass parent_class;
 };
 
-SeahorseWidget * seahorse_key_manager_show         (GcrCollection *sources);
+GType            seahorse_key_manager_get_type     (void) G_GNUC_CONST;
 
-GType            seahorse_key_manager_get_type     (void);
+SeahorseWidget * seahorse_key_manager_show         (void);
 
 
 G_END_DECLS

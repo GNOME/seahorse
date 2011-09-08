@@ -28,6 +28,7 @@ KEYSERVER_SRCS =
 endif
 
 libseahorse_la_SOURCES = \
+	seahorse-backend.c seahorse-backend.h \
 	seahorse-bind.c seahorse-bind.h \
 	seahorse-cleanup.c seahorse-cleanup.h \
 	seahorse-collection.c seahorse-collection.h \

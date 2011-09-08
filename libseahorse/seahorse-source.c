@@ -29,6 +29,8 @@
 #include "seahorse-source.h"
 #include "seahorse-util.h"
 
+#include <gcr/gcr.h>
+
 /**
  * SECTION:seahorse-source
  * @short_description: This class stores and handles key sources
@@ -36,6 +38,9 @@
  *
  **/
 
+typedef SeahorseSourceIface SeahorseSourceInterface;
+
+G_DEFINE_INTERFACE (SeahorseSource, seahorse_source, GCR_TYPE_COLLECTION);
 
 /* ---------------------------------------------------------------------------------
  * INTERFACE
@@ -46,42 +51,24 @@
 *
 **/
 static void
-seahorse_source_base_init (gpointer gobject_class)
+seahorse_source_default_init (SeahorseSourceIface *iface)
 {
 	static gboolean initialized = FALSE;
 	if (!initialized) {
+		g_object_interface_install_property (iface,
+		           g_param_spec_string ("label", "Label", "Label for the source",
+		                                "", G_PARAM_READABLE));
+
+		g_object_interface_install_property (iface,
+		           g_param_spec_string ("description", "Description", "Description for the source",
+		                                "", G_PARAM_READABLE));
+
+		g_object_interface_install_property (iface,
+		           g_param_spec_object ("icon", "Icon", "Icon for this source",
+		                                G_TYPE_ICON, G_PARAM_READABLE));
+
 		initialized = TRUE;
 	}
-}
-
-/**
- * seahorse_source_get_type:
- *
- * Registers the type of G_TYPE_INTERFACE
- *
- * Returns: the type id
- */
-GType
-seahorse_source_get_type (void)
-{
-	static GType type = 0;
-	if (!type) {
-		static const GTypeInfo info = {
-			sizeof (SeahorseSourceIface),
-			seahorse_source_base_init,               /* base init */
-			NULL,             /* base finalize */
-			NULL,             /* class_init */
-			NULL,             /* class finalize */
-			NULL,             /* class data */
-			0,
-			0,                /* n_preallocs */
-			NULL,             /* instance init */
-		};
-		type = g_type_register_static (G_TYPE_INTERFACE, "SeahorseSourceIface", &info, 0);
-		g_type_interface_add_prerequisite (type, G_TYPE_OBJECT);
-	}
-	
-	return type;
 }
 
 /* ---------------------------------------------------------------------------------

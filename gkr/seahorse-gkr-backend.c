@@ -27,9 +27,20 @@
 #include "seahorse-gkr-keyring-commands.h"
 #include "seahorse-gkr-operation.h"
 
+#include "seahorse-backend.h"
 #include "seahorse-progress.h"
+#include "seahorse-registry.h"
 
 #include <gnome-keyring.h>
+
+#include <glib/gi18n.h>
+
+enum {
+	PROP_0,
+	PROP_NAME,
+	PROP_LABEL,
+	PROP_DESCRIPTION
+};
 
 static SeahorseGkrBackend *gkr_backend = NULL;
 
@@ -42,10 +53,14 @@ struct _SeahorseGkrBackendClass {
 	GObjectClass parent_class;
 };
 
+static void         seahorse_gkr_backend_iface_init       (SeahorseBackendIface *iface);
+
 static void         seahorse_gkr_backend_collection_init  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseGkrBackend, seahorse_gkr_backend, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_gkr_backend_collection_init));
+                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_gkr_backend_collection_init);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_gkr_backend_iface_init);
+);
 
 static void
 seahorse_gkr_backend_init (SeahorseGkrBackend *self)
@@ -69,6 +84,28 @@ seahorse_gkr_backend_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_gkr_backend_parent_class)->constructed (obj);
 
 	seahorse_gkr_backend_load_async (self, NULL, NULL, NULL);
+}
+
+static void
+seahorse_gkr_backend_get_property (GObject *obj,
+                                   guint prop_id,
+                                   GValue *value,
+                                   GParamSpec *pspec)
+{
+	switch (prop_id) {
+	case PROP_NAME:
+		g_value_set_string (value, SEAHORSE_GKR_NAME);
+		break;
+	case PROP_LABEL:
+		g_value_set_string (value, _("Passwords"));
+		break;
+	case PROP_DESCRIPTION:
+		g_value_set_string (value, _("Stored personal passwords, credentials and secrets"));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
 }
 
 static void
@@ -101,6 +138,11 @@ seahorse_gkr_backend_class_init (SeahorseGkrBackendClass *klass)
 	gobject_class->constructed = seahorse_gkr_backend_constructed;
 	gobject_class->dispose = seahorse_gkr_backend_dispose;
 	gobject_class->finalize = seahorse_gkr_backend_finalize;
+	gobject_class->get_property = seahorse_gkr_backend_get_property;
+
+	g_object_class_override_property (gobject_class, PROP_NAME, "name");
+	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
+	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 }
 
 static guint
@@ -139,24 +181,24 @@ seahorse_gkr_backend_collection_init (GcrCollectionIface *iface)
 	iface->get_objects = seahorse_gkr_backend_get_objects;
 }
 
-GcrCollection *
+static void
+seahorse_gkr_backend_iface_init (SeahorseBackendIface *iface)
+{
+
+}
+
+void
 seahorse_gkr_backend_initialize (void)
 {
 	SeahorseGkrBackend *self;
-	GcrCollection *collection;
 
+	g_return_if_fail (gkr_backend == NULL);
 	self = g_object_new (SEAHORSE_TYPE_GKR_BACKEND, NULL);
 
-	/*
-	 * For now, the keyrings themselves are the objects, so the
-	 * backend is the source
-	 */
-
-	collection = gcr_simple_collection_new ();
-	gcr_simple_collection_add (GCR_SIMPLE_COLLECTION (collection), G_OBJECT (self));
+	seahorse_registry_register_object (NULL, G_OBJECT (self), "backend", "gnome-keyring", NULL);
 	g_object_unref (self);
 
-	return collection;
+	g_return_if_fail (gkr_backend != NULL);
 }
 
 SeahorseGkrBackend *

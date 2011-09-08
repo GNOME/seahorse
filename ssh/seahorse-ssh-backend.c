@@ -26,6 +26,18 @@
 #include "seahorse-ssh-dialogs.h"
 #include "seahorse-ssh-source.h"
 
+#include "seahorse-backend.h"
+#include "seahorse-registry.h"
+
+#include <glib/gi18n.h>
+
+enum {
+	PROP_0,
+	PROP_NAME,
+	PROP_LABEL,
+	PROP_DESCRIPTION
+};
+
 static SeahorseSshBackend *ssh_backend = NULL;
 
 struct _SeahorseSshBackend {
@@ -37,10 +49,14 @@ struct _SeahorseSshBackendClass {
 	GObjectClass parent_class;
 };
 
+static void         seahorse_ssh_backend_iface_init       (SeahorseBackendIface *iface);
+
 static void         seahorse_ssh_backend_collection_init  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseSshBackend, seahorse_ssh_backend, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_ssh_backend_collection_init));
+                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_ssh_backend_collection_init);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_ssh_backend_iface_init);
+);
 
 static void
 seahorse_ssh_backend_init (SeahorseSshBackend *self)
@@ -66,6 +82,28 @@ seahorse_ssh_backend_constructed (GObject *obj)
 }
 
 static void
+seahorse_ssh_backend_get_property (GObject *obj,
+                                   guint prop_id,
+                                   GValue *value,
+                                   GParamSpec *pspec)
+{
+	switch (prop_id) {
+	case PROP_NAME:
+		g_value_set_string (value, SEAHORSE_SSH_NAME);
+		break;
+	case PROP_LABEL:
+		g_value_set_string (value, _("Secure Shell"));
+		break;
+	case PROP_DESCRIPTION:
+		g_value_set_string (value, _("Keys used to connect securely to other computers"));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
+}
+
+static void
 seahorse_ssh_backend_finalize (GObject *obj)
 {
 	SeahorseSshBackend *self = SEAHORSE_SSH_BACKEND (obj);
@@ -83,6 +121,11 @@ seahorse_ssh_backend_class_init (SeahorseSshBackendClass *klass)
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 	gobject_class->constructed = seahorse_ssh_backend_constructed;
 	gobject_class->finalize = seahorse_ssh_backend_finalize;
+	gobject_class->get_property = seahorse_ssh_backend_get_property;
+
+	g_object_class_override_property (gobject_class, PROP_NAME, "name");
+	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
+	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 }
 
 static guint
@@ -114,14 +157,24 @@ seahorse_ssh_backend_collection_init (GcrCollectionIface *iface)
 	iface->get_objects = seahorse_ssh_backend_get_objects;
 }
 
-GcrCollection *
+static void
+seahorse_ssh_backend_iface_init (SeahorseBackendIface *iface)
+{
+
+}
+
+void
 seahorse_ssh_backend_initialize (void)
 {
 	SeahorseSshBackend *self;
 
+	g_return_if_fail (ssh_backend == NULL);
 	self = g_object_new (SEAHORSE_TYPE_SSH_BACKEND, NULL);
 
-	return GCR_COLLECTION (self);
+	seahorse_registry_register_object (NULL, G_OBJECT (self), "backend", "openssh", NULL);
+	g_object_unref (self);
+
+	g_return_if_fail (ssh_backend != NULL);
 }
 
 SeahorseSshBackend *

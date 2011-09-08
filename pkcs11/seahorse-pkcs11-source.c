@@ -42,9 +42,12 @@
 #include "seahorse-registry.h"
 
 enum {
-    PROP_0,
-    PROP_SLOT,
-    PROP_FLAGS
+	PROP_0,
+	PROP_LABEL,
+	PROP_DESCRIPTION,
+	PROP_ICON,
+	PROP_SLOT,
+	PROP_FLAGS
 };
 
 struct _SeahorsePkcs11SourcePrivate {
@@ -57,8 +60,8 @@ static void          seahorse_pkcs11_source_iface      (SeahorseSourceIface *ifa
 static void          seahorse_pkcs11_collection_iface  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (SeahorsePkcs11Source, seahorse_pkcs11_source, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_pkcs11_source_iface);
                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_pkcs11_collection_iface);
+                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_pkcs11_source_iface);
 );
 
 /* -----------------------------------------------------------------------------
@@ -95,6 +98,15 @@ seahorse_pkcs11_source_get_property (GObject *object, guint prop_id, GValue *val
 	SeahorsePkcs11Source *self = SEAHORSE_PKCS11_SOURCE (object);
 
 	switch (prop_id) {
+	case PROP_LABEL:
+		g_value_set_string (value, _("To Do Pkcs11"));
+		break;
+	case PROP_DESCRIPTION:
+		g_value_set_string (value, _("To Do Description"));
+		break;
+	case PROP_ICON:
+		g_value_take_object (value, g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION));
+		break;
 	case PROP_SLOT:
 		g_value_set_object (value, self->pv->slot);
 		break;
@@ -158,7 +170,11 @@ seahorse_pkcs11_source_class_init (SeahorsePkcs11SourceClass *klass)
 	gobject_class->finalize = seahorse_pkcs11_source_finalize;
 	gobject_class->set_property = seahorse_pkcs11_source_set_property;
 	gobject_class->get_property = seahorse_pkcs11_source_get_property;
-    
+
+	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
+	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+
 	g_object_class_install_property (gobject_class, PROP_SLOT,
 	         g_param_spec_object ("slot", "Slot", "Pkcs#11 SLOT",
 	                              GCK_TYPE_SLOT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
@@ -166,8 +182,6 @@ seahorse_pkcs11_source_class_init (SeahorsePkcs11SourceClass *klass)
 	g_object_class_install_property (gobject_class, PROP_FLAGS,
 	         g_param_spec_uint ("flags", "Flags", "Object Source flags.", 
 	                            0, G_MAXUINT, 0, G_PARAM_READABLE));
-
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_PKCS11_SOURCE, "source", "local", SEAHORSE_PKCS11_TYPE_STR, NULL);
 }
 
 static void 

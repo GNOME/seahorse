@@ -44,6 +44,9 @@
 
 enum {
     PROP_0,
+    PROP_LABEL,
+    PROP_DESCRIPTION,
+    PROP_ICON,
     PROP_KEY_SERVER,
     PROP_URI
 };
@@ -57,10 +60,11 @@ struct _SeahorseServerSourcePrivate {
     gchar *uri;
 };
 
-static void seahorse_source_iface (SeahorseSourceIface *iface);
+static void      seahorse_server_source_collection_init    (GcrCollectionIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (SeahorseServerSource, seahorse_server_source, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
+G_DEFINE_TYPE_WITH_CODE (SeahorseServerSource, seahorse_server_source, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_server_source_collection_init);
+);
 
 /* GObject handlers */
 static void seahorse_server_source_finalize   (GObject *gobject);
@@ -86,6 +90,14 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
     gobject_class->set_property = seahorse_server_set_property;
     gobject_class->get_property = seahorse_server_get_property;
 
+    /* These properties are used to conform to SeahorseSource, but are not actually used */
+    g_object_class_install_property (gobject_class, PROP_LABEL,
+            g_param_spec_string ("label", "Label", "Label", "", G_PARAM_READABLE));
+    g_object_class_install_property (gobject_class, PROP_DESCRIPTION,
+            g_param_spec_string ("description", "Description", "Description", "", G_PARAM_READABLE));
+    g_object_class_install_property (gobject_class, PROP_ICON,
+            g_param_spec_object ("icon", "icon", "Icon", G_TYPE_ICON, G_PARAM_READABLE));
+
     g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
             g_param_spec_string ("key-server", "Key Server",
                                  "Key Server to search on", "",
@@ -95,20 +107,6 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
             g_param_spec_string ("uri", "Key Server URI",
                                  "Key Server full URI", "",
                                  G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
-}
-
-/**
-* iface: The #SeahorseSourceIface to init
-*
-* Sets the load function in @iface
-*
-* This is the init function of the interface SEAHORSE_TYPE_SOURCE
-*
-**/
-static void 
-seahorse_source_iface (SeahorseSourceIface *iface)
-{
-
 }
 
 /**
@@ -189,19 +187,57 @@ seahorse_server_set_property (GObject *object, guint prop_id,
 *
 **/
 static void 
-seahorse_server_get_property (GObject *object, guint prop_id, GValue *value,
+seahorse_server_get_property (GObject *obj,
+                              guint prop_id,
+                              GValue *value,
                               GParamSpec *pspec)
 {
-    SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (object);
-  
-    switch (prop_id) {
-    case PROP_KEY_SERVER:
-        g_value_set_string (value, ssrc->priv->server);
-        break;
-    case PROP_URI:
-        g_value_set_string (value, ssrc->priv->uri);
-        break;
-    }
+	SeahorseServerSource *self = SEAHORSE_SERVER_SOURCE (obj);
+
+	switch (prop_id) {
+	case PROP_LABEL:
+	case PROP_KEY_SERVER:
+		g_value_set_string (value, self->priv->server);
+		break;
+	case PROP_DESCRIPTION:
+	case PROP_URI:
+		g_value_set_string (value, self->priv->uri);
+		break;
+	case PROP_ICON:
+		g_value_take_object (value, g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
+}
+
+static guint
+seahorse_server_source_get_length (GcrCollection *collection)
+{
+	return 0;
+}
+
+static GList *
+seahorse_server_source_get_objects (GcrCollection *collection)
+{
+	return NULL;
+}
+
+static gboolean
+seahorse_server_source_contains (GcrCollection *collection,
+                                 GObject *object)
+{
+	return FALSE;
+}
+
+static void
+seahorse_server_source_collection_init (GcrCollectionIface *iface)
+{
+	/* This is implemented because SeahorseSource requires it */
+	iface->get_length = seahorse_server_source_get_length;
+	iface->get_objects = seahorse_server_source_get_objects;
+	iface->contains = seahorse_server_source_contains;
 }
 
 /* --------------------------------------------------------------------------

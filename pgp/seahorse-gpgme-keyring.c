@@ -48,6 +48,13 @@
 #define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
 #include "seahorse-debug.h"
 
+enum {
+	PROP_0,
+	PROP_LABEL,
+	PROP_DESCRIPTION,
+	PROP_ICON
+};
+
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 50
 
@@ -148,8 +155,8 @@ static void     seahorse_gpgme_keyring_source_iface       (SeahorseSourceIface *
 static void     seahorse_gpgme_keyring_collection_iface   (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseGpgmeKeyring, seahorse_gpgme_keyring, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_gpgme_keyring_source_iface);
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_gpgme_keyring_collection_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_gpgme_keyring_source_iface);
 );
 
 typedef struct {
@@ -943,6 +950,32 @@ seahorse_gpgme_keyring_init (SeahorseGpgmeKeyring *self)
 }
 
 static void
+seahorse_gpgme_keyring_get_property (GObject *obj,
+                                     guint prop_id,
+                                     GValue *value,
+                                     GParamSpec *pspec)
+{
+#if 0
+	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (obj);
+#endif
+
+	switch (prop_id) {
+	case PROP_LABEL:
+		g_value_set_string (value, _("To Do Keys"));
+		break;
+	case PROP_DESCRIPTION:
+		g_value_set_string (value, _("To Do Description"));
+		break;
+	case PROP_ICON:
+		g_value_take_object (value, g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
+}
+
+static void
 seahorse_gpgme_keyring_dispose (GObject *object)
 {
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (object);
@@ -994,13 +1027,15 @@ seahorse_gpgme_keyring_class_init (SeahorseGpgmeKeyringClass *klass)
 #endif
 
 	gobject_class = G_OBJECT_CLASS (klass);
+	gobject_class->get_property = seahorse_gpgme_keyring_get_property;
 	gobject_class->dispose = seahorse_gpgme_keyring_dispose;
 	gobject_class->finalize = seahorse_gpgme_keyring_finalize;
 
 	g_type_class_add_private (klass, sizeof (SeahorseGpgmeKeyringPrivate));
 
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_GPGME_KEYRING,
-	                                 "source", "local", NULL);
+	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
+	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
 }
 
 static void

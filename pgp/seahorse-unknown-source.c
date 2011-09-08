@@ -39,10 +39,7 @@ struct _SeahorseUnknownSourceClass {
 	GObjectClass parent_class;
 };
 
-static void     seahorse_source_iface    (SeahorseSourceIface *iface);
-
-G_DEFINE_TYPE_EXTENDED (SeahorseUnknownSource, seahorse_unknown_source, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
+G_DEFINE_TYPE (SeahorseUnknownSource, seahorse_unknown_source, G_TYPE_OBJECT);
 
 /* -----------------------------------------------------------------------------
  * OBJECT
@@ -71,12 +68,6 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 	gobject_class->finalize = seahorse_unknown_source_finalize;
-}
-
-static void
-seahorse_source_iface (SeahorseSourceIface *iface)
-{
-
 }
 
 SeahorseUnknownSource*

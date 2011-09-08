@@ -45,8 +45,11 @@
 #include "seahorse-debug.h"
 
 enum {
-    PROP_0,
-    PROP_BASE_DIRECTORY
+	PROP_0,
+	PROP_LABEL,
+	PROP_DESCRIPTION,
+	PROP_ICON,
+	PROP_BASE_DIRECTORY
 };
 
 struct _SeahorseSSHSourcePrivate {
@@ -61,8 +64,8 @@ static void       seahorse_ssh_source_iface             (SeahorseSourceIface *if
 static void       seahorse_ssh_source_collection_iface  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (SeahorseSSHSource, seahorse_ssh_source, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_ssh_source_iface)
                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_ssh_source_collection_iface);
+                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_ssh_source_iface)
 );
 
 #define AUTHORIZED_KEYS_FILE    "authorized_keys"
@@ -214,16 +217,30 @@ merge_keydata (SeahorseSSHKey *prev, SeahorseSSHKeyData *keydata)
 }
 
 static void 
-seahorse_ssh_source_get_property (GObject *object, guint prop_id, GValue *value, 
+seahorse_ssh_source_get_property (GObject *obj,
+                                  guint prop_id,
+                                  GValue *value,
                                   GParamSpec *pspec)
 {
-    SeahorseSSHSource *ssrc = SEAHORSE_SSH_SOURCE (object);
-    
-    switch (prop_id) {
-    case PROP_BASE_DIRECTORY:
-        g_value_set_string (value, ssrc->priv->ssh_homedir);
-        break;
-    }
+	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (obj);
+
+	switch (prop_id) {
+	case PROP_LABEL:
+		g_value_set_string (value, _("To SSH Keys"));
+		break;
+	case PROP_DESCRIPTION:
+		g_value_set_string (value, _("To Do Description"));
+		break;
+	case PROP_ICON:
+		g_value_take_object (value, g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION));
+		break;
+	case PROP_BASE_DIRECTORY:
+		g_value_set_string (value, self->priv->ssh_homedir);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
 }
 
 static void
@@ -307,6 +324,10 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
     gobject_class->dispose = seahorse_ssh_source_dispose;
     gobject_class->finalize = seahorse_ssh_source_finalize;
     gobject_class->get_property = seahorse_ssh_source_get_property;
+
+    g_object_class_override_property (gobject_class, PROP_LABEL, "label");
+    g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+    g_object_class_override_property (gobject_class, PROP_ICON, "icon");
 
     g_object_class_install_property (gobject_class, PROP_BASE_DIRECTORY,
         g_param_spec_string ("base-directory", "Key directory", "Directory where the keys are stored",
