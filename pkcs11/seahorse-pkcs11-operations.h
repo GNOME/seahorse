@@ -26,14 +26,14 @@
 #include <glib-object.h>
 
 #include "seahorse-pkcs11-object.h"
-#include "seahorse-pkcs11-source.h"
+#include "seahorse-pkcs11-token.h"
 
-void          seahorse_pkcs11_refresh_async    (SeahorsePkcs11Source *source,
+void          seahorse_pkcs11_refresh_async    (SeahorsePkcs11Token *token,
                                                 GCancellable *cancellable,
                                                 GAsyncReadyCallback callback,
                                                 gpointer user_data);
 
-gboolean      seahorse_pkcs11_refresh_finish   (SeahorsePkcs11Source *source,
+gboolean      seahorse_pkcs11_refresh_finish   (SeahorsePkcs11Token *token,
                                                 GAsyncResult *result,
                                                 GError **error);
 
@@ -45,4 +45,4 @@ void          seahorse_pkcs11_delete_async     (GList *objects,
 gboolean      seahorse_pkcs11_delete_finish    (GAsyncResult *result,
                                                 GError **error);
 
-#endif /* __SEAHORSE_PKCS11_OPERATIONS_H__ */
+#endif /* __SEAHORSE_PKCS11_TOKEN_H__ */

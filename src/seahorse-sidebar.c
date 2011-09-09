@@ -716,6 +716,7 @@ seahorse_sidebar_constructed (GObject *obj)
 	gtk_tree_selection_set_select_function (selection, on_tree_selection_validate, self, NULL);
 	g_signal_connect (selection, "changed", G_CALLBACK (on_tree_selection_changed), self);
 
+
 	load_backends (self);
 }
 

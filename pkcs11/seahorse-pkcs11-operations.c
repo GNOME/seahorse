@@ -25,7 +25,7 @@
 #include "seahorse-pkcs11-helpers.h"
 #include "seahorse-pkcs11-object.h"
 #include "seahorse-pkcs11-operations.h"
-#include "seahorse-pkcs11-source.h"
+#include "seahorse-pkcs11-token.h"
 
 #include "seahorse-progress.h"
 
@@ -37,7 +37,7 @@
 #include <gcr/gcr.h>
 
 typedef struct {
-	SeahorsePkcs11Source *source;
+	SeahorsePkcs11Token *token;
 	GCancellable *cancellable;
 	GHashTable *checks;
 	GckSession *session;
@@ -47,7 +47,7 @@ static void
 pkcs11_refresh_free (gpointer data)
 {
 	pkcs11_refresh_closure *closure = data;
-	g_object_unref (closure->source);
+	g_object_unref (closure->token);
 	g_clear_object (&closure->cancellable);
 	g_hash_table_destroy (closure->checks);
 	g_clear_object (&closure->session);
@@ -59,9 +59,9 @@ remove_each_object (gpointer key,
                     gpointer value,
                     gpointer user_data)
 {
-	SeahorsePkcs11Source *source = SEAHORSE_PKCS11_SOURCE (user_data);
+	SeahorsePkcs11Token *token = SEAHORSE_PKCS11_TOKEN (user_data);
 	SeahorsePkcs11Object *object = SEAHORSE_PKCS11_OBJECT (value);
-	seahorse_pkcs11_source_remove_object (source, object);
+	seahorse_pkcs11_token_remove_object (token, object);
 	return TRUE;
 }
 
@@ -83,13 +83,13 @@ on_refresh_find_objects (GckSession *session,
 
 		/* Remove all objects that were found, from the check table */
 		for (l = objects; l; l = g_list_next (l)) {
-			seahorse_pkcs11_source_receive_object (closure->source, l->data);
+			seahorse_pkcs11_token_receive_object (closure->token, l->data);
 			handle = gck_object_get_handle (l->data);
 			g_hash_table_remove (closure->checks, &handle);
 		}
 
 		/* Remove everything not found from the context */
-		g_hash_table_foreach_remove (closure->checks, remove_each_object, closure->source);
+		g_hash_table_foreach_remove (closure->checks, remove_each_object, closure->token);
 	}
 
 	g_simple_async_result_complete (res);
@@ -126,7 +126,7 @@ on_refresh_open_session (GObject *source,
 }
 
 void
-seahorse_pkcs11_refresh_async (SeahorsePkcs11Source *source,
+seahorse_pkcs11_refresh_async (SeahorsePkcs11Token *token,
                                GCancellable *cancellable,
                                GAsyncReadyCallback callback,
                                gpointer user_data)
@@ -137,18 +137,18 @@ seahorse_pkcs11_refresh_async (SeahorsePkcs11Source *source,
 	GList *objects, *l;
 	gulong handle;
 
-	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (token), callback, user_data,
 	                                 seahorse_pkcs11_refresh_async);
 	closure = g_new0 (pkcs11_refresh_closure, 1);
 	closure->checks = g_hash_table_new_full (seahorse_pkcs11_ulong_hash,
 	                                         seahorse_pkcs11_ulong_equal,
 	                                         g_free, g_object_unref);
-	closure->source = g_object_ref (source);
+	closure->token = g_object_ref (token);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	g_simple_async_result_set_op_res_gpointer (res, closure, pkcs11_refresh_free);
 
 	/* Make note of all the objects that were there */
-	objects = gcr_collection_get_objects (GCR_COLLECTION (source));
+	objects = gcr_collection_get_objects (GCR_COLLECTION (token));
 	for (l = objects; l; l = g_list_next (l)) {
 		if (g_object_class_find_property (G_OBJECT_GET_CLASS (l->data), "pkcs11-handle")) {
 			g_object_get (l->data, "pkcs11-handle", &handle, NULL);
@@ -160,7 +160,7 @@ seahorse_pkcs11_refresh_async (SeahorsePkcs11Source *source,
 	g_list_free (objects);
 
 	/* Step 1. Load the session */
-	slot = seahorse_pkcs11_source_get_slot (closure->source);
+	slot = seahorse_pkcs11_token_get_slot (closure->token);
 	gck_slot_open_session_async (slot, GCK_SESSION_READ_WRITE, closure->cancellable,
 	                             on_refresh_open_session, g_object_ref (res));
 
@@ -168,11 +168,11 @@ seahorse_pkcs11_refresh_async (SeahorsePkcs11Source *source,
 }
 
 gboolean
-seahorse_pkcs11_refresh_finish (SeahorsePkcs11Source *source,
+seahorse_pkcs11_refresh_finish (SeahorsePkcs11Token *token,
                                 GAsyncResult *result,
                                 GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (token),
 	                      seahorse_pkcs11_refresh_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -208,7 +208,7 @@ on_delete_object_completed (GObject *source,
 	pkcs11_delete_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
 	SeahorseObject *object;
-	SeahorsePkcs11Source *pkcs11_source;
+	SeahorsePkcs11Token *pkcs11_token;
 
 	object = g_queue_pop_head (closure->objects);
 	seahorse_progress_end (closure->cancellable, object);
@@ -226,8 +226,8 @@ on_delete_object_completed (GObject *source,
 	}
 
 	if (error == NULL) {
-		pkcs11_source = SEAHORSE_PKCS11_SOURCE (seahorse_object_get_source (object));
-		seahorse_pkcs11_source_remove_object (pkcs11_source, SEAHORSE_PKCS11_OBJECT (object));
+		pkcs11_token = SEAHORSE_PKCS11_TOKEN (seahorse_object_get_source (object));
+		seahorse_pkcs11_token_remove_object (pkcs11_token, SEAHORSE_PKCS11_OBJECT (object));
 		pkcs11_delete_one_object (res);
 	}
 

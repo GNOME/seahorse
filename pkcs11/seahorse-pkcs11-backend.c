@@ -23,7 +23,7 @@
 
 #include "seahorse-pkcs11-backend.h"
 #include "seahorse-pkcs11-commands.h"
-#include "seahorse-pkcs11-source.h"
+#include "seahorse-pkcs11-token.h"
 
 #include "seahorse-backend.h"
 #include "seahorse-registry.h"
@@ -90,7 +90,7 @@ seahorse_pkcs11_backend_constructed (GObject *obj)
 	for (m = modules; m != NULL; m = g_list_next (m)) {
 		slots = gck_module_get_slots (m->data, FALSE);
 		for (s = slots; s; s = g_list_next (s)) {
-			source = SEAHORSE_SOURCE (seahorse_pkcs11_source_new (s->data));
+			source = SEAHORSE_SOURCE (seahorse_pkcs11_token_new (s->data));
 			self->slots = g_list_append (self->slots, source);
 		}
 
