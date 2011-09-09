@@ -52,11 +52,7 @@ ui_DATA = \
 	seahorse-key-manager.ui \
 	seahorse-key-manager.xml \
 	seahorse-change-passphrase.xml \
-	seahorse-generate-select.xml \
-	seahorse-keyserver-search.xml \
-	seahorse-keyserver-results.ui \
-	seahorse-keyserver-results.xml \
-	seahorse-keyserver-sync.xml
+	seahorse-generate-select.xml
 
 desktopdir = $(datadir)/applications
 desktop_in_files = seahorse.desktop.in 

@@ -87,6 +87,10 @@ ui_DATA = \
 	seahorse-add-subkey.xml \
 	seahorse-add-uid.xml \
 	seahorse-expires.xml \
+	seahorse-keyserver-search.xml \
+	seahorse-keyserver-results.ui \
+	seahorse-keyserver-results.xml \
+	seahorse-keyserver-sync.xml \
 	seahorse-pgp-public-key-properties.xml \
 	seahorse-pgp-private-key-properties.xml \
 	seahorse-pgp-generate.xml \
