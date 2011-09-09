@@ -78,6 +78,16 @@ seahorse_pkcs11_token_init (SeahorsePkcs11Token *self)
 }
 
 static void
+seahorse_pkcs11_token_constructed (GObject *obj)
+{
+	SeahorsePkcs11Token *self = SEAHORSE_PKCS11_TOKEN (obj);
+
+	G_OBJECT_CLASS (seahorse_pkcs11_token_parent_class)->constructed (obj);
+
+	seahorse_pkcs11_refresh_async (self, NULL, NULL, NULL);
+}
+
+static void
 seahorse_pkcs11_token_get_property (GObject *object,
                                     guint prop_id,
                                     GValue *value,
@@ -161,12 +171,11 @@ seahorse_pkcs11_token_finalize (GObject *obj)
 static void
 seahorse_pkcs11_token_class_init (SeahorsePkcs11TokenClass *klass)
 {
-	GObjectClass *gobject_class;
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-	seahorse_pkcs11_token_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePkcs11TokenPrivate));
 
-	gobject_class = G_OBJECT_CLASS (klass);
+	gobject_class->constructed = seahorse_pkcs11_token_constructed;
 	gobject_class->dispose = seahorse_pkcs11_token_dispose;
 	gobject_class->finalize = seahorse_pkcs11_token_finalize;
 	gobject_class->set_property = seahorse_pkcs11_token_set_property;
@@ -263,7 +272,7 @@ seahorse_pkcs11_token_receive_object (SeahorsePkcs11Token *self,
 	}
 
 	cert = seahorse_pkcs11_certificate_new (obj);
-	g_object_set (cert, "token", self, NULL);
+	g_object_set (cert, "source", self, NULL);
 
 	g_hash_table_insert (self->pv->objects, g_memdup (&handle, sizeof (handle)), cert);
 	gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (cert));

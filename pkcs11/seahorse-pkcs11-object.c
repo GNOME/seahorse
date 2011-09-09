@@ -351,7 +351,7 @@ seahorse_pkcs11_object_require_attribute (SeahorsePkcs11Object *self, gulong att
 	attr = gck_attributes_find (self->pv->pkcs11_attributes, attr_type);
 	if (attr == NULL)
 		load_object_attributes (self, &attr_type, 1);
-	if (gck_attribute_is_invalid (attr))
+	else if (gck_attribute_is_invalid (attr))
 		attr = NULL;
 	
 	return attr;
