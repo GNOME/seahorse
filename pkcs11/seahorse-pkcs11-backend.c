@@ -45,10 +45,17 @@ static SeahorsePkcs11Backend *pkcs11_backend = NULL;
 struct _SeahorsePkcs11Backend {
 	GObject parent;
 	GList *slots;
+	GList *blacklist;
 };
 
 struct _SeahorsePkcs11BackendClass {
 	GObjectClass parent_class;
+};
+
+static const char *token_blacklist[] = {
+	"pkcs11:manufacturer=Gnome%20Keyring;serial=1:SSH:HOME",
+	"pkcs11:manufacturer=Gnome%20Keyring;serial=1:SECRET:MAIN",
+	NULL
 };
 
 static void         seahorse_pkcs11_backend_iface_init       (SeahorseBackendIface *iface);
@@ -63,11 +70,38 @@ G_DEFINE_TYPE_WITH_CODE (SeahorsePkcs11Backend, seahorse_pkcs11_backend, G_TYPE_
 static void
 seahorse_pkcs11_backend_init (SeahorsePkcs11Backend *self)
 {
+	GError *error = NULL;
+	GckUriData *uri;
+	guint i;
+
 	g_return_if_fail (pkcs11_backend == NULL);
 	pkcs11_backend = self;
 
 	/* Let these classes register themselves, when the backend is created */
 	g_type_class_unref (g_type_class_ref (SEAHORSE_PKCS11_TYPE_COMMANDS));
+
+	for (i = 0; token_blacklist[i] != NULL; i++) {
+		uri = gck_uri_parse (token_blacklist[i], GCK_URI_FOR_TOKEN | GCK_URI_FOR_MODULE, &error);
+		if (uri == NULL) {
+			g_warning ("couldn't parse pkcs11 blacklist uri: %s", error->message);
+			g_clear_error (&error);
+		}
+		self->blacklist = g_list_prepend (self->blacklist, uri);
+	}
+}
+
+static gboolean
+is_token_blacklisted (SeahorsePkcs11Backend *self,
+                      GckSlot *slot)
+{
+	GList *l;
+
+	for (l = self->blacklist; l != NULL; l = g_list_next (l)) {
+		if (gck_slot_match (slot, l->data))
+			return TRUE;
+	}
+
+	return FALSE;
 }
 
 static void
@@ -90,8 +124,10 @@ seahorse_pkcs11_backend_constructed (GObject *obj)
 	for (m = modules; m != NULL; m = g_list_next (m)) {
 		slots = gck_module_get_slots (m->data, FALSE);
 		for (s = slots; s; s = g_list_next (s)) {
-			source = SEAHORSE_SOURCE (seahorse_pkcs11_token_new (s->data));
-			self->slots = g_list_append (self->slots, source);
+			if (!is_token_blacklisted (self, s->data)) {
+				source = SEAHORSE_SOURCE (seahorse_pkcs11_token_new (s->data));
+				self->slots = g_list_append (self->slots, source);
+			}
 		}
 
 		/* These will have been refed by the source above */
@@ -99,7 +135,6 @@ seahorse_pkcs11_backend_constructed (GObject *obj)
 	}
 
 	gck_list_unref_free (modules);
-
 }
 
 static void
@@ -140,6 +175,7 @@ seahorse_pkcs11_backend_finalize (GObject *obj)
 {
 	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (obj);
 
+	g_list_free_full (self->blacklist, (GDestroyNotify)gck_uri_data_free);
 	g_assert (self->slots == NULL);
 	g_return_if_fail (pkcs11_backend == self);
 	pkcs11_backend = NULL;
