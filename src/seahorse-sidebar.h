@@ -40,4 +40,6 @@ GType                        seahorse_sidebar_get_type           (void);
 
 SeahorseSidebar *            seahorse_sidebar_new                (void);
 
+GcrCollection *              seahorse_sidebar_get_collection     (SeahorseSidebar *self);
+
 #endif /* __SEAHORSE_SIDEBAR_H__ */

@@ -39,11 +39,11 @@ struct _SeahorseSidebar {
 
 	GtkListStore *store;
 	GPtrArray *backends;
+	GHashTable *checked;
+	GcrUnionCollection *objects;
+	GcrCollection *selected;
 
 	guint update_places_sig;
-
-	gint checks_checked;
-	GtkTreePath *selected_path;
 };
 
 struct _SeahorseSidebarClass {
@@ -52,12 +52,13 @@ struct _SeahorseSidebarClass {
 
 enum {
 	PROP_0,
+	PROP_COLLECTION
 };
 
 typedef enum {
-	PLACES_HEADING,
-	PLACES_COLLECTION,
-} PlaceType;
+	TYPE_BACKEND,
+	TYPE_PLACE,
+} RowType;
 
 enum {
 	SIDEBAR_ROW_TYPE,
@@ -67,7 +68,6 @@ enum {
 	SIDEBAR_EDITABLE,
 	SIDEBAR_CATEGORY,
 	SIDEBAR_COLLECTION,
-	SIDEBAR_CHECKED,
 	SIDEBAR_N_COLUMNS
 };
 
@@ -79,7 +79,6 @@ static GType column_types[] = {
 	G_TYPE_BOOLEAN,
 	G_TYPE_STRING,
 	0 /* later */,
-	G_TYPE_BOOLEAN,
 };
 
 G_DEFINE_TYPE (SeahorseSidebar, seahorse_sidebar, GTK_TYPE_SCROLLED_WINDOW);
@@ -93,7 +92,8 @@ seahorse_sidebar_init (SeahorseSidebar *self)
 	self->store = gtk_list_store_newv (SIDEBAR_N_COLUMNS, column_types);
 
 	self->backends = g_ptr_array_new_with_free_func (g_object_unref);
-
+	self->checked = g_hash_table_new (g_direct_hash, g_direct_equal);
+	self->objects = GCR_UNION_COLLECTION (gcr_union_collection_new ());
 }
 
 static void
@@ -176,7 +176,7 @@ update_backend (SeahorseSidebar *self,
 
 	next_or_append_row (self->store, iter, category, GCR_COLLECTION (backend));
 	gtk_list_store_set (self->store, iter,
-	                    SIDEBAR_ROW_TYPE, PLACES_HEADING,
+	                    SIDEBAR_ROW_TYPE, TYPE_BACKEND,
 	                    SIDEBAR_CATEGORY, category,
 	                    SIDEBAR_LABEL, label,
 	                    SIDEBAR_TOOLTIP, tooltip,
@@ -201,7 +201,7 @@ update_backend (SeahorseSidebar *self,
 
 		next_or_append_row (self->store, iter, category, l->data);
 		gtk_list_store_set (self->store, iter,
-		                    SIDEBAR_ROW_TYPE, PLACES_COLLECTION,
+		                    SIDEBAR_ROW_TYPE, TYPE_PLACE,
 		                    SIDEBAR_CATEGORY, category,
 		                    SIDEBAR_LABEL, label,
 		                    SIDEBAR_TOOLTIP, tooltip,
@@ -220,11 +220,80 @@ update_backend (SeahorseSidebar *self,
 }
 
 static void
+update_objects_for_selection (SeahorseSidebar *self,
+                              GtkTreeSelection *selection)
+{
+	GcrCollection *selected = NULL;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+
+	if (gtk_tree_selection_get_selected (selection, &model, &iter))
+		gtk_tree_model_get (model, &iter,
+		                    SIDEBAR_COLLECTION, &selected,
+		                    -1);
+
+	if (selected != self->selected) {
+		if (self->selected && g_hash_table_size (self->checked) == 0)
+			gcr_union_collection_remove (self->objects, self->selected);
+
+		g_clear_object (&self->selected);
+		self->selected = selected ? g_object_ref (selected) : NULL;
+
+		if (self->selected && g_hash_table_size (self->checked) == 0)
+			gcr_union_collection_add (self->objects, self->selected);
+	}
+
+	g_clear_object (&selected);
+}
+
+static void
+update_objects_for_checked (SeahorseSidebar *self,
+                            GcrCollection *place)
+{
+	g_hash_table_insert (self->checked, place, place);
+
+	/* The first check ... */
+	if (g_hash_table_size (self->checked) == 1) {
+
+		/* ... but the currently checked one was selected so leave same */
+		if (self->selected == place)
+			return;
+
+		/* ... something else was selected, so update */
+		else if (self->selected)
+			gcr_union_collection_remove (self->objects, self->selected);
+	}
+
+	gcr_union_collection_add (self->objects, place);
+}
+
+static void
+update_objects_for_unchecked (SeahorseSidebar *self,
+                              GcrCollection *place)
+{
+	if (!g_hash_table_remove (self->checked, place))
+		g_assert_not_reached ();
+
+	/* No more checks ... */
+	if (g_hash_table_size (self->checked) == 0) {
+
+		/* ... but the currently unchecked one is selected so leave same ... */
+		if (self->selected == place)
+			return;
+
+		/* ... something else is selected, so update */
+		else if (self->selected)
+			gcr_union_collection_add (self->objects, self->selected);
+	}
+
+	gcr_union_collection_remove (self->objects, place);
+}
+
+static void
 update_places (SeahorseSidebar *self)
 {
 	GtkTreeSelection *selection;
 	GtkTreeIter iter;
-	GtkTreeModel *model;
 	guint i;
 
 	/* A marker that tells us the iter is not yet valid */
@@ -235,11 +304,8 @@ update_places (SeahorseSidebar *self)
 		update_backend (self, GCR_COLLECTION (self->backends->pdata[i]), &iter);
 
 	/* Update selection */
-	gtk_tree_path_free (self->selected_path);
-	self->selected_path = NULL;
 	selection = gtk_tree_view_get_selection (self->tree_view);
-	if (gtk_tree_selection_get_selected (selection, &model, &iter))
-		self->selected_path = gtk_tree_model_get_path (model, &iter);
+	update_objects_for_selection (self, selection);
 }
 
 static gboolean
@@ -267,12 +333,12 @@ on_cell_renderer_heading_visible (GtkTreeViewColumn *column,
                                   GtkTreeIter *iter,
                                   gpointer user_data)
 {
-	PlaceType type;
+	RowType type;
 	gtk_tree_model_get (model, iter,
 	                    SIDEBAR_ROW_TYPE, &type,
 	                    -1);
 	g_object_set (cell,
-	              "visible", (type == PLACES_HEADING),
+	              "visible", (type == TYPE_BACKEND),
 	              NULL);
 }
 
@@ -283,12 +349,12 @@ on_padding_cell_renderer (GtkTreeViewColumn *column,
                           GtkTreeIter *iter,
                           gpointer user_data)
 {
-	PlaceType type;
+	RowType type;
 	gtk_tree_model_get (model, iter,
 	                    SIDEBAR_ROW_TYPE, &type,
 	                    -1);
 
-	if (type == PLACES_HEADING) {
+	if (type == TYPE_BACKEND) {
 		g_object_set (cell,
 		              "visible", FALSE,
 		              "xpad", 0,
@@ -310,12 +376,12 @@ on_cell_renderer_heading_not_visible (GtkTreeViewColumn *column,
                                       GtkTreeIter *iter,
                                       gpointer user_data)
 {
-	PlaceType type;
+	RowType type;
 	gtk_tree_model_get (model, iter,
 	                    SIDEBAR_ROW_TYPE, &type,
 	                    -1);
 	g_object_set (cell,
-	              "visible", (type != PLACES_HEADING),
+	              "visible", (type != TYPE_BACKEND),
 	              NULL);
 }
 
@@ -327,29 +393,27 @@ on_cell_renderer_check (GtkTreeViewColumn *column,
                         gpointer user_data)
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
-	PlaceType type;
+	GcrCollection *collection;
+	RowType type;
 	gboolean active;
 	gboolean inconsistent;
 	gboolean visible;
-	GtkTreePath *only;
 
 	gtk_tree_model_get (model, iter,
 	                    SIDEBAR_ROW_TYPE, &type,
-	                    SIDEBAR_CHECKED, &active,
+	                    SIDEBAR_COLLECTION, &collection,
 	                    -1);
 
+	active = FALSE;
 	inconsistent = FALSE;
 
-	if (type == PLACES_HEADING) {
+	if (type == TYPE_BACKEND) {
 		visible = FALSE;
-	} else if (self->checks_checked > 0) {
+	} else if (collection != NULL && g_hash_table_size (self->checked) > 0) {
+		active = g_hash_table_lookup (self->checked, collection) != NULL;
 		visible = TRUE;
-	} else if (self->selected_path != NULL) {
-		only = gtk_tree_model_get_path (model, iter);
-		visible = gtk_tree_path_compare (only, self->selected_path) == 0;
-		gtk_tree_path_free (only);
 	} else {
-		visible = FALSE;
+		visible = (collection == self->selected);
 	}
 
 	/* self->mnemonics_visible */
@@ -358,6 +422,8 @@ on_cell_renderer_check (GtkTreeViewColumn *column,
 	              "active", active,
 	              "inconsistent", inconsistent,
 	              NULL);
+
+	g_clear_object (&collection);
 }
 
 static void
@@ -383,13 +449,13 @@ on_tree_selection_validate (GtkTreeSelection *selection,
                             gpointer user_data)
 {
 	GtkTreeIter iter;
-	PlaceType row_type;
+	RowType row_type;
 
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get (model, &iter,
 	                    SIDEBAR_ROW_TYPE, &row_type,
 	                    -1);
-	if (row_type == PLACES_HEADING)
+	if (row_type == TYPE_BACKEND)
 		return FALSE;
 
 	return TRUE;
@@ -400,16 +466,8 @@ on_tree_selection_changed (GtkTreeSelection *selection,
                            gpointer user_data)
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
-	GtkTreeModel *model;
-	GtkTreeIter iter;
-
-	gtk_tree_path_free (self->selected_path);
-	self->selected_path = NULL;
-
-	if (gtk_tree_selection_get_selected (selection, &model, &iter))
-		self->selected_path = gtk_tree_model_get_path (model, &iter);
-
-	invalidate_all_rows (model);
+	update_objects_for_selection (self, selection);
+	invalidate_all_rows (GTK_TREE_MODEL (self->store));
 }
 
 static void
@@ -508,31 +566,43 @@ load_backends (SeahorseSidebar *self)
 
 static void
 on_checked_toggled  (GtkCellRendererToggle *renderer,
-                     gchar *path,
+                     gchar *path_string,
                      gpointer user_data)
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
+	GcrCollection *collection;
+	GtkTreeModel *model;
 	GtkTreeIter iter;
+	GtkTreePath *path;
 	gboolean checked;
+	gboolean have;
 
-	if (!gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (self->store), &iter, path))
-		g_return_if_reached ();
+	model = GTK_TREE_MODEL (self->store);
+	path = gtk_tree_path_new_from_string (path_string);
+	gtk_tree_model_get_iter (model, &iter, path);
 
 	checked = !gtk_cell_renderer_toggle_get_active (renderer);
-	gtk_list_store_set (self->store, &iter,
-	                    SIDEBAR_CHECKED, checked,
+	gtk_tree_model_get (model, &iter,
+	                    SIDEBAR_COLLECTION, &collection,
 	                    -1);
+	have = g_hash_table_lookup (self->checked, collection) != NULL;
 
-	if (checked) {
-		self->checks_checked++;
-		if (self->checks_checked == 1)
-			invalidate_all_rows (GTK_TREE_MODEL (self->store));
-	} else {
-		g_assert (self->checks_checked > 0);
-		self->checks_checked--;
-		if (self->checks_checked == 0)
-			invalidate_all_rows (GTK_TREE_MODEL (self->store));
+	if (checked && !have) {
+		update_objects_for_checked (self, collection);
+		if (g_hash_table_size (self->checked) == 1)
+			invalidate_all_rows (model);
+		else
+			gtk_tree_model_row_changed (model, path, &iter);
+	} else if (!checked && have) {
+		update_objects_for_unchecked (self, collection);
+		if (g_hash_table_size (self->checked) == 0)
+			invalidate_all_rows (model);
+		else
+			gtk_tree_model_row_changed (model, path, &iter);
 	}
+
+	g_object_unref (collection);
+	gtk_tree_path_free (path);
 }
 
 static void
@@ -649,8 +719,6 @@ seahorse_sidebar_constructed (GObject *obj)
 	load_backends (self);
 }
 
-#if 0
-
 static void
 seahorse_sidebar_get_property (GObject *obj,
                                guint prop_id,
@@ -660,34 +728,14 @@ seahorse_sidebar_get_property (GObject *obj,
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (obj);
 
 	switch (prop_id) {
-	case PROP_PLACES:
-		g_value_set_object (value, self->places);
+	case PROP_COLLECTION:
+		g_value_set_object (value, seahorse_sidebar_get_collection (self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
 	}
 }
-
-static void
-seahorse_sidebar_set_property (GObject *obj,
-                               guint prop_id,
-                               const GValue *value,
-                               GParamSpec *pspec)
-{
-	SeahorseSidebar *self = SEAHORSE_SIDEBAR (obj);
-
-	switch (prop_id) {
-	case PROP_PLACES:
-		self->places = g_value_dup_object (value);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
-}
-
-#endif
 
 static void
 seahorse_sidebar_dispose (GObject *obj)
@@ -715,7 +763,9 @@ seahorse_sidebar_finalize (GObject *obj)
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (obj);
 
-	gtk_tree_path_free (self->selected_path);
+	g_clear_object (&self->selected);
+	g_hash_table_destroy (self->checked);
+	g_object_unref (self->objects);
 
 	if (self->update_places_sig)
 		g_source_remove (self->update_places_sig);
@@ -734,14 +784,11 @@ seahorse_sidebar_class_init (SeahorseSidebarClass *klass)
 	gobject_class->constructed = seahorse_sidebar_constructed;
 	gobject_class->dispose = seahorse_sidebar_dispose;
 	gobject_class->finalize = seahorse_sidebar_finalize;
-#if 0
-	gobject_class->set_property = seahorse_sidebar_set_property;
 	gobject_class->get_property = seahorse_sidebar_get_property;
 
-	g_object_class_install_property (gobject_class, PROP_PLACES,
-	        g_param_spec_object ("places", "Places", "Places for Items",
-	                             GCR_TYPE_COLLECTION, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-#endif
+	g_object_class_install_property (gobject_class, PROP_COLLECTION,
+	        g_param_spec_object ("collection", "Collection", "Collection of objects sidebar represents",
+	                             GCR_TYPE_COLLECTION, G_PARAM_READABLE));
 }
 
 SeahorseSidebar *
@@ -749,4 +796,11 @@ seahorse_sidebar_new (void)
 {
 	return g_object_new (SEAHORSE_TYPE_SIDEBAR,
 	                     NULL);
+}
+
+GcrCollection *
+seahorse_sidebar_get_collection (SeahorseSidebar *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_SIDEBAR (self), NULL);
+	return GCR_COLLECTION (self->objects);
 }

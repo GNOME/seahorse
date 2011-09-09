@@ -57,25 +57,16 @@ void           on_keymanager_import_button              (GtkButton* button,
 
 enum {
 	PROP_0,
-	PROP_SOURCES,
 	PROP_SELECTED
 };
-typedef struct _TabInfo {
-	guint id;
-	gint page;
-	GtkTreeView* view;
-	SeahorseCollection *collection;
-	GtkWidget* widget;
-	SeahorseKeyManagerStore* store;
-} TabInfo;
 
 struct _SeahorseKeyManagerPrivate {
-	GcrCollection *sources;
-	GcrUnionCollection *collection;
-	GtkNotebook* notebook;
 	GtkActionGroup* view_actions;
 	GtkEntry* filter_entry;
-	TabInfo* tabs;
+
+	GtkTreeView* view;
+	GcrCollection *collection; /* owned by the sidebar */
+	SeahorseKeyManagerStore* store;
 
 	GSettings *settings;
 	gint sidebar_width;
@@ -87,101 +78,11 @@ enum  {
 	TARGETS_URIS
 };
 
-enum  {
-	TAB_PUBLIC = 0,
-	TAB_PRIVATE,
-	TAB_PASSWORD,
-	TAB_NUM_TABS
-} SeahorseKeyManagerTabs;
-
-static SeahorsePredicate pred_public = {
-	0,
-	SEAHORSE_USAGE_PUBLIC_KEY, 
-	0, 
-	0, 
-	NULL
-};
-
-static SeahorsePredicate pred_private = {
-	0,
-	SEAHORSE_USAGE_PRIVATE_KEY, 
-	0, 
-	0, 
-	NULL
-};
-
-static SeahorsePredicate pred_password = {
-	0, /* type filled in later */
-	0, 
-	0, 
-	0, 
-	NULL
-};
-
 G_DEFINE_TYPE (SeahorseKeyManager, seahorse_key_manager, SEAHORSE_TYPE_VIEWER);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
  */
-
-static TabInfo* 
-get_tab_for_object (SeahorseKeyManager* self, SeahorseObject* obj) 
-{
-	gint i;
-	
-	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER (self), NULL);
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (obj), NULL);
-	
-	for (i = 0; i < TAB_NUM_TABS; ++i) {
-		TabInfo* tab = &self->pv->tabs[i];
-		if (gcr_collection_contains (GCR_COLLECTION (tab->collection),
-		                             G_OBJECT (obj)))
-			return tab;
-	}
-	
-	return NULL;
-}
-
-static TabInfo* 
-get_tab_info (SeahorseKeyManager* self, gint page) 
-{
-	gint i;
-	
-	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER (self), NULL);
-
-	if (page < 0) 
-		page = gtk_notebook_get_current_page (self->pv->notebook);
-	if (page < 0)
-		return NULL;
-
-	for (i = 0; i < TAB_NUM_TABS; ++i)
-	{
-		TabInfo* tab = &self->pv->tabs[i];
-		if (tab->page == page)
-			return tab;
-	}
-
-	return NULL;
-}
-
-static GtkTreeView* 
-get_current_view (SeahorseKeyManager* self) 
-{
-	TabInfo* tab;
-	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER (self), NULL);
-	tab = get_tab_info (self, -1);
-	if (tab == NULL)
-		return NULL;
-	return tab->view;
-}
-
-static void 
-set_tab_current (SeahorseKeyManager* self, TabInfo* tab) 
-{
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	gtk_notebook_set_current_page (self->pv->notebook, tab->page);
-	g_signal_emit_by_name (G_OBJECT (SEAHORSE_VIEW (self)), "selection-changed");
-}
 
 static gboolean 
 fire_selection_changed (gpointer user_data)
@@ -193,16 +94,6 @@ fire_selection_changed (gpointer user_data)
 	
 	/* This is called as a one-time idle handler, return FALSE so we don't get run again */
 	return FALSE;
-}
-
-static void 
-on_tab_changed (GtkNotebook* notebook, void* unused, guint page_num, SeahorseKeyManager* self) 
-{
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-	gtk_entry_set_text (self->pv->filter_entry, "");
-
-	fire_selection_changed (self);
 }
 
 static void 
@@ -271,42 +162,7 @@ on_keymanager_new_button (GtkButton* button, SeahorseKeyManager* self)
 	seahorse_generate_select_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
 }
 
-static void 
-initialize_tab (SeahorseKeyManager* self, const char* tabwidget, guint tabid, const char* viewwidget, 
-                const SeahorsePredicate* pred)
-{
-	SeahorseCollection *collection;
-	GtkTreeSelection *selection;
-	GtkTreeView *view;
-	
-	g_assert (tabid < (int)TAB_NUM_TABS);
-	
-	self->pv->tabs[tabid].id = tabid;
-	self->pv->tabs[tabid].widget = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), tabwidget);
-	g_return_if_fail (self->pv->tabs[tabid].widget != NULL);
-	
-	self->pv->tabs[tabid].page = gtk_notebook_page_num (self->pv->notebook, self->pv->tabs[tabid].widget);
-	g_return_if_fail (self->pv->tabs[tabid].page >= 0);
-
-	collection = seahorse_collection_new_for_predicate (GCR_COLLECTION (self->pv->collection),
-	                                                    (SeahorsePredicate*)pred, NULL);
-	self->pv->tabs[tabid].collection = SEAHORSE_COLLECTION (collection);
-
-	/* Init key list & selection settings */
-	view = GTK_TREE_VIEW (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), viewwidget));
-	self->pv->tabs[tabid].view = view;
-	g_return_if_fail (view != NULL);
-	
-	selection = gtk_tree_view_get_selection (view);
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
-	g_signal_connect (selection, "changed", G_CALLBACK (on_view_selection_changed), self);
-	gtk_widget_realize (GTK_WIDGET (view));
-
-	/* Add new key store and associate it */
-	self->pv->tabs[tabid].store = seahorse_key_manager_store_new (GCR_COLLECTION (collection),
-	                                                              view, self->pv->settings);
-}
-
+#if REFACTOR_FIRST
 static gboolean 
 on_first_timer (SeahorseKeyManager* self) 
 {
@@ -326,6 +182,7 @@ on_first_timer (SeahorseKeyManager* self)
 	
 	return FALSE;
 }
+#endif
 
 static void
 on_clear_clicked (GtkEntry* entry, GtkEntryIconPosition icon_pos, GdkEvent* event, gpointer user_data)
@@ -337,14 +194,12 @@ static void
 on_filter_changed (GtkEntry* entry, SeahorseKeyManager* self) 
 {
 	const gchar *text;
-	gint i;
 
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_ENTRY (entry));
 
 	text = gtk_entry_get_text (entry);
-	for (i = 0; i < TAB_NUM_TABS; ++i)
-		g_object_set (self->pv->tabs[i].store, "filter", text, NULL);
+	g_object_set (self->pv->store, "filter", text, NULL);
 }
 
 #ifdef REFACTOR_IMPORT
@@ -682,71 +537,22 @@ static GList*
 seahorse_key_manager_get_selected_objects (SeahorseViewer* base) 
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (base); 
-	TabInfo* tab = get_tab_info (self, -1);
-	if (tab == NULL)
-		return NULL;
-	return seahorse_key_manager_store_get_selected_objects (tab->view);
+	return seahorse_key_manager_store_get_selected_objects (self->pv->view);
 }
 
 static void 
 seahorse_key_manager_set_selected_objects (SeahorseViewer* base, GList* objects) 
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (base);
-	GList** tab_lists;
-	GList *l;
-	gint i;
-	guint highest_matched;
-	TabInfo* highest_tab;
+	seahorse_key_manager_store_set_selected_objects (self->pv->view, objects);
 
-	tab_lists = g_new0 (GList*, TAB_NUM_TABS + 1);
-	
-	/* Break objects into what's on each tab */
-	for (l = objects; l; l = g_list_next (l)) {
-		SeahorseObject* obj = SEAHORSE_OBJECT (l->data);
-		TabInfo* tab = get_tab_for_object (self, obj);
-		if (tab == NULL) 
-			continue;
-
-		g_assert (tab->id < TAB_NUM_TABS);
-		tab_lists[tab->id] = g_list_prepend (tab_lists[tab->id], obj);
-	}
-	
-	highest_matched = 0;
-	highest_tab = NULL;
-	
-	for (i = 0; i < TAB_NUM_TABS; ++i) {
-		GList* list = tab_lists[i];
-		TabInfo* tab = &self->pv->tabs[i];
-
-		/* Save away the tab that had the most objects */
-		guint num = g_list_length (list);
-		if (num > highest_matched) {
-			highest_matched = num;
-			highest_tab = tab;
-		}
-		
-		/* Select the objects on that tab */
-		seahorse_key_manager_store_set_selected_objects (tab->view, list);
-		
-		/* Free the broken down list */
-		g_list_free (list);
-	}
-	
-	g_free (tab_lists);
-	
-	/* Change to the tab with the most objects */
-	if (highest_tab != NULL)
-		set_tab_current (self, highest_tab);
 }
 
 static SeahorseObject* 
 seahorse_key_manager_get_selected (SeahorseViewer* base) 
 {
 	SeahorseKeyManager* self = SEAHORSE_KEY_MANAGER (base);
-	TabInfo* tab = get_tab_info (self, -1);
-	if (tab == NULL)
-		return NULL;
-	return seahorse_key_manager_store_get_selected_object (tab->view);
+	return seahorse_key_manager_store_get_selected_object (self->pv->view);
 }
 
 static void 
@@ -789,7 +595,7 @@ on_sidebar_panes_size_allocate (GtkWidget *widget,
 	}
 }
 
-static void
+static GcrCollection *
 setup_sidebar (SeahorseKeyManager *self)
 {
 	SeahorseSidebar *sidebar;
@@ -804,6 +610,8 @@ setup_sidebar (SeahorseKeyManager *self)
 	widget = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-panes");
 	gtk_paned_set_position (GTK_PANED (widget), self->pv->sidebar_width);
 	g_signal_connect (sidebar, "size_allocate", G_CALLBACK (on_sidebar_panes_size_allocate), self);
+
+	return seahorse_sidebar_get_collection (sidebar);
 }
 
 static void
@@ -813,15 +621,13 @@ seahorse_key_manager_constructed (GObject *object)
 	GtkActionGroup* actions;
 	GtkToggleAction* action;
 	GtkTargetList* targets;
+	GtkTreeSelection *selection;
 	GtkWidget* widget;
 
 	G_OBJECT_CLASS (seahorse_key_manager_parent_class)->constructed (object);
 
-	setup_sidebar (self);
+	self->pv->collection = setup_sidebar (self);
 
-	self->pv->tabs = g_new0 (TabInfo, TAB_NUM_TABS);
-
-	self->pv->notebook = GTK_NOTEBOOK (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "notebook"));
 	gtk_window_set_title (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)), _("Passwords and Keys"));
 	
 	actions = gtk_action_group_new ("general");
@@ -855,10 +661,7 @@ seahorse_key_manager_constructed (GObject *object)
 
 	g_signal_connect_object (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "new-button"), 
 	                         "clicked", G_CALLBACK (on_keymanager_new_button), self, 0);
-	
-	/* The notebook */
-	g_signal_connect_object (self->pv->notebook, "switch-page", G_CALLBACK (on_tab_changed), self, G_CONNECT_AFTER);
-	
+
 	/* Flush all updates */
 	seahorse_viewer_ensure_updated (SEAHORSE_VIEWER (self));
 	
@@ -925,17 +728,24 @@ seahorse_key_manager_constructed (GObject *object)
 	/* For the filtering */
 	g_signal_connect_object (GTK_EDITABLE (self->pv->filter_entry), "changed", 
 	                         G_CALLBACK (on_filter_changed), self, 0);
-	
-	/* Initialize the tabs, and associate them up */
-	initialize_tab (self, "pub-key-tab", TAB_PUBLIC, "pub-key-list", &pred_public);
-	initialize_tab (self, "sec-key-tab", TAB_PRIVATE, "sec-key-list", &pred_private);
-	pred_password.type = SEAHORSE_TYPE_GKR_KEYRING;
-	initialize_tab (self, "password-tab", TAB_PASSWORD, "password-list", &pred_password);
-	
-	/* Set focus to the current key list */
-	widget = GTK_WIDGET (get_current_view (self));
-	gtk_widget_grab_focus (widget);
 
+
+	/* Init key list & selection settings */
+	self->pv->view = GTK_TREE_VIEW (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "key-list"));
+	g_return_if_fail (self->pv->view != NULL);
+
+	selection = gtk_tree_view_get_selection (self->pv->view);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
+	g_signal_connect (selection, "changed", G_CALLBACK (on_view_selection_changed), self);
+	gtk_widget_realize (GTK_WIDGET (self->pv->view));
+
+	/* Add new key store and associate it */
+	self->pv->store = seahorse_key_manager_store_new (self->pv->collection,
+	                                                  self->pv->view,
+	                                                  self->pv->settings);
+
+	/* Set focus to the current key list */
+	gtk_widget_grab_focus (widget);
 	g_signal_emit_by_name (self, "selection-changed");
 
 	/* To avoid flicker */
@@ -954,8 +764,10 @@ seahorse_key_manager_constructed (GObject *object)
 	                         G_CALLBACK (on_target_drag_data_received), self, 0);
 #endif
 
+#ifdef REFACTOR_FIRST
 	/* To show first time dialog */
 	g_timeout_add_seconds (1, (GSourceFunc)on_first_timer, self);
+#endif
 }
 
 static void
@@ -963,14 +775,12 @@ seahorse_key_manager_init (SeahorseKeyManager *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_KEY_MANAGER, SeahorseKeyManagerPrivate);
 	self->pv->settings = g_settings_new ("org.gnome.seahorse.manager");
-	self->pv->collection = GCR_UNION_COLLECTION (gcr_union_collection_new ());
 }
 
 static void
 seahorse_key_manager_finalize (GObject *obj)
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (obj);
-	gint i;
 
 	if (self->pv->sidebar_width_sig != 0) {
 		g_source_remove (self->pv->sidebar_width_sig);
@@ -982,19 +792,8 @@ seahorse_key_manager_finalize (GObject *obj)
 	self->pv->view_actions = NULL;
 	
 	self->pv->filter_entry = NULL;
-	
-	if (self->pv->tabs) {
-		for (i = 0; i < TAB_NUM_TABS; ++i) {
-			g_clear_object (&self->pv->tabs[i].store);
-			g_clear_object (&self->pv->tabs[i].collection);
-		}
-		g_free (self->pv->tabs);
-		self->pv->tabs = NULL;
-	}
 
 	g_clear_object (&self->pv->settings);
-	g_object_unref (self->pv->collection);
-	g_clear_object (&self->pv->sources);
 
 	G_OBJECT_CLASS (seahorse_key_manager_parent_class)->finalize (obj);
 }
@@ -1004,17 +803,8 @@ seahorse_key_manager_set_property (GObject *obj, guint prop_id, const GValue *va
                            GParamSpec *pspec)
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (obj);
-	GList *collections, *l;
 
 	switch (prop_id) {
-	case PROP_SOURCES:
-		g_return_if_fail (self->pv->sources == NULL);
-		self->pv->sources = g_value_dup_object (value);
-		collections = gcr_collection_get_objects (self->pv->sources);
-		for (l = collections; l != NULL; l = g_list_next (l))
-			gcr_union_collection_add (self->pv->collection, l->data);
-		g_list_free (collections);
-		break;
 	case PROP_SELECTED:
 		seahorse_viewer_set_selected (SEAHORSE_VIEWER (self), g_value_get_object (value));
 		break;
@@ -1031,9 +821,6 @@ seahorse_key_manager_get_property (GObject *obj, guint prop_id, GValue *value,
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (obj);
 
 	switch (prop_id) {
-	case PROP_SOURCES:
-		g_value_set_object (value, self->pv->sources);
-		break;
 	case PROP_SELECTED:
 		g_value_set_object (value, seahorse_viewer_get_selected (SEAHORSE_VIEWER (self)));
 		break;
@@ -1061,10 +848,6 @@ seahorse_key_manager_class_init (SeahorseKeyManagerClass *klass)
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected = seahorse_key_manager_get_selected;
 	SEAHORSE_VIEWER_CLASS (klass)->set_selected = seahorse_key_manager_set_selected;
 
-	g_object_class_install_property (gobject_class, PROP_SOURCES,
-	               g_param_spec_object ("sources", "Sources" , "Collection of Sources",
-	                                    GCR_TYPE_COLLECTION, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
 	g_object_class_override_property (gobject_class, PROP_SELECTED, "selected");
 }
 
@@ -1077,22 +860,11 @@ SeahorseWidget *
 seahorse_key_manager_show (void)
 {
 	SeahorseKeyManager *self;
-	GcrUnionCollection *sources;
-	GList *backends, *l;
-
-	sources = GCR_UNION_COLLECTION (gcr_union_collection_new ());
-
-	backends = seahorse_registry_object_instances (NULL, "backend", NULL);
-	for (l = backends; l != NULL; l = g_list_next (l))
-		gcr_union_collection_take (sources, GCR_COLLECTION (l->data));
-	g_list_free (backends);
 
 	self = g_object_new (SEAHORSE_TYPE_KEY_MANAGER,
 	                     "name", "key-manager",
-	                     "sources", sources,
 	                     NULL);
 
-	g_object_unref (sources);
 	g_object_ref_sink (self);
 
 	return SEAHORSE_WIDGET (self);
