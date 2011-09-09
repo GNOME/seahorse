@@ -4,6 +4,7 @@
 gkr/seahorse-gkr-add-item.c
 [type: gettext/glade]gkr/seahorse-gkr-add-item.xml
 gkr/seahorse-gkr-add-keyring.c
+gkr/seahorse-gkr-backend.c
 gkr/seahorse-gkr-item.c
 gkr/seahorse-gkr-item-commands.c
 gkr/seahorse-gkr-item-properties.c
@@ -13,23 +14,22 @@ gkr/seahorse-gkr-keyring-commands.c
 [type: gettext/glade]gkr/seahorse-gkr-keyring.xml
 gkr/seahorse-gkr-keyring-properties.c
 gkr/seahorse-gkr-operation.c
-gkr/seahorse-gkr-source.c
 libegg/egg-datetime.c
 [type: gettext/glade]libseahorse/seahorse-add-keyserver.xml
 libseahorse/seahorse-context.c
+libseahorse/seahorse-key-manager-store.c
 libseahorse/seahorse-object.c
 libseahorse/seahorse-passphrase.c
 libseahorse/seahorse-prefs.c
 [type: gettext/glade]libseahorse/seahorse-prefs.xml
 [type: gettext/glade]libseahorse/seahorse-progress.xml
-libseahorse/seahorse-transfer.c
-libseahorse/seahorse-unknown.c
-libseahorse/seahorse-unknown-source.c
 libseahorse/seahorse-util.c
 libseahorse/seahorse-validity.c
+libseahorse/seahorse-viewer.c
 libseahorse/seahorse-widget.c
 [type: gettext/glade]pgp/seahorse-add-subkey.xml
 [type: gettext/glade]pgp/seahorse-add-uid.xml
+pgp/seahorse-pgp-backend.c
 [type: gettext/glade]pgp/seahorse-expires.xml
 pgp/seahorse-gpgme-add-subkey.c
 pgp/seahorse-gpgme-add-uid.c
@@ -38,10 +38,10 @@ pgp/seahorse-gpgme-expires.c
 pgp/seahorse-gpgme-generate.c
 pgp/seahorse-gpgme-key.c
 pgp/seahorse-gpgme-key-op.c
+pgp/seahorse-gpgme-keyring.c
 pgp/seahorse-gpgme-photos.c
 pgp/seahorse-gpgme-revoke.c
 pgp/seahorse-gpgme-sign.c
-pgp/seahorse-gpgme-source.c
 pgp/seahorse-gpgme-subkey.c
 pgp/seahorse-gpg-options.c
 pgp/seahorse-hkp-source.c
@@ -52,30 +52,34 @@ pgp/seahorse-pgp-key.c
 pgp/seahorse-pgp-key-properties.c
 [type: gettext/glade]pgp/seahorse-pgp-private-key-properties.xml
 [type: gettext/glade]pgp/seahorse-pgp-public-key-properties.xml
+pgp/seahorse-keyserver-results.c
+[type: gettext/glade]pgp/seahorse-keyserver-results.xml
+pgp/seahorse-keyserver-search.c
+[type: gettext/glade]pgp/seahorse-keyserver-search.xml
+pgp/seahorse-keyserver-sync.c
+[type: gettext/glade]pgp/seahorse-keyserver-sync.xml
 pgp/seahorse-pgp-subkey.c
 [type: gettext/glade]pgp/seahorse-revoke.xml
 pgp/seahorse-server-source.c
 pgp/seahorse-signer.c
 [type: gettext/glade]pgp/seahorse-sign.xml
 [type: gettext/glade]pgp/seahorse-signer.xml
+pgp/seahorse-transfer.c
+pgp/seahorse-unknown.c
+pgp/seahorse-unknown-source.c
+pkcs11/seahorse-pkcs11-backend.c
 pkcs11/seahorse-pkcs11-certificate.c
 pkcs11/seahorse-pkcs11-certificate-props.c
 pkcs11/seahorse-pkcs11-commands.c
+pkcs11/seahorse-pkcs11-source.c
 [type: gettext/glade]src/seahorse-change-passphrase.xml
 src/seahorse.desktop.in.in
 [type: gettext/glade]src/seahorse-generate-select.xml
 src/seahorse-key-manager.c
 [type: gettext/glade]src/seahorse-key-manager.xml
-src/seahorse-key-manager-store.c
-src/seahorse-keyserver-results.c
-[type: gettext/glade]src/seahorse-keyserver-results.xml
-src/seahorse-keyserver-search.c
-[type: gettext/glade]src/seahorse-keyserver-search.xml
-src/seahorse-keyserver-sync.c
-[type: gettext/glade]src/seahorse-keyserver-sync.xml
 src/seahorse-main.c
-src/seahorse-viewer.c
 ssh/seahorse-ssh-askpass.c
+ssh/seahorse-ssh-backend.c
 ssh/seahorse-ssh-commands.c
 ssh/seahorse-ssh-generate.c
 [type: gettext/glade]ssh/seahorse-ssh-generate.xml
