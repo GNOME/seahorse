@@ -392,12 +392,15 @@ seahorse_sidebar_constructed (GObject *obj)
 
 	G_OBJECT_CLASS (seahorse_sidebar_parent_class)->constructed (obj);
 
+	gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self)),
+	                             GTK_STYLE_CLASS_SIDEBAR);
+
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (self),
 	                                GTK_POLICY_NEVER,
 	                                GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_set_hadjustment (GTK_SCROLLED_WINDOW (self), NULL);
 	gtk_scrolled_window_set_vadjustment (GTK_SCROLLED_WINDOW (self), NULL);
-	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (self), GTK_SHADOW_IN);
+	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (self), GTK_SHADOW_NONE);
 	gtk_style_context_set_junction_sides (gtk_widget_get_style_context (GTK_WIDGET (self)),
 	                                      GTK_JUNCTION_RIGHT | GTK_JUNCTION_LEFT);
 

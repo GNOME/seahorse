@@ -70,7 +70,8 @@ seahorse-marshal.c: seahorse-marshal.list $(GLIB_GENMARSHAL)
 ui_DATA = \
 	seahorse-prefs.xml \
 	seahorse-add-keyserver.xml \
-	seahorse-progress.xml
+	seahorse-progress.xml \
+	seahorse.css
 
 EXTRA_DIST = $(ui_DATA) \
 	seahorse-marshal.list

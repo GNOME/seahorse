@@ -145,10 +145,11 @@ seahorse_widget_constructed (GObject *object)
 static void
 class_init (SeahorseWidgetClass *klass)
 {
-	GObjectClass *gobject_class;
-	
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	GtkCssProvider *css_provider;
+	GError *error = NULL;
+
 	parent_class = g_type_class_peek_parent (klass);
-	gobject_class = G_OBJECT_CLASS (klass);
 
 	gobject_class->constructed = seahorse_widget_constructed;
 	gobject_class->dispose = object_dispose;
@@ -163,6 +164,17 @@ class_init (SeahorseWidgetClass *klass)
 	signals[DESTROY] = g_signal_new ("destroy", SEAHORSE_TYPE_WIDGET,
 	                                 G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (SeahorseWidgetClass, destroy),
 	                                 NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+
+	css_provider = gtk_css_provider_new ();
+	if (gtk_css_provider_load_from_path (css_provider, SEAHORSE_UIDIR "seahorse.css", &error)) {
+		gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+		                                           GTK_STYLE_PROVIDER (css_provider),
+		                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	} else {
+		g_warning ("couldn't load %s file: %s", SEAHORSE_UIDIR "seahorse.css", error->message);
+		g_error_free (error);
+	}
+	g_object_unref (css_provider);
 }
 
 /**
