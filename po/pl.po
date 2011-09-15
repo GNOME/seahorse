@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-08 21:17+0200\n"
-"PO-Revision-Date: 2011-09-08 21:18+0200\n"
+"POT-Creation-Date: 2011-09-15 13:40+0200\n"
+"PO-Revision-Date: 2011-09-15 13:41+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -307,7 +307,7 @@ msgid "_Name:"
 msgstr "_Nazwa:"
 
 #: ../gkr/seahorse-gkr-operation.c:52 ../pgp/seahorse-gpgme.c:73
-#: ../pgp/seahorse-hkp-source.c:662 ../ssh/seahorse-ssh-operation.c:257
+#: ../pgp/seahorse-hkp-source.c:662 ../ssh/seahorse-ssh-operation.c:193
 msgid "The operation was cancelled"
 msgstr "Anulowano działanie"
 
@@ -618,17 +618,16 @@ msgstr "Numer portu serwera."
 msgid "initial temporary item"
 msgstr "początkowy element tymczasowy"
 
-#: ../libseahorse/seahorse-passphrase.c:178
+#: ../libseahorse/seahorse-passphrase.c:180
 msgid "Passphrase"
 msgstr "Hasło"
 
-#: ../libseahorse/seahorse-passphrase.c:181
-#: ../ssh/seahorse-ssh-operation.c:207
+#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
 msgid "Password:"
 msgstr "Hasło:"
 
 #. The second and main entry
-#: ../libseahorse/seahorse-passphrase.c:244
+#: ../libseahorse/seahorse-passphrase.c:246
 msgid "Confirm:"
 msgstr "Potwierdzenie:"
 
@@ -923,7 +922,7 @@ msgstr "Klucz PGP"
 msgid "Used to encrypt email and files"
 msgstr "Używany do szyfrowania poczty i plików"
 
-#: ../pgp/seahorse-gpgme-generate.c:128 ../ssh/seahorse-ssh-generate.xml.h:9
+#: ../pgp/seahorse-gpgme-generate.c:128
 msgid "RSA"
 msgstr "RSA"
 
@@ -1239,7 +1238,7 @@ msgstr "_Utwórz"
 msgid "E_xpiration Date:"
 msgstr "Data _wygaśnięcia:"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:5
+#: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:4
 msgid "Encryption _Type:"
 msgstr "Typ _szyfrowania:"
 
@@ -1247,7 +1246,7 @@ msgstr "Typ _szyfrowania:"
 msgid "Generate a new key"
 msgstr "Tworzy nowy klucz"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:7
+#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:6
 msgid "Key _Strength (bits):"
 msgstr "_Długość klucza (w bitach):"
 
@@ -1862,7 +1861,7 @@ msgstr "Zaimportowane klucze"
 msgid "Importing keys"
 msgstr "Importowanie kluczy"
 
-#: ../src/seahorse-key-manager.c:504 ../ssh/seahorse-ssh-operation.c:1089
+#: ../src/seahorse-key-manager.c:504 ../ssh/seahorse-ssh-operation.c:891
 msgid "Import Key"
 msgstr "Importowanie klucza"
 
@@ -2226,9 +2225,32 @@ msgstr "Kopiuje do schowka"
 msgid "Import selected keys to local key ring"
 msgstr "Importuje zaznaczone klucze do lokalnej bazy kluczy"
 
-#: ../ssh/seahorse-ssh-askpass.c:99
+#: ../ssh/seahorse-ssh-askpass.c:60 ../ssh/seahorse-ssh-askpass.c:68
 msgid "Enter your Secure Shell passphrase:"
 msgstr "Proszę wprowadzić hasło SSH:"
+
+#: ../ssh/seahorse-ssh-askpass.c:82
+msgid "Old Key Passphrase"
+msgstr "Poprzednie hasło klucza"
+
+#: ../ssh/seahorse-ssh-askpass.c:83
+#, c-format
+msgid "Enter the old passphrase for: %s"
+msgstr "Poprzednie hasło dla: %s"
+
+#: ../ssh/seahorse-ssh-askpass.c:87 ../ssh/seahorse-ssh-askpass.c:92
+msgid "New Key Passphrase"
+msgstr "Nowe hasło klucza"
+
+#: ../ssh/seahorse-ssh-askpass.c:88
+#, c-format
+msgid "Enter the new passphrase for: %s"
+msgstr "Nowe hasło dla: %s"
+
+#: ../ssh/seahorse-ssh-askpass.c:93
+#, c-format
+msgid "Enter the new passphrase again: %s"
+msgstr "Ponownie nowe hasło dla: %s"
 
 #: ../ssh/seahorse-ssh-commands.c:86
 msgid "Configure Key for _Secure Shell..."
@@ -2265,11 +2287,11 @@ msgstr "Klucz SSH"
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Używany do połączeń ze zdalnymi komputerami (np. przez terminal)"
 
-#: ../ssh/seahorse-ssh-generate.c:116 ../ssh/seahorse-ssh-generate.c:135
+#: ../ssh/seahorse-ssh-generate.c:115 ../ssh/seahorse-ssh-generate.c:131
 msgid "Couldn't generate Secure Shell key"
 msgstr "Nie można utworzyć klucza SSH"
 
-#: ../ssh/seahorse-ssh-generate.c:203
+#: ../ssh/seahorse-ssh-generate.c:197
 msgid "Creating Secure Shell Key"
 msgstr "Tworzenie klucza SSH"
 
@@ -2289,11 +2311,7 @@ msgstr ""
 "Klucz bezpiecznej powłoki (SSH) umożliwia bezpieczne połączenia z zaufanymi "
 "komputerami, bez konieczności podawania różnych haseł dla każdego z nich."
 
-#: ../ssh/seahorse-ssh-generate.xml.h:4
-msgid "DSA"
-msgstr "DSA"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:6
+#: ../ssh/seahorse-ssh-generate.xml.h:5
 msgid ""
 "If there is already a computer you want to use this key with, you can set up "
 "that computer to recognize your key now. "
@@ -2302,19 +2320,19 @@ msgstr ""
 "komputerem, można w tej chwili przygotować ten komputer do rozpoznawania "
 "tworzonego klucza. "
 
-#: ../ssh/seahorse-ssh-generate.xml.h:8
+#: ../ssh/seahorse-ssh-generate.xml.h:7
 msgid "New Secure Shell Key"
 msgstr "Nowy klucz SSH"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:10
+#: ../ssh/seahorse-ssh-generate.xml.h:8
 msgid "_Create and Set Up"
 msgstr "_Utwórz i przygotuj"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:11
+#: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "_Just Create Key"
 msgstr "Utwórz _tylko klucz"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:12
+#: ../ssh/seahorse-ssh-generate.xml.h:10
 msgid "_Key Description:"
 msgstr "_Opis klucza:"
 
@@ -2376,71 +2394,44 @@ msgstr ""
 msgid "Used to connect to other computers."
 msgstr "Używany do łączenia się z innymi komputerami."
 
-#: ../ssh/seahorse-ssh-operation.c:204
-msgid "Secure Shell key"
-msgstr "Klucz SSH"
-
-#: ../ssh/seahorse-ssh-operation.c:262
+#: ../ssh/seahorse-ssh-operation.c:198
 msgid "The SSH command was terminated unexpectedly."
 msgstr "Polecenie SSH zostało nieoczekiwanie zakończone."
 
-#: ../ssh/seahorse-ssh-operation.c:270
+#: ../ssh/seahorse-ssh-operation.c:208
 msgid "The SSH command failed."
 msgstr "Polecenie SSH się nie powiodło."
 
-#. Just prompt over and over again
-#: ../ssh/seahorse-ssh-operation.c:678
+#: ../ssh/seahorse-ssh-operation.c:518
 msgid "Remote Host Password"
 msgstr "Hasło do zdalnego komputera"
 
-#: ../ssh/seahorse-ssh-operation.c:808
-msgid "Old Key Passphrase"
-msgstr "Poprzednie hasło klucza"
-
-#: ../ssh/seahorse-ssh-operation.c:809
-#, c-format
-msgid "Enter the old passphrase for: %s"
-msgstr "Poprzednie hasło dla: %s"
-
-#: ../ssh/seahorse-ssh-operation.c:813
-msgid "New Key Passphrase"
-msgstr "Nowe hasło klucza"
-
-#: ../ssh/seahorse-ssh-operation.c:814
-#, c-format
-msgid "Enter the new passphrase for: %s"
-msgstr "Nowe hasło dla: %s"
-
-#: ../ssh/seahorse-ssh-operation.c:822
+#: ../ssh/seahorse-ssh-operation.c:634
 msgid "Enter Key Passphrase"
 msgstr "Hasło klucza"
 
-#: ../ssh/seahorse-ssh-operation.c:942
+#: ../ssh/seahorse-ssh-operation.c:724
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Hasło dla nowego klucza SSH"
 
-#: ../ssh/seahorse-ssh-operation.c:943
-msgid "Enter a passphrase for your new Secure Shell key."
-msgstr "Hasło nowego klucza SSH"
-
-#: ../ssh/seahorse-ssh-operation.c:1085
+#: ../ssh/seahorse-ssh-operation.c:908
 #, c-format
 msgid "Importing key: %s"
 msgstr "Importowanie klucza: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:1087
+#: ../ssh/seahorse-ssh-operation.c:910
 msgid "Importing key. Enter passphrase"
 msgstr "Importowanie klucza. Proszę wprowadzić hasło"
 
-#: ../ssh/seahorse-ssh-source.c:915
+#: ../ssh/seahorse-ssh-source.c:951
 msgid "No private key file is available for this key."
 msgstr "Brak klucza prywatnego dla tego klucza."
 
-#: ../ssh/seahorse-ssh-upload.c:51
+#: ../ssh/seahorse-ssh-upload.c:50
 msgid "Couldn't configure Secure Shell keys on remote computer."
 msgstr "Nie można ustawić kluczy SSH na komputerze zdalnym."
 
-#: ../ssh/seahorse-ssh-upload.c:136
+#: ../ssh/seahorse-ssh-upload.c:133
 msgid "Configuring Secure Shell Keys..."
 msgstr "Konfigurowanie kluczy SSH..."
 
