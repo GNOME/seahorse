@@ -127,7 +127,9 @@ confirm_callback (GtkWidget *widget, GtkDialog *dialog)
 static void
 enter_callback (GtkWidget *widget, GtkDialog *dialog)
 {
-    gtk_dialog_response (dialog, GTK_RESPONSE_ACCEPT);
+	GtkWidget *widg = gtk_dialog_get_widget_for_response (dialog, GTK_RESPONSE_ACCEPT);
+	if (gtk_widget_get_sensitive (widg))
+		gtk_dialog_response (dialog, GTK_RESPONSE_ACCEPT);
 }
 
 static void
