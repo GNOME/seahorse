@@ -12,20 +12,6 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-ok</property>
   </object>
-  <object class="GtkListStore" id="model1">
-    <columns>
-      <!-- column-name gchararray -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">RSA</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">DSA</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkDialog" id="ssh-generate">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -352,6 +338,8 @@
                                   <object class="GtkComboBoxText" id="algorithm-choice">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="id_column">1</property>
+                                    <property name="entry_text_column">0</property>
                                     <items>
                                       <item translatable="yes">RSA</item>
                                       <item translatable="yes">DSA</item>
