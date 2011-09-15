@@ -35,7 +35,6 @@
 
 #include "seahorse-ssh-operation.h"
 #include "seahorse-util.h"
-#include "seahorse-passphrase.h"
 
 #define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
 #include "seahorse-debug.h"
@@ -44,14 +43,11 @@
 #define COMMAND_PASSWORD_LEN   9
 
 typedef struct {
-	SeahorseObject *key;
-	GtkDialog *dialog;
-	guint requests;
-} SeahorseSshSourcePrompt;
-
-typedef const gchar * (*SeahorseSshSourcePasswordCallback) (SeahorseSshSourcePrompt *prompt,
-                                                            const gchar* message,
-                                                            gpointer user_data);
+	const gchar *title;
+	const gchar *message;
+	const gchar *argument;
+	const gchar *flags;
+} SeahorseSshPromptInfo;
 
 typedef struct {
 	GError *previous_error;
@@ -75,15 +71,6 @@ typedef struct {
 	GPid pid;
 	guint wpid;
 
-	/* Callback for password prompting */
-	SeahorseSshSourcePasswordCallback password_cb;
-	SeahorseSshSourcePrompt *prompt;
-
-	/* seahorse-ssh-askpass communication */
-	GIOChannel *io_askpass;
-	guint stag_askpass;
-	int fds_askpass[2];
-
 	GCancellable *cancellable;
 	gulong cancelled_sig;
 } ssh_operation_closure;
@@ -99,12 +86,6 @@ ssh_operation_free (gpointer data)
 	/* Disconnected when process exits */
 	g_assert (closure->cancelled_sig == 0);
 	g_clear_object (&closure->cancellable);
-
-	g_assert (closure->prompt);
-	if (closure->prompt->dialog)
-		gtk_widget_destroy (GTK_WIDGET (closure->prompt->dialog));
-	g_clear_object (&closure->prompt->key);
-	g_free (closure->prompt);
 
 	if (closure->win)
 		g_source_remove (closure->win);
@@ -126,15 +107,8 @@ ssh_operation_free (gpointer data)
 		g_string_free (closure->sout, TRUE);
 	g_string_free (closure->serr, TRUE);
 
-	/* Close the sockets */
-	if (closure->fds_askpass[0] != -1)
-		close (closure->fds_askpass[0]);
-	if (closure->fds_askpass[1] != -1)
-		close (closure->fds_askpass[1]);
-
 	/* watch_ssh_process always needs to have been called */
 	g_assert (closure->pid == 0 && closure->wpid == 0);
-	g_assert (closure->io_askpass == NULL && closure->stag_askpass == 0);
 
 	g_free (closure);
 }
@@ -185,40 +159,6 @@ escape_shell_arg (const gchar *arg)
     return escaped;
 }
 
-static const gchar*
-seahorse_ssh_source_prompt_passphrase (SeahorseSshSourcePrompt *prompt,
-                                       const gchar* title,
-                                       const gchar* message,
-                                       const gchar* check,
-                                       gboolean confirm)
-{
-	const gchar *display;
-	gchar *msg;
-
-	if (prompt->dialog)
-		gtk_widget_destroy (GTK_WIDGET (prompt->dialog));
-
-	if (prompt->key)
-		display = seahorse_object_get_label (prompt->key);
-	else
-		display = g_strdup (_("Secure Shell key"));
-	msg = g_strdup_printf (message, display);
-
-	prompt->dialog = seahorse_passphrase_prompt_show (title, msg, _("Password:"),
-	                                                  check, confirm);
-	g_free (msg);
-
-	/* Run and check if cancelled? */
-	if (gtk_dialog_run (prompt->dialog) != GTK_RESPONSE_ACCEPT) {
-		gtk_widget_destroy (GTK_WIDGET (prompt->dialog));
-		prompt->dialog = NULL;
-		return NULL;
-	}
-
-	gtk_widget_hide (GTK_WIDGET (prompt->dialog));
-	return seahorse_passphrase_prompt_get (prompt->dialog);
-}
-
 static void
 on_ssh_operation_cancelled (GCancellable *cancellable,
                             gpointer user_data)
@@ -238,13 +178,9 @@ on_watch_ssh_process (GPid pid,
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
 	ssh_operation_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	const gchar *message;
 
 	seahorse_debug ("SSHOP: SSH process done");
-
-	/* Close off the askpass io channel etc... */
-	if (closure->stag_askpass)
-		g_source_remove (closure->stag_askpass);
-	closure->stag_askpass = 0;
 
 	/* Already have an error? */
 	if (closure->previous_error) {
@@ -265,10 +201,13 @@ on_watch_ssh_process (GPid pid,
 	} else if (WEXITSTATUS (status) != 0) {
 		g_message ("SSH command failed: (%d)", WEXITSTATUS (status));
 		if (closure->serr->len)
-			g_message ("SSH error output: %s", closure->serr->str);
-		g_simple_async_result_set_error (res, SEAHORSE_ERROR, 0, "%s",
-		                                 closure->serr->len ? closure->serr->str : _("The SSH command failed."));
-
+			message = closure->serr->str;
+		else if (closure->sout->len)
+			message = closure->sout->str;
+		else
+			message = _("The SSH command failed.");
+		g_message ("SSH error: %s", message);
+		g_simple_async_result_set_error (res, SEAHORSE_ERROR, 0, "%s", message);
 	}
 
 	g_cancellable_disconnect (closure->cancellable,
@@ -279,9 +218,13 @@ on_watch_ssh_process (GPid pid,
 	closure->pid = 0;
 	closure->wpid = 0;
 
-	if (closure->io_askpass)
-		g_io_channel_unref (closure->io_askpass);
-	closure->io_askpass = NULL;
+	if (closure->win)
+		g_source_remove (closure->win);
+	if (closure->wout)
+		g_source_remove (closure->wout);
+	if (closure->werr)
+		g_source_remove (closure->werr);
+	closure->win = closure->wout = closure->werr = 0;
 
 	g_simple_async_result_complete (res);
 }
@@ -387,98 +330,10 @@ on_io_ssh_write (GIOChannel *source,
 	return ret;
 }
 
-/* Communication with seahorse-ssh-askpass */
-static gboolean
-on_io_askpass_handler (GIOChannel *source,
-                       GIOCondition condition,
-                       gpointer user_data)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	ssh_operation_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	gchar *string = NULL;
-	gsize length;
-	GError *error = NULL;
-	gboolean ret = TRUE;
-	const gchar *line;
-	const gchar *result = NULL;
-
-	if (condition & G_IO_IN) {
-
-		/* Read 1 line from the io channel, including newline character */
-		g_io_channel_read_line (source, &string, &length, NULL, &error);
-
-		if (error != NULL) {
-			g_critical ("couldn't read from seahorse-ssh-askpass: %s",
-			            error->message);
-			g_clear_error (&error);
-			ret = FALSE;
-		}
-
-		/* Process the line */
-		if (string && ret) {
-
-			string[length] = 0;
-			seahorse_debug ("SSHOP: seahorse-ssh-askpass request: \"%s\"", string);
-
-			if (g_ascii_strncasecmp (COMMAND_PASSWORD, string, COMMAND_PASSWORD_LEN) == 0) {
-				line = g_strstrip (string + COMMAND_PASSWORD_LEN);
-
-				/* Prompt for a password */
-				if (closure->password_cb) {
-					result = (closure->password_cb) (closure->prompt, line,
-					                                 g_async_result_get_user_data (G_ASYNC_RESULT (res)));
-
-					/* Cancelled prompt, cancel operation */
-					if (!result) {
-						kill (closure->pid, SIGTERM);
-						seahorse_debug ("SSHOP: password prompt cancelled");
-						ret = FALSE;
-					}
-				}
-
-				closure->prompt->requests++;
-			}
-
-			if (ret) {
-				/* And write the result back out to seahorse-ssh-askpass */
-				seahorse_debug ("SSHOP: seahorse-ssh-askpass response: %s", result ? result : "");
-				if (result)
-					g_io_channel_write_chars (closure->io_askpass, result,
-					                          strlen (result), &length, &error);
-				if (error == NULL)
-					g_io_channel_write_chars (closure->io_askpass, "\n", 1, &length, &error);
-				if (error == NULL)
-					g_io_channel_flush (closure->io_askpass, &error);
-				if (error != NULL) {
-					g_critical ("couldn't read from seahorse-ssh-askpass: %s",
-					            error->message);
-					g_clear_error (&error);
-					ret = FALSE;
-				}
-			}
-		}
-	}
-
-	if (condition & G_IO_HUP)
-		ret = FALSE;
-
-	if (!ret) {
-		if (closure->io_askpass)
-			g_io_channel_unref (closure->io_askpass);
-		closure->io_askpass = NULL;
-		closure->stag_askpass = 0;
-	}
-
-	g_free (string);
-	return ret;
-}
-
-
 static void
 on_spawn_setup_child (gpointer user_data)
 {
-	ssh_operation_closure *closure = user_data;
-	gchar buf[15];
+	SeahorseSshPromptInfo *prompt = user_data;
 
 	/* No terminal for this process */
 	setsid ();
@@ -490,15 +345,14 @@ on_spawn_setup_child (gpointer user_data)
 		g_setenv ("LC_ALL", "C", TRUE);
 	g_setenv ("LANG", "C", TRUE);
 
-	/* Let child know which fd it is */
-	if (closure->fds_askpass[1] != -1) {
-		snprintf (buf, sizeof (buf), "%d", closure->fds_askpass[1]);
-		g_setenv ("SEAHORSE_SSH_ASKPASS_FD", buf, TRUE);
+	if (prompt != NULL) {
+		if (prompt->title)
+			g_setenv ("SEAHORSE_SSH_ASKPASS_TITLE", prompt->title, TRUE);
+		if (prompt->message)
+			g_setenv ("SEAHORSE_SSH_ASKPASS_MESSAGE", prompt->message, TRUE);
+		if (prompt->flags)
+			g_setenv ("SEAHORSE_SSH_ASKPASS_FLAGS", prompt->flags, TRUE);
 	}
-
-	/* Child doesn't need this stuff */
-	if (closure->fds_askpass[0] != -1)
-		close (closure->fds_askpass[0]);
 }
 
 static void
@@ -506,10 +360,9 @@ seahorse_ssh_operation_async (SeahorseSSHSource *source,
                               const gchar *command,
                               const gchar *input,
                               gssize length,
-                              SeahorseSSHKey *key,
                               GCancellable *cancellable,
                               GAsyncReadyCallback callback,
-                              SeahorseSshSourcePasswordCallback password,
+                              SeahorseSshPromptInfo *prompt,
                               gpointer user_data)
 {
 	GSimpleAsyncResult *res;
@@ -533,17 +386,6 @@ seahorse_ssh_operation_async (SeahorseSSHSource *source,
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	closure->sout = g_string_new (NULL);
 	closure->serr = g_string_new (NULL);
-	closure->password_cb = password;
-	closure->prompt = g_new0 (SeahorseSshSourcePrompt, 1);
-	closure->prompt->key = key ? g_object_ref (key) : NULL;
-
-	/* The seahorse-ssh-askpass pipes */
-	if (socketpair (AF_UNIX, SOCK_STREAM, 0, closure->fds_askpass) == -1) {
-		g_warning ("couldn't create pipes to communicate with seahorse-ssh-askpass: %s",
-		           strerror(errno));
-		closure->fds_askpass[0] = -1;
-		closure->fds_askpass[1] = -1;
-	}
 
 	g_simple_async_result_set_op_res_gpointer (res, closure, ssh_operation_free);
 
@@ -552,7 +394,7 @@ seahorse_ssh_operation_async (SeahorseSSHSource *source,
 	/* And off we go to run the program */
 	r = g_spawn_async_with_pipes (NULL, argv, NULL,
 	                              G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN,
-	                              on_spawn_setup_child, closure, &closure->pid,
+	                              on_spawn_setup_child, prompt, &closure->pid,
 	                              input ? &fin : NULL, &fout, &ferr, &error);
 	g_strfreev (argv);
 
@@ -598,22 +440,6 @@ seahorse_ssh_operation_async (SeahorseSSHSource *source,
 	closure->wpid = g_child_watch_add_full (G_PRIORITY_DEFAULT, closure->pid,
 	                                        on_watch_ssh_process,
 	                                        g_object_ref (res), g_object_unref);
-
-	/* Setup askpass communication */
-	if (closure->fds_askpass[0] != -1) {
-		closure->io_askpass = g_io_channel_unix_new (closure->fds_askpass[0]);
-		g_io_channel_set_close_on_unref (closure->io_askpass, TRUE);
-		g_io_channel_set_encoding (closure->io_askpass, NULL, NULL);
-		closure->stag_askpass = g_io_add_watch_full (closure->io_askpass, G_PRIORITY_DEFAULT,
-		                                             G_IO_IN | G_IO_HUP, on_io_askpass_handler,
-		                                             g_object_ref (res), g_object_unref);
-		closure->fds_askpass[0] = -1; /* closed by io channel */
-	}
-
-	/* The other end of the pipe, close it */
-	if (closure->fds_askpass[1] != -1)
-		close (closure->fds_askpass[1]);
-	closure->fds_askpass[1] = -1;
 
 	if (cancellable)
 		closure->cancelled_sig = g_cancellable_connect (closure->cancellable,
@@ -667,18 +493,6 @@ ssh_upload_free (gpointer data)
 	g_free (closure);
 }
 
-static const gchar*
-on_upload_send_password (SeahorseSshSourcePrompt *prompt,
-                         const gchar* message,
-                         gpointer user_data)
-{
-    seahorse_debug ("in upload_password_cb");
-
-    /* Just prompt over and over again */
-    return seahorse_ssh_source_prompt_passphrase (prompt, _("Remote Host Password"),
-                                                  message, NULL, FALSE);
-}
-
 static void
 on_upload_send_complete (GObject *source,
                          GAsyncResult *result,
@@ -701,6 +515,7 @@ on_upload_export_complete (GObject *source,
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
 	ssh_upload_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	SeahorseSshPromptInfo prompt = { _("Remote Host Password"), NULL, NULL, NULL };
 	GError *error = NULL;
 	gchar *data;
 	size_t length;
@@ -723,12 +538,14 @@ on_upload_export_complete (GObject *source,
 	                       closure->username, closure->hostname,
 	                       closure->port ? "-p" : "", closure->port ? closure->port : "");
 
+	if (g_output_stream_write_all (G_OUTPUT_STREAM (closure->output), "\n", 1, NULL, NULL, NULL) != 1)
+		g_return_if_reached ();
 	data = g_memory_output_stream_get_data (closure->output);
 	length = g_memory_output_stream_get_data_size (closure->output);
 
-	seahorse_ssh_operation_async (SEAHORSE_SSH_SOURCE (source), cmd, data, length, NULL,
+	seahorse_ssh_operation_async (SEAHORSE_SSH_SOURCE (source), cmd, data, length,
 	                              closure->cancellable, on_upload_send_complete,
-	                              on_upload_send_password, g_object_ref (res));
+	                              &prompt, g_object_ref (res));
 
 	g_free (cmd);
 	g_object_unref (res);
@@ -778,7 +595,7 @@ seahorse_ssh_op_upload_finish (SeahorseSSHSource *source,
                                GError **error)
 {
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
-	                      seahorse_ssh_op_change_passphrase_async), FALSE);
+	                      seahorse_ssh_op_upload_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
 		return FALSE;
@@ -789,42 +606,6 @@ seahorse_ssh_op_upload_finish (SeahorseSSHSource *source,
 /* -----------------------------------------------------------------------------
  * CHANGE PASSPHRASE 
  */
-
-static const gchar *
-on_change_passphrase_password (SeahorseSshSourcePrompt *prompt,
-                               const gchar* message,
-                               gpointer user_data)
-{
-	const gchar *ret = NULL;
-	gchar *lcase;
-
-	lcase = g_strdup (message ? message : "");
-	seahorse_util_string_lower (lcase);
-
-	seahorse_debug ("in change_password_cb");
-
-	/* Need the old passphrase */
-	if (strstr (lcase, "old pass"))
-		ret = seahorse_ssh_source_prompt_passphrase (prompt, _("Old Key Passphrase"),
-		                                             _("Enter the old passphrase for: %s"), NULL, FALSE);
-
-	/* Look for the new passphrase thingy */
-	else if (strstr (lcase, "new pass"))
-		ret = seahorse_ssh_source_prompt_passphrase (prompt, _("New Key Passphrase"),
-		                                             _("Enter the new passphrase for: %s"), NULL, TRUE);
-
-	/* Confirm the new passphrase, just send it again */
-	else if (strstr (lcase, "again") && prompt->dialog)
-		ret = seahorse_passphrase_prompt_get (prompt->dialog);
-
-	/* Something we don't understand */
-	else
-		ret = seahorse_ssh_source_prompt_passphrase (prompt, _("Enter Key Passphrase"),
-		                                             message, NULL, FALSE);
-
-	g_free (lcase);
-	return ret;
-}
 
 static void
 on_change_passphrase_complete (GObject *source,
@@ -850,6 +631,7 @@ seahorse_ssh_op_change_passphrase_async  (SeahorseSSHKey *key,
                                           GAsyncReadyCallback callback,
                                           gpointer user_data)
 {
+	SeahorseSshPromptInfo prompt = { _("Enter Key Passphrase"), NULL, NULL, NULL };
 	GSimpleAsyncResult *res;
 	SeahorseSource *source;
 	gchar *cmd;
@@ -860,14 +642,15 @@ seahorse_ssh_op_change_passphrase_async  (SeahorseSSHKey *key,
 	source = seahorse_object_get_source (SEAHORSE_OBJECT (key));
 	g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (source));
 
+	prompt.argument = seahorse_object_get_label (SEAHORSE_OBJECT (key));
+
 	res = g_simple_async_result_new (G_OBJECT (key), callback, user_data,
 	                                 seahorse_ssh_op_change_passphrase_async);
 	g_simple_async_result_set_op_res_gpointer (res, g_object_ref (key), g_object_unref);
 
 	cmd = g_strdup_printf (SSH_KEYGEN_PATH " -p -f '%s'", key->keydata->privfile);
-	seahorse_ssh_operation_async (SEAHORSE_SSH_SOURCE (source), cmd, NULL, 0, key, cancellable,
-	                              on_change_passphrase_complete, on_change_passphrase_password,
-	                              g_object_ref (res));
+	seahorse_ssh_operation_async (SEAHORSE_SSH_SOURCE (source), cmd, NULL, 0, cancellable,
+	                              on_change_passphrase_complete, &prompt, g_object_ref (res));
 
 	g_free (cmd);
 	g_object_unref (res);
@@ -929,24 +712,6 @@ on_generate_complete (GObject *source,
 	g_object_unref (res);
 }
 
-static const gchar *
-on_generate_password (SeahorseSshSourcePrompt *prompt,
-                      const gchar* message,
-                      gpointer user_data)
-{
-	seahorse_debug ("in generate_password_cb");
-
-	/* If the first time then prompt */
-	if (!prompt->dialog)
-		return seahorse_ssh_source_prompt_passphrase (prompt,
-		                                              _("Passphrase for New Secure Shell Key"),
-		                                              _("Enter a passphrase for your new Secure Shell key."),
-		                                              NULL, TRUE);
-
-	/* Otherwise return the entered passphrase */
-	return seahorse_passphrase_prompt_get (prompt->dialog);
-}
-
 void
 seahorse_ssh_op_generate_async (SeahorseSSHSource *source,
                                 const gchar *email,
@@ -956,6 +721,8 @@ seahorse_ssh_op_generate_async (SeahorseSSHSource *source,
                                 GAsyncReadyCallback callback,
                                 gpointer user_data)
 {
+	SeahorseSshPromptInfo prompt = { _("Passphrase for New Secure Shell Key"),
+	                                 NULL, NULL, NULL };
 	ssh_generate_closure *closure;
 	GSimpleAsyncResult *res;
 	const gchar *algo;
@@ -980,9 +747,8 @@ seahorse_ssh_op_generate_async (SeahorseSSHSource *source,
 	                       bits, algo, comment, closure->filename);
 	g_free (comment);
 
-	seahorse_ssh_operation_async (source, cmd, NULL, 0, NULL, cancellable,
-	                              on_generate_complete, on_generate_password,
-	                              g_object_ref (res));
+	seahorse_ssh_operation_async (source, cmd, NULL, 0, cancellable,
+	                              on_generate_complete, &prompt, g_object_ref (res));
 
 	g_free (cmd);
 	g_object_unref (res);
@@ -1070,29 +836,6 @@ ssh_import_free (gpointer data)
 	g_free (closure);
 }
 
-static const gchar *
-on_import_private_password (SeahorseSshSourcePrompt *prompt,
-                            const gchar* message,
-                            gpointer user_data)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	ssh_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	const gchar *ret;
-	gchar* details;
-
-	/* Add the comment to the output */
-	if (closure->comment)
-		details = g_strdup_printf (_("Importing key: %s"), closure->comment);
-	else
-		details = g_strdup (_("Importing key. Enter passphrase"));
-
-	ret = seahorse_ssh_source_prompt_passphrase (prompt, _("Import Key"),
-	                                             details, NULL, FALSE);
-	g_free (details);
-
-	return ret;
-}
-
 static void
 on_import_private_complete (GObject *source,
                             GAsyncResult *result,
@@ -1145,9 +888,11 @@ seahorse_ssh_op_import_private_async (SeahorseSSHSource *source,
                                       gpointer user_data)
 {
 	GSimpleAsyncResult *res;
+	SeahorseSshPromptInfo prompt = { _("Import Key"), NULL, NULL, NULL };
 	gchar *cmd, *privfile = NULL;
 	GError *error = NULL;
 	ssh_import_closure *closure;
+	gchar *message;
 
 	g_return_if_fail (data && data->rawdata);
 	g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (source));
@@ -1157,6 +902,13 @@ seahorse_ssh_op_import_private_async (SeahorseSSHSource *source,
 		filename = privfile = seahorse_ssh_source_file_for_algorithm (source, data->algo);
 		g_return_if_fail (privfile);
 	}
+
+	/* Add the comment to the output */
+	if (data->comment)
+		message = g_strdup_printf (_("Importing key: %s"), data->comment);
+	else
+		message = g_strdup (_("Importing key. Enter passphrase"));
+	prompt.message = message;
 
 	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
 	                                 seahorse_ssh_op_import_private_async);
@@ -1176,10 +928,11 @@ seahorse_ssh_op_import_private_async (SeahorseSSHSource *source,
 
 	/* Start command to generate public key */
 	cmd = g_strdup_printf (SSH_KEYGEN_PATH " -y -f '%s'", privfile);
-	seahorse_ssh_operation_async (source, cmd, NULL, 0, NULL, cancellable,
-	                              on_import_private_complete,
-	                              on_import_private_password,
+	seahorse_ssh_operation_async (source, cmd, NULL, 0, cancellable,
+	                              on_import_private_complete, &prompt,
 	                              g_object_ref (res));
+
+	g_free (message);
 	g_free (cmd);
 
 	g_object_unref (res);

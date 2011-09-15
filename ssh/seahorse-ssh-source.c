@@ -322,6 +322,7 @@ typedef struct {
 	GHashTable *checks;
 	gchar *pubfile;
 	gchar *privfile;
+	SeahorseSSHKey *last_key;
 } source_load_closure;
 
 static void
@@ -329,8 +330,10 @@ source_load_free (gpointer data)
 {
 	source_load_closure *closure = data;
 	g_object_unref (closure->source);
-	g_hash_table_destroy (closure->loaded);
-	g_hash_table_destroy (closure->checks);
+	if (closure->loaded)
+		g_hash_table_destroy (closure->loaded);
+	if (closure->checks)
+		g_hash_table_destroy (closure->checks);
 	g_free (closure->pubfile);
 	g_free (closure->privfile);
 	g_free (closure);
@@ -455,8 +458,54 @@ on_load_found_public_key (SeahorseSSHKeyData *data,
 	data->partial = FALSE;
 
 	/* Check and register thet key with the context, frees keydata */
-	ssh_key_from_data (closure->source, closure, data);
+	closure->last_key = ssh_key_from_data (closure->source, closure, data);
 	return TRUE;
+}
+
+static void
+load_key_for_private_file (SeahorseSSHSource *self,
+                           source_load_closure *closure,
+                           const gchar *privfile)
+{
+	GError *error = NULL;
+
+	closure->privfile = g_strdup (privfile);
+	closure->pubfile = g_strconcat (closure->privfile, ".pub", NULL);
+
+	/* possibly an SSH key? */
+	if (g_file_test (closure->privfile, G_FILE_TEST_EXISTS) &&
+	    g_file_test (closure->pubfile, G_FILE_TEST_EXISTS) &&
+	    check_file_for_ssh_private (self, closure->privfile)) {
+		seahorse_ssh_key_data_parse_file (closure->pubfile, on_load_found_public_key,
+		                                  NULL, closure, &error);
+		if (error != NULL) {
+			g_warning ("couldn't read SSH file: %s (%s)",
+			           closure->pubfile, error->message);
+			g_clear_error (&error);
+		}
+	}
+
+	g_free (closure->privfile);
+	g_free (closure->pubfile);
+	closure->privfile = closure->pubfile = NULL;
+}
+
+static SeahorseSSHKey *
+seahorse_ssh_source_load_one_sync (SeahorseSSHSource *self,
+                                   const gchar *privfile)
+{
+	source_load_closure *closure;
+	SeahorseSSHKey *key;
+
+	closure = g_new0 (source_load_closure, 1);
+	closure->source = g_object_ref (self);
+
+	load_key_for_private_file (self, closure, privfile);
+
+	key = closure->last_key;
+	source_load_free (closure);
+
+	return key;
 }
 
 static void
@@ -470,6 +519,7 @@ seahorse_ssh_source_load_async (SeahorseSource *source,
 	source_load_closure *closure;
 	GError *error = NULL;
 	const gchar *filename;
+	gchar *privfile;
 	GDir *dir;
 
 	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
@@ -505,26 +555,9 @@ seahorse_ssh_source_load_async (SeahorseSource *source,
 		if (filename == NULL)
 			break;
 
-		closure->privfile = g_build_filename (self->priv->ssh_homedir, filename, NULL);
-		closure->pubfile = g_strconcat (closure->privfile, ".pub", NULL);
-
-		/* possibly an SSH key? */
-		if (g_file_test (closure->privfile, G_FILE_TEST_EXISTS) &&
-		    g_file_test (closure->pubfile, G_FILE_TEST_EXISTS) &&
-		    check_file_for_ssh_private (self, closure->privfile)) {
-
-			seahorse_ssh_key_data_parse_file (closure->pubfile, on_load_found_public_key,
-			                                  NULL, closure, &error);
-			if (error != NULL) {
-				g_warning ("couldn't read SSH file: %s (%s)",
-				           closure->pubfile, error->message);
-				g_clear_error (&error);
-			}
-		}
-
-		g_free (closure->privfile);
-		g_free (closure->pubfile);
-		closure->privfile = closure->pubfile = NULL;
+		privfile = g_build_filename (self->priv->ssh_homedir, filename, NULL);
+		load_key_for_private_file (self, closure, privfile);
+		g_free (privfile);
 	}
 
 	g_dir_close (dir);
@@ -845,11 +878,14 @@ seahorse_ssh_source_key_for_filename (SeahorseSSHSource *ssrc,
 		g_return_val_if_fail (data, NULL);
 
 		/* If it's already loaded then just leave it at that */
-		if (data->privfile && strcmp (privfile, data->privfile) == 0)
+		if (data->privfile && strcmp (privfile, data->privfile) == 0) {
+			g_list_free (keys);
 			return SEAHORSE_SSH_KEY (l->data);
+		}
 	}
+	g_list_free (keys);
 
-	return NULL;
+	return seahorse_ssh_source_load_one_sync (ssrc, privfile);
 }
 
 gchar*

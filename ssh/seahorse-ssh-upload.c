@@ -44,13 +44,10 @@ on_upload_complete (GObject *source,
                     GAsyncResult *result,
                     gpointer user_data)
 {
-	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	GError *error = NULL;
 
 	if (!seahorse_ssh_op_upload_finish (SEAHORSE_SSH_SOURCE (source), result, &error))
-		seahorse_util_handle_error (&error, swidget, _("Couldn't configure Secure Shell keys on remote computer."));
-
-	g_object_unref (swidget);
+		seahorse_util_handle_error (&error, NULL, _("Couldn't configure Secure Shell keys on remote computer."));
 }
 
 G_MODULE_EXPORT void

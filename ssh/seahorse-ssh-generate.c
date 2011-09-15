@@ -106,16 +106,13 @@ on_generate_complete (GObject *source,
                       GAsyncResult *result,
                       gpointer user_data)
 {
-	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	GError *error = NULL;
 
 	seahorse_ssh_op_generate_finish (SEAHORSE_SSH_SOURCE (source),
 	                                 result, &error);
 
 	if (error != NULL)
-		seahorse_util_handle_error (&error, swidget, _("Couldn't generate Secure Shell key"));
-
-	g_object_unref (swidget);
+		seahorse_util_handle_error (&error, NULL, _("Couldn't generate Secure Shell key"));
 }
 
 static void
@@ -123,7 +120,6 @@ on_generate_complete_and_upload (GObject *source,
                                  GAsyncResult *result,
                                  gpointer user_data)
 {
-	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	GError *error = NULL;
 	SeahorseObject *object;
 	GList *keys;
@@ -132,15 +128,13 @@ on_generate_complete_and_upload (GObject *source,
 	                                          result, &error);
 
 	if (error != NULL) {
-		seahorse_util_handle_error (&error, swidget, _("Couldn't generate Secure Shell key"));
+		seahorse_util_handle_error (&error, NULL, _("Couldn't generate Secure Shell key"));
 
 	} else {
 		keys = g_list_append (NULL, object);
-		seahorse_ssh_upload_prompt (keys, GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)));
+		seahorse_ssh_upload_prompt (keys, NULL);
 		g_list_free (keys);
 	}
-
-	g_object_unref (swidget);
 }
 
 static void
@@ -199,9 +193,11 @@ on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
     cancellable = g_cancellable_new ();
     seahorse_ssh_op_generate_async (src, email, type, bits, cancellable,
                                     upload ? on_generate_complete_and_upload : on_generate_complete,
-                                    g_object_ref (swidget));
+                                    NULL);
     seahorse_progress_show (cancellable, _("Creating Secure Shell Key"), FALSE);
     g_object_unref (cancellable);
+
+    seahorse_widget_destroy (swidget);
 }
 
 void
