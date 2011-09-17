@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-07 07:21+0000\n"
-"PO-Revision-Date: 2011-09-07 19:28+0100\n"
+"POT-Creation-Date: 2011-09-17 09:51+0000\n"
+"PO-Revision-Date: 2011-09-17 12:12+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: \n"
@@ -303,7 +303,7 @@ msgstr "_Ime:"
 #: ../gkr/seahorse-gkr-operation.c:52
 #: ../pgp/seahorse-gpgme.c:73
 #: ../pgp/seahorse-hkp-source.c:662
-#: ../ssh/seahorse-ssh-operation.c:257
+#: ../ssh/seahorse-ssh-operation.c:193
 msgid "The operation was cancelled"
 msgstr "Opravilo je bilo preklicano."
 
@@ -617,17 +617,17 @@ msgstr "Vrata preko katerih je mogoč dostop do strežnika."
 msgid "initial temporary item"
 msgstr "začetni začasni predmet"
 
-#: ../libseahorse/seahorse-passphrase.c:178
+#: ../libseahorse/seahorse-passphrase.c:180
 msgid "Passphrase"
 msgstr "Šifrirno geslo"
 
-#: ../libseahorse/seahorse-passphrase.c:181
-#: ../ssh/seahorse-ssh-operation.c:207
+#: ../libseahorse/seahorse-passphrase.c:183
+#: ../ssh/seahorse-ssh-askpass.c:99
 msgid "Password:"
 msgstr "Geslo:"
 
 #. The second and main entry
-#: ../libseahorse/seahorse-passphrase.c:244
+#: ../libseahorse/seahorse-passphrase.c:246
 msgid "Confirm:"
 msgstr "Potrditev:"
 
@@ -925,7 +925,6 @@ msgid "Used to encrypt email and files"
 msgstr "Uporablja se za šifriranje sporočil in datotek"
 
 #: ../pgp/seahorse-gpgme-generate.c:128
-#: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
@@ -1228,7 +1227,7 @@ msgid "E_xpiration Date:"
 msgstr "Datum _preteka:"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:6
-#: ../ssh/seahorse-ssh-generate.xml.h:5
+#: ../ssh/seahorse-ssh-generate.xml.h:4
 msgid "Encryption _Type:"
 msgstr "_Vrsta šifriranja:"
 
@@ -1237,7 +1236,7 @@ msgid "Generate a new key"
 msgstr "Ustvari nov ključ"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:9
-#: ../ssh/seahorse-ssh-generate.xml.h:7
+#: ../ssh/seahorse-ssh-generate.xml.h:6
 msgid "Key _Strength (bits):"
 msgstr "_Jakost ključa (biti):"
 
@@ -1828,7 +1827,7 @@ msgid "Importing keys"
 msgstr "Uvažanje ključev"
 
 #: ../src/seahorse-key-manager.c:504
-#: ../ssh/seahorse-ssh-operation.c:1089
+#: ../ssh/seahorse-ssh-operation.c:891
 msgid "Import Key"
 msgstr "Uvozi ključ"
 
@@ -2181,9 +2180,34 @@ msgstr "Kopiraj v odložišče"
 msgid "Import selected keys to local key ring"
 msgstr "Uvozi izbrane ključe v osebno zbirko ključev"
 
-#: ../ssh/seahorse-ssh-askpass.c:99
+#: ../ssh/seahorse-ssh-askpass.c:60
+#: ../ssh/seahorse-ssh-askpass.c:68
 msgid "Enter your Secure Shell passphrase:"
 msgstr "Vnesite šifrirno geslo varne lupine:"
+
+#: ../ssh/seahorse-ssh-askpass.c:82
+msgid "Old Key Passphrase"
+msgstr "Staro šifrirno geslo ključa"
+
+#: ../ssh/seahorse-ssh-askpass.c:83
+#, c-format
+msgid "Enter the old passphrase for: %s"
+msgstr "Vnesite staro šifrirno geslo za: %s"
+
+#: ../ssh/seahorse-ssh-askpass.c:87
+#: ../ssh/seahorse-ssh-askpass.c:92
+msgid "New Key Passphrase"
+msgstr "Novo šifrirno geslo ključa"
+
+#: ../ssh/seahorse-ssh-askpass.c:88
+#, c-format
+msgid "Enter the new passphrase for: %s"
+msgstr "Vnesite novo šifrirno geslo za: %s"
+
+#: ../ssh/seahorse-ssh-askpass.c:93
+#, c-format
+msgid "Enter the new passphrase again: %s"
+msgstr "Ponovno vnesite novo šifrirno geslo: '%s'"
 
 #: ../ssh/seahorse-ssh-commands.c:86
 msgid "Configure Key for _Secure Shell..."
@@ -2218,12 +2242,12 @@ msgstr "Ključ varne lupine"
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Uporabno pri dostopu do drugih računalnikov (npr.: preko terminala)"
 
-#: ../ssh/seahorse-ssh-generate.c:116
-#: ../ssh/seahorse-ssh-generate.c:135
+#: ../ssh/seahorse-ssh-generate.c:115
+#: ../ssh/seahorse-ssh-generate.c:131
 msgid "Couldn't generate Secure Shell key"
 msgstr "Ni mogoče ustvariti ključa varne lupine"
 
-#: ../ssh/seahorse-ssh-generate.c:203
+#: ../ssh/seahorse-ssh-generate.c:197
 msgid "Creating Secure Shell Key"
 msgstr "Ustvarjanje ključa varne lupine"
 
@@ -2235,27 +2259,23 @@ msgstr "<i>Uporabite svoj elektronski naslov in druge opomnike za izbrani ključ
 msgid "A Secure Shell (SSH) key lets you connect securely to trusted computers using SSH, without entering a different password for each of them."
 msgstr "Uporaba varne lupine (SSH) omogoča varno povezovanje z drugimi računalniki preko SSH sistema, brez vnašanja različnih gesel za posamezen sistem."
 
-#: ../ssh/seahorse-ssh-generate.xml.h:4
-msgid "DSA"
-msgstr "DSA"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:6
+#: ../ssh/seahorse-ssh-generate.xml.h:5
 msgid "If there is already a computer you want to use this key with, you can set up that computer to recognize your key now. "
 msgstr "V kolikor računalnik, s katerim želite uporabiti ta ključ, že obstaja, je mogoče nastaviti računalnik, da ključ prepozna ."
 
-#: ../ssh/seahorse-ssh-generate.xml.h:8
+#: ../ssh/seahorse-ssh-generate.xml.h:7
 msgid "New Secure Shell Key"
 msgstr "Nov ključ varne lupine"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:10
+#: ../ssh/seahorse-ssh-generate.xml.h:8
 msgid "_Create and Set Up"
 msgstr "_Ustvarjanje in nastavitve"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:11
+#: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "_Just Create Key"
 msgstr "_Ustvari ključ"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:12
+#: ../ssh/seahorse-ssh-generate.xml.h:10
 msgid "_Key Description:"
 msgstr "Opis _ključa:"
 
@@ -2316,71 +2336,44 @@ msgstr "Lastnik tega ključa je _pooblaščen za povezavo s tem računalnikom"
 msgid "Used to connect to other computers."
 msgstr "Uporaba pri povezovanju z drugimi računalniki."
 
-#: ../ssh/seahorse-ssh-operation.c:204
-msgid "Secure Shell key"
-msgstr "Ključ varne lupine"
-
-#: ../ssh/seahorse-ssh-operation.c:262
+#: ../ssh/seahorse-ssh-operation.c:198
 msgid "The SSH command was terminated unexpectedly."
 msgstr "Ukaz ssh je bil nepričakovano zaključen."
 
-#: ../ssh/seahorse-ssh-operation.c:270
+#: ../ssh/seahorse-ssh-operation.c:208
 msgid "The SSH command failed."
 msgstr "Ukaz ssh je spodletel."
 
-#. Just prompt over and over again
-#: ../ssh/seahorse-ssh-operation.c:678
+#: ../ssh/seahorse-ssh-operation.c:518
 msgid "Remote Host Password"
 msgstr "Geslo oddaljenega gostitelja"
 
-#: ../ssh/seahorse-ssh-operation.c:808
-msgid "Old Key Passphrase"
-msgstr "Staro šifrirno geslo ključa"
-
-#: ../ssh/seahorse-ssh-operation.c:809
-#, c-format
-msgid "Enter the old passphrase for: %s"
-msgstr "Vnesite staro šifrirno geslo za: %s"
-
-#: ../ssh/seahorse-ssh-operation.c:813
-msgid "New Key Passphrase"
-msgstr "Novo šifrirno geslo ključa"
-
-#: ../ssh/seahorse-ssh-operation.c:814
-#, c-format
-msgid "Enter the new passphrase for: %s"
-msgstr "Vnesite novo šifrirno geslo za: %s"
-
-#: ../ssh/seahorse-ssh-operation.c:822
+#: ../ssh/seahorse-ssh-operation.c:634
 msgid "Enter Key Passphrase"
 msgstr "Vnesite šifrirno geslo ključa"
 
-#: ../ssh/seahorse-ssh-operation.c:942
+#: ../ssh/seahorse-ssh-operation.c:724
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Šifrirno geslo za ključ nove varne lupine"
 
-#: ../ssh/seahorse-ssh-operation.c:943
-msgid "Enter a passphrase for your new Secure Shell key."
-msgstr "Vnesite šifrirno geslo za nov ključ varne lupine."
-
-#: ../ssh/seahorse-ssh-operation.c:1085
+#: ../ssh/seahorse-ssh-operation.c:908
 #, c-format
 msgid "Importing key: %s"
 msgstr "Uvažanje ključa: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:1087
+#: ../ssh/seahorse-ssh-operation.c:910
 msgid "Importing key. Enter passphrase"
 msgstr "Uvažanje ključa. Vnesite šifrirno geslo"
 
-#: ../ssh/seahorse-ssh-source.c:915
+#: ../ssh/seahorse-ssh-source.c:951
 msgid "No private key file is available for this key."
 msgstr "Za ta ključ ni na voljo osebnega ključa."
 
-#: ../ssh/seahorse-ssh-upload.c:51
+#: ../ssh/seahorse-ssh-upload.c:50
 msgid "Couldn't configure Secure Shell keys on remote computer."
 msgstr "Ni mogoče pripraviti ključa varne lupine na oddaljenem računalniku."
 
-#: ../ssh/seahorse-ssh-upload.c:136
+#: ../ssh/seahorse-ssh-upload.c:133
 msgid "Configuring Secure Shell Keys..."
 msgstr "Prilagajanje ključev varne lupine ..."
 
@@ -2407,6 +2400,15 @@ msgstr "_Uporabniško ime:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_Nastavitev"
+
+#~ msgid "DSA"
+#~ msgstr "DSA"
+
+#~ msgid "Secure Shell key"
+#~ msgstr "Ključ varne lupine"
+
+#~ msgid "Enter a passphrase for your new Secure Shell key."
+#~ msgstr "Vnesite šifrirno geslo za nov ključ varne lupine."
 
 #~ msgid "Do not run seahorse-daemon as a daemon"
 #~ msgstr "Ne zaganjaj seahorse ozadnjega programa"
