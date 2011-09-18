@@ -38,7 +38,7 @@
 #define DEBUG_FLAG SEAHORSE_DEBUG_DNSSD
 #include "seahorse-debug.h"
 
-#define HKP_SERVICE_TYPE "_pgpkey-hkp._tcp."
+#define HKP_SERVICE_TYPE "_pgpkey-hkp._tcp"
 
 /* 
  * DEBUG: Define if we want to show discoveries from this
