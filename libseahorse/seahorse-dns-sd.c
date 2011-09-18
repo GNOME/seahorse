@@ -414,6 +414,7 @@ seahorse_service_discovery_list (SeahorseServiceDiscovery *ssd)
 	while (g_hash_table_iter_next (&iter, &key, NULL))
 		g_ptr_array_add (result, g_strdup (key));
 
+	g_ptr_array_add (result, NULL);
 	return (gchar **)g_ptr_array_free (result, FALSE);
 }
 
