@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-12 20:26+0530\n"
-"PO-Revision-Date: 2011-09-12 20:31+0530\n"
+"POT-Creation-Date: 2011-09-18 14:08+0530\n"
+"PO-Revision-Date: 2011-09-18 14:09+0530\n"
 "Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: \n"
@@ -308,7 +308,7 @@ msgid "_Name:"
 msgstr "(_N) பெயர்:"
 
 #: ../gkr/seahorse-gkr-operation.c:52 ../pgp/seahorse-gpgme.c:73
-#: ../pgp/seahorse-hkp-source.c:662 ../ssh/seahorse-ssh-operation.c:257
+#: ../pgp/seahorse-hkp-source.c:662 ../ssh/seahorse-ssh-operation.c:193
 msgid "The operation was cancelled"
 msgstr "செயல் ரத்து செய்யப்பட்டது."
 
@@ -619,17 +619,16 @@ msgstr "சேவயகத்தை அணுக துறை."
 msgid "initial temporary item"
 msgstr "ஆரம்ப தற்காலிக உருப்படி"
 
-#: ../libseahorse/seahorse-passphrase.c:178
+#: ../libseahorse/seahorse-passphrase.c:180
 msgid "Passphrase"
 msgstr "கடவுச்சொற்றொடர்"
 
-#: ../libseahorse/seahorse-passphrase.c:181
-#: ../ssh/seahorse-ssh-operation.c:207
+#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
 msgid "Password:"
 msgstr "கடவுச்சொல்:"
 
 #. The second and main entry
-#: ../libseahorse/seahorse-passphrase.c:244
+#: ../libseahorse/seahorse-passphrase.c:246
 msgid "Confirm:"
 msgstr "உறுதியாக்கம்:"
 
@@ -921,7 +920,7 @@ msgstr "பிஜிபி விசை"
 msgid "Used to encrypt email and files"
 msgstr "மின்னஞ்சல் மற்றும் கோப்புகளுக்கு மறையாக்கத்தை பயன்படுத்துக"
 
-#: ../pgp/seahorse-gpgme-generate.c:128 ../ssh/seahorse-ssh-generate.xml.h:9
+#: ../pgp/seahorse-gpgme-generate.c:128
 msgid "RSA"
 msgstr "ஆர்எஸ்ஏ(RSA)"
 
@@ -1232,7 +1231,7 @@ msgstr "_r உருவாக்கு"
 msgid "E_xpiration Date:"
 msgstr "_x காலாவதி தேதி:"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:5
+#: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:4
 msgid "Encryption _Type:"
 msgstr "_T மறையாக்க வகை:"
 
@@ -1240,7 +1239,7 @@ msgstr "_T மறையாக்க வகை:"
 msgid "Generate a new key"
 msgstr "ஒரு புதிய விசையை உருவாக்குக"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:7
+#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:6
 msgid "Key _Strength (bits):"
 msgstr "விசை _S பலம் (பிட்டுகள்):"
 
@@ -1839,7 +1838,7 @@ msgstr "இறக்குமதி செய்யப்பட்ட விச�
 msgid "Importing keys"
 msgstr "விசைகளை இறக்குமதி செய்கிறது"
 
-#: ../src/seahorse-key-manager.c:504 ../ssh/seahorse-ssh-operation.c:1089
+#: ../src/seahorse-key-manager.c:504 ../ssh/seahorse-ssh-operation.c:891
 msgid "Import Key"
 msgstr "விசையை இறக்குமதி செய்க"
 
@@ -2201,9 +2200,32 @@ msgstr "ஒட்டுப்பலகைக்கு படியெடு "
 msgid "Import selected keys to local key ring"
 msgstr "உள்ளமை விசை ரிங்கிற்கு தேர்ந்தெடுக்கப்பட்ட விசைகளை இறக்கு"
 
-#: ../ssh/seahorse-ssh-askpass.c:99
+#: ../ssh/seahorse-ssh-askpass.c:60 ../ssh/seahorse-ssh-askpass.c:68
 msgid "Enter your Secure Shell passphrase:"
 msgstr "உங்கள் பத்திரமான ஷெல் கடவு சொற்றொடரை உள்ளிடுக."
+
+#: ../ssh/seahorse-ssh-askpass.c:82
+msgid "Old Key Passphrase"
+msgstr "பழைய விசை கடவுச்சொற்றொடர்"
+
+#: ../ssh/seahorse-ssh-askpass.c:83
+#, c-format
+msgid "Enter the old passphrase for: %s"
+msgstr "%s க்கு பழைய விசை கடவுச்சொற்றொடர் ஐ உள்ளிடு"
+
+#: ../ssh/seahorse-ssh-askpass.c:87 ../ssh/seahorse-ssh-askpass.c:92
+msgid "New Key Passphrase"
+msgstr "புதிய விசை கடவுச்சொற்றொடர்"
+
+#: ../ssh/seahorse-ssh-askpass.c:88
+#, c-format
+msgid "Enter the new passphrase for: %s"
+msgstr "%s க்கு புதிய கடவுச்சொற்றொடர் ஐ உள்ளிடு"
+
+#: ../ssh/seahorse-ssh-askpass.c:93
+#, c-format
+msgid "Enter the new passphrase again: %s"
+msgstr "புதிய கடவுச்சொற்றொடர் ஐ மீண்டும் உள்ளிடு: %s "
 
 #: ../ssh/seahorse-ssh-commands.c:86
 msgid "Configure Key for _Secure Shell..."
@@ -2240,11 +2262,11 @@ msgstr "பத்திரமான ஷெல் விசை"
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "மற்ற கணினிகளை அணுக பயன்படும். (எ-டு ஒரு முனையம் வழியாக)"
 
-#: ../ssh/seahorse-ssh-generate.c:116 ../ssh/seahorse-ssh-generate.c:135
+#: ../ssh/seahorse-ssh-generate.c:115 ../ssh/seahorse-ssh-generate.c:131
 msgid "Couldn't generate Secure Shell key"
 msgstr "பத்திரமான ஷெல் விசையை உருவாக்க முடியவில்லை"
 
-#: ../ssh/seahorse-ssh-generate.c:203
+#: ../ssh/seahorse-ssh-generate.c:197
 msgid "Creating Secure Shell Key"
 msgstr "பத்திரமான ஷெல் விசையை உருவாக்குகிறது"
 
@@ -2264,11 +2286,7 @@ msgstr ""
 "ஒரு பாதுகாப்பான ஷெல் விசை (SSH) உங்களை SSH ஐ பயன்படுத்தி நம்பகமான கணினிகளுடன் இணைக்க "
 "அனுமதிக்கிறது. கடவுச்சொல் ஒவ்வொரு முறையும் உள்ளிடத்தேவை இல்லை."
 
-#: ../ssh/seahorse-ssh-generate.xml.h:4
-msgid "DSA"
-msgstr "டிஎஸ்ஏ(DSA)"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:6
+#: ../ssh/seahorse-ssh-generate.xml.h:5
 msgid ""
 "If there is already a computer you want to use this key with, you can set up "
 "that computer to recognize your key now. "
@@ -2276,19 +2294,19 @@ msgstr ""
 "இந்த விசையை பயன்படுத்த ஏற்கெனெவே ஒரு கணினி இருந்தால் உங்கள் விசையை கண்டு கொள்ள அந்த "
 "கணினியை இப்போது வடிவமைக்கலாம்."
 
-#: ../ssh/seahorse-ssh-generate.xml.h:8
+#: ../ssh/seahorse-ssh-generate.xml.h:7
 msgid "New Secure Shell Key"
 msgstr "புதிய பத்திரமான ஷெல் விசை"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:10
+#: ../ssh/seahorse-ssh-generate.xml.h:8
 msgid "_Create and Set Up"
 msgstr "_C உருவாக்கு மற்றும் அமை"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:11
+#: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "_Just Create Key"
 msgstr "_Jவிசை மட்டும் உருவாக்கு "
 
-#: ../ssh/seahorse-ssh-generate.xml.h:12
+#: ../ssh/seahorse-ssh-generate.xml.h:10
 msgid "_Key Description:"
 msgstr "_K விசை விவரணம்:"
 
@@ -2349,71 +2367,44 @@ msgstr "_a இந்த விசையின் உரிமையாளர் 
 msgid "Used to connect to other computers."
 msgstr "மற்ற கணினிகளுடன் இணைக்க பயன்படும்."
 
-#: ../ssh/seahorse-ssh-operation.c:204
-msgid "Secure Shell key"
-msgstr "பத்திரமான ஷெல் விசை"
-
-#: ../ssh/seahorse-ssh-operation.c:262
+#: ../ssh/seahorse-ssh-operation.c:198
 msgid "The SSH command was terminated unexpectedly."
 msgstr "எஸ்எஸ்ஹெச்(SSH) கட்டளை எதிர்பாராமல் முடிந்தது."
 
-#: ../ssh/seahorse-ssh-operation.c:270
+#: ../ssh/seahorse-ssh-operation.c:208
 msgid "The SSH command failed."
 msgstr "எஸ்எஸ்ஹெச்(SSH) தோல்வியுற்றது"
 
-#. Just prompt over and over again
-#: ../ssh/seahorse-ssh-operation.c:678
+#: ../ssh/seahorse-ssh-operation.c:518
 msgid "Remote Host Password"
 msgstr "தொலை புரவலன் கடவுச்சொல்"
 
-#: ../ssh/seahorse-ssh-operation.c:808
-msgid "Old Key Passphrase"
-msgstr "பழைய விசை கடவுச்சொற்றொடர்"
-
-#: ../ssh/seahorse-ssh-operation.c:809
-#, c-format
-msgid "Enter the old passphrase for: %s"
-msgstr "%s க்கு பழைய விசை கடவுச்சொற்றொடர் ஐ உள்ளிடு"
-
-#: ../ssh/seahorse-ssh-operation.c:813
-msgid "New Key Passphrase"
-msgstr "புதிய விசை கடவுச்சொற்றொடர்"
-
-#: ../ssh/seahorse-ssh-operation.c:814
-#, c-format
-msgid "Enter the new passphrase for: %s"
-msgstr "%s க்கு புதிய கடவுச்சொற்றொடர் ஐ உள்ளிடு"
-
-#: ../ssh/seahorse-ssh-operation.c:822
+#: ../ssh/seahorse-ssh-operation.c:634
 msgid "Enter Key Passphrase"
 msgstr "விசை கடவுச்சொற்றொடர் ஐ உள்ளிடு"
 
-#: ../ssh/seahorse-ssh-operation.c:942
+#: ../ssh/seahorse-ssh-operation.c:724
 msgid "Passphrase for New Secure Shell Key"
 msgstr "புது பத்திரமான ஷெல் விசைக்கு கடவுச்சொற்றொடர்"
 
-#: ../ssh/seahorse-ssh-operation.c:943
-msgid "Enter a passphrase for your new Secure Shell key."
-msgstr "புது பத்திரமான ஷெல் விசைக்கு கடவுச்சொற்றொடர் ஐ உள்ளிடுக"
-
-#: ../ssh/seahorse-ssh-operation.c:1085
+#: ../ssh/seahorse-ssh-operation.c:908
 #, c-format
 msgid "Importing key: %s"
 msgstr "%s விசையை இறக்குமதி செய்கிறது"
 
-#: ../ssh/seahorse-ssh-operation.c:1087
+#: ../ssh/seahorse-ssh-operation.c:910
 msgid "Importing key. Enter passphrase"
 msgstr "விசையை இறக்குமதி செய்கிறது. கடவுச்சொற்றொடர் ஐ உள்ளிடவும்"
 
-#: ../ssh/seahorse-ssh-source.c:915
+#: ../ssh/seahorse-ssh-source.c:951
 msgid "No private key file is available for this key."
 msgstr "இந்த விசைக்கு தனி விசை இல்லை"
 
-#: ../ssh/seahorse-ssh-upload.c:51
+#: ../ssh/seahorse-ssh-upload.c:50
 msgid "Couldn't configure Secure Shell keys on remote computer."
 msgstr "தொலை கணினியில் பத்திரமான ஷெல் விசைகளை வடிவமைக்க இயலவில்லை."
 
-#: ../ssh/seahorse-ssh-upload.c:136
+#: ../ssh/seahorse-ssh-upload.c:133
 msgid "Configuring Secure Shell Keys..."
 msgstr "பத்திரமான ஷெல் விசைகளை வடிவமைகிறது..."
 
@@ -2444,6 +2435,15 @@ msgstr "_L உள்நுழை பெயர்:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_S அமை"
+
+#~ msgid "DSA"
+#~ msgstr "டிஎஸ்ஏ(DSA)"
+
+#~ msgid "Secure Shell key"
+#~ msgstr "பத்திரமான ஷெல் விசை"
+
+#~ msgid "Enter a passphrase for your new Secure Shell key."
+#~ msgstr "புது பத்திரமான ஷெல் விசைக்கு கடவுச்சொற்றொடர் ஐ உள்ளிடுக"
 
 #~ msgid "Do not run seahorse-daemon as a daemon"
 #~ msgstr "சீஹார்ஸ் கிங்கரனை கிங்கரனாக இயக்காதே"
