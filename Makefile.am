@@ -47,8 +47,6 @@ EXTRA_DIST = \
     README \
     THANKS \
     TODO \
-    seahorse.spec \
-    seahorse.spec.in \
     intltool-extract.in \
     intltool-merge.in \
     intltool-update.in \
