@@ -7,4 +7,4 @@ DOC_INCLUDES =
 DOC_FIGURES = \
 	figures/seahorse-window.png
 
-DOC_LINGUAS = ca cs de el en_GB es eu fr it ja ko oc ru sl sv vi zh_CN
+DOC_LINGUAS = ca cs de el en_GB es eu fr gl it ja ko oc ru sl sv vi zh_CN
