@@ -200,7 +200,7 @@ seahorse_transfer_async (SeahorseSource *from,
 	                        _("Exporting data") : _("Retrieving data"));
 	seahorse_progress_prep (cancellable, &closure->to,
 	                        SEAHORSE_IS_GPGME_KEYRING (closure->to) ?
-	                        _("Sending data") : _("Importing data"));
+	                        _("Importing data") : _("Sending data"));
 
 	seahorse_debug ("starting export");
 

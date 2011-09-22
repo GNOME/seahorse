@@ -23,11 +23,13 @@
 #include "config.h"
 
 #include "seahorse-pgp-backend.h"
+#include "seahorse-gpgme-keyring.h"
 #include "seahorse-keyserver-search.h"
 #include "seahorse-keyserver-results.h"
 
 #include "seahorse-key-manager-store.h"
 #include "seahorse-progress.h"
+#include "seahorse-util.h"
 
 #include <glib/gi18n.h>
 
@@ -50,7 +52,7 @@ struct _SeahorseKeyserverResultsPrivate {
 	char *search_string;
 	GtkTreeView *view;
 	GcrSimpleCollection *collection;
-	GtkActionGroup *object_actions;
+	GtkActionGroup *import_actions;
 	SeahorseKeyManagerStore *store;
 	GSettings *settings;
 };
@@ -72,8 +74,8 @@ fire_selection_changed (SeahorseKeyserverResults* self)
 	selection = gtk_tree_view_get_selection (self->pv->view);
 	rows = gtk_tree_selection_count_selected_rows (selection);
 	seahorse_viewer_set_numbered_status (SEAHORSE_VIEWER (self), ngettext ("Selected %d key", "Selected %d keys", rows), rows);
-	if (self->pv->object_actions)
-		gtk_action_group_set_sensitive (self->pv->object_actions, rows > 0);
+	if (self->pv->import_actions)
+		gtk_action_group_set_sensitive (self->pv->import_actions, rows > 0);
 	g_signal_emit_by_name (G_OBJECT (SEAHORSE_VIEW (self)), "selection-changed");
 	return FALSE;
 }
@@ -188,7 +190,67 @@ on_remote_find (GtkAction* action, SeahorseKeyserverResults* self)
 	seahorse_keyserver_search_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
 }
 
+static void
+on_import_complete (GObject *source,
+                    GAsyncResult *result,
+                    gpointer user_data)
+{
+	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	GError *error = NULL;
 
+	if (!seahorse_pgp_backend_transfer_finish (SEAHORSE_PGP_BACKEND (source),
+	                                           result, &error))
+		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
+		                            _("Couldn't import keys"));
+	else
+		seahorse_viewer_set_status (self, _ ("Imported keys"));
+
+	g_object_unref (self);
+}
+
+static GList*
+objects_prune_non_exportable (GList *objects)
+{
+	GList *exportable = NULL;
+	GList *l;
+
+	for (l = objects; l; l = g_list_next (l)) {
+		if (seahorse_object_get_flags (l->data) & SEAHORSE_FLAG_EXPORTABLE)
+			exportable = g_list_append (exportable, l->data);
+	}
+
+	g_list_free (objects);
+	return exportable;
+}
+
+static void
+on_key_import_keyring (GtkAction* action, SeahorseViewer* self)
+{
+	GCancellable *cancellable;
+	SeahorsePgpBackend *backend;
+	SeahorseGpgmeKeyring *keyring;
+	GList* objects;
+
+	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (GTK_IS_ACTION (action));
+
+	objects = seahorse_viewer_get_selected_objects (self);
+	objects = objects_prune_non_exportable (objects);
+
+	/* No objects, nothing to do */
+	if (objects == NULL)
+		return;
+
+	cancellable = g_cancellable_new ();
+	backend = seahorse_pgp_backend_get ();
+	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+	seahorse_pgp_backend_transfer_async (backend, objects, SEAHORSE_SOURCE (keyring),
+	                                     cancellable, on_import_complete, g_object_ref (self));
+	seahorse_progress_show (cancellable, _ ("Importing keys from key servers"), TRUE);
+	g_object_unref (cancellable);
+
+	g_list_free (objects);
+}
 
 /**
 * widget: sending widget
@@ -221,6 +283,11 @@ static const GtkActionEntry GENERAL_ENTRIES[] = {
 static const GtkActionEntry SERVER_ENTRIES[] = {
 	{ "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
 	  N_("Search for keys on a key server"), G_CALLBACK (on_remote_find) }
+};
+
+static const GtkActionEntry IMPORT_ENTRIES[] = {
+	{ "key-import-keyring", GTK_STOCK_ADD, N_("_Import"), "",
+	  N_("Import selected keys to local key ring"), G_CALLBACK (on_key_import_keyring) }
 };
 
 /* -----------------------------------------------------------------------------
@@ -307,6 +374,12 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	gtk_action_group_add_actions (actions, SERVER_ENTRIES, G_N_ELEMENTS (SERVER_ENTRIES), self);
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
 
+	self->pv->import_actions = gtk_action_group_new ("import");
+	gtk_action_group_set_translation_domain (self->pv->import_actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (self->pv->import_actions, IMPORT_ENTRIES, G_N_ELEMENTS (IMPORT_ENTRIES), self);
+	g_object_set (gtk_action_group_get_action (self->pv->import_actions, "key-import-keyring"), "is-important", TRUE, NULL);
+	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->pv->import_actions);
+
 	/* init key list & selection settings */
 	self->pv->view = GTK_TREE_VIEW (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "key_list"));
 	selection = gtk_tree_view_get_selection (self->pv->view);
@@ -360,9 +433,7 @@ seahorse_keyserver_results_finalize (GObject *obj)
 	g_free (self->pv->search_string);
 	self->pv->search_string = NULL;
 
-	if (self->pv->object_actions)
-		g_object_unref (self->pv->object_actions);
-	self->pv->object_actions = NULL;
+	g_clear_object (&self->pv->import_actions);
 
 	g_clear_object (&self->pv->collection);
 

@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "seahorse-generate-select.h"
+#include "seahorse-import-dialog.h"
 #include "seahorse-key-manager.h"
 #include "seahorse-key-manager-store.h"
 #include "seahorse-preferences.h"
@@ -202,81 +203,20 @@ on_filter_changed (GtkEntry* entry, SeahorseKeyManager* self)
 	g_object_set (self->pv->store, "filter", text, NULL);
 }
 
-#ifdef REFACTOR_IMPORT
-
 static void 
-on_import_complete (GObject *source,
-                    GAsyncResult *result,
-                    gpointer user_data)
+import_files (SeahorseKeyManager* self,
+              const gchar** uris)
 {
-	SeahorseKeyManager* self = SEAHORSE_KEY_MANAGER (user_data);
-	GError *error = NULL;
+	GtkDialog *dialog;
+	GtkWindow *parent;
 
-	if (!seahorse_source_import_finish (SEAHORSE_SOURCE (source), result, &error)) {
-		seahorse_util_handle_error (&error, seahorse_viewer_get_window (SEAHORSE_VIEWER (self)),
-		                            "%s", _("Couldn't import keys"));
-	} else {
-		seahorse_viewer_set_status (SEAHORSE_VIEWER (self), _("Imported keys"));
-	}
+	parent = seahorse_viewer_get_window (SEAHORSE_VIEWER (self));
+	dialog = seahorse_import_dialog_new (parent);
+	seahorse_import_dialog_add_uris (SEAHORSE_IMPORT_DIALOG (dialog), uris);
 
-	g_object_unref (self);
+	gtk_dialog_run (dialog);
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
-
-static void 
-import_files (SeahorseKeyManager* self, const gchar** uris) 
-{
-	GError *error = NULL;
-	GFileInputStream* input;
-	GCancellable *cancellable;
-	const gchar *uri;
-	GString *errmsg;
-	GFile* file;
-
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	errmsg = g_string_new ("");
-	cancellable = g_cancellable_new ();
-
-	for (uri = *uris; uri; uris++, uri = *uris) {
-		GQuark ktype;
-		SeahorseSource* sksrc;
-		
-		if(!uri[0])
-			continue;
-			
-		/* Figure out where to import to */
-		ktype = seahorse_util_detect_file_type (uri);
-		if (ktype == 0) {
-			g_string_append_printf (errmsg, "%s: Invalid file format\n", uri);
-			continue;
-		}
-		
-		/* All our supported key types have a local source */
-		sksrc = seahorse_context_find_source (NULL, ktype, SEAHORSE_LOCATION_LOCAL);
-		g_return_if_fail (sksrc != NULL);
-
-		file = g_file_new_for_uri (uri);
-		input = g_file_read (file, NULL, &error);
-		if (error) {
-			g_string_append_printf (errmsg, "%s: %s\n", uri, error->message);
-			g_clear_error (&error);
-			continue;
-		}
-
-		seahorse_source_import_async (sksrc, G_INPUT_STREAM (input),
-		                              cancellable, on_import_complete,
-		                              g_object_ref (self));
-	}
-
-	seahorse_progress_show (cancellable, _("Importing keys"), TRUE);
-	g_object_unref (cancellable);
-
-	if (errmsg->len > 0)
-		seahorse_util_show_error (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), 
-		                          _("Couldn't import keys"), errmsg->str);
-
-	g_string_free (errmsg, TRUE);
-}
-
 
 static void 
 import_prompt (SeahorseKeyManager* self) 
@@ -297,69 +237,41 @@ import_prompt (SeahorseKeyManager* self)
 		uris[1] = NULL;
 		import_files (self, (const gchar**)uris);
 	}
-	
+
 	g_free (uri);
 }
-
-#endif /* REFACTOR_IMPORT */
 
 static void 
 on_key_import_file (GtkAction* action, SeahorseKeyManager* self) 
 {
-#ifdef REFACTOR_IMPORT
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 	import_prompt (self);
-#endif
 }
 
 G_MODULE_EXPORT void 
 on_keymanager_import_button (GtkButton* button, SeahorseKeyManager* self) 
 {
-#ifdef REFACTOR_IMPORT
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_BUTTON (button));
 	import_prompt (self);
-#endif
 }
 
-#ifdef REFACTOR_IMPORT
-
 static void 
-import_text (SeahorseKeyManager* self, const char* text) 
+import_text (SeahorseKeyManager* self,
+             const gchar *display_name,
+             const char* text)
 {
-	glong len;
-	GQuark ktype;
-	SeahorseSource* sksrc;
-	GMemoryInputStream* input;
-	GCancellable *cancellable;
+	GtkDialog *dialog;
+	GtkWindow *parent;
 
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (text != NULL);
-	
-	len = g_utf8_strlen (text, -1);
-	ktype = seahorse_util_detect_data_type (text, len);
-	if (ktype == 0) {
-		seahorse_util_show_error (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), 
-		                          _("Couldn't import keys"), _("Unrecognized key type, or invalid data format"));
-		return;
-	}
-	
-	/* All our supported key types have a local key source */
-	sksrc = seahorse_context_find_source (seahorse_context_instance (), ktype, SEAHORSE_LOCATION_LOCAL);
-	g_return_if_fail (sksrc != NULL);
+	parent = seahorse_viewer_get_window (SEAHORSE_VIEWER (self));
+	dialog = seahorse_import_dialog_new (parent);
+	seahorse_import_dialog_add_text (SEAHORSE_IMPORT_DIALOG (dialog),
+	                                 display_name, text);
 
-	input = G_MEMORY_INPUT_STREAM (g_memory_input_stream_new_from_data (g_strndup (text, len),
-	                                                                    len, g_free));
-
-	cancellable = g_cancellable_new ();
-	seahorse_source_import_async (sksrc, G_INPUT_STREAM (input), cancellable,
-	                              on_import_complete, g_object_ref (self));
-
-	seahorse_progress_show (cancellable, _("Importing Keys"), TRUE);
-	g_object_unref (cancellable);
-
-	g_object_unref (input);
+	gtk_dialog_run (dialog);
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void 
@@ -378,7 +290,7 @@ on_target_drag_data_received (GtkWindow* window, GdkDragContext* context, gint x
 	
 	if (info == TARGETS_PLAIN) {
 		text = gtk_selection_data_get_text (selection_data);
-		import_text (self, (gchar*)text);
+		import_text (self, _("Dropped text"), (gchar*)text);
 		g_free (text);
 	} else if (info == TARGETS_URIS) {
 		uris = gtk_selection_data_get_uris (selection_data);
@@ -396,30 +308,26 @@ on_clipboard_received (GtkClipboard* board, const char* text, SeahorseKeyManager
 	g_return_if_fail (GTK_IS_CLIPBOARD (board));
 	g_return_if_fail (text != NULL);
 
-    g_assert(self->pv->filter_entry);
-    if (gtk_widget_is_focus (GTK_WIDGET (self->pv->filter_entry)) == TRUE)
-	    gtk_editable_paste_clipboard (GTK_EDITABLE (self->pv->filter_entry));
-    else	
-    	if (text != NULL && g_utf8_strlen (text, -1) > 0)
-    		import_text (self, text);
+	g_assert(self->pv->filter_entry);
+	if (gtk_widget_is_focus (GTK_WIDGET (self->pv->filter_entry)) == TRUE)
+		gtk_editable_paste_clipboard (GTK_EDITABLE (self->pv->filter_entry));
+	else
+		if (text != NULL && g_utf8_strlen (text, -1) > 0)
+			import_text (self, _("Clipboard text"), text);
 }
-
-#endif /* REFACTOR_IMPORT */
 
 static void 
 on_key_import_clipboard (GtkAction* action, SeahorseKeyManager* self) 
 {
-#ifdef REFACTOR_IMPORT
 	GdkAtom atom;
 	GtkClipboard* board;
-	
+
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	
+
 	atom = gdk_atom_intern ("CLIPBOARD", FALSE);
 	board = gtk_clipboard_get (atom);
 	gtk_clipboard_request_text (board, (GtkClipboardTextReceivedFunc)on_clipboard_received, self);
-#endif
 }
 
 static gboolean
@@ -759,10 +667,8 @@ seahorse_key_manager_constructed (GObject *object)
 	gtk_target_list_add_text_targets (targets, TARGETS_PLAIN);
 	gtk_drag_dest_set_target_list (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), targets);
 
-#ifdef REFACTOR_IMPORT
 	g_signal_connect_object (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)), "drag-data-received", 
 	                         G_CALLBACK (on_target_drag_data_received), self, 0);
-#endif
 
 #ifdef REFACTOR_FIRST
 	/* To show first time dialog */

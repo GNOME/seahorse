@@ -657,8 +657,10 @@ on_search_message_complete (SoupSession *session,
 
 	} else {
 		keys = parse_hkp_index (message->response_body->data);
-		for (l = keys; l; l = g_list_next (l))
+		for (l = keys; l; l = g_list_next (l)) {
+			g_object_set (l->data, "source", closure->source, NULL);
 			gcr_simple_collection_add (closure->results, l->data);
+		}
 		g_list_free_full (keys, g_object_unref);
 	}
 

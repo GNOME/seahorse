@@ -32,6 +32,7 @@ bin_PROGRAMS = seahorse
 
 seahorse_SOURCES = \
 	seahorse-generate-select.c seahorse-generate-select.h \
+	seahorse-import-dialog.c seahorse-import-dialog.h \
 	seahorse-key-manager.c seahorse-key-manager.h \
 	seahorse-main.c \
 	seahorse-sidebar.c seahorse-sidebar.h \

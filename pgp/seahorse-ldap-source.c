@@ -844,6 +844,7 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
 		seahorse_pgp_key_set_subkeys (key, list);
 		seahorse_object_list_free (list);
 		g_object_set (key, "flags", flags, NULL);
+		g_object_set (key, "source", self, NULL);
 
 		seahorse_pgp_key_realize (key);
 		gcr_simple_collection_add (results, G_OBJECT (key));
