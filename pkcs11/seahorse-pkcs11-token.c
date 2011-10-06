@@ -113,9 +113,13 @@ seahorse_pkcs11_token_get_property (GObject *object,
 			g_value_set_string (value, token->manufacturer_id);
 		gck_token_info_free (token);
 		break;
-		break;
 	case PROP_ICON:
-		g_value_take_object (value, g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION));
+		token = gck_slot_get_token_info (self->pv->slot);
+		if (token == NULL)
+			g_value_take_object (value, g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION));
+		else
+			g_value_take_object (value, gcr_icon_for_token (token));
+		gck_token_info_free (token);
 		break;
 	case PROP_SLOT:
 		g_value_set_object (value, self->pv->slot);
