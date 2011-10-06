@@ -83,6 +83,8 @@ seahorse_import_dialog_constructed (GObject *obj)
 {
 	SeahorseImportDialog *self = SEAHORSE_IMPORT_DIALOG (obj);
 	GtkWidget *button;
+	GtkBox *content;
+	GtkWidget *frame;
 
 	G_OBJECT_CLASS (seahorse_import_dialog_parent_class)->constructed (obj);
 
@@ -98,14 +100,21 @@ seahorse_import_dialog_constructed (GObject *obj)
 	gtk_box_pack_start (GTK_BOX (gtk_dialog_get_action_area (GTK_DIALOG (self))),
 	                    GTK_WIDGET (self->import), FALSE, TRUE, 0);
 
+	content = GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (self)));
+
+	frame = gtk_frame_new (_("<b>Data to be imported:</b>"));
+	gtk_label_set_use_markup (GTK_LABEL (gtk_frame_get_label_widget (GTK_FRAME (frame))), TRUE);
+	gtk_box_pack_start (content, frame, TRUE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (frame), 6);
+	gtk_widget_show (frame);
+
 	self->viewer = gcr_viewer_widget_new ();
 	g_signal_connect_object (self->viewer, "added",
 	                         G_CALLBACK (on_viewer_renderer_added),
 	                         self, 0);
 	gtk_widget_show (GTK_WIDGET (self->viewer));
 
-	gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (self))),
-	                    GTK_WIDGET (self->viewer), TRUE, TRUE, 0);
+	gtk_container_add (GTK_CONTAINER (frame), GTK_WIDGET (self->viewer));
 }
 
 static void
