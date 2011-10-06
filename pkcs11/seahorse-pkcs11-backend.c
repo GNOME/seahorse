@@ -91,43 +91,63 @@ seahorse_pkcs11_backend_init (SeahorsePkcs11Backend *self)
 }
 
 static gboolean
-is_token_blacklisted (SeahorsePkcs11Backend *self,
-                      GckSlot *slot)
+is_token_usable (SeahorsePkcs11Backend *self,
+                 GckSlot *slot,
+                 GckTokenInfo *token)
 {
 	GList *l;
 
-	for (l = self->blacklist; l != NULL; l = g_list_next (l)) {
-		if (gck_slot_match (slot, l->data))
-			return TRUE;
+	if (token->flags & CKF_WRITE_PROTECTED) {
+		/* _gcr_debug ("token is not importable: %s: write protected", token->label); */
+		return FALSE;
+	}
+	if (!(token->flags & CKF_TOKEN_INITIALIZED)) {
+		/* _gcr_debug ("token is not importable: %s: not initialized", token->label); */
+		return FALSE;
+	}
+	if ((token->flags & CKF_LOGIN_REQUIRED) &&
+	    !(token->flags & CKF_USER_PIN_INITIALIZED)) {
+		/* _gcr_debug ("token is not importable: %s: user pin not initialized", token->label); */
+		return FALSE;
 	}
 
-	return FALSE;
+	for (l = self->blacklist; l != NULL; l = g_list_next (l)) {
+		if (gck_slot_match (slot, l->data))
+			return FALSE;
+	}
+
+	return TRUE;
 }
 
+
 static void
-seahorse_pkcs11_backend_constructed (GObject *obj)
+on_initialized_registered (GObject *unused,
+                           GAsyncResult *result,
+                           gpointer user_data)
 {
-	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (obj);
+	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (user_data);
 	SeahorseSource *source;
 	GList *slots, *s;
 	GList *modules, *m;
 	GError *error = NULL;
+	GckTokenInfo *token;
 
-	G_OBJECT_CLASS (seahorse_pkcs11_backend_parent_class)->constructed (obj);
-
-	modules = gck_modules_initialize_registered (NULL, &error);
+	modules = gck_modules_initialize_registered_finish (result, &error);
 	if (error != NULL) {
 		g_warning ("%s", error->message);
 		g_clear_error (&error);
 	}
 
 	for (m = modules; m != NULL; m = g_list_next (m)) {
-		slots = gck_module_get_slots (m->data, FALSE);
+		slots = gck_module_get_slots (m->data, TRUE);
 		for (s = slots; s; s = g_list_next (s)) {
-			if (!is_token_blacklisted (self, s->data)) {
+			token = gck_slot_get_token_info (s->data);
+			if (is_token_usable (self, s->data, token)) {
 				source = SEAHORSE_SOURCE (seahorse_pkcs11_token_new (s->data));
 				self->slots = g_list_append (self->slots, source);
+				gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (source));
 			}
+			gck_token_info_free (token);
 		}
 
 		/* These will have been refed by the source above */
@@ -135,6 +155,18 @@ seahorse_pkcs11_backend_constructed (GObject *obj)
 	}
 
 	gck_list_unref_free (modules);
+	g_object_unref (self);
+}
+
+static void
+seahorse_pkcs11_backend_constructed (GObject *obj)
+{
+	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (obj);
+
+	G_OBJECT_CLASS (seahorse_pkcs11_backend_parent_class)->constructed (obj);
+
+	gck_modules_initialize_registered_async (NULL, on_initialized_registered,
+	                                         g_object_ref (self));
 }
 
 static void
