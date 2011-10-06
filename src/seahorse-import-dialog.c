@@ -44,11 +44,11 @@ G_DEFINE_TYPE (SeahorseImportDialog, seahorse_import_dialog, GTK_TYPE_DIALOG);
 static void
 on_viewer_renderer_added (GcrViewerWidget *viewer,
                           GcrRenderer *renderer,
-                          GcrParser *parser,
+                          GcrParsed *parsed,
                           gpointer user_data)
 {
 	SeahorseImportDialog *self = SEAHORSE_IMPORT_DIALOG (user_data);
-	gcr_import_button_add_parsed (self->import, parser);
+	gcr_import_button_add_parsed (self->import, parsed);
 }
 
 static void
@@ -153,5 +153,6 @@ seahorse_import_dialog_add_text (SeahorseImportDialog *self,
 	g_return_if_fail (SEAHORSE_IS_IMPORT_DIALOG (self));
 	g_return_if_fail (text != NULL);
 	gcr_viewer_widget_load_data (self->viewer, display_name,
-	                             text, strlen (text));
+	                             (const guchar *)text,
+	                             strlen (text));
 }
