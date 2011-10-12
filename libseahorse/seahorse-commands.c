@@ -45,8 +45,9 @@ G_DEFINE_TYPE (SeahorseCommands, seahorse_commands, G_TYPE_OBJECT);
  * OBJECT 
  */
 
-static void 
-seahorse_commands_real_show_properties (SeahorseCommands* self, SeahorseObject* obj) 
+static void
+seahorse_commands_real_show_properties (SeahorseCommands *self,
+                                        GObject *obj)
 {
 	g_critical ("Type `%s' does not implement abstract method `seahorse_commands_show_properties'", 
 	            g_type_name (G_TYPE_FROM_INSTANCE (self)));
@@ -162,7 +163,8 @@ seahorse_commands_class_init (SeahorseCommandsClass *klass)
  */
 
 void 
-seahorse_commands_show_properties (SeahorseCommands* self, SeahorseObject* obj) 
+seahorse_commands_show_properties (SeahorseCommands *self,
+                                   GObject *obj)
 {
 	g_return_if_fail (SEAHORSE_IS_COMMANDS (self));
 	SEAHORSE_COMMANDS_GET_CLASS (self)->show_properties (self, obj);

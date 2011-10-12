@@ -155,12 +155,11 @@ static const GtkActionEntry COMMAND_ENTRIES[] = {
  */
 
 static void 
-seahorse_pgp_commands_show_properties (SeahorseCommands* base, SeahorseObject* obj) 
+seahorse_pgp_commands_show_properties (SeahorseCommands* base,
+                                       GObject* obj)
 {
-	g_return_if_fail (SEAHORSE_IS_OBJECT (obj));
-
 	if (SEAHORSE_IS_PGP_UID (obj))
-		obj = SEAHORSE_OBJECT (seahorse_pgp_uid_get_parent (SEAHORSE_PGP_UID (obj)));
+		obj = G_OBJECT (seahorse_pgp_uid_get_parent (SEAHORSE_PGP_UID (obj)));
 
 	g_return_if_fail (G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_PGP_KEY || 
 	                  G_TYPE_FROM_INSTANCE (G_OBJECT (obj)) == SEAHORSE_TYPE_GPGME_KEY);
@@ -354,7 +353,7 @@ seahorse_pgp_commands_class_init (SeahorsePgpCommandsClass *klass)
 	gobject_class->finalize = seahorse_pgp_commands_finalize;
 	gobject_class->set_property = seahorse_pgp_commands_set_property;
 	gobject_class->get_property = seahorse_pgp_commands_get_property;
-    
+
 	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_pgp_commands_show_properties;
 	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_pgp_commands_delete_objects;
 	

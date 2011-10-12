@@ -40,35 +40,35 @@ struct _SeahorseCollectionPrivate {
 static void      seahorse_collection_iface_init     (GcrCollectionIface *iface);
 
 static gboolean  maybe_add_object                   (SeahorseCollection *self,
-                                                     SeahorseObject *object);
+                                                     GObject *obj);
 
 static gboolean  maybe_remove_object                (SeahorseCollection *self,
-                                                     SeahorseObject *object);
+                                                     GObject *obj);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseCollection, seahorse_collection, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_collection_iface_init);
 );
 
 static gboolean
-remove_update (SeahorseObject *object,
+remove_update (GObject *object,
                gpointer unused,
                SeahorseCollection *self)
 {
-	gcr_collection_emit_removed (GCR_COLLECTION (self), G_OBJECT (object));
+	gcr_collection_emit_removed (GCR_COLLECTION (self), object);
 	return TRUE;
 }
 
 
 static void
-on_object_changed (SeahorseObject *object,
+on_object_changed (GObject *obj,
                    GParamSpec *spec,
                    gpointer user_data)
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
-	if (g_hash_table_lookup (self->pv->objects, object))
-		maybe_remove_object (self, object);
+	if (g_hash_table_lookup (self->pv->objects, obj))
+		maybe_remove_object (self, obj);
 	else
-		maybe_add_object (self, object);
+		maybe_add_object (self, obj);
 }
 
 static void
@@ -77,7 +77,7 @@ remove_object (gpointer key,
                gpointer user_data)
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
-	SeahorseObject *object = SEAHORSE_OBJECT (key);
+	GObject *object = G_OBJECT (key);
 	g_hash_table_remove (self->pv->objects, object);
 	g_signal_handlers_disconnect_by_func (object, on_object_changed, self);
 	remove_update (object, NULL, self);
@@ -85,47 +85,47 @@ remove_object (gpointer key,
 
 static gboolean
 maybe_add_object (SeahorseCollection *self,
-                  SeahorseObject *object)
+                  GObject *obj)
 {
-	if (g_hash_table_lookup (self->pv->objects, object))
+	if (g_hash_table_lookup (self->pv->objects, obj))
 		return FALSE;
 
-	if (!self->pv->pred || !seahorse_predicate_match (self->pv->pred, object))
+	if (!self->pv->pred || !seahorse_predicate_match (self->pv->pred, obj))
 		return FALSE;
 
-	g_hash_table_replace (self->pv->objects, object, GINT_TO_POINTER (TRUE));
-	g_signal_connect (object, "notify", G_CALLBACK (on_object_changed), self);
-	gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (object));
+	g_hash_table_replace (self->pv->objects, obj, GINT_TO_POINTER (TRUE));
+	g_signal_connect (obj, "notify", G_CALLBACK (on_object_changed), self);
+	gcr_collection_emit_added (GCR_COLLECTION (self), obj);
 	return TRUE;
 }
 
 static gboolean
 maybe_remove_object (SeahorseCollection *self,
-                     SeahorseObject *object)
+                     GObject *obj)
 {
-	if (!g_hash_table_lookup (self->pv->objects, object))
+	if (!g_hash_table_lookup (self->pv->objects, obj))
 		return FALSE;
 
-	if (self->pv->pred && seahorse_predicate_match (self->pv->pred, object))
+	if (self->pv->pred && seahorse_predicate_match (self->pv->pred, obj))
 		return FALSE;
 
-	remove_object (object, NULL, self);
+	remove_object (obj, NULL, self);
 	return TRUE;
 }
 
 static void
 on_base_added (GcrCollection *base,
-               SeahorseObject *object,
+               GObject *obj,
                gpointer user_data)
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
 
-	maybe_add_object (self, object);
+	maybe_add_object (self, obj);
 }
 
 static void
 on_base_removed (GcrCollection *base,
-                 SeahorseObject *object,
+                 GObject *object,
                  gpointer user_data)
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
@@ -135,15 +135,15 @@ on_base_removed (GcrCollection *base,
 }
 
 static void
-objects_to_list (SeahorseObject *sobj, gpointer *c, GList **l)
+objects_to_list (GObject *obj, gpointer *c, GList **l)
 {
-	*l = g_list_append (*l, sobj);
+	*l = g_list_append (*l, obj);
 }
 
 static void
-objects_to_hash (SeahorseObject *sobj, gpointer *c, GHashTable *ht)
+objects_to_hash (GObject *obj, gpointer *c, GHashTable *ht)
 {
-	g_hash_table_replace (ht, sobj, NULL);
+	g_hash_table_replace (ht, obj, NULL);
 }
 
 static void

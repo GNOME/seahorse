@@ -430,16 +430,14 @@ seahorse_util_printf_fd (int fd, const char* fmt, ...)
 gchar*      
 seahorse_util_filename_for_objects (GList *objects)
 {
-	SeahorseObject *object;
-	const gchar *name;
+	const gchar *name = NULL;
 	gchar *filename;
-    
+
 	g_return_val_if_fail (g_list_length (objects) > 0, NULL);
 
 	if (g_list_length (objects) == 1) {
-		g_return_val_if_fail (SEAHORSE_IS_OBJECT (objects->data), NULL);
-		object = SEAHORSE_OBJECT (objects->data);
-		name = seahorse_object_get_nickname (object);
+		if (SEAHORSE_IS_OBJECT (objects->data))
+			name = seahorse_object_get_nickname (SEAHORSE_OBJECT (objects->data));
 		if (name == NULL)
 			name = _("Key Data");
 	} else {
@@ -817,11 +815,12 @@ seahorse_util_chooser_set_filename_full (GtkDialog *dialog, GList *objects)
 /**
  * seahorse_util_chooser_set_filename:
  * @dialog: set the dialog for this
- * @object: The object to use for the filename. #SeahorseObject
+ * @object: The object to use for the filename. #GObject
  *
  */
 void
-seahorse_util_chooser_set_filename (GtkDialog *dialog, SeahorseObject *object)
+seahorse_util_chooser_set_filename (GtkDialog *dialog,
+                                    GObject *object)
 {
 	GList *objects = g_list_append (NULL, object);
 	seahorse_util_chooser_set_filename_full (dialog, objects);
@@ -906,27 +905,27 @@ seahorse_util_chooser_open_prompt (GtkDialog *dialog)
  * Returns: if source of k1<k2 it returns -1,
  *          1 will be returned  if k1>k2. If the sources are equal it returns 0
  */
-static gint 
-sort_objects_by_source (SeahorseObject *k1, SeahorseObject *k2)
+static gint
+sort_objects_by_source (GObject *k1,
+                        GObject *k2)
 {
-    SeahorseSource *sk1, *sk2;
-    
-    g_assert (SEAHORSE_IS_OBJECT (k1));
-    g_assert (SEAHORSE_IS_OBJECT (k2));
-    
-    sk1 = seahorse_object_get_source (k1);
-    sk2 = seahorse_object_get_source (k2);
-    
-    if (sk1 == sk2)
-        return 0;
-    
-    return sk1 < sk2 ? -1 : 1;
-}
+	SeahorseSource *sk1 = NULL;
+	SeahorseSource *sk2 = NULL;
 
+	g_assert (G_IS_OBJECT (k1));
+	g_assert (G_IS_OBJECT (k2));
+
+	g_object_get (k1, "source", &sk1, NULL);
+	g_object_get (k2, "source", &sk2, NULL);
+
+	if (sk1 == sk2)
+		return 0;
+	return sk1 < sk2 ? -1 : 1;
+}
 
 /**
  * seahorse_util_objects_sort:
- * @objects: #SeahorseObject #GList to sort
+ * @objects: #GObject #GList to sort
  *
  * The objects are sorted by their source
  *
@@ -941,7 +940,7 @@ seahorse_util_objects_sort (GList *objects)
 
 /**
  * seahorse_util_objects_splice:
- * @objects: A #GList of #SeahorseObject. Must be sorted
+ * @objects: A #GList of #GObject. Must be sorted
  *
  * Splices the list at the source disconuity
  *
@@ -958,9 +957,12 @@ seahorse_util_objects_splice (GList *objects)
     
     for ( ; objects; objects = g_list_next (objects)) {
      
-        g_return_val_if_fail (SEAHORSE_IS_OBJECT (objects->data), NULL);
-        sk = seahorse_object_get_source (SEAHORSE_OBJECT (objects->data));
-        
+        g_return_val_if_fail (G_IS_OBJECT (objects->data), NULL);
+
+        sk = NULL;
+        g_object_get (objects->data, "source", &sk, NULL);
+        g_return_val_if_fail (sk != NULL, NULL);
+
         /* Found a disconuity */
         if (psk && sk != psk) {
             g_assert (prev != NULL);

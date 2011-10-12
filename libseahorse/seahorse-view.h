@@ -51,11 +51,11 @@ struct _SeahorseViewIface {
 	
 	GList*          (*get_selected_matching)  (SeahorseView *self, 
 	                                           SeahorsePredicate *pred);
-	
-	SeahorseObject* (*get_selected)           (SeahorseView *self);
-	
+
+	GObject *       (*get_selected)           (SeahorseView *self);
+
 	void            (*set_selected)           (SeahorseView *self, 
-	                                           SeahorseObject *value);
+	                                           GObject *value);
 
 	GtkWindow*      (*get_window)             (SeahorseView *self);
 	
@@ -80,10 +80,10 @@ void              seahorse_view_set_selected_objects        (SeahorseView *self,
 GList*            seahorse_view_get_selected_matching       (SeahorseView *self, 
                                                              SeahorsePredicate *pred);
 
-SeahorseObject*   seahorse_view_get_selected                (SeahorseView *self);
+GObject *         seahorse_view_get_selected                (SeahorseView *self);
 
 void              seahorse_view_set_selected                (SeahorseView *self, 
-                                                             SeahorseObject *value);
+                                                             GObject *value);
 
 GtkWindow*        seahorse_view_get_window                  (SeahorseView *self);
 

@@ -52,12 +52,12 @@ struct _SeahorseObjectModel {
 };
 
 struct _SeahorseObjectModelClass {
-    GtkTreeStoreClass parent_class;
-    
-    /* signals --------------------------------------------------------- */
-    
-    /* A key was added to this view */
-    void (*update_row)   (SeahorseObjectModel *self, SeahorseObject *object, GtkTreeIter *iter);
+	GtkTreeStoreClass parent_class;
+
+	/* A key was added to this view */
+	void           (*update_row)     (SeahorseObjectModel *self,
+	                                  GObject *object,
+	                                  GtkTreeIter *iter);
 };
 
 GType               seahorse_object_model_get_type                (void);
@@ -71,16 +71,16 @@ void                seahorse_object_model_set_column_types        (SeahorseObjec
 
 void                seahorse_object_model_set_row_object          (SeahorseObjectModel *self,
                                                                    GtkTreeIter *iter,
-                                                                   SeahorseObject *object);
+                                                                   GObject *object);
 
-SeahorseObject*     seahorse_object_model_get_row_key             (SeahorseObjectModel *self,
+GObject*            seahorse_object_model_get_row_key             (SeahorseObjectModel *self,
                                                                    GtkTreeIter *iter);
 
-GList*             seahorse_object_model_get_rows_for_object     (SeahorseObjectModel *self,
-                                                                   SeahorseObject *object);
+GList*              seahorse_object_model_get_rows_for_object     (SeahorseObjectModel *self,
+                                                                   GObject *object);
 
 void                seahorse_object_model_remove_rows_for_object  (SeahorseObjectModel *self,
-                                                                   SeahorseObject *object);
+                                                                   GObject *object);
 
 void                seahorse_object_model_free_rows               (GList *rows);
 

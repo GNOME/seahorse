@@ -184,7 +184,7 @@ seahorse_source_export_auto_async (GList *objects,
 	GSimpleAsyncResult *res;
 	export_auto_closure *closure;
 	SeahorseSource *source;
-	SeahorseObject *object;
+	GObject *object;
 	GList *next;
 
 	res = g_simple_async_result_new (NULL, callback, user_data,
@@ -202,11 +202,12 @@ seahorse_source_export_auto_async (GList *objects,
 		/* Break off one set (same source) */
 		next = seahorse_util_objects_splice (objects);
 
-		g_assert (SEAHORSE_IS_OBJECT (objects->data));
-		object = SEAHORSE_OBJECT (objects->data);
+		g_assert (G_IS_OBJECT (objects->data));
+		object = G_OBJECT (objects->data);
 
 		/* Export from this object source */
-		source = seahorse_object_get_source (object);
+		source = NULL;
+		g_object_get (object, "source", &source, NULL);
 		g_return_if_fail (source != NULL);
 
 		/* We pass our own data object, to which data is appended */

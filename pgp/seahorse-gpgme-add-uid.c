@@ -81,10 +81,10 @@ on_gpgme_add_uid_ok_clicked (GtkButton *button,
                              gpointer user_data)
 {
 	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
-	SeahorseObject *object;
+	GObject *object;
 	const gchar *name, *email, *comment;
 	gpgme_error_t err;
-	
+
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 	
 	name = gtk_entry_get_text (GTK_ENTRY (
@@ -113,8 +113,8 @@ seahorse_gpgme_add_uid_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 {
 	SeahorseWidget *swidget;
 	const gchar *userid;
-	
-	swidget = seahorse_object_widget_new ("add-uid", parent, SEAHORSE_OBJECT (pkey));
+
+	swidget = seahorse_object_widget_new ("add-uid", parent, G_OBJECT (pkey));
 	g_return_if_fail (swidget != NULL);
 	
 	userid = seahorse_object_get_label (SEAHORSE_OBJECT (pkey));

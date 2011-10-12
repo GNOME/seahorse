@@ -103,8 +103,8 @@ seahorse_object_widget_finalize (GObject *gobject)
     
     self = SEAHORSE_OBJECT_WIDGET (gobject);
     swidget = SEAHORSE_WIDGET (self);
-    
-    g_return_if_fail (SEAHORSE_IS_OBJECT (self->object));
+
+    g_return_if_fail (G_IS_OBJECT (self->object));
 
     /* get widgets hash from types */
     widgets = g_hash_table_lookup (types, self->object);
@@ -186,8 +186,10 @@ seahorse_object_widget_destroyed (gpointer data, GObject *object)
  * Makes use of hash sets to control which widgets can be created and how
  * the focus is grabbed.
  */
-static SeahorseWidget*
-seahorse_object_widget_create (gchar *name, GtkWindow *parent, SeahorseObject *object)
+static SeahorseWidget *
+seahorse_object_widget_create (gchar *name,
+                               GtkWindow *parent,
+                               GObject *object)
 {
     SeahorseWidget *swidget = NULL;     // widget to lookup or create
     GHashTable *widgets = NULL;         // hash of widgets from types
@@ -249,8 +251,10 @@ seahorse_object_widget_create (gchar *name, GtkWindow *parent, SeahorseObject *o
     return swidget;
 }
 
-SeahorseWidget*
-seahorse_object_widget_new (gchar *name, GtkWindow *parent, SeahorseObject *object)
+SeahorseWidget *
+seahorse_object_widget_new (gchar *name,
+                            GtkWindow *parent,
+                            GObject *object)
 {
 	return seahorse_object_widget_create (name, parent, object);
 }

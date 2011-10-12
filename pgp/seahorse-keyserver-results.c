@@ -98,7 +98,7 @@ on_view_selection_changed (GtkTreeSelection *selection, SeahorseKeyserverResults
 static void
 on_row_activated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *column, SeahorseKeyserverResults *self)
 {
-	SeahorseObject *obj;
+	GObject *obj;
 
 	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
 	g_return_if_fail (GTK_IS_TREE_VIEW (view));
@@ -123,7 +123,7 @@ on_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKe
 G_MODULE_EXPORT gboolean
 on_key_list_popup_menu (GtkTreeView* view, SeahorseKeyserverResults* self)
 {
-	SeahorseObject* key;
+	GObject* key;
 
 	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self), FALSE);
 	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
@@ -308,8 +308,8 @@ seahorse_keyserver_results_set_selected_objects (SeahorseViewer* base, GList* ke
 	seahorse_key_manager_store_set_selected_objects (self->pv->view, keys);
 }
 
-static SeahorseObject*
-seahorse_keyserver_results_get_selected (SeahorseViewer* base)
+static GObject *
+seahorse_keyserver_results_get_selected (SeahorseViewer *base)
 {
 	SeahorseKeyserverResults* self;
 	self = SEAHORSE_KEYSERVER_RESULTS (base);
@@ -317,7 +317,8 @@ seahorse_keyserver_results_get_selected (SeahorseViewer* base)
 }
 
 static void
-seahorse_keyserver_results_set_selected (SeahorseViewer* base, SeahorseObject* value)
+seahorse_keyserver_results_set_selected (SeahorseViewer *base,
+                                         GObject *value)
 {
 	SeahorseKeyserverResults* self = SEAHORSE_KEYSERVER_RESULTS (base);
 	GList* keys = NULL;

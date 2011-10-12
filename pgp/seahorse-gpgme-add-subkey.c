@@ -173,8 +173,8 @@ seahorse_gpgme_add_subkey_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 	GtkTreeIter iter;
 	GtkCellRenderer *renderer;
 	GtkWidget *widget, *datetime;
-	
-	swidget = seahorse_object_widget_new ("add-subkey", parent, SEAHORSE_OBJECT (pkey));
+
+	swidget = seahorse_object_widget_new ("add-subkey", parent, G_OBJECT (pkey));
 	g_return_if_fail (swidget != NULL);
 	
 	gtk_window_set_title (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)),

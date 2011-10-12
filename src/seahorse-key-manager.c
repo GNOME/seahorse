@@ -109,7 +109,7 @@ G_MODULE_EXPORT void
 on_keymanager_row_activated (GtkTreeView* view, GtkTreePath* path, 
                                   GtkTreeViewColumn* column, SeahorseKeyManager* self) 
 {
-	SeahorseObject* obj;
+	GObject* obj;
 
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_TREE_VIEW (view));
@@ -136,7 +136,7 @@ on_keymanager_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event,
 G_MODULE_EXPORT gboolean
 on_keymanager_key_list_popup_menu (GtkTreeView* view, SeahorseKeyManager* self) 
 {
-	SeahorseObject* obj;
+	GObject* obj;
 
 	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER (self), FALSE);
 	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
@@ -456,15 +456,16 @@ seahorse_key_manager_set_selected_objects (SeahorseViewer* base, GList* objects)
 
 }
 
-static SeahorseObject* 
-seahorse_key_manager_get_selected (SeahorseViewer* base) 
+static GObject *
+seahorse_key_manager_get_selected (SeahorseViewer *base)
 {
 	SeahorseKeyManager* self = SEAHORSE_KEY_MANAGER (base);
 	return seahorse_key_manager_store_get_selected_object (self->pv->view);
 }
 
 static void 
-seahorse_key_manager_set_selected (SeahorseViewer* base, SeahorseObject* value) 
+seahorse_key_manager_set_selected (SeahorseViewer *base,
+                                   GObject *value)
 {
 	SeahorseKeyManager* self = SEAHORSE_KEY_MANAGER (base);
 	GList* objects = NULL; 

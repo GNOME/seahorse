@@ -391,8 +391,8 @@ on_delete_gkr_complete (GnomeKeyringResult result,
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
 	delete_gkr_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
-	SeahorseObject *object;
-	SeahorseGkrKeyring *keyring;
+	GObject *object;
+	SeahorseGkrKeyring *keyring = NULL;
 	SeahorseGkrItem *item;
 
 	closure->request = NULL;
@@ -404,7 +404,7 @@ on_delete_gkr_complete (GnomeKeyringResult result,
 		g_simple_async_result_complete_in_idle (res);
 
 	} else if (SEAHORSE_IS_GKR_ITEM (object)) {
-		keyring = SEAHORSE_GKR_KEYRING (seahorse_object_get_source (object));
+		g_object_get (object, "source", &keyring, NULL);
 		item = SEAHORSE_GKR_ITEM (object);
 		seahorse_gkr_keyring_remove_item (keyring, seahorse_gkr_item_get_item_id (item));
 
@@ -433,7 +433,7 @@ static void
 delete_gkr_one_object (GSimpleAsyncResult *res)
 {
 	delete_gkr_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	SeahorseObject *object;
+	GObject *object;
 	const gchar *keyring;
 	guint32 item;
 

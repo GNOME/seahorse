@@ -48,20 +48,21 @@ struct _SeahorseCommandsClass {
 	GObjectClass parent_class;
 	
 	/* Virtual methods */
-	
+
 	void        (*show_properties)         (SeahorseCommands *self,
-	                                        SeahorseObject *obj);
+	                                        GObject *object);
 
 	gboolean    (*delete_objects)          (SeahorseCommands *self,
-	                                        GList *obj);
+	                                        GList *objects);
 };
 
 GType                 seahorse_commands_get_type                 (void);
 
-void                  seahorse_commands_show_properties          (SeahorseCommands *self, SeahorseObject *obj);
+void                  seahorse_commands_show_properties          (SeahorseCommands *self,
+                                                                  GObject *object);
 
 gboolean              seahorse_commands_delete_objects           (SeahorseCommands *self,
-                                                                  GList *obj);
+                                                                  GList *objects);
 
 SeahorseView *        seahorse_commands_get_view                 (SeahorseCommands *self);
 

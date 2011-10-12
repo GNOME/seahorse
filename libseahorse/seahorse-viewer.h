@@ -48,19 +48,22 @@ struct _SeahorseViewerClass {
 
 	/* virtual -------------------------------------------------------- */
 
-	GList* (*get_selected_objects) (SeahorseViewer* self);
+	GList *          (*get_selected_objects)          (SeahorseViewer *self);
 
-	void (*set_selected_objects) (SeahorseViewer* self, GList* objects);
+	void             (*set_selected_objects)          (SeahorseViewer *self,
+	                                                   GList *objects);
 
-	SeahorseObject* (*get_selected_object_and_uid) (SeahorseViewer* self, guint* uid);
+	GObject *        (*get_selected_object_and_uid)   (SeahorseViewer* self,
+	                                                   guint *uid);
 
-	SeahorseObject* (*get_selected) (SeahorseViewer* self);
+	GObject *        (*get_selected)                  (SeahorseViewer* self);
 
-	void (*set_selected) (SeahorseViewer* self, SeahorseObject* value);
+	void             (*set_selected)                  (SeahorseViewer* self,
+	                                                   GObject* value);
 
 	/* signals --------------------------------------------------------- */
 
-	void (*signal)   (SeahorseViewer *viewer);
+	void             (*signal)                        (SeahorseViewer *viewer);
 };
 
 GType               seahorse_viewer_get_type                        (void);
@@ -75,15 +78,15 @@ GList*              seahorse_viewer_get_selected_objects            (SeahorseVie
 void                seahorse_viewer_set_selected_objects            (SeahorseViewer* self,
                                                                      GList* objects);
 
-SeahorseObject*     seahorse_viewer_get_selected_object_and_uid     (SeahorseViewer* self,
-                                                                     guint* uid);
+GObject *           seahorse_viewer_get_selected_object_and_uid     (SeahorseViewer *self,
+                                                                     guint *uid);
 
 void                seahorse_viewer_show_context_menu               (SeahorseViewer* self,
                                                                      guint button,
                                                                      guint time);
 
 void                seahorse_viewer_show_properties                 (SeahorseViewer* self,
-                                                                     SeahorseObject* obj);
+                                                                     GObject* obj);
 
 void                seahorse_viewer_set_status                      (SeahorseViewer* self,
                                                                      const char* text);
@@ -92,10 +95,10 @@ void                seahorse_viewer_set_numbered_status             (SeahorseVie
                                                                      const char* text,
                                                                      gint num);
 
-SeahorseObject*     seahorse_viewer_get_selected                    (SeahorseViewer* self);
+GObject *           seahorse_viewer_get_selected                    (SeahorseViewer *self);
 
-void                seahorse_viewer_set_selected                    (SeahorseViewer* self,
-                                                                     SeahorseObject* value);
+void                seahorse_viewer_set_selected                    (SeahorseViewer *self,
+                                                                     GObject *value);
 
 GtkWindow*          seahorse_viewer_get_window                      (SeahorseViewer* self);
 

@@ -62,7 +62,7 @@ SeahorseKeyManagerStore*   seahorse_key_manager_store_new                    (Gc
                                                                               GtkTreeView *view,
                                                                               GSettings *settings);
 
-SeahorseObject*            seahorse_key_manager_store_get_object_from_path   (GtkTreeView *view,
+GObject *                  seahorse_key_manager_store_get_object_from_path   (GtkTreeView *view,
                                                                               GtkTreePath *path);
 
 GList*                     seahorse_key_manager_store_get_all_objects        (GtkTreeView *view);
@@ -72,6 +72,6 @@ void                       seahorse_key_manager_store_set_selected_objects   (Gt
 
 GList*                     seahorse_key_manager_store_get_selected_objects   (GtkTreeView *view);
 
-SeahorseObject*            seahorse_key_manager_store_get_selected_object    (GtkTreeView *view);
+GObject *                  seahorse_key_manager_store_get_selected_object    (GtkTreeView *view);
 
 #endif /* __SEAHORSE_KEY_MANAGER_STORE_H__ */

@@ -60,8 +60,8 @@ transform_keyring_created (const GValue *from, GValue *to)
 static void
 setup_main (SeahorseWidget *swidget)
 {
-	SeahorseObject *object;
-	
+	GObject *object;
+
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 
 	/* Setup the image properly */
@@ -102,9 +102,9 @@ on_keyring_properties_response (GtkDialog *dialog,
 void
 seahorse_gkr_keyring_properties_show (SeahorseGkrKeyring *gkr, GtkWindow *parent)
 {
-	SeahorseObject *object = SEAHORSE_OBJECT (gkr);
+	GObject *object = G_OBJECT (gkr);
 	SeahorseWidget *swidget = NULL;
-	
+
 	swidget = seahorse_object_widget_new ("gkr-keyring", parent, object);
     
 	/* This happens if the window is already open */

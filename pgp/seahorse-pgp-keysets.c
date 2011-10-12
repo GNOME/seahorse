@@ -43,7 +43,7 @@ on_settings_default_key_changed (GSettings *settings, const gchar *key, gpointer
 }
 
 static gboolean 
-pgp_signers_match (SeahorseObject *obj,
+pgp_signers_match (GObject *obj,
                    gpointer data)
 {
 	SeahorsePgpKey *defkey;

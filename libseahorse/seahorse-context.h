@@ -68,9 +68,6 @@ struct _SeahorseContextClass {
 	void     (*destroy)            (SeahorseContext *self);
 };
 
-typedef void       (*SeahorseObjectFunc)                     (struct _SeahorseObject *obj,
-                                                              gpointer user_data);
-
 #define             SCTX_APP()                               (seahorse_context_instance ())
 
 GType               seahorse_context_get_type                (void);

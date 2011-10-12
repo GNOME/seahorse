@@ -26,8 +26,6 @@
  * - A generic interface for accessing sources.
  * - Eventually more functionality will be merged from seahorse-op.* into 
  *   this class and derived classes. 
- * - Each SeahorseObject has a weak pointer to the SeahorseSource that 
- *   created it.
  * 
  * Properties base classes must implement:
  *  ktype: (GQuark) The ktype (ie: SEAHORSE_PGP) of objects originating from this 
@@ -51,8 +49,6 @@
 #define SEAHORSE_SOURCE(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SOURCE, SeahorseSource))
 #define SEAHORSE_IS_SOURCE(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_SOURCE))
 #define SEAHORSE_SOURCE_GET_INTERFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SEAHORSE_TYPE_SOURCE, SeahorseSourceIface))
-
-struct _SeahorseObject;
 
 typedef struct _SeahorseSource SeahorseSource;
 typedef struct _SeahorseSourceIface SeahorseSourceIface;

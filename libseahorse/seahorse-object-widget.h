@@ -36,20 +36,20 @@
 
 typedef struct _SeahorseObjectWidget SeahorseObjectWidget;
 typedef struct _SeahorseObjectWidgetClass SeahorseObjectWidgetClass;
-	
+
 struct _SeahorseObjectWidget {
-	SeahorseWidget		parent;
-	SeahorseObject		*object;
+	SeahorseWidget parent;
+	GObject *object;
 };
 
 struct _SeahorseObjectWidgetClass {
 	SeahorseWidgetClass	parent_class;
 };
 
-GType           seahorse_object_widget_get_type    (void);
+GType             seahorse_object_widget_get_type    (void);
 
-SeahorseWidget*	seahorse_object_widget_new         (gchar              *name,
-                                                    GtkWindow          *parent,
-                                                    SeahorseObject     *object);
+SeahorseWidget *  seahorse_object_widget_new         (gchar *name,
+                                                      GtkWindow *parent,
+                                                      GObject *object);
 
 #endif /* __SEAHORSE_OBJECT_WIDGET_H__ */

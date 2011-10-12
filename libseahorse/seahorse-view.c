@@ -45,7 +45,7 @@ seahorse_view_get_selected_matching (SeahorseView *self,
 	return SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected_matching (self, pred);
 }
 
-SeahorseObject* 
+GObject *
 seahorse_view_get_selected (SeahorseView* self) 
 {
 	g_return_val_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->get_selected, NULL);
@@ -54,7 +54,8 @@ seahorse_view_get_selected (SeahorseView* self)
 
 
 void 
-seahorse_view_set_selected (SeahorseView* self, SeahorseObject* value) 
+seahorse_view_set_selected (SeahorseView* self,
+                            GObject* value)
 {
 	g_return_if_fail (SEAHORSE_VIEW_GET_INTERFACE (self)->set_selected);
 	SEAHORSE_VIEW_GET_INTERFACE (self)->set_selected (self, value);

@@ -29,7 +29,7 @@
 
 #include <glib-object.h>
 
-typedef gboolean (*SeahorsePredicateFunc) (SeahorseObject *object,
+typedef gboolean (*SeahorsePredicateFunc) (GObject *obj,
                                            void *user_data);
 
 typedef struct _SeahorsePredicate SeahorsePredicate;
@@ -44,9 +44,7 @@ struct _SeahorsePredicate {
 	gpointer custom_target;
 };
 
-void               seahorse_predicate_clear         (SeahorsePredicate *self);
-
 gboolean           seahorse_predicate_match         (SeahorsePredicate *self,
-                                                     SeahorseObject *object);
+                                                     GObject *obj);
 
 #endif /* __SEAHORSE_PREDICATE_H__ */

@@ -222,7 +222,7 @@ static void
 password_activate (GtkEntry *entry,
                    SeahorseWidget *swidget)
 {
-	SeahorseObject *object;
+	GObject *object;
 	SeahorseGkrItem *git;
 	GtkWidget *expander;
 	GCancellable *cancellable;
@@ -283,7 +283,7 @@ on_item_password_expander_activate (GtkExpander *expander,
                                     gpointer user_data)
 {
     SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
-    SeahorseObject *object;
+    GObject *object;
     SeahorseGkrItem *git;
     GtkWidget *widget;
 
@@ -350,7 +350,7 @@ on_item_description_activate (GtkWidget *entry,
 	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	item_description_closure *closure;
 	GCancellable *cancellable;
-	SeahorseObject *object;
+	GObject *object;
 	SeahorseGkrItem *git;
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
@@ -391,7 +391,7 @@ on_item_description_focus_out (GtkWidget* widget,
 static void
 setup_main (SeahorseWidget *swidget)
 {
-	SeahorseObject *object;
+	GObject *object;
 	GtkEntryBuffer *buffer;
 	GtkWidget *widget;
 	GtkWidget *box;
@@ -506,7 +506,7 @@ transform_item_details (const GValue *from, GValue *to)
 static void 
 setup_details (SeahorseWidget *swidget)
 {
-	SeahorseObject *object;
+	GObject *object;
 	GtkWidget *widget;
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
@@ -537,7 +537,7 @@ properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
 void
 seahorse_gkr_item_properties_show (SeahorseGkrItem *git, GtkWindow *parent)
 {
-    SeahorseObject *object = SEAHORSE_OBJECT (git);
+    GObject *object = G_OBJECT (git);
     SeahorseWidget *swidget = NULL;
     GtkWidget *widget;
 

@@ -30,8 +30,7 @@
 
 #include <glib/gi18n.h>
 
-/**
- * _SeahorseObjectProps:
+/*
  * @PROP_0:
  * @PROP_SOURCE:
  * @PROP_LABEL:
@@ -55,7 +54,6 @@ enum _SeahorseObjectProps {
 };
 
 /**
- * _SeahorseObjectPrivate:
  * @source: Where did the object come from ?
  * @label: DBUS: "display-name"
  * @markup: Markup text
@@ -546,40 +544,32 @@ seahorse_object_get_flags (SeahorseObject *self)
  */
 gboolean
 seahorse_predicate_match (SeahorsePredicate *self,
-                          SeahorseObject* object)
+                          GObject* obj)
 {
 	SeahorseObjectPrivate *pv;
 
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (object), FALSE);
-	pv = object->pv;
+	g_return_val_if_fail (G_IS_OBJECT (obj), FALSE);
 
 	/* Check all the fields */
-	if (self->type != 0 && !G_TYPE_CHECK_INSTANCE_TYPE (object, self->type))
-		return FALSE;
-	if (self->usage != 0 && self->usage != pv->usage)
-		return FALSE;
-	if (self->flags != 0 && (self->flags & pv->flags) == 0)
-		return FALSE;
-	if (self->nflags != 0 && (self->nflags & pv->flags) != 0)
-		return FALSE;
-	if (self->source != NULL && self->source != pv->source)
+	if (self->type != 0 && !G_TYPE_CHECK_INSTANCE_TYPE (obj, self->type))
 		return FALSE;
 
+	if (SEAHORSE_IS_OBJECT (obj)) {
+		g_return_val_if_fail (SEAHORSE_IS_OBJECT (obj), FALSE);
+		pv = SEAHORSE_OBJECT (obj)->pv;
+		if (self->usage != 0 && self->usage != pv->usage)
+			return FALSE;
+		if (self->flags != 0 && (self->flags & pv->flags) == 0)
+			return FALSE;
+		if (self->nflags != 0 && (self->nflags & pv->flags) != 0)
+			return FALSE;
+		if (self->source != NULL && self->source != pv->source)
+			return FALSE;
+	}
+
 	/* And any custom stuff */
-	if (self->custom != NULL && !self->custom (object, self->custom_target))
+	if (self->custom != NULL && !self->custom (obj, self->custom_target))
 		return FALSE;
 
 	return TRUE;
-}
-
-/**
- * seahorse_predicate_clear:
- * @self: The predicate to clean
- *
- * Clears a seahorse predicate (#SeahorsePredicate)
- */
-void
-seahorse_predicate_clear (SeahorsePredicate *self)
-{
-	memset (self, 0, sizeof (*self));
 }

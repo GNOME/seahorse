@@ -149,7 +149,7 @@ G_DEFINE_TYPE (SeahorseKeyManagerStore, seahorse_key_manager_store, GCR_TYPE_COL
 
 /* Search through row for text */
 static gboolean
-object_contains_filtered_text (SeahorseObject *object,
+object_contains_filtered_text (GObject *object,
                                const gchar* text)
 {
 	gchar* name = NULL;
@@ -186,7 +186,7 @@ object_contains_filtered_text (SeahorseObject *object,
 
 /* Called to filter each row */
 static gboolean
-on_filter_visible (SeahorseObject *object,
+on_filter_visible (GObject *obj,
                    gpointer user_data)
 {
 	SeahorseKeyManagerStore* self = SEAHORSE_KEY_MANAGER_STORE (user_data);
@@ -196,7 +196,7 @@ on_filter_visible (SeahorseObject *object,
 	/* Check the row requested */
 	switch (self->priv->filter_mode) {
 	case KEY_STORE_MODE_FILTERED:
-		ret = object_contains_filtered_text (object, self->priv->filter_text);
+		ret = object_contains_filtered_text (obj, self->priv->filter_text);
 		break;
 
 	case KEY_STORE_MODE_ALL:
@@ -209,8 +209,8 @@ on_filter_visible (SeahorseObject *object,
 	};
 
 	/* If current is not being shown, double check with children */
-	if (!ret && GCR_IS_COLLECTION (object)) {
-		children = gcr_collection_get_objects (GCR_COLLECTION (object));
+	if (!ret && GCR_IS_COLLECTION (obj)) {
+		children = gcr_collection_get_objects (GCR_COLLECTION (obj));
 		for (l = children; !ret && l != NULL; l = g_list_next (l))
 			ret = on_filter_visible (l->data, user_data);
 	}
@@ -831,7 +831,7 @@ seahorse_key_manager_store_new (GcrCollection *collection,
 	return self;
 }
 
-SeahorseObject*
+GObject *
 seahorse_key_manager_store_get_object_from_path (GtkTreeView *view, GtkTreePath *path)
 {
     GtkTreeModel *model;
@@ -842,7 +842,7 @@ seahorse_key_manager_store_get_object_from_path (GtkTreeView *view, GtkTreePath 
 
     model = gtk_tree_view_get_model (view);
     g_return_val_if_fail (gtk_tree_model_get_iter (model, &iter, path), NULL);
-    return SEAHORSE_OBJECT (gcr_collection_model_object_for_iter (GCR_COLLECTION_MODEL (model), &iter));
+    return gcr_collection_model_object_for_iter (GCR_COLLECTION_MODEL (model), &iter);
 }
 
 GList*
@@ -859,7 +859,7 @@ seahorse_key_manager_store_get_all_objects (GtkTreeView *view)
 GList*
 seahorse_key_manager_store_get_selected_objects (GtkTreeView *view)
 {
-    SeahorseObject *sobj;
+    GObject *obj;
     GList *l, *objects = NULL;
     SeahorseKeyManagerStore* skstore;
     GList *list, *paths = NULL;
@@ -874,9 +874,9 @@ seahorse_key_manager_store_get_selected_objects (GtkTreeView *view)
 
     /* make object list */
     for (list = paths; list != NULL; list = g_list_next (list)) {
-        sobj = seahorse_key_manager_store_get_object_from_path (view, list->data);
-        if (sobj != NULL)
-            objects = g_list_append (objects, sobj);
+        obj = seahorse_key_manager_store_get_object_from_path (view, list->data);
+        if (obj != NULL)
+            objects = g_list_append (objects, obj);
     }
 
     /* free selected paths */
@@ -926,11 +926,11 @@ seahorse_key_manager_store_set_selected_objects (GtkTreeView *view, GList* objec
 	}
 }
 
-SeahorseObject*
+GObject *
 seahorse_key_manager_store_get_selected_object (GtkTreeView *view)
 {
 	SeahorseKeyManagerStore* skstore;
-	SeahorseObject *sobj = NULL;
+	GObject *obj = NULL;
 	GList *paths = NULL;
 	GtkTreeSelection *selection;
 
@@ -943,12 +943,12 @@ seahorse_key_manager_store_get_selected_object (GtkTreeView *view)
 
 	/* choose first object */
 	if (paths != NULL) {
-		sobj = seahorse_key_manager_store_get_object_from_path (view, paths->data);
+		obj = seahorse_key_manager_store_get_object_from_path (view, paths->data);
 
 		/* free selected paths */
 		g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
 		g_list_free (paths);
 	}
 
-	return sobj;
+	return obj;
 }

@@ -211,19 +211,18 @@ filter_matching_objects (SeahorsePredicate *pred,
                          GList** all_objects)
 {
 	GList *results, *next, *here;
-	SeahorseObject *object;
+	GObject *obj;
 
 	results = NULL;
 
 	next = *all_objects;
 	while ((here = next) != NULL) {
-		g_return_val_if_fail (SEAHORSE_IS_OBJECT (here->data), NULL);
-		object = SEAHORSE_OBJECT (here->data);
+		obj = G_OBJECT (here->data);
 		next = g_list_next (here);
 
 		/* If it matches then separate it */
-		if (seahorse_predicate_match (pred, object)) {
-			results = g_list_append (results, object);
+		if (seahorse_predicate_match (pred, obj)) {
+			results = g_list_append (results, obj);
 			*all_objects = g_list_delete_link (*all_objects, here);
 		}
 	}
@@ -235,15 +234,10 @@ static gboolean
 has_matching_objects (SeahorsePredicate *pred,
                       GList *objects)
 {
-	SeahorseObject *object;
 	GList *l;
 
 	for (l = objects; l; l = g_list_next (l)) {
-		g_return_val_if_fail (SEAHORSE_IS_OBJECT (l->data), FALSE);
-		object = SEAHORSE_OBJECT (l->data);
-
-		/* If it matches then separate it */
-		if (seahorse_predicate_match (pred, object))
+		if (seahorse_predicate_match (pred, l->data))
 			return TRUE;
 	}
 
@@ -422,11 +416,13 @@ on_key_delete (GtkAction* action, SeahorseViewer* self)
 
 	/* Check for private objects */
 	for (l = objects; l; l = g_list_next (l)) {
-		SeahorseObject* object = l->data;
+		GObject* object = l->data;
 
-		if (seahorse_object_get_usage (object) == SEAHORSE_USAGE_PRIVATE_KEY) {
+		/* TODO: Need to rework this for PKCS#11 keys */
+		if (SEAHORSE_IS_OBJECT (object) &&
+		    seahorse_object_get_usage (SEAHORSE_OBJECT (object)) == SEAHORSE_USAGE_PRIVATE_KEY) {
 			gchar* prompt = g_strdup_printf (_("%s is a private key. Are you sure you want to proceed?"),
-			                                 seahorse_object_get_label (object));
+			                                 seahorse_object_get_label (SEAHORSE_OBJECT (object)));
 			if (!seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_viewer_get_window (self)))) {
 				g_free (prompt);
 				g_list_free (objects);
@@ -447,8 +443,6 @@ show_properties_for_selected (SeahorseViewer *self,
                               SeahorsePredicate *pred,
                               gpointer user_data)
 {
-	g_return_val_if_fail (SEAHORSE_IS_OBJECT (user_data), FALSE);
-
 	/* If not mactched, then continue enumeration */
 	if (!seahorse_predicate_match (pred, user_data))
 		return TRUE;
@@ -813,8 +807,9 @@ seahorse_viewer_set_selected_objects (SeahorseViewer* self, GList* objects)
 	SEAHORSE_VIEWER_GET_CLASS (self)->set_selected_objects (self, objects);
 }
 
-SeahorseObject*
-seahorse_viewer_get_selected_object_and_uid (SeahorseViewer* self, guint* uid)
+GObject *
+seahorse_viewer_get_selected_object_and_uid (SeahorseViewer *self,
+                                             guint *uid)
 {
 	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
 	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_object_and_uid, NULL);
@@ -838,10 +833,10 @@ seahorse_viewer_show_context_menu (SeahorseViewer* self, guint button, guint tim
 }
 
 void
-seahorse_viewer_show_properties (SeahorseViewer* self, SeahorseObject* obj)
+seahorse_viewer_show_properties (SeahorseViewer* self, GObject* obj)
 {
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (SEAHORSE_IS_OBJECT (obj));
+	g_return_if_fail (G_IS_OBJECT (obj));
 
 	for_each_commands (self, show_properties_for_selected, obj);
 }
@@ -876,7 +871,7 @@ seahorse_viewer_set_numbered_status (SeahorseViewer* self, const char* text, gin
 	g_free (message);
 }
 
-SeahorseObject*
+GObject *
 seahorse_viewer_get_selected (SeahorseViewer* self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
@@ -886,7 +881,8 @@ seahorse_viewer_get_selected (SeahorseViewer* self)
 }
 
 void
-seahorse_viewer_set_selected (SeahorseViewer* self, SeahorseObject* value)
+seahorse_viewer_set_selected (SeahorseViewer *self,
+                              GObject *value)
 {
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->set_selected);

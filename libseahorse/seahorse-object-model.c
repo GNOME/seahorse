@@ -55,7 +55,7 @@ G_DEFINE_TYPE (SeahorseObjectModel, seahorse_object_model, GTK_TYPE_TREE_STORE);
 typedef struct {
 	SeahorseObjectModel *self;
 	GPtrArray           *refs;     /* GtkTreeRowReference pointers */
-	SeahorseObject      *object;     /* The key we're dealing with */
+	GObject             *object;     /* The key we're dealing with */
 	gpointer            binding;
 } SeahorseObjectRow;
 
@@ -64,7 +64,8 @@ typedef struct {
  */
 
 static void
-key_notify (SeahorseObject *object, SeahorseObjectModel *self)
+key_notify (GObject *object,
+            SeahorseObjectModel *self)
 {
     SeahorseObjectModelPrivate *pv = SEAHORSE_OBJECT_MODEL_GET_PRIVATE (self);
     SeahorseObjectRow *skrow;
@@ -101,19 +102,22 @@ key_destroyed (gpointer data, GObject *was)
 
 
 static gboolean
-remove_each (SeahorseObject *object, gchar *path, SeahorseObjectModel *self)
+remove_each (GObject *object,
+             gchar *path,
+             SeahorseObjectModel *self)
 {
     return TRUE;
 }
 
-static SeahorseObjectRow*
-key_row_new (SeahorseObjectModel *self, SeahorseObject *object)
+static SeahorseObjectRow *
+key_row_new (SeahorseObjectModel *self,
+             GObject *object)
 {
     SeahorseObjectRow *skrow;
     
     g_assert (SEAHORSE_IS_OBJECT_MODEL (self));
-    g_assert (SEAHORSE_IS_OBJECT (object));
-    
+    g_assert (G_IS_OBJECT (object));
+
     skrow = g_new0 (SeahorseObjectRow, 1);
     skrow->refs = g_ptr_array_new ();
     skrow->self = self;
@@ -299,8 +303,9 @@ seahorse_object_model_set_column_types (SeahorseObjectModel *self, gint n_column
 }
 
 void
-seahorse_object_model_set_row_object (SeahorseObjectModel *self, GtkTreeIter *iter,
-                                      SeahorseObject *object)
+seahorse_object_model_set_row_object (SeahorseObjectModel *self,
+                                      GtkTreeIter *iter,
+                                      GObject *object)
 {
     SeahorseObjectModelPrivate *pv = SEAHORSE_OBJECT_MODEL_GET_PRIVATE (self);
     SeahorseObjectRow *skrow;
@@ -309,7 +314,7 @@ seahorse_object_model_set_row_object (SeahorseObjectModel *self, GtkTreeIter *it
     int i;
     
     g_return_if_fail (SEAHORSE_IS_OBJECT_MODEL (self));
-    g_return_if_fail (SEAHORSE_IS_OBJECT (object) || object == NULL);
+    g_return_if_fail (G_IS_OBJECT (object) || object == NULL);
     g_return_if_fail (pv->data_column >= 0);
     
     /* Add the row/key association */
@@ -365,7 +370,7 @@ seahorse_object_model_set_row_object (SeahorseObjectModel *self, GtkTreeIter *it
         key_notify (object, self);
 }
 
-SeahorseObject*
+GObject *
 seahorse_object_model_get_row_key (SeahorseObjectModel *self, GtkTreeIter *iter)
 {
     SeahorseObjectModelPrivate *pv = SEAHORSE_OBJECT_MODEL_GET_PRIVATE (self);
@@ -377,12 +382,13 @@ seahorse_object_model_get_row_key (SeahorseObjectModel *self, GtkTreeIter *iter)
     gtk_tree_model_get (GTK_TREE_MODEL (self), iter, pv->data_column, &skrow, -1);
     if (!skrow)
         return NULL;
-    g_assert (SEAHORSE_IS_OBJECT (skrow->object));
+    g_assert (G_IS_OBJECT (skrow->object));
     return skrow->object;
 }
 
 void
-seahorse_object_model_remove_rows_for_object (SeahorseObjectModel *self, SeahorseObject *object)
+seahorse_object_model_remove_rows_for_object (SeahorseObjectModel *self,
+                                              GObject *object)
 {
     SeahorseObjectModelPrivate *pv = SEAHORSE_OBJECT_MODEL_GET_PRIVATE (self);
     SeahorseObjectRow *skrow;
@@ -391,7 +397,7 @@ seahorse_object_model_remove_rows_for_object (SeahorseObjectModel *self, Seahors
     int i;
     
     g_return_if_fail (SEAHORSE_IS_OBJECT_MODEL (self));
-    g_return_if_fail (SEAHORSE_IS_OBJECT (object));
+    g_return_if_fail (G_IS_OBJECT (object));
     g_return_if_fail (pv->data_column >= 0);
     
     skrow = (SeahorseObjectRow*)g_hash_table_lookup (pv->rows, object);
@@ -413,7 +419,8 @@ seahorse_object_model_remove_rows_for_object (SeahorseObjectModel *self, Seahors
 }
 
 GList*
-seahorse_object_model_get_rows_for_object (SeahorseObjectModel *self, SeahorseObject *object)
+seahorse_object_model_get_rows_for_object (SeahorseObjectModel *self,
+                                           GObject *object)
 {
     SeahorseObjectModelPrivate *pv = SEAHORSE_OBJECT_MODEL_GET_PRIVATE (self);
     GList *rows = NULL;
@@ -423,8 +430,8 @@ seahorse_object_model_get_rows_for_object (SeahorseObjectModel *self, SeahorseOb
     int i;
     
     g_return_val_if_fail (SEAHORSE_IS_OBJECT_MODEL (self), NULL);
-    g_return_val_if_fail (SEAHORSE_IS_OBJECT (object), NULL);
-    
+    g_return_val_if_fail (G_IS_OBJECT (object), NULL);
+
     skrow = (SeahorseObjectRow*)g_hash_table_lookup (pv->rows, object);
     if (!skrow) 
         return NULL;

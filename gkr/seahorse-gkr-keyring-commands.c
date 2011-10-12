@@ -312,11 +312,12 @@ on_view_selection_changed (SeahorseView *view, gpointer user_data)
  */
 
 static void 
-seahorse_gkr_keyring_commands_show_properties (SeahorseCommands* base, SeahorseObject* object) 
+seahorse_gkr_keyring_commands_show_properties (SeahorseCommands* base,
+                                               GObject* object)
 {
 	GtkWindow *window;
 
-	g_return_if_fail (SEAHORSE_IS_OBJECT (object));
+	g_return_if_fail (G_IS_OBJECT (object));
 
 	window = seahorse_commands_get_window (base);
 	if (G_OBJECT_TYPE (object) == SEAHORSE_TYPE_GKR_KEYRING) 

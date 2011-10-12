@@ -36,8 +36,6 @@
 const AvahiPoll* seahorse_util_dns_sd_get_poll (void);
 #endif
 
-struct _SeahorseObject;
-
 typedef guint64 SeahorseVersion;
 
 #define SEAHORSE_EXT_ASC ".asc"
@@ -110,7 +108,7 @@ void        seahorse_util_chooser_set_filename_full     (GtkDialog *dialog,
                                                          GList *objects);
 
 void        seahorse_util_chooser_set_filename          (GtkDialog *dialog, 
-                                                         struct _SeahorseObject *object);
+                                                         GObject *object);
 
 gchar*      seahorse_util_chooser_open_prompt           (GtkDialog *dialog);
 

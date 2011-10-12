@@ -65,7 +65,8 @@ properties_response (GtkDialog *dialog, gint response_id, gpointer user_data)
  */
 
 static void
-seahorse_pkcs11_commands_show_properties (SeahorseCommands *cmds, SeahorseObject *object)
+seahorse_pkcs11_commands_show_properties (SeahorseCommands *cmds,
+                                          GObject *object)
 {
 	GtkWindow *window;
 	gpointer previous;
