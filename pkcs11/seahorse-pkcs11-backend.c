@@ -23,7 +23,7 @@
 
 #include "seahorse-pkcs11-backend.h"
 #include "seahorse-pkcs11-commands.h"
-#include "seahorse-pkcs11-token.h"
+#include "seahorse-token.h"
 
 #include "seahorse-backend.h"
 #include "seahorse-registry.h"
@@ -143,7 +143,7 @@ on_initialized_registered (GObject *unused,
 		for (s = slots; s; s = g_list_next (s)) {
 			token = gck_slot_get_token_info (s->data);
 			if (is_token_usable (self, s->data, token)) {
-				source = SEAHORSE_SOURCE (seahorse_pkcs11_token_new (s->data));
+				source = SEAHORSE_SOURCE (seahorse_token_new (s->data));
 				self->slots = g_list_append (self->slots, source);
 				gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (source));
 			}

@@ -21,7 +21,7 @@
 
 #include "config.h"
 
-#include "seahorse-pkcs11-certificate.h"
+#include "seahorse-certificate.h"
 #include "seahorse-pkcs11-certificate-props.h"
 
 #include <gcr/gcr.h>
@@ -143,7 +143,7 @@ seahorse_pkcs11_certificate_props_class_init (SeahorsePkcs11CertificatePropsClas
 
 	g_object_class_install_property (gobject_class, PROP_CERTIFICATE,
 	           g_param_spec_object ("certificate", "Certificate", "Certificate to display", 
-	                                SEAHORSE_PKCS11_TYPE_CERTIFICATE, G_PARAM_READWRITE));
+	                                SEAHORSE_TYPE_CERTIFICATE, G_PARAM_READWRITE));
 }
 
 /* -----------------------------------------------------------------------------

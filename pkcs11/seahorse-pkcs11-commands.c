@@ -24,8 +24,8 @@
 
 #include "seahorse-pkcs11-commands.h"
 
+#include "seahorse-certificate.h"
 #include "seahorse-pkcs11.h"
-#include "seahorse-pkcs11-certificate.h"
 #include "seahorse-pkcs11-certificate-props.h"
 #include "seahorse-pkcs11-operations.h"
 
@@ -72,8 +72,8 @@ seahorse_pkcs11_commands_show_properties (SeahorseCommands *cmds,
 	gpointer previous;
 	
 	g_return_if_fail (SEAHORSE_PKCS11_IS_COMMANDS (cmds));
-	g_return_if_fail (SEAHORSE_PKCS11_IS_CERTIFICATE (object));
-	
+	g_return_if_fail (SEAHORSE_IS_CERTIFICATE (object));
+
 	/* Try to show an already present window */
 	previous = g_object_get_qdata (G_OBJECT (object), slot_certificate_window);
 	if (GTK_IS_WINDOW (previous)) {
@@ -245,8 +245,8 @@ seahorse_pkcs11_commands_class_init (SeahorsePkcs11CommandsClass *klass)
 
 	slot_certificate_window = g_quark_from_static_string ("seahorse-pkcs11-commands-window");
 
-	commands_predicate.type = SEAHORSE_PKCS11_TYPE_CERTIFICATE;
-		
+	commands_predicate.type = SEAHORSE_TYPE_CERTIFICATE;
+
 	/* Register this as a source of commands */
 	seahorse_registry_register_type (seahorse_registry_get (), SEAHORSE_PKCS11_TYPE_COMMANDS, 
 	                                 SEAHORSE_PKCS11_NAME, "commands", NULL);

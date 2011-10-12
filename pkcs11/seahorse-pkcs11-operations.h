@@ -25,18 +25,6 @@
 
 #include <glib-object.h>
 
-#include "seahorse-pkcs11-object.h"
-#include "seahorse-pkcs11-token.h"
-
-void          seahorse_pkcs11_refresh_async    (SeahorsePkcs11Token *token,
-                                                GCancellable *cancellable,
-                                                GAsyncReadyCallback callback,
-                                                gpointer user_data);
-
-gboolean      seahorse_pkcs11_refresh_finish   (SeahorsePkcs11Token *token,
-                                                GAsyncResult *result,
-                                                GError **error);
-
 void          seahorse_pkcs11_delete_async     (GList *objects,
                                                 GCancellable *cancellable,
                                                 GAsyncReadyCallback callback,
