@@ -232,20 +232,21 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
     const gchar *host = NULL;
     const gchar *port = NULL;
     GtkWidget *widget;
-    GList *types;
+    gchar **types;
     gint active;
     gchar *uri;
+    guint i;
 
     /* Figure out the scheme */
     widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-type"));
     g_return_val_if_fail (widget != NULL, NULL);
 
 	active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
-	if (active >= 0) {
-		types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
-		scheme = (const gchar*)g_list_nth_data (types, active);
-		if (scheme && !scheme[0])
-			scheme = NULL;
+	types = g_object_get_data (G_OBJECT (swidget), "keyserver-types");
+	if (active >= 0 && types) {
+		for (i = 0; types[i] != NULL && i < active; i++);
+		if (i == active && types[active] && types[active][0])
+			scheme = types[active];
 	}
 
     /* The host */
