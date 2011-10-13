@@ -49,11 +49,7 @@ enum {
 	PROP_ALGO
 };
 
-static void      seahorse_pgp_key_collection_iface_init (GcrCollectionIface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_pgp_key_collection_iface_init);
-);
+G_DEFINE_TYPE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT);
 
 struct _SeahorsePgpKeyPrivate {
 	gchar *keyid;
@@ -114,13 +110,84 @@ calc_name (SeahorsePgpKey *self)
 	                                           seahorse_pgp_uid_get_comment (uids->data)) : g_strdup ("");
 }
 
-static gchar* 
-calc_markup (SeahorsePgpKey *self, guint flags)
+static gchar *
+calc_markup (SeahorsePgpKey *self)
 {
-	GList *uids = seahorse_pgp_key_get_uids (self);
-	return uids ? seahorse_pgp_uid_calc_markup (seahorse_pgp_uid_get_name (uids->data),
-	                                            seahorse_pgp_uid_get_email (uids->data),
-	                                            seahorse_pgp_uid_get_comment (uids->data), flags) : g_strdup ("");
+	guint flags = seahorse_object_get_flags (SEAHORSE_OBJECT (self));
+	GList *uids;
+	GString *result;
+	gchar *text;
+	const gchar *name;
+	const gchar *email;
+	const gchar *comment;
+	const gchar *primary = NULL;
+
+	uids = seahorse_pgp_key_get_uids (self);
+
+	result = g_string_new ("<span");
+	if (flags & SEAHORSE_FLAG_EXPIRED || flags & SEAHORSE_FLAG_REVOKED ||
+	    flags & SEAHORSE_FLAG_DISABLED)
+		g_string_append (result, " strikethrough='true'");
+	if (!(flags & SEAHORSE_FLAG_TRUSTED))
+		g_string_append (result, "  foreground='#555555'");
+	g_string_append_c (result, '>');
+
+	/* The first name is the key name */
+	if (uids != NULL) {
+		name = seahorse_pgp_uid_get_name (uids->data);
+		text = g_markup_escape_text (name, -1);
+		g_string_append (result, text);
+		g_free (text);
+		primary = name;
+	}
+
+	g_string_append (result, "<span size='small' rise='0'>");
+	if (uids != NULL) {
+		email = seahorse_pgp_uid_get_email (uids->data);
+		if (email && !email[0])
+			email = NULL;
+		comment = seahorse_pgp_uid_get_comment (uids->data);
+		if (comment && !comment[0])
+			comment = NULL;
+		text = g_markup_printf_escaped ("\n%s%s%s%s%s",
+		                                email ? email : "",
+		                                email ? " " : "",
+		                                comment ? "'" : "",
+		                                comment ? comment : "",
+		                                comment ? "'" : "");
+		g_string_append (result, text);
+		g_free (text);
+		uids = uids->next;
+	}
+
+	while (uids != NULL) {
+		name = seahorse_pgp_uid_get_name (uids->data);
+		if (name && !name[0])
+			name = NULL;
+		if (g_strcmp0 (name, primary) == 0)
+			name = NULL;
+		email = seahorse_pgp_uid_get_email (uids->data);
+		if (email && !email[0])
+			email = NULL;
+		comment = seahorse_pgp_uid_get_comment (uids->data);
+		if (comment && !comment[0])
+			comment = NULL;
+		text = g_markup_printf_escaped ("\n%s%s%s%s%s%s%s",
+		                                name ? name : "",
+		                                name ? ": " : "",
+		                                email ? email : "",
+		                                email ? " " : "",
+		                                comment ? "'" : "",
+		                                comment ? comment : "",
+		                                comment ? "'" : "");
+		g_string_append (result, text);
+		g_free (text);
+		uids = uids->next;
+	}
+
+	g_string_append (result, "</span></span>");
+
+	return g_string_free (result, FALSE);
 }
 
 /* -----------------------------------------------------------------------------
@@ -137,32 +204,10 @@ _seahorse_pgp_key_get_uids (SeahorsePgpKey *self)
 static void
 _seahorse_pgp_key_set_uids (SeahorsePgpKey *self, GList *uids)
 {
-	GHashTable *checks;
-	GHashTableIter iter;
-	GObject *uid;
-	GList *l;
-
 	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
-
-	checks = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-	                                g_object_unref, NULL);
-	for (l = self->pv->uids; l; l = g_list_next (l))
-		g_hash_table_insert (checks, g_object_ref (l->data), l->data);
 
 	seahorse_object_list_free (self->pv->uids);
 	self->pv->uids = seahorse_object_list_copy (uids);
-	
-	/* Set parent and source on each new one, except the first */
-	for (l = self->pv->uids; l; l = g_list_next (l)) {
-		uid = l->data;
-		if (!g_hash_table_remove (checks, uid))
-			gcr_collection_emit_added (GCR_COLLECTION (self), uid);
-	}
-
-	g_hash_table_iter_init (&iter, checks);
-	while (g_hash_table_iter_next (&iter, (gpointer *)&uid, NULL))
-		gcr_collection_emit_removed (GCR_COLLECTION (self), uid);
-	g_hash_table_destroy (checks);
 
 	g_object_notify (G_OBJECT (self), "uids");
 }
@@ -241,7 +286,7 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
 	}
 
 	name = calc_name (self);
-	markup = calc_markup (self, seahorse_object_get_flags (SEAHORSE_OBJECT (self)));
+	markup = calc_markup (self);
 	nickname = calc_short_name (self);
 
 	g_object_get (self, "usage", &usage, NULL);
@@ -419,44 +464,6 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
  	        g_param_spec_string ("algo", "Algorithm", "The algorithm of this key.",
  	                             "", G_PARAM_READABLE));
 }
-
-static guint
-seahorse_pgp_key_collection_get_length (GcrCollection *collection)
-{
-	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (collection);
-	guint length = g_list_length (self->pv->uids);
-
-	/* First UID is displayed as the key itself */
-	return length ? length - 1 : 0;
-}
-
-static GList *
-seahorse_pgp_key_collection_get_objects (GcrCollection *collection)
-{
-	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (collection);
-
-	/* First UID is displayed as the key itself */
-	return g_list_copy (self->pv->uids ? self->pv->uids->next : NULL);
-}
-
-static gboolean
-seahorse_pgp_key_collection_contains (GcrCollection *collection,
-                                      GObject *object)
-{
-	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (collection);
-
-	/* First UID is displayed as the key itself */
-	return g_list_find (self->pv->uids ? self->pv->uids->next : NULL, object) != NULL;
-}
-
-static void
-seahorse_pgp_key_collection_iface_init (GcrCollectionIface *iface)
-{
-	iface->get_length = seahorse_pgp_key_collection_get_length;
-	iface->get_objects = seahorse_pgp_key_collection_get_objects;
-	iface->contains = seahorse_pgp_key_collection_contains;
-}
-
 
 /* -----------------------------------------------------------------------------
  * PUBLIC 

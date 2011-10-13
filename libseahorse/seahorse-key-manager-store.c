@@ -346,6 +346,9 @@ append_text_column (SeahorseKeyManagerStore *skstore, GtkTreeView *view,
 
     renderer = gtk_cell_renderer_text_new ();
     g_object_set (renderer, "xpad", 3, NULL);
+    g_object_set (renderer, "ypad", 2, NULL);
+    g_object_set (renderer, "yalign", 0.0, NULL);
+    g_object_set (renderer, "scale", PANGO_SCALE_SMALL, NULL);
     column = gtk_tree_view_column_new_with_attributes (label, renderer, "text", index, NULL);
     gtk_tree_view_column_set_resizable (column, TRUE);
     gtk_tree_view_append_column (view, column);
@@ -751,8 +754,9 @@ seahorse_key_manager_store_new (GcrCollection *collection,
 
 	/* add the icon column */
 	renderer = gtk_cell_renderer_pixbuf_new ();
-	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
-	g_object_set (renderer, "xpad", 6, NULL);
+	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DND, NULL);
+	g_object_set (renderer, "ypad", 2, NULL);
+	g_object_set (renderer, "yalign", 0.0, NULL);
 	col = gtk_tree_view_column_new_with_attributes ("", renderer, "gicon", COL_ICON, NULL);
 	gtk_tree_view_column_set_resizable (col, FALSE);
 	gtk_tree_view_append_column (view, col);
@@ -760,11 +764,13 @@ seahorse_key_manager_store_new (GcrCollection *collection,
 
 	/* Name column */
 	renderer = gtk_cell_renderer_text_new ();
+	g_object_set (renderer, "ypad", 2, NULL);
+	g_object_set (renderer, "yalign", 0.0, NULL);
+	g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 	col = gtk_tree_view_column_new_with_attributes (_("Name"), renderer, "markup", COL_NAME, NULL);
 	gtk_tree_view_column_set_resizable (col, TRUE);
 	gtk_tree_view_column_set_expand (col, TRUE);
 	gtk_tree_view_append_column (view, col);
-	gtk_tree_view_set_expander_column (view, col);
 	gtk_tree_view_column_set_sort_column_id (col, COL_NAME);
 
 	/* Use predicate to figure out which columns to add */
@@ -815,6 +821,7 @@ seahorse_key_manager_store_new (GcrCollection *collection,
 	}
 
 	gtk_tree_view_set_enable_search (view, FALSE);
+	gtk_tree_view_set_show_expanders (view, FALSE);
 
 	g_signal_connect_object (settings, "changed", G_CALLBACK (on_manager_settings_changed), view, 0);
 
