@@ -48,73 +48,23 @@ enum {
 	PROP_SETTINGS
 };
 
-static void
-on_transform_validity_to_string (const GValue *source,
-                                 GValue *dest)
-{
-	g_return_if_fail (G_VALUE_TYPE (source) == G_TYPE_UINT);
-	g_value_set_string (dest, seahorse_validity_get_string (g_value_get_uint (source)));
-}
-
-static void
-on_transform_trust_to_string (const GValue *source,
-                              GValue *dest)
-{
-	g_return_if_fail (G_VALUE_TYPE (source) == G_TYPE_UINT);
-	g_value_set_string (dest, seahorse_validity_get_string (g_value_get_uint (source)));
-}
-
-static void
-on_transform_expires_to_string (const GValue *source,
-                                GValue *dest)
-{
-	GTimeVal timeval;
-	gulong expires;
-
-	g_return_if_fail (G_VALUE_TYPE (source) == G_TYPE_ULONG);
-	expires = g_value_get_ulong (source);
-
-	if (expires == 0) {
-		g_value_set_string (dest, "");
-	} else {
-		g_get_current_time (&timeval);
-		if (timeval.tv_sec > expires) {
-			g_value_set_string (dest, _("Expired"));
-		} else {
-			g_value_take_string (dest, seahorse_util_get_date_string (expires));
-		}
-	}
-}
-
 enum {
 	COL_ICON,
-	COL_USAGE,
-	COL_NAME,
-	COL_KEYID,
-	COL_VALIDITY,
-	COL_TRUST,
-	COL_TYPE,
-	COL_EXPIRES,
+	COL_MARKUP,
+	COL_LABEL,
+	COL_DESCRIPTION,
 	N_COLS
 };
 
 static GcrColumn columns[] = {
 	{ "icon", /* later */ 0, /* later */ 0, NULL,
 	  0, NULL, NULL },
-	{ "usage", G_TYPE_UINT, G_TYPE_UINT, NULL,
-	  GCR_COLUMN_SORTABLE, NULL, "usage" },
 	{ "markup", G_TYPE_STRING, G_TYPE_STRING, NULL,
-	  GCR_COLUMN_SORTABLE, NULL, "label" },
-	{ "identifier", G_TYPE_STRING, G_TYPE_STRING, NULL,
-	  GCR_COLUMN_SORTABLE, NULL, "id" },
-	{ "validity", G_TYPE_UINT, G_TYPE_STRING, NULL,
-	  GCR_COLUMN_SORTABLE, on_transform_validity_to_string, "validity" },
-	{ "trust", G_TYPE_UINT, G_TYPE_STRING, NULL,
-	  GCR_COLUMN_SORTABLE, on_transform_trust_to_string, "trust" },
-	{ "type", G_TYPE_STRING, G_TYPE_STRING, NULL,
-	  GCR_COLUMN_SORTABLE, NULL, "type" },
-	{ "expires", G_TYPE_ULONG, G_TYPE_STRING, NULL,
-	  GCR_COLUMN_SORTABLE, on_transform_expires_to_string, "expires" },
+	  0, NULL, NULL },
+	{ "label", G_TYPE_STRING, G_TYPE_STRING, NULL,
+	  GCR_COLUMN_SORTABLE, NULL, NULL },
+	{ "description", G_TYPE_STRING, G_TYPE_STRING, NULL,
+	  0, NULL, NULL },
 	{ NULL }
 };
 
@@ -301,59 +251,6 @@ on_sort_column_changed (GtkTreeSortable *sort,
 	} else if (self->priv->settings) {
 		g_settings_set_string (self->priv->settings, "sort-by", "");
 	}
-}
-
-static void
-on_manager_settings_changed (GSettings *settings, const gchar *key, gpointer user_data)
-{
-	SeahorseKeyManagerStore *self;
-	GtkTreeViewColumn *col = NULL;
-	GtkTreeView *view = GTK_TREE_VIEW (user_data);
-	const gchar *col_key = NULL;
-	GList *columns, *l;
-	gchar *sort_by;
-
-	if (g_str_equal (key, "sort-by")) {
-		self = SEAHORSE_KEY_MANAGER_STORE (gtk_tree_view_get_model (view));
-		g_return_if_fail (SEAHORSE_IS_KEY_MANAGER_STORE (self));
-		sort_by = g_settings_get_string (settings, key);
-		set_sort_to (self, sort_by);
-		g_free (sort_by);
-		return;
-	}
-
-	columns = gtk_tree_view_get_columns (view);
-	for (l = columns; l; l = g_list_next (l)) {
-		col_key = g_object_get_data (G_OBJECT (l->data), "settings-key");
-		if (col_key && g_str_equal (col_key, key)) {
-			col = GTK_TREE_VIEW_COLUMN (l->data);
-			break;
-		}
-	}
-
-	if (col != NULL)
-		gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, key));
-
-	g_list_free (columns);
-}
-
-static GtkTreeViewColumn*
-append_text_column (SeahorseKeyManagerStore *skstore, GtkTreeView *view,
-                    const gchar *label, const gint index)
-{
-    GtkTreeViewColumn *column;
-    GtkCellRenderer *renderer;
-
-    renderer = gtk_cell_renderer_text_new ();
-    g_object_set (renderer, "xpad", 3, NULL);
-    g_object_set (renderer, "ypad", 2, NULL);
-    g_object_set (renderer, "yalign", 0.0, NULL);
-    g_object_set (renderer, "scale", PANGO_SCALE_SMALL, NULL);
-    column = gtk_tree_view_column_new_with_attributes (label, renderer, "text", index, NULL);
-    gtk_tree_view_column_set_resizable (column, TRUE);
-    gtk_tree_view_append_column (view, column);
-
-    return column;
 }
 
 /* The following three functions taken from bugzilla
@@ -755,61 +652,47 @@ seahorse_key_manager_store_new (GcrCollection *collection,
 	/* add the icon column */
 	renderer = gtk_cell_renderer_pixbuf_new ();
 	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DND, NULL);
-	g_object_set (renderer, "ypad", 2, NULL);
+	g_object_set (renderer, "ypad", 6, NULL);
 	g_object_set (renderer, "yalign", 0.0, NULL);
 	col = gtk_tree_view_column_new_with_attributes ("", renderer, "gicon", COL_ICON, NULL);
 	gtk_tree_view_column_set_resizable (col, FALSE);
 	gtk_tree_view_append_column (view, col);
-	gtk_tree_view_column_set_sort_column_id (col, COL_USAGE);
 
 	/* Name column */
+	col = gtk_tree_view_column_new ();
 	renderer = gtk_cell_renderer_text_new ();
-	g_object_set (renderer, "ypad", 2, NULL);
-	g_object_set (renderer, "yalign", 0.0, NULL);
-	g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-	col = gtk_tree_view_column_new_with_attributes (_("Name"), renderer, "markup", COL_NAME, NULL);
+	g_object_set (renderer,
+	              "ypad", 6,
+	              "yalign", 0.0,
+	              "ellipsize", PANGO_ELLIPSIZE_END,
+	              NULL);
+	gtk_tree_view_column_pack_start (col, renderer, TRUE);
+	gtk_tree_view_column_set_attributes (col, renderer,
+	                                     "markup", COL_MARKUP,
+	                                     NULL);
+	renderer = gtk_cell_renderer_text_new ();
+	g_object_set (renderer,
+	              "ypad", 6,
+	              "xpad", 3,
+	              "yalign", 0.0,
+	              "xalign", 1.0,
+	              "scale", PANGO_SCALE_SMALL,
+	              "alignment", PANGO_ALIGN_RIGHT,
+	              NULL);
+	gtk_tree_view_column_pack_start (col, renderer, FALSE);
+	gtk_tree_view_column_set_attributes (col, renderer,
+	                                     "markup", COL_DESCRIPTION,
+	                                     NULL);
 	gtk_tree_view_column_set_resizable (col, TRUE);
 	gtk_tree_view_column_set_expand (col, TRUE);
 	gtk_tree_view_append_column (view, col);
-	gtk_tree_view_column_set_sort_column_id (col, COL_NAME);
+	gtk_tree_view_column_set_sort_column_id (col, COL_LABEL);
 
 	/* Use predicate to figure out which columns to add */
 	if (SEAHORSE_IS_COLLECTION (collection))
 		pred = seahorse_collection_get_predicate (SEAHORSE_COLLECTION (collection));
 	else
 		pred = NULL;
-
-	/* Key ID column, don't show for passwords */
-	if (!pred || pred->usage != SEAHORSE_USAGE_CREDENTIALS) {
-		col = append_text_column (self, view, _("Key ID"), COL_KEYID);
-		gtk_tree_view_column_set_sort_column_id (col, COL_KEYID);
-	}
-
-	/* Public keys show validity */
-	if (pred && pred->usage == SEAHORSE_USAGE_PUBLIC_KEY) {
-		col = append_text_column (self, view, _("Validity"), COL_VALIDITY);
-		g_object_set_data (G_OBJECT (col), "settings-key", "show-validity");
-		gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-validity"));
-		gtk_tree_view_column_set_sort_column_id (col, COL_VALIDITY);
-	}
-
-	/* Trust column */
-	col = append_text_column (self, view, _("Trust"), COL_TRUST);
-	g_object_set_data (G_OBJECT (col), "settings-key", "show-trust");
-	gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-trust"));
-	gtk_tree_view_column_set_sort_column_id (col, COL_TRUST);
-
-	/* The key type column */
-	col = append_text_column (self, view, _("Type"), COL_TYPE);
-	g_object_set_data (G_OBJECT (col), "settings-key", "show-type");
-	gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-type"));
-	gtk_tree_view_column_set_sort_column_id (col, COL_TYPE);
-
-	/* Expiry date column */
-	col = append_text_column (self, view, _("Expiration Date"), COL_EXPIRES);
-	g_object_set_data (G_OBJECT (col), "settings-key", "show-expiry");
-	gtk_tree_view_column_set_visible (col, g_settings_get_boolean (settings, "show-expiry"));
-	gtk_tree_view_column_set_sort_column_id (col, COL_EXPIRES);
 
 	/* Also watch for sort-changed on the store */
 	g_signal_connect (self, "sort-column-changed", G_CALLBACK (on_sort_column_changed), self);
@@ -822,8 +705,11 @@ seahorse_key_manager_store_new (GcrCollection *collection,
 
 	gtk_tree_view_set_enable_search (view, FALSE);
 	gtk_tree_view_set_show_expanders (view, FALSE);
+	gtk_tree_view_set_rules_hint (view, TRUE);
+	gtk_tree_view_set_headers_visible (view, FALSE);
 
-	g_signal_connect_object (settings, "changed", G_CALLBACK (on_manager_settings_changed), view, 0);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (self), COL_LABEL,
+	                                      GTK_SORT_ASCENDING);
 
 	/* Tree drag */
 	egg_tree_multi_drag_add_drag_support (view);

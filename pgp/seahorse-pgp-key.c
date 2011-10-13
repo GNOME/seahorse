@@ -46,7 +46,8 @@ enum {
 	PROP_TRUST,
 	PROP_EXPIRES,
 	PROP_LENGTH,
-	PROP_ALGO
+	PROP_ALGO,
+	PROP_DESCRIPTION
 };
 
 G_DEFINE_TYPE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT);
@@ -293,9 +294,9 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
 
 	/* The type */
 	if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
-		icon_name = SEAHORSE_ICON_SECRET;
+		icon_name = GCR_ICON_KEY_PAIR;
 	} else {
-		icon_name = SEAHORSE_ICON_KEY;
+		icon_name = GCR_ICON_KEY;
 		if (usage == SEAHORSE_USAGE_NONE)
 			g_object_set (self, "usage", SEAHORSE_USAGE_PUBLIC_KEY, NULL);
 	}
@@ -326,7 +327,8 @@ seahorse_pgp_key_get_property (GObject *object, guint prop_id,
                                GValue *value, GParamSpec *pspec)
 {
 	SeahorsePgpKey *self = SEAHORSE_PGP_KEY (object);
-    
+	SeahorseUsage usage;
+
 	switch (prop_id) {
 	case PROP_PHOTOS:
 		g_value_set_boxed (value, seahorse_pgp_key_get_photos (self));
@@ -339,6 +341,13 @@ seahorse_pgp_key_get_property (GObject *object, guint prop_id,
 		break;
 	case PROP_FINGERPRINT:
 		g_value_set_string (value, seahorse_pgp_key_get_fingerprint (self));
+		break;
+	case PROP_DESCRIPTION:
+		g_object_get (self, "usage", &usage, NULL);
+		if (usage == SEAHORSE_USAGE_PRIVATE_KEY)
+			g_value_set_string (value, _("Personal PGP key"));
+		else
+			g_value_set_string (value, _("PGP key"));
 		break;
 	case PROP_EXPIRES:
 		g_value_set_ulong (value, seahorse_pgp_key_get_expires (self));
@@ -442,6 +451,10 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
 
 	g_object_class_install_property (gobject_class, PROP_FINGERPRINT,
                 g_param_spec_string ("fingerprint", "Fingerprint", "Unique fingerprint for this key",
+                                     "", G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_DESCRIPTION,
+                g_param_spec_string ("description", "Description", "Description for key",
                                      "", G_PARAM_READABLE));
 
 	g_object_class_install_property (gobject_class, PROP_VALIDITY,

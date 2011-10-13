@@ -36,42 +36,442 @@
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-operation.h"
 
-/* For gnome-keyring secret type ids */
-#ifdef WITH_PGP
-#include "pgp/seahorse-pgp.h"
-#endif
-#ifdef WITH_SSH
-#include "ssh/seahorse-ssh.h"
-#endif 
+#define GENERIC_SECRET "org.freedesktop.Secret.Generic"
+#define NETWORK_PASSWORD "org.gnome.keyring.NetworkPassword"
+#define KEYRING_NOTE "org.gnome.keyring.Note"
+#define CHAINED_KEYRING "org.gnome.keyring.ChainedKeyring"
+#define ENCRYPTION_KEY "org.gnome.keyring.EncryptionKey"
+#define PK_STORAGE "org.gnome.keyring.PkStorage"
+#define CHROME_PASSWORD "x.internal.Chrome"
+#define GOA_PASSWORD "org.gnome.OnlineAccounts"
+#define TELEPATHY_PASSWORD "org.freedesktop.Telepathy"
+#define EMPATHY_PASSWORD "org.freedesktop.Empathy"
+#define NETWORK_MANAGER_SECRET "org.freedesktop.NetworkManager"
 
-/* XXX Copied from libgnomeui */
-#define GNOME_STOCK_AUTHENTICATION      "gnome-stock-authentication"
-#define GNOME_STOCK_BOOK_OPEN           "gnome-stock-book-open"
-#define GNOME_STOCK_BLANK               "gnome-stock-blank"
+typedef struct _DisplayEntry DisplayEntry;
+typedef struct _DisplayInfo DisplayInfo;
+
+typedef void      (*DisplayCustom) (const DisplayEntry *entry,
+                                    GnomeKeyringItemInfo *item_info,
+                                    GnomeKeyringAttributeList *item_attrs,
+                                    DisplayInfo *info);
+
+struct _DisplayEntry {
+	const gchar *item_type;
+	const gchar *description;
+	DisplayCustom custom_func;
+};
+
+struct _DisplayInfo {
+	const gchar *item_type;
+	gchar *label;
+	gchar *details;
+	const gchar *description;
+};
+
+typedef struct {
+	const gchar *item_type;
+	const gchar *mapped_type;
+	const gchar *match_attribute;
+	const gchar *match_pattern;
+} MappingEntry;
+
+typedef struct {
+	GnomeKeyringItemType old;
+	const gchar *item_type;
+} OldItemTypes;
+
+static guint32
+get_attribute_int (GnomeKeyringAttributeList *attrs,
+                   const gchar *name)
+{
+	guint i;
+
+	if (!attrs)
+		return 0;
+
+	for (i = 0; i < attrs->len; i++) {
+		GnomeKeyringAttribute *attr = &(gnome_keyring_attribute_list_index (attrs, i));
+		if (g_ascii_strcasecmp (name, attr->name) == 0 &&
+		    attr->type == GNOME_KEYRING_ATTRIBUTE_TYPE_UINT32)
+			return attr->value.integer;
+	}
+
+	return 0;
+}
+
+static const gchar *
+get_attribute_string (GnomeKeyringAttributeList *attrs,
+                      const gchar *name)
+{
+	guint i;
+
+	if (!attrs)
+		return NULL;
+
+	for (i = 0; i < attrs->len; i++) {
+		GnomeKeyringAttribute *attr = &(gnome_keyring_attribute_list_index (attrs, i));
+		if (g_ascii_strcasecmp (name, attr->name) == 0 &&
+		    attr->type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING)
+			return attr->value.string;
+	}
+
+	return NULL;
+}
+
+static gboolean
+is_network_item (GnomeKeyringAttributeList *attrs,
+                 const gchar *match)
+{
+	const gchar *protocol;
+
+	g_assert (match);
+
+	protocol = get_attribute_string (attrs, "protocol");
+	return protocol && strcasecmp (protocol, match) == 0;
+}
+
+static gboolean
+is_custom_network_label (const gchar *server,
+                         const gchar *user,
+                         const gchar *object,
+                         guint32 port,
+                         const gchar *display)
+{
+	GString *generated;
+	gboolean ret;
+
+	/*
+	 * For network passwords gnome-keyring generates in a funky looking display
+	 * name that's generated from login credentials. We simulate that generating
+	 * here and return FALSE if it matches. This allows us to display user
+	 * customized display names and ignore the generated ones.
+	 */
+
+	if (!server)
+		return TRUE;
+
+	generated = g_string_new (NULL);
+	if (user != NULL)
+		g_string_append_printf (generated, "%s@", user);
+	g_string_append (generated, server);
+	if (port != 0)
+		g_string_append_printf (generated, ":%d", port);
+	if (object != NULL)
+		g_string_append_printf (generated, "/%s", object);
+
+	ret = strcmp (display, generated->str) != 0;
+	g_string_free (generated, TRUE);
+
+	return ret;
+}
+
+static gchar *
+calc_network_label (GnomeKeyringAttributeList *attrs,
+                    gboolean always)
+{
+	const gchar *val;
+
+	/* HTTP usually has a the realm as the "object" display that */
+	if (is_network_item (attrs, "http") && attrs != NULL) {
+		val = get_attribute_string (attrs, "object");
+		if (val && val[0])
+			return g_strdup (val);
+
+		/* Display the server name as a last resort */
+		if (always) {
+			val = get_attribute_string (attrs, "server");
+			if (val && val[0])
+				return g_strdup (val);
+		}
+	}
+
+	return NULL;
+}
+
+static void
+network_custom (const DisplayEntry *entry,
+                GnomeKeyringItemInfo *item,
+                GnomeKeyringAttributeList *attrs,
+                DisplayInfo *info)
+{
+	const gchar *object;
+	const gchar *user;
+	const gchar *protocol;
+	const gchar *server;
+	guint32 port;
+	gchar *display = NULL;
+
+	server = get_attribute_string (attrs, "server");
+	protocol = get_attribute_string (attrs, "protocol");
+	object = get_attribute_string (attrs, "object");
+	user = get_attribute_string (attrs, "user");
+	port = get_attribute_int (attrs, "port");
+
+	if (!protocol)
+		return;
+
+	display = gnome_keyring_item_info_get_display_name (item);
+
+	/* If it's customized by the application or user then display that */
+	if (!is_custom_network_label (server, user, object, port, display))
+		info->label = calc_network_label (attrs, TRUE);
+	if (info->label == NULL)
+		info->label = display;
+	else
+		g_free (display);
+
+	if (server && protocol) {
+		info->details = g_markup_printf_escaped ("%s://%s%s%s/%s",
+		                                         protocol,
+		                                         user ? user : "",
+		                                         user ? "@" : "",
+		                                         server,
+		                                         object ? object : "");
+	}
+}
+
+static void
+chrome_custom (const DisplayEntry *entry,
+               GnomeKeyringItemInfo *item,
+               GnomeKeyringAttributeList *attrs,
+               DisplayInfo *info)
+{
+	gchar *display;
+	const gchar *origin;
+	GRegex *regex;
+	GMatchInfo *match;
+
+	display = gnome_keyring_item_info_get_display_name (item);
+	origin = get_attribute_string (attrs, "origin_url");
+
+	/* A brain dead url, parse */
+	if (g_strcmp0 (display, origin) == 0) {
+		regex = g_regex_new ("[a-z]+://([^/]+)/", G_REGEX_CASELESS, 0, NULL);
+		if (g_regex_match (regex, display, G_REGEX_MATCH_ANCHORED, &match)) {
+			if (g_match_info_matches (match))
+				info->label = g_match_info_fetch (match, 1);
+			g_match_info_free (match);
+		}
+		g_regex_unref (regex);
+	}
+
+	if (info->label == NULL)
+		info->label = (display);
+	else
+		g_free (display);
+
+	info->details = g_markup_escape_text (origin ? origin : "", -1);
+}
+
+static gchar *
+decode_telepathy_id (const gchar *account)
+{
+	gchar *value;
+	gchar *result;
+	gchar *pos;
+	gsize len;
+
+	value = g_strdup (account);
+	while ((pos = strchr (value, '_')) != NULL)
+		*pos = '%';
+
+	len = strlen (value);
+
+	if (len > 0 && value[len - 1] == '0')
+		value[len - 1] = '\0';
+
+	result = g_uri_unescape_string (value, "");
+	g_free (value);
+
+	if (result != NULL)
+		return result;
+
+	return NULL;
+}
+
+static void
+empathy_custom (const DisplayEntry *entry,
+                GnomeKeyringItemInfo *item,
+                GnomeKeyringAttributeList *attrs,
+                DisplayInfo *info)
+{
+	const gchar *account;
+	GMatchInfo *match;
+	GRegex *regex;
+	gchar *display;
+	gchar *identifier;
+	const gchar *prefix;
+	gchar *pos;
+	gsize len;
+
+	display = gnome_keyring_item_info_get_display_name (item);
+	account = get_attribute_string (attrs, "account-id");
+
+	/* Translators: This should be the same as the string in empathy */
+	prefix = _("IM account password for ");
+
+	if (g_str_has_prefix (display, prefix)) {
+		len = strlen (prefix);
+		pos = strchr (display + len, '(');
+		if (pos != NULL)
+			info->label = g_strndup (display + len, pos - (display + len));
+
+		regex = g_regex_new ("^.+/.+/(.+)$", G_REGEX_CASELESS, 0, NULL);
+		if (g_regex_match (regex, account, G_REGEX_MATCH_ANCHORED, &match)) {
+			if (g_match_info_matches (match)) {
+				identifier = g_match_info_fetch (match, 1);
+				info->details = decode_telepathy_id (identifier);
+				g_free (identifier);
+			}
+			g_match_info_free (match);
+		}
+		g_regex_unref (regex);
+	}
+
+	if (info->label == NULL)
+		info->label = (display);
+	else
+		g_free (display);
+
+	if (info->details == NULL)
+		info->details = g_markup_escape_text (account, -1);
+}
+
+static void
+telepathy_custom (const DisplayEntry *entry,
+                  GnomeKeyringItemInfo *item,
+                  GnomeKeyringAttributeList *attrs,
+                  DisplayInfo *info)
+{
+	const gchar *account;
+	GMatchInfo *match;
+	GRegex *regex;
+	gchar *display;
+	gchar *identifier;
+
+	display = gnome_keyring_item_info_get_display_name (item);
+	account = get_attribute_string (attrs, "account");
+
+	if (strstr (display, account)) {
+		regex = g_regex_new ("^.+/.+/(.+)$", G_REGEX_CASELESS, 0, NULL);
+		if (g_regex_match (regex, account, G_REGEX_MATCH_ANCHORED, &match)) {
+			if (g_match_info_matches (match)) {
+				identifier = g_match_info_fetch (match, 1);
+				info->label = decode_telepathy_id (identifier);
+				g_free (identifier);
+			}
+			g_match_info_free (match);
+		}
+		g_regex_unref (regex);
+	}
+
+	if (info->label == NULL)
+		info->label = (display);
+	else
+		g_free (display);
+
+	info->details = g_markup_escape_text (account, -1);
+}
+
+static const DisplayEntry DISPLAY_ENTRIES[] = {
+	{ GENERIC_SECRET, N_("Password or secret"), NULL },
+	{ NETWORK_PASSWORD, N_("Network password"), network_custom },
+	{ KEYRING_NOTE, N_("Stored note"), NULL },
+	{ CHAINED_KEYRING, N_("Keyring password"), NULL },
+	{ ENCRYPTION_KEY, N_("Encryption key password"), NULL },
+	{ PK_STORAGE, N_("Key storage password"), NULL },
+	{ CHROME_PASSWORD, N_("Google Chrome password"), chrome_custom },
+	{ GOA_PASSWORD, N_("Gnome Online Accounts password"), NULL },
+	{ TELEPATHY_PASSWORD, N_("Telepathy password"), telepathy_custom },
+	{ EMPATHY_PASSWORD, N_("Instant messaging password"), empathy_custom },
+	{ NETWORK_MANAGER_SECRET, N_("Network Manager secret"), NULL },
+};
+
+static const OldItemTypes OLD_ITEM_TYPES[] = {
+	{ GNOME_KEYRING_ITEM_GENERIC_SECRET, GENERIC_SECRET },
+	{ GNOME_KEYRING_ITEM_NETWORK_PASSWORD, NETWORK_PASSWORD },
+	{ GNOME_KEYRING_ITEM_NOTE, KEYRING_NOTE },
+	{ GNOME_KEYRING_ITEM_CHAINED_KEYRING_PASSWORD, CHAINED_KEYRING },
+	{ GNOME_KEYRING_ITEM_ENCRYPTION_KEY_PASSWORD, ENCRYPTION_KEY },
+	{ GNOME_KEYRING_ITEM_PK_STORAGE, PK_STORAGE },
+};
+
+static const gchar *
+map_item_type_to_string (GnomeKeyringItemType old)
+{
+	guint i;
+
+	for (i = 0; i < G_N_ELEMENTS (OLD_ITEM_TYPES); i++) {
+		if (old == OLD_ITEM_TYPES[i].old)
+			return OLD_ITEM_TYPES[i].item_type;
+	}
+
+	return GENERIC_SECRET;
+}
+
+static const MappingEntry MAPPING_ENTRIES[] = {
+	{ GENERIC_SECRET, CHROME_PASSWORD, "application", "chrome*" },
+	{ GENERIC_SECRET, GOA_PASSWORD, "goa-identity", NULL },
+	{ GENERIC_SECRET, TELEPATHY_PASSWORD, "account", "*/*/*" },
+	{ GENERIC_SECRET, EMPATHY_PASSWORD, "account-id", "*/*/*" },
+	/* Network secret for Auto anna/802-11-wireless-security/psk */
+	{ GENERIC_SECRET, NETWORK_MANAGER_SECRET, "connection-uuid", NULL },
+};
+
+static const gchar *
+map_item_type_to_specific (const gchar *item_type,
+                           GnomeKeyringAttributeList *attrs)
+{
+	const gchar *value;
+	guint i;
+
+	if (!attrs)
+		return item_type;
+
+	for (i = 0; i < G_N_ELEMENTS (MAPPING_ENTRIES); i++) {
+		if (g_str_equal (item_type, MAPPING_ENTRIES[i].item_type)) {
+			value = get_attribute_string (attrs, MAPPING_ENTRIES[i].match_attribute);
+			if (value && MAPPING_ENTRIES[i].match_pattern != NULL) {
+				if (g_pattern_match_simple (MAPPING_ENTRIES[i].match_pattern, value))
+					return MAPPING_ENTRIES[i].mapped_type;
+			} else if (value) {
+				return MAPPING_ENTRIES[i].mapped_type;
+			}
+		}
+	}
+
+	return item_type;
+}
 
 enum {
-    PROP_0,
-    PROP_KEYRING_NAME,
-    PROP_ITEM_ID,
-    PROP_ITEM_INFO,
-    PROP_ITEM_ATTRIBUTES,
-    PROP_HAS_SECRET,
-    PROP_USE
+	PROP_0,
+	PROP_KEYRING_NAME,
+	PROP_ITEM_ID,
+	PROP_ITEM_INFO,
+	PROP_ITEM_ATTRIBUTES,
+	PROP_HAS_SECRET,
+	PROP_DESCRIPTION,
+	PROP_USE
 };
 
 struct _SeahorseGkrItemPrivate {
 	gchar *keyring_name;
 	guint32 item_id;
-	
+
 	gpointer req_info;
 	GnomeKeyringItemInfo *item_info;
-	
+
 	gpointer req_attrs;
 	GnomeKeyringAttributeList *item_attrs;
 
 	gpointer req_secret;
 	gchar *item_secret;
+
+	DisplayInfo *display_info;
 };
+
+static gboolean require_item_attrs (SeahorseGkrItem *self);
 
 G_DEFINE_TYPE (SeahorseGkrItem, seahorse_gkr_item, SEAHORSE_TYPE_OBJECT);
 
@@ -101,14 +501,73 @@ boxed_attributes_type (void)
 	return type;
 }
 
+static void
+free_display_info (DisplayInfo *info)
+{
+	g_free (info->label);
+	g_free (info->details);
+	g_free (info);
+}
+
+static DisplayInfo *
+ensure_display_info (SeahorseGkrItem *self)
+{
+	const gchar *item_type;
+	DisplayInfo *info;
+	guint i;
+
+	if (self->pv->display_info)
+		return self->pv->display_info;
+
+	require_item_attrs (self);
+
+	info = g_new0 (DisplayInfo, 1);
+
+	item_type = map_item_type_to_string (gnome_keyring_item_info_get_type (self->pv->item_info));
+	item_type = map_item_type_to_specific (item_type, self->pv->item_attrs);
+	g_assert (item_type != NULL);
+	info->item_type = item_type;
+
+	for (i = 0; i < G_N_ELEMENTS (DISPLAY_ENTRIES); i++) {
+		if (g_str_equal (DISPLAY_ENTRIES[i].item_type, item_type)) {
+			if (DISPLAY_ENTRIES[i].custom_func != NULL)
+				(DISPLAY_ENTRIES[i].custom_func) (&DISPLAY_ENTRIES[i],
+				                                  self->pv->item_info,
+				                                  self->pv->item_attrs,
+				                                  info);
+			if (!info->label && self->pv->item_info)
+				info->label = gnome_keyring_item_info_get_display_name (self->pv->item_info);
+			if (!info->description)
+				info->description = DISPLAY_ENTRIES[i].description;
+			if (!info->details)
+				info->details = g_strdup ("");
+			break;
+		}
+	}
+
+	self->pv->display_info = info;
+	return info;
+}
+
+static void
+clear_display_info (SeahorseGkrItem *self)
+{
+	if (self->pv->display_info) {
+		free_display_info (self->pv->display_info);
+		self->pv->display_info = NULL;
+	}
+}
+
 static gboolean 
 received_result (SeahorseGkrItem *self, GnomeKeyringResult result)
 {
 	if (result == GNOME_KEYRING_RESULT_CANCELLED)
 		return FALSE;
-	
-	if (result == GNOME_KEYRING_RESULT_OK)
+
+	if (result == GNOME_KEYRING_RESULT_OK) {
+		clear_display_info (self);
 		return TRUE;
+	}
 
 	/* TODO: Implement so that we can display an error icon, along with some text */
 	g_message ("failed to retrieve item %d from keyring %s: %s",
@@ -212,200 +671,22 @@ require_item_attrs (SeahorseGkrItem *self)
 	return self->pv->item_attrs != NULL;
 }
 
-static guint32
-find_attribute_int (GnomeKeyringAttributeList *attrs, const gchar *name)
-{
-    guint i;
-    
-    if (!attrs)
-        return 0;
-    
-    for (i = 0; i < attrs->len; i++) {
-        GnomeKeyringAttribute *attr = &(gnome_keyring_attribute_list_index (attrs, i));
-        if (g_ascii_strcasecmp (name, attr->name) == 0 && 
-            attr->type == GNOME_KEYRING_ATTRIBUTE_TYPE_UINT32)
-            return attr->value.integer;
-    }
-    
-    return 0;
-}
-
-
-static gboolean
-is_network_item (SeahorseGkrItem *self, const gchar *match)
-{
-	const gchar *protocol;
-	
-	if (!require_item_info (self))
-		return FALSE;
-	
-	if (gnome_keyring_item_info_get_type (self->pv->item_info) != GNOME_KEYRING_ITEM_NETWORK_PASSWORD)
-		return FALSE;
-    
-	if (!match)
-		return TRUE;
-    
-	protocol = seahorse_gkr_item_get_attribute (self, "protocol");
-	return protocol && g_ascii_strncasecmp (protocol, match, strlen (match)) == 0;
-}
-
-static gboolean 
-is_custom_display_name (SeahorseGkrItem *self, const gchar *display)
-{
-	const gchar *user;
-	const gchar *server;
-	const gchar *object;
-	guint32 port;
-	GString *generated;
-	gboolean ret;
-	
-	if (require_item_info (self) && gnome_keyring_item_info_get_type (self->pv->item_info) != 
-					    GNOME_KEYRING_ITEM_NETWORK_PASSWORD)
-		return TRUE;
-    
-	if (!require_item_attrs (self) || !display)
-		return TRUE;
-    
-	/* 
-	 * For network passwords gnome-keyring generates in a funky looking display 
-	 * name that's generated from login credentials. We simulate that generating 
-	 * here and return FALSE if it matches. This allows us to display user 
-	 * customized display names and ignore the generated ones.
-	 */
-    
-	user = seahorse_gkr_item_get_attribute (self, "user");
-	server = seahorse_gkr_item_get_attribute (self, "server");
-	object = seahorse_gkr_item_get_attribute (self, "object");
-	port = find_attribute_int (self->pv->item_attrs, "port");
-    
-	if (!server)
-		return TRUE;
-    
-	generated = g_string_new (NULL);
-	if (user != NULL)
-		g_string_append_printf (generated, "%s@", user);
-	g_string_append (generated, server);
-	if (port != 0)
-		g_string_append_printf (generated, ":%d", port);
-	if (object != NULL)
-		g_string_append_printf (generated, "/%s", object);
-
-	ret = strcmp (display, generated->str) != 0;
-	g_string_free (generated, TRUE);
-    
-	return ret;
-}
-
 static gchar*
-calc_display_name (SeahorseGkrItem *self, gboolean always)
-{
-	const gchar *val;
-	gchar *display;
-    
-	if (!require_item_info (self))
-		return NULL;
-	
-	display = gnome_keyring_item_info_get_display_name (self->pv->item_info);
-    
-	/* If it's customized by the application or user then display that */
-	if (is_custom_display_name (self, display))
-		return display;
-    
-	/* If it's a network item ... */
-	if (gnome_keyring_item_info_get_type (self->pv->item_info) == GNOME_KEYRING_ITEM_NETWORK_PASSWORD) {
-        
-		/* HTTP usually has a the realm as the "object" display that */
-		if (is_network_item (self, "http") && self->pv->item_attrs) {
-			val = seahorse_gkr_item_get_attribute (self, "object");
-			if (val && val[0]) {
-				g_free (display);
-				return g_strdup (val);
-			}
-		}
-        
-		/* Display the server name as a last resort */
-		if (always) {
-			val = seahorse_gkr_item_get_attribute (self, "server");
-			if (val && val[0]) {
-				g_free (display);
-				return g_strdup (val);
-			}
-		}
-	}
-    
-	return always ? display : NULL;
-}
-
-static gchar*
-calc_network_item_markup (SeahorseGkrItem *self)
-{
-	const gchar *object;
-	const gchar *user;
-	const gchar *protocol;
-	const gchar *server;
-    
-	gchar *uri = NULL;
-	gchar *display = NULL;
-	gchar *ret;
-    
-	server = seahorse_gkr_item_get_attribute (self, "server");
-	protocol = seahorse_gkr_item_get_attribute (self, "protocol");
-	object = seahorse_gkr_item_get_attribute (self, "object");
-	user = seahorse_gkr_item_get_attribute (self, "user");
-
-	if (!protocol)
-		return NULL;
-    
-	/* The object in HTTP often isn't a path at all */
-	if (is_network_item (self, "http"))
-		object = NULL;
-    
-	display = calc_display_name (self, TRUE);
-    
-	if (server && protocol) {
-		uri = g_strdup_printf ("  %s://%s%s%s/%s", 
-		                       protocol, 
-		                       user ? user : "",
-		                       user ? "@" : "",
-		                       server,
-		                       object ? object : "");
-	}
-    
-	ret = g_markup_printf_escaped ("%s<span foreground='#555555' size='small' rise='0'>%s</span>",
-	                               display, uri ? uri : "");
-	g_free (display);
-	g_free (uri);
-    
-	return ret;
-}
-
-static gchar* 
 calc_name_markup (SeahorseGkrItem *self)
 {
-	gchar *name, *markup = NULL;
-	
-	if (!require_item_info (self))
-		return NULL;
-    
-	/* Only do our special markup for network passwords */
-	if (is_network_item (self, NULL))
-        markup = calc_network_item_markup (self);
-    
-	if (!markup) {
-		name = calc_display_name (self, TRUE);
-		markup = g_markup_escape_text (name, -1);
-		g_free (name);
-	}
+	GString *result;
+	DisplayInfo *info;
+	gchar *value;
 
-	return markup;
-}
+	info = ensure_display_info (self);
+	result = g_string_new ("");
+	value = g_markup_escape_text (info->label, -1);
+	g_string_append (result, value);
+	g_string_append (result, "<span size='small' rise='0' foreground='#555555'>\n");
+	g_string_append (result, info->details);
+	g_string_append (result, "</span>");
 
-static gint
-calc_item_type (SeahorseGkrItem *self)
-{
-	if (!require_item_info (self))
-		return -1;
-	return gnome_keyring_item_info_get_type (self->pv->item_info);
+	return g_string_free (result, FALSE);
 }
 
 /* -----------------------------------------------------------------------------
@@ -415,48 +696,29 @@ calc_item_type (SeahorseGkrItem *self)
 void
 seahorse_gkr_item_realize (SeahorseGkrItem *self)
 {
-	gchar *display;
+	DisplayInfo *info;
 	gchar *markup;
-	gchar *identifier;
-	const gchar *icon_name;
 	GIcon *icon;
 
-	display = calc_display_name (self, TRUE);
-	markup = calc_name_markup(self);
-	identifier = g_strdup_printf ("%u", self->pv->item_id);
+	if (!require_item_info (self))
+		return;
 
-	/* We use a pointer so we don't copy the string every time */
-	switch (calc_item_type (self))
-	{
-	case GNOME_KEYRING_ITEM_GENERIC_SECRET:
-		icon_name = GNOME_STOCK_AUTHENTICATION;
-		break;
-	case GNOME_KEYRING_ITEM_NETWORK_PASSWORD:
-		icon_name = is_network_item (self, "http") ? SEAHORSE_ICON_WEBBROWSER : GTK_STOCK_NETWORK;
-		break;
-	case GNOME_KEYRING_ITEM_NOTE:
-		icon_name = GNOME_STOCK_BOOK_OPEN;
-		break;
-	default:
-		icon_name = GNOME_STOCK_BLANK;
-		break;
-	}
+	info = ensure_display_info (self);
+	markup = calc_name_markup (self);
 
-	icon = g_themed_icon_new (icon_name);
+	icon = g_themed_icon_new (GCR_ICON_PASSWORD);
 	g_object_set (self,
-		      "label", display,
-		      "icon", icon,
-		      "markup", markup,
-		      "identifier", identifier,
-		      "flags", SEAHORSE_FLAG_DELETABLE,
-		      NULL);
+	              "label", info->label,
+	              "icon", icon,
+	              "markup", markup,
+	              "flags", SEAHORSE_FLAG_DELETABLE,
+	              NULL);
 	g_object_unref (icon);
-	g_free (display);
 	g_free (markup);
-	g_free (identifier);
-	
+
 	g_object_notify (G_OBJECT (self), "has-secret");
 	g_object_notify (G_OBJECT (self), "use");
+	g_object_notify (G_OBJECT (self), "description");
 }
 
 void
@@ -492,7 +754,8 @@ seahorse_gkr_item_get_property (GObject *object, guint prop_id,
                                 GValue *value, GParamSpec *pspec)
 {
 	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (object);
-    
+	DisplayInfo *info;
+
 	switch (prop_id) {
 	case PROP_KEYRING_NAME:
 		g_value_set_string (value, seahorse_gkr_item_get_keyring_name (self));
@@ -511,6 +774,12 @@ seahorse_gkr_item_get_property (GObject *object, guint prop_id,
 		break;
 	case PROP_USE:
 		g_value_set_uint (value, seahorse_gkr_item_get_use (self));
+		break;
+	case PROP_DESCRIPTION:
+		if (!require_item_info (self))
+			break;
+		info = ensure_display_info (self);
+		g_value_set_string (value, info->description);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -604,6 +873,10 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 	        g_param_spec_string("keyring-name", "Keyring Name", "Keyring this item is in", 
 	                            "", G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+	g_object_class_install_property (gobject_class, PROP_DESCRIPTION,
+	        g_param_spec_string("description", "Description", "Item description",
+	                            "", G_PARAM_READABLE));
+
 	g_object_class_install_property (gobject_class, PROP_ITEM_ID,
 	        g_param_spec_uint ("item-id", "Item ID", "GNOME Keyring Item ID", 
 	                           0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
@@ -680,7 +953,8 @@ seahorse_gkr_item_set_info (SeahorseGkrItem *self, GnomeKeyringItemInfo* info)
 	seahorse_gkr_item_realize (self);
 	g_object_notify (obj, "item-info");
 	g_object_notify (obj, "use");
-	
+	g_object_notify (obj, "description");
+
 	/* Get the secret out of the item info, if not already loaded */
 	WITH_SECURE_MEM (secret = gnome_keyring_item_info_get_secret (self->pv->item_info));
 	if (secret != NULL) {
@@ -734,6 +1008,7 @@ seahorse_gkr_item_set_attributes (SeahorseGkrItem *self, GnomeKeyringAttributeLi
 	seahorse_gkr_item_realize (self);
 	g_object_notify (obj, "item-attributes");
 	g_object_notify (obj, "use");
+	g_object_notify (obj, "description");
 	g_object_thaw_notify (obj);
 }
 
@@ -767,30 +1042,12 @@ seahorse_gkr_find_string_attribute (GnomeKeyringAttributeList *attrs, const gcha
 SeahorseGkrUse
 seahorse_gkr_item_get_use (SeahorseGkrItem *self)
 {
-	const gchar *val;
-    
 	/* Network passwords */
 	if (require_item_info (self)) {
 		if (gnome_keyring_item_info_get_type (self->pv->item_info) == GNOME_KEYRING_ITEM_NETWORK_PASSWORD) {
-			if (is_network_item (self, "http"))
-				return SEAHORSE_GKR_USE_WEB;
 			return SEAHORSE_GKR_USE_NETWORK;
 		}
 	}
-    
-	if (require_item_attrs (self)) {
-		val = seahorse_gkr_item_get_attribute (self, "seahorse-key-type");
-		if (val) {
-#ifdef WITH_PGP
-			if (strcmp (val, SEAHORSE_PGP_TYPE_STR) == 0)
-				return SEAHORSE_GKR_USE_PGP;
-#endif
-#ifdef WITH_SSH
-			if (strcmp (val, SEAHORSE_SSH_TYPE_STR) == 0)
-				return SEAHORSE_GKR_USE_SSH;
-#endif
-		}
-	}
-    
+
 	return SEAHORSE_GKR_USE_OTHER;
 }

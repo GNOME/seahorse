@@ -22,14 +22,14 @@
 
 #include "config.h"
 
-#include <string.h>
+#include <gcr/gcr.h>
 
 #include <glib.h>
-
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
 
 #include <errno.h>
+#include <string.h>
 
 #include "seahorse-source.h"
 #include "seahorse-ssh-source.h"
@@ -42,6 +42,7 @@ enum {
     PROP_0,
     PROP_KEY_DATA,
     PROP_FINGERPRINT,
+    PROP_DESCRIPTION,
     PROP_VALIDITY,
     PROP_TRUST,
     PROP_EXPIRES,
@@ -74,6 +75,8 @@ changed_key (SeahorseSSHKey *self)
 	gchar *identifier;
 	gchar *simple = NULL;
 	GIcon *icon;
+	gchar *filename;
+	gchar *markup;
 
 	if (self->keydata) {
 
@@ -96,7 +99,6 @@ changed_key (SeahorseSSHKey *self)
 	}
     
 	if (!self->keydata || !self->keydata->fingerprint) {
-        
 		g_object_set (self,
 		              "label", "",
 		              "icon", NULL,
@@ -105,18 +107,29 @@ changed_key (SeahorseSSHKey *self)
 		              "flags", SEAHORSE_FLAG_DISABLED,
 		              NULL);
 		return;
-		
 	} 
 
-	if (self->keydata->privfile)
+	if (self->keydata->privfile) {
 		usage = SEAHORSE_USAGE_PRIVATE_KEY;
-	else
+		icon = g_themed_icon_new (GCR_ICON_KEY_PAIR);
+	} else {
 		usage = SEAHORSE_USAGE_PUBLIC_KEY;
+		icon = g_themed_icon_new (GCR_ICON_KEY);
+	}
+
+	if (self->keydata->privfile)
+		filename = g_path_get_basename (self->keydata->privfile);
+	else
+		filename = g_path_get_basename (self->keydata->pubfile);
+
+	markup = g_markup_printf_escaped ("%s<span size='small' rise='0' foreground='#555555'>\n%s</span>",
+	                                  display, filename);
 
 	identifier = seahorse_ssh_key_calc_identifier (self->keydata->fingerprint);
 
 	icon = g_themed_icon_new (SEAHORSE_ICON_KEY_SSH);
 	g_object_set (obj,
+	              "markup", markup,
 	              "label", display,
 	              "icon", icon,
 	              "usage", usage,
@@ -126,6 +139,7 @@ changed_key (SeahorseSSHKey *self)
 	              NULL);
 	g_object_unref (icon);
 	g_free (identifier);
+	g_free (markup);
 }
 
 static guint 
@@ -159,13 +173,21 @@ seahorse_ssh_key_get_property (GObject *object, guint prop_id,
                                GValue *value, GParamSpec *pspec)
 {
     SeahorseSSHKey *skey = SEAHORSE_SSH_KEY (object);
-    
+    SeahorseUsage usage;
+
     switch (prop_id) {
     case PROP_KEY_DATA:
         g_value_set_pointer (value, skey->keydata);
         break;
     case PROP_FINGERPRINT:
         g_value_set_string (value, skey->keydata ? skey->keydata->fingerprint : NULL);
+        break;
+    case PROP_DESCRIPTION:
+        g_object_get (skey, "usage", &usage, NULL);
+        if (usage == SEAHORSE_USAGE_PRIVATE_KEY)
+            g_value_set_string (value, _("Personal SSH key"));
+        else
+            g_value_set_string (value, _("SSH key"));
         break;
     case PROP_VALIDITY:
         g_value_set_uint (value, calc_validity (skey));
@@ -235,6 +257,10 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
 
     g_object_class_install_property (gobject_class, PROP_FINGERPRINT,
         g_param_spec_string ("fingerprint", "Fingerprint", "Unique fingerprint for this key",
+                             "", G_PARAM_READABLE));
+
+    g_object_class_install_property (gobject_class, PROP_DESCRIPTION,
+        g_param_spec_string ("description", "Description", "Description",
                              "", G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_VALIDITY,
