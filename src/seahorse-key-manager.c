@@ -38,6 +38,12 @@
 
 #include <glib/gi18n.h>
 
+enum {
+	SHOW_ANY,
+	SHOW_PERSONAL,
+	SHOW_TRUSTED,
+};
+
 void           on_keymanager_row_activated              (GtkTreeView* view,
                                                          GtkTreePath* path,
                                                          GtkTreeViewColumn* column,
@@ -356,65 +362,34 @@ on_delete_event (GtkWidget* widget, GdkEvent* event, SeahorseKeyManager* self)
 	return TRUE;
 }
 
-static void 
-on_view_type_activate (GtkToggleAction* action, SeahorseKeyManager* self) 
-{
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
-	g_settings_set_boolean (self->pv->settings, "show-type", gtk_toggle_action_get_active (action));
-}
-
-
-static void 
-on_view_expires_activate (GtkToggleAction* action, SeahorseKeyManager* self) 
-{
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
-	g_settings_set_boolean (self->pv->settings, "show-expiry", gtk_toggle_action_get_active (action));
-}
-
-
-static void 
-on_view_validity_activate (GtkToggleAction* action, SeahorseKeyManager* self) 
-{
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
-	g_settings_set_boolean (self->pv->settings, "show-validity", gtk_toggle_action_get_active (action));
-}
-
-static void 
-on_view_trust_activate (GtkToggleAction* action, SeahorseKeyManager* self) 
-{
-	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
-	g_return_if_fail (GTK_IS_TOGGLE_ACTION (action));
-	g_settings_set_boolean (self->pv->settings, "show-trust", gtk_toggle_action_get_active (action));
-}
-
 static void
-on_manager_settings_changed (GSettings *settings, const gchar *key, gpointer user_data)
+on_manager_settings_changed (GSettings *settings,
+                             const gchar *key,
+                             gpointer user_data)
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
-	GtkToggleAction* action;
-	const gchar* name;
+	GtkAction* action;
+	gchar *value;
+	gint radio;
 
-	if (g_str_equal (key, "show-trust"))
-		name = "view-trust";
-	else if (g_str_equal (key, "show-type"))
-		name = "view-type";
-	else if (g_str_equal (key, "show-expiry"))
-		name = "view-expires";
-	else if (g_str_equal (key, "show-validity"))
-		name = "view-validity";
-	else
-		return;
-
-	action = GTK_TOGGLE_ACTION (gtk_action_group_get_action (self->pv->view_actions, name));
-	g_return_if_fail (action != NULL);
-
-	gtk_toggle_action_set_active (action, g_settings_get_boolean (settings, key));
+	if (g_str_equal (key, "item-filter")) {
+		action = gtk_action_group_get_action (self->pv->view_actions, "view-any");
+		value = g_settings_get_string (settings, key);
+		if (value == NULL || g_str_equal (value, ""))
+			radio = SHOW_ANY;
+		else if (g_str_equal (value, "personal"))
+			radio = SHOW_PERSONAL;
+		else if (g_str_equal (value, "trusted"))
+			radio = SHOW_TRUSTED;
+		else
+			action = NULL;
+		if (action != NULL)
+			gtk_radio_action_set_current_value (GTK_RADIO_ACTION (action), radio);
+		g_free (value);
+	}
 }
 
-static const GtkActionEntry GENERAL_ENTRIES[] = {
+static const GtkActionEntry GENERAL_ACTIONS[] = {
 	{ "remote-menu", NULL, N_("_Remote") }, 
 	{ "app-quit", GTK_STOCK_QUIT, NULL, "<control>Q", 
 	  N_("Close this program"), G_CALLBACK (on_app_quit) }, 
@@ -426,15 +401,18 @@ static const GtkActionEntry GENERAL_ENTRIES[] = {
 	  N_("Import from the clipboard"), G_CALLBACK (on_key_import_clipboard) }
 };
 
-static const GtkToggleActionEntry VIEW_ENTRIES[] = {
-	{ "view-type", NULL, N_("T_ypes"), NULL, N_("Show type column"), 
-	  G_CALLBACK (on_view_type_activate), FALSE }, 
-	{ "view-expires", NULL, N_("_Expiry"), NULL, N_("Show expiry column"), 
-	  G_CALLBACK (on_view_expires_activate), FALSE }, 
-	{ "view-trust", NULL, N_("_Trust"), NULL, N_("Show owner trust column"), 
-	  G_CALLBACK (on_view_trust_activate), FALSE}, 
-	{ "view-validity", NULL, N_("_Validity"), NULL, N_("Show validity column"), 
-	  G_CALLBACK (on_view_validity_activate), FALSE }
+static const GtkToggleActionEntry SIDEBAR_ACTIONS[] = {
+	{ "view-places", NULL, N_("P_laces"), NULL,
+	  N_("Show places sidebar"), NULL, FALSE },
+};
+
+static const GtkRadioActionEntry VIEW_RADIO_ACTIONS[] = {
+	{ "view-personal", NULL, N_("Show _personal"), NULL,
+	  N_("Only show personal keys, certificates and passwords"), SHOW_PERSONAL },
+	{ "view-trusted", NULL, N_("Show _trusted"), NULL,
+	  N_("Only show trusted keys, certificates and passwords"), SHOW_TRUSTED },
+	{ "view-any", NULL, N_("_Show _any"), NULL,
+	  N_("Show all keys, certificates and passwords"), SHOW_ANY },
 };
 
 /* -----------------------------------------------------------------------------
@@ -508,17 +486,30 @@ static GcrCollection *
 setup_sidebar (SeahorseKeyManager *self)
 {
 	SeahorseSidebar *sidebar;
-	GtkWidget *widget;
+	GtkWidget *area, *panes;
+	GtkActionGroup *actions;
+	GtkAction *action;
 
 	sidebar = seahorse_sidebar_new ();
-	widget = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-area");
-	gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (sidebar));
+	area = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-area");
+	gtk_container_add (GTK_CONTAINER (area), GTK_WIDGET (sidebar));
 	gtk_widget_show (GTK_WIDGET (sidebar));
 
 	self->pv->sidebar_width = g_settings_get_int (self->pv->settings, "sidebar-width");
-	widget = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-panes");
-	gtk_paned_set_position (GTK_PANED (widget), self->pv->sidebar_width);
+	panes = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-panes");
+	gtk_paned_set_position (GTK_PANED (panes), self->pv->sidebar_width);
 	g_signal_connect (sidebar, "size_allocate", G_CALLBACK (on_sidebar_panes_size_allocate), self);
+
+	actions = gtk_action_group_new ("sidebar");
+	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_toggle_actions (actions, SIDEBAR_ACTIONS,
+	                                     G_N_ELEMENTS (SIDEBAR_ACTIONS), self);
+	action = gtk_action_group_get_action (actions, "view-places");
+	g_object_bind_property (action, "active", area, "visible", G_BINDING_DEFAULT);
+	g_object_bind_property (action, "active", sidebar, "combined", G_BINDING_INVERT_BOOLEAN);
+	g_settings_bind (self->pv->settings, "show-sidebar", action, "active", G_BINDING_BIDIRECTIONAL);
+	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
+	g_object_unref (actions);
 
 	return seahorse_sidebar_get_collection (sidebar);
 }
@@ -528,7 +519,6 @@ seahorse_key_manager_constructed (GObject *object)
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (object);
 	GtkActionGroup* actions;
-	GtkToggleAction* action;
 	GtkTargetList* targets;
 	GtkTreeSelection *selection;
 	GtkWidget* widget;
@@ -541,22 +531,16 @@ seahorse_key_manager_constructed (GObject *object)
 	
 	actions = gtk_action_group_new ("general");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, GENERAL_ENTRIES, G_N_ELEMENTS (GENERAL_ENTRIES), self);
+	gtk_action_group_add_actions (actions, GENERAL_ACTIONS, G_N_ELEMENTS (GENERAL_ACTIONS), self);
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
 
 	self->pv->view_actions = gtk_action_group_new ("view");
 	gtk_action_group_set_translation_domain (self->pv->view_actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_toggle_actions (self->pv->view_actions, VIEW_ENTRIES, G_N_ELEMENTS (VIEW_ENTRIES), self);
-	action = GTK_TOGGLE_ACTION (gtk_action_group_get_action (self->pv->view_actions, "view-type"));
-	gtk_toggle_action_set_active (action, g_settings_get_boolean (self->pv->settings, "show-type"));
-	action = GTK_TOGGLE_ACTION (gtk_action_group_get_action (self->pv->view_actions, "view-expires"));
-	gtk_toggle_action_set_active (action, g_settings_get_boolean (self->pv->settings, "show-expiry"));
-	action = GTK_TOGGLE_ACTION (gtk_action_group_get_action (self->pv->view_actions, "view-trust"));
-	gtk_toggle_action_set_active (action, g_settings_get_boolean (self->pv->settings, "show-trust"));
-	action = GTK_TOGGLE_ACTION (gtk_action_group_get_action (self->pv->view_actions, "view-validity"));
-	gtk_toggle_action_set_active (action, g_settings_get_boolean (self->pv->settings, "show-validity"));
+	gtk_action_group_add_radio_actions (self->pv->view_actions, VIEW_RADIO_ACTIONS,
+	                                    G_N_ELEMENTS (VIEW_RADIO_ACTIONS),
+	                                    SHOW_PERSONAL, NULL, NULL);
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->pv->view_actions);
-	
+
 	/* Notify us when settings change */
 	g_signal_connect_object (self->pv->settings, "changed", G_CALLBACK (on_manager_settings_changed), self, 0);
 

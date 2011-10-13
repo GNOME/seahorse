@@ -136,38 +136,6 @@ on_key_list_popup_menu (GtkTreeView* view, SeahorseKeyserverResults* self)
 }
 
 /**
-* action:
-* self: The result object to expand the nodes in
-*
-* Expands all the nodes in the view of the object
-*
-**/
-static void
-on_view_expand_all (GtkAction* action, SeahorseKeyserverResults* self)
-{
-	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
-	g_return_if_fail (GTK_IS_ACTION (action));
-	gtk_tree_view_expand_all (self->pv->view);
-}
-
-
-/**
-* action:
-* self: The result object to collapse the nodes in
-*
-* Collapses all the nodes in the view of the object
-*
-**/
-static void
-on_view_collapse_all (GtkAction* action, SeahorseKeyserverResults* self)
-
-{
-	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
-	g_return_if_fail (GTK_IS_ACTION (action));
-	gtk_tree_view_collapse_all (self->pv->view);
-}
-
-/**
 * action: the closing action or NULL
 * self: The SeahorseKeyServerResults widget to destroy
 *
@@ -274,10 +242,6 @@ static const GtkActionEntry GENERAL_ENTRIES[] = {
 	{ "remote-menu", NULL, N_("_Remote") },
 	{ "app-close", GTK_STOCK_CLOSE, NULL, "<control>W",
 	  N_("Close this window"), G_CALLBACK (on_app_close) },
-	{ "view-expand-all", GTK_STOCK_ADD, N_("_Expand All"), NULL,
-	  N_("Expand all listings"), G_CALLBACK (on_view_expand_all) },
-	{ "view-collapse-all", GTK_STOCK_REMOVE, N_("_Collapse All"), NULL,
-	  N_("Collapse all listings"), G_CALLBACK (on_view_collapse_all) }
 };
 
 static const GtkActionEntry SERVER_ENTRIES[] = {

@@ -32,6 +32,12 @@
 
 #include <glib/gi18n.h>
 
+typedef enum {
+	SEAHORSE_SIDEBAR_MODE_COMBINED,
+	SEAHORSE_SIDEBAR_MODE_CHECKED,
+	SEAHORSE_SIDEBAR_MODE_SELECTED
+} SeahorseSidebarMode;
+
 struct _SeahorseSidebar {
 	GtkScrolledWindow parent;
 
@@ -39,6 +45,7 @@ struct _SeahorseSidebar {
 
 	GtkListStore *store;
 	GPtrArray *backends;
+	SeahorseSidebarMode mode;
 	GHashTable *checked;
 	GcrUnionCollection *objects;
 	GcrCollection *selected;
@@ -52,7 +59,8 @@ struct _SeahorseSidebarClass {
 
 enum {
 	PROP_0,
-	PROP_COLLECTION
+	PROP_COLLECTION,
+	PROP_COMBINED
 };
 
 typedef enum {
@@ -94,10 +102,11 @@ seahorse_sidebar_init (SeahorseSidebar *self)
 	self->backends = g_ptr_array_new_with_free_func (g_object_unref);
 	self->checked = g_hash_table_new (g_direct_hash, g_direct_equal);
 	self->objects = GCR_UNION_COLLECTION (gcr_union_collection_new ());
+	self->mode = SEAHORSE_SIDEBAR_MODE_SELECTED;
 }
 
 static void
-next_or_append_row (GtkListStore *store,
+next_or_append_row (SeahorseSidebar *self,
                     GtkTreeIter *iter,
                     const gchar *category,
                     GcrCollection *collection)
@@ -119,18 +128,18 @@ next_or_append_row (GtkListStore *store,
 	/* A marker that tells us the iter is not yet valid */
 	if (iter->stamp == GPOINTER_TO_INT (iter) && iter->user_data3 == iter &&
 	    iter->user_data2 == iter && iter->user_data == iter) {
-		if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), iter))
-			gtk_list_store_append (store, iter);
+		if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (self->store), iter))
+			gtk_list_store_append (self->store, iter);
 		return;
 	}
 
-	if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (store), iter)) {
-		gtk_list_store_append (store, iter);
+	if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (self->store), iter)) {
+		gtk_list_store_append (self->store, iter);
 		return;
 	}
 
 	for (;;) {
-		gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
+		gtk_tree_model_get (GTK_TREE_MODEL (self->store), iter,
 		                    SIDEBAR_CATEGORY, &row_category,
 		                    SIDEBAR_COLLECTION, &row_collection,
 		                    -1);
@@ -143,8 +152,9 @@ next_or_append_row (GtkListStore *store,
 		if (found)
 			return;
 
-		if (!gtk_list_store_remove (store, iter)) {
-			gtk_list_store_append (store, iter);
+		g_hash_table_remove (self->checked, row_collection);
+		if (!gtk_list_store_remove (self->store, iter)) {
+			gtk_list_store_append (self->store, iter);
 			return;
 		}
 	}
@@ -174,7 +184,7 @@ update_backend (SeahorseSidebar *self,
 	              "description", &tooltip,
 	              NULL);
 
-	next_or_append_row (self->store, iter, category, GCR_COLLECTION (backend));
+	next_or_append_row (self, iter, category, GCR_COLLECTION (backend));
 	gtk_list_store_set (self->store, iter,
 	                    SIDEBAR_ROW_TYPE, TYPE_BACKEND,
 	                    SIDEBAR_CATEGORY, category,
@@ -199,7 +209,7 @@ update_backend (SeahorseSidebar *self,
 		spec = g_object_class_find_property (G_OBJECT_GET_CLASS (l->data), "label");
 		g_return_if_fail (spec != NULL);
 
-		next_or_append_row (self->store, iter, category, l->data);
+		next_or_append_row (self, iter, category, l->data);
 		gtk_list_store_set (self->store, iter,
 		                    SIDEBAR_ROW_TYPE, TYPE_PLACE,
 		                    SIDEBAR_CATEGORY, category,
@@ -220,6 +230,42 @@ update_backend (SeahorseSidebar *self,
 }
 
 static void
+update_objects_in_collection (SeahorseSidebar *self)
+{
+	GList *collections;
+	gboolean include;
+	gboolean have;
+	GList *l;
+	guint i;
+
+	for (i = 0; i < self->backends->len; i++) {
+		collections = gcr_collection_get_objects (self->backends->pdata[i]);
+		for (l = collections; l != NULL; l = g_list_next (l)) {
+			switch (self->mode) {
+			case SEAHORSE_SIDEBAR_MODE_COMBINED:
+				include = TRUE;
+				break;
+			case SEAHORSE_SIDEBAR_MODE_CHECKED:
+				include = (g_hash_table_lookup (self->checked, l->data) != NULL);
+				break;
+			case SEAHORSE_SIDEBAR_MODE_SELECTED:
+				include = (l->data == self->selected);
+				break;
+			default:
+				g_assert_not_reached ();
+			}
+
+			have = gcr_union_collection_have (self->objects, l->data);
+			if (include && !have)
+				gcr_union_collection_add (self->objects, l->data);
+			else if (!include && have)
+				gcr_union_collection_remove (self->objects, l->data);
+		}
+		g_list_free (collections);
+	}
+}
+
+static void
 update_objects_for_selection (SeahorseSidebar *self,
                               GtkTreeSelection *selection)
 {
@@ -233,14 +279,10 @@ update_objects_for_selection (SeahorseSidebar *self,
 		                    -1);
 
 	if (selected != self->selected) {
-		if (self->selected && g_hash_table_size (self->checked) == 0)
-			gcr_union_collection_remove (self->objects, self->selected);
-
 		g_clear_object (&self->selected);
 		self->selected = selected ? g_object_ref (selected) : NULL;
-
-		if (self->selected && g_hash_table_size (self->checked) == 0)
-			gcr_union_collection_add (self->objects, self->selected);
+		if (self->mode == SEAHORSE_SIDEBAR_MODE_SELECTED)
+			update_objects_in_collection (self);
 	}
 
 	g_clear_object (&selected);
@@ -252,19 +294,10 @@ update_objects_for_checked (SeahorseSidebar *self,
 {
 	g_hash_table_insert (self->checked, place, place);
 
-	/* The first check ... */
-	if (g_hash_table_size (self->checked) == 1) {
-
-		/* ... but the currently checked one was selected so leave same */
-		if (self->selected == place)
-			return;
-
-		/* ... something else was selected, so update */
-		else if (self->selected)
-			gcr_union_collection_remove (self->objects, self->selected);
-	}
-
-	gcr_union_collection_add (self->objects, place);
+	if (self->mode == SEAHORSE_SIDEBAR_MODE_SELECTED)
+		self->mode = SEAHORSE_SIDEBAR_MODE_CHECKED;
+	if (self->mode != SEAHORSE_SIDEBAR_MODE_COMBINED)
+		update_objects_in_collection (self);
 }
 
 static void
@@ -274,25 +307,37 @@ update_objects_for_unchecked (SeahorseSidebar *self,
 	if (!g_hash_table_remove (self->checked, place))
 		g_assert_not_reached ();
 
-	/* No more checks ... */
-	if (g_hash_table_size (self->checked) == 0) {
+	if (self->mode == SEAHORSE_SIDEBAR_MODE_CHECKED &&
+	    g_hash_table_size (self->checked) == 0)
+		self->mode = SEAHORSE_SIDEBAR_MODE_SELECTED;
+	if (self->mode != SEAHORSE_SIDEBAR_MODE_COMBINED)
+		update_objects_in_collection (self);
+}
 
-		/* ... but the currently unchecked one is selected so leave same ... */
-		if (self->selected == place)
-			return;
-
-		/* ... something else is selected, so update */
-		else if (self->selected)
-			gcr_union_collection_add (self->objects, self->selected);
+static void
+update_objects_for_combine (SeahorseSidebar *self)
+{
+	if (self->mode != SEAHORSE_SIDEBAR_MODE_COMBINED) {
+		self->mode = SEAHORSE_SIDEBAR_MODE_COMBINED;
+		update_objects_in_collection (self);
 	}
+}
 
-	gcr_union_collection_remove (self->objects, place);
+static void
+update_objects_for_uncombine (SeahorseSidebar *self)
+{
+	if (self->mode == SEAHORSE_SIDEBAR_MODE_COMBINED) {
+		if (g_hash_table_size (self->checked) > 0)
+			self->mode = SEAHORSE_SIDEBAR_MODE_CHECKED;
+		else
+			self->mode = SEAHORSE_SIDEBAR_MODE_SELECTED;
+		update_objects_in_collection (self);
+	}
 }
 
 static void
 update_places (SeahorseSidebar *self)
 {
-	GtkTreeSelection *selection;
 	GtkTreeIter iter;
 	guint i;
 
@@ -304,8 +349,7 @@ update_places (SeahorseSidebar *self)
 		update_backend (self, GCR_COLLECTION (self->backends->pdata[i]), &iter);
 
 	/* Update selection */
-	selection = gtk_tree_view_get_selection (self->tree_view);
-	update_objects_for_selection (self, selection);
+	update_objects_in_collection (self);
 }
 
 static gboolean
@@ -490,11 +534,11 @@ on_backend_changed (GObject *obj,
 
 static void
 on_place_added (GcrCollection *places,
-                GObject *object,
+                GObject *place,
                 gpointer user_data)
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
-	g_signal_connect (object, "notify", G_CALLBACK (on_place_changed), self);
+	g_signal_connect (place, "notify", G_CALLBACK (on_place_changed), self);
 	update_places_later (self);
 }
 
@@ -732,6 +776,27 @@ seahorse_sidebar_get_property (GObject *obj,
 	case PROP_COLLECTION:
 		g_value_set_object (value, seahorse_sidebar_get_collection (self));
 		break;
+	case PROP_COMBINED:
+		g_value_set_boolean (value, seahorse_sidebar_get_combined (self));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+seahorse_sidebar_set_property (GObject *obj,
+                               guint prop_id,
+                               const GValue *value,
+                               GParamSpec *pspec)
+{
+	SeahorseSidebar *self = SEAHORSE_SIDEBAR (obj);
+
+	switch (prop_id) {
+	case PROP_COMBINED:
+		seahorse_sidebar_set_combined (self, g_value_get_boolean (value));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -786,10 +851,15 @@ seahorse_sidebar_class_init (SeahorseSidebarClass *klass)
 	gobject_class->dispose = seahorse_sidebar_dispose;
 	gobject_class->finalize = seahorse_sidebar_finalize;
 	gobject_class->get_property = seahorse_sidebar_get_property;
+	gobject_class->set_property = seahorse_sidebar_set_property;
 
 	g_object_class_install_property (gobject_class, PROP_COLLECTION,
 	        g_param_spec_object ("collection", "Collection", "Collection of objects sidebar represents",
 	                             GCR_TYPE_COLLECTION, G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_COMBINED,
+	        g_param_spec_boolean ("combined", "Combined", "Collection shows all objects combined",
+	                              FALSE, G_PARAM_READWRITE));
 }
 
 SeahorseSidebar *
@@ -804,4 +874,23 @@ seahorse_sidebar_get_collection (SeahorseSidebar *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_SIDEBAR (self), NULL);
 	return GCR_COLLECTION (self->objects);
+}
+
+gboolean
+seahorse_sidebar_get_combined (SeahorseSidebar *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_SIDEBAR (self), FALSE);
+	return self->mode == SEAHORSE_SIDEBAR_MODE_COMBINED;
+}
+
+void
+seahorse_sidebar_set_combined (SeahorseSidebar *self,
+                               gboolean combined)
+{
+	g_return_if_fail (SEAHORSE_IS_SIDEBAR (self));
+	if (combined)
+		update_objects_for_combine (self);
+	else
+		update_objects_for_uncombine (self);
+	g_object_notify (G_OBJECT (self), "combined");
 }

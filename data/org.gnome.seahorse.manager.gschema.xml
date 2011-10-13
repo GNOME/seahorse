@@ -1,24 +1,15 @@
 <schemalist>
 	<schema id="org.gnome.seahorse.manager" path="/apps/seahorse/listing/">
-		<key name="show-validity" type="b">
+		<key name="show-sidebar" type="b">
 			<default>false</default>
-			<summary>Show validity column</summary>
-			<description>Controls the visibility of the expires column for the key manager.</description>
+			<summary>Show places sidebar</summary>
+			<description>Show places sidebar in seahorse.</description>
 		</key>
-		<key name="show-expiry" type="b">
-			<default>false</default>
-			<summary>Show expiry column</summary>
-			<description>Controls the visibility of the expiry column for the key manager.</description>
-		</key>
-		<key name="show-trust" type="b">
-			<default>false</default>
-			<summary>Show trust column</summary>
-			<description>Controls the visibility of the trust column for the key manager.</description>
-		</key>
-		<key name="show-type" type="b">
-			<default>false</default>
-			<summary>Show type column</summary>
-			<description>Controls the visibility of the type column for the key manager.</description>
+		<key name="item-filter" type="s">
+			<default>"personal"</default>
+			<summary>Which items to show</summary>
+			<description>Filter which items to show. If empty, show all items, if
+			'personal' show personal keys, if 'trusted' show trusted.</description>
 		</key>
 		<key name="sort-by" type="s">
 			<default>'name'</default>
@@ -29,6 +20,26 @@
 			<default>148</default>
 			<summary>Width of the side pane</summary>
 			<description>The default width of the side pane.</description>
+		</key>
+		<key name="show-validity" type="b">
+			<default>false</default>
+			<summary>Show validity column</summary>
+			<description>No longer in use.</description>
+		</key>
+		<key name="show-expiry" type="b">
+			<default>false</default>
+			<summary>Show expiry column</summary>
+			<description>No longer in use.</description>
+		</key>
+		<key name="show-trust" type="b">
+			<default>false</default>
+			<summary>Show trust column</summary>
+			<description>No longer in use.</description>
+		</key>
+		<key name="show-type" type="b">
+			<default>false</default>
+			<summary>Show type column</summary>
+			<description>No longer in use.</description>
 		</key>
 	</schema>
 </schemalist>
