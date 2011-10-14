@@ -955,19 +955,15 @@ seahorse_gpgme_keyring_get_property (GObject *obj,
                                      GValue *value,
                                      GParamSpec *pspec)
 {
-#if 0
-	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (obj);
-#endif
-
 	switch (prop_id) {
 	case PROP_LABEL:
-		g_value_set_string (value, _("To Do Keys"));
+		g_value_set_string (value, _("GnuPG keyring"));
 		break;
 	case PROP_DESCRIPTION:
-		g_value_set_string (value, _("To Do Description"));
+		g_value_set_string (value, _("GnuPG: default keyring directory"));
 		break;
 	case PROP_ICON:
-		g_value_take_object (value, g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION));
+		g_value_take_object (value, g_themed_icon_new (GCR_ICON_HOME_DIRECTORY));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);

@@ -223,16 +223,18 @@ seahorse_ssh_source_get_property (GObject *obj,
                                   GParamSpec *pspec)
 {
 	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (obj);
+	gchar *text;
 
 	switch (prop_id) {
 	case PROP_LABEL:
-		g_value_set_string (value, _("To SSH Keys"));
+		g_value_set_string (value, _("OpenSSH directory"));
 		break;
 	case PROP_DESCRIPTION:
-		g_value_set_string (value, _("To Do Description"));
+		text = g_strdup_printf (_("OpenSSH: %s"), "~/.ssh/");
+		g_value_take_string (value, text);
 		break;
 	case PROP_ICON:
-		g_value_take_object (value, g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION));
+		g_value_take_object (value, g_themed_icon_new (GCR_ICON_HOME_DIRECTORY));
 		break;
 	case PROP_BASE_DIRECTORY:
 		g_value_set_string (value, self->priv->ssh_homedir);

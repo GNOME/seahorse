@@ -127,7 +127,6 @@ changed_key (SeahorseSSHKey *self)
 
 	identifier = seahorse_ssh_key_calc_identifier (self->keydata->fingerprint);
 
-	icon = g_themed_icon_new (SEAHORSE_ICON_KEY_SSH);
 	g_object_set (obj,
 	              "markup", markup,
 	              "label", display,
