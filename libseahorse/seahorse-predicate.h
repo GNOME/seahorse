@@ -37,14 +37,13 @@ typedef struct _SeahorsePredicate SeahorsePredicate;
 struct _SeahorsePredicate {
 	GType type;
 	SeahorseUsage usage;
-	guint flags;
-	guint nflags;
-	SeahorseSource *source;
+	SeahorseFlags flags;
+	SeahorseFlags nflags;
 	SeahorsePredicateFunc custom;
 	gpointer custom_target;
 };
 
-gboolean           seahorse_predicate_match         (SeahorsePredicate *self,
+gboolean           seahorse_predicate_match         (SeahorsePredicate *pred,
                                                      GObject *obj);
 
 #endif /* __SEAHORSE_PREDICATE_H__ */

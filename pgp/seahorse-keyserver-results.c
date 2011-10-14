@@ -50,6 +50,7 @@ enum {
 
 struct _SeahorseKeyserverResultsPrivate {
 	char *search_string;
+	SeahorsePredicate pred;
 	GtkTreeView *view;
 	GcrSimpleCollection *collection;
 	GtkActionGroup *import_actions;
@@ -364,6 +365,7 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 
 	self->pv->store = seahorse_key_manager_store_new (GCR_COLLECTION (self->pv->collection),
 	                                                  self->pv->view,
+	                                                  &self->pv->pred,
 	                                                  self->pv->settings);
 	on_view_selection_changed (selection, self);
 

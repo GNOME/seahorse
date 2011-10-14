@@ -711,7 +711,7 @@ seahorse_gkr_item_realize (SeahorseGkrItem *self)
 	              "label", info->label,
 	              "icon", icon,
 	              "markup", markup,
-	              "flags", SEAHORSE_FLAG_DELETABLE,
+	              "flags", SEAHORSE_FLAG_DELETABLE | SEAHORSE_FLAG_PERSONAL,
 	              NULL);
 	g_object_unref (icon);
 	g_free (markup);

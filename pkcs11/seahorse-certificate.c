@@ -26,6 +26,7 @@
 #include "seahorse-pkcs11-helpers.h"
 #include "seahorse-pkcs11.h"
 #include "seahorse-token.h"
+#include "seahorse-types.h"
 
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
@@ -46,6 +47,7 @@ enum {
 	PROP_0,
 	PROP_SOURCE,
 	PROP_ATTRIBUTES,
+	PROP_FLAGS,
 };
 
 struct _SeahorseCertificatePrivate {
@@ -110,6 +112,10 @@ seahorse_certificate_get_property (GObject *obj,
 	case PROP_ATTRIBUTES:
 		g_value_set_boxed (value, self->pv->attributes);
 		break;
+	case PROP_FLAGS:
+		g_value_set_flags (value, SEAHORSE_FLAG_PERSONAL |
+		                          SEAHORSE_FLAG_EXPORTABLE);
+		break;
 	default:
 		gcr_certificate_mixin_get_property (obj, prop_id, value, pspec);
 		break;
@@ -162,6 +168,10 @@ seahorse_certificate_class_init (SeahorseCertificateClass *klass)
 
 	g_object_class_install_property (gobject_class, PROP_SOURCE,
 	         g_param_spec_object ("source", "source", "source", SEAHORSE_TYPE_TOKEN,
+	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_FLAGS,
+	         g_param_spec_flags ("flags", "flags", "flags", SEAHORSE_TYPE_FLAGS, SEAHORSE_FLAG_NONE,
 	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 
 	g_object_class_override_property (gobject_class, PROP_ATTRIBUTES, "attributes");

@@ -416,7 +416,6 @@ on_key_delete (GtkAction* action, SeahorseViewer* self)
 	for (l = objects; l; l = g_list_next (l)) {
 		GObject* object = l->data;
 
-		/* TODO: Need to rework this for PKCS#11 keys */
 		if (SEAHORSE_IS_OBJECT (object) &&
 		    seahorse_object_get_usage (SEAHORSE_OBJECT (object)) == SEAHORSE_USAGE_PRIVATE_KEY) {
 			gchar* prompt = g_strdup_printf (_("%s is a private key. Are you sure you want to proceed?"),

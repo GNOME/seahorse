@@ -339,15 +339,18 @@ seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 	    !self->pv->pubkey->expired)
 		flags |= SEAHORSE_FLAG_TRUSTED;
 
-	g_object_set (self, "flags", flags, NULL);
-
 	/* The type */
-	if (self->pv->seckey)
+	if (self->pv->seckey) {
 		usage = SEAHORSE_USAGE_PRIVATE_KEY;
-	else
+		flags |= SEAHORSE_FLAG_PERSONAL;
+	} else {
 		usage = SEAHORSE_USAGE_PUBLIC_KEY;
+	}
 
-	g_object_set (self, "usage", usage, NULL);
+	g_object_set (self,
+	              "usage", usage,
+	              "flags", flags,
+	              NULL);
 
 	seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (self));
 }

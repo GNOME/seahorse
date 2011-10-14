@@ -30,8 +30,6 @@ G_BEGIN_DECLS
 
 #define SEAHORSE_TYPE_USAGE (seahorse_usage_get_type ())
 
-GType seahorse_location_get_type (void);
-
 /* Again, never change these values */
 typedef enum  {
 	SEAHORSE_USAGE_NONE = 0,
@@ -43,9 +41,12 @@ typedef enum  {
 	SEAHORSE_USAGE_OTHER = 10
 } SeahorseUsage;
 
-GType seahorse_usage_get_type (void);
+GType seahorse_usage_get_type (void) G_GNUC_CONST;
+
+#define SEAHORSE_TYPE_FLAGS (seahorse_flags_get_type ())
 
 typedef enum {
+	SEAHORSE_FLAG_NONE = 0,
 	SEAHORSE_FLAG_IS_VALID =    0x00000001,
 	SEAHORSE_FLAG_CAN_ENCRYPT = 0x00000002,
 	SEAHORSE_FLAG_CAN_SIGN =    0x00000004,
@@ -53,11 +54,12 @@ typedef enum {
 	SEAHORSE_FLAG_REVOKED =     0x00000200,
 	SEAHORSE_FLAG_DISABLED =    0x00000400,
 	SEAHORSE_FLAG_TRUSTED =     0x00001000,
+	SEAHORSE_FLAG_PERSONAL =    0x00002000,
 	SEAHORSE_FLAG_EXPORTABLE =  0x00100000,
 	SEAHORSE_FLAG_DELETABLE =   0x10000000
-} SeahorseKeyFlags;
+} SeahorseFlags;
 
-#define SEAHORSE_TAG_INVALID               0
+GType seahorse_flags_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 

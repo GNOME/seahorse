@@ -42,7 +42,7 @@ libseahorse_la_SOURCES = \
 	seahorse-object-model.c seahorse-object-model.h \
 	seahorse-object-widget.c seahorse-object-widget.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
-	seahorse-predicate.h \
+	seahorse-predicate.c seahorse-predicate.h \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-preferences.c seahorse-preferences.h \
 	seahorse-progress.c seahorse-progress.h \

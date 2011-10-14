@@ -135,7 +135,7 @@ seahorse_gkr_keyring_realize (SeahorseGkrKeyring *self)
 	              "label", name,
 	              "nickname", self->pv->keyring_name,
 	              "identifier", "",
-	              "flags", SEAHORSE_FLAG_DELETABLE,
+	              "flags", SEAHORSE_FLAG_DELETABLE | SEAHORSE_FLAG_PERSONAL,
 	              "icon", icon,
 	              "usage", SEAHORSE_USAGE_OTHER,
 	              NULL);
@@ -350,7 +350,6 @@ seahorse_gkr_keyring_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->constructed (obj);
 
 	g_return_if_fail (self->pv->keyring_name);
-	g_object_set (self, "usage", SEAHORSE_USAGE_NONE, NULL);
 }
 
 static void

@@ -60,6 +60,7 @@ GType                      seahorse_key_manager_store_get_type               (vo
 
 SeahorseKeyManagerStore*   seahorse_key_manager_store_new                    (GcrCollection *collection,
                                                                               GtkTreeView *view,
+                                                                              SeahorsePredicate *pred,
                                                                               GSettings *settings);
 
 GObject *                  seahorse_key_manager_store_get_object_from_path   (GtkTreeView *view,
@@ -73,5 +74,7 @@ void                       seahorse_key_manager_store_set_selected_objects   (Gt
 GList*                     seahorse_key_manager_store_get_selected_objects   (GtkTreeView *view);
 
 GObject *                  seahorse_key_manager_store_get_selected_object    (GtkTreeView *view);
+
+void                       seahorse_key_manager_store_refilter               (SeahorseKeyManagerStore* self);
 
 #endif /* __SEAHORSE_KEY_MANAGER_STORE_H__ */

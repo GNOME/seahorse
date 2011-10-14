@@ -70,6 +70,7 @@ enum {
 struct _SeahorseKeyManagerPrivate {
 	GtkActionGroup* view_actions;
 	GtkEntry* filter_entry;
+	SeahorsePredicate pred;
 
 	GtkTreeView* view;
 	GcrCollection *collection; /* owned by the sidebar */
@@ -363,30 +364,55 @@ on_delete_event (GtkWidget* widget, GdkEvent* event, SeahorseKeyManager* self)
 }
 
 static void
-on_manager_settings_changed (GSettings *settings,
-                             const gchar *key,
-                             gpointer user_data)
+on_view_show_changed (GtkRadioAction *action,
+                      GtkRadioAction *current,
+                      gpointer user_data)
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
-	GtkAction* action;
+	const gchar *value;
+	gint radio;
+
+	radio = gtk_radio_action_get_current_value (action);
+	switch (radio) {
+	case SHOW_PERSONAL:
+		self->pv->pred.flags = SEAHORSE_FLAG_PERSONAL;
+		value = "personal";
+		break;
+	case SHOW_TRUSTED:
+		self->pv->pred.flags = SEAHORSE_FLAG_TRUSTED;
+		value = "trusted";
+		break;
+	case SHOW_ANY:
+		self->pv->pred.flags = 0;
+		value = "";
+		break;
+	}
+
+	seahorse_key_manager_store_refilter (self->pv->store);
+	g_settings_set_string (self->pv->settings, "item-filter", value);
+}
+
+static void
+on_item_filter_changed (GSettings *settings,
+                        const gchar *key,
+                        gpointer user_data)
+{
+	GtkAction* action = GTK_ACTION (user_data);
 	gchar *value;
 	gint radio;
 
-	if (g_str_equal (key, "item-filter")) {
-		action = gtk_action_group_get_action (self->pv->view_actions, "view-any");
-		value = g_settings_get_string (settings, key);
-		if (value == NULL || g_str_equal (value, ""))
-			radio = SHOW_ANY;
-		else if (g_str_equal (value, "personal"))
-			radio = SHOW_PERSONAL;
-		else if (g_str_equal (value, "trusted"))
-			radio = SHOW_TRUSTED;
-		else
-			action = NULL;
-		if (action != NULL)
-			gtk_radio_action_set_current_value (GTK_RADIO_ACTION (action), radio);
-		g_free (value);
-	}
+	value = g_settings_get_string (settings, key);
+	if (value == NULL || g_str_equal (value, ""))
+		radio = SHOW_ANY;
+	else if (g_str_equal (value, "personal"))
+		radio = SHOW_PERSONAL;
+	else if (g_str_equal (value, "trusted"))
+		radio = SHOW_TRUSTED;
+	else
+		action = NULL;
+	if (action != NULL)
+		gtk_radio_action_set_current_value (GTK_RADIO_ACTION (action), radio);
+	g_free (value);
 }
 
 static const GtkActionEntry GENERAL_ACTIONS[] = {
@@ -507,7 +533,7 @@ setup_sidebar (SeahorseKeyManager *self)
 	action = gtk_action_group_get_action (actions, "view-places");
 	g_object_bind_property (action, "active", area, "visible", G_BINDING_DEFAULT);
 	g_object_bind_property (action, "active", sidebar, "combined", G_BINDING_INVERT_BOOLEAN);
-	g_settings_bind (self->pv->settings, "show-sidebar", action, "active", G_BINDING_BIDIRECTIONAL);
+	g_settings_bind (self->pv->settings, "sidebar-visible", action, "active", G_BINDING_BIDIRECTIONAL);
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
 	g_object_unref (actions);
 
@@ -522,6 +548,7 @@ seahorse_key_manager_constructed (GObject *object)
 	GtkTargetList* targets;
 	GtkTreeSelection *selection;
 	GtkWidget* widget;
+	GtkAction *action;
 
 	G_OBJECT_CLASS (seahorse_key_manager_parent_class)->constructed (object);
 
@@ -537,12 +564,14 @@ seahorse_key_manager_constructed (GObject *object)
 	self->pv->view_actions = gtk_action_group_new ("view");
 	gtk_action_group_set_translation_domain (self->pv->view_actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_radio_actions (self->pv->view_actions, VIEW_RADIO_ACTIONS,
-	                                    G_N_ELEMENTS (VIEW_RADIO_ACTIONS),
-	                                    SHOW_PERSONAL, NULL, NULL);
+	                                    G_N_ELEMENTS (VIEW_RADIO_ACTIONS), SHOW_PERSONAL,
+	                                    G_CALLBACK (on_view_show_changed), self);
+	action = gtk_action_group_get_action (self->pv->view_actions, "view-personal");
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->pv->view_actions);
 
 	/* Notify us when settings change */
-	g_signal_connect_object (self->pv->settings, "changed", G_CALLBACK (on_manager_settings_changed), self, 0);
+	g_signal_connect_object (self->pv->settings, "changed",
+	                         G_CALLBACK (on_item_filter_changed), action, 0);
 
 	/* close event */
 	g_signal_connect_object (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)), 
@@ -635,6 +664,7 @@ seahorse_key_manager_constructed (GObject *object)
 	/* Add new key store and associate it */
 	self->pv->store = seahorse_key_manager_store_new (self->pv->collection,
 	                                                  self->pv->view,
+	                                                  &self->pv->pred,
 	                                                  self->pv->settings);
 
 	/* Set focus to the current key list */

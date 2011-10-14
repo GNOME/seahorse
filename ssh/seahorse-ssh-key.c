@@ -71,6 +71,7 @@ changed_key (SeahorseSSHKey *self)
 {
 	SeahorseObject *obj = SEAHORSE_OBJECT (self);
 	SeahorseUsage usage;
+	SeahorseFlags flags;
 	const gchar *display = NULL;
 	gchar *identifier;
 	gchar *simple = NULL;
@@ -109,10 +110,14 @@ changed_key (SeahorseSSHKey *self)
 		return;
 	} 
 
+	flags = SEAHORSE_FLAG_EXPORTABLE | SEAHORSE_FLAG_DELETABLE;
+
 	if (self->keydata->privfile) {
 		usage = SEAHORSE_USAGE_PRIVATE_KEY;
+		flags |= SEAHORSE_FLAG_PERSONAL | SEAHORSE_FLAG_TRUSTED;
 		icon = g_themed_icon_new (GCR_ICON_KEY_PAIR);
 	} else {
+		flags = 0;
 		usage = SEAHORSE_USAGE_PUBLIC_KEY;
 		icon = g_themed_icon_new (GCR_ICON_KEY);
 	}
@@ -127,6 +132,9 @@ changed_key (SeahorseSSHKey *self)
 
 	identifier = seahorse_ssh_key_calc_identifier (self->keydata->fingerprint);
 
+	if (self->keydata->authorized)
+		flags |= SEAHORSE_FLAG_TRUSTED;
+
 	g_object_set (obj,
 	              "markup", markup,
 	              "label", display,
@@ -134,7 +142,7 @@ changed_key (SeahorseSSHKey *self)
 	              "usage", usage,
 	              "nickname", simple,
 	              "identifier", identifier,
-	              "flags", (self->keydata->authorized ? SEAHORSE_FLAG_TRUSTED : 0) | SEAHORSE_FLAG_EXPORTABLE | SEAHORSE_FLAG_DELETABLE,
+	              "flags", flags,
 	              NULL);
 	g_object_unref (icon);
 	g_free (identifier);

@@ -168,14 +168,20 @@ on_filter_visible (GObject *obj,
 	return ret;
 }
 
+void
+seahorse_key_manager_store_refilter (SeahorseKeyManagerStore* self)
+{
+	GcrCollection *collection = gcr_collection_model_get_collection (GCR_COLLECTION_MODEL (self));
+	seahorse_collection_refresh (SEAHORSE_COLLECTION (collection));
+}
+
 /* Refilter the tree */
 static gboolean
 refilter_now (gpointer user_data)
 {
 	SeahorseKeyManagerStore* self = SEAHORSE_KEY_MANAGER_STORE (user_data);
-	GcrCollection *collection = gcr_collection_model_get_collection (GCR_COLLECTION_MODEL (self));
-	seahorse_collection_refresh (SEAHORSE_COLLECTION (collection));
 	self->priv->filter_stag = 0;
+	seahorse_key_manager_store_refilter (self);
 	return FALSE;
 }
 
@@ -622,18 +628,17 @@ seahorse_key_manager_store_class_init (SeahorseKeyManagerStoreClass *klass)
 SeahorseKeyManagerStore*
 seahorse_key_manager_store_new (GcrCollection *collection,
                                 GtkTreeView *view,
+                                SeahorsePredicate *pred,
                                 GSettings *settings)
 {
 	SeahorseKeyManagerStore *self;
 	GtkTreeViewColumn *col;
-	SeahorsePredicate *pred;
 	SeahorseCollection *filtered;
 	GtkCellRenderer *renderer;
 	gchar *sort_by;
 	guint last;
 
-	pred = g_new0 (SeahorsePredicate, 1);
-	filtered = seahorse_collection_new_for_predicate (collection, pred, g_free);
+	filtered = seahorse_collection_new_for_predicate (collection, pred, NULL);
 	pred->custom = on_filter_visible;
 
 	self = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE,
