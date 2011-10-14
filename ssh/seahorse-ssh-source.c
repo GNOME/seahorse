@@ -49,7 +49,8 @@ enum {
 	PROP_LABEL,
 	PROP_DESCRIPTION,
 	PROP_ICON,
-	PROP_BASE_DIRECTORY
+	PROP_BASE_DIRECTORY,
+	PROP_URI
 };
 
 struct _SeahorseSSHSourcePrivate {
@@ -230,7 +231,7 @@ seahorse_ssh_source_get_property (GObject *obj,
 		g_value_set_string (value, _("OpenSSH directory"));
 		break;
 	case PROP_DESCRIPTION:
-		text = g_strdup_printf (_("OpenSSH: %s"), "~/.ssh/");
+		text = g_strdup_printf (_("OpenSSH: %s"), self->priv->ssh_homedir);
 		g_value_take_string (value, text);
 		break;
 	case PROP_ICON:
@@ -238,6 +239,10 @@ seahorse_ssh_source_get_property (GObject *obj,
 		break;
 	case PROP_BASE_DIRECTORY:
 		g_value_set_string (value, self->priv->ssh_homedir);
+		break;
+	case PROP_URI:
+		g_value_take_string (value, g_strdup_printf ("openssh://%s",
+		                                             self->priv->ssh_homedir));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -295,7 +300,7 @@ seahorse_ssh_source_init (SeahorseSSHSource *ssrc)
 	ssrc->priv->scheduled_refresh = 0;
 	ssrc->priv->monitor_handle = NULL;
 
-	ssrc->priv->ssh_homedir = g_strdup_printf ("%s/.ssh/", g_get_home_dir ());
+	ssrc->priv->ssh_homedir = g_strdup_printf ("%s/.ssh", g_get_home_dir ());
 
 	/* Make the .ssh directory if it doesn't exist */
 	if (!g_file_test (ssrc->priv->ssh_homedir, G_FILE_TEST_EXISTS)) {
@@ -329,6 +334,7 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
 
     g_object_class_override_property (gobject_class, PROP_LABEL, "label");
     g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+    g_object_class_override_property (gobject_class, PROP_URI, "uri");
     g_object_class_override_property (gobject_class, PROP_ICON, "icon");
 
     g_object_class_install_property (gobject_class, PROP_BASE_DIRECTORY,

@@ -52,7 +52,8 @@ enum {
 	PROP_0,
 	PROP_LABEL,
 	PROP_DESCRIPTION,
-	PROP_ICON
+	PROP_ICON,
+	PROP_URI
 };
 
 /* Amount of keys to load in a batch */
@@ -965,6 +966,9 @@ seahorse_gpgme_keyring_get_property (GObject *obj,
 	case PROP_ICON:
 		g_value_take_object (value, g_themed_icon_new (GCR_ICON_HOME_DIRECTORY));
 		break;
+	case PROP_URI:
+		g_value_set_string (value, "gnupg://");
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -1031,6 +1035,7 @@ seahorse_gpgme_keyring_class_init (SeahorseGpgmeKeyringClass *klass)
 
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+	g_object_class_override_property (gobject_class, PROP_URI, "uri");
 	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
 }
 

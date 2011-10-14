@@ -44,11 +44,13 @@ enum {
 	PROP_DESCRIPTION,
 	PROP_ICON,
 	PROP_SLOT,
-	PROP_FLAGS
+	PROP_FLAGS,
+	PROP_URI,
 };
 
 struct _SeahorseTokenPrivate {
 	GckSlot *slot;
+	gchar *uri;
 	GHashTable *objects;
 };
 
@@ -216,8 +218,16 @@ static void
 seahorse_token_constructed (GObject *obj)
 {
 	SeahorseToken *self = SEAHORSE_TOKEN (obj);
+	GckUriData *data;
 
 	G_OBJECT_CLASS (seahorse_token_parent_class)->constructed (obj);
+
+	g_return_if_fail (self->pv->slot != NULL);
+
+	data = gck_uri_data_new ();
+	data->token_info = gck_slot_get_token_info (self->pv->slot);
+	self->pv->uri = gck_uri_build (data, GCK_URI_FOR_TOKEN);
+	gck_uri_data_free (data);
 
 	seahorse_token_refresh_async (self, NULL, NULL, NULL);
 }
@@ -262,6 +272,12 @@ seahorse_token_get_property (GObject *object,
 	case PROP_FLAGS:
 		g_value_set_uint (value, 0);
 		break;
+	case PROP_URI:
+		g_value_set_string (value, self->pv->uri);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
 	}
 }
 
@@ -303,6 +319,7 @@ seahorse_token_finalize (GObject *obj)
 
 	g_hash_table_destroy (self->pv->objects);
 	g_assert (self->pv->slot == NULL);
+	g_free (self->pv->uri);
 
 	G_OBJECT_CLASS (seahorse_token_parent_class)->finalize (obj);
 }
@@ -322,6 +339,7 @@ seahorse_token_class_init (SeahorseTokenClass *klass)
 
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+	g_object_class_override_property (gobject_class, PROP_URI, "uri");
 	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
 
 	g_object_class_install_property (gobject_class, PROP_SLOT,

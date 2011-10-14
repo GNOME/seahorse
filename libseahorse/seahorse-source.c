@@ -64,6 +64,10 @@ seahorse_source_default_init (SeahorseSourceIface *iface)
 		                                "", G_PARAM_READABLE));
 
 		g_object_interface_install_property (iface,
+		           g_param_spec_string ("uri", "URI", "URI for the source",
+		                                "", G_PARAM_READABLE));
+
+		g_object_interface_install_property (iface,
 		           g_param_spec_object ("icon", "Icon", "Icon for this source",
 		                                G_TYPE_ICON, G_PARAM_READABLE));
 

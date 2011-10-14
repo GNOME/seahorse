@@ -106,7 +106,7 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
     g_object_class_install_property (gobject_class, PROP_URI,
             g_param_spec_string ("uri", "Key Server URI",
                                  "Key Server full URI", "",
-                                 G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
+                                 G_PARAM_READWRITE));
 }
 
 /**
@@ -167,7 +167,7 @@ seahorse_server_set_property (GObject *object, guint prop_id,
         g_return_if_fail (ssrc->priv->server && ssrc->priv->server[0]);
         break;
     case PROP_URI:
-        g_assert (ssrc->priv->uri == NULL);
+        g_free (ssrc->priv->uri);
         ssrc->priv->uri = g_strdup (g_value_get_string (value));
         g_return_if_fail (ssrc->priv->uri && ssrc->priv->uri[0]);
         break;

@@ -497,12 +497,12 @@ on_sidebar_panes_size_allocate (GtkWidget *widget,
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
 
-	if (self->pv->sidebar_width_sig != 0) {
-		g_source_remove (self->pv->sidebar_width_sig);
-		self->pv->sidebar_width_sig = 0;
-	}
-
 	if (allocation->width != self->pv->sidebar_width && allocation->width > 1) {
+		if (self->pv->sidebar_width_sig != 0) {
+			g_source_remove (self->pv->sidebar_width_sig);
+			self->pv->sidebar_width_sig = 0;
+		}
+
 		self->pv->sidebar_width = allocation->width;
 		self->pv->sidebar_width_sig = g_idle_add (on_idle_save_sidebar_width, self);
 	}
@@ -521,21 +521,31 @@ setup_sidebar (SeahorseKeyManager *self)
 	gtk_container_add (GTK_CONTAINER (area), GTK_WIDGET (sidebar));
 	gtk_widget_show (GTK_WIDGET (sidebar));
 
-	self->pv->sidebar_width = g_settings_get_int (self->pv->settings, "sidebar-width");
-	panes = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-panes");
-	gtk_paned_set_position (GTK_PANED (panes), self->pv->sidebar_width);
-	g_signal_connect (sidebar, "size_allocate", G_CALLBACK (on_sidebar_panes_size_allocate), self);
-
 	actions = gtk_action_group_new ("sidebar");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_toggle_actions (actions, SIDEBAR_ACTIONS,
 	                                     G_N_ELEMENTS (SIDEBAR_ACTIONS), self);
 	action = gtk_action_group_get_action (actions, "view-places");
-	g_object_bind_property (action, "active", area, "visible", G_BINDING_DEFAULT);
-	g_object_bind_property (action, "active", sidebar, "combined", G_BINDING_INVERT_BOOLEAN);
-	g_settings_bind (self->pv->settings, "sidebar-visible", action, "active", G_SETTINGS_BIND_DEFAULT);
+	g_object_bind_property (action, "active",
+	                        area, "visible",
+	                        G_BINDING_DEFAULT);
+	g_object_bind_property (action, "active",
+	                        sidebar, "combined",
+	                        G_BINDING_INVERT_BOOLEAN);
+	g_settings_bind (self->pv->settings, "sidebar-visible",
+	                 action, "active",
+	                 G_SETTINGS_BIND_DEFAULT);
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
 	g_object_unref (actions);
+
+	g_settings_bind (self->pv->settings, "places-selected",
+	                 sidebar, "selected-uris",
+	                 G_SETTINGS_BIND_DEFAULT);
+
+	self->pv->sidebar_width = g_settings_get_int (self->pv->settings, "sidebar-width");
+	panes = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-panes");
+	gtk_paned_set_position (GTK_PANED (panes), self->pv->sidebar_width);
+	g_signal_connect (sidebar, "size_allocate", G_CALLBACK (on_sidebar_panes_size_allocate), self);
 
 	return seahorse_sidebar_get_collection (sidebar);
 }
@@ -570,7 +580,7 @@ seahorse_key_manager_constructed (GObject *object)
 	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->pv->view_actions);
 
 	/* Notify us when settings change */
-	g_signal_connect_object (self->pv->settings, "changed",
+	g_signal_connect_object (self->pv->settings, "changed::item-filter",
 	                         G_CALLBACK (on_item_filter_changed), action, 0);
 
 	/* close event */

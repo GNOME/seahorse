@@ -39,7 +39,8 @@ enum {
 	PROP_DESCRIPTION,
 	PROP_KEYRING_NAME,
 	PROP_KEYRING_INFO,
-	PROP_IS_DEFAULT
+	PROP_IS_DEFAULT,
+	PROP_URI,
 };
 
 struct _SeahorseGkrKeyringPrivate {
@@ -410,7 +411,8 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
                            GParamSpec *pspec)
 {
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
-	
+	gchar *text;
+
 	switch (prop_id) {
 	case PROP_DESCRIPTION:
 		g_value_set_string (value, seahorse_gkr_keyring_get_description (self));
@@ -423,6 +425,10 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 		break;
 	case PROP_IS_DEFAULT:
 		g_value_set_boolean (value, seahorse_gkr_keyring_get_is_default (self));
+		break;
+	case PROP_URI:
+		text = g_strdup_printf ("secret-service://%s", self->pv->keyring_name);
+		g_value_take_string (value, text);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -443,6 +449,8 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 	gobject_class->get_property = seahorse_gkr_keyring_get_property;
 
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+
+	g_object_class_override_property (gobject_class, PROP_URI, "uri");
 
 	g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,
 	           g_param_spec_string ("keyring-name", "Gnome Keyring Name", "Name of keyring.", 

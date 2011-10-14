@@ -142,6 +142,8 @@ on_initialized_registered (GObject *unused,
 		slots = gck_module_get_slots (m->data, TRUE);
 		for (s = slots; s; s = g_list_next (s)) {
 			token = gck_slot_get_token_info (s->data);
+			if (token == NULL)
+				continue;
 			if (is_token_usable (self, s->data, token)) {
 				source = SEAHORSE_SOURCE (seahorse_token_new (s->data));
 				self->slots = g_list_append (self->slots, source);

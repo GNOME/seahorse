@@ -47,4 +47,9 @@ void                         seahorse_sidebar_set_combined       (SeahorseSideba
 
 GcrCollection *              seahorse_sidebar_get_collection     (SeahorseSidebar *self);
 
+gchar **                     seahorse_sidebar_get_selected_uris  (SeahorseSidebar *self);
+
+void                         seahorse_sidebar_set_selected_uris  (SeahorseSidebar *self,
+                                                                  const gchar **value);
+
 #endif /* __SEAHORSE_SIDEBAR_H__ */
