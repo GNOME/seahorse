@@ -103,7 +103,7 @@ object_contains_filtered_text (GObject *object,
                                const gchar* text)
 {
 	gchar* name = NULL;
-	gchar* id = NULL;
+	gchar* description = NULL;
 	gchar* lower;
 	gboolean ret = FALSE;
 
@@ -120,14 +120,14 @@ object_contains_filtered_text (GObject *object,
 		g_free (name);
 	}
 
-	if (!ret && g_object_class_find_property (G_OBJECT_GET_CLASS (object), "identifier")) {
-		g_object_get (object, "identifier", &id, NULL);
-		if (id != NULL) {
-			lower = g_utf8_strdown (id, -1);
+	if (!ret && g_object_class_find_property (G_OBJECT_GET_CLASS (object), "description")) {
+		g_object_get (object, "description", &description, NULL);
+		if (description != NULL) {
+			lower = g_utf8_strdown (description, -1);
 			if (strstr (lower, text))
 				ret = TRUE;
 			g_free (lower);
-			g_free (id);
+			g_free (description);
 		}
 	}
 

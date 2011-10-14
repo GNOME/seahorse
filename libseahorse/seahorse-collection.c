@@ -338,7 +338,8 @@ seahorse_collection_refresh (SeahorseCollection *self)
 		g_hash_table_remove (check, l->data);
 
 		/* This will add to set */
-		maybe_add_object (self, l->data);
+		if (!maybe_remove_object (self, l->data))
+			maybe_add_object (self, l->data);
 	}
 	g_list_free (objects);
 
