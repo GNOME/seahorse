@@ -964,7 +964,7 @@ seahorse_gpgme_keyring_get_property (GObject *obj,
 		g_value_set_string (value, _("GnuPG: default keyring directory"));
 		break;
 	case PROP_ICON:
-		g_value_take_object (value, g_themed_icon_new (GCR_ICON_HOME_DIRECTORY));
+		g_value_take_object (value, g_themed_icon_new (GCR_ICON_GNUPG));
 		break;
 	case PROP_URI:
 		g_value_set_string (value, "gnupg://");
