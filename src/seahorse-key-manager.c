@@ -624,9 +624,9 @@ seahorse_key_manager_constructed (GObject *object)
 				
 				/* Insert a filter bar */
 				box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
-				gtk_box_pack_start (box, GTK_WIDGET (gtk_label_new (_("Filter:"))), FALSE, TRUE, 3);
-				
+
 				self->pv->filter_entry = GTK_ENTRY (gtk_entry_new ());
+				gtk_entry_set_placeholder_text (self->pv->filter_entry, _("Filter"));
 				gtk_box_pack_start (box, GTK_WIDGET (self->pv->filter_entry), FALSE, TRUE, 0);
 
 				gtk_box_pack_start (box, gtk_label_new (NULL), FALSE, FALSE, 0);
@@ -678,7 +678,7 @@ seahorse_key_manager_constructed (GObject *object)
 	                                                  self->pv->settings);
 
 	/* Set focus to the current key list */
-	gtk_widget_grab_focus (widget);
+	gtk_widget_grab_focus (GTK_WIDGET (self->pv->view));
 	g_signal_emit_by_name (self, "selection-changed");
 
 	/* To avoid flicker */
