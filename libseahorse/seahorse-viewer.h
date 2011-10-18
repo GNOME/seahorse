@@ -24,8 +24,7 @@
 
 #include <glib-object.h>
 
-#include "seahorse-object.h"
-#include "seahorse-view.h"
+#include "seahorse-predicate.h"
 #include "seahorse-widget.h"
 
 #define SEAHORSE_TYPE_VIEWER               (seahorse_viewer_get_type ())
@@ -35,6 +34,7 @@
 #define SEAHORSE_IS_VIEWER_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_VIEWER))
 #define SEAHORSE_VIEWER_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_VIEWER, SeahorseViewerClass))
 
+typedef struct _SeahorseCommands SeahorseCommands;
 typedef struct _SeahorseViewer SeahorseViewer;
 typedef struct _SeahorseViewerClass SeahorseViewerClass;
 typedef struct _SeahorseViewerPrivate SeahorseViewerPrivate;
@@ -53,9 +53,6 @@ struct _SeahorseViewerClass {
 	void             (*set_selected_objects)          (SeahorseViewer *self,
 	                                                   GList *objects);
 
-	GObject *        (*get_selected_object_and_uid)   (SeahorseViewer* self,
-	                                                   guint *uid);
-
 	GObject *        (*get_selected)                  (SeahorseViewer* self);
 
 	void             (*set_selected)                  (SeahorseViewer* self,
@@ -63,7 +60,7 @@ struct _SeahorseViewerClass {
 
 	/* signals --------------------------------------------------------- */
 
-	void             (*signal)                        (SeahorseViewer *viewer);
+	void             (*selection_changed)             (SeahorseViewer *viewer);
 };
 
 GType               seahorse_viewer_get_type                        (void);
@@ -78,8 +75,8 @@ GList*              seahorse_viewer_get_selected_objects            (SeahorseVie
 void                seahorse_viewer_set_selected_objects            (SeahorseViewer* self,
                                                                      GList* objects);
 
-GObject *           seahorse_viewer_get_selected_object_and_uid     (SeahorseViewer *self,
-                                                                     guint *uid);
+GList *             seahorse_viewer_get_selected_matching           (SeahorseViewer *self,
+                                                                     SeahorsePredicate *pred);
 
 void                seahorse_viewer_show_context_menu               (SeahorseViewer* self,
                                                                      guint button,

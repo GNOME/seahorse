@@ -77,7 +77,7 @@ fire_selection_changed (SeahorseKeyserverResults* self)
 	seahorse_viewer_set_numbered_status (SEAHORSE_VIEWER (self), ngettext ("Selected %d key", "Selected %d keys", rows), rows);
 	if (self->pv->import_actions)
 		gtk_action_group_set_sensitive (self->pv->import_actions, rows > 0);
-	g_signal_emit_by_name (G_OBJECT (SEAHORSE_VIEW (self)), "selection-changed");
+	g_signal_emit_by_name (self, "selection-changed");
 	return FALSE;
 }
 

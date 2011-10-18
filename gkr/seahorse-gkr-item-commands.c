@@ -117,21 +117,15 @@ seahorse_gkr_item_commands_delete_objects (SeahorseCommands* commands,
 	return ret;
 }
 
-static GObject* 
-seahorse_gkr_item_commands_constructor (GType type, guint n_props, GObjectConstructParam *props) 
+static void
+seahorse_gkr_item_commands_constructed (GObject *obj)
 {
-	GObject *obj = G_OBJECT_CLASS (seahorse_gkr_item_commands_parent_class)->constructor (type, n_props, props);
-	SeahorseCommands *base = NULL;
-	SeahorseView *view;
-	
-	if (obj) {
-		base = SEAHORSE_COMMANDS (obj);
-		view = seahorse_commands_get_view (base);
-		g_return_val_if_fail (view, NULL);
-		seahorse_view_register_commands (view, &commands_predicate, base);
-	}
-	
-	return obj;
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (obj);
+
+	G_OBJECT_CLASS (seahorse_gkr_item_commands_parent_class)->constructed (obj);
+
+	seahorse_viewer_register_commands (seahorse_commands_get_viewer (commands),
+	                                   &commands_predicate, commands);
 }
 
 static void
@@ -148,7 +142,7 @@ seahorse_gkr_item_commands_class_init (SeahorseGkrItemCommandsClass *klass)
 	
 	seahorse_gkr_item_commands_parent_class = g_type_class_peek_parent (klass);
 
-	gobject_class->constructor = seahorse_gkr_item_commands_constructor;
+	gobject_class->constructed = seahorse_gkr_item_commands_constructed;
 
 	cmd_class->show_properties = seahorse_gkr_item_commands_show_properties;
 	cmd_class->delete_objects = seahorse_gkr_item_commands_delete_objects;

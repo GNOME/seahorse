@@ -27,7 +27,7 @@
 #include <glib-object.h>
 
 #include "seahorse-object.h"
-#include "seahorse-view.h"
+#include "seahorse-viewer.h"
 
 #define SEAHORSE_TYPE_COMMANDS                  (seahorse_commands_get_type ())
 #define SEAHORSE_COMMANDS(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_COMMANDS, SeahorseCommands))
@@ -64,7 +64,7 @@ void                  seahorse_commands_show_properties          (SeahorseComman
 gboolean              seahorse_commands_delete_objects           (SeahorseCommands *self,
                                                                   GList *objects);
 
-SeahorseView *        seahorse_commands_get_view                 (SeahorseCommands *self);
+SeahorseViewer *      seahorse_commands_get_viewer               (SeahorseCommands *self);
 
 GtkWindow *           seahorse_commands_get_window               (SeahorseCommands *self);
 

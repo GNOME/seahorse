@@ -54,7 +54,6 @@ libseahorse_la_SOURCES = \
 	seahorse-types.c seahorse-types.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
-	seahorse-view.c seahorse-view.h \
 	seahorse-viewer.c seahorse-viewer.h \
 	seahorse-widget.c seahorse-widget.h \
 	$(MARSHAL_SRCS) \

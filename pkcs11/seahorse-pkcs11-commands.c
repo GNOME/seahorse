@@ -148,35 +148,25 @@ seahorse_pkcs11_commands_delete_objects (SeahorseCommands *cmds, GList *objects)
 	return ret;
 }
 
-static GObject* 
-seahorse_pkcs11_commands_constructor (GType type, guint n_props, GObjectConstructParam *props) 
+static void
+seahorse_pkcs11_commands_constructed (GObject* obj)
 {
-	GObject *obj = G_OBJECT_CLASS (seahorse_pkcs11_commands_parent_class)->constructor (type, n_props, props);
-	SeahorsePkcs11CommandsPrivate *pv;
-	SeahorsePkcs11Commands *self = NULL;
-	SeahorseCommands *base;
-	SeahorseView *view;
-	
-	if (obj) {
-		pv = SEAHORSE_PKCS11_COMMANDS_GET_PRIVATE (obj);
-		self = SEAHORSE_PKCS11_COMMANDS (obj);
-		base = SEAHORSE_COMMANDS (self);
-	
-		view = seahorse_commands_get_view (base);
-		g_return_val_if_fail (view, NULL);
-		
-		seahorse_view_register_commands (view, &commands_predicate, base);
-		seahorse_view_register_ui (view, &commands_predicate, "", pv->action_group);
-	}
-	
-	return obj;
+	SeahorsePkcs11Commands *self = SEAHORSE_PKCS11_COMMANDS (obj);
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (self);
+	SeahorseViewer *viewer;
+
+	G_OBJECT_CLASS (seahorse_pkcs11_commands_parent_class)->constructed (obj);
+
+	viewer = seahorse_commands_get_viewer (commands);
+	seahorse_viewer_register_commands (viewer, &commands_predicate, commands);
+	seahorse_viewer_register_ui (viewer, &commands_predicate, "", self->pv->action_group);
 }
 
 static void
 seahorse_pkcs11_commands_init (SeahorsePkcs11Commands *self)
 {
-	SeahorsePkcs11CommandsPrivate *pv = SEAHORSE_PKCS11_COMMANDS_GET_PRIVATE (self);
-	pv->action_group = gtk_action_group_new ("pkcs11");
+	self->pv = SEAHORSE_PKCS11_COMMANDS_GET_PRIVATE (self);
+	self->pv->action_group = gtk_action_group_new ("pkcs11");
 }
 
 static void
@@ -234,7 +224,7 @@ seahorse_pkcs11_commands_class_init (SeahorsePkcs11CommandsClass *klass)
 	seahorse_pkcs11_commands_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePkcs11CommandsPrivate));
 
-	gobject_class->constructor = seahorse_pkcs11_commands_constructor;
+	gobject_class->constructed = seahorse_pkcs11_commands_constructed;
 	gobject_class->dispose = seahorse_pkcs11_commands_dispose;
 	gobject_class->finalize = seahorse_pkcs11_commands_finalize;
 	gobject_class->set_property = seahorse_pkcs11_commands_set_property;

@@ -39,6 +39,7 @@ typedef struct _SeahorsePkcs11CommandsPrivate SeahorsePkcs11CommandsPrivate;
     
 struct _SeahorsePkcs11Commands {
 	SeahorseCommands parent;
+	SeahorsePkcs11CommandsPrivate *pv;
 };
 
 struct _SeahorsePkcs11CommandsClass {

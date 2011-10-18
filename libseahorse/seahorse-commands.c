@@ -26,14 +26,14 @@
 
 enum {
 	PROP_0,
-	PROP_VIEW,
+	PROP_VIEWER,
 	PROP_KTYPE,
 	PROP_COMMAND_ACTIONS,
 	PROP_UI_DEFINITION
 };
 
 struct _SeahorseCommandsPrivate {
-	SeahorseView* view;
+	SeahorseViewer* viewer;
 };
 
 G_DEFINE_TYPE (SeahorseCommands, seahorse_commands, G_TYPE_OBJECT);
@@ -72,11 +72,12 @@ static void
 seahorse_commands_dispose (GObject *obj)
 {
 	SeahorseCommands *self = SEAHORSE_COMMANDS (obj);
-    
-	if (self->pv->view)
-		g_object_remove_weak_pointer (G_OBJECT (self->pv->view), (gpointer*)&self->pv->view);
-	self->pv->view = NULL;
-	
+
+	if (self->pv->viewer)
+		g_object_remove_weak_pointer (G_OBJECT (self->pv->viewer),
+		                              (gpointer*)&self->pv->viewer);
+	self->pv->viewer = NULL;
+
 	G_OBJECT_CLASS (seahorse_commands_parent_class)->dispose (obj);
 }
 
@@ -85,8 +86,8 @@ seahorse_commands_finalize (GObject *obj)
 {
 	SeahorseCommands *self = SEAHORSE_COMMANDS (obj);
 
-	g_assert (!self->pv->view);
-	
+	g_assert (!self->pv->viewer);
+
 	G_OBJECT_CLASS (seahorse_commands_parent_class)->finalize (obj);
 }
 
@@ -97,11 +98,12 @@ seahorse_commands_set_property (GObject *obj, guint prop_id, const GValue *value
 	SeahorseCommands *self = SEAHORSE_COMMANDS (obj);
 	
 	switch (prop_id) {
-	case PROP_VIEW:
-		g_return_if_fail (!self->pv->view);
-		self->pv->view = g_value_get_object (value);
-		g_return_if_fail (self->pv->view);
-		g_object_add_weak_pointer (G_OBJECT (self->pv->view), (gpointer*)&self->pv->view);
+	case PROP_VIEWER:
+		g_return_if_fail (!self->pv->viewer);
+		self->pv->viewer = g_value_get_object (value);
+		g_return_if_fail (self->pv->viewer);
+		g_object_add_weak_pointer (G_OBJECT (self->pv->viewer),
+		                           (gpointer*)&self->pv->viewer);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -116,8 +118,8 @@ seahorse_commands_get_property (GObject *obj, guint prop_id, GValue *value,
 	SeahorseCommands *self = SEAHORSE_COMMANDS (obj);
 	
 	switch (prop_id) {
-	case PROP_VIEW:
-		g_value_set_object (value, seahorse_commands_get_view (self));
+	case PROP_VIEWER:
+		g_value_set_object (value, seahorse_commands_get_viewer (self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -141,8 +143,8 @@ seahorse_commands_class_init (SeahorseCommandsClass *klass)
 	SEAHORSE_COMMANDS_CLASS (klass)->show_properties = seahorse_commands_real_show_properties;
 	SEAHORSE_COMMANDS_CLASS (klass)->delete_objects = seahorse_commands_real_delete_objects;
 
-	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_VIEW, 
-	         g_param_spec_object ("view", "view", "view", SEAHORSE_TYPE_VIEW, 
+	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_VIEWER,
+	         g_param_spec_object ("viewer", "viewer", "Viewer", SEAHORSE_TYPE_VIEWER,
 	                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 	
 	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_KTYPE, 
@@ -179,11 +181,11 @@ seahorse_commands_delete_objects (SeahorseCommands *self,
 	return SEAHORSE_COMMANDS_GET_CLASS (self)->delete_objects (self, objects);
 }
 
-SeahorseView*
-seahorse_commands_get_view (SeahorseCommands* self) 
+SeahorseViewer *
+seahorse_commands_get_viewer (SeahorseCommands* self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_COMMANDS (self), NULL);
-	return self->pv->view;
+	return self->pv->viewer;
 }
 
 GtkActionGroup*
@@ -210,7 +212,7 @@ seahorse_commands_get_ui_definition (SeahorseCommands* self)
 GtkWindow*
 seahorse_commands_get_window (SeahorseCommands* self)
 {
-	SeahorseView *view = seahorse_commands_get_view (self);
-	g_return_val_if_fail (view, NULL);
-	return seahorse_view_get_window (view);
+	SeahorseViewer *viewer = seahorse_commands_get_viewer (self);
+	g_return_val_if_fail (viewer != NULL, NULL);
+	return seahorse_viewer_get_window (viewer);
 }

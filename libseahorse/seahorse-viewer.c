@@ -29,7 +29,6 @@
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
-#include "seahorse-view.h"
 #include "seahorse-viewer.h"
 
 #include <glib/gi18n-lib.h>
@@ -59,9 +58,7 @@ struct _SeahorseViewerPrivate {
 	GList *all_commands;
 };
 
-static void seahorse_viewer_implement_view (SeahorseViewIface *iface);
-G_DEFINE_TYPE_EXTENDED (SeahorseViewer, seahorse_viewer, SEAHORSE_TYPE_WIDGET, 0,
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEW, seahorse_viewer_implement_view));
+G_DEFINE_TYPE (SeahorseViewer, seahorse_viewer, SEAHORSE_TYPE_WIDGET);
 
 #define SEAHORSE_VIEWER_GET_PRIVATE(o) \
 	(G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_TYPE_VIEWER, SeahorseViewerPrivate))
@@ -495,7 +492,7 @@ include_basic_actions (SeahorseViewer* self)
 }
 
 static void
-on_selection_changed (SeahorseView* view, SeahorseViewer* self)
+seahorse_viewer_real_selection_changed (SeahorseViewer *self)
 {
 	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
 	ViewerPredicate *predicate;
@@ -503,10 +500,10 @@ on_selection_changed (SeahorseView* view, SeahorseViewer* self)
 	guint i;
 
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (SEAHORSE_IS_VIEW (view));
 
 	/* Enable if anything is selected */
-	gtk_action_group_set_sensitive (pv->object_actions, seahorse_view_get_selected (view) != NULL);
+	gtk_action_group_set_sensitive (pv->object_actions,
+	                                seahorse_viewer_get_selected (self) != NULL);
 
 	objects = seahorse_viewer_get_selected_objects (self);
 
@@ -554,22 +551,17 @@ on_add_widget (GtkUIManager* ui, GtkWidget* widget, SeahorseViewer* self)
 		g_warning ("no place holder found for: %s", name);
 }
 
-
-/* -----------------------------------------------------------------------------
- * OBJECT
- */
-
-static GList*
-seahorse_viewer_get_selected_matching (SeahorseView *base,
+GList *
+seahorse_viewer_get_selected_matching (SeahorseViewer *self,
                                        SeahorsePredicate *pred)
 {
 	GList *all_objects;
 	GList *objects;
 
-	g_return_val_if_fail (SEAHORSE_IS_VIEW (base), NULL);
-	g_return_val_if_fail (pred, NULL);
+	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
+	g_return_val_if_fail (pred != NULL, NULL);
 
-	all_objects = seahorse_view_get_selected_objects (base);
+	all_objects = seahorse_viewer_get_selected_objects (self);
 	objects = filter_matching_objects (pred, &all_objects);
 	g_list_free (all_objects);
 
@@ -608,9 +600,6 @@ seahorse_viewer_constructor (GType type, guint n_props, GObjectConstructParam *p
 			                            gtk_ui_manager_get_accel_group (pv->ui_manager));
 
 		include_basic_actions (self);
-
-		g_signal_connect (SEAHORSE_VIEW (self), "selection-changed",
-		                  G_CALLBACK (on_selection_changed), self);
 
 		/* Setup the commands */
 		types = seahorse_registry_object_types (seahorse_registry_get (), "commands", NULL, NULL);
@@ -700,7 +689,7 @@ seahorse_viewer_get_property (GObject *obj, guint prop_id, GValue *value,
 		g_value_set_object (value, seahorse_viewer_get_selected (self));
 		break;
 	case PROP_WINDOW:
-		g_value_set_object (value, seahorse_view_get_window (SEAHORSE_VIEW (self)));
+		g_value_set_object (value, seahorse_viewer_get_window (self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -738,29 +727,22 @@ seahorse_viewer_class_init (SeahorseViewerClass *klass)
 	gobject_class->set_property = seahorse_viewer_set_property;
 	gobject_class->get_property = seahorse_viewer_get_property;
 
+	klass->selection_changed = seahorse_viewer_real_selection_changed;
+
 	g_object_class_install_property (gobject_class, PROP_SELECTED,
 	           g_param_spec_object ("selected", "Selected", "Selected Object",
-					SEAHORSE_TYPE_OBJECT, G_PARAM_READWRITE));
+	                                SEAHORSE_TYPE_OBJECT, G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_WINDOW,
 	           g_param_spec_object ("window", "Window", "Window of View",
 	                                GTK_TYPE_WIDGET, G_PARAM_READABLE));
 
+	g_signal_new ("selection-changed", SEAHORSE_TYPE_VIEWER,
+	              G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (SeahorseViewerClass, selection_changed),
+	              NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+
 	exportable_predicate.flags = SEAHORSE_FLAG_EXPORTABLE;
 	deletable_predicate.flags = SEAHORSE_FLAG_DELETABLE;
-}
-
-static void
-seahorse_viewer_implement_view (SeahorseViewIface *iface)
-{
-	iface->get_selected_objects = (gpointer)seahorse_viewer_get_selected_objects;
-	iface->set_selected_objects = (gpointer)seahorse_viewer_set_selected_objects;
-	iface->get_selected = (gpointer)seahorse_viewer_get_selected;
-	iface->set_selected = (gpointer)seahorse_viewer_set_selected;
-	iface->get_selected_matching = (gpointer)seahorse_viewer_get_selected_matching;
-	iface->get_window = (gpointer)seahorse_viewer_get_window;
-	iface->register_ui = (gpointer)seahorse_viewer_register_ui;
-	iface->register_commands = (gpointer)seahorse_viewer_register_commands;
 }
 
 /* -----------------------------------------------------------------------------
@@ -802,16 +784,6 @@ seahorse_viewer_set_selected_objects (SeahorseViewer* self, GList* objects)
 	g_return_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->set_selected_objects);
 
 	SEAHORSE_VIEWER_GET_CLASS (self)->set_selected_objects (self, objects);
-}
-
-GObject *
-seahorse_viewer_get_selected_object_and_uid (SeahorseViewer *self,
-                                             guint *uid)
-{
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
-	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_object_and_uid, NULL);
-
-	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_object_and_uid (self, uid);
 }
 
 void

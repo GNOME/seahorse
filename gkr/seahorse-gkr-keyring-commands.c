@@ -56,7 +56,7 @@ static const char* UI_KEYRING = ""\
 
 static SeahorsePredicate keyring_predicate = { 0, };
 
-static void on_view_selection_changed (SeahorseView *view, gpointer user_data);
+static void on_viewer_selection_changed (SeahorseViewer *viewer, gpointer user_data);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
@@ -68,13 +68,13 @@ on_refresh_all_keyrings_complete (GObject *source,
                                   gpointer user_data)
 {
 	SeahorseCommands *self = SEAHORSE_COMMANDS (user_data);
-	SeahorseView *view;
+	SeahorseViewer *viewer;
 
 	g_return_if_fail (SEAHORSE_IS_COMMANDS (self));
 
-	view = seahorse_commands_get_view (self);
-	if (view != NULL)
-		on_view_selection_changed (view, self);
+	viewer = seahorse_commands_get_viewer (self);
+	if (viewer != NULL)
+		on_viewer_selection_changed (viewer, self);
 
 	g_object_unref (self);
 }
@@ -134,14 +134,14 @@ on_keyring_unlock_done (GnomeKeyringResult result, gpointer user_data)
 static void 
 on_keyring_unlock (GtkAction *action, SeahorseGkrKeyringCommands *self)
 {
-	SeahorseView *view;
+	SeahorseViewer *viewer;
 	GList *keys, *l;
 
 	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
-	keys = seahorse_view_get_selected_matching (view, &keyring_predicate);
+	viewer = seahorse_commands_get_viewer (SEAHORSE_COMMANDS (self));
+	keys = seahorse_viewer_get_selected_matching (viewer, &keyring_predicate);
 
 	for (l = keys; l; l = g_list_next (l)) {
 		g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (l->data));
@@ -171,14 +171,14 @@ on_keyring_lock_done (GnomeKeyringResult result, gpointer user_data)
 static void 
 on_keyring_lock (GtkAction *action, SeahorseGkrKeyringCommands *self)
 {
-	SeahorseView *view;
+	SeahorseViewer *viewer;
 	GList *keyrings, *l;
 
 	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
-	keyrings = seahorse_view_get_selected_matching (view, &keyring_predicate);
+	viewer = seahorse_commands_get_viewer (SEAHORSE_COMMANDS (self));
+	keyrings = seahorse_viewer_get_selected_matching (viewer, &keyring_predicate);
 
 	for (l = keyrings; l; l = g_list_next (l)) {
 		g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (l->data));
@@ -208,14 +208,14 @@ on_set_default_keyring_done (GnomeKeyringResult result, gpointer user_data)
 static void
 on_keyring_default (GtkAction *action, SeahorseGkrKeyringCommands *self)
 {
-	SeahorseView *view;
+	SeahorseViewer *viewer;
 	GList *keys;
 
 	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
-	keys = seahorse_view_get_selected_matching (view, &keyring_predicate);
+	viewer = seahorse_commands_get_viewer (SEAHORSE_COMMANDS (self));
+	keys = seahorse_viewer_get_selected_matching (viewer, &keyring_predicate);
 
 	if (keys) {
 		gnome_keyring_set_default_keyring (seahorse_gkr_keyring_get_name (keys->data), 
@@ -245,14 +245,14 @@ on_change_password_done (GnomeKeyringResult result, gpointer user_data)
 static void
 on_keyring_password (GtkAction *action, SeahorseGkrKeyringCommands *self)
 {
-	SeahorseView *view;
+	SeahorseViewer *viewer;
 	GList *keys, *l;
 
 	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
-	keys = seahorse_view_get_selected_matching (view, &keyring_predicate);
+	viewer = seahorse_commands_get_viewer (SEAHORSE_COMMANDS (self));
+	keys = seahorse_viewer_get_selected_matching (viewer, &keyring_predicate);
 
 	for (l = keys; l; l = g_list_next (l)) {
 		g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (l->data));
@@ -275,7 +275,8 @@ static const GtkActionEntry ENTRIES_KEYRING[] = {
 };
 
 static void
-on_view_selection_changed (SeahorseView *view, gpointer user_data)
+on_viewer_selection_changed (SeahorseViewer *viewer,
+                             gpointer user_data)
 {
 	SeahorseGkrKeyringCommands *self = user_data;
 	GnomeKeyringInfo *info;
@@ -283,11 +284,8 @@ on_view_selection_changed (SeahorseView *view, gpointer user_data)
 	gboolean unlocked = FALSE;
 	gboolean can_default = FALSE;
 	GList *keys, *l;
-	
-	g_return_if_fail (SEAHORSE_IS_VIEW (view));
-	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self));
-	
-	keys = seahorse_view_get_selected_matching (view, &keyring_predicate);
+
+	keys = seahorse_viewer_get_selected_matching (viewer, &keyring_predicate);
 	for (l = keys; l; l = g_list_next (l)) {
 		info = seahorse_gkr_keyring_get_info (l->data);
 		if (info != NULL) {
@@ -373,32 +371,29 @@ seahorse_gkr_keyring_commands_delete_objects (SeahorseCommands* commands,
 	return ret;
 }
 
-static GObject* 
-seahorse_gkr_keyring_commands_constructor (GType type, guint n_props, GObjectConstructParam *props) 
+static void
+seahorse_gkr_keyring_commands_constructed (GObject* obj)
 {
-	SeahorseGkrKeyringCommands *self = SEAHORSE_GKR_KEYRING_COMMANDS (G_OBJECT_CLASS (seahorse_gkr_keyring_commands_parent_class)->constructor (type, n_props, props));
+	SeahorseGkrKeyringCommands *self = SEAHORSE_GKR_KEYRING_COMMANDS (obj);
 	GtkActionGroup *actions;
-	SeahorseView *view;
-	
-	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING_COMMANDS (self), NULL);
-	
-	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
-	g_return_val_if_fail (view, NULL);
-	seahorse_view_register_commands (view, &keyring_predicate, SEAHORSE_COMMANDS (self));
+	SeahorseViewer *viewer;
+
+	G_OBJECT_CLASS (seahorse_gkr_keyring_commands_parent_class)->constructed (obj);
+
+	viewer = seahorse_commands_get_viewer (SEAHORSE_COMMANDS (self));
+	seahorse_viewer_register_commands (viewer, &keyring_predicate, SEAHORSE_COMMANDS (self));
 
 	actions = gtk_action_group_new ("gkr-keyring");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, ENTRIES_KEYRING, G_N_ELEMENTS (ENTRIES_KEYRING), self);
-	seahorse_view_register_ui (view, &keyring_predicate, UI_KEYRING, actions);
+	seahorse_viewer_register_ui (viewer, &keyring_predicate, UI_KEYRING, actions);
 	self->pv->action_lock = g_object_ref (gtk_action_group_get_action (actions, "keyring-lock"));
 	self->pv->action_unlock = g_object_ref (gtk_action_group_get_action (actions, "keyring-unlock"));
 	self->pv->action_default = g_object_ref (gtk_action_group_get_action (actions, "keyring-default"));
 	g_object_unref (actions);
-	
-	/* Watch and wait for selection changes and diddle lock/unlock */ 
-	g_signal_connect (view, "selection-changed", G_CALLBACK (on_view_selection_changed), self);
 
-	return G_OBJECT (self);
+	/* Watch and wait for selection changes and diddle lock/unlock */
+	g_signal_connect (viewer, "selection-changed", G_CALLBACK (on_viewer_selection_changed), self);
 }
 
 static void
@@ -433,7 +428,7 @@ seahorse_gkr_keyring_commands_class_init (SeahorseGkrKeyringCommandsClass *klass
 	
 	seahorse_gkr_keyring_commands_parent_class = g_type_class_peek_parent (klass);
 
-	gobject_class->constructor = seahorse_gkr_keyring_commands_constructor;
+	gobject_class->constructed = seahorse_gkr_keyring_commands_constructed;
 	gobject_class->finalize = seahorse_gkr_keyring_commands_finalize;
 
 	cmd_class->show_properties = seahorse_gkr_keyring_commands_show_properties;

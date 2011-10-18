@@ -85,24 +85,21 @@ static SeahorsePredicate commands_uid_predicate = { 0 };
 static void 
 on_key_sign (GtkAction* action, SeahorsePgpCommands* self) 
 {
-	SeahorseView *view;
+	SeahorseViewer *viewer;
 	GtkWindow *window;
 	GList *keys;
 
-	g_return_if_fail (SEAHORSE_IS_PGP_COMMANDS (self));
-	g_return_if_fail (GTK_IS_ACTION (action));
-	
-	view = seahorse_commands_get_view (SEAHORSE_COMMANDS (self));
-	keys = seahorse_view_get_selected_matching (view, &actions_key_predicate);
+	viewer = seahorse_commands_get_viewer (SEAHORSE_COMMANDS (self));
+	keys = seahorse_viewer_get_selected_matching (viewer, &actions_key_predicate);
 
 	if (keys == NULL) {
-		keys = seahorse_view_get_selected_matching (view, &actions_uid_predicate);
+		keys = seahorse_viewer_get_selected_matching (viewer, &actions_uid_predicate);
 		if (keys == NULL)
 			return;
 	}
 
 	/* Indicate what we're actually going to operate on */
-	seahorse_view_set_selected (view, keys->data);
+	seahorse_viewer_set_selected (viewer, keys->data);
 
 	window = seahorse_commands_get_window (SEAHORSE_COMMANDS (self));
 	
@@ -126,11 +123,11 @@ on_remote_sync (GtkAction* action,
                 gpointer user_data)
 {
 	SeahorseCommands *commands = SEAHORSE_COMMANDS (user_data);
-	SeahorseView *view = seahorse_commands_get_view (commands);
+	SeahorseViewer *viewer = seahorse_commands_get_viewer (commands);
 	SeahorseGpgmeKeyring *keyring;
 	GList* objects;
 
-	objects = seahorse_view_get_selected_objects (view);
+	objects = seahorse_viewer_get_selected_objects (viewer);
 	if (objects == NULL) {
 		keyring = seahorse_pgp_backend_get_default_keyring (NULL);
 		objects = gcr_collection_get_objects (GCR_COLLECTION (keyring));
@@ -261,32 +258,25 @@ seahorse_pgp_commands_delete_objects (SeahorseCommands* base, GList* objects)
 	return TRUE;
 }
 
-static GObject* 
-seahorse_pgp_commands_constructor (GType type, guint n_props, GObjectConstructParam *props) 
+static void
+seahorse_pgp_commands_constructed (GObject* obj)
 {
-	GObject *obj = G_OBJECT_CLASS (seahorse_pgp_commands_parent_class)->constructor (type, n_props, props);
-	SeahorsePgpCommands *self = NULL;
-	SeahorseCommands *base;
-	SeahorseView *view;
-	
-	if (obj) {
-		self = SEAHORSE_PGP_COMMANDS (obj);
-		base = SEAHORSE_COMMANDS (self);
-	
-		view = seahorse_commands_get_view (base);
-		g_return_val_if_fail (view, NULL);
-		
-		self->pv->command_actions = gtk_action_group_new ("pgp");
-		gtk_action_group_set_translation_domain (self->pv->command_actions, GETTEXT_PACKAGE);
-		gtk_action_group_add_actions (self->pv->command_actions, COMMAND_ENTRIES, 
-		                              G_N_ELEMENTS (COMMAND_ENTRIES), self);
+	SeahorsePgpCommands *self = SEAHORSE_PGP_COMMANDS (obj);
+	SeahorseCommands *commands = SEAHORSE_COMMANDS (obj);
+	SeahorseViewer *viewer;
 
-		seahorse_view_register_commands (view, &commands_key_predicate, base);
-		seahorse_view_register_commands (view, &commands_uid_predicate, base);
-		seahorse_view_register_ui (view, &actions_key_predicate, UI_DEFINITION, self->pv->command_actions);
-	}
-	
-	return obj;
+	G_OBJECT_CLASS (seahorse_pgp_commands_parent_class)->constructed (obj);
+
+	viewer = seahorse_commands_get_viewer (commands);
+
+	self->pv->command_actions = gtk_action_group_new ("pgp");
+	gtk_action_group_set_translation_domain (self->pv->command_actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (self->pv->command_actions, COMMAND_ENTRIES,
+	                              G_N_ELEMENTS (COMMAND_ENTRIES), self);
+
+	seahorse_viewer_register_commands (viewer, &commands_key_predicate, commands);
+	seahorse_viewer_register_commands (viewer, &commands_uid_predicate, commands);
+	seahorse_viewer_register_ui (viewer, &actions_key_predicate, UI_DEFINITION, self->pv->command_actions);
 }
 
 static void
@@ -348,7 +338,7 @@ seahorse_pgp_commands_class_init (SeahorsePgpCommandsClass *klass)
 	seahorse_pgp_commands_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorsePgpCommandsPrivate));
 
-	gobject_class->constructor = seahorse_pgp_commands_constructor;
+	gobject_class->constructed = seahorse_pgp_commands_constructed;
 	gobject_class->dispose = seahorse_pgp_commands_dispose;
 	gobject_class->finalize = seahorse_pgp_commands_finalize;
 	gobject_class->set_property = seahorse_pgp_commands_set_property;
