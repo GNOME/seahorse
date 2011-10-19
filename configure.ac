@@ -1,18 +1,21 @@
-dnl Process this file with autoconf to produce a configure script.
+AC_PREREQ([2.63])
+AC_INIT([seahorse], [3.3.0],
+        [http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-keyring&component=gcr],
+        [gcr])
 
-AC_PREREQ(2.52)
-
-dnl ****************************************************************************
-dnl MAIN SEAHORSE VERSION (update after release)
-
-AC_INIT(seahorse, 3.3.0)
-
+GCK_REQUIRED=3.1.2
 GCR_REQUIRED=3.1.5
+GTK_REQUIRED=2.90.0
+GNUPG_ACCEPTED="1.2 1.4 2.0"
+GPGME_REQUIRED=1.0.0
+GNOME_KEYRING_REQUIRED=2.25.5
+AVAHI_GLIB_REQUIRED=0.6
 
-dnl ****************************************************************************
+# -----------------------------------------------------------------------------
+# Basic tools
 
-AC_CONFIG_SRCDIR(src/seahorse-main.c)
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+AM_INIT_AUTOMAKE([1.11 tar-ustar foreign -Wno-portability])
+AM_SANITY_CHECK
 AM_CONFIG_HEADER(config.h)
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_MAINTAINER_MODE([enable])
@@ -22,28 +25,11 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INTLTOOL([0.35.0])
 AM_PROG_LIBTOOL
-GNOME_DOC_INIT
-
-dnl Get the off_t size right
-AC_SYS_LARGEFILE
-AC_TYPE_OFF_T
-AC_FUNC_FSEEKO
-
-AC_CHECK_FUNCS(setresuid setresgid)
-AC_CHECK_FUNCS(strsep)
-
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 
-GTK_REQUIRED=2.90.0
-
-PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQUIRED)
-AC_SUBST(GTK_CFLAGS)
-AC_SUBST(GTK_LIBS)
-
-PKG_CHECK_MODULES(SEAHORSE, gmodule-2.0 gio-2.0 gthread-2.0 gtk+-3.0 >= $GTK_REQUIRED gcr-3 >= $GCR_REQUIRED)
-SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS -DGCR_API_SUBJECT_TO_CHANGE -DGCK_API_SUBJECT_TO_CHANGE"
-
-GLIB_GSETTINGS
+GETTEXT_PACKAGE=seahorse
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Name of the gettext domain.])
 
 AC_MSG_CHECKING([for some Win32 platform])
 case "$host" in
@@ -76,9 +62,40 @@ else
 fi
 AC_SUBST(PLUGIN_LIBTOOL_FLAGS)
 
-dnl **************************************************************
-dnl GPG / GPGME CHECKS
-dnl **************************************************************
+# -----------------------------------------------------------------------------
+# Basic Dependencies
+
+PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQUIRED)
+AC_SUBST(GTK_CFLAGS)
+AC_SUBST(GTK_LIBS)
+
+PKG_CHECK_MODULES(SEAHORSE, gmodule-2.0 gio-2.0 gthread-2.0 gtk+-3.0 >= $GTK_REQUIRED gcr-3 >= $GCR_REQUIRED)
+SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS -DGCR_API_SUBJECT_TO_CHANGE -DGCK_API_SUBJECT_TO_CHANGE"
+
+GNOME_DOC_INIT
+GLIB_GSETTINGS
+AM_GLIB_GNU_GETTEXT
+AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
+
+PKG_CHECK_MODULES(EGG, gtk+-3.0 >= $GTK_REQUIRED)
+AC_SUBST(EGG_LIBS)
+AC_SUBST(EGG_CFLAGS)
+
+PKG_CHECK_MODULES(EGG_SMCLIENT, gtk+-3.0)
+AC_SUBST(EGG_SMCLIENT_LIBS)
+AC_SUBST(EGG_SMCLIENT_CFLAGS)
+
+# -----------------------------------------------------------------------------
+# Checks for functions
+
+AC_SYS_LARGEFILE
+AC_TYPE_OFF_T
+AC_FUNC_FSEEKO
+
+AC_CHECK_FUNCS(strsep)
+
+# -----------------------------------------------------------------------------
+# GPG / GPGME CHECKS
 
 AC_ARG_ENABLE(pgp,
 	AC_HELP_STRING([--enable-pgp], [enable PGP support (default is auto)]))
@@ -94,7 +111,6 @@ else
 		DO_CHECK=$enableval, DO_CHECK=yes)
 	
 	if test	"$DO_CHECK" = "yes"; then
-		accepted_versions="1.2 1.4 2.0"
 		AC_PATH_PROGS(GNUPG, [gpg gpg2], no)
 		AC_DEFINE_UNQUOTED(GNUPG, "$GNUPG", [Path to gpg executable.])
 		ok="no"
@@ -108,7 +124,7 @@ else
 			micro=`echo $gnupg_version | \
 				sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
     
-			for ver in $accepted_versions; do
+			for ver in $GNUPG_ACCEPTED; do
 				if test "$ver" = "$major.$minor"; then
 					AC_DEFINE_UNQUOTED(GPG_MAJOR, [$major], [GPG Major Version])
 					AC_DEFINE_UNQUOTED(GPG_MINOR, [$minor], [GPG Minor Version])
@@ -129,15 +145,14 @@ else
 
 
 	ok="no"
-	min_gpgme_version=1.0.0
 	AC_PATH_PROG(GPGME_CONFIG, gpgme-config, "failed")
 	if test $GPGME_CONFIG != "failed" ; then
-      		AC_MSG_CHECKING(for GPGME - version >= $min_gpgme_version)
-		req_major=`echo $min_gpgme_version | \
+      		AC_MSG_CHECKING(for GPGME - version >= $GPGME_REQUIRED)
+		req_major=`echo $GPGME_REQUIRED | \
 			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\1/'`
-		req_minor=`echo $min_gpgme_version | \
+		req_minor=`echo $GPGME_REQUIRED | \
 			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\2/'`
-		req_micro=`echo $min_gpgme_version | \
+		req_micro=`echo $GPGME_REQUIRED | \
 			sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\3/'`
 		gpgme_config_version=`$GPGME_CONFIG --version`
 		major=`echo $gpgme_config_version | \
@@ -172,11 +187,11 @@ fi
 
 if test "$enable_pgp" = "yes"; then
 	if test -z "$have_gpg"; then
-		AC_MSG_ERROR([Appropriate version of GnuPG not found. Please install one of versions: $accepted_versions])
+		AC_MSG_ERROR([Appropriate version of GnuPG not found. Please install one of versions: $GNUPG_ACCEPTED])
 	fi
 			
 	if test -z "$have_gpgme"; then
-		AC_MSG_ERROR(GPGME $min_gpgme_version or later needed)
+		AC_MSG_ERROR(GPGME $GPGME_REQUIRED or later needed)
 	fi
 
 	SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GPGME_CFLAGS"
@@ -186,9 +201,8 @@ fi
 
 AM_CONDITIONAL(WITH_PGP, test "$enable_pgp" = "yes")
 
-dnl ******************************************************************************
-dnl LDAP [from gpg]
-dnl ******************************************************************************
+# -----------------------------------------------------------------------------
+# LDAP [from gpg]
 
 AC_MSG_CHECKING([LDAP keyserver support])
 AC_ARG_ENABLE(ldap,
@@ -262,10 +276,8 @@ SEAHORSE_LIBS="$SEAHORSE_LIBS $LDAP_LIBS"
 
 AC_SUBST(NETLIBS)
 
-
-dnl ****************************************************************************
-dnl HKP (libsoup)
-dnl ****************************************************************************
+# -----------------------------------------------------------------------------
+# HKP (libsoup)
 
 # Allow hkp to be disabled 
 AC_ARG_ENABLE(hkp,
@@ -302,10 +314,8 @@ fi
 
 AM_CONDITIONAL(WITH_HKP, test "$enable_hkp" = "yes")
 
-
-dnl ***************
-dnl KEYSERVER
-dnl ***************
+# -----------------------------------------------------------------------------
+# KEYSERVER
 
 AM_CONDITIONAL(WITH_KEYSERVER, test "$with_keyserver" = "yes")
 
@@ -317,12 +327,10 @@ else
 	echo "disabling key server support"
 fi
 
+# -----------------------------------------------------------------------------
+# GNOME-KEYRING
 
-dnl ****************************************************************************
-dnl GNOME-KEYRING
-dnl ****************************************************************************
-
-PKG_CHECK_MODULES([GNOME_KEYRING], gnome-keyring-1 >= 2.25.5,
+PKG_CHECK_MODULES([GNOME_KEYRING], gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED,
                   [enable_gnome_keyring=yes],[enable_gnome_keyring=no])
 
 if test "$enable_gnome_keyring" = "no"; then
@@ -331,13 +339,9 @@ fi
 
 SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GNOME_KEYRING_CFLAGS"
 SEAHORSE_LIBS="$SEAHORSE_LIBS $GNOME_KEYRING_LIBS"
-        
 
-dnl *******************
-dnl KEY SHARING 
-dnl *******************
-
-AVAHI_GLIB_REQUIRED=0.6
+# -----------------------------------------------------------------------------
+# KEY SHARING
 
 # Allow sharing to be disabled
 AC_ARG_ENABLE(sharing, 
@@ -373,9 +377,8 @@ fi
 
 AM_CONDITIONAL(WITH_SHARING, test "$enable_sharing" = "yes")
 
-dnl ****************************************************************************
-dnl  PKCS11
-dnl ****************************************************************************
+# -----------------------------------------------------------------------------
+#  PKCS11
 
 AC_ARG_ENABLE(pkcs11,
 	AC_HELP_STRING([--disable-pkcs11],
@@ -385,7 +388,7 @@ if test "$enable_pkcs11" = "no"; then
 	echo "disabling pkcs11 support"
 	enable_pkcs11="no"
 else
-	PKG_CHECK_MODULES(GCK, gck-1 >= 3.1.2, enable_pkcs11="yes", enable_pkcs11="no")
+	PKG_CHECK_MODULES(GCK, gck-1 >= $GCK_REQUIRED, enable_pkcs11="yes", enable_pkcs11="no")
 	if test "$enable_pkcs11" = "yes"; then
 		AC_DEFINE(WITH_PKCS11, 1, [gck library available])
 		SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GCK_CFLAGS $GCR_CFLAGS"
@@ -397,9 +400,8 @@ fi
 
 AM_CONDITIONAL(WITH_PKCS11, test "$enable_pkcs11" = "yes")
 
-dnl ****************************************************************************
-dnl  SSH 
-dnl ****************************************************************************
+# -----------------------------------------------------------------------------
+#  SSH
 
 AC_ARG_ENABLE(ssh,
         AC_HELP_STRING([--disable-ssh], 
@@ -425,57 +427,31 @@ fi
 AM_CONDITIONAL(WITH_SSH, test "$enable_ssh" = "yes")
 
 # -----------------------------------------------------------------------------
-# Debug mode
+# Compilation and linking options
 #
 
 AC_MSG_CHECKING([for debug mode])
 AC_ARG_ENABLE(debug,
-              AC_HELP_STRING([--enable-debug=no/yes/full],
+              AC_HELP_STRING([--enable-debug=no/default/yes],
               [Turn on or off debugging]))
 
 if test "$enable_debug" != "no"; then
 	AC_DEFINE_UNQUOTED(WITH_DEBUG, 1, [Print debug output])
 	AC_DEFINE_UNQUOTED(_DEBUG, 1, [In debug mode])
+	CFLAGS="$CFLAGS -g"
 fi
 
-if test "$enable_debug" = "full"; then
-	debug_status="full"
-	CFLAGS="$CFLAGS -g -O0 -Werror"
-	CFLAGS="$CFLAGS -DG_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED"
-	CFLAGS="$CFLAGS -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
+if test "$enable_debug" = "yes"; then
+	debug_status="yes (-g, -O0, debug output, testable)"
+	CFLAGS="$CFLAGS -O0"
 elif test "$enable_debug" = "no"; then
-	debug_status="no"
+	debug_status="no (no debug output, not testable, G_DISABLE_ASSERT)"
 	AC_DEFINE_UNQUOTED(G_DISABLE_ASSERT, 1, [Disable glib assertions])
 else
-	debug_status="yes"
+	debug_status="default (-g, debug output, testable)"
 fi
 
 AC_MSG_RESULT($debug_status)
-
-# Fatal Messages mode
-AC_ARG_ENABLE(fatal-messages, 
-	    AC_HELP_STRING([--enable-fatal-messages],
-	    [Don't make compile and or runtime messages fatal in debug mode.]))
-
-if test "$enable_fatal_messages" = "yes" && test "$enable_debug" = "yes"; then
-    CFLAGS="$CFLAGS -Wall -Werror"
-    AC_DEFINE_UNQUOTED(FATAL_MESSAGES, 1, [Fatal runtime messages])
-    echo "enabling fatal runtime messages"
-fi
-
-# Build Tests
-AC_ARG_ENABLE(tests,
-        AC_HELP_STRING([--enable-tests],
-        [Compile Test Programs]))
-        
-if test "$enable_tests" != "yes"; then
-    enable_tests="no"
-fi
-
-AM_CONDITIONAL(WITH_TESTS, test "$enable_tests" = "yes")
-
-# -------------------------------------------------------------------
-# More warnings
 
 AC_MSG_CHECKING(for more warnings)
 if test "$GCC" = "yes"; then
@@ -506,39 +482,30 @@ else
 	AC_MSG_RESULT(no)
 fi
 
-dnl ****************************************************************************
+AC_ARG_ENABLE(strict, [
+               AS_HELP_STRING([--enable-strict], [Strict code compilation])
+             ])
+
+AC_MSG_CHECKING([build strict])
+
+if test "$enable_strict" = "yes"; then
+	CFLAGS="$CFLAGS -Werror \
+		-DGTK_DISABLE_DEPRECATED \
+		-DGDK_DISABLE_DEPRECATED \
+		-DG_DISABLE_DEPRECATED \
+		-DGDK_PIXBUF_DISABLE_DEPRECATED"
+	AC_DEFINE_UNQUOTED(WITH_STRICT, 1, [More strict checks])
+	strict_status="yes (-Werror, fatals, no deprecations)"
+else
+	strict_status="no (non-fatal warnings)"
+fi
+
+AC_MSG_RESULT($strict_status)
+
+# -----------------------------------------------------------------------------
 
 AC_SUBST(SEAHORSE_CFLAGS)
 AC_SUBST(SEAHORSE_LIBS)
-
-AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
-
-AC_ARG_ENABLE(update-mime-database,
-	AC_HELP_STRING([--disable-update-mime-database],
-	[do not run the update-mime-database utility (mostly useful for package maintainers) ]))
-AM_CONDITIONAL(UPDATE_MIME_DATABASE, test "$enable_update_mime_database" != "no")
-
-dnl *******************
-dnl ***** gettext *****
-dnl *******************
-
-GETTEXT_PACKAGE=seahorse
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Name of the gettext domain.])
-
-AM_GLIB_GNU_GETTEXT
-
-dnl ****************************************************************************
-## here we get the flags we'll actually use
-PKG_CHECK_MODULES(EGG, gtk+-3.0 >= $GTK_REQUIRED)
-AC_SUBST(EGG_LIBS)
-AC_SUBST(EGG_CFLAGS)
-
-PKG_CHECK_MODULES(EGG_SMCLIENT, gtk+-3.0)
-AC_SUBST(EGG_SMCLIENT_LIBS)
-AC_SUBST(EGG_SMCLIENT_CFLAGS)
-
-dnl ****************************************************************************
 
 AC_OUTPUT([
 Makefile
@@ -556,10 +523,6 @@ src/seahorse.desktop.in
 ssh/Makefile
 ])
 
-dnl ****************************************************************************
-dnl  SUMMARY
-dnl ****************************************************************************
-
 echo "
 PKCS11 Support:             $enable_pkcs11
 PGP Support:                $enable_pgp
@@ -570,4 +533,6 @@ Keyserver Support:          $with_keyserver
   LDAP:                     $with_ldap
   HKP:                      $enable_hkp
   Key Sharing:              $enable_sharing
+Debug:                      $debug_status
+Strict:                     $strict_status
 "
