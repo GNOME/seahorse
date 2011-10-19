@@ -44,14 +44,6 @@ value_equal (const GValue *a, const GValue *b)
 		else
 			retval = FALSE;
 		break;
-	case G_TYPE_CHAR:
-		if (g_value_get_char (a) < g_value_get_char (b))
-			retval = FALSE;
-		else if (g_value_get_char (a) == g_value_get_char (b))
-			retval = TRUE;
-		else
-			retval = FALSE;
-		break;
 	case G_TYPE_UCHAR:
 		if (g_value_get_uchar (a) < g_value_get_uchar (b))
 			retval = FALSE;

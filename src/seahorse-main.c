@@ -57,8 +57,6 @@ main (int argc, char **argv)
     GError *error = NULL;
     int ret = 0;
 
-    g_thread_init (NULL);
-
     seahorse_secure_memory_init ();
     
 #ifdef ENABLE_NLS

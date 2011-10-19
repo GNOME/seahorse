@@ -162,136 +162,138 @@ window_state_changed (GtkWidget *win, GdkEventWindowState *event, gpointer data)
 }
 
 GtkDialog*
-seahorse_passphrase_prompt_show (const gchar *title, const gchar *description, 
-                                 const gchar *prompt, const gchar *check,
+seahorse_passphrase_prompt_show (const gchar *title,
+                                 const gchar *description,
+                                 const gchar *prompt,
+                                 const gchar *check,
                                  gboolean confirm)
 {
-    GtkEntryBuffer *buffer;
-    GtkEntry *entry;
-    GtkDialog *dialog;
-    GtkWidget *w;
-    GtkWidget *box;
-    GtkTable *table;
-    GtkWidget *wvbox;
-    GtkWidget *chbox;
-    gchar *msg;
-    
-    if (!title)
-        title = _("Passphrase");
+	GtkEntryBuffer *buffer;
+	GtkEntry *entry;
+	GtkDialog *dialog;
+	GtkWidget *widget;
+	GtkWidget *box;
+	GtkGrid *grid;
+	GtkWidget *wvbox;
+	GtkWidget *chbox;
+	gchar *msg;
 
-    if (!prompt)
-        prompt = _("Password:"); 
-    
-    w = gtk_dialog_new_with_buttons (title, NULL, 0, NULL);
-    gtk_window_set_icon_name (GTK_WINDOW (w), GTK_STOCK_DIALOG_AUTHENTICATION);
+	if (!title)
+		title = _("Passphrase");
 
-    dialog = GTK_DIALOG (w);
+	if (!prompt)
+		prompt = _("Password:");
 
-    g_signal_connect (G_OBJECT (dialog), "map-event", G_CALLBACK (grab_keyboard), NULL);
-    g_signal_connect (G_OBJECT (dialog), "unmap-event", G_CALLBACK (ungrab_keyboard), NULL);
-    g_signal_connect (G_OBJECT (dialog), "window-state-event", G_CALLBACK (window_state_changed), NULL); 
+	widget = gtk_dialog_new_with_buttons (title, NULL, 0, NULL);
+	gtk_window_set_icon_name (GTK_WINDOW (widget), GTK_STOCK_DIALOG_AUTHENTICATION);
+	dialog = GTK_DIALOG (widget);
 
-    wvbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, HIG_LARGE * 2);
-    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (dialog)), wvbox);
-    gtk_container_set_border_width (GTK_CONTAINER (wvbox), HIG_LARGE);
+	g_signal_connect (G_OBJECT (dialog), "map-event", G_CALLBACK (grab_keyboard), NULL);
+	g_signal_connect (G_OBJECT (dialog), "unmap-event", G_CALLBACK (ungrab_keyboard), NULL);
+	g_signal_connect (G_OBJECT (dialog), "window-state-event", G_CALLBACK (window_state_changed), NULL);
 
-    chbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, HIG_LARGE);
-    gtk_box_pack_start (GTK_BOX (wvbox), chbox, FALSE, FALSE, 0);
+	wvbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, HIG_LARGE * 2);
+	gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (dialog)), wvbox);
+	gtk_container_set_border_width (GTK_CONTAINER (wvbox), HIG_LARGE);
 
-    /* The image */
-    w = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, GTK_ICON_SIZE_DIALOG);
-    gtk_misc_set_alignment (GTK_MISC (w), 0.0, 0.0);
-    gtk_box_pack_start (GTK_BOX (chbox), w, FALSE, FALSE, 0);
+	chbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, HIG_LARGE);
+	gtk_box_pack_start (GTK_BOX (wvbox), chbox, FALSE, FALSE, 0);
 
-    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, HIG_SMALL);
-    gtk_box_pack_start (GTK_BOX (chbox), box, TRUE, TRUE, 0);
+	/* The image */
+	widget = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, GTK_ICON_SIZE_DIALOG);
+	gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.0);
+	gtk_box_pack_start (GTK_BOX (chbox), widget, FALSE, FALSE, 0);
 
-    /* The description text */
-    if (description) {
-        msg = utf8_validate (description);
-        w = gtk_label_new (msg);
-        g_free (msg);
+	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, HIG_SMALL);
+	gtk_box_pack_start (GTK_BOX (chbox), box, TRUE, TRUE, 0);
 
-        gtk_misc_set_alignment (GTK_MISC (w), 0.0, 0.5);
-        gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
-        gtk_box_pack_start (GTK_BOX (box), w, TRUE, FALSE, 0);
-    }
+	/* The description text */
+	if (description) {
+		msg = utf8_validate (description);
+		widget = gtk_label_new (msg);
+		g_free (msg);
 
-    /* Two entries (usually on is hidden)  in a vbox */
-    table = GTK_TABLE (gtk_table_new (3, 2, FALSE));
-    gtk_table_set_row_spacings (table, HIG_SMALL);
-    gtk_table_set_col_spacings (table, HIG_LARGE);
-    gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (table), FALSE, FALSE, 0);
+		gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
+		gtk_label_set_line_wrap (GTK_LABEL (widget), TRUE);
+		gtk_box_pack_start (GTK_BOX (box), widget, TRUE, FALSE, 0);
+	}
 
-    /* The first entry if we have one */
-    if (confirm) {
-        msg = utf8_validate (prompt);
-        w = gtk_label_new (msg);
-        g_free (msg);
-        gtk_table_attach (table, w, 0, 1, 0, 1, GTK_FILL, 0, 0, 0);
+	grid = GTK_GRID (gtk_grid_new ());
+	gtk_grid_set_row_spacing (grid, HIG_SMALL);
+	gtk_grid_set_column_spacing (grid, HIG_LARGE);
+	gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (grid), FALSE, FALSE, 0);
 
-        buffer = seahorse_secure_buffer_new ();
-        entry = GTK_ENTRY (gtk_entry_new_with_buffer (buffer));
-        g_object_unref (buffer);
-        gtk_entry_set_visibility (entry, FALSE);
-        gtk_widget_set_size_request (GTK_WIDGET (entry), 200, -1);
-        g_object_set_data (G_OBJECT (dialog), "confirm-entry", entry);
-        g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (confirm_callback), dialog);
-        g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), dialog);
-        gtk_table_attach_defaults (table, GTK_WIDGET (entry), 1, 2, 0, 1);
-        gtk_widget_grab_focus (GTK_WIDGET (entry));
-    }
+	/* The first entry if we have one */
+	if (confirm) {
+		msg = utf8_validate (prompt);
+		widget = gtk_label_new (msg);
+		g_free (msg);
+		gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
+		gtk_grid_attach (grid, widget, 0, 0, 1, 1);
 
-    /* The second and main entry */
-    msg = utf8_validate (confirm ? _("Confirm:") : prompt);
-    w = gtk_label_new (msg);
-    g_free (msg);
-    gtk_table_attach (table, w, 0, 1, 1, 2, GTK_FILL, 0, 0, 0);
+		buffer = seahorse_secure_buffer_new ();
+		entry = GTK_ENTRY (gtk_entry_new_with_buffer (buffer));
+		g_object_unref (buffer);
+		gtk_entry_set_visibility (entry, FALSE);
+		gtk_widget_set_size_request (GTK_WIDGET (entry), 200, -1);
+		g_object_set_data (G_OBJECT (dialog), "confirm-entry", entry);
+		g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (confirm_callback), dialog);
+		g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), dialog);
+		gtk_grid_attach (grid, GTK_WIDGET (entry), 1, 0, 1, 1);
+		gtk_widget_grab_focus (GTK_WIDGET (entry));
+	}
 
-    buffer = seahorse_secure_buffer_new ();
-    entry = GTK_ENTRY (gtk_entry_new_with_buffer (buffer));
-    g_object_unref (buffer);
-    gtk_widget_set_size_request (GTK_WIDGET (entry), 200, -1);
-    gtk_entry_set_visibility (entry, FALSE);
-    g_object_set_data (G_OBJECT (dialog), "secure-entry", entry);
-    g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (enter_callback), dialog);
-    gtk_table_attach_defaults (table, GTK_WIDGET (entry), 1, 2, 1, 2);
-    if (!confirm)
-        gtk_widget_grab_focus (GTK_WIDGET (entry));
-    else
-        g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), dialog);
+	/* The second and main entry */
+	msg = utf8_validate (confirm ? _("Confirm:") : prompt);
+	widget = gtk_label_new (msg);
+	g_free (msg);
+	gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
+	gtk_grid_attach (grid, widget, 0, 1, 1, 1);
 
-    /* The checkbox */
-    if (check) {
-        w = gtk_check_button_new_with_mnemonic (check);
-        gtk_table_attach_defaults (table, w, 1, 2, 2, 3);
-        g_object_set_data (G_OBJECT (dialog), "check-option", w);
-    }
+	buffer = seahorse_secure_buffer_new ();
+	entry = GTK_ENTRY (gtk_entry_new_with_buffer (buffer));
+	g_object_unref (buffer);
+	gtk_widget_set_size_request (GTK_WIDGET (entry), 200, -1);
+	gtk_entry_set_visibility (entry, FALSE);
+	g_object_set_data (G_OBJECT (dialog), "secure-entry", entry);
+	g_signal_connect (G_OBJECT (entry), "activate", G_CALLBACK (enter_callback), dialog);
+	gtk_grid_attach (grid, GTK_WIDGET (entry), 1, 1, 1, 1);
+	if (!confirm)
+		gtk_widget_grab_focus (GTK_WIDGET (entry));
+	else
+		g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), dialog);
 
-    gtk_widget_show_all (GTK_WIDGET (table));
-    
-    w = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-    gtk_dialog_add_action_widget (dialog, w, GTK_RESPONSE_REJECT);
-    gtk_widget_set_can_default (w, TRUE);
+	/* The checkbox */
+	if (check) {
+		widget = gtk_check_button_new_with_mnemonic (check);
+		gtk_grid_attach (grid, widget, 1, 2, 1, 1);
+		g_object_set_data (G_OBJECT (dialog), "check-option", widget);
+	}
 
-    w = gtk_button_new_from_stock (GTK_STOCK_OK);
-    gtk_dialog_add_action_widget (dialog, w, GTK_RESPONSE_ACCEPT);
-    gtk_widget_set_can_default (w, TRUE);
-    gtk_widget_grab_default (w);
-    
-    g_signal_connect (dialog, "key_press_event", G_CALLBACK (key_press), NULL);
+	gtk_widget_show_all (GTK_WIDGET (grid));
 
-    gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
-    gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);    
-    gtk_window_set_type_hint (GTK_WINDOW (dialog), GDK_WINDOW_TYPE_HINT_NORMAL);
-    gtk_window_set_keep_above (GTK_WINDOW (dialog), TRUE);
-    gtk_widget_show_all (GTK_WIDGET (dialog));
-    gdk_window_focus (gtk_widget_get_window (GTK_WIDGET (dialog)), GDK_CURRENT_TIME);
+	widget = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+	gtk_dialog_add_action_widget (dialog, widget, GTK_RESPONSE_REJECT);
+	gtk_widget_set_can_default (widget, TRUE);
 
-    if (confirm)
-        entry_changed (NULL, dialog);
-    
-    return dialog;
+	widget = gtk_button_new_from_stock (GTK_STOCK_OK);
+	gtk_dialog_add_action_widget (dialog, widget, GTK_RESPONSE_ACCEPT);
+	gtk_widget_set_can_default (widget, TRUE);
+	gtk_widget_grab_default (widget);
+
+	g_signal_connect (dialog, "key_press_event", G_CALLBACK (key_press), NULL);
+
+	gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
+	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_window_set_type_hint (GTK_WINDOW (dialog), GDK_WINDOW_TYPE_HINT_NORMAL);
+	gtk_window_set_keep_above (GTK_WINDOW (dialog), TRUE);
+	gtk_widget_show_all (GTK_WIDGET (dialog));
+	gdk_window_focus (gtk_widget_get_window (GTK_WIDGET (dialog)), GDK_CURRENT_TIME);
+
+	if (confirm)
+		entry_changed (NULL, dialog);
+
+	return dialog;
 }
 
 const gchar*
