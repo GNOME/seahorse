@@ -243,7 +243,7 @@ op_delete (SeahorseGpgmeKey *pkey, gboolean secret)
 	gpgme_error_t err;
 	gpgme_key_t key;
 
-	keyring = SEAHORSE_GPGME_KEYRING (seahorse_object_get_source (SEAHORSE_OBJECT (pkey)));
+	keyring = SEAHORSE_GPGME_KEYRING (seahorse_object_get_place (SEAHORSE_OBJECT (pkey)));
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring), GPG_E (GPG_ERR_INV_KEYRING));
 
 	g_object_ref (pkey);
@@ -399,7 +399,7 @@ edit_key (SeahorseGpgmeKey *pkey, SeahorseEditParm *parms)
 	gpgme_error_t err;
 	gpgme_key_t key;
 
-	keyring = SEAHORSE_GPGME_KEYRING (seahorse_object_get_source (SEAHORSE_OBJECT (pkey)));
+	keyring = SEAHORSE_GPGME_KEYRING (seahorse_object_get_place (SEAHORSE_OBJECT (pkey)));
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring), GPG_E (GPG_ERR_INV_KEYRING));
 
 	g_object_ref (pkey);

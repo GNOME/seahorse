@@ -20,29 +20,23 @@
  * 02111-1307, USA.
  */
 
-#ifndef __SEAHORSE_PREDICATE_H__
-#define __SEAHORSE_PREDICATE_H__
+#ifndef __SEAHORSE_ACTION_H__
+#define __SEAHORSE_ACTION_H__
 
-#include "seahorse-object.h"
-#include "seahorse-types.h"
+#include <gtk/gtk.h>
 
-#include <glib-object.h>
+GtkWindow *           seahorse_action_get_window                (GtkAction *action);
 
-typedef gboolean (*SeahorsePredicateFunc) (GObject *obj,
-                                           void *user_data);
+gpointer              seahorse_action_get_object                (GtkAction *action);
 
-typedef struct _SeahorsePredicate SeahorsePredicate;
+GList *               seahorse_action_get_objects               (GtkAction *action);
 
-struct _SeahorsePredicate {
-	GType type;
-	SeahorseUsage usage;
-	SeahorseFlags flags;
-	SeahorseFlags nflags;
-	SeahorsePredicateFunc custom;
-	gpointer custom_target;
-};
+void                  seahorse_action_set_window                (GtkAction *action,
+                                                                 GtkWindow *window);
 
-gboolean           seahorse_predicate_match         (SeahorsePredicate *pred,
-                                                     GObject *obj);
+void                  seahorse_action_set_objects               (GtkAction *action,
+                                                                 GList *objects);
 
-#endif /* __SEAHORSE_PREDICATE_H__ */
+gboolean              seahorse_action_have_objects              (GtkAction *action);
+
+#endif

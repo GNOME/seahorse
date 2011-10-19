@@ -21,15 +21,15 @@
 
 #include "config.h"
 
+#include "seahorse-gkr-actions.h"
 #include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-dialogs.h"
-#include "seahorse-gkr-item-commands.h"
-#include "seahorse-gkr-keyring-commands.h"
 #include "seahorse-gkr-operation.h"
 
 #include "seahorse-backend.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
+#include "seahorse-viewer.h"
 
 #include <gnome-keyring.h>
 
@@ -39,7 +39,8 @@ enum {
 	PROP_0,
 	PROP_NAME,
 	PROP_LABEL,
-	PROP_DESCRIPTION
+	PROP_DESCRIPTION,
+	PROP_ACTIONS
 };
 
 static SeahorseGkrBackend *gkr_backend = NULL;
@@ -47,6 +48,7 @@ static SeahorseGkrBackend *gkr_backend = NULL;
 struct _SeahorseGkrBackend {
 	GObject parent;
 	GHashTable *keyrings;
+	GtkActionGroup *actions;
 };
 
 struct _SeahorseGkrBackendClass {
@@ -68,12 +70,9 @@ seahorse_gkr_backend_init (SeahorseGkrBackend *self)
 	g_return_if_fail (gkr_backend == NULL);
 	gkr_backend = self;
 
+	self->actions = seahorse_gkr_backend_actions_instance ();
 	self->keyrings = g_hash_table_new_full (g_str_hash, g_str_equal,
 	                                        g_free, g_object_unref);
-
-	/* Let these classes register themselves, when the backend is created */
-	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKR_ITEM_COMMANDS));
-	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_GKR_KEYRING_COMMANDS));
 }
 
 static void
@@ -92,6 +91,8 @@ seahorse_gkr_backend_get_property (GObject *obj,
                                    GValue *value,
                                    GParamSpec *pspec)
 {
+	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (obj);
+
 	switch (prop_id) {
 	case PROP_NAME:
 		g_value_set_string (value, SEAHORSE_GKR_NAME);
@@ -101,6 +102,9 @@ seahorse_gkr_backend_get_property (GObject *obj,
 		break;
 	case PROP_DESCRIPTION:
 		g_value_set_string (value, _("Stored personal passwords, credentials and secrets"));
+		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, self->actions);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -114,6 +118,7 @@ seahorse_gkr_backend_dispose (GObject *obj)
 	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (obj);
 
 	g_hash_table_remove_all (self->keyrings);
+	gtk_action_group_set_sensitive (self->actions, FALSE);
 
 	G_OBJECT_CLASS (seahorse_gkr_backend_parent_class)->finalize (obj);
 }
@@ -124,6 +129,8 @@ seahorse_gkr_backend_finalize (GObject *obj)
 	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (obj);
 
 	g_hash_table_destroy (self->keyrings);
+	g_clear_object (&self->actions);
+
 	g_return_if_fail (gkr_backend == self);
 	gkr_backend = NULL;
 
@@ -143,6 +150,7 @@ seahorse_gkr_backend_class_init (SeahorseGkrBackendClass *klass)
 	g_object_class_override_property (gobject_class, PROP_NAME, "name");
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
 }
 
 static guint

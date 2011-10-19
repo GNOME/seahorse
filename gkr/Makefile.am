@@ -17,15 +17,14 @@ noinst_LTLIBRARIES = libseahorse-gkr.la
 
 libseahorse_gkr_la_SOURCES = \
 	seahorse-gkr.c seahorse-gkr.h \
+	seahorse-gkr-actions.c seahorse-gkr-actions.h \
 	seahorse-gkr-add-item.c \
 	seahorse-gkr-add-keyring.c \
 	seahorse-gkr-backend.c seahorse-gkr-backend.h \
 	seahorse-gkr-dialogs.h seahorse-gkr-dialogs.c \
 	seahorse-gkr-item.c seahorse-gkr-item.h \
-	seahorse-gkr-item-commands.c seahorse-gkr-item-commands.h \
 	seahorse-gkr-item-properties.c \
 	seahorse-gkr-keyring.c seahorse-gkr-keyring.h \
-	seahorse-gkr-keyring-commands.c seahorse-gkr-keyring-commands.h \
 	seahorse-gkr-keyring-properties.c \
 	seahorse-gkr-operation.c seahorse-gkr-operation.h
 

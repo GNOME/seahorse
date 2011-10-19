@@ -3,7 +3,6 @@
 		<menu name="File" action="file-menu">
 			<menuitem action="file-new"/>
 			<menuitem action="file-import"/>
-			<menuitem action="file-export"/>
 			<separator/>
 			<placeholder name="FileCommands">
 			</placeholder>
@@ -11,7 +10,6 @@
 			<menuitem action="app-quit"/>
 		</menu>
 		<menu name="Edit" action="edit-menu">
-			<menuitem action="edit-export-clipboard"/>
 			<menuitem action="edit-import-clipboard"/>
 			<menuitem action="edit-delete"/>
 			<separator/>
@@ -34,21 +32,22 @@
 	</menubar>
   
 	<toolbar name="MainToolbar">
-		<placeholder name="ToolItems">
-			<toolitem action="show-properties"/>
-			<toolitem action="file-export"/>
-			<toolitem action="key-sign"/>
-			<toolitem action="remote-find"/>
-		</placeholder>
+		<toolitem action="properties-object"/>
 	</toolbar>
 	
-	<popup name="KeyPopup">
-		<menuitem action="show-properties"/>
+	<popup name="ObjectPopup">
+		<menuitem action="properties-object"/>
 		<separator/>
-		<menuitem action="file-export"/>
-		<menuitem action="edit-export-clipboard"/>
 		<menuitem action="edit-delete"/>
 		<separator/>
 	</popup>
-	
+
+	<popup name="PlacePopup">
+		<menuitem action="properties-object"/>
+	</popup>
+
+	<popup name="BackendPopup">
+		<menuitem action="properties-object"/>
+	</popup>
+
 </ui>

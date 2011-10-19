@@ -22,10 +22,10 @@
 #include "config.h"
 
 #include "seahorse-pkcs11-backend.h"
-#include "seahorse-pkcs11-commands.h"
 #include "seahorse-token.h"
 
 #include "seahorse-backend.h"
+#include "seahorse-place.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
 
@@ -37,7 +37,8 @@ enum {
 	PROP_0,
 	PROP_NAME,
 	PROP_LABEL,
-	PROP_DESCRIPTION
+	PROP_DESCRIPTION,
+	PROP_ACTIONS
 };
 
 static SeahorsePkcs11Backend *pkcs11_backend = NULL;
@@ -76,9 +77,6 @@ seahorse_pkcs11_backend_init (SeahorsePkcs11Backend *self)
 
 	g_return_if_fail (pkcs11_backend == NULL);
 	pkcs11_backend = self;
-
-	/* Let these classes register themselves, when the backend is created */
-	g_type_class_unref (g_type_class_ref (SEAHORSE_PKCS11_TYPE_COMMANDS));
 
 	for (i = 0; token_blacklist[i] != NULL; i++) {
 		uri = gck_uri_parse (token_blacklist[i], GCK_URI_FOR_TOKEN | GCK_URI_FOR_MODULE, &error);
@@ -126,7 +124,7 @@ on_initialized_registered (GObject *unused,
                            gpointer user_data)
 {
 	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (user_data);
-	SeahorseSource *source;
+	SeahorsePlace *place;
 	GList *slots, *s;
 	GList *modules, *m;
 	GError *error = NULL;
@@ -145,9 +143,9 @@ on_initialized_registered (GObject *unused,
 			if (token == NULL)
 				continue;
 			if (is_token_usable (self, s->data, token)) {
-				source = SEAHORSE_SOURCE (seahorse_token_new (s->data));
-				self->slots = g_list_append (self->slots, source);
-				gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (source));
+				place = SEAHORSE_PLACE (seahorse_token_new (s->data));
+				self->slots = g_list_append (self->slots, place);
+				gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (place));
 			}
 			gck_token_info_free (token);
 		}
@@ -186,6 +184,9 @@ seahorse_pkcs11_backend_get_property (GObject *obj,
 		break;
 	case PROP_DESCRIPTION:
 		g_value_set_string (value, _("X.509 certificates and related keys"));
+		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, NULL);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -230,6 +231,7 @@ seahorse_pkcs11_backend_class_init (SeahorsePkcs11BackendClass *klass)
 	g_object_class_override_property (gobject_class, PROP_NAME, "name");
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
 }
 
 static guint

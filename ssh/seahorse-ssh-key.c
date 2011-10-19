@@ -31,7 +31,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include "seahorse-source.h"
+#include "seahorse-place.h"
 #include "seahorse-ssh-source.h"
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
@@ -292,11 +292,14 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
  */
 
 SeahorseSSHKey* 
-seahorse_ssh_key_new (SeahorseSource *sksrc, SeahorseSSHKeyData *data)
+seahorse_ssh_key_new (SeahorsePlace *place,
+                      SeahorseSSHKeyData *data)
 {
     SeahorseSSHKey *skey;
-    skey = g_object_new (SEAHORSE_TYPE_SSH_KEY, "source", sksrc, 
-                         "key-data", data, NULL);
+    skey = g_object_new (SEAHORSE_TYPE_SSH_KEY,
+                         "place", place,
+                         "key-data", data,
+                         NULL);
     return skey;
 }
 

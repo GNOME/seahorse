@@ -25,8 +25,9 @@
 #include "seahorse-gkr.h"
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-operation.h"
+#include "seahorse-gkr-actions.h"
 
-#include "seahorse-predicate.h"
+#include "seahorse-action.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
@@ -41,6 +42,7 @@ enum {
 	PROP_KEYRING_INFO,
 	PROP_IS_DEFAULT,
 	PROP_URI,
+	PROP_ACTIONS,
 };
 
 struct _SeahorseGkrKeyringPrivate {
@@ -50,14 +52,16 @@ struct _SeahorseGkrKeyringPrivate {
 
 	gpointer req_info;
 	GnomeKeyringInfo *keyring_info;
+
+	GtkActionGroup *actions;
 };
 
-static void     seahorse_keyring_source_iface        (SeahorseSourceIface *iface);
-static void     seahorse_keyring_collection_iface    (GcrCollectionIface *iface);
+static void     seahorse_keyring_place_iface        (SeahorsePlaceIface *iface);
+static void     seahorse_keyring_collection_iface   (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_keyring_collection_iface);
-                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_keyring_source_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_keyring_place_iface);
 );
 
 static GType
@@ -70,10 +74,6 @@ boxed_type_keyring_info (void)
 		                                     (GBoxedFreeFunc)gnome_keyring_info_free);
 	return type;
 }
-
-/* -----------------------------------------------------------------------------
- * INTERNAL 
- */
 
 static void
 received_keyring_info (GnomeKeyringResult result, GnomeKeyringInfo *info, gpointer data)
@@ -162,7 +162,7 @@ seahorse_gkr_keyring_remove_item (SeahorseGkrKeyring *self,
 	item = g_hash_table_lookup (self->pv->items, GUINT_TO_POINTER (item_id));
 	if (item != NULL) {
 		g_object_ref (item);
-		g_object_set (item, "source", NULL, NULL);
+		g_object_set (item, "place", NULL, NULL);
 		g_hash_table_remove (self->pv->items, GUINT_TO_POINTER (item_id));
 		gcr_collection_emit_removed (GCR_COLLECTION (self), G_OBJECT (item));
 		g_object_unref (item);
@@ -248,9 +248,7 @@ on_keyring_load_list_item_ids (GnomeKeyringResult result,
 		list = g_list_next (list);
 	}
 
-	g_hash_table_foreach (checks, (GHFunc)remove_key_from_context,
-	                      SEAHORSE_SOURCE (closure->keyring));
-
+	g_hash_table_foreach (checks, (GHFunc)remove_key_from_context, closure->keyring);
 	g_hash_table_destroy (checks);
 
 	seahorse_progress_end (closure->cancellable, res);
@@ -358,6 +356,7 @@ seahorse_gkr_keyring_init (SeahorseGkrKeyring *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_KEYRING, SeahorseGkrKeyringPrivate);
 	self->pv->items = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);
+	self->pv->actions = seahorse_gkr_keyring_actions_instance ();
 }
 
 static void
@@ -371,14 +370,16 @@ seahorse_gkr_keyring_finalize (GObject *obj)
 		gnome_keyring_info_free (self->pv->keyring_info);
 	self->pv->keyring_info = NULL;
 	g_assert (self->pv->req_info == NULL);
-    
+
 	g_free (self->pv->keyring_name);
 	self->pv->keyring_name = NULL;
 	
 	if (self->pv->keyring_info) 
 		gnome_keyring_info_free (self->pv->keyring_info);
 	self->pv->keyring_info = NULL;
-	
+
+	g_object_unref (self->pv->actions);
+
 	G_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->finalize (obj);
 }
 
@@ -430,6 +431,9 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 		text = g_strdup_printf ("secret-service://%s", self->pv->keyring_name);
 		g_value_take_string (value, text);
 		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, self->pv->actions);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -449,8 +453,8 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 	gobject_class->get_property = seahorse_gkr_keyring_get_property;
 
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
-
 	g_object_class_override_property (gobject_class, PROP_URI, "uri");
+	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
 
 	g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,
 	           g_param_spec_string ("keyring-name", "Gnome Keyring Name", "Name of keyring.", 
@@ -466,7 +470,7 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 }
 
 static void
-seahorse_keyring_source_iface (SeahorseSourceIface *iface)
+seahorse_keyring_place_iface (SeahorsePlaceIface *iface)
 {
 
 }

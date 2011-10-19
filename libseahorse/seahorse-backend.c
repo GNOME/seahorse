@@ -46,6 +46,10 @@ seahorse_backend_default_init (SeahorseBackendIface *iface)
 		           g_param_spec_string ("description", "Description", "Description for the backend",
 		                                "", G_PARAM_READABLE));
 
+		g_object_interface_install_property (iface,
+		           g_param_spec_object ("actions", "Actions", "Backend actions",
+		                                GTK_TYPE_ACTION_GROUP, G_PARAM_READABLE));
+
 		initialized = TRUE;
 	}
 }

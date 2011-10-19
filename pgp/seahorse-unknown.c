@@ -62,7 +62,7 @@ seahorse_unknown_new (SeahorseUnknownSource *source,
 	identifier = seahorse_pgp_key_calc_identifier (keyid);
 
 	return g_object_new (SEAHORSE_TYPE_UNKNOWN,
-	                     "source", source,
+	                     "place", source,
 	                     "label", display,
 	                     "identifier", identifier,
 	                     NULL);

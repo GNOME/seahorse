@@ -20,29 +20,13 @@
  * 02111-1307, USA.
  */
 
-#ifndef __SEAHORSE_PREDICATE_H__
-#define __SEAHORSE_PREDICATE_H__
+#ifndef __SEAHORSE_PGP_ACTIONS_H__
+#define __SEAHORSE_PGP_ACTIONS_H__
 
-#include "seahorse-object.h"
-#include "seahorse-types.h"
+#include <gtk/gtk.h>
 
-#include <glib-object.h>
+GtkActionGroup *      seahorse_pgp_backend_actions_instance    (void);
 
-typedef gboolean (*SeahorsePredicateFunc) (GObject *obj,
-                                           void *user_data);
+GtkActionGroup *      seahorse_gpgme_key_actions_instance      (void);
 
-typedef struct _SeahorsePredicate SeahorsePredicate;
-
-struct _SeahorsePredicate {
-	GType type;
-	SeahorseUsage usage;
-	SeahorseFlags flags;
-	SeahorseFlags nflags;
-	SeahorsePredicateFunc custom;
-	gpointer custom_target;
-};
-
-gboolean           seahorse_predicate_match         (SeahorsePredicate *pred,
-                                                     GObject *obj);
-
-#endif /* __SEAHORSE_PREDICATE_H__ */
+#endif

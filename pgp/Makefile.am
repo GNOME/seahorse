@@ -58,8 +58,8 @@ libseahorse_pgp_la_SOURCES = \
 	seahorse-gpg-op.h seahorse-gpg-op.c \
 	seahorse-gpg-options.c seahorse-gpg-options.h \
 	seahorse-pgp.c seahorse-pgp.h \
+	seahorse-pgp-actions.c seahorse-pgp-actions.h \
 	seahorse-pgp-backend.c seahorse-pgp-backend.h \
-	seahorse-pgp-commands.c seahorse-pgp-commands.h \
 	seahorse-pgp-key.c seahorse-pgp-key.h \
 	seahorse-pgp-key-properties.c \
 	seahorse-pgp-keysets.c seahorse-pgp-keysets.h \

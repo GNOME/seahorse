@@ -23,16 +23,18 @@
 
 #include "config.h"
 
+#include "seahorse-place.h"
+#include "seahorse-util.h"
+
+#include "seahorse-key-manager-store.h"
+#include "seahorse-preferences.h"
+#include "seahorse-validity.h"
+
 #include <string.h>
 #include <unistd.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-
-#include "seahorse-key-manager-store.h"
-#include "seahorse-preferences.h"
-#include "seahorse-util.h"
-#include "seahorse-validity.h"
 
 #define DEBUG_FLAG SEAHORSE_DEBUG_DRAG
 #include "seahorse-debug.h"
@@ -358,8 +360,8 @@ export_to_text (SeahorseKeyManagerStore *skstore,
 	output = g_memory_output_stream_new (NULL, 0, g_realloc, g_free);
 	g_return_val_if_fail (output, FALSE);
 
-	ret = seahorse_source_export_auto_wait (skstore->priv->drag_objects, output,
-	                                        &skstore->priv->drag_error) &&
+	ret = seahorse_place_export_auto_wait (skstore->priv->drag_objects, output,
+	                                       &skstore->priv->drag_error) &&
 	      g_output_stream_close (output, NULL, &skstore->priv->drag_error);
 
 	if (ret) {
@@ -403,7 +405,7 @@ export_to_filename (SeahorseKeyManagerStore *skstore, const gchar *filename)
 
 	if (output) {
 		/* This modifies and frees keys */
-		ret = seahorse_source_export_auto_wait (keys, output, &skstore->priv->drag_error) &&
+		ret = seahorse_place_export_auto_wait (keys, output, &skstore->priv->drag_error) &&
 		      g_output_stream_close (output, NULL, &skstore->priv->drag_error);
 
 		g_object_unref (output);

@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-object.h"
-#include "seahorse-source.h"
+#include "seahorse-place.h"
 #include "seahorse-validity.h"
 
 #include "seahorse-ssh-key-data.h"
@@ -60,7 +60,7 @@ struct _SeahorseSSHKeyClass {
     SeahorseObjectClass            parent_class;
 };
 
-SeahorseSSHKey*         seahorse_ssh_key_new                  (SeahorseSource *sksrc, 
+SeahorseSSHKey*         seahorse_ssh_key_new                  (SeahorsePlace *sksrc,
                                                                SeahorseSSHKeyData *data);
 
 void                    seahorse_ssh_key_refresh              (SeahorseSSHKey *self);

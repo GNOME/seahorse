@@ -23,8 +23,6 @@
 
 #include "seahorse-object-widget.h"
 
-#define PROPERTIES "object-properties"
-
 enum {
 	PROP_0,
 	PROP_OBJECT

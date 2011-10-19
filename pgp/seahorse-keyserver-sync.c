@@ -46,7 +46,7 @@ on_transfer_upload_complete (GObject *object,
                              GAsyncResult *result,
                              gpointer user_data)
 {
-	SeahorseSource *source = SEAHORSE_SOURCE (user_data);
+	SeahorsePlace *place = SEAHORSE_PLACE (user_data);
 	GError *error = NULL;
 	gchar *publish_to;
 
@@ -58,7 +58,7 @@ on_transfer_upload_complete (GObject *object,
 		g_free (publish_to);
 	}
 
-	g_object_unref (source);
+	g_object_unref (place);
 }
 
 static void
@@ -66,18 +66,18 @@ on_transfer_download_complete (GObject *object,
                                GAsyncResult *result,
                                gpointer user_data)
 {
-	SeahorseSource *source = SEAHORSE_SOURCE (user_data);
+	SeahorsePlace *place = SEAHORSE_PLACE (user_data);
 	GError *error = NULL;
 	gchar *keyserver;
 
 	if (!seahorse_transfer_finish (result, &error)) {
-		g_object_get (source, "key-server", &keyserver, NULL);
+		g_object_get (place, "key-server", &keyserver, NULL);
 		seahorse_util_handle_error (&error, NULL,
 		                            _("Couldn't retrieve keys from server: %s"), keyserver);
 		g_free (keyserver);
 	}
 
-	g_object_unref (source);
+	g_object_unref (place);
 }
 
 G_MODULE_EXPORT void
@@ -203,7 +203,7 @@ seahorse_keyserver_sync (GList *keys)
 			continue;
 
 		keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-		seahorse_transfer_async (SEAHORSE_SOURCE (source), SEAHORSE_SOURCE (keyring),
+		seahorse_transfer_async (SEAHORSE_PLACE (source), SEAHORSE_PLACE (keyring),
 		                         keys, cancellable, on_transfer_download_complete,
 		                         g_object_ref (source));
 	}
@@ -218,7 +218,7 @@ seahorse_keyserver_sync (GList *keys)
 
 		/* This can happen if the URI scheme is not supported */
 		if (source != NULL) {
-			seahorse_pgp_backend_transfer_async (NULL, keys, SEAHORSE_SOURCE (source),
+			seahorse_pgp_backend_transfer_async (NULL, keys, SEAHORSE_PLACE (source),
 			                                     cancellable, on_transfer_upload_complete,
 			                                     g_object_ref (source));
 		}

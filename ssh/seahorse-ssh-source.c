@@ -23,11 +23,11 @@
 #include "config.h"
 
 
-#include "seahorse-ssh-source.h"
-
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
+#include "seahorse-ssh-source.h"
 
+#include "seahorse-place.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
 
@@ -50,7 +50,8 @@ enum {
 	PROP_DESCRIPTION,
 	PROP_ICON,
 	PROP_BASE_DIRECTORY,
-	PROP_URI
+	PROP_URI,
+	PROP_ACTIONS
 };
 
 struct _SeahorseSSHSourcePrivate {
@@ -60,13 +61,13 @@ struct _SeahorseSSHSourcePrivate {
     GHashTable *keys;
 };
 
-static void       seahorse_ssh_source_iface             (SeahorseSourceIface *iface);
+static void       seahorse_ssh_source_place_iface       (SeahorsePlaceIface *iface);
 
 static void       seahorse_ssh_source_collection_iface  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (SeahorseSSHSource, seahorse_ssh_source, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_ssh_source_collection_iface);
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_ssh_source_iface)
+                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_ssh_source_place_iface)
 );
 
 #define AUTHORIZED_KEYS_FILE    "authorized_keys"
@@ -244,6 +245,9 @@ seahorse_ssh_source_get_property (GObject *obj,
 		g_value_take_string (value, g_strdup_printf ("openssh://%s",
 		                                             self->priv->ssh_homedir));
 		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, NULL);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -336,6 +340,7 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
     g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
     g_object_class_override_property (gobject_class, PROP_URI, "uri");
     g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+    g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
 
     g_object_class_install_property (gobject_class, PROP_BASE_DIRECTORY,
         g_param_spec_string ("base-directory", "Key directory", "Directory where the keys are stored",
@@ -405,7 +410,7 @@ ssh_key_from_data (SeahorseSSHSource *self,
                    source_load_closure *closure,
                    SeahorseSSHKeyData *keydata)
 {
-	SeahorseSource *source = SEAHORSE_SOURCE (self);
+	SeahorsePlace *place = SEAHORSE_PLACE (self);
 	SeahorseSSHKey *skey;
 	SeahorseObject *prev;
 	const gchar *location;
@@ -453,7 +458,7 @@ ssh_key_from_data (SeahorseSSHSource *self,
 
 	/* Create a new key */
 	g_assert (keydata);
-	skey = seahorse_ssh_key_new (source, keydata);
+	skey = seahorse_ssh_key_new (place, keydata);
 	g_assert (g_strcmp0 (seahorse_ssh_key_get_location (skey), location) == 0);
 
 	g_hash_table_insert (self->priv->keys, g_strdup (location), skey);
@@ -774,19 +779,19 @@ on_import_found_private_key (SeahorseSSHSecData *data,
 }
 
 static void
-seahorse_ssh_source_import_async (SeahorseSource *source,
+seahorse_ssh_source_import_async (SeahorsePlace *place,
                                   GInputStream *input,
                                   GCancellable *cancellable,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
 {
-	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (source);
+	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (place);
 	source_import_closure *closure;
 	gchar *contents;
 	GSimpleAsyncResult *res;
 	guint count;
 
-	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
 	                                 seahorse_ssh_source_import_async);
 	closure = g_new0 (source_import_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
@@ -805,11 +810,11 @@ seahorse_ssh_source_import_async (SeahorseSource *source,
 }
 
 static GList *
-seahorse_ssh_source_import_finish (SeahorseSource *source,
+seahorse_ssh_source_import_finish (SeahorsePlace *place,
                                    GAsyncResult *result,
                                    GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
 	                      seahorse_ssh_source_import_async), NULL);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -820,7 +825,7 @@ seahorse_ssh_source_import_finish (SeahorseSource *source,
 }
 
 static void
-seahorse_ssh_source_export_async (SeahorseSource *source,
+seahorse_ssh_source_export_async (SeahorsePlace *place,
                                   GList *keys,
                                   GOutputStream *output,
                                   GCancellable *cancellable,
@@ -836,7 +841,7 @@ seahorse_ssh_source_export_async (SeahorseSource *source,
 	GList *l;
 	gsize written;
 
-	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
 	                                 seahorse_ssh_source_export_async);
 
 	for (l = keys; l; l = g_list_next (l)) {
@@ -886,11 +891,11 @@ seahorse_ssh_source_export_async (SeahorseSource *source,
 }
 
 static GOutputStream *
-seahorse_ssh_source_export_finish (SeahorseSource *source,
+seahorse_ssh_source_export_finish (SeahorsePlace *place,
                                    GAsyncResult *result,
                                    GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
 	                      seahorse_ssh_source_export_async), NULL);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -900,7 +905,7 @@ seahorse_ssh_source_export_finish (SeahorseSource *source,
 }
 
 static void 
-seahorse_ssh_source_iface (SeahorseSourceIface *iface)
+seahorse_ssh_source_place_iface (SeahorsePlaceIface *iface)
 {
 	iface->import_async = seahorse_ssh_source_import_async;
 	iface->import_finish = seahorse_ssh_source_import_finish;

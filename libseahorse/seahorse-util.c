@@ -66,7 +66,9 @@ static const gchar *bad_filename_chars = "/\\<>|";
  *
  */
 void
-seahorse_util_show_error (GtkWidget *parent, const gchar *heading, const gchar *message)
+seahorse_util_show_error (gpointer parent,
+                          const gchar *heading,
+                          const gchar *message)
 {
 	GtkWidget *dialog;
 
@@ -906,17 +908,17 @@ seahorse_util_chooser_open_prompt (GtkDialog *dialog)
  *          1 will be returned  if k1>k2. If the sources are equal it returns 0
  */
 static gint
-sort_objects_by_source (GObject *k1,
-                        GObject *k2)
+sort_objects_by_place (GObject *k1,
+                       GObject *k2)
 {
-	SeahorseSource *sk1 = NULL;
-	SeahorseSource *sk2 = NULL;
+	SeahorsePlace *sk1 = NULL;
+	SeahorsePlace *sk2 = NULL;
 
 	g_assert (G_IS_OBJECT (k1));
 	g_assert (G_IS_OBJECT (k2));
 
-	g_object_get (k1, "source", &sk1, NULL);
-	g_object_get (k2, "source", &sk2, NULL);
+	g_object_get (k1, "place", &sk1, NULL);
+	g_object_get (k2, "place", &sk2, NULL);
 
 	if (sk1 == sk2)
 		return 0;
@@ -931,10 +933,10 @@ sort_objects_by_source (GObject *k1,
  *
  * Returns: The sorted list
  */
-GList*        
-seahorse_util_objects_sort (GList *objects)
+GList *
+seahorse_util_objects_sort_by_place (GList *objects)
 {
-    return g_list_sort (objects, (GCompareFunc)sort_objects_by_source);
+	return g_list_sort (objects, (GCompareFunc)sort_objects_by_place);
 }
 
 
@@ -946,39 +948,36 @@ seahorse_util_objects_sort (GList *objects)
  *
  * Returns: The second part of the list.
  */
-GList*       
-seahorse_util_objects_splice (GList *objects)
+GList *
+seahorse_util_objects_splice_by_place (GList *objects)
 {
-    SeahorseSource *psk = NULL;
-    SeahorseSource *sk;
-    GList *prev = NULL;
-    
-    /* Note that the objects must be sorted */
-    
-    for ( ; objects; objects = g_list_next (objects)) {
-     
-        g_return_val_if_fail (G_IS_OBJECT (objects->data), NULL);
+	SeahorsePlace *psk = NULL;
+	SeahorsePlace *sk;
+	GList *prev = NULL;
 
-        sk = NULL;
-        g_object_get (objects->data, "source", &sk, NULL);
-        g_return_val_if_fail (sk != NULL, NULL);
+	/* Note that the objects must be sorted */
+	for ( ; objects; objects = g_list_next (objects)) {
+		g_return_val_if_fail (G_IS_OBJECT (objects->data), NULL);
+		sk = NULL;
+		g_object_get (objects->data, "place", &sk, NULL);
+		g_return_val_if_fail (sk != NULL, NULL);
 
-        /* Found a disconuity */
-        if (psk && sk != psk) {
-            g_assert (prev != NULL);
-            
-            /* Break the list */
-            prev->next = NULL;
-            
-            /* And return the new list */
-            return objects;
-        }
-        
-        psk = sk;
-        prev = objects;
-    }
-    
-    return NULL;
+		/* Found a disconuity */
+		if (psk && sk != psk) {
+			g_assert (prev != NULL);
+
+			/* Break the list */
+			prev->next = NULL;
+
+			/* And return the new list */
+			return objects;
+		}
+
+		psk = sk;
+		prev = objects;
+	}
+
+	return NULL;
 }
 
 /**

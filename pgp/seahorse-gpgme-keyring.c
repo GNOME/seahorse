@@ -28,6 +28,7 @@
 #include "seahorse-gpgme.h"
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-gpg-options.h"
+#include "seahorse-pgp-actions.h"
 #include "seahorse-pgp-key.h"
 
 #include "seahorse-progress.h"
@@ -53,7 +54,8 @@ enum {
 	PROP_LABEL,
 	PROP_DESCRIPTION,
 	PROP_ICON,
-	PROP_URI
+	PROP_URI,
+	PROP_ACTIONS
 };
 
 /* Amount of keys to load in a batch */
@@ -149,15 +151,16 @@ struct _SeahorseGpgmeKeyringPrivate {
 	guint scheduled_refresh;                /* Source for refresh timeout */
 	GFileMonitor *monitor_handle;           /* For monitoring the .gnupg directory */
 	GList *orphan_secret;                   /* Orphan secret keys */
+	GtkActionGroup *actions;
 };
 
-static void     seahorse_gpgme_keyring_source_iface       (SeahorseSourceIface *iface);
+static void     seahorse_gpgme_keyring_place_iface        (SeahorsePlaceIface *iface);
 
 static void     seahorse_gpgme_keyring_collection_iface   (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseGpgmeKeyring, seahorse_gpgme_keyring, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_gpgme_keyring_collection_iface);
-                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_gpgme_keyring_source_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_gpgme_keyring_place_iface);
 );
 
 typedef struct {
@@ -214,7 +217,7 @@ add_key_to_context (SeahorseGpgmeKeyring *self,
 
 	/* Create a new key with secret */
 	if (key->secret) {
-		pkey = seahorse_gpgme_key_new (SEAHORSE_SOURCE (self), NULL, key);
+		pkey = seahorse_gpgme_key_new (SEAHORSE_PLACE (self), NULL, key);
 
 		/* Since we don't have a public key yet, save this away */
 		self->pv->orphan_secret = g_list_append (self->pv->orphan_secret, pkey);
@@ -247,7 +250,7 @@ add_key_to_context (SeahorseGpgmeKeyring *self,
 	}
 
 	if (pkey == NULL)
-		pkey = seahorse_gpgme_key_new (SEAHORSE_SOURCE (self), key, NULL);
+		pkey = seahorse_gpgme_key_new (SEAHORSE_PLACE (self), key, NULL);
 
 	/* Add to context */
 	g_hash_table_insert (self->pv->keys, g_strdup (keyid), pkey);
@@ -677,20 +680,20 @@ on_keyring_import_complete (gpgme_error_t gerr,
 }
 
 static void
-seahorse_gpgme_keyring_import_async (SeahorseSource *source,
-                                    GInputStream *input,
-                                    GCancellable *cancellable,
-                                    GAsyncReadyCallback callback,
-                                    gpointer user_data)
+seahorse_gpgme_keyring_import_async (SeahorsePlace *place,
+                                     GInputStream *input,
+                                     GCancellable *cancellable,
+                                     GAsyncReadyCallback callback,
+                                     gpointer user_data)
 {
-	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (source);
+	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (place);
 	GSimpleAsyncResult *res;
 	keyring_import_closure *closure;
 	gpgme_error_t gerr;
 	GError *error = NULL;
 	GSource *gsource;
 
-	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
 	                                 seahorse_gpgme_keyring_import_async);
 	closure = g_new0 (keyring_import_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
@@ -719,14 +722,14 @@ seahorse_gpgme_keyring_import_async (SeahorseSource *source,
 }
 
 static GList *
-seahorse_gpgme_keyring_import_finish (SeahorseSource *source,
-                                     GAsyncResult *result,
-                                     GError **error)
+seahorse_gpgme_keyring_import_finish (SeahorsePlace *place,
+                                      GAsyncResult *result,
+                                      GError **error)
 {
 	keyring_import_closure *closure;
 	GList *results;
 
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
 	                      seahorse_gpgme_keyring_import_async), NULL);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -803,12 +806,12 @@ on_keyring_export_complete (gpgme_error_t gerr,
 }
 
 static void
-seahorse_gpgme_keyring_export_async (SeahorseSource *source,
-                                    GList *objects,
-                                    GOutputStream *output,
-                                    GCancellable *cancellable,
-                                    GAsyncReadyCallback callback,
-                                    gpointer user_data)
+seahorse_gpgme_keyring_export_async (SeahorsePlace *place,
+                                     GList *objects,
+                                     GOutputStream *output,
+                                     GCancellable *cancellable,
+                                     GAsyncReadyCallback callback,
+                                     gpointer user_data)
 {
 	GSimpleAsyncResult *res;
 	keyring_export_closure *closure;
@@ -817,7 +820,7 @@ seahorse_gpgme_keyring_export_async (SeahorseSource *source,
 	GSource *gsource;
 	GList *l;
 
-	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
 	                                 seahorse_gpgme_keyring_export_async);
 	closure = g_new0 (keyring_export_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
@@ -839,7 +842,7 @@ seahorse_gpgme_keyring_export_async (SeahorseSource *source,
 
 		g_return_if_fail (SEAHORSE_IS_PGP_KEY (l->data));
 		key = SEAHORSE_PGP_KEY (l->data);
-		g_return_if_fail (seahorse_object_get_source (SEAHORSE_OBJECT (key)) == source);
+		g_return_if_fail (seahorse_object_get_place (SEAHORSE_OBJECT (key)) == place);
 
 		/* Building list */
 		keyid = g_strdup (seahorse_pgp_key_get_keyid (key));
@@ -860,13 +863,13 @@ seahorse_gpgme_keyring_export_async (SeahorseSource *source,
 }
 
 static GOutputStream *
-seahorse_gpgme_keyring_export_finish (SeahorseSource *source,
-                                     GAsyncResult *result,
-                                     GError **error)
+seahorse_gpgme_keyring_export_finish (SeahorsePlace *place,
+                                      GAsyncResult *result,
+                                      GError **error)
 {
 	keyring_export_closure *closure;
 
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
 	                      seahorse_gpgme_keyring_export_async), NULL);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -956,6 +959,8 @@ seahorse_gpgme_keyring_get_property (GObject *obj,
                                      GValue *value,
                                      GParamSpec *pspec)
 {
+	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (obj);
+
 	switch (prop_id) {
 	case PROP_LABEL:
 		g_value_set_string (value, _("GnuPG keyring"));
@@ -969,6 +974,9 @@ seahorse_gpgme_keyring_get_property (GObject *obj,
 	case PROP_URI:
 		g_value_set_string (value, "gnupg://");
 		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, self->pv->actions);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -981,6 +989,7 @@ seahorse_gpgme_keyring_dispose (GObject *object)
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (object);
 	GList *l;
 
+	gtk_action_group_set_sensitive (self->pv->actions, TRUE);
 	g_hash_table_remove_all (self->pv->keys);
 
 	cancel_scheduled_refresh (self);
@@ -1005,6 +1014,7 @@ seahorse_gpgme_keyring_finalize (GObject *object)
 {
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (object);
 
+	g_clear_object (self->pv->actions);
 	g_hash_table_destroy (self->pv->keys);
 
 	/* All monitoring and scheduling should be done */
@@ -1037,10 +1047,11 @@ seahorse_gpgme_keyring_class_init (SeahorseGpgmeKeyringClass *klass)
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 	g_object_class_override_property (gobject_class, PROP_URI, "uri");
 	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
 }
 
 static void
-seahorse_gpgme_keyring_source_iface (SeahorseSourceIface *iface)
+seahorse_gpgme_keyring_place_iface (SeahorsePlaceIface *iface)
 {
 	iface->import_async = seahorse_gpgme_keyring_import_async;
 	iface->import_finish = seahorse_gpgme_keyring_import_finish;

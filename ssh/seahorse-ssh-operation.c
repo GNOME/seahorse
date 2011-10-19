@@ -521,7 +521,7 @@ on_upload_export_complete (GObject *source,
 	size_t length;
 	gchar *cmd;
 
-	if (!seahorse_source_export_finish (SEAHORSE_SOURCE (source), result, &error)) {
+	if (!seahorse_place_export_finish (SEAHORSE_PLACE (source), result, &error)) {
 		g_simple_async_result_take_error (res, error);
 		g_simple_async_result_complete (res);
 		g_object_unref (res);
@@ -582,8 +582,8 @@ seahorse_ssh_op_upload_async (SeahorseSSHSource *source,
 	g_simple_async_result_set_op_res_gpointer (res, closure, ssh_upload_free);
 
 	/* Buffer for what we send to the server */
-	seahorse_source_export_async (SEAHORSE_SOURCE (source), keys, G_OUTPUT_STREAM (closure->output),
-	                              cancellable, on_upload_export_complete, g_object_ref (res));
+	seahorse_place_export_async (SEAHORSE_PLACE (source), keys, G_OUTPUT_STREAM (closure->output),
+	                             cancellable, on_upload_export_complete, g_object_ref (res));
 
 	g_object_unref (res);
 
@@ -633,14 +633,14 @@ seahorse_ssh_op_change_passphrase_async  (SeahorseSSHKey *key,
 {
 	SeahorseSshPromptInfo prompt = { _("Enter Key Passphrase"), NULL, NULL, NULL };
 	GSimpleAsyncResult *res;
-	SeahorseSource *source;
+	SeahorsePlace *place;
 	gchar *cmd;
 
 	g_return_if_fail (SEAHORSE_IS_SSH_KEY (key));
 	g_return_if_fail (key->keydata && key->keydata->privfile);
 
-	source = seahorse_object_get_source (SEAHORSE_OBJECT (key));
-	g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (source));
+	place = seahorse_object_get_place (SEAHORSE_OBJECT (key));
+	g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (place));
 
 	prompt.argument = seahorse_object_get_label (SEAHORSE_OBJECT (key));
 
@@ -649,7 +649,7 @@ seahorse_ssh_op_change_passphrase_async  (SeahorseSSHKey *key,
 	g_simple_async_result_set_op_res_gpointer (res, g_object_ref (key), g_object_unref);
 
 	cmd = g_strdup_printf (SSH_KEYGEN_PATH " -p -f '%s'", key->keydata->privfile);
-	seahorse_ssh_operation_async (SEAHORSE_SSH_SOURCE (source), cmd, NULL, 0, cancellable,
+	seahorse_ssh_operation_async (SEAHORSE_SSH_SOURCE (place), cmd, NULL, 0, cancellable,
 	                              on_change_passphrase_complete, &prompt, g_object_ref (res));
 
 	g_free (cmd);
@@ -1151,7 +1151,7 @@ seahorse_ssh_op_delete_sync (SeahorseSSHKey *key,
 	}
 
 	if (ret) {
-		source = SEAHORSE_SSH_SOURCE (seahorse_object_get_source (SEAHORSE_OBJECT (key)));
+		source = SEAHORSE_SSH_SOURCE (seahorse_object_get_place (SEAHORSE_OBJECT (key)));
 		seahorse_ssh_source_remove_object (source, key);
 	}
 

@@ -28,11 +28,12 @@ KEYSERVER_SRCS =
 endif
 
 libseahorse_la_SOURCES = \
+	seahorse-action.c seahorse-action.h \
+	seahorse-actions.c seahorse-actions.h \
 	seahorse-backend.c seahorse-backend.h \
 	seahorse-bind.c seahorse-bind.h \
 	seahorse-cleanup.c seahorse-cleanup.h \
 	seahorse-collection.c seahorse-collection.h \
-	seahorse-commands.c seahorse-commands.h \
 	seahorse-context.c seahorse-context.h \
 	seahorse-debug.c seahorse-debug.h \
 	seahorse-icons.c seahorse-icons.h \
@@ -42,6 +43,7 @@ libseahorse_la_SOURCES = \
 	seahorse-object-model.c seahorse-object-model.h \
 	seahorse-object-widget.c seahorse-object-widget.h \
 	seahorse-passphrase.c seahorse-passphrase.h \
+	seahorse-place.c seahorse-place.h \
 	seahorse-predicate.c seahorse-predicate.h \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-preferences.c seahorse-preferences.h \
@@ -50,7 +52,6 @@ libseahorse_la_SOURCES = \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
 	seahorse-secure-buffer.c seahorse-secure-buffer.h \
 	seahorse-servers.c seahorse-servers.h \
-	seahorse-source.c seahorse-source.h \
 	seahorse-types.c seahorse-types.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \

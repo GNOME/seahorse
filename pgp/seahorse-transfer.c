@@ -38,8 +38,8 @@
 
 typedef struct {
 	GCancellable *cancellable;
-	SeahorseSource *from;
-	SeahorseSource *to;
+	SeahorsePlace *from;
+	SeahorsePlace *to;
 	GOutputStream *output;
 	GList *keys;
 } transfer_closure;
@@ -69,7 +69,7 @@ on_source_import_ready (GObject *object,
 	seahorse_debug ("[transfer] import done");
 	seahorse_progress_end (closure->cancellable, &closure->to);
 
-	if (seahorse_source_import_finish (closure->to, result, &error))
+	if (seahorse_place_import_finish (closure->to, result, &error))
 		g_cancellable_set_error_if_cancelled (closure->cancellable, &error);
 
 	if (error != NULL)
@@ -99,7 +99,7 @@ on_source_export_ready (GObject *object,
 		                                      result, &error);
 
 	} else {
-		seahorse_source_export_finish (closure->from, result, &error);
+		seahorse_place_export_finish (closure->from, result, &error);
 	}
 
 	if (error == NULL)
@@ -121,8 +121,8 @@ on_source_export_ready (GObject *object,
 			                                             stream_size, g_free);
 
 			seahorse_debug ("[transfer] starting import");
-			seahorse_source_import_async (closure->to, input, closure->cancellable,
-			                              on_source_import_ready, g_object_ref (res));
+			seahorse_place_import_async (closure->to, input, closure->cancellable,
+			                             on_source_import_ready, g_object_ref (res));
 			g_object_unref (input);
 		}
 
@@ -142,7 +142,7 @@ on_timeout_start_transfer (gpointer user_data)
 	transfer_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GList *keyids, *l;
 
-	g_assert (SEAHORSE_IS_SOURCE (closure->from));
+	g_assert (SEAHORSE_IS_PLACE (closure->from));
 	g_assert (closure->keys);
 
 	seahorse_progress_begin (closure->cancellable, &closure->from);
@@ -156,17 +156,17 @@ on_timeout_start_transfer (gpointer user_data)
 		                                     on_source_export_ready, g_object_ref (res));
 		g_list_free (keyids);
 	} else {
-		seahorse_source_export_async (closure->from, closure->keys, closure->output,
-		                              closure->cancellable, on_source_export_ready,
-		                              g_object_ref (res));
+		seahorse_place_export_async (closure->from, closure->keys, closure->output,
+		                             closure->cancellable, on_source_export_ready,
+		                             g_object_ref (res));
 	}
 
 	return FALSE; /* Don't run again */
 }
 
 void
-seahorse_transfer_async (SeahorseSource *from,
-                         SeahorseSource *to,
+seahorse_transfer_async (SeahorsePlace *from,
+                         SeahorsePlace *to,
                          GList *keys,
                          GCancellable *cancellable,
                          GAsyncReadyCallback callback,
@@ -175,8 +175,8 @@ seahorse_transfer_async (SeahorseSource *from,
 	GSimpleAsyncResult *res;
 	transfer_closure *closure = NULL;
 
-	g_return_if_fail (SEAHORSE_SOURCE (from));
-	g_return_if_fail (SEAHORSE_SOURCE (to));
+	g_return_if_fail (SEAHORSE_PLACE (from));
+	g_return_if_fail (SEAHORSE_PLACE (to));
 
 	res = g_simple_async_result_new (NULL, callback, user_data,
 	                                 seahorse_transfer_async);

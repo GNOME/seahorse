@@ -26,7 +26,7 @@
 
 #include <gtk/gtk.h>
 
-#include "seahorse-source.h"
+#include "seahorse-place.h"
 
 #define SEAHORSE_TYPE_CONTEXT			(seahorse_context_get_type ())
 #define SEAHORSE_CONTEXT(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_CONTEXT, SeahorseContext))

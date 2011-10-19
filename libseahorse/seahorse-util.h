@@ -49,9 +49,9 @@ gchar*      seahorse_util_get_display_date_string   (const time_t time);
 
 GQuark      seahorse_util_error_domain          (void);
 
-void        seahorse_util_show_error            (GtkWidget          *parent,
-                                                 const gchar        *heading,
-                                                 const gchar        *message);
+void        seahorse_util_show_error            (gpointer parent,
+                                                 const gchar *heading,
+                                                 const gchar *message);
 
 void        seahorse_util_handle_error          (GError **error,
                                                  gpointer parent,
@@ -114,9 +114,9 @@ gchar*      seahorse_util_chooser_open_prompt           (GtkDialog *dialog);
 
 gchar*      seahorse_util_chooser_save_prompt           (GtkDialog *dialog);
 
-GList*      seahorse_util_objects_sort       (GList *objects);
+GList *     seahorse_util_objects_sort_by_place         (GList *objects);
 
-GList*      seahorse_util_objects_splice     (GList *objects);
+GList *     seahorse_util_objects_splice_by_place       (GList *objects);
 
 gboolean    seahorse_util_string_equals       (const gchar *s1, const gchar *s2);
 

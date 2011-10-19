@@ -40,7 +40,6 @@
 #define __SEAHORSE_SSH_SOURCE_H__
 
 #include "seahorse-ssh-key.h"
-#include "seahorse-source.h"
 
 #define SEAHORSE_TYPE_SSH_SOURCE            (seahorse_ssh_source_get_type ())
 #define SEAHORSE_SSH_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SSH_SOURCE, SeahorseSSHSource))

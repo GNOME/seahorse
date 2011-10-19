@@ -23,8 +23,8 @@
 #include "config.h"
 
 #include "seahorse-object.h"
+#include "seahorse-place.h"
 #include "seahorse-predicate.h"
-#include "seahorse-source.h"
 
 #include "string.h"
 

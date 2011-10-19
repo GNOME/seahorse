@@ -404,7 +404,7 @@ on_delete_gkr_complete (GnomeKeyringResult result,
 		g_simple_async_result_complete_in_idle (res);
 
 	} else if (SEAHORSE_IS_GKR_ITEM (object)) {
-		g_object_get (object, "source", &keyring, NULL);
+		g_object_get (object, "place", &keyring, NULL);
 		item = SEAHORSE_GKR_ITEM (object);
 		seahorse_gkr_keyring_remove_item (keyring, seahorse_gkr_item_get_item_id (item));
 

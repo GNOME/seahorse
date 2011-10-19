@@ -94,7 +94,7 @@ on_ssh_comment_activate (GtkWidget *entry,
 	ssh_rename_closure *closure;
 
 	skey = SEAHORSE_SSH_KEY (SEAHORSE_OBJECT_WIDGET (swidget)->object);
-	source = SEAHORSE_SSH_SOURCE (seahorse_object_get_source (SEAHORSE_OBJECT (skey)));
+	source = SEAHORSE_SSH_SOURCE (seahorse_object_get_place (SEAHORSE_OBJECT (skey)));
 
 	text = gtk_entry_get_text (GTK_ENTRY (entry));
 
@@ -145,7 +145,7 @@ on_ssh_trust_toggled (GtkToggleButton *button,
 	gboolean authorize;
 
 	skey = SEAHORSE_SSH_KEY (SEAHORSE_OBJECT_WIDGET (swidget)->object);
-	source = SEAHORSE_SSH_SOURCE (seahorse_object_get_source (SEAHORSE_OBJECT (skey)));
+	source = SEAHORSE_SSH_SOURCE (seahorse_object_get_place (SEAHORSE_OBJECT (skey)));
 
 	authorize = gtk_toggle_button_get_active (button);
 	gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
@@ -208,7 +208,7 @@ export_complete (GFile *file, GAsyncResult *result, guchar *contents)
 G_MODULE_EXPORT void
 on_ssh_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	SeahorseSource *sksrc;
+	SeahorsePlace *sksrc;
 	GObject *object;
 	GFile *file;
 	GtkDialog *dialog;
@@ -219,7 +219,7 @@ on_ssh_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 	g_return_if_fail (SEAHORSE_IS_SSH_KEY (object));
-	g_object_get (object, "source", &sksrc, NULL);
+	g_object_get (object, "place", &sksrc, NULL);
 	g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
 
 	dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 

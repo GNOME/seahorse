@@ -23,12 +23,12 @@
 #ifndef __SEAHORSE_TRANSFER_H__
 #define __SEAHORSE_TRANSFER_H__
 
-#include "seahorse-source.h"
+#include "seahorse-place.h"
 
 #include "seahorse-server-source.h"
 
-void            seahorse_transfer_async         (SeahorseSource *from,
-                                                 SeahorseSource *to,
+void            seahorse_transfer_async         (SeahorsePlace *from,
+                                                 SeahorsePlace *to,
                                                  GList *keys,
                                                  GCancellable *cancellable,
                                                  GAsyncReadyCallback callback,

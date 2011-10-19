@@ -26,15 +26,16 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-icons.h"
-#include "seahorse-source.h"
-#include "seahorse-util.h"
-#include "seahorse-secure-memory.h"
-
 #include "seahorse-gkr.h"
+#include "seahorse-gkr-actions.h"
 #include "seahorse-gkr-item.h"
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-operation.h"
+
+#include "seahorse-icons.h"
+#include "seahorse-place.h"
+#include "seahorse-util.h"
+#include "seahorse-secure-memory.h"
 
 #define GENERIC_SECRET "org.freedesktop.Secret.Generic"
 #define NETWORK_PASSWORD "org.gnome.keyring.NetworkPassword"
@@ -735,8 +736,16 @@ seahorse_gkr_item_refresh (SeahorseGkrItem *self)
 static void
 seahorse_gkr_item_init (SeahorseGkrItem *self)
 {
+	GtkActionGroup *actions;
+
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_ITEM, SeahorseGkrItemPrivate);
-	g_object_set (self, "usage", SEAHORSE_USAGE_CREDENTIALS, NULL);
+
+	actions = seahorse_gkr_item_actions_instance ();
+	g_object_set (self,
+	              "usage", SEAHORSE_USAGE_CREDENTIALS,
+	              "actions", actions,
+	              NULL);
+	g_object_unref (actions);
 }
 
 static void
@@ -818,11 +827,11 @@ static void
 seahorse_gkr_item_dispose (GObject *obj)
 {
 	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (obj);
-	SeahorseSource *source;
+	SeahorsePlace *place;
 
-	source = seahorse_object_get_source (SEAHORSE_OBJECT (self));
-	if (source != NULL)
-		seahorse_gkr_keyring_remove_item (SEAHORSE_GKR_KEYRING (source),
+	place = seahorse_object_get_place (SEAHORSE_OBJECT (self));
+	if (place != NULL)
+		seahorse_gkr_keyring_remove_item (SEAHORSE_GKR_KEYRING (place),
 		                                  self->pv->item_id);
 
 	G_OBJECT_CLASS (seahorse_gkr_item_parent_class)->dispose (obj);
@@ -907,8 +916,11 @@ seahorse_gkr_item_new (SeahorseGkrKeyring *keyring,
                        const gchar *keyring_name,
                        guint32 item_id)
 {
-	return g_object_new (SEAHORSE_TYPE_GKR_ITEM, "source", keyring,
-	                     "item-id", item_id, "keyring-name", keyring_name, NULL);
+	return g_object_new (SEAHORSE_TYPE_GKR_ITEM,
+	                     "place", keyring,
+	                     "item-id", item_id,
+	                     "keyring-name", keyring_name,
+	                     NULL);
 }
 
 guint32

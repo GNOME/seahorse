@@ -559,10 +559,10 @@ detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
  *  SEAHORSE HKP SOURCE
  */
 
-static void seahorse_source_iface (SeahorseSourceIface *iface);
+static void seahorse_place_iface (SeahorsePlaceIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (SeahorseHKPSource, seahorse_hkp_source, SEAHORSE_TYPE_SERVER_SOURCE, 0,
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_source_iface));
+                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_place_iface));
 
 static void 
 seahorse_hkp_source_init (SeahorseHKPSource *hsrc)
@@ -658,7 +658,7 @@ on_search_message_complete (SoupSession *session,
 	} else {
 		keys = parse_hkp_index (message->response_body->data);
 		for (l = keys; l; l = g_list_next (l)) {
-			g_object_set (l->data, "source", closure->source, NULL);
+			g_object_set (l->data, "place", closure->source, NULL);
 			gcr_simple_collection_add (closure->results, l->data);
 		}
 		g_list_free_full (keys, g_object_unref);
@@ -819,13 +819,13 @@ on_import_message_complete (SoupSession *session,
 * Imports a list of keys from the input stream to the keyserver
 **/
 static void
-seahorse_hkp_source_import_async (SeahorseSource *source,
+seahorse_hkp_source_import_async (SeahorsePlace *place,
                                   GInputStream *input,
                                   GCancellable *cancellable,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
 {
-	SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
+	SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (place);
 	GSimpleAsyncResult *res;
 	source_import_closure *closure;
 	SoupMessage *message;
@@ -837,7 +837,7 @@ seahorse_hkp_source_import_async (SeahorseSource *source,
 	GList *l;
 	guint len;
 
-	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
 	                                 seahorse_hkp_source_import_async);
 	closure = g_new0 (source_import_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
@@ -909,11 +909,11 @@ seahorse_hkp_source_import_async (SeahorseSource *source,
 }
 
 static GList *
-seahorse_hkp_source_import_finish (SeahorseSource *source,
+seahorse_hkp_source_import_finish (SeahorsePlace *place,
                                    GAsyncResult *result,
                                    GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
 	                      seahorse_hkp_source_import_async), NULL);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -1109,7 +1109,7 @@ seahorse_hkp_source_export_finish (SeahorseServerSource *source,
 *
 **/
 static void 
-seahorse_source_iface (SeahorseSourceIface *iface)
+seahorse_place_iface (SeahorsePlaceIface *iface)
 {
 	iface->import_async = seahorse_hkp_source_import_async;
 	iface->import_finish = seahorse_hkp_source_import_finish;
@@ -1131,7 +1131,6 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 	server_class->export_async = seahorse_hkp_source_export_async;
 	server_class->export_finish = seahorse_hkp_source_export_finish;
 
-	seahorse_registry_register_type (NULL, SEAHORSE_TYPE_HKP_SOURCE, "source", "remote", NULL);
 	seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
 }
 /**

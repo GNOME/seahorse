@@ -1038,3 +1038,24 @@ seahorse_sidebar_set_selected_uris (SeahorseSidebar *self,
 
 	g_object_notify (G_OBJECT (self), "selected-uris");
 }
+
+GList *
+seahorse_sidebar_get_selected_places (SeahorseSidebar *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_SIDEBAR (self), NULL);
+	return gcr_union_collection_elements (self->objects);
+}
+
+GList *
+seahorse_sidebar_get_backends (SeahorseSidebar *self)
+{
+	GList *backends = NULL;
+	guint i;
+
+	g_return_val_if_fail (SEAHORSE_IS_SIDEBAR (self), NULL);
+
+	for (i = 0; i < self->backends->len; i++)
+		backends = g_list_prepend (backends, self->backends->pdata[i]);
+
+	return g_list_reverse (backends);
+}

@@ -26,7 +26,6 @@
 
 #include "seahorse-icons.h"
 #include "seahorse-object-list.h"
-#include "seahorse-source.h"
 #include "seahorse-util.h"
 
 #include "pgp/seahorse-pgp.h"

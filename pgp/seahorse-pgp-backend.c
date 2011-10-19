@@ -22,8 +22,8 @@
 #include "config.h"
 
 #include "seahorse-gpgme-dialogs.h"
+#include "seahorse-pgp-actions.h"
 #include "seahorse-pgp-backend.h"
-#include "seahorse-pgp-commands.h"
 #include "seahorse-server-source.h"
 #include "seahorse-transfer.h"
 #include "seahorse-unknown-source.h"
@@ -44,7 +44,8 @@ enum {
 	PROP_0,
 	PROP_NAME,
 	PROP_LABEL,
-	PROP_DESCRIPTION
+	PROP_DESCRIPTION,
+	PROP_ACTIONS
 };
 
 static SeahorsePgpBackend *pgp_backend = NULL;
@@ -55,6 +56,7 @@ struct _SeahorsePgpBackend {
 	SeahorseDiscovery *discovery;
 	SeahorseUnknownSource *unknown;
 	GHashTable *remotes;
+	GtkActionGroup *actions;
 };
 
 struct _SeahorsePgpBackendClass {
@@ -79,8 +81,7 @@ seahorse_pgp_backend_init (SeahorsePgpBackend *self)
 	self->remotes = g_hash_table_new_full (g_str_hash, g_str_equal,
 	                                       g_free, g_object_unref);
 
-	/* Let these classes register themselves, when the backend is created */
-	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_PGP_COMMANDS));
+	self->actions = seahorse_pgp_backend_actions_instance ();
 
 	seahorse_gpgme_generate_register ();
 }
@@ -163,6 +164,8 @@ seahorse_pgp_backend_get_property (GObject *obj,
                                    GValue *value,
                                    GParamSpec *pspec)
 {
+	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
+
 	switch (prop_id) {
 	case PROP_NAME:
 		g_value_set_string (value, SEAHORSE_PGP_NAME);
@@ -172,6 +175,9 @@ seahorse_pgp_backend_get_property (GObject *obj,
 		break;
 	case PROP_DESCRIPTION:
 		g_value_set_string (value, _("PGP keys are for encrypting email or files"));
+		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, self->actions);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -193,6 +199,7 @@ seahorse_pgp_backend_finalize (GObject *obj)
 	g_clear_object (&self->discovery);
 	g_clear_object (&self->unknown);
 	g_hash_table_destroy (self->remotes);
+	g_clear_object (&self->actions);
 	pgp_backend = NULL;
 
 	G_OBJECT_CLASS (seahorse_pgp_backend_parent_class)->finalize (obj);
@@ -210,6 +217,7 @@ seahorse_pgp_backend_class_init (SeahorsePgpBackendClass *klass)
 	g_object_class_override_property (gobject_class, PROP_NAME, "name");
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
 }
 
 static guint
@@ -508,7 +516,7 @@ on_source_transfer_ready (GObject *source,
 void
 seahorse_pgp_backend_transfer_async (SeahorsePgpBackend *self,
                                      GList *keys,
-                                     SeahorseSource *to,
+                                     SeahorsePlace *to,
                                      GCancellable *cancellable,
                                      GAsyncReadyCallback callback,
                                      gpointer user_data)
@@ -516,12 +524,12 @@ seahorse_pgp_backend_transfer_async (SeahorsePgpBackend *self,
 	transfer_closure *closure;
 	SeahorseObject *object;
 	GSimpleAsyncResult *res;
-	SeahorseSource *from;
+	SeahorsePlace *from;
 	GList *next;
 
 	self = self ? self : seahorse_pgp_backend_get ();
 	g_return_if_fail (SEAHORSE_IS_PGP_BACKEND (self));
-	g_return_if_fail (SEAHORSE_IS_SOURCE (to));
+	g_return_if_fail (SEAHORSE_IS_PLACE (to));
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_pgp_backend_transfer_async);
@@ -533,23 +541,23 @@ seahorse_pgp_backend_transfer_async (SeahorsePgpBackend *self,
 
 	keys = g_list_copy (keys);
 
-	/* Sort by key source */
-	keys = seahorse_util_objects_sort (keys);
+	/* Sort by key plage */
+	keys = seahorse_util_objects_sort_by_place (keys);
 
 	while (keys) {
 
 		/* break off one set (same keysource) */
-		next = seahorse_util_objects_splice (keys);
+		next = seahorse_util_objects_splice_by_place (keys);
 
 		g_assert (SEAHORSE_IS_OBJECT (keys->data));
 		object = SEAHORSE_OBJECT (keys->data);
 
-		/* Export from this key source */
-		from = seahorse_object_get_source (object);
+		/* Export from this key place */
+		from = seahorse_object_get_place (object);
 		g_return_if_fail (from != NULL);
 
 		if (from != to) {
-			/* Start a new transfer operation between the two sources */
+			/* Start a new transfer operation between the two places */
 			seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
 			seahorse_transfer_async (from, to, keys, cancellable,
 			                         on_source_transfer_ready, g_object_ref (res));
@@ -589,19 +597,19 @@ seahorse_pgp_backend_transfer_finish (SeahorsePgpBackend *self,
 void
 seahorse_pgp_backend_retrieve_async (SeahorsePgpBackend *self,
                                      GList *keyids,
-                                     SeahorseSource *to,
+                                     SeahorsePlace *to,
                                      GCancellable *cancellable,
                                      GAsyncReadyCallback callback,
                                      gpointer user_data)
 {
 	transfer_closure *closure;
 	GSimpleAsyncResult *res;
-	SeahorseSource *source;
+	SeahorsePlace *place;
 	GHashTableIter iter;
 
 	self = self ? self : seahorse_pgp_backend_get ();
 	g_return_if_fail (SEAHORSE_IS_PGP_BACKEND (self));
-	g_return_if_fail (SEAHORSE_IS_SOURCE (to));
+	g_return_if_fail (SEAHORSE_IS_PLACE (to));
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_pgp_backend_retrieve_async);
@@ -612,10 +620,10 @@ seahorse_pgp_backend_retrieve_async (SeahorsePgpBackend *self,
 		closure->cancellable = g_object_ref (cancellable);
 
 	g_hash_table_iter_init (&iter, self->remotes);
-	while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&source)) {
-		/* Start a new transfer operation between the two key sources */
+	while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&place)) {
+		/* Start a new transfer operation between the two places */
 		seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
-		seahorse_transfer_async (source, to, keyids, cancellable,
+		seahorse_transfer_async (place, to, keyids, cancellable,
 		                         on_source_transfer_ready, g_object_ref (res));
 		closure->num_transfers++;
 	}
@@ -681,7 +689,7 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
 	/* Start a discover process on all todiscover */
 	if (todiscover != NULL &&
 	    g_settings_get_boolean (seahorse_context_settings (NULL), "server-auto-retrieve")) {
-		seahorse_pgp_backend_retrieve_async (self, todiscover, SEAHORSE_SOURCE (self->keyring),
+		seahorse_pgp_backend_retrieve_async (self, todiscover, SEAHORSE_PLACE (self->keyring),
 		                                     cancellable, NULL, NULL);
 	}
 

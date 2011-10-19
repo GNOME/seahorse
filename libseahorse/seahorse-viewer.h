@@ -24,8 +24,11 @@
 
 #include <glib-object.h>
 
-#include "seahorse-predicate.h"
 #include "seahorse-widget.h"
+
+#define SEAHORSE_VIEWER_MENU_BACKEND  "/BackendPopup"
+#define SEAHORSE_VIEWER_MENU_OBJECT   "/ObjectPopup"
+#define SEAHORSE_VIEWER_MENU_PLACE    "/PlacePopup"
 
 #define SEAHORSE_TYPE_VIEWER               (seahorse_viewer_get_type ())
 #define SEAHORSE_VIEWER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_VIEWER, SeahorseViewer))
@@ -34,31 +37,23 @@
 #define SEAHORSE_IS_VIEWER_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_VIEWER))
 #define SEAHORSE_VIEWER_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_VIEWER, SeahorseViewerClass))
 
-typedef struct _SeahorseCommands SeahorseCommands;
 typedef struct _SeahorseViewer SeahorseViewer;
 typedef struct _SeahorseViewerClass SeahorseViewerClass;
 typedef struct _SeahorseViewerPrivate SeahorseViewerPrivate;
 
 struct _SeahorseViewer {
 	SeahorseWidget parent;
+	SeahorseViewerPrivate *pv;
 };
 
 struct _SeahorseViewerClass {
 	SeahorseWidgetClass parent;
 
-	/* virtual -------------------------------------------------------- */
+	GList *          (*get_selected_backends)         (SeahorseViewer *self);
+
+	GList *          (*get_selected_places)           (SeahorseViewer *self);
 
 	GList *          (*get_selected_objects)          (SeahorseViewer *self);
-
-	void             (*set_selected_objects)          (SeahorseViewer *self,
-	                                                   GList *objects);
-
-	GObject *        (*get_selected)                  (SeahorseViewer* self);
-
-	void             (*set_selected)                  (SeahorseViewer* self,
-	                                                   GObject* value);
-
-	/* signals --------------------------------------------------------- */
 
 	void             (*selection_changed)             (SeahorseViewer *viewer);
 };
@@ -70,35 +65,32 @@ void                seahorse_viewer_ensure_updated                  (SeahorseVie
 void                seahorse_viewer_include_actions                 (SeahorseViewer* self,
                                                                      GtkActionGroup* actions);
 
-GList*              seahorse_viewer_get_selected_objects            (SeahorseViewer* self);
+GList *             seahorse_viewer_get_selected_objects            (SeahorseViewer* self);
 
-void                seahorse_viewer_set_selected_objects            (SeahorseViewer* self,
-                                                                     GList* objects);
+GList *             seahorse_viewer_get_selected_places             (SeahorseViewer* self);
 
-GList *             seahorse_viewer_get_selected_matching           (SeahorseViewer *self,
-                                                                     SeahorsePredicate *pred);
+GList *             seahorse_viewer_get_selected_backends           (SeahorseViewer* self);
 
 void                seahorse_viewer_show_context_menu               (SeahorseViewer* self,
+                                                                     const gchar *which,
                                                                      guint button,
                                                                      guint time);
 
 void                seahorse_viewer_show_properties                 (SeahorseViewer* self,
                                                                      GObject* obj);
 
+#if 0
 void                seahorse_viewer_set_status                      (SeahorseViewer* self,
                                                                      const char* text);
 
 void                seahorse_viewer_set_numbered_status             (SeahorseViewer* self,
                                                                      const char* text,
                                                                      gint num);
+#endif
 
-GObject *           seahorse_viewer_get_selected                    (SeahorseViewer *self);
+GtkWindow *         seahorse_viewer_get_window                      (SeahorseViewer* self);
 
-void                seahorse_viewer_set_selected                    (SeahorseViewer *self,
-                                                                     GObject *value);
-
-GtkWindow*          seahorse_viewer_get_window                      (SeahorseViewer* self);
-
+#if 0
 void                seahorse_viewer_register_ui                     (SeahorseViewer *self,
                                                                      SeahorsePredicate *pred,
                                                                      const gchar *uidef,
@@ -107,5 +99,6 @@ void                seahorse_viewer_register_ui                     (SeahorseVie
 void                seahorse_viewer_register_commands               (SeahorseViewer *self,
                                                                      SeahorsePredicate *pred,
                                                                      SeahorseCommands *commands);
+#endif
 
 #endif /* __SEAHORSE_VIEWER_H__ */

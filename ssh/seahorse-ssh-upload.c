@@ -124,7 +124,7 @@ upload_keys (SeahorseWidget *swidget)
     cancellable = g_cancellable_new ();
 
     /* Start an upload process */
-    seahorse_ssh_op_upload_async (SEAHORSE_SSH_SOURCE (seahorse_object_get_source (keys->data)),
+    seahorse_ssh_op_upload_async (SEAHORSE_SSH_SOURCE (seahorse_object_get_place (keys->data)),
                                   keys, user, host, port, cancellable, on_upload_complete, NULL);
 
     g_free (host);

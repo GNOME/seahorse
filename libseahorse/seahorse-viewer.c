@@ -22,84 +22,50 @@
 
 #include "config.h"
 
-#include "seahorse-commands.h"
+#include "seahorse-action.h"
+#include "seahorse-actions.h"
+#include "seahorse-backend.h"
 #include "seahorse-object.h"
-#include "seahorse-object-list.h"
 #include "seahorse-preferences.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
 #include "seahorse-viewer.h"
 
+#include <gcr/gcr.h>
+
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
 void                on_app_preferences                (GtkAction* action,
-                                                       SeahorseViewer* self);
+                                                       gpointer user_data);
 
 enum {
 	PROP_0,
-	PROP_SELECTED,
 	PROP_WINDOW
 };
 
-typedef struct _ViewerPredicate {
-	SeahorsePredicate pred;
-	gboolean is_commands;
-	GObject *commands_or_actions;
-} ViewerPredicate;
-
 struct _SeahorseViewerPrivate {
 	GtkUIManager *ui_manager;
-	GtkActionGroup *object_actions;
-	GtkActionGroup *export_actions;
-	GtkAction *delete_action;
-	GArray *predicates;
-	GList *all_commands;
+	GHashTable *actions;
+	GtkAction *edit_delete;
+	GtkAction *properties_object;
+	GtkAction *properties_place;
+	GtkAction *properties_backend;
 };
 
 G_DEFINE_TYPE (SeahorseViewer, seahorse_viewer, SEAHORSE_TYPE_WIDGET);
-
-#define SEAHORSE_VIEWER_GET_PRIVATE(o) \
-	(G_TYPE_INSTANCE_GET_PRIVATE ((o), SEAHORSE_TYPE_VIEWER, SeahorseViewerPrivate))
-
-/* Predicates which control export and delete commands, inited in class_init */
-static SeahorsePredicate exportable_predicate = { 0, };
-static SeahorsePredicate deletable_predicate = { 0, };
 
 /* -----------------------------------------------------------------------------
  * INTERNAL
  */
 
-typedef gboolean     (*ForEachCommandsFunc)     (SeahorseViewer *self,
-                                                 SeahorseCommands *commands,
-                                                 SeahorsePredicate *predicate,
-                                                 gpointer user_data);
-
-static void
-for_each_commands (SeahorseViewer *self, ForEachCommandsFunc func, gpointer user_data)
-{
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
-	ViewerPredicate *predicate;
-	guint i;
-
-	for (i = 0; i < pv->predicates->len; ++i)
-	{
-		predicate = &g_array_index (pv->predicates, ViewerPredicate, i);
-		if (predicate->is_commands) {
-			if (!(func) (self, SEAHORSE_COMMANDS (predicate->commands_or_actions),
-			            &predicate->pred, user_data))
-				return;
-		}
-	}
-}
 
 G_MODULE_EXPORT void
-on_app_preferences (GtkAction* action, SeahorseViewer* self)
+on_app_preferences (GtkAction* action,
+                    gpointer user_data)
 {
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (GTK_IS_ACTION (action));
-
+	SeahorseViewer* self = SEAHORSE_VIEWER (user_data);
 	seahorse_preferences_show (seahorse_viewer_get_window (self), NULL);
 }
 
@@ -154,11 +120,102 @@ on_app_about (GtkAction* action, SeahorseViewer* self)
 }
 
 static void
-on_help_show (GtkAction* action, SeahorseViewer* self)
+on_help_show (GtkAction *action,
+              SeahorseViewer* self)
 {
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 	seahorse_widget_show_help (SEAHORSE_WIDGET (self));
+}
+
+static void
+on_object_delete (GtkAction *action,
+                  gpointer user_data)
+{
+	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	GtkActionGroup *actions;
+	GList *objects;
+	GList *selected;
+	const gchar *name;
+	GList *l;
+
+	if (seahorse_action_have_objects (action))
+		return;
+
+	objects = seahorse_viewer_get_selected_objects (self);
+	objects = g_list_concat (objects, seahorse_viewer_get_selected_places (self));
+	objects = g_list_concat (objects, seahorse_viewer_get_selected_backends (self));
+	name = gtk_action_get_name (action);
+
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		actions = NULL;
+		g_object_get (l->data, "actions", &actions, NULL);
+		if (actions && gtk_action_group_get_action (actions, name) == action)
+			selected = g_list_prepend (selected, l->data);
+		g_object_ref (actions);
+	}
+
+	selected = g_list_reverse (selected);
+	seahorse_action_set_objects (action, selected);
+	seahorse_action_set_window (action, seahorse_viewer_get_window (self));
+
+	g_list_free (selected);
+	g_list_free (objects);
+}
+
+static GtkAction *
+properties_action_for_object (GObject *object)
+{
+	GtkActionGroup *actions = NULL;
+	GtkAction *action;
+
+	g_object_get (object, "actions", &actions, NULL);
+	if (actions == NULL)
+		return NULL;
+
+	action = gtk_action_group_get_action (actions, "properties");
+	g_object_unref (actions);
+
+	return action;
+}
+
+static void
+on_properties_object (GtkAction *action,
+                      gpointer user_data)
+{
+	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	GList *objects;
+
+	objects = seahorse_viewer_get_selected_objects (self);
+	if (objects != NULL)
+		seahorse_viewer_show_properties (self, objects->data);
+	g_list_free (objects);
+}
+
+static void
+on_properties_place (GtkAction *action,
+                     gpointer user_data)
+{
+	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	GList *objects;
+
+	objects = seahorse_viewer_get_selected_places (self);
+	if (objects != NULL)
+		seahorse_viewer_show_properties (self, objects->data);
+	g_list_free (objects);
+}
+
+static void
+on_properties_backend (GtkAction *action,
+                       gpointer user_data)
+{
+	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	GList *objects;
+
+	objects = seahorse_viewer_get_selected_backends (self);
+	if (objects != NULL)
+		seahorse_viewer_show_properties (self, objects->data);
+	g_list_free (objects);
 }
 
 static const GtkActionEntry UI_ENTRIES[] = {
@@ -166,79 +223,25 @@ static const GtkActionEntry UI_ENTRIES[] = {
 	/* Top menu items */
 	{ "file-menu", NULL, N_("_File") },
 	{ "edit-menu", NULL, N_("_Edit") },
-	{ "view-menu", NULL, N_("_View") },
-	{ "help-menu", NULL, N_("_Help") },
+	{ "edit-delete", GTK_STOCK_DELETE, NC_("This text refers to deleting an item from its type's backing store.", "_Delete"), NULL,
+	  N_("Delete selected items"), G_CALLBACK (on_object_delete) },
+	{ "properties-object", GTK_STOCK_PROPERTIES, NULL, NULL,
+	  N_("Show the properties of this item"), G_CALLBACK (on_properties_object) },
+	{ "properties-place", GTK_STOCK_PROPERTIES, NULL, NULL,
+	  N_("Show the properties of this place"), G_CALLBACK (on_properties_place) },
+	{ "properties-backend", GTK_STOCK_PROPERTIES, NULL, NULL,
+	  N_("Show the properties of this backend"), G_CALLBACK (on_properties_backend) },
 	{ "app-preferences", GTK_STOCK_PREFERENCES, N_("Prefere_nces"), NULL,
 	  N_("Change preferences for this program"), G_CALLBACK (on_app_preferences) },
+	{ "view-menu", NULL, N_("_View") },
+	{ "help-menu", NULL, N_("_Help") },
 	{ "app-about", GTK_STOCK_ABOUT, NULL, NULL,
 	  N_("About this program"), G_CALLBACK (on_app_about) },
 	{ "help-show", GTK_STOCK_HELP, N_("_Contents"), "F1",
 	  N_("Show Seahorse help"), G_CALLBACK (on_help_show) }
 };
 
-static void
-on_key_properties (GtkAction* action, SeahorseViewer* self)
-{
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (GTK_IS_ACTION (action));
-
-	if (seahorse_viewer_get_selected (self) != NULL)
-		seahorse_viewer_show_properties (self, seahorse_viewer_get_selected (self));
-}
-
-static GList*
-objects_prune_non_exportable (GList *objects)
-{
-	GList *exportable = NULL;
-	GList *l;
-
-	for (l = objects; l; l = g_list_next (l)) {
-		if (seahorse_object_get_flags (l->data) & SEAHORSE_FLAG_EXPORTABLE)
-			exportable = g_list_append (exportable, l->data);
-	}
-
-	g_list_free (objects);
-	return exportable;
-}
-
-static GList*
-filter_matching_objects (SeahorsePredicate *pred,
-                         GList** all_objects)
-{
-	GList *results, *next, *here;
-	GObject *obj;
-
-	results = NULL;
-
-	next = *all_objects;
-	while ((here = next) != NULL) {
-		obj = G_OBJECT (here->data);
-		next = g_list_next (here);
-
-		/* If it matches then separate it */
-		if (seahorse_predicate_match (pred, obj)) {
-			results = g_list_append (results, obj);
-			*all_objects = g_list_delete_link (*all_objects, here);
-		}
-	}
-
-	return results;
-}
-
-static gboolean
-has_matching_objects (SeahorsePredicate *pred,
-                      GList *objects)
-{
-	GList *l;
-
-	for (l = objects; l; l = g_list_next (l)) {
-		if (seahorse_predicate_match (pred, l->data))
-			return TRUE;
-	}
-
-	return FALSE;
-}
-
+#if 0
 static void
 on_file_export_completed (GObject *source,
                           GAsyncResult *result,
@@ -247,7 +250,7 @@ on_file_export_completed (GObject *source,
 	SeahorseViewer* self = SEAHORSE_VIEWER (user_data);
 	GError *error = NULL;
 
-	if (!seahorse_source_export_auto_finish (result, &error))
+	if (!seahorse_place_export_auto_finish (result, &error))
 		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
 		                            _("Couldn't export keys"));
 
@@ -289,8 +292,8 @@ on_key_export_file (GtkAction* action, SeahorseViewer* self)
 			g_free (unesc_uri);
 		} else {
 			cancellable = g_cancellable_new ();
-			seahorse_source_export_auto_async (objects, output, cancellable,
-			                                   on_file_export_completed, g_object_ref (self));
+			seahorse_place_export_auto_async (objects, output, cancellable,
+			                                  on_file_export_completed, g_object_ref (self));
 			seahorse_progress_show (cancellable, _("Exporting keys"), TRUE);
 			g_object_unref (cancellable);
 		}
@@ -317,7 +320,7 @@ on_copy_export_complete (GObject *source,
 	GdkAtom atom;
 	GtkClipboard* board;
 
-	output = seahorse_source_export_auto_finish (result, &error);
+	output = seahorse_place_export_auto_finish (result, &error);
 	if (error != NULL) {
 		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
 		                            _("Couldn't retrieve data from key server"));
@@ -330,9 +333,6 @@ on_copy_export_complete (GObject *source,
 	atom = gdk_atom_intern ("CLIPBOARD", FALSE);
 	board = gtk_clipboard_get (atom);
 	gtk_clipboard_set_text (board, text, (gint)size);
-
-	/* Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys" */
-	seahorse_viewer_set_status (self, _ ("Copied keys"));
 
 	g_object_unref (self);
 }
@@ -355,8 +355,8 @@ on_key_export_clipboard (GtkAction* action, SeahorseViewer* self)
 	output = G_OUTPUT_STREAM (g_memory_output_stream_new (NULL, 0, g_realloc, g_free));
 
 	cancellable = g_cancellable_new ();
-	seahorse_source_export_auto_async (objects, output, cancellable,
-	                                   on_copy_export_complete, g_object_ref (self));
+	seahorse_place_export_auto_async (objects, output, cancellable,
+	                                  on_copy_export_complete, g_object_ref (self));
 	seahorse_progress_show (cancellable, _ ("Retrieving keys"), TRUE);
 	g_object_unref (cancellable);
 
@@ -364,178 +364,194 @@ on_key_export_clipboard (GtkAction* action, SeahorseViewer* self)
 	g_object_unref (output);
 }
 
-static gboolean
-delete_objects_for_selected (SeahorseViewer *self,
-                             SeahorseCommands *commands,
-                             SeahorsePredicate *pred,
-                             gpointer user_data)
-{
-	GList **all_objects;
-	GList *objects;
-	gboolean ret;
-
-	all_objects = (GList**)user_data;
-
-	/* Stop the enumeration if nothing still selected */
-	if (!*all_objects)
-		return FALSE;
-
-	objects = filter_matching_objects (pred, all_objects);
-
-	/* No objects matched this predicate? */
-	if (!objects)
-		return TRUE;
-
-	/* Indicate to our users what is being operated on */
-	seahorse_viewer_set_selected_objects (self, objects);
-
-	ret = seahorse_commands_delete_objects (commands, objects);
-	g_list_free (objects);
-
-	return ret;
-}
-
-static void
-on_key_delete (GtkAction* action, SeahorseViewer* self)
-{
-	GList *objects = NULL;
-	GList *all_objects = NULL;
-	GList *l;
-
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (GTK_IS_ACTION (action));
-
-	all_objects = seahorse_viewer_get_selected_objects (self);
-	objects = filter_matching_objects (&deletable_predicate, &all_objects);
-	g_list_free (all_objects);
-
-	/* Check for private objects */
-	for (l = objects; l; l = g_list_next (l)) {
-		GObject* object = l->data;
-
-		if (SEAHORSE_IS_OBJECT (object) &&
-		    seahorse_object_get_usage (SEAHORSE_OBJECT (object)) == SEAHORSE_USAGE_PRIVATE_KEY) {
-			gchar* prompt = g_strdup_printf (_("%s is a private key. Are you sure you want to proceed?"),
-			                                 seahorse_object_get_label (SEAHORSE_OBJECT (object)));
-			if (!seahorse_util_prompt_delete (prompt, GTK_WIDGET (seahorse_viewer_get_window (self)))) {
-				g_free (prompt);
-				g_list_free (objects);
-				return;
-			}
-		}
-	}
-
-	/* Go through the list of predicates, and call each one */
-	for_each_commands (self, delete_objects_for_selected, &objects);
-
-	g_list_free (objects);
-}
-
-static gboolean
-show_properties_for_selected (SeahorseViewer *self,
-                              SeahorseCommands *commands,
-                              SeahorsePredicate *pred,
-                              gpointer user_data)
-{
-	/* If not mactched, then continue enumeration */
-	if (!seahorse_predicate_match (pred, user_data))
-		return TRUE;
-
-	seahorse_commands_show_properties (commands, user_data);
-
-	/* Stop enumeration */
-	return FALSE;
-}
-
-static const GtkActionEntry KEY_ENTRIES[] = {
-	{ "show-properties", GTK_STOCK_PROPERTIES, NULL, NULL,
-	  N_("Show properties"), G_CALLBACK (on_key_properties) },
-	{ "edit-delete", GTK_STOCK_DELETE, NC_("This text refers to deleting an item from its type's backing store.", "_Delete"), NULL,
-	  N_("Delete selected items"), G_CALLBACK (on_key_delete) }
-};
-
 static const GtkActionEntry EXPORT_ENTRIES[] = {
 	{ "file-export", GTK_STOCK_SAVE_AS, N_("E_xport..."), NULL,
 	  N_("Export to a file"), G_CALLBACK (on_key_export_file) },
 	{ "edit-export-clipboard", GTK_STOCK_COPY, NULL, "<control>C",
 	  N_("Copy to the clipboard"), G_CALLBACK (on_key_export_clipboard) }
 };
+#endif
 
 static void
-include_basic_actions (SeahorseViewer* self)
+on_ui_manager_pre_activate (GtkUIManager *ui_manager,
+                            GtkAction *action,
+                            gpointer user_data)
 {
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
-	GtkActionGroup* actions;
-
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-
-	actions = gtk_action_group_new ("main");
-	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, UI_ENTRIES, G_N_ELEMENTS (UI_ENTRIES), self);
-	seahorse_viewer_include_actions (self, actions);
-	g_object_unref (actions);
-
-	pv->object_actions = gtk_action_group_new ("key");
-	gtk_action_group_set_translation_domain (pv->object_actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (pv->object_actions, KEY_ENTRIES, G_N_ELEMENTS (KEY_ENTRIES), self);
-	/* Mark the properties toolbar button as important */
-	g_object_set (gtk_action_group_get_action (pv->object_actions, "show-properties"), "is-important", TRUE, NULL);
-	seahorse_viewer_include_actions (self, pv->object_actions);
-	pv->delete_action = gtk_action_group_get_action (pv->object_actions, "edit-delete");
-	g_return_if_fail (pv->delete_action);
-	g_object_ref (pv->delete_action);
-
-	pv->export_actions = gtk_action_group_new ("export");
-	gtk_action_group_set_translation_domain (pv->export_actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (pv->export_actions, EXPORT_ENTRIES, G_N_ELEMENTS (EXPORT_ENTRIES), self);
-	seahorse_viewer_include_actions (self, pv->export_actions);
-}
-
-static void
-seahorse_viewer_real_selection_changed (SeahorseViewer *self)
-{
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
-	ViewerPredicate *predicate;
+	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	GtkActionGroup *actions;
+	GList *selected = NULL;
 	GList *objects;
-	guint i;
+	const gchar *name;
+	GList *l;
 
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	name = gtk_action_get_name (action);
+	g_return_if_fail (name != NULL);
 
-	/* Enable if anything is selected */
-	gtk_action_group_set_sensitive (pv->object_actions,
-	                                seahorse_viewer_get_selected (self) != NULL);
+	/* These guys do their own object selection */
+	if (seahorse_action_have_objects (action) ||
+	    action == self->pv->properties_object ||
+	    action == self->pv->properties_place ||
+	    action == self->pv->properties_backend ||
+	    action == self->pv->edit_delete)
+		return;
 
 	objects = seahorse_viewer_get_selected_objects (self);
+	objects = g_list_concat (objects, seahorse_viewer_get_selected_places (self));
+	objects = g_list_concat (objects, seahorse_viewer_get_selected_backends (self));
 
-	/* Enable if any exportable objects are selected */
-	gtk_action_group_set_sensitive (pv->export_actions,
-	                                has_matching_objects (&exportable_predicate, objects));
-
-	/* Enable if any deletable objects are selected */
-	gtk_action_set_sensitive (pv->delete_action,
-	                          has_matching_objects (&deletable_predicate, objects));
-
-	/* Go through the list of actions and disable all those which have no matches */
-	for (i = 0; i < pv->predicates->len; ++i) {
-		predicate = &g_array_index (pv->predicates, ViewerPredicate, i);
-		if (predicate->is_commands)
-			continue;
-		gtk_action_group_set_visible (GTK_ACTION_GROUP (predicate->commands_or_actions),
-		                              has_matching_objects (&predicate->pred, objects));
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		actions = NULL;
+		g_object_get (l->data, "actions", &actions, NULL);
+		if (actions != NULL) {
+			if (gtk_action_group_get_action (actions, name) == action)
+				selected = g_list_prepend (selected, l->data);
+			g_object_unref (actions);
+		}
 	}
 
+	selected = g_list_reverse (selected);
+	seahorse_action_set_objects (action, selected);
+	seahorse_action_set_window (action, seahorse_viewer_get_window (self));
+
+	g_list_free (selected);
 	g_list_free (objects);
 }
 
 static void
-on_add_widget (GtkUIManager* ui, GtkWidget* widget, SeahorseViewer* self)
+on_ui_manager_post_activate (GtkUIManager *ui_manager,
+                             GtkAction *action,
+                             gpointer user_data)
 {
+	seahorse_action_set_objects (action, NULL);
+	seahorse_action_set_window (action, NULL);
+}
+
+static void
+viewer_find_actions_for_selection (SeahorseViewer *self,
+                                   GHashTable *found,
+                                   GList *objects)
+{
+	GtkActionGroup *actions;
+	GPtrArray *selected;
+	GList *l;
+
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		actions = NULL;
+		g_object_get (l->data, "actions", &actions, NULL);
+		if (actions != NULL) {
+			if (g_hash_table_lookup (self->pv->actions, actions) == NULL) {
+				g_hash_table_insert (self->pv->actions, g_object_ref (actions), actions);
+				seahorse_viewer_include_actions (self, actions);
+			}
+			selected = g_hash_table_lookup (found, actions);
+			if (selected == NULL) {
+				selected = g_ptr_array_new ();
+				g_hash_table_insert (found, actions, selected);
+			}
+			g_ptr_array_add (selected, l->data);
+			g_object_unref (actions);
+		}
+	}
+}
+
+
+static void
+seahorse_viewer_real_selection_changed (SeahorseViewer *self)
+{
+	GHashTableIter iter;
+	GHashTable *seen;
+	GPtrArray *deletes;
+	GList *objects;
+	GPtrArray *selected;
+	GtkActionGroup *actions;
+	GtkAction *action;
+	guint i;
+
+	seen = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+	                              NULL, (GDestroyNotify)g_ptr_array_unref);
+
+	objects = seahorse_viewer_get_selected_objects (self);
+	viewer_find_actions_for_selection (self, seen, objects);
+	if (objects != NULL)
+		gtk_action_set_sensitive (self->pv->properties_object,
+		                          properties_action_for_object (objects->data) != NULL);
+	g_list_free (objects);
+
+	/*
+	 * At this point we only have the actions for real objects, so hook
+	 * in the delete logic here.
+	 */
+
+	deletes = g_ptr_array_new ();
+
+	g_hash_table_iter_init (&iter, seen);
+	while (g_hash_table_iter_next (&iter, (gpointer *)&actions, (gpointer *)&selected)) {
+		action = gtk_action_group_get_action (actions, "delete");
+		if (action != NULL)
+			g_ptr_array_add (deletes, action);
+	}
+
+	/* If there's no delete command, then disable ours */
+	if (deletes->len == 0) {
+		gtk_action_set_sensitive (self->pv->edit_delete, FALSE);
+
+	/* If there's one delete command, then hide ours, and show it */
+	} else if (deletes->len == 1) {
+		gtk_action_set_visible (self->pv->edit_delete, FALSE);
+		gtk_action_set_visible (deletes->pdata[0], TRUE);
+
+	/* If there's more than one delete command, then show ours, and hide others */
+	} else {
+		gtk_action_set_sensitive (self->pv->edit_delete, TRUE);
+		gtk_action_set_visible (self->pv->edit_delete, TRUE);
+		for (i = 0; i < deletes->len; i++)
+			gtk_action_set_visible (deletes->pdata[i], FALSE);
+	}
+
+	g_ptr_array_unref (deletes);
+
+	/* Now proceed to bring in the other commands */
+	objects = seahorse_viewer_get_selected_places (self);
+	viewer_find_actions_for_selection (self, seen, objects);
+	if (objects != NULL)
+		gtk_action_set_sensitive (self->pv->properties_place,
+		                          properties_action_for_object (objects->data) != NULL);
+	g_list_free (objects);
+
+	objects = seahorse_viewer_get_selected_backends (self);
+	viewer_find_actions_for_selection (self, seen, objects);
+	if (objects != NULL)
+		gtk_action_set_sensitive (self->pv->properties_backend,
+		                          properties_action_for_object (objects->data) != NULL);
+	g_list_free (objects);
+
+	g_hash_table_iter_init (&iter, self->pv->actions);
+	while (g_hash_table_iter_next (&iter, (gpointer *)&actions, NULL))
+		gtk_action_group_set_visible (actions, g_hash_table_lookup (seen, actions) != NULL);
+
+	g_hash_table_iter_init (&iter, seen);
+	while (g_hash_table_iter_next (&iter, (gpointer *)&actions, (gpointer *)&selected)) {
+		if (SEAHORSE_IS_ACTIONS (actions)) {
+			objects = NULL;
+			for (i = 0; i < selected->len; i++)
+				objects = g_list_prepend (objects, selected->pdata[i]);
+			objects = g_list_reverse (objects);
+			seahorse_actions_update (SEAHORSE_ACTIONS (actions), objects);
+			g_list_free (objects);
+		}
+	}
+
+	g_hash_table_destroy (seen);
+}
+
+static void
+on_ui_manager_add_widget (GtkUIManager *ui_manager,
+                          GtkWidget *widget,
+                          gpointer user_data)
+{
+	SeahorseViewer* self = SEAHORSE_VIEWER (user_data);
 	const char* name = NULL;
 	GtkWidget* holder;
-
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (GTK_IS_UI_MANAGER (ui));
-	g_return_if_fail (GTK_IS_WIDGET (widget));
 
 	if (GTK_IS_MENU_BAR (widget))
 		name = "menu-placeholder";
@@ -545,120 +561,89 @@ on_add_widget (GtkUIManager* ui, GtkWidget* widget, SeahorseViewer* self)
 		name = NULL;
 
 	holder = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), name);
-	if (holder != NULL)
+	if (holder != NULL) {
 		gtk_container_add ((GTK_CONTAINER (holder)), widget);
-	else
+		gtk_widget_show (widget);
+	} else {
 		g_warning ("no place holder found for: %s", name);
+	}
 }
 
-GList *
-seahorse_viewer_get_selected_matching (SeahorseViewer *self,
-                                       SeahorsePredicate *pred)
+static void
+seahorse_viewer_constructed (GObject *obj)
 {
-	GList *all_objects;
-	GList *objects;
-
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
-	g_return_val_if_fail (pred != NULL, NULL);
-
-	all_objects = seahorse_viewer_get_selected_objects (self);
-	objects = filter_matching_objects (pred, &all_objects);
-	g_list_free (all_objects);
-
-	return objects;
-}
-
-static GObject*
-seahorse_viewer_constructor (GType type, guint n_props, GObjectConstructParam *props)
-{
-	GObject *obj = G_OBJECT_CLASS (seahorse_viewer_parent_class)->constructor (type, n_props, props);
-	SeahorseViewer *self = NULL;
-	SeahorseViewerPrivate *pv;
+	SeahorseViewer *self = SEAHORSE_VIEWER (obj);
 	GError *error = NULL;
 	GtkWidget *win;
 	const gchar *name;
 	gchar *path;
-	GList *types, *l;
+	GtkActionGroup *actions;
 
-	if (obj) {
-		pv = SEAHORSE_VIEWER_GET_PRIVATE (obj);
-		self = SEAHORSE_VIEWER (obj);
+	G_OBJECT_CLASS (seahorse_viewer_parent_class)->constructed (obj);
 
-		/* The widgts get added in an idle loop later */
-		name = seahorse_widget_get_name (SEAHORSE_WIDGET (self));
-		path = g_strdup_printf ("%sseahorse-%s.ui", SEAHORSE_UIDIR, name);
-		if (!gtk_ui_manager_add_ui_from_file (pv->ui_manager, path, &error)) {
-			g_warning ("couldn't load ui description for '%s': %s", name, error->message);
-			g_clear_error (&error);
-		}
-
-		g_free (path);
-
-		win = seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self));
-		if (G_TYPE_FROM_INSTANCE (G_OBJECT (win)) == GTK_TYPE_WINDOW)
-			gtk_window_add_accel_group (GTK_WINDOW (win),
-			                            gtk_ui_manager_get_accel_group (pv->ui_manager));
-
-		include_basic_actions (self);
-
-		/* Setup the commands */
-		types = seahorse_registry_object_types (seahorse_registry_get (), "commands", NULL, NULL);
-		for (l = types; l; l = g_list_next (l)) {
-			GType typ = GPOINTER_TO_SIZE (l->data);
-			SeahorseCommands *commands;
-
-			commands = g_object_new (typ, "view", self, NULL);
-			pv->all_commands = seahorse_object_list_prepend (pv->all_commands, commands);
-			g_object_unref (commands);
-		}
+	/* The widgts get added in an idle loop later */
+	name = seahorse_widget_get_name (SEAHORSE_WIDGET (self));
+	path = g_strdup_printf ("%sseahorse-%s.ui", SEAHORSE_UIDIR, name);
+	if (!gtk_ui_manager_add_ui_from_file (self->pv->ui_manager, path, &error)) {
+		g_warning ("couldn't load ui description for '%s': %s", name, error->message);
+		g_clear_error (&error);
 	}
 
-	return obj;
-}
+	g_free (path);
 
+	win = seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self));
+	if (G_TYPE_FROM_INSTANCE (G_OBJECT (win)) == GTK_TYPE_WINDOW)
+		gtk_window_add_accel_group (GTK_WINDOW (win),
+		                            gtk_ui_manager_get_accel_group (self->pv->ui_manager));
+
+	actions = gtk_action_group_new ("main");
+	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (actions, UI_ENTRIES, G_N_ELEMENTS (UI_ENTRIES), self);
+	self->pv->edit_delete = gtk_action_group_get_action (actions, "edit-delete");
+	g_object_ref (self->pv->edit_delete);
+	self->pv->properties_object = gtk_action_group_get_action (actions, "properties-object");
+	g_object_ref (self->pv->properties_object);
+	self->pv->properties_place = gtk_action_group_get_action (actions, "properties-place");
+	g_object_ref (self->pv->properties_place);
+	self->pv->properties_backend = gtk_action_group_get_action (actions, "properties-backend");
+	g_object_ref (self->pv->properties_backend);
+	gtk_ui_manager_insert_action_group (self->pv->ui_manager, actions, 0);
+	g_object_unref (actions);
+}
 
 static void
 seahorse_viewer_init (SeahorseViewer *self)
 {
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_VIEWER,
+	                                        SeahorseViewerPrivate);
+	self->pv->actions = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+	                                           g_object_unref, NULL);
 
-	pv->ui_manager = gtk_ui_manager_new ();
-	g_signal_connect (pv->ui_manager, "add-widget", G_CALLBACK (on_add_widget), self);
-
-	pv->predicates = g_array_new (FALSE, TRUE, sizeof (ViewerPredicate));
+	self->pv->ui_manager = gtk_ui_manager_new ();
+	g_signal_connect (self->pv->ui_manager, "add-widget",
+	                  G_CALLBACK (on_ui_manager_add_widget), self);
+	g_signal_connect (self->pv->ui_manager, "pre-activate",
+	                  G_CALLBACK (on_ui_manager_pre_activate), self);
+	g_signal_connect (self->pv->ui_manager, "post-activate",
+	                  G_CALLBACK (on_ui_manager_post_activate), self);
 }
 
 static void
 seahorse_viewer_dispose (GObject *obj)
 {
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (obj);
-	ViewerPredicate *predicate;
-	guint i;
+	SeahorseViewer *self = SEAHORSE_VIEWER (obj);
 
-	if (pv->ui_manager)
-		g_object_unref (pv->ui_manager);
-	pv->ui_manager = NULL;
+	g_clear_object (&self->pv->edit_delete);
+	g_clear_object (&self->pv->properties_object);
+	g_clear_object (&self->pv->properties_place);
+	g_clear_object (&self->pv->properties_backend);
 
-	if (pv->object_actions)
-		g_object_unref (pv->object_actions);
-	pv->object_actions = NULL;
+	g_signal_handlers_disconnect_by_func (self->pv->ui_manager, on_ui_manager_add_widget, self);
+	g_signal_handlers_disconnect_by_func (self->pv->ui_manager, on_ui_manager_pre_activate, self);
+	g_signal_handlers_disconnect_by_func (self->pv->ui_manager, on_ui_manager_post_activate, self);
+	g_clear_object (&self->pv->ui_manager);
 
-	if (pv->export_actions)
-		g_object_unref (pv->export_actions);
-	pv->export_actions = NULL;
-
-	if (pv->delete_action)
-		g_object_unref (pv->delete_action);
-	pv->delete_action = NULL;
-
-	for (i = 0; i < pv->predicates->len; ++i) {
-		predicate = &g_array_index (pv->predicates, ViewerPredicate, i);
-		g_object_unref (predicate->commands_or_actions);
-	}
-	g_array_set_size (pv->predicates, 0);
-
-	seahorse_object_list_free (pv->all_commands);
-	pv->all_commands = NULL;
+	g_hash_table_remove_all (self->pv->actions);
 
 	G_OBJECT_CLASS (seahorse_viewer_parent_class)->dispose (obj);
 }
@@ -666,14 +651,11 @@ seahorse_viewer_dispose (GObject *obj)
 static void
 seahorse_viewer_finalize (GObject *obj)
 {
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE(obj);
+	SeahorseViewer *self = SEAHORSE_VIEWER (obj);
 
-	g_assert (pv->object_actions == NULL);
-	g_assert (pv->export_actions == NULL);
-	g_assert (pv->delete_action == NULL);
-	g_assert (pv->all_commands == NULL);
-	g_assert (pv->ui_manager == NULL);
-	g_array_free (pv->predicates, TRUE);
+	g_assert (self->pv->ui_manager == NULL);
+	g_assert (g_hash_table_size (self->pv->actions) == 0);
+	g_hash_table_destroy (self->pv->actions);
 
 	G_OBJECT_CLASS (seahorse_viewer_parent_class)->finalize (obj);
 }
@@ -685,27 +667,8 @@ seahorse_viewer_get_property (GObject *obj, guint prop_id, GValue *value,
 	SeahorseViewer *self = SEAHORSE_VIEWER (obj);
 
 	switch (prop_id) {
-	case PROP_SELECTED:
-		g_value_set_object (value, seahorse_viewer_get_selected (self));
-		break;
 	case PROP_WINDOW:
 		g_value_set_object (value, seahorse_viewer_get_window (self));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-seahorse_viewer_set_property (GObject *obj, guint prop_id, const GValue *value,
-                              GParamSpec *pspec)
-{
-	SeahorseViewer *self = SEAHORSE_VIEWER (obj);
-
-	switch (prop_id) {
-	case PROP_SELECTED:
-		seahorse_viewer_set_selected (self, g_value_get_object (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -718,20 +681,14 @@ seahorse_viewer_class_init (SeahorseViewerClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-	seahorse_viewer_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseViewerPrivate));
 
-	gobject_class->constructor = seahorse_viewer_constructor;
+	gobject_class->constructed = seahorse_viewer_constructed;
 	gobject_class->dispose = seahorse_viewer_dispose;
 	gobject_class->finalize = seahorse_viewer_finalize;
-	gobject_class->set_property = seahorse_viewer_set_property;
 	gobject_class->get_property = seahorse_viewer_get_property;
 
 	klass->selection_changed = seahorse_viewer_real_selection_changed;
-
-	g_object_class_install_property (gobject_class, PROP_SELECTED,
-	           g_param_spec_object ("selected", "Selected", "Selected Object",
-	                                SEAHORSE_TYPE_OBJECT, G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_WINDOW,
 	           g_param_spec_object ("window", "Window", "Window of View",
@@ -740,182 +697,110 @@ seahorse_viewer_class_init (SeahorseViewerClass *klass)
 	g_signal_new ("selection-changed", SEAHORSE_TYPE_VIEWER,
 	              G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (SeahorseViewerClass, selection_changed),
 	              NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-
-	exportable_predicate.flags = SEAHORSE_FLAG_EXPORTABLE;
-	deletable_predicate.flags = SEAHORSE_FLAG_DELETABLE;
 }
-
-/* -----------------------------------------------------------------------------
- * PUBLIC
- */
 
 void
 seahorse_viewer_ensure_updated (SeahorseViewer* self)
 {
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-
-	gtk_ui_manager_ensure_update (pv->ui_manager);
-
+	gtk_ui_manager_ensure_update (self->pv->ui_manager);
 }
 
 void
-seahorse_viewer_include_actions (SeahorseViewer* self, GtkActionGroup* actions)
+seahorse_viewer_include_actions (SeahorseViewer* self,
+                                 GtkActionGroup* actions)
 {
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
+	const gchar *definition;
+	GError *error = NULL;
+
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (GTK_IS_ACTION_GROUP (actions));
 
-	gtk_ui_manager_insert_action_group (pv->ui_manager, actions, -1);
-}
+	gtk_ui_manager_insert_action_group (self->pv->ui_manager, actions, 0);
 
-GList*
-seahorse_viewer_get_selected_objects (SeahorseViewer* self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
-	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_objects, NULL);
-
-	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_objects (self);
+	if (SEAHORSE_IS_ACTIONS (actions)) {
+		definition = seahorse_actions_get_definition (SEAHORSE_ACTIONS (actions));
+		if (definition != NULL) {
+			gtk_ui_manager_add_ui_from_string (self->pv->ui_manager, definition, -1, &error);
+			if (error != NULL) {
+				g_warning ("couldn't add ui defintion for action group: %s: %s",
+				           gtk_action_group_get_name (actions), definition);
+				g_clear_error (&error);
+			}
+		}
+	}
 }
 
 void
-seahorse_viewer_set_selected_objects (SeahorseViewer* self, GList* objects)
+seahorse_viewer_show_context_menu (SeahorseViewer* self,
+                                   const gchar *which,
+                                   guint button,
+                                   guint time)
 {
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->set_selected_objects);
-
-	SEAHORSE_VIEWER_GET_CLASS (self)->set_selected_objects (self, objects);
-}
-
-void
-seahorse_viewer_show_context_menu (SeahorseViewer* self, guint button, guint time)
-{
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
 	GtkMenu* menu;
 
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (which != NULL);
 
-	menu = GTK_MENU (gtk_ui_manager_get_widget (pv->ui_manager, "/KeyPopup"));
-	g_return_if_fail (GTK_IS_MENU (menu));
+	menu = GTK_MENU (gtk_ui_manager_get_widget (self->pv->ui_manager, which));
+	if (!GTK_IS_MENU (menu)) {
+		g_warning ("couldn't find menu '%s' in UI", which);
+		return;
+	}
 
 	gtk_menu_popup (menu, NULL, NULL, NULL, NULL, button, time);
 	gtk_widget_show (GTK_WIDGET (menu));
 }
 
 void
-seahorse_viewer_show_properties (SeahorseViewer* self, GObject* obj)
+seahorse_viewer_show_properties (SeahorseViewer* self,
+                                 GObject* obj)
 {
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (G_IS_OBJECT (obj));
+	GtkAction *action;
+	GList *objects;
 
-	for_each_commands (self, show_properties_for_selected, obj);
+	action = properties_action_for_object (obj);
+	if (action == NULL)
+		return;
+
+	objects = g_list_append (NULL, obj);
+	seahorse_action_set_objects (action, objects);
+	seahorse_action_set_window (action, seahorse_viewer_get_window (self));
+	g_list_free (objects);
+
+	gtk_action_activate (action);
+
+	seahorse_action_set_objects (action, NULL);
+	seahorse_action_set_window (action, NULL);
 }
 
-void
-seahorse_viewer_set_status (SeahorseViewer* self, const char* text)
-{
-	GtkStatusbar* status;
-	guint id;
-
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (text != NULL);
-
-	status = GTK_STATUSBAR (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "status"));
-	g_return_if_fail (GTK_IS_STATUSBAR (status));
-
-	id = gtk_statusbar_get_context_id (status, "key-manager");
-	gtk_statusbar_pop (status, id);
-	gtk_statusbar_push (status, id, text);
-}
-
-void
-seahorse_viewer_set_numbered_status (SeahorseViewer* self, const char* text, gint num)
-{
-	gchar* message;
-
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (text != NULL);
-
-	message = g_strdup_printf (text, num);
-	seahorse_viewer_set_status (self, message);
-	g_free (message);
-}
-
-GObject *
-seahorse_viewer_get_selected (SeahorseViewer* self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
-	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_selected, NULL);
-
-	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected (self);
-}
-
-void
-seahorse_viewer_set_selected (SeahorseViewer *self,
-                              GObject *value)
-{
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->set_selected);
-
-	SEAHORSE_VIEWER_GET_CLASS (self)->set_selected (self, value);
-}
-
-GtkWindow*
+GtkWindow *
 seahorse_viewer_get_window (SeahorseViewer* self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
 	return GTK_WINDOW (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)));
 }
 
-void
-seahorse_viewer_register_ui (SeahorseViewer *self,
-                             SeahorsePredicate *pred,
-                             const gchar *uidef,
-                             GtkActionGroup *actions)
+GList *
+seahorse_viewer_get_selected_objects (SeahorseViewer* self)
 {
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
-	GError *error = NULL;
-	ViewerPredicate predicate;
-
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-
-	if (actions != NULL) {
-		seahorse_viewer_include_actions (self, actions);
-
-		/* Add this to the list */
-		memset (&predicate, 0, sizeof (predicate));
-		if (pred)
-			predicate.pred = *pred;
-		predicate.is_commands = FALSE;
-		predicate.commands_or_actions = G_OBJECT (actions);
-		g_object_ref (actions);
-		g_array_append_val (pv->predicates, predicate);
-	}
-
-	if (uidef && uidef[0]) {
-		if (!gtk_ui_manager_add_ui_from_string (pv->ui_manager, uidef, -1, &error)) {
-			g_warning ("couldn't load UI description: %s", error->message);
-			g_clear_error (&error);
-		}
-	}
+	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
+	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_objects, NULL);
+	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_objects (self);
 }
 
-void
-seahorse_viewer_register_commands (SeahorseViewer *self,
-                                   SeahorsePredicate *pred,
-                                   SeahorseCommands *commands)
+GList *
+seahorse_viewer_get_selected_places (SeahorseViewer* self)
 {
-	SeahorseViewerPrivate *pv = SEAHORSE_VIEWER_GET_PRIVATE (self);
-	ViewerPredicate predicate;
+	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
+	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_places, NULL);
+	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_places (self);
+}
 
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (SEAHORSE_IS_COMMANDS (commands));
-
-	/* Add this to the list of commands */
-	memset (&predicate, 0, sizeof (predicate));
-	if (pred)
-		predicate.pred = *pred;
-	predicate.is_commands = TRUE;
-	predicate.commands_or_actions = G_OBJECT (commands);
-	g_object_ref (commands);
-	g_array_append_val (pv->predicates, predicate);
+GList *
+seahorse_viewer_get_selected_backends (SeahorseViewer* self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
+	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_backends, NULL);
+	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_backends (self);
 }

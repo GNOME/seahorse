@@ -48,7 +48,8 @@ enum {
     PROP_DESCRIPTION,
     PROP_ICON,
     PROP_KEY_SERVER,
-    PROP_URI
+    PROP_URI,
+    PROP_ACTIONS
 };
 
 /* -----------------------------------------------------------------------------
@@ -97,6 +98,9 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
             g_param_spec_string ("description", "Description", "Description", "", G_PARAM_READABLE));
     g_object_class_install_property (gobject_class, PROP_ICON,
             g_param_spec_object ("icon", "icon", "Icon", G_TYPE_ICON, G_PARAM_READABLE));
+    g_object_class_install_property (gobject_class, PROP_ACTIONS,
+            g_param_spec_object ("actions", "actions", "Actions",
+                                 GTK_TYPE_ACTION_GROUP, G_PARAM_READABLE));
 
     g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
             g_param_spec_string ("key-server", "Key Server",
@@ -205,6 +209,9 @@ seahorse_server_get_property (GObject *obj,
 		break;
 	case PROP_ICON:
 		g_value_take_object (value, g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION));
+		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, NULL);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);

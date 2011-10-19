@@ -62,15 +62,11 @@ void           on_keymanager_new_button                 (GtkButton* button,
 void           on_keymanager_import_button              (GtkButton* button,
                                                          SeahorseKeyManager* self);
 
-enum {
-	PROP_0,
-	PROP_SELECTED
-};
-
 struct _SeahorseKeyManagerPrivate {
 	GtkActionGroup* view_actions;
 	GtkEntry* filter_entry;
 	SeahorsePredicate pred;
+	SeahorseSidebar *sidebar;
 
 	GtkTreeView* view;
 	GcrCollection *collection; /* owned by the sidebar */
@@ -135,7 +131,9 @@ on_keymanager_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event,
 	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
 	
 	if (event->button == 3)
-		seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self), event->button, event->time);
+		seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self),
+		                                   SEAHORSE_VIEWER_MENU_OBJECT,
+		                                   event->button, event->time);
 
 	return FALSE;
 }
@@ -143,14 +141,14 @@ on_keymanager_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event,
 G_MODULE_EXPORT gboolean
 on_keymanager_key_list_popup_menu (GtkTreeView* view, SeahorseKeyManager* self) 
 {
-	GObject* obj;
+	GList *objects;
 
-	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER (self), FALSE);
-	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
-
-	obj = seahorse_viewer_get_selected (SEAHORSE_VIEWER (self));
-	if (obj != NULL) 
-		seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self), 0, gtk_get_current_event_time ());
+	objects = seahorse_viewer_get_selected_objects (SEAHORSE_VIEWER (self));
+	if (objects != NULL)
+		seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self),
+		                                   SEAHORSE_VIEWER_MENU_OBJECT,
+		                                   0, gtk_get_current_event_time ());
+	g_list_free (objects);
 	return FALSE;
 }
 
@@ -441,42 +439,25 @@ static const GtkRadioActionEntry VIEW_RADIO_ACTIONS[] = {
 	  N_("Show all keys, certificates and passwords"), SHOW_ANY },
 };
 
-/* -----------------------------------------------------------------------------
- * OBJECT 
- */
-
-static GList* 
-seahorse_key_manager_get_selected_objects (SeahorseViewer* base) 
+static GList *
+seahorse_key_manager_get_selected_objects (SeahorseViewer* viewer)
 {
-	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (base); 
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (viewer);
 	return seahorse_key_manager_store_get_selected_objects (self->pv->view);
 }
 
-static void 
-seahorse_key_manager_set_selected_objects (SeahorseViewer* base, GList* objects) 
+static GList *
+seahorse_key_manager_get_selected_places (SeahorseViewer* viewer)
 {
-	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (base);
-	seahorse_key_manager_store_set_selected_objects (self->pv->view, objects);
-
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (viewer);
+	return seahorse_sidebar_get_selected_places (self->pv->sidebar);
 }
 
-static GObject *
-seahorse_key_manager_get_selected (SeahorseViewer *base)
+static GList *
+seahorse_key_manager_get_selected_backends (SeahorseViewer* viewer)
 {
-	SeahorseKeyManager* self = SEAHORSE_KEY_MANAGER (base);
-	return seahorse_key_manager_store_get_selected_object (self->pv->view);
-}
-
-static void 
-seahorse_key_manager_set_selected (SeahorseViewer *base,
-                                   GObject *value)
-{
-	SeahorseKeyManager* self = SEAHORSE_KEY_MANAGER (base);
-	GList* objects = NULL; 
-	objects = g_list_prepend (objects, value);
-	seahorse_viewer_set_selected_objects (SEAHORSE_VIEWER (self), objects);
-	g_list_free (objects);
-	g_object_notify (G_OBJECT (self), "selected");
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (viewer);
+	return seahorse_sidebar_get_backends (self->pv->sidebar);
 }
 
 static gboolean
@@ -511,15 +492,14 @@ on_sidebar_panes_size_allocate (GtkWidget *widget,
 static GcrCollection *
 setup_sidebar (SeahorseKeyManager *self)
 {
-	SeahorseSidebar *sidebar;
 	GtkWidget *area, *panes;
 	GtkActionGroup *actions;
 	GtkAction *action;
 
-	sidebar = seahorse_sidebar_new ();
+	self->pv->sidebar = seahorse_sidebar_new ();
 	area = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-area");
-	gtk_container_add (GTK_CONTAINER (area), GTK_WIDGET (sidebar));
-	gtk_widget_show (GTK_WIDGET (sidebar));
+	gtk_container_add (GTK_CONTAINER (area), GTK_WIDGET (self->pv->sidebar));
+	gtk_widget_show (GTK_WIDGET (self->pv->sidebar));
 
 	actions = gtk_action_group_new ("sidebar");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
@@ -530,7 +510,7 @@ setup_sidebar (SeahorseKeyManager *self)
 	                        area, "visible",
 	                        G_BINDING_DEFAULT);
 	g_object_bind_property (action, "active",
-	                        sidebar, "combined",
+	                        self->pv->sidebar, "combined",
 	                        G_BINDING_INVERT_BOOLEAN);
 	g_settings_bind (self->pv->settings, "sidebar-visible",
 	                 action, "active",
@@ -539,15 +519,15 @@ setup_sidebar (SeahorseKeyManager *self)
 	g_object_unref (actions);
 
 	g_settings_bind (self->pv->settings, "places-selected",
-	                 sidebar, "selected-uris",
+	                 self->pv->sidebar, "selected-uris",
 	                 G_SETTINGS_BIND_DEFAULT);
 
 	self->pv->sidebar_width = g_settings_get_int (self->pv->settings, "sidebar-width");
 	panes = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-panes");
 	gtk_paned_set_position (GTK_PANED (panes), self->pv->sidebar_width);
-	g_signal_connect (sidebar, "size_allocate", G_CALLBACK (on_sidebar_panes_size_allocate), self);
+	g_signal_connect (self->pv->sidebar, "size_allocate", G_CALLBACK (on_sidebar_panes_size_allocate), self);
 
-	return seahorse_sidebar_get_collection (sidebar);
+	return seahorse_sidebar_get_collection (self->pv->sidebar);
 }
 
 static void
@@ -730,62 +710,19 @@ seahorse_key_manager_finalize (GObject *obj)
 }
 
 static void
-seahorse_key_manager_set_property (GObject *obj, guint prop_id, const GValue *value, 
-                           GParamSpec *pspec)
-{
-	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (obj);
-
-	switch (prop_id) {
-	case PROP_SELECTED:
-		seahorse_viewer_set_selected (SEAHORSE_VIEWER (self), g_value_get_object (value));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-seahorse_key_manager_get_property (GObject *obj, guint prop_id, GValue *value, 
-                           GParamSpec *pspec)
-{
-	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (obj);
-
-	switch (prop_id) {
-	case PROP_SELECTED:
-		g_value_set_object (value, seahorse_viewer_get_selected (SEAHORSE_VIEWER (self)));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
-}
-
-static void
 seahorse_key_manager_class_init (SeahorseKeyManagerClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    
-	seahorse_key_manager_parent_class = g_type_class_peek_parent (klass);
+
 	g_type_class_add_private (klass, sizeof (SeahorseKeyManagerPrivate));
 
 	gobject_class->constructed = seahorse_key_manager_constructed;
 	gobject_class->finalize = seahorse_key_manager_finalize;
-	gobject_class->set_property = seahorse_key_manager_set_property;
-	gobject_class->get_property = seahorse_key_manager_get_property;
-    
+
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_key_manager_get_selected_objects;
-	SEAHORSE_VIEWER_CLASS (klass)->set_selected_objects = seahorse_key_manager_set_selected_objects;
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected = seahorse_key_manager_get_selected;
-	SEAHORSE_VIEWER_CLASS (klass)->set_selected = seahorse_key_manager_set_selected;
-
-	g_object_class_override_property (gobject_class, PROP_SELECTED, "selected");
+	SEAHORSE_VIEWER_CLASS (klass)->get_selected_places = seahorse_key_manager_get_selected_places;
+	SEAHORSE_VIEWER_CLASS (klass)->get_selected_backends = seahorse_key_manager_get_selected_backends;
 }
-
-/* -----------------------------------------------------------------------------
- * PUBLIC 
- */
-
 
 SeahorseWidget *
 seahorse_key_manager_show (void)

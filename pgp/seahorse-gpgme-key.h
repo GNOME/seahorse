@@ -49,7 +49,7 @@ struct _SeahorseGpgmeKeyClass {
 	SeahorsePgpKeyClass         parent_class;
 };
 
-SeahorseGpgmeKey* seahorse_gpgme_key_new                 (SeahorseSource *sksrc,
+SeahorseGpgmeKey* seahorse_gpgme_key_new                 (SeahorsePlace *sksrc,
                                                           gpgme_key_t pubkey,
                                                           gpgme_key_t seckey);
 

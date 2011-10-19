@@ -23,27 +23,17 @@
 #include "config.h"
 
 #include "seahorse-object.h"
+#include "seahorse-place.h"
 #include "seahorse-predicate.h"
-#include "seahorse-source.h"
 
 #include "string.h"
 
 #include <glib/gi18n.h>
 
-/*
- * @PROP_0:
- * @PROP_SOURCE:
- * @PROP_LABEL:
- * @PROP_MARKUP:
- * @PROP_NICKNAME:
- * @PROP_ICON:
- * @PROP_IDENTIFIER:
- * @PROP_USAGE:
- * @PROP_FLAGS:
- */
-enum _SeahorseObjectProps {
+enum {
 	PROP_0,
-	PROP_SOURCE,
+	PROP_PLACE,
+	PROP_ACTIONS,
 	PROP_LABEL,
 	PROP_MARKUP,
 	PROP_NICKNAME,
@@ -54,7 +44,7 @@ enum _SeahorseObjectProps {
 };
 
 /**
- * @source: Where did the object come from ?
+ * @place: Where did the object come from ?
  * @label: DBUS: "display-name"
  * @markup: Markup text
  * @markup_explicit: If TRUE the markup will not be set automatically
@@ -68,7 +58,8 @@ enum _SeahorseObjectProps {
  * @flags:
  */
 struct _SeahorseObjectPrivate {
-	SeahorseSource *source;
+	SeahorsePlace *place;
+	GtkActionGroup *actions;
 
     gchar *label;             
     gchar *markup;
@@ -199,9 +190,10 @@ seahorse_object_dispose (GObject *obj)
 {
 	SeahorseObject *self = SEAHORSE_OBJECT (obj);
 
-	if (self->pv->source != NULL) {
-		g_object_remove_weak_pointer (G_OBJECT (self->pv->source), (gpointer*)&self->pv->source);
-		self->pv->source = NULL;
+	if (self->pv->place != NULL) {
+		g_object_remove_weak_pointer (G_OBJECT (self->pv->place),
+		                              (gpointer*)&self->pv->place);
+		self->pv->place = NULL;
 	}
 
 	G_OBJECT_CLASS (seahorse_object_parent_class)->dispose (obj);	
@@ -216,8 +208,9 @@ static void
 seahorse_object_finalize (GObject *obj)
 {
 	SeahorseObject *self = SEAHORSE_OBJECT (obj);
-	
-	g_assert (self->pv->source == NULL);
+
+	g_assert (self->pv->place == NULL);
+	g_clear_object (&self->pv->actions);
 
 	g_free (self->pv->label);
 	self->pv->label = NULL;
@@ -252,10 +245,13 @@ seahorse_object_get_property (GObject *obj, guint prop_id, GValue *value,
                            GParamSpec *pspec)
 {
 	SeahorseObject *self = SEAHORSE_OBJECT (obj);
-	
+
 	switch (prop_id) {
-	case PROP_SOURCE:
-		g_value_set_object (value, seahorse_object_get_source (self));
+	case PROP_PLACE:
+		g_value_set_object (value, seahorse_object_get_place (self));
+		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, self->pv->actions);
 		break;
 	case PROP_LABEL:
 		g_value_set_string (value, seahorse_object_get_label (self));
@@ -303,8 +299,12 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 	guint flags;
 
 	switch (prop_id) {
-	case PROP_SOURCE:
-		seahorse_object_set_source (self, SEAHORSE_SOURCE (g_value_get_object (value)));
+	case PROP_PLACE:
+		seahorse_object_set_place (self, g_value_get_object (value));
+		break;
+	case PROP_ACTIONS:
+		g_clear_object (&self->pv->actions);
+		self->pv->actions = g_value_dup_object (value);
 		break;
 	case PROP_LABEL:
 		if (set_string_storage (g_value_get_string (value), &self->pv->label)) {
@@ -379,9 +379,13 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
 	gobject_class->set_property = seahorse_object_set_property;
 	gobject_class->get_property = seahorse_object_get_property;
 
-	g_object_class_install_property (gobject_class, PROP_SOURCE,
-	           g_param_spec_object ("source", "Object Source", "Source the Object came from", 
-	                                SEAHORSE_TYPE_SOURCE, G_PARAM_READWRITE));
+	g_object_class_install_property (gobject_class, PROP_PLACE,
+	           g_param_spec_object ("place", "Object Place", "Place the Object came from",
+	                                SEAHORSE_TYPE_PLACE, G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_ACTIONS,
+	           g_param_spec_object ("actions", "Actions", "Actions for the object",
+	                                GTK_TYPE_ACTION_GROUP, G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_LABEL,
 	           g_param_spec_string ("label", "Object Display Label", "This object's displayable label.", 
@@ -422,11 +426,11 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
  *
  * Returns: the source of the object @self
  */
-SeahorseSource*
-seahorse_object_get_source (SeahorseObject *self)
+SeahorsePlace *
+seahorse_object_get_place (SeahorseObject *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_OBJECT (self), NULL);
-	return self->pv->source;	
+	return self->pv->place;
 }
 
 
@@ -438,21 +442,24 @@ seahorse_object_get_source (SeahorseObject *self)
  * sets the source for the object
  */
 void
-seahorse_object_set_source (SeahorseObject *self, SeahorseSource *value)
+seahorse_object_set_place (SeahorseObject *self,
+                           SeahorsePlace *value)
 {
 	g_return_if_fail (SEAHORSE_IS_OBJECT (self));
-	
-	if (value == self->pv->source)
+
+	if (value == self->pv->place)
 		return;
 
-	if (self->pv->source) 
-		g_object_remove_weak_pointer (G_OBJECT (self->pv->source), (gpointer*)&self->pv->source);
+	if (self->pv->place)
+		g_object_remove_weak_pointer (G_OBJECT (self->pv->place),
+		                              (gpointer*)&self->pv->place);
 
-	self->pv->source = value;
-	if (self->pv->source != NULL)
-		g_object_add_weak_pointer (G_OBJECT (self->pv->source), (gpointer*)&self->pv->source);
+	self->pv->place = value;
+	if (self->pv->place != NULL)
+		g_object_add_weak_pointer (G_OBJECT (self->pv->place),
+		                           (gpointer*)&self->pv->place);
 
-	g_object_notify (G_OBJECT (self), "source");
+	g_object_notify (G_OBJECT (self), "place");
 }
 
 /**

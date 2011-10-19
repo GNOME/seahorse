@@ -22,7 +22,6 @@
 #include "config.h"
 
 #include "seahorse-ssh-backend.h"
-#include "seahorse-ssh-commands.h"
 #include "seahorse-ssh-dialogs.h"
 #include "seahorse-ssh-source.h"
 
@@ -35,7 +34,8 @@ enum {
 	PROP_0,
 	PROP_NAME,
 	PROP_LABEL,
-	PROP_DESCRIPTION
+	PROP_DESCRIPTION,
+	PROP_ACTIONS
 };
 
 static SeahorseSshBackend *ssh_backend = NULL;
@@ -63,9 +63,6 @@ seahorse_ssh_backend_init (SeahorseSshBackend *self)
 {
 	g_return_if_fail (ssh_backend == NULL);
 	ssh_backend = self;
-
-	/* Let these classes register themselves, when the backend is created */
-	g_type_class_unref (g_type_class_ref (SEAHORSE_TYPE_SSH_COMMANDS));
 
 	seahorse_ssh_generate_register ();
 }
@@ -97,6 +94,9 @@ seahorse_ssh_backend_get_property (GObject *obj,
 	case PROP_DESCRIPTION:
 		g_value_set_string (value, _("Keys used to connect securely to other computers"));
 		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, NULL);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -126,6 +126,7 @@ seahorse_ssh_backend_class_init (SeahorseSshBackendClass *klass)
 	g_object_class_override_property (gobject_class, PROP_NAME, "name");
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
 }
 
 static guint

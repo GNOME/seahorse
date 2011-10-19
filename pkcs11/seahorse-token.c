@@ -34,7 +34,7 @@
 #include "seahorse-pkcs11-operations.h"
 #include "seahorse-token.h"
 
-#include "seahorse-source.h"
+#include "seahorse-place.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
 
@@ -46,6 +46,7 @@ enum {
 	PROP_SLOT,
 	PROP_FLAGS,
 	PROP_URI,
+	PROP_ACTIONS
 };
 
 struct _SeahorseTokenPrivate {
@@ -57,13 +58,13 @@ struct _SeahorseTokenPrivate {
 static void          receive_object                      (SeahorseToken *self,
                                                           GckObject *obj);
 
-static void          seahorse_token_source_iface  (SeahorseSourceIface *iface);
+static void          seahorse_token_place_iface          (SeahorsePlaceIface *iface);
 
-static void          seahorse_token_collection_iface    (GcrCollectionIface *iface);
+static void          seahorse_token_collection_iface     (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_EXTENDED (SeahorseToken, seahorse_token, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_token_collection_iface);
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SOURCE, seahorse_token_source_iface);
+                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_token_place_iface);
 );
 
 
@@ -275,6 +276,9 @@ seahorse_token_get_property (GObject *object,
 	case PROP_URI:
 		g_value_set_string (value, self->pv->uri);
 		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, NULL);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -341,6 +345,7 @@ seahorse_token_class_init (SeahorseTokenClass *klass)
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 	g_object_class_override_property (gobject_class, PROP_URI, "uri");
 	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
 
 	g_object_class_install_property (gobject_class, PROP_SLOT,
 	         g_param_spec_object ("slot", "Slot", "Pkcs#11 SLOT",
@@ -352,7 +357,7 @@ seahorse_token_class_init (SeahorseTokenClass *klass)
 }
 
 static void
-seahorse_token_source_iface (SeahorseSourceIface *iface)
+seahorse_token_place_iface (SeahorsePlaceIface *iface)
 {
 
 }

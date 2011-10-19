@@ -19,93 +19,96 @@
  * 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA.
  */
- 
+
 /**
- * - A generic interface for accessing sources.
- * - Eventually more functionality will be merged from seahorse-op.* into 
- *   this class and derived classes. 
+ * - A generic interface for accessing places.
+ * - Eventually more functionality will be merged from seahorse-op.* into
+ *   this class and derived classes.
  */
 
 
-#ifndef __SEAHORSE_SOURCE_H__
-#define __SEAHORSE_SOURCE_H__
+#ifndef __SEAHORSE_PLACE_H__
+#define __SEAHORSE_PLACE_H__
 
 #include "seahorse-types.h"
 
 #include <gio/gio.h>
-#include <glib-object.h>
 
-#define SEAHORSE_TYPE_SOURCE                (seahorse_source_get_type ())
-#define SEAHORSE_SOURCE(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SOURCE, SeahorseSource))
-#define SEAHORSE_IS_SOURCE(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_SOURCE))
-#define SEAHORSE_SOURCE_GET_INTERFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SEAHORSE_TYPE_SOURCE, SeahorseSourceIface))
+#include <gtk/gtk.h>
 
-typedef struct _SeahorseSource SeahorseSource;
-typedef struct _SeahorseSourceIface SeahorseSourceIface;
+#define SEAHORSE_TYPE_PLACE                (seahorse_place_get_type ())
+#define SEAHORSE_PLACE(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PLACE, SeahorsePlace))
+#define SEAHORSE_IS_PLACE(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PLACE))
+#define SEAHORSE_PLACE_GET_INTERFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SEAHORSE_TYPE_PLACE, SeahorsePlaceIface))
 
-struct _SeahorseSourceIface {
+typedef struct _SeahorsePlace SeahorsePlace;
+typedef struct _SeahorsePlaceIface SeahorsePlaceIface;
+
+struct _SeahorsePlaceIface {
 	GTypeInterface parent;
 
 	/* virtual methods ------------------------------------------------- */
 
-	void            (*import_async)              (SeahorseSource *source,
+	void            (*import_async)              (SeahorsePlace *place,
 	                                              GInputStream *input,
 	                                              GCancellable *cancellable,
 	                                              GAsyncReadyCallback callback,
 	                                              gpointer user_data);
 
-	GList *         (*import_finish)             (SeahorseSource *source,
+	GList *         (*import_finish)             (SeahorsePlace *place,
 	                                              GAsyncResult *result,
 	                                              GError **error);
 
-	void            (*export_async)              (SeahorseSource *source,
+	void            (*export_async)              (SeahorsePlace *place,
 	                                              GList *objects,
 	                                              GOutputStream *output,
 	                                              GCancellable *cancellable,
 	                                              GAsyncReadyCallback callback,
 	                                              gpointer user_data);
 
-	GOutputStream * (*export_finish)             (SeahorseSource *source,
+	GOutputStream * (*export_finish)             (SeahorsePlace *place,
 	                                              GAsyncResult *result,
 	                                              GError **error);
 };
 
-GType            seahorse_source_get_type             (void) G_GNUC_CONST;
+GType            seahorse_place_get_type             (void) G_GNUC_CONST;
+
+GtkActionGroup * seahorse_place_get_actions          (SeahorsePlace *self);
 
 /* Method helper functions ------------------------------------------- */
 
-void             seahorse_source_import_async         (SeahorseSource *source,
-                                                       GInputStream *input,
+void             seahorse_place_import_async         (SeahorsePlace *place,
+                                                      GInputStream *input,
+                                                      GCancellable *cancellable,
+                                                      GAsyncReadyCallback callback,
+                                                      gpointer user_data);
+
+GList *          seahorse_place_import_finish        (SeahorsePlace *place,
+                                                      GAsyncResult *result,
+                                                      GError **error);
+
+void             seahorse_place_export_async         (SeahorsePlace *place,
+                                                      GList *objects,
+                                                      GOutputStream *output,
                                                        GCancellable *cancellable,
                                                        GAsyncReadyCallback callback,
                                                        gpointer user_data);
 
-GList *          seahorse_source_import_finish        (SeahorseSource *source,
+GOutputStream *  seahorse_place_export_finish        (SeahorsePlace *place,
                                                        GAsyncResult *result,
                                                        GError **error);
 
-void             seahorse_source_export_async         (SeahorseSource *source,
-                                                       GList *objects,
+void             seahorse_place_export_auto_async    (GList *objects,
                                                        GOutputStream *output,
                                                        GCancellable *cancellable,
                                                        GAsyncReadyCallback callback,
                                                        gpointer user_data);
 
-GOutputStream *  seahorse_source_export_finish        (SeahorseSource *source,
-                                                       GAsyncResult *result,
+GOutputStream *  seahorse_place_export_auto_finish   (GAsyncResult *result,
                                                        GError **error);
 
-void             seahorse_source_export_auto_async    (GList *objects,
-                                                       GOutputStream *output,
-                                                       GCancellable *cancellable,
-                                                       GAsyncReadyCallback callback,
-                                                       gpointer user_data);
-
-GOutputStream *  seahorse_source_export_auto_finish   (GAsyncResult *result,
-                                                       GError **error);
-
-gboolean         seahorse_source_export_auto_wait     (GList *objects,
+gboolean         seahorse_place_export_auto_wait     (GList *objects,
                                                        GOutputStream *output,
                                                        GError **error);
 
-#endif /* __SEAHORSE_SOURCE_H__ */
+#endif /* __SEAHORSE_PLACE_H__ */

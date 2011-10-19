@@ -23,8 +23,9 @@
 #include "config.h"
 
 #include "seahorse-certificate.h"
-#include "seahorse-pkcs11-helpers.h"
 #include "seahorse-pkcs11.h"
+#include "seahorse-pkcs11-actions.h"
+#include "seahorse-pkcs11-helpers.h"
 #include "seahorse-token.h"
 #include "seahorse-types.h"
 
@@ -45,15 +46,17 @@ static const gulong REQUIRED_ATTRS[] = {
 
 enum {
 	PROP_0,
-	PROP_SOURCE,
+	PROP_PLACE,
 	PROP_ATTRIBUTES,
 	PROP_FLAGS,
+	PROP_ACTIONS
 };
 
 struct _SeahorseCertificatePrivate {
 	SeahorseToken *token;
 	GckAttributes *attributes;
 	GckAttribute der_value;
+	GtkActionGroup *actions;
 };
 
 static void seahorse_certificate_certificate_iface (GcrCertificateIface *iface);
@@ -69,6 +72,7 @@ static void
 seahorse_certificate_init (SeahorseCertificate *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_CERTIFICATE, SeahorseCertificatePrivate));
+	self->pv->actions = seahorse_pkcs11_actions_instance ();
 	gck_attribute_init_invalid (&self->pv->der_value, CKA_VALUE);
 }
 
@@ -90,6 +94,8 @@ seahorse_certificate_finalize (GObject *obj)
 {
 	SeahorseCertificate *self = SEAHORSE_CERTIFICATE (obj);
 
+	g_clear_object (&self->pv->actions);
+
 	if (self->pv->attributes)
 		gck_attributes_unref (self->pv->attributes);
 	gck_attribute_clear (&self->pv->der_value);
@@ -106,7 +112,7 @@ seahorse_certificate_get_property (GObject *obj,
 	SeahorseCertificate *self = SEAHORSE_CERTIFICATE (obj);
 
 	switch (prop_id) {
-	case PROP_SOURCE:
+	case PROP_PLACE:
 		g_value_set_object (value, self->pv->token);
 		break;
 	case PROP_ATTRIBUTES:
@@ -115,6 +121,9 @@ seahorse_certificate_get_property (GObject *obj,
 	case PROP_FLAGS:
 		g_value_set_flags (value, SEAHORSE_FLAG_PERSONAL |
 		                          SEAHORSE_FLAG_EXPORTABLE);
+		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, self->pv->actions);
 		break;
 	default:
 		gcr_certificate_mixin_get_property (obj, prop_id, value, pspec);
@@ -132,7 +141,7 @@ seahorse_certificate_set_property (GObject *obj,
 	GckAttribute *der_value = NULL;
 
 	switch (prop_id) {
-	case PROP_SOURCE:
+	case PROP_PLACE:
 		g_return_if_fail (self->pv->token == NULL);
 		self->pv->token = g_value_dup_object (value);
 		break;
@@ -166,12 +175,16 @@ seahorse_certificate_class_init (SeahorseCertificateClass *klass)
 	gobject_class->get_property = seahorse_certificate_get_property;
 	gobject_class->notify = seahorse_certificate_notify;
 
-	g_object_class_install_property (gobject_class, PROP_SOURCE,
-	         g_param_spec_object ("source", "source", "source", SEAHORSE_TYPE_TOKEN,
+	g_object_class_install_property (gobject_class, PROP_PLACE,
+	         g_param_spec_object ("place", "place", "place", SEAHORSE_TYPE_TOKEN,
 	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 
 	g_object_class_install_property (gobject_class, PROP_FLAGS,
 	         g_param_spec_flags ("flags", "flags", "flags", SEAHORSE_TYPE_FLAGS, SEAHORSE_FLAG_NONE,
+	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_ACTIONS,
+	         g_param_spec_object ("actions", "Actions", "Actions", GTK_TYPE_ACTION_GROUP,
 	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 
 	g_object_class_override_property (gobject_class, PROP_ATTRIBUTES, "attributes");

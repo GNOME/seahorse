@@ -80,7 +80,7 @@ gboolean               seahorse_pgp_backend_search_remote_finish (SeahorsePgpBac
 
 void                   seahorse_pgp_backend_transfer_async       (SeahorsePgpBackend *self,
                                                                   GList *keys,
-                                                                  SeahorseSource *to,
+                                                                  SeahorsePlace *to,
                                                                   GCancellable *cancellable,
                                                                   GAsyncReadyCallback callback,
                                                                   gpointer user_data);
@@ -91,7 +91,7 @@ gboolean               seahorse_pgp_backend_transfer_finish      (SeahorsePgpBac
 
 void                   seahorse_pgp_backend_retrieve_async       (SeahorsePgpBackend *self,
                                                                   GList *keyids,
-                                                                  SeahorseSource *to,
+                                                                  SeahorsePlace *to,
                                                                   GCancellable *cancellable,
                                                                   GAsyncReadyCallback callback,
                                                                   gpointer user_data);

@@ -79,7 +79,7 @@ on_delete_object_completed (GObject *source,
 	}
 
 	if (error == NULL) {
-		g_object_get (object, "source", &pkcs11_token, NULL);
+		g_object_get (object, "place", &pkcs11_token, NULL);
 		g_return_if_fail (SEAHORSE_IS_TOKEN (pkcs11_token));
 		seahorse_token_remove_object (pkcs11_token, GCK_OBJECT (object));
 		pkcs11_delete_one_object (res);

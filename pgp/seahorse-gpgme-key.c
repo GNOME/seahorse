@@ -28,9 +28,10 @@
 #include "seahorse-icons.h"
 #include "seahorse-predicate.h"
 #include "seahorse-object-list.h"
-#include "seahorse-source.h"
+#include "seahorse-place.h"
 #include "seahorse-util.h"
 
+#include "seahorse-pgp-actions.h"
 #include "seahorse-pgp-backend.h"
 #include "pgp/seahorse-pgp-key.h"
 #include "pgp/seahorse-gpgme.h"
@@ -297,6 +298,7 @@ void
 seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 {
 	SeahorseUsage usage;
+	GtkActionGroup *actions;
 	guint flags;
 
 	if (!self->pv->pubkey)
@@ -347,10 +349,13 @@ seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 		usage = SEAHORSE_USAGE_PUBLIC_KEY;
 	}
 
+	actions = seahorse_gpgme_key_actions_instance ();
 	g_object_set (self,
 	              "usage", usage,
 	              "flags", flags,
+	              "actions", actions,
 	              NULL);
+	g_object_unref (actions);
 
 	seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (self));
 }
@@ -536,13 +541,16 @@ seahorse_gpgme_key_class_init (SeahorseGpgmeKeyClass *klass)
  */
 
 SeahorseGpgmeKey* 
-seahorse_gpgme_key_new (SeahorseSource *sksrc, gpgme_key_t pubkey, 
+seahorse_gpgme_key_new (SeahorsePlace *sksrc,
+                        gpgme_key_t pubkey,
                         gpgme_key_t seckey)
 {
 	g_return_val_if_fail (pubkey || seckey, NULL);
 
-	return g_object_new (SEAHORSE_TYPE_GPGME_KEY, "source", sksrc,
-	                     "pubkey", pubkey, "seckey", seckey, 
+	return g_object_new (SEAHORSE_TYPE_GPGME_KEY,
+	                     "place", sksrc,
+	                     "pubkey", pubkey,
+	                     "seckey", seckey,
 	                     NULL);
 }
 

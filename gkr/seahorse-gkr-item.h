@@ -30,7 +30,6 @@
 #include "seahorse-gkr-keyring.h"
 
 #include "seahorse-object.h"
-#include "seahorse-source.h"
 
 typedef enum {
     SEAHORSE_GKR_USE_OTHER,

@@ -52,4 +52,8 @@ gchar **                     seahorse_sidebar_get_selected_uris  (SeahorseSideba
 void                         seahorse_sidebar_set_selected_uris  (SeahorseSidebar *self,
                                                                   const gchar **value);
 
+GList *                 seahorse_sidebar_get_selected_places     (SeahorseSidebar *self);
+
+GList *                 seahorse_sidebar_get_backends            (SeahorseSidebar *self);
+
 #endif /* __SEAHORSE_SIDEBAR_H__ */
