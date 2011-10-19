@@ -24,7 +24,6 @@
 
 #include "seahorse-ssh-key-data.h"
 #include "seahorse-ssh-source.h"
-#include "seahorse-algo.h"
 #include "seahorse-util.h"
 
 #define SSH_PRIVATE_BEGIN "-----BEGIN "
@@ -77,27 +76,27 @@ parse_algo (const gchar *type)
 static gboolean
 parse_key_blob (guchar *bytes, gsize len, SeahorseSSHKeyData *data)
 {
-    md5_ctx_t ctx;
-    guchar digest[MD5_LEN];
-    gchar *fingerprint;
-    guint i;
-    
-    seahorse_md5_init (&ctx);
-    seahorse_md5_update (&ctx, bytes, len);
-    seahorse_md5_final (digest, &ctx);
-    
-    fingerprint = g_new0 (gchar, MD5_LEN * 3 + 1);
-    for (i = 0; i < MD5_LEN; i++) {
-        char hex[4];
-        snprintf (hex, sizeof (hex), "%02x:", (int)(digest[i]));
-        strncat (fingerprint, hex, MD5_LEN * 3 - strlen (fingerprint));
-    }
+	GString *fingerprint;
+	gchar *digest;
+	gsize n_digest;
+	gsize i;
 
-    /* Remove the trailing ':' character */
-    fingerprint[(MD5_LEN * 3) - 1] = '\0';
-    data->fingerprint = fingerprint;
-    
-    return TRUE;
+	digest = g_compute_checksum_for_data (G_CHECKSUM_MD5, bytes, len);
+	if (!digest)
+		return FALSE;
+
+	n_digest = strlen (digest);
+	fingerprint = g_string_sized_new ((n_digest * 3) / 2);
+	for (i = 0; i < n_digest; i += 2) {
+		if (i > 0)
+			g_string_append_c (fingerprint, ':');
+		g_string_append_len (fingerprint, digest + i, 2);
+	}
+
+	g_free (digest);
+	data->fingerprint = g_string_free (fingerprint, FALSE);
+
+	return TRUE;
 }
 
 static gboolean
