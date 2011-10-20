@@ -75,10 +75,17 @@ on_new_item (GtkAction *action,
 }
 
 static const GtkActionEntry BACKEND_ACTIONS[] = {
-	{ "gkr-keyring-new", "folder", N_("New password keyring"), "",
+	{ "gkr-keyring-new", NULL, N_("New password keyring"), "",
 	  N_("Used to store application and network passwords"), G_CALLBACK (on_new_keyring) },
-	{ "gkr-item-new", "emblem-readonly", N_("New password..."), "",
+	{ "gkr-item-new", NULL, N_("New password..."), "",
 	  N_("Safely store a password or secret."), G_CALLBACK (on_new_item) },
+};
+
+static const GtkActionEntry ENTRIES_NEW[] = {
+	{ "gkr-add-keyring", "folder", N_("Password Keyring"), "",
+	  N_("Used to store application and network passwords"), G_CALLBACK (on_new_keyring) },
+	{ "gkr-add-item", GCR_ICON_PASSWORD, N_("Stored Password"), "",
+	  N_("Safely store a password or secret."), G_CALLBACK (on_new_item) }
 };
 
 static const gchar* BACKEND_UI =
@@ -92,9 +99,17 @@ static void
 seahorse_gkr_backend_actions_init (SeahorseGkrBackendActions *self)
 {
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
+
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, BACKEND_ACTIONS, G_N_ELEMENTS (BACKEND_ACTIONS), self);
 	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), BACKEND_UI);
+
+	/* Register another set of actions as a generator */
+	actions = gtk_action_group_new ("gkr-generate");
+	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (actions, ENTRIES_NEW, G_N_ELEMENTS (ENTRIES_NEW), NULL);
+	seahorse_registry_register_object (NULL, G_OBJECT (actions), "generator", NULL);
+	g_object_unref (actions);
 }
 
 static void

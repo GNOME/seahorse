@@ -29,6 +29,7 @@
  
 #include "egg-datetime.h"
 
+#include "seahorse-action.h"
 #include "seahorse-icons.h"
 #include "seahorse-registry.h"
 #include "seahorse-passphrase.h"
@@ -85,11 +86,13 @@ on_pgp_generate_key (GtkAction *action, gpointer unused)
 	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
 	g_return_if_fail (keyring != NULL);
 
-	seahorse_gpgme_generate_show (keyring, NULL, NULL, NULL, NULL);
+	seahorse_gpgme_generate_show (keyring,
+	                              seahorse_action_get_window (action),
+	                              NULL, NULL, NULL);
 }
 
 static const GtkActionEntry ACTION_ENTRIES[] = {
-	{ "pgp-generate-key", SEAHORSE_PGP_STOCK_ICON, N_ ("PGP Key"), "", 
+	{ "pgp-generate-key", GCR_ICON_KEY_PAIR, N_ ("PGP Key"), "",
 	  N_("Used to encrypt email and files"), G_CALLBACK (on_pgp_generate_key) }
 };
 
@@ -452,11 +455,6 @@ seahorse_gpgme_generate_show (SeahorseGpgmeKeyring *keyring,
         g_return_if_fail (widget != NULL);
         gtk_entry_set_text(GTK_ENTRY(widget),comment);
     }
-    
-    widget = seahorse_widget_get_widget (swidget, "pgp-image");
-    g_return_if_fail (widget != NULL);
-    gtk_image_set_from_icon_name (GTK_IMAGE (widget), SEAHORSE_ICON_SECRET,
-                                  GTK_ICON_SIZE_DIALOG);
 
     /* The algoritms */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");

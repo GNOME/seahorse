@@ -413,12 +413,37 @@ on_item_filter_changed (GSettings *settings,
 	g_free (value);
 }
 
+#define       SEAHORSE_TYPE_MENU_ACTION          (seahorse_menu_action_get_type ())
+
+GType         seahorse_menu_action_get_type      (void) G_GNUC_CONST;
+
+typedef       GtkAction                          SeahorseMenuAction;
+
+typedef       GtkActionClass                     SeahorseMenuActionClass;
+
+G_DEFINE_TYPE (SeahorseMenuAction, seahorse_menu_action, GTK_TYPE_ACTION);
+
+static void
+seahorse_menu_action_init (SeahorseMenuAction *self)
+{
+
+}
+
+static void
+seahorse_menu_action_class_init (SeahorseMenuActionClass *klass)
+{
+	GTK_ACTION_CLASS (klass)->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
+}
+
 static const GtkActionEntry GENERAL_ACTIONS[] = {
 	{ "remote-menu", NULL, N_("_Remote") }, 
+	{ "new-menu", NULL, N_("_New") },
 	{ "app-quit", GTK_STOCK_QUIT, NULL, "<control>Q", 
 	  N_("Close this program"), G_CALLBACK (on_app_quit) }, 
 	{ "file-new", GTK_STOCK_NEW, N_("_New..."), "<control>N", 
 	  N_("Create a new key or item"), G_CALLBACK (on_file_new) },
+	{ "new-object", GTK_STOCK_ADD, N_("_New..."), NULL,
+	  N_("Add a new key or item"), G_CALLBACK (on_file_new) },
 	{ "file-import", GTK_STOCK_OPEN, N_("_Import..."), "<control>I", 
 	  N_("Import from a file"), G_CALLBACK (on_key_import_file) }, 
 	{ "edit-import-clipboard", GTK_STOCK_PASTE, NULL, "<control>V", 

@@ -32,6 +32,7 @@
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 
+#include "seahorse-action.h"
 #include "seahorse-icons.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
@@ -46,11 +47,12 @@
 static void
 on_ssh_generate_key (GtkAction *action, gpointer unused)
 {
-	seahorse_ssh_generate_show (seahorse_ssh_backend_get_dot_ssh (NULL), NULL);
+	seahorse_ssh_generate_show (seahorse_ssh_backend_get_dot_ssh (NULL),
+	                            seahorse_action_get_window (action));
 }
 
 static const GtkActionEntry ACTION_ENTRIES[] = {
-	{ "ssh-generate-key", SEAHORSE_SSH_STOCK_ICON, N_ ("Secure Shell Key"), "", 
+	{ "ssh-generate-key", GCR_ICON_KEY_PAIR, N_ ("Secure Shell Key"), "",
 	  N_("Used to access other computers (eg: via a terminal)"), G_CALLBACK (on_ssh_generate_key) }
 };
 
@@ -213,10 +215,6 @@ seahorse_ssh_generate_show (SeahorseSSHSource *src, GtkWindow *parent)
 
     g_signal_connect (seahorse_widget_get_toplevel (swidget), "response", 
                     G_CALLBACK (on_response), swidget);
-
-    widget = seahorse_widget_get_widget (swidget, "ssh-image");
-    g_return_if_fail (widget != NULL);
-    gtk_image_set_from_icon_name (GTK_IMAGE (widget), SEAHORSE_ICON_KEY_SSH, GTK_ICON_SIZE_DIALOG);
 
     /* on_change() gets called, bits entry is setup */
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
