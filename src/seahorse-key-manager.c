@@ -489,6 +489,19 @@ on_sidebar_panes_size_allocate (GtkWidget *widget,
 	}
 }
 
+static void
+on_sidebar_popup_menu (SeahorseSidebar *sidebar,
+                       GcrCollection *collection,
+                       gpointer user_data)
+{
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
+	const gchar *name;
+
+	name = G_OBJECT_TYPE_NAME (collection);
+	seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self), name,
+	                                   0, gtk_get_current_event_time ());
+}
+
 static GcrCollection *
 setup_sidebar (SeahorseKeyManager *self)
 {
@@ -526,6 +539,7 @@ setup_sidebar (SeahorseKeyManager *self)
 	panes = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-panes");
 	gtk_paned_set_position (GTK_PANED (panes), self->pv->sidebar_width);
 	g_signal_connect (self->pv->sidebar, "size_allocate", G_CALLBACK (on_sidebar_panes_size_allocate), self);
+	g_signal_connect (self->pv->sidebar, "context-menu", G_CALLBACK (on_sidebar_popup_menu), self);
 
 	return seahorse_sidebar_get_collection (self->pv->sidebar);
 }

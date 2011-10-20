@@ -53,7 +53,7 @@ struct _SeahorseActionsClass {
 
 GType                 seahorse_actions_get_type                 (void);
 
-SeahorseViewer *      seahorse_actions_get_viewer               (SeahorseActions *self);
+GtkActionGroup *      seahorse_actions_new                      (const gchar *name);
 
 const gchar *         seahorse_actions_get_definition           (SeahorseActions *self);
 

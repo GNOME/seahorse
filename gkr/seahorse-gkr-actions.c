@@ -67,19 +67,24 @@ on_new_keyring (GtkAction *action,
 	seahorse_gkr_add_keyring_show (seahorse_action_get_window (action));
 }
 
+static void
+on_new_item (GtkAction *action,
+                 gpointer unused)
+{
+	seahorse_gkr_add_item_show (seahorse_action_get_window (action));
+}
 
 static const GtkActionEntry BACKEND_ACTIONS[] = {
-	{ "new-keyring", "folder", N_("New password keyring"), "",
+	{ "gkr-keyring-new", "folder", N_("New password keyring"), "",
 	  N_("Used to store application and network passwords"), G_CALLBACK (on_new_keyring) },
+	{ "gkr-item-new", "emblem-readonly", N_("New password..."), "",
+	  N_("Safely store a password or secret."), G_CALLBACK (on_new_item) },
 };
 
-static const gchar* BACKEND_UI = ""\
-"<ui>"\
-"	<popup name='PlacePopup'>"\
-"		<menuitem action='keyring-default'/>"\
-"		<menuitem action='keyring-lock'/>"\
-"		<menuitem action='keyring-unlock'/>"\
-"		<menuitem action='keyring-password'/>"\
+static const gchar* BACKEND_UI =
+"<ui>"
+"	<popup name='SeahorseGkrBackend'>"
+"		<menuitem action='gkr-keyring-new'/>"
 "	</popup>"\
 "</ui>";
 
@@ -89,6 +94,7 @@ seahorse_gkr_backend_actions_init (SeahorseGkrBackendActions *self)
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, BACKEND_ACTIONS, G_N_ELEMENTS (BACKEND_ACTIONS), self);
+	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), BACKEND_UI);
 }
 
 static void
@@ -137,13 +143,6 @@ GType                      seahorse_gkr_keyring_actions_get_type               (
 
 
 G_DEFINE_TYPE (SeahorseGkrKeyringActions, seahorse_gkr_keyring_actions, SEAHORSE_TYPE_ACTIONS);
-
-static void
-on_gkr_add_item (GtkAction *action,
-                 gpointer unused)
-{
-	seahorse_gkr_add_item_show (seahorse_action_get_window (action));
-}
 
 static void
 on_keyring_unlock_done (GnomeKeyringResult result,
@@ -331,21 +330,31 @@ on_keyring_delete (GtkAction* action,
 
 
 static const GtkActionEntry KEYRING_ACTIONS[] = {
-	{ "keyring-lock", NULL, N_("_Lock"), "",
+	{ "gkr-keyring-lock", NULL, N_("_Lock"), "",
 	  N_("Lock the password storage keyring so a master password is required to unlock it."), G_CALLBACK (on_keyring_lock) },
-	{ "keyring-unlock", NULL, N_("_Unlock"), "",
+	{ "gkr-keyring-unlock", NULL, N_("_Unlock"), "",
 	  N_("Unlock the password storage keyring with a master password so it is available for use."), G_CALLBACK (on_keyring_unlock) },
-	{ "keyring-default", NULL, N_("_Set as default"), "",
+	{ "gkr-keyring-default", NULL, N_("_Set as default"), "",
 	  N_("Applications usually store new passwords in the default keyring."), G_CALLBACK (on_keyring_default) },
-	{ "keyring-password", NULL, N_("Change _Password"), "",
+	{ "gkr-keyring-password", NULL, N_("Change _Password"), "",
 	  N_("Change the unlock password of the password storage keyring"), G_CALLBACK (on_keyring_password) },
-	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
+	{ "gkr-keyring-properties", GTK_STOCK_PROPERTIES, NULL, NULL,
 	  N_("Properties of the keyring."), G_CALLBACK (on_keyring_properties) },
-	{ "delete", GTK_STOCK_DELETE, NULL, NULL,
+	{ "gkr-keyring-delete", GTK_STOCK_DELETE, NULL, NULL,
 	  N_("Delete the keyring."), G_CALLBACK (on_keyring_delete) },
-	{ "new-password", "emblem-readonly", N_("New password..."), "",
-	  N_("Safely store a password or secret."), G_CALLBACK (on_gkr_add_item) },
 };
+
+static const gchar* KEYRING_UI =
+"<ui>"
+"	<popup name='SeahorseGkrKeyring'>"
+"		<menuitem action='gkr-keyring-unlock'/>"
+"		<menuitem action='gkr-keyring-lock'/>"
+"		<menuitem action='gkr-keyring-default'/>"
+"		<menuitem action='gkr-keyring-password'/>"
+"		<menuitem action='gkr-keyring-delete'/>"
+"		<menuitem action='gkr-keyring-properties'/>"
+"	</popup>"\
+"</ui>";
 
 static void
 seahorse_gkr_keyring_actions_init (SeahorseGkrKeyringActions *self)
@@ -353,10 +362,10 @@ seahorse_gkr_keyring_actions_init (SeahorseGkrKeyringActions *self)
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, KEYRING_ACTIONS, G_N_ELEMENTS (KEYRING_ACTIONS), self);
-	self->action_lock = g_object_ref (gtk_action_group_get_action (actions, "keyring-lock"));
-	self->action_unlock = g_object_ref (gtk_action_group_get_action (actions, "keyring-unlock"));
-	self->action_default = g_object_ref (gtk_action_group_get_action (actions, "keyring-default"));
-	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), BACKEND_UI);
+	self->action_lock = g_object_ref (gtk_action_group_get_action (actions, "gkr-keyring-lock"));
+	self->action_unlock = g_object_ref (gtk_action_group_get_action (actions, "gkr-keyring-unlock"));
+	self->action_default = g_object_ref (gtk_action_group_get_action (actions, "gkr-keyring-default"));
+	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), KEYRING_UI);
 }
 
 static void

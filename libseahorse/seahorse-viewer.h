@@ -26,9 +26,7 @@
 
 #include "seahorse-widget.h"
 
-#define SEAHORSE_VIEWER_MENU_BACKEND  "/BackendPopup"
-#define SEAHORSE_VIEWER_MENU_OBJECT   "/ObjectPopup"
-#define SEAHORSE_VIEWER_MENU_PLACE    "/PlacePopup"
+#define SEAHORSE_VIEWER_MENU_OBJECT   "ObjectPopup"
 
 #define SEAHORSE_TYPE_VIEWER               (seahorse_viewer_get_type ())
 #define SEAHORSE_VIEWER(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_VIEWER, SeahorseViewer))

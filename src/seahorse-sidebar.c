@@ -23,6 +23,8 @@
 
 #include "seahorse-sidebar.h"
 
+#include "seahorse-backend.h"
+#include "seahorse-place.h"
 #include "seahorse-registry.h"
 
 #include "gkr/seahorse-gkr.h"
@@ -91,6 +93,13 @@ static GType column_types[] = {
 	0 /* later */,
 	G_TYPE_STRING,
 };
+
+enum {
+	CONTEXT_MENU,
+	LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (SeahorseSidebar, seahorse_sidebar, GTK_TYPE_SCROLLED_WINDOW);
 
@@ -747,6 +756,66 @@ on_checked_toggled  (GtkCellRendererToggle *renderer,
 }
 
 static void
+on_tree_view_popup_menu (GtkWidget *widget,
+                         gpointer user_data)
+{
+	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
+	GtkTreeModel *model = GTK_TREE_MODEL (self->store);
+	GcrCollection *collection;
+	GtkTreePath *path;
+	GtkTreeIter iter;
+
+	gtk_tree_view_get_cursor (self->tree_view, &path, NULL);
+	if (path == NULL)
+		return;
+
+	if (!gtk_tree_model_get_iter (model, &iter, path))
+		g_return_if_reached ();
+	gtk_tree_path_free (path);
+
+	gtk_tree_model_get (model, &iter,
+	                    SIDEBAR_COLLECTION, &collection,
+	                    -1);
+
+	g_signal_emit (self, signals[CONTEXT_MENU], 0, collection);
+
+	g_clear_object (&collection);
+}
+
+static gboolean
+on_tree_view_button_press_event (GtkWidget *widget,
+                                 GdkEventButton *event,
+                                 gpointer user_data)
+{
+	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
+	GtkTreeModel *model = GTK_TREE_MODEL (self->store);
+	GcrCollection *collection;
+	GtkTreePath *path;
+	GtkTreeIter iter;
+
+	if (event->button != 3 || event->type != GDK_BUTTON_PRESS)
+		return FALSE;
+
+	if (!gtk_tree_view_get_path_at_pos (self->tree_view, event->x, event->y,
+	                                    &path, NULL, NULL, NULL))
+		return FALSE;
+
+	gtk_tree_view_set_cursor (self->tree_view, path, NULL, FALSE);
+	if (!gtk_tree_model_get_iter (model, &iter, path))
+		g_return_val_if_reached (FALSE);
+	gtk_tree_path_free (path);
+
+	gtk_tree_model_get (model, &iter,
+	                    SIDEBAR_COLLECTION, &collection,
+	                    -1);
+
+	g_signal_emit (self, signals[CONTEXT_MENU], 0, collection);
+
+	g_clear_object (&collection);
+	return TRUE;
+}
+
+static void
 seahorse_sidebar_constructed (GObject *obj)
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (obj);
@@ -847,6 +916,8 @@ seahorse_sidebar_constructed (GObject *obj)
 	gtk_tree_view_set_tooltip_column (tree_view, SIDEBAR_TOOLTIP);
 	gtk_tree_view_set_search_column (tree_view, SIDEBAR_LABEL);
 	gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL (self->store));
+	g_signal_connect (tree_view, "popup-menu", G_CALLBACK (on_tree_view_popup_menu), self);
+	g_signal_connect (tree_view, "button-press-event", G_CALLBACK (on_tree_view_button_press_event), self);
 
 	gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (tree_view));
 	gtk_widget_show (GTK_WIDGET (tree_view));
@@ -968,6 +1039,10 @@ seahorse_sidebar_class_init (SeahorseSidebarClass *klass)
 	g_object_class_install_property (gobject_class, PROP_SELECTED_URIS,
 	        g_param_spec_boxed ("selected-uris", "Selected URIs", "URIs selected by the user",
 	                            G_TYPE_STRV, G_PARAM_READWRITE));
+
+	signals[CONTEXT_MENU] = g_signal_new ("context-menu", SEAHORSE_TYPE_SIDEBAR,
+	                                      G_SIGNAL_RUN_FIRST, 0, NULL, NULL, NULL,
+	                                      G_TYPE_NONE, 1, GCR_TYPE_COLLECTION);
 }
 
 SeahorseSidebar *
@@ -1042,14 +1117,47 @@ seahorse_sidebar_set_selected_uris (SeahorseSidebar *self,
 GList *
 seahorse_sidebar_get_selected_places (SeahorseSidebar *self)
 {
+	GcrCollection *collection;
+	GtkTreePath *path;
+	RowType row_type;
+	GtkTreeIter iter;
+	GList *places;
+
 	g_return_val_if_fail (SEAHORSE_IS_SIDEBAR (self), NULL);
-	return gcr_union_collection_elements (self->objects);
+
+	places = gcr_union_collection_elements (self->objects);
+
+	gtk_tree_view_get_cursor (self->tree_view, &path, NULL);
+	if (path != NULL) {
+		if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (self->store), &iter, path))
+			g_return_val_if_reached (NULL);
+		gtk_tree_model_get (GTK_TREE_MODEL (self->store), &iter,
+		                    SIDEBAR_ROW_TYPE, &row_type,
+		                    SIDEBAR_COLLECTION, &collection,
+		                    -1);
+
+		if (collection != NULL) {
+			if (row_type == TYPE_PLACE) {
+				places = g_list_remove (places, collection);
+				places = g_list_prepend (places, collection);
+			}
+			g_object_unref (collection);
+		}
+
+		gtk_tree_path_free (path);
+	}
+
+	return places;
 }
 
 GList *
 seahorse_sidebar_get_backends (SeahorseSidebar *self)
 {
 	GList *backends = NULL;
+	GcrCollection *collection;
+	GtkTreePath *path;
+	RowType row_type;
+	GtkTreeIter iter;
 	guint i;
 
 	g_return_val_if_fail (SEAHORSE_IS_SIDEBAR (self), NULL);
@@ -1057,5 +1165,27 @@ seahorse_sidebar_get_backends (SeahorseSidebar *self)
 	for (i = 0; i < self->backends->len; i++)
 		backends = g_list_prepend (backends, self->backends->pdata[i]);
 
-	return g_list_reverse (backends);
+	backends = g_list_reverse (backends);
+
+	gtk_tree_view_get_cursor (self->tree_view, &path, NULL);
+	if (path != NULL) {
+		if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (self->store), &iter, path))
+			g_return_val_if_reached (NULL);
+		gtk_tree_model_get (GTK_TREE_MODEL (self->store), &iter,
+		                    SIDEBAR_ROW_TYPE, &row_type,
+		                    SIDEBAR_COLLECTION, &collection,
+		                    -1);
+
+		if (collection != NULL) {
+			if (row_type == TYPE_BACKEND) {
+				backends = g_list_remove (backends, collection);
+				backends = g_list_prepend (backends, collection);
+			}
+			g_object_unref (collection);
+		}
+
+		gtk_tree_path_free (path);
+	}
+
+	return backends;
 }

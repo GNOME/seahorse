@@ -44,6 +44,15 @@ seahorse_actions_init (SeahorseActions *self)
 	                                         SeahorseActionsPrivate));
 }
 
+GtkActionGroup *
+seahorse_actions_new (const gchar *name)
+{
+	g_return_val_if_fail (name != NULL, NULL);
+	return g_object_new (SEAHORSE_TYPE_ACTIONS,
+	                     "name", name,
+	                     NULL);
+}
+
 static void
 seahorse_actions_class_init (SeahorseActionsClass *klass)
 {

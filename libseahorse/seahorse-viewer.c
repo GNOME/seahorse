@@ -733,23 +733,29 @@ seahorse_viewer_include_actions (SeahorseViewer* self,
 
 void
 seahorse_viewer_show_context_menu (SeahorseViewer* self,
-                                   const gchar *which,
+                                   const gchar *name,
                                    guint button,
                                    guint time)
 {
-	GtkMenu* menu;
+	GtkWidget *menu;
+	gchar *path;
 
 	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (which != NULL);
+	g_return_if_fail (name != NULL);
 
-	menu = GTK_MENU (gtk_ui_manager_get_widget (self->pv->ui_manager, which));
+	path = g_strdup_printf ("/%s", name);
+	menu = gtk_ui_manager_get_widget (self->pv->ui_manager, path);
+	g_free (path);
+
+	if (menu == NULL)
+		return;
 	if (!GTK_IS_MENU (menu)) {
-		g_warning ("couldn't find menu '%s' in UI", which);
+		g_warning ("the object /%s isn't a menu", name);
 		return;
 	}
 
-	gtk_menu_popup (menu, NULL, NULL, NULL, NULL, button, time);
-	gtk_widget_show (GTK_WIDGET (menu));
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, button, time);
+	gtk_widget_show (menu);
 }
 
 void
