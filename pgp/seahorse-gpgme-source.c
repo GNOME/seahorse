@@ -46,10 +46,8 @@
 #define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
 #include "seahorse-debug.h"
 
-/* TODO: Verify properly that all keys we deal with are PGP keys */
-
 /* Amount of keys to load in a batch */
-#define DEFAULT_LOAD_BATCH 200
+#define DEFAULT_LOAD_BATCH 50
 
 enum {
     LOAD_FULL = 0x01,
@@ -403,7 +401,7 @@ seahorse_gpgme_source_list_async (SeahorseGpgmeSource *self,
 		                                                G_CALLBACK (on_source_list_cancelled),
 		                                                res, NULL);
 
-	g_idle_add_full (G_PRIORITY_DEFAULT, on_idle_list_batch_of_keys,
+	g_idle_add_full (G_PRIORITY_LOW, on_idle_list_batch_of_keys,
 	                 g_object_ref (res), g_object_unref);
 
 	g_object_unref (res);
