@@ -189,7 +189,6 @@ on_keyring_unlock (GtkAction *action,
 		gnome_keyring_unlock (seahorse_gkr_keyring_get_name (l->data), NULL,
 		                      on_keyring_unlock_done, g_object_ref (parent), g_object_unref);
 	}
-	g_list_free (keys);
 }
 
 static void
@@ -221,7 +220,6 @@ on_keyring_lock (GtkAction *action,
 		gnome_keyring_lock (seahorse_gkr_keyring_get_name (l->data),
 		                    on_keyring_lock_done, g_object_ref (parent), g_object_unref);
 	}
-	g_list_free (keyrings);
 }
 
 static void
@@ -283,8 +281,6 @@ on_keyring_password (GtkAction *action,
 		gnome_keyring_change_password (seahorse_gkr_keyring_get_name (l->data), NULL, NULL,
 		                               on_change_password_done, g_object_ref (window), g_object_unref);
 	}
-
-	g_list_free (keys);
 }
 
 
@@ -340,7 +336,6 @@ on_keyring_delete (GtkAction* action,
 	}
 
 	g_free (prompt);
-	g_list_free (objects);
 }
 
 
@@ -529,7 +524,6 @@ on_delete_passwords (GtkAction *action,
 	}
 
 	g_free (prompt);
-	g_list_free (objects);
 }
 
 static const GtkActionEntry ITEM_ACTIONS[] = {

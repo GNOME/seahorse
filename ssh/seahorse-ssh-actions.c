@@ -79,7 +79,6 @@ on_ssh_upload (GtkAction* action,
 		return;
 
 	seahorse_ssh_upload_prompt (ssh_keys, seahorse_action_get_window (action));
-	g_list_free (ssh_keys);
 }
 
 static void

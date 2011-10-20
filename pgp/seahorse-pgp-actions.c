@@ -88,6 +88,8 @@ on_remote_sync (GtkAction* action,
 	if (objects == NULL) {
 		keyring = seahorse_pgp_backend_get_default_keyring (NULL);
 		objects = gcr_collection_get_objects (GCR_COLLECTION (keyring));
+	} else {
+		objects = g_list_copy (objects);
 	}
 
 	seahorse_keyserver_sync_show (objects, seahorse_action_get_window (action));
