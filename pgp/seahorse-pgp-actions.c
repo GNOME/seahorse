@@ -260,6 +260,7 @@ on_delete_objects (GtkAction *action,
 	parent = GTK_WIDGET (seahorse_action_get_window (action));
 	if (!seahorse_util_prompt_delete (message, parent)) {
 		g_free (message);
+		seahorse_action_cancel (action);
 		return;
 	}
 

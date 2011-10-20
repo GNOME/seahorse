@@ -25,6 +25,13 @@
 
 #include <gtk/gtk.h>
 
+void                  seahorse_action_reset                     (GtkAction *action);
+
+void                  seahorse_action_set_cancellable           (GtkAction *action,
+                                                                 GCancellable *cancellable);
+
+void                  seahorse_action_cancel                    (GtkAction *action);
+
 GtkWindow *           seahorse_action_get_window                (GtkAction *action);
 
 gpointer              seahorse_action_get_object                (GtkAction *action);
@@ -36,7 +43,5 @@ void                  seahorse_action_set_window                (GtkAction *acti
 
 void                  seahorse_action_set_objects               (GtkAction *action,
                                                                  GList *objects);
-
-gboolean              seahorse_action_have_objects              (GtkAction *action);
 
 #endif

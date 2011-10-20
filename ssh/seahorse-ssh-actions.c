@@ -120,6 +120,8 @@ on_delete_objects (GtkAction *action,
 				seahorse_util_handle_error (&error, parent, _("Couldn't delete key"));
 			}
 		}
+	} else {
+		seahorse_action_cancel (action);
 	}
 
 	g_free (prompt);

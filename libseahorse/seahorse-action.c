@@ -29,34 +29,62 @@
 typedef struct {
 	GtkWindow *window;
 	GList *objects;
+	GCancellable *cancellable;
 } SeahorseActionInfo;
+
+static GQuark   seahorse_action_info_quark (void) G_GNUC_CONST;
 
 static void
 seahorse_action_info_free (gpointer data)
 {
 	SeahorseActionInfo *info = data;
 	g_clear_object (&info->window);
+	g_clear_object (&info->cancellable);
 	gck_list_unref_free (info->objects);
 	g_slice_free (SeahorseActionInfo, info);
+}
+
+static GQuark
+seahorse_action_info_quark (void)
+{
+	static GQuark quark = 0;
+	if (quark == 0)
+		quark = g_quark_from_static_string ("seahorse-action-info");
+	return quark;
 }
 
 static SeahorseActionInfo *
 seahorse_action_info_lookup (GtkAction *action)
 {
 	SeahorseActionInfo *info;
-	static GQuark QUARK_INFO = 0;
 
-	if (QUARK_INFO == 0)
-		QUARK_INFO = g_quark_from_static_string ("seahorse-action-info");
-
-	info = g_object_get_qdata (G_OBJECT (action), QUARK_INFO);
+	info = g_object_get_qdata (G_OBJECT (action), seahorse_action_info_quark ());
 	if (info == NULL) {
 		info = g_slice_new0 (SeahorseActionInfo);
-		g_object_set_qdata_full (G_OBJECT (action), QUARK_INFO, info,
-		                         seahorse_action_info_free);
+		g_object_set_qdata_full (G_OBJECT (action), seahorse_action_info_quark (),
+		                         info, seahorse_action_info_free);
 	}
 
 	return info;
+}
+
+void
+seahorse_action_reset (GtkAction *action)
+{
+	g_return_if_fail (GTK_IS_ACTION (action));
+	g_object_set_qdata (G_OBJECT (action), seahorse_action_info_quark (), NULL);
+}
+
+void
+seahorse_action_cancel (GtkAction *action)
+{
+	SeahorseActionInfo *info;
+
+	g_return_if_fail (GTK_IS_ACTION (action));
+
+	info = seahorse_action_info_lookup (action);
+	if (info->cancellable)
+		g_cancellable_cancel (info->cancellable);
 }
 
 GtkWindow *
@@ -118,13 +146,16 @@ seahorse_action_set_objects (GtkAction *action,
 	info->objects = gck_list_ref_copy (objects);
 }
 
-gboolean
-seahorse_action_have_objects (GtkAction *action)
+void
+seahorse_action_set_cancellable (GtkAction *action,
+                                 GCancellable *cancellable)
 {
 	SeahorseActionInfo *info;
 
-	g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+	g_return_if_fail (cancellable == NULL ||
+	                  G_IS_CANCELLABLE (cancellable));
 
 	info = seahorse_action_info_lookup (action);
-	return info->objects ? TRUE : FALSE;
+	g_clear_object (&info->cancellable);
+	info->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 }

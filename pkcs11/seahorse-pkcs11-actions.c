@@ -139,6 +139,8 @@ on_delete_objects (GtkAction *action,
 		                              on_delete_completed, g_object_ref (parent));
 		seahorse_progress_show (cancellable, _("Deleting"), TRUE);
 		g_object_unref (cancellable);
+	} else {
+		seahorse_action_cancel (action);
 	}
 }
 

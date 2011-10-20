@@ -333,6 +333,8 @@ on_keyring_delete (GtkAction* action,
 		seahorse_progress_show (cancellable, ngettext ("Deleting keyring", "Deleting keyrings",
 		                                               g_list_length (objects)), TRUE);
 		g_object_unref (cancellable);
+	} else {
+		seahorse_action_cancel (action);
 	}
 
 	g_free (prompt);
@@ -521,6 +523,9 @@ on_delete_passwords (GtkAction *action,
 		seahorse_gkr_delete_async (objects, cancellable, on_delete_objects, g_object_ref (parent));
 		seahorse_progress_show (cancellable, ngettext ("Deleting item", "Deleting items", num), TRUE);
 		g_object_unref (cancellable);
+	} else {
+		seahorse_action_cancel (action);
+
 	}
 
 	g_free (prompt);

@@ -133,34 +133,52 @@ on_object_delete (GtkAction *action,
                   gpointer user_data)
 {
 	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	GCancellable *cancellable;
 	GtkActionGroup *actions;
+	GtkAction *delete_action;
 	GList *objects;
-	GList *selected;
-	const gchar *name;
+	GHashTable *perform;
+	GHashTableIter iter;
+	GQueue *queue;
 	GList *l;
 
-	if (seahorse_action_have_objects (action))
-		return;
+	cancellable = g_cancellable_new ();
+	perform = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+	                                 NULL, (GDestroyNotify)g_queue_free);
 
 	objects = seahorse_viewer_get_selected_objects (self);
-	objects = g_list_concat (objects, seahorse_viewer_get_selected_places (self));
-	objects = g_list_concat (objects, seahorse_viewer_get_selected_backends (self));
-	name = gtk_action_get_name (action);
-
 	for (l = objects; l != NULL; l = g_list_next (l)) {
-		actions = NULL;
 		g_object_get (l->data, "actions", &actions, NULL);
-		if (actions && gtk_action_group_get_action (actions, name) == action)
-			selected = g_list_prepend (selected, l->data);
-		g_object_ref (actions);
+		delete_action = gtk_action_group_get_action (actions, "delete");
+		g_object_unref (actions);
+
+		if (delete_action == NULL)
+			continue;
+
+		queue = g_hash_table_lookup (perform, delete_action);
+		if (queue == NULL) {
+			queue = g_queue_new ();
+			g_hash_table_insert (perform, delete_action, queue);
+		}
+		g_queue_push_tail (queue, l->data);
+	}
+	g_list_free (objects);
+
+	/* Now go through and execute the deletes */
+	g_hash_table_iter_init (&iter, perform);
+	while (!g_cancellable_is_cancelled (cancellable) &&
+	       g_hash_table_iter_next (&iter, (gpointer *)&delete_action, (gpointer *)&queue)) {
+		seahorse_action_set_window (delete_action, seahorse_viewer_get_window (self));
+		seahorse_action_set_objects (delete_action, queue->head);
+		seahorse_action_set_cancellable (delete_action, cancellable);
+
+		gtk_action_activate (delete_action);
+
+		seahorse_action_reset (delete_action);
 	}
 
-	selected = g_list_reverse (selected);
-	seahorse_action_set_objects (action, selected);
-	seahorse_action_set_window (action, seahorse_viewer_get_window (self));
-
-	g_list_free (selected);
-	g_list_free (objects);
+	g_object_unref (cancellable);
+	g_hash_table_destroy (perform);
 }
 
 static GtkAction *
@@ -388,7 +406,7 @@ on_ui_manager_pre_activate (GtkUIManager *ui_manager,
 	g_return_if_fail (name != NULL);
 
 	/* These guys do their own object selection */
-	if (seahorse_action_have_objects (action) ||
+	if (seahorse_action_get_object (action) ||
 	    action == self->pv->properties_object ||
 	    action == self->pv->properties_place ||
 	    action == self->pv->properties_backend ||
@@ -422,8 +440,7 @@ on_ui_manager_post_activate (GtkUIManager *ui_manager,
                              GtkAction *action,
                              gpointer user_data)
 {
-	seahorse_action_set_objects (action, NULL);
-	seahorse_action_set_window (action, NULL);
+	seahorse_action_reset (action);
 }
 
 static void
@@ -460,11 +477,11 @@ seahorse_viewer_real_selection_changed (SeahorseViewer *self)
 {
 	GHashTableIter iter;
 	GHashTable *seen;
-	GPtrArray *deletes;
 	GList *objects;
 	GPtrArray *selected;
 	GtkActionGroup *actions;
 	GtkAction *action;
+	gboolean deletes;
 	guint i;
 
 	seen = g_hash_table_new_full (g_direct_hash, g_direct_equal,
@@ -482,33 +499,16 @@ seahorse_viewer_real_selection_changed (SeahorseViewer *self)
 	 * in the delete logic here.
 	 */
 
-	deletes = g_ptr_array_new ();
+	deletes = FALSE;
 
 	g_hash_table_iter_init (&iter, seen);
-	while (g_hash_table_iter_next (&iter, (gpointer *)&actions, (gpointer *)&selected)) {
+	while (g_hash_table_iter_next (&iter, (gpointer *)&actions, NULL)) {
 		action = gtk_action_group_get_action (actions, "delete");
 		if (action != NULL)
-			g_ptr_array_add (deletes, action);
+			deletes = TRUE;
 	}
 
-	/* If there's no delete command, then disable ours */
-	if (deletes->len == 0) {
-		gtk_action_set_sensitive (self->pv->edit_delete, FALSE);
-
-	/* If there's one delete command, then hide ours, and show it */
-	} else if (deletes->len == 1) {
-		gtk_action_set_visible (self->pv->edit_delete, FALSE);
-		gtk_action_set_visible (deletes->pdata[0], TRUE);
-
-	/* If there's more than one delete command, then show ours, and hide others */
-	} else {
-		gtk_action_set_sensitive (self->pv->edit_delete, TRUE);
-		gtk_action_set_visible (self->pv->edit_delete, TRUE);
-		for (i = 0; i < deletes->len; i++)
-			gtk_action_set_visible (deletes->pdata[i], FALSE);
-	}
-
-	g_ptr_array_unref (deletes);
+	gtk_action_set_sensitive (self->pv->edit_delete, deletes);
 
 	/* Now proceed to bring in the other commands */
 	objects = seahorse_viewer_get_selected_places (self);
@@ -776,8 +776,7 @@ seahorse_viewer_show_properties (SeahorseViewer* self,
 
 	gtk_action_activate (action);
 
-	seahorse_action_set_objects (action, NULL);
-	seahorse_action_set_window (action, NULL);
+	seahorse_action_reset (action);
 }
 
 GtkWindow *
