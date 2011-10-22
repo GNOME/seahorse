@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-30 13:37+0300\n"
-"PO-Revision-Date: 2011-09-30 14:00+0200\n"
+"POT-Creation-Date: 2011-10-22 13:08+0200\n"
+"PO-Revision-Date: 2011-10-22 13:17+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "Language: he\n"
@@ -26,9 +26,7 @@ msgid "New Keyring Name:"
 msgstr "שם קבוצת המפתחות החדשה:"
 
 #: ../gkr/seahorse-add-keyring.xml.h:3
-msgid ""
-"Please choose a name for the new keyring. You will be prompted for an unlock "
-"password."
+msgid "Please choose a name for the new keyring. You will be prompted for an unlock password."
 msgstr "נא לבחור שם עבור קבוצת המפתחות החדשה. תוצג בפניך שאלה לססמת השחרור."
 
 #: ../gkr/seahorse-add-keyring.xml.h:4
@@ -37,7 +35,135 @@ msgstr "נא לבחור שם עבור קבוצת המפתחות החדשה. תו
 msgid "The host name or address of the server."
 msgstr "שם המארח או כתובת השרת."
 
-#: ../gkr/seahorse-gkr-add-item.c:61 ../gkr/seahorse-gkr-add-keyring.c:72
+#: ../gkr/seahorse-gkr-actions.c:78
+msgid "New password keyring"
+msgstr "קבוצת ססמאות חדשה"
+
+#: ../gkr/seahorse-gkr-actions.c:79
+#: ../gkr/seahorse-gkr-actions.c:86
+msgid "Used to store application and network passwords"
+msgstr "בשימוש לצורך אחסון ססמאות ליישומים ולרשת"
+
+#: ../gkr/seahorse-gkr-actions.c:80
+msgid "New password..."
+msgstr "ססמה חדשה..."
+
+#: ../gkr/seahorse-gkr-actions.c:81
+#: ../gkr/seahorse-gkr-actions.c:88
+msgid "Safely store a password or secret."
+msgstr "אחסון בטוח של ססמה או סוד."
+
+#: ../gkr/seahorse-gkr-actions.c:85
+msgid "Password Keyring"
+msgstr "קבוצת ססמאות"
+
+#: ../gkr/seahorse-gkr-actions.c:87
+msgid "Stored Password"
+msgstr "ססמה מאוחסנת"
+
+#: ../gkr/seahorse-gkr-actions.c:171
+msgid "Couldn't unlock keyring"
+msgstr "לא ניתן לשחרר את קבוצת המפתחות"
+
+#: ../gkr/seahorse-gkr-actions.c:202
+msgid "Couldn't lock keyring"
+msgstr "לא ניתן לנעול את קבוצת המפתחות"
+
+#: ../gkr/seahorse-gkr-actions.c:234
+msgid "Couldn't set default keyring"
+msgstr "לא ניתן להגדיר את קבוצת הססמאות כבררת המחדל"
+
+#: ../gkr/seahorse-gkr-actions.c:263
+msgid "Couldn't change keyring password"
+msgstr "לא ניתן לשנות את ססמת קבוצת המפתחות"
+
+#: ../gkr/seahorse-gkr-actions.c:302
+msgid "Couldn't delete keyring"
+msgstr "לא ניתן למחוק את קבוצת המפתחות"
+
+#: ../gkr/seahorse-gkr-actions.c:323
+#, c-format
+msgid "Are you sure you want to delete the password keyring '%s'?"
+msgstr "האם למחוק את קבוצת הססמאות '%s'?"
+
+#: ../gkr/seahorse-gkr-actions.c:333
+msgid "Deleting keyring"
+msgid_plural "Deleting keyrings"
+msgstr[0] "קבוצת המפתחות נמחקת"
+msgstr[1] "קבוצות המפתחות נמחקות"
+
+#: ../gkr/seahorse-gkr-actions.c:345
+msgid "_Lock"
+msgstr "_נעילה"
+
+#: ../gkr/seahorse-gkr-actions.c:346
+msgid "Lock the password storage keyring so a master password is required to unlock it."
+msgstr "נעילת קבוצת מפתחות המאחסנת ססמאות כך שנדרשת ססמה ראשית כדי לשחרר אותה."
+
+#: ../gkr/seahorse-gkr-actions.c:347
+msgid "_Unlock"
+msgstr "_שחרור"
+
+#: ../gkr/seahorse-gkr-actions.c:348
+msgid "Unlock the password storage keyring with a master password so it is available for use."
+msgstr "שחרור קבוצת מפתחות המאחסנת ססמאות על ידי ססמה ראשית כדי שתהיה זמינה לשימוש."
+
+#: ../gkr/seahorse-gkr-actions.c:349
+msgid "_Set as default"
+msgstr "ה_גדרה כבררת מחדל"
+
+#: ../gkr/seahorse-gkr-actions.c:350
+msgid "Applications usually store new passwords in the default keyring."
+msgstr "יישומים לרוב מאחסנים ססמאות חדשות בקבוצת המפתחות כבררת המחדל."
+
+#: ../gkr/seahorse-gkr-actions.c:351
+msgid "Change _Password"
+msgstr "ה_חלפת ססמה"
+
+#: ../gkr/seahorse-gkr-actions.c:352
+msgid "Change the unlock password of the password storage keyring"
+msgstr "שינוי ססמת השחרור של קבוצת מפתחות המאחסנת ססמאות"
+
+#: ../gkr/seahorse-gkr-actions.c:354
+msgid "Properties of the keyring."
+msgstr "מאפייני קבוצת המפתחות."
+
+#: ../gkr/seahorse-gkr-actions.c:356
+msgid "Delete the keyring."
+msgstr "מחיקת קבוצת המפתחות."
+
+#: ../gkr/seahorse-gkr-actions.c:486
+msgid "Couldn't delete item"
+msgstr "לא ניתן למחוק את הפריט"
+
+#: ../gkr/seahorse-gkr-actions.c:510
+#, c-format
+msgid "Are you sure you want to delete the password '%s'?"
+msgstr "האם למחוק את הססמה '%s'?"
+
+#: ../gkr/seahorse-gkr-actions.c:513
+#, c-format
+msgid "Are you sure you want to delete %d password?"
+msgid_plural "Are you sure you want to delete %d passwords?"
+msgstr[0] "האם ברצונך למחוק ססמה אחת?"
+msgstr[1] "האם ברצונך למחוק %d ססמאות?"
+
+#: ../gkr/seahorse-gkr-actions.c:524
+msgid "Deleting item"
+msgid_plural "Deleting items"
+msgstr[0] "הפריט במחיקה"
+msgstr[1] "הפריטים במחיקה"
+
+#: ../gkr/seahorse-gkr-actions.c:536
+msgid "Properties of the password."
+msgstr "מאפייני הססמה."
+
+#: ../gkr/seahorse-gkr-actions.c:538
+msgid "Delete the password."
+msgstr "מחיקת הססמה."
+
+#: ../gkr/seahorse-gkr-add-item.c:60
+#: ../gkr/seahorse-gkr-add-keyring.c:71
 msgid "Couldn't add keyring"
 msgstr "לא ניתן להוסיף קבוצת מפתחות"
 
@@ -46,7 +172,9 @@ msgid "Add Password"
 msgstr "הוספת ססמה"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:2
-#: ../gkr/seahorse-gkr-item-properties.xml.h:12 ../pgp/seahorse-revoke.xml.h:5
+#: ../gkr/seahorse-gkr-item-properties.xml.h:12
+#: ../pgp/seahorse-revoke.xml.h:5
+#: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "_Description:"
 msgstr "_תיאור:"
 
@@ -62,66 +190,101 @@ msgstr "_ססמה:"
 msgid "_Show Password"
 msgstr "הצגת _ססמה"
 
-#: ../gkr/seahorse-gkr-item-commands.c:78
-msgid "Couldn't delete item"
-msgstr "לא ניתן למחוק את הפריט"
+#: ../gkr/seahorse-gkr-backend.c:101
+msgid "Passwords"
+msgstr "ססמאות"
 
-#: ../gkr/seahorse-gkr-item-commands.c:100
-#, c-format
-msgid "Are you sure you want to delete the password '%s'?"
-msgstr "האם למחוק את הססמה '%s'?"
+#: ../gkr/seahorse-gkr-backend.c:104
+msgid "Stored personal passwords, credentials and secrets"
+msgstr "ססמאות, פרטי גישה וסודות אישיים בלבד הנמצאים באחסון"
 
-#: ../gkr/seahorse-gkr-item-commands.c:103
-#, c-format
-msgid "Are you sure you want to delete %d password?"
-msgid_plural "Are you sure you want to delete %d passwords?"
-msgstr[0] "האם ברצונך למחוק ססמה אחת?"
-msgstr[1] "האם ברצונך למחוק %d ססמאות?"
+#. Translators: This should be the same as the string in empathy
+#: ../gkr/seahorse-gkr-item.c:313
+msgid "IM account password for "
+msgstr "ססמת חשבון המסרים המידיים עבור"
 
-#: ../gkr/seahorse-gkr-item-commands.c:114
-msgid "Deleting item"
-msgid_plural "Deleting items"
-msgstr[0] "הפריט במחיקה"
-msgstr[1] "הפריטים במחיקה"
+#: ../gkr/seahorse-gkr-item.c:379
+msgid "Password or secret"
+msgstr "ססמה או סוד"
 
-#: ../gkr/seahorse-gkr-item-properties.c:70
+#: ../gkr/seahorse-gkr-item.c:380
+msgid "Network password"
+msgstr "ססמת רשת"
+
+#: ../gkr/seahorse-gkr-item.c:381
+msgid "Stored note"
+msgstr "הערה מאוחסנת"
+
+#: ../gkr/seahorse-gkr-item.c:382
+msgid "Keyring password"
+msgstr "ססמת קבוצת הססמאות"
+
+#: ../gkr/seahorse-gkr-item.c:383
+msgid "Encryption key password"
+msgstr "ססמת מפתח ההצפנה"
+
+#: ../gkr/seahorse-gkr-item.c:384
+msgid "Key storage password"
+msgstr "ססמת אחסון המפתחות"
+
+#: ../gkr/seahorse-gkr-item.c:385
+msgid "Google Chrome password"
+msgstr "הססמה של Google Chrome"
+
+#: ../gkr/seahorse-gkr-item.c:386
+msgid "Gnome Online Accounts password"
+msgstr "ססמת החשבונות המקוונים של Gnome"
+
+#: ../gkr/seahorse-gkr-item.c:387
+msgid "Telepathy password"
+msgstr "הססמה של Telepathy"
+
+#: ../gkr/seahorse-gkr-item.c:388
+msgid "Instant messaging password"
+msgstr "ססמת המסרים המידיים"
+
+#: ../gkr/seahorse-gkr-item.c:389
+msgid "Network Manager secret"
+msgstr "סוג מנהל חיבורי הרשת"
+
+#: ../gkr/seahorse-gkr-item-properties.c:69
 msgid "Access a network share or resource"
 msgstr "גישה לשיתוף או משאב ברשת"
 
-#: ../gkr/seahorse-gkr-item-properties.c:73
+#: ../gkr/seahorse-gkr-item-properties.c:72
 msgid "Access a website"
 msgstr "גישה לאתר אינטרנט"
 
-#: ../gkr/seahorse-gkr-item-properties.c:76
+#: ../gkr/seahorse-gkr-item-properties.c:75
 msgid "Unlocks a PGP key"
 msgstr "לשחרור מפתח PGP"
 
-#: ../gkr/seahorse-gkr-item-properties.c:79
+#: ../gkr/seahorse-gkr-item-properties.c:78
 msgid "Unlocks a Secure Shell key"
 msgstr "לשחרור מפתח SSH"
 
-#: ../gkr/seahorse-gkr-item-properties.c:82
+#: ../gkr/seahorse-gkr-item-properties.c:81
 msgid "Saved password or login"
 msgstr "ססמה או נתוני כניסה שמורים"
 
-#: ../gkr/seahorse-gkr-item-properties.c:106
+#: ../gkr/seahorse-gkr-item-properties.c:105
 msgid "Network Credentials"
 msgstr "פרטי זיהוי ברשת"
 
-#: ../gkr/seahorse-gkr-item-properties.c:111
+#: ../gkr/seahorse-gkr-item-properties.c:110
 msgid "Password"
 msgstr "ססמה"
 
-#: ../gkr/seahorse-gkr-item-properties.c:211
+#: ../gkr/seahorse-gkr-item-properties.c:210
 msgid "Couldn't change password."
 msgstr "לא ניתן לשנות ססמה."
 
-#: ../gkr/seahorse-gkr-item-properties.c:256
-#: ../gkr/seahorse-gkr-item-properties.c:377
+#: ../gkr/seahorse-gkr-item-properties.c:255
+#: ../gkr/seahorse-gkr-item-properties.c:376
 msgid "Updating password"
 msgstr "הססמה מתעדכנת"
 
-#: ../gkr/seahorse-gkr-item-properties.c:337
+#: ../gkr/seahorse-gkr-item-properties.c:336
 msgid "Couldn't set description."
 msgstr "לא ניתן לקבוע תיאור"
 
@@ -178,103 +341,14 @@ msgstr "סוג:"
 msgid "Use:"
 msgstr "שימוש:"
 
-#: ../gkr/seahorse-gkr-keyring.c:120
-#, c-format
-msgid "Passwords: %s"
-msgstr "ססמאות: %s"
+#: ../gkr/seahorse-gkr-keyring.c:129
+msgid "Login keyring"
+msgstr "קבוצת מפתחות הכניסה"
 
-#: ../gkr/seahorse-gkr-keyring.c:121
-#, c-format
-msgid "<b>Passwords:</b> %s"
-msgstr "<b>ססמאות:</b> %s"
+#: ../gkr/seahorse-gkr-keyring.c:534
+msgid "To do Keyring"
+msgstr "קבוצת המפתחות לביצוע"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:113
-msgid "Password Keyring"
-msgstr "קבוצת ססמאות"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:114
-msgid "Used to store application and network passwords"
-msgstr "בשימוש לצורך אחסון ססמאות ליישומים ולרשת"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:115
-msgid "Stored Password"
-msgstr "ססמה מאוחסנת"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:116
-msgid "Safely store a password or secret."
-msgstr "אחסון בטוח של ססמה או סוד."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:128
-msgid "Couldn't unlock keyring"
-msgstr "לא ניתן לשחרר את קבוצת המפתחות"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:165
-msgid "Couldn't lock keyring"
-msgstr "לא ניתן לנעול את קבוצת המפתחות"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:202
-msgid "Couldn't set default keyring"
-msgstr "לא ניתן להגדיר את קבוצת הססמאות כבררת המחדל"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:239
-msgid "Couldn't change keyring password"
-msgstr "לא ניתן לשנות את ססמת קבוצת המפתחות"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:268
-msgid "_Lock"
-msgstr "_נעילה"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:269
-msgid ""
-"Lock the password storage keyring so a master password is required to unlock "
-"it."
-msgstr "נעילת קבוצת מפתחות המאחסנת ססמאות כך שנדרשת ססמה ראשית כדי לשחרר אותה."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:270
-msgid "_Unlock"
-msgstr "_שחרור"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:271
-msgid ""
-"Unlock the password storage keyring with a master password so it is "
-"available for use."
-msgstr ""
-"שחרור קבוצת מפתחות המאחסנת ססמאות על ידי ססמה ראשית כדי שתהיה זמינה לשימוש."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:272
-msgid "_Set as default"
-msgstr "ה_גדרה כבררת מחדל"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:273
-msgid "Applications usually store new passwords in the default keyring."
-msgstr "יישומים לרוב מאחסנים ססמאות חדשות בקבוצת המפתחות כבררת המחדל."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:274
-msgid "Change _Password"
-msgstr "ה_חלפת ססמה"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:275
-msgid "Change the unlock password of the password storage keyring"
-msgstr "שינוי ססמת השחרור של קבוצת מפתחות המאחסנת ססמאות"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:340
-msgid "Couldn't delete keyring"
-msgstr "לא ניתן למחוק את קבוצת המפתחות"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:358
-#, c-format
-msgid "Are you sure you want to delete the password keyring '%s'?"
-msgstr "האם למחוק את קבוצת הססמאות '%s'?"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:368
-msgid "Deleting keyring"
-msgid_plural "Deleting keyrings"
-msgstr[0] "קבוצת המפתחות נמחקת"
-msgstr[1] "קבוצות המפתחות נמחקות"
-
-#. -----------------------------------------------------------------------------
-#. * PUBLIC
-#.
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.xml.h:2
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
@@ -294,36 +368,38 @@ msgstr "מאפייני קבוצת המפתחות"
 msgid "_Name:"
 msgstr "_שם:"
 
-#: ../gkr/seahorse-gkr-operation.c:52 ../pgp/seahorse-gpgme.c:73
-#: ../pgp/seahorse-hkp-source.c:662 ../ssh/seahorse-ssh-operation.c:193
+#: ../gkr/seahorse-gkr-operation.c:54
+#: ../pgp/seahorse-gpgme.c:73
+#: ../pgp/seahorse-hkp-source.c:585
+#: ../ssh/seahorse-ssh-operation.c:193
 msgid "The operation was cancelled"
 msgstr "הפעולה בוטלה"
 
-#: ../gkr/seahorse-gkr-operation.c:57
+#: ../gkr/seahorse-gkr-operation.c:59
 msgid "Access to the key ring was denied"
 msgstr "הגישה לקבוצת המפתחות נדחתה"
 
-#: ../gkr/seahorse-gkr-operation.c:60
+#: ../gkr/seahorse-gkr-operation.c:62
 msgid "The gnome-keyring daemon is not running"
 msgstr "מנוע קבוצות המפתחות (gnome-keyring) אינו רץ"
 
-#: ../gkr/seahorse-gkr-operation.c:63
+#: ../gkr/seahorse-gkr-operation.c:65
 msgid "The key ring has already been unlocked"
 msgstr "קבוצת המפתחות כבר שוחררה"
 
-#: ../gkr/seahorse-gkr-operation.c:66
+#: ../gkr/seahorse-gkr-operation.c:68
 msgid "No such key ring exists"
 msgstr "לא קיימת קבוצת מפתחות כזאת"
 
-#: ../gkr/seahorse-gkr-operation.c:69
+#: ../gkr/seahorse-gkr-operation.c:71
 msgid "Couldn't communicate with key ring daemon"
 msgstr "לא ניתן לתקשר עם מנוע קבוצות המפתחות"
 
-#: ../gkr/seahorse-gkr-operation.c:72
+#: ../gkr/seahorse-gkr-operation.c:74
 msgid "The item already exists"
 msgstr "הפריט כבר קיים"
 
-#: ../gkr/seahorse-gkr-operation.c:78
+#: ../gkr/seahorse-gkr-operation.c:80
 msgid "Internal error accessing gnome-keyring"
 msgstr "שגיאה פנימית בגישה ל־gnome-keyring"
 
@@ -512,7 +588,8 @@ msgstr "בחר תאריך"
 msgid "Select the date from a calendar"
 msgstr "בחירת התאריך מיומן"
 
-#: ../libegg/egg-datetime.c:521 ../libegg/egg-datetime.c:2199
+#: ../libegg/egg-datetime.c:521
+#: ../libegg/egg-datetime.c:2199
 msgid "Time"
 msgstr "שעה"
 
@@ -535,12 +612,14 @@ msgstr "בחירת השעה מרשימה"
 msgid "24hr: no"
 msgstr "yes"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1260
+#: ../libegg/egg-datetime.c:797
+#: ../libegg/egg-datetime.c:1260
 #: ../libegg/egg-datetime.c:1264
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:799 ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:799
+#: ../libegg/egg-datetime.c:1261
 #: ../libegg/egg-datetime.c:1268
 msgid "PM"
 msgstr "PM"
@@ -606,38 +685,42 @@ msgstr "השער דרכו לגשת לשרת."
 msgid "initial temporary item"
 msgstr "פריט זמני ראשוני"
 
-#: ../libseahorse/seahorse-passphrase.c:180
+#: ../libseahorse/seahorse-key-manager-store.c:476
+#: ../libseahorse/seahorse-viewer.c:273
+msgid "Couldn't export keys"
+msgstr "לא ניתן לייצא מפתחות"
+
+#: ../libseahorse/seahorse-passphrase.c:182
 msgid "Passphrase"
 msgstr "מילת צופן"
 
-#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
+#: ../libseahorse/seahorse-passphrase.c:185
+#: ../ssh/seahorse-ssh-askpass.c:99
 msgid "Password:"
 msgstr "ססמה:"
 
 #. The second and main entry
-#: ../libseahorse/seahorse-passphrase.c:246
+#: ../libseahorse/seahorse-passphrase.c:247
 msgid "Confirm:"
 msgstr "אישור:"
 
-#: ../libseahorse/seahorse-prefs.c:68
+#: ../libseahorse/seahorse-prefs.c:67
 msgid "Not a valid Key Server address."
 msgstr "כתובת שרת המפתחות לא תקפה."
 
-#: ../libseahorse/seahorse-prefs.c:69
-msgid ""
-"For help contact your system adminstrator or the administrator of the key "
-"server."
+#: ../libseahorse/seahorse-prefs.c:68
+msgid "For help contact your system adminstrator or the administrator of the key server."
 msgstr "לקבלת עזרה ניתן לפנות למנהל המערכת או אל מנהל מערכת שרת המפתחות."
 
-#: ../libseahorse/seahorse-prefs.c:183
+#: ../libseahorse/seahorse-prefs.c:182
 msgid "URL"
 msgstr "כתובת"
 
-#: ../libseahorse/seahorse-prefs.c:348
+#: ../libseahorse/seahorse-prefs.c:347
 msgid "Custom"
 msgstr "מותאם אישית"
 
-#: ../libseahorse/seahorse-prefs.c:406
+#: ../libseahorse/seahorse-prefs.c:405
 msgid "None: Don't publish keys"
 msgstr "ללא: לא לפרסם מפתחות"
 
@@ -665,27 +748,7 @@ msgstr "_חיפוש מפתחות בעזרת:"
 msgid "_Publish keys to:"
 msgstr "_פרסום מפתחות ל:"
 
-#: ../libseahorse/seahorse-transfer.c:178
-msgid "Retrieving data"
-msgstr "מתקבלים נתונים"
-
-#: ../libseahorse/seahorse-transfer.c:178
-msgid "Exporting data"
-msgstr "מיוצאים נתונים"
-
-#: ../libseahorse/seahorse-transfer.c:182
-msgid "Importing data"
-msgstr "מיובאים נתונים"
-
-#: ../libseahorse/seahorse-transfer.c:182
-msgid "Sending data"
-msgstr "נשלחים נתונים"
-
-#: ../libseahorse/seahorse-unknown.c:59
-msgid "Unavailable"
-msgstr "לא זמין"
-
-#: ../libseahorse/seahorse-util.c:259
+#: ../libseahorse/seahorse-util.c:261
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
@@ -703,7 +766,8 @@ msgstr "מפתחות  מרובים"
 msgid "All key files"
 msgstr "כל קובצי המפתחות"
 
-#: ../libseahorse/seahorse-util.c:745 ../libseahorse/seahorse-util.c:793
+#: ../libseahorse/seahorse-util.c:745
+#: ../libseahorse/seahorse-util.c:793
 #: ../pgp/seahorse-gpgme-photos.c:242
 msgid "All files"
 msgstr "כל הקבצים"
@@ -712,7 +776,7 @@ msgstr "כל הקבצים"
 msgid "Archive files"
 msgstr "קבצי ארכיון"
 
-#: ../libseahorse/seahorse-util.c:856
+#: ../libseahorse/seahorse-util.c:857
 msgid ""
 "<b>A file already exists with this name.</b>\n"
 "\n"
@@ -722,14 +786,16 @@ msgstr ""
 "\n"
 "האם ברצונך להחליף אותו בקובץ חדש?"
 
-#: ../libseahorse/seahorse-util.c:859
+#: ../libseahorse/seahorse-util.c:860
 msgid "_Replace"
 msgstr "ה_חלפה"
 
-#: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
+#: ../libseahorse/seahorse-validity.c:40
+#: ../pgp/seahorse-gpgme-subkey.c:197
 #: ../pgp/seahorse-pgp-key-properties.c:1273
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+#: ../pkcs11/seahorse-token.c:249
 msgid "Unknown"
 msgstr "לא ידוע"
 
@@ -758,16 +824,133 @@ msgid "Ultimate"
 msgstr "אולטימטיבי"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1491
+#: ../pgp/seahorse-pgp-key-properties.c:1488
 msgid "Disabled"
 msgstr "כבוי"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1487
+#: ../pgp/seahorse-pgp-key-properties.c:1484
 msgid "Revoked"
 msgstr "בוטל"
 
-#: ../libseahorse/seahorse-widget.c:461
+#: ../libseahorse/seahorse-viewer.c:84
+msgid "Contributions:"
+msgstr "תורמים:"
+
+#: ../libseahorse/seahorse-viewer.c:108
+#: ../src/seahorse.desktop.in.in.h:2
+#: ../src/seahorse-key-manager.c:586
+#: ../src/seahorse-main.c:68
+msgid "Passwords and Keys"
+msgstr "ססמאות ומפתחות"
+
+#: ../libseahorse/seahorse-viewer.c:110
+msgid "translator-credits"
+msgstr ""
+"ירון שהרבני <sh.yaron@gmail.com>\n"
+"יאיר הרשקוביץ <yairhr@gmail.com>\n"
+"\n"
+"פרויקט תרגום GNOME לעברית\n"
+"‏http://gnome-il.berlios.de"
+
+#: ../libseahorse/seahorse-viewer.c:113
+msgid "Seahorse Project Homepage"
+msgstr "דף הבית של מיזם Seahorse"
+
+#. Top menu items
+#: ../libseahorse/seahorse-viewer.c:242
+msgid "_File"
+msgstr "_קובץ:"
+
+#: ../libseahorse/seahorse-viewer.c:243
+msgid "_Edit"
+msgstr "ע_ריכה"
+
+#: ../libseahorse/seahorse-viewer.c:244
+msgctxt "This text refers to deleting an item from its type's backing store."
+msgid "_Delete"
+msgstr "מ_חיקה"
+
+#: ../libseahorse/seahorse-viewer.c:245
+msgid "Delete selected items"
+msgstr "מחיקת הפריטים שנבחרו"
+
+#: ../libseahorse/seahorse-viewer.c:247
+msgid "Show the properties of this item"
+msgstr "הצגת מאפיינים הפריט הזה"
+
+#: ../libseahorse/seahorse-viewer.c:249
+msgid "Show the properties of this place"
+msgstr "הצגת מאפייני המיקום הזה"
+
+#: ../libseahorse/seahorse-viewer.c:251
+msgid "Show the properties of this backend"
+msgstr "הצגת מאפייני מנגנון זה"
+
+#: ../libseahorse/seahorse-viewer.c:252
+msgid "Prefere_nces"
+msgstr "ה_עדפות"
+
+#: ../libseahorse/seahorse-viewer.c:253
+msgid "Change preferences for this program"
+msgstr "שינוי העדפות תכנית זאת"
+
+#: ../libseahorse/seahorse-viewer.c:254
+msgid "_View"
+msgstr "_תצוגה"
+
+#: ../libseahorse/seahorse-viewer.c:255
+msgid "_Help"
+msgstr "ע_זרה"
+
+#: ../libseahorse/seahorse-viewer.c:257
+msgid "About this program"
+msgstr "על אודות תכנית זו"
+
+#: ../libseahorse/seahorse-viewer.c:258
+msgid "_Contents"
+msgstr "_תכנים"
+
+#: ../libseahorse/seahorse-viewer.c:259
+msgid "Show Seahorse help"
+msgstr "הצגת עזרה עבור Seahorse"
+
+#: ../libseahorse/seahorse-viewer.c:294
+msgid "Export public key"
+msgstr "ייצוא מפתח ציבורי"
+
+#: ../libseahorse/seahorse-viewer.c:308
+#: ../pgp/seahorse-pgp-key-properties.c:1142
+#: ../ssh/seahorse-ssh-key-properties.c:201
+#, c-format
+msgid "Couldn't export key to \"%s\""
+msgstr "לא ניתן לייצא מפתח ל־\"%s\""
+
+#: ../libseahorse/seahorse-viewer.c:315
+msgid "Exporting keys"
+msgstr "מפתחות מיוצאים"
+
+#: ../libseahorse/seahorse-viewer.c:344
+msgid "Couldn't retrieve data from key server"
+msgstr "לא ניתן לקבל מידע משרת המפתחות"
+
+#: ../libseahorse/seahorse-viewer.c:378
+msgid "Retrieving keys"
+msgstr "מתקבלים מפתחות"
+
+#: ../libseahorse/seahorse-viewer.c:386
+msgid "E_xport..."
+msgstr "יי_צוא..."
+
+#: ../libseahorse/seahorse-viewer.c:387
+msgid "Export to a file"
+msgstr "ייצוא לקובץ"
+
+#: ../libseahorse/seahorse-viewer.c:389
+msgid "Copy to the clipboard"
+msgstr "העתקה ללוח הגזירים"
+
+#: ../libseahorse/seahorse-widget.c:473
 #, c-format
 msgid "Could not display help: %s"
 msgstr "לא ניתן להציג עזרה: %s"
@@ -808,7 +991,8 @@ msgstr "הוספת זיהוי משתמש"
 msgid "Create the new user ID"
 msgstr "יצירת מזהה משתמש חדש"
 
-#: ../pgp/seahorse-add-uid.xml.h:3 ../pgp/seahorse-pgp-generate.xml.h:7
+#: ../pgp/seahorse-add-uid.xml.h:3
+#: ../pgp/seahorse-pgp-generate.xml.h:7
 msgid "Full _Name:"
 msgstr "שם _מלא:"
 
@@ -828,7 +1012,8 @@ msgstr "הערה לא מחייבת לתיאור המפתח"
 msgid "Optional email address"
 msgstr "כתובת דוא״ל אפשרית"
 
-#: ../pgp/seahorse-add-uid.xml.h:8 ../pgp/seahorse-pgp-generate.xml.h:13
+#: ../pgp/seahorse-add-uid.xml.h:8
+#: ../pgp/seahorse-pgp-generate.xml.h:12
 msgid "_Email Address:"
 msgstr "כתובת דוא״ל:"
 
@@ -836,7 +1021,8 @@ msgstr "כתובת דוא״ל:"
 msgid "C_hange"
 msgstr "_שינוי"
 
-#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:4
+#: ../pgp/seahorse-expires.xml.h:2
+#: ../pgp/seahorse-revoke.xml.h:4
 msgid "Revoke key"
 msgstr "שלילת מפתח"
 
@@ -853,7 +1039,8 @@ msgstr "לא ניתן להוסיף תת־מפתח"
 msgid "Add subkey to %s"
 msgstr "הוספת תת־מפתח ל־%s"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:197 ../pgp/seahorse-gpgme-generate.c:130
+#: ../pgp/seahorse-gpgme-add-subkey.c:197
+#: ../pgp/seahorse-gpgme-generate.c:134
 msgid "DSA (sign only)"
 msgstr "‏DSA (חתימה בלבד)"
 
@@ -861,7 +1048,8 @@ msgstr "‏DSA (חתימה בלבד)"
 msgid "ElGamal (encrypt only)"
 msgstr "אל־גמאל (הצפנה בלבד)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:211 ../pgp/seahorse-gpgme-generate.c:131
+#: ../pgp/seahorse-gpgme-add-subkey.c:211
+#: ../pgp/seahorse-gpgme-generate.c:135
 msgid "RSA (sign only)"
 msgstr "‏RSA (חתימה בלבד)"
 
@@ -899,35 +1087,35 @@ msgstr "לא ניתן לשנות תאריך תפוגה"
 msgid "Expiry: %s"
 msgstr "תפוגה: %s"
 
-#: ../pgp/seahorse-gpgme-generate.c:91
+#: ../pgp/seahorse-gpgme-generate.c:95
 msgid "PGP Key"
 msgstr "מפתח PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:92
+#: ../pgp/seahorse-gpgme-generate.c:96
 msgid "Used to encrypt email and files"
 msgstr "משמש להצפנת דוא״ל וקבצים"
 
-#: ../pgp/seahorse-gpgme-generate.c:128
+#: ../pgp/seahorse-gpgme-generate.c:132
 msgid "RSA"
 msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:129
+#: ../pgp/seahorse-gpgme-generate.c:133
 msgid "DSA Elgamal"
 msgstr "‏DSA אל־גמאל"
 
-#: ../pgp/seahorse-gpgme-generate.c:178
+#: ../pgp/seahorse-gpgme-generate.c:182
 msgid "Couldn't generate PGP key"
 msgstr "לא ניתן לייצר מפתח PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:209
+#: ../pgp/seahorse-gpgme-generate.c:213
 msgid "Passphrase for New PGP Key"
 msgstr "מילת צפון עבור מפתח ה־PGP החדש"
 
-#: ../pgp/seahorse-gpgme-generate.c:210
+#: ../pgp/seahorse-gpgme-generate.c:214
 msgid "Enter the passphrase for your new key twice."
 msgstr "יש להזין את מילת הצופן עבור המפתח החדש שלך פעמיים."
 
-#: ../pgp/seahorse-gpgme-generate.c:219
+#: ../pgp/seahorse-gpgme-generate.c:223
 msgid "Generating key"
 msgstr "נוצר מפתח"
 
@@ -938,6 +1126,49 @@ msgstr "ססמה שגויה"
 #: ../pgp/seahorse-gpgme-key-op.c:370
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "זוהי הפעם השלישית שהוקלדה ססמה שגויה. נא לנסות שוב."
+
+#: ../pgp/seahorse-gpgme-keyring.c:90
+#, c-format
+msgid "Wrong passphrase."
+msgstr "מילת הצופן שגויה."
+
+#: ../pgp/seahorse-gpgme-keyring.c:94
+#, c-format
+msgid "Enter new passphrase for '%s'"
+msgstr "נא להזין מילת צופן חדשה עבור '%s'"
+
+#: ../pgp/seahorse-gpgme-keyring.c:96
+#, c-format
+msgid "Enter passphrase for '%s'"
+msgstr "נא להזין מילת צופן עבור '%s'"
+
+#: ../pgp/seahorse-gpgme-keyring.c:99
+#: ../src/seahorse-change-passphrase.xml.h:4
+msgid "Enter new passphrase"
+msgstr "נא להזין מילת צופן חדשה"
+
+#: ../pgp/seahorse-gpgme-keyring.c:101
+msgid "Enter passphrase"
+msgstr "נא להזין מילת צופן"
+
+#: ../pgp/seahorse-gpgme-keyring.c:329
+#, c-format
+msgid "Loaded %d key"
+msgid_plural "Loaded %d keys"
+msgstr[0] "מפתח אחד נטען"
+msgstr[1] "%d מפתחות נטענו"
+
+#: ../pgp/seahorse-gpgme-keyring.c:666
+msgid "Invalid key data (missing UIDs). This may be due to a computer with a date set in the future or a missing self-signature."
+msgstr "נתוני המפתח שגויים (חסרים UID). שגיאה זאת נגרמה עקב מחשב ששעונו ממהר או חתימה עצמית חסרה."
+
+#: ../pgp/seahorse-gpgme-keyring.c:966
+msgid "GnuPG keyring"
+msgstr "קבוצת מפתחות GnuPG"
+
+#: ../pgp/seahorse-gpgme-keyring.c:969
+msgid "GnuPG: default keyring directory"
+msgstr "GnuPG: תיקיית בררת המחדל של קבוצת המפתחות"
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -958,12 +1189,8 @@ msgstr "_שינוי הגודל"
 
 #: ../pgp/seahorse-gpgme-photos.c:128
 #, c-format
-msgid ""
-"This is not a image file, or an unrecognized kind of image file. Try to use "
-"a JPEG image."
-msgstr ""
-"זהו אינו קובץ תמונה או סוג בלתי מזוהה של קובץ תמונה. כדאי לנסות להשתמש "
-"בתמונת JPEG."
+msgid "This is not a image file, or an unrecognized kind of image file. Try to use a JPEG image."
+msgstr "זהו אינו קובץ תמונה או סוג בלתי מזוהה של קובץ תמונה. כדאי לנסות להשתמש בתמונת JPEG."
 
 #: ../pgp/seahorse-gpgme-photos.c:224
 msgid "All image files"
@@ -981,7 +1208,8 @@ msgstr "נא לבחור תמונה להוספה למפתח"
 msgid "Couldn't prepare photo"
 msgstr "לא ניתן להכין תמונה"
 
-#: ../pgp/seahorse-gpgme-photos.c:288 ../pgp/seahorse-gpgme-photos.c:292
+#: ../pgp/seahorse-gpgme-photos.c:288
+#: ../pgp/seahorse-gpgme-photos.c:292
 msgid "Couldn't add photo"
 msgstr "לא ניתן להוסיף תמונה"
 
@@ -1040,18 +1268,14 @@ msgstr "המפתח כבר אינו בשימוש"
 
 #: ../pgp/seahorse-gpgme-revoke.c:166
 #, c-format
-msgid ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
-msgstr ""
-"%s מועמד להתווסף כמורשה שלילה עבור %s. לא ניתן לבטל פעולה זו! האם ברצונך "
-"להמשיך?"
+msgid "You are about to add %s as a revoker for %s. This operation cannot be undone! Are you sure you want to continue?"
+msgstr "%s מועמד להתווסף כמורשה שלילה עבור %s. לא ניתן לבטל פעולה זו! האם ברצונך להמשיך?"
 
 #: ../pgp/seahorse-gpgme-revoke.c:178
 msgid "Couldn't add revoker"
 msgstr "לא ניתן להוסיף מורשה שלילה"
 
-#: ../pgp/seahorse-gpgme-sign.c:101
+#: ../pgp/seahorse-gpgme-sign.c:100
 #, c-format
 msgid ""
 "This key was already signed by\n"
@@ -1066,71 +1290,149 @@ msgstr "לא ניתן לחתום על המפתח"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:161 ../pgp/seahorse-signer.c:61
+#: ../pgp/seahorse-gpgme-sign.c:164
+#: ../pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr "אין מפתחות שמתאימים להצפנה"
 
-#: ../pgp/seahorse-gpgme-sign.c:162
-msgid ""
-"You have no personal PGP keys that can be used to indicate your trust of "
-"this key."
+#: ../pgp/seahorse-gpgme-sign.c:165
+msgid "You have no personal PGP keys that can be used to indicate your trust of this key."
 msgstr "אין לך מפתחות PGP שניתן להשתמש בם כדי לציין את אמינות מפתח זה בעיניך."
-
-#: ../pgp/seahorse-gpgme-source.c:86
-#, c-format
-msgid "Wrong passphrase."
-msgstr "מילת הצופן שגויה."
-
-#: ../pgp/seahorse-gpgme-source.c:90
-#, c-format
-msgid "Enter new passphrase for '%s'"
-msgstr "נא להזין מילת צופן חדשה עבור '%s'"
-
-#: ../pgp/seahorse-gpgme-source.c:92
-#, c-format
-msgid "Enter passphrase for '%s'"
-msgstr "נא להזין מילת צופן עבור '%s'"
-
-#: ../pgp/seahorse-gpgme-source.c:95 ../src/seahorse-change-passphrase.xml.h:4
-msgid "Enter new passphrase"
-msgstr "נא להזין מילת צופן חדשה"
-
-#: ../pgp/seahorse-gpgme-source.c:97
-msgid "Enter passphrase"
-msgstr "נא להזין מילת צופן"
-
-#: ../pgp/seahorse-gpgme-source.c:328
-#, c-format
-msgid "Loaded %d key"
-msgid_plural "Loaded %d keys"
-msgstr[0] "מפתח אחד נטען"
-msgstr[1] "%d מפתחות נטענו"
-
-#: ../pgp/seahorse-gpgme-source.c:649
-msgid ""
-"Invalid key data (missing UIDs). This may be due to a computer with a date "
-"set in the future or a missing self-signature."
-msgstr ""
-"נתוני המפתח שגויים (חסרים UID). שגיאה זאת נגרמה עקב מחשב ששעונו ממהר או "
-"חתימה עצמית חסרה."
 
 #: ../pgp/seahorse-gpgme-subkey.c:199
 msgid "ElGamal"
 msgstr "אל־גמאל"
 
-#: ../pgp/seahorse-hkp-source.c:645
-msgid "HTTP Key Server"
-msgstr "שרת מפתחות HTTP"
-
-#: ../pgp/seahorse-hkp-source.c:680
+#: ../pgp/seahorse-hkp-source.c:603
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "החיפוש לא היה מספיק מדויק. השרת '%s' מצא יותר מדי מפתחות."
 
-#: ../pgp/seahorse-hkp-source.c:683
+#: ../pgp/seahorse-hkp-source.c:606
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "לא ניתן לתקשר עם השרת '%s': ‏%s"
+
+#: ../pgp/seahorse-hkp-source.c:1134
+msgid "HTTP Key Server"
+msgstr "שרת מפתחות HTTP"
+
+#: ../pgp/seahorse-keyserver-results.c:176
+msgid "Couldn't import keys"
+msgstr "לא ניתן לייבא מפתחות"
+
+#: ../pgp/seahorse-keyserver-results.c:219
+msgid "Importing keys from key servers"
+msgstr "מיובאים מפתחות משרת מפתחות"
+
+#: ../pgp/seahorse-keyserver-results.c:244
+#: ../src/seahorse-key-manager.c:439
+msgid "_Remote"
+msgstr "_מרוחק"
+
+#: ../pgp/seahorse-keyserver-results.c:246
+msgid "Close this window"
+msgstr "סגירת חלון זה"
+
+#: ../pgp/seahorse-keyserver-results.c:250
+#: ../pgp/seahorse-pgp-actions.c:100
+msgid "_Find Remote Keys..."
+msgstr "_חיפוש מפתחות מרוחקים..."
+
+#: ../pgp/seahorse-keyserver-results.c:251
+#: ../pgp/seahorse-pgp-actions.c:101
+msgid "Search for keys on a key server"
+msgstr "חיפוש מפתחות בשרת מפתחות"
+
+#: ../pgp/seahorse-keyserver-results.c:255
+#: ../src/seahorse-key-manager.xml.h:5
+msgid "_Import"
+msgstr "יי_בוא"
+
+#: ../pgp/seahorse-keyserver-results.c:256
+msgid "Import selected keys to local key ring"
+msgstr "ייבוא המפתחות הנבחרים לקבוצת מפתחות מקומית"
+
+#: ../pgp/seahorse-keyserver-results.c:300
+msgid "Remote Keys"
+msgstr "מפתחות מרוחקים"
+
+#: ../pgp/seahorse-keyserver-results.c:302
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "מפתחות מרוחקים שמכילים '%s'"
+
+#: ../pgp/seahorse-keyserver-results.c:497
+msgid "The search for keys failed."
+msgstr "החיפוש אחר מפתחות נכשל."
+
+#: ../pgp/seahorse-keyserver-search.xml.h:1
+msgid "<b>Key Servers:</b>"
+msgstr "<b>שרתי מפתח:</b>"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:2
+msgid "<b>Shared Keys Near Me:</b>"
+msgstr "<b>מפתחות משותפים בסביבתי:</b>"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:3
+msgid "Find Remote Keys"
+msgstr "חיפוש מפתחות מרוחקים"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:4
+msgid "This will find keys for others on the Internet. These keys can then be imported into your local key ring."
+msgstr "פעולה זו תמצא מפתחות של אחרים באינטרנט. ניתן לייבא מפתחות אלה לקבוצת מפתחות מקומית."
+
+#: ../pgp/seahorse-keyserver-search.xml.h:5
+msgid "Where to search:"
+msgstr "איפה לחפש:"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:6
+msgid "_Search"
+msgstr "_חיפוש:"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:7
+msgid "_Search for keys containing: "
+msgstr "_חיפוש מפתחות שמכילים: "
+
+#: ../pgp/seahorse-keyserver-sync.c:57
+msgid "Couldn't publish keys to server"
+msgstr "לא ניתן לפרסם מפתחות לשרת"
+
+#: ../pgp/seahorse-keyserver-sync.c:76
+#, c-format
+msgid "Couldn't retrieve keys from server: %s"
+msgstr "לא ניתן לקבל מפתחות משרת: %s"
+
+#: ../pgp/seahorse-keyserver-sync.c:160
+#, c-format
+msgid "<b>%d key is selected for synchronizing</b>"
+msgid_plural "<b>%d keys are selected for synchronizing</b>"
+msgstr[0] "<b>מפתח אחד נבחר לסנכרון</b>"
+msgstr[1] "<b>%d מפתחות נבחרו לסנכרון</b>"
+
+#: ../pgp/seahorse-keyserver-sync.c:229
+msgid "Synchronizing keys..."
+msgstr "מפתחות מסתנכרנים..."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:1
+msgid "Sync Keys"
+msgstr "סנכרון מפתחות"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:2
+msgid "This will publish the keys in your key ring so they're available for others to use. You'll also get any changes others have made since you received their keys."
+msgstr "פעולה זו תפרסם את המפתחות בקבוצת המפתחות שלך כך שיהיו זמינים לשימושם של אחרים. שינויים שאחרים ביצעו יתקבלו אליך מאחר שקיבלת את מפתחותיהם."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:3
+msgid "This will retrieve any changes others have made since you received their keys. No key server has been chosen for publishing, so your keys will not be made available to others."
+msgstr "פעולה זו תקבל כל שינויים שאחרים ביצעו מאז שקיבלת את מפתחותיהם. לא נבחר שרת מפתחות לפרסום כך שמפתחותיך לא יהיו זמינים לאחרים."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:4
+msgid "_Key Servers"
+msgstr "_שרתי מפתח"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:5
+msgid "_Sync"
+msgstr "_סנכרון"
 
 #: ../pgp/seahorse-ldap-source.c:440
 #, c-format
@@ -1152,51 +1454,79 @@ msgstr "לא ניתן לפענח את הכתובת: %s"
 msgid "Resolving server address: %s"
 msgstr "כתובת השרת מפוענחת: %s"
 
-#: ../pgp/seahorse-ldap-source.c:781
+#: ../pgp/seahorse-ldap-source.c:1450
 msgid "LDAP Key Server"
 msgstr "שרת מפתחות LDAP"
 
-#: ../pgp/seahorse-pgp-commands.c:104
-msgid "_Sign Key..."
-msgstr "_חתימה על המפתח..."
+#: ../pgp/seahorse-pgp-actions.c:102
+msgid "_Sync and Publish Keys..."
+msgstr "_סנכרון ופרסם מפתחות..."
 
-#: ../pgp/seahorse-pgp-commands.c:104
-msgid "Sign public key"
-msgstr "חתימה על מפתח ציבורי"
+#: ../pgp/seahorse-pgp-actions.c:103
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "פרסום ו/או סנכרון מפתחותיך עם אלו באופן מקוון."
 
-#: ../pgp/seahorse-pgp-commands.c:174
+#: ../pgp/seahorse-pgp-actions.c:244
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "האם למחוק את %s?"
 
-#: ../pgp/seahorse-pgp-commands.c:179
+#: ../pgp/seahorse-pgp-actions.c:249
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys and identities?"
 msgstr "האם ברצונך למחוק %d מפתחות וזהויות לצמיתות?"
 
-#: ../pgp/seahorse-pgp-commands.c:181
+#: ../pgp/seahorse-pgp-actions.c:251
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys?"
 msgstr "האם ברצונך למחוק %d מפתחות לצמיתות?"
 
-#: ../pgp/seahorse-pgp-commands.c:183
+#: ../pgp/seahorse-pgp-actions.c:253
 #, c-format
 msgid "Are you sure you want to permanently delete %d identities?"
 msgstr "האם ברצונך למחוק %d זהויות?"
 
-#: ../pgp/seahorse-pgp-commands.c:201 ../pgp/seahorse-pgp-key-properties.c:348
+#: ../pgp/seahorse-pgp-actions.c:272
+#: ../pgp/seahorse-pgp-key-properties.c:351
 msgid "Couldn't delete user ID"
 msgstr "לא ניתן למחוק את מזהה המשתמש"
 
-#: ../pgp/seahorse-pgp-commands.c:205
+#: ../pgp/seahorse-pgp-actions.c:276
 msgid "Couldn't delete private key"
 msgstr "לא ניתן למחוק מפתח פרטי"
 
-#: ../pgp/seahorse-pgp-commands.c:208
+#: ../pgp/seahorse-pgp-actions.c:279
 msgid "Couldn't delete public key"
 msgstr "לא ניתן למחוק מפתח ציבורי"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:1 ../ssh/seahorse-ssh-generate.xml.h:1
+#: ../pgp/seahorse-pgp-actions.c:291
+msgid "_Sign Key..."
+msgstr "_חתימה על המפתח..."
+
+#: ../pgp/seahorse-pgp-actions.c:292
+msgid "Sign public key"
+msgstr "חתימה על מפתח ציבורי"
+
+#: ../pgp/seahorse-pgp-actions.c:294
+#: ../ssh/seahorse-ssh-actions.c:136
+msgid "Properties of the key."
+msgstr "מאפייני המפתח."
+
+#: ../pgp/seahorse-pgp-actions.c:296
+#: ../ssh/seahorse-ssh-actions.c:138
+msgid "Delete the key."
+msgstr "מחיקת המפתח."
+
+#: ../pgp/seahorse-pgp-backend.c:174
+msgid "PGP Keys"
+msgstr "מפתחות PGP"
+
+#: ../pgp/seahorse-pgp-backend.c:177
+msgid "PGP keys are for encrypting email or files"
+msgstr "מפתחות PGP מיועדים להצפנת דוא״ל או קבצים"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:1
+#: ../ssh/seahorse-ssh-generate.xml.h:1
 msgid "<b>_Advanced key options</b>"
 msgstr "<b>_אפשרויות מפתח מתקדמות</b>"
 
@@ -1216,7 +1546,8 @@ msgstr "_צור"
 msgid "E_xpiration Date:"
 msgstr "תאריך _תפוגה:"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:4
+#: ../pgp/seahorse-pgp-generate.xml.h:6
+#: ../ssh/seahorse-ssh-generate.xml.h:4
 msgid "Encryption _Type:"
 msgstr "_סוג הצפנה:"
 
@@ -1224,7 +1555,8 @@ msgstr "_סוג הצפנה:"
 msgid "Generate a new key"
 msgstr "יצר מפתח חדש"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:6
+#: ../pgp/seahorse-pgp-generate.xml.h:9
+#: ../ssh/seahorse-ssh-generate.xml.h:6
 msgid "Key _Strength (bits):"
 msgstr "_חוזק מפתח (סיביות):"
 
@@ -1233,55 +1565,54 @@ msgid "Ne_ver Expires"
 msgstr "_לעולם לא פג"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:11
-msgid "New PGP Key"
-msgstr "מפתח PGP חדש"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:12
 msgid "_Comment:"
 msgstr "_הערה:"
 
-#: ../pgp/seahorse-pgp-key.c:572 ../pgp/seahorse-pgp-key-properties.c:1489
-msgid "Expired"
-msgstr "פג תוקף"
+#: ../pgp/seahorse-pgp-key.c:347
+msgid "Personal PGP key"
+msgstr "מפתח PGP אישי"
 
-#: ../pgp/seahorse-pgp-key-properties.c:319
+#: ../pgp/seahorse-pgp-key.c:349
+msgid "PGP key"
+msgstr "מפתח PGP"
+
+#: ../pgp/seahorse-pgp-key-properties.c:322
 msgid "Couldn't change primary user ID"
 msgstr "לא ניתן לשנות את מזהה המשתמש העיקרי"
 
-#: ../pgp/seahorse-pgp-key-properties.c:338
+#: ../pgp/seahorse-pgp-key-properties.c:341
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr "האם ברצונך למחוק את מזהה המשתמש '%s' לצמיתות?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:433
-#: ../pgp/seahorse-pgp-key-properties.c:1604
+#: ../pgp/seahorse-pgp-key-properties.c:425
+#: ../pgp/seahorse-pgp-key-properties.c:1589
 msgid "[Unknown]"
 msgstr "[לא ידוע]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:533
-#: ../pgp/seahorse-pgp-key-properties.c:1885
+#: ../pgp/seahorse-pgp-key-properties.c:528
+#: ../pgp/seahorse-pgp-key-properties.c:1868
 msgid "Name/Email"
 msgstr "שם/דוא״ל"
 
-#: ../pgp/seahorse-pgp-key-properties.c:538
+#: ../pgp/seahorse-pgp-key-properties.c:533
 msgid "Signature ID"
 msgstr "זיהוי חתימה"
 
-#: ../pgp/seahorse-pgp-key-properties.c:671
+#: ../pgp/seahorse-pgp-key-properties.c:666
 msgid "Couldn't change primary photo"
 msgstr "לא ניתן לשנות את התמונה הראשית"
 
-#: ../pgp/seahorse-pgp-key-properties.c:903
+#: ../pgp/seahorse-pgp-key-properties.c:899
 msgid "(unknown)"
 msgstr "(לא ידוע)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:906
+#: ../pgp/seahorse-pgp-key-properties.c:902
 #, c-format
 msgid "This key expired on: %s"
 msgstr "תוקף מפתח זה פג ב: %s"
 
-#: ../pgp/seahorse-pgp-key-properties.c:967
-#: ../src/seahorse-key-manager-store.c:802
+#: ../pgp/seahorse-pgp-key-properties.c:965
 msgid "Name"
 msgstr "שם"
 
@@ -1295,15 +1626,9 @@ msgid "Couldn't delete subkey"
 msgstr "לא ניתן למחוק תת־מפתח"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1127
-#: ../pgp/seahorse-pgp-key-properties.c:1567
+#: ../pgp/seahorse-pgp-key-properties.c:1564
 msgid "Unable to change trust"
 msgstr "לא ניתן לשנות את המהימנות"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1142 ../src/seahorse-viewer.c:298
-#: ../ssh/seahorse-ssh-key-properties.c:201
-#, c-format
-msgid "Couldn't export key to \"%s\""
-msgstr "לא ניתן לייצא מפתח ל־\"%s\""
 
 #: ../pgp/seahorse-pgp-key-properties.c:1172
 #: ../ssh/seahorse-ssh-key-properties.c:225
@@ -1315,44 +1640,45 @@ msgstr "ייצוא המפתח כולו"
 msgid "Couldn't export key."
 msgstr "לא ניתן לייצא את המפתח."
 
-#: ../pgp/seahorse-pgp-key-properties.c:1407
-#: ../pgp/seahorse-pgp-key-properties.c:1496
+#: ../pgp/seahorse-pgp-key-properties.c:1404
+#: ../pgp/seahorse-pgp-key-properties.c:1493
 msgctxt "Expires"
 msgid "Never"
 msgstr "לעולם לא"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1454
+#: ../pgp/seahorse-pgp-key-properties.c:1451
 msgid "ID"
 msgstr "זיהוי"
 
-#. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1457
-#: ../src/seahorse-key-manager-store.c:833
+#: ../pgp/seahorse-pgp-key-properties.c:1454
 msgid "Type"
 msgstr "סוג"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1460
+#: ../pgp/seahorse-pgp-key-properties.c:1457
 msgid "Created"
 msgstr "נוצר"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1463
+#: ../pgp/seahorse-pgp-key-properties.c:1460
 msgid "Expires"
 msgstr "תפוגה"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1466
+#: ../pgp/seahorse-pgp-key-properties.c:1463
 msgid "Status"
 msgstr "מצב"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1469
+#: ../pgp/seahorse-pgp-key-properties.c:1466
 msgid "Strength"
 msgstr "חוזק"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1493
+#: ../pgp/seahorse-pgp-key-properties.c:1486
+msgid "Expired"
+msgstr "פג תוקף"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1490
 msgid "Good"
 msgstr "טוב"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1888
-#: ../src/seahorse-key-manager-store.c:814
+#: ../pgp/seahorse-pgp-key-properties.c:1871
 msgid "Key ID"
 msgstr "זיהוי מפתח"
 
@@ -1577,19 +1903,13 @@ msgstr "אני בוטח בחתימות מ-'%s' במפתחות אחרים"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
 #, no-c-format
-msgid ""
-"If you believe that the person that owns this key is '%s', <i>sign</i> this "
-"key:"
-msgstr ""
-"אם ישנה סבירות שהבעלים של מפתח זה הם '%s', ניתן <i>לחתום</i> על מפתח זה:"
+msgid "If you believe that the person that owns this key is '%s', <i>sign</i> this key:"
+msgstr "אם ישנה סבירות שהבעלים של מפתח זה הם '%s', ניתן <i>לחתום</i> על מפתח זה:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:28
 #, no-c-format
-msgid ""
-"If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
-msgstr ""
-"אם קיים בעיניך חשד ש־'%s' אינו עוד הבעלים של מפתח זה, ניתן <i>לשלול</i> את "
-"החתימה שלך:"
+msgid "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
+msgstr "אם קיים בעיניך חשד ש־'%s' אינו עוד הבעלים של מפתח זה, ניתן <i>לשלול</i> את החתימה שלך:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
 msgid "Marginally"
@@ -1599,9 +1919,7 @@ msgstr "באופן גבולי"
 msgid "Public PGP Key"
 msgstr "מפתח PGP ציבורי"
 
-#. Trust column
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
-#: ../src/seahorse-key-manager-store.c:827
 msgid "Trust"
 msgstr "מהימן"
 
@@ -1650,10 +1968,13 @@ msgstr "הסיבה לשלילת המפתח"
 msgid "_Reason:"
 msgstr "_סיבה:"
 
-#: ../pgp/seahorse-signer.c:62
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
+#: ../pgp/seahorse-signer.c:63
+msgid "You have no personal PGP keys that can be used to sign a document or message."
 msgstr "אין לך מפתחות PGP אישיים אשר יכולים לשמש לחתימה על מסמך או הודעה."
+
+#: ../pgp/seahorse-signer.xml.h:1
+msgid "_Sign message with key:"
+msgstr "_חתימה על הודעה עם מפתח:"
 
 #: ../pgp/seahorse-sign.xml.h:1
 msgid "<b>How carefully have you checked this key?</b>"
@@ -1668,30 +1989,19 @@ msgid "<b>Sign key as:</b>"
 msgstr "<b>חתימה על המפתח בשם:</b>"
 
 #: ../pgp/seahorse-sign.xml.h:4
-msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone. "
-msgstr ""
-"לעתים: משמעות הדבר היא שבוצעו אימותים מדי פעם ופעם כדי לוודא שהמפתח בבעלותו "
-"של הטוען לבעלותו. לדוגמה, ביכולתך להקריא את טביעת המפתח לבעלים בטלפון. "
+msgid "<i>Casually:</i> means you have done a casual verification that the key is owned by the person who claims to own it. For example, you could read the key fingerprint to the owner over the phone. "
+msgstr "לעתים: משמעות הדבר היא שבוצעו אימותים מדי פעם ופעם כדי לוודא שהמפתח בבעלותו של הטוען לבעלותו. לדוגמה, ביכולתך להקריא את טביעת המפתח לבעלים בטלפון. "
 
 #: ../pgp/seahorse-sign.xml.h:5
 msgid "<i>Key Name</i>"
 msgstr "שם מפתח"
 
 #: ../pgp/seahorse-sign.xml.h:6
-msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who "
-"claims to own it, but you could not or did not verify this to be a fact."
-msgstr ""
-"כלל לא: משמעות הדבר היא שסביר להניח כי המפתח שייך לאדם הטוען לבעלותו, אך "
-"הדעה לא ניתנת לאימות או שלא נבדקה."
+msgid "<i>Not at all:</i> means you believe the key is owned by the person who claims to own it, but you could not or did not verify this to be a fact."
+msgstr "כלל לא: משמעות הדבר היא שסביר להניח כי המפתח שייך לאדם הטוען לבעלותו, אך הדעה לא ניתנת לאימות או שלא נבדקה."
 
 #: ../pgp/seahorse-sign.xml.h:7
-msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
-"key is genuine."
+msgid "<i>Very Carefully:</i> Select this only if you are absolutely sure that this key is genuine."
 msgstr "בזהירות רבה: יש לבחור זאת רק אם ידוע לך בבטחה שמפתח זה מקורי."
 
 #: ../pgp/seahorse-sign.xml.h:8
@@ -1707,13 +2017,8 @@ msgid "Sign Key"
 msgstr "חתימה על המפתח"
 
 #: ../pgp/seahorse-sign.xml.h:11
-msgid ""
-"You could use a hard to forge photo identification (such as a passport) to "
-"personally check that the name on the key is correct. You should have also "
-"used email to check that the email address belongs to the owner."
-msgstr ""
-"ניתן להשתמש בזיהוי תמונה (כגון תמונת פספורט) המקשה על הזיוף כדי לוודא שהשם "
-"במפתח נכון. כדאי לך גם להשתמש בדוא״ל כדי לאמת שכתובת הדוא״ל שייכת לבעלים."
+msgid "You could use a hard to forge photo identification (such as a passport) to personally check that the name on the key is correct. You should have also used email to check that the email address belongs to the owner."
+msgstr "ניתן להשתמש בזיהוי תמונה (כגון תמונת פספורט) המקשה על הזיוף כדי לוודא שהשם במפתח נכון. כדאי לך גם להשתמש בדוא״ל כדי לאמת שכתובת הדוא״ל שייכת לבעלים."
 
 #: ../pgp/seahorse-sign.xml.h:12
 msgid "_Casually"
@@ -1739,34 +2044,65 @@ msgstr "_חותם:"
 msgid "_Very Carefully"
 msgstr "_בזהירות רבה"
 
-#: ../pgp/seahorse-signer.xml.h:1
-msgid "_Sign message with key:"
-msgstr "_חתימה על הודעה עם מפתח:"
+#: ../pgp/seahorse-transfer.c:200
+msgid "Exporting data"
+msgstr "מיוצאים נתונים"
 
-#: ../pkcs11/seahorse-pkcs11-certificate.c:106
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
-msgid "Certificate"
-msgstr "אישור"
+#: ../pgp/seahorse-transfer.c:200
+msgid "Retrieving data"
+msgstr "מתקבלים נתונים"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:106
+#: ../pgp/seahorse-transfer.c:203
+msgid "Importing data"
+msgstr "מיובאים נתונים"
+
+#: ../pgp/seahorse-transfer.c:203
+msgid "Sending data"
+msgstr "נשלחים נתונים"
+
+#: ../pgp/seahorse-unknown.c:61
+msgid "Unavailable"
+msgstr "לא זמין"
+
+#: ../pkcs11/seahorse-pkcs11-actions.c:103
 msgid "Couldn't delete"
 msgstr "לא ניתן למחוק"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:127
+#: ../pkcs11/seahorse-pkcs11-actions.c:124
 #, c-format
 msgid "Are you sure you want to delete the certificate '%s'?"
 msgstr "האם ברצונך למחוק את האישור '%s'?"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:130
+#: ../pkcs11/seahorse-pkcs11-actions.c:127
 #, c-format
 msgid "Are you sure you want to delete %d certificate?"
 msgid_plural "Are you sure you want to delete %d certificates?"
 msgstr[0] "האם ברצונך למחוק אישור אחד?"
 msgstr[1] "האם ברצונך למחוק %d אישורים?"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:143
+#: ../pkcs11/seahorse-pkcs11-actions.c:140
 msgid "Deleting"
 msgstr "בהליכי מחיקה"
+
+#: ../pkcs11/seahorse-pkcs11-actions.c:149
+msgid "Properties of the certificate."
+msgstr "מאפייני האישור."
+
+#: ../pkcs11/seahorse-pkcs11-actions.c:151
+msgid "Delete the certificate."
+msgstr "מחיקת האישור."
+
+#: ../pkcs11/seahorse-pkcs11-backend.c:183
+msgid "Certificates"
+msgstr "אישורים"
+
+#: ../pkcs11/seahorse-pkcs11-backend.c:186
+msgid "X.509 certificates and related keys"
+msgstr "אישורי X.509 וכאלה שקשורים אליהם"
+
+#: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
+msgid "Certificate"
+msgstr "אישור"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
@@ -1788,134 +2124,107 @@ msgstr "מילת צופן _חדשה:"
 msgid "Manage your passwords and encryption keys"
 msgstr "ניהול הססמאות ומפתחות ההצפנה שלך"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:868
-#: ../src/seahorse-main.c:76 ../src/seahorse-viewer.c:147
-msgid "Passwords and Keys"
-msgstr "ססמאות ומפתחות"
+#: ../src/seahorse-generate-select.c:219
+msgid "Continue"
+msgstr "המשך"
 
 #: ../src/seahorse-generate-select.xml.h:1
 msgid "<b>_Select the type of item to create:</b>"
 msgstr "<b>נא לבחור את סוג המפתח שברצונך ליצור:</b>"
 
-#: ../src/seahorse-generate-select.xml.h:2
-msgid "C_ontinue"
-msgstr "ה_משך"
+#: ../src/seahorse-import-dialog.c:74
+msgid "Import failed"
+msgstr "הייבוא נכשל"
 
-#: ../src/seahorse-generate-select.xml.h:3
-msgid "Create New ..."
-msgstr "יצירת חדש..."
+#: ../src/seahorse-import-dialog.c:95
+msgid "Import"
+msgstr "ייבוא"
 
-#: ../src/seahorse-key-manager.c:251 ../src/seahorse-keyserver-results.c:116
-#, c-format
-msgid "Selected %d key"
-msgid_plural "Selected %d keys"
-msgstr[0] "מפתח אחד נבחר"
-msgstr[1] "%d מפתחות נבחרו"
+#: ../src/seahorse-import-dialog.c:105
+msgid "<b>Data to be imported:</b>"
+msgstr "<b>נתונים לייבוא:</b>"
 
-#: ../src/seahorse-key-manager.c:431 ../src/seahorse-key-manager.c:489
-#: ../src/seahorse-key-manager.c:550 ../src/seahorse-viewer.c:453
-msgid "Couldn't import keys"
-msgstr "לא ניתן לייבא מפתחות"
-
-#: ../src/seahorse-key-manager.c:433 ../src/seahorse-viewer.c:455
-msgid "Imported keys"
-msgstr "מפתחות מיובאים"
-
-#: ../src/seahorse-key-manager.c:484
-msgid "Importing keys"
-msgstr "מייבא מפתחות"
-
-#: ../src/seahorse-key-manager.c:504 ../ssh/seahorse-ssh-operation.c:891
+#: ../src/seahorse-key-manager.c:235
+#: ../ssh/seahorse-ssh-operation.c:891
 msgid "Import Key"
 msgstr "ייבוא מפתח"
 
-#: ../src/seahorse-key-manager.c:550
-msgid "Unrecognized key type, or invalid data format"
-msgstr "סוג מפתח לא מזוהה, או תצורת מידע שגויה"
+#: ../src/seahorse-key-manager.c:298
+msgid "Dropped text"
+msgstr "טקסט שהושלך"
 
-#: ../src/seahorse-key-manager.c:565
-msgid "Importing Keys"
-msgstr "מפתחות מיובאים"
+#: ../src/seahorse-key-manager.c:321
+msgid "Clipboard text"
+msgstr "טקסט מלוח הגזירים"
 
-#: ../src/seahorse-key-manager.c:737 ../src/seahorse-keyserver-results.c:254
-msgid "_Remote"
-msgstr "_מרוחק"
+#: ../src/seahorse-key-manager.c:440
+msgid "_New"
+msgstr "חדש"
 
-#: ../src/seahorse-key-manager.c:739
+#: ../src/seahorse-key-manager.c:442
 msgid "Close this program"
 msgstr "סגירת תכנית זו"
 
-#: ../src/seahorse-key-manager.c:740
+#: ../src/seahorse-key-manager.c:443
+#: ../src/seahorse-key-manager.c:445
 msgid "_New..."
 msgstr "_חדש..."
 
-#: ../src/seahorse-key-manager.c:741
+#: ../src/seahorse-key-manager.c:444
 msgid "Create a new key or item"
 msgstr "יצירת מפתח או פריט חדשים"
 
-#: ../src/seahorse-key-manager.c:742
+#: ../src/seahorse-key-manager.c:446
+msgid "Add a new key or item"
+msgstr "הוספת מפתח או פריט חדשים"
+
+#: ../src/seahorse-key-manager.c:447
 msgid "_Import..."
 msgstr "יי_בוא"
 
-#: ../src/seahorse-key-manager.c:743
+#: ../src/seahorse-key-manager.c:448
 msgid "Import from a file"
 msgstr "ייבוא מקובץ"
 
-#: ../src/seahorse-key-manager.c:745
+#: ../src/seahorse-key-manager.c:450
 msgid "Import from the clipboard"
 msgstr "ייבוא מלוח הגזירים"
 
-#: ../src/seahorse-key-manager.c:750 ../src/seahorse-keyserver-results.c:264
-msgid "_Find Remote Keys..."
-msgstr "_חיפוש מפתחות מרוחקים..."
+#: ../src/seahorse-key-manager.c:454
+msgid "P_laces"
+msgstr "מי_קומים"
 
-#: ../src/seahorse-key-manager.c:751 ../src/seahorse-keyserver-results.c:265
-msgid "Search for keys on a key server"
-msgstr "חיפוש מפתחות בשרת מפתחות"
+#: ../src/seahorse-key-manager.c:455
+msgid "Show places sidebar"
+msgstr "הצגת סרגל המיקומים הצדי"
 
-#: ../src/seahorse-key-manager.c:752
-msgid "_Sync and Publish Keys..."
-msgstr "_סנכרון ופרסם מפתחות..."
+#: ../src/seahorse-key-manager.c:459
+msgid "Show _personal"
+msgstr "הצגת _אישי"
 
-#: ../src/seahorse-key-manager.c:753
-msgid "Publish and/or synchronize your keys with those online."
-msgstr "פרסום ו/או סנכרון מפתחותיך עם אלו באופן מקוון."
+#: ../src/seahorse-key-manager.c:460
+msgid "Only show personal keys, certificates and passwords"
+msgstr "הצגת המפתחות, האישורים והססמאות האישיים בלבד"
 
-#: ../src/seahorse-key-manager.c:758
-msgid "T_ypes"
-msgstr "_סוגים"
+#: ../src/seahorse-key-manager.c:461
+msgid "Show _trusted"
+msgstr "הצגת _מהימנים"
 
-#: ../src/seahorse-key-manager.c:758
-msgid "Show type column"
-msgstr "הצגת עמודת הסוג"
+#: ../src/seahorse-key-manager.c:462
+msgid "Only show trusted keys, certificates and passwords"
+msgstr "הצגת המפתחות, האישורים והססמאות המהימנים בלבד"
 
-#: ../src/seahorse-key-manager.c:760
-msgid "_Expiry"
-msgstr "_תפוגה"
+#: ../src/seahorse-key-manager.c:463
+msgid "_Show _any"
+msgstr "הצגת _כלשהו"
 
-#: ../src/seahorse-key-manager.c:760
-msgid "Show expiry column"
-msgstr "הצגת עמודת התפוגה"
+#: ../src/seahorse-key-manager.c:464
+msgid "Show all keys, certificates and passwords"
+msgstr "הצגת כל המפתחות, האישורים והססמאות"
 
-#: ../src/seahorse-key-manager.c:762
-msgid "_Trust"
-msgstr "_מהימנות"
-
-#: ../src/seahorse-key-manager.c:762
-msgid "Show owner trust column"
-msgstr "הצגת מהימנות הבעלים"
-
-#: ../src/seahorse-key-manager.c:764
-msgid "_Validity"
-msgstr "_תוקף"
-
-#: ../src/seahorse-key-manager.c:764
-msgid "Show validity column"
-msgstr "הצגת עמודת התוקף"
-
-#: ../src/seahorse-key-manager.c:941
-msgid "Filter:"
-msgstr "מסנן:"
+#: ../src/seahorse-key-manager.c:648
+msgid "Filter"
+msgstr "מסנן"
 
 #: ../src/seahorse-key-manager.xml.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -1930,267 +2239,37 @@ msgid "Import existing keys from a file:"
 msgstr "ייבוא מפתחות קיימים מקובץ:"
 
 #: ../src/seahorse-key-manager.xml.h:4
-msgid "My _Personal Keys"
-msgstr "ה_מפתחות האישיים שלי"
-
-#: ../src/seahorse-key-manager.xml.h:5
-msgid "Other _Keys"
-msgstr "מפתחות _אחרים"
-
-#: ../src/seahorse-key-manager.xml.h:6
 msgid "To get started with encryption you will need keys."
 msgstr "על מנת להתחיל בהצפנה יש צורך במפתחות."
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:518
-msgid "_Import"
-msgstr "יי_בוא"
-
-#: ../src/seahorse-key-manager.xml.h:8
-msgid "_Passwords"
-msgstr "_ססמאות"
-
-#: ../src/seahorse-key-manager-store.c:610 ../src/seahorse-viewer.c:263
-msgid "Couldn't export keys"
-msgstr "לא ניתן לייצא מפתחות"
-
-#: ../src/seahorse-key-manager-store.c:820
-msgid "Validity"
-msgstr "תוקף"
-
-#. Expiry date column
-#: ../src/seahorse-key-manager-store.c:839
-msgid "Expiration Date"
-msgstr "תאריך תפוגה"
-
-#: ../src/seahorse-keyserver-results.c:256
-msgid "Close this window"
-msgstr "סגירת חלון זה"
-
-#: ../src/seahorse-keyserver-results.c:257
-msgid "_Expand All"
-msgstr "ה_רחבת הכול"
-
-#: ../src/seahorse-keyserver-results.c:258
-msgid "Expand all listings"
-msgstr "הרחבת כל הרשומות"
-
-#: ../src/seahorse-keyserver-results.c:259
-msgid "_Collapse All"
-msgstr "צמצום ה_כול"
-
-#: ../src/seahorse-keyserver-results.c:260
-msgid "Collapse all listings"
-msgstr "צמצום כל הרשומות"
-
-#: ../src/seahorse-keyserver-results.c:331
-msgid "Remote Keys"
-msgstr "מפתחות מרוחקים"
-
-#: ../src/seahorse-keyserver-results.c:333
-#, c-format
-msgid "Remote Keys Containing '%s'"
-msgstr "מפתחות מרוחקים שמכילים '%s'"
-
-#: ../src/seahorse-keyserver-search.xml.h:1
-msgid "<b>Key Servers:</b>"
-msgstr "<b>שרתי מפתח:</b>"
-
-#: ../src/seahorse-keyserver-search.xml.h:2
-msgid "<b>Shared Keys Near Me:</b>"
-msgstr "<b>מפתחות משותפים בסביבתי:</b>"
-
-#: ../src/seahorse-keyserver-search.xml.h:3
-msgid "Find Remote Keys"
-msgstr "חיפוש מפתחות מרוחקים"
-
-#: ../src/seahorse-keyserver-search.xml.h:4
-msgid ""
-"This will find keys for others on the Internet. These keys can then be "
-"imported into your local key ring."
-msgstr ""
-"פעולה זו תמצא מפתחות של אחרים באינטרנט. ניתן לייבא מפתחות אלה לקבוצת מפתחות "
-"מקומית."
-
-#: ../src/seahorse-keyserver-search.xml.h:5
-msgid "Where to search:"
-msgstr "איפה לחפש:"
-
-#: ../src/seahorse-keyserver-search.xml.h:6
-msgid "_Search"
-msgstr "_חיפוש:"
-
-#: ../src/seahorse-keyserver-search.xml.h:7
-msgid "_Search for keys containing: "
-msgstr "_חיפוש מפתחות שמכילים: "
-
-#: ../src/seahorse-keyserver-sync.c:58
-msgid "Couldn't publish keys to server"
-msgstr "לא ניתן לפרסם מפתחות לשרת"
-
-#: ../src/seahorse-keyserver-sync.c:77
-#, c-format
-msgid "Couldn't retrieve keys from server: %s"
-msgstr "לא ניתן לקבל מפתחות משרת: %s"
-
-#: ../src/seahorse-keyserver-sync.c:161
-#, c-format
-msgid "<b>%d key is selected for synchronizing</b>"
-msgid_plural "<b>%d keys are selected for synchronizing</b>"
-msgstr[0] "<b>מפתח אחד נבחר לסנכרון</b>"
-msgstr[1] "<b>%d מפתחות נבחרו לסנכרון</b>"
-
-#: ../src/seahorse-keyserver-sync.c:247
-msgid "Synchronizing keys..."
-msgstr "מפתחות מסתנכרנים..."
-
-#: ../src/seahorse-keyserver-sync.xml.h:1
-msgid "Sync Keys"
-msgstr "סנכרון מפתחות"
-
-#: ../src/seahorse-keyserver-sync.xml.h:2
-msgid ""
-"This will publish the keys in your key ring so they're available for others "
-"to use. You'll also get any changes others have made since you received "
-"their keys."
-msgstr ""
-"פעולה זו תפרסם את המפתחות בקבוצת המפתחות שלך כך שיהיו זמינים לשימושם של "
-"אחרים. שינויים שאחרים ביצעו יתקבלו אליך מאחר שקיבלת את מפתחותיהם."
-
-#: ../src/seahorse-keyserver-sync.xml.h:3
-msgid ""
-"This will retrieve any changes others have made since you received their "
-"keys. No key server has been chosen for publishing, so your keys will not be "
-"made available to others."
-msgstr ""
-"פעולה זו תקבל כל שינויים שאחרים ביצעו מאז שקיבלת את מפתחותיהם. לא נבחר שרת "
-"מפתחות לפרסום כך שמפתחותיך לא יהיו זמינים לאחרים."
-
-#: ../src/seahorse-keyserver-sync.xml.h:4
-msgid "_Key Servers"
-msgstr "_שרתי מפתח"
-
-#: ../src/seahorse-keyserver-sync.xml.h:5
-msgid "_Sync"
-msgstr "_סנכרון"
-
-#: ../src/seahorse-main.c:60
+#: ../src/seahorse-main.c:54
 msgid "Version of this application"
 msgstr "גרסת יישום זה"
 
-#: ../src/seahorse-viewer.c:123
-msgid "Contributions:"
-msgstr "תורמים:"
-
-#: ../src/seahorse-viewer.c:149
-msgid "translator-credits"
-msgstr ""
-"ירון שהרבני <sh.yaron@gmail.com>\n"
-"יאיר הרשקוביץ <yairhr@gmail.com>\n"
-"\n"
-"פרויקט תרגום GNOME לעברית\n"
-"‏http://gnome-il.berlios.de"
-
-#: ../src/seahorse-viewer.c:152
-msgid "Seahorse Project Homepage"
-msgstr "דף הבית של מיזם Seahorse"
-
-#. Top menu items
-#: ../src/seahorse-viewer.c:172
-msgid "_File"
-msgstr "_קובץ:"
-
-#: ../src/seahorse-viewer.c:173
-msgid "_Edit"
-msgstr "ע_ריכה"
-
-#: ../src/seahorse-viewer.c:174
-msgid "_View"
-msgstr "_תצוגה"
-
-#: ../src/seahorse-viewer.c:175
-msgid "_Help"
-msgstr "ע_זרה"
-
-#: ../src/seahorse-viewer.c:177
-msgid "Prefere_nces"
-msgstr "ה_עדפות"
-
-#: ../src/seahorse-viewer.c:178
-msgid "Change preferences for this program"
-msgstr "שינוי העדפות תכנית זאת"
-
-#: ../src/seahorse-viewer.c:181
-msgid "About this program"
-msgstr "על אודות תכנית זו"
-
-#: ../src/seahorse-viewer.c:182
-msgid "_Contents"
-msgstr "_תכנים"
-
-#: ../src/seahorse-viewer.c:183
-msgid "Show Seahorse help"
-msgstr "הצגת עזרה עבור Seahorse"
-
-#: ../src/seahorse-viewer.c:284
-msgid "Export public key"
-msgstr "ייצוא מפתח ציבורי"
-
-#: ../src/seahorse-viewer.c:305
-msgid "Exporting keys"
-msgstr "מפתחות מיוצאים"
-
-#: ../src/seahorse-viewer.c:334
-msgid "Couldn't retrieve data from key server"
-msgstr "לא ניתן לקבל מידע משרת המפתחות"
-
-#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:346
-msgid "Copied keys"
-msgstr "מפתחות מועתקים"
-
-#: ../src/seahorse-viewer.c:371
-msgid "Retrieving keys"
-msgstr "מתקבלים מפתחות"
-
-#: ../src/seahorse-viewer.c:426
+#: ../ssh/seahorse-ssh-actions.c:109
 #, c-format
-msgid "%s is a private key. Are you sure you want to proceed?"
-msgstr "‏%s הוא מפתח פרטי. להמשיך?"
+msgid "Are you sure you want to delete the secure shell key '%s'?"
+msgstr "האם למחוק את מפתח ה־SSH‏ '%s'?"
 
-#: ../src/seahorse-viewer.c:480
-msgid "Importing keys from key servers"
-msgstr "מיובאים מפתחות משרת מפתחות"
+#: ../ssh/seahorse-ssh-actions.c:113
+#, c-format
+msgid "Are you sure you want to delete %d secure shell keys?"
+msgstr "האם למחוק %d מפתחות SSH?"
 
-#: ../src/seahorse-viewer.c:505
-msgid "Show properties"
-msgstr "הצגת מאפיינים"
+#: ../ssh/seahorse-ssh-actions.c:120
+msgid "Couldn't delete key"
+msgstr "לא ניתן למחוק מפתח"
 
-#: ../src/seahorse-viewer.c:506
-msgctxt "This text refers to deleting an item from its type's backing store."
-msgid "_Delete"
-msgstr "מ_חיקה"
+#: ../ssh/seahorse-ssh-actions.c:132
+msgid "Configure Key for _Secure Shell..."
+msgstr "הגדרת מפתח עבור _SSH..."
 
-#: ../src/seahorse-viewer.c:507
-msgid "Delete selected items"
-msgstr "מחיקת הפריטים שנבחרו"
+#: ../ssh/seahorse-ssh-actions.c:133
+msgid "Send public Secure Shell key to another machine, and enable logins using that key."
+msgstr "שליחת מפתח SSH ציבורי למכונה אחרת ולאפשר התחברות בעזרת מפתח זה."
 
-#: ../src/seahorse-viewer.c:511
-msgid "E_xport..."
-msgstr "יי_צוא..."
-
-#: ../src/seahorse-viewer.c:512
-msgid "Export to a file"
-msgstr "ייצוא לקובץ"
-
-#: ../src/seahorse-viewer.c:514
-msgid "Copy to the clipboard"
-msgstr "העתקה ללוח הגזירים"
-
-#: ../src/seahorse-viewer.c:519
-msgid "Import selected keys to local key ring"
-msgstr "ייבוא המפתחות הנבחרים לקבוצת מפתחות מקומית"
-
-#: ../ssh/seahorse-ssh-askpass.c:60 ../ssh/seahorse-ssh-askpass.c:68
+#: ../ssh/seahorse-ssh-askpass.c:60
+#: ../ssh/seahorse-ssh-askpass.c:68
 msgid "Enter your Secure Shell passphrase:"
 msgstr "נא להזין את מילת צופן ה־SSH שלך:"
 
@@ -2203,7 +2282,8 @@ msgstr "מילת הצופן הישנה למפתח"
 msgid "Enter the old passphrase for: %s"
 msgstr "נא להזין את מילת הצופן הישנה עבור: %s"
 
-#: ../ssh/seahorse-ssh-askpass.c:87 ../ssh/seahorse-ssh-askpass.c:92
+#: ../ssh/seahorse-ssh-askpass.c:87
+#: ../ssh/seahorse-ssh-askpass.c:92
 msgid "New Key Passphrase"
 msgstr "מילת צופן חדשה למפתח"
 
@@ -2217,69 +2297,45 @@ msgstr "נא להזין מילת צופן חדש עבור: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "נא להזין את מילת הצופן החדשה שוב: %s"
 
-#: ../ssh/seahorse-ssh-commands.c:86
-msgid "Configure Key for _Secure Shell..."
-msgstr "הגדרת מפתח עבור _SSH..."
+#: ../ssh/seahorse-ssh-backend.c:92
+msgid "Secure Shell"
+msgstr "מעטפת מאובטחת"
 
-#: ../ssh/seahorse-ssh-commands.c:87
-msgid ""
-"Send public Secure Shell key to another machine, and enable logins using "
-"that key."
-msgstr "שליחת מפתח SSH ציבורי למכונה אחרת ולאפשר התחברות בעזרת מפתח זה."
+#: ../ssh/seahorse-ssh-backend.c:95
+msgid "Keys used to connect securely to other computers"
+msgstr "מפתחות המשמשים לחיבור בצורה מאובטחת למחשבים אחרים"
 
-#: ../ssh/seahorse-ssh-commands.c:118
-#, c-format
-msgid "Are you sure you want to delete the secure shell key '%s'?"
-msgstr "האם למחוק את מפתח ה־SSH‏ '%s'?"
-
-#: ../ssh/seahorse-ssh-commands.c:121
-#, c-format
-msgid "Are you sure you want to delete %d secure shell keys?"
-msgstr "האם למחוק %d מפתחות SSH?"
-
-#: ../ssh/seahorse-ssh-commands.c:133
-msgid "Couldn't delete key"
-msgstr "לא ניתן למחוק מפתח"
-
-#: ../ssh/seahorse-ssh-generate.c:60 ../ssh/seahorse-ssh-key.c:91
-#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-generate.c:55
+#: ../ssh/seahorse-ssh-key.c:95
+#: ../ssh/seahorse-ssh-key.c:99
+#: ../ssh/seahorse-ssh-key-properties.xml.h:19
 msgid "Secure Shell Key"
 msgstr "מפתח SSH"
 
-#: ../ssh/seahorse-ssh-generate.c:61
+#: ../ssh/seahorse-ssh-generate.c:56
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "משמש לגישה למחשבים אחרים (לדוגמה: דרך מסוף)"
 
-#: ../ssh/seahorse-ssh-generate.c:115 ../ssh/seahorse-ssh-generate.c:131
+#: ../ssh/seahorse-ssh-generate.c:110
+#: ../ssh/seahorse-ssh-generate.c:126
 msgid "Couldn't generate Secure Shell key"
 msgstr "לא ניתן ליצור מפתח SSH"
 
-#: ../ssh/seahorse-ssh-generate.c:197
+#: ../ssh/seahorse-ssh-generate.c:192
 msgid "Creating Secure Shell Key"
 msgstr "נוצר מפתח SSH"
 
 #: ../ssh/seahorse-ssh-generate.xml.h:2
-msgid ""
-"<i>Use your email address, and any other reminder you need about what this "
-"key is for.</i>"
-msgstr ""
-"ניתן להשתמש בכתובת הדוא״ל שלך, ובכל תזכורת אחרת על מנת לדעת למה משמש מפתח זה."
+msgid "<i>Your email address, or a reminder of what this key is for.</i>"
+msgstr "כתובת הדוא״ל שלך או תזכורת למה מיועד המפתח הזה."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:3
-msgid ""
-"A Secure Shell (SSH) key lets you connect securely to trusted computers "
-"using SSH, without entering a different password for each of them."
-msgstr ""
-"מפתח Secure Shell‏ (SSH) מאפשר לך להתחבר באופן בטוח למחשבים מהימנים באמצעות "
-"SSH ללא הזנת ססמה נפרדת לכול אחד מהם."
+msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
+msgstr "מפתח Secure Shell‏ (SSH) מאפשר לך להתחבר באופן בטוח למחשבים אחרים."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:5
-msgid ""
-"If there is already a computer you want to use this key with, you can set up "
-"that computer to recognize your key now. "
-msgstr ""
-"אם כבר ישנו מחשב מולו ברצונך להשתמש במפתח זה, ניתן להגדיר שמחשב זה יזהה את "
-"המפתח שלך כעת."
+msgid "If there a computer you want to use this key with, you can set up that computer to recognize your new key."
+msgstr "אם כבר ישנו מחשב מולו ברצונך להשתמש במפתח זה, ניתן להגדיר שמחשב זה יזהה את המפתח החדש שלך."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:7
 msgid "New Secure Shell Key"
@@ -2289,17 +2345,21 @@ msgstr "מפתח SSH חדש"
 msgid "_Create and Set Up"
 msgstr "י_צירה והגדרה"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:9
+#: ../ssh/seahorse-ssh-generate.xml.h:10
 msgid "_Just Create Key"
 msgstr "יצירת מפתח _בלבד"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:10
-msgid "_Key Description:"
-msgstr "_תיאור מפתח"
-
-#: ../ssh/seahorse-ssh-key.c:87
+#: ../ssh/seahorse-ssh-key.c:91
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(מפתח SSH לא קריא)"
+
+#: ../ssh/seahorse-ssh-key.c:195
+msgid "Personal SSH key"
+msgstr "מפתח SSH אישי"
+
+#: ../ssh/seahorse-ssh-key.c:197
+msgid "SSH key"
+msgstr "מפתח SSH"
 
 #: ../ssh/seahorse-ssh-key-properties.c:79
 msgid "Couldn't rename key."
@@ -2383,7 +2443,16 @@ msgstr "מפתח מיובא: %s"
 msgid "Importing key. Enter passphrase"
 msgstr "המפתח מיובא. נא להזין מילת צופן"
 
-#: ../ssh/seahorse-ssh-source.c:951
+#: ../ssh/seahorse-ssh-source.c:232
+msgid "OpenSSH directory"
+msgstr "תיקיית ה־OpenSSH"
+
+#: ../ssh/seahorse-ssh-source.c:235
+#, c-format
+msgid "OpenSSH: %s"
+msgstr "OpenSSH: %s"
+
+#: ../ssh/seahorse-ssh-source.c:1022
 msgid "No private key file is available for this key."
 msgstr "אין קובץ מפתח פרטי הזמין למפתח זה."
 
@@ -2404,12 +2473,8 @@ msgid "Set Up Computer for SSH Connection"
 msgstr "הגדרת המחשב לחיבור SSH"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:4
-msgid ""
-"To use your Secure Shell key with another computer that uses SSH, you must "
-"already have a login account on that computer."
-msgstr ""
-"כדי להשתמש במפתח ה־Secure Shell שלך מול מחשב אחר המשתמש ב־SSH, כבר צריך "
-"להיות לך חשבון כניסה למחשב זה."
+msgid "To use your Secure Shell key with another computer that uses SSH, you must already have a login account on that computer."
+msgstr "כדי להשתמש במפתח ה־Secure Shell שלך מול מחשב אחר המשתמש ב־SSH, כבר צריך להיות לך חשבון כניסה למחשב זה."
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
 msgid "_Computer Name:"
@@ -2422,6 +2487,90 @@ msgstr "_שם הכניסה:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "ה_גדרה"
+
+#~ msgid "Passwords: %s"
+#~ msgstr "ססמאות: %s"
+
+#~ msgid "<b>Passwords:</b> %s"
+#~ msgstr "<b>ססמאות:</b> %s"
+
+#~ msgid "New PGP Key"
+#~ msgstr "מפתח PGP חדש"
+
+#~ msgid "Create New ..."
+#~ msgstr "יצירת חדש..."
+
+#~ msgid "Selected %d key"
+
+#~ msgid_plural "Selected %d keys"
+#~ msgstr[0] "מפתח אחד נבחר"
+#~ msgstr[1] "%d מפתחות נבחרו"
+
+#~ msgid "Imported keys"
+#~ msgstr "מפתחות מיובאים"
+
+#~ msgid "Importing keys"
+#~ msgstr "מייבא מפתחות"
+
+#~ msgid "Unrecognized key type, or invalid data format"
+#~ msgstr "סוג מפתח לא מזוהה, או תצורת מידע שגויה"
+
+#~ msgid "Importing Keys"
+#~ msgstr "מפתחות מיובאים"
+
+#~ msgid "T_ypes"
+#~ msgstr "_סוגים"
+
+#~ msgid "Show type column"
+#~ msgstr "הצגת עמודת הסוג"
+
+#~ msgid "_Expiry"
+#~ msgstr "_תפוגה"
+
+#~ msgid "Show expiry column"
+#~ msgstr "הצגת עמודת התפוגה"
+
+#~ msgid "_Trust"
+#~ msgstr "_מהימנות"
+
+#~ msgid "Show owner trust column"
+#~ msgstr "הצגת מהימנות הבעלים"
+
+#~ msgid "_Validity"
+#~ msgstr "_תוקף"
+
+#~ msgid "Show validity column"
+#~ msgstr "הצגת עמודת התוקף"
+
+#~ msgid "Other _Keys"
+#~ msgstr "מפתחות _אחרים"
+
+#~ msgid "Validity"
+#~ msgstr "תוקף"
+
+#~ msgid "Expiration Date"
+#~ msgstr "תאריך תפוגה"
+
+#~ msgid "_Expand All"
+#~ msgstr "ה_רחבת הכול"
+
+#~ msgid "Expand all listings"
+#~ msgstr "הרחבת כל הרשומות"
+
+#~ msgid "_Collapse All"
+#~ msgstr "צמצום ה_כול"
+
+#~ msgid "Collapse all listings"
+#~ msgstr "צמצום כל הרשומות"
+
+#~ msgid "Copied keys"
+#~ msgstr "מפתחות מועתקים"
+
+#~ msgid "%s is a private key. Are you sure you want to proceed?"
+#~ msgstr "‏%s הוא מפתח פרטי. להמשיך?"
+
+#~ msgid "_Key Description:"
+#~ msgstr "_תיאור מפתח"
 
 #~ msgid "Do not run seahorse-daemon as a daemon"
 #~ msgstr "Do not run seahorse-daemon as a daemon"
@@ -2675,9 +2824,6 @@ msgstr "ה_גדרה"
 #~ msgid "Web Password"
 #~ msgstr "ססמת Web"
 
-#~ msgid "Network Password"
-#~ msgstr "ססמת רשת"
-
 #~ msgid "Couldn't set application access."
 #~ msgstr "לא ניתן להגדיר את הגישה ליישום."
 
@@ -2695,8 +2841,8 @@ msgstr "ה_גדרה"
 
 #~ msgid "_Write"
 #~ msgstr "_כתוב"
-
 #~ msgctxt "infinitive"
+
 #~ msgid "_Delete"
 #~ msgstr "מ_חיקה"
 
@@ -2776,16 +2922,19 @@ msgstr "ה_גדרה"
 #~ msgstr "Show session management options"
 
 #~ msgid "Key Imported"
+
 #~ msgid_plural "Keys Imported"
 #~ msgstr[0] "מפתח יובא"
 #~ msgstr[1] "מפתחות יובאו"
 
 #~ msgid "Imported %i key"
+
 #~ msgid_plural "Imported %i keys"
 #~ msgstr[0] "מפתח אחד יובא"
 #~ msgstr[1] "%i מפתחות יובאו"
 
 #~ msgid "Imported a key for"
+
 #~ msgid_plural "Imported keys for"
 #~ msgstr[0] "יובא מפתח עבור"
 #~ msgstr[1] "יובאו מפתחות עבור"
@@ -2823,9 +2972,6 @@ msgstr "ה_גדרה"
 #~ msgid "Loading Keys..."
 #~ msgstr "מפתחות נטענים..."
 
-#~ msgid "Searching for keys..."
-#~ msgstr "מחפש מפתחות..."
-
 #~ msgid "Uploading keys..."
 #~ msgstr "מעלה מפתחות..."
 
@@ -2849,9 +2995,6 @@ msgstr "ה_גדרה"
 
 #~ msgid "Synchronizing keys"
 #~ msgstr "מסנכרן מפתחות"
-
-#~ msgid "Encryption Key Manager"
-#~ msgstr "מנהל מפתח הצפנה"
 
 #~ msgid "DSA"
 #~ msgstr "DSA"
@@ -2905,248 +3048,166 @@ msgstr "ה_גדרה"
 #~| msgid "seahorse"
 #~ msgid "Seahorse Daemon"
 #~ msgstr "seahorse"
-
 #~ msgid "Create a PGP Key"
 #~ msgstr "צור מפתח PGP"
-
 #~ msgid "Other _Collected Keys"
 #~ msgstr "מפתחות _אחרים"
-
 #~ msgid "_Trusted Keys"
 #~ msgstr "מפתחות נ_בטחים"
-
 #~ msgid "/home/nate/.ssh/blah_rsa"
 #~ msgstr "/home/nate/.ssh/blah_rsa"
-
 #~ msgid "00:00:00:00:00"
 #~ msgstr "00:00:00:00:00"
-
 #~ msgid "Couldn't get default password keyring"
 #~ msgstr "לא ניתן לקבל את קבוצת סיסמאות ברירת המחדל"
-
 #~ msgid "Couldn't get list of password keyrings"
 #~ msgstr "לא ניתן לקבל את רשימת קבוצות הסיסמאות"
-
 #~ msgid "Couldn't remove keyring"
 #~ msgstr "לא ניתן להסיר קבוצת מפתחות"
-
 #~ msgid "Are you sure you want to permanently delete the '%s' keyring?"
 #~ msgstr "להסיר את קבוצת המפתחות '%s'?"
-
 #~ msgid "<b>Default Keyring</b>"
 #~ msgstr "<b>קבוצת מפתחות ברירת המחדל</b>"
-
 #~ msgid "Password and Encryption Settings"
 #~ msgstr "הגדרות סיסמה והצפנה"
-
-#~ msgid "_Add Keyring"
-#~ msgstr "_הוסף קבוצת מפתחות"
-
 #~ msgid "_Remove Keyring"
 #~ msgstr "_הסר קבוצת מפתחות"
-
 #~ msgid "Unknown Key: %s"
 #~ msgstr "מפתח לא ידוע: %s"
-
 #~ msgid "Unknown Key"
 #~ msgstr "מפתח לא ידוע"
-
 #~ msgid "Unavailable Key"
 #~ msgstr "מפתח לא זמין"
-
 #~ msgid ""
 #~ "%s is a private key. Make sure you have a backup. Do you still want to "
 #~ "delete it?"
 #~ msgstr "‏%s הוא מפתח פרטי. נא לוודא שקיים לו גיבוי. למחוק אותו?"
-
 #~ msgid "_Quit"
 #~ msgstr "_יציאה"
-
 #~ msgid "Create a new personal key"
 #~ msgstr "צור מפתח ציבורי חדש"
-
 #~ msgid "Import keys into your key ring from a file"
 #~ msgstr "יבא מפתחות לקבוצת המפתחות שלך מקובץ"
-
 #~ msgid "User ID"
 #~ msgstr "זיהוי משתמש"
-
 #~ msgid "_Close"
 #~ msgstr "_סגור"
-
 #~ msgid "_Key"
 #~ msgstr "_מפתח"
-
 #~ msgid "_About"
 #~ msgstr "_אודות"
-
-#~ msgid "P_roperties"
-#~ msgstr "מ_אפיינים"
-
 #~ msgid "E_xport Public Key..."
 #~ msgstr "י_צא מפתח ציבורי..."
-
 #~ msgid "_Copy Public Key"
 #~ msgstr "הע_תק מפתח ציבורי"
-
 #~ msgid "Copy public part of selected keys to the clipboard"
 #~ msgstr "העתק את החלק הציבורי של מפתח לקובץ"
-
-#~ msgid "_Delete Key"
-#~ msgstr "_מחק מפתח"
-
 #~ msgid "Imported %d key"
 #~ msgid_plural "Imported %d keys"
 #~ msgstr[0] "מפתח אחד יובא"
 #~ msgstr[1] "%d מפתחות יובאו"
-
 #~ msgid "Couldn't read file"
 #~ msgstr "לא ניתן לקרוא קובץ"
-
 #~ msgid "Back up Key Rings to Archive"
 #~ msgstr "גבה קבוצות מפתחות לארכיון"
-
 #~ msgid "_Back up Key Rings..."
 #~ msgstr "_גבה את קבוצות המפתחות..."
-
 #~ msgid "Back up all keys"
 #~ msgstr "גבה את כל המפתחות"
-
 #~ msgid "Set Up Computer for _Secure Shell..."
 #~ msgstr "הגדר מחשב עבור _SSH..."
-
 #~ msgid "Couldn't retrieve key data"
 #~ msgstr "לא ניתן לקבל את מידע המפתח"
-
 #~ msgid "Couldn't write key to file"
 #~ msgstr "לא ניתן לכתוב את המפתח לקובץ"
-
 #~ msgid "Couldn't import keys into key ring"
 #~ msgstr "לא ניתן ליבא מפתות לקבוצת המפתחות"
-
 #~ msgid "Couldn't write keys to file: %s"
 #~ msgstr "לא ניתן לכתוב מפתחות לקובץ: %s"
-
 #~ msgid "Save Remote Keys"
 #~ msgstr "שמור מפתחות מרוחקים"
-
 #~ msgid "No matching keys found"
 #~ msgstr "לא נמצאו מפתחות מתאימים"
-
 #~ msgid "Save Key As..."
 #~ msgstr "שמור מפתח בשם..."
-
 #~ msgid "Save selected keys as a file"
 #~ msgstr "בחר את המפתחות שנבחרו לקובץ"
-
 #~ msgid "_Copy Key"
 #~ msgstr "ה_עתק מפתח"
-
 #~ msgid "<b>You have selected multiple files or folders</b>"
 #~ msgstr "<b>בחרת קבצים או ספריות מרובות</b>"
-
 #~ msgid ""
 #~ "Because the files are located remotely, each file will be encrypted "
 #~ "separately."
 #~ msgstr "מכיוון שהקבצים ממוקמים במיקום מרוחק, כל קובץ יוצפן בנפרד."
-
 #~ msgid "Encrypt Multiple Files"
 #~ msgstr "הצפן קבצים מרובים "
-
 #~ msgid "Encrypt each file separately"
 #~ msgstr "הצפן כל קובץ בנפרד"
-
 #~ msgid "Package Name:"
 #~ msgstr "שם חבילה:"
-
 #~ msgid "encrypted-package"
 #~ msgstr "חבילה-מוצפנת"
-
 #~ msgid "Remote Encryption Keys"
 #~ msgstr "מפתחות הצפנה מרוחקים"
-
 #~ msgid "I have checked that this key belongs to '%s'"
 #~ msgstr "בדקתי שמפתח זה שייך ל-'%s'"
-
 #~ msgid "PGP Key: %s"
 #~ msgstr "מפתח PGP: %s"
-
 #~ msgid "Cache _Preferences"
 #~ msgstr "ה_עדפות מטמון:"
-
 #~ msgid "_Clear Cache"
 #~ msgstr "_נקה את המטמון"
-
-#~ msgid "_Show Window"
-#~ msgstr "הצג _חלון"
-
 #~ msgid "Do not daemonize seahorse-agent"
 #~ msgstr "Do not daemonize seahorse-agent"
-
 #~ msgid "Print variables in for a C type shell"
 #~ msgstr "Print variables in for a C type shell"
-
 #~ msgid "Display environment variables (the default)"
 #~ msgstr "Display environment variables (the default)"
-
 #~ msgid "Allow GPG agent request from any display"
 #~ msgstr "Allow GPG agent request from any display"
-
 #~ msgid "command..."
 #~ msgstr "command..."
-
 #~ msgid "Encryption Key Agent (Seahorse)"
 #~ msgstr "מנהל מפתחות הצפנה (Seahorse)"
-
 #~ msgid "no command specified to execute"
 #~ msgstr "no command specified to execute"
-
 #~ msgid "Key Name"
 #~ msgstr "שם מפתח"
-
 #~ msgid ""
 #~ "After performing an decrypt or verify operation from the applet, display "
 #~ "the resulting text in a window."
 #~ msgstr ""
 #~ "After performing an decrypt or verify operation from the applet, display "
 #~ "the resulting text in a window."
-
 #~ msgid ""
 #~ "After performing an encrypt or signing operation from the applet, display "
 #~ "the resulting text in a window."
 #~ msgstr ""
 #~ "After performing an encrypt or signing operation from the applet, display "
 #~ "the resulting text in a window."
-
 #~ msgid "Display cache reminder in the notification area"
 #~ msgstr "Display cache reminder in the notification area"
-
 #~ msgid "Display clipboard after decrypting"
 #~ msgstr "Display clipboard after decrypting"
-
 #~ msgid "Display clipboard after encrypting"
 #~ msgstr "Display clipboard after encrypting"
-
 #~ msgid "Expire passwords in the cache"
 #~ msgstr "Expire passwords in the cache"
-
 #~ msgid ""
 #~ "If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
 #~ "'internal' uses internal cache."
 #~ msgstr ""
 #~ "If set to 'gnome' uses gnome-keyring to cache passwords. When set to "
 #~ "'internal' uses internal cache."
-
 #~ msgid "Prompt before using GPG passwords in cache"
 #~ msgstr "Prompt before using GPG passwords in cache"
-
 #~ msgid ""
 #~ "Reflect the contents of the clipboard (whether encrypted, signed, etc...) "
 #~ "in the panel applet icon."
 #~ msgstr ""
 #~ "Reflect the contents of the clipboard (whether encrypted, signed, etc...) "
 #~ "in the panel applet icon."
-
 #, fuzzy
 #~ msgid ""
 #~ "Set to 'true' to enable display of the cache reminder in the notification "
@@ -3201,9 +3262,6 @@ msgstr "ה_גדרה"
 #~ msgid "_Default key:"
 #~ msgstr "מפתח _ברירת מחדל:"
 
-#~ msgid "Clipboard Text Encryption"
-#~ msgstr "Clipboard Text Encryption"
-
 #~ msgid "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
 #~ msgstr "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
 
@@ -3239,9 +3297,6 @@ msgstr "ה_גדרה"
 
 #~ msgid "_Import Key"
 #~ msgstr "_יבא מפתח"
-
-#~ msgid "Encrypted text"
-#~ msgstr "טקסט מוצפן"
 
 #~ msgid "Signed text"
 #~ msgstr "טקסט חתום"
@@ -3344,6 +3399,7 @@ msgstr "ה_גדרה"
 #~ msgstr "7-Zip (.7z)"
 
 #~ msgid "You have selected %d file "
+
 #~ msgid_plural "You have selected %d files "
 #~ msgstr[0] "בחרת קובץ אחד"
 #~ msgstr[1] "בחרת %d קבצים"
