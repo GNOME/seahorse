@@ -30,7 +30,8 @@ endif
 
 if WITH_KEYSERVER
 KEYSERVER_SRCS = seahorse-server-source.c seahorse-server-source.h 
-KEYSERVER_SRCS += seahorse-keyserver-search.c seahorse-keyserver-sync.c seahorse-keyserver-sync.h
+KEYSERVER_SRCS += seahorse-keyserver-search.c seahorse-keyserver-search.h
+KEYSERVER_SRCS += seahorse-keyserver-sync.c seahorse-keyserver-sync.h
 KEYSERVER_SRCS += seahorse-keyserver-results.c seahorse-keyserver-results.h
 else
 KEYSERVER_SRCS = 

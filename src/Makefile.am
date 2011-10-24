@@ -36,7 +36,6 @@ seahorse_SOURCES = \
 	seahorse-key-manager.c seahorse-key-manager.h \
 	seahorse-main.c \
 	seahorse-sidebar.c seahorse-sidebar.h \
-	seahorse-windows.h \
 	$(KEYSERVER_SRCS)
 
 seahorse_LDADD = \

@@ -1,7 +1,7 @@
 AC_PREREQ([2.63])
-AC_INIT([seahorse], [3.3.0],
-        [http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-keyring&component=gcr],
-        [gcr])
+AC_INIT([seahorse], [3.3.1],
+        [http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse],
+        [seahorse])
 
 GCK_REQUIRED=3.1.2
 GCR_REQUIRED=3.1.5
