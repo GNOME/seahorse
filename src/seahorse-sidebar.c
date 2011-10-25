@@ -23,6 +23,8 @@
 
 #include "seahorse-sidebar.h"
 
+#include "seahorse-action.h"
+#include "seahorse-actions.h"
 #include "seahorse-backend.h"
 #include "seahorse-place.h"
 #include "seahorse-registry.h"
@@ -52,12 +54,23 @@ struct _SeahorseSidebar {
 	/* A set of chosen uris, used with settings */
 	GHashTable *chosen;
 
+	/* Action icons */
+	GdkPixbuf *pixbuf_lock;
+	GdkPixbuf *pixbuf_unlock;
+	GdkPixbuf *pixbuf_lock_l;
+	GdkPixbuf *pixbuf_unlock_l;
+	GtkTreePath *action_highlight_path;
+	GtkCellRenderer *action_cell_renderer;
+	gint action_button_size;
+
 	guint update_places_sig;
 };
 
 struct _SeahorseSidebarClass {
 	GtkScrolledWindowClass parent_class;
 };
+
+#define ACTION_BUTTON_XPAD 6
 
 enum {
 	PROP_0,
@@ -80,6 +93,7 @@ enum {
 	SIDEBAR_CATEGORY,
 	SIDEBAR_COLLECTION,
 	SIDEBAR_URI,
+	SIDEBAR_ACTIONS,
 	SIDEBAR_N_COLUMNS
 };
 
@@ -92,6 +106,7 @@ static GType column_types[] = {
 	G_TYPE_STRING,
 	0 /* later */,
 	G_TYPE_STRING,
+	0 /* later */
 };
 
 enum {
@@ -109,12 +124,108 @@ seahorse_sidebar_init (SeahorseSidebar *self)
 	g_assert (SIDEBAR_N_COLUMNS == G_N_ELEMENTS (column_types));
 	column_types[SIDEBAR_ICON] = G_TYPE_ICON;
 	column_types[SIDEBAR_COLLECTION] = GCR_TYPE_COLLECTION;
+	column_types[SIDEBAR_ACTIONS] = GTK_TYPE_ACTION_GROUP;
 	self->store = gtk_list_store_newv (SIDEBAR_N_COLUMNS, column_types);
 
 	self->backends = g_ptr_array_new_with_free_func (g_object_unref);
 	self->checked = g_hash_table_new (g_direct_hash, g_direct_equal);
 	self->objects = GCR_UNION_COLLECTION (gcr_union_collection_new ());
 	self->chosen = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+}
+
+static guchar
+lighten_component (guchar cur_value)
+{
+	int new_value = cur_value + 24 + (cur_value >> 3);
+	return (new_value > 255) ? (guchar)255 : (guchar)new_value;
+}
+
+static GdkPixbuf *
+create_spotlight_pixbuf (GdkPixbuf* src)
+{
+	GdkPixbuf *dest;
+	int i, j;
+	int width, height, has_alpha, src_row_stride, dst_row_stride;
+	guchar *target_pixels, *original_pixels;
+	guchar *pixsrc, *pixdest;
+
+	dest = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (src),
+	                       gdk_pixbuf_get_has_alpha (src),
+	                       gdk_pixbuf_get_bits_per_sample (src),
+	                       gdk_pixbuf_get_width (src),
+	                       gdk_pixbuf_get_height (src));
+
+	has_alpha = gdk_pixbuf_get_has_alpha (src);
+	width = gdk_pixbuf_get_width (src);
+	height = gdk_pixbuf_get_height (src);
+	dst_row_stride = gdk_pixbuf_get_rowstride (dest);
+	src_row_stride = gdk_pixbuf_get_rowstride (src);
+	target_pixels = gdk_pixbuf_get_pixels (dest);
+	original_pixels = gdk_pixbuf_get_pixels (src);
+
+	for (i = 0; i < height; i++) {
+		pixdest = target_pixels + i * dst_row_stride;
+		pixsrc = original_pixels + i * src_row_stride;
+		for (j = 0; j < width; j++) {
+			*pixdest++ = lighten_component (*pixsrc++);
+			*pixdest++ = lighten_component (*pixsrc++);
+			*pixdest++ = lighten_component (*pixsrc++);
+			if (has_alpha) {
+				*pixdest++ = *pixsrc++;
+			}
+		}
+	}
+	return dest;
+}
+
+static void
+ensure_sidebar_pixbufs (SeahorseSidebar *self)
+{
+	GtkIconInfo *icon_info;
+	GIcon *icon;
+	GtkIconTheme *icon_theme;
+	GtkStyleContext *style;
+	gint height;
+
+	if (self->pixbuf_lock &&
+	    self->pixbuf_lock_l &&
+	    self->pixbuf_unlock_l &&
+	    self->pixbuf_unlock)
+		return;
+
+	icon_theme = gtk_icon_theme_get_default ();
+	style = gtk_widget_get_style_context (GTK_WIDGET (self));
+	if (!gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &self->action_button_size, &height))
+		self->action_button_size = 16;
+
+	/* Lock icon */
+	icon = g_themed_icon_new_with_default_fallbacks ("changes-prevent-symbolic");
+	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, self->action_button_size, 0);
+	if (!self->pixbuf_lock)
+		self->pixbuf_lock = gtk_icon_info_load_symbolic_for_context (icon_info, style, NULL, NULL);
+	if (!self->pixbuf_lock_l)
+		self->pixbuf_lock_l = create_spotlight_pixbuf (self->pixbuf_lock);
+	gtk_icon_info_free (icon_info);
+	g_object_unref (icon);
+
+	/* Unlock icon */
+	icon = g_themed_icon_new_with_default_fallbacks ("changes-allow-symbolic");
+	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, self->action_button_size, 0);
+	if (!self->pixbuf_unlock)
+		self->pixbuf_unlock = gtk_icon_info_load_symbolic_for_context (icon_info, style, NULL, NULL);
+	if (!self->pixbuf_unlock_l)
+		self->pixbuf_unlock_l = create_spotlight_pixbuf (self->pixbuf_unlock);
+	gtk_icon_info_free (icon_info);
+	g_object_unref (icon);
+}
+
+static void
+invalidate_sidebar_pixbufs (SeahorseSidebar *self)
+{
+	g_clear_object (&self->pixbuf_lock);
+	g_clear_object (&self->pixbuf_unlock);
+	g_clear_object (&self->pixbuf_lock_l);
+	g_clear_object (&self->pixbuf_unlock_l);
 }
 
 static void
@@ -177,11 +288,14 @@ update_backend (SeahorseSidebar *self,
                 GtkTreeIter *iter)
 {
 	GList *collections, *l;
+	GtkActionGroup *actions;
+	GtkActionGroup *cloned;
 	GParamSpec *spec;
 	gchar *category;
 	gchar *tooltip;
 	gchar *label;
 	GIcon *icon = NULL;
+	GList *objects;
 	gchar *uri;
 
 	collections = gcr_collection_get_objects (backend);
@@ -216,7 +330,16 @@ update_backend (SeahorseSidebar *self,
 		              "description", &tooltip,
 		              "icon", &icon,
 		              "uri", &uri,
+		              "actions", &actions,
 		              NULL);
+
+		cloned = NULL;
+		if (actions) {
+			objects = g_list_append (NULL, l->data);
+			cloned = seahorse_actions_clone_for_objects (actions, objects);
+			g_list_free (objects);
+			g_object_unref (actions);
+		}
 
 		spec = g_object_class_find_property (G_OBJECT_GET_CLASS (l->data), "label");
 		g_return_if_fail (spec != NULL);
@@ -230,9 +353,17 @@ update_backend (SeahorseSidebar *self,
 		                    SIDEBAR_ICON, icon,
 		                    SIDEBAR_EDITABLE, (spec->flags & G_PARAM_WRITABLE) ? TRUE : FALSE,
 		                    SIDEBAR_COLLECTION, l->data,
+		                    SIDEBAR_ACTIONS, cloned,
 		                    SIDEBAR_URI, uri,
 		                    -1);
-
+#if 0
+GtkAction *action;
+action = gtk_action_group_get_action (cloned, "lock");
+g_printerr ("lock sensitive: %d", gtk_action_get_sensitive (action));
+action = gtk_action_group_get_action (cloned, "unlock");
+g_printerr ("unlock sensitive: %d", gtk_action_get_sensitive (action));
+#endif
+		g_clear_object (&cloned);
 		g_clear_object (&icon);
 		g_free (label);
 		g_free (tooltip);
@@ -490,6 +621,91 @@ update_places_later (SeahorseSidebar *self)
 		self->update_places_sig = g_idle_add (on_idle_update_places, self);
 }
 
+static GtkAction *
+lookup_relevant_action_for_iter (GtkTreeModel *model,
+                                 GtkTreeIter *iter,
+                                 gboolean *is_lock)
+{
+	GtkActionGroup *actions = NULL;
+	GtkAction *action;
+
+	gtk_tree_model_get (model, iter,
+	                    SIDEBAR_ACTIONS, &actions,
+	                    -1);
+
+	if (!actions)
+		return NULL;
+
+	action = gtk_action_group_get_action (actions, "unlock");
+	if (action != NULL &&
+	    gtk_action_is_visible (action) &&
+	    gtk_action_is_sensitive (action)) {
+		*is_lock = FALSE;
+	} else {
+		action = gtk_action_group_get_action (actions, "lock");
+		if (action != NULL &&
+		    gtk_action_is_visible (action) &&
+		    gtk_action_is_sensitive (action)) {
+			*is_lock = TRUE;
+		} else {
+			action = NULL;
+		}
+	}
+
+	if (action)
+		g_object_ref (action);
+	g_object_unref (actions);
+	return action;
+}
+
+static void
+on_cell_renderer_action_icon (GtkTreeViewColumn *column,
+                              GtkCellRenderer *cell,
+                              GtkTreeModel *model,
+                              GtkTreeIter *iter,
+                              gpointer user_data)
+{
+	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
+	gboolean highlight = FALSE;
+	GtkTreePath *path;
+	GdkPixbuf *pixbuf = NULL;
+	GtkAction *action;
+	gboolean is_lock = FALSE;
+
+	action = lookup_relevant_action_for_iter (model, iter, &is_lock);
+
+	if (action == NULL) {
+		g_object_set (cell,
+		              "visible", FALSE,
+		              "pixbuf", NULL,
+		              NULL);
+		return;
+	}
+
+	ensure_sidebar_pixbufs (self);
+
+	pixbuf = NULL;
+	highlight = FALSE;
+
+	if (self->action_highlight_path) {
+		path = gtk_tree_model_get_path (model, iter);
+		highlight = gtk_tree_path_compare (path, self->action_highlight_path) == 0;
+		gtk_tree_path_free (path);
+	}
+
+	if (is_lock)
+		pixbuf = highlight ? self->pixbuf_unlock : self->pixbuf_unlock_l;
+	else
+		pixbuf = highlight ? self->pixbuf_lock : self->pixbuf_lock_l;
+
+	g_object_set (cell,
+	              "visible", TRUE,
+	              "pixbuf", pixbuf,
+	              NULL);
+
+	g_object_unref (action);
+}
+
 static void
 on_cell_renderer_heading_visible (GtkTreeViewColumn *column,
                                   GtkCellRenderer *cell,
@@ -556,23 +772,30 @@ on_cell_renderer_check (GtkTreeViewColumn *column,
                         GtkTreeIter *iter,
                         gpointer user_data)
 {
+#if 0
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
 	GcrCollection *collection;
 	RowType type;
+#endif
 	gboolean active;
 	gboolean inconsistent;
 	gboolean visible;
 
+#if 0
 	gtk_tree_model_get (model, iter,
 	                    SIDEBAR_ROW_TYPE, &type,
 	                    SIDEBAR_COLLECTION, &collection,
 	                    -1);
+#endif
 
 	active = FALSE;
 	inconsistent = FALSE;
 
+#if 0
 	if (type == TYPE_BACKEND) {
+#endif
 		visible = FALSE;
+#if 0
 	} else if (collection != NULL && g_hash_table_size (self->checked) > 0) {
 		active = g_hash_table_lookup (self->checked, collection) != NULL;
 		visible = TRUE;
@@ -580,6 +803,7 @@ on_cell_renderer_check (GtkTreeViewColumn *column,
 		visible = (gtk_widget_is_focus (GTK_WIDGET (self->tree_view)) &&
 		           collection == self->selected);
 	}
+#endif
 
 	/* self->mnemonics_visible */
 	g_object_set (cell,
@@ -588,7 +812,9 @@ on_cell_renderer_check (GtkTreeViewColumn *column,
 	              "inconsistent", inconsistent,
 	              NULL);
 
+#if 0
 	g_clear_object (&collection);
+#endif
 }
 
 static gboolean
@@ -782,6 +1008,106 @@ on_tree_view_popup_menu (GtkWidget *widget,
 	g_clear_object (&collection);
 }
 
+static void
+update_action_buttons_take_path (SeahorseSidebar *self,
+                                 GtkTreePath *path)
+{
+	GtkTreeIter iter;
+	GtkTreePath *old_path;
+	GtkTreeModel *model;
+
+	if (path == self->action_highlight_path) {
+		gtk_tree_path_free (path);
+		return;
+	}
+
+	if (path && self->action_highlight_path &&
+	    gtk_tree_path_compare (self->action_highlight_path, path) == 0) {
+		gtk_tree_path_free (path);
+		return;
+	}
+
+	old_path = self->action_highlight_path;
+	self->action_highlight_path = path;
+
+	model = GTK_TREE_MODEL (self->store);
+	if (self->action_highlight_path) {
+		if (gtk_tree_model_get_iter (model, &iter, self->action_highlight_path))
+			gtk_tree_model_row_changed (model, self->action_highlight_path, &iter);
+	}
+
+	if (old_path) {
+		if (gtk_tree_model_get_iter (model, &iter, old_path))
+			gtk_tree_model_row_changed (model, old_path, &iter);
+		gtk_tree_path_free (old_path);
+	}
+}
+
+static gboolean
+over_action_button (SeahorseSidebar *self,
+                    gint x,
+                    gint y,
+                    GtkTreePath **path)
+{
+	GtkTreeViewColumn *column;
+	gint width, x_offset, hseparator;
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+
+	*path = NULL;
+
+	if (gtk_tree_view_get_path_at_pos (self->tree_view, x, y, path,
+	                                   &column, NULL, NULL)) {
+
+		model = GTK_TREE_MODEL (self->store);
+		gtk_tree_model_get_iter (model, &iter, *path);
+
+		gtk_widget_style_get (GTK_WIDGET (self->tree_view),
+		                      "horizontal-separator", &hseparator,
+		                      NULL);
+
+		/* Reload cell attributes for this particular row */
+		gtk_tree_view_column_cell_set_cell_data (column,
+		                                         model, &iter, FALSE, FALSE);
+
+		gtk_tree_view_column_cell_get_position (column,
+		                                        self->action_cell_renderer,
+		                                        &x_offset, &width);
+
+		/* This is kinda weird, but we have to do it to workaround gtk+ expanding
+		 * the eject cell renderer (even thought we told it not to) and we then
+		 * had to set it right-aligned */
+		x_offset += width - hseparator - ACTION_BUTTON_XPAD - self->action_button_size;
+
+		if (x - x_offset >= 0 && x - x_offset <= self->action_button_size)
+			return TRUE;
+	}
+
+	if (*path != NULL) {
+		gtk_tree_path_free (*path);
+		*path = NULL;
+	}
+
+	return FALSE;
+}
+
+static gboolean
+on_tree_view_motion_notify_event (GtkWidget *widget,
+                                  GdkEventMotion *event,
+                                  gpointer user_data)
+{
+	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
+	GtkTreePath *path = NULL;
+
+	if (over_action_button (self, event->x, event->y, &path)) {
+		update_action_buttons_take_path (self, path);
+		return TRUE;
+	}
+
+	update_action_buttons_take_path (self, NULL);
+	return FALSE;
+}
+
 static gboolean
 on_tree_view_button_press_event (GtkWidget *widget,
                                  GdkEventButton *event,
@@ -812,6 +1138,45 @@ on_tree_view_button_press_event (GtkWidget *widget,
 	g_signal_emit (self, signals[CONTEXT_MENU], 0, collection);
 
 	g_clear_object (&collection);
+	return TRUE;
+}
+
+static gboolean
+on_tree_view_button_release_event (GtkWidget *widget,
+                                   GdkEventButton *event,
+                                   gpointer user_data)
+{
+	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
+	GtkTreePath *path;
+	GtkAction *action;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gboolean is_lock;
+	gboolean ret;
+	GtkWidget *window;
+
+	if (event->type != GDK_BUTTON_RELEASE)
+		return TRUE;
+
+	if (!over_action_button (self, event->x, event->y, &path))
+		return FALSE;
+
+	model = GTK_TREE_MODEL (self->store);
+
+	ret = gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_path_free (path);
+
+	if (!ret)
+		return FALSE;
+
+	action = lookup_relevant_action_for_iter (model, &iter, &is_lock);
+	if (action == NULL)
+		return FALSE;
+
+	window = gtk_widget_get_toplevel (widget);
+	seahorse_action_activate_with_window (action, GTK_WINDOW (window));
+	g_object_unref (action);
+
 	return TRUE;
 }
 
@@ -909,6 +1274,20 @@ seahorse_sidebar_constructed (GObject *obj)
 	                                         self, NULL);
 	g_signal_connect (cell, "toggled", G_CALLBACK (on_checked_toggled), self);
 
+	/* lock/unlock icon renderer */
+	cell = gtk_cell_renderer_pixbuf_new ();
+	self->action_cell_renderer = cell;
+	g_object_set (cell,
+	              "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE,
+	              "stock-size", GTK_ICON_SIZE_MENU,
+	              "xpad", ACTION_BUTTON_XPAD,
+	              "xalign", 1.0,
+	              NULL);
+	gtk_tree_view_column_pack_start (col, cell, FALSE);
+	gtk_tree_view_column_set_cell_data_func (col, cell,
+	                                         on_cell_renderer_action_icon,
+	                                         self, NULL);
+
 	gtk_tree_view_column_set_max_width (GTK_TREE_VIEW_COLUMN (col), 24);
 	gtk_tree_view_append_column (tree_view, col);
 
@@ -918,7 +1297,8 @@ seahorse_sidebar_constructed (GObject *obj)
 	gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL (self->store));
 	g_signal_connect (tree_view, "popup-menu", G_CALLBACK (on_tree_view_popup_menu), self);
 	g_signal_connect (tree_view, "button-press-event", G_CALLBACK (on_tree_view_button_press_event), self);
-
+	g_signal_connect (tree_view, "motion-notify-event", G_CALLBACK (on_tree_view_motion_notify_event), self);
+	g_signal_connect (tree_view, "button-release-event", G_CALLBACK (on_tree_view_button_release_event), self);
 	gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (tree_view));
 	gtk_widget_show (GTK_WIDGET (tree_view));
 	self->tree_view = tree_view;
@@ -995,6 +1375,8 @@ seahorse_sidebar_dispose (GObject *obj)
 		g_list_free (places);
 	}
 
+	invalidate_sidebar_pixbufs (self);
+
 	G_OBJECT_CLASS (seahorse_sidebar_parent_class)->dispose (obj);
 }
 
@@ -1013,6 +1395,9 @@ seahorse_sidebar_finalize (GObject *obj)
 
 	g_ptr_array_unref (self->backends);
 	g_object_unref (self->store);
+
+	if (self->action_highlight_path)
+		gtk_tree_path_free (self->action_highlight_path);
 
 	G_OBJECT_CLASS (seahorse_sidebar_parent_class)->finalize (obj);
 }

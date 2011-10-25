@@ -43,12 +43,14 @@ enum {
 	PROP_IS_DEFAULT,
 	PROP_URI,
 	PROP_ACTIONS,
+	PROP_LOCKED,
 };
 
 struct _SeahorseGkrKeyringPrivate {
 	GHashTable *items;
 	gchar *keyring_name;
 	gboolean is_default;
+	gboolean locked;
 
 	gpointer req_info;
 	GnomeKeyringInfo *keyring_info;
@@ -434,6 +436,9 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 	case PROP_ACTIONS:
 		g_value_set_object (value, self->pv->actions);
 		break;
+	case PROP_LOCKED:
+		g_value_set_boolean (value, seahorse_gkr_keyring_get_locked (self));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -463,10 +468,15 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 	g_object_class_install_property (gobject_class, PROP_KEYRING_INFO,
 	           g_param_spec_boxed ("keyring-info", "Gnome Keyring Info", "Info about keyring.", 
 	                               boxed_type_keyring_info (), G_PARAM_READWRITE));
-	
+
 	g_object_class_install_property (gobject_class, PROP_IS_DEFAULT,
 	           g_param_spec_boolean ("is-default", "Is default", "Is the default keyring.",
 	                                 FALSE, G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_LOCKED,
+	           g_param_spec_boolean ("locked", "Locked", "Keyring is locked?",
+	                                 FALSE, G_PARAM_READABLE));
+
 }
 
 static void
@@ -560,6 +570,7 @@ seahorse_gkr_keyring_set_info (SeahorseGkrKeyring *self, GnomeKeyringInfo *info)
 	g_object_freeze_notify (obj);
 	seahorse_gkr_keyring_realize (self);
 	g_object_notify (obj, "keyring-info");
+	g_object_notify (obj, "locked");
 	g_object_thaw_notify (obj);
 }
 
@@ -576,4 +587,14 @@ seahorse_gkr_keyring_set_is_default (SeahorseGkrKeyring *self, gboolean is_defau
 	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (self));
 	self->pv->is_default = is_default;
 	g_object_notify (G_OBJECT (self), "is-default");
+}
+
+gboolean
+seahorse_gkr_keyring_get_locked (SeahorseGkrKeyring *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), TRUE);
+
+	if (!self->pv->keyring_info)
+		return TRUE;
+	return gnome_keyring_info_get_is_locked (self->pv->keyring_info);
 }

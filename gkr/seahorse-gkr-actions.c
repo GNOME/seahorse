@@ -189,6 +189,15 @@ on_keyrings_unlock (GtkAction *action,
 }
 
 static void
+on_keyring_unlock (GtkAction *action,
+                   gpointer user_data)
+{
+	GtkWindow *parent = seahorse_action_get_window (action);
+	gnome_keyring_unlock (seahorse_gkr_keyring_get_name (SEAHORSE_GKR_KEYRING (user_data)), NULL,
+	                      on_keyring_unlock_done, g_object_ref (parent), g_object_unref);
+}
+
+static void
 on_keyring_lock_done (GnomeKeyringResult result, gpointer user_data)
 {
 	GtkWindow *parent = GTK_WINDOW (user_data);
@@ -217,6 +226,15 @@ on_keyrings_lock (GtkAction *action,
 		gnome_keyring_lock (seahorse_gkr_keyring_get_name (l->data),
 		                    on_keyring_lock_done, g_object_ref (parent), g_object_unref);
 	}
+}
+
+static void
+on_keyring_lock (GtkAction *action,
+                 gpointer user_data)
+{
+	GtkWindow *parent = seahorse_action_get_window (action);
+	gnome_keyring_lock (seahorse_gkr_keyring_get_name (SEAHORSE_GKR_KEYRING (user_data)),
+	                    on_keyring_lock_done, g_object_ref (parent), g_object_unref);
 }
 
 static void
@@ -344,6 +362,12 @@ static const GtkActionEntry KEYRING_ACTIONS[] = {
 	  N_("Change the unlock password of the password storage keyring"), G_CALLBACK (on_keyring_password) },
 	{ "keyring-properties", GTK_STOCK_PROPERTIES, NULL, NULL,
 	  N_("Properties of the keyring."), G_CALLBACK (on_keyring_properties) },
+
+	/* Generic actions used by the sidebar for the current selection */
+	{ "lock", NULL, NULL, "",
+	  N_("Lock the password storage keyring."), G_CALLBACK (on_keyring_lock) },
+	{ "unlock", NULL, NULL, "",
+	  N_("Unlock the password storage keyring."), G_CALLBACK (on_keyring_unlock) },
 };
 
 static const gchar* KEYRING_UI =
@@ -376,25 +400,18 @@ static GtkActionGroup *
 seahorse_gkr_keyring_actions_clone_for_objects (SeahorseActions *actions,
                                                 GList *objects)
 {
-	GnomeKeyringInfo *info;
 	gboolean locked = FALSE;
 	gboolean unlocked = FALSE;
-	gboolean can_default = FALSE;
 	GtkActionGroup *cloned;
 	GList *l;
 
 	g_return_val_if_fail (objects != NULL, NULL);
 
 	for (l = objects; l; l = g_list_next (l)) {
-		info = seahorse_gkr_keyring_get_info (l->data);
-		if (info != NULL) {
-			if (gnome_keyring_info_get_is_locked (info))
-				locked = TRUE;
-			else
-				unlocked = TRUE;
-			if (!seahorse_gkr_keyring_get_is_default (l->data))
-				can_default = TRUE;
-		}
+		if (seahorse_gkr_keyring_get_locked (l->data))
+			locked = TRUE;
+		else
+			unlocked = TRUE;
 	}
 
 	cloned = gtk_action_group_new ("KeyringObject");
@@ -413,7 +430,15 @@ seahorse_gkr_keyring_actions_clone_for_objects (SeahorseActions *actions,
 		                                   G_N_ELEMENTS (KEYRING_ACTIONS),
 		                                   g_object_ref (objects->data),
 		                                   g_object_unref);
-		gtk_action_set_sensitive (gtk_action_group_get_action (cloned, "keyring-default"), can_default);
+		g_object_bind_property (objects->data, "is-default",
+		                        gtk_action_group_get_action (cloned, "keyring-default"), "sensitive",
+		                        G_BINDING_INVERT_BOOLEAN | G_BINDING_SYNC_CREATE);
+		g_object_bind_property (objects->data, "locked",
+		                        gtk_action_group_get_action (cloned, "lock"), "sensitive",
+		                        G_BINDING_INVERT_BOOLEAN | G_BINDING_SYNC_CREATE);
+		g_object_bind_property (objects->data, "locked",
+		                        gtk_action_group_get_action (cloned, "unlock"), "sensitive",
+		                        G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
 	}
 
 	return cloned;
