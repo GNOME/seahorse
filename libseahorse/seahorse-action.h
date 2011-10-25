@@ -25,23 +25,14 @@
 
 #include <gtk/gtk.h>
 
-void                  seahorse_action_reset                     (GtkAction *action);
-
-void                  seahorse_action_set_cancellable           (GtkAction *action,
-                                                                 GCancellable *cancellable);
-
-void                  seahorse_action_cancel                    (GtkAction *action);
-
-GtkWindow *           seahorse_action_get_window                (GtkAction *action);
-
-gpointer              seahorse_action_get_object                (GtkAction *action);
-
-GList *               seahorse_action_get_objects               (GtkAction *action);
-
-void                  seahorse_action_set_window                (GtkAction *action,
+void                  seahorse_action_pre_activate_with_window  (GtkAction *action,
                                                                  GtkWindow *window);
 
-void                  seahorse_action_set_objects               (GtkAction *action,
-                                                                 GList *objects);
+void                  seahorse_action_activate_with_window      (GtkAction *action,
+                                                                 GtkWindow *window);
+
+void                  seahorse_action_post_activate             (GtkAction *action);
+
+GtkWindow *           seahorse_action_get_window                (GtkAction *action);
 
 #endif

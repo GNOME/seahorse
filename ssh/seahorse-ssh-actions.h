@@ -23,6 +23,8 @@
 #ifndef __SEAHORSE_SSH_ACTIONS_H__
 #define __SEAHORSE_SSH_ACTIONS_H__
 
+#include <gtk/gtk.h>
+
 GtkActionGroup *       seahorse_ssh_actions_instance           (void);
 
 #endif

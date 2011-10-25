@@ -30,6 +30,7 @@
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
 #include "seahorse-object.h"
+#include "seahorse-object-list.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
 
@@ -72,9 +73,8 @@ static void
 on_ssh_upload (GtkAction* action,
                gpointer user_data)
 {
-	GList *ssh_keys;
+	GList *ssh_keys = user_data;
 
-	ssh_keys = seahorse_action_get_objects (action);
 	if (ssh_keys == NULL)
 		return;
 
@@ -85,7 +85,7 @@ static void
 on_show_properties (GtkAction *action,
                     gpointer user_data)
 {
-	seahorse_ssh_key_properties_show (seahorse_action_get_object (action),
+	seahorse_ssh_key_properties_show (SEAHORSE_SSH_KEY (user_data),
 	                                  seahorse_action_get_window (action));
 }
 
@@ -100,7 +100,7 @@ on_delete_objects (GtkAction *action,
 	GError *error = NULL;
 	GList* objects;
 
-	objects = seahorse_action_get_objects (action);
+	objects = user_data;
 	num = g_list_length (objects);
 	if (num == 0) {
 		return;
@@ -121,21 +121,24 @@ on_delete_objects (GtkAction *action,
 			}
 		}
 	} else {
-		seahorse_action_cancel (action);
+		g_cancellable_cancel (g_cancellable_get_current ());
 	}
 
 	g_free (prompt);
 
 }
 
-static const GtkActionEntry KEY_ACTIONS[] = {
+static const GtkActionEntry KEYS_ACTIONS[] = {
 	{ "remote-ssh-upload", NULL, N_ ("Configure Key for _Secure Shell..."), "",
 		N_ ("Send public Secure Shell key to another machine, and enable logins using that key."),
 		G_CALLBACK (on_ssh_upload) },
-	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
-	  N_("Properties of the key."), G_CALLBACK (on_show_properties) },
 	{ "delete", GTK_STOCK_DELETE, NULL, NULL,
 	  N_("Delete the key."), G_CALLBACK (on_delete_objects) },
+};
+
+static const GtkActionEntry KEY_ACTIONS[] = {
+	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
+	  N_("Properties of the key."), G_CALLBACK (on_show_properties) },
 };
 
 static void
@@ -143,14 +146,42 @@ seahorse_ssh_actions_init (SeahorseSshActions *self)
 {
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, KEY_ACTIONS, G_N_ELEMENTS (KEY_ACTIONS), self);
+	gtk_action_group_add_actions (actions, KEYS_ACTIONS, G_N_ELEMENTS (KEYS_ACTIONS), NULL);
+	gtk_action_group_set_visible (actions, FALSE);
 	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), UI_DEFINITION);
+}
+
+static GtkActionGroup *
+seahorse_ssh_actions_clone_for_objects (SeahorseActions *actions,
+                                        GList *objects)
+{
+	GtkActionGroup *cloned;
+
+	g_return_val_if_fail (actions, NULL);
+
+	cloned = gtk_action_group_new ("SshKey");
+	gtk_action_group_set_translation_domain (cloned, GETTEXT_PACKAGE);
+
+	gtk_action_group_add_actions_full (cloned, KEYS_ACTIONS,
+	                                   G_N_ELEMENTS (KEYS_ACTIONS),
+	                                   seahorse_object_list_copy (objects),
+	                                   seahorse_object_list_free);
+
+	/* A single object */
+	if (!objects->next)
+		gtk_action_group_add_actions_full (cloned, KEY_ACTIONS,
+		                                   G_N_ELEMENTS (KEY_ACTIONS),
+		                                   g_object_ref (objects->data),
+		                                   g_object_unref);
+
+	return cloned;
 }
 
 static void
 seahorse_ssh_actions_class_init (SeahorseSshActionsClass *klass)
 {
-
+	SeahorseActionsClass *actions_class = SEAHORSE_ACTIONS_CLASS (klass);
+	actions_class->clone_for_objects = seahorse_ssh_actions_clone_for_objects;
 }
 
 GtkActionGroup *
@@ -160,7 +191,7 @@ seahorse_ssh_actions_instance (void)
 
 	if (actions == NULL) {
 		actions = g_object_new (SEAHORSE_TYPE_SSH_ACTIONS,
-		                        "name", "ssh-key",
+		                        "name", "SshKey",
 		                        NULL);
 		g_object_add_weak_pointer (G_OBJECT (actions),
 		                           (gpointer *)&actions);

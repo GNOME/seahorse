@@ -30,11 +30,11 @@ struct _SeahorseActionsPrivate {
 
 G_DEFINE_TYPE (SeahorseActions, seahorse_actions, GTK_TYPE_ACTION_GROUP);
 
-static void
-seahorse_actions_real_update (SeahorseActions *self,
-                              GList *selected)
+static GtkActionGroup *
+seahorse_actions_real_clone_for_objects (SeahorseActions *self,
+                                         GList *selected)
 {
-
+	return gtk_action_group_new ("internal");
 }
 
 static void
@@ -57,8 +57,7 @@ static void
 seahorse_actions_class_init (SeahorseActionsClass *klass)
 {
 	g_type_class_add_private (klass, sizeof (SeahorseActionsPrivate));
-
-	klass->update = seahorse_actions_real_update;
+	klass->clone_for_objects = seahorse_actions_real_clone_for_objects;
 }
 
 const gchar *
@@ -69,19 +68,25 @@ seahorse_actions_get_definition (SeahorseActions* self)
 }
 
 void
-seahorse_actions_update (SeahorseActions *self,
-                         GList *selected)
-{
-	g_return_if_fail (SEAHORSE_IS_ACTIONS (self));
-	g_return_if_fail (SEAHORSE_ACTIONS_GET_CLASS (self)->update);
-	SEAHORSE_ACTIONS_GET_CLASS (self)->update (self, selected);
-}
-
-void
 seahorse_actions_register_definition (SeahorseActions *self,
                                       const gchar *definition)
 {
 	g_return_if_fail (SEAHORSE_IS_ACTIONS (self));
 	g_return_if_fail (self->pv->definition == NULL);
 	self->pv->definition = definition;
+}
+
+GtkActionGroup *
+seahorse_actions_clone_for_objects (GtkActionGroup *actions,
+                                    GList *objects)
+{
+	SeahorseActionsClass *klass;
+
+	g_return_val_if_fail (GTK_IS_ACTION_GROUP (actions), NULL);
+
+	if (!SEAHORSE_IS_ACTIONS (actions))
+		return g_object_ref (actions);
+	klass = SEAHORSE_ACTIONS_GET_CLASS (actions);
+	g_assert (klass->clone_for_objects != NULL);
+	return (klass->clone_for_objects) (SEAHORSE_ACTIONS (actions), objects);
 }

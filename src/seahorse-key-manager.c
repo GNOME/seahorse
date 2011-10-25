@@ -478,13 +478,6 @@ seahorse_key_manager_get_selected_places (SeahorseViewer* viewer)
 	return seahorse_sidebar_get_selected_places (self->pv->sidebar);
 }
 
-static GList *
-seahorse_key_manager_get_selected_backends (SeahorseViewer* viewer)
-{
-	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (viewer);
-	return seahorse_sidebar_get_backends (self->pv->sidebar);
-}
-
 static gboolean
 on_idle_save_sidebar_width (gpointer user_data)
 {
@@ -533,6 +526,7 @@ setup_sidebar (SeahorseKeyManager *self)
 	GtkWidget *area, *panes;
 	GtkActionGroup *actions;
 	GtkAction *action;
+	GList *backends, *l;
 
 	self->pv->sidebar = seahorse_sidebar_new ();
 	area = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-area");
@@ -566,6 +560,16 @@ setup_sidebar (SeahorseKeyManager *self)
 	g_signal_connect (self->pv->sidebar, "size_allocate", G_CALLBACK (on_sidebar_panes_size_allocate), self);
 	g_signal_connect (self->pv->sidebar, "context-menu", G_CALLBACK (on_sidebar_popup_menu), self);
 
+	backends = seahorse_sidebar_get_backends (self->pv->sidebar);
+	for (l = backends; l != NULL; l = g_list_next (l)) {
+		actions = NULL;
+		g_object_get (l->data, "actions", &actions, NULL);
+		if (actions != NULL) {
+			seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
+			g_object_unref (actions);
+		}
+	}
+
 	return seahorse_sidebar_get_collection (self->pv->sidebar);
 }
 
@@ -584,7 +588,7 @@ seahorse_key_manager_constructed (GObject *object)
 	self->pv->collection = setup_sidebar (self);
 
 	gtk_window_set_title (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)), _("Passwords and Keys"));
-	
+
 	actions = gtk_action_group_new ("general");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, GENERAL_ACTIONS, G_N_ELEMENTS (GENERAL_ACTIONS), self);
@@ -760,7 +764,6 @@ seahorse_key_manager_class_init (SeahorseKeyManagerClass *klass)
 
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_key_manager_get_selected_objects;
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_places = seahorse_key_manager_get_selected_places;
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected_backends = seahorse_key_manager_get_selected_backends;
 }
 
 SeahorseWidget *

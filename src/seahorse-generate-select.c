@@ -69,7 +69,6 @@ get_selected_action (SeahorseGenerateSelect *self)
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GtkAction *action;
-	GtkWindow *parent;
 
 	selection = gtk_tree_view_get_selection (self->view);
 	if (!gtk_tree_selection_get_selected (selection, &model, &iter))
@@ -78,9 +77,6 @@ get_selected_action (SeahorseGenerateSelect *self)
 	gtk_tree_model_get (GTK_TREE_MODEL (self->store), &iter,
 	                    COLUMN_ACTION, &action, -1);
 	g_assert (action != NULL);
-
-	parent = gtk_window_get_transient_for (GTK_WINDOW (self));
-	seahorse_action_set_window (action, parent);
 
 	return action;
 }
@@ -93,12 +89,20 @@ on_row_activated (GtkTreeView *view,
 {
 	SeahorseGenerateSelect *self = SEAHORSE_GENERATE_SELECT (user_data);
 	GtkAction *action;
+	GtkWindow *parent;
 
 	action = get_selected_action (self);
 	if (action != NULL) {
+		parent = gtk_window_get_transient_for (GTK_WINDOW (self));
+		if (parent != NULL)
+			g_object_ref (parent);
+
 		g_object_ref (action);
 		gtk_widget_destroy (GTK_WIDGET (self));
-		gtk_action_activate (action);
+
+		seahorse_action_activate_with_window (action, parent);
+
+		g_clear_object (&parent);
 		g_object_unref (action);
 	}
 }
@@ -110,17 +114,23 @@ on_response (GtkDialog *dialog,
 {
 	SeahorseGenerateSelect *self = SEAHORSE_GENERATE_SELECT (user_data);
 	GtkAction *action = NULL;
+	GtkWindow *parent = NULL;
 
 	if (response == GTK_RESPONSE_OK) 
 		action = get_selected_action (self);
-	if (action != NULL)
+	if (action != NULL) {
 		g_object_ref (action);
+		parent = gtk_window_get_transient_for (GTK_WINDOW (self));
+		if (parent != NULL)
+			g_object_ref (parent);
+	}
 
 	gtk_widget_destroy (GTK_WIDGET (self));
 
 	if (action != NULL) {
-		gtk_action_activate (action);
+		seahorse_action_activate_with_window (action, parent);
 		g_object_unref (action);
+		g_clear_object (&parent);
 	}
 }
 

@@ -37,6 +37,7 @@
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
 #include "seahorse-object.h"
+#include "seahorse-object-list.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
 
@@ -82,9 +83,8 @@ on_remote_sync (GtkAction* action,
                 gpointer user_data)
 {
 	SeahorseGpgmeKeyring *keyring;
-	GList* objects;
+	GList* objects = user_data;
 
-	objects = seahorse_action_get_objects (action);
 	if (objects == NULL) {
 		keyring = seahorse_pgp_backend_get_default_keyring (NULL);
 		objects = gcr_collection_get_objects (GCR_COLLECTION (keyring));
@@ -96,9 +96,12 @@ on_remote_sync (GtkAction* action,
 	g_list_free (objects);
 }
 
-static const GtkActionEntry BACKEND_ACTIONS[] = {
+static const GtkActionEntry FIND_ACTIONS[] = {
 	{ "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
 	  N_("Search for keys on a key server"), G_CALLBACK (on_remote_find) },
+};
+
+static const GtkActionEntry SYNC_ACTIONS[] = {
 	{ "remote-sync", GTK_STOCK_REFRESH, N_("_Sync and Publish Keys..."), "",
 	  N_("Publish and/or synchronize your keys with those online."), G_CALLBACK (on_remote_sync) }
 };
@@ -108,8 +111,10 @@ seahorse_pgp_backend_actions_init (SeahorsePgpBackendActions *self)
 {
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, BACKEND_ACTIONS,
-	                              G_N_ELEMENTS (BACKEND_ACTIONS), self);
+	gtk_action_group_add_actions (actions, FIND_ACTIONS,
+	                              G_N_ELEMENTS (FIND_ACTIONS), NULL);
+	gtk_action_group_add_actions (actions, SYNC_ACTIONS,
+	                              G_N_ELEMENTS (SYNC_ACTIONS), NULL);
 	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), BACKEND_DEFINITION);
 }
 
@@ -174,19 +179,20 @@ on_key_sign (GtkAction* action,
              gpointer user_data)
 {
 	GtkWindow *window;
-	GObject *key;
+	GList *objects = user_data;
 
-	key = seahorse_action_get_object (action);
+	g_return_if_fail (objects->data);
+
 	window = seahorse_action_get_window (action);
 
-	seahorse_gpgme_sign_prompt (SEAHORSE_GPGME_KEY (key), window);
+	seahorse_gpgme_sign_prompt (SEAHORSE_GPGME_KEY (objects->data), window);
 }
 
 static void
 on_show_properties (GtkAction *action,
                     gpointer user_data)
 {
-	seahorse_pgp_key_properties_show (seahorse_action_get_object (action),
+	seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (user_data),
 	                                  seahorse_action_get_window (action));
 }
 
@@ -206,7 +212,7 @@ on_delete_objects (GtkAction *action,
 	GError *error = NULL;
 	GList *objects;
 
-	objects = seahorse_action_get_objects (action);
+	objects = user_data;
 	num = g_list_length (objects);
 	if (num == 0)
 		return;
@@ -260,7 +266,7 @@ on_delete_objects (GtkAction *action,
 	parent = GTK_WIDGET (seahorse_action_get_window (action));
 	if (!seahorse_util_prompt_delete (message, parent)) {
 		g_free (message);
-		seahorse_action_cancel (action);
+		g_cancellable_cancel (g_cancellable_get_current ());
 		return;
 	}
 
@@ -292,6 +298,9 @@ static const GtkActionEntry KEY_ACTIONS[] = {
 	  N_("Sign public key"), G_CALLBACK (on_key_sign) },
 	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
 	  N_("Properties of the key."), G_CALLBACK (on_show_properties) },
+};
+
+static const GtkActionEntry KEYS_ACTIONS[] = {
 	{ "delete", GTK_STOCK_DELETE, NULL, NULL,
 	  N_("Delete the key."), G_CALLBACK (on_delete_objects) },
 };
@@ -302,15 +311,48 @@ seahorse_gpgme_key_actions_init (SeahorseGpgmeKeyActions *self)
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, KEY_ACTIONS,
-	                              G_N_ELEMENTS (KEY_ACTIONS), self);
+	                              G_N_ELEMENTS (KEY_ACTIONS), NULL);
+	gtk_action_group_add_actions (actions, KEYS_ACTIONS,
+	                              G_N_ELEMENTS (KEYS_ACTIONS), NULL);
+	gtk_action_group_set_visible (actions, FALSE);
 	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), KEY_DEFINITION);
 
+}
+
+static GtkActionGroup *
+seahorse_gpgme_key_actions_clone_for_objects (SeahorseActions *actions,
+                                              GList *objects)
+{
+	GtkActionGroup *cloned;
+
+	g_return_val_if_fail (objects != NULL, NULL);
+
+	cloned = gtk_action_group_new ("GpgmeKey");
+	gtk_action_group_add_actions_full (cloned, KEYS_ACTIONS,
+	                                   G_N_ELEMENTS (KEYS_ACTIONS),
+	                                   seahorse_object_list_copy (objects),
+	                                   seahorse_object_list_free);
+	gtk_action_group_add_actions_full (cloned, SYNC_ACTIONS,
+	                                   G_N_ELEMENTS (SYNC_ACTIONS),
+	                                   seahorse_object_list_copy (objects),
+	                                   seahorse_object_list_free);
+
+	/* Single key */
+	if (!objects->next) {
+		gtk_action_group_add_actions_full (cloned, KEY_ACTIONS,
+		                                   G_N_ELEMENTS (KEY_ACTIONS),
+		                                   g_object_ref (objects->data),
+		                                   g_object_unref);
+	}
+
+	return cloned;
 }
 
 static void
 seahorse_gpgme_key_actions_class_init (SeahorseGpgmeKeyActionsClass *klass)
 {
-
+	SeahorseActionsClass *actions_class = SEAHORSE_ACTIONS_CLASS (klass);
+	actions_class->clone_for_objects = seahorse_gpgme_key_actions_clone_for_objects;
 }
 
 GtkActionGroup *

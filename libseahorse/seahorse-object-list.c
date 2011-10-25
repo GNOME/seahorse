@@ -64,12 +64,13 @@ seahorse_object_list_copy (GList *original)
 }
 
 void
-seahorse_object_list_free (GList *list)
+seahorse_object_list_free (gpointer list)
 {
 	GList *l;
-	
+
 	for (l = list; l; l = g_list_next (l))
 		g_object_unref (l->data);
+	g_list_free (list);
 }
 
 GType

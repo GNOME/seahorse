@@ -47,7 +47,7 @@ struct _SeahorseViewer {
 struct _SeahorseViewerClass {
 	SeahorseWidgetClass parent;
 
-	GList *          (*get_selected_backends)         (SeahorseViewer *self);
+	GList *          (*get_backends)                  (SeahorseViewer *self);
 
 	GList *          (*get_selected_places)           (SeahorseViewer *self);
 
@@ -67,7 +67,7 @@ GList *             seahorse_viewer_get_selected_objects            (SeahorseVie
 
 GList *             seahorse_viewer_get_selected_places             (SeahorseViewer* self);
 
-GList *             seahorse_viewer_get_selected_backends           (SeahorseViewer* self);
+GList *             seahorse_viewer_get_backends                    (SeahorseViewer* self);
 
 void                seahorse_viewer_show_context_menu               (SeahorseViewer* self,
                                                                      const gchar *which,
@@ -77,26 +77,6 @@ void                seahorse_viewer_show_context_menu               (SeahorseVie
 void                seahorse_viewer_show_properties                 (SeahorseViewer* self,
                                                                      GObject* obj);
 
-#if 0
-void                seahorse_viewer_set_status                      (SeahorseViewer* self,
-                                                                     const char* text);
-
-void                seahorse_viewer_set_numbered_status             (SeahorseViewer* self,
-                                                                     const char* text,
-                                                                     gint num);
-#endif
-
 GtkWindow *         seahorse_viewer_get_window                      (SeahorseViewer* self);
-
-#if 0
-void                seahorse_viewer_register_ui                     (SeahorseViewer *self,
-                                                                     SeahorsePredicate *pred,
-                                                                     const gchar *uidef,
-                                                                     GtkActionGroup *actions);
-
-void                seahorse_viewer_register_commands               (SeahorseViewer *self,
-                                                                     SeahorsePredicate *pred,
-                                                                     SeahorseCommands *commands);
-#endif
 
 #endif /* __SEAHORSE_VIEWER_H__ */

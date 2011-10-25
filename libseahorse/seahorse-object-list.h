@@ -37,6 +37,6 @@ GList*     seahorse_object_list_remove       (GList *original, gpointer object);
 
 GList*     seahorse_object_list_copy         (GList *original);
 
-void       seahorse_object_list_free         (GList *list);
+void       seahorse_object_list_free         (gpointer list);
 
 #endif /* SEAHORSEOBJECTLIST_H_ */

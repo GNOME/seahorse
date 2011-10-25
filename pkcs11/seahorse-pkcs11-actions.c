@@ -31,6 +31,7 @@
 
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
+#include "seahorse-object-list.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
@@ -69,10 +70,10 @@ on_show_properties (GtkAction *action,
 	gpointer previous;
 	GObject *object;
 
-	object = seahorse_action_get_object (action);
+	object = G_OBJECT (user_data);
 
 	/* Try to show an already present window */
-	previous = g_object_get_qdata (G_OBJECT (object), QUARK_WINDOW);
+	previous = g_object_get_qdata (object, QUARK_WINDOW);
 	if (GTK_IS_WINDOW (previous)) {
 		window = GTK_WINDOW (previous);
 		if (gtk_widget_get_visible (GTK_WIDGET (window))) {
@@ -111,17 +112,18 @@ on_delete_objects (GtkAction *action,
 {
 	GCancellable *cancellable;
 	gchar *prompt;
-	const gchar *display;
+	gchar *display;
 	GtkWidget *parent;
 	gboolean ret;
 	guint num;
 	GList *objects;
 
-	objects = seahorse_action_get_objects (action);
+	objects = user_data;
 	num = g_list_length (objects);
 	if (num == 1) {
-		display = seahorse_object_get_label (SEAHORSE_OBJECT (objects->data));
+		g_object_get (objects->data, "label", &display, NULL);
 		prompt = g_strdup_printf (_("Are you sure you want to delete the certificate '%s'?"), display);
+		g_free (display);
 	} else {
 		prompt = g_strdup_printf (ngettext (
 				"Are you sure you want to delete %d certificate?",
@@ -140,13 +142,16 @@ on_delete_objects (GtkAction *action,
 		seahorse_progress_show (cancellable, _("Deleting"), TRUE);
 		g_object_unref (cancellable);
 	} else {
-		seahorse_action_cancel (action);
+		g_cancellable_cancel (g_cancellable_get_current ());
 	}
 }
 
 static const GtkActionEntry CERTIFICATE_ACTIONS[] = {
 	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
 	  N_("Properties of the certificate."), G_CALLBACK (on_show_properties) },
+};
+
+static const GtkActionEntry CERTIFICATES_ACTIONS[] = {
 	{ "delete", GTK_STOCK_DELETE, NULL, NULL,
 	  N_("Delete the certificate."), G_CALLBACK (on_delete_objects) },
 };
@@ -154,15 +159,40 @@ static const GtkActionEntry CERTIFICATE_ACTIONS[] = {
 static void
 seahorse_pkcs11_actions_init (SeahorsePkcs11Actions *self)
 {
-	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
-	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, CERTIFICATE_ACTIONS, G_N_ELEMENTS (CERTIFICATE_ACTIONS), self);
+
+}
+
+static GtkActionGroup *
+seahorse_pkcs11_actions_clone_for_objects (SeahorseActions *actions,
+                                           GList *objects)
+{
+	GtkActionGroup *cloned;
+
+	g_return_val_if_fail (objects != NULL, NULL);
+
+	cloned = gtk_action_group_new ("Certificate");
+	gtk_action_group_set_translation_domain (cloned, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions_full (cloned, CERTIFICATES_ACTIONS,
+	                                   G_N_ELEMENTS (CERTIFICATES_ACTIONS),
+	                                   seahorse_object_list_copy (objects),
+	                                   seahorse_object_list_free);
+
+	/* Only one object? */
+	if (!objects->next)
+		gtk_action_group_add_actions_full (cloned, CERTIFICATE_ACTIONS,
+		                                   G_N_ELEMENTS (CERTIFICATE_ACTIONS),
+		                                   g_object_ref (objects->data),
+		                                   g_object_unref);
+
+	return cloned;
 }
 
 static void
 seahorse_pkcs11_actions_class_init (SeahorsePkcs11ActionsClass *klass)
 {
+	SeahorseActionsClass *actions_class = SEAHORSE_ACTIONS_CLASS (klass);
 	QUARK_WINDOW = g_quark_from_static_string ("seahorse-pkcs11-actions-window");
+	actions_class->clone_for_objects = seahorse_pkcs11_actions_clone_for_objects;
 }
 
 GtkActionGroup *
@@ -172,7 +202,7 @@ seahorse_pkcs11_actions_instance (void)
 
 	if (actions == NULL) {
 		actions = g_object_new (SEAHORSE_TYPE_PKCS11_ACTIONS,
-		                        "name", "pkcs11-certificate",
+		                        "name", "Certificate",
 		                        NULL);
 		g_object_add_weak_pointer (G_OBJECT (actions),
 		                           (gpointer *)&actions);

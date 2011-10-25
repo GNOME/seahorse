@@ -22,6 +22,11 @@
 
 #include "config.h"
 
+#include "seahorse-ssh-actions.h"
+#include "seahorse-ssh-key.h"
+#include "seahorse-ssh-operation.h"
+#include "seahorse-ssh-source.h"
+
 #include <gcr/gcr.h>
 
 #include <glib.h>
@@ -31,10 +36,8 @@
 #include <errno.h>
 #include <string.h>
 
+
 #include "seahorse-place.h"
-#include "seahorse-ssh-source.h"
-#include "seahorse-ssh-key.h"
-#include "seahorse-ssh-operation.h"
 #include "seahorse-icons.h"
 #include "seahorse-validity.h"
 
@@ -75,6 +78,7 @@ changed_key (SeahorseSSHKey *self)
 	const gchar *display = NULL;
 	gchar *identifier;
 	gchar *simple = NULL;
+	GtkActionGroup *actions;
 	GIcon *icon;
 	gchar *filename;
 	gchar *markup;
@@ -131,11 +135,13 @@ changed_key (SeahorseSSHKey *self)
 	                                  display, filename);
 
 	identifier = seahorse_ssh_key_calc_identifier (self->keydata->fingerprint);
+	actions = seahorse_ssh_actions_instance ();
 
 	if (self->keydata->authorized)
 		flags |= SEAHORSE_FLAG_TRUSTED;
 
 	g_object_set (obj,
+	              "actions", actions,
 	              "markup", markup,
 	              "label", display,
 	              "icon", icon,
@@ -144,6 +150,8 @@ changed_key (SeahorseSSHKey *self)
 	              "identifier", identifier,
 	              "flags", flags,
 	              NULL);
+
+	g_object_unref (actions);
 	g_object_unref (icon);
 	g_free (identifier);
 	g_free (markup);

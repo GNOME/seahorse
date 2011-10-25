@@ -264,12 +264,6 @@ seahorse_keyserver_results_get_selected_objects (SeahorseViewer* viewer)
 }
 
 static GList *
-seahorse_keyserver_results_get_selected_backends (SeahorseViewer* viewer)
-{
-	return NULL;
-}
-
-static GList *
 seahorse_keyserver_results_get_selected_places (SeahorseViewer* viewer)
 {
 	return NULL;
@@ -346,6 +340,12 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	                                                  &self->pv->pred,
 	                                                  self->pv->settings);
 	on_view_selection_changed (selection, self);
+
+	/* Include actions from the backend */
+	actions = NULL;
+	g_object_get (seahorse_pgp_backend_get (), "actions", &actions, NULL);
+	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
+	g_object_unref (actions);
 
 	return G_OBJECT (self);
 }
@@ -473,7 +473,6 @@ seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
 
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_keyserver_results_get_selected_objects;
 	SEAHORSE_VIEWER_CLASS (klass)->get_selected_places = seahorse_keyserver_results_get_selected_places;
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected_backends = seahorse_keyserver_results_get_selected_backends;
 
 	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_SEARCH,
 	         g_param_spec_string ("search", "search", "search", NULL,
