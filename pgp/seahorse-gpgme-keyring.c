@@ -103,7 +103,7 @@ passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
 
 	g_strfreev (split_uid);
 
-	dialog = seahorse_passphrase_prompt_show (NULL, errmsg ? errmsg : label,
+	dialog = seahorse_passphrase_prompt_show (_("Passphrase"), errmsg ? errmsg : label,
 	                                          NULL, NULL, confirm);
 	g_free (label);
 	g_free (errmsg);

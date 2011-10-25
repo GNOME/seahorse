@@ -49,10 +49,36 @@ GType                  seahorse_token_get_type          (void);
 
 SeahorseToken *        seahorse_token_new               (GckSlot *slot);
 
+GckTokenInfo *         seahorse_token_get_info          (SeahorseToken *self);
+
 GckSlot *              seahorse_token_get_slot          (SeahorseToken *self);
+
+gboolean               seahorse_token_get_lockable      (SeahorseToken *self);
+
+gboolean               seahorse_token_get_unlockable    (SeahorseToken *self);
 
 void                   seahorse_token_remove_object     (SeahorseToken *self,
                                                          GckObject *object);
+
+void                   seahorse_token_lock_async        (SeahorseToken *self,
+                                                         GTlsInteraction *interaction,
+                                                         GCancellable *cancellable,
+                                                         GAsyncReadyCallback callback,
+                                                         gpointer user_data);
+
+gboolean               seahorse_token_lock_finish       (SeahorseToken *self,
+                                                         GAsyncResult *result,
+                                                         GError **error);
+
+void                   seahorse_token_unlock_async      (SeahorseToken *self,
+                                                         GTlsInteraction *interaction,
+                                                         GCancellable *cancellable,
+                                                         GAsyncReadyCallback callback,
+                                                         gpointer user_data);
+
+gboolean               seahorse_token_unlock_finish     (SeahorseToken *self,
+                                                         GAsyncResult *result,
+                                                         GError **error);
 
 void                   seahorse_token_refresh_async     (SeahorseToken *self,
                                                          GCancellable *cancellable,

@@ -72,7 +72,7 @@ static void
 seahorse_certificate_init (SeahorseCertificate *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_CERTIFICATE, SeahorseCertificatePrivate));
-	self->pv->actions = seahorse_pkcs11_actions_instance ();
+	self->pv->actions = seahorse_pkcs11_object_actions_instance ();
 	gck_attribute_init_invalid (&self->pv->der_value, CKA_VALUE);
 }
 

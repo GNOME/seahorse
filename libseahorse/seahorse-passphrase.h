@@ -32,7 +32,7 @@ GtkDialog*      seahorse_passphrase_prompt_show     (const gchar *title,
                                                      const gchar *prompt,
                                                      const gchar *check,
                                                      gboolean confirm);
-                                                     
+
 const gchar*    seahorse_passphrase_prompt_get      (GtkDialog *dialog);
 
 gboolean        seahorse_passphrase_prompt_checked  (GtkDialog *dialog);

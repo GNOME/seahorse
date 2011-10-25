@@ -178,13 +178,10 @@ seahorse_passphrase_prompt_show (const gchar *title,
 	GtkWidget *chbox;
 	gchar *msg;
 
-	if (!title)
-		title = _("Passphrase");
-
 	if (!prompt)
 		prompt = _("Password:");
 
-	widget = gtk_dialog_new_with_buttons (title, NULL, 0, NULL);
+	widget = gtk_dialog_new_with_buttons (title, NULL, GTK_DIALOG_MODAL, NULL);
 	gtk_window_set_icon_name (GTK_WINDOW (widget), GTK_STOCK_DIALOG_AUTHENTICATION);
 	dialog = GTK_DIALOG (widget);
 
@@ -285,7 +282,6 @@ seahorse_passphrase_prompt_show (const gchar *title,
 
 	gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-	gtk_window_set_type_hint (GTK_WINDOW (dialog), GDK_WINDOW_TYPE_HINT_NORMAL);
 	gtk_window_set_keep_above (GTK_WINDOW (dialog), TRUE);
 	gtk_widget_show_all (GTK_WIDGET (dialog));
 	gdk_window_focus (gtk_widget_get_window (GTK_WIDGET (dialog)), GDK_CURRENT_TIME);

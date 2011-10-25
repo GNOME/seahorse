@@ -24,6 +24,8 @@
 
 #include <gtk/gtk.h>
 
-GtkActionGroup *      seahorse_pkcs11_actions_instance            (void);
+GtkActionGroup *      seahorse_pkcs11_token_actions_instance        (void);
+
+GtkActionGroup *      seahorse_pkcs11_object_actions_instance       (void);
 
 #endif /* __SEAHORSE_PKCS11_ACTIONS_H__ */
