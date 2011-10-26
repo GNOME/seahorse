@@ -22,13 +22,13 @@
 #ifndef __SEAHORSE_PKCS11_H__
 #define __SEAHORSE_PKCS11_H__
 
-#ifdef WITH_PKCS11
-
 #include <glib.h>
 
 #include <gcr/gcr.h>
 
 #define SEAHORSE_PKCS11_NAME "pkcs11"
+
+#ifdef WITH_PKCS11
 
 void       seahorse_pkcs11_backend_initialize    (void);
 

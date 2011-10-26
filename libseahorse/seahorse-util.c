@@ -578,10 +578,12 @@ seahorse_util_detect_mime_type (const gchar *mime)
 		return 0;
 	}
 
+#ifdef WITH_PGP
 	if (g_ascii_strcasecmp (mime, "application/pgp-encrypted") == 0 ||
 	    g_ascii_strcasecmp (mime, "application/pgp-keys") == 0)
 		return SEAHORSE_PGP;
-    
+#endif
+
 #ifdef WITH_SSH 
 	/* TODO: For now all PEM keys are treated as SSH keys */
 	else if (g_ascii_strcasecmp (mime, "application/x-ssh-key") == 0 ||

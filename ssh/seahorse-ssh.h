@@ -22,8 +22,6 @@
 #ifndef __SEAHORSE_SSH_H__
 #define __SEAHORSE_SSH_H__
 
-#ifdef WITH_SSH
-
 #include <glib.h>
 #include <glib-object.h>
 
@@ -31,8 +29,9 @@
 
 #define SEAHORSE_SSH_NAME "openssh"
 #define SEAHORSE_SSH_TYPE_STR SEAHORSE_SSH_NAME
-#define SEAHORSE_SSH (g_quark_from_static_string (SEAHORSE_PGP_NAME))
-#define SEAHORSE_SSH_STOCK_ICON "seahorse-key-ssh"
+#define SEAHORSE_SSH (g_quark_from_static_string (SEAHORSE_SSH_NAME))
+
+#ifdef WITH_SSH
 
 void       seahorse_ssh_backend_initialize    (void);
 

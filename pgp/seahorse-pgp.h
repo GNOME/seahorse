@@ -29,16 +29,15 @@
 
 G_BEGIN_DECLS
 
-#ifdef WITH_PGP
-
 #define SEAHORSE_PGP_NAME "openpgp"
 #define SEAHORSE_PGP_TYPE_STR SEAHORSE_PGP_NAME
 #define SEAHORSE_PGP g_quark_from_string (SEAHORSE_PGP_NAME)
-#define SEAHORSE_PGP_STOCK_ICON "seahorse-key-personal"
+
+#ifdef WITH_PGP
 
 void       seahorse_pgp_backend_initialize    (void);
 
-#endif /* WITH_PGP */
+#endif
 
 G_END_DECLS
 

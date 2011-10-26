@@ -73,7 +73,9 @@ main (int argc, char **argv)
 
     if (show_version) {
         g_print ("%s\n", PACKAGE_STRING);
+#ifdef WITH_PGP
         g_print ("GNUPG: %s (%d.%d.%d)\n", GNUPG, GPG_MAJOR, GPG_MINOR, GPG_MICRO);
+#endif
         exit (1);
     }
 
@@ -85,9 +87,15 @@ main (int argc, char **argv)
     context = seahorse_context_instance ();
 
     /* Initialize the various components */
+#ifdef WITH_PGP
     seahorse_pgp_backend_initialize ();
+#endif
+#ifdef WITH_SSH
     seahorse_ssh_backend_initialize ();
+#endif
+#ifdef WITH_PKCS11
     seahorse_pkcs11_backend_initialize ();
+#endif
     seahorse_gkr_backend_initialize ();
 
     swidget = seahorse_key_manager_show ();
