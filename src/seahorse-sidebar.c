@@ -46,8 +46,7 @@ struct _SeahorseSidebar {
 	GcrUnionCollection *objects;
 
 	/* The selection */
-	GHashTable *checked;
-	GcrCollection *selected;
+	GHashTable *selection;
 	gboolean combined;
 	gboolean updating;
 
@@ -128,7 +127,7 @@ seahorse_sidebar_init (SeahorseSidebar *self)
 	self->store = gtk_list_store_newv (SIDEBAR_N_COLUMNS, column_types);
 
 	self->backends = g_ptr_array_new_with_free_func (g_object_unref);
-	self->checked = g_hash_table_new (g_direct_hash, g_direct_equal);
+	self->selection = g_hash_table_new (g_direct_hash, g_direct_equal);
 	self->objects = GCR_UNION_COLLECTION (gcr_union_collection_new ());
 	self->chosen = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 }
@@ -356,13 +355,6 @@ update_backend (SeahorseSidebar *self,
 		                    SIDEBAR_ACTIONS, cloned,
 		                    SIDEBAR_URI, uri,
 		                    -1);
-#if 0
-GtkAction *action;
-action = gtk_action_group_get_action (cloned, "lock");
-g_printerr ("lock sensitive: %d", gtk_action_get_sensitive (action));
-action = gtk_action_group_get_action (cloned, "unlock");
-g_printerr ("unlock sensitive: %d", gtk_action_get_sensitive (action));
-#endif
 		g_clear_object (&cloned);
 		g_clear_object (&icon);
 		g_free (label);
@@ -394,13 +386,7 @@ update_objects_in_collection (SeahorseSidebar *self,
 		collections = gcr_collection_get_objects (self->backends->pdata[i]);
 		for (l = collections; l != NULL; l = g_list_next (l)) {
 
-			/* Checked collections are chosen*/
-			if (g_hash_table_size (self->checked) > 0)
-				include = (g_hash_table_lookup (self->checked, l->data) != NULL);
-
-			/* Just selected one is chosen */
-			else
-				include = (l->data == self->selected);
+			include = g_hash_table_lookup (self->selection, l->data) != NULL;
 
 			if (update_chosen) {
 				g_object_get (l->data, "uri", &uri, NULL);
@@ -433,43 +419,38 @@ update_objects_in_collection (SeahorseSidebar *self,
 }
 
 static void
+for_each_selected_place_row (GtkTreeModel *model,
+                             GtkTreePath *path,
+                             GtkTreeIter *iter,
+                             gpointer user_data)
+{
+	GcrCollection *collection;
+	GHashTable *selected = user_data;
+
+	gtk_tree_model_get (model, iter, SIDEBAR_COLLECTION, &collection, -1);
+	if (collection != NULL) {
+		g_hash_table_insert (selected, collection, collection);
+		g_object_unref (collection);
+	}
+}
+
+static void
 update_objects_for_selection (SeahorseSidebar *self,
                               GtkTreeSelection *selection)
 {
-	GcrCollection *selected = NULL;
-	GtkTreeModel *model;
-	GtkTreeIter iter;
+	GHashTable *selected;
 
-	if (gtk_tree_selection_get_selected (selection, &model, &iter))
-		gtk_tree_model_get (model, &iter,
-		                    SIDEBAR_COLLECTION, &selected,
-		                    -1);
+	if (self->updating)
+		return;
 
-	if (selected != self->selected) {
-		g_clear_object (&self->selected);
-		self->selected = selected ? g_object_ref (selected) : NULL;
-		if (g_hash_table_size (self->checked) == 0)
-			update_objects_in_collection (self, TRUE);
-	}
+	selected = g_hash_table_new (g_direct_hash, g_direct_equal);
+	gtk_tree_selection_selected_foreach (selection, for_each_selected_place_row, selected);
 
-	g_clear_object (&selected);
-}
+	g_hash_table_destroy (self->selection);
+	self->selection = selected;
 
-static void
-update_objects_for_checked (SeahorseSidebar *self,
-                            GcrCollection *place)
-{
-	g_hash_table_insert (self->checked, place, place);
-	update_objects_in_collection (self, TRUE);
-}
-
-static void
-update_objects_for_unchecked (SeahorseSidebar *self,
-                              GcrCollection *place)
-{
-	if (!g_hash_table_remove (self->checked, place))
-		g_assert_not_reached ();
-	update_objects_in_collection (self, TRUE);
+	if (!self->combined)
+		update_objects_in_collection (self, TRUE);
 }
 
 static void
@@ -483,39 +464,21 @@ update_objects_for_combine (SeahorseSidebar *self,
 }
 
 static void
-invalidate_all_rows (GtkTreeModel *model)
-{
-	GtkTreeIter iter;
-	GtkTreePath *path;
-
-	if (gtk_tree_model_get_iter_first (model, &iter)) {
-		do {
-			path = gtk_tree_model_get_path (model, &iter);
-			gtk_tree_model_row_changed (model, path, &iter);
-			gtk_tree_path_free (path);
-		} while (gtk_tree_model_iter_next (model, &iter));
-	}
-}
-
-static void
 update_objects_for_chosen (SeahorseSidebar *self,
                            GHashTable *chosen)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GcrCollection *collection;
-	gboolean checked;
 	gchar *uri;
-	gint count = 0;
-	gboolean changed = FALSE;
-	GcrCollection *selected = NULL;
-	GtkTreeIter select_iter;
 	GtkTreeSelection *selection;
 
 	self->updating = TRUE;
 
-	/* Update the display */
 	model = GTK_TREE_MODEL (self->store);
+	selection = gtk_tree_view_get_selection (self->tree_view);
+
+	/* Update the display */
 	if (gtk_tree_model_get_iter_first (model, &iter)) {
 		do {
 			gtk_tree_model_get (model, &iter,
@@ -524,47 +487,10 @@ update_objects_for_chosen (SeahorseSidebar *self,
 					    -1);
 
 			if (collection && uri) {
-				checked = g_hash_table_size (self->checked) > 0;
-
-				/* Chosen */
-				if (g_hash_table_lookup (chosen, uri)) {
-					if (!checked) {
-						/* First one update selection */
-						if (count == 0) {
-							g_clear_object (&selected);
-							selected = collection;
-							collection = NULL;
-							select_iter = iter;
-							changed = TRUE;
-
-						/* Second one, change to checked if necessary */
-						} else if (count == 1) {
-							g_assert (selected != NULL);
-							g_hash_table_insert (self->checked,
-							                     selected,
-							                     selected);
-							g_clear_object (&selected);
-							checked = TRUE;
-							changed = TRUE;
-						}
-					}
-
-					if (checked) {
-						g_hash_table_insert (self->checked,
-						                     collection,
-						                     collection);
-						changed = TRUE;
-					}
-
-					count++;
-
-				/* Not chosen */
-				} else {
-					if (!checked)
-						changed = TRUE;
-					if (g_hash_table_remove (self->checked, collection))
-						changed = TRUE;
-				}
+				if (g_hash_table_lookup (chosen, uri))
+					gtk_tree_selection_select_iter (selection, &iter);
+				else
+					gtk_tree_selection_unselect_iter (selection, &iter);
 			}
 
 			g_clear_object (&collection);
@@ -572,18 +498,8 @@ update_objects_for_chosen (SeahorseSidebar *self,
 		} while (gtk_tree_model_iter_next (model, &iter));
 	}
 
-	if (selected) {
-		selection = gtk_tree_view_get_selection (self->tree_view);
-		gtk_tree_selection_select_iter (selection, &select_iter);
-		g_object_unref (selected);
-	}
-
 	self->updating = FALSE;
-
-	if (changed)
-		invalidate_all_rows (model);
-
-	update_objects_in_collection (self, FALSE);
+	update_objects_for_selection (self, selection);
 }
 
 static void
@@ -765,58 +681,6 @@ on_cell_renderer_heading_not_visible (GtkTreeViewColumn *column,
 	              NULL);
 }
 
-static void
-on_cell_renderer_check (GtkTreeViewColumn *column,
-                        GtkCellRenderer *cell,
-                        GtkTreeModel *model,
-                        GtkTreeIter *iter,
-                        gpointer user_data)
-{
-#if 0
-	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
-	GcrCollection *collection;
-	RowType type;
-#endif
-	gboolean active;
-	gboolean inconsistent;
-	gboolean visible;
-
-#if 0
-	gtk_tree_model_get (model, iter,
-	                    SIDEBAR_ROW_TYPE, &type,
-	                    SIDEBAR_COLLECTION, &collection,
-	                    -1);
-#endif
-
-	active = FALSE;
-	inconsistent = FALSE;
-
-#if 0
-	if (type == TYPE_BACKEND) {
-#endif
-		visible = FALSE;
-#if 0
-	} else if (collection != NULL && g_hash_table_size (self->checked) > 0) {
-		active = g_hash_table_lookup (self->checked, collection) != NULL;
-		visible = TRUE;
-	} else {
-		visible = (gtk_widget_is_focus (GTK_WIDGET (self->tree_view)) &&
-		           collection == self->selected);
-	}
-#endif
-
-	/* self->mnemonics_visible */
-	g_object_set (cell,
-	              "visible", visible,
-	              "active", active,
-	              "inconsistent", inconsistent,
-	              NULL);
-
-#if 0
-	g_clear_object (&collection);
-#endif
-}
-
 static gboolean
 on_tree_selection_validate (GtkTreeSelection *selection,
                             GtkTreeModel *model,
@@ -843,7 +707,6 @@ on_tree_selection_changed (GtkTreeSelection *selection,
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
 	update_objects_for_selection (self, selection);
-	invalidate_all_rows (GTK_TREE_MODEL (self->store));
 }
 
 static void
@@ -938,47 +801,6 @@ load_backends (SeahorseSidebar *self)
 	}
 	g_ptr_array_sort (self->backends, on_sort_backends);
 	g_list_free (backends);
-}
-
-static void
-on_checked_toggled  (GtkCellRendererToggle *renderer,
-                     gchar *path_string,
-                     gpointer user_data)
-{
-	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
-	GcrCollection *collection;
-	GtkTreeModel *model;
-	GtkTreeIter iter;
-	GtkTreePath *path;
-	gboolean checked;
-	gboolean have;
-
-	model = GTK_TREE_MODEL (self->store);
-	path = gtk_tree_path_new_from_string (path_string);
-	gtk_tree_model_get_iter (model, &iter, path);
-
-	checked = !gtk_cell_renderer_toggle_get_active (renderer);
-	gtk_tree_model_get (model, &iter,
-	                    SIDEBAR_COLLECTION, &collection,
-	                    -1);
-	have = g_hash_table_lookup (self->checked, collection) != NULL;
-
-	if (checked && !have) {
-		update_objects_for_checked (self, collection);
-		if (g_hash_table_size (self->checked) == 1)
-			invalidate_all_rows (model);
-		else
-			gtk_tree_model_row_changed (model, path, &iter);
-	} else if (!checked && have) {
-		update_objects_for_unchecked (self, collection);
-		if (g_hash_table_size (self->checked) == 0)
-			invalidate_all_rows (model);
-		else
-			gtk_tree_model_row_changed (model, path, &iter);
-	}
-
-	g_object_unref (collection);
-	gtk_tree_path_free (path);
 }
 
 static void
@@ -1262,18 +1084,6 @@ seahorse_sidebar_constructed (GObject *obj)
 	              "ellipsize-set", TRUE,
 	              NULL);
 
-	/* check renderer */
-	cell = gtk_cell_renderer_toggle_new ();
-	g_object_set (cell,
-	              "xpad", 6,
-	              "xalign", 1.0,
-	              NULL);
-	gtk_tree_view_column_pack_end (col, cell, FALSE);
-	gtk_tree_view_column_set_cell_data_func (col, cell,
-	                                         on_cell_renderer_check,
-	                                         self, NULL);
-	g_signal_connect (cell, "toggled", G_CALLBACK (on_checked_toggled), self);
-
 	/* lock/unlock icon renderer */
 	cell = gtk_cell_renderer_pixbuf_new ();
 	self->action_cell_renderer = cell;
@@ -1304,7 +1114,7 @@ seahorse_sidebar_constructed (GObject *obj)
 	self->tree_view = tree_view;
 
 	selection = gtk_tree_view_get_selection (tree_view);
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
+	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	gtk_tree_selection_set_select_function (selection, on_tree_selection_validate, self, NULL);
 	g_signal_connect (selection, "changed", G_CALLBACK (on_tree_selection_changed), self);
 
@@ -1385,8 +1195,7 @@ seahorse_sidebar_finalize (GObject *obj)
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (obj);
 
-	g_clear_object (&self->selected);
-	g_hash_table_destroy (self->checked);
+	g_hash_table_destroy (self->selection);
 	g_hash_table_destroy (self->chosen);
 	g_object_unref (self->objects);
 
