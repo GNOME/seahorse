@@ -33,6 +33,7 @@
 #include "seahorse-pkcs11-actions.h"
 #include "seahorse-pkcs11-helpers.h"
 #include "seahorse-pkcs11-operations.h"
+#include "seahorse-private-key.h"
 #include "seahorse-token.h"
 
 #include "seahorse-place.h"
@@ -50,7 +51,8 @@ enum {
 	PROP_ACTIONS,
 	PROP_INFO,
 	PROP_LOCKABLE,
-	PROP_UNLOCKABLE
+	PROP_UNLOCKABLE,
+	PROP_SESSION
 };
 
 struct _SeahorseTokenPrivate {
@@ -79,12 +81,12 @@ typedef struct {
 	GCancellable *cancellable;
 	GHashTable *checks;
 	GckEnumerator *enumerator;
-} pkcs11_refresh_closure;
+} RefreshClosure;
 
 static void
 pkcs11_refresh_free (gpointer data)
 {
-	pkcs11_refresh_closure *closure = data;
+	RefreshClosure *closure = data;
 	g_object_unref (closure->token);
 	g_clear_object (&closure->cancellable);
 	g_hash_table_destroy (closure->checks);
@@ -109,7 +111,7 @@ on_refresh_next_objects (GObject *source,
                          gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	pkcs11_refresh_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	RefreshClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
 	gulong handle;
 	GList *objects;
@@ -163,6 +165,71 @@ update_token_info (SeahorseToken *self)
 	}
 }
 
+static void
+refresh_enumerate (GSimpleAsyncResult *res)
+{
+	RefreshClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GckSession *session;
+	GckEnumerator *enumerator;
+	GckAttributes *attrs;
+
+	session = seahorse_token_get_session (closure->token);
+
+	attrs = gck_attributes_new ();
+	gck_attributes_add_boolean (attrs, CKA_TOKEN, TRUE);
+	gck_attributes_add_ulong (attrs, CKA_CLASS, CKO_CERTIFICATE);
+	enumerator = gck_session_enumerate_objects (session, attrs);
+	gck_enumerator_set_object_type (enumerator, SEAHORSE_TYPE_CERTIFICATE);
+	closure->enumerator = enumerator;
+	gck_attributes_unref (attrs);
+
+	attrs = gck_attributes_new ();
+	gck_attributes_add_boolean (attrs, CKA_TOKEN, TRUE);
+	gck_attributes_add_ulong (attrs, CKA_CLASS, CKO_PRIVATE_KEY);
+	enumerator = gck_session_enumerate_objects (session, attrs);
+	gck_enumerator_set_object_type (enumerator, SEAHORSE_TYPE_PRIVATE_KEY);
+	gck_enumerator_set_chained (closure->enumerator, enumerator);
+	g_object_unref (enumerator);
+	gck_attributes_unref (attrs);
+
+	gck_enumerator_next_async (closure->enumerator, 16, closure->cancellable,
+	                           on_refresh_next_objects, g_object_ref (res));
+}
+
+static void
+on_refresh_session_open (GObject *source,
+                         GAsyncResult *result,
+                         gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	RefreshClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GError *error = NULL;
+	GckSession *session;
+
+	session = gck_session_open_finish (result, &error);
+
+	if (error == NULL) {
+		seahorse_token_set_session (closure->token, session);
+		refresh_enumerate (res);
+		g_object_unref (session);
+	} else {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete (res);
+	}
+
+	g_object_unref (res);
+}
+
+static GckSessionOptions
+calculate_session_options (SeahorseToken *self)
+{
+	GckTokenInfo *info = seahorse_token_get_info (self);
+	if (info->flags & CKF_WRITE_PROTECTED)
+		return GCK_SESSION_READ_ONLY;
+	else
+		return GCK_SESSION_READ_WRITE;
+}
+
 void
 seahorse_token_refresh_async (SeahorseToken *self,
                               GCancellable *cancellable,
@@ -170,9 +237,8 @@ seahorse_token_refresh_async (SeahorseToken *self,
                               gpointer user_data)
 {
 	GSimpleAsyncResult *res;
-	pkcs11_refresh_closure *closure;
-	GckAttributes *attrs;
-	GckSlot *slot;
+	RefreshClosure *closure;
+	GckSessionOptions options;
 	GList *objects, *l;
 	gulong handle;
 
@@ -182,7 +248,7 @@ seahorse_token_refresh_async (SeahorseToken *self,
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_token_refresh_async);
-	closure = g_new0 (pkcs11_refresh_closure, 1);
+	closure = g_new0 (RefreshClosure, 1);
 	closure->checks = g_hash_table_new_full (seahorse_pkcs11_ulong_hash,
 	                                         seahorse_pkcs11_ulong_equal,
 	                                         g_free, g_object_unref);
@@ -200,21 +266,13 @@ seahorse_token_refresh_async (SeahorseToken *self,
 	}
 	g_list_free (objects);
 
-	attrs = gck_attributes_new ();
-	gck_attributes_add_boolean (attrs, CKA_TOKEN, TRUE);
-	gck_attributes_add_ulong (attrs, CKA_CLASS, CKO_CERTIFICATE);
-
-	slot = seahorse_token_get_slot (closure->token);
-	closure->enumerator = gck_slot_enumerate_objects (slot, attrs, GCK_SESSION_READ_WRITE);
-	g_return_if_fail (closure->enumerator != NULL);
-
-	gck_attributes_unref (attrs);
-
-	/* This enumerator creates objects of type SeahorseCertificate */
-	gck_enumerator_set_object_type (closure->enumerator, SEAHORSE_TYPE_CERTIFICATE);
-
-	gck_enumerator_next_async (closure->enumerator, 16, closure->cancellable,
-	                           on_refresh_next_objects, g_object_ref (res));
+	if (!self->pv->session) {
+		options = calculate_session_options (self);
+		gck_session_open_async (self->pv->slot, options, NULL, cancellable,
+		                        on_refresh_session_open, g_object_ref (res));
+	} else {
+		refresh_enumerate (res);
+	}
 
 	g_object_unref (res);
 }
@@ -318,6 +376,9 @@ seahorse_token_get_property (GObject *object,
 	case PROP_UNLOCKABLE:
 		g_value_set_boolean (value, seahorse_token_get_unlockable (self));
 		break;
+	case PROP_SESSION:
+		g_value_set_object (value, seahorse_token_get_session (self));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -343,6 +404,9 @@ seahorse_token_set_property (GObject *object,
 		g_return_if_fail (!self->pv->info);
 		self->pv->info = g_value_dup_boxed (value);
 		break;
+	case PROP_SESSION:
+		seahorse_token_set_session (self, g_value_get_object (value));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -354,10 +418,8 @@ seahorse_token_dispose (GObject *obj)
 {
 	SeahorseToken *self = SEAHORSE_TOKEN (obj);
 
-	/* The keyring object */
-	if (self->pv->slot)
-		g_object_unref (self->pv->slot);
-	self->pv->slot = NULL;
+	g_clear_object (&self->pv->slot);
+	g_clear_object (&self->pv->session);
 
 	G_OBJECT_CLASS (seahorse_token_parent_class)->dispose (obj);
 }
@@ -413,6 +475,10 @@ seahorse_token_class_init (SeahorseTokenClass *klass)
 	g_object_class_install_property (gobject_class, PROP_UNLOCKABLE,
 	         g_param_spec_boolean ("unlockable", "Unlockable", "Token can be unlocked",
 	                               FALSE, G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_SLOT,
+	            g_param_spec_object ("session", "Session", "Pkcs#11 Session",
+	                                 GCK_TYPE_SESSION, G_PARAM_READWRITE));
 }
 
 static void
@@ -474,6 +540,35 @@ seahorse_token_get_slot (SeahorseToken *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_TOKEN (self), NULL);
 	return self->pv->slot;
+}
+
+GckSession *
+seahorse_token_get_session (SeahorseToken *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_TOKEN (self), NULL);
+	return self->pv->session;
+}
+
+void
+seahorse_token_set_session (SeahorseToken *self,
+                            GckSession *session)
+{
+	GObject *obj;
+
+	g_return_if_fail (SEAHORSE_IS_TOKEN (self));
+	g_return_if_fail (session == NULL || GCK_IS_SESSION (session));
+
+	if (session)
+		g_object_ref (session);
+	g_clear_object (&self->pv->session);
+	self->pv->session = session;
+
+	obj = G_OBJECT (self);
+	g_object_freeze_notify (obj);
+	g_object_notify (obj, "session");
+	g_object_notify (obj, "lockable");
+	g_object_notify (obj, "unlockable");
+	g_object_thaw_notify (obj);
 }
 
 GckTokenInfo *
@@ -676,13 +771,17 @@ on_session_login_open (GObject *source,
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
 	SeahorseToken *self = SEAHORSE_TOKEN (g_async_result_get_source_object (user_data));
+	GckSession *session;
 	GError *error = NULL;
 
-	self->pv->session = gck_session_open_finish (result, &error);
-	if (error == NULL)
+	session = gck_session_open_finish (result, &error);
+	if (error == NULL) {
+		seahorse_token_set_session (self, session);
 		seahorse_token_refresh_async (self, NULL, NULL, NULL);
-	else
+		g_object_unref (session);
+	} else {
 		g_simple_async_result_take_error (res, error);
+	}
 
 	g_simple_async_result_complete (res);
 	g_object_unref (self);
@@ -697,6 +796,7 @@ seahorse_token_unlock_async (SeahorseToken *self,
                              gpointer user_data)
 {
 	GSimpleAsyncResult *res;
+	GckSessionOptions options;
 
 	g_return_if_fail (SEAHORSE_IS_TOKEN (self));
 	g_return_if_fail (interaction == NULL || G_IS_TLS_INTERACTION (interaction));
@@ -713,7 +813,8 @@ seahorse_token_unlock_async (SeahorseToken *self,
 		                                     interaction, NULL, on_login_interactive,
 		                                     g_object_ref (res));
 	} else {
-		gck_session_open_async (self->pv->slot, GCK_SESSION_LOGIN_USER, interaction,
+		options = calculate_session_options (self);
+		gck_session_open_async (self->pv->slot, options | GCK_SESSION_LOGIN_USER, interaction,
 		                        NULL, on_session_login_open, g_object_ref (res));
 	}
 

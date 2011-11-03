@@ -53,6 +53,11 @@ GckTokenInfo *         seahorse_token_get_info          (SeahorseToken *self);
 
 GckSlot *              seahorse_token_get_slot          (SeahorseToken *self);
 
+GckSession *           seahorse_token_get_session       (SeahorseToken *self);
+
+void                   seahorse_token_set_session       (SeahorseToken *self,
+                                                         GckSession *session);
+
 gboolean               seahorse_token_get_lockable      (SeahorseToken *self);
 
 gboolean               seahorse_token_get_unlockable    (SeahorseToken *self);

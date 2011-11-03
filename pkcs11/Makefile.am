@@ -23,6 +23,7 @@ libseahorse_pkcs11_la_SOURCES = \
 	seahorse-pkcs11-helpers.c seahorse-pkcs11-helpers.h \
 	seahorse-pkcs11-operations.c seahorse-pkcs11-operations.h \
 	seahorse-pkcs11.c seahorse-pkcs11.h \
+	seahorse-private-key.c seahorse-private-key.h \
 	seahorse-token.c seahorse-token.h
 
 libseahorse_pkcs11_la_LIBADD = \
