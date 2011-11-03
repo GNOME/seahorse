@@ -36,6 +36,7 @@
 typedef struct _SeahorseCertificate SeahorseCertificate;
 typedef struct _SeahorseCertificateClass SeahorseCertificateClass;
 typedef struct _SeahorseCertificatePrivate SeahorseCertificatePrivate;
+typedef struct _SeahorsePrivateKey SeahorsePrivateKey;
 
 struct _SeahorseCertificate {
 	GckObject parent;
@@ -48,12 +49,11 @@ struct _SeahorseCertificateClass {
 
 GType                 seahorse_certificate_get_type               (void) G_GNUC_CONST;
 
-void                  seahorse_certificate_realize                (SeahorseCertificate *self);
+GIcon *               seahorse_certificate_get_icon               (SeahorseCertificate *self);
 
-guint                 seahorse_certificate_get_validity           (SeahorseCertificate* self);
+SeahorsePrivateKey *  seahorse_certificate_get_private_key        (SeahorseCertificate *self);
 
-guint                 seahorse_certificate_get_trust              (SeahorseCertificate* self);
-
-gulong                seahorse_certificate_get_expires            (SeahorseCertificate* self);
+void                  seahorse_certificate_set_private_key        (SeahorseCertificate *self,
+                                                                   SeahorsePrivateKey *private_key);
 
 #endif /* __SEAHORSE_CERTIFICATE_H__ */

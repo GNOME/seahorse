@@ -58,14 +58,14 @@ enum {
 struct _SeahorseTokenPrivate {
 	GckSlot *slot;
 	gchar *uri;
-	GHashTable *objects;
 	GckTokenInfo *info;
 	GckSession *session;
 	GtkActionGroup *actions;
+	GHashTable *object_for_handle;
+	GHashTable *objects_for_id;
+	GHashTable *id_for_object;
+	GHashTable *objects_visible;
 };
-
-static void          receive_object                      (SeahorseToken *self,
-                                                          GckObject *obj);
 
 static void          seahorse_token_place_iface          (SeahorsePlaceIface *iface);
 
@@ -75,6 +75,254 @@ G_DEFINE_TYPE_EXTENDED (SeahorseToken, seahorse_token, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_token_collection_iface);
                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_token_place_iface);
 );
+
+static void
+update_token_info (SeahorseToken *self)
+{
+	GckTokenInfo *info;
+	GObject *obj;
+
+	info = gck_slot_get_token_info (self->pv->slot);
+	if (info != NULL) {
+		gck_token_info_free (self->pv->info);
+		self->pv->info = info;
+
+		obj = G_OBJECT (self);
+		g_object_notify (obj, "info");
+		g_object_notify (obj, "lockable");
+		g_object_notify (obj, "unlockable");
+	}
+}
+
+static void
+update_id_map (SeahorseToken *self,
+               gpointer object,
+               GckAttribute *id)
+{
+	GPtrArray *objects;
+	GckAttribute *pid;
+	gboolean remove = FALSE;
+	gboolean add = FALSE;
+
+	/* See if this object was here before */
+	pid = g_hash_table_lookup (self->pv->id_for_object, object);
+
+	/* Decide what we're going to do */
+	if (id == NULL) {
+		if (pid != NULL) {
+			id = pid;
+			remove = TRUE;
+		}
+	} else {
+		if (pid == NULL) {
+			add = TRUE;
+		} else if (!gck_attribute_equal (id, pid)) {
+			remove = TRUE;
+			add = TRUE;
+		}
+	}
+
+	if (add) {
+		if (!g_hash_table_lookup_extended (self->pv->objects_for_id, id,
+		                                   (gpointer *)&id, (gpointer *)&objects)) {
+			objects = g_ptr_array_new ();
+			id = gck_attribute_dup (id);
+			g_hash_table_insert (self->pv->objects_for_id, id, objects);
+		}
+		g_ptr_array_add (objects, object);
+		g_hash_table_insert (self->pv->id_for_object, object, id);
+	}
+
+	/* Remove this object from the map */
+	if (remove) {
+		if (!g_hash_table_remove (self->pv->id_for_object, object))
+			g_assert_not_reached ();
+		objects = g_hash_table_lookup (self->pv->objects_for_id, id);
+		g_assert (objects != NULL);
+		g_assert (objects->len > 0);
+		if (objects->len == 1) {
+			if (!g_hash_table_remove (self->pv->objects_for_id, id))
+				g_assert_not_reached ();
+		} else {
+			if (!g_ptr_array_remove (objects, object))
+				g_assert_not_reached ();
+		}
+	}
+}
+
+static gpointer
+lookup_id_map (SeahorseToken *self,
+               GType object_type,
+               GckAttribute *id)
+{
+	GPtrArray *objects;
+	guint i;
+
+	objects = g_hash_table_lookup (self->pv->objects_for_id, id);
+	if (objects == NULL)
+		return NULL;
+
+	for (i = 0; i < objects->len; i++) {
+		if (G_TYPE_CHECK_INSTANCE_TYPE (objects->pdata[i], object_type))
+			return objects->pdata[i];
+	}
+
+	return NULL;
+}
+
+static void
+update_visibility (SeahorseToken *self,
+                   GList *objects,
+                   gboolean visible)
+{
+	gboolean have;
+	gpointer object;
+	GList *l;
+
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		object = l->data;
+		have = g_hash_table_lookup (self->pv->objects_visible, object) != NULL;
+		if (!have && visible) {
+			g_hash_table_insert (self->pv->objects_visible, object, object);
+			gcr_collection_emit_added (GCR_COLLECTION (self), object);
+		} else if (have && !visible) {
+			if (!g_hash_table_remove (self->pv->objects_visible, object))
+				g_assert_not_reached ();
+			gcr_collection_emit_removed (GCR_COLLECTION (self), object);
+		}
+	}
+}
+
+static gboolean
+make_certificate_key_pair (SeahorseCertificate *certificate,
+                           SeahorsePrivateKey *private_key)
+{
+	if (seahorse_certificate_get_private_key (certificate) ||
+	    seahorse_private_key_get_certificate (private_key))
+		return FALSE;
+
+	seahorse_certificate_set_private_key (certificate, private_key);
+	seahorse_private_key_set_certificate (private_key, certificate);
+	return TRUE;
+}
+
+static gpointer
+break_certificate_key_pair (gpointer object)
+{
+	SeahorseCertificate *certificate = NULL;
+	SeahorsePrivateKey *private_key = NULL;
+	gpointer pair;
+
+	if (SEAHORSE_IS_CERTIFICATE (object)) {
+		certificate = SEAHORSE_CERTIFICATE (object);
+		pair = seahorse_certificate_get_private_key (certificate);
+		seahorse_certificate_set_private_key (certificate, NULL);
+	} else if (SEAHORSE_IS_PRIVATE_KEY (object)) {
+		private_key = SEAHORSE_PRIVATE_KEY (object);
+		pair = seahorse_private_key_get_certificate (private_key);
+		seahorse_private_key_set_certificate (private_key, NULL);
+	} else {
+		pair = NULL;
+	}
+
+	return pair;
+}
+
+static void
+receive_objects (SeahorseToken *self,
+                 GList *objects)
+{
+	GckAttributes *attrs;
+	GckAttribute *id;
+	gpointer object;
+	gpointer prev;
+	gpointer pair;
+	gulong handle;
+	GList *show = NULL;
+	GList *hide = NULL;
+	GList *l;
+
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		object = l->data;
+		handle = gck_object_get_handle (object);
+		attrs = gck_object_attributes_get_attributes (object);
+
+		prev = g_hash_table_lookup (self->pv->object_for_handle, &handle);
+		if (prev == NULL) {
+			g_hash_table_insert (self->pv->object_for_handle,
+			                     g_memdup (&handle, sizeof (handle)),
+			                     g_object_ref (object));
+			g_object_set (object, "place", self, NULL);
+		} else if (prev != object) {
+			gck_object_attributes_set_attributes (prev, attrs);
+			object = prev;
+		}
+
+		id = gck_attributes_find (attrs, CKA_ID);
+		update_id_map (self, object, id);
+
+		if (SEAHORSE_IS_CERTIFICATE (object)) {
+			pair = lookup_id_map (self, SEAHORSE_TYPE_PRIVATE_KEY, id);
+			if (pair && make_certificate_key_pair (object, pair))
+				hide = g_list_prepend (hide, pair);
+			show = g_list_prepend (show, object);
+
+		} else if (SEAHORSE_IS_PRIVATE_KEY (object)) {
+			pair = lookup_id_map (self, SEAHORSE_TYPE_CERTIFICATE, id);
+			if (pair && make_certificate_key_pair (pair, object))
+				hide = g_list_prepend (hide, object);
+			else
+				show = g_list_prepend (show, object);
+
+		} else {
+			show = g_list_prepend (show, object);
+		}
+
+		gck_attributes_unref (attrs);
+	}
+
+	update_visibility (self, hide, FALSE);
+	g_list_free (hide);
+
+	update_visibility (self, show, TRUE);
+	g_list_free (show);
+}
+
+static void
+remove_objects (SeahorseToken *self,
+                GList *objects)
+{
+	GList *depaired = NULL;
+	GList *hide = NULL;
+	gulong handle;
+	gpointer object;
+	gpointer pair;
+	GList *l;
+
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		object = l->data;
+		pair = break_certificate_key_pair (object);
+		if (pair != NULL)
+			depaired = g_list_prepend (depaired, pair);
+		update_id_map (self, object, NULL);
+		hide = g_list_prepend (hide, object);
+	}
+
+	/* Remove the ownership of these */
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		handle = gck_object_get_handle (l->data);
+		g_object_set (object, "place", NULL, NULL);
+		g_hash_table_remove (self->pv->object_for_handle, &handle);
+	}
+
+	update_visibility (self, hide, FALSE);
+	g_list_free (hide);
+
+	/* Add everything that was paired */
+	receive_objects (self, depaired);
+	g_list_free (depaired);
+}
+
 
 typedef struct {
 	SeahorseToken *token;
@@ -94,17 +342,6 @@ pkcs11_refresh_free (gpointer data)
 	g_free (closure);
 }
 
-static gboolean
-remove_each_object (gpointer key,
-                    gpointer value,
-                    gpointer user_data)
-{
-	SeahorseToken *token = SEAHORSE_TOKEN (user_data);
-	GckObject *object = GCK_OBJECT (value);
-	seahorse_token_remove_object (token, object);
-	return TRUE;
-}
-
 static void
 on_refresh_next_objects (GObject *source,
                          GAsyncResult *result,
@@ -119,9 +356,10 @@ on_refresh_next_objects (GObject *source,
 
 	objects = gck_enumerator_next_finish (closure->enumerator, result, &error);
 
-	/* Remove all objects that were found, from the check table */
+	receive_objects (closure->token, objects);
+
+	/* Remove all objects that were found from the check table */
 	for (l = objects; l; l = g_list_next (l)) {
-		receive_object (closure->token, l->data);
 		handle = gck_object_get_handle (l->data);
 		g_hash_table_remove (closure->checks, &handle);
 	}
@@ -140,29 +378,14 @@ on_refresh_next_objects (GObject *source,
 
 	/* Otherwise we're done, remove everything not found */
 	} else {
-		g_hash_table_foreach_remove (closure->checks, remove_each_object, closure->token);
+		objects = g_hash_table_get_values (closure->checks);
+		remove_objects (closure->token, objects);
+		g_list_free (objects);
+
 		g_simple_async_result_complete (res);
 	}
 
 	g_object_unref (res);
-}
-
-static void
-update_token_info (SeahorseToken *self)
-{
-	GckTokenInfo *info;
-	GObject *obj;
-
-	info = gck_slot_get_token_info (self->pv->slot);
-	if (info != NULL) {
-		gck_token_info_free (self->pv->info);
-		self->pv->info = info;
-
-		obj = G_OBJECT (self);
-		g_object_notify (obj, "info");
-		g_object_notify (obj, "lockable");
-		g_object_notify (obj, "unlockable");
-	}
 }
 
 static void
@@ -296,10 +519,16 @@ static void
 seahorse_token_init (SeahorseToken *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_TOKEN, SeahorseTokenPrivate));
-	self->pv->objects = g_hash_table_new_full (seahorse_pkcs11_ulong_hash,
-	                                           seahorse_pkcs11_ulong_equal,
-	                                           g_free, g_object_unref);
 	self->pv->actions = seahorse_pkcs11_token_actions_instance ();
+	self->pv->object_for_handle = g_hash_table_new_full (seahorse_pkcs11_ulong_hash,
+	                                                     seahorse_pkcs11_ulong_equal,
+	                                                     g_free, g_object_unref);
+	self->pv->objects_for_id = g_hash_table_new_full (gck_attribute_hash,
+	                                                  gck_attribute_equal,
+	                                                  gck_attribute_free,
+	                                                  (GDestroyNotify)g_ptr_array_unref);
+	self->pv->id_for_object = g_hash_table_new (g_direct_hash, g_direct_equal);
+	self->pv->objects_visible = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 static void
@@ -429,7 +658,10 @@ seahorse_token_finalize (GObject *obj)
 {
 	SeahorseToken *self = SEAHORSE_TOKEN (obj);
 
-	g_hash_table_destroy (self->pv->objects);
+	g_hash_table_destroy (self->pv->objects_visible);
+	g_hash_table_destroy (self->pv->object_for_handle);
+	g_hash_table_destroy (self->pv->objects_for_id);
+	g_hash_table_destroy (self->pv->id_for_object);
 	g_assert (self->pv->slot == NULL);
 	g_clear_object (&self->pv->actions);
 	g_free (self->pv->uri);
@@ -491,14 +723,14 @@ static guint
 seahorse_token_get_length (GcrCollection *collection)
 {
 	SeahorseToken *self = SEAHORSE_TOKEN (collection);
-	return g_hash_table_size (self->pv->objects);
+	return g_hash_table_size (self->pv->objects_visible);
 }
 
 static GList *
 seahorse_token_get_objects (GcrCollection *collection)
 {
 	SeahorseToken *self = SEAHORSE_TOKEN (collection);
-	return g_hash_table_get_values (self->pv->objects);
+	return g_hash_table_get_values (self->pv->objects_visible);
 }
 
 static gboolean
@@ -506,13 +738,7 @@ seahorse_token_contains (GcrCollection *collection,
                          GObject *object)
 {
 	SeahorseToken *self = SEAHORSE_TOKEN (collection);
-	gulong handle;
-
-	if (!GCK_IS_OBJECT (object))
-		return FALSE;
-
-	handle = gck_object_get_handle (GCK_OBJECT (object));
-	return g_hash_table_lookup (self->pv->objects, &handle) == object;
+	return g_hash_table_lookup (self->pv->objects_visible, object) != NULL;
 }
 
 static void
@@ -636,51 +862,20 @@ seahorse_token_get_unlockable (SeahorseToken *self)
 		return FALSE;
 
 	return !is_session_logged_in (self->pv->session);
-
-}
-
-static void
-receive_object (SeahorseToken *self,
-                GckObject *obj)
-{
-	GckAttributes *attrs;
-	GckObject *prev;
-	gulong handle;
-
-	g_return_if_fail (SEAHORSE_IS_TOKEN (self));
-
-	handle = gck_object_get_handle (obj);
-	prev = g_hash_table_lookup (self->pv->objects, &handle);
-	if (prev != NULL) {
-		attrs = gck_object_attributes_get_attributes (GCK_OBJECT_ATTRIBUTES (obj));
-		gck_object_attributes_set_attributes (GCK_OBJECT_ATTRIBUTES (prev), attrs);
-		gck_attributes_unref (attrs);
-	} else {
-		g_hash_table_insert (self->pv->objects,
-		                     g_memdup (&handle, sizeof (handle)),
-		                     g_object_ref (obj));
-		gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (obj));
-	}
 }
 
 void
 seahorse_token_remove_object (SeahorseToken *self,
                               GckObject *object)
 {
-	gulong handle;
+	GList *objects;
 
 	g_return_if_fail (SEAHORSE_IS_TOKEN (self));
 	g_return_if_fail (GCK_IS_OBJECT (object));
 
-	g_object_ref (object);
-
-	handle = gck_object_get_handle (object);
-	g_return_if_fail (g_hash_table_lookup (self->pv->objects, &handle) == object);
-
-	g_hash_table_remove (self->pv->objects, &handle);
-	gcr_collection_emit_removed (GCR_COLLECTION (self), G_OBJECT (object));
-
-	g_object_unref (object);
+	objects = g_list_prepend (NULL, g_object_ref (object));
+	remove_objects (self, objects);
+	g_list_free_full (objects, g_object_unref);
 }
 
 static void

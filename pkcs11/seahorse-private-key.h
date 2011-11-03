@@ -26,6 +26,8 @@
 
 #include <glib-object.h>
 
+#include "seahorse-certificate.h"
+
 #define SEAHORSE_TYPE_PRIVATE_KEY               (seahorse_private_key_get_type ())
 #define SEAHORSE_PRIVATE_KEY(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PRIVATE_KEY, SeahorsePrivateKey))
 #define SEAHORSE_PRIVATE_KEY_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PRIVATE_KEY, SeahorsePrivateKeyClass))
@@ -33,7 +35,6 @@
 #define SEAHORSE_IS_PRIVATE_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PRIVATE_KEY))
 #define SEAHORSE_PRIVATE_KEY_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PRIVATE_KEY, SeahorsePrivateKeyClass))
 
-typedef struct _SeahorsePrivateKey SeahorsePrivateKey;
 typedef struct _SeahorsePrivateKeyClass SeahorsePrivateKeyClass;
 typedef struct _SeahorsePrivateKeyPrivate SeahorsePrivateKeyPrivate;
 
@@ -47,5 +48,10 @@ struct _SeahorsePrivateKeyClass {
 };
 
 GType                 seahorse_private_key_get_type           (void) G_GNUC_CONST;
+
+SeahorseCertificate * seahorse_private_key_get_certificate    (SeahorsePrivateKey *self);
+
+void                  seahorse_private_key_set_certificate    (SeahorsePrivateKey *self,
+                                                               SeahorseCertificate *certificate);
 
 #endif /* __SEAHORSE_PRIVATE_KEY_H__ */
