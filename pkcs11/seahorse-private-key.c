@@ -52,6 +52,11 @@ enum {
 	PROP_FLAGS,
 	PROP_ACTIONS,
 	PROP_CERTIFICATE,
+
+	PROP_LABEL,
+	PROP_MARKUP,
+	PROP_DESCRIPTION,
+	PROP_ICON
 };
 
 struct _SeahorsePrivateKeyPrivate {
@@ -59,6 +64,7 @@ struct _SeahorsePrivateKeyPrivate {
 	GckAttributes *attributes;
 	GtkActionGroup *actions;
 	SeahorseCertificate *certificate;
+	GIcon *icon;
 };
 
 static void seahorse_private_key_object_attributes_iface (GckObjectAttributesIface *iface);
@@ -66,6 +72,13 @@ static void seahorse_private_key_object_attributes_iface (GckObjectAttributesIfa
 G_DEFINE_TYPE_WITH_CODE (SeahorsePrivateKey, seahorse_private_key, GCK_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_ATTRIBUTES, seahorse_private_key_object_attributes_iface)
 );
+
+static void
+update_icon (SeahorsePrivateKey *self)
+{
+	g_clear_object (&self->pv->icon);
+	self->pv->icon = g_themed_icon_new (GCR_ICON_KEY);
+}
 
 static void
 seahorse_private_key_init (SeahorsePrivateKey *self)
@@ -80,11 +93,37 @@ seahorse_private_key_finalize (GObject *obj)
 	SeahorsePrivateKey *self = SEAHORSE_PRIVATE_KEY (obj);
 
 	g_clear_object (&self->pv->actions);
+	g_clear_object (&self->pv->icon);
 
 	if (self->pv->attributes)
 		gck_attributes_unref (self->pv->attributes);
 
 	G_OBJECT_CLASS (seahorse_private_key_parent_class)->finalize (obj);
+}
+
+static gchar *
+calculate_label (SeahorsePrivateKey *self)
+{
+	gchar *label = NULL;
+
+	if (self->pv->attributes) {
+		if (gck_attributes_find_string (self->pv->attributes, CKA_LABEL, &label))
+			return label;
+	}
+
+	if (self->pv->certificate) {
+		g_object_get (self->pv->certificate, "label", &label, NULL);
+		return label;
+	}
+
+	return g_strdup (_("Unnamed private key"));
+}
+
+static gchar *
+calculate_markup (SeahorsePrivateKey *self)
+{
+	gchar *label = calculate_label (self);
+	return g_markup_escape_text (label, -1);
 }
 
 static void
@@ -110,6 +149,18 @@ seahorse_private_key_get_property (GObject *obj,
 		break;
 	case PROP_CERTIFICATE:
 		g_value_set_object (value, seahorse_private_key_get_certificate (self));
+		break;
+	case PROP_LABEL:
+		g_value_take_string (value, calculate_label (self));
+		break;
+	case PROP_MARKUP:
+		g_value_take_string (value, calculate_markup (self));
+		break;
+	case PROP_DESCRIPTION:
+		g_value_set_string (value, _("Private key"));
+		break;
+	case PROP_ICON:
+		g_value_set_object (value, seahorse_private_key_get_icon (self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -166,15 +217,31 @@ seahorse_private_key_class_init (SeahorsePrivateKeyClass *klass)
 
 	g_object_class_install_property (gobject_class, PROP_FLAGS,
 	         g_param_spec_flags ("flags", "flags", "flags", SEAHORSE_TYPE_FLAGS, SEAHORSE_FLAG_NONE,
-	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+	                              G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
 
 	g_object_class_install_property (gobject_class, PROP_ACTIONS,
 	         g_param_spec_object ("actions", "Actions", "Actions", GTK_TYPE_ACTION_GROUP,
-	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+	                              G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
 
 	g_object_class_install_property (gobject_class, PROP_CERTIFICATE,
 	            g_param_spec_object ("certificate", "Certificate", "Certificate associated with this private key",
 	                                 SEAHORSE_TYPE_CERTIFICATE, G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_LABEL,
+	            g_param_spec_string ("label", "label", "label",
+	                                 "", G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_MARKUP,
+	            g_param_spec_string ("markup", "markup", "markup",
+	                                 "", G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_DESCRIPTION,
+	            g_param_spec_string ("description", "description", "description",
+	                                 "", G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_ICON,
+	            g_param_spec_object ("icon", "icon", "icon",
+	                                 G_TYPE_ICON, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
 
 	g_object_class_override_property (gobject_class, PROP_ATTRIBUTES, "attributes");
 }
@@ -193,23 +260,46 @@ seahorse_private_key_get_certificate (SeahorsePrivateKey *self)
 	return self->pv->certificate;
 }
 
+static void
+notify_certificate_change (GObject *obj)
+{
+	g_object_notify (obj, "certificate");
+	g_object_notify (obj, "label");
+	g_object_notify (obj, "markup");
+}
+
+static void
+on_certificate_gone (gpointer data,
+                     GObject *where_the_object_was)
+{
+	SeahorsePrivateKey *self = SEAHORSE_PRIVATE_KEY (data);
+	self->pv->certificate = NULL;
+	notify_certificate_change (G_OBJECT (self));
+}
+
 void
 seahorse_private_key_set_certificate (SeahorsePrivateKey *self,
                                       SeahorseCertificate *certificate)
 {
-	GObject *obj;
-
 	g_return_if_fail (SEAHORSE_IS_PRIVATE_KEY (self));
 	g_return_if_fail (certificate == NULL || SEAHORSE_IS_CERTIFICATE (certificate));
 
 	if (self->pv->certificate)
-		g_object_remove_weak_pointer (G_OBJECT (certificate),
-		                              (gpointer *)self->pv->certificate);
+		g_object_weak_unref (G_OBJECT (self->pv->certificate), on_certificate_gone, self);
 	self->pv->certificate = certificate;
 	if (self->pv->certificate)
-		g_object_add_weak_pointer (G_OBJECT (certificate),
-		                           (gpointer *)self->pv->certificate);
+		g_object_weak_ref (G_OBJECT (self->pv->certificate), on_certificate_gone, self);
 
-	obj = G_OBJECT (self);
-	g_object_notify (obj, "certificate");
+	notify_certificate_change (G_OBJECT (self));
+}
+
+GIcon *
+seahorse_private_key_get_icon (SeahorsePrivateKey *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_PRIVATE_KEY (self), NULL);
+
+	if (!self->pv->icon)
+		update_icon (self);
+
+	return self->pv->icon;
 }

@@ -54,4 +54,6 @@ SeahorseCertificate * seahorse_private_key_get_certificate    (SeahorsePrivateKe
 void                  seahorse_private_key_set_certificate    (SeahorsePrivateKey *self,
                                                                SeahorseCertificate *certificate);
 
+GIcon *               seahorse_private_key_get_icon           (SeahorsePrivateKey *self);
+
 #endif /* __SEAHORSE_PRIVATE_KEY_H__ */
