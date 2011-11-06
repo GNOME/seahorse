@@ -110,7 +110,10 @@ on_delete_objects (GtkAction *action,
 		                          seahorse_object_get_label (objects->data));
 
 	} else {
-		prompt = g_strdup_printf (_("Are you sure you want to delete %d secure shell keys?"), num);
+		prompt = g_strdup_printf (ngettext (_("Are you sure you want to delete %d secure shell keys?"),
+		                                    _("Are you sure you want to delete %d secure shell keys?"),
+		                                    num),
+		                          num);
 	}
 
 	parent = GTK_WIDGET (seahorse_action_get_window (action));

@@ -252,11 +252,20 @@ on_delete_objects (GtkAction *action,
 		break;
 	default:
 		if (num_keys > 0 && num_identities > 0) {
-			message = g_strdup_printf (_("Are you sure you want to permanently delete %d keys and identities?"), length);
+			message = g_strdup_printf (ngettext (_("Are you sure you want to permanently delete %d keys and identities?"),
+			                                     _("Are you sure you want to permanently delete %d keys and identities?"),
+			                                     length),
+			                           length);
 		} else if (num_keys > 0) {
-			message = g_strdup_printf (_("Are you sure you want to permanently delete %d keys?"), length);
+			message = g_strdup_printf (ngettext (_("Are you sure you want to permanently delete %d keys?"),
+			                                     _("Are you sure you want to permanently delete %d keys?"),
+			                                     length),
+			                           length);
 		} else if (num_identities > 0){
-			message = g_strdup_printf (_("Are you sure you want to permanently delete %d identities?"), length);
+			message = g_strdup_printf (ngettext (_("Are you sure you want to permanently delete %d identities?"),
+			                                     _("Are you sure you want to permanently delete %d identities?"),
+			                                     length),
+			                           length);
 		} else {
 			g_assert_not_reached ();
 		}
