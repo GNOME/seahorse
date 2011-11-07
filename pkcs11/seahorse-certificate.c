@@ -51,8 +51,10 @@ enum {
 	PROP_ATTRIBUTES,
 	PROP_FLAGS,
 	PROP_ACTIONS,
+	PROP_PARTNER,
+
 	PROP_ICON,
-	PROP_PRIVATE_KEY
+	PROP_DESCRIPTION
 };
 
 struct _SeahorseCertificatePrivate {
@@ -160,11 +162,14 @@ seahorse_certificate_get_property (GObject *obj,
 	case PROP_ACTIONS:
 		g_value_set_object (value, self->pv->actions);
 		break;
+	case PROP_PARTNER:
+		g_value_set_object (value, seahorse_certificate_get_partner (self));
+		break;
 	case PROP_ICON:
 		g_value_set_object (value, seahorse_certificate_get_icon (self));
 		break;
-	case PROP_PRIVATE_KEY:
-		g_value_set_object (value, seahorse_certificate_get_private_key (self));
+	case PROP_DESCRIPTION:
+		g_value_set_string (value, seahorse_certificate_get_description (self));
 		break;
 	default:
 		gcr_certificate_mixin_get_property (obj, prop_id, value, pspec);
@@ -203,8 +208,8 @@ seahorse_certificate_set_property (GObject *obj,
 			gck_attribute_init_copy (&self->pv->der_value, der_value);
 		}
 		break;
-	case PROP_PRIVATE_KEY:
-		seahorse_certificate_set_private_key (self, g_value_get_object (value));
+	case PROP_PARTNER:
+		seahorse_certificate_set_partner (self, g_value_get_object (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -237,12 +242,14 @@ seahorse_certificate_class_init (SeahorseCertificateClass *klass)
 	         g_param_spec_object ("actions", "Actions", "Actions", GTK_TYPE_ACTION_GROUP,
 	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 
-	g_object_class_install_property (gobject_class, PROP_PRIVATE_KEY,
-	            g_param_spec_object ("private-key", "Private key", "Private key associated with certificate",
+	g_object_class_install_property (gobject_class, PROP_PARTNER,
+	            g_param_spec_object ("partner", "Partner", "Private key associated with certificate",
 	                                 SEAHORSE_TYPE_PRIVATE_KEY, G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE));
 
-	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
 	g_object_class_override_property (gobject_class, PROP_ATTRIBUTES, "attributes");
+
+	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 
 	gcr_certificate_mixin_class_init (gobject_class);
 }
@@ -282,16 +289,27 @@ seahorse_certificate_get_icon (SeahorseCertificate *self)
 	return self->pv->icon;
 }
 
+const gchar *
+seahorse_certificate_get_description (SeahorseCertificate *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_CERTIFICATE (self), NULL);
+
+	if (self->pv->private_key)
+		return _("Certificate and Key");
+
+	return _("Certificate");
+}
+
 SeahorsePrivateKey *
-seahorse_certificate_get_private_key (SeahorseCertificate *self)
+seahorse_certificate_get_partner (SeahorseCertificate *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_CERTIFICATE (self), NULL);
 	return self->pv->private_key;
 }
 
 void
-seahorse_certificate_set_private_key (SeahorseCertificate *self,
-                                      SeahorsePrivateKey *private_key)
+seahorse_certificate_set_partner (SeahorseCertificate *self,
+                                  SeahorsePrivateKey *private_key)
 {
 	GObject *obj;
 
@@ -307,7 +325,7 @@ seahorse_certificate_set_private_key (SeahorseCertificate *self,
 		                           (gpointer *)self->pv->private_key);
 
 	obj = G_OBJECT (self);
-	g_object_notify (obj, "private-key");
+	g_object_notify (obj, "partner");
 	g_clear_object (&self->pv->icon);
 	g_object_notify (obj, "icon");
 	g_object_notify (obj, "description");

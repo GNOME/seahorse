@@ -51,7 +51,7 @@ enum {
 	PROP_ATTRIBUTES,
 	PROP_FLAGS,
 	PROP_ACTIONS,
-	PROP_CERTIFICATE,
+	PROP_PARTNER,
 
 	PROP_LABEL,
 	PROP_MARKUP,
@@ -147,8 +147,8 @@ seahorse_private_key_get_property (GObject *obj,
 	case PROP_ACTIONS:
 		g_value_set_object (value, self->pv->actions);
 		break;
-	case PROP_CERTIFICATE:
-		g_value_set_object (value, seahorse_private_key_get_certificate (self));
+	case PROP_PARTNER:
+		g_value_set_object (value, seahorse_private_key_get_partner (self));
 		break;
 	case PROP_LABEL:
 		g_value_take_string (value, calculate_label (self));
@@ -191,8 +191,8 @@ seahorse_private_key_set_property (GObject *obj,
 			gck_attributes_unref (self->pv->attributes);
 		self->pv->attributes = g_value_dup_boxed (value);
 		break;
-	case PROP_CERTIFICATE:
-		seahorse_private_key_set_certificate (self, g_value_get_object (value));
+	case PROP_PARTNER:
+		seahorse_private_key_set_partner (self, g_value_get_object (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -223,8 +223,8 @@ seahorse_private_key_class_init (SeahorsePrivateKeyClass *klass)
 	         g_param_spec_object ("actions", "Actions", "Actions", GTK_TYPE_ACTION_GROUP,
 	                              G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
 
-	g_object_class_install_property (gobject_class, PROP_CERTIFICATE,
-	            g_param_spec_object ("certificate", "Certificate", "Certificate associated with this private key",
+	g_object_class_install_property (gobject_class, PROP_PARTNER,
+	            g_param_spec_object ("partner", "Partner", "Certificate associated with this private key",
 	                                 SEAHORSE_TYPE_CERTIFICATE, G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_LABEL,
@@ -254,7 +254,7 @@ seahorse_private_key_object_attributes_iface (GckObjectAttributesIface *iface)
 }
 
 SeahorseCertificate *
-seahorse_private_key_get_certificate (SeahorsePrivateKey *self)
+seahorse_private_key_get_partner (SeahorsePrivateKey *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_PRIVATE_KEY (self), NULL);
 	return self->pv->certificate;
@@ -263,7 +263,7 @@ seahorse_private_key_get_certificate (SeahorsePrivateKey *self)
 static void
 notify_certificate_change (GObject *obj)
 {
-	g_object_notify (obj, "certificate");
+	g_object_notify (obj, "partner");
 	g_object_notify (obj, "label");
 	g_object_notify (obj, "markup");
 }
@@ -278,7 +278,7 @@ on_certificate_gone (gpointer data,
 }
 
 void
-seahorse_private_key_set_certificate (SeahorsePrivateKey *self,
+seahorse_private_key_set_partner (SeahorsePrivateKey *self,
                                       SeahorseCertificate *certificate)
 {
 	g_return_if_fail (SEAHORSE_IS_PRIVATE_KEY (self));

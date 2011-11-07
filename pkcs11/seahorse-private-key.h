@@ -49,9 +49,9 @@ struct _SeahorsePrivateKeyClass {
 
 GType                 seahorse_private_key_get_type           (void) G_GNUC_CONST;
 
-SeahorseCertificate * seahorse_private_key_get_certificate    (SeahorsePrivateKey *self);
+SeahorseCertificate * seahorse_private_key_get_partner        (SeahorsePrivateKey *self);
 
-void                  seahorse_private_key_set_certificate    (SeahorsePrivateKey *self,
+void                  seahorse_private_key_set_partner        (SeahorsePrivateKey *self,
                                                                SeahorseCertificate *certificate);
 
 GIcon *               seahorse_private_key_get_icon           (SeahorsePrivateKey *self);

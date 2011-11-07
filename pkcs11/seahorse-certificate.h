@@ -51,9 +51,11 @@ GType                 seahorse_certificate_get_type               (void) G_GNUC_
 
 GIcon *               seahorse_certificate_get_icon               (SeahorseCertificate *self);
 
-SeahorsePrivateKey *  seahorse_certificate_get_private_key        (SeahorseCertificate *self);
+const gchar *         seahorse_certificate_get_description        (SeahorseCertificate *self);
 
-void                  seahorse_certificate_set_private_key        (SeahorseCertificate *self,
+SeahorsePrivateKey *  seahorse_certificate_get_partner            (SeahorseCertificate *self);
+
+void                  seahorse_certificate_set_partner            (SeahorseCertificate *self,
                                                                    SeahorsePrivateKey *private_key);
 
 #endif /* __SEAHORSE_CERTIFICATE_H__ */

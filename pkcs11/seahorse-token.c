@@ -197,12 +197,12 @@ static gboolean
 make_certificate_key_pair (SeahorseCertificate *certificate,
                            SeahorsePrivateKey *private_key)
 {
-	if (seahorse_certificate_get_private_key (certificate) ||
-	    seahorse_private_key_get_certificate (private_key))
+	if (seahorse_certificate_get_partner (certificate) ||
+	    seahorse_private_key_get_partner (private_key))
 		return FALSE;
 
-	seahorse_certificate_set_private_key (certificate, private_key);
-	seahorse_private_key_set_certificate (private_key, certificate);
+	seahorse_certificate_set_partner (certificate, private_key);
+	seahorse_private_key_set_partner (private_key, certificate);
 	return TRUE;
 }
 
@@ -215,12 +215,12 @@ break_certificate_key_pair (gpointer object)
 
 	if (SEAHORSE_IS_CERTIFICATE (object)) {
 		certificate = SEAHORSE_CERTIFICATE (object);
-		pair = seahorse_certificate_get_private_key (certificate);
-		seahorse_certificate_set_private_key (certificate, NULL);
+		pair = seahorse_certificate_get_partner (certificate);
+		seahorse_certificate_set_partner (certificate, NULL);
 	} else if (SEAHORSE_IS_PRIVATE_KEY (object)) {
 		private_key = SEAHORSE_PRIVATE_KEY (object);
-		pair = seahorse_private_key_get_certificate (private_key);
-		seahorse_private_key_set_certificate (private_key, NULL);
+		pair = seahorse_private_key_get_partner (private_key);
+		seahorse_private_key_set_partner (private_key, NULL);
 	} else {
 		pair = NULL;
 	}

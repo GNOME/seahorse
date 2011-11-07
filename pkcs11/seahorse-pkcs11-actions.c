@@ -27,7 +27,7 @@
 #include "seahorse-certificate.h"
 #include "seahorse-interaction.h"
 #include "seahorse-pkcs11.h"
-#include "seahorse-pkcs11-certificate-props.h"
+#include "seahorse-pkcs11-properties.h"
 #include "seahorse-pkcs11-operations.h"
 #include "seahorse-token.h"
 
@@ -190,44 +190,19 @@ typedef struct {
 	SeahorseActionsClass parent_class;
 } SeahorsePkcs11ObjectActionsClass;
 
-static GQuark QUARK_WINDOW = 0;
-
 G_DEFINE_TYPE (SeahorsePkcs11ObjectActions, seahorse_pkcs11_object_actions, SEAHORSE_TYPE_ACTIONS);
-
-static void
-properties_response (GtkDialog *dialog, gint response_id, gpointer user_data)
-{
-	gtk_widget_destroy (GTK_WIDGET (dialog));
-}
 
 static void
 on_show_properties (GtkAction *action,
                     gpointer user_data)
 {
 	GtkWindow *window;
-	gpointer previous;
 	GObject *object;
 
-	object = G_OBJECT (user_data);
-
-	/* Try to show an already present window */
-	previous = g_object_get_qdata (object, QUARK_WINDOW);
-	if (GTK_IS_WINDOW (previous)) {
-		window = GTK_WINDOW (previous);
-		if (gtk_widget_get_visible (GTK_WIDGET (window))) {
-			gtk_window_present (window);
-			return;
-		}
-	}
-
 	/* Create a new dialog for the certificate */
-	window = GTK_WINDOW (seahorse_pkcs11_certificate_props_new (GCR_CERTIFICATE (object)));
-	gtk_window_set_transient_for (window, seahorse_action_get_window (action));
-	g_object_set_qdata (G_OBJECT (object), QUARK_WINDOW, window);
+	object = G_OBJECT (user_data);
+	window = seahorse_pkcs11_properties_show (object, seahorse_action_get_window (action));
 	gtk_widget_show (GTK_WIDGET (window));
-
-	/* Close the window when we get a response */
-	g_signal_connect (window, "response", G_CALLBACK (properties_response), NULL);
 }
 
 static void
@@ -329,7 +304,6 @@ static void
 seahorse_pkcs11_object_actions_class_init (SeahorsePkcs11ObjectActionsClass *klass)
 {
 	SeahorseActionsClass *actions_class = SEAHORSE_ACTIONS_CLASS (klass);
-	QUARK_WINDOW = g_quark_from_static_string ("seahorse-pkcs11-actions-window");
 	actions_class->clone_for_objects = seahorse_pkcs11_object_actions_clone_for_objects;
 }
 
