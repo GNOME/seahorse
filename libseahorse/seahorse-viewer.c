@@ -228,7 +228,8 @@ static const GtkActionEntry UI_ENTRIES[] = {
 	/* Top menu items */
 	{ "file-menu", NULL, N_("_File") },
 	{ "edit-menu", NULL, N_("_Edit") },
-	{ "edit-delete", GTK_STOCK_DELETE, NC_("This text refers to deleting an item from its type's backing store.", "_Delete"), NULL,
+	/*Translators: This text refers to deleting an item from its type's backing store*/
+	{ "edit-delete", GTK_STOCK_DELETE, N_("_Delete"), NULL,
 	  N_("Delete selected items"), G_CALLBACK (on_object_delete) },
 	{ "properties-object", GTK_STOCK_PROPERTIES, NULL, NULL,
 	  N_("Show the properties of this item"), G_CALLBACK (on_properties_object) },
