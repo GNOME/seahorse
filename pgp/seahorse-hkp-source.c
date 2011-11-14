@@ -1245,7 +1245,7 @@ seahorse_hkp_is_valid_uri (const gchar *uri)
         /* Must be http or https, have a host. No querystring, user, path, passwd etc... */
         if ((soup->scheme == SOUP_URI_SCHEME_HTTP || soup->scheme == SOUP_URI_SCHEME_HTTPS) && 
             !soup->user && !soup->password && !soup->query && !soup->fragment &&
-            soup->host && g_str_equal (soup->path ? soup->path : "/", "/"))
+            soup->host && soup->host[0] && g_str_equal (soup->path ? soup->path : "/", "/"))
             ret = TRUE;
         soup_uri_free (soup);
     }

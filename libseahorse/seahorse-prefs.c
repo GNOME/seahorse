@@ -282,7 +282,7 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
 }
 
 G_MODULE_EXPORT void
-on_prefs_add_keyserver_uri_changed (GtkWidget *button,
+on_prefs_add_keyserver_uri_changed (GtkWidget *unused,
                                     gpointer user_data)
 {
     SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
@@ -341,18 +341,17 @@ on_prefs_keyserver_add_clicked (GtkButton *button,
     /* The list of types */
     types = seahorse_servers_get_types ();
 
+    /* Save these away for later */
+    g_object_set_data_full (G_OBJECT (swidget), "keyserver-types", types,
+                            (GDestroyNotify)g_strfreev);
+
     /* The description for the key server types, plus custom */
     for (i = 0; types[i] != NULL; i++)
         gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget),
                                         seahorse_servers_get_description (types[i]));
     gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget),
                                     _("Custom"));
-    gtk_combo_box_text_remove (GTK_COMBO_BOX_TEXT (widget), 0);
     gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-
-    /* Save these away for later */
-    g_object_set_data_full (G_OBJECT (swidget), "keyserver-types", types, 
-                            (GDestroyNotify)g_strfreev);
 
     response = gtk_dialog_run (GTK_DIALOG (seahorse_widget_get_toplevel (swidget)));
     if (response == GTK_RESPONSE_ACCEPT) {
