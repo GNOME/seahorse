@@ -71,13 +71,14 @@ create_file (const gchar *file, mode_t mode, GError **err)
 static gchar *
 find_config_file (gboolean read, GError **err)
 {
-    gchar *conf = NULL;
+	gchar *conf = NULL;
 
-    g_assert (gpg_options_inited);
-    g_assert (!err || !*err);
+	g_assert (!err || !*err);
 
-    if (!gpg_homedir)
-        return NULL;
+	if (!gpg_options_inited)
+		return NULL;
+	if (!gpg_homedir)
+		return NULL;
 
     /* Check for and open ~/.gnupg/gpg.conf */
     conf = g_strconcat (gpg_homedir, "/gpg.conf", NULL);
@@ -239,35 +240,37 @@ parse_home_directory (gpgme_engine_info_t engine, GError **err)
 static gboolean
 gpg_options_init (GError **err)
 {
-    if (!gpg_options_inited) {
-        gpgme_error_t gerr;
-        gpgme_engine_info_t engine;
+	gpgme_error_t gerr;
+	gpgme_engine_info_t engine;
 
-        gerr = gpgme_get_engine_info (&engine);
-        g_return_val_if_fail (GPG_IS_OK (gerr),
-                              (seahorse_gpgme_propagate_error (gerr, err), FALSE));
+	if (gpg_options_inited)
+		return TRUE;
 
-        /* Look for the OpenPGP engine */
-        while (engine && engine->protocol != GPGME_PROTOCOL_OpenPGP)
-            engine = engine->next;
+	gerr = gpgme_get_engine_info (&engine);
+	if (seahorse_gpgme_propagate_error (gerr, err))
+		return FALSE;
 
-        /* 
-         * Make sure it's the right version for us to be messing 
-         * around with the configuration file.
-         */
-        g_return_val_if_fail (engine && engine->version && engine->file_name &&
-                              (g_str_has_prefix (engine->version, GPG_VERSION_PREFIX1) ||
-                               g_str_has_prefix (engine->version, GPG_VERSION_PREFIX2)),
-                              (seahorse_gpgme_propagate_error (GPG_E (GPG_ERR_INV_ENGINE), err), FALSE));
+	/* Look for the OpenPGP engine */
+	while (engine && engine->protocol != GPGME_PROTOCOL_OpenPGP)
+		engine = engine->next;
 
-        /* Now run the binary and read in the home directory */
-        if (!parse_home_directory (engine, err))
-            return FALSE;
+	/*
+	 * Make sure it's the right version for us to be messing
+	 * around with the configuration file.
+	 */
+	if (!engine || !engine->version || !engine->file_name ||
+	    !(g_str_has_prefix (engine->version, GPG_VERSION_PREFIX1) ||
+	      g_str_has_prefix (engine->version, GPG_VERSION_PREFIX2))) {
+		seahorse_gpgme_propagate_error (GPG_E (GPG_ERR_INV_ENGINE), err);
+		return FALSE;
+	}
 
-        gpg_options_inited = TRUE;
-    }
+	/* Now run the binary and read in the home directory */
+	if (!parse_home_directory (engine, err))
+		return FALSE;
 
-    return TRUE;
+	gpg_options_inited = TRUE;
+	return TRUE;
 }
 
 /**
@@ -275,13 +278,12 @@ gpg_options_init (GError **err)
  * 
  * Returns: The home dir that GPG uses for it's keys and configuration
  **/
-const gchar*
+const gchar *
 seahorse_gpg_homedir (void)
 {
-    /* THis shouldn't normally fail, and as such we return an invalid 
-     * directory to avoid NULL memory access */
-    g_return_val_if_fail (gpg_options_init (NULL), "/invalid/gpg/dir");
-    return gpg_homedir;
+	if (!gpg_options_init (NULL))
+		return NULL;
+	return gpg_homedir;
 }
 
 /**

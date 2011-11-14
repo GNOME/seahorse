@@ -59,7 +59,6 @@ typedef struct _SeahorseGpgmeKeyringPrivate SeahorseGpgmeKeyringPrivate;
 
 struct _SeahorseGpgmeKeyring {
 	GObject parent;
-	gpgme_ctx_t gctx;
 	SeahorseGpgmeKeyringPrivate *pv;
 };
 
@@ -71,7 +70,7 @@ GType                  seahorse_gpgme_keyring_get_type       (void);
 
 SeahorseGpgmeKeyring * seahorse_gpgme_keyring_new            (void);
 
-gpgme_ctx_t            seahorse_gpgme_keyring_new_context    (void);
+gpgme_ctx_t            seahorse_gpgme_keyring_new_context    (gpgme_error_t *gerr);
 
 SeahorseGpgmeKey *     seahorse_gpgme_keyring_lookup         (SeahorseGpgmeKeyring *self,
                                                               const gchar *keyid);

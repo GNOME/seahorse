@@ -1177,12 +1177,15 @@ on_pgp_details_export_button (GtkWidget *widget,
 	uri = seahorse_util_chooser_save_prompt (dialog);
 	if (!uri) 
 		return;
-	
+
+	ctx = seahorse_gpgme_keyring_new_context (&gerr);
+	if (ctx == NULL)
+		return;
+
 	/* Export to a data block */
 	gerr = gpgme_data_new (&data);
 	g_return_if_fail (GPG_IS_OK (gerr));
-	ctx = seahorse_gpgme_keyring_new_context ();
-	g_return_if_fail (ctx);
+
 	gerr = seahorse_gpg_op_export_secret (ctx, seckey->subkeys->keyid, data);
 	gpgme_release (ctx);
 	results = gpgme_data_release_and_get_mem (data, &n_results);

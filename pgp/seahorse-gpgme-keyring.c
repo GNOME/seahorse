@@ -123,29 +123,6 @@ passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
 	return err;
 }
 
-/* Initialise a GPGME context for PGP keys */
-static gpgme_error_t
-init_gpgme (gpgme_ctx_t *ctx)
-{
-	gpgme_protocol_t proto = GPGME_PROTOCOL_OpenPGP;
-	gpgme_error_t err;
-
-	err = gpgme_engine_check_version (proto);
-	g_return_val_if_fail (GPG_IS_OK (err), err);
-
-	err = gpgme_new (ctx);
-	g_return_val_if_fail (GPG_IS_OK (err), err);
-
-	err = gpgme_set_protocol (*ctx, proto);
-	g_return_val_if_fail (GPG_IS_OK (err), err);
-
-	gpgme_set_passphrase_cb (*ctx, (gpgme_passphrase_cb_t)passphrase_get,
-	                         NULL);
-
-	gpgme_set_keylist_mode (*ctx, GPGME_KEYLIST_MODE_LOCAL);
-	return err;
-}
-
 struct _SeahorseGpgmeKeyringPrivate {
 	GHashTable *keys;
 	guint scheduled_refresh;                /* Source for refresh timeout */
@@ -177,7 +154,8 @@ static void
 keyring_list_free (gpointer data)
 {
 	keyring_list_closure *closure = data;
-	gpgme_release (closure->gctx);
+	if (closure->gctx)
+		gpgme_release (closure->gctx);
 	if (closure->checks)
 		g_hash_table_destroy (closure->checks);
 	g_cancellable_disconnect (closure->cancellable,
@@ -355,8 +333,9 @@ seahorse_gpgme_keyring_list_async (SeahorseGpgmeKeyring *self,
 	keyring_list_closure *closure;
 	GSimpleAsyncResult *res;
 	SeahorseObject *object;
-	gpgme_error_t gerr;
+	gpgme_error_t gerr = 0;
 	GHashTableIter iter;
+	GError *error = NULL;
 	gchar *keyid;
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
@@ -364,22 +343,29 @@ seahorse_gpgme_keyring_list_async (SeahorseGpgmeKeyring *self,
 
 	closure = g_new0 (keyring_list_closure, 1);
 	closure->parts = parts;
-	closure->gctx = seahorse_gpgme_keyring_new_context ();
+	closure->gctx = seahorse_gpgme_keyring_new_context (&gerr);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	closure->keyring = g_object_ref (self);
 	g_simple_async_result_set_op_res_gpointer (res, closure, keyring_list_free);
 
-	if (parts & LOAD_FULL) {
-		gpgme_set_keylist_mode (closure->gctx, GPGME_KEYLIST_MODE_SIGS |
-		                        gpgme_get_keylist_mode (closure->gctx));
+	/* Start the key listing */
+	if (closure->gctx) {
+		if (parts & LOAD_FULL)
+			gpgme_set_keylist_mode (closure->gctx, GPGME_KEYLIST_MODE_SIGS |
+			                        gpgme_get_keylist_mode (closure->gctx));
+		if (patterns)
+			gerr = gpgme_op_keylist_ext_start (closure->gctx, patterns, secret, 0);
+		else
+			gerr = gpgme_op_keylist_start (closure->gctx, NULL, secret);
 	}
 
-	/* Start the key listing */
-	if (patterns)
-		gerr = gpgme_op_keylist_ext_start (closure->gctx, patterns, secret, 0);
-	else
-		gerr = gpgme_op_keylist_start (closure->gctx, NULL, secret);
-	g_return_if_fail (GPG_IS_OK (gerr));
+	if (gerr != 0) {
+		seahorse_gpgme_propagate_error (gerr, &error);
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete_in_idle (res);
+		g_object_unref (res);
+		return;
+	}
 
 	/* Loading all the keys? */
 	if (patterns == NULL) {
@@ -590,7 +576,8 @@ keyring_import_free (gpointer data)
 {
 	keyring_import_closure *closure = data;
 	g_clear_object (&closure->cancellable);
-	gpgme_release (closure->gctx);
+	if (closure->gctx)
+		gpgme_release (closure->gctx);
 	gpgme_data_release (closure->data);
 	g_object_unref (closure->keyring);
 	g_strfreev (closure->patterns);
@@ -689,25 +676,26 @@ seahorse_gpgme_keyring_import_async (SeahorsePlace *place,
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (place);
 	GSimpleAsyncResult *res;
 	keyring_import_closure *closure;
-	gpgme_error_t gerr;
+	gpgme_error_t gerr = 0;
 	GError *error = NULL;
-	GSource *gsource;
+	GSource *gsource = NULL;
 
 	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
 	                                 seahorse_gpgme_keyring_import_async);
 	closure = g_new0 (keyring_import_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	closure->gctx = seahorse_gpgme_keyring_new_context ();
+	closure->gctx = seahorse_gpgme_keyring_new_context (&gerr);
 	closure->data = seahorse_gpgme_data_input (input);
 	closure->keyring = g_object_ref (self);
 	g_simple_async_result_set_op_res_gpointer (res, closure, keyring_import_free);
 
-	seahorse_progress_prep_and_begin (cancellable, res, NULL);
-	gsource = seahorse_gpgme_gsource_new (closure->gctx, cancellable);
-	g_source_set_callback (gsource, (GSourceFunc)on_keyring_import_complete,
-	                       g_object_ref (res), g_object_unref);
-
-	gerr = gpgme_op_import_start (closure->gctx, closure->data);
+	if (gerr == 0) {
+		seahorse_progress_prep_and_begin (cancellable, res, NULL);
+		gsource = seahorse_gpgme_gsource_new (closure->gctx, cancellable);
+		g_source_set_callback (gsource, (GSourceFunc)on_keyring_import_complete,
+		                       g_object_ref (res), g_object_unref);
+		gerr = gpgme_op_import_start (closure->gctx, closure->data);
+	}
 
 	if (seahorse_gpgme_propagate_error (gerr, &error)) {
 		g_simple_async_result_take_error (res, error);
@@ -758,7 +746,8 @@ keyring_export_free (gpointer data)
 	g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
 	g_clear_object (&closure->cancellable);
 	gpgme_data_release (closure->data);
-	gpgme_release (closure->gctx);
+	if (closure->gctx)
+		gpgme_release (closure->gctx);
 	g_ptr_array_free (closure->keyids, TRUE);
 	g_object_unref (closure->output);
 	g_free (closure);
@@ -815,6 +804,8 @@ seahorse_gpgme_keyring_export_async (SeahorsePlace *place,
 {
 	GSimpleAsyncResult *res;
 	keyring_export_closure *closure;
+	GError *error = NULL;
+	gpgme_error_t gerr = 0;
 	SeahorsePgpKey *key;
 	gchar *keyid;
 	GSource *gsource;
@@ -824,12 +815,19 @@ seahorse_gpgme_keyring_export_async (SeahorsePlace *place,
 	                                 seahorse_gpgme_keyring_export_async);
 	closure = g_new0 (keyring_export_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	closure->gctx = seahorse_gpgme_keyring_new_context ();
+	closure->gctx = seahorse_gpgme_keyring_new_context (&gerr);
 	closure->data = seahorse_gpgme_data_output (output);
 	closure->keyids = g_ptr_array_new_with_free_func (g_free);
 	closure->output = g_object_ref (output);
 	closure->at = -1;
 	g_simple_async_result_set_op_res_gpointer (res, closure, keyring_export_free);
+
+	if (seahorse_gpgme_propagate_error (gerr, &error)) {
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete_in_idle (res);
+		g_object_unref (res);
+		return;
+	}
 
 	gpgme_set_armor (closure->gctx, TRUE);
 	gpgme_set_textmode (closure->gctx, TRUE);
@@ -915,7 +913,6 @@ monitor_gpg_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
 static void
 seahorse_gpgme_keyring_init (SeahorseGpgmeKeyring *self)
 {
-	gpgme_error_t gerr;
 	GError *err = NULL;
 	const gchar *gpg_homedir;
 	GFile *file;
@@ -927,9 +924,6 @@ seahorse_gpgme_keyring_init (SeahorseGpgmeKeyring *self)
 	                                        seahorse_pgp_keyid_equal,
 	                                        g_free, g_object_unref);
 
-	gerr = init_gpgme (&self->gctx);
-	g_return_if_fail (GPG_IS_OK (gerr));
-
 	/* init private vars */
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GPGME_KEYRING,
 	                                        SeahorseGpgmeKeyringPrivate);
@@ -938,18 +932,20 @@ seahorse_gpgme_keyring_init (SeahorseGpgmeKeyring *self)
 	self->pv->monitor_handle = NULL;
 
 	gpg_homedir = seahorse_gpg_homedir ();
-	file = g_file_new_for_path (gpg_homedir);
-	g_return_if_fail (file != NULL);
+	if (gpg_homedir) {
+		file = g_file_new_for_path (gpg_homedir);
+		g_return_if_fail (file != NULL);
 
-	self->pv->monitor_handle = g_file_monitor_directory (file, G_FILE_MONITOR_NONE, NULL, &err);
-	g_object_unref (file);
+		self->pv->monitor_handle = g_file_monitor_directory (file, G_FILE_MONITOR_NONE, NULL, &err);
+		g_object_unref (file);
 
-	if (self->pv->monitor_handle) {
-		g_signal_connect (self->pv->monitor_handle, "changed",
-		                  G_CALLBACK (monitor_gpg_homedir), self);
-	} else {
-		g_warning ("couldn't monitor the GPG home directory: %s: %s",
-		           gpg_homedir, err && err->message ? err->message : "");
+		if (self->pv->monitor_handle) {
+			g_signal_connect (self->pv->monitor_handle, "changed",
+			                  G_CALLBACK (monitor_gpg_homedir), self);
+		} else {
+			g_warning ("couldn't monitor the GPG home directory: %s: %s",
+			           gpg_homedir, err && err->message ? err->message : "");
+		}
 	}
 }
 
@@ -1002,9 +998,6 @@ seahorse_gpgme_keyring_dispose (GObject *object)
 		g_object_unref (l->data);
 	g_list_free (self->pv->orphan_secret);
 	self->pv->orphan_secret = NULL;
-
-	if (self->gctx)
-		gpgme_release (self->gctx);
 
 	G_OBJECT_CLASS (seahorse_gpgme_keyring_parent_class)->dispose (object);
 }
@@ -1109,9 +1102,27 @@ seahorse_gpgme_keyring_new (void)
 }
 
 gpgme_ctx_t
-seahorse_gpgme_keyring_new_context (void)
+seahorse_gpgme_keyring_new_context (gpgme_error_t *gerr)
 {
+	gpgme_protocol_t proto = GPGME_PROTOCOL_OpenPGP;
+	gpgme_error_t error = 0;
 	gpgme_ctx_t ctx = NULL;
-	g_return_val_if_fail (GPG_IS_OK (init_gpgme (&ctx)), NULL);
+
+	error = gpgme_engine_check_version (proto);
+	if (error == 0)
+		error = gpgme_new (&ctx);
+	if (error == 0)
+		error = gpgme_set_protocol (ctx, proto);
+
+	if (error != 0) {
+		g_message ("couldn't initialize gnupg properly: %s",
+		           gpgme_strerror (error));
+		if (gerr)
+			*gerr = error;
+		return NULL;
+	}
+
+	gpgme_set_passphrase_cb (ctx, (gpgme_passphrase_cb_t)passphrase_get, NULL);
+	gpgme_set_keylist_mode (ctx, GPGME_KEYLIST_MODE_LOCAL);
 	return ctx;
 }

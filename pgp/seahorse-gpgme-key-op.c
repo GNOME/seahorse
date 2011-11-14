@@ -69,7 +69,8 @@ key_op_generate_free (gpointer data)
 {
 	key_op_generate_closure *closure = data;
 	g_clear_object (&closure->cancellable);
-	gpgme_release (closure->gctx);
+	if (closure->gctx)
+		gpgme_release (closure->gctx);
 	g_free (closure);
 }
 
@@ -134,7 +135,7 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
 	GSimpleAsyncResult *res;
 	GError *error = NULL;
 	const gchar *parms;
-	gpgme_error_t gerr;
+	gpgme_error_t gerr = 0;
 	GSource *gsource;
 
 	g_return_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring));
@@ -193,7 +194,7 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
 	                                 seahorse_gpgme_key_op_generate_async);
 
 	closure = g_new0 (key_op_generate_closure, 1);
-	closure->gctx = seahorse_gpgme_keyring_new_context ();
+	closure->gctx = seahorse_gpgme_keyring_new_context (&gerr);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	gpgme_set_progress_cb (closure->gctx, on_key_op_generate_progress, res);
 	g_simple_async_result_set_op_res_gpointer (res, closure, key_op_generate_free);
@@ -203,7 +204,9 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
 	g_source_set_callback (gsource, (GSourceFunc)on_key_op_generate_complete,
 	                       g_object_ref (res), g_object_unref);
 
-	gerr = gpgme_op_genkey_start (closure->gctx, parms, NULL, NULL);
+	if (gerr == 0)
+		gerr = gpgme_op_genkey_start (closure->gctx, parms, NULL, NULL);
+
 	if (seahorse_gpgme_propagate_error (gerr, &error)) {
 		g_simple_async_result_take_error (res, error);
 		g_simple_async_result_complete_in_idle (res);
@@ -240,23 +243,28 @@ static gpgme_error_t
 op_delete (SeahorseGpgmeKey *pkey, gboolean secret)
 {
 	SeahorseGpgmeKeyring *keyring;
-	gpgme_error_t err;
+	gpgme_error_t gerr;
 	gpgme_key_t key;
+	gpgme_ctx_t ctx;
 
 	keyring = SEAHORSE_GPGME_KEYRING (seahorse_object_get_place (SEAHORSE_OBJECT (pkey)));
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring), GPG_E (GPG_ERR_INV_KEYRING));
 
 	g_object_ref (pkey);
-	
+
 	seahorse_util_wait_until ((key = seahorse_gpgme_key_get_public (pkey)) != NULL);
 
-	err = gpgme_op_delete (keyring->gctx, key, secret);
-	if (GPG_IS_OK (err))
-		seahorse_gpgme_keyring_remove_key (keyring, pkey);
+	ctx = seahorse_gpgme_keyring_new_context (&gerr);
+	if (ctx == NULL)
+		return gerr;
 
+	gerr = gpgme_op_delete (ctx, key, secret);
+	if (GPG_IS_OK (gerr))
+		seahorse_gpgme_keyring_remove_key (keyring, SEAHORSE_GPGME_KEY (pkey));
+
+	gpgme_release (ctx);
 	g_object_unref (pkey);
-	
-	return err;
+	return gerr;
 }
 
 gpgme_error_t
@@ -344,39 +352,39 @@ seahorse_gpgme_key_op_edit (gpointer data, gpgme_status_code_t status,
 
 /* Common edit operation */
 static gpgme_error_t
-edit_gpgme_key (gpgme_ctx_t ctx, gpgme_key_t key, SeahorseEditParm *parms)
+edit_gpgme_key (gpgme_ctx_t ctx,
+                gpgme_key_t key,
+                SeahorseEditParm *parms)
 {
 	gboolean own_context = FALSE;
 	gpgme_data_t out;
 	gpgme_error_t gerr;
-    
+
 	g_assert (key);
 	g_assert (parms);
-	
+
 	gpgme_key_ref (key);
-    
-	if (!ctx) {
-		ctx = seahorse_gpgme_keyring_new_context ();
-		g_return_val_if_fail (ctx, GPG_E (GPG_ERR_GENERAL));
+
+	if (ctx == NULL) {
+		ctx = seahorse_gpgme_keyring_new_context (&gerr);
+		if (ctx == NULL)
+			return gerr;
 		own_context = TRUE;
 	}
-    
+
 	out = seahorse_gpgme_data_new ();
-    
+
 	/* do edit callback, release data */
 	gerr = gpgme_op_edit (ctx, key, seahorse_gpgme_key_op_edit, parms, out);
 
 	if (gpgme_err_code (gerr) == GPG_ERR_BAD_PASSPHRASE) {
 		seahorse_util_show_error(NULL, _("Wrong password"), _("This was the third time you entered a wrong password. Please try again."));
 	}
-	
+
 	seahorse_gpgme_data_release (out);
-    
 	if (own_context)
 		gpgme_release (ctx);
-	
 	gpgme_key_unref (key);
-	
 	return gerr;
 }
 
@@ -396,21 +404,25 @@ static gpgme_error_t
 edit_key (SeahorseGpgmeKey *pkey, SeahorseEditParm *parms)
 {
 	SeahorseGpgmeKeyring *keyring;
-	gpgme_error_t err;
+	gpgme_error_t gerr;
 	gpgme_key_t key;
+	gpgme_ctx_t ctx;
 
 	keyring = SEAHORSE_GPGME_KEYRING (seahorse_object_get_place (SEAHORSE_OBJECT (pkey)));
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring), GPG_E (GPG_ERR_INV_KEYRING));
 
 	g_object_ref (pkey);
-	
+
 	seahorse_util_wait_until ((key = seahorse_gpgme_key_get_public (pkey)) != NULL);
-  
-	err = edit_refresh_gpgme_key (keyring->gctx, key, parms);
+
+	ctx = seahorse_gpgme_keyring_new_context (&gerr);
+	if (ctx != NULL) {
+		gerr = edit_refresh_gpgme_key (ctx, key, parms);
+		gpgme_release (ctx);
+	}
 
 	g_object_unref (pkey);
-    
-	return err;
+	return gerr;
 }
 
 typedef struct
@@ -586,9 +598,10 @@ sign_process (gpgme_key_t signed_key, gpgme_key_t signing_key, guint sign_index,
 	gpgme_ctx_t ctx;
 	gpgme_error_t gerr;
 
-	ctx = seahorse_gpgme_keyring_new_context ();
-	g_return_val_if_fail (ctx, GPG_E (GPG_ERR_GENERAL));
-	
+	ctx = seahorse_gpgme_keyring_new_context (&gerr);
+	if (ctx == NULL)
+		return gerr;
+
         gerr = gpgme_signers_add (ctx, signing_key);
         if (!GPG_IS_OK (gerr))
         	return gerr;

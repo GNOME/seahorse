@@ -77,7 +77,10 @@ load_gpgme_key (const gchar *keyid,
 	gpgme_ctx_t ctx;
 	gpgme_error_t gerr;
 
-	ctx = seahorse_gpgme_keyring_new_context ();
+	ctx = seahorse_gpgme_keyring_new_context (&gerr);
+	if (gerr != 0)
+		return FALSE;
+
 	gpgme_set_keylist_mode (ctx, mode);
 	gerr = gpgme_op_keylist_start (ctx, keyid, secret);
 	if (GPG_IS_OK (gerr)) {
