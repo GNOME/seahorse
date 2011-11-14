@@ -2007,6 +2007,7 @@ seahorse_pgp_key_properties_show (SeahorsePgpKey *pkey, GtkWindow *parent)
     if (SEAHORSE_IS_GPGME_KEY (pkey)) {
         /* This causes the key source to get any specific info about the key */
         seahorse_gpgme_key_refresh (SEAHORSE_GPGME_KEY (pkey));
+        seahorse_gpgme_key_ensure_signatures (SEAHORSE_GPGME_KEY (pkey));
         sobj = seahorse_context_get_object (SCTX_APP(), sksrc, seahorse_object_get_id (sobj));
         g_return_if_fail (sobj != NULL);
     }

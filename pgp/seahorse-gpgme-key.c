@@ -153,7 +153,7 @@ require_key_private (SeahorseGpgmeKey *self)
 static gboolean
 require_key_uids (SeahorseGpgmeKey *self)
 {
-	return require_key_public (self, GPGME_KEYLIST_MODE_LOCAL | GPGME_KEYLIST_MODE_SIGS);
+	return require_key_public (self, GPGME_KEYLIST_MODE_LOCAL);
 }
 
 static gboolean
@@ -360,6 +360,12 @@ seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 	g_object_set (self, "usage", usage, NULL);
 
 	seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (self));
+}
+
+void
+seahorse_gpgme_key_ensure_signatures (SeahorseGpgmeKey *self)
+{
+	require_key_public (self, GPGME_KEYLIST_MODE_LOCAL | GPGME_KEYLIST_MODE_SIGS);
 }
 
 void
