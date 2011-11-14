@@ -5,7 +5,7 @@ AC_PREREQ(2.52)
 dnl ****************************************************************************
 dnl MAIN SEAHORSE VERSION (update after release)
 
-AC_INIT(seahorse, 3.2.1)
+AC_INIT(seahorse, 3.2.2)
 
 GCR_REQUIRED=3.1.5
 
