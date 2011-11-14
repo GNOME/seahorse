@@ -57,6 +57,8 @@ void              seahorse_gpgme_key_refresh              (SeahorseGpgmeKey *sel
 
 void              seahorse_gpgme_key_realize              (SeahorseGpgmeKey *self);
 
+void              seahorse_gpgme_key_ensure_signatures    (SeahorseGpgmeKey *self);
+
 GType             seahorse_gpgme_key_get_type             (void);
 
 gpgme_key_t       seahorse_gpgme_key_get_public           (SeahorseGpgmeKey *self);

@@ -1984,8 +1984,10 @@ seahorse_pgp_key_properties_show (SeahorsePgpKey *pkey, GtkWindow *parent)
 	SeahorseWidget *swidget;
 
 	/* This causes the key source to get any specific info about the key */
-	if (SEAHORSE_IS_GPGME_KEY (pkey))
+	if (SEAHORSE_IS_GPGME_KEY (pkey)) {
 		seahorse_gpgme_key_refresh (SEAHORSE_GPGME_KEY (pkey));
+		seahorse_gpgme_key_ensure_signatures (SEAHORSE_GPGME_KEY (pkey));
+	}
 
 	if (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PUBLIC_KEY)
 		swidget = setup_public_properties (pkey, parent);
