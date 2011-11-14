@@ -62,6 +62,11 @@ gboolean               seahorse_token_get_lockable      (SeahorseToken *self);
 
 gboolean               seahorse_token_get_unlockable    (SeahorseToken *self);
 
+GArray *               seahorse_token_get_mechanisms    (SeahorseToken *self);
+
+gboolean               seahorse_token_has_mechanism     (SeahorseToken *self,
+                                                         gulong mechanism);
+
 void                   seahorse_token_remove_object     (SeahorseToken *self,
                                                          GckObject *object);
 

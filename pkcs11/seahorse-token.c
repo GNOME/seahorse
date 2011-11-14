@@ -59,6 +59,7 @@ struct _SeahorseTokenPrivate {
 	GckSlot *slot;
 	gchar *uri;
 	GckTokenInfo *info;
+	GArray *mechanisms;
 	GckSession *session;
 	GtkActionGroup *actions;
 	GHashTable *object_for_handle;
@@ -75,6 +76,17 @@ G_DEFINE_TYPE_EXTENDED (SeahorseToken, seahorse_token, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_token_collection_iface);
                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_token_place_iface);
 );
+
+static void
+update_mechanisms (SeahorseToken *self)
+{
+	GArray *mechanisms;
+
+	mechanisms = gck_slot_get_mechanisms (self->pv->slot);
+	if (self->pv->mechanisms != NULL)
+		g_array_unref (self->pv->mechanisms);
+	self->pv->mechanisms = mechanisms;
+}
 
 static void
 update_token_info (SeahorseToken *self)
@@ -157,6 +169,9 @@ lookup_id_map (SeahorseToken *self,
 {
 	GPtrArray *objects;
 	guint i;
+
+	if (id == NULL)
+		return NULL;
 
 	objects = g_hash_table_lookup (self->pv->objects_for_id, id);
 	if (objects == NULL)
@@ -258,7 +273,7 @@ receive_objects (SeahorseToken *self,
 			object = prev;
 		}
 
-		id = gck_attributes_find (attrs, CKA_ID);
+		id = attrs ? gck_attributes_find (attrs, CKA_ID) : NULL;
 		update_id_map (self, object, id);
 
 		if (SEAHORSE_IS_CERTIFICATE (object)) {
@@ -862,6 +877,31 @@ seahorse_token_get_unlockable (SeahorseToken *self)
 		return FALSE;
 
 	return !is_session_logged_in (self->pv->session);
+}
+
+GArray *
+seahorse_token_get_mechanisms (SeahorseToken *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_TOKEN (self), NULL);
+
+	if (!self->pv->mechanisms)
+		update_mechanisms (self);
+
+	return self->pv->mechanisms;
+}
+
+gboolean
+seahorse_token_has_mechanism (SeahorseToken *self,
+                              gulong mechanism)
+{
+	g_return_val_if_fail (SEAHORSE_IS_TOKEN (self), FALSE);
+
+	if (!self->pv->mechanisms)
+		update_mechanisms (self);
+
+	return gck_mechanisms_check (self->pv->mechanisms,
+	                             mechanism,
+	                             GCK_INVALID);
 }
 
 void

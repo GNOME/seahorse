@@ -22,12 +22,15 @@
 #include "config.h"
 
 #include "seahorse-pkcs11-backend.h"
+#include "seahorse-pkcs11-generate.h"
 #include "seahorse-token.h"
 
 #include "seahorse-backend.h"
 #include "seahorse-place.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
+
+#include <gcr/gcr-base.h>
 
 #include <gck/gck.h>
 
@@ -86,6 +89,8 @@ seahorse_pkcs11_backend_init (SeahorsePkcs11Backend *self)
 		}
 		self->blacklist = g_list_prepend (self->blacklist, uri);
 	}
+
+	seahorse_pkcs11_generate_register ();
 }
 
 static gboolean
@@ -95,10 +100,6 @@ is_token_usable (SeahorsePkcs11Backend *self,
 {
 	GList *l;
 
-	if (token->flags & CKF_WRITE_PROTECTED) {
-		/* _gcr_debug ("token is not importable: %s: write protected", token->label); */
-		return FALSE;
-	}
 	if (!(token->flags & CKF_TOKEN_INITIALIZED)) {
 		/* _gcr_debug ("token is not importable: %s: not initialized", token->label); */
 		return FALSE;
@@ -116,7 +117,6 @@ is_token_usable (SeahorsePkcs11Backend *self,
 
 	return TRUE;
 }
-
 
 static void
 on_initialized_registered (GObject *unused,
@@ -290,4 +290,45 @@ seahorse_pkcs11_backend_get (void)
 {
 	g_return_val_if_fail (pkcs11_backend, NULL);
 	return pkcs11_backend;
+}
+
+static gboolean
+on_filter_writable (GObject *object,
+                    gpointer user_data)
+{
+	SeahorseToken *token = SEAHORSE_TOKEN (object);
+	guint mechanism = GPOINTER_TO_UINT (user_data);
+	GckTokenInfo *info;
+
+	info = seahorse_token_get_info (token);
+	g_return_val_if_fail (info != NULL, FALSE);
+
+	if (info->flags & CKF_WRITE_PROTECTED)
+		return FALSE;
+
+	if (mechanism != G_MAXUINT) {
+		if (!seahorse_token_has_mechanism (token, (gulong)mechanism))
+			return FALSE;
+	}
+
+	return TRUE;
+}
+
+GcrCollection *
+seahorse_pkcs11_backend_get_writable_tokens (SeahorsePkcs11Backend *self,
+                                             gulong with_mechanism)
+{
+	gpointer mechanism;
+
+	self = self ? self : seahorse_pkcs11_backend_get ();
+	g_return_val_if_fail (SEAHORSE_IS_PKCS11_BACKEND (self), NULL);
+
+	if (with_mechanism == GCK_INVALID)
+		mechanism = GUINT_TO_POINTER (G_MAXUINT);
+	else
+		mechanism = GUINT_TO_POINTER (with_mechanism);
+
+	return gcr_filter_collection_new_with_callback (GCR_COLLECTION (self),
+	                                                on_filter_writable,
+	                                                mechanism, NULL);
 }

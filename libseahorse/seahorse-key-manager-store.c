@@ -646,6 +646,7 @@ seahorse_key_manager_store_new (GcrCollection *collection,
 	self = g_object_new (SEAHORSE_TYPE_KEY_MANAGER_STORE,
 	                     "collection", filtered,
 	                     "settings", settings,
+	                     "mode", GCR_COLLECTION_MODEL_LIST,
 	                     NULL);
 	pred->custom_target = self;
 	g_object_unref (filtered);

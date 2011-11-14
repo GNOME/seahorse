@@ -20,6 +20,7 @@ libseahorse_pkcs11_la_SOURCES = \
 	seahorse-pkcs11-actions.c seahorse-pkcs11-actions.h \
 	seahorse-pkcs11-backend.c seahorse-pkcs11-backend.h \
 	seahorse-pkcs11-helpers.c seahorse-pkcs11-helpers.h \
+	seahorse-pkcs11-generate.c seahorse-pkcs11-generate.h \
 	seahorse-pkcs11-operations.c seahorse-pkcs11-operations.h \
 	seahorse-pkcs11-properties.c seahorse-pkcs11-properties.h \
 	seahorse-pkcs11.c seahorse-pkcs11.h \
@@ -30,7 +31,8 @@ libseahorse_pkcs11_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse.la \
 	$(GCR_LIBS)
 
-ui_DATA =
+ui_DATA = \
+	seahorse-pkcs11-generate.xml
 
 EXTRA_DIST = \
 	$(ui_DATA)
