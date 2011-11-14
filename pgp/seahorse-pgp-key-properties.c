@@ -1876,9 +1876,9 @@ do_trust (SeahorseWidget *swidget)
 			g_signal_connect (widget, "toggled", G_CALLBACK (on_pgp_trusted_toggled), filter);
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 		}
-	}
 
-	signatures_populate_model (swidget, SEAHORSE_OBJECT_MODEL (store));
+		signatures_populate_model (swidget, SEAHORSE_OBJECT_MODEL (store));
+	}
 }
 
 /* -----------------------------------------------------------------------------

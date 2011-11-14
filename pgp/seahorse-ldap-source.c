@@ -216,7 +216,7 @@ get_date_attribute (LDAP* ld, LDAPMessage *res, const char *attribute)
 {
     struct tm t;
     gchar **vals;
-    long int d;
+    long int d = 0;
     
     vals = get_ldap_values (ld, res, attribute);
     if (!vals)

@@ -367,7 +367,7 @@ on_view_show_changed (GtkRadioAction *action,
                       gpointer user_data)
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
-	const gchar *value;
+	const gchar *value = "";
 	gint radio;
 
 	radio = gtk_radio_action_get_current_value (action);
