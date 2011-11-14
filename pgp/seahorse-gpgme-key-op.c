@@ -2395,7 +2395,7 @@ photoid_load_transit (guint current_state, gpgme_status_code_t status,
 {
 	PhotoIdLoadParm *parm = (PhotoIdLoadParm*)data;
 	SeahorseGpgmePhoto *photo;
-	GdkPixbuf *pixbuf;
+	GdkPixbuf *pixbuf = NULL;
 	guint next_state = 0;
 	struct stat st;
 	GError *error = NULL;
