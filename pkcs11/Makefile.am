@@ -23,6 +23,7 @@ libseahorse_pkcs11_la_SOURCES = \
 	seahorse-pkcs11-generate.c seahorse-pkcs11-generate.h \
 	seahorse-pkcs11-operations.c seahorse-pkcs11-operations.h \
 	seahorse-pkcs11-properties.c seahorse-pkcs11-properties.h \
+	seahorse-pkcs11-request.c seahorse-pkcs11-request.h \
 	seahorse-pkcs11.c seahorse-pkcs11.h \
 	seahorse-private-key.c seahorse-private-key.h \
 	seahorse-token.c seahorse-token.h
@@ -32,7 +33,8 @@ libseahorse_pkcs11_la_LIBADD = \
 	$(GCR_LIBS)
 
 ui_DATA = \
-	seahorse-pkcs11-generate.xml
+	seahorse-pkcs11-generate.xml \
+	seahorse-pkcs11-request.xml
 
 EXTRA_DIST = \
 	$(ui_DATA)

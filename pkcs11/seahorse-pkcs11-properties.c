@@ -24,8 +24,10 @@
 #include "seahorse-certificate.h"
 #include "seahorse-pkcs11-properties.h"
 #include "seahorse-pkcs11-operations.h"
+#include "seahorse-pkcs11-request.h"
 #include "seahorse-private-key.h"
 
+#include "seahorse-action.h"
 #include "seahorse-delete-dialog.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
@@ -38,7 +40,7 @@ static const gchar *UI_STRING =
 "		<toolitem action='export-object'/>"
 "		<toolitem action='delete-object'/>"
 "		<separator name='MiddleSeparator' expand='true'/>"
-"		<toolitem action='extra-action'/>"
+"		<toolitem action='request-certificate'/>"
 "	</toolbar>"
 "</ui>";
 
@@ -53,6 +55,8 @@ struct _SeahorsePkcs11Properties {
 	GtkBox *content;
 	GcrViewer *viewer;
 	GObject *object;
+	GCancellable *cancellable;
+	GckObject *request_key;
 	GtkUIManager *ui_manager;
 	GtkActionGroup *actions;
 };
@@ -74,6 +78,8 @@ static void
 seahorse_pkcs11_properties_init (SeahorsePkcs11Properties *self)
 {
 	GtkWidget *viewer;
+
+	self->cancellable = g_cancellable_new ();
 
 	gtk_window_set_default_size (GTK_WINDOW (self), 400, 400);
 
@@ -229,20 +235,21 @@ on_delete_objects (GtkAction *action,
 }
 
 static void
-on_extra_action (GtkAction *action,
-                 gpointer user_data)
+on_request_certificate (GtkAction *action,
+                        gpointer user_data)
 {
-
+	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (user_data);
+	g_return_if_fail (self->request_key != NULL);
+	seahorse_pkcs11_request_prompt (GTK_WINDOW (self), self->request_key);
 }
-
 
 static const GtkActionEntry UI_ACTIONS[] = {
 	{ "export-object", GTK_STOCK_SAVE_AS, N_("_Export"), "",
 	  N_("Export the certificate"), G_CALLBACK (on_export_certificate) },
 	{ "delete-object", GTK_STOCK_DELETE, N_("_Delete"), "<Ctrl>Delete",
 	  N_("Delete this certificate or key"), G_CALLBACK (on_delete_objects) },
-	{ "extra-action", NULL, N_("Extra _Action"), NULL,
-	  N_("An extra action on the certificate"), G_CALLBACK (on_extra_action) },
+	{ "request-certificate", NULL, N_("Request _Certificate"), NULL,
+	  N_("Create a certificate request file for this key"), G_CALLBACK (on_request_certificate) },
 };
 
 static void
@@ -264,17 +271,72 @@ on_ui_manager_add_widget (GtkUIManager *manager,
 	gtk_widget_show (widget);
 }
 
+typedef struct {
+	SeahorsePkcs11Properties *properties;
+	GckObject *private_key;
+} CapableClosure;
+
+static void
+on_certificate_request_capable (GObject *source,
+                                GAsyncResult *result,
+                                gpointer user_data)
+{
+	CapableClosure *closure = user_data;
+	SeahorsePkcs11Properties *self = closure->properties;
+	GError *error = NULL;
+	GtkAction *request;
+
+	if (gcr_certificate_request_capable_finish (result, &error)) {
+		request = gtk_action_group_get_action (self->actions, "request-certificate");
+		gtk_action_set_visible (request, TRUE);
+		g_clear_object (&self->request_key);
+		self->request_key = g_object_ref (closure->private_key);
+
+	} else if (error != NULL) {
+		g_message ("couldn't check capabilities of private key: %s", error->message);
+		g_clear_error (&error);
+	}
+
+	g_object_unref (closure->properties);
+	g_object_unref (closure->private_key);
+	g_slice_free (CapableClosure, closure);
+}
+
+static void
+check_certificate_request_capable (SeahorsePkcs11Properties *self,
+                                   GObject *object)
+{
+	CapableClosure *closure;
+
+	if (!SEAHORSE_IS_PRIVATE_KEY (object))
+		return;
+
+	closure = g_slice_new (CapableClosure);
+	closure->properties = g_object_ref (self);
+	closure->private_key = g_object_ref (object);
+
+	gcr_certificate_request_capable_async (closure->private_key,
+	                                       self->cancellable,
+	                                       on_certificate_request_capable,
+	                                       closure);
+}
+
 static void
 seahorse_pkcs11_properties_constructed (GObject *obj)
 {
 	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (obj);
 	GObject *partner = NULL;
 	GError *error = NULL;
+	GtkAction *request;
 
 	G_OBJECT_CLASS (seahorse_pkcs11_properties_parent_class)->constructed (obj);
 
 	self->actions = gtk_action_group_new ("Pkcs11Actions");
 	gtk_action_group_add_actions (self->actions, UI_ACTIONS, G_N_ELEMENTS (UI_ACTIONS), self);
+	gtk_action_group_set_translation_domain (self->actions, GETTEXT_PACKAGE);
+	request = gtk_action_group_get_action (self->actions, "request-certificate");
+	gtk_action_set_is_important (request, TRUE);
+	gtk_action_set_visible (request, FALSE);
 
 	self->ui_manager = gtk_ui_manager_new ();
 	gtk_ui_manager_insert_action_group (self->ui_manager, self->actions, 0);
@@ -294,10 +356,13 @@ seahorse_pkcs11_properties_constructed (GObject *obj)
 	on_object_label_changed (self->object, NULL, self);
 
 	add_renderer_for_object (self, self->object);
+	check_certificate_request_capable (self, self->object);
 
 	g_object_get (self->object, "partner", &partner, NULL);
 	if (partner != NULL) {
 		add_renderer_for_object (self, partner);
+		check_certificate_request_capable (self, partner);
+
 		g_object_unref (partner);
 	}
 
@@ -342,10 +407,22 @@ seahorse_pkcs11_properties_get_property (GObject *obj,
 }
 
 static void
+seahorse_pkcs11_properties_dispose (GObject *obj)
+{
+	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (obj);
+
+	g_cancellable_cancel (self->cancellable);
+
+	G_OBJECT_CLASS (seahorse_pkcs11_properties_parent_class)->dispose (obj);
+}
+
+static void
 seahorse_pkcs11_properties_finalize (GObject *obj)
 {
 	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (obj);
 
+	g_object_unref (self->cancellable);
+	g_clear_object (&self->request_key);
 	g_object_unref (self->actions);
 	g_object_unref (self->ui_manager);
 
@@ -369,6 +446,7 @@ seahorse_pkcs11_properties_class_init (SeahorsePkcs11PropertiesClass *klass)
 	gobject_class->constructed = seahorse_pkcs11_properties_constructed;
 	gobject_class->set_property = seahorse_pkcs11_properties_set_property;
 	gobject_class->get_property = seahorse_pkcs11_properties_get_property;
+	gobject_class->dispose = seahorse_pkcs11_properties_dispose;
 	gobject_class->finalize = seahorse_pkcs11_properties_finalize;
 
 	g_object_class_install_property (gobject_class, PROP_OBJECT,
