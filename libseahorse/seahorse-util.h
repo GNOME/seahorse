@@ -58,9 +58,6 @@ void        seahorse_util_handle_error          (GError **error,
                                                  const gchar* description,
                                                  ...);
 
-gboolean    seahorse_util_prompt_delete         (const gchar *text,
-                                                 GtkWidget *parent);
-
 guchar*     seahorse_util_read_to_memory        (GInputStream *     input,
                                                  guint              *len);
 

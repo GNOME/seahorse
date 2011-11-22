@@ -23,8 +23,24 @@
 
 #include "seahorse-certificate.h"
 #include "seahorse-pkcs11-properties.h"
+#include "seahorse-pkcs11-operations.h"
+#include "seahorse-private-key.h"
+
+#include "seahorse-delete-dialog.h"
+#include "seahorse-progress.h"
+#include "seahorse-util.h"
 
 #include <gcr/gcr.h>
+
+static const gchar *UI_STRING =
+"<ui>"
+"	<toolbar name='Toolbar'>"
+"		<toolitem action='export-object'/>"
+"		<toolitem action='delete-object'/>"
+"		<separator name='MiddleSeparator' expand='true'/>"
+"		<toolitem action='extra-action'/>"
+"	</toolbar>"
+"</ui>";
 
 #define SEAHORSE_PKCS11_PROPERTIES_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PKCS11_PROPERTIES, SeahorsePkcs11PropertiesClass))
 #define SEAHORSE_IS_PKCS11_PROPERTIES_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PKCS11_PROPERTIES))
@@ -34,8 +50,11 @@ typedef struct _SeahorsePkcs11PropertiesClass SeahorsePkcs11PropertiesClass;
 
 struct _SeahorsePkcs11Properties {
 	GtkWindow parent;
+	GtkBox *content;
 	GcrViewer *viewer;
 	GObject *object;
+	GtkUIManager *ui_manager;
+	GtkActionGroup *actions;
 };
 
 struct _SeahorsePkcs11PropertiesClass {
@@ -58,9 +77,13 @@ seahorse_pkcs11_properties_init (SeahorsePkcs11Properties *self)
 
 	gtk_window_set_default_size (GTK_WINDOW (self), 400, 400);
 
+	self->content = GTK_BOX (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+	gtk_container_add (GTK_CONTAINER (self), GTK_WIDGET (self->content));
+	gtk_widget_show (GTK_WIDGET (self->content));
+
 	self->viewer = gcr_viewer_new_scrolled ();
 	viewer = GTK_WIDGET (self->viewer);
-	gtk_container_add (GTK_CONTAINER (self), viewer);
+	gtk_container_add (GTK_CONTAINER (self->content), viewer);
 	gtk_widget_set_hexpand (viewer, TRUE);
 	gtk_widget_set_vexpand (viewer, TRUE);
 	gtk_widget_show (viewer);
@@ -123,17 +146,151 @@ on_object_label_changed (GObject *obj,
 }
 
 static void
+on_export_certificate (GtkAction *action,
+                       gpointer user_data)
+{
+	/* TODO: Exporter not done */
+}
+
+static void
+on_delete_complete (GObject *source,
+                    GAsyncResult *result,
+                    gpointer user_data)
+{
+	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (user_data);
+	GError *error = NULL;
+
+	if (seahorse_pkcs11_delete_finish (result, &error))
+		gtk_widget_destroy (GTK_WIDGET (self));
+
+	else
+		seahorse_util_handle_error (&error, self, _("Couldn't delete"));
+
+	g_object_unref (self);
+}
+
+static void
+on_delete_objects (GtkAction *action,
+                   gpointer user_data)
+{
+	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (user_data);
+	gboolean with_partner = FALSE;
+	GObject *partner = NULL;
+	GtkDialog *dialog = NULL;
+	GCancellable *cancellable;
+	GList *objects = NULL;
+	gchar *label;
+
+	g_object_get (self->object,
+	              "label", &label,
+	              "partner", &partner,
+	              NULL);
+
+	if (SEAHORSE_IS_CERTIFICATE (self->object)) {
+		objects = g_list_prepend (objects, g_object_ref (self->object));
+		dialog = seahorse_delete_dialog_new (GTK_WINDOW (self),
+		                                     _("Are you sure you want to delete the certificate '%s'?"),
+		                                     label);
+
+		if (SEAHORSE_IS_PRIVATE_KEY (partner)) {
+			seahorse_delete_dialog_set_check_value (SEAHORSE_DELETE_DIALOG (dialog), FALSE);
+			seahorse_delete_dialog_set_check_label (SEAHORSE_DELETE_DIALOG (dialog),
+			                                        _("Also delete matching private key"));
+			with_partner = TRUE;
+		}
+
+	} else if (SEAHORSE_IS_PRIVATE_KEY (self->object)) {
+		objects = g_list_prepend (objects, g_object_ref (self->object));
+		dialog = seahorse_delete_dialog_new (GTK_WINDOW (self),
+		                                     _("Are you sure you want to delete the private key '%s'?"),
+		                                     label);
+
+		seahorse_delete_dialog_set_check_value (SEAHORSE_DELETE_DIALOG (dialog), FALSE);
+		seahorse_delete_dialog_set_check_require (SEAHORSE_DELETE_DIALOG (dialog), TRUE);
+		seahorse_delete_dialog_set_check_label (SEAHORSE_DELETE_DIALOG (dialog),
+		                                        _("I understand that this action cannot be undone"));
+	}
+
+	if (dialog && gtk_dialog_run (dialog) == GTK_RESPONSE_OK) {
+		if (with_partner)
+			objects = g_list_prepend (objects, partner);
+
+		cancellable = g_cancellable_new ();
+		seahorse_pkcs11_delete_async (objects, cancellable,
+		                              on_delete_complete, g_object_ref (self));
+		seahorse_progress_show (cancellable, _("Deleting"), TRUE);
+		g_object_unref (cancellable);
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+	g_list_free_full (objects, g_object_unref);
+	g_clear_object (&partner);
+	g_free (label);
+}
+
+static void
+on_extra_action (GtkAction *action,
+                 gpointer user_data)
+{
+
+}
+
+
+static const GtkActionEntry UI_ACTIONS[] = {
+	{ "export-object", GTK_STOCK_SAVE_AS, N_("_Export"), "",
+	  N_("Export the certificate"), G_CALLBACK (on_export_certificate) },
+	{ "delete-object", GTK_STOCK_DELETE, N_("_Delete"), "<Ctrl>Delete",
+	  N_("Delete this certificate or key"), G_CALLBACK (on_delete_objects) },
+	{ "extra-action", NULL, N_("Extra _Action"), NULL,
+	  N_("An extra action on the certificate"), G_CALLBACK (on_extra_action) },
+};
+
+static void
+on_ui_manager_add_widget (GtkUIManager *manager,
+                          GtkWidget *widget,
+                          gpointer user_data)
+{
+	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (user_data);
+
+	if (!GTK_IS_TOOLBAR (widget))
+		return;
+
+	gtk_box_pack_start (self->content, widget, FALSE, TRUE, 0);
+	gtk_box_reorder_child (self->content, widget, 0);
+
+	gtk_style_context_add_class (gtk_widget_get_style_context (widget),
+	                             GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
+	gtk_widget_reset_style (widget);
+	gtk_widget_show (widget);
+}
+
+static void
 seahorse_pkcs11_properties_constructed (GObject *obj)
 {
 	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (obj);
 	GObject *partner = NULL;
+	GError *error = NULL;
 
 	G_OBJECT_CLASS (seahorse_pkcs11_properties_parent_class)->constructed (obj);
+
+	self->actions = gtk_action_group_new ("Pkcs11Actions");
+	gtk_action_group_add_actions (self->actions, UI_ACTIONS, G_N_ELEMENTS (UI_ACTIONS), self);
+
+	self->ui_manager = gtk_ui_manager_new ();
+	gtk_ui_manager_insert_action_group (self->ui_manager, self->actions, 0);
+	g_signal_connect (self->ui_manager, "add-widget", G_CALLBACK (on_ui_manager_add_widget), self);
+	gtk_ui_manager_add_ui_from_string (self->ui_manager, UI_STRING, -1, &error);
+	if (error != NULL) {
+		g_warning ("couldn't load ui: %s", error->message);
+		g_error_free (error);
+	}
+	gtk_ui_manager_ensure_update (self->ui_manager);
 
 	g_return_if_fail (self->object != NULL);
 	g_object_set_qdata (self->object, QUARK_WINDOW, self);
 
-	g_signal_connect (self->object, "notify::label", G_CALLBACK (on_object_label_changed), self);
+	g_signal_connect_object (self->object, "notify::label", G_CALLBACK (on_object_label_changed),
+	                         self, G_CONNECT_AFTER);
 	on_object_label_changed (self->object, NULL, self);
 
 	add_renderer_for_object (self, self->object);
@@ -143,6 +300,8 @@ seahorse_pkcs11_properties_constructed (GObject *obj)
 		add_renderer_for_object (self, partner);
 		g_object_unref (partner);
 	}
+
+	gtk_widget_grab_focus (GTK_WIDGET (self->viewer));
 }
 
 static void
@@ -186,6 +345,9 @@ static void
 seahorse_pkcs11_properties_finalize (GObject *obj)
 {
 	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (obj);
+
+	g_object_unref (self->actions);
+	g_object_unref (self->ui_manager);
 
 	if (self->object) {
 		if (g_object_get_qdata (self->object, QUARK_WINDOW) == self)

@@ -29,6 +29,7 @@
 
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
+#include "seahorse-delete-dialog.h"
 #include "seahorse-object.h"
 #include "seahorse-object-list.h"
 #include "seahorse-registry.h"
@@ -96,7 +97,7 @@ on_delete_objects (GtkAction *action,
 	guint num;
 	gchar* prompt;
 	GList *l;
-	GtkWidget *parent;
+	GtkWindow *parent;
 	GError *error = NULL;
 	GList* objects;
 
@@ -116,8 +117,8 @@ on_delete_objects (GtkAction *action,
 		                          num);
 	}
 
-	parent = GTK_WIDGET (seahorse_action_get_window (action));
-	if (seahorse_util_prompt_delete (prompt, NULL)) {
+	parent = seahorse_action_get_window (action);
+	if (seahorse_delete_dialog_prompt (parent, prompt)) {
 		for (l = objects; l != NULL; l = g_list_next (l)) {
 			if (!seahorse_ssh_op_delete_sync (l->data, &error)) {
 				seahorse_util_handle_error (&error, parent, _("Couldn't delete key"));

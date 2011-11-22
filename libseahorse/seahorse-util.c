@@ -154,51 +154,6 @@ seahorse_util_handle_error (GError **error,
 }
 
 /**
- * seahorse_util_prompt_delete:
- * @text: The text to display in the delete-dialog
- * @parent: The widget to display the dialog for. Can be NULL
- *
- * Displays a modal dialog with "cancel" and "delete"
- *
- * Returns: TRUE if the user pressed "delete", FALSE else
- */
-gboolean
-seahorse_util_prompt_delete (const gchar *text, GtkWidget *parent)
-{
-	GtkWidget *warning, *button;
-	gint response;
-	
-	if (parent) {
-		if (!GTK_IS_WIDGET (parent)) {
-			g_warn_if_reached ();
-			parent = NULL;
-		} else {
-			if (!GTK_IS_WINDOW (parent)) 
-				parent = gtk_widget_get_toplevel (parent);
-			if (!GTK_IS_WINDOW (parent) && gtk_widget_is_toplevel (parent))
-				parent = NULL;
-		}
-	}
-	
-	warning = gtk_message_dialog_new (GTK_WINDOW (parent), GTK_DIALOG_MODAL,
-	                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-	                                  "%s", text);
-    
-	button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-	gtk_dialog_add_action_widget (GTK_DIALOG (warning), GTK_WIDGET (button), GTK_RESPONSE_REJECT);
-	gtk_widget_show (button);
-	
-	button = gtk_button_new_from_stock(GTK_STOCK_DELETE);
-	gtk_dialog_add_action_widget (GTK_DIALOG (warning), GTK_WIDGET (button), GTK_RESPONSE_ACCEPT);
-	gtk_widget_show (button);
-	
-	response = gtk_dialog_run (GTK_DIALOG (warning));
-	gtk_widget_destroy (warning);
-	
-	return (response == GTK_RESPONSE_ACCEPT);
-}
-
-/**
  * seahorse_util_error_domain:
  *
  * Returns: The GError domain for generic seahorse errors

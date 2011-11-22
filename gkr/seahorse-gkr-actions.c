@@ -30,6 +30,7 @@
 
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
+#include "seahorse-delete-dialog.h"
 #include "seahorse-object-list.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
@@ -330,7 +331,7 @@ on_keyrings_delete (GtkAction* action,
 	                          seahorse_object_get_label (objects->data));
 	parent = seahorse_action_get_window (action);
 
-	ret = seahorse_util_prompt_delete (prompt, GTK_WIDGET (parent));
+	ret = seahorse_delete_dialog_prompt (parent, prompt);
 	if (ret) {
 		cancellable = g_cancellable_new ();
 		seahorse_gkr_delete_async (objects, cancellable,
@@ -516,7 +517,7 @@ on_delete_passwords (GtkAction *action,
                      gpointer user_data)
 {
 	GCancellable *cancellable;
-	GtkWidget *parent;
+	GtkWindow *parent;
 	GList *objects;
 	gchar *prompt;
 	gboolean ret;
@@ -536,8 +537,8 @@ on_delete_passwords (GtkAction *action,
 		                                    num), num);
 	}
 
-	parent = GTK_WIDGET (seahorse_action_get_window (action));
-	ret = seahorse_util_prompt_delete (prompt, parent);
+	parent = seahorse_action_get_window (action);
+	ret = seahorse_delete_dialog_prompt (parent, prompt);
 
 	if (ret) {
 		cancellable = g_cancellable_new ();

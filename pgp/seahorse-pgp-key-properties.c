@@ -31,6 +31,7 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-bind.h"
+#include "seahorse-delete-dialog.h"
 #include "seahorse-icons.h"
 #include "seahorse-object.h"
 #include "seahorse-object-model.h"
@@ -340,7 +341,7 @@ on_pgp_names_delete_clicked (GtkWidget *widget,
 	g_return_if_fail (SEAHORSE_IS_GPGME_UID (uid));
 	message = g_strdup_printf (_("Are you sure you want to permanently delete the '%s' user ID?"), 
 	                           seahorse_object_get_label (SEAHORSE_OBJECT (uid)));
-	ret = seahorse_util_prompt_delete (message, seahorse_widget_get_toplevel (swidget));
+	ret = seahorse_delete_dialog_prompt (GTK_WINDOW (seahorse_widget_get_toplevel (swidget)), message);
 	g_free (message);
 	
 	if (ret == FALSE)
@@ -1076,7 +1077,7 @@ on_pgp_details_del_subkey_button (GtkButton *button,
 	index = seahorse_pgp_subkey_get_index (subkey);
 	label = seahorse_object_get_label (SEAHORSE_OBJECT (pkey));
 	message = g_strdup_printf (_("Are you sure you want to permanently delete subkey %d of %s?"), index, label);
-	ret = seahorse_util_prompt_delete (message, seahorse_widget_get_toplevel (swidget));
+	ret = seahorse_delete_dialog_prompt (GTK_WINDOW (seahorse_widget_get_toplevel (swidget)), message);
 	g_free (message);
 	
 	if (ret == FALSE)

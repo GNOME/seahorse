@@ -36,6 +36,7 @@
 
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
+#include "seahorse-delete-dialog.h"
 #include "seahorse-object.h"
 #include "seahorse-object-list.h"
 #include "seahorse-registry.h"
@@ -206,7 +207,7 @@ on_delete_objects (GtkAction *action,
 	char* message;
 	SeahorseObject *obj;
 	GList* to_delete, *l;
-	GtkWidget *parent;
+	GtkWindow *parent;
 	gpgme_error_t gerr;
 	guint length;
 	GError *error = NULL;
@@ -272,8 +273,8 @@ on_delete_objects (GtkAction *action,
 		break;
 	}
 
-	parent = GTK_WIDGET (seahorse_action_get_window (action));
-	if (!seahorse_util_prompt_delete (message, parent)) {
+	parent = seahorse_action_get_window (action);
+	if (!seahorse_delete_dialog_prompt (parent, message)) {
 		g_free (message);
 		g_cancellable_cancel (g_cancellable_get_current ());
 		return;
