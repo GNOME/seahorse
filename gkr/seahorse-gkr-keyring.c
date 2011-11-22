@@ -541,7 +541,9 @@ const gchar *
 seahorse_gkr_keyring_get_description (SeahorseGkrKeyring *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), NULL);
-	return _("To do Keyring");
+	if (g_strcmp0 (self->pv->keyring_name, "login") == 0)
+		return _("A keyring that is automatically unlocked on login");
+	return _("A keyring used to store passwords");
 }
 
 GnomeKeyringInfo*
