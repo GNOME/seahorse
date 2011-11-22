@@ -317,7 +317,7 @@ seahorse_certificate_set_partner (SeahorseCertificate *self,
 	g_return_if_fail (private_key == NULL || SEAHORSE_IS_PRIVATE_KEY (private_key));
 
 	if (self->pv->private_key)
-		g_object_remove_weak_pointer (G_OBJECT (private_key),
+		g_object_remove_weak_pointer (G_OBJECT (self->pv->private_key),
 		                              (gpointer *)self->pv->private_key);
 	self->pv->private_key = private_key;
 	if (self->pv->private_key)
