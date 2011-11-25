@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-11-22 15:53+0000\n"
-"PO-Revision-Date: 2011-11-22 17:22+0100\n"
+"POT-Creation-Date: 2011-11-24 11:48+0000\n"
+"PO-Revision-Date: 2011-11-25 17:21+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -372,9 +372,16 @@ msgstr "Uso:"
 msgid "Login keyring"
 msgstr "Depósito de inicio de sesión"
 
-#: ../gkr/seahorse-gkr-keyring.c:544
-msgid "To do Keyring"
+#: ../gkr/seahorse-gkr-keyring.c:545
+msgid "A keyring that is automatically unlocked on login"
 msgstr ""
+"Un almacén de contraseñas que se desbloquea automáticamente al iniciar la "
+"sesión"
+
+#: ../gkr/seahorse-gkr-keyring.c:546
+#| msgid "Key storage password"
+msgid "A keyring used to store passwords"
+msgstr "Un almacén de claves para almacenar contraseñas"
 
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.xml.h:2
@@ -816,7 +823,7 @@ msgstr "_Reemplazar"
 #: ../pgp/seahorse-pgp-key-properties.c:1277
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
-#: ../pkcs11/seahorse-token.c:566
+#: ../pkcs11/seahorse-token.c:581
 msgid "Unknown"
 msgstr "Desconocida"
 
@@ -886,7 +893,7 @@ msgstr "_Editar"
 
 #. Translators: This text refers to deleting an item from its type's backing store
 #: ../libseahorse/seahorse-viewer.c:232
-#: ../pkcs11/seahorse-pkcs11-properties.c:242
+#: ../pkcs11/seahorse-pkcs11-properties.c:249
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -987,6 +994,7 @@ msgid "Key _Length:"
 msgstr "_Longitud de clave:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:5
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:4
 msgid "Key _Type:"
 msgstr "_Tipo de clave:"
 
@@ -1106,6 +1114,7 @@ msgid "Used to encrypt email and files"
 msgstr "Usada para cifrar correo y archivos"
 
 #: ../pgp/seahorse-gpgme-generate.c:132
+#: ../pkcs11/seahorse-pkcs11-generate.c:92
 msgid "RSA"
 msgstr "RSA"
 
@@ -1126,6 +1135,7 @@ msgid "Enter the passphrase for your new key twice."
 msgstr "Introduzca la frase de paso para su clave nueva dos veces."
 
 #: ../pgp/seahorse-gpgme-generate.c:223
+#: ../pkcs11/seahorse-pkcs11-generate.c:457
 msgid "Generating key"
 msgstr "Generando clave"
 
@@ -1567,7 +1577,9 @@ msgstr "Claves PGP"
 msgid "PGP keys are for encrypting email or files"
 msgstr "Las claves PGP se usan para cifrar correos electrónicos o archivos"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:1 ../ssh/seahorse-ssh-generate.xml.h:1
+#: ../pgp/seahorse-pgp-generate.xml.h:1
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:1
+#: ../ssh/seahorse-ssh-generate.xml.h:1
 msgid "<b>_Advanced key options</b>"
 msgstr "<b>Opciones _avanzadas de clave</b>"
 
@@ -1595,7 +1607,9 @@ msgstr "_Tipo de cifrado:"
 msgid "Generate a new key"
 msgstr "Generar una clave nueva"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:6
+#: ../pgp/seahorse-pgp-generate.xml.h:9
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:3
+#: ../ssh/seahorse-ssh-generate.xml.h:6
 msgid "Key _Strength (bits):"
 msgstr "_Fortaleza de la clave (bits):"
 
@@ -2159,12 +2173,12 @@ msgid "Unlock this token"
 msgstr "Desbloquear este «token»"
 
 #: ../pkcs11/seahorse-pkcs11-actions.c:218
-#: ../pkcs11/seahorse-pkcs11-properties.c:167
+#: ../pkcs11/seahorse-pkcs11-properties.c:173
 msgid "Couldn't delete"
 msgstr "No se pudo eliminar"
 
 #: ../pkcs11/seahorse-pkcs11-actions.c:239
-#: ../pkcs11/seahorse-pkcs11-properties.c:192
+#: ../pkcs11/seahorse-pkcs11-properties.c:198
 #, c-format
 msgid "Are you sure you want to delete the certificate '%s'?"
 msgstr "¿Está seguro de que quiere eliminar el certificado «%s»?"
@@ -2177,7 +2191,7 @@ msgstr[0] "¿Está seguro de que quiere eliminar %d certificado?"
 msgstr[1] "¿Está seguro de que quiere eliminar %d certificados?"
 
 #: ../pkcs11/seahorse-pkcs11-actions.c:256
-#: ../pkcs11/seahorse-pkcs11-properties.c:221
+#: ../pkcs11/seahorse-pkcs11-properties.c:227
 msgid "Deleting"
 msgstr "Eliminando"
 
@@ -2197,57 +2211,128 @@ msgstr "Certificados"
 msgid "X.509 certificates and related keys"
 msgstr "Certificados X.509 y claves relacionadas"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:134
-#: ../pkcs11/seahorse-pkcs11-properties.c:138
+#: ../pkcs11/seahorse-pkcs11-generate.c:116
+#| msgid "Couldn't delete private key"
+msgid "Couldn't generate private key"
+msgstr "No se pudo generar la clave privada"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:411
+#: ../pkcs11/seahorse-pkcs11-request.c:256
+#| msgid "C_reate"
+msgid "Create"
+msgstr "Crear"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:504
+#: ../pkcs11/seahorse-private-key.c:160
+msgid "Private key"
+msgstr "Clave privada"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:505
+#| msgid "Export the certificate"
+msgid "Used to request a certificate"
+msgstr "Usado para solicitar un certificado"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:2
+#| msgid "Create a new key or item"
+msgid "Create a new private key"
+msgstr "Crear una clave privada nueva"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:5
+msgid "Label:"
+msgstr "Etiqueta:"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
+#| msgid "Stored note"
+msgid "Stored at:"
+msgstr "Almacenado en:"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:140
+#: ../pkcs11/seahorse-pkcs11-properties.c:144
 msgid "Unnamed"
 msgstr "Sin nombre"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:198
-#| msgid "Couldn't delete private key"
+#: ../pkcs11/seahorse-pkcs11-properties.c:204
 msgid "Also delete matching private key"
 msgstr "Eliminar también la clave privada coincidente"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:205
+#: ../pkcs11/seahorse-pkcs11-properties.c:211
 #, c-format
-#| msgid "Are you sure you want to delete the certificate '%s'?"
 msgid "Are you sure you want to delete the private key '%s'?"
 msgstr "¿Está seguro de que quiere eliminar la clave privada «%s»?"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:211
+#: ../pkcs11/seahorse-pkcs11-properties.c:217
 msgid "I understand that this action cannot be undone"
 msgstr "Entiendo que esta acción no se puede deshacer"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:240
-#| msgid "Export"
+#: ../pkcs11/seahorse-pkcs11-properties.c:247
 msgid "_Export"
 msgstr "_Exportar"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:241
-#| msgid "Delete the certificate."
+#: ../pkcs11/seahorse-pkcs11-properties.c:248
 msgid "Export the certificate"
 msgstr "Exportar el certificado"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:243
-#| msgid "Delete the certificate."
+#: ../pkcs11/seahorse-pkcs11-properties.c:250
 msgid "Delete this certificate or key"
 msgstr "Eliminar este certificado o clave"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:244
-msgid "Extra _Action"
-msgstr "_Acción adicional"
+#: ../pkcs11/seahorse-pkcs11-properties.c:251
+#| msgid "Certificate"
+msgid "Request _Certificate"
+msgstr "Solicitar _certificado"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:245
-#| msgid "Properties of the certificate."
-msgid "An extra action on the certificate"
-msgstr "Una acción adicional sobre el certificado"
+#: ../pkcs11/seahorse-pkcs11-properties.c:252
+#, fuzzy
+#| msgid "No private key file is available for this key."
+msgid "Create a certificate request file for this key"
+msgstr "No existe un archivo de clave privada disponible para esta clave."
+
+#: ../pkcs11/seahorse-pkcs11-request.c:104
+#, fuzzy
+#| msgid "Couldn't verify signature."
+msgid "Couldn't save certificate request"
+msgstr "No se pudo verificar la firma."
+
+#: ../pkcs11/seahorse-pkcs11-request.c:127
+#, fuzzy
+#| msgid "Certificates"
+msgid "Save certificate request"
+msgstr "Certificados"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:138
+#, fuzzy
+#| msgid "Certificates"
+msgid "Certificate request"
+msgstr "Certificados"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:146
+msgid "PEM encoded request"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-request.c:194
+#, fuzzy
+#| msgid "couldn't create new process group"
+msgid "Couldn't create certificate request"
+msgstr "no se pudo crear un grupo de proceso nuevo"
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:1
+#, fuzzy
+#| msgid "Delete this certificate or key"
+msgid "Create a certificate request file."
+msgstr "Eliminar este certificado o clave"
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:2
+#| msgid "Common Name (CN)"
+msgid "Name (CN):"
+msgstr "Nombre (CN):"
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:3
+msgid "The common name (CN) placed in the certificate request."
+msgstr ""
 
 #: ../pkcs11/seahorse-private-key.c:119
 msgid "Unnamed private key"
 msgstr "Clave privada sin nombre"
-
-#: ../pkcs11/seahorse-private-key.c:160
-msgid "Private key"
-msgstr "Clave privada"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
@@ -2642,6 +2727,13 @@ msgstr "_Usuario:"
 msgid "_Set Up"
 msgstr "Co_nfigurar"
 
+#~ msgid "Extra _Action"
+#~ msgstr "_Acción adicional"
+
+#~| msgid "Properties of the certificate."
+#~ msgid "An extra action on the certificate"
+#~ msgstr "Una acción adicional sobre el certificado"
+
 #~| msgid "Show properties"
 #~ msgid "Show the properties of this backend"
 #~ msgstr "Mostrar las propiedades de este «backend»"
@@ -2774,9 +2866,6 @@ msgstr "Co_nfigurar"
 #~ msgid "couldn't fork process"
 #~ msgstr "no se pudo bifurcar el proceso"
 
-#~ msgid "couldn't create new process group"
-#~ msgstr "no se pudo crear un grupo de proceso nuevo"
-
 #~ msgid "Encryption Daemon (Seahorse)"
 #~ msgstr "Demonio de cifrado (Seahorse)"
 
@@ -2829,9 +2918,6 @@ msgstr "Co_nfigurar"
 
 #~ msgid "Bad Signature"
 #~ msgstr "Firma mala"
-
-#~ msgid "Couldn't verify signature."
-#~ msgstr "No se pudo verificar la firma."
 
 #~ msgid "Invalid or unrecognized signer: %s"
 #~ msgstr "Firmante inválido o no reconocido: %s"
@@ -3300,9 +3386,6 @@ msgstr "Co_nfigurar"
 
 #~ msgid "<b>Validity</b>"
 #~ msgstr "<b>Validez</b>"
-
-#~ msgid "Common Name (CN)"
-#~ msgstr "Nombre común (CN)"
 
 #~ msgid "Email Recipient Certificate"
 #~ msgstr "Certificado del destinatario del correo-e"
