@@ -1204,17 +1204,18 @@ seahorse_ldap_source_import_finish (SeahorsePlace *place,
 typedef struct {
 	GPtrArray *fingerprints;
 	gint current_index;
-	GOutputStream *output;
+	GString *data;
 	GCancellable *cancellable;
 	LDAP *ldap;
-} source_export_closure;
+} ExportClosure;
 
 static void
-source_export_free (gpointer data)
+export_closure_free (gpointer data)
 {
-	source_export_closure *closure = data;
+	ExportClosure *closure = data;
 	g_ptr_array_free (closure->fingerprints, TRUE);
-	g_object_unref (closure->output);
+	if (closure->data)
+		g_string_free (closure->data, TRUE);
 	g_clear_object (&closure->cancellable);
 	if (closure->ldap)
 		ldap_unbind_ext (closure->ldap, NULL, NULL);
@@ -1229,14 +1230,12 @@ on_export_search_completed (LDAPMessage *result,
                             gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	source_export_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	ExportClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	SeahorseLDAPSource *self = SEAHORSE_LDAP_SOURCE (g_async_result_get_source_object (G_ASYNC_RESULT (res)));
 	LDAPServerInfo *sinfo;
 	char *message;
 	GError *error = NULL;
-	gboolean ret;
 	gchar *key;
-	gsize written;
 	int code;
 	int type;
 	int rc;
@@ -1264,18 +1263,10 @@ on_export_search_completed (LDAPMessage *result,
 			return FALSE;
 		}
 
-		ret = g_output_stream_write_all (closure->output, key, strlen (key), &written, NULL, &error) &&
-		      g_output_stream_write_all (closure->output, "\n", 1, &written, NULL, &error) &&
-		      g_output_stream_flush (closure->output, NULL, &error);
+		g_string_append (closure->data, key);
+		g_string_append_c (closure->data, '\n');
 
 		g_free (key);
-
-		if (!ret) {
-			g_simple_async_result_take_error (res, error);
-			g_simple_async_result_complete (res);
-			return FALSE;
-		}
-
 		return TRUE;
 
 	/* No more entries, result */
@@ -1302,7 +1293,7 @@ static void
 export_retrieve_key (SeahorseLDAPSource *self,
                      GSimpleAsyncResult *res)
 {
-	source_export_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	ExportClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	LDAPServerInfo *sinfo;
 	gchar *filter;
 	char *attrs[2];
@@ -1362,7 +1353,7 @@ on_export_connect_completed (GObject *source,
                              gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	source_export_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	ExportClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
 
 	closure->ldap = seahorse_ldap_source_connect_finish (SEAHORSE_LDAP_SOURCE (source),
@@ -1380,21 +1371,20 @@ on_export_connect_completed (GObject *source,
 static void
 seahorse_ldap_source_export_async (SeahorseServerSource *source,
                                    GList *keyids,
-                                   GOutputStream *output,
                                    GCancellable *cancellable,
                                    GAsyncReadyCallback callback,
                                    gpointer user_data)
 {
 	SeahorseLDAPSource *self = SEAHORSE_LDAP_SOURCE (source);
-	source_export_closure *closure;
+	ExportClosure *closure;
 	GSimpleAsyncResult *res;
 	gchar *fingerprint;
 	GList *l;
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_ldap_source_export_async);
-	closure = g_new0 (source_export_closure, 1);
-	closure->output = g_object_ref (output);
+	closure = g_new0 (ExportClosure, 1);
+	closure->data = g_string_sized_new (1024);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	closure->fingerprints = g_ptr_array_new_with_free_func (g_free);
 	for (l = keyids; l; l = g_list_next (l)) {
@@ -1403,7 +1393,7 @@ seahorse_ldap_source_export_async (SeahorseServerSource *source,
 		seahorse_progress_prep (closure->cancellable, fingerprint, NULL);
 	}
 	closure->current_index = -1;
-	g_simple_async_result_set_op_res_gpointer (res, closure, source_export_free);
+	g_simple_async_result_set_op_res_gpointer (res, closure, export_closure_free);
 
 	seahorse_ldap_source_connect_async (self, cancellable,
 	                                    on_export_connect_completed,
@@ -1412,21 +1402,27 @@ seahorse_ldap_source_export_async (SeahorseServerSource *source,
 	g_object_unref (res);
 }
 
-static GOutputStream *
+static gpointer
 seahorse_ldap_source_export_finish (SeahorseServerSource *source,
                                     GAsyncResult *result,
+                                    gsize *size,
                                     GError **error)
 {
-	source_export_closure *closure;
+	ExportClosure *closure;
+	gpointer output;
 
+	g_return_val_if_fail (size != NULL, NULL);
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
-	                      seahorse_ldap_source_export_async), FALSE);
+	                      seahorse_ldap_source_export_async), NULL);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return FALSE;
+		return NULL;
 
 	closure = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-	return closure->output;
+	*size = closure->data->len;
+	output = g_string_free (closure->data, FALSE);
+	closure->data = NULL;
+	return output;
 }
 
 static void 

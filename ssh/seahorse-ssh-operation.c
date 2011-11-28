@@ -22,6 +22,13 @@
 
 #include "config.h"
 
+#include "seahorse-ssh-operation.h"
+
+#define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
+#include "seahorse-debug.h"
+#include "seahorse-exporter.h"
+#include "seahorse-util.h"
+
 #include <sys/wait.h>
 #include <signal.h>
 #include <sys/socket.h>
@@ -32,12 +39,6 @@
 
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
-
-#include "seahorse-ssh-operation.h"
-#include "seahorse-util.h"
-
-#define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
-#include "seahorse-debug.h"
 
 #define COMMAND_PASSWORD "PASSWORD "
 #define COMMAND_PASSWORD_LEN   9
@@ -473,26 +474,6 @@ seahorse_ssh_operation_finish (SeahorseSSHSource *source,
  * UPLOAD KEY 
  */
 
-typedef struct {
-	GMemoryOutputStream *output;
-	GCancellable *cancellable;
-	gchar *username;
-	gchar *hostname;
-	gchar *port;
-} ssh_upload_closure;
-
-static void
-ssh_upload_free (gpointer data)
-{
-	ssh_upload_closure *closure = data;
-	g_object_unref (closure->output);
-	g_clear_object (&closure->cancellable);
-	g_free (closure->username);
-	g_free (closure->hostname);
-	g_free (closure->port);
-	g_free (closure);
-}
-
 static void
 on_upload_send_complete (GObject *source,
                          GAsyncResult *result,
@@ -508,49 +489,6 @@ on_upload_send_complete (GObject *source,
 	g_object_unref (res);
 }
 
-static void
-on_upload_export_complete (GObject *source,
-                           GAsyncResult *result,
-                           gpointer user_data)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	ssh_upload_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	SeahorseSshPromptInfo prompt = { _("Remote Host Password"), NULL, NULL, NULL };
-	GError *error = NULL;
-	gchar *data;
-	size_t length;
-	gchar *cmd;
-
-	if (!seahorse_place_export_finish (SEAHORSE_PLACE (source), result, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete (res);
-		g_object_unref (res);
-		return;
-	}
-
-	/*
-	 * This command creates the .ssh directory if necessary (with appropriate permissions)
-	 * and then appends all input data onto the end of .ssh/authorized_keys
-	 */
-	/* TODO: Important, we should handle the host checking properly */
-	cmd = g_strdup_printf (SSH_PATH " '%s@%s' %s %s -o StrictHostKeyChecking=no "
-	                       "\"umask 077; test -d .ssh || mkdir .ssh ; cat >> .ssh/authorized_keys\"",
-	                       closure->username, closure->hostname,
-	                       closure->port ? "-p" : "", closure->port ? closure->port : "");
-
-	if (g_output_stream_write_all (G_OUTPUT_STREAM (closure->output), "\n", 1, NULL, NULL, NULL) != 1)
-		g_return_if_reached ();
-	data = g_memory_output_stream_get_data (closure->output);
-	length = g_memory_output_stream_get_data_size (closure->output);
-
-	seahorse_ssh_operation_async (SEAHORSE_SSH_SOURCE (source), cmd, data, length,
-	                              closure->cancellable, on_upload_send_complete,
-	                              &prompt, g_object_ref (res));
-
-	g_free (cmd);
-	g_object_unref (res);
-}
-
 void
 seahorse_ssh_op_upload_async (SeahorseSSHSource *source,
                               GList *keys,
@@ -561,8 +499,12 @@ seahorse_ssh_op_upload_async (SeahorseSSHSource *source,
                               GAsyncReadyCallback callback,
                               gpointer user_data)
 {
+	SeahorseSshPromptInfo prompt = { _("Remote Host Password"), NULL, NULL, NULL };
+	SeahorseSSHKeyData *keydata;
 	GSimpleAsyncResult *res;
-	ssh_upload_closure *closure;
+	GString *data;
+	GList *l;
+	gchar *cmd;
 
 	g_return_if_fail (keys != NULL);
 	g_return_if_fail (username && username[0]);
@@ -573,18 +515,30 @@ seahorse_ssh_op_upload_async (SeahorseSSHSource *source,
 
 	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
 	                                 seahorse_ssh_op_upload_async);
-	closure = g_new0 (ssh_upload_closure, 1);
-	closure->output = G_MEMORY_OUTPUT_STREAM (g_memory_output_stream_new (NULL, 0, g_realloc, NULL));
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	closure->username = g_strdup (username);
-	closure->hostname = g_strdup (hostname);
-	closure->port = g_strdup (port);
-	g_simple_async_result_set_op_res_gpointer (res, closure, ssh_upload_free);
 
-	/* Buffer for what we send to the server */
-	seahorse_place_export_async (SEAHORSE_PLACE (source), keys, G_OUTPUT_STREAM (closure->output),
-	                             cancellable, on_upload_export_complete, g_object_ref (res));
+	data = g_string_sized_new (1024);
+	for (l = keys; l != NULL; l = g_list_next (l)) {
+		keydata = seahorse_ssh_key_get_data (l->data);
+		if (keydata && keydata->pubfile) {
+			g_string_append (data, keydata->rawdata);
+			g_string_append_c (data, '\n');
+		}
+	}
 
+	/*
+	 * This command creates the .ssh directory if necessary (with appropriate permissions)
+	 * and then appends all input data onto the end of .ssh/authorized_keys
+	 */
+	/* TODO: Important, we should handle the host checking properly */
+	cmd = g_strdup_printf (SSH_PATH " '%s@%s' %s %s -o StrictHostKeyChecking=no "
+	                       "\"umask 077; test -d .ssh || mkdir .ssh ; cat >> .ssh/authorized_keys\"",
+	                       username, hostname, port ? "-p" : "", port ? port : "");
+
+	seahorse_ssh_operation_async (SEAHORSE_SSH_SOURCE (source), cmd, data->str, data->len,
+	                              cancellable, on_upload_send_complete,
+	                              &prompt, g_object_ref (res));
+
+	g_string_free (data, TRUE);
 	g_object_unref (res);
 
 }

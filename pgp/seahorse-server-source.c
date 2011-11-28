@@ -399,7 +399,6 @@ seahorse_server_source_search_finish (SeahorseServerSource *self,
 void
 seahorse_server_source_export_async (SeahorseServerSource *self,
                                      GList *keyids,
-                                     GOutputStream *output,
                                      GCancellable *cancellable,
                                      GAsyncReadyCallback callback,
                                      gpointer user_data)
@@ -407,27 +406,28 @@ seahorse_server_source_export_async (SeahorseServerSource *self,
 	SeahorseServerSourceClass *klass;
 
 	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (self));
-	g_return_if_fail (output == NULL || G_IS_OUTPUT_STREAM (output));
 	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
 	klass = SEAHORSE_SERVER_SOURCE_GET_CLASS (self);
 	g_return_if_fail (klass->export_async);
-	(klass->export_async) (self, keyids, output, cancellable, callback, user_data);
+	(klass->export_async) (self, keyids, cancellable, callback, user_data);
 }
 
-GOutputStream *
+gpointer
 seahorse_server_source_export_finish (SeahorseServerSource *self,
                                       GAsyncResult *result,
+                                      gsize *size,
                                       GError **error)
 {
 	SeahorseServerSourceClass *klass;
 
 	g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (self), NULL);
 	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+	g_return_val_if_fail (size != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	klass = SEAHORSE_SERVER_SOURCE_GET_CLASS (self);
 	g_return_val_if_fail (klass->export_async != NULL, NULL);
 	g_return_val_if_fail (klass->export_finish != NULL, NULL);
-	return (klass->export_finish) (self, result, error);
+	return (klass->export_finish) (self, result, size, error);
 }

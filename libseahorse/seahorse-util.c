@@ -52,8 +52,6 @@
 
 #include <sys/types.h>
 
-static const gchar *bad_filename_chars = "/\\<>|";
-
 /**
  * seahorse_util_show_error:
  * @parent: The parent widget. Can be NULL
@@ -372,41 +370,6 @@ seahorse_util_printf_fd (int fd, const char* fmt, ...)
     return ret;
 }
 
-/**
- * seahorse_util_filename_for_objects:
- * @objects: A list of objects
- *
- * If the single object has a nickname, this will be returned (with .asc attached)
- * If there are multiple objects, "Multiple Keys.asc" will be returned.
- * Single objects default to "Key Data.asc".
- * Results are internationalized
- *
- * Returns: NULL on error, the filename else. The returned string should be
- * freed with #g_free when no longer needed.
- */
-gchar*      
-seahorse_util_filename_for_objects (GList *objects)
-{
-	const gchar *name = NULL;
-	gchar *filename;
-
-	g_return_val_if_fail (g_list_length (objects) > 0, NULL);
-
-	if (g_list_length (objects) == 1) {
-		if (SEAHORSE_IS_OBJECT (objects->data))
-			name = seahorse_object_get_nickname (SEAHORSE_OBJECT (objects->data));
-		if (name == NULL)
-			name = _("Key Data");
-	} else {
-		name = _("Multiple Keys");
-	}
-    
-	filename = g_strconcat (name, SEAHORSE_EXT_ASC, NULL);
-	g_strstrip (filename);
-	g_strdelimit (filename, bad_filename_chars, '_');
-	return filename;
-}
-
 /** 
  * seahorse_util_uri_get_last:
  * @uri: The uri to parse
@@ -435,86 +398,48 @@ seahorse_util_uri_get_last (const gchar* uri)
     return t;
 }    
 
-/**
- * seahorse_util_uri_exists:
- * @uri: The uri to check
- * 
- * Verify whether a given uri exists or not.
- * 
- * Returns: FALSE if it does not exist, TRUE else
- **/
-gboolean
-seahorse_util_uri_exists (const gchar* uri)
+GFile *
+seahorse_util_file_increment_unique (GFile *file,
+                                     guint *state)
 {
-	GFile *file;
-	gboolean exists;
+	GFile *result;
+	gchar *suffix;
+	gchar *prefix;
+	gchar *uri_try;
+	gchar *x;
+	guint len;
 
-	file = g_file_new_for_uri (uri);
-	g_return_val_if_fail (file, FALSE);
-	
-	exists = g_file_query_exists (file, NULL);
-	g_object_unref (file);
-	
-	return exists;
-}       
-    
-/**
- * seahorse_util_uri_unique:
- * @uri: The uri to guarantee is unique
- * 
- * Creates a URI based on @uri that does not exist.
- * A simple numbering scheme is used to create new
- * URIs. Not meant for temp file creation.
- * 
- * Returns: Newly allocated unique URI.
- **/
-gchar*
-seahorse_util_uri_unique (const gchar* uri)
-{
-    gchar* suffix;
-    gchar* prefix;
-    gchar* uri_try;
-    gchar* x;
-    guint len;
-    int i;
-    
-    /* Simple when doesn't exist */
-    if (!seahorse_util_uri_exists (uri))
-        return g_strdup (uri);
-    
-    prefix = g_strdup (uri);
-    len = strlen (prefix); 
-    
-    /* Always take off a slash at end */
-    g_return_val_if_fail (len > 1, g_strdup (uri));
-    if (prefix[len - 1] == '/')
-        prefix[len - 1] = 0;
-            
-    /* Split into prefix and suffix */
-    suffix = strrchr (prefix, '.');
-    x = strrchr(uri, '/');
-    if (suffix == NULL || (x != NULL && suffix < x)) {
-        suffix = g_strdup ("");
-    } else {
-        x = suffix;
-        suffix = g_strdup (suffix);
-        *x = 0;
-    }                
-        
-    for (i = 1; i < 1000; i++) {
-       
-        uri_try = g_strdup_printf ("%s-%d%s", prefix, i, suffix);
-       
-        if (!seahorse_util_uri_exists (uri_try))
-            break;
-        
-        g_free (uri_try);
-        uri_try = NULL;
-    }
-        
-    g_free (suffix);    
-    g_free (prefix);
-    return uri_try ? uri_try : g_strdup (uri);       
+	g_return_val_if_fail (G_IS_FILE (file), NULL);
+	g_return_val_if_fail (state != NULL, NULL);
+
+	prefix = g_file_get_uri (file);
+	len = strlen (prefix);
+
+	g_return_val_if_fail (len > 0, NULL);
+
+	/* Always take off a slash at end */
+	if (prefix[len - 1] == '/')
+		prefix[len - 1] = 0;
+
+	/* Split into prefix and suffix */
+	suffix = strrchr (prefix, '.');
+	x = strrchr (prefix, '/');
+	if (suffix == NULL || (x != NULL && suffix < x)) {
+		suffix = g_strdup ("");
+	} else {
+		x = suffix;
+		suffix = g_strdup (suffix);
+		*x = 0;
+	}
+
+	++(*state);
+	uri_try = g_strdup_printf ("%s-%u%s", prefix, *state, suffix);
+	g_free (suffix);
+	g_free (prefix);
+
+	result = g_file_new_for_uri (uri_try);
+	g_free (uri_try);
+	return result;
 }
 
 /**
@@ -702,136 +627,6 @@ seahorse_util_chooser_show_key_files (GtkDialog *dialog)
     gtk_file_filter_set_name (filter, _("All files"));
     gtk_file_filter_add_pattern (filter, "*");    
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);       
-}
-
-/**
- * seahorse_util_chooser_show_archive_files:
- * @dialog: the dialog to add the filter for
- *
- * Adds a archive file filter and a "All files" filter. The archive filter
- * is used.
- *
- */
-void
-seahorse_util_chooser_show_archive_files (GtkDialog *dialog)
-{
-    GtkFileFilter* filter;
-    int i;
-    
-    static const char *archive_mime_type[] = {
-        "application/x-ar",
-        "application/x-arj",
-        "application/x-bzip",
-        "application/x-bzip-compressed-tar",
-        "application/x-cd-image",
-        "application/x-compress",
-        "application/x-compressed-tar",
-        "application/x-gzip",
-        "application/x-java-archive",
-        "application/x-jar",
-        "application/x-lha",
-        "application/x-lzop",
-        "application/x-rar",
-        "application/x-rar-compressed",
-        "application/x-tar",
-        "application/x-zoo",
-        "application/zip",
-        "application/x-7zip"
-    };
-    
-    filter = gtk_file_filter_new ();
-    gtk_file_filter_set_name (filter, _("Archive files"));
-    for (i = 0; i < G_N_ELEMENTS (archive_mime_type); i++)
-        gtk_file_filter_add_mime_type (filter, archive_mime_type[i]);
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);    
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
-
-    filter = gtk_file_filter_new ();
-    gtk_file_filter_set_name (filter, _("All files"));
-    gtk_file_filter_add_pattern (filter, "*");    
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);   
-}
-
-/**
- * seahorse_util_chooser_set_filename_full:
- * @dialog: The dialog to pre set the name
- * @objects: generate the file name from this object
- *
- *
- */
-void
-seahorse_util_chooser_set_filename_full (GtkDialog *dialog, GList *objects)
-{
-    gchar *t = NULL;
-    
-    if (g_list_length (objects) > 0) {
-        t = seahorse_util_filename_for_objects (objects);
-        gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), t);
-        g_free (t);
-    }
-}
-
-/**
- * seahorse_util_chooser_set_filename:
- * @dialog: set the dialog for this
- * @object: The object to use for the filename. #GObject
- *
- */
-void
-seahorse_util_chooser_set_filename (GtkDialog *dialog,
-                                    GObject *object)
-{
-	GList *objects = g_list_append (NULL, object);
-	seahorse_util_chooser_set_filename_full (dialog, objects);
-	g_list_free (objects);
-}
-
-/**
- * seahorse_util_chooser_save_prompt:
- * @dialog: save dialog to show
- *
- * If the selected file already exists, a confirmation dialog will be displayed
- *
- * Returns: the uri of the chosen file or NULL
- */
-gchar*      
-seahorse_util_chooser_save_prompt (GtkDialog *dialog)
-{
-    GtkWidget* edlg;
-    gchar *uri = NULL;
-    
-    while (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT) {
-     
-        uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (dialog));
-
-        if (uri == NULL)
-            continue;
-            
-        if (seahorse_util_uri_exists (uri)) {
-
-            edlg = gtk_message_dialog_new_with_markup (GTK_WINDOW (dialog),
-                        GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
-                        GTK_BUTTONS_NONE, _("<b>A file already exists with this name.</b>\n\nDo you want to replace it with a new file?"));
-            gtk_dialog_add_buttons (GTK_DIALOG (edlg), 
-                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                        _("_Replace"), GTK_RESPONSE_ACCEPT, NULL);
-
-            gtk_dialog_set_default_response (GTK_DIALOG (edlg), GTK_RESPONSE_CANCEL);
-                  
-            if (gtk_dialog_run (GTK_DIALOG (edlg)) != GTK_RESPONSE_ACCEPT) {
-                g_free (uri);
-                uri = NULL;
-            }
-                
-            gtk_widget_destroy (edlg);
-        } 
-             
-        if (uri != NULL)
-            break;
-    }
-  
-    gtk_widget_destroy (GTK_WIDGET (dialog));
-    return uri;
 }
 
 /**

@@ -25,6 +25,7 @@
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
 #include "seahorse-backend.h"
+#include "seahorse-exportable.h"
 #include "seahorse-object.h"
 #include "seahorse-preferences.h"
 #include "seahorse-progress.h"
@@ -223,12 +224,69 @@ on_properties_place (GtkAction *action,
 	g_list_free (objects);
 }
 
+static void
+on_key_export_file (GtkAction* action, SeahorseViewer* self)
+{
+	GError *error = NULL;
+	GtkWindow *window;
+	GList *objects;
+
+	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (GTK_IS_ACTION (action));
+
+	window = seahorse_viewer_get_window (self);
+	objects = seahorse_viewer_get_selected_objects (self);
+	seahorse_exportable_export_to_prompt_wait (objects, window, &error);
+	g_list_free (objects);
+
+	/* TODO: message if only partially exported */
+
+	if (error != NULL)
+		seahorse_util_handle_error (&error, window, _("Couldn't export keys"));
+}
+
+static void
+on_key_export_clipboard (GtkAction* action,
+                         SeahorseViewer* self)
+{
+	GList* objects;
+	gpointer output;
+	gsize size;
+	GError *error = NULL;
+	GdkAtom atom;
+	GtkClipboard* board;
+
+	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (GTK_IS_ACTION (action));
+
+	objects = seahorse_viewer_get_selected_objects (self);
+	seahorse_exportable_export_to_text_wait (objects, &output, &size, &error);
+	g_list_free (objects);
+
+	/* TODO: Print message if only partially exported */
+
+	if (error == NULL) {
+		atom = gdk_atom_intern ("CLIPBOARD", FALSE);
+		board = gtk_clipboard_get (atom);
+		gtk_clipboard_set_text (board, output, (gint)size);
+	} else {
+		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
+		                            _("Couldn't export data"));
+	}
+
+	g_free (output);
+}
+
 static const GtkActionEntry UI_ENTRIES[] = {
 
 	/* Top menu items */
 	{ "file-menu", NULL, N_("_File") },
+	{ "file-export", GTK_STOCK_SAVE_AS, N_("E_xport..."), NULL,
+	  N_("Export to a file"), G_CALLBACK (on_key_export_file) },
 	{ "edit-menu", NULL, N_("_Edit") },
 	/*Translators: This text refers to deleting an item from its type's backing store*/
+	{ "edit-export-clipboard", GTK_STOCK_COPY, NULL, "<control>C",
+	  N_("Copy to the clipboard"), G_CALLBACK (on_key_export_clipboard) },
 	{ "edit-delete", GTK_STOCK_DELETE, N_("_Delete"), NULL,
 	  N_("Delete selected items"), G_CALLBACK (on_object_delete) },
 	{ "properties-object", GTK_STOCK_PROPERTIES, NULL, NULL,
@@ -244,137 +302,6 @@ static const GtkActionEntry UI_ENTRIES[] = {
 	{ "help-show", GTK_STOCK_HELP, N_("_Contents"), "F1",
 	  N_("Show Seahorse help"), G_CALLBACK (on_help_show) }
 };
-
-#if 0
-static void
-on_file_export_completed (GObject *source,
-                          GAsyncResult *result,
-                          gpointer user_data)
-{
-	SeahorseViewer* self = SEAHORSE_VIEWER (user_data);
-	GError *error = NULL;
-
-	if (!seahorse_place_export_auto_finish (result, &error))
-		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
-		                            _("Couldn't export keys"));
-
-	g_object_unref (self);
-}
-
-static void
-on_key_export_file (GtkAction* action, SeahorseViewer* self)
-{
-	GError *error = NULL;
-	GList *objects;
-	GtkDialog *dialog;
-	gchar *uri, *unesc_uri;
-
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (GTK_IS_ACTION (action));
-
-	objects = seahorse_viewer_get_selected_objects (self);
-	objects = objects_prune_non_exportable (objects);
-	if (objects == NULL)
-		return;
-
-	dialog = seahorse_util_chooser_save_new (_("Export public key"),
-	                                         seahorse_viewer_get_window (self));
-	seahorse_util_chooser_show_key_files (dialog);
-	seahorse_util_chooser_set_filename_full (dialog, objects);
-	uri = seahorse_util_chooser_save_prompt (dialog);
-	if (uri != NULL) {
-		GFile* file;
-		GOutputStream* output;
-		GCancellable *cancellable;
-
-		file = g_file_new_for_uri (uri);
-		output = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, 0, NULL, &error));
-		if (output == NULL) {
-		    unesc_uri = g_uri_unescape_string (seahorse_util_uri_get_last (uri), NULL);
-			seahorse_util_handle_error (&error, NULL, _ ("Couldn't export key to \"%s\""),
-			                            unesc_uri, NULL);
-			g_free (unesc_uri);
-		} else {
-			cancellable = g_cancellable_new ();
-			seahorse_place_export_auto_async (objects, output, cancellable,
-			                                  on_file_export_completed, g_object_ref (self));
-			seahorse_progress_show (cancellable, _("Exporting keys"), TRUE);
-			g_object_unref (cancellable);
-		}
-
-
-		g_object_unref (file);
-		g_object_unref (output);
-		g_free (uri);
-	}
-
-	g_list_free (objects);
-}
-
-static void
-on_copy_export_complete (GObject *source,
-                         GAsyncResult *result,
-                         gpointer user_data)
-{
-	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
-	GOutputStream* output;
-	GError *error = NULL;
-	const gchar* text;
-	guint size;
-	GdkAtom atom;
-	GtkClipboard* board;
-
-	output = seahorse_place_export_auto_finish (result, &error);
-	if (error != NULL) {
-		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
-		                            _("Couldn't retrieve data from key server"));
-		return;
-	}
-
-	text = g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output));
-	size = g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (output));
-
-	atom = gdk_atom_intern ("CLIPBOARD", FALSE);
-	board = gtk_clipboard_get (atom);
-	gtk_clipboard_set_text (board, text, (gint)size);
-
-	g_object_unref (self);
-}
-
-static void
-on_key_export_clipboard (GtkAction* action, SeahorseViewer* self)
-{
-	GList* objects;
-	GOutputStream* output;
-	GCancellable *cancellable;
-
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
-	g_return_if_fail (GTK_IS_ACTION (action));
-
-	objects = seahorse_viewer_get_selected_objects (self);
-	objects = objects_prune_non_exportable (objects);
-	if (objects == NULL)
-		return;
-
-	output = G_OUTPUT_STREAM (g_memory_output_stream_new (NULL, 0, g_realloc, g_free));
-
-	cancellable = g_cancellable_new ();
-	seahorse_place_export_auto_async (objects, output, cancellable,
-	                                  on_copy_export_complete, g_object_ref (self));
-	seahorse_progress_show (cancellable, _ ("Retrieving keys"), TRUE);
-	g_object_unref (cancellable);
-
-	g_list_free (objects);
-	g_object_unref (output);
-}
-
-static const GtkActionEntry EXPORT_ENTRIES[] = {
-	{ "file-export", GTK_STOCK_SAVE_AS, N_("E_xport..."), NULL,
-	  N_("Export to a file"), G_CALLBACK (on_key_export_file) },
-	{ "edit-export-clipboard", GTK_STOCK_COPY, NULL, "<control>C",
-	  N_("Copy to the clipboard"), G_CALLBACK (on_key_export_clipboard) }
-};
-#endif
 
 static void
 on_ui_manager_pre_activate (GtkUIManager *ui_manager,

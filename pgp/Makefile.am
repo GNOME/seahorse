@@ -46,6 +46,7 @@ libseahorse_pgp_la_SOURCES = \
 	seahorse-gpgme-dialogs.h \
 	seahorse-gpgme-data.c seahorse-gpgme-data.h \
 	seahorse-gpgme-expires.c \
+	seahorse-gpgme-exporter.c seahorse-gpgme-exporter.h \
 	seahorse-gpgme-generate.c \
 	seahorse-gpgme-key.c seahorse-gpgme-key.h \
 	seahorse-gpgme-key-op.c seahorse-gpgme-key-op.h \

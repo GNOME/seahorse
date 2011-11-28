@@ -61,34 +61,33 @@ execute_gpg_command (gpgme_ctx_t ctx, const gchar *args, gchar **std_out,
     return gerr;
 }
 
-gpgme_error_t        
-seahorse_gpg_op_export_secret  (gpgme_ctx_t ctx, const char *pattern,
-                                gpgme_data_t keydata)
+gpgme_error_t
+seahorse_gpg_op_export_secret (gpgme_ctx_t ctx,
+                               const gchar **patterns,
+                               gpgme_data_t keydata)
 {
-    gchar *output = NULL;
-    gpgme_error_t err;
-    gchar *args;
-    
-    g_return_val_if_fail (pattern != NULL, GPG_E (GPG_ERR_INV_VALUE));
-    
-    /* 
-     * We have to use armor mode, because otherwise below 
-     * string stuff doesn't work 
-     */
-    args = g_strdup_printf ("--armor --export-secret-key '%s'", 
-                            pattern);
-    
-    err = execute_gpg_command (ctx, args, &output, NULL);
-    g_free (args);
-    
-    if (!GPG_IS_OK (err))
-        return err;
-    
-    if (gpgme_data_write (keydata, output, strlen (output)) == -1)
-        return GPG_E (GPG_ERR_GENERAL);
-    
-    g_free (output);
-    return GPG_OK;
+	gchar *output = NULL;
+	gpgme_error_t gerr;
+	gchar *args;
+	gsize i;
+
+	g_return_val_if_fail (patterns != NULL, GPG_E (GPG_ERR_INV_VALUE));
+
+	for (i = 0; patterns[i] != NULL; i++) {
+		args = g_strdup_printf ("--armor --export-secret-key '%s'", patterns[i]);
+		gerr = execute_gpg_command (ctx, args, &output, NULL);
+		g_free (args);
+
+		if (!GPG_IS_OK (gerr))
+			return gerr;
+
+		if (gpgme_data_write (keydata, output, strlen (output)) == -1)
+			return GPG_E (GPG_ERR_GENERAL);
+
+		g_free (output);
+	}
+
+	return GPG_OK;
 }
 
 gpgme_error_t 

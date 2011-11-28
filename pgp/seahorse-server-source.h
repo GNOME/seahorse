@@ -66,13 +66,13 @@ struct _SeahorseServerSourceClass {
 
 	void            (*export_async)          (SeahorseServerSource *source,
 	                                          GList *ids,
-	                                          GOutputStream *output,
 	                                          GCancellable *cancellable,
 	                                          GAsyncReadyCallback callback,
 	                                          gpointer user_data);
 
-	GOutputStream * (*export_finish)         (SeahorseServerSource *source,
+	gpointer        (*export_finish)         (SeahorseServerSource *source,
 	                                          GAsyncResult *result,
+	                                          gsize *size,
 	                                          GError **error);
 
 	void            (*search_async)          (SeahorseServerSource *source,
@@ -104,13 +104,13 @@ gboolean               seahorse_server_source_search_finish    (SeahorseServerSo
 
 void                   seahorse_server_source_export_async     (SeahorseServerSource *self,
                                                                 GList *ids,
-                                                                GOutputStream *output,
                                                                 GCancellable *cancellable,
                                                                 GAsyncReadyCallback callback,
                                                                 gpointer user_data);
 
-GOutputStream *        seahorse_server_source_export_finish    (SeahorseServerSource *self,
+gpointer               seahorse_server_source_export_finish    (SeahorseServerSource *self,
                                                                 GAsyncResult *result,
+                                                                gsize *size,
                                                                 GError **error);
 
 #endif /* __SEAHORSE_SERVER_SOURCE_H__ */

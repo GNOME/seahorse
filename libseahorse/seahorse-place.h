@@ -58,24 +58,11 @@ struct _SeahorsePlaceIface {
 	GList *         (*import_finish)             (SeahorsePlace *place,
 	                                              GAsyncResult *result,
 	                                              GError **error);
-
-	void            (*export_async)              (SeahorsePlace *place,
-	                                              GList *objects,
-	                                              GOutputStream *output,
-	                                              GCancellable *cancellable,
-	                                              GAsyncReadyCallback callback,
-	                                              gpointer user_data);
-
-	GOutputStream * (*export_finish)             (SeahorsePlace *place,
-	                                              GAsyncResult *result,
-	                                              GError **error);
 };
 
 GType            seahorse_place_get_type             (void) G_GNUC_CONST;
 
 GtkActionGroup * seahorse_place_get_actions          (SeahorsePlace *self);
-
-/* Method helper functions ------------------------------------------- */
 
 void             seahorse_place_import_async         (SeahorsePlace *place,
                                                       GInputStream *input,
@@ -86,29 +73,5 @@ void             seahorse_place_import_async         (SeahorsePlace *place,
 GList *          seahorse_place_import_finish        (SeahorsePlace *place,
                                                       GAsyncResult *result,
                                                       GError **error);
-
-void             seahorse_place_export_async         (SeahorsePlace *place,
-                                                      GList *objects,
-                                                      GOutputStream *output,
-                                                       GCancellable *cancellable,
-                                                       GAsyncReadyCallback callback,
-                                                       gpointer user_data);
-
-GOutputStream *  seahorse_place_export_finish        (SeahorsePlace *place,
-                                                       GAsyncResult *result,
-                                                       GError **error);
-
-void             seahorse_place_export_auto_async    (GList *objects,
-                                                       GOutputStream *output,
-                                                       GCancellable *cancellable,
-                                                       GAsyncReadyCallback callback,
-                                                       gpointer user_data);
-
-GOutputStream *  seahorse_place_export_auto_finish   (GAsyncResult *result,
-                                                       GError **error);
-
-gboolean         seahorse_place_export_auto_wait     (GList *objects,
-                                                       GOutputStream *output,
-                                                       GError **error);
 
 #endif /* __SEAHORSE_PLACE_H__ */

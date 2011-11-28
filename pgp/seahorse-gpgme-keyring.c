@@ -729,154 +729,6 @@ seahorse_gpgme_keyring_import_finish (SeahorsePlace *place,
 	return results;
 }
 
-typedef struct {
-	GPtrArray *keyids;
-	gint at;
-	gpgme_data_t data;
-	gpgme_ctx_t gctx;
-	GOutputStream *output;
-	GCancellable *cancellable;
-	gulong cancelled_sig;
-} keyring_export_closure;
-
-static void
-keyring_export_free (gpointer data)
-{
-	keyring_export_closure *closure = data;
-	g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
-	g_clear_object (&closure->cancellable);
-	gpgme_data_release (closure->data);
-	if (closure->gctx)
-		gpgme_release (closure->gctx);
-	g_ptr_array_free (closure->keyids, TRUE);
-	g_object_unref (closure->output);
-	g_free (closure);
-}
-
-static gboolean
-on_keyring_export_complete (gpgme_error_t gerr,
-                           gpointer user_data)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	keyring_export_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
-
-	if (seahorse_gpgme_propagate_error (gerr, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete (res);
-		return FALSE; /* don't call again */
-	}
-
-	if (closure->at >= 0)
-		seahorse_progress_end (closure->cancellable,
-		                       closure->keyids->pdata[closure->at]);
-
-	g_assert (closure->at < (gint)closure->keyids->len);
-	closure->at++;
-
-	if (closure->at == closure->keyids->len) {
-		g_simple_async_result_complete (res);
-		return FALSE; /* don't run this again */
-	}
-
-	/* Do the next key in the list */
-	gerr = gpgme_op_export_start (closure->gctx, closure->keyids->pdata[closure->at],
-	                              0, closure->data);
-
-	if (seahorse_gpgme_propagate_error (gerr, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete (res);
-		return FALSE; /* don't run this again */
-	}
-
-	seahorse_progress_begin (closure->cancellable,
-	                         closure->keyids->pdata[closure->at]);
-	return TRUE; /* call this source again */
-}
-
-static void
-seahorse_gpgme_keyring_export_async (SeahorsePlace *place,
-                                     GList *objects,
-                                     GOutputStream *output,
-                                     GCancellable *cancellable,
-                                     GAsyncReadyCallback callback,
-                                     gpointer user_data)
-{
-	GSimpleAsyncResult *res;
-	keyring_export_closure *closure;
-	GError *error = NULL;
-	gpgme_error_t gerr = 0;
-	SeahorsePgpKey *key;
-	gchar *keyid;
-	GSource *gsource;
-	GList *l;
-
-	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
-	                                 seahorse_gpgme_keyring_export_async);
-	closure = g_new0 (keyring_export_closure, 1);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	closure->gctx = seahorse_gpgme_keyring_new_context (&gerr);
-	closure->data = seahorse_gpgme_data_output (output);
-	closure->keyids = g_ptr_array_new_with_free_func (g_free);
-	closure->output = g_object_ref (output);
-	closure->at = -1;
-	g_simple_async_result_set_op_res_gpointer (res, closure, keyring_export_free);
-
-	if (seahorse_gpgme_propagate_error (gerr, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
-		g_object_unref (res);
-		return;
-	}
-
-	gpgme_set_armor (closure->gctx, TRUE);
-	gpgme_set_textmode (closure->gctx, TRUE);
-
-	for (l = objects; l != NULL; l = g_list_next (l)) {
-
-		/* Ignore PGP Uids */
-		if (SEAHORSE_IS_PGP_UID (l->data))
-			continue;
-
-		g_return_if_fail (SEAHORSE_IS_PGP_KEY (l->data));
-		key = SEAHORSE_PGP_KEY (l->data);
-		g_return_if_fail (seahorse_object_get_place (SEAHORSE_OBJECT (key)) == place);
-
-		/* Building list */
-		keyid = g_strdup (seahorse_pgp_key_get_keyid (key));
-		seahorse_progress_prep (closure->cancellable, keyid, NULL);
-		g_ptr_array_add (closure->keyids, keyid);
-	}
-
-	gsource = seahorse_gpgme_gsource_new (closure->gctx, cancellable);
-	g_source_set_callback (gsource, (GSourceFunc)on_keyring_export_complete,
-	                       g_object_ref (res), g_object_unref);
-
-	/* Get things started */
-	if (on_keyring_export_complete (0, res))
-		g_source_attach (gsource, g_main_context_default ());
-
-	g_source_unref (gsource);
-	g_object_unref (res);
-}
-
-static GOutputStream *
-seahorse_gpgme_keyring_export_finish (SeahorsePlace *place,
-                                      GAsyncResult *result,
-                                      GError **error)
-{
-	keyring_export_closure *closure;
-
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
-	                      seahorse_gpgme_keyring_export_async), NULL);
-
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return NULL;
-
-	closure = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-	return closure->output;
-}
-
 static gboolean
 scheduled_refresh (gpointer user_data)
 {
@@ -901,7 +753,7 @@ monitor_gpg_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
 	    event_type == G_FILE_MONITOR_EVENT_CREATED) {
 
 		name = g_file_get_basename (file);
-		if (g_str_has_suffix (name, SEAHORSE_EXT_GPG)) {
+		if (g_str_has_suffix (name, ".gpg")) {
 			if (self->pv->scheduled_refresh == 0) {
 				seahorse_debug ("scheduling refresh event due to file changes");
 				self->pv->scheduled_refresh = g_timeout_add (500, scheduled_refresh, self);
@@ -1048,8 +900,6 @@ seahorse_gpgme_keyring_place_iface (SeahorsePlaceIface *iface)
 {
 	iface->import_async = seahorse_gpgme_keyring_import_async;
 	iface->import_finish = seahorse_gpgme_keyring_import_finish;
-	iface->export_async = seahorse_gpgme_keyring_export_async;
-	iface->export_finish = seahorse_gpgme_keyring_export_finish;
 }
 
 static guint

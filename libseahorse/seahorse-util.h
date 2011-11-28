@@ -38,8 +38,7 @@ const AvahiPoll* seahorse_util_dns_sd_get_poll (void);
 
 typedef guint64 SeahorseVersion;
 
-#define SEAHORSE_EXT_ASC ".asc"
-#define SEAHORSE_EXT_GPG ".gpg"
+#define SEAHORSE_BAD_FILENAME_CHARS  "/\\<>|:?;"
 
 gchar*      seahorse_util_get_date_string           (const time_t time);
 gchar*      seahorse_util_get_display_date_string   (const time_t time);
@@ -71,12 +70,9 @@ gboolean    seahorse_util_print_fd          (int fd,
 
 gboolean    seahorse_util_printf_fd         (int fd, 
                                              const char* data, ...);
-                             
-gchar*      seahorse_util_filename_for_objects (GList *objects);
-                                             
-gboolean    seahorse_util_uri_exists        (const gchar* uri);
 
-gchar*      seahorse_util_uri_unique        (const gchar* uri);
+GFile *     seahorse_util_file_increment_unique     (GFile *file,
+                                                     guint *state);
 
 const gchar* seahorse_util_uri_get_last     (const gchar* uri);
 
@@ -99,17 +95,8 @@ GtkDialog*  seahorse_util_chooser_save_new              (const gchar *title,
 
 void        seahorse_util_chooser_show_key_files        (GtkDialog *dialog);
 
-void        seahorse_util_chooser_show_archive_files    (GtkDialog *dialog);
-
-void        seahorse_util_chooser_set_filename_full     (GtkDialog *dialog, 
-                                                         GList *objects);
-
-void        seahorse_util_chooser_set_filename          (GtkDialog *dialog, 
-                                                         GObject *object);
 
 gchar*      seahorse_util_chooser_open_prompt           (GtkDialog *dialog);
-
-gchar*      seahorse_util_chooser_save_prompt           (GtkDialog *dialog);
 
 GList *     seahorse_util_objects_sort_by_place         (GList *objects);
 

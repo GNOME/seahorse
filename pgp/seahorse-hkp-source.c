@@ -926,19 +926,20 @@ seahorse_hkp_source_import_finish (SeahorsePlace *place,
 
 typedef struct {
 	SeahorseHKPSource *source;
-	GOutputStream *output;
+	GString *data;
 	GCancellable *cancellable;
 	gulong cancelled_sig;
 	SoupSession *session;
 	gint requests;
-} source_export_closure;
+} ExportClosure;
 
 static void
-source_export_free (gpointer data)
+export_closure_free (gpointer data)
 {
-	source_export_closure *closure = data;
+	ExportClosure *closure = data;
 	g_object_unref (closure->source);
-	g_object_unref (closure->output);
+	if (closure->data)
+		g_string_free (closure->data, TRUE);
 	g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
 	g_clear_object (&closure->cancellable);
 	g_object_unref (closure->session);
@@ -951,14 +952,12 @@ on_export_message_complete (SoupSession *session,
                             gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	source_export_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	ExportClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
 	const gchar *start;
 	const gchar *end;
 	const gchar *text;
-	gboolean ret;
 	guint len;
-	gsize written;
 
 	seahorse_progress_end (closure->cancellable, message);
 
@@ -980,16 +979,8 @@ on_export_message_complete (SoupSession *session,
 		if (!detect_key (text, len, &start, &end))
 			break;
 
-		ret = g_output_stream_write_all (closure->output, start, end - start, &written, NULL, &error) &&
-		      g_output_stream_write_all (closure->output, "\n", 1, &written, NULL, &error) &&
-		      g_output_stream_flush (closure->output, NULL, &error);
-
-		if (!ret) {
-			g_simple_async_result_take_error (res, error);
-			g_simple_async_result_complete_in_idle (res);
-			g_object_unref (res);
-			return;
-		}
+		g_string_append_len (closure->data, start, end - start);
+		g_string_append_c (closure->data, '\n');
 	}
 
 	g_assert (closure->requests > 0);
@@ -1011,13 +1002,12 @@ on_export_message_complete (SoupSession *session,
 static void
 seahorse_hkp_source_export_async (SeahorseServerSource *source,
                                   GList *keyids,
-                                  GOutputStream *output,
                                   GCancellable *cancellable,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
 {
 	SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
-	source_export_closure *closure;
+	ExportClosure *closure;
 	GSimpleAsyncResult *res;
 	SoupMessage *message;
 	SoupURI *uri;
@@ -1029,12 +1019,12 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_hkp_source_export_async);
-	closure = g_new0 (source_export_closure, 1);
+	closure = g_new0 (ExportClosure, 1);
 	closure->source = g_object_ref (self);
-	closure->output = g_object_ref (output);
+	closure->data = g_string_sized_new (1024);
 	closure->session = create_hkp_soup_session ();
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	g_simple_async_result_set_op_res_gpointer (res, closure, source_export_free);
+	g_simple_async_result_set_op_res_gpointer (res, closure, export_closure_free);
 
 	if (g_list_length (keyids) == 0) {
 		g_simple_async_result_complete_in_idle (res);
@@ -1085,13 +1075,16 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
 	g_object_unref (res);
 }
 
-static GOutputStream *
+static gpointer
 seahorse_hkp_source_export_finish (SeahorseServerSource *source,
                                    GAsyncResult *result,
+                                   gsize *size,
                                    GError **error)
 {
-	source_export_closure *closure;
+	ExportClosure *closure;
+	gpointer output;
 
+	g_return_val_if_fail (size != NULL, NULL);
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
 	                      seahorse_hkp_source_export_async), NULL);
 
@@ -1099,7 +1092,10 @@ seahorse_hkp_source_export_finish (SeahorseServerSource *source,
 		return NULL;
 
 	closure = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-	return closure->output;
+	*size = closure->data->len;
+	output = g_string_free (closure->data, FALSE);
+	closure->data = NULL;
+	return output;
 }
 
 /**

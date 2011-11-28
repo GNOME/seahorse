@@ -23,35 +23,34 @@
 #include "config.h"
 
 #include "seahorse-server-source.h"
+#include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-keyring.h"
-
-#include <stdlib.h>
-#include <glib/gi18n.h>
-
-#include "seahorse-object-list.h"
-#include "seahorse-transfer.h"
-#include "seahorse-progress.h"
-#include "seahorse-util.h"
 
 #define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
 #include "seahorse-debug.h"
+#include "seahorse-exporter.h"
+#include "seahorse-object-list.h"
+#include "seahorse-progress.h"
+#include "seahorse-transfer.h"
+#include "seahorse-util.h"
+
+#include <glib/gi18n.h>
+
+#include <stdlib.h>
 
 typedef struct {
 	GCancellable *cancellable;
 	SeahorsePlace *from;
 	SeahorsePlace *to;
-	GOutputStream *output;
 	GList *keys;
-} transfer_closure;
+} TransferClosure;
 
 static void
 transfer_closure_free (gpointer user_data)
 {
-	transfer_closure *closure = user_data;
-
+	TransferClosure *closure = user_data;
 	g_clear_object (&closure->from);
 	g_clear_object (&closure->to);
-	g_clear_object (&closure->output);
 	g_clear_object (&closure->cancellable);
 	seahorse_object_list_free (closure->keys);
 	g_free (closure);
@@ -63,7 +62,7 @@ on_source_import_ready (GObject *object,
                         gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	transfer_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	TransferClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
 
 	seahorse_debug ("[transfer] import done");
@@ -85,9 +84,9 @@ on_source_export_ready (GObject *object,
                         gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	transfer_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	TransferClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
-	gpointer stream_data;
+	gpointer stream_data = NULL;
 	gsize stream_size;
 	GInputStream *input;
 
@@ -95,11 +94,15 @@ on_source_export_ready (GObject *object,
 	seahorse_progress_end (closure->cancellable, &closure->from);
 
 	if (SEAHORSE_IS_SERVER_SOURCE (closure->from)) {
-		seahorse_server_source_export_finish (SEAHORSE_SERVER_SOURCE (closure->from),
-		                                      result, &error);
+		stream_data = seahorse_server_source_export_finish (SEAHORSE_SERVER_SOURCE (object),
+		                                                    result, &stream_size, &error);
+
+	} else if (SEAHORSE_IS_GPGME_KEYRING (closure->from)) {
+		stream_data = seahorse_exporter_export_finish (SEAHORSE_EXPORTER (object), result,
+		                                               &stream_size, &error);
 
 	} else {
-		seahorse_place_export_finish (closure->from, result, &error);
+		g_warning ("unsupported source for export: %s", G_OBJECT_TYPE_NAME (object));
 	}
 
 	if (error == NULL)
@@ -108,17 +111,15 @@ on_source_export_ready (GObject *object,
 	if (error == NULL) {
 		seahorse_progress_begin (closure->cancellable, &closure->to);
 
-		stream_data = g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (closure->output));
-		stream_size = g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (closure->output));
-
 		if (!stream_size) {
 			seahorse_debug ("[transfer] nothing to import");
 			seahorse_progress_end (closure->cancellable, &closure->to);
 			g_simple_async_result_complete (res);
 
 		} else {
-			input = g_memory_input_stream_new_from_data (g_memdup (stream_data, stream_size),
-			                                             stream_size, g_free);
+			input = g_memory_input_stream_new_from_data (stream_data, stream_size, g_free);
+			stream_data = NULL;
+			stream_size = 0;
 
 			seahorse_debug ("[transfer] starting import");
 			seahorse_place_import_async (closure->to, input, closure->cancellable,
@@ -132,6 +133,7 @@ on_source_export_ready (GObject *object,
 		g_simple_async_result_complete (res);
 	}
 
+	g_free (stream_data);
 	g_object_unref (user_data);
 }
 
@@ -139,7 +141,8 @@ static gboolean
 on_timeout_start_transfer (gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	transfer_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	TransferClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	SeahorseExporter *exporter;
 	GList *keyids, *l;
 
 	g_assert (SEAHORSE_IS_PLACE (closure->from));
@@ -152,13 +155,18 @@ on_timeout_start_transfer (gpointer user_data)
 			keyids = g_list_prepend (keyids, (gpointer)seahorse_pgp_key_get_keyid (l->data));
 		keyids = g_list_reverse (keyids);
 		seahorse_server_source_export_async (SEAHORSE_SERVER_SOURCE (closure->from),
-		                                     keyids, closure->output, closure->cancellable,
+		                                     keyids, closure->cancellable,
 		                                     on_source_export_ready, g_object_ref (res));
 		g_list_free (keyids);
+
+	} else if (SEAHORSE_IS_GPGME_KEYRING (closure->from)) {
+		exporter = seahorse_gpgme_exporter_new_multiple (closure->keys, TRUE);
+		seahorse_exporter_export_async (exporter, closure->cancellable,
+		                                on_source_export_ready, g_object_ref (res));
+		g_object_unref (exporter);
+
 	} else {
-		seahorse_place_export_async (closure->from, closure->keys, closure->output,
-		                             closure->cancellable, on_source_export_ready,
-		                             g_object_ref (res));
+		g_warning ("unsupported source for transfer: %s", G_OBJECT_TYPE_NAME (closure->from));
 	}
 
 	return FALSE; /* Don't run again */
@@ -173,7 +181,7 @@ seahorse_transfer_async (SeahorsePlace *from,
                          gpointer user_data)
 {
 	GSimpleAsyncResult *res;
-	transfer_closure *closure = NULL;
+	TransferClosure *closure;
 
 	g_return_if_fail (SEAHORSE_PLACE (from));
 	g_return_if_fail (SEAHORSE_PLACE (to));
@@ -187,12 +195,11 @@ seahorse_transfer_async (SeahorsePlace *from,
 		return;
 	}
 
-	closure = g_new0 (transfer_closure, 1);
+	closure = g_new0 (TransferClosure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : cancellable;
 	closure->from = g_object_ref (from);
 	closure->to = g_object_ref (to);
 	closure->keys = seahorse_object_list_copy (keys);
-	closure->output = g_memory_output_stream_new (NULL, 0, g_realloc, g_free);
 	g_simple_async_result_set_op_res_gpointer (res, closure, transfer_closure_free);
 
 	seahorse_progress_prep (cancellable, &closure->from,

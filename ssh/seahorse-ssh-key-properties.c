@@ -21,16 +21,19 @@
  */
 #include "config.h"
 
+#include "seahorse-ssh-dialogs.h"
+#include "seahorse-ssh-exporter.h"
+#include "seahorse-ssh-key.h"
+#include "seahorse-ssh-operation.h"
+
 #include "seahorse-bind.h"
+#include "seahorse-exporter.h"
+#include "seahorse-exportable.h"
 #include "seahorse-icons.h"
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
-
-#include "ssh/seahorse-ssh-dialogs.h"
-#include "ssh/seahorse-ssh-key.h"
-#include "ssh/seahorse-ssh-operation.h"
 
 #include <glib/gi18n.h>
 
@@ -188,65 +191,41 @@ on_ssh_passphrase_button_clicked (GtkWidget *widget,
 }
 
 static void
-export_complete (GFile *file, GAsyncResult *result, guchar *contents)
+on_export_complete (GObject *source,
+                    GAsyncResult *result,
+                    gpointer user_data)
 {
-	GError *err = NULL;
-	gchar *uri, *unesc_uri;
-	
-	g_free (contents);
-	
-	if (!g_file_replace_contents_finish (file, result, NULL, &err)) {
-		uri = g_file_get_uri (file);
-		unesc_uri = g_uri_unescape_string (seahorse_util_uri_get_last (uri), NULL);
-		seahorse_util_handle_error (&err, NULL, _("Couldn't export key to \"%s\""),
-		                            unesc_uri);
-        g_free (uri);
-        g_free (unesc_uri);
-	}
+	GtkWindow *parent = GTK_WINDOW (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_exporter_export_to_file_finish (SEAHORSE_EXPORTER (source), result, &error))
+		seahorse_util_handle_error (&error, parent, _("Couldn't export key"));
+
+	g_object_unref (parent);
 }
 
 G_MODULE_EXPORT void
 on_ssh_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 {
-	SeahorsePlace *sksrc;
+	SeahorseExporter *exporter;
+	GList *exporters = NULL;
 	GObject *object;
+	GtkWindow *window;
 	GFile *file;
-	GtkDialog *dialog;
-	guchar *results;
-	gsize n_results;
-	gchar* uri = NULL;
-	GError *err = NULL;
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
-	g_return_if_fail (SEAHORSE_IS_SSH_KEY (object));
-	g_object_get (object, "place", &sksrc, NULL);
-	g_return_if_fail (SEAHORSE_IS_SSH_SOURCE (sksrc));
 
-	dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 
-	                                         GTK_WINDOW (seahorse_widget_get_toplevel (swidget)));
-	seahorse_util_chooser_show_key_files (dialog);
-	seahorse_util_chooser_set_filename (dialog, object);
+	exporters = g_list_append (exporters, seahorse_ssh_exporter_new (object, TRUE));
 
-	uri = seahorse_util_chooser_save_prompt (dialog);
-	if (!uri) 
-		return;
-	
-	results = seahorse_ssh_source_export_private (SEAHORSE_SSH_SOURCE (sksrc), 
-	                                              SEAHORSE_SSH_KEY (object),
-	                                              &n_results, &err);
-	
-	if (results) {
-		g_return_if_fail (err == NULL);
-		file = g_file_new_for_uri (uri);
-		g_file_replace_contents_async (file, (gchar*)results, n_results, NULL, FALSE, 
-		                               G_FILE_CREATE_PRIVATE, NULL, 
-		                               (GAsyncReadyCallback)export_complete, results);
+	window = GTK_WINDOW (seahorse_widget_get_toplevel (swidget));
+	if (seahorse_exportable_prompt (exporters, window, NULL, &file, &exporter)) {
+		seahorse_exporter_export_to_file_async (exporter, file, TRUE, NULL,
+		                                        on_export_complete, g_object_ref (window));
+		g_object_unref (file);
+		g_object_unref (exporter);
 	}
-	
-	if (err)
-		seahorse_util_handle_error (&err, swidget, _("Couldn't export key."));
 
-	g_free (uri);
+	g_list_free_full (exporters, g_object_unref);
 }
 
 static void

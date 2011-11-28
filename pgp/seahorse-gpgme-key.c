@@ -21,24 +21,26 @@
  */
 #include "config.h"
 
-#include <string.h>
+#include "seahorse-gpgme.h"
+#include "seahorse-gpgme-exporter.h"
+#include "seahorse-gpgme-key-op.h"
+#include "seahorse-gpgme-photo.h"
+#include "seahorse-gpgme-keyring.h"
+#include "seahorse-gpgme-uid.h"
+#include "seahorse-pgp-actions.h"
+#include "seahorse-pgp-backend.h"
+#include "seahorse-pgp-key.h"
 
-#include <glib/gi18n.h>
-
+#include "seahorse-exportable.h"
 #include "seahorse-icons.h"
 #include "seahorse-predicate.h"
 #include "seahorse-object-list.h"
 #include "seahorse-place.h"
 #include "seahorse-util.h"
 
-#include "seahorse-pgp-actions.h"
-#include "seahorse-pgp-backend.h"
-#include "pgp/seahorse-pgp-key.h"
-#include "pgp/seahorse-gpgme.h"
-#include "pgp/seahorse-gpgme-key-op.h"
-#include "pgp/seahorse-gpgme-photo.h"
-#include "pgp/seahorse-gpgme-keyring.h"
-#include "pgp/seahorse-gpgme-uid.h"
+#include <glib/gi18n.h>
+
+#include <string.h>
 
 enum {
 	PROP_0,
@@ -48,7 +50,11 @@ enum {
 	PROP_TRUST
 };
 
-G_DEFINE_TYPE (SeahorseGpgmeKey, seahorse_gpgme_key, SEAHORSE_TYPE_PGP_KEY);
+static void       seahorse_gpgme_key_exportable_iface      (SeahorseExportableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (SeahorseGpgmeKey, seahorse_gpgme_key, SEAHORSE_TYPE_PGP_KEY,
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_gpgme_key_exportable_iface);
+);
 
 struct _SeahorseGpgmeKeyPrivate {
 	gpgme_key_t pubkey;   		/* The public key */
@@ -544,6 +550,24 @@ seahorse_gpgme_key_class_init (SeahorseGpgmeKeyClass *klass)
         g_object_class_override_property (gobject_class, PROP_TRUST, "trust");
 }
 
+static GList *
+seahorse_gpgme_key_create_exporters (SeahorseExportable *exportable,
+                                     SeahorseExporterType type)
+{
+	GList *result = NULL;
+
+	if (type != SEAHORSE_EXPORTER_TEXTUAL)
+		result = g_list_append (result, seahorse_gpgme_exporter_new (G_OBJECT (exportable), FALSE, FALSE));
+	result = g_list_append (result, seahorse_gpgme_exporter_new (G_OBJECT (exportable), TRUE, FALSE));
+
+	return result;
+}
+
+static void
+seahorse_gpgme_key_exportable_iface (SeahorseExportableIface *iface)
+{
+	iface->create_exporters = seahorse_gpgme_key_create_exporters;
+}
 
 /* -----------------------------------------------------------------------------
  * PUBLIC 

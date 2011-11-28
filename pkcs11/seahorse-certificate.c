@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "seahorse-certificate.h"
+#include "seahorse-certificate-der-exporter.h"
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-actions.h"
 #include "seahorse-pkcs11-helpers.h"
@@ -30,6 +31,7 @@
 #include "seahorse-token.h"
 #include "seahorse-types.h"
 
+#include "seahorse-exportable.h"
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 
@@ -66,13 +68,17 @@ struct _SeahorseCertificatePrivate {
 	GIcon *icon;
 };
 
-static void seahorse_certificate_certificate_iface (GcrCertificateIface *iface);
-static void seahorse_certificate_object_attributes_iface (GckObjectAttributesIface *iface);
+static void   seahorse_certificate_certificate_iface           (GcrCertificateIface *iface);
+
+static void   seahorse_certificate_object_attributes_iface     (GckObjectAttributesIface *iface);
+
+static void   seahorse_certificate_exportable_iface            (SeahorseExportableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseCertificate, seahorse_certificate, GCK_TYPE_OBJECT,
                          GCR_CERTIFICATE_MIXIN_IMPLEMENT_COMPARABLE ();
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_CERTIFICATE, seahorse_certificate_certificate_iface);
-                         G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_ATTRIBUTES, seahorse_certificate_object_attributes_iface)
+                         G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_ATTRIBUTES, seahorse_certificate_object_attributes_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_certificate_exportable_iface);
 );
 
 static void
@@ -276,6 +282,21 @@ seahorse_certificate_object_attributes_iface (GckObjectAttributesIface *iface)
 {
 	iface->attribute_types = REQUIRED_ATTRS;
 	iface->n_attribute_types = G_N_ELEMENTS (REQUIRED_ATTRS);
+}
+
+static GList *
+seahorse_certificate_create_exporters (SeahorseExportable *exportable,
+                                       SeahorseExporterType type)
+{
+	SeahorseExporter *exporter;
+	exporter = seahorse_certificate_der_exporter_new (SEAHORSE_CERTIFICATE (exportable));
+	return g_list_append (NULL, exporter);
+}
+
+static void
+seahorse_certificate_exportable_iface (SeahorseExportableIface *iface)
+{
+	iface->create_exporters = seahorse_certificate_create_exporters;
 }
 
 GIcon *

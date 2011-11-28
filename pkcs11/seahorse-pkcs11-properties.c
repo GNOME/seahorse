@@ -29,6 +29,7 @@
 
 #include "seahorse-action.h"
 #include "seahorse-delete-dialog.h"
+#include "seahorse-exportable.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
@@ -155,7 +156,17 @@ static void
 on_export_certificate (GtkAction *action,
                        gpointer user_data)
 {
-	/* TODO: Exporter not done */
+	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (user_data);
+	GtkWindow *parent = GTK_WINDOW (self);
+	GError *error = NULL;
+	GList *objects;
+
+	objects = g_list_append (NULL, self->object);
+	seahorse_exportable_export_to_prompt_wait (objects, parent, &error);
+	g_list_free (objects);
+
+	if (error != NULL)
+		seahorse_util_handle_error (&error, parent, _("Failed to export certificate"));
 }
 
 static void
@@ -327,6 +338,7 @@ seahorse_pkcs11_properties_constructed (GObject *obj)
 	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (obj);
 	GObject *partner = NULL;
 	GError *error = NULL;
+	GList *exporters = NULL;
 	GtkAction *request;
 
 	G_OBJECT_CLASS (seahorse_pkcs11_properties_parent_class)->constructed (obj);
@@ -365,6 +377,14 @@ seahorse_pkcs11_properties_constructed (GObject *obj)
 
 		g_object_unref (partner);
 	}
+
+	if (SEAHORSE_IS_EXPORTABLE (self->object))
+		exporters = seahorse_exportable_create_exporters (SEAHORSE_EXPORTABLE (self->object),
+		                                                  SEAHORSE_EXPORTER_ANY);
+
+	request = gtk_action_group_get_action (self->actions, "export-object");
+	gtk_action_set_visible (request, exporters != NULL);
+	g_list_free_full (exporters, g_object_unref);
 
 	gtk_widget_grab_focus (GTK_WIDGET (self->viewer));
 }

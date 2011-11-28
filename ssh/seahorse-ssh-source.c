@@ -824,93 +824,11 @@ seahorse_ssh_source_import_finish (SeahorsePlace *place,
 	return NULL;
 }
 
-static void
-seahorse_ssh_source_export_async (SeahorsePlace *place,
-                                  GList *keys,
-                                  GOutputStream *output,
-                                  GCancellable *cancellable,
-                                  GAsyncReadyCallback callback,
-                                  gpointer user_data)
-{
-	GSimpleAsyncResult *res;
-	SeahorseSSHKeyData *keydata;
-	gchar *results = NULL;
-	gchar *raw = NULL;
-	GError *error = NULL;
-	SeahorseObject *object;
-	GList *l;
-	gsize written;
-
-	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
-	                                 seahorse_ssh_source_export_async);
-
-	for (l = keys; l; l = g_list_next (l)) {
-		object = SEAHORSE_OBJECT (l->data);
-		g_assert (SEAHORSE_IS_SSH_KEY (object));
-
-		results = NULL;
-		raw = NULL;
-
-		keydata = NULL;
-		g_object_get (object, "key-data", &keydata, NULL);
-		g_assert (keydata);
-
-		/* We should already have the data loaded */
-		if (keydata->pubfile) {
-			g_assert (keydata->rawdata);
-			results = g_strdup_printf ("%s", keydata->rawdata);
-
-		} else if (!keydata->pubfile) {
-
-			/*
-			 * TODO: We should be able to get at this data by using ssh-keygen
-			 * to make a public key from the private
-			 */
-			g_warning ("private key without public, not exporting: %s", keydata->privfile);
-		}
-
-		/* Write the data out */
-		if (results) {
-			if (g_output_stream_write_all (output, results, strlen (results),
-			                               &written, NULL, &error))
-				g_output_stream_flush (output, NULL, &error);
-			g_free (results);
-		}
-
-		g_free (raw);
-
-		if (error != NULL) {
-			g_simple_async_result_take_error (res, error);
-			break;
-		}
-	}
-
-	g_simple_async_result_set_op_res_gpointer (res, g_object_ref (output), g_object_unref);
-	g_simple_async_result_complete_in_idle (res);
-	g_object_unref (res);
-}
-
-static GOutputStream *
-seahorse_ssh_source_export_finish (SeahorsePlace *place,
-                                   GAsyncResult *result,
-                                   GError **error)
-{
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
-	                      seahorse_ssh_source_export_async), NULL);
-
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return NULL;
-
-	return g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-}
-
 static void 
 seahorse_ssh_source_place_iface (SeahorsePlaceIface *iface)
 {
 	iface->import_async = seahorse_ssh_source_import_async;
 	iface->import_finish = seahorse_ssh_source_import_finish;
-	iface->export_async = seahorse_ssh_source_export_async;
-	iface->export_finish = seahorse_ssh_source_export_finish;
 }
 
 /* -----------------------------------------------------------------------------

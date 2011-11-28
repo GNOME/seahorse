@@ -23,9 +23,15 @@
 #include "config.h"
 
 #include "seahorse-ssh-actions.h"
+#include "seahorse-ssh-exporter.h"
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 #include "seahorse-ssh-source.h"
+
+#include "seahorse-exportable.h"
+#include "seahorse-icons.h"
+#include "seahorse-place.h"
+#include "seahorse-validity.h"
 
 #include <gcr/gcr.h>
 
@@ -35,11 +41,6 @@
 
 #include <errno.h>
 #include <string.h>
-
-
-#include "seahorse-place.h"
-#include "seahorse-icons.h"
-#include "seahorse-validity.h"
 
 enum {
     PROP_0,
@@ -52,7 +53,11 @@ enum {
     PROP_LENGTH
 };
 
-G_DEFINE_TYPE (SeahorseSSHKey, seahorse_ssh_key, SEAHORSE_TYPE_OBJECT);
+static void       seahorse_ssh_key_exportable_iface      (SeahorseExportableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (SeahorseSSHKey, seahorse_ssh_key, SEAHORSE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_ssh_key_exportable_iface);
+);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
@@ -295,6 +300,19 @@ seahorse_ssh_key_class_init (SeahorseSSHKeyClass *klass)
                            0, G_MAXUINT, 0, G_PARAM_READABLE));
 }
 
+static GList *
+seahorse_ssh_key_create_exporters (SeahorseExportable *exportable,
+                                   SeahorseExporterType type)
+{
+	return g_list_append (NULL, seahorse_ssh_exporter_new (G_OBJECT (exportable), FALSE));
+}
+
+static void
+seahorse_ssh_key_exportable_iface (SeahorseExportableIface *iface)
+{
+	iface->create_exporters = seahorse_ssh_key_create_exporters;
+}
+
 /* -----------------------------------------------------------------------------
  * PUBLIC METHODS
  */
@@ -309,6 +327,13 @@ seahorse_ssh_key_new (SeahorsePlace *place,
                          "key-data", data,
                          NULL);
     return skey;
+}
+
+SeahorseSSHKeyData *
+seahorse_ssh_key_get_data (SeahorseSSHKey *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_SSH_KEY (self), NULL);
+	return self->keydata;
 }
 
 guint 

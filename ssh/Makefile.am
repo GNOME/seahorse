@@ -21,6 +21,7 @@ libseahorse_ssh_la_SOURCES = \
 	seahorse-ssh-actions.c seahorse-ssh-actions.h \
 	seahorse-ssh-backend.c seahorse-ssh-backend.h \
 	seahorse-ssh-dialogs.h \
+	seahorse-ssh-exporter.c seahorse-ssh-exporter.h \
 	seahorse-ssh-generate.c \
 	seahorse-ssh-key-data.c seahorse-ssh-key-data.h \
 	seahorse-ssh-key.c seahorse-ssh-key.h  \

@@ -27,7 +27,7 @@
 #include <gpgme.h>
 
 gpgme_error_t seahorse_gpg_op_export_secret  (gpgme_ctx_t ctx, 
-                                              const char *pattern,
+                                              const gchar **patterns,
                                               gpgme_data_t keydata);
 
 gpgme_error_t seahorse_gpg_op_num_uids       (gpgme_ctx_t ctx, 

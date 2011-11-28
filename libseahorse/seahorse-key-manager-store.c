@@ -23,6 +23,7 @@
 
 #include "config.h"
 
+#include "seahorse-exportable.h"
 #include "seahorse-place.h"
 #include "seahorse-util.h"
 
@@ -348,70 +349,47 @@ typedef struct {
 } export_keys_to_output_closure;
 
 static gboolean
-export_to_text (SeahorseKeyManagerStore *skstore,
+export_to_text (SeahorseKeyManagerStore *self,
                 GtkSelectionData *selection_data)
 {
-	GOutputStream *output;
-	gboolean ret = FALSE;
+	gpointer output;
+	gsize size;
+	gboolean ret;
+	guint count;
 
-	g_return_val_if_fail (skstore->priv->drag_objects, FALSE);
+	g_return_val_if_fail (self->priv->drag_objects, FALSE);
 	seahorse_debug ("exporting to text");
 
-	output = g_memory_output_stream_new (NULL, 0, g_realloc, g_free);
-	g_return_val_if_fail (output, FALSE);
+	count = seahorse_exportable_export_to_text_wait (self->priv->drag_objects,
+	                                                 &output, &size, &self->priv->drag_error);
 
-	ret = seahorse_place_export_auto_wait (skstore->priv->drag_objects, output,
-	                                       &skstore->priv->drag_error) &&
-	      g_output_stream_close (output, NULL, &skstore->priv->drag_error);
+	/* TODO: Need to print status if only partially exported */
 
-	if (ret) {
+	if (count > 0) {
 		seahorse_debug ("setting selection text");
-		gtk_selection_data_set_text (selection_data,
-		                             g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (output)),
-		                             g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (output)));
+		gtk_selection_data_set_text (selection_data, output, size);
+		ret = TRUE;
+	} else if (self->priv->drag_error) {
+		g_message ("error occurred on export: %s", self->priv->drag_error->message);
+		ret = FALSE;
 	} else {
-		g_message ("error occurred on export: %s",
-		           skstore->priv->drag_error && skstore->priv->drag_error->message ?
-		                      skstore->priv->drag_error->message : "");
+		g_message ("no objects exported");
+		ret = FALSE;
 	}
 
-	g_object_unref (output);
+	g_free (output);
 	return ret;
 }
 
 static gboolean
-export_to_filename (SeahorseKeyManagerStore *skstore, const gchar *filename)
+export_to_directory (SeahorseKeyManagerStore *self,
+                     const gchar *directory)
 {
-	GOutputStream *output;
-	gboolean ret;
-	gchar *uri;
-	GFile *file;
-	GList *keys;
+	seahorse_debug ("exporting to %s", directory);
 
-	seahorse_debug ("exporting to %s", filename);
-
-	ret = FALSE;
-	g_return_val_if_fail (skstore->priv->drag_objects, FALSE);
-	keys = g_list_copy (skstore->priv->drag_objects);
-
-	uri = seahorse_util_uri_unique (filename);
-
-	/* Create output file */
-	file = g_file_new_for_uri (uri);
-	g_free (uri);
-	output = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE,
-	                                          NULL, &skstore->priv->drag_error));
-	g_object_unref (file);
-
-	if (output) {
-		/* This modifies and frees keys */
-		ret = seahorse_place_export_auto_wait (keys, output, &skstore->priv->drag_error) &&
-		      g_output_stream_close (output, NULL, &skstore->priv->drag_error);
-
-		g_object_unref (output);
-	}
-
-	return ret;
+	return seahorse_exportable_export_to_directory_wait (self->priv->drag_objects,
+	                                                     directory,
+	                                                     &self->priv->drag_error);
 }
 
 static gboolean
@@ -455,22 +433,10 @@ drag_data_get (GtkWidget *widget, GdkDragContext *context, GtkSelectionData *sel
 static void
 drag_end (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore *skstore)
 {
-	gchar *filename, *name;
-
 	seahorse_debug ("drag_end -->");
 
-	if (skstore->priv->drag_destination && !skstore->priv->drag_error) {
-		g_return_if_fail (skstore->priv->drag_objects);
-
-		name = seahorse_util_filename_for_objects (skstore->priv->drag_objects);
-		g_return_if_fail (name);
-
-		filename = g_build_filename (skstore->priv->drag_destination, name, NULL);
-		g_free (name);
-
-		export_to_filename (skstore, filename);
-		g_free (filename);
-	}
+	if (skstore->priv->drag_destination && !skstore->priv->drag_error)
+		export_to_directory (skstore, skstore->priv->drag_destination);
 
 	if (skstore->priv->drag_error) {
 		seahorse_util_show_error (widget, _("Couldn't export keys"),

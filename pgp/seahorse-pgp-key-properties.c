@@ -32,6 +32,8 @@
 
 #include "seahorse-bind.h"
 #include "seahorse-delete-dialog.h"
+#include "seahorse-exportable.h"
+#include "seahorse-exporter.h"
 #include "seahorse-icons.h"
 #include "seahorse-object.h"
 #include "seahorse-object-model.h"
@@ -39,6 +41,7 @@
 #include "seahorse-util.h"
 
 #include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-pgp-backend.h"
@@ -1130,21 +1133,17 @@ on_pgp_details_trust_changed (GtkComboBox *selection,
 }
 
 static void
-export_complete (GFile *file, GAsyncResult *result, gchar *contents)
+on_export_complete (GObject *source,
+                    GAsyncResult *result,
+                    gpointer user_data)
 {
-	GError *err = NULL;
-	gchar *uri, *unesc_uri;
-	
-	g_free (contents);
+	GtkWindow *parent = GTK_WINDOW (user_data);
+	GError *error = NULL;
 
-	if (!g_file_replace_contents_finish (file, result, NULL, &err)) {
-		uri = g_file_get_uri (file);
-		unesc_uri = g_uri_unescape_string (seahorse_util_uri_get_last (uri), NULL);
-		seahorse_util_handle_error (&err, NULL, _("Couldn't export key to \"%s\""),
-		                            unesc_uri);
-        g_free (uri);
-        g_free (unesc_uri);
-	}
+	if (!seahorse_exporter_export_to_file_finish (SEAHORSE_EXPORTER (source), result, &error))
+		seahorse_util_handle_error (&error, parent, _("Couldn't export key"));
+
+	g_object_unref (parent);
 }
 
 G_MODULE_EXPORT void
@@ -1152,56 +1151,25 @@ on_pgp_details_export_button (GtkWidget *widget,
                               gpointer user_data)
 {
 	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+	SeahorseExporter *exporter;
+	GList *exporters = NULL;
+	GtkWindow *window;
 	GObject *object;
-	GtkDialog *dialog;
-	gchar* uri = NULL;
-	GError *err = NULL;
 	GFile *file;
-	gpgme_error_t gerr;
-	gpgme_ctx_t ctx;
-	gpgme_data_t data;
-	gchar *results;
-	gsize n_results;
-	gpgme_key_t seckey;
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
-	g_return_if_fail (SEAHORSE_IS_GPGME_KEY (object));
 
-	seckey = seahorse_gpgme_key_get_private (SEAHORSE_GPGME_KEY (object));
-	g_return_if_fail (seckey && seckey->subkeys && seckey->subkeys->keyid);
+	exporters = g_list_append (exporters, seahorse_gpgme_exporter_new (object, TRUE, TRUE));
 
-	dialog = seahorse_util_chooser_save_new (_("Export Complete Key"), 
-	                                         GTK_WINDOW (seahorse_widget_get_toplevel (swidget)));
-	seahorse_util_chooser_show_key_files (dialog);
-	seahorse_util_chooser_set_filename (dialog, object);
-    
-	uri = seahorse_util_chooser_save_prompt (dialog);
-	if (!uri) 
-		return;
-
-	ctx = seahorse_gpgme_keyring_new_context (&gerr);
-	if (ctx == NULL)
-		return;
-
-	/* Export to a data block */
-	gerr = gpgme_data_new (&data);
-	g_return_if_fail (GPG_IS_OK (gerr));
-
-	gerr = seahorse_gpg_op_export_secret (ctx, seckey->subkeys->keyid, data);
-	gpgme_release (ctx);
-	results = gpgme_data_release_and_get_mem (data, &n_results);
-
-	if (GPG_IS_OK (gerr)) {
-		file = g_file_new_for_uri (uri);
-		g_file_replace_contents_async (file, results, n_results, NULL, FALSE, 
-		                               G_FILE_CREATE_PRIVATE, NULL, 
-		                               (GAsyncReadyCallback)export_complete, results);
-	} else {
-		seahorse_gpgme_propagate_error (gerr, &err);
-		seahorse_util_handle_error (&err, NULL, _("Couldn't export key."));
+	window = GTK_WINDOW (seahorse_widget_get_toplevel (swidget));
+	if (seahorse_exportable_prompt (exporters, window, NULL, &file, &exporter)) {
+		seahorse_exporter_export_to_file_async (exporter, file, TRUE, NULL,
+		                                        on_export_complete, g_object_ref (window));
+		g_object_unref (file);
+		g_object_unref (exporter);
 	}
-	
-	g_free (uri);
+
+	g_list_free_full (exporters, g_object_unref);
 }
 
 G_MODULE_EXPORT void
