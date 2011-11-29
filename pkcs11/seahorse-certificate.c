@@ -44,7 +44,8 @@ static const gulong REQUIRED_ATTRS[] = {
 	CKA_VALUE,
 	CKA_ID,
 	CKA_LABEL,
-	CKA_CLASS
+	CKA_CLASS,
+	CKA_CERTIFICATE_CATEGORY
 };
 
 enum {
@@ -66,6 +67,7 @@ struct _SeahorseCertificatePrivate {
 	GtkActionGroup *actions;
 	SeahorsePrivateKey *private_key;
 	GIcon *icon;
+	guint flags;
 };
 
 static void   seahorse_certificate_certificate_iface           (GcrCertificateIface *iface);
@@ -108,6 +110,7 @@ seahorse_certificate_init (SeahorseCertificate *self)
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_CERTIFICATE, SeahorseCertificatePrivate));
 	self->pv->actions = seahorse_pkcs11_object_actions_instance ();
 	self->pv->value = NULL;
+	self->pv->flags = G_MAXUINT;
 }
 
 static void
@@ -146,6 +149,39 @@ seahorse_certificate_finalize (GObject *obj)
 	G_OBJECT_CLASS (seahorse_certificate_parent_class)->finalize (obj);
 }
 
+static guint
+calc_is_personal_and_trusted (SeahorseCertificate *self)
+{
+	gulong category = 0;
+	gboolean is_ca;
+
+	/* If a matching private key, then this is personal*/
+	if (self->pv->private_key)
+		return SEAHORSE_FLAG_PERSONAL | SEAHORSE_FLAG_TRUSTED;
+
+	if (gck_attributes_find_ulong (self->pv->attributes, CKA_CERTIFICATE_CATEGORY, &category)) {
+		if (category == 2)
+			return 0;
+		else if (category == 1)
+			return SEAHORSE_FLAG_PERSONAL;
+	}
+
+	if (gcr_certificate_get_basic_constraints (GCR_CERTIFICATE (self), &is_ca, NULL))
+		return is_ca ? 0 : SEAHORSE_FLAG_PERSONAL;
+
+	return SEAHORSE_FLAG_PERSONAL;
+}
+
+static void
+ensure_flags (SeahorseCertificate *self)
+{
+	if (self->pv->flags != G_MAXUINT)
+		return;
+
+	self->pv->flags = SEAHORSE_FLAG_EXPORTABLE |
+	                  calc_is_personal_and_trusted (self);
+}
+
 static void
 seahorse_certificate_get_property (GObject *obj,
                                    guint prop_id,
@@ -162,8 +198,8 @@ seahorse_certificate_get_property (GObject *obj,
 		g_value_set_boxed (value, self->pv->attributes);
 		break;
 	case PROP_FLAGS:
-		g_value_set_flags (value, SEAHORSE_FLAG_PERSONAL |
-		                          SEAHORSE_FLAG_EXPORTABLE);
+		ensure_flags (self);
+		g_value_set_flags (value, self->pv->flags);
 		break;
 	case PROP_ACTIONS:
 		g_value_set_object (value, self->pv->actions);
@@ -312,10 +348,15 @@ seahorse_certificate_get_description (SeahorseCertificate *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_CERTIFICATE (self), NULL);
 
-	if (self->pv->private_key)
-		return _("Certificate and Key");
+	ensure_flags (self);
 
-	return _("Certificate");
+	if (self->pv->private_key)
+		return _("Personal certificate and key");
+
+	if (self->pv->flags & SEAHORSE_FLAG_PERSONAL)
+		return _("Personal certificate");
+	else
+		return _("Certificate");
 }
 
 SeahorsePrivateKey *
