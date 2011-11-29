@@ -62,7 +62,7 @@ enum {
 struct _SeahorseCertificatePrivate {
 	SeahorseToken *token;
 	GckAttributes *attributes;
-	GckAttribute der_value;
+	GckAttribute *value;
 	GtkActionGroup *actions;
 	SeahorsePrivateKey *private_key;
 	GIcon *icon;
@@ -107,7 +107,7 @@ seahorse_certificate_init (SeahorseCertificate *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_CERTIFICATE, SeahorseCertificatePrivate));
 	self->pv->actions = seahorse_pkcs11_object_actions_instance ();
-	gck_attribute_init_invalid (&self->pv->der_value, CKA_VALUE);
+	self->pv->value = NULL;
 }
 
 static void
@@ -141,7 +141,7 @@ seahorse_certificate_finalize (GObject *obj)
 
 	if (self->pv->attributes)
 		gck_attributes_unref (self->pv->attributes);
-	gck_attribute_clear (&self->pv->der_value);
+	self->pv->value = NULL;
 
 	G_OBJECT_CLASS (seahorse_certificate_parent_class)->finalize (obj);
 }
@@ -190,7 +190,6 @@ seahorse_certificate_set_property (GObject *obj,
                                    GParamSpec *pspec)
 {
 	SeahorseCertificate *self = SEAHORSE_CERTIFICATE (obj);
-	GckAttribute *der_value = NULL;
 
 	switch (prop_id) {
 	case PROP_PLACE:
@@ -206,13 +205,10 @@ seahorse_certificate_set_property (GObject *obj,
 		if (self->pv->attributes)
 			gck_attributes_unref (self->pv->attributes);
 		self->pv->attributes = g_value_dup_boxed (value);
-		if (self->pv->attributes)
-			der_value = gck_attributes_find (self->pv->attributes,
-			                                 CKA_VALUE);
-		if (der_value) {
-			gck_attribute_clear (&self->pv->der_value);
-			gck_attribute_init_copy (&self->pv->der_value, der_value);
-		}
+		g_return_if_fail (self->pv->attributes);
+		self->pv->value = gck_attributes_find (self->pv->attributes, CKA_VALUE);
+		g_return_if_fail (self->pv->value != NULL);
+		g_return_if_fail (!gck_attribute_is_invalid (self->pv->value));
 		break;
 	case PROP_PARTNER:
 		seahorse_certificate_set_partner (self, g_value_get_object (value));
@@ -266,9 +262,10 @@ seahorse_certificate_get_der_data (GcrCertificate *cert,
 {
 	SeahorseCertificate *self = SEAHORSE_CERTIFICATE (cert);
 
-	g_return_val_if_fail (!gck_attribute_is_invalid (&self->pv->der_value), NULL);
-	*n_length = self->pv->der_value.length;
-	return self->pv->der_value.value;
+	g_return_val_if_fail (self->pv->value != NULL &&
+	                      !gck_attribute_is_invalid (self->pv->value), NULL);
+	*n_length = self->pv->value->length;
+	return self->pv->value->value;
 }
 
 static void
