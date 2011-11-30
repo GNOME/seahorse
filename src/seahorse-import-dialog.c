@@ -58,23 +58,28 @@ seahorse_import_dialog_init (SeahorseImportDialog *self)
 }
 
 static void
+on_import_button_importing (GcrImportButton *button,
+                            GcrImporter *importer,
+                            gpointer user_data)
+{
+	SeahorseImportDialog *self = SEAHORSE_IMPORT_DIALOG (user_data);
+	gcr_viewer_widget_clear_error (self->viewer);
+}
+
+static void
 on_import_button_imported (GcrImportButton *button,
                            GcrImporter *importer,
                            GError *error,
                            gpointer user_data)
 {
 	SeahorseImportDialog *self = SEAHORSE_IMPORT_DIALOG (user_data);
-	GcrRenderer *renderer;
 
 	if (error == NULL) {
 		gtk_dialog_response (GTK_DIALOG (self), GTK_RESPONSE_OK);
 
 	} else {
-		if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
-			renderer = gcr_failure_renderer_new (_("Import failed"), error);
-			gcr_viewer_add_renderer (GCR_VIEWER (self->viewer), renderer);
-			g_object_unref (renderer);
-		}
+		if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+			gcr_viewer_widget_show_error (self->viewer, _("Import failed"), error);
 	}
 }
 
@@ -93,6 +98,9 @@ seahorse_import_dialog_constructed (GObject *obj)
 	gtk_dialog_add_action_widget (GTK_DIALOG (self), GTK_WIDGET (button), GTK_RESPONSE_CANCEL);
 
 	self->import = gcr_import_button_new (_("Import"));
+	g_signal_connect_object (self->import, "importing",
+	                         G_CALLBACK (on_import_button_importing),
+	                         self, 0);
 	g_signal_connect_object (self->import, "imported",
 	                         G_CALLBACK (on_import_button_imported),
 	                         self, 0);
