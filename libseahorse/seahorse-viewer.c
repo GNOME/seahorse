@@ -51,6 +51,8 @@ struct _SeahorseViewerPrivate {
 	GHashTable *actions;
 	GtkAction *edit_delete;
 	GtkAction *properties_object;
+	GtkAction *file_export;
+	GtkAction *edit_copy;
 	GList *selection_actions;
 };
 
@@ -329,14 +331,23 @@ seahorse_viewer_real_selection_changed (SeahorseViewer *self)
 	GList *previous;
 	gboolean can_properties;
 	gboolean can_delete;
+	gboolean can_export;
 	GList *l;
-
-	objects = seahorse_viewer_get_selected_objects (self);
-	groups = lookup_actions_for_objects (self, objects);
-	g_list_free (objects);
 
 	can_properties = FALSE;
 	can_delete = FALSE;
+	can_export = FALSE;
+
+	objects = seahorse_viewer_get_selected_objects (self);
+	for (l = objects; l != NULL; l = g_list_next (l)) {
+		if (SEAHORSE_IS_EXPORTABLE (l->data)) {
+			can_export = TRUE;
+			break;
+		}
+	}
+
+	groups = lookup_actions_for_objects (self, objects);
+	g_list_free (objects);
 
 	/* Add all those actions */
 	for (l = groups; l != NULL; l = g_list_next (l)) {
@@ -348,6 +359,8 @@ seahorse_viewer_real_selection_changed (SeahorseViewer *self)
 
 	gtk_action_set_sensitive (self->pv->properties_object, can_properties);
 	gtk_action_set_sensitive (self->pv->edit_delete, can_delete);
+	gtk_action_set_sensitive (self->pv->edit_copy, can_export);
+	gtk_action_set_sensitive (self->pv->file_export, can_export);
 
 	objects = seahorse_viewer_get_selected_places (self);
 	groups = g_list_concat (groups, lookup_actions_for_objects (self, objects));
@@ -422,6 +435,10 @@ seahorse_viewer_constructed (GObject *obj)
 	g_object_ref (self->pv->edit_delete);
 	self->pv->properties_object = gtk_action_group_get_action (actions, "properties-object");
 	g_object_ref (self->pv->properties_object);
+	self->pv->edit_copy = gtk_action_group_get_action (actions, "edit-export-clipboard");
+	g_object_ref (self->pv->edit_copy);
+	self->pv->file_export = gtk_action_group_get_action (actions, "file-export");
+	g_object_ref (self->pv->file_export);
 	gtk_ui_manager_insert_action_group (self->pv->ui_manager, actions, 0);
 	g_object_unref (actions);
 }
@@ -449,7 +466,9 @@ seahorse_viewer_dispose (GObject *obj)
 	SeahorseViewer *self = SEAHORSE_VIEWER (obj);
 	GList *l;
 
+	g_clear_object (&self->pv->edit_copy);
 	g_clear_object (&self->pv->edit_delete);
+	g_clear_object (&self->pv->file_export);
 	g_clear_object (&self->pv->properties_object);
 
 	for (l = self->pv->selection_actions; l != NULL; l = g_list_next (l))
