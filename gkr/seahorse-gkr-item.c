@@ -29,9 +29,11 @@
 #include "seahorse-gkr.h"
 #include "seahorse-gkr-actions.h"
 #include "seahorse-gkr-item.h"
+#include "seahorse-gkr-item-deleter.h"
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-operation.h"
 
+#include "seahorse-deletable.h"
 #include "seahorse-icons.h"
 #include "seahorse-place.h"
 #include "seahorse-util.h"
@@ -472,9 +474,13 @@ struct _SeahorseGkrItemPrivate {
 	DisplayInfo *display_info;
 };
 
-static gboolean require_item_attrs (SeahorseGkrItem *self);
+static gboolean  require_item_attrs                  (SeahorseGkrItem *self);
 
-G_DEFINE_TYPE (SeahorseGkrItem, seahorse_gkr_item, SEAHORSE_TYPE_OBJECT);
+static void      seahorse_gkr_item_deletable_iface   (SeahorseDeletableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (SeahorseGkrItem, seahorse_gkr_item, SEAHORSE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_gkr_item_deletable_iface);
+);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL HELPERS
@@ -907,9 +913,18 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 	                              FALSE, G_PARAM_READABLE));
 }
 
-/* -----------------------------------------------------------------------------
- * PUBLIC 
- */
+static SeahorseDeleter *
+seahorse_gkr_item_create_deleter (SeahorseDeletable *deletable)
+{
+	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (deletable);
+	return seahorse_gkr_item_deleter_new (self);
+}
+
+static void
+seahorse_gkr_item_deletable_iface (SeahorseDeletableIface *iface)
+{
+	iface->create_deleter = seahorse_gkr_item_create_deleter;
+}
 
 SeahorseGkrItem *
 seahorse_gkr_item_new (SeahorseGkrKeyring *keyring,

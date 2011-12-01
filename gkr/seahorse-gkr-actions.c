@@ -25,6 +25,7 @@
 #include "seahorse-gkr-actions.h"
 #include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-keyring.h"
+#include "seahorse-gkr-keyring-deleter.h"
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-operation.h"
 
@@ -301,12 +302,14 @@ on_keyring_properties (GtkAction* action,
 }
 
 static void
-on_delete_objects_complete (GObject *source, GAsyncResult *result, gpointer user_data)
+on_delete_keyring_complete (GObject *source,
+                            GAsyncResult *result,
+                            gpointer user_data)
 {
 	GtkWindow *parent = GTK_WINDOW (user_data);
 	GError *error = NULL;
 
-	if (!seahorse_gkr_delete_finish (result, &error)) {
+	if (!seahorse_deleter_delete_finish (SEAHORSE_DELETER (source), result, &error)) {
 		seahorse_util_show_error (parent, _("Couldn't delete keyring"), error->message);
 		g_error_free (error);
 	}
@@ -318,33 +321,16 @@ static void
 on_keyrings_delete (GtkAction* action,
                     gpointer user_data)
 {
-	GList *objects = user_data;
-	GCancellable *cancellable;
-	GtkWindow *parent;
-	gchar *prompt;
-	gboolean ret;
+	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (user_data);
+	GtkWindow *parent = seahorse_action_get_window (action);
+	SeahorseDeleter *deleter;
 
-	if (!objects)
-		return;
+	deleter = seahorse_gkr_keyring_deleter_new (keyring);
 
-	prompt = g_strdup_printf (_ ("Are you sure you want to delete the password keyring '%s'?"),
-	                          seahorse_object_get_label (objects->data));
-	parent = seahorse_action_get_window (action);
-
-	ret = seahorse_delete_dialog_prompt (parent, prompt);
-	if (ret) {
-		cancellable = g_cancellable_new ();
-		seahorse_gkr_delete_async (objects, cancellable,
-		                           on_delete_objects_complete,
-		                           g_object_ref (parent));
-		seahorse_progress_show (cancellable, ngettext ("Deleting keyring", "Deleting keyrings",
-		                                               g_list_length (objects)), TRUE);
-		g_object_unref (cancellable);
-	} else {
-		g_cancellable_cancel (g_cancellable_get_current ());
-	}
-
-	g_free (prompt);
+	if (seahorse_deleter_prompt (deleter, parent))
+		seahorse_deleter_delete_async (deleter, NULL, on_delete_keyring_complete,
+		                               g_object_ref (parent));
+	g_object_unref (deleter);
 }
 
 static const GtkActionEntry KEYRINGS_ACTIONS[] = {
@@ -352,8 +338,6 @@ static const GtkActionEntry KEYRINGS_ACTIONS[] = {
 	  N_("Lock the password storage keyring so a master password is required to unlock it."), G_CALLBACK (on_keyrings_lock) },
 	{ "keyring-unlock", NULL, N_("_Unlock"), "",
 	  N_("Unlock the password storage keyring with a master password so it is available for use."), G_CALLBACK (on_keyrings_unlock) },
-	{ "keyring-delete", GTK_STOCK_DELETE, NULL, NULL,
-	  N_("Delete the keyring."), G_CALLBACK (on_keyrings_delete) },
 };
 
 static const GtkActionEntry KEYRING_ACTIONS[] = {
@@ -363,6 +347,8 @@ static const GtkActionEntry KEYRING_ACTIONS[] = {
 	  N_("Change the unlock password of the password storage keyring"), G_CALLBACK (on_keyring_password) },
 	{ "keyring-properties", GTK_STOCK_PROPERTIES, NULL, NULL,
 	  N_("Properties of the keyring."), G_CALLBACK (on_keyring_properties) },
+	{ "keyring-delete", GTK_STOCK_DELETE, NULL, NULL,
+	  N_("Delete the keyring."), G_CALLBACK (on_keyrings_delete) },
 
 	/* Generic actions used by the sidebar for the current selection */
 	{ "lock", NULL, NULL, "",
@@ -496,71 +482,9 @@ on_password_properties (GtkAction *action,
 	                                   seahorse_action_get_window (action));
 }
 
-static void
-on_delete_objects (GObject *source,
-                   GAsyncResult *result,
-                   gpointer user_data)
-{
-	GtkWidget *parent = GTK_WIDGET (user_data);
-	GError *error = NULL;
-
-	if (!seahorse_gkr_delete_finish (result, &error)) {
-		seahorse_util_show_error (parent, _("Couldn't delete item"), error->message);
-		g_error_free (error);
-	}
-
-	g_object_unref (parent);
-}
-
-static void
-on_delete_passwords (GtkAction *action,
-                     gpointer user_data)
-{
-	GCancellable *cancellable;
-	GtkWindow *parent;
-	GList *objects;
-	gchar *prompt;
-	gboolean ret;
-	guint num;
-
-	objects = user_data;
-	if (objects == NULL)
-		return;
-
-	num = g_list_length (objects);
-	if (num == 1) {
-		prompt = g_strdup_printf (_ ("Are you sure you want to delete the password '%s'?"),
-		                          seahorse_object_get_label (SEAHORSE_OBJECT (objects->data)));
-	} else {
-		prompt = g_strdup_printf (ngettext ("Are you sure you want to delete %d password?",
-		                                    "Are you sure you want to delete %d passwords?",
-		                                    num), num);
-	}
-
-	parent = seahorse_action_get_window (action);
-	ret = seahorse_delete_dialog_prompt (parent, prompt);
-
-	if (ret) {
-		cancellable = g_cancellable_new ();
-		seahorse_gkr_delete_async (objects, cancellable, on_delete_objects, g_object_ref (parent));
-		seahorse_progress_show (cancellable, ngettext ("Deleting item", "Deleting items", num), TRUE);
-		g_object_unref (cancellable);
-	} else {
-		g_cancellable_cancel (g_cancellable_get_current ());
-
-	}
-
-	g_free (prompt);
-}
-
 static const GtkActionEntry ITEM_ACTIONS[] = {
 	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
 	  N_("Properties of the password."), G_CALLBACK (on_password_properties) },
-};
-
-static const GtkActionEntry ITEMS_ACTIONS[] = {
-	{ "delete", GTK_STOCK_DELETE, NULL, NULL,
-	  N_("Delete the password."), G_CALLBACK (on_delete_passwords) },
 };
 
 static void
@@ -577,10 +501,6 @@ seahorse_gkr_item_actions_clone_for_objects (SeahorseActions *actions,
 
 	cloned = gtk_action_group_new ("KeyringItem");
 	gtk_action_group_set_translation_domain (cloned, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions_full (cloned, ITEMS_ACTIONS,
-	                                   G_N_ELEMENTS (ITEMS_ACTIONS),
-	                                   seahorse_object_list_copy (objects),
-	                                   seahorse_object_list_free);
 
 	if (!objects->next)
 		gtk_action_group_add_actions_full (cloned, ITEM_ACTIONS,

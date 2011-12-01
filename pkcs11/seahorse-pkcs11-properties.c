@@ -22,13 +22,14 @@
 #include "config.h"
 
 #include "seahorse-certificate.h"
+#include "seahorse-pkcs11-deleter.h"
+#include "seahorse-pkcs11-key-deleter.h"
 #include "seahorse-pkcs11-properties.h"
-#include "seahorse-pkcs11-operations.h"
 #include "seahorse-pkcs11-request.h"
 #include "seahorse-private-key.h"
 
 #include "seahorse-action.h"
-#include "seahorse-delete-dialog.h"
+#include "seahorse-deleter.h"
 #include "seahorse-exportable.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
@@ -177,7 +178,7 @@ on_delete_complete (GObject *source,
 	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (user_data);
 	GError *error = NULL;
 
-	if (seahorse_pkcs11_delete_finish (result, &error))
+	if (seahorse_deleter_delete_finish (SEAHORSE_DELETER (source), result, &error))
 		gtk_widget_destroy (GTK_WIDGET (self));
 
 	else
@@ -191,58 +192,25 @@ on_delete_objects (GtkAction *action,
                    gpointer user_data)
 {
 	SeahorsePkcs11Properties *self = SEAHORSE_PKCS11_PROPERTIES (user_data);
-	gboolean with_partner = FALSE;
+	SeahorseDeleter *deleter;
 	GObject *partner = NULL;
-	GtkDialog *dialog = NULL;
-	GCancellable *cancellable;
-	GList *objects = NULL;
-	gchar *label;
 
-	g_object_get (self->object,
-	              "label", &label,
-	              "partner", &partner,
-	              NULL);
+	g_object_get (self->object, "partner", &partner, NULL);
 
-	if (SEAHORSE_IS_CERTIFICATE (self->object)) {
-		objects = g_list_prepend (objects, g_object_ref (self->object));
-		dialog = seahorse_delete_dialog_new (GTK_WINDOW (self),
-		                                     _("Are you sure you want to delete the certificate '%s'?"),
-		                                     label);
-
-		if (SEAHORSE_IS_PRIVATE_KEY (partner)) {
-			seahorse_delete_dialog_set_check_value (SEAHORSE_DELETE_DIALOG (dialog), FALSE);
-			seahorse_delete_dialog_set_check_label (SEAHORSE_DELETE_DIALOG (dialog),
-			                                        _("Also delete matching private key"));
-			with_partner = TRUE;
-		}
-
-	} else if (SEAHORSE_IS_PRIVATE_KEY (self->object)) {
-		objects = g_list_prepend (objects, g_object_ref (self->object));
-		dialog = seahorse_delete_dialog_new (GTK_WINDOW (self),
-		                                     _("Are you sure you want to delete the private key '%s'?"),
-		                                     label);
-
-		seahorse_delete_dialog_set_check_value (SEAHORSE_DELETE_DIALOG (dialog), FALSE);
-		seahorse_delete_dialog_set_check_require (SEAHORSE_DELETE_DIALOG (dialog), TRUE);
-		seahorse_delete_dialog_set_check_label (SEAHORSE_DELETE_DIALOG (dialog),
-		                                        _("I understand that this action cannot be undone"));
+	if (partner || SEAHORSE_IS_PRIVATE_KEY (self->object)) {
+		deleter = seahorse_pkcs11_key_deleter_new (self->object);
+		if (!seahorse_deleter_add_object (SEAHORSE_DELETER (deleter), partner))
+			g_assert_not_reached ();
+	} else {
+		deleter = seahorse_pkcs11_deleter_new (SEAHORSE_CERTIFICATE (self->object));
 	}
 
-	if (dialog && gtk_dialog_run (dialog) == GTK_RESPONSE_OK) {
-		if (with_partner)
-			objects = g_list_prepend (objects, partner);
-
-		cancellable = g_cancellable_new ();
-		seahorse_pkcs11_delete_async (objects, cancellable,
-		                              on_delete_complete, g_object_ref (self));
-		seahorse_progress_show (cancellable, _("Deleting"), TRUE);
-		g_object_unref (cancellable);
+	if (seahorse_deleter_prompt (deleter, GTK_WINDOW (self))) {
+		seahorse_deleter_delete_async (deleter, NULL, on_delete_complete, g_object_ref (self));
 	}
 
-	gtk_widget_destroy (GTK_WIDGET (dialog));
-	g_list_free_full (objects, g_object_unref);
+	g_object_unref (deleter);
 	g_clear_object (&partner);
-	g_free (label);
 }
 
 static void
@@ -340,12 +308,17 @@ seahorse_pkcs11_properties_constructed (GObject *obj)
 	GError *error = NULL;
 	GList *exporters = NULL;
 	GtkAction *request;
+	GtkAction *action;
 
 	G_OBJECT_CLASS (seahorse_pkcs11_properties_parent_class)->constructed (obj);
 
 	self->actions = gtk_action_group_new ("Pkcs11Actions");
 	gtk_action_group_add_actions (self->actions, UI_ACTIONS, G_N_ELEMENTS (UI_ACTIONS), self);
 	gtk_action_group_set_translation_domain (self->actions, GETTEXT_PACKAGE);
+	action = gtk_action_group_get_action (self->actions, "delete-object");
+	g_object_bind_property (self->object, "deletable", action, "sensitive", G_BINDING_SYNC_CREATE);
+	action = gtk_action_group_get_action (self->actions, "export-object");
+	g_object_bind_property (self->object, "exportable", action, "sensitive", G_BINDING_SYNC_CREATE);
 	request = gtk_action_group_get_action (self->actions, "request-certificate");
 	gtk_action_set_is_important (request, TRUE);
 	gtk_action_set_visible (request, FALSE);

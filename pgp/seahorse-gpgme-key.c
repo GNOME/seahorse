@@ -24,13 +24,16 @@
 #include "seahorse-gpgme.h"
 #include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-key-op.h"
+#include "seahorse-gpgme-key-deleter.h"
 #include "seahorse-gpgme-photo.h"
 #include "seahorse-gpgme-keyring.h"
+#include "seahorse-gpgme-secret-deleter.h"
 #include "seahorse-gpgme-uid.h"
 #include "seahorse-pgp-actions.h"
 #include "seahorse-pgp-backend.h"
 #include "seahorse-pgp-key.h"
 
+#include "seahorse-deletable.h"
 #include "seahorse-exportable.h"
 #include "seahorse-icons.h"
 #include "seahorse-predicate.h"
@@ -50,10 +53,13 @@ enum {
 	PROP_TRUST
 };
 
+static void       seahorse_gpgme_key_deletable_iface       (SeahorseDeletableIface *iface);
+
 static void       seahorse_gpgme_key_exportable_iface      (SeahorseExportableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseGpgmeKey, seahorse_gpgme_key, SEAHORSE_TYPE_PGP_KEY,
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_gpgme_key_exportable_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_gpgme_key_deletable_iface);
 );
 
 struct _SeahorseGpgmeKeyPrivate {
@@ -548,6 +554,22 @@ seahorse_gpgme_key_class_init (SeahorseGpgmeKeyClass *klass)
 	g_object_class_override_property (gobject_class, PROP_VALIDITY, "validity");
 
         g_object_class_override_property (gobject_class, PROP_TRUST, "trust");
+}
+
+static SeahorseDeleter *
+seahorse_gpgme_key_create_deleter (SeahorseDeletable *deletable)
+{
+	SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (deletable);
+	if (self->pv->seckey)
+		return seahorse_gpgme_secret_deleter_new (self);
+	else
+		return seahorse_gpgme_key_deleter_new (self);
+}
+
+static void
+seahorse_gpgme_key_deletable_iface (SeahorseDeletableIface *iface)
+{
+	iface->create_deleter = seahorse_gpgme_key_create_deleter;
 }
 
 static GList *

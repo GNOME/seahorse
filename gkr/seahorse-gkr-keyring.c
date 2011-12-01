@@ -23,11 +23,13 @@
 #include "config.h"
 
 #include "seahorse-gkr.h"
+#include "seahorse-gkr-keyring-deleter.h"
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-operation.h"
 #include "seahorse-gkr-actions.h"
 
 #include "seahorse-action.h"
+#include "seahorse-deletable.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
@@ -59,11 +61,15 @@ struct _SeahorseGkrKeyringPrivate {
 };
 
 static void     seahorse_keyring_place_iface        (SeahorsePlaceIface *iface);
+
 static void     seahorse_keyring_collection_iface   (GcrCollectionIface *iface);
+
+static void     seahorse_keyring_deletable_iface    (SeahorseDeletableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_keyring_collection_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_keyring_place_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_keyring_deletable_iface);
 );
 
 static GType
@@ -520,9 +526,19 @@ seahorse_keyring_collection_iface (GcrCollectionIface *iface)
 	iface->contains = seahorse_gkr_keyring_contains;
 }
 
-/* -----------------------------------------------------------------------------
- * PUBLIC 
- */
+static SeahorseDeleter *
+seahorse_gkr_keyring_create_deleter (SeahorseDeletable *deletable)
+{
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (deletable);
+	return seahorse_gkr_keyring_deleter_new (self);
+}
+
+static void
+seahorse_keyring_deletable_iface (SeahorseDeletableIface *iface)
+{
+	iface->create_deleter = seahorse_gkr_keyring_create_deleter;
+}
+
 
 SeahorseGkrKeyring*
 seahorse_gkr_keyring_new (const gchar *keyring_name)

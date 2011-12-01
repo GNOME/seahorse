@@ -49,12 +49,4 @@ gboolean      seahorse_gkr_update_secret_finish      (SeahorseGkrItem *item,
                                                       GAsyncResult *result,
                                                       GError **error);
 
-void          seahorse_gkr_delete_async              (GList *objects,
-                                                      GCancellable *cancellable,
-                                                      GAsyncReadyCallback callback,
-                                                      gpointer user_data);
-
-gboolean      seahorse_gkr_delete_finish             (GAsyncResult *result,
-                                                      GError **error);
-
 #endif /* __SEAHORSE_GKR_OPERATION_H__ */

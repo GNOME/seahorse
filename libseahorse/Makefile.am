@@ -37,6 +37,8 @@ libseahorse_la_SOURCES = \
 	seahorse-context.c seahorse-context.h \
 	seahorse-debug.c seahorse-debug.h \
 	seahorse-delete-dialog.c seahorse-delete-dialog.h \
+	seahorse-deletable.c seahorse-deletable.h \
+	seahorse-deleter.c seahorse-deleter.h \
 	seahorse-exportable.c seahorse-exportable.h \
 	seahorse-exporter.c seahorse-exporter.h \
 	seahorse-icons.c seahorse-icons.h \

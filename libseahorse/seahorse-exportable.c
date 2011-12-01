@@ -47,6 +47,19 @@ seahorse_exportable_create_exporters (SeahorseExportable *exportable,
 	return iface->create_exporters (exportable, type);
 }
 
+
+gboolean
+seahorse_exportable_can_export (gpointer object)
+{
+	gboolean can = FALSE;
+
+	if (!SEAHORSE_IS_EXPORTABLE (object))
+		return FALSE;
+
+	g_object_get (object, "exportable", &can, NULL);
+	return can;
+}
+
 typedef struct {
 	GMainLoop *loop;
 	GAsyncResult *result;
@@ -88,6 +101,9 @@ seahorse_exportable_default_init (SeahorseExportableIface *iface)
 	static gboolean initialized = FALSE;
 	if (!initialized) {
 		initialized = TRUE;
+		g_object_interface_install_property (iface,
+		               g_param_spec_boolean ("exportable", "Exportable", "Is actually exportable",
+		                                      FALSE, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 	}
 }
 
@@ -112,7 +128,7 @@ seahorse_exportable_export_to_directory_wait (GList *objects,
 	closure = wait_closure_new ();
 
 	for (l = objects; l != NULL; l = g_list_next (l)) {
-		if (!SEAHORSE_IS_EXPORTABLE (l->data))
+		if (!seahorse_exportable_can_export (l->data))
 			continue;
 
 		exporters = seahorse_exportable_create_exporters (SEAHORSE_EXPORTABLE (l->data),
@@ -168,7 +184,7 @@ seahorse_exportable_export_to_text_wait (GList *objects,
 	g_return_val_if_fail (size != NULL, 0);
 
 	for (l = objects; l != NULL; l = g_list_next (l)) {
-		if (!SEAHORSE_IS_EXPORTABLE (l->data))
+		if (!seahorse_exportable_can_export (l->data))
 			continue;
 
 		/* If we've already found exporters, then add to those */
@@ -244,7 +260,7 @@ seahorse_exportable_export_to_prompt_wait (GList *objects,
 		if (!g_hash_table_lookup (pending, l->data))
 			continue;
 
-		if (!SEAHORSE_IS_EXPORTABLE (l->data)) {
+		if (!seahorse_exportable_can_export (l->data)) {
 			g_hash_table_remove (pending, l->data);
 			continue;
 		}

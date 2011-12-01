@@ -26,9 +26,11 @@
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-actions.h"
 #include "seahorse-pkcs11-helpers.h"
+#include "seahorse-pkcs11-key-deleter.h"
 #include "seahorse-token.h"
 #include "seahorse-types.h"
 
+#include "seahorse-deletable.h"
 #include "seahorse-util.h"
 
 #include <gcr/gcr.h>
@@ -43,6 +45,7 @@ static const gulong REQUIRED_ATTRS[] = {
 	CKA_LABEL,
 	CKA_CLASS,
 	CKA_KEY_TYPE,
+	CKA_MODIFIABLE,
 };
 
 enum {
@@ -53,6 +56,7 @@ enum {
 	PROP_ACTIONS,
 	PROP_PARTNER,
 
+	PROP_DELETABLE,
 	PROP_LABEL,
 	PROP_MARKUP,
 	PROP_DESCRIPTION,
@@ -67,10 +71,13 @@ struct _SeahorsePrivateKeyPrivate {
 	GIcon *icon;
 };
 
+static void seahorse_private_key_deletable_iface (SeahorseDeletableIface *iface);
+
 static void seahorse_private_key_object_attributes_iface (GckObjectAttributesIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorsePrivateKey, seahorse_private_key, GCK_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_ATTRIBUTES, seahorse_private_key_object_attributes_iface)
+                         G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_ATTRIBUTES, seahorse_private_key_object_attributes_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_private_key_deletable_iface);
 );
 
 static void
@@ -155,6 +162,9 @@ seahorse_private_key_get_property (GObject *obj,
 		break;
 	case PROP_MARKUP:
 		g_value_take_string (value, calculate_markup (self));
+		break;
+	case PROP_DELETABLE:
+		g_value_set_boolean (value, seahorse_token_is_deletable (self->pv->token, GCK_OBJECT (self)));
 		break;
 	case PROP_DESCRIPTION:
 		g_value_set_string (value, _("Private key"));
@@ -244,6 +254,8 @@ seahorse_private_key_class_init (SeahorsePrivateKeyClass *klass)
 	                                 G_TYPE_ICON, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE));
 
 	g_object_class_override_property (gobject_class, PROP_ATTRIBUTES, "attributes");
+
+	g_object_class_override_property (gobject_class, PROP_DELETABLE, "deletable");
 }
 
 static void
@@ -251,6 +263,21 @@ seahorse_private_key_object_attributes_iface (GckObjectAttributesIface *iface)
 {
 	iface->attribute_types = REQUIRED_ATTRS;
 	iface->n_attribute_types = G_N_ELEMENTS (REQUIRED_ATTRS);
+}
+
+static SeahorseDeleter *
+seahorse_private_key_create_deleter (SeahorseDeletable *deletable)
+{
+	SeahorsePrivateKey *self = SEAHORSE_PRIVATE_KEY (deletable);
+	if (!seahorse_token_is_deletable (self->pv->token, GCK_OBJECT (self)))
+		return NULL;
+	return seahorse_pkcs11_key_deleter_new (G_OBJECT (self));
+}
+
+static void
+seahorse_private_key_deletable_iface (SeahorseDeletableIface *iface)
+{
+	iface->create_deleter = seahorse_private_key_create_deleter;
 }
 
 SeahorseCertificate *

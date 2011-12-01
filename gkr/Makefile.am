@@ -23,8 +23,10 @@ libseahorse_gkr_la_SOURCES = \
 	seahorse-gkr-backend.c seahorse-gkr-backend.h \
 	seahorse-gkr-dialogs.h seahorse-gkr-dialogs.c \
 	seahorse-gkr-item.c seahorse-gkr-item.h \
+	seahorse-gkr-item-deleter.c seahorse-gkr-item-deleter.h \
 	seahorse-gkr-item-properties.c \
 	seahorse-gkr-keyring.c seahorse-gkr-keyring.h \
+	seahorse-gkr-keyring-deleter.c seahorse-gkr-keyring-deleter.h \
 	seahorse-gkr-keyring-properties.c \
 	seahorse-gkr-operation.c seahorse-gkr-operation.h
 

@@ -25,6 +25,7 @@
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
 #include "seahorse-backend.h"
+#include "seahorse-deletable.h"
 #include "seahorse-exportable.h"
 #include "seahorse-object.h"
 #include "seahorse-preferences.h"
@@ -177,27 +178,18 @@ on_object_delete (GtkAction *action,
                   gpointer user_data)
 {
 	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
-	GCancellable *cancellable;
-	GtkAction *delete_action;
+	GError *error = NULL;
 	GtkWindow *window;
-	GList *l;
+	GList *objects;
 
-	cancellable = g_cancellable_new ();
-
-	g_cancellable_push_current (cancellable);
 	window = seahorse_viewer_get_window (self);
+	objects = seahorse_viewer_get_selected_objects (self);
+	seahorse_deletable_delete_with_prompt_wait (objects, window, &error);
 
-	/* Now go through and clone for the selection */
-	for (l = self->pv->selection_actions;
-	     l != NULL && !g_cancellable_is_cancelled (cancellable);
-	     l = g_list_next (l)) {
-		delete_action = gtk_action_group_get_action (l->data, "delete");
-		if (delete_action != NULL && gtk_action_is_sensitive (delete_action))
-			seahorse_action_activate_with_window (delete_action, window);
-	}
+	if (error != NULL)
+		seahorse_util_handle_error (&error, window, _("Cannot delete"));
 
-	g_cancellable_pop_current (cancellable);
-	g_object_unref (cancellable);
+	g_list_free (objects);
 }
 
 static void
@@ -340,10 +332,12 @@ seahorse_viewer_real_selection_changed (SeahorseViewer *self)
 
 	objects = seahorse_viewer_get_selected_objects (self);
 	for (l = objects; l != NULL; l = g_list_next (l)) {
-		if (SEAHORSE_IS_EXPORTABLE (l->data)) {
+		if (seahorse_exportable_can_export (l->data))
 			can_export = TRUE;
+		if (seahorse_deletable_can_delete (l->data))
+			can_delete = TRUE;
+		if (can_export && can_delete)
 			break;
-		}
 	}
 
 	groups = lookup_actions_for_objects (self, objects);
@@ -353,8 +347,6 @@ seahorse_viewer_real_selection_changed (SeahorseViewer *self)
 	for (l = groups; l != NULL; l = g_list_next (l)) {
 		if (gtk_action_group_get_action (l->data, "properties"))
 			can_properties = TRUE;
-		if (gtk_action_group_get_action (l->data, "delete"))
-			can_delete = TRUE;
 	}
 
 	gtk_action_set_sensitive (self->pv->properties_object, can_properties);

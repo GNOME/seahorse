@@ -50,6 +50,8 @@ GType       seahorse_exportable_get_type                    (void) G_GNUC_CONST;
 GList *     seahorse_exportable_create_exporters            (SeahorseExportable *exportable,
                                                              SeahorseExporterType type);
 
+gboolean    seahorse_exportable_can_export                  (gpointer object);
+
 guint       seahorse_exportable_export_to_directory_wait    (GList *objects,
                                                              const gchar *directory,
                                                              GError **error);

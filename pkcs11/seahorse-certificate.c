@@ -26,11 +26,13 @@
 #include "seahorse-certificate-der-exporter.h"
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-actions.h"
+#include "seahorse-pkcs11-deleter.h"
 #include "seahorse-pkcs11-helpers.h"
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"
 #include "seahorse-types.h"
 
+#include "seahorse-deletable.h"
 #include "seahorse-exportable.h"
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
@@ -45,7 +47,8 @@ static const gulong REQUIRED_ATTRS[] = {
 	CKA_ID,
 	CKA_LABEL,
 	CKA_CLASS,
-	CKA_CERTIFICATE_CATEGORY
+	CKA_CERTIFICATE_CATEGORY,
+	CKA_MODIFIABLE
 };
 
 enum {
@@ -56,6 +59,8 @@ enum {
 	PROP_ACTIONS,
 	PROP_PARTNER,
 
+	PROP_EXPORTABLE,
+	PROP_DELETABLE,
 	PROP_ICON,
 	PROP_DESCRIPTION
 };
@@ -74,12 +79,15 @@ static void   seahorse_certificate_certificate_iface           (GcrCertificateIf
 
 static void   seahorse_certificate_object_attributes_iface     (GckObjectAttributesIface *iface);
 
+static void   seahorse_certificate_deletable_iface             (SeahorseDeletableIface *iface);
+
 static void   seahorse_certificate_exportable_iface            (SeahorseExportableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseCertificate, seahorse_certificate, GCK_TYPE_OBJECT,
                          GCR_CERTIFICATE_MIXIN_IMPLEMENT_COMPARABLE ();
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_CERTIFICATE, seahorse_certificate_certificate_iface);
                          G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_ATTRIBUTES, seahorse_certificate_object_attributes_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_certificate_deletable_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_certificate_exportable_iface);
 );
 
@@ -213,6 +221,12 @@ seahorse_certificate_get_property (GObject *obj,
 	case PROP_DESCRIPTION:
 		g_value_set_string (value, seahorse_certificate_get_description (self));
 		break;
+	case PROP_EXPORTABLE:
+		g_value_set_boolean (value, gck_attributes_find (self->pv->attributes, CKA_VALUE) != NULL);
+		break;
+	case PROP_DELETABLE:
+		g_value_set_boolean (value, seahorse_token_is_deletable (self->pv->token, GCK_OBJECT (self)));
+		break;
 	default:
 		gcr_certificate_mixin_get_property (obj, prop_id, value, pspec);
 		break;
@@ -286,6 +300,10 @@ seahorse_certificate_class_init (SeahorseCertificateClass *klass)
 
 	g_object_class_override_property (gobject_class, PROP_ATTRIBUTES, "attributes");
 
+	g_object_class_override_property (gobject_class, PROP_DELETABLE, "deletable");
+
+	g_object_class_override_property (gobject_class, PROP_EXPORTABLE, "exportable");
+
 	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 
@@ -322,6 +340,12 @@ seahorse_certificate_create_exporters (SeahorseExportable *exportable,
                                        SeahorseExporterType type)
 {
 	SeahorseExporter *exporter;
+	gboolean can_export = FALSE;
+
+	g_object_get (exportable, "exportable", &can_export, NULL);
+	if (!can_export)
+		return NULL;
+
 	exporter = seahorse_certificate_der_exporter_new (SEAHORSE_CERTIFICATE (exportable));
 	return g_list_append (NULL, exporter);
 }
@@ -330,6 +354,31 @@ static void
 seahorse_certificate_exportable_iface (SeahorseExportableIface *iface)
 {
 	iface->create_exporters = seahorse_certificate_create_exporters;
+}
+
+static SeahorseDeleter *
+seahorse_certificate_create_deleter (SeahorseDeletable *deletable)
+{
+	SeahorseCertificate *self = SEAHORSE_CERTIFICATE (deletable);
+	SeahorseDeleter *deleter = NULL;
+
+	if (self->pv->private_key)
+		deleter = seahorse_deletable_create_deleter (SEAHORSE_DELETABLE (self->pv->private_key));
+
+	if (seahorse_token_is_deletable (self->pv->token, GCK_OBJECT (self))) {
+		if (deleter == NULL)
+			deleter = seahorse_pkcs11_deleter_new (self);
+		else if (!seahorse_deleter_add_object (deleter, G_OBJECT (self)))
+			g_return_val_if_reached (NULL);
+	}
+
+	return deleter;
+}
+
+static void
+seahorse_certificate_deletable_iface (SeahorseDeletableIface *iface)
+{
+	iface->create_deleter = seahorse_certificate_create_deleter;
 }
 
 GIcon *

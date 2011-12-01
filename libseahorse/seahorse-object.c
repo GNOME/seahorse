@@ -40,7 +40,9 @@ enum {
 	PROP_ICON,
 	PROP_IDENTIFIER,
 	PROP_USAGE,
-	PROP_FLAGS
+	PROP_FLAGS,
+	PROP_DELETABLE,
+	PROP_EXPORTABLE
 };
 
 /**
@@ -274,6 +276,12 @@ seahorse_object_get_property (GObject *obj, guint prop_id, GValue *value,
 	case PROP_FLAGS:
 		g_value_set_uint (value, seahorse_object_get_flags (self));
 		break;
+	case PROP_DELETABLE:
+		g_value_set_boolean (value, seahorse_object_get_flags (self) & SEAHORSE_FLAG_DELETABLE ? TRUE : FALSE);
+		break;
+	case PROP_EXPORTABLE:
+		g_value_set_boolean (value, seahorse_object_get_flags (self) & SEAHORSE_FLAG_EXPORTABLE ? TRUE : FALSE);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -414,6 +422,14 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
 	g_object_class_install_property (gobject_class, PROP_FLAGS,
 	           g_param_spec_uint ("flags", "Object Flags", "This object's flags.", 
 	                              0, G_MAXUINT, 0, G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_DELETABLE,
+	           g_param_spec_boolean ("deletable", "Deletable", "Object is deletable.",
+	                                 FALSE, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+	g_object_class_install_property (gobject_class, PROP_EXPORTABLE,
+	           g_param_spec_boolean ("exportable", "Exportable", "Object is exportable.",
+	                                 FALSE, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 }
 
 /* -----------------------------------------------------------------------------

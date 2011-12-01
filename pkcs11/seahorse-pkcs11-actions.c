@@ -28,7 +28,6 @@
 #include "seahorse-interaction.h"
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-properties.h"
-#include "seahorse-pkcs11-operations.h"
 #include "seahorse-token.h"
 
 #include "seahorse-action.h"
@@ -206,68 +205,10 @@ on_show_properties (GtkAction *action,
 	gtk_widget_show (GTK_WIDGET (window));
 }
 
-static void
-on_delete_completed (GObject *source,
-                     GAsyncResult *result,
-                     gpointer user_data)
-{
-	GtkWindow *parent = GTK_WINDOW (user_data);
-	GError *error = NULL;
-
-	if (!seahorse_pkcs11_delete_finish (result, &error))
-		seahorse_util_handle_error (&error, parent, _("Couldn't delete"));
-
-	g_object_unref (parent);
-}
-
-static void
-on_delete_objects (GtkAction *action,
-                   gpointer user_data)
-{
-	GCancellable *cancellable;
-	gchar *prompt;
-	gchar *display;
-	GtkWindow *parent;
-	gboolean ret;
-	guint num;
-	GList *objects;
-
-	objects = user_data;
-	num = g_list_length (objects);
-	if (num == 1) {
-		g_object_get (objects->data, "label", &display, NULL);
-		prompt = g_strdup_printf (_("Are you sure you want to delete the certificate '%s'?"), display);
-		g_free (display);
-	} else {
-		prompt = g_strdup_printf (ngettext (
-				"Are you sure you want to delete %d certificate?",
-				"Are you sure you want to delete %d certificates?",
-				num), num);
-	}
-
-	parent = seahorse_action_get_window (action);
-	ret = seahorse_delete_dialog_prompt (parent, prompt);
-	g_free (prompt);
-
-	if (ret) {
-		cancellable = g_cancellable_new ();
-		seahorse_pkcs11_delete_async (objects, cancellable,
-		                              on_delete_completed, g_object_ref (parent));
-		seahorse_progress_show (cancellable, _("Deleting"), TRUE);
-		g_object_unref (cancellable);
-	} else {
-		g_cancellable_cancel (g_cancellable_get_current ());
-	}
-}
 
 static const GtkActionEntry CERTIFICATE_ACTIONS[] = {
 	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
 	  N_("Properties of the certificate."), G_CALLBACK (on_show_properties) },
-};
-
-static const GtkActionEntry CERTIFICATES_ACTIONS[] = {
-	{ "delete", GTK_STOCK_DELETE, NULL, NULL,
-	  N_("Delete the certificate."), G_CALLBACK (on_delete_objects) },
 };
 
 static void
@@ -286,10 +227,6 @@ seahorse_pkcs11_object_actions_clone_for_objects (SeahorseActions *actions,
 
 	cloned = gtk_action_group_new ("Pkcs11Object");
 	gtk_action_group_set_translation_domain (cloned, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions_full (cloned, CERTIFICATES_ACTIONS,
-	                                   G_N_ELEMENTS (CERTIFICATES_ACTIONS),
-	                                   seahorse_object_list_copy (objects),
-	                                   seahorse_object_list_free);
 
 	/* Only one object? */
 	if (!objects->next)

@@ -70,6 +70,9 @@ gboolean               seahorse_token_has_mechanism     (SeahorseToken *self,
 void                   seahorse_token_remove_object     (SeahorseToken *self,
                                                          GckObject *object);
 
+gboolean               seahorse_token_is_deletable      (SeahorseToken *self,
+                                                         GckObject *object);
+
 void                   seahorse_token_lock_async        (SeahorseToken *self,
                                                          GTlsInteraction *interaction,
                                                          GCancellable *cancellable,

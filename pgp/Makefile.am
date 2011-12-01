@@ -49,11 +49,13 @@ libseahorse_pgp_la_SOURCES = \
 	seahorse-gpgme-exporter.c seahorse-gpgme-exporter.h \
 	seahorse-gpgme-generate.c \
 	seahorse-gpgme-key.c seahorse-gpgme-key.h \
+	seahorse-gpgme-key-deleter.c seahorse-gpgme-key-deleter.h \
 	seahorse-gpgme-key-op.c seahorse-gpgme-key-op.h \
 	seahorse-gpgme-keyring.c seahorse-gpgme-keyring.h \
 	seahorse-gpgme-photo.c seahorse-gpgme-photo.h \
 	seahorse-gpgme-photos.c \
 	seahorse-gpgme-revoke.c \
+	seahorse-gpgme-secret-deleter.c seahorse-gpgme-secret-deleter.h \
 	seahorse-gpgme-sign.c \
 	seahorse-gpgme-subkey.c seahorse-gpgme-subkey.h \
 	seahorse-gpgme-uid.c seahorse-gpgme-uid.h \

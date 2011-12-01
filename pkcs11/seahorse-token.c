@@ -32,7 +32,6 @@
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-actions.h"
 #include "seahorse-pkcs11-helpers.h"
-#include "seahorse-pkcs11-operations.h"
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"
 
@@ -1070,4 +1069,28 @@ seahorse_token_unlock_finish (SeahorseToken *self,
 		return FALSE;
 
 	return TRUE;
+}
+
+gboolean
+seahorse_token_is_deletable (SeahorseToken *self,
+                             GckObject *object)
+{
+	GckAttributes *attrs;
+	GckTokenInfo *info;
+	gboolean ret;
+
+	g_return_val_if_fail (SEAHORSE_IS_TOKEN (self), FALSE);
+	g_return_val_if_fail (GCK_IS_OBJECT (object), FALSE);
+
+	info = seahorse_token_get_info (self);
+	if (info->flags & CKF_WRITE_PROTECTED)
+		return FALSE;
+
+	g_object_get (object, "attributes", &attrs, NULL);
+
+	if (!gck_attributes_find_boolean (attrs, CKA_MODIFIABLE, &ret))
+		ret = TRUE;
+
+	gck_attributes_unref (attrs);
+	return ret;
 }

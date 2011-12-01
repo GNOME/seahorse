@@ -23,11 +23,13 @@
 #include "config.h"
 
 #include "seahorse-ssh-actions.h"
+#include "seahorse-ssh-deleter.h"
 #include "seahorse-ssh-exporter.h"
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 #include "seahorse-ssh-source.h"
 
+#include "seahorse-deletable.h"
 #include "seahorse-exportable.h"
 #include "seahorse-icons.h"
 #include "seahorse-place.h"
@@ -53,10 +55,13 @@ enum {
     PROP_LENGTH
 };
 
+static void       seahorse_ssh_key_deletable_iface       (SeahorseDeletableIface *iface);
+
 static void       seahorse_ssh_key_exportable_iface      (SeahorseExportableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseSSHKey, seahorse_ssh_key, SEAHORSE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_ssh_key_exportable_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_ssh_key_deletable_iface);
 );
 
 /* -----------------------------------------------------------------------------
@@ -313,9 +318,18 @@ seahorse_ssh_key_exportable_iface (SeahorseExportableIface *iface)
 	iface->create_exporters = seahorse_ssh_key_create_exporters;
 }
 
-/* -----------------------------------------------------------------------------
- * PUBLIC METHODS
- */
+static SeahorseDeleter *
+seahorse_ssh_key_create_deleter (SeahorseDeletable *deletable)
+{
+	SeahorseSSHKey *self = SEAHORSE_SSH_KEY (deletable);
+	return seahorse_ssh_deleter_new (self);
+}
+
+static void
+seahorse_ssh_key_deletable_iface (SeahorseDeletableIface *iface)
+{
+	iface->create_deleter = seahorse_ssh_key_create_deleter;
+}
 
 SeahorseSSHKey* 
 seahorse_ssh_key_new (SeahorsePlace *place,

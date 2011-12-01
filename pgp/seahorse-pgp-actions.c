@@ -197,122 +197,11 @@ on_show_properties (GtkAction *action,
 	                                  seahorse_action_get_window (action));
 }
 
-static void
-on_delete_objects (GtkAction *action,
-                   gpointer user_data)
-{
-	guint num;
-	gint num_keys;
-	gint num_identities;
-	char* message;
-	SeahorseObject *obj;
-	GList* to_delete, *l;
-	GtkWindow *parent;
-	gpgme_error_t gerr;
-	guint length;
-	GError *error = NULL;
-	GList *objects;
-
-	objects = user_data;
-	num = g_list_length (objects);
-	if (num == 0)
-		return;
-
-	num_keys = 0;
-	num_identities = 0;
-	message = NULL;
-
-	/*
-	 * Go through and validate all what we have to delete,
-	 * removing UIDs where the parent Key is also on the
-	 * chopping block.
-	 */
-	to_delete = NULL;
-
-	for (l = objects; l; l = g_list_next (l)) {
-		obj = SEAHORSE_OBJECT (l->data);
-		if (SEAHORSE_IS_PGP_UID (obj)) {
-			if (g_list_find (objects, seahorse_pgp_uid_get_parent (SEAHORSE_PGP_UID (obj))) == NULL) {
-				to_delete = g_list_prepend (to_delete, obj);
-				++num_identities;
-			}
-		} else if (G_OBJECT_TYPE (obj) == SEAHORSE_TYPE_GPGME_KEY) {
-			to_delete = g_list_prepend (to_delete, obj);
-			++num_keys;
-		}
-	}
-
-	/* Figure out a good prompt message */
-	length = g_list_length (to_delete);
-	switch (length) {
-	case 0:
-		return;
-	case 1:
-		message = g_strdup_printf (_ ("Are you sure you want to permanently delete %s?"),
-		                           seahorse_object_get_label (to_delete->data));
-		break;
-	default:
-		if (num_keys > 0 && num_identities > 0) {
-			message = g_strdup_printf (ngettext (_("Are you sure you want to permanently delete %d keys and identities?"),
-			                                     _("Are you sure you want to permanently delete %d keys and identities?"),
-			                                     length),
-			                           length);
-		} else if (num_keys > 0) {
-			message = g_strdup_printf (ngettext (_("Are you sure you want to permanently delete %d keys?"),
-			                                     _("Are you sure you want to permanently delete %d keys?"),
-			                                     length),
-			                           length);
-		} else if (num_identities > 0){
-			message = g_strdup_printf (ngettext (_("Are you sure you want to permanently delete %d identities?"),
-			                                     _("Are you sure you want to permanently delete %d identities?"),
-			                                     length),
-			                           length);
-		} else {
-			g_assert_not_reached ();
-		}
-		break;
-	}
-
-	parent = seahorse_action_get_window (action);
-	if (!seahorse_delete_dialog_prompt (parent, message)) {
-		g_free (message);
-		g_cancellable_cancel (g_cancellable_get_current ());
-		return;
-	}
-
-	gerr = 0;
-	for (l = objects; l; l = g_list_next (l)) {
-		obj = SEAHORSE_OBJECT (l->data);
-		if (SEAHORSE_IS_GPGME_UID (obj)) {
-			gerr = seahorse_gpgme_key_op_del_uid (SEAHORSE_GPGME_UID (obj));
-			message = _("Couldn't delete user ID");
-		} else if (SEAHORSE_IS_GPGME_KEY (obj)) {
-			if (seahorse_object_get_usage (obj) == SEAHORSE_USAGE_PRIVATE_KEY) {
-				gerr = seahorse_gpgme_key_op_delete_pair (SEAHORSE_GPGME_KEY (obj));
-				message = _("Couldn't delete private key");
-			} else {
-				gerr = seahorse_gpgme_key_op_delete (SEAHORSE_GPGME_KEY (obj));
-				message = _("Couldn't delete public key");
-			}
-		}
-
-		if (seahorse_gpgme_propagate_error (gerr, &error)) {
-			seahorse_util_handle_error (&error, parent, "%s", message);
-			return;
-		}
-	}
-}
-
 static const GtkActionEntry KEY_ACTIONS[] = {
 	{ "key-sign", GTK_STOCK_INDEX, N_("_Sign Key..."), "",
 	  N_("Sign public key"), G_CALLBACK (on_key_sign) },
 	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
 	  N_("Properties of the key."), G_CALLBACK (on_show_properties) },
-};
-
-static const GtkActionEntry KEYS_ACTIONS[] = {
-	{ "delete", GTK_STOCK_DELETE, NULL, NULL,
-	  N_("Delete the key."), G_CALLBACK (on_delete_objects) },
 };
 
 static void
@@ -322,8 +211,6 @@ seahorse_gpgme_key_actions_init (SeahorseGpgmeKeyActions *self)
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, KEY_ACTIONS,
 	                              G_N_ELEMENTS (KEY_ACTIONS), NULL);
-	gtk_action_group_add_actions (actions, KEYS_ACTIONS,
-	                              G_N_ELEMENTS (KEYS_ACTIONS), NULL);
 	gtk_action_group_set_visible (actions, FALSE);
 	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), KEY_DEFINITION);
 
@@ -338,10 +225,6 @@ seahorse_gpgme_key_actions_clone_for_objects (SeahorseActions *actions,
 	g_return_val_if_fail (objects != NULL, NULL);
 
 	cloned = gtk_action_group_new ("GpgmeKey");
-	gtk_action_group_add_actions_full (cloned, KEYS_ACTIONS,
-	                                   G_N_ELEMENTS (KEYS_ACTIONS),
-	                                   seahorse_object_list_copy (objects),
-	                                   seahorse_object_list_free);
 	gtk_action_group_add_actions_full (cloned, SYNC_ACTIONS,
 	                                   G_N_ELEMENTS (SYNC_ACTIONS),
 	                                   seahorse_object_list_copy (objects),

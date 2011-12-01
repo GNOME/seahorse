@@ -90,54 +90,10 @@ on_show_properties (GtkAction *action,
 	                                  seahorse_action_get_window (action));
 }
 
-static void
-on_delete_objects (GtkAction *action,
-                   gpointer user_data)
-{
-	guint num;
-	gchar* prompt;
-	GList *l;
-	GtkWindow *parent;
-	GError *error = NULL;
-	GList* objects;
-
-	objects = user_data;
-	num = g_list_length (objects);
-	if (num == 0) {
-		return;
-
-	} else if (num == 1) {
-		prompt = g_strdup_printf (_("Are you sure you want to delete the secure shell key '%s'?"),
-		                          seahorse_object_get_label (objects->data));
-
-	} else {
-		prompt = g_strdup_printf (ngettext (_("Are you sure you want to delete %d secure shell keys?"),
-		                                    _("Are you sure you want to delete %d secure shell keys?"),
-		                                    num),
-		                          num);
-	}
-
-	parent = seahorse_action_get_window (action);
-	if (seahorse_delete_dialog_prompt (parent, prompt)) {
-		for (l = objects; l != NULL; l = g_list_next (l)) {
-			if (!seahorse_ssh_op_delete_sync (l->data, &error)) {
-				seahorse_util_handle_error (&error, parent, _("Couldn't delete key"));
-			}
-		}
-	} else {
-		g_cancellable_cancel (g_cancellable_get_current ());
-	}
-
-	g_free (prompt);
-
-}
-
 static const GtkActionEntry KEYS_ACTIONS[] = {
 	{ "remote-ssh-upload", NULL, N_ ("Configure Key for _Secure Shell..."), "",
 		N_ ("Send public Secure Shell key to another machine, and enable logins using that key."),
 		G_CALLBACK (on_ssh_upload) },
-	{ "delete", GTK_STOCK_DELETE, NULL, NULL,
-	  N_("Delete the key."), G_CALLBACK (on_delete_objects) },
 };
 
 static const GtkActionEntry KEY_ACTIONS[] = {
