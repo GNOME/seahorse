@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 3.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-01 20:37+0100\n"
-"PO-Revision-Date: 2011-12-01 20:41+0100\n"
+"POT-Creation-Date: 2011-12-01 21:32+0100\n"
+"PO-Revision-Date: 2011-12-01 21:35+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -223,6 +223,18 @@ msgstr "Passord for lynmeldinger"
 msgid "Network Manager secret"
 msgstr "Hemmelighet for Network Manager"
 
+#: ../gkr/seahorse-gkr-item-deleter.c:83
+#, c-format
+msgid "Are you sure you want to delete the password '%s'?"
+msgstr "Er du sikker på at du vil slette passordet «%s»?"
+
+#: ../gkr/seahorse-gkr-item-deleter.c:86
+#, c-format
+msgid "Are you sure you want to delete %d password?"
+msgid_plural "Are you sure you want to delete %d passwords?"
+msgstr[0] "Er du sikker på at du vil slette %d passord?"
+msgstr[1] "Er du sikker på at du vil slette %d passord?"
+
 #: ../gkr/seahorse-gkr-item-properties.c:69
 msgid "Access a network share or resource"
 msgstr "Aksesser en delt nettverksressurs"
@@ -328,6 +340,15 @@ msgstr "En nøkkelring som låses opp automatisk ved innlogging"
 #: ../gkr/seahorse-gkr-keyring.c:562
 msgid "A keyring used to store passwords"
 msgstr "En nøkkelring som brukes til å lagre passord"
+
+#: ../gkr/seahorse-gkr-keyring-deleter.c:80
+#, c-format
+msgid "Are you sure you want to delete the password keyring '%s'?"
+msgstr "Er du sikker på at du vil slette passordnøkkelringen «%s»?"
+
+#: ../gkr/seahorse-gkr-keyring-deleter.c:83
+msgid "I understand that all items will be permanently deleted."
+msgstr "Jeg forstår at alle oppføringer vil bli slettet permanent."
 
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.xml.h:2
@@ -1009,6 +1030,22 @@ msgstr "Kunne ikke endre utløpsdato"
 msgid "Expiry: %s"
 msgstr "Utgår: %s"
 
+#: ../pgp/seahorse-gpgme-exporter.c:84
+msgid "Multiple Keys"
+msgstr "Flere nøkler"
+
+#: ../pgp/seahorse-gpgme-exporter.c:88
+msgid "Key Data"
+msgstr "Nøkkeldata"
+
+#: ../pgp/seahorse-gpgme-exporter.c:114
+msgid "Armored PGP keys"
+msgstr "Beskyttede PGP-nøkler"
+
+#: ../pgp/seahorse-gpgme-exporter.c:118
+msgid "PGP keys"
+msgstr "PGP-nøkler"
+
 #: ../pgp/seahorse-gpgme-generate.c:95
 msgid "PGP Key"
 msgstr "PGP-nøkkel"
@@ -1042,6 +1079,21 @@ msgstr "Oppgi passordfrasen for din nye nøkkel to ganger."
 #: ../pkcs11/seahorse-pkcs11-generate.c:457
 msgid "Generating key"
 msgstr "Genererer nøkkel"
+
+#: ../pgp/seahorse-gpgme-key-deleter.c:78
+#: ../pgp/seahorse-gpgme-secret-deleter.c:77
+#: ../pkcs11/seahorse-pkcs11-deleter.c:66
+#: ../pkcs11/seahorse-pkcs11-key-deleter.c:81
+#, c-format
+msgid "Are you sure you want to permanently delete %s?"
+msgstr "Er du sikker på at du vil slette %s permanent?"
+
+#: ../pgp/seahorse-gpgme-key-deleter.c:81
+#, c-format
+msgid "Are you sure you want to permanently delete %d keys?"
+msgid_plural "Are you sure you want to permanently delete %d keys?"
+msgstr[0] "Er du sikker på at du vil slette %d nøkkel permanent?"
+msgstr[1] "Er du sikker på at du vil slette %d nøkler permanent?"
 
 #: ../pgp/seahorse-gpgme-key-op.c:381
 msgid "Wrong password"
@@ -1214,6 +1266,10 @@ msgstr ""
 #: ../pgp/seahorse-gpgme-revoke.c:178
 msgid "Couldn't add revoker"
 msgstr "Kunne ikke legge til tilbakekaller"
+
+#: ../pgp/seahorse-gpgme-secret-deleter.c:82 ../ssh/seahorse-ssh-deleter.c:83
+msgid "I understand that this secret key will be permanently deleted."
+msgstr "Jeg forstår at denne hemmelige nøkkelen vil bli slettet permanent."
 
 #: ../pgp/seahorse-gpgme-sign.c:100
 #, c-format
@@ -1440,22 +1496,6 @@ msgstr "PGP-nøkler"
 #: ../pgp/seahorse-pgp-backend.c:177
 msgid "PGP keys are for encrypting email or files"
 msgstr "PGP-nøkler brukes til å kryptere e-post og filer"
-
-#: ../pgp/seahorse-gpgme-exporter.c:84
-msgid "Multiple Keys"
-msgstr "Flere nøkler"
-
-#: ../pgp/seahorse-gpgme-exporter.c:88
-msgid "Key Data"
-msgstr "Nøkkeldata"
-
-#: ../pgp/seahorse-gpgme-exporter.c:114
-msgid "Armored PGP keys"
-msgstr "Beskyttede PGP-nøkler"
-
-#: ../pgp/seahorse-gpgme-exporter.c:118
-msgid "PGP keys"
-msgstr "PGP-nøkler"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:1
 #: ../pkcs11/seahorse-pkcs11-generate.xml.h:1
@@ -2066,6 +2106,13 @@ msgstr "Sertifikater"
 msgid "X.509 certificates and related keys"
 msgstr "X.509-sertifikater og relaterte nøkler"
 
+#: ../pkcs11/seahorse-pkcs11-deleter.c:69
+#, c-format
+msgid "Are you sure you want to permanently delete %d certificate?"
+msgid_plural "Are you sure you want to permanently delete %d certificates?"
+msgstr[0] "Er du sikker på at du vil slette %d sertifikat permanent?"
+msgstr[1] "Er du sikker på at du vil slette %d sertifikater permanent?"
+
 #: ../pkcs11/seahorse-pkcs11-generate.c:116
 msgid "Couldn't generate private key"
 msgstr "Kunne ikke lage privat nøkkel"
@@ -2095,6 +2142,10 @@ msgstr "Etikett:"
 #: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
 msgid "Stored at:"
 msgstr "Lagret i:"
+
+#: ../pkcs11/seahorse-pkcs11-key-deleter.c:85
+msgid "I understand that this key will be permanently deleted."
+msgstr "Jeg forstår at denne nøkkelen vil bli slettet permanent."
 
 #: ../pkcs11/seahorse-pkcs11-properties.c:142
 #: ../pkcs11/seahorse-pkcs11-properties.c:146
@@ -2351,6 +2402,16 @@ msgstr "Sikkert skall"
 #: ../ssh/seahorse-ssh-backend.c:95
 msgid "Keys used to connect securely to other computers"
 msgstr "Nøkler som brukes til å koble til andre datamaskiner på en sikker måte"
+
+#: ../ssh/seahorse-ssh-deleter.c:81 ../ssh/seahorse-ssh-deleter.c:86
+#, c-format
+msgid "Are you sure you want to delete the secure shell key '%s'?"
+msgstr "Er du sikker på at du vil slette SSH-nøkkel «%s»?"
+
+#: ../ssh/seahorse-ssh-deleter.c:91 ../ssh/seahorse-ssh-deleter.c:92
+#, c-format
+msgid "Are you sure you want to delete %d secure shell keys?"
+msgstr "Er du sikker på at du vil slette %d SSH-nøkler?"
 
 #: ../ssh/seahorse-ssh-exporter.c:92
 msgid "Ssh Key"
