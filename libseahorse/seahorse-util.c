@@ -34,11 +34,6 @@
 #include <gio/gio.h>
 #include <glib/gstdio.h>
 
-#ifdef WITH_SHARING
-#include <avahi-glib/glib-watch.h>
-#include <avahi-glib/glib-malloc.h>
-#endif 
-
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -915,49 +910,3 @@ seahorse_util_parse_version (const char *version)
 	g_strfreev(tokens);
 	return ret;
 }
-
-/* -----------------------------------------------------------------------------
- * DNS-SD Stuff 
- */
-
-#ifdef WITH_SHARING
-
-/* 
- * We have this stuff here because it needs to:
- *  - Be usable from libseahorse and anything within libseahorse
- *  - Be initialized properly only once per process. 
- */
-
-#include <avahi-glib/glib-watch.h>
-#include <avahi-glib/glib-malloc.h>
-
-static AvahiGLibPoll *avahi_poll = NULL;
-
-static void
-free_avahi ()
-{
-    if (avahi_poll)
-        avahi_glib_poll_free (avahi_poll);
-    avahi_poll = NULL;
-}
-
-const AvahiPoll*
-seahorse_util_dns_sd_get_poll (void)
-{
-    if (!avahi_poll) {
-        
-        avahi_set_allocator (avahi_glib_allocator ());
-        
-        avahi_poll = avahi_glib_poll_new (NULL, G_PRIORITY_DEFAULT);
-        if (!avahi_poll) {
-            g_warning ("couldn't initialize avahi glib poll integration");
-            return NULL;
-        }
-        
-        g_atexit (free_avahi);
-    }
-    
-    return avahi_glib_poll_get (avahi_poll);
-}
-
-#endif

@@ -31,11 +31,6 @@
 #include <gtk/gtk.h>
 #include <time.h>
 
-#ifdef WITH_SHARING
-#include <avahi-client/client.h>
-const AvahiPoll* seahorse_util_dns_sd_get_poll (void);
-#endif
-
 typedef guint64 SeahorseVersion;
 
 #define SEAHORSE_BAD_FILENAME_CHARS  "/\\<>|:?;"

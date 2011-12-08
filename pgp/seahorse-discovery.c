@@ -29,6 +29,8 @@
 #include <avahi-client/client.h>
 #include <avahi-client/lookup.h>
 #include <avahi-common/error.h>
+#include <avahi-glib/glib-watch.h>
+#include <avahi-glib/glib-malloc.h>
 #endif /* WITH_SHARING */
 
 #include "seahorse-util.h"
@@ -57,6 +59,7 @@ struct _SeahorseDiscoveryPriv {
 #ifdef WITH_SHARING
 	AvahiClient *client;
 	AvahiServiceBrowser *browser;
+	AvahiGLibPoll *poll;
 #else
 	char no_use;
 #endif
@@ -94,6 +97,10 @@ disconnect (SeahorseDiscovery *self)
 	if (self->priv->client)
 		avahi_client_free (self->priv->client);
 	self->priv->client = NULL;
+
+	if (self->priv->poll)
+	        avahi_glib_poll_free (self->priv->poll);
+	self->priv->poll = NULL;
 }
 
 /**
@@ -281,7 +288,15 @@ seahorse_discovery_init (SeahorseDiscovery *self)
 #ifdef WITH_SHARING
 	{
 		int aerr;
-		self->priv->client = avahi_client_new (seahorse_util_dns_sd_get_poll (),
+		avahi_set_allocator (avahi_glib_allocator ());
+
+		self->priv->poll = avahi_glib_poll_new (NULL, G_PRIORITY_DEFAULT);
+		if (!self->priv->poll) {
+			g_warning ("couldn't initialize avahi glib poll integration");
+			return;
+		}
+
+		self->priv->client = avahi_client_new (avahi_glib_poll_get (self->priv->poll),
 		                                       0, client_callback, self, &aerr);
 		if (!self->priv->client) {
 			g_message ("DNS-SD initialization failed: %s", avahi_strerror (aerr));
