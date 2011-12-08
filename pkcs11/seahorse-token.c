@@ -108,7 +108,7 @@ update_token_info (SeahorseToken *self)
 static void
 update_id_map (SeahorseToken *self,
                gpointer object,
-               GckAttribute *id)
+               const GckAttribute *id)
 {
 	GPtrArray *objects;
 	GckAttribute *pid;
@@ -137,11 +137,11 @@ update_id_map (SeahorseToken *self,
 		if (!g_hash_table_lookup_extended (self->pv->objects_for_id, id,
 		                                   (gpointer *)&id, (gpointer *)&objects)) {
 			objects = g_ptr_array_new ();
-			id = gck_attribute_dup (id);
-			g_hash_table_insert (self->pv->objects_for_id, id, objects);
+			g_hash_table_insert (self->pv->objects_for_id,
+			                     gck_attribute_dup (id), objects);
 		}
 		g_ptr_array_add (objects, object);
-		g_hash_table_insert (self->pv->id_for_object, object, id);
+		g_hash_table_insert (self->pv->id_for_object, object, (GckAttribute *)id);
 	}
 
 	/* Remove this object from the map */
@@ -164,7 +164,7 @@ update_id_map (SeahorseToken *self,
 static gpointer
 lookup_id_map (SeahorseToken *self,
                GType object_type,
-               GckAttribute *id)
+               const GckAttribute *id)
 {
 	GPtrArray *objects;
 	guint i;
@@ -247,7 +247,7 @@ receive_objects (SeahorseToken *self,
                  GList *objects)
 {
 	GckAttributes *attrs;
-	GckAttribute *id;
+	const GckAttribute *id;
 	gpointer object;
 	gpointer prev;
 	gpointer pair;
@@ -259,7 +259,7 @@ receive_objects (SeahorseToken *self,
 	for (l = objects; l != NULL; l = g_list_next (l)) {
 		object = l->data;
 		handle = gck_object_get_handle (object);
-		attrs = gck_object_attributes_get_attributes (object);
+		attrs = gck_object_cache_get_attributes (object);
 
 		prev = g_hash_table_lookup (self->pv->object_for_handle, &handle);
 		if (prev == NULL) {
@@ -268,7 +268,7 @@ receive_objects (SeahorseToken *self,
 			                     g_object_ref (object));
 			g_object_set (object, "place", self, NULL);
 		} else if (prev != object) {
-			gck_object_attributes_set_attributes (prev, attrs);
+			gck_object_cache_set_attributes (prev, attrs);
 			object = prev;
 		}
 
@@ -406,28 +406,24 @@ static void
 refresh_enumerate (GSimpleAsyncResult *res)
 {
 	RefreshClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GckBuilder builder = GCK_BUILDER_INIT;
 	GckSession *session;
 	GckEnumerator *enumerator;
-	GckAttributes *attrs;
 
 	session = seahorse_token_get_session (closure->token);
 
-	attrs = gck_attributes_new ();
-	gck_attributes_add_boolean (attrs, CKA_TOKEN, TRUE);
-	gck_attributes_add_ulong (attrs, CKA_CLASS, CKO_CERTIFICATE);
-	enumerator = gck_session_enumerate_objects (session, attrs);
+	gck_builder_add_boolean (&builder, CKA_TOKEN, TRUE);
+	gck_builder_add_ulong (&builder, CKA_CLASS, CKO_CERTIFICATE);
+	enumerator = gck_session_enumerate_objects (session, gck_builder_end (&builder));
 	gck_enumerator_set_object_type (enumerator, SEAHORSE_TYPE_CERTIFICATE);
 	closure->enumerator = enumerator;
-	gck_attributes_unref (attrs);
 
-	attrs = gck_attributes_new ();
-	gck_attributes_add_boolean (attrs, CKA_TOKEN, TRUE);
-	gck_attributes_add_ulong (attrs, CKA_CLASS, CKO_PRIVATE_KEY);
-	enumerator = gck_session_enumerate_objects (session, attrs);
+	gck_builder_add_boolean (&builder, CKA_TOKEN, TRUE);
+	gck_builder_add_ulong (&builder, CKA_CLASS, CKO_PRIVATE_KEY);
+	enumerator = gck_session_enumerate_objects (session, gck_builder_end (&builder));
 	gck_enumerator_set_object_type (enumerator, SEAHORSE_TYPE_PRIVATE_KEY);
 	gck_enumerator_set_chained (closure->enumerator, enumerator);
 	g_object_unref (enumerator);
-	gck_attributes_unref (attrs);
 
 	gck_enumerator_next_async (closure->enumerator, 16, closure->cancellable,
 	                           on_refresh_next_objects, g_object_ref (res));

@@ -3,8 +3,8 @@ AC_INIT([seahorse], [3.3.2],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse],
         [seahorse])
 
-GCK_REQUIRED=3.1.2
-GCR_REQUIRED=3.1.5
+GCK_REQUIRED=3.3.3
+GCR_REQUIRED=3.3.3
 GTK_REQUIRED=2.90.0
 GNUPG_ACCEPTED="1.2 1.4 2.0"
 GPGME_REQUIRED=1.0.0

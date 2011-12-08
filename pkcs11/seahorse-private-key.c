@@ -73,10 +73,10 @@ struct _SeahorsePrivateKeyPrivate {
 
 static void seahorse_private_key_deletable_iface (SeahorseDeletableIface *iface);
 
-static void seahorse_private_key_object_attributes_iface (GckObjectAttributesIface *iface);
+static void seahorse_private_key_object_cache_iface (GckObjectCacheIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorsePrivateKey, seahorse_private_key, GCK_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_ATTRIBUTES, seahorse_private_key_object_attributes_iface);
+                         G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_CACHE, seahorse_private_key_object_cache_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_private_key_deletable_iface);
 );
 
@@ -259,10 +259,28 @@ seahorse_private_key_class_init (SeahorsePrivateKeyClass *klass)
 }
 
 static void
-seahorse_private_key_object_attributes_iface (GckObjectAttributesIface *iface)
+seahorse_private_key_fill (GckObjectCache *object,
+                           GckAttributes *attributes)
 {
-	iface->attribute_types = REQUIRED_ATTRS;
-	iface->n_attribute_types = G_N_ELEMENTS (REQUIRED_ATTRS);
+	SeahorsePrivateKey *self = SEAHORSE_PRIVATE_KEY (object);
+	GckBuilder builder = GCK_BUILDER_INIT;
+
+	if (self->pv->attributes)
+		gck_builder_add_all (&builder, self->pv->attributes);
+	gck_builder_set_all (&builder, attributes);
+	gck_attributes_unref (self->pv->attributes);
+	self->pv->attributes = gck_builder_steal (&builder);
+	gck_builder_clear (&builder);
+
+	g_object_notify (G_OBJECT (object), "attributes");
+}
+
+static void
+seahorse_private_key_object_cache_iface (GckObjectCacheIface *iface)
+{
+	iface->default_types = REQUIRED_ATTRS;
+	iface->n_default_types = G_N_ELEMENTS (REQUIRED_ATTRS);
+	iface->fill = seahorse_private_key_fill;
 }
 
 static SeahorseDeleter *

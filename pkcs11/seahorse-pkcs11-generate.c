@@ -127,46 +127,49 @@ static void
 prepare_generate (SeahorsePkcs11Generate *self)
 {
 	CK_BYTE rsa_public_exponent[] = { 0x01, 0x00, 0x01 }; /* 65537 in bytes */
+	GckBuilder publi = GCK_BUILDER_INIT;
+	GckBuilder priva = GCK_BUILDER_INIT;
 	const gchar *label;
 
 	g_assert (self->cancellable == NULL);
-	g_assert (self->mechanism);
+	g_assert (self->mechanism != NULL);
 
-	self->cancellable = g_cancellable_new ();
+	gck_builder_add_ulong (&publi, CKA_CLASS, CKO_PUBLIC_KEY);
+	gck_builder_add_ulong (&priva, CKA_CLASS, CKO_PRIVATE_KEY);
 
-	self->pub_attrs = gck_attributes_new ();
-	self->prv_attrs = gck_attributes_new ();
+	gck_builder_add_boolean (&publi, CKA_TOKEN, TRUE);
+	gck_builder_add_boolean (&priva, CKA_TOKEN, TRUE);
 
-	gck_attributes_add_ulong (self->pub_attrs, CKA_CLASS, CKO_PUBLIC_KEY);
-	gck_attributes_add_ulong (self->prv_attrs, CKA_CLASS, CKO_PRIVATE_KEY);
-
-	gck_attributes_add_boolean (self->pub_attrs, CKA_TOKEN, TRUE);
-	gck_attributes_add_boolean (self->prv_attrs, CKA_TOKEN, TRUE);
-
-	gck_attributes_add_boolean (self->prv_attrs, CKA_PRIVATE, TRUE);
-	gck_attributes_add_boolean (self->prv_attrs, CKA_SENSITIVE, TRUE);
+	gck_builder_add_boolean (&priva, CKA_PRIVATE, TRUE);
+	gck_builder_add_boolean (&priva, CKA_SENSITIVE, TRUE);
 
 	label = gtk_entry_get_text (self->label_entry);
-	gck_attributes_add_string (self->pub_attrs, CKA_LABEL, label);
-	gck_attributes_add_string (self->prv_attrs, CKA_LABEL, label);
+	gck_builder_add_string (&publi, CKA_LABEL, label);
+	gck_builder_add_string (&priva, CKA_LABEL, label);
 
 	if (self->mechanism->type == CKM_RSA_PKCS_KEY_PAIR_GEN) {
-		gck_attributes_add_boolean (self->pub_attrs, CKA_ENCRYPT, TRUE);
-		gck_attributes_add_boolean (self->pub_attrs, CKA_VERIFY, TRUE);
-		gck_attributes_add_boolean (self->pub_attrs, CKA_WRAP, TRUE);
+		gck_builder_add_boolean (&publi, CKA_ENCRYPT, TRUE);
+		gck_builder_add_boolean (&publi, CKA_VERIFY, TRUE);
+		gck_builder_add_boolean (&publi, CKA_WRAP, TRUE);
 
-		gck_attributes_add_boolean (self->prv_attrs, CKA_DECRYPT, TRUE);
-		gck_attributes_add_boolean (self->prv_attrs, CKA_SIGN, TRUE);
-		gck_attributes_add_boolean (self->prv_attrs, CKA_UNWRAP, TRUE);
+		gck_builder_add_boolean (&priva, CKA_DECRYPT, TRUE);
+		gck_builder_add_boolean (&priva, CKA_SIGN, TRUE);
+		gck_builder_add_boolean (&priva, CKA_UNWRAP, TRUE);
 
-		gck_attributes_add_data (self->pub_attrs, CKA_PUBLIC_EXPONENT,
-		                         rsa_public_exponent, sizeof (rsa_public_exponent));
-		gck_attributes_add_ulong (self->pub_attrs, CKA_MODULUS_BITS,
-		                          gtk_spin_button_get_value_as_int (self->bits_entry));
+		gck_builder_add_data (&publi, CKA_PUBLIC_EXPONENT,
+		                      rsa_public_exponent, sizeof (rsa_public_exponent));
+		gck_builder_add_ulong (&publi, CKA_MODULUS_BITS,
+		                       gtk_spin_button_get_value_as_int (self->bits_entry));
 
 	} else {
 		g_warning ("currently no support for this mechanism");
 	}
+
+	self->prv_attrs = gck_builder_steal (&priva);
+	self->pub_attrs = gck_builder_steal (&publi);
+
+	gck_builder_clear (&publi);
+	gck_builder_clear (&priva);
 }
 
 static void

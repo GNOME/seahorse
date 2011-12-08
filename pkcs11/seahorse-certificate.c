@@ -68,7 +68,7 @@ enum {
 struct _SeahorseCertificatePrivate {
 	SeahorseToken *token;
 	GckAttributes *attributes;
-	GckAttribute *value;
+	const GckAttribute *value;
 	GtkActionGroup *actions;
 	SeahorsePrivateKey *private_key;
 	GIcon *icon;
@@ -77,7 +77,7 @@ struct _SeahorseCertificatePrivate {
 
 static void   seahorse_certificate_certificate_iface           (GcrCertificateIface *iface);
 
-static void   seahorse_certificate_object_attributes_iface     (GckObjectAttributesIface *iface);
+static void   seahorse_certificate_object_cache_iface          (GckObjectCacheIface *iface);
 
 static void   seahorse_certificate_deletable_iface             (SeahorseDeletableIface *iface);
 
@@ -86,7 +86,7 @@ static void   seahorse_certificate_exportable_iface            (SeahorseExportab
 G_DEFINE_TYPE_WITH_CODE (SeahorseCertificate, seahorse_certificate, GCK_TYPE_OBJECT,
                          GCR_CERTIFICATE_MIXIN_IMPLEMENT_COMPARABLE ();
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_CERTIFICATE, seahorse_certificate_certificate_iface);
-                         G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_ATTRIBUTES, seahorse_certificate_object_attributes_iface);
+                         G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_CACHE, seahorse_certificate_object_cache_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_certificate_deletable_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_certificate_exportable_iface);
 );
@@ -329,10 +329,28 @@ seahorse_certificate_certificate_iface (GcrCertificateIface *iface)
 }
 
 static void
-seahorse_certificate_object_attributes_iface (GckObjectAttributesIface *iface)
+seahorse_certificate_fill (GckObjectCache *object,
+                           GckAttributes *attributes)
 {
-	iface->attribute_types = REQUIRED_ATTRS;
-	iface->n_attribute_types = G_N_ELEMENTS (REQUIRED_ATTRS);
+	SeahorseCertificate *self = SEAHORSE_CERTIFICATE (object);
+	GckBuilder builder = GCK_BUILDER_INIT;
+
+	if (self->pv->attributes)
+		gck_builder_add_all (&builder, self->pv->attributes);
+	gck_builder_set_all (&builder, attributes);
+	gck_attributes_unref (self->pv->attributes);
+	self->pv->attributes = gck_builder_steal (&builder);
+	gck_builder_clear (&builder);
+
+	g_object_notify (G_OBJECT (object), "attributes");
+}
+
+static void
+seahorse_certificate_object_cache_iface (GckObjectCacheIface *iface)
+{
+	iface->default_types = REQUIRED_ATTRS;
+	iface->n_default_types = G_N_ELEMENTS (REQUIRED_ATTRS);
+	iface->fill = seahorse_certificate_fill;
 }
 
 static GList *
