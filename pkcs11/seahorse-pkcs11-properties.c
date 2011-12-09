@@ -116,6 +116,9 @@ add_renderer_for_object (SeahorsePkcs11Properties *self,
 			                        renderer, "attributes",
 			                        G_BINDING_DEFAULT);
 
+			if (g_object_class_find_property (G_OBJECT_GET_CLASS (renderer), "object"))
+				g_object_set (renderer, "object", object, NULL);
+
 			gcr_viewer_add_renderer (self->viewer, renderer);
 			g_object_unref (renderer);
 		}
