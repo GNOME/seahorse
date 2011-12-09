@@ -31,6 +31,7 @@
 #include "seahorse-types.h"
 
 #include "seahorse-deletable.h"
+#include "seahorse-exportable.h"
 #include "seahorse-util.h"
 
 #include <gcr/gcr.h>
@@ -56,6 +57,7 @@ enum {
 	PROP_ACTIONS,
 	PROP_PARTNER,
 
+	PROP_EXPORTABLE,
 	PROP_DELETABLE,
 	PROP_LABEL,
 	PROP_MARKUP,
@@ -73,11 +75,14 @@ struct _SeahorsePrivateKeyPrivate {
 
 static void seahorse_private_key_deletable_iface (SeahorseDeletableIface *iface);
 
+static void seahorse_private_key_exportable_iface (SeahorseExportableIface *iface);
+
 static void seahorse_private_key_object_cache_iface (GckObjectCacheIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorsePrivateKey, seahorse_private_key, GCK_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_CACHE, seahorse_private_key_object_cache_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_private_key_deletable_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_private_key_exportable_iface);
 );
 
 static void
@@ -162,6 +167,9 @@ seahorse_private_key_get_property (GObject *obj,
 		break;
 	case PROP_MARKUP:
 		g_value_take_string (value, calculate_markup (self));
+		break;
+	case PROP_EXPORTABLE:
+		g_value_set_boolean (value, FALSE);
 		break;
 	case PROP_DELETABLE:
 		g_value_set_boolean (value, seahorse_token_is_deletable (self->pv->token, GCK_OBJECT (self)));
@@ -255,6 +263,8 @@ seahorse_private_key_class_init (SeahorsePrivateKeyClass *klass)
 
 	g_object_class_override_property (gobject_class, PROP_ATTRIBUTES, "attributes");
 
+	g_object_class_override_property (gobject_class, PROP_EXPORTABLE, "exportable");
+
 	g_object_class_override_property (gobject_class, PROP_DELETABLE, "deletable");
 }
 
@@ -296,6 +306,20 @@ static void
 seahorse_private_key_deletable_iface (SeahorseDeletableIface *iface)
 {
 	iface->create_deleter = seahorse_private_key_create_deleter;
+}
+
+static GList *
+seahorse_private_key_create_exporters (SeahorseExportable *exportable,
+                                       SeahorseExporterType type)
+{
+	/* In the future we may exporters here, but for now no exporting */
+	return NULL;
+}
+
+static void
+seahorse_private_key_exportable_iface (SeahorseExportableIface *iface)
+{
+	iface->create_exporters = seahorse_private_key_create_exporters;
 }
 
 SeahorseCertificate *
