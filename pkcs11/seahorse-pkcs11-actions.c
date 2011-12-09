@@ -58,14 +58,18 @@ on_token_locked (GObject *source,
                  GAsyncResult *result,
                  gpointer user_data)
 {
+	GtkWindow *window = GTK_WINDOW (user_data);
 	GError *error = NULL;
 
 	seahorse_token_lock_finish (SEAHORSE_TOKEN (source), result, &error);
 	if (error != NULL) {
-		if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-			g_warning ("couldn't unlock token: %s", error->message);
-		g_error_free (error);
+		if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
+		    !g_error_matches (error, GCK_ERROR, CKR_USER_NOT_LOGGED_IN))
+			seahorse_util_handle_error (&error, window, _("Couldn't unlock"));
+		g_clear_error (&error);
 	}
+
+	g_object_unref (window);
 }
 
 static void
@@ -73,10 +77,14 @@ on_token_lock (GtkAction *action,
                gpointer user_data)
 {
 	GTlsInteraction *interaction;
+	GtkWindow *window;
 
-	interaction = seahorse_interaction_new (seahorse_action_get_window (action));
+	window = seahorse_action_get_window (action);
+	interaction = seahorse_interaction_new (window);
+
 	seahorse_token_lock_async (SEAHORSE_TOKEN (user_data), interaction, NULL,
-	                           on_token_locked, NULL);
+	                           on_token_locked, g_object_ref (window));
+
 	g_object_unref (interaction);
 }
 
@@ -86,14 +94,20 @@ on_token_unlocked (GObject *source,
                    GAsyncResult *result,
                    gpointer user_data)
 {
+	GtkWindow *window = GTK_WINDOW (user_data);
 	GError *error = NULL;
 
 	seahorse_token_unlock_finish (SEAHORSE_TOKEN (source), result, &error);
 	if (error != NULL) {
-		if (!g_error_matches (error, GCK_ERROR, CKR_FUNCTION_CANCELED))
-			g_warning ("couldn't unlock token: %s", error->message);
-		g_error_free (error);
+		if (!g_error_matches (error, GCK_ERROR, CKR_FUNCTION_CANCELED) ||
+		    !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
+		    !g_error_matches (error, GCK_ERROR, CKR_USER_NOT_LOGGED_IN) ||
+		    !g_error_matches (error, GCK_ERROR, CKR_USER_ALREADY_LOGGED_IN))
+			seahorse_util_handle_error (&error, window, _("Couldn't unlock"));
+		g_clear_error (&error);
 	}
+
+	g_object_unref (window);
 }
 
 static void
@@ -107,7 +121,7 @@ on_token_unlock (GtkAction *action,
 	interaction = seahorse_interaction_new (window);
 
 	seahorse_token_unlock_async (SEAHORSE_TOKEN (user_data), interaction, NULL,
-	                             on_token_unlocked, NULL);
+	                             on_token_unlocked, g_object_ref (window));
 
 	g_object_unref (interaction);
 }
