@@ -469,7 +469,7 @@ static const GtkRadioActionEntry VIEW_RADIO_ACTIONS[] = {
 	  N_("Only show personal keys, certificates and passwords"), SHOW_PERSONAL },
 	{ "view-trusted", NULL, N_("Show _trusted"), NULL,
 	  N_("Only show trusted keys, certificates and passwords"), SHOW_TRUSTED },
-	{ "view-any", NULL, N_("_Show _any"), NULL,
+	{ "view-any", NULL, N_("Show _any"), NULL,
 	  N_("Show all keys, certificates and passwords"), SHOW_ANY },
 };
 
