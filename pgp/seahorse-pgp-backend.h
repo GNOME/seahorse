@@ -90,7 +90,7 @@ gboolean               seahorse_pgp_backend_transfer_finish      (SeahorsePgpBac
                                                                   GError **error);
 
 void                   seahorse_pgp_backend_retrieve_async       (SeahorsePgpBackend *self,
-                                                                  GList *keyids,
+                                                                  const gchar **keyids,
                                                                   SeahorsePlace *to,
                                                                   GCancellable *cancellable,
                                                                   GAsyncReadyCallback callback,
@@ -101,7 +101,7 @@ gboolean               seahorse_pgp_backend_retrieve_finish      (SeahorsePgpBac
                                                                   GError **error);
 
 GList*                 seahorse_pgp_backend_discover_keys        (SeahorsePgpBackend *self,
-                                                                  GList *keyids,
+                                                                  const gchar **keyids,
                                                                   GCancellable *cancellable);
 
 G_END_DECLS

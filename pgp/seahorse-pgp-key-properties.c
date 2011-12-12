@@ -259,19 +259,18 @@ on_pgp_signature_row_activated (GtkTreeView *treeview,
 	}
 }
 
-static GList*
-unique_slist_strings (GList *keyids)
+static void
+unique_strings (GPtrArray *keyids)
 {
-    GList *l;
-    
-    keyids = g_list_sort (keyids, (GCompareFunc)g_ascii_strcasecmp);
-    for (l = keyids; l; l = g_list_next (l)) {
-        while (l->next && l->data && l->next->data && 
-               g_ascii_strcasecmp (l->data, l->next->data) == 0)
-            keyids = g_list_delete_link (keyids, l->next);
-    }    
-    
-    return keyids;
+	gint i;
+
+	g_ptr_array_sort (keyids, (GCompareFunc)g_ascii_strcasecmp);
+	for (i = 0; i + 1 < keyids->len; ) {
+		if (g_ascii_strcasecmp (keyids->pdata[i], keyids->pdata[i + 1]) == 0)
+			g_ptr_array_remove_index (keyids, i);
+		else
+			i++;
+	}
 }
 
 /* -----------------------------------------------------------------------------
@@ -436,7 +435,7 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePgpKey *pk
 {
 	GObject *object;
 	GtkTreeIter uiditer, sigiter;
-	GList *keyids = NULL;
+	GPtrArray *keyids;
 	SeahorsePgpUid *uid;
 	GList *keys, *l;
 	GList *uids, *u;
@@ -459,25 +458,29 @@ names_populate (SeahorseWidget *swidget, GtkTreeStore *store, SeahorsePgpKey *pk
 		                    -1);
 		g_object_unref (icon);
 
+		keyids = g_ptr_array_new ();
+
 		/* Build a list of all the keyids */
 		sigs = seahorse_pgp_uid_get_signatures (uid);
 		for (s = sigs; s; s = g_list_next (s)) {
 			/* Never show self signatures, they're implied */
 			if (seahorse_pgp_key_has_keyid (pkey, seahorse_pgp_signature_get_keyid (s->data)))
 				continue;
-			keyids = g_list_prepend (keyids, (gpointer)seahorse_pgp_signature_get_keyid (s->data));
+			g_ptr_array_add (keyids, (gpointer)seahorse_pgp_signature_get_keyid (s->data));
 		}
+
+		g_ptr_array_add (keyids, NULL);
 
 		/*
 		 * Pass it to 'DiscoverKeys' for resolution/download, cancellable
 		 * ties search scope together
 		 */
 		cancellable = g_cancellable_new ();
-		keys = seahorse_pgp_backend_discover_keys (NULL, keyids, cancellable);
+		keys = seahorse_pgp_backend_discover_keys (NULL, (const gchar **)keyids->pdata, cancellable);
 		g_object_unref (cancellable);
-		g_list_free (keyids);
+		g_ptr_array_free (keyids, TRUE);
 		keyids = NULL;
-        
+
 		/* Add the keys to the store */
 		for (l = keys; l; l = g_list_next (l)) {
 			object = G_OBJECT (l->data);
@@ -1573,7 +1576,7 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseObjectModel *skmodel
 	GtkTreeIter iter;
 	GtkWidget *widget;
 	gboolean have_sigs = FALSE;
-	GList *rawids = NULL;
+	GPtrArray *rawids;
 	GList *keys, *l, *uids;
 	GList *sigs, *s;
 	GCancellable *cancellable;
@@ -1582,7 +1585,8 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseObjectModel *skmodel
 	widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "signatures-tree"));
 	if (!widget)
 		return;
-    
+
+	rawids = g_ptr_array_new ();
 	uids = seahorse_pgp_key_get_uids (pkey);
 
 	/* Build a list of all the keyids */        
@@ -1593,37 +1597,39 @@ signatures_populate_model (SeahorseWidget *swidget, SeahorseObjectModel *skmodel
 			if (seahorse_pgp_key_has_keyid (pkey, seahorse_pgp_signature_get_keyid (s->data)))
 				continue;
 			have_sigs = TRUE;
-			rawids = g_list_prepend (rawids, (gpointer)seahorse_pgp_signature_get_keyid (s->data));
+			g_ptr_array_add (rawids, (gchar *)seahorse_pgp_signature_get_keyid (s->data));
 		}
 	}
-    
+
+	/* Strip out duplicates */
+	unique_strings (rawids);
+	g_ptr_array_add (rawids, NULL);
+
 	/* Only show signatures area when there are signatures */
 	seahorse_widget_set_visible (swidget, "signatures-area", have_sigs);
 
 	if (skmodel) {
-    
-		/* String out duplicates */
-		rawids = unique_slist_strings (rawids);
 
 		/*
 		 * Pass it to 'DiscoverKeys' for resolution/download. cancellable ties
 		 * search scope together
 		 */
 		cancellable = g_cancellable_new ();
-		keys = seahorse_pgp_backend_discover_keys (NULL, rawids, cancellable);
+		keys = seahorse_pgp_backend_discover_keys (NULL, (const gchar **)rawids->pdata, cancellable);
 		g_object_unref (cancellable);
-		g_list_free (rawids);
-		rawids = NULL;
-        
+
 		/* Add the keys to the store */
 		for (l = keys; l; l = g_list_next (l)) {
 			object = G_OBJECT (l->data);
 			gtk_tree_store_append (GTK_TREE_STORE (skmodel), &iter, NULL);
-            
+
 			/* This calls the 'update-row' callback, to set the values for the key */
 			seahorse_object_model_set_row_object (SEAHORSE_OBJECT_MODEL (skmodel), &iter, object);
 		}
 	}
+
+	g_ptr_array_free (rawids, TRUE);
+	rawids = NULL;
 }
 
 /* Refilter when the user toggles the 'only show trusted' checkbox */

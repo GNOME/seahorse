@@ -1370,7 +1370,7 @@ on_export_connect_completed (GObject *source,
 
 static void
 seahorse_ldap_source_export_async (SeahorseServerSource *source,
-                                   GList *keyids,
+                                   const gchar **keyids,
                                    GCancellable *cancellable,
                                    GAsyncReadyCallback callback,
                                    gpointer user_data)
@@ -1379,7 +1379,7 @@ seahorse_ldap_source_export_async (SeahorseServerSource *source,
 	ExportClosure *closure;
 	GSimpleAsyncResult *res;
 	gchar *fingerprint;
-	GList *l;
+	gint i;
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_ldap_source_export_async);
@@ -1387,8 +1387,8 @@ seahorse_ldap_source_export_async (SeahorseServerSource *source,
 	closure->data = g_string_sized_new (1024);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	closure->fingerprints = g_ptr_array_new_with_free_func (g_free);
-	for (l = keyids; l; l = g_list_next (l)) {
-		fingerprint = g_strdup (l->data);
+	for (i = 0; keyids[i] != NULL; i++) {
+		fingerprint = g_strdup (keyids[i]);
 		g_ptr_array_add (closure->fingerprints, fingerprint);
 		seahorse_progress_prep (closure->cancellable, fingerprint, NULL);
 	}

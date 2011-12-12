@@ -788,7 +788,9 @@ on_import_message_complete (SoupSession *session,
 	GError *error = NULL;
 	gchar *errmsg;
 
-	seahorse_progress_end (closure->cancellable, message);
+	g_assert (closure->requests > 0);
+	seahorse_progress_end (closure->cancellable, GUINT_TO_POINTER (closure->requests));
+	closure->requests--;
 
 	if (hkp_message_propagate_error (closure->source, message, &error)) {
 		g_simple_async_result_take_error (res, error);
@@ -802,9 +804,6 @@ on_import_message_complete (SoupSession *session,
 
 	/* A successful status from the server is all we want in this case */
 	} else {
-		g_assert (closure->requests > 0);
-		closure->requests--;
-
 		if (closure->requests == 0)
 			g_simple_async_result_complete_in_idle (res);
 	}
@@ -890,7 +889,7 @@ seahorse_hkp_source_import_async (SeahorsePlace *place,
 		                            on_import_message_complete, g_object_ref (res));
 
 		closure->requests++;
-		seahorse_progress_prep_and_begin (cancellable, message, NULL);
+		seahorse_progress_prep_and_begin (cancellable, GUINT_TO_POINTER (closure->requests), NULL);
 	}
 	g_hash_table_destroy (form);
 
@@ -1001,7 +1000,7 @@ on_export_message_complete (SoupSession *session,
 **/
 static void
 seahorse_hkp_source_export_async (SeahorseServerSource *source,
-                                  GList *keyids,
+                                  const gchar **keyids,
                                   GCancellable *cancellable,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
@@ -1015,7 +1014,7 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
 	gchar hexfpr[11];
 	GHashTable *form;
 	guint len;
-	GList *l;
+	gint i;
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_hkp_source_export_async);
@@ -1026,7 +1025,7 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	g_simple_async_result_set_op_res_gpointer (res, closure, export_closure_free);
 
-	if (g_list_length (keyids) == 0) {
+	if (!keyids || !keyids[0]) {
 		g_simple_async_result_complete_in_idle (res);
 		g_object_unref (res);
 		return;
@@ -1039,12 +1038,11 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
 	strncpy (hexfpr, "0x", 3);
 
 	form = g_hash_table_new (g_str_hash, g_str_equal);
-	for (l = keyids; l; l = g_list_next (l)) {
-
+	for (i = 0; keyids[i] != NULL; i++) {
 		g_hash_table_remove_all (form);
 
 		/* Get the key id and limit it to 8 characters */
-		fpr = l->data;
+		fpr = keyids[i];
 		len = strlen (fpr);
 		if (len > 8)
 			fpr += (len - 8);

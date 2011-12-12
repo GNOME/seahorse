@@ -398,7 +398,7 @@ seahorse_server_source_search_finish (SeahorseServerSource *self,
 
 void
 seahorse_server_source_export_async (SeahorseServerSource *self,
-                                     GList *keyids,
+                                     const gchar **keyids,
                                      GCancellable *cancellable,
                                      GAsyncReadyCallback callback,
                                      gpointer user_data)

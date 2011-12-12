@@ -27,7 +27,14 @@
 
 #include "seahorse-server-source.h"
 
-void            seahorse_transfer_async         (SeahorsePlace *from,
+void            seahorse_transfer_keyids_async  (SeahorseServerSource *from,
+                                                 SeahorsePlace *to,
+                                                 const gchar **keyids,
+                                                 GCancellable *cancellable,
+                                                 GAsyncReadyCallback callback,
+                                                 gpointer user_data);
+
+void            seahorse_transfer_keys_async    (SeahorseGpgmeKeyring *from,
                                                  SeahorsePlace *to,
                                                  GList *keys,
                                                  GCancellable *cancellable,

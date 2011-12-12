@@ -22,13 +22,25 @@
 
 #include "config.h"
 
-#include <glib/gi18n.h>
-
 #include "seahorse-pgp-key.h"
 #include "seahorse-unknown-source.h"
 
+#include "seahorse-place.h"
 #include "seahorse-registry.h"
 #include "seahorse-unknown.h"
+
+#include <gcr/gcr-base.h>
+
+#include <glib/gi18n.h>
+
+enum {
+	PROP_0,
+	PROP_LABEL,
+	PROP_DESCRIPTION,
+	PROP_ICON,
+	PROP_URI,
+	PROP_ACTIONS
+};
 
 struct _SeahorseUnknownSource {
 	GObject parent;
@@ -39,11 +51,14 @@ struct _SeahorseUnknownSourceClass {
 	GObjectClass parent_class;
 };
 
-G_DEFINE_TYPE (SeahorseUnknownSource, seahorse_unknown_source, G_TYPE_OBJECT);
+static void      seahorse_unknown_source_collection_iface      (GcrCollectionIface *iface);
 
-/* -----------------------------------------------------------------------------
- * OBJECT
- */
+static void      seahorse_unknown_source_place_iface           (SeahorsePlaceIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (SeahorseUnknownSource, seahorse_unknown_source, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_unknown_source_collection_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_unknown_source_place_iface);
+);
 
 static void
 seahorse_unknown_source_init (SeahorseUnknownSource *self)
@@ -51,6 +66,32 @@ seahorse_unknown_source_init (SeahorseUnknownSource *self)
 	self->keys = g_hash_table_new_full (seahorse_pgp_keyid_hash,
 	                                    seahorse_pgp_keyid_equal,
 	                                    g_free, g_object_unref);
+}
+
+static void
+seahorse_unknown_source_get_property (GObject *obj,
+                                      guint prop_id,
+                                      GValue *value,
+                                      GParamSpec *pspec)
+{
+	switch (prop_id) {
+	case PROP_LABEL:
+		g_value_set_string (value, "");
+		break;
+	case PROP_DESCRIPTION:
+	case PROP_URI:
+		g_value_set_string (value, NULL);
+		break;
+	case PROP_ICON:
+		g_value_set_object (value, NULL);
+		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, NULL);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
 }
 
 static void
@@ -67,7 +108,52 @@ static void
 seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+	gobject_class->get_property = seahorse_unknown_source_get_property;
 	gobject_class->finalize = seahorse_unknown_source_finalize;
+
+	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
+	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+	g_object_class_override_property (gobject_class, PROP_URI, "uri");
+}
+
+static guint
+seahorse_unknown_source_get_length (GcrCollection *collection)
+{
+	SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (collection);
+	return g_hash_table_size (self->keys);
+}
+
+static GList *
+seahorse_unknown_source_get_objects (GcrCollection *collection)
+{
+	SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (collection);
+	return g_hash_table_get_values (self->keys);
+}
+
+static gboolean
+seahorse_unknown_source_contains (GcrCollection *collection,
+                                  GObject *object)
+{
+	SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (collection);
+	const gchar *identifier = seahorse_object_get_identifier (SEAHORSE_OBJECT (object));
+	return g_hash_table_lookup (self->keys, identifier) == object;
+}
+
+static void
+seahorse_unknown_source_collection_iface (GcrCollectionIface *iface)
+{
+	iface->contains = seahorse_unknown_source_contains;
+	iface->get_length = seahorse_unknown_source_get_length;
+	iface->get_objects = seahorse_unknown_source_get_objects;
+}
+
+static void
+seahorse_unknown_source_place_iface (SeahorsePlaceIface *iface)
+{
+	/* no implementation */
 }
 
 SeahorseUnknownSource*

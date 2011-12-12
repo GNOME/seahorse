@@ -42,6 +42,7 @@ typedef struct {
 	GCancellable *cancellable;
 	SeahorsePlace *from;
 	SeahorsePlace *to;
+	gchar **keyids;
 	GList *keys;
 } TransferClosure;
 
@@ -52,6 +53,7 @@ transfer_closure_free (gpointer user_data)
 	g_clear_object (&closure->from);
 	g_clear_object (&closure->to);
 	g_clear_object (&closure->cancellable);
+	g_strfreev (closure->keyids);
 	seahorse_object_list_free (closure->keys);
 	g_free (closure);
 }
@@ -143,23 +145,19 @@ on_timeout_start_transfer (gpointer user_data)
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
 	TransferClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	SeahorseExporter *exporter;
-	GList *keyids, *l;
 
 	g_assert (SEAHORSE_IS_PLACE (closure->from));
-	g_assert (closure->keys);
 
 	seahorse_progress_begin (closure->cancellable, &closure->from);
 	if (SEAHORSE_IS_SERVER_SOURCE (closure->from)) {
-		keyids = NULL;
-		for (l = closure->keys; l != NULL; l = g_list_next (l))
-			keyids = g_list_prepend (keyids, (gpointer)seahorse_pgp_key_get_keyid (l->data));
-		keyids = g_list_reverse (keyids);
+		g_assert (closure->keyids != NULL);
 		seahorse_server_source_export_async (SEAHORSE_SERVER_SOURCE (closure->from),
-		                                     keyids, closure->cancellable,
-		                                     on_source_export_ready, g_object_ref (res));
-		g_list_free (keyids);
+		                                     (const gchar **)closure->keyids,
+		                                     closure->cancellable, on_source_export_ready,
+		                                     g_object_ref (res));
 
 	} else if (SEAHORSE_IS_GPGME_KEYRING (closure->from)) {
+		g_assert (closure->keys != NULL);
 		exporter = seahorse_gpgme_exporter_new_multiple (closure->keys, TRUE);
 		seahorse_exporter_export_async (exporter, closure->cancellable,
 		                                on_source_export_ready, g_object_ref (res));
@@ -173,21 +171,21 @@ on_timeout_start_transfer (gpointer user_data)
 }
 
 void
-seahorse_transfer_async (SeahorsePlace *from,
-                         SeahorsePlace *to,
-                         GList *keys,
-                         GCancellable *cancellable,
-                         GAsyncReadyCallback callback,
-                         gpointer user_data)
+seahorse_transfer_keys_async (SeahorseGpgmeKeyring *from,
+                              SeahorsePlace *to,
+                              GList *keys,
+                              GCancellable *cancellable,
+                              GAsyncReadyCallback callback,
+                              gpointer user_data)
 {
 	GSimpleAsyncResult *res;
 	TransferClosure *closure;
 
-	g_return_if_fail (SEAHORSE_PLACE (from));
+	g_return_if_fail (SEAHORSE_IS_GPGME_KEYRING (from));
 	g_return_if_fail (SEAHORSE_PLACE (to));
 
 	res = g_simple_async_result_new (NULL, callback, user_data,
-	                                 seahorse_transfer_async);
+	                                 seahorse_transfer_finish);
 
 	if (!keys) {
 		g_simple_async_result_complete_in_idle (res);
@@ -219,12 +217,59 @@ seahorse_transfer_async (SeahorsePlace *from,
 	g_object_unref (res);
 }
 
+void
+seahorse_transfer_keyids_async (SeahorseServerSource *from,
+                                SeahorsePlace *to,
+                                const gchar **keyids,
+                                GCancellable *cancellable,
+                                GAsyncReadyCallback callback,
+                                gpointer user_data)
+{
+	GSimpleAsyncResult *res;
+	TransferClosure *closure;
+
+	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (from));
+	g_return_if_fail (SEAHORSE_PLACE (to));
+
+	res = g_simple_async_result_new (NULL, callback, user_data,
+	                                 seahorse_transfer_finish);
+
+	if (!keyids || !keyids[0]) {
+		g_simple_async_result_complete_in_idle (res);
+		g_object_unref (res);
+		return;
+	}
+
+	closure = g_new0 (TransferClosure, 1);
+	closure->cancellable = cancellable ? g_object_ref (cancellable) : cancellable;
+	closure->from = g_object_ref (from);
+	closure->to = g_object_ref (to);
+	closure->keyids = g_strdupv ((gchar **)keyids);
+	g_simple_async_result_set_op_res_gpointer (res, closure, transfer_closure_free);
+
+	seahorse_progress_prep (cancellable, &closure->from,
+	                        SEAHORSE_IS_GPGME_KEYRING (closure->from) ?
+	                        _("Exporting data") : _("Retrieving data"));
+	seahorse_progress_prep (cancellable, &closure->to,
+	                        SEAHORSE_IS_GPGME_KEYRING (closure->to) ?
+	                        _("Importing data") : _("Sending data"));
+
+	seahorse_debug ("starting export");
+
+	/* We delay and continue from a callback */
+	g_timeout_add_seconds_full (G_PRIORITY_DEFAULT, 0,
+	                            on_timeout_start_transfer,
+	                            g_object_ref (res), g_object_unref);
+
+	g_object_unref (res);
+}
+
 gboolean
 seahorse_transfer_finish (GAsyncResult *result,
                           GError **error)
 {
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, NULL,
-	                      seahorse_transfer_async), FALSE);
+	                      seahorse_transfer_finish), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
 		return FALSE;

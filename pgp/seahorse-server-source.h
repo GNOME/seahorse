@@ -65,7 +65,7 @@ struct _SeahorseServerSourceClass {
 	GObjectClass parent_class;
 
 	void            (*export_async)          (SeahorseServerSource *source,
-	                                          GList *ids,
+	                                          const gchar **keyids,
 	                                          GCancellable *cancellable,
 	                                          GAsyncReadyCallback callback,
 	                                          gpointer user_data);
@@ -103,7 +103,7 @@ gboolean               seahorse_server_source_search_finish    (SeahorseServerSo
                                                                 GError **error);
 
 void                   seahorse_server_source_export_async     (SeahorseServerSource *self,
-                                                                GList *ids,
+                                                                const gchar **keyids,
                                                                 GCancellable *cancellable,
                                                                 GAsyncReadyCallback callback,
                                                                 gpointer user_data);

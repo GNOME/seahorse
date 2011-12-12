@@ -554,13 +554,13 @@ seahorse_pgp_backend_transfer_async (SeahorsePgpBackend *self,
 
 		/* Export from this key place */
 		from = seahorse_object_get_place (object);
-		g_return_if_fail (from != NULL);
+		g_return_if_fail (SEAHORSE_IS_GPGME_KEYRING (from));
 
 		if (from != to) {
 			/* Start a new transfer operation between the two places */
 			seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
-			seahorse_transfer_async (from, to, keys, cancellable,
-			                         on_source_transfer_ready, g_object_ref (res));
+			seahorse_transfer_keys_async (SEAHORSE_GPGME_KEYRING (from), to, keys, cancellable,
+			                              on_source_transfer_ready, g_object_ref (res));
 			closure->num_transfers++;
 		}
 
@@ -596,7 +596,7 @@ seahorse_pgp_backend_transfer_finish (SeahorsePgpBackend *self,
 
 void
 seahorse_pgp_backend_retrieve_async (SeahorsePgpBackend *self,
-                                     GList *keyids,
+                                     const gchar **keyids,
                                      SeahorsePlace *to,
                                      GCancellable *cancellable,
                                      GAsyncReadyCallback callback,
@@ -623,8 +623,8 @@ seahorse_pgp_backend_retrieve_async (SeahorsePgpBackend *self,
 	while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&place)) {
 		/* Start a new transfer operation between the two places */
 		seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
-		seahorse_transfer_async (place, to, keyids, cancellable,
-		                         on_source_transfer_ready, g_object_ref (res));
+		seahorse_transfer_keyids_async (SEAHORSE_SERVER_SOURCE (place), to, keyids, cancellable,
+		                                on_source_transfer_ready, g_object_ref (res));
 		closure->num_transfers++;
 	}
 
@@ -656,29 +656,31 @@ seahorse_pgp_backend_retrieve_finish (SeahorsePgpBackend *self,
 
 GList *
 seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
-                                    GList *keyids,
+                                    const gchar **keyids,
                                     GCancellable *cancellable)
 {
 	GList *robjects = NULL;
 	const gchar *keyid;
-	GList *todiscover = NULL;
 	SeahorseGpgmeKey *key;
 	SeahorseObject *object;
-	GList *l;
+	GPtrArray *todiscover;
+	gint i;
 
 	self = self ? self : seahorse_pgp_backend_get ();
 	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (self), NULL);
 
+	todiscover = g_ptr_array_new ();
+
 	/* Check all the ids */
-	for (l = keyids; l != NULL; l = g_list_next (l)) {
-		keyid = l->data;
+	for (i = 0; keyids[i] != NULL; i++) {
+		keyid = keyids[i];
 
 		/* Do we know about this object? */
 		key = seahorse_gpgme_keyring_lookup (self->keyring, keyid);
 
 		/* No such object anywhere, discover it */
 		if (key == NULL) {
-			todiscover = g_list_prepend (todiscover, (gpointer)keyid);
+			g_ptr_array_add (todiscover, (gchar *)keyid);
 			continue;
 		}
 
@@ -686,20 +688,22 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
 		robjects = g_list_prepend (robjects, key);
 	}
 
+	g_ptr_array_add (todiscover, NULL);
+
 	/* Start a discover process on all todiscover */
 	if (todiscover != NULL &&
 	    g_settings_get_boolean (seahorse_context_settings (NULL), "server-auto-retrieve")) {
-		seahorse_pgp_backend_retrieve_async (self, todiscover, SEAHORSE_PLACE (self->keyring),
+		seahorse_pgp_backend_retrieve_async (self, (const gchar **)todiscover->pdata,
+		                                     SEAHORSE_PLACE (self->keyring),
 		                                     cancellable, NULL, NULL);
 	}
 
 	/* Add unknown objects for all these */
-	for (l = todiscover; l != NULL; l = g_list_next (l)) {
-		object = seahorse_unknown_source_add_object (self->unknown, keyid, cancellable);
+	for (i = 0; keyids[i] != NULL; i++) {
+		object = seahorse_unknown_source_add_object (self->unknown, keyids[i], cancellable);
 		robjects = g_list_prepend (robjects, object);
 	}
 
-	g_list_free (todiscover);
-
+	g_ptr_array_free (todiscover, TRUE);
 	return robjects;
 }

@@ -186,12 +186,19 @@ seahorse_keyserver_sync (GList *keys)
 	gchar *keyserver;
 	GCancellable *cancellable;
 	gchar **keyservers;
+	GPtrArray *keyids;
+	GList *l;
 	guint i;
 
 	if (!keys)
 		return;
 
 	cancellable = g_cancellable_new ();
+
+	keyids = g_ptr_array_new ();
+	for (l = keys; l != NULL; l = g_list_next (l))
+		g_ptr_array_add (keyids, (gchar *)seahorse_pgp_key_get_keyid (l->data));
+	g_ptr_array_add (keyids, NULL);
 
 	/* And now synchronizing keys from the servers */
 	keyservers = seahorse_servers_get_uris ();
@@ -203,11 +210,15 @@ seahorse_keyserver_sync (GList *keys)
 			continue;
 
 		keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-		seahorse_transfer_async (SEAHORSE_PLACE (source), SEAHORSE_PLACE (keyring),
-		                         keys, cancellable, on_transfer_download_complete,
-		                         g_object_ref (source));
+		seahorse_transfer_keyids_async (SEAHORSE_SERVER_SOURCE (source),
+		                                SEAHORSE_PLACE (keyring),
+		                                (const gchar **)keyids->pdata,
+		                                cancellable,
+		                                on_transfer_download_complete,
+		                                g_object_ref (source));
 	}
 
+	g_ptr_array_free (keyids, TRUE);
 	g_strfreev (keyservers);
 
 	/* Publishing keys online */
