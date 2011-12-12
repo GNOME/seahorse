@@ -33,6 +33,7 @@
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
 #include "seahorse-delete-dialog.h"
+#include "seahorse-lockable.h"
 #include "seahorse-object-list.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
@@ -63,7 +64,7 @@ on_token_locked (GObject *source,
 	GtkWindow *window = GTK_WINDOW (user_data);
 	GError *error = NULL;
 
-	seahorse_token_lock_finish (SEAHORSE_TOKEN (source), result, &error);
+	seahorse_lockable_lock_finish (SEAHORSE_LOCKABLE (source), result, &error);
 	if (error != NULL) {
 		if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
 		    !g_error_matches (error, GCK_ERROR, CKR_USER_NOT_LOGGED_IN))
@@ -84,8 +85,8 @@ on_token_lock (GtkAction *action,
 	window = seahorse_action_get_window (action);
 	interaction = seahorse_interaction_new (window);
 
-	seahorse_token_lock_async (SEAHORSE_TOKEN (user_data), interaction, NULL,
-	                           on_token_locked, g_object_ref (window));
+	seahorse_lockable_lock_async (SEAHORSE_LOCKABLE (user_data), interaction, NULL,
+	                              on_token_locked, g_object_ref (window));
 
 	g_object_unref (interaction);
 }
@@ -99,7 +100,7 @@ on_token_unlocked (GObject *source,
 	GtkWindow *window = GTK_WINDOW (user_data);
 	GError *error = NULL;
 
-	seahorse_token_unlock_finish (SEAHORSE_TOKEN (source), result, &error);
+	seahorse_lockable_unlock_finish (SEAHORSE_LOCKABLE (source), result, &error);
 	if (error != NULL) {
 		if (!g_error_matches (error, GCK_ERROR, CKR_FUNCTION_CANCELED) ||
 		    !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
@@ -122,8 +123,8 @@ on_token_unlock (GtkAction *action,
 	window = seahorse_action_get_window (action);
 	interaction = seahorse_interaction_new (window);
 
-	seahorse_token_unlock_async (SEAHORSE_TOKEN (user_data), interaction, NULL,
-	                             on_token_unlocked, g_object_ref (window));
+	seahorse_lockable_unlock_async (SEAHORSE_LOCKABLE (user_data), interaction, NULL,
+	                                on_token_unlocked, g_object_ref (window));
 
 	g_object_unref (interaction);
 }

@@ -73,26 +73,6 @@ void                   seahorse_token_remove_object     (SeahorseToken *self,
 gboolean               seahorse_token_is_deletable      (SeahorseToken *self,
                                                          GckObject *object);
 
-void                   seahorse_token_lock_async        (SeahorseToken *self,
-                                                         GTlsInteraction *interaction,
-                                                         GCancellable *cancellable,
-                                                         GAsyncReadyCallback callback,
-                                                         gpointer user_data);
-
-gboolean               seahorse_token_lock_finish       (SeahorseToken *self,
-                                                         GAsyncResult *result,
-                                                         GError **error);
-
-void                   seahorse_token_unlock_async      (SeahorseToken *self,
-                                                         GTlsInteraction *interaction,
-                                                         GCancellable *cancellable,
-                                                         GAsyncReadyCallback callback,
-                                                         gpointer user_data);
-
-gboolean               seahorse_token_unlock_finish     (SeahorseToken *self,
-                                                         GAsyncResult *result,
-                                                         GError **error);
-
 void                   seahorse_token_refresh_async     (SeahorseToken *self,
                                                          GCancellable *cancellable,
                                                          GAsyncReadyCallback callback,

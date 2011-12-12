@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "seahorse-gkr.h"
+#include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-keyring-deleter.h"
 #include "seahorse-gkr-keyring.h"
@@ -31,9 +32,10 @@
 
 #include "seahorse-action.h"
 #include "seahorse-deletable.h"
-#include "seahorse-viewable.h"
+#include "seahorse-lockable.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
+#include "seahorse-viewable.h"
 
 #include <gcr/gcr.h>
 
@@ -48,6 +50,8 @@ enum {
 	PROP_URI,
 	PROP_ACTIONS,
 	PROP_LOCKED,
+	PROP_LOCKABLE,
+	PROP_UNLOCKABLE
 };
 
 struct _SeahorseGkrKeyringPrivate {
@@ -68,12 +72,15 @@ static void     seahorse_keyring_collection_iface   (GcrCollectionIface *iface);
 
 static void     seahorse_keyring_deletable_iface    (SeahorseDeletableIface *iface);
 
+static void     seahorse_keyring_lockable_iface     (SeahorseLockableIface *iface);
+
 static void     seahorse_keyring_viewable_iface     (SeahorseViewableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_keyring_collection_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_keyring_place_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_keyring_deletable_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_LOCKABLE, seahorse_keyring_lockable_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_keyring_viewable_iface);
 );
 
@@ -450,6 +457,12 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 	case PROP_LOCKED:
 		g_value_set_boolean (value, seahorse_gkr_keyring_get_locked (self));
 		break;
+	case PROP_LOCKABLE:
+		g_value_set_boolean (value, !seahorse_gkr_keyring_get_locked (self));
+		break;
+	case PROP_UNLOCKABLE:
+		g_value_set_boolean (value, seahorse_gkr_keyring_get_locked (self));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -488,6 +501,8 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 	           g_param_spec_boolean ("locked", "Locked", "Keyring is locked?",
 	                                 FALSE, G_PARAM_READABLE));
 
+	g_object_class_override_property (gobject_class, PROP_LOCKABLE, "lockable");
+	g_object_class_override_property (gobject_class, PROP_UNLOCKABLE, "unlockable");
 }
 
 static void
@@ -542,6 +557,95 @@ static void
 seahorse_keyring_deletable_iface (SeahorseDeletableIface *iface)
 {
 	iface->create_deleter = seahorse_gkr_keyring_create_deleter;
+}
+
+static void
+on_keyring_xlock_done (GnomeKeyringResult result,
+                       gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	GError *error = NULL;
+
+	if (seahorse_gkr_propagate_error (result, &error))
+		g_simple_async_result_take_error (res, error);
+
+	seahorse_gkr_backend_load_async (NULL, NULL, NULL, NULL);
+	g_simple_async_result_complete_in_idle (res);
+}
+
+static void
+seahorse_gkr_keyring_lock_async (SeahorseLockable *lockable,
+                                 GTlsInteraction *interaction,
+                                 GCancellable *cancellable,
+                                 GAsyncReadyCallback callback,
+                                 gpointer user_data)
+{
+	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (lockable);
+	GSimpleAsyncResult *res;
+
+	res = g_simple_async_result_new (G_OBJECT (lockable), callback, user_data,
+	                                 seahorse_gkr_keyring_lock_async);
+
+	gnome_keyring_lock (seahorse_gkr_keyring_get_name (keyring),
+	                    on_keyring_xlock_done, g_object_ref (res), g_object_unref);
+
+	g_object_unref (res);
+}
+
+static gboolean
+seahorse_gkr_keyring_lock_finish (SeahorseLockable *lockable,
+                                  GAsyncResult *result,
+                                  GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (lockable),
+	                      seahorse_gkr_keyring_lock_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
+static void
+seahorse_gkr_keyring_unlock_async (SeahorseLockable *lockable,
+                                   GTlsInteraction *interaction,
+                                   GCancellable *cancellable,
+                                   GAsyncReadyCallback callback,
+                                   gpointer user_data)
+{
+	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (lockable);
+	GSimpleAsyncResult *res;
+
+	res = g_simple_async_result_new (G_OBJECT (lockable), callback, user_data,
+	                                 seahorse_gkr_keyring_unlock_async);
+
+	gnome_keyring_unlock (seahorse_gkr_keyring_get_name (keyring), NULL,
+	                      on_keyring_xlock_done, g_object_ref (res), g_object_unref);
+
+	g_object_unref (res);
+}
+
+static gboolean
+seahorse_gkr_keyring_unlock_finish (SeahorseLockable *lockable,
+                                    GAsyncResult *result,
+                                    GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (lockable),
+	                      seahorse_gkr_keyring_unlock_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
+static void
+seahorse_keyring_lockable_iface (SeahorseLockableIface *iface)
+{
+	iface->lock_async = seahorse_gkr_keyring_lock_async;
+	iface->lock_finish = seahorse_gkr_keyring_lock_finish;
+	iface->unlock_async = seahorse_gkr_keyring_unlock_async;
+	iface->unlock_finish = seahorse_gkr_keyring_unlock_finish;
 }
 
 static void

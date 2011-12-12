@@ -26,8 +26,11 @@
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
 #include "seahorse-backend.h"
+#include "seahorse-interaction.h"
+#include "seahorse-lockable.h"
 #include "seahorse-place.h"
 #include "seahorse-registry.h"
+#include "seahorse-util.h"
 
 #include "gkr/seahorse-gkr.h"
 #include "pgp/seahorse-pgp.h"
@@ -92,7 +95,6 @@ enum {
 	SIDEBAR_CATEGORY,
 	SIDEBAR_COLLECTION,
 	SIDEBAR_URI,
-	SIDEBAR_ACTIONS,
 	SIDEBAR_N_COLUMNS
 };
 
@@ -104,8 +106,7 @@ static GType column_types[] = {
 	G_TYPE_BOOLEAN,
 	G_TYPE_STRING,
 	0 /* later */,
-	G_TYPE_STRING,
-	0 /* later */
+	G_TYPE_STRING
 };
 
 enum {
@@ -123,7 +124,6 @@ seahorse_sidebar_init (SeahorseSidebar *self)
 	g_assert (SIDEBAR_N_COLUMNS == G_N_ELEMENTS (column_types));
 	column_types[SIDEBAR_ICON] = G_TYPE_ICON;
 	column_types[SIDEBAR_COLLECTION] = GCR_TYPE_COLLECTION;
-	column_types[SIDEBAR_ACTIONS] = GTK_TYPE_ACTION_GROUP;
 	self->store = gtk_list_store_newv (SIDEBAR_N_COLUMNS, column_types);
 
 	self->backends = g_ptr_array_new_with_free_func (g_object_unref);
@@ -288,13 +288,11 @@ update_backend (SeahorseSidebar *self,
 {
 	GList *collections, *l;
 	GtkActionGroup *actions;
-	GtkActionGroup *cloned;
 	GParamSpec *spec;
 	gchar *category;
 	gchar *tooltip;
 	gchar *label;
 	GIcon *icon = NULL;
-	GList *objects;
 	gchar *uri;
 
 	collections = gcr_collection_get_objects (backend);
@@ -332,14 +330,6 @@ update_backend (SeahorseSidebar *self,
 		              "actions", &actions,
 		              NULL);
 
-		cloned = NULL;
-		if (actions) {
-			objects = g_list_append (NULL, l->data);
-			cloned = seahorse_actions_clone_for_objects (actions, objects);
-			g_list_free (objects);
-			g_object_unref (actions);
-		}
-
 		spec = g_object_class_find_property (G_OBJECT_GET_CLASS (l->data), "label");
 		g_return_if_fail (spec != NULL);
 
@@ -352,10 +342,8 @@ update_backend (SeahorseSidebar *self,
 		                    SIDEBAR_ICON, icon,
 		                    SIDEBAR_EDITABLE, (spec->flags & G_PARAM_WRITABLE) ? TRUE : FALSE,
 		                    SIDEBAR_COLLECTION, l->data,
-		                    SIDEBAR_ACTIONS, cloned,
 		                    SIDEBAR_URI, uri,
 		                    -1);
-		g_clear_object (&cloned);
 		g_clear_object (&icon);
 		g_free (label);
 		g_free (tooltip);
@@ -537,41 +525,25 @@ update_places_later (SeahorseSidebar *self)
 		self->update_places_sig = g_idle_add (on_idle_update_places, self);
 }
 
-static GtkAction *
-lookup_relevant_action_for_iter (GtkTreeModel *model,
-                                 GtkTreeIter *iter,
-                                 gboolean *is_lock)
+static SeahorseLockable *
+lookup_lockable_for_iter (GtkTreeModel *model,
+                          GtkTreeIter *iter)
 {
-	GtkActionGroup *actions = NULL;
-	GtkAction *action;
+	GcrCollection *collection;
 
 	gtk_tree_model_get (model, iter,
-	                    SIDEBAR_ACTIONS, &actions,
+	                    SIDEBAR_COLLECTION, &collection,
 	                    -1);
 
-	if (!actions)
+	if (collection == NULL)
 		return NULL;
 
-	action = gtk_action_group_get_action (actions, "unlock");
-	if (action != NULL &&
-	    gtk_action_is_visible (action) &&
-	    gtk_action_is_sensitive (action)) {
-		*is_lock = FALSE;
-	} else {
-		action = gtk_action_group_get_action (actions, "lock");
-		if (action != NULL &&
-		    gtk_action_is_visible (action) &&
-		    gtk_action_is_sensitive (action)) {
-			*is_lock = TRUE;
-		} else {
-			action = NULL;
-		}
+	if (!SEAHORSE_IS_LOCKABLE (collection)) {
+		g_object_unref (collection);
+		return NULL;
 	}
 
-	if (action)
-		g_object_ref (action);
-	g_object_unref (actions);
-	return action;
+	return SEAHORSE_LOCKABLE (collection);
 }
 
 static void
@@ -585,41 +557,46 @@ on_cell_renderer_action_icon (GtkTreeViewColumn *column,
 	gboolean highlight = FALSE;
 	GtkTreePath *path;
 	GdkPixbuf *pixbuf = NULL;
-	GtkAction *action;
-	gboolean is_lock = FALSE;
+	SeahorseLockable *lockable;
+	gboolean can_lock = FALSE;
+	gboolean can_unlock = FALSE;
 
-	action = lookup_relevant_action_for_iter (model, iter, &is_lock);
+	lockable = lookup_lockable_for_iter (model, iter);
 
-	if (action == NULL) {
+	if (lockable) {
+		can_lock = seahorse_lockable_can_lock (lockable);
+		can_unlock = seahorse_lockable_can_unlock (lockable);
+	}
+
+	if (can_lock || can_unlock) {
+		ensure_sidebar_pixbufs (self);
+
+		pixbuf = NULL;
+		highlight = FALSE;
+
+		if (self->action_highlight_path) {
+			path = gtk_tree_model_get_path (model, iter);
+			highlight = gtk_tree_path_compare (path, self->action_highlight_path) == 0;
+			gtk_tree_path_free (path);
+		}
+
+		if (can_lock)
+			pixbuf = highlight ? self->pixbuf_unlock : self->pixbuf_unlock_l;
+		else
+			pixbuf = highlight ? self->pixbuf_lock : self->pixbuf_lock_l;
+
+		g_object_set (cell,
+		              "visible", TRUE,
+		              "pixbuf", pixbuf,
+		              NULL);
+	} else {
 		g_object_set (cell,
 		              "visible", FALSE,
 		              "pixbuf", NULL,
 		              NULL);
-		return;
 	}
 
-	ensure_sidebar_pixbufs (self);
-
-	pixbuf = NULL;
-	highlight = FALSE;
-
-	if (self->action_highlight_path) {
-		path = gtk_tree_model_get_path (model, iter);
-		highlight = gtk_tree_path_compare (path, self->action_highlight_path) == 0;
-		gtk_tree_path_free (path);
-	}
-
-	if (is_lock)
-		pixbuf = highlight ? self->pixbuf_unlock : self->pixbuf_unlock_l;
-	else
-		pixbuf = highlight ? self->pixbuf_lock : self->pixbuf_lock_l;
-
-	g_object_set (cell,
-	              "visible", TRUE,
-	              "pixbuf", pixbuf,
-	              NULL);
-
-	g_object_unref (action);
+	g_clear_object (&lockable);
 }
 
 static void
@@ -963,19 +940,48 @@ on_tree_view_button_press_event (GtkWidget *widget,
 	return TRUE;
 }
 
+static void
+on_place_lock (GObject *source,
+               GAsyncResult *result,
+               gpointer user_data)
+{
+	GtkWindow *parent = GTK_WINDOW (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_lockable_lock_finish (SEAHORSE_LOCKABLE (source), result, &error))
+		seahorse_util_handle_error (&error, parent, _("Couldn't lock"));
+
+	g_object_unref (parent);
+}
+
+static void
+on_place_unlock (GObject *source,
+                 GAsyncResult *result,
+                 gpointer user_data)
+{
+	GtkWindow *parent = GTK_WINDOW (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_lockable_unlock_finish (SEAHORSE_LOCKABLE (source), result, &error))
+		seahorse_util_handle_error (&error, parent, _("Couldn't unlock"));
+
+	g_object_unref (parent);
+}
+
 static gboolean
 on_tree_view_button_release_event (GtkWidget *widget,
                                    GdkEventButton *event,
                                    gpointer user_data)
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
+	GTlsInteraction *interaction;
+	GCancellable *cancellable;
+	SeahorseLockable *lockable;
 	GtkTreePath *path;
-	GtkAction *action;
 	GtkTreeModel *model;
-	GtkTreeIter iter;
-	gboolean is_lock;
-	gboolean ret;
 	GtkWidget *window;
+	GtkTreeIter iter;
+	gboolean ret;
 
 	if (event->type != GDK_BUTTON_RELEASE)
 		return TRUE;
@@ -991,13 +997,24 @@ on_tree_view_button_release_event (GtkWidget *widget,
 	if (!ret)
 		return FALSE;
 
-	action = lookup_relevant_action_for_iter (model, &iter, &is_lock);
-	if (action == NULL)
-		return FALSE;
-
 	window = gtk_widget_get_toplevel (widget);
-	seahorse_action_activate_with_window (action, GTK_WINDOW (window));
-	g_object_unref (action);
+	cancellable = g_cancellable_new ();
+	interaction = seahorse_interaction_new (GTK_WINDOW (window));
+	ret = FALSE;
+
+	lockable = lookup_lockable_for_iter (model, &iter);
+	if (lockable) {
+		if (seahorse_lockable_can_lock (lockable)) {
+			seahorse_lockable_lock_async (lockable, interaction, cancellable,
+			                              on_place_lock, g_object_ref (window));
+		} else if (seahorse_lockable_can_unlock (lockable)) {
+			seahorse_lockable_unlock_async (lockable, interaction, cancellable,
+			                                on_place_unlock, g_object_ref (window));
+		}
+	}
+
+	g_object_unref (cancellable);
+	g_object_unref (interaction);
 
 	return TRUE;
 }

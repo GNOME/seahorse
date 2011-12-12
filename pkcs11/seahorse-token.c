@@ -35,6 +35,7 @@
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"
 
+#include "seahorse-lockable.h"
 #include "seahorse-place.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
@@ -71,9 +72,12 @@ static void          seahorse_token_place_iface          (SeahorsePlaceIface *if
 
 static void          seahorse_token_collection_iface     (GcrCollectionIface *iface);
 
+static void          seahorse_token_lockable_iface       (SeahorseLockableIface *iface);
+
 G_DEFINE_TYPE_EXTENDED (SeahorseToken, seahorse_token, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_token_collection_iface);
                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_token_place_iface);
+                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_LOCKABLE, seahorse_token_lockable_iface);
 );
 
 static void
@@ -759,9 +763,177 @@ seahorse_token_collection_iface (GcrCollectionIface *iface)
 	iface->contains = seahorse_token_contains;
 }
 
-/* --------------------------------------------------------------------------
- * PUBLIC
- */
+static gboolean
+is_session_logged_in (GckSession *session)
+{
+	GckSessionInfo *info;
+	gboolean logged_in;
+
+	if (session == NULL)
+		return FALSE;
+
+	info = gck_session_get_info (session);
+	logged_in = (info != NULL) &&
+	            (info->state == CKS_RW_USER_FUNCTIONS ||
+	             info->state == CKS_RO_USER_FUNCTIONS ||
+	             info->state == CKS_RW_SO_FUNCTIONS);
+	gck_session_info_free (info);
+
+	return logged_in;
+}
+
+static void
+on_session_logout (GObject *source,
+                   GAsyncResult *result,
+                   gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	SeahorseToken *self = SEAHORSE_TOKEN (g_async_result_get_source_object (user_data));
+	GError *error = NULL;
+
+	gck_session_logout_finish (GCK_SESSION (source), result, &error);
+	if (error == NULL)
+		seahorse_token_refresh_async (self, NULL, NULL, NULL);
+	else
+		g_simple_async_result_take_error (res, error);
+
+	g_simple_async_result_complete (res);
+	g_object_unref (self);
+	g_object_unref (res);
+}
+
+static void
+on_login_interactive (GObject *source,
+                      GAsyncResult *result,
+                      gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	SeahorseToken *self = SEAHORSE_TOKEN (g_async_result_get_source_object (user_data));
+	GError *error = NULL;
+
+	gck_session_logout_finish (GCK_SESSION (source), result, &error);
+	if (error == NULL)
+		seahorse_token_refresh_async (self, NULL, NULL, NULL);
+	else
+		g_simple_async_result_take_error (res, error);
+
+	g_simple_async_result_complete (res);
+	g_object_unref (self);
+	g_object_unref (res);
+}
+
+static void
+on_session_login_open (GObject *source,
+                       GAsyncResult *result,
+                       gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	SeahorseToken *self = SEAHORSE_TOKEN (g_async_result_get_source_object (user_data));
+	GckSession *session;
+	GError *error = NULL;
+
+	session = gck_session_open_finish (result, &error);
+	if (error == NULL) {
+		seahorse_token_set_session (self, session);
+		seahorse_token_refresh_async (self, NULL, NULL, NULL);
+		g_object_unref (session);
+	} else {
+		g_simple_async_result_take_error (res, error);
+	}
+
+	g_simple_async_result_complete (res);
+	g_object_unref (self);
+	g_object_unref (res);
+}
+
+static void
+seahorse_token_lock_async (SeahorseLockable *lockable,
+                           GTlsInteraction *interaction,
+                           GCancellable *cancellable,
+                           GAsyncReadyCallback callback,
+                           gpointer user_data)
+{
+	SeahorseToken *self = SEAHORSE_TOKEN (lockable);
+	GSimpleAsyncResult *res;
+
+	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
+	                                 seahorse_token_lock_async);
+
+	if (is_session_logged_in (self->pv->session))
+		gck_session_logout_async (self->pv->session, cancellable,
+		                          on_session_logout, g_object_ref (res));
+	else
+		g_simple_async_result_complete_in_idle (res);
+
+	g_object_unref (res);
+}
+
+static gboolean
+seahorse_token_lock_finish (SeahorseLockable *lockable,
+                            GAsyncResult *result,
+                            GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (lockable),
+	                      seahorse_token_lock_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
+static void
+seahorse_token_unlock_async (SeahorseLockable *lockable,
+                             GTlsInteraction *interaction,
+                             GCancellable *cancellable,
+                             GAsyncReadyCallback callback,
+                             gpointer user_data)
+{
+	SeahorseToken *self = SEAHORSE_TOKEN (lockable);
+	GSimpleAsyncResult *res;
+	GckSessionOptions options;
+
+	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
+	                                 seahorse_token_unlock_async);
+
+	if (is_session_logged_in (self->pv->session)) {
+		g_simple_async_result_complete_in_idle (res);
+
+	} else if (self->pv->session) {
+		gck_session_login_interactive_async (self->pv->session, CKU_USER,
+		                                     interaction, NULL, on_login_interactive,
+		                                     g_object_ref (res));
+	} else {
+		options = calculate_session_options (self);
+		gck_session_open_async (self->pv->slot, options | GCK_SESSION_LOGIN_USER, interaction,
+		                        NULL, on_session_login_open, g_object_ref (res));
+	}
+
+	g_object_unref (res);
+}
+
+static gboolean
+seahorse_token_unlock_finish (SeahorseLockable *lockable,
+                              GAsyncResult *result,
+                              GError **error)
+{
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (lockable),
+	                      seahorse_token_unlock_async), FALSE);
+
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
+}
+
+static void
+seahorse_token_lockable_iface (SeahorseLockableIface *iface)
+{
+	iface->lock_async = seahorse_token_lock_async;
+	iface->lock_finish = seahorse_token_lock_finish;
+	iface->unlock_async = seahorse_token_unlock_async;
+	iface->unlock_finish = seahorse_token_unlock_finish;
+}
 
 SeahorseToken *
 seahorse_token_new (GckSlot *slot)
@@ -816,25 +988,6 @@ seahorse_token_get_info (SeahorseToken *self)
 		update_token_info (self);
 
 	return self->pv->info;
-}
-
-static gboolean
-is_session_logged_in (GckSession *session)
-{
-	GckSessionInfo *info;
-	gboolean logged_in;
-
-	if (session == NULL)
-		return FALSE;
-
-	info = gck_session_get_info (session);
-	logged_in = (info != NULL) &&
-	            (info->state == CKS_RW_USER_FUNCTIONS ||
-	             info->state == CKS_RO_USER_FUNCTIONS ||
-	             info->state == CKS_RW_SO_FUNCTIONS);
-	gck_session_info_free (info);
-
-	return logged_in;
 }
 
 gboolean
@@ -911,160 +1064,6 @@ seahorse_token_remove_object (SeahorseToken *self,
 	objects = g_list_prepend (NULL, g_object_ref (object));
 	remove_objects (self, objects);
 	g_list_free_full (objects, g_object_unref);
-}
-
-static void
-on_session_logout (GObject *source,
-                   GAsyncResult *result,
-                   gpointer user_data)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	SeahorseToken *self = SEAHORSE_TOKEN (g_async_result_get_source_object (user_data));
-	GError *error = NULL;
-
-	gck_session_logout_finish (GCK_SESSION (source), result, &error);
-	if (error == NULL)
-		seahorse_token_refresh_async (self, NULL, NULL, NULL);
-	else
-		g_simple_async_result_take_error (res, error);
-
-	g_simple_async_result_complete (res);
-	g_object_unref (self);
-	g_object_unref (res);
-}
-
-void
-seahorse_token_lock_async (SeahorseToken *self,
-                           GTlsInteraction *interaction,
-                           GCancellable *cancellable,
-                           GAsyncReadyCallback callback,
-                           gpointer user_data)
-{
-	GSimpleAsyncResult *res;
-
-	g_return_if_fail (SEAHORSE_IS_TOKEN (self));
-	g_return_if_fail (interaction == NULL || G_IS_TLS_INTERACTION (interaction));
-	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_token_lock_async);
-
-	if (is_session_logged_in (self->pv->session))
-		gck_session_logout_async (self->pv->session, cancellable,
-		                          on_session_logout, g_object_ref (res));
-	else
-		g_simple_async_result_complete_in_idle (res);
-
-	g_object_unref (res);
-}
-
-gboolean
-seahorse_token_lock_finish (SeahorseToken *self,
-                            GAsyncResult *result,
-                            GError **error)
-{
-	g_return_val_if_fail (SEAHORSE_IS_TOKEN (self), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
-	                      seahorse_token_lock_async), FALSE);
-
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return FALSE;
-
-	return TRUE;
-}
-
-static void
-on_login_interactive (GObject *source,
-                      GAsyncResult *result,
-                      gpointer user_data)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	SeahorseToken *self = SEAHORSE_TOKEN (g_async_result_get_source_object (user_data));
-	GError *error = NULL;
-
-	gck_session_logout_finish (GCK_SESSION (source), result, &error);
-	if (error == NULL)
-		seahorse_token_refresh_async (self, NULL, NULL, NULL);
-	else
-		g_simple_async_result_take_error (res, error);
-
-	g_simple_async_result_complete (res);
-	g_object_unref (self);
-	g_object_unref (res);
-}
-
-static void
-on_session_login_open (GObject *source,
-                       GAsyncResult *result,
-                       gpointer user_data)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	SeahorseToken *self = SEAHORSE_TOKEN (g_async_result_get_source_object (user_data));
-	GckSession *session;
-	GError *error = NULL;
-
-	session = gck_session_open_finish (result, &error);
-	if (error == NULL) {
-		seahorse_token_set_session (self, session);
-		seahorse_token_refresh_async (self, NULL, NULL, NULL);
-		g_object_unref (session);
-	} else {
-		g_simple_async_result_take_error (res, error);
-	}
-
-	g_simple_async_result_complete (res);
-	g_object_unref (self);
-	g_object_unref (res);
-}
-
-void
-seahorse_token_unlock_async (SeahorseToken *self,
-                             GTlsInteraction *interaction,
-                             GCancellable *cancellable,
-                             GAsyncReadyCallback callback,
-                             gpointer user_data)
-{
-	GSimpleAsyncResult *res;
-	GckSessionOptions options;
-
-	g_return_if_fail (SEAHORSE_IS_TOKEN (self));
-	g_return_if_fail (interaction == NULL || G_IS_TLS_INTERACTION (interaction));
-	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_token_unlock_async);
-
-	if (is_session_logged_in (self->pv->session)) {
-		g_simple_async_result_complete_in_idle (res);
-
-	} else if (self->pv->session) {
-		gck_session_login_interactive_async (self->pv->session, CKU_USER,
-		                                     interaction, NULL, on_login_interactive,
-		                                     g_object_ref (res));
-	} else {
-		options = calculate_session_options (self);
-		gck_session_open_async (self->pv->slot, options | GCK_SESSION_LOGIN_USER, interaction,
-		                        NULL, on_session_login_open, g_object_ref (res));
-	}
-
-	g_object_unref (res);
-}
-
-gboolean
-seahorse_token_unlock_finish (SeahorseToken *self,
-                              GAsyncResult *result,
-                              GError **error)
-{
-	g_return_val_if_fail (SEAHORSE_IS_TOKEN (self), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
-	                      seahorse_token_unlock_async), FALSE);
-
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return FALSE;
-
-	return TRUE;
 }
 
 gboolean

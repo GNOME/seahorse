@@ -43,7 +43,9 @@ libseahorse_la_SOURCES = \
 	seahorse-exportable.c seahorse-exportable.h \
 	seahorse-exporter.c seahorse-exporter.h \
 	seahorse-icons.c seahorse-icons.h \
+	seahorse-interaction.c seahorse-interaction.h \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
+	seahorse-lockable.c seahorse-lockable.h \
 	seahorse-object.c seahorse-object.h \
 	seahorse-object-list.c seahorse-object-list.h \
 	seahorse-object-model.c seahorse-object-model.h \
