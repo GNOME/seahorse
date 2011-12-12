@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-object.h"
-#include "seahorse-viewer.h"
+#include "seahorse-catalog.h"
 
 #define SEAHORSE_TYPE_ACTIONS                  (seahorse_actions_get_type ())
 #define SEAHORSE_ACTIONS(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_ACTIONS, SeahorseActions))

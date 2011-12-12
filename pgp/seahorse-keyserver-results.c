@@ -58,7 +58,7 @@ struct _SeahorseKeyserverResultsPrivate {
 	GSettings *settings;
 };
 
-G_DEFINE_TYPE (SeahorseKeyserverResults, seahorse_keyserver_results, SEAHORSE_TYPE_VIEWER);
+G_DEFINE_TYPE (SeahorseKeyserverResults, seahorse_keyserver_results, SEAHORSE_TYPE_CATALOG);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL
@@ -107,7 +107,7 @@ on_row_activated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *colum
 
 	obj = seahorse_key_manager_store_get_object_from_path (view, path);
 	if (obj != NULL)
-		seahorse_viewer_show_properties (SEAHORSE_VIEWER (self), obj);
+		seahorse_catalog_show_properties (SEAHORSE_CATALOG (self), obj);
 }
 
 G_MODULE_EXPORT gboolean
@@ -116,8 +116,8 @@ on_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKe
 	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self), FALSE);
 	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
 	if (event->button == 3)
-		seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self),
-		                                   SEAHORSE_VIEWER_MENU_OBJECT,
+		seahorse_catalog_show_context_menu (SEAHORSE_CATALOG (self),
+		                                   SEAHORSE_CATALOG_MENU_OBJECT,
 		                                   event->button, event->time);
 	return FALSE;
 }
@@ -130,10 +130,10 @@ on_key_list_popup_menu (GtkTreeView* view, SeahorseKeyserverResults* self)
 	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self), FALSE);
 	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
 
-	objects = seahorse_viewer_get_selected_objects (SEAHORSE_VIEWER (self));
+	objects = seahorse_catalog_get_selected_objects (SEAHORSE_CATALOG (self));
 	if (objects != NULL)
-		seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self),
-		                                   SEAHORSE_VIEWER_MENU_OBJECT,
+		seahorse_catalog_show_context_menu (SEAHORSE_CATALOG (self),
+		                                   SEAHORSE_CATALOG_MENU_OBJECT,
 		                                   0, gtk_get_current_event_time ());
 	g_list_free (objects);
 	return TRUE;
@@ -159,7 +159,7 @@ on_remote_find (GtkAction* action, SeahorseKeyserverResults* self)
 {
 	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	seahorse_keyserver_search_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
+	seahorse_keyserver_search_show (seahorse_catalog_get_window (SEAHORSE_CATALOG (self)));
 }
 
 static void
@@ -167,12 +167,12 @@ on_import_complete (GObject *source,
                     GAsyncResult *result,
                     gpointer user_data)
 {
-	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (user_data);
 	GError *error = NULL;
 
 	if (!seahorse_pgp_backend_transfer_finish (SEAHORSE_PGP_BACKEND (source),
 	                                           result, &error))
-		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
+		seahorse_util_handle_error (&error, seahorse_catalog_get_window (self),
 		                            _("Couldn't import keys"));
 
 	g_object_unref (self);
@@ -194,17 +194,17 @@ objects_prune_non_exportable (GList *objects)
 }
 
 static void
-on_key_import_keyring (GtkAction* action, SeahorseViewer* self)
+on_key_import_keyring (GtkAction* action, SeahorseCatalog* self)
 {
 	GCancellable *cancellable;
 	SeahorsePgpBackend *backend;
 	SeahorseGpgmeKeyring *keyring;
 	GList* objects;
 
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (SEAHORSE_IS_CATALOG (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	objects = seahorse_viewer_get_selected_objects (self);
+	objects = seahorse_catalog_get_selected_objects (self);
 	objects = objects_prune_non_exportable (objects);
 
 	/* No objects, nothing to do */
@@ -257,14 +257,14 @@ static const GtkActionEntry IMPORT_ENTRIES[] = {
 };
 
 static GList *
-seahorse_keyserver_results_get_selected_objects (SeahorseViewer* viewer)
+seahorse_keyserver_results_get_selected_objects (SeahorseCatalog *catalog)
 {
-	SeahorseKeyserverResults * self = SEAHORSE_KEYSERVER_RESULTS (viewer);
+	SeahorseKeyserverResults * self = SEAHORSE_KEYSERVER_RESULTS (catalog);
 	return seahorse_key_manager_store_get_selected_objects (self->pv->view);
 }
 
 static GList *
-seahorse_keyserver_results_get_selected_places (SeahorseViewer* viewer)
+seahorse_keyserver_results_get_selected_places (SeahorseCatalog *catalog)
 {
 	return NULL;
 }
@@ -296,7 +296,7 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 		title = g_strdup_printf (_ ("Remote Keys Containing '%s'"), self->pv->search_string);
 	}
 
-	window = seahorse_viewer_get_window (SEAHORSE_VIEWER (self));
+	window = seahorse_catalog_get_window (SEAHORSE_CATALOG (self));
 	gtk_window_set_title (window, title);
 	g_free (title);
 
@@ -305,18 +305,18 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	actions = gtk_action_group_new ("general");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, GENERAL_ENTRIES, G_N_ELEMENTS (GENERAL_ENTRIES), self);
-	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
+	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
 
 	actions = gtk_action_group_new ("keyserver");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, SERVER_ENTRIES, G_N_ELEMENTS (SERVER_ENTRIES), self);
-	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
+	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
 
 	self->pv->import_actions = gtk_action_group_new ("import");
 	gtk_action_group_set_translation_domain (self->pv->import_actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (self->pv->import_actions, IMPORT_ENTRIES, G_N_ELEMENTS (IMPORT_ENTRIES), self);
 	g_object_set (gtk_action_group_get_action (self->pv->import_actions, "key-import-keyring"), "is-important", TRUE, NULL);
-	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->pv->import_actions);
+	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), self->pv->import_actions);
 
 	/* init key list & selection settings */
 	self->pv->view = GTK_TREE_VIEW (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "key_list"));
@@ -332,8 +332,8 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	gtk_widget_grab_focus (GTK_WIDGET (self->pv->view));
 
 	/* To avoid flicker */
-	seahorse_viewer_ensure_updated (SEAHORSE_VIEWER (self));
-	seahorse_widget_show (SEAHORSE_WIDGET (SEAHORSE_VIEWER (self)));
+	seahorse_catalog_ensure_updated (SEAHORSE_CATALOG (self));
+	seahorse_widget_show (SEAHORSE_WIDGET (SEAHORSE_CATALOG (self)));
 
 	self->pv->store = seahorse_key_manager_store_new (GCR_COLLECTION (self->pv->collection),
 	                                                  self->pv->view,
@@ -344,7 +344,7 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	/* Include actions from the backend */
 	actions = NULL;
 	g_object_get (seahorse_pgp_backend_get (), "actions", &actions, NULL);
-	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
+	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
 	g_object_unref (actions);
 
 	return G_OBJECT (self);
@@ -471,8 +471,8 @@ seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
 	gobject_class->set_property = seahorse_keyserver_results_set_property;
 	gobject_class->get_property = seahorse_keyserver_results_get_property;
 
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_keyserver_results_get_selected_objects;
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected_places = seahorse_keyserver_results_get_selected_places;
+	SEAHORSE_CATALOG_CLASS (klass)->get_selected_objects = seahorse_keyserver_results_get_selected_objects;
+	SEAHORSE_CATALOG_CLASS (klass)->get_selected_places = seahorse_keyserver_results_get_selected_places;
 
 	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_SEARCH,
 	         g_param_spec_string ("search", "search", "search", NULL,
@@ -492,7 +492,7 @@ on_search_completed (GObject *source,
 
 	seahorse_pgp_backend_search_remote_finish (NULL, result, &error);
 	if (error != NULL) {
-		window = seahorse_viewer_get_window (SEAHORSE_VIEWER (self));
+		window = seahorse_catalog_get_window (SEAHORSE_CATALOG (self));
 		seahorse_util_show_error (window, _("The search for keys failed."), error->message);
 		g_error_free (error);
 	}

@@ -28,7 +28,7 @@
 
 #include <gcr/gcr.h>
 
-#include "seahorse-viewer.h"
+#include "seahorse-catalog.h"
 
 G_BEGIN_DECLS
 
@@ -44,12 +44,12 @@ typedef struct _SeahorseKeyManagerClass SeahorseKeyManagerClass;
 typedef struct _SeahorseKeyManagerPrivate SeahorseKeyManagerPrivate;
 
 struct _SeahorseKeyManager {
-	SeahorseViewer parent_instance;
+	SeahorseCatalog parent_instance;
 	SeahorseKeyManagerPrivate *pv;
 };
 
 struct _SeahorseKeyManagerClass {
-	SeahorseViewerClass parent_class;
+	SeahorseCatalogClass parent_class;
 };
 
 GType            seahorse_key_manager_get_type     (void) G_GNUC_CONST;

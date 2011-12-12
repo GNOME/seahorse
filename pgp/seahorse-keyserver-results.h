@@ -27,7 +27,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "seahorse-viewer.h"
+#include "seahorse-catalog.h"
 #include "seahorse-object.h"
 
 G_BEGIN_DECLS
@@ -45,12 +45,12 @@ typedef struct _SeahorseKeyserverResultsClass SeahorseKeyserverResultsClass;
 typedef struct _SeahorseKeyserverResultsPrivate SeahorseKeyserverResultsPrivate;
 
 struct _SeahorseKeyserverResults {
-	SeahorseViewer parent_instance;
+	SeahorseCatalog parent_instance;
 	SeahorseKeyserverResultsPrivate *pv;
 };
 
 struct _SeahorseKeyserverResultsClass {
-	SeahorseViewerClass parent_class;
+	SeahorseCatalogClass parent_class;
 };
 
 GType            seahorse_keyserver_results_get_type         (void);

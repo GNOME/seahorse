@@ -32,6 +32,7 @@ libseahorse_la_SOURCES = \
 	seahorse-actions.c seahorse-actions.h \
 	seahorse-backend.c seahorse-backend.h \
 	seahorse-bind.c seahorse-bind.h \
+	seahorse-catalog.c seahorse-catalog.h \
 	seahorse-cleanup.c seahorse-cleanup.h \
 	seahorse-collection.c seahorse-collection.h \
 	seahorse-context.c seahorse-context.h \
@@ -60,7 +61,6 @@ libseahorse_la_SOURCES = \
 	seahorse-types.c seahorse-types.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
-	seahorse-viewer.c seahorse-viewer.h \
 	seahorse-widget.c seahorse-widget.h \
 	$(MARSHAL_SRCS) \
 	$(KEYSERVER_SRCS)

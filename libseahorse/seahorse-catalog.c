@@ -32,7 +32,7 @@
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
-#include "seahorse-viewer.h"
+#include "seahorse-catalog.h"
 
 #include <gcr/gcr.h>
 
@@ -47,7 +47,7 @@ enum {
 	PROP_WINDOW
 };
 
-struct _SeahorseViewerPrivate {
+struct _SeahorseCatalogPrivate {
 	GtkUIManager *ui_manager;
 	GHashTable *actions;
 	GtkAction *edit_delete;
@@ -57,7 +57,7 @@ struct _SeahorseViewerPrivate {
 	GList *selection_actions;
 };
 
-G_DEFINE_TYPE (SeahorseViewer, seahorse_viewer, SEAHORSE_TYPE_WIDGET);
+G_DEFINE_TYPE (SeahorseCatalog, seahorse_catalog, SEAHORSE_TYPE_WIDGET);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL
@@ -68,12 +68,12 @@ G_MODULE_EXPORT void
 on_app_preferences (GtkAction* action,
                     gpointer user_data)
 {
-	SeahorseViewer* self = SEAHORSE_VIEWER (user_data);
-	seahorse_preferences_show (seahorse_viewer_get_window (self), NULL);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (user_data);
+	seahorse_preferences_show (seahorse_catalog_get_window (self), NULL);
 }
 
 static void
-on_app_about (GtkAction* action, SeahorseViewer* self)
+on_app_about (GtkAction* action, SeahorseCatalog *self)
 {
 	GtkAboutDialog *about;
 
@@ -116,7 +116,7 @@ on_app_about (GtkAction* action, SeahorseViewer* self)
 	gtk_about_dialog_set_website_label (about, _("Seahorse Project Homepage"));
 
 	g_signal_connect (about, "response", G_CALLBACK (gtk_widget_hide), NULL);
-	gtk_window_set_transient_for (GTK_WINDOW (about), seahorse_viewer_get_window (self));
+	gtk_window_set_transient_for (GTK_WINDOW (about), seahorse_catalog_get_window (self));
 
 	gtk_dialog_run (GTK_DIALOG (about));
 	gtk_widget_destroy (GTK_WIDGET (about));
@@ -124,15 +124,15 @@ on_app_about (GtkAction* action, SeahorseViewer* self)
 
 static void
 on_help_show (GtkAction *action,
-              SeahorseViewer* self)
+              SeahorseCatalog *self)
 {
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (SEAHORSE_IS_CATALOG (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 	seahorse_widget_show_help (SEAHORSE_WIDGET (self));
 }
 
 static GList *
-lookup_actions_for_objects (SeahorseViewer *self,
+lookup_actions_for_objects (SeahorseCatalog *self,
                             GList *objects)
 {
 	GtkActionGroup *actions;
@@ -152,7 +152,7 @@ lookup_actions_for_objects (SeahorseViewer *self,
 		if (actions == NULL)
 			continue;
 		if (g_hash_table_lookup (self->pv->actions, actions) == NULL)
-			seahorse_viewer_include_actions (self, actions);
+			seahorse_catalog_include_actions (self, actions);
 		queue = g_hash_table_lookup (table, actions);
 		if (queue == NULL) {
 			queue = g_queue_new ();
@@ -177,13 +177,13 @@ static void
 on_object_delete (GtkAction *action,
                   gpointer user_data)
 {
-	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (user_data);
 	GError *error = NULL;
 	GtkWindow *window;
 	GList *objects;
 
-	window = seahorse_viewer_get_window (self);
-	objects = seahorse_viewer_get_selected_objects (self);
+	window = seahorse_catalog_get_window (self);
+	objects = seahorse_catalog_get_selected_objects (self);
 	seahorse_deletable_delete_with_prompt_wait (objects, window, &error);
 
 	if (error != NULL)
@@ -196,12 +196,12 @@ static void
 on_properties_object (GtkAction *action,
                       gpointer user_data)
 {
-	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (user_data);
 	GList *objects;
 
-	objects = seahorse_viewer_get_selected_objects (self);
+	objects = seahorse_catalog_get_selected_objects (self);
 	if (objects != NULL)
-		seahorse_viewer_show_properties (self, objects->data);
+		seahorse_catalog_show_properties (self, objects->data);
 	g_list_free (objects);
 }
 
@@ -209,27 +209,27 @@ static void
 on_properties_place (GtkAction *action,
                      gpointer user_data)
 {
-	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (user_data);
 	GList *objects;
 
-	objects = seahorse_viewer_get_selected_places (self);
+	objects = seahorse_catalog_get_selected_places (self);
 	if (objects != NULL)
-		seahorse_viewer_show_properties (self, objects->data);
+		seahorse_catalog_show_properties (self, objects->data);
 	g_list_free (objects);
 }
 
 static void
-on_key_export_file (GtkAction* action, SeahorseViewer* self)
+on_key_export_file (GtkAction* action, SeahorseCatalog *self)
 {
 	GError *error = NULL;
 	GtkWindow *window;
 	GList *objects;
 
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (SEAHORSE_IS_CATALOG (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	window = seahorse_viewer_get_window (self);
-	objects = seahorse_viewer_get_selected_objects (self);
+	window = seahorse_catalog_get_window (self);
+	objects = seahorse_catalog_get_selected_objects (self);
 	seahorse_exportable_export_to_prompt_wait (objects, window, &error);
 	g_list_free (objects);
 
@@ -241,7 +241,7 @@ on_key_export_file (GtkAction* action, SeahorseViewer* self)
 
 static void
 on_key_export_clipboard (GtkAction* action,
-                         SeahorseViewer* self)
+                         SeahorseCatalog *self)
 {
 	GList* objects;
 	gpointer output;
@@ -250,10 +250,10 @@ on_key_export_clipboard (GtkAction* action,
 	GdkAtom atom;
 	GtkClipboard* board;
 
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (SEAHORSE_IS_CATALOG (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	objects = seahorse_viewer_get_selected_objects (self);
+	objects = seahorse_catalog_get_selected_objects (self);
 	seahorse_exportable_export_to_text_wait (objects, &output, &size, &error);
 	g_list_free (objects);
 
@@ -264,7 +264,7 @@ on_key_export_clipboard (GtkAction* action,
 		board = gtk_clipboard_get (atom);
 		gtk_clipboard_set_text (board, output, (gint)size);
 	} else {
-		seahorse_util_handle_error (&error, seahorse_viewer_get_window (self),
+		seahorse_util_handle_error (&error, seahorse_catalog_get_window (self),
 		                            _("Couldn't export data"));
 	}
 
@@ -302,9 +302,9 @@ on_ui_manager_pre_activate (GtkUIManager *ui_manager,
                             GtkAction *action,
                             gpointer user_data)
 {
-	SeahorseViewer *self = SEAHORSE_VIEWER (user_data);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (user_data);
 	seahorse_action_pre_activate_with_window (action,
-	                                          seahorse_viewer_get_window (self));
+	                                          seahorse_catalog_get_window (self));
 }
 
 static void
@@ -316,7 +316,7 @@ on_ui_manager_post_activate (GtkUIManager *ui_manager,
 }
 
 static void
-seahorse_viewer_real_selection_changed (SeahorseViewer *self)
+seahorse_catalog_real_selection_changed (SeahorseCatalog *self)
 {
 	GList *groups;
 	GList *objects;
@@ -330,7 +330,7 @@ seahorse_viewer_real_selection_changed (SeahorseViewer *self)
 	can_delete = FALSE;
 	can_export = FALSE;
 
-	objects = seahorse_viewer_get_selected_objects (self);
+	objects = seahorse_catalog_get_selected_objects (self);
 	for (l = objects; l != NULL; l = g_list_next (l)) {
 		if (seahorse_exportable_can_export (l->data))
 			can_export = TRUE;
@@ -354,7 +354,7 @@ seahorse_viewer_real_selection_changed (SeahorseViewer *self)
 	gtk_action_set_sensitive (self->pv->edit_copy, can_export);
 	gtk_action_set_sensitive (self->pv->file_export, can_export);
 
-	objects = seahorse_viewer_get_selected_places (self);
+	objects = seahorse_catalog_get_selected_places (self);
 	groups = g_list_concat (groups, lookup_actions_for_objects (self, objects));
 	g_list_free (objects);
 
@@ -373,7 +373,7 @@ on_ui_manager_add_widget (GtkUIManager *ui_manager,
                           GtkWidget *widget,
                           gpointer user_data)
 {
-	SeahorseViewer* self = SEAHORSE_VIEWER (user_data);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (user_data);
 	const char* name = NULL;
 	GtkWidget* holder;
 
@@ -394,16 +394,16 @@ on_ui_manager_add_widget (GtkUIManager *ui_manager,
 }
 
 static void
-seahorse_viewer_constructed (GObject *obj)
+seahorse_catalog_constructed (GObject *obj)
 {
-	SeahorseViewer *self = SEAHORSE_VIEWER (obj);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (obj);
 	GError *error = NULL;
 	GtkWidget *win;
 	const gchar *name;
 	gchar *path;
 	GtkActionGroup *actions;
 
-	G_OBJECT_CLASS (seahorse_viewer_parent_class)->constructed (obj);
+	G_OBJECT_CLASS (seahorse_catalog_parent_class)->constructed (obj);
 
 	/* The widgts get added in an idle loop later */
 	name = seahorse_widget_get_name (SEAHORSE_WIDGET (self));
@@ -436,10 +436,10 @@ seahorse_viewer_constructed (GObject *obj)
 }
 
 static void
-seahorse_viewer_init (SeahorseViewer *self)
+seahorse_catalog_init (SeahorseCatalog *self)
 {
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_VIEWER,
-	                                        SeahorseViewerPrivate);
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_CATALOG,
+	                                        SeahorseCatalogPrivate);
 	self->pv->actions = g_hash_table_new_full (g_direct_hash, g_direct_equal,
 	                                           g_object_unref, NULL);
 
@@ -453,9 +453,9 @@ seahorse_viewer_init (SeahorseViewer *self)
 }
 
 static void
-seahorse_viewer_dispose (GObject *obj)
+seahorse_catalog_dispose (GObject *obj)
 {
-	SeahorseViewer *self = SEAHORSE_VIEWER (obj);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (obj);
 	GList *l;
 
 	g_clear_object (&self->pv->edit_copy);
@@ -474,30 +474,30 @@ seahorse_viewer_dispose (GObject *obj)
 
 	g_hash_table_remove_all (self->pv->actions);
 
-	G_OBJECT_CLASS (seahorse_viewer_parent_class)->dispose (obj);
+	G_OBJECT_CLASS (seahorse_catalog_parent_class)->dispose (obj);
 }
 
 static void
-seahorse_viewer_finalize (GObject *obj)
+seahorse_catalog_finalize (GObject *obj)
 {
-	SeahorseViewer *self = SEAHORSE_VIEWER (obj);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (obj);
 
 	g_assert (self->pv->ui_manager == NULL);
 	g_assert (g_hash_table_size (self->pv->actions) == 0);
 	g_hash_table_destroy (self->pv->actions);
 
-	G_OBJECT_CLASS (seahorse_viewer_parent_class)->finalize (obj);
+	G_OBJECT_CLASS (seahorse_catalog_parent_class)->finalize (obj);
 }
 
 static void
-seahorse_viewer_get_property (GObject *obj, guint prop_id, GValue *value,
+seahorse_catalog_get_property (GObject *obj, guint prop_id, GValue *value,
                               GParamSpec *pspec)
 {
-	SeahorseViewer *self = SEAHORSE_VIEWER (obj);
+	SeahorseCatalog *self = SEAHORSE_CATALOG (obj);
 
 	switch (prop_id) {
 	case PROP_WINDOW:
-		g_value_set_object (value, seahorse_viewer_get_window (self));
+		g_value_set_object (value, seahorse_catalog_get_window (self));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -506,43 +506,43 @@ seahorse_viewer_get_property (GObject *obj, guint prop_id, GValue *value,
 }
 
 static void
-seahorse_viewer_class_init (SeahorseViewerClass *klass)
+seahorse_catalog_class_init (SeahorseCatalogClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-	g_type_class_add_private (klass, sizeof (SeahorseViewerPrivate));
+	g_type_class_add_private (klass, sizeof (SeahorseCatalogPrivate));
 
-	gobject_class->constructed = seahorse_viewer_constructed;
-	gobject_class->dispose = seahorse_viewer_dispose;
-	gobject_class->finalize = seahorse_viewer_finalize;
-	gobject_class->get_property = seahorse_viewer_get_property;
+	gobject_class->constructed = seahorse_catalog_constructed;
+	gobject_class->dispose = seahorse_catalog_dispose;
+	gobject_class->finalize = seahorse_catalog_finalize;
+	gobject_class->get_property = seahorse_catalog_get_property;
 
-	klass->selection_changed = seahorse_viewer_real_selection_changed;
+	klass->selection_changed = seahorse_catalog_real_selection_changed;
 
 	g_object_class_install_property (gobject_class, PROP_WINDOW,
 	           g_param_spec_object ("window", "Window", "Window of View",
 	                                GTK_TYPE_WIDGET, G_PARAM_READABLE));
 
-	g_signal_new ("selection-changed", SEAHORSE_TYPE_VIEWER,
-	              G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (SeahorseViewerClass, selection_changed),
+	g_signal_new ("selection-changed", SEAHORSE_TYPE_CATALOG,
+	              G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (SeahorseCatalogClass, selection_changed),
 	              NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 void
-seahorse_viewer_ensure_updated (SeahorseViewer* self)
+seahorse_catalog_ensure_updated (SeahorseCatalog *self)
 {
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (SEAHORSE_IS_CATALOG (self));
 	gtk_ui_manager_ensure_update (self->pv->ui_manager);
 }
 
 void
-seahorse_viewer_include_actions (SeahorseViewer* self,
+seahorse_catalog_include_actions (SeahorseCatalog *self,
                                  GtkActionGroup* actions)
 {
 	const gchar *definition;
 	GError *error = NULL;
 
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (SEAHORSE_IS_CATALOG (self));
 	g_return_if_fail (GTK_IS_ACTION_GROUP (actions));
 
 	gtk_ui_manager_insert_action_group (self->pv->ui_manager, actions, 10);
@@ -563,7 +563,7 @@ seahorse_viewer_include_actions (SeahorseViewer* self,
 }
 
 void
-seahorse_viewer_show_context_menu (SeahorseViewer* self,
+seahorse_catalog_show_context_menu (SeahorseCatalog *self,
                                    const gchar *name,
                                    guint button,
                                    guint time)
@@ -571,7 +571,7 @@ seahorse_viewer_show_context_menu (SeahorseViewer* self,
 	GtkWidget *menu;
 	gchar *path;
 
-	g_return_if_fail (SEAHORSE_IS_VIEWER (self));
+	g_return_if_fail (SEAHORSE_IS_CATALOG (self));
 	g_return_if_fail (name != NULL);
 
 	path = g_strdup_printf ("/%s", name);
@@ -590,7 +590,7 @@ seahorse_viewer_show_context_menu (SeahorseViewer* self,
 }
 
 void
-seahorse_viewer_show_properties (SeahorseViewer* self,
+seahorse_catalog_show_properties (SeahorseCatalog *self,
                                  GObject* obj)
 {
 	GtkActionGroup *actions, *cloned;
@@ -608,38 +608,38 @@ seahorse_viewer_show_properties (SeahorseViewer* self,
 
 	action = gtk_action_group_get_action (cloned, "properties");
 	if (action != NULL)
-		seahorse_action_activate_with_window (action, seahorse_viewer_get_window (self));
+		seahorse_action_activate_with_window (action, seahorse_catalog_get_window (self));
 
 	g_object_unref (cloned);
 }
 
 GtkWindow *
-seahorse_viewer_get_window (SeahorseViewer* self)
+seahorse_catalog_get_window (SeahorseCatalog *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
+	g_return_val_if_fail (SEAHORSE_IS_CATALOG (self), NULL);
 	return GTK_WINDOW (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)));
 }
 
 GList *
-seahorse_viewer_get_selected_objects (SeahorseViewer* self)
+seahorse_catalog_get_selected_objects (SeahorseCatalog *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
-	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_objects, NULL);
-	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_objects (self);
+	g_return_val_if_fail (SEAHORSE_IS_CATALOG (self), NULL);
+	g_return_val_if_fail (SEAHORSE_CATALOG_GET_CLASS (self)->get_selected_objects, NULL);
+	return SEAHORSE_CATALOG_GET_CLASS (self)->get_selected_objects (self);
 }
 
 GList *
-seahorse_viewer_get_selected_places (SeahorseViewer* self)
+seahorse_catalog_get_selected_places (SeahorseCatalog *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
-	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_places, NULL);
-	return SEAHORSE_VIEWER_GET_CLASS (self)->get_selected_places (self);
+	g_return_val_if_fail (SEAHORSE_IS_CATALOG (self), NULL);
+	g_return_val_if_fail (SEAHORSE_CATALOG_GET_CLASS (self)->get_selected_places, NULL);
+	return SEAHORSE_CATALOG_GET_CLASS (self)->get_selected_places (self);
 }
 
 GList *
-seahorse_viewer_get_backends (SeahorseViewer* self)
+seahorse_catalog_get_backends (SeahorseCatalog *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_VIEWER (self), NULL);
-	g_return_val_if_fail (SEAHORSE_VIEWER_GET_CLASS (self)->get_backends, NULL);
-	return SEAHORSE_VIEWER_GET_CLASS (self)->get_backends (self);
+	g_return_val_if_fail (SEAHORSE_IS_CATALOG (self), NULL);
+	g_return_val_if_fail (SEAHORSE_CATALOG_GET_CLASS (self)->get_backends, NULL);
+	return SEAHORSE_CATALOG_GET_CLASS (self)->get_backends (self);
 }

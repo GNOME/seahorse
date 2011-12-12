@@ -83,7 +83,7 @@ enum  {
 	TARGETS_URIS
 };
 
-G_DEFINE_TYPE (SeahorseKeyManager, seahorse_key_manager, SEAHORSE_TYPE_VIEWER);
+G_DEFINE_TYPE (SeahorseKeyManager, seahorse_key_manager, SEAHORSE_TYPE_CATALOG);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL 
@@ -122,7 +122,7 @@ on_keymanager_row_activated (GtkTreeView* view, GtkTreePath* path,
 	
 	obj = seahorse_key_manager_store_get_object_from_path (view, path);
 	if (obj != NULL)
-		seahorse_viewer_show_properties (SEAHORSE_VIEWER (self), obj);
+		seahorse_catalog_show_properties (SEAHORSE_CATALOG (self), obj);
 }
 
 G_MODULE_EXPORT gboolean
@@ -132,8 +132,8 @@ on_keymanager_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event,
 	g_return_val_if_fail (GTK_IS_TREE_VIEW (view), FALSE);
 	
 	if (event->button == 3)
-		seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self),
-		                                   SEAHORSE_VIEWER_MENU_OBJECT,
+		seahorse_catalog_show_context_menu (SEAHORSE_CATALOG (self),
+		                                   SEAHORSE_CATALOG_MENU_OBJECT,
 		                                   event->button, event->time);
 
 	return FALSE;
@@ -144,10 +144,10 @@ on_keymanager_key_list_popup_menu (GtkTreeView* view, SeahorseKeyManager* self)
 {
 	GList *objects;
 
-	objects = seahorse_viewer_get_selected_objects (SEAHORSE_VIEWER (self));
+	objects = seahorse_catalog_get_selected_objects (SEAHORSE_CATALOG (self));
 	if (objects != NULL)
-		seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self),
-		                                   SEAHORSE_VIEWER_MENU_OBJECT,
+		seahorse_catalog_show_context_menu (SEAHORSE_CATALOG (self),
+		                                   SEAHORSE_CATALOG_MENU_OBJECT,
 		                                   0, gtk_get_current_event_time ());
 	g_list_free (objects);
 	return FALSE;
@@ -158,7 +158,7 @@ on_file_new (GtkAction* action, SeahorseKeyManager* self)
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	seahorse_generate_select_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
+	seahorse_generate_select_show (seahorse_catalog_get_window (SEAHORSE_CATALOG (self)));
 }
 
 G_MODULE_EXPORT void 
@@ -166,7 +166,7 @@ on_keymanager_new_button (GtkButton* button, SeahorseKeyManager* self)
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_BUTTON (button));
-	seahorse_generate_select_show (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
+	seahorse_generate_select_show (seahorse_catalog_get_window (SEAHORSE_CATALOG (self)));
 }
 
 #if REFACTOR_FIRST
@@ -216,7 +216,7 @@ import_files (SeahorseKeyManager* self,
 	GtkDialog *dialog;
 	GtkWindow *parent;
 
-	parent = seahorse_viewer_get_window (SEAHORSE_VIEWER (self));
+	parent = seahorse_catalog_get_window (SEAHORSE_CATALOG (self));
 	dialog = seahorse_import_dialog_new (parent);
 	seahorse_import_dialog_add_uris (SEAHORSE_IMPORT_DIALOG (dialog), uris);
 
@@ -234,7 +234,7 @@ import_prompt (SeahorseKeyManager* self)
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 
 	dialog = seahorse_util_chooser_open_new (_("Import Key"), 
-	                                         seahorse_viewer_get_window (SEAHORSE_VIEWER (self)));
+	                                         seahorse_catalog_get_window (SEAHORSE_CATALOG (self)));
 	seahorse_util_chooser_show_key_files (dialog);
 	
 	uri = seahorse_util_chooser_open_prompt (dialog);
@@ -271,7 +271,7 @@ import_text (SeahorseKeyManager* self,
 	GtkDialog *dialog;
 	GtkWindow *parent;
 
-	parent = seahorse_viewer_get_window (SEAHORSE_VIEWER (self));
+	parent = seahorse_catalog_get_window (SEAHORSE_CATALOG (self));
 	dialog = seahorse_import_dialog_new (parent);
 	seahorse_import_dialog_add_text (SEAHORSE_IMPORT_DIALOG (dialog),
 	                                 display_name, text);
@@ -474,16 +474,16 @@ static const GtkRadioActionEntry VIEW_RADIO_ACTIONS[] = {
 };
 
 static GList *
-seahorse_key_manager_get_selected_objects (SeahorseViewer* viewer)
+seahorse_key_manager_get_selected_objects (SeahorseCatalog *catalog)
 {
-	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (viewer);
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (catalog);
 	return seahorse_key_manager_store_get_selected_objects (self->pv->view);
 }
 
 static GList *
-seahorse_key_manager_get_selected_places (SeahorseViewer* viewer)
+seahorse_key_manager_get_selected_places (SeahorseCatalog *catalog)
 {
-	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (viewer);
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (catalog);
 	return seahorse_sidebar_get_selected_places (self->pv->sidebar);
 }
 
@@ -525,7 +525,7 @@ on_sidebar_popup_menu (SeahorseSidebar *sidebar,
 	const gchar *name;
 
 	name = G_OBJECT_TYPE_NAME (collection);
-	seahorse_viewer_show_context_menu (SEAHORSE_VIEWER (self), name,
+	seahorse_catalog_show_context_menu (SEAHORSE_CATALOG (self), name,
 	                                   0, gtk_get_current_event_time ());
 }
 
@@ -556,7 +556,7 @@ setup_sidebar (SeahorseKeyManager *self)
 	g_settings_bind (self->pv->settings, "sidebar-visible",
 	                 action, "active",
 	                 G_SETTINGS_BIND_DEFAULT);
-	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
+	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
 	g_object_unref (actions);
 
 	g_settings_bind (self->pv->settings, "places-selected",
@@ -574,7 +574,7 @@ setup_sidebar (SeahorseKeyManager *self)
 		actions = NULL;
 		g_object_get (l->data, "actions", &actions, NULL);
 		if (actions != NULL) {
-			seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
+			seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
 			g_object_unref (actions);
 		}
 	}
@@ -594,7 +594,7 @@ seahorse_key_manager_constructed (GObject *object)
 
 	G_OBJECT_CLASS (seahorse_key_manager_parent_class)->constructed (object);
 
-	gtk_window_set_title (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)), _("Passwords and Keys"));
+	gtk_window_set_title (seahorse_catalog_get_window (SEAHORSE_CATALOG (self)), _("Passwords and Keys"));
 
 	self->pv->collection = setup_sidebar (self);
 
@@ -617,7 +617,7 @@ seahorse_key_manager_constructed (GObject *object)
 	actions = gtk_action_group_new ("general");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, GENERAL_ACTIONS, G_N_ELEMENTS (GENERAL_ACTIONS), self);
-	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), actions);
+	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
 
 	self->pv->view_actions = gtk_action_group_new ("view");
 	gtk_action_group_set_translation_domain (self->pv->view_actions, GETTEXT_PACKAGE);
@@ -625,7 +625,7 @@ seahorse_key_manager_constructed (GObject *object)
 	                                    G_N_ELEMENTS (VIEW_RADIO_ACTIONS), -1,
 	                                    G_CALLBACK (on_view_show_changed), self);
 	action = gtk_action_group_get_action (self->pv->view_actions, "view-personal");
-	seahorse_viewer_include_actions (SEAHORSE_VIEWER (self), self->pv->view_actions);
+	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), self->pv->view_actions);
 	self->pv->show_action = GTK_RADIO_ACTION (action);
 
 	/* Notify us when settings change */
@@ -645,7 +645,7 @@ seahorse_key_manager_constructed (GObject *object)
 	                         "clicked", G_CALLBACK (on_keymanager_new_button), self, 0);
 
 	/* Flush all updates */
-	seahorse_viewer_ensure_updated (SEAHORSE_VIEWER (self));
+	seahorse_catalog_ensure_updated (SEAHORSE_CATALOG (self));
 	
 	/* Find the toolbar */
 	widget = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "toolbar-placeholder");
@@ -717,17 +717,17 @@ seahorse_key_manager_constructed (GObject *object)
 	g_signal_emit_by_name (self, "selection-changed");
 
 	/* To avoid flicker */
-	seahorse_widget_show (SEAHORSE_WIDGET (SEAHORSE_VIEWER (self)));
+	seahorse_widget_show (SEAHORSE_WIDGET (SEAHORSE_CATALOG (self)));
 	
 	/* Setup drops */
-	gtk_drag_dest_set (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), 
+	gtk_drag_dest_set (GTK_WIDGET (seahorse_catalog_get_window (SEAHORSE_CATALOG (self))),
 	                   GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
 	targets = gtk_target_list_new (NULL, 0);
 	gtk_target_list_add_uri_targets (targets, TARGETS_URIS);
 	gtk_target_list_add_text_targets (targets, TARGETS_PLAIN);
-	gtk_drag_dest_set_target_list (GTK_WIDGET (seahorse_viewer_get_window (SEAHORSE_VIEWER (self))), targets);
+	gtk_drag_dest_set_target_list (GTK_WIDGET (seahorse_catalog_get_window (SEAHORSE_CATALOG (self))), targets);
 
-	g_signal_connect_object (seahorse_viewer_get_window (SEAHORSE_VIEWER (self)), "drag-data-received", 
+	g_signal_connect_object (seahorse_catalog_get_window (SEAHORSE_CATALOG (self)), "drag-data-received",
 	                         G_CALLBACK (on_target_drag_data_received), self, 0);
 
 #ifdef REFACTOR_FIRST
@@ -774,8 +774,8 @@ seahorse_key_manager_class_init (SeahorseKeyManagerClass *klass)
 	gobject_class->constructed = seahorse_key_manager_constructed;
 	gobject_class->finalize = seahorse_key_manager_finalize;
 
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected_objects = seahorse_key_manager_get_selected_objects;
-	SEAHORSE_VIEWER_CLASS (klass)->get_selected_places = seahorse_key_manager_get_selected_places;
+	SEAHORSE_CATALOG_CLASS (klass)->get_selected_objects = seahorse_key_manager_get_selected_objects;
+	SEAHORSE_CATALOG_CLASS (klass)->get_selected_places = seahorse_key_manager_get_selected_places;
 }
 
 SeahorseWidget *

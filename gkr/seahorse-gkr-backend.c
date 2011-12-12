@@ -29,7 +29,6 @@
 #include "seahorse-backend.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
-#include "seahorse-viewer.h"
 
 #include <gnome-keyring.h>
 
