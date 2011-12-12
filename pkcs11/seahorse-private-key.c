@@ -27,12 +27,14 @@
 #include "seahorse-pkcs11-actions.h"
 #include "seahorse-pkcs11-helpers.h"
 #include "seahorse-pkcs11-key-deleter.h"
+#include "seahorse-pkcs11-properties.h"
 #include "seahorse-token.h"
 #include "seahorse-types.h"
 
 #include "seahorse-deletable.h"
 #include "seahorse-exportable.h"
 #include "seahorse-util.h"
+#include "seahorse-viewable.h"
 
 #include <gcr/gcr.h>
 #include <gck/pkcs11.h>
@@ -79,10 +81,13 @@ static void seahorse_private_key_exportable_iface (SeahorseExportableIface *ifac
 
 static void seahorse_private_key_object_cache_iface (GckObjectCacheIface *iface);
 
+static void seahorse_private_key_viewable_iface (SeahorseViewableIface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (SeahorsePrivateKey, seahorse_private_key, GCK_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_CACHE, seahorse_private_key_object_cache_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_private_key_deletable_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_private_key_exportable_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_private_key_viewable_iface);
 );
 
 static void
@@ -320,6 +325,20 @@ static void
 seahorse_private_key_exportable_iface (SeahorseExportableIface *iface)
 {
 	iface->create_exporters = seahorse_private_key_create_exporters;
+}
+
+static void
+seahorse_private_key_show_viewer (SeahorseViewable *viewable,
+                                  GtkWindow *parent)
+{
+	GtkWindow *viewer = seahorse_pkcs11_properties_show (G_OBJECT (viewable), parent);
+	gtk_widget_show (GTK_WIDGET (viewer));
+}
+
+static void
+seahorse_private_key_viewable_iface (SeahorseViewableIface *iface)
+{
+	iface->show_viewer = seahorse_private_key_show_viewer;
 }
 
 SeahorseCertificate *

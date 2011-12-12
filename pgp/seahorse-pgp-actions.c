@@ -189,19 +189,9 @@ on_key_sign (GtkAction* action,
 	seahorse_gpgme_sign_prompt (SEAHORSE_GPGME_KEY (objects->data), window);
 }
 
-static void
-on_show_properties (GtkAction *action,
-                    gpointer user_data)
-{
-	seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (user_data),
-	                                  seahorse_action_get_window (action));
-}
-
 static const GtkActionEntry KEY_ACTIONS[] = {
 	{ "key-sign", GTK_STOCK_INDEX, N_("_Sign Key..."), "",
 	  N_("Sign public key"), G_CALLBACK (on_key_sign) },
-	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
-	  N_("Properties of the key."), G_CALLBACK (on_show_properties) },
 };
 
 static void

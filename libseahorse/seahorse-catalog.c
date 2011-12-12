@@ -25,6 +25,7 @@
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
 #include "seahorse-backend.h"
+#include "seahorse-catalog.h"
 #include "seahorse-deletable.h"
 #include "seahorse-exportable.h"
 #include "seahorse-object.h"
@@ -32,7 +33,7 @@
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
-#include "seahorse-catalog.h"
+#include "seahorse-viewable.h"
 
 #include <gcr/gcr.h>
 
@@ -136,6 +137,7 @@ lookup_actions_for_objects (SeahorseCatalog *self,
                             GList *objects)
 {
 	GtkActionGroup *actions;
+	GtkActionGroup *cloned;
 	GHashTableIter iter;
 	GList *results;
 	GHashTable *table;
@@ -165,8 +167,9 @@ lookup_actions_for_objects (SeahorseCatalog *self,
 	results = NULL;
 	g_hash_table_iter_init (&iter, table);
 	while (g_hash_table_iter_next (&iter, (gpointer *)&actions, (gpointer *)&queue)) {
-		results = g_list_prepend (results,
-		      seahorse_actions_clone_for_objects (actions, queue->head));
+		cloned = seahorse_actions_clone_for_objects (actions, queue->head);
+		if (cloned != NULL)
+			results = g_list_prepend (results, cloned);
 	}
 
 	g_hash_table_destroy (table);
@@ -336,18 +339,14 @@ seahorse_catalog_real_selection_changed (SeahorseCatalog *self)
 			can_export = TRUE;
 		if (seahorse_deletable_can_delete (l->data))
 			can_delete = TRUE;
-		if (can_export && can_delete)
+		if (seahorse_viewable_can_view (l->data))
+			can_properties = TRUE;
+		if (can_export && can_delete && can_properties)
 			break;
 	}
 
 	groups = lookup_actions_for_objects (self, objects);
 	g_list_free (objects);
-
-	/* Add all those actions */
-	for (l = groups; l != NULL; l = g_list_next (l)) {
-		if (gtk_action_group_get_action (l->data, "properties"))
-			can_properties = TRUE;
-	}
 
 	gtk_action_set_sensitive (self->pv->properties_object, can_properties);
 	gtk_action_set_sensitive (self->pv->edit_delete, can_delete);
@@ -591,26 +590,11 @@ seahorse_catalog_show_context_menu (SeahorseCatalog *self,
 
 void
 seahorse_catalog_show_properties (SeahorseCatalog *self,
-                                 GObject* obj)
+                                  GObject* obj)
 {
-	GtkActionGroup *actions, *cloned;
-	GtkAction *action;
-	GList *objects;
-
-	g_object_get (obj, "actions", &actions, NULL);
-	if (actions == NULL)
-		return;
-
-	objects = g_list_append (NULL, obj);
-	cloned = seahorse_actions_clone_for_objects (actions, objects);
-	g_object_unref (actions);
-	g_list_free (objects);
-
-	action = gtk_action_group_get_action (cloned, "properties");
-	if (action != NULL)
-		seahorse_action_activate_with_window (action, seahorse_catalog_get_window (self));
-
-	g_object_unref (cloned);
+	if (seahorse_viewable_can_view (obj))
+		seahorse_viewable_show_viewer (SEAHORSE_VIEWABLE (obj),
+		                               seahorse_catalog_get_window (self));
 }
 
 GtkWindow *

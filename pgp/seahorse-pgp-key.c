@@ -20,20 +20,22 @@
  */
 #include "config.h"
 
-#include <string.h>
-
-#include <glib/gi18n.h>
+#include "seahorse-pgp.h"
+#include "seahorse-pgp-dialogs.h"
+#include "seahorse-pgp-key.h"
+#include "seahorse-pgp-uid.h"
+#include "seahorse-pgp-subkey.h"
 
 #include "seahorse-icons.h"
 #include "seahorse-object-list.h"
 #include "seahorse-util.h"
-
-#include "pgp/seahorse-pgp.h"
-#include "pgp/seahorse-pgp-key.h"
-#include "pgp/seahorse-pgp-uid.h"
-#include "pgp/seahorse-pgp-subkey.h"
+#include "seahorse-viewable.h"
 
 #include <gcr/gcr.h>
+
+#include <glib/gi18n.h>
+
+#include <string.h>
 
 enum {
 	PROP_0,
@@ -49,7 +51,11 @@ enum {
 	PROP_DESCRIPTION
 };
 
-G_DEFINE_TYPE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT);
+static void        seahorse_pgp_key_viewable_iface          (SeahorseViewableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_pgp_key_viewable_iface);
+);
 
 struct _SeahorsePgpKeyPrivate {
 	gchar *keyid;
@@ -477,9 +483,18 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
  	                             "", G_PARAM_READABLE));
 }
 
-/* -----------------------------------------------------------------------------
- * PUBLIC 
- */
+static void
+seahorse_pgp_key_show_viewer (SeahorseViewable *viewable,
+                              GtkWindow *parent)
+{
+	seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (viewable), parent);
+}
+
+static void
+seahorse_pgp_key_viewable_iface (SeahorseViewableIface *iface)
+{
+	iface->show_viewer = seahorse_pgp_key_show_viewer;
+}
 
 gchar*
 seahorse_pgp_key_calc_identifier (const gchar *keyid)

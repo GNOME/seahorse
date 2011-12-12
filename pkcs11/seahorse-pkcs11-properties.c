@@ -36,6 +36,8 @@
 
 #include <gcr/gcr.h>
 
+#include <glib/gi18n.h>
+
 static const gchar *UI_STRING =
 "<ui>"
 "	<toolbar name='Toolbar'>"

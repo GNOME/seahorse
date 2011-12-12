@@ -24,6 +24,7 @@
 
 #include "seahorse-ssh-actions.h"
 #include "seahorse-ssh-deleter.h"
+#include "seahorse-ssh-dialogs.h"
 #include "seahorse-ssh-exporter.h"
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
@@ -34,6 +35,7 @@
 #include "seahorse-icons.h"
 #include "seahorse-place.h"
 #include "seahorse-validity.h"
+#include "seahorse-viewable.h"
 
 #include <gcr/gcr.h>
 
@@ -59,9 +61,12 @@ static void       seahorse_ssh_key_deletable_iface       (SeahorseDeletableIface
 
 static void       seahorse_ssh_key_exportable_iface      (SeahorseExportableIface *iface);
 
+static void       seahorse_ssh_key_viewable_iface        (SeahorseViewableIface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (SeahorseSSHKey, seahorse_ssh_key, SEAHORSE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_ssh_key_exportable_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_ssh_key_deletable_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_ssh_key_viewable_iface);
 );
 
 /* -----------------------------------------------------------------------------
@@ -329,6 +334,19 @@ static void
 seahorse_ssh_key_deletable_iface (SeahorseDeletableIface *iface)
 {
 	iface->create_deleter = seahorse_ssh_key_create_deleter;
+}
+
+static void
+seahorse_ssh_key_show_viewer (SeahorseViewable *viewable,
+                              GtkWindow *parent)
+{
+	seahorse_ssh_key_properties_show (SEAHORSE_SSH_KEY (viewable), parent);
+}
+
+static void
+seahorse_ssh_key_viewable_iface (SeahorseViewableIface *iface)
+{
+	iface->show_viewer = seahorse_ssh_key_show_viewer;
 }
 
 SeahorseSSHKey* 

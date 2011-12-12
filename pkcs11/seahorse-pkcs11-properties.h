@@ -27,7 +27,6 @@
 #include <gtk/gtk.h>
 
 #include <glib-object.h>
-#include <glib/gi18n.h>
 
 #define SEAHORSE_TYPE_PKCS11_PROPERTIES               (seahorse_pkcs11_properties_get_type ())
 #define SEAHORSE_PKCS11_PROPERTIES(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PKCS11_PROPERTIES, SeahorsePkcs11Properties))

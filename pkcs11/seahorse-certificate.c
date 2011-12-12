@@ -28,6 +28,7 @@
 #include "seahorse-pkcs11-actions.h"
 #include "seahorse-pkcs11-deleter.h"
 #include "seahorse-pkcs11-helpers.h"
+#include "seahorse-pkcs11-properties.h"
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"
 #include "seahorse-types.h"
@@ -36,6 +37,7 @@
 #include "seahorse-exportable.h"
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
+#include "seahorse-viewable.h"
 
 #include <gcr/gcr.h>
 #include <gck/pkcs11.h>
@@ -83,12 +85,15 @@ static void   seahorse_certificate_deletable_iface             (SeahorseDeletabl
 
 static void   seahorse_certificate_exportable_iface            (SeahorseExportableIface *iface);
 
+static void   seahorse_certificate_viewable_iface              (SeahorseViewableIface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (SeahorseCertificate, seahorse_certificate, GCK_TYPE_OBJECT,
                          GCR_CERTIFICATE_MIXIN_IMPLEMENT_COMPARABLE ();
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_CERTIFICATE, seahorse_certificate_certificate_iface);
                          G_IMPLEMENT_INTERFACE (GCK_TYPE_OBJECT_CACHE, seahorse_certificate_object_cache_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_certificate_deletable_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_certificate_exportable_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_certificate_viewable_iface);
 );
 
 static void
@@ -397,6 +402,20 @@ static void
 seahorse_certificate_deletable_iface (SeahorseDeletableIface *iface)
 {
 	iface->create_deleter = seahorse_certificate_create_deleter;
+}
+
+static void
+seahorse_certificate_show_viewer (SeahorseViewable *viewable,
+                                  GtkWindow *parent)
+{
+	GtkWindow *viewer = seahorse_pkcs11_properties_show (G_OBJECT (viewable), parent);
+	gtk_widget_show (GTK_WIDGET (viewer));
+}
+
+static void
+seahorse_certificate_viewable_iface (SeahorseViewableIface *iface)
+{
+	iface->show_viewer = seahorse_certificate_show_viewer;
 }
 
 GIcon *

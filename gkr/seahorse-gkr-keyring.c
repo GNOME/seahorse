@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "seahorse-gkr.h"
+#include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-keyring-deleter.h"
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-operation.h"
@@ -30,6 +31,7 @@
 
 #include "seahorse-action.h"
 #include "seahorse-deletable.h"
+#include "seahorse-viewable.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
@@ -66,10 +68,13 @@ static void     seahorse_keyring_collection_iface   (GcrCollectionIface *iface);
 
 static void     seahorse_keyring_deletable_iface    (SeahorseDeletableIface *iface);
 
+static void     seahorse_keyring_viewable_iface     (SeahorseViewableIface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_keyring_collection_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_keyring_place_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_keyring_deletable_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_keyring_viewable_iface);
 );
 
 static GType
@@ -539,6 +544,19 @@ seahorse_keyring_deletable_iface (SeahorseDeletableIface *iface)
 	iface->create_deleter = seahorse_gkr_keyring_create_deleter;
 }
 
+static void
+seahorse_gkr_keyring_show_viewer (SeahorseViewable *viewable,
+                                  GtkWindow *parent)
+{
+	seahorse_gkr_keyring_properties_show (SEAHORSE_GKR_KEYRING (viewable),
+	                                      parent);
+}
+
+static void
+seahorse_keyring_viewable_iface (SeahorseViewableIface *iface)
+{
+	iface->show_viewer = seahorse_gkr_keyring_show_viewer;
+}
 
 SeahorseGkrKeyring*
 seahorse_gkr_keyring_new (const gchar *keyring_name)

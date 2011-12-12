@@ -82,23 +82,10 @@ on_ssh_upload (GtkAction* action,
 	seahorse_ssh_upload_prompt (ssh_keys, seahorse_action_get_window (action));
 }
 
-static void
-on_show_properties (GtkAction *action,
-                    gpointer user_data)
-{
-	seahorse_ssh_key_properties_show (SEAHORSE_SSH_KEY (user_data),
-	                                  seahorse_action_get_window (action));
-}
-
 static const GtkActionEntry KEYS_ACTIONS[] = {
 	{ "remote-ssh-upload", NULL, N_ ("Configure Key for _Secure Shell..."), "",
 		N_ ("Send public Secure Shell key to another machine, and enable logins using that key."),
 		G_CALLBACK (on_ssh_upload) },
-};
-
-static const GtkActionEntry KEY_ACTIONS[] = {
-	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
-	  N_("Properties of the key."), G_CALLBACK (on_show_properties) },
 };
 
 static void
@@ -126,13 +113,6 @@ seahorse_ssh_actions_clone_for_objects (SeahorseActions *actions,
 	                                   G_N_ELEMENTS (KEYS_ACTIONS),
 	                                   seahorse_object_list_copy (objects),
 	                                   seahorse_object_list_free);
-
-	/* A single object */
-	if (!objects->next)
-		gtk_action_group_add_actions_full (cloned, KEY_ACTIONS,
-		                                   G_N_ELEMENTS (KEY_ACTIONS),
-		                                   g_object_ref (objects->data),
-		                                   g_object_unref);
 
 	return cloned;
 }

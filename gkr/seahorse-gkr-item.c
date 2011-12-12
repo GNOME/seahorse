@@ -28,6 +28,7 @@
 
 #include "seahorse-gkr.h"
 #include "seahorse-gkr-actions.h"
+#include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-item.h"
 #include "seahorse-gkr-item-deleter.h"
 #include "seahorse-gkr-keyring.h"
@@ -38,6 +39,7 @@
 #include "seahorse-place.h"
 #include "seahorse-util.h"
 #include "seahorse-secure-memory.h"
+#include "seahorse-viewable.h"
 
 #define GENERIC_SECRET "org.freedesktop.Secret.Generic"
 #define NETWORK_PASSWORD "org.gnome.keyring.NetworkPassword"
@@ -478,8 +480,11 @@ static gboolean  require_item_attrs                  (SeahorseGkrItem *self);
 
 static void      seahorse_gkr_item_deletable_iface   (SeahorseDeletableIface *iface);
 
+static void      seahorse_gkr_item_viewable_iface    (SeahorseViewableIface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (SeahorseGkrItem, seahorse_gkr_item, SEAHORSE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_gkr_item_deletable_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_gkr_item_viewable_iface);
 );
 
 /* -----------------------------------------------------------------------------
@@ -924,6 +929,20 @@ static void
 seahorse_gkr_item_deletable_iface (SeahorseDeletableIface *iface)
 {
 	iface->create_deleter = seahorse_gkr_item_create_deleter;
+}
+
+static void
+seahorse_gkr_item_show_viewer (SeahorseViewable *viewable,
+                               GtkWindow *parent)
+{
+	seahorse_gkr_item_properties_show (SEAHORSE_GKR_ITEM (viewable),
+	                                   parent);
+}
+
+static void
+seahorse_gkr_item_viewable_iface (SeahorseViewableIface *iface)
+{
+	iface->show_viewer = seahorse_gkr_item_show_viewer;
 }
 
 SeahorseGkrItem *

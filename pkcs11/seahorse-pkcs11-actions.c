@@ -38,6 +38,8 @@
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
 
+#include <glib/gi18n.h>
+
 GType   seahorse_pkcs11_token_actions_get_type       (void) G_GNUC_CONST;
 #define SEAHORSE_TYPE_PKCS11_TOKEN_ACTIONS           (seahorse_pkcs11_token_actions_get_type ())
 #define SEAHORSE_PKCS11_TOKEN_ACTIONS(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PKCS11_TOKEN_ACTIONS, SeahorsePkcs11TokenActions))
@@ -207,25 +209,6 @@ typedef struct {
 G_DEFINE_TYPE (SeahorsePkcs11ObjectActions, seahorse_pkcs11_object_actions, SEAHORSE_TYPE_ACTIONS);
 
 static void
-on_show_properties (GtkAction *action,
-                    gpointer user_data)
-{
-	GtkWindow *window;
-	GObject *object;
-
-	/* Create a new dialog for the certificate */
-	object = G_OBJECT (user_data);
-	window = seahorse_pkcs11_properties_show (object, seahorse_action_get_window (action));
-	gtk_widget_show (GTK_WIDGET (window));
-}
-
-
-static const GtkActionEntry CERTIFICATE_ACTIONS[] = {
-	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
-	  N_("Properties of the certificate."), G_CALLBACK (on_show_properties) },
-};
-
-static void
 seahorse_pkcs11_object_actions_init (SeahorsePkcs11ObjectActions *self)
 {
 
@@ -235,21 +218,7 @@ static GtkActionGroup *
 seahorse_pkcs11_object_actions_clone_for_objects (SeahorseActions *actions,
                                            GList *objects)
 {
-	GtkActionGroup *cloned;
-
-	g_return_val_if_fail (objects != NULL, NULL);
-
-	cloned = gtk_action_group_new ("Pkcs11Object");
-	gtk_action_group_set_translation_domain (cloned, GETTEXT_PACKAGE);
-
-	/* Only one object? */
-	if (!objects->next)
-		gtk_action_group_add_actions_full (cloned, CERTIFICATE_ACTIONS,
-		                                   G_N_ELEMENTS (CERTIFICATE_ACTIONS),
-		                                   g_object_ref (objects->data),
-		                                   g_object_unref);
-
-	return cloned;
+	return NULL;
 }
 
 static void

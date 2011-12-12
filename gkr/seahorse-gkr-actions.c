@@ -475,19 +475,6 @@ typedef struct {
 G_DEFINE_TYPE (SeahorseGkrItemActions, seahorse_gkr_item_actions, SEAHORSE_TYPE_ACTIONS);
 
 static void
-on_password_properties (GtkAction *action,
-                        gpointer user_data)
-{
-	seahorse_gkr_item_properties_show (SEAHORSE_GKR_ITEM (user_data),
-	                                   seahorse_action_get_window (action));
-}
-
-static const GtkActionEntry ITEM_ACTIONS[] = {
-	{ "properties", GTK_STOCK_PROPERTIES, NULL, NULL,
-	  N_("Properties of the password."), G_CALLBACK (on_password_properties) },
-};
-
-static void
 seahorse_gkr_item_actions_init (SeahorseGkrItemActions *self)
 {
 
@@ -497,18 +484,7 @@ static GtkActionGroup *
 seahorse_gkr_item_actions_clone_for_objects (SeahorseActions *actions,
                                              GList *objects)
 {
-	GtkActionGroup *cloned;
-
-	cloned = gtk_action_group_new ("KeyringItem");
-	gtk_action_group_set_translation_domain (cloned, GETTEXT_PACKAGE);
-
-	if (!objects->next)
-		gtk_action_group_add_actions_full (cloned, ITEM_ACTIONS,
-		                                   G_N_ELEMENTS (ITEM_ACTIONS),
-		                                   g_object_ref (objects->data),
-		                                   g_object_unref);
-
-	return cloned;
+	return NULL;
 }
 
 static void
