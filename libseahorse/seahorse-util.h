@@ -69,29 +69,9 @@ gboolean    seahorse_util_printf_fd         (int fd,
 GFile *     seahorse_util_file_increment_unique     (GFile *file,
                                                      guint *state);
 
-const gchar* seahorse_util_uri_get_last     (const gchar* uri);
-
-GQuark      seahorse_util_detect_mime_type   (const gchar *mime);
-
-GQuark      seahorse_util_detect_data_type   (const gchar *data,
-                                              guint length);
-
-GQuark      seahorse_util_detect_file_type   (const gchar *uri);
-
 gboolean    seahorse_util_write_file_private            (const gchar* filename,
                                                          const gchar* contents,
                                                          GError **err);
-
-GtkDialog*  seahorse_util_chooser_open_new              (const gchar *title,
-                                                         GtkWindow *parent);
-
-GtkDialog*  seahorse_util_chooser_save_new              (const gchar *title,
-                                                         GtkWindow *parent);
-
-void        seahorse_util_chooser_show_key_files        (GtkDialog *dialog);
-
-
-gchar*      seahorse_util_chooser_open_prompt           (GtkDialog *dialog);
 
 GList *     seahorse_util_objects_sort_by_place         (GList *objects);
 

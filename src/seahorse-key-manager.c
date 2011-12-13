@@ -227,17 +227,68 @@ import_files (SeahorseKeyManager* self,
 static void 
 import_prompt (SeahorseKeyManager* self) 
 {
-	GtkDialog* dialog;
+	GtkFileFilter *filter;
+	GtkWidget *dialog;
 	gchar *uris[2];
-	gchar* uri;
+	gchar *uri = NULL;
 
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 
-	dialog = seahorse_util_chooser_open_new (_("Import Key"), 
-	                                         seahorse_catalog_get_window (SEAHORSE_CATALOG (self)));
-	seahorse_util_chooser_show_key_files (dialog);
-	
-	uri = seahorse_util_chooser_open_prompt (dialog);
+	dialog = gtk_file_chooser_dialog_new (_("Import Key"),
+	                                      seahorse_catalog_get_window (SEAHORSE_CATALOG (self)),
+	                                      GTK_FILE_CHOOSER_ACTION_OPEN,
+	                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+	                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+	                                      NULL);
+
+	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (dialog), FALSE);
+
+	/* TODO: This should come from libgcr somehow */
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, _("All key files"));
+	gtk_file_filter_add_mime_type (filter, "application/pgp-keys");
+	gtk_file_filter_add_mime_type (filter, "application/x-ssh-key");
+	gtk_file_filter_add_mime_type (filter, "application/pkcs12");
+	gtk_file_filter_add_mime_type (filter, "application/pkcs12+pem");
+	gtk_file_filter_add_mime_type (filter, "application/pkcs7-mime");
+	gtk_file_filter_add_mime_type (filter, "application/pkcs7-mime+pem");
+	gtk_file_filter_add_mime_type (filter, "application/pkcs8");
+	gtk_file_filter_add_mime_type (filter, "application/pkcs8+pem");
+	gtk_file_filter_add_mime_type (filter, "application/pkix-cert");
+	gtk_file_filter_add_mime_type (filter, "application/pkix-cert+pem");
+	gtk_file_filter_add_mime_type (filter, "application/pkix-crl");
+	gtk_file_filter_add_mime_type (filter, "application/pkix-crl+pem");
+	gtk_file_filter_add_mime_type (filter, "application/x-pem-file");
+	gtk_file_filter_add_mime_type (filter, "application/x-pem-key");
+	gtk_file_filter_add_mime_type (filter, "application/x-pkcs12");
+	gtk_file_filter_add_mime_type (filter, "application/x-pkcs7-certificates");
+	gtk_file_filter_add_mime_type (filter, "application/x-x509-ca-cert");
+	gtk_file_filter_add_mime_type (filter, "application/x-x509-user-cert");
+	gtk_file_filter_add_mime_type (filter, "application/pkcs10");
+	gtk_file_filter_add_mime_type (filter, "application/pkcs10+pem");
+	gtk_file_filter_add_mime_type (filter, "application/x-spkac");
+	gtk_file_filter_add_mime_type (filter, "application/x-spkac+base64");
+	gtk_file_filter_add_pattern (filter, "*.asc");
+	gtk_file_filter_add_pattern (filter, "*.gpg");
+	gtk_file_filter_add_pattern (filter, "*.pub");
+	gtk_file_filter_add_pattern (filter, "*.pfx");
+	gtk_file_filter_add_pattern (filter, "*.cer");
+	gtk_file_filter_add_pattern (filter, "*.crt");
+	gtk_file_filter_add_pattern (filter, "*.pem");
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+	gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, _("All files"));
+	gtk_file_filter_add_pattern (filter, "*");
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+		uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+
+	gtk_widget_destroy (dialog);
+
 	if (uri != NULL) {
 		uris[0] = uri;
 		uris[1] = NULL;

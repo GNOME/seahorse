@@ -246,62 +246,66 @@ add_image_files (GtkWidget *dialog)
 
 
 gboolean
-seahorse_gpgme_photo_add (SeahorseGpgmeKey *pkey, GtkWindow *parent, const gchar *path)
+seahorse_gpgme_photo_add (SeahorseGpgmeKey *pkey,
+                          GtkWindow *parent,
+                          const gchar *path)
 {
-    gchar *filename = NULL;
-    gchar *tempfile = NULL;
-    GError *error = NULL;
-    gpgme_error_t gerr;
-    GtkDialog *chooser;
-    gboolean res = TRUE;
-    
-    g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), FALSE);
+	gchar *filename = NULL;
+	gchar *tempfile = NULL;
+	GError *error = NULL;
+	gpgme_error_t gerr;
+	GtkWidget *chooser;
+	gboolean res = TRUE;
 
-    if (NULL == path) {
-        chooser = seahorse_util_chooser_open_new (_("Choose Photo to Add to Key"), parent);
-        gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), TRUE);
-        add_image_files (GTK_WIDGET (chooser));
+	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), FALSE);
 
-        if (gtk_dialog_run (GTK_DIALOG (chooser)) == GTK_RESPONSE_ACCEPT)
-            filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
-	
-        gtk_widget_destroy (GTK_WIDGET (chooser));
+	if (NULL == path) {
+		chooser = gtk_file_chooser_dialog_new (_("Choose Photo to Add to Key"), parent,
+		                                      GTK_FILE_CHOOSER_ACTION_OPEN,
+		                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+		                                      NULL);
 
-        if (!filename)
-            return FALSE;
-    } else {
-	filename = g_strdup (path);
-    }
-    
-    if (!prepare_photo_id (parent, filename, &tempfile, &error)) {
-        if (error)
-            seahorse_util_handle_error (&error, NULL, _("Couldn't prepare photo"));
-        return FALSE;
-    }
-    
-    gerr = seahorse_gpgme_key_op_photo_add (pkey, tempfile ? tempfile : filename);
-    if (!GPG_IS_OK (gerr)) {
-        
-        /* A special error value set by seahorse_key_op_photoid_add to 
-           denote an invalid format file */
-        if (gerr == GPG_E (GPG_ERR_USER_1)) 
-            seahorse_util_show_error (NULL, _("Couldn't add photo"), 
-                                      _("The file could not be loaded. It may be in an invalid format"));
-        
-        else
-            seahorse_gpgme_handle_error (gerr, _("Couldn't add photo"));
+		gtk_dialog_set_default_response (GTK_DIALOG (chooser), GTK_RESPONSE_ACCEPT);
+		gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (chooser), TRUE);
+		add_image_files (chooser);
 
-        res = FALSE;
-    }
-    
-    g_free (filename);
-    
-    if (tempfile) {
-        unlink (tempfile);
-        g_free (tempfile);
-    }
-    
-    return res;
+		if (gtk_dialog_run (GTK_DIALOG (chooser)) == GTK_RESPONSE_ACCEPT)
+			filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
+
+		gtk_widget_destroy (chooser);
+
+		if (!filename)
+			return FALSE;
+	} else {
+		filename = g_strdup (path);
+	}
+
+	if (!prepare_photo_id (parent, filename, &tempfile, &error)) {
+		seahorse_util_handle_error (&error, NULL, _("Couldn't prepare photo"));
+		return FALSE;
+	}
+
+	gerr = seahorse_gpgme_key_op_photo_add (pkey, tempfile ? tempfile : filename);
+	if (!GPG_IS_OK (gerr)) {
+
+		/* A special error value set by seahorse_key_op_photoid_add to
+		   denote an invalid format file */
+		if (gerr == GPG_E (GPG_ERR_USER_1))
+			seahorse_util_show_error (NULL, _("Couldn't add photo"),
+			                          _("The file could not be loaded. It may be in an invalid format"));
+		else
+			seahorse_gpgme_handle_error (gerr, _("Couldn't add photo"));
+		res = FALSE;
+	}
+
+	g_free (filename);
+	if (tempfile) {
+		unlink (tempfile);
+		g_free (tempfile);
+	}
+
+	return res;
 }
 
 gboolean
