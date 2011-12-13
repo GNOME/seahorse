@@ -779,20 +779,19 @@ on_import_found_private_key (SeahorseSSHSecData *data,
 	return TRUE;
 }
 
-static void
-seahorse_ssh_source_import_async (SeahorsePlace *place,
+void
+seahorse_ssh_source_import_async (SeahorseSSHSource *self,
                                   GInputStream *input,
                                   GCancellable *cancellable,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
 {
-	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (place);
 	source_import_closure *closure;
 	gchar *contents;
 	GSimpleAsyncResult *res;
 	guint count;
 
-	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_ssh_source_import_async);
 	closure = g_new0 (source_import_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
@@ -810,12 +809,12 @@ seahorse_ssh_source_import_async (SeahorsePlace *place,
 	g_object_unref (res);
 }
 
-static GList *
-seahorse_ssh_source_import_finish (SeahorsePlace *place,
+GList *
+seahorse_ssh_source_import_finish (SeahorseSSHSource *self,
                                    GAsyncResult *result,
                                    GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
 	                      seahorse_ssh_source_import_async), NULL);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -828,8 +827,6 @@ seahorse_ssh_source_import_finish (SeahorsePlace *place,
 static void 
 seahorse_ssh_source_place_iface (SeahorsePlaceIface *iface)
 {
-	iface->import_async = seahorse_ssh_source_import_async;
-	iface->import_finish = seahorse_ssh_source_import_finish;
 	iface->load_async = seahorse_ssh_source_load_async;
 	iface->load_finish = seahorse_ssh_source_load_finish;
 }

@@ -81,52 +81,25 @@ seahorse_place_default_init (SeahorsePlaceIface *iface)
 
 void
 seahorse_place_load_async (SeahorsePlace *place,
-                              GCancellable *cancellable,
-                              GAsyncReadyCallback callback,
-                              gpointer user_data)
+                           GCancellable *cancellable,
+                           GAsyncReadyCallback callback,
+                           gpointer user_data)
 {
 	g_return_if_fail (SEAHORSE_IS_PLACE (place));
 	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 	g_return_if_fail (SEAHORSE_PLACE_GET_INTERFACE (place)->load_async);
 	SEAHORSE_PLACE_GET_INTERFACE (place)->load_async (place, cancellable,
-	                                                    callback, user_data);
+	                                                  callback, user_data);
 }
 
 gboolean
 seahorse_place_load_finish (SeahorsePlace *place,
-                               GAsyncResult *result,
-                               GError **error)
+                            GAsyncResult *result,
+                            GError **error)
 {
 	g_return_val_if_fail (SEAHORSE_IS_PLACE (place), FALSE);
 	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 	g_return_val_if_fail (SEAHORSE_PLACE_GET_INTERFACE (place)->load_finish, FALSE);
 	return SEAHORSE_PLACE_GET_INTERFACE (place)->load_finish (place, result, error);
-}
-
-void
-seahorse_place_import_async (SeahorsePlace *place,
-                             GInputStream *input,
-                             GCancellable *cancellable,
-                             GAsyncReadyCallback callback,
-                             gpointer user_data)
-{
-	g_return_if_fail (SEAHORSE_IS_PLACE (place));
-	g_return_if_fail (G_IS_INPUT_STREAM (input));
-	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-	g_return_if_fail (SEAHORSE_PLACE_GET_INTERFACE (place)->import_async);
-	SEAHORSE_PLACE_GET_INTERFACE (place)->import_async (place, input, cancellable,
-	                                                    callback, user_data);
-}
-
-GList *
-seahorse_place_import_finish (SeahorsePlace *place,
-                              GAsyncResult *result,
-                              GError **error)
-{
-	g_return_val_if_fail (SEAHORSE_IS_PLACE (place), NULL);
-	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-	g_return_val_if_fail (SEAHORSE_PLACE_GET_INTERFACE (place)->import_finish, NULL);
-	return SEAHORSE_PLACE_GET_INTERFACE (place)->import_finish (place, result, error);
 }

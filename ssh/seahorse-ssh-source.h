@@ -84,4 +84,14 @@ guchar*              seahorse_ssh_source_export_private     (SeahorseSSHSource *
                                                              gsize *n_results,
                                                              GError **err);
 
+void                 seahorse_ssh_source_import_async       (SeahorseSSHSource *self,
+                                                             GInputStream *input,
+                                                             GCancellable *cancellable,
+                                                             GAsyncReadyCallback callback,
+                                                             gpointer user_data);
+
+GList *              seahorse_ssh_source_import_finish      (SeahorseSSHSource *self,
+                                                             GAsyncResult *result,
+                                                             GError **error);
+
 #endif /* __SEAHORSE_SSH_SOURCE_H__ */

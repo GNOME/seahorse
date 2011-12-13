@@ -66,12 +66,23 @@ on_source_import_ready (GObject *object,
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
 	TransferClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	GError *error = NULL;
+	GList *results;
 
 	seahorse_debug ("[transfer] import done");
 	seahorse_progress_end (closure->cancellable, &closure->to);
 
-	if (seahorse_place_import_finish (closure->to, result, &error))
+	if (SEAHORSE_IS_GPGME_KEYRING (closure->to)) {
+		results = seahorse_gpgme_keyring_import_finish (SEAHORSE_GPGME_KEYRING (closure->to),
+		                                                result, &error);
+	} else {
+		results = seahorse_server_source_import_finish (SEAHORSE_SERVER_SOURCE (closure->to),
+		                                                result, &error);
+	}
+
+	if (results != NULL)
 		g_cancellable_set_error_if_cancelled (closure->cancellable, &error);
+
+	g_list_free (results);
 
 	if (error != NULL)
 		g_simple_async_result_take_error (res, error);
@@ -124,8 +135,17 @@ on_source_export_ready (GObject *object,
 			stream_size = 0;
 
 			seahorse_debug ("[transfer] starting import");
-			seahorse_place_import_async (closure->to, input, closure->cancellable,
-			                             on_source_import_ready, g_object_ref (res));
+			if (SEAHORSE_IS_GPGME_KEYRING (closure->to)) {
+				seahorse_gpgme_keyring_import_async (SEAHORSE_GPGME_KEYRING (closure->to),
+				                                     input, closure->cancellable,
+				                                     on_source_import_ready,
+				                                     g_object_ref (res));
+			} else {
+				seahorse_server_source_import_async (SEAHORSE_SERVER_SOURCE (closure->to),
+				                                     input, closure->cancellable,
+				                                     on_source_import_ready,
+				                                     g_object_ref (res));
+			}
 			g_object_unref (input);
 		}
 

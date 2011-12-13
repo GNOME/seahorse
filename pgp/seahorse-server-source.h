@@ -64,6 +64,16 @@ struct _SeahorseServerSource {
 struct _SeahorseServerSourceClass {
 	GObjectClass parent_class;
 
+	void            (* import_async)         (SeahorseServerSource *source,
+	                                          GInputStream *input,
+	                                          GCancellable *cancellable,
+	                                          GAsyncReadyCallback callback,
+	                                          gpointer user_data);
+
+	GList *         (* import_finish)        (SeahorseServerSource *source,
+	                                          GAsyncResult *result,
+	                                          GError **error);
+
 	void            (*export_async)          (SeahorseServerSource *source,
 	                                          const gchar **keyids,
 	                                          GCancellable *cancellable,
@@ -99,6 +109,16 @@ void                   seahorse_server_source_search_async     (SeahorseServerSo
                                                                 gpointer user_data);
 
 gboolean               seahorse_server_source_search_finish    (SeahorseServerSource *self,
+                                                                GAsyncResult *result,
+                                                                GError **error);
+
+void                   seahorse_server_source_import_async     (SeahorseServerSource *self,
+                                                                GInputStream *input,
+                                                                GCancellable *cancellable,
+                                                                GAsyncReadyCallback callback,
+                                                                gpointer user_data);
+
+GList *                seahorse_server_source_import_finish    (SeahorseServerSource *self,
                                                                 GAsyncResult *result,
                                                                 GError **error);
 

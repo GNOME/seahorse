@@ -431,3 +431,30 @@ seahorse_server_source_export_finish (SeahorseServerSource *self,
 	g_return_val_if_fail (klass->export_finish != NULL, NULL);
 	return (klass->export_finish) (self, result, size, error);
 }
+
+void
+seahorse_server_source_import_async (SeahorseServerSource *source,
+                                     GInputStream *input,
+                                     GCancellable *cancellable,
+                                     GAsyncReadyCallback callback,
+                                     gpointer user_data)
+{
+	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (source));
+	g_return_if_fail (G_IS_INPUT_STREAM (input));
+	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+	g_return_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_async);
+	SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_async (source, input, cancellable,
+	                                                         callback, user_data);
+}
+
+GList *
+seahorse_server_source_import_finish (SeahorseServerSource *source,
+                                      GAsyncResult *result,
+                                      GError **error)
+{
+	g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (source), NULL);
+	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+	g_return_val_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_finish, NULL);
+	return SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_finish (source, result, error);
+}

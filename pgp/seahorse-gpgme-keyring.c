@@ -667,21 +667,20 @@ on_keyring_import_complete (gpgme_error_t gerr,
 	return FALSE; /* don't call again */
 }
 
-static void
-seahorse_gpgme_keyring_import_async (SeahorsePlace *place,
+void
+seahorse_gpgme_keyring_import_async (SeahorseGpgmeKeyring *self,
                                      GInputStream *input,
                                      GCancellable *cancellable,
                                      GAsyncReadyCallback callback,
                                      gpointer user_data)
 {
-	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (place);
 	GSimpleAsyncResult *res;
 	keyring_import_closure *closure;
 	gpgme_error_t gerr = 0;
 	GError *error = NULL;
 	GSource *gsource = NULL;
 
-	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_gpgme_keyring_import_async);
 	closure = g_new0 (keyring_import_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
@@ -710,15 +709,15 @@ seahorse_gpgme_keyring_import_async (SeahorsePlace *place,
 	g_object_unref (res);
 }
 
-static GList *
-seahorse_gpgme_keyring_import_finish (SeahorsePlace *place,
+GList *
+seahorse_gpgme_keyring_import_finish (SeahorseGpgmeKeyring *self,
                                       GAsyncResult *result,
                                       GError **error)
 {
 	keyring_import_closure *closure;
 	GList *results;
 
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
 	                      seahorse_gpgme_keyring_import_async), NULL);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -899,8 +898,6 @@ seahorse_gpgme_keyring_class_init (SeahorseGpgmeKeyringClass *klass)
 static void
 seahorse_gpgme_keyring_place_iface (SeahorsePlaceIface *iface)
 {
-	iface->import_async = seahorse_gpgme_keyring_import_async;
-	iface->import_finish = seahorse_gpgme_keyring_import_finish;
 	iface->load_async = seahorse_gpgme_keyring_load_async;
 	iface->load_finish = seahorse_gpgme_keyring_load_finish;
 }

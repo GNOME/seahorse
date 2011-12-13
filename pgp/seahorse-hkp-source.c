@@ -818,13 +818,13 @@ on_import_message_complete (SoupSession *session,
 * Imports a list of keys from the input stream to the keyserver
 **/
 static void
-seahorse_hkp_source_import_async (SeahorsePlace *place,
+seahorse_hkp_source_import_async (SeahorseServerSource *source,
                                   GInputStream *input,
                                   GCancellable *cancellable,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
 {
-	SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (place);
+	SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
 	GSimpleAsyncResult *res;
 	source_import_closure *closure;
 	SoupMessage *message;
@@ -836,7 +836,7 @@ seahorse_hkp_source_import_async (SeahorsePlace *place,
 	GList *l;
 	guint len;
 
-	res = g_simple_async_result_new (G_OBJECT (place), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
 	                                 seahorse_hkp_source_import_async);
 	closure = g_new0 (source_import_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
@@ -908,11 +908,11 @@ seahorse_hkp_source_import_async (SeahorsePlace *place,
 }
 
 static GList *
-seahorse_hkp_source_import_finish (SeahorsePlace *place,
+seahorse_hkp_source_import_finish (SeahorseServerSource *source,
                                    GAsyncResult *result,
                                    GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
 	                      seahorse_hkp_source_import_async), NULL);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -1105,8 +1105,7 @@ seahorse_hkp_source_export_finish (SeahorseServerSource *source,
 static void 
 seahorse_place_iface (SeahorsePlaceIface *iface)
 {
-	iface->import_async = seahorse_hkp_source_import_async;
-	iface->import_finish = seahorse_hkp_source_import_finish;
+
 }
 
 /**
@@ -1124,6 +1123,8 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 	server_class->search_finish = seahorse_hkp_source_search_finish;
 	server_class->export_async = seahorse_hkp_source_export_async;
 	server_class->export_finish = seahorse_hkp_source_export_finish;
+	server_class->import_async = seahorse_hkp_source_import_async;
+	server_class->import_finish = seahorse_hkp_source_import_finish;
 
 	seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
 }
