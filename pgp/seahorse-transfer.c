@@ -171,7 +171,7 @@ on_timeout_start_transfer (gpointer user_data)
 }
 
 void
-seahorse_transfer_keys_async (SeahorseGpgmeKeyring *from,
+seahorse_transfer_keys_async (SeahorsePlace *from,
                               SeahorsePlace *to,
                               GList *keys,
                               GCancellable *cancellable,
@@ -180,9 +180,11 @@ seahorse_transfer_keys_async (SeahorseGpgmeKeyring *from,
 {
 	GSimpleAsyncResult *res;
 	TransferClosure *closure;
+	GPtrArray *keyids;
+	GList *l;
 
-	g_return_if_fail (SEAHORSE_IS_GPGME_KEYRING (from));
-	g_return_if_fail (SEAHORSE_PLACE (to));
+	g_return_if_fail (SEAHORSE_IS_PLACE (from));
+	g_return_if_fail (SEAHORSE_IS_PLACE (to));
 
 	res = g_simple_async_result_new (NULL, callback, user_data,
 	                                 seahorse_transfer_finish);
@@ -197,8 +199,18 @@ seahorse_transfer_keys_async (SeahorseGpgmeKeyring *from,
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : cancellable;
 	closure->from = g_object_ref (from);
 	closure->to = g_object_ref (to);
-	closure->keys = seahorse_object_list_copy (keys);
 	g_simple_async_result_set_op_res_gpointer (res, closure, transfer_closure_free);
+
+	if (SEAHORSE_IS_GPGME_KEYRING (from)) {
+		closure->keys = seahorse_object_list_copy (keys);
+
+	} else {
+		keyids = g_ptr_array_new ();
+		for (l = keys; l != NULL; l = g_list_next (l))
+			g_ptr_array_add (keyids, g_strdup (seahorse_pgp_key_get_keyid (l->data)));
+		g_ptr_array_add (keyids, NULL);
+		closure->keyids = (gchar **)g_ptr_array_free (keyids, FALSE);
+	}
 
 	seahorse_progress_prep (cancellable, &closure->from,
 	                        SEAHORSE_IS_GPGME_KEYRING (closure->from) ?

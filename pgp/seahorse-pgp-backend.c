@@ -554,12 +554,12 @@ seahorse_pgp_backend_transfer_async (SeahorsePgpBackend *self,
 
 		/* Export from this key place */
 		from = seahorse_object_get_place (object);
-		g_return_if_fail (SEAHORSE_IS_GPGME_KEYRING (from));
+		g_return_if_fail (SEAHORSE_IS_PLACE (from));
 
 		if (from != to) {
 			/* Start a new transfer operation between the two places */
 			seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
-			seahorse_transfer_keys_async (SEAHORSE_GPGME_KEYRING (from), to, keys, cancellable,
+			seahorse_transfer_keys_async (from, to, keys, cancellable,
 			                              on_source_transfer_ready, g_object_ref (res));
 			closure->num_transfers++;
 		}

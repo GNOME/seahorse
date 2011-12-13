@@ -265,7 +265,9 @@ seahorse_keyserver_results_get_selected_objects (SeahorseCatalog *catalog)
 static SeahorsePlace *
 seahorse_keyserver_results_get_focused_place (SeahorseCatalog *catalog)
 {
-	return NULL;
+	SeahorseGpgmeKeyring *keyring;
+	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+	return SEAHORSE_PLACE (keyring);
 }
 
 /**

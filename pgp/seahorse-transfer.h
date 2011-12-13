@@ -34,7 +34,7 @@ void            seahorse_transfer_keyids_async  (SeahorseServerSource *from,
                                                  GAsyncReadyCallback callback,
                                                  gpointer user_data);
 
-void            seahorse_transfer_keys_async    (SeahorseGpgmeKeyring *from,
+void            seahorse_transfer_keys_async    (SeahorsePlace *from,
                                                  SeahorsePlace *to,
                                                  GList *keys,
                                                  GCancellable *cancellable,
