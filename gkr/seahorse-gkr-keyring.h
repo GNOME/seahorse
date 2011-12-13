@@ -22,9 +22,10 @@
 #ifndef __SEAHORSE_GKR_KEYRING_H__
 #define __SEAHORSE_GKR_KEYRING_H__
 
-#include <glib-object.h>
-
 #include "seahorse-object.h"
+
+#include <glib-object.h>
+#include <gio/gio.h>
 
 #include <gnome-keyring.h>
 

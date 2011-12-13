@@ -263,8 +263,8 @@ seahorse_keyserver_results_get_selected_objects (SeahorseCatalog *catalog)
 	return seahorse_key_manager_store_get_selected_objects (self->pv->view);
 }
 
-static GList *
-seahorse_keyserver_results_get_selected_places (SeahorseCatalog *catalog)
+static SeahorsePlace *
+seahorse_keyserver_results_get_focused_place (SeahorseCatalog *catalog)
 {
 	return NULL;
 }
@@ -462,6 +462,7 @@ static void
 seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	SeahorseCatalogClass *catalog_class = SEAHORSE_CATALOG_CLASS (klass);
 
 	seahorse_keyserver_results_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseKeyserverResultsPrivate));
@@ -471,8 +472,8 @@ seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
 	gobject_class->set_property = seahorse_keyserver_results_set_property;
 	gobject_class->get_property = seahorse_keyserver_results_get_property;
 
-	SEAHORSE_CATALOG_CLASS (klass)->get_selected_objects = seahorse_keyserver_results_get_selected_objects;
-	SEAHORSE_CATALOG_CLASS (klass)->get_selected_places = seahorse_keyserver_results_get_selected_places;
+	catalog_class->get_selected_objects = seahorse_keyserver_results_get_selected_objects;
+	catalog_class->get_focused_place = seahorse_keyserver_results_get_focused_place;
 
 	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_SEARCH,
 	         g_param_spec_string ("search", "search", "search", NULL,

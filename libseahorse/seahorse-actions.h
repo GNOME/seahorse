@@ -47,20 +47,25 @@ struct _SeahorseActions {
 struct _SeahorseActionsClass {
 	GtkActionGroupClass parent_class;
 
-	GtkActionGroup *  (*clone_for_objects)  (SeahorseActions *actions,
-	                                         GList *objects);
+	void              (* update)  (SeahorseActions *actions,
+	                               SeahorseCatalog *catalog);
 };
 
 GType                 seahorse_actions_get_type                 (void);
 
 GtkActionGroup *      seahorse_actions_new                      (const gchar *name);
 
+SeahorseCatalog *     seahorse_actions_get_catalog              (SeahorseActions *self);
+
+void                  seahorse_actions_set_catalog              (SeahorseActions *self,
+                                                                 SeahorseCatalog *catalog);
+
 const gchar *         seahorse_actions_get_definition           (SeahorseActions *self);
 
 void                  seahorse_actions_register_definition      (SeahorseActions *self,
                                                                  const gchar *definition);
 
-GtkActionGroup *      seahorse_actions_clone_for_objects        (GtkActionGroup *actions,
-                                                                 GList *objects);
+void                  seahorse_actions_update                   (GtkActionGroup *actions,
+                                                                 SeahorseCatalog *catalog);
 
 #endif

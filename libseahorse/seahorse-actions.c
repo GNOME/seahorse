@@ -26,15 +26,17 @@
 
 struct _SeahorseActionsPrivate {
 	const gchar *definition;
+	SeahorseCatalog *catalog;
+	guint catalog_sig;
 };
 
 G_DEFINE_TYPE (SeahorseActions, seahorse_actions, GTK_TYPE_ACTION_GROUP);
 
-static GtkActionGroup *
-seahorse_actions_real_clone_for_objects (SeahorseActions *self,
-                                         GList *selected)
+static void
+seahorse_actions_real_update (SeahorseActions *self,
+                              SeahorseCatalog *catalog)
 {
-	return gtk_action_group_new ("internal");
+	/* Nothing to do */
 }
 
 static void
@@ -42,6 +44,28 @@ seahorse_actions_init (SeahorseActions *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_ACTIONS,
 	                                         SeahorseActionsPrivate));
+}
+
+static void
+seahorse_actions_finalize (GObject *obj)
+{
+	SeahorseActions *actions = SEAHORSE_ACTIONS (obj);
+
+	seahorse_actions_set_catalog (actions, NULL);
+
+	G_OBJECT_CLASS (seahorse_actions_parent_class)->finalize (obj);
+}
+
+static void
+seahorse_actions_class_init (SeahorseActionsClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = seahorse_actions_finalize;
+
+	klass->update = seahorse_actions_real_update;
+
+	g_type_class_add_private (klass, sizeof (SeahorseActionsPrivate));
 }
 
 GtkActionGroup *
@@ -53,11 +77,54 @@ seahorse_actions_new (const gchar *name)
 	                     NULL);
 }
 
-static void
-seahorse_actions_class_init (SeahorseActionsClass *klass)
+SeahorseCatalog *
+seahorse_actions_get_catalog (SeahorseActions *self)
 {
-	g_type_class_add_private (klass, sizeof (SeahorseActionsPrivate));
-	klass->clone_for_objects = seahorse_actions_real_clone_for_objects;
+	g_return_val_if_fail (SEAHORSE_IS_ACTIONS (self), NULL);
+	return self->pv->catalog;
+}
+
+static void
+on_catalog_gone (gpointer data,
+                 GObject *where_the_object_was)
+{
+	SeahorseActions *self = SEAHORSE_ACTIONS (data);
+
+	self->pv->catalog = NULL;
+	self->pv->catalog_sig = 0;
+}
+
+static void
+on_catalog_selection (SeahorseCatalog *catalog,
+                      gpointer user_data)
+{
+	SeahorseActions *self = SEAHORSE_ACTIONS (user_data);
+	seahorse_actions_update (GTK_ACTION_GROUP (self), catalog);
+}
+
+void
+seahorse_actions_set_catalog (SeahorseActions *self,
+                              SeahorseCatalog *catalog)
+{
+	g_return_if_fail (SEAHORSE_IS_ACTIONS (self));
+	g_return_if_fail (catalog == NULL || SEAHORSE_IS_CATALOG (catalog));
+
+	if (self->pv->catalog) {
+		g_signal_handler_disconnect (self->pv->catalog,
+		                             self->pv->catalog_sig);
+		g_object_weak_unref (G_OBJECT (self->pv->catalog),
+		                     on_catalog_gone, self);
+	}
+
+	self->pv->catalog = catalog;
+	if (self->pv->catalog) {
+		self->pv->catalog_sig = g_signal_connect (self->pv->catalog,
+		                                          "selection-changed",
+		                                          G_CALLBACK (on_catalog_selection),
+		                                          self);
+		g_object_weak_ref (G_OBJECT (self->pv->catalog),
+		                   on_catalog_gone, self);
+	}
 }
 
 const gchar *
@@ -76,17 +143,18 @@ seahorse_actions_register_definition (SeahorseActions *self,
 	self->pv->definition = definition;
 }
 
-GtkActionGroup *
-seahorse_actions_clone_for_objects (GtkActionGroup *actions,
-                                    GList *objects)
+void
+seahorse_actions_update (GtkActionGroup *actions,
+                         SeahorseCatalog *catalog)
 {
 	SeahorseActionsClass *klass;
 
-	g_return_val_if_fail (GTK_IS_ACTION_GROUP (actions), NULL);
+	g_return_if_fail (GTK_IS_ACTION_GROUP (actions));
 
 	if (!SEAHORSE_IS_ACTIONS (actions))
-		return g_object_ref (actions);
+		return;
+
 	klass = SEAHORSE_ACTIONS_GET_CLASS (actions);
-	g_assert (klass->clone_for_objects != NULL);
-	return (klass->clone_for_objects) (SEAHORSE_ACTIONS (actions), objects);
+	g_assert (klass->update != NULL);
+	(klass->update) (SEAHORSE_ACTIONS (actions), catalog);
 }

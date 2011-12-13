@@ -480,11 +480,11 @@ seahorse_key_manager_get_selected_objects (SeahorseCatalog *catalog)
 	return seahorse_key_manager_store_get_selected_objects (self->pv->view);
 }
 
-static GList *
-seahorse_key_manager_get_selected_places (SeahorseCatalog *catalog)
+static SeahorsePlace *
+seahorse_key_manager_get_focused_place (SeahorseCatalog *catalog)
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (catalog);
-	return seahorse_sidebar_get_selected_places (self->pv->sidebar);
+	return seahorse_sidebar_get_focused_place (self->pv->sidebar);
 }
 
 static gboolean
@@ -768,14 +768,15 @@ static void
 seahorse_key_manager_class_init (SeahorseKeyManagerClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	SeahorseCatalogClass *catalog_class = SEAHORSE_CATALOG_CLASS (klass);
 
 	g_type_class_add_private (klass, sizeof (SeahorseKeyManagerPrivate));
 
 	gobject_class->constructed = seahorse_key_manager_constructed;
 	gobject_class->finalize = seahorse_key_manager_finalize;
 
-	SEAHORSE_CATALOG_CLASS (klass)->get_selected_objects = seahorse_key_manager_get_selected_objects;
-	SEAHORSE_CATALOG_CLASS (klass)->get_selected_places = seahorse_key_manager_get_selected_places;
+	catalog_class->get_selected_objects = seahorse_key_manager_get_selected_objects;
+	catalog_class->get_focused_place = seahorse_key_manager_get_focused_place;
 }
 
 SeahorseWidget *

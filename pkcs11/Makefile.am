@@ -17,7 +17,6 @@ noinst_LTLIBRARIES = libseahorse-pkcs11.la
 libseahorse_pkcs11_la_SOURCES = \
 	seahorse-certificate.c seahorse-certificate.h \
 	seahorse-certificate-der-exporter.c seahorse-certificate-der-exporter.h \
-	seahorse-pkcs11-actions.c seahorse-pkcs11-actions.h \
 	seahorse-pkcs11-backend.c seahorse-pkcs11-backend.h \
 	seahorse-pkcs11-deleter.c seahorse-pkcs11-deleter.h \
 	seahorse-pkcs11-helpers.c seahorse-pkcs11-helpers.h \

@@ -137,7 +137,6 @@ lookup_actions_for_objects (SeahorseCatalog *self,
                             GList *objects)
 {
 	GtkActionGroup *actions;
-	GtkActionGroup *cloned;
 	GHashTableIter iter;
 	GList *results;
 	GHashTable *table;
@@ -167,9 +166,8 @@ lookup_actions_for_objects (SeahorseCatalog *self,
 	results = NULL;
 	g_hash_table_iter_init (&iter, table);
 	while (g_hash_table_iter_next (&iter, (gpointer *)&actions, (gpointer *)&queue)) {
-		cloned = seahorse_actions_clone_for_objects (actions, queue->head);
-		if (cloned != NULL)
-			results = g_list_prepend (results, cloned);
+		seahorse_actions_update (actions, self);
+		results = g_list_prepend (results, g_object_ref (actions));
 	}
 
 	g_hash_table_destroy (table);
@@ -213,12 +211,11 @@ on_properties_place (GtkAction *action,
                      gpointer user_data)
 {
 	SeahorseCatalog *self = SEAHORSE_CATALOG (user_data);
-	GList *objects;
+	SeahorsePlace *place;
 
-	objects = seahorse_catalog_get_selected_places (self);
-	if (objects != NULL)
-		seahorse_catalog_show_properties (self, objects->data);
-	g_list_free (objects);
+	place = seahorse_catalog_get_focused_place (self);
+	if (place != NULL)
+		seahorse_catalog_show_properties (self, G_OBJECT (place));
 }
 
 static void
@@ -306,8 +303,7 @@ on_ui_manager_pre_activate (GtkUIManager *ui_manager,
                             gpointer user_data)
 {
 	SeahorseCatalog *self = SEAHORSE_CATALOG (user_data);
-	seahorse_action_pre_activate_with_window (action,
-	                                          seahorse_catalog_get_window (self));
+	seahorse_action_pre_activate (action, self, seahorse_catalog_get_window (self));
 }
 
 static void
@@ -352,10 +348,6 @@ seahorse_catalog_real_selection_changed (SeahorseCatalog *self)
 	gtk_action_set_sensitive (self->pv->edit_delete, can_delete);
 	gtk_action_set_sensitive (self->pv->edit_copy, can_export);
 	gtk_action_set_sensitive (self->pv->file_export, can_export);
-
-	objects = seahorse_catalog_get_selected_places (self);
-	groups = g_list_concat (groups, lookup_actions_for_objects (self, objects));
-	g_list_free (objects);
 
 	previous = self->pv->selection_actions;
 	self->pv->selection_actions = groups;
@@ -612,12 +604,12 @@ seahorse_catalog_get_selected_objects (SeahorseCatalog *self)
 	return SEAHORSE_CATALOG_GET_CLASS (self)->get_selected_objects (self);
 }
 
-GList *
-seahorse_catalog_get_selected_places (SeahorseCatalog *self)
+SeahorsePlace *
+seahorse_catalog_get_focused_place (SeahorseCatalog *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_CATALOG (self), NULL);
-	g_return_val_if_fail (SEAHORSE_CATALOG_GET_CLASS (self)->get_selected_places, NULL);
-	return SEAHORSE_CATALOG_GET_CLASS (self)->get_selected_places (self);
+	g_return_val_if_fail (SEAHORSE_CATALOG_GET_CLASS (self)->get_focused_place, NULL);
+	return SEAHORSE_CATALOG_GET_CLASS (self)->get_focused_place (self);
 }
 
 GList *

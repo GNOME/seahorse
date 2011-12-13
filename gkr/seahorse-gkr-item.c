@@ -747,16 +747,8 @@ seahorse_gkr_item_refresh (SeahorseGkrItem *self)
 static void
 seahorse_gkr_item_init (SeahorseGkrItem *self)
 {
-	GtkActionGroup *actions;
-
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_ITEM, SeahorseGkrItemPrivate);
-
-	actions = seahorse_gkr_item_actions_instance ();
-	g_object_set (self,
-	              "usage", SEAHORSE_USAGE_CREDENTIALS,
-	              "actions", actions,
-	              NULL);
-	g_object_unref (actions);
+	g_object_set (self, "usage", SEAHORSE_USAGE_CREDENTIALS, NULL);
 }
 
 static void

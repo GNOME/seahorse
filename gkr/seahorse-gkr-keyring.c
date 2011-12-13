@@ -62,8 +62,6 @@ struct _SeahorseGkrKeyringPrivate {
 
 	gpointer req_info;
 	GnomeKeyringInfo *keyring_info;
-
-	GtkActionGroup *actions;
 };
 
 static void     seahorse_keyring_place_iface        (SeahorsePlaceIface *iface);
@@ -376,7 +374,6 @@ seahorse_gkr_keyring_init (SeahorseGkrKeyring *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_KEYRING, SeahorseGkrKeyringPrivate);
 	self->pv->items = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);
-	self->pv->actions = seahorse_gkr_keyring_actions_instance ();
 }
 
 static void
@@ -397,8 +394,6 @@ seahorse_gkr_keyring_finalize (GObject *obj)
 	if (self->pv->keyring_info) 
 		gnome_keyring_info_free (self->pv->keyring_info);
 	self->pv->keyring_info = NULL;
-
-	g_object_unref (self->pv->actions);
 
 	G_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->finalize (obj);
 }
@@ -452,7 +447,7 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 		g_value_take_string (value, text);
 		break;
 	case PROP_ACTIONS:
-		g_value_set_object (value, self->pv->actions);
+		g_value_take_object (value, seahorse_gkr_keyring_actions_new (self));
 		break;
 	case PROP_LOCKED:
 		g_value_set_boolean (value, seahorse_gkr_keyring_get_locked (self));

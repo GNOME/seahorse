@@ -94,34 +94,13 @@ seahorse_ssh_actions_init (SeahorseSshActions *self)
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, KEYS_ACTIONS, G_N_ELEMENTS (KEYS_ACTIONS), NULL);
-	gtk_action_group_set_visible (actions, FALSE);
 	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), UI_DEFINITION);
-}
-
-static GtkActionGroup *
-seahorse_ssh_actions_clone_for_objects (SeahorseActions *actions,
-                                        GList *objects)
-{
-	GtkActionGroup *cloned;
-
-	g_return_val_if_fail (actions, NULL);
-
-	cloned = gtk_action_group_new ("SshKey");
-	gtk_action_group_set_translation_domain (cloned, GETTEXT_PACKAGE);
-
-	gtk_action_group_add_actions_full (cloned, KEYS_ACTIONS,
-	                                   G_N_ELEMENTS (KEYS_ACTIONS),
-	                                   seahorse_object_list_copy (objects),
-	                                   seahorse_object_list_free);
-
-	return cloned;
 }
 
 static void
 seahorse_ssh_actions_class_init (SeahorseSshActionsClass *klass)
 {
-	SeahorseActionsClass *actions_class = SEAHORSE_ACTIONS_CLASS (klass);
-	actions_class->clone_for_objects = seahorse_ssh_actions_clone_for_objects;
+
 }
 
 GtkActionGroup *

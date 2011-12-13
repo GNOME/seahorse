@@ -30,7 +30,6 @@
 
 #include "seahorse-certificate.h"
 #include "seahorse-pkcs11.h"
-#include "seahorse-pkcs11-actions.h"
 #include "seahorse-pkcs11-helpers.h"
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"
@@ -61,7 +60,6 @@ struct _SeahorseTokenPrivate {
 	GckTokenInfo *info;
 	GArray *mechanisms;
 	GckSession *session;
-	GtkActionGroup *actions;
 	GHashTable *object_for_handle;
 	GHashTable *objects_for_id;
 	GHashTable *id_for_object;
@@ -533,7 +531,6 @@ static void
 seahorse_token_init (SeahorseToken *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_TOKEN, SeahorseTokenPrivate));
-	self->pv->actions = seahorse_pkcs11_token_actions_instance ();
 	self->pv->object_for_handle = g_hash_table_new_full (seahorse_pkcs11_ulong_hash,
 	                                                     seahorse_pkcs11_ulong_equal,
 	                                                     g_free, g_object_unref);
@@ -608,7 +605,7 @@ seahorse_token_get_property (GObject *object,
 		g_value_set_string (value, self->pv->uri);
 		break;
 	case PROP_ACTIONS:
-		g_value_set_object (value, self->pv->actions);
+		g_value_set_object (value, NULL);
 		break;
 	case PROP_INFO:
 		g_value_set_boxed (value, self->pv->info);
@@ -677,7 +674,6 @@ seahorse_token_finalize (GObject *obj)
 	g_hash_table_destroy (self->pv->objects_for_id);
 	g_hash_table_destroy (self->pv->id_for_object);
 	g_assert (self->pv->slot == NULL);
-	g_clear_object (&self->pv->actions);
 	g_free (self->pv->uri);
 
 	G_OBJECT_CLASS (seahorse_token_parent_class)->finalize (obj);

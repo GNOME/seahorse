@@ -100,7 +100,7 @@ on_row_activated (GtkTreeView *view,
 		g_object_ref (action);
 		gtk_widget_destroy (GTK_WIDGET (self));
 
-		seahorse_action_activate_with_window (action, parent);
+		seahorse_action_activate_with_window (action, NULL, parent);
 
 		g_clear_object (&parent);
 		g_object_unref (action);
@@ -128,7 +128,7 @@ on_response (GtkDialog *dialog,
 	gtk_widget_destroy (GTK_WIDGET (self));
 
 	if (action != NULL) {
-		seahorse_action_activate_with_window (action, parent);
+		seahorse_action_activate_with_window (action, NULL, parent);
 		g_object_unref (action);
 		g_clear_object (&parent);
 	}

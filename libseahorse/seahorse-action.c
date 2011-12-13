@@ -27,10 +27,12 @@
 
 #include <gck/gck.h>
 
-static GQuark   seahorse_action_info_quark (void) G_GNUC_CONST;
+static GQuark   seahorse_action_window_quark   (void) G_GNUC_CONST;
+
+static GQuark   seahorse_action_catalog_quark  (void) G_GNUC_CONST;
 
 static GQuark
-seahorse_action_info_quark (void)
+seahorse_action_window_quark (void)
 {
 	static GQuark quark = 0;
 	if (quark == 0)
@@ -38,19 +40,33 @@ seahorse_action_info_quark (void)
 	return quark;
 }
 
+static GQuark
+seahorse_action_catalog_quark (void)
+{
+	static GQuark quark = 0;
+	if (quark == 0)
+		quark = g_quark_from_static_string ("seahorse-action-catalog");
+	return quark;
+}
+
 void
-seahorse_action_pre_activate_with_window (GtkAction *action,
-                                          GtkWindow *window)
+seahorse_action_pre_activate (GtkAction *action,
+                              SeahorseCatalog *catalog,
+                              GtkWindow *window)
 {
 	g_return_if_fail (GTK_IS_ACTION (action));
-	g_return_if_fail (window != NULL || GTK_IS_WINDOW (window));
+	g_return_if_fail (catalog == NULL || SEAHORSE_IS_CATALOG (catalog));
+	g_return_if_fail (window == NULL || GTK_IS_WINDOW (window));
 
-	g_object_set_qdata_full (G_OBJECT (action), seahorse_action_info_quark (),
+	g_object_set_qdata_full (G_OBJECT (action), seahorse_action_window_quark (),
 	                         window ? g_object_ref (window) : NULL, g_object_unref);
+	g_object_set_qdata_full (G_OBJECT (action), seahorse_action_catalog_quark (),
+	                         catalog ? g_object_ref (catalog) : NULL, g_object_unref);
 }
 
 void
 seahorse_action_activate_with_window (GtkAction *action,
+                                      SeahorseCatalog *catalog,
                                       GtkWindow *window)
 {
 	g_return_if_fail (GTK_IS_ACTION (action));
@@ -58,7 +74,7 @@ seahorse_action_activate_with_window (GtkAction *action,
 
 	g_object_ref (action);
 
-	seahorse_action_pre_activate_with_window (action, window);
+	seahorse_action_pre_activate (action, catalog, window);
 	gtk_action_activate (action);
 	seahorse_action_post_activate (action);
 
@@ -70,7 +86,8 @@ seahorse_action_post_activate (GtkAction *action)
 {
 	g_return_if_fail (GTK_IS_ACTION (action));
 
-	g_object_set_qdata (G_OBJECT (action), seahorse_action_info_quark (), NULL);
+	g_object_set_qdata (G_OBJECT (action), seahorse_action_window_quark (), NULL);
+	g_object_set_qdata (G_OBJECT (action), seahorse_action_catalog_quark (), NULL);
 }
 
 
@@ -78,5 +95,12 @@ GtkWindow *
 seahorse_action_get_window (GtkAction *action)
 {
 	g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
-	return g_object_get_qdata (G_OBJECT (action), seahorse_action_info_quark ());
+	return g_object_get_qdata (G_OBJECT (action), seahorse_action_window_quark ());
+}
+
+SeahorseCatalog *
+seahorse_action_get_catalog (GtkAction *action)
+{
+	g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+	return g_object_get_qdata (G_OBJECT (action), seahorse_action_catalog_quark ());
 }

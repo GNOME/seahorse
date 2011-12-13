@@ -161,81 +161,19 @@ typedef struct {
 
 G_DEFINE_TYPE (SeahorseGpgmeKeyActions, seahorse_gpgme_key_actions, SEAHORSE_TYPE_ACTIONS);
 
-static const char* KEY_DEFINITION = ""\
-"<ui>"\
-"	<menubar>"\
-"		<menu name='File' action='file-menu'>"\
-"			<placeholder name='FileActions'>"\
-"				<menuitem action='key-sign'/>"\
-"			</placeholder>"\
-"		</menu>"\
-"	</menubar>"\
-"	<popup name='ObjectPopup'>"\
-"		<menuitem action='key-sign'/>"\
-"	</popup>"\
-"</ui>";
-
-static void
-on_key_sign (GtkAction* action,
-             gpointer user_data)
-{
-	GtkWindow *window;
-	GList *objects = user_data;
-
-	g_return_if_fail (objects->data);
-
-	window = seahorse_action_get_window (action);
-
-	seahorse_gpgme_sign_prompt (SEAHORSE_GPGME_KEY (objects->data), window);
-}
-
-static const GtkActionEntry KEY_ACTIONS[] = {
-	{ "key-sign", GTK_STOCK_INDEX, N_("_Sign Key..."), "",
-	  N_("Sign public key"), G_CALLBACK (on_key_sign) },
-};
-
 static void
 seahorse_gpgme_key_actions_init (SeahorseGpgmeKeyActions *self)
 {
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, KEY_ACTIONS,
-	                              G_N_ELEMENTS (KEY_ACTIONS), NULL);
-	gtk_action_group_set_visible (actions, FALSE);
-	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), KEY_DEFINITION);
-
-}
-
-static GtkActionGroup *
-seahorse_gpgme_key_actions_clone_for_objects (SeahorseActions *actions,
-                                              GList *objects)
-{
-	GtkActionGroup *cloned;
-
-	g_return_val_if_fail (objects != NULL, NULL);
-
-	cloned = gtk_action_group_new ("GpgmeKey");
-	gtk_action_group_add_actions_full (cloned, SYNC_ACTIONS,
-	                                   G_N_ELEMENTS (SYNC_ACTIONS),
-	                                   seahorse_object_list_copy (objects),
-	                                   seahorse_object_list_free);
-
-	/* Single key */
-	if (!objects->next) {
-		gtk_action_group_add_actions_full (cloned, KEY_ACTIONS,
-		                                   G_N_ELEMENTS (KEY_ACTIONS),
-		                                   g_object_ref (objects->data),
-		                                   g_object_unref);
-	}
-
-	return cloned;
+	gtk_action_group_add_actions (actions, SYNC_ACTIONS,
+	                              G_N_ELEMENTS (SYNC_ACTIONS), NULL);
 }
 
 static void
 seahorse_gpgme_key_actions_class_init (SeahorseGpgmeKeyActionsClass *klass)
 {
-	SeahorseActionsClass *actions_class = SEAHORSE_ACTIONS_CLASS (klass);
-	actions_class->clone_for_objects = seahorse_gpgme_key_actions_clone_for_objects;
+
 }
 
 GtkActionGroup *

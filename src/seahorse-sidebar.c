@@ -26,11 +26,13 @@
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
 #include "seahorse-backend.h"
+#include "seahorse-deletable.h"
 #include "seahorse-interaction.h"
 #include "seahorse-lockable.h"
 #include "seahorse-place.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
+#include "seahorse-viewable.h"
 
 #include "gkr/seahorse-gkr.h"
 #include "pgp/seahorse-pgp.h"
@@ -64,6 +66,7 @@ struct _SeahorseSidebar {
 	GtkTreePath *action_highlight_path;
 	GtkCellRenderer *action_cell_renderer;
 	gint action_button_size;
+	GtkAccelGroup *accel_group;
 
 	guint update_places_sig;
 };
@@ -130,6 +133,8 @@ seahorse_sidebar_init (SeahorseSidebar *self)
 	self->selection = g_hash_table_new (g_direct_hash, g_direct_equal);
 	self->objects = GCR_UNION_COLLECTION (gcr_union_collection_new ());
 	self->chosen = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+	self->accel_group = gtk_accel_group_new ();
 }
 
 static guchar
@@ -781,6 +786,204 @@ load_backends (SeahorseSidebar *self)
 }
 
 static void
+on_place_locked (GObject *source,
+                 GAsyncResult *result,
+                 gpointer user_data)
+{
+	GtkWindow *parent = GTK_WINDOW (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_lockable_lock_finish (SEAHORSE_LOCKABLE (source), result, &error))
+		seahorse_util_handle_error (&error, parent, _("Couldn't lock"));
+
+	g_object_unref (parent);
+}
+
+static void
+place_lock (SeahorseLockable *lockable,
+            GtkWindow *window)
+{
+	GCancellable *cancellable = g_cancellable_new ();
+	GTlsInteraction *interaction = seahorse_interaction_new (window);
+
+	seahorse_lockable_lock_async (lockable, interaction, cancellable,
+	                              on_place_locked, g_object_ref (window));
+
+	g_object_unref (cancellable);
+	g_object_unref (interaction);
+}
+
+static void
+on_place_lock (GtkMenuItem *item,
+               gpointer user_data)
+{
+	SeahorseLockable *lockable = SEAHORSE_LOCKABLE (user_data);
+	GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (item));
+	place_lock (lockable, GTK_WINDOW (window));
+}
+
+static void
+on_place_unlocked (GObject *source,
+                 GAsyncResult *result,
+                 gpointer user_data)
+{
+	GtkWindow *parent = GTK_WINDOW (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_lockable_unlock_finish (SEAHORSE_LOCKABLE (source), result, &error))
+		seahorse_util_handle_error (&error, parent, _("Couldn't unlock"));
+
+	g_object_unref (parent);
+}
+
+
+
+static void
+place_unlock (SeahorseLockable *lockable,
+              GtkWindow *window)
+{
+	GCancellable *cancellable = g_cancellable_new ();
+	GTlsInteraction *interaction = seahorse_interaction_new (window);
+
+	seahorse_lockable_unlock_async (lockable, interaction, cancellable,
+	                                on_place_unlocked, g_object_ref (window));
+
+	g_object_unref (cancellable);
+	g_object_unref (interaction);
+}
+
+static void
+on_place_unlock (GtkMenuItem *item,
+                 gpointer user_data)
+{
+	SeahorseLockable *lockable = SEAHORSE_LOCKABLE (user_data);
+	GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (item));
+	place_unlock (lockable, GTK_WINDOW (window));
+}
+
+static void
+on_place_deleted (GObject *source,
+                  GAsyncResult *result,
+                  gpointer user_data)
+{
+	GtkWindow *parent = GTK_WINDOW (user_data);
+	GError *error = NULL;
+
+	if (!seahorse_deleter_delete_finish (SEAHORSE_DELETER (source), result, &error))
+		seahorse_util_handle_error (&error, parent, _("Couldn't delete"));
+
+	g_object_unref (parent);
+}
+
+static void
+on_place_delete (GtkMenuItem *item,
+                 gpointer user_data)
+{
+	SeahorseDeletable *deletable = SEAHORSE_DELETABLE (user_data);
+	GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (item));
+	SeahorseDeleter *deleter;
+
+	deleter = seahorse_deletable_create_deleter (deletable);
+
+	if (seahorse_deleter_prompt (deleter, GTK_WINDOW (window)))
+		seahorse_deleter_delete_async (deleter, NULL, on_place_deleted,
+		                               g_object_ref (window));
+
+	g_object_unref (deleter);
+}
+
+static void
+on_place_properties (GtkMenuItem *item,
+                     gpointer user_data)
+{
+	SeahorseViewable *viewable = SEAHORSE_VIEWABLE (user_data);
+	GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (item));
+	seahorse_viewable_show_viewer (viewable, GTK_WINDOW (window));
+}
+
+static void
+check_widget_visible (GtkWidget *widget,
+                      gpointer data)
+{
+	gboolean *visible = data;
+	if (gtk_widget_get_visible (widget))
+		*visible = TRUE;
+}
+
+static void
+popup_menu_for_place (SeahorseSidebar *self,
+                      SeahorsePlace *place,
+                      guint button,
+                      guint32 activate_time)
+{
+	GtkActionGroup *actions = NULL;
+	GtkMenu *menu;
+	GList *list, *l;
+	GtkWidget *item;
+	gboolean visible;
+
+	menu = GTK_MENU (gtk_menu_new ());
+
+	/* First add all the actions from the collection */
+	g_object_get (place, "actions", &actions, NULL);
+	list = actions ? gtk_action_group_list_actions (actions) : NULL;
+	if (list) {
+		for (l = list; l != NULL; l = g_list_next (l)) {
+			gtk_action_set_accel_group (l->data, self->accel_group);
+			item = gtk_action_create_menu_item (l->data);
+			gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+		}
+		g_list_free (list);
+	}
+	g_clear_object (&actions);
+
+	/* Lock and unlock items */
+	if (SEAHORSE_IS_LOCKABLE (place)) {
+		item = gtk_menu_item_new_with_mnemonic (_("_Lock"));
+		g_signal_connect (item, "activate", G_CALLBACK (on_place_lock), place);
+		g_object_bind_property (place, "lockable", item, "visible", G_BINDING_SYNC_CREATE);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+		item = gtk_menu_item_new_with_mnemonic (_("_Unlock"));
+		g_signal_connect (item, "activate", G_CALLBACK (on_place_unlock), place);
+		g_object_bind_property (place, "unlockable", item, "visible", G_BINDING_SYNC_CREATE);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	}
+
+	/* Delete item */
+	if (SEAHORSE_IS_DELETABLE (place)) {
+		item = gtk_image_menu_item_new_with_mnemonic (_("_Delete"));
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+		                               gtk_image_new_from_stock (GTK_STOCK_DELETE, GTK_ICON_SIZE_MENU));
+		g_signal_connect (item, "activate", G_CALLBACK (on_place_delete), place);
+		g_object_bind_property (place, "deletable", item, "sensitive", G_BINDING_SYNC_CREATE);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+		gtk_widget_show (item);
+	}
+
+	/* Properties item */
+	if (SEAHORSE_IS_VIEWABLE (place)) {
+		item = gtk_image_menu_item_new_with_mnemonic (_("_Properties"));
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+		                               gtk_image_new_from_stock (GTK_STOCK_PROPERTIES, GTK_ICON_SIZE_MENU));
+		g_signal_connect (item, "activate", G_CALLBACK (on_place_properties), place);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+		gtk_widget_show (item);
+	}
+
+	visible = FALSE;
+	gtk_container_foreach (GTK_CONTAINER (menu), check_widget_visible, &visible);
+
+	if (visible) {
+		gtk_menu_popup (menu, NULL, NULL, NULL, NULL, button, activate_time);
+		gtk_menu_attach_to_widget (menu, GTK_WIDGET (self), NULL);
+		gtk_widget_show (GTK_WIDGET (menu));
+	} else {
+		gtk_widget_destroy (GTK_WIDGET (menu));
+	}
+}
+
+static void
 on_tree_view_popup_menu (GtkWidget *widget,
                          gpointer user_data)
 {
@@ -802,7 +1005,8 @@ on_tree_view_popup_menu (GtkWidget *widget,
 	                    SIDEBAR_COLLECTION, &collection,
 	                    -1);
 
-	g_signal_emit (self, signals[CONTEXT_MENU], 0, collection);
+	if (SEAHORSE_IS_PLACE (collection))
+		popup_menu_for_place (self, SEAHORSE_PLACE (collection), 0, gtk_get_current_event_time ());
 
 	g_clear_object (&collection);
 }
@@ -934,38 +1138,11 @@ on_tree_view_button_press_event (GtkWidget *widget,
 	                    SIDEBAR_COLLECTION, &collection,
 	                    -1);
 
-	g_signal_emit (self, signals[CONTEXT_MENU], 0, collection);
+	if (SEAHORSE_IS_PLACE (collection))
+		popup_menu_for_place (self, SEAHORSE_PLACE (collection), event->button, event->time);
 
 	g_clear_object (&collection);
 	return TRUE;
-}
-
-static void
-on_place_lock (GObject *source,
-               GAsyncResult *result,
-               gpointer user_data)
-{
-	GtkWindow *parent = GTK_WINDOW (user_data);
-	GError *error = NULL;
-
-	if (!seahorse_lockable_lock_finish (SEAHORSE_LOCKABLE (source), result, &error))
-		seahorse_util_handle_error (&error, parent, _("Couldn't lock"));
-
-	g_object_unref (parent);
-}
-
-static void
-on_place_unlock (GObject *source,
-                 GAsyncResult *result,
-                 gpointer user_data)
-{
-	GtkWindow *parent = GTK_WINDOW (user_data);
-	GError *error = NULL;
-
-	if (!seahorse_lockable_unlock_finish (SEAHORSE_LOCKABLE (source), result, &error))
-		seahorse_util_handle_error (&error, parent, _("Couldn't unlock"));
-
-	g_object_unref (parent);
 }
 
 static gboolean
@@ -974,8 +1151,6 @@ on_tree_view_button_release_event (GtkWidget *widget,
                                    gpointer user_data)
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (user_data);
-	GTlsInteraction *interaction;
-	GCancellable *cancellable;
 	SeahorseLockable *lockable;
 	GtkTreePath *path;
 	GtkTreeModel *model;
@@ -998,23 +1173,15 @@ on_tree_view_button_release_event (GtkWidget *widget,
 		return FALSE;
 
 	window = gtk_widget_get_toplevel (widget);
-	cancellable = g_cancellable_new ();
-	interaction = seahorse_interaction_new (GTK_WINDOW (window));
 	ret = FALSE;
 
 	lockable = lookup_lockable_for_iter (model, &iter);
 	if (lockable) {
-		if (seahorse_lockable_can_lock (lockable)) {
-			seahorse_lockable_lock_async (lockable, interaction, cancellable,
-			                              on_place_lock, g_object_ref (window));
-		} else if (seahorse_lockable_can_unlock (lockable)) {
-			seahorse_lockable_unlock_async (lockable, interaction, cancellable,
-			                                on_place_unlock, g_object_ref (window));
-		}
+		if (seahorse_lockable_can_lock (lockable))
+			place_lock (lockable, GTK_WINDOW (window));
+		else if (seahorse_lockable_can_unlock (lockable))
+			place_unlock (lockable, GTK_WINDOW (window));
 	}
-
-	g_object_unref (cancellable);
-	g_object_unref (interaction);
 
 	return TRUE;
 }
@@ -1225,6 +1392,8 @@ seahorse_sidebar_finalize (GObject *obj)
 	if (self->action_highlight_path)
 		gtk_tree_path_free (self->action_highlight_path);
 
+	g_object_unref (self->accel_group);
+
 	G_OBJECT_CLASS (seahorse_sidebar_parent_class)->finalize (obj);
 }
 
@@ -1359,6 +1528,34 @@ seahorse_sidebar_get_selected_places (SeahorseSidebar *self)
 	}
 
 	return places;
+}
+
+SeahorsePlace *
+seahorse_sidebar_get_focused_place (SeahorseSidebar *self)
+{
+	GcrCollection *collection;
+	GtkTreePath *path;
+	GtkTreeIter iter;
+	RowType row_type;
+
+	g_return_val_if_fail (SEAHORSE_IS_SIDEBAR (self), NULL);
+
+	gtk_tree_view_get_cursor (self->tree_view, &path, NULL);
+	if (path != NULL) {
+		if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (self->store), &iter, path))
+			g_return_val_if_reached (NULL);
+		gtk_tree_path_free (path);
+
+		gtk_tree_model_get (GTK_TREE_MODEL (self->store), &iter,
+		                    SIDEBAR_ROW_TYPE, &row_type,
+		                    SIDEBAR_COLLECTION, &collection,
+		                    -1);
+
+		if (row_type == TYPE_PLACE)
+			return SEAHORSE_PLACE (collection);
+	}
+
+	return NULL;
 }
 
 GList *

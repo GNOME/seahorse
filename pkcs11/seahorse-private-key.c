@@ -24,7 +24,6 @@
 
 #include "seahorse-private-key.h"
 #include "seahorse-pkcs11.h"
-#include "seahorse-pkcs11-actions.h"
 #include "seahorse-pkcs11-helpers.h"
 #include "seahorse-pkcs11-key-deleter.h"
 #include "seahorse-pkcs11-properties.h"
@@ -70,7 +69,6 @@ enum {
 struct _SeahorsePrivateKeyPrivate {
 	SeahorseToken *token;
 	GckAttributes *attributes;
-	GtkActionGroup *actions;
 	SeahorseCertificate *certificate;
 	GIcon *icon;
 };
@@ -101,7 +99,6 @@ static void
 seahorse_private_key_init (SeahorsePrivateKey *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_PRIVATE_KEY, SeahorsePrivateKeyPrivate));
-	self->pv->actions = seahorse_pkcs11_object_actions_instance ();
 }
 
 static void
@@ -109,7 +106,6 @@ seahorse_private_key_finalize (GObject *obj)
 {
 	SeahorsePrivateKey *self = SEAHORSE_PRIVATE_KEY (obj);
 
-	g_clear_object (&self->pv->actions);
 	g_clear_object (&self->pv->icon);
 
 	if (self->pv->attributes)
@@ -162,7 +158,7 @@ seahorse_private_key_get_property (GObject *obj,
 		g_value_set_flags (value, SEAHORSE_FLAG_PERSONAL);
 		break;
 	case PROP_ACTIONS:
-		g_value_set_object (value, self->pv->actions);
+		g_value_set_object (value, NULL);
 		break;
 	case PROP_PARTNER:
 		g_value_set_object (value, seahorse_private_key_get_partner (self));

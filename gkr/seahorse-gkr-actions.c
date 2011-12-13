@@ -139,106 +139,6 @@ seahorse_gkr_backend_actions_instance (void)
 	return actions;
 }
 
-#define SEAHORSE_TYPE_GKR_KEYRING_ACTIONS            (seahorse_gkr_keyring_actions_get_type ())
-#define SEAHORSE_GKR_KEYRING_ACTIONS(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GKR_KEYRING_ACTIONS, SeahorseGkrKeyringActions))
-#define SEAHORSE_GKR_KEYRING_ACTIONS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GKR_KEYRING_ACTIONS, SeahorseGkrKeyringActionsClass))
-#define SEAHORSE_IS_GKR_KEYRING_ACTIONS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GKR_KEYRING_ACTIONS))
-#define SEAHORSE_IS_GKR_KEYRING_ACTIONS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GKR_KEYRING_ACTIONS))
-#define SEAHORSE_GKR_KEYRING_ACTIONS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GKR_KEYRING_ACTIONS, SeahorseGkrKeyringActionsClass))
-
-typedef struct {
-	SeahorseActions parent;
-} SeahorseGkrKeyringActions;
-
-typedef struct {
-	SeahorseActionsClass parent_class;
-} SeahorseGkrKeyringActionsClass;
-
-GType     seahorse_gkr_keyring_actions_get_type (void) G_GNUC_CONST;
-
-G_DEFINE_TYPE (SeahorseGkrKeyringActions, seahorse_gkr_keyring_actions, SEAHORSE_TYPE_ACTIONS);
-
-static void
-on_keyring_unlock_done (GnomeKeyringResult result,
-                        gpointer user_data)
-{
-	GtkWindow *parent = GTK_WINDOW (user_data);
-
-	if (result != GNOME_KEYRING_RESULT_OK &&
-	    result != GNOME_KEYRING_RESULT_DENIED &&
-	    result != GNOME_KEYRING_RESULT_CANCELLED) {
-		seahorse_util_show_error (parent, _("Couldn't unlock keyring"),
-		                          gnome_keyring_result_to_message (result));
-	}
-
-	refresh_all_keyrings ();
-}
-
-static void
-on_keyrings_unlock (GtkAction *action,
-                    gpointer user_data)
-{
-	GList *keys = user_data;
-	GtkWindow *parent;
-	GList *l;
-
-	parent = seahorse_action_get_window (action);
-	for (l = keys; l; l = g_list_next (l)) {
-		g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (l->data));
-		gnome_keyring_unlock (seahorse_gkr_keyring_get_name (l->data), NULL,
-		                      on_keyring_unlock_done, g_object_ref (parent), g_object_unref);
-	}
-}
-
-static void
-on_keyring_unlock (GtkAction *action,
-                   gpointer user_data)
-{
-	GtkWindow *parent = seahorse_action_get_window (action);
-	gnome_keyring_unlock (seahorse_gkr_keyring_get_name (SEAHORSE_GKR_KEYRING (user_data)), NULL,
-	                      on_keyring_unlock_done, g_object_ref (parent), g_object_unref);
-}
-
-static void
-on_keyring_lock_done (GnomeKeyringResult result, gpointer user_data)
-{
-	GtkWindow *parent = GTK_WINDOW (user_data);
-
-	if (result != GNOME_KEYRING_RESULT_OK &&
-	    result != GNOME_KEYRING_RESULT_DENIED &&
-	    result != GNOME_KEYRING_RESULT_CANCELLED) {
-		seahorse_util_show_error (parent, _("Couldn't lock keyring"),
-		                          gnome_keyring_result_to_message (result));
-	}
-
-	refresh_all_keyrings ();
-}
-
-static void
-on_keyrings_lock (GtkAction *action,
-                  gpointer user_data)
-{
-	GList *keyrings = user_data;
-	GtkWindow *parent;
-	GList *l;
-
-	parent = seahorse_action_get_window (action);
-	for (l = keyrings; l; l = g_list_next (l)) {
-		g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (l->data));
-		gnome_keyring_lock (seahorse_gkr_keyring_get_name (l->data),
-		                    on_keyring_lock_done, g_object_ref (parent), g_object_unref);
-	}
-}
-
-static void
-on_keyring_lock (GtkAction *action,
-                 gpointer user_data)
-{
-	GtkWindow *parent = seahorse_action_get_window (action);
-	gnome_keyring_lock (seahorse_gkr_keyring_get_name (SEAHORSE_GKR_KEYRING (user_data)),
-	                    on_keyring_lock_done, g_object_ref (parent), g_object_unref);
-}
-
 static void
 on_set_default_keyring_done (GnomeKeyringResult result,
                              gpointer user_data)
@@ -261,9 +161,15 @@ on_keyring_default (GtkAction *action,
 {
 	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (user_data);
 	GtkWindow *parent = seahorse_action_get_window (action);
-	gnome_keyring_set_default_keyring (seahorse_gkr_keyring_get_name (keyring),
-	                                   on_set_default_keyring_done,
-	                                   g_object_ref (parent), g_object_unref);
+
+	if (parent == NULL)
+		gnome_keyring_set_default_keyring (seahorse_gkr_keyring_get_name (keyring),
+		                                   on_set_default_keyring_done,
+		                                   NULL, NULL);
+	else
+		gnome_keyring_set_default_keyring (seahorse_gkr_keyring_get_name (keyring),
+		                                   on_set_default_keyring_done,
+		                                   g_object_ref (parent), g_object_unref);
 }
 
 static void
@@ -288,226 +194,42 @@ on_keyring_password (GtkAction *action,
 	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (user_data);
 	GtkWindow *window = seahorse_action_get_window (action);
 
-	gnome_keyring_change_password (seahorse_gkr_keyring_get_name (keyring),
-	                               NULL, NULL, on_change_password_done,
-	                               g_object_ref (window), g_object_unref);
+	if (window == NULL)
+		gnome_keyring_change_password (seahorse_gkr_keyring_get_name (keyring),
+		                               NULL, NULL, on_change_password_done,
+		                               NULL, NULL);
+	else
+		gnome_keyring_change_password (seahorse_gkr_keyring_get_name (keyring),
+		                               NULL, NULL, on_change_password_done,
+		                               g_object_ref (window), g_object_unref);
+
 }
-
-static void
-on_keyring_properties (GtkAction* action,
-                       gpointer user_data)
-{
-	seahorse_gkr_keyring_properties_show (SEAHORSE_GKR_KEYRING (user_data),
-	                                      seahorse_action_get_window (action));
-}
-
-static void
-on_delete_keyring_complete (GObject *source,
-                            GAsyncResult *result,
-                            gpointer user_data)
-{
-	GtkWindow *parent = GTK_WINDOW (user_data);
-	GError *error = NULL;
-
-	if (!seahorse_deleter_delete_finish (SEAHORSE_DELETER (source), result, &error)) {
-		seahorse_util_show_error (parent, _("Couldn't delete keyring"), error->message);
-		g_error_free (error);
-	}
-
-	g_object_unref (parent);
-}
-
-static void
-on_keyrings_delete (GtkAction* action,
-                    gpointer user_data)
-{
-	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (user_data);
-	GtkWindow *parent = seahorse_action_get_window (action);
-	SeahorseDeleter *deleter;
-
-	deleter = seahorse_gkr_keyring_deleter_new (keyring);
-
-	if (seahorse_deleter_prompt (deleter, parent))
-		seahorse_deleter_delete_async (deleter, NULL, on_delete_keyring_complete,
-		                               g_object_ref (parent));
-	g_object_unref (deleter);
-}
-
-static const GtkActionEntry KEYRINGS_ACTIONS[] = {
-	{ "keyring-lock", NULL, N_("_Lock"), "",
-	  N_("Lock the password storage keyring so a master password is required to unlock it."), G_CALLBACK (on_keyrings_lock) },
-	{ "keyring-unlock", NULL, N_("_Unlock"), "",
-	  N_("Unlock the password storage keyring with a master password so it is available for use."), G_CALLBACK (on_keyrings_unlock) },
-};
 
 static const GtkActionEntry KEYRING_ACTIONS[] = {
-	{ "keyring-default", NULL, N_("_Set as default"), "",
+	{ "keyring-default", NULL, N_("_Set as default"), NULL,
 	  N_("Applications usually store new passwords in the default keyring."), G_CALLBACK (on_keyring_default) },
-	{ "keyring-password", NULL, N_("Change _Password"), "",
+	{ "keyring-password", NULL, N_("Change _Password"), NULL,
 	  N_("Change the unlock password of the password storage keyring"), G_CALLBACK (on_keyring_password) },
-	{ "keyring-properties", GTK_STOCK_PROPERTIES, NULL, NULL,
-	  N_("Properties of the keyring."), G_CALLBACK (on_keyring_properties) },
-	{ "keyring-delete", GTK_STOCK_DELETE, NULL, NULL,
-	  N_("Delete the keyring."), G_CALLBACK (on_keyrings_delete) },
-
-	/* Generic actions used by the sidebar for the current selection */
-	{ "lock", NULL, NULL, "",
-	  N_("Lock the password storage keyring."), G_CALLBACK (on_keyring_lock) },
-	{ "unlock", NULL, NULL, "",
-	  N_("Unlock the password storage keyring."), G_CALLBACK (on_keyring_unlock) },
 };
 
-static const gchar* KEYRING_UI =
-"<ui>"
-"	<popup name='SeahorseGkrKeyring'>"
-"		<menuitem action='keyring-unlock'/>"
-"		<menuitem action='keyring-lock'/>"
-"		<menuitem action='keyring-default'/>"
-"		<menuitem action='keyring-password'/>"
-"		<menuitem action='keyring-delete'/>"
-"		<menuitem action='keyring-properties'/>"
-"	</popup>"\
-"</ui>";
-
-static void
-seahorse_gkr_keyring_actions_init (SeahorseGkrKeyringActions *self)
+GtkActionGroup *
+seahorse_gkr_keyring_actions_new (SeahorseGkrKeyring *keyring)
 {
-	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
+	GtkActionGroup *actions;
+	GtkAction *action;
+
+	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (keyring), NULL);
+
+	actions = gtk_action_group_new ("KeyringActions");
 
 	/* Add these actions, but none of them are visible until cloned */
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, KEYRINGS_ACTIONS, G_N_ELEMENTS (KEYRINGS_ACTIONS), NULL);
-	gtk_action_group_add_actions (actions, KEYRING_ACTIONS, G_N_ELEMENTS (KEYRING_ACTIONS), NULL);
-	gtk_action_group_set_sensitive (actions, FALSE);
+	gtk_action_group_add_actions_full (actions, KEYRING_ACTIONS, G_N_ELEMENTS (KEYRING_ACTIONS),
+	                                   g_object_ref (keyring), g_object_unref);
 
-	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), KEYRING_UI);
-}
-
-static GtkActionGroup *
-seahorse_gkr_keyring_actions_clone_for_objects (SeahorseActions *actions,
-                                                GList *objects)
-{
-	gboolean locked = FALSE;
-	gboolean unlocked = FALSE;
-	GtkActionGroup *cloned;
-	GList *l;
-
-	g_return_val_if_fail (objects != NULL, NULL);
-
-	for (l = objects; l; l = g_list_next (l)) {
-		if (seahorse_gkr_keyring_get_locked (l->data))
-			locked = TRUE;
-		else
-			unlocked = TRUE;
-	}
-
-	cloned = gtk_action_group_new ("KeyringObject");
-	gtk_action_group_set_translation_domain (cloned, GETTEXT_PACKAGE);
-
-	gtk_action_group_add_actions_full (cloned, KEYRINGS_ACTIONS,
-	                                   G_N_ELEMENTS (KEYRINGS_ACTIONS),
-	                                   seahorse_object_list_copy (objects),
-	                                   seahorse_object_list_free);
-	gtk_action_set_sensitive (gtk_action_group_get_action (cloned, "keyring-lock"), unlocked);
-	gtk_action_set_sensitive (gtk_action_group_get_action (cloned, "keyring-unlock"), locked);
-
-	/* Single object */
-	if (!objects->next) {
-		gtk_action_group_add_actions_full (cloned, KEYRING_ACTIONS,
-		                                   G_N_ELEMENTS (KEYRING_ACTIONS),
-		                                   g_object_ref (objects->data),
-		                                   g_object_unref);
-		g_object_bind_property (objects->data, "is-default",
-		                        gtk_action_group_get_action (cloned, "keyring-default"), "sensitive",
-		                        G_BINDING_INVERT_BOOLEAN | G_BINDING_SYNC_CREATE);
-		g_object_bind_property (objects->data, "locked",
-		                        gtk_action_group_get_action (cloned, "lock"), "sensitive",
-		                        G_BINDING_INVERT_BOOLEAN | G_BINDING_SYNC_CREATE);
-		g_object_bind_property (objects->data, "locked",
-		                        gtk_action_group_get_action (cloned, "unlock"), "sensitive",
-		                        G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
-	}
-
-	return cloned;
-}
-
-static void
-seahorse_gkr_keyring_actions_class_init (SeahorseGkrKeyringActionsClass *klass)
-{
-	SeahorseActionsClass *actions_class = SEAHORSE_ACTIONS_CLASS (klass);
-	actions_class->clone_for_objects = seahorse_gkr_keyring_actions_clone_for_objects;
-}
-
-GtkActionGroup *
-seahorse_gkr_keyring_actions_instance (void)
-{
-	static GtkActionGroup *actions = NULL;
-
-	if (actions == NULL) {
-		actions = g_object_new (SEAHORSE_TYPE_GKR_KEYRING_ACTIONS,
-		                        "name", "gkr-keyring",
-		                        NULL);
-		g_object_add_weak_pointer (G_OBJECT (actions),
-		                           (gpointer *)&actions);
-	} else {
-		g_object_ref (actions);
-	}
-
-	return actions;
-}
-
-GType   seahorse_gkr_item_actions_get_type        (void);
-#define SEAHORSE_TYPE_GKR_ITEM_ACTIONS            (seahorse_gkr_item_actions_get_type ())
-#define SEAHORSE_GKR_ITEM_ACTIONS(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GKR_ITEM_ACTIONS, SeahorseGkrItemActions))
-#define SEAHORSE_GKR_ITEM_ACTIONS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GKR_ITEM_ACTIONS, SeahorseGkrItemActionsClass))
-#define SEAHORSE_IS_GKR_ITEM_ACTIONS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GKR_ITEM_ACTIONS))
-#define SEAHORSE_IS_GKR_ITEM_ACTIONS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GKR_ITEM_ACTIONS))
-#define SEAHORSE_GKR_ITEM_ACTIONS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GKR_ITEM_ACTIONS, SeahorseGkrItemActionsClass))
-
-typedef struct {
-	SeahorseActions parent;
-} SeahorseGkrItemActions;
-
-typedef struct {
-	SeahorseActionsClass parent_class;
-} SeahorseGkrItemActionsClass;
-
-G_DEFINE_TYPE (SeahorseGkrItemActions, seahorse_gkr_item_actions, SEAHORSE_TYPE_ACTIONS);
-
-static void
-seahorse_gkr_item_actions_init (SeahorseGkrItemActions *self)
-{
-
-}
-
-static GtkActionGroup *
-seahorse_gkr_item_actions_clone_for_objects (SeahorseActions *actions,
-                                             GList *objects)
-{
-	return NULL;
-}
-
-static void
-seahorse_gkr_item_actions_class_init (SeahorseGkrItemActionsClass *klass)
-{
-	SeahorseActionsClass *actions_class = SEAHORSE_ACTIONS_CLASS (klass);
-	actions_class->clone_for_objects = seahorse_gkr_item_actions_clone_for_objects;
-}
-
-GtkActionGroup *
-seahorse_gkr_item_actions_instance (void)
-{
-	static GtkActionGroup *actions = NULL;
-
-	if (actions == NULL) {
-		actions = g_object_new (SEAHORSE_TYPE_GKR_ITEM_ACTIONS,
-		                        "name", "KeyringItem",
-		                        NULL);
-		g_object_add_weak_pointer (G_OBJECT (actions),
-		                           (gpointer *)&actions);
-	} else {
-		g_object_ref (actions);
-	}
+	action = gtk_action_group_get_action (actions, "keyring-default");
+	g_object_bind_property (keyring, "is-default", action, "sensitive",
+	                        G_BINDING_INVERT_BOOLEAN | G_BINDING_SYNC_CREATE);
 
 	return actions;
 }

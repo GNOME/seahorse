@@ -22,6 +22,8 @@
 #ifndef __SEAHORSE_SIDEBAR_H__
 #define __SEAHORSE_SIDEBAR_H__
 
+#include "seahorse-place.h"
+
 #include <gcr/gcr.h>
 
 #include <gtk/gtk.h>
@@ -53,6 +55,8 @@ void                         seahorse_sidebar_set_selected_uris  (SeahorseSideba
                                                                   const gchar **value);
 
 GList *                 seahorse_sidebar_get_selected_places     (SeahorseSidebar *self);
+
+SeahorsePlace *         seahorse_sidebar_get_focused_place       (SeahorseSidebar *self);
 
 GList *                 seahorse_sidebar_get_backends            (SeahorseSidebar *self);
 

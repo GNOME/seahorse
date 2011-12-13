@@ -49,7 +49,7 @@ struct _SeahorseCatalogClass {
 
 	GList *          (*get_backends)                  (SeahorseCatalog *self);
 
-	GList *          (*get_selected_places)           (SeahorseCatalog *self);
+	SeahorsePlace *  (*get_focused_place)             (SeahorseCatalog *self);
 
 	GList *          (*get_selected_objects)          (SeahorseCatalog *self);
 
@@ -65,7 +65,7 @@ void                seahorse_catalog_include_actions             (SeahorseCatalo
 
 GList *             seahorse_catalog_get_selected_objects        (SeahorseCatalog* self);
 
-GList *             seahorse_catalog_get_selected_places         (SeahorseCatalog* self);
+SeahorsePlace *     seahorse_catalog_get_focused_place           (SeahorseCatalog* self);
 
 GList *             seahorse_catalog_get_backends                (SeahorseCatalog* self);
 

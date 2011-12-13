@@ -23,16 +23,22 @@
 #ifndef __SEAHORSE_ACTION_H__
 #define __SEAHORSE_ACTION_H__
 
+#include "seahorse-catalog.h"
+
 #include <gtk/gtk.h>
 
-void                  seahorse_action_pre_activate_with_window  (GtkAction *action,
+void                  seahorse_action_pre_activate              (GtkAction *action,
+                                                                 SeahorseCatalog *catalog,
                                                                  GtkWindow *window);
 
 void                  seahorse_action_activate_with_window      (GtkAction *action,
+                                                                 SeahorseCatalog *catalog,
                                                                  GtkWindow *window);
 
 void                  seahorse_action_post_activate             (GtkAction *action);
 
 GtkWindow *           seahorse_action_get_window                (GtkAction *action);
+
+SeahorseCatalog *     seahorse_action_get_catalog               (GtkAction *action);
 
 #endif

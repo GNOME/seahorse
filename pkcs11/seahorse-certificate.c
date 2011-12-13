@@ -25,7 +25,6 @@
 #include "seahorse-certificate.h"
 #include "seahorse-certificate-der-exporter.h"
 #include "seahorse-pkcs11.h"
-#include "seahorse-pkcs11-actions.h"
 #include "seahorse-pkcs11-deleter.h"
 #include "seahorse-pkcs11-helpers.h"
 #include "seahorse-pkcs11-properties.h"
@@ -71,7 +70,6 @@ struct _SeahorseCertificatePrivate {
 	SeahorseToken *token;
 	GckAttributes *attributes;
 	const GckAttribute *value;
-	GtkActionGroup *actions;
 	SeahorsePrivateKey *private_key;
 	GIcon *icon;
 	guint flags;
@@ -121,7 +119,6 @@ static void
 seahorse_certificate_init (SeahorseCertificate *self)
 {
 	self->pv = (G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_CERTIFICATE, SeahorseCertificatePrivate));
-	self->pv->actions = seahorse_pkcs11_object_actions_instance ();
 	self->pv->value = NULL;
 	self->pv->flags = G_MAXUINT;
 }
@@ -152,8 +149,6 @@ static void
 seahorse_certificate_finalize (GObject *obj)
 {
 	SeahorseCertificate *self = SEAHORSE_CERTIFICATE (obj);
-
-	g_clear_object (&self->pv->actions);
 
 	if (self->pv->attributes)
 		gck_attributes_unref (self->pv->attributes);
@@ -215,7 +210,7 @@ seahorse_certificate_get_property (GObject *obj,
 		g_value_set_flags (value, self->pv->flags);
 		break;
 	case PROP_ACTIONS:
-		g_value_set_object (value, self->pv->actions);
+		g_value_set_object (value, NULL);
 		break;
 	case PROP_PARTNER:
 		g_value_set_object (value, seahorse_certificate_get_partner (self));

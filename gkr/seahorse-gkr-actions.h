@@ -22,12 +22,12 @@
 #ifndef __SEAHORSE_GKR_ACTIONS_H__
 #define __SEAHORSE_GKR_ACTIONS_H__
 
+#include "seahorse-gkr-keyring.h"
+
 #include <gtk/gtk.h>
 
 GtkActionGroup *     seahorse_gkr_backend_actions_instance      (void);
 
-GtkActionGroup *     seahorse_gkr_keyring_actions_instance      (void);
-
-GtkActionGroup *     seahorse_gkr_item_actions_instance         (void);
+GtkActionGroup *     seahorse_gkr_keyring_actions_new           (SeahorseGkrKeyring *keyring);
 
 #endif /* __SEAHORSE_GKR_ACTIONS_H__ */
