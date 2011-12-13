@@ -28,7 +28,6 @@
 
 #include "seahorse-backend.h"
 #include "seahorse-progress.h"
-#include "seahorse-registry.h"
 
 #include <gnome-keyring.h>
 
@@ -54,13 +53,13 @@ struct _SeahorseGkrBackendClass {
 	GObjectClass parent_class;
 };
 
-static void         seahorse_gkr_backend_iface_init       (SeahorseBackendIface *iface);
+static void         seahorse_gkr_backend_iface            (SeahorseBackendIface *iface);
 
 static void         seahorse_gkr_backend_collection_init  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseGkrBackend, seahorse_gkr_backend, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_gkr_backend_collection_init);
-                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_gkr_backend_iface_init);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_gkr_backend_iface);
 );
 
 static void
@@ -188,10 +187,24 @@ seahorse_gkr_backend_collection_init (GcrCollectionIface *iface)
 	iface->get_objects = seahorse_gkr_backend_get_objects;
 }
 
-static void
-seahorse_gkr_backend_iface_init (SeahorseBackendIface *iface)
+static SeahorsePlace *
+seahorse_gkr_backend_lookup_place (SeahorseBackend *backend,
+                                   const gchar *uri)
 {
+	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (backend);
 
+	if (g_str_has_prefix (uri, "secret-service://")) {
+		uri += strlen ("secret-service://");
+		return g_hash_table_lookup (self->keyrings, uri);
+	}
+
+	return NULL;
+}
+
+static void
+seahorse_gkr_backend_iface (SeahorseBackendIface *iface)
+{
+	iface->lookup_place = seahorse_gkr_backend_lookup_place;
 }
 
 void
@@ -202,7 +215,7 @@ seahorse_gkr_backend_initialize (void)
 	g_return_if_fail (gkr_backend == NULL);
 	self = g_object_new (SEAHORSE_TYPE_GKR_BACKEND, NULL);
 
-	seahorse_registry_register_object (NULL, G_OBJECT (self), "backend", "gnome-keyring", NULL);
+	seahorse_backend_register (SEAHORSE_BACKEND (self));
 	g_object_unref (self);
 
 	g_return_if_fail (gkr_backend != NULL);
@@ -319,7 +332,7 @@ on_backend_load_keyring_complete (GObject *object,
 	closure->num_loads--;
 	seahorse_progress_end (closure->cancellable, keyring);
 
-	if (!seahorse_gkr_keyring_load_finish (keyring, result, &error))
+	if (!seahorse_place_load_finish (SEAHORSE_PLACE (keyring), result, &error))
 		g_simple_async_result_take_error (res, error);
 
 	if (closure->num_loads == 0)
@@ -381,9 +394,9 @@ on_backend_load_list_keyring_names_complete (GnomeKeyringResult result,
 		}
 
 		/* Refresh the keyring as well, and track the load */
-		seahorse_gkr_keyring_load_async (keyring, closure->cancellable,
-		                                 on_backend_load_keyring_complete,
-		                                 g_object_ref (res));
+		seahorse_place_load_async (SEAHORSE_PLACE (keyring), closure->cancellable,
+		                              on_backend_load_keyring_complete,
+		                              g_object_ref (res));
 		seahorse_progress_prep_and_begin (closure->cancellable, keyring, NULL);
 		closure->num_loads++;
 		g_object_unref (keyring);

@@ -30,7 +30,6 @@
 #include "seahorse-interaction.h"
 #include "seahorse-lockable.h"
 #include "seahorse-place.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 #include "seahorse-viewable.h"
 
@@ -769,7 +768,7 @@ load_backends (SeahorseSidebar *self)
 	GList *backends, *l;
 	GList *places, *p;
 
-	backends = seahorse_registry_object_instances (NULL, "backend", NULL);
+	backends = seahorse_backend_get_registered ();
 	for (l = backends; l != NULL; l = g_list_next (l)) {
 		g_ptr_array_add (self->backends, l->data);
 		g_signal_connect (l->data, "added", G_CALLBACK (on_place_added), self);

@@ -149,7 +149,7 @@ scheduled_refresh (SeahorseSSHSource *ssrc)
 {
     seahorse_debug ("scheduled refresh event ocurring now");
     cancel_scheduled_refresh (ssrc);
-    seahorse_ssh_source_load_async (ssrc, NULL, NULL, NULL);
+    seahorse_place_load_async (SEAHORSE_PLACE (ssrc), NULL, NULL, NULL);
     return FALSE; /* don't run again */    
 }
 
@@ -573,12 +573,13 @@ seahorse_ssh_source_load_one_sync (SeahorseSSHSource *self,
 	return key;
 }
 
-void
-seahorse_ssh_source_load_async (SeahorseSSHSource *self,
+static void
+seahorse_ssh_source_load_async (SeahorsePlace *place,
                                 GCancellable *cancellable,
                                 GAsyncReadyCallback callback,
                                 gpointer user_data)
 {
+	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (place);
 	GSimpleAsyncResult *res;
 	source_load_closure *closure;
 	GError *error = NULL;
@@ -667,12 +668,12 @@ seahorse_ssh_source_load_async (SeahorseSSHSource *self,
 	g_object_unref (res);
 }
 
-gboolean
-seahorse_ssh_source_load_finish (SeahorseSSHSource *self,
+static gboolean
+seahorse_ssh_source_load_finish (SeahorsePlace *place,
                                  GAsyncResult *result,
                                  GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
 	                      seahorse_ssh_source_load_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -829,6 +830,8 @@ seahorse_ssh_source_place_iface (SeahorsePlaceIface *iface)
 {
 	iface->import_async = seahorse_ssh_source_import_async;
 	iface->import_finish = seahorse_ssh_source_import_finish;
+	iface->load_async = seahorse_ssh_source_load_async;
+	iface->load_finish = seahorse_ssh_source_load_finish;
 }
 
 /* -----------------------------------------------------------------------------

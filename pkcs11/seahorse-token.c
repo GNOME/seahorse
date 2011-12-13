@@ -465,24 +465,23 @@ calculate_session_options (SeahorseToken *self)
 		return GCK_SESSION_READ_WRITE;
 }
 
-void
-seahorse_token_refresh_async (SeahorseToken *self,
-                              GCancellable *cancellable,
-                              GAsyncReadyCallback callback,
-                              gpointer user_data)
+static void
+seahorse_token_load_async (SeahorsePlace *place,
+                           GCancellable *cancellable,
+                           GAsyncReadyCallback callback,
+                           gpointer user_data)
 {
+	SeahorseToken *self = SEAHORSE_TOKEN (place);
 	GSimpleAsyncResult *res;
 	RefreshClosure *closure;
 	GckSessionOptions options;
 	GList *objects, *l;
 	gulong handle;
 
-	g_return_if_fail (SEAHORSE_IS_TOKEN (self));
-
 	update_token_info (self);
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_token_refresh_async);
+	                                 seahorse_token_load_async);
 	closure = g_new0 (RefreshClosure, 1);
 	closure->checks = g_hash_table_new_full (seahorse_pkcs11_ulong_hash,
 	                                         seahorse_pkcs11_ulong_equal,
@@ -512,13 +511,13 @@ seahorse_token_refresh_async (SeahorseToken *self,
 	g_object_unref (res);
 }
 
-gboolean
-seahorse_token_refresh_finish (SeahorseToken *token,
-                               GAsyncResult *result,
-                               GError **error)
+static gboolean
+seahorse_token_load_finish (SeahorsePlace *place,
+                            GAsyncResult *result,
+                            GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (token),
-	                      seahorse_token_refresh_async), FALSE);
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
+	                      seahorse_token_load_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
 		return FALSE;
@@ -552,7 +551,7 @@ seahorse_token_constructed (GObject *obj)
 
 	g_return_if_fail (self->pv->slot != NULL);
 
-	seahorse_token_refresh_async (self, NULL, NULL, NULL);
+	seahorse_place_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 
 	data = gck_uri_data_new ();
 	data->token_info = seahorse_token_get_info (self);
@@ -726,7 +725,8 @@ seahorse_token_class_init (SeahorseTokenClass *klass)
 static void
 seahorse_token_place_iface (SeahorsePlaceIface *iface)
 {
-
+	iface->load_async = seahorse_token_load_async;
+	iface->load_finish = seahorse_token_load_finish;
 }
 
 static guint
@@ -789,7 +789,7 @@ on_session_logout (GObject *source,
 
 	gck_session_logout_finish (GCK_SESSION (source), result, &error);
 	if (error == NULL)
-		seahorse_token_refresh_async (self, NULL, NULL, NULL);
+		seahorse_place_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 	else
 		g_simple_async_result_take_error (res, error);
 
@@ -809,7 +809,7 @@ on_login_interactive (GObject *source,
 
 	gck_session_logout_finish (GCK_SESSION (source), result, &error);
 	if (error == NULL)
-		seahorse_token_refresh_async (self, NULL, NULL, NULL);
+		seahorse_token_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 	else
 		g_simple_async_result_take_error (res, error);
 
@@ -831,7 +831,7 @@ on_session_login_open (GObject *source,
 	session = gck_session_open_finish (result, &error);
 	if (error == NULL) {
 		seahorse_token_set_session (self, session);
-		seahorse_token_refresh_async (self, NULL, NULL, NULL);
+		seahorse_place_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 		g_object_unref (session);
 	} else {
 		g_simple_async_result_take_error (res, error);

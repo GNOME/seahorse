@@ -53,8 +53,6 @@ GType                seahorse_gkr_keyring_get_type         (void);
 
 SeahorseGkrKeyring*  seahorse_gkr_keyring_new              (const gchar *keyring_name);
 
-void                 seahorse_gkr_keyring_refresh          (SeahorseGkrKeyring *self);
-
 void                 seahorse_gkr_keyring_realize          (SeahorseGkrKeyring *self);
 
 void                 seahorse_gkr_keyring_remove_item      (SeahorseGkrKeyring *self,
@@ -75,14 +73,5 @@ void                 seahorse_gkr_keyring_set_is_default   (SeahorseGkrKeyring *
                                                             gboolean is_default);
 
 gboolean             seahorse_gkr_keyring_get_locked       (SeahorseGkrKeyring *self);
-
-void                 seahorse_gkr_keyring_load_async       (SeahorseGkrKeyring *self,
-                                                            GCancellable *cancellable,
-                                                            GAsyncReadyCallback callback,
-                                                            gpointer user_data);
-
-gboolean             seahorse_gkr_keyring_load_finish      (SeahorseGkrKeyring *self,
-                                                            GAsyncResult *result,
-                                                            GError **error);
 
 #endif /* __SEAHORSE_GKR_KEYRING_H__ */

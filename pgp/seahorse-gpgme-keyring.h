@@ -78,13 +78,4 @@ SeahorseGpgmeKey *     seahorse_gpgme_keyring_lookup         (SeahorseGpgmeKeyri
 void                   seahorse_gpgme_keyring_remove_key     (SeahorseGpgmeKeyring *self,
                                                               SeahorseGpgmeKey *key);
 
-void                   seahorse_gpgme_keyring_load_async     (SeahorseGpgmeKeyring *self,
-                                                              GCancellable *cancellable,
-                                                              GAsyncReadyCallback callback,
-                                                              gpointer user_data);
-
-gboolean               seahorse_gpgme_keyring_load_finish    (SeahorseGpgmeKeyring *self,
-                                                              GAsyncResult *result,
-                                                              GError **error);
-
 #endif /* __SEAHORSE_GPGME_KEYRING_H__ */

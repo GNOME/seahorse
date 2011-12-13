@@ -64,7 +64,7 @@ struct _SeahorseGkrKeyringPrivate {
 	GnomeKeyringInfo *keyring_info;
 };
 
-static void     seahorse_keyring_place_iface        (SeahorsePlaceIface *iface);
+static void     seahorse_gkr_keyring_place_iface    (SeahorsePlaceIface *iface);
 
 static void     seahorse_keyring_collection_iface   (GcrCollectionIface *iface);
 
@@ -76,7 +76,7 @@ static void     seahorse_keyring_viewable_iface     (SeahorseViewableIface *ifac
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_keyring_collection_iface);
-                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_keyring_place_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_gkr_keyring_place_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_keyring_deletable_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_LOCKABLE, seahorse_keyring_lockable_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_keyring_viewable_iface);
@@ -160,13 +160,6 @@ seahorse_gkr_keyring_realize (SeahorseGkrKeyring *self)
 	              NULL);
 
 	g_object_unref (icon);
-}
-
-void
-seahorse_gkr_keyring_refresh (SeahorseGkrKeyring *self)
-{
-	if (self->pv->keyring_info)
-		load_keyring_info (self);
 }
 
 void
@@ -315,12 +308,13 @@ on_keyring_load_cancelled (GCancellable *cancellable,
 		gnome_keyring_cancel_request (closure->request);
 }
 
-void
-seahorse_gkr_keyring_load_async (SeahorseGkrKeyring *self,
-                                 GCancellable *cancellable,
-                                 GAsyncReadyCallback callback,
-                                 gpointer user_data)
+static void
+seahorse_gkr_keyring_load_async (SeahorsePlace *place,
+                                    GCancellable *cancellable,
+                                    GAsyncReadyCallback callback,
+                                    gpointer user_data)
 {
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (place);
 	keyring_load_closure *closure;
 	GSimpleAsyncResult *res;
 
@@ -345,12 +339,12 @@ seahorse_gkr_keyring_load_async (SeahorseGkrKeyring *self,
 	g_object_unref (res);
 }
 
-gboolean
-seahorse_gkr_keyring_load_finish (SeahorseGkrKeyring *self,
-                                  GAsyncResult *result,
-                                  GError **error)
+static gboolean
+seahorse_gkr_keyring_load_finish (SeahorsePlace *place,
+                                     GAsyncResult *result,
+                                     GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
 	                      seahorse_gkr_keyring_load_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -501,9 +495,10 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 }
 
 static void
-seahorse_keyring_place_iface (SeahorsePlaceIface *iface)
+seahorse_gkr_keyring_place_iface (SeahorsePlaceIface *iface)
 {
-
+	iface->load_async = seahorse_gkr_keyring_load_async;
+	iface->load_finish = seahorse_gkr_keyring_load_finish;
 }
 
 static guint

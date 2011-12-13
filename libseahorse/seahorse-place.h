@@ -49,13 +49,22 @@ struct _SeahorsePlaceIface {
 
 	/* virtual methods ------------------------------------------------- */
 
-	void            (*import_async)              (SeahorsePlace *place,
+	void            (* import_async)             (SeahorsePlace *place,
 	                                              GInputStream *input,
 	                                              GCancellable *cancellable,
 	                                              GAsyncReadyCallback callback,
 	                                              gpointer user_data);
 
-	GList *         (*import_finish)             (SeahorsePlace *place,
+	GList *         (* import_finish)            (SeahorsePlace *place,
+	                                              GAsyncResult *result,
+	                                              GError **error);
+
+	void            (* load_async)            (SeahorsePlace *place,
+	                                              GCancellable *cancellable,
+	                                              GAsyncReadyCallback callback,
+	                                              gpointer user_data);
+
+	gboolean        (* load_finish)           (SeahorsePlace *place,
 	                                              GAsyncResult *result,
 	                                              GError **error);
 };
@@ -71,6 +80,15 @@ void             seahorse_place_import_async         (SeahorsePlace *place,
                                                       gpointer user_data);
 
 GList *          seahorse_place_import_finish        (SeahorsePlace *place,
+                                                      GAsyncResult *result,
+                                                      GError **error);
+
+void             seahorse_place_load_async        (SeahorsePlace *place,
+                                                      GCancellable *cancellable,
+                                                      GAsyncReadyCallback callback,
+                                                      gpointer user_data);
+
+gboolean         seahorse_place_load_finish       (SeahorsePlace *place,
                                                       GAsyncResult *result,
                                                       GError **error);
 

@@ -27,7 +27,6 @@
 
 #include "seahorse-backend.h"
 #include "seahorse-place.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 #include <gcr/gcr-base.h>
@@ -48,7 +47,7 @@ static SeahorsePkcs11Backend *pkcs11_backend = NULL;
 
 struct _SeahorsePkcs11Backend {
 	GObject parent;
-	GList *slots;
+	GList *tokens;
 	GList *blacklist;
 };
 
@@ -63,13 +62,13 @@ static const char *token_blacklist[] = {
 	NULL
 };
 
-static void         seahorse_pkcs11_backend_iface_init       (SeahorseBackendIface *iface);
+static void         seahorse_pkcs11_backend_iface            (SeahorseBackendIface *iface);
 
 static void         seahorse_pkcs11_backend_collection_init  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorsePkcs11Backend, seahorse_pkcs11_backend, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_pkcs11_backend_collection_init)
-                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_pkcs11_backend_iface_init);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_pkcs11_backend_iface);
 );
 
 static void
@@ -145,7 +144,7 @@ on_initialized_registered (GObject *unused,
 				continue;
 			if (is_token_usable (self, s->data, token)) {
 				place = SEAHORSE_PLACE (seahorse_token_new (s->data));
-				self->slots = g_list_append (self->slots, place);
+				self->tokens = g_list_append (self->tokens, place);
 				gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (place));
 			}
 			gck_token_info_free (token);
@@ -200,8 +199,8 @@ seahorse_pkcs11_backend_dispose (GObject *obj)
 {
 	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (obj);
 
-	g_list_free_full (self->slots, g_object_unref);
-	self->slots = NULL;
+	g_list_free_full (self->tokens, g_object_unref);
+	self->tokens = NULL;
 
 	G_OBJECT_CLASS (seahorse_pkcs11_backend_parent_class)->dispose (obj);
 }
@@ -212,7 +211,7 @@ seahorse_pkcs11_backend_finalize (GObject *obj)
 	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (obj);
 
 	g_list_free_full (self->blacklist, (GDestroyNotify)gck_uri_data_free);
-	g_assert (self->slots == NULL);
+	g_assert (self->tokens == NULL);
 	g_return_if_fail (pkcs11_backend == self);
 	pkcs11_backend = NULL;
 
@@ -239,14 +238,14 @@ static guint
 seahorse_pkcs11_backend_get_length (GcrCollection *collection)
 {
 	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (collection);
-	return g_list_length (self->slots);
+	return g_list_length (self->tokens);
 }
 
 static GList *
 seahorse_pkcs11_backend_get_objects (GcrCollection *collection)
 {
 	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (collection);
-	return g_list_copy (self->slots);
+	return g_list_copy (self->tokens);
 }
 
 static gboolean
@@ -254,7 +253,7 @@ seahorse_pkcs11_backend_contains (GcrCollection *collection,
                                   GObject *object)
 {
 	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (collection);
-	return g_list_find (self->slots, object) != NULL;
+	return g_list_find (self->tokens, object) != NULL;
 }
 
 static void
@@ -265,11 +264,34 @@ seahorse_pkcs11_backend_collection_init (GcrCollectionIface *iface)
 	iface->get_objects = seahorse_pkcs11_backend_get_objects;
 }
 
+static SeahorsePlace *
+seahorse_pkcs11_backend_lookup_place (SeahorseBackend *backend,
+                                      const gchar *uri)
+{
+	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (backend);
+	GckUriData *uri_data;
+	GList *l;
+
+	if (!g_str_has_prefix (uri, "pkcs11:"))
+		return NULL;
+
+	uri_data = gck_uri_parse (uri, GCK_URI_FOR_TOKEN | GCK_URI_FOR_MODULE, NULL);
+	if (uri_data == NULL)
+		return NULL;
+
+	for (l = self->tokens; l != NULL; l = g_list_next (l)) {
+		if (gck_slot_match (seahorse_token_get_slot (l->data), uri_data))
+			break;
+	}
+
+	gck_uri_data_free (uri_data);
+	return l != NULL ? l->data : NULL;
+}
 
 static void
-seahorse_pkcs11_backend_iface_init (SeahorseBackendIface *iface)
+seahorse_pkcs11_backend_iface (SeahorseBackendIface *iface)
 {
-
+	iface->lookup_place = seahorse_pkcs11_backend_lookup_place;
 }
 
 void
@@ -280,7 +302,7 @@ seahorse_pkcs11_backend_initialize (void)
 	g_return_if_fail (pkcs11_backend == NULL);
 	self = g_object_new (SEAHORSE_TYPE_PKCS11_BACKEND, NULL);
 
-	seahorse_registry_register_object (NULL, G_OBJECT (self), "backend", "pkcs11", NULL);
+	seahorse_backend_register (SEAHORSE_BACKEND (self));
 	g_object_unref (self);
 
 	g_return_if_fail (pkcs11_backend != NULL);

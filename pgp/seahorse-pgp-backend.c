@@ -63,13 +63,13 @@ struct _SeahorsePgpBackendClass {
 	GObjectClass parent_class;
 };
 
-static void         seahorse_pgp_backend_iface_init       (SeahorseBackendIface *iface);
+static void         seahorse_pgp_backend_iface            (SeahorseBackendIface *iface);
 
 static void         seahorse_pgp_backend_collection_init  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorsePgpBackend, seahorse_pgp_backend, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_pgp_backend_collection_init);
-                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_pgp_backend_iface_init);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_pgp_backend_iface);
 );
 
 static void
@@ -144,7 +144,7 @@ seahorse_pgp_backend_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_pgp_backend_parent_class)->constructed (obj);
 
 	self->keyring = seahorse_gpgme_keyring_new ();
-	seahorse_gpgme_keyring_load_async (self->keyring, NULL, NULL, NULL);
+	seahorse_place_load_async (SEAHORSE_PLACE (self->keyring), NULL, NULL, NULL);
 
 	self->discovery = seahorse_discovery_new ();
 	self->unknown = seahorse_unknown_source_new ();
@@ -249,10 +249,20 @@ seahorse_pgp_backend_collection_init (GcrCollectionIface *iface)
 	iface->get_objects = seahorse_pgp_backend_get_objects;
 }
 
-static void
-seahorse_pgp_backend_iface_init (SeahorseBackendIface *iface)
+static SeahorsePlace *
+seahorse_pgp_backend_lookup_place (SeahorseBackend *backend,
+                                   const gchar *uri)
 {
+	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (backend);
+	if (g_str_equal (uri, "gnupg://"))
+		return SEAHORSE_PLACE (seahorse_pgp_backend_get_default_keyring (self));
+	return NULL;
+}
 
+static void
+seahorse_pgp_backend_iface (SeahorseBackendIface *iface)
+{
+	iface->lookup_place = seahorse_pgp_backend_lookup_place;
 }
 
 SeahorsePgpBackend *
@@ -270,7 +280,7 @@ seahorse_pgp_backend_initialize (void)
 	g_return_if_fail (pgp_backend == NULL);
 	self = g_object_new (SEAHORSE_TYPE_PGP_BACKEND, NULL);
 
-	seahorse_registry_register_object (NULL, G_OBJECT (self), "backend", "openpgp", NULL);
+	seahorse_backend_register (SEAHORSE_BACKEND (self));
 	g_object_unref (self);
 
 	g_return_if_fail (pgp_backend != NULL);

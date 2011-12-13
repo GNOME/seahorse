@@ -26,7 +26,6 @@
 #include "seahorse-ssh-source.h"
 
 #include "seahorse-backend.h"
-#include "seahorse-registry.h"
 
 #include <glib/gi18n.h>
 
@@ -49,13 +48,13 @@ struct _SeahorseSshBackendClass {
 	GObjectClass parent_class;
 };
 
-static void         seahorse_ssh_backend_iface_init       (SeahorseBackendIface *iface);
+static void         seahorse_ssh_backend_iface            (SeahorseBackendIface *iface);
 
 static void         seahorse_ssh_backend_collection_init  (GcrCollectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseSshBackend, seahorse_ssh_backend, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_ssh_backend_collection_init);
-                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_ssh_backend_iface_init);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_ssh_backend_iface);
 );
 
 static void
@@ -75,7 +74,7 @@ seahorse_ssh_backend_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_ssh_backend_parent_class)->constructed (obj);
 
 	self->dot_ssh = seahorse_ssh_source_new ();
-	seahorse_ssh_source_load_async (self->dot_ssh, NULL, NULL, NULL);
+	seahorse_place_load_async (SEAHORSE_PLACE (self->dot_ssh), NULL, NULL, NULL);
 }
 
 static void
@@ -158,10 +157,29 @@ seahorse_ssh_backend_collection_init (GcrCollectionIface *iface)
 	iface->get_objects = seahorse_ssh_backend_get_objects;
 }
 
-static void
-seahorse_ssh_backend_iface_init (SeahorseBackendIface *iface)
+static SeahorsePlace *
+seahorse_ssh_backend_lookup_place (SeahorseBackend *backend,
+                                   const gchar *uri)
 {
+	SeahorseSshBackend *self = SEAHORSE_SSH_BACKEND (backend);
+	gchar *our_uri = NULL;
+	gboolean match;
 
+	if (self->dot_ssh) {
+		g_object_get (self->dot_ssh, "uri", &our_uri, NULL);
+		match = (our_uri && g_str_equal (our_uri, uri));
+		g_free (our_uri);
+		if (match)
+			return SEAHORSE_PLACE (self->dot_ssh);
+	}
+
+	return NULL;
+}
+
+static void
+seahorse_ssh_backend_iface (SeahorseBackendIface *iface)
+{
+	iface->lookup_place = seahorse_ssh_backend_lookup_place;
 }
 
 void
@@ -172,7 +190,7 @@ seahorse_ssh_backend_initialize (void)
 	g_return_if_fail (ssh_backend == NULL);
 	self = g_object_new (SEAHORSE_TYPE_SSH_BACKEND, NULL);
 
-	seahorse_registry_register_object (NULL, G_OBJECT (self), "backend", "openssh", NULL);
+	seahorse_backend_register (SEAHORSE_BACKEND (self));
 	g_object_unref (self);
 
 	g_return_if_fail (ssh_backend != NULL);

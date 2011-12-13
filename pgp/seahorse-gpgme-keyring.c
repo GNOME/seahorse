@@ -538,22 +538,23 @@ seahorse_gpgme_keyring_remove_key (SeahorseGpgmeKeyring *self,
 
 }
 
-void
-seahorse_gpgme_keyring_load_async (SeahorseGpgmeKeyring *self,
+static void
+seahorse_gpgme_keyring_load_async (SeahorsePlace *place,
                                    GCancellable *cancellable,
                                    GAsyncReadyCallback callback,
                                    gpointer user_data)
 {
+	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (place);
 	seahorse_gpgme_keyring_load_full_async (self, NULL, 0, cancellable,
 	                                        callback, user_data);
 }
 
-gboolean
-seahorse_gpgme_keyring_load_finish (SeahorseGpgmeKeyring *self,
+static gboolean
+seahorse_gpgme_keyring_load_finish (SeahorsePlace *place,
                                     GAsyncResult *result,
                                     GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
+	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
 	                      seahorse_gpgme_keyring_load_full_async), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
@@ -736,7 +737,7 @@ scheduled_refresh (gpointer user_data)
 
 	seahorse_debug ("scheduled refresh event ocurring now");
 	cancel_scheduled_refresh (self);
-	seahorse_gpgme_keyring_load_async (self, NULL, NULL, NULL);
+	seahorse_gpgme_keyring_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 
 	return FALSE; /* don't run again */
 }
@@ -900,6 +901,8 @@ seahorse_gpgme_keyring_place_iface (SeahorsePlaceIface *iface)
 {
 	iface->import_async = seahorse_gpgme_keyring_import_async;
 	iface->import_finish = seahorse_gpgme_keyring_import_finish;
+	iface->load_async = seahorse_gpgme_keyring_load_async;
+	iface->load_finish = seahorse_gpgme_keyring_load_finish;
 }
 
 static guint

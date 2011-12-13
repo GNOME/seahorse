@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "seahorse-backend.h"
+#include "seahorse-registry.h"
 
 #include <gcr/gcr.h>
 
@@ -52,4 +53,36 @@ seahorse_backend_default_init (SeahorseBackendIface *iface)
 
 		initialized = TRUE;
 	}
+}
+
+SeahorsePlace *
+seahorse_backend_lookup_place (SeahorseBackend *backend,
+                               const gchar *uri)
+{
+	SeahorseBackendIface *iface;
+
+	g_return_val_if_fail (SEAHORSE_IS_BACKEND (backend), NULL);
+
+	iface = SEAHORSE_BACKEND_GET_INTERFACE (backend);
+	g_return_val_if_fail (iface->lookup_place != NULL, NULL);
+
+	return (iface->lookup_place) (backend, uri);
+}
+
+void
+seahorse_backend_register (SeahorseBackend *backend)
+{
+	gchar *name = NULL;
+
+	g_return_if_fail (SEAHORSE_IS_BACKEND (backend));
+
+	g_object_get (backend, "name", &name, NULL);
+	seahorse_registry_register_object (NULL, G_OBJECT (backend), "backend", name, NULL);
+	g_free (name);
+}
+
+GList *
+seahorse_backend_get_registered (void)
+{
+	return seahorse_registry_object_instances (NULL, "backend", NULL);
 }

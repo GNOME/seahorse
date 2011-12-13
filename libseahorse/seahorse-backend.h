@@ -22,8 +22,9 @@
 #ifndef __SEAHORSE_BACKEND_H__
 #define __SEAHORSE_BACKEND_H__
 
+#include "seahorse-place.h"
+
 #include <glib-object.h>
-#include <gtk/gtk.h>
 
 #define SEAHORSE_TYPE_BACKEND                (seahorse_backend_get_type ())
 #define SEAHORSE_BACKEND(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_BACKEND, SeahorseBackend))
@@ -35,10 +36,18 @@ typedef struct _SeahorseBackendIface SeahorseBackendIface;
 
 struct _SeahorseBackendIface {
 	GTypeInterface parent;
+
+	SeahorsePlace *   (* lookup_place)      (SeahorseBackend *backend,
+	                                         const gchar *uri);
 };
 
 GType               seahorse_backend_get_type           (void) G_GNUC_CONST;
 
-GtkActionGroup *    seahorse_backend_get_actions        (SeahorseBackend *backend);
+SeahorsePlace *     seahorse_backend_lookup_place       (SeahorseBackend *backend,
+                                                         const gchar *uri);
+
+void                seahorse_backend_register           (SeahorseBackend *backend);
+
+GList *             seahorse_backend_get_registered     (void);
 
 #endif /* __SEAHORSE_BACKEND_H__ */

@@ -23,6 +23,9 @@
 
 #include "config.h"
 
+#include "seahorse-backend.h"
+#include "seahorse-place.h"
+
 #include "seahorse-import-dialog.h"
 
 #include <gcr/gcr.h>
@@ -73,9 +76,22 @@ on_import_button_imported (GcrImportButton *button,
                            gpointer user_data)
 {
 	SeahorseImportDialog *self = SEAHORSE_IMPORT_DIALOG (user_data);
+	SeahorsePlace *place;
+	GList *backends, *l;
+	gchar *uri;
 
 	if (error == NULL) {
 		gtk_dialog_response (GTK_DIALOG (self), GTK_RESPONSE_OK);
+		g_object_get (importer, "uri", &uri, NULL);
+
+		backends = seahorse_backend_get_registered ();
+		for (l = backends; l != NULL; l = g_list_next (l)) {
+			place = seahorse_backend_lookup_place (l->data, uri);
+			if (place != NULL)
+				seahorse_place_load_async (place, NULL, NULL, NULL);
+		}
+		g_list_free (backends);
+		g_free (uri);
 
 	} else {
 		if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
