@@ -61,9 +61,11 @@ G_DEFINE_TYPE (SeahorseSshActions, seahorse_ssh_actions, SEAHORSE_TYPE_ACTIONS);
 static const char* UI_DEFINITION = ""\
 "<ui>"\
 "	<menubar>"\
-"		<menu name='Remote' action='remote-menu'>"\
-"			<menuitem action='remote-ssh-upload'/>"\
-"		</menu>"\
+"		<placeholder name='RemoteMenu'>"\
+"			<menu name='Remote' action='remote-menu'>"\
+"				<menuitem action='remote-ssh-upload'/>"\
+"			</menu>"\
+"		</placeholder>"\
 "	</menubar>"\
 "	<popup name='ObjectPopup'>"\
 "		<menuitem action='remote-ssh-upload'/>"\

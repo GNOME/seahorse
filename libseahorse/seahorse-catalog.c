@@ -353,9 +353,9 @@ seahorse_catalog_real_selection_changed (SeahorseCatalog *self)
 	self->pv->selection_actions = groups;
 
 	for (l = self->pv->selection_actions; l != NULL; l = g_list_next (l))
-		gtk_ui_manager_insert_action_group (self->pv->ui_manager, l->data, 5);
+		gtk_action_group_set_visible (l->data, TRUE);
 	for (l = previous; l != NULL; l = g_list_next (l))
-		gtk_ui_manager_remove_action_group (self->pv->ui_manager, l->data);
+		gtk_action_group_set_visible (l->data, FALSE);
 	g_list_free_full (previous, g_object_unref);
 }
 

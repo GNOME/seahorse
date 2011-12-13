@@ -270,26 +270,16 @@ seahorse_keyserver_results_get_focused_place (SeahorseCatalog *catalog)
 	return SEAHORSE_PLACE (keyring);
 }
 
-/**
-* type: The type identifying this object
-* n_props: Number of properties
-* props: Properties
-*
-* Creates a new SeahorseKeyserverResults object, shows the resulting window
-*
-* Returns The SeahorseKeyserverResults object as GObject
-**/
-static GObject*
-seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstructParam *props)
+static void
+seahorse_keyserver_results_constructed (GObject *obj)
 {
-	SeahorseKeyserverResults *self = SEAHORSE_KEYSERVER_RESULTS (G_OBJECT_CLASS (seahorse_keyserver_results_parent_class)->constructor(type, n_props, props));
+	SeahorseKeyserverResults *self = SEAHORSE_KEYSERVER_RESULTS (obj);
 	GtkActionGroup* actions;
 	GtkTreeSelection *selection;
 	GtkWindow *window;
 	char* title;
 
-	g_return_val_if_fail (self, NULL);
-
+	G_OBJECT_CLASS (seahorse_keyserver_results_parent_class)->constructed (obj);
 
 	if (g_utf8_strlen (self->pv->search_string, -1) == 0) {
 		title = g_strdup (_("Remote Keys"));
@@ -347,8 +337,6 @@ seahorse_keyserver_results_constructor (GType type, guint n_props, GObjectConstr
 	g_object_get (seahorse_pgp_backend_get (), "actions", &actions, NULL);
 	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
 	g_object_unref (actions);
-
-	return G_OBJECT (self);
 }
 
 /**
@@ -468,7 +456,7 @@ seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
 	seahorse_keyserver_results_parent_class = g_type_class_peek_parent (klass);
 	g_type_class_add_private (klass, sizeof (SeahorseKeyserverResultsPrivate));
 
-	gobject_class->constructor = seahorse_keyserver_results_constructor;
+	gobject_class->constructed = seahorse_keyserver_results_constructed;
 	gobject_class->finalize = seahorse_keyserver_results_finalize;
 	gobject_class->set_property = seahorse_keyserver_results_set_property;
 	gobject_class->get_property = seahorse_keyserver_results_get_property;
