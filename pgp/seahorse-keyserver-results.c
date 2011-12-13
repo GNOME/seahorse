@@ -44,8 +44,7 @@ gboolean              on_key_list_popup_menu               (GtkTreeView* view,
 
 enum {
 	PROP_0,
-	PROP_SEARCH,
-	PROP_SELECTED
+	PROP_SEARCH
 };
 
 struct _SeahorseKeyserverResultsPrivate {
@@ -478,8 +477,6 @@ seahorse_keyserver_results_class_init (SeahorseKeyserverResultsClass *klass)
 	g_object_class_install_property (G_OBJECT_CLASS (klass), PROP_SEARCH,
 	         g_param_spec_string ("search", "search", "search", NULL,
 	                              G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-
-	g_object_class_override_property (G_OBJECT_CLASS (klass), PROP_SELECTED, "selected");
 }
 
 static void
