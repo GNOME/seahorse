@@ -539,6 +539,7 @@ seahorse_catalog_include_actions (SeahorseCatalog *self,
 	gtk_ui_manager_insert_action_group (self->pv->ui_manager, actions, 10);
 
 	if (SEAHORSE_IS_ACTIONS (actions)) {
+		seahorse_actions_set_catalog (SEAHORSE_ACTIONS (actions), self);
 		definition = seahorse_actions_get_definition (SEAHORSE_ACTIONS (actions));
 		if (definition != NULL) {
 			gtk_ui_manager_add_ui_from_string (self->pv->ui_manager, definition, -1, &error);

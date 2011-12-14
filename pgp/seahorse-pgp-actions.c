@@ -83,18 +83,30 @@ static void
 on_remote_sync (GtkAction* action,
                 gpointer user_data)
 {
+	SeahorseActions *actions = SEAHORSE_ACTIONS (user_data);
 	SeahorseGpgmeKeyring *keyring;
-	GList* objects = user_data;
+	SeahorseCatalog *catalog;
+	GList *objects = NULL;
+	GList *keys = NULL;
+	GList *l;
 
-	if (objects == NULL) {
-		keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-		objects = gcr_collection_get_objects (GCR_COLLECTION (keyring));
-	} else {
-		objects = g_list_copy (objects);
+	catalog = seahorse_actions_get_catalog (actions);
+	if (catalog != NULL) {
+		objects = seahorse_catalog_get_selected_objects (catalog);
+		for (l = objects; l != NULL; l = g_list_next (l)) {
+			if (SEAHORSE_IS_PGP_KEY (l->data))
+				keys = g_list_prepend (keys, l->data);
+		}
+		g_list_free (objects);
 	}
 
-	seahorse_keyserver_sync_show (objects, seahorse_action_get_window (action));
-	g_list_free (objects);
+	if (keys == NULL) {
+		keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+		keys = gcr_collection_get_objects (GCR_COLLECTION (keyring));
+	}
+
+	seahorse_keyserver_sync_show (keys, seahorse_action_get_window (action));
+	g_list_free (keys);
 }
 
 static const GtkActionEntry FIND_ACTIONS[] = {
@@ -115,7 +127,7 @@ seahorse_pgp_backend_actions_init (SeahorsePgpBackendActions *self)
 	gtk_action_group_add_actions (actions, FIND_ACTIONS,
 	                              G_N_ELEMENTS (FIND_ACTIONS), NULL);
 	gtk_action_group_add_actions (actions, SYNC_ACTIONS,
-	                              G_N_ELEMENTS (SYNC_ACTIONS), NULL);
+	                              G_N_ELEMENTS (SYNC_ACTIONS), self);
 	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), BACKEND_DEFINITION);
 }
 
