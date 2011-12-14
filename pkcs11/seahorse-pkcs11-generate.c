@@ -109,7 +109,6 @@ static void
 complete_generate (SeahorsePkcs11Generate *self,
                    GError **error)
 {
-	g_assert (self->cancellable != NULL);
 	g_assert (error != NULL);
 
 	if (*error != NULL)
@@ -265,6 +264,7 @@ on_token_changed (GtkComboBox *combo_box,
 			                    MECHANISM_TYPE, type,
 			                    MECHANISM_LABEL, label,
 			                    -1);
+			valid = gtk_tree_model_iter_next (model, &iter);
 		}
 	}
 	while (valid)
