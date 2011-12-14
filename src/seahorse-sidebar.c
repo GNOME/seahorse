@@ -509,6 +509,9 @@ update_places (SeahorseSidebar *self)
 
 	/* Update selection */
 	update_objects_for_chosen (self, self->chosen);
+
+	if (self->combined)
+		update_objects_in_collection (self, FALSE);
 }
 
 static gboolean

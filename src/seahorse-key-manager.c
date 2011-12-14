@@ -613,15 +613,15 @@ setup_sidebar (SeahorseKeyManager *self)
 	gtk_action_group_add_toggle_actions (actions, SIDEBAR_ACTIONS,
 	                                     G_N_ELEMENTS (SIDEBAR_ACTIONS), self);
 	action = gtk_action_group_get_action (actions, "view-places");
+	g_settings_bind (self->pv->settings, "sidebar-visible",
+	                 action, "active",
+	                 G_SETTINGS_BIND_DEFAULT);
 	g_object_bind_property (action, "active",
 	                        area, "visible",
 	                        G_BINDING_SYNC_CREATE);
 	g_object_bind_property (action, "active",
 	                        self->pv->sidebar, "combined",
 	                        G_BINDING_INVERT_BOOLEAN | G_BINDING_SYNC_CREATE);
-	g_settings_bind (self->pv->settings, "sidebar-visible",
-	                 action, "active",
-	                 G_SETTINGS_BIND_DEFAULT);
 	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
 	g_object_unref (actions);
 
