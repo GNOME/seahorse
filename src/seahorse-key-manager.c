@@ -539,32 +539,29 @@ seahorse_key_manager_get_focused_place (SeahorseCatalog *catalog)
 }
 
 static gboolean
-on_idle_save_sidebar_width (gpointer user_data)
+on_panes_realize (GtkWidget *widget,
+                  gpointer   user_data)
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
+	gint width;
 
-	self->pv->sidebar_width_sig = 0;
-	g_settings_set_int (self->pv->settings, "sidebar-width", self->pv->sidebar_width);
+	width = g_settings_get_int (self->pv->settings, "sidebar-width");
+	gtk_paned_set_position (GTK_PANED (widget), width);
 
 	return FALSE;
 }
 
-static void
-on_sidebar_panes_size_allocate (GtkWidget *widget,
-                                GtkAllocation *allocation,
-                                gpointer user_data)
+static gboolean
+on_panes_unrealize (GtkWidget *widget,
+                    gpointer   user_data)
 {
 	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
+	gint width;
 
-	if (allocation->width != self->pv->sidebar_width && allocation->width > 1) {
-		if (self->pv->sidebar_width_sig != 0) {
-			g_source_remove (self->pv->sidebar_width_sig);
-			self->pv->sidebar_width_sig = 0;
-		}
+	width = gtk_paned_get_position (GTK_PANED (widget));
+	g_settings_set_int (self->pv->settings, "sidebar-width", width);
 
-		self->pv->sidebar_width = allocation->width;
-		self->pv->sidebar_width_sig = g_idle_add (on_idle_save_sidebar_width, self);
-	}
+	return FALSE;
 }
 
 static void
@@ -589,35 +586,12 @@ setup_sidebar (SeahorseKeyManager *self)
 	GList *backends, *l;
 
 	self->pv->sidebar = seahorse_sidebar_new ();
-	area = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-area");
-	gtk_container_add (GTK_CONTAINER (area), GTK_WIDGET (self->pv->sidebar));
-	gtk_widget_show (GTK_WIDGET (self->pv->sidebar));
-
-	actions = gtk_action_group_new ("sidebar");
-	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_toggle_actions (actions, SIDEBAR_ACTIONS,
-	                                     G_N_ELEMENTS (SIDEBAR_ACTIONS), self);
-	action = gtk_action_group_get_action (actions, "view-places");
-	g_object_bind_property (action, "active",
-	                        area, "visible",
-	                        G_BINDING_DEFAULT);
-	g_object_bind_property (action, "active",
-	                        self->pv->sidebar, "combined",
-	                        G_BINDING_INVERT_BOOLEAN);
-	g_settings_bind (self->pv->settings, "sidebar-visible",
-	                 action, "active",
-	                 G_SETTINGS_BIND_DEFAULT);
-	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
-	g_object_unref (actions);
-
-	g_settings_bind (self->pv->settings, "places-selected",
-	                 self->pv->sidebar, "selected-uris",
-	                 G_SETTINGS_BIND_DEFAULT);
 
 	self->pv->sidebar_width = g_settings_get_int (self->pv->settings, "sidebar-width");
 	panes = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-panes");
 	gtk_paned_set_position (GTK_PANED (panes), self->pv->sidebar_width);
-	g_signal_connect (self->pv->sidebar, "size_allocate", G_CALLBACK (on_sidebar_panes_size_allocate), self);
+	g_signal_connect (panes, "realize", G_CALLBACK (on_panes_realize), self);
+	g_signal_connect (panes, "unrealize", G_CALLBACK (on_panes_unrealize), self);
 	g_signal_connect (self->pv->sidebar, "context-menu", G_CALLBACK (on_sidebar_popup_menu), self);
 
 	backends = seahorse_sidebar_get_backends (self->pv->sidebar);
@@ -629,6 +603,31 @@ setup_sidebar (SeahorseKeyManager *self)
 			g_object_unref (actions);
 		}
 	}
+
+	area = seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "sidebar-area");
+	gtk_container_add (GTK_CONTAINER (area), GTK_WIDGET (self->pv->sidebar));
+	gtk_widget_show (GTK_WIDGET (self->pv->sidebar));
+
+	actions = gtk_action_group_new ("sidebar");
+	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_toggle_actions (actions, SIDEBAR_ACTIONS,
+	                                     G_N_ELEMENTS (SIDEBAR_ACTIONS), self);
+	action = gtk_action_group_get_action (actions, "view-places");
+	g_object_bind_property (action, "active",
+	                        area, "visible",
+	                        G_BINDING_SYNC_CREATE);
+	g_object_bind_property (action, "active",
+	                        self->pv->sidebar, "combined",
+	                        G_BINDING_INVERT_BOOLEAN | G_BINDING_SYNC_CREATE);
+	g_settings_bind (self->pv->settings, "sidebar-visible",
+	                 action, "active",
+	                 G_SETTINGS_BIND_DEFAULT);
+	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
+	g_object_unref (actions);
+
+	g_settings_bind (self->pv->settings, "places-selected",
+	                 self->pv->sidebar, "selected-uris",
+	                 G_SETTINGS_BIND_DEFAULT);
 
 	return seahorse_sidebar_get_collection (self->pv->sidebar);
 }
