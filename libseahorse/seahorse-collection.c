@@ -72,14 +72,10 @@ on_object_changed (GObject *obj,
 }
 
 static void
-remove_object (gpointer key,
-               gpointer value,
-               gpointer user_data)
+remove_object (SeahorseCollection *self,
+               GObject *object)
 {
-	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
-	GObject *object = G_OBJECT (key);
 	g_hash_table_remove (self->pv->objects, object);
-	g_signal_handlers_disconnect_by_func (object, on_object_changed, self);
 	remove_update (object, NULL, self);
 }
 
@@ -94,7 +90,6 @@ maybe_add_object (SeahorseCollection *self,
 		return FALSE;
 
 	g_hash_table_replace (self->pv->objects, obj, GINT_TO_POINTER (TRUE));
-	g_signal_connect (obj, "notify", G_CALLBACK (on_object_changed), self);
 	gcr_collection_emit_added (GCR_COLLECTION (self), obj);
 	return TRUE;
 }
@@ -109,7 +104,7 @@ maybe_remove_object (SeahorseCollection *self,
 	if (self->pv->pred && seahorse_predicate_match (self->pv->pred, obj))
 		return FALSE;
 
-	remove_object (obj, NULL, self);
+	remove_object (self, obj);
 	return TRUE;
 }
 
@@ -120,6 +115,7 @@ on_base_added (GcrCollection *base,
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
 
+	g_signal_connect (obj, "notify", G_CALLBACK (on_object_changed), self);
 	maybe_add_object (self, obj);
 }
 
@@ -130,8 +126,10 @@ on_base_removed (GcrCollection *base,
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (user_data);
 
+	g_signal_handlers_disconnect_by_func (object, on_object_changed, self);
+
 	if (g_hash_table_lookup (self->pv->objects, object))
-		remove_object (object, NULL, self);
+		remove_object (self, object);
 }
 
 static void
@@ -325,6 +323,8 @@ seahorse_collection_refresh (SeahorseCollection *self)
 {
 	GHashTable *check = g_hash_table_new (g_direct_hash, g_direct_equal);
 	GList *l, *objects = NULL;
+	GHashTableIter iter;
+	GObject *obj;
 
 	g_return_if_fail (SEAHORSE_IS_COLLECTION (self));
 
@@ -338,12 +338,19 @@ seahorse_collection_refresh (SeahorseCollection *self)
 		g_hash_table_remove (check, l->data);
 
 		/* This will add to set */
-		if (!maybe_remove_object (self, l->data))
-			maybe_add_object (self, l->data);
+		if (!maybe_remove_object (self, l->data)) {
+			if (maybe_add_object (self, l->data))
+				g_signal_connect (l->data, "notify", G_CALLBACK (on_object_changed), self);
+		}
 	}
 	g_list_free (objects);
 
-	g_hash_table_foreach (check, remove_object, self);
+	g_hash_table_iter_init (&iter, check);
+	while (g_hash_table_iter_next (&iter, (gpointer *)&obj, NULL)) {
+		g_signal_handlers_disconnect_by_func (obj, on_object_changed, self);
+		remove_object (self, obj);
+	}
+
 	g_hash_table_destroy (check);
 }
 

@@ -554,13 +554,16 @@ on_keyring_xlock_done (GnomeKeyringResult result,
                        gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (g_async_result_get_source_object (user_data));
 	GError *error = NULL;
 
 	if (seahorse_gkr_propagate_error (result, &error))
 		g_simple_async_result_take_error (res, error);
 
-	seahorse_gkr_backend_load_async (NULL, NULL, NULL, NULL);
+	seahorse_gkr_keyring_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 	g_simple_async_result_complete_in_idle (res);
+
+	g_object_unref (self);
 }
 
 static void
@@ -570,13 +573,13 @@ seahorse_gkr_keyring_lock_async (SeahorseLockable *lockable,
                                  GAsyncReadyCallback callback,
                                  gpointer user_data)
 {
-	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (lockable);
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (lockable);
 	GSimpleAsyncResult *res;
 
-	res = g_simple_async_result_new (G_OBJECT (lockable), callback, user_data,
+	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_gkr_keyring_lock_async);
 
-	gnome_keyring_lock (seahorse_gkr_keyring_get_name (keyring),
+	gnome_keyring_lock (seahorse_gkr_keyring_get_name (self),
 	                    on_keyring_xlock_done, g_object_ref (res), g_object_unref);
 
 	g_object_unref (res);
@@ -603,13 +606,13 @@ seahorse_gkr_keyring_unlock_async (SeahorseLockable *lockable,
                                    GAsyncReadyCallback callback,
                                    gpointer user_data)
 {
-	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (lockable);
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (lockable);
 	GSimpleAsyncResult *res;
 
 	res = g_simple_async_result_new (G_OBJECT (lockable), callback, user_data,
 	                                 seahorse_gkr_keyring_unlock_async);
 
-	gnome_keyring_unlock (seahorse_gkr_keyring_get_name (keyring), NULL,
+	gnome_keyring_unlock (seahorse_gkr_keyring_get_name (self), NULL,
 	                      on_keyring_xlock_done, g_object_ref (res), g_object_unref);
 
 	g_object_unref (res);
