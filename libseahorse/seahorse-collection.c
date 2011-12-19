@@ -49,16 +49,6 @@ G_DEFINE_TYPE_WITH_CODE (SeahorseCollection, seahorse_collection, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_collection_iface_init);
 );
 
-static gboolean
-remove_update (GObject *object,
-               gpointer unused,
-               SeahorseCollection *self)
-{
-	gcr_collection_emit_removed (GCR_COLLECTION (self), object);
-	return TRUE;
-}
-
-
 static void
 on_object_changed (GObject *obj,
                    GParamSpec *spec,
@@ -76,7 +66,7 @@ remove_object (SeahorseCollection *self,
                GObject *object)
 {
 	g_hash_table_remove (self->pv->objects, object);
-	remove_update (object, NULL, self);
+	gcr_collection_emit_removed (GCR_COLLECTION (self), object);
 }
 
 static gboolean
@@ -169,12 +159,19 @@ static void
 seahorse_collection_dispose (GObject *obj)
 {
 	SeahorseCollection *self = SEAHORSE_COLLECTION (obj);
+	GHashTableIter iter;
+	GObject *object;
 
 	g_signal_handlers_disconnect_by_func (self->pv->base, on_base_added, self);
 	g_signal_handlers_disconnect_by_func (self->pv->base, on_base_removed, self);
 
-	/* Release all our pointers and stuff */
-	g_hash_table_foreach_remove (self->pv->objects, (GHRFunc)remove_update, self);
+	g_hash_table_iter_init (&iter, self->pv->objects);
+	while (g_hash_table_iter_next (&iter, (gpointer *)&object, NULL)) {
+		g_signal_handlers_disconnect_by_func (object, on_object_changed, self);
+		gcr_collection_emit_removed (GCR_COLLECTION (self), object);
+	}
+
+	g_hash_table_remove_all (self->pv->objects);
 
 	G_OBJECT_CLASS (seahorse_collection_parent_class)->dispose (obj);
 }
