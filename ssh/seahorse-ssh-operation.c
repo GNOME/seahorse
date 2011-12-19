@@ -241,7 +241,7 @@ on_io_ssh_read (GIOChannel *source,
 	gchar buf[128];
 	GIOStatus status;
 	gsize read = 0;
-	GString *str;
+	GString *str = NULL;
 	gboolean ret = TRUE;
 
 	/* Figure out which buffer we're writing into */

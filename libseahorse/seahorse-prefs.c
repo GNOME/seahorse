@@ -61,16 +61,14 @@ keyserver_cell_edited (GtkCellRendererText *cell, gchar *path, gchar *text,
                        GtkTreeModel *model)
 {
     GtkTreeIter iter;
-    gboolean ret;
-    
+
     if (!seahorse_servers_is_valid_uri (text)) {
         seahorse_util_show_error (NULL, _("Not a valid Key Server address."), 
                                   _("For help contact your system adminstrator or the administrator of the key server." ));
         return;
     }
-    
-    ret = gtk_tree_model_get_iter_from_string (model, &iter, path);
-    g_assert (ret);
+
+    g_warn_if_fail (gtk_tree_model_get_iter_from_string (model, &iter, path));
     gtk_tree_store_set (GTK_TREE_STORE (model), &iter, KEYSERVER_COLUMN, text, -1);
 }
 

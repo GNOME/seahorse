@@ -110,10 +110,8 @@ static void
 on_cancellable_cancelled (GCancellable *cancellable,
                           gpointer user_data)
 {
-	TrackedTask *task = user_data;
-
 	g_assert (tracked_tasks);
-	g_assert (task->cancellable == cancellable);
+	g_assert (((TrackedTask *)user_data)->cancellable == cancellable);
 	if (!g_hash_table_remove (tracked_tasks, cancellable))
 		g_assert_not_reached ();
 }

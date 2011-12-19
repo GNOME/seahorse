@@ -170,7 +170,7 @@ static off_t
 output_seek (void *handle, off_t offset, int whence)
 {
 	GSeekable *seek;
-	GSeekType from;
+	GSeekType from = 0;
 	GError *err = NULL;
 	GOutputStream* output = handle;
 
@@ -264,7 +264,7 @@ static off_t
 input_seek (void *handle, off_t offset, int whence)
 {
 	GSeekable *seek;
-	GSeekType from;
+	GSeekType from = 0;
 	GError *err = NULL;
 	GInputStream* input = handle;
 

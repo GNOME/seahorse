@@ -518,8 +518,8 @@ seahorse_gpgme_key_object_finalize (GObject *obj)
 	g_assert (self->pv->pubkey == NULL);
 	g_assert (self->pv->seckey == NULL);
 	g_assert (self->pv->uids == NULL);
-    
-	G_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->finalize (obj);
+
+	G_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->finalize (G_OBJECT (self));
 }
 
 static void
