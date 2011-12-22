@@ -77,7 +77,7 @@ seahorse_gpgme_secret_deleter_create_confirm (SeahorseDeleter *deleter,
 	prompt = g_strdup_printf (_("Are you sure you want to permanently delete %s?"),
 	                          seahorse_object_get_label (SEAHORSE_OBJECT (self->key)));
 
-	dialog = seahorse_delete_dialog_new (parent, prompt);
+	dialog = seahorse_delete_dialog_new (parent, "%s", prompt);
 
 	seahorse_delete_dialog_set_check_label (SEAHORSE_DELETE_DIALOG (dialog), _("I understand that this secret key will be permanently deleted."));
 	seahorse_delete_dialog_set_check_require (SEAHORSE_DELETE_DIALOG (dialog), TRUE);
