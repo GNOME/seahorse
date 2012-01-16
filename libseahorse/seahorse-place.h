@@ -30,6 +30,7 @@
 #ifndef __SEAHORSE_PLACE_H__
 #define __SEAHORSE_PLACE_H__
 
+#include "seahorse-object.h"
 #include "seahorse-types.h"
 
 #include <gio/gio.h>
@@ -41,7 +42,6 @@
 #define SEAHORSE_IS_PLACE(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PLACE))
 #define SEAHORSE_PLACE_GET_INTERFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SEAHORSE_TYPE_PLACE, SeahorsePlaceIface))
 
-typedef struct _SeahorsePlace SeahorsePlace;
 typedef struct _SeahorsePlaceIface SeahorsePlaceIface;
 
 struct _SeahorsePlaceIface {
