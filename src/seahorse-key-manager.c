@@ -511,8 +511,8 @@ static const GtkActionEntry GENERAL_ACTIONS[] = {
 };
 
 static const GtkToggleActionEntry SIDEBAR_ACTIONS[] = {
-	{ "view-places", NULL, N_("P_laces"), NULL,
-	  N_("Show places sidebar"), NULL, FALSE },
+	{ "view-sidebar", NULL, N_("By _keyring"), NULL,
+	  N_("Show sidebar listing keyrings"), NULL, FALSE },
 };
 
 static const GtkRadioActionEntry VIEW_RADIO_ACTIONS[] = {
@@ -612,7 +612,7 @@ setup_sidebar (SeahorseKeyManager *self)
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_toggle_actions (actions, SIDEBAR_ACTIONS,
 	                                     G_N_ELEMENTS (SIDEBAR_ACTIONS), self);
-	action = gtk_action_group_get_action (actions, "view-places");
+	action = gtk_action_group_get_action (actions, "view-sidebar");
 	g_settings_bind (self->pv->settings, "sidebar-visible",
 	                 action, "active",
 	                 G_SETTINGS_BIND_DEFAULT);
@@ -625,7 +625,7 @@ setup_sidebar (SeahorseKeyManager *self)
 	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), actions);
 	g_object_unref (actions);
 
-	g_settings_bind (self->pv->settings, "places-selected",
+	g_settings_bind (self->pv->settings, "keyrings-selected",
 	                 self->pv->sidebar, "selected-uris",
 	                 G_SETTINGS_BIND_DEFAULT);
 
