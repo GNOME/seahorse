@@ -183,6 +183,9 @@ seahorse_exportable_export_to_text_wait (GList *objects,
 	g_return_val_if_fail (data != NULL, 0);
 	g_return_val_if_fail (size != NULL, 0);
 
+	*data = NULL;
+	*size = 0;
+
 	for (l = objects; l != NULL; l = g_list_next (l)) {
 		if (!seahorse_exportable_can_export (l->data))
 			continue;
