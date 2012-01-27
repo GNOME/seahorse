@@ -192,13 +192,17 @@ on_first_timer (SeahorseKeyManager* self)
 #endif
 
 static void
-on_clear_clicked (GtkEntry* entry, GtkEntryIconPosition icon_pos, GdkEvent* event, gpointer user_data)
+on_clear_clicked (GtkEntry* entry,
+                  GtkEntryIconPosition icon_pos,
+                  GdkEvent* event,
+                  gpointer user_data)
 {
 	gtk_entry_set_text (entry, "");
 }
 
 static void 
-on_filter_changed (GtkEntry* entry, SeahorseKeyManager* self) 
+on_filter_changed (GtkEntry* entry,
+                   SeahorseKeyManager* self)
 {
 	const gchar *text;
 
@@ -207,6 +211,20 @@ on_filter_changed (GtkEntry* entry, SeahorseKeyManager* self)
 
 	text = gtk_entry_get_text (entry);
 	g_object_set (self->pv->store, "filter", text, NULL);
+
+	if (text == NULL || g_str_equal (text, "")) {
+		g_object_set (G_OBJECT (entry),
+		              "secondary-icon-name", "edit-find-symbolic",
+		              "secondary-icon-activatable", FALSE,
+		              "secondary-icon-sensitive", FALSE,
+		              NULL);
+	} else {
+		g_object_set (G_OBJECT (entry),
+		              "secondary-icon-name", "edit-clear-symbolic",
+		              "secondary-icon-activatable", TRUE,
+		              "secondary-icon-sensitive", TRUE,
+		              NULL);
+	}
 }
 
 static void 
@@ -743,23 +761,11 @@ seahorse_key_manager_constructed (GObject *object)
 		}
 	}
 
-	gtk_entry_set_icon_from_icon_name (self->pv->filter_entry,
-					   GTK_ENTRY_ICON_PRIMARY,
-					   GTK_STOCK_FIND);
-	gtk_entry_set_icon_from_icon_name (self->pv->filter_entry,
-					   GTK_ENTRY_ICON_SECONDARY,
-					   GTK_STOCK_CLEAR);
-
-	gtk_entry_set_icon_activatable (self->pv->filter_entry,
-					GTK_ENTRY_ICON_PRIMARY, FALSE);
-	gtk_entry_set_icon_activatable (self->pv->filter_entry,
-					GTK_ENTRY_ICON_SECONDARY, TRUE);
-
+	on_filter_changed (self->pv->filter_entry, self);
 	gtk_entry_set_width_chars (self->pv->filter_entry, 30);
-
 	g_signal_connect (self->pv->filter_entry, "icon-release",
-			  G_CALLBACK (on_clear_clicked), NULL);
-	
+	                  G_CALLBACK (on_clear_clicked), NULL);
+
 	/* For the filtering */
 	g_signal_connect_object (GTK_EDITABLE (self->pv->filter_entry), "changed", 
 	                         G_CALLBACK (on_filter_changed), self, 0);
