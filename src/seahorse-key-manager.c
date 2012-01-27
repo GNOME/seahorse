@@ -594,6 +594,9 @@ setup_sidebar (SeahorseKeyManager *self)
 	g_signal_connect (panes, "unrealize", G_CALLBACK (on_panes_unrealize), self);
 	g_signal_connect (self->pv->sidebar, "context-menu", G_CALLBACK (on_sidebar_popup_menu), self);
 
+	gtk_widget_set_size_request (gtk_paned_get_child1 (GTK_PANED (panes)), 50, -1);
+	gtk_widget_set_size_request (gtk_paned_get_child2 (GTK_PANED (panes)), 150, -1);
+
 	backends = seahorse_sidebar_get_backends (self->pv->sidebar);
 	for (l = backends; l != NULL; l = g_list_next (l)) {
 		actions = NULL;
