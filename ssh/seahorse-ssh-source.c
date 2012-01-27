@@ -229,7 +229,7 @@ seahorse_ssh_source_get_property (GObject *obj,
 
 	switch (prop_id) {
 	case PROP_LABEL:
-		g_value_set_string (value, _("OpenSSH directory"));
+		g_value_set_string (value, _("OpenSSH keys"));
 		break;
 	case PROP_DESCRIPTION:
 		text = g_strdup_printf (_("OpenSSH: %s"), self->priv->ssh_homedir);

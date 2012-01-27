@@ -811,7 +811,7 @@ seahorse_gpgme_keyring_get_property (GObject *obj,
 
 	switch (prop_id) {
 	case PROP_LABEL:
-		g_value_set_string (value, _("GnuPG keyring"));
+		g_value_set_string (value, _("GnuPG keys"));
 		break;
 	case PROP_DESCRIPTION:
 		g_value_set_string (value, _("GnuPG: default keyring directory"));
