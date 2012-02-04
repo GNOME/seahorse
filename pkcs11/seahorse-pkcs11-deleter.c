@@ -72,7 +72,7 @@ seahorse_pkcs11_deleter_create_confirm (SeahorseDeleter *deleter,
 		                          num);
 	}
 
-	dialog = seahorse_delete_dialog_new (parent, prompt);
+	dialog = seahorse_delete_dialog_new (parent, "%s", prompt);
 	g_free (prompt);
 
 	return dialog;

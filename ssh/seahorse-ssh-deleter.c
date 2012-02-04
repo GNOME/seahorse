@@ -95,7 +95,7 @@ seahorse_ssh_deleter_create_confirm (SeahorseDeleter *deleter,
 		confirm = NULL;
 	}
 
-	dialog = seahorse_delete_dialog_new (parent, prompt);
+	dialog = seahorse_delete_dialog_new (parent, "%s", prompt);
 	g_free (prompt);
 
 	if (confirm) {
