@@ -1207,7 +1207,7 @@ seahorse_sidebar_constructed (GObject *obj)
 	                                GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_set_hadjustment (GTK_SCROLLED_WINDOW (self), NULL);
 	gtk_scrolled_window_set_vadjustment (GTK_SCROLLED_WINDOW (self), NULL);
-	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (self), GTK_SHADOW_NONE);
+	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (self), GTK_SHADOW_OUT);
 	gtk_style_context_set_junction_sides (gtk_widget_get_style_context (GTK_WIDGET (self)),
 	                                      GTK_JUNCTION_RIGHT | GTK_JUNCTION_LEFT);
 
