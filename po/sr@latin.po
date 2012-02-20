@@ -1,26 +1,25 @@
 # Serbian translation of seahorse
-# Courtesy of Prevod.org team (http://prevod.org/) -- 2003 - 2009.
+# Courtesy of Prevod.org team (http://prevod.org/) -- 2003 — 2012.
 # This file is distributed under the same license as the seahorse package.
 # Maintainer: Dušan Živojnov <calvin@verat.net>
 # Translated on 2009-05-09 by: Branko Kokanović <branko.kokanovic@gmail.com>
 # Miloš Popović <gpopac@gmail.com>, 2010.
-# Miroslav Nikolić <miroslavnikolic@rocketmail.com>, 2011.
+# Miroslav Nikolić <miroslavnikolic@rocketmail.com>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-18 06:28+0000\n"
-"PO-Revision-Date: 2011-09-18 09:52+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahor"
+"se&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-02-08 09:05+0000\n"
+"PO-Revision-Date: 2012-02-19 18:50+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sr\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 :    n%"
-"10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Virtaal 0.7.0-beta5\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
 
 #: ../gkr/seahorse-add-keyring.xml.h:1
@@ -28,15 +27,15 @@ msgid "Add Password Keyring"
 msgstr "Dodajte privezak za lozinku"
 
 #: ../gkr/seahorse-add-keyring.xml.h:2
-msgid "New Keyring Name:"
-msgstr "Naziv novog priveska:"
-
-#: ../gkr/seahorse-add-keyring.xml.h:3
 msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
 msgstr ""
 "Izaberite naziv novog priveska. Biće vam zatražena lozinka za otključavanje."
+
+#: ../gkr/seahorse-add-keyring.xml.h:3
+msgid "New Keyring Name:"
+msgstr "Naziv novog priveska:"
 
 #: ../gkr/seahorse-add-keyring.xml.h:4
 #: ../libseahorse/seahorse-add-keyserver.xml.h:5
@@ -44,7 +43,57 @@ msgstr ""
 msgid "The host name or address of the server."
 msgstr "Naziv udaljenog računara ili adresa servera."
 
-#: ../gkr/seahorse-gkr-add-item.c:61 ../gkr/seahorse-gkr-add-keyring.c:72
+#: ../gkr/seahorse-gkr-actions.c:81
+#| msgid "Password Keyring"
+msgid "New password keyring"
+msgstr "Novi privezak za lozinke"
+
+#: ../gkr/seahorse-gkr-actions.c:82 ../gkr/seahorse-gkr-actions.c:89
+msgid "Used to store application and network passwords"
+msgstr "Koristi se za čuvanje lozinki programa i mreže"
+
+#: ../gkr/seahorse-gkr-actions.c:83
+#| msgid "Network Password"
+msgid "New password..."
+msgstr "Nova lozinka..."
+
+#: ../gkr/seahorse-gkr-actions.c:84 ../gkr/seahorse-gkr-actions.c:91
+msgid "Safely store a password or secret."
+msgstr "Sigurno čuva lozinke ili tajne."
+
+#: ../gkr/seahorse-gkr-actions.c:88
+msgid "Password Keyring"
+msgstr "Privezak za lozinke"
+
+#: ../gkr/seahorse-gkr-actions.c:90
+msgid "Stored Password"
+msgstr "Sačuvane lozinke"
+
+#: ../gkr/seahorse-gkr-actions.c:151
+msgid "Couldn't set default keyring"
+msgstr "Ne mogu da postavim osnovni privezak ključeva"
+
+#: ../gkr/seahorse-gkr-actions.c:183
+msgid "Couldn't change keyring password"
+msgstr "Ne mogu da promenim lozinku priveska ključeva"
+
+#: ../gkr/seahorse-gkr-actions.c:209
+msgid "_Set as default"
+msgstr "_Postavi kao osnovno"
+
+#: ../gkr/seahorse-gkr-actions.c:210
+msgid "Applications usually store new passwords in the default keyring."
+msgstr "Programi uglavnom skladište nove lozinke u osnovnom privesku."
+
+#: ../gkr/seahorse-gkr-actions.c:211
+msgid "Change _Password"
+msgstr "Izmeni _lozinku"
+
+#: ../gkr/seahorse-gkr-actions.c:212
+msgid "Change the unlock password of the password storage keyring"
+msgstr "Izmenite lozinku priveska ključeva skladišta lozinki"
+
+#: ../gkr/seahorse-gkr-add-item.c:60 ../gkr/seahorse-gkr-add-keyring.c:71
 msgid "Couldn't add keyring"
 msgstr "Ne mogu da dodam privezak"
 
@@ -53,32 +102,96 @@ msgid "Add Password"
 msgstr "Dodajte lozinku"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:2
-#: ../gkr/seahorse-gkr-item-properties.xml.h:12 ../pgp/seahorse-revoke.xml.h:5
+#: ../gkr/seahorse-gkr-item-properties.xml.h:2 ../pgp/seahorse-revoke.xml.h:3
+#: ../ssh/seahorse-ssh-generate.xml.h:5
 msgid "_Description:"
 msgstr "_Opis:"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:3
-msgid "_Keyring:"
-msgstr "_Privezak:"
-
-#: ../gkr/seahorse-gkr-add-item.xml.h:4
 msgid "_Password:"
 msgstr "_Lozinka:"
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:5
+#: ../gkr/seahorse-gkr-add-item.xml.h:4
 msgid "_Show Password"
 msgstr "Prikaži lo_zinku"
 
-#: ../gkr/seahorse-gkr-item-commands.c:78
-msgid "Couldn't delete item"
-msgstr "Ne mogu da obrišem stavku"
+#: ../gkr/seahorse-gkr-add-item.xml.h:5
+msgid "_Keyring:"
+msgstr "_Privezak:"
 
-#: ../gkr/seahorse-gkr-item-commands.c:100
+#: ../gkr/seahorse-gkr-backend.c:99
+#| msgid "_Passwords"
+msgid "Passwords"
+msgstr "Lozinke"
+
+#: ../gkr/seahorse-gkr-backend.c:102
+msgid "Stored personal passwords, credentials and secrets"
+msgstr "Sačuvane lične lozinke, uverenja i tajne"
+
+#. Translators: This should be the same as the string in empathy
+#: ../gkr/seahorse-gkr-item.c:317
+msgid "IM account password for "
+msgstr "Lozinka TP naloga za "
+
+#: ../gkr/seahorse-gkr-item.c:383
+#| msgid "Safely store a password or secret."
+msgid "Password or secret"
+msgstr "Lozinka ili tajna"
+
+#: ../gkr/seahorse-gkr-item.c:384
+#| msgid "Network Password"
+msgid "Network password"
+msgstr "Lozinka za mrežu"
+
+#: ../gkr/seahorse-gkr-item.c:385
+#| msgid "Strength"
+msgid "Stored note"
+msgstr "Sačuvana beleška"
+
+#: ../gkr/seahorse-gkr-item.c:386
+#| msgid "Wrong password"
+msgid "Keyring password"
+msgstr "Lozinka priveska"
+
+#: ../gkr/seahorse-gkr-item.c:387
+#| msgid "Encryption Key Manager"
+msgid "Encryption key password"
+msgstr "Lozinka ključa šifrovanja"
+
+#: ../gkr/seahorse-gkr-item.c:388
+#| msgid "Stored Password"
+msgid "Key storage password"
+msgstr "Lozinka ključa skladištenja"
+
+#: ../gkr/seahorse-gkr-item.c:389
+#| msgid "Show pass_word"
+msgid "Google Chrome password"
+msgstr "Lozinka Gugl Hromijuma"
+
+#: ../gkr/seahorse-gkr-item.c:390
+msgid "Gnome Online Accounts password"
+msgstr "Lozinka Gnomovih naloga na mreži"
+
+#: ../gkr/seahorse-gkr-item.c:391
+#| msgid "Updating password"
+msgid "Telepathy password"
+msgstr "Lozinka Internet pismonoše"
+
+#: ../gkr/seahorse-gkr-item.c:392
+#| msgid "Updating password"
+msgid "Instant messaging password"
+msgstr "Lozinka trenutnih poruka"
+
+#: ../gkr/seahorse-gkr-item.c:393
+msgid "Network Manager secret"
+msgstr "Tajne upravnika mreže"
+
+#: ../gkr/seahorse-gkr-item-deleter.c:83
 #, c-format
 msgid "Are you sure you want to delete the password '%s'?"
 msgstr "Da li sigurno želite da izbrišete lozinku „%s“?"
 
-#: ../gkr/seahorse-gkr-item-commands.c:103
+#: ../gkr/seahorse-gkr-item-deleter.c:86
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
@@ -87,259 +200,173 @@ msgstr[1] "Da li sigurno želite da izbrišete %d lozinke?"
 msgstr[2] "Da li sigurno želite da izbrišete %d lozinki?"
 msgstr[3] "Da li sigurno želite da izbrišete lozinku?"
 
-#: ../gkr/seahorse-gkr-item-commands.c:114
-msgid "Deleting item"
-msgid_plural "Deleting items"
-msgstr[0] "Brišem stavku"
-msgstr[1] "Brišem stavke"
-msgstr[2] "Brišem stavke"
-msgstr[3] "Brišem stavku"
-
-#: ../gkr/seahorse-gkr-item-properties.c:70
+#: ../gkr/seahorse-gkr-item-properties.c:69
 msgid "Access a network share or resource"
 msgstr "Pristupite sadržaju deljenom na mreži ili resursima"
 
-#: ../gkr/seahorse-gkr-item-properties.c:73
+#: ../gkr/seahorse-gkr-item-properties.c:72
 msgid "Access a website"
 msgstr "Pristupite veb stranici"
 
-#: ../gkr/seahorse-gkr-item-properties.c:76
+#: ../gkr/seahorse-gkr-item-properties.c:75
 msgid "Unlocks a PGP key"
 msgstr "Otključajte PGP ključ"
 
-#: ../gkr/seahorse-gkr-item-properties.c:79
+#: ../gkr/seahorse-gkr-item-properties.c:78
 msgid "Unlocks a Secure Shell key"
 msgstr "Otključajte ključ bezbedne školjke"
 
-#: ../gkr/seahorse-gkr-item-properties.c:82
+#: ../gkr/seahorse-gkr-item-properties.c:81
 msgid "Saved password or login"
 msgstr "Sačuvana lozinka ili prijava"
 
-#: ../gkr/seahorse-gkr-item-properties.c:106
+#: ../gkr/seahorse-gkr-item-properties.c:105
 msgid "Network Credentials"
 msgstr "Punomoćstva mreže"
 
-#: ../gkr/seahorse-gkr-item-properties.c:111
+#: ../gkr/seahorse-gkr-item-properties.c:110
 msgid "Password"
 msgstr "Lozinka"
 
-#: ../gkr/seahorse-gkr-item-properties.c:211
+#: ../gkr/seahorse-gkr-item-properties.c:210
 msgid "Couldn't change password."
 msgstr "Ne mogu da promenim lozinku."
 
-#: ../gkr/seahorse-gkr-item-properties.c:256
-#: ../gkr/seahorse-gkr-item-properties.c:377
+#: ../gkr/seahorse-gkr-item-properties.c:255
+#: ../gkr/seahorse-gkr-item-properties.c:376
 msgid "Updating password"
 msgstr "Ažuriram lozinku"
 
-#: ../gkr/seahorse-gkr-item-properties.c:337
+#: ../gkr/seahorse-gkr-item-properties.c:336
 msgid "Couldn't set description."
 msgstr "Ne mogu da postavim opis."
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:1
-msgid "<b>Password:</b>"
-msgstr "<b>Lozinka:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
-#: ../ssh/seahorse-ssh-key-properties.xml.h:7
-msgid "<b>Technical Details:</b>"
-msgstr "<b>Tehnički detalji:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:3
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:22
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
-#: ../ssh/seahorse-ssh-key-properties.xml.h:15
-msgid "Details"
-msgstr "Detalji"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:4
-#: ../pgp/seahorse-pgp-subkey.c:366
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
-msgid "Key"
-msgstr "Ključ"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:5
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
-#: ../ssh/seahorse-ssh-key-properties.xml.h:18
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
+#: ../ssh/seahorse-ssh-key-properties.xml.h:1
 msgid "Key Properties"
 msgstr "Osobine ključa"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:6
-msgid "Login:"
-msgstr "Prijava:"
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-item-properties.xml.h:4
+msgid "Use:"
+msgstr "Upotreba:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:7
+#: ../gkr/seahorse-gkr-item-properties.xml.h:5
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:36
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
+msgid "Type:"
+msgstr "Vrsta:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:6
 msgid "Server:"
 msgstr "Server:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:7
+msgid "Login:"
+msgstr "Prijava:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:8
 msgid "Show pass_word"
 msgstr "Prikaži _lozinku"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:9
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-msgid "Type:"
-msgstr "Vrsta:"
+msgid "<b>Password:</b>"
+msgstr "<b>Lozinka:</b>"
 
-#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-item-properties.xml.h:10
+#: ../pgp/seahorse-pgp-subkey.c:366
+#: ../ssh/seahorse-ssh-key-properties.xml.h:14
+msgid "Key"
+msgstr "Ključ"
+
 #: ../gkr/seahorse-gkr-item-properties.xml.h:11
-msgid "Use:"
-msgstr "Upotreba:"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
+#: ../ssh/seahorse-ssh-key-properties.xml.h:19
+msgid "<b>Technical Details:</b>"
+msgstr "<b>Tehnički detalji:</b>"
 
-#: ../gkr/seahorse-gkr-keyring.c:120
-#, c-format
-msgid "Passwords: %s"
-msgstr "Lozinke: %s"
+#: ../gkr/seahorse-gkr-item-properties.xml.h:12
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+#: ../ssh/seahorse-ssh-key-properties.xml.h:21
+msgid "Details"
+msgstr "Detalji"
 
-#: ../gkr/seahorse-gkr-keyring.c:121
-#, c-format
-msgid "<b>Passwords:</b> %s"
-msgstr "<b>Lozinke:</b> %s"
+#: ../gkr/seahorse-gkr-keyring.c:147
+#| msgid "Deleting keyring"
+#| msgid_plural "Deleting keyrings"
+msgid "Login keyring"
+msgstr "Privezak prijave"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:113
-msgid "Password Keyring"
-msgstr "Privezak za lozinke"
+#: ../gkr/seahorse-gkr-keyring.c:676
+msgid "A keyring that is automatically unlocked on login"
+msgstr "Privezak koji biva samostalno otključan prilikom prijavljivanja"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:114
-msgid "Used to store application and network passwords"
-msgstr "Koristi se za čuvanje lozinki programa i mreže"
+#: ../gkr/seahorse-gkr-keyring.c:677
+msgid "A keyring used to store passwords"
+msgstr "Privezak koji se koristi za čuvanje lozinki"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:115
-msgid "Stored Password"
-msgstr "Sačuvane lozinke"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:116
-msgid "Safely store a password or secret."
-msgstr "Sigurno čuva lozinke ili tajne."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:128
-msgid "Couldn't unlock keyring"
-msgstr "Ne mogu da otključam privezak ključeva"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:165
-msgid "Couldn't lock keyring"
-msgstr "Ne mogu da zaključam privezak ključeva"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:202
-msgid "Couldn't set default keyring"
-msgstr "Ne mogu da postavim osnovni privezak ključeva"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:239
-msgid "Couldn't change keyring password"
-msgstr "Ne mogu da promenim lozinku priveska ključeva"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:268
-msgid "_Lock"
-msgstr "_Zaključaj"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:269
-msgid ""
-"Lock the password storage keyring so a master password is required to unlock "
-"it."
-msgstr ""
-"Zaključajte privezak ključeva skladišta lozinki tako da će biti potrebna "
-"glavna lozinka da bi mu pristupili."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:270
-msgid "_Unlock"
-msgstr "_Otključaj"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:271
-msgid ""
-"Unlock the password storage keyring with a master password so it is "
-"available for use."
-msgstr ""
-"Otključajte privezak ključeva skladišta lozinki glavnom lozinkom tako da se "
-"može koristiti."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:272
-msgid "_Set as default"
-msgstr "_Postavi kao osnovno"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:273
-msgid "Applications usually store new passwords in the default keyring."
-msgstr "Programi uglavnom skladište nove lozinke u osnovnom privesku."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:274
-msgid "Change _Password"
-msgstr "Izmeni _lozinku"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:275
-msgid "Change the unlock password of the password storage keyring"
-msgstr "Izmenite lozinku priveska ključeva skladišta lozinki"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:340
-msgid "Couldn't delete keyring"
-msgstr "Ne mogu da obrišem privezak ključeva"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:358
+#: ../gkr/seahorse-gkr-keyring-deleter.c:80
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "Da li sigurno želite da obrišete „%s“ privezak?"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:368
-msgid "Deleting keyring"
-msgid_plural "Deleting keyrings"
-msgstr[0] "Brišem privezak"
-msgstr[1] "Brišem priveske"
-msgstr[2] "Brišem priveske"
-msgstr[3] "Brišem privezak"
+#: ../gkr/seahorse-gkr-keyring-deleter.c:83
+msgid "I understand that all items will be permanently deleted."
+msgstr "Shvatam da će sve stavke biti trajno obrisane."
 
-#. -----------------------------------------------------------------------------
-#. * PUBLIC
-#.
-#. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-keyring.xml.h:2
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
-msgid "Created:"
-msgstr "Napravljeno:"
-
-#: ../gkr/seahorse-gkr-keyring.xml.h:3
-msgid "Keyring"
-msgstr "Privezak ključeva"
-
-#: ../gkr/seahorse-gkr-keyring.xml.h:4
+#: ../gkr/seahorse-gkr-keyring.xml.h:1
 msgid "Keyring Properties"
 msgstr "Osobine priveska"
 
-#: ../gkr/seahorse-gkr-keyring.xml.h:5
-msgid "_Name:"
-msgstr "_Naziv:"
+#: ../gkr/seahorse-gkr-keyring.xml.h:2
+#| msgid "_Name:"
+msgid "Name:"
+msgstr "Naziv:"
 
-#: ../gkr/seahorse-gkr-operation.c:52 ../pgp/seahorse-gpgme.c:73
-#: ../pgp/seahorse-hkp-source.c:662 ../ssh/seahorse-ssh-operation.c:193
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-keyring.xml.h:4
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+msgid "Created:"
+msgstr "Napravljen:"
+
+#: ../gkr/seahorse-gkr-keyring.xml.h:5
+msgid "Keyring"
+msgstr "Privezak ključeva"
+
+#: ../gkr/seahorse-gkr-operation.c:54 ../pgp/seahorse-gpgme.c:73
+#: ../pgp/seahorse-hkp-source.c:585 ../ssh/seahorse-ssh-operation.c:194
 msgid "The operation was cancelled"
 msgstr "Radnja je otkazana"
 
-#: ../gkr/seahorse-gkr-operation.c:57
+#: ../gkr/seahorse-gkr-operation.c:59
 msgid "Access to the key ring was denied"
 msgstr "Pristup privesku je odbijen"
 
-#: ../gkr/seahorse-gkr-operation.c:60
+#: ../gkr/seahorse-gkr-operation.c:62
 msgid "The gnome-keyring daemon is not running"
 msgstr "Uslužni program Priveska ključeva nije pokrenut"
 
-#: ../gkr/seahorse-gkr-operation.c:63
+#: ../gkr/seahorse-gkr-operation.c:65
 msgid "The key ring has already been unlocked"
 msgstr "Privezak je već otključan"
 
-#: ../gkr/seahorse-gkr-operation.c:66
+#: ../gkr/seahorse-gkr-operation.c:68
 msgid "No such key ring exists"
 msgstr "Ne postoji takav privezak"
 
-#: ../gkr/seahorse-gkr-operation.c:69
+#: ../gkr/seahorse-gkr-operation.c:71
 msgid "Couldn't communicate with key ring daemon"
 msgstr "Ne mogu da se povežem sa uslužnim programom priveska"
 
-#: ../gkr/seahorse-gkr-operation.c:72
+#: ../gkr/seahorse-gkr-operation.c:74
 msgid "The item already exists"
 msgstr "Stavka već postoji"
 
-#: ../gkr/seahorse-gkr-operation.c:78
+#: ../gkr/seahorse-gkr-operation.c:80
 msgid "Internal error accessing gnome-keyring"
 msgstr "Unutrašnja greška pri pristupanju Gnomovom privesku"
 
@@ -554,12 +581,12 @@ msgstr "24hr: ne"
 #: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1260
 #: ../libegg/egg-datetime.c:1264
 msgid "AM"
-msgstr "prepodne"
+msgstr "PrP"
 
 #: ../libegg/egg-datetime.c:799 ../libegg/egg-datetime.c:1261
 #: ../libegg/egg-datetime.c:1268
 msgid "PM"
-msgstr "popodne"
+msgstr "PoP"
 
 #. Translators: This is hh:mm:ss AM/PM.
 #: ../libegg/egg-datetime.c:807
@@ -599,47 +626,163 @@ msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:1
-msgid ":"
-msgstr ":"
+msgid "initial temporary item"
+msgstr "početna privremena stavka"
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:2
 msgid "Add Key Server"
 msgstr "Dodaj server ključeva"
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:3
-msgid "Host:"
-msgstr "Domaćin:"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:4
 msgid "Key Server Type:"
 msgstr "Vrsta servera ključeva:"
 
+#: ../libseahorse/seahorse-add-keyserver.xml.h:4
+msgid "Host:"
+msgstr "Domaćin:"
+
 #: ../libseahorse/seahorse-add-keyserver.xml.h:6
+msgid ":"
+msgstr ":"
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:7
 msgid "The port to access the server on."
 msgstr "Port preko koga se može pristupiti serveru."
 
-#: ../libseahorse/seahorse-add-keyserver.xml.h:7
-msgid "initial temporary item"
-msgstr "početna privremena stavka"
+#: ../libseahorse/seahorse-catalog.c:88
+msgid "Contributions:"
+msgstr "Doprinosi:"
 
-#: ../libseahorse/seahorse-passphrase.c:180
-msgid "Passphrase"
-msgstr "Lozinka"
+#: ../libseahorse/seahorse-catalog.c:112 ../src/seahorse.desktop.in.in.h:1
+#: ../src/seahorse-key-manager.c:668 ../src/seahorse-main.c:68
+msgid "Passwords and Keys"
+msgstr "Lozinke i ključevi"
 
-#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
+#: ../libseahorse/seahorse-catalog.c:114
+msgid "translator-credits"
+msgstr ""
+"Danilo Šegan <danilo@gnome.org>\n"
+"Goran Rakić <grakic@devbase.net>\n"
+"Dušan Živojnov <calvin@verat.net>\n"
+"Branko Kokanović <branko.kokanovic@gmail.com>\n"
+"\n"
+"Prevod.org — prevod na srpski jezik."
+
+#: ../libseahorse/seahorse-catalog.c:117
+msgid "Seahorse Project Homepage"
+msgstr "Stranica projekta Morskog konjića"
+
+#: ../libseahorse/seahorse-catalog.c:191
+#| msgid "Couldn't delete"
+msgid "Cannot delete"
+msgstr "Ne mogu da obrišem"
+
+#: ../libseahorse/seahorse-catalog.c:239
+#: ../libseahorse/seahorse-key-manager-store.c:442
+msgid "Couldn't export keys"
+msgstr "Ne mogu da izvezem ključeve"
+
+#: ../libseahorse/seahorse-catalog.c:268
+#| msgid "Couldn't export key."
+msgid "Couldn't export data"
+msgstr "Ne mogu da izvezem podatke"
+
+#. Top menu items
+#: ../libseahorse/seahorse-catalog.c:277
+msgid "_File"
+msgstr "_Datoteka"
+
+#: ../libseahorse/seahorse-catalog.c:278
+msgid "E_xport..."
+msgstr "_Izvezi..."
+
+#: ../libseahorse/seahorse-catalog.c:279
+msgid "Export to a file"
+msgstr "Izvezite u datoteku"
+
+#: ../libseahorse/seahorse-catalog.c:280
+msgid "_Edit"
+msgstr "_Uređivanje"
+
+#: ../libseahorse/seahorse-catalog.c:283
+msgid "Copy to the clipboard"
+msgstr "Umnožite u ostavu"
+
+#: ../libseahorse/seahorse-catalog.c:284
+#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:957
+#| msgctxt ""
+#| "This text refers to deleting an item from its type's backing store."
+#| msgid "_Delete"
+msgid "_Delete"
+msgstr "_Obriši"
+
+#: ../libseahorse/seahorse-catalog.c:285
+msgid "Delete selected items"
+msgstr "Obrišite izabrane stavke"
+
+#: ../libseahorse/seahorse-catalog.c:287
+#| msgid "Show properties"
+msgid "Show the properties of this item"
+msgstr "Prikažite osobine ove stavke"
+
+#: ../libseahorse/seahorse-catalog.c:289
+#| msgid "Show properties"
+msgid "Show the properties of this keyring"
+msgstr "Prikažite osobine ovog priveska"
+
+#: ../libseahorse/seahorse-catalog.c:290
+msgid "Prefere_nces"
+msgstr "Po_dešavanja"
+
+#: ../libseahorse/seahorse-catalog.c:291
+msgid "Change preferences for this program"
+msgstr "Izmenite podešavanja programa"
+
+#: ../libseahorse/seahorse-catalog.c:292
+msgid "_View"
+msgstr "Pre_gled"
+
+#: ../libseahorse/seahorse-catalog.c:293
+msgid "_Help"
+msgstr "Po_moć"
+
+#: ../libseahorse/seahorse-catalog.c:295
+msgid "About this program"
+msgstr "O programu"
+
+#: ../libseahorse/seahorse-catalog.c:296
+msgid "_Contents"
+msgstr "_Sadržaj"
+
+#: ../libseahorse/seahorse-catalog.c:297
+msgid "Show Seahorse help"
+msgstr "Prikaži pomoć Morskog konjića"
+
+#: ../libseahorse/seahorse-exportable.c:407
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
+msgid "Export"
+msgstr "Izvezi"
+
+#: ../libseahorse/seahorse-interaction.c:100
+#, c-format
+#| msgid "Enter the old passphrase for: %s"
+msgid "Enter PIN or password for: %s"
+msgstr "Unesite PIN ili lozinku za: %s"
+
+#: ../libseahorse/seahorse-passphrase.c:182 ../ssh/seahorse-ssh-askpass.c:99
 msgid "Password:"
 msgstr "Lozinka:"
 
 #. The second and main entry
-#: ../libseahorse/seahorse-passphrase.c:246
+#: ../libseahorse/seahorse-passphrase.c:244
 msgid "Confirm:"
 msgstr "Potvrdi:"
 
-#: ../libseahorse/seahorse-prefs.c:68
+#: ../libseahorse/seahorse-prefs.c:66
 msgid "Not a valid Key Server address."
 msgstr "Neispravna adresa servera ključeva."
 
-#: ../libseahorse/seahorse-prefs.c:69
+#: ../libseahorse/seahorse-prefs.c:67
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
@@ -647,220 +790,165 @@ msgstr ""
 "Za pomoć se obratite vašem administratoru sistema ili administratoru servera "
 "ključeva."
 
-#: ../libseahorse/seahorse-prefs.c:183
+#: ../libseahorse/seahorse-prefs.c:180
 msgid "URL"
 msgstr "Adresa"
 
-#: ../libseahorse/seahorse-prefs.c:348
+#: ../libseahorse/seahorse-prefs.c:350
 msgid "Custom"
 msgstr "Proizvoljno"
 
-#: ../libseahorse/seahorse-prefs.c:406
+#: ../libseahorse/seahorse-prefs.c:403
 msgid "None: Don't publish keys"
 msgstr "Ništa: nemoj objavljivati ključeve"
 
 #: ../libseahorse/seahorse-prefs.xml.h:1
-msgid "Automatically retrieve keys from _key servers"
-msgstr "Automatski preuzmi ključeve sa servera _ključeva"
-
-#: ../libseahorse/seahorse-prefs.xml.h:2
-msgid "Automatically synchronize _modified keys with key servers"
-msgstr "Automatski usaglasi _izmenjene ključeve sa serverima ključeva"
-
-#: ../libseahorse/seahorse-prefs.xml.h:3
-msgid "Key Servers"
-msgstr "Serveri ključeva"
-
-#: ../libseahorse/seahorse-prefs.xml.h:4
 msgid "Preferences"
 msgstr "Podešavanja"
 
-#: ../libseahorse/seahorse-prefs.xml.h:5
+#: ../libseahorse/seahorse-prefs.xml.h:2
 msgid "_Find keys via:"
 msgstr "_Pronađi ključ preko:"
 
-#: ../libseahorse/seahorse-prefs.xml.h:6
+#: ../libseahorse/seahorse-prefs.xml.h:3
 msgid "_Publish keys to:"
 msgstr "_Objavi ključeve na:"
 
-#: ../libseahorse/seahorse-transfer.c:178
-msgid "Retrieving data"
-msgstr "Preuzimam podatke"
+#: ../libseahorse/seahorse-prefs.xml.h:4
+msgid "Automatically retrieve keys from _key servers"
+msgstr "Automatski preuzmi ključeve sa servera _ključeva"
 
-#: ../libseahorse/seahorse-transfer.c:178
-msgid "Exporting data"
-msgstr "Izvozim podatke"
+#: ../libseahorse/seahorse-prefs.xml.h:5
+msgid "Automatically synchronize _modified keys with key servers"
+msgstr "Automatski usaglasi _izmenjene ključeve sa serverima ključeva"
 
-#: ../libseahorse/seahorse-transfer.c:182
-msgid "Importing data"
-msgstr "Uvozim podatke"
+#: ../libseahorse/seahorse-prefs.xml.h:6
+msgid "Key Servers"
+msgstr "Serveri ključeva"
 
-#: ../libseahorse/seahorse-transfer.c:182
-msgid "Sending data"
-msgstr "Šaljem podatke"
-
-#: ../libseahorse/seahorse-unknown.c:59
-msgid "Unavailable"
-msgstr "Nedostupno"
-
-#: ../libseahorse/seahorse-util.c:259
+#: ../libseahorse/seahorse-util.c:209
 msgid "%Y-%m-%d"
 msgstr "%d.%m.%Y."
 
-#: ../libseahorse/seahorse-util.c:444
-msgid "Key Data"
-msgstr "Podaci ključa"
-
-#: ../libseahorse/seahorse-util.c:446
-msgid "Multiple Keys"
-msgstr "Višestruki ključevi"
-
-#. Filter for PGP keys. We also include *.asc, as in many
-#. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:734
-msgid "All key files"
-msgstr "Sve datoteke ključeva"
-
-#: ../libseahorse/seahorse-util.c:745 ../libseahorse/seahorse-util.c:793
-#: ../pgp/seahorse-gpgme-photos.c:242
-msgid "All files"
-msgstr "Sve datoteke"
-
-#: ../libseahorse/seahorse-util.c:786
-msgid "Archive files"
-msgstr "Arhive"
-
-#: ../libseahorse/seahorse-util.c:856
-msgid ""
-"<b>A file already exists with this name.</b>\n"
-"\n"
-"Do you want to replace it with a new file?"
-msgstr ""
-"<b>Datoteka već postoji.</b>\n"
-"\n"
-"Želite li da je zamenite novom?"
-
-#: ../libseahorse/seahorse-util.c:859
-msgid "_Replace"
-msgstr "_Zameni"
-
 #: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
-#: ../pgp/seahorse-pgp-key-properties.c:1273
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+#: ../pgp/seahorse-pgp-key-properties.c:1248
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
+#: ../pkcs11/seahorse-token.c:576
 msgid "Unknown"
 msgstr "Nepoznato"
 
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1279
+#: ../pgp/seahorse-pgp-key-properties.c:1254
 msgctxt "Validity"
 msgid "Never"
 msgstr "Nikada"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1286
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
+#: ../pgp/seahorse-pgp-key-properties.c:1261
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
 msgid "Marginal"
 msgstr "Površno"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1292
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
+#: ../pgp/seahorse-pgp-key-properties.c:1267
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
 msgid "Full"
 msgstr "Potpuno"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1298
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
+#: ../pgp/seahorse-pgp-key-properties.c:1273
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
 msgid "Ultimate"
 msgstr "Najveće"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1491
+#: ../pgp/seahorse-pgp-key-properties.c:1463
 msgid "Disabled"
 msgstr "Onemogućeno"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1487
+#: ../pgp/seahorse-pgp-key-properties.c:1459
 msgid "Revoked"
 msgstr "Povučen"
 
-#: ../libseahorse/seahorse-widget.c:461
+#: ../libseahorse/seahorse-widget.c:473
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Ne mogu da prikažem pomoć: %s"
 
 #: ../pgp/seahorse-add-subkey.xml.h:1
-msgid "Expiration Date:"
-msgstr "Datum isteka:"
+msgid "Never E_xpires"
+msgstr "Nikada ne _ističe"
 
 #: ../pgp/seahorse-add-subkey.xml.h:2
-msgid "Generate a new subkey"
-msgstr "Napravite novi podključ"
-
-#: ../pgp/seahorse-add-subkey.xml.h:3
 msgid "If key never expires"
 msgstr "Ako ključ nikad ne ističe"
+
+#: ../pgp/seahorse-add-subkey.xml.h:3
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:4
+msgid "Key _Type:"
+msgstr "_Vrsta ključa:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:4
 msgid "Key _Length:"
 msgstr "_Dužina ključa:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:5
-msgid "Key _Type:"
-msgstr "_Vrsta ključa:"
+msgid "Expiration Date:"
+msgstr "Datum isteka:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:6
 msgid "Length of Key"
 msgstr "Dužina ključa"
 
 #: ../pgp/seahorse-add-subkey.xml.h:7
-msgid "Never E_xpires"
-msgstr "Nikada ne _ističe"
+msgid "Generate a new subkey"
+msgstr "Napravite novi podključ"
 
 #: ../pgp/seahorse-add-uid.xml.h:1
 msgid "Add User ID"
 msgstr "Dodaj IB korisnika"
 
 #: ../pgp/seahorse-add-uid.xml.h:2
-msgid "Create the new user ID"
-msgstr "Napravi novi IB korisnika"
-
-#: ../pgp/seahorse-add-uid.xml.h:3 ../pgp/seahorse-pgp-generate.xml.h:7
-msgid "Full _Name:"
-msgstr "Ime i _prezime:"
-
-#: ../pgp/seahorse-add-uid.xml.h:4
-msgid "Key Co_mment:"
-msgstr "Ko_mentar ključa:"
-
-#: ../pgp/seahorse-add-uid.xml.h:5
 msgid "Must be at least 5 characters long"
 msgstr "Mora biti dužine bar 5 znakova"
 
-#: ../pgp/seahorse-add-uid.xml.h:6
+#: ../pgp/seahorse-add-uid.xml.h:3
+msgid "Optional email address"
+msgstr "Neobavezna adresa el. pošte"
+
+#: ../pgp/seahorse-add-uid.xml.h:4
 msgid "Optional comment describing key"
 msgstr "Neobavezna primedba za opis ključa"
 
-#: ../pgp/seahorse-add-uid.xml.h:7
-msgid "Optional email address"
-msgstr "Neobavezna adresa e-pošte"
+#: ../pgp/seahorse-add-uid.xml.h:5 ../pgp/seahorse-pgp-generate.xml.h:5
+msgid "Full _Name:"
+msgstr "Ime i _prezime:"
 
-#: ../pgp/seahorse-add-uid.xml.h:8 ../pgp/seahorse-pgp-generate.xml.h:13
+#: ../pgp/seahorse-add-uid.xml.h:6 ../pgp/seahorse-pgp-generate.xml.h:6
 msgid "_Email Address:"
-msgstr "Adresa _e-pošte:"
+msgstr "Adresa _el. pošte:"
+
+#: ../pgp/seahorse-add-uid.xml.h:7
+msgid "Key Co_mment:"
+msgstr "Ko_mentar ključa:"
+
+#: ../pgp/seahorse-add-uid.xml.h:8
+msgid "Create the new user ID"
+msgstr "Napravi novi IB korisnika"
 
 #: ../pgp/seahorse-expires.xml.h:1
-msgid "C_hange"
-msgstr "_Izmeni"
+msgid "_Never expires"
+msgstr "_Nikad ne ističe"
 
-#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:4
+#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:5
 msgid "Revoke key"
 msgstr "Povuci ključ"
 
 #: ../pgp/seahorse-expires.xml.h:3
-msgid "_Never expires"
-msgstr "_Nikad ne ističe"
+msgid "C_hange"
+msgstr "_Izmeni"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:162
 msgid "Couldn't add subkey"
@@ -871,7 +959,7 @@ msgstr "Ne mogu da dodam podključ"
 msgid "Add subkey to %s"
 msgstr "Dodaj podključ za %s"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:197 ../pgp/seahorse-gpgme-generate.c:130
+#: ../pgp/seahorse-gpgme-add-subkey.c:197 ../pgp/seahorse-gpgme-generate.c:134
 msgid "DSA (sign only)"
 msgstr "DSA (samo potpis)"
 
@@ -879,7 +967,7 @@ msgstr "DSA (samo potpis)"
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (samo šifrovanje)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:211 ../pgp/seahorse-gpgme-generate.c:131
+#: ../pgp/seahorse-gpgme-add-subkey.c:211 ../pgp/seahorse-gpgme-generate.c:135
 msgid "RSA (sign only)"
 msgstr "RSA (samo potpis)"
 
@@ -917,45 +1005,138 @@ msgstr "Ne mogu da promenim datum isteka"
 msgid "Expiry: %s"
 msgstr "Ističe: %s"
 
-#: ../pgp/seahorse-gpgme-generate.c:91
+#: ../pgp/seahorse-gpgme-exporter.c:84
+msgid "Multiple Keys"
+msgstr "Višestruki ključevi"
+
+#: ../pgp/seahorse-gpgme-exporter.c:88
+msgid "Key Data"
+msgstr "Podaci ključa"
+
+# bug: plural-forms
+#: ../pgp/seahorse-gpgme-exporter.c:114
+#| msgid "Imported keys"
+msgid "Armored PGP keys"
+msgstr "Oklopljeni PGP ključevi"
+
+#: ../pgp/seahorse-gpgme-exporter.c:118
+#| msgid "PGP Key"
+msgid "PGP keys"
+msgstr "PGP ključevi"
+
+#: ../pgp/seahorse-gpgme-generate.c:95
 msgid "PGP Key"
 msgstr "PGP ključ"
 
-#: ../pgp/seahorse-gpgme-generate.c:92
+#: ../pgp/seahorse-gpgme-generate.c:96
 msgid "Used to encrypt email and files"
 msgstr "Koristi se za šifrovanje e-pošte i datoteka"
 
-#: ../pgp/seahorse-gpgme-generate.c:128
+#: ../pgp/seahorse-gpgme-generate.c:132
+#: ../pkcs11/seahorse-pkcs11-generate.c:92
+#: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:129
+#: ../pgp/seahorse-gpgme-generate.c:133
 msgid "DSA Elgamal"
 msgstr "DSA Elgamal"
 
-#: ../pgp/seahorse-gpgme-generate.c:178
+#: ../pgp/seahorse-gpgme-generate.c:182
 msgid "Couldn't generate PGP key"
 msgstr "Ne mogu da generišem PGP ključ"
 
-#: ../pgp/seahorse-gpgme-generate.c:209
+#: ../pgp/seahorse-gpgme-generate.c:213
 msgid "Passphrase for New PGP Key"
 msgstr "Lozinka za novi PGP ključ"
 
-#: ../pgp/seahorse-gpgme-generate.c:210
+#: ../pgp/seahorse-gpgme-generate.c:214
 msgid "Enter the passphrase for your new key twice."
 msgstr "Dvaput unesite lozinku za novi ključ."
 
-#: ../pgp/seahorse-gpgme-generate.c:219
+#: ../pgp/seahorse-gpgme-generate.c:223
+#: ../pkcs11/seahorse-pkcs11-generate.c:460
 msgid "Generating key"
 msgstr "Stvaram ključ"
 
-#: ../pgp/seahorse-gpgme-key-op.c:370
+#: ../pgp/seahorse-gpgme-key-deleter.c:78
+#: ../pgp/seahorse-gpgme-secret-deleter.c:77
+#: ../pkcs11/seahorse-pkcs11-deleter.c:66
+#: ../pkcs11/seahorse-pkcs11-key-deleter.c:81
+#, c-format
+msgid "Are you sure you want to permanently delete %s?"
+msgstr "Da li sigurno želite trajno da uklonite %s?"
+
+#: ../pgp/seahorse-gpgme-key-deleter.c:81
+#, c-format
+#| msgid "Are you sure you want to permanently delete %d keys?"
+msgid "Are you sure you want to permanently delete %d keys?"
+msgid_plural "Are you sure you want to permanently delete %d keys?"
+msgstr[0] "Da li ste sigurni da želite trajno da obrišete %d ključ?"
+msgstr[1] "Da li ste sigurni da želite trajno da obrišete %d ključa?"
+msgstr[2] "Da li ste sigurni da želite trajno da obrišete %d ključeva?"
+msgstr[3] "Da li ste sigurni da želite trajno da obrišete jedan ključ?"
+
+#: ../pgp/seahorse-gpgme-key-op.c:381
 msgid "Wrong password"
 msgstr "Pogrešna lozinka"
 
-#: ../pgp/seahorse-gpgme-key-op.c:370
+#: ../pgp/seahorse-gpgme-key-op.c:381
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Ovo je treći put da ste uneli pogrešnu lozinku. Pokušajte ponovo."
+
+#: ../pgp/seahorse-gpgme-keyring.c:90
+#, c-format
+msgid "Wrong passphrase."
+msgstr "Pogrešna lozinka."
+
+#: ../pgp/seahorse-gpgme-keyring.c:94
+#, c-format
+msgid "Enter new passphrase for '%s'"
+msgstr "Unesite novu lozinku za „%s“"
+
+#: ../pgp/seahorse-gpgme-keyring.c:96
+#, c-format
+msgid "Enter passphrase for '%s'"
+msgstr "Unesite lozinku za „%s“"
+
+#: ../pgp/seahorse-gpgme-keyring.c:99
+#: ../src/seahorse-change-passphrase.xml.h:2
+msgid "Enter new passphrase"
+msgstr "Unesite novu lozinku"
+
+#: ../pgp/seahorse-gpgme-keyring.c:101
+msgid "Enter passphrase"
+msgstr "Unesite propusnu reč"
+
+#: ../pgp/seahorse-gpgme-keyring.c:106
+msgid "Passphrase"
+msgstr "Lozinka"
+
+#: ../pgp/seahorse-gpgme-keyring.c:307
+#, c-format
+msgid "Loaded %d key"
+msgid_plural "Loaded %d keys"
+msgstr[0] "Učitao sam %d ključ"
+msgstr[1] "Učitao sam %d ključa"
+msgstr[2] "Učitao sam %d ključeva"
+msgstr[3] "Učitao sam jedan ključ"
+
+#: ../pgp/seahorse-gpgme-keyring.c:654
+msgid ""
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
+msgstr ""
+"Neispravni podaci ključa (nedostaju JID-ovi). Ovo se može desiti ako je datum "
+"na računaru podešen unapred ili ako nedostaje samopotpis."
+
+#: ../pgp/seahorse-gpgme-keyring.c:814
+msgid "GnuPG keys"
+msgstr "GnuPG ključevi"
+
+#: ../pgp/seahorse-gpgme-keyring.c:817
+msgid "GnuPG: default keyring directory"
+msgstr "GnuPG: osnovni direktorijum priveska"
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -991,27 +1172,31 @@ msgstr "Sve slike"
 msgid "All JPEG files"
 msgstr "Sve JPEG datoteke"
 
-#: ../pgp/seahorse-gpgme-photos.c:261
+#: ../pgp/seahorse-gpgme-photos.c:242 ../src/seahorse-key-manager.c:301
+msgid "All files"
+msgstr "Sve datoteke"
+
+#: ../pgp/seahorse-gpgme-photos.c:263
 msgid "Choose Photo to Add to Key"
 msgstr "Izaberite sliku za pridodavanje ključu"
 
-#: ../pgp/seahorse-gpgme-photos.c:278
+#: ../pgp/seahorse-gpgme-photos.c:285
 msgid "Couldn't prepare photo"
 msgstr "Ne mogu da pripremim fotografiju"
 
-#: ../pgp/seahorse-gpgme-photos.c:288 ../pgp/seahorse-gpgme-photos.c:292
+#: ../pgp/seahorse-gpgme-photos.c:295 ../pgp/seahorse-gpgme-photos.c:298
 msgid "Couldn't add photo"
 msgstr "Ne mogu da dodam sliku"
 
-#: ../pgp/seahorse-gpgme-photos.c:289
+#: ../pgp/seahorse-gpgme-photos.c:296
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr "Ne mogu da učitam datoteku. Moguće da je u neodgovarajućem formatu"
 
-#: ../pgp/seahorse-gpgme-photos.c:318
+#: ../pgp/seahorse-gpgme-photos.c:322
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "Da li sigurno želite da uklonite trenutnu sliku iz vašeg ključa?"
 
-#: ../pgp/seahorse-gpgme-photos.c:331
+#: ../pgp/seahorse-gpgme-photos.c:335
 msgid "Couldn't delete photo"
 msgstr "Ne mogu da izbrišem sliku"
 
@@ -1069,7 +1254,11 @@ msgstr ""
 msgid "Couldn't add revoker"
 msgstr "Ne mogu da dodam opozivača"
 
-#: ../pgp/seahorse-gpgme-sign.c:101
+#: ../pgp/seahorse-gpgme-secret-deleter.c:82 ../ssh/seahorse-ssh-deleter.c:83
+msgid "I understand that this secret key will be permanently deleted."
+msgstr "Shvatam da će ovaj ključ tajne biti trajno obrisan."
+
+#: ../pgp/seahorse-gpgme-sign.c:100
 #, c-format
 msgid ""
 "This key was already signed by\n"
@@ -1084,11 +1273,11 @@ msgstr "Ne mogu da potpišem ključ"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:161 ../pgp/seahorse-signer.c:61
+#: ../pgp/seahorse-gpgme-sign.c:164 ../pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr "Nema ključeva upotrebljivih za potpisivanje"
 
-#: ../pgp/seahorse-gpgme-sign.c:162
+#: ../pgp/seahorse-gpgme-sign.c:165
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
@@ -1096,64 +1285,156 @@ msgstr ""
 "Nemate ličnih PGP ključeva koji bi se mogli iskoristiti da ukažu na vaše "
 "poverenje ovom ključu."
 
-#: ../pgp/seahorse-gpgme-source.c:86
-#, c-format
-msgid "Wrong passphrase."
-msgstr "Pogrešna lozinka."
-
-#: ../pgp/seahorse-gpgme-source.c:90
-#, c-format
-msgid "Enter new passphrase for '%s'"
-msgstr "Unesite novu lozinku za „%s“"
-
-#: ../pgp/seahorse-gpgme-source.c:92
-#, c-format
-msgid "Enter passphrase for '%s'"
-msgstr "Unesite lozinku za „%s“"
-
-#: ../pgp/seahorse-gpgme-source.c:95 ../src/seahorse-change-passphrase.xml.h:4
-msgid "Enter new passphrase"
-msgstr "Unesite novu lozinku"
-
-#: ../pgp/seahorse-gpgme-source.c:97
-msgid "Enter passphrase"
-msgstr "Unesite propusnu reč"
-
-#: ../pgp/seahorse-gpgme-source.c:328
-#, c-format
-msgid "Loaded %d key"
-msgid_plural "Loaded %d keys"
-msgstr[0] "Učitao sam %d ključ"
-msgstr[1] "Učitao sam %d ključa"
-msgstr[2] "Učitao sam %d ključeva"
-msgstr[3] "Učitao sam ključ"
-
-#: ../pgp/seahorse-gpgme-source.c:649
-msgid ""
-"Invalid key data (missing UIDs). This may be due to a computer with a date "
-"set in the future or a missing self-signature."
-msgstr ""
-"Neispravni podaci ključa (nedostaju JID-ovi). Ovo se može desiti ako je datum "
-"na računaru podešen unapred ili ako nedostaje samopotpis."
-
 #: ../pgp/seahorse-gpgme-subkey.c:199
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: ../pgp/seahorse-hkp-source.c:645
-msgid "HTTP Key Server"
-msgstr "HTTP server ključeva"
-
-#: ../pgp/seahorse-hkp-source.c:680
+#: ../pgp/seahorse-hkp-source.c:603
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 "Pretraga nije bila dovoljno određena. Server „%s“ je pronašao previše ključeva."
 
-#: ../pgp/seahorse-hkp-source.c:683
+#: ../pgp/seahorse-hkp-source.c:606
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Ne mogu da se povežem sa serverom „%s“: %s"
+
+#: ../pgp/seahorse-hkp-source.c:1129
+msgid "HTTP Key Server"
+msgstr "HTTP server ključeva"
+
+#: ../pgp/seahorse-keyserver-results.c:175
+msgid "Couldn't import keys"
+msgstr "Ne mogu da uvezem ključeve"
+
+#: ../pgp/seahorse-keyserver-results.c:218
+msgid "Importing keys from key servers"
+msgstr "Uvozim ključeve sa servera ključeva"
+
+#: ../pgp/seahorse-keyserver-results.c:243 ../src/seahorse-key-manager.c:517
+msgid "_Remote"
+msgstr "_Udaljeno"
+
+#: ../pgp/seahorse-keyserver-results.c:245
+msgid "Close this window"
+msgstr "Zatvorite ovaj prozor"
+
+#: ../pgp/seahorse-keyserver-results.c:249 ../pgp/seahorse-pgp-actions.c:113
+msgid "_Find Remote Keys..."
+msgstr "_Pronađi udaljene ključeve..."
+
+#: ../pgp/seahorse-keyserver-results.c:250 ../pgp/seahorse-pgp-actions.c:114
+msgid "Search for keys on a key server"
+msgstr "Potražite ključeve na serveru ključeva"
+
+#: ../pgp/seahorse-keyserver-results.c:254 ../src/seahorse-key-manager.xml.h:3
+msgid "_Import"
+msgstr "_Uvezi"
+
+#: ../pgp/seahorse-keyserver-results.c:255
+msgid "Import selected keys to local key ring"
+msgstr "Stavlja izabrane ključeve na lokalni privezak"
+
+#: ../pgp/seahorse-keyserver-results.c:285
+msgid "Remote Keys"
+msgstr "Udaljeni ključevi"
+
+#: ../pgp/seahorse-keyserver-results.c:287
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "Udaljeni ključevi koji sadrže „%s“"
+
+#: ../pgp/seahorse-keyserver-results.c:484
+#| msgid "Searching for keys..."
+msgid "The search for keys failed."
+msgstr "Nije uspela pretraga za ključevima."
+
+#: ../pgp/seahorse-keyserver-search.xml.h:1
+msgid "Find Remote Keys"
+msgstr "Pronađite udaljene ključeve"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:2
+msgid ""
+"This will find keys for others on the Internet. These keys can then be "
+"imported into your local key ring."
+msgstr ""
+"Ova opcija će pronaći ključeve za druge na Internetu. Ove ključeve možete "
+"zatim da uvezete u vaš privezak ključeva."
+
+#: ../pgp/seahorse-keyserver-search.xml.h:3
+msgid "_Search for keys containing: "
+msgstr "_Traži ključeve koji sadrže:"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:4
+msgid "<b>Key Servers:</b>"
+msgstr "<b>Serveri ključeva:</b>"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:5
+msgid "<b>Shared Keys Near Me:</b>"
+msgstr "</b>Deljeni ključevi blizu mene:</b>"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:6
+msgid "Where to search:"
+msgstr "Gde tražiti:"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:7
+msgid "_Search"
+msgstr "_Potraži"
+
+#: ../pgp/seahorse-keyserver-sync.c:57
+msgid "Couldn't publish keys to server"
+msgstr "Ne mogu da objavim ključeve na server"
+
+#: ../pgp/seahorse-keyserver-sync.c:76
+#, c-format
+msgid "Couldn't retrieve keys from server: %s"
+msgstr "Ne mogu da preuzmem ključeve sa servera: %s"
+
+#: ../pgp/seahorse-keyserver-sync.c:160
+#, c-format
+msgid "<b>%d key is selected for synchronizing</b>"
+msgid_plural "<b>%d keys are selected for synchronizing</b>"
+msgstr[0] "<b>%d ključ je izabran za usaglašavanje</b>"
+msgstr[1] "<b>%d ključa su izabrana za usaglašavanje</b>"
+msgstr[2] "<b>%d ključeva je izabrano za usaglašavanje</b>"
+msgstr[3] "<b>Jedan ključ je izabran za usaglašavanje</b>"
+
+#: ../pgp/seahorse-keyserver-sync.c:240
+msgid "Synchronizing keys..."
+msgstr "Usaglašavam ključeve..."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:1
+msgid "Sync Keys"
+msgstr "Usaglasite ključeve"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:2
+msgid ""
+"This will publish the keys in your key ring so they're available for others "
+"to use. You'll also get any changes others have made since you received "
+"their keys."
+msgstr ""
+"Ova opcija će objaviti ključeve u vaš privezak, tako da će biti dostupni "
+"drugima na korišćenje. Takođe, dobićete izmene koje su napravili drugi od "
+"kada ste primili njihove ključeve."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:3
+msgid ""
+"This will retrieve any changes others have made since you received their "
+"keys. No key server has been chosen for publishing, so your keys will not be "
+"made available to others."
+msgstr ""
+"Ova opcija će preuzeti sve izmene koje su drugi napravili od kada ste "
+"primili njihove ključeve. Nijedan server ključeva nije izabran za objavljivanje, "
+"tako da vaši ključevi neće biti dostupni drugima."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:4
+msgid "_Key Servers"
+msgstr "Serveri _ključeva"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:5
+msgid "_Sync"
+msgstr "_Usaglasi"
 
 #: ../pgp/seahorse-ldap-source.c:440
 #, c-format
@@ -1175,432 +1456,405 @@ msgstr "Ne mogu da razrešim adresu: %s"
 msgid "Resolving server address: %s"
 msgstr "Razrešavam adresu servera: %s"
 
-#: ../pgp/seahorse-ldap-source.c:781
+#: ../pgp/seahorse-ldap-source.c:1446
 msgid "LDAP Key Server"
 msgstr "LDAP server ključeva"
 
-#: ../pgp/seahorse-pgp-commands.c:104
-msgid "_Sign Key..."
-msgstr "_Potpiši ključ..."
+#: ../pgp/seahorse-pgp-actions.c:118
+msgid "_Sync and Publish Keys..."
+msgstr "_Usaglasi i objavi ključeve..."
 
-#: ../pgp/seahorse-pgp-commands.c:104
-msgid "Sign public key"
-msgstr "Potpišite javni ključ"
+#: ../pgp/seahorse-pgp-actions.c:119
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "Objavite i/ili usaglasite vaše ključeve sa onima na mreži."
 
-#: ../pgp/seahorse-pgp-commands.c:174
-#, c-format
-msgid "Are you sure you want to permanently delete %s?"
-msgstr "Da li sigurno želite trajno da uklonite %s?"
+#: ../pgp/seahorse-pgp-backend.c:174
+#| msgid "PGP Key"
+msgid "PGP Keys"
+msgstr "PGP ključevi"
 
-#: ../pgp/seahorse-pgp-commands.c:179
-#, c-format
-msgid "Are you sure you want to permanently delete %d keys and identities?"
-msgstr "Da li sigurno želite trajno da izbrišete %d ključeve i identitete?"
+#: ../pgp/seahorse-pgp-backend.c:177
+#| msgid "Used to encrypt email and files"
+msgid "PGP keys are for encrypting email or files"
+msgstr "PGP ključevi se koriste za šifrovanje el. pošte i datoteka"
 
-#: ../pgp/seahorse-pgp-commands.c:181
-#, c-format
-msgid "Are you sure you want to permanently delete %d keys?"
-msgstr "Da li sigurno želite trajno da izbrišete %d ključeve?"
-
-#: ../pgp/seahorse-pgp-commands.c:183
-#, c-format
-msgid "Are you sure you want to permanently delete %d identities?"
-msgstr "Da li sigurno želite trajno da izbrišete %d identitete?"
-
-#: ../pgp/seahorse-pgp-commands.c:201 ../pgp/seahorse-pgp-key-properties.c:348
-msgid "Couldn't delete user ID"
-msgstr "Ne mogu da uklonim IB korisnika"
-
-#: ../pgp/seahorse-pgp-commands.c:205
-msgid "Couldn't delete private key"
-msgstr "Ne mogu da obrišem lični ključ"
-
-#: ../pgp/seahorse-pgp-commands.c:208
-msgid "Couldn't delete public key"
-msgstr "Ne mogu da obrišem javni ključ"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:1 ../ssh/seahorse-ssh-generate.xml.h:1
-msgid "<b>_Advanced key options</b>"
-msgstr "<b>_Napredne opcije ključa</b>"
+#: ../pgp/seahorse-pgp-generate.xml.h:1
+msgid "Algorithms here"
+msgstr "Ovde staviti algoritme"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:2
+msgid "C_reate"
+msgstr "_Napravi"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:3
+msgid "Generate a new key"
+msgstr "Napravite novi ključ"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:4
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
 "PGP ključ vam omogućava da šifrujete e-poštu ili datoteke koje šaljete drugim "
 "ljudima."
 
-#: ../pgp/seahorse-pgp-generate.xml.h:3
-msgid "Algorithms here"
-msgstr "Ovde staviti algoritme"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:4
-msgid "C_reate"
-msgstr "_Napravi"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:5
-msgid "E_xpiration Date:"
-msgstr "Datum _isteka:"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:4
-msgid "Encryption _Type:"
-msgstr "_Vrsta šifrovanja:"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:8
-msgid "Generate a new key"
-msgstr "Napravite novi ključ"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:6
-msgid "Key _Strength (bits):"
-msgstr "_Jačina ključa (bitova):"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:10
-msgid "Ne_ver Expires"
-msgstr "Nika_da ne ističe"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:11
-msgid "New PGP Key"
-msgstr "Novi PGP ključ"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:12
+#: ../pgp/seahorse-pgp-generate.xml.h:7
 msgid "_Comment:"
 msgstr "_Komentar:"
 
-#: ../pgp/seahorse-pgp-key.c:572 ../pgp/seahorse-pgp-key-properties.c:1489
-msgid "Expired"
-msgstr "Istekao"
+#: ../pgp/seahorse-pgp-generate.xml.h:8
+msgid "Ne_ver Expires"
+msgstr "Nika_da ne ističe"
 
-#: ../pgp/seahorse-pgp-key-properties.c:319
+#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:7
+msgid "Encryption _Type:"
+msgstr "_Vrsta šifrovanja:"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:10
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:5
+#: ../ssh/seahorse-ssh-generate.xml.h:8
+msgid "Key _Strength (bits):"
+msgstr "_Jačina ključa (bitova):"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:11
+msgid "E_xpiration Date:"
+msgstr "Datum _isteka:"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:12
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
+#: ../ssh/seahorse-ssh-generate.xml.h:11
+msgid "<b>_Advanced key options</b>"
+msgstr "<b>_Napredne opcije ključa</b>"
+
+#: ../pgp/seahorse-pgp-key.c:353
+#| msgid "My _Personal Keys"
+msgid "Personal PGP key"
+msgstr "Lični PGP ključ"
+
+#: ../pgp/seahorse-pgp-key.c:355
+#| msgid "PGP Key"
+msgid "PGP key"
+msgstr "PGP ključ"
+
+#: ../pgp/seahorse-pgp-key-properties.c:325
 msgid "Couldn't change primary user ID"
 msgstr "Ne mogu da promenim IB osnovnog korisnika"
 
-#: ../pgp/seahorse-pgp-key-properties.c:338
+#: ../pgp/seahorse-pgp-key-properties.c:344
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr "Sigurno želite trajno da uklonite IB korisnika „%s“?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:433
-#: ../pgp/seahorse-pgp-key-properties.c:1604
+#: ../pgp/seahorse-pgp-key-properties.c:354
+msgid "Couldn't delete user ID"
+msgstr "Ne mogu da uklonim IB korisnika"
+
+#: ../pgp/seahorse-pgp-key-properties.c:428
+#: ../pgp/seahorse-pgp-key-properties.c:1564
 msgid "[Unknown]"
 msgstr "[Nepoznato]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:533
-#: ../pgp/seahorse-pgp-key-properties.c:1885
+#: ../pgp/seahorse-pgp-key-properties.c:535
+#: ../pgp/seahorse-pgp-key-properties.c:1846
 msgid "Name/Email"
 msgstr "Ime/E-pošta"
 
-#: ../pgp/seahorse-pgp-key-properties.c:538
+#: ../pgp/seahorse-pgp-key-properties.c:540
 msgid "Signature ID"
 msgstr "IB potpisa"
 
-#: ../pgp/seahorse-pgp-key-properties.c:671
+#: ../pgp/seahorse-pgp-key-properties.c:673
 msgid "Couldn't change primary photo"
 msgstr "Ne mogu da promenim primarnu sliku"
 
-#: ../pgp/seahorse-pgp-key-properties.c:903
+#: ../pgp/seahorse-pgp-key-properties.c:906
 msgid "(unknown)"
 msgstr "(nepoznato)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:906
+#: ../pgp/seahorse-pgp-key-properties.c:909
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Ovaj ključ je istekao: %s"
 
-#: ../pgp/seahorse-pgp-key-properties.c:967
-#: ../src/seahorse-key-manager-store.c:802
+#: ../pgp/seahorse-pgp-key-properties.c:972
 msgid "Name"
 msgstr "Naziv"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1078
+#: ../pgp/seahorse-pgp-key-properties.c:1085
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Da li sigurno želite da trajno uklonite podključ %d od %s?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1087
+#: ../pgp/seahorse-pgp-key-properties.c:1094
 msgid "Couldn't delete subkey"
 msgstr "Ne mogu da obrišem podključ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1127
-#: ../pgp/seahorse-pgp-key-properties.c:1567
+#: ../pgp/seahorse-pgp-key-properties.c:1134
+#: ../pgp/seahorse-pgp-key-properties.c:1539
 msgid "Unable to change trust"
 msgstr "Ne mogu da promenim poverenje"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1142 ../src/seahorse-viewer.c:298
-#: ../ssh/seahorse-ssh-key-properties.c:201
-#, c-format
-msgid "Couldn't export key to \"%s\""
-msgstr "Ne mogu da izvezem ključ u „%s“"
+#: ../pgp/seahorse-pgp-key-properties.c:1147
+#: ../ssh/seahorse-ssh-key-properties.c:202
+#| msgid "Couldn't export key."
+msgid "Couldn't export key"
+msgstr "Ne mogu da izvezem ključ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1172
-#: ../ssh/seahorse-ssh-key-properties.c:225
-msgid "Export Complete Key"
-msgstr "Izvezi kompletan ključ"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1197
-#: ../ssh/seahorse-ssh-key-properties.c:247
-msgid "Couldn't export key."
-msgstr "Ne mogu da izvezem ključ."
-
-#: ../pgp/seahorse-pgp-key-properties.c:1407
-#: ../pgp/seahorse-pgp-key-properties.c:1496
+#: ../pgp/seahorse-pgp-key-properties.c:1379
+#: ../pgp/seahorse-pgp-key-properties.c:1468
 msgctxt "Expires"
 msgid "Never"
 msgstr "Nikada"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1454
+#: ../pgp/seahorse-pgp-key-properties.c:1426
 msgid "ID"
 msgstr "IB"
 
-#. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1457
-#: ../src/seahorse-key-manager-store.c:833
+#: ../pgp/seahorse-pgp-key-properties.c:1429
 msgid "Type"
 msgstr "Vrsta"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1460
+#: ../pgp/seahorse-pgp-key-properties.c:1432
 msgid "Created"
 msgstr "Napravljen"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1463
+#: ../pgp/seahorse-pgp-key-properties.c:1435
 msgid "Expires"
 msgstr "Ističe"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1466
+#: ../pgp/seahorse-pgp-key-properties.c:1438
 msgid "Status"
 msgstr "Status"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1469
+#: ../pgp/seahorse-pgp-key-properties.c:1441
 msgid "Strength"
 msgstr "Jačina"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1493
+#: ../pgp/seahorse-pgp-key-properties.c:1461
+msgid "Expired"
+msgstr "Istekao"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1465
 msgid "Good"
 msgstr "Dobar"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1888
-#: ../src/seahorse-key-manager-store.c:814
+#: ../pgp/seahorse-pgp-key-properties.c:1849
 msgid "Key ID"
 msgstr "IB ključa"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>Radnje</b>"
-
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
-msgid "<b>Comment:</b>"
-msgstr "<b>Primedba:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
-msgid "<b>Dates</b>"
-msgstr "<b>Datumi</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
-msgid "<b>Email:</b>"
-msgstr "<b>E-pošta:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
-msgid "<b>Fingerprint</b>"
-msgstr "<b>Otisak</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
-msgid "<b>Key ID:</b>"
-msgstr "<b>IB ključa:</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
+msgid "Never"
+msgstr "Nikada"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
-msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>Nazivi ključeva i potpisi</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-msgid "<b>Photo </b>"
-msgstr "<b>Fotografija </b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
-msgid "<b>Technical Details</b>"
-msgstr "<b>Tehnički detalji</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
 msgid "<b>This key has been revoked</b>"
 msgstr "<b>Ovaj ključ je opozvan</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:10
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
+msgid "The owner of the key revoked the key. It can no longer be used."
+msgstr "Vlasnik ključa je opozvao ključ. Ne može se više koristiti."
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
 msgid "<b>This key has expired</b>"
 msgstr "<b>Ovaj ključ je istekao</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
-msgid "<b>Type:</b>"
-msgstr "<b>Vrsta:</b>"
-
-#. To translators: This is the noun not the verb.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:14
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
-msgid "<b>Use:</b>"
-msgstr "<b>Upotreba:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:15
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
-msgid "<b>_Subkeys</b>"
-msgstr "<b>_Podključevi</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
-msgid "Add"
-msgstr "Dodaj"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
 msgid "Add a photo to this key"
 msgstr "Dodajte fotografiju ovom ključu"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:18
-#: ../ssh/seahorse-ssh-key-properties.xml.h:14
-msgid "Change _Passphrase"
-msgstr "Promeni _lozinku"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
+msgid "Remove this photo from this key"
+msgstr "Ukloni ovu sliku iz ovog ključa"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
-msgid "Decrypt files and email sent to you."
-msgstr "Dešifrujte primljene datoteke i e-poštu."
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
+msgid "Make this photo the primary photo"
+msgstr "Postavi ovu sliku za glavnu sliku"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
-msgid "Delete"
-msgstr "Izbriši"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
-msgid "Expire"
-msgstr "Ističe"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
-msgid "Expires:"
-msgstr "Ističe:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
-msgid "Export"
-msgstr "Izvezi"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
-msgid "Go to next photo"
-msgstr "Idite na sledeću sliku"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:13
 msgid "Go to previous photo"
 msgstr "Idite na prethodnu sliku"
 
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:14
+msgid "Go to next photo"
+msgstr "Idite na sledeću sliku"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:15
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:10
+msgid "<b>Photo </b>"
+msgstr "<b>Fotografija </b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
+msgid "<b>Key ID:</b>"
+msgstr "<b>IB ključa:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
+msgctxt "name-of-key"
+msgid "<b>Name:</b>"
+msgstr "<b>Naziv:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:18
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:16
+msgid "<b>Email:</b>"
+msgstr "<b>E-pošta:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
+msgid "<b>Comment:</b>"
+msgstr "<b>Primedba:</b>"
+
+#. To translators: This is the noun not the verb.
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:12
+#: ../ssh/seahorse-ssh-key-properties.xml.h:8
+msgid "<b>Use:</b>"
+msgstr "<b>Upotreba:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:22
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
+msgid "<b>Type:</b>"
+msgstr "<b>Vrsta:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
+msgid "Decrypt files and email sent to you."
+msgstr "Dešifrujte primljene datoteke i e-poštu."
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
+msgid "Private PGP Key"
+msgstr "Privatni PGP ključ"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
+msgid "Change _Passphrase"
+msgstr "Promeni _lozinku"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
+msgid "Owner"
+msgstr "Vlasnik"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
+msgid "<b>Key Names and Signatures</b>"
+msgstr "<b>Nazivi ključeva i potpisi</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
+msgid "Primary"
+msgstr "Primarno"
+
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:29
-msgid "Key ID:"
-msgstr "IB ključa:"
+msgid "Sign"
+msgstr "Potpiši"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
+msgid "Delete"
+msgstr "Izbriši"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
-msgid "Make this photo the primary photo"
-msgstr "Postavi ovu sliku za glavnu sliku"
+msgid "_Add Name"
+msgstr "_Dodaj naziv"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
+msgid "Revoke"
+msgstr "Opozovi"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:33
 msgid "Names and Signatures"
 msgstr "Nazivi i potpisi"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
-msgid "Never"
-msgstr "Nikada"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
+msgid "Key ID:"
+msgstr "IB ključa:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
-msgid "Override Owner _Trust:"
-msgstr "Premosti _poverenje vlasnika:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:36
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
-msgid "Owner"
-msgstr "Vlasnik"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
-msgid "Primary"
-msgstr "Primarno"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
-msgid "Private PGP Key"
-msgstr "Privatni PGP ključ"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
-msgid "Remove this photo from this key"
-msgstr "Ukloni ovu sliku iz ovog ključa"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
-msgid "Revoke"
-msgstr "Opozovi"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
-msgid "Sign"
-msgstr "Potpiši"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
 msgid "Strength:"
 msgstr "Jačina:"
 
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
+msgid "<b>Technical Details</b>"
+msgstr "<b>Tehnički detalji</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
+msgid "<b>Fingerprint</b>"
+msgstr "<b>Otisak</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
+msgid "Expires:"
+msgstr "Ističe:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
+msgid "<b>Dates</b>"
+msgstr "<b>Datumi</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
+msgid "Override Owner _Trust:"
+msgstr "Premosti _poverenje vlasnika:"
+
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
-msgid "The owner of the key revoked the key. It can no longer be used."
-msgstr "Vlasnik ključa je opozvao ključ. Ne može se više koristiti."
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
-msgid "_Add Name"
-msgstr "_Dodaj naziv"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
 msgid "_Export Complete Key:"
 msgstr "_Izvezi kompletan ključ:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
-msgctxt "name-of-key"
-msgid "<b>Name:</b>"
-msgstr "<b>Naziv:</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
+msgid "<b>Actions</b>"
+msgstr "<b>Radnje</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
-msgid "<b>Dates:</b>"
-msgstr "<b>Datumi:</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+msgid "Add"
+msgstr "Dodaj"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+msgid "Expire"
+msgstr "Ističe"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+msgid "<b>_Subkeys</b>"
+msgstr "<b>_Podključevi</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
+msgid "Marginally"
+msgstr "Površno"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
-#: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "<b>Fingerprint:</b>"
-msgstr "<b>Otisak:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
-msgid "<b>Indicate Trust:</b>"
-msgstr "<b>Ukaži na poverenje:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
-msgid "<b>Your trust of this key</b>"
-msgstr "<b>Vaše poverenje za ovaj ključ</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
-msgid "<b>_Other Names:</b>"
-msgstr "<b>_Ostali nazivi:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:16
-msgid "<b>_People who have signed this key:</b>"
-msgstr "<b>_Ljudi koji su potpisali ovaj ključ:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-msgid "Encrypt files and email to the key's owner "
-msgstr "Šifruj datoteku i pošalji vlasniku ključa "
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
 msgid "Fully"
 msgstr "Potpuno"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
+msgid "Ultimately"
+msgstr "Najveće"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
+msgid "Encrypt files and email to the key's owner "
+msgstr "Šifruj datoteku i pošalji vlasniku ključa "
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
+msgid "Public PGP Key"
+msgstr "Javni PGP ključ"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
+msgid "<b>_Other Names:</b>"
+msgstr "<b>_Ostali nazivi:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
+msgid "<b>Your trust of this key</b>"
+msgstr "<b>Vaše poverenje za ovaj ključ</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
+msgid "Your trust is manually specified on the <i>Details</i> tab."
+msgstr "Vaše poverenje je ručno navedeno u jezičku <i>Detalji</i>."
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
 #, no-c-format
 msgid "I trust signatures from '%s' on other keys"
 msgstr "Verujem potpisima sa „%s“ na drugim ključevima"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:27
 #, no-c-format
 msgid ""
 "If you believe that the person that owns this key is '%s', <i>sign</i> this "
@@ -1609,6 +1863,10 @@ msgstr ""
 "Ako verujete da je „%s“ osoba koja poseduje ovaj ključ, <i>potpišite</i> ključ:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:28
+msgid "_Sign this Key"
+msgstr "_Potpiši ovaj ključ"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
 #, no-c-format
 msgid ""
 "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
@@ -1616,42 +1874,37 @@ msgstr ""
 "Ako više ne verujete da „%s“ poseduje ovaj ključ, <i>opozovite</i> vaš potpis:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
-msgid "Marginally"
-msgstr "Površno"
+msgid "_Revoke Signature"
+msgstr "_Opozovi potpis"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
+msgid "<b>_People who have signed this key:</b>"
+msgstr "<b>_Ljudi koji su potpisali ovaj ključ:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
+msgid "_Only display the signatures of people I trust"
+msgstr "Prikazuj _samo potpise ljudi kojima verujem"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
-msgid "Public PGP Key"
-msgstr "Javni PGP ključ"
-
-#. Trust column
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
-#: ../src/seahorse-key-manager-store.c:827
 msgid "Trust"
 msgstr "Poverenje"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
-msgid "Ultimately"
-msgstr "Najveće"
+#: ../ssh/seahorse-ssh-key-properties.xml.h:18
+msgid "<b>Fingerprint:</b>"
+msgstr "<b>Otisak:</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
-msgid "You _Trust the Owner:"
-msgstr "_Verujete vlasniku:"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
-msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr "Vaše poverenje je ručno navedeno u jezičku <i>Detalji</i>."
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+msgid "<b>Dates:</b>"
+msgstr "<b>Datumi:</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
-msgid "_Only display the signatures of people I trust"
-msgstr "Prikazuj _samo potpise ljudi kojima verujem"
+msgid "<b>Indicate Trust:</b>"
+msgstr "<b>Ukaži na poverenje:</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
-msgid "_Revoke Signature"
-msgstr "_Opozovi potpis"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
-msgid "_Sign this Key"
-msgstr "_Potpiši ovaj ključ"
+msgid "You _Trust the Owner:"
+msgstr "_Verujete vlasniku:"
 
 #: ../pgp/seahorse-pgp-subkey.c:371
 #, c-format
@@ -1659,41 +1912,69 @@ msgid "Subkey %d of %s"
 msgstr "Podključ %d od %s"
 
 #: ../pgp/seahorse-revoke.xml.h:1
-msgid "Optional description of revocation"
-msgstr "Neobavezan opis za povlačenje"
-
-#: ../pgp/seahorse-revoke.xml.h:2
-msgid "Re_voke"
-msgstr "_Opozovi"
-
-#: ../pgp/seahorse-revoke.xml.h:3
 msgid "Reason for revoking the key"
 msgstr "Razlog za povlačenje ključa"
 
-#: ../pgp/seahorse-revoke.xml.h:6
+#: ../pgp/seahorse-revoke.xml.h:2
 msgid "_Reason:"
 msgstr "_Razlog:"
 
-#: ../pgp/seahorse-signer.c:62
+#: ../pgp/seahorse-revoke.xml.h:4
+msgid "Optional description of revocation"
+msgstr "Neobavezan opis za povlačenje"
+
+#: ../pgp/seahorse-revoke.xml.h:6
+msgid "Re_voke"
+msgstr "_Opozovi"
+
+#: ../pgp/seahorse-signer.c:63
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
 "Nemate ličnih PGP ključeva koji se mogu iskoristiti za potpisivanje dokumenta "
 "ili poruke."
 
+#: ../pgp/seahorse-signer.xml.h:1
+msgid "_Sign message with key:"
+msgstr "Potpiši poruku _ključem:"
+
 #: ../pgp/seahorse-sign.xml.h:1
+msgid "Sign Key"
+msgstr "Potpišite ključ"
+
+#: ../pgp/seahorse-sign.xml.h:2
+msgid "By signing you indicate your trust that this key belongs to:"
+msgstr "Potpisivanjem ukazujete vaše poverenje da ovaj ključ pripada:"
+
+#: ../pgp/seahorse-sign.xml.h:3
+msgid "<i>Key Name</i>"
+msgstr "<i>Naziv ključa</i>"
+
+#: ../pgp/seahorse-sign.xml.h:4
 msgid "<b>How carefully have you checked this key?</b>"
 msgstr "<b>Koliko ste pažljivo proverili ovaj ključ?</b>"
 
-#: ../pgp/seahorse-sign.xml.h:2
-msgid "<b>How others will see this signature:</b>"
-msgstr "<b>Kako će drugi videti ovaj potpis:</b>"
+#: ../pgp/seahorse-sign.xml.h:5
+msgid "_Not at all"
+msgstr "N_ipošto"
 
-#: ../pgp/seahorse-sign.xml.h:3
-msgid "<b>Sign key as:</b>"
-msgstr "<b>Potpiši ključ kao:</b>"
+#: ../pgp/seahorse-sign.xml.h:6
+msgid "_Casually"
+msgstr "N_eformalno"
 
-#: ../pgp/seahorse-sign.xml.h:4
+#: ../pgp/seahorse-sign.xml.h:7
+msgid "_Very Carefully"
+msgstr "_Vrlo pažljivo"
+
+#: ../pgp/seahorse-sign.xml.h:8
+msgid ""
+"<i>Not at all:</i> means you believe the key is owned by the person who "
+"claims to own it, but you could not or did not verify this to be a fact."
+msgstr ""
+"<i>Nikako:</i> znači da verujete da ključ poseduje osoba koja tvrdi da joj "
+"pripada, ali ne možete ili niste proverili da je ovo istina"
+
+#: ../pgp/seahorse-sign.xml.h:9
 msgid ""
 "<i>Casually:</i> means you have done a casual verification that the key is "
 "owned by the person who claims to own it. For example, you could read the "
@@ -1703,37 +1984,13 @@ msgstr ""
 "osoba koja tvrdi da je njen. Na primer, možete da očitate otisak ključa "
 "vlasniku, preko telefona. "
 
-#: ../pgp/seahorse-sign.xml.h:5
-msgid "<i>Key Name</i>"
-msgstr "<i>Naziv ključa</i>"
-
-#: ../pgp/seahorse-sign.xml.h:6
-msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who "
-"claims to own it, but you could not or did not verify this to be a fact."
-msgstr ""
-"<i>Nikako:</i> znači da verujete da ključ poseduje osoba koja tvrdi da joj "
-"pripada, ali ne možete ili niste proverili da je ovo istina"
-
-#: ../pgp/seahorse-sign.xml.h:7
+#: ../pgp/seahorse-sign.xml.h:10
 msgid ""
 "<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
 "key is genuine."
 msgstr ""
 "<i>Vrlo pažljivo:</i> Izaberite ovo jedino ako ste u potpunosti sigurni da je "
 "ovaj ključ originalan."
-
-#: ../pgp/seahorse-sign.xml.h:8
-msgid "By signing you indicate your trust that this key belongs to:"
-msgstr "Potpisivanjem ukazujete vaše poverenje da ovaj ključ pripada:"
-
-#: ../pgp/seahorse-sign.xml.h:9
-msgid "I can _revoke this signature at a later date."
-msgstr "Mogu _opozvati ovaj potpis kasnije."
-
-#: ../pgp/seahorse-sign.xml.h:10
-msgid "Sign Key"
-msgstr "Potpišite ključ"
 
 #: ../pgp/seahorse-sign.xml.h:11
 msgid ""
@@ -1747,211 +2004,338 @@ msgstr ""
 "iskoristite e-poštu da proverite da li adresa e-pošte pripada vlasniku."
 
 #: ../pgp/seahorse-sign.xml.h:12
-msgid "_Casually"
-msgstr "N_eformalno"
+msgid "<b>How others will see this signature:</b>"
+msgstr "<b>Kako će drugi videti ovaj potpis:</b>"
 
 #: ../pgp/seahorse-sign.xml.h:13
-msgid "_Not at all"
-msgstr "N_ipošto"
-
-#: ../pgp/seahorse-sign.xml.h:14
 msgid "_Others may not see this signature"
 msgstr "_Drugi ne bi mogli videti ovaj potpis"
 
+#: ../pgp/seahorse-sign.xml.h:14
+msgid "I can _revoke this signature at a later date."
+msgstr "Mogu _opozvati ovaj potpis kasnije."
+
 #: ../pgp/seahorse-sign.xml.h:15
-msgid "_Sign"
-msgstr "_Potpiši"
+msgid "<b>Sign key as:</b>"
+msgstr "<b>Potpiši ključ kao:</b>"
 
 #: ../pgp/seahorse-sign.xml.h:16
 msgid "_Signer:"
 msgstr "_Potpisnik:"
 
 #: ../pgp/seahorse-sign.xml.h:17
-msgid "_Very Carefully"
-msgstr "_Vrlo pažljivo"
+msgid "_Sign"
+msgstr "_Potpiši"
 
-#: ../pgp/seahorse-signer.xml.h:1
-msgid "_Sign message with key:"
-msgstr "Potpiši poruku _ključem:"
+#: ../pgp/seahorse-transfer.c:237 ../pgp/seahorse-transfer.c:284
+msgid "Exporting data"
+msgstr "Izvozim podatke"
 
-#: ../pkcs11/seahorse-pkcs11-certificate.c:106
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
+#: ../pgp/seahorse-transfer.c:237 ../pgp/seahorse-transfer.c:284
+msgid "Retrieving data"
+msgstr "Preuzimam podatke"
+
+#: ../pgp/seahorse-transfer.c:240 ../pgp/seahorse-transfer.c:287
+msgid "Importing data"
+msgstr "Uvozim podatke"
+
+#: ../pgp/seahorse-transfer.c:240 ../pgp/seahorse-transfer.c:287
+msgid "Sending data"
+msgstr "Šaljem podatke"
+
+#: ../pgp/seahorse-unknown.c:61
+msgid "Unavailable"
+msgstr "Nedostupno"
+
+#: ../pkcs11/seahorse-certificate.c:435
+#| msgid "Generate a new key"
+msgid "Personal certificate and key"
+msgstr "Lično uverenje i ključ"
+
+#: ../pkcs11/seahorse-certificate.c:438
+#| msgid "Certificate"
+msgid "Personal certificate"
+msgstr "Lično uverenje"
+
+#: ../pkcs11/seahorse-certificate.c:440
+#: ../pkcs11/seahorse-certificate-der-exporter.c:77
 msgid "Certificate"
 msgstr "Uverenje"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:106
+#: ../pkcs11/seahorse-certificate-der-exporter.c:99
+msgid "Certificates (DER encoded)"
+msgstr "Uverenja (DER šifrovana)"
+
+#: ../pkcs11/seahorse-pkcs11-backend.c:183
+#| msgid "Certificate"
+msgid "Certificates"
+msgstr "Uverenja"
+
+#: ../pkcs11/seahorse-pkcs11-backend.c:186
+msgid "X.509 certificates and related keys"
+msgstr "H.509 uverenja i odgovarajući ključevi"
+
+#: ../pkcs11/seahorse-pkcs11-deleter.c:69
+#, c-format
+#| msgid "Are you sure you want to permanently delete %d identities?"
+msgid "Are you sure you want to permanently delete %d certificate?"
+msgid_plural "Are you sure you want to permanently delete %d certificates?"
+msgstr[0] "Da li ste sigurni da želite trajno da obrišete %d uverenje?"
+msgstr[1] "Da li ste sigurni da želite trajno da obrišete %d uverenja?"
+msgstr[2] "Da li ste sigurni da želite trajno da obrišete %d uverenja?"
+msgstr[3] "Da li ste sigurni da želite trajno da obrišete jedno uverenje?"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:115
+#| msgid "Couldn't delete private key"
+msgid "Couldn't generate private key"
+msgstr "Ne mogu da stvorim lični ključ"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:414
+#: ../pkcs11/seahorse-pkcs11-request.c:256
+#| msgid "C_reate"
+msgid "Create"
+msgstr "Napravi"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:507
+#: ../pkcs11/seahorse-private-key.c:179
+#| msgid "Private Key"
+msgid "Private key"
+msgstr "Privatni ključ"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:508
+msgid "Used to request a certificate"
+msgstr "Koristi se za zahtevanje uverenja"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:1
+#| msgid "Create a new key or item"
+msgid "Create a new private key"
+msgstr "Napravite novi lični ključ"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:2
+msgid "Label:"
+msgstr "Natpis:"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:3
+#| msgid "Stored Password"
+msgid "Stored at:"
+msgstr "Sačuvan:"
+
+#: ../pkcs11/seahorse-pkcs11-key-deleter.c:85
+msgid "I understand that this key will be permanently deleted."
+msgstr "Shvatam da će ovaj ključ biti trajno obrisan."
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:147
+#: ../pkcs11/seahorse-pkcs11-properties.c:151
+msgid "Unnamed"
+msgstr "Neimanovan"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:175
+msgid "Failed to export certificate"
+msgstr "Nisam uspeo da izvezem uverenje"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:875
 msgid "Couldn't delete"
 msgstr "Ne mogu da obrišem"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:127
-#, c-format
-msgid "Are you sure you want to delete the certificate '%s'?"
-msgstr "Da li sigurno želite da obrišete uverenje „%s“?"
+#: ../pkcs11/seahorse-pkcs11-properties.c:231
+#| msgid "Export"
+msgid "_Export"
+msgstr "_Izvezi"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:130
-#, c-format
-msgid "Are you sure you want to delete %d certificate?"
-msgid_plural "Are you sure you want to delete %d certificates?"
-msgstr[0] "Da li sigurno želite da uklonite %d uverenje?"
-msgstr[1] "Da li sigurno želite da uklonite %d uverenja?"
-msgstr[2] "Da li sigurno želite da uklonite %d uverenja?"
-msgstr[3] "Da li sigurno želite da uklonite uverenje?"
+#: ../pkcs11/seahorse-pkcs11-properties.c:232
+#| msgid "Export to a file"
+msgid "Export the certificate"
+msgstr "Izvezite u uverenje"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:143
-msgid "Deleting"
-msgstr "Brišem"
+#: ../pkcs11/seahorse-pkcs11-properties.c:234
+msgid "Delete this certificate or key"
+msgstr "Obrišite ovo uverenje ili ključ"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:235
+#| msgid "Certificate"
+msgid "Request _Certificate"
+msgstr "Zahtevaj _uverenje"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:236
+#| msgid "No private key file is available for this key."
+msgid "Create a certificate request file for this key"
+msgstr "Napravi datoteku zahteva uverenja za ovaj ključ"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:104
+#| msgid "Couldn't verify signature."
+msgid "Couldn't save certificate request"
+msgstr "Ne mogu da sačuvam zahtev uverenja"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:127
+msgid "Save certificate request"
+msgstr "Sačuvaj zahtev uverenja"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:138
+#| msgid "Certificate"
+msgid "Certificate request"
+msgstr "Zahtev uverenja"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:146
+msgid "PEM encoded request"
+msgstr "PEM šifrovani zahtev"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:194
+#| msgid "couldn't create new process group"
+msgid "Couldn't create certificate request"
+msgstr "Ne mogu da napravim zahtev uverenja"
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:1
+msgid "Create a certificate request file."
+msgstr "Napravite datoteku zhteva uverenja."
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:2
+msgid "The common name (CN) placed in the certificate request."
+msgstr "Opšti naziv (CN) postavljen u zahtevu uverenja."
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:3
+#| msgid "_Name:"
+msgid "Name (CN):"
+msgstr "Naziv (CN):"
+
+#: ../pkcs11/seahorse-private-key.c:132
+#| msgid "Couldn't delete private key"
+msgid "Unnamed private key"
+msgstr "Neimenovani lični ključ"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
 msgstr "Promenite lozinku"
 
-#: ../src/seahorse-change-passphrase.xml.h:2
-msgid "Con_firm Passphrase:"
-msgstr "Po_tvrdi lozinku:"
-
 #: ../src/seahorse-change-passphrase.xml.h:3
+msgid "New _Passphrase:"
+msgstr "Nova _lozinka:"
+
+#: ../src/seahorse-change-passphrase.xml.h:4
 msgid "Confirm new passphrase"
 msgstr "Potvrdite novu lozinku"
 
 #: ../src/seahorse-change-passphrase.xml.h:5
-msgid "New _Passphrase:"
-msgstr "Nova _lozinka:"
+msgid "Con_firm Passphrase:"
+msgstr "Po_tvrdi lozinku:"
 
-#: ../src/seahorse.desktop.in.in.h:1
+#: ../src/seahorse.desktop.in.in.h:2
 msgid "Manage your passwords and encryption keys"
 msgstr "Uredite vaše lozinke i ključeve šifrovanja"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:868
-#: ../src/seahorse-main.c:76 ../src/seahorse-viewer.c:147
-msgid "Passwords and Keys"
-msgstr "Lozinke i ključevi"
+#: ../src/seahorse-generate-select.c:229
+#| msgid "C_ontinue"
+msgid "Continue"
+msgstr "Nastavi"
 
 #: ../src/seahorse-generate-select.xml.h:1
 msgid "<b>_Select the type of item to create:</b>"
 msgstr "<b>_Izaberite vrstu stavke koju želite da napravite:</b>"
 
-#: ../src/seahorse-generate-select.xml.h:2
-msgid "C_ontinue"
-msgstr "_Nastavi"
+#: ../src/seahorse-import-dialog.c:98
+#| msgid "Import from a file"
+msgid "Import failed"
+msgstr "Uvoz nije uspeo"
 
-#: ../src/seahorse-generate-select.xml.h:3
-msgid "Create New ..."
-msgstr "Napravite novi..."
+#: ../src/seahorse-import-dialog.c:116
+#| msgid "_Import"
+msgid "Import"
+msgstr "Uvezi"
 
-#: ../src/seahorse-key-manager.c:251 ../src/seahorse-keyserver-results.c:116
-#, c-format
-msgid "Selected %d key"
-msgid_plural "Selected %d keys"
-msgstr[0] "Izabran je %d ključ"
-msgstr[1] "Izabrana su %d ključa"
-msgstr[2] "Izabrano je %d ključeva"
-msgstr[3] "Izabran je %d ključ"
+#: ../src/seahorse-import-dialog.c:129
+#| msgid "<b>Dates:</b>"
+msgid "<b>Data to be imported:</b>"
+msgstr "<b>Podaci koji će biti uvezeni:</b>"
 
-#: ../src/seahorse-key-manager.c:431 ../src/seahorse-key-manager.c:489
-#: ../src/seahorse-key-manager.c:550 ../src/seahorse-viewer.c:453
-msgid "Couldn't import keys"
-msgstr "Ne mogu da uvezem ključeve"
-
-# bug: plural-forms
-#: ../src/seahorse-key-manager.c:433 ../src/seahorse-viewer.c:455
-msgid "Imported keys"
-msgstr "Uvezeni ključevi"
-
-#: ../src/seahorse-key-manager.c:484
-msgid "Importing keys"
-msgstr "Uvozim ključeve"
-
-#: ../src/seahorse-key-manager.c:504 ../ssh/seahorse-ssh-operation.c:891
+#: ../src/seahorse-key-manager.c:255 ../ssh/seahorse-ssh-operation.c:845
 msgid "Import Key"
 msgstr "Uvezite ključ"
 
-#: ../src/seahorse-key-manager.c:550
-msgid "Unrecognized key type, or invalid data format"
-msgstr "Neprepoznata vrsta ključa, ili neispravan format podataka"
+#: ../src/seahorse-key-manager.c:267
+msgid "All key files"
+msgstr "Sve datoteke ključeva"
 
-#: ../src/seahorse-key-manager.c:565
-msgid "Importing Keys"
-msgstr "Uvozim ključeve"
+#: ../src/seahorse-key-manager.c:368
+msgid "Dropped text"
+msgstr "Ubačeni tekst"
 
-#: ../src/seahorse-key-manager.c:737 ../src/seahorse-keyserver-results.c:254
-msgid "_Remote"
-msgstr "_Udaljeno"
+#: ../src/seahorse-key-manager.c:391
+msgid "Clipboard text"
+msgstr "Tekst iz ostave"
 
-#: ../src/seahorse-key-manager.c:739
+#: ../src/seahorse-key-manager.c:518
+#| msgid "_New..."
+msgid "_New"
+msgstr "_Novi"
+
+#: ../src/seahorse-key-manager.c:520
 msgid "Close this program"
 msgstr "Zatvorite ovaj program"
 
-#: ../src/seahorse-key-manager.c:740
+#: ../src/seahorse-key-manager.c:521 ../src/seahorse-key-manager.c:523
 msgid "_New..."
-msgstr "_Novo..."
+msgstr "_Novi..."
 
-#: ../src/seahorse-key-manager.c:741
+#: ../src/seahorse-key-manager.c:522
 msgid "Create a new key or item"
 msgstr "Napravite novi ključ ili stavku"
 
-#: ../src/seahorse-key-manager.c:742
+#: ../src/seahorse-key-manager.c:524
+#| msgid "Create a new key or item"
+msgid "Add a new key or item"
+msgstr "Dodajte novi ključ ili stavku"
+
+#: ../src/seahorse-key-manager.c:525
 msgid "_Import..."
 msgstr "_Uvezi..."
 
-#: ../src/seahorse-key-manager.c:743
+#: ../src/seahorse-key-manager.c:526
 msgid "Import from a file"
 msgstr "Uvezi iz datoteke"
 
-#: ../src/seahorse-key-manager.c:745
+#: ../src/seahorse-key-manager.c:528
 msgid "Import from the clipboard"
 msgstr "Uvezi iz ostave"
 
-#: ../src/seahorse-key-manager.c:750 ../src/seahorse-keyserver-results.c:264
-msgid "_Find Remote Keys..."
-msgstr "_Pronađi udaljene ključeve..."
+#: ../src/seahorse-key-manager.c:532
+#| msgid "_Keyring:"
+msgid "By _keyring"
+msgstr "Prema _privesku"
 
-#: ../src/seahorse-key-manager.c:751 ../src/seahorse-keyserver-results.c:265
-msgid "Search for keys on a key server"
-msgstr "Potražite ključeve na serveru ključeva"
+#: ../src/seahorse-key-manager.c:533
+#| msgid "Deleting keyring"
+#| msgid_plural "Deleting keyrings"
+msgid "Show sidebar listing keyrings"
+msgstr "Prikažite spisak privezaka u bočnoj površi"
 
-#: ../src/seahorse-key-manager.c:752
-msgid "_Sync and Publish Keys..."
-msgstr "_Usaglasi i objavi ključeve..."
+#: ../src/seahorse-key-manager.c:537
+#| msgid "Show properties"
+msgid "Show _personal"
+msgstr "Prikaži _lični"
 
-#: ../src/seahorse-key-manager.c:753
-msgid "Publish and/or synchronize your keys with those online."
-msgstr "Objavite i/ili usaglasite vaše ključeve sa onima na mreži."
+#: ../src/seahorse-key-manager.c:538
+msgid "Only show personal keys, certificates and passwords"
+msgstr "Prikažite samo lične ključeve, uverenja i lozinke"
 
-#: ../src/seahorse-key-manager.c:758
-msgid "T_ypes"
-msgstr "_Vrste"
+#: ../src/seahorse-key-manager.c:539
+msgid "Show _trusted"
+msgstr "Prikaži _poverljive"
 
-#: ../src/seahorse-key-manager.c:758
-msgid "Show type column"
-msgstr "Prikažite kolonu vrste"
+#: ../src/seahorse-key-manager.c:540
+msgid "Only show trusted keys, certificates and passwords"
+msgstr "Prikažite samo poverljive ključeve, uverenja i lozinke"
 
-#: ../src/seahorse-key-manager.c:760
-msgid "_Expiry"
-msgstr "_Isticanja"
+#: ../src/seahorse-key-manager.c:541
+msgid "Show _any"
+msgstr "Prikaži _bilo koji"
 
-#: ../src/seahorse-key-manager.c:760
-msgid "Show expiry column"
-msgstr "Prikažite kolonu isticanja"
+#: ../src/seahorse-key-manager.c:542
+msgid "Show all keys, certificates and passwords"
+msgstr "Prikažite sve ključeve, uverenja i lozinke"
 
-#: ../src/seahorse-key-manager.c:762
-msgid "_Trust"
-msgstr "P_overenje"
-
-#: ../src/seahorse-key-manager.c:762
-msgid "Show owner trust column"
-msgstr "Prikažite kolonu poverenje vlasnika"
-
-#: ../src/seahorse-key-manager.c:764
-msgid "_Validity"
-msgstr "Ispra_vnost"
-
-#: ../src/seahorse-key-manager.c:764
-msgid "Show validity column"
-msgstr "Prikažite kolonu ispravnosti"
-
-#: ../src/seahorse-key-manager.c:941
-msgid "Filter:"
-msgstr "Filter:"
+#: ../src/seahorse-key-manager.c:750
+#| msgid "Filter:"
+msgid "Filter"
+msgstr "Filter"
 
 #: ../src/seahorse-key-manager.xml.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -1961,275 +2345,52 @@ msgstr "<big><b>Opcije prvog puta:</b></big>"
 msgid "Generate a new key of your own: "
 msgstr "Samostalno napravite novi ključ:"
 
-#: ../src/seahorse-key-manager.xml.h:3
+#: ../src/seahorse-key-manager.xml.h:4
 msgid "Import existing keys from a file:"
 msgstr "Uvezite postojeće ključeve iz datoteke:"
 
-#: ../src/seahorse-key-manager.xml.h:4
-msgid "My _Personal Keys"
-msgstr "Moji _lični ključevi"
-
 #: ../src/seahorse-key-manager.xml.h:5
-msgid "Other _Keys"
-msgstr "Ostali _ključevi"
-
-#: ../src/seahorse-key-manager.xml.h:6
 msgid "To get started with encryption you will need keys."
 msgstr "Da započnete sa šifrovanjem biće vam potrebni ključevi."
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:518
-msgid "_Import"
-msgstr "_Uvezi"
-
-#: ../src/seahorse-key-manager.xml.h:8
-msgid "_Passwords"
-msgstr "_Lozinke"
-
-#: ../src/seahorse-key-manager-store.c:610 ../src/seahorse-viewer.c:263
-msgid "Couldn't export keys"
-msgstr "Ne mogu da izvezem ključeve"
-
-#: ../src/seahorse-key-manager-store.c:820
-msgid "Validity"
-msgstr "Ispravnost"
-
-#. Expiry date column
-#: ../src/seahorse-key-manager-store.c:839
-msgid "Expiration Date"
-msgstr "Datum isteka"
-
-#: ../src/seahorse-keyserver-results.c:256
-msgid "Close this window"
-msgstr "Zatvorite ovaj prozor"
-
-#: ../src/seahorse-keyserver-results.c:257
-msgid "_Expand All"
-msgstr "_Razgranaj sve"
-
-#: ../src/seahorse-keyserver-results.c:258
-msgid "Expand all listings"
-msgstr "Razgranajte sav ispis"
-
-#: ../src/seahorse-keyserver-results.c:259
-msgid "_Collapse All"
-msgstr "_Sažmi sve"
-
-#: ../src/seahorse-keyserver-results.c:260
-msgid "Collapse all listings"
-msgstr "Sažmite sav ispis"
-
-#: ../src/seahorse-keyserver-results.c:331
-msgid "Remote Keys"
-msgstr "Udaljeni ključevi"
-
-#: ../src/seahorse-keyserver-results.c:333
-#, c-format
-msgid "Remote Keys Containing '%s'"
-msgstr "Udaljeni ključevi koji sadrže „%s“"
-
-#: ../src/seahorse-keyserver-search.xml.h:1
-msgid "<b>Key Servers:</b>"
-msgstr "<b>Serveri ključeva:</b>"
-
-#: ../src/seahorse-keyserver-search.xml.h:2
-msgid "<b>Shared Keys Near Me:</b>"
-msgstr "</b>Deljeni ključevi blizu mene:</b>"
-
-#: ../src/seahorse-keyserver-search.xml.h:3
-msgid "Find Remote Keys"
-msgstr "Pronađite udaljene ključeve"
-
-#: ../src/seahorse-keyserver-search.xml.h:4
-msgid ""
-"This will find keys for others on the Internet. These keys can then be "
-"imported into your local key ring."
-msgstr ""
-"Ova opcija će pronaći ključeve za druge na Internetu. Ove ključeve možete "
-"zatim da uvezete u vaš privezak ključeva."
-
-#: ../src/seahorse-keyserver-search.xml.h:5
-msgid "Where to search:"
-msgstr "Gde tražiti:"
-
-#: ../src/seahorse-keyserver-search.xml.h:6
-msgid "_Search"
-msgstr "_Potraži"
-
-#: ../src/seahorse-keyserver-search.xml.h:7
-msgid "_Search for keys containing: "
-msgstr "_Traži ključeve koji sadrže:"
-
-#: ../src/seahorse-keyserver-sync.c:58
-msgid "Couldn't publish keys to server"
-msgstr "Ne mogu da objavim ključeve na server"
-
-#: ../src/seahorse-keyserver-sync.c:77
-#, c-format
-msgid "Couldn't retrieve keys from server: %s"
-msgstr "Ne mogu da preuzmem ključeve sa servera: %s"
-
-#: ../src/seahorse-keyserver-sync.c:161
-#, c-format
-msgid "<b>%d key is selected for synchronizing</b>"
-msgid_plural "<b>%d keys are selected for synchronizing</b>"
-msgstr[0] "<b>%d ključ je izabran za usaglašavanje</b>"
-msgstr[1] "<b>%d ključa su izabrana za usaglašavanje</b>"
-msgstr[2] "<b>%d ključeva je izabrano za usaglašavanje</b>"
-msgstr[3] "<b>%d ključ je izabran za usaglašavanje</b>"
-
-#: ../src/seahorse-keyserver-sync.c:247
-msgid "Synchronizing keys..."
-msgstr "Usaglašavam ključeve..."
-
-#: ../src/seahorse-keyserver-sync.xml.h:1
-msgid "Sync Keys"
-msgstr "Usaglasite ključeve"
-
-#: ../src/seahorse-keyserver-sync.xml.h:2
-msgid ""
-"This will publish the keys in your key ring so they're available for others "
-"to use. You'll also get any changes others have made since you received "
-"their keys."
-msgstr ""
-"Ova opcija će objaviti ključeve u vaš privezak, tako da će biti dostupni "
-"drugima na korišćenje. Takođe, dobićete izmene koje su napravili drugi od "
-"kada ste primili njihove ključeve."
-
-#: ../src/seahorse-keyserver-sync.xml.h:3
-msgid ""
-"This will retrieve any changes others have made since you received their "
-"keys. No key server has been chosen for publishing, so your keys will not be "
-"made available to others."
-msgstr ""
-"Ova opcija će preuzeti sve izmene koje su drugi napravili od kada ste "
-"primili njihove ključeve. Nijedan server ključeva nije izabran za objavljivanje, "
-"tako da vaši ključevi neće biti dostupni drugima."
-
-#: ../src/seahorse-keyserver-sync.xml.h:4
-msgid "_Key Servers"
-msgstr "Serveri _ključeva"
-
-#: ../src/seahorse-keyserver-sync.xml.h:5
-msgid "_Sync"
-msgstr "_Usaglasi"
-
-#: ../src/seahorse-main.c:60
+#: ../src/seahorse-main.c:54
 msgid "Version of this application"
 msgstr "Izdanje programa"
 
-#: ../src/seahorse-viewer.c:123
-msgid "Contributions:"
-msgstr "Doprinosi:"
+#: ../src/seahorse-sidebar.c:799
+#| msgid "Couldn't lock keyring"
+msgid "Couldn't lock"
+msgstr "Ne mogu da zaključam"
 
-#: ../src/seahorse-viewer.c:149
-msgid "translator-credits"
+#: ../src/seahorse-sidebar.c:836
+#| msgid "Couldn't unlock keyring"
+msgid "Couldn't unlock"
+msgstr "Ne mogu da otključam"
+
+#: ../src/seahorse-sidebar.c:944
+msgid "_Lock"
+msgstr "_Zaključaj"
+
+#: ../src/seahorse-sidebar.c:949
+msgid "_Unlock"
+msgstr "_Otključaj"
+
+#: ../src/seahorse-sidebar.c:968
+#| msgid "Key Properties"
+msgid "_Properties"
+msgstr "_Osobine"
+
+#: ../ssh/seahorse-ssh-actions.c:88
+msgid "Configure Key for _Secure Shell..."
+msgstr "Podesi ključ bezbedne _školjke..."
+
+#: ../ssh/seahorse-ssh-actions.c:89
+msgid ""
+"Send public Secure Shell key to another machine, and enable logins using "
+"that key."
 msgstr ""
-"Danilo Šegan <danilo@gnome.org>\n"
-"Goran Rakić <grakic@devbase.net>\n"
-"Dušan Živojnov <calvin@verat.net>\n"
-"Branko Kokanović <branko.kokanovic@gmail.com>\n"
-"\n"
-"Prevod.org — prevod na srpski jezik."
-
-#: ../src/seahorse-viewer.c:152
-msgid "Seahorse Project Homepage"
-msgstr "Stranica projekta Morskog konjića"
-
-#. Top menu items
-#: ../src/seahorse-viewer.c:172
-msgid "_File"
-msgstr "_Datoteka"
-
-#: ../src/seahorse-viewer.c:173
-msgid "_Edit"
-msgstr "_Uređivanje"
-
-#: ../src/seahorse-viewer.c:174
-msgid "_View"
-msgstr "Pre_gled"
-
-#: ../src/seahorse-viewer.c:175
-msgid "_Help"
-msgstr "Po_moć"
-
-#: ../src/seahorse-viewer.c:177
-msgid "Prefere_nces"
-msgstr "Po_dešavanja"
-
-#: ../src/seahorse-viewer.c:178
-msgid "Change preferences for this program"
-msgstr "Izmenite podešavanja programa"
-
-#: ../src/seahorse-viewer.c:181
-msgid "About this program"
-msgstr "O programu"
-
-#: ../src/seahorse-viewer.c:182
-msgid "_Contents"
-msgstr "_Sadržaj"
-
-#: ../src/seahorse-viewer.c:183
-msgid "Show Seahorse help"
-msgstr "Prikaži pomoć Morskog konjića"
-
-#: ../src/seahorse-viewer.c:284
-msgid "Export public key"
-msgstr "Izvezite javni ključ"
-
-#: ../src/seahorse-viewer.c:305
-msgid "Exporting keys"
-msgstr "Izvozim ključeve"
-
-#: ../src/seahorse-viewer.c:334
-msgid "Couldn't retrieve data from key server"
-msgstr "Ne mogu da preuzmem podatke sa servera ključeva"
-
-#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:346
-msgid "Copied keys"
-msgstr "Umnoženi ključevi"
-
-#: ../src/seahorse-viewer.c:371
-msgid "Retrieving keys"
-msgstr "Preuzimam ključeve"
-
-#: ../src/seahorse-viewer.c:426
-#, c-format
-msgid "%s is a private key. Are you sure you want to proceed?"
-msgstr "%s je privatni ključ. Da li želite da nastavite?"
-
-#: ../src/seahorse-viewer.c:480
-msgid "Importing keys from key servers"
-msgstr "Uvozim ključeve sa servera ključeva"
-
-#: ../src/seahorse-viewer.c:505
-msgid "Show properties"
-msgstr "Prikažite osobine"
-
-#: ../src/seahorse-viewer.c:506
-msgctxt "This text refers to deleting an item from its type's backing store."
-msgid "_Delete"
-msgstr "_Obriši"
-
-#: ../src/seahorse-viewer.c:507
-msgid "Delete selected items"
-msgstr "Obrišite izabrane stavke"
-
-#: ../src/seahorse-viewer.c:511
-msgid "E_xport..."
-msgstr "_Izvezi..."
-
-#: ../src/seahorse-viewer.c:512
-msgid "Export to a file"
-msgstr "Izvezite u datoteku"
-
-#: ../src/seahorse-viewer.c:514
-msgid "Copy to the clipboard"
-msgstr "Umnožite u ostavu"
-
-#: ../src/seahorse-viewer.c:519
-msgid "Import selected keys to local key ring"
-msgstr "Stavlja izabrane ključeve na lokalni privezak"
+"Pošaljite javni ključ bezbedne školjke na drugu mašinu, i omogućite "
+"prijavljivanja korišćenjem tog ključa."
 
 #: ../ssh/seahorse-ssh-askpass.c:60 ../ssh/seahorse-ssh-askpass.c:68
 msgid "Enter your Secure Shell passphrase:"
@@ -2258,177 +2419,212 @@ msgstr "Unesite novu lozinku za: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Ponovo unesite novu lozinku: %s"
 
-#: ../ssh/seahorse-ssh-commands.c:86
-msgid "Configure Key for _Secure Shell..."
-msgstr "Podesi ključeve bezbedne _školjke..."
+#: ../ssh/seahorse-ssh-backend.c:91
+#| msgid "Secure Shell Key"
+msgid "Secure Shell"
+msgstr "Bezbedna školjka"
 
-#: ../ssh/seahorse-ssh-commands.c:87
-msgid ""
-"Send public Secure Shell key to another machine, and enable logins using "
-"that key."
-msgstr ""
-"Pošaljite javni ključ bezbedne školjke na drugu mašinu, i omogućite "
-"prijavljivanja korišćenjem tog ključa."
+#: ../ssh/seahorse-ssh-backend.c:94
+#| msgid "Used to connect to other computers."
+msgid "Keys used to connect securely to other computers"
+msgstr "Ključevi korišćeni za bezbedno povezivanje na druge računare"
 
-#: ../ssh/seahorse-ssh-commands.c:118
+#: ../ssh/seahorse-ssh-deleter.c:81 ../ssh/seahorse-ssh-deleter.c:86
 #, c-format
 msgid "Are you sure you want to delete the secure shell key '%s'?"
 msgstr "Da li sigurno želite trajno da izbrišete ključ bezbedne školjke „%s“?"
 
-#: ../ssh/seahorse-ssh-commands.c:121
+#: ../ssh/seahorse-ssh-deleter.c:91 ../ssh/seahorse-ssh-deleter.c:92
 #, c-format
 msgid "Are you sure you want to delete %d secure shell keys?"
 msgstr "Da li sigurno želite trajno da izbrišete %d ključeva bezbedne školjke?"
 
-#: ../ssh/seahorse-ssh-commands.c:133
-msgid "Couldn't delete key"
-msgstr "Ne mogu da obrišem ključ"
+#: ../ssh/seahorse-ssh-exporter.c:92
+#| msgid "Sign Key"
+msgid "Ssh Key"
+msgstr "Ključ bezbedne školjke"
 
-#: ../ssh/seahorse-ssh-generate.c:60 ../ssh/seahorse-ssh-key.c:91
-#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-exporter.c:122
+#| msgid "Secure Shell key"
+msgid "Secret SSH keys"
+msgstr "Tajni SSH ključevi"
+
+#: ../ssh/seahorse-ssh-exporter.c:126
+#| msgid "Public Key"
+msgid "Public SSH keys"
+msgstr "Javni SSH ključevi"
+
+#: ../ssh/seahorse-ssh-exporter.c:290
+#| msgid "No private key file is available for this key."
+msgid "No public key file is available for this key."
+msgstr "Nijedan javni ključ nije dostupan za ovaj ključ."
+
+#: ../ssh/seahorse-ssh-generate.c:55 ../ssh/seahorse-ssh-key.c:114
+#: ../ssh/seahorse-ssh-key.c:118 ../ssh/seahorse-ssh-key-properties.xml.h:4
 msgid "Secure Shell Key"
 msgstr "Ključ bezbedne školjke"
 
-#: ../ssh/seahorse-ssh-generate.c:61
+#: ../ssh/seahorse-ssh-generate.c:56
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Koristi se za pristup drugim računarima (npr: preko terminala)"
 
-#: ../ssh/seahorse-ssh-generate.c:115 ../ssh/seahorse-ssh-generate.c:131
+#: ../ssh/seahorse-ssh-generate.c:110 ../ssh/seahorse-ssh-generate.c:126
 msgid "Couldn't generate Secure Shell key"
 msgstr "Ne mogu da napravim ključ bezbedne školjke"
 
-#: ../ssh/seahorse-ssh-generate.c:197
+#: ../ssh/seahorse-ssh-generate.c:192
 msgid "Creating Secure Shell Key"
 msgstr "Stvaram ključ bezbedne školjke"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:2
-msgid ""
-"<i>Use your email address, and any other reminder you need about what this "
-"key is for.</i>"
-msgstr ""
-"<i>Koristite adresu vaše e-pošte i bilo koji drugi podsetnik koji vam treba "
-"da znate čemu služi ovaj ključ.</i>"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:3
-msgid ""
-"A Secure Shell (SSH) key lets you connect securely to trusted computers "
-"using SSH, without entering a different password for each of them."
-msgstr ""
-"Ključ bezbedne školjke (SSH) vam omogućava da se bezbedno povežete na "
-"poverljive računare koji koriste SSH, bez unošenja različite šifre za svaki od "
-"njih."
-
-#: ../ssh/seahorse-ssh-generate.xml.h:5
-msgid ""
-"If there is already a computer you want to use this key with, you can set up "
-"that computer to recognize your key now. "
-msgstr ""
-"Ako već postoji računar sa kojim želite da iskoristite ovaj ključ, sada "
-"možete da podesite taj računar da prepoznaje vaš ključ."
-
-#: ../ssh/seahorse-ssh-generate.xml.h:7
+#: ../ssh/seahorse-ssh-generate.xml.h:1
 msgid "New Secure Shell Key"
 msgstr "Novi ključ bezbedne školjke"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:8
-msgid "_Create and Set Up"
-msgstr "_Napravi i podesi"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:9
+#: ../ssh/seahorse-ssh-generate.xml.h:2
 msgid "_Just Create Key"
 msgstr "_Samo napravi ključ"
 
+#: ../ssh/seahorse-ssh-generate.xml.h:3
+msgid "_Create and Set Up"
+msgstr "_Napravi i podesi"
+
+#: ../ssh/seahorse-ssh-generate.xml.h:4
+#| msgid ""
+#| "A Secure Shell (SSH) key lets you connect securely to trusted computers "
+#| "using SSH, without entering a different password for each of them."
+msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
+msgstr ""
+"Ključ bezbedne školjke (SSH) vam omogućava da se bezbedno povežete na druge "
+"računare."
+
+#: ../ssh/seahorse-ssh-generate.xml.h:6
+#| msgid ""
+#| "<i>Use your email address, and any other reminder you need about what "
+#| "this key is for.</i>"
+msgid "<i>Your email address, or a reminder of what this key is for.</i>"
+msgstr "<i>Adresa vaše el. pošte ili podsetnik za koji je ovaj ključ.</i>"
+
 #: ../ssh/seahorse-ssh-generate.xml.h:10
-msgid "_Key Description:"
-msgstr "Opis _ključa:"
+msgid "DSA"
+msgstr "DSA"
 
-#: ../ssh/seahorse-ssh-key.c:87
+#: ../ssh/seahorse-ssh-generate.xml.h:12
+#| msgid ""
+#| "If there is already a computer you want to use this key with, you can set "
+#| "up that computer to recognize your key now. "
+msgid ""
+"If there is a computer you want to use this key with, you can set up that "
+"computer to recognize your new key."
+msgstr ""
+"Ako postoji računar sa kojim želite da koristite ovaj ključ, možete da "
+"podesite taj računar da prepoznaje vaš novi ključ."
+
+#: ../ssh/seahorse-ssh-key.c:110
 msgid "(Unreadable Secure Shell Key)"
-msgstr "(Nečitak ključ bezbedne školjke)"
+msgstr "(Nečitljiv ključ bezbedne školjke)"
 
-#: ../ssh/seahorse-ssh-key-properties.c:79
+#: ../ssh/seahorse-ssh-key.c:218
+#| msgid "My _Personal Keys"
+msgid "Personal SSH key"
+msgstr "Lični SSH ključ"
+
+#: ../ssh/seahorse-ssh-key.c:220
+msgid "SSH key"
+msgstr "SSH ključ"
+
+#: ../ssh/seahorse-ssh-key-properties.c:82
 msgid "Couldn't rename key."
 msgstr "Ne mogu da preimenujem ključ."
 
-#: ../ssh/seahorse-ssh-key-properties.c:132
+#: ../ssh/seahorse-ssh-key-properties.c:135
 msgid "Couldn't change authorization for key."
 msgstr "Ne mogu da promenim ovlašćenje za ovaj ključ."
 
-#: ../ssh/seahorse-ssh-key-properties.c:167
+#: ../ssh/seahorse-ssh-key-properties.c:170
 msgid "Couldn't change passphrase for key."
 msgstr "Ne mogu da promenim lozinku za ključ."
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:1
-msgid "<b>Algorithm:</b>"
-msgstr "<b>Algoritam:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
+#: ../ssh/seahorse-ssh-key-properties.xml.h:2
 msgid "<b>Identifier:</b>"
 msgstr "<b>Identifikator:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:4
-msgid "<b>Location:</b>"
-msgstr "<b>Lokacija:</b>"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:5
 msgid "<b>Name:</b>"
 msgstr "<b>Naziv:</b>"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:6
-msgid "<b>Strength:</b>"
-msgstr "<b>Jačina:</b>"
+msgid "Used to connect to other computers."
+msgstr "Koristi se za povezivanje na druge računare."
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:8
+#: ../ssh/seahorse-ssh-key-properties.xml.h:10
 msgid "<b>Trust</b>"
 msgstr "<b>Poverenje</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
+msgid "The owner of this key is _authorized to connect to this computer"
+msgstr "Vlasnik ovog ključa je _ovlašćen da se poveže na ovaj računar"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:13
 #, no-c-format
 msgid "<i>This only applies to the '%s'</i> account."
 msgstr "<i>Ovo jedino važi za „%s“</i> nalog."
 
+#: ../ssh/seahorse-ssh-key-properties.xml.h:15
+msgid "<b>Algorithm:</b>"
+msgstr "<b>Algoritam:</b>"
+
 #: ../ssh/seahorse-ssh-key-properties.xml.h:16
+msgid "<b>Strength:</b>"
+msgstr "<b>Jačina:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
+msgid "<b>Location:</b>"
+msgstr "<b>Lokacija:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:20
 msgid "E_xport Complete Key"
 msgstr "I_zvezi kompletan ključ"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:20
-msgid "The owner of this key is _authorized to connect to this computer"
-msgstr "Vlasnik ovog ključa je _ovlašćen da se poveže na ovaj računar"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:21
-msgid "Used to connect to other computers."
-msgstr "Koristi se za povezivanje na druge računare."
-
-#: ../ssh/seahorse-ssh-operation.c:198
+#: ../ssh/seahorse-ssh-operation.c:199
 msgid "The SSH command was terminated unexpectedly."
 msgstr "SSH nardba je neočekivano prekinuta."
 
-#: ../ssh/seahorse-ssh-operation.c:208
+#: ../ssh/seahorse-ssh-operation.c:209
 msgid "The SSH command failed."
 msgstr "SSH naredba nije uspela da se izvrši."
 
-#: ../ssh/seahorse-ssh-operation.c:518
+#: ../ssh/seahorse-ssh-operation.c:502
 msgid "Remote Host Password"
 msgstr "Lozinka udaljenog računara"
 
-#: ../ssh/seahorse-ssh-operation.c:634
+#: ../ssh/seahorse-ssh-operation.c:588
 msgid "Enter Key Passphrase"
 msgstr "Unesite propusnu reč ključa"
 
-#: ../ssh/seahorse-ssh-operation.c:724
+#: ../ssh/seahorse-ssh-operation.c:678
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Lozinka za novi ključ bezbedne školjke"
 
-#: ../ssh/seahorse-ssh-operation.c:908
+#: ../ssh/seahorse-ssh-operation.c:862
 #, c-format
 msgid "Importing key: %s"
 msgstr "Uvozim ključ: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:910
+#: ../ssh/seahorse-ssh-operation.c:864
 msgid "Importing key. Enter passphrase"
 msgstr "Uvozim ključ. Unesite propusnu reč"
 
-#: ../ssh/seahorse-ssh-source.c:951
+#: ../ssh/seahorse-ssh-source.c:232
+#| msgid "Copied keys"
+msgid "OpenSSH keys"
+msgstr "OpenSSH ključevi"
+
+#: ../ssh/seahorse-ssh-source.c:235
+#, c-format
+msgid "OpenSSH: %s"
+msgstr "OpenSSH: %s"
+
+#: ../ssh/seahorse-ssh-source.c:940
 msgid "No private key file is available for this key."
 msgstr "Nijedan privatni ključ nije dostupan za ovaj ključ."
 
@@ -2441,20 +2637,20 @@ msgid "Configuring Secure Shell Keys..."
 msgstr "Podešavam ključeve bezbedne školjke..."
 
 #: ../ssh/seahorse-ssh-upload.xml.h:1
-msgid "<i>eg: fileserver.example.com:port</i>"
-msgstr "<i>npr.: fileserver.example.com:port</i>"
-
-#: ../ssh/seahorse-ssh-upload.xml.h:2
 msgid "Set Up Computer for SSH Connection"
 msgstr "Podesite računar za SSH vezu"
 
-#: ../ssh/seahorse-ssh-upload.xml.h:4
+#: ../ssh/seahorse-ssh-upload.xml.h:2
 msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
 msgstr ""
 "Da biste koristili ključ bezbedne školjke na drugom računaru koji koristi SSH, "
 "morate već na njemu imati prijavni nalog."
+
+#: ../ssh/seahorse-ssh-upload.xml.h:4
+msgid "<i>eg: fileserver.example.com:port</i>"
+msgstr "<i>npr.: fileserver.example.com:port</i>"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
 msgid "_Computer Name:"
@@ -2468,14 +2664,178 @@ msgstr "_Prijavno ime:"
 msgid "_Set Up"
 msgstr "Pode_šavnje"
 
+#~ msgid "Couldn't delete item"
+#~ msgstr "Ne mogu da obrišem stavku"
+
+#~ msgid "Deleting item"
+#~ msgid_plural "Deleting items"
+#~ msgstr[0] "Brišem stavku"
+#~ msgstr[1] "Brišem stavke"
+#~ msgstr[2] "Brišem stavke"
+#~ msgstr[3] "Brišem stavku"
+
+#~ msgid "Passwords: %s"
+#~ msgstr "Lozinke: %s"
+
+#~ msgid "<b>Passwords:</b> %s"
+#~ msgstr "<b>Lozinke:</b> %s"
+
+#~ msgid ""
+#~ "Lock the password storage keyring so a master password is required to "
+#~ "unlock it."
+#~ msgstr ""
+#~ "Zaključajte privezak ključeva skladišta lozinki tako da će biti potrebna "
+#~ "glavna lozinka da bi mu pristupili."
+
+#~ msgid ""
+#~ "Unlock the password storage keyring with a master password so it is "
+#~ "available for use."
+#~ msgstr ""
+#~ "Otključajte privezak ključeva skladišta lozinki glavnom lozinkom tako da se "
+#~ "može koristiti."
+
+#~ msgid "Couldn't delete keyring"
+#~ msgstr "Ne mogu da obrišem privezak ključeva"
+
+#~ msgid "Archive files"
+#~ msgstr "Arhive"
+
+#~ msgid ""
+#~ "<b>A file already exists with this name.</b>\n"
+#~ "\n"
+#~ "Do you want to replace it with a new file?"
+#~ msgstr ""
+#~ "<b>Datoteka već postoji.</b>\n"
+#~ "\n"
+#~ "Želite li da je zamenite novom?"
+
+#~ msgid "_Replace"
+#~ msgstr "_Zameni"
+
+#~ msgid "_Sign Key..."
+#~ msgstr "_Potpiši ključ..."
+
+#~ msgid "Sign public key"
+#~ msgstr "Potpišite javni ključ"
+
+#~ msgid "Are you sure you want to permanently delete %d keys and identities?"
+#~ msgstr "Da li sigurno želite trajno da izbrišete %d ključeve i identitete?"
+
+#~ msgid "Couldn't delete public key"
+#~ msgstr "Ne mogu da obrišem javni ključ"
+
+#~ msgid "New PGP Key"
+#~ msgstr "Novi PGP ključ"
+
+#~ msgid "Couldn't export key to \"%s\""
+#~ msgstr "Ne mogu da izvezem ključ u „%s“"
+
+#~ msgid "Export Complete Key"
+#~ msgstr "Izvezi kompletan ključ"
+
+#~ msgid "Are you sure you want to delete the certificate '%s'?"
+#~ msgstr "Da li sigurno želite da obrišete uverenje „%s“?"
+
+#~ msgid "Are you sure you want to delete %d certificate?"
+#~ msgid_plural "Are you sure you want to delete %d certificates?"
+#~ msgstr[0] "Da li sigurno želite da uklonite %d uverenje?"
+#~ msgstr[1] "Da li sigurno želite da uklonite %d uverenja?"
+#~ msgstr[2] "Da li sigurno želite da uklonite %d uverenja?"
+#~ msgstr[3] "Da li sigurno želite da uklonite uverenje?"
+
+#~ msgid "Deleting"
+#~ msgstr "Brišem"
+
+#~ msgid "Create New ..."
+#~ msgstr "Napravite novi..."
+
+#~ msgid "Selected %d key"
+#~ msgid_plural "Selected %d keys"
+#~ msgstr[0] "Izabran je %d ključ"
+#~ msgstr[1] "Izabrana su %d ključa"
+#~ msgstr[2] "Izabrano je %d ključeva"
+#~ msgstr[3] "Izabran je %d ključ"
+
+#~ msgid "Importing keys"
+#~ msgstr "Uvozim ključeve"
+
+#~ msgid "Unrecognized key type, or invalid data format"
+#~ msgstr "Neprepoznata vrsta ključa, ili neispravan format podataka"
+
+#~ msgid "Importing Keys"
+#~ msgstr "Uvozim ključeve"
+
+#~ msgid "T_ypes"
+#~ msgstr "_Vrste"
+
+#~ msgid "Show type column"
+#~ msgstr "Prikažite kolonu vrste"
+
+#~ msgid "_Expiry"
+#~ msgstr "_Isticanja"
+
+#~ msgid "Show expiry column"
+#~ msgstr "Prikažite kolonu isticanja"
+
+#~ msgid "_Trust"
+#~ msgstr "P_overenje"
+
+#~ msgid "Show owner trust column"
+#~ msgstr "Prikažite kolonu poverenje vlasnika"
+
+#~ msgid "_Validity"
+#~ msgstr "Ispra_vnost"
+
+#~ msgid "Show validity column"
+#~ msgstr "Prikažite kolonu ispravnosti"
+
+#~ msgid "Other _Keys"
+#~ msgstr "Ostali _ključevi"
+
+#~ msgid "Validity"
+#~ msgstr "Ispravnost"
+
+#~ msgid "Expiration Date"
+#~ msgstr "Datum isteka"
+
+#~ msgid "_Expand All"
+#~ msgstr "_Razgranaj sve"
+
+#~ msgid "Expand all listings"
+#~ msgstr "Razgranajte sav ispis"
+
+#~ msgid "_Collapse All"
+#~ msgstr "_Sažmi sve"
+
+#~ msgid "Collapse all listings"
+#~ msgstr "Sažmite sav ispis"
+
+#~ msgid "Export public key"
+#~ msgstr "Izvezite javni ključ"
+
+#~ msgid "Exporting keys"
+#~ msgstr "Izvozim ključeve"
+
+#~ msgid "Couldn't retrieve data from key server"
+#~ msgstr "Ne mogu da preuzmem podatke sa servera ključeva"
+
+#~ msgid "Retrieving keys"
+#~ msgstr "Preuzimam ključeve"
+
+#~ msgid "%s is a private key. Are you sure you want to proceed?"
+#~ msgstr "%s je privatni ključ. Da li želite da nastavite?"
+
+#~ msgid "Couldn't delete key"
+#~ msgstr "Ne mogu da obrišem ključ"
+
+#~ msgid "_Key Description:"
+#~ msgstr "Opis _ključa:"
+
 #~ msgid "Do not run seahorse-daemon as a daemon"
 #~ msgstr "Ne pokreći Morskog konjića kao uslužni program"
 
 #~ msgid "couldn't fork process"
 #~ msgstr "ne mogu da razdelim proces"
-
-#~ msgid "couldn't create new process group"
-#~ msgstr "ne mogu da napravim novu grupu procesa"
 
 #~ msgid "Encryption Daemon (Seahorse)"
 #~ msgstr "Uslužni program za šifrovanje (Morski konjić)"
@@ -2527,9 +2887,6 @@ msgstr "Pode_šavnje"
 
 #~ msgid "Bad Signature"
 #~ msgstr "Loš potpis"
-
-#~ msgid "Couldn't verify signature."
-#~ msgstr "Ne mogu da potvrdim potpis."
 
 #~ msgid "Invalid or unrecognized signer: %s"
 #~ msgstr "Nevažeći ili nepoznat potpisnik: %s"
@@ -2721,9 +3078,6 @@ msgstr "Pode_šavnje"
 #~ msgid "Web Password"
 #~ msgstr "Lozinka za veb"
 
-#~ msgid "Network Password"
-#~ msgstr "Lozinka za mrežu"
-
 #~ msgid "Couldn't set application access."
 #~ msgstr "Ne mogu da postavim pristup aplikaciji."
 
@@ -2849,12 +3203,6 @@ msgstr "Pode_šavnje"
 #~ msgid "Symmetric Key"
 #~ msgstr "Simetrični ključ"
 
-#~ msgid "Public Key"
-#~ msgstr "Javni ključ"
-
-#~ msgid "Private Key"
-#~ msgstr "Privatni ključ"
-
 #~ msgid "Credentials"
 #~ msgstr "Akreditivi"
 
@@ -2875,9 +3223,6 @@ msgstr "Pode_šavnje"
 
 #~ msgid "Loading Keys..."
 #~ msgstr "Učitavam ključeve..."
-
-#~ msgid "Searching for keys..."
-#~ msgstr "Tražim ključeve..."
 
 #~ msgid "Uploading keys..."
 #~ msgstr "Slanje ključeva..."
@@ -2903,12 +3248,6 @@ msgstr "Pode_šavnje"
 #~ msgid "Synchronizing keys"
 #~ msgstr "Usaglašavanje ključeva"
 
-#~ msgid "Encryption Key Manager"
-#~ msgstr "Urednik ključeva za šifrovanje"
-
-#~ msgid "DSA"
-#~ msgstr "DSA"
-
 #~ msgid "Invalid"
 #~ msgstr "Nevažeće"
 
@@ -2917,9 +3256,6 @@ msgstr "Pode_šavnje"
 
 #~ msgid "Public Secure Shell Key"
 #~ msgstr "Ključ javnog osiguranog komandnog okruženja"
-
-#~ msgid "Secure Shell key"
-#~ msgstr "Ključ osiguranog komandnog okruženja"
 
 #~ msgid "Passphrase:"
 #~ msgstr "Lozinka:"
