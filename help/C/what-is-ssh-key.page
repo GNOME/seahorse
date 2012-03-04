@@ -12,14 +12,34 @@
 
   </info>
 
-  <title>What is an SSH key?</title>
+  <title>What is a Secure Shell key?</title>
 
-  <p>Short introductory text...</p>
+  <p>A <em>Secure Shell key</em>, often just called an <em>SSH key</em>, 
+  helps you create a secure connection over an unsecured network.</p>
+  
+  <p>Before <em>SSH keys</em>, computers would create connections via insecure 
+  protocols, such as <em>Telnet</em>. These protocols just used plaintext 
+  passwords to create connections between computers. These passwords could be 
+  easily intercepted.</p>
+  
+  <list>
+    <title>An SSH key actually consists of two parts:</title>
+    <item><p>A public key, which is widely available.</p></item>
+    <item><p>A private key, which is kept secret. The private key is used 
+    to unlock messages encrypted with a corresponding public key.</p></item>
+  </list>
+  
+  <p>The advantage of using an <em>SSH key</em> to create a connection between 
+  computers is that only the <em>Public key</em> needs to be sent over 
+  the network. Transmissions encrypted with a <em>Public key</em> can only be 
+  decoded by unlocking them with the corresponding <em>Private key</em> and a 
+  password. Because only the public key is sent over the network, the key's 
+  password is kept secret.</p>  
 
-  <steps>
-    <item><p>First step...</p></item>
-    <item><p>Second step...</p></item>
-    <item><p>Third step...</p></item>
-  </steps>
-
+  <p><em>SSH keys</em> are most often used in situations where data security is 
+  very important. For example, a system administrator would use an <em>SSH key
+  </em> when connecting to a remote server to perform system updates. A 
+  software developer would use an <em>SSH key</em> to submit updated software 
+  code to a remote software repository.</p>
+  
 </page>
