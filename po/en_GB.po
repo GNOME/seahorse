@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the seahorse package.
 # Gareth Owen <gowen72@yahoo.com>, David Lodge <dave@cirt.net>, 2004.
 # Philip Withnall <philip@tecnocode.co.uk>, 2009, 2010.
-# Bruce Cowan <bruce@bcowan.me.uk>, 2010, 2011.
+# Bruce Cowan <bruce@bcowan.me.uk>, 2010, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-19 13:22+0100\n"
-"PO-Revision-Date: 2011-09-19 13:22+0100\n"
+"POT-Creation-Date: 2012-03-07 16:02+0000\n"
+"PO-Revision-Date: 2012-03-07 16:08+0100\n"
 "Last-Translator: Bruce Cowan <bruce@bcowan.me.uk>\n"
 "Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
@@ -17,17 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1-beta1\n"
+"X-Generator: Virtaal 0.7.1\n"
+"X-Project-Style: gnome\n"
 
 #: ../gkr/seahorse-add-keyring.xml.h:1
 msgid "Add Password Keyring"
 msgstr "Add Password Keyring"
 
 #: ../gkr/seahorse-add-keyring.xml.h:2
-msgid "New Keyring Name:"
-msgstr "New Keyring Name:"
-
-#: ../gkr/seahorse-add-keyring.xml.h:3
 msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
@@ -35,13 +32,65 @@ msgstr ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
 
+#: ../gkr/seahorse-add-keyring.xml.h:3
+msgid "New Keyring Name:"
+msgstr "New Keyring Name:"
+
 #: ../gkr/seahorse-add-keyring.xml.h:4
 #: ../libseahorse/seahorse-add-keyserver.xml.h:5
 #: ../ssh/seahorse-ssh-upload.xml.h:3
 msgid "The host name or address of the server."
 msgstr "The host name or address of the server."
 
-#: ../gkr/seahorse-gkr-add-item.c:61 ../gkr/seahorse-gkr-add-keyring.c:72
+#: ../gkr/seahorse-gkr-actions.c:81
+msgid "New password keyring"
+msgstr "New password keyring"
+
+#: ../gkr/seahorse-gkr-actions.c:82 ../gkr/seahorse-gkr-actions.c:89
+msgid "Used to store application and network passwords"
+msgstr "Used to store application and network passwords"
+
+#: ../gkr/seahorse-gkr-actions.c:83
+msgid "New password..."
+msgstr "New password…"
+
+#: ../gkr/seahorse-gkr-actions.c:84 ../gkr/seahorse-gkr-actions.c:91
+msgid "Safely store a password or secret."
+msgstr "Safely store a password or secret."
+
+#: ../gkr/seahorse-gkr-actions.c:88
+msgid "Password Keyring"
+msgstr "Password Keyring"
+
+#: ../gkr/seahorse-gkr-actions.c:90
+msgid "Stored Password"
+msgstr "Stored Password"
+
+#: ../gkr/seahorse-gkr-actions.c:151
+msgid "Couldn't set default keyring"
+msgstr "Couldn't set default keyring"
+
+#: ../gkr/seahorse-gkr-actions.c:183
+msgid "Couldn't change keyring password"
+msgstr "Couldn't change keyring password"
+
+#: ../gkr/seahorse-gkr-actions.c:209
+msgid "_Set as default"
+msgstr "_Set as default"
+
+#: ../gkr/seahorse-gkr-actions.c:210
+msgid "Applications usually store new passwords in the default keyring."
+msgstr "Applications usually store new passwords in the default keyring."
+
+#: ../gkr/seahorse-gkr-actions.c:211
+msgid "Change _Password"
+msgstr "Change _Password"
+
+#: ../gkr/seahorse-gkr-actions.c:212
+msgid "Change the unlock password of the password storage keyring"
+msgstr "Change the unlock password of the password storage keyring"
+
+#: ../gkr/seahorse-gkr-add-item.c:60 ../gkr/seahorse-gkr-add-keyring.c:71
 msgid "Couldn't add keyring"
 msgstr "Couldn't add keyring"
 
@@ -50,287 +99,256 @@ msgid "Add Password"
 msgstr "Add Password"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:2
-#: ../gkr/seahorse-gkr-item-properties.xml.h:12 ../pgp/seahorse-revoke.xml.h:5
+#: ../gkr/seahorse-gkr-item-properties.xml.h:2 ../pgp/seahorse-revoke.xml.h:3
+#: ../ssh/seahorse-ssh-generate.xml.h:5
 msgid "_Description:"
 msgstr "_Description:"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:3
-msgid "_Keyring:"
-msgstr "_Keyring:"
-
-#: ../gkr/seahorse-gkr-add-item.xml.h:4
 msgid "_Password:"
 msgstr "_Password:"
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:5
+#: ../gkr/seahorse-gkr-add-item.xml.h:4
 msgid "_Show Password"
 msgstr "_Show Password"
 
-#: ../gkr/seahorse-gkr-item-commands.c:78
-msgid "Couldn't delete item"
-msgstr "Couldn't delete item"
+#: ../gkr/seahorse-gkr-add-item.xml.h:5
+msgid "_Keyring:"
+msgstr "_Keyring:"
 
-#: ../gkr/seahorse-gkr-item-commands.c:100
+#: ../gkr/seahorse-gkr-backend.c:99
+msgid "Passwords"
+msgstr "Passwords"
+
+#: ../gkr/seahorse-gkr-backend.c:102
+msgid "Stored personal passwords, credentials and secrets"
+msgstr "Stored personal passwords, credentials and secrets"
+
+#. Translators: This should be the same as the string in empathy
+#: ../gkr/seahorse-gkr-item.c:317
+msgid "IM account password for "
+msgstr "IM account password for "
+
+#: ../gkr/seahorse-gkr-item.c:383
+msgid "Password or secret"
+msgstr "Password or secret"
+
+#: ../gkr/seahorse-gkr-item.c:384
+msgid "Network password"
+msgstr "Network password"
+
+#: ../gkr/seahorse-gkr-item.c:385
+msgid "Stored note"
+msgstr "Stored note"
+
+#: ../gkr/seahorse-gkr-item.c:386
+msgid "Keyring password"
+msgstr "Keyring password"
+
+#: ../gkr/seahorse-gkr-item.c:387
+msgid "Encryption key password"
+msgstr "Encryption key password"
+
+#: ../gkr/seahorse-gkr-item.c:388
+msgid "Key storage password"
+msgstr "Key storage password"
+
+#: ../gkr/seahorse-gkr-item.c:389
+msgid "Google Chrome password"
+msgstr "Google Chrome password"
+
+#: ../gkr/seahorse-gkr-item.c:390
+msgid "Gnome Online Accounts password"
+msgstr "Gnome Online Accounts password"
+
+#: ../gkr/seahorse-gkr-item.c:391
+msgid "Telepathy password"
+msgstr "Telepathy password"
+
+#: ../gkr/seahorse-gkr-item.c:392
+msgid "Instant messaging password"
+msgstr "Instant messaging password"
+
+#: ../gkr/seahorse-gkr-item.c:393
+msgid "Network Manager secret"
+msgstr "Network Manager secret"
+
+#: ../gkr/seahorse-gkr-item-deleter.c:83
 #, c-format
 msgid "Are you sure you want to delete the password '%s'?"
 msgstr "Are you sure you want to delete the password '%s'?"
 
-#: ../gkr/seahorse-gkr-item-commands.c:103
+#: ../gkr/seahorse-gkr-item-deleter.c:86
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "Are you sure you want to delete %d password?"
 msgstr[1] "Are you sure you want to delete %d passwords?"
 
-#: ../gkr/seahorse-gkr-item-commands.c:114
-msgid "Deleting item"
-msgid_plural "Deleting items"
-msgstr[0] "Deleting item"
-msgstr[1] "Deleting items"
-
-#: ../gkr/seahorse-gkr-item-properties.c:70
+#: ../gkr/seahorse-gkr-item-properties.c:69
 msgid "Access a network share or resource"
 msgstr "Access a network share or resource"
 
-#: ../gkr/seahorse-gkr-item-properties.c:73
+#: ../gkr/seahorse-gkr-item-properties.c:72
 msgid "Access a website"
 msgstr "Access a website"
 
-#: ../gkr/seahorse-gkr-item-properties.c:76
+#: ../gkr/seahorse-gkr-item-properties.c:75
 msgid "Unlocks a PGP key"
 msgstr "Unlocks a PGP key"
 
-#: ../gkr/seahorse-gkr-item-properties.c:79
+#: ../gkr/seahorse-gkr-item-properties.c:78
 msgid "Unlocks a Secure Shell key"
 msgstr "Unlocks a Secure Shell key"
 
-#: ../gkr/seahorse-gkr-item-properties.c:82
+#: ../gkr/seahorse-gkr-item-properties.c:81
 msgid "Saved password or login"
 msgstr "Saved password or login"
 
-#: ../gkr/seahorse-gkr-item-properties.c:106
+#: ../gkr/seahorse-gkr-item-properties.c:105
 msgid "Network Credentials"
 msgstr "Network Credentials"
 
-#: ../gkr/seahorse-gkr-item-properties.c:111
+#: ../gkr/seahorse-gkr-item-properties.c:110
 msgid "Password"
 msgstr "Password"
 
-#: ../gkr/seahorse-gkr-item-properties.c:211
+#: ../gkr/seahorse-gkr-item-properties.c:210
 msgid "Couldn't change password."
 msgstr "Couldn't change password."
 
-#: ../gkr/seahorse-gkr-item-properties.c:256
-#: ../gkr/seahorse-gkr-item-properties.c:377
+#: ../gkr/seahorse-gkr-item-properties.c:255
+#: ../gkr/seahorse-gkr-item-properties.c:376
 msgid "Updating password"
 msgstr "Updating password"
 
-#: ../gkr/seahorse-gkr-item-properties.c:337
+#: ../gkr/seahorse-gkr-item-properties.c:336
 msgid "Couldn't set description."
 msgstr "Couldn't set description."
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:1
-msgid "<b>Password:</b>"
-msgstr "<b>Password:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
-#: ../ssh/seahorse-ssh-key-properties.xml.h:7
-msgid "<b>Technical Details:</b>"
-msgstr "<b>Technical Details:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:3
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:22
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
-#: ../ssh/seahorse-ssh-key-properties.xml.h:15
-msgid "Details"
-msgstr "Details"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:4
-#: ../pgp/seahorse-pgp-subkey.c:366
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
-msgid "Key"
-msgstr "Key"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:5
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
-#: ../ssh/seahorse-ssh-key-properties.xml.h:18
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
+#: ../ssh/seahorse-ssh-key-properties.xml.h:1
 msgid "Key Properties"
 msgstr "Key Properties"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:6
-msgid "Login:"
-msgstr "Login:"
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-item-properties.xml.h:4
+msgid "Use:"
+msgstr "Use:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:7
+#: ../gkr/seahorse-gkr-item-properties.xml.h:5
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:36
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
+msgid "Type:"
+msgstr "Type:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:6
 msgid "Server:"
 msgstr "Server:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:7
+msgid "Login:"
+msgstr "Login:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:8
 msgid "Show pass_word"
 msgstr "Show pass_word"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:9
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-msgid "Type:"
-msgstr "Type:"
+msgid "<b>Password:</b>"
+msgstr "<b>Password:</b>"
 
-#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-item-properties.xml.h:10
+#: ../pgp/seahorse-pgp-subkey.c:366
+#: ../ssh/seahorse-ssh-key-properties.xml.h:14
+msgid "Key"
+msgstr "Key"
+
 #: ../gkr/seahorse-gkr-item-properties.xml.h:11
-msgid "Use:"
-msgstr "Use:"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
+#: ../ssh/seahorse-ssh-key-properties.xml.h:19
+msgid "<b>Technical Details:</b>"
+msgstr "<b>Technical Details:</b>"
 
-#: ../gkr/seahorse-gkr-keyring.c:120
-#, c-format
-msgid "Passwords: %s"
-msgstr "Passwords: %s"
+#: ../gkr/seahorse-gkr-item-properties.xml.h:12
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+#: ../ssh/seahorse-ssh-key-properties.xml.h:21
+msgid "Details"
+msgstr "Details"
 
-#: ../gkr/seahorse-gkr-keyring.c:121
-#, c-format
-msgid "<b>Passwords:</b> %s"
-msgstr "<b>Passwords:</b> %s"
+#: ../gkr/seahorse-gkr-keyring.c:147
+msgid "Login keyring"
+msgstr "Login keyring"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:113
-msgid "Password Keyring"
-msgstr "Password Keyring"
+#: ../gkr/seahorse-gkr-keyring.c:676
+msgid "A keyring that is automatically unlocked on login"
+msgstr "A keyring that is automatically unlocked on login"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:114
-msgid "Used to store application and network passwords"
-msgstr "Used to store application and network passwords"
+#: ../gkr/seahorse-gkr-keyring.c:677
+msgid "A keyring used to store passwords"
+msgstr "A keyring used to store passwords"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:115
-msgid "Stored Password"
-msgstr "Stored Password"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:116
-msgid "Safely store a password or secret."
-msgstr "Safely store a password or secret."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:128
-msgid "Couldn't unlock keyring"
-msgstr "Couldn't unlock keyring"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:165
-msgid "Couldn't lock keyring"
-msgstr "Couldn't lock keyring"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:202
-msgid "Couldn't set default keyring"
-msgstr "Couldn't set default keyring"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:239
-msgid "Couldn't change keyring password"
-msgstr "Couldn't change keyring password."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:268
-msgid "_Lock"
-msgstr "_Lock"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:269
-msgid ""
-"Lock the password storage keyring so a master password is required to unlock "
-"it."
-msgstr ""
-"Lock the password storage keyring so a master password is required to unlock "
-"it."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:270
-msgid "_Unlock"
-msgstr "_Unlock"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:271
-msgid ""
-"Unlock the password storage keyring with a master password so it is "
-"available for use."
-msgstr ""
-"Unlock the password storage keyring with a master password so it is "
-"available for use."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:272
-msgid "_Set as default"
-msgstr "_Set as default"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:273
-msgid "Applications usually store new passwords in the default keyring."
-msgstr "Applications usually store new passwords in the default keyring."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:274
-msgid "Change _Password"
-msgstr "Change _Password"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:275
-msgid "Change the unlock password of the password storage keyring"
-msgstr "Change the unlock password of the password storage keyring"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:340
-msgid "Couldn't delete keyring"
-msgstr "Couldn't delete keyring"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:358
+#: ../gkr/seahorse-gkr-keyring-deleter.c:80
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "Are you sure you want to delete the password keyring '%s'?"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:368
-msgid "Deleting keyring"
-msgid_plural "Deleting keyrings"
-msgstr[0] "Deleting keyring"
-msgstr[1] "Deleting keyrings"
+#: ../gkr/seahorse-gkr-keyring-deleter.c:83
+msgid "I understand that all items will be permanently deleted."
+msgstr "I understand that all items will be permanently deleted."
 
-#. -----------------------------------------------------------------------------
-#. * PUBLIC
-#.
-#. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-keyring.xml.h:2
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
-msgid "Created:"
-msgstr "Created:"
-
-#: ../gkr/seahorse-gkr-keyring.xml.h:3
-msgid "Keyring"
-msgstr "Keyring"
-
-#: ../gkr/seahorse-gkr-keyring.xml.h:4
+#: ../gkr/seahorse-gkr-keyring.xml.h:1
 msgid "Keyring Properties"
 msgstr "Keyring Properties"
 
-#: ../gkr/seahorse-gkr-keyring.xml.h:5
-msgid "_Name:"
-msgstr "_Name:"
+#: ../gkr/seahorse-gkr-keyring.xml.h:2
+msgid "Name:"
+msgstr "Name:"
 
-#: ../gkr/seahorse-gkr-operation.c:52 ../pgp/seahorse-gpgme.c:73
-#: ../pgp/seahorse-hkp-source.c:662 ../ssh/seahorse-ssh-operation.c:193
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-keyring.xml.h:4
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+msgid "Created:"
+msgstr "Created:"
+
+#: ../gkr/seahorse-gkr-keyring.xml.h:5
+msgid "Keyring"
+msgstr "Keyring"
+
+#: ../gkr/seahorse-gkr-operation.c:54 ../pgp/seahorse-gpgme.c:73
+#: ../pgp/seahorse-hkp-source.c:585 ../ssh/seahorse-ssh-operation.c:194
 msgid "The operation was cancelled"
 msgstr "The operation was cancelled"
 
-#: ../gkr/seahorse-gkr-operation.c:57
+#: ../gkr/seahorse-gkr-operation.c:59
 msgid "Access to the key ring was denied"
 msgstr "Access to the key ring was denied"
 
-#: ../gkr/seahorse-gkr-operation.c:60
+#: ../gkr/seahorse-gkr-operation.c:62
 msgid "The gnome-keyring daemon is not running"
 msgstr "The gnome-keyring daemon is not running"
 
-#: ../gkr/seahorse-gkr-operation.c:63
+#: ../gkr/seahorse-gkr-operation.c:65
 msgid "The key ring has already been unlocked"
 msgstr "The key ring has already been unlocked"
 
-#: ../gkr/seahorse-gkr-operation.c:66
+#: ../gkr/seahorse-gkr-operation.c:68
 msgid "No such key ring exists"
 msgstr "No such key ring exists"
 
-#: ../gkr/seahorse-gkr-operation.c:69
+#: ../gkr/seahorse-gkr-operation.c:71
 msgid "Couldn't communicate with key ring daemon"
 msgstr "Couldn't communicate with key ring daemon"
 
-#: ../gkr/seahorse-gkr-operation.c:72
+#: ../gkr/seahorse-gkr-operation.c:74
 msgid "The item already exists"
 msgstr "The item already exists"
 
-#: ../gkr/seahorse-gkr-operation.c:78
+#: ../gkr/seahorse-gkr-operation.c:80
 msgid "Internal error accessing gnome-keyring"
 msgstr "Internal error accessing gnome-keyring"
 
@@ -590,47 +608,155 @@ msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:1
-msgid ":"
-msgstr ":"
+msgid "initial temporary item"
+msgstr "initial temporary item"
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:2
 msgid "Add Key Server"
 msgstr "Add Key Server"
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:3
-msgid "Host:"
-msgstr "Host:"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:4
 msgid "Key Server Type:"
 msgstr "Key Server Type:"
 
+#: ../libseahorse/seahorse-add-keyserver.xml.h:4
+msgid "Host:"
+msgstr "Host:"
+
 #: ../libseahorse/seahorse-add-keyserver.xml.h:6
+msgid ":"
+msgstr ":"
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:7
 msgid "The port to access the server on."
 msgstr "The port to access the server on."
 
-#: ../libseahorse/seahorse-add-keyserver.xml.h:7
-msgid "initial temporary item"
-msgstr "initial temporary item"
+#: ../libseahorse/seahorse-catalog.c:88
+msgid "Contributions:"
+msgstr "Contributions:"
 
-#: ../libseahorse/seahorse-passphrase.c:180
-msgid "Passphrase"
-msgstr "Passphrase"
+#: ../libseahorse/seahorse-catalog.c:112 ../src/seahorse.desktop.in.in.h:1
+#: ../src/seahorse-key-manager.c:668 ../src/seahorse-main.c:68
+msgid "Passwords and Keys"
+msgstr "Passwords and Keys"
 
-#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
+#: ../libseahorse/seahorse-catalog.c:114
+msgid "translator-credits"
+msgstr ""
+"Abigail Brady <morwen@evilmagi_c.org>\n"
+"Bastien Nocera <hadess@hadess.net>\n"
+"Gareth Owen <gowen72@yahoo.com>\n"
+"David Lodge <dave@cirt.net>\n"
+"Philip Withnall <philip@tecnocode.co.uk>\n"
+"Bruce Cowan <bruce@bcowan.me.uk>"
+
+#: ../libseahorse/seahorse-catalog.c:117
+msgid "Seahorse Project Homepage"
+msgstr "Seahorse Project Homepage"
+
+#: ../libseahorse/seahorse-catalog.c:191
+msgid "Cannot delete"
+msgstr "Cannot delete"
+
+#: ../libseahorse/seahorse-catalog.c:239
+#: ../libseahorse/seahorse-key-manager-store.c:442
+msgid "Couldn't export keys"
+msgstr "Couldn't export keys"
+
+#: ../libseahorse/seahorse-catalog.c:268
+msgid "Couldn't export data"
+msgstr "Couldn't export data"
+
+#. Top menu items
+#: ../libseahorse/seahorse-catalog.c:277
+msgid "_File"
+msgstr "_File"
+
+#: ../libseahorse/seahorse-catalog.c:278
+msgid "E_xport..."
+msgstr "E_xport…"
+
+#: ../libseahorse/seahorse-catalog.c:279
+msgid "Export to a file"
+msgstr "Export to a file"
+
+#: ../libseahorse/seahorse-catalog.c:280
+msgid "_Edit"
+msgstr "_Edit"
+
+#: ../libseahorse/seahorse-catalog.c:283
+msgid "Copy to the clipboard"
+msgstr "Copy to the clipboard"
+
+#: ../libseahorse/seahorse-catalog.c:284
+#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:957
+msgid "_Delete"
+msgstr "_Delete"
+
+#: ../libseahorse/seahorse-catalog.c:285
+msgid "Delete selected items"
+msgstr "Delete selected items"
+
+#: ../libseahorse/seahorse-catalog.c:287
+msgid "Show the properties of this item"
+msgstr "Show the properties of this item"
+
+#: ../libseahorse/seahorse-catalog.c:289
+msgid "Show the properties of this keyring"
+msgstr "Show the properties of this keyring"
+
+#: ../libseahorse/seahorse-catalog.c:290
+msgid "Prefere_nces"
+msgstr "Prefere_nces"
+
+#: ../libseahorse/seahorse-catalog.c:291
+msgid "Change preferences for this program"
+msgstr "Change preferences for this program"
+
+#: ../libseahorse/seahorse-catalog.c:292
+msgid "_View"
+msgstr "_View"
+
+#: ../libseahorse/seahorse-catalog.c:293
+msgid "_Help"
+msgstr "_Help"
+
+#: ../libseahorse/seahorse-catalog.c:295
+msgid "About this program"
+msgstr "About this program"
+
+#: ../libseahorse/seahorse-catalog.c:296
+msgid "_Contents"
+msgstr "_Contents"
+
+#: ../libseahorse/seahorse-catalog.c:297
+msgid "Show Seahorse help"
+msgstr "Show Seahorse help"
+
+#: ../libseahorse/seahorse-exportable.c:407
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
+msgid "Export"
+msgstr "Export"
+
+#: ../libseahorse/seahorse-interaction.c:100
+#, c-format
+msgid "Enter PIN or password for: %s"
+msgstr "Enter PIN or password for: %s"
+
+#: ../libseahorse/seahorse-passphrase.c:182 ../ssh/seahorse-ssh-askpass.c:99
 msgid "Password:"
 msgstr "Password:"
 
 #. The second and main entry
-#: ../libseahorse/seahorse-passphrase.c:246
+#: ../libseahorse/seahorse-passphrase.c:244
 msgid "Confirm:"
 msgstr "Confirm:"
 
-#: ../libseahorse/seahorse-prefs.c:68
+#: ../libseahorse/seahorse-prefs.c:66
 msgid "Not a valid Key Server address."
 msgstr "Not a valid Key Server address."
 
-#: ../libseahorse/seahorse-prefs.c:69
+#: ../libseahorse/seahorse-prefs.c:67
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
@@ -638,220 +764,165 @@ msgstr ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 
-#: ../libseahorse/seahorse-prefs.c:183
+#: ../libseahorse/seahorse-prefs.c:180
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:348
+#: ../libseahorse/seahorse-prefs.c:350
 msgid "Custom"
 msgstr "Custom"
 
-#: ../libseahorse/seahorse-prefs.c:406
+#: ../libseahorse/seahorse-prefs.c:403
 msgid "None: Don't publish keys"
 msgstr "None: Don't publish keys"
 
 #: ../libseahorse/seahorse-prefs.xml.h:1
-msgid "Automatically retrieve keys from _key servers"
-msgstr "Automatically retrieve keys from _key servers"
-
-#: ../libseahorse/seahorse-prefs.xml.h:2
-msgid "Automatically synchronize _modified keys with key servers"
-msgstr "Automatically synchronise _modified keys with key servers"
-
-#: ../libseahorse/seahorse-prefs.xml.h:3
-msgid "Key Servers"
-msgstr "Key Servers"
-
-#: ../libseahorse/seahorse-prefs.xml.h:4
 msgid "Preferences"
 msgstr "Preferences"
 
-#: ../libseahorse/seahorse-prefs.xml.h:5
+#: ../libseahorse/seahorse-prefs.xml.h:2
 msgid "_Find keys via:"
 msgstr "_Find keys via:"
 
-#: ../libseahorse/seahorse-prefs.xml.h:6
+#: ../libseahorse/seahorse-prefs.xml.h:3
 msgid "_Publish keys to:"
 msgstr "_Publish keys to:"
 
-#: ../libseahorse/seahorse-transfer.c:178
-msgid "Retrieving data"
-msgstr "Retrieving data"
+#: ../libseahorse/seahorse-prefs.xml.h:4
+msgid "Automatically retrieve keys from _key servers"
+msgstr "Automatically retrieve keys from _key servers"
 
-#: ../libseahorse/seahorse-transfer.c:178
-msgid "Exporting data"
-msgstr "Exporting data"
+#: ../libseahorse/seahorse-prefs.xml.h:5
+msgid "Automatically synchronize _modified keys with key servers"
+msgstr "Automatically synchronise _modified keys with key servers"
 
-#: ../libseahorse/seahorse-transfer.c:182
-msgid "Importing data"
-msgstr "Importing data"
+#: ../libseahorse/seahorse-prefs.xml.h:6
+msgid "Key Servers"
+msgstr "Key Servers"
 
-#: ../libseahorse/seahorse-transfer.c:182
-msgid "Sending data"
-msgstr "Sending data"
-
-#: ../libseahorse/seahorse-unknown.c:59
-msgid "Unavailable"
-msgstr "Unavailable"
-
-#: ../libseahorse/seahorse-util.c:259
+#: ../libseahorse/seahorse-util.c:209
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:444
-msgid "Key Data"
-msgstr "Key Data"
-
-#: ../libseahorse/seahorse-util.c:446
-msgid "Multiple Keys"
-msgstr "Multiple Keys"
-
-#. Filter for PGP keys. We also include *.asc, as in many
-#. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:734
-msgid "All key files"
-msgstr "All key files"
-
-#: ../libseahorse/seahorse-util.c:745 ../libseahorse/seahorse-util.c:793
-#: ../pgp/seahorse-gpgme-photos.c:242
-msgid "All files"
-msgstr "All files"
-
-#: ../libseahorse/seahorse-util.c:786
-msgid "Archive files"
-msgstr "Archive files"
-
-#: ../libseahorse/seahorse-util.c:856
-msgid ""
-"<b>A file already exists with this name.</b>\n"
-"\n"
-"Do you want to replace it with a new file?"
-msgstr ""
-"<b>A file already exists with this name.</b>\n"
-"\n"
-"Do you want to replace it with a new file?"
-
-#: ../libseahorse/seahorse-util.c:859
-msgid "_Replace"
-msgstr "_Replace"
-
 #: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
-#: ../pgp/seahorse-pgp-key-properties.c:1273
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+#: ../pgp/seahorse-pgp-key-properties.c:1248
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
+#: ../pkcs11/seahorse-token.c:576
 msgid "Unknown"
 msgstr "Unknown"
 
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1279
+#: ../pgp/seahorse-pgp-key-properties.c:1254
 msgctxt "Validity"
 msgid "Never"
 msgstr "Never"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1286
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
+#: ../pgp/seahorse-pgp-key-properties.c:1261
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
 msgid "Marginal"
 msgstr "Marginal"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1292
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
+#: ../pgp/seahorse-pgp-key-properties.c:1267
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
 msgid "Full"
 msgstr "Full"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1298
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
+#: ../pgp/seahorse-pgp-key-properties.c:1273
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
 msgid "Ultimate"
 msgstr "Ultimate"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1491
+#: ../pgp/seahorse-pgp-key-properties.c:1463
 msgid "Disabled"
 msgstr "Disabled"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1487
+#: ../pgp/seahorse-pgp-key-properties.c:1459
 msgid "Revoked"
 msgstr "Revoked"
 
-#: ../libseahorse/seahorse-widget.c:461
+#: ../libseahorse/seahorse-widget.c:473
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Could not display help: %s"
 
 #: ../pgp/seahorse-add-subkey.xml.h:1
-msgid "Expiration Date:"
-msgstr "Expiration Date:"
+msgid "Never E_xpires"
+msgstr "Never E_xpires"
 
 #: ../pgp/seahorse-add-subkey.xml.h:2
-msgid "Generate a new subkey"
-msgstr "Generate a new subkey"
-
-#: ../pgp/seahorse-add-subkey.xml.h:3
 msgid "If key never expires"
 msgstr "If key never expires"
+
+#: ../pgp/seahorse-add-subkey.xml.h:3
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:4
+msgid "Key _Type:"
+msgstr "Key _Type:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:4
 msgid "Key _Length:"
 msgstr "Key _Length:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:5
-msgid "Key _Type:"
-msgstr "Key _Type:"
+msgid "Expiration Date:"
+msgstr "Expiration Date:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:6
 msgid "Length of Key"
 msgstr "Length of Key"
 
 #: ../pgp/seahorse-add-subkey.xml.h:7
-msgid "Never E_xpires"
-msgstr "Never E_xpires"
+msgid "Generate a new subkey"
+msgstr "Generate a new subkey"
 
 #: ../pgp/seahorse-add-uid.xml.h:1
 msgid "Add User ID"
 msgstr "Add User ID"
 
 #: ../pgp/seahorse-add-uid.xml.h:2
-msgid "Create the new user ID"
-msgstr "Create the new user ID"
-
-#: ../pgp/seahorse-add-uid.xml.h:3 ../pgp/seahorse-pgp-generate.xml.h:7
-msgid "Full _Name:"
-msgstr "Full _Name:"
-
-#: ../pgp/seahorse-add-uid.xml.h:4
-msgid "Key Co_mment:"
-msgstr "Key Co_mment:"
-
-#: ../pgp/seahorse-add-uid.xml.h:5
 msgid "Must be at least 5 characters long"
 msgstr "Must be at least 5 characters long"
 
-#: ../pgp/seahorse-add-uid.xml.h:6
-msgid "Optional comment describing key"
-msgstr "Optional comment describing key"
-
-#: ../pgp/seahorse-add-uid.xml.h:7
+#: ../pgp/seahorse-add-uid.xml.h:3
 msgid "Optional email address"
 msgstr "Optional e-mail address"
 
-#: ../pgp/seahorse-add-uid.xml.h:8 ../pgp/seahorse-pgp-generate.xml.h:13
+#: ../pgp/seahorse-add-uid.xml.h:4
+msgid "Optional comment describing key"
+msgstr "Optional comment describing key"
+
+#: ../pgp/seahorse-add-uid.xml.h:5 ../pgp/seahorse-pgp-generate.xml.h:5
+msgid "Full _Name:"
+msgstr "Full _Name:"
+
+#: ../pgp/seahorse-add-uid.xml.h:6 ../pgp/seahorse-pgp-generate.xml.h:6
 msgid "_Email Address:"
 msgstr "_E-mail Address:"
 
-#: ../pgp/seahorse-expires.xml.h:1
-msgid "C_hange"
-msgstr "C_hange"
+#: ../pgp/seahorse-add-uid.xml.h:7
+msgid "Key Co_mment:"
+msgstr "Key Co_mment:"
 
-#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:4
+#: ../pgp/seahorse-add-uid.xml.h:8
+msgid "Create the new user ID"
+msgstr "Create the new user ID"
+
+#: ../pgp/seahorse-expires.xml.h:1
+msgid "_Never expires"
+msgstr "_Never expires"
+
+#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:5
 msgid "Revoke key"
 msgstr "Revoke key"
 
 #: ../pgp/seahorse-expires.xml.h:3
-msgid "_Never expires"
-msgstr "_Never expires"
+msgid "C_hange"
+msgstr "C_hange"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:162
 msgid "Couldn't add subkey"
@@ -862,7 +933,7 @@ msgstr "Couldn't add subkey"
 msgid "Add subkey to %s"
 msgstr "Add subkey to %s"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:197 ../pgp/seahorse-gpgme-generate.c:130
+#: ../pgp/seahorse-gpgme-add-subkey.c:197 ../pgp/seahorse-gpgme-generate.c:134
 msgid "DSA (sign only)"
 msgstr "DSA (sign only)"
 
@@ -870,7 +941,7 @@ msgstr "DSA (sign only)"
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (encrypt only)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:211 ../pgp/seahorse-gpgme-generate.c:131
+#: ../pgp/seahorse-gpgme-add-subkey.c:211 ../pgp/seahorse-gpgme-generate.c:135
 msgid "RSA (sign only)"
 msgstr "RSA (sign only)"
 
@@ -908,46 +979,130 @@ msgstr "Couldn't change expiry date"
 msgid "Expiry: %s"
 msgstr "Expiry: %s"
 
-#: ../pgp/seahorse-gpgme-generate.c:91
+#: ../pgp/seahorse-gpgme-exporter.c:84
+msgid "Multiple Keys"
+msgstr "Multiple Keys"
+
+#: ../pgp/seahorse-gpgme-exporter.c:88
+msgid "Key Data"
+msgstr "Key Data"
+
+#: ../pgp/seahorse-gpgme-exporter.c:114
+msgid "Armored PGP keys"
+msgstr "Armoured PGP keys"
+
+#: ../pgp/seahorse-gpgme-exporter.c:118
+msgid "PGP keys"
+msgstr "PGP keys"
+
+#: ../pgp/seahorse-gpgme-generate.c:95
 msgid "PGP Key"
 msgstr "PGP Key"
 
-#: ../pgp/seahorse-gpgme-generate.c:92
+#: ../pgp/seahorse-gpgme-generate.c:96
 msgid "Used to encrypt email and files"
 msgstr "Used to encrypt e-mail and files"
 
-#: ../pgp/seahorse-gpgme-generate.c:128
+#: ../pgp/seahorse-gpgme-generate.c:132
+#: ../pkcs11/seahorse-pkcs11-generate.c:92
 msgid "RSA"
 msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:129
+#: ../pgp/seahorse-gpgme-generate.c:133
 msgid "DSA Elgamal"
 msgstr "DSA Elgamal"
 
-#: ../pgp/seahorse-gpgme-generate.c:178
+#: ../pgp/seahorse-gpgme-generate.c:182
 msgid "Couldn't generate PGP key"
 msgstr "Couldn't generate PGP key"
 
-#: ../pgp/seahorse-gpgme-generate.c:209
+#: ../pgp/seahorse-gpgme-generate.c:213
 msgid "Passphrase for New PGP Key"
 msgstr "Passphrase for New PGP Key"
 
-#: ../pgp/seahorse-gpgme-generate.c:210
+#: ../pgp/seahorse-gpgme-generate.c:214
 msgid "Enter the passphrase for your new key twice."
 msgstr "Enter the passphrase for your new key twice."
 
-#: ../pgp/seahorse-gpgme-generate.c:219
+#: ../pgp/seahorse-gpgme-generate.c:223
+#: ../pkcs11/seahorse-pkcs11-generate.c:460
 msgid "Generating key"
 msgstr "Generating key"
 
-#: ../pgp/seahorse-gpgme-key-op.c:370
+#: ../pgp/seahorse-gpgme-key-deleter.c:78
+#: ../pgp/seahorse-gpgme-secret-deleter.c:77
+#: ../pkcs11/seahorse-pkcs11-deleter.c:66
+#: ../pkcs11/seahorse-pkcs11-key-deleter.c:81
+#, c-format
+msgid "Are you sure you want to permanently delete %s?"
+msgstr "Are you sure you want to permanently delete %s?"
+
+#: ../pgp/seahorse-gpgme-key-deleter.c:81
+#, c-format
+msgid "Are you sure you want to permanently delete %d keys?"
+msgid_plural "Are you sure you want to permanently delete %d keys?"
+msgstr[0] "Are you sure you want to permanently delete %d keys?"
+msgstr[1] "Are you sure you want to permanently delete %d keys?"
+
+#: ../pgp/seahorse-gpgme-key-op.c:381
 msgid "Wrong password"
 msgstr "Wrong password"
 
-#: ../pgp/seahorse-gpgme-key-op.c:370
+#: ../pgp/seahorse-gpgme-key-op.c:381
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 "This was the third time you entered a wrong password. Please try again."
+
+#: ../pgp/seahorse-gpgme-keyring.c:90
+#, c-format
+msgid "Wrong passphrase."
+msgstr "Wrong passphrase."
+
+#: ../pgp/seahorse-gpgme-keyring.c:94
+#, c-format
+msgid "Enter new passphrase for '%s'"
+msgstr "Enter new passphrase for '%s'"
+
+#: ../pgp/seahorse-gpgme-keyring.c:96
+#, c-format
+msgid "Enter passphrase for '%s'"
+msgstr "Enter passphrase for '%s'"
+
+#: ../pgp/seahorse-gpgme-keyring.c:99
+#: ../src/seahorse-change-passphrase.xml.h:2
+msgid "Enter new passphrase"
+msgstr "Enter new passphrase"
+
+#: ../pgp/seahorse-gpgme-keyring.c:101
+msgid "Enter passphrase"
+msgstr "Enter passphrase"
+
+#: ../pgp/seahorse-gpgme-keyring.c:106
+msgid "Passphrase"
+msgstr "Passphrase"
+
+#: ../pgp/seahorse-gpgme-keyring.c:307
+#, c-format
+msgid "Loaded %d key"
+msgid_plural "Loaded %d keys"
+msgstr[0] "Loaded %d key"
+msgstr[1] "Loaded %d keys"
+
+#: ../pgp/seahorse-gpgme-keyring.c:654
+msgid ""
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
+msgstr ""
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
+
+#: ../pgp/seahorse-gpgme-keyring.c:814
+msgid "GnuPG keys"
+msgstr "GnuPG keys"
+
+#: ../pgp/seahorse-gpgme-keyring.c:817
+msgid "GnuPG: default keyring directory"
+msgstr "GnuPG: default keyring directory"
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -983,27 +1138,31 @@ msgstr "All image files"
 msgid "All JPEG files"
 msgstr "All JPEG files"
 
-#: ../pgp/seahorse-gpgme-photos.c:261
+#: ../pgp/seahorse-gpgme-photos.c:242 ../src/seahorse-key-manager.c:301
+msgid "All files"
+msgstr "All files"
+
+#: ../pgp/seahorse-gpgme-photos.c:263
 msgid "Choose Photo to Add to Key"
 msgstr "Choose Photo to Add to Key"
 
-#: ../pgp/seahorse-gpgme-photos.c:278
+#: ../pgp/seahorse-gpgme-photos.c:285
 msgid "Couldn't prepare photo"
 msgstr "Couldn't prepare photo"
 
-#: ../pgp/seahorse-gpgme-photos.c:288 ../pgp/seahorse-gpgme-photos.c:292
+#: ../pgp/seahorse-gpgme-photos.c:295 ../pgp/seahorse-gpgme-photos.c:298
 msgid "Couldn't add photo"
 msgstr "Couldn't add photo"
 
-#: ../pgp/seahorse-gpgme-photos.c:289
+#: ../pgp/seahorse-gpgme-photos.c:296
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr "The file could not be loaded. It may be in an invalid format"
 
-#: ../pgp/seahorse-gpgme-photos.c:318
+#: ../pgp/seahorse-gpgme-photos.c:322
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "Are you sure you want to remove the current photo from your key?"
 
-#: ../pgp/seahorse-gpgme-photos.c:331
+#: ../pgp/seahorse-gpgme-photos.c:335
 msgid "Couldn't delete photo"
 msgstr "Couldn't delete photo"
 
@@ -1061,7 +1220,11 @@ msgstr ""
 msgid "Couldn't add revoker"
 msgstr "Couldn't add revoker"
 
-#: ../pgp/seahorse-gpgme-sign.c:101
+#: ../pgp/seahorse-gpgme-secret-deleter.c:82 ../ssh/seahorse-ssh-deleter.c:83
+msgid "I understand that this secret key will be permanently deleted."
+msgstr "I understand that this secret key will be permanently deleted."
+
+#: ../pgp/seahorse-gpgme-sign.c:100
 #, c-format
 msgid ""
 "This key was already signed by\n"
@@ -1076,73 +1239,164 @@ msgstr "Couldn't sign key"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:161 ../pgp/seahorse-signer.c:61
+#: ../pgp/seahorse-gpgme-sign.c:164 ../pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr "No keys usable for signing"
 
-#: ../pgp/seahorse-gpgme-sign.c:162
+#: ../pgp/seahorse-gpgme-sign.c:165
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
-
-#: ../pgp/seahorse-gpgme-source.c:86
-#, c-format
-msgid "Wrong passphrase."
-msgstr "Wrong passphrase."
-
-#: ../pgp/seahorse-gpgme-source.c:90
-#, c-format
-msgid "Enter new passphrase for '%s'"
-msgstr "Enter new passphrase for '%s'"
-
-#: ../pgp/seahorse-gpgme-source.c:92
-#, c-format
-msgid "Enter passphrase for '%s'"
-msgstr "Enter passphrase for '%s'"
-
-#: ../pgp/seahorse-gpgme-source.c:95 ../src/seahorse-change-passphrase.xml.h:4
-msgid "Enter new passphrase"
-msgstr "Enter new passphrase"
-
-#: ../pgp/seahorse-gpgme-source.c:97
-msgid "Enter passphrase"
-msgstr "Enter passphrase"
-
-#: ../pgp/seahorse-gpgme-source.c:328
-#, c-format
-msgid "Loaded %d key"
-msgid_plural "Loaded %d keys"
-msgstr[0] "Loaded %d key"
-msgstr[1] "Loaded %d keys"
-
-#: ../pgp/seahorse-gpgme-source.c:649
-msgid ""
-"Invalid key data (missing UIDs). This may be due to a computer with a date "
-"set in the future or a missing self-signature."
-msgstr ""
-"Invalid key data (missing UIDs). This may be due to a computer with a date "
-"set in the future or a missing self-signature."
 
 #: ../pgp/seahorse-gpgme-subkey.c:199
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: ../pgp/seahorse-hkp-source.c:645
-msgid "HTTP Key Server"
-msgstr "HTTP Key Server"
-
-#: ../pgp/seahorse-hkp-source.c:680
+#: ../pgp/seahorse-hkp-source.c:603
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "Search was not specific enough. Server '%s' found too many keys."
 
-#: ../pgp/seahorse-hkp-source.c:683
+#: ../pgp/seahorse-hkp-source.c:606
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Couldn't communicate with server '%s': %s"
+
+#: ../pgp/seahorse-hkp-source.c:1129
+msgid "HTTP Key Server"
+msgstr "HTTP Key Server"
+
+#: ../pgp/seahorse-keyserver-results.c:175
+msgid "Couldn't import keys"
+msgstr "Couldn't import keys"
+
+#: ../pgp/seahorse-keyserver-results.c:218
+msgid "Importing keys from key servers"
+msgstr "Importing keys from key servers"
+
+#: ../pgp/seahorse-keyserver-results.c:243 ../src/seahorse-key-manager.c:517
+msgid "_Remote"
+msgstr "_Remote"
+
+#: ../pgp/seahorse-keyserver-results.c:245
+msgid "Close this window"
+msgstr "Close this window"
+
+#: ../pgp/seahorse-keyserver-results.c:249 ../pgp/seahorse-pgp-actions.c:113
+msgid "_Find Remote Keys..."
+msgstr "_Find Remote Keys…"
+
+#: ../pgp/seahorse-keyserver-results.c:250 ../pgp/seahorse-pgp-actions.c:114
+msgid "Search for keys on a key server"
+msgstr "Search for keys on a key server"
+
+#: ../pgp/seahorse-keyserver-results.c:254 ../src/seahorse-key-manager.xml.h:3
+msgid "_Import"
+msgstr "_Import"
+
+#: ../pgp/seahorse-keyserver-results.c:255
+msgid "Import selected keys to local key ring"
+msgstr "Import selected keys to local key ring"
+
+#: ../pgp/seahorse-keyserver-results.c:285
+msgid "Remote Keys"
+msgstr "Remote Keys"
+
+#: ../pgp/seahorse-keyserver-results.c:287
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "Remote Keys Containing '%s'"
+
+#: ../pgp/seahorse-keyserver-results.c:484
+msgid "The search for keys failed."
+msgstr "The search for keys failed."
+
+#: ../pgp/seahorse-keyserver-search.xml.h:1
+msgid "Find Remote Keys"
+msgstr "Find Remote Keys"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:2
+msgid ""
+"This will find keys for others on the Internet. These keys can then be "
+"imported into your local key ring."
+msgstr ""
+"This will find keys for others on the Internet. These keys can then be "
+"imported into your local key ring."
+
+#: ../pgp/seahorse-keyserver-search.xml.h:3
+msgid "_Search for keys containing: "
+msgstr "_Search for keys containing: "
+
+#: ../pgp/seahorse-keyserver-search.xml.h:4
+msgid "<b>Key Servers:</b>"
+msgstr "<b>Key Servers:</b>"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:5
+msgid "<b>Shared Keys Near Me:</b>"
+msgstr "<b>Shared Keys Near Me:</b>"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:6
+msgid "Where to search:"
+msgstr "Where to search:"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:7
+msgid "_Search"
+msgstr "_Search"
+
+#: ../pgp/seahorse-keyserver-sync.c:57
+msgid "Couldn't publish keys to server"
+msgstr "Couldn't publish keys to server"
+
+#: ../pgp/seahorse-keyserver-sync.c:76
+#, c-format
+msgid "Couldn't retrieve keys from server: %s"
+msgstr "Couldn't retrieve keys from server: %s"
+
+#: ../pgp/seahorse-keyserver-sync.c:160
+#, c-format
+msgid "<b>%d key is selected for synchronizing</b>"
+msgid_plural "<b>%d keys are selected for synchronizing</b>"
+msgstr[0] "<b>%d key is selected for synchronising</b>"
+msgstr[1] "<b>%d keys are selected for synchronising</b>"
+
+#: ../pgp/seahorse-keyserver-sync.c:240
+msgid "Synchronizing keys..."
+msgstr "Synchronising keys…"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:1
+msgid "Sync Keys"
+msgstr "Sync Keys"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:2
+msgid ""
+"This will publish the keys in your key ring so they're available for others "
+"to use. You'll also get any changes others have made since you received "
+"their keys."
+msgstr ""
+"This will publish the keys in your key ring so they're available for others "
+"to use. You'll also get any changes others have made since you received "
+"their keys."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:3
+msgid ""
+"This will retrieve any changes others have made since you received their "
+"keys. No key server has been chosen for publishing, so your keys will not be "
+"made available to others."
+msgstr ""
+"This will retrieve any changes others have made since you received their "
+"keys. No key server has been chosen for publishing, so your keys will not be "
+"made available to others."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:4
+msgid "_Key Servers"
+msgstr "_Key Servers"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:5
+msgid "_Sync"
+msgstr "_Sync"
 
 #: ../pgp/seahorse-ldap-source.c:440
 #, c-format
@@ -1164,430 +1418,398 @@ msgstr "Couldn't resolve address: %s"
 msgid "Resolving server address: %s"
 msgstr "Resolving server address: %s"
 
-#: ../pgp/seahorse-ldap-source.c:781
+#: ../pgp/seahorse-ldap-source.c:1446
 msgid "LDAP Key Server"
 msgstr "LDAP Key Server"
 
-#: ../pgp/seahorse-pgp-commands.c:104
-msgid "_Sign Key..."
-msgstr "_Sign Key…"
+#: ../pgp/seahorse-pgp-actions.c:118
+msgid "_Sync and Publish Keys..."
+msgstr "_Sync and Publish Keys…"
 
-#: ../pgp/seahorse-pgp-commands.c:104
-msgid "Sign public key"
-msgstr "Sign public key"
+#: ../pgp/seahorse-pgp-actions.c:119
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "Publish and/or synchronise your keys with those online."
 
-#: ../pgp/seahorse-pgp-commands.c:174
-#, c-format
-msgid "Are you sure you want to permanently delete %s?"
-msgstr "Are you sure you want to permanently delete %s?"
+#: ../pgp/seahorse-pgp-backend.c:174
+msgid "PGP Keys"
+msgstr "PGP Keys"
 
-#: ../pgp/seahorse-pgp-commands.c:179
-#, c-format
-msgid "Are you sure you want to permanently delete %d keys and identities?"
-msgstr "Are you sure you want to permanently delete %d keys and identities?"
+#: ../pgp/seahorse-pgp-backend.c:177
+msgid "PGP keys are for encrypting email or files"
+msgstr "PGP keys are for encrypting e-mail or files"
 
-#: ../pgp/seahorse-pgp-commands.c:181
-#, c-format
-msgid "Are you sure you want to permanently delete %d keys?"
-msgstr "Are you sure you want to permanently delete %d keys?"
-
-#: ../pgp/seahorse-pgp-commands.c:183
-#, c-format
-msgid "Are you sure you want to permanently delete %d identities?"
-msgstr "Are you sure you want to permanently delete %d identities?"
-
-#: ../pgp/seahorse-pgp-commands.c:201 ../pgp/seahorse-pgp-key-properties.c:348
-msgid "Couldn't delete user ID"
-msgstr "Couldn't delete user ID"
-
-#: ../pgp/seahorse-pgp-commands.c:205
-msgid "Couldn't delete private key"
-msgstr "Couldn't delete private key"
-
-#: ../pgp/seahorse-pgp-commands.c:208
-msgid "Couldn't delete public key"
-msgstr "Couldn't delete public key"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:1 ../ssh/seahorse-ssh-generate.xml.h:1
-msgid "<b>_Advanced key options</b>"
-msgstr "<b>_Advanced key options</b>"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:2
-msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr "A PGP key allows you to encrypt e-mail or files to other people."
-
-#: ../pgp/seahorse-pgp-generate.xml.h:3
+#: ../pgp/seahorse-pgp-generate.xml.h:1
 msgid "Algorithms here"
 msgstr "Algorithms here"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:4
+#: ../pgp/seahorse-pgp-generate.xml.h:2
 msgid "C_reate"
 msgstr "C_reate"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:5
-msgid "E_xpiration Date:"
-msgstr "E_xpiration Date:"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:4
-msgid "Encryption _Type:"
-msgstr "Encryption _Type:"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:8
+#: ../pgp/seahorse-pgp-generate.xml.h:3
 msgid "Generate a new key"
 msgstr "Generate a new key"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:6
-msgid "Key _Strength (bits):"
-msgstr "Key _Strength (bits):"
+#: ../pgp/seahorse-pgp-generate.xml.h:4
+msgid "A PGP key allows you to encrypt email or files to other people."
+msgstr "A PGP key allows you to encrypt e-mail or files to other people."
 
-#: ../pgp/seahorse-pgp-generate.xml.h:10
-msgid "Ne_ver Expires"
-msgstr "Ne_ver Expires"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:11
-msgid "New PGP Key"
-msgstr "New PGP Key"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:12
+#: ../pgp/seahorse-pgp-generate.xml.h:7
 msgid "_Comment:"
 msgstr "_Comment:"
 
-#: ../pgp/seahorse-pgp-key.c:572 ../pgp/seahorse-pgp-key-properties.c:1489
-msgid "Expired"
-msgstr "Expired"
+#: ../pgp/seahorse-pgp-generate.xml.h:8
+msgid "Ne_ver Expires"
+msgstr "Ne_ver Expires"
 
-#: ../pgp/seahorse-pgp-key-properties.c:319
+#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:7
+msgid "Encryption _Type:"
+msgstr "Encryption _Type:"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:10
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:5
+#: ../ssh/seahorse-ssh-generate.xml.h:8
+msgid "Key _Strength (bits):"
+msgstr "Key _Strength (bits):"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:11
+msgid "E_xpiration Date:"
+msgstr "E_xpiration Date:"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:12
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
+#: ../ssh/seahorse-ssh-generate.xml.h:9
+msgid "<b>_Advanced key options</b>"
+msgstr "<b>_Advanced key options</b>"
+
+#: ../pgp/seahorse-pgp-key.c:353
+msgid "Personal PGP key"
+msgstr "Personal PGP key"
+
+#: ../pgp/seahorse-pgp-key.c:355
+msgid "PGP key"
+msgstr "PGP key"
+
+#: ../pgp/seahorse-pgp-key-properties.c:325
 msgid "Couldn't change primary user ID"
 msgstr "Couldn't change primary user ID"
 
-#: ../pgp/seahorse-pgp-key-properties.c:338
+#: ../pgp/seahorse-pgp-key-properties.c:344
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr "Are you sure you want to permanently delete the '%s' user ID?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:433
-#: ../pgp/seahorse-pgp-key-properties.c:1604
+#: ../pgp/seahorse-pgp-key-properties.c:354
+msgid "Couldn't delete user ID"
+msgstr "Couldn't delete user ID"
+
+#: ../pgp/seahorse-pgp-key-properties.c:428
+#: ../pgp/seahorse-pgp-key-properties.c:1564
 msgid "[Unknown]"
 msgstr "[Unknown]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:533
-#: ../pgp/seahorse-pgp-key-properties.c:1885
+#: ../pgp/seahorse-pgp-key-properties.c:535
+#: ../pgp/seahorse-pgp-key-properties.c:1846
 msgid "Name/Email"
 msgstr "Name/E-mail"
 
-#: ../pgp/seahorse-pgp-key-properties.c:538
+#: ../pgp/seahorse-pgp-key-properties.c:540
 msgid "Signature ID"
 msgstr "Signature ID"
 
-#: ../pgp/seahorse-pgp-key-properties.c:671
+#: ../pgp/seahorse-pgp-key-properties.c:673
 msgid "Couldn't change primary photo"
 msgstr "Couldn't change primary photo"
 
-#: ../pgp/seahorse-pgp-key-properties.c:903
+#: ../pgp/seahorse-pgp-key-properties.c:906
 msgid "(unknown)"
 msgstr "(unknown)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:906
+#: ../pgp/seahorse-pgp-key-properties.c:909
 #, c-format
 msgid "This key expired on: %s"
 msgstr "This key expired on: %s"
 
-#: ../pgp/seahorse-pgp-key-properties.c:967
-#: ../src/seahorse-key-manager-store.c:802
+#: ../pgp/seahorse-pgp-key-properties.c:972
 msgid "Name"
 msgstr "Name"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1078
+#: ../pgp/seahorse-pgp-key-properties.c:1085
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Are you sure you want to permanently delete subkey %d of %s?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1087
+#: ../pgp/seahorse-pgp-key-properties.c:1094
 msgid "Couldn't delete subkey"
 msgstr "Couldn't delete subkey"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1127
-#: ../pgp/seahorse-pgp-key-properties.c:1567
+#: ../pgp/seahorse-pgp-key-properties.c:1134
+#: ../pgp/seahorse-pgp-key-properties.c:1539
 msgid "Unable to change trust"
 msgstr "Unable to change trust"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1142 ../src/seahorse-viewer.c:298
-#: ../ssh/seahorse-ssh-key-properties.c:201
-#, c-format
-msgid "Couldn't export key to \"%s\""
-msgstr "Couldn't export key to \"%s\""
+#: ../pgp/seahorse-pgp-key-properties.c:1147
+#: ../ssh/seahorse-ssh-key-properties.c:202
+msgid "Couldn't export key"
+msgstr "Couldn't export key"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1172
-#: ../ssh/seahorse-ssh-key-properties.c:225
-msgid "Export Complete Key"
-msgstr "Export Complete Key"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1197
-#: ../ssh/seahorse-ssh-key-properties.c:247
-msgid "Couldn't export key."
-msgstr "Couldn't export key."
-
-#: ../pgp/seahorse-pgp-key-properties.c:1407
-#: ../pgp/seahorse-pgp-key-properties.c:1496
+#: ../pgp/seahorse-pgp-key-properties.c:1379
+#: ../pgp/seahorse-pgp-key-properties.c:1468
 msgctxt "Expires"
 msgid "Never"
 msgstr "Never"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1454
+#: ../pgp/seahorse-pgp-key-properties.c:1426
 msgid "ID"
 msgstr "ID"
 
-#. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1457
-#: ../src/seahorse-key-manager-store.c:833
+#: ../pgp/seahorse-pgp-key-properties.c:1429
 msgid "Type"
 msgstr "Type"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1460
+#: ../pgp/seahorse-pgp-key-properties.c:1432
 msgid "Created"
 msgstr "Created"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1463
+#: ../pgp/seahorse-pgp-key-properties.c:1435
 msgid "Expires"
 msgstr "Expires"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1466
+#: ../pgp/seahorse-pgp-key-properties.c:1438
 msgid "Status"
 msgstr "Status"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1469
+#: ../pgp/seahorse-pgp-key-properties.c:1441
 msgid "Strength"
 msgstr "Strength"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1493
+#: ../pgp/seahorse-pgp-key-properties.c:1461
+msgid "Expired"
+msgstr "Expired"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1465
 msgid "Good"
 msgstr "Good"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1888
-#: ../src/seahorse-key-manager-store.c:814
+#: ../pgp/seahorse-pgp-key-properties.c:1849
 msgid "Key ID"
 msgstr "Key ID"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>Actions</b>"
-
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
-msgid "<b>Comment:</b>"
-msgstr "<b>Comment:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
-msgid "<b>Dates</b>"
-msgstr "<b>Dates</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
-msgid "<b>Email:</b>"
-msgstr "<b>E-mail:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
-msgid "<b>Fingerprint</b>"
-msgstr "<b>Fingerprint</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
-msgid "<b>Key ID:</b>"
-msgstr "<b>Key ID:</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
+msgid "Never"
+msgstr "Never"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
-msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>Key Names and Signatures</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-msgid "<b>Photo </b>"
-msgstr "<b>Photo </b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
-msgid "<b>Technical Details</b>"
-msgstr "<b>Technical Details</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
 msgid "<b>This key has been revoked</b>"
 msgstr "<b>This key has been revoked</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:10
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
+msgid "The owner of the key revoked the key. It can no longer be used."
+msgstr "The owner of the key revoked the key. It can no longer be used."
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
 msgid "<b>This key has expired</b>"
 msgstr "<b>This key has expired</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
-msgid "<b>Type:</b>"
-msgstr "<b>Type:</b>"
-
-#. To translators: This is the noun not the verb.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:14
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
-msgid "<b>Use:</b>"
-msgstr "<b>Use:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:15
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
-msgid "<b>_Subkeys</b>"
-msgstr "<b>_Subkeys</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
-msgid "Add"
-msgstr "Add"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
 msgid "Add a photo to this key"
 msgstr "Add a photo to this key"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:18
-#: ../ssh/seahorse-ssh-key-properties.xml.h:14
-msgid "Change _Passphrase"
-msgstr "Change _Passphrase"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
+msgid "Remove this photo from this key"
+msgstr "Remove this photo from this key"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
-msgid "Decrypt files and email sent to you."
-msgstr "Decrypt files and e-mail sent to you."
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
+msgid "Make this photo the primary photo"
+msgstr "Make this photo the primary photo"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
-msgid "Delete"
-msgstr "Delete"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
-msgid "Expire"
-msgstr "Expire"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
-msgid "Expires:"
-msgstr "Expires:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
-msgid "Export"
-msgstr "Export"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
-msgid "Go to next photo"
-msgstr "Go to next photo"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:13
 msgid "Go to previous photo"
 msgstr "Go to previous photo"
 
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:14
+msgid "Go to next photo"
+msgstr "Go to next photo"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:15
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:10
+msgid "<b>Photo </b>"
+msgstr "<b>Photo </b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
+msgid "<b>Key ID:</b>"
+msgstr "<b>Key ID:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
+msgctxt "name-of-key"
+msgid "<b>Name:</b>"
+msgstr "<b>Name:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:18
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:16
+msgid "<b>Email:</b>"
+msgstr "<b>E-mail:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
+msgid "<b>Comment:</b>"
+msgstr "<b>Comment:</b>"
+
+#. To translators: This is the noun not the verb.
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:12
+#: ../ssh/seahorse-ssh-key-properties.xml.h:8
+msgid "<b>Use:</b>"
+msgstr "<b>Use:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:22
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
+msgid "<b>Type:</b>"
+msgstr "<b>Type:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
+msgid "Decrypt files and email sent to you."
+msgstr "Decrypt files and e-mail sent to you."
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
+msgid "Private PGP Key"
+msgstr "Private PGP Key"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
+msgid "Change _Passphrase"
+msgstr "Change _Passphrase"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
+msgid "Owner"
+msgstr "Owner"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
+msgid "<b>Key Names and Signatures</b>"
+msgstr "<b>Key Names and Signatures</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
+msgid "Primary"
+msgstr "Primary"
+
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:29
-msgid "Key ID:"
-msgstr "Key ID:"
+msgid "Sign"
+msgstr "Sign"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
+msgid "Delete"
+msgstr "Delete"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
-msgid "Make this photo the primary photo"
-msgstr "Make this photo the primary photo"
+msgid "_Add Name"
+msgstr "_Add Name"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
+msgid "Revoke"
+msgstr "Revoke"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:33
 msgid "Names and Signatures"
 msgstr "Names and Signatures"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
-msgid "Never"
-msgstr "Never"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
+msgid "Key ID:"
+msgstr "Key ID:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
-msgid "Override Owner _Trust:"
-msgstr "Override Owner _Trust:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:36
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
-msgid "Owner"
-msgstr "Owner"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
-msgid "Primary"
-msgstr "Primary"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
-msgid "Private PGP Key"
-msgstr "Private PGP Key"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
-msgid "Remove this photo from this key"
-msgstr "Remove this photo from this key"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
-msgid "Revoke"
-msgstr "Revoke"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
-msgid "Sign"
-msgstr "Sign"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
 msgid "Strength:"
 msgstr "Strength:"
 
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
+msgid "<b>Technical Details</b>"
+msgstr "<b>Technical Details</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
+msgid "<b>Fingerprint</b>"
+msgstr "<b>Fingerprint</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
+msgid "Expires:"
+msgstr "Expires:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
+msgid "<b>Dates</b>"
+msgstr "<b>Dates</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
+msgid "Override Owner _Trust:"
+msgstr "Override Owner _Trust:"
+
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
-msgid "The owner of the key revoked the key. It can no longer be used."
-msgstr "The owner of the key revoked the key. It can no longer be used."
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
-msgid "_Add Name"
-msgstr "_Add Name"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
 msgid "_Export Complete Key:"
 msgstr "_Export Complete Key:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
-msgctxt "name-of-key"
-msgid "<b>Name:</b>"
-msgstr "<b>Name:</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
+msgid "<b>Actions</b>"
+msgstr "<b>Actions</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
-msgid "<b>Dates:</b>"
-msgstr "<b>Dates:</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+msgid "Add"
+msgstr "Add"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+msgid "Expire"
+msgstr "Expire"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+msgid "<b>_Subkeys</b>"
+msgstr "<b>_Subkeys</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
+msgid "Marginally"
+msgstr "Marginally"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
-#: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "<b>Fingerprint:</b>"
-msgstr "<b>Fingerprint:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
-msgid "<b>Indicate Trust:</b>"
-msgstr "<b>Indicate Trust:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
-msgid "<b>Your trust of this key</b>"
-msgstr "<b>Your trust of this key</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
-msgid "<b>_Other Names:</b>"
-msgstr "<b>_Other Names:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:16
-msgid "<b>_People who have signed this key:</b>"
-msgstr "<b>_People who have signed this key:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-msgid "Encrypt files and email to the key's owner "
-msgstr "Encrypt files and e-mail to the key's owner "
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
 msgid "Fully"
 msgstr "Fully"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
+msgid "Ultimately"
+msgstr "Ultimately"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
+msgid "Encrypt files and email to the key's owner "
+msgstr "Encrypt files and e-mail to the key's owner "
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
+msgid "Public PGP Key"
+msgstr "Public PGP Key"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
+msgid "<b>_Other Names:</b>"
+msgstr "<b>_Other Names:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
+msgid "<b>Your trust of this key</b>"
+msgstr "<b>Your trust of this key</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
+msgid "Your trust is manually specified on the <i>Details</i> tab."
+msgstr "Your trust is manually specified on the <i>Details</i> tab."
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
 #, no-c-format
 msgid "I trust signatures from '%s' on other keys"
 msgstr "I trust signatures from '%s' on other keys"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:27
 #, no-c-format
 msgid ""
 "If you believe that the person that owns this key is '%s', <i>sign</i> this "
@@ -1597,6 +1819,10 @@ msgstr ""
 "key:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:28
+msgid "_Sign this Key"
+msgstr "_Sign this Key"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
 #, no-c-format
 msgid ""
 "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
@@ -1604,42 +1830,37 @@ msgstr ""
 "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
-msgid "Marginally"
-msgstr "Marginally"
+msgid "_Revoke Signature"
+msgstr "_Revoke Signature"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
+msgid "<b>_People who have signed this key:</b>"
+msgstr "<b>_People who have signed this key:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
+msgid "_Only display the signatures of people I trust"
+msgstr "_Only display the signatures of people I trust"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
-msgid "Public PGP Key"
-msgstr "Public PGP Key"
-
-#. Trust column
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
-#: ../src/seahorse-key-manager-store.c:827
 msgid "Trust"
 msgstr "Trust"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
-msgid "Ultimately"
-msgstr "Ultimately"
+#: ../ssh/seahorse-ssh-key-properties.xml.h:18
+msgid "<b>Fingerprint:</b>"
+msgstr "<b>Fingerprint:</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
-msgid "You _Trust the Owner:"
-msgstr "You _Trust the Owner:"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
-msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr "Your trust is manually specified on the <i>Details</i> tab."
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+msgid "<b>Dates:</b>"
+msgstr "<b>Dates:</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
-msgid "_Only display the signatures of people I trust"
-msgstr "_Only display the signatures of people I trust"
+msgid "<b>Indicate Trust:</b>"
+msgstr "<b>Indicate Trust:</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
-msgid "_Revoke Signature"
-msgstr "_Revoke Signature"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
-msgid "_Sign this Key"
-msgstr "_Sign this Key"
+msgid "You _Trust the Owner:"
+msgstr "You _Trust the Owner:"
 
 #: ../pgp/seahorse-pgp-subkey.c:371
 #, c-format
@@ -1647,80 +1868,84 @@ msgid "Subkey %d of %s"
 msgstr "Subkey %d of %s"
 
 #: ../pgp/seahorse-revoke.xml.h:1
-msgid "Optional description of revocation"
-msgstr "Optional description of revocation"
-
-#: ../pgp/seahorse-revoke.xml.h:2
-msgid "Re_voke"
-msgstr "Re_voke"
-
-#: ../pgp/seahorse-revoke.xml.h:3
 msgid "Reason for revoking the key"
 msgstr "Reason for revoking the key"
 
-#: ../pgp/seahorse-revoke.xml.h:6
+#: ../pgp/seahorse-revoke.xml.h:2
 msgid "_Reason:"
 msgstr "_Reason:"
 
-#: ../pgp/seahorse-signer.c:62
+#: ../pgp/seahorse-revoke.xml.h:4
+msgid "Optional description of revocation"
+msgstr "Optional description of revocation"
+
+#: ../pgp/seahorse-revoke.xml.h:6
+msgid "Re_voke"
+msgstr "Re_voke"
+
+#: ../pgp/seahorse-signer.c:63
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
 "You have no personal PGP keys that can be used to sign a document or message."
+
+#: ../pgp/seahorse-signer.xml.h:1
+msgid "_Sign message with key:"
+msgstr "_Sign message with key:"
 
 #: ../pgp/seahorse-sign.xml.h:1
-msgid "<b>How carefully have you checked this key?</b>"
-msgstr "<b>How carefully have you checked this key?</b>"
+msgid "Sign Key"
+msgstr "Sign Key"
 
 #: ../pgp/seahorse-sign.xml.h:2
-msgid "<b>How others will see this signature:</b>"
-msgstr "<b>How others will see this signature:</b>"
-
-#: ../pgp/seahorse-sign.xml.h:3
-msgid "<b>Sign key as:</b>"
-msgstr "<b>Sign key as:</b>"
-
-#: ../pgp/seahorse-sign.xml.h:4
-msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone. "
-msgstr ""
-"<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone. "
-
-#: ../pgp/seahorse-sign.xml.h:5
-msgid "<i>Key Name</i>"
-msgstr "<i>Key Name</i>"
-
-#: ../pgp/seahorse-sign.xml.h:6
-msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who "
-"claims to own it, but you could not or did not verify this to be a fact."
-msgstr ""
-"<i>Not at all:</i> means you believe the key is owned by the person who "
-"claims to own it, but you could not or did not verify this to be a fact."
-
-#: ../pgp/seahorse-sign.xml.h:7
-msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
-"key is genuine."
-msgstr ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
-"key is genuine."
-
-#: ../pgp/seahorse-sign.xml.h:8
 msgid "By signing you indicate your trust that this key belongs to:"
 msgstr "By signing you indicate your trust that this key belongs to:"
 
+#: ../pgp/seahorse-sign.xml.h:3
+msgid "<i>Key Name</i>"
+msgstr "<i>Key Name</i>"
+
+#: ../pgp/seahorse-sign.xml.h:4
+msgid "<b>How carefully have you checked this key?</b>"
+msgstr "<b>How carefully have you checked this key?</b>"
+
+#: ../pgp/seahorse-sign.xml.h:5
+msgid "_Not at all"
+msgstr "_Not at all"
+
+#: ../pgp/seahorse-sign.xml.h:6
+msgid "_Casually"
+msgstr "_Casually"
+
+#: ../pgp/seahorse-sign.xml.h:7
+msgid "_Very Carefully"
+msgstr "_Very Carefully"
+
+#: ../pgp/seahorse-sign.xml.h:8
+msgid ""
+"<i>Not at all:</i> means you believe the key is owned by the person who "
+"claims to own it, but you could not or did not verify this to be a fact."
+msgstr ""
+"<i>Not at all:</i> means you believe the key is owned by the person who "
+"claims to own it, but you could not or did not verify this to be a fact."
+
 #: ../pgp/seahorse-sign.xml.h:9
-msgid "I can _revoke this signature at a later date."
-msgstr "I can _revoke this signature at a later date."
+msgid ""
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone. "
+msgstr ""
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone. "
 
 #: ../pgp/seahorse-sign.xml.h:10
-msgid "Sign Key"
-msgstr "Sign Key"
+msgid ""
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
+"key is genuine."
+msgstr ""
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
+"key is genuine."
 
 #: ../pgp/seahorse-sign.xml.h:11
 msgid ""
@@ -1733,206 +1958,307 @@ msgstr ""
 "used e-mail to check that the e-mail address belongs to the owner."
 
 #: ../pgp/seahorse-sign.xml.h:12
-msgid "_Casually"
-msgstr "_Casually"
+msgid "<b>How others will see this signature:</b>"
+msgstr "<b>How others will see this signature:</b>"
 
 #: ../pgp/seahorse-sign.xml.h:13
-msgid "_Not at all"
-msgstr "_Not at all"
-
-#: ../pgp/seahorse-sign.xml.h:14
 msgid "_Others may not see this signature"
 msgstr "_Others may not see this signature"
 
+#: ../pgp/seahorse-sign.xml.h:14
+msgid "I can _revoke this signature at a later date."
+msgstr "I can _revoke this signature at a later date."
+
 #: ../pgp/seahorse-sign.xml.h:15
-msgid "_Sign"
-msgstr "_Sign"
+msgid "<b>Sign key as:</b>"
+msgstr "<b>Sign key as:</b>"
 
 #: ../pgp/seahorse-sign.xml.h:16
 msgid "_Signer:"
 msgstr "_Signer:"
 
 #: ../pgp/seahorse-sign.xml.h:17
-msgid "_Very Carefully"
-msgstr "_Very Carefully"
+msgid "_Sign"
+msgstr "_Sign"
 
-#: ../pgp/seahorse-signer.xml.h:1
-msgid "_Sign message with key:"
-msgstr "_Sign message with key:"
+#: ../pgp/seahorse-transfer.c:237 ../pgp/seahorse-transfer.c:284
+msgid "Exporting data"
+msgstr "Exporting data"
 
-#: ../pkcs11/seahorse-pkcs11-certificate.c:106
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
+#: ../pgp/seahorse-transfer.c:237 ../pgp/seahorse-transfer.c:284
+msgid "Retrieving data"
+msgstr "Retrieving data"
+
+#: ../pgp/seahorse-transfer.c:240 ../pgp/seahorse-transfer.c:287
+msgid "Importing data"
+msgstr "Importing data"
+
+#: ../pgp/seahorse-transfer.c:240 ../pgp/seahorse-transfer.c:287
+msgid "Sending data"
+msgstr "Sending data"
+
+#: ../pgp/seahorse-unknown.c:61
+msgid "Unavailable"
+msgstr "Unavailable"
+
+#: ../pkcs11/seahorse-certificate.c:435
+msgid "Personal certificate and key"
+msgstr "Personal certificate and key"
+
+#: ../pkcs11/seahorse-certificate.c:438
+msgid "Personal certificate"
+msgstr "Personal certificate"
+
+#: ../pkcs11/seahorse-certificate.c:440
+#: ../pkcs11/seahorse-certificate-der-exporter.c:77
 msgid "Certificate"
 msgstr "Certificate"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:106
+#: ../pkcs11/seahorse-certificate-der-exporter.c:99
+msgid "Certificates (DER encoded)"
+msgstr "Certificates (DER encoded)"
+
+#: ../pkcs11/seahorse-pkcs11-backend.c:183
+msgid "Certificates"
+msgstr "Certificates"
+
+#: ../pkcs11/seahorse-pkcs11-backend.c:186
+msgid "X.509 certificates and related keys"
+msgstr "X.509 certificates and related keys"
+
+#: ../pkcs11/seahorse-pkcs11-deleter.c:69
+#, c-format
+msgid "Are you sure you want to permanently delete %d certificate?"
+msgid_plural "Are you sure you want to permanently delete %d certificates?"
+msgstr[0] "Are you sure you want to permanently delete %d certificate?"
+msgstr[1] "Are you sure you want to permanently delete %d certificates?"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:115
+msgid "Couldn't generate private key"
+msgstr "Couldn't generate private key"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:414
+#: ../pkcs11/seahorse-pkcs11-request.c:256
+msgid "Create"
+msgstr "Create"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:507
+#: ../pkcs11/seahorse-private-key.c:179
+msgid "Private key"
+msgstr "Private key"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:508
+msgid "Used to request a certificate"
+msgstr "Used to request a certificate"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:1
+msgid "Create a new private key"
+msgstr "Create a new private key"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:2
+msgid "Label:"
+msgstr "Label:"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:3
+msgid "Stored at:"
+msgstr "Stored at:"
+
+#: ../pkcs11/seahorse-pkcs11-key-deleter.c:85
+msgid "I understand that this key will be permanently deleted."
+msgstr "I understand that this key will be permanently deleted."
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:147
+#: ../pkcs11/seahorse-pkcs11-properties.c:151
+msgid "Unnamed"
+msgstr "Unnamed"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:175
+msgid "Failed to export certificate"
+msgstr "Failed to export certificate"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:875
 msgid "Couldn't delete"
 msgstr "Couldn't delete"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:127
-#, c-format
-msgid "Are you sure you want to delete the certificate '%s'?"
-msgstr "Are you sure you want to delete the certificate '%s'?"
+#: ../pkcs11/seahorse-pkcs11-properties.c:231
+msgid "_Export"
+msgstr "_Export"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:130
-#, c-format
-msgid "Are you sure you want to delete %d certificate?"
-msgid_plural "Are you sure you want to delete %d certificates?"
-msgstr[0] "Are you sure you want to delete %d certificate?"
-msgstr[1] "Are you sure you want to delete %d passwords?"
+#: ../pkcs11/seahorse-pkcs11-properties.c:232
+msgid "Export the certificate"
+msgstr "Export the certificate"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:143
-msgid "Deleting"
-msgstr "Deleting"
+#: ../pkcs11/seahorse-pkcs11-properties.c:234
+msgid "Delete this certificate or key"
+msgstr "Delete this certificate or key"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:235
+msgid "Request _Certificate"
+msgstr "Request _Certificate"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:236
+msgid "Create a certificate request file for this key"
+msgstr "Create a certificate request file for this key"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:104
+msgid "Couldn't save certificate request"
+msgstr "Couldn't save certificate request"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:127
+msgid "Save certificate request"
+msgstr "Save certificate request"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:138
+msgid "Certificate request"
+msgstr "Certificate request"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:146
+msgid "PEM encoded request"
+msgstr "PEM encoded request"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:194
+msgid "Couldn't create certificate request"
+msgstr "Couldn't create certificate request"
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:1
+msgid "Create a certificate request file."
+msgstr "Create a certificate request file."
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:2
+msgid "The common name (CN) placed in the certificate request."
+msgstr "The common name (CN) placed in the certificate request."
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:3
+msgid "Name (CN):"
+msgstr "Name (CN):"
+
+#: ../pkcs11/seahorse-private-key.c:132
+msgid "Unnamed private key"
+msgstr "Unnamed private key"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
 msgstr "Change Passphrase"
 
-#: ../src/seahorse-change-passphrase.xml.h:2
-msgid "Con_firm Passphrase:"
-msgstr "Con_firm Passphrase:"
-
 #: ../src/seahorse-change-passphrase.xml.h:3
+msgid "New _Passphrase:"
+msgstr "New _Passphrase:"
+
+#: ../src/seahorse-change-passphrase.xml.h:4
 msgid "Confirm new passphrase"
 msgstr "Confirm new passphrase"
 
 #: ../src/seahorse-change-passphrase.xml.h:5
-msgid "New _Passphrase:"
-msgstr "New _Passphrase:"
+msgid "Con_firm Passphrase:"
+msgstr "Con_firm Passphrase:"
 
-#: ../src/seahorse.desktop.in.in.h:1
+#: ../src/seahorse.desktop.in.in.h:2
 msgid "Manage your passwords and encryption keys"
 msgstr "Manage your passwords and encryption keys"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:868
-#: ../src/seahorse-main.c:76 ../src/seahorse-viewer.c:147
-msgid "Passwords and Keys"
-msgstr "Passwords and Keys"
+#: ../src/seahorse-generate-select.c:229
+msgid "Continue"
+msgstr "Continue"
 
 #: ../src/seahorse-generate-select.xml.h:1
 msgid "<b>_Select the type of item to create:</b>"
 msgstr "<b>_Select the type of item to create:</b>"
 
-#: ../src/seahorse-generate-select.xml.h:2
-msgid "C_ontinue"
-msgstr "C_ontinue"
+#: ../src/seahorse-import-dialog.c:98
+msgid "Import failed"
+msgstr "Import failed"
 
-#: ../src/seahorse-generate-select.xml.h:3
-msgid "Create New ..."
-msgstr "Create New…"
+#: ../src/seahorse-import-dialog.c:116
+msgid "Import"
+msgstr "Import"
 
-#: ../src/seahorse-key-manager.c:251 ../src/seahorse-keyserver-results.c:116
-#, c-format
-msgid "Selected %d key"
-msgid_plural "Selected %d keys"
-msgstr[0] "Selected %d key"
-msgstr[1] "Selected %d keys"
+#: ../src/seahorse-import-dialog.c:129
+msgid "<b>Data to be imported:</b>"
+msgstr "<b>Data to be imported:</b>"
 
-#: ../src/seahorse-key-manager.c:431 ../src/seahorse-key-manager.c:489
-#: ../src/seahorse-key-manager.c:550 ../src/seahorse-viewer.c:453
-msgid "Couldn't import keys"
-msgstr "Couldn't import keys"
-
-#: ../src/seahorse-key-manager.c:433 ../src/seahorse-viewer.c:455
-msgid "Imported keys"
-msgstr "Imported keys"
-
-#: ../src/seahorse-key-manager.c:484
-msgid "Importing keys"
-msgstr "Importing keys"
-
-#: ../src/seahorse-key-manager.c:504 ../ssh/seahorse-ssh-operation.c:891
+#: ../src/seahorse-key-manager.c:255 ../ssh/seahorse-ssh-operation.c:845
 msgid "Import Key"
 msgstr "Import Key"
 
-#: ../src/seahorse-key-manager.c:550
-msgid "Unrecognized key type, or invalid data format"
-msgstr "Unrecognised key type, or invalid data format"
+#: ../src/seahorse-key-manager.c:267
+msgid "All key files"
+msgstr "All key files"
 
-#: ../src/seahorse-key-manager.c:565
-msgid "Importing Keys"
-msgstr "Importing Keys"
+#: ../src/seahorse-key-manager.c:368
+msgid "Dropped text"
+msgstr "Dropped text"
 
-#: ../src/seahorse-key-manager.c:737 ../src/seahorse-keyserver-results.c:254
-msgid "_Remote"
-msgstr "_Remote"
+#: ../src/seahorse-key-manager.c:391
+msgid "Clipboard text"
+msgstr "Clipboard text"
 
-#: ../src/seahorse-key-manager.c:739
+#: ../src/seahorse-key-manager.c:518
+msgid "_New"
+msgstr "_New"
+
+#: ../src/seahorse-key-manager.c:520
 msgid "Close this program"
 msgstr "Close this program"
 
-#: ../src/seahorse-key-manager.c:740
+#: ../src/seahorse-key-manager.c:521 ../src/seahorse-key-manager.c:523
 msgid "_New..."
 msgstr "_New…"
 
-#: ../src/seahorse-key-manager.c:741
+#: ../src/seahorse-key-manager.c:522
 msgid "Create a new key or item"
 msgstr "Create a new key or item"
 
-#: ../src/seahorse-key-manager.c:742
+#: ../src/seahorse-key-manager.c:524
+msgid "Add a new key or item"
+msgstr "Add a new key or item"
+
+#: ../src/seahorse-key-manager.c:525
 msgid "_Import..."
 msgstr "_Import…"
 
-#: ../src/seahorse-key-manager.c:743
+#: ../src/seahorse-key-manager.c:526
 msgid "Import from a file"
 msgstr "Import from a file"
 
-#: ../src/seahorse-key-manager.c:745
+#: ../src/seahorse-key-manager.c:528
 msgid "Import from the clipboard"
 msgstr "Import from the clipboard"
 
-#: ../src/seahorse-key-manager.c:750 ../src/seahorse-keyserver-results.c:264
-msgid "_Find Remote Keys..."
-msgstr "_Find Remote Keys…"
+#: ../src/seahorse-key-manager.c:532
+msgid "By _keyring"
+msgstr "By _keyring"
 
-#: ../src/seahorse-key-manager.c:751 ../src/seahorse-keyserver-results.c:265
-msgid "Search for keys on a key server"
-msgstr "Search for keys on a key server"
+#: ../src/seahorse-key-manager.c:533
+msgid "Show sidebar listing keyrings"
+msgstr "Show sidebar listing keyrings"
 
-#: ../src/seahorse-key-manager.c:752
-msgid "_Sync and Publish Keys..."
-msgstr "_Sync and Publish Keys…"
+#: ../src/seahorse-key-manager.c:537
+msgid "Show _personal"
+msgstr "Show _personal"
 
-#: ../src/seahorse-key-manager.c:753
-msgid "Publish and/or synchronize your keys with those online."
-msgstr "Publish and/or synchronise your keys with those online."
+#: ../src/seahorse-key-manager.c:538
+msgid "Only show personal keys, certificates and passwords"
+msgstr "Only show personal keys, certificates and passwords"
 
-#: ../src/seahorse-key-manager.c:758
-msgid "T_ypes"
-msgstr "T_ypes"
+#: ../src/seahorse-key-manager.c:539
+msgid "Show _trusted"
+msgstr "Show _trusted"
 
-#: ../src/seahorse-key-manager.c:758
-msgid "Show type column"
-msgstr "Show type column"
+#: ../src/seahorse-key-manager.c:540
+msgid "Only show trusted keys, certificates and passwords"
+msgstr "Only show trusted keys, certificates and passwords"
 
-#: ../src/seahorse-key-manager.c:760
-msgid "_Expiry"
-msgstr "_Expiry"
+#: ../src/seahorse-key-manager.c:541
+msgid "Show _any"
+msgstr "Show _any"
 
-#: ../src/seahorse-key-manager.c:760
-msgid "Show expiry column"
-msgstr "Show expiry column"
+#: ../src/seahorse-key-manager.c:542
+msgid "Show all keys, certificates and passwords"
+msgstr "Show all keys, certificates and passwords"
 
-#: ../src/seahorse-key-manager.c:762
-msgid "_Trust"
-msgstr "_Trust"
-
-#: ../src/seahorse-key-manager.c:762
-msgid "Show owner trust column"
-msgstr "Show owner trust column"
-
-#: ../src/seahorse-key-manager.c:764
-msgid "_Validity"
-msgstr "_Validity"
-
-#: ../src/seahorse-key-manager.c:764
-msgid "Show validity column"
-msgstr "Show validity column"
-
-#: ../src/seahorse-key-manager.c:941
-msgid "Filter:"
-msgstr "Filter:"
+#: ../src/seahorse-key-manager.c:750
+msgid "Filter"
+msgstr "Filter"
 
 #: ../src/seahorse-key-manager.xml.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -1942,273 +2268,49 @@ msgstr "<big><b>First time options:</b></big>"
 msgid "Generate a new key of your own: "
 msgstr "Generate a new key of your own: "
 
-#: ../src/seahorse-key-manager.xml.h:3
+#: ../src/seahorse-key-manager.xml.h:4
 msgid "Import existing keys from a file:"
 msgstr "Import existing keys from a file:"
 
-#: ../src/seahorse-key-manager.xml.h:4
-msgid "My _Personal Keys"
-msgstr "My _Personal Keys"
-
 #: ../src/seahorse-key-manager.xml.h:5
-msgid "Other _Keys"
-msgstr "Other _Keys"
-
-#: ../src/seahorse-key-manager.xml.h:6
 msgid "To get started with encryption you will need keys."
 msgstr "To get started with encryption you will need keys."
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:518
-msgid "_Import"
-msgstr "_Import"
-
-#: ../src/seahorse-key-manager.xml.h:8
-msgid "_Passwords"
-msgstr "_Passwords"
-
-#: ../src/seahorse-key-manager-store.c:610 ../src/seahorse-viewer.c:263
-msgid "Couldn't export keys"
-msgstr "Couldn't export keys"
-
-#: ../src/seahorse-key-manager-store.c:820
-msgid "Validity"
-msgstr "Validity"
-
-#. Expiry date column
-#: ../src/seahorse-key-manager-store.c:839
-msgid "Expiration Date"
-msgstr "Expiration Date"
-
-#: ../src/seahorse-keyserver-results.c:256
-msgid "Close this window"
-msgstr "Close this window"
-
-#: ../src/seahorse-keyserver-results.c:257
-msgid "_Expand All"
-msgstr "_Expand All"
-
-#: ../src/seahorse-keyserver-results.c:258
-msgid "Expand all listings"
-msgstr "Expand all listings"
-
-#: ../src/seahorse-keyserver-results.c:259
-msgid "_Collapse All"
-msgstr "_Collapse All"
-
-#: ../src/seahorse-keyserver-results.c:260
-msgid "Collapse all listings"
-msgstr "Collapse all listings"
-
-#: ../src/seahorse-keyserver-results.c:331
-msgid "Remote Keys"
-msgstr "Remote Keys"
-
-#: ../src/seahorse-keyserver-results.c:333
-#, c-format
-msgid "Remote Keys Containing '%s'"
-msgstr "Remote Keys Containing '%s'"
-
-#: ../src/seahorse-keyserver-search.xml.h:1
-msgid "<b>Key Servers:</b>"
-msgstr "<b>Key Servers:</b>"
-
-#: ../src/seahorse-keyserver-search.xml.h:2
-msgid "<b>Shared Keys Near Me:</b>"
-msgstr "<b>Shared Keys Near Me:</b>"
-
-#: ../src/seahorse-keyserver-search.xml.h:3
-msgid "Find Remote Keys"
-msgstr "Find Remote Keys"
-
-#: ../src/seahorse-keyserver-search.xml.h:4
-msgid ""
-"This will find keys for others on the Internet. These keys can then be "
-"imported into your local key ring."
-msgstr ""
-"This will find keys for others on the Internet. These keys can then be "
-"imported into your local key ring."
-
-#: ../src/seahorse-keyserver-search.xml.h:5
-msgid "Where to search:"
-msgstr "Where to search:"
-
-#: ../src/seahorse-keyserver-search.xml.h:6
-msgid "_Search"
-msgstr "_Search"
-
-#: ../src/seahorse-keyserver-search.xml.h:7
-msgid "_Search for keys containing: "
-msgstr "_Search for keys containing: "
-
-#: ../src/seahorse-keyserver-sync.c:58
-msgid "Couldn't publish keys to server"
-msgstr "Couldn't publish keys to server"
-
-#: ../src/seahorse-keyserver-sync.c:77
-#, c-format
-msgid "Couldn't retrieve keys from server: %s"
-msgstr "Couldn't retrieve keys from server: %s"
-
-#: ../src/seahorse-keyserver-sync.c:161
-#, c-format
-msgid "<b>%d key is selected for synchronizing</b>"
-msgid_plural "<b>%d keys are selected for synchronizing</b>"
-msgstr[0] "<b>%d key is selected for synchronising</b>"
-msgstr[1] "<b>%d keys are selected for synchronising</b>"
-
-#: ../src/seahorse-keyserver-sync.c:247
-msgid "Synchronizing keys..."
-msgstr "Synchronising keys…"
-
-#: ../src/seahorse-keyserver-sync.xml.h:1
-msgid "Sync Keys"
-msgstr "Sync Keys"
-
-#: ../src/seahorse-keyserver-sync.xml.h:2
-msgid ""
-"This will publish the keys in your key ring so they're available for others "
-"to use. You'll also get any changes others have made since you received "
-"their keys."
-msgstr ""
-"This will publish the keys in your key ring so they're available for others "
-"to use. You'll also get any changes others have made since you received "
-"their keys."
-
-#: ../src/seahorse-keyserver-sync.xml.h:3
-msgid ""
-"This will retrieve any changes others have made since you received their "
-"keys. No key server has been chosen for publishing, so your keys will not be "
-"made available to others."
-msgstr ""
-"This will retrieve any changes others have made since you received their "
-"keys. No key server has been chosen for publishing, so your keys will not be "
-"made available to others."
-
-#: ../src/seahorse-keyserver-sync.xml.h:4
-msgid "_Key Servers"
-msgstr "_Key Servers"
-
-#: ../src/seahorse-keyserver-sync.xml.h:5
-msgid "_Sync"
-msgstr "_Sync"
-
-#: ../src/seahorse-main.c:60
+#: ../src/seahorse-main.c:54
 msgid "Version of this application"
 msgstr "Version of this application"
 
-#: ../src/seahorse-viewer.c:123
-msgid "Contributions:"
-msgstr "Contributions:"
+#: ../src/seahorse-sidebar.c:799
+msgid "Couldn't lock"
+msgstr "Couldn't lock"
 
-#: ../src/seahorse-viewer.c:149
-msgid "translator-credits"
+#: ../src/seahorse-sidebar.c:836
+msgid "Couldn't unlock"
+msgstr "Couldn't unlock"
+
+#: ../src/seahorse-sidebar.c:944
+msgid "_Lock"
+msgstr "_Lock"
+
+#: ../src/seahorse-sidebar.c:949
+msgid "_Unlock"
+msgstr "_Unlock"
+
+#: ../src/seahorse-sidebar.c:968
+msgid "_Properties"
+msgstr "_Properties"
+
+#: ../ssh/seahorse-ssh-actions.c:88
+msgid "Configure Key for _Secure Shell..."
+msgstr "Configure Key for _Secure Shell…"
+
+#: ../ssh/seahorse-ssh-actions.c:89
+msgid ""
+"Send public Secure Shell key to another machine, and enable logins using "
+"that key."
 msgstr ""
-"Abigail Brady <morwen@evilmagi_c.org>\n"
-"Bastien Nocera <hadess@hadess.net>\n"
-"Gareth Owen <gowen72@yahoo.com>\n"
-"David Lodge <dave@cirt.net>\n"
-"Philip Withnall <philip@tecnocode.co.uk>\n"
-"Bruce Cowan <bruce@bcowan.me.uk>"
-
-#: ../src/seahorse-viewer.c:152
-msgid "Seahorse Project Homepage"
-msgstr "Seahorse Project Homepage"
-
-#. Top menu items
-#: ../src/seahorse-viewer.c:172
-msgid "_File"
-msgstr "_File"
-
-#: ../src/seahorse-viewer.c:173
-msgid "_Edit"
-msgstr "_Edit"
-
-#: ../src/seahorse-viewer.c:174
-msgid "_View"
-msgstr "_View"
-
-#: ../src/seahorse-viewer.c:175
-msgid "_Help"
-msgstr "_Help"
-
-#: ../src/seahorse-viewer.c:177
-msgid "Prefere_nces"
-msgstr "Prefere_nces"
-
-#: ../src/seahorse-viewer.c:178
-msgid "Change preferences for this program"
-msgstr "Change preferences for this program"
-
-#: ../src/seahorse-viewer.c:181
-msgid "About this program"
-msgstr "About this program"
-
-#: ../src/seahorse-viewer.c:182
-msgid "_Contents"
-msgstr "_Contents"
-
-#: ../src/seahorse-viewer.c:183
-msgid "Show Seahorse help"
-msgstr "Show Seahorse help"
-
-#: ../src/seahorse-viewer.c:284
-msgid "Export public key"
-msgstr "Export public key"
-
-#: ../src/seahorse-viewer.c:305
-msgid "Exporting keys"
-msgstr "Exporting keys"
-
-#: ../src/seahorse-viewer.c:334
-msgid "Couldn't retrieve data from key server"
-msgstr "Couldn't retrieve data from key server"
-
-#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:346
-msgid "Copied keys"
-msgstr "Copied keys"
-
-#: ../src/seahorse-viewer.c:371
-msgid "Retrieving keys"
-msgstr "Retrieving keys"
-
-#: ../src/seahorse-viewer.c:426
-#, c-format
-msgid "%s is a private key. Are you sure you want to proceed?"
-msgstr "%s is a private key. Are you sure you want to proceed?"
-
-#: ../src/seahorse-viewer.c:480
-msgid "Importing keys from key servers"
-msgstr "Importing keys from key servers"
-
-#: ../src/seahorse-viewer.c:505
-msgid "Show properties"
-msgstr "Show properties"
-
-#: ../src/seahorse-viewer.c:506
-msgctxt "This text refers to deleting an item from its type's backing store."
-msgid "_Delete"
-msgstr "_Delete"
-
-#: ../src/seahorse-viewer.c:507
-msgid "Delete selected items"
-msgstr "Delete selected items"
-
-#: ../src/seahorse-viewer.c:511
-msgid "E_xport..."
-msgstr "E_xport…"
-
-#: ../src/seahorse-viewer.c:512
-msgid "Export to a file"
-msgstr "Export to a file"
-
-#: ../src/seahorse-viewer.c:514
-msgid "Copy to the clipboard"
-msgstr "Copy to the clipboard"
-
-#: ../src/seahorse-viewer.c:519
-msgid "Import selected keys to local key ring"
-msgstr "Import selected keys to local key ring"
+"Send public Secure Shell key to another machine, and enable logins using "
+"that key."
 
 #: ../ssh/seahorse-ssh-askpass.c:60 ../ssh/seahorse-ssh-askpass.c:68
 msgid "Enter your Secure Shell passphrase:"
@@ -2237,176 +2339,189 @@ msgstr "Enter the new passphrase for: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Enter the new passphrase again: %s"
 
-#: ../ssh/seahorse-ssh-commands.c:86
-msgid "Configure Key for _Secure Shell..."
-msgstr "Configure Key for _Secure Shell…"
+#: ../ssh/seahorse-ssh-backend.c:91
+msgid "Secure Shell"
+msgstr "Secure Shell"
 
-#: ../ssh/seahorse-ssh-commands.c:87
-msgid ""
-"Send public Secure Shell key to another machine, and enable logins using "
-"that key."
-msgstr ""
-"Send public Secure Shell key to another machine, and enable logins using "
-"that key."
+#: ../ssh/seahorse-ssh-backend.c:94
+msgid "Keys used to connect securely to other computers"
+msgstr "Keys used to connect securely to other computers"
 
-#: ../ssh/seahorse-ssh-commands.c:118
+#: ../ssh/seahorse-ssh-deleter.c:81 ../ssh/seahorse-ssh-deleter.c:86
 #, c-format
 msgid "Are you sure you want to delete the secure shell key '%s'?"
 msgstr "Are you sure you want to delete the secure shell key '%s'?"
 
-#: ../ssh/seahorse-ssh-commands.c:121
+#: ../ssh/seahorse-ssh-deleter.c:91 ../ssh/seahorse-ssh-deleter.c:92
 #, c-format
 msgid "Are you sure you want to delete %d secure shell keys?"
 msgstr "Are you sure you want to delete %d secure shell keys?"
 
-#: ../ssh/seahorse-ssh-commands.c:133
-msgid "Couldn't delete key"
-msgstr "Couldn't delete key"
+#: ../ssh/seahorse-ssh-exporter.c:92
+msgid "Ssh Key"
+msgstr "SSH Key"
 
-#: ../ssh/seahorse-ssh-generate.c:60 ../ssh/seahorse-ssh-key.c:91
-#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-exporter.c:122
+msgid "Secret SSH keys"
+msgstr "Secret SSH keys"
+
+#: ../ssh/seahorse-ssh-exporter.c:126
+msgid "Public SSH keys"
+msgstr "Public SSH keys"
+
+#: ../ssh/seahorse-ssh-exporter.c:290
+msgid "No public key file is available for this key."
+msgstr "No public key file is available for this key."
+
+#: ../ssh/seahorse-ssh-generate.c:55 ../ssh/seahorse-ssh-key.c:114
+#: ../ssh/seahorse-ssh-key.c:118 ../ssh/seahorse-ssh-key-properties.xml.h:4
 msgid "Secure Shell Key"
 msgstr "Secure Shell Key"
 
-#: ../ssh/seahorse-ssh-generate.c:61
+#: ../ssh/seahorse-ssh-generate.c:56
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Used to access other computers (eg: via a terminal)"
 
-#: ../ssh/seahorse-ssh-generate.c:115 ../ssh/seahorse-ssh-generate.c:131
+#: ../ssh/seahorse-ssh-generate.c:110 ../ssh/seahorse-ssh-generate.c:126
 msgid "Couldn't generate Secure Shell key"
 msgstr "Couldn't generate Secure Shell key"
 
-#: ../ssh/seahorse-ssh-generate.c:197
+#: ../ssh/seahorse-ssh-generate.c:192
 msgid "Creating Secure Shell Key"
 msgstr "Creating Secure Shell Key"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:2
-msgid ""
-"<i>Use your email address, and any other reminder you need about what this "
-"key is for.</i>"
-msgstr ""
-"<i>Use your e-mail address, and any other reminder you need about what this "
-"key is for.</i>"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:3
-msgid ""
-"A Secure Shell (SSH) key lets you connect securely to trusted computers "
-"using SSH, without entering a different password for each of them."
-msgstr ""
-"A Secure Shell (SSH) key lets you connect securely to trusted computers "
-"using SSH, without entering a different password for each of them."
-
-#: ../ssh/seahorse-ssh-generate.xml.h:5
-msgid ""
-"If there is already a computer you want to use this key with, you can set up "
-"that computer to recognize your key now. "
-msgstr ""
-"If there is already a computer with which you want to use this key, you can "
-"set up that computer to recognise your key now. "
-
-#: ../ssh/seahorse-ssh-generate.xml.h:7
+#: ../ssh/seahorse-ssh-generate.xml.h:1
 msgid "New Secure Shell Key"
 msgstr "New Secure Shell Key"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:8
-msgid "_Create and Set Up"
-msgstr "_Create and Set Up"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:9
+#: ../ssh/seahorse-ssh-generate.xml.h:2
 msgid "_Just Create Key"
 msgstr "_Just Create Key"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:10
-msgid "_Key Description:"
-msgstr "_Key Description:"
+#: ../ssh/seahorse-ssh-generate.xml.h:3
+msgid "_Create and Set Up"
+msgstr "_Create and Set Up"
 
-#: ../ssh/seahorse-ssh-key.c:87
+#: ../ssh/seahorse-ssh-generate.xml.h:4
+msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
+msgstr "A Secure Shell (SSH) key lets you connect securely to other computers."
+
+#: ../ssh/seahorse-ssh-generate.xml.h:6
+msgid "<i>Your email address, or a reminder of what this key is for.</i>"
+msgstr "<i>Your e-mail address, or a reminder of what this key is for.</i>"
+
+#: ../ssh/seahorse-ssh-generate.xml.h:10
+msgid ""
+"If there is a computer you want to use this key with, you can set up that "
+"computer to recognize your new key."
+msgstr ""
+"If there is a computer you want to use this key with, you can set up that "
+"computer to recognise your new key."
+
+#: ../ssh/seahorse-ssh-key.c:110
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Unreadable Secure Shell Key)"
 
-#: ../ssh/seahorse-ssh-key-properties.c:79
+#: ../ssh/seahorse-ssh-key.c:218
+msgid "Personal SSH key"
+msgstr "Personal SSH key"
+
+#: ../ssh/seahorse-ssh-key.c:220
+msgid "SSH key"
+msgstr "SSH key"
+
+#: ../ssh/seahorse-ssh-key-properties.c:82
 msgid "Couldn't rename key."
 msgstr "Couldn't rename key."
 
-#: ../ssh/seahorse-ssh-key-properties.c:132
+#: ../ssh/seahorse-ssh-key-properties.c:135
 msgid "Couldn't change authorization for key."
 msgstr "Couldn't change authorisation for key."
 
-#: ../ssh/seahorse-ssh-key-properties.c:167
+#: ../ssh/seahorse-ssh-key-properties.c:170
 msgid "Couldn't change passphrase for key."
 msgstr "Couldn't change passphrase for key."
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:1
-msgid "<b>Algorithm:</b>"
-msgstr "<b>Algorithm:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
+#: ../ssh/seahorse-ssh-key-properties.xml.h:2
 msgid "<b>Identifier:</b>"
 msgstr "<b>Identifier:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:4
-msgid "<b>Location:</b>"
-msgstr "<b>Location:</b>"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:5
 msgid "<b>Name:</b>"
 msgstr "<b>Name:</b>"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:6
-msgid "<b>Strength:</b>"
-msgstr "<b>Strength:</b>"
+msgid "Used to connect to other computers."
+msgstr "Used to connect to other computers."
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:8
+#: ../ssh/seahorse-ssh-key-properties.xml.h:10
 msgid "<b>Trust</b>"
 msgstr "<b>Trust</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
+msgid "The owner of this key is _authorized to connect to this computer"
+msgstr "The owner of this key is _authorised to connect to this computer"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:13
 #, no-c-format
 msgid "<i>This only applies to the '%s'</i> account."
 msgstr "<i>This only applies to the '%s'</i> account."
 
+#: ../ssh/seahorse-ssh-key-properties.xml.h:15
+msgid "<b>Algorithm:</b>"
+msgstr "<b>Algorithm:</b>"
+
 #: ../ssh/seahorse-ssh-key-properties.xml.h:16
+msgid "<b>Strength:</b>"
+msgstr "<b>Strength:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
+msgid "<b>Location:</b>"
+msgstr "<b>Location:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:20
 msgid "E_xport Complete Key"
 msgstr "E_xport Complete Key"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:20
-msgid "The owner of this key is _authorized to connect to this computer"
-msgstr "The owner of this key is _authorised to connect to this computer"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:21
-msgid "Used to connect to other computers."
-msgstr "Used to connect to other computers."
-
-#: ../ssh/seahorse-ssh-operation.c:198
+#: ../ssh/seahorse-ssh-operation.c:199
 msgid "The SSH command was terminated unexpectedly."
 msgstr "The SSH command was terminated unexpectedly."
 
-#: ../ssh/seahorse-ssh-operation.c:208
+#: ../ssh/seahorse-ssh-operation.c:209
 msgid "The SSH command failed."
 msgstr "The SSH command failed."
 
-#: ../ssh/seahorse-ssh-operation.c:518
+#: ../ssh/seahorse-ssh-operation.c:502
 msgid "Remote Host Password"
 msgstr "Remote Host Password"
 
-#: ../ssh/seahorse-ssh-operation.c:634
+#: ../ssh/seahorse-ssh-operation.c:588
 msgid "Enter Key Passphrase"
 msgstr "Enter Key Passphrase"
 
-#: ../ssh/seahorse-ssh-operation.c:724
+#: ../ssh/seahorse-ssh-operation.c:678
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Passphrase for New Secure Shell Key"
 
-#: ../ssh/seahorse-ssh-operation.c:908
+#: ../ssh/seahorse-ssh-operation.c:862
 #, c-format
 msgid "Importing key: %s"
 msgstr "Importing key: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:910
+#: ../ssh/seahorse-ssh-operation.c:864
 msgid "Importing key. Enter passphrase"
 msgstr "Importing key. Enter passphrase"
 
-#: ../ssh/seahorse-ssh-source.c:951
+#: ../ssh/seahorse-ssh-source.c:232
+msgid "OpenSSH keys"
+msgstr "OpenSSH keys"
+
+#: ../ssh/seahorse-ssh-source.c:235
+#, c-format
+msgid "OpenSSH: %s"
+msgstr "OpenSSH: %s"
+
+#: ../ssh/seahorse-ssh-source.c:940
 msgid "No private key file is available for this key."
 msgstr "No private key file is available for this key."
 
@@ -2419,20 +2534,20 @@ msgid "Configuring Secure Shell Keys..."
 msgstr "Configuring Secure Shell Keys…"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:1
-msgid "<i>eg: fileserver.example.com:port</i>"
-msgstr "<i>e.g.: fileserver.example.com:port</i>"
-
-#: ../ssh/seahorse-ssh-upload.xml.h:2
 msgid "Set Up Computer for SSH Connection"
 msgstr "Set Up Computer for SSH Connection"
 
-#: ../ssh/seahorse-ssh-upload.xml.h:4
+#: ../ssh/seahorse-ssh-upload.xml.h:2
 msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
 msgstr ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
+
+#: ../ssh/seahorse-ssh-upload.xml.h:4
+msgid "<i>eg: fileserver.example.com:port</i>"
+msgstr "<i>e.g.: fileserver.example.com:port</i>"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
 msgid "_Computer Name:"
@@ -2446,11 +2561,172 @@ msgstr "_Login Name:"
 msgid "_Set Up"
 msgstr "_Set Up"
 
+#~ msgid "Couldn't delete item"
+#~ msgstr "Couldn't delete item"
+
+#~ msgid "Deleting item"
+#~ msgid_plural "Deleting items"
+#~ msgstr[0] "Deleting item"
+#~ msgstr[1] "Deleting items"
+
+#~ msgid "Passwords: %s"
+#~ msgstr "Passwords: %s"
+
+#~ msgid "<b>Passwords:</b> %s"
+#~ msgstr "<b>Passwords:</b> %s"
+
+#~ msgid "Couldn't lock keyring"
+#~ msgstr "Couldn't lock keyring"
+
+#~ msgid ""
+#~ "Lock the password storage keyring so a master password is required to "
+#~ "unlock it."
+#~ msgstr ""
+#~ "Lock the password storage keyring so a master password is required to "
+#~ "unlock it."
+
+#~ msgid ""
+#~ "Unlock the password storage keyring with a master password so it is "
+#~ "available for use."
+#~ msgstr ""
+#~ "Unlock the password storage keyring with a master password so it is "
+#~ "available for use."
+
+#~ msgid "Couldn't delete keyring"
+#~ msgstr "Couldn't delete keyring"
+
+#~ msgid "Archive files"
+#~ msgstr "Archive files"
+
+#~ msgid ""
+#~ "<b>A file already exists with this name.</b>\n"
+#~ "\n"
+#~ "Do you want to replace it with a new file?"
+#~ msgstr ""
+#~ "<b>A file already exists with this name.</b>\n"
+#~ "\n"
+#~ "Do you want to replace it with a new file?"
+
+#~ msgid "_Replace"
+#~ msgstr "_Replace"
+
+#~ msgid "_Sign Key..."
+#~ msgstr "_Sign Key…"
+
+#~ msgid "Sign public key"
+#~ msgstr "Sign public key"
+
+#~ msgid "Are you sure you want to permanently delete %d keys and identities?"
+#~ msgstr "Are you sure you want to permanently delete %d keys and identities?"
+
+#~ msgid "Couldn't delete public key"
+#~ msgstr "Couldn't delete public key"
+
+#~ msgid "New PGP Key"
+#~ msgstr "New PGP Key"
+
+#~ msgid "Couldn't export key to \"%s\""
+#~ msgstr "Couldn't export key to \"%s\""
+
+#~ msgid "Export Complete Key"
+#~ msgstr "Export Complete Key"
+
+#~ msgid "Are you sure you want to delete the certificate '%s'?"
+#~ msgstr "Are you sure you want to delete the certificate '%s'?"
+
+#~ msgid "Are you sure you want to delete %d certificate?"
+#~ msgid_plural "Are you sure you want to delete %d certificates?"
+#~ msgstr[0] "Are you sure you want to delete %d certificate?"
+#~ msgstr[1] "Are you sure you want to delete %d passwords?"
+
+#~ msgid "Deleting"
+#~ msgstr "Deleting"
+
+#~ msgid "Create New ..."
+#~ msgstr "Create New…"
+
+#~ msgid "Selected %d key"
+#~ msgid_plural "Selected %d keys"
+#~ msgstr[0] "Selected %d key"
+#~ msgstr[1] "Selected %d keys"
+
+#~ msgid "Importing keys"
+#~ msgstr "Importing keys"
+
+#~ msgid "Unrecognized key type, or invalid data format"
+#~ msgstr "Unrecognised key type, or invalid data format"
+
+#~ msgid "Importing Keys"
+#~ msgstr "Importing Keys"
+
+#~ msgid "T_ypes"
+#~ msgstr "T_ypes"
+
+#~ msgid "Show type column"
+#~ msgstr "Show type column"
+
+#~ msgid "_Expiry"
+#~ msgstr "_Expiry"
+
+#~ msgid "Show expiry column"
+#~ msgstr "Show expiry column"
+
+#~ msgid "_Trust"
+#~ msgstr "_Trust"
+
+#~ msgid "Show owner trust column"
+#~ msgstr "Show owner trust column"
+
+#~ msgid "_Validity"
+#~ msgstr "_Validity"
+
+#~ msgid "Show validity column"
+#~ msgstr "Show validity column"
+
+#~ msgid "Other _Keys"
+#~ msgstr "Other _Keys"
+
+#~ msgid "Validity"
+#~ msgstr "Validity"
+
+#~ msgid "Expiration Date"
+#~ msgstr "Expiration Date"
+
+#~ msgid "_Expand All"
+#~ msgstr "_Expand All"
+
+#~ msgid "Expand all listings"
+#~ msgstr "Expand all listings"
+
+#~ msgid "_Collapse All"
+#~ msgstr "_Collapse All"
+
+#~ msgid "Collapse all listings"
+#~ msgstr "Collapse all listings"
+
+#~ msgid "Export public key"
+#~ msgstr "Export public key"
+
+#~ msgid "Exporting keys"
+#~ msgstr "Exporting keys"
+
+#~ msgid "Couldn't retrieve data from key server"
+#~ msgstr "Couldn't retrieve data from key server"
+
+#~ msgid "Retrieving keys"
+#~ msgstr "Retrieving keys"
+
+#~ msgid "%s is a private key. Are you sure you want to proceed?"
+#~ msgstr "%s is a private key. Are you sure you want to proceed?"
+
+#~ msgid "Couldn't delete key"
+#~ msgstr "Couldn't delete key"
+
+#~ msgid "_Key Description:"
+#~ msgstr "_Key Description:"
+
 #~ msgid "DSA"
 #~ msgstr "DSA"
-
-#~ msgid "Secure Shell key"
-#~ msgstr "Secure Shell key"
 
 #~ msgid "Enter a passphrase for your new Secure Shell key."
 #~ msgstr "Enter a passphrase for your new Secure Shell key."
@@ -2460,9 +2736,6 @@ msgstr "_Set Up"
 
 #~ msgid "couldn't fork process"
 #~ msgstr "couldn't fork process"
-
-#~ msgid "couldn't create new process group"
-#~ msgstr "couldn't create new process group"
 
 #~ msgid "Encryption Daemon (Seahorse)"
 #~ msgstr "Encryption Daemon (Seahorse)"
@@ -2514,9 +2787,6 @@ msgstr "_Set Up"
 
 #~ msgid "Bad Signature"
 #~ msgstr "Bad Signature"
-
-#~ msgid "Couldn't verify signature."
-#~ msgstr "Couldn't verify signature."
 
 #~ msgid "Invalid or unrecognized signer: %s"
 #~ msgstr "Invalid or unrecognised signer: %s"
@@ -2707,9 +2977,6 @@ msgstr "_Set Up"
 #~ msgid "Web Password"
 #~ msgstr "Web Password"
 
-#~ msgid "Network Password"
-#~ msgstr "Network Password"
-
 #~ msgid "Couldn't set application access."
 #~ msgstr "Couldn't set application access."
 
@@ -2828,12 +3095,6 @@ msgstr "_Set Up"
 #~ msgid "Symmetric Key"
 #~ msgstr "Symmetric Key"
 
-#~ msgid "Public Key"
-#~ msgstr "Public Key"
-
-#~ msgid "Private Key"
-#~ msgstr "Private Key"
-
 #~ msgid "Credentials"
 #~ msgstr "Credentials"
 
@@ -2881,9 +3142,6 @@ msgstr "_Set Up"
 
 #~ msgid "Synchronizing keys"
 #~ msgstr "Synchronising keys"
-
-#~ msgid "Encryption Key Manager"
-#~ msgstr "Encryption Key Manager"
 
 #~ msgid "Invalid"
 #~ msgstr "Invalid"
@@ -2982,9 +3240,6 @@ msgstr "_Set Up"
 #~ msgid "Removing item"
 #~ msgstr "Removing item"
 
-#~ msgid "<i>Automatically unlocked when user logs in.</i>"
-#~ msgstr "<i>Automatically unlocked when user logs in.</i>"
-
 #~ msgid "Couldn't get default password keyring"
 #~ msgstr "Couldn't get default password keyring"
 
@@ -3039,9 +3294,6 @@ msgstr "_Set Up"
 #~ msgid "_Quit"
 #~ msgstr "_Quit"
 
-#~ msgid "Create a new personal key"
-#~ msgstr "Create a new personal key"
-
 #~ msgid "Import keys into your key ring from a file"
 #~ msgstr "Import keys into your key ring from a file"
 
@@ -3065,9 +3317,6 @@ msgstr "_Set Up"
 
 #~ msgid "_About"
 #~ msgstr "_About"
-
-#~ msgid "P_roperties"
-#~ msgstr "P_roperties"
 
 #~ msgid "E_xport Public Key..."
 #~ msgstr "E_xport Public Key…"
@@ -3287,9 +3536,6 @@ msgstr "_Set Up"
 #~ msgid "Couldn't set permissions on backup file."
 #~ msgstr "Couldn't set permissions on backup file."
 
-#~ msgid "Clipboard Text Encryption"
-#~ msgstr "Clipboard Text Encryption"
-
 #~ msgid "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
 #~ msgstr "Encrypt, decrypt or sign the clipboard (uses PGP type encryption)."
 
@@ -3328,9 +3574,6 @@ msgstr "_Set Up"
 
 #~ msgid "The clipboard could not be Signed."
 #~ msgstr "The clipboard could not be Signed."
-
-#~ msgid "Import Failed"
-#~ msgstr "Import Failed"
 
 #~ msgid "Keys were found but not imported."
 #~ msgstr "Keys were found but not imported."
@@ -3412,9 +3655,6 @@ msgstr "_Set Up"
 
 #~ msgid "No encrypted or signed text is selected."
 #~ msgstr "No encrypted or signed text is selected."
-
-#~ msgid "Decrypted text"
-#~ msgstr "Decrypted text"
 
 #~ msgid "Verified text"
 #~ msgstr "Verified text"
@@ -3508,9 +3748,6 @@ msgstr "_Set Up"
 
 #~ msgid "Choose Recipients"
 #~ msgstr "Choose Recipients"
-
-#~ msgid "Couldn't load keys"
-#~ msgstr "Couldn't load keys"
 
 #~ msgid "Choose Encrypted File Name for '%s'"
 #~ msgstr "Choose Encrypted File Name for '%s'"
@@ -3917,9 +4154,6 @@ msgstr "_Set Up"
 #~ msgid "Choose Signing Key"
 #~ msgstr "Choose Signing Key"
 
-#~ msgid "The ssh command failed."
-#~ msgstr "The ssh command failed."
-
 #~ msgid "Key T_ypes"
 #~ msgstr "Key T_ypes"
 
@@ -4274,9 +4508,6 @@ msgstr "_Set Up"
 #~ msgid "Add the default key as a revoker"
 #~ msgstr "Add the default key as a revoker"
 
-#~ msgid "Create a revocation certificate"
-#~ msgstr "Create a revocation certificate"
-
 #~ msgid "Delete key"
 #~ msgstr "Delete key"
 
@@ -4284,9 +4515,6 @@ msgstr "_Set Up"
 #~ "Publish the selected keys online, and sync any changes others have made."
 #~ msgstr ""
 #~ "Publish the selected keys online, and sync any changes others have made."
-
-#~ msgid "Sign key"
-#~ msgstr "Sign key"
 
 #~ msgid "_Change Passphrase..."
 #~ msgstr "_Change Passphrase…"
