@@ -514,6 +514,7 @@ seahorse_menu_action_class_init (SeahorseMenuActionClass *klass)
 }
 
 static const GtkActionEntry GENERAL_ACTIONS[] = {
+	/* TRANSLATORS: The "Remote" menu contains key operations on remote systems. */
 	{ "remote-menu", NULL, N_("_Remote") }, 
 	{ "new-menu", NULL, N_("_New") },
 	{ "app-quit", GTK_STOCK_QUIT, NULL, "<control>Q", 

@@ -421,7 +421,8 @@ names_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
 	                               SEAHORSE_ICON_SIGN : GTK_STOCK_DIALOG_QUESTION);
 	name = seahorse_object_get_markup (object);
 	id = seahorse_object_get_identifier (object);
-	
+
+	/* TRANSLATORS: [Unknown] signature name */
 	gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter,
 	                    UIDSIG_OBJECT, NULL,
 	                    UIDSIG_ICON, icon,
@@ -530,7 +531,7 @@ do_names (SeahorseWidget *swidget)
                                                      -1, "", renderer,
                                                      "gicon", UIDSIG_ICON, NULL);
 
-        /* The name column */
+        /* TRANSLATORS: The name and email set on the PGP key */
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
                                                      -1, _("Name/Email"), gtk_cell_renderer_text_new (), 
                                                      "markup", UIDSIG_NAME, NULL);
@@ -900,9 +901,10 @@ do_owner (SeahorseWidget *swidget)
 	if (flags & SEAHORSE_FLAG_EXPIRED) {
 		widget = GTK_WIDGET (gtk_builder_get_object (swidget->gtkbuilder, "expired-message"));
 		if (widget) {
-            
+
 			expires_date = seahorse_pgp_key_get_expires (pkey);
-			if (expires_date == 0) 
+			if (expires_date == 0)
+				/* TRANSLATORS: (unknown) expiry date */
 				t = g_strdup (_("(unknown)"));
 			else
 				t = seahorse_util_get_display_date_string (expires_date);
@@ -1559,6 +1561,7 @@ trust_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
 	name = seahorse_object_get_label (object);
 	id = seahorse_object_get_identifier (object);
 
+	/* TRANSLATORS: [Unknown] signature name */
 	gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter,
 	                    SIGN_ICON, icon,
 	                    SIGN_NAME, name ? name : _("[Unknown]"),
@@ -1842,6 +1845,7 @@ do_trust (SeahorseWidget *swidget)
 			gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
 			                                             -1, "", renderer,
 			                                             "gicon", SIGN_ICON, NULL);
+			/* TRANSLATORS: The name and email set on the PGP key */
 			gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
 			                                             -1, _("Name/Email"), gtk_cell_renderer_text_new (), 
 			                                             "text", SIGN_NAME, NULL);

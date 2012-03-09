@@ -240,6 +240,7 @@ on_delete_event (GtkWidget* widget, GdkEvent* event, SeahorseKeyserverResults* s
 }
 
 static const GtkActionEntry GENERAL_ENTRIES[] = {
+	/* TRANSLATORS: The "Remote" menu contains key operations on remote systems. */
 	{ "remote-menu", NULL, N_("_Remote") },
 	{ "app-close", GTK_STOCK_CLOSE, NULL, "<control>W",
 	  N_("Close this window"), G_CALLBACK (on_app_close) },
