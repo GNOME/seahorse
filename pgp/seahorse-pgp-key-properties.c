@@ -725,9 +725,9 @@ set_photoid_state (SeahorseWidget *swidget, SeahorsePgpKey *pkey)
 	if (pixbuf)
 		gtk_image_set_from_pixbuf (GTK_IMAGE (photo_image), pixbuf);
 	else if (etype == SEAHORSE_USAGE_PRIVATE_KEY)
-		gtk_image_set_from_icon_name (GTK_IMAGE (photo_image), SEAHORSE_ICON_SECRET, (GtkIconSize)-1);
+		gtk_image_set_from_icon_name (GTK_IMAGE (photo_image), SEAHORSE_ICON_SECRET, GTK_ICON_SIZE_DIALOG);
 	else 
-		gtk_image_set_from_icon_name (GTK_IMAGE (photo_image), SEAHORSE_ICON_KEY, (GtkIconSize)-1);
+		gtk_image_set_from_icon_name (GTK_IMAGE (photo_image), SEAHORSE_ICON_KEY, GTK_ICON_SIZE_DIALOG);
 }
 
 static void

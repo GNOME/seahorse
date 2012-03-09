@@ -26,14 +26,83 @@
 #include "seahorse-object.h"
 
 enum {
-  COMBO_STRING,
+  COMBO_LABEL,
+  COMBO_MARKUP,
   COMBO_POINTER,
   N_COLUMNS
 };
 
-/* -----------------------------------------------------------------------------
- * HELPERS
- */
+typedef struct {
+	GHashTable *labels;
+	gboolean collision;
+} ComboClosure;
+
+static void
+combo_closure_free (gpointer data)
+{
+	ComboClosure *closure = data;
+	g_hash_table_destroy (closure->labels);
+	g_slice_free (ComboClosure, closure);
+}
+
+static ComboClosure *
+combo_closure_new (void)
+{
+	ComboClosure *closure = g_slice_new0 (ComboClosure);
+	closure->labels = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+	return closure;
+}
+
+static void
+refresh_all_markup_in_combo (GtkComboBox *combo)
+{
+	GtkTreeModel *model;
+	gpointer object;
+	GtkTreeIter iter;
+	gboolean valid;
+
+	model = gtk_combo_box_get_model (combo);
+	valid = gtk_tree_model_get_iter_first (model, &iter);
+
+	while (valid) {
+		gtk_tree_model_get (model, &iter, COMBO_POINTER, &object, -1);
+		g_object_notify (object, "label");
+		valid = gtk_tree_model_iter_next (model, &iter);
+	}
+}
+
+static gchar *
+calculate_markup_for_object (GtkComboBox *combo,
+                             const gchar *label,
+                             SeahorseObject *object)
+{
+	ComboClosure *closure;
+	const gchar *keyid;
+	gchar *ident;
+	gchar *markup;
+
+	closure = g_object_get_data (G_OBJECT (combo), "combo-keys-closure");
+
+	if (!closure->collision) {
+		if (g_hash_table_lookup (closure->labels, label)) {
+			closure->collision = TRUE;
+			refresh_all_markup_in_combo (combo);
+		} else {
+			g_hash_table_insert (closure->labels, g_strdup (label), "X");
+		}
+	}
+
+	if (closure->collision && SEAHORSE_IS_PGP_KEY (object)) {
+		keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (object));
+		ident = seahorse_pgp_key_calc_identifier (keyid);
+		markup = g_markup_printf_escaped ("%s <span size='small'>[%s]</span>", label, ident);
+		g_free (ident);
+	} else {
+		markup = g_markup_escape_text (label, -1);
+	}
+
+	return markup;
+}
 
 static void
 on_label_changed (GObject *obj,
@@ -42,30 +111,38 @@ on_label_changed (GObject *obj,
 {
 	SeahorseObject *object = SEAHORSE_OBJECT (obj);
 	GtkComboBox *combo = GTK_COMBO_BOX (user_data);
+	ComboClosure *closure;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gboolean valid;
-	const gchar *userid;
+	gchar *previous;
+	gchar *markup;
 	gpointer pntr;
-	SeahorseObject *frommodel;
+	const gchar *label;
 
+	closure = g_object_get_data (G_OBJECT (combo), "combo-keys-closure");
 	model = gtk_combo_box_get_model (combo);
 	valid = gtk_tree_model_get_iter_first (model, &iter);
 
 	while (valid) {
-		gtk_tree_model_get (model, &iter,
-		                    COMBO_POINTER, &pntr,
-		                    -1);
+		gtk_tree_model_get (model, &iter, COMBO_POINTER, &pntr, COMBO_LABEL, &previous, -1);
+		if (SEAHORSE_OBJECT (pntr) == object) {
 
-		frommodel = SEAHORSE_OBJECT (pntr);
-		if (frommodel == object) {
-			userid = seahorse_object_get_label (object);
+			/* Remove this from label collision checks */
+			g_hash_table_remove (closure->labels, previous);
+
+			/* Calculate markup taking into account label collisions */
+			label = seahorse_object_get_label (object);
+			markup = calculate_markup_for_object (combo, label, object);
 			gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-			                    COMBO_STRING, userid,
+			                    COMBO_LABEL, label,
+			                    COMBO_MARKUP, markup,
 			                    -1);
+			g_free (markup);
 			break;
 		}
 
+		g_free (previous);
 		valid = gtk_tree_model_iter_next (model, &iter);
 	}
 }
@@ -79,16 +156,22 @@ on_collection_added (GcrCollection *collection,
 	GtkComboBox *combo = GTK_COMBO_BOX (user_data);
 	GtkListStore *model;
 	GtkTreeIter iter;
-	const gchar *userid;
+	const gchar *label;
+	gchar *markup;
 
 	model = GTK_LIST_STORE (gtk_combo_box_get_model (combo));
-	userid = seahorse_object_get_label (object);
+
+	label = seahorse_object_get_label (object);
+	markup = calculate_markup_for_object (combo, label, object);
 
 	gtk_list_store_append (model, &iter);
 	gtk_list_store_set (model, &iter,
-	                    COMBO_STRING, userid,
+	                    COMBO_LABEL, label,
+	                    COMBO_MARKUP, markup,
 	                    COMBO_POINTER, object,
 	                    -1);
+
+	g_free (markup);
 
 	g_signal_connect (object, "notify::label", G_CALLBACK (on_label_changed), combo);
 }
@@ -98,28 +181,31 @@ on_collection_removed (GcrCollection *collection,
                        GObject *obj,
                        gpointer user_data)
 {
+	ComboClosure *closure = g_object_get_data (user_data, "combo-keys-closure");
 	SeahorseObject *object = SEAHORSE_OBJECT (obj);
 	GtkComboBox *combo = GTK_COMBO_BOX (user_data);
 	GtkTreeModel *model;
 	GtkTreeIter iter;
+	gchar *previous;
 	gpointer pntr;
 	gboolean valid;
-	SeahorseObject *frommodel;
 
 	model = gtk_combo_box_get_model (combo);
 	valid = gtk_tree_model_get_iter_first (model, &iter);
 
 	while (valid) {
 		gtk_tree_model_get (model, &iter,
+		                    COMBO_LABEL, &previous,
 		                    COMBO_POINTER, &pntr,
 		                    -1);
 
-		frommodel = SEAHORSE_OBJECT (pntr);
-		if (frommodel == object) {
+		if (SEAHORSE_OBJECT (pntr) == object) {
+			g_hash_table_remove (closure->labels, previous);
 			gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
 			break;
 		}
 
+		g_free (previous);
 		valid = gtk_tree_model_iter_next (model, &iter);
 	}
 
@@ -155,10 +241,14 @@ seahorse_combo_keys_attach (GtkComboBox *combo,
 	GtkCellRenderer *renderer;
 	GList *l, *objects;
 
+	g_object_set_data_full (G_OBJECT (combo), "combo-keys-closure",
+	                        combo_closure_new (), combo_closure_free);
+
 	/* Setup the None Option */
 	model = gtk_combo_box_get_model (combo);
 	if (!model) {
-		model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER));
+		model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING,
+		                                            G_TYPE_STRING, G_TYPE_POINTER));
 		gtk_combo_box_set_model (combo, model);
 
 		gtk_cell_layout_clear (GTK_CELL_LAYOUT (combo));
@@ -166,7 +256,7 @@ seahorse_combo_keys_attach (GtkComboBox *combo,
 
 		gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
 		gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combo), renderer,
-		                               "text", COMBO_STRING);
+		                               "markup", COMBO_MARKUP);
 	}
 
 	/* Setup the object list */
@@ -181,7 +271,8 @@ seahorse_combo_keys_attach (GtkComboBox *combo,
 	if (none_option) {
 		gtk_list_store_prepend (GTK_LIST_STORE (model), &iter);
 		gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-		                    COMBO_STRING, none_option,
+		                    COMBO_LABEL, NULL,
+		                    COMBO_MARKUP, none_option,
 		                    COMBO_POINTER, NULL,
 		                    -1);
 	}
