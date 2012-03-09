@@ -76,12 +76,24 @@ static void
 on_ssh_upload (GtkAction* action,
                gpointer user_data)
 {
-	GList *ssh_keys = user_data;
+	SeahorseActions *actions = SEAHORSE_ACTIONS (user_data);
+	SeahorseCatalog *catalog;
+	GList *keys, *objects, *l;
 
-	if (ssh_keys == NULL)
-		return;
+	keys = NULL;
+	catalog = seahorse_actions_get_catalog (actions);
 
-	seahorse_ssh_upload_prompt (ssh_keys, seahorse_action_get_window (action));
+	if (catalog != NULL) {
+		objects = seahorse_catalog_get_selected_objects (catalog);
+		for (l = objects; l != NULL; l = g_list_next (l)) {
+			if (SEAHORSE_IS_SSH_KEY (l->data))
+				keys = g_list_prepend (keys, l->data);
+		}
+		g_list_free (objects);
+	}
+
+	seahorse_ssh_upload_prompt (keys, seahorse_action_get_window (action));
+	g_list_free (keys);
 }
 
 static const GtkActionEntry KEYS_ACTIONS[] = {
@@ -95,7 +107,7 @@ seahorse_ssh_actions_init (SeahorseSshActions *self)
 {
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, KEYS_ACTIONS, G_N_ELEMENTS (KEYS_ACTIONS), NULL);
+	gtk_action_group_add_actions (actions, KEYS_ACTIONS, G_N_ELEMENTS (KEYS_ACTIONS), self);
 	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), UI_DEFINITION);
 }
 

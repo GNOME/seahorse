@@ -352,10 +352,10 @@ seahorse_catalog_real_selection_changed (SeahorseCatalog *self)
 	previous = self->pv->selection_actions;
 	self->pv->selection_actions = groups;
 
-	for (l = self->pv->selection_actions; l != NULL; l = g_list_next (l))
-		gtk_action_group_set_visible (l->data, TRUE);
 	for (l = previous; l != NULL; l = g_list_next (l))
 		gtk_action_group_set_visible (l->data, FALSE);
+	for (l = self->pv->selection_actions; l != NULL; l = g_list_next (l))
+		gtk_action_group_set_visible (l->data, TRUE);
 	g_list_free_full (previous, g_object_unref);
 }
 
