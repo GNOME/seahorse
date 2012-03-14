@@ -978,7 +978,9 @@ seahorse_gkr_item_set_info (SeahorseGkrItem *self, GnomeKeyringItemInfo* info)
 	gchar *secret;
 
 	g_return_if_fail (SEAHORSE_IS_GKR_ITEM (self));
-	
+
+	clear_display_info (self);
+
 	if (self->pv->item_info)
 		gnome_keyring_item_info_free (self->pv->item_info);
 	if (info)
