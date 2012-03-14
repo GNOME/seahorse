@@ -313,8 +313,8 @@ empathy_custom (const DisplayEntry *entry,
 	display = gnome_keyring_item_info_get_display_name (item);
 	account = get_attribute_string (attrs, "account-id");
 
-	/* Translators: This should be the same as the string in empathy */
-	prefix = _("IM account password for ");
+	/* This should be the same as the string in empathy */
+	prefix = "IM account password for ";
 
 	if (g_str_has_prefix (display, prefix)) {
 		len = strlen (prefix);
