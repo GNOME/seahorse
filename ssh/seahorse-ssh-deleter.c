@@ -88,8 +88,8 @@ seahorse_ssh_deleter_create_confirm (SeahorseDeleter *deleter,
 		confirm = NULL;
 
 	} else {
-		prompt = g_strdup_printf (ngettext (_("Are you sure you want to delete %d secure shell key?"),
-		                                    _("Are you sure you want to delete %d secure shell keys?"),
+		prompt = g_strdup_printf (ngettext ("Are you sure you want to delete %d secure shell key?",
+		                                    "Are you sure you want to delete %d secure shell keys?",
 		                                    num),
 		                          num);
 		confirm = NULL;
