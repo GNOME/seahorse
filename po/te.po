@@ -1,19 +1,19 @@
 # translation of seahorse.master.te.po to Telugu
 # Telugu translation of seahorse.
-# Copyright (C) 2007,2011 Swecha Telugu Localisation Team <localization@swecha.net>.
+# Copyright (C) 2007,2011,2012 Swecha Telugu Localisation Team <localization@swecha.net>.
 # This file is distributed under the same license as the seahorse package.
 #
 # Srinivasa Chary <srinu.kolpur@gmail.com>, 2007.
 # Krishna Babu K <kkrothap@redhat.com>, 2009.
-# Hari Krishna <hari@swecha.net>, 2011.
 # Krishna Babu K <kkrothap@redhat.com>, 2011.
+# Hari Krishna <hari@swecha.net>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master.te\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-15 08:07+0000\n"
-"PO-Revision-Date: 2009-08-28 14:08+0530\n"
+"POT-Creation-Date: 2012-03-21 16:29+0000\n"
+"PO-Revision-Date: 2012-03-23 12:08+0530\n"
 "Last-Translator: Hari Krishna <hari@swecha.net>\n"
 "Language-Team: Telugu <indlinux-telugu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -30,15 +30,15 @@ msgid "Add Password Keyring"
 msgstr "దాచబడిన సంకేతపదం లేదా ప్రవేశద్వారం"
 
 #: ../gkr/seahorse-add-keyring.xml.h:2
-msgid "New Keyring Name:"
-msgstr "మీట యొక్క పేరు"
-
-#: ../gkr/seahorse-add-keyring.xml.h:3
 msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
 msgstr ""
 "కొత్త కీరింగు కొరకు దయచేసి పేరును యెంచుకొనుము. మీరు వొక అన్‌లాక్ సంకేతపదము కొరకు అడుగబడతారు."
+
+#: ../gkr/seahorse-add-keyring.xml.h:3
+msgid "New Keyring Name:"
+msgstr "మీట యొక్క పేరు"
 
 #: ../gkr/seahorse-add-keyring.xml.h:4
 #: ../libseahorse/seahorse-add-keyserver.xml.h:5
@@ -46,7 +46,55 @@ msgstr ""
 msgid "The host name or address of the server."
 msgstr "ఆతిథ్య నామం లేదా సేవిక యొక్క చిరునామా."
 
-#: ../gkr/seahorse-gkr-add-item.c:61 ../gkr/seahorse-gkr-add-keyring.c:72
+#: ../gkr/seahorse-gkr-actions.c:81
+msgid "New password keyring"
+msgstr "కొత్త సంకేతపదం యొక్క కీరింగ్"
+
+#: ../gkr/seahorse-gkr-actions.c:82 ../gkr/seahorse-gkr-actions.c:89
+msgid "Used to store application and network passwords"
+msgstr "తాత్కాలిక స్థలంలో ఉన్న సంకేతపదాలను ఎక్కడ ఉంచాలి."
+
+#: ../gkr/seahorse-gkr-actions.c:83
+msgid "New password..."
+msgstr "కొత్త సంకేతపదం"
+
+#: ../gkr/seahorse-gkr-actions.c:84 ../gkr/seahorse-gkr-actions.c:91
+msgid "Safely store a password or secret."
+msgstr "సంకేతపదమును లేదా రహస్యమును సురక్షితముగా నిల్వవుంచుము."
+
+#: ../gkr/seahorse-gkr-actions.c:88
+msgid "Password Keyring"
+msgstr "సంకేతపదం"
+
+#: ../gkr/seahorse-gkr-actions.c:90
+msgid "Stored Password"
+msgstr "నిల్వవుంచిన సంకేతపదము"
+
+#: ../gkr/seahorse-gkr-actions.c:151
+msgid "Couldn't set default keyring"
+msgstr "మీటను తొలగించలేకపోయింది"
+
+#: ../gkr/seahorse-gkr-actions.c:183
+msgid "Couldn't change keyring password"
+msgstr "సంకేతపదంను మార్చలేకపోయింది."
+
+#: ../gkr/seahorse-gkr-actions.c:209
+msgid "_Set as default"
+msgstr "అప్రమేయంగా అమర్చుము (_S)"
+
+#: ../gkr/seahorse-gkr-actions.c:210
+msgid "Applications usually store new passwords in the default keyring."
+msgstr "అనువర్తనములు కొత్త సంకేతపదములను అప్రమేయ కీరింగునందు నిల్వవుంచుతాయి."
+
+#: ../gkr/seahorse-gkr-actions.c:211
+msgid "Change _Password"
+msgstr "సంకేతపదంను మార్చండి (_P)"
+
+#: ../gkr/seahorse-gkr-actions.c:212
+msgid "Change the unlock password of the password storage keyring"
+msgstr "సంకేతపదము నిల్వవుంచే కీరింగు యొక్క అన్‌లాక్ సంకేతపదమును మార్చుము"
+
+#: ../gkr/seahorse-gkr-add-item.c:60 ../gkr/seahorse-gkr-add-keyring.c:71
 msgid "Couldn't add keyring"
 msgstr "ఉపమీటను చేర్చలేకపోయింది"
 
@@ -55,286 +103,256 @@ msgid "Add Password"
 msgstr "సంకేతపదమును జతచేయుము"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:2
-#: ../gkr/seahorse-gkr-item-properties.xml.h:12 ../pgp/seahorse-revoke.xml.h:5
+#: ../gkr/seahorse-gkr-item-properties.xml.h:2 ../pgp/seahorse-revoke.xml.h:3
+#: ../ssh/seahorse-ssh-generate.xml.h:5
 msgid "_Description:"
 msgstr "వివరణ (_D):"
 
 #: ../gkr/seahorse-gkr-add-item.xml.h:3
-msgid "_Keyring:"
-msgstr "కీరింగు (_K):"
-
-#: ../gkr/seahorse-gkr-add-item.xml.h:4
 msgid "_Password:"
 msgstr "సంకేతపదము (_P):"
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:5
+#: ../gkr/seahorse-gkr-add-item.xml.h:4
 msgid "_Show Password"
 msgstr "సంకేతపదమును చూపుము (_S)"
 
-#: ../gkr/seahorse-gkr-item-commands.c:78
-msgid "Couldn't delete item"
-msgstr "అంశమును తొలగించలేకపోయింది"
+#: ../gkr/seahorse-gkr-add-item.xml.h:5
+msgid "_Keyring:"
+msgstr "కీరింగు (_K):"
 
-#: ../gkr/seahorse-gkr-item-commands.c:100
+#: ../gkr/seahorse-gkr-backend.c:99
+msgid "Passwords"
+msgstr "సంకేతపదాలు "
+
+#: ../gkr/seahorse-gkr-backend.c:102
+msgid "Stored personal passwords, credentials and secrets"
+msgstr "దాచిన వ్యక్తిగతమైన సంకేతపదము, అధికారపత్రములు మరియు రహస్యములు"
+
+#. Translators: This should be the same as the string in empathy
+#: ../gkr/seahorse-gkr-item.c:317
+msgid "IM account password for "
+msgstr "దీనికి IM ఖాతా యొక్క రహస్యపదము"
+
+#: ../gkr/seahorse-gkr-item.c:383
+msgid "Password or secret"
+msgstr "సంకేతపదమును లేదా రహస్యమును ."
+
+#: ../gkr/seahorse-gkr-item.c:384
+msgid "Network password"
+msgstr "అల్లిక సంకేతపదం"
+
+#: ../gkr/seahorse-gkr-item.c:385
+msgid "Stored note"
+msgstr "దాచిన నోట్"
+
+#: ../gkr/seahorse-gkr-item.c:386
+msgid "Keyring password"
+msgstr "కీరింగ్ సంకేతపదము"
+
+#: ../gkr/seahorse-gkr-item.c:387
+msgid "Encryption key password"
+msgstr "రహస్యపరచే ముఖ్య రహస్యపదము"
+
+#: ../gkr/seahorse-gkr-item.c:388
+msgid "Key storage password"
+msgstr "నిల్వవుంచిన కీ యొక్క సంకేతపదము"
+
+#: ../gkr/seahorse-gkr-item.c:389
+msgid "Google Chrome password"
+msgstr "గూగుల్ క్రోం యొక్క సంకేతపదం"
+
+#: ../gkr/seahorse-gkr-item.c:390
+msgid "Gnome Online Accounts password"
+msgstr "గ్నోం ఆన్ లైన్ ఖాతాలయొక్క  రహస్యపదము"
+
+#: ../gkr/seahorse-gkr-item.c:391
+msgid "Telepathy password"
+msgstr "టెలిపతి యొక్క సంకేతపదం"
+
+#: ../gkr/seahorse-gkr-item.c:392
+msgid "Instant messaging password"
+msgstr "వెంటనే సందేశముయొక్క సంకేతపదం"
+
+#: ../gkr/seahorse-gkr-item.c:393
+msgid "Network Manager secret"
+msgstr "నెట్వర్కు అభికర్త యొక్క రహస్యము"
+
+#: ../gkr/seahorse-gkr-item-deleter.c:83
 #, c-format
 msgid "Are you sure you want to delete the password '%s'?"
 msgstr "'%s' వాడుకరి సంకేతపదంను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
 
-#: ../gkr/seahorse-gkr-item-commands.c:103
+#: ../gkr/seahorse-gkr-item-deleter.c:86
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "%d ను శాశ్వతంగా తొలగించాలని మీరు నిశ్చయించుకున్నారా?"
 msgstr[1] "%d ను శాశ్వతంగా తొలగించాలని మీరు నిశ్చయించుకున్నారా?"
 
-#: ../gkr/seahorse-gkr-item-commands.c:114
-msgid "Deleting item"
-msgid_plural "Deleting items"
-msgstr[0] "వస్తువును దాచుతోంది"
-msgstr[1] "వస్తువును దాచుతోంది"
-
-#: ../gkr/seahorse-gkr-item-properties.c:70
+#: ../gkr/seahorse-gkr-item-properties.c:69
 msgid "Access a network share or resource"
 msgstr "నెట్వర్కు భాగస్వామ్యము లేదా వనరును యాక్సెస్ చేయుము"
 
-#: ../gkr/seahorse-gkr-item-properties.c:73
+#: ../gkr/seahorse-gkr-item-properties.c:72
 msgid "Access a website"
 msgstr "వెబ్ సైట్ ను సాంగత్యించు"
 
-#: ../gkr/seahorse-gkr-item-properties.c:76
+#: ../gkr/seahorse-gkr-item-properties.c:75
 msgid "Unlocks a PGP key"
 msgstr "పీజీపీ మీటను తాళం తీస్తుంది"
 
-#: ../gkr/seahorse-gkr-item-properties.c:79
+#: ../gkr/seahorse-gkr-item-properties.c:78
 msgid "Unlocks a Secure Shell key"
 msgstr "సురక్షిత షెల్ మీటను తాళం తీస్తుంది"
 
-#: ../gkr/seahorse-gkr-item-properties.c:82
+#: ../gkr/seahorse-gkr-item-properties.c:81
 msgid "Saved password or login"
 msgstr "దాచబడిన సంకేతపదం లేదా ప్రవేశద్వారం"
 
-#: ../gkr/seahorse-gkr-item-properties.c:106
+#: ../gkr/seahorse-gkr-item-properties.c:105
 msgid "Network Credentials"
 msgstr "నెట్వర్క్ పరపతులు"
 
-#: ../gkr/seahorse-gkr-item-properties.c:111
+#: ../gkr/seahorse-gkr-item-properties.c:110
 msgid "Password"
 msgstr "సంకేతపదం"
 
-#: ../gkr/seahorse-gkr-item-properties.c:211
+#: ../gkr/seahorse-gkr-item-properties.c:210
 msgid "Couldn't change password."
 msgstr "సంకేతపదంను మార్చలేకపోయింది."
 
-#: ../gkr/seahorse-gkr-item-properties.c:256
-#: ../gkr/seahorse-gkr-item-properties.c:377
+#: ../gkr/seahorse-gkr-item-properties.c:255
+#: ../gkr/seahorse-gkr-item-properties.c:376
 msgid "Updating password"
 msgstr "సంకేతపదంను తాజాపరుచుట"
 
-#: ../gkr/seahorse-gkr-item-properties.c:337
+#: ../gkr/seahorse-gkr-item-properties.c:336
 msgid "Couldn't set description."
 msgstr "వర్ణనను ఏర్పాటు చేయలేకపోయింది."
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:1
-msgid "<b>Password:</b>"
-msgstr "<b>సంకేతపదం:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
-#: ../ssh/seahorse-ssh-key-properties.xml.h:7
-msgid "<b>Technical Details:</b>"
-msgstr "<b>సాంకేతిక వివరములు:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:3
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:22
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
-#: ../ssh/seahorse-ssh-key-properties.xml.h:15
-msgid "Details"
-msgstr "వివరములు"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:4
-#: ../pgp/seahorse-pgp-subkey.c:366
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
-msgid "Key"
-msgstr "మీట"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:5
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
-#: ../ssh/seahorse-ssh-key-properties.xml.h:18
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
+#: ../ssh/seahorse-ssh-key-properties.xml.h:1
 msgid "Key Properties"
 msgstr "మీట యొక్క లక్షణాలు"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:6
-msgid "Login:"
-msgstr "ప్రవేశద్వారం పేరు:"
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-item-properties.xml.h:4
+msgid "Use:"
+msgstr "ఉపయోగించు:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:7
+#: ../gkr/seahorse-gkr-item-properties.xml.h:5
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+msgid "Type:"
+msgstr "రకము:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:6
 msgid "Server:"
 msgstr "సేవిక:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:7
+msgid "Login:"
+msgstr "ప్రవేశద్వారం పేరు:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:8
 msgid "Show pass_word"
 msgstr "సంకేతపదంను చూపించు (_w)"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:9
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-msgid "Type:"
-msgstr "రకము:"
+msgid "<b>Password:</b>"
+msgstr "<b>సంకేతపదం:</b>"
 
-#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-item-properties.xml.h:10
+#: ../pgp/seahorse-pgp-subkey.c:366
+#: ../ssh/seahorse-ssh-key-properties.xml.h:15
+msgid "Key"
+msgstr "మీట"
+
 #: ../gkr/seahorse-gkr-item-properties.xml.h:11
-msgid "Use:"
-msgstr "ఉపయోగించు:"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
+#: ../ssh/seahorse-ssh-key-properties.xml.h:20
+msgid "<b>Technical Details:</b>"
+msgstr "<b>సాంకేతిక వివరములు:</b>"
 
-#: ../gkr/seahorse-gkr-keyring.c:120
-#, c-format
-msgid "Passwords: %s"
-msgstr "సంకేతపదం: %s"
+#: ../gkr/seahorse-gkr-item-properties.xml.h:12
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:53
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:49
+#: ../ssh/seahorse-ssh-key-properties.xml.h:22
+msgid "Details"
+msgstr "వివరములు"
 
-#: ../gkr/seahorse-gkr-keyring.c:121
-#, c-format
-msgid "<b>Passwords:</b> %s"
-msgstr "<b>సంకేతపదం:</b> %s"
+#: ../gkr/seahorse-gkr-keyring.c:147
+msgid "Login keyring"
+msgstr "ప్రవేశించుటకు కీరింగ్"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:113
-msgid "Password Keyring"
-msgstr "సంకేతపదం"
+#: ../gkr/seahorse-gkr-keyring.c:676
+msgid "A keyring that is automatically unlocked on login"
+msgstr "ప్రవేసించినపుడు స్వయముగా అన్ లాకఅగు కీరింగు"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:114
-msgid "Used to store application and network passwords"
-msgstr "తాత్కాలిక స్థలంలో ఉన్న సంకేతపదాలను ఎక్కడ ఉంచాలి."
+#: ../gkr/seahorse-gkr-keyring.c:677
+msgid "A keyring used to store passwords"
+msgstr "సంకేతపదములను దాచుటకు ఉపయోగించు కీరింగ్"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:115
-msgid "Stored Password"
-msgstr "నిల్వవుంచిన సంకేతపదము"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:116
-msgid "Safely store a password or secret."
-msgstr "సంకేతపదమును లేదా రహస్యమును సురక్షితముగా నిల్వవుంచుము."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:128
-msgid "Couldn't unlock keyring"
-msgstr "మీటను సంతకం చేయలేక పోయింది"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:165
-msgid "Couldn't lock keyring"
-msgstr "మీటను తొలగించలేకపోయింది"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:202
-msgid "Couldn't set default keyring"
-msgstr "మీటను తొలగించలేకపోయింది"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:239
-msgid "Couldn't change keyring password"
-msgstr "సంకేతపదంను మార్చలేకపోయింది."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:268
-msgid "_Lock"
-msgstr "లాక్  (_L)"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:269
-msgid ""
-"Lock the password storage keyring so a master password is required to unlock "
-"it."
-msgstr ""
-"సంకేతపద నిల్వ కీరింగును లాక్ చేయుము అలా వొక మాస్టర్ సంకేతపదము అవసరమౌతుంది దానిని అన్‌లాక్ చేయుటకు."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:270
-msgid "_Unlock"
-msgstr "తెరచివేయు(_U)"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:271
-msgid ""
-"Unlock the password storage keyring with a master password so it is "
-"available for use."
-msgstr ""
-"సంకేతపదము దాచే కీరింగును మాస్టర్ సంకేతపదముతో అన్‌లాక్ చేయుము అలా అది వుపయోగమునకు అందుబాటులో "
-"వుంటుంది."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:272
-msgid "_Set as default"
-msgstr "అప్రమేయంగా అమర్చుము (_S)"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:273
-msgid "Applications usually store new passwords in the default keyring."
-msgstr "అనువర్తనములు కొత్త సంకేతపదములను అప్రమేయ కీరింగునందు నిల్వవుంచుతాయి."
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:274
-msgid "Change _Password"
-msgstr "సంకేతపదంను మార్చండి (_P)"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:275
-msgid "Change the unlock password of the password storage keyring"
-msgstr "సంకేతపదము నిల్వవుంచే కీరింగు యొక్క అన్‌లాక్ సంకేతపదమును మార్చుము"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:340
-msgid "Couldn't delete keyring"
-msgstr "కీరింగ్ ను తొలగించలేకపోయింది"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:358
+#: ../gkr/seahorse-gkr-keyring-deleter.c:80
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr "'%s' వాడుకరి సంకేతపదంను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:368
-msgid "Deleting keyring"
-msgid_plural "Deleting keyrings"
-msgstr[0] "కీరింగ్ ను తొలగించుచున్నది"
-msgstr[1] "కీరింగ్ లను తొలగించుచున్నది"
+#: ../gkr/seahorse-gkr-keyring-deleter.c:83
+msgid "I understand that all items will be permanently deleted."
+msgstr "అన్ని ఐటంలు శాశ్వతంగా తొలగించుట అర్ధమైనది."
 
-#. -----------------------------------------------------------------------------
-#. * PUBLIC
-#.
-#. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-keyring.xml.h:2
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
-msgid "Created:"
-msgstr "సృష్టించబడింది:"
-
-#: ../gkr/seahorse-gkr-keyring.xml.h:3
-msgid "Keyring"
-msgstr "గ్నోం కీలకవలయం"
-
-#: ../gkr/seahorse-gkr-keyring.xml.h:4
+#: ../gkr/seahorse-gkr-keyring.xml.h:1
 msgid "Keyring Properties"
 msgstr "మీట యొక్క లక్షణాలు"
 
-#: ../gkr/seahorse-gkr-keyring.xml.h:5
-msgid "_Name:"
-msgstr "పేరు(_N):"
+#: ../gkr/seahorse-gkr-keyring.xml.h:2
+msgid "Name:"
+msgstr "పేరు:"
 
-#: ../gkr/seahorse-gkr-operation.c:52 ../pgp/seahorse-gpgme.c:73
-#: ../pgp/seahorse-hkp-source.c:662 ../ssh/seahorse-ssh-operation.c:193
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-keyring.xml.h:4
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+msgid "Created:"
+msgstr "సృష్టించబడింది:"
+
+#: ../gkr/seahorse-gkr-keyring.xml.h:5
+msgid "Keyring"
+msgstr "గ్నోం కీలకవలయం"
+
+#: ../gkr/seahorse-gkr-operation.c:54 ../pgp/seahorse-gpgme.c:73
+#: ../pgp/seahorse-hkp-source.c:585 ../ssh/seahorse-ssh-operation.c:194
 msgid "The operation was cancelled"
 msgstr "కార్యము రద్దుచేయబడినది"
 
-#: ../gkr/seahorse-gkr-operation.c:57
+#: ../gkr/seahorse-gkr-operation.c:59
 msgid "Access to the key ring was denied"
 msgstr "మీట వలయామికి సాంగత్యం తిరస్కరించబడింది"
 
-#: ../gkr/seahorse-gkr-operation.c:60
+#: ../gkr/seahorse-gkr-operation.c:62
 msgid "The gnome-keyring daemon is not running"
 msgstr "గ్నోమ్-కీలకవలయ సూత్రధారి నడవట్లేదు"
 
-#: ../gkr/seahorse-gkr-operation.c:63
+#: ../gkr/seahorse-gkr-operation.c:65
 msgid "The key ring has already been unlocked"
 msgstr "మీట వలయం ఇంతకు ముందే తాళం తీసి ఉంది"
 
-#: ../gkr/seahorse-gkr-operation.c:66
+#: ../gkr/seahorse-gkr-operation.c:68
 msgid "No such key ring exists"
 msgstr "అలాంటి ఏ మీట వలయం లేదు"
 
-#: ../gkr/seahorse-gkr-operation.c:69
+#: ../gkr/seahorse-gkr-operation.c:71
 msgid "Couldn't communicate with key ring daemon"
 msgstr "మీట వలయ సూత్రధారికి తెలియజేయలేకపోయిం"
 
-#: ../gkr/seahorse-gkr-operation.c:72
+#: ../gkr/seahorse-gkr-operation.c:74
 msgid "The item already exists"
 msgstr "ఈ వస్తువు ఇంతకు ముందే ఉంది"
 
-#: ../gkr/seahorse-gkr-operation.c:78
+#: ../gkr/seahorse-gkr-operation.c:80
 msgid "Internal error accessing gnome-keyring"
 msgstr "గ్నోమ్-కీలకవలయాన్ని సాంగత్యించేటప్పుడు అంతర్గత దోషం"
 
@@ -424,7 +442,7 @@ msgstr "తక్కువ పరిమితి నెల"
 
 #: ../libegg/egg-datetime.c:378
 msgid "Month part of the lower date limit"
-msgstr "తక్కువ తేది పరిమితి యొక్క నెల భాగము"
+msgstr "తక్కువ తేది పరిమితి యొక్క నెల భాగ1ము"
 
 #: ../libegg/egg-datetime.c:383
 msgid "Upper limit month"
@@ -594,266 +612,313 @@ msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:1
-msgid ":"
-msgstr ":"
+msgid "initial temporary item"
+msgstr "ప్రారంభ తాత్కాలిక అంశము"
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:2
 msgid "Add Key Server"
 msgstr "ముఖ్య సేవికను చేర్చు"
 
 #: ../libseahorse/seahorse-add-keyserver.xml.h:3
-msgid "Host:"
-msgstr "ఆతిథ్యం:"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:4
 msgid "Key Server Type:"
 msgstr "ముఖ్య సేవిక యొక్క రకము:"
 
+#: ../libseahorse/seahorse-add-keyserver.xml.h:4
+msgid "Host:"
+msgstr "ఆతిథ్యం:"
+
 #: ../libseahorse/seahorse-add-keyserver.xml.h:6
+msgid ":"
+msgstr ":"
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:7
 msgid "The port to access the server on."
 msgstr "సేవికను సాంగత్యించేందుకు పోర్టు."
 
-#: ../libseahorse/seahorse-add-keyserver.xml.h:7
-msgid "initial temporary item"
-msgstr "ప్రారంభ తాత్కాలిక అంశము"
+#: ../libseahorse/seahorse-catalog.c:88
+msgid "Contributions:"
+msgstr "సహాయములు:"
 
-#: ../libseahorse/seahorse-passphrase.c:180
-msgid "Passphrase"
-msgstr "పాస్ పదసముదాయం"
+#: ../libseahorse/seahorse-catalog.c:112 ../src/seahorse.desktop.in.in.h:1
+#: ../src/seahorse-key-manager.c:669 ../src/seahorse-main.c:68
+msgid "Passwords and Keys"
+msgstr "సంకేతపదాలు మరియు మీటలు"
 
-#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
+#: ../libseahorse/seahorse-catalog.c:114
+msgid "translator-credits"
+msgstr "Srinivasa Chary <srinu.kolpur@gmail.com>"
+
+#: ../libseahorse/seahorse-catalog.c:117
+msgid "Seahorse Project Homepage"
+msgstr "సీహార్స్ పథకం నివాస పుట"
+
+#: ../libseahorse/seahorse-catalog.c:191
+msgid "Cannot delete"
+msgstr "తొలగించలేకపోయింది"
+
+#: ../libseahorse/seahorse-catalog.c:239
+#: ../libseahorse/seahorse-key-manager-store.c:442
+msgid "Couldn't export keys"
+msgstr "మీటను ఎగుమతి చేయలేకపోయింది"
+
+#: ../libseahorse/seahorse-catalog.c:268
+msgid "Couldn't export data"
+msgstr "సమాచారమును ఎగుమతి చేయలేకపోయింది"
+
+#. Top menu items
+#: ../libseahorse/seahorse-catalog.c:277
+msgid "_File"
+msgstr "ఫైలు(_F)"
+
+#: ../libseahorse/seahorse-catalog.c:278
+msgid "E_xport..."
+msgstr "దిగుమతి... (_E)"
+
+#: ../libseahorse/seahorse-catalog.c:279
+msgid "Export to a file"
+msgstr "మీటలోని ప్రజా భాగాన్ని దస్ర్తానికి ఎగుమతి చేయు"
+
+#: ../libseahorse/seahorse-catalog.c:280
+msgid "_Edit"
+msgstr "సరిచేయు (_E)"
+
+#: ../libseahorse/seahorse-catalog.c:283
+msgid "Copy to the clipboard"
+msgstr "ఎన్నుకొన్న మీటలను క్లిప్ బోర్డుకు నకలు చేయండి"
+
+#: ../libseahorse/seahorse-catalog.c:284
+#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:957
+msgid "_Delete"
+msgstr "తొలగించు(_D)"
+
+#: ../libseahorse/seahorse-catalog.c:285
+msgid "Delete selected items"
+msgstr "ఎన్నుకొన్న మీటలను తొలగించు"
+
+#: ../libseahorse/seahorse-catalog.c:287
+msgid "Show the properties of this item"
+msgstr "ఈ ఐటమ్ యొక్క లక్షణాలను చూపు"
+
+#: ../libseahorse/seahorse-catalog.c:289
+msgid "Show the properties of this keyring"
+msgstr "ఈ మీట యొక్క లక్షణాలను చూపు"
+
+#: ../libseahorse/seahorse-catalog.c:290
+msgid "Prefere_nces"
+msgstr "అభీష్టాలు (_n)"
+
+#: ../libseahorse/seahorse-catalog.c:291
+msgid "Change preferences for this program"
+msgstr "ఈ కార్యక్రమం యొక్క అభీష్టాలను మార్చు"
+
+#: ../libseahorse/seahorse-catalog.c:292
+msgid "_View"
+msgstr "దర్శనం (_V)"
+
+#: ../libseahorse/seahorse-catalog.c:293
+msgid "_Help"
+msgstr "సహాయం (_H)"
+
+#: ../libseahorse/seahorse-catalog.c:295
+msgid "About this program"
+msgstr "ఈ కార్యక్రమం గురించి"
+
+#: ../libseahorse/seahorse-catalog.c:296
+msgid "_Contents"
+msgstr "విషయములు (_C)"
+
+#: ../libseahorse/seahorse-catalog.c:297
+msgid "Show Seahorse help"
+msgstr "సీహార్స్ సహాయాన్ని చూపు"
+
+#: ../libseahorse/seahorse-exportable.c:407
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+msgid "Export"
+msgstr "ఎగుమతి"
+
+#: ../libseahorse/seahorse-interaction.c:100
+msgid "Enter PIN or password for: %s"
+msgstr "%s కొరకు PIN లేదా సంకేతపదమును ఇవ్వండి"
+
+#: ../libseahorse/seahorse-passphrase.c:182 ../ssh/seahorse-ssh-askpass.c:99
 msgid "Password:"
 msgstr "సంకేతపదం:"
 
 #. The second and main entry
-#: ../libseahorse/seahorse-passphrase.c:246
+#: ../libseahorse/seahorse-passphrase.c:244
 msgid "Confirm:"
 msgstr "ధృఢపరచు:"
 
-#: ../libseahorse/seahorse-prefs.c:68
+#: ../libseahorse/seahorse-prefs.c:66
 msgid "Not a valid Key Server address."
 msgstr "సారమైన మీట సేవిక చిరునామా"
 
-#: ../libseahorse/seahorse-prefs.c:69
+#: ../libseahorse/seahorse-prefs.c:67
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 msgstr "సహాయం కోసం మీ వ్యవస్థ నిర్వాహకుడిని లేదా ముఖ్య సేవిక నిర్వాహకుడిని సంప్రదించండి"
 
-#: ../libseahorse/seahorse-prefs.c:183
+#: ../libseahorse/seahorse-prefs.c:180
 msgid "URL"
 msgstr "యు ఆర్ ఎల్ "
 
-#: ../libseahorse/seahorse-prefs.c:348
+#: ../libseahorse/seahorse-prefs.c:350
 msgid "Custom"
 msgstr "అలవాటు"
 
-#: ../libseahorse/seahorse-prefs.c:406
+#: ../libseahorse/seahorse-prefs.c:403
 msgid "None: Don't publish keys"
 msgstr "ఒకటీ లేదు:మీటలను ప్రచురించకు"
 
 #: ../libseahorse/seahorse-prefs.xml.h:1
-msgid "Automatically retrieve keys from _key servers"
-msgstr "సేవిక నుంచి మీటలను వెలికితీయలేకపోయింది:%s"
-
-#: ../libseahorse/seahorse-prefs.xml.h:2
-msgid "Automatically synchronize _modified keys with key servers"
-msgstr "సవరించిన కీలను కీ సర్వర్లతో స్వయంచాలకంగా ఏకకాలం చేయుము (_m)"
-
-#: ../libseahorse/seahorse-prefs.xml.h:3
-msgid "Key Servers"
-msgstr "ముఖ్య సేవికలు"
-
-#: ../libseahorse/seahorse-prefs.xml.h:4
 msgid "Preferences"
 msgstr "అభీష్టాలు"
 
-#: ../libseahorse/seahorse-prefs.xml.h:5
+#: ../libseahorse/seahorse-prefs.xml.h:2
 msgid "_Find keys via:"
 msgstr "దీని ద్వారా కీలను కనుగొనుము (_F):"
 
-#: ../libseahorse/seahorse-prefs.xml.h:6
+#: ../libseahorse/seahorse-prefs.xml.h:3
 msgid "_Publish keys to:"
 msgstr "మీటలను ముఖ్య సేవికకు ప్రచురించు. (_P)"
 
-#: ../libseahorse/seahorse-transfer.c:178
-msgid "Retrieving data"
-msgstr "దత్తాంశమును మరల సంపాదిస్తోంది"
+#: ../libseahorse/seahorse-prefs.xml.h:4
+msgid "Automatically retrieve keys from _key servers"
+msgstr "సేవిక నుంచి మీటలను వెలికితీయలేకపోయింది:%s"
 
-#: ../libseahorse/seahorse-transfer.c:178
-msgid "Exporting data"
-msgstr "దత్తాంశమును ఎగుమతి చేస్తోంది"
+#: ../libseahorse/seahorse-prefs.xml.h:5
+msgid "Automatically synchronize _modified keys with key servers"
+msgstr "సవరించిన కీలను కీ సర్వర్లతో స్వయంచాలకంగా ఏకకాలం చేయుము (_m)"
 
-#: ../libseahorse/seahorse-transfer.c:182
-msgid "Importing data"
-msgstr "దత్తాంశమును దిగుమతి చేస్తోంది"
+#: ../libseahorse/seahorse-prefs.xml.h:6
+msgid "Key Servers"
+msgstr "ముఖ్య సేవికలు"
 
-#: ../libseahorse/seahorse-transfer.c:182
-msgid "Sending data"
-msgstr "దత్తాంశమును పంపుము"
-
-#: ../libseahorse/seahorse-unknown.c:59
-msgid "Unavailable"
-msgstr "అందుబాటులోలేని"
-
-#: ../libseahorse/seahorse-util.c:259
+#: ../libseahorse/seahorse-util.c:209
 msgid "%Y-%m-%d"
 msgstr "%Y-%m-%d"
 
-#: ../libseahorse/seahorse-util.c:444
-msgid "Key Data"
-msgstr "మీట యొక్క దత్తాంశం"
-
-#: ../libseahorse/seahorse-util.c:446
-msgid "Multiple Keys"
-msgstr "బహుళ కీలు"
-
-#. Filter for PGP keys. We also include *.asc, as in many
-#. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:734
-msgid "All key files"
-msgstr "అన్ని ముఖ్యమైన ఫైళ్ళు"
-
-#: ../libseahorse/seahorse-util.c:745 ../libseahorse/seahorse-util.c:793
-#: ../pgp/seahorse-gpgme-photos.c:242
-msgid "All files"
-msgstr "అన్ని ఫైళ్ళు"
-
-#: ../libseahorse/seahorse-util.c:786
-msgid "Archive files"
-msgstr "సంగ్రహమైన ఫైళ్ళు"
-
-#: ../libseahorse/seahorse-util.c:856
-msgid ""
-"<b>A file already exists with this name.</b>\n"
-"\n"
-"Do you want to replace it with a new file?"
-msgstr ""
-"<b>ఈ పేరుతో వొక ఫైలు యిప్పటికే వుంది.</b>\n"
-"\n"
-"మీరు దానిని కొత్త ఫైలుతో పునఃస్థాపించాలని అనుకొనుచున్నారా?"
-
-#: ../libseahorse/seahorse-util.c:859
-msgid "_Replace"
-msgstr "పునఃస్థాపించు (_R)"
-
 #: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
-#: ../pgp/seahorse-pgp-key-properties.c:1273
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+#: ../pgp/seahorse-pgp-key-properties.c:1250
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
+#: ../pkcs11/seahorse-token.c:576
 msgid "Unknown"
 msgstr "తెలియనది"
 
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1279
+#: ../pgp/seahorse-pgp-key-properties.c:1256
 msgctxt "Validity"
 msgid "Never"
 msgstr "ఎప్పటికివద్దు"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1286
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
+#: ../pgp/seahorse-pgp-key-properties.c:1263
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
 msgid "Marginal"
 msgstr "మార్జినల్"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1292
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
+#: ../pgp/seahorse-pgp-key-properties.c:1269
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
 msgid "Full"
 msgstr "పూర్తి"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1298
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
+#: ../pgp/seahorse-pgp-key-properties.c:1275
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
 msgid "Ultimate"
 msgstr "అంతిమ"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1491
+#: ../pgp/seahorse-pgp-key-properties.c:1465
 msgid "Disabled"
 msgstr "నిరుపయోగంగా చేయబడింది"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1487
+#: ../pgp/seahorse-pgp-key-properties.c:1461
 msgid "Revoked"
 msgstr "కొట్టివేయబడింది"
 
-#: ../libseahorse/seahorse-widget.c:461
+#: ../libseahorse/seahorse-widget.c:473
 #, c-format
 msgid "Could not display help: %s"
 msgstr "%s సహాయాన్ని ప్రదర్శించలేకపోయింది"
 
 #: ../pgp/seahorse-add-subkey.xml.h:1
-msgid "Expiration Date:"
-msgstr "ముగిసే తేది:"
+msgid "Never E_xpires"
+msgstr "ఎన్నటికి ముగియదు (_x)"
 
 #: ../pgp/seahorse-add-subkey.xml.h:2
-msgid "Generate a new subkey"
-msgstr "కొత్త ఉపమీటను ఉత్పత్ప్తి చేయు"
-
-#: ../pgp/seahorse-add-subkey.xml.h:3
 msgid "If key never expires"
 msgstr "మీట ఎన్నటికి ముగియకపోతే"
+
+#: ../pgp/seahorse-add-subkey.xml.h:3
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:4
+msgid "Key _Type:"
+msgstr "మీటరకం (_T):"
 
 #: ../pgp/seahorse-add-subkey.xml.h:4
 msgid "Key _Length:"
 msgstr "మీటనిడివి (_L):"
 
 #: ../pgp/seahorse-add-subkey.xml.h:5
-msgid "Key _Type:"
-msgstr "మీటరకం (_T):"
+msgid "Expiration Date:"
+msgstr "ముగిసే తేది:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:6
 msgid "Length of Key"
 msgstr "మీట యొక్క నిడివి"
 
 #: ../pgp/seahorse-add-subkey.xml.h:7
-msgid "Never E_xpires"
-msgstr "ఎన్నటికి ముగియదు (_x)"
+msgid "Generate a new subkey"
+msgstr "కొత్త ఉపమీటను ఉత్పత్ప్తి చేయు"
 
 #: ../pgp/seahorse-add-uid.xml.h:1
 msgid "Add User ID"
 msgstr "వాడుకరి సంకేతపదంను చేర్చు"
 
 #: ../pgp/seahorse-add-uid.xml.h:2
-msgid "Create the new user ID"
-msgstr "కొత్త వాడుకరి సంకేతపదంను సృష్టించు"
-
-#: ../pgp/seahorse-add-uid.xml.h:3 ../pgp/seahorse-pgp-generate.xml.h:7
-msgid "Full _Name:"
-msgstr "పూర్తి పేరు (_N):"
-
-#: ../pgp/seahorse-add-uid.xml.h:4
-msgid "Key Co_mment:"
-msgstr "మీట వ్యాఖ్య (_m):"
-
-#: ../pgp/seahorse-add-uid.xml.h:5
 msgid "Must be at least 5 characters long"
 msgstr "కనీసం 5 అక్షరాలు ఉండాలి"
 
-#: ../pgp/seahorse-add-uid.xml.h:6
-msgid "Optional comment describing key"
-msgstr "మీటను వివరించేందుకు ఇచ్ఛాపూర్వక వ్యాఖ్య"
-
-#: ../pgp/seahorse-add-uid.xml.h:7
+#: ../pgp/seahorse-add-uid.xml.h:3
 msgid "Optional email address"
 msgstr "ఇచ్ఛాపూర్వక ఇ తపాలా చిరునామా"
 
-#: ../pgp/seahorse-add-uid.xml.h:8 ../pgp/seahorse-pgp-generate.xml.h:13
+#: ../pgp/seahorse-add-uid.xml.h:4
+msgid "Optional comment describing key"
+msgstr "మీటను వివరించేందుకు ఇచ్ఛాపూర్వక వ్యాఖ్య"
+
+#. Full name of the key, usually the name of the user.
+#: ../pgp/seahorse-add-uid.xml.h:6 ../pgp/seahorse-pgp-generate.xml.h:5
+msgid "Full _Name:"
+msgstr "పూర్తి పేరు (_N):"
+
+#: ../pgp/seahorse-add-uid.xml.h:7 ../pgp/seahorse-pgp-generate.xml.h:6
 msgid "_Email Address:"
 msgstr " తపాలా చిరునామా (_E):"
 
-#: ../pgp/seahorse-expires.xml.h:1
-msgid "C_hange"
-msgstr "మార్చు (_h)"
+#: ../pgp/seahorse-add-uid.xml.h:8
+msgid "Key Co_mment:"
+msgstr "మీట వ్యాఖ్య (_m):"
 
-#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:4
+#: ../pgp/seahorse-add-uid.xml.h:9
+msgid "Create the new user ID"
+msgstr "కొత్త వాడుకరి సంకేతపదంను సృష్టించు"
+
+#: ../pgp/seahorse-expires.xml.h:1
+msgid "_Never expires"
+msgstr "ఎన్నటికి ముగియదు (_N)"
+
+#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:5
 msgid "Revoke key"
 msgstr "కొట్టివేసే మీట"
 
 #: ../pgp/seahorse-expires.xml.h:3
-msgid "_Never expires"
-msgstr "ఎన్నటికి ముగియదు (_N)"
+msgid "C_hange"
+msgstr "మార్చు (_h)"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:162
 msgid "Couldn't add subkey"
@@ -864,7 +929,7 @@ msgstr "ఉపమీటను చేర్చలేకపోయింది"
 msgid "Add subkey to %s"
 msgstr "%s కు ఉపమీటను చేర్చండి"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:197 ../pgp/seahorse-gpgme-generate.c:130
+#: ../pgp/seahorse-gpgme-add-subkey.c:197 ../pgp/seahorse-gpgme-generate.c:134
 msgid "DSA (sign only)"
 msgstr "డీ ఎస్ ఏ (సంతకం మాత్రమే)"
 
@@ -872,7 +937,7 @@ msgstr "డీ ఎస్ ఏ (సంతకం మాత్రమే)"
 msgid "ElGamal (encrypt only)"
 msgstr "ఎల్ గమల్ (రహస్యపరచడం మాత్రమే)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:211 ../pgp/seahorse-gpgme-generate.c:131
+#: ../pgp/seahorse-gpgme-add-subkey.c:211 ../pgp/seahorse-gpgme-generate.c:135
 msgid "RSA (sign only)"
 msgstr "ఆర్ ఎస్ ఏ ( సంతకం మాత్రమే)"
 
@@ -910,45 +975,127 @@ msgstr "ముగిసే తేదిని మార్చలేకపోయ�
 msgid "Expiry: %s"
 msgstr "%s కొరకు ముగియు"
 
-#: ../pgp/seahorse-gpgme-generate.c:91
+#: ../pgp/seahorse-gpgme-exporter.c:84
+msgid "Multiple Keys"
+msgstr "బహుళ కీలు"
+
+#: ../pgp/seahorse-gpgme-exporter.c:88
+msgid "Key Data"
+msgstr "మీట యొక్క దత్తాంశం"
+
+#: ../pgp/seahorse-gpgme-exporter.c:114
+msgid "Armored PGP keys"
+msgstr "రక్షింపబడ్డ PGP మీటలు"
+
+#: ../pgp/seahorse-gpgme-exporter.c:118
+msgid "PGP keys"
+msgstr "పీజీపీ మీటలు"
+
+#: ../pgp/seahorse-gpgme-generate.c:95
 msgid "PGP Key"
 msgstr "పీజీపీ మీట"
 
-#: ../pgp/seahorse-gpgme-generate.c:92
+#: ../pgp/seahorse-gpgme-generate.c:96
 msgid "Used to encrypt email and files"
 msgstr "ఇ తపాలా మరియు ఫైళ్ళను రహస్యపరచటానికి వాడబడుతుంది"
 
-#: ../pgp/seahorse-gpgme-generate.c:128
+#: ../pgp/seahorse-gpgme-generate.c:132
+#: ../pkcs11/seahorse-pkcs11-generate.c:92
+#: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:129
+#: ../pgp/seahorse-gpgme-generate.c:133
 msgid "DSA Elgamal"
 msgstr "డీ ఎస్ ఏ ఎల్గమల్"
 
-#: ../pgp/seahorse-gpgme-generate.c:178
+#: ../pgp/seahorse-gpgme-generate.c:182
 msgid "Couldn't generate PGP key"
 msgstr "పీజీపీ మీటను ఉత్పత్తి చేయలేక పోయింది"
 
-#: ../pgp/seahorse-gpgme-generate.c:209
+#: ../pgp/seahorse-gpgme-generate.c:213
 msgid "Passphrase for New PGP Key"
 msgstr "కొత్త మీట కోసం పాస్ పదసముదాయం"
 
-#: ../pgp/seahorse-gpgme-generate.c:210
+#: ../pgp/seahorse-gpgme-generate.c:214
 msgid "Enter the passphrase for your new key twice."
 msgstr "మీ కొత్త మీట కోసం పాస్ పదసముదాయాన్ని వ్రాయండి."
 
-#: ../pgp/seahorse-gpgme-generate.c:219
+#: ../pgp/seahorse-gpgme-generate.c:223
+#: ../pkcs11/seahorse-pkcs11-generate.c:460
 msgid "Generating key"
 msgstr "మీటను ఉత్పత్తి చేస్తోంది"
 
-#: ../pgp/seahorse-gpgme-key-op.c:370
+#: ../pgp/seahorse-gpgme-key-deleter.c:78
+#: ../pgp/seahorse-gpgme-secret-deleter.c:77
+#: ../pkcs11/seahorse-pkcs11-deleter.c:66
+#: ../pkcs11/seahorse-pkcs11-key-deleter.c:81
+#, c-format
+msgid "Are you sure you want to permanently delete %s?"
+msgstr "%s ను శాశ్వతంగా తొలగించాలని మీరు నిశ్చయించుకున్నారా?"
+
+#: ../pgp/seahorse-gpgme-key-deleter.c:81
+msgid "Are you sure you want to permanently delete %d keys?"
+msgid_plural "Are you sure you want to permanently delete %d keys?"
+msgstr[0] "%d మీటను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+msgstr[1] "%d మీటలను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+
+#: ../pgp/seahorse-gpgme-key-op.c:381
 msgid "Wrong password"
 msgstr "తప్పు సంకేతపదము"
 
-#: ../pgp/seahorse-gpgme-key-op.c:370
+#: ../pgp/seahorse-gpgme-key-op.c:381
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "ఇది మూడవసారి మీరు తప్పు సంకేతపదంను ప్రవేశించడం.దయచేసి మరల ప్రయత్నించండి"
+
+#: ../pgp/seahorse-gpgme-keyring.c:90
+#, c-format
+msgid "Wrong passphrase."
+msgstr "తప్పు పాస్ పదసముదాయం."
+
+#: ../pgp/seahorse-gpgme-keyring.c:94
+#, c-format
+msgid "Enter new passphrase for '%s'"
+msgstr "'%s' కోసం కొత్త పాస్ పదసముదాయాన్ని ఇవ్వండి"
+
+#: ../pgp/seahorse-gpgme-keyring.c:96
+#, c-format
+msgid "Enter passphrase for '%s'"
+msgstr "'%s' కోసం పాస్ పదసముదాయాన్ని ఇవ్వండి"
+
+#: ../pgp/seahorse-gpgme-keyring.c:99
+#: ../src/seahorse-change-passphrase.xml.h:2
+msgid "Enter new passphrase"
+msgstr "కొత్త పాస్ పదసముదాయాన్ని ఇవ్వండి"
+
+#: ../pgp/seahorse-gpgme-keyring.c:101
+msgid "Enter passphrase"
+msgstr "పాస్ పదసముదాయాన్ని ఇవ్వండి"
+
+#: ../pgp/seahorse-gpgme-keyring.c:106
+msgid "Passphrase"
+msgstr "పాస్ పదసముదాయం"
+
+#: ../pgp/seahorse-gpgme-keyring.c:307
+#, c-format
+msgid "Loaded %d key"
+msgid_plural "Loaded %d keys"
+msgstr[0] "%d కీ లోడైంది"
+msgstr[1] "%d కీలు లోడైనాయి"
+
+#: ../pgp/seahorse-gpgme-keyring.c:654
+msgid ""
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
+msgstr "నిస్సారమైన దత్తాంశం కీ(తప్పిపోయిన UIDలు).ఇది బహుశా కంప్యూటర్ కి భవిస్యత్తు తేదీ పెట్టినందుకు లేదా తప్పిపోయిన స్వంతమైన సంతకం జరిగిఉండును "
+
+#: ../pgp/seahorse-gpgme-keyring.c:814
+msgid "GnuPG keys"
+msgstr "GnuPG మీట"
+
+#: ../pgp/seahorse-gpgme-keyring.c:817
+msgid "GnuPG: default keyring directory"
+msgstr "GnuPG: అప్రమేయ కీరింగు సంచయం"
 
 #: ../pgp/seahorse-gpgme-photos.c:73
 #, c-format
@@ -973,8 +1120,8 @@ msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
 msgstr ""
-"ఇది ప్రతిరూప ఫైలు కాదు లేదా ఒక గుర్తించలేని రకమైన ప్రతిరూప ఫైలు .ఒక JPEG ప్రతిరూపాన్ని  "
-"వాడటానికి ప్రయత్నించండి"
+"ఇది ప్రతిరూప ఫైలు కాదు లేదా ఒక గుర్తించలేని రకమైన ప్రతిరూప ఫైలు .ఒక JPEG ప్రతిరూపాన్ని  వాడటానికి "
+"ప్రయత్నించండి"
 
 #: ../pgp/seahorse-gpgme-photos.c:224
 msgid "All image files"
@@ -984,27 +1131,31 @@ msgstr "అన్ని ప్రతిరూప ఫైళ్ళు"
 msgid "All JPEG files"
 msgstr "అన్ని JPEG ఫైళ్ళు"
 
-#: ../pgp/seahorse-gpgme-photos.c:261
+#: ../pgp/seahorse-gpgme-photos.c:242 ../src/seahorse-key-manager.c:301
+msgid "All files"
+msgstr "అన్ని ఫైళ్ళు"
+
+#: ../pgp/seahorse-gpgme-photos.c:263
 msgid "Choose Photo to Add to Key"
 msgstr "మీటలోకి చేర్చటానికి ఛాయా చిత్రమును ఎన్నుకోండి"
 
-#: ../pgp/seahorse-gpgme-photos.c:278
+#: ../pgp/seahorse-gpgme-photos.c:285
 msgid "Couldn't prepare photo"
 msgstr "ఛాయా చిత్రమును సృష్టించలేకపోయింది"
 
-#: ../pgp/seahorse-gpgme-photos.c:288 ../pgp/seahorse-gpgme-photos.c:292
+#: ../pgp/seahorse-gpgme-photos.c:295 ../pgp/seahorse-gpgme-photos.c:298
 msgid "Couldn't add photo"
 msgstr "ఛాయా చిత్రమును చేర్చలేకపోయింది"
 
-#: ../pgp/seahorse-gpgme-photos.c:289
+#: ../pgp/seahorse-gpgme-photos.c:296
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr "ఫైలు లోడు కాలేక పోయింది. ఇది చెల్లని ఫార్మాటులో వుండివుండవచ్చు"
 
-#: ../pgp/seahorse-gpgme-photos.c:318
+#: ../pgp/seahorse-gpgme-photos.c:322
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "మీ మీటలోంచి ప్రస్తుత ఛాయా చిత్రమును తొలగించాలని మీరు ఖచ్చింతంగా ఉన్నారా ?"
 
-#: ../pgp/seahorse-gpgme-photos.c:331
+#: ../pgp/seahorse-gpgme-photos.c:335
 msgid "Couldn't delete photo"
 msgstr "ఛాయా చిత్రమును తొలగించలేకపోయింది"
 
@@ -1062,12 +1213,17 @@ msgstr ""
 msgid "Couldn't add revoker"
 msgstr "కొట్టివేసేవారిని చేర్చలేకపోయింది"
 
-#: ../pgp/seahorse-gpgme-sign.c:101
+#: ../pgp/seahorse-gpgme-secret-deleter.c:82 ../ssh/seahorse-ssh-deleter.c:83
+msgid "I understand that this secret key will be permanently deleted."
+msgstr "నాకు తెలుసు రహస్యకీ శాశ్వతంగా తొలగింపబడుతుంది."
+
+#: ../pgp/seahorse-gpgme-sign.c:100
 #, c-format
 msgid ""
 "This key was already signed by\n"
 "\"%s\""
-msgstr "ఈ మీట ను ముందుగానే సంతకం చేసినవారు \n"
+msgstr ""
+"ఈ మీట ను ముందుగానే సంతకం చేసినవారు \n"
 "\"%s\""
 
 #: ../pgp/seahorse-gpgme-sign.c:105
@@ -1076,69 +1232,161 @@ msgstr "మీటను సంతకం చేయలేక పోయింది
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:161 ../pgp/seahorse-signer.c:61
+#: ../pgp/seahorse-gpgme-sign.c:164 ../pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr "సంతకము చేయడానికి ఏ యొక్క మీటలు పనికిరావు"
 
-#: ../pgp/seahorse-gpgme-sign.c:162
+#: ../pgp/seahorse-gpgme-sign.c:165
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr "ఈ మీట యొక్క నమ్మకాన్ని తెలిపే మీకు స్వకీయమైన పీజీపీ మీటలు లేవు "
 
-#: ../pgp/seahorse-gpgme-source.c:86
-#, c-format
-msgid "Wrong passphrase."
-msgstr "తప్పు పాస్ పదసముదాయం."
-
-#: ../pgp/seahorse-gpgme-source.c:90
-#, c-format
-msgid "Enter new passphrase for '%s'"
-msgstr "'%s' కోసం కొత్త పాస్ పదసముదాయాన్ని ఇవ్వండి"
-
-#: ../pgp/seahorse-gpgme-source.c:92
-#, c-format
-msgid "Enter passphrase for '%s'"
-msgstr "'%s' కోసం పాస్ పదసముదాయాన్ని ఇవ్వండి"
-
-#: ../pgp/seahorse-gpgme-source.c:95 ../src/seahorse-change-passphrase.xml.h:4
-msgid "Enter new passphrase"
-msgstr "కొత్త పాస్ పదసముదాయాన్ని ఇవ్వండి"
-
-#: ../pgp/seahorse-gpgme-source.c:97
-msgid "Enter passphrase"
-msgstr "పాస్ పదసముదాయాన్ని ఇవ్వండి"
-
-#: ../pgp/seahorse-gpgme-source.c:328
-#, c-format
-msgid "Loaded %d key"
-msgid_plural "Loaded %d keys"
-msgstr[0] "%d కీ లోడైంది"
-msgstr[1] "%d కీలు లోడైనాయి"
-
-#: ../pgp/seahorse-gpgme-source.c:649
-msgid ""
-"Invalid key data (missing UIDs). This may be due to a computer with a date "
-"set in the future or a missing self-signature."
-msgstr "నిస్సార"
-
 #: ../pgp/seahorse-gpgme-subkey.c:199
 msgid "ElGamal"
 msgstr "ఎల్గమాల్"
 
-#: ../pgp/seahorse-hkp-source.c:645
-msgid "HTTP Key Server"
-msgstr "హెచ్  టిటిపి ముఖ్య సేవిక"
-
-#: ../pgp/seahorse-hkp-source.c:680
+#: ../pgp/seahorse-hkp-source.c:603
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr "వెతికిన పధ్ధతి అవసరమైనంత వివరంగా  లేదు.సేవిక '%s' మరీ ఎక్కువ మీటలను కనుగొంది."
 
-#: ../pgp/seahorse-hkp-source.c:683
+#: ../pgp/seahorse-hkp-source.c:606
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "సేవిక '%s' తో సంప్రదించలేక పోయింది: %s"
+
+#: ../pgp/seahorse-hkp-source.c:1129
+msgid "HTTP Key Server"
+msgstr "హెచ్  టిటిపి ముఖ్య సేవిక"
+
+#: ../pgp/seahorse-keyserver-results.c:175
+msgid "Couldn't import keys"
+msgstr "మీటలను దిగుమతి చేయలేకపోయింది"
+
+#: ../pgp/seahorse-keyserver-results.c:218
+msgid "Importing keys from key servers"
+msgstr "ముఖ్య సేవికల నుంచి మీటలను దిగుమతి చేస్తోంది"
+
+#. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
+#: ../pgp/seahorse-keyserver-results.c:244 ../src/seahorse-key-manager.c:518
+msgid "_Remote"
+msgstr "సుదూర (_R)"
+
+#: ../pgp/seahorse-keyserver-results.c:246
+msgid "Close this window"
+msgstr "ఈ గవాక్షాన్ని మూసివేయు"
+
+#: ../pgp/seahorse-keyserver-results.c:250 ../pgp/seahorse-pgp-actions.c:113
+msgid "_Find Remote Keys..."
+msgstr "సుదూర మీటలను వెతుకు... (_F)"
+
+#: ../pgp/seahorse-keyserver-results.c:251 ../pgp/seahorse-pgp-actions.c:114
+msgid "Search for keys on a key server"
+msgstr "ముఖ్య సేవికలో మీటల కోసం వెతుకు"
+
+#: ../pgp/seahorse-keyserver-results.c:255 ../src/seahorse-key-manager.xml.h:3
+msgid "_Import"
+msgstr "దిగుమతి (_I)"
+
+#: ../pgp/seahorse-keyserver-results.c:256
+msgid "Import selected keys to local key ring"
+msgstr "ఎన్నుకొన్న మీటలను స్థానిక మీట వలయంలోకి దిగుమతి చేయు"
+
+#: ../pgp/seahorse-keyserver-results.c:286
+msgid "Remote Keys"
+msgstr "సుదూర మీటలు"
+
+#: ../pgp/seahorse-keyserver-results.c:288
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr "%s కలిగియున్న సుదూర మీటలు"
+
+#: ../pgp/seahorse-keyserver-results.c:485
+msgid "The search for keys failed."
+msgstr "మీటలకోసం వెతుకుటలో విఫలం"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:1
+msgid "Find Remote Keys"
+msgstr "సుదూర మీటలను కనుగొనండి"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:2
+msgid ""
+"This will find keys for others on the Internet. These keys can then be "
+"imported into your local key ring."
+msgstr ""
+"ఇది ఇతరుల కోసం ఇంటర్నెట్లో మీటల కోసం వెతుకుతుంది.ఈ మీటలు తర్వాత స్థానిక మీట వలయంలోకి దిగుమతి "
+"చేయబడతాయి."
+
+#: ../pgp/seahorse-keyserver-search.xml.h:3
+msgid "_Search for keys containing: "
+msgstr "దీనిని కలగివున్న కీల కొరకు శోధించుము (_S): "
+
+#: ../pgp/seahorse-keyserver-search.xml.h:4
+msgid "<b>Key Servers:</b>"
+msgstr "<b>ముఖ్య సేవికలు:</b>"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:5
+msgid "<b>Shared Keys Near Me:</b>"
+msgstr "<b>నా దగ్గరులోనున్న పంచుకొన్న మీటలు : </b>"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:6
+msgid "Where to search:"
+msgstr "ఎక్కడ వెతకాలి:"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:7
+msgid "_Search"
+msgstr "వెతుకు (_S)"
+
+#: ../pgp/seahorse-keyserver-sync.c:57
+msgid "Couldn't publish keys to server"
+msgstr "సేవికకు మీటలను ప్రచురించలేకపోయింది : %s"
+
+#: ../pgp/seahorse-keyserver-sync.c:76
+#, c-format
+msgid "Couldn't retrieve keys from server: %s"
+msgstr "సేవిక నుంచి మీటలను వెలికితీయలేకపోయింది:%s"
+
+#: ../pgp/seahorse-keyserver-sync.c:160
+#, c-format
+msgid "<b>%d key is selected for synchronizing</b>"
+msgid_plural "<b>%d keys are selected for synchronizing</b>"
+msgstr[0] "<b>%d మీట కాలనియమితం చేసేందుకు ఎన్నుకొనబడండి</b>"
+msgstr[1] "<b>%d మీటలు కాలనియమితం చేసేందుకు ఎన్నుకొనబడ్డాయి</b>"
+
+#: ../pgp/seahorse-keyserver-sync.c:240
+msgid "Synchronizing keys..."
+msgstr "మీటలను కాలనియమితం చేస్తోంది..."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:1
+msgid "Sync Keys"
+msgstr "కాలనియమిత మీటలు"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:2
+msgid ""
+"This will publish the keys in your key ring so they're available for others "
+"to use. You'll also get any changes others have made since you received "
+"their keys."
+msgstr ""
+"ఇది కీలను మీ కీరింగు నందు ప్రచురిస్తుంది అలా అవి యితరులకు అందుబాటులో వుంటాయి. మీరు యితరుల కీలను "
+"స్వీకరించిన దగ్గరనుండి వారు చేసిన మార్పులను కూడా పొందుతారు."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:3
+msgid ""
+"This will retrieve any changes others have made since you received their "
+"keys. No key server has been chosen for publishing, so your keys will not be "
+"made available to others."
+msgstr ""
+"మీరు యితరుల కీలను స్వీకరించిన దగ్గరనుండి యిది యితరులు చేసిన మార్పులను వెలికితీస్తుంది. ప్రచురణ కొరకు "
+"ఏ కీ సేవిక ఎంచుకొనబడలేదు, అందువలన మీ కీలు యితరులను అందుబాటలో వుండవు."
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:4
+msgid "_Key Servers"
+msgstr "ముఖ్య సేవికలు (_K)"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:5
+msgid "_Sync"
+msgstr "కాలనియమితం (_S)"
 
 #: ../pgp/seahorse-ldap-source.c:440
 #, c-format
@@ -1160,479 +1408,448 @@ msgstr "చిరునామాను రిజాల్వు చేయలే�
 msgid "Resolving server address: %s"
 msgstr "సేవిక చిరునామాను రిజాల్వుచేస్తోంది: %s"
 
-#: ../pgp/seahorse-ldap-source.c:781
+#: ../pgp/seahorse-ldap-source.c:1446
 msgid "LDAP Key Server"
 msgstr "ఎల్ డీ ఏ పీ ముఖ్య సేవిక"
 
-#: ../pgp/seahorse-pgp-commands.c:104
-msgid "_Sign Key..."
-msgstr "సంతకం చేయు... (_S)"
+#: ../pgp/seahorse-pgp-actions.c:118
+msgid "_Sync and Publish Keys..."
+msgstr "కాలనియమితం చేసి మీటలను ప్రచురించు... (_S)"
 
-#: ../pgp/seahorse-pgp-commands.c:104
-msgid "Sign public key"
-msgstr "ప్రజా మీటను సంతకం చేయు"
+#: ../pgp/seahorse-pgp-actions.c:119
+msgid "Publish and/or synchronize your keys with those online."
+msgstr "ఆన్‌లైను వాటితో మీ కీలను ప్రచురించుము మరియు/లేదా సింక్రొనైజ్ చేయుము."
 
-#: ../pgp/seahorse-pgp-commands.c:174
-#, c-format
-msgid "Are you sure you want to permanently delete %s?"
-msgstr "%s ను శాశ్వతంగా తొలగించాలని మీరు నిశ్చయించుకున్నారా?"
+#: ../pgp/seahorse-pgp-backend.c:174
+msgid "PGP Keys"
+msgstr "పీజీపీ మీటలు"
 
-#: ../pgp/seahorse-pgp-commands.c:179
-#, c-format
-msgid "Are you sure you want to permanently delete %d keys and identities?"
-msgstr "%d మీటను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+#: ../pgp/seahorse-pgp-backend.c:177
+msgid "PGP keys are for encrypting email or files"
+msgstr "ఇ మెయిల్ మరియు ఫైళ్ళను రహస్యపరచటానికి ఉపయోగించు PGPమీటలు"
 
-#: ../pgp/seahorse-pgp-commands.c:181
-#, c-format
-msgid "Are you sure you want to permanently delete %d keys?"
-msgstr "%d మీటను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
-
-#: ../pgp/seahorse-pgp-commands.c:183
-#, c-format
-msgid "Are you sure you want to permanently delete %d identities?"
-msgstr "%d మీటను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
-
-#: ../pgp/seahorse-pgp-commands.c:201 ../pgp/seahorse-pgp-key-properties.c:348
-msgid "Couldn't delete user ID"
-msgstr "వాడుకరి సంకేతపదంను తొలగించలేకపోయింది"
-
-#: ../pgp/seahorse-pgp-commands.c:205
-msgid "Couldn't delete private key"
-msgstr "మీటను తొలగించ లేక పోయింది"
-
-#: ../pgp/seahorse-pgp-commands.c:208
-msgid "Couldn't delete public key"
-msgstr "పబ్లిక్ కీను తొలగించలేకపోయింది"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:1 ../ssh/seahorse-ssh-generate.xml.h:1
-msgid "<b>_Advanced key options</b>"
-msgstr "<b>ఉన్నత స్థితి మీట ఇచ్ఛాపూర్వకాలు (_A)</b>"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:2
-msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr "ఒక పీజీపీ మీట మిమ్మల్ని ఇ-తపాలా లేదా ఫైళ్ళను రహస్యపరచి ఇతరులకు ఇవ్వడానికి అనుమతినిస్తుంది"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:3
-msgid "Algorithms here"
-msgstr "అల్గారిదములు ఇక్కడ"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:4
+#: ../pgp/seahorse-pgp-generate.xml.h:1
 msgid "C_reate"
 msgstr "సృష్టించు (_r)"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:5
-msgid "E_xpiration Date:"
-msgstr "ముగిసే తేది (_x):"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:4
-msgid "Encryption _Type:"
-msgstr "రహస్యపరచే  రకము (_T):"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:8
+#: ../pgp/seahorse-pgp-generate.xml.h:2
 msgid "Generate a new key"
 msgstr "కొత్త మీటను ఉత్పత్తి చేయు"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:6
-msgid "Key _Strength (bits):"
-msgstr "మీట యొక్క శక్తి (బిట్స్) (_S)"
+#: ../pgp/seahorse-pgp-generate.xml.h:3
+msgid "A PGP key allows you to encrypt email or files to other people."
+msgstr "ఒక పీజీపీ మీట మిమ్మల్ని ఇ-తపాలా లేదా ఫైళ్ళను రహస్యపరచి ఇతరులకు ఇవ్వడానికి అనుమతినిస్తుంది"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:10
-msgid "Ne_ver Expires"
-msgstr "ఎప్పటికీ ముగియదు (_v)"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:11
-msgid "New PGP Key"
-msgstr "కొత్త పీజీపీ మీట"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:12
+#: ../pgp/seahorse-pgp-generate.xml.h:7
 msgid "_Comment:"
 msgstr "వ్యాఖ్యానం (_C):"
 
-#: ../pgp/seahorse-pgp-key.c:572 ../pgp/seahorse-pgp-key-properties.c:1489
-msgid "Expired"
-msgstr "ముగిసినది"
+#: ../pgp/seahorse-pgp-generate.xml.h:8
+msgid "Ne_ver Expires"
+msgstr "ఎప్పటికీ ముగియదు (_v)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:319
+#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:7
+msgid "Encryption _Type:"
+msgstr "రహస్యపరచే  రకము (_T):"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:10
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:5
+#: ../ssh/seahorse-ssh-generate.xml.h:8
+msgid "Key _Strength (bits):"
+msgstr "మీట యొక్క శక్తి (బిట్స్) (_S)"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:11
+msgid "E_xpiration Date:"
+msgstr "ముగిసే తేది (_x):"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:12
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
+#: ../ssh/seahorse-ssh-generate.xml.h:11
+msgid "<b>_Advanced key options</b>"
+msgstr "<b>ఉన్నత స్థితి మీట ఇచ్ఛాపూర్వకాలు (_A)</b>"
+
+#: ../pgp/seahorse-pgp-key.c:353
+msgid "Personal PGP key"
+msgstr "స్వకీయమైన మీటలు "
+
+#: ../pgp/seahorse-pgp-key.c:355
+msgid "PGP key"
+msgstr "పీజీపీ మీట"
+
+#: ../pgp/seahorse-pgp-key-properties.c:325
 msgid "Couldn't change primary user ID"
 msgstr "ప్రాథమిక వాడుకరి సంకేతపదంను మార్చలేకపోయింది"
 
-#: ../pgp/seahorse-pgp-key-properties.c:338
+#: ../pgp/seahorse-pgp-key-properties.c:344
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr "'%s' వాడుకరి సంకేతపదంను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:433
-#: ../pgp/seahorse-pgp-key-properties.c:1604
+#: ../pgp/seahorse-pgp-key-properties.c:354
+msgid "Couldn't delete user ID"
+msgstr "వాడుకరి సంకేతపదంను తొలగించలేకపోయింది"
+
+#: ../pgp/seahorse-pgp-key-properties.c:429
+#: ../pgp/seahorse-pgp-key-properties.c:1567
 msgid "[Unknown]"
 msgstr "[గుర్తుతెలియని]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:533
-#: ../pgp/seahorse-pgp-key-properties.c:1885
+#: ../pgp/seahorse-pgp-key-properties.c:536
+#: ../pgp/seahorse-pgp-key-properties.c:1850
 msgid "Name/Email"
 msgstr "పేరు/ఇ తపాలా"
 
-#: ../pgp/seahorse-pgp-key-properties.c:538
+#: ../pgp/seahorse-pgp-key-properties.c:541
 msgid "Signature ID"
 msgstr "సంతక గుచి"
 
-#: ../pgp/seahorse-pgp-key-properties.c:671
+#: ../pgp/seahorse-pgp-key-properties.c:674
 msgid "Couldn't change primary photo"
 msgstr "ప్రాథమిక చిత్రాన్ని మార్చలేకపోయింది"
 
-#: ../pgp/seahorse-pgp-key-properties.c:903
+#. TRANSLATORS: (unknown) expiry date
+#: ../pgp/seahorse-pgp-key-properties.c:908
 msgid "(unknown)"
 msgstr "(తెలియని)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:906
+#: ../pgp/seahorse-pgp-key-properties.c:911
 #, c-format
 msgid "This key expired on: %s"
 msgstr "ఈ మీట %s న ముగిసినది."
 
-#: ../pgp/seahorse-pgp-key-properties.c:967
-#: ../src/seahorse-key-manager-store.c:802
+#: ../pgp/seahorse-pgp-key-properties.c:974
 msgid "Name"
 msgstr "పేరు"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1078
+#: ../pgp/seahorse-pgp-key-properties.c:1087
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "%d ఉపమీటను (%s లొని) మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1087
+#: ../pgp/seahorse-pgp-key-properties.c:1096
 msgid "Couldn't delete subkey"
 msgstr "ఉపమీటను తొలగించలేకపోయింది"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1127
-#: ../pgp/seahorse-pgp-key-properties.c:1567
+#: ../pgp/seahorse-pgp-key-properties.c:1136
+#: ../pgp/seahorse-pgp-key-properties.c:1541
 msgid "Unable to change trust"
 msgstr "నమ్మకాన్ని మార్చలేకపోయింది"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1142 ../src/seahorse-viewer.c:298
-#: ../ssh/seahorse-ssh-key-properties.c:201
-#, c-format
-msgid "Couldn't export key to \"%s\""
-msgstr "\"%s\" కు మీటను ఎగుమతి చేయలేకపోయింది"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1172
-#: ../ssh/seahorse-ssh-key-properties.c:225
-msgid "Export Complete Key"
-msgstr "పూర్తి మీటను ఎగుమతిచేయు"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1197
-#: ../ssh/seahorse-ssh-key-properties.c:247
-msgid "Couldn't export key."
+#: ../pgp/seahorse-pgp-key-properties.c:1149
+#: ../ssh/seahorse-ssh-key-properties.c:202
+msgid "Couldn't export key"
 msgstr "మీటను ఎగుమతి చేయలేకపోయింది"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1407
-#: ../pgp/seahorse-pgp-key-properties.c:1496
+#: ../pgp/seahorse-pgp-key-properties.c:1381
+#: ../pgp/seahorse-pgp-key-properties.c:1470
 msgctxt "Expires"
 msgid "Never"
 msgstr "ఎప్పటికివద్దు"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1454
+#: ../pgp/seahorse-pgp-key-properties.c:1428
 msgid "ID"
 msgstr "గుచి"
 
-#. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1457
-#: ../src/seahorse-key-manager-store.c:833
+#: ../pgp/seahorse-pgp-key-properties.c:1431
 msgid "Type"
 msgstr "రకం"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1460
+#: ../pgp/seahorse-pgp-key-properties.c:1434
 msgid "Created"
 msgstr "సృష్టించినది"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1463
+#: ../pgp/seahorse-pgp-key-properties.c:1437
 msgid "Expires"
 msgstr "ముగుస్తుంది"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1466
+#: ../pgp/seahorse-pgp-key-properties.c:1440
 msgid "Status"
 msgstr "సుస్థితి"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1469
+#: ../pgp/seahorse-pgp-key-properties.c:1443
 msgid "Strength"
 msgstr "శక్తి"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1493
+#: ../pgp/seahorse-pgp-key-properties.c:1463
+msgid "Expired"
+msgstr "ముగిసినది"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1467
 msgid "Good"
 msgstr "మంచి"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1888
-#: ../src/seahorse-key-manager-store.c:814
+#: ../pgp/seahorse-pgp-key-properties.c:1853
 msgid "Key ID"
 msgstr "మీట గుచి"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>కార్యములు</b>"
-
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
-msgid "<b>Comment:</b>"
-msgstr "<b>వ్యాఖ్యానం:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
-msgid "<b>Dates</b>"
-msgstr "<b>తేదీలు</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
-msgid "<b>Email:</b>"
-msgstr "<b>ఎలక్ర్టానిక్ తపా:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
-msgid "<b>Fingerprint</b>"
-msgstr "<b>వేలిముద్ర</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
-msgid "<b>Key ID:</b>"
-msgstr "<b>మీట గుచి</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
-msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>మీట పేర్లు మరియు సంతకములు</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-msgid "<b>Photo </b>"
-msgstr "<b>ఛాయా చిత్రం</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
-msgid "<b>Technical Details</b>"
-msgstr "<b>సాంకేతిక వివరములు</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
-msgid "<b>This key has been revoked</b>"
-msgstr "<b>ఈ మీట కొట్టివేయబడింది</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:10
-msgid "<b>This key has expired</b>"
-msgstr "<b>ఈ మీట ముగిసినది</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
-msgid "<b>Type:</b>"
-msgstr "<b>రకము:</b>"
-
-#. To translators: This is the noun not the verb.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:14
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
-msgid "<b>Use:</b>"
-msgstr "<b>ఉపయోగం:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:15
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
-msgid "<b>_Subkeys</b>"
-msgstr "<b>ఉపమీటలు (_S)</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
-msgid "Add"
-msgstr "చేర్చు"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
-msgid "Add a photo to this key"
-msgstr "ఈ మీటకు ఒక ఛాయా చిత్రమును చేర్చండి"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:18
-#: ../ssh/seahorse-ssh-key-properties.xml.h:14
-msgid "Change _Passphrase"
-msgstr "పాస్ పదసముదాయమును మార్చండి (_P)"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
-msgid "Decrypt files and email sent to you."
-msgstr "ఫైలులను డీక్రిప్టు చేయుము మరియు ఈమెయిల్ మీకు పంపబడింది."
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
-msgid "Delete"
-msgstr "తొలగించు"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
-msgid "Expire"
-msgstr "ముగియు"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
-msgid "Expires:"
-msgstr "ముగుస్తుంది:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
-msgid "Export"
-msgstr "ఎగుమతి"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
-msgid "Go to next photo"
-msgstr "తరువాతి ఛాయా చిత్రానికి వెళ్లు"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
-msgid "Go to previous photo"
-msgstr "పూర్వపు ఛాయా చిత్రానికి వెళ్లు"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:29
-msgid "Key ID:"
-msgstr "మీట గుచి:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
-msgid "Make this photo the primary photo"
-msgstr "ఈ ఛాయా చిత్రాన్ని ప్రాథమిక ఛాయా చిత్రాన్ని చేయండి"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:33
-msgid "Names and Signatures"
-msgstr "పేర్లు మరియు సంతకములు"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
 msgid "Never"
 msgstr "ఎప్పటికివద్దు"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
-msgid "Override Owner _Trust:"
-msgstr "యజమాని నమ్మకాన్ని వోవర్‌రైడ్ చేయుము (_T):"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
+msgid "<b>This key has been revoked</b>"
+msgstr "<b>ఈ మీట కొట్టివేయబడింది</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:36
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
-msgid "Owner"
-msgstr "యజమాని"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
-msgid "Primary"
-msgstr "ప్రాథమిక"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
-msgid "Private PGP Key"
-msgstr "స్వంత పీజీపీ మీట"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
-msgid "Remove this photo from this key"
-msgstr "ఈ మీట నుంచి ఈ ఛాయా చిత్రాన్ని తీసి వేయండి"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
-msgid "Revoke"
-msgstr "కొట్టివేయు"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
-msgid "Sign"
-msgstr "సంతకం"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
-msgid "Strength:"
-msgstr "శక్తి:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "మీట యొక్క యజమాని ఈ మీటను కొట్టివేశారు. దీనిని ఇకమీద వాడకూడదు."
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
-msgid "_Add Name"
-msgstr "పేరును చేర్చు (_A)"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
+msgid "<b>This key has expired</b>"
+msgstr "<b>ఈ మీట ముగిసినది</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
-msgid "_Export Complete Key:"
-msgstr "పూర్తి మీటను ఎగుమతి చేయండి (_E):"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
+msgid "Add a photo to this key"
+msgstr "ఈ మీటకు ఒక ఛాయా చిత్రమును చేర్చండి"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
+msgid "Remove this photo from this key"
+msgstr "ఈ మీట నుంచి ఈ ఛాయా చిత్రాన్ని తీసి వేయండి"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
+msgid "Make this photo the primary photo"
+msgstr "ఈ ఛాయా చిత్రాన్ని ప్రాథమిక ఛాయా చిత్రాన్ని చేయండి"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:13
+msgid "Go to previous photo"
+msgstr "పూర్వపు ఛాయా చిత్రానికి వెళ్లు"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:14
+msgid "Go to next photo"
+msgstr "తరువాతి ఛాయా చిత్రానికి వెళ్లు"
+
+#. A photograph
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
+msgid "<b>Photo </b>"
+msgstr "<b>ఛాయా చిత్రం</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
+msgid "<b>Key ID:</b>"
+msgstr "<b>మీట గుచి</b>"
+
+#. Name of key, usually a persons name
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
 msgctxt "name-of-key"
 msgid "<b>Name:</b>"
 msgstr "<b>పేరు:</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
-msgid "<b>Dates:</b>"
-msgstr "<b>తేదీలు:</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
+msgid "<b>Email:</b>"
+msgstr "<b>ఎలక్ర్టానిక్ తపా:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
+msgid "<b>Comment:</b>"
+msgstr "<b>వ్యాఖ్యానం:</b>"
+
+#. To translators: This is the noun not the verb.
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
+msgid "<b>Use:</b>"
+msgstr "<b>ఉపయోగం:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
+msgid "<b>Type:</b>"
+msgstr "<b>రకము:</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
+msgid "Decrypt files and email sent to you."
+msgstr "ఫైలులను డీక్రిప్టు చేయుము మరియు ఈమెయిల్ మీకు పంపబడింది."
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
+msgid "Private PGP Key"
+msgstr "స్వంత పీజీపీ మీట"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
+#: ../ssh/seahorse-ssh-key-properties.xml.h:10
+msgid "Change _Passphrase"
+msgstr "పాస్ పదసముదాయమును మార్చండి (_P)"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:24
+msgid "Owner"
+msgstr "యజమాని"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
+msgid "<b>Key Names and Signatures</b>"
+msgstr "<b>మీట పేర్లు మరియు సంతకములు</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
+msgid "Primary"
+msgstr "ప్రాథమిక"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
+msgid "Sign"
+msgstr "సంతకం"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
+msgid "Delete"
+msgstr "తొలగించు"
+
+#. Add another name to the PGP key.
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
+msgid "_Add Name"
+msgstr "పేరును చేర్చు (_A)"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
+msgid "Revoke"
+msgstr "కొట్టివేయు"
+
+#. List of names and signatures on the PGP key.
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
+msgid "Names and Signatures"
+msgstr "పేర్లు మరియు సంతకములు"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
+msgid "Key ID:"
+msgstr "మీట గుచి:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+msgid "Strength:"
+msgstr "శక్తి:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
+msgid "<b>Technical Details</b>"
+msgstr "<b>సాంకేతిక వివరములు</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
+msgid "<b>Fingerprint</b>"
+msgstr "<b>వేలిముద్ర</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+msgid "Expires:"
+msgstr "ముగుస్తుంది:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
+msgid "<b>Dates</b>"
+msgstr "<b>తేదీలు</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+msgid "Override Owner _Trust:"
+msgstr "యజమాని నమ్మకాన్ని వోవర్‌రైడ్ చేయుము (_T):"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+msgid "_Export Complete Key:"
+msgstr "పూర్తి మీటను ఎగుమతి చేయండి (_E):"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
+msgid "<b>Actions</b>"
+msgstr "<b>కార్యములు</b>"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
+msgid "Add"
+msgstr "చేర్చు"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
+msgid "Expire"
+msgstr "ముగియు"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:52
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:48
+msgid "<b>_Subkeys</b>"
+msgstr "<b>ఉపమీటలు (_S)</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
+msgid "Marginally"
+msgstr "మార్జినల్లీ"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
-#: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "<b>Fingerprint:</b>"
-msgstr "<b>వేలి ముద్రలు</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
-msgid "<b>Indicate Trust:</b>"
-msgstr "<b>నమ్మకాన్ని తెలుపు:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
-msgid "<b>Your trust of this key</b>"
-msgstr "<b>ఈ మీట యొక్క మీ నమ్మకం</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
-msgid "<b>_Other Names:</b>"
-msgstr "<b>ఇతర పేర్లు (_O):</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:16
-msgid "<b>_People who have signed this key:</b>"
-msgstr "<b>ఈ మీటను సంతకము చేసిన ప్రజలు (_P)</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-msgid "Encrypt files and email to the key's owner "
-msgstr "ఫైళ్ళను రహస్యపరచి మీట యజమానికి ఎలక్ర్టానిక్ తపా చేయు"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
 msgid "Fully"
 msgstr "పూర్తిగా"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
+msgid "Ultimately"
+msgstr "అంతిమంగా"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
+msgid "Encrypt files and email to the key's owner"
+msgstr "ఫైళ్ళను రహస్యపరచి మీట యజమానికి ఈ మెయిల్ చేయు"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
+msgid "Public PGP Key"
+msgstr "ప్రజా పీజీపీ మీట"
+
+#. Names set on the PGP key.
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
+msgid "<b>_Other Names:</b>"
+msgstr "<b>ఇతర పేర్లు (_O):</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
+msgid "<b>Your trust of this key</b>"
+msgstr "<b>ఈ మీట యొక్క మీ నమ్మకం</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
+msgid "Your trust is manually specified on the <i>Details</i> tab."
+msgstr "మీ నమ్మకం <i>వివరముల</i> టాబ్ లో వివరించబడింది"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:28
 #, no-c-format
 msgid "I trust signatures from '%s' on other keys"
 msgstr "'%s' నుంచి సంతకాలను వేరే మీటల మీద నమ్ముతున్నాను"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
 #, no-c-format
 msgid ""
 "If you believe that the person that owns this key is '%s', <i>sign</i> this "
 "key:"
 msgstr "మీ మీట యొక్క నమ్మకాన్ని ఇతరులకు తెలిపేందుకు ,ఈ  మీటను <i>సంతకం</i> చేయు:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:28
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
+msgid "_Sign this Key"
+msgstr "ఈ మీటను సంతకం చేయు (_S)"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
 #, no-c-format
 msgid ""
 "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
 msgstr "ఒక వేళ మీరు ఈ వ్యక్తి యొక్క గుర్తింపును నమ్మకపోతే , మీ సంతకాన్ని<i>కొట్టివేయండి</i>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
-msgid "Marginally"
-msgstr "మార్జినల్లీ"
-
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
-msgid "Public PGP Key"
-msgstr "ప్రజా పీజీపీ మీట"
-
-#. Trust column
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
-#: ../src/seahorse-key-manager-store.c:827
-msgid "Trust"
-msgstr "నమ్మకం"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
-msgid "Ultimately"
-msgstr "అంతిమంగా"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
-msgid "You _Trust the Owner:"
-msgstr "మీరునమ్మే యజమాని (_T):"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
-msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr "మీ నమ్మకం <i>వివరముల</i> టాబ్ లో వివరించబడింది"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
-msgid "_Only display the signatures of people I trust"
-msgstr "కేవలం నేను నమ్మే ప్రజల సంతకాలను ప్రదర్శించు (_O)"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
 msgid "_Revoke Signature"
 msgstr "సంతకాన్ని కొట్టివేయు (_R)"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
-msgid "_Sign this Key"
-msgstr "ఈ మీటను సంతకం చేయు (_S)"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
+msgid "<b>_People who have signed this key:</b>"
+msgstr "<b>ఈ మీటను సంతకము చేసిన ప్రజలు (_P)</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
+msgid "_Only display the signatures of people I trust"
+msgstr "కేవలం నేను నమ్మే ప్రజల సంతకాలను ప్రదర్శించు (_O)"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
+msgid "Trust"
+msgstr "నమ్మకం"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
+#: ../ssh/seahorse-ssh-key-properties.xml.h:19
+msgid "<b>Fingerprint:</b>"
+msgstr "<b>వేలి ముద్రలు</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
+msgid "<b>Dates:</b>"
+msgstr "<b>తేదీలు:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+msgid "<b>Indicate Trust:</b>"
+msgstr "<b>నమ్మకాన్ని తెలుపు:</b>"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
+msgid "You _Trust the Owner:"
+msgstr "మీరునమ్మే యజమాని (_T):"
 
 #: ../pgp/seahorse-pgp-subkey.c:371
 #, c-format
@@ -1640,52 +1857,59 @@ msgid "Subkey %d of %s"
 msgstr "%d ఉపమీటను (%s లో ) కొట్టివేయలేకపోయింది"
 
 #: ../pgp/seahorse-revoke.xml.h:1
-msgid "Optional description of revocation"
-msgstr "ఇష్టానుసారమైన కొట్టివేయుట యొక్క వివరణ"
-
-#: ../pgp/seahorse-revoke.xml.h:2
-msgid "Re_voke"
-msgstr "కొట్టివేయు (_v)"
-
-#: ../pgp/seahorse-revoke.xml.h:3
 msgid "Reason for revoking the key"
 msgstr "మీటను కొట్టివేయటానికి కారణం"
 
-#: ../pgp/seahorse-revoke.xml.h:6
+#: ../pgp/seahorse-revoke.xml.h:2
 msgid "_Reason:"
 msgstr "కారణం (_R):"
 
-#: ../pgp/seahorse-signer.c:62
+#: ../pgp/seahorse-revoke.xml.h:4
+msgid "Optional description of revocation"
+msgstr "ఇష్టానుసారమైన కొట్టివేయుట యొక్క వివరణ"
+
+#: ../pgp/seahorse-revoke.xml.h:6
+msgid "Re_voke"
+msgstr "కొట్టివేయు (_v)"
+
+#: ../pgp/seahorse-signer.c:63
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
 msgstr "పత్రాన్నైనా లేదా సందేశాన్ని సంతకం చేయటానికి మీకు స్వకీయమైన పీజీపీ మీటలు లేవు."
 
+#: ../pgp/seahorse-signer.xml.h:1
+msgid "_Sign message with key:"
+msgstr "సందేశాన్ని సంతకం చేయటానికి మీట (_S):"
+
 #: ../pgp/seahorse-sign.xml.h:1
-msgid "<b>How carefully have you checked this key?</b>"
-msgstr "<b>ఈ మీటను మీరు ఎంత జాగ్రత్తగా తనిఖీ చేసారు?</b>"
+msgid "Sign Key"
+msgstr "ఈ మీటను సంతకం చేయు"
 
 #: ../pgp/seahorse-sign.xml.h:2
-msgid "<b>How others will see this signature:</b>"
-msgstr "<b>ఇతరులు ఈ సంతకాన్ని  ఏ విధంగా చూస్తారు:</b>"
+msgid "By signing you indicate your trust that this key belongs to:"
+msgstr "ఈ సంతకం చేసి మీరు ఈ మీట : కి సంబంధించినదని నమ్మకాన్ని తెలుపుతున్నారు"
 
 #: ../pgp/seahorse-sign.xml.h:3
-msgid "<b>Sign key as:</b>"
-msgstr "<b>:సంతకంచేయు మీట లాగ:</b>"
-
-#: ../pgp/seahorse-sign.xml.h:4
-msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone. "
-msgstr ""
-"<i>సాదారణంగా:</i> అంటే మీరు సాదారణంగా వొక నిరూపణ జరిపారు ఆ కీ దానిని కలిగివుండాలని క్లేయిము చేసిన వారి "
-"వద్దే వుందేమోనని. ఉదాహరణకు, మీరు ఫోను నందు యజమానికి కీ వేలిముద్రను చదువగలరు."
-
-#: ../pgp/seahorse-sign.xml.h:5
 msgid "<i>Key Name</i>"
 msgstr "<i>మీట పేరు</i>"
 
+#: ../pgp/seahorse-sign.xml.h:4
+msgid "<b>How carefully have you checked this key?</b>"
+msgstr "<b>ఈ మీటను మీరు ఎంత జాగ్రత్తగా తనిఖీ చేసారు?</b>"
+
+#: ../pgp/seahorse-sign.xml.h:5
+msgid "_Not at all"
+msgstr "అస్సలు కాదు (_N)"
+
 #: ../pgp/seahorse-sign.xml.h:6
+msgid "_Casually"
+msgstr "అకస్మాత్తుగా (_C)"
+
+#: ../pgp/seahorse-sign.xml.h:7
+msgid "_Very Carefully"
+msgstr "చాలా జాగ్రత్తగా (_V)"
+
+#: ../pgp/seahorse-sign.xml.h:8
 msgid ""
 "<i>Not at all:</i> means you believe the key is owned by the person who "
 "claims to own it, but you could not or did not verify this to be a fact."
@@ -1693,23 +1917,20 @@ msgstr ""
 "<i>కానేకాదు:</i> అంటే కీ దానిని కావలని క్లెయిము చేసిన వారివద్దనే వున్నదని మీరు నమ్ముతున్నారు, అయితే మీరు "
 "యిది నిజమనునది నిర్దారించలేక పోయినారు లేదా నిర్ధారించలేదు."
 
-#: ../pgp/seahorse-sign.xml.h:7
+#: ../pgp/seahorse-sign.xml.h:9
+msgid ""
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone."
+msgstr ""
+"<i>సాదారణంగా:</i> అంటే మీరు సాదారణంగా వొక నిరూపణ జరిపారు ఆ కీ దానిని కలిగివుండాలని క్లేయిము చేసిన వారి "
+"వద్దే వుందేమోనని. ఉదాహరణకు, మీరు ఫోను నందు యజమానికి కీ వేలిముద్రను చదువగలరు."
+
+#: ../pgp/seahorse-sign.xml.h:10
 msgid ""
 "<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
 "key is genuine."
 msgstr "<i>చాలా జాగ్రత్తగా:</i>మీరు ఈ మీట ఖచ్చితంగా అసలైనదని నమ్మతేనే దీనిని ఎన్నుకోండి"
-
-#: ../pgp/seahorse-sign.xml.h:8
-msgid "By signing you indicate your trust that this key belongs to:"
-msgstr "ఈ సంతకం చేసి మీరు ఈ మీట : కి సంబంధించినదని నమ్మకాన్ని తెలుపుతున్నారు"
-
-#: ../pgp/seahorse-sign.xml.h:9
-msgid "I can _revoke this signature at a later date."
-msgstr "నేను ఈ సంతకాన్ని కొంత సమయం తరువాత కొట్టివేయవచ్చు (_r)."
-
-#: ../pgp/seahorse-sign.xml.h:10
-msgid "Sign Key"
-msgstr "ఈ మీటను సంతకం చేయు"
 
 #: ../pgp/seahorse-sign.xml.h:11
 msgid ""
@@ -1721,206 +1942,306 @@ msgstr ""
 "పెట్టవచ్చు. ఈమెయిల్ చిరునామా యజమానికి చెందినదేమో పరిశీలించుటకు మీరు ఈమెయిల్‌ను వుపయోగించవచ్చు."
 
 #: ../pgp/seahorse-sign.xml.h:12
-msgid "_Casually"
-msgstr "అకస్మాత్తుగా (_C)"
+msgid "<b>How others will see this signature:</b>"
+msgstr "<b>ఇతరులు ఈ సంతకాన్ని  ఏ విధంగా చూస్తారు:</b>"
 
 #: ../pgp/seahorse-sign.xml.h:13
-msgid "_Not at all"
-msgstr "అస్సలు కాదు (_N)"
-
-#: ../pgp/seahorse-sign.xml.h:14
 msgid "_Others may not see this signature"
 msgstr "ఇతరులు ఈ సంతకమును చూడక పోవచ్చు (_O)"
 
+#: ../pgp/seahorse-sign.xml.h:14
+msgid "I can _revoke this signature at a later date."
+msgstr "నేను ఈ సంతకాన్ని కొంత సమయం తరువాత కొట్టివేయవచ్చు (_r)."
+
 #: ../pgp/seahorse-sign.xml.h:15
-msgid "_Sign"
-msgstr "సంతకం (_S)"
+msgid "<b>Sign key as:</b>"
+msgstr "<b>:సంతకంచేయు మీట లాగ:</b>"
 
 #: ../pgp/seahorse-sign.xml.h:16
 msgid "_Signer:"
 msgstr "సంతకము చేసేవారు (_S):"
 
 #: ../pgp/seahorse-sign.xml.h:17
-msgid "_Very Carefully"
-msgstr "చాలా జాగ్రత్తగా (_V)"
+msgid "_Sign"
+msgstr "సంతకం (_S)"
 
-#: ../pgp/seahorse-signer.xml.h:1
-msgid "_Sign message with key:"
-msgstr "సందేశాన్ని సంతకం చేయటానికి మీట (_S):"
+#: ../pgp/seahorse-transfer.c:237 ../pgp/seahorse-transfer.c:284
+msgid "Exporting data"
+msgstr "దత్తాంశమును ఎగుమతి చేస్తోంది"
 
-#: ../pkcs11/seahorse-pkcs11-certificate.c:106
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:66
+#: ../pgp/seahorse-transfer.c:237 ../pgp/seahorse-transfer.c:284
+msgid "Retrieving data"
+msgstr "దత్తాంశమును మరల సంపాదిస్తోంది"
+
+#: ../pgp/seahorse-transfer.c:240 ../pgp/seahorse-transfer.c:287
+msgid "Importing data"
+msgstr "దత్తాంశమును దిగుమతి చేస్తోంది"
+
+#: ../pgp/seahorse-transfer.c:240 ../pgp/seahorse-transfer.c:287
+msgid "Sending data"
+msgstr "దత్తాంశమును పంపుము"
+
+#: ../pgp/seahorse-unknown.c:61
+msgid "Unavailable"
+msgstr "అందుబాటులోలేని"
+
+#: ../pkcs11/seahorse-certificate.c:435
+msgid "Personal certificate and key"
+msgstr "స్వగత అధికారపత్రములు మరియు మీట"
+
+#: ../pkcs11/seahorse-certificate.c:438
+msgid "Personal certificate"
+msgstr "స్వగత అధికారపత్రములు"
+
+#: ../pkcs11/seahorse-certificate.c:440
+#: ../pkcs11/seahorse-certificate-der-exporter.c:77
 msgid "Certificate"
 msgstr "యోగ్యతాపత్రిక"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:106
+#: ../pkcs11/seahorse-certificate-der-exporter.c:99
+msgid "Certificates (DER encoded)"
+msgstr "అధికారపత్రములు (DER తో నిక్షిప్తమైనవి)"
+
+#: ../pkcs11/seahorse-pkcs11-backend.c:183
+msgid "Certificates"
+msgstr "అధికారపత్రములు"
+
+#: ../pkcs11/seahorse-pkcs11-backend.c:186
+msgid "X.509 certificates and related keys"
+msgstr "X.509 అధికారపత్రములు మరియు సంబందిత మీటలు"
+
+#: ../pkcs11/seahorse-pkcs11-deleter.c:69
+msgid "Are you sure you want to permanently delete %d certificate?"
+msgid_plural "Are you sure you want to permanently delete %d certificates?"
+msgstr[0] "%d మీటయొక్క అధికారపత్రమును  మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+msgstr[1] "మీటయొక్క అధికారపత్రములను  మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:115
+msgid "Couldn't generate private key"
+msgstr "మీటను సృష్తించలేక పోయింది"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:414
+#: ../pkcs11/seahorse-pkcs11-request.c:256
+msgid "Create"
+msgstr "సృష్టించు "
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:507
+#: ../pkcs11/seahorse-private-key.c:179
+msgid "Private key"
+msgstr "స్వంత పీజీపీ మీట"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:508
+msgid "Used to request a certificate"
+msgstr "అధికారపత్రములను అభ్యర్దించుటకు ఉపయోగించబడు  "
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:1
+msgid "Create a new private key"
+msgstr "ఒక కొత్త ప్రైవేటు మీటను సృష్టించండి"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:2
+msgid "Label:"
+msgstr "చీటీ:"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:3
+msgid "Stored at:"
+msgstr "నిల్వవుంచిన స్థలము:"
+
+#: ../pkcs11/seahorse-pkcs11-key-deleter.c:85
+msgid "I understand that this key will be permanently deleted."
+msgstr "ఈ మీట శాశ్వతముగా తొలగించబడునని నాకు అర్ధమైనది."
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:147
+#: ../pkcs11/seahorse-pkcs11-properties.c:151
+msgid "Unnamed"
+msgstr "నామములేని"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:175
+msgid "Failed to export certificate"
+msgstr "అధికారపత్రములు దిగుమతి చేయుతలో విఫలం"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:875
 msgid "Couldn't delete"
 msgstr "తొలగించలేకపోయింది"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:127
-#, c-format
-msgid "Are you sure you want to delete the certificate '%s'?"
-msgstr "%s ను శాశ్వతంగా తొలగించాలని మీరు నిశ్చయించుకున్నారా?"
+#: ../pkcs11/seahorse-pkcs11-properties.c:231
+msgid "_Export"
+msgstr "ఎగుమతి(_E)"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:130
-#, c-format
-msgid "Are you sure you want to delete %d certificate?"
-msgid_plural "Are you sure you want to delete %d certificates?"
-msgstr[0] "%d మీటను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
-msgstr[1] "%d మీటలను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+#: ../pkcs11/seahorse-pkcs11-properties.c:232
+msgid "Export the certificate"
+msgstr "అధికారపత్రానికి ఎగుమతి చేయు"
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:143
-msgid "Deleting"
-msgstr "తొలగిస్తుంది"
+#: ../pkcs11/seahorse-pkcs11-properties.c:234
+msgid "Delete this certificate or key"
+msgstr "ఈ అధికారపత్రము లేదా మీటను తొలగించుము"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:235
+msgid "Request _Certificate"
+msgstr "అధికారపత్రమును అర్ధించుము(_C)"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:236
+msgid "Create a certificate request file for this key"
+msgstr "ఈ కీ కొరకు అభ్యర్దించు అధికారపత్రము ఫైలు సృష్టించుము."
+
+#: ../pkcs11/seahorse-pkcs11-request.c:104
+msgid "Couldn't save certificate request"
+msgstr "అధికారపత్రము అభ్యర్ధన దాచుట కుదురుటలేదు."
+
+#: ../pkcs11/seahorse-pkcs11-request.c:127
+msgid "Save certificate request"
+msgstr "అధికారపత్రము అభ్యర్ధన దాచుము"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:138
+msgid "Certificate request"
+msgstr "అధికారపత్రము అభ్యర్ధన "
+
+#: ../pkcs11/seahorse-pkcs11-request.c:146
+msgid "PEM encoded request"
+msgstr "PEM ఎంకోడ్ అభ్యర్ధన"
+
+#: ../pkcs11/seahorse-pkcs11-request.c:194
+msgid "Couldn't create certificate request"
+msgstr "అధికారపత్రము సృష్టించలేకపోయింది"
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:1
+msgid "Create a certificate request file."
+msgstr "అధికారపత్రము అభ్యర్ధన ఫైలును సృష్టించుము."
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:2
+msgid "The common name (CN) placed in the certificate request."
+msgstr "అధికారపత్రము అభ్యర్ధన లో ఉంచిన సాధారమైన నామము"
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:3
+msgid "Name (CN):"
+msgstr "పేరు(CN):"
+
+#: ../pkcs11/seahorse-private-key.c:132
+msgid "Unnamed private key"
+msgstr "నామములేని ప్రైవేటు మీట"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
 msgstr "పాస్ పదసముదాయాన్నిమార్చు"
 
-#: ../src/seahorse-change-passphrase.xml.h:2
-msgid "Con_firm Passphrase:"
-msgstr "పాస్ పదసముదాయాన్ని ధృవీకరించు (_f)"
-
 #: ../src/seahorse-change-passphrase.xml.h:3
+msgid "New _Passphrase:"
+msgstr "కొత్త పాస్ పదసముదాయం (_P):"
+
+#: ../src/seahorse-change-passphrase.xml.h:4
 msgid "Confirm new passphrase"
 msgstr "కొత్త పాస్ పదసముదాయాన్ని ధృవీకరించు"
 
 #: ../src/seahorse-change-passphrase.xml.h:5
-msgid "New _Passphrase:"
-msgstr "కొత్త పాస్ పదసముదాయం (_P):"
+msgid "Con_firm Passphrase:"
+msgstr "పాస్ పదసముదాయాన్ని ధృవీకరించు (_f)"
 
-#: ../src/seahorse.desktop.in.in.h:1
+#: ../src/seahorse.desktop.in.in.h:2
 msgid "Manage your passwords and encryption keys"
 msgstr "మీ సంకేతపదాలను మరియు రహస్యపరచే మీటలను నిర్వహించండి"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:868
-#: ../src/seahorse-main.c:76 ../src/seahorse-viewer.c:147
-msgid "Passwords and Keys"
-msgstr "సంకేతపదాలు మరియు మీటలు"
+#: ../src/seahorse-generate-select.c:229
+msgid "Continue"
+msgstr "కొనసాగించు "
 
 #: ../src/seahorse-generate-select.xml.h:1
 msgid "<b>_Select the type of item to create:</b>"
 msgstr "<b>మీరు ఏ రకమైన మీటను సృష్టించాలనుకుంటున్నారో ఆ రకమైన మీటను ఎన్నుకోండి (_S):</b>"
 
-#: ../src/seahorse-generate-select.xml.h:2
-msgid "C_ontinue"
-msgstr "కొనసాగించు (_o)"
+#: ../src/seahorse-import-dialog.c:98
+msgid "Import failed"
+msgstr "దిగుమతిచేయుట విఫలమైంది"
 
-#: ../src/seahorse-generate-select.xml.h:3
-msgid "Create New ..."
-msgstr "కొత్త మీటను సృష్టించు..."
+#: ../src/seahorse-import-dialog.c:116
+msgid "Import"
+msgstr "దిగుమతి "
 
-#: ../src/seahorse-key-manager.c:251 ../src/seahorse-keyserver-results.c:116
-#, c-format
-msgid "Selected %d key"
-msgid_plural "Selected %d keys"
-msgstr[0] "ఎన్నుకొన్న %d మీట"
-msgstr[1] "ఎన్నుకొన్న %d మీటలు"
+#: ../src/seahorse-import-dialog.c:129
+msgid "<b>Data to be imported:</b>"
+msgstr "<b>దిగుమతి అగుటకు దత్తాంశము:</b>"
 
-#: ../src/seahorse-key-manager.c:431 ../src/seahorse-key-manager.c:489
-#: ../src/seahorse-key-manager.c:550 ../src/seahorse-viewer.c:453
-msgid "Couldn't import keys"
-msgstr "మీటలను దిగుమతి చేయలేకపోయింది"
-
-#: ../src/seahorse-key-manager.c:433 ../src/seahorse-viewer.c:455
-msgid "Imported keys"
-msgstr "దిగుమతి చేయబడ్డ మీట"
-
-#: ../src/seahorse-key-manager.c:484
-msgid "Importing keys"
-msgstr "మీటలను దిగుమతి చేస్తోంది"
-
-#: ../src/seahorse-key-manager.c:504 ../ssh/seahorse-ssh-operation.c:891
+#: ../src/seahorse-key-manager.c:255 ../ssh/seahorse-ssh-operation.c:845
 msgid "Import Key"
 msgstr "కీను దిగుమతి చేయి"
 
-#: ../src/seahorse-key-manager.c:550
-msgid "Unrecognized key type, or invalid data format"
-msgstr "తెలియని మీట రకం, లేదా నిస్సారమైన దత్తాంశ రూపలావణ్యం"
+#: ../src/seahorse-key-manager.c:267
+msgid "All key files"
+msgstr "అన్ని ముఖ్యమైన ఫైళ్ళు"
 
-#: ../src/seahorse-key-manager.c:565
-msgid "Importing Keys"
-msgstr "మీటలను దిగుమతి చేస్తోంది"
+#: ../src/seahorse-key-manager.c:368
+msgid "Dropped text"
+msgstr "విడిచిన పాఠము"
 
-#: ../src/seahorse-key-manager.c:737 ../src/seahorse-keyserver-results.c:254
-msgid "_Remote"
-msgstr "సుదూర (_R)"
+#: ../src/seahorse-key-manager.c:391
+msgid "Clipboard text"
+msgstr "క్లిప్ బోర్డుపై పాఠము"
 
-#: ../src/seahorse-key-manager.c:739
+#: ../src/seahorse-key-manager.c:519
+msgid "_New"
+msgstr "కొత్త(_N)"
+
+#: ../src/seahorse-key-manager.c:521
 msgid "Close this program"
 msgstr "ఈ కార్యక్రమాన్ని మూసివేయు"
 
-#: ../src/seahorse-key-manager.c:740
+#: ../src/seahorse-key-manager.c:522 ../src/seahorse-key-manager.c:524
 msgid "_New..."
 msgstr "కొత్త(_N)..."
 
-#: ../src/seahorse-key-manager.c:741
+#: ../src/seahorse-key-manager.c:523
 msgid "Create a new key or item"
 msgstr "కొత్త మీటను సృష్టించండి"
 
-#: ../src/seahorse-key-manager.c:742
+#: ../src/seahorse-key-manager.c:525
+msgid "Add a new key or item"
+msgstr "కొత్త మీట లేక ఐటంను జోడించండి"
+
+#: ../src/seahorse-key-manager.c:526
 msgid "_Import..."
 msgstr "దిగుమతి... (_I)"
 
-#: ../src/seahorse-key-manager.c:743
+#: ../src/seahorse-key-manager.c:527
 msgid "Import from a file"
 msgstr "మీటలను ఫైలు నుంచి దిగుమతిచేయు"
 
-#: ../src/seahorse-key-manager.c:745
+#: ../src/seahorse-key-manager.c:529
 msgid "Import from the clipboard"
 msgstr "క్లిప్ బోర్డు నుంచి మీటలను దిగుమతి చేయు"
 
-#: ../src/seahorse-key-manager.c:750 ../src/seahorse-keyserver-results.c:264
-msgid "_Find Remote Keys..."
-msgstr "సుదూర మీటలను వెతుకు... (_F)"
+#: ../src/seahorse-key-manager.c:533
+msgid "By _keyring"
+msgstr "కీరింగు  వల్ల(_K):"
 
-#: ../src/seahorse-key-manager.c:751 ../src/seahorse-keyserver-results.c:265
-msgid "Search for keys on a key server"
-msgstr "ముఖ్య సేవికలో మీటల కోసం వెతుకు"
+#: ../src/seahorse-key-manager.c:534
+msgid "Show sidebar listing keyrings"
+msgstr "పక్కపట్టీకి జతచేయబడ్డ కీరింగ్ లను చూపుము"
 
-#: ../src/seahorse-key-manager.c:752
-msgid "_Sync and Publish Keys..."
-msgstr "కాలనియమితం చేసి మీటలను ప్రచురించు... (_S)"
+#: ../src/seahorse-key-manager.c:538
+msgid "Show _personal"
+msgstr "వ్యకితగతమైనవి చూపు(_p)"
 
-#: ../src/seahorse-key-manager.c:753
-msgid "Publish and/or synchronize your keys with those online."
-msgstr "ఆన్‌లైను వాటితో మీ కీలను ప్రచురించుము మరియు/లేదా సింక్రొనైజ్ చేయుము."
+#: ../src/seahorse-key-manager.c:539
+msgid "Only show personal keys, certificates and passwords"
+msgstr "వ్యక్తిగత  మీటలు, అధికారపత్రములు మరియు సంకేతపదములు"
 
-#: ../src/seahorse-key-manager.c:758
-msgid "T_ypes"
-msgstr "రకాలు (_y)"
+#: ../src/seahorse-key-manager.c:540
+msgid "Show _trusted"
+msgstr "నమ్మకమైనవి చూపు(_t)"
 
-#: ../src/seahorse-key-manager.c:758
-msgid "Show type column"
-msgstr "రకం నిలువును చూపు"
+#: ../src/seahorse-key-manager.c:541
+msgid "Only show trusted keys, certificates and passwords"
+msgstr "నమ్మకమైన  మీటలు, అధికారపత్రములు మరియు సంకేతపదములు"
 
-#: ../src/seahorse-key-manager.c:760
-msgid "_Expiry"
-msgstr "ముగియు (_E)"
+#: ../src/seahorse-key-manager.c:542
+msgid "Show _any"
+msgstr "ఏమైనా చూపుము(_a)"
 
-#: ../src/seahorse-key-manager.c:760
-msgid "Show expiry column"
-msgstr "ముగియు నిలువును చూపు"
+#: ../src/seahorse-key-manager.c:543
+msgid "Show all keys, certificates and passwords"
+msgstr "అన్ని మీటలు, అధికారపత్రములు మరియు సంకేతపదములు"
 
-#: ../src/seahorse-key-manager.c:762
-msgid "_Trust"
-msgstr "నమ్మకం (_T)"
-
-#: ../src/seahorse-key-manager.c:762
-msgid "Show owner trust column"
-msgstr "యజమాని నమ్మకం నిలువును చూపు"
-
-#: ../src/seahorse-key-manager.c:764
-msgid "_Validity"
-msgstr "దార్ఢ్యము (_V)"
-
-#: ../src/seahorse-key-manager.c:764
-msgid "Show validity column"
-msgstr "దార్ఢ్యము నిలువును చూపు"
-
-#: ../src/seahorse-key-manager.c:941
-msgid "Filter:"
-msgstr "వడపోత:"
+#: ../src/seahorse-key-manager.c:751
+msgid "Filter"
+msgstr "వడపోత"
 
 #: ../src/seahorse-key-manager.xml.h:1
 msgid "<big><b>First time options:</b></big>"
@@ -1930,265 +2251,47 @@ msgstr "<big><b>మొదటి సారి ఇచ్ఛాపూర్వక�
 msgid "Generate a new key of your own: "
 msgstr "నీ స్వంత కొత్త మీటను ఉత్పత్తి చేయు:"
 
-#: ../src/seahorse-key-manager.xml.h:3
+#: ../src/seahorse-key-manager.xml.h:4
 msgid "Import existing keys from a file:"
 msgstr "ఫైలు నుండి ఉన్న మీటలను దిగుమతి చేయు:"
 
-#: ../src/seahorse-key-manager.xml.h:4
-msgid "My _Personal Keys"
-msgstr "నా స్వకీయమైన మీటలు (_P)"
-
 #: ../src/seahorse-key-manager.xml.h:5
-msgid "Other _Keys"
-msgstr "ఇతర కీలు (_K)"
-
-#: ../src/seahorse-key-manager.xml.h:6
 msgid "To get started with encryption you will need keys."
 msgstr "రహస్యపరచడంతో మొదలుపెట్టడానికి మీకు మీటలు కావాలి."
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:518
-msgid "_Import"
-msgstr "దిగుమతి (_I)"
-
-#: ../src/seahorse-key-manager.xml.h:8
-msgid "_Passwords"
-msgstr "సంకేతపదాలు (_P)"
-
-#: ../src/seahorse-key-manager-store.c:610 ../src/seahorse-viewer.c:263
-msgid "Couldn't export keys"
-msgstr "మీటను ఎగుమతి చేయలేకపోయింది"
-
-#: ../src/seahorse-key-manager-store.c:820
-msgid "Validity"
-msgstr "దార్ఢ్యము"
-
-#. Expiry date column
-#: ../src/seahorse-key-manager-store.c:839
-msgid "Expiration Date"
-msgstr "ముగిసే తేది"
-
-#: ../src/seahorse-keyserver-results.c:256
-msgid "Close this window"
-msgstr "ఈ గవాక్షాన్ని మూసివేయు"
-
-#: ../src/seahorse-keyserver-results.c:257
-msgid "_Expand All"
-msgstr "అన్నింటినీ విస్తరించు (_E)"
-
-#: ../src/seahorse-keyserver-results.c:258
-msgid "Expand all listings"
-msgstr "అన్ని జాబితాలను విస్తరించు"
-
-#: ../src/seahorse-keyserver-results.c:259
-msgid "_Collapse All"
-msgstr "అన్నింటినీ కూల్చివేయు (_C)"
-
-#: ../src/seahorse-keyserver-results.c:260
-msgid "Collapse all listings"
-msgstr "అన్ని జాబితాలను కూల్చివేయు"
-
-#: ../src/seahorse-keyserver-results.c:331
-msgid "Remote Keys"
-msgstr "సుదూర మీటలు"
-
-#: ../src/seahorse-keyserver-results.c:333
-#, c-format
-msgid "Remote Keys Containing '%s'"
-msgstr "%s కలిగియున్న సుదూర మీటలు"
-
-#: ../src/seahorse-keyserver-search.xml.h:1
-msgid "<b>Key Servers:</b>"
-msgstr "<b>ముఖ్య సేవికలు:</b>"
-
-#: ../src/seahorse-keyserver-search.xml.h:2
-msgid "<b>Shared Keys Near Me:</b>"
-msgstr "<b>నా దగ్గరులోనున్న పంచుకొన్న మీటలు : </b>"
-
-#: ../src/seahorse-keyserver-search.xml.h:3
-msgid "Find Remote Keys"
-msgstr "సుదూర మీటలను కనుగొనండి"
-
-#: ../src/seahorse-keyserver-search.xml.h:4
-msgid ""
-"This will find keys for others on the Internet. These keys can then be "
-"imported into your local key ring."
-msgstr ""
-"ఇది ఇతరుల కోసం ఇంటర్నెట్లో మీటల కోసం వెతుకుతుంది.ఈ మీటలు తర్వాత స్థానిక మీట వలయంలోకి దిగుమతి "
-"చేయబడతాయి."
-
-#: ../src/seahorse-keyserver-search.xml.h:5
-msgid "Where to search:"
-msgstr "ఎక్కడ వెతకాలి:"
-
-#: ../src/seahorse-keyserver-search.xml.h:6
-msgid "_Search"
-msgstr "వెతుకు (_S)"
-
-#: ../src/seahorse-keyserver-search.xml.h:7
-msgid "_Search for keys containing: "
-msgstr "దీనిని కలగివున్న కీల కొరకు శోధించుము (_S): "
-
-#: ../src/seahorse-keyserver-sync.c:58
-msgid "Couldn't publish keys to server"
-msgstr "సేవికకు మీటలను ప్రచురించలేకపోయింది : %s"
-
-#: ../src/seahorse-keyserver-sync.c:77
-#, c-format
-msgid "Couldn't retrieve keys from server: %s"
-msgstr "సేవిక నుంచి మీటలను వెలికితీయలేకపోయింది:%s"
-
-#: ../src/seahorse-keyserver-sync.c:161
-#, c-format
-msgid "<b>%d key is selected for synchronizing</b>"
-msgid_plural "<b>%d keys are selected for synchronizing</b>"
-msgstr[0] "<b>%d మీట కాలనియమితం చేసేందుకు ఎన్నుకొనబడండి</b>"
-msgstr[1] "<b>%d మీటలు కాలనియమితం చేసేందుకు ఎన్నుకొనబడ్డాయి</b>"
-
-#: ../src/seahorse-keyserver-sync.c:247
-msgid "Synchronizing keys..."
-msgstr "మీటలను కాలనియమితం చేస్తోంది..."
-
-#: ../src/seahorse-keyserver-sync.xml.h:1
-msgid "Sync Keys"
-msgstr "కాలనియమిత మీటలు"
-
-#: ../src/seahorse-keyserver-sync.xml.h:2
-msgid ""
-"This will publish the keys in your key ring so they're available for others "
-"to use. You'll also get any changes others have made since you received "
-"their keys."
-msgstr ""
-"ఇది కీలను మీ కీరింగు నందు ప్రచురిస్తుంది అలా అవి యితరులకు అందుబాటులో వుంటాయి. మీరు యితరుల కీలను "
-"స్వీకరించిన దగ్గరనుండి వారు చేసిన మార్పులను కూడా పొందుతారు."
-
-#: ../src/seahorse-keyserver-sync.xml.h:3
-msgid ""
-"This will retrieve any changes others have made since you received their "
-"keys. No key server has been chosen for publishing, so your keys will not be "
-"made available to others."
-msgstr ""
-"మీరు యితరుల కీలను స్వీకరించిన దగ్గరనుండి యిది యితరులు చేసిన మార్పులను వెలికితీస్తుంది. ప్రచురణ కొరకు "
-"ఏ కీ సేవిక ఎంచుకొనబడలేదు, అందువలన మీ కీలు యితరులను అందుబాటలో వుండవు."
-
-#: ../src/seahorse-keyserver-sync.xml.h:4
-msgid "_Key Servers"
-msgstr "ముఖ్య సేవికలు (_K)"
-
-#: ../src/seahorse-keyserver-sync.xml.h:5
-msgid "_Sync"
-msgstr "కాలనియమితం (_S)"
-
-#: ../src/seahorse-main.c:60
+#: ../src/seahorse-main.c:54
 msgid "Version of this application"
 msgstr "ఈ అనువర్తనము యొక్క వర్షన్"
 
-#: ../src/seahorse-viewer.c:123
-msgid "Contributions:"
-msgstr "సహాయములు:"
+#: ../src/seahorse-sidebar.c:799
+msgid "Couldn't lock"
+msgstr "లాక్ చేయలేకపోయింది"
 
-#: ../src/seahorse-viewer.c:149
-msgid "translator-credits"
-msgstr "Srinivasa Chary <srinu.kolpur@gmail.com>"
+#: ../src/seahorse-sidebar.c:836
+msgid "Couldn't unlock"
+msgstr "అన్ లాక్ చేయలేక పోయింది"
 
-#: ../src/seahorse-viewer.c:152
-msgid "Seahorse Project Homepage"
-msgstr "సీహార్స్ పథకం నివాస పుట"
+#: ../src/seahorse-sidebar.c:944
+msgid "_Lock"
+msgstr "లాక్  (_L)"
 
-#. Top menu items
-#: ../src/seahorse-viewer.c:172
-msgid "_File"
-msgstr "ఫైలు(_F)"
+#: ../src/seahorse-sidebar.c:949
+msgid "_Unlock"
+msgstr "తెరచివేయు(_U)"
 
-#: ../src/seahorse-viewer.c:173
-msgid "_Edit"
-msgstr "సరిచేయు (_E)"
+#: ../src/seahorse-sidebar.c:968
+msgid "_Properties"
+msgstr "అభీష్టా(_P)"
 
-#: ../src/seahorse-viewer.c:174
-msgid "_View"
-msgstr "దర్శనం (_V)"
+#: ../ssh/seahorse-ssh-actions.c:100
+msgid "Configure Key for _Secure Shell..."
+msgstr "రక్షిత షెల్ మీటలు రూపకరించుచున్నది... (_S)"
 
-#: ../src/seahorse-viewer.c:175
-msgid "_Help"
-msgstr "సహాయం (_H)"
-
-#: ../src/seahorse-viewer.c:177
-msgid "Prefere_nces"
-msgstr "అభీష్టాలు (_n)"
-
-#: ../src/seahorse-viewer.c:178
-msgid "Change preferences for this program"
-msgstr "ఈ కార్యక్రమం యొక్క అభీష్టాలను మార్చు"
-
-#: ../src/seahorse-viewer.c:181
-msgid "About this program"
-msgstr "ఈ కార్యక్రమం గురించి"
-
-#: ../src/seahorse-viewer.c:182
-msgid "_Contents"
-msgstr "విషయములు (_C)"
-
-#: ../src/seahorse-viewer.c:183
-msgid "Show Seahorse help"
-msgstr "సీహార్స్ సహాయాన్ని చూపు"
-
-#: ../src/seahorse-viewer.c:284
-msgid "Export public key"
-msgstr "ప్రజా మీటను ఎగుమతి  చేయు"
-
-#: ../src/seahorse-viewer.c:305
-msgid "Exporting keys"
-msgstr "మీటలను ఎగుమతి చేస్తోంది"
-
-#: ../src/seahorse-viewer.c:334
-msgid "Couldn't retrieve data from key server"
-msgstr "ముఖ్య సేవిక నుంచి దత్తాంశాన్ని మరల సంపాదించలేకపోయింది"
-
-#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:346
-msgid "Copied keys"
-msgstr "%d మీటను నకలు చేసింది"
-
-#: ../src/seahorse-viewer.c:371
-msgid "Retrieving keys"
-msgstr "మీటలను మరల సంపాదిస్తోంది"
-
-#: ../src/seahorse-viewer.c:426
-#, c-format
-msgid "%s is a private key. Are you sure you want to proceed?"
-msgstr "%s ఒక స్వంతతాళం."
-
-#: ../src/seahorse-viewer.c:480
-msgid "Importing keys from key servers"
-msgstr "ముఖ్య సేవికల నుంచి మీటలను దిగుమతి చేస్తోంది"
-
-#: ../src/seahorse-viewer.c:505
-msgid "Show properties"
-msgstr "మీట యొక్క లక్షణాలను చూపు"
-
-#: ../src/seahorse-viewer.c:506
-msgctxt "This text refers to deleting an item from its type's backing store."
-msgid "_Delete"
-msgstr "తొలగించు(_D)"
-
-#: ../src/seahorse-viewer.c:507
-msgid "Delete selected items"
-msgstr "ఎన్నుకొన్న మీటలను తొలగించు"
-
-#: ../src/seahorse-viewer.c:511
-msgid "E_xport..."
-msgstr "దిగుమతి... (_E)"
-
-#: ../src/seahorse-viewer.c:512
-msgid "Export to a file"
-msgstr "మీటలోని ప్రజా భాగాన్ని దస్ర్తానికి ఎగుమతి చేయు"
-
-#: ../src/seahorse-viewer.c:514
-msgid "Copy to the clipboard"
-msgstr "ఎన్నుకొన్న మీటలను క్లిప్ బోర్డుకు నకలు చేయండి"
-
-#: ../src/seahorse-viewer.c:519
-msgid "Import selected keys to local key ring"
-msgstr "ఎన్నుకొన్న మీటలను స్థానిక మీట వలయంలోకి దిగుమతి చేయు"
+#: ../ssh/seahorse-ssh-actions.c:101
+msgid ""
+"Send public Secure Shell key to another machine, and enable logins using "
+"that key."
+msgstr "ప్రజా సురక్షిత షెల్ మీటను మరొక యంత్రానికి పంపి, దాని ద్వారా ప్రవేశద్వారానికి ఉపయోగించు. "
 
 #: ../ssh/seahorse-ssh-askpass.c:60 ../ssh/seahorse-ssh-askpass.c:68
 msgid "Enter your Secure Shell passphrase:"
@@ -2213,175 +2316,200 @@ msgid "Enter the new passphrase for: %s"
 msgstr "%s కొరకు కొత్త పాస్ పదసముదాయాన్ని ఇవ్వండి"
 
 #: ../ssh/seahorse-ssh-askpass.c:93
+#, c-format
 msgid "Enter the new passphrase again: %s"
 msgstr "%s కొరకు కొత్త పాస్ పదసముదాయాన్నిమరల ఇవ్వండి"
 
-#: ../ssh/seahorse-ssh-commands.c:86
-msgid "Configure Key for _Secure Shell..."
-msgstr "రక్షిత షెల్ మీటలు రూపకరించుచున్నది... (_S)"
+#: ../ssh/seahorse-ssh-backend.c:91
+msgid "Secure Shell"
+msgstr "రక్షిత షెల్ "
 
-#: ../ssh/seahorse-ssh-commands.c:87
-msgid ""
-"Send public Secure Shell key to another machine, and enable logins using "
-"that key."
-msgstr "ప్రజా సురక్షిత షెల్ మీటను మరొక యంత్రానికి పంపి, దాని ద్వారా ప్రవేశద్వారానికి ఉపయోగించు. "
+#: ../ssh/seahorse-ssh-backend.c:94
+msgid "Keys used to connect securely to other computers"
+msgstr "ఇతర కంప్యూటర్స్ కు సురక్షితమైన బంధంకు వాడబడిన మీటలు."
 
-#: ../ssh/seahorse-ssh-commands.c:118
+#: ../ssh/seahorse-ssh-deleter.c:81 ../ssh/seahorse-ssh-deleter.c:86
 #, c-format
 msgid "Are you sure you want to delete the secure shell key '%s'?"
 msgstr "'%s' వాడుకరి సంకేతపదంను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
 
-#: ../ssh/seahorse-ssh-commands.c:121
-#, c-format
-msgid "Are you sure you want to delete %d secure shell keys?"
-msgstr "%d మీటను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+#: ../ssh/seahorse-ssh-deleter.c:91
+msgid "Are you sure you want to delete %d secure shell key?"
+msgid_plural "Are you sure you want to delete %d secure shell keys?"
+msgstr[0] "%d మీటను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+msgstr[1] "%d మీటలను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
 
-#: ../ssh/seahorse-ssh-commands.c:133
-msgid "Couldn't delete key"
-msgstr "మీటను తొలగించలేకపోయింది"
+#: ../ssh/seahorse-ssh-exporter.c:92
+msgid "Ssh Key"
+msgstr "ssh మీట"
 
-#: ../ssh/seahorse-ssh-generate.c:60 ../ssh/seahorse-ssh-key.c:91
-#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:19
+#: ../ssh/seahorse-ssh-exporter.c:122
+msgid "Secret SSH keys"
+msgstr "రహస్య షెల్ మీట"
+
+#: ../ssh/seahorse-ssh-exporter.c:126
+msgid "Public SSH keys"
+msgstr "పబ్లిక్ ssh మీట"
+
+#: ../ssh/seahorse-ssh-exporter.c:290
+msgid "No public key file is available for this key."
+msgstr "ఈ కీ కొరకు ఏ పబ్లిక్ కీ అందుబాటులో లేదు."
+
+#: ../ssh/seahorse-ssh-generate.c:55 ../ssh/seahorse-ssh-key.c:114
+#: ../ssh/seahorse-ssh-key.c:118 ../ssh/seahorse-ssh-key-properties.xml.h:4
 msgid "Secure Shell Key"
 msgstr "రక్షిత షెల్ మీట"
 
-#: ../ssh/seahorse-ssh-generate.c:61
+#: ../ssh/seahorse-ssh-generate.c:56
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "ఇతర కంప్యూటర్లను సాంగత్యించేందుకు వాడబడతుంది(ఉదాహరణకు:అగ్రం ద్వారా)"
 
-#: ../ssh/seahorse-ssh-generate.c:115 ../ssh/seahorse-ssh-generate.c:131
+#: ../ssh/seahorse-ssh-generate.c:110 ../ssh/seahorse-ssh-generate.c:126
 msgid "Couldn't generate Secure Shell key"
 msgstr "రక్షిత షెల్ మీటను ఉత్పత్తి చేయలేకపోయింది"
 
-#: ../ssh/seahorse-ssh-generate.c:197
+#: ../ssh/seahorse-ssh-generate.c:192
 msgid "Creating Secure Shell Key"
 msgstr "రక్షిత షెల్ మీట సృష్టించుచున్నది."
 
-#: ../ssh/seahorse-ssh-generate.xml.h:2
-msgid ""
-"<i>Use your email address, and any other reminder you need about what this "
-"key is for.</i>"
-msgstr "<i>ఈ మీట దేని కొరకో తెలుసుకోవటానికి మీ ఇ తపాలాను లేదా ఇతర జ్ఞాపకంచేసేదానిని వాడండి</i>"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:3
-msgid ""
-"A Secure Shell (SSH) key lets you connect securely to trusted computers "
-"using SSH, without entering a different password for each of them."
-msgstr ""
-"ఒక రక్షిత షెల్ (ఎస్ ఎస్ హెచ్) మీట మిమ్మల్ని సురక్షితంగా ఎస్ ఎస్ హెచ్ వాడే నమ్మకమైన కంప్యూటర్లకు వేరువేరు "
-"సంకేతపదాలు ఇవ్వకుండా బంధించడానికి ఉపయోగపడుతుంది."
-
-#: ../ssh/seahorse-ssh-generate.xml.h:5
-msgid ""
-"If there is already a computer you want to use this key with, you can set up "
-"that computer to recognize your key now. "
-msgstr ""
-"ఒకవేళ ఈ మీటను వాడడానికి కంప్యూటరుంటే, ఇప్పుడు ఆ కంప్యూటర్నుమీ మీటను గుర్తించే విధంగా దానిని "
-"స్థాపించవచ్చు."
-
-#: ../ssh/seahorse-ssh-generate.xml.h:7
+#: ../ssh/seahorse-ssh-generate.xml.h:1
 msgid "New Secure Shell Key"
 msgstr "కొత్త రక్షిత షెల్ మీట"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:8
-msgid "_Create and Set Up"
-msgstr "సృష్టించు మరియు అమర్చిపెట్టు (_C)"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:9
+#: ../ssh/seahorse-ssh-generate.xml.h:2
 msgid "_Just Create Key"
 msgstr "కేవలం మీట సృష్టించు (_J)"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:10
-msgid "_Key Description:"
-msgstr "మీట వివరణ (_K):"
+#: ../ssh/seahorse-ssh-generate.xml.h:3
+msgid "_Create and Set Up"
+msgstr "సృష్టించు మరియు అమర్చిపెట్టు (_C)"
 
-#: ../ssh/seahorse-ssh-key.c:87
+#: ../ssh/seahorse-ssh-generate.xml.h:4
+msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
+msgstr ""
+"ఒక రక్షిత షెల్ (ఎస్ ఎస్ హెచ్) మీట మిమ్మల్ని సురక్షితంగా  వెరే కంప్యూటర్లకు బంధించడానికి ఉపయోగపడుతుంది."
+
+#: ../ssh/seahorse-ssh-generate.xml.h:6
+msgid "<i>Your email address, or a reminder of what this key is for.</i>"
+msgstr "<i>ఈ మీట దేని కొరకో తెలుసుకోవటానికి మీ ఈ మెయిల్ ను  జ్ఞాపకంచేసేదానిని వాడండి</i>"
+
+#: ../ssh/seahorse-ssh-generate.xml.h:10
+msgid "DSA"
+msgstr "DSA"
+
+#: ../ssh/seahorse-ssh-generate.xml.h:12
+msgid ""
+"If there is a computer you want to use this key with, you can set up that "
+"computer to recognize your new key."
+msgstr ""
+"ఒకవేళ ఈ మీటను వాడడానికి కంప్యూటరుంటే, ఇప్పుడు ఆ కంప్యూటర్నుమీ కొత్త మీటను గుర్తించే విధంగా దానిని "
+"స్థాపించవచ్చు."
+
+#: ../ssh/seahorse-ssh-key.c:110
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(చదవలేని రక్షిత షెల్ మీట)"
 
-#: ../ssh/seahorse-ssh-key-properties.c:79
+#: ../ssh/seahorse-ssh-key.c:218
+msgid "Personal SSH key"
+msgstr "నా స్వకీయమైన ssh మీటలు "
+
+#: ../ssh/seahorse-ssh-key.c:220
+msgid "SSH key"
+msgstr "ssh మీట"
+
+#: ../ssh/seahorse-ssh-key-properties.c:82
 msgid "Couldn't rename key."
 msgstr "మీట పునర్నామకరణము చేయుటకు వీలుకాదు."
 
-#: ../ssh/seahorse-ssh-key-properties.c:132
+#: ../ssh/seahorse-ssh-key-properties.c:135
 msgid "Couldn't change authorization for key."
 msgstr "మీట కొరకు అధికారాన్ని మార్చుటకు వీలుకాదు."
 
-#: ../ssh/seahorse-ssh-key-properties.c:167
+#: ../ssh/seahorse-ssh-key-properties.c:170
 msgid "Couldn't change passphrase for key."
 msgstr "మీట కొరకు పాస్ పదసముదాయాన్ని మార్చుట వీలుకాదు."
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:1
-msgid "<b>Algorithm:</b>"
-msgstr "<b>అల్గారిదమ్:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
+#: ../ssh/seahorse-ssh-key-properties.xml.h:2
 msgid "<b>Identifier:</b>"
 msgstr "<b>గుర్తించునది:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:4
-msgid "<b>Location:</b>"
-msgstr "<b>స్థలము:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:5
+#. Name of key, often a persons name
+#: ../ssh/seahorse-ssh-key-properties.xml.h:6
+msgctxt "name-of-ssh-key"
 msgid "<b>Name:</b>"
 msgstr "<b>పేరు:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:6
-msgid "<b>Strength:</b>"
-msgstr "<b>శక్తి:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:8
-msgid "<b>Trust</b>"
-msgstr "<b>నమ్మకం</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:13
-#, no-c-format
-msgid "<i>This only applies to the '%s'</i> account."
-msgstr "<i>'%s' కు మాత్రమే ఇది వర్తిస్తుంది </i> ఖాతా."
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:16
-msgid "E_xport Complete Key"
-msgstr "పూర్తి మీట ఎగుమతి (_x)"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:20
-msgid "The owner of this key is _authorized to connect to this computer"
-msgstr "ఈ కంప్యూటర్ కు బంధంకు ఈ మీట యొక్క యజమాని కి అధికారమివ్వబడినది. (_a)"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:21
+#: ../ssh/seahorse-ssh-key-properties.xml.h:7
 msgid "Used to connect to other computers."
 msgstr "ఇతర కంప్యూటర్స్ కు బంధంకు వాడబడినది."
 
-#: ../ssh/seahorse-ssh-operation.c:198
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
+msgid "<b>Trust</b>"
+msgstr "<b>నమ్మకం</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:12
+msgid "The owner of this key is _authorized to connect to this computer"
+msgstr "ఈ కంప్యూటర్ కు బంధంకు ఈ మీట యొక్క యజమాని కి అధికారమివ్వబడినది. (_a)"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:14
+msgid "This only applies to the <i>%s</i> account."
+msgstr "<i>'%s'</i> కు మాత్రమే ఇది వర్తిస్తుంది  ఖాతా."
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:16
+msgid "<b>Algorithm:</b>"
+msgstr "<b>అల్గారిదమ్:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
+msgid "<b>Strength:</b>"
+msgstr "<b>శక్తి:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:18
+msgid "<b>Location:</b>"
+msgstr "<b>స్థలము:</b>"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:21
+msgid "E_xport Complete Key"
+msgstr "పూర్తి మీట ఎగుమతి (_x)"
+
+#: ../ssh/seahorse-ssh-operation.c:199
 msgid "The SSH command was terminated unexpectedly."
 msgstr "ఎస్ ఎస్ హెచ్ ఆదేశం అనుకోకుండా ముగిసినది."
 
-#: ../ssh/seahorse-ssh-operation.c:208
+#: ../ssh/seahorse-ssh-operation.c:209
 msgid "The SSH command failed."
 msgstr "ఎస్ ఎస్ హెచ్ ఆదేశం విఫలమైనది."
 
-#: ../ssh/seahorse-ssh-operation.c:518
+#: ../ssh/seahorse-ssh-operation.c:502
 msgid "Remote Host Password"
 msgstr "అల్లిక సంకేతపదం"
 
-#: ../ssh/seahorse-ssh-operation.c:634
+#: ../ssh/seahorse-ssh-operation.c:588
 msgid "Enter Key Passphrase"
 msgstr "పాస్ పదసముదాయాన్ని ఇవ్వండి"
 
-#: ../ssh/seahorse-ssh-operation.c:724
+#: ../ssh/seahorse-ssh-operation.c:678
 msgid "Passphrase for New Secure Shell Key"
 msgstr "కొత్త రక్షిత షెల్ మీట కొరకు పాస్ పదసముదాయం"
 
-#: ../ssh/seahorse-ssh-operation.c:908
+#: ../ssh/seahorse-ssh-operation.c:862
 #, c-format
 msgid "Importing key: %s"
 msgstr "కీను దిగుమతిచేయుచున్నది: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:910
+#: ../ssh/seahorse-ssh-operation.c:864
 msgid "Importing key. Enter passphrase"
 msgstr "కీను దిగుమతిచేయుచున్నది. సంకేతపదమును ప్రవేశపెట్టుము"
 
-#: ../ssh/seahorse-ssh-source.c:951
+#: ../ssh/seahorse-ssh-source.c:232
+msgid "OpenSSH keys"
+msgstr "OpenSSH చేసింది"
+
+#: ../ssh/seahorse-ssh-source.c:235
+#, c-format
+msgid "OpenSSH: %s"
+msgstr "OpenSSH: %s"
+
+#: ../ssh/seahorse-ssh-source.c:940
 msgid "No private key file is available for this key."
 msgstr "ఈ కీ కొరకు ఏ వ్యక్తిగత కీ అందుబాటులో లేదు."
 
@@ -2394,14 +2522,10 @@ msgid "Configuring Secure Shell Keys..."
 msgstr "రక్షిత షెల్ మీటలు రూపకరించుచున్నది..."
 
 #: ../ssh/seahorse-ssh-upload.xml.h:1
-msgid "<i>eg: fileserver.example.com:port</i>"
-msgstr "<i>ఉదా: fileserver.example.com</i>"
-
-#: ../ssh/seahorse-ssh-upload.xml.h:2
 msgid "Set Up Computer for SSH Connection"
 msgstr "ఎస్ ఎస్ హెచ్ బంధం కొరకు కంప్యూటర్ అమర్చిపెట్టు"
 
-#: ../ssh/seahorse-ssh-upload.xml.h:4
+#: ../ssh/seahorse-ssh-upload.xml.h:2
 msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
@@ -2409,6 +2533,10 @@ msgstr ""
 "మీ యొక్క రక్షిత షెల్ మీట మరియొక కంప్యూటర్ తో వాడుటకు అది\n"
 "ఎస్ ఎస్ హెచ్ వాడుతుంది, నీవు ఇదివరకే ఒక ప్రవేశద్వారం ఖాతా కలిగి ఉండవలయును ఆ\n"
 "కంప్యూటర్ పై."
+
+#: ../ssh/seahorse-ssh-upload.xml.h:4
+msgid "<i>eg: fileserver.example.com:port</i>"
+msgstr "<i>ఉదా: fileserver.example.com</i>"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
 msgid "_Computer Name:"
@@ -2422,14 +2550,179 @@ msgstr "ప్రవేశద్వారం పేరు (_L):"
 msgid "_Set Up"
 msgstr "అమర్చిపెట్టు (_S)"
 
+#~ msgid "Couldn't delete item"
+#~ msgstr "అంశమును తొలగించలేకపోయింది"
+
+#~ msgid "Deleting item"
+#~ msgid_plural "Deleting items"
+#~ msgstr[0] "వస్తువును దాచుతోంది"
+#~ msgstr[1] "వస్తువును దాచుతోంది"
+
+#~ msgid "Passwords: %s"
+#~ msgstr "సంకేతపదం: %s"
+
+#~ msgid "<b>Passwords:</b> %s"
+#~ msgstr "<b>సంకేతపదం:</b> %s"
+
+#~ msgid ""
+#~ "Lock the password storage keyring so a master password is required to "
+#~ "unlock it."
+#~ msgstr ""
+#~ "సంకేతపద నిల్వ కీరింగును లాక్ చేయుము అలా వొక మాస్టర్ సంకేతపదము అవసరమౌతుంది దానిని అన్‌లాక్ చేయుటకు."
+
+#~ msgid ""
+#~ "Unlock the password storage keyring with a master password so it is "
+#~ "available for use."
+#~ msgstr ""
+#~ "సంకేతపదము దాచే కీరింగును మాస్టర్ సంకేతపదముతో అన్‌లాక్ చేయుము అలా అది వుపయోగమునకు అందుబాటులో "
+#~ "వుంటుంది."
+
+#~ msgid "Couldn't delete keyring"
+#~ msgstr "కీరింగ్ ను తొలగించలేకపోయింది"
+
+#~ msgid "Archive files"
+#~ msgstr "సంగ్రహమైన ఫైళ్ళు"
+
+#~ msgid ""
+#~ "<b>A file already exists with this name.</b>\n"
+#~ "\n"
+#~ "Do you want to replace it with a new file?"
+#~ msgstr ""
+#~ "<b>ఈ పేరుతో వొక ఫైలు యిప్పటికే వుంది.</b>\n"
+#~ "\n"
+#~ "మీరు దానిని కొత్త ఫైలుతో పునఃస్థాపించాలని అనుకొనుచున్నారా?"
+
+#~ msgid "_Replace"
+#~ msgstr "పునఃస్థాపించు (_R)"
+
+#~ msgid "_Sign Key..."
+#~ msgstr "సంతకం చేయు... (_S)"
+
+#~ msgid "Sign public key"
+#~ msgstr "ప్రజా మీటను సంతకం చేయు"
+
+#~ msgid "Are you sure you want to permanently delete %d keys and identities?"
+#~ msgstr "%d మీటను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+
+#~ msgid "Couldn't delete public key"
+#~ msgstr "పబ్లిక్ కీను తొలగించలేకపోయింది"
+
+#~ msgid "Algorithms here"
+#~ msgstr "అల్గారిదములు ఇక్కడ"
+
+#~ msgid "New PGP Key"
+#~ msgstr "కొత్త పీజీపీ మీట"
+
+#~ msgid "Couldn't export key to \"%s\""
+#~ msgstr "\"%s\" కు మీటను ఎగుమతి చేయలేకపోయింది"
+
+#~ msgid "Export Complete Key"
+#~ msgstr "పూర్తి మీటను ఎగుమతిచేయు"
+
+#~ msgid "Are you sure you want to delete the certificate '%s'?"
+#~ msgstr "%s ను శాశ్వతంగా తొలగించాలని మీరు నిశ్చయించుకున్నారా?"
+
+#~ msgid "Are you sure you want to delete %d certificate?"
+#~ msgid_plural "Are you sure you want to delete %d certificates?"
+#~ msgstr[0] "%d మీటను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+#~ msgstr[1] "%d మీటలను మీరు శాశ్వతంగా తొలగించడానికి నిశ్చయించుకున్నారా?"
+
+#~ msgid "Deleting"
+#~ msgstr "తొలగిస్తుంది"
+
+#~ msgid "Create New ..."
+#~ msgstr "కొత్త మీటను సృష్టించు..."
+
+#~ msgid "Selected %d key"
+#~ msgid_plural "Selected %d keys"
+#~ msgstr[0] "ఎన్నుకొన్న %d మీట"
+#~ msgstr[1] "ఎన్నుకొన్న %d మీటలు"
+
+#~ msgid "Importing keys"
+#~ msgstr "మీటలను దిగుమతి చేస్తోంది"
+
+#~ msgid "Unrecognized key type, or invalid data format"
+#~ msgstr "తెలియని మీట రకం, లేదా నిస్సారమైన దత్తాంశ రూపలావణ్యం"
+
+#~ msgid "Importing Keys"
+#~ msgstr "మీటలను దిగుమతి చేస్తోంది"
+
+#~ msgid "T_ypes"
+#~ msgstr "రకాలు (_y)"
+
+#~ msgid "Show type column"
+#~ msgstr "రకం నిలువును చూపు"
+
+#~ msgid "_Expiry"
+#~ msgstr "ముగియు (_E)"
+
+#~ msgid "Show expiry column"
+#~ msgstr "ముగియు నిలువును చూపు"
+
+#~ msgid "_Trust"
+#~ msgstr "నమ్మకం (_T)"
+
+#~ msgid "Show owner trust column"
+#~ msgstr "యజమాని నమ్మకం నిలువును చూపు"
+
+#~ msgid "_Validity"
+#~ msgstr "దార్ఢ్యము (_V)"
+
+#~ msgid "Show validity column"
+#~ msgstr "దార్ఢ్యము నిలువును చూపు"
+
+#~ msgid "Other _Keys"
+#~ msgstr "ఇతర కీలు (_K)"
+
+#~ msgid "Validity"
+#~ msgstr "దార్ఢ్యము"
+
+#~ msgid "Expiration Date"
+#~ msgstr "ముగిసే తేది"
+
+#~ msgid "_Expand All"
+#~ msgstr "అన్నింటినీ విస్తరించు (_E)"
+
+#~ msgid "Expand all listings"
+#~ msgstr "అన్ని జాబితాలను విస్తరించు"
+
+#~ msgid "_Collapse All"
+#~ msgstr "అన్నింటినీ కూల్చివేయు (_C)"
+
+#~ msgid "Collapse all listings"
+#~ msgstr "అన్ని జాబితాలను కూల్చివేయు"
+
+#~ msgid "Export public key"
+#~ msgstr "ప్రజా మీటను ఎగుమతి  చేయు"
+
+#~ msgid "Exporting keys"
+#~ msgstr "మీటలను ఎగుమతి చేస్తోంది"
+
+#~ msgid "Couldn't retrieve data from key server"
+#~ msgstr "ముఖ్య సేవిక నుంచి దత్తాంశాన్ని మరల సంపాదించలేకపోయింది"
+
+#~ msgid "Retrieving keys"
+#~ msgstr "మీటలను మరల సంపాదిస్తోంది"
+
+#~ msgid "%s is a private key. Are you sure you want to proceed?"
+#~ msgstr "%s ఒక స్వంతతాళం."
+
+#~ msgctxt ""
+#~ "This text refers to deleting an item from its type's backing store."
+#~ msgid "_Delete"
+#~ msgstr "తొలగించు(_D)"
+
+#~ msgid "Couldn't delete key"
+#~ msgstr "మీటను తొలగించలేకపోయింది"
+
+#~ msgid "_Key Description:"
+#~ msgstr "మీట వివరణ (_K):"
+
 #~ msgid "Do not run seahorse-daemon as a daemon"
 #~ msgstr "సీహార్స్-డెమోన్‌ను డెమోన్‌లా నడపవద్దు"
 
 #~ msgid "couldn't fork process"
 #~ msgstr "ప్రోసెస్‌ను పోర్కు చేయలేదు"
-
-#~ msgid "couldn't create new process group"
-#~ msgstr "కొత్త క్రమణసముదాయాన్ని సృష్టించలేకపోయింది"
 
 #~ msgid "Encryption Daemon (Seahorse)"
 #~ msgstr "రహస్యపరచు సూత్రధారి(సీహార్స్)"
@@ -2478,9 +2771,6 @@ msgstr "అమర్చిపెట్టు (_S)"
 
 #~ msgid "Bad Signature"
 #~ msgstr "చెడ్డ సంతకం"
-
-#~ msgid "Couldn't verify signature."
-#~ msgstr "సంతకాన్ని పరీక్షించలేకపోయింది."
 
 #~ msgid "Invalid or unrecognized signer: %s"
 #~ msgstr "నిస్సారమైన లేదా గుర్తించలేని సంతకదారి:%s"
@@ -2560,8 +2850,7 @@ msgstr "అమర్చిపెట్టు (_S)"
 #~ msgid ""
 #~ "If set to true, then files encrypted with seahorse will be ASCII armor "
 #~ "encoded."
-#~ msgstr ""
-#~ "సత్యమునకు అమర్చితే, సీహార్సుతో ఎన్క్రిప్టు చేయబడిన ఫైలులు ASCII ఆర్మర్ ఎన్కోడెడ్ అవుతాయి."
+#~ msgstr "సత్యమునకు అమర్చితే, సీహార్సుతో ఎన్క్రిప్టు చేయబడిన ఫైలులు ASCII ఆర్మర్ ఎన్కోడెడ్ అవుతాయి."
 
 #~ msgid ""
 #~ "If set to true, then the default key will always be added to an "
@@ -2659,9 +2948,6 @@ msgstr "అమర్చిపెట్టు (_S)"
 #~ msgid "Web Password"
 #~ msgstr "మహాతల సంకేతపదం"
 
-#~ msgid "Network Password"
-#~ msgstr "అల్లిక సంకేతపదం"
-
 #~ msgid "Couldn't set application access."
 #~ msgstr "వర్ణనను ఏర్పాటు చేయలేకపోయింది."
 
@@ -2673,9 +2959,6 @@ msgstr "అమర్చిపెట్టు (_S)"
 
 #~ msgid "Applications"
 #~ msgstr "కార్యక్షేత్రాలు"
-
-#~ msgid "_Delete"
-#~ msgstr "తొలగించు(_D)"
 
 #~ msgid "_Read"
 #~ msgstr "చదువుము(_R)"
@@ -2779,12 +3062,6 @@ msgstr "అమర్చిపెట్టు (_S)"
 #~ msgid "Symmetric Key"
 #~ msgstr "కాలనియమిత మీటలు"
 
-#~ msgid "Public Key"
-#~ msgstr "Public Key"
-
-#~ msgid "Private Key"
-#~ msgstr "స్వంత పీజీపీ మీట"
-
 #~ msgid "Credentials"
 #~ msgstr "నెట్వర్క్ పరపతులు"
 
@@ -2825,9 +3102,6 @@ msgstr "అమర్చిపెట్టు (_S)"
 #~ msgid "Loading Keys..."
 #~ msgstr "కీలు లోడుచేస్తోంది..."
 
-#~ msgid "Searching for keys..."
-#~ msgstr "మీటలకోసం వెతుకుతోంది..."
-
 #~ msgid "Uploading keys..."
 #~ msgstr "కీలను నవీకరించుచున్నది..."
 
@@ -2855,17 +3129,11 @@ msgstr "అమర్చిపెట్టు (_S)"
 #~ msgid "<b>X keys are selected for synchronizing</b>"
 #~ msgstr "<b>మీటలను కాలనియమితులుగా చేయడానికి ఎన్నుకొనబడ్డాయి</b>"
 
-#~ msgid "Encryption Key Manager"
-#~ msgstr "రహస్యపరచే ముఖ్య అభికర్త"
-
 #~ msgid ""
 #~ "One or more of the deleted keys are private keys. Are you sure you want "
 #~ "to proceed?"
 #~ msgstr ""
 #~ "తొలగించిన కీలలో వొకటి లేదా యెక్కువ కీలు వ్యక్తిగత కీలు. మీరు ఖచ్చితముగా కొనసాగాలని అనుకొనుచున్నారా?"
-
-#~ msgid "DSA"
-#~ msgstr "DSA"
 
 #~ msgid "Invalid"
 #~ msgstr "నిస్సారం"
@@ -2882,12 +3150,8 @@ msgstr "అమర్చిపెట్టు (_S)"
 #~ msgid "00:00:00:00:00"
 #~ msgstr "00:00:00:00:00"
 
-#~ msgid "Secure Shell key"
-#~ msgstr "రక్షిత షెల్ మీట"
-
 #~ msgid "Passphrase:"
 #~ msgstr "పాస్ పదసముదాయం"
 
 #~ msgid "Enter a passphrase for your new Secure Shell key."
 #~ msgstr "కొత్త రక్షిత షెల్ మీట కొరకు పాస్ పదసముదాయం ఇవ్వండి."
-
