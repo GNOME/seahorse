@@ -962,24 +962,21 @@ on_export_message_complete (SoupSession *session,
 
 	if (hkp_message_propagate_error (closure->source, message, &error)) {
 		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
-		g_object_unref (res);
-		return;
-	}
+	} else {
+		end = text = message->response_body->data;
+		len = message->response_body->length;
 
-	end = text = message->response_body->data;
-	len = message->response_body->length;
+		for (;;) {
 
-	for (;;) {
+			len -= end - text;
+			text = end;
 
-		len -= end - text;
-		text = end;
+			if (!detect_key (text, len, &start, &end))
+				break;
 
-		if (!detect_key (text, len, &start, &end))
-			break;
-
-		g_string_append_len (closure->data, start, end - start);
-		g_string_append_c (closure->data, '\n');
+			g_string_append_len (closure->data, start, end - start);
+			g_string_append_c (closure->data, '\n');
+		}
 	}
 
 	g_assert (closure->requests > 0);
