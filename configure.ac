@@ -519,7 +519,6 @@ data/Makefile
 data/icons/Makefile
 pkcs11/Makefile
 src/Makefile
-src/seahorse.desktop.in
 ssh/Makefile
 ])
 

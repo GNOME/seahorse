@@ -1,3 +1,4 @@
+include $(top_srcdir)/Makefile.decl
 
 uidir = $(datadir)/seahorse/ui/
 localedir = $(datadir)/locale
@@ -67,5 +68,5 @@ EXTRA_DIST = \
 	seahorse.desktop.in.in
 
 CLEANFILES = *.xmlp* *.bak \
-    $(desktop_DATA) \
-    seahorse.desktop.in 
+	$(desktop_DATA) \
+	$(desktop_in_files)
