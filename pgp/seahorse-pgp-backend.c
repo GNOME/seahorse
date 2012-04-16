@@ -428,11 +428,11 @@ seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
 	/* Get a list of all selected key servers */
 	names = g_settings_get_strv (seahorse_context_settings (NULL), "last-search-servers");
 	if (names != NULL && names[0] != NULL) {
-		servers = g_hash_table_new (g_str_hash, g_str_equal);
+		servers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 		for (i = 0; names[i] != NULL; i++)
-			g_hash_table_insert (servers, names[i], GINT_TO_POINTER (TRUE));
-		g_strfreev (names);
+			g_hash_table_insert (servers, g_strdup (names[i]), GINT_TO_POINTER (TRUE));
 	}
+	g_strfreev (names);
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_pgp_backend_search_remote_async);
@@ -458,6 +458,9 @@ seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
 		                                     on_source_search_ready, g_object_ref (res));
 		closure->num_searches++;
 	}
+
+	if (servers)
+		g_hash_table_unref (servers);
 
 	if (closure->num_searches == 0)
 		g_simple_async_result_complete_in_idle (res);

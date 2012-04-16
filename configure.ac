@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([seahorse], [3.3.92],
+AC_INIT([seahorse], [3.4.1],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse],
         [seahorse])
 
@@ -519,7 +519,6 @@ data/Makefile
 data/icons/Makefile
 pkcs11/Makefile
 src/Makefile
-src/seahorse.desktop.in
 ssh/Makefile
 ])
 
