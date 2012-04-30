@@ -701,20 +701,20 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
 		robjects = g_list_prepend (robjects, key);
 	}
 
-	g_ptr_array_add (todiscover, NULL);
+	if (todiscover->len > 0) {
+		g_ptr_array_add (todiscover, NULL);
+		keyids = (const gchar **)todiscover->pdata;
 
-	/* Start a discover process on all todiscover */
-	if (todiscover != NULL &&
-	    g_settings_get_boolean (seahorse_context_settings (NULL), "server-auto-retrieve")) {
-		seahorse_pgp_backend_retrieve_async (self, (const gchar **)todiscover->pdata,
-		                                     SEAHORSE_PLACE (self->keyring),
-		                                     cancellable, NULL, NULL);
-	}
+		/* Start a discover process on all todiscover */
+		if (g_settings_get_boolean (seahorse_context_settings (NULL), "server-auto-retrieve"))
+			seahorse_pgp_backend_retrieve_async (self, keyids, SEAHORSE_PLACE (self->keyring),
+			                                     cancellable, NULL, NULL);
 
-	/* Add unknown objects for all these */
-	for (i = 0; keyids[i] != NULL; i++) {
-		object = seahorse_unknown_source_add_object (self->unknown, keyids[i], cancellable);
-		robjects = g_list_prepend (robjects, object);
+		/* Add unknown objects for all these */
+		for (i = 0; keyids[i] != NULL; i++) {
+			object = seahorse_unknown_source_add_object (self->unknown, keyids[i], cancellable);
+			robjects = g_list_prepend (robjects, object);
+		}
 	}
 
 	g_ptr_array_free (todiscover, TRUE);
