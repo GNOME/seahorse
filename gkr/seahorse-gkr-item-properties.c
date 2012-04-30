@@ -25,7 +25,6 @@
 
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-item.h"
-#include "seahorse-gkr-operation.h"
 
 #include "seahorse-bind.h"
 #include "seahorse-icons.h"
@@ -148,7 +147,7 @@ transform_network_visible (const GValue *from, GValue *to)
 static gboolean
 transform_attributes_server (const GValue *from, GValue *to)
 {
-	GnomeKeyringAttributeList *attrs;
+	GHashTable *attrs;
 	attrs = g_value_get_boxed (from);
 	if (attrs)
 		g_value_set_string (to, seahorse_gkr_find_string_attribute (attrs, "server"));
@@ -160,7 +159,7 @@ transform_attributes_server (const GValue *from, GValue *to)
 static gboolean
 transform_attributes_user (const GValue *from, GValue *to)
 {
-	GnomeKeyringAttributeList *attrs;
+	GHashTable *attrs;
 	attrs = g_value_get_boxed (from);
 	if (attrs)
 		g_value_set_string (to, seahorse_gkr_find_string_attribute (attrs, "user"));
@@ -174,7 +173,9 @@ transfer_password (SeahorseGkrItem *git, SeahorseWidget *swidget)
 {
 	GtkWidget *expander;
 	GtkEntry *entry;
-	const gchar *secret;
+	SecretValue *secret;
+	const gchar *password;
+	gsize length;
 
 	expander = seahorse_widget_get_widget (swidget, "password-expander");
 	g_return_if_fail (expander);
@@ -182,12 +183,18 @@ transfer_password (SeahorseGkrItem *git, SeahorseWidget *swidget)
 	entry = g_object_get_data (G_OBJECT (swidget), "secure-password-entry");
 	g_return_if_fail (entry);
 
+	password = "";
+	length = 0;
+
 	if (gtk_expander_get_expanded (GTK_EXPANDER (expander))) {
 		secret = seahorse_gkr_item_get_secret (git);
-		gtk_entry_set_text (entry, secret ? secret : "");
-	} else {
-		gtk_entry_set_text (entry, "");
+		if (secret)
+			password = secret_value_get (secret, &length);
 	}
+
+	gtk_entry_buffer_set_text (gtk_entry_get_buffer (entry),
+	                           password, length);
+
 	g_object_set_data (G_OBJECT (entry), "changed", NULL);
 }
 
@@ -201,7 +208,7 @@ on_update_password_ready (GObject *source,
 	GError *error = NULL;
 	GtkWidget *expander;
 
-	if (seahorse_gkr_update_secret_finish (git, result, &error)) {
+	if (seahorse_gkr_item_set_secret_finish (git, result, &error)) {
 		transfer_password (git, swidget);
 
 	} else {
@@ -225,6 +232,7 @@ password_activate (GtkEntry *entry,
 	SeahorseGkrItem *git;
 	GtkWidget *expander;
 	GCancellable *cancellable;
+	SecretValue *value;
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 	if (!object)
@@ -249,9 +257,11 @@ password_activate (GtkEntry *entry,
 	gtk_widget_set_sensitive (expander, FALSE);
 
 	cancellable = g_cancellable_new ();
-	seahorse_gkr_update_secret_async (git, gtk_entry_get_text (entry), cancellable,
-	                                  on_update_password_ready, g_object_ref (swidget));
+	value = secret_value_new (gtk_entry_get_text (entry), -1, "text/plain");
+	seahorse_gkr_item_set_secret (git, value, cancellable,
+	                              on_update_password_ready, g_object_ref (swidget));
 	seahorse_progress_show (cancellable, _("Updating password"), TRUE);
+	secret_value_unref (value);
 	g_object_unref (cancellable);
 }
 
@@ -325,11 +335,11 @@ on_item_description_complete (GObject *source,
 	SeahorseGkrItem *git = SEAHORSE_GKR_ITEM (source);
 	GError *error = NULL;
 
-	if (!seahorse_gkr_update_description_finish (git, result, &error)) {
+	if (!secret_item_set_label_finish (SECRET_ITEM (git), result, &error)) {
 
 		/* Set back to original */
 		gtk_entry_set_text (closure->entry,
-		                    seahorse_object_get_label (SEAHORSE_OBJECT (git)));
+		                    secret_item_get_label (SECRET_ITEM (git)));
 
 		seahorse_util_show_error (seahorse_widget_get_toplevel (closure->swidget),
 		                          _("Couldn't set description."), error->message);
@@ -369,9 +379,8 @@ on_item_description_activate (GtkWidget *entry,
 	closure->entry = GTK_ENTRY (entry);
 
 	cancellable = g_cancellable_new ();
-	seahorse_gkr_update_description_async (git, gtk_entry_get_text (GTK_ENTRY (entry)),
-	                                       cancellable, on_item_description_complete,
-	                                       closure);
+	secret_item_set_label (SECRET_ITEM (git), gtk_entry_get_text (GTK_ENTRY (entry)),
+	                       cancellable, on_item_description_complete, closure);
 	seahorse_progress_show (cancellable, _("Updating password"), TRUE);
 	g_object_unref (cancellable);
 }
@@ -425,11 +434,11 @@ setup_main (SeahorseWidget *swidget)
 	                             seahorse_widget_get_widget (swidget, "login-field"), NULL);
 
 	/* Server name */
-	seahorse_bind_property_full ("item-attributes", object, transform_attributes_server, "label", 
+	seahorse_bind_property_full ("attributes", object, transform_attributes_server, "label",
 	                             seahorse_widget_get_widget (swidget, "server-field"), NULL);
 	
 	/* User name */
-	seahorse_bind_property_full ("item-attributes", object, transform_attributes_user, "label", 
+	seahorse_bind_property_full ("attributes", object, transform_attributes_user, "label",
 	                             seahorse_widget_get_widget (swidget, "login-field"), NULL);
 
 	/* Create the password entry */
@@ -465,36 +474,27 @@ setup_main (SeahorseWidget *swidget)
 static gboolean
 transform_item_details (const GValue *from, GValue *to)
 {
-	GnomeKeyringAttributeList *attrs;
-	GnomeKeyringAttribute *attr;
+	GHashTableIter iter;
+	GHashTable *attrs;
 	GString *details;
+	gpointer key;
+	gpointer value;
 	gchar *text;
-	guint i;
 
 	g_return_val_if_fail (G_VALUE_TYPE (to) == G_TYPE_STRING, FALSE);
 	attrs = g_value_get_boxed (from);
 	
 	details = g_string_new (NULL);
 	if (attrs) {
-		/* Build up the display string */
-		for(i = 0; i < attrs->len; ++i) {
-			attr = &(gnome_keyring_attribute_list_index (attrs, i));
-			text = g_markup_escape_text (attr->name, -1);
-			g_string_append_printf (details, "<b>%s</b>: ", text);
+		g_hash_table_iter_init (&iter, attrs);
+		while (g_hash_table_iter_next (&iter, &key, &value)) {
+			if (g_str_has_prefix (key, "gkr:") ||
+			    g_str_has_prefix (key, "xdg:"))
+				continue;
+			text = g_markup_escape_text (key, -1);
+			g_string_append_printf (details, "<b>%s</b>: %s\n",
+			                        text, (gchar *)value);
 			g_free (text);
-			switch (attr->type) {
-			case GNOME_KEYRING_ATTRIBUTE_TYPE_STRING:
-				text = g_markup_escape_text (attr->value.string, -1);
-				g_string_append_printf (details, "%s\n", text);
-				g_free (text);
-				break;
-			case GNOME_KEYRING_ATTRIBUTE_TYPE_UINT32:
-				g_string_append_printf (details, "%u\n", attr->value.integer);
-				break;
-			default:
-				g_string_append (details, "<i>[invalid]</i>\n");
-				break;
-			}
 		}
 	}
 
@@ -513,8 +513,8 @@ setup_details (SeahorseWidget *swidget)
 	widget = seahorse_widget_get_widget (swidget, "details-box");
 	g_return_if_fail (widget != NULL);
 	gtk_label_set_use_markup (GTK_LABEL (widget), TRUE);
-    
-	seahorse_bind_property_full ("item-attributes", object, transform_item_details, 
+
+	seahorse_bind_property_full ("attributes", object, transform_item_details,
 	                             "label", widget, NULL);
 }
 

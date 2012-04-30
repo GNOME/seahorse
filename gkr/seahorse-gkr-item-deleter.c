@@ -25,12 +25,9 @@
 
 #include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-item-deleter.h"
-#include "seahorse-gkr-operation.h"
 
 #include "seahorse-delete-dialog.h"
 #include "seahorse-object.h"
-
-#include <gnome-keyring.h>
 
 #include <glib/gi18n.h>
 
@@ -81,7 +78,7 @@ seahorse_gkr_item_deleter_create_confirm (SeahorseDeleter *deleter,
 	num = g_list_length (self->items);
 	if (num == 1) {
 		prompt = g_strdup_printf (_ ("Are you sure you want to delete the password '%s'?"),
-		                          seahorse_object_get_label (SEAHORSE_OBJECT (self->items->data)));
+		                          secret_item_get_label (SECRET_ITEM (self->items->data)));
 	} else {
 		prompt = g_strdup_printf (ngettext ("Are you sure you want to delete %d password?",
 		                                    "Are you sure you want to delete %d passwords?",
@@ -141,39 +138,29 @@ delete_closure_free (gpointer data)
 }
 
 static void
-on_delete_gkr_complete (GnomeKeyringResult result,
+on_delete_gkr_complete (GObject *source,
+                        GAsyncResult *result,
                         gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	DeleteClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	SeahorseGkrItemDeleter *self = SEAHORSE_GKR_ITEM_DELETER (g_async_result_get_source_object (user_data));
-	SeahorseGkrKeyring *keyring;
 	GError *error = NULL;
-	guint32 item_id;
 
-	closure->request = NULL;
-
-	if (seahorse_gkr_propagate_error (result, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
+	secret_item_delete_finish (SECRET_ITEM (source), result, &error);
+	if (error == NULL) {
+		delete_one_item (res);
 
 	} else {
-		g_object_get (closure->current, "place", &keyring, NULL);
-		item_id = seahorse_gkr_item_get_item_id (closure->current);
-		seahorse_gkr_keyring_remove_item (keyring, item_id);
-		g_object_unref (keyring);
-		delete_one_item (res);
+		g_simple_async_result_take_error (res, error);
+		g_simple_async_result_complete_in_idle (res);
 	}
 
-	g_object_unref (self);
+	g_object_unref (res);
 }
 
 static void
 delete_one_item (GSimpleAsyncResult *res)
 {
 	DeleteClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	const gchar *name;
-	guint32 item_id;
 
 	g_clear_object (&closure->current);
 	closure->current = g_queue_pop_head (&closure->queue);
@@ -181,21 +168,11 @@ delete_one_item (GSimpleAsyncResult *res)
 		g_simple_async_result_complete_in_idle (res);
 
 	} else {
-		name = seahorse_gkr_item_get_keyring_name (closure->current);
-		item_id = seahorse_gkr_item_get_item_id (closure->current);
-		gnome_keyring_item_delete (name, item_id, on_delete_gkr_complete,
-		                           g_object_ref (res), g_object_unref);
+		secret_item_delete (SECRET_ITEM (closure->current),
+		                    closure->cancellable,
+		                    on_delete_gkr_complete,
+		                    g_object_ref (res));
 	}
-}
-
-static void
-on_delete_gkr_cancelled (GCancellable *cancellable,
-                         gpointer user_data)
-{
-	DeleteClosure *closure = user_data;
-
-	if (closure->request)
-		gnome_keyring_cancel_request (closure->request);
 }
 
 static void
@@ -217,11 +194,6 @@ seahorse_gkr_item_deleter_delete_async (SeahorseDeleter *deleter,
 	for (l = self->items; l != NULL; l = g_list_next (l))
 		g_queue_push_tail (&closure->queue, g_object_ref (l->data));
 	g_simple_async_result_set_op_res_gpointer (res, closure, delete_closure_free);
-
-	if (cancellable)
-		closure->cancelled_sig = g_cancellable_connect (cancellable,
-		                                                G_CALLBACK (on_delete_gkr_cancelled),
-		                                                closure, NULL);
 
 	delete_one_item (res);
 	g_object_unref (res);

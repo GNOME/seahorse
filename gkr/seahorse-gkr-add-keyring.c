@@ -52,26 +52,27 @@ void             on_add_keyring_properties_response  (GtkDialog *dialog,
  * internal seahorse list of keyrings
  */
 static void
-keyring_add_done (GnomeKeyringResult result, gpointer data)
+on_keyring_create (GObject *source,
+                   GAsyncResult *result,
+                   gpointer data)
 {
 	SeahorseWidget *swidget = SEAHORSE_WIDGET (data);
+	GError *error = NULL;
 
 	g_return_if_fail (swidget);
 
 	/* Clear the operation without cancelling it since it is complete */
 	seahorse_gkr_dialog_complete_request (swidget, FALSE);
 
-	/* Successful. Update the listings and stuff. */
-	if (result == GNOME_KEYRING_RESULT_OK) {
-		seahorse_gkr_backend_load_async (NULL, NULL, NULL, NULL);
+	secret_collection_create_finish (result, &error);
 
-	/* Setting the default keyring failed */
-	} else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     
-		seahorse_util_show_error (seahorse_widget_get_toplevel (swidget),
-		                          _("Couldn't add keyring"),
-		                          gnome_keyring_result_to_message (result));
+	/* Successful. Update the listings and stuff. */
+	if (error != NULL) {
+		seahorse_util_handle_error (&error, seahorse_widget_get_toplevel (swidget),
+		                            _("Couldn't add keyring"));
 	}
-	
+
+	g_object_unref (swidget);
 	seahorse_widget_destroy (swidget);
 }
 
@@ -108,10 +109,10 @@ on_add_keyring_properties_response (GtkDialog *dialog,
                                     gpointer user_data)
 {
 	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+	GCancellable *cancellable;
 	GtkEntry *entry;
 	const gchar *keyring;
-	gpointer request;
-	
+
 	if (response == GTK_RESPONSE_HELP) {
 		seahorse_widget_show_help (swidget);
 		
@@ -122,11 +123,14 @@ on_add_keyring_properties_response (GtkDialog *dialog,
 
 		keyring = gtk_entry_get_text (entry);
 		g_return_if_fail (keyring && keyring[0]);
-	    
-		request = gnome_keyring_create (keyring, NULL, keyring_add_done, g_object_ref (swidget), g_object_unref);
-		g_return_if_fail (request);
-		seahorse_gkr_dialog_begin_request (swidget, request);
-		
+
+		cancellable = seahorse_gkr_dialog_begin_request (swidget);
+
+		secret_collection_create (seahorse_gkr_backend_get_service (NULL),
+		                          keyring, NULL, cancellable, on_keyring_create,
+		                          g_object_ref (swidget));
+		g_object_unref (cancellable);
+
 	} else {
 		seahorse_widget_destroy (swidget);
 	}

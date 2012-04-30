@@ -40,20 +40,14 @@ void              on_keyring_properties_response          (GtkDialog *dialog,
  */
 
 static gboolean
-transform_keyring_created (const GValue *from, GValue *to)
+transform_keyring_created (const GValue *from,
+                           GValue *to)
 {
-	GnomeKeyringInfo *info;
 	time_t time;
-	
-	info = g_value_get_boxed (from);
-	if (info) {
-		time = gnome_keyring_info_get_ctime (info);
-		g_value_take_string (to, seahorse_util_get_display_date_string (time));
-	}
-	
-	if (!g_value_get_string (to))
-		g_value_set_string (to, "");
-	
+
+	time = g_value_get_uint64 (from);
+	g_value_take_string (to, seahorse_util_get_display_date_string (time));
+
 	return TRUE;
 }
 
@@ -73,11 +67,11 @@ setup_main (SeahorseWidget *swidget)
 	                        seahorse_widget_get_toplevel (swidget));
 
 	/* Setup the label properly */
-	seahorse_bind_property ("keyring-name", object, "label", 
+	seahorse_bind_property ("label", object, "label",
 	                        seahorse_widget_get_widget (swidget, "name-field"));
 
 	/* The date field */
-	seahorse_bind_property_full ("keyring-info", object, transform_keyring_created, "label", 
+	seahorse_bind_property_full ("created", object, transform_keyring_created, "label",
 	                             seahorse_widget_get_widget (swidget, "created-field"), NULL);
 }
 

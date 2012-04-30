@@ -88,7 +88,7 @@ seahorse_object_widget_class_init (SeahorseObjectWidgetClass *klass)
 	g_object_class_install_property (gobject_class, PROP_OBJECT,
 		g_param_spec_object ("object",  "Seahorse Object",
 				     "Seahorse Object of this widget",
-				     SEAHORSE_TYPE_OBJECT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+				     G_TYPE_OBJECT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void

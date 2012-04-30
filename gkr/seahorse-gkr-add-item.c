@@ -40,26 +40,25 @@ void             on_add_item_response                     (GtkDialog *dialog,
                                                            gpointer user_data);
 
 static void
-item_add_done (GnomeKeyringResult result, guint32 item, gpointer data)
+on_item_stored (GObject *source,
+                GAsyncResult *result,
+                gpointer user_data)
 {
-	SeahorseWidget *swidget = SEAHORSE_WIDGET (data);
-
-	g_return_if_fail (swidget);
+	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+	GError *error = NULL;
 
 	/* Clear the operation without cancelling it since it is complete */
 	seahorse_gkr_dialog_complete_request (swidget, FALSE);
 
-	/* Successful. Update the listings and stuff. */
-	if (result == GNOME_KEYRING_RESULT_OK) {
-		seahorse_gkr_backend_load_async (NULL, NULL, NULL, NULL);
+	secret_service_store_finish (SECRET_SERVICE (source), result, &error);
 
-	/* Setting the default keyring failed */
-	} else if (result != GNOME_KEYRING_RESULT_CANCELLED) {     
-		seahorse_util_show_error (seahorse_widget_get_toplevel (swidget),
-		                          _("Couldn't add keyring"),
-		                          gnome_keyring_result_to_message (result));
+	/* Successful. Update the listings and stuff. */
+	if (error != NULL) {
+		seahorse_util_handle_error (&error, seahorse_widget_get_toplevel (swidget),
+		                            _("Couldn't add item"));
 	}
-	
+
+	g_object_unref (swidget);
 	seahorse_widget_destroy (swidget);
 }
 
@@ -87,45 +86,40 @@ on_add_item_response (GtkDialog *dialog,
                       gpointer user_data)
 {
 	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+	SecretCollection *collection;
+	GCancellable *cancellable;
 	GtkWidget *widget;
-	gchar *keyring;
-	const gchar *secret;
+	SecretValue *secret;
 	const gchar *label;
-	gpointer request;
-	GArray *attributes;
 	GtkTreeIter iter;
 
 	if (response == GTK_RESPONSE_HELP) {
 		seahorse_widget_show_help (swidget);
 		
 	} else if (response == GTK_RESPONSE_ACCEPT) {
-	    
+		widget = seahorse_widget_get_widget (swidget, "item-keyring");
+		if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter))
+			return;
+		gtk_tree_model_get (gtk_combo_box_get_model (GTK_COMBO_BOX (widget)),
+		                    &iter, 1, &collection, -1);
+
 		widget = seahorse_widget_get_widget (swidget, "item-label");
 		label = gtk_entry_get_text (GTK_ENTRY (widget));
 		g_return_if_fail (label && label[0]);
 		
 		widget = g_object_get_data (G_OBJECT (swidget), "gkr-secure-entry");
-		secret = gtk_entry_get_text (GTK_ENTRY (widget));
-		
-		widget = seahorse_widget_get_widget (swidget, "item-keyring");
-		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
-			gtk_tree_model_get (gtk_combo_box_get_model (GTK_COMBO_BOX (widget)),
-			                    &iter, 0, &keyring, -1);
-		} else {
-			keyring = NULL;
-		}
+		secret = secret_value_new (gtk_entry_get_text (GTK_ENTRY (widget)),
+		                           -1, "text/plain");
 
-		attributes = gnome_keyring_attribute_list_new ();
+		cancellable = seahorse_gkr_dialog_begin_request (swidget);
+		secret_service_store (secret_collection_get_service (collection),
+		                      SECRET_SCHEMA_NOTE,
+		                      g_dbus_proxy_get_object_path (G_DBUS_PROXY (collection)),
+		                      label, secret, cancellable, on_item_stored,
+		                      g_object_ref (swidget),
+		                      NULL);
+		g_object_unref (cancellable);
 
-		request = gnome_keyring_item_create (keyring, GNOME_KEYRING_ITEM_NOTE, label, 
-		                                     attributes, secret, FALSE, item_add_done, 
-		                                     g_object_ref (swidget), g_object_unref);
-		g_return_if_fail (request);
-		seahorse_gkr_dialog_begin_request (swidget, request);
-		
-		g_free (keyring);
-		gnome_keyring_attribute_list_free (attributes);
-		
 	} else {
 		seahorse_widget_destroy (swidget);
 	}
@@ -147,7 +141,7 @@ seahorse_gkr_add_item_show (GtkWindow *parent)
 	
 	/* Load up a list of all the keyrings, and select the default */
 	widget = seahorse_widget_get_widget (swidget, "item-keyring");
-	store = gtk_list_store_new (1, G_TYPE_STRING);
+	store = gtk_list_store_new (2, G_TYPE_STRING, SECRET_TYPE_COLLECTION);
 	gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
 	cell = gtk_cell_renderer_text_new ();
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), cell, TRUE);
@@ -156,7 +150,10 @@ seahorse_gkr_add_item_show (GtkWindow *parent)
 	keyrings = seahorse_gkr_backend_get_keyrings (NULL);
 	for (l = keyrings; l; l = g_list_next (l)) {
 		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter, 0, seahorse_gkr_keyring_get_name (l->data), -1);
+		gtk_list_store_set (store, &iter,
+		                    0, secret_collection_get_label (l->data),
+		                    1, l->data,
+		                    -1);
 		if (seahorse_gkr_keyring_get_is_default (l->data))
 			gtk_combo_box_set_active_iter (GTK_COMBO_BOX (widget), &iter);
 	}

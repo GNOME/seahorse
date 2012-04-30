@@ -25,12 +25,8 @@
 
 #include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-keyring-deleter.h"
-#include "seahorse-gkr-operation.h"
 
 #include "seahorse-delete-dialog.h"
-#include "seahorse-object.h"
-
-#include <gnome-keyring.h>
 
 #include <glib/gi18n.h>
 
@@ -78,7 +74,7 @@ seahorse_gkr_keyring_deleter_create_confirm (SeahorseDeleter *deleter,
 
 	dialog = seahorse_delete_dialog_new (parent,
 	                                     _("Are you sure you want to delete the password keyring '%s'?"),
-	                                     seahorse_object_get_label (SEAHORSE_OBJECT (self->keyring)));
+	                                     secret_collection_get_label (SECRET_COLLECTION (self->keyring)));
 
 	seahorse_delete_dialog_set_check_label (SEAHORSE_DELETE_DIALOG (dialog), _("I understand that all items will be permanently deleted."));
 	seahorse_delete_dialog_set_check_require (SEAHORSE_DELETE_DIALOG (dialog), TRUE);
@@ -107,52 +103,20 @@ seahorse_gkr_keyring_deleter_add_object (SeahorseDeleter *deleter,
 	return TRUE;
 }
 
-typedef struct {
-	GCancellable *cancellable;
-	gpointer request;
-	gulong cancelled_sig;
-} DeleteClosure;
-
 static void
-delete_closure_free (gpointer data)
-{
-	DeleteClosure *closure = data;
-	if (closure->cancellable && closure->cancelled_sig)
-		g_signal_handler_disconnect (closure->cancellable,
-		                             closure->cancelled_sig);
-	g_clear_object (&closure->cancellable);
-	g_assert (!closure->request);
-	g_free (closure);
-}
-
-static void
-on_delete_gkr_complete (GnomeKeyringResult result,
+on_delete_gkr_complete (GObject *source,
+                        GAsyncResult *result,
                         gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	DeleteClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	SeahorseGkrKeyringDeleter *self = SEAHORSE_GKR_KEYRING_DELETER (g_async_result_get_source_object (user_data));
 	GError *error = NULL;
 
-	closure->request = NULL;
-
-	if (seahorse_gkr_propagate_error (result, &error))
+	secret_collection_delete_finish (SECRET_COLLECTION (source), result, &error);
+	if (error != NULL)
 		g_simple_async_result_take_error (res, error);
-	else
-		seahorse_gkr_backend_remove_keyring (NULL, self->keyring);
 
-	g_simple_async_result_complete_in_idle (res);
-	g_object_unref (self);
-}
-
-static void
-on_delete_gkr_cancelled (GCancellable *cancellable,
-                         gpointer user_data)
-{
-	DeleteClosure *closure = user_data;
-
-	if (closure->request)
-		gnome_keyring_cancel_request (closure->request);
+	g_simple_async_result_complete (res);
+	g_object_unref (res);
 }
 
 static void
@@ -163,23 +127,13 @@ seahorse_gkr_keyring_deleter_delete_async (SeahorseDeleter *deleter,
 {
 	SeahorseGkrKeyringDeleter *self = SEAHORSE_GKR_KEYRING_DELETER (deleter);
 	GSimpleAsyncResult *res;
-	DeleteClosure *closure;
-	const gchar *name;
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_gkr_keyring_deleter_delete_async);
-	closure = g_new0 (DeleteClosure, 1);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	g_simple_async_result_set_op_res_gpointer (res, closure, delete_closure_free);
 
-	name = seahorse_gkr_keyring_get_name (self->keyring);
-	closure->request = gnome_keyring_delete (name, on_delete_gkr_complete,
-	                                         g_object_ref (res), g_object_unref);
-
-	if (cancellable)
-		closure->cancelled_sig = g_cancellable_connect (cancellable,
-		                                                G_CALLBACK (on_delete_gkr_cancelled),
-		                                                closure, NULL);
+	secret_collection_delete (SECRET_COLLECTION (self->keyring),
+	                          cancellable, on_delete_gkr_complete,
+	                          g_object_ref (res));
 
 	g_object_unref (res);
 }

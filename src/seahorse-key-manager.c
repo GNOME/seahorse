@@ -34,8 +34,6 @@
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
-#include "gkr/seahorse-gkr-item.h"
-
 #include <glib/gi18n.h>
 
 enum {

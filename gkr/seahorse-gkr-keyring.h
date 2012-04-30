@@ -27,7 +27,7 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 
-#include <gnome-keyring.h>
+#include <secret/secret-unstable.h>
 
 #define SEAHORSE_TYPE_GKR_KEYRING               (seahorse_gkr_keyring_get_type ())
 #define SEAHORSE_GKR_KEYRING(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GKR_KEYRING, SeahorseGkrKeyring))
@@ -41,37 +41,18 @@ typedef struct _SeahorseGkrKeyringClass SeahorseGkrKeyringClass;
 typedef struct _SeahorseGkrKeyringPrivate SeahorseGkrKeyringPrivate;
 
 struct _SeahorseGkrKeyring {
-	SeahorseObject parent;
+	SecretCollection parent;
 	SeahorseGkrKeyringPrivate *pv;
 };
 
 struct _SeahorseGkrKeyringClass {
-	SeahorseObjectClass parent_class;
+	SecretCollectionClass parent_class;
 };
 
 GType                seahorse_gkr_keyring_get_type         (void);
 
-SeahorseGkrKeyring*  seahorse_gkr_keyring_new              (const gchar *keyring_name);
-
-void                 seahorse_gkr_keyring_realize          (SeahorseGkrKeyring *self);
-
-void                 seahorse_gkr_keyring_remove_item      (SeahorseGkrKeyring *self,
-                                                            guint32 item_id);
-
-const gchar*         seahorse_gkr_keyring_get_name         (SeahorseGkrKeyring *self);
-
 const gchar *        seahorse_gkr_keyring_get_description  (SeahorseGkrKeyring *self);
 
-GnomeKeyringInfo*    seahorse_gkr_keyring_get_info         (SeahorseGkrKeyring *self);
-
-void                 seahorse_gkr_keyring_set_info         (SeahorseGkrKeyring *self,
-                                                            GnomeKeyringInfo *info);
-
 gboolean             seahorse_gkr_keyring_get_is_default   (SeahorseGkrKeyring *self);
-
-void                 seahorse_gkr_keyring_set_is_default   (SeahorseGkrKeyring *self,
-                                                            gboolean is_default);
-
-gboolean             seahorse_gkr_keyring_get_locked       (SeahorseGkrKeyring *self);
 
 #endif /* __SEAHORSE_GKR_KEYRING_H__ */

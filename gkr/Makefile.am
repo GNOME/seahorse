@@ -11,7 +11,8 @@ INCLUDES = -I$(top_builddir) \
 	-DSEAHORSE_UIDIR=\""$(uidir)/"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
-	-DGETTEXT_PACKAGE=\""seahorse\""
+	-DGETTEXT_PACKAGE=\""seahorse\"" \
+	-DSECRET_API_SUBJECT_TO_CHANGE
 
 noinst_LTLIBRARIES = libseahorse-gkr.la
 
@@ -27,8 +28,7 @@ libseahorse_gkr_la_SOURCES = \
 	seahorse-gkr-item-properties.c \
 	seahorse-gkr-keyring.c seahorse-gkr-keyring.h \
 	seahorse-gkr-keyring-deleter.c seahorse-gkr-keyring-deleter.h \
-	seahorse-gkr-keyring-properties.c \
-	seahorse-gkr-operation.c seahorse-gkr-operation.h
+	seahorse-gkr-keyring-properties.c
 
 libseahorse_gkr_la_LIBADD = \
 	$(top_builddir)/libseahorse/libseahorse.la

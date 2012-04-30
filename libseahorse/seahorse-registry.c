@@ -165,6 +165,7 @@ seahorse_registry_dispose (GObject *obj)
 {
 	SeahorseRegistryPrivate *pv = SEAHORSE_REGISTRY_GET_PRIVATE (obj);
 	g_hash_table_remove_all (pv->types);
+	g_hash_table_remove_all (pv->objects);
 	G_OBJECT_CLASS (seahorse_registry_parent_class)->dispose (obj);
 }
 
@@ -173,6 +174,7 @@ seahorse_registry_finalize (GObject *obj)
 {
 	SeahorseRegistryPrivate *pv = SEAHORSE_REGISTRY_GET_PRIVATE (obj);
 	g_hash_table_destroy (pv->types);
+	g_hash_table_destroy (pv->objects);
 	G_OBJECT_CLASS (seahorse_registry_parent_class)->finalize (obj);
 }
 

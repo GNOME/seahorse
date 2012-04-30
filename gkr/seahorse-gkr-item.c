@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 #include <glib/gi18n.h>
@@ -32,7 +33,6 @@
 #include "seahorse-gkr-item.h"
 #include "seahorse-gkr-item-deleter.h"
 #include "seahorse-gkr-keyring.h"
-#include "seahorse-gkr-operation.h"
 
 #include "seahorse-deletable.h"
 #include "seahorse-icons.h"
@@ -57,8 +57,8 @@ typedef struct _DisplayEntry DisplayEntry;
 typedef struct _DisplayInfo DisplayInfo;
 
 typedef void      (*DisplayCustom) (const DisplayEntry *entry,
-                                    GnomeKeyringItemInfo *item_info,
-                                    GnomeKeyringAttributeList *item_attrs,
+                                    const gchar *label,
+                                    GHashTable *item_attrs,
                                     DisplayInfo *info);
 
 struct _DisplayEntry {
@@ -81,51 +81,39 @@ typedef struct {
 	const gchar *match_pattern;
 } MappingEntry;
 
-typedef struct {
-	GnomeKeyringItemType old;
-	const gchar *item_type;
-} OldItemTypes;
-
 static guint32
-get_attribute_int (GnomeKeyringAttributeList *attrs,
+get_attribute_int (GHashTable *attrs,
                    const gchar *name)
 {
-	guint i;
+	const gchar *value;
+	gchar *end;
+	guint32 num;
 
 	if (!attrs)
 		return 0;
 
-	for (i = 0; i < attrs->len; i++) {
-		GnomeKeyringAttribute *attr = &(gnome_keyring_attribute_list_index (attrs, i));
-		if (g_ascii_strcasecmp (name, attr->name) == 0 &&
-		    attr->type == GNOME_KEYRING_ATTRIBUTE_TYPE_UINT32)
-			return attr->value.integer;
+	value = g_hash_table_lookup (attrs, name);
+	if (value != NULL) {
+		num = strtoul (value, &end, 10);
+		if (end && *end == '\0')
+			return num;
 	}
 
 	return 0;
 }
 
 static const gchar *
-get_attribute_string (GnomeKeyringAttributeList *attrs,
+get_attribute_string (GHashTable *attrs,
                       const gchar *name)
 {
-	guint i;
-
 	if (!attrs)
 		return NULL;
 
-	for (i = 0; i < attrs->len; i++) {
-		GnomeKeyringAttribute *attr = &(gnome_keyring_attribute_list_index (attrs, i));
-		if (g_ascii_strcasecmp (name, attr->name) == 0 &&
-		    attr->type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING)
-			return attr->value.string;
-	}
-
-	return NULL;
+	return g_hash_table_lookup (attrs, name);
 }
 
 static gboolean
-is_network_item (GnomeKeyringAttributeList *attrs,
+is_network_item (GHashTable *attrs,
                  const gchar *match)
 {
 	const gchar *protocol;
@@ -172,7 +160,7 @@ is_custom_network_label (const gchar *server,
 }
 
 static gchar *
-calc_network_label (GnomeKeyringAttributeList *attrs,
+calc_network_label (GHashTable *attrs,
                     gboolean always)
 {
 	const gchar *val;
@@ -196,8 +184,8 @@ calc_network_label (GnomeKeyringAttributeList *attrs,
 
 static void
 network_custom (const DisplayEntry *entry,
-                GnomeKeyringItemInfo *item,
-                GnomeKeyringAttributeList *attrs,
+                const gchar *display,
+                GHashTable *attrs,
                 DisplayInfo *info)
 {
 	const gchar *object;
@@ -205,7 +193,6 @@ network_custom (const DisplayEntry *entry,
 	const gchar *protocol;
 	const gchar *server;
 	guint32 port;
-	gchar *display = NULL;
 
 	server = get_attribute_string (attrs, "server");
 	protocol = get_attribute_string (attrs, "protocol");
@@ -216,15 +203,11 @@ network_custom (const DisplayEntry *entry,
 	if (!protocol)
 		return;
 
-	display = gnome_keyring_item_info_get_display_name (item);
-
 	/* If it's customized by the application or user then display that */
 	if (!is_custom_network_label (server, user, object, port, display))
 		info->label = calc_network_label (attrs, TRUE);
 	if (info->label == NULL)
-		info->label = display;
-	else
-		g_free (display);
+		info->label = g_strdup (display);
 
 	if (server && protocol) {
 		info->details = g_markup_printf_escaped ("%s://%s%s%s/%s",
@@ -238,16 +221,14 @@ network_custom (const DisplayEntry *entry,
 
 static void
 chrome_custom (const DisplayEntry *entry,
-               GnomeKeyringItemInfo *item,
-               GnomeKeyringAttributeList *attrs,
+               const gchar *display,
+               GHashTable *attrs,
                DisplayInfo *info)
 {
-	gchar *display;
 	const gchar *origin;
 	GRegex *regex;
 	GMatchInfo *match;
 
-	display = gnome_keyring_item_info_get_display_name (item);
 	origin = get_attribute_string (attrs, "origin_url");
 
 	/* A brain dead url, parse */
@@ -262,9 +243,7 @@ chrome_custom (const DisplayEntry *entry,
 	}
 
 	if (info->label == NULL)
-		info->label = (display);
-	else
-		g_free (display);
+		info->label = g_strdup (display);
 
 	info->details = g_markup_escape_text (origin ? origin : "", -1);
 }
@@ -297,20 +276,18 @@ decode_telepathy_id (const gchar *account)
 
 static void
 empathy_custom (const DisplayEntry *entry,
-                GnomeKeyringItemInfo *item,
-                GnomeKeyringAttributeList *attrs,
+                const gchar *display,
+                GHashTable *attrs,
                 DisplayInfo *info)
 {
 	const gchar *account;
 	GMatchInfo *match;
 	GRegex *regex;
-	gchar *display;
 	gchar *identifier;
 	const gchar *prefix;
 	gchar *pos;
 	gsize len;
 
-	display = gnome_keyring_item_info_get_display_name (item);
 	account = get_attribute_string (attrs, "account-id");
 
 	/* Translators: This should be the same as the string in empathy */
@@ -335,9 +312,7 @@ empathy_custom (const DisplayEntry *entry,
 	}
 
 	if (info->label == NULL)
-		info->label = (display);
-	else
-		g_free (display);
+		info->label = g_strdup (display);
 
 	if (info->details == NULL)
 		info->details = g_markup_escape_text (account, -1);
@@ -345,17 +320,15 @@ empathy_custom (const DisplayEntry *entry,
 
 static void
 telepathy_custom (const DisplayEntry *entry,
-                  GnomeKeyringItemInfo *item,
-                  GnomeKeyringAttributeList *attrs,
+                  const gchar *display,
+                  GHashTable *attrs,
                   DisplayInfo *info)
 {
 	const gchar *account;
 	GMatchInfo *match;
 	GRegex *regex;
-	gchar *display;
 	gchar *identifier;
 
-	display = gnome_keyring_item_info_get_display_name (item);
 	account = get_attribute_string (attrs, "account");
 
 	if (strstr (display, account)) {
@@ -372,9 +345,7 @@ telepathy_custom (const DisplayEntry *entry,
 	}
 
 	if (info->label == NULL)
-		info->label = (display);
-	else
-		g_free (display);
+		info->label = g_strdup (display);
 
 	info->details = g_markup_escape_text (account, -1);
 }
@@ -393,28 +364,6 @@ static const DisplayEntry DISPLAY_ENTRIES[] = {
 	{ NETWORK_MANAGER_SECRET, N_("Network Manager secret"), NULL },
 };
 
-static const OldItemTypes OLD_ITEM_TYPES[] = {
-	{ GNOME_KEYRING_ITEM_GENERIC_SECRET, GENERIC_SECRET },
-	{ GNOME_KEYRING_ITEM_NETWORK_PASSWORD, NETWORK_PASSWORD },
-	{ GNOME_KEYRING_ITEM_NOTE, KEYRING_NOTE },
-	{ GNOME_KEYRING_ITEM_CHAINED_KEYRING_PASSWORD, CHAINED_KEYRING },
-	{ GNOME_KEYRING_ITEM_ENCRYPTION_KEY_PASSWORD, ENCRYPTION_KEY },
-	{ GNOME_KEYRING_ITEM_PK_STORAGE, PK_STORAGE },
-};
-
-static const gchar *
-map_item_type_to_string (GnomeKeyringItemType old)
-{
-	guint i;
-
-	for (i = 0; i < G_N_ELEMENTS (OLD_ITEM_TYPES); i++) {
-		if (old == OLD_ITEM_TYPES[i].old)
-			return OLD_ITEM_TYPES[i].item_type;
-	}
-
-	return GENERIC_SECRET;
-}
-
 static const MappingEntry MAPPING_ENTRIES[] = {
 	{ GENERIC_SECRET, CHROME_PASSWORD, "application", "chrome*" },
 	{ GENERIC_SECRET, GOA_PASSWORD, "goa-identity", NULL },
@@ -426,11 +375,13 @@ static const MappingEntry MAPPING_ENTRIES[] = {
 
 static const gchar *
 map_item_type_to_specific (const gchar *item_type,
-                           GnomeKeyringAttributeList *attrs)
+                           GHashTable *attrs)
 {
 	const gchar *value;
 	guint i;
 
+	if (!item_type)
+		return GENERIC_SECRET;
 	if (!attrs)
 		return item_type;
 
@@ -451,38 +402,31 @@ map_item_type_to_specific (const gchar *item_type,
 
 enum {
 	PROP_0,
-	PROP_KEYRING_NAME,
-	PROP_ITEM_ID,
-	PROP_ITEM_INFO,
-	PROP_ITEM_ATTRIBUTES,
 	PROP_HAS_SECRET,
 	PROP_DESCRIPTION,
-	PROP_USE
+	PROP_USE,
+	PROP_PLACE,
+	PROP_FLAGS,
+	PROP_DELETABLE,
+	PROP_ICON,
+	PROP_LABEL,
+	PROP_MARKUP,
+	PROP_USAGE,
+	PROP_ACTIONS
 };
 
 struct _SeahorseGkrItemPrivate {
-	gchar *keyring_name;
-	guint32 item_id;
-
-	gpointer req_info;
-	GnomeKeyringItemInfo *item_info;
-
-	gpointer req_attrs;
-	GnomeKeyringAttributeList *item_attrs;
-
-	gpointer req_secret;
-	gchar *item_secret;
-
+	SecretValue *item_secret;
+	GCancellable *req_secret;
 	DisplayInfo *display_info;
+	GObject *place;
 };
-
-static gboolean  require_item_attrs                  (SeahorseGkrItem *self);
 
 static void      seahorse_gkr_item_deletable_iface   (SeahorseDeletableIface *iface);
 
 static void      seahorse_gkr_item_viewable_iface    (SeahorseViewableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (SeahorseGkrItem, seahorse_gkr_item, SEAHORSE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (SeahorseGkrItem, seahorse_gkr_item, SECRET_TYPE_ITEM,
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_gkr_item_deletable_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_gkr_item_viewable_iface);
 );
@@ -490,28 +434,6 @@ G_DEFINE_TYPE_WITH_CODE (SeahorseGkrItem, seahorse_gkr_item, SEAHORSE_TYPE_OBJEC
 /* -----------------------------------------------------------------------------
  * INTERNAL HELPERS
  */
-
-static GType
-boxed_item_info_type (void)
-{
-	static GType type = 0;
-	if (!type)
-		type = g_boxed_type_register_static ("GnomeKeyringItemInfo", 
-		                                     (GBoxedCopyFunc)gnome_keyring_item_info_copy,
-		                                     (GBoxedFreeFunc)gnome_keyring_item_info_free);
-	return type;
-}
-
-static GType
-boxed_attributes_type (void)
-{
-	static GType type = 0;
-	if (!type)
-		type = g_boxed_type_register_static ("GnomeKeyringAttributeList", 
-		                                     (GBoxedCopyFunc)gnome_keyring_attribute_list_copy,
-		                                     (GBoxedFreeFunc)gnome_keyring_attribute_list_free);
-	return type;
-}
 
 static void
 free_display_info (DisplayInfo *info)
@@ -525,30 +447,33 @@ static DisplayInfo *
 ensure_display_info (SeahorseGkrItem *self)
 {
 	const gchar *item_type;
+	GHashTable *attrs;
 	DisplayInfo *info;
+	gchar *label;
 	guint i;
 
 	if (self->pv->display_info)
 		return self->pv->display_info;
 
-	require_item_attrs (self);
-
 	info = g_new0 (DisplayInfo, 1);
 
-	item_type = map_item_type_to_string (gnome_keyring_item_info_get_type (self->pv->item_info));
-	item_type = map_item_type_to_specific (item_type, self->pv->item_attrs);
+	attrs = secret_item_get_attributes (SECRET_ITEM (self));
+	item_type = get_attribute_string (attrs, "xdg:schema");
+	item_type = map_item_type_to_specific (item_type, attrs);
 	g_assert (item_type != NULL);
 	info->item_type = item_type;
 
+	label = secret_item_get_label (SECRET_ITEM (self));
 	for (i = 0; i < G_N_ELEMENTS (DISPLAY_ENTRIES); i++) {
 		if (g_str_equal (DISPLAY_ENTRIES[i].item_type, item_type)) {
 			if (DISPLAY_ENTRIES[i].custom_func != NULL)
 				(DISPLAY_ENTRIES[i].custom_func) (&DISPLAY_ENTRIES[i],
-				                                  self->pv->item_info,
-				                                  self->pv->item_attrs,
+				                                  label, attrs,
 				                                  info);
-			if (!info->label && self->pv->item_info)
-				info->label = gnome_keyring_item_info_get_display_name (self->pv->item_info);
+			if (!info->label) {
+				info->label = label;
+				label = NULL;
+			}
 			if (!info->description)
 				info->description = DISPLAY_ENTRIES[i].description;
 			if (!info->details)
@@ -558,91 +483,69 @@ ensure_display_info (SeahorseGkrItem *self)
 	}
 
 	self->pv->display_info = info;
+	g_hash_table_unref (attrs);
+	g_free (label);
 	return info;
 }
 
 static void
-clear_display_info (SeahorseGkrItem *self)
+seahorse_gkr_item_g_properties_changed (GDBusProxy *proxy,
+                                        GVariant *changed_properties,
+                                        const gchar* const *invalidated_properties)
 {
+	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (proxy);
+	GObject *obj = G_OBJECT (self);
+
 	if (self->pv->display_info) {
 		free_display_info (self->pv->display_info);
 		self->pv->display_info = NULL;
 	}
-}
 
-static gboolean 
-received_result (SeahorseGkrItem *self, GnomeKeyringResult result)
-{
-	if (result == GNOME_KEYRING_RESULT_CANCELLED)
-		return FALSE;
-
-	if (result == GNOME_KEYRING_RESULT_OK) {
-		clear_display_info (self);
-		return TRUE;
-	}
-
-	/* TODO: Implement so that we can display an error icon, along with some text */
-	g_message ("failed to retrieve item %d from keyring %s: %s",
-	           self->pv->item_id, self->pv->keyring_name, 
-	           gnome_keyring_result_to_message (result));
-	return FALSE;
+	g_object_freeze_notify (obj);
+	g_object_notify (obj, "has-secret");
+	g_object_notify (obj, "use");
+	g_object_notify (obj, "label");
+	g_object_notify (obj, "icon");
+	g_object_notify (obj, "markup");
+	g_object_notify (obj, "description");
+	g_object_notify (obj, "flags");
+	g_object_thaw_notify (obj);
 }
 
 static void
-received_item_info (GnomeKeyringResult result, GnomeKeyringItemInfo *info, gpointer data)
+received_item_secret (GObject *source,
+                      GAsyncResult *result,
+                      gpointer user_data)
 {
-	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (data);
-	self->pv->req_info = NULL;
-	if (received_result (self, result))
-		seahorse_gkr_item_set_info (self, info);
-}
+	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (source);
+	SecretValue *value;
+	GError *error = NULL;
 
-static void
-load_item_info (SeahorseGkrItem *self)
-{
-	/* Already in progress */
-	if (!self->pv->req_info) {
-		g_object_ref (self);
-		self->pv->req_info = gnome_keyring_item_get_info_full (self->pv->keyring_name,
-		                                                       self->pv->item_id,
-		                                                       GNOME_KEYRING_ITEM_INFO_BASICS,
-		                                                       received_item_info,
-		                                                       self, g_object_unref);
-	}
-}
+	g_clear_object (&self->pv->req_secret);
 
-static gboolean
-require_item_info (SeahorseGkrItem *self)
-{
-	if (!self->pv->item_info)
-		load_item_info (self);
-	return self->pv->item_info != NULL;
-}
-
-static void
-received_item_secret (GnomeKeyringResult result, GnomeKeyringItemInfo *info, gpointer data)
-{
-	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (data);
-	self->pv->req_secret = NULL;
-	if (received_result (self, result)) {
-		g_free (self->pv->item_secret);
-		WITH_SECURE_MEM (self->pv->item_secret = gnome_keyring_item_info_get_secret (info));
+	value = secret_item_get_secret_finish (SECRET_ITEM (source), result, &error);
+	if (error == NULL) {
+		if (self->pv->item_secret)
+			secret_value_unref (self->pv->item_secret);
+		self->pv->item_secret = value;
 		g_object_notify (G_OBJECT (self), "has-secret");
+	} else {
+		g_message ("Couldn't retrieve secret: %s", error->message);
+		g_error_free (error);
 	}
+
+	g_object_unref (self);
 }
 
 static void
 load_item_secret (SeahorseGkrItem *self)
 {
-	/* Already in progress */
-	if (!self->pv->req_secret) {
-		g_object_ref (self);
-		self->pv->req_secret = gnome_keyring_item_get_info_full (self->pv->keyring_name,
-		                                                         self->pv->item_id,
-		                                                         GNOME_KEYRING_ITEM_INFO_SECRET,
-		                                                         received_item_secret,
-		                                                         self, g_object_unref);
-	}	
+	if (self->pv->req_secret)
+		return;
+
+	self->pv->req_secret = g_cancellable_new ();
+	secret_item_get_secret (SECRET_ITEM (self), self->pv->req_secret,
+	                        received_item_secret, g_object_ref (self));
 }
 
 static gboolean
@@ -651,36 +554,6 @@ require_item_secret (SeahorseGkrItem *self)
 	if (!self->pv->item_secret)
 		load_item_secret (self);
 	return self->pv->item_secret != NULL;
-}
-
-static void
-received_item_attrs (GnomeKeyringResult result, GnomeKeyringAttributeList *attrs, gpointer data)
-{
-	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (data);
-	self->pv->req_attrs = NULL;
-	if (received_result (self, result))
-		seahorse_gkr_item_set_attributes (self, attrs);
-}
-
-static void
-load_item_attrs (SeahorseGkrItem *self)
-{
-	/* Already in progress */
-	if (!self->pv->req_attrs) {
-		g_object_ref (self);
-		self->pv->req_attrs = gnome_keyring_item_get_attributes (self->pv->keyring_name,
-		                                                         self->pv->item_id,
-		                                                         received_item_attrs,
-		                                                         self, g_object_unref);
-	}	
-}
-
-static gboolean
-require_item_attrs (SeahorseGkrItem *self)
-{
-	if (!self->pv->item_attrs)
-		load_item_attrs (self);
-	return self->pv->item_attrs != NULL;
 }
 
 static gchar*
@@ -701,45 +574,9 @@ calc_name_markup (SeahorseGkrItem *self)
 	return g_string_free (result, FALSE);
 }
 
-/* -----------------------------------------------------------------------------
- * OBJECT 
- */
-
-void
-seahorse_gkr_item_realize (SeahorseGkrItem *self)
-{
-	DisplayInfo *info;
-	gchar *markup;
-	GIcon *icon;
-
-	if (!require_item_info (self))
-		return;
-
-	info = ensure_display_info (self);
-	markup = calc_name_markup (self);
-
-	icon = g_themed_icon_new (GCR_ICON_PASSWORD);
-	g_object_set (self,
-	              "label", info->label,
-	              "icon", icon,
-	              "markup", markup,
-	              "flags", SEAHORSE_FLAG_DELETABLE | SEAHORSE_FLAG_PERSONAL,
-	              NULL);
-	g_object_unref (icon);
-	g_free (markup);
-
-	g_object_notify (G_OBJECT (self), "has-secret");
-	g_object_notify (G_OBJECT (self), "use");
-	g_object_notify (G_OBJECT (self), "description");
-}
-
 void
 seahorse_gkr_item_refresh (SeahorseGkrItem *self)
 {
-	if (self->pv->item_info)
-		load_item_info (self);
-	if (self->pv->item_attrs)
-		load_item_attrs (self);
 	if (self->pv->item_secret)
 		load_item_secret (self);
 }
@@ -748,17 +585,6 @@ static void
 seahorse_gkr_item_init (SeahorseGkrItem *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_ITEM, SeahorseGkrItemPrivate);
-	g_object_set (self, "usage", SEAHORSE_USAGE_CREDENTIALS, NULL);
-}
-
-static void
-seahorse_gkr_item_constructed (GObject *object)
-{
-	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (object);
-
-	G_OBJECT_CLASS (seahorse_gkr_item_parent_class)->constructed (object);
-
-	seahorse_gkr_item_realize (self);
 }
 
 static void
@@ -769,18 +595,6 @@ seahorse_gkr_item_get_property (GObject *object, guint prop_id,
 	DisplayInfo *info;
 
 	switch (prop_id) {
-	case PROP_KEYRING_NAME:
-		g_value_set_string (value, seahorse_gkr_item_get_keyring_name (self));
-		break;
-	case PROP_ITEM_ID:
-		g_value_set_uint (value, seahorse_gkr_item_get_item_id (self));
-		break;
-	case PROP_ITEM_INFO:
-		g_value_set_boxed (value, seahorse_gkr_item_get_info (self));
-		break;
-	case PROP_ITEM_ATTRIBUTES:
-		g_value_set_boxed (value, seahorse_gkr_item_get_attributes (self));
-		break;
 	case PROP_HAS_SECRET:
 		g_value_set_boolean (value, self->pv->item_secret != NULL);
 		break;
@@ -788,10 +602,34 @@ seahorse_gkr_item_get_property (GObject *object, guint prop_id,
 		g_value_set_uint (value, seahorse_gkr_item_get_use (self));
 		break;
 	case PROP_DESCRIPTION:
-		if (!require_item_info (self))
-			break;
 		info = ensure_display_info (self);
 		g_value_set_string (value, info->description);
+		break;
+	case PROP_PLACE:
+		g_value_set_object (value, self->pv->place);
+		break;
+	case PROP_FLAGS:
+		g_value_set_flags (value, SEAHORSE_FLAG_DELETABLE | SEAHORSE_FLAG_PERSONAL);
+		break;
+	case PROP_LABEL:
+		info = ensure_display_info (self);
+		g_value_set_string (value, info->label);
+		break;
+	case PROP_MARKUP:
+		info = ensure_display_info (self);
+		g_value_take_string (value, calc_name_markup (self));
+		break;
+	case PROP_ICON:
+		g_value_take_object (value, g_themed_icon_new (GCR_ICON_PASSWORD));
+		break;
+	case PROP_DELETABLE:
+		g_value_set_boolean (value, TRUE);
+		break;
+	case PROP_USAGE:
+		g_value_set_enum (value, SEAHORSE_USAGE_CREDENTIALS);
+		break;
+	case PROP_ACTIONS:
+		g_value_set_object (value, NULL);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -800,25 +638,19 @@ seahorse_gkr_item_get_property (GObject *object, guint prop_id,
 }
 
 static void
-seahorse_gkr_item_set_property (GObject *object, guint prop_id, const GValue *value, 
+seahorse_gkr_item_set_property (GObject *object,
+                                guint prop_id,
+                                const GValue *value,
                                 GParamSpec *pspec)
 {
 	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (object);
-    
 	switch (prop_id) {
-	case PROP_KEYRING_NAME:
-		g_return_if_fail (self->pv->keyring_name == NULL);
-		self->pv->keyring_name = g_value_dup_string (value);
-		break;
-	case PROP_ITEM_ID:
-		g_return_if_fail (self->pv->item_id == 0);
-		self->pv->item_id = g_value_get_uint (value);
-		break;
-	case PROP_ITEM_INFO:
-		seahorse_gkr_item_set_info (self, g_value_get_boxed (value));
-		break;
-	case PROP_ITEM_ATTRIBUTES:
-		seahorse_gkr_item_set_attributes (self, g_value_get_boxed (value));
+	case PROP_PLACE:
+		if (self->pv->place)
+			g_object_remove_weak_pointer (self->pv->place, (gpointer *)&self->pv->place);
+		self->pv->place = g_value_get_object (value);
+		if (self->pv->place)
+			g_object_add_weak_pointer (self->pv->place, (gpointer *)&self->pv->place);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -830,12 +662,17 @@ static void
 seahorse_gkr_item_dispose (GObject *obj)
 {
 	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (obj);
-	SeahorsePlace *place;
 
-	place = seahorse_object_get_place (SEAHORSE_OBJECT (self));
-	if (place != NULL)
-		seahorse_gkr_keyring_remove_item (SEAHORSE_GKR_KEYRING (place),
-		                                  self->pv->item_id);
+	if (self->pv->req_secret) {
+		g_cancellable_cancel (self->pv->req_secret);
+		g_object_unref (self->pv->req_secret);
+		self->pv->req_secret = NULL;
+	}
+
+	if (self->pv->place) {
+		g_object_remove_weak_pointer (self->pv->place, (gpointer *)&self->pv->place);
+		self->pv->place = NULL;
+	}
 
 	G_OBJECT_CLASS (seahorse_gkr_item_parent_class)->dispose (obj);
 }
@@ -844,62 +681,33 @@ static void
 seahorse_gkr_item_finalize (GObject *gobject)
 {
 	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (gobject);
-	
-	g_free (self->pv->keyring_name);
-	self->pv->keyring_name = NULL;
-    
-	if (self->pv->item_info)
-		gnome_keyring_item_info_free (self->pv->item_info);
-	self->pv->item_info = NULL;
-	g_assert (self->pv->req_info == NULL);
-    
-	if (self->pv->item_attrs)
-		gnome_keyring_attribute_list_free (self->pv->item_attrs);
-	self->pv->item_attrs = NULL;
-	g_assert (self->pv->req_attrs == NULL);
 
-	g_free (self->pv->item_secret);
+	if (self->pv->item_secret)
+		secret_value_unref (self->pv->item_secret);
 	self->pv->item_secret = NULL;
 	g_assert (self->pv->req_secret == NULL);
-	
+
 	G_OBJECT_CLASS (seahorse_gkr_item_parent_class)->finalize (gobject);
 }
 
 static void
 seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 {
-	GObjectClass *gobject_class;
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+	GDBusProxyClass *proxy_class = G_DBUS_PROXY_CLASS (klass);
 
-	seahorse_gkr_item_parent_class = g_type_class_peek_parent (klass);
-	gobject_class = G_OBJECT_CLASS (klass);
-	
-	gobject_class->constructed = seahorse_gkr_item_constructed;
 	gobject_class->dispose = seahorse_gkr_item_dispose;
 	gobject_class->finalize = seahorse_gkr_item_finalize;
-	gobject_class->set_property = seahorse_gkr_item_set_property;
 	gobject_class->get_property = seahorse_gkr_item_get_property;
+	gobject_class->set_property = seahorse_gkr_item_set_property;
+
+	proxy_class->g_properties_changed = seahorse_gkr_item_g_properties_changed;
 
 	g_type_class_add_private (klass, sizeof (SeahorseGkrItemPrivate));
-    
-	g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,
-	        g_param_spec_string("keyring-name", "Keyring Name", "Keyring this item is in", 
-	                            "", G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (gobject_class, PROP_DESCRIPTION,
 	        g_param_spec_string("description", "Description", "Item description",
 	                            "", G_PARAM_READABLE));
-
-	g_object_class_install_property (gobject_class, PROP_ITEM_ID,
-	        g_param_spec_uint ("item-id", "Item ID", "GNOME Keyring Item ID", 
-	                           0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-	g_object_class_install_property (gobject_class, PROP_ITEM_INFO,
-                g_param_spec_boxed ("item-info", "Item Info", "GNOME Keyring Item Info",
-                                    boxed_item_info_type (),  G_PARAM_READWRITE));
-                              
-	g_object_class_install_property (gobject_class, PROP_ITEM_ATTRIBUTES,
-                g_param_spec_boxed ("item-attributes", "Item Attributes", "GNOME Keyring Item Attributes",
-                                    boxed_attributes_type (), G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_USE,
 	        g_param_spec_uint ("use", "Use", "Item is used for", 
@@ -908,6 +716,36 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 	g_object_class_install_property (gobject_class, PROP_HAS_SECRET,
 	        g_param_spec_boolean ("has-secret", "Has Secret", "Secret has been loaded", 
 	                              FALSE, G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_PLACE,
+	         g_param_spec_object ("place", "place", "place", SEAHORSE_TYPE_GKR_KEYRING,
+	                              G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_FLAGS,
+	         g_param_spec_flags ("flags", "flags", "flags", SEAHORSE_TYPE_FLAGS, SEAHORSE_FLAG_NONE,
+	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_ICON,
+	            g_param_spec_object ("icon", "Icon", "Icon", G_TYPE_ICON,
+	                                 G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_LABEL,
+	            g_param_spec_string ("label", "Label", "Label", "",
+	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_MARKUP,
+	            g_param_spec_string ("markup", "Markup", "Markup", "",
+	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_USAGE,
+	              g_param_spec_enum ("usage", "Object Usage", "How this object is used.",
+	                                 SEAHORSE_TYPE_USAGE, SEAHORSE_USAGE_NONE, G_PARAM_READWRITE));
+
+	g_object_class_install_property (gobject_class, PROP_ACTIONS,
+	            g_param_spec_object ("actions", "Actions", "Actions", GTK_TYPE_ACTION_GROUP,
+	                                 G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
+
+	g_object_class_override_property (gobject_class, PROP_DELETABLE, "deletable");
 }
 
 static SeahorseDeleter *
@@ -949,63 +787,6 @@ seahorse_gkr_item_new (SeahorseGkrKeyring *keyring,
 	                     NULL);
 }
 
-guint32
-seahorse_gkr_item_get_item_id (SeahorseGkrItem *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (self), 0);
-	return self->pv->item_id;
-}
-
-const gchar*
-seahorse_gkr_item_get_keyring_name (SeahorseGkrItem *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (self), NULL);
-	return self->pv->keyring_name;
-}
-
-GnomeKeyringItemInfo*
-seahorse_gkr_item_get_info (SeahorseGkrItem *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (self), NULL);
-	require_item_info (self);
-	return self->pv->item_info;
-}
-
-void
-seahorse_gkr_item_set_info (SeahorseGkrItem *self, GnomeKeyringItemInfo* info)
-{
-	GObject *obj;
-	gchar *secret;
-
-	g_return_if_fail (SEAHORSE_IS_GKR_ITEM (self));
-
-	clear_display_info (self);
-
-	if (self->pv->item_info)
-		gnome_keyring_item_info_free (self->pv->item_info);
-	if (info)
-		self->pv->item_info = gnome_keyring_item_info_copy (info);
-	else
-		self->pv->item_info = NULL;
-	
-	obj = G_OBJECT (self);
-	g_object_freeze_notify (obj);
-	seahorse_gkr_item_realize (self);
-	g_object_notify (obj, "item-info");
-	g_object_notify (obj, "use");
-	g_object_notify (obj, "description");
-
-	/* Get the secret out of the item info, if not already loaded */
-	WITH_SECURE_MEM (secret = gnome_keyring_item_info_get_secret (self->pv->item_info));
-	if (secret != NULL) {
-		gnome_keyring_free_password (self->pv->item_secret);
-		self->pv->item_secret = secret;
-		g_object_notify (obj, "has-secret");
-	}
-
-	g_object_thaw_notify (obj);
-}
-
 gboolean
 seahorse_gkr_item_has_secret (SeahorseGkrItem *self)
 {
@@ -1013,7 +794,7 @@ seahorse_gkr_item_has_secret (SeahorseGkrItem *self)
 	return self->pv->item_secret != NULL;
 }
 
-const gchar*
+SecretValue *
 seahorse_gkr_item_get_secret (SeahorseGkrItem *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (self), NULL);
@@ -1021,73 +802,94 @@ seahorse_gkr_item_get_secret (SeahorseGkrItem *self)
 	return self->pv->item_secret;
 }
 
-GnomeKeyringAttributeList*
-seahorse_gkr_item_get_attributes (SeahorseGkrItem *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (self), NULL);
-	require_item_attrs (self);
-	return self->pv->item_attrs;
-}
-
-void
-seahorse_gkr_item_set_attributes (SeahorseGkrItem *self, GnomeKeyringAttributeList* attrs)
-{
-	GObject *obj;
-	
-	g_return_if_fail (SEAHORSE_IS_GKR_ITEM (self));
-	
-	if (self->pv->item_attrs)
-		gnome_keyring_attribute_list_free (self->pv->item_attrs);
-	if (attrs)
-		self->pv->item_attrs = gnome_keyring_attribute_list_copy (attrs);
-	else
-		self->pv->item_attrs = NULL;
-	
-	obj = G_OBJECT (self);
-	g_object_freeze_notify (obj);
-	seahorse_gkr_item_realize (self);
-	g_object_notify (obj, "item-attributes");
-	g_object_notify (obj, "use");
-	g_object_notify (obj, "description");
-	g_object_thaw_notify (obj);
-}
-
 const gchar*
 seahorse_gkr_item_get_attribute (SeahorseGkrItem *self, const gchar *name)
 {
+	GHashTable *attributes;
+
 	g_return_val_if_fail (SEAHORSE_IS_GKR_ITEM (self), NULL);
-	if (!require_item_attrs (self))
+
+	attributes = secret_item_get_attributes (SECRET_ITEM (self));
+	if (attributes == NULL)
 		return NULL;
-	return seahorse_gkr_find_string_attribute (self->pv->item_attrs, name);
+	return g_hash_table_lookup (attributes, name);
 }
 
+
 const gchar*
-seahorse_gkr_find_string_attribute (GnomeKeyringAttributeList *attrs, const gchar *name)
+seahorse_gkr_find_string_attribute (GHashTable *attrs,
+                                    const gchar *name)
 {
-	guint i;
-	
 	g_return_val_if_fail (attrs, NULL);
 	g_return_val_if_fail (name, NULL);
 
-	for (i = 0; i < attrs->len; i++) {
-		GnomeKeyringAttribute *attr = &(gnome_keyring_attribute_list_index (attrs, i));
-		if (g_ascii_strcasecmp (name, attr->name) == 0 && 
-				attr->type == GNOME_KEYRING_ATTRIBUTE_TYPE_STRING)
-			return attr->value.string;
-	}
-	    
-	return NULL;	
+	return g_hash_table_lookup (attrs, name);
 }
 
 SeahorseGkrUse
 seahorse_gkr_item_get_use (SeahorseGkrItem *self)
 {
-	/* Network passwords */
-	if (require_item_info (self)) {
-		if (gnome_keyring_item_info_get_type (self->pv->item_info) == GNOME_KEYRING_ITEM_NETWORK_PASSWORD) {
-			return SEAHORSE_GKR_USE_NETWORK;
-		}
-	}
+	const gchar *schema_name;
+
+	schema_name = seahorse_gkr_item_get_attribute (self, "xdg:schema");
+	if (schema_name && g_str_equal (schema_name, "org.gnome.keyring.NetworkPassword"))
+		return SEAHORSE_GKR_USE_NETWORK;
 
 	return SEAHORSE_GKR_USE_OTHER;
+}
+
+static void
+on_set_secret (GObject *source,
+               GAsyncResult *result,
+               gpointer user_data)
+{
+	GSimpleAsyncResult *async = G_SIMPLE_ASYNC_RESULT (user_data);
+	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (source);
+	GError *error = NULL;
+
+	secret_item_set_secret_finish (SECRET_ITEM (source), result, &error);
+	if (error == NULL) {
+		if (self->pv->item_secret)
+			secret_value_unref (self->pv->item_secret);
+		self->pv->item_secret = g_simple_async_result_get_op_res_gpointer (async);
+		secret_value_ref (self->pv->item_secret);
+		g_object_notify (G_OBJECT (self), "has-secret");
+
+	} else {
+		g_simple_async_result_take_error (async, error);
+	}
+
+	g_simple_async_result_complete (async);
+	g_object_unref (async);
+}
+
+void
+seahorse_gkr_item_set_secret (SeahorseGkrItem *self,
+                              SecretValue *value,
+                              GCancellable *cancellable,
+                              GAsyncReadyCallback callback,
+                              gpointer user_data)
+{
+	GSimpleAsyncResult *async;
+
+	async = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
+	                                   seahorse_gkr_item_set_secret);
+	g_simple_async_result_set_op_res_gpointer (async, secret_value_ref (value),
+	                                           secret_value_unref);
+
+	secret_item_set_secret (SECRET_ITEM (self), value, cancellable,
+	                        on_set_secret, g_object_ref (async));
+
+	g_object_unref (async);
+}
+
+gboolean
+seahorse_gkr_item_set_secret_finish (SeahorseGkrItem *self,
+                                     GAsyncResult *result,
+                                     GError **error)
+{
+	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
+		return FALSE;
+
+	return TRUE;
 }

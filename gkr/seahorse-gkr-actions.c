@@ -27,7 +27,6 @@
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-keyring-deleter.h"
 #include "seahorse-gkr-dialogs.h"
-#include "seahorse-gkr-operation.h"
 
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
@@ -140,69 +139,119 @@ seahorse_gkr_backend_actions_instance (void)
 }
 
 static void
-on_set_default_keyring_done (GnomeKeyringResult result,
+on_set_default_keyring_done (GObject *source,
+                             GAsyncResult *result,
                              gpointer user_data)
 {
 	GtkWindow *parent = GTK_WINDOW (user_data);
+	GError *error = NULL;
 
-	if (result != GNOME_KEYRING_RESULT_OK &&
-	    result != GNOME_KEYRING_RESULT_DENIED &&
-	    result != GNOME_KEYRING_RESULT_CANCELLED) {
-		seahorse_util_show_error (parent, _("Couldn't set default keyring"),
-		                          gnome_keyring_result_to_message (result));
-	}
+	secret_service_set_alias_finish (SECRET_SERVICE (source), result, &error);
+	if (error != NULL)
+		seahorse_util_handle_error (&error, parent, _("Couldn't set default keyring"));
 
 	refresh_all_keyrings ();
+	if (parent)
+		g_object_unref (parent);
 }
 
 static void
 on_keyring_default (GtkAction *action,
                     gpointer user_data)
 {
-	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (user_data);
+	SecretCollection *keyring = SECRET_COLLECTION (user_data);
 	GtkWindow *parent = seahorse_action_get_window (action);
 
-	if (parent == NULL)
-		gnome_keyring_set_default_keyring (seahorse_gkr_keyring_get_name (keyring),
-		                                   on_set_default_keyring_done,
-		                                   NULL, NULL);
-	else
-		gnome_keyring_set_default_keyring (seahorse_gkr_keyring_get_name (keyring),
-		                                   on_set_default_keyring_done,
-		                                   g_object_ref (parent), g_object_unref);
+	if (parent != NULL)
+		g_object_ref (parent);
+
+	secret_service_set_alias_path (secret_collection_get_service (keyring), "default",
+	                               g_dbus_proxy_get_object_path (G_DBUS_PROXY (keyring)),
+	                               NULL, on_set_default_keyring_done, parent);
+}
+
+typedef struct {
+	SecretService *service;
+	GtkWindow *parent;
+} ChangeClosure;
+
+static void
+change_closure_free (gpointer data)
+{
+	ChangeClosure *change = data;
+	g_object_unref (change->service);
+	if (change->parent)
+		g_object_unref (change->parent);
+	g_slice_free (ChangeClosure, change);
 }
 
 static void
-on_change_password_done (GnomeKeyringResult result, gpointer user_data)
+on_change_password_done (GObject *source,
+                         GAsyncResult *result,
+                         gpointer user_data)
 {
-	GtkWindow *parent = GTK_WINDOW (user_data);
+	ChangeClosure *change = user_data;
+	GError *error = NULL;
+	GVariant *retval;
 
-	if (result != GNOME_KEYRING_RESULT_OK &&
-	    result != GNOME_KEYRING_RESULT_DENIED &&
-	    result != GNOME_KEYRING_RESULT_CANCELLED) {
-		seahorse_util_show_error (parent, _("Couldn't change keyring password"),
-		                          gnome_keyring_result_to_message (result));
-	}
+	retval = secret_service_prompt_path_finish (SECRET_SERVICE (source), result, NULL, &error);
+	if (retval != NULL)
+		g_variant_unref (retval);
+	if (error != NULL)
+		seahorse_util_handle_error (&error, change->parent,
+		                            _("Couldn't change keyring password"));
 
 	refresh_all_keyrings ();
+	change_closure_free (change);
+}
+
+static void
+on_change_password_prompt (GObject *source,
+                           GAsyncResult *result,
+                           gpointer user_data)
+{
+	ChangeClosure *change = user_data;
+	const gchar *prompt_path;
+	GError *error = NULL;
+	GVariant *retval;
+
+	retval = g_dbus_connection_call_finish (G_DBUS_CONNECTION (source), result, &error);
+	if (error == NULL) {
+		g_variant_get (retval, "@s", &prompt_path);
+		secret_service_prompt_path (change->service, prompt_path, NULL,
+		                            on_change_password_done, change);
+		g_variant_unref (retval);
+	} else {
+		seahorse_util_handle_error (&error, change->parent, _("Couldn't change keyring password"));
+		change_closure_free (change);
+	}
 }
 
 static void
 on_keyring_password (GtkAction *action,
                      gpointer user_data)
 {
-	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (user_data);
-	GtkWindow *window = seahorse_action_get_window (action);
+	SecretCollection *collection = SECRET_COLLECTION (user_data);
+	GDBusProxy *proxy;
+	ChangeClosure *change;
 
-	if (window == NULL)
-		gnome_keyring_change_password (seahorse_gkr_keyring_get_name (keyring),
-		                               NULL, NULL, on_change_password_done,
-		                               NULL, NULL);
-	else
-		gnome_keyring_change_password (seahorse_gkr_keyring_get_name (keyring),
-		                               NULL, NULL, on_change_password_done,
-		                               g_object_ref (window), g_object_unref);
+	change = g_slice_new0 (ChangeClosure);
+	change->parent = seahorse_action_get_window (action);
+	if (change->parent)
+		g_object_ref (change->parent);
+	change->service = secret_collection_get_service (collection);
+	g_return_if_fail (change->service != NULL);
+	g_object_ref (change->service);
 
+	proxy = G_DBUS_PROXY (change->service);
+	g_dbus_connection_call (g_dbus_proxy_get_connection (proxy),
+	                        g_dbus_proxy_get_name (proxy),
+	                        g_dbus_proxy_get_object_path (proxy),
+	                        "org.gnome.keyring.InternalUnsupportedGuiltRiddenInterface",
+	                        "ChangeWithPrompt",
+	                        g_variant_new ("(o)", g_dbus_proxy_get_object_path (proxy)),
+	                        G_VARIANT_TYPE ("(o)"),
+	                        0, -1, NULL, on_change_password_prompt, change);
 }
 
 static const GtkActionEntry KEYRING_ACTIONS[] = {

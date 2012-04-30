@@ -27,7 +27,6 @@
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-keyring-deleter.h"
 #include "seahorse-gkr-keyring.h"
-#include "seahorse-gkr-operation.h"
 #include "seahorse-gkr-actions.h"
 
 #include "seahorse-action.h"
@@ -44,24 +43,19 @@
 enum {
 	PROP_0,
 	PROP_DESCRIPTION,
-	PROP_KEYRING_NAME,
 	PROP_KEYRING_INFO,
 	PROP_IS_DEFAULT,
 	PROP_URI,
 	PROP_ACTIONS,
-	PROP_LOCKED,
 	PROP_LOCKABLE,
-	PROP_UNLOCKABLE
+	PROP_UNLOCKABLE,
+
+	PROP_ICON,
+	PROP_DELETABLE
 };
 
 struct _SeahorseGkrKeyringPrivate {
 	GHashTable *items;
-	gchar *keyring_name;
-	gboolean is_default;
-	gboolean locked;
-
-	gpointer req_info;
-	GnomeKeyringInfo *keyring_info;
 };
 
 static void     seahorse_gkr_keyring_place_iface    (SeahorsePlaceIface *iface);
@@ -74,7 +68,7 @@ static void     seahorse_keyring_lockable_iface     (SeahorseLockableIface *ifac
 
 static void     seahorse_keyring_viewable_iface     (SeahorseViewableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (SeahorseGkrKeyring, seahorse_gkr_keyring, SECRET_TYPE_COLLECTION,
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_keyring_collection_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_gkr_keyring_place_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_keyring_deletable_iface);
@@ -82,267 +76,75 @@ G_DEFINE_TYPE_WITH_CODE (SeahorseGkrKeyring, seahorse_gkr_keyring, SEAHORSE_TYPE
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_keyring_viewable_iface);
 );
 
-static GType
-boxed_type_keyring_info (void)
-{
-	static GType type = 0;
-	if (!type)
-		type = g_boxed_type_register_static ("GnomeKeyringInfo", 
-		                                     (GBoxedCopyFunc)gnome_keyring_info_copy,
-		                                     (GBoxedFreeFunc)gnome_keyring_info_free);
-	return type;
-}
-
 static void
-received_keyring_info (GnomeKeyringResult result, GnomeKeyringInfo *info, gpointer data)
+refresh_collection (SeahorseGkrKeyring *self)
 {
-	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (data);
-	self->pv->req_info = NULL;
-	
-	if (result == GNOME_KEYRING_RESULT_CANCELLED)
-		return;
-	
-	if (result != GNOME_KEYRING_RESULT_OK) {
-		/* TODO: Implement so that we can display an error icon, along with some text */
-		g_message ("failed to retrieve info for keyring %s: %s",
-		           self->pv->keyring_name, 
-		           gnome_keyring_result_to_message (result));
-		return;
-	}
-
-	seahorse_gkr_keyring_set_info (self, info);
-}
-
-static void
-load_keyring_info (SeahorseGkrKeyring *self)
-{
-	/* Already in progress */
-	if (!self->pv->req_info) {
-		g_object_ref (self);
-		self->pv->req_info = gnome_keyring_get_info (self->pv->keyring_name,
-		                                             received_keyring_info,
-		                                             self, g_object_unref);
-	}
-}
-
-static gboolean
-require_keyring_info (SeahorseGkrKeyring *self)
-{
-	if (!self->pv->keyring_info)
-		load_keyring_info (self);
-	return self->pv->keyring_info != NULL;
-}
-
-/* -----------------------------------------------------------------------------
- * OBJECT 
- */
-
-void
-seahorse_gkr_keyring_realize (SeahorseGkrKeyring *self)
-{
-	const gchar *name;
-	GIcon *icon;
-
-	if (self->pv->keyring_name && g_str_equal (self->pv->keyring_name, "login"))
-		name = _("Login keyring");
-	else
-		name = self->pv->keyring_name;
-
-	icon = g_themed_icon_new ("folder");
-
-	g_object_set (self,
-	              "label", name,
-	              "nickname", self->pv->keyring_name,
-	              "identifier", "",
-	              "flags", SEAHORSE_FLAG_DELETABLE | SEAHORSE_FLAG_PERSONAL,
-	              "icon", icon,
-	              "usage", SEAHORSE_USAGE_OTHER,
-	              NULL);
-
-	g_object_unref (icon);
-}
-
-void
-seahorse_gkr_keyring_remove_item (SeahorseGkrKeyring *self,
-                                  guint32 item_id)
-{
+	SecretCollection *collection = SECRET_COLLECTION (self);
 	SeahorseGkrItem *item;
-
-	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (self));
-
-	item = g_hash_table_lookup (self->pv->items, GUINT_TO_POINTER (item_id));
-	if (item != NULL) {
-		g_object_ref (item);
-		g_object_set (item, "place", NULL, NULL);
-		g_hash_table_remove (self->pv->items, GUINT_TO_POINTER (item_id));
-		gcr_collection_emit_removed (GCR_COLLECTION (self), G_OBJECT (item));
-		g_object_unref (item);
-	}
-}
-
-typedef struct {
-	SeahorseGkrKeyring *keyring;
-	gpointer request;
-	GCancellable *cancellable;
-	gulong cancelled_sig;
-} keyring_load_closure;
-
-static void
-keyring_load_free (gpointer data)
-{
-	keyring_load_closure *closure = data;
-	if (closure->cancellable && closure->cancelled_sig)
-		g_signal_handler_disconnect (closure->cancellable,
-		                             closure->cancelled_sig);
-	if (closure->cancellable)
-		g_object_unref (closure->cancellable);
-	g_clear_object (&closure->keyring);
-	g_assert (!closure->request);
-	g_free (closure);
-}
-
-/* Remove the given key from the context */
-static void
-remove_key_from_context (gpointer kt,
-                         gpointer value,
-                         gpointer user_data)
-{
-	/* This function gets called as a GHFunc on the self->checks hashtable. */
-	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (user_data);
-	seahorse_gkr_keyring_remove_item (self, GPOINTER_TO_UINT (kt));
-}
-
-static void
-on_keyring_load_list_item_ids (GnomeKeyringResult result,
-                               GList *list,
-                               gpointer user_data)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	keyring_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	SeahorseGkrItem *item;
-	const gchar *keyring_name;
-	GError *error = NULL;
-	GHashTable *checks;
+	const gchar *object_path;
 	GHashTableIter iter;
-	gpointer key;
+	GHashTable *seen;
+	GList *items = NULL;
+	GList *l;
 
-	closure->request = NULL;
+	seen = g_hash_table_new (g_str_hash, g_str_equal);
 
-	if (seahorse_gkr_propagate_error (result, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
-		return;
-	}
+	if (!secret_collection_get_locked (collection))
+		items = secret_collection_get_items (collection);
 
-	keyring_name = seahorse_gkr_keyring_get_name (closure->keyring);
-	g_return_if_fail (keyring_name);
+	for (l = items; l != NULL; l = g_list_next (l)) {
+		object_path = g_dbus_proxy_get_object_path (l->data);
+		item = l->data;
 
-	/* When loading new keys prepare a list of current */
-	checks = g_hash_table_new (g_direct_hash, g_direct_equal);
-	g_hash_table_iter_init (&iter, closure->keyring->pv->items);
-	while (g_hash_table_iter_next (&iter, &key, NULL))
-		g_hash_table_insert (checks, key, key);
-
-	while (list) {
-		item = g_hash_table_lookup (closure->keyring->pv->items, list->data);
-
-		if (item == NULL) {
-			item = seahorse_gkr_item_new (closure->keyring, keyring_name,
-			                              GPOINTER_TO_UINT (list->data));
-
-			/* Add to context */
-			g_hash_table_insert (closure->keyring->pv->items, list->data, item);
-			gcr_collection_emit_added (GCR_COLLECTION (closure->keyring), G_OBJECT (item));
-		}
-
-		g_hash_table_remove (checks, list->data);
-		list = g_list_next (list);
-	}
-
-	g_hash_table_foreach (checks, (GHFunc)remove_key_from_context, closure->keyring);
-	g_hash_table_destroy (checks);
-
-	seahorse_progress_end (closure->cancellable, res);
-	g_simple_async_result_complete_in_idle (res);
-}
-
-static void
-on_keyring_load_get_info (GnomeKeyringResult result,
-                          GnomeKeyringInfo *info,
-                          gpointer user_data)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	keyring_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
-	const gchar *name;
-
-	closure->request = NULL;
-
-	if (seahorse_gkr_propagate_error (result, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
-
-	} else {
-		seahorse_gkr_keyring_set_info (closure->keyring, info);
-
-		/* Locked, no items... */
-		if (gnome_keyring_info_get_is_locked (info)) {
-			on_keyring_load_list_item_ids (GNOME_KEYRING_RESULT_OK, NULL, res);
-
-		} else {
-			name = seahorse_gkr_keyring_get_name (closure->keyring);
-			closure->request = gnome_keyring_list_item_ids (name,
-			                                                on_keyring_load_list_item_ids,
-			                                                g_object_ref (res), g_object_unref);
+		g_hash_table_add (seen, (gpointer)object_path);
+		if (!g_hash_table_lookup (self->pv->items, object_path)) {
+			g_object_set (item, "place", self, NULL);
+			g_hash_table_insert (self->pv->items,
+			                     g_strdup (object_path),
+			                     g_object_ref (item));
+			gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (item));
 		}
 	}
-}
 
-static void
-on_keyring_load_cancelled (GCancellable *cancellable,
-                           gpointer user_data)
-{
-	keyring_load_closure *closure = user_data;
+	/* Remove any that we didn't find */
+	g_hash_table_iter_init (&iter, self->pv->items);
+	while (g_hash_table_iter_next (&iter, (gpointer *)&object_path, NULL)) {
+		if (!g_hash_table_lookup (seen, object_path)) {
+			item = g_hash_table_lookup (self->pv->items, object_path);
+			g_object_ref (item);
+			g_object_set (item, "place", NULL, NULL);
+			g_hash_table_iter_remove (&iter);
+			gcr_collection_emit_removed (GCR_COLLECTION (self), G_OBJECT (item));
+			g_object_unref (item);
+		}
+	}
 
-	if (closure->request)
-		gnome_keyring_cancel_request (closure->request);
+	g_hash_table_destroy (seen);
+	g_list_free_full (items, g_object_unref);
 }
 
 static void
 seahorse_gkr_keyring_load_async (SeahorsePlace *place,
-                                    GCancellable *cancellable,
-                                    GAsyncReadyCallback callback,
-                                    gpointer user_data)
+                                 GCancellable *cancellable,
+                                 GAsyncReadyCallback callback,
+                                 gpointer user_data)
 {
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (place);
-	keyring_load_closure *closure;
-	GSimpleAsyncResult *res;
+	GSimpleAsyncResult *async;
 
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_gkr_keyring_load_async);
+	async = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
+	                                   seahorse_gkr_keyring_load_async);
 
-	closure = g_new0 (keyring_load_closure, 1);
-	closure->keyring = g_object_ref (self);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	g_simple_async_result_set_op_res_gpointer (res, closure, keyring_load_free);
+	refresh_collection (self);
 
-	closure->request = gnome_keyring_get_info (seahorse_gkr_keyring_get_name (self),
-	                                           on_keyring_load_get_info,
-	                                           g_object_ref (res), g_object_unref);
-
-	if (cancellable)
-		closure->cancelled_sig = g_cancellable_connect (cancellable,
-		                                                G_CALLBACK (on_keyring_load_cancelled),
-		                                                closure, NULL);
-	seahorse_progress_prep_and_begin (cancellable, res, NULL);
-
-	g_object_unref (res);
+	g_simple_async_result_complete_in_idle (async);
+	g_object_unref (async);
 }
 
 static gboolean
 seahorse_gkr_keyring_load_finish (SeahorsePlace *place,
-                                     GAsyncResult *result,
-                                     GError **error)
+                                  GAsyncResult *result,
+                                  GError **error)
 {
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
 	                      seahorse_gkr_keyring_load_async), FALSE);
@@ -354,20 +156,38 @@ seahorse_gkr_keyring_load_finish (SeahorsePlace *place,
 }
 
 static void
-seahorse_gkr_keyring_constructed (GObject *obj)
+on_aliases_changed (GObject *obj,
+                    GParamSpec *pspec,
+                    gpointer user_data)
 {
-	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
+	g_object_notify (user_data, "is-default");
+	g_object_notify (user_data, "description");
+}
 
-	G_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->constructed (obj);
+static void
+on_notify_items (GObject *obj,
+                 GParamSpec *pspec,
+                 gpointer user_data)
+{
+	refresh_collection (SEAHORSE_GKR_KEYRING (obj));
+}
 
-	g_return_if_fail (self->pv->keyring_name);
+static void
+on_notify_locked (GObject *obj,
+                  GParamSpec *pspec,
+                  gpointer user_data)
+{
+	refresh_collection (SEAHORSE_GKR_KEYRING (obj));
 }
 
 static void
 seahorse_gkr_keyring_init (SeahorseGkrKeyring *self)
 {
 	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GKR_KEYRING, SeahorseGkrKeyringPrivate);
-	self->pv->items = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);
+	self->pv->items = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+	g_signal_connect (self, "notify::items", G_CALLBACK (on_notify_items), NULL);
+	g_signal_connect (self, "notify::locked", G_CALLBACK (on_notify_locked), NULL);
+	g_signal_connect (seahorse_gkr_backend_get (), "notify::aliases", G_CALLBACK (on_aliases_changed), self);
 }
 
 static void
@@ -376,44 +196,11 @@ seahorse_gkr_keyring_finalize (GObject *obj)
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
 
 	g_hash_table_destroy (self->pv->items);
-
-	if (self->pv->keyring_info)
-		gnome_keyring_info_free (self->pv->keyring_info);
-	self->pv->keyring_info = NULL;
-	g_assert (self->pv->req_info == NULL);
-
-	g_free (self->pv->keyring_name);
-	self->pv->keyring_name = NULL;
-	
-	if (self->pv->keyring_info) 
-		gnome_keyring_info_free (self->pv->keyring_info);
-	self->pv->keyring_info = NULL;
+	g_signal_handlers_disconnect_by_func (self, on_notify_items, NULL);
+	g_signal_handlers_disconnect_by_func (self, on_notify_locked, NULL);
+	g_signal_handlers_disconnect_by_func (seahorse_gkr_backend_get (), on_aliases_changed, self);
 
 	G_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->finalize (obj);
-}
-
-static void
-seahorse_gkr_keyring_set_property (GObject *obj, guint prop_id, const GValue *value, 
-                                   GParamSpec *pspec)
-{
-	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
-	
-	switch (prop_id) {
-	case PROP_KEYRING_NAME:
-		g_return_if_fail (self->pv->keyring_name == NULL);
-		self->pv->keyring_name = g_value_dup_string (value);
-		g_object_notify (obj, "keyring-name");
-		break;
-	case PROP_KEYRING_INFO:
-		seahorse_gkr_keyring_set_info (self, g_value_get_boxed (value));
-		break;
-	case PROP_IS_DEFAULT:
-		seahorse_gkr_keyring_set_is_default (self, g_value_get_boolean (value));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
 }
 
 static void
@@ -421,36 +208,35 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
                            GParamSpec *pspec)
 {
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
+	const gchar *object_path;
 	gchar *text;
 
 	switch (prop_id) {
 	case PROP_DESCRIPTION:
 		g_value_set_string (value, seahorse_gkr_keyring_get_description (self));
 		break;
-	case PROP_KEYRING_NAME:
-		g_value_set_string (value, seahorse_gkr_keyring_get_name (self));
-		break;
-	case PROP_KEYRING_INFO:
-		g_value_set_boxed (value, seahorse_gkr_keyring_get_info (self));
-		break;
 	case PROP_IS_DEFAULT:
 		g_value_set_boolean (value, seahorse_gkr_keyring_get_is_default (self));
 		break;
 	case PROP_URI:
-		text = g_strdup_printf ("secret-service://%s", self->pv->keyring_name);
+		object_path = g_dbus_proxy_get_object_path (G_DBUS_PROXY (self));
+		text = g_strdup_printf ("secret-service://%s", object_path);
 		g_value_take_string (value, text);
 		break;
 	case PROP_ACTIONS:
 		g_value_take_object (value, seahorse_gkr_keyring_actions_new (self));
 		break;
-	case PROP_LOCKED:
-		g_value_set_boolean (value, seahorse_gkr_keyring_get_locked (self));
-		break;
 	case PROP_LOCKABLE:
-		g_value_set_boolean (value, !seahorse_gkr_keyring_get_locked (self));
+		g_value_set_boolean (value, !secret_collection_get_locked (SECRET_COLLECTION (self)));
 		break;
 	case PROP_UNLOCKABLE:
-		g_value_set_boolean (value, seahorse_gkr_keyring_get_locked (self));
+		g_value_set_boolean (value, secret_collection_get_locked (SECRET_COLLECTION (self)));
+		break;
+	case PROP_DELETABLE:
+		g_value_set_boolean (value, TRUE);
+		break;
+	case PROP_ICON:
+		g_value_take_object (value, g_themed_icon_new ("folder"));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -465,33 +251,21 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 
 	g_type_class_add_private (klass, sizeof (SeahorseGkrKeyringPrivate));
 
-	gobject_class->constructed = seahorse_gkr_keyring_constructed;
 	gobject_class->finalize = seahorse_gkr_keyring_finalize;
-	gobject_class->set_property = seahorse_gkr_keyring_set_property;
 	gobject_class->get_property = seahorse_gkr_keyring_get_property;
 
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 	g_object_class_override_property (gobject_class, PROP_URI, "uri");
 	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
-
-	g_object_class_install_property (gobject_class, PROP_KEYRING_NAME,
-	           g_param_spec_string ("keyring-name", "Gnome Keyring Name", "Name of keyring.", 
-	                                "", G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-	g_object_class_install_property (gobject_class, PROP_KEYRING_INFO,
-	           g_param_spec_boxed ("keyring-info", "Gnome Keyring Info", "Info about keyring.", 
-	                               boxed_type_keyring_info (), G_PARAM_READWRITE));
+	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
 
 	g_object_class_install_property (gobject_class, PROP_IS_DEFAULT,
 	           g_param_spec_boolean ("is-default", "Is default", "Is the default keyring.",
-	                                 FALSE, G_PARAM_READWRITE));
-
-	g_object_class_install_property (gobject_class, PROP_LOCKED,
-	           g_param_spec_boolean ("locked", "Locked", "Keyring is locked?",
 	                                 FALSE, G_PARAM_READABLE));
 
 	g_object_class_override_property (gobject_class, PROP_LOCKABLE, "lockable");
 	g_object_class_override_property (gobject_class, PROP_UNLOCKABLE, "unlockable");
+	g_object_class_override_property (gobject_class, PROP_DELETABLE, "deletable");
 }
 
 static void
@@ -520,12 +294,10 @@ seahorse_gkr_keyring_contains (GcrCollection *collection,
                                GObject *object)
 {
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (collection);
-	guint32 item_id;
 
 	if (!SEAHORSE_IS_GKR_ITEM (object))
 		return FALSE;
-	item_id = seahorse_gkr_item_get_item_id (SEAHORSE_GKR_ITEM (object));
-	return g_hash_table_lookup (self->pv->items, GUINT_TO_POINTER (item_id)) ? TRUE : FALSE;
+	return g_hash_table_lookup (self->pv->items, g_dbus_proxy_get_object_path (G_DBUS_PROXY (object))) != NULL;
 }
 
 static void
@@ -550,20 +322,23 @@ seahorse_keyring_deletable_iface (SeahorseDeletableIface *iface)
 }
 
 static void
-on_keyring_xlock_done (GnomeKeyringResult result,
-                       gpointer user_data)
+on_keyring_lock_done (GObject *source,
+                      GAsyncResult *result,
+                      gpointer user_data)
 {
 	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (g_async_result_get_source_object (user_data));
 	GError *error = NULL;
 
-	if (seahorse_gkr_propagate_error (result, &error))
+	secret_service_lock_finish (SECRET_SERVICE (source), result, NULL, &error);
+	if (error != NULL)
 		g_simple_async_result_take_error (res, error);
 
-	seahorse_gkr_keyring_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
-	g_simple_async_result_complete_in_idle (res);
+	refresh_collection (self);
+	g_simple_async_result_complete (res);
 
 	g_object_unref (self);
+	g_object_unref (res);
 }
 
 static void
@@ -573,14 +348,18 @@ seahorse_gkr_keyring_lock_async (SeahorseLockable *lockable,
                                  GAsyncReadyCallback callback,
                                  gpointer user_data)
 {
-	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (lockable);
+	SecretCollection *self = SECRET_COLLECTION (lockable);
 	GSimpleAsyncResult *res;
+	GList *objects;
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_gkr_keyring_lock_async);
 
-	gnome_keyring_lock (seahorse_gkr_keyring_get_name (self),
-	                    on_keyring_xlock_done, g_object_ref (res), g_object_unref);
+	objects = g_list_prepend (NULL, self);
+	secret_service_lock (secret_collection_get_service (self),
+	                     objects, cancellable, on_keyring_lock_done,
+	                     g_object_ref (res));
+	g_list_free (objects);
 
 	g_object_unref (res);
 }
@@ -600,20 +379,44 @@ seahorse_gkr_keyring_lock_finish (SeahorseLockable *lockable,
 }
 
 static void
+on_keyring_unlock_done (GObject *source,
+                        GAsyncResult *result,
+                        gpointer user_data)
+{
+	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
+	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (g_async_result_get_source_object (user_data));
+	GError *error = NULL;
+
+	secret_service_unlock_finish (SECRET_SERVICE (source), result, NULL, &error);
+	if (error != NULL)
+		g_simple_async_result_take_error (res, error);
+
+	refresh_collection (self);
+	g_simple_async_result_complete (res);
+
+	g_object_unref (self);
+	g_object_unref (res);
+}
+
+static void
 seahorse_gkr_keyring_unlock_async (SeahorseLockable *lockable,
                                    GTlsInteraction *interaction,
                                    GCancellable *cancellable,
                                    GAsyncReadyCallback callback,
                                    gpointer user_data)
 {
-	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (lockable);
+	SecretCollection *self = SECRET_COLLECTION (lockable);
 	GSimpleAsyncResult *res;
+	GList *objects;
 
 	res = g_simple_async_result_new (G_OBJECT (lockable), callback, user_data,
 	                                 seahorse_gkr_keyring_unlock_async);
 
-	gnome_keyring_unlock (seahorse_gkr_keyring_get_name (self), NULL,
-	                      on_keyring_xlock_done, g_object_ref (res), g_object_unref);
+	objects = g_list_prepend (NULL, self);
+	secret_service_unlock (secret_collection_get_service (self),
+	                       objects, cancellable, on_keyring_unlock_done,
+	                       g_object_ref (res));
+	g_list_free (objects);
 
 	g_object_unref (res);
 }
@@ -655,79 +458,18 @@ seahorse_keyring_viewable_iface (SeahorseViewableIface *iface)
 	iface->show_viewer = seahorse_gkr_keyring_show_viewer;
 }
 
-SeahorseGkrKeyring*
-seahorse_gkr_keyring_new (const gchar *keyring_name)
-{
-	return g_object_new (SEAHORSE_TYPE_GKR_KEYRING, "keyring-name", keyring_name, NULL);
-}
-
-const gchar*
-seahorse_gkr_keyring_get_name (SeahorseGkrKeyring *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), NULL);
-	return self->pv->keyring_name;
-}
-
 const gchar *
 seahorse_gkr_keyring_get_description (SeahorseGkrKeyring *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), NULL);
-	if (g_strcmp0 (self->pv->keyring_name, "login") == 0)
+	if (seahorse_gkr_backend_has_alias (NULL, "login", self))
 		return _("A keyring that is automatically unlocked on login");
 	return _("A keyring used to store passwords");
-}
-
-GnomeKeyringInfo*
-seahorse_gkr_keyring_get_info (SeahorseGkrKeyring *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), NULL);
-	require_keyring_info (self);
-	return self->pv->keyring_info;
-}
-
-void
-seahorse_gkr_keyring_set_info (SeahorseGkrKeyring *self, GnomeKeyringInfo *info)
-{
-	GObject *obj;
-	
-	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (self));
-	
-	if (self->pv->keyring_info)
-		gnome_keyring_info_free (self->pv->keyring_info);
-	if (info)
-		self->pv->keyring_info = gnome_keyring_info_copy (info);
-	else
-		self->pv->keyring_info = NULL;
-	
-	obj = G_OBJECT (self);
-	g_object_freeze_notify (obj);
-	seahorse_gkr_keyring_realize (self);
-	g_object_notify (obj, "keyring-info");
-	g_object_notify (obj, "locked");
-	g_object_thaw_notify (obj);
 }
 
 gboolean
 seahorse_gkr_keyring_get_is_default (SeahorseGkrKeyring *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), FALSE);
-	return self->pv->is_default;
-}
-
-void
-seahorse_gkr_keyring_set_is_default (SeahorseGkrKeyring *self, gboolean is_default)
-{
-	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (self));
-	self->pv->is_default = is_default;
-	g_object_notify (G_OBJECT (self), "is-default");
-}
-
-gboolean
-seahorse_gkr_keyring_get_locked (SeahorseGkrKeyring *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), TRUE);
-
-	if (!self->pv->keyring_info)
-		return TRUE;
-	return gnome_keyring_info_get_is_locked (self->pv->keyring_info);
+	return seahorse_gkr_backend_has_alias (NULL, "default", self);
 }

@@ -34,8 +34,6 @@
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 
-#include <gnome-keyring.h>
-
 #include <glib/gi18n.h>
 
 #include <string.h>

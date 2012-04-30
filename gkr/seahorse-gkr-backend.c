@@ -24,28 +24,49 @@
 #include "seahorse-gkr-actions.h"
 #include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-dialogs.h"
-#include "seahorse-gkr-operation.h"
 
 #include "seahorse-backend.h"
 #include "seahorse-progress.h"
 
-#include <gnome-keyring.h>
-
 #include <glib/gi18n.h>
+
+
+typedef SecretService MySecretService;
+typedef SecretServiceClass MySecretServiceClass;
+
+GType   my_secret_service_get_type (void);
+
+G_DEFINE_TYPE (MySecretService, my_secret_service, SECRET_TYPE_SERVICE);
+
+static void
+my_secret_service_init (MySecretService *self)
+{
+
+}
+
+static void
+my_secret_service_class_init (MySecretServiceClass *klass)
+{
+	klass->collection_gtype = SEAHORSE_TYPE_GKR_KEYRING;
+	klass->item_gtype = SEAHORSE_TYPE_GKR_ITEM;
+}
 
 enum {
 	PROP_0,
 	PROP_NAME,
 	PROP_LABEL,
 	PROP_DESCRIPTION,
-	PROP_ACTIONS
+	PROP_ACTIONS,
+	PROP_ALIASES
 };
 
 static SeahorseGkrBackend *gkr_backend = NULL;
 
 struct _SeahorseGkrBackend {
 	GObject parent;
+	SecretService *service;
 	GHashTable *keyrings;
+	GHashTable *aliases;
 	GtkActionGroup *actions;
 };
 
@@ -71,6 +92,89 @@ seahorse_gkr_backend_init (SeahorseGkrBackend *self)
 	self->actions = seahorse_gkr_backend_actions_instance ();
 	self->keyrings = g_hash_table_new_full (g_str_hash, g_str_equal,
 	                                        g_free, g_object_unref);
+	self->aliases = g_hash_table_new_full (g_str_hash, g_str_equal,
+	                                       g_free, g_free);
+}
+
+static void
+refresh_collection (SeahorseGkrBackend *self)
+{
+	GHashTable *seen = NULL;
+	GHashTableIter iter;
+	const gchar *object_path;
+	SeahorseGkrKeyring *keyring;
+	GList *keyrings;
+	GList *l;
+
+	seen = g_hash_table_new (g_str_hash, g_str_equal);
+
+	keyrings = secret_service_get_collections (self->service);
+
+	/* Add any keyrings we don't have */
+	for (l = keyrings; l != NULL; l = g_list_next (l)) {
+		object_path = g_dbus_proxy_get_object_path (l->data);
+
+		/* Don't list the session keyring */
+		if (g_strcmp0 (g_hash_table_lookup (self->aliases, "session"), object_path) == 0)
+			continue;
+
+		keyring = l->data;
+		g_hash_table_add (seen, (gpointer)object_path);
+
+		if (!g_hash_table_lookup (self->keyrings, object_path)) {
+			g_hash_table_insert (self->keyrings,
+			                     g_strdup (object_path),
+			                     g_object_ref (keyring));
+			gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (keyring));
+		}
+	}
+
+	/* Remove any that we didn't find */
+	g_hash_table_iter_init (&iter, self->keyrings);
+	while (g_hash_table_iter_next (&iter, (gpointer *)&object_path, NULL)) {
+		if (!g_hash_table_lookup (seen, object_path)) {
+			keyring = g_hash_table_lookup (self->keyrings, object_path);
+			g_object_ref (keyring);
+			g_hash_table_iter_remove (&iter);
+			gcr_collection_emit_removed (GCR_COLLECTION (self), G_OBJECT (keyring));
+			g_object_unref (keyring);
+		}
+	}
+
+	g_hash_table_destroy (seen);
+	g_list_free_full (keyrings, g_object_unref);
+}
+
+static void
+on_notify_collections (GObject *obj,
+                       GParamSpec *pspec,
+                       gpointer user_data)
+{
+	refresh_collection (SEAHORSE_GKR_BACKEND (user_data));
+}
+
+static void
+on_service_new (GObject *source,
+                GAsyncResult *result,
+                gpointer user_data)
+{
+	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (user_data);
+	GError *error = NULL;
+
+	self->service = secret_service_new_finish (result, &error);
+	if (error == NULL) {
+		g_signal_connect (self->service, "notify::collections", G_CALLBACK (on_notify_collections), self);
+		refresh_collection (self);
+
+		secret_service_ensure_collections (self->service, NULL, NULL, NULL);
+		secret_service_ensure_session (self->service, NULL, NULL, NULL);
+		seahorse_gkr_backend_load_async (self, NULL, NULL, NULL);
+	} else {
+		g_warning ("couldn't connect to secret service: %s", error->message);
+		g_error_free (error);
+	}
+
+	g_object_unref (self);
 }
 
 static void
@@ -80,7 +184,8 @@ seahorse_gkr_backend_constructed (GObject *obj)
 
 	G_OBJECT_CLASS (seahorse_gkr_backend_parent_class)->constructed (obj);
 
-	seahorse_gkr_backend_load_async (self, NULL, NULL, NULL);
+	secret_service_new (my_secret_service_get_type (), NULL, SECRET_SERVICE_NONE,
+	                    NULL, on_service_new, g_object_ref (self));
 }
 
 static void
@@ -104,6 +209,9 @@ seahorse_gkr_backend_get_property (GObject *obj,
 	case PROP_ACTIONS:
 		g_value_set_object (value, self->actions);
 		break;
+	case PROP_ALIASES:
+		g_value_set_boxed (value, self->aliases);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -115,7 +223,14 @@ seahorse_gkr_backend_dispose (GObject *obj)
 {
 	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (obj);
 
+	if (self->service) {
+		g_signal_handlers_disconnect_by_func (self->service, on_notify_collections, self);
+		g_object_unref (self->service);
+		self->service = NULL;
+	}
+
 	g_hash_table_remove_all (self->keyrings);
+	g_hash_table_remove_all (self->aliases);
 	gtk_action_group_set_sensitive (self->actions, FALSE);
 
 	G_OBJECT_CLASS (seahorse_gkr_backend_parent_class)->finalize (obj);
@@ -126,7 +241,10 @@ seahorse_gkr_backend_finalize (GObject *obj)
 {
 	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (obj);
 
+	g_assert (self->service == NULL);
+
 	g_hash_table_destroy (self->keyrings);
+	g_hash_table_destroy (self->aliases);
 	g_clear_object (&self->actions);
 
 	g_return_if_fail (gkr_backend == self);
@@ -149,6 +267,10 @@ seahorse_gkr_backend_class_init (SeahorseGkrBackendClass *klass)
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+
+	g_object_class_install_property (gobject_class, PROP_ALIASES,
+	             g_param_spec_boxed ("aliases", "aliases", "Aliases",
+	                                 G_TYPE_HASH_TABLE, G_PARAM_READABLE));
 }
 
 static guint
@@ -170,13 +292,17 @@ seahorse_gkr_backend_contains (GcrCollection *collection,
                                GObject *object)
 {
 	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (collection);
-	const gchar *keyring_name;
+	gboolean have;
+	gchar *uri;
 
 	if (!SEAHORSE_IS_GKR_KEYRING (object))
 		return FALSE;
 
-	keyring_name = seahorse_gkr_keyring_get_name (SEAHORSE_GKR_KEYRING (object));
-	return g_hash_table_lookup (self->keyrings, keyring_name) == object;
+	g_object_get (object, "uri", &uri, NULL);
+	have = (g_hash_table_lookup (self->keyrings, uri) == object);
+	g_free (uri);
+
+	return have;
 }
 
 static void
@@ -192,13 +318,7 @@ seahorse_gkr_backend_lookup_place (SeahorseBackend *backend,
                                    const gchar *uri)
 {
 	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (backend);
-
-	if (g_str_has_prefix (uri, "secret-service://")) {
-		uri += strlen ("secret-service://");
-		return g_hash_table_lookup (self->keyrings, uri);
-	}
-
-	return NULL;
+	return g_hash_table_lookup (self->keyrings, uri);
 }
 
 static void
@@ -228,14 +348,12 @@ seahorse_gkr_backend_get (void)
 	return gkr_backend;
 }
 
-SeahorseGkrKeyring *
-seahorse_gkr_backend_get_keyring (SeahorseGkrBackend *self,
-                                 const gchar *keyring_name)
+SecretService *
+seahorse_gkr_backend_get_service (SeahorseGkrBackend *self)
 {
 	self = self ? self : seahorse_gkr_backend_get ();
 	g_return_val_if_fail (SEAHORSE_IS_GKR_BACKEND (self), NULL);
-	g_return_val_if_fail (keyring_name != NULL, NULL);
-	return g_hash_table_lookup (self->keyrings, keyring_name);
+	return self->service;
 }
 
 GList *
@@ -246,212 +364,101 @@ seahorse_gkr_backend_get_keyrings (SeahorseGkrBackend *self)
 	return g_hash_table_get_values (self->keyrings);
 }
 
-void
-seahorse_gkr_backend_remove_keyring (SeahorseGkrBackend *self,
-                                     SeahorseGkrKeyring *keyring)
-{
-	const gchar *keyring_name;
-
-	self = self ? self : seahorse_gkr_backend_get ();
-	g_return_if_fail (SEAHORSE_IS_GKR_BACKEND (self));
-	g_return_if_fail (SEAHORSE_IS_GKR_KEYRING (keyring));
-
-	keyring_name = seahorse_gkr_keyring_get_name (keyring);
-	g_return_if_fail (g_hash_table_lookup (self->keyrings, keyring_name) == keyring);
-
-	g_object_ref (keyring);
-
-	g_hash_table_remove (self->keyrings, keyring_name);
-	gcr_collection_emit_removed (GCR_COLLECTION (self), G_OBJECT (keyring));
-
-	g_object_unref (keyring);
-}
-
-
 typedef struct {
-	SeahorseGkrBackend *backend;
-	GCancellable *cancellable;
-	gulong cancelled_sig;
-	gpointer request;
-	gint num_loads;
-} backend_load_closure;
+	gint outstanding;
+} LoadClosure;
 
 static void
-backend_load_free (gpointer data)
+on_load_read_alias (GObject *source,
+                    GAsyncResult *result,
+                    const gchar *alias,
+                    gpointer user_data)
 {
-	backend_load_closure *closure = data;
-	g_assert (closure->request == NULL);
-	g_assert (closure->num_loads == 0);
-	if (closure->cancellable && closure->cancelled_sig)
-		g_signal_handler_disconnect (closure->cancellable,
-		                             closure->cancelled_sig);
-	g_clear_object (&closure->cancellable);
-	g_clear_object (&closure->backend);
-	g_free (closure);
-}
-
-static void
-on_backend_load_default_keyring (GnomeKeyringResult result,
-                                 const gchar *default_name,
-                                 gpointer user_data)
-{
-	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (user_data);
-	const gchar *keyring_name;
-	gboolean is_default;
-	GList *keyrings, *l;
-
-	if (result != GNOME_KEYRING_RESULT_OK) {
-		if (result != GNOME_KEYRING_RESULT_CANCELLED)
-			g_warning ("couldn't get default keyring name: %s", gnome_keyring_result_to_message (result));
-		return;
-	}
-
-	keyrings = seahorse_gkr_backend_get_keyrings (self);
-	for (l = keyrings; l != NULL; l = g_list_next (l)) {
-		keyring_name = seahorse_gkr_keyring_get_name (l->data);
-		g_return_if_fail (keyring_name);
-
-		/* Remember default keyring could be null in strange circumstances */
-		is_default = default_name && g_str_equal (keyring_name, default_name);
-		g_object_set (l->data, "is-default", is_default, NULL);
-	}
-	g_list_free (keyrings);
-}
-
-static void
-on_backend_load_keyring_complete (GObject *object,
-                                  GAsyncResult *result,
-                                  gpointer user_data)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	SeahorseGkrKeyring *keyring = SEAHORSE_GKR_KEYRING (object);
-	backend_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GSimpleAsyncResult *async = G_SIMPLE_ASYNC_RESULT (user_data);
+	LoadClosure *load = g_simple_async_result_get_op_res_gpointer (async);
+	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (g_async_result_get_source_object (user_data));
 	GError *error = NULL;
+	gchar *path;
 
-	g_assert (closure->num_loads > 0);
-	closure->num_loads--;
-	seahorse_progress_end (closure->cancellable, keyring);
+	path = secret_service_read_alias_path_finish (SECRET_SERVICE (source), result, &error);
+	if (path != NULL) {
+		g_hash_table_replace (self->aliases, g_strdup (alias), path);
+		g_object_notify (G_OBJECT (self), "aliases");
+	}
 
-	if (!seahorse_place_load_finish (SEAHORSE_PLACE (keyring), result, &error))
-		g_simple_async_result_take_error (res, error);
+	if (error != NULL)
+		g_simple_async_result_take_error (async, error);
 
-	if (closure->num_loads == 0)
-		g_simple_async_result_complete (res);
+	load->outstanding--;
+	if (load->outstanding <= 0) {
+		refresh_collection (self);
+		g_simple_async_result_complete (async);
+	}
 
-	g_object_unref (res);
+	g_object_unref (self);
+	g_object_unref (async);
+
+}
+static void
+on_load_read_default_alias (GObject *source,
+                            GAsyncResult *result,
+                            gpointer user_data)
+{
+	on_load_read_alias (source, result, "default", user_data);
 }
 
 static void
-on_backend_load_list_keyring_names_complete (GnomeKeyringResult result,
-                                            GList *list,
-                                            gpointer user_data)
+on_load_read_session_alias (GObject *source,
+                            GAsyncResult *result,
+                            gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	backend_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	SeahorseGkrKeyring *keyring;
-	GError *error = NULL;
-	gchar *keyring_name;
-	GHashTableIter iter;
-	GHashTable *checks;
-	GList *l;
-
-	closure->request = NULL;
-
-	if (seahorse_gkr_propagate_error (result, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
-		return;
-	}
-
-	/* Load up a list of all the current names */
-	checks = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
-	g_hash_table_iter_init (&iter, closure->backend->keyrings);
-	while (g_hash_table_iter_next (&iter, (gpointer *)&keyring_name, (gpointer *)&keyring))
-		g_hash_table_insert (checks, g_strdup (keyring_name), g_object_ref (keyring));
-
-	for (l = list; l; l = g_list_next (l)) {
-		keyring_name = l->data;
-
-		/* Don't show the 'session' keyring */
-		if (g_str_equal (keyring_name, "session"))
-			continue;
-
-		keyring = g_hash_table_lookup (checks, keyring_name);
-
-		/* Already have a keyring */
-		if (keyring != NULL) {
-			g_object_ref (keyring);
-			g_hash_table_remove (checks, keyring_name);
-
-		/* Create a new keyring for this one */
-		} else {
-			keyring = seahorse_gkr_keyring_new (keyring_name);
-			g_hash_table_insert (closure->backend->keyrings,
-			                     g_strdup (keyring_name),
-			                     g_object_ref (keyring));
-			gcr_collection_emit_added (GCR_COLLECTION (closure->backend),
-			                           G_OBJECT (keyring));
-		}
-
-		/* Refresh the keyring as well, and track the load */
-		seahorse_place_load_async (SEAHORSE_PLACE (keyring), closure->cancellable,
-		                              on_backend_load_keyring_complete,
-		                              g_object_ref (res));
-		seahorse_progress_prep_and_begin (closure->cancellable, keyring, NULL);
-		closure->num_loads++;
-		g_object_unref (keyring);
-	}
-
-	g_hash_table_iter_init (&iter, checks);
-	while (g_hash_table_iter_next (&iter, (gpointer *)&keyring_name, (gpointer *)&keyring))
-		seahorse_gkr_backend_remove_keyring (closure->backend, keyring);
-	g_hash_table_destroy (checks);
-
-	if (list == NULL)
-		g_simple_async_result_complete_in_idle (res);
-
-	/* Get the default keyring in the background */
-	gnome_keyring_get_default_keyring (on_backend_load_default_keyring,
-	                                   g_object_ref (closure->backend),
-	                                   g_object_unref);
+	on_load_read_alias (source, result, "session", user_data);
 }
 
 static void
-on_backend_load_cancelled (GCancellable *cancellable,
-                           gpointer user_data)
+on_load_read_login_alias (GObject *source,
+                          GAsyncResult *result,
+                          gpointer user_data)
 {
-	backend_load_closure *closure = user_data;
-
-	if (closure->request)
-		gnome_keyring_cancel_request (closure->request);
+	on_load_read_alias (source, result, "login", user_data);
 }
+
 void
 seahorse_gkr_backend_load_async (SeahorseGkrBackend *self,
                                  GCancellable *cancellable,
                                  GAsyncReadyCallback callback,
                                  gpointer user_data)
 {
-	backend_load_closure *closure;
-	GSimpleAsyncResult *res;
+	LoadClosure *load;
+	GSimpleAsyncResult *async;
 
 	self = self ? self : seahorse_gkr_backend_get ();
 
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_gkr_backend_load_async);
-	closure = g_new0 (backend_load_closure, 1);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	closure->backend = g_object_ref (self);
-	g_simple_async_result_set_op_res_gpointer (res, closure, backend_load_free);
+	async = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
+	                                   seahorse_gkr_backend_load_async);
+	load = g_new0 (LoadClosure, 1);
+	load->outstanding = 0;
+	g_simple_async_result_set_op_res_gpointer (async, load, g_free);
 
-	closure->request = gnome_keyring_list_keyring_names (on_backend_load_list_keyring_names_complete,
-	                                                     g_object_ref (res), g_object_unref);
+	if (!self->service) {
+		g_simple_async_result_complete_in_idle (async);
+		g_object_unref (async);
+		return;
+	}
 
-	if (cancellable)
-		closure->cancelled_sig = g_cancellable_connect (cancellable,
-		                                                G_CALLBACK (on_backend_load_cancelled),
-		                                                closure, NULL);
+	secret_service_read_alias_path (self->service, "default", cancellable,
+	                                on_load_read_default_alias, g_object_ref (async));
+	load->outstanding++;
 
-	g_object_unref (res);
+	secret_service_read_alias_path (self->service, "session", cancellable,
+	                                on_load_read_session_alias, g_object_ref (async));
+	load->outstanding++;
+
+	secret_service_read_alias_path (self->service, "login", cancellable,
+	                                on_load_read_login_alias, g_object_ref (async));
+	load->outstanding++;
+
+	g_object_unref (async);
 }
 
 gboolean
@@ -468,4 +475,16 @@ seahorse_gkr_backend_load_finish (SeahorseGkrBackend *self,
 		return FALSE;
 
 	return TRUE;
+}
+
+gboolean
+seahorse_gkr_backend_has_alias (SeahorseGkrBackend *self,
+                                const gchar *alias,
+                                SeahorseGkrKeyring *keyring)
+{
+	const gchar *object_path;
+
+	self = self ? self : seahorse_gkr_backend_get ();
+	object_path = g_dbus_proxy_get_object_path (G_DBUS_PROXY (keyring));
+	return g_strcmp0 (g_hash_table_lookup (self->aliases, alias), object_path) == 0;
 }

@@ -47,12 +47,12 @@ GType                 seahorse_gkr_backend_get_type        (void) G_GNUC_CONST;
 
 SeahorseGkrBackend *  seahorse_gkr_backend_get             (void);
 
-SeahorseGkrKeyring *  seahorse_gkr_backend_get_keyring     (SeahorseGkrBackend *self,
-                                                            const gchar *keyring_name);
+SecretService *       seahorse_gkr_backend_get_service     (SeahorseGkrBackend *self);
 
 GList *               seahorse_gkr_backend_get_keyrings    (SeahorseGkrBackend *self);
 
-void                  seahorse_gkr_backend_remove_keyring  (SeahorseGkrBackend *self,
+gboolean              seahorse_gkr_backend_has_alias       (SeahorseGkrBackend *self,
+                                                            const gchar *alias,
                                                             SeahorseGkrKeyring *keyring);
 
 void                  seahorse_gkr_backend_load_async      (SeahorseGkrBackend *self,

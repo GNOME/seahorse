@@ -24,7 +24,7 @@
 #define __SEAHORSE_GKR_ITEM_H__
 
 #include <gtk/gtk.h>
-#include <gnome-keyring.h>
+#include <secret/secret.h>
 
 #include "seahorse-gkr.h"
 #include "seahorse-gkr-keyring.h"
@@ -53,12 +53,12 @@ typedef struct _SeahorseGkrItemClass SeahorseGkrItemClass;
 typedef struct _SeahorseGkrItemPrivate SeahorseGkrItemPrivate;
 
 struct _SeahorseGkrItem {
-	SeahorseObject parent;
+	SecretItem parent;
 	SeahorseGkrItemPrivate *pv;
 };
 
 struct _SeahorseGkrItemClass {
-    SeahorseObjectClass         parent_class;
+	SecretItemClass parent_class;
 };
 
 GType                        seahorse_gkr_item_get_type           (void);
@@ -69,32 +69,26 @@ SeahorseGkrItem *            seahorse_gkr_item_new                (SeahorseGkrKe
 
 void                         seahorse_gkr_item_refresh            (SeahorseGkrItem *self);
 
-void                         seahorse_gkr_item_realize            (SeahorseGkrItem *self);
-
-guint32                      seahorse_gkr_item_get_item_id        (SeahorseGkrItem *self);
-
-const gchar*                 seahorse_gkr_item_get_keyring_name   (SeahorseGkrItem *self);
-
-GnomeKeyringItemInfo*        seahorse_gkr_item_get_info           (SeahorseGkrItem *self);
-
-void                         seahorse_gkr_item_set_info           (SeahorseGkrItem *self,
-                                                                   GnomeKeyringItemInfo* info);
-
 gboolean                     seahorse_gkr_item_has_secret         (SeahorseGkrItem *self);
 
-const gchar*                 seahorse_gkr_item_get_secret         (SeahorseGkrItem *self);
-
-GnomeKeyringAttributeList*   seahorse_gkr_item_get_attributes     (SeahorseGkrItem *self);
-
-void                         seahorse_gkr_item_set_attributes     (SeahorseGkrItem *self,
-                                                                   GnomeKeyringAttributeList* attrs);
+SecretValue *                seahorse_gkr_item_get_secret         (SeahorseGkrItem *self);
 
 const gchar*                 seahorse_gkr_item_get_attribute      (SeahorseGkrItem *self, 
                                                                    const gchar *name);
 
-const gchar* 		     seahorse_gkr_find_string_attribute   (GnomeKeyringAttributeList *attrs, 
-             		                                           const gchar *name);
+const gchar*                 seahorse_gkr_find_string_attribute   (GHashTable *attrs,
+                                                                   const gchar *name);
 
 SeahorseGkrUse               seahorse_gkr_item_get_use            (SeahorseGkrItem *self);
+
+void                         seahorse_gkr_item_set_secret         (SeahorseGkrItem *self,
+                                                                   SecretValue *value,
+                                                                   GCancellable *cancellable,
+                                                                   GAsyncReadyCallback callback,
+                                                                   gpointer user_data);
+
+gboolean                     seahorse_gkr_item_set_secret_finish  (SeahorseGkrItem *self,
+                                                                   GAsyncResult *result,
+                                                                   GError **error);
 
 #endif /* __SEAHORSE_GKR_ITEM_H__ */

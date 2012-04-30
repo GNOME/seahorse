@@ -8,7 +8,7 @@ GCR_REQUIRED=3.3.4
 GTK_REQUIRED=2.90.0
 GNUPG_ACCEPTED="1.2 1.4 2.0"
 GPGME_REQUIRED=1.0.0
-GNOME_KEYRING_REQUIRED=2.25.5
+LIBSECRET_REQUIRED=0.4
 AVAHI_GLIB_REQUIRED=0.6
 
 # -----------------------------------------------------------------------------
@@ -328,17 +328,17 @@ else
 fi
 
 # -----------------------------------------------------------------------------
-# GNOME-KEYRING
+# LIBSECRET
 
-PKG_CHECK_MODULES([GNOME_KEYRING], gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED,
+PKG_CHECK_MODULES([LIBSECRET], libsecret-0 >= $LIBSECRET_REQUIRED,
                   [enable_gnome_keyring=yes],[enable_gnome_keyring=no])
 
 if test "$enable_gnome_keyring" = "no"; then
-    AC_MSG_ERROR([gnome-keyring library or headers not found.])
+    AC_MSG_ERROR([libsecret library or headers not found.])
 fi
 
-SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $GNOME_KEYRING_CFLAGS"
-SEAHORSE_LIBS="$SEAHORSE_LIBS $GNOME_KEYRING_LIBS"
+SEAHORSE_CFLAGS="$SEAHORSE_CFLAGS $LIBSECRET_CFLAGS"
+SEAHORSE_LIBS="$SEAHORSE_LIBS $LIBSECRET_LIBS"
 
 # -----------------------------------------------------------------------------
 # KEY SHARING

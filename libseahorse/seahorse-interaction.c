@@ -25,9 +25,8 @@
 #include "seahorse-interaction.h"
 #include "seahorse-passphrase.h"
 
-#include <gnome-keyring-memory.h>
-
 #include <glib/gi18n.h>
+#include <gcr/gcr.h>
 
 enum {
 	PROP_0,
@@ -127,8 +126,8 @@ seahorse_interaction_ask_password (GTlsInteraction *interaction,
 		pass = seahorse_passphrase_prompt_get (dialog);
 		length = strlen (pass);
 		g_tls_password_set_value_full (password,
-		                               (guchar *)gnome_keyring_memory_strdup (pass),
-		                               length, gnome_keyring_memory_free);
+		                               (guchar *)gcr_secure_memory_strdup (pass),
+		                               length, gcr_secure_memory_free);
 		res = G_TLS_INTERACTION_HANDLED;
 		break;
 	default:
