@@ -532,13 +532,17 @@ do_names (SeahorseWidget *swidget)
                                                      "gicon", UIDSIG_ICON, NULL);
 
         /* TRANSLATORS: The name and email set on the PGP key */
+        renderer = gtk_cell_renderer_text_new ();
+        g_object_set (renderer, "yalign", 0.0, "xalign", 0.0, NULL);
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
-                                                     -1, _("Name/Email"), gtk_cell_renderer_text_new (), 
+                                                     -1, _("Name/Email"), renderer,
                                                      "markup", UIDSIG_NAME, NULL);
 
         /* The signature ID column */
+        renderer = gtk_cell_renderer_text_new ();
+        g_object_set (renderer, "yalign", 0.0, "xalign", 0.0, NULL);
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget), 
-                                                     -1, _("Signature ID"), gtk_cell_renderer_text_new (), 
+                                                     -1, _("Signature ID"), renderer,
                                                      "text", UIDSIG_KEYID, NULL);
     }
 
