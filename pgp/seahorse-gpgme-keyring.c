@@ -859,7 +859,7 @@ seahorse_gpgme_keyring_finalize (GObject *object)
 {
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (object);
 
-	g_clear_object (self->pv->actions);
+	g_clear_object (&self->pv->actions);
 	g_hash_table_destroy (self->pv->keys);
 
 	/* All monitoring and scheduling should be done */
