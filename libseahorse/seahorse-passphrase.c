@@ -46,8 +46,9 @@
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkkeysyms-compat.h>
 
+#include <gcr/gcr.h>
+
 #include "seahorse-passphrase.h"
-#include "seahorse-secure-buffer.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 
@@ -228,7 +229,7 @@ seahorse_passphrase_prompt_show (const gchar *title,
 		gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
 		gtk_grid_attach (grid, widget, 0, 0, 1, 1);
 
-		buffer = seahorse_secure_buffer_new ();
+		buffer = gcr_secure_entry_buffer_new ();
 		entry = GTK_ENTRY (gtk_entry_new_with_buffer (buffer));
 		g_object_unref (buffer);
 		gtk_entry_set_visibility (entry, FALSE);
@@ -247,7 +248,7 @@ seahorse_passphrase_prompt_show (const gchar *title,
 	gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
 	gtk_grid_attach (grid, widget, 0, 1, 1, 1);
 
-	buffer = seahorse_secure_buffer_new ();
+	buffer = gcr_secure_entry_buffer_new ();
 	entry = GTK_ENTRY (gtk_entry_new_with_buffer (buffer));
 	g_object_unref (buffer);
 	gtk_widget_set_size_request (GTK_WIDGET (entry), 200, -1);

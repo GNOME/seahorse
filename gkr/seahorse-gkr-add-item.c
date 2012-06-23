@@ -24,7 +24,6 @@
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-keyring.h"
 
-#include "seahorse-secure-buffer.h"
 #include "seahorse-widget.h"
 #include "seahorse-util.h"
 
@@ -171,7 +170,7 @@ seahorse_gkr_add_item_show (GtkWindow *parent)
 	
 	widget = seahorse_widget_get_widget (swidget, "password-area");
 	g_return_if_fail (widget);
-	buffer = seahorse_secure_buffer_new ();
+	buffer = gcr_secure_entry_buffer_new ();
 	entry = gtk_entry_new_with_buffer (buffer);
 	g_object_unref (buffer);
 	gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (entry));

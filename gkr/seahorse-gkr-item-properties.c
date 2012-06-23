@@ -32,7 +32,6 @@
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-progress.h"
-#include "seahorse-secure-buffer.h"
 #include "seahorse-secure-memory.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
@@ -434,7 +433,7 @@ setup_main (SeahorseWidget *swidget)
 	                             seahorse_widget_get_widget (swidget, "login-field"), NULL);
 
 	/* Create the password entry */
-	buffer = seahorse_secure_buffer_new ();
+	buffer = gcr_secure_entry_buffer_new ();
 	widget = gtk_entry_new_with_buffer (buffer);
 	g_object_unref (buffer);
 

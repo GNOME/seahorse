@@ -58,7 +58,6 @@ libseahorse_la_SOURCES = \
 	seahorse-progress.c seahorse-progress.h \
 	seahorse-registry.c seahorse-registry.h \
 	seahorse-secure-memory.c seahorse-secure-memory.h \
-	seahorse-secure-buffer.c seahorse-secure-buffer.h \
 	seahorse-servers.c seahorse-servers.h \
 	seahorse-types.c seahorse-types.h \
 	seahorse-util.c seahorse-util.h \
