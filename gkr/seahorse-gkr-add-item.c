@@ -88,6 +88,7 @@ on_add_item_response (GtkDialog *dialog,
 	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	SecretCollection *collection;
 	GCancellable *cancellable;
+	GHashTable *attributes;
 	GtkWidget *widget;
 	SecretValue *secret;
 	const gchar *label;
@@ -112,12 +113,13 @@ on_add_item_response (GtkDialog *dialog,
 		                           -1, "text/plain");
 
 		cancellable = seahorse_gkr_dialog_begin_request (swidget);
+		attributes = g_hash_table_new (g_str_hash, g_str_equal);
 		secret_service_store (secret_collection_get_service (collection),
-		                      SECRET_SCHEMA_NOTE,
+		                      SECRET_SCHEMA_NOTE, attributes,
 		                      g_dbus_proxy_get_object_path (G_DBUS_PROXY (collection)),
 		                      label, secret, cancellable, on_item_stored,
-		                      g_object_ref (swidget),
-		                      NULL);
+		                      g_object_ref (swidget));
+		g_hash_table_unref (attributes);
 		g_object_unref (cancellable);
 
 	} else {
