@@ -31,7 +31,6 @@
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-progress.h"
-#include "seahorse-secure-memory.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 

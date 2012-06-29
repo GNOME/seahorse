@@ -26,7 +26,6 @@
 #include "seahorse-context.h"
 #include "seahorse-icons.h"
 #include "seahorse-registry.h"
-#include "seahorse-secure-memory.h"
 #include "seahorse-util.h"
 
 #include "seahorse-key-manager.h"
@@ -57,8 +56,6 @@ main (int argc, char **argv)
     GError *error = NULL;
     int ret = 0;
 
-    seahorse_secure_memory_init ();
-    
 #ifdef ENABLE_NLS
     bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
     bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
