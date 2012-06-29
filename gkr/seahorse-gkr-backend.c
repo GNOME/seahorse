@@ -57,7 +57,8 @@ enum {
 	PROP_LABEL,
 	PROP_DESCRIPTION,
 	PROP_ACTIONS,
-	PROP_ALIASES
+	PROP_ALIASES,
+	PROP_SERVICE
 };
 
 static SeahorseGkrBackend *gkr_backend = NULL;
@@ -89,7 +90,7 @@ seahorse_gkr_backend_init (SeahorseGkrBackend *self)
 	g_return_if_fail (gkr_backend == NULL);
 	gkr_backend = self;
 
-	self->actions = seahorse_gkr_backend_actions_instance ();
+	self->actions = seahorse_gkr_backend_actions_instance (self);
 	self->keyrings = g_hash_table_new_full (g_str_hash, g_str_equal,
 	                                        g_free, g_object_unref);
 	self->aliases = g_hash_table_new_full (g_str_hash, g_str_equal,
@@ -167,13 +168,13 @@ on_service_new (GObject *source,
 		refresh_collection (self);
 
 		secret_service_ensure_collections (self->service, NULL, NULL, NULL);
-		secret_service_ensure_session (self->service, NULL, NULL, NULL);
 		seahorse_gkr_backend_load_async (self, NULL, NULL, NULL);
 	} else {
 		g_warning ("couldn't connect to secret service: %s", error->message);
 		g_error_free (error);
 	}
 
+	g_object_notify (G_OBJECT (self), "service");
 	g_object_unref (self);
 }
 
@@ -184,7 +185,7 @@ seahorse_gkr_backend_constructed (GObject *obj)
 
 	G_OBJECT_CLASS (seahorse_gkr_backend_parent_class)->constructed (obj);
 
-	secret_service_new (my_secret_service_get_type (), NULL, SECRET_SERVICE_NONE,
+	secret_service_new (my_secret_service_get_type (), NULL, SECRET_SERVICE_OPEN_SESSION,
 	                    NULL, on_service_new, g_object_ref (self));
 }
 
@@ -211,6 +212,9 @@ seahorse_gkr_backend_get_property (GObject *obj,
 		break;
 	case PROP_ALIASES:
 		g_value_set_boxed (value, self->aliases);
+		break;
+	case PROP_SERVICE:
+		g_value_set_object (value, self->service);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -271,6 +275,10 @@ seahorse_gkr_backend_class_init (SeahorseGkrBackendClass *klass)
 	g_object_class_install_property (gobject_class, PROP_ALIASES,
 	             g_param_spec_boxed ("aliases", "aliases", "Aliases",
 	                                 G_TYPE_HASH_TABLE, G_PARAM_READABLE));
+
+	g_object_class_install_property (gobject_class, PROP_SERVICE,
+	            g_param_spec_object ("service", "Service", "Service",
+	                                 SECRET_TYPE_SERVICE, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 }
 
 static guint

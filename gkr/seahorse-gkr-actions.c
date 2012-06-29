@@ -48,6 +48,7 @@ GType   seahorse_gkr_backend_actions_get_type           (void) G_GNUC_CONST;
 
 typedef struct {
 	SeahorseActions parent;
+	gboolean initialized;
 } SeahorseGkrBackendActions;
 
 typedef struct {
@@ -98,11 +99,19 @@ static const gchar* BACKEND_UI =
 "</ui>";
 
 static void
-seahorse_gkr_backend_actions_init (SeahorseGkrBackendActions *self)
+on_backend_notify_service (GObject *obj,
+                           GParamSpec *pspec,
+                           gpointer user_data)
 {
+	SeahorseGkrBackendActions *self = SEAHORSE_GKR_BACKEND_ACTIONS (user_data);
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 
-	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
+	if (self->initialized)
+		return;
+	if (seahorse_gkr_backend_get_service (SEAHORSE_GKR_BACKEND (obj)) == NULL)
+		return;
+
+	self->initialized = TRUE;
 	gtk_action_group_add_actions (actions, BACKEND_ACTIONS, G_N_ELEMENTS (BACKEND_ACTIONS), NULL);
 	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), BACKEND_UI);
 
@@ -115,15 +124,22 @@ seahorse_gkr_backend_actions_init (SeahorseGkrBackendActions *self)
 }
 
 static void
+seahorse_gkr_backend_actions_init (SeahorseGkrBackendActions *self)
+{
+	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
+	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
+}
+
+static void
 seahorse_gkr_backend_actions_class_init (SeahorseGkrBackendActionsClass *klass)
 {
 
 }
 
 GtkActionGroup *
-seahorse_gkr_backend_actions_instance (void)
+seahorse_gkr_backend_actions_instance (SeahorseGkrBackend *backend)
 {
-	static GtkActionGroup *actions = NULL;
+	static SeahorseGkrBackendActions *actions = NULL;
 
 	if (actions == NULL) {
 		actions = g_object_new (SEAHORSE_TYPE_GKR_BACKEND_ACTIONS,
@@ -131,11 +147,18 @@ seahorse_gkr_backend_actions_instance (void)
 		                        NULL);
 		g_object_add_weak_pointer (G_OBJECT (actions),
 		                           (gpointer *)&actions);
+
+		g_signal_connect_object (backend, "notify::service",
+		                         G_CALLBACK (on_backend_notify_service),
+		                         actions, G_CONNECT_AFTER);
+
+		if (seahorse_gkr_backend_get_service (backend) != NULL)
+			on_backend_notify_service (G_OBJECT (backend), NULL, actions);
 	} else {
 		g_object_ref (actions);
 	}
 
-	return actions;
+	return GTK_ACTION_GROUP (actions);
 }
 
 static void
