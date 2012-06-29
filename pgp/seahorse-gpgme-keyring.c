@@ -837,7 +837,8 @@ seahorse_gpgme_keyring_dispose (GObject *object)
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (object);
 	GList *l;
 
-	gtk_action_group_set_sensitive (self->pv->actions, TRUE);
+	if (self->pv->actions)
+		gtk_action_group_set_sensitive (self->pv->actions, TRUE);
 	g_hash_table_remove_all (self->pv->keys);
 
 	cancel_scheduled_refresh (self);
