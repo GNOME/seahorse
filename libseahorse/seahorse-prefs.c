@@ -435,7 +435,7 @@ seahorse_prefs_new (GtkWindow *parent)
 {
     SeahorseWidget *swidget;
 
-#if !(WITH_KEYSERVER && WITH_SHARING)
+#ifndef WITH_KEYSERVER
     GtkWidget *widget = NULL;
 #endif
 
