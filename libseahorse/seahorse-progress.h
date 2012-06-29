@@ -54,6 +54,11 @@ void          seahorse_progress_show            (GCancellable *cancellable,
                                                  const gchar *title,
                                                  gboolean delayed);
 
+void          seahorse_progress_show_with_notice (GCancellable *cancellable,
+                                                 const gchar *title,
+                                                 const gchar *notice,
+                                                 gboolean delayed);
+
 void          seahorse_progress_attach          (GCancellable *cancellable,
                                                  SeahorseWidget *swidget);
 

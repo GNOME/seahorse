@@ -47,6 +47,7 @@ typedef struct {
 
 	SeahorseWidget *swidget;
 	gchar *title;
+	gchar *notice;
 	gboolean showing;
 
 	GQueue *parts;
@@ -133,6 +134,7 @@ tracked_task_free (gpointer data)
 	g_queue_foreach (task->parts, (GFunc)tracked_part_free, NULL);
 	g_queue_free (task->parts);
 	g_free (task->title);
+	g_free (task->notice);
 	if (task->swidget)
 		g_object_unref (task->swidget);
 	g_free (task);
@@ -547,6 +549,13 @@ on_timeout_show_progress (gpointer user_data)
 		g_free (text);
 	}
 
+	/* Setup the notice */
+	if (task->notice) {
+		widget = seahorse_widget_get_widget (swidget, "progress-notice");
+		gtk_label_set_label (GTK_LABEL (widget), task->notice);
+		gtk_widget_show (widget);
+	}
+
 	/* Setup the cancel button */
 	widget = seahorse_widget_get_widget (swidget, "progress-cancel");
 	g_signal_connect (widget, "clicked", G_CALLBACK (on_cancel_button_clicked),
@@ -565,6 +574,15 @@ void
 seahorse_progress_show (GCancellable *cancellable,
                         const gchar *title,
                         gboolean delayed)
+{
+	seahorse_progress_show_with_notice (cancellable, title, NULL, delayed);
+}
+
+void
+seahorse_progress_show_with_notice (GCancellable *cancellable,
+                                    const gchar *title,
+                                    const gchar *notice,
+                                    gboolean delayed)
 {
 	TrackedTask *task;
 
@@ -588,6 +606,7 @@ seahorse_progress_show (GCancellable *cancellable,
 
 	g_free (task->title);
 	task->title = g_strdup (title);
+	task->notice = g_strdup (notice);
 	task->showing = TRUE;
 
 	if (delayed)

@@ -209,6 +209,7 @@ seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
 	GCancellable *cancellable;
 	const gchar *pass;
 	GtkDialog *dialog;
+	const gchar *notice;
 
 	dialog = seahorse_passphrase_prompt_show (_("Passphrase for New PGP Key"),
 	                                          _("Enter the passphrase for your new key twice."),
@@ -220,7 +221,14 @@ seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
 		                                      pass, type, bits, expires,
 		                                      cancellable, on_generate_key_complete,
 		                                      NULL);
-		seahorse_progress_show (cancellable, _("Generating key"), FALSE);
+
+		/* Has line breaks because GtkLabel is completely broken WRT wrapping */
+		notice = _("When creating a key we need to generate a lot of\n"
+		           "random data and we need you to help. It's a good\n"
+		           "idea to perform some other action like typing on\n"
+		           "the keyboard, moving the mouse, using applications.\n"
+		           "This gives the system the random data that it needs.");
+		seahorse_progress_show_with_notice (cancellable, _("Generating key"), notice, FALSE);
 		g_object_unref (cancellable);
 	}
 
