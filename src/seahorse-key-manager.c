@@ -225,6 +225,15 @@ on_filter_changed (GtkEntry* entry,
 	}
 }
 
+static gboolean
+on_start_interactive_search (GtkTreeView *treeview,
+                             gpointer user_data)
+{
+	SeahorseKeyManager *self = SEAHORSE_KEY_MANAGER (user_data);
+	gtk_widget_grab_focus (GTK_WIDGET (self->pv->filter_entry));
+	return FALSE;
+}
+
 static void 
 import_files (SeahorseKeyManager* self,
               const gchar** uris)
@@ -768,7 +777,8 @@ seahorse_key_manager_constructed (GObject *object)
 	/* For the filtering */
 	g_signal_connect_object (GTK_EDITABLE (self->pv->filter_entry), "changed", 
 	                         G_CALLBACK (on_filter_changed), self, 0);
-
+	g_signal_connect (self->pv->view, "start-interactive-search",
+	                  G_CALLBACK (on_start_interactive_search), self);
 
 	/* Set focus to the current key list */
 	gtk_widget_grab_focus (GTK_WIDGET (self->pv->view));
