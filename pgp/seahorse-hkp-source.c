@@ -35,6 +35,7 @@
 #include "seahorse-servers.h"
 
 #include "seahorse-object-list.h"
+#include "seahorse-place.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
