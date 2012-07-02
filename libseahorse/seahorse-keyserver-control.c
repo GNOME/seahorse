@@ -21,7 +21,7 @@
 
 #include <config.h>
 
-#include "seahorse-context.h"
+#include "seahorse-application.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
@@ -68,7 +68,7 @@ on_keyserver_changed (GtkComboBox *widget, SeahorseKeyserverControl *self)
 
 	if (self->settings_key) {
 		text = seahorse_keyserver_control_selected (self);
-		g_settings_set_string (seahorse_context_settings (NULL),
+		g_settings_set_string (seahorse_application_settings (NULL),
 		                       self->settings_key, text ? text : "");
 		g_free (text);
 	}
@@ -98,11 +98,11 @@ seahorse_keyserver_control_constructed (GObject *object)
 
 	populate_combo (self, TRUE);
 	g_signal_connect_object (self, "changed", G_CALLBACK (on_keyserver_changed), self, 0);
-	g_signal_connect_object (seahorse_context_pgp_settings (NULL), "changed::keyserver",
+	g_signal_connect_object (seahorse_application_pgp_settings (NULL), "changed::keyserver",
 	                         G_CALLBACK (on_settings_keyserver_changed), self, 0);
 	if (self->settings_key) {
 		detailed = g_strdup_printf ("changed::%s", self->settings_key);
-		g_signal_connect_object (seahorse_context_settings (NULL), detailed,
+		g_signal_connect_object (seahorse_application_settings (NULL), detailed,
 		                         G_CALLBACK (on_settings_key_changed), self, 0);
 		g_free (detailed);
 	}
@@ -242,7 +242,7 @@ populate_combo (SeahorseKeyserverControl *skc, gboolean with_key)
 
     /* Get the appropriate selection */
     if (with_key && skc->settings_key)
-        chosen = g_settings_get_string (seahorse_context_settings (NULL), skc->settings_key);
+        chosen = g_settings_get_string (seahorse_application_settings (NULL), skc->settings_key);
     else {
         if (gtk_combo_box_get_active_iter (combo, &iter)) {
             gtk_tree_model_get (gtk_combo_box_get_model (combo), &iter,

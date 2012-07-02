@@ -412,30 +412,13 @@ on_key_import_clipboard (GtkAction* action, SeahorseKeyManager* self)
 	gtk_clipboard_request_text (board, (GtkClipboardTextReceivedFunc)on_clipboard_received, self);
 }
 
-static gboolean
-quit_app_later (gpointer unused)
-{
-	seahorse_context_destroy (seahorse_context_instance ());
-	return FALSE;
-}
-
-
 static void 
-on_app_quit (GtkAction* action, SeahorseKeyManager* self) 
+on_app_quit (GtkAction* action,
+             SeahorseKeyManager* self)
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	g_idle_add (quit_app_later, NULL);
-}
-
-/* When this window closes we quit seahorse */
-static gboolean 
-on_delete_event (GtkWidget* widget, GdkEvent* event, SeahorseKeyManager* self) 
-{
-	g_return_val_if_fail (SEAHORSE_IS_KEY_MANAGER (self), FALSE);
-	g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-	g_idle_add (quit_app_later, NULL);
-	return TRUE;
+	g_application_quit (G_APPLICATION (seahorse_application_get ()));
 }
 
 static const gchar *
@@ -712,10 +695,6 @@ seahorse_key_manager_constructed (GObject *object)
 	                         G_CALLBACK (on_item_filter_changed), self, 0);
 	on_item_filter_changed (self->pv->settings, "item-filter", self);
 
-	/* close event */
-	g_signal_connect_object (seahorse_widget_get_toplevel (SEAHORSE_WIDGET (self)), 
-	                         "delete-event", G_CALLBACK (on_delete_event), self, 0);
-
 	/* first time signals */
 	g_signal_connect_object (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "import-button"), 
 	                         "clicked", G_CALLBACK (on_keymanager_import_button), self, 0);
@@ -847,16 +826,14 @@ seahorse_key_manager_class_init (SeahorseKeyManagerClass *klass)
 	catalog_class->get_focused_place = seahorse_key_manager_get_focused_place;
 }
 
-SeahorseWidget *
+void
 seahorse_key_manager_show (void)
 {
-	SeahorseKeyManager *self;
+	SeahorseWidget *self;
 
-	self = g_object_new (SEAHORSE_TYPE_KEY_MANAGER,
-	                     "name", "key-manager",
-	                     NULL);
-
-	g_object_ref_sink (self);
-
-	return SEAHORSE_WIDGET (self);
+	self = seahorse_widget_find ("key-manager");
+	if (self != NULL)
+		gtk_window_present (GTK_WINDOW (seahorse_widget_get_widget (self, self->name)));
+	else
+		g_object_new (SEAHORSE_TYPE_KEY_MANAGER, "name", "key-manager", NULL);
 }

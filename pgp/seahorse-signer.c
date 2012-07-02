@@ -81,7 +81,7 @@ seahorse_signer_get (GtkWindow *parent)
     seahorse_combo_keys_attach (GTK_COMBO_BOX (combo), collection, NULL);
     g_object_unref (collection);
 
-    settings = seahorse_context_pgp_settings (NULL);
+    settings = seahorse_application_pgp_settings (NULL);
 
     /* Select the last key used */
     id = g_settings_get_string (settings, "last-signer");

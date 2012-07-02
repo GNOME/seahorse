@@ -26,7 +26,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "seahorse-context.h"
+#include "seahorse-application.h"
 
 #define SEAHORSE_TYPE_WIDGET            (seahorse_widget_get_type ())
 #define SEAHORSE_WIDGET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_WIDGET, SeahorseWidget))

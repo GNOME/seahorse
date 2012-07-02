@@ -22,6 +22,7 @@
 
 #include <glib/gi18n.h>
 
+#include "seahorse-application.h"
 #include "seahorse-icons.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-prefs.h"
@@ -119,7 +120,7 @@ save_keyservers (GtkTreeModel *model)
 	}
 
 	g_ptr_array_add (values, NULL);
-	g_settings_set_strv (seahorse_context_pgp_settings (NULL), "keyservers",
+	g_settings_set_strv (seahorse_application_pgp_settings (NULL), "keyservers",
 	                     (const gchar* const*)values->pdata);
 	g_ptr_array_free (values, TRUE);
 }
@@ -394,7 +395,7 @@ setup_keyservers (SeahorseWidget *swidget)
 	g_signal_connect (selection, "changed", G_CALLBACK (keyserver_sel_changed), swidget);
 
 	gtk_builder_connect_signals (swidget->gtkbuilder, swidget);
-	g_signal_connect_object (seahorse_context_pgp_settings (NULL), "changed::keyserver",
+	g_signal_connect_object (seahorse_application_pgp_settings (NULL), "changed::keyserver",
 	                         G_CALLBACK (on_settings_keyserver_changed), swidget, 0);
 
 	widget = seahorse_widget_get_widget (swidget, "keyserver-publish");
@@ -409,12 +410,12 @@ setup_keyservers (SeahorseWidget *swidget)
 
 	widget = seahorse_widget_get_widget (swidget, "auto_retrieve");
 	g_return_if_fail (widget != NULL);
-	g_settings_bind (seahorse_context_settings (NULL), "server-auto-retrieve",
+	g_settings_bind (seahorse_application_settings (NULL), "server-auto-retrieve",
 	                 widget, "active", G_SETTINGS_BIND_DEFAULT);
 
 	widget = seahorse_widget_get_widget (swidget, "auto_sync");
 	g_return_if_fail (widget != NULL);
-	g_settings_bind (seahorse_context_settings (NULL), "server-auto-publish",
+	g_settings_bind (seahorse_application_settings (NULL), "server-auto-publish",
 	                 widget, "active", G_SETTINGS_BIND_DEFAULT);
 }
 

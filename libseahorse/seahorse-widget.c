@@ -77,9 +77,6 @@ G_MODULE_EXPORT gboolean on_widget_delete_event  (GtkWidget             *widget,
                                                        GdkEvent              *event,
                                                        SeahorseWidget        *swidget);
 
-static void     context_destroyed    (SeahorseContext       *sctx,
-                                      SeahorseWidget        *swidget);
-
 static GObjectClass *parent_class = NULL;
 
 /* Hash of widgets with name as key */
@@ -134,6 +131,13 @@ seahorse_widget_constructed (GObject *object)
 		if (width > 0 && height > 0)
 			gtk_window_resize (window, width, height);
 	}
+
+	if(!widgets)
+		widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
+	g_hash_table_insert (widgets, g_strdup (self->name), self);
+
+	gtk_application_add_window (seahorse_application_get (),
+	                            GTK_WINDOW (seahorse_widget_get_widget (self, self->name)));
 }
 
 /**
@@ -178,19 +182,6 @@ class_init (SeahorseWidgetClass *klass)
 }
 
 /**
-* sctx: ignored
-* swidget: The swidget being destroyed
-*
-* Destroy widget when context is destroyed
-*
-**/
-static void
-context_destroyed (SeahorseContext *sctx, SeahorseWidget *swidget)
-{
-	seahorse_widget_destroy (swidget);
-}
-
-/**
 * swidget: The #SeahorseWidget being initialised
 *
 * Connects the destroy-signal
@@ -199,8 +190,7 @@ context_destroyed (SeahorseContext *sctx, SeahorseWidget *swidget)
 static void
 object_init (SeahorseWidget *swidget)
 {
-	g_signal_connect_after (SCTX_APP(), "destroy",
-	                        G_CALLBACK (context_destroyed), swidget);
+
 }
 
 static void
@@ -240,7 +230,8 @@ object_finalize (GObject *gobject)
     	}
     }
 
-	g_signal_handlers_disconnect_by_func (SCTX_APP (), context_destroyed, swidget);
+	gtk_application_remove_window (seahorse_application_get (),
+	                               GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)));
 
     if (seahorse_widget_get_widget (swidget, swidget->name))
         gtk_widget_destroy (GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name)));
@@ -250,7 +241,7 @@ object_finalize (GObject *gobject)
 
 	g_clear_object (&swidget->settings);
 	g_free (swidget->name);
-	
+
 	G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
@@ -393,10 +384,6 @@ seahorse_widget_new (const gchar *name, GtkWindow *parent)
 
     /* If widget doesn't already exist, create & insert into hash */
     swidget = g_object_new (SEAHORSE_TYPE_WIDGET, "name", name, NULL);
-    if(!widgets)
-        widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
-    g_hash_table_insert (widgets, g_strdup (name), swidget);
-    
     if (parent != NULL) {
         window = GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name));
         gtk_window_set_transient_for (window, parent);

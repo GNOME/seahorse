@@ -19,8 +19,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "seahorse-application.h"
 #include "seahorse-cleanup.h"
-#include "seahorse-context.h"
 #include "seahorse-servers.h"
 
 #include <string.h>
@@ -103,7 +103,7 @@ seahorse_servers_get_uris (void)
 	gchar *name;
 	guint i;
 
-	servers = g_settings_get_strv (seahorse_context_pgp_settings (NULL), "keyservers");
+	servers = g_settings_get_strv (seahorse_application_pgp_settings (NULL), "keyservers");
 
 	/* The values are 'uri name', remove the name part */
 	for (i = 0; servers[i] != NULL; i++) {
@@ -123,7 +123,7 @@ seahorse_servers_get_names (void)
 	gchar *name;
 	guint i;
 
-	servers = g_settings_get_strv (seahorse_context_pgp_settings (NULL),
+	servers = g_settings_get_strv (seahorse_application_pgp_settings (NULL),
 	                               "keyservers");
 
 	/* The values are 'uri name', remove the value part */

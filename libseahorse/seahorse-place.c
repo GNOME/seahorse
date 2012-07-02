@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include "seahorse-context.h"
 #include "seahorse-marshal.h"
 #include "seahorse-object.h"
 #include "seahorse-registry.h"

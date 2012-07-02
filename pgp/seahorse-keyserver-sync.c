@@ -51,7 +51,7 @@ on_transfer_upload_complete (GObject *object,
 	gchar *publish_to;
 
 	if (!seahorse_pgp_backend_transfer_finish (SEAHORSE_PGP_BACKEND (object), result, &error)) {
-		publish_to = g_settings_get_string (seahorse_context_settings (NULL),
+		publish_to = g_settings_get_string (seahorse_application_settings (NULL),
 		                                    "server-publish-to");
 		seahorse_util_handle_error (&error, NULL,
 		                            _("Couldn't publish keys to server"), publish_to);
@@ -112,7 +112,7 @@ update_message (SeahorseWidget *swidget)
 	widget2 = seahorse_widget_get_widget (swidget, "sync-message");
 	sync_button = seahorse_widget_get_widget (swidget, "sync-button");
 
-	text = g_settings_get_string (seahorse_context_settings (NULL),
+	text = g_settings_get_string (seahorse_application_settings (NULL),
 	                              "server-publish-to");
 	if (text && text[0]) {
 		gtk_widget_show (widget);
@@ -167,7 +167,7 @@ seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
 
     /* The right help message */
     update_message (swidget);
-    g_signal_connect_object (seahorse_context_settings (NULL), "changed::server-publish-to",
+    g_signal_connect_object (seahorse_application_settings (NULL), "changed::server-publish-to",
                              G_CALLBACK (on_settings_publish_to_changed), swidget, 0);
 
     keys = g_list_copy (keys);
@@ -222,7 +222,7 @@ seahorse_keyserver_sync (GList *keys)
 	g_strfreev (keyservers);
 
 	/* Publishing keys online */
-	keyserver = g_settings_get_string (seahorse_context_settings (NULL),
+	keyserver = g_settings_get_string (seahorse_application_settings (NULL),
 	                                   "server-publish-to");
 	if (keyserver && keyserver[0]) {
 		source = seahorse_pgp_backend_lookup_remote (NULL, keyserver);

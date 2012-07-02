@@ -22,90 +22,46 @@
 
 #include "config.h"
 
+#include "seahorse-application.h"
 #include "seahorse-cleanup.h"
-#include "seahorse-context.h"
-#include "seahorse-icons.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 #include "seahorse-key-manager.h"
 
-#include "gkr/seahorse-gkr.h"
-#include "pgp/seahorse-pgp.h"
-#include "ssh/seahorse-ssh.h"
-#include "pkcs11/seahorse-pkcs11.h"
+#include <glib/gi18n.h>
 
 #include <locale.h>
 #include <stdlib.h>
-  
-#include <glib/gi18n.h>
 
-static gboolean show_version = FALSE;
+static void
+on_application_activate (GApplication *application,
+                         gpointer user_data)
+{
+	seahorse_key_manager_show ();
+}
 
 /* Initializes context and preferences, then loads key manager */
 int
 main (int argc, char **argv)
 {
-	SeahorseWidget *swidget;
-	SeahorseContext *context;
-
-    static GOptionEntry options[] = {
-        { "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("Version of this application"), NULL },
-        { NULL, 0, 0, 0, NULL, NULL, NULL }
-    };
-    GError *error = NULL;
-    int ret = 0;
+	GtkApplication *application;
+	int status;
 
 #ifdef ENABLE_NLS
-    bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-    textdomain (GETTEXT_PACKAGE);
+	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
 #endif
 
-    if (!gtk_init_with_args (&argc, &argv, _("Passwords and Keys"), options, GETTEXT_PACKAGE, &error)) {
-        g_printerr ("seahorse: %s\n", error->message);
-        g_error_free (error);
-        exit (1);
-    }
+	g_type_init ();
 
-    if (show_version) {
-        g_print ("%s\n", PACKAGE_STRING);
-#ifdef WITH_PGP
-        g_print ("GNUPG: %s (%d.%d.%d)\n", GNUPG, GPG_MAJOR, GPG_MINOR, GPG_MICRO);
-#endif
-        exit (1);
-    }
+	application = seahorse_application_new ();
+	g_signal_connect (application, "activate", G_CALLBACK (on_application_activate), NULL);
+	status = g_application_run (G_APPLICATION (application), argc, argv);
 
-    /* Insert Icons into Stock */ 
-    seahorse_icons_init ();
+	seahorse_cleanup_perform ();
+	g_object_unref (application);
 
-    /* Make the default SeahorseContext */
-    seahorse_context_create ();
-    context = seahorse_context_instance ();
-
-    /* Initialize the various components */
-#ifdef WITH_PGP
-    seahorse_pgp_backend_initialize ();
-#endif
-#ifdef WITH_SSH
-    seahorse_ssh_backend_initialize ();
-#endif
-#ifdef WITH_PKCS11
-    seahorse_pkcs11_backend_initialize ();
-#endif
-    seahorse_gkr_backend_initialize ();
-
-    swidget = seahorse_key_manager_show ();
-
-    g_object_ref (context);
-    g_signal_connect_after (context, "destroy", gtk_main_quit, NULL);
-
-    gtk_main ();
-
-    seahorse_cleanup_perform ();
-
-    g_object_unref (swidget);
-    g_object_unref (context);
-
-    return ret;
+	return status;
 }

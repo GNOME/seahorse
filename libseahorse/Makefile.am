@@ -30,12 +30,12 @@ endif
 libseahorse_la_SOURCES = \
 	seahorse-action.c seahorse-action.h \
 	seahorse-actions.c seahorse-actions.h \
+	seahorse-application.c seahorse-application.h \
 	seahorse-backend.c seahorse-backend.h \
 	seahorse-bind.c seahorse-bind.h \
 	seahorse-catalog.c seahorse-catalog.h \
 	seahorse-cleanup.c seahorse-cleanup.h \
 	seahorse-collection.c seahorse-collection.h \
-	seahorse-context.c seahorse-context.h \
 	seahorse-debug.c seahorse-debug.h \
 	seahorse-delete-dialog.c seahorse-delete-dialog.h \
 	seahorse-deletable.c seahorse-deletable.h \

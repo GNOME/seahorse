@@ -250,7 +250,7 @@ select_inital_keyservers (SeahorseWidget *swidget)
 	gchar *name;
 	guint i;
 
-	names = g_settings_get_strv (seahorse_context_settings (NULL), "last-search-servers");
+	names = g_settings_get_strv (seahorse_application_settings (NULL), "last-search-servers");
 
 	/* Close the expander if all servers are selected */
 	widget = seahorse_widget_get_widget (swidget, "search-where");
@@ -418,12 +418,12 @@ on_keyserver_search_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	/* Get search text and save it for next time */
 	search = gtk_entry_get_text (GTK_ENTRY (widget));
 	g_return_if_fail (search != NULL && search[0] != 0);
-	g_settings_set_string (seahorse_context_settings (NULL), "last-search-text", search);
+	g_settings_set_string (seahorse_application_settings (NULL), "last-search-text", search);
 
 	/* The keyservers to search, and save for next time */
 	selection = get_keyserver_selection (swidget);
 	g_return_if_fail (selection->uris != NULL);
-	g_settings_set_strv (seahorse_context_settings (NULL), "last-search-servers",
+	g_settings_set_strv (seahorse_application_settings (NULL), "last-search-servers",
 	                     selection->all ? NULL : (const gchar * const*)selection->uris->pdata);
 
 	/* Open the new result window */
@@ -474,7 +474,7 @@ seahorse_keyserver_search_show (GtkWindow *parent)
 	widget = seahorse_widget_get_widget (swidget, "search-text");
 	g_return_val_if_fail (widget != NULL, window);
 
-	search = g_settings_get_string (seahorse_context_settings (NULL),
+	search = g_settings_get_string (seahorse_application_settings (NULL),
 	                                "last-search-text");
 	if (search != NULL) {
 		gtk_entry_set_text (GTK_ENTRY (widget), search);
@@ -483,7 +483,7 @@ seahorse_keyserver_search_show (GtkWindow *parent)
 	}
 
 	/* The key servers to list */
-	settings = seahorse_context_pgp_settings (NULL);
+	settings = seahorse_application_pgp_settings (NULL);
 	on_settings_keyservers_changed (settings, "keyservers", swidget);
 	g_signal_connect_object (settings, "changed::keyservers",
 	                         G_CALLBACK (on_settings_keyservers_changed), swidget, 0);

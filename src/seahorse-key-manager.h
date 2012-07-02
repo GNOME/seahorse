@@ -54,7 +54,7 @@ struct _SeahorseKeyManagerClass {
 
 GType            seahorse_key_manager_get_type     (void) G_GNUC_CONST;
 
-SeahorseWidget * seahorse_key_manager_show         (void);
+void             seahorse_key_manager_show         (void);
 
 
 G_END_DECLS
