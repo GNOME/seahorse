@@ -517,16 +517,15 @@ received_item_secret (GObject *source,
                       gpointer user_data)
 {
 	SeahorseGkrItem *self = SEAHORSE_GKR_ITEM (source);
-	SecretValue *value;
 	GError *error = NULL;
 
 	g_clear_object (&self->pv->req_secret);
 
-	value = secret_item_get_secret_finish (SECRET_ITEM (source), result, &error);
+	secret_item_load_secret_finish (SECRET_ITEM (source), result, &error);
 	if (error == NULL) {
 		if (self->pv->item_secret)
 			secret_value_unref (self->pv->item_secret);
-		self->pv->item_secret = value;
+		self->pv->item_secret = secret_item_get_secret (SECRET_ITEM (self));
 		g_object_notify (G_OBJECT (self), "has-secret");
 	} else {
 		g_message ("Couldn't retrieve secret: %s", error->message);
@@ -543,8 +542,8 @@ load_item_secret (SeahorseGkrItem *self)
 		return;
 
 	self->pv->req_secret = g_cancellable_new ();
-	secret_item_get_secret (SECRET_ITEM (self), self->pv->req_secret,
-	                        received_item_secret, g_object_ref (self));
+	secret_item_load_secret (SECRET_ITEM (self), self->pv->req_secret,
+	                         received_item_secret, g_object_ref (self));
 }
 
 static gboolean

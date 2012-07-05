@@ -167,7 +167,7 @@ on_service_new (GObject *source,
 		g_signal_connect (self->service, "notify::collections", G_CALLBACK (on_notify_collections), self);
 		refresh_collection (self);
 
-		secret_service_ensure_collections (self->service, NULL, NULL, NULL);
+		secret_service_load_collections (self->service, NULL, NULL, NULL);
 		seahorse_gkr_backend_load_async (self, NULL, NULL, NULL);
 	} else {
 		g_warning ("couldn't connect to secret service: %s", error->message);
