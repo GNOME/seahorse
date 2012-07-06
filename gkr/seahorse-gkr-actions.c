@@ -188,9 +188,9 @@ on_keyring_default (GtkAction *action,
 	if (parent != NULL)
 		g_object_ref (parent);
 
-	secret_service_set_alias_path (secret_collection_get_service (keyring), "default",
-	                               g_dbus_proxy_get_object_path (G_DBUS_PROXY (keyring)),
-	                               NULL, on_set_default_keyring_done, parent);
+	secret_service_set_alias (secret_collection_get_service (keyring), "default",
+	                          SECRET_COLLECTION (keyring),
+	                          NULL, on_set_default_keyring_done, parent);
 }
 
 typedef struct {
@@ -217,7 +217,7 @@ on_change_password_done (GObject *source,
 	GError *error = NULL;
 	GVariant *retval;
 
-	retval = secret_service_prompt_path_finish (SECRET_SERVICE (source), result, NULL, &error);
+	retval = secret_service_prompt_at_dbus_path_finish (SECRET_SERVICE (source), result, NULL, &error);
 	if (retval != NULL)
 		g_variant_unref (retval);
 	if (error != NULL)
@@ -241,8 +241,8 @@ on_change_password_prompt (GObject *source,
 	retval = g_dbus_connection_call_finish (G_DBUS_CONNECTION (source), result, &error);
 	if (error == NULL) {
 		g_variant_get (retval, "@s", &prompt_path);
-		secret_service_prompt_path (change->service, prompt_path, NULL,
-		                            on_change_password_done, change);
+		secret_service_prompt_at_dbus_path (change->service, prompt_path, NULL,
+		                                    on_change_password_done, change);
 		g_variant_unref (retval);
 	} else {
 		seahorse_util_handle_error (&error, change->parent, _("Couldn't change keyring password"));

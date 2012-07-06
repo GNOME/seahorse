@@ -388,7 +388,7 @@ on_load_read_alias (GObject *source,
 	GError *error = NULL;
 	gchar *path;
 
-	path = secret_service_read_alias_path_finish (SECRET_SERVICE (source), result, &error);
+	path = secret_service_read_alias_dbus_path_finish (SECRET_SERVICE (source), result, &error);
 	if (path != NULL) {
 		g_hash_table_replace (self->aliases, g_strdup (alias), path);
 		g_object_notify (G_OBJECT (self), "aliases");
@@ -454,16 +454,16 @@ seahorse_gkr_backend_load_async (SeahorseGkrBackend *self,
 		return;
 	}
 
-	secret_service_read_alias_path (self->service, "default", cancellable,
-	                                on_load_read_default_alias, g_object_ref (async));
+	secret_service_read_alias_dbus_path (self->service, "default", cancellable,
+	                                     on_load_read_default_alias, g_object_ref (async));
 	load->outstanding++;
 
-	secret_service_read_alias_path (self->service, "session", cancellable,
-	                                on_load_read_session_alias, g_object_ref (async));
+	secret_service_read_alias_dbus_path (self->service, "session", cancellable,
+	                                     on_load_read_session_alias, g_object_ref (async));
 	load->outstanding++;
 
-	secret_service_read_alias_path (self->service, "login", cancellable,
-	                                on_load_read_login_alias, g_object_ref (async));
+	secret_service_read_alias_dbus_path (self->service, "login", cancellable,
+	                                     on_load_read_login_alias, g_object_ref (async));
 	load->outstanding++;
 
 	g_object_unref (async);
