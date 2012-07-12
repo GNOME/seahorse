@@ -8,7 +8,7 @@ GCR_REQUIRED=3.3.4
 GTK_REQUIRED=3.4.0
 GNUPG_ACCEPTED="1.2 1.4 2.0"
 GPGME_REQUIRED=1.0.0
-LIBSECRET_REQUIRED=0.4
+LIBSECRET_REQUIRED=0.5
 AVAHI_GLIB_REQUIRED=0.6
 
 # -----------------------------------------------------------------------------

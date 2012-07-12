@@ -127,7 +127,8 @@ on_add_keyring_properties_response (GtkDialog *dialog,
 		cancellable = seahorse_gkr_dialog_begin_request (swidget);
 
 		secret_collection_create (seahorse_gkr_backend_get_service (NULL),
-		                          keyring, NULL, cancellable, on_keyring_create,
+		                          keyring, NULL, SECRET_COLLECTION_NONE,
+		                          cancellable, on_keyring_create,
 		                          g_object_ref (swidget));
 		g_object_unref (cancellable);
 
