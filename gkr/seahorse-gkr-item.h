@@ -24,7 +24,7 @@
 #define __SEAHORSE_GKR_ITEM_H__
 
 #include <gtk/gtk.h>
-#include <secret/secret.h>
+#include <libsecret/secret.h>
 
 #include "seahorse-gkr.h"
 #include "seahorse-gkr-keyring.h"

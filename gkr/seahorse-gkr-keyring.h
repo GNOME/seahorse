@@ -27,7 +27,7 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 
-#include <secret/secret-unstable.h>
+#include <libsecret/secret.h>
 
 #define SEAHORSE_TYPE_GKR_KEYRING               (seahorse_gkr_keyring_get_type ())
 #define SEAHORSE_GKR_KEYRING(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GKR_KEYRING, SeahorseGkrKeyring))

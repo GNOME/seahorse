@@ -330,7 +330,7 @@ fi
 # -----------------------------------------------------------------------------
 # LIBSECRET
 
-PKG_CHECK_MODULES([LIBSECRET], libsecret-0 >= $LIBSECRET_REQUIRED,
+PKG_CHECK_MODULES([LIBSECRET], libsecret-unstable >= $LIBSECRET_REQUIRED,
                   [enable_gnome_keyring=yes],[enable_gnome_keyring=no])
 
 if test "$enable_gnome_keyring" = "no"; then
