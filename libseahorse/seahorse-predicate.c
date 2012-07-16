@@ -59,7 +59,7 @@ seahorse_predicate_match (SeahorsePredicate *pred,
 
 	if (pred->flags != 0 || pred->nflags != 0) {
 		SeahorseFlags flags = 0;
-		g_object_get (obj, "flags", &flags, NULL);
+		g_object_get (obj, "object-flags", &flags, NULL);
 		if (pred->flags != 0 && (pred->flags & flags) == 0)
 			return FALSE;
 		if (pred->nflags != 0 && (pred->nflags & flags) != 0)

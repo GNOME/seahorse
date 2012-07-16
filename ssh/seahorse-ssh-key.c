@@ -124,7 +124,7 @@ changed_key (SeahorseSSHKey *self)
 		              "icon", NULL,
 		              "usage", SEAHORSE_USAGE_NONE,
 		              "nickname", "",
-		              "flags", SEAHORSE_FLAG_DISABLED,
+		              "object-flags", SEAHORSE_FLAG_DISABLED,
 		              NULL);
 		return;
 	} 
@@ -163,7 +163,7 @@ changed_key (SeahorseSSHKey *self)
 	              "usage", usage,
 	              "nickname", simple,
 	              "identifier", identifier,
-	              "flags", flags,
+	              "object-flags", flags,
 	              NULL);
 
 	g_object_unref (actions);

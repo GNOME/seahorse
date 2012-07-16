@@ -287,7 +287,7 @@ seahorse_certificate_class_init (SeahorseCertificateClass *klass)
 	                              G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_FLAGS,
-	         g_param_spec_flags ("flags", "flags", "flags", SEAHORSE_TYPE_FLAGS, SEAHORSE_FLAG_NONE,
+	         g_param_spec_flags ("object-flags", "flags", "flags", SEAHORSE_TYPE_FLAGS, SEAHORSE_FLAG_NONE,
 	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 
 	g_object_class_install_property (gobject_class, PROP_ACTIONS,

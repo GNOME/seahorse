@@ -367,7 +367,7 @@ seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 	actions = seahorse_gpgme_key_actions_instance ();
 	g_object_set (self,
 	              "usage", usage,
-	              "flags", flags,
+	              "object-flags", flags,
 	              "actions", actions,
 	              NULL);
 	g_object_unref (actions);

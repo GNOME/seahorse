@@ -702,7 +702,7 @@ seahorse_token_class_init (SeahorseTokenClass *klass)
 	                              GCK_TYPE_SLOT, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
 	g_object_class_install_property (gobject_class, PROP_FLAGS,
-	         g_param_spec_uint ("flags", "Flags", "Object Token flags.",
+	         g_param_spec_uint ("object-flags", "Flags", "Object Token flags.",
 	                            0, G_MAXUINT, 0, G_PARAM_READABLE));
 
 	g_object_class_install_property (gobject_class, PROP_INFO,

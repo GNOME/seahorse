@@ -419,7 +419,7 @@ parse_hkp_index (const gchar *response)
 
 				key = seahorse_pgp_key_new ();
 				keys = g_list_prepend (keys, key);
-				g_object_set (key, "flags", flags, NULL);
+				g_object_set (key, "object-flags", flags, NULL);
 
 				/* Add all the info to the key */
 				subkey = seahorse_pgp_subkey_new ();

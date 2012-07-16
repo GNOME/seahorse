@@ -358,7 +358,7 @@ seahorse_object_set_property (GObject *obj, guint prop_id, const GValue *value,
 		flags = g_value_get_uint (value);
 		if (flags != self->pv->flags) {
 			self->pv->flags = flags;
-			g_object_notify (obj, "flags");
+			g_object_notify (obj, "object-flags");
 		}
 		break;
 	default:
@@ -420,7 +420,7 @@ seahorse_object_class_init (SeahorseObjectClass *klass)
 	                              SEAHORSE_TYPE_USAGE, SEAHORSE_USAGE_NONE, G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_FLAGS,
-	           g_param_spec_uint ("flags", "Object Flags", "This object's flags.", 
+	           g_param_spec_uint ("object-flags", "Object Flags", "This object's flags.",
 	                              0, G_MAXUINT, 0, G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_DELETABLE,

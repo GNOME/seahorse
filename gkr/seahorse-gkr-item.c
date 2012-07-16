@@ -507,7 +507,7 @@ seahorse_gkr_item_g_properties_changed (GDBusProxy *proxy,
 	g_object_notify (obj, "icon");
 	g_object_notify (obj, "markup");
 	g_object_notify (obj, "description");
-	g_object_notify (obj, "flags");
+	g_object_notify (obj, "object-flags");
 	g_object_thaw_notify (obj);
 }
 
@@ -720,7 +720,7 @@ seahorse_gkr_item_class_init (SeahorseGkrItemClass *klass)
 	                              G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE));
 
 	g_object_class_install_property (gobject_class, PROP_FLAGS,
-	         g_param_spec_flags ("flags", "flags", "flags", SEAHORSE_TYPE_FLAGS, SEAHORSE_FLAG_NONE,
+	         g_param_spec_flags ("object-flags", "Flags", "Flags", SEAHORSE_TYPE_FLAGS, SEAHORSE_FLAG_NONE,
 	                              G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 
 	g_object_class_install_property (gobject_class, PROP_ICON,
