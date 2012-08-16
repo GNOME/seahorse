@@ -1,10 +1,12 @@
-include $(top_srcdir)/gnome-doc-utils.make
-dist-hook: doc-dist-hook
+@YELP_HELP_RULES@
 
-DOC_MODULE = seahorse
-DOC_ENTITIES = legal.xml
-DOC_INCLUDES = 
-DOC_FIGURES = \
+HELP_ID = seahorse
+
+HELP_FILES = \
+	index.docbook \
+	legal.xml
+
+HELP_MEDIA = \
 	figures/seahorse-window.png
 
-DOC_LINGUAS = ca cs de el en_GB es eu fr gl it ja ko oc ru sl sv vi zh_CN
+HELP_LINGUAS = ca cs de el en_GB es eu fr gl it ja ko oc ru sl sv vi zh_CN

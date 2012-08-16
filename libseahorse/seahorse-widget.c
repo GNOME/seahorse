@@ -449,9 +449,9 @@ seahorse_widget_show_help (SeahorseWidget *swidget)
 
     if (g_str_equal (swidget->name, "key-manager") || 
         g_str_equal (swidget->name, "keyserver-results")) {
-        document = g_strdup ("ghelp:" PACKAGE "?introduction");
+        document = g_strdup ("help:" PACKAGE "/introduction");
     } else {
-        document = g_strdup_printf ("ghelp:" PACKAGE "?%s", swidget->name);
+        document = g_strdup_printf ("help:" PACKAGE "/%s", swidget->name);
     }
 
     if (!g_app_info_launch_default_for_uri (document, NULL, &error)) {

@@ -48,12 +48,9 @@ EXTRA_DIST = \
     TODO \
     intltool-extract.in \
     intltool-merge.in \
-    intltool-update.in \
-    gnome-doc-utils.make \
-    omf.make
+    intltool-update.in
 
 DISTCLEANFILES = \
-    gnome-doc-utils.make \
     intltool-extract \
     intltool-merge \
     intltool-update
