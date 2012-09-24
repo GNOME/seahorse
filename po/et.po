@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: Seahorse MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-20 21:39+0000\n"
-"PO-Revision-Date: 2012-02-23 01:02+0200\n"
+"POT-Creation-Date: 2012-09-22 19:01+0000\n"
+"PO-Revision-Date: 2012-08-21 09:23+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
-"Language-Team: Estonian <>\n"
+"Language-Team: Estonian <gnome-et@linux.ee>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bits\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 msgid "Add Password Keyring"
@@ -76,8 +76,8 @@ msgstr "Muuda _parooli"
 msgid "Change the unlock password of the password storage keyring"
 msgstr "Muuda paroolide võtmerõnga hoidla luku parool"
 
-msgid "Couldn't add keyring"
-msgstr "Võtmerõngast pole võimalik lisada"
+msgid "Couldn't add item"
+msgstr "Kirjet pole võimalik lisada"
 
 msgid "Add Password"
 msgstr "Parooli lisamine"
@@ -93,6 +93,9 @@ msgstr "_Parooli näidatakse"
 
 msgid "_Keyring:"
 msgstr "_Võtmerõngas:"
+
+msgid "Couldn't add keyring"
+msgstr "Võtmerõngast pole võimalik lisada"
 
 msgid "Passwords"
 msgstr "Paroolid"
@@ -208,9 +211,6 @@ msgstr "<b>Tehnilised üksikasjad:</b>"
 msgid "Details"
 msgstr "Üksikasjad"
 
-msgid "Login keyring"
-msgstr "Sisselogimise võtmerõngas"
-
 msgid "A keyring that is automatically unlocked on login"
 msgstr ""
 "Võtmerõngas, mis võetakse kasutaja sisselogimisel automaatselt lukust lahti."
@@ -237,30 +237,6 @@ msgstr "Loodud:"
 
 msgid "Keyring"
 msgstr "Võtmerõngas"
-
-msgid "The operation was cancelled"
-msgstr "Operatsioon katkestati"
-
-msgid "Access to the key ring was denied"
-msgstr "Ligipääs võtmerõngale on keelatud"
-
-msgid "The gnome-keyring daemon is not running"
-msgstr "GNOME võtmerõnga deemon pole käivitatud"
-
-msgid "The key ring has already been unlocked"
-msgstr "Võtmerõngas on juba lukust lahti"
-
-msgid "No such key ring exists"
-msgstr "Sellist võtmerõngast pole olemas"
-
-msgid "Couldn't communicate with key ring daemon"
-msgstr "Võtmerõngadeemoniga pole võimalik suhelda"
-
-msgid "The item already exists"
-msgstr "Kirje on juba olemas"
-
-msgid "Internal error accessing gnome-keyring"
-msgstr "Sisemine viga gnome-keyring'iga suhtlemisel"
 
 msgid "Display flags"
 msgstr "Kuvamislipud"
@@ -476,6 +452,12 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "Serveri port, kuhu tuleb ühenduda."
 
+msgid "Version of this application"
+msgstr "Selle rakenduse versioon"
+
+msgid "- System Settings"
+msgstr "- süsteemi sätted"
+
 msgid "Contributions:"
 msgstr "Kaasaaitajad:"
 
@@ -661,6 +643,7 @@ msgstr "Valikuline e-posti aadress"
 msgid "Optional comment describing key"
 msgstr "Valikuline kommentaar võtme kirjeldamiseks"
 
+#. Full name of the key, usually the name of the user.
 msgid "Full _Name:"
 msgstr "_Täisnimi:"
 
@@ -713,6 +696,9 @@ msgstr ""
 "Tõrge lahtikrüptimisel. Arvatavasti pole sul lahtkirüptimiseks vajalikku "
 "võtit."
 
+msgid "The operation was cancelled"
+msgstr "Operatsioon katkestati"
+
 msgid "Invalid expiry date"
 msgstr "Vigane aegumise kuupäev"
 
@@ -759,6 +745,20 @@ msgstr "Uue PGP-võtme parool"
 
 msgid "Enter the passphrase for your new key twice."
 msgstr "Sisesta oma uuele võtmele parool (2 korda)."
+
+#. Has line breaks because GtkLabel is completely broken WRT wrapping
+msgid ""
+"When creating a key we need to generate a lot of\n"
+"random data and we need you to help. It's a good\n"
+"idea to perform some other action like typing on\n"
+"the keyboard, moving the mouse, using applications.\n"
+"This gives the system the random data that it needs."
+msgstr ""
+"Võtme loomisel tuleb genereerida palju juhuslikkust\n"
+"ning selleks on vajalik sinu abi. Praegu on hea\n"
+"teha midagi muud, näiteks liigutada hiir, tippida\n"
+"klaviatuuril või kasutada rakendusi. See tagab\n"
+"arvutile vajaliku juhuslikkuse."
 
 msgid "Generating key"
 msgstr "Võtme genereerimine"
@@ -958,6 +958,7 @@ msgstr "Võtmeid pole võimalik importida"
 msgid "Importing keys from key servers"
 msgstr "Võtmete importimine serverist"
 
+#. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
 msgid "_Remote"
 msgstr "_Kaugvalikud"
 
@@ -1085,9 +1086,6 @@ msgstr "PGP-võtmed"
 msgid "PGP keys are for encrypting email or files"
 msgstr "PGP-võtmeid kasutatakse e-posti ja failide krüptimiseks"
 
-msgid "Algorithms here"
-msgstr "Siia tulevad algoritmid"
-
 msgid "C_reate"
 msgstr "L_oo"
 
@@ -1143,6 +1141,7 @@ msgstr "Allkirja ID"
 msgid "Couldn't change primary photo"
 msgstr "Peamist fotot pole võimalik muuta"
 
+#. TRANSLATORS: (unknown) expiry date
 msgid "(unknown)"
 msgstr "(tundmatu)"
 
@@ -1224,12 +1223,14 @@ msgstr "Eelmisele fotole liikumine"
 msgid "Go to next photo"
 msgstr "Järgmisele fotole liikumine"
 
+#. A photograph
 msgid "<b>Photo </b>"
 msgstr "<b>Foto </b>"
 
 msgid "<b>Key ID:</b>"
 msgstr "<b>Võtme ID:</b>"
 
+#. Name of key, usually a persons name
 msgctxt "name-of-key"
 msgid "<b>Name:</b>"
 msgstr "<b>Nimi:</b>"
@@ -1271,12 +1272,14 @@ msgstr "Allkirjasta"
 msgid "Delete"
 msgstr "Kustuta"
 
+#. Add another name to the PGP key.
 msgid "_Add Name"
 msgstr "Lisa _nimi"
 
 msgid "Revoke"
 msgstr "Tühista"
 
+#. List of names and signatures on the PGP key.
 msgid "Names and Signatures"
 msgstr "Nimed ja allkirjad"
 
@@ -1325,12 +1328,13 @@ msgstr "Täielik"
 msgid "Ultimately"
 msgstr "Ülim"
 
-msgid "Encrypt files and email to the key's owner "
+msgid "Encrypt files and email to the key's owner"
 msgstr "Failide ja e-posti krüptimiseks võtme omaniku jaoks"
 
 msgid "Public PGP Key"
 msgstr "Avalik PGP-võti"
 
+#. Names set on the PGP key.
 msgid "<b>_Other Names:</b>"
 msgstr "<b>_Teised nimed:</b>"
 
@@ -1443,11 +1447,11 @@ msgstr ""
 msgid ""
 "<i>Casually:</i> means you have done a casual verification that the key is "
 "owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone. "
+"key fingerprint to the owner over the phone."
 msgstr ""
 "<i>Pealiskaudselt</i> tähedab, et sa oled vaid põgusalt kontrollinud, kas "
 "võti kuulub isikule, kes väidab selle võtme enesele kuuluvat. Näiteks on "
-"võtme omanik telefonitsi kinnitanud võtme sõrmejälje vastavust."
+"võtme omanik telefonitsi kinnitanud võtme kuuluvust."
 
 msgid ""
 "<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
@@ -1702,9 +1706,6 @@ msgstr "Olemasolevate võtmete importimine failist:"
 msgid "To get started with encryption you will need keys."
 msgstr "Krüptimise jaoks on sul kõigepealt tarvis võtmeid."
 
-msgid "Version of this application"
-msgstr "Selle rakenduse versioon"
-
 msgid "Couldn't lock"
 msgstr "Pole võimalik lukustada"
 
@@ -1762,8 +1763,10 @@ msgid "Are you sure you want to delete the secure shell key '%s'?"
 msgstr "Kas sa soovid SSH-võtme '%s' kustutada?"
 
 #, c-format
-msgid "Are you sure you want to delete %d secure shell keys?"
-msgstr "Kas sa soovid %d SSH-võtit kustutada?"
+msgid "Are you sure you want to delete %d secure shell key?"
+msgid_plural "Are you sure you want to delete %d secure shell keys?"
+msgstr[0] "Kas sa soovid %d SSH-võtme kustutada?"
+msgstr[1] "Kas sa soovid %d SSH-võtit kustutada?"
 
 msgid "Ssh Key"
 msgstr "SSH võti"
@@ -1839,6 +1842,8 @@ msgstr "Võtme parooli pole võimalik muuta."
 msgid "<b>Identifier:</b>"
 msgstr "<b>Identifikaator:</b>"
 
+#. Name of key, often a persons name
+msgctxt "name-of-ssh-key"
 msgid "<b>Name:</b>"
 msgstr "<b>Nimi:</b>"
 
@@ -1852,8 +1857,8 @@ msgid "The owner of this key is _authorized to connect to this computer"
 msgstr "Selle võtme omanik on _volitatud sellesse arvutisse ühenduma"
 
 #, no-c-format
-msgid "<i>This only applies to the '%s'</i> account."
-msgstr "<i>See rakendub ainult kontole '%s'.</i>"
+msgid "This only applies to the <i>%s</i> account."
+msgstr "See rakendub ainult kontole <i>%s</i>."
 
 msgid "<b>Algorithm:</b>"
 msgstr "<b>Algoritm:</b>"
