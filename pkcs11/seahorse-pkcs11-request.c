@@ -36,7 +36,6 @@
 #include <gcr/gcr.h>
 
 #include <gck/gck.h>
-#include <gck/pkcs11.h>
 
 GType   seahorse_pkcs11_request_get_type           (void) G_GNUC_CONST;
 

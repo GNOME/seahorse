@@ -37,7 +37,6 @@
 #include <gcr/gcr.h>
 
 #include <gck/gck.h>
-#include <gck/pkcs11.h>
 
 #define SEAHORSE_PKCS11_GENERATE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PKCS11_GENERATE, SeahorsePkcs11Generate))
 #define SEAHORSE_IS_PKCS11_GENERATE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PKCS11_GENERATE))
