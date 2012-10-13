@@ -240,7 +240,7 @@ on_change_password_prompt (GObject *source,
 
 	retval = g_dbus_connection_call_finish (G_DBUS_CONNECTION (source), result, &error);
 	if (error == NULL) {
-		g_variant_get (retval, "@s", &prompt_path);
+		g_variant_get (retval, "(&o)", &prompt_path);
 		secret_service_prompt_at_dbus_path (change->service, prompt_path, NULL,
 		                                    on_change_password_done, change);
 		g_variant_unref (retval);
@@ -272,7 +272,7 @@ on_keyring_password (GtkAction *action,
 	                        g_dbus_proxy_get_object_path (proxy),
 	                        "org.gnome.keyring.InternalUnsupportedGuiltRiddenInterface",
 	                        "ChangeWithPrompt",
-	                        g_variant_new ("(o)", g_dbus_proxy_get_object_path (proxy)),
+	                        g_variant_new ("(o)", g_dbus_proxy_get_object_path (G_DBUS_PROXY (collection))),
 	                        G_VARIANT_TYPE ("(o)"),
 	                        0, -1, NULL, on_change_password_prompt, change);
 }
