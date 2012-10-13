@@ -1251,7 +1251,7 @@ setup_details_trust (SeahorseWidget *swidget)
     if (etype != SEAHORSE_USAGE_PRIVATE_KEY) {
         gtk_list_store_append (model, &iter);
         gtk_list_store_set (model, &iter,
-                            TRUST_LABEL, _("Unknown"),
+                            TRUST_LABEL, C_("Validity", "Unknown"),
                             TRUST_VALIDITY,  SEAHORSE_VALIDITY_UNKNOWN,
                             -1);                               
        

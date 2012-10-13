@@ -573,7 +573,7 @@ seahorse_token_get_property (GObject *object,
 	case PROP_LABEL:
 		token = gck_slot_get_token_info (self->pv->slot);
 		if (token == NULL)
-			g_value_set_string (value, _("Unknown"));
+			g_value_set_string (value, C_("Label", "Unknown"));
 		else
 			g_value_set_string (value, token->label);
 		gck_token_info_free (token);

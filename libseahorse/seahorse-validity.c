@@ -37,19 +37,19 @@ seahorse_validity_get_string (SeahorseValidity validity)
 {
 	switch (validity) {
 		case SEAHORSE_VALIDITY_UNKNOWN:
-			return _("Unknown");
+			return C_("Validity", "Unknown");
 		case SEAHORSE_VALIDITY_NEVER:
 			return C_("Validity", "Never");
 		case SEAHORSE_VALIDITY_MARGINAL:
-			return _("Marginal");
+			return C_("Validity", "Marginal");
 		case SEAHORSE_VALIDITY_FULL:
-			return _("Full");
+			return C_("Validity", "Full");
 		case SEAHORSE_VALIDITY_ULTIMATE:
-			return _("Ultimate");
+			return C_("Validity", "Ultimate");
 		case SEAHORSE_VALIDITY_DISABLED:
-			return _("Disabled");
+			return C_("Validity", "Disabled");
 		case SEAHORSE_VALIDITY_REVOKED:
-			return _("Revoked");
+			return C_("Validity", "Revoked");
 		default:
 			return NULL;
 	}

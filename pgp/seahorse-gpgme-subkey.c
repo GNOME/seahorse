@@ -194,7 +194,7 @@ seahorse_gpgme_subkey_set_subkey (SeahorseGpgmeSubkey *self, gpgme_subkey_t subk
 	/* Calculate the algorithm */
 	algo_type = gpgme_pubkey_algo_name (subkey->pubkey_algo);
 	if (algo_type == NULL)
-		algo_type = _("Unknown");
+		algo_type = C_("Algorithm", "Unknown");
 	else if (g_str_equal ("Elg", algo_type) || g_str_equal("ELG-E", algo_type))
 		algo_type = _("ElGamal");
 
