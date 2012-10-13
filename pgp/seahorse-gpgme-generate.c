@@ -130,7 +130,7 @@ typedef struct _AlgorithmDesc {
 
 static AlgorithmDesc available_algorithms[] = {
     { N_("RSA"),             RSA_RSA,     RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  },
-    { N_("DSA Elgamal"),     DSA_ELGAMAL, ELGAMAL_MIN, LENGTH_MAX, LENGTH_DEFAULT  },
+    { N_("DSA ElGamal"),     DSA_ELGAMAL, ELGAMAL_MIN, LENGTH_MAX, LENGTH_DEFAULT  },
     { N_("DSA (sign only)"), DSA,         DSA_MIN,     DSA_MAX,    LENGTH_DEFAULT  },
     { N_("RSA (sign only)"), RSA_SIGN,    RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  }
 };
