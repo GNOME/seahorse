@@ -140,6 +140,7 @@ seahorse_util_handle_error (GError **error,
 	else
 		g_warning ("unsupported 'parent' argument passed to seahorse_util_handle_error() ");
 
+	g_dbus_error_strip_remote_error (*error);
 	seahorse_util_show_error (widget, text,
 	                          (*error)->message ? (*error)->message : "");
 	g_free (text);

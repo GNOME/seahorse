@@ -211,6 +211,7 @@ on_update_password_ready (GObject *source,
 		transfer_password (git, swidget);
 
 	} else {
+		g_dbus_error_strip_remote_error (error);
 		seahorse_util_show_error (seahorse_widget_get_toplevel (swidget),
 		                          _("Couldn't change password."), error->message);
 		g_clear_error (&error);
@@ -340,6 +341,7 @@ on_item_description_complete (GObject *source,
 		gtk_entry_set_text (closure->entry,
 		                    secret_item_get_label (SECRET_ITEM (git)));
 
+		g_dbus_error_strip_remote_error (error);
 		seahorse_util_show_error (seahorse_widget_get_toplevel (closure->swidget),
 		                          _("Couldn't set description."), error->message);
 		g_clear_error (&error);
