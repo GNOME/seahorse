@@ -9,10 +9,11 @@ msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-07-02 16:47+0000\n"
-"PO-Revision-Date: 2012-09-22 10:54+0700\n"
+"POT-Creation-Date: 2012-10-14 20:58+0000\n"
+"PO-Revision-Date: 2012-10-15 15:35+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -767,45 +768,47 @@ msgstr "เซิร์ฟเวอร์กุญแจ"
 msgid "%Y-%m-%d"
 msgstr "%d/%m/%Ey"
 
-#: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
+#: ../libseahorse/seahorse-validity.c:40
 #: ../pgp/seahorse-pgp-key-properties.c:1254
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
-#: ../pkcs11/seahorse-token.c:576
+msgctxt "Validity"
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
 #: ../libseahorse/seahorse-validity.c:42
 #: ../pgp/seahorse-pgp-key-properties.c:1260
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
 msgctxt "Validity"
 msgid "Never"
 msgstr "ไม่เคยเปิดใช้"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1267
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
+msgctxt "Validity"
 msgid "Marginal"
 msgstr "ก้ำกึ่ง"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1273
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
+msgctxt "Validity"
 msgid "Full"
 msgstr "เต็มที่"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1279
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
+msgctxt "Validity"
 msgid "Ultimate"
 msgstr "เต็มพิกัด"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1469
+msgctxt "Validity"
 msgid "Disabled"
 msgstr "ปิดใช้งาน"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1465
+msgctxt "Validity"
 msgid "Revoked"
 msgstr "เพิกถอน"
 
@@ -973,7 +976,7 @@ msgid "Used to encrypt email and files"
 msgstr "ใช้สำหรับเข้ารหัสลับอีเมลและแฟ้มต่างๆ"
 
 #: ../pgp/seahorse-gpgme-generate.c:132
-#: ../pkcs11/seahorse-pkcs11-generate.c:92
+#: ../pkcs11/seahorse-pkcs11-generate.c:91
 #: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
@@ -1009,7 +1012,7 @@ msgstr ""
 "ซึ่งจะทำให้ระบบได้ข้อมูลสุ่มที่ต้องการ"
 
 #: ../pgp/seahorse-gpgme-generate.c:231
-#: ../pkcs11/seahorse-pkcs11-generate.c:460
+#: ../pkcs11/seahorse-pkcs11-generate.c:459
 msgid "Generating key"
 msgstr "กำลังสร้างกุญแจ"
 
@@ -1228,6 +1231,11 @@ msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr "คุณไม่มีกุญแจส่วนตัวที่สามารถใช้แสดงความเชื่อมั่นกับกุญแจนี้"
+
+#: ../pgp/seahorse-gpgme-subkey.c:197
+msgctxt "Algorithm"
+msgid "Unknown"
+msgstr "ไม่ทราบ"
 
 #: ../pgp/seahorse-gpgme-subkey.c:199
 msgid "ElGamal"
@@ -1526,6 +1534,18 @@ msgstr "ไม่สามารถเปลี่ยนค่าความเ
 msgid "Couldn't export key"
 msgstr "ไม่สามารถส่งออกกุญแจ"
 
+#: ../pgp/seahorse-pgp-key-properties.c:1267
+msgid "Marginal"
+msgstr "ก้ำกึ่ง"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1273
+msgid "Full"
+msgstr "เต็มที่"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1279
+msgid "Ultimate"
+msgstr "เต็มพิกัด"
+
 #: ../pgp/seahorse-pgp-key-properties.c:1385
 #: ../pgp/seahorse-pgp-key-properties.c:1474
 msgctxt "Expires"
@@ -1556,9 +1576,17 @@ msgstr "สถานะ"
 msgid "Strength"
 msgstr "ความแข็งแรง"
 
+#: ../pgp/seahorse-pgp-key-properties.c:1465
+msgid "Revoked"
+msgstr "เพิกถอน"
+
 #: ../pgp/seahorse-pgp-key-properties.c:1467
 msgid "Expired"
 msgstr "หมดอายุ"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1469
+msgid "Disabled"
+msgstr "ปิดใช้งาน"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1471
 msgid "Good"
@@ -1567,11 +1595,6 @@ msgstr "ดี"
 #: ../pgp/seahorse-pgp-key-properties.c:1857
 msgid "Key ID"
 msgstr "หมายเลขกุญแจ"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
-msgid "Never"
-msgstr "ไม่เลย"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
@@ -1750,14 +1773,17 @@ msgid "<b>_Subkeys</b>"
 msgstr "<b>กุญแจ_ย่อย</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
+msgctxt "Validity"
 msgid "Marginally"
 msgstr "ก้ำกึ่ง"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
+msgctxt "Validity"
 msgid "Fully"
 msgstr "เต็มที่"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
+msgctxt "Validity"
 msgid "Ultimately"
 msgstr "เต็มพิกัด"
 
@@ -1974,15 +2000,15 @@ msgstr "กำลังส่งข้อมูล"
 msgid "Unavailable"
 msgstr "ไม่มี"
 
-#: ../pkcs11/seahorse-certificate.c:435
+#: ../pkcs11/seahorse-certificate.c:434
 msgid "Personal certificate and key"
 msgstr "ใบรับรองและกุญแจส่วนตัว"
 
-#: ../pkcs11/seahorse-certificate.c:438
+#: ../pkcs11/seahorse-certificate.c:437
 msgid "Personal certificate"
 msgstr "ใบรับรองส่วนตัว"
 
-#: ../pkcs11/seahorse-certificate.c:440
+#: ../pkcs11/seahorse-certificate.c:439
 #: ../pkcs11/seahorse-certificate-der-exporter.c:77
 msgid "Certificate"
 msgstr "ใบรับรอง"
@@ -2005,21 +2031,21 @@ msgid "Are you sure you want to permanently delete %d certificate?"
 msgid_plural "Are you sure you want to permanently delete %d certificates?"
 msgstr[0] "ยืนยันหรือไม่ว่าต้องการลบใบรับรองทั้ง %d ใบอย่างถาวร?"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:115
+#: ../pkcs11/seahorse-pkcs11-generate.c:114
 msgid "Couldn't generate private key"
 msgstr "ไม่สามารถสร้างกุญแจส่วนตัว"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:414
-#: ../pkcs11/seahorse-pkcs11-request.c:256
+#: ../pkcs11/seahorse-pkcs11-generate.c:413
+#: ../pkcs11/seahorse-pkcs11-request.c:255
 msgid "Create"
 msgstr "สร้าง"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:507
-#: ../pkcs11/seahorse-private-key.c:179
+#: ../pkcs11/seahorse-pkcs11-generate.c:506
+#: ../pkcs11/seahorse-private-key.c:178
 msgid "Private key"
 msgstr "กุญแจส่วนตัว"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:508
+#: ../pkcs11/seahorse-pkcs11-generate.c:507
 msgid "Used to request a certificate"
 msgstr "ใช้ในการยื่นขอใบรับรอง"
 
@@ -2072,23 +2098,23 @@ msgstr "ยื่นขอใ_บรับรอง"
 msgid "Create a certificate request file for this key"
 msgstr "สร้างแฟ้มใบยื่นขอใบรับรองสำหรับกุญแจนี้"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:104
+#: ../pkcs11/seahorse-pkcs11-request.c:103
 msgid "Couldn't save certificate request"
 msgstr "ไม่สามารถบันทึกใบยื่นขอใบรับรอง"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:127
+#: ../pkcs11/seahorse-pkcs11-request.c:126
 msgid "Save certificate request"
 msgstr "บันทึกใบยื่นขอใบรับรอง"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:138
+#: ../pkcs11/seahorse-pkcs11-request.c:137
 msgid "Certificate request"
 msgstr "ใบยื่นขอใบรับรอง"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:146
+#: ../pkcs11/seahorse-pkcs11-request.c:145
 msgid "PEM encoded request"
 msgstr "ใบยื่นขอในรูปของรหัส PEM"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:194
+#: ../pkcs11/seahorse-pkcs11-request.c:193
 msgid "Couldn't create certificate request"
 msgstr "ไม่สามารถสร้างใบยื่นขอใบรับรอง"
 
@@ -2104,9 +2130,14 @@ msgstr "ชื่อสามัญ (CN) ที่จะใช้ในใบย
 msgid "Name (CN):"
 msgstr "ชื่อ (CN):"
 
-#: ../pkcs11/seahorse-private-key.c:132
+#: ../pkcs11/seahorse-private-key.c:131
 msgid "Unnamed private key"
 msgstr "กุญแจส่วนตัวไม่มีชื่อ"
+
+#: ../pkcs11/seahorse-token.c:576
+msgctxt "Label"
+msgid "Unknown"
+msgstr "ไม่ทราบ"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
@@ -2531,6 +2562,9 @@ msgstr "ชื่อเ_ข้าระบบ:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_ตั้งค่า"
+
+#~ msgid "Never"
+#~ msgstr "ไม่เลย"
 
 #~ msgid "Deleting item"
 #~ msgid_plural "Deleting items"
