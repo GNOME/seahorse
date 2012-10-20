@@ -6,6 +6,7 @@ seahorselibexecbindir = $(libdir)/seahorse/
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/libegg \
+	-I$(top_srcdir)/common \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
@@ -81,6 +82,7 @@ libseahorse_pgp_la_SOURCES = \
 	$(HKP_SRCS)
 
 libseahorse_pgp_la_LIBADD = \
+	$(top_builddir)/common/libcommon.la \
 	$(top_builddir)/libseahorse/libseahorse.la
 
 seahorselibexecbin_PROGRAMS = xloadimage

@@ -120,16 +120,16 @@ on_delete_gkr_complete (GObject *source,
 }
 
 static void
-seahorse_gkr_keyring_deleter_delete_async (SeahorseDeleter *deleter,
-                                           GCancellable *cancellable,
-                                           GAsyncReadyCallback callback,
-                                           gpointer user_data)
+seahorse_gkr_keyring_deleter_delete (SeahorseDeleter *deleter,
+                                     GCancellable *cancellable,
+                                     GAsyncReadyCallback callback,
+                                     gpointer user_data)
 {
 	SeahorseGkrKeyringDeleter *self = SEAHORSE_GKR_KEYRING_DELETER (deleter);
 	GSimpleAsyncResult *res;
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_gkr_keyring_deleter_delete_async);
+	                                 seahorse_gkr_keyring_deleter_delete);
 
 	secret_collection_delete (SECRET_COLLECTION (self->keyring),
 	                          cancellable, on_delete_gkr_complete,
@@ -146,7 +146,7 @@ seahorse_gkr_keyring_deleter_delete_finish (SeahorseDeleter *deleter,
 	SeahorseGkrKeyringDeleter *self = SEAHORSE_GKR_KEYRING_DELETER (deleter);
 
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
-	                      seahorse_gkr_keyring_deleter_delete_async), FALSE);
+	                      seahorse_gkr_keyring_deleter_delete), FALSE);
 
 	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
 		return FALSE;
@@ -164,7 +164,7 @@ seahorse_gkr_keyring_deleter_class_init (SeahorseGkrKeyringDeleterClass *klass)
 
 	deleter_class->add_object = seahorse_gkr_keyring_deleter_add_object;
 	deleter_class->create_confirm = seahorse_gkr_keyring_deleter_create_confirm;
-	deleter_class->delete_async = seahorse_gkr_keyring_deleter_delete_async;
+	deleter_class->delete = seahorse_gkr_keyring_deleter_delete;
 	deleter_class->delete_finish = seahorse_gkr_keyring_deleter_delete_finish;
 	deleter_class->get_objects = seahorse_gkr_keyring_deleter_get_objects;
 }

@@ -33,7 +33,7 @@
 #include "seahorse-pgp-backend.h"
 #include "seahorse-pgp-key.h"
 
-#include "seahorse-deletable.h"
+#include "seahorse-common.h"
 #include "seahorse-exportable.h"
 #include "seahorse-icons.h"
 #include "seahorse-predicate.h"
@@ -566,10 +566,19 @@ seahorse_gpgme_key_create_deleter (SeahorseDeletable *deletable)
 		return seahorse_gpgme_key_deleter_new (self);
 }
 
+static gboolean
+seahorse_gpgme_key_get_deletable (SeahorseDeletable *deletable)
+{
+	gboolean can;
+	g_object_get (deletable, "deletable", &can, NULL);
+	return can;
+}
+
 static void
 seahorse_gpgme_key_deletable_iface (SeahorseDeletableIface *iface)
 {
 	iface->create_deleter = seahorse_gpgme_key_create_deleter;
+	iface->get_deletable = seahorse_gpgme_key_get_deletable;
 }
 
 static GList *

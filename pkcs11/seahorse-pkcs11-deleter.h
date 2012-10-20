@@ -26,7 +26,7 @@
 
 #include <glib-object.h>
 
-#include "seahorse-deleter.h"
+#include "seahorse-common.h"
 #include "seahorse-certificate.h"
 
 #define SEAHORSE_TYPE_PKCS11_DELETER       (seahorse_pkcs11_deleter_get_type ())

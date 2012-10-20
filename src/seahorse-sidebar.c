@@ -26,7 +26,7 @@
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
 #include "seahorse-backend.h"
-#include "seahorse-deletable.h"
+#include "seahorse-common.h"
 #include "seahorse-interaction.h"
 #include "seahorse-lockable.h"
 #include "seahorse-place.h"
@@ -898,8 +898,8 @@ on_place_delete (GtkMenuItem *item,
 	deleter = seahorse_deletable_create_deleter (deletable);
 
 	if (seahorse_deleter_prompt (deleter, GTK_WINDOW (window)))
-		seahorse_deleter_delete_async (deleter, NULL, on_place_deleted,
-		                               g_object_ref (window));
+		seahorse_deleter_delete (deleter, NULL, on_place_deleted,
+		                         g_object_ref (window));
 
 	g_object_unref (deleter);
 }

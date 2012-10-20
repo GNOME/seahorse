@@ -26,7 +26,7 @@
 #include "seahorse-actions.h"
 #include "seahorse-backend.h"
 #include "seahorse-catalog.h"
-#include "seahorse-deletable.h"
+#include "seahorse-common.h"
 #include "seahorse-exportable.h"
 #include "seahorse-object.h"
 #include "seahorse-prefs.h"

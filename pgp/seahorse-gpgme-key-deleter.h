@@ -26,7 +26,7 @@
 
 #include <glib-object.h>
 
-#include "seahorse-deleter.h"
+#include "seahorse-common.h"
 #include "seahorse-gpgme-key.h"
 
 #define SEAHORSE_TYPE_GPGME_KEY_DELETER       (seahorse_gpgme_key_deleter_get_type ())

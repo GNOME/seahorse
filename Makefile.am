@@ -21,6 +21,7 @@ PGP_DIR =
 endif
 
 SUBDIRS = libegg \
+	common \
 	libseahorse \
 	gkr \
 	$(PGP_DIR) \

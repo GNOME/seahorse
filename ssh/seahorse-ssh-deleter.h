@@ -26,7 +26,7 @@
 
 #include <glib-object.h>
 
-#include "seahorse-deleter.h"
+#include "seahorse-common.h"
 #include "seahorse-ssh-key.h"
 
 #define SEAHORSE_TYPE_SSH_DELETER       (seahorse_ssh_deleter_get_type ())

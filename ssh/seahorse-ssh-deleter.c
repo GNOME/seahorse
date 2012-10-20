@@ -187,7 +187,7 @@ seahorse_ssh_deleter_class_init (SeahorseSshDeleterClass *klass)
 
 	deleter_class->add_object = seahorse_ssh_deleter_add_object;
 	deleter_class->create_confirm = seahorse_ssh_deleter_create_confirm;
-	deleter_class->delete_async = seahorse_ssh_deleter_delete_async;
+	deleter_class->delete = seahorse_ssh_deleter_delete_async;
 	deleter_class->delete_finish = seahorse_ssh_deleter_delete_finish;
 	deleter_class->get_objects = seahorse_ssh_deleter_get_objects;
 }

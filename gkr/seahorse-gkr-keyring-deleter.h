@@ -26,7 +26,7 @@
 
 #include <glib-object.h>
 
-#include "seahorse-deleter.h"
+#include "seahorse-common.h"
 #include "seahorse-gkr-keyring.h"
 
 #define SEAHORSE_TYPE_GKR_KEYRING_DELETER               (seahorse_gkr_keyring_deleter_get_type ())

@@ -29,7 +29,7 @@
 #include "seahorse-private-key.h"
 
 #include "seahorse-action.h"
-#include "seahorse-deleter.h"
+#include "seahorse-common.h"
 #include "seahorse-exportable.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
@@ -211,7 +211,7 @@ on_delete_objects (GtkAction *action,
 	}
 
 	if (seahorse_deleter_prompt (deleter, GTK_WINDOW (self))) {
-		seahorse_deleter_delete_async (deleter, NULL, on_delete_complete, g_object_ref (self));
+		seahorse_deleter_delete (deleter, NULL, on_delete_complete, g_object_ref (self));
 	}
 
 	g_object_unref (deleter);

@@ -34,7 +34,7 @@
 #include "seahorse-gkr-item-deleter.h"
 #include "seahorse-gkr-keyring.h"
 
-#include "seahorse-deletable.h"
+#include "seahorse-common.h"
 #include "seahorse-icons.h"
 #include "seahorse-place.h"
 #include "seahorse-util.h"
@@ -754,10 +754,19 @@ seahorse_gkr_item_create_deleter (SeahorseDeletable *deletable)
 	return seahorse_gkr_item_deleter_new (self);
 }
 
+static gboolean
+seahorse_gkr_item_get_deletable (SeahorseDeletable *deletable)
+{
+	gboolean can;
+	g_object_get (deletable, "deletable", &can, NULL);
+	return can;
+}
+
 static void
 seahorse_gkr_item_deletable_iface (SeahorseDeletableIface *iface)
 {
 	iface->create_deleter = seahorse_gkr_item_create_deleter;
+	iface->get_deletable = seahorse_gkr_item_get_deletable;
 }
 
 static void

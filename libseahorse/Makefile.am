@@ -5,6 +5,7 @@ seahorselibexecbindir = $(libdir)/seahorse/
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
+	-I$(top_srcdir)/common \
 	-I$(top_srcdir)/libegg \
 	$(SEAHORSE_CFLAGS) \
 	-DPKGDATADIR=\""$(pkgdatadir)/"\" \
@@ -52,8 +53,6 @@ libseahorse_la_SOURCES = \
 	seahorse-collection.c seahorse-collection.h \
 	seahorse-debug.c seahorse-debug.h \
 	seahorse-delete-dialog.c seahorse-delete-dialog.h \
-	seahorse-deletable.c seahorse-deletable.h \
-	seahorse-deleter.c seahorse-deleter.h \
 	seahorse-exportable.c seahorse-exportable.h \
 	seahorse-exporter.c seahorse-exporter.h \
 	seahorse-icons.c seahorse-icons.h \
@@ -80,6 +79,9 @@ libseahorse_la_SOURCES = \
 	$(dbus_shell_search_provider_built_sources) \
 	$(MARSHAL_SRCS) \
 	$(KEYSERVER_SRCS)
+
+libseahorse_la_LIBADD = \
+	$(top_builddir)/common/libcommon.la
 
 seahorse-marshal.h: seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@

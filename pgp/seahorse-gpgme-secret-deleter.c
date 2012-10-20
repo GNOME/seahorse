@@ -159,7 +159,7 @@ seahorse_gpgme_secret_deleter_class_init (SeahorseGpgmeSecretDeleterClass *klass
 
 	deleter_class->add_object = seahorse_gpgme_secret_deleter_add_object;
 	deleter_class->create_confirm = seahorse_gpgme_secret_deleter_create_confirm;
-	deleter_class->delete_async = seahorse_gpgme_secret_deleter_delete_async;
+	deleter_class->delete = seahorse_gpgme_secret_deleter_delete_async;
 	deleter_class->delete_finish = seahorse_gpgme_secret_deleter_delete_finish;
 	deleter_class->get_objects = seahorse_gpgme_secret_deleter_get_objects;
 }

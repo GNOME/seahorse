@@ -225,7 +225,7 @@ seahorse_gkr_item_deleter_class_init (SeahorseGkrItemDeleterClass *klass)
 
 	deleter_class->add_object = seahorse_gkr_item_deleter_add_object;
 	deleter_class->create_confirm = seahorse_gkr_item_deleter_create_confirm;
-	deleter_class->delete_async = seahorse_gkr_item_deleter_delete_async;
+	deleter_class->delete = seahorse_gkr_item_deleter_delete_async;
 	deleter_class->delete_finish = seahorse_gkr_item_deleter_delete_finish;
 	deleter_class->get_objects = seahorse_gkr_item_deleter_get_objects;
 }

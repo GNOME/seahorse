@@ -5,6 +5,7 @@ localedir = $(datadir)/locale
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
+	-I$(top_srcdir)/common \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
 	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
@@ -40,6 +41,7 @@ seahorse_SOURCES = \
 	$(KEYSERVER_SRCS)
 
 seahorse_LDADD = \
+	$(top_builddir)/common/libcommon.la \
 	$(top_builddir)/libseahorse/libseahorse.la \
 	$(PGP_LDADD) \
 	$(SSH_LDADD) \

@@ -23,6 +23,7 @@ AC_CONFIG_MACRO_DIR([m4])
 
 AC_PROG_CC
 AC_PROG_CXX
+AM_PROG_VALAC([0.18.0])
 AC_PROG_INTLTOOL([0.35.0])
 AM_PROG_LIBTOOL
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
@@ -450,6 +451,7 @@ fi
 if test "$enable_debug" = "yes"; then
 	debug_status="yes (-g, -O0, debug output, testable)"
 	CFLAGS="$CFLAGS -O0"
+	VALA_FLAGS="$VALA_FLAGS --debug"
 elif test "$enable_debug" = "no"; then
 	debug_status="no (no debug output, not testable, G_DISABLE_ASSERT)"
 	AC_DEFINE_UNQUOTED(G_DISABLE_ASSERT, 1, [Disable glib assertions])
@@ -540,9 +542,11 @@ AC_MSG_RESULT($enable_coverage)
 
 AC_SUBST(SEAHORSE_CFLAGS)
 AC_SUBST(SEAHORSE_LIBS)
+AC_SUBST(VALA_FLAGS)
 
 AC_OUTPUT([
 Makefile
+common/Makefile
 gkr/Makefile
 libegg/Makefile
 libseahorse/Makefile

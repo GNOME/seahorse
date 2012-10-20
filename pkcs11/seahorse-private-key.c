@@ -30,7 +30,7 @@
 #include "seahorse-token.h"
 #include "seahorse-types.h"
 
-#include "seahorse-deletable.h"
+#include "seahorse-common.h"
 #include "seahorse-exportable.h"
 #include "seahorse-util.h"
 #include "seahorse-viewable.h"
@@ -302,10 +302,19 @@ seahorse_private_key_create_deleter (SeahorseDeletable *deletable)
 	return seahorse_pkcs11_key_deleter_new (G_OBJECT (self));
 }
 
+static gboolean
+seahorse_private_key_get_deletable (SeahorseDeletable *deletable)
+{
+	gboolean can;
+	g_object_get (deletable, "deletable", &can, NULL);
+	return can;
+}
+
 static void
 seahorse_private_key_deletable_iface (SeahorseDeletableIface *iface)
 {
 	iface->create_deleter = seahorse_private_key_create_deleter;
+	iface->get_deletable = seahorse_private_key_get_deletable;
 }
 
 static GList *

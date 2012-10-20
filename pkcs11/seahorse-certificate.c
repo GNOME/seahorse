@@ -32,7 +32,7 @@
 #include "seahorse-token.h"
 #include "seahorse-types.h"
 
-#include "seahorse-deletable.h"
+#include "seahorse-common.h"
 #include "seahorse-exportable.h"
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
@@ -392,10 +392,19 @@ seahorse_certificate_create_deleter (SeahorseDeletable *deletable)
 	return deleter;
 }
 
+static gboolean
+seahorse_certificate_get_deletable (SeahorseDeletable *deletable)
+{
+	gboolean can;
+	g_object_get (deletable, "deletable", &can, NULL);
+	return can;
+}
+
 static void
 seahorse_certificate_deletable_iface (SeahorseDeletableIface *iface)
 {
 	iface->create_deleter = seahorse_certificate_create_deleter;
+	iface->get_deletable = seahorse_certificate_get_deletable;
 }
 
 static void
