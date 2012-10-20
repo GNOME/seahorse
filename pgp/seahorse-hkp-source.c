@@ -201,7 +201,7 @@ create_hkp_soup_session (void)
 #if WITH_DEBUG
 	if (seahorse_debugging) {
 		logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
-		soup_logger_attach (logger, session);
+		soup_session_add_feature (session, SOUP_SESSION_FEATURE (logger));
 		g_object_unref (logger);
 	}
 #endif
