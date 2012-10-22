@@ -54,7 +54,9 @@ main (int argc, char **argv)
 	textdomain (GETTEXT_PACKAGE);
 #endif
 
+#if !GLIB_CHECK_VERSION(2,35,0)
 	g_type_init ();
+#endif
 
 	application = seahorse_application_new ();
 	g_signal_connect (application, "activate", G_CALLBACK (on_application_activate), NULL);
