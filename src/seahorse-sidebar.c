@@ -31,7 +31,6 @@
 #include "seahorse-lockable.h"
 #include "seahorse-place.h"
 #include "seahorse-util.h"
-#include "seahorse-viewable.h"
 
 #include "gkr/seahorse-gkr.h"
 #include "pgp/seahorse-pgp.h"

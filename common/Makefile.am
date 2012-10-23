@@ -11,6 +11,7 @@ libcommon_la_SOURCES = \
 	seahorse-deleter.vala \
 	seahorse-exportable.vala \
 	seahorse-exporter.vala \
+	seahorse-viewable.vala \
 	$(NULL)
 
 AM_VALAFLAGS = \
@@ -25,3 +26,6 @@ CFLAGS = \
 	-Wno-unused-but-set-variable \
 	-Wno-pointer-sign \
 	$(NULL)
+
+EXTRA_DIST = \
+	seahorse-common.h

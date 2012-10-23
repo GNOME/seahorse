@@ -29,7 +29,7 @@
 
 #include "seahorse-backend.h"
 #include "seahorse-predicate.h"
-#include "seahorse-viewable.h"
+#include "seahorse-common.h"
 #include "seahorse-widget.h"
 #include "seahorse-collection.h"
 

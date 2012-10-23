@@ -34,7 +34,6 @@
 #include "seahorse-icons.h"
 #include "seahorse-place.h"
 #include "seahorse-validity.h"
-#include "seahorse-viewable.h"
 
 #include <gcr/gcr.h>
 

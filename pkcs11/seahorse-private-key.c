@@ -32,7 +32,6 @@
 
 #include "seahorse-common.h"
 #include "seahorse-util.h"
-#include "seahorse-viewable.h"
 
 #include <gcr/gcr.h>
 

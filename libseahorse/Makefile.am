@@ -72,7 +72,6 @@ libseahorse_la_SOURCES = \
 	seahorse-types.c seahorse-types.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
-	seahorse-viewable.c seahorse-viewable.h \
 	seahorse-widget.c seahorse-widget.h \
 	$(dbus_shell_search_provider_built_sources) \
 	$(MARSHAL_SRCS) \

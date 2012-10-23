@@ -26,10 +26,10 @@
 #include "seahorse-pgp-uid.h"
 #include "seahorse-pgp-subkey.h"
 
+#include "seahorse-common.h"
 #include "seahorse-icons.h"
 #include "seahorse-object-list.h"
 #include "seahorse-util.h"
-#include "seahorse-viewable.h"
 
 #include <gcr/gcr.h>
 

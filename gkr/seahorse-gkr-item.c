@@ -38,7 +38,6 @@
 #include "seahorse-icons.h"
 #include "seahorse-place.h"
 #include "seahorse-util.h"
-#include "seahorse-viewable.h"
 
 #define GENERIC_SECRET "org.freedesktop.Secret.Generic"
 #define NETWORK_PASSWORD "org.gnome.keyring.NetworkPassword"
