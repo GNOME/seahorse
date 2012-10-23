@@ -28,7 +28,7 @@
 #include "seahorse-ssh-exporter.h"
 #include "seahorse-ssh-source.h"
 
-#include "seahorse-exporter.h"
+#include "seahorse-common.h"
 #include "seahorse-object.h"
 #include "seahorse-util.h"
 
@@ -256,7 +256,7 @@ seahorse_ssh_exporter_export_async (SeahorseExporter *exporter,
 	g_object_unref (res);
  }
 
-static gpointer
+static guchar *
 seahorse_ssh_exporter_export_finish (SeahorseExporter *exporter,
                                      GAsyncResult *result,
                                      gsize *size,
@@ -299,7 +299,7 @@ static void
 seahorse_ssh_exporter_iface_init (SeahorseExporterIface *iface)
 {
 	iface->add_object = seahorse_ssh_exporter_add_object;
-	iface->export_async = seahorse_ssh_exporter_export_async;
+	iface->export = seahorse_ssh_exporter_export_async;
 	iface->export_finish = seahorse_ssh_exporter_export_finish;
 	iface->get_objects = seahorse_ssh_exporter_get_objects;
 }

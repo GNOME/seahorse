@@ -34,7 +34,6 @@
 #include "seahorse-pgp-key.h"
 
 #include "seahorse-common.h"
-#include "seahorse-exportable.h"
 #include "seahorse-icons.h"
 #include "seahorse-predicate.h"
 #include "seahorse-object-list.h"
@@ -587,7 +586,7 @@ seahorse_gpgme_key_create_exporters (SeahorseExportable *exportable,
 {
 	GList *result = NULL;
 
-	if (type != SEAHORSE_EXPORTER_TEXTUAL)
+	if (type != SEAHORSE_EXPORTER_TYPE_TEXTUAL)
 		result = g_list_append (result, seahorse_gpgme_exporter_new (G_OBJECT (exportable), FALSE, FALSE));
 	result = g_list_append (result, seahorse_gpgme_exporter_new (G_OBJECT (exportable), TRUE, FALSE));
 

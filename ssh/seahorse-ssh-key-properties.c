@@ -27,8 +27,6 @@
 #include "seahorse-ssh-operation.h"
 
 #include "seahorse-bind.h"
-#include "seahorse-exporter.h"
-#include "seahorse-exportable.h"
 #include "seahorse-icons.h"
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
@@ -219,8 +217,8 @@ on_ssh_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 
 	window = GTK_WINDOW (seahorse_widget_get_toplevel (swidget));
 	if (seahorse_exportable_prompt (exporters, window, NULL, &file, &exporter)) {
-		seahorse_exporter_export_to_file_async (exporter, file, TRUE, NULL,
-		                                        on_export_complete, g_object_ref (window));
+		seahorse_exporter_export_to_file (exporter, file, TRUE, NULL,
+		                                  on_export_complete, g_object_ref (window));
 		g_object_unref (file);
 		g_object_unref (exporter);
 	}

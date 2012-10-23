@@ -53,8 +53,6 @@ libseahorse_la_SOURCES = \
 	seahorse-collection.c seahorse-collection.h \
 	seahorse-debug.c seahorse-debug.h \
 	seahorse-delete-dialog.c seahorse-delete-dialog.h \
-	seahorse-exportable.c seahorse-exportable.h \
-	seahorse-exporter.c seahorse-exporter.h \
 	seahorse-icons.c seahorse-icons.h \
 	seahorse-interaction.c seahorse-interaction.h \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \

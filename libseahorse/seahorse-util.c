@@ -366,50 +366,6 @@ seahorse_util_printf_fd (int fd, const char* fmt, ...)
     return ret;
 }
 
-GFile *
-seahorse_util_file_increment_unique (GFile *file,
-                                     guint *state)
-{
-	GFile *result;
-	gchar *suffix;
-	gchar *prefix;
-	gchar *uri_try;
-	gchar *x;
-	guint len;
-
-	g_return_val_if_fail (G_IS_FILE (file), NULL);
-	g_return_val_if_fail (state != NULL, NULL);
-
-	prefix = g_file_get_uri (file);
-	len = strlen (prefix);
-
-	g_return_val_if_fail (len > 0, NULL);
-
-	/* Always take off a slash at end */
-	if (prefix[len - 1] == '/')
-		prefix[len - 1] = 0;
-
-	/* Split into prefix and suffix */
-	suffix = strrchr (prefix, '.');
-	x = strrchr (prefix, '/');
-	if (suffix == NULL || (x != NULL && suffix < x)) {
-		suffix = g_strdup ("");
-	} else {
-		x = suffix;
-		suffix = g_strdup (suffix);
-		*x = 0;
-	}
-
-	++(*state);
-	uri_try = g_strdup_printf ("%s-%u%s", prefix, *state, suffix);
-	g_free (suffix);
-	g_free (prefix);
-
-	result = g_file_new_for_uri (uri_try);
-	g_free (uri_try);
-	return result;
-}
-
 /**
  * seahorse_util_write_file_private:
  * @filename: file to write to

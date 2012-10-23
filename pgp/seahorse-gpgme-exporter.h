@@ -26,7 +26,7 @@
 
 #include <glib-object.h>
 
-#include "seahorse-exporter.h"
+#include "seahorse-common.h"
 
 #define SEAHORSE_TYPE_GPGME_EXPORTER            (seahorse_gpgme_exporter_get_type ())
 #define SEAHORSE_GPGME_EXPORTER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GPGME_EXPORTER, SeahorseGpgmeExporter))

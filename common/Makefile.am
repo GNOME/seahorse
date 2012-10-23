@@ -9,6 +9,8 @@ noinst_LTLIBRARIES = libcommon.la
 libcommon_la_SOURCES = \
 	seahorse-deletable.vala \
 	seahorse-deleter.vala \
+	seahorse-exportable.vala \
+	seahorse-exporter.vala \
 	$(NULL)
 
 AM_VALAFLAGS = \

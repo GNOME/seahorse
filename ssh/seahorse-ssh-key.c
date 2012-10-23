@@ -31,7 +31,6 @@
 #include "seahorse-ssh-source.h"
 
 #include "seahorse-common.h"
-#include "seahorse-exportable.h"
 #include "seahorse-icons.h"
 #include "seahorse-place.h"
 #include "seahorse-validity.h"

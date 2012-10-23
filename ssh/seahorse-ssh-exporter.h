@@ -26,7 +26,7 @@
 
 #include <glib-object.h>
 
-#include "seahorse-exporter.h"
+#include "seahorse-common.h"
 
 #define SEAHORSE_TYPE_SSH_EXPORTER            (seahorse_ssh_exporter_get_type ())
 #define SEAHORSE_SSH_EXPORTER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SSH_EXPORTER, SeahorseSshExporter))

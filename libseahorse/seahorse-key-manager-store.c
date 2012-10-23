@@ -23,7 +23,7 @@
 
 #include "config.h"
 
-#include "seahorse-exportable.h"
+#include "seahorse-common.h"
 #include "seahorse-place.h"
 #include "seahorse-util.h"
 
@@ -352,7 +352,7 @@ static gboolean
 export_to_text (SeahorseKeyManagerStore *self,
                 GtkSelectionData *selection_data)
 {
-	gpointer output;
+	guchar *output;
 	gsize size;
 	gboolean ret;
 	guint count;
@@ -367,7 +367,7 @@ export_to_text (SeahorseKeyManagerStore *self,
 
 	if (count > 0) {
 		seahorse_debug ("setting selection text");
-		gtk_selection_data_set_text (selection_data, output, size);
+		gtk_selection_data_set_text (selection_data, (gchar *)output, (gint)size);
 		ret = TRUE;
 	} else if (self->priv->drag_error) {
 		g_message ("error occurred on export: %s", self->priv->drag_error->message);

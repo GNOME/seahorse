@@ -30,7 +30,6 @@
 
 #include "seahorse-action.h"
 #include "seahorse-common.h"
-#include "seahorse-exportable.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
@@ -358,7 +357,7 @@ seahorse_pkcs11_properties_constructed (GObject *obj)
 
 	if (SEAHORSE_IS_EXPORTABLE (self->object))
 		exporters = seahorse_exportable_create_exporters (SEAHORSE_EXPORTABLE (self->object),
-		                                                  SEAHORSE_EXPORTER_ANY);
+		                                                  SEAHORSE_EXPORTER_TYPE_ANY);
 
 	request = gtk_action_group_get_action (self->actions, "export-object");
 	gtk_action_set_visible (request, exporters != NULL);

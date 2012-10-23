@@ -31,9 +31,8 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-bind.h"
+#include "seahorse-common.h"
 #include "seahorse-delete-dialog.h"
-#include "seahorse-exportable.h"
-#include "seahorse-exporter.h"
 #include "seahorse-icons.h"
 #include "seahorse-object.h"
 #include "seahorse-object-model.h"
@@ -1149,7 +1148,8 @@ on_export_complete (GObject *source,
 	GtkWindow *parent = GTK_WINDOW (user_data);
 	GError *error = NULL;
 
-	if (!seahorse_exporter_export_to_file_finish (SEAHORSE_EXPORTER (source), result, &error))
+	seahorse_exporter_export_to_file_finish (SEAHORSE_EXPORTER (source), result, &error);
+	if (error != NULL)
 		seahorse_util_handle_error (&error, parent, _("Couldn't export key"));
 
 	g_object_unref (parent);
@@ -1172,8 +1172,8 @@ on_pgp_details_export_button (GtkWidget *widget,
 
 	window = GTK_WINDOW (seahorse_widget_get_toplevel (swidget));
 	if (seahorse_exportable_prompt (exporters, window, NULL, &file, &exporter)) {
-		seahorse_exporter_export_to_file_async (exporter, file, TRUE, NULL,
-		                                        on_export_complete, g_object_ref (window));
+		seahorse_exporter_export_to_file (exporter, file, TRUE, NULL,
+		                                  on_export_complete, g_object_ref (window));
 		g_object_unref (file);
 		g_object_unref (exporter);
 	}

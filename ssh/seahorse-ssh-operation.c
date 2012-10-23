@@ -24,9 +24,9 @@
 
 #include "seahorse-ssh-operation.h"
 
+#include "seahorse-common.h"
 #define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
 #include "seahorse-debug.h"
-#include "seahorse-exporter.h"
 #include "seahorse-util.h"
 
 #include <sys/wait.h>

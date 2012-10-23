@@ -201,7 +201,7 @@ seahorse_certificate_der_exporter_export_async (SeahorseExporter *exporter,
 	g_object_unref (res);
 }
 
-static gpointer
+static guchar *
 seahorse_certificate_der_exporter_export_finish (SeahorseExporter *exporter,
                                                  GAsyncResult *result,
                                                  gsize *size,
@@ -225,7 +225,7 @@ static void
 seahorse_certificate_der_exporter_iface_init (SeahorseExporterIface *iface)
 {
 	iface->add_object = seahorse_certificate_der_exporter_add_object;
-	iface->export_async = seahorse_certificate_der_exporter_export_async;
+	iface->export = seahorse_certificate_der_exporter_export_async;
 	iface->export_finish = seahorse_certificate_der_exporter_export_finish;
 	iface->get_objects = seahorse_certificate_der_exporter_get_objects;
 }

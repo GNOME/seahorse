@@ -33,7 +33,6 @@
 #include "seahorse-types.h"
 
 #include "seahorse-common.h"
-#include "seahorse-exportable.h"
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 #include "seahorse-viewable.h"

@@ -24,7 +24,7 @@
 #ifndef __SEAHORSE_CERTIFICATE_DER_EXPORTER_H__
 #define __SEAHORSE_CERTIFICATE_DER_EXPORTER_H__
 
-#include "seahorse-exporter.h"
+#include "seahorse-common.h"
 
 #include <glib-object.h>
 

@@ -24,7 +24,7 @@
 #ifndef __SEAHORSE_VIEWABLE_H__
 #define __SEAHORSE_VIEWABLE_H__
 
-#include "seahorse-exporter.h"
+#include "seahorse-common.h"
 
 #include <gio/gio.h>
 

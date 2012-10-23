@@ -26,9 +26,9 @@
 #include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-keyring.h"
 
+#include "seahorse-common.h"
 #define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
 #include "seahorse-debug.h"
-#include "seahorse-exporter.h"
 #include "seahorse-object-list.h"
 #include "seahorse-progress.h"
 #include "seahorse-transfer.h"
@@ -179,8 +179,8 @@ on_timeout_start_transfer (gpointer user_data)
 	} else if (SEAHORSE_IS_GPGME_KEYRING (closure->from)) {
 		g_assert (closure->keys != NULL);
 		exporter = seahorse_gpgme_exporter_new_multiple (closure->keys, TRUE);
-		seahorse_exporter_export_async (exporter, closure->cancellable,
-		                                on_source_export_ready, g_object_ref (res));
+		seahorse_exporter_export (exporter, closure->cancellable,
+		                          on_source_export_ready, g_object_ref (res));
 		g_object_unref (exporter);
 
 	} else {

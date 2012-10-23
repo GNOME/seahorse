@@ -66,9 +66,6 @@ gboolean    seahorse_util_print_fd          (int fd,
 gboolean    seahorse_util_printf_fd         (int fd, 
                                              const char* data, ...);
 
-GFile *     seahorse_util_file_increment_unique     (GFile *file,
-                                                     guint *state);
-
 gboolean    seahorse_util_write_file_private            (const gchar* filename,
                                                          const gchar* contents,
                                                          GError **err);

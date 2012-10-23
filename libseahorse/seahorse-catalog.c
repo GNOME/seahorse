@@ -27,7 +27,6 @@
 #include "seahorse-backend.h"
 #include "seahorse-catalog.h"
 #include "seahorse-common.h"
-#include "seahorse-exportable.h"
 #include "seahorse-object.h"
 #include "seahorse-prefs.h"
 #include "seahorse-progress.h"
@@ -244,7 +243,7 @@ on_key_export_clipboard (GtkAction* action,
                          SeahorseCatalog *self)
 {
 	GList* objects;
-	gpointer output;
+	guchar *output;
 	gsize size;
 	GError *error = NULL;
 	GdkAtom atom;
@@ -262,7 +261,7 @@ on_key_export_clipboard (GtkAction* action,
 	if (error == NULL) {
 		atom = gdk_atom_intern ("CLIPBOARD", FALSE);
 		board = gtk_clipboard_get (atom);
-		gtk_clipboard_set_text (board, output, (gint)size);
+		gtk_clipboard_set_text (board, (gchar *)output, (gint)size);
 	} else {
 		seahorse_util_handle_error (&error, seahorse_catalog_get_window (self),
 		                            _("Couldn't export data"));
