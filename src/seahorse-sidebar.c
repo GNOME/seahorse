@@ -203,7 +203,8 @@ ensure_sidebar_pixbufs (SeahorseSidebar *self)
 
 	/* Lock icon */
 	icon = g_themed_icon_new_with_default_fallbacks ("changes-prevent-symbolic");
-	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, self->action_button_size, 0);
+	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, self->action_button_size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+	g_return_if_fail (icon_info != NULL);
 	if (!self->pixbuf_lock)
 		self->pixbuf_lock = gtk_icon_info_load_symbolic_for_context (icon_info, style, NULL, NULL);
 	if (!self->pixbuf_lock_l)
@@ -213,7 +214,8 @@ ensure_sidebar_pixbufs (SeahorseSidebar *self)
 
 	/* Unlock icon */
 	icon = g_themed_icon_new_with_default_fallbacks ("changes-allow-symbolic");
-	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, self->action_button_size, 0);
+	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, self->action_button_size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+	g_return_if_fail (icon_info != NULL);
 	if (!self->pixbuf_unlock)
 		self->pixbuf_unlock = gtk_icon_info_load_symbolic_for_context (icon_info, style, NULL, NULL);
 	if (!self->pixbuf_unlock_l)
