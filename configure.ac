@@ -62,6 +62,10 @@ else
 fi
 AC_SUBST(PLUGIN_LIBTOOL_FLAGS)
 
+GNOME_CODE_COVERAGE
+CFLAGS="$CFLAGS $CODE_COVERAGE_CFLAGS"
+LDFLAGS="$LDFLAGS $CODE_COVERAGE_LDFLAGS"
+
 # -----------------------------------------------------------------------------
 # Basic Dependencies
 
