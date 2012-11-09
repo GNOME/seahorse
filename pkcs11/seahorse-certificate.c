@@ -139,7 +139,7 @@ seahorse_certificate_dispose (GObject *obj)
 {
 	SeahorseCertificate *self = SEAHORSE_CERTIFICATE (obj);
 
-	g_clear_object (&self->pv->private_key);
+	seahorse_certificate_set_partner (self, NULL);
 
 	G_OBJECT_CLASS (seahorse_certificate_parent_class)->dispose (obj);
 }
