@@ -469,17 +469,18 @@ ensure_display_info (SeahorseGkrItem *self)
 				(DISPLAY_ENTRIES[i].custom_func) (&DISPLAY_ENTRIES[i],
 				                                  label, attrs,
 				                                  info);
-			if (!info->label) {
-				info->label = label;
-				label = NULL;
-			}
 			if (!info->description)
 				info->description = DISPLAY_ENTRIES[i].description;
-			if (!info->details)
-				info->details = g_strdup ("");
 			break;
 		}
 	}
+
+	if (!info->label) {
+		info->label = label;
+		label = NULL;
+	}
+	if (!info->details)
+		info->details = g_strdup ("");
 
 	self->pv->display_info = info;
 	g_hash_table_unref (attrs);
