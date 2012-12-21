@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: seahorse 3.5.x\n"
+"Project-Id-Version: seahorse 3.7.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-10 08:07+0200\n"
-"PO-Revision-Date: 2012-07-10 08:09+0200\n"
+"POT-Creation-Date: 2012-12-21 17:35+0100\n"
+"PO-Revision-Date: 2012-12-21 17:39+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -86,7 +86,7 @@ msgstr "Bytt _passord"
 msgid "Change the unlock password of the password storage keyring"
 msgstr "Endre passord for å låse opp nøkkelring for lagring av passord"
 
-#: ../gkr/seahorse-gkr-add-item.c:58
+#: ../gkr/seahorse-gkr-add-item.c:60
 msgid "Couldn't add item"
 msgstr "Kunne ikke legge til oppføring"
 
@@ -213,16 +213,16 @@ msgstr "Påloggingsinformasjon for nettverk"
 msgid "Password"
 msgstr "Passord"
 
-#: ../gkr/seahorse-gkr-item-properties.c:215
+#: ../gkr/seahorse-gkr-item-properties.c:216
 msgid "Couldn't change password."
 msgstr "Kunne ikke endre passord"
 
-#: ../gkr/seahorse-gkr-item-properties.c:262
-#: ../gkr/seahorse-gkr-item-properties.c:383
+#: ../gkr/seahorse-gkr-item-properties.c:263
+#: ../gkr/seahorse-gkr-item-properties.c:385
 msgid "Updating password"
 msgstr "Oppdaterer passord"
 
-#: ../gkr/seahorse-gkr-item-properties.c:344
+#: ../gkr/seahorse-gkr-item-properties.c:346
 msgid "Couldn't set description."
 msgstr "Kunne ikke sette beskrivelse"
 
@@ -235,12 +235,16 @@ msgstr "Egenskaper for nøkkel"
 
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-item-properties.xml.h:4
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
 msgid "Use:"
 msgstr "Bruk:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:5
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
 msgid "Type:"
 msgstr "Type:"
 
@@ -257,8 +261,9 @@ msgid "Show pass_word"
 msgstr "Vis pass_ord"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:9
-msgid "<b>Password:</b>"
-msgstr "<b>Passord:</b>"
+#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
+msgid "Password:"
+msgstr "Passord:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:10
 #: ../pgp/seahorse-pgp-subkey.c:366
@@ -269,12 +274,12 @@ msgstr "Nøkkel"
 #: ../gkr/seahorse-gkr-item-properties.xml.h:11
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
 #: ../ssh/seahorse-ssh-key-properties.xml.h:20
-msgid "<b>Technical Details:</b>"
-msgstr "<b>Tekniske detaljer:</b>"
+msgid "Technical Details:"
+msgstr "Tekniske detaljer:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:12
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:53
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:49
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
 #: ../ssh/seahorse-ssh-key-properties.xml.h:22
 msgid "Details"
 msgstr "Detaljer"
@@ -306,8 +311,8 @@ msgstr "Navn:"
 
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.xml.h:4
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
 msgid "Created:"
 msgstr "Opprettet:"
 
@@ -626,7 +631,7 @@ msgid "Cannot delete"
 msgstr "Kan ikke slette"
 
 #: ../libseahorse/seahorse-catalog.c:239
-#: ../libseahorse/seahorse-key-manager-store.c:442
+#: ../libseahorse/seahorse-key-manager-store.c:443
 msgid "Couldn't export keys"
 msgstr "Kunne ikke eksportere nøkler"
 
@@ -656,7 +661,7 @@ msgid "Copy to the clipboard"
 msgstr "Kopier til utklippstavlen"
 
 #: ../libseahorse/seahorse-catalog.c:284
-#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:957
+#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:959
 msgid "_Delete"
 msgstr "_Slett"
 
@@ -701,7 +706,7 @@ msgid "Show Seahorse help"
 msgstr "Vis hjelp for Seahorse"
 
 #: ../libseahorse/seahorse-exportable.c:407
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 msgid "Export"
 msgstr "Eksporter"
 
@@ -709,10 +714,6 @@ msgstr "Eksporter"
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Oppgi PIN eller passord for: %s"
-
-#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
-msgid "Password:"
-msgstr "Passord:"
 
 #. The second and main entry
 #: ../libseahorse/seahorse-passphrase.c:245
@@ -767,49 +768,51 @@ msgstr "Synkroniser _endrede nøkler med nøkkeltjenere automatisk."
 msgid "Key Servers"
 msgstr "Nøkkeltjenere"
 
-#: ../libseahorse/seahorse-util.c:209
+#: ../libseahorse/seahorse-util.c:210
 msgid "%Y-%m-%d"
 msgstr "%d-%m-%Y"
 
-#: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
+#: ../libseahorse/seahorse-validity.c:40
 #: ../pgp/seahorse-pgp-key-properties.c:1254
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
-#: ../pkcs11/seahorse-token.c:576
+msgctxt "Validity"
 msgid "Unknown"
 msgstr "Ukjent"
 
 #: ../libseahorse/seahorse-validity.c:42
 #: ../pgp/seahorse-pgp-key-properties.c:1260
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
 msgctxt "Validity"
 msgid "Never"
 msgstr "Aldri"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1267
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
+msgctxt "Validity"
 msgid "Marginal"
 msgstr "Marginal"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1273
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
+msgctxt "Validity"
 msgid "Full"
 msgstr "Full"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1279
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
+msgctxt "Validity"
 msgid "Ultimate"
 msgstr "Ultimat"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1469
+msgctxt "Validity"
 msgid "Disabled"
 msgstr "Deaktivert"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1465
+msgctxt "Validity"
 msgid "Revoked"
 msgstr "Tilbakekalt"
 
@@ -977,13 +980,13 @@ msgid "Used to encrypt email and files"
 msgstr "Brukes til å kryptere e-post og filer"
 
 #: ../pgp/seahorse-gpgme-generate.c:132
-#: ../pkcs11/seahorse-pkcs11-generate.c:92
+#: ../pkcs11/seahorse-pkcs11-generate.c:91
 #: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
 #: ../pgp/seahorse-gpgme-generate.c:133
-msgid "DSA Elgamal"
+msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
 #: ../pgp/seahorse-gpgme-generate.c:182
@@ -1014,7 +1017,7 @@ msgstr ""
 "Dette gir systemet de tilfeldige data det trenger."
 
 #: ../pgp/seahorse-gpgme-generate.c:231
-#: ../pkcs11/seahorse-pkcs11-generate.c:460
+#: ../pkcs11/seahorse-pkcs11-generate.c:459
 msgid "Generating key"
 msgstr "Genererer nøkkel"
 
@@ -1240,6 +1243,11 @@ msgstr ""
 "Du har ingen personlige PGP-nøkler som kan brukes for å indikere din tillit "
 "til denne nøkkelen."
 
+#: ../pgp/seahorse-gpgme-subkey.c:197
+msgctxt "Algorithm"
+msgid "Unknown"
+msgstr "Ukjent"
+
 #: ../pgp/seahorse-gpgme-subkey.c:199
 msgid "ElGamal"
 msgstr "ElGamal"
@@ -1300,7 +1308,7 @@ msgstr "Eksterne nøkler"
 msgid "Remote Keys Containing '%s'"
 msgstr "Eksterne nøkler som inneholder «%s»"
 
-#: ../pgp/seahorse-keyserver-results.c:485
+#: ../pgp/seahorse-keyserver-results.c:486
 msgid "The search for keys failed."
 msgstr "Søk etter nøkler feilet."
 
@@ -1321,12 +1329,12 @@ msgid "_Search for keys containing: "
 msgstr "_Søk etter nøkler som inneholder:"
 
 #: ../pgp/seahorse-keyserver-search.xml.h:4
-msgid "<b>Key Servers:</b>"
-msgstr "<b>Nøkkeltjenere:</b>"
+msgid "Key Servers:"
+msgstr "Nøkkeltjenere:"
 
 #: ../pgp/seahorse-keyserver-search.xml.h:5
-msgid "<b>Shared Keys Near Me:</b>"
-msgstr "<b>Delte nøkler nær meg:</b>"
+msgid "Shared Keys Near Me:"
+msgstr "Delte nøkler nær meg:"
 
 #: ../pgp/seahorse-keyserver-search.xml.h:6
 msgid "Where to search:"
@@ -1465,8 +1473,8 @@ msgstr "_Utløpsdato:"
 #: ../pgp/seahorse-pgp-generate.xml.h:12
 #: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
 #: ../ssh/seahorse-ssh-generate.xml.h:11
-msgid "<b>_Advanced key options</b>"
-msgstr "<b>_Avanserte nøkkelvalg</b>"
+msgid "_Advanced key options"
+msgstr "_Avanserte nøkkelvalg"
 
 #: ../pgp/seahorse-pgp-key.c:353
 msgid "Personal PGP key"
@@ -1540,6 +1548,18 @@ msgstr "Kan ikke endre tillitsforhold"
 msgid "Couldn't export key"
 msgstr "Kunne ikke eksportere nøkkel"
 
+#: ../pgp/seahorse-pgp-key-properties.c:1267
+msgid "Marginal"
+msgstr "Marginal"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1273
+msgid "Full"
+msgstr "Full"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1279
+msgid "Ultimate"
+msgstr "Ultimat"
+
 #: ../pgp/seahorse-pgp-key-properties.c:1385
 #: ../pgp/seahorse-pgp-key-properties.c:1474
 msgctxt "Expires"
@@ -1570,9 +1590,17 @@ msgstr "Status"
 msgid "Strength"
 msgstr "Styrke"
 
+#: ../pgp/seahorse-pgp-key-properties.c:1465
+msgid "Revoked"
+msgstr "Tilbakekalt"
+
 #: ../pgp/seahorse-pgp-key-properties.c:1467
 msgid "Expired"
 msgstr "Utgått"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1469
+msgid "Disabled"
+msgstr "Deaktivert"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1471
 msgid "Good"
@@ -1582,15 +1610,10 @@ msgstr "God"
 msgid "Key ID"
 msgstr "Nøkkel-ID"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
-msgid "Never"
-msgstr "Aldri"
-
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-msgid "<b>This key has been revoked</b>"
-msgstr "<b>Denne nøkkelen har blitt tilbakekalt</b>"
+msgid "This key has been revoked"
+msgstr "Denne nøkkelen har blitt tilbakekalt"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
@@ -1601,8 +1624,8 @@ msgstr ""
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
-msgid "<b>This key has expired</b>"
-msgstr "<b>Denne nøkkelen har utløpt</b>"
+msgid "This key has expired"
+msgstr "Denne nøkkelen har utløpt"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
 msgid "Add a photo to this key"
@@ -1627,43 +1650,30 @@ msgstr "Gå til neste bilde"
 #. A photograph
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
-msgid "<b>Photo </b>"
-msgstr "<b>Bilde </b>"
+msgid "Photo "
+msgstr "Bilde"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
-msgid "<b>Key ID:</b>"
-msgstr "<b>Nøkkel-ID:</b>"
+msgid "Key ID:"
+msgstr "Nøkkel-ID:"
 
 #. Name of key, usually a persons name
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
 msgctxt "name-of-key"
-msgid "<b>Name:</b>"
-msgstr "<b>Navn:</b>"
+msgid "Name:"
+msgstr "Navn:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
-msgid "<b>Email:</b>"
-msgstr "<b>E-postadresse:</b>"
+msgid "Email:"
+msgstr "E-postadresse:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
-msgid "<b>Comment:</b>"
-msgstr "<b>Kommentar:</b>"
-
-#. To translators: This is the noun not the verb.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
-msgid "<b>Use:</b>"
-msgstr "<b>Bruk:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
-msgid "<b>Type:</b>"
-msgstr "<b>Type:</b>"
+msgid "Comment:"
+msgstr "Kommentar:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
 msgid "Decrypt files and email sent to you."
@@ -1684,8 +1694,8 @@ msgid "Owner"
 msgstr "Eier"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
-msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>Nøkkelnavn og signaturer</b>"
+msgid "Key Names and Signatures"
+msgstr "Nøkkelnavn og signaturer"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
 msgid "Primary"
@@ -1715,65 +1725,64 @@ msgstr "Navn og signaturer"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
-msgid "Key ID:"
-msgstr "Nøkkel-ID:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
 msgid "Strength:"
 msgstr "Styrke:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
-msgid "<b>Technical Details</b>"
-msgstr "<b>Tekniske detaljer</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+msgid "Technical Details"
+msgstr "Tekniske detaljer"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
+msgid "Fingerprint"
+msgstr "Fingeravtrykk"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
-msgid "<b>Fingerprint</b>"
-msgstr "<b>Fingeravtrykk:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
 msgid "Expires:"
 msgstr "Utgår:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
-msgid "<b>Dates</b>"
-msgstr "<b>Datoer</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
+msgid "Dates"
+msgstr "Datoer"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
 msgid "Override Owner _Trust:"
 msgstr "Overstyr _tillit til eier:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
 msgid "_Export Complete Key:"
 msgstr "_Eksporter hele nøkkelen:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
-msgid "<b>Actions</b>"
-msgstr "<b>Handlinger</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+msgid "Actions"
+msgstr "Handlinger"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
 msgid "Add"
 msgstr "Legg til"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
 msgid "Expire"
 msgstr "Utløpt"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:52
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:48
-msgid "<b>_Subkeys</b>"
-msgstr "<b>Un_dernøkler</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+msgid "_Subkeys"
+msgstr "Un_dernøkler"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
+msgctxt "Validity"
 msgid "Marginally"
 msgstr "Marginalt"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
+msgctxt "Validity"
 msgid "Fully"
 msgstr "Fullt ut"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
+msgctxt "Validity"
 msgid "Ultimately"
 msgstr "Ultimat"
 
@@ -1787,12 +1796,12 @@ msgstr "Offentlig PGP-nøkkel"
 
 #. Names set on the PGP key.
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
-msgid "<b>_Other Names:</b>"
-msgstr "<b>_Andre navn:</b>"
+msgid "_Other Names:"
+msgstr "_Andre navn:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
-msgid "<b>Your trust of this key</b>"
-msgstr "<b>Din tillit til denne nøkkelen</b>"
+msgid "Your trust of this key"
+msgstr "Din tillit til denne nøkkelen"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
 msgid "Your trust is manually specified on the <i>Details</i> tab."
@@ -1829,31 +1838,32 @@ msgid "_Revoke Signature"
 msgstr "_Tilbakekall signatur"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
-msgid "<b>_People who have signed this key:</b>"
-msgstr "<b>_Personer som har signert denne nøkkelen:</b>"
+msgid "_People who have signed this key:"
+msgstr "_Personer som har signert denne nøkkelen:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
 msgid "_Only display the signatures of people I trust"
 msgstr "_Bare vis signaturer til personer jeg stoler på"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
 msgid "Trust"
 msgstr "Tillit"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
 #: ../ssh/seahorse-ssh-key-properties.xml.h:19
-msgid "<b>Fingerprint:</b>"
-msgstr "<b>Fingeravtrykk:</b>"
+msgid "Fingerprint:"
+msgstr "Fingeravtrykk:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
-msgid "<b>Dates:</b>"
-msgstr "<b>Datoer:</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+msgid "Dates:"
+msgstr "Datoer:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
-msgid "<b>Indicate Trust:</b>"
-msgstr "<b>Indiker tillit:</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+msgid "Indicate Trust:"
+msgstr "Indiker tillit:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
 msgid "You _Trust the Owner:"
 msgstr "Du s_toler på eieren:"
 
@@ -1898,12 +1908,12 @@ msgid "By signing you indicate your trust that this key belongs to:"
 msgstr "Bed å signere indikerer du at du stoler på at denne nøkkelen tilhører:"
 
 #: ../pgp/seahorse-sign.xml.h:3
-msgid "<i>Key Name</i>"
-msgstr "<i>Navn på nøkkel</i>"
+msgid "Key Name"
+msgstr "Navn på nøkkel"
 
 #: ../pgp/seahorse-sign.xml.h:4
-msgid "<b>How carefully have you checked this key?</b>"
-msgstr "<b>Hvor nøye har du sjekket denne nøkkelen?</b>"
+msgid "How carefully have you checked this key?"
+msgstr "Hvor nøye har du sjekket denne nøkkelen?"
 
 #: ../pgp/seahorse-sign.xml.h:5
 msgid "_Not at all"
@@ -1954,8 +1964,8 @@ msgstr ""
 "post for å sjekke at e-postadressen tilhører eieren."
 
 #: ../pgp/seahorse-sign.xml.h:12
-msgid "<b>How others will see this signature:</b>"
-msgstr "<b>Hvordan andre vil se denne signaturen:</b>"
+msgid "How others will see this signature:"
+msgstr "Hvordan andre vil se denne signaturen:"
 
 #: ../pgp/seahorse-sign.xml.h:13
 msgid "_Others may not see this signature"
@@ -1966,8 +1976,8 @@ msgid "I can _revoke this signature at a later date."
 msgstr "Jeg kan t_rekke tilbake denne signaturen senere."
 
 #: ../pgp/seahorse-sign.xml.h:15
-msgid "<b>Sign key as:</b>"
-msgstr "<b>Signer nøkkel som:</b>"
+msgid "Sign key as:"
+msgstr "Signer nøkkel som:"
 
 #: ../pgp/seahorse-sign.xml.h:16
 msgid "_Signer:"
@@ -1997,15 +2007,15 @@ msgstr "Sender data"
 msgid "Unavailable"
 msgstr "Ikke tilgjengelig"
 
-#: ../pkcs11/seahorse-certificate.c:435
+#: ../pkcs11/seahorse-certificate.c:434
 msgid "Personal certificate and key"
 msgstr "Personlig sertifikat og nøkkel"
 
-#: ../pkcs11/seahorse-certificate.c:438
+#: ../pkcs11/seahorse-certificate.c:437
 msgid "Personal certificate"
 msgstr "Personlig sertifikat"
 
-#: ../pkcs11/seahorse-certificate.c:440
+#: ../pkcs11/seahorse-certificate.c:439
 #: ../pkcs11/seahorse-certificate-der-exporter.c:77
 msgid "Certificate"
 msgstr "Sertifikat"
@@ -2029,21 +2039,21 @@ msgid_plural "Are you sure you want to permanently delete %d certificates?"
 msgstr[0] "Er du sikker på at du vil slette %d sertifikat permanent?"
 msgstr[1] "Er du sikker på at du vil slette %d sertifikater permanent?"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:115
+#: ../pkcs11/seahorse-pkcs11-generate.c:114
 msgid "Couldn't generate private key"
 msgstr "Kunne ikke lage privat nøkkel"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:414
-#: ../pkcs11/seahorse-pkcs11-request.c:256
+#: ../pkcs11/seahorse-pkcs11-generate.c:413
+#: ../pkcs11/seahorse-pkcs11-request.c:255
 msgid "Create"
 msgstr "Lag"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:507
-#: ../pkcs11/seahorse-private-key.c:179
+#: ../pkcs11/seahorse-pkcs11-generate.c:506
+#: ../pkcs11/seahorse-private-key.c:178
 msgid "Private key"
 msgstr "Privat nøkkel"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:508
+#: ../pkcs11/seahorse-pkcs11-generate.c:507
 msgid "Used to request a certificate"
 msgstr "Brukes til å forespørre et sertifikat"
 
@@ -2072,7 +2082,7 @@ msgstr "Uten navn"
 msgid "Failed to export certificate"
 msgstr "Klarte ikke å eksportere sertifikat"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:875
+#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:877
 msgid "Couldn't delete"
 msgstr "Kunne ikke slette"
 
@@ -2096,23 +2106,23 @@ msgstr "Forespør sertifikat"
 msgid "Create a certificate request file for this key"
 msgstr "Lag en sertifikatforespørselsfil for denne nøkkelen"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:104
+#: ../pkcs11/seahorse-pkcs11-request.c:103
 msgid "Couldn't save certificate request"
 msgstr "Kunne ikke lagre sertifikatforespørsel"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:127
+#: ../pkcs11/seahorse-pkcs11-request.c:126
 msgid "Save certificate request"
 msgstr "Lagre sertifikatforespørsel"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:138
+#: ../pkcs11/seahorse-pkcs11-request.c:137
 msgid "Certificate request"
 msgstr "Sertifikatforespørsel"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:146
+#: ../pkcs11/seahorse-pkcs11-request.c:145
 msgid "PEM encoded request"
 msgstr "PEM-kodet forespørsel"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:194
+#: ../pkcs11/seahorse-pkcs11-request.c:193
 msgid "Couldn't create certificate request"
 msgstr "Kunne ikke lage sertifikatforespørsel"
 
@@ -2128,9 +2138,14 @@ msgstr "Common Name (CN) som settes inn i sertifikatforespørselen."
 msgid "Name (CN):"
 msgstr "Navn (CN):"
 
-#: ../pkcs11/seahorse-private-key.c:132
+#: ../pkcs11/seahorse-private-key.c:131
 msgid "Unnamed private key"
 msgstr "Privat nøkkel uten navn"
+
+#: ../pkcs11/seahorse-token.c:576
+msgctxt "Label"
+msgid "Unknown"
+msgstr "Ukjent"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
@@ -2157,8 +2172,8 @@ msgid "Continue"
 msgstr "Fortsett"
 
 #: ../src/seahorse-generate-select.xml.h:1
-msgid "<b>_Select the type of item to create:</b>"
-msgstr "<b>_Velg type oppføring du ønsker å opprettte:</b>"
+msgid "_Select the type of item to create:"
+msgstr "_Velg type oppføring du ønsker å opprettte:"
 
 #: ../src/seahorse-import-dialog.c:98
 msgid "Import failed"
@@ -2257,8 +2272,8 @@ msgid "Filter"
 msgstr "Filter"
 
 #: ../src/seahorse-key-manager.xml.h:1
-msgid "<big><b>First time options:</b></big>"
-msgstr "<big><b>Førstegangsalternativ:</b></big>"
+msgid "First time options:"
+msgstr "Førstegangsalternativer:"
 
 #: ../src/seahorse-key-manager.xml.h:2
 msgid "Generate a new key of your own: "
@@ -2272,23 +2287,23 @@ msgstr "Importer eksisterende nøkler fra en fil:"
 msgid "To get started with encryption you will need keys."
 msgstr "For å komme i gang med kryptering må du ha nøkler."
 
-#: ../src/seahorse-sidebar.c:799
+#: ../src/seahorse-sidebar.c:801
 msgid "Couldn't lock"
 msgstr "Kunne ikke låse"
 
-#: ../src/seahorse-sidebar.c:836
+#: ../src/seahorse-sidebar.c:838
 msgid "Couldn't unlock"
 msgstr "Kunne ikke låse opp"
 
-#: ../src/seahorse-sidebar.c:944
+#: ../src/seahorse-sidebar.c:946
 msgid "_Lock"
 msgstr "_Lås"
 
-#: ../src/seahorse-sidebar.c:949
+#: ../src/seahorse-sidebar.c:951
 msgid "_Unlock"
 msgstr "Lås _opp"
 
-#: ../src/seahorse-sidebar.c:968
+#: ../src/seahorse-sidebar.c:970
 msgid "_Properties"
 msgstr "Egenska_per"
 
@@ -2403,10 +2418,8 @@ msgstr ""
 "datamaskiner på en sikker måte."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:6
-msgid "<i>Your email address, or a reminder of what this key is for.</i>"
-msgstr ""
-"<i>E-postadressen din eller noe annet som minner deg hva denne nøkkelen er "
-"til.</i>"
+msgid "Your email address, or a reminder of what this key is for."
+msgstr "E-postadressen din eller noe annet som minner deg hva denne nøkkelen er til."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:10
 msgid "DSA"
@@ -2445,22 +2458,18 @@ msgid "Couldn't change passphrase for key."
 msgstr "Kunne ikke endre passordfrasen for nøkkel."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "<b>Identifier:</b>"
-msgstr "<b>Identifikator:</b>"
+msgid "Identifier:"
+msgstr "Identifikator:"
 
 #. Name of key, often a persons name
 #: ../ssh/seahorse-ssh-key-properties.xml.h:6
 msgctxt "name-of-ssh-key"
-msgid "<b>Name:</b>"
-msgstr "<b>Navn:</b>"
+msgid "Name:"
+msgstr "Navn:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:7
 msgid "Used to connect to other computers."
 msgstr "Brukt til å koble til andre datamaskiner."
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
-msgid "<b>Trust</b>"
-msgstr "<b>Tillit</b>"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:12
 msgid "The owner of this key is _authorized to connect to this computer"
@@ -2473,16 +2482,12 @@ msgid "This only applies to the <i>%s</i> account."
 msgstr "Dette gjelder kun <i>«%s»</i>-kontoen."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:16
-msgid "<b>Algorithm:</b>"
-msgstr "<b>Algoritme:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
-msgid "<b>Strength:</b>"
-msgstr "<b>Styrke:</b>"
+msgid "Algorithm:"
+msgstr "Algoritme:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:18
-msgid "<b>Location:</b>"
-msgstr "<b>Lokasjon:</b>"
+msgid "Location:"
+msgstr "Lokasjon:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:21
 msgid "E_xport Complete Key"
@@ -2551,8 +2556,8 @@ msgstr ""
 "på en annen datamaskin som bruker SSH."
 
 #: ../ssh/seahorse-ssh-upload.xml.h:4
-msgid "<i>eg: fileserver.example.com:port</i>"
-msgstr "<i>f.eks: filserver.eksempel.no:port</i>"
+msgid "eg: fileserver.example.com:port"
+msgstr "f.eks: filserver.eksempel.no:port"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
 msgid "_Computer Name:"
