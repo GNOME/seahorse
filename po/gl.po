@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-15 10:36+0200\n"
-"PO-Revision-Date: 2012-10-15 10:37+0200\n"
+"POT-Creation-Date: 2012-12-24 22:21+0100\n"
+"PO-Revision-Date: 2012-12-24 22:23+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -101,7 +101,7 @@ msgstr ""
 "Cambiar o contrasinal de desbloqueo do anel de chaves de almacenamento de "
 "contrasinais"
 
-#: ../gkr/seahorse-gkr-add-item.c:58
+#: ../gkr/seahorse-gkr-add-item.c:60
 msgid "Couldn't add item"
 msgstr "Non foi posíbel engadir o elemento"
 
@@ -228,16 +228,16 @@ msgstr "Credenciais de rede"
 msgid "Password"
 msgstr "Contrasinal"
 
-#: ../gkr/seahorse-gkr-item-properties.c:215
+#: ../gkr/seahorse-gkr-item-properties.c:216
 msgid "Couldn't change password."
 msgstr "Non foi posíbel modificar o contrasinal."
 
-#: ../gkr/seahorse-gkr-item-properties.c:262
-#: ../gkr/seahorse-gkr-item-properties.c:383
+#: ../gkr/seahorse-gkr-item-properties.c:263
+#: ../gkr/seahorse-gkr-item-properties.c:385
 msgid "Updating password"
 msgstr "Actualizando o contrasinal"
 
-#: ../gkr/seahorse-gkr-item-properties.c:344
+#: ../gkr/seahorse-gkr-item-properties.c:346
 msgid "Couldn't set description."
 msgstr "Non foi posíbel definir a descrición."
 
@@ -250,12 +250,16 @@ msgstr "Propiedades da chave"
 
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-item-properties.xml.h:4
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
 msgid "Use:"
 msgstr "Uso:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:5
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
 msgid "Type:"
 msgstr "Tipo:"
 
@@ -272,8 +276,9 @@ msgid "Show pass_word"
 msgstr "Mostrar _contrasinal"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:9
-msgid "<b>Password:</b>"
-msgstr "<b>Contrasinal:</b>"
+#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
+msgid "Password:"
+msgstr "Contrasinal:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:10
 #: ../pgp/seahorse-pgp-subkey.c:366
@@ -284,12 +289,12 @@ msgstr "Tecla"
 #: ../gkr/seahorse-gkr-item-properties.xml.h:11
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
 #: ../ssh/seahorse-ssh-key-properties.xml.h:20
-msgid "<b>Technical Details:</b>"
-msgstr "<b>Detalles técnicos:</b>"
+msgid "Technical Details:"
+msgstr "Detalles técnicos:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:12
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:53
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:49
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
 #: ../ssh/seahorse-ssh-key-properties.xml.h:22
 msgid "Details"
 msgstr "Detalles"
@@ -323,8 +328,8 @@ msgstr "Nome:"
 
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.xml.h:4
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
 msgid "Created:"
 msgstr "Creado:"
 
@@ -652,7 +657,7 @@ msgid "Cannot delete"
 msgstr "Non é posíbel eliminar"
 
 #: ../libseahorse/seahorse-catalog.c:239
-#: ../libseahorse/seahorse-key-manager-store.c:442
+#: ../libseahorse/seahorse-key-manager-store.c:443
 msgid "Couldn't export keys"
 msgstr "Non foi posíbel exportar as chaves"
 
@@ -682,7 +687,7 @@ msgid "Copy to the clipboard"
 msgstr "Copiar ao portapapeis"
 
 #: ../libseahorse/seahorse-catalog.c:284
-#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:957
+#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:959
 msgid "_Delete"
 msgstr "E_liminar"
 
@@ -727,7 +732,7 @@ msgid "Show Seahorse help"
 msgstr "Mostrar a axuda do Seahorse"
 
 #: ../libseahorse/seahorse-exportable.c:407
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 msgid "Export"
 msgstr "Exportar"
 
@@ -735,10 +740,6 @@ msgstr "Exportar"
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Escriba o PIN ou contrasinal para: %s"
-
-#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
-msgid "Password:"
-msgstr "Contrasinal:"
 
 #. The second and main entry
 #: ../libseahorse/seahorse-passphrase.c:245
@@ -795,7 +796,7 @@ msgstr ""
 msgid "Key Servers"
 msgstr "Servidores de chaves"
 
-#: ../libseahorse/seahorse-util.c:209
+#: ../libseahorse/seahorse-util.c:210
 msgid "%Y-%m-%d"
 msgstr "%d-%m-%Y"
 
@@ -1013,7 +1014,7 @@ msgid "RSA"
 msgstr "RSA"
 
 #: ../pgp/seahorse-gpgme-generate.c:133
-msgid "DSA Elgamal"
+msgid "DSA ElGamal"
 msgstr "DSA Elgamal"
 
 #: ../pgp/seahorse-gpgme-generate.c:182
@@ -1340,7 +1341,7 @@ msgstr "Chaves remotas"
 msgid "Remote Keys Containing '%s'"
 msgstr "Chaves remotas que conteñan «%s»"
 
-#: ../pgp/seahorse-keyserver-results.c:485
+#: ../pgp/seahorse-keyserver-results.c:486
 msgid "The search for keys failed."
 msgstr "Produciuse un erro ao buscar as chaves."
 
@@ -1361,12 +1362,12 @@ msgid "_Search for keys containing: "
 msgstr "_Buscar chaves que conteñan: "
 
 #: ../pgp/seahorse-keyserver-search.xml.h:4
-msgid "<b>Key Servers:</b>"
-msgstr "<b>Servidores de chaves:</b>"
+msgid "Key Servers:"
+msgstr "Servidores de chaves:"
 
 #: ../pgp/seahorse-keyserver-search.xml.h:5
-msgid "<b>Shared Keys Near Me:</b>"
-msgstr "<b>Chaves compartidas próximas a min:</b>"
+msgid "Shared Keys Near Me:"
+msgstr "Chaves compartidas próximas a min:"
 
 #: ../pgp/seahorse-keyserver-search.xml.h:6
 msgid "Where to search:"
@@ -1508,8 +1509,8 @@ msgstr "Data de _caducidade:"
 #: ../pgp/seahorse-pgp-generate.xml.h:12
 #: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
 #: ../ssh/seahorse-ssh-generate.xml.h:11
-msgid "<b>_Advanced key options</b>"
-msgstr "<b>Opcións _avanzadas de chave</b>"
+msgid "_Advanced key options"
+msgstr "Opcións _avanzadas de chave"
 
 #: ../pgp/seahorse-pgp-key.c:353
 msgid "Personal PGP key"
@@ -1648,8 +1649,8 @@ msgstr "ID da chave"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-msgid "<b>This key has been revoked</b>"
-msgstr "<b>Esta chave foi revogada</b>"
+msgid "This key has been revoked"
+msgstr "Esta chave foi revogada"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
@@ -1658,8 +1659,8 @@ msgstr "O propietario da chave revogou a chave. Non é posíbel usar máis."
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
-msgid "<b>This key has expired</b>"
-msgstr "<b>Esta chave caducou</b>"
+msgid "This key has expired"
+msgstr "Esta chave caducou"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
 msgid "Add a photo to this key"
@@ -1684,43 +1685,30 @@ msgstr "Ir á foto seguinte"
 #. A photograph
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
-msgid "<b>Photo </b>"
-msgstr "<b>Foto</b>"
+msgid "Photo "
+msgstr "Foto"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
-msgid "<b>Key ID:</b>"
-msgstr "<b>ID de chave:</b>"
+msgid "Key ID:"
+msgstr "ID de chave:"
 
 #. Name of key, usually a persons name
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
 msgctxt "name-of-key"
-msgid "<b>Name:</b>"
-msgstr "<b>Nome:</b>"
+msgid "Name:"
+msgstr "Nome:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
-msgid "<b>Email:</b>"
-msgstr "<b>Correo electrónico:</b>"
+msgid "Email:"
+msgstr "Correo electrónico:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
-msgid "<b>Comment:</b>"
-msgstr "<b>Comentario:</b>"
-
-#. To translators: This is the noun not the verb.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
-msgid "<b>Use:</b>"
-msgstr "<b>Uso:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
-msgid "<b>Type:</b>"
-msgstr "<b>Tipo:</b>"
+msgid "Comment:"
+msgstr "Comentario:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
 msgid "Decrypt files and email sent to you."
@@ -1741,8 +1729,8 @@ msgid "Owner"
 msgstr "Propietario"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
-msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>Nomes de chave e sinaturas</b>"
+msgid "Key Names and Signatures"
+msgstr "Nomes de chaves e sinaturas"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
 msgid "Primary"
@@ -1772,55 +1760,51 @@ msgstr "Nomes e sinaturas"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
-msgid "Key ID:"
-msgstr "ID de chave:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
 msgid "Strength:"
 msgstr "Resistencia:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
-msgid "<b>Technical Details</b>"
-msgstr "<b>Detalles técnicos</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+msgid "Technical Details"
+msgstr "Detalles técnicos"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
+msgid "Fingerprint"
+msgstr "Pegada dixital"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
-msgid "<b>Fingerprint</b>"
-msgstr "<b>Impresión dixital</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
 msgid "Expires:"
 msgstr "Caduca:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
-msgid "<b>Dates</b>"
-msgstr "<b>Datas</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
+msgid "Dates"
+msgstr "Datas"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
 msgid "Override Owner _Trust:"
 msgstr "Impor a confianza do _propietario:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
 msgid "_Export Complete Key:"
 msgstr "_Exportar chave completa:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
-msgid "<b>Actions</b>"
-msgstr "<b>Accións</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+msgid "Actions"
+msgstr "Accións"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
 msgid "Add"
 msgstr "Engadir"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
 msgid "Expire"
 msgstr "Caducar"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:52
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:48
-msgid "<b>_Subkeys</b>"
-msgstr "<b>_Subchaves</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+msgid "_Subkeys"
+msgstr "_Subchaves"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
 msgctxt "Validity"
@@ -1847,12 +1831,12 @@ msgstr "Chave PGP pública"
 
 #. Names set on the PGP key.
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
-msgid "<b>_Other Names:</b>"
-msgstr "<b>_Outros nomes:</b>"
+msgid "_Other Names:"
+msgstr "_Outros nomes:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
-msgid "<b>Your trust of this key</b>"
-msgstr "<b>A súa confianza nesta chave</b>"
+msgid "Your trust of this key"
+msgstr "A súa confianza nesta chave"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
 msgid "Your trust is manually specified on the <i>Details</i> tab."
@@ -1890,31 +1874,32 @@ msgid "_Revoke Signature"
 msgstr "_Revogar sinatura"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
-msgid "<b>_People who have signed this key:</b>"
-msgstr "<b>_Persoas que asinaron esta chave:</b>"
+msgid "_People who have signed this key:"
+msgstr "_Persoas que asinaron esta chave:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
 msgid "_Only display the signatures of people I trust"
 msgstr "Mostrar _só as sinaturas das persoas en quen confío"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
 msgid "Trust"
 msgstr "Confianza"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
 #: ../ssh/seahorse-ssh-key-properties.xml.h:19
-msgid "<b>Fingerprint:</b>"
-msgstr "<b>Impresión dixital:</b>"
+msgid "Fingerprint:"
+msgstr "Pegada dixital:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
-msgid "<b>Dates:</b>"
-msgstr "<b>Datas:</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+msgid "Dates:"
+msgstr "Datas:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
-msgid "<b>Indicate Trust:</b>"
-msgstr "<b>Indicar a confianza:</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+msgid "Indicate Trust:"
+msgstr "Indicar confianza:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
 msgid "You _Trust the Owner:"
 msgstr "_Confía no propietario:"
 
@@ -1959,12 +1944,12 @@ msgid "By signing you indicate your trust that this key belongs to:"
 msgstr "Asinando indica que confía que esta chave pertence a:"
 
 #: ../pgp/seahorse-sign.xml.h:3
-msgid "<i>Key Name</i>"
-msgstr "<i>Nome da chave</i>"
+msgid "Key Name"
+msgstr "Nome da chave"
 
 #: ../pgp/seahorse-sign.xml.h:4
-msgid "<b>How carefully have you checked this key?</b>"
-msgstr "<b>Que coidado puxo na verificación desta chave?</b>"
+msgid "How carefully have you checked this key?"
+msgstr "Que coidado puxo na verificación desta chave?"
 
 #: ../pgp/seahorse-sign.xml.h:5
 msgid "_Not at all"
@@ -2017,8 +2002,8 @@ msgstr ""
 "de correo pertence ao propietario."
 
 #: ../pgp/seahorse-sign.xml.h:12
-msgid "<b>How others will see this signature:</b>"
-msgstr "<b>Como verán outros esta sinatura:</b>"
+msgid "How others will see this signature:"
+msgstr "Como verán outros esta sinatura:"
 
 #: ../pgp/seahorse-sign.xml.h:13
 msgid "_Others may not see this signature"
@@ -2029,8 +2014,8 @@ msgid "I can _revoke this signature at a later date."
 msgstr "Podo _revogar esta sinatura nunha data posterior."
 
 #: ../pgp/seahorse-sign.xml.h:15
-msgid "<b>Sign key as:</b>"
-msgstr "<b>Asinar a chave como:</b>"
+msgid "Sign key as:"
+msgstr "Asinar chave como:"
 
 #: ../pgp/seahorse-sign.xml.h:16
 msgid "_Signer:"
@@ -2135,7 +2120,7 @@ msgstr "Sen nome"
 msgid "Failed to export certificate"
 msgstr "Produciuse un erro ao exportar o certificado"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:875
+#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:877
 msgid "Couldn't delete"
 msgstr "Non foi posíbel eliminar"
 
@@ -2225,8 +2210,8 @@ msgid "Continue"
 msgstr "Continuar"
 
 #: ../src/seahorse-generate-select.xml.h:1
-msgid "<b>_Select the type of item to create:</b>"
-msgstr "<b>_Seleccione o tipo de elemento para crear:</b>"
+msgid "_Select the type of item to create:"
+msgstr "_Seleccione o tipo de elemento para crear:"
 
 #: ../src/seahorse-import-dialog.c:98
 msgid "Import failed"
@@ -2325,8 +2310,8 @@ msgid "Filter"
 msgstr "Filtro"
 
 #: ../src/seahorse-key-manager.xml.h:1
-msgid "<big><b>First time options:</b></big>"
-msgstr "<big><b>Opcións de primeiro uso:</b></big>"
+msgid "First time options:"
+msgstr "Opcións de primeiro uso:"
 
 #: ../src/seahorse-key-manager.xml.h:2
 msgid "Generate a new key of your own: "
@@ -2340,23 +2325,23 @@ msgstr "Importar as chaves existentes nun ficheiro:"
 msgid "To get started with encryption you will need keys."
 msgstr "Para poder comezar o proceso de cifrado precisará chaves."
 
-#: ../src/seahorse-sidebar.c:799
+#: ../src/seahorse-sidebar.c:801
 msgid "Couldn't lock"
 msgstr "Non foi posíbel bloquear"
 
-#: ../src/seahorse-sidebar.c:836
+#: ../src/seahorse-sidebar.c:838
 msgid "Couldn't unlock"
 msgstr "Non foi posíbel desbloquear"
 
-#: ../src/seahorse-sidebar.c:944
+#: ../src/seahorse-sidebar.c:946
 msgid "_Lock"
 msgstr "B_loquear"
 
-#: ../src/seahorse-sidebar.c:949
+#: ../src/seahorse-sidebar.c:951
 msgid "_Unlock"
 msgstr "_Desbloquear"
 
-#: ../src/seahorse-sidebar.c:968
+#: ../src/seahorse-sidebar.c:970
 msgid "_Properties"
 msgstr "_Propiedades"
 
@@ -2472,10 +2457,10 @@ msgstr ""
 "computadores."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:6
-msgid "<i>Your email address, or a reminder of what this key is for.</i>"
+msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
-"<i>O seu enderezo de correo electrónico ou un recordatorio para saber para "
-"que é esta chave.</i>"
+"O seu enderezo de correo electrónico ou un recordatorio para saber para que "
+"é esta chave."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:10
 msgid "DSA"
@@ -2514,22 +2499,18 @@ msgid "Couldn't change passphrase for key."
 msgstr "Non foi posíbel modificar a frase de paso da chave."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "<b>Identifier:</b>"
-msgstr "<b>Identificador:</b>"
+msgid "Identifier:"
+msgstr "Identificador:"
 
 #. Name of key, often a persons name
 #: ../ssh/seahorse-ssh-key-properties.xml.h:6
 msgctxt "name-of-ssh-key"
-msgid "<b>Name:</b>"
-msgstr "<b>Nome:</b>"
+msgid "Name:"
+msgstr "Nome:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:7
 msgid "Used to connect to other computers."
 msgstr "Úsase para conectarse a outros computadores."
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
-msgid "<b>Trust</b>"
-msgstr "<b>Confianza</b>"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:12
 msgid "The owner of this key is _authorized to connect to this computer"
@@ -2542,16 +2523,12 @@ msgid "This only applies to the <i>%s</i> account."
 msgstr "Isto só se lle aplica á conta <i>«%s»</i>."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:16
-msgid "<b>Algorithm:</b>"
-msgstr "<b>Algoritmo:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
-msgid "<b>Strength:</b>"
-msgstr "<b>Resistencia:</b>"
+msgid "Algorithm:"
+msgstr "Algoritmo:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:18
-msgid "<b>Location:</b>"
-msgstr "<b>Localización:</b>"
+msgid "Location:"
+msgstr "Localización:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:21
 msgid "E_xport Complete Key"
@@ -2622,8 +2599,8 @@ msgstr ""
 "SSH, debería ter xa unha conta de usuario nese computador."
 
 #: ../ssh/seahorse-ssh-upload.xml.h:4
-msgid "<i>eg: fileserver.example.com:port</i>"
-msgstr "<i>exemplo: servidordeficheiros.exemplo.com:porto</i>"
+msgid "eg: fileserver.example.com:port"
+msgstr "exemplo: servidordeficheiros.exemplo.com:porto"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
 msgid "_Computer Name:"
@@ -2636,6 +2613,50 @@ msgstr "Nome de _inicio de sesión:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_Configurar"
+
+#~ msgid "<b>Password:</b>"
+#~ msgstr "<b>Contrasinal:</b>"
+
+#~ msgid "<b>Key Servers:</b>"
+#~ msgstr "<b>Servidores de chaves:</b>"
+
+#~ msgid "<b>Key ID:</b>"
+#~ msgstr "<b>ID de chave:</b>"
+
+#~ msgctxt "name-of-key"
+#~ msgid "<b>Name:</b>"
+#~ msgstr "<b>Nome:</b>"
+
+#~ msgid "<b>Comment:</b>"
+#~ msgstr "<b>Comentario:</b>"
+
+#~ msgid "<b>Use:</b>"
+#~ msgstr "<b>Uso:</b>"
+
+#~ msgid "<b>Type:</b>"
+#~ msgstr "<b>Tipo:</b>"
+
+#~ msgid "<b>Key Names and Signatures</b>"
+#~ msgstr "<b>Nomes de chave e sinaturas</b>"
+
+#~ msgid "<b>Dates</b>"
+#~ msgstr "<b>Datas</b>"
+
+#~ msgid "<b>Actions</b>"
+#~ msgstr "<b>Accións</b>"
+
+#~ msgid "<b>Dates:</b>"
+#~ msgstr "<b>Datas:</b>"
+
+#~ msgctxt "name-of-ssh-key"
+#~ msgid "<b>Name:</b>"
+#~ msgstr "<b>Nome:</b>"
+
+#~ msgid "<b>Trust</b>"
+#~ msgstr "<b>Confianza</b>"
+
+#~ msgid "<b>Strength:</b>"
+#~ msgstr "<b>Resistencia:</b>"
 
 #~ msgid "Never"
 #~ msgstr "Nunca"
@@ -3171,9 +3192,6 @@ msgstr "_Configurar"
 
 #~ msgid "<b>Permissions:</b>"
 #~ msgstr "<b>Permisos:</b>"
-
-#~ msgid "Applications"
-#~ msgstr "Aplicativos"
 
 #~ msgid "_Read"
 #~ msgstr "_Ler"
