@@ -6,20 +6,21 @@
 # Andras Timar <timar at gnome dot hu>, 2003.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2005, 2007, 2008, 2009, 2010, 2011, 2012.
 # Mate Ory <orymate at gmail dot com>, 2008.
+# Balázs Úr <urbalazs at gmail dot com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-07-02 16:47+0000\n"
-"PO-Revision-Date: 2012-09-04 23:38+0200\n"
-"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
+"POT-Creation-Date: 2012-11-10 13:16+0000\n"
+"PO-Revision-Date: 2013-01-06 20:48+0100\n"
+"Last-Translator: Balázs Úr <urbalazs at gmail dot com>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 1.2\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../gkr/seahorse-add-keyring.xml.h:1
@@ -93,8 +94,7 @@ msgstr "Jelszó meg_változtatása"
 msgid "Change the unlock password of the password storage keyring"
 msgstr "A jelszótároló kulcstartó feloldási jelszavának módosítása"
 
-#: ../gkr/seahorse-gkr-add-item.c:58
-#| msgid "Couldn't delete item"
+#: ../gkr/seahorse-gkr-add-item.c:60
 msgid "Couldn't add item"
 msgstr "Nem vehető fel az elem"
 
@@ -221,16 +221,16 @@ msgstr "Hálózati hitelesítési adatok"
 msgid "Password"
 msgstr "Jelszó"
 
-#: ../gkr/seahorse-gkr-item-properties.c:215
+#: ../gkr/seahorse-gkr-item-properties.c:216
 msgid "Couldn't change password."
 msgstr "Nem lehet megváltoztatni a jelszót."
 
-#: ../gkr/seahorse-gkr-item-properties.c:262
-#: ../gkr/seahorse-gkr-item-properties.c:383
+#: ../gkr/seahorse-gkr-item-properties.c:263
+#: ../gkr/seahorse-gkr-item-properties.c:385
 msgid "Updating password"
 msgstr "Jelszó frissítése"
 
-#: ../gkr/seahorse-gkr-item-properties.c:344
+#: ../gkr/seahorse-gkr-item-properties.c:346
 msgid "Couldn't set description."
 msgstr "Nem állítható be a leírás."
 
@@ -243,12 +243,16 @@ msgstr "A kulcs tulajdonságai"
 
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-item-properties.xml.h:4
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
 msgid "Use:"
 msgstr "Használat:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:5
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
 msgid "Type:"
 msgstr "Típus:"
 
@@ -265,8 +269,9 @@ msgid "Show pass_word"
 msgstr "_Jelszó megjelenítése"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:9
-msgid "<b>Password:</b>"
-msgstr "<b>Jelszó:</b>"
+#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
+msgid "Password:"
+msgstr "Jelszó:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:10
 #: ../pgp/seahorse-pgp-subkey.c:366
@@ -277,12 +282,13 @@ msgstr "Kulcs"
 #: ../gkr/seahorse-gkr-item-properties.xml.h:11
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
 #: ../ssh/seahorse-ssh-key-properties.xml.h:20
-msgid "<b>Technical Details:</b>"
-msgstr "<b>Technikai részletek:</b>"
+#| msgid "<b>Technical Details:</b>"
+msgid "Technical Details:"
+msgstr "Technikai részletek:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:12
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:53
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:49
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
 #: ../ssh/seahorse-ssh-key-properties.xml.h:22
 msgid "Details"
 msgstr "Részletek"
@@ -314,8 +320,8 @@ msgstr "Név:"
 
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.xml.h:4
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
 msgid "Created:"
 msgstr "Létrehozva:"
 
@@ -636,7 +642,7 @@ msgid "Cannot delete"
 msgstr "Nem törölhető"
 
 #: ../libseahorse/seahorse-catalog.c:239
-#: ../libseahorse/seahorse-key-manager-store.c:442
+#: ../libseahorse/seahorse-key-manager-store.c:443
 msgid "Couldn't export keys"
 msgstr "Nem sikerült a kulcsok exportálása"
 
@@ -666,7 +672,7 @@ msgid "Copy to the clipboard"
 msgstr "Másolás a vágólapra"
 
 #: ../libseahorse/seahorse-catalog.c:284
-#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:957
+#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:959
 msgid "_Delete"
 msgstr "_Törlés"
 
@@ -711,7 +717,7 @@ msgid "Show Seahorse help"
 msgstr "A Seahorse súgójának megjelenítése"
 
 #: ../libseahorse/seahorse-exportable.c:407
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 msgid "Export"
 msgstr "Exportálás"
 
@@ -719,10 +725,6 @@ msgstr "Exportálás"
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Adja meg %s PIN-kódját vagy jelszavát"
-
-#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
-msgid "Password:"
-msgstr "Jelszó:"
 
 #. The second and main entry
 #: ../libseahorse/seahorse-passphrase.c:245
@@ -777,49 +779,57 @@ msgstr "_Módosított kulcsok automatikus szinkronizálása kulcskiszolgálókka
 msgid "Key Servers"
 msgstr "Kulcskiszolgálók"
 
-#: ../libseahorse/seahorse-util.c:209
+#: ../libseahorse/seahorse-util.c:210
 msgid "%Y-%m-%d"
 msgstr "%Y. %m. %d"
 
-#: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
+#: ../libseahorse/seahorse-validity.c:40
 #: ../pgp/seahorse-pgp-key-properties.c:1254
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
-#: ../pkcs11/seahorse-token.c:576
+#| msgid "Unknown"
+msgctxt "Validity"
 msgid "Unknown"
 msgstr "Ismeretlen"
 
 #: ../libseahorse/seahorse-validity.c:42
 #: ../pgp/seahorse-pgp-key-properties.c:1260
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
 msgctxt "Validity"
 msgid "Never"
 msgstr "Soha"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1267
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
+#| msgid "Marginal"
+msgctxt "Validity"
 msgid "Marginal"
 msgstr "Kismértékben"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1273
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
+#| msgid "Full"
+msgctxt "Validity"
 msgid "Full"
 msgstr "Teljesen"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1279
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
+#| msgid "Ultimate"
+msgctxt "Validity"
 msgid "Ultimate"
 msgstr "Tökéletesen"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1469
+#| msgid "Disabled"
+msgctxt "Validity"
 msgid "Disabled"
 msgstr "Tiltva"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1465
+#| msgid "Revoked"
+msgctxt "Validity"
 msgid "Revoked"
 msgstr "Visszavonva"
 
@@ -989,14 +999,15 @@ msgid "Used to encrypt email and files"
 msgstr "E-mailek és fájlok titkosításához"
 
 #: ../pgp/seahorse-gpgme-generate.c:132
-#: ../pkcs11/seahorse-pkcs11-generate.c:92
+#: ../pkcs11/seahorse-pkcs11-generate.c:91
 #: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
 #: ../pgp/seahorse-gpgme-generate.c:133
-msgid "DSA Elgamal"
-msgstr "DSA Elgamal"
+#| msgid "DSA Elgamal"
+msgid "DSA ElGamal"
+msgstr "DSA ElGamal"
 
 #: ../pgp/seahorse-gpgme-generate.c:182
 msgid "Couldn't generate PGP key"
@@ -1026,7 +1037,7 @@ msgstr ""
 "számára szükséges véletlenszerű adatokat."
 
 #: ../pgp/seahorse-gpgme-generate.c:231
-#: ../pkcs11/seahorse-pkcs11-generate.c:460
+#: ../pkcs11/seahorse-pkcs11-generate.c:459
 msgid "Generating key"
 msgstr "Kulcs előállítása"
 
@@ -1249,6 +1260,12 @@ msgid ""
 msgstr ""
 "Nincsenek titkos PGP kulcsai, amelyekkel jelezhetné a bizalmát a kulcsban."
 
+#: ../pgp/seahorse-gpgme-subkey.c:197
+#| msgid "Unknown"
+msgctxt "Algorithm"
+msgid "Unknown"
+msgstr "Ismeretlen"
+
 #: ../pgp/seahorse-gpgme-subkey.c:199
 msgid "ElGamal"
 msgstr "ElGamal"
@@ -1310,7 +1327,7 @@ msgstr "Távoli kulcsok"
 msgid "Remote Keys Containing '%s'"
 msgstr "„%s” kifejezést tartalmazó távoli kulcsok"
 
-#: ../pgp/seahorse-keyserver-results.c:485
+#: ../pgp/seahorse-keyserver-results.c:486
 msgid "The search for keys failed."
 msgstr "A kulcsok keresése sikertelen."
 
@@ -1331,12 +1348,14 @@ msgid "_Search for keys containing: "
 msgstr "Kulcsok _keresése, amelyek tartalmazzák ezt: "
 
 #: ../pgp/seahorse-keyserver-search.xml.h:4
-msgid "<b>Key Servers:</b>"
-msgstr "<b>Kulcskiszolgálók:</b>"
+#| msgid "Key Servers"
+msgid "Key Servers:"
+msgstr "Kulcskiszolgálók:"
 
 #: ../pgp/seahorse-keyserver-search.xml.h:5
-msgid "<b>Shared Keys Near Me:</b>"
-msgstr "<b>Megosztott kulcsok a környezetemben:</b>"
+#| msgid "<b>Shared Keys Near Me:</b>"
+msgid "Shared Keys Near Me:"
+msgstr "Megosztott kulcsok a környezetemben:"
 
 #: ../pgp/seahorse-keyserver-search.xml.h:6
 msgid "Where to search:"
@@ -1476,8 +1495,9 @@ msgstr "_Lejárati idő:"
 #: ../pgp/seahorse-pgp-generate.xml.h:12
 #: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
 #: ../ssh/seahorse-ssh-generate.xml.h:11
-msgid "<b>_Advanced key options</b>"
-msgstr "<b>Spe_ciális kulcsbeállítások</b>"
+#| msgid "<b>_Advanced key options</b>"
+msgid "_Advanced key options"
+msgstr "Spe_ciális kulcsbeállítások"
 
 #: ../pgp/seahorse-pgp-key.c:353
 msgid "Personal PGP key"
@@ -1551,6 +1571,18 @@ msgstr "Nem módosítható a megbízhatóság"
 msgid "Couldn't export key"
 msgstr "Nem sikerült exportálni a kulcsot"
 
+#: ../pgp/seahorse-pgp-key-properties.c:1267
+msgid "Marginal"
+msgstr "Kismértékben"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1273
+msgid "Full"
+msgstr "Teljesen"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1279
+msgid "Ultimate"
+msgstr "Tökéletesen"
+
 #: ../pgp/seahorse-pgp-key-properties.c:1385
 #: ../pgp/seahorse-pgp-key-properties.c:1474
 msgctxt "Expires"
@@ -1581,9 +1613,17 @@ msgstr "Állapot"
 msgid "Strength"
 msgstr "Erősség"
 
+#: ../pgp/seahorse-pgp-key-properties.c:1465
+msgid "Revoked"
+msgstr "Visszavonva"
+
 #: ../pgp/seahorse-pgp-key-properties.c:1467
 msgid "Expired"
 msgstr "Lejárt"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1469
+msgid "Disabled"
+msgstr "Tiltva"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1471
 msgid "Good"
@@ -1593,15 +1633,11 @@ msgstr "Jó"
 msgid "Key ID"
 msgstr "Kulcsazonosító"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
-msgid "Never"
-msgstr "Soha"
-
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-msgid "<b>This key has been revoked</b>"
-msgstr "<b>A kulcs vissza lett vonva</b>"
+#| msgid "<b>This key has been revoked</b>"
+msgid "This key has been revoked"
+msgstr "A kulcs vissza lett vonva"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
@@ -1610,8 +1646,9 @@ msgstr "A kulcs tulajdonosa visszavonta a kulcsot, amely már nem használható.
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
-msgid "<b>This key has expired</b>"
-msgstr "<b>A kulcs lejárt</b>"
+#| msgid "<b>This key has expired</b>"
+msgid "This key has expired"
+msgstr "A kulcs lejárt"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
 msgid "Add a photo to this key"
@@ -1636,43 +1673,34 @@ msgstr "Ugrás a következő fényképre"
 #. A photograph
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
-msgid "<b>Photo </b>"
-msgstr "<b>Fénykép</b>"
+#| msgid "<b>Photo </b>"
+msgid "Photo "
+msgstr "Fénykép "
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
-msgid "<b>Key ID:</b>"
-msgstr "<b>Kulcsazonosító:</b>"
+msgid "Key ID:"
+msgstr "Kulcsazonosító:"
 
 #. Name of key, usually a persons name
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
+#| msgid "Name:"
 msgctxt "name-of-key"
-msgid "<b>Name:</b>"
-msgstr "<b>Név:</b>"
+msgid "Name:"
+msgstr "Név:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
-msgid "<b>Email:</b>"
-msgstr "<b>E-mail:</b>"
+#| msgid "<b>Email:</b>"
+msgid "Email:"
+msgstr "E-mail:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
-msgid "<b>Comment:</b>"
-msgstr "<b>Megjegyzés:</b>"
-
-#. To translators: This is the noun not the verb.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
-msgid "<b>Use:</b>"
-msgstr "<b>Használat:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
-msgid "<b>Type:</b>"
-msgstr "<b>Típus:</b>"
+#| msgid "_Comment:"
+msgid "Comment:"
+msgstr "Megjegyzés:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
 msgid "Decrypt files and email sent to you."
@@ -1693,8 +1721,9 @@ msgid "Owner"
 msgstr "Tulajdonos"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
-msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>Kulcsnevek és aláírások</b>"
+#| msgid "Names and Signatures"
+msgid "Key Names and Signatures"
+msgstr "Kulcsnevek és aláírások"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
 msgid "Primary"
@@ -1724,65 +1753,72 @@ msgstr "Nevek és aláírások"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
-msgid "Key ID:"
-msgstr "Kulcsazonosító:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
 msgid "Strength:"
 msgstr "Erősség:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
-msgid "<b>Technical Details</b>"
-msgstr "<b>Technikai részletek</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+#| msgid "<b>Technical Details</b>"
+msgid "Technical Details"
+msgstr "Technikai részletek"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
+#| msgid "<b>Fingerprint</b>"
+msgid "Fingerprint"
+msgstr "Ujjlenyomat"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
-msgid "<b>Fingerprint</b>"
-msgstr "<b>Ujjlenyomat</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
 msgid "Expires:"
 msgstr "Lejárat:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
-msgid "<b>Dates</b>"
-msgstr "<b>Dátumok</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
+#| msgid "Date"
+msgid "Dates"
+msgstr "Dátumok"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
 msgid "Override Owner _Trust:"
 msgstr "Megbízhatóság _felülbírálása:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
 msgid "_Export Complete Key:"
 msgstr "_Teljes kulcs exportálása:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
-msgid "<b>Actions</b>"
-msgstr "<b>Műveletek</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+#| msgid "Applications"
+msgid "Actions"
+msgstr "Műveletek"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
 msgid "Add"
 msgstr "Hozzáadás"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
 msgid "Expire"
 msgstr "Lejárt"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:52
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:48
-msgid "<b>_Subkeys</b>"
-msgstr "<b>_Részkulcsok</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+#| msgid "<b>_Subkeys</b>"
+msgid "_Subkeys"
+msgstr "_Részkulcsok"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
+#| msgid "Marginally"
+msgctxt "Validity"
 msgid "Marginally"
 msgstr "Kismértékben"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
+#| msgid "Fully"
+msgctxt "Validity"
 msgid "Fully"
 msgstr "Teljesen"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
+#| msgid "Ultimately"
+msgctxt "Validity"
 msgid "Ultimately"
 msgstr "Tökéletesen"
 
@@ -1796,12 +1832,14 @@ msgstr "Nyilvános PGP kulcs"
 
 #. Names set on the PGP key.
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
-msgid "<b>_Other Names:</b>"
-msgstr "<b>_Egyéb nevek:</b>"
+#| msgid "<b>_Other Names:</b>"
+msgid "_Other Names:"
+msgstr "_Egyéb nevek:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
-msgid "<b>Your trust of this key</b>"
-msgstr "<b>A kulcs megbízhatósága</b>"
+#| msgid "<b>Your trust of this key</b>"
+msgid "Your trust of this key"
+msgstr "A kulcs megbízhatósága"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
 msgid "Your trust is manually specified on the <i>Details</i> tab."
@@ -1838,31 +1876,36 @@ msgid "_Revoke Signature"
 msgstr "_Aláírás visszavonása"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
-msgid "<b>_People who have signed this key:</b>"
-msgstr "<b>A k_ulcsot aláíró személyek:</b>"
+#| msgid "<b>_People who have signed this key:</b>"
+msgid "_People who have signed this key:"
+msgstr "A k_ulcsot aláíró személyek:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
 msgid "_Only display the signatures of people I trust"
 msgstr "_Csak a megbízható személyek aláírásainak megjelenítése"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
 msgid "Trust"
 msgstr "Megbízhatóság"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
 #: ../ssh/seahorse-ssh-key-properties.xml.h:19
-msgid "<b>Fingerprint:</b>"
-msgstr "<b>Ujjlenyomat:</b>"
+#| msgid "<b>Fingerprint:</b>"
+msgid "Fingerprint:"
+msgstr "Ujjlenyomat:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
-msgid "<b>Dates:</b>"
-msgstr "<b>Dátumok:</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+#| msgid "Date"
+msgid "Dates:"
+msgstr "Dátumok:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
-msgid "<b>Indicate Trust:</b>"
-msgstr "<b>Megbízhatóság jelzése:</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+#| msgid "<b>Indicate Trust:</b>"
+msgid "Indicate Trust:"
+msgstr "Megbízhatóság jelzése:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
 msgid "You _Trust the Owner:"
 msgstr "Me_gbízik a tulajdonosban:"
 
@@ -1907,12 +1950,14 @@ msgid "By signing you indicate your trust that this key belongs to:"
 msgstr "A kulcs aláírásával kifejezi bizalmát, hogy a kulcs tulajdonosa:"
 
 #: ../pgp/seahorse-sign.xml.h:3
-msgid "<i>Key Name</i>"
-msgstr "<i>Kulcs neve</i>"
+#| msgid "<i>Key Name</i>"
+msgid "Key Name"
+msgstr "Kulcs neve"
 
 #: ../pgp/seahorse-sign.xml.h:4
-msgid "<b>How carefully have you checked this key?</b>"
-msgstr "<b>Mennyire alaposan ellenőrizte ezt a kulcsot?</b>"
+#| msgid "<b>How carefully have you checked this key?</b>"
+msgid "How carefully have you checked this key?"
+msgstr "Mennyire alaposan ellenőrizte ezt a kulcsot?"
 
 #: ../pgp/seahorse-sign.xml.h:5
 msgid "_Not at all"
@@ -1963,8 +2008,9 @@ msgstr ""
 "ellenőrizze, hogy az e-mail cím a tulajdonoshoz tartozik."
 
 #: ../pgp/seahorse-sign.xml.h:12
-msgid "<b>How others will see this signature:</b>"
-msgstr "<b>Hogyan fogják mások látni ezt az aláírást:</b>"
+#| msgid "<b>How others will see this signature:</b>"
+msgid "How others will see this signature:"
+msgstr "Hogyan fogják mások látni ezt az aláírást:"
 
 #: ../pgp/seahorse-sign.xml.h:13
 msgid "_Others may not see this signature"
@@ -1975,8 +2021,9 @@ msgid "I can _revoke this signature at a later date."
 msgstr "Később _visszavonhatom ezt az aláírást."
 
 #: ../pgp/seahorse-sign.xml.h:15
-msgid "<b>Sign key as:</b>"
-msgstr "<b>Kulcs aláírása mint:</b>"
+#| msgid "<b>Sign key as:</b>"
+msgid "Sign key as:"
+msgstr "Kulcs aláírása mint:"
 
 #: ../pgp/seahorse-sign.xml.h:16
 msgid "_Signer:"
@@ -2006,15 +2053,15 @@ msgstr "Adatok küldése"
 msgid "Unavailable"
 msgstr "Nem érhető el"
 
-#: ../pkcs11/seahorse-certificate.c:435
+#: ../pkcs11/seahorse-certificate.c:434
 msgid "Personal certificate and key"
 msgstr "Személyes tanúsítvány és kulcs"
 
-#: ../pkcs11/seahorse-certificate.c:438
+#: ../pkcs11/seahorse-certificate.c:437
 msgid "Personal certificate"
 msgstr "Személyes tanúsítvány"
 
-#: ../pkcs11/seahorse-certificate.c:440
+#: ../pkcs11/seahorse-certificate.c:439
 #: ../pkcs11/seahorse-certificate-der-exporter.c:77
 msgid "Certificate"
 msgstr "Tanúsítvány"
@@ -2038,21 +2085,21 @@ msgid_plural "Are you sure you want to permanently delete %d certificates?"
 msgstr[0] "Biztosan véglegesen töröl %d tanúsítványt?"
 msgstr[1] "Biztosan véglegesen töröl %d tanúsítványt?"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:115
+#: ../pkcs11/seahorse-pkcs11-generate.c:114
 msgid "Couldn't generate private key"
 msgstr "Nem sikerült a személyes kulcs előállítása"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:414
-#: ../pkcs11/seahorse-pkcs11-request.c:256
+#: ../pkcs11/seahorse-pkcs11-generate.c:413
+#: ../pkcs11/seahorse-pkcs11-request.c:255
 msgid "Create"
 msgstr "Létrehozás"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:507
-#: ../pkcs11/seahorse-private-key.c:179
+#: ../pkcs11/seahorse-pkcs11-generate.c:506
+#: ../pkcs11/seahorse-private-key.c:178
 msgid "Private key"
 msgstr "Személyes kulcs"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:508
+#: ../pkcs11/seahorse-pkcs11-generate.c:507
 msgid "Used to request a certificate"
 msgstr "Tanúsítvány kérésére használatos"
 
@@ -2081,7 +2128,7 @@ msgstr "Névtelen"
 msgid "Failed to export certificate"
 msgstr "A tanúsítvány exportálása meghiúsult"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:875
+#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:877
 msgid "Couldn't delete"
 msgstr "Nem törölhető."
 
@@ -2105,23 +2152,23 @@ msgstr "Tanúsítvány _kérése"
 msgid "Create a certificate request file for this key"
 msgstr "Tanúsítványkérési fájl létrehozása ehhez a kulcshoz"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:104
+#: ../pkcs11/seahorse-pkcs11-request.c:103
 msgid "Couldn't save certificate request"
 msgstr "Nem menthető a tanúsítványkérés"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:127
+#: ../pkcs11/seahorse-pkcs11-request.c:126
 msgid "Save certificate request"
 msgstr "Tanúsítványkérés mentése"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:138
+#: ../pkcs11/seahorse-pkcs11-request.c:137
 msgid "Certificate request"
 msgstr "Tanúsítványkérés"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:146
+#: ../pkcs11/seahorse-pkcs11-request.c:145
 msgid "PEM encoded request"
 msgstr "PEM-kódolású kérés"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:194
+#: ../pkcs11/seahorse-pkcs11-request.c:193
 msgid "Couldn't create certificate request"
 msgstr "Nem sikerült a tanúsítványkérést létrehozni"
 
@@ -2137,9 +2184,15 @@ msgstr "A tanúsítványkérésbe elhelyezendő közönséges név (CN)."
 msgid "Name (CN):"
 msgstr "Név (CN):"
 
-#: ../pkcs11/seahorse-private-key.c:132
+#: ../pkcs11/seahorse-private-key.c:131
 msgid "Unnamed private key"
 msgstr "Névtelen személyes kulcs"
+
+#: ../pkcs11/seahorse-token.c:576
+#| msgid "Unknown"
+msgctxt "Label"
+msgid "Unknown"
+msgstr "Ismeretlen"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
@@ -2166,8 +2219,9 @@ msgid "Continue"
 msgstr "Folytatás"
 
 #: ../src/seahorse-generate-select.xml.h:1
-msgid "<b>_Select the type of item to create:</b>"
-msgstr "<b>_Válassza ki az előállítandó elem típusát:</b>"
+#| msgid "<b>_Select the type of item to create:</b>"
+msgid "_Select the type of item to create:"
+msgstr "_Válassza ki az előállítandó elem típusát:"
 
 #: ../src/seahorse-import-dialog.c:98
 msgid "Import failed"
@@ -2266,8 +2320,9 @@ msgid "Filter"
 msgstr "Szűrő"
 
 #: ../src/seahorse-key-manager.xml.h:1
-msgid "<big><b>First time options:</b></big>"
-msgstr "<big><b>Kezdeti lehetőségek:</b></big>"
+#| msgid "<big><b>First time options:</b></big>"
+msgid "First time options:"
+msgstr "Kezdeti lehetőségek:"
 
 #: ../src/seahorse-key-manager.xml.h:2
 msgid "Generate a new key of your own: "
@@ -2281,23 +2336,23 @@ msgstr "Létező kulcsok importálása fájlból:"
 msgid "To get started with encryption you will need keys."
 msgstr "A titkosítás elkezdéséhez kulcsokra lesz szüksége."
 
-#: ../src/seahorse-sidebar.c:799
+#: ../src/seahorse-sidebar.c:801
 msgid "Couldn't lock"
 msgstr "Nem sikerült a zárolás"
 
-#: ../src/seahorse-sidebar.c:836
+#: ../src/seahorse-sidebar.c:838
 msgid "Couldn't unlock"
 msgstr "Nem sikerült feloldás"
 
-#: ../src/seahorse-sidebar.c:944
+#: ../src/seahorse-sidebar.c:946
 msgid "_Lock"
 msgstr "_Zárolás"
 
-#: ../src/seahorse-sidebar.c:949
+#: ../src/seahorse-sidebar.c:951
 msgid "_Unlock"
 msgstr "_Feloldás"
 
-#: ../src/seahorse-sidebar.c:968
+#: ../src/seahorse-sidebar.c:970
 msgid "_Properties"
 msgstr "_Tulajdonságok"
 
@@ -2411,9 +2466,9 @@ msgstr ""
 "Az SSH-kulcs lehetővé teszi a biztonságos csatlakozást más számítógépekhez."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:6
-msgid "<i>Your email address, or a reminder of what this key is for.</i>"
-msgstr ""
-"<i>Az e-mail címe vagy valamilyen emlékeztető a kulcs funkciójáról.</i>"
+#| msgid "<i>Your email address, or a reminder of what this key is for.</i>"
+msgid "Your email address, or a reminder of what this key is for."
+msgstr "Az e-mail címe vagy valamilyen emlékeztető a kulcs funkciójáról."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:10
 msgid "DSA"
@@ -2452,22 +2507,20 @@ msgid "Couldn't change passphrase for key."
 msgstr "Nem sikerült megváltoztatni a kulcs jelmondatát."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "<b>Identifier:</b>"
-msgstr "<b>Azonosító:</b>"
+#| msgid "<b>Identifier:</b>"
+msgid "Identifier:"
+msgstr "Azonosító:"
 
 #. Name of key, often a persons name
 #: ../ssh/seahorse-ssh-key-properties.xml.h:6
+#| msgid "Name:"
 msgctxt "name-of-ssh-key"
-msgid "<b>Name:</b>"
-msgstr "<b>Név:</b>"
+msgid "Name:"
+msgstr "Név:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:7
 msgid "Used to connect to other computers."
 msgstr "Más számítógépekhez csatlakozásra használható."
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
-msgid "<b>Trust</b>"
-msgstr "<b>Megbízhatóság</b>"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:12
 msgid "The owner of this key is _authorized to connect to this computer"
@@ -2479,16 +2532,14 @@ msgid "This only applies to the <i>%s</i> account."
 msgstr "Ez csak a(z) <i>%s</i> fiókra vonatkozik."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:16
-msgid "<b>Algorithm:</b>"
-msgstr "<b>Algoritmus:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
-msgid "<b>Strength:</b>"
-msgstr "<b>Erősség:</b>"
+#| msgid "<b>Algorithm:</b>"
+msgid "Algorithm:"
+msgstr "Algoritmus:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:18
-msgid "<b>Location:</b>"
-msgstr "<b>Hely:</b>"
+#| msgid "<b>Location:</b>"
+msgid "Location:"
+msgstr "Hely:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:21
 msgid "E_xport Complete Key"
@@ -2557,8 +2608,9 @@ msgstr ""
 "kell felhasználói fiókkal az adott gépre."
 
 #: ../ssh/seahorse-ssh-upload.xml.h:4
-msgid "<i>eg: fileserver.example.com:port</i>"
-msgstr "<i>például: fájlkiszolgáló.példa.hu:port</i>"
+#| msgid "<i>eg: fileserver.example.com:port</i>"
+msgid "eg: fileserver.example.com:port"
+msgstr "például: fájlkiszolgáló.példa.hu:port"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
 msgid "_Computer Name:"
@@ -2571,6 +2623,53 @@ msgstr "Bejelentkezési _név:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_Beállítás"
+
+#~ msgid "<b>Password:</b>"
+#~ msgstr "<b>Jelszó:</b>"
+
+#~ msgid "<b>Key Servers:</b>"
+#~ msgstr "<b>Kulcskiszolgálók:</b>"
+
+#~ msgid "Never"
+#~ msgstr "Soha"
+
+#~ msgid "<b>Key ID:</b>"
+#~ msgstr "<b>Kulcsazonosító:</b>"
+
+#~ msgctxt "name-of-key"
+#~ msgid "<b>Name:</b>"
+#~ msgstr "<b>Név:</b>"
+
+#~ msgid "<b>Comment:</b>"
+#~ msgstr "<b>Megjegyzés:</b>"
+
+#~ msgid "<b>Use:</b>"
+#~ msgstr "<b>Használat:</b>"
+
+#~ msgid "<b>Type:</b>"
+#~ msgstr "<b>Típus:</b>"
+
+#~ msgid "<b>Key Names and Signatures</b>"
+#~ msgstr "<b>Kulcsnevek és aláírások</b>"
+
+#~ msgid "<b>Dates</b>"
+#~ msgstr "<b>Dátumok</b>"
+
+#~ msgid "<b>Actions</b>"
+#~ msgstr "<b>Műveletek</b>"
+
+#~ msgid "<b>Dates:</b>"
+#~ msgstr "<b>Dátumok:</b>"
+
+#~ msgctxt "name-of-ssh-key"
+#~ msgid "<b>Name:</b>"
+#~ msgstr "<b>Név:</b>"
+
+#~ msgid "<b>Trust</b>"
+#~ msgstr "<b>Megbízhatóság</b>"
+
+#~ msgid "<b>Strength:</b>"
+#~ msgstr "<b>Erősség:</b>"
 
 #~ msgid "Login keyring"
 #~ msgstr "Bejelentkezési kulcstartó"
@@ -3014,9 +3113,6 @@ msgstr "_Beállítás"
 
 #~ msgid "<b>Permissions:</b>"
 #~ msgstr "<b>Jogosultságok:</b>"
-
-#~ msgid "Applications"
-#~ msgstr "Alkalmazások"
 
 #~ msgid "_Read"
 #~ msgstr "_Olvasás"
