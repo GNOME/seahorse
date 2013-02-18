@@ -173,7 +173,7 @@ GtkApplication *
 seahorse_application_new (void)
 {
 	return g_object_new (SEAHORSE_TYPE_APPLICATION,
-	                     "application-id", "org.gnome.seahorse",
+	                     "application-id", "org.gnome.seahorse.Application",
 	                     NULL);
 }
 
