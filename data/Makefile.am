@@ -15,6 +15,15 @@ convert_DATA = \
 convertdir = \
 	$(datarootdir)/GConf/gsettings
 
+servicedir = $(datadir)/dbus-1/services
+service_DATA = $(service_in_files:.service.in=.service)
+service_in_files = 				\
+	org.gnome.seahorse.Application.service.in
+
+searchproviderdir = $(datadir)/gnome-shell/search-providers
+dist_searchprovider_DATA = seahorse-search-provider.ini
+
 EXTRA_DIST = \
 	$(convert_DATA) \
-	$(gsettings_SCHEMAS)
+	$(gsettings_SCHEMAS) \
+	$(service_in_files)

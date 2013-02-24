@@ -13,10 +13,24 @@ INCLUDES = -I$(top_builddir) \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\"
 
+dbus_shell_search_provider_built_sources =	\
+	seahorse-shell-search-provider-generated.c	\
+	seahorse-shell-search-provider-generated.h
+
+# The upstream for the DBus interface definition is
+# at http://git.gnome.org/browse/gnome-shell/plain/data/org.gnome.ShellSearchProvider2.xml
+$(dbus_shell_search_provider_built_sources) : Makefile.am $(srcdir)/org.gnome.ShellSearchProvider2.xml
+	gdbus-codegen								\
+		--interface-prefix org.gnome.					\
+		--c-namespace Seahorse						\
+		--generate-c-code seahorse-shell-search-provider-generated	\
+		$(srcdir)/org.gnome.ShellSearchProvider2.xml
+
 MARSHAL_SRCS = \
 	seahorse-marshal.c seahorse-marshal.h
 
 BUILT_SOURCES = \
+	$(dbus_shell_search_provider_built_sources) \
 	$(MARSHAL_SRCS)
 
 noinst_LTLIBRARIES = libseahorse.la
@@ -56,12 +70,14 @@ libseahorse_la_SOURCES = \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-progress.c seahorse-progress.h \
 	seahorse-registry.c seahorse-registry.h \
+	seahorse-search-provider.c seahorse-search-provider.h \
 	seahorse-servers.c seahorse-servers.h \
 	seahorse-types.c seahorse-types.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-viewable.c seahorse-viewable.h \
 	seahorse-widget.c seahorse-widget.h \
+	$(dbus_shell_search_provider_built_sources) \
 	$(MARSHAL_SRCS) \
 	$(KEYSERVER_SRCS)
 
@@ -79,4 +95,5 @@ ui_DATA = \
 	seahorse.css
 
 EXTRA_DIST = $(ui_DATA) \
-	seahorse-marshal.list
+	seahorse-marshal.list \
+	org.gnome.ShellSearchProvider2.xml

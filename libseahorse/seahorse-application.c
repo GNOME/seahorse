@@ -32,6 +32,8 @@
 #include "ssh/seahorse-ssh.h"
 #include "pkcs11/seahorse-pkcs11.h"
 
+#include "seahorse-search-provider.h"
+
 #include <gtk/gtk.h>
 
 #include <glib/gi18n.h>
@@ -40,11 +42,15 @@ struct _SeahorseApplication {
 	GtkApplication parent;
 	GSettings *seahorse_settings;
 	GSettings *crypto_pgp_settings;
+
+	SeahorseSearchProvider *search_provider;
 };
 
 struct _SeahorseApplicationClass {
 	GtkApplicationClass parent_class;
 };
+
+#define INACTIVITY_TIMEOUT 60 * 1000 /* One minute, in milliseconds */
 
 G_DEFINE_TYPE (SeahorseApplication, seahorse_application, GTK_TYPE_APPLICATION);
 
@@ -80,6 +86,8 @@ seahorse_application_finalize (GObject *gobject)
 #endif
 	g_clear_object (&self->seahorse_settings);
 
+	g_clear_object (&self->search_provider);
+
 	G_OBJECT_CLASS (seahorse_application_parent_class)->finalize (gobject);
 }
 
@@ -100,6 +108,12 @@ seahorse_application_startup (GApplication *application)
 	seahorse_pkcs11_backend_initialize ();
 #endif
 	seahorse_gkr_backend_initialize ();
+
+	seahorse_search_provider_initialize (SEAHORSE_APPLICATION (application)->search_provider);
+
+	/* HACK: get the inactivity timeout started */
+	g_application_hold (application);
+	g_application_release (application);
 
 	G_APPLICATION_CLASS (seahorse_application_parent_class)->startup (application);
 }
@@ -122,6 +136,7 @@ seahorse_application_local_command_line (GApplication *application,
 	argc = g_strv_length (*arguments);
 
 	context = g_option_context_new (N_("- System Settings"));
+	g_option_context_set_ignore_unknown_options (context, TRUE);
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
 	g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
@@ -148,6 +163,83 @@ seahorse_application_local_command_line (GApplication *application,
 	return G_APPLICATION_CLASS (seahorse_application_parent_class)->local_command_line (application, arguments, exit_status);
 }
 
+static int
+seahorse_application_command_line (GApplication            *application,
+				   GApplicationCommandLine *command_line)
+{
+	GOptionContext *context;
+	gboolean no_window = FALSE;
+	char **arguments;
+	GError *error = NULL;
+	int ret;
+	int argc;
+
+	GOptionEntry options[] = {
+		{ "no-window", 0, 0, G_OPTION_ARG_NONE, &no_window, N_("Don't display a window"), NULL },
+		{ NULL, 0, 0, 0, NULL, NULL, NULL }
+	};
+
+	context = g_option_context_new (N_("- System Settings"));
+	g_option_context_set_ignore_unknown_options (context, TRUE);
+	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+	g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
+
+	arguments = g_application_command_line_get_arguments (command_line, &argc);
+	if (g_option_context_parse (context, &argc, &arguments, &error) == FALSE) {
+		g_warning ("seahorse: %s\n", error->message);
+		g_error_free (error);
+		ret = 1;
+	} else if (no_window) {
+		g_application_hold (application);
+		g_application_set_inactivity_timeout (application, INACTIVITY_TIMEOUT);
+		g_application_release (application);
+		ret = 0;
+	} else {
+		g_application_activate (application);
+		ret = 0;
+	}
+
+	g_strfreev (arguments);
+	g_option_context_free (context);
+	return ret;
+}
+
+static gboolean
+seahorse_application_dbus_register (GApplication    *application,
+                                    GDBusConnection *connection,
+                                    const gchar     *object_path,
+                                    GError         **error)
+{
+	SeahorseApplication *self;
+
+	if (!G_APPLICATION_CLASS (seahorse_application_parent_class)->dbus_register (application,
+	                                                                             connection,
+	                                                                             object_path,
+	                                                                             error))
+		return FALSE;
+
+	self = SEAHORSE_APPLICATION (application);
+
+	return seahorse_search_provider_dbus_register (self->search_provider, connection,
+	                                               object_path, error);
+}
+
+static void
+seahorse_application_dbus_unregister (GApplication    *application,
+                                        GDBusConnection *connection,
+                                        const gchar     *object_path)
+{
+	SeahorseApplication *self;
+
+	self = SEAHORSE_APPLICATION (application);
+	if (self->search_provider)
+		seahorse_search_provider_dbus_unregister (self->search_provider, connection, object_path);
+
+	G_APPLICATION_CLASS (seahorse_application_parent_class)->dbus_unregister (application,
+	                                                                          connection,
+	                                                                          object_path);
+}
+
 static void
 seahorse_application_class_init (SeahorseApplicationClass *klass)
 {
@@ -159,12 +251,16 @@ seahorse_application_class_init (SeahorseApplicationClass *klass)
 
 	application_class->startup = seahorse_application_startup;
 	application_class->local_command_line = seahorse_application_local_command_line;
+	application_class->command_line = seahorse_application_command_line;
+
+	application_class->dbus_register = seahorse_application_dbus_register;
+	application_class->dbus_unregister = seahorse_application_dbus_unregister;
 }
 
 static void
 seahorse_application_init (SeahorseApplication *self)
 {
-
+	self->search_provider = seahorse_search_provider_new ();
 }
 
 GtkApplication *
@@ -172,6 +268,7 @@ seahorse_application_new (void)
 {
 	return g_object_new (SEAHORSE_TYPE_APPLICATION,
 	                     "application-id", "org.gnome.seahorse.Application",
+	                     "flags", G_APPLICATION_HANDLES_COMMAND_LINE,
 	                     NULL);
 }
 
