@@ -28,7 +28,7 @@
 #include "seahorse-util.h"
 
 #include "seahorse-key-manager-store.h"
-#include "seahorse-preferences.h"
+#include "seahorse-prefs.h"
 #include "seahorse-validity.h"
 
 #include <string.h>

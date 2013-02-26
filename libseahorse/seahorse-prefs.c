@@ -31,15 +31,15 @@
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 
-/* From seahorse-prefs-cache.c */
-void           seahorse_prefs_cache                     (SeahorseWidget *widget);
-
+G_MODULE_EXPORT
 void           on_prefs_keyserver_add_clicked           (GtkButton *button,
                                                          gpointer user_data);
 
+G_MODULE_EXPORT
 void           on_prefs_keyserver_remove_clicked        (GtkWidget *button,
                                                          gpointer user_data);
 
+G_MODULE_EXPORT
 void           on_prefs_add_keyserver_uri_changed       (GtkWidget *button,
                                                          gpointer user_data);
 
@@ -419,9 +419,61 @@ setup_keyservers (SeahorseWidget *swidget)
 	                 widget, "active", G_SETTINGS_BIND_DEFAULT);
 }
 
+#else
+
+void
+on_prefs_keyserver_add_clicked (GtkButton *button,
+                                gpointer user_data)
+{
+
+}
+
+void
+on_prefs_keyserver_remove_clicked (GtkWidget *button,
+                                   gpointer user_data)
+{
+
+}
+
+void
+on_prefs_add_keyserver_uri_changed (GtkWidget *button,
+                                    gpointer user_data)
+{
+
+}
+
 #endif /* WITH_KEYSERVER */
 
 /* -------------------------------------------------------------------------- */
+
+gboolean
+seahorse_prefs_available (void)
+{
+#ifdef WITH_KEYSERVER
+	return TRUE;
+#else
+	return FALSE;
+#endif
+}
+
+/**
+ * seahorse_preferences_show:
+ * @tabid: The id of the tab to show
+ *
+ * Creates a new or shows the current preferences dialog.
+ **/
+void
+seahorse_prefs_show (GtkWindow *parent, const gchar *tabid)
+{
+    SeahorseWidget *swidget = seahorse_prefs_new (parent);
+    GtkWidget *tab;
+
+    if (tabid) {
+        tab = seahorse_widget_get_widget (swidget, tabid);
+        g_return_if_fail (tab);
+        seahorse_prefs_select_tab (swidget, tab);
+    }
+}
 
 /**
  * seahorse_prefs_new:

@@ -28,6 +28,11 @@
 
 #include "seahorse-widget.h"
 
+gboolean            seahorse_prefs_available    (void);
+
+void                seahorse_prefs_show         (GtkWindow *parent,
+                                                 const gchar *tabid);
+
 SeahorseWidget *    seahorse_prefs_new          (GtkWindow *parent);
 
 void                seahorse_prefs_add_tab      (SeahorseWidget *swidget,

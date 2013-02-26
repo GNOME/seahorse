@@ -29,7 +29,7 @@
 #include "seahorse-deletable.h"
 #include "seahorse-exportable.h"
 #include "seahorse-object.h"
-#include "seahorse-preferences.h"
+#include "seahorse-prefs.h"
 #include "seahorse-progress.h"
 #include "seahorse-registry.h"
 #include "seahorse-util.h"
@@ -70,7 +70,7 @@ on_app_preferences (GtkAction* action,
                     gpointer user_data)
 {
 	SeahorseCatalog *self = SEAHORSE_CATALOG (user_data);
-	seahorse_preferences_show (seahorse_catalog_get_window (self), NULL);
+	seahorse_prefs_show (seahorse_catalog_get_window (self), NULL);
 }
 
 static void
@@ -393,6 +393,7 @@ seahorse_catalog_constructed (GObject *obj)
 	const gchar *name;
 	gchar *path;
 	GtkActionGroup *actions;
+	GtkAction *action;
 
 	G_OBJECT_CLASS (seahorse_catalog_parent_class)->constructed (obj);
 
@@ -414,6 +415,8 @@ seahorse_catalog_constructed (GObject *obj)
 	actions = gtk_action_group_new ("main");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, UI_ENTRIES, G_N_ELEMENTS (UI_ENTRIES), self);
+	action = gtk_action_group_get_action (actions, "app-preferences");
+	gtk_action_set_visible (action, seahorse_prefs_available ());
 	self->pv->edit_delete = gtk_action_group_get_action (actions, "edit-delete");
 	g_object_ref (self->pv->edit_delete);
 	self->pv->properties_object = gtk_action_group_get_action (actions, "properties-object");

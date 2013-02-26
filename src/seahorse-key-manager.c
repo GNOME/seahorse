@@ -26,7 +26,6 @@
 #include "seahorse-import-dialog.h"
 #include "seahorse-key-manager.h"
 #include "seahorse-key-manager-store.h"
-#include "seahorse-preferences.h"
 #include "seahorse-sidebar.h"
 
 #include "seahorse-collection.h"

@@ -54,7 +54,6 @@ libseahorse_la_SOURCES = \
 	seahorse-place.c seahorse-place.h \
 	seahorse-predicate.c seahorse-predicate.h \
 	seahorse-prefs.c seahorse-prefs.h \
-	seahorse-preferences.c seahorse-preferences.h \
 	seahorse-progress.c seahorse-progress.h \
 	seahorse-registry.c seahorse-registry.h \
 	seahorse-servers.c seahorse-servers.h \
