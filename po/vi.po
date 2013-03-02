@@ -8,10 +8,11 @@ msgstr ""
 "Project-Id-Version: seahorse 2.25.90\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-07-02 16:47+0000\n"
-"PO-Revision-Date: 2012-09-01 22:47+0700\n"
+"POT-Creation-Date: 2013-01-22 08:46+0000\n"
+"PO-Revision-Date: 2013-03-02 21:17+0700\n"
 "Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -86,8 +87,7 @@ msgstr "Đổi _mật khẩu"
 msgid "Change the unlock password of the password storage keyring"
 msgstr "Thay đổi mật khẩu sẽ mở khoá xâu khoá lưu trữ mật khẩu"
 
-#: ../gkr/seahorse-gkr-add-item.c:58
-#| msgid "Couldn't add photo"
+#: ../gkr/seahorse-gkr-add-item.c:60
 msgid "Couldn't add item"
 msgstr "Không thể thêm mục"
 
@@ -213,16 +213,16 @@ msgstr "Thông tin xác thực mạng"
 msgid "Password"
 msgstr "Mật khẩu"
 
-#: ../gkr/seahorse-gkr-item-properties.c:215
+#: ../gkr/seahorse-gkr-item-properties.c:216
 msgid "Couldn't change password."
 msgstr "Không thể thay đổi mật khẩu."
 
-#: ../gkr/seahorse-gkr-item-properties.c:262
-#: ../gkr/seahorse-gkr-item-properties.c:383
+#: ../gkr/seahorse-gkr-item-properties.c:263
+#: ../gkr/seahorse-gkr-item-properties.c:385
 msgid "Updating password"
 msgstr "Đang cập nhật mật khẩu"
 
-#: ../gkr/seahorse-gkr-item-properties.c:344
+#: ../gkr/seahorse-gkr-item-properties.c:346
 msgid "Couldn't set description."
 msgstr "Không thể đặt mô tả."
 
@@ -235,12 +235,16 @@ msgstr "Thuộc tính khoá"
 
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-item-properties.xml.h:4
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
 msgid "Use:"
 msgstr "Dùng:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:5
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
 msgid "Type:"
 msgstr "Kiểu:"
 
@@ -257,8 +261,9 @@ msgid "Show pass_word"
 msgstr "Hiện _mật khẩu"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:9
-msgid "<b>Password:</b>"
-msgstr "<b>Mật khẩu :</b>"
+#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
+msgid "Password:"
+msgstr "Mật khẩu:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:10
 #: ../pgp/seahorse-pgp-subkey.c:366
@@ -269,12 +274,14 @@ msgstr "Khoá"
 #: ../gkr/seahorse-gkr-item-properties.xml.h:11
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
 #: ../ssh/seahorse-ssh-key-properties.xml.h:20
-msgid "<b>Technical Details:</b>"
+#, fuzzy
+#| msgid "<b>Technical Details:</b>"
+msgid "Technical Details:"
 msgstr "<b>Chi tiết kỹ thuật:</b>"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:12
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:53
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:49
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
 #: ../ssh/seahorse-ssh-key-properties.xml.h:22
 msgid "Details"
 msgstr "Chi tiết"
@@ -306,8 +313,8 @@ msgstr "Tên:"
 
 #. To translators: This is the noun not the verb.
 #: ../gkr/seahorse-gkr-keyring.xml.h:4
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
 msgid "Created:"
 msgstr "Tạo:"
 
@@ -624,7 +631,7 @@ msgid "Cannot delete"
 msgstr "Không thể xoá"
 
 #: ../libseahorse/seahorse-catalog.c:239
-#: ../libseahorse/seahorse-key-manager-store.c:442
+#: ../libseahorse/seahorse-key-manager-store.c:443
 msgid "Couldn't export keys"
 msgstr "Không thể xuất khoá"
 
@@ -654,7 +661,7 @@ msgid "Copy to the clipboard"
 msgstr "Chép sang bảng nháp"
 
 #: ../libseahorse/seahorse-catalog.c:284
-#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:957
+#: ../pkcs11/seahorse-pkcs11-properties.c:233 ../src/seahorse-sidebar.c:959
 msgid "_Delete"
 msgstr "_Xoá"
 
@@ -699,7 +706,7 @@ msgid "Show Seahorse help"
 msgstr "Hiện trợ giúp Seahorse"
 
 #: ../libseahorse/seahorse-exportable.c:407
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 msgid "Export"
 msgstr "Xuất"
 
@@ -707,10 +714,6 @@ msgstr "Xuất"
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Nhập PIN hoặc mật khẩu cho: %s"
-
-#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
-msgid "Password:"
-msgstr "Mật khẩu:"
 
 #. The second and main entry
 #: ../libseahorse/seahorse-passphrase.c:245
@@ -765,49 +768,63 @@ msgstr "Tự động đồng bộ hoá các khoá đã sửa đổi với các _
 msgid "Key Servers"
 msgstr "Máy phục vụ khoá"
 
-#: ../libseahorse/seahorse-util.c:209
+#: ../libseahorse/seahorse-util.c:210
 msgid "%Y-%m-%d"
 msgstr "%d-%m-%Y"
 
-#: ../libseahorse/seahorse-validity.c:40 ../pgp/seahorse-gpgme-subkey.c:197
+#: ../libseahorse/seahorse-validity.c:40
 #: ../pgp/seahorse-pgp-key-properties.c:1254
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
-#: ../pkcs11/seahorse-token.c:576
+#, fuzzy
+#| msgid "Unknown"
+msgctxt "Validity"
 msgid "Unknown"
 msgstr "Không rõ"
 
 #: ../libseahorse/seahorse-validity.c:42
 #: ../pgp/seahorse-pgp-key-properties.c:1260
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
 msgctxt "Validity"
 msgid "Never"
 msgstr "Không bao giờ"
 
 #: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1267
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
+#, fuzzy
+#| msgid "Marginal"
+msgctxt "Validity"
 msgid "Marginal"
 msgstr "Sát giới hạn"
 
 #: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1273
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
+#, fuzzy
+#| msgid "Full"
+msgctxt "Validity"
 msgid "Full"
 msgstr "Đầy"
 
 #: ../libseahorse/seahorse-validity.c:48
-#: ../pgp/seahorse-pgp-key-properties.c:1279
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
+#, fuzzy
+#| msgid "Ultimate"
+msgctxt "Validity"
 msgid "Ultimate"
 msgstr "Cuối cùng"
 
 #: ../libseahorse/seahorse-validity.c:50
-#: ../pgp/seahorse-pgp-key-properties.c:1469
+#, fuzzy
+#| msgid "Disabled"
+msgctxt "Validity"
 msgid "Disabled"
 msgstr "Bị tắt"
 
 #: ../libseahorse/seahorse-validity.c:52
-#: ../pgp/seahorse-pgp-key-properties.c:1465
+#, fuzzy
+#| msgid "Revoked"
+msgctxt "Validity"
 msgid "Revoked"
 msgstr "Bị hủy bỏ"
 
@@ -975,14 +992,16 @@ msgid "Used to encrypt email and files"
 msgstr "Dùng để mã hoá thư điện tử và tập tin"
 
 #: ../pgp/seahorse-gpgme-generate.c:132
-#: ../pkcs11/seahorse-pkcs11-generate.c:92
+#: ../pkcs11/seahorse-pkcs11-generate.c:91
 #: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
 # Name: don't translate/Tên: đừng dịch
 #: ../pgp/seahorse-gpgme-generate.c:133
-msgid "DSA Elgamal"
+#, fuzzy
+#| msgid "DSA Elgamal"
+msgid "DSA ElGamal"
 msgstr "DSA Elgamal"
 
 #: ../pgp/seahorse-gpgme-generate.c:182
@@ -1008,7 +1027,7 @@ msgid ""
 msgstr ""
 
 #: ../pgp/seahorse-gpgme-generate.c:231
-#: ../pkcs11/seahorse-pkcs11-generate.c:460
+#: ../pkcs11/seahorse-pkcs11-generate.c:459
 msgid "Generating key"
 msgstr "Đang tạo ra khoá"
 
@@ -1231,6 +1250,13 @@ msgstr ""
 "Bạn không có khoá PGP riêng nào có thể được dùng để ghi độ tin cậy của bạn "
 "trên khoá này."
 
+#: ../pgp/seahorse-gpgme-subkey.c:197
+#, fuzzy
+#| msgid "Unknown"
+msgctxt "Algorithm"
+msgid "Unknown"
+msgstr "Không rõ"
+
 #: ../pgp/seahorse-gpgme-subkey.c:199
 msgid "ElGamal"
 msgstr "ElGamal"
@@ -1293,7 +1319,7 @@ msgstr "Khoá ở xa"
 msgid "Remote Keys Containing '%s'"
 msgstr "Khoá ở xa chứa '%s'"
 
-#: ../pgp/seahorse-keyserver-results.c:485
+#: ../pgp/seahorse-keyserver-results.c:486
 msgid "The search for keys failed."
 msgstr "Tìm kiếm khoá thất bại."
 
@@ -1314,11 +1340,15 @@ msgid "_Search for keys containing: "
 msgstr "_Tìm khoá chứa: "
 
 #: ../pgp/seahorse-keyserver-search.xml.h:4
-msgid "<b>Key Servers:</b>"
-msgstr "<b>Máy phục vụ khoá:</b>"
+#, fuzzy
+#| msgid "Key Servers"
+msgid "Key Servers:"
+msgstr "Máy phục vụ khoá"
 
 #: ../pgp/seahorse-keyserver-search.xml.h:5
-msgid "<b>Shared Keys Near Me:</b>"
+#, fuzzy
+#| msgid "<b>Shared Keys Near Me:</b>"
+msgid "Shared Keys Near Me:"
 msgstr "<b>Khoá dùng chung gần tôi:</b>"
 
 #: ../pgp/seahorse-keyserver-search.xml.h:6
@@ -1458,7 +1488,9 @@ msgstr "Ngà_y hết hạn:"
 #: ../pgp/seahorse-pgp-generate.xml.h:12
 #: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
 #: ../ssh/seahorse-ssh-generate.xml.h:11
-msgid "<b>_Advanced key options</b>"
+#, fuzzy
+#| msgid "<b>_Advanced key options</b>"
+msgid "_Advanced key options"
 msgstr "<b>Tùy chọn khoá cấp c_ao</b>"
 
 #: ../pgp/seahorse-pgp-key.c:353
@@ -1533,6 +1565,18 @@ msgstr "Không thể thay đổi tình trạng đáng tin"
 msgid "Couldn't export key"
 msgstr "Không thể xuất khẩu khoá"
 
+#: ../pgp/seahorse-pgp-key-properties.c:1267
+msgid "Marginal"
+msgstr "Sát giới hạn"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1273
+msgid "Full"
+msgstr "Đầy"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1279
+msgid "Ultimate"
+msgstr "Cuối cùng"
+
 #: ../pgp/seahorse-pgp-key-properties.c:1385
 #: ../pgp/seahorse-pgp-key-properties.c:1474
 msgctxt "Expires"
@@ -1563,9 +1607,17 @@ msgstr "Trạng thái"
 msgid "Strength"
 msgstr "Mạnh"
 
+#: ../pgp/seahorse-pgp-key-properties.c:1465
+msgid "Revoked"
+msgstr "Bị hủy bỏ"
+
 #: ../pgp/seahorse-pgp-key-properties.c:1467
 msgid "Expired"
 msgstr "Đã hết hạn"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1469
+msgid "Disabled"
+msgstr "Bị tắt"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1471
 msgid "Good"
@@ -1575,14 +1627,11 @@ msgstr "Tốt"
 msgid "Key ID"
 msgstr "ID khoá"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
-msgid "Never"
-msgstr "Không bao giờ"
-
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-msgid "<b>This key has been revoked</b>"
+#, fuzzy
+#| msgid "<b>This key has been revoked</b>"
+msgid "This key has been revoked"
 msgstr "<b>Khoá này đã bị hủy bỏ</b>"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
@@ -1592,7 +1641,9 @@ msgstr "Người sở hữu khoá đã hủy bỏ khoá đó nên nó vô ích."
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
-msgid "<b>This key has expired</b>"
+#, fuzzy
+#| msgid "<b>This key has expired</b>"
+msgid "This key has expired"
 msgstr "<b>Khoá này đã hết hạn dùng<b>"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
@@ -1618,43 +1669,38 @@ msgstr "Tới ảnh chụp kế"
 #. A photograph
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
-msgid "<b>Photo </b>"
+#, fuzzy
+#| msgid "<b>Photo </b>"
+msgid "Photo "
 msgstr "<b>Ảnh chụp </b>"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
-msgid "<b>Key ID:</b>"
-msgstr "<b>ID khoá:</b>"
+msgid "Key ID:"
+msgstr "ID khoá:"
 
 #. Name of key, usually a persons name
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
+#, fuzzy
+#| msgid "Name:"
 msgctxt "name-of-key"
-msgid "<b>Name:</b>"
-msgstr "<b>Tên:</b>"
+msgid "Name:"
+msgstr "Tên:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
-msgid "<b>Email:</b>"
+#, fuzzy
+#| msgid "<b>Email:</b>"
+msgid "Email:"
 msgstr "<b>Địa chỉ thư :</b>"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
-msgid "<b>Comment:</b>"
-msgstr "<b>Chú thích:</b>"
-
-#. To translators: This is the noun not the verb.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
-msgid "<b>Use:</b>"
-msgstr "<b>Dùng:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
-msgid "<b>Type:</b>"
-msgstr "<b>Kiểu :</b>"
+#, fuzzy
+#| msgid "_Comment:"
+msgid "Comment:"
+msgstr "_Chú thích:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
 msgid "Decrypt files and email sent to you."
@@ -1675,8 +1721,10 @@ msgid "Owner"
 msgstr "Sở hữu"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
-msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>Tên khoá và chữ ký</b>"
+#, fuzzy
+#| msgid "Names and Signatures"
+msgid "Key Names and Signatures"
+msgstr "Tên và Chữ ký"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
 msgid "Primary"
@@ -1706,70 +1754,84 @@ msgstr "Tên và Chữ ký"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
-msgid "Key ID:"
-msgstr "ID khoá:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
 msgid "Strength:"
 msgstr "Độ mạnh:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
-msgid "<b>Technical Details</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+#, fuzzy
+#| msgid "<b>Technical Details</b>"
+msgid "Technical Details"
 msgstr "<b>Chi tiết kỹ thuật</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
-msgid "<b>Fingerprint</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
+#, fuzzy
+#| msgid "<b>Fingerprint</b>"
+msgid "Fingerprint"
 msgstr "<b>Vân tay</b>"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
 msgid "Expires:"
 msgstr "Hết hạn:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
-msgid "<b>Dates</b>"
-msgstr "<b>Ngày</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
+#, fuzzy
+#| msgid "Date"
+msgid "Dates"
+msgstr "Ngày"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
 msgid "Override Owner _Trust:"
 msgstr "Ghi đè lên _tình trạng tin cậy của người sở hữu:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
 msgid "_Export Complete Key:"
 msgstr "_Xuất toàn bộ khoá:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
-msgid "<b>Actions</b>"
-msgstr "<b>Hành vi</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+#, fuzzy
+#| msgid "Applications"
+msgid "Actions"
+msgstr "Ứng dụng"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
 msgid "Add"
 msgstr "Thêm"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
 msgid "Expire"
 msgstr "Hết hạn"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:52
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:48
-msgid "<b>_Subkeys</b>"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+#, fuzzy
+#| msgid "<b>_Subkeys</b>"
+msgid "_Subkeys"
 msgstr "<b>Khoá _phụ</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
+#, fuzzy
+#| msgid "Marginally"
+msgctxt "Validity"
 msgid "Marginally"
 msgstr "Biên"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
+#, fuzzy
+#| msgid "Fully"
+msgctxt "Validity"
 msgid "Fully"
 msgstr "Đầy"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
+#, fuzzy
+#| msgid "Ultimately"
+msgctxt "Validity"
 msgid "Ultimately"
 msgstr "Cuối cùng"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
-#| msgid "Encrypt files and email to the key's owner "
 msgid "Encrypt files and email to the key's owner"
 msgstr "Mã hoá tập tin và thư cho người sử hữu khoá này"
 
@@ -1779,11 +1841,15 @@ msgstr "Khoá PGP công"
 
 #. Names set on the PGP key.
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
-msgid "<b>_Other Names:</b>"
+#, fuzzy
+#| msgid "<b>_Other Names:</b>"
+msgid "_Other Names:"
 msgstr "<b>_Tên khác:</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
-msgid "<b>Your trust of this key</b>"
+#, fuzzy
+#| msgid "<b>Your trust of this key</b>"
+msgid "Your trust of this key"
 msgstr "<b>Độ tin cậy của bạn với khoá này</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
@@ -1820,7 +1886,9 @@ msgid "_Revoke Signature"
 msgstr "_Hủy bỏ chữ ký"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
-msgid "<b>_People who have signed this key:</b>"
+#, fuzzy
+#| msgid "<b>_People who have signed this key:</b>"
+msgid "_People who have signed this key:"
 msgstr "<b>_Người đã ký khoá này:</b>"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
@@ -1828,23 +1896,30 @@ msgid "_Only display the signatures of people I trust"
 msgstr "_Chỉ hiển thị chữ ký của những người tôi tin cậy"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
 msgid "Trust"
 msgstr "Tin cậy"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
 #: ../ssh/seahorse-ssh-key-properties.xml.h:19
-msgid "<b>Fingerprint:</b>"
+#, fuzzy
+#| msgid "<b>Fingerprint:</b>"
+msgid "Fingerprint:"
 msgstr "<b>Vân tay:</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
-msgid "<b>Dates:</b>"
-msgstr "<b>Ngày:</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+#, fuzzy
+#| msgid "Date"
+msgid "Dates:"
+msgstr "Ngày"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
-msgid "<b>Indicate Trust:</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+#, fuzzy
+#| msgid "<b>Indicate Trust:</b>"
+msgid "Indicate Trust:"
 msgstr "<b>Ghi tin cậy</b>"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
 msgid "You _Trust the Owner:"
 msgstr "Bạn _tin cậy người sở hữu:"
 
@@ -1888,11 +1963,15 @@ msgid "By signing you indicate your trust that this key belongs to:"
 msgstr "Bằng cách ký, bạn ghi rằng bạn tin cậy khoá này thuộc về:"
 
 #: ../pgp/seahorse-sign.xml.h:3
-msgid "<i>Key Name</i>"
+#, fuzzy
+#| msgid "<i>Key Name</i>"
+msgid "Key Name"
 msgstr "<i>Tên khoá</i>"
 
 #: ../pgp/seahorse-sign.xml.h:4
-msgid "<b>How carefully have you checked this key?</b>"
+#, fuzzy
+#| msgid "<b>How carefully have you checked this key?</b>"
+msgid "How carefully have you checked this key?"
 msgstr "<b>Bao đã kiểm tra khoá này một cách cẩn thận bao nhiêu?</b>"
 
 #: ../pgp/seahorse-sign.xml.h:5
@@ -1916,10 +1995,6 @@ msgstr ""
 "người tuyên bố sở hữu nó, nhưng bạn chưa hay không thể thẩm tra đây là thật."
 
 #: ../pgp/seahorse-sign.xml.h:9
-#| msgid ""
-#| "<i>Casually:</i> means you have done a casual verification that the key "
-#| "is owned by the person who claims to own it. For example, you could read "
-#| "the key fingerprint to the owner over the phone. "
 msgid ""
 "<i>Casually:</i> means you have done a casual verification that the key is "
 "owned by the person who claims to own it. For example, you could read the "
@@ -1948,7 +2023,9 @@ msgstr ""
 "kiểm tra địa chỉ thư điện tử của khoá có phải thuộc về người sở hữu đó."
 
 #: ../pgp/seahorse-sign.xml.h:12
-msgid "<b>How others will see this signature:</b>"
+#, fuzzy
+#| msgid "<b>How others will see this signature:</b>"
+msgid "How others will see this signature:"
 msgstr "<b>Hình thức của chữ ký này cho người khác:</b>"
 
 #: ../pgp/seahorse-sign.xml.h:13
@@ -1960,7 +2037,9 @@ msgid "I can _revoke this signature at a later date."
 msgstr "Tôi có thể _hủy bỏ chữ ký này vào ngày sau."
 
 #: ../pgp/seahorse-sign.xml.h:15
-msgid "<b>Sign key as:</b>"
+#, fuzzy
+#| msgid "<b>Sign key as:</b>"
+msgid "Sign key as:"
 msgstr "<b>Ký chữ ký như là:</b>"
 
 #: ../pgp/seahorse-sign.xml.h:16
@@ -1991,15 +2070,15 @@ msgstr "Gửi khoá"
 msgid "Unavailable"
 msgstr "Không sẵn sàng"
 
-#: ../pkcs11/seahorse-certificate.c:435
+#: ../pkcs11/seahorse-certificate.c:434
 msgid "Personal certificate and key"
 msgstr "Chứng nhận và khoá cá nhân"
 
-#: ../pkcs11/seahorse-certificate.c:438
+#: ../pkcs11/seahorse-certificate.c:437
 msgid "Personal certificate"
 msgstr "Chứng nhận cá nhân"
 
-#: ../pkcs11/seahorse-certificate.c:440
+#: ../pkcs11/seahorse-certificate.c:439
 #: ../pkcs11/seahorse-certificate-der-exporter.c:77
 msgid "Certificate"
 msgstr "Chứng nhận"
@@ -2022,21 +2101,21 @@ msgid "Are you sure you want to permanently delete %d certificate?"
 msgid_plural "Are you sure you want to permanently delete %d certificates?"
 msgstr[0] "Bạn có chắc muốn xoá hẳn %d chứng nhận không?"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:115
+#: ../pkcs11/seahorse-pkcs11-generate.c:114
 msgid "Couldn't generate private key"
 msgstr "Không thể tạo ra khoá riêng"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:414
-#: ../pkcs11/seahorse-pkcs11-request.c:256
+#: ../pkcs11/seahorse-pkcs11-generate.c:413
+#: ../pkcs11/seahorse-pkcs11-request.c:255
 msgid "Create"
 msgstr "Tạo"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:507
-#: ../pkcs11/seahorse-private-key.c:179
+#: ../pkcs11/seahorse-pkcs11-generate.c:506
+#: ../pkcs11/seahorse-private-key.c:178
 msgid "Private key"
 msgstr "Khoá riêng"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:508
+#: ../pkcs11/seahorse-pkcs11-generate.c:507
 msgid "Used to request a certificate"
 msgstr "Dùng để yêu cầu chứng nhận"
 
@@ -2065,7 +2144,7 @@ msgstr "Không tên"
 msgid "Failed to export certificate"
 msgstr "Lỗi xuất chứng nhận"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:875
+#: ../pkcs11/seahorse-pkcs11-properties.c:190 ../src/seahorse-sidebar.c:877
 msgid "Couldn't delete"
 msgstr "Không thể xoá"
 
@@ -2089,23 +2168,23 @@ msgstr "Yêu cầu _chứng nhận"
 msgid "Create a certificate request file for this key"
 msgstr "Tạo tập tin yêu cầu chứng nhận cho khoá này"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:104
+#: ../pkcs11/seahorse-pkcs11-request.c:103
 msgid "Couldn't save certificate request"
 msgstr "Không thể lưu yêu cầu chứng nhận"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:127
+#: ../pkcs11/seahorse-pkcs11-request.c:126
 msgid "Save certificate request"
 msgstr "Lưu yêu cầu chứng nhận"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:138
+#: ../pkcs11/seahorse-pkcs11-request.c:137
 msgid "Certificate request"
 msgstr "Yêu cầu chứng nhận"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:146
+#: ../pkcs11/seahorse-pkcs11-request.c:145
 msgid "PEM encoded request"
 msgstr "Yêu cầu mã hoá dạng PEM"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:194
+#: ../pkcs11/seahorse-pkcs11-request.c:193
 msgid "Couldn't create certificate request"
 msgstr "không thể tạo yêu cầu chứng nhận mới"
 
@@ -2121,9 +2200,16 @@ msgstr ""
 msgid "Name (CN):"
 msgstr "Tên (CN):"
 
-#: ../pkcs11/seahorse-private-key.c:132
+#: ../pkcs11/seahorse-private-key.c:131
 msgid "Unnamed private key"
 msgstr "Khoá riêng không tên"
+
+#: ../pkcs11/seahorse-token.c:576
+#, fuzzy
+#| msgid "Unknown"
+msgctxt "Label"
+msgid "Unknown"
+msgstr "Không rõ"
 
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
@@ -2145,12 +2231,18 @@ msgstr "_Xác nhận cụm từ mật khẩu:"
 msgid "Manage your passwords and encryption keys"
 msgstr "Quản lý các mật khẩu và khoá mã hoá của bạn"
 
+#: ../src/seahorse.desktop.in.in.h:3
+msgid "keyring;encryption;security;sign;ssh;"
+msgstr ""
+
 #: ../src/seahorse-generate-select.c:229
 msgid "Continue"
 msgstr "Tiếp tục"
 
 #: ../src/seahorse-generate-select.xml.h:1
-msgid "<b>_Select the type of item to create:</b>"
+#, fuzzy
+#| msgid "<b>_Select the type of item to create:</b>"
+msgid "_Select the type of item to create:"
 msgstr "<b>_Chọn kiểu khoá cần tạo :</b>"
 
 #: ../src/seahorse-import-dialog.c:98
@@ -2250,7 +2342,9 @@ msgid "Filter"
 msgstr "Bộ lọc"
 
 #: ../src/seahorse-key-manager.xml.h:1
-msgid "<big><b>First time options:</b></big>"
+#, fuzzy
+#| msgid "<big><b>First time options:</b></big>"
+msgid "First time options:"
 msgstr "<big><b>Tùy chọn lần đầu tiên:</b></big>"
 
 #: ../src/seahorse-key-manager.xml.h:2
@@ -2265,23 +2359,23 @@ msgstr "Nhập khoá đã có từ tập tin:"
 msgid "To get started with encryption you will need keys."
 msgstr "Để mã hoá, cần thiết có khoá."
 
-#: ../src/seahorse-sidebar.c:799
+#: ../src/seahorse-sidebar.c:801
 msgid "Couldn't lock"
 msgstr "Không thể khoá"
 
-#: ../src/seahorse-sidebar.c:836
+#: ../src/seahorse-sidebar.c:838
 msgid "Couldn't unlock"
 msgstr "Không thể mở khoá"
 
-#: ../src/seahorse-sidebar.c:944
+#: ../src/seahorse-sidebar.c:946
 msgid "_Lock"
 msgstr "_Khoá"
 
-#: ../src/seahorse-sidebar.c:949
+#: ../src/seahorse-sidebar.c:951
 msgid "_Unlock"
 msgstr "_Mở khoá"
 
-#: ../src/seahorse-sidebar.c:968
+#: ../src/seahorse-sidebar.c:970
 msgid "_Properties"
 msgstr "Th_uộc tính"
 
@@ -2339,7 +2433,6 @@ msgstr "Bạn có chắc muốn xoá khoá trình bao bảo mật (SSH) « %s »
 
 #: ../ssh/seahorse-ssh-deleter.c:91
 #, c-format
-#| msgid "Are you sure you want to delete %d secure shell keys?"
 msgid "Are you sure you want to delete %d secure shell key?"
 msgid_plural "Are you sure you want to delete %d secure shell keys?"
 msgstr[0] "Bạn có chắc muốn xoá %d khoá trình bao bảo mật (SSH) không?"
@@ -2394,7 +2487,9 @@ msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 
 #: ../ssh/seahorse-ssh-generate.xml.h:6
-msgid "<i>Your email address, or a reminder of what this key is for.</i>"
+#, fuzzy
+#| msgid "<i>Your email address, or a reminder of what this key is for.</i>"
+msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "<i>Địa chỉ thư điện tử của bạn, hoặc bất cứ lời nhắc nhở nào khác cần thiết "
 "để nhớ mục đích của khoá này.</i>"
@@ -2436,23 +2531,22 @@ msgid "Couldn't change passphrase for key."
 msgstr "Không thể thay đổi cụm từ mật khẩu cho khoá đó."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "<b>Identifier:</b>"
+#, fuzzy
+#| msgid "<b>Identifier:</b>"
+msgid "Identifier:"
 msgstr "<b>Bộ nhận diện:</b>"
 
 #. Name of key, often a persons name
 #: ../ssh/seahorse-ssh-key-properties.xml.h:6
-#| msgid "<b>Name:</b>"
+#, fuzzy
+#| msgid "Name:"
 msgctxt "name-of-ssh-key"
-msgid "<b>Name:</b>"
-msgstr "<b>Tên:</b>"
+msgid "Name:"
+msgstr "Tên:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:7
 msgid "Used to connect to other computers."
 msgstr "Dùng để kết nối tới máy tính khác."
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
-msgid "<b>Trust</b>"
-msgstr "<b>Tin cậy</b>"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:12
 msgid "The owner of this key is _authorized to connect to this computer"
@@ -2460,20 +2554,19 @@ msgstr "Người sở hữu khoá này có _quyền kết nối đến máy tín
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:14
 #, no-c-format
-#| msgid "<i>This only applies to the '%s'</i> account."
 msgid "This only applies to the <i>%s</i> account."
 msgstr "Chỉ áp dụng cho tài khoản </i>%s</i>."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:16
-msgid "<b>Algorithm:</b>"
+#, fuzzy
+#| msgid "<b>Algorithm:</b>"
+msgid "Algorithm:"
 msgstr "<b>Thuật toán:</b>"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
-msgid "<b>Strength:</b>"
-msgstr "<b>Độ mạnh:</b>"
-
 #: ../ssh/seahorse-ssh-key-properties.xml.h:18
-msgid "<b>Location:</b>"
+#, fuzzy
+#| msgid "<b>Location:</b>"
+msgid "Location:"
 msgstr "<b>Vị trí:</b>"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:21
@@ -2543,7 +2636,9 @@ msgstr ""
 "bạn cần phải thiết lập một tài khoản đăng nhập trên máy tính đó."
 
 #: ../ssh/seahorse-ssh-upload.xml.h:4
-msgid "<i>eg: fileserver.example.com:port</i>"
+#, fuzzy
+#| msgid "<i>eg: fileserver.example.com:port</i>"
+msgid "eg: fileserver.example.com:port"
 msgstr "<i>v.d.: máy_phục_vụ_tập_tin.thí_dụ.com:cổng</i>"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
@@ -2557,6 +2652,54 @@ msgstr "Tê_n đăng nhập:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "Thiết _lập"
+
+#~ msgid "<b>Password:</b>"
+#~ msgstr "<b>Mật khẩu :</b>"
+
+#~ msgid "<b>Key Servers:</b>"
+#~ msgstr "<b>Máy phục vụ khoá:</b>"
+
+#~ msgid "Never"
+#~ msgstr "Không bao giờ"
+
+#~ msgid "<b>Key ID:</b>"
+#~ msgstr "<b>ID khoá:</b>"
+
+#~ msgctxt "name-of-key"
+#~ msgid "<b>Name:</b>"
+#~ msgstr "<b>Tên:</b>"
+
+#~ msgid "<b>Comment:</b>"
+#~ msgstr "<b>Chú thích:</b>"
+
+#~ msgid "<b>Use:</b>"
+#~ msgstr "<b>Dùng:</b>"
+
+#~ msgid "<b>Type:</b>"
+#~ msgstr "<b>Kiểu :</b>"
+
+#~ msgid "<b>Key Names and Signatures</b>"
+#~ msgstr "<b>Tên khoá và chữ ký</b>"
+
+#~ msgid "<b>Dates</b>"
+#~ msgstr "<b>Ngày</b>"
+
+#~ msgid "<b>Actions</b>"
+#~ msgstr "<b>Hành vi</b>"
+
+#~ msgid "<b>Dates:</b>"
+#~ msgstr "<b>Ngày:</b>"
+
+#~| msgid "<b>Name:</b>"
+#~ msgctxt "name-of-ssh-key"
+#~ msgid "<b>Name:</b>"
+#~ msgstr "<b>Tên:</b>"
+
+#~ msgid "<b>Trust</b>"
+#~ msgstr "<b>Tin cậy</b>"
+
+#~ msgid "<b>Strength:</b>"
+#~ msgstr "<b>Độ mạnh:</b>"
 
 #~| msgid "Deleting keyring..."
 #~ msgid "Login keyring"
@@ -2842,9 +2985,6 @@ msgstr "Thiết _lập"
 
 #~ msgid "<b>Permissions:</b>"
 #~ msgstr "<b>Quyền hạn:</b>"
-
-#~ msgid "Applications"
-#~ msgstr "Ứng dụng"
 
 #~ msgid "_Read"
 #~ msgstr "Đọ_c"
