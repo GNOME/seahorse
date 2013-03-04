@@ -26,11 +26,11 @@
 
 #include "seahorse-object.h"
 #include "seahorse-progress.h"
-#include "seahorse-preferences.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 
+#include "seahorse-prefs.h"
 #include "seahorse-keyserver-sync.h"
 #include "seahorse-pgp-backend.h"
 #include "seahorse-transfer.h"
@@ -97,7 +97,7 @@ on_sync_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 G_MODULE_EXPORT void
 on_sync_configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    seahorse_preferences_show (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)), "keyserver-tab");
+    seahorse_prefs_show (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)), "keyserver-tab");
 }
 
 static void
