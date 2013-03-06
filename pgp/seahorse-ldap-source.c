@@ -677,10 +677,10 @@ seahorse_ldap_source_connect_async (SeahorseLDAPSource *source,
 {
 	GSimpleAsyncResult *res;
 	source_connect_closure *closure;
-#ifdef WITH_SOUP
-	SoupAddress *address;
 	gchar *server = NULL;
 	gchar *pos;
+#ifdef WITH_SOUP
+	SoupAddress *address;
 #endif
 
 	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
@@ -708,7 +708,7 @@ seahorse_ldap_source_connect_async (SeahorseLDAPSource *source,
 
 #else /* !WITH_SOUP */
 
-	once_resolved_start_connect (self, res, server);
+	once_resolved_start_connect (source, res, server);
 
 #endif
 

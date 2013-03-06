@@ -320,6 +320,8 @@ seahorse_pgp_backend_get_default_key (SeahorsePgpBackend *self)
 	return key;
 }
 
+#ifdef WITH_KEYSERVER
+
 SeahorseDiscovery *
 seahorse_pgp_backend_get_discovery (SeahorsePgpBackend *self)
 {
@@ -665,6 +667,8 @@ seahorse_pgp_backend_retrieve_finish (SeahorsePgpBackend *self,
 	return TRUE;
 }
 
+#endif /* WITH_KEYSERVER */
+
 GList *
 seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
                                     const gchar **keyids,
@@ -703,10 +707,12 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
 		g_ptr_array_add (todiscover, NULL);
 		keyids = (const gchar **)todiscover->pdata;
 
+#ifdef WITH_KEYSERVER
 		/* Start a discover process on all todiscover */
 		if (g_settings_get_boolean (seahorse_application_settings (NULL), "server-auto-retrieve"))
 			seahorse_pgp_backend_retrieve_async (self, keyids, SEAHORSE_PLACE (self->keyring),
 			                                     cancellable, NULL, NULL);
+#endif
 
 		/* Add unknown objects for all these */
 		for (i = 0; keyids[i] != NULL; i++) {

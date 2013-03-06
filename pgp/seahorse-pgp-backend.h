@@ -55,6 +55,8 @@ SeahorseGpgmeKeyring * seahorse_pgp_backend_get_default_keyring  (SeahorsePgpBac
 
 SeahorsePgpKey *       seahorse_pgp_backend_get_default_key      (SeahorsePgpBackend *self);
 
+#ifdef WITH_KEYSERVER
+
 SeahorseDiscovery *    seahorse_pgp_backend_get_discovery        (SeahorsePgpBackend *self);
 
 SeahorseServerSource * seahorse_pgp_backend_lookup_remote        (SeahorsePgpBackend *self,
@@ -99,10 +101,12 @@ void                   seahorse_pgp_backend_retrieve_async       (SeahorsePgpBac
 gboolean               seahorse_pgp_backend_retrieve_finish      (SeahorsePgpBackend *self,
                                                                   GAsyncResult *result,
                                                                   GError **error);
+#endif /* WITH_KEYSERVER */
 
 GList*                 seahorse_pgp_backend_discover_keys        (SeahorsePgpBackend *self,
                                                                   const gchar **keyids,
                                                                   GCancellable *cancellable);
+
 
 G_END_DECLS
 

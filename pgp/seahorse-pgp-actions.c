@@ -60,6 +60,8 @@ typedef struct {
 
 G_DEFINE_TYPE (SeahorsePgpBackendActions, seahorse_pgp_backend_actions, SEAHORSE_TYPE_ACTIONS);
 
+#ifdef WITH_KEYSERVER
+
 static const gchar* BACKEND_DEFINITION = ""\
 "<ui>"\
 "	<menubar>"\
@@ -119,9 +121,12 @@ static const GtkActionEntry SYNC_ACTIONS[] = {
 	  N_("Publish and/or synchronize your keys with those online."), G_CALLBACK (on_remote_sync) }
 };
 
+#endif /* WITH_KEYSERVER */
+
 static void
 seahorse_pgp_backend_actions_init (SeahorsePgpBackendActions *self)
 {
+#ifdef WITH_KEYSERVER
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, FIND_ACTIONS,
@@ -129,6 +134,7 @@ seahorse_pgp_backend_actions_init (SeahorsePgpBackendActions *self)
 	gtk_action_group_add_actions (actions, SYNC_ACTIONS,
 	                              G_N_ELEMENTS (SYNC_ACTIONS), self);
 	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), BACKEND_DEFINITION);
+#endif
 }
 
 static void
@@ -176,10 +182,12 @@ G_DEFINE_TYPE (SeahorseGpgmeKeyActions, seahorse_gpgme_key_actions, SEAHORSE_TYP
 static void
 seahorse_gpgme_key_actions_init (SeahorseGpgmeKeyActions *self)
 {
+#ifdef WITH_KEYSERVER
 	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, SYNC_ACTIONS,
 	                              G_N_ELEMENTS (SYNC_ACTIONS), NULL);
+#endif
 }
 
 static void
