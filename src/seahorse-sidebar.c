@@ -209,7 +209,11 @@ ensure_sidebar_pixbufs (SeahorseSidebar *self)
 		self->pixbuf_lock = gtk_icon_info_load_symbolic_for_context (icon_info, style, NULL, NULL);
 	if (!self->pixbuf_lock_l)
 		self->pixbuf_lock_l = create_spotlight_pixbuf (self->pixbuf_lock);
+#if GTK_CHECK_VERSION(3, 8, 0)
+	g_object_unref (icon_info);
+#else
 	gtk_icon_info_free (icon_info);
+#endif
 	g_object_unref (icon);
 
 	/* Unlock icon */
@@ -220,7 +224,11 @@ ensure_sidebar_pixbufs (SeahorseSidebar *self)
 		self->pixbuf_unlock = gtk_icon_info_load_symbolic_for_context (icon_info, style, NULL, NULL);
 	if (!self->pixbuf_unlock_l)
 		self->pixbuf_unlock_l = create_spotlight_pixbuf (self->pixbuf_unlock);
+#if GTK_CHECK_VERSION(3, 8, 0)
+	g_object_unref (icon_info);
+#else
 	gtk_icon_info_free (icon_info);
+#endif
 	g_object_unref (icon);
 }
 
