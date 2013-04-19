@@ -250,6 +250,7 @@ receive_objects (SeahorseToken *self,
 {
 	GckAttributes *attrs;
 	const GckAttribute *id;
+	const GckAttribute *der;
 	gpointer object;
 	gpointer prev;
 	gpointer pair;
@@ -262,6 +263,15 @@ receive_objects (SeahorseToken *self,
 		object = l->data;
 		handle = gck_object_get_handle (object);
 		attrs = gck_object_cache_get_attributes (object);
+
+		/* For now skip certificates that have no X.509 data */
+		if (SEAHORSE_IS_CERTIFICATE (object)) {
+			der = gck_attributes_find (attrs, CKA_VALUE);
+			if (!der || !der->value) {
+				gck_attributes_unref (attrs);
+				continue;
+			}
+		}
 
 		prev = g_hash_table_lookup (self->pv->object_for_handle, &handle);
 		if (prev == NULL) {
