@@ -58,6 +58,7 @@ struct _SeahorsePkcs11BackendClass {
 static const char *token_blacklist[] = {
 	"pkcs11:manufacturer=Gnome%20Keyring;serial=1:SSH:HOME",
 	"pkcs11:manufacturer=Gnome%20Keyring;serial=1:SECRET:MAIN",
+	"pkcs11:manufacturer=Gnome%20Keyring;serial=1%3aXDG%3aDEFAULT",
 	"pkcs11:manufacturer=Mozilla%20Foundation;token=NSS%20Generic%20Crypto%20Services",
 	NULL
 };
