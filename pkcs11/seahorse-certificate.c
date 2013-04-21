@@ -173,10 +173,11 @@ calc_is_personal_and_trusted (SeahorseCertificate *self)
 			return SEAHORSE_FLAG_PERSONAL;
 	}
 
-	if (gcr_certificate_get_basic_constraints (GCR_CERTIFICATE (self), &is_ca, NULL))
-		return is_ca ? 0 : SEAHORSE_FLAG_PERSONAL;
+	if (gcr_certificate_get_basic_constraints (GCR_CERTIFICATE (self), &is_ca, NULL) && is_ca)
+		return 0;
 
-	return SEAHORSE_FLAG_PERSONAL;
+	/* The default for now */
+	return 0;
 }
 
 static void
