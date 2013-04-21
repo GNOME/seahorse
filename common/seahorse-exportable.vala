@@ -146,7 +146,7 @@ public interface Exportable : GLib.Object {
 				}
 			}
 
-			string directory = null;
+			string? directory = null;
 			GLib.File? file;
 			Exporter? exporter;
 
@@ -163,6 +163,8 @@ public interface Exportable : GLib.Object {
 				result = res;
 				loop.quit();
 			});
+
+			loop.run();
 
 			exporter.export_to_file.end(result);
 			foreach (var e in exporter.get_objects()) {
@@ -185,7 +187,7 @@ public interface Exportable : GLib.Object {
 
 	public static bool prompt(GLib.List<Exporter> exporters,
 	                          Gtk.Window? parent,
-	                          ref string directory,
+	                          ref string? directory,
 	                          out GLib.File chosen_file,
 	                          out Exporter chosen_exporter) {
 		var chooser = new Gtk.FileChooserDialog(null, parent, Gtk.FileChooserAction.SAVE,
@@ -231,11 +233,13 @@ public interface Exportable : GLib.Object {
 			chosen_file = chooser.get_file();
 			chosen_exporter = filters.lookup(chooser.get_filter());
 			directory = chooser.get_current_folder();
+			chooser.destroy();
 			return true;
 		}
 
 		chosen_file = null;
 		chosen_exporter = null;
+		chooser.destroy();
 		return false;
 	}
 }

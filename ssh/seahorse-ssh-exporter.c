@@ -68,8 +68,9 @@ G_DEFINE_TYPE_WITH_CODE (SeahorseSshExporter, seahorse_ssh_exporter, G_TYPE_OBJE
 );
 
 static gchar *
-calc_filename (SeahorseSshExporter *self)
+seahorse_ssh_exporter_get_filename (SeahorseExporter *exporter)
 {
+	SeahorseSshExporter *self = SEAHORSE_SSH_EXPORTER (exporter);
 	SeahorseSSHKeyData *data;
 	const gchar *location = NULL;
 	const gchar *basename = NULL;
@@ -105,8 +106,9 @@ calc_filename (SeahorseSshExporter *self)
 }
 
 static const gchar *
-calc_content_type (SeahorseSshExporter *self)
+seahorse_ssh_exporter_get_content_type (SeahorseExporter *exporter)
 {
+	SeahorseSshExporter *self = SEAHORSE_SSH_EXPORTER (exporter);
 	if (self->secret)
 		return "application/x-pem-key";
 	else
@@ -114,8 +116,9 @@ calc_content_type (SeahorseSshExporter *self)
 }
 
 static GtkFileFilter *
-calc_file_filter (SeahorseSshExporter *self)
+seahorse_ssh_exporter_get_file_filter (SeahorseExporter *exporter)
 {
+	SeahorseSshExporter *self = SEAHORSE_SSH_EXPORTER (exporter);
 	GtkFileFilter *filter = gtk_file_filter_new ();
 
 	if (self->secret) {
@@ -144,16 +147,17 @@ seahorse_ssh_exporter_get_property (GObject *object,
                                       GParamSpec *pspec)
 {
 	SeahorseSshExporter *self = SEAHORSE_SSH_EXPORTER (object);
+	SeahorseExporter *exporter = SEAHORSE_EXPORTER (object);
 
 	switch (prop_id) {
 	case PROP_FILENAME:
-		g_value_take_string (value, calc_filename (self));
+		g_value_take_string (value, seahorse_ssh_exporter_get_filename (exporter));
 		break;
 	case PROP_CONTENT_TYPE:
-		g_value_set_string (value, calc_content_type (self));
+		g_value_set_string (value, seahorse_ssh_exporter_get_content_type (exporter));
 		break;
 	case PROP_FILE_FILTER:
-		g_value_take_object (value, calc_file_filter (self));
+		g_value_take_object (value, seahorse_ssh_exporter_get_file_filter (exporter));
 		break;
 	case PROP_SECRET:
 		g_value_set_boolean (value, self->secret);
@@ -175,6 +179,9 @@ seahorse_ssh_exporter_set_property (GObject *object,
 	switch (prop_id) {
 	case PROP_SECRET:
 		self->secret = g_value_get_boolean (value);
+		g_object_notify (G_OBJECT (self), "filename");
+		g_object_notify (G_OBJECT (self), "filter");
+		g_object_notify (G_OBJECT (self), "content-type");
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -234,6 +241,7 @@ seahorse_ssh_exporter_add_object (SeahorseExporter *exporter,
 		}
 		self->key = g_object_ref (key);
 		self->objects = g_list_append (self->objects, self->key);
+		g_object_notify (G_OBJECT (self), "filename");
 		return TRUE;
 	}
 
@@ -302,6 +310,9 @@ seahorse_ssh_exporter_iface_init (SeahorseExporterIface *iface)
 	iface->export = seahorse_ssh_exporter_export_async;
 	iface->export_finish = seahorse_ssh_exporter_export_finish;
 	iface->get_objects = seahorse_ssh_exporter_get_objects;
+	iface->get_filename = seahorse_ssh_exporter_get_filename;
+	iface->get_content_type = seahorse_ssh_exporter_get_content_type;
+	iface->get_file_filter = seahorse_ssh_exporter_get_file_filter;
 }
 
 SeahorseExporter *

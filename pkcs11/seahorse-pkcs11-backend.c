@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-backend.h"
 #include "seahorse-pkcs11-generate.h"
 #include "seahorse-token.h"
@@ -42,6 +43,8 @@ enum {
 	PROP_DESCRIPTION,
 	PROP_ACTIONS
 };
+
+void  seahorse_pkcs11_backend_initialize (void);
 
 static SeahorsePkcs11Backend *pkcs11_backend = NULL;
 

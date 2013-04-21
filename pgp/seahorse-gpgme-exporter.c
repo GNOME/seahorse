@@ -72,8 +72,9 @@ G_DEFINE_TYPE_WITH_CODE (SeahorseGpgmeExporter, seahorse_gpgme_exporter, G_TYPE_
 );
 
 static gchar *
-calc_filename (SeahorseGpgmeExporter *self)
+seahorse_gpgme_exporter_get_filename (SeahorseExporter* exporter)
 {
+	SeahorseGpgmeExporter *self = SEAHORSE_GPGME_EXPORTER (exporter);
 	const gchar *basename = NULL;
 	gchar *filename;
 
@@ -97,8 +98,9 @@ calc_filename (SeahorseGpgmeExporter *self)
 }
 
 static const gchar *
-calc_content_type (SeahorseGpgmeExporter *self)
+seahorse_gpgme_exporter_get_content_type (SeahorseExporter* exporter)
 {
+	SeahorseGpgmeExporter *self = SEAHORSE_GPGME_EXPORTER (exporter);
 	if (self->armor)
 		return "application/pgp-keys";
 	else
@@ -106,8 +108,9 @@ calc_content_type (SeahorseGpgmeExporter *self)
 }
 
 static GtkFileFilter *
-calc_file_filter (SeahorseGpgmeExporter *self)
+seahorse_gpgme_exporter_get_file_filter (SeahorseExporter* exporter)
 {
+	SeahorseGpgmeExporter *self = SEAHORSE_GPGME_EXPORTER (exporter);
 	GtkFileFilter *filter = gtk_file_filter_new ();
 
 	if (self->armor) {
@@ -137,16 +140,17 @@ seahorse_gpgme_exporter_get_property (GObject *object,
                                       GParamSpec *pspec)
 {
 	SeahorseGpgmeExporter *self = SEAHORSE_GPGME_EXPORTER (object);
+	SeahorseExporter *exporter = SEAHORSE_EXPORTER (object);
 
 	switch (prop_id) {
 	case PROP_FILENAME:
-		g_value_take_string (value, calc_filename (self));
+		g_value_take_string (value, seahorse_gpgme_exporter_get_filename (exporter));
 		break;
 	case PROP_CONTENT_TYPE:
-		g_value_set_string (value, calc_content_type (self));
+		g_value_set_string (value, seahorse_gpgme_exporter_get_content_type (exporter));
 		break;
 	case PROP_FILE_FILTER:
-		g_value_take_object (value, calc_file_filter (self));
+		g_value_take_object (value, seahorse_gpgme_exporter_get_file_filter (exporter));
 		break;
 	case PROP_ARMOR:
 		g_value_set_boolean (value, self->armor);
@@ -171,6 +175,9 @@ seahorse_gpgme_exporter_set_property (GObject *object,
 	switch (prop_id) {
 	case PROP_ARMOR:
 		self->armor = g_value_get_boolean (value);
+		g_object_notify (G_OBJECT (self), "filename");
+		g_object_notify (G_OBJECT (self), "file-filter");
+		g_object_notify (G_OBJECT (self), "content-type");
 		break;
 	case PROP_SECRET:
 		self->secret = g_value_get_boolean (value);
@@ -233,6 +240,7 @@ seahorse_gpgme_exporter_add_object (SeahorseExporter *exporter,
 			return FALSE;
 
 		self->objects = g_list_append (self->objects, g_object_ref (key));
+		g_object_notify (G_OBJECT (self), "filename");
 		return TRUE;
 	}
 
@@ -401,6 +409,9 @@ seahorse_gpgme_exporter_iface_init (SeahorseExporterIface *iface)
 	iface->export = seahorse_gpgme_exporter_export_async;
 	iface->export_finish = seahorse_gpgme_exporter_export_finish;
 	iface->get_objects = seahorse_gpgme_exporter_get_objects;
+	iface->get_filename = seahorse_gpgme_exporter_get_filename;
+	iface->get_content_type = seahorse_gpgme_exporter_get_content_type;
+	iface->get_file_filter = seahorse_gpgme_exporter_get_file_filter;
 }
 
 SeahorseExporter *

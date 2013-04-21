@@ -30,7 +30,6 @@
 #include "gkr/seahorse-gkr.h"
 #include "pgp/seahorse-pgp.h"
 #include "ssh/seahorse-ssh.h"
-#include "pkcs11/seahorse-pkcs11.h"
 
 #include "seahorse-search-provider.h"
 
@@ -90,6 +89,10 @@ seahorse_application_finalize (GObject *gobject)
 
 	G_OBJECT_CLASS (seahorse_application_parent_class)->finalize (gobject);
 }
+
+#ifdef WITH_PKCS11
+void seahorse_pkcs11_backend_initialize (void);
+#endif
 
 static void
 seahorse_application_startup (GApplication *application)

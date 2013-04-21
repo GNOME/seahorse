@@ -315,10 +315,19 @@ seahorse_ssh_key_create_exporters (SeahorseExportable *exportable,
 	return g_list_append (NULL, seahorse_ssh_exporter_new (G_OBJECT (exportable), FALSE));
 }
 
+static gboolean
+seahorse_ssh_key_get_exportable (SeahorseExportable *exportable)
+{
+	gboolean can;
+	g_object_get (exportable, "exportable", &can, NULL);
+	return can;
+}
+
 static void
 seahorse_ssh_key_exportable_iface (SeahorseExportableIface *iface)
 {
 	iface->create_exporters = seahorse_ssh_key_create_exporters;
+	iface->get_exportable = seahorse_ssh_key_get_exportable;
 }
 
 static SeahorseDeleter *

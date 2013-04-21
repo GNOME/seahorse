@@ -33,8 +33,6 @@
 
 typedef guint64 SeahorseVersion;
 
-#define SEAHORSE_BAD_FILENAME_CHARS  "/\\<>|:?;"
-
 gchar*      seahorse_util_get_date_string           (const time_t time);
 gchar*      seahorse_util_get_display_date_string   (const time_t time);
 

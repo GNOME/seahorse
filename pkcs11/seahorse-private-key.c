@@ -323,10 +323,19 @@ seahorse_private_key_create_exporters (SeahorseExportable *exportable,
 	return NULL;
 }
 
+static gboolean
+seahorse_private_key_get_exportable (SeahorseExportable *exportable)
+{
+	gboolean can;
+	g_object_get (exportable, "exportable", &can, NULL);
+	return can;
+}
+
 static void
 seahorse_private_key_exportable_iface (SeahorseExportableIface *iface)
 {
 	iface->create_exporters = seahorse_private_key_create_exporters;
+	iface->get_exportable = seahorse_private_key_get_exportable;
 }
 
 static void

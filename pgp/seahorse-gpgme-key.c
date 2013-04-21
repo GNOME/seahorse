@@ -593,10 +593,19 @@ seahorse_gpgme_key_create_exporters (SeahorseExportable *exportable,
 	return result;
 }
 
+static gboolean
+seahorse_gpgme_key_get_exportable (SeahorseExportable *exportable)
+{
+	gboolean can;
+	g_object_get (exportable, "exportable", &can, NULL);
+	return can;
+}
+
 static void
 seahorse_gpgme_key_exportable_iface (SeahorseExportableIface *iface)
 {
 	iface->create_exporters = seahorse_gpgme_key_create_exporters;
+	iface->get_exportable = seahorse_gpgme_key_get_exportable;
 }
 
 /* -----------------------------------------------------------------------------

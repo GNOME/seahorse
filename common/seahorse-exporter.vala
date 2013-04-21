@@ -29,12 +29,14 @@ public enum ExporterType {
 	TEXTUAL
 }
 
+public const string BAD_FILENAME_CHARS = "/\\<>|:?;";
+
 public interface Exporter : GLib.Object {
-	public abstract string filename { get; }
+	public abstract string filename { owned get; }
 
 	public abstract string content_type { get; }
 
-	public abstract Gtk.FileFilter file_filter { get; }
+	public abstract Gtk.FileFilter file_filter { owned get; }
 
 	public abstract unowned GLib.List<weak GLib.Object> get_objects();
 
@@ -74,8 +76,10 @@ public interface Exporter : GLib.Object {
 	                                 bool overwrite,
 	                                 GLib.Cancellable? cancellable) throws GLib.Error {
 
-		uchar[] bytes = yield this.export(cancellable);
+		uchar[] bytes;
 		GLib.File out = file;
+
+		bytes = yield this.export(cancellable);
 
 		/*
 		 * When not trying to overwrite we pass an invalid etag. This way

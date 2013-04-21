@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include "seahorse-certificate.h"
-#include "seahorse-certificate-der-exporter.h"
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-deleter.h"
 #include "seahorse-pkcs11-helpers.h"
@@ -354,21 +353,30 @@ static GList *
 seahorse_certificate_create_exporters (SeahorseExportable *exportable,
                                        SeahorseExporterType type)
 {
-	SeahorseExporter *exporter;
+	SeahorseCertificateDerExporter *exporter;
 	gboolean can_export = FALSE;
 
 	g_object_get (exportable, "exportable", &can_export, NULL);
 	if (!can_export)
 		return NULL;
 
-	exporter = seahorse_certificate_der_exporter_new (SEAHORSE_CERTIFICATE (exportable));
+	exporter = seahorse_certificate_der_exporter_new (GCR_CERTIFICATE (exportable));
 	return g_list_append (NULL, exporter);
+}
+
+static gboolean
+seahorse_certificate_get_exportable (SeahorseExportable *exportable)
+{
+	gboolean can;
+	g_object_get (exportable, "exportable", &can, NULL);
+	return can;
 }
 
 static void
 seahorse_certificate_exportable_iface (SeahorseExportableIface *iface)
 {
 	iface->create_exporters = seahorse_certificate_create_exporters;
+	iface->get_exportable = seahorse_certificate_get_exportable;
 }
 
 static SeahorseDeleter *
