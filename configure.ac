@@ -14,15 +14,17 @@ AVAHI_GLIB_REQUIRED=0.6
 # -----------------------------------------------------------------------------
 # Basic tools
 
+AC_CONFIG_AUX_DIR([build/aux])
 AM_INIT_AUTOMAKE([1.11 tar-ustar foreign -Wno-portability])
 AM_SANITY_CHECK
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([build/config.h])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_MAINTAINER_MODE([enable])
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIR([build/m4])
 
 AC_PROG_CC
 AC_PROG_CXX
+AM_PROG_CC_C_O
 AM_PROG_VALAC([0.18.0])
 AC_PROG_INTLTOOL([0.35.0])
 AM_PROG_LIBTOOL
@@ -437,6 +439,8 @@ AM_CONDITIONAL(WITH_SSH, test "$enable_ssh" = "yes")
 # Compilation and linking options
 #
 
+CFLAGS="$CFLAGS -I\$(top_srcdir)/build"
+
 AC_MSG_CHECKING([for debug mode])
 AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug=no/default/yes],
@@ -546,6 +550,7 @@ AC_SUBST(VALA_FLAGS)
 
 AC_OUTPUT([
 Makefile
+build/Makefile
 common/Makefile
 gkr/Makefile
 libegg/Makefile

@@ -28,3 +28,7 @@ EXTRA_DIST = \
 	$(convert_DATA) \
 	$(gsettings_SCHEMAS) \
 	$(service_in_files)
+
+CLEANFILES = \
+	org.gnome.seahorse.Application.service \
+	$(NULL)

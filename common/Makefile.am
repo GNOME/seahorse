@@ -19,13 +19,18 @@ AM_VALAFLAGS = \
 	--use-header \
 	--header=seahorse-common.h \
 	--pkg gtk+-3.0 \
+	--vapi=common.vapi \
 	$(NULL)
 
-CFLAGS = \
-	-include config.h \
-	-Wno-unused-but-set-variable \
-	-Wno-pointer-sign \
+CFLAGS += \
+	-include config.h -w \
 	$(NULL)
 
 EXTRA_DIST = \
-	seahorse-common.h
+	seahorse-common.h \
+	common.vapi \
+	$(NULL)
+
+DISTCLEANFILES = \
+	common.vapi \
+	$(NULL)
