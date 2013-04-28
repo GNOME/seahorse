@@ -68,7 +68,7 @@ public interface Exportable : GLib.Object {
 	}
 
 	public static uint export_to_text_wait(GLib.List<GLib.Object> objects,
-	                                       [CCode (array_length_type = "size_t")] out uchar[] output) throws GLib.Error {
+	                                       [CCode (array_length_type = "size_t")] out uint8[] output) throws GLib.Error {
 		GLib.List<Exporter> exporters = null;
 
 		foreach (var object in objects) {

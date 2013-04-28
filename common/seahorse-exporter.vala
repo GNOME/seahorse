@@ -43,7 +43,7 @@ public interface Exporter : GLib.Object {
 	public abstract bool add_object(GLib.Object obj);
 
 	[CCode (array_length_type = "size_t")]
-	public abstract async uchar[] export(GLib.Cancellable? cancellable) throws GLib.Error;
+	public abstract async uint8[] export(GLib.Cancellable? cancellable) throws GLib.Error;
 
 	static GLib.File file_increment_unique(GLib.File file,
 	                                       ref uint state) {
@@ -76,7 +76,7 @@ public interface Exporter : GLib.Object {
 	                                 bool overwrite,
 	                                 GLib.Cancellable? cancellable) throws GLib.Error {
 
-		uchar[] bytes;
+		uint8[] bytes;
 		GLib.File outfile = file;
 
 		bytes = yield this.export(cancellable);
