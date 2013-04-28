@@ -17,12 +17,4 @@ which gnome-autogen.sh || {
     exit 1
 }
 
-(gtkdocize --flavour=no-tmpl) < /dev/null > /dev/null 2>&1 || {
-    echo
-    echo "You must have gtk-doc installed to compile seahorse."
-    echo "Install the appropriate package for your distribution,"
-    echo "or get the source tarball at http://ftp.gnome.org/pub/GNOME/sources/gtk-doc/"
-    DIE=1
-} 
-
 REQUIRED_AUTOMAKE_VERSION=1.9 USE_GNOME2_MACROS=1 . gnome-autogen.sh
