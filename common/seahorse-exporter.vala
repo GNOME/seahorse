@@ -77,7 +77,7 @@ public interface Exporter : GLib.Object {
 	                                 GLib.Cancellable? cancellable) throws GLib.Error {
 
 		uchar[] bytes;
-		GLib.File out = file;
+		GLib.File outfile = file;
 
 		bytes = yield this.export(cancellable);
 
@@ -90,14 +90,14 @@ public interface Exporter : GLib.Object {
 		while (true) {
 			uint unique = 0;
 			try {
-				yield out.replace_contents_async(bytes, overwrite ? null : "invalid etag",
+				yield outfile.replace_contents_async(bytes, overwrite ? null : "invalid etag",
 				                                 false, GLib.FileCreateFlags.PRIVATE,
 				                                 cancellable, null);
 				return true;
 
 			} catch (GLib.IOError err) {
 				if (err is GLib.IOError.WRONG_ETAG) {
-					out = file_increment_unique(file, ref unique);
+					outfile = file_increment_unique(file, ref unique);
 					continue;
 				}
 				throw err;
