@@ -307,7 +307,7 @@ seahorse_ssh_key_data_parse_file (const gchar *filename,  SeahorseSSHPublicKeyPa
 }
 
 SeahorseSSHKeyData*
-seahorse_ssh_key_data_parse_line (const gchar *line, guint length)
+seahorse_ssh_key_data_parse_line (const gchar *line, gssize length)
 {
     SeahorseSSHKeyData *keydata = NULL;
     gchar *x;
@@ -323,7 +323,7 @@ seahorse_ssh_key_data_parse_line (const gchar *line, guint length)
     if (!*line || *line == '#')
         return NULL;
     
-    x = g_strndup (line, length == -1 ? strlen (line) : length);
+    x = g_strndup (line, length < 0 ? strlen (line) : (gsize) length);
     
     keydata = g_new0 (SeahorseSSHKeyData, 1);
     if (!parse_key_data (x, keydata)) {

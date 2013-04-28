@@ -261,7 +261,7 @@ on_pgp_signature_row_activated (GtkTreeView *treeview,
 static void
 unique_strings (GPtrArray *keyids)
 {
-	gint i;
+	guint i;
 
 	g_ptr_array_sort (keyids, (GCompareFunc)g_ascii_strcasecmp);
 	for (i = 0; i + 1 < keyids->len; ) {
@@ -1530,7 +1530,7 @@ on_pgp_trust_marginal_toggled (GtkToggleButton *toggle,
 {
     SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     GObject *object;
-    guint trust;
+    SeahorseValidity trust;
     gpgme_error_t err;
 
     object = SEAHORSE_OBJECT_WIDGET (swidget)->object;

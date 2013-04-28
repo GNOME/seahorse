@@ -41,7 +41,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 typedef struct _SeahorseObjectModelPrivate {
     GHashTable *rows;
-    guint data_column;
+    gint data_column;
 } SeahorseObjectModelPrivate;
 
 G_DEFINE_TYPE (SeahorseObjectModel, seahorse_object_model, GTK_TYPE_TREE_STORE);
@@ -71,7 +71,7 @@ key_notify (GObject *object,
     SeahorseObjectRow *skrow;
     GtkTreeIter iter;
     GtkTreePath *path;
-    int i;
+    guint i;
 
     skrow = g_hash_table_lookup (pv->rows, object);
     if (!skrow)
@@ -311,7 +311,7 @@ seahorse_object_model_set_row_object (SeahorseObjectModel *self,
     SeahorseObjectRow *skrow;
     GtkTreePath *path;
     GtkTreePath *ipath;
-    int i;
+    guint i;
     
     g_return_if_fail (SEAHORSE_IS_OBJECT_MODEL (self));
     g_return_if_fail (G_IS_OBJECT (object) || object == NULL);
@@ -394,7 +394,7 @@ seahorse_object_model_remove_rows_for_object (SeahorseObjectModel *self,
     SeahorseObjectRow *skrow;
     GtkTreeIter iter;
     GtkTreePath *path;
-    int i;
+    guint i;
     
     g_return_if_fail (SEAHORSE_IS_OBJECT_MODEL (self));
     g_return_if_fail (G_IS_OBJECT (object));
@@ -427,7 +427,7 @@ seahorse_object_model_get_rows_for_object (SeahorseObjectModel *self,
     SeahorseObjectRow *skrow;
     GtkTreeIter *iter;
     GtkTreePath *path;
-    int i;
+    guint i;
     
     g_return_val_if_fail (SEAHORSE_IS_OBJECT_MODEL (self), NULL);
     g_return_val_if_fail (G_IS_OBJECT (object), NULL);

@@ -623,7 +623,7 @@ on_keyring_import_complete (gpgme_error_t gerr,
 	gpgme_import_status_t import;
 	GError *error = NULL;
 	const gchar *msg;
-	guint i;
+	gint i;
 
 	if (seahorse_gpgme_propagate_error (gerr, &error)) {
 		g_simple_async_result_take_error (res, error);

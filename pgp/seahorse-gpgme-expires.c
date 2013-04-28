@@ -73,7 +73,7 @@ on_gpgme_expire_ok_clicked (GtkButton *button,
 	g_object_ref (swidget);
 	g_object_ref (subkey);
 	
-	if (expiry != seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (subkey))) {
+	if (expiry != (time_t)seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (subkey))) {
 		err = seahorse_gpgme_key_op_set_expires (subkey, expiry);
 		if (!GPG_IS_OK (err))
 			seahorse_gpgme_handle_error (err, _("Couldn't change expiry date"));

@@ -43,7 +43,7 @@ main (int argc, char* argv[])
 	const gchar *flags;
 	gint result;
 	const gchar *pass;
-	gsize len;
+	gssize len;
 
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");

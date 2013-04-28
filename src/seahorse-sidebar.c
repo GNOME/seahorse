@@ -1367,7 +1367,7 @@ seahorse_sidebar_dispose (GObject *obj)
 {
 	SeahorseSidebar *self = SEAHORSE_SIDEBAR (obj);
 	GList *places, *l;
-	gint i;
+	guint i;
 
 	for (i = 0; i < self->backends->len; i++) {
 		g_signal_handlers_disconnect_by_func (self->backends->pdata[i], on_place_added, self);

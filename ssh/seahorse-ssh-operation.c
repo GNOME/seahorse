@@ -408,7 +408,7 @@ seahorse_ssh_operation_async (SeahorseSSHSource *source,
 
 	/* Copy the input for later writing */
 	if (input) {
-		closure->sin = g_string_new_len (input, length == -1 ? strlen (input) : length);
+                closure->sin = g_string_new_len (input, length < 0 ? (gssize) strlen (input) : length);
 		seahorse_debug ("SSHOP: Will send SSH input: %s", closure->sin->str);
 
 		fcntl (fin, F_SETFL, O_NONBLOCK | fcntl (fin, F_GETFL));

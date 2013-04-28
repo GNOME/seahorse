@@ -1180,7 +1180,7 @@ seahorse_gpgme_key_op_set_expires (SeahorseGpgmeSubkey *subkey, const time_t exp
 	gpgme_key_t key;
 	
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	g_return_val_if_fail (expires != seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (subkey)), GPG_E (GPG_ERR_INV_VALUE));
+	g_return_val_if_fail (expires != (time_t)seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (subkey)), GPG_E (GPG_ERR_INV_VALUE));
 	
 	key = seahorse_gpgme_subkey_get_pubkey (subkey);
 	g_return_val_if_fail (key, GPG_E (GPG_ERR_INV_VALUE));
@@ -2359,7 +2359,7 @@ seahorse_gpgme_key_op_photo_delete (SeahorseGpgmePhoto *photo)
 
 typedef struct {
 	GList *photos;
-	gint uid;
+	guint uid;
 	guint num_uids;
 	char *output_file;
 	gpgme_key_t key;
@@ -2524,7 +2524,7 @@ seahorse_gpgme_key_op_photos_load (SeahorseGpgmeKey *pkey)
 	const gchar *oldpath;
 	const gchar *keyid;
 	gchar *path;
-	guint fd;
+	gint fd;
 
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	

@@ -234,7 +234,7 @@ calculate_keyserver_uri (SeahorseWidget *swidget)
     gchar **types;
     gint active;
     gchar *uri;
-    guint i;
+    gint i;
 
     /* Figure out the scheme */
     widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "keyserver-type"));

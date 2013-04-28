@@ -133,7 +133,7 @@ on_generate_complete_and_upload (GObject *source,
 }
 
 static void
-on_response (GtkDialog *dialog, guint response, SeahorseWidget *swidget)
+on_response (GtkDialog *dialog, gint response, SeahorseWidget *swidget)
 {
     SeahorseSSHSource *src;
     GCancellable *cancellable;

@@ -52,7 +52,7 @@
  **/
 
 void           on_gpgme_generate_response                    (GtkDialog *dialog,
-                                                              guint response,
+                                                              gint response,
                                                               gpointer user_data);
 
 void           on_gpgme_generate_entry_changed               (GtkEditable *editable,
@@ -248,7 +248,7 @@ seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
  */
 G_MODULE_EXPORT void
 on_gpgme_generate_response (GtkDialog *dialog,
-                            guint response,
+                            gint response,
                             gpointer user_data)
 {
     SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
@@ -296,7 +296,7 @@ on_gpgme_generate_response (GtkDialog *dialog,
     widget = seahorse_widget_get_widget (swidget, "algorithm-choice");
     g_return_if_fail (widget != NULL);
     sel = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
-    g_assert (sel <= G_N_ELEMENTS(available_algorithms));
+    g_assert (sel <= (gint) G_N_ELEMENTS(available_algorithms));
     type = available_algorithms[sel].type;
 
     /* The number of bits */

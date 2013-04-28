@@ -89,10 +89,10 @@ static gboolean
 save_to_fd (const gchar *buf, gsize count, GError **error, gpointer data)
 {
     int fd = GPOINTER_TO_INT (data);
-    int written;
+    gssize written;
     
     written = write (fd, buf, count);
-    if (written != count) {
+    if (written != (gssize) count) {
         g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (errno), 
                      "%s", g_strerror (errno));
         return FALSE;

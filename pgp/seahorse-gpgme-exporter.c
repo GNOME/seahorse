@@ -293,7 +293,7 @@ on_keyring_export_complete (gpgme_error_t gerr,
 	g_assert (closure->at < (gint)closure->keyids->len);
 	closure->at++;
 
-	if (closure->at == closure->keyids->len) {
+	if (closure->at == (gint)closure->keyids->len) {
 		g_simple_async_result_complete (res);
 		return FALSE; /* don't run this again */
 	}

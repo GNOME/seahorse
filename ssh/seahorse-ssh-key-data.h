@@ -82,7 +82,7 @@ guint                   seahorse_ssh_key_data_parse_file      (const gchar *file
                                                                GError **error);
 
 SeahorseSSHKeyData*     seahorse_ssh_key_data_parse_line      (const gchar *line,
-                                                               guint length);
+                                                               gssize length);
 
 gboolean                seahorse_ssh_key_data_match           (const gchar *line,
                                                                gint length,

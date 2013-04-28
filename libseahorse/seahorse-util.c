@@ -224,7 +224,7 @@ seahorse_util_get_display_date_string (const time_t time)
 guchar*
 seahorse_util_read_to_memory (GInputStream *input, guint *len)
 {
-	gint size = 128;
+	gsize size = 128;
 	gchar *buffer, *text;
 	gsize nread = 0;
 	GString *string;

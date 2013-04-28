@@ -789,7 +789,7 @@ seahorse_ssh_source_import_async (SeahorseSSHSource *self,
 	source_import_closure *closure;
 	gchar *contents;
 	GSimpleAsyncResult *res;
-	guint count;
+	gint count;
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_ssh_source_import_async);
@@ -862,7 +862,7 @@ seahorse_ssh_source_file_for_algorithm (SeahorseSSHSource *ssrc, guint algo)
 {
     const gchar *pref;
     gchar *filename, *t;
-    guint i = 0;
+    gint i = 0;
     
     switch (algo) {
     case SSH_ALGO_DSA:
