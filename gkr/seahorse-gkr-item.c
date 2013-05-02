@@ -36,7 +36,6 @@
 
 #include "seahorse-common.h"
 #include "seahorse-icons.h"
-#include "seahorse-place.h"
 #include "seahorse-util.h"
 
 #define GENERIC_SECRET "org.freedesktop.Secret.Generic"

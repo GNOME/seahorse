@@ -26,7 +26,6 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-object.h"
-#include "seahorse-place.h"
 #include "seahorse-validity.h"
 
 #include "seahorse-ssh-key-data.h"

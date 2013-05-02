@@ -22,7 +22,7 @@
 #ifndef __SEAHORSE_SIDEBAR_H__
 #define __SEAHORSE_SIDEBAR_H__
 
-#include "seahorse-place.h"
+#include "seahorse-common.h"
 
 #include <gcr/gcr.h>
 

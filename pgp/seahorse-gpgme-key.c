@@ -37,7 +37,6 @@
 #include "seahorse-icons.h"
 #include "seahorse-predicate.h"
 #include "seahorse-object-list.h"
-#include "seahorse-place.h"
 #include "seahorse-util.h"
 
 #include <glib/gi18n.h>

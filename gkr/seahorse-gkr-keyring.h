@@ -51,8 +51,6 @@ struct _SeahorseGkrKeyringClass {
 
 GType                seahorse_gkr_keyring_get_type         (void);
 
-const gchar *        seahorse_gkr_keyring_get_description  (SeahorseGkrKeyring *self);
-
 gboolean             seahorse_gkr_keyring_get_is_default   (SeahorseGkrKeyring *self);
 
 #endif /* __SEAHORSE_GKR_KEYRING_H__ */

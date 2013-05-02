@@ -24,7 +24,7 @@
 
 #include <glib-object.h>
 
-#include "seahorse-place.h"
+#include "seahorse-common.h"
 #include "seahorse-widget.h"
 
 #define SEAHORSE_CATALOG_MENU_OBJECT   "ObjectPopup"

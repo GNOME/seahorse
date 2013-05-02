@@ -35,7 +35,6 @@
 #include "seahorse-servers.h"
 
 #include "seahorse-object-list.h"
-#include "seahorse-place.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
@@ -490,10 +489,7 @@ detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
  *  SEAHORSE HKP SOURCE
  */
 
-static void seahorse_place_iface (SeahorsePlaceIface *iface);
-
-G_DEFINE_TYPE_EXTENDED (SeahorseHKPSource, seahorse_hkp_source, SEAHORSE_TYPE_SERVER_SOURCE, 0,
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_place_iface));
+G_DEFINE_TYPE (SeahorseHKPSource, seahorse_hkp_source, SEAHORSE_TYPE_SERVER_SOURCE);
 
 static void 
 seahorse_hkp_source_init (SeahorseHKPSource *hsrc)
@@ -1022,18 +1018,6 @@ seahorse_hkp_source_export_finish (SeahorseServerSource *source,
 	output = g_string_free (closure->data, FALSE);
 	closure->data = NULL;
 	return output;
-}
-
-/**
-* iface: The interface to set
-*
-* Set up the default SeahorseSourceIface
-*
-**/
-static void 
-seahorse_place_iface (SeahorsePlaceIface *iface)
-{
-
 }
 
 /**

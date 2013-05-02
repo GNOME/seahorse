@@ -27,7 +27,6 @@
 #include "seahorse-token.h"
 
 #include "seahorse-backend.h"
-#include "seahorse-place.h"
 #include "seahorse-util.h"
 
 #include <gcr/gcr-base.h>

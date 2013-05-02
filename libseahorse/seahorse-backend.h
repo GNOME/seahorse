@@ -22,7 +22,7 @@
 #ifndef __SEAHORSE_BACKEND_H__
 #define __SEAHORSE_BACKEND_H__
 
-#include "seahorse-place.h"
+#include "seahorse-common.h"
 
 #include <glib-object.h>
 

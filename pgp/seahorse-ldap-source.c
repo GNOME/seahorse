@@ -34,8 +34,8 @@
 #include "seahorse-pgp-subkey.h"
 #include "seahorse-pgp-uid.h"
 
+#include "seahorse-common.h"
 #include "seahorse-object-list.h"
-#include "seahorse-place.h"
 #include "seahorse-progress.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
@@ -735,10 +735,7 @@ seahorse_ldap_source_connect_finish (SeahorseLDAPSource *source,
 	return ldap;
 }
 
-static void seahorse_place_iface (SeahorsePlaceIface *iface);
-
-G_DEFINE_TYPE_EXTENDED (SeahorseLDAPSource, seahorse_ldap_source, SEAHORSE_TYPE_SERVER_SOURCE, 0,
-                        G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_place_iface));
+G_DEFINE_TYPE (SeahorseLDAPSource, seahorse_ldap_source, SEAHORSE_TYPE_SERVER_SOURCE);
 
 static void 
 seahorse_ldap_source_init (SeahorseLDAPSource *self)
@@ -1423,11 +1420,6 @@ seahorse_ldap_source_export_finish (SeahorseServerSource *source,
 	output = g_string_free (closure->data, FALSE);
 	closure->data = NULL;
 	return output;
-}
-
-static void 
-seahorse_place_iface (SeahorsePlaceIface *iface)
-{
 }
 
 /* Initialize the basic class stuff */

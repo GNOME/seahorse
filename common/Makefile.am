@@ -11,6 +11,7 @@ libcommon_la_SOURCES = \
 	deleter.vala \
 	exportable.vala \
 	exporter.vala \
+	place.vala \
 	registry.vala \
 	viewable.vala \
 	$(NULL)
@@ -20,6 +21,7 @@ AM_VALAFLAGS = \
 	--use-header \
 	--header=seahorse-common.h \
 	--pkg gtk+-3.0 \
+	--pkg gcr-3 \
 	--vapi=common.vapi \
 	$(NULL)
 

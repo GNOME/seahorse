@@ -142,7 +142,7 @@ seahorse_pgp_backend_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_pgp_backend_parent_class)->constructed (obj);
 
 	self->keyring = seahorse_gpgme_keyring_new ();
-	seahorse_place_load_async (SEAHORSE_PLACE (self->keyring), NULL, NULL, NULL);
+	seahorse_place_load (SEAHORSE_PLACE (self->keyring), NULL, NULL, NULL);
 
 	self->discovery = seahorse_discovery_new ();
 	self->unknown = seahorse_unknown_source_new ();

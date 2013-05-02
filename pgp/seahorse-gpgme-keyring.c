@@ -32,7 +32,6 @@
 #include "seahorse-pgp-key.h"
 
 #include "seahorse-common.h"
-#include "seahorse-place.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 #include "seahorse-passphrase.h"
@@ -802,29 +801,59 @@ seahorse_gpgme_keyring_init (SeahorseGpgmeKeyring *self)
 	}
 }
 
+static gchar *
+seahorse_gpgme_keyring_get_label (SeahorsePlace *place)
+{
+	return g_strdup (_("GnuPG keys"));
+}
+
+static gchar *
+seahorse_gpgme_keyring_get_description (SeahorsePlace *place)
+{
+	return g_strdup (_("GnuPG: default keyring directory"));
+}
+
+static GIcon *
+seahorse_gpgme_keyring_get_icon (SeahorsePlace *place)
+{
+	return g_themed_icon_new (GCR_ICON_GNUPG);
+}
+
+static GtkActionGroup *
+seahorse_gpgme_keyring_get_actions (SeahorsePlace *place)
+{
+	return g_object_ref (SEAHORSE_GPGME_KEYRING (place)->pv->actions);
+}
+
+static gchar *
+seahorse_gpgme_keyring_get_uri (SeahorsePlace *place)
+{
+	return g_strdup ("gnupg://");
+}
+
 static void
 seahorse_gpgme_keyring_get_property (GObject *obj,
                                      guint prop_id,
                                      GValue *value,
                                      GParamSpec *pspec)
 {
-	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (obj);
+	SeahorsePlace *place = SEAHORSE_PLACE (obj);
 
 	switch (prop_id) {
 	case PROP_LABEL:
-		g_value_set_string (value, _("GnuPG keys"));
+		g_value_take_string (value, seahorse_gpgme_keyring_get_label (place));
 		break;
 	case PROP_DESCRIPTION:
-		g_value_set_string (value, _("GnuPG: default keyring directory"));
+		g_value_take_string (value, seahorse_gpgme_keyring_get_description (place));
 		break;
 	case PROP_ICON:
-		g_value_take_object (value, g_themed_icon_new (GCR_ICON_GNUPG));
+		g_value_take_object (value, seahorse_gpgme_keyring_get_icon (place));
 		break;
 	case PROP_URI:
-		g_value_set_string (value, "gnupg://");
+		g_value_take_string (value, seahorse_gpgme_keyring_get_uri (place));
 		break;
 	case PROP_ACTIONS:
-		g_value_set_object (value, self->pv->actions);
+		g_value_take_object (value, seahorse_gpgme_keyring_get_actions (place));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -900,8 +929,13 @@ seahorse_gpgme_keyring_class_init (SeahorseGpgmeKeyringClass *klass)
 static void
 seahorse_gpgme_keyring_place_iface (SeahorsePlaceIface *iface)
 {
-	iface->load_async = seahorse_gpgme_keyring_load_async;
+	iface->load = seahorse_gpgme_keyring_load_async;
 	iface->load_finish = seahorse_gpgme_keyring_load_finish;
+	iface->get_actions = seahorse_gpgme_keyring_get_actions;
+	iface->get_description = seahorse_gpgme_keyring_get_description;
+	iface->get_icon = seahorse_gpgme_keyring_get_icon;
+	iface->get_label = seahorse_gpgme_keyring_get_label;
+	iface->get_uri = seahorse_gpgme_keyring_get_uri;
 }
 
 static guint

@@ -27,7 +27,7 @@
 #include "seahorse-ssh-operation.h"
 #include "seahorse-ssh-source.h"
 
-#include "seahorse-place.h"
+#include "seahorse-common.h"
 #include "seahorse-util.h"
 
 #include <gcr/gcr.h>
@@ -148,7 +148,7 @@ scheduled_refresh (SeahorseSSHSource *ssrc)
 {
     seahorse_debug ("scheduled refresh event ocurring now");
     cancel_scheduled_refresh (ssrc);
-    seahorse_place_load_async (SEAHORSE_PLACE (ssrc), NULL, NULL, NULL);
+    seahorse_place_load (SEAHORSE_PLACE (ssrc), NULL, NULL, NULL);
     return FALSE; /* don't run again */    
 }
 
@@ -217,6 +217,38 @@ merge_keydata (SeahorseSSHKey *prev, SeahorseSSHKeyData *keydata)
         
 }
 
+static gchar *
+seahorse_ssh_source_get_label (SeahorsePlace *place)
+{
+	return g_strdup (_("OpenSSH keys"));
+}
+
+static gchar *
+seahorse_ssh_source_get_description (SeahorsePlace *place)
+{
+	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (place);
+	return g_strdup_printf (_("OpenSSH: %s"), self->priv->ssh_homedir);
+}
+
+static gchar *
+seahorse_ssh_source_get_uri (SeahorsePlace *place)
+{
+	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (place);
+	return g_strdup_printf ("openssh://%s", self->priv->ssh_homedir);
+}
+
+static GIcon *
+seahorse_ssh_source_get_icon (SeahorsePlace *place)
+{
+	return g_themed_icon_new (GCR_ICON_HOME_DIRECTORY);
+}
+
+static GtkActionGroup *
+seahorse_ssh_source_get_actions (SeahorsePlace* self)
+{
+	return NULL;
+}
+
 static void 
 seahorse_ssh_source_get_property (GObject *obj,
                                   guint prop_id,
@@ -224,28 +256,26 @@ seahorse_ssh_source_get_property (GObject *obj,
                                   GParamSpec *pspec)
 {
 	SeahorseSSHSource *self = SEAHORSE_SSH_SOURCE (obj);
-	gchar *text;
+	SeahorsePlace *place = SEAHORSE_PLACE (obj);
 
 	switch (prop_id) {
 	case PROP_LABEL:
-		g_value_set_string (value, _("OpenSSH keys"));
+		g_value_take_string (value, seahorse_ssh_source_get_label (place));
 		break;
 	case PROP_DESCRIPTION:
-		text = g_strdup_printf (_("OpenSSH: %s"), self->priv->ssh_homedir);
-		g_value_take_string (value, text);
+		g_value_take_string (value, seahorse_ssh_source_get_description (place));
 		break;
 	case PROP_ICON:
-		g_value_take_object (value, g_themed_icon_new (GCR_ICON_HOME_DIRECTORY));
+		g_value_take_object (value, seahorse_ssh_source_get_icon (place));
 		break;
 	case PROP_BASE_DIRECTORY:
 		g_value_set_string (value, self->priv->ssh_homedir);
 		break;
 	case PROP_URI:
-		g_value_take_string (value, g_strdup_printf ("openssh://%s",
-		                                             self->priv->ssh_homedir));
+		g_value_take_string (value, seahorse_ssh_source_get_uri (place));
 		break;
 	case PROP_ACTIONS:
-		g_value_set_object (value, NULL);
+		g_value_take_object (value, seahorse_ssh_source_get_actions (place));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -826,8 +856,13 @@ seahorse_ssh_source_import_finish (SeahorseSSHSource *self,
 static void 
 seahorse_ssh_source_place_iface (SeahorsePlaceIface *iface)
 {
-	iface->load_async = seahorse_ssh_source_load_async;
+	iface->load = seahorse_ssh_source_load_async;
 	iface->load_finish = seahorse_ssh_source_load_finish;
+	iface->get_actions = seahorse_ssh_source_get_actions;
+	iface->get_description = seahorse_ssh_source_get_description;
+	iface->get_icon = seahorse_ssh_source_get_icon;
+	iface->get_label = seahorse_ssh_source_get_label;
+	iface->get_uri = seahorse_ssh_source_get_uri;
 }
 
 /* -----------------------------------------------------------------------------

@@ -23,7 +23,7 @@
 #ifndef __SEAHORSE_TRANSFER_H__
 #define __SEAHORSE_TRANSFER_H__
 
-#include "seahorse-place.h"
+#include "seahorse-common.h"
 
 #include "seahorse-server-source.h"
 

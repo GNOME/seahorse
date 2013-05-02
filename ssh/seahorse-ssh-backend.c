@@ -74,7 +74,7 @@ seahorse_ssh_backend_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_ssh_backend_parent_class)->constructed (obj);
 
 	self->dot_ssh = seahorse_ssh_source_new ();
-	seahorse_place_load_async (SEAHORSE_PLACE (self->dot_ssh), NULL, NULL, NULL);
+	seahorse_place_load (SEAHORSE_PLACE (self->dot_ssh), NULL, NULL, NULL);
 }
 
 static void

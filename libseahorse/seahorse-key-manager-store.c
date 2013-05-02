@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include "seahorse-common.h"
-#include "seahorse-place.h"
 #include "seahorse-util.h"
 
 #include "seahorse-key-manager-store.h"

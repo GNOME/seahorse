@@ -113,7 +113,7 @@ complete_generate (SeahorsePkcs11Generate *self,
 	if (*error != NULL)
 		seahorse_util_handle_error (error, NULL, _("Couldn't generate private key"));
 	else
-		seahorse_place_load_async (SEAHORSE_PLACE (self->token), self->cancellable, NULL, NULL);
+		seahorse_place_load (SEAHORSE_PLACE (self->token), self->cancellable, NULL, NULL);
 
 	g_clear_object (&self->cancellable);
 	gck_attributes_unref (self->pub_attrs);

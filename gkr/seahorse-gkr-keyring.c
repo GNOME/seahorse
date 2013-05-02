@@ -202,28 +202,60 @@ seahorse_gkr_keyring_finalize (GObject *obj)
 	G_OBJECT_CLASS (seahorse_gkr_keyring_parent_class)->finalize (obj);
 }
 
+static gchar *
+seahorse_gkr_keyring_get_description (SeahorsePlace *place)
+{
+	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (place), NULL);
+	if (seahorse_gkr_backend_has_alias (NULL, "login", SEAHORSE_GKR_KEYRING (place)))
+		return g_strdup (_("A keyring that is automatically unlocked on login"));
+	return g_strdup (_("A keyring used to store passwords"));
+}
+
+static GtkActionGroup *
+seahorse_gkr_keyring_get_actions (SeahorsePlace *place)
+{
+	return seahorse_gkr_keyring_actions_new (SEAHORSE_GKR_KEYRING (place));
+}
+
+static gchar *
+seahorse_gkr_keyring_get_uri (SeahorsePlace *place)
+{
+	const gchar *object_path;
+	object_path = g_dbus_proxy_get_object_path (G_DBUS_PROXY (place));
+	return g_strdup_printf ("secret-service://%s", object_path);
+}
+
+static GIcon *
+seahorse_gkr_keyring_get_icon (SeahorsePlace *place)
+{
+	return g_themed_icon_new ("folder");
+}
+
+static gchar *
+seahorse_gkr_keyring_get_label (SeahorsePlace *place)
+{
+	return secret_collection_get_label (SECRET_COLLECTION (place));
+}
+
 static void
 seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value, 
                            GParamSpec *pspec)
 {
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
-	const gchar *object_path;
-	gchar *text;
+	SeahorsePlace *place = SEAHORSE_PLACE (obj);
 
 	switch (prop_id) {
 	case PROP_DESCRIPTION:
-		g_value_set_string (value, seahorse_gkr_keyring_get_description (self));
+		g_value_take_string (value, seahorse_gkr_keyring_get_description (place));
 		break;
 	case PROP_IS_DEFAULT:
 		g_value_set_boolean (value, seahorse_gkr_keyring_get_is_default (self));
 		break;
 	case PROP_URI:
-		object_path = g_dbus_proxy_get_object_path (G_DBUS_PROXY (self));
-		text = g_strdup_printf ("secret-service://%s", object_path);
-		g_value_take_string (value, text);
+		g_value_take_string (value, seahorse_gkr_keyring_get_uri (place));
 		break;
 	case PROP_ACTIONS:
-		g_value_take_object (value, seahorse_gkr_keyring_actions_new (self));
+		g_value_take_object (value, seahorse_gkr_keyring_get_actions (place));
 		break;
 	case PROP_LOCKABLE:
 		g_value_set_boolean (value, !secret_collection_get_locked (SECRET_COLLECTION (self)));
@@ -235,7 +267,7 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 		g_value_set_boolean (value, TRUE);
 		break;
 	case PROP_ICON:
-		g_value_take_object (value, g_themed_icon_new ("folder"));
+		g_value_take_object (value, seahorse_gkr_keyring_get_icon (place));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -270,8 +302,13 @@ seahorse_gkr_keyring_class_init (SeahorseGkrKeyringClass *klass)
 static void
 seahorse_gkr_keyring_place_iface (SeahorsePlaceIface *iface)
 {
-	iface->load_async = seahorse_gkr_keyring_load_async;
+	iface->load = seahorse_gkr_keyring_load_async;
 	iface->load_finish = seahorse_gkr_keyring_load_finish;
+	iface->get_actions = seahorse_gkr_keyring_get_actions;
+	iface->get_description = seahorse_gkr_keyring_get_description;
+	iface->get_icon = seahorse_gkr_keyring_get_icon;
+	iface->get_label = seahorse_gkr_keyring_get_label;
+	iface->get_uri = seahorse_gkr_keyring_get_uri;
 }
 
 static guint
@@ -465,15 +502,6 @@ static void
 seahorse_keyring_viewable_iface (SeahorseViewableIface *iface)
 {
 	iface->show_viewer = seahorse_gkr_keyring_show_viewer;
-}
-
-const gchar *
-seahorse_gkr_keyring_get_description (SeahorseGkrKeyring *self)
-{
-	g_return_val_if_fail (SEAHORSE_IS_GKR_KEYRING (self), NULL);
-	if (seahorse_gkr_backend_has_alias (NULL, "login", self))
-		return _("A keyring that is automatically unlocked on login");
-	return _("A keyring used to store passwords");
 }
 
 gboolean

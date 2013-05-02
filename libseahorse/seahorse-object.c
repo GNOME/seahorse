@@ -22,8 +22,8 @@
 
 #include "config.h"
 
+#include "seahorse-common.h"
 #include "seahorse-object.h"
-#include "seahorse-place.h"
 #include "seahorse-predicate.h"
 
 #include "string.h"

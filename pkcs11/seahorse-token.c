@@ -34,8 +34,8 @@
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"
 
+#include "seahorse-common.h"
 #include "seahorse-lockable.h"
-#include "seahorse-place.h"
 #include "seahorse-util.h"
 
 enum {
@@ -550,7 +550,7 @@ seahorse_token_constructed (GObject *obj)
 
 	g_return_if_fail (self->pv->slot != NULL);
 
-	seahorse_place_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
+	seahorse_place_load (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 
 	data = gck_uri_data_new ();
 	data->token_info = seahorse_token_get_info (self);
@@ -559,6 +559,70 @@ seahorse_token_constructed (GObject *obj)
 	gck_uri_data_free (data);
 }
 
+static gchar *
+seahorse_token_get_label (SeahorsePlace* place)
+{
+	SeahorseToken *self = SEAHORSE_TOKEN (place);
+	GckTokenInfo *token;
+	gchar *string;
+
+	token = gck_slot_get_token_info (self->pv->slot);
+	if (token == NULL)
+		string = g_strdup (C_("Label", "Unknown"));
+	else
+		string = g_strdup (token->label);
+	gck_token_info_free (token);
+
+	return string;
+}
+
+static gchar *
+seahorse_token_get_description (SeahorsePlace* place)
+{
+	SeahorseToken *self = SEAHORSE_TOKEN (place);
+	GckTokenInfo *token;
+	gchar *string;
+
+	token = gck_slot_get_token_info (self->pv->slot);
+	if (token == NULL)
+		string = NULL;
+	else
+		string = g_strdup (token->manufacturer_id);
+	gck_token_info_free (token);
+
+	return string;
+}
+
+static gchar *
+seahorse_token_get_uri (SeahorsePlace* place)
+{
+	return g_strdup (SEAHORSE_TOKEN (place)->pv->uri);
+}
+
+static GIcon *
+seahorse_token_get_icon (SeahorsePlace* place)
+{
+	SeahorseToken *self = SEAHORSE_TOKEN (place);
+	GckTokenInfo *token;
+	GIcon *icon;
+
+	token = gck_slot_get_token_info (self->pv->slot);
+	if (token == NULL)
+		icon = g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION);
+	else
+		icon = gcr_icon_for_token (token);
+	gck_token_info_free (token);
+
+	return icon;
+}
+
+static GtkActionGroup *
+seahorse_token_get_actions (SeahorsePlace* place)
+{
+	return NULL;
+}
+
+
 static void
 seahorse_token_get_property (GObject *object,
                              guint prop_id,
@@ -566,32 +630,17 @@ seahorse_token_get_property (GObject *object,
                              GParamSpec *pspec)
 {
 	SeahorseToken *self = SEAHORSE_TOKEN (object);
-	GckTokenInfo *token;
+	SeahorsePlace *place = SEAHORSE_PLACE (object);
 
 	switch (prop_id) {
 	case PROP_LABEL:
-		token = gck_slot_get_token_info (self->pv->slot);
-		if (token == NULL)
-			g_value_set_string (value, C_("Label", "Unknown"));
-		else
-			g_value_set_string (value, token->label);
-		gck_token_info_free (token);
+		g_value_take_string (value, seahorse_token_get_label (place));
 		break;
 	case PROP_DESCRIPTION:
-		token = gck_slot_get_token_info (self->pv->slot);
-		if (token == NULL)
-			g_value_set_string (value, NULL);
-		else
-			g_value_set_string (value, token->manufacturer_id);
-		gck_token_info_free (token);
+		g_value_take_string (value, seahorse_token_get_description (place));
 		break;
 	case PROP_ICON:
-		token = gck_slot_get_token_info (self->pv->slot);
-		if (token == NULL)
-			g_value_take_object (value, g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION));
-		else
-			g_value_take_object (value, gcr_icon_for_token (token));
-		gck_token_info_free (token);
+		g_value_take_object (value, seahorse_token_get_icon (place));
 		break;
 	case PROP_SLOT:
 		g_value_set_object (value, self->pv->slot);
@@ -600,10 +649,10 @@ seahorse_token_get_property (GObject *object,
 		g_value_set_uint (value, 0);
 		break;
 	case PROP_URI:
-		g_value_set_string (value, self->pv->uri);
+		g_value_take_string (value, seahorse_token_get_uri (place));
 		break;
 	case PROP_ACTIONS:
-		g_value_set_object (value, NULL);
+		g_value_take_object (value, seahorse_token_get_actions (place));
 		break;
 	case PROP_INFO:
 		g_value_set_boxed (value, self->pv->info);
@@ -724,8 +773,13 @@ seahorse_token_class_init (SeahorseTokenClass *klass)
 static void
 seahorse_token_place_iface (SeahorsePlaceIface *iface)
 {
-	iface->load_async = seahorse_token_load_async;
+	iface->load = seahorse_token_load_async;
 	iface->load_finish = seahorse_token_load_finish;
+	iface->get_actions = seahorse_token_get_actions;
+	iface->get_description = seahorse_token_get_description;
+	iface->get_icon = seahorse_token_get_icon;
+	iface->get_label = seahorse_token_get_label;
+	iface->get_uri = seahorse_token_get_uri;
 }
 
 static guint
@@ -788,7 +842,7 @@ on_session_logout (GObject *source,
 
 	gck_session_logout_finish (GCK_SESSION (source), result, &error);
 	if (error == NULL)
-		seahorse_place_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
+		seahorse_place_load (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 	else
 		g_simple_async_result_take_error (res, error);
 
@@ -830,7 +884,7 @@ on_session_login_open (GObject *source,
 	session = gck_session_open_finish (result, &error);
 	if (error == NULL) {
 		seahorse_token_set_session (self, session);
-		seahorse_place_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
+		seahorse_place_load (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 		g_object_unref (session);
 	} else {
 		g_simple_async_result_take_error (res, error);

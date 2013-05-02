@@ -29,7 +29,6 @@
 #include "seahorse-common.h"
 #include "seahorse-interaction.h"
 #include "seahorse-lockable.h"
-#include "seahorse-place.h"
 #include "seahorse-util.h"
 
 #include "gkr/seahorse-gkr.h"
