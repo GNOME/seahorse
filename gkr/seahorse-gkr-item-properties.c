@@ -23,6 +23,8 @@
 
 #include <glib/gi18n.h>
 
+#include <gcr/gcr.h>
+
 #include "seahorse-gkr-dialogs.h"
 #include "seahorse-gkr-item.h"
 

@@ -75,6 +75,8 @@ struct _SeahorseGkrBackendClass {
 	GObjectClass parent_class;
 };
 
+void                seahorse_gkr_backend_initialize       (void);
+
 static void         seahorse_gkr_backend_iface            (SeahorseBackendIface *iface);
 
 static void         seahorse_gkr_backend_collection_init  (GcrCollectionIface *iface);

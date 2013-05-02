@@ -15,10 +15,29 @@ INCLUDES = -I$(top_builddir) \
 	-DGETTEXT_PACKAGE=\""seahorse\"" \
 	-DSECRET_API_SUBJECT_TO_CHANGE
 
-noinst_LTLIBRARIES = libseahorse-gkr.la
+noinst_LTLIBRARIES = \
+	libvala-code.la \
+	libseahorse-gkr.la
+
+AM_VALAFLAGS = \
+	$(VALA_FLAGS) \
+	--use-header \
+	--header=seahorse-gkr.h \
+	--vapidir $(top_builddir)/common \
+	--pkg common \
+	--pkg gtk+-3.0 \
+	--pkg libsecret-1 \
+	$(NULL)
+
+libvala_code_la_SOURCES = \
+	gkr-module.vala \
+	$(NULL)
+
+libvala_code_la_CFLAGS = \
+	-include config.h -w \
+	$(NULL)
 
 libseahorse_gkr_la_SOURCES = \
-	seahorse-gkr.c seahorse-gkr.h \
 	seahorse-gkr-actions.c seahorse-gkr-actions.h \
 	seahorse-gkr-add-item.c \
 	seahorse-gkr-add-keyring.c \
@@ -42,5 +61,6 @@ ui_DATA = \
 	seahorse-gkr-keyring.xml
 
 EXTRA_DIST = \
-	$(ui_DATA)
-
+	$(ui_DATA) \
+	seahorse-gkr.h \
+	$(NULL)

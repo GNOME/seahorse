@@ -27,7 +27,6 @@
 #include "seahorse-application.h"
 #include "seahorse-icons.h"
 
-#include "gkr/seahorse-gkr.h"
 #include "pgp/seahorse-pgp.h"
 #include "ssh/seahorse-ssh.h"
 
@@ -93,6 +92,8 @@ seahorse_application_finalize (GObject *gobject)
 #ifdef WITH_PKCS11
 void seahorse_pkcs11_backend_initialize (void);
 #endif
+
+void seahorse_gkr_backend_initialize (void);
 
 static void
 seahorse_application_startup (GApplication *application)
