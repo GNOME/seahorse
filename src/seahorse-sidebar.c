@@ -25,7 +25,6 @@
 
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
-#include "seahorse-backend.h"
 #include "seahorse-common.h"
 #include "seahorse-interaction.h"
 #include "seahorse-lockable.h"

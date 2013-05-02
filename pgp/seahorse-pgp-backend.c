@@ -28,7 +28,6 @@
 #include "seahorse-transfer.h"
 #include "seahorse-unknown-source.h"
 
-#include "seahorse-backend.h"
 #include "seahorse-common.h"
 #include "seahorse-progress.h"
 #include "seahorse-servers.h"
@@ -156,26 +155,51 @@ seahorse_pgp_backend_constructed (GObject *obj)
 #endif
 }
 
+static const gchar *
+seahorse_pgp_backend_get_name (SeahorseBackend *backend)
+{
+	return SEAHORSE_PGP_NAME;
+}
+
+static const gchar *
+seahorse_pgp_backend_get_label (SeahorseBackend *backend)
+{
+	return _("PGP Keys");
+}
+
+static const gchar *
+seahorse_pgp_backend_get_description (SeahorseBackend *backend)
+{
+	return _("PGP keys are for encrypting email or files");
+}
+
+static GtkActionGroup *
+seahorse_pgp_backend_get_actions (SeahorseBackend *backend)
+{
+	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (backend);
+	return g_object_ref (self->actions);
+}
+
 static void
 seahorse_pgp_backend_get_property (GObject *obj,
                                    guint prop_id,
                                    GValue *value,
                                    GParamSpec *pspec)
 {
-	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
+	SeahorseBackend *backend = SEAHORSE_BACKEND (obj);
 
 	switch (prop_id) {
 	case PROP_NAME:
-		g_value_set_string (value, SEAHORSE_PGP_NAME);
+		g_value_set_string (value,  seahorse_pgp_backend_get_name (backend));
 		break;
 	case PROP_LABEL:
-		g_value_set_string (value, _("PGP Keys"));
+		g_value_set_string (value,  seahorse_pgp_backend_get_label (backend));
 		break;
 	case PROP_DESCRIPTION:
-		g_value_set_string (value, _("PGP keys are for encrypting email or files"));
+		g_value_set_string (value,  seahorse_pgp_backend_get_description (backend));
 		break;
 	case PROP_ACTIONS:
-		g_value_set_object (value, self->actions);
+		g_value_take_object (value, seahorse_pgp_backend_get_actions (backend));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -261,6 +285,10 @@ static void
 seahorse_pgp_backend_iface (SeahorseBackendIface *iface)
 {
 	iface->lookup_place = seahorse_pgp_backend_lookup_place;
+	iface->get_actions = seahorse_pgp_backend_get_actions;
+	iface->get_description = seahorse_pgp_backend_get_description;
+	iface->get_label = seahorse_pgp_backend_get_label;
+	iface->get_name = seahorse_pgp_backend_get_name;
 }
 
 SeahorsePgpBackend *

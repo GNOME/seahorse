@@ -27,7 +27,6 @@
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
 
-#include "seahorse-backend.h"
 #include "seahorse-predicate.h"
 #include "seahorse-common.h"
 #include "seahorse-widget.h"

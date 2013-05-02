@@ -24,7 +24,6 @@
 
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
-#include "seahorse-backend.h"
 #include "seahorse-catalog.h"
 #include "seahorse-common.h"
 #include "seahorse-object.h"

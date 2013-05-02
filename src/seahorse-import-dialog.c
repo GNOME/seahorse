@@ -23,7 +23,7 @@
 
 #include "config.h"
 
-#include "seahorse-backend.h"
+#include "seahorse-common.h"
 
 #include "seahorse-import-dialog.h"
 

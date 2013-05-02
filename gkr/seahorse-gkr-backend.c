@@ -25,7 +25,7 @@
 #include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-dialogs.h"
 
-#include "seahorse-backend.h"
+#include "seahorse-common.h"
 #include "seahorse-progress.h"
 
 #include <glib/gi18n.h>
@@ -191,6 +191,31 @@ seahorse_gkr_backend_constructed (GObject *obj)
 	                    NULL, on_service_new, g_object_ref (self));
 }
 
+static const gchar *
+seahorse_gkr_backend_get_name (SeahorseBackend *backend)
+{
+	return SEAHORSE_GKR_NAME;
+}
+
+static const gchar *
+seahorse_gkr_backend_get_label (SeahorseBackend *backend)
+{
+	return _("Passwords");
+}
+
+static const gchar *
+seahorse_gkr_backend_get_description (SeahorseBackend *backend)
+{
+	return _("Stored personal passwords, credentials and secrets");
+}
+
+static GtkActionGroup *
+seahorse_gkr_backend_get_actions (SeahorseBackend *backend)
+{
+	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (backend);
+	return g_object_ref (self->actions);
+}
+
 static void
 seahorse_gkr_backend_get_property (GObject *obj,
                                    guint prop_id,
@@ -198,19 +223,20 @@ seahorse_gkr_backend_get_property (GObject *obj,
                                    GParamSpec *pspec)
 {
 	SeahorseGkrBackend *self = SEAHORSE_GKR_BACKEND (obj);
+	SeahorseBackend *backend = SEAHORSE_BACKEND (obj);
 
 	switch (prop_id) {
 	case PROP_NAME:
-		g_value_set_string (value, SEAHORSE_GKR_NAME);
+		g_value_set_string (value, seahorse_gkr_backend_get_name (backend));
 		break;
 	case PROP_LABEL:
-		g_value_set_string (value, _("Passwords"));
+		g_value_set_string (value, seahorse_gkr_backend_get_label (backend));
 		break;
 	case PROP_DESCRIPTION:
-		g_value_set_string (value, _("Stored personal passwords, credentials and secrets"));
+		g_value_set_string (value, seahorse_gkr_backend_get_description (backend));
 		break;
 	case PROP_ACTIONS:
-		g_value_set_object (value, self->actions);
+		g_value_take_object (value, seahorse_gkr_backend_get_actions (backend));
 		break;
 	case PROP_ALIASES:
 		g_value_set_boxed (value, self->aliases);
@@ -335,6 +361,10 @@ static void
 seahorse_gkr_backend_iface (SeahorseBackendIface *iface)
 {
 	iface->lookup_place = seahorse_gkr_backend_lookup_place;
+	iface->get_actions = seahorse_gkr_backend_get_actions;
+	iface->get_description = seahorse_gkr_backend_get_description;
+	iface->get_label = seahorse_gkr_backend_get_label;
+	iface->get_name = seahorse_gkr_backend_get_name;
 }
 
 void

@@ -7,6 +7,7 @@ INCLUDES = -I$(top_builddir) \
 noinst_LTLIBRARIES = libcommon.la
 
 libcommon_la_SOURCES = \
+	backend.vala \
 	deletable.vala \
 	deleter.vala \
 	exportable.vala \
