@@ -26,7 +26,6 @@
 #include "seahorse-unknown-source.h"
 
 #include "seahorse-place.h"
-#include "seahorse-registry.h"
 #include "seahorse-unknown.h"
 
 #include <gcr/gcr-base.h>

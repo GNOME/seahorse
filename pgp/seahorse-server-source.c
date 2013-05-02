@@ -32,7 +32,7 @@
 #include "seahorse-pgp-key.h"
 #include "seahorse-server-source.h"
 
-#include "seahorse-registry.h"
+#include "seahorse-common.h"
 #include "seahorse-util.h"
 
 /**

@@ -32,7 +32,6 @@
 #include "seahorse-delete-dialog.h"
 #include "seahorse-object.h"
 #include "seahorse-object-list.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 #include <glib/gi18n.h>

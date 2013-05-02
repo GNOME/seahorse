@@ -23,10 +23,10 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-application.h"
+#include "seahorse-common.h"
 #include "seahorse-icons.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-prefs.h"
-#include "seahorse-registry.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"

@@ -30,10 +30,10 @@
 
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
+#include "seahorse-common.h"
 #include "seahorse-delete-dialog.h"
 #include "seahorse-object-list.h"
 #include "seahorse-progress.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 #include <glib/gi18n.h>
@@ -119,7 +119,7 @@ on_backend_notify_service (GObject *obj,
 	actions = gtk_action_group_new ("gkr-generate");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, ENTRIES_NEW, G_N_ELEMENTS (ENTRIES_NEW), NULL);
-	seahorse_registry_register_object (NULL, G_OBJECT (actions), "generator", NULL);
+	seahorse_registry_register_object (G_OBJECT (actions), "generator");
 	g_object_unref (actions);
 }
 

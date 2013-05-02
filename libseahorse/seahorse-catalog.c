@@ -30,7 +30,6 @@
 #include "seahorse-object.h"
 #include "seahorse-prefs.h"
 #include "seahorse-progress.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 #include <gcr/gcr.h>

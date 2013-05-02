@@ -24,7 +24,7 @@
 #include "seahorse-generate-select.h"
 
 #include "seahorse-action.h"
-#include "seahorse-registry.h"
+#include "seahorse-common.h"
 
 #include <glib/gi18n.h>
 
@@ -178,7 +178,7 @@ seahorse_generate_select_constructed (GObject *obj)
 	gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (self->store), on_list_sort, NULL, NULL);
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (self->store), GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
 
-	self->action_groups = seahorse_registry_object_instances (NULL, "generator", NULL);
+	self->action_groups = seahorse_registry_object_instances ("generator");
 	for (l = self->action_groups; l != NULL; l = g_list_next (l)) {
 		actions = gtk_action_group_list_actions (l->data);
 		for (k = actions; k != NULL; k = g_list_next (k)) {

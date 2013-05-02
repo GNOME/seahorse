@@ -49,7 +49,6 @@ libseahorse_la_SOURCES = \
 	seahorse-backend.c seahorse-backend.h \
 	seahorse-bind.c seahorse-bind.h \
 	seahorse-catalog.c seahorse-catalog.h \
-	seahorse-cleanup.c seahorse-cleanup.h \
 	seahorse-collection.c seahorse-collection.h \
 	seahorse-debug.c seahorse-debug.h \
 	seahorse-delete-dialog.c seahorse-delete-dialog.h \
@@ -66,7 +65,6 @@ libseahorse_la_SOURCES = \
 	seahorse-predicate.c seahorse-predicate.h \
 	seahorse-prefs.c seahorse-prefs.h \
 	seahorse-progress.c seahorse-progress.h \
-	seahorse-registry.c seahorse-registry.h \
 	seahorse-search-provider.c seahorse-search-provider.h \
 	seahorse-servers.c seahorse-servers.h \
 	seahorse-types.c seahorse-types.h \

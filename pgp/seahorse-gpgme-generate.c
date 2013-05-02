@@ -30,8 +30,8 @@
 #include "egg-datetime.h"
 
 #include "seahorse-action.h"
+#include "seahorse-common.h"
 #include "seahorse-icons.h"
-#include "seahorse-registry.h"
 #include "seahorse-passphrase.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
@@ -113,7 +113,7 @@ seahorse_gpgme_generate_register (void)
 	gtk_action_group_add_actions (actions, ACTION_ENTRIES, G_N_ELEMENTS (ACTION_ENTRIES), NULL);
 	
 	/* Register this as a generator */
-	seahorse_registry_register_object (NULL, G_OBJECT (actions), SEAHORSE_PGP_TYPE_STR, "generator", NULL);
+	seahorse_registry_register_object (G_OBJECT (actions), "generator");
 }
 
 /* --------------------------------------------------------------------------

@@ -41,4 +41,6 @@ void            seahorse_servers_register_type          (const char* type,
                                                          const char* description, 
                                                          SeahorseValidUriFunc validate);
 
+void            seahorse_servers_cleanup                (void);
+
 #endif

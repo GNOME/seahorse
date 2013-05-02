@@ -36,10 +36,10 @@
 
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
+#include "seahorse-common.h"
 #include "seahorse-delete-dialog.h"
 #include "seahorse-object.h"
 #include "seahorse-object-list.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 GType   seahorse_pgp_backend_actions_get_type         (void) G_GNUC_CONST;

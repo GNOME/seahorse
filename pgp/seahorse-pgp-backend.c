@@ -29,8 +29,8 @@
 #include "seahorse-unknown-source.h"
 
 #include "seahorse-backend.h"
+#include "seahorse-common.h"
 #include "seahorse-progress.h"
-#include "seahorse-registry.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 

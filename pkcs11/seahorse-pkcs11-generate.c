@@ -27,9 +27,9 @@
 #include "seahorse-token.h"
 
 #include "seahorse-action.h"
+#include "seahorse-common.h"
 #include "seahorse-progress.h"
 #include "seahorse-interaction.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 #include <glib/gi18n.h>
@@ -515,5 +515,5 @@ seahorse_pkcs11_generate_register (void)
 	actions = gtk_action_group_new ("pkcs11-generate");
 	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (actions, ACTION_ENTRIES, G_N_ELEMENTS (ACTION_ENTRIES), NULL);
-	seahorse_registry_register_object (NULL, G_OBJECT (actions), "generator", NULL);
+	seahorse_registry_register_object (G_OBJECT (actions), "generator");
 }

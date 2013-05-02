@@ -20,7 +20,6 @@
  */
 
 #include "seahorse-application.h"
-#include "seahorse-cleanup.h"
 #include "seahorse-servers.h"
 
 #include <string.h>
@@ -87,14 +86,18 @@ seahorse_servers_register_type (const char* type, const char* description,
 	info->type = g_strdup (type);
 	info->validator = validate;
 	
-	if (!server_types) {
+	if (!server_types)
 		server_types = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, free_server_info);
-		seahorse_cleanup_register ((GDestroyNotify)g_hash_table_destroy, server_types);
-	}
-	
 	g_hash_table_replace (server_types, info->type, info);
 }
 
+void
+seahorse_servers_cleanup (void)
+{
+	if (server_types)
+		g_hash_table_destroy (server_types);
+	server_types = NULL;
+}
 
 gchar **
 seahorse_servers_get_uris (void)

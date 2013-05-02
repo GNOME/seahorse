@@ -28,7 +28,6 @@
 #include "seahorse-ssh-source.h"
 
 #include "seahorse-place.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 #include <gcr/gcr.h>

@@ -28,7 +28,6 @@
 #include "seahorse-action.h"
 #include "seahorse-progress.h"
 #include "seahorse-interaction.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 #include <glib/gi18n.h>

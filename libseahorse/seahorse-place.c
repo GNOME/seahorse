@@ -22,9 +22,9 @@
 
 #include "config.h"
 
+#include "seahorse-common.h"
 #include "seahorse-marshal.h"
 #include "seahorse-object.h"
-#include "seahorse-registry.h"
 #include "seahorse-place.h"
 #include "seahorse-util.h"
 

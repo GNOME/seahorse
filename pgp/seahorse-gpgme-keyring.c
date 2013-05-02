@@ -31,9 +31,9 @@
 #include "seahorse-pgp-actions.h"
 #include "seahorse-pgp-key.h"
 
+#include "seahorse-common.h"
 #include "seahorse-place.h"
 #include "seahorse-progress.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 #include "seahorse-passphrase.h"
 

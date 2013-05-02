@@ -36,7 +36,6 @@
 
 #include "seahorse-lockable.h"
 #include "seahorse-place.h"
-#include "seahorse-registry.h"
 #include "seahorse-util.h"
 
 enum {

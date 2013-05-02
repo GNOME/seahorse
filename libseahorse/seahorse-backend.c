@@ -22,7 +22,7 @@
 #include "config.h"
 
 #include "seahorse-backend.h"
-#include "seahorse-registry.h"
+#include "seahorse-common.h"
 
 #include <gcr/gcr.h>
 
@@ -72,17 +72,12 @@ seahorse_backend_lookup_place (SeahorseBackend *backend,
 void
 seahorse_backend_register (SeahorseBackend *backend)
 {
-	gchar *name = NULL;
-
 	g_return_if_fail (SEAHORSE_IS_BACKEND (backend));
-
-	g_object_get (backend, "name", &name, NULL);
-	seahorse_registry_register_object (NULL, G_OBJECT (backend), "backend", name, NULL);
-	g_free (name);
+	seahorse_registry_register_object (G_OBJECT (backend), "backend");
 }
 
 GList *
 seahorse_backend_get_registered (void)
 {
-	return seahorse_registry_object_instances (NULL, "backend", NULL);
+	return seahorse_registry_object_instances ("backend");
 }

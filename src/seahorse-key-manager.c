@@ -29,7 +29,6 @@
 #include "seahorse-sidebar.h"
 
 #include "seahorse-collection.h"
-#include "seahorse-registry.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 

@@ -23,8 +23,8 @@
 #include "config.h"
 
 #include "seahorse-application.h"
-#include "seahorse-cleanup.h"
-#include "seahorse-registry.h"
+#include "seahorse-common.h"
+#include "seahorse-servers.h"
 #include "seahorse-util.h"
 
 #include "seahorse-key-manager.h"
@@ -62,7 +62,8 @@ main (int argc, char **argv)
 	g_signal_connect (application, "activate", G_CALLBACK (on_application_activate), NULL);
 	status = g_application_run (G_APPLICATION (application), argc, argv);
 
-	seahorse_cleanup_perform ();
+	seahorse_registry_cleanup ();
+	seahorse_servers_cleanup ();
 	g_object_unref (application);
 
 	return status;

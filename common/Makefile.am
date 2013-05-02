@@ -11,6 +11,7 @@ libcommon_la_SOURCES = \
 	deleter.vala \
 	exportable.vala \
 	exporter.vala \
+	registry.vala \
 	viewable.vala \
 	$(NULL)
 
