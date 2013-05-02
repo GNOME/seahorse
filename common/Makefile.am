@@ -7,11 +7,11 @@ INCLUDES = -I$(top_builddir) \
 noinst_LTLIBRARIES = libcommon.la
 
 libcommon_la_SOURCES = \
-	seahorse-deletable.vala \
-	seahorse-deleter.vala \
-	seahorse-exportable.vala \
-	seahorse-exporter.vala \
-	seahorse-viewable.vala \
+	deletable.vala \
+	deleter.vala \
+	exportable.vala \
+	exporter.vala \
+	viewable.vala \
 	$(NULL)
 
 AM_VALAFLAGS = \
