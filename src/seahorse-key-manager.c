@@ -519,16 +519,16 @@ static const GtkActionEntry GENERAL_ACTIONS[] = {
 };
 
 static const GtkToggleActionEntry SIDEBAR_ACTIONS[] = {
-	{ "view-sidebar", NULL, N_("By _keyring"), NULL,
+	{ "view-sidebar", NULL, N_("By _Keyring"), NULL,
 	  N_("Show sidebar listing keyrings"), NULL, FALSE },
 };
 
 static const GtkRadioActionEntry VIEW_RADIO_ACTIONS[] = {
-	{ "view-personal", NULL, N_("Show _personal"), NULL,
+	{ "view-personal", NULL, N_("Show _Personal"), NULL,
 	  N_("Only show personal keys, certificates and passwords"), SHOW_PERSONAL },
-	{ "view-trusted", NULL, N_("Show _trusted"), NULL,
+	{ "view-trusted", NULL, N_("Show _Trusted"), NULL,
 	  N_("Only show trusted keys, certificates and passwords"), SHOW_TRUSTED },
-	{ "view-any", NULL, N_("Show _any"), NULL,
+	{ "view-any", NULL, N_("Show _Any"), NULL,
 	  N_("Show all keys, certificates and passwords"), SHOW_ANY },
 };
 
