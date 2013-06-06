@@ -305,7 +305,7 @@ else
     
     echo "checking for supported versions of libsoup..."
 
-    PKG_CHECK_MODULES(SOUP, libsoup-2.4 >= 2.24.0, 
+    PKG_CHECK_MODULES(SOUP, libsoup-2.4 >= 2.33.92,
         [enable_hkp=yes],  
         [enable_hkp=no])
 
