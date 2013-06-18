@@ -26,10 +26,12 @@ AM_VALAFLAGS = \
 	--vapidir $(top_builddir)/common \
 	--pkg common \
 	--pkg gtk+-3.0 \
+	--pkg gcr-3 \
 	--pkg libsecret-1 \
 	$(NULL)
 
 libvala_code_la_SOURCES = \
+	gkr-dialogs.vala \
 	gkr-module.vala \
 	$(NULL)
 
@@ -42,7 +44,7 @@ libseahorse_gkr_la_SOURCES = \
 	seahorse-gkr-add-item.c \
 	seahorse-gkr-add-keyring.c \
 	seahorse-gkr-backend.c seahorse-gkr-backend.h \
-	seahorse-gkr-dialogs.h seahorse-gkr-dialogs.c \
+	seahorse-gkr-dialogs.h \
 	seahorse-gkr-item.c seahorse-gkr-item.h \
 	seahorse-gkr-item-deleter.c seahorse-gkr-item-deleter.h \
 	seahorse-gkr-item-properties.c \
@@ -52,7 +54,9 @@ libseahorse_gkr_la_SOURCES = \
 
 libseahorse_gkr_la_LIBADD = \
 	$(top_builddir)/common/libcommon.la \
-	$(top_builddir)/libseahorse/libseahorse.la
+	$(top_builddir)/libseahorse/libseahorse.la \
+	libvala-code.la \
+	$(NULL)
 
 ui_DATA = \
 	seahorse-add-keyring.xml \

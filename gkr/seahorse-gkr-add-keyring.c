@@ -58,11 +58,14 @@ on_keyring_create (GObject *source,
 {
 	SeahorseWidget *swidget = SEAHORSE_WIDGET (data);
 	GError *error = NULL;
+	GtkWidget *dialog;
 
 	g_return_if_fail (swidget);
 
+	dialog = seahorse_widget_get_toplevel (swidget);
+
 	/* Clear the operation without cancelling it since it is complete */
-	seahorse_gkr_dialog_complete_request (swidget, FALSE);
+	seahorse_gkr_dialog_complete_request (dialog, FALSE);
 
 	secret_collection_create_finish (result, &error);
 
@@ -112,6 +115,7 @@ on_add_keyring_properties_response (GtkDialog *dialog,
 	GCancellable *cancellable;
 	GtkEntry *entry;
 	const gchar *keyring;
+	GtkWidget *widget;
 
 	if (response == GTK_RESPONSE_HELP) {
 		seahorse_widget_show_help (swidget);
@@ -124,7 +128,8 @@ on_add_keyring_properties_response (GtkDialog *dialog,
 		keyring = gtk_entry_get_text (entry);
 		g_return_if_fail (keyring && keyring[0]);
 
-		cancellable = seahorse_gkr_dialog_begin_request (swidget);
+		widget = seahorse_widget_get_toplevel (swidget);
+		cancellable = seahorse_gkr_dialog_begin_request (widget);
 
 		secret_collection_create (seahorse_gkr_backend_get_service (NULL),
 		                          keyring, NULL, SECRET_COLLECTION_NONE,

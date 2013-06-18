@@ -47,17 +47,19 @@ on_item_stored (GObject *source,
 	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
 	GError *error = NULL;
 	SecretItem *item;
+	GtkWidget *dialog;
+
+	dialog = seahorse_widget_get_toplevel (swidget);
 
 	/* Clear the operation without cancelling it since it is complete */
-	seahorse_gkr_dialog_complete_request (swidget, FALSE);
+	seahorse_gkr_dialog_complete_request (dialog, FALSE);
 
 	item = secret_item_create_finish (result, &error);
 
 	if (error == NULL) {
 		g_object_unref (item);
 	} else {
-		seahorse_util_handle_error (&error, seahorse_widget_get_toplevel (swidget),
-		                            _("Couldn't add item"));
+		seahorse_util_handle_error (&error, dialog, _("Couldn't add item"));
 	}
 
 	g_object_unref (swidget);
@@ -114,7 +116,8 @@ on_add_item_response (GtkDialog *dialog,
 		secret = secret_value_new (gtk_entry_get_text (GTK_ENTRY (widget)),
 		                           -1, "text/plain");
 
-		cancellable = seahorse_gkr_dialog_begin_request (swidget);
+		widget = seahorse_widget_get_toplevel (swidget);
+		cancellable = seahorse_gkr_dialog_begin_request (widget);
 		attributes = g_hash_table_new (g_str_hash, g_str_equal);
 		secret_item_create (collection, SECRET_SCHEMA_NOTE, attributes,
 		                    label, secret, SECRET_ITEM_CREATE_NONE,

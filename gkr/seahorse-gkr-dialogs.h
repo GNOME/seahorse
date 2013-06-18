@@ -38,8 +38,4 @@ void            seahorse_gkr_item_properties_show     (SeahorseGkrItem *git, Gtk
 
 void            seahorse_gkr_keyring_properties_show  (SeahorseGkrKeyring *gkr, GtkWindow *parent);
 
-GCancellable *  seahorse_gkr_dialog_begin_request     (SeahorseWidget *swidget);
-
-void            seahorse_gkr_dialog_complete_request  (SeahorseWidget *swidget, gboolean cancel);
-
 #endif /* __SEAHORSE_GKR_DIALOGS__ */
