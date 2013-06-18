@@ -4,10 +4,11 @@
   <info>
     <link type="guide" xref="learn-about-keys"/>
     <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-18" status="draft"/>
 
-    <credit type="author">
-      <name>Jim Campbell</name>
-      <email>jwcampbell@gmail.com</email>
+    <credit type="author copyright">
+      <name>Aruna</name>
+      <email>aruna.evam@gmail.com</email>
     </credit>
 
     <desc></desc>
@@ -15,18 +16,38 @@
 
   <title>What are key servers?</title>
 
-  <comment>
-    <cite date="2011-10-23" href="mailto:jwcampbell@gmail.com">Jim Campbell</cite>
-    <p>This assumes the reader knows how to.... By the end of this page,
-    the reader will be able to....</p>
-  </comment>
+  <p>Key servers are computers that help you to store and retrieve
+  <em>Public keys</em>. When you create a new <em>Public key</em> you can
+  choose to submit it to a key server. When you do this, the key server
+  notifies the location of your <em>Public key</em> to other key servers. This
+  makes it easier for people to import your <em>Public key</em> and use it to
+  encrypt all of their communication with you. You can also import someone's
+  public key if you have certain details about them like their user ID or key
+  ID. There are several key servers present globally, and each of them is
+  equipped with an Internet address(URL) which can be used to submit or import
+  <em>Public keys</em>.</p>
 
-  <p>Short introductory text...</p>
+  <p><app>Passwords and Keys</app> provides you with an interface to
+  <link xref="keys-sync-publish">publish</link> your <em>Public keys</em> or to
+  find and <link xref="keys-retrieve-remote">retrieve a remote key</link>. You
+  can also use <app>Passwords and Keys</app> to sync your keys so that they are
+  updated when someone signs them.</p>
 
-  <steps>
-    <item><p>First step...</p></item>
-    <item><p>Second step...</p></item>
-    <item><p>Third step...</p></item>
-  </steps>
+  <list>
+    <title>Default key servers on <app>Passwords and Keys</app></title>
+      <item>
+        <p>hkp://keyserver.ubuntu.com:11371</p>
+      </item>
+      <item>
+        <p>hkp://pool.sks-keyservers.net</p>
+      </item>
+      <item>
+        <p>ldap://keyserver.pgp.com</p>
+      </item>
+  </list>
+
+  <note style="info">
+    <p>You can also add key servers of your choice to <app>Passwords and Keys</app>.</p>
+  </note>
 
 </page>
