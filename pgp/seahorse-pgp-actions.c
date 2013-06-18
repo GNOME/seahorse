@@ -37,7 +37,6 @@
 #include "seahorse-action.h"
 #include "seahorse-actions.h"
 #include "seahorse-common.h"
-#include "seahorse-delete-dialog.h"
 #include "seahorse-object.h"
 #include "seahorse-object-list.h"
 #include "seahorse-util.h"

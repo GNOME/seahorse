@@ -26,7 +26,7 @@
 #include "seahorse-gkr-backend.h"
 #include "seahorse-gkr-item-deleter.h"
 
-#include "seahorse-delete-dialog.h"
+#include "seahorse-common.h"
 #include "seahorse-object.h"
 
 #include <glib/gi18n.h>

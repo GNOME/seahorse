@@ -27,7 +27,7 @@
 #include "seahorse-ssh-deleter.h"
 #include "seahorse-ssh-operation.h"
 
-#include "seahorse-delete-dialog.h"
+#include "seahorse-common.h"
 
 #include <glib/gi18n.h>
 

@@ -29,7 +29,7 @@
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"
 
-#include "seahorse-delete-dialog.h"
+#include "seahorse-common.h"
 
 #include <gck/gck.h>
 

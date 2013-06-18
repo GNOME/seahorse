@@ -9,6 +9,7 @@ noinst_LTLIBRARIES = libcommon.la
 libcommon_la_SOURCES = \
 	backend.vala \
 	deletable.vala \
+	delete-dialog.vala \
 	deleter.vala \
 	exportable.vala \
 	exporter.vala \

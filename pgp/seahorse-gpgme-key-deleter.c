@@ -27,7 +27,7 @@
 #include "seahorse-gpgme-key-deleter.h"
 #include "seahorse-gpgme-key-op.h"
 
-#include "seahorse-delete-dialog.h"
+#include "seahorse-common.h"
 
 #include <glib/gi18n.h>
 

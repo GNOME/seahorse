@@ -32,7 +32,6 @@
 
 #include "seahorse-bind.h"
 #include "seahorse-common.h"
-#include "seahorse-delete-dialog.h"
 #include "seahorse-icons.h"
 #include "seahorse-object.h"
 #include "seahorse-object-model.h"
