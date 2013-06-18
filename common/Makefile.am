@@ -21,11 +21,21 @@ libcommon_la_SOURCES = \
 AM_VALAFLAGS = \
 	$(VALA_FLAGS) \
 	--use-header \
-	--header=seahorse-common.h \
+	--header=seahorse-internal.h \
 	--pkg gtk+-3.0 \
 	--pkg gcr-3 \
 	--vapi=common.vapi \
 	$(NULL)
+
+all-local: seahorse-common.h
+	sed -i '/_constructv/d' seahorse-common.h
+	touch -r libcommon_la_vala.stamp seahorse-common.h
+
+seahorse-internal.h: backend.c
+
+# Because vala produces broken headers
+seahorse-common.h: seahorse-internal.h
+	sed '/_constructv/d' $< > $@
 
 CFLAGS += \
 	-include config.h -w \
@@ -33,6 +43,7 @@ CFLAGS += \
 
 EXTRA_DIST = \
 	seahorse-common.h \
+	seahorse-internal.h \
 	common.vapi \
 	$(NULL)
 
