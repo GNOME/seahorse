@@ -1,0 +1,113 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic" style="task"
+      id="keys-sync-publish">
+  <info>
+    <link type="guide" xref="index#use-keys"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-18" status="draft"/>
+
+    <credit type="author copyright">
+      <name>Aruna</name>
+      <email>aruna.evam@gmail.com</email>
+    </credit>
+
+    <desc></desc>
+  </info>
+
+  <title>How to sync and publish keys?</title>
+
+  <p><app>Passwords and Keys</app> helps you to publish and sync
+  <em>Public keys</em>. This keeps your keys updated and also helps people to
+  find your keys easily.</p>
+
+<section id="publish">
+  <title>Publish your keys</title>
+
+  <p>After you create your <em>Public key</em> you can choose to publish it.
+  When you publish a key, it becomes easily accessible to anybody who wants to
+  communicate with you and saves you the hassle of mailing your key
+  individually to all your communicators. However, you can also choose to not
+  publish your key if you only want to share your <em>Public key</em> with a
+  select few people.</p>
+
+  <steps>
+    <title>How do I publish my key?</title>
+      <item>
+        <p>Select the key you want to publish.</p>
+      </item>
+      <item>
+	<p>Select <guiseq><gui style="menu">Remote</gui>
+	<gui style="menuitem">Sync and Publish Keys…</gui></guiseq>.</p>
+      </item>
+      <item>
+	<p>Click the <gui style="button">Key Servers</gui> button.</p>
+      </item>
+      <item>
+	<p>Three <link xref="key-servers-what-are-they">key servers</link>
+	will already be listed by <app>Passwords and Keys</app>.</p>
+	<note style="tip">
+	  <p>You can also add the key server of your choice to the list by
+	  clicking the <gui style="add">Add</gui> button. Select the
+	  appropriate key server type. Key servers are identified by the
+	  protocol they use to communicate. Look for the first few letters in
+	  the Internet URL of your key server to identify its type. In the
+	  <gui style="input">Host</gui> field, paste the Internet URL of your
+	  key server, and click <gui style="button">OK</gui>. To remove a key
+	  server from the list, select it with your mouse and click
+	  <gui style="button">Remove</gui>.</p>
+	</note>
+      </item>
+      <item>
+	<p>From the drop down box next to
+	<gui style="group">Publish keys to</gui>, select the key server that
+	you want to publish your key on.</p>
+      </item>
+      <item>
+	<p>Check the
+	<gui style="checkbox">Automatically retrieve keys from key servers</gui>
+	checkbox to retrieve any key that is published on the
+	server you have selected in the previous step. You can also check the
+	<gui style="checkbox">Automatically sync modified keys with key servers</gui>
+	checkbox to ensure that any modifications to a key on the
+	key server, like a signature are updated on your copy of the key
+	too.</p>
+      </item>
+  </steps>
+
+</section>
+
+<section id="sync">
+  <title>Sync your keys</title>
+
+  <p>Keys in your keyring may have to be synced with a key server to ensure
+  that any changes made to the key on the key server, like a new signature, are
+  updated in your local copy of the key.</p>
+
+  <steps>
+    <title>How do I sync a key?</title>
+      <item>
+        <p>Select the key you wish to sync.</p>
+      </item>
+      <item>
+        <p>Select <guiseq><gui style="menu">Remote</gui>
+	<gui style="menuitem">Sync and Publish Keys…</gui></guiseq>.</p>
+      </item>
+      <item>
+        <p>Click the <gui style="button">Sync</gui> button to sync your
+	key.</p>
+      </item>
+  </steps>
+
+  <note style="important">
+    <title>Why is the <gui style="button">Sync</gui> button not
+    clickable?</title>
+      <p>Only keys that have been published on a key server can be synced. If
+      the <gui style="button">Sync</gui> button is not clickable, check if the
+      key has been published on a key server. In the case of syncing your own
+      keys, publish them, before syncing them.</p>
+  </note>
+
+</section>
+
+</page>
