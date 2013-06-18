@@ -822,7 +822,10 @@ seahorse_gpgme_keyring_get_icon (SeahorsePlace *place)
 static GtkActionGroup *
 seahorse_gpgme_keyring_get_actions (SeahorsePlace *place)
 {
-	return g_object_ref (SEAHORSE_GPGME_KEYRING (place)->pv->actions);
+	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (place);
+	if (self->pv->actions)
+		return g_object_ref (self->pv->actions);
+	return NULL;
 }
 
 static gchar *
