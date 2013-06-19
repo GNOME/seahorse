@@ -31,7 +31,6 @@
 
 #include "seahorse-action.h"
 #include "seahorse-common.h"
-#include "seahorse-lockable.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
 
@@ -237,12 +236,25 @@ seahorse_gkr_keyring_get_label (SeahorsePlace *place)
 	return secret_collection_get_label (SECRET_COLLECTION (place));
 }
 
+static gboolean
+seahorse_gkr_keyring_get_lockable (SeahorseLockable *lockable)
+{
+	return !secret_collection_get_locked (SECRET_COLLECTION (lockable));
+}
+
+static gboolean
+seahorse_gkr_keyring_get_unlockable (SeahorseLockable *lockable)
+{
+	return secret_collection_get_locked (SECRET_COLLECTION (lockable));
+}
+
 static void
 seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value, 
                            GParamSpec *pspec)
 {
 	SeahorseGkrKeyring *self = SEAHORSE_GKR_KEYRING (obj);
 	SeahorsePlace *place = SEAHORSE_PLACE (obj);
+	SeahorseLockable *lockable = SEAHORSE_LOCKABLE (obj);
 
 	switch (prop_id) {
 	case PROP_DESCRIPTION:
@@ -258,10 +270,10 @@ seahorse_gkr_keyring_get_property (GObject *obj, guint prop_id, GValue *value,
 		g_value_take_object (value, seahorse_gkr_keyring_get_actions (place));
 		break;
 	case PROP_LOCKABLE:
-		g_value_set_boolean (value, !secret_collection_get_locked (SECRET_COLLECTION (self)));
+		g_value_set_boolean (value, seahorse_gkr_keyring_get_lockable (lockable));
 		break;
 	case PROP_UNLOCKABLE:
-		g_value_set_boolean (value, secret_collection_get_locked (SECRET_COLLECTION (self)));
+		g_value_set_boolean (value, seahorse_gkr_keyring_get_unlockable (lockable));
 		break;
 	case PROP_DELETABLE:
 		g_value_set_boolean (value, TRUE);
@@ -484,9 +496,11 @@ seahorse_gkr_keyring_unlock_finish (SeahorseLockable *lockable,
 static void
 seahorse_keyring_lockable_iface (SeahorseLockableIface *iface)
 {
-	iface->lock_async = seahorse_gkr_keyring_lock_async;
+	iface->get_lockable = seahorse_gkr_keyring_get_lockable;
+	iface->get_unlockable = seahorse_gkr_keyring_get_unlockable;
+	iface->lock = seahorse_gkr_keyring_lock_async;
 	iface->lock_finish = seahorse_gkr_keyring_lock_finish;
-	iface->unlock_async = seahorse_gkr_keyring_unlock_async;
+	iface->unlock = seahorse_gkr_keyring_unlock_async;
 	iface->unlock_finish = seahorse_gkr_keyring_unlock_finish;
 }
 

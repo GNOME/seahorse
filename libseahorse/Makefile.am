@@ -52,7 +52,6 @@ libseahorse_la_SOURCES = \
 	seahorse-debug.c seahorse-debug.h \
 	seahorse-interaction.c seahorse-interaction.h \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
-	seahorse-lockable.c seahorse-lockable.h \
 	seahorse-object.c seahorse-object.h \
 	seahorse-object-list.c seahorse-object-list.h \
 	seahorse-object-model.c seahorse-object-model.h \

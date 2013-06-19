@@ -27,7 +27,6 @@
 #include "seahorse-actions.h"
 #include "seahorse-common.h"
 #include "seahorse-interaction.h"
-#include "seahorse-lockable.h"
 #include "seahorse-util.h"
 
 #include "gkr/seahorse-gkr.h"
@@ -578,8 +577,8 @@ on_cell_renderer_action_icon (GtkTreeViewColumn *column,
 	lockable = lookup_lockable_for_iter (model, iter);
 
 	if (lockable) {
-		can_lock = seahorse_lockable_can_lock (lockable);
-		can_unlock = seahorse_lockable_can_unlock (lockable);
+		can_lock = seahorse_lockable_can_lock (G_OBJECT (lockable));
+		can_unlock = seahorse_lockable_can_unlock (G_OBJECT (lockable));
 	}
 
 	if (can_lock || can_unlock) {
@@ -815,8 +814,8 @@ place_lock (SeahorseLockable *lockable,
 	GCancellable *cancellable = g_cancellable_new ();
 	GTlsInteraction *interaction = seahorse_interaction_new (window);
 
-	seahorse_lockable_lock_async (lockable, interaction, cancellable,
-	                              on_place_locked, g_object_ref (window));
+	seahorse_lockable_lock (lockable, interaction, cancellable,
+	                        on_place_locked, g_object_ref (window));
 
 	g_object_unref (cancellable);
 	g_object_unref (interaction);
@@ -854,8 +853,8 @@ place_unlock (SeahorseLockable *lockable,
 	GCancellable *cancellable = g_cancellable_new ();
 	GTlsInteraction *interaction = seahorse_interaction_new (window);
 
-	seahorse_lockable_unlock_async (lockable, interaction, cancellable,
-	                                on_place_unlocked, g_object_ref (window));
+	seahorse_lockable_unlock (lockable, interaction, cancellable,
+	                          on_place_unlocked, g_object_ref (window));
 
 	g_object_unref (cancellable);
 	g_object_unref (interaction);
@@ -1186,9 +1185,9 @@ on_tree_view_button_release_event (GtkWidget *widget,
 
 	lockable = lookup_lockable_for_iter (model, &iter);
 	if (lockable) {
-		if (seahorse_lockable_can_lock (lockable))
+		if (seahorse_lockable_can_lock (G_OBJECT (lockable)))
 			place_lock (lockable, GTK_WINDOW (window));
-		else if (seahorse_lockable_can_unlock (lockable))
+		else if (seahorse_lockable_can_unlock (G_OBJECT (lockable)))
 			place_unlock (lockable, GTK_WINDOW (window));
 	}
 

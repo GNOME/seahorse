@@ -58,10 +58,6 @@ GckSession *           seahorse_token_get_session       (SeahorseToken *self);
 void                   seahorse_token_set_session       (SeahorseToken *self,
                                                          GckSession *session);
 
-gboolean               seahorse_token_get_lockable      (SeahorseToken *self);
-
-gboolean               seahorse_token_get_unlockable    (SeahorseToken *self);
-
 GArray *               seahorse_token_get_mechanisms    (SeahorseToken *self);
 
 gboolean               seahorse_token_has_mechanism     (SeahorseToken *self,

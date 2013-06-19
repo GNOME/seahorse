@@ -35,7 +35,6 @@
 #include "seahorse-token.h"
 
 #include "seahorse-common.h"
-#include "seahorse-lockable.h"
 #include "seahorse-util.h"
 
 enum {
@@ -64,6 +63,10 @@ struct _SeahorseTokenPrivate {
 	GHashTable *id_for_object;
 	GHashTable *objects_visible;
 };
+
+static gboolean      seahorse_token_get_lockable         (SeahorseLockable *lockable);
+
+static gboolean      seahorse_token_get_unlockable       (SeahorseLockable *lockable);
 
 static void          seahorse_token_place_iface          (SeahorsePlaceIface *iface);
 
@@ -631,6 +634,7 @@ seahorse_token_get_property (GObject *object,
 {
 	SeahorseToken *self = SEAHORSE_TOKEN (object);
 	SeahorsePlace *place = SEAHORSE_PLACE (object);
+	SeahorseLockable *lockable = SEAHORSE_LOCKABLE (object);
 
 	switch (prop_id) {
 	case PROP_LABEL:
@@ -658,10 +662,10 @@ seahorse_token_get_property (GObject *object,
 		g_value_set_boxed (value, self->pv->info);
 		break;
 	case PROP_LOCKABLE:
-		g_value_set_boolean (value, seahorse_token_get_lockable (self));
+		g_value_set_boolean (value, seahorse_token_get_lockable (lockable));
 		break;
 	case PROP_UNLOCKABLE:
-		g_value_set_boolean (value, seahorse_token_get_unlockable (self));
+		g_value_set_boolean (value, seahorse_token_get_unlockable (lockable));
 		break;
 	case PROP_SESSION:
 		g_value_set_object (value, seahorse_token_get_session (self));
@@ -978,9 +982,11 @@ seahorse_token_unlock_finish (SeahorseLockable *lockable,
 static void
 seahorse_token_lockable_iface (SeahorseLockableIface *iface)
 {
-	iface->lock_async = seahorse_token_lock_async;
+	iface->get_lockable = seahorse_token_get_lockable;
+	iface->get_unlockable = seahorse_token_get_unlockable;
+	iface->lock = seahorse_token_lock_async;
 	iface->lock_finish = seahorse_token_lock_finish;
-	iface->unlock_async = seahorse_token_unlock_async;
+	iface->unlock = seahorse_token_unlock_async;
 	iface->unlock_finish = seahorse_token_unlock_finish;
 }
 
@@ -1039,12 +1045,11 @@ seahorse_token_get_info (SeahorseToken *self)
 	return self->pv->info;
 }
 
-gboolean
-seahorse_token_get_lockable (SeahorseToken *self)
+static gboolean
+seahorse_token_get_lockable (SeahorseLockable *lockable)
 {
+	SeahorseToken *self = SEAHORSE_TOKEN (lockable);
 	GckTokenInfo *info;
-
-	g_return_val_if_fail (SEAHORSE_IS_TOKEN (self), FALSE);
 
 	info = seahorse_token_get_info (self);
 
@@ -1058,12 +1063,11 @@ seahorse_token_get_lockable (SeahorseToken *self)
 
 }
 
-gboolean
-seahorse_token_get_unlockable (SeahorseToken *self)
+static gboolean
+seahorse_token_get_unlockable (SeahorseLockable *lockable)
 {
+	SeahorseToken *self = SEAHORSE_TOKEN (lockable);
 	GckTokenInfo *info;
-
-	g_return_val_if_fail (SEAHORSE_IS_TOKEN (self), FALSE);
 
 	info = seahorse_token_get_info (self);
 

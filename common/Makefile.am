@@ -15,6 +15,7 @@ libcommon_la_SOURCES = \
 	exportable.vala \
 	exporter.vala \
 	icons.vala \
+	lockable.vala \
 	place.vala \
 	registry.vala \
 	viewable.vala \
