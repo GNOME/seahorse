@@ -26,7 +26,7 @@
 
 #include <glib/gi18n.h>
 
-#include "seahorse-icons.h"
+#include "seahorse-common.h"
 #include "seahorse-widget.h"
 
 /**

@@ -29,7 +29,7 @@
 #include "seahorse-gkr-item.h"
 
 #include "seahorse-bind.h"
-#include "seahorse-icons.h"
+#include "seahorse-common.h"
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-progress.h"

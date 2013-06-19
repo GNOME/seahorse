@@ -35,7 +35,6 @@
 #include "seahorse-gkr-keyring.h"
 
 #include "seahorse-common.h"
-#include "seahorse-icons.h"
 #include "seahorse-util.h"
 
 #define GENERIC_SECRET "org.freedesktop.Secret.Generic"

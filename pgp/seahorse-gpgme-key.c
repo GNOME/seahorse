@@ -34,7 +34,6 @@
 #include "seahorse-pgp-key.h"
 
 #include "seahorse-common.h"
-#include "seahorse-icons.h"
 #include "seahorse-predicate.h"
 #include "seahorse-object-list.h"
 #include "seahorse-util.h"

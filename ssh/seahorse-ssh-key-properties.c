@@ -27,7 +27,7 @@
 #include "seahorse-ssh-operation.h"
 
 #include "seahorse-bind.h"
-#include "seahorse-icons.h"
+#include "seahorse-common.h"
 #include "seahorse-object.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-util.h"

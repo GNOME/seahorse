@@ -27,7 +27,6 @@
 #include "seahorse-pgp-subkey.h"
 
 #include "seahorse-common.h"
-#include "seahorse-icons.h"
 #include "seahorse-object-list.h"
 #include "seahorse-util.h"
 

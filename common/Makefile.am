@@ -2,6 +2,7 @@ NULL =
 
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
+	-DPKGDATADIR=\""$(pkgdatadir)/"\" \
 	$(SEAHORSE_CFLAGS)
 
 noinst_LTLIBRARIES = libcommon.la
@@ -13,6 +14,7 @@ libcommon_la_SOURCES = \
 	deleter.vala \
 	exportable.vala \
 	exporter.vala \
+	icons.vala \
 	place.vala \
 	registry.vala \
 	viewable.vala \
@@ -24,6 +26,8 @@ AM_VALAFLAGS = \
 	--header=seahorse-internal.h \
 	--pkg gtk+-3.0 \
 	--pkg gcr-3 \
+	--pkg config \
+	--vapidir=$(srcdir) \
 	--vapi=common.vapi \
 	$(NULL)
 
@@ -45,6 +49,7 @@ EXTRA_DIST = \
 	seahorse-common.h \
 	seahorse-internal.h \
 	common.vapi \
+	config.vapi \
 	$(NULL)
 
 DISTCLEANFILES = \

@@ -31,7 +31,6 @@
 
 #include "seahorse-action.h"
 #include "seahorse-common.h"
-#include "seahorse-icons.h"
 #include "seahorse-passphrase.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"

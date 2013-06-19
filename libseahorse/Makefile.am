@@ -50,7 +50,6 @@ libseahorse_la_SOURCES = \
 	seahorse-catalog.c seahorse-catalog.h \
 	seahorse-collection.c seahorse-collection.h \
 	seahorse-debug.c seahorse-debug.h \
-	seahorse-icons.c seahorse-icons.h \
 	seahorse-interaction.c seahorse-interaction.h \
 	seahorse-key-manager-store.c seahorse-key-manager-store.h \
 	seahorse-lockable.c seahorse-lockable.h \

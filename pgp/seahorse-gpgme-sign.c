@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include "seahorse-combo-keys.h"
-#include "seahorse-icons.h"
+#include "seahorse-common.h"
 #include "seahorse-object-widget.h"
 #include "seahorse-util.h"
 
