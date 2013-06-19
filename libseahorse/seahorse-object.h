@@ -41,7 +41,7 @@
  * flags: guint: Flags from the SEAHORSE_FLAG_ set. 
  */
 
-#include "seahorse-types.h"
+#include "seahorse-common.h"
 
 #include <glib-object.h>
 

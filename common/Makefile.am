@@ -18,6 +18,7 @@ libcommon_la_SOURCES = \
 	lockable.vala \
 	place.vala \
 	registry.vala \
+	types.vala \
 	viewable.vala \
 	$(NULL)
 

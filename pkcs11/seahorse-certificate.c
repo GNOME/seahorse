@@ -29,7 +29,6 @@
 #include "seahorse-pkcs11-properties.h"
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"
-#include "seahorse-types.h"
 
 #include "seahorse-common.h"
 #include "seahorse-util.h"

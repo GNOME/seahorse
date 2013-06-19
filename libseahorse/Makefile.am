@@ -62,7 +62,6 @@ libseahorse_la_SOURCES = \
 	seahorse-progress.c seahorse-progress.h \
 	seahorse-search-provider.c seahorse-search-provider.h \
 	seahorse-servers.c seahorse-servers.h \
-	seahorse-types.c seahorse-types.h \
 	seahorse-util.c seahorse-util.h \
 	seahorse-validity.c seahorse-validity.h \
 	seahorse-widget.c seahorse-widget.h \
