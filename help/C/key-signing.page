@@ -1,0 +1,100 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic" style="task"
+      id="key-signing">
+  <info>
+    <link type="guide" xref="learn-about-keys" group="second"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-18" status="draft"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email>aruna.evam@gmail.com</email>
+    </credit>
+
+    <desc></desc>
+  </info>
+
+  <title>Why do keys require a signature?</title>
+
+  <p><em>Public keys</em> are so popular because they are known to everyone
+  once they have been <link xref="keys-sync-publish">published</link>. However
+  it is essential to verify if a <em>Public key</em> belongs to the rightful
+  owner or if it is an imitation key.</p>
+
+  <steps>
+    <title>A possible scenario:</title>
+      <item>
+	<p>A and B want to communicate with each other. C wants to stop all
+	communication between them, but A and B do not know this.</p>
+      </item>
+      <item>
+        <p> A creates their <em>Public key</em> and publishes it on a
+	<link xref="key-servers-what-are-they">key server</link>.</p>
+      </item>
+      <item>
+	<p>C <link xref="keys-retrieve-remote">imports</link> A's key and
+	using the information in it, creates a new imitation key. This
+	imitation key will have the same details as A's key but will have a
+	different <link xref="key-fingerprint">fingerprint</link>.</p>
+      </item>
+      <item>
+	<p>C publishes the imitation key on a key server.</p>
+      </item>
+      <item>
+	<p>B imports the key submitted by C, believing that it is A's key.</p>
+      </item>
+      <item>
+	<p>A and B cannot communicate till they realise that the key has been
+	compromised.</p>
+      </item>
+  </steps>
+
+<!--Should the above be described using pictures in a sequence?-aruna-->
+
+<section id="verify">
+  <title>How can <em>Public keys</em> be verified?</title>
+
+  <p>Usually, if you know the person you are communicating with, you can
+  verify the <link xref="key-fingerprint">fingerprint</link> on their key, by
+  asking them in person. In the cases when this is not possible, there is a
+  provision to digitally <em>sign</em> someone's keys if you trust them. You
+  may also sign your own key.</p>
+
+  <steps>
+    <title>How does signing work?</title>
+      <item>
+	<p>A and B want to communicate. C wants to stop all communication
+	between them.</p>
+      </item>
+      <item>
+        <p>A creates a public key and requests common friends between her and
+	B to sign the key. She may also choose to sign the key herself. Keys
+	are signed using the <em>Private key</em>.</p>
+      </item>
+      <item>
+        <p>A publishes the signed key on a key server.</p>
+      </item>
+      <item>
+	<p>C publishes an imitation key, after retrieving A's information, but
+	obviously this key will not have any signatures.</p>
+      </item>
+      <item>
+	<p>When B sees two keys in A's name, the signed key will be given more
+	preference and imported, rather than the unsigned key uploaded by C.
+	Signatures can be verified by decrypting the <em>Private keys</em> used
+	to sign, with the <em>Public keys</em> on a key server.</p>
+      </item>
+      <item>
+        <p>A and B can communicate.</p>
+      </item>
+  </steps>
+
+  <p>You can establish a <em>web of trust</em> among the people you want to
+  communicate with by mutually signing each other's keys. In this way, only
+  keys signed by persons in the <em>web of trust</em> are trusted by the
+  communicating members.</p>
+
+</section>
+
+</page>
