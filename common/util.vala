@@ -52,6 +52,16 @@ namespace Util {
 		dialog.destroy();
 	}
 
+	public string get_display_date_string (long time)
+	{
+		if (time == 0)
+			return "";
+		var created_date = GLib.Date();
+		created_date.set_time_t (time);
+		var buffer = new char[128];
+		created_date.strftime(buffer, _("%Y-%m-%d"));
+		return (string)buffer;
+	}
 }
 
 }
