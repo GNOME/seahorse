@@ -1,14 +1,19 @@
 NULL =
 
+uidir = $(datadir)/seahorse/ui/
+
 INCLUDES = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-DPKGDATADIR=\""$(pkgdatadir)/"\" \
+	-DUIDIR=\""$(uidir)"\" \
 	$(SEAHORSE_CFLAGS)
 
 noinst_LTLIBRARIES = libcommon.la
 
 libcommon_la_SOURCES = \
+	actions.vala \
 	backend.vala \
+	catalog.vala \
 	deletable.vala \
 	delete-dialog.vala \
 	deleter.vala \

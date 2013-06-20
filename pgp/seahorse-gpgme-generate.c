@@ -29,7 +29,6 @@
  
 #include "egg-datetime.h"
 
-#include "seahorse-action.h"
 #include "seahorse-common.h"
 #include "seahorse-passphrase.h"
 #include "seahorse-progress.h"

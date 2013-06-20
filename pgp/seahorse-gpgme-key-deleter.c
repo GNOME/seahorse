@@ -87,7 +87,7 @@ seahorse_gpgme_key_deleter_create_confirm (SeahorseDeleter *deleter,
 	dialog = seahorse_delete_dialog_new (parent, "%s", prompt);
 	g_free (prompt);
 
-	return dialog;
+	return g_object_ref (dialog);
 }
 
 static GList *

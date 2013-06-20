@@ -34,8 +34,6 @@
 #include "seahorse-keyserver-search.h"
 #include "seahorse-keyserver-sync.h"
 
-#include "seahorse-action.h"
-#include "seahorse-actions.h"
 #include "seahorse-common.h"
 #include "seahorse-object.h"
 #include "seahorse-object-list.h"
@@ -100,6 +98,7 @@ on_remote_sync (GtkAction* action,
 		}
 		g_list_free (objects);
 	}
+	g_object_unref (catalog);
 
 	if (keys == NULL) {
 		keyring = seahorse_pgp_backend_get_default_keyring (NULL);

@@ -45,7 +45,7 @@ typedef struct {
 	GCancellable *cancellable;
 	gulong cancelled_sig;
 
-	SeahorseWidget *swidget;
+	GtkBuilder *builder;
 	gchar *title;
 	gchar *notice;
 	gboolean showing;
@@ -135,8 +135,8 @@ tracked_task_free (gpointer data)
 	g_queue_free (task->parts);
 	g_free (task->title);
 	g_free (task->notice);
-	if (task->swidget)
-		g_object_unref (task->swidget);
+	if (task->builder)
+		g_object_unref (task->builder);
 	g_free (task);
 }
 
@@ -191,21 +191,20 @@ progress_update_display (TrackedTask *task)
 	gdouble fraction;
 	guint id;
 
-	if (task->swidget == NULL)
+	if (task->builder == NULL)
 		return;
 
 	/* Dig out our progress display stuff */
-	widget = seahorse_widget_get_widget (task->swidget, "progress-bar");
+	widget = GTK_WIDGET (gtk_builder_get_object (task->builder, "progress-bar"));
 	if (widget == NULL)
-		g_warning ("cannot display progress because seahorse window '%s' has no progress widget",
-		           task->swidget->name);
+		g_warning ("cannot display progress because seahorse window has no progress widget");
 	else
 		progress = GTK_PROGRESS_BAR (widget);
-	widget = GTK_WIDGET (gtk_builder_get_object (task->swidget->gtkbuilder, "status"));
+	widget = GTK_WIDGET (gtk_builder_get_object (task->builder, "status"));
 	if (GTK_IS_STATUSBAR (widget)) {
 		status = GTK_STATUSBAR (widget);
 	} else {
-		widget = GTK_WIDGET (gtk_builder_get_object (task->swidget->gtkbuilder, "progress-details"));
+		widget = GTK_WIDGET (gtk_builder_get_object (task->builder, "progress-details"));
 		if (GTK_IS_LABEL (widget))
 			label = GTK_LABEL (widget);
 	}
@@ -563,7 +562,7 @@ on_timeout_show_progress (gpointer user_data)
 
 	/* Allow attach to work */
 	task->showing = FALSE;
-	seahorse_progress_attach (task->cancellable, swidget);
+	seahorse_progress_attach (task->cancellable, swidget->gtkbuilder);
 	gtk_widget_show (GTK_WIDGET (window));
 	g_object_unref (swidget);
 
@@ -617,7 +616,7 @@ seahorse_progress_show_with_notice (GCancellable *cancellable,
 
 void
 seahorse_progress_attach (GCancellable *cancellable,
-                          SeahorseWidget *swidget)
+                          GtkBuilder *builder)
 {
 	TrackedTask *task;
 
@@ -638,7 +637,7 @@ seahorse_progress_attach (GCancellable *cancellable,
 	}
 
 	task->showing = TRUE;
-	task->swidget = g_object_ref (swidget);
+	task->builder = g_object_ref (builder);
 
 	progress_update_display (task);
 }

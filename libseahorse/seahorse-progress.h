@@ -26,8 +26,7 @@
 #define __SEAHORSE_PROGRESS_H__
 
 #include <gio/gio.h>
-
-#include "seahorse-widget.h"
+#include <gtk/gtk.h>
 
 void          seahorse_progress_prep            (GCancellable *cancellable,
                                                  gconstpointer progress_tag,
@@ -59,7 +58,7 @@ void          seahorse_progress_show_with_notice (GCancellable *cancellable,
                                                  const gchar *notice,
                                                  gboolean delayed);
 
-void          seahorse_progress_attach          (GCancellable *cancellable,
-                                                 SeahorseWidget *swidget);
+void          seahorse_progress_attach           (GCancellable *cancellable,
+                                                  GtkBuilder *builder);
 
 #endif /* __SEAHORSE_PROGRESS_H__ */

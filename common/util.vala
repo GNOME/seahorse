@@ -62,6 +62,31 @@ namespace Util {
 		created_date.strftime(buffer, _("%Y-%m-%d"));
 		return (string)buffer;
 	}
+
+	public Gtk.Builder load_built_contents(Gtk.Container? frame,
+	                                       string name) {
+		var builder = new Gtk.Builder();
+		string path = GLib.Path.build_filename(Config.UIDIR, "seahorse-%s.xml".printf(name));
+
+		if (frame != null && frame is Gtk.Dialog)
+			frame = ((Gtk.Dialog)frame).get_content_area();
+
+		try {
+			builder.add_from_file(path);
+			var obj = builder.get_object(name);
+			if (obj == null) {
+				GLib.critical("Couldn't find object named %s in %s", name, path);
+			} else if (frame != null) {
+				var widget = (Gtk.Widget)obj;
+				frame.add(widget);
+				widget.show();
+			}
+		} catch (GLib.Error err) {
+			GLib.critical("Couldn't load %s: %s", path, err.message);
+		}
+
+		return builder;
+	}
 }
 
 }

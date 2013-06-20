@@ -28,7 +28,7 @@
 
 #include <gcr/gcr.h>
 
-#include "seahorse-catalog.h"
+#include "seahorse-common.h"
 
 G_BEGIN_DECLS
 

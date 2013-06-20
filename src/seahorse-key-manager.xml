@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <object class="GtkWindow" id="key-manager">
-    <property name="can_focus">False</property>
-    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property name="default_width">640</property>
-    <property name="default_height">476</property>
-    <signal name="delete-event" handler="on_widget_delete_event" swapped="no"/>
-    <child>
-      <object class="GtkVBox" id="vbox1">
+      <object class="GtkVBox" id="key-manager">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -72,9 +65,6 @@
                         <property name="margin_left">12</property>
                         <property name="margin_right">12</property>
                         <property name="rules_hint">True</property>
-                        <signal name="button-press-event" handler="on_keymanager_key_list_button_pressed" swapped="no"/>
-                        <signal name="row-activated" handler="on_keymanager_row_activated" swapped="no"/>
-                        <signal name="popup-menu" handler="on_keymanager_key_list_popup_menu" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="treeview-selection"/>
                         </child>
@@ -144,7 +134,6 @@
                                 <property name="receives_default">True</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_stock">True</property>
-                                <signal name="clicked" handler="on_keymanager_new_button" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -174,10 +163,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="can_default">True</property>
-                                <property name="has_default">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_action_appearance">False</property>
-                                <signal name="clicked" handler="on_keymanager_import_button" swapped="no"/>
                                 <child>
                                   <object class="GtkAlignment" id="alignment6">
                                     <property name="visible">True</property>
@@ -248,7 +235,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="can_default">True</property>
-                                <property name="has_default">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_stock">True</property>
@@ -304,6 +290,4 @@
           </packing>
         </child>
       </object>
-    </child>
-  </object>
 </interface>

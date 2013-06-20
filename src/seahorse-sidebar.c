@@ -23,8 +23,6 @@
 
 #include "seahorse-sidebar.h"
 
-#include "seahorse-action.h"
-#include "seahorse-actions.h"
 #include "seahorse-common.h"
 #include "seahorse-interaction.h"
 #include "seahorse-util.h"

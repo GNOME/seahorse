@@ -28,8 +28,6 @@
 #include "seahorse-gkr-keyring-deleter.h"
 #include "seahorse-gkr-dialogs.h"
 
-#include "seahorse-action.h"
-#include "seahorse-actions.h"
 #include "seahorse-common.h"
 #include "seahorse-object-list.h"
 #include "seahorse-progress.h"

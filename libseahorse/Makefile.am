@@ -43,11 +43,8 @@ KEYSERVER_SRCS =
 endif
 
 libseahorse_la_SOURCES = \
-	seahorse-action.c seahorse-action.h \
-	seahorse-actions.c seahorse-actions.h \
 	seahorse-application.c seahorse-application.h \
 	seahorse-bind.c seahorse-bind.h \
-	seahorse-catalog.c seahorse-catalog.h \
 	seahorse-collection.c seahorse-collection.h \
 	seahorse-debug.c seahorse-debug.h \
 	seahorse-interaction.c seahorse-interaction.h \

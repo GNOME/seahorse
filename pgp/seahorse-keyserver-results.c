@@ -35,13 +35,6 @@
 
 #include <string.h>
 
-gboolean              on_key_list_button_pressed           (GtkTreeView* view,
-                                                            GdkEventButton* event,
-                                                            SeahorseKeyserverResults* self);
-
-gboolean              on_key_list_popup_menu               (GtkTreeView* view,
-                                                            SeahorseKeyserverResults* self);
-
 enum {
 	PROP_0,
 	PROP_SEARCH
@@ -109,7 +102,7 @@ on_row_activated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *colum
 		seahorse_catalog_show_properties (SEAHORSE_CATALOG (self), obj);
 }
 
-G_MODULE_EXPORT gboolean
+static gboolean
 on_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKeyserverResults* self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self), FALSE);
@@ -121,7 +114,7 @@ on_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKe
 	return FALSE;
 }
 
-G_MODULE_EXPORT gboolean
+static gboolean
 on_key_list_popup_menu (GtkTreeView* view, SeahorseKeyserverResults* self)
 {
 	GList *objects;
@@ -150,7 +143,7 @@ on_app_close (GtkAction* action, SeahorseKeyserverResults* self)
 {
 	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
 	g_return_if_fail (action == NULL || GTK_IS_ACTION (action));
-	seahorse_widget_destroy (SEAHORSE_WIDGET (self));
+	gtk_widget_destroy (GTK_WIDGET (self));
 }
 
 static void
@@ -278,6 +271,7 @@ seahorse_keyserver_results_constructed (GObject *obj)
 	GtkActionGroup* actions;
 	GtkTreeSelection *selection;
 	GtkWindow *window;
+	GtkBuilder *builder;
 	char* title;
 
 	G_OBJECT_CLASS (seahorse_keyserver_results_parent_class)->constructed (obj);
@@ -289,7 +283,10 @@ seahorse_keyserver_results_constructed (GObject *obj)
 	}
 
 	window = seahorse_catalog_get_window (SEAHORSE_CATALOG (self));
+	gtk_window_set_default_geometry(window, 640, 476);
+	gtk_widget_set_events (GTK_WIDGET (window), GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 	gtk_window_set_title (window, title);
+	gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
 	g_free (title);
 
 	g_signal_connect (window, "delete-event", G_CALLBACK (on_delete_event), self);
@@ -311,7 +308,8 @@ seahorse_keyserver_results_constructed (GObject *obj)
 	seahorse_catalog_include_actions (SEAHORSE_CATALOG (self), self->pv->import_actions);
 
 	/* init key list & selection settings */
-	self->pv->view = GTK_TREE_VIEW (seahorse_widget_get_widget (SEAHORSE_WIDGET (self), "key_list"));
+	builder = seahorse_catalog_get_builder (SEAHORSE_CATALOG (self));
+	self->pv->view = GTK_TREE_VIEW (gtk_builder_get_object (builder, "key_list"));
 	selection = gtk_tree_view_get_selection (self->pv->view);
 	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	g_signal_connect_object (selection, "changed", G_CALLBACK (on_view_selection_changed), self, 0);
@@ -325,7 +323,7 @@ seahorse_keyserver_results_constructed (GObject *obj)
 
 	/* To avoid flicker */
 	seahorse_catalog_ensure_updated (SEAHORSE_CATALOG (self));
-	seahorse_widget_show (SEAHORSE_WIDGET (SEAHORSE_CATALOG (self)));
+	gtk_widget_show (GTK_WIDGET (self));
 
 	self->pv->store = seahorse_key_manager_store_new (GCR_COLLECTION (self->pv->collection),
 	                                                  self->pv->view,
@@ -503,11 +501,12 @@ seahorse_keyserver_results_show (const char* search_text)
 {
 	SeahorseKeyserverResults* self;
 	GCancellable *cancellable;
+	GtkBuilder *builder;
 
 	g_return_if_fail (search_text != NULL);
 
 	self = g_object_new (SEAHORSE_TYPE_KEYSERVER_RESULTS,
-	                     "name", "keyserver-results",
+	                     "ui-name", "keyserver-results",
 	                     "search", search_text,
 	                     NULL);
 
@@ -521,7 +520,8 @@ seahorse_keyserver_results_show (const char* search_text)
 	                                          cancellable, on_search_completed,
 	                                          g_object_ref (self));
 
-	seahorse_progress_attach (cancellable, SEAHORSE_WIDGET (self));
+	builder = seahorse_catalog_get_builder (SEAHORSE_CATALOG (self));
+	seahorse_progress_attach (cancellable, builder);
 
 	g_object_unref (cancellable);
 }

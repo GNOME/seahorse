@@ -27,7 +27,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#include "seahorse-catalog.h"
+#include "seahorse-common.h"
 #include "seahorse-object.h"
 
 G_BEGIN_DECLS

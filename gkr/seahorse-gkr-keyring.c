@@ -29,7 +29,6 @@
 #include "seahorse-gkr-keyring.h"
 #include "seahorse-gkr-actions.h"
 
-#include "seahorse-action.h"
 #include "seahorse-common.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"

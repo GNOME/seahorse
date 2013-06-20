@@ -28,7 +28,6 @@
 #include "seahorse-pkcs11-request.h"
 #include "seahorse-private-key.h"
 
-#include "seahorse-action.h"
 #include "seahorse-common.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"

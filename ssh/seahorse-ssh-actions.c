@@ -27,8 +27,6 @@
 #include "seahorse-ssh-dialogs.h"
 #include "seahorse-ssh-operation.h"
 
-#include "seahorse-action.h"
-#include "seahorse-actions.h"
 #include "seahorse-common.h"
 #include "seahorse-object.h"
 #include "seahorse-object-list.h"
@@ -90,6 +88,7 @@ on_ssh_upload (GtkAction* action,
 		}
 		g_list_free (objects);
 	}
+	g_object_unref (catalog);
 
 	seahorse_ssh_upload_prompt (keys, seahorse_action_get_window (action));
 	g_list_free (keys);

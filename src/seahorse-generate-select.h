@@ -25,7 +25,7 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#include "seahorse-widget.h"
+#include <gtk/gtk.h>
 
 void               seahorse_generate_select_show       (GtkWindow *parent);
 

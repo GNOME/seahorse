@@ -23,7 +23,6 @@
 
 #include "seahorse-generate-select.h"
 
-#include "seahorse-action.h"
 #include "seahorse-common.h"
 
 #include <glib/gi18n.h>

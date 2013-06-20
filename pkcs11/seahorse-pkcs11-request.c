@@ -25,7 +25,6 @@
 #include "seahorse-pkcs11-request.h"
 #include "seahorse-token.h"
 
-#include "seahorse-action.h"
 #include "seahorse-progress.h"
 #include "seahorse-interaction.h"
 #include "seahorse-util.h"

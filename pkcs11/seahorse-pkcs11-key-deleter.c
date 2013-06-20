@@ -86,7 +86,7 @@ seahorse_pkcs11_key_deleter_create_confirm (SeahorseDeleter *deleter,
 	seahorse_delete_dialog_set_check_require (SEAHORSE_DELETE_DIALOG (dialog), TRUE);
 
 	g_free (prompt);
-	return dialog;
+	return g_object_ref (dialog);
 }
 
 static gboolean

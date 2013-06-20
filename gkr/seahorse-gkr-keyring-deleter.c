@@ -79,7 +79,7 @@ seahorse_gkr_keyring_deleter_create_confirm (SeahorseDeleter *deleter,
 	seahorse_delete_dialog_set_check_label (SEAHORSE_DELETE_DIALOG (dialog), _("I understand that all items will be permanently deleted."));
 	seahorse_delete_dialog_set_check_require (SEAHORSE_DELETE_DIALOG (dialog), TRUE);
 
-	return dialog;
+	return g_object_ref (dialog);
 }
 
 static GList *

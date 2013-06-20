@@ -103,7 +103,7 @@ seahorse_ssh_deleter_create_confirm (SeahorseDeleter *deleter,
 		seahorse_delete_dialog_set_check_require (SEAHORSE_DELETE_DIALOG (dialog), TRUE);
 	}
 
-	return dialog;
+	return g_object_ref (dialog);
 }
 
 static GList *

@@ -32,7 +32,6 @@
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 
-#include "seahorse-action.h"
 #include "seahorse-common.h"
 #include "seahorse-progress.h"
 #include "seahorse-util.h"
