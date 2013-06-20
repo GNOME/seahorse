@@ -22,7 +22,9 @@
  */
 
 namespace Seahorse {
+namespace Gkr {
 
-public const string GKR_NAME = "gkr";
+public const string NAME = "gkr";
 
+}
 }

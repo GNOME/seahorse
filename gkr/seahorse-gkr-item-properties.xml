@@ -2,18 +2,7 @@
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-naming-policy toplevel-contextual -->
-  <object class="GtkDialog" id="gkr-item-properties">
-    <property name="visible">True</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Key Properties</property>
-    <property name="type_hint">dialog</property>
-    <signal name="delete_event" handler="on_widget_delete_event"/>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox1">
-        <property name="visible">True</property>
-        <property name="spacing">2</property>
-        <child>
-          <object class="GtkNotebook" id="notebook">
+          <object class="GtkNotebook" id="gkr-item-properties">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="border_width">5</property>
@@ -65,8 +54,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
-                            <signal name="focus_out_event" handler="on_item_description_focus_out"/>
-                            <signal name="activate" handler="on_item_description_activate"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -213,7 +200,6 @@
                   <object class="GtkExpander" id="password-expander">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <signal name="activate" handler="on_item_password_expander_activate" after="yes"/>
                     <child>
                       <object class="GtkAlignment" id="alignment45">
                         <property name="visible">True</property>
@@ -243,7 +229,6 @@
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_item_show_password_toggled"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -355,58 +340,4 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="helpbutton1">
-                <property name="label">gtk-help</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_widget_help"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="closebutton1">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_widget_closed"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="-11">helpbutton1</action-widget>
-      <action-widget response="-7">closebutton1</action-widget>
-    </action-widgets>
-  </object>
 </interface>

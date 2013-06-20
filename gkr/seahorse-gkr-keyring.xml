@@ -2,15 +2,7 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
-  <object class="GtkDialog" id="gkr-keyring">
-    <property name="visible">True</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Keyring Properties</property>
-    <property name="type_hint">dialog</property>
-    <signal name="response" handler="on_keyring_properties_response"/>
-    <signal name="delete_event" handler="on_widget_delete_event"/>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox1">
+      <object class="GtkVBox" id="gkr-keyring">
         <property name="visible">True</property>
         <property name="spacing">2</property>
         <child>
@@ -184,10 +176,4 @@
           </packing>
         </child>
       </object>
-    </child>
-    <action-widgets>
-      <action-widget response="-11">helpbutton1</action-widget>
-      <action-widget response="-7">closebutton1</action-widget>
-    </action-widgets>
-  </object>
 </interface>

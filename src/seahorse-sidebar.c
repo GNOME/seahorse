@@ -27,11 +27,6 @@
 #include "seahorse-interaction.h"
 #include "seahorse-util.h"
 
-#include "gkr/seahorse-gkr.h"
-#include "pgp/seahorse-pgp.h"
-#include "pkcs11/seahorse-pkcs11.h"
-#include "ssh/seahorse-ssh.h"
-
 #include <glib/gi18n.h>
 
 struct _SeahorseSidebar {
@@ -745,13 +740,13 @@ order_from_backend (GObject *backend)
 
 	if (name == NULL)
 		order = 10;
-	else if (g_str_equal (name, SEAHORSE_GKR_NAME))
+	else if (g_str_equal (name, "gkr"))
 		order = 0;
-	else if (g_str_equal (name, SEAHORSE_PGP_NAME))
+	else if (g_str_equal (name, "pgp"))
 		order = 1;
-	else if (g_str_equal (name, SEAHORSE_PKCS11_NAME))
+	else if (g_str_equal (name, "pkcs11"))
 		order = 2;
-	else if (g_str_equal (name, SEAHORSE_SSH_NAME))
+	else if (g_str_equal (name, "ssh"))
 		order = 3;
 	else
 		order = 10;

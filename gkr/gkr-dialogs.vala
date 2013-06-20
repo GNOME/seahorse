@@ -20,8 +20,9 @@
  */
 
 namespace Seahorse {
+namespace Gkr {
 
-public class GkrDialog {
+public class Dialog {
 
 	private static void update_wait_cursor(Gtk.Widget widget) {
 		GLib.Cancellable? cancellable = widget.get_data("gkr-request");
@@ -80,4 +81,5 @@ public class GkrDialog {
 	}
 }
 
+}
 }
