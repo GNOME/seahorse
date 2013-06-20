@@ -19,6 +19,7 @@ libcommon_la_SOURCES = \
 	place.vala \
 	registry.vala \
 	types.vala \
+	util.vala \
 	viewable.vala \
 	$(NULL)
 

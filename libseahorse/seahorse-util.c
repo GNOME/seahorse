@@ -48,58 +48,6 @@
 #include <sys/types.h>
 
 /**
- * seahorse_util_show_error:
- * @parent: The parent widget. Can be NULL
- * @heading: The heading of the dialog
- * @message: The message to display
- *
- * This displays an error dialog.
- * The parent widget can be any widget. The dialog will be a child of the window
- * the widget is in.
- *
- */
-void
-seahorse_util_show_error (gpointer parent,
-                          const gchar *heading,
-                          const gchar *message)
-{
-	GtkWidget *dialog;
-
-	g_return_if_fail (message || heading);
-	if (!message)
-		message = "";
-
-	if (parent) {
-		if (!GTK_IS_WIDGET (parent)) {
-			g_warn_if_reached ();
-			parent = NULL;
-		} else {
-			if (!GTK_IS_WINDOW (parent)) 
-				parent = gtk_widget_get_toplevel (parent);
-			if (!GTK_IS_WINDOW (parent) && gtk_widget_is_toplevel (parent))
-				parent = NULL;
-		}
-	}
-	
-	dialog = gtk_message_dialog_new (GTK_WINDOW (parent), 
-	                                GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-	                                GTK_BUTTONS_CLOSE, NULL);
-	if (heading)
-	    g_object_set (G_OBJECT (dialog),
-	                  "text", heading,
-	                  "secondary-text", message,
-	                  NULL);
-    else
-        g_object_set (G_OBJECT (dialog),
-	                  "text", message,
-	                  NULL);
-	
-	
-	gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
-}
-
-/**
  * seahorse_util_handle_error:
  * @error: The #GError to print, and clear
  * @desc: The heading of the box

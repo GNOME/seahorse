@@ -483,7 +483,8 @@ on_search_completed (GObject *source,
 	if (error != NULL) {
 		window = seahorse_catalog_get_window (SEAHORSE_CATALOG (self));
 		g_dbus_error_strip_remote_error (error);
-		seahorse_util_show_error (window, _("The search for keys failed."), error->message);
+		seahorse_util_show_error (GTK_WIDGET (window),
+		                          _("The search for keys failed."), error->message);
 		g_error_free (error);
 	}
 

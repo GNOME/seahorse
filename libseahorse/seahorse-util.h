@@ -41,10 +41,6 @@ gchar*      seahorse_util_get_display_date_string   (const time_t time);
 
 GQuark      seahorse_util_error_domain          (void);
 
-void        seahorse_util_show_error            (gpointer parent,
-                                                 const gchar *heading,
-                                                 const gchar *message);
-
 void        seahorse_util_handle_error          (GError **error,
                                                  gpointer parent,
                                                  const gchar* description,
