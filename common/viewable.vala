@@ -26,10 +26,35 @@ namespace Seahorse
 {
 
 public interface Viewable : GLib.Object {
-	public abstract void show_viewer(Gtk.Window? parent);
+	public abstract Gtk.Window? create_viewer(Gtk.Window? parent);
 
 	public static bool can_view(GLib.Object object) {
 		return object is Viewable;
+	}
+
+	public static bool view(GLib.Object object,
+	                        Gtk.Window? parent) {
+		if (!Viewable.can_view(object))
+			return false;
+
+		Gtk.Window? window = null;
+
+		window = object.get_data("viewable-window");
+		if (window == null) {
+			var viewable = (Viewable)object;
+			window = viewable.create_viewer(parent);
+			if (window == null)
+				return false;
+
+			object.set_data("viewable-window", window);
+			window.destroy.connect(() => {
+				object.set_data_full("viewable-window", null, null);
+			});
+		}
+
+		window.present();
+		window.show();
+		return true;
 	}
 }
 

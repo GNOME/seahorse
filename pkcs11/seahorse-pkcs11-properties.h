@@ -36,7 +36,7 @@ typedef struct _SeahorsePkcs11Properties SeahorsePkcs11Properties;
 
 GType            seahorse_pkcs11_properties_get_type            (void);
 
-GtkWindow *      seahorse_pkcs11_properties_show                (GObject *object,
+GtkWindow *      seahorse_pkcs11_properties_new                 (GObject *object,
                                                                  GtkWindow *parent);
 
 GObject *        seahorse_pkcs11_properties_get_object          (SeahorsePkcs11Properties *self);

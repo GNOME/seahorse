@@ -766,18 +766,17 @@ seahorse_gkr_item_deletable_iface (SeahorseDeletableIface *iface)
 	iface->get_deletable = seahorse_gkr_item_get_deletable;
 }
 
-static void
-seahorse_gkr_item_show_viewer (SeahorseViewable *viewable,
-                               GtkWindow *parent)
+static GtkWindow *
+seahorse_gkr_item_create_viewer (SeahorseViewable *viewable,
+                                 GtkWindow *parent)
 {
-	seahorse_gkr_item_properties_show (SEAHORSE_GKR_ITEM (viewable),
-	                                   parent);
+	return seahorse_gkr_item_properties_show (SEAHORSE_GKR_ITEM (viewable), parent);
 }
 
 static void
 seahorse_gkr_item_viewable_iface (SeahorseViewableIface *iface)
 {
-	iface->show_viewer = seahorse_gkr_item_show_viewer;
+	iface->create_viewer = seahorse_gkr_item_create_viewer;
 }
 
 SeahorseGkrItem *

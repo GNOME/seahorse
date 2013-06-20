@@ -34,8 +34,8 @@ void            seahorse_gkr_add_item_show            (GtkWindow *parent);
 
 void            seahorse_gkr_add_keyring_show         (GtkWindow *parent);
 
-void            seahorse_gkr_item_properties_show     (SeahorseGkrItem *git, GtkWindow *parent);
+GtkWindow *     seahorse_gkr_item_properties_show     (SeahorseGkrItem *git, GtkWindow *parent);
 
-void            seahorse_gkr_keyring_properties_show  (SeahorseGkrKeyring *gkr, GtkWindow *parent);
+GtkWindow *     seahorse_gkr_keyring_properties_show  (SeahorseGkrKeyring *gkr, GtkWindow *parent);
 
 #endif /* __SEAHORSE_GKR_DIALOGS__ */

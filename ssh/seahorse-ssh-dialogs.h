@@ -9,7 +9,7 @@
 void        seahorse_ssh_upload_prompt         (GList *keys,
                                                 GtkWindow *parent);
 
-void        seahorse_ssh_key_properties_show   (SeahorseSSHKey *skey,
+GtkWindow * seahorse_ssh_key_properties_show   (SeahorseSSHKey *skey,
                                                 GtkWindow *parent);
 
 void        seahorse_ssh_generate_show         (SeahorseSSHSource *sksrc,

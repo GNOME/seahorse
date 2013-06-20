@@ -350,17 +350,17 @@ seahorse_ssh_key_deletable_iface (SeahorseDeletableIface *iface)
 	iface->get_deletable = seahorse_ssh_key_get_deletable;
 }
 
-static void
-seahorse_ssh_key_show_viewer (SeahorseViewable *viewable,
-                              GtkWindow *parent)
+static GtkWindow *
+seahorse_ssh_key_create_viewer (SeahorseViewable *viewable,
+                                GtkWindow *parent)
 {
-	seahorse_ssh_key_properties_show (SEAHORSE_SSH_KEY (viewable), parent);
+	return seahorse_ssh_key_properties_show (SEAHORSE_SSH_KEY (viewable), parent);
 }
 
 static void
 seahorse_ssh_key_viewable_iface (SeahorseViewableIface *iface)
 {
-	iface->show_viewer = seahorse_ssh_key_show_viewer;
+	iface->create_viewer = seahorse_ssh_key_create_viewer;
 }
 
 SeahorseSSHKey* 

@@ -337,18 +337,19 @@ seahorse_private_key_exportable_iface (SeahorseExportableIface *iface)
 	iface->get_exportable = seahorse_private_key_get_exportable;
 }
 
-static void
-seahorse_private_key_show_viewer (SeahorseViewable *viewable,
+static GtkWindow *
+seahorse_private_key_create_viewer (SeahorseViewable *viewable,
                                   GtkWindow *parent)
 {
-	GtkWindow *viewer = seahorse_pkcs11_properties_show (G_OBJECT (viewable), parent);
+	GtkWindow *viewer = seahorse_pkcs11_properties_new (G_OBJECT (viewable), parent);
 	gtk_widget_show (GTK_WIDGET (viewer));
+	return viewer;
 }
 
 static void
 seahorse_private_key_viewable_iface (SeahorseViewableIface *iface)
 {
-	iface->show_viewer = seahorse_private_key_show_viewer;
+	iface->create_viewer = seahorse_private_key_create_viewer;
 }
 
 SeahorseCertificate *

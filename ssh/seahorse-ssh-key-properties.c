@@ -334,7 +334,7 @@ properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
     seahorse_widget_destroy (swidget);
 }
 
-void
+GtkWindow *
 seahorse_ssh_key_properties_show (SeahorseSSHKey *skey,
                                   GtkWindow *parent)
 {
@@ -346,7 +346,7 @@ seahorse_ssh_key_properties_show (SeahorseSSHKey *skey,
     
     /* This happens if the window is already open */
     if (swidget == NULL)
-        return;
+        return NULL;
 
     /* 
      * The signals don't need to keep getting connected. Everytime a key changes the
@@ -371,4 +371,5 @@ seahorse_ssh_key_properties_show (SeahorseSSHKey *skey,
     seahorse_bind_objects (NULL, skey, (SeahorseTransfer)key_notify, swidget);
 
     seahorse_widget_show (swidget);
+    return g_object_ref (seahorse_widget_get_toplevel (swidget));
 }

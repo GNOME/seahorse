@@ -73,8 +73,6 @@ enum {
 	PROP_OBJECT
 };
 
-static GQuark QUARK_WINDOW = 0;
-
 G_DEFINE_TYPE (SeahorsePkcs11Properties, seahorse_pkcs11_properties, GTK_TYPE_WINDOW);
 
 static void
@@ -338,7 +336,6 @@ seahorse_pkcs11_properties_constructed (GObject *obj)
 	gtk_ui_manager_ensure_update (self->ui_manager);
 
 	g_return_if_fail (self->object != NULL);
-	g_object_set_qdata (self->object, QUARK_WINDOW, self);
 
 	g_signal_connect_object (self->object, "notify::label", G_CALLBACK (on_object_label_changed),
 	                         self, G_CONNECT_AFTER);
@@ -422,12 +419,6 @@ seahorse_pkcs11_properties_finalize (GObject *obj)
 	g_clear_object (&self->request_key);
 	g_object_unref (self->actions);
 	g_object_unref (self->ui_manager);
-
-	if (self->object) {
-		if (g_object_get_qdata (self->object, QUARK_WINDOW) == self)
-			g_object_set_qdata (self->object, QUARK_WINDOW, NULL);
-	}
-
 	g_clear_object (&self->object);
 
 	G_OBJECT_CLASS (seahorse_pkcs11_properties_parent_class)->finalize (obj);
@@ -449,8 +440,6 @@ seahorse_pkcs11_properties_class_init (SeahorsePkcs11PropertiesClass *klass)
 	g_object_class_install_property (gobject_class, PROP_OBJECT,
 	           g_param_spec_object ("object", "Object", "Certificate or key to display", G_TYPE_OBJECT,
 	                                G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-	QUARK_WINDOW = g_quark_from_static_string ("seahorse-pkcs11-properties-window");
 }
 
 /* -----------------------------------------------------------------------------
@@ -458,22 +447,9 @@ seahorse_pkcs11_properties_class_init (SeahorsePkcs11PropertiesClass *klass)
  */
 
 GtkWindow *
-seahorse_pkcs11_properties_show (GObject  *object,
-                                 GtkWindow *parent)
+seahorse_pkcs11_properties_new (GObject  *object,
+                                GtkWindow *parent)
 {
-	GObject *previous;
-	GtkWindow *window;
-
-	/* Try to show an already present window */
-	previous = g_object_get_qdata (object, QUARK_WINDOW);
-	if (GTK_IS_WINDOW (previous)) {
-		window = GTK_WINDOW (previous);
-		if (gtk_widget_get_visible (GTK_WIDGET (window))) {
-			gtk_window_present (window);
-			return window;
-		}
-	}
-
 	return g_object_new (SEAHORSE_TYPE_PKCS11_PROPERTIES,
 	                     "object", object,
 	                     "transient-for", parent,

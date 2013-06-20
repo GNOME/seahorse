@@ -904,9 +904,8 @@ static void
 on_place_properties (GtkMenuItem *item,
                      gpointer user_data)
 {
-	SeahorseViewable *viewable = SEAHORSE_VIEWABLE (user_data);
 	GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (item));
-	seahorse_viewable_show_viewer (viewable, GTK_WINDOW (window));
+	seahorse_viewable_view (user_data, GTK_WINDOW (window));
 }
 
 static void

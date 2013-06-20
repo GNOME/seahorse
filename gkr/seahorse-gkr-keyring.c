@@ -504,18 +504,18 @@ seahorse_keyring_lockable_iface (SeahorseLockableIface *iface)
 	iface->unlock_finish = seahorse_gkr_keyring_unlock_finish;
 }
 
-static void
-seahorse_gkr_keyring_show_viewer (SeahorseViewable *viewable,
-                                  GtkWindow *parent)
+static GtkWindow *
+seahorse_gkr_keyring_create_viewer (SeahorseViewable *viewable,
+                                    GtkWindow *parent)
 {
-	seahorse_gkr_keyring_properties_show (SEAHORSE_GKR_KEYRING (viewable),
-	                                      parent);
+	return seahorse_gkr_keyring_properties_show (SEAHORSE_GKR_KEYRING (viewable),
+	                                             parent);
 }
 
 static void
 seahorse_keyring_viewable_iface (SeahorseViewableIface *iface)
 {
-	iface->show_viewer = seahorse_gkr_keyring_show_viewer;
+	iface->create_viewer = seahorse_gkr_keyring_create_viewer;
 }
 
 gboolean

@@ -93,7 +93,7 @@ on_keyring_properties_response (GtkDialog *dialog,
 	seahorse_widget_destroy (swidget);
 }
 
-void
+GtkWindow *
 seahorse_gkr_keyring_properties_show (SeahorseGkrKeyring *gkr, GtkWindow *parent)
 {
 	GObject *object = G_OBJECT (gkr);
@@ -103,6 +103,7 @@ seahorse_gkr_keyring_properties_show (SeahorseGkrKeyring *gkr, GtkWindow *parent
     
 	/* This happens if the window is already open */
 	if (swidget == NULL)
-		return;
+		return NULL;
 	setup_main (swidget);
+	return g_object_ref (seahorse_widget_get_toplevel (swidget));
 }

@@ -584,9 +584,7 @@ void
 seahorse_catalog_show_properties (SeahorseCatalog *self,
                                   GObject* obj)
 {
-	if (seahorse_viewable_can_view (obj))
-		seahorse_viewable_show_viewer (SEAHORSE_VIEWABLE (obj),
-		                               seahorse_catalog_get_window (self));
+	seahorse_viewable_view (obj, seahorse_catalog_get_window (self));
 }
 
 GtkWindow *

@@ -536,7 +536,7 @@ properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
     seahorse_widget_destroy (swidget);
 }
 
-void
+GtkWindow *
 seahorse_gkr_item_properties_show (SeahorseGkrItem *git, GtkWindow *parent)
 {
     GObject *object = G_OBJECT (git);
@@ -547,7 +547,7 @@ seahorse_gkr_item_properties_show (SeahorseGkrItem *git, GtkWindow *parent)
     
     /* This happens if the window is already open */
     if (swidget == NULL)
-        return;
+        return NULL;
 
     seahorse_gkr_item_refresh (git);
 
@@ -562,4 +562,6 @@ seahorse_gkr_item_properties_show (SeahorseGkrItem *git, GtkWindow *parent)
 
     setup_main (swidget);
     setup_details (swidget);
+
+    return g_object_ref (seahorse_widget_get_toplevel (swidget));
 }

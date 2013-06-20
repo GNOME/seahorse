@@ -33,7 +33,7 @@
 
 SeahorsePgpKey* seahorse_signer_get                 (GtkWindow *parent);
 
-void            seahorse_pgp_key_properties_show    (SeahorsePgpKey *pkey,
+GtkWindow *     seahorse_pgp_key_properties_show    (SeahorsePgpKey *pkey,
                                                      GtkWindow *parent);
 
 #endif /* __SEAHORSE_PGP_DIALOGS_H__ */

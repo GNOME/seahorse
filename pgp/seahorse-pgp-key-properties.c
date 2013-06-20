@@ -1959,7 +1959,7 @@ setup_private_properties (SeahorsePgpKey *pkey, GtkWindow *parent)
     return swidget;
 }
 
-void
+GtkWindow *
 seahorse_pgp_key_properties_show (SeahorsePgpKey *pkey, GtkWindow *parent)
 {
 	SeahorseWidget *swidget;
@@ -1974,6 +1974,10 @@ seahorse_pgp_key_properties_show (SeahorsePgpKey *pkey, GtkWindow *parent)
 		swidget = setup_public_properties (pkey, parent);
 	else
 		swidget = setup_private_properties (pkey, parent);
-	if (swidget)
+	if (swidget) {
 		seahorse_widget_show (swidget);
+		return g_object_ref (seahorse_widget_get_toplevel (swidget));
+	}
+
+	return NULL;
 }

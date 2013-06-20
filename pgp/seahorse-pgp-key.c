@@ -482,17 +482,17 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
  	                             "", G_PARAM_READABLE));
 }
 
-static void
-seahorse_pgp_key_show_viewer (SeahorseViewable *viewable,
-                              GtkWindow *parent)
+static GtkWindow *
+seahorse_pgp_key_create_viewer (SeahorseViewable *viewable,
+                                GtkWindow *parent)
 {
-	seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (viewable), parent);
+	return seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (viewable), parent);
 }
 
 static void
 seahorse_pgp_key_viewable_iface (SeahorseViewableIface *iface)
 {
-	iface->show_viewer = seahorse_pgp_key_show_viewer;
+	iface->create_viewer = seahorse_pgp_key_create_viewer;
 }
 
 gchar*

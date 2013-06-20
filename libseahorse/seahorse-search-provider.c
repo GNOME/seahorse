@@ -286,7 +286,7 @@ handle_activate_result (SeahorseShellSearchProvider2 *skeleton,
 	window = GTK_WINDOW (seahorse_widget_get_widget (key_manager, key_manager->name));
 	gtk_window_present_with_time (window, timestamp);
 
-	seahorse_viewable_show_viewer (SEAHORSE_VIEWABLE (object), window);
+	seahorse_viewable_view (object, window);
 
 	seahorse_shell_search_provider2_complete_activate_result (skeleton,
 	                                                          invocation);
