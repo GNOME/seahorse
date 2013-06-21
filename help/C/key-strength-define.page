@@ -3,12 +3,13 @@
       id="key-strength-define">
   <info>
     <link type="guide" xref="learn-about-keys" group="second"/>
-    <revision version="0.1" date="2011-10-23" status="stub"/>
 
-    <credit type="author">
-      <name>Jim Campbell</name>
-      <email>jwcampbell@gmail.com</email>
-      <years>2011</years>
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-21" status="draft"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email>aruna.evam@gmail.com</email>
     </credit>
 
     <desc></desc>
@@ -16,11 +17,27 @@
 
   <title>What does key strength mean?</title>
 
-  <comment>
-    <cite date="2011-10-23" href="mailto:jwcampbell@gmail.com">Jim Campbell</cite>
-    <p>This assumes the reader knows how to.... By the end of this page,
-    the reader will be able to....</p>
-  </comment>
+  <p>Whenever you pick a password, there are two factors to consider: the
+  length of the password and how easy it is to guess the password.  Choosing a
+  reasonably long password with a random mix of lower case and upper case
+  alphabets, special characters, and numbers makes your password hard to guess,
+  and thus, more secure.</p>
+
+  <p>The idea of key strength is similar. <app>Passwords and Keys</app>
+  generates a random set of characters every time you create a key, which acts
+  as a secret cipher that the key uses to encrypt your data. The length of
+  this generated random sequence determines how strong your key is. In
+  general, the longer the sequence, stronger is the generated key.</p>
+
+  <p>It is difficult and more time consuming to break a strong key, but
+  stronger keys also slow down the encryption and signing process because they
+  contain more characters and are bigger in size. You should choose your key
+  strength in <app>Passwords and Keys</app> depending on how long you want to
+  use they key. If you are going to be using they key for a very short period,
+  a small key is sufficient while stronger keys should be generated if you are
+  going to use them for longer periods of time. It would take the average
+  computer more than 14 billion years to crack a key that is 2048 bits
+  long.</p>
 
   <!-- stefw: I would suggest basing this page off the current
     reccomendations for key strength. The basic concepts for key
@@ -33,12 +50,5 @@
     Note that in general in seahorse we ar etalking about the Assymetric key strength
     not the Symmetric ones.
   -->
-  <p>Short introductory text...</p>
-
-  <steps>
-    <item><p>First step...</p></item>
-    <item><p>Second step...</p></item>
-    <item><p>Third step...</p></item>
-  </steps>
 
 </page>
