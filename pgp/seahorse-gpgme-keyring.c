@@ -1013,5 +1013,7 @@ seahorse_gpgme_keyring_new_context (gpgme_error_t *gerr)
 
 	gpgme_set_passphrase_cb (ctx, (gpgme_passphrase_cb_t)passphrase_get, NULL);
 	gpgme_set_keylist_mode (ctx, GPGME_KEYLIST_MODE_LOCAL);
+	if (gerr)
+		*gerr = 0;
 	return ctx;
 }
