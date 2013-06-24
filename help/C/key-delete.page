@@ -3,11 +3,13 @@
       id="key-delete">
   <info>
     <link type="guide" xref="index#revoke-keys"/>
-    <revision version="0.1" date="2011-10-23" status="stub"/>
 
-    <credit type="author">
-      <name>Jim Campbell</name>
-      <email>jwcampbell@gmail.com</email>
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-24" status="draft"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email>aruna.evam@gmail.com</email>
     </credit>
 
     <desc></desc>
@@ -15,18 +17,41 @@
 
   <title>Delete an existing key</title>
 
-  <comment>
-    <cite date="2011-10-23" href="mailto:jwcampbell@gmail.com">Jim Campbell</cite>
-    <p>This assumes the reader knows how to.... By the end of this page,
-    the reader will be able to....</p>
-  </comment>
-
-  <p>Short introductory text...</p>
+  <p>If you are no longer communicating with someone, you can delete the copy
+  of their key on your computer using <app>Passwords and Keys</app>. You can
+  also permanently delete a key, provided it has never been published on a
+  <link xref="key-servers-what-are-they">key server</link>.</p>
 
   <steps>
-    <item><p>First step...</p></item>
-    <item><p>Second step...</p></item>
-    <item><p>Third step...</p></item>
+    <title>To delete a key:</title>
+      <item>
+        <p>Select the key.</p>
+      </item>
+      <item>
+        <p>Right click, and choose <gui>Delete</gui>.</p>
+        <note style="tip">
+          <p>You can also select <guiseq><gui style="menu">Edit</gui>
+	  <gui style="menuitem">Delete</gui></guiseq> to delete the key.</p>
+        </note>
+      </item>
+      <item>
+	<p>In the new dialog that opens up, confirm the deletion by checking
+	the
+	<gui style="checkbox">I understand that this secret key will be	permanently deleted</gui>
+	checkbox, and click the
+	<gui style="button">Delete</gui> button to finish.</p>
+      </item>
   </steps>
+
+  <note style="important">
+    <p>When you delete a key that has been published on a key-server, you
+    delete only the local copy of the key on your computer. Copies of the
+    deleted key can still be retrieved from a key server and used to encrypt
+    messages to you. You can also
+    <link xref="keys-import-export#import">import</link> the deleted key from a
+    key server if you wish to restore it. Such a key can be permanently deleted
+    only when it <link xref="key-expiration-setting">expires</link> or when you
+    <link xref="key-disabling">revoke</link> it.</p>
+  </note>
 
 </page>
