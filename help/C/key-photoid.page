@@ -3,30 +3,62 @@
       id="key-photoid">
   <info>
     <link type="guide" xref="index#use-keys"/>
-    <revision version="0.1" date="2011-10-23" status="stub"/>
 
-    <credit type="author">
-      <name>Jim Campbell</name>
-      <email>jwcampbell@gmail.com</email>
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-24" status="draft"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email>aruna.evam@gmail.com</email>
     </credit>
 
     <desc></desc>
   </info>
 
-  <title>Attach an photo to an existing key</title>
+  <title>Attach your photo to an existing key</title>
 
-  <comment>
-    <cite date="2011-10-23" href="mailto:jwcampbell@gmail.com">Jim Campbell</cite>
-    <p>This assumes the reader knows how to.... By the end of this page,
-    the reader will be able to....</p>
-  </comment>
+  <p>You can attach a photo ID to your keys so that everyone can verify the
+  ownership of your keys after looking at your photo. Though a key with an
+  attached photo will provide a slightly better level of security than a key
+  with no photo, checking the photo on a key is not as safe as checking the
+  <link xref="key-fingerprint">fingerprint of the key</link> because anyone
+  having your photos can create a key with your photo ID while the key
+  fingerprint cannot be mimicked.</p>
 
-  <p>Short introductory text...</p>
+  <note style="info">
+    <p>Unlike the restrictions in <app>GPG</app>, the photo you want to
+    upload need not be in the <file>JPEG</file> format. <app>Passwords and
+    Keys</app> lets you upload your photo in <file>png</file>,
+    <file>jpg</file> and several other common image formats.</p>
+  </note>
 
   <steps>
-    <item><p>First step...</p></item>
-    <item><p>Second step...</p></item>
-    <item><p>Third step...</p></item>
+    <title>To attach a photo ID:</title>
+      <item>
+        <p>Select the key to which you want to attach a photo ID.</p>
+      </item>
+      <item>
+	<p>Right click on the chosen key and select
+	<guiseq><gui style="menuitem">Properties</gui>
+	<gui>Owner</gui></guiseq>.</p>
+      </item>
+      <item>
+	<p>Click on the button marked with a <gui style="button">+</gui> on
+	the left hand side to add a photo.</p>
+      </item>
+      <item>
+        <p>Select the photo of your choice from anywhere on your computer.</p>
+        <note style="info">
+          <p>The photos you select should be small in size, preferably about
+	  120 by 150 pixels. Since a photo ID is always attached to its key a
+	  large photo will increase the key size and slow down all operations
+	  that use the key. <app>Passwords and Keys</app> resizes large photos
+	  to the optimal size after asking for your confirmation.</p>
+        </note>
+      </item>
+      <item>
+        <p>Click <gui style="button">Close</gui> to finish.</p>
+      </item>
   </steps>
 
 </page>
