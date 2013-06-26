@@ -40,8 +40,6 @@ AM_VALAFLAGS = \
 	$(NULL)
 
 all-local: seahorse-common.h
-	sed -i '/_constructv/d' seahorse-common.h
-	touch -r libcommon_la_vala.stamp seahorse-common.h
 
 seahorse-internal.h: backend.c
 
