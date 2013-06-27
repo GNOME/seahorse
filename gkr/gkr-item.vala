@@ -80,7 +80,7 @@ public class Item : Secret.Item, Deletable, Viewable {
 	}
 
 	public GLib.Icon icon {
-		owned get { return new GLib.ThemedIcon (Gcr.ICON_PASSWORD); }
+		owned get { return new GLib.ThemedIcon (ICON_PASSWORD); }
 	}
 
 	public new string label {

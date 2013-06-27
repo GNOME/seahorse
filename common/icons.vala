@@ -32,6 +32,7 @@ namespace Seahorse {
 	public const string ICON_SIGN_UNKNOWN = "seahorse-sign-unknown";
 	public const string ICON_WEBBROWSER = "web-browser";
 	public const string ICON_FOLDER = "folder";
+	public const string ICON_PASSWORD = "gcr-password";
 	public bool _icons_inited = false;
 
 	public static void icons_init() {
