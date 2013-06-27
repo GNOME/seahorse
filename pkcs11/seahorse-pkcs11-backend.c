@@ -20,6 +20,7 @@
  */
 
 #include "config.h"
+#include "seahorse-common.h"
 
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-backend.h"

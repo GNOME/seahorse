@@ -21,6 +21,7 @@
  */
 
 #include "config.h"
+#include "seahorse-common.h"
 
 #include "seahorse-certificate.h"
 #include "seahorse-pkcs11.h"
@@ -30,7 +31,6 @@
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"
 
-#include "seahorse-common.h"
 #include "seahorse-util.h"
 #include "seahorse-validity.h"
 

@@ -21,6 +21,7 @@
  */
 
 #include "config.h"
+#include "seahorse-common.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -34,7 +35,6 @@
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"
 
-#include "seahorse-common.h"
 #include "seahorse-util.h"
 
 enum {
