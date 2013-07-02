@@ -1,0 +1,61 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic" style="task"
+      id="subkeys-examine">
+  <info>
+    <link type="guide" xref="key-subkeys#more"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-07-01" status="draft"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email>aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc></desc>
+  </info>
+
+<title>Where are my subkeys listed?</title>
+
+  <p>You can check the contents of a keypair to see the properties of a
+  subkey.</p>
+
+  <steps>
+    <title>To see all the <em>subkeys</em> in a keypair:</title>
+      <item>
+        <p>Select the <em>GnuPG keypair</em> of your choice from the list.</p>
+      </item>
+      <item>
+        <p>Right click on the key chosen in the previous step and select
+        <guiseq><gui>Properties</gui><gui>Details</gui></guiseq>.</p>
+      </item>
+      <item>
+        <p>If the <gui>Subkeys</gui> section is not expanded, expand
+        it.</p>
+      </item>
+      <item>
+        <p>Out of the two keys listed, the first one is your master key and
+        all the other keys that follow it are your subkeys.</p>
+        <note style="bug">
+          <p>This is a bug. When you create a new public cryptography key and
+          check the <gui>Subkeys</gui> section, you will see two subkeys listed
+          even though only one is created by default.  This is because
+          <app>Passwords and Keys</app> lists all the keys in the keypair in
+          the <gui>Subkeys</gui> section instead of listing only the subkeys.
+          So, the master key is also listed under <gui>Subkeys</gui> even
+          though it is not one.</p>
+        </note>
+      </item>
+  </steps>
+
+  <note style="info">
+    <p><app>Passwords and Keys</app> stores your keypairs under
+    <gui>GnuPG Keys</gui> if you have enabled the
+    <guiseq><gui style="menu">View</gui>
+    <gui style="menuitem">By Keyring</gui></guiseq> option. While signing, you
+    only need to select the keypair, <app>Passwords and Keys</app>
+    automatically chooses the master key for signing.</p>
+  </note>
+
+</page>
