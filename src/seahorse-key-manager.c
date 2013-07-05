@@ -364,12 +364,25 @@ on_target_drag_data_received (GtkWindow* window, GdkDragContext* context, gint x
 	}
 }
 
+static void
+update_clipboard_state (GtkClipboard* clipboard, GdkEvent* event, GtkActionGroup* group)
+{
+	GtkAction *action;
+	gboolean text_available;
+
+	text_available = gtk_clipboard_wait_is_text_available (clipboard);
+	action = gtk_action_group_get_action (group, "edit-import-clipboard");
+	gtk_action_set_sensitive (action, text_available);
+}
+
 static void 
 on_clipboard_received (GtkClipboard* board, const char* text, SeahorseKeyManager* self) 
 {
 	g_return_if_fail (SEAHORSE_IS_KEY_MANAGER (self));
 	g_return_if_fail (GTK_IS_CLIPBOARD (board));
-	g_return_if_fail (text != NULL);
+
+	if (text == NULL)
+		return;
 
 	g_assert(self->pv->filter_entry);
 	if (gtk_widget_is_focus (GTK_WIDGET (self->pv->filter_entry)) == TRUE)
@@ -638,6 +651,7 @@ seahorse_key_manager_constructed (GObject *object)
 	GtkAction *action;
 	GtkWindow *window;
 	GtkBuilder *builder;
+	GtkClipboard* clipboard;
 
 	G_OBJECT_CLASS (seahorse_key_manager_parent_class)->constructed (object);
 
@@ -690,6 +704,12 @@ seahorse_key_manager_constructed (GObject *object)
 
 	g_signal_connect_object (gtk_builder_get_object (builder, "new-button"),
 	                         "clicked", G_CALLBACK (on_keymanager_new_button), self, 0);
+
+	/* Make sure import is only available with clipboard content */
+	action = gtk_action_group_get_action (actions, "edit-import-clipboard");
+	clipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
+	g_signal_connect (clipboard, "owner-change", G_CALLBACK (update_clipboard_state), actions);
+	update_clipboard_state (clipboard, NULL, actions);
 
 	/* Flush all updates */
 	seahorse_catalog_ensure_updated (SEAHORSE_CATALOG (self));
