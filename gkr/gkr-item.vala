@@ -167,7 +167,7 @@ public class Item : Secret.Item, Deletable, Viewable {
 				if (entry.custom_func != null)
 					entry.custom_func(label, attrs, ref this._info);
 				if (this._info.description == null)
-					this._info.description = entry.description;
+					this._info.description = _(entry.description);
 				break;
 			}
 		}
