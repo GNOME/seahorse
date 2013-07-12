@@ -1,0 +1,90 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="topic" style="task"
+      id="keys-export">
+  <info>
+    <link type="guide" xref="index#create-keys"/>
+
+    <revision version="0.1" date="2011-06-17" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-07-11" status="draft"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email>aruna.evam@gmail.com</email>
+    </credit>
+    <credit type="editor copyright">
+      <name>Jim Campbell</name>
+      <email>jwcampbell@gmail.com</email>
+    </credit>
+
+    <desc></desc>
+  </info>
+
+  <title>Export your keys</title>
+
+  <p>You can export the keys from <app>Passwords and Keys</app> to either a
+  binary format or an ASCII format. This creates key files on your computer
+  which contain all the information about the exported key. This can be useful
+  when you want to mail a copy of your key to someone or
+  <link xref="backup-keys">backup your keys</link>.</p>
+
+<section id="binary">
+  <title>Export keys to binary files</title>
+
+  <p>Exporting your keys to a binary format creates a keyfile with a
+  <file>.pgp</file> extension for PGP keys and <file>.pub</file> extension for
+  SSH keys.</p>
+
+  <steps>
+    <title>To export your keys in binary format:</title>
+      <item>
+        <p>Select the key you want to export.</p>
+      </item>
+      <item>
+        <p>Select
+          <guiseq><gui style="menu">File</gui><gui>Export…</gui></guiseq>.</p>
+      </item>
+      <item>
+        <p>In the dialog that opens up, select the folder in which you want
+        your key to be stored.</p>
+      </item>
+      <item>
+        <p>Press <gui style="button">Export</gui>.</p>
+      </item>
+  </steps>
+
+</section>
+
+<section id="ascii">
+  <title>Export keys to ASCII files</title>
+
+  <p>Exporting your keys to the ASCII format creates a key file with a
+  <file>.key</file> extension for PGP keys</p><!--Not sure of this: <file>.pub</file> extension for
+  SSH keys.</p>-->
+
+<!--clarify UI and capitalisation of elements inside <gui> tags-->
+
+  <steps>
+    <title>To export your keys in ASCII format:</title>
+      <item>
+        <p>Select the key you want to export.</p>
+      </item>
+      <item>
+        <p>Right click on the key and select
+	<guiseq><gui style="menu">Properties</gui><gui>Details</gui></guiseq>.</p>
+      </item>
+      <item>
+        <p>Expand the <gui>Subkeys</gui> panel.</p>
+      </item>
+      <item>
+	<p>From the list of <link xref="keys-subkeys">subkeys</link>, select
+	the key you wish to export.</p>
+      </item>
+      <item>
+        <p>Press the <gui style="button">Export Complete Key</gui> button.</p>
+      </item>
+  </steps>
+
+</section>
+</page>
