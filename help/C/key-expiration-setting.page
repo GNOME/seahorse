@@ -3,7 +3,7 @@
       id="key-expiration-setting">
 
   <info>
-    <link type="guide" xref="index#create-keys"/>
+    <link type="guide" xref="pgp-key-advanced-options" group="second"/>
 
     <revision version="0.1" date="2011-10-23" status="stub"/>
     <revision pkgversion="3.9" version="0.1" date="2013-07-06" status="draft"/>
@@ -18,7 +18,7 @@
     <desc></desc>
   </info>
 
-  <title>Set expiry dates for your keys.</title>
+  <title>Expiry dates for keys</title>
 
   <p>You can set your keys to <link xref="key-expired">expire</link> while
   creating them. You can also change the expiry date on your keys.</p>
@@ -26,32 +26,54 @@
 <section id="set">
   <title>Set expiry dates while creating keys</title>
 
+  <p><app>Passwords and Keys</app> creates keys that are valid forever by
+  default unless you explicitly set an expiration date for each key you
+  create.</p>
+
   <steps>
+    <title>To set the expiration date in the <gui>Advanced key options</gui>
+    panel:</title>
     <item>
-      <p>First step...</p>
+      <p>Untick the <gui style="checkbox">Never Expires</gui> checkbox.</p>
     </item>
     <item>
-      <p>Second step...</p>
-    </item>
-    <item>
-      <p>Third step...</p>
+      <p>Choose the new expiry date and time from the drop down menus
+      displaying the date and time. You can also manually enter the expiry date
+      and time for your key.</p>
     </item>
   </steps>
 
 </section>
 
 <section id="change">
-  <title>Change the expiry date of your keys.</title>
+  <title>Change the expiry date of your keys</title>
 
   <steps>
     <item>
-      <p>First step...</p>
+      <p>Select the PGP key of your choice from the list.</p>
     </item>
     <item>
-      <p>Second step...</p>
+      <p>Right click on the selected key and select <gui>Properties</gui>.</p>
     </item>
     <item>
-      <p>Third step...</p>
+      <p>In the new dialog, select the <gui>Details</gui> tab.</p>
+    </item>
+    <item>
+      <list>
+        <item>
+	  <p>To change the expiry date of the master key, press the small
+	  button with the picture of a calendar next to <gui>Expires</gui>, on
+	  the right side of the dialog. You can then select the date of your
+	  choice from the calendar.</p>
+        </item>
+        <item>
+	  <p>To change the expiry date of a
+	  <link xref="keys-subkeys">subkey</link>, expand the
+	  <gui>Subkeys</gui> panel and select the subkey of your choice from
+	  the list. Press the <gui style="button">Expire</gui> button on the
+	  left of the panel and select the new expiry date of your choice.</p>
+        </item>
+      </list>
     </item>
   </steps>
 
