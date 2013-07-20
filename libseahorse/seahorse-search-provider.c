@@ -30,6 +30,8 @@
 
 #include "src/seahorse-key-manager.h"
 
+#include <glib/gi18n.h>
+
 #include <gcr/gcr.h>
 
 #define SECRET_API_SUBJECT_TO_CHANGE
@@ -45,6 +47,8 @@ struct _SeahorseSearchProvider {
 	SeahorsePredicate base_predicate;
 	GcrCollection *collection;
 	GHashTable *handles;
+	GList *queued_requests;
+	int n_loading;
 };
 
 struct _SeahorseSearchProviderClass {
@@ -55,6 +59,11 @@ static void seahorse_shell_search_provider2_iface_init (SeahorseShellSearchProvi
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseSearchProvider, seahorse_search_provider, SEAHORSE_TYPE_SHELL_SEARCH_PROVIDER2_SKELETON,
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_SHELL_SEARCH_PROVIDER2, seahorse_shell_search_provider2_iface_init))
+
+typedef struct {
+	GDBusMethodInvocation *invocation;
+	char                 **terms;
+} QueuedRequest;
 
 /* Search through row for text */
 static gboolean
@@ -124,6 +133,43 @@ on_object_gone (gpointer data,
 	g_free (str);
 }
 
+/* We called before loading, we queue GetInitialResultSet, but
+   we drop all other calls, because we don't expect to see them
+   before we reply to GetInitialResultSet
+*/
+
+static gboolean
+queue_request_if_not_loaded (SeahorseSearchProvider *self,
+			     GDBusMethodInvocation  *invocation,
+			     const char * const     *terms)
+{
+	QueuedRequest *req;
+
+	if (self->n_loading <= 0)
+		return FALSE;
+
+	req = g_slice_new (QueuedRequest);
+	req->invocation = g_object_ref (invocation);
+	req->terms = g_strdupv ((char**) terms);
+
+	self->queued_requests = g_list_prepend (self->queued_requests, req);
+	return TRUE;
+}
+
+static gboolean
+error_request_if_not_loaded (SeahorseSearchProvider *self,
+			     GDBusMethodInvocation  *invocation)
+{
+	if (self->n_loading > 0) {
+		g_dbus_method_invocation_return_dbus_error (invocation,
+							    "org.gnome.Seahore.Error.NotLoaded",
+							    _("The search provider is not loaded yet"));
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
 static gboolean
 handle_get_initial_result_set (SeahorseShellSearchProvider2 *skeleton,
                                GDBusMethodInvocation        *invocation,
@@ -134,6 +180,9 @@ handle_get_initial_result_set (SeahorseShellSearchProvider2 *skeleton,
 	GPtrArray *array;
 	GList *objects, *l;
 	char **results;
+
+	if (queue_request_if_not_loaded (self, invocation, terms))
+		return TRUE;
 
 	init_predicate (&predicate, (char **) terms);
 
@@ -176,6 +225,9 @@ handle_get_subsearch_result_set (SeahorseShellSearchProvider2 *skeleton,
 	int i;
 	char **results;
 
+	if (error_request_if_not_loaded (self, invocation))
+		return TRUE;
+
 	init_predicate (&predicate, (char **) terms);
 
 	array = g_ptr_array_new ();
@@ -216,6 +268,9 @@ handle_get_result_metas (SeahorseShellSearchProvider2 *skeleton,
 	GVariantBuilder builder;
 	char *name, *description, *escaped_description, *icon_string;
 	GIcon *icon;
+
+	if (error_request_if_not_loaded (self, invocation))
+		return TRUE;
 
 	g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
 
@@ -279,6 +334,11 @@ handle_activate_result (SeahorseShellSearchProvider2 *skeleton,
 	GObject *object;
 	SeahorseKeyManager *key_manager;
 
+	if (error_request_if_not_loaded (self, invocation))
+		return TRUE;
+
+	sscanf (identifier, "%p", &object);
+
 	object = g_hash_table_lookup (self->handles, identifier);
 	if (!object || !gcr_collection_contains (self->collection, object) ||
 	    !SEAHORSE_IS_VIEWABLE (object)) {
@@ -331,6 +391,34 @@ on_place_removed (GcrCollection *places,
 		                             GCR_COLLECTION (place));
 }
 
+static void
+on_backend_loaded (GObject    *object,
+		   GParamSpec *pspec,
+		   gpointer    user_data)
+{
+	SeahorseSearchProvider *self = SEAHORSE_SEARCH_PROVIDER (user_data);
+	GList *iter;
+
+	self->n_loading--;
+	if (self->n_loading > 0)
+		return;
+
+	for (iter = self->queued_requests; iter; iter = iter->next) {
+		QueuedRequest *req = iter->data;
+
+		handle_get_initial_result_set (SEAHORSE_SHELL_SEARCH_PROVIDER2 (self),
+					       req->invocation,
+					       (const char * const *) req->terms);
+
+		g_object_unref (req->invocation);
+		g_strfreev (req->terms);
+		g_slice_free (QueuedRequest, req);
+	}
+
+	g_list_free (self->queued_requests);
+	self->queued_requests = NULL;
+}
+
 void
 seahorse_search_provider_initialize (SeahorseSearchProvider *self)
 {
@@ -339,6 +427,9 @@ seahorse_search_provider_initialize (SeahorseSearchProvider *self)
 
 	backends = seahorse_backend_get_registered ();
 	for (l = backends; l != NULL; l = g_list_next (l)) {
+		self->n_loading ++;
+		g_signal_connect_object (l->data, "notify::loaded", G_CALLBACK (on_backend_loaded), self, 0);
+
 		g_signal_connect_object (l->data, "added", G_CALLBACK (on_place_added), self, 0);
 		g_signal_connect_object (l->data, "removed", G_CALLBACK (on_place_removed), self, 0);
 
