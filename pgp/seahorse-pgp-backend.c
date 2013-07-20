@@ -42,7 +42,8 @@ enum {
 	PROP_NAME,
 	PROP_LABEL,
 	PROP_DESCRIPTION,
-	PROP_ACTIONS
+	PROP_ACTIONS,
+        PROP_LOADED
 };
 
 static SeahorsePgpBackend *pgp_backend = NULL;
@@ -54,6 +55,7 @@ struct _SeahorsePgpBackend {
 	SeahorseUnknownSource *unknown;
 	GHashTable *remotes;
 	GtkActionGroup *actions;
+	gboolean loaded;
 };
 
 struct _SeahorsePgpBackendClass {
@@ -134,6 +136,29 @@ on_settings_keyservers_changed (GSettings *settings,
 #endif /* WITH_KEYSERVER */
 
 static void
+on_place_loaded (GObject       *object,
+                 GAsyncResult  *result,
+                 gpointer       user_data)
+{
+	SeahorsePgpBackend *backend = user_data;
+	gboolean ok;
+	GError *error;
+
+	error = NULL;
+	ok = seahorse_place_load_finish (SEAHORSE_PLACE (object), result, &error);
+
+	if (!ok) {
+		g_warning ("Failed to initialize PGP backend: %s", error->message);
+		g_error_free (error);
+	}
+
+	backend->loaded = TRUE;
+	g_object_notify (backend, "loaded");
+
+	g_object_unref (backend);
+}
+
+static void
 seahorse_pgp_backend_constructed (GObject *obj)
 {
 	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
@@ -141,7 +166,8 @@ seahorse_pgp_backend_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_pgp_backend_parent_class)->constructed (obj);
 
 	self->keyring = seahorse_gpgme_keyring_new ();
-	seahorse_place_load (SEAHORSE_PLACE (self->keyring), NULL, NULL, NULL);
+	seahorse_place_load (SEAHORSE_PLACE (self->keyring), NULL, on_place_loaded,
+			     g_object_ref (self));
 
 	self->discovery = seahorse_discovery_new ();
 	self->unknown = seahorse_unknown_source_new ();
@@ -201,6 +227,9 @@ seahorse_pgp_backend_get_property (GObject *obj,
 	case PROP_ACTIONS:
 		g_value_take_object (value, seahorse_pgp_backend_get_actions (backend));
 		break;
+	case PROP_LOADED:
+		g_value_set_boolean (value, SEAHORSE_PGP_BACKEND (backend)->loaded);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -240,6 +269,7 @@ seahorse_pgp_backend_class_init (SeahorsePgpBackendClass *klass)
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+	g_object_class_override_property (gobject_class, PROP_LOADED, "loaded");
 }
 
 static guint

@@ -33,7 +33,8 @@ enum {
 	PROP_NAME,
 	PROP_LABEL,
 	PROP_DESCRIPTION,
-	PROP_ACTIONS
+	PROP_ACTIONS,
+        PROP_LOADED,
 };
 
 static SeahorseSshBackend *ssh_backend = NULL;
@@ -41,6 +42,8 @@ static SeahorseSshBackend *ssh_backend = NULL;
 struct _SeahorseSshBackend {
 	GObject parent;
 	SeahorseSSHSource *dot_ssh;
+
+	gboolean loaded;
 };
 
 struct _SeahorseSshBackendClass {
@@ -66,6 +69,29 @@ seahorse_ssh_backend_init (SeahorseSshBackend *self)
 }
 
 static void
+on_place_loaded (GObject       *object,
+                 GAsyncResult  *result,
+                 gpointer       user_data)
+{
+	SeahorseSshBackend *backend = user_data;
+	gboolean ok;
+	GError *error;
+
+	error = NULL;
+	ok = seahorse_place_load_finish (SEAHORSE_PLACE (object), result, &error);
+
+	if (!ok) {
+		g_warning ("Failed to initialize SSH backend: %s", error->message);
+		g_error_free (error);
+	}
+
+	backend->loaded = TRUE;
+	g_object_notify (backend, "loaded");
+
+	g_object_unref (backend);
+}
+
+static void
 seahorse_ssh_backend_constructed (GObject *obj)
 {
 	SeahorseSshBackend *self = SEAHORSE_SSH_BACKEND (obj);
@@ -73,7 +99,8 @@ seahorse_ssh_backend_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_ssh_backend_parent_class)->constructed (obj);
 
 	self->dot_ssh = seahorse_ssh_source_new ();
-	seahorse_place_load (SEAHORSE_PLACE (self->dot_ssh), NULL, NULL, NULL);
+	seahorse_place_load (SEAHORSE_PLACE (self->dot_ssh), NULL, on_place_loaded,
+			     g_object_ref (self));
 }
 
 static const gchar *
@@ -121,6 +148,9 @@ seahorse_ssh_backend_get_property (GObject *obj,
 	case PROP_ACTIONS:
 		g_value_take_object (value, seahorse_ssh_backend_get_actions (backend));
 		break;
+	case PROP_LOADED:
+		g_value_set_boolean (value, SEAHORSE_SSH_BACKEND (backend)->loaded);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -151,6 +181,7 @@ seahorse_ssh_backend_class_init (SeahorseSshBackendClass *klass)
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+	g_object_class_override_property (gobject_class, PROP_LOADED, "loaded");
 }
 
 static guint

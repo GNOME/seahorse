@@ -51,6 +51,11 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 		get { return this._aliases; }
 	}
 
+	private bool _loaded;
+	public bool loaded {
+		get { return this._loaded; }
+	}
+
 	public Secret.Service? service {
 		get { return this._service; }
 	}
@@ -122,6 +127,11 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 				iter.remove();
 				emit_removed(keyring);
 			}
+		}
+
+		if (!_loaded) {
+			_loaded = true;
+			notify_property("loaded");
 		}
 	}
 

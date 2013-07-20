@@ -41,7 +41,8 @@ enum {
 	PROP_NAME,
 	PROP_LABEL,
 	PROP_DESCRIPTION,
-	PROP_ACTIONS
+	PROP_ACTIONS,
+	PROP_LOADED,
 };
 
 void  seahorse_pkcs11_backend_initialize (void);
@@ -52,6 +53,7 @@ struct _SeahorsePkcs11Backend {
 	GObject parent;
 	GList *tokens;
 	GList *blacklist;
+	gboolean loaded;
 };
 
 struct _SeahorsePkcs11BackendClass {
@@ -157,6 +159,9 @@ on_initialized_registered (GObject *unused,
 		gck_list_unref_free (slots);
 	}
 
+	self->loaded = TRUE;
+	g_object_notify (self, "loaded");
+
 	gck_list_unref_free (modules);
 	g_object_unref (self);
 }
@@ -217,6 +222,9 @@ seahorse_pkcs11_backend_get_property (GObject *obj,
 	case PROP_ACTIONS:
 		g_value_take_object (value, seahorse_pkcs11_backend_get_actions (backend));
 		break;
+	case PROP_LOADED:
+		g_value_set_boolean (value, SEAHORSE_PKCS11_BACKEND (backend)->loaded);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -261,6 +269,7 @@ seahorse_pkcs11_backend_class_init (SeahorsePkcs11BackendClass *klass)
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+	g_object_class_override_property (gobject_class, PROP_LOADED, "loaded");
 }
 
 static guint

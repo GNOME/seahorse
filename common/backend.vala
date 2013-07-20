@@ -23,6 +23,7 @@ public interface Backend : Gcr.Collection {
 	public abstract string label { get; }
 	public abstract string description { get; }
 	public abstract Gtk.ActionGroup actions { owned get; }
+	public abstract bool loaded { get; }
 
 	public abstract Place lookup_place(string uri);
 
