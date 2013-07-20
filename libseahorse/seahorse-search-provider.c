@@ -21,8 +21,10 @@
 
 #include "seahorse-search-provider.h"
 
+#include "seahorse-application.h"
 #include "seahorse-collection.h"
 #include "seahorse-predicate.h"
+#include "seahorse-search-provider.h"
 #include "seahorse-widget.h"
 #include "seahorse-shell-search-provider-generated.h"
 
@@ -138,6 +140,24 @@ on_object_gone (gpointer data,
    before we reply to GetInitialResultSet
 */
 
+static void
+hold_app (void)
+{
+	SeahorseApplication *app;
+
+	app = seahorse_application_get ();
+	g_application_hold (G_APPLICATION (app));
+}
+
+static void
+release_app (void)
+{
+	SeahorseApplication *app;
+
+	app = seahorse_application_get ();
+	g_application_release (G_APPLICATION (app));
+}
+
 static gboolean
 queue_request_if_not_loaded (SeahorseSearchProvider *self,
 			     GDBusMethodInvocation  *invocation,
@@ -181,6 +201,8 @@ handle_get_initial_result_set (SeahorseShellSearchProvider2 *skeleton,
 	GList *objects, *l;
 	char **results;
 
+	hold_app ();
+
 	if (queue_request_if_not_loaded (self, invocation, terms))
 		return TRUE;
 
@@ -210,6 +232,7 @@ handle_get_initial_result_set (SeahorseShellSearchProvider2 *skeleton,
 	                                                                 (const char* const*) results);
 
 	g_strfreev (results);
+	release_app ();
 	return TRUE;
 }
 
@@ -225,9 +248,10 @@ handle_get_subsearch_result_set (SeahorseShellSearchProvider2 *skeleton,
 	int i;
 	char **results;
 
-	if (error_request_if_not_loaded (self, invocation))
+       	if (error_request_if_not_loaded (self, invocation))
 		return TRUE;
 
+	hold_app ();
 	init_predicate (&predicate, (char **) terms);
 
 	array = g_ptr_array_new ();
@@ -255,6 +279,7 @@ handle_get_subsearch_result_set (SeahorseShellSearchProvider2 *skeleton,
 
 	/* g_free, not g_strfreev, because we don't duplicate result strings */
 	g_free (results);
+	release_app ();
 	return TRUE;
 }
 
@@ -272,6 +297,7 @@ handle_get_result_metas (SeahorseShellSearchProvider2 *skeleton,
 	if (error_request_if_not_loaded (self, invocation))
 		return TRUE;
 
+	hold_app ();
 	g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
 
 	for (i = 0; results[i]; i++) {
@@ -320,6 +346,7 @@ handle_get_result_metas (SeahorseShellSearchProvider2 *skeleton,
 	seahorse_shell_search_provider2_complete_get_result_metas (skeleton,
 	                                                           invocation,
 	                                                           g_variant_builder_end (&builder));
+	release_app ();
 	return TRUE;
 }
 
@@ -337,6 +364,7 @@ handle_activate_result (SeahorseShellSearchProvider2 *skeleton,
 	if (error_request_if_not_loaded (self, invocation))
 		return TRUE;
 
+	hold_app ();
 	sscanf (identifier, "%p", &object);
 
 	object = g_hash_table_lookup (self->handles, identifier);
@@ -351,7 +379,7 @@ handle_activate_result (SeahorseShellSearchProvider2 *skeleton,
 
 	seahorse_shell_search_provider2_complete_activate_result (skeleton,
 	                                                          invocation);
-
+	release_app ();
 	return TRUE;
 }
 
@@ -410,6 +438,9 @@ on_backend_loaded (GObject    *object,
 					       req->invocation,
 					       (const char * const *) req->terms);
 
+		/* In the previous get_initial_result_set() we had one unbalanced
+		   hold, so we release it now. */
+		release_app ();
 		g_object_unref (req->invocation);
 		g_strfreev (req->terms);
 		g_slice_free (QueuedRequest, req);
