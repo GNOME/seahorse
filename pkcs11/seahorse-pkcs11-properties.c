@@ -314,8 +314,8 @@ seahorse_pkcs11_properties_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_pkcs11_properties_parent_class)->constructed (obj);
 
 	self->actions = gtk_action_group_new ("Pkcs11Actions");
-	gtk_action_group_add_actions (self->actions, UI_ACTIONS, G_N_ELEMENTS (UI_ACTIONS), self);
 	gtk_action_group_set_translation_domain (self->actions, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (self->actions, UI_ACTIONS, G_N_ELEMENTS (UI_ACTIONS), self);
 	action = gtk_action_group_get_action (self->actions, "delete-object");
 	g_object_bind_property (self->object, "deletable", action, "sensitive", G_BINDING_SYNC_CREATE);
 	action = gtk_action_group_get_action (self->actions, "export-object");
