@@ -6,7 +6,7 @@
     <link type="guide" xref="index"/>
 
     <revision pkgversion="3.8" date="2013-02-26" status="stub"/>
-    <revision pkgversion="3.9" date="2013-06-13" status="draft"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-13" status="review"/>
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
@@ -21,17 +21,18 @@
 
   <title>Introduction</title>
 
-  <p><app>Passwords and Keys</app> helps you to communicate securely over the
-  Internet and keep your files and data safe. It provides advanced mathematical
-  methods and secret keys to protect your files and communication. Some basic
-  terms that you may encounter while reading this help are:</p>
+  <p><app>Passwords and Keys</app> helps you to generate and manage tokens that
+  can be used to protect your files and communication. Some basic terms you
+  will encounter while reading this help are:</p>
 
   <terms>
     <item>
       <title>Encryption</title>
-        <p>Encryption is the process of making your important files and data
-	unreadable to anyone but the intended recipient. It is done by the
-	sender.</p>
+	<p>Encryption is the process of making your important files and data
+	unreadable to anyone but the intended recipient. When you encrypt your
+	data, it becomes a scrambled sequence of numbers and letters.
+	Encryption is done by someone who is sending a protected file, or
+	sending a message in a protected conversation.</p>
     </item>
     <item>
       <title>Algorithm</title>
@@ -40,8 +41,10 @@
     </item>
     <item>
       <title>Decryption</title>
-        <p>Decryption is the process of retrieving the original text from the
-	encrypted message or file. It is done by the receiver.</p>
+	<p>Decryption is the process of retrieving the original text from the
+	encrypted message or file. It is done by the receiver of the protected
+	file or communication. Encrypted messages cannot be understood without
+	decrypting them first.</p>
     </item>
     <item>
       <title>Plaintext</title>
@@ -50,14 +53,10 @@
     </item>
     <item>
       <title>Key</title>
-        <p>A key is used to encrypt or decrypt your data. For example, if you
-	wish to encrypt a personal message by substituting every letter in the
-	message with a new letter according to some substitution set you have,
-	the substitution set would be a key because anyone who has the
-	substitution set can decrypt your message.
-	<app>Passwords and Keys</app> uses advanced mathematical means to
-	generate a key so that it is not guessable. Keys can be
-	<link xref="what-diff-private-public">private or public</link>.</p>
+	<p>A key is used to encrypt and decrypt files and communication. A key
+	may also be used to login to a remote computer. Some types of keys are
+	<link xref="what-is-pgp-key">PGP keys</link> and
+	<link xref="what-is-ssh-key">SSH keys</link>.</p>
     </item>
     <item>
       <title>Keyring</title>
