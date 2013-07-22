@@ -5,7 +5,7 @@
     <link type="guide" xref="learn-about-keys" group="second"/>
 
     <revision version="0.1" date="2011-10-23" status="stub"/>
-    <revision pkgversion="3.9" version="0.1" date="2013-06-18" status="draft"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-18" status="review"/>
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
@@ -21,18 +21,18 @@
 
   <title>Why do keys require a signature?</title>
 
-  <p>Public keys that are published on
-  <link xref="key-servers-what-are-they">key servers</link> contain the
-  <link xref="key-userid">user ID</link> of the key owner. It is quite easy for
-  someone to create a fake key with a user ID obtained from a key server. To
-  help people in verifying that your key is indeed genuinely yours, you can
-  sign your key and also ask people you know to sign your key.</p>
+  <p>Public keys that have been <link xref="keys-publish">published</link> on
+  key servers contain the <link xref="key-userid">user ID</link> of the key
+  owner. It is quite easy for someone to create a fake key with a user ID
+  obtained from a key server. To help people in verifying that your key is
+  indeed genuinely yours, you can sign your key and also ask people you know to
+  sign your key.</p>
 
   <p>A <em>web of trust</em> on the Internet is a group of people who have
   verified and signed each other's public keys. You can also establish a web of
   trust among the people you want to communicate with by mutually signing each
-  other's keys. In this way, only keys signed by persons in the web of trust
-  are trusted by the other communicating members.</p>
+  other's keys. This way, only keys signed by members in the web of trust are
+  trusted by the other communicating members.</p>
 
 <section id="my-sign">
   <title>How do I sign keys?</title>
@@ -73,7 +73,7 @@
       </item>
       <item>
 	<p>When you own more than one PGP key, select the key you want to sign
-	with from the list next to <gui>Signer</gui>.</p>
+	with from the drop down list next to <gui>Signer</gui>.</p>
       </item>
       <item>
         <p>Click the <gui style="button">Sign</gui> button to finish.</p>
