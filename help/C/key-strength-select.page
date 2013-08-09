@@ -16,6 +16,12 @@
       <years>2013</years>
     </credit>
 
+    <credit type="editor copyright">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jcampbell@gnome.org</email>
+      <years>2013</years>
+    </credit>
+
     <desc>Choose the right key strength depending on how long you want your key
     to be valid.</desc>
   </info>
@@ -30,7 +36,7 @@
   <steps>
     <title>Selecting your key strength:</title>
       <item>
-	<p>While <link xref="create-pgp-key">creating a PGP key</link>, you
+	<p>When <link xref="create-pgp-key">creating a PGP key</link>, you
 	can expand the <gui>Advanced key options</gui> panel to select settings
 	for key strength.</p>
       </item>
@@ -41,11 +47,13 @@
 	<app>Passwords and Keys</app> offers key strengths ranging from 1024
 	bits to 4096 bits.</p>
       </item>
-      <note style="info">
-	<p>You can also manually enter the key strength in the textbox provided
-	next to <gui>Key Strength(bits)</gui>. The closest multiple of 32, for
-	the value you enter, is chosen as the key strength.</p>
-      </note>
   </steps>
+  <note style="info">
+	  <p>You can also manually enter the key strength in the textbox provided
+	  next to <gui>Key Strength(bits)</gui>. If the value you enter is not
+	  divisible by 32, <app>Passwords and Keys</app> will change the value you
+	  enter to the nearest multiple of 32. This number will be used as the key
+	  strength.</p>
+  </note>
 
 </page>
