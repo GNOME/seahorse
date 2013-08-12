@@ -1,0 +1,54 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="pgp-expired">
+
+  <info>
+    <link type="guide" xref="index#pgp-keys"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-07-03" status="review"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Can I still use it? Can expiration dates be changed?</desc>
+  </info>
+
+  <title>What happens if my key expires?</title>
+
+  <p>When your key expires, it becomes invalid. This means:</p>
+
+  <list>
+    <item>
+      <p>It can no longer be used to encrypt and decrypt messages.</p>
+    </item>
+    <item>
+      <p>It cannot sign other keys or receive signatures from other
+      keys.</p>
+    </item>
+  </list>
+
+  <p>Depending on how long you want your key to be valid, you can
+  <link xref="pgp-advanced-expiration-set">set an expiration date</link> for
+  it. By default, <app>Passwords and Keys</app> sets all keys to be valid
+  forever, that is the keys never expire.</p>
+
+  <p>The expiration date on a key can be
+  <link xref="pgp-expiration-change">changed</link> anytime, even after
+  the key has expired. However, if you want to stop using the expired key, you
+  should <link xref="misc-key-delete">delete</link> or
+  <link xref="misc-key-revoke">revoke</link> it.</p>
+
+  <note style="info">
+    <p>If you have any messages encrypted with an expired key, you must change
+    the expiration date on the key to decrypt such messages before deleting or
+    revoking it.</p>
+  </note>
+
+</page>

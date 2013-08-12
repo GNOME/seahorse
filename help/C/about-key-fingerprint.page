@@ -1,0 +1,82 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="about-key-fingerprint">
+
+  <info>
+    <link type="guide" xref="learn-about-keys" group="first"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-23" status="review"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>What is the key fingerprint? Why is it important? How can I check
+    it?</desc>
+  </info>
+
+  <title>Key fingerprint</title>
+
+  <p>The fingerprint of a key is a unique sequence of alphabets and numbers
+  that identifies the key. Just like the thumbprints of two different people,
+  the fingerprints of two different keys can never be identical. The
+  fingerprint is the best way to identify a particular key.</p>
+
+  <p>A key has several properties like the name and email of the key owner,
+  key type, key expiration date and so on. When you are searching for a public
+  key and you find multiple keys with the same properties, the only way to
+  identify the key you are looking for is to compare the fingerprints of the
+  two keys with the fingerprint of the key you require.</p>
+
+  <p>It is the fingerprint of a key that is verified when you try to login to a
+  remote computer using <link xref="about-ssh">SSH</link>. While signing a
+  <link xref="about-pgp">PGP</link> key, you must always check the key
+  fingerprint to ensure that you are signing the correct key.</p>
+
+<section id="fingerprint-ui">
+  <title>Fingerprints on <app>Passwords and Keys</app></title>
+
+    <p>You can look at the fingerprint of a key on
+    <app>Passwords and Keys</app> by checking the properties of the key.</p>
+
+    <steps>
+      <title>To check the fingerprint:</title>
+        <item>
+          <p>Select the key of your choice.</p>
+        </item>
+        <item>
+          <p>Right click the key and select
+	  <gui style="menuitem">Properties</gui>.</p>
+	</item>
+        <item>
+          <p>In the new dialog, select the <gui>Details</gui> tab.</p>
+        </item>
+        <item>
+          <p>You can see the fingerprint of the key on the left hand side.</p>
+        </item>
+    </steps>
+
+  <!-- stefw: Suggest documenting that the key fingerprint is the
+  only way to uniquely tell the difference between two keys.
+
+  Two keys may have the same name and description. The label or name
+  is no guarantee that the key represents the person described in the label.
+
+  The way to guarantee that you have a given key is to compare the
+  fingerprint with the person who owns the key.
+
+  For SSH keys this is done when you initially connect to a server.
+
+  For PGP keys this is usually done through the web of trust. Where someone
+  you know signs a key, and vouches that the key with a given fingerprint
+  is owned by the person noted on the label.
+  -->
+</section>
+
+</page>

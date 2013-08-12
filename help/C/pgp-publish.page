@@ -1,0 +1,78 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="pgp-publish">
+
+  <info>
+    <link type="guide" xref="index#pgp-keys"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-18" status="draft"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Make your keys downloadable from key servers.</desc>
+  </info>
+
+  <title>Publish your public keys</title>
+
+  <p>After <link xref="pgp-create">creating</link> your
+  <link xref="about-pgp">PGP keypair</link> you can choose to publish the
+
+  <em>public key</em> on the Internet. This allows anyone to
+  <link xref="misc-key-import">import</link> your public keys and send you
+  encrypted files and communication. When you keep your public keys unpublished
+  you can selectively share them with the people you want to communicate
+  with.</p>
+
+  <steps>
+    <title>How do I publish my key?</title>
+      <item>
+        <p>Select the PGP key you want to publish.</p>
+      </item>
+      <item>
+	<p>Select <guiseq><gui style="menu">Remote</gui>
+	<gui style="menuitem">Sync and Publish Keys…</gui></guiseq>.</p>
+      </item>
+      <item>
+	<p>Click the <gui style="button">Key Servers</gui> button.</p>
+      </item>
+      <item>
+	<p>Three <link xref="about-key-servers">key servers</link>
+	will already be listed by <app>Passwords and Keys</app>.</p>
+	<note style="tip">
+	  <p>You can also add the key server of your choice to the list by
+	  clicking the <gui style="add">Add</gui> button. Select the
+	  appropriate key server type. Key servers are identified by the
+	  protocol they use to communicate. Look for the first few letters in
+	  the Internet URL of your key server to identify its type. In the
+	  <gui style="input">Host</gui> field, paste the Internet URL of your
+	  key server, and click <gui style="button">OK</gui>. To remove a key
+	  server from the list, select it with your mouse and click
+	  <gui style="button">Remove</gui>.</p>
+	</note>
+      </item>
+      <item>
+	<p>From the drop down box next to
+	<gui style="group">Publish keys to</gui>, select the key server that
+	you want to publish your key on.</p>
+      </item>
+      <item>
+	<p>Check the
+	<gui style="checkbox">Automatically retrieve keys from key servers</gui>
+	checkbox to retrieve any key that is published on the
+	server you have selected in the previous step. You can also check the
+	<gui style="checkbox">Automatically sync modified keys with key servers</gui>
+	checkbox to ensure that any modifications to a key on the
+	key server, like a signature are updated on your copy of the key
+	too.</p>
+      </item>
+  </steps>
+
+</page>

@@ -1,0 +1,57 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="guide" style="task"
+      id="about-subkeys">
+  <info>
+    <link type="guide" xref="learn-about-keys" group="second"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-28" status="review"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Why are subkeys important? Where are they used?</desc>
+  </info>
+
+  <title>Subkeys</title>
+
+  <p>Though it is very important to keep your keys safe, it can become quite
+  tedious to do so when you have many keys. <app>Passwords and Keys</app>
+  provides a simple solution to key safety by using <em>subkeys</em> for
+  signing and encryption.</p>
+
+  <p>Whenever you <link xref="pgp-create">create</link> a new public encryption
+  key, a <em>keypair</em> is generated instead of a single key. This keypair
+  consists of a main key, also called the <em>master key</em> and a
+  <em>subkey</em>. A master key can be used to create additional subkeys that
+  are then bound to it.</p>
+
+  <list>
+    <title>What does each key in a keypair do?</title>
+      <item>
+	<p>The <em>master key</em> is used for
+	<link xref="about-key-signing">signing</link> other keys, creating subkeys
+	and <link xref="misc-key-revoke">revoking</link> subkeys. Your master key
+	must be kept very safe. Signatures of trust are also collected on your
+	master key. If the master key is compromised, you have no choice but to
+	revoke it and all the subkeys attached to it.</p>
+      </item>
+      <item>
+	<p>The default <em>subkey</em> is used for encryption and decryption
+	of messages. Additional subkeys can be created for signing. Though it
+	is important that your subkeys are kept safe, you can always revoke a
+	subkey if it is compromised and create a new one with the original
+	master key.</p>
+      </item>
+  </list>
+
+  <section id="more" style="2column">
+    <title>More about subkeys</title>
+  </section>
+</page>

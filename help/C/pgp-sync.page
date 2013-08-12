@@ -1,0 +1,55 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="pgp-sync">
+
+  <info>
+    <link type="guide" xref="index#pgp-keys"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-07-03" status="review"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Have your local key copies update every change made to the key on the
+    key server.</desc>
+  </info>
+
+  <title>Sync your keys</title>
+
+  <p>PGP keys in your keyring have to be synced with a key server to ensure
+  that any changes made to the key on the key server, like a new signature, are
+  updated in your local copy of the key. You need a working Internet connection
+  to sync your keys.</p>
+
+  <steps>
+    <title>How do I sync a key?</title>
+      <item>
+        <p>Select the PGP key you wish to sync.</p>
+      </item>
+      <item>
+        <p>Select <guiseq><gui style="menu">Remote</gui>
+        <gui style="menuitem">Sync and Publish Keys…</gui></guiseq>.</p>
+      </item>
+      <item>
+        <p>Click the <gui style="button">Sync</gui> button to sync your
+        key.</p>
+      </item>
+  </steps>
+
+  <note style="important">
+    <title>Why is the <gui style="button">Sync</gui> button not
+    clickable?</title>
+      <p>Only PGP keys that have been published on a key server can be synced.
+      If the <gui style="button">Sync</gui> button is not clickable, check if
+      the key has been published on a key server. In the case of syncing your
+      own keys, publish them, before syncing them.</p>
+  </note>
+
+</page>

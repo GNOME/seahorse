@@ -1,0 +1,64 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="misc-key-delete">
+
+  <info>
+    <link type="guide" xref="index#misc"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-24" status="review"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Delete local copies of your keys or the keys of people you
+    communicate with.</desc>
+  </info>
+
+  <title>Delete an existing key</title>
+
+  <p>If you are no longer communicating with someone, you can delete the copy
+  of their key on your computer using <app>Passwords and Keys</app>. You can
+  also permanently delete a key you own, provided it has never been published
+  on a <link xref="about-key-servers">key server</link>.</p>
+
+  <steps>
+    <title>To delete a key:</title>
+      <item>
+        <p>Select the key.</p>
+      </item>
+      <item>
+        <p>Right click, and choose <gui>Delete</gui>.</p>
+        <note style="tip">
+          <p>You can also select <guiseq><gui style="menu">Edit</gui>
+	  <gui style="menuitem">Delete</gui></guiseq> to delete the key.</p>
+        </note>
+      </item>
+      <item>
+	<p>In the new dialog that opens up, confirm the deletion by ticking
+	the
+	<gui style="checkbox">I understand that this secret key will be	permanently deleted</gui>
+	checkbox, and press the
+	<gui style="button">Delete</gui> button to finish.</p>
+      </item>
+  </steps>
+
+  <note style="important">
+    <p>When you delete a key that has been published on a key-server, you
+    delete only the local copy of the key on your computer. The
+    deleted key can still be retrieved from a key server and used to encrypt
+    messages to you. You can also
+    <link xref="misc-key-import">import</link> the deleted key from a
+    key server if you wish to restore it. Such a key can be prevented from
+    being used only when it
+    <link xref="pgp-expired">expires</link> or when you
+    <link xref="misc-key-revoke">revoke</link> it.</p>
+  </note>
+
+</page>
