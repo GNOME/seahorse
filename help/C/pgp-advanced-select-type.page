@@ -4,7 +4,6 @@
       id="pgp-advanced-select-type">
 
   <info>
-    <link type="guide" xref="index#pgp-keys"/>
     <link type="guide" xref="pgp-advanced-options"/>
 
     <revision version="0.1" date="2011-06-17" status="draft"/>
@@ -18,11 +17,45 @@
       <years>2013</years>
     </credit>
 
-    <desc>DSA-Elgamal or RSA? What are sign only keys?</desc>
+    <desc>Depending on your needs, create keys that can be used for signing
+    only or for both encryption and signing.</desc>
   </info>
 
   <title>Select key encryption type</title>
 
   <!--To explain selection betwen RSA, DSA-Elgamal, RSA Sign only, DSA Sign only-->
+
+  <p>Using <app>Passwords and Keys</app>, you can create keys for encryption
+  and <link xref="about-key-signing">signing</link>, or for signing-only.</p>
+
+  <terms>
+  <title>Key types:</title>
+    <item>
+    <title>RSA</title>
+      <p>This key type can be used to sign and encrypt. It uses the RSA
+      algorithm for both.</p>
+    </item>
+    <item>
+    <title>DSA-ELGamal</title>
+      <p>This key type can be used to sign and encrypt. It uses the DSA
+      algorithm while signing keys and the ELGamal algorithm for
+      encryption.</p>
+    </item>
+    <item>
+    <title>RSA(sign only)</title>
+      <p>This key type can only be used to sign other keys. It uses the RSA
+      algorithm for the same.</p>
+    </item>
+    <item>
+    <title>DSA(sign only)</title>
+      <p>This key type can only be used to sign other keys. It uses the DSA
+      algorithm for the same.</p>
+    </item>
+  </terms>
+
+  <note style="tip">
+    <p>Both the RSA and DSA-ELGamal algorithms generate equally strong keys.
+    For all general purposes, any one of the two can be chosen.</p>
+  </note>
 
 </page>
