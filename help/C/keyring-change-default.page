@@ -6,7 +6,7 @@
   <info>
     <link type="guide" xref="about-keyring"/>
 
-    <revision pkgversion="3.9" version="0.1" date="2013-07-18" status="review"/>
+    <revision pkgversion="3.10" date="2013-08-25" status="candidate"/>
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
@@ -16,33 +16,29 @@
       <years>2013</years>
     </credit>
 
-    <desc>Make one of your newly created password keyrings the default choice
-    in <app>Passwords and Keys</app>.</desc>
-
+    <desc>Save new passwords to a different keyring by default.</desc>
   </info>
 
-  <title>Change the default password keyring</title>
+  <title>Change the default keyring</title>
 
-  <p>When you
-  <link xref="passwords-stored-create">create a new stored password</link>,
-  the default keyring is the first choice in the password creation dialog to
-  store the newly created password. Though the <gui>Login</gui> keyring is the
-  default choice in <app>Passwords and Keys</app>, you can make any other
-  keyring the default choice in <app>Passwords and Keys</app>.</p>
+  <p>When you <link xref="passwords-stored-new-create">add a new
+  password</link>, it is normally added to the default keyring. If you want to
+  add it to a different keyring, you can chose another one while adding the new
+  password, but you can also change the default keyring. The default keyring is
+  normally the <gui>Login</gui> keyring.</p>
 
   <steps>
-    <title>To change the default keyring choice:</title>
-      <item>
-	<p>Select <guiseq><gui style="menu">View</gui>
-	<gui style="menuitem">By keyring</gui></guiseq>.</p>
-      </item>
-      <item>
-	<p>From the left, select the keyring of your choice from the list.</p>
-      </item>
-      <item>
-	<p>Right click on the selected keyring and select
-	<gui>Set as default</gui>.</p>
-      </item>
+    <title>To change the default keyring:</title>
+    <item>
+      <p>Enable <guiseq><gui style="menu">View</gui>
+      <gui style="menuitem">By keyring</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Right click on the keyring in the <gui>Passwords</gui> list and select
+      <gui>Set as default</gui>.</p>
+    </item>
   </steps>
 
+  <!-- Does this affect which keyring passwords are saved to through other
+       applications? -->
 </page>
