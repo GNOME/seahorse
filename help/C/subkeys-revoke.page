@@ -1,0 +1,74 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="subkeys-revoke">
+
+  <info>
+    <link type="guide" xref="about-subkeys"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" date="2013-08-25" status="review"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Revoke a subkey that has been compromised or is not being
+    used.</desc>
+  </info>
+
+  <title>Revoke your subkeys</title>
+
+  <p>If your subkey has been compromised or has remained unused for several
+  days, it might be a good idea to revoke it to prevent misuse of the key.</p>
+
+  <steps>
+    <title>To revoke a subkey:</title>
+    <item>
+      <p><link xref="subkeys-examine">Navigate</link> to the <gui>Subkeys</gui>
+      panel.</p>
+    </item>
+    <!--The above step can be replaced with the following, if it's too vague:
+    <item>
+      <p>Select <gui>GnuPG keys</gui> from the panel on the left.</p>
+    </item>
+    <item>
+      <p>Right click on the key of your choice and select
+      <guiseq><gui>Properties</gui><gui>Details</gui>.</p>
+    </item>
+    <item>
+      <p>Expand the subkeys panel if required.</p>
+    </item>-->
+    <item>
+      <p>Select the subkey of your choice from the list and press the
+      <gui style="button">Revoke</gui> button.</p>
+    </item>
+    <item>
+      <p>In the new dialog, select a reason for revoking the key.
+      Optionally, describe your reason in more detail in the
+      <gui>Description</gui> field.</p>
+    </item>
+    <item>
+      <p>Press the <gui style="button">Revoke</gui> button.</p>
+    </item>
+    <item>
+      <p>You will have to unlock the key with its
+      <link xref="passwords-passphrases">passphrase.</p>
+    </item>
+    <item>
+      <p>The <gui>Status</gui> of the subkey changes to <gui>Revoked</gui> in
+      the <gui>Subkeys</gui> panel.</p>
+    </item>
+  </steps>
+
+  <note style="tip">
+    <p>If you have <link xref="pgp-publish">published</link> your subkey, you
+    must <link xref="pgp-sync">synchronize</link> it with the key servers after
+    revoking it to apply the revocation on all copies of the key.</p>
+  </note>
+
+</page>
