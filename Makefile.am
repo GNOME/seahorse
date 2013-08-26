@@ -82,3 +82,7 @@ dist-hook:
 
 distuninstallcheck:
 	@:
+
+upload-release: $(DIST_ARCHIVES)
+	scp $(DIST_ARCHIVES) master.gnome.org:
+	ssh master.gnome.org ftpadmin install $(DIST_ARCHIVES)
