@@ -1,5 +1,6 @@
 <page xmlns="http://projectmallard.org/1.0/"
       xmlns:its="http://www.w3.org/2005/11/its"
+      xmlns:ui = "http://projectmallard.org/ui/1.0/"
       type="topic" style="task"
       id="pgp-create">
 
@@ -16,41 +17,87 @@
       <years>2013</years>
     </credit>
 
-    <desc>Create PGP keys for encrypting and signing emails.</desc>
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Create GnuPG keys for encrypting and signing emails.</desc>
   </info>
 
   <title>Create a new PGP key</title>
 
-  <p>A <link xref="about-pgp"><em>PGP key</em></link> will allow to
-  encrypt your email and files. Here is how to create a new key:</p>
-
   <steps>
-    <item><p>Click <guiseq><gui>File</gui><gui>New…</gui></guiseq>.</p></item>
-    <item><p>Select <em>PGP Key</em> from the list of options.</p></item>
-    <item><p>Click <gui style="button">Continue</gui>.</p></item>
-    <item><p>Enter your full given name and your email address. You can also
-    add a comment, such as whether the key is a personal key or a key for work,
-    your date of birth, or the date you created the key. These details when
-    taken together are called your
-    <link xref="pgp-userid">user ID</link>.</p></item>
-    <item><p>Click <gui>Create</gui>.</p></item>
-    <item><p>Enter a password, then confirm the password and click
-    <gui>Create</gui>.</p></item>
+    <item>
+      <p>Select <guiseq><gui>File</gui><gui>New…</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Select <gui>PGP Key</gui> from the list and press
+      <gui style="button">Continue</gui>.</p>
+    </item>
+    <item>
+      <p>Enter your full name in the <gui>Full Name</gui> field.</p>
+    </item>
+    <item>
+      <p>Optionally, add your email address and a comment to describe the key.
+      Your date of birth, the purpose of creating the key, etc. make for good
+      descriptions.</p>
+    </item>
+    <item>
+      <p>Press <gui>Create</gui>.</p>
+    </item>
+    <item>
+      <p>In the password dialog, enter a password of your choice for the key
+      and retype the password to confirm it.</p>
+    </item>
+    <item>
+      <p>Press <gui style="button">OK</gui> to finish.</p>
+    </item>
   </steps>
-
-  <note style="info">
-    <p>You can change default settings for key expiration, key strength and
-    key type by expanding the
-    <link xref="pgp-advanced-options"><gui>Advanced key options</gui></link>
-    panel.</p>
-  </note>
 
   <p><app>Passwords and Keys</app> will take some time to generate your key.
   While your key is being created, move your mouse around and press some keys
-  on your keyboard. This will help <app>Passwords and Keys</app> to create
-  a truly random key.</p>
+  on your keyboard. This will help <app>Passwords and Keys</app> to create a
+  truly random key. The key will be listed under <gui>GnuPG keys</gui>.</p>
 
-  <note><p>Adding a comment to a <em>PGP Key</em> is entirely optional, and
-  many people prefer to not use comments when creating keys.</p></note>
+  <section id="advanced" ui:expanded="false">
+    <title>Advanced PGP key options</title>
+
+  <p>Expand the <gui>Advanced key options</gui> panel to choose custom values
+  for key type, key strength and key expiration date.</p>
+
+  <terms>
+    <item>
+    <title>Key type</title>
+      <p>Depending on your needs, create keys that can be used for signing only
+      or for both encryption and signing. The RSA and DSA-Elgamal algorithms
+      generate equally secure keys. Similarly, your sign-only key can be either
+      RSA or DSA.</p>
+    </item>
+    <item>
+    <title>Key Strength</title>
+      <p>The key strength is measured in terms of the size of the key in bits.
+      It is difficult and more time consuming to break a strong key, but strong
+      keys also slow down the encryption and signing process. You should choose
+      your key strength in <app>Passwords and Keys</app> depending on how long
+      you want to use the key. A small key is sufficient for short term use
+      while a large key will remain secure for a long period of time.</p>
+    </item>
+    <item>
+    <title>Expiration Date</title>
+      <p>When a key expires, it can no longer be used to sign or encrypt. You
+      can either set your key to <gui style="checkbox">Never Expire</gui>, or
+      select an expiration date and time for it.</p>
+    </item>
+  </terms>
+
+  </section>
+
+  <note>
+    <p>The <gui>Full Name</gui>, <gui>Email Address</gui> and
+    <gui>Comment</gui> details of a GnuPG key are called the
+    <link xref="pgp-userid">user ID</link> of the key.</p>
+  </note>
 
 </page>
