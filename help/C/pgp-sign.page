@@ -1,0 +1,74 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="guide" style="task"
+      id="pgp-sign">
+
+  <info>
+    <link type="guide" xref="pgp"/>
+
+    <revision pkgversion="3.9" date="2013-08-29" status="review"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>If you trust a key, you can sign it.</desc>
+  </info>
+
+  <title>Sign keys</title>
+
+  <p>To show that you trust and vouch for the genuineness of someone's key, you
+  can sign it. A person's key must be signed only after you compare the
+  <link xref="pgp-userid">user ID</link> on the key with a valid proof of their
+  identity. If the two IDs match, the key is said to be trustworthy.</p>
+
+  <steps>
+    <title>To sign a key:</title>
+    <item>
+      <p>Import the <link xref="pgp-retrieve-remote">remote key</link> or
+      <link xref="misc-key-import">keyfile</link> of your choice into
+      <app>Passwords and Keys</app>.</p>
+    </item>
+    <item>
+      <p>From the list of <gui>GnuPG keys</gui> select the imported key.</p>
+    </item>
+    <item>
+      <p>Right click the key and select
+      <guiseq><gui>Properties</gui><gui>Trust</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Press the <gui style="button">Sign this Key</gui> button.</p>
+    </item>
+    <item>
+      <p>Depending on how carefully you have checked the key, choose one out of
+      <gui style="radiobutton">Not at all</gui>,
+      <gui style="radiobutton">Casually</gui> or
+      <gui style="radiobutton">Very carefully</gui>.</p>
+    </item>
+    <item>
+      <p>Decide if you want to revoke your signature at a later date and if you
+      want to make your signature public, by ticking the checkboxes
+      provided.</p>
+    </item>
+    <item>
+      <p>When you own more than one PGP key, select the key you want to sign
+      with, from the list next to <gui>Signer</gui>.</p>
+    </item>
+    <item>
+      <p>Press the <gui style="button">Sign</gui> button to finish.</p>
+    </item>
+  </steps>
+
+  <note style="info">
+    <title>Can I sign my own keys?</title>
+    <p>When you <link xref="pgp-create">create</link> a new
+    <gui>GnuPG key</gui>, it is automatically signed by you. Any new subkeys
+    <link xref="subkeys-add">created</link> using a <gui>GnuPG key</gui>, will
+    also be signed automatically.</p>
+  </note>
+
+</page>
