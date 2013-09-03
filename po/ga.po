@@ -1,395 +1,268 @@
 # Irish translations for seahorse package.
-# Copyright (C) 2007-2009 Free Software Foundation, Inc.
+# Copyright (C) 2007-2013 Free Software Foundation, Inc.
 # This file is distributed under the same license as the seahorse package.
-# Seán de Búrca <leftmostcat@gmail.com>, 2007-2009.
+# Seán de Búrca <leftmostcat@gmail.com>, 2007-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-07 20:47-0600\n"
-"PO-Revision-Date: 2009-08-07 21:21-0600\n"
+"POT-Creation-Date: 2013-09-03 15:12-0600\n"
+"PO-Revision-Date: 2013-09-03 15:50-0600\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : (n%10==1 || n%10==2) ? 1 : (n%"
-"10>=3 && n%10<= 6) ? 2 : ((n%10>=7 && n%10<=9) || n==10) ? 3 : 4;\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : "
+"4;\n"
 
-#: ../daemon/seahorse-daemon.c:69
-msgid "Do not run seahorse-daemon as a daemon"
+#: ../common/catalog.vala:259
+msgid "Contributions:"
+msgstr "Ranníocaíochtaí:"
+
+#: ../common/catalog.vala:287 ../src/seahorse.desktop.in.in.h:1
+#: ../src/seahorse-key-manager.c:661
+msgid "Passwords and Keys"
+msgstr "Focail Fhaire agus Eochracha"
+
+#: ../common/catalog.vala:289
+msgid "translator-credits"
+msgstr "Seán de Búrca <leftmostcat@gmail.com>"
+
+#: ../common/catalog.vala:292
+msgid "Seahorse Project Homepage"
+msgstr "Suíomh Gréasáin Tionscadail Seahorse"
+
+#: ../common/catalog.vala:310
+msgid "Cannot delete"
+msgstr "Ní féidir scriosadh"
+
+#: ../common/catalog.vala:333 ../libseahorse/seahorse-key-manager-store.c:442
+msgid "Couldn't export keys"
 msgstr ""
 
-#: ../daemon/seahorse-daemon.c:87
-msgid "couldn't fork process"
+#: ../common/catalog.vala:344
+msgid "Couldn't export data"
 msgstr ""
 
-#: ../daemon/seahorse-daemon.c:93
-msgid "couldn't create new process group"
-msgstr ""
-
-#: ../daemon/seahorse-daemon.c:207
-msgid "Encryption Daemon (Seahorse)"
-msgstr "Deamhan Criptithe (Seahorse)"
-
-#: ../daemon/seahorse-daemon.desktop.in.in.h:1
-msgid "Seahorse Daemon"
-msgstr "Deamhan Seahorse"
-
-#: ../daemon/seahorse-service.c:110 ../daemon/seahorse-service.c:134
+#: ../common/catalog.vala:360 ../libseahorse/seahorse-widget.c:460
 #, c-format
-msgid "Invalid or unrecognized key type: %s"
+msgid "Could not display help: %s"
 msgstr ""
 
-#: ../daemon/seahorse-service.c:183 ../daemon/seahorse-service-keyset.c:135
-#: ../daemon/seahorse-service-keyset.c:164
-#, c-format
-msgid "Invalid or unrecognized key: %s"
-msgstr ""
-
-#. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:160
-#, c-format
-msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:161
-msgid "Invalid Signature"
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:167
-#, c-format
-msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:168
-msgid "Expired Signature"
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:174
-#, c-format
-msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:175
-msgid "Revoked Signature"
-msgstr ""
-
-#. TRANSLATORS: <key id='xxx'> is a custom markup tag, do not translate.
-#: ../daemon/seahorse-service-crypto.c:181
-#, c-format
-msgid "Signed by <i><key id='%s'/></i> on %s."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:182
-msgid "Good Signature"
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:187
-msgid "Signing key not in keyring."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:188
-msgid "Unknown Signature"
-msgstr "Síniú Anaithnid"
-
-#: ../daemon/seahorse-service-crypto.c:192
-msgid "Bad or forged signature. The signed data was modified."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:193
-msgid "Bad Signature"
-msgstr "Drochshíniú"
-
-#: ../daemon/seahorse-service-crypto.c:201
-msgid "Couldn't verify signature."
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:257
-#: ../daemon/seahorse-service-crypto.c:364
-#, c-format
-msgid "Invalid or unrecognized signer: %s"
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:264
-#: ../daemon/seahorse-service-crypto.c:371
-#, c-format
-msgid "Key is not valid for signing: %s"
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:276
-#, c-format
-msgid "Invalid or unrecognized recipient: %s"
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:284
-#, c-format
-msgid "Key is not a valid recipient for encryption: %s"
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:293
-#, c-format
-msgid "No recipients specified"
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:359
-#, c-format
-msgid "No signer specified"
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:414
-#, c-format
-msgid "Invalid key type for decryption: %s"
-msgstr ""
-
-#: ../daemon/seahorse-service-crypto.c:477
-#, c-format
-msgid "Invalid key type for verifying: %s"
-msgstr ""
-
-#: ../daemon/seahorse-service-keyset.c:200
-#, c-format
-msgid "Invalid key id: %s"
-msgstr ""
-
-#: ../daemon/seahorse-sharing.c:72 ../daemon/seahorse-sharing.c:216
-msgid "Couldn't share keys"
-msgstr ""
-
-#: ../daemon/seahorse-sharing.c:73
-msgid "Can't publish discovery information on the network."
-msgstr ""
-
-#. Translators: The %s will get filled in with the user name
-#. of the user, to form a genitive. If this is difficult to
-#. translate correctly so that it will work correctly in your
-#. language, you may use something equivalent to
-#. "Shared keys of %s".
-#: ../daemon/seahorse-sharing.c:93
-#, c-format
-msgid "%s's encryption keys"
-msgstr ""
+#. Top menu items
+#: ../common/catalog.vala:366
+msgid "_File"
+msgstr "_Comhad"
 
-#: ../data/seahorse.schemas.in.h:1
-msgid ""
-"A list of key server URIs to search for remote PGP keys. In later versions a "
-"display name can be included, by appending a space and then the name."
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:2
-msgid "Auto Retrieve Keys"
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:3
-msgid "Auto Sync Keys"
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:4
-msgid "Controls the visibility of the expires column for the key manager."
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:5
-msgid "Controls the visibility of the trust column for the key manager."
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:6
-msgid "Controls the visibility of the type column for the key manager."
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:7
-msgid "Controls the visibility of the validity column for the key manager."
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:8
-msgid "Enable DNS-SD sharing"
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:9
-msgid ""
-"Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be "
-"running and must be built with HKP and DNS-SD support."
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:10
-msgid "ID of the default key"
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:11
-msgid ""
-"If set to true, then files encrypted with seahorse will be ASCII armor "
-"encoded."
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:12
-msgid ""
-"If set to true, then the default key will always be added to an encryption "
-"recipients list."
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:13
-msgid "Last key server search pattern"
-msgstr ""
+#: ../common/catalog.vala:367
+msgid "E_xport..."
+msgstr "_Easpórtáil..."
 
-#: ../data/seahorse.schemas.in.h:14
-msgid "Last key servers used"
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:15
-msgid "Last key used to sign a message."
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:16
-msgid "PGP Key servers"
-msgstr ""
-
-#: ../data/seahorse.schemas.in.h:17
-msgid "Publish keys to this key server."
-msgstr ""
+#: ../common/catalog.vala:368
+msgid "Export to a file"
+msgstr "Easpórtáil go comhad"
 
-#: ../data/seahorse.schemas.in.h:18
-msgid "Show expires column in key manager"
-msgstr ""
+#: ../common/catalog.vala:369
+msgid "_Edit"
+msgstr "_Eagar"
 
-#: ../data/seahorse.schemas.in.h:19
-msgid "Show trust column in key manager"
-msgstr ""
+#: ../common/catalog.vala:372
+msgid "Copy to the clipboard"
+msgstr "Cóipeáil go dtí an ghearrthaisce"
 
-#: ../data/seahorse.schemas.in.h:20
-msgid "Show type column in key manager"
-msgstr ""
+#: ../common/catalog.vala:373 ../pkcs11/seahorse-pkcs11-properties.c:229
+#: ../src/seahorse-sidebar.c:955
+msgid "_Delete"
+msgstr "_Scrios"
 
-#: ../data/seahorse.schemas.in.h:21
-msgid "Show validity column in key manager"
-msgstr ""
+#: ../common/catalog.vala:374
+msgid "Delete selected items"
+msgstr "Scrios míreanna roghnaithe"
 
-#: ../data/seahorse.schemas.in.h:22
-msgid ""
-"Specify the column to sort the recipients window by. Columns are: 'name' and "
-"'id'. Put a '-' in front of the column name to sort in descending order."
-msgstr ""
+#: ../common/catalog.vala:376
+#, fuzzy
+msgid "Show the properties of this item"
+msgstr "Taispeáin airíonna"
 
-#: ../data/seahorse.schemas.in.h:23
-msgid ""
-"Specify the column to sort the seahorse key manager main window by. Columns "
-"are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. Put a '-' in "
-"front of the column name to sort in descending order."
-msgstr ""
+#: ../common/catalog.vala:378
+#, fuzzy
+msgid "Show the properties of this keyring"
+msgstr "Taispeáin airíonna"
 
-#: ../data/seahorse.schemas.in.h:24
-msgid "The ID of the last secret key used to sign a message."
-msgstr ""
+#: ../common/catalog.vala:379
+msgid "Prefere_nces"
+msgstr "_Sainroghanna"
 
-#: ../data/seahorse.schemas.in.h:25
-msgid "The column to sort the recipients by"
+#: ../common/catalog.vala:380
+msgid "Change preferences for this program"
 msgstr ""
 
-#: ../data/seahorse.schemas.in.h:26
-msgid "The column to sort the seahorse keys by"
-msgstr ""
+#: ../common/catalog.vala:381
+msgid "_View"
+msgstr "_Amharc"
 
-#: ../data/seahorse.schemas.in.h:27
-msgid ""
-"The key server to publish PGP keys to. Or empty to suppress publishing of "
-"PGP keys."
-msgstr ""
+#: ../common/catalog.vala:382
+msgid "_Help"
+msgstr "Cab_hair"
 
-#: ../data/seahorse.schemas.in.h:28
-msgid ""
-"The last key server a search was performed against or empty for all key "
-"servers."
-msgstr ""
+#: ../common/catalog.vala:384
+msgid "About this program"
+msgstr "Maidir leis an ríomhchlár seo"
 
-#: ../data/seahorse.schemas.in.h:29
-msgid "The last search pattern searched for against a key server."
-msgstr ""
+#: ../common/catalog.vala:385
+msgid "_Contents"
+msgstr "_Inneachar"
 
-#: ../data/seahorse.schemas.in.h:30
-msgid ""
-"This specifies the default key to use for certain operations, mainly signing."
-msgstr ""
+#: ../common/catalog.vala:386
+msgid "Show Seahorse help"
+msgstr "Taispeáin cabhair Seahorse"
 
-#: ../data/seahorse.schemas.in.h:31
-msgid "Whether or not keys should be automatically retrieved from key servers."
-msgstr ""
+#: ../common/exportable.vala:195
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+msgid "Export"
+msgstr "Easpórtáil"
 
-#: ../data/seahorse.schemas.in.h:32
-msgid ""
-"Whether or not modified keys should be automatically synced with the default "
-"key server."
-msgstr ""
+#: ../gkr/gkr-backend.vala:41
+msgid "Passwords"
+msgstr "Focail Fhaire"
 
-#: ../data/seahorse.schemas.in.h:33
-msgid "Whether to always encrypt to default key"
+#: ../gkr/gkr-backend.vala:45
+msgid "Stored personal passwords, credentials and secrets"
 msgstr ""
 
-#: ../data/seahorse.schemas.in.h:34
-msgid "Whether to use ASCII Armor"
-msgstr ""
+#: ../gkr/gkr-backend.vala:243
+#, fuzzy
+msgid "New password keyring"
+msgstr "Fáinne Eochracha Focal Faire"
 
-#: ../gkr/seahorse-add-keyring.xml.h:1
-msgid "Add Password Keyring"
+#: ../gkr/gkr-backend.vala:244 ../gkr/gkr-backend.vala:251
+msgid "Used to store application and network passwords"
 msgstr ""
 
-#: ../gkr/seahorse-add-keyring.xml.h:2
-msgid "New Keyring Name:"
-msgstr ""
+#: ../gkr/gkr-backend.vala:245
+msgid "New password..."
+msgstr "Focal faire nua..."
 
-#: ../gkr/seahorse-add-keyring.xml.h:3
-msgid ""
-"Please choose a name for the new keyring. You will be prompted for an unlock "
-"password."
+#: ../gkr/gkr-backend.vala:246 ../gkr/gkr-backend.vala:253
+msgid "Safely store a password or secret."
 msgstr ""
 
-#: ../gkr/seahorse-add-keyring.xml.h:4
-#: ../libseahorse/seahorse-add-keyserver.xml.h:5
-#: ../ssh/seahorse-ssh-upload.xml.h:3
-msgid "The host name or address of the server."
-msgstr ""
+#: ../gkr/gkr-backend.vala:250
+msgid "Password Keyring"
+msgstr "Fáinne Eochracha Focal Faire"
 
-#: ../gkr/seahorse-gkr-add-item.c:60 ../gkr/seahorse-gkr-add-keyring.c:59
-msgid "Couldn't add keyring"
-msgstr ""
+#: ../gkr/gkr-backend.vala:252
+msgid "Stored Password"
+msgstr "Focal Faire Stóráilte"
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:1
+#: ../gkr/gkr-item-add.vala:27
 msgid "Add Password"
 msgstr "Cuir Focal Faire Leis"
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:2
-#: ../gkr/seahorse-gkr-item-properties.xml.h:17 ../pgp/seahorse-revoke.xml.h:5
-msgid "_Description:"
-msgstr "Cur _Síos:"
+#: ../gkr/gkr-item-add.vala:104
+msgid "Couldn't add item"
+msgstr ""
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:3
-msgid "_Keyring:"
-msgstr "Fáinne _Eochracha:"
+#: ../gkr/gkr-item-properties.vala:139
+msgid "Access a network share or resource"
+msgstr ""
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:4
-msgid "_Password:"
-msgstr "_Focal Faire:"
+#: ../gkr/gkr-item-properties.vala:142
+msgid "Access a website"
+msgstr ""
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:5
-msgid "_Show Password"
-msgstr "_Taispeáin Focal Faire"
+#: ../gkr/gkr-item-properties.vala:145
+msgid "Unlocks a PGP key"
+msgstr ""
 
-#: ../gkr/seahorse-gkr-item.c:470
-msgid "Web Password"
-msgstr "Focal Faire Gréasáin"
+#: ../gkr/gkr-item-properties.vala:148
+msgid "Unlocks a Secure Shell key"
+msgstr ""
 
-#: ../gkr/seahorse-gkr-item.c:472
-msgid "Network Password"
-msgstr "Focal Faire Líonra"
+#: ../gkr/gkr-item-properties.vala:151
+msgid "Saved password or login"
+msgstr ""
 
-#: ../gkr/seahorse-gkr-item.c:474 ../gkr/seahorse-gkr-item-properties.c:107
+#: ../gkr/gkr-item-properties.vala:164
+msgid "Network Credentials"
+msgstr ""
+
+#: ../gkr/gkr-item-properties.vala:169
 msgid "Password"
 msgstr "Focal Faire"
 
-#: ../gkr/seahorse-gkr-item-commands.c:78
+#: ../gkr/gkr-item-properties.vala:238
+msgid "Couldn't change password."
+msgstr ""
+
+#: ../gkr/gkr-item-properties.vala:276
+msgid "Couldn't set description."
+msgstr ""
+
+#. Translators: This should be the same as the string in empathy
+#: ../gkr/gkr-item.vala:391
+msgid "IM account password for "
+msgstr ""
+
+#: ../gkr/gkr-item.vala:447
+#, fuzzy
+msgid "Password or secret"
+msgstr "Fáinne Eochracha Focal Faire"
+
+#: ../gkr/gkr-item.vala:448
+#, fuzzy
+msgid "Network password"
+msgstr "Focal Faire Líonra"
+
+#: ../gkr/gkr-item.vala:449
+#, fuzzy
+msgid "Stored note"
+msgstr "Focal Faire Stóráilte"
+
+#: ../gkr/gkr-item.vala:450
+#, fuzzy
+msgid "Keyring password"
+msgstr "Focal Faire Gréasáin"
+
+#: ../gkr/gkr-item.vala:451
+#, fuzzy
+msgid "Encryption key password"
+msgstr "Bainisteoir Eochracha Criptithe"
+
+#: ../gkr/gkr-item.vala:452
+#, fuzzy
+msgid "Key storage password"
+msgstr "Focal Faire Stóráilte"
+
+#: ../gkr/gkr-item.vala:453
+msgid "Google Chrome password"
+msgstr "Focal faire Google Chrome"
+
+#: ../gkr/gkr-item.vala:454
+msgid "Gnome Online Accounts password"
+msgstr "Focal faire Gnome Online Accounts"
+
+#: ../gkr/gkr-item.vala:455
+msgid "Telepathy password"
+msgstr "Focal faire Telepathy"
+
+#: ../gkr/gkr-item.vala:456
+msgid "Instant messaging password"
+msgstr ""
+
+#: ../gkr/gkr-item.vala:457
+msgid "Network Manager secret"
+msgstr ""
+
+#: ../gkr/gkr-item.vala:507
 #, c-format
 msgid "Are you sure you want to delete the password '%s'?"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-item-commands.c:81
+#: ../gkr/gkr-item.vala:509
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
@@ -399,486 +272,312 @@ msgstr[2] ""
 msgstr[3] ""
 msgstr[4] ""
 
-#: ../gkr/seahorse-gkr-item-properties.c:66
-msgid "Access a network share or resource"
+#: ../gkr/gkr-keyring-add.vala:28
+msgid "Add Password Keyring"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-item-properties.c:69
-msgid "Access a website"
+#: ../gkr/gkr-keyring-add.vala:58
+msgid "Couldn't add keyring"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-item-properties.c:72
-msgid "Unlocks a PGP key"
+#: ../gkr/gkr-keyring.vala:30
+msgid "A keyring that is automatically unlocked on login"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-item-properties.c:75
-msgid "Unlocks a Secure Shell key"
+#: ../gkr/gkr-keyring.vala:31
+msgid "A keyring used to store passwords"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-item-properties.c:78
-msgid "Saved password or login"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-item-properties.c:102
-msgid "Network Credentials"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-item-properties.c:245
-msgid "Couldn't change password."
-msgstr ""
-
-#: ../gkr/seahorse-gkr-item-properties.c:347
-msgid "Couldn't set description."
-msgstr ""
-
-#: ../gkr/seahorse-gkr-item-properties.c:641
-msgid "Couldn't set application access."
-msgstr ""
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:1
-msgid "<b>Password:</b>"
-msgstr "<b>Focal Faire:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:2
-msgid "<b>Path:</b>"
-msgstr "<b>Conair:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:3
-msgid "<b>Permissions:</b>"
-msgstr "<b>Ceadanna:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:4
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
-msgid "<b>Technical Details:</b>"
-msgstr "<b>Sonraí Teicniúla:</b>"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:5
-msgid "Applications"
-msgstr "Feidhmchláir"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:6
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:72
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
-msgid "Details"
-msgstr "Sonraí"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:7
-#: ../pgp/seahorse-pgp-subkey.c:366
-#: ../ssh/seahorse-ssh-key-properties.xml.h:19
-msgid "Key"
-msgstr "Eochair"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:8
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
-#: ../ssh/seahorse-ssh-key-properties.xml.h:20
-msgid "Key Properties"
-msgstr "Airíonna Eochrach"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:9
-msgid "Login:"
-msgstr "Logáil isteach:"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:10
-msgid "Server:"
-msgstr "Freastalaí:"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:11
-msgid "Show pass_word"
-msgstr "Taispeáin _focal faire"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:12
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
-msgid "Type:"
-msgstr "Cineál:"
-
-#. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:14
-msgid "Use:"
-msgstr "Úsáid:"
-
-#. To translators: This is the infinitive not the imperative.  This string refers to the ability of an application to delete this secret from its key ring.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:16
-msgid "_Delete"
-msgstr "_Scrios"
-
-#. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:19
-msgid "_Read"
-msgstr "_Léigh"
-
-#. To translators: This is the infinitive not the imperative.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:21
-msgid "_Write"
-msgstr "_Scríobh"
-
-#: ../gkr/seahorse-gkr-keyring.c:193
-msgid "Listing passwords"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-keyring.c:354
-#, c-format
-msgid "Passwords: %s"
-msgstr "Focail Faire: %s"
-
-#: ../gkr/seahorse-gkr-keyring.c:355
-#, c-format
-msgid "<b>Passwords:</b> %s"
-msgstr "<b>Focail Faire:</b> %s"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:94
-msgid "Password Keyring"
-msgstr "Fáinne Eochracha Focal Faire"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:95
-msgid "Used to store application and network passwords"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:96
-msgid "Stored Password"
-msgstr "Focal Faire Stóráilte"
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:97
-msgid "Safely store a password or secret."
-msgstr ""
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:110
-msgid "Couldn't unlock keyring"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:150
-msgid "Couldn't lock keyring"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:190
+#: ../gkr/gkr-keyring.vala:176
 msgid "Couldn't set default keyring"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:228
+#: ../gkr/gkr-keyring.vala:200 ../gkr/gkr-keyring.vala:205
 msgid "Couldn't change keyring password"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:259
-msgid "_Lock"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:260
-msgid ""
-"Lock the password storage keyring so a master password is required to unlock "
-"it."
-msgstr ""
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:261
-msgid "_Unlock"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:262
-msgid ""
-"Unlock the password storage keyring with a master password so it is "
-"available for use."
-msgstr ""
-
-#: ../gkr/seahorse-gkr-keyring-commands.c:263
+#: ../gkr/gkr-keyring.vala:211
 msgid "_Set as default"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:264
+#: ../gkr/gkr-keyring.vala:212
 msgid "Applications usually store new passwords in the default keyring."
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:265
+#: ../gkr/gkr-keyring.vala:213
 msgid "Change _Password"
 msgstr "Athraigh _Focal Faire"
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:266
+#: ../gkr/gkr-keyring.vala:214
 msgid "Change the unlock password of the password storage keyring"
 msgstr ""
 
-#: ../gkr/seahorse-gkr-keyring-commands.c:330
+#: ../gkr/gkr-keyring.vala:239
 #, c-format
 msgid "Are you sure you want to delete the password keyring '%s'?"
 msgstr ""
 
-#. -----------------------------------------------------------------------------
-#. * PUBLIC
-#.
+#: ../gkr/gkr-keyring.vala:242
+msgid "I understand that all items will be permanently deleted."
+msgstr ""
+
+#: ../gkr/seahorse-add-keyring.xml.h:1
+msgid ""
+"Please choose a name for the new keyring. You will be prompted for an unlock "
+"password."
+msgstr ""
+
+#: ../gkr/seahorse-add-keyring.xml.h:2
+msgid "New Keyring Name:"
+msgstr ""
+
+#: ../gkr/seahorse-add-keyring.xml.h:3
+#: ../libseahorse/seahorse-add-keyserver.xml.h:5
+#: ../ssh/seahorse-ssh-upload.xml.h:3
+msgid "The host name or address of the server."
+msgstr ""
+
+#: ../gkr/seahorse-gkr-add-item.xml.h:1
+#: ../gkr/seahorse-gkr-item-properties.xml.h:1 ../pgp/seahorse-revoke.xml.h:3
+#: ../ssh/seahorse-ssh-generate.xml.h:5
+msgid "_Description:"
+msgstr "Cur _Síos:"
+
+#: ../gkr/seahorse-gkr-add-item.xml.h:2
+msgid "_Password:"
+msgstr "_Focal Faire:"
+
+#: ../gkr/seahorse-gkr-add-item.xml.h:3
+msgid "_Show Password"
+msgstr "_Taispeáin Focal Faire"
+
+#: ../gkr/seahorse-gkr-add-item.xml.h:4
+msgid "_Keyring:"
+msgstr "Fáinne _Eochracha:"
+
 #. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-keyring.xml.h:2
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
+#: ../gkr/seahorse-gkr-item-properties.xml.h:3
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
+#: ../ssh/seahorse-ssh-key-properties.xml.h:9
+msgid "Use:"
+msgstr "Úsáid:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:4
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
+#: ../ssh/seahorse-ssh-key-properties.xml.h:3
+msgid "Type:"
+msgstr "Cineál:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:5
+msgid "Server:"
+msgstr "Freastalaí:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:6
+msgid "Login:"
+msgstr "Logáil isteach:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:7
+msgid "Show pass_word"
+msgstr "Taispeáin _focal faire"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:8
+#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
+msgid "Password:"
+msgstr "Focal Faire:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:9
+#: ../pgp/seahorse-pgp-subkey.c:366
+#: ../ssh/seahorse-ssh-key-properties.xml.h:15
+msgid "Key"
+msgstr "Eochair"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:10
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
+#: ../ssh/seahorse-ssh-key-properties.xml.h:20
+msgid "Technical Details:"
+msgstr "Mionsonraí Teicniúla:"
+
+#: ../gkr/seahorse-gkr-item-properties.xml.h:11
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
+#: ../ssh/seahorse-ssh-key-properties.xml.h:22
+msgid "Details"
+msgstr "Sonraí"
+
+#: ../gkr/seahorse-gkr-keyring.xml.h:1
+msgid "Name:"
+msgstr "Ainm:"
+
+#. To translators: This is the noun not the verb.
+#: ../gkr/seahorse-gkr-keyring.xml.h:3
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
 msgid "Created:"
 msgstr "Cruthaithe:"
 
-#: ../gkr/seahorse-gkr-keyring.xml.h:3
+#: ../gkr/seahorse-gkr-keyring.xml.h:4
 msgid "Keyring"
 msgstr "Fáinne Eochracha"
 
-#: ../gkr/seahorse-gkr-keyring.xml.h:4
-msgid "Keyring Properties"
-msgstr "Airíonna Fáinne Eochracha"
-
-#: ../gkr/seahorse-gkr-keyring.xml.h:5
-msgid "_Name:"
-msgstr "_Ainm:"
-
-#: ../gkr/seahorse-gkr-operation.c:168
-msgid "Access to the key ring was denied"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-operation.c:171
-msgid "The gnome-keyring daemon is not running"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-operation.c:174
-msgid "The key ring has already been unlocked"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-operation.c:177
-msgid "No such key ring exists"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-operation.c:180
-msgid "Couldn't communicate with key ring daemon"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-operation.c:183
-msgid "The item already exists"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-operation.c:189
-msgid "Internal error accessing gnome-keyring"
-msgstr ""
-
-#: ../gkr/seahorse-gkr-operation.c:238 ../gkr/seahorse-gkr-operation.c:264
-msgid "Saving item..."
-msgstr ""
-
-#: ../gkr/seahorse-gkr-operation.c:300
-msgid "Deleting item..."
-msgstr ""
-
-#: ../gkr/seahorse-gkr-operation.c:325
-msgid "Deleting keyring..."
-msgstr ""
-
-#: ../gkr/seahorse-gkr-source.c:234
-msgid "Listing password keyrings"
-msgstr "Fáinní eochracha focal faire á liostáil"
-
-#: ../libcryptui/cryptui.c:272
-msgid ""
-"No encryption keys were found with which to perform the operation you "
-"requested.  The program <b>Passwords and Encryption Keys</b> will now be "
-"started so that you may either create a key or import one."
-msgstr ""
-
-#: ../libcryptui/cryptui-key-chooser.c:173
-msgid "All Keys"
-msgstr "Gach Eochair"
-
-#: ../libcryptui/cryptui-key-chooser.c:174
-msgid "Selected Recipients"
-msgstr ""
-
-#: ../libcryptui/cryptui-key-chooser.c:175
-msgid "Search Results"
-msgstr ""
-
-#. Filter Label
-#: ../libcryptui/cryptui-key-chooser.c:185
-msgid "Search _for:"
-msgstr ""
-
-#: ../libcryptui/cryptui-key-chooser.c:243
-msgid "None (Don't Sign)"
-msgstr "Neamhní (Ná Sínigh)"
-
-#: ../libcryptui/cryptui-key-chooser.c:256
-#, c-format
-msgid "Sign this message as %s"
-msgstr ""
-
-#. Sign Label
-#: ../libcryptui/cryptui-key-chooser.c:278
-msgid "_Sign message as:"
-msgstr ""
-
-#. TODO: Icons
-#. The name column
-#: ../libcryptui/cryptui-key-list.c:140
-#: ../pgp/seahorse-pgp-key-properties.c:839
-#: ../src/seahorse-key-manager-store.c:828
-msgid "Name"
-msgstr "Ainm"
-
-#. The keyid column
-#: ../libcryptui/cryptui-key-list.c:145
-#: ../pgp/seahorse-pgp-key-properties.c:1743
-#: ../src/seahorse-key-manager-store.c:840
-msgid "Key ID"
-msgstr "CA Eochrach"
-
-#: ../libegg/egg-datetime.c:313
+#: ../libegg/egg-datetime.c:317
 msgid "Display flags"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:314
+#: ../libegg/egg-datetime.c:318
 msgid "Displayed date and/or time properties"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:319
+#: ../libegg/egg-datetime.c:323
 msgid "Lazy mode"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:320
+#: ../libegg/egg-datetime.c:324
 msgid "Lazy mode doesn't normalize entered date and time values"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:325
+#: ../libegg/egg-datetime.c:329
 msgid "Year"
 msgstr "Bliain"
 
-#: ../libegg/egg-datetime.c:326
+#: ../libegg/egg-datetime.c:330
 msgid "Displayed year"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:331
+#: ../libegg/egg-datetime.c:335
 msgid "Month"
 msgstr "Mí"
 
-#: ../libegg/egg-datetime.c:332
+#: ../libegg/egg-datetime.c:336
 msgid "Displayed month"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:337
+#: ../libegg/egg-datetime.c:341
 msgid "Day"
 msgstr "Lá"
 
-#: ../libegg/egg-datetime.c:338
+#: ../libegg/egg-datetime.c:342
 msgid "Displayed day of month"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:343
+#: ../libegg/egg-datetime.c:347
 msgid "Hour"
 msgstr "Uair"
 
-#: ../libegg/egg-datetime.c:344
+#: ../libegg/egg-datetime.c:348
 msgid "Displayed hour"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:349
+#: ../libegg/egg-datetime.c:353
 msgid "Minute"
 msgstr "Nóiméad"
 
-#: ../libegg/egg-datetime.c:350
+#: ../libegg/egg-datetime.c:354
 msgid "Displayed minute"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:355
+#: ../libegg/egg-datetime.c:359
 msgid "Second"
 msgstr "Soicind"
 
-#: ../libegg/egg-datetime.c:356
+#: ../libegg/egg-datetime.c:360
 msgid "Displayed second"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:361
+#: ../libegg/egg-datetime.c:365
 msgid "Lower limit year"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:362
+#: ../libegg/egg-datetime.c:366
 msgid "Year part of the lower date limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:367
+#: ../libegg/egg-datetime.c:371
 msgid "Upper limit year"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:368
+#: ../libegg/egg-datetime.c:372
 msgid "Year part of the upper date limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:373
+#: ../libegg/egg-datetime.c:377
 msgid "Lower limit month"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:374
+#: ../libegg/egg-datetime.c:378
 msgid "Month part of the lower date limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:379
+#: ../libegg/egg-datetime.c:383
 msgid "Upper limit month"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:380
+#: ../libegg/egg-datetime.c:384
 msgid "Month part of the upper date limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:385
+#: ../libegg/egg-datetime.c:389
 msgid "Lower limit day"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:386
+#: ../libegg/egg-datetime.c:390
 msgid "Day of month part of the lower date limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:391
+#: ../libegg/egg-datetime.c:395
 msgid "Upper limit day"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:392
+#: ../libegg/egg-datetime.c:396
 msgid "Day of month part of the upper date limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:397
+#: ../libegg/egg-datetime.c:401
 msgid "Lower limit hour"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:398
+#: ../libegg/egg-datetime.c:402
 msgid "Hour part of the lower time limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:403
+#: ../libegg/egg-datetime.c:407
 msgid "Upper limit hour"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:404
+#: ../libegg/egg-datetime.c:408
 msgid "Hour part of the upper time limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:409
+#: ../libegg/egg-datetime.c:413
 msgid "Lower limit minute"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:410
+#: ../libegg/egg-datetime.c:414
 msgid "Minute part of the lower time limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:415
+#: ../libegg/egg-datetime.c:419
 msgid "Upper limit minute"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:416
+#: ../libegg/egg-datetime.c:420
 msgid "Minute part of the upper time limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:421
+#: ../libegg/egg-datetime.c:425
 msgid "Lower limit second"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:422
+#: ../libegg/egg-datetime.c:426
 msgid "Second part of the lower time limit"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:427
+#: ../libegg/egg-datetime.c:431
 msgid "Upper limit second"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:428
+#: ../libegg/egg-datetime.c:432
 msgid "Second part of the upper time limit"
 msgstr ""
 
@@ -887,442 +586,260 @@ msgstr ""
 #. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
 #. * or calendar:week_start:0 it will not work.
 #.
-#: ../libegg/egg-datetime.c:470
+#: ../libegg/egg-datetime.c:474
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:496
 msgid "Date"
 msgstr "Dáta"
 
-#: ../libegg/egg-datetime.c:492
+#: ../libegg/egg-datetime.c:496
 msgid "Enter the date directly"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:503
 msgid "Select Date"
 msgstr "Roghnaigh Dáta"
 
-#: ../libegg/egg-datetime.c:499
+#: ../libegg/egg-datetime.c:503
 msgid "Select the date from a calendar"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:517 ../libegg/egg-datetime.c:2192
+#: ../libegg/egg-datetime.c:521 ../libegg/egg-datetime.c:2199
 msgid "Time"
 msgstr "Am"
 
-#: ../libegg/egg-datetime.c:517
+#: ../libegg/egg-datetime.c:521
 msgid "Enter the time directly"
 msgstr ""
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:528
 msgid "Select Time"
 msgstr "Roghnaigh Am"
 
-#: ../libegg/egg-datetime.c:524
+#: ../libegg/egg-datetime.c:528
 msgid "Select the time from a list"
 msgstr ""
 
 #. Translators: set this to anything else if you want to use a
 #. * 24 hour clock.
 #.
-#: ../libegg/egg-datetime.c:791
+#: ../libegg/egg-datetime.c:793
 msgid "24hr: no"
-msgstr "24u: níl"
+msgstr "24hr: no"
 
-#: ../libegg/egg-datetime.c:795 ../libegg/egg-datetime.c:1253
-#: ../libegg/egg-datetime.c:1257
+#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1260
+#: ../libegg/egg-datetime.c:1264
 msgid "AM"
 msgstr "AM"
 
-#: ../libegg/egg-datetime.c:797 ../libegg/egg-datetime.c:1254
-#: ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:799 ../libegg/egg-datetime.c:1261
+#: ../libegg/egg-datetime.c:1268
 msgid "PM"
 msgstr "PM"
 
 #. Translators: This is hh:mm:ss AM/PM.
-#: ../libegg/egg-datetime.c:805
+#: ../libegg/egg-datetime.c:807
 #, c-format
 msgid "%02d:%02d:%02d %s"
 msgstr "%02d:%02d:%02d %s"
 
 #. Translators: This is hh:mm AM/PM.
-#: ../libegg/egg-datetime.c:808
+#: ../libegg/egg-datetime.c:810
 #, c-format
 msgid "%02d:%02d %s"
 msgstr "%02d:%02d %s"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:812
+#: ../libegg/egg-datetime.c:814
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
 #. Translators: This is hh:mm.
-#: ../libegg/egg-datetime.c:815
+#: ../libegg/egg-datetime.c:817
 #, c-format
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1169
+#: ../libegg/egg-datetime.c:1176
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1234
+#: ../libegg/egg-datetime.c:1241
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
-#: ../libegg/eggdesktopfile.c:165
-#, c-format
-msgid "File is not a valid .desktop file"
-msgstr ""
-
-#: ../libegg/eggdesktopfile.c:188
-#, c-format
-msgid "Unrecognized desktop file Version '%s'"
-msgstr ""
-
-#: ../libegg/eggdesktopfile.c:958
-#, c-format
-msgid "Starting %s"
-msgstr ""
-
-#: ../libegg/eggdesktopfile.c:1100
-#, c-format
-msgid "Application does not accept documents on command line"
-msgstr ""
-
-#: ../libegg/eggdesktopfile.c:1168
-#, c-format
-msgid "Unrecognized launch option: %d"
-msgstr ""
-
-#: ../libegg/eggdesktopfile.c:1373
-#, c-format
-msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
-msgstr ""
-
-#: ../libegg/eggdesktopfile.c:1392
-#, c-format
-msgid "Not a launchable item"
-msgstr ""
-
-#: ../libegg/eggsmclient.c:225
-msgid "Disable connection to session manager"
-msgstr ""
-
-#: ../libegg/eggsmclient.c:228
-msgid "Specify file containing saved configuration"
-msgstr ""
-
-#: ../libegg/eggsmclient.c:228
-msgid "FILE"
-msgstr ""
-
-#: ../libegg/eggsmclient.c:231
-msgid "Specify session management ID"
-msgstr ""
-
-#: ../libegg/eggsmclient.c:231 ../pgp/seahorse-pgp-key-properties.c:1312
-msgid "ID"
-msgstr "CA"
-
-#: ../libegg/eggsmclient.c:252
-msgid "Session management options:"
-msgstr ""
-
-#: ../libegg/eggsmclient.c:253
-msgid "Show session management options"
-msgstr ""
-
 #: ../libseahorse/seahorse-add-keyserver.xml.h:1
-msgid ":"
-msgstr ":"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:2
-msgid "Add Key Server"
-msgstr ""
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:3
-msgid "Host:"
-msgstr "Óstach:"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:4
-msgid "Key Server Type:"
-msgstr ""
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:6
-msgid "The port to access the server on."
-msgstr ""
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:7
 msgid "initial temporary item"
 msgstr ""
 
-#: ../libseahorse/seahorse-notification.c:566
-#: ../libseahorse/seahorse-notification.c:594
-msgid "Key Imported"
-msgid_plural "Keys Imported"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+#: ../libseahorse/seahorse-add-keyserver.xml.h:2
+msgid "Add Key Server"
+msgstr "Cuir Freastalaí Eochrach Leis"
 
-#: ../libseahorse/seahorse-notification.c:570
-#: ../libseahorse/seahorse-notification.c:593
+#: ../libseahorse/seahorse-add-keyserver.xml.h:3
+msgid "Key Server Type:"
+msgstr ""
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:4
+msgid "Host:"
+msgstr "Óstach:"
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:6
+msgid ":"
+msgstr ":"
+
+#: ../libseahorse/seahorse-add-keyserver.xml.h:7
+msgid "The port to access the server on."
+msgstr ""
+
+#: ../libseahorse/seahorse-application.c:136
+msgid "Version of this application"
+msgstr "Leagan an fheidhmchláir seo"
+
+#: ../libseahorse/seahorse-application.c:142
+#: ../libseahorse/seahorse-application.c:186
+msgid "- System Settings"
+msgstr ""
+
+#: ../libseahorse/seahorse-application.c:182
+msgid "Don't display a window"
+msgstr ""
+
+#: ../libseahorse/seahorse-interaction.c:99
 #, c-format
-msgid "Imported %i key"
-msgid_plural "Imported %i keys"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: ../libseahorse/seahorse-notification.c:572
-#, c-format
-msgid "Imported a key for"
-msgid_plural "Imported keys for"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: ../libseahorse/seahorse-notify.xml.h:1
-msgid "Notification Messages"
+msgid "Enter PIN or password for: %s"
 msgstr ""
 
-#: ../libseahorse/seahorse-object.c:216
-msgid "Symmetric Key"
-msgstr "Eochair Shiméadrach"
-
-#: ../libseahorse/seahorse-object.c:219
-msgid "Public Key"
-msgstr "Eochair Phoiblí"
-
-#: ../libseahorse/seahorse-object.c:222
-msgid "Private Key"
-msgstr "Eochair Phríobháideach"
-
-#: ../libseahorse/seahorse-object.c:225
-msgid "Credentials"
-msgstr ""
-
-#.
-#. * Translators: "This object is a means of storing items such as
-#. * name, email address, etc. that make up one's digital identity.
-#.
-#: ../libseahorse/seahorse-object.c:232
-msgid "Identity"
-msgstr ""
-
-#: ../libseahorse/seahorse-passphrase.c:194
-msgid "Passphrase"
-msgstr "Frása Faire"
-
-#: ../libseahorse/seahorse-passphrase.c:197
-#: ../ssh/seahorse-ssh-operation.c:480
-msgid "Password:"
-msgstr "Focal Faire:"
-
-#: ../libseahorse/seahorse-passphrase.c:260
+#. The second and main entry
+#: ../libseahorse/seahorse-passphrase.c:245
 msgid "Confirm:"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.c:63
+#: ../libseahorse/seahorse-prefs.c:66
 msgid "Not a valid Key Server address."
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.c:64
+#: ../libseahorse/seahorse-prefs.c:67
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.c:173
+#: ../libseahorse/seahorse-prefs.c:180
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:353
+#: ../libseahorse/seahorse-prefs.c:350
 msgid "Custom"
 msgstr "Saincheaptha"
 
-#: ../libseahorse/seahorse-prefs.c:420
+#: ../libseahorse/seahorse-prefs.c:403
 msgid "None: Don't publish keys"
 msgstr ""
 
 #: ../libseahorse/seahorse-prefs.xml.h:1
-msgid "Automatically retrieve keys from _key servers"
-msgstr ""
-
-#: ../libseahorse/seahorse-prefs.xml.h:2
-msgid "Automatically synchronize _modified keys with key servers"
-msgstr ""
-
-#: ../libseahorse/seahorse-prefs.xml.h:3
-msgid "Key Servers"
-msgstr ""
-
-#: ../libseahorse/seahorse-prefs.xml.h:4
-msgid "Key Sharing"
-msgstr ""
-
-#: ../libseahorse/seahorse-prefs.xml.h:5
 msgid "Preferences"
 msgstr "Sainroghanna"
 
-#: ../libseahorse/seahorse-prefs.xml.h:6
-msgid ""
-"Sharing your keys allows other people on your network to use the keys you've "
-"collected. This means they can automatically encrypt things for you or those "
-"you know, without you having to send them your key.\n"
-"\n"
-"<b>Note:</b> Your personal keys will not be compromised."
-msgstr ""
-
-#: ../libseahorse/seahorse-prefs.xml.h:9
+#: ../libseahorse/seahorse-prefs.xml.h:2
 msgid "_Find keys via:"
 msgstr ""
 
-#: ../libseahorse/seahorse-prefs.xml.h:10
+#: ../libseahorse/seahorse-prefs.xml.h:3
 msgid "_Publish keys to:"
 msgstr "_Foilsigh eochracha go:"
 
-#: ../libseahorse/seahorse-prefs.xml.h:11
-msgid "_Share my keys with others on my network"
+#: ../libseahorse/seahorse-prefs.xml.h:4
+msgid "Automatically retrieve keys from _key servers"
 msgstr ""
 
-#: ../libseahorse/seahorse-progress.xml.h:1
-msgid "Progress Title"
+#: ../libseahorse/seahorse-prefs.xml.h:5
+msgid "Automatically synchronize _modified keys with key servers"
 msgstr ""
 
-#: ../libseahorse/seahorse-unknown.c:67
-msgid "Unavailable"
-msgstr ""
+#: ../libseahorse/seahorse-prefs.xml.h:6
+msgid "Key Servers"
+msgstr "Freastalaithe Eochrach"
 
-#: ../libseahorse/seahorse-util.c:206
-msgid "%Y-%m-%d"
-msgstr "%Y-%m-%d"
-
-#: ../libseahorse/seahorse-util.c:439
-msgid "Key Data"
-msgstr "Sonraí Eochrach"
-
-#: ../libseahorse/seahorse-util.c:441
-msgid "Multiple Keys"
-msgstr ""
-
-#: ../libseahorse/seahorse-util.c:696
-msgid "Couldn't run file-roller"
-msgstr ""
-
-#: ../libseahorse/seahorse-util.c:702
-msgid "Couldn't package files"
-msgstr ""
-
-#: ../libseahorse/seahorse-util.c:703
-msgid "The file-roller process did not complete successfully"
-msgstr ""
-
-#. Filter for PGP keys. We also include *.asc, as in many
-#. cases that extension is associated with text/plain
-#: ../libseahorse/seahorse-util.c:812
-msgid "All key files"
-msgstr "Gach comhad eochrach"
-
-#: ../libseahorse/seahorse-util.c:823 ../libseahorse/seahorse-util.c:863
-#: ../pgp/seahorse-gpgme-photos.c:242
-msgid "All files"
-msgstr "Gach comhad"
-
-#: ../libseahorse/seahorse-util.c:856
-msgid "Archive files"
-msgstr "Comhaid cartlainne"
-
-#: ../libseahorse/seahorse-util.c:905
-msgid ""
-"<b>A file already exists with this name.</b>\n"
-"\n"
-"Do you want to replace it with a new file?"
-msgstr ""
-
-#: ../libseahorse/seahorse-util.c:908
-msgid "_Replace"
-msgstr "_Ionadaigh"
-
-#: ../libseahorse/seahorse-validity.c:34 ../pgp/seahorse-gpgme-subkey.c:197
-#: ../pgp/seahorse-pgp-key-properties.c:1131
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+#: ../libseahorse/seahorse-validity.c:40
+#: ../pgp/seahorse-pgp-key-properties.c:1252
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
+msgctxt "Validity"
 msgid "Unknown"
 msgstr "Anaithnid"
 
-#: ../libseahorse/seahorse-validity.c:36
-#: ../pgp/seahorse-pgp-key-properties.c:1137
+#: ../libseahorse/seahorse-validity.c:42
+#: ../pgp/seahorse-pgp-key-properties.c:1258
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
 msgctxt "Validity"
 msgid "Never"
 msgstr "Riamh"
 
-#: ../libseahorse/seahorse-validity.c:38
-#: ../pgp/seahorse-pgp-key-properties.c:1144
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:33
+#: ../libseahorse/seahorse-validity.c:44
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
+msgctxt "Validity"
 msgid "Marginal"
 msgstr "Imeallach"
 
-#: ../libseahorse/seahorse-validity.c:40
-#: ../pgp/seahorse-pgp-key-properties.c:1150
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
+#: ../libseahorse/seahorse-validity.c:46
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
+msgctxt "Validity"
 msgid "Full"
 msgstr "Iomlán"
 
-#: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1156
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
+#: ../libseahorse/seahorse-validity.c:48
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
+msgctxt "Validity"
 msgid "Ultimate"
 msgstr "An-Iontaofa"
 
-#: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-key-properties.c:1349
+#: ../libseahorse/seahorse-validity.c:50
+msgctxt "Validity"
 msgid "Disabled"
 msgstr "Díchumasaithe"
 
-#: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-key-properties.c:1345
+#: ../libseahorse/seahorse-validity.c:52
+msgctxt "Validity"
 msgid "Revoked"
 msgstr "Cúlghairthe"
 
-#: ../libseahorse/seahorse-widget.c:362
-#, c-format
-msgid "Could not display help: %s"
+#: ../pgp/seahorse-add-subkey.xml.h:1
+msgid "Never E_xpires"
 msgstr ""
 
-#: ../pgp/seahorse-add-subkey.xml.h:1
-msgid "Expiration Date:"
-msgstr "Dáta Éaga:"
-
 #: ../pgp/seahorse-add-subkey.xml.h:2
-msgid "Generate a new subkey"
+msgid "If key never expires"
 msgstr ""
 
 #: ../pgp/seahorse-add-subkey.xml.h:3
-msgid "If key never expires"
-msgstr ""
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:4
+msgid "Key _Type:"
+msgstr "_Cineál Eochrach:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:4
 msgid "Key _Length:"
 msgstr "_Fad Eochrach:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:5
-msgid "Key _Type:"
-msgstr "_Cineál Eochrach:"
+msgid "Expiration Date:"
+msgstr "Dáta Éaga:"
 
 #: ../pgp/seahorse-add-subkey.xml.h:6
 msgid "Length of Key"
-msgstr ""
+msgstr "Fad na hEochrach"
 
 #: ../pgp/seahorse-add-subkey.xml.h:7
-msgid "Never E_xpires"
+msgid "Generate a new subkey"
 msgstr ""
 
 #: ../pgp/seahorse-add-uid.xml.h:1
@@ -1330,130 +847,243 @@ msgid "Add User ID"
 msgstr "Cuir CA Úsáideora Leis"
 
 #: ../pgp/seahorse-add-uid.xml.h:2
-msgid "Create the new user ID"
-msgstr ""
-
-#: ../pgp/seahorse-add-uid.xml.h:3 ../pgp/seahorse-pgp-generate.xml.h:7
-msgid "Full _Name:"
-msgstr "_Ainm Iomlán:"
-
-#: ../pgp/seahorse-add-uid.xml.h:4
-msgid "Key Co_mment:"
-msgstr ""
-
-#: ../pgp/seahorse-add-uid.xml.h:5
 msgid "Must be at least 5 characters long"
 msgstr ""
 
-#: ../pgp/seahorse-add-uid.xml.h:6
-msgid "Optional comment describing key"
-msgstr ""
-
-#: ../pgp/seahorse-add-uid.xml.h:7
+#: ../pgp/seahorse-add-uid.xml.h:3
 msgid "Optional email address"
 msgstr ""
 
-#: ../pgp/seahorse-add-uid.xml.h:8 ../pgp/seahorse-pgp-generate.xml.h:13
+#: ../pgp/seahorse-add-uid.xml.h:4
+msgid "Optional comment describing key"
+msgstr ""
+
+#. Full name of the key, usually the name of the user.
+#: ../pgp/seahorse-add-uid.xml.h:6 ../pgp/seahorse-pgp-generate.xml.h:5
+msgid "Full _Name:"
+msgstr "_Ainm Iomlán:"
+
+#: ../pgp/seahorse-add-uid.xml.h:7 ../pgp/seahorse-pgp-generate.xml.h:6
 msgid "_Email Address:"
 msgstr "Seoladh _Ríomhphoist:"
 
-#: ../pgp/seahorse-expires.xml.h:1
-msgid "C_hange"
-msgstr "_Athraigh"
+#: ../pgp/seahorse-add-uid.xml.h:8
+msgid "Key Co_mment:"
+msgstr "_Nóta na hEochrach:"
 
-#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:4
+#: ../pgp/seahorse-add-uid.xml.h:9
+msgid "Create the new user ID"
+msgstr ""
+
+#: ../pgp/seahorse-expires.xml.h:1
+msgid "_Never expires"
+msgstr ""
+
+#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:5
 msgid "Revoke key"
 msgstr ""
 
 #: ../pgp/seahorse-expires.xml.h:3
-msgid "_Never expires"
-msgstr ""
+msgid "C_hange"
+msgstr "_Athraigh"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:144
+#: ../pgp/seahorse-gpgme-add-subkey.c:162
 msgid "Couldn't add subkey"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:163
+#: ../pgp/seahorse-gpgme-add-subkey.c:181
 #, c-format
 msgid "Add subkey to %s"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:179 ../pgp/seahorse-gpgme-generate.c:96
+#: ../pgp/seahorse-gpgme-add-subkey.c:197 ../pgp/seahorse-gpgme-generate.c:132
 msgid "DSA (sign only)"
 msgstr "DSA (sínigh amháin)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:187
+#: ../pgp/seahorse-gpgme-add-subkey.c:205
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (criptigh amháin)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:193 ../pgp/seahorse-gpgme-generate.c:97
+#: ../pgp/seahorse-gpgme-add-subkey.c:211 ../pgp/seahorse-gpgme-generate.c:133
 msgid "RSA (sign only)"
 msgstr "RSA (sínigh amháin)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:199
+#: ../pgp/seahorse-gpgme-add-subkey.c:217
 msgid "RSA (encrypt only)"
 msgstr "RSA (criptigh amháin)"
 
-#: ../pgp/seahorse-gpgme-add-uid.c:85
+#: ../pgp/seahorse-gpgme-add-uid.c:100
 msgid "Couldn't add user id"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-add-uid.c:107
+#: ../pgp/seahorse-gpgme-add-uid.c:122
 #, c-format
 msgid "Add user ID to %s"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme.c:51
+#: ../pgp/seahorse-gpgme.c:70
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-expires.c:58
+#: ../pgp/seahorse-gpgme.c:74 ../pgp/seahorse-hkp-source.c:512
+#: ../ssh/seahorse-ssh-operation.c:194
+msgid "The operation was cancelled"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-expires.c:65
 msgid "Invalid expiry date"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-expires.c:59
+#: ../pgp/seahorse-gpgme-expires.c:66
 msgid "The expiry date must be in the future"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-expires.c:72
+#: ../pgp/seahorse-gpgme-expires.c:79
 msgid "Couldn't change expiry date"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-expires.c:131
+#: ../pgp/seahorse-gpgme-expires.c:140
 #, c-format
 msgid "Expiry: %s"
 msgstr "Éag: %s"
 
-#: ../pgp/seahorse-gpgme-generate.c:65
+#: ../pgp/seahorse-gpgme-exporter.c:85
+msgid "Multiple Keys"
+msgstr "Eochracha Iomadúla"
+
+#: ../pgp/seahorse-gpgme-exporter.c:89
+msgid "Key Data"
+msgstr "Sonraí Eochrach"
+
+#: ../pgp/seahorse-gpgme-exporter.c:117
+msgid "Armored PGP keys"
+msgstr "Eochracha armúrtha PGP"
+
+#: ../pgp/seahorse-gpgme-exporter.c:121
+msgid "PGP keys"
+msgstr "Eochracha PGP"
+
+#: ../pgp/seahorse-gpgme-generate.c:93
 msgid "PGP Key"
 msgstr "Eochair PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:66
+#: ../pgp/seahorse-gpgme-generate.c:94
 msgid "Used to encrypt email and files"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-generate.c:95
-msgid "DSA Elgamal"
-msgstr "DSA Elgamal"
+#: ../pgp/seahorse-gpgme-generate.c:130
+#: ../pkcs11/seahorse-pkcs11-generate.c:91
+#: ../ssh/seahorse-ssh-generate.xml.h:9
+msgid "RSA"
+msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:106
+#: ../pgp/seahorse-gpgme-generate.c:131
+msgid "DSA ElGamal"
+msgstr "DSA ElGamal"
+
+#: ../pgp/seahorse-gpgme-generate.c:180
 msgid "Couldn't generate PGP key"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-generate.c:213
+#: ../pgp/seahorse-gpgme-generate.c:212
 msgid "Passphrase for New PGP Key"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-generate.c:214
+#: ../pgp/seahorse-gpgme-generate.c:213
 msgid "Enter the passphrase for your new key twice."
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-generate.c:223
-msgid "Couldn't generate key"
+#. Has line breaks because GtkLabel is completely broken WRT wrapping
+#: ../pgp/seahorse-gpgme-generate.c:224
+msgid ""
+"When creating a key we need to generate a lot of\n"
+"random data and we need you to help. It's a good\n"
+"idea to perform some other action like typing on\n"
+"the keyboard, moving the mouse, using applications.\n"
+"This gives the system the random data that it needs."
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-generate.c:225
+#: ../pgp/seahorse-gpgme-generate.c:229
+#: ../pkcs11/seahorse-pkcs11-generate.c:459
 msgid "Generating key"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-key-deleter.c:78
+#: ../pgp/seahorse-gpgme-secret-deleter.c:77
+#: ../pkcs11/seahorse-pkcs11-deleter.c:66
+#: ../pkcs11/seahorse-pkcs11-key-deleter.c:81
+#, c-format
+msgid "Are you sure you want to permanently delete %s?"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-key-deleter.c:81
+#, c-format
+msgid "Are you sure you want to permanently delete %d keys?"
+msgid_plural "Are you sure you want to permanently delete %d keys?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+
+#: ../pgp/seahorse-gpgme-key-op.c:381
+msgid "Wrong password"
+msgstr "Focal faire mícheart"
+
+#: ../pgp/seahorse-gpgme-key-op.c:381
+msgid "This was the third time you entered a wrong password. Please try again."
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-keyring.c:90
+#, c-format
+msgid "Wrong passphrase."
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-keyring.c:94
+#, c-format
+msgid "Enter new passphrase for '%s'"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-keyring.c:96
+#, c-format
+msgid "Enter passphrase for '%s'"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-keyring.c:99
+#: ../src/seahorse-change-passphrase.xml.h:2
+msgid "Enter new passphrase"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-keyring.c:101
+msgid "Enter passphrase"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-keyring.c:106
+msgid "Passphrase"
+msgstr "Frása Faire"
+
+#: ../pgp/seahorse-gpgme-keyring.c:307
+#, c-format
+msgid "Loaded %d key"
+msgid_plural "Loaded %d keys"
+msgstr[0] "Luchtaíodh %d eochair"
+msgstr[1] "Luchtaíodh %d eochair"
+msgstr[2] "Luchtaíodh %d eochair"
+msgstr[3] "Luchtaíodh %d n-eochair"
+msgstr[4] "Luchtaíodh %d eochair"
+
+#: ../pgp/seahorse-gpgme-keyring.c:654
+msgid ""
+"Invalid key data (missing UIDs). This may be due to a computer with a date "
+"set in the future or a missing self-signature."
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-keyring.c:807
+msgid "GnuPG keys"
+msgstr "Eochracha GnuPG"
+
+#: ../pgp/seahorse-gpgme-keyring.c:813
+msgid "GnuPG: default keyring directory"
 msgstr ""
 
 #: ../pgp/seahorse-gpgme-photos.c:73
@@ -1465,7 +1095,7 @@ msgstr ""
 
 #: ../pgp/seahorse-gpgme-photos.c:78
 msgid "_Don't Resize"
-msgstr "_Ná Athmhéadaigh"
+msgstr "_Ná hAthmhéadaigh"
 
 #: ../pgp/seahorse-gpgme-photos.c:79
 msgid "_Resize"
@@ -1486,674 +1116,730 @@ msgstr "Gach comhad íomhá"
 msgid "All JPEG files"
 msgstr "Gach comhad JPEG"
 
-#: ../pgp/seahorse-gpgme-photos.c:261
+#: ../pgp/seahorse-gpgme-photos.c:242 ../src/seahorse-key-manager.c:289
+msgid "All files"
+msgstr "Gach comhad"
+
+#: ../pgp/seahorse-gpgme-photos.c:263
 msgid "Choose Photo to Add to Key"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-photos.c:290 ../pgp/seahorse-gpgme-photos.c:294
+#: ../pgp/seahorse-gpgme-photos.c:285
+msgid "Couldn't prepare photo"
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-photos.c:295 ../pgp/seahorse-gpgme-photos.c:298
 msgid "Couldn't add photo"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-photos.c:291
+#: ../pgp/seahorse-gpgme-photos.c:296
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-photos.c:320
+#: ../pgp/seahorse-gpgme-photos.c:322
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-photos.c:333
+#: ../pgp/seahorse-gpgme-photos.c:335
 msgid "Couldn't delete photo"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:70
+#: ../pgp/seahorse-gpgme-revoke.c:75
 msgid "Couldn't revoke subkey"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:91
+#: ../pgp/seahorse-gpgme-revoke.c:96
 #, c-format
 msgid "Revoke: %s"
 msgstr "Cúlghair: %s"
 
-#: ../pgp/seahorse-gpgme-revoke.c:102
+#: ../pgp/seahorse-gpgme-revoke.c:107
 msgid "No reason"
-msgstr ""
+msgstr "Gan chúis"
 
-#: ../pgp/seahorse-gpgme-revoke.c:103
+#: ../pgp/seahorse-gpgme-revoke.c:108
 msgid "No reason for revoking key"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:109
+#: ../pgp/seahorse-gpgme-revoke.c:114
 msgid "Compromised"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:110
+#: ../pgp/seahorse-gpgme-revoke.c:115
 msgid "Key has been compromised"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:116
+#: ../pgp/seahorse-gpgme-revoke.c:121
 msgid "Superseded"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:117
+#: ../pgp/seahorse-gpgme-revoke.c:122
 msgid "Key has been superseded"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:123
+#: ../pgp/seahorse-gpgme-revoke.c:128
 msgid "Not Used"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:124
+#: ../pgp/seahorse-gpgme-revoke.c:129
 msgid "Key is no longer used"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:161
+#: ../pgp/seahorse-gpgme-revoke.c:166
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-revoke.c:173
+#: ../pgp/seahorse-gpgme-revoke.c:178
 msgid "Couldn't add revoker"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-sign.c:96
+#: ../pgp/seahorse-gpgme-secret-deleter.c:82 ../ssh/seahorse-ssh-deleter.c:83
+msgid "I understand that this secret key will be permanently deleted."
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-sign.c:100
+#, c-format
+msgid ""
+"This key was already signed by\n"
+"\"%s\""
+msgstr ""
+
+#: ../pgp/seahorse-gpgme-sign.c:105
 msgid "Couldn't sign key"
 msgstr ""
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:149 ../pgp/seahorse-signer.c:61
+#: ../pgp/seahorse-gpgme-sign.c:164 ../pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-sign.c:150
+#: ../pgp/seahorse-gpgme-sign.c:165
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr ""
 
-#: ../pgp/seahorse-gpgme-source.c:99
-#, c-format
-msgid "Wrong passphrase."
-msgstr ""
-
-#: ../pgp/seahorse-gpgme-source.c:103
-#, c-format
-msgid "Enter new passphrase for '%s'"
-msgstr ""
-
-#: ../pgp/seahorse-gpgme-source.c:105
-#, c-format
-msgid "Enter passphrase for '%s'"
-msgstr ""
-
-#: ../pgp/seahorse-gpgme-source.c:108
-#: ../src/seahorse-change-passphrase.xml.h:4
-msgid "Enter new passphrase"
-msgstr ""
-
-#: ../pgp/seahorse-gpgme-source.c:110
-msgid "Enter passphrase"
-msgstr ""
-
-#. TODO: We can use the GPGME progress to make this more accurate
-#: ../pgp/seahorse-gpgme-source.c:722
-#, c-format
-msgid "Loaded %d key"
-msgid_plural "Loaded %d keys"
-msgstr[0] "Luchtaíodh %d eochair"
-msgstr[1] "Luchtaíodh %d eochair"
-msgstr[2] "Luchtaíodh %d eochair"
-msgstr[3] "Luchtaíodh %d n-eochair"
-msgstr[4] "Luchtaíodh %d eochair"
-
-#: ../pgp/seahorse-gpgme-source.c:777
-msgid "Loading Keys..."
-msgstr "Eochracha á Luchtú..."
-
-#: ../pgp/seahorse-gpgme-source.c:820
-msgid ""
-"Invalid key data (missing UIDs). This may be due to a computer with a date "
-"set in the future or a missing self-signature."
-msgstr ""
-
-#: ../pgp/seahorse-gpgme-source.c:910 ../src/seahorse-key-manager.c:538
-msgid "Importing Keys"
-msgstr ""
-
-#: ../pgp/seahorse-gpgme-source.c:946
-msgid "Exporting Keys"
-msgstr ""
+#: ../pgp/seahorse-gpgme-subkey.c:197
+msgctxt "Algorithm"
+msgid "Unknown"
+msgstr "Anaithnid"
 
 #: ../pgp/seahorse-gpgme-subkey.c:199
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: ../pgp/seahorse-hkp-source.c:330
+#: ../pgp/seahorse-hkp-source.c:530
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 
-#: ../pgp/seahorse-hkp-source.c:332
+#: ../pgp/seahorse-hkp-source.c:533
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr ""
 
-#: ../pgp/seahorse-hkp-source.c:576
-msgid "Searching for keys..."
-msgstr ""
-
-#: ../pgp/seahorse-hkp-source.c:647
-msgid "Uploading keys..."
-msgstr ""
-
-#: ../pgp/seahorse-hkp-source.c:725
-msgid "Retrieving keys..."
-msgstr ""
-
-#: ../pgp/seahorse-hkp-source.c:831
-#, c-format
-msgid "Searching for keys on: %s"
-msgstr ""
-
-#. The ldap_cb and chain_cb were set in seahorse_ldap_operation_start
-#: ../pgp/seahorse-hkp-source.c:908 ../pgp/seahorse-hkp-source.c:981
-#: ../pgp/seahorse-ldap-source.c:668
-#, c-format
-msgid "Connecting to: %s"
-msgstr ""
-
-#: ../pgp/seahorse-hkp-source.c:1005
+#: ../pgp/seahorse-hkp-source.c:1041
 msgid "HTTP Key Server"
 msgstr "Freastalaí Eochracha HTTP"
 
-#: ../pgp/seahorse-ldap-source.c:459
+#: ../pgp/seahorse-keyserver-results.c:168
+msgid "Couldn't import keys"
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-results.c:211
+msgid "Importing keys from key servers"
+msgstr ""
+
+#. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
+#: ../pgp/seahorse-keyserver-results.c:237 ../src/seahorse-key-manager.c:502
+msgid "_Remote"
+msgstr "C_ianda"
+
+#: ../pgp/seahorse-keyserver-results.c:239
+msgid "Close this window"
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-results.c:243 ../pgp/seahorse-pgp-actions.c:113
+msgid "_Find Remote Keys..."
+msgstr "_Aimsigh Eochracha Cianda..."
+
+#: ../pgp/seahorse-keyserver-results.c:244 ../pgp/seahorse-pgp-actions.c:114
+msgid "Search for keys on a key server"
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-results.c:248 ../src/seahorse-key-manager.xml.h:3
+msgid "_Import"
+msgstr "_Iompórtáil"
+
+#: ../pgp/seahorse-keyserver-results.c:249
+msgid "Import selected keys to local key ring"
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-results.c:280
+msgid "Remote Keys"
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-results.c:282
+#, c-format
+msgid "Remote Keys Containing '%s'"
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-results.c:485
+msgid "The search for keys failed."
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-search.xml.h:1
+msgid "Find Remote Keys"
+msgstr "Aimsigh Eochracha Cianda"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:2
+msgid ""
+"This will find keys for others on the Internet. These keys can then be "
+"imported into your local key ring."
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-search.xml.h:3
+msgid "_Search for keys containing: "
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-search.xml.h:4
+msgid "Key Servers:"
+msgstr "Freastalaithe _Eochrach:"
+
+#: ../pgp/seahorse-keyserver-search.xml.h:5
+msgid "Shared Keys Near Me:"
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-search.xml.h:6
+msgid "Where to search:"
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-search.xml.h:7
+msgid "_Search"
+msgstr "Cuar_daigh"
+
+#: ../pgp/seahorse-keyserver-sync.c:57
+msgid "Couldn't publish keys to server"
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-sync.c:76
+#, c-format
+msgid "Couldn't retrieve keys from server: %s"
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-sync.c:160
+#, c-format
+msgid "<b>%d key is selected for synchronizing</b>"
+msgid_plural "<b>%d keys are selected for synchronizing</b>"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: ../pgp/seahorse-keyserver-sync.c:240
+msgid "Synchronizing keys..."
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:1
+msgid "Sync Keys"
+msgstr "Sioncrónaigh Eochracha"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:2
+msgid ""
+"This will publish the keys in your key ring so they're available for others "
+"to use. You'll also get any changes others have made since you received "
+"their keys."
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:3
+msgid ""
+"This will retrieve any changes others have made since you received their "
+"keys. No key server has been chosen for publishing, so your keys will not be "
+"made available to others."
+msgstr ""
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:4
+msgid "_Key Servers"
+msgstr "Freastalaithe _Eochracha"
+
+#: ../pgp/seahorse-keyserver-sync.xml.h:5
+msgid "_Sync"
+msgstr "_Sionc"
+
+#: ../pgp/seahorse-ldap-source.c:440
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr ""
 
-#: ../pgp/seahorse-ldap-source.c:641
+#: ../pgp/seahorse-ldap-source.c:651
+#, c-format
+msgid "Connecting to: %s"
+msgstr ""
+
+#: ../pgp/seahorse-ldap-source.c:657
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr ""
 
-#: ../pgp/seahorse-ldap-source.c:719
+#: ../pgp/seahorse-ldap-source.c:701
 #, c-format
 msgid "Resolving server address: %s"
 msgstr ""
 
-#: ../pgp/seahorse-ldap-source.c:955
-#, c-format
-msgid "Searching for keys containing '%s'..."
-msgstr ""
-
-#: ../pgp/seahorse-ldap-source.c:982
-#, c-format
-msgid "Searching for key id '%s'..."
-msgstr ""
-
-#: ../pgp/seahorse-ldap-source.c:1087
-msgid "Retrieving remote keys..."
-msgstr ""
-
-#: ../pgp/seahorse-ldap-source.c:1219
-msgid "Sending keys to key server..."
-msgstr ""
-
-#: ../pgp/seahorse-ldap-source.c:1421
+#: ../pgp/seahorse-ldap-source.c:1438
 msgid "LDAP Key Server"
 msgstr "Freastalaí Eochracha LDAP"
 
-#: ../pgp/seahorse-pgp-commands.c:103
-msgid "_Sign Key..."
-msgstr "_Sínigh Eochair..."
+#: ../pgp/seahorse-pgp-actions.c:118
+msgid "_Sync and Publish Keys..."
+msgstr "_Sioncrónaigh agus Foilsigh Eochracha..."
 
-#: ../pgp/seahorse-pgp-commands.c:103
-msgid "Sign public key"
-msgstr "Sínigh eochair phoiblí"
-
-#: ../pgp/seahorse-pgp-commands.c:171
-#, c-format
-msgid "Are you sure you want to permanently delete %s?"
+#: ../pgp/seahorse-pgp-actions.c:119
+msgid "Publish and/or synchronize your keys with those online."
 msgstr ""
 
-#: ../pgp/seahorse-pgp-commands.c:176
-#, c-format
-msgid "Are you sure you want to permanently delete %d keys and identities?"
+#: ../pgp/seahorse-pgp-backend.c:167
+msgid "PGP Keys"
+msgstr "Eochracha PGP"
+
+#: ../pgp/seahorse-pgp-backend.c:173
+msgid "PGP keys are for encrypting email or files"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-commands.c:178
-#, c-format
-msgid "Are you sure you want to permanently delete %d keys?"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-commands.c:180
-#, c-format
-msgid "Are you sure you want to permanently delete %d identities?"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-generate.xml.h:1 ../ssh/seahorse-ssh-generate.xml.h:1
-msgid "<b>_Advanced key options</b>"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-generate.xml.h:2
-msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr ""
-
-#: ../pgp/seahorse-pgp-generate.xml.h:3
-msgid "Algorithms here"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-generate.xml.h:4
+#: ../pgp/seahorse-pgp-generate.xml.h:1
 msgid "C_reate"
 msgstr "C_ruthaigh"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:5
-msgid "E_xpiration Date:"
-msgstr "Dáta Éa_ga:"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:6 ../ssh/seahorse-ssh-generate.xml.h:5
-msgid "Encryption _Type:"
-msgstr "_Cineál Criptithe:"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:8
+#: ../pgp/seahorse-pgp-generate.xml.h:2
 msgid "Generate a new key"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:7
-msgid "Key _Strength (bits):"
+#: ../pgp/seahorse-pgp-generate.xml.h:3
+msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
 
-#: ../pgp/seahorse-pgp-generate.xml.h:10
+#: ../pgp/seahorse-pgp-generate.xml.h:7
 msgid "Ne_ver Expires"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-generate.xml.h:11
-msgid "New PGP Key"
-msgstr "Eochair PGP Nua"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:12
+#: ../pgp/seahorse-pgp-generate.xml.h:8
 msgid "_Comment:"
 msgstr "_Nóta:"
 
-#: ../pgp/seahorse-pgp-key.c:201
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
-msgid "Private PGP Key"
+#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:7
+msgid "Encryption _Type:"
+msgstr "_Cineál Criptithe:"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:10
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:5
+#: ../ssh/seahorse-ssh-generate.xml.h:8
+msgid "Key _Strength (bits):"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key.c:204
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
-msgid "Public PGP Key"
-msgstr "Eochair PGP Phoiblí"
+#: ../pgp/seahorse-pgp-generate.xml.h:11
+msgid "E_xpiration Date:"
+msgstr "Dáta Éa_ga:"
 
-#: ../pgp/seahorse-pgp-key.c:583 ../pgp/seahorse-pgp-key-properties.c:1347
-msgid "Expired"
-msgstr "As Dáta"
+#: ../pgp/seahorse-pgp-generate.xml.h:12
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
+#: ../ssh/seahorse-ssh-generate.xml.h:11
+msgid "_Advanced key options"
+msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:224
+#: ../pgp/seahorse-pgp-key.c:352
+msgid "Personal PGP key"
+msgstr "Eochair pearsanta PGP"
+
+#: ../pgp/seahorse-pgp-key.c:354
+msgid "PGP key"
+msgstr "Eochair PGP"
+
+#: ../pgp/seahorse-pgp-key-properties.c:322
 msgid "Couldn't change primary user ID"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:241
+#: ../pgp/seahorse-pgp-key-properties.c:341
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:251
+#: ../pgp/seahorse-pgp-key-properties.c:351
 msgid "Couldn't delete user ID"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:333
-#: ../pgp/seahorse-pgp-key-properties.c:1462
+#: ../pgp/seahorse-pgp-key-properties.c:426
+#: ../pgp/seahorse-pgp-key-properties.c:1569
 msgid "[Unknown]"
 msgstr "[Anaithnid]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:426
-#: ../pgp/seahorse-pgp-key-properties.c:1740
+#: ../pgp/seahorse-pgp-key-properties.c:535
+#: ../pgp/seahorse-pgp-key-properties.c:1852
 msgid "Name/Email"
 msgstr "Ainm/Ríomhphost"
 
-#: ../pgp/seahorse-pgp-key-properties.c:431
+#: ../pgp/seahorse-pgp-key-properties.c:542
 msgid "Signature ID"
 msgstr "CA Sínithe"
 
-#: ../pgp/seahorse-pgp-key-properties.c:552
+#: ../pgp/seahorse-pgp-key-properties.c:675
 msgid "Couldn't change primary photo"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:775
+#. TRANSLATORS: (unknown) expiry date
+#: ../pgp/seahorse-pgp-key-properties.c:909
 msgid "(unknown)"
 msgstr "(anaithnid)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:778
+#: ../pgp/seahorse-pgp-key-properties.c:912
 #, c-format
 msgid "This key expired on: %s"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:946
+#: ../pgp/seahorse-pgp-key-properties.c:975
+msgid "Name"
+msgstr "Ainm"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1088
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:955
+#: ../pgp/seahorse-pgp-key-properties.c:1097
 msgid "Couldn't delete subkey"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:991
-#: ../pgp/seahorse-pgp-key-properties.c:1425
+#: ../pgp/seahorse-pgp-key-properties.c:1137
+#: ../pgp/seahorse-pgp-key-properties.c:1543
 msgid "Unable to change trust"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-key-properties.c:1005 ../src/seahorse-viewer.c:315
-#: ../ssh/seahorse-ssh-key-properties.c:167
-#, c-format
-msgid "Couldn't export key to \"%s\""
-msgstr ""
-
-#: ../pgp/seahorse-pgp-key-properties.c:1033
-#: ../ssh/seahorse-ssh-key-properties.c:191
-msgid "Export Complete Key"
-msgstr "Easpórtáil Eochair ar Fad"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1058
-#: ../ssh/seahorse-ssh-key-properties.c:213
-msgid "Couldn't export key."
-msgstr ""
+#: ../pgp/seahorse-pgp-key-properties.c:1151
+#: ../ssh/seahorse-ssh-key-properties.c:200
+#, fuzzy
+msgid "Couldn't export key"
+msgstr "Níorbh fhéidir frása faire d'eochair a athrú."
 
 #: ../pgp/seahorse-pgp-key-properties.c:1265
-#: ../pgp/seahorse-pgp-key-properties.c:1354
+msgid "Marginal"
+msgstr "Imeallach"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1271
+msgid "Full"
+msgstr "Iomlán"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1277
+msgid "Ultimate"
+msgstr "An-Iontaofa"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1383
+#: ../pgp/seahorse-pgp-key-properties.c:1472
 msgctxt "Expires"
 msgid "Never"
 msgstr "Riamh"
 
-#. The key type column
-#: ../pgp/seahorse-pgp-key-properties.c:1315
-#: ../src/seahorse-key-manager-store.c:859
+#: ../pgp/seahorse-pgp-key-properties.c:1430
+msgid "ID"
+msgstr "CA"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1433
 msgid "Type"
 msgstr "Cineál"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1318
+#: ../pgp/seahorse-pgp-key-properties.c:1436
 msgid "Created"
 msgstr "Cruthaithe"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1321
+#: ../pgp/seahorse-pgp-key-properties.c:1439
 msgid "Expires"
 msgstr "As Feidhm"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1324
+#: ../pgp/seahorse-pgp-key-properties.c:1442
 msgid "Status"
 msgstr "Stádas"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1327
+#: ../pgp/seahorse-pgp-key-properties.c:1445
 msgid "Strength"
 msgstr "Neart"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1351
+#: ../pgp/seahorse-pgp-key-properties.c:1463
+msgid "Revoked"
+msgstr "Cúlghairthe"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1465
+msgid "Expired"
+msgstr "As Dáta"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1467
+msgid "Disabled"
+msgstr "Díchumasaithe"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1469
 msgid "Good"
 msgstr "Maith"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>Gníomhartha</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
-msgid "<b>Comment:</b>"
-msgstr "<b>Nóta:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
-msgid "<b>Dates</b>"
-msgstr "<b>Dátaí</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
-msgid "<b>Email:</b>"
-msgstr "<b>Ríomhphost:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
-msgid "<b>Fingerprint</b>"
-msgstr "<b>Méarlorg</b>"
+#: ../pgp/seahorse-pgp-key-properties.c:1855
+msgid "Key ID"
+msgstr "CA Eochrach"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
-msgid "<b>Key ID:</b>"
-msgstr "<b>CA Eochrach:</b>"
+#: ../ssh/seahorse-ssh-key-properties.xml.h:1
+msgid "Key Properties"
+msgstr "Airíonna Eochrach"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
-msgid "<b>Key Names and Signatures</b>"
-msgstr "<b>Ainmneacha Eochracha agus Sínithe</b>"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
+msgid "This key has been revoked"
+msgstr ""
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-#: ../ssh/seahorse-ssh-key-properties.xml.h:7
-msgid "<b>Name:</b>"
-msgstr "<b>Ainm:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
-msgid "<b>Photo </b>"
-msgstr "<b>Grianghraf </b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
-msgid "<b>Technical Details</b>"
-msgstr "<b>Sonraí Teicniúla</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:10
-msgid "<b>This key has been revoked</b>"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
-msgid "<b>This key has expired</b>"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:13
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:12
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
-msgid "<b>Type:</b>"
-msgstr "<b>Cineál:</b>"
-
-#. To translators: This is the noun not the verb.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:15
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
-#: ../ssh/seahorse-ssh-key-properties.xml.h:13
-msgid "<b>Use:</b>"
-msgstr "<b>Úsáid:</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
-msgid "<b>_Subkeys</b>"
-msgstr "<b>_Fo-eochracha</b>"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
-msgid "Add"
-msgstr "Cuir Leis"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:18
-msgid "Add a photo to this key"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
-#: ../ssh/seahorse-ssh-key-properties.xml.h:16
-msgid "Change _Passphrase"
-msgstr "Athraigh _Frása Faire"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
-msgid "Decrypt files and email sent to you."
-msgstr ""
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:22
-msgid "Delete"
-msgstr "Scrios"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
-msgid "Expire"
-msgstr "Cuir as Feidhm"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:22
-msgid "Expires:"
-msgstr "As Feidhm:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
-msgid "Export"
-msgstr "Easpórtáil"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
-msgid "Go to next photo"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
-msgid "Go to previous photo"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
-msgid "Key ID:"
-msgstr "CA eochrach:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
-msgid "Make this photo the primary photo"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
-msgid "Names and Signatures"
-msgstr "Ainmneacha agus Sínithe"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
-msgid "Never"
-msgstr "Riamh"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:36
-msgid "Override Owner _Trust:"
-msgstr "Sáraigh _Muinín Úinéara:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
-msgid "Owner"
-msgstr "Úinéir"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
-msgid "Primary"
-msgstr "Príomha"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
-msgid "Remove this photo from this key"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
-msgid "Revoke"
-msgstr "Cúlghair"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
-msgid "Sign"
-msgstr "Sínigh"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
-msgid "Strength:"
-msgstr "Neart:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr ""
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
+msgid "This key has expired"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
+msgid "Add a photo to this key"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
+msgid "Remove this photo from this key"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
+msgid "Make this photo the primary photo"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:13
+msgid "Go to previous photo"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:14
+msgid "Go to next photo"
+msgstr ""
+
+#. A photograph
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
+msgid "Photo "
+msgstr "Grianghraf "
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
+msgid "Key ID:"
+msgstr "CA eochrach:"
+
+#. Name of key, usually a persons name
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
+msgctxt "name-of-key"
+msgid "Name:"
+msgstr "Ainm:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
+msgid "Email:"
+msgstr "Ríomhphost:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
+msgid "Comment:"
+msgstr "Nóta:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
+msgid "Decrypt files and email sent to you."
+msgstr ""
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
+msgid "Private PGP Key"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
+#: ../ssh/seahorse-ssh-key-properties.xml.h:10
+msgid "Change _Passphrase"
+msgstr "Athraigh _Frása Faire"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:24
+msgid "Owner"
+msgstr "Úinéir"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
+msgid "Key Names and Signatures"
+msgstr "Ainmneacha Eochracha agus Sínithe"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
+msgid "Primary"
+msgstr "Príomha"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
+msgid "Sign"
+msgstr "Sínigh"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
+msgid "Delete"
+msgstr "Scrios"
+
+#. Add another name to the PGP key.
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
 msgid "_Add Name"
 msgstr "Cuir _Ainm Leis"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
-msgid "_Export Complete Key:"
-msgstr "_Easpórtáil Eochair ar Fad:"
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
+msgid "Revoke"
+msgstr "Cúlghair"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
-msgid "<b>Dates:</b>"
-msgstr "<b>Dátaí:</b>"
+#. List of names and signatures on the PGP key.
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
+msgid "Names and Signatures"
+msgstr "Ainmneacha agus Sínithe"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
+#: ../ssh/seahorse-ssh-key-properties.xml.h:17
+msgid "Strength:"
+msgstr "Neart:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+msgid "Technical Details"
+msgstr "Mionsonraí Teicniúla"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
+msgid "Fingerprint"
+msgstr "Méarlorg"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
+msgid "Expires:"
+msgstr "As Feidhm:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
+msgid "Dates"
+msgstr "Dátaí"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
+msgid "Override Owner _Trust:"
+msgstr "Sáraigh _Iontaibh Úinéara:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
+msgid "_Export Secret Key:"
+msgstr "_Easpórtáil Eochair Rúnda:"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+#, fuzzy
+msgid "Actions"
+msgstr "Feidhmchláir"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+msgid "Add"
+msgstr "Cuir Leis"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
+msgid "Expire"
+msgstr "Cuir as Feidhm"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+msgid "_Subkeys"
+msgstr "_Fo-Eochracha"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
+msgctxt "Validity"
+msgid "Marginally"
+msgstr "Go hImeallach"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
-#: ../ssh/seahorse-ssh-key-properties.xml.h:4
-msgid "<b>Fingerprint:</b>"
-msgstr "<b>Méarlorg:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
-msgid "<b>Indicate Trust:</b>"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
-msgid "<b>Your trust of this key</b>"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:16
-msgid "<b>_Other Names:</b>"
-msgstr "<b>Ainmneacha _Eile:</b>"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
-msgid "<b>_People who have signed this key:</b>"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
-msgid "Encrypt files and email to the key's owner "
-msgstr ""
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
+msgctxt "Validity"
 msgid "Fully"
 msgstr "Go hIomlán"
 
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
+msgctxt "Validity"
+msgid "Ultimately"
+msgstr "Go hAn-Iontaofa"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
+msgid "Encrypt files and email to the key's owner"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
+msgid "Public PGP Key"
+msgstr "Eochair PGP Phoiblí"
+
+#. Names set on the PGP key.
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
+msgid "_Other Names:"
+msgstr "Ainmneacha _Eile:"
+
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
+msgid "Your trust of this key"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
+msgid "Your trust is manually specified on the <i>Details</i> tab."
+msgstr ""
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:28
 #, no-c-format
 msgid "I trust signatures from '%s' on other keys"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:27
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
 #, no-c-format
 msgid ""
 "If you believe that the person that owns this key is '%s', <i>sign</i> this "
 "key:"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:29
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
+msgid "_Sign this Key"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
 #, no-c-format
 msgid ""
 "If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
 msgstr ""
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:32
-msgid "Marginally"
-msgstr "Go hImeallach"
-
-#. Trust column
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../src/seahorse-key-manager-store.c:853
-msgid "Trust"
-msgstr "Muinín"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
-msgid "Ultimately"
-msgstr "Sraith Iontaofa"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
-msgid "You _Trust the Owner:"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
-msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr ""
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
-msgid "_Only display the signatures of people I trust"
-msgstr ""
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
 msgid "_Revoke Signature"
 msgstr "_Cúlghair Síniú"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
-msgid "_Sign this Key"
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
+msgid "_People who have signed this key:"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
+msgid "_Only display the signatures of people I trust"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
+#: ../ssh/seahorse-ssh-key-properties.xml.h:11
+msgid "Trust"
+msgstr "Iontaoibh"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
+#: ../ssh/seahorse-ssh-key-properties.xml.h:19
+msgid "Fingerprint:"
+msgstr "Méarlorg:"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+msgid "Dates:"
+msgstr "Dátaí:"
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+msgid "Indicate Trust:"
+msgstr ""
+
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+msgid "You _Trust the Owner:"
 msgstr ""
 
 #: ../pgp/seahorse-pgp-subkey.c:371
@@ -2162,72 +1848,76 @@ msgid "Subkey %d of %s"
 msgstr ""
 
 #: ../pgp/seahorse-revoke.xml.h:1
-msgid "Optional description of revocation"
-msgstr ""
-
-#: ../pgp/seahorse-revoke.xml.h:2
-msgid "Re_voke"
-msgstr ""
-
-#: ../pgp/seahorse-revoke.xml.h:3
 msgid "Reason for revoking the key"
 msgstr ""
 
-#: ../pgp/seahorse-revoke.xml.h:6
+#: ../pgp/seahorse-revoke.xml.h:2
 msgid "_Reason:"
 msgstr "_Cúis:"
 
-#: ../pgp/seahorse-signer.c:62
+#: ../pgp/seahorse-revoke.xml.h:4
+msgid "Optional description of revocation"
+msgstr ""
+
+#: ../pgp/seahorse-revoke.xml.h:6
+msgid "Re_voke"
+msgstr "Cúl_ghair"
+
+#: ../pgp/seahorse-signer.c:63
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
 
-#: ../pgp/seahorse-sign.xml.h:1
-msgid "<b>How carefully have you checked this key?</b>"
+#: ../pgp/seahorse-signer.xml.h:1
+msgid "_Sign message with key:"
 msgstr ""
 
+#: ../pgp/seahorse-sign.xml.h:1
+msgid "Sign Key"
+msgstr "Sínigh Eochair"
+
 #: ../pgp/seahorse-sign.xml.h:2
-msgid "<b>How others will see this signature:</b>"
+msgid "By signing you indicate your trust that this key belongs to:"
 msgstr ""
 
 #: ../pgp/seahorse-sign.xml.h:3
-msgid "<b>Sign key as:</b>"
-msgstr "<b>Sínigh eochair mar:</b>"
+msgid "Key Name"
+msgstr "Ainm na hEochrach"
 
 #: ../pgp/seahorse-sign.xml.h:4
-msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone. "
+msgid "How carefully have you checked this key?"
 msgstr ""
 
 #: ../pgp/seahorse-sign.xml.h:5
-msgid "<i>Key Name</i>"
-msgstr "<i>Ainm Eochrach</i>"
+msgid "_Not at all"
+msgstr ""
 
 #: ../pgp/seahorse-sign.xml.h:6
+msgid "_Casually"
+msgstr ""
+
+#: ../pgp/seahorse-sign.xml.h:7
+msgid "_Very Carefully"
+msgstr ""
+
+#: ../pgp/seahorse-sign.xml.h:8
 msgid ""
 "<i>Not at all:</i> means you believe the key is owned by the person who "
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
 
-#: ../pgp/seahorse-sign.xml.h:7
+#: ../pgp/seahorse-sign.xml.h:9
+msgid ""
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone."
+msgstr ""
+
+#: ../pgp/seahorse-sign.xml.h:10
 msgid ""
 "<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
 "key is genuine."
 msgstr ""
-
-#: ../pgp/seahorse-sign.xml.h:8
-msgid "By signing you indicate your trust that this key belongs to:"
-msgstr ""
-
-#: ../pgp/seahorse-sign.xml.h:9
-msgid "I can _revoke this signature at a later date."
-msgstr ""
-
-#: ../pgp/seahorse-sign.xml.h:10
-msgid "Sign Key"
-msgstr "Sínigh Eochair"
 
 #: ../pgp/seahorse-sign.xml.h:11
 msgid ""
@@ -2237,741 +1927,613 @@ msgid ""
 msgstr ""
 
 #: ../pgp/seahorse-sign.xml.h:12
-msgid "_Casually"
+msgid "How others will see this signature:"
 msgstr ""
 
 #: ../pgp/seahorse-sign.xml.h:13
-msgid "_Not at all"
-msgstr ""
-
-#: ../pgp/seahorse-sign.xml.h:14
 msgid "_Others may not see this signature"
 msgstr ""
 
+#: ../pgp/seahorse-sign.xml.h:14
+msgid "I can _revoke this signature at a later date."
+msgstr ""
+
 #: ../pgp/seahorse-sign.xml.h:15
-msgid "_Sign"
-msgstr "_Sínigh"
+msgid "Sign key as:"
+msgstr "Sínigh eochair mar:"
 
 #: ../pgp/seahorse-sign.xml.h:16
 msgid "_Signer:"
 msgstr ""
 
 #: ../pgp/seahorse-sign.xml.h:17
-msgid "_Very Carefully"
+msgid "_Sign"
+msgstr "_Sínigh"
+
+#: ../pgp/seahorse-transfer.c:237 ../pgp/seahorse-transfer.c:284
+#, fuzzy
+msgid "Exporting data"
+msgstr "Easpórtáil"
+
+#: ../pgp/seahorse-transfer.c:237 ../pgp/seahorse-transfer.c:284
+msgid "Retrieving data"
 msgstr ""
 
-#: ../pgp/seahorse-signer.xml.h:1
-msgid "_Sign message with key:"
+#: ../pgp/seahorse-transfer.c:240 ../pgp/seahorse-transfer.c:287
+msgid "Importing data"
 msgstr ""
 
-#: ../pkcs11/seahorse-pkcs11-certificate.c:107
-#: ../pkcs11/seahorse-pkcs11-certificate-props.c:68
+#: ../pgp/seahorse-transfer.c:240 ../pgp/seahorse-transfer.c:287
+msgid "Sending data"
+msgstr ""
+
+#: ../pgp/seahorse-unknown.c:61
+msgid "Unavailable"
+msgstr ""
+
+#: ../pkcs11/certificate-der-exporter.vala:46
+#: ../pkcs11/seahorse-certificate.c:454
 msgid "Certificate"
+msgstr "Teastas"
+
+#: ../pkcs11/certificate-der-exporter.vala:60
+msgid "Certificates (DER encoded)"
 msgstr ""
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:108
-#, c-format
-msgid "Are you sure you want to delete the certificate '%s'?"
+#: ../pkcs11/seahorse-certificate.c:449
+msgid "Personal certificate and key"
 msgstr ""
 
-#: ../pkcs11/seahorse-pkcs11-commands.c:111
+#: ../pkcs11/seahorse-certificate.c:452
+msgid "Personal certificate"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-backend.c:183
+msgid "Certificates"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-backend.c:189
+msgid "X.509 certificates and related keys"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-deleter.c:69
 #, c-format
-msgid "Are you sure you want to delete %d certificate?"
-msgid_plural "Are you sure you want to delete %d certificates?"
+msgid "Are you sure you want to permanently delete %d certificate?"
+msgid_plural "Are you sure you want to permanently delete %d certificates?"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 msgstr[4] ""
 
+#: ../pkcs11/seahorse-pkcs11-generate.c:114
+#, fuzzy
+msgid "Couldn't generate private key"
+msgstr "Níorbh fhéidir frása faire d'eochair a athrú."
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:413
+#: ../pkcs11/seahorse-pkcs11-request.c:253
+msgid "Create"
+msgstr "Cruthaigh"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:506
+#: ../pkcs11/seahorse-private-key.c:175
+msgid "Private key"
+msgstr "Eochair phríobháideach"
+
+#: ../pkcs11/seahorse-pkcs11-generate.c:507
+msgid "Used to request a certificate"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:1
+msgid "Create a new private key"
+msgstr "Cruthaigh eochair phríobháideach nua"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:2
+msgid "Label:"
+msgstr "Lipéad:"
+
+#: ../pkcs11/seahorse-pkcs11-generate.xml.h:3
+#, fuzzy
+msgid "Stored at:"
+msgstr "Focal Faire Stóráilte"
+
+#: ../pkcs11/seahorse-pkcs11-key-deleter.c:85
+msgid "I understand that this key will be permanently deleted."
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:143
+#: ../pkcs11/seahorse-pkcs11-properties.c:147
+msgid "Unnamed"
+msgstr "Gan ainm"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:171
+msgid "Failed to export certificate"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:186 ../src/seahorse-sidebar.c:874
+msgid "Couldn't delete"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:227
+msgid "_Export"
+msgstr "_Easpórtáil"
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:228
+msgid "Export the certificate"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:230
+msgid "Delete this certificate or key"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:231
+msgid "Request _Certificate"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-properties.c:232
+msgid "Create a certificate request file for this key"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-request.c:101
+msgid "Couldn't save certificate request"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-request.c:124
+msgid "Save certificate request"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-request.c:135
+msgid "Certificate request"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-request.c:143
+msgid "PEM encoded request"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-request.c:191
+msgid "Couldn't create certificate request"
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:1
+msgid "Create a certificate request file."
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:2
+msgid "The common name (CN) placed in the certificate request."
+msgstr ""
+
+#: ../pkcs11/seahorse-pkcs11-request.xml.h:3
+msgid "Name (CN):"
+msgstr "Ainm (CN):"
+
+#: ../pkcs11/seahorse-private-key.c:128
+msgid "Unnamed private key"
+msgstr "Eochair phríobháideach gan ainm"
+
+#: ../pkcs11/seahorse-token.c:574
+msgctxt "Label"
+msgid "Unknown"
+msgstr "Anaithnid"
+
 #: ../src/seahorse-change-passphrase.xml.h:1
 msgid "Change Passphrase"
 msgstr "Athraigh Frása Faire"
 
-#: ../src/seahorse-change-passphrase.xml.h:2
-msgid "Con_firm Passphrase:"
-msgstr ""
-
 #: ../src/seahorse-change-passphrase.xml.h:3
+msgid "New _Passphrase:"
+msgstr "_Frása Faire Nua:"
+
+#: ../src/seahorse-change-passphrase.xml.h:4
 msgid "Confirm new passphrase"
 msgstr ""
 
 #: ../src/seahorse-change-passphrase.xml.h:5
-msgid "New _Passphrase:"
-msgstr "_Frása Faire Nua:"
+msgid "Con_firm Passphrase:"
+msgstr ""
 
-#: ../src/seahorse.desktop.in.in.h:1
+#: ../src/seahorse.desktop.in.in.h:2
 msgid "Manage your passwords and encryption keys"
 msgstr "Bainistigh d'fhocail faire agus eochracha criptithe"
 
-#: ../src/seahorse.desktop.in.in.h:2 ../src/seahorse-key-manager.c:853
-msgid "Passwords and Encryption Keys"
-msgstr "Focail Faire agus Eochracha Chriptithe"
+#: ../src/seahorse.desktop.in.in.h:3
+msgid "keyring;encryption;security;sign;ssh;"
+msgstr ""
+
+#: ../src/seahorse-generate-select.c:228
+msgid "Continue"
+msgstr "Ar Aghaidh"
 
 #: ../src/seahorse-generate-select.xml.h:1
-msgid "<b>_Select the type of item to create:</b>"
+msgid "_Select the type of item to create:"
 msgstr ""
 
-#: ../src/seahorse-generate-select.xml.h:2
-msgid "C_ontinue"
-msgstr "Ar _Aghaidh"
+#: ../src/seahorse-import-dialog.c:97
+msgid "Import failed"
+msgstr "Theip ar iompórtáil"
 
-#: ../src/seahorse-generate-select.xml.h:3
-msgid "Create New ..."
-msgstr "Cruthaigh Nua ..."
+#: ../src/seahorse-import-dialog.c:115
+msgid "Import"
+msgstr "Iompórtáil"
 
-#: ../src/seahorse-key-manager.c:233 ../src/seahorse-keyserver-results.c:108
-#, c-format
-msgid "Selected %d key"
-msgid_plural "Selected %d keys"
-msgstr[0] "Roghnaigh %d eochair"
-msgstr[1] "Roghnaigh %d eochair"
-msgstr[2] "Roghnaigh %d eochair"
-msgstr[3] "Roghnaigh %d n-eochair"
-msgstr[4] "Roghnaigh %d eochair"
+#: ../src/seahorse-import-dialog.c:128
+msgid "<b>Data to be imported:</b>"
+msgstr "<b>Sonraí le hiompórtáil:</b>"
 
-#: ../src/seahorse-key-manager.c:404 ../src/seahorse-key-manager.c:464
-#: ../src/seahorse-key-manager.c:527 ../src/seahorse-viewer.c:488
-msgid "Couldn't import keys"
-msgstr ""
-
-#: ../src/seahorse-key-manager.c:409 ../src/seahorse-viewer.c:493
-msgid "Imported keys"
-msgstr "Iompórtáladh eochracha"
-
-#: ../src/seahorse-key-manager.c:458
-msgid "Importing keys"
-msgstr ""
-
-#: ../src/seahorse-key-manager.c:481 ../ssh/seahorse-ssh-operation.c:1017
+#: ../src/seahorse-key-manager.c:243 ../ssh/seahorse-ssh-operation.c:845
 msgid "Import Key"
+msgstr "Iompórtáil Eochair"
+
+#: ../src/seahorse-key-manager.c:255
+msgid "All key files"
+msgstr "Gach comhad eochrach"
+
+#: ../src/seahorse-key-manager.c:356
+msgid "Dropped text"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:527
-msgid "Unrecognized key type, or invalid data format"
+#: ../src/seahorse-key-manager.c:392
+msgid "Clipboard text"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:721 ../src/seahorse-keyserver-results.c:207
-msgid "_Remote"
-msgstr "C_ianda"
+#: ../src/seahorse-key-manager.c:503
+msgid "_New"
+msgstr "_Nua"
 
-#: ../src/seahorse-key-manager.c:723
+#: ../src/seahorse-key-manager.c:505
 msgid "Close this program"
 msgstr "Dún an ríomhchlár seo"
 
-#: ../src/seahorse-key-manager.c:724
+#: ../src/seahorse-key-manager.c:506 ../src/seahorse-key-manager.c:508
 msgid "_New..."
-msgstr ""
+msgstr "_Nua..."
 
-#: ../src/seahorse-key-manager.c:725
+#: ../src/seahorse-key-manager.c:507
 msgid "Create a new key or item"
 msgstr "Cruthaigh eochair nó mír nua"
 
-#: ../src/seahorse-key-manager.c:726
+#: ../src/seahorse-key-manager.c:509
+msgid "Add a new key or item"
+msgstr "Cuir eochair nó mír nua leis"
+
+#: ../src/seahorse-key-manager.c:510
 msgid "_Import..."
 msgstr "_Iompórtáil..."
 
-#: ../src/seahorse-key-manager.c:727
+#: ../src/seahorse-key-manager.c:511
 msgid "Import from a file"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:729
+#: ../src/seahorse-key-manager.c:513
 msgid "Import from the clipboard"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:734 ../src/seahorse-keyserver-results.c:217
-msgid "_Find Remote Keys..."
-msgstr "_Aimsigh Eochracha Cianda..."
+#: ../src/seahorse-key-manager.c:517
+msgid "By _Keyring"
+msgstr "De Réir Fáinne _Eochracha"
 
-#: ../src/seahorse-key-manager.c:735 ../src/seahorse-keyserver-results.c:218
-msgid "Search for keys on a key server"
+#: ../src/seahorse-key-manager.c:518
+msgid "Show sidebar listing keyrings"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:736
-msgid "_Sync and Publish Keys..."
-msgstr "_Sioncronaigh agus Foilsigh Eochracha..."
+#: ../src/seahorse-key-manager.c:522
+msgid "Show _Personal"
+msgstr "Taispeáin _Pearsanta"
 
-#: ../src/seahorse-key-manager.c:737
-msgid "Publish and/or synchronize your keys with those online."
+#: ../src/seahorse-key-manager.c:523
+msgid "Only show personal keys, certificates and passwords"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:742
-msgid "T_ypes"
-msgstr "C_ineáil"
+#: ../src/seahorse-key-manager.c:524
+msgid "Show _Trusted"
+msgstr "Taispeáin _Iontaofa"
 
-#: ../src/seahorse-key-manager.c:742
-msgid "Show type column"
+#: ../src/seahorse-key-manager.c:525
+msgid "Only show trusted keys, certificates and passwords"
 msgstr ""
 
-#: ../src/seahorse-key-manager.c:744
-msgid "_Expiry"
-msgstr "_Dáta Éaga"
+#: ../src/seahorse-key-manager.c:526
+msgid "Show _Any"
+msgstr "Taispeáin _Gach Rud"
 
-#: ../src/seahorse-key-manager.c:744
-msgid "Show expiry column"
+#: ../src/seahorse-key-manager.c:527
+msgid "Show all keys, certificates and passwords"
 msgstr ""
 
 #: ../src/seahorse-key-manager.c:746
-msgid "_Trust"
-msgstr "_Muinín"
-
-#: ../src/seahorse-key-manager.c:746
-msgid "Show owner trust column"
-msgstr ""
-
-#: ../src/seahorse-key-manager.c:748
-msgid "_Validity"
-msgstr "_Bailíocht"
-
-#: ../src/seahorse-key-manager.c:748
-msgid "Show validity column"
-msgstr ""
-
-#: ../src/seahorse-key-manager.c:922
-msgid "Filter:"
-msgstr "Scagaire:"
+msgid "Filter"
+msgstr "Scag"
 
 #: ../src/seahorse-key-manager.xml.h:1
-msgid "<big><b>First time options:</b></big>"
+msgid "First time options:"
 msgstr ""
 
 #: ../src/seahorse-key-manager.xml.h:2
 msgid "Generate a new key of your own: "
 msgstr ""
 
-#: ../src/seahorse-key-manager.xml.h:3
+#: ../src/seahorse-key-manager.xml.h:4
 msgid "Import existing keys from a file:"
 msgstr ""
 
-#: ../src/seahorse-key-manager.xml.h:4
-msgid "My _Personal Keys"
-msgstr "M'Eochracha _Phearsanta"
-
 #: ../src/seahorse-key-manager.xml.h:5
-msgid "Other _Keys"
-msgstr "_Eochracha Eile"
-
-#: ../src/seahorse-key-manager.xml.h:6
 msgid "To get started with encryption you will need keys."
 msgstr ""
 
-#: ../src/seahorse-key-manager.xml.h:7 ../src/seahorse-viewer.c:552
-msgid "_Import"
-msgstr "_Iompórtáil"
-
-#: ../src/seahorse-key-manager.xml.h:8
-msgid "_Passwords"
-msgstr "_Focail Faire"
-
-#: ../src/seahorse-key-manager-store.c:648 ../src/seahorse-viewer.c:282
-msgid "Couldn't export keys"
+#: ../src/seahorse-sidebar.c:798
+msgid "Couldn't lock"
 msgstr ""
 
-#: ../src/seahorse-key-manager-store.c:846
-msgid "Validity"
-msgstr "Bailíocht"
-
-#. Expiry date column
-#: ../src/seahorse-key-manager-store.c:865
-msgid "Expiration Date"
-msgstr "Dáta Éaga"
-
-#: ../src/seahorse-keyserver-results.c:209
-msgid "Close this window"
+#: ../src/seahorse-sidebar.c:835
+msgid "Couldn't unlock"
 msgstr ""
 
-#: ../src/seahorse-keyserver-results.c:210
-msgid "_Expand All"
-msgstr "_Leathnaigh Gach Rud"
+#: ../src/seahorse-sidebar.c:942
+msgid "_Lock"
+msgstr "Cuir Faoi _Ghlas"
 
-#: ../src/seahorse-keyserver-results.c:211
-msgid "Expand all listings"
-msgstr ""
+#: ../src/seahorse-sidebar.c:947
+msgid "_Unlock"
+msgstr "_Díghlasáil"
 
-#: ../src/seahorse-keyserver-results.c:212
-msgid "_Collapse All"
-msgstr ""
+#: ../src/seahorse-sidebar.c:966
+msgid "_Properties"
+msgstr "_Airíonna"
 
-#: ../src/seahorse-keyserver-results.c:213
-msgid "Collapse all listings"
-msgstr ""
-
-#: ../src/seahorse-keyserver-results.c:275
-msgid "Remote Keys"
-msgstr ""
-
-#: ../src/seahorse-keyserver-results.c:277
-#, c-format
-msgid "Remote Keys Containing '%s'"
-msgstr ""
-
-#: ../src/seahorse-keyserver-search.xml.h:1
-msgid "<b>Key Servers:</b>"
-msgstr ""
-
-#: ../src/seahorse-keyserver-search.xml.h:2
-msgid "<b>Shared Keys Near Me:</b>"
-msgstr ""
-
-#: ../src/seahorse-keyserver-search.xml.h:3
-msgid "Find Remote Keys"
-msgstr "Aimsigh Eochracha Cianda"
-
-#: ../src/seahorse-keyserver-search.xml.h:4
-msgid ""
-"This will find keys for others on the Internet. These keys can then be "
-"imported into your local key ring."
-msgstr ""
-
-#: ../src/seahorse-keyserver-search.xml.h:5
-msgid "Where to search:"
-msgstr ""
-
-#: ../src/seahorse-keyserver-search.xml.h:6
-msgid "_Search"
-msgstr "Cuar_daigh"
-
-#: ../src/seahorse-keyserver-search.xml.h:7
-msgid "_Search for keys containing: "
-msgstr ""
-
-#: ../src/seahorse-keyserver-sync.c:45
-msgid "Couldn't publish keys to server"
-msgstr ""
-
-#: ../src/seahorse-keyserver-sync.c:61
-#, c-format
-msgid "Couldn't retrieve keys from server: %s"
-msgstr ""
-
-#: ../src/seahorse-keyserver-sync.c:155
-#, c-format
-msgid "<b>%d key is selected for synchronizing</b>"
-msgid_plural "<b>%d keys are selected for synchronizing</b>"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: ../src/seahorse-keyserver-sync.c:216
-msgid "Synchronizing keys"
-msgstr ""
-
-#. Show the progress window if necessary
-#: ../src/seahorse-keyserver-sync.c:248
-msgid "Synchronizing keys..."
-msgstr ""
-
-#: ../src/seahorse-keyserver-sync.xml.h:1
-msgid "<b>X keys are selected for synchronizing</b>"
-msgstr ""
-
-#: ../src/seahorse-keyserver-sync.xml.h:2
-msgid "Sync Keys"
-msgstr "Sioncronaigh Eochracha"
-
-#: ../src/seahorse-keyserver-sync.xml.h:3
-msgid ""
-"This will publish the keys in your key ring so they're available for others "
-"to use. You'll also get any changes others have made since you received "
-"their keys."
-msgstr ""
-
-#: ../src/seahorse-keyserver-sync.xml.h:4
-msgid ""
-"This will retrieve any changes others have made since you received their "
-"keys. No key server has been chosen for publishing, so your keys will not be "
-"made available to others."
-msgstr ""
-
-#: ../src/seahorse-keyserver-sync.xml.h:5
-msgid "_Key Servers"
-msgstr "Freastalaithe _Eochracha"
-
-#: ../src/seahorse-keyserver-sync.xml.h:6
-msgid "_Sync"
-msgstr "_Sionc"
-
-#: ../src/seahorse-main.c:62
-msgid "Version of this application"
-msgstr "Leagan an fheidhmchláir seo"
-
-#: ../src/seahorse-main.c:78 ../src/seahorse-viewer.c:170
-msgid "Encryption Key Manager"
-msgstr "Bainisteoir Eochracha Criptithe"
-
-#: ../src/seahorse-viewer.c:141
-msgid "Contributions:"
-msgstr "Ranníocaíochtaí:"
-
-#: ../src/seahorse-viewer.c:172
-msgid "translator-credits"
-msgstr "Seán de Búrca <leftmostcat@gmail.com>"
-
-#: ../src/seahorse-viewer.c:175
-msgid "Seahorse Project Homepage"
-msgstr "Suíomh Gréasáin Tionscadail Seahorse"
-
-#. Top menu items
-#: ../src/seahorse-viewer.c:194
-msgid "_File"
-msgstr "_Comhad"
-
-#: ../src/seahorse-viewer.c:195
-msgid "_Edit"
-msgstr "_Eagar"
-
-#: ../src/seahorse-viewer.c:196
-msgid "_View"
-msgstr "_Amharc"
-
-#: ../src/seahorse-viewer.c:197
-msgid "_Help"
-msgstr "Cab_hair"
-
-#: ../src/seahorse-viewer.c:199
-msgid "Prefere_nces"
-msgstr "_Sainroghanna"
-
-#: ../src/seahorse-viewer.c:200
-msgid "Change preferences for this program"
-msgstr ""
-
-#: ../src/seahorse-viewer.c:203
-msgid "About this program"
-msgstr "Maidir leis an ríomhchlár seo"
-
-#: ../src/seahorse-viewer.c:204
-msgid "_Contents"
-msgstr "_Inneachar"
-
-#: ../src/seahorse-viewer.c:205
-msgid "Show Seahorse help"
-msgstr ""
-
-#: ../src/seahorse-viewer.c:302
-msgid "Export public key"
-msgstr ""
-
-#: ../src/seahorse-viewer.c:320
-msgid "Exporting keys"
-msgstr ""
-
-#: ../src/seahorse-viewer.c:345
-msgid "Couldn't retrieve data from key server"
-msgstr ""
-
-#. Translators: "Copied" is a verb (used as a status indicator), not an adjective for the word "keys"
-#: ../src/seahorse-viewer.c:364
-msgid "Copied keys"
-msgstr "Cóipeáladh eochracha"
-
-#: ../src/seahorse-viewer.c:384
-msgid "Retrieving keys"
-msgstr ""
-
-#: ../src/seahorse-viewer.c:399
-msgid "Couldn't delete."
-msgstr ""
-
-#: ../src/seahorse-viewer.c:433
-msgid "Deleting..."
-msgstr ""
-
-#: ../src/seahorse-viewer.c:462
-#, c-format
-msgid "%s is a private key. Are you sure you want to proceed?"
-msgstr ""
-
-#: ../src/seahorse-viewer.c:465
-msgid ""
-"One or more of the deleted keys are private keys. Are you sure you want to "
-"proceed?"
-msgstr ""
-
-#: ../src/seahorse-viewer.c:513
-msgid "Importing keys from key servers"
-msgstr ""
-
-#: ../src/seahorse-viewer.c:539
-msgid "Show properties"
-msgstr "Taispeáin airíonna"
-
-#: ../src/seahorse-viewer.c:540
-msgctxt "This text refers to deleting an item from its type's backing store."
-msgid "_Delete"
-msgstr "Scr_ios"
-
-#: ../src/seahorse-viewer.c:541
-msgid "Delete selected items"
-msgstr "Scrios míreanna roghnaithe"
-
-#: ../src/seahorse-viewer.c:545
-msgid "E_xport..."
-msgstr "_Easpórtáil..."
-
-#: ../src/seahorse-viewer.c:546
-msgid "Export to a file"
-msgstr ""
-
-#: ../src/seahorse-viewer.c:548
-msgid "Copy to the clipboard"
-msgstr ""
-
-#: ../src/seahorse-viewer.c:553
-msgid "Import selected keys to local key ring"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-askpass.c:99
-msgid "Enter your Secure Shell passphrase:"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-commands.c:85
+#: ../ssh/seahorse-ssh-actions.c:98
 msgid "Configure Key for _Secure Shell..."
 msgstr "Cumraigh Eochair le hAghaidh _Blaoisce Dhaingean..."
 
-#: ../ssh/seahorse-ssh-commands.c:86
+#: ../ssh/seahorse-ssh-actions.c:99
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
 msgstr ""
 
-#: ../ssh/seahorse-ssh-commands.c:115
-#, c-format
-msgid "Are you sure you want to delete the secure shell key '%s'?"
+#: ../ssh/seahorse-ssh-askpass.c:60 ../ssh/seahorse-ssh-askpass.c:68
+msgid "Enter your Secure Shell passphrase:"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-commands.c:118
-#, c-format
-msgid "Are you sure you want to delete %d secure shell keys?"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-generate.c:59 ../ssh/seahorse-ssh-key.c:91
-#: ../ssh/seahorse-ssh-key.c:95 ../ssh/seahorse-ssh-key-properties.xml.h:21
-msgid "Secure Shell Key"
-msgstr "Eochair Bhlaoisce Dhaingean"
-
-#: ../ssh/seahorse-ssh-generate.c:60
-msgid "Used to access other computers (eg: via a terminal)"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-generate.c:90
-msgid "Couldn't generate Secure Shell key"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-generate.c:205
-msgid "Creating Secure Shell Key"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-generate.xml.h:2
-msgid ""
-"<i>Use your email address, and any other reminder you need about what this "
-"key is for.</i>"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-generate.xml.h:3
-msgid ""
-"A Secure Shell (SSH) key lets you connect securely to trusted computers "
-"using SSH, without entering a different password for each of them."
-msgstr ""
-
-#: ../ssh/seahorse-ssh-generate.xml.h:4
-msgid "DSA"
-msgstr "DSA"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:6
-msgid ""
-"If there is already a computer you want to use this key with, you can set up "
-"that computer to recognize your key now. "
-msgstr ""
-
-#: ../ssh/seahorse-ssh-generate.xml.h:8
-msgid "New Secure Shell Key"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-generate.xml.h:9
-msgid "RSA"
-msgstr "RSA"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:10
-msgid "_Create and Set Up"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-generate.xml.h:11
-msgid "_Just Create Key"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-generate.xml.h:12
-msgid "_Key Description:"
-msgstr "Cur Síos _Eochrach:"
-
-#: ../ssh/seahorse-ssh-key.c:87
-msgid "(Unreadable Secure Shell Key)"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-key.c:105
-msgid "Invalid"
-msgstr "Neamhbhailí"
-
-#: ../ssh/seahorse-ssh-key.c:116
-msgid "Private Secure Shell Key"
-msgstr "Eochair Bhlaoisce Dhaingean Phríobháideach"
-
-#: ../ssh/seahorse-ssh-key.c:119
-msgid "Public Secure Shell Key"
-msgstr "Eochair Bhlaoisce Dhaingean Phoiblí"
-
-#: ../ssh/seahorse-ssh-key-properties.c:71
-msgid "Couldn't rename key."
-msgstr ""
-
-#: ../ssh/seahorse-ssh-key-properties.c:112
-msgid "Couldn't change authorization for key."
-msgstr ""
-
-#: ../ssh/seahorse-ssh-key-properties.c:127
-msgid "Couldn't change passphrase for key."
-msgstr "Níorbh fhéidir frása faire d'eochair a athrú."
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:1
-msgid "/home/nate/.ssh/blah_rsa"
-msgstr "/home/nate/.ssh/blah_rsa"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "00:00:00:00:00"
-msgstr "00:00:00:00:00"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
-msgid "<b>Algorithm:</b>"
-msgstr "<b>Algartam:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:5
-msgid "<b>Identifier:</b>"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:6
-msgid "<b>Location:</b>"
-msgstr "<b>Suíomh:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:8
-msgid "<b>Strength:</b>"
-msgstr "<b>Neart:</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:10
-msgid "<b>Trust</b>"
-msgstr "<b>Muinín</b>"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:15
-#, no-c-format
-msgid "<i>This only applies to the '%s'</i> account."
-msgstr ""
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:18
-msgid "E_xport Complete Key"
-msgstr "Ea_spórtáil Eochair ar Fad"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:22
-msgid "The owner of this key is _authorized to connect to this computer"
-msgstr ""
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:23
-msgid "Used to connect to other computers."
-msgstr ""
-
-#: ../ssh/seahorse-ssh-operation.c:143 ../ssh/seahorse-ssh-operation.c:732
-#, c-format
-msgid "The SSH command was terminated unexpectedly."
-msgstr ""
-
-#: ../ssh/seahorse-ssh-operation.c:151 ../ssh/seahorse-ssh-operation.c:739
-msgid "The SSH command failed."
-msgstr ""
-
-#: ../ssh/seahorse-ssh-operation.c:445 ../ssh/seahorse-ssh-operation.c:477
-msgid "Secure Shell key"
-msgstr "Eochair Bhlaoisce Dhaingean"
-
-#: ../ssh/seahorse-ssh-operation.c:448
-msgid "Passphrase:"
-msgstr "Frása Faire:"
-
-#. Just prompt over and over again
-#: ../ssh/seahorse-ssh-operation.c:762
-msgid "Remote Host Password"
-msgstr "Focal Faire Cianóstaigh"
-
-#: ../ssh/seahorse-ssh-operation.c:850
+#: ../ssh/seahorse-ssh-askpass.c:82
 msgid "Old Key Passphrase"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-operation.c:851
+#: ../ssh/seahorse-ssh-askpass.c:83
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-operation.c:855
+#: ../ssh/seahorse-ssh-askpass.c:87 ../ssh/seahorse-ssh-askpass.c:92
 msgid "New Key Passphrase"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-operation.c:856
+#: ../ssh/seahorse-ssh-askpass.c:88
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-operation.c:864
+#: ../ssh/seahorse-ssh-askpass.c:93
+#, c-format
+msgid "Enter the new passphrase again: %s"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-backend.c:89
+msgid "Secure Shell"
+msgstr "Blaosc Dhaingean"
+
+#: ../ssh/seahorse-ssh-backend.c:95
+msgid "Keys used to connect securely to other computers"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-deleter.c:81 ../ssh/seahorse-ssh-deleter.c:86
+#, c-format
+msgid "Are you sure you want to delete the secure shell key '%s'?"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-deleter.c:91
+#, c-format
+msgid "Are you sure you want to delete %d secure shell key?"
+msgid_plural "Are you sure you want to delete %d secure shell keys?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+
+#: ../ssh/seahorse-ssh-exporter.c:93
+#, fuzzy
+msgid "SSH Key"
+msgstr "Eochair SSH"
+
+#: ../ssh/seahorse-ssh-exporter.c:125
+msgid "Secret SSH keys"
+msgstr "Eocracha rúnda SSH"
+
+#: ../ssh/seahorse-ssh-exporter.c:129
+msgid "Public SSH keys"
+msgstr "Eochracha poiblí SSH"
+
+#: ../ssh/seahorse-ssh-exporter.c:298
+msgid "No public key file is available for this key."
+msgstr ""
+
+#: ../ssh/seahorse-ssh-generate.c:53 ../ssh/seahorse-ssh-key.c:110
+#: ../ssh/seahorse-ssh-key.c:114 ../ssh/seahorse-ssh-key-properties.xml.h:4
+msgid "Secure Shell Key"
+msgstr "Eochair Bhlaoisce Dhaingean"
+
+#: ../ssh/seahorse-ssh-generate.c:54
+msgid "Used to access other computers (eg: via a terminal)"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-generate.c:108 ../ssh/seahorse-ssh-generate.c:124
+msgid "Couldn't generate Secure Shell key"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-generate.c:190
+msgid "Creating Secure Shell Key"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-generate.xml.h:1
+msgid "New Secure Shell Key"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-generate.xml.h:2
+msgid "_Just Create Key"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-generate.xml.h:3
+msgid "_Create and Set Up"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-generate.xml.h:4
+msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
+msgstr ""
+
+#: ../ssh/seahorse-ssh-generate.xml.h:6
+msgid "Your email address, or a reminder of what this key is for."
+msgstr ""
+
+#: ../ssh/seahorse-ssh-generate.xml.h:10
+msgid "DSA"
+msgstr "DSA"
+
+#: ../ssh/seahorse-ssh-generate.xml.h:12
+msgid ""
+"If there is a computer you want to use this key with, you can set up that "
+"computer to recognize your new key."
+msgstr ""
+
+#: ../ssh/seahorse-ssh-key.c:106
+msgid "(Unreadable Secure Shell Key)"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-key.c:214
+msgid "Personal SSH key"
+msgstr "Eochair pearsanta SSH"
+
+#: ../ssh/seahorse-ssh-key.c:216
+msgid "SSH key"
+msgstr "Eochair SSH"
+
+#: ../ssh/seahorse-ssh-key-properties.c:80
+msgid "Couldn't rename key."
+msgstr ""
+
+#: ../ssh/seahorse-ssh-key-properties.c:133
+msgid "Couldn't change authorization for key."
+msgstr ""
+
+#: ../ssh/seahorse-ssh-key-properties.c:168
+msgid "Couldn't change passphrase for key."
+msgstr "Níorbh fhéidir frása faire d'eochair a athrú."
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:2
+msgid "Identifier:"
+msgstr "Aitheantóir:"
+
+#. Name of key, often a persons name
+#: ../ssh/seahorse-ssh-key-properties.xml.h:6
+msgctxt "name-of-ssh-key"
+msgid "Name:"
+msgstr "Ainm:"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:7
+msgid "Used to connect to other computers."
+msgstr ""
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:12
+msgid "The owner of this key is _authorized to connect to this computer"
+msgstr ""
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:14
+#, no-c-format
+msgid "This only applies to the <i>%s</i> account."
+msgstr ""
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:16
+msgid "Algorithm:"
+msgstr "Algartam:"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:18
+msgid "Location:"
+msgstr "Suíomh:"
+
+#: ../ssh/seahorse-ssh-key-properties.xml.h:21
+msgid "E_xport Complete Key"
+msgstr "Ea_spórtáil Eochair ar Fad"
+
+#: ../ssh/seahorse-ssh-operation.c:199
+msgid "The SSH command was terminated unexpectedly."
+msgstr ""
+
+#: ../ssh/seahorse-ssh-operation.c:209
+msgid "The SSH command failed."
+msgstr ""
+
+#: ../ssh/seahorse-ssh-operation.c:502
+msgid "Remote Host Password"
+msgstr "Focal Faire Cianóstaigh"
+
+#: ../ssh/seahorse-ssh-operation.c:588
 msgid "Enter Key Passphrase"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-operation.c:931
+#: ../ssh/seahorse-ssh-operation.c:678
 msgid "Passphrase for New Secure Shell Key"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-operation.c:932
-msgid "Enter a passphrase for your new Secure Shell key."
-msgstr ""
-
-#: ../ssh/seahorse-ssh-operation.c:1013
+#: ../ssh/seahorse-ssh-operation.c:862
 #, c-format
 msgid "Importing key: %s"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-operation.c:1015
+#: ../ssh/seahorse-ssh-operation.c:864
 msgid "Importing key. Enter passphrase"
 msgstr ""
 
-#: ../ssh/seahorse-ssh-source.c:825
+#: ../ssh/seahorse-ssh-source.c:223
+msgid "OpenSSH keys"
+msgstr "Eocracha OpenSSH"
+
+#: ../ssh/seahorse-ssh-source.c:230
+#, c-format
+msgid "OpenSSH: %s"
+msgstr "OpenSSH: %s"
+
+#: ../ssh/seahorse-ssh-source.c:974
 msgid "No private key file is available for this key."
 msgstr ""
 
-#: ../ssh/seahorse-ssh-upload.c:45
+#: ../ssh/seahorse-ssh-upload.c:50
 msgid "Couldn't configure Secure Shell keys on remote computer."
 msgstr ""
 
-#. Show the progress window if necessary
-#: ../ssh/seahorse-ssh-upload.c:181
+#: ../ssh/seahorse-ssh-upload.c:133
 msgid "Configuring Secure Shell Keys..."
 msgstr ""
 
 #: ../ssh/seahorse-ssh-upload.xml.h:1
-msgid "<i>eg: fileserver.example.com:port</i>"
-msgstr "<i>m.sh.: freastalaícomhad.sampla.com:port</i>"
-
-#: ../ssh/seahorse-ssh-upload.xml.h:2
 msgid "Set Up Computer for SSH Connection"
 msgstr "Socraigh Ríomhaire le hAghaidh Ceangail SSH"
 
-#: ../ssh/seahorse-ssh-upload.xml.h:4
+#: ../ssh/seahorse-ssh-upload.xml.h:2
 msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
 msgstr ""
 
+#: ../ssh/seahorse-ssh-upload.xml.h:4
+msgid "eg: fileserver.example.com:port"
+msgstr "m.sh.: freastalaícomhad.sampla.com:port"
+
 #: ../ssh/seahorse-ssh-upload.xml.h:5
-msgid "_Computer Name:"
-msgstr "Ainm _Ríomhaire:"
+msgid "_Server address:"
+msgstr "Seoladh _freastalaí:"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:6
-msgid "_Login Name:"
-msgstr "Ainm _Lógala Isteach:"
+msgid "_Login name:"
+msgstr "Ainm _lógala isteach:"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
