@@ -90,7 +90,7 @@ seahorse_ssh_exporter_get_filename (SeahorseExporter *exporter)
 
 	basename = seahorse_object_get_nickname (SEAHORSE_OBJECT (self->key));
 	if (basename == NULL)
-		basename = _("Ssh Key");
+		basename = _("SSH Key");
 
 	if (self->secret) {
 		filename = g_strdup_printf ("id_%s", basename);
