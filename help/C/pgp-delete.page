@@ -1,0 +1,65 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="pgp-delete">
+
+  <info>
+    <link type="guide" xref="pgp"/>
+
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+    <revision pkgversion="3.9" version="0.1" date="2013-06-24" status="review"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Delete local copies of your keys or the keys of people you
+    communicate with.</desc>
+  </info>
+
+  <title>Delete an existing key</title>
+
+  <p>If you are no longer communicating with someone, you can delete the copy
+  of their GnuPG key on your computer using <app>Passwords and Keys</app>. You
+  can also permanently delete a key you own, provided it has never been
+  published on a key server. Deleting a GnuPG key deletes both the public key
+  and the secret key.</p>
+
+  <steps>
+    <title>To delete a key:</title>
+    <item>
+      <p>Select the key.</p>
+    </item>
+    <item>
+      <p>Right click, and choose <gui>Delete</gui>. Alternatively you can also
+      select <guiseq><gui style="menu">Edit</gui>
+      <gui style="menuitem">Delete</gui></guiseq> to delete the key.</p>
+    </item>
+    <item>
+      <p>In the new dialog, confirm the deletion by ticking the
+      <gui style="checkbox">I understand that this secret key will be permanently deleted</gui>
+      checkbox, and press the <gui style="button">Delete</gui> button to
+      finish.</p>
+    </item>
+  </steps>
+
+  <note style="important">
+    <p>When you delete a GnuPG key that has been published on a key server, you
+    only delete the secret key in the GnuPG keypair because a copy of the
+    public key will still be present on some key server. This means that
+    someone can <link xref="pgp-retrieve-remote">retrieve</link> the public key
+    from a key server and use it to encrypt messages to you but you will not be
+    able to decrypt those messages with the corresponding secret key. To
+    prevent the published key from being used, retrieve it and
+    <link xref="misc-key-revoke">revoke</link> it. The revoked key can then be
+    <link xref="pgp-sync">synced</link> with a key server to prevent people
+    from retrieving and using it.</p>
+    <!-- or when you <link xref="misc-key-revoke">revoke</link> it.- No
+    revoking feature yet for SSH keys/PGP master keys-->
+  </note>
+
+</page>
