@@ -6,7 +6,7 @@
   <info>
     <link type="guide" xref="about-keyring"/>
 
-    <revision pkgversion="3.10" date="2013-08-25" status="candidate"/>
+    <revision pkgversion="3.10" date="2013-08-25" status="review"/>
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
@@ -21,24 +21,32 @@
 
   <title>Change the default keyring</title>
 
-  <p>When you <link xref="passwords-stored-create">add a new
-  password</link>, it is normally added to the default keyring. If you want to
-  add it to a different keyring, you can chose another one while adding the new
-  password, but you can also change the default keyring. The default keyring is
-  normally the <gui>Login</gui> keyring.</p>
+  <p>When you
+  <link xref="passwords-stored-create">add a new password</link>, it is
+  normally added to the default keyring. If you want to add it to a different
+  keyring, you can chose another one while adding the new password, but you can
+  also change the default keyring. The default keyring is normally the
+  <gui>Login</gui> keyring.</p>
 
   <steps>
     <title>To change the default keyring:</title>
     <item>
-      <p>Enable <guiseq><gui style="menu">View</gui>
-      <gui style="menuitem">By keyring</gui></guiseq>.</p>
+      <p>From the list of keyrings under <gui>Passwords</gui>, on the left side
+      panel, select the keyring of your choice.</p>
     </item>
     <item>
-      <p>Right click on the keyring in the <gui>Passwords</gui> list and select
-      <gui>Set as default</gui>.</p>
+      <p>Right click on the selected keyring and select <gui>Set as
+      default</gui>.</p>
     </item>
   </steps>
 
-  <!-- Does this affect which keyring passwords are saved to through other
-       applications? -->
+  <note style="info">
+    <p>Passwords to some GNOME applications are stored automatically by
+    <app>Passwords and Keys</app> in the <gui>Login</gui> keyring because it is
+    the default keyring. When you change the default keyring, any new passwords
+    created for GNOME applications will be stored in the new default keyring,
+    while GNOME application passwords created before the change will remain in
+    the <gui>Login</gui> keyring.</p>
+  </note>
+
 </page>
