@@ -23,42 +23,48 @@
 
   <title>Add extra user IDs to a key</title>
 
-  <p>A key can have multiple user IDs. This is helpful when you want to
-  communicate with several people and one of them does not recognize, say, the
-  email address in your user ID. This person may not want to import your
-  <em>Public key</em> since it contains information that they do not know. In
-  such scenarios, if you do not want to create a new key or edit the existing
-  user ID, you can attach a new user ID to your key. This also saves you the
-  trouble of managing a lot of keys and remembering different passphrases.</p>
+  <p>A key can have multiple user IDs. This is helpful when you want to use the
+  same key while communicating with several people and one of them does not
+  recognize, say, the email address in your user ID. This person may not want
+  to import your public key since it contains information that they do not
+  know. In such scenarios, if you do not want to create a new key with a
+  different user ID, you can attach a new user ID to your existing key.</p>
 
   <steps>
     <title>To add an extra user ID:</title>
-      <item>
-        <p>Select the <em>GnuPG key</em> of your choice from the list.</p>
-      </item>
-      <item>
-        <p>Right click on the key and choose
-        <guiseq><gui>Properties</gui>
-        <gui>Names and Signatures</gui></guiseq>.</p>
-      </item>
-      <item>
-        <p>Click the <gui style="button">Add Name</gui> button to add a new
-        user ID.</p>
-      </item>
-      <item>
-        <p>In the new dialog that opens up, fill the correct details for
-        the new user ID, like <gui>Full Name</gui>, <gui>Email Address</gui>
-        and <gui>Key Comment</gui>.</p>
-      </item>
-      <item>
-        <p>You will be asked to enter the passphrase you used while creating
-        the key. Enter the correct passphrase and click
-        <gui style="button">OK</gui> to finish.</p>
-      </item>
-      <item>
-        <p>Your new user ID will now be listed under <gui>Names and
-        Signatures</gui>.</p>
-      </item>
+    <item>
+      <p>Select the <gui>GnuPG keys</gui> keyring from the left side panel.</p>
+    </item>
+    <item>
+      <p>From the list, select the <gui>Personal PGP key</gui> of your
+      choice.</p>
+    </item>
+    <item>
+      <p>Right click on the key and select <guiseq><gui>Properties</gui>
+      <gui>Names and Signatures</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Click the <gui style="button">Add Name</gui> button to add a new user
+      ID.</p>
+    </item>
+    <item>
+      <p>In the new dialog, fill in details like <gui>Full Name</gui>,
+      <gui>Email Address</gui> and <gui>Key Comment</gui> for the new user
+      ID.</p>
+    </item>
+    <item>
+      <p>Enter the correct passphrase and click <gui style="button">OK</gui> to
+      finish.</p>
+    </item>
   </steps>
+
+  <p>Your new user ID will now be listed under the
+  <gui>Names and Signatures</gui> panel.</p>
+
+  <note style="tip">
+    <p>If your key has been published on a key server,
+    <link xref="pgp-sync">synchronize</link> it after adding new user IDs to
+    update the remote copy of the key.</p>
+  </note>
 
 </page>
