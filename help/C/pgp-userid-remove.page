@@ -7,7 +7,7 @@
     <link type="guide" xref="pgp-userid#add-remove"/>
 
     <revision version="0.1" date="2011-10-23" status="stub"/>
-    <revision pkgversion="3.9" version="0.1" date="2013-06-27" status="draft"/>
+    <revision pkgversion="3.9" date="2013-06-27" status="review"/>
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
@@ -26,19 +26,27 @@
   remove any additional user IDs that you have attached to the key.</p>
 
   <steps>
-    <title>To remove a user ID:</title>
-      <item>
-        <p>Select the <em>PGP key</em> of your choice from the list.</p>
-      </item>
-      <item>
-        <p>Right click on the key and choose
-        <guiseq><gui>Properties</gui>
-        <gui>Names and Signatures</gui></guiseq>.</p>
-      </item>
-      <item>
-        <p>Select the user ID you want to remove and click
-        <gui style="button">Delete</gui>.</p>
-      </item>
-   </steps>
+    <title>To remove a user ID from a PGP key:</title>
+    <item>
+      <p>Select the <gui>GnuPG keys</gui> keyring from the left side panel.</p>
+    </item>
+    <item>
+      <p>Select the <gui>Personal PGP key</gui> list.</p>
+    </item>
+    <item>
+      <p>Right click on the selected key and choose
+      <guiseq><gui>Properties</gui>
+      <gui>Names and Signatures</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Select the user ID you want to remove and click
+      <gui style="button">Delete</gui>.</p>
+    </item>
+  </steps>
+
+   <note style="tip">
+     <p><link xref="pgp-sync">Synchronize</link> your keys after detaching the
+     user ID to update the changes on the remote copy of the key.</p>
+   </note>
 
 </page>
