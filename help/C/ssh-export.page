@@ -1,0 +1,81 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="ssh-export">
+
+  <info>
+    <link type="guide" xref="ssh"/>
+
+    <revision pkgversion="3.9" date="2013-09-10" status="review"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author copyright">
+      <name>Aruna Sankaranarayanan</name>
+      <email its:translate="no">aruna.evam@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Export your public and private SSH keys to store them in
+    keyfiles.</desc>
+  </info>
+
+  <title>Export SSH keys</title>
+
+  <p>Export the contents of your SSH keys and store them in keyfiles, to have a
+  backup of your keys or to share your public key with someone.</p>
+
+  <section id="public">
+    <title>To export your public SSH key:</title>
+
+    <steps>
+      <item>
+	<p>Select the <gui>OpenSSH keys</gui> keyring from the left side
+	panel.</p>
+      </item>
+      <item>
+	<p>Select the <gui>Personal SSH key</gui>, that has to be exported,
+	from the list.</p>
+      </item>
+      <item>
+	<p>Select <guiseq><gui>File</gui><gui>Export…</gui></guiseq>.</p>
+      </item>
+      <item>
+	<p>Press the <gui style="button">Export</gui> button to save the
+	exported public key on your computer.</p>
+      </item>
+    </steps>
+
+  </section>
+
+  <section id="private">
+    <title>To export your private SSH key:</title>
+
+    <steps>
+      <item>
+	<p>Select the <gui>OpenSSH keys</gui> keyring from the left side
+	panel.</p>
+      </item>
+      <item>
+	<p>Select the <gui>Personal SSH key</gui>, that has to be exported,
+	from the list.</p>
+      </item>
+      <item>
+	<p>Right click on the selected key and select
+	<guiseq><gui>Properties</gui><gui>Details</gui></guiseq>.</p>
+      </item>
+      <item>
+	<p>Press the <gui style="button">Export Private Key</gui> button to
+	save the exported private key on your computer.</p>
+      </item>
+    </steps>
+
+    <note style="warning">
+      <p>Keep the exported private key file in a safe location, since the
+      contents of the file must be kept private, to prevent misuse of your
+      key.</p>
+    </note>
+
+  </section>
+
+</page>
