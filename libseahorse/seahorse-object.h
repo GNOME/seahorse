@@ -52,7 +52,6 @@
 #define SEAHORSE_IS_OBJECT_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_OBJECT))
 #define SEAHORSE_OBJECT_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_OBJECT, SeahorseObjectClass))
 
-typedef struct _SeahorsePlace SeahorsePlace;
 typedef struct _SeahorseObject SeahorseObject;
 typedef struct _SeahorseObjectClass SeahorseObjectClass;
 typedef struct _SeahorseObjectPrivate SeahorseObjectPrivate;

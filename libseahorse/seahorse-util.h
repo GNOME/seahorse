@@ -34,7 +34,6 @@
 typedef guint64 SeahorseVersion;
 
 gchar*      seahorse_util_get_date_string           (const time_t time);
-gchar*      seahorse_util_get_display_date_string   (const time_t time);
 
 
 #define     SEAHORSE_ERROR                      (seahorse_util_error_domain ())
