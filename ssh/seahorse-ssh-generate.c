@@ -184,7 +184,8 @@ on_response (GtkDialog *dialog, gint response, SeahorseWidget *swidget)
 
     /* We start creation */
     cancellable = g_cancellable_new ();
-    seahorse_ssh_op_generate_async (src, email, type, bits, cancellable,
+    seahorse_ssh_op_generate_async (src, email, type, bits,
+                                    gtk_window_get_transient_for (GTK_WINDOW (dialog)), cancellable,
                                     upload ? on_generate_complete_and_upload : on_generate_complete,
                                     NULL);
     seahorse_progress_show (cancellable, _("Creating Secure Shell Key"), FALSE);

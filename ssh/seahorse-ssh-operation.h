@@ -32,6 +32,7 @@ void              seahorse_ssh_op_upload_async             (SeahorseSSHSource *s
                                                             const gchar *username,
                                                             const gchar *hostname,
                                                             const gchar *port,
+                                                            GtkWindow *transient_for,
                                                             GCancellable *cancellable,
                                                             GAsyncReadyCallback callback,
                                                             gpointer user_data);
@@ -44,6 +45,7 @@ void              seahorse_ssh_op_generate_async           (SeahorseSSHSource *s
                                                             const gchar *email,
                                                             guint type,
                                                             guint bits,
+                                                            GtkWindow *transient_for,
                                                             GCancellable *cancellable,
                                                             GAsyncReadyCallback callback,
                                                             gpointer user_data);
@@ -53,6 +55,7 @@ SeahorseObject *  seahorse_ssh_op_generate_finish          (SeahorseSSHSource *s
                                                             GError **error);
 
 void              seahorse_ssh_op_change_passphrase_async  (SeahorseSSHKey *key,
+                                                            GtkWindow *transient_for,
                                                             GCancellable *cancellable,
                                                             GAsyncReadyCallback callback,
                                                             gpointer user_data);
@@ -64,6 +67,7 @@ gboolean          seahorse_ssh_op_change_passphrase_finish (SeahorseSSHKey *key,
 void              seahorse_ssh_op_import_public_async      (SeahorseSSHSource *source,
                                                             SeahorseSSHKeyData *data,
                                                             const gchar* filename,
+                                                            GtkWindow *transient_for,
                                                             GCancellable *cancellable,
                                                             GAsyncReadyCallback callback,
                                                             gpointer user_data);
@@ -75,6 +79,7 @@ gchar *           seahorse_ssh_op_import_public_finish     (SeahorseSSHSource *s
 void              seahorse_ssh_op_import_private_async     (SeahorseSSHSource *source,
                                                             SeahorseSSHSecData *data,
                                                             const gchar* filename,
+                                                            GtkWindow *transient_for,
                                                             GCancellable *cancellable,
                                                             GAsyncReadyCallback callback,
                                                             gpointer user_data);
@@ -86,6 +91,7 @@ gchar *           seahorse_ssh_op_import_private_finish    (SeahorseSSHSource *s
 void              seahorse_ssh_op_authorize_async          (SeahorseSSHSource *source,
                                                             SeahorseSSHKey *skey,
                                                             gboolean authorize,
+                                                            GtkWindow *transient_for,
                                                             GCancellable *cancellable,
                                                             GAsyncReadyCallback callback,
                                                             gpointer user_data);
@@ -97,6 +103,7 @@ gboolean          seahorse_ssh_op_authorize_finish         (SeahorseSSHSource *s
 void              seahorse_ssh_op_rename_async             (SeahorseSSHSource *source,
                                                             SeahorseSSHKey *key,
                                                             const gchar *newcomment,
+                                                            GtkWindow *transient_for,
                                                             GCancellable *cancellable,
                                                             GAsyncReadyCallback callback,
                                                             gpointer user_data);

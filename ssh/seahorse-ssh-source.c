@@ -714,6 +714,7 @@ seahorse_ssh_source_load_finish (SeahorsePlace *place,
 typedef struct {
 	SeahorseSSHSource *source;
 	GCancellable *cancellable;
+	GtkWindow *transient_for;
 	gint imports;
 } source_import_closure;
 
@@ -722,6 +723,7 @@ source_import_free (gpointer data)
 {
 	source_import_closure *closure = data;
 	g_object_unref (closure->source);
+	g_clear_object (&closure->transient_for);
 	g_clear_object (&closure->cancellable);
 	g_free (closure);
 }
@@ -760,8 +762,8 @@ on_import_found_public_key (SeahorseSSHKeyData *data,
 
 	fullpath = seahorse_ssh_source_file_for_public (closure->source, FALSE);
 	seahorse_ssh_op_import_public_async (closure->source, data, fullpath,
-	                                     closure->cancellable, on_import_public_complete,
-	                                     g_object_ref (res));
+	                                     closure->transient_for, closure->cancellable,
+	                                     on_import_public_complete, g_object_ref (res));
 	closure->imports++;
 	g_free (fullpath);
 	seahorse_ssh_key_data_free (data);
@@ -801,8 +803,8 @@ on_import_found_private_key (SeahorseSSHSecData *data,
 	source_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 
 	seahorse_ssh_op_import_private_async (closure->source, data, NULL,
-	                                      closure->cancellable, on_import_private_complete,
-	                                      g_object_ref (res));
+	                                      closure->transient_for, closure->cancellable,
+	                                      on_import_private_complete, g_object_ref (res));
 
 	seahorse_ssh_sec_data_free (data);
 	return TRUE;
@@ -811,6 +813,7 @@ on_import_found_private_key (SeahorseSSHSecData *data,
 void
 seahorse_ssh_source_import_async (SeahorseSSHSource *self,
                                   GInputStream *input,
+                                  GtkWindow *transient_for,
                                   GCancellable *cancellable,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
@@ -825,6 +828,7 @@ seahorse_ssh_source_import_async (SeahorseSSHSource *self,
 	closure = g_new0 (source_import_closure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	closure->source = g_object_ref (self);
+	closure->transient_for = transient_for ? g_object_ref (transient_for) : NULL;
 	g_simple_async_result_set_op_res_gpointer (res, closure, source_import_free);
 
 	contents = (gchar*)seahorse_util_read_to_memory (input, NULL);

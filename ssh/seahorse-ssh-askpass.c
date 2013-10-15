@@ -27,15 +27,21 @@
 #include "seahorse-passphrase.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
+
 int
 main (int argc, char* argv[])
 {
+	GdkWindow *transient_for = NULL;
 	GtkDialog *dialog;
 	const gchar *title;
 	const gchar *argument;
@@ -43,6 +49,7 @@ main (int argc, char* argv[])
 	const gchar *flags;
 	gint result;
 	const gchar *pass;
+	gulong xid;
 	gssize len;
 
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
@@ -54,7 +61,20 @@ main (int argc, char* argv[])
 	/* Non buffered stdout */
 	setvbuf (stdout, 0, _IONBF, 0);
 
-	/* TODO: Change lousy default, rarely used, and string freeze right now */
+#ifdef GDK_WINDOWING_X11
+	argument = g_getenv ("SEAHORSE_SSH_ASKPASS_PARENT");
+	if (argument) {
+		GdkDisplay *display = gdk_display_get_default ();
+		if (GDK_IS_X11_DISPLAY (display)) {
+			xid = strtoul (argument, NULL, 10);
+			if (xid != 0)
+				transient_for = gdk_x11_window_foreign_new_for_display (display, xid);
+			if (transient_for == NULL)
+				g_warning ("Couldn't find window to be transient for: %s", argument);
+		}
+	}
+#endif
+
 	title = g_getenv ("SEAHORSE_SSH_ASKPASS_TITLE");
 	if (!title || !title[0])
 		title = _("Enter your Secure Shell passphrase:");
@@ -101,6 +121,11 @@ main (int argc, char* argv[])
 
 	g_free (message);
 
+	if (transient_for) {
+		gdk_window_set_transient_for (gtk_widget_get_window (GTK_WIDGET (dialog)),
+		                              transient_for);
+	}
+
 	result = 1;
 	if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT) {
 		pass = seahorse_passphrase_prompt_get (dialog);
@@ -113,6 +138,8 @@ main (int argc, char* argv[])
 		}
 	}
 
+	if (transient_for)
+		g_object_unref (transient_for);
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 	return result;
 }

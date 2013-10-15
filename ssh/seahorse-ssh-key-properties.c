@@ -93,6 +93,7 @@ on_ssh_comment_activate (GtkWidget *entry,
 	SeahorseSSHSource *source;
 	const gchar *text;
 	ssh_rename_closure *closure;
+	GtkWidget *window;
 
 	skey = SEAHORSE_SSH_KEY (SEAHORSE_OBJECT_WIDGET (swidget)->object);
 	source = SEAHORSE_SSH_SOURCE (seahorse_object_get_place (SEAHORSE_OBJECT (skey)));
@@ -104,12 +105,13 @@ on_ssh_comment_activate (GtkWidget *entry,
 		return;
 
 	gtk_widget_set_sensitive (entry, FALSE);
+	window = gtk_widget_get_toplevel (entry);
 
 	closure = g_new0 (ssh_rename_closure, 1);
 	closure->swidget = g_object_ref (swidget);
 	closure->entry = GTK_ENTRY (entry);
 	closure->original = g_strdup (skey->keydata->comment ? skey->keydata->comment : "");
-	seahorse_ssh_op_rename_async (source, skey, text,
+	seahorse_ssh_op_rename_async (source, skey, text, GTK_WINDOW (window),
 	                              NULL, on_rename_complete, closure);
 }
 
@@ -144,14 +146,16 @@ on_ssh_trust_toggled (GtkToggleButton *button,
 	SeahorseSSHSource *source;
 	SeahorseSSHKey *skey;
 	gboolean authorize;
+	GtkWidget *window;
 
 	skey = SEAHORSE_SSH_KEY (SEAHORSE_OBJECT_WIDGET (swidget)->object);
 	source = SEAHORSE_SSH_SOURCE (seahorse_object_get_place (SEAHORSE_OBJECT (skey)));
 
 	authorize = gtk_toggle_button_get_active (button);
 	gtk_widget_set_sensitive (GTK_WIDGET (button), FALSE);
+	window = gtk_widget_get_toplevel (GTK_WIDGET (button));
 
-	seahorse_ssh_op_authorize_async (source, skey, authorize,
+	seahorse_ssh_op_authorize_async (source, skey, authorize, GTK_WINDOW (window),
 	                                 NULL, on_authorize_complete, g_object_ref (button));
 }
 
@@ -178,13 +182,15 @@ on_ssh_passphrase_button_clicked (GtkWidget *widget,
 {
 	GObject *object;
 	GtkWidget *button;
+	GtkWidget *window;
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
 
 	button = seahorse_widget_get_widget (swidget, "passphrase-button");
 	gtk_widget_set_sensitive (button, FALSE);
+	window = gtk_widget_get_toplevel (widget);
 
-	seahorse_ssh_op_change_passphrase_async (SEAHORSE_SSH_KEY (object), NULL,
+	seahorse_ssh_op_change_passphrase_async (SEAHORSE_SSH_KEY (object), GTK_WINDOW (window), NULL,
 	                                         on_passphrase_complete, g_object_ref (button));
 }
 

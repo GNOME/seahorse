@@ -125,7 +125,7 @@ upload_keys (SeahorseWidget *swidget)
 
     /* Start an upload process */
     seahorse_ssh_op_upload_async (SEAHORSE_SSH_SOURCE (seahorse_object_get_place (keys->data)),
-                                  keys, user, host, port, cancellable, on_upload_complete, NULL);
+                                  keys, user, host, port, NULL, cancellable, on_upload_complete, NULL);
 
     g_free (host);
     g_free (user);

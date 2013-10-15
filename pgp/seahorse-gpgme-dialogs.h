@@ -56,7 +56,8 @@ void            seahorse_gpgme_generate_key         (SeahorseGpgmeKeyring *keyri
                                                      const gchar *comment,
                                                      guint type,
                                                      guint bits,
-                                                     time_t expires);
+                                                     time_t expires,
+                                                     GtkWindow *parent);
 
 void            seahorse_gpgme_add_revoker_new      (SeahorseGpgmeKey *pkey,
                                                      GtkWindow *parent);

@@ -86,6 +86,7 @@ guchar*              seahorse_ssh_source_export_private     (SeahorseSSHSource *
 
 void                 seahorse_ssh_source_import_async       (SeahorseSSHSource *self,
                                                              GInputStream *input,
+                                                             GtkWindow *transient_for,
                                                              GCancellable *cancellable,
                                                              GAsyncReadyCallback callback,
                                                              gpointer user_data);

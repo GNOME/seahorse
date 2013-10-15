@@ -202,7 +202,8 @@ seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
                              const gchar *comment,
                              guint type,
                              guint bits,
-                             time_t expires)
+                             time_t expires,
+                             GtkWindow *parent)
 {
 	GCancellable *cancellable;
 	const gchar *pass;
@@ -212,6 +213,7 @@ seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
 	dialog = seahorse_passphrase_prompt_show (_("Passphrase for New PGP Key"),
 	                                          _("Enter the passphrase for your new key twice."),
 	                                          NULL, NULL, TRUE);
+	gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 	if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT) {
 		pass = seahorse_passphrase_prompt_get (dialog);
 		cancellable = g_cancellable_new ();
@@ -324,8 +326,8 @@ on_gpgme_generate_response (GtkDialog *dialog,
     /* Less confusing with less on the screen */
     gtk_widget_hide (seahorse_widget_get_toplevel (swidget));
 
-    seahorse_gpgme_generate_key (keyring, name, email, comment, type, bits, expires);
-
+    seahorse_gpgme_generate_key (keyring, name, email, comment, type, bits, expires,
+                                 gtk_window_get_transient_for (GTK_WINDOW (dialog)));
 
     seahorse_widget_destroy (swidget);
     g_free (name);
