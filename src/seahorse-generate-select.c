@@ -221,8 +221,9 @@ seahorse_generate_select_constructed (GObject *obj)
 	/* Setup the dialog */
 	gtk_window_set_modal (GTK_WINDOW (self), TRUE);
 	gtk_window_set_default_size (GTK_WINDOW (self), -1, 410);
-	gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (self))),
-	                   GTK_WIDGET (gtk_builder_get_object (builder, "generate-select")));
+	gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (self))),
+	                    GTK_WIDGET (gtk_builder_get_object (builder, "generate-select")),
+	                    TRUE, TRUE, 0);
 	gtk_dialog_add_buttons (GTK_DIALOG (self),
 	                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 	                        _("Continue"), GTK_RESPONSE_OK,
