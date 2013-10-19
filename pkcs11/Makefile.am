@@ -7,7 +7,7 @@ seahorselibexecbindir = $(libdir)/seahorse/
 # Generate seahorse-pkcs11.h before building libseahorse_pkcs11_la_SOURCES
 BUILT_SOURCES = libvala_code_la_vala.stamp
 
-INCLUDES = -I$(top_builddir) \
+AM_CPPFLAGS = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/common \
 	-I$(top_srcdir)/libseahorse \

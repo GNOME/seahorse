@@ -4,7 +4,7 @@ uidir = $(pkgdatadir)/ui
 localedir = $(datadir)/locale
 seahorselibexecbindir = $(libdir)/seahorse/
 
-INCLUDES = -I$(top_builddir) \
+AM_CPPFLAGS = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/common \
 	-I$(top_srcdir)/libseahorse \

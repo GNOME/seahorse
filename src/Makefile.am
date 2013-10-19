@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.decl
 uidir = $(datadir)/seahorse/ui/
 localedir = $(datadir)/locale
 
-INCLUDES = -I$(top_builddir) \
+AM_CPPFLAGS = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/common \
 	-I$(top_srcdir)/libseahorse \

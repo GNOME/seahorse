@@ -2,7 +2,7 @@ NULL =
 
 uidir = $(datadir)/seahorse/ui/
 
-INCLUDES = -I$(top_builddir) \
+AM_CPPFLAGS = -I$(top_builddir) \
 	-I$(top_srcdir) \
 	-DPKGDATADIR=\""$(pkgdatadir)/"\" \
 	-DUIDIR=\""$(uidir)"\" \
