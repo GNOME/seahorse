@@ -7,13 +7,14 @@
 # Jennie Petoumenou <epetoumenou@gmail.com>, 2009.
 # Marios Zindilis <m.zindilis@dmajor.org>, 2011.
 # Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>, 2012, 2013.
+# Efstathios Iosifidis <iosifidis@opensuse.org>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=seahor"
 "se&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-04-21 22:35+0000\n"
-"PO-Revision-Date: 2013-04-25 17:38+0300\n"
+"POT-Creation-Date: 2013-10-19 04:16+0000\n"
+"PO-Revision-Date: 2013-11-05 23:07+0300\n"
 "Last-Translator: Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>\n"
 "Language-Team: team@gnome.gr\n"
 "Language: el\n"
@@ -24,16 +25,313 @@ msgstr ""
 "X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
-#: ../common/seahorse-exportable.vala:193
+#: ../common/catalog.vala:259
+msgid "Contributions:"
+msgstr "Συντελεστές:"
+
+#: ../common/catalog.vala:287 ../src/seahorse.desktop.in.in.h:1
+#: ../src/seahorse-key-manager.c:661
+msgid "Passwords and Keys"
+msgstr "Κωδικοί πρόσβασης και κλειδιά κρυπτογράφησης"
+
+#: ../common/catalog.vala:289
+msgid "translator-credits"
+msgstr ""
+"Ελληνική μεταφραστική ομάδα GNOME\n"
+" Δημήτρης Σπίγγος <dmtrs32@gmail.com>\n"
+" Κώστας Παπαδήμας <pkst@gnome.org>\n"
+" Δημήτριος Τυπάλδος <dtfedora@yahoo.com>\n"
+" Νίκος Χαρωνιτάκης <nikosx@gmail.com>\n"
+" Σίμος Ξενιτέλλης <simos@gnome.org>\n"
+" Νίκος Αγιαννιώτης <nickagian@gmail.com>\n"
+" Τζένη Πετούμενου <epetoumenou@gmail.com>\n"
+" Ευστάθιος Ιωσηφίδης <iosifidis@opensuse.org>\n"
+"\n"
+"Για περισσότερα δείτε http://www.gnome.gr/"
+
+#: ../common/catalog.vala:292
+msgid "Seahorse Project Homepage"
+msgstr "Αρχική σελίδα του Seahorse"
+
+#: ../common/catalog.vala:310
+msgid "Cannot delete"
+msgstr "Αδυναμία διαγραφής"
+
+#: ../common/catalog.vala:333 ../libseahorse/seahorse-key-manager-store.c:442
+msgid "Couldn't export keys"
+msgstr "Αδυναμία εξαγωγής κλειδιών"
+
+#: ../common/catalog.vala:344
+msgid "Couldn't export data"
+msgstr "Αδυναμία εξαγωγής δεδομένων"
+
+#: ../common/catalog.vala:360 ../libseahorse/seahorse-widget.c:460
+#, c-format
+msgid "Could not display help: %s"
+msgstr "Αδύνατη η προβολή βοήθειας: %s"
+
+#. Top menu items
+#: ../common/catalog.vala:366
+msgid "_File"
+msgstr "_Αρχείο"
+
+#: ../common/catalog.vala:367
+msgid "E_xport..."
+msgstr "Ε_ξαγωγή..."
+
+#: ../common/catalog.vala:368
+msgid "Export to a file"
+msgstr "Εξαγωγή σε αρχείο"
+
+#: ../common/catalog.vala:369
+msgid "_Edit"
+msgstr "_Επεξεργασία"
+
+#: ../common/catalog.vala:372
+msgid "Copy to the clipboard"
+msgstr "Αντιγραφή στο πρόχειρο"
+
+#: ../common/catalog.vala:373 ../pkcs11/seahorse-pkcs11-properties.c:229
+#: ../src/seahorse-sidebar.c:955
+msgid "_Delete"
+msgstr "_Διαγραφή"
+
+#: ../common/catalog.vala:374
+msgid "Delete selected items"
+msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+
+#: ../common/catalog.vala:376
+msgid "Show the properties of this item"
+msgstr "Προβολή ιδιοτήτων αυτού του αντικειμένου"
+
+#: ../common/catalog.vala:378
+msgid "Show the properties of this keyring"
+msgstr "Προβολή ιδιοτήτων αυτής της κλειδοθήκης"
+
+#: ../common/catalog.vala:379
+msgid "Prefere_nces"
+msgstr "Προτι_μήσεις"
+
+#: ../common/catalog.vala:380
+msgid "Change preferences for this program"
+msgstr "Αλλαγή προτιμήσεων για το συγκεκριμένο πρόγραμμα"
+
+#: ../common/catalog.vala:381
+msgid "_View"
+msgstr "Προ_βολή"
+
+#: ../common/catalog.vala:382
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#: ../common/catalog.vala:384
+msgid "About this program"
+msgstr "Περί αυτού του προγράμματος"
+
+#: ../common/catalog.vala:385
+msgid "_Contents"
+msgstr "_Περιεχόμενα"
+
+#: ../common/catalog.vala:386
+msgid "Show Seahorse help"
+msgstr "Εμφάνιση βοήθειας Seahorse"
+
+#: ../common/exportable.vala:195
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 msgid "Export"
 msgstr "Εξαγωγή"
 
-#: ../gkr/seahorse-add-keyring.xml.h:1
+#: ../gkr/gkr-backend.vala:41
+msgid "Passwords"
+msgstr "Συνθηματικά"
+
+#: ../gkr/gkr-backend.vala:45
+msgid "Stored personal passwords, credentials and secrets"
+msgstr "Αποθηκευμένων κωδικών πρόσβασης, πιστοποιητικών και μυστικών"
+
+#: ../gkr/gkr-backend.vala:243
+msgid "New password keyring"
+msgstr "Νέα κλειδοθήκη κωδικών"
+
+#: ../gkr/gkr-backend.vala:244 ../gkr/gkr-backend.vala:251
+msgid "Used to store application and network passwords"
+msgstr "Χρησιμοποιείται για την αποθήκευση κωδικών για εφαρμογές και δίκτυα"
+
+#: ../gkr/gkr-backend.vala:245
+msgid "New password..."
+msgstr "Νέος κωδικός πρόσβασης..."
+
+#: ../gkr/gkr-backend.vala:246 ../gkr/gkr-backend.vala:253
+msgid "Safely store a password or secret."
+msgstr "Ασφαλής αποθήκευση ενός κωδικού πρόσβασης ή μυστικού."
+
+#: ../gkr/gkr-backend.vala:250
+msgid "Password Keyring"
+msgstr "Κλειδοθήκη κωδικών"
+
+#: ../gkr/gkr-backend.vala:252
+msgid "Stored Password"
+msgstr "Αποθηκευμένος κωδικός πρόσβασης"
+
+#: ../gkr/gkr-item-add.vala:27
+msgid "Add Password"
+msgstr "Προσθήκη κωδικού"
+
+#: ../gkr/gkr-item-add.vala:104
+msgid "Couldn't add item"
+msgstr "Αδυναμία προσθήκης αντικειμένου"
+
+#: ../gkr/gkr-item-properties.vala:139
+msgid "Access a network share or resource"
+msgstr "Πρόσβαση κοινόχρηστου δικτύου ή πόρου"
+
+#: ../gkr/gkr-item-properties.vala:142
+msgid "Access a website"
+msgstr "Πρόσβαση ιστοσελίδας"
+
+#: ../gkr/gkr-item-properties.vala:145
+msgid "Unlocks a PGP key"
+msgstr "Ξεκλειδώνει ένα κλειδί PGP"
+
+#: ../gkr/gkr-item-properties.vala:148
+msgid "Unlocks a Secure Shell key"
+msgstr "Ξεκλειδώνει ένα κλειδί Secure Shell (SSH)"
+
+#: ../gkr/gkr-item-properties.vala:151
+msgid "Saved password or login"
+msgstr "Αποθηκευμένος κωδικός πρόσβασης ή στοιχεία σύνδεσης"
+
+#: ../gkr/gkr-item-properties.vala:164
+msgid "Network Credentials"
+msgstr "Πιστοποιητικά δικτύου"
+
+#: ../gkr/gkr-item-properties.vala:169
+msgid "Password"
+msgstr "Κωδικός πρόσβασης"
+
+#: ../gkr/gkr-item-properties.vala:238
+msgid "Couldn't change password."
+msgstr "Αδύνατη η αλλαγή κωδικού πρόσβασης."
+
+#: ../gkr/gkr-item-properties.vala:276
+msgid "Couldn't set description."
+msgstr "Αδύνατος ο καθορισμός περιγραφής."
+
+#. Translators: This should be the same as the string in empathy
+#: ../gkr/gkr-item.vala:391
+msgid "IM account password for "
+msgstr "Κωδικός πρόσβασης για της εφαρμογή αποστολής άμεσων μηνυμάτων "
+
+#: ../gkr/gkr-item.vala:447
+msgid "Password or secret"
+msgstr "Κωδικός πρόσβασης ή μυστικό"
+
+#: ../gkr/gkr-item.vala:448
+msgid "Network password"
+msgstr "Κωδικός πρόσβασης δικτύου"
+
+#: ../gkr/gkr-item.vala:449
+msgid "Stored note"
+msgstr "Αποθηκευμένη σημείωση"
+
+#: ../gkr/gkr-item.vala:450
+msgid "Keyring password"
+msgstr "Κωδικός πρόσβασης κλειδοθήκης"
+
+#: ../gkr/gkr-item.vala:451
+msgid "Encryption key password"
+msgstr "Κρυπτογράφηση συνθηματικού κλειδιού"
+
+#: ../gkr/gkr-item.vala:452
+msgid "Key storage password"
+msgstr "Κωδικός πρόσβασης αποθήκευσης κλειδιού"
+
+#: ../gkr/gkr-item.vala:453
+msgid "Google Chrome password"
+msgstr "Κωδικός πρόσβασης για Google Chrome"
+
+#: ../gkr/gkr-item.vala:454
+msgid "Gnome Online Accounts password"
+msgstr "Κωδικός πρόσβασης για τους διαδικτυακούς λογαριασμούς του GNOME"
+
+#: ../gkr/gkr-item.vala:455
+msgid "Telepathy password"
+msgstr "Κωδικός πρόσβασης για Telepathy"
+
+#: ../gkr/gkr-item.vala:456
+msgid "Instant messaging password"
+msgstr "Κωδικός πρόσβασης της εφαρμογής άμεσων μηνυμάτων"
+
+#: ../gkr/gkr-item.vala:457
+msgid "Network Manager secret"
+msgstr "Μυστικό του Network Manager"
+
+#: ../gkr/gkr-item.vala:507
+#, c-format
+msgid "Are you sure you want to delete the password '%s'?"
+msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε τον κωδικό πρόσβασης '%s';"
+
+#: ../gkr/gkr-item.vala:509
+#, c-format
+msgid "Are you sure you want to delete %d password?"
+msgid_plural "Are you sure you want to delete %d passwords?"
+msgstr[0] "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε %d κωδικό πρόσβασης;"
+msgstr[1] "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε %d κωδικούς πρόσβασης;"
+
+#: ../gkr/gkr-keyring-add.vala:28
 msgid "Add Password Keyring"
 msgstr "Προσθήκη κλειδοθήκης κωδικών"
 
-#: ../gkr/seahorse-add-keyring.xml.h:2
+#: ../gkr/gkr-keyring-add.vala:58
+msgid "Couldn't add keyring"
+msgstr "Αδύνατη η προσθήκη κλειδοθήκης"
+
+#: ../gkr/gkr-keyring.vala:30
+msgid "A keyring that is automatically unlocked on login"
+msgstr "Μια κλειδοθήκη που ξεκλειδώνεται αυτόματα κατά την σύνδεση"
+
+#: ../gkr/gkr-keyring.vala:31
+msgid "A keyring used to store passwords"
+msgstr ""
+"Μια κλειδοθήκη που χρησιμοποιείται για την αποθήκευση κωδικών πρόσβασης"
+
+#: ../gkr/gkr-keyring.vala:176
+msgid "Couldn't set default keyring"
+msgstr "Αδύνατος ο καθορισμός προεπιλεγμένης κλειδοθήκης"
+
+#: ../gkr/gkr-keyring.vala:200 ../gkr/gkr-keyring.vala:205
+msgid "Couldn't change keyring password"
+msgstr "Αδύνατη η αλλαγή κωδικού της κλειδοθήκης"
+
+#: ../gkr/gkr-keyring.vala:211
+msgid "_Set as default"
+msgstr "_Ορισμός ως προεπιλογής"
+
+#: ../gkr/gkr-keyring.vala:212
+msgid "Applications usually store new passwords in the default keyring."
+msgstr ""
+"Συνήθως, οι εφαρμογές αποθηκεύουν τους νέους κωδικούς στην προεπιλεγμένη "
+"κλειδοθήκη."
+
+#: ../gkr/gkr-keyring.vala:213
+msgid "Change _Password"
+msgstr "Αλλαγή _κωδικού πρόσβασης"
+
+#: ../gkr/gkr-keyring.vala:214
+msgid "Change the unlock password of the password storage keyring"
+msgstr "Αλλαγή του κωδικού ξεκλειδώματος της κλειδοθήκης αποθήκευσης κωδικών"
+
+#: ../gkr/gkr-keyring.vala:239
+#, c-format
+msgid "Are you sure you want to delete the password keyring '%s'?"
+msgstr ""
+"Είστε σίγουροι ότι επιθυμείτε να διαγράψετε την κλειδοθήκη κωδικών '%s';"
+
+#: ../gkr/gkr-keyring.vala:242
+msgid "I understand that all items will be permanently deleted."
+msgstr "Κατανοώ πως όλα τα αντικείμενα θα διαγραφούν οριστικά."
+
+#: ../gkr/seahorse-add-keyring.xml.h:1
 msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
@@ -41,299 +339,97 @@ msgstr ""
 "Παρακαλώ επιλέξτε ένα όνομα για τη νέα κλειδοθήκη. Θα ερωτηθείτε για κωδικό "
 "ξεκλειδώματος."
 
-#: ../gkr/seahorse-add-keyring.xml.h:3
+#: ../gkr/seahorse-add-keyring.xml.h:2
 msgid "New Keyring Name:"
 msgstr "Νέο όνομα κλειδοθήκης:"
 
-#: ../gkr/seahorse-add-keyring.xml.h:4
+#: ../gkr/seahorse-add-keyring.xml.h:3
 #: ../libseahorse/seahorse-add-keyserver.xml.h:5
 #: ../ssh/seahorse-ssh-upload.xml.h:3
 msgid "The host name or address of the server."
 msgstr "Όνομα συστήματος ή διεύθυνση εξυπηρετητή."
 
-#: ../gkr/seahorse-gkr-actions.c:81
-msgid "New password keyring"
-msgstr "Νέα κλειδοθήκη κωδικών"
-
-#: ../gkr/seahorse-gkr-actions.c:82 ../gkr/seahorse-gkr-actions.c:89
-msgid "Used to store application and network passwords"
-msgstr "Χρησιμοποιείται για την αποθήκευση κωδικών για εφαρμογές και δίκτυα"
-
-#: ../gkr/seahorse-gkr-actions.c:83
-msgid "New password..."
-msgstr "Νέος κωδικός πρόσβασης..."
-
-#: ../gkr/seahorse-gkr-actions.c:84 ../gkr/seahorse-gkr-actions.c:91
-msgid "Safely store a password or secret."
-msgstr "Ασφαλής αποθήκευση ενός κωδικού πρόσβασης ή μυστικού."
-
-#: ../gkr/seahorse-gkr-actions.c:88
-msgid "Password Keyring"
-msgstr "Κλειδοθήκη κωδικών"
-
-#: ../gkr/seahorse-gkr-actions.c:90
-msgid "Stored Password"
-msgstr "Αποθηκευμένος κωδικός πρόσβασης"
-
-#: ../gkr/seahorse-gkr-actions.c:174
-msgid "Couldn't set default keyring"
-msgstr "Αδύνατος ο καθορισμός προεπιλεγμένης κλειδοθήκης"
-
-#: ../gkr/seahorse-gkr-actions.c:225 ../gkr/seahorse-gkr-actions.c:248
-msgid "Couldn't change keyring password"
-msgstr "Αδύνατη η αλλαγή κωδικού της κλειδοθήκης"
-
-#: ../gkr/seahorse-gkr-actions.c:281
-msgid "_Set as default"
-msgstr "_Ορισμός ως προεπιλογής"
-
-#: ../gkr/seahorse-gkr-actions.c:282
-msgid "Applications usually store new passwords in the default keyring."
-msgstr ""
-"Συνήθως, οι εφαρμογές αποθηκεύουν τους νέους κωδικούς στην προεπιλεγμένη "
-"κλειδοθήκη."
-
-#: ../gkr/seahorse-gkr-actions.c:283
-msgid "Change _Password"
-msgstr "Αλλαγή _κωδικού πρόσβασης"
-
-#: ../gkr/seahorse-gkr-actions.c:284
-msgid "Change the unlock password of the password storage keyring"
-msgstr "Αλλαγή του κωδικού ξεκλειδώματος της κλειδοθήκης αποθήκευσης κωδικών"
-
-#: ../gkr/seahorse-gkr-add-item.c:60
-msgid "Couldn't add item"
-msgstr "Αδυναμία προσθήκης αντικειμένου"
-
 #: ../gkr/seahorse-gkr-add-item.xml.h:1
-msgid "Add Password"
-msgstr "Προσθήκη κωδικού"
-
-#: ../gkr/seahorse-gkr-add-item.xml.h:2
-#: ../gkr/seahorse-gkr-item-properties.xml.h:2 ../pgp/seahorse-revoke.xml.h:3
+#: ../gkr/seahorse-gkr-item-properties.xml.h:1 ../pgp/seahorse-revoke.xml.h:3
 #: ../ssh/seahorse-ssh-generate.xml.h:5
 msgid "_Description:"
 msgstr "Περι_γραφή:"
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:3
+#: ../gkr/seahorse-gkr-add-item.xml.h:2
 msgid "_Password:"
 msgstr "Κωδικός _πρόσβασης:"
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:4
+#: ../gkr/seahorse-gkr-add-item.xml.h:3
 msgid "_Show Password"
 msgstr "Εμφάνιση κωδικού _πρόσβασης"
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:5
+#: ../gkr/seahorse-gkr-add-item.xml.h:4
 msgid "_Keyring:"
 msgstr "_Κλειδοθήκη:"
 
-#: ../gkr/seahorse-gkr-add-keyring.c:72
-msgid "Couldn't add keyring"
-msgstr "Αδύνατη η προσθήκη κλειδοθήκης"
-
-#: ../gkr/seahorse-gkr-backend.c:205
-msgid "Passwords"
-msgstr "Κωδικοί πρόσβασης"
-
-#: ../gkr/seahorse-gkr-backend.c:208
-msgid "Stored personal passwords, credentials and secrets"
-msgstr "Αποθηκευμένων κωδικών πρόσβασης, πιστοποιητικών και μυστικών"
-
-#. Translators: This should be the same as the string in empathy
-#: ../gkr/seahorse-gkr-item.c:292
-msgid "IM account password for "
-msgstr "Κωδικός πρόσβασης για της εφαρμογή αποστολής άμεσων μηνυμάτων "
-
-#: ../gkr/seahorse-gkr-item.c:352
-msgid "Password or secret"
-msgstr "Κωδικός πρόσβασης ή μυστικό"
-
-#: ../gkr/seahorse-gkr-item.c:353
-msgid "Network password"
-msgstr "Κωδικός πρόσβασης δικτύου"
-
-#: ../gkr/seahorse-gkr-item.c:354
-msgid "Stored note"
-msgstr "Αποθηκευμένη σημείωση"
-
-#: ../gkr/seahorse-gkr-item.c:355
-msgid "Keyring password"
-msgstr "Κωδικός πρόσβασης κλειδοθήκης"
-
-#: ../gkr/seahorse-gkr-item.c:356
-msgid "Encryption key password"
-msgstr "Κρυπτογράφηση συνθηματικού κλειδιού"
-
-#: ../gkr/seahorse-gkr-item.c:357
-msgid "Key storage password"
-msgstr "Κωδικός πρόσβασης αποθήκευσης κλειδιού"
-
-#: ../gkr/seahorse-gkr-item.c:358
-msgid "Google Chrome password"
-msgstr "Κωδικός πρόσβασης για Google Chrome"
-
-#: ../gkr/seahorse-gkr-item.c:359
-msgid "Gnome Online Accounts password"
-msgstr "Κωδικός πρόσβασης για τους διαδικτυακούς λογαριασμούς του GNOME"
-
-#: ../gkr/seahorse-gkr-item.c:360
-msgid "Telepathy password"
-msgstr "Κωδικός πρόσβασης για Telepathy"
-
-#: ../gkr/seahorse-gkr-item.c:361
-msgid "Instant messaging password"
-msgstr "Κωδικός πρόσβασης της εφαρμογής άμεσων μηνυμάτων"
-
-#: ../gkr/seahorse-gkr-item.c:362
-msgid "Network Manager secret"
-msgstr "Μυστικό του Network Manager"
-
-#: ../gkr/seahorse-gkr-item-deleter.c:80
-#, c-format
-msgid "Are you sure you want to delete the password '%s'?"
-msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε τον κωδικό πρόσβασης '%s';"
-
-#: ../gkr/seahorse-gkr-item-deleter.c:83
-#, c-format
-msgid "Are you sure you want to delete %d password?"
-msgid_plural "Are you sure you want to delete %d passwords?"
-msgstr[0] "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε %d κωδικό πρόσβασης;"
-msgstr[1] "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε %d κωδικούς πρόσβασης;"
-
-#: ../gkr/seahorse-gkr-item-properties.c:66
-msgid "Access a network share or resource"
-msgstr "Πρόσβαση κοινόχρηστου δικτύου ή πόρου"
-
-#: ../gkr/seahorse-gkr-item-properties.c:69
-msgid "Access a website"
-msgstr "Πρόσβαση ιστοσελίδας"
-
-#: ../gkr/seahorse-gkr-item-properties.c:72
-msgid "Unlocks a PGP key"
-msgstr "Ξεκλειδώνει ένα κλειδί PGP"
-
-#: ../gkr/seahorse-gkr-item-properties.c:75
-msgid "Unlocks a Secure Shell key"
-msgstr "Ξεκλειδώνει ένα κλειδί Secure Shell (SSH)"
-
-#: ../gkr/seahorse-gkr-item-properties.c:78
-msgid "Saved password or login"
-msgstr "Αποθηκευμένος κωδικός πρόσβασης ή στοιχεία σύνδεσης"
-
-#: ../gkr/seahorse-gkr-item-properties.c:102
-msgid "Network Credentials"
-msgstr "Πιστοποιητικά δικτύου"
-
-#: ../gkr/seahorse-gkr-item-properties.c:107
-msgid "Password"
-msgstr "Κωδικός πρόσβασης"
-
-#: ../gkr/seahorse-gkr-item-properties.c:216
-msgid "Couldn't change password."
-msgstr "Αδύνατη η αλλαγή κωδικού πρόσβασης."
-
-#: ../gkr/seahorse-gkr-item-properties.c:263
-#: ../gkr/seahorse-gkr-item-properties.c:385
-msgid "Updating password"
-msgstr "Γίνεται ενημέρωση του κωδικού"
-
-#: ../gkr/seahorse-gkr-item-properties.c:346
-msgid "Couldn't set description."
-msgstr "Αδύνατος ο καθορισμός περιγραφής."
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:1
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
-#: ../ssh/seahorse-ssh-key-properties.xml.h:1
-msgid "Key Properties"
-msgstr "Ιδιότητες κλειδιού"
-
 #. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:4
+#: ../gkr/seahorse-gkr-item-properties.xml.h:3
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
 #: ../ssh/seahorse-ssh-key-properties.xml.h:9
 msgid "Use:"
 msgstr "Χρήση:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:5
+#: ../gkr/seahorse-gkr-item-properties.xml.h:4
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
 #: ../ssh/seahorse-ssh-key-properties.xml.h:3
 msgid "Type:"
 msgstr "Τύπος:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:6
+#: ../gkr/seahorse-gkr-item-properties.xml.h:5
 msgid "Server:"
 msgstr "Εξυπηρετητής:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:7
+#: ../gkr/seahorse-gkr-item-properties.xml.h:6
 msgid "Login:"
 msgstr "Σύνδεση:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:8
+#: ../gkr/seahorse-gkr-item-properties.xml.h:7
 msgid "Show pass_word"
 msgstr "Εμφάνιση _κωδικού"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:9
-#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:99
+#: ../gkr/seahorse-gkr-item-properties.xml.h:8
+#: ../libseahorse/seahorse-passphrase.c:183 ../ssh/seahorse-ssh-askpass.c:119
 msgid "Password:"
 msgstr "Κωδικός πρόσβασης:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:10
+#: ../gkr/seahorse-gkr-item-properties.xml.h:9
 #: ../pgp/seahorse-pgp-subkey.c:366
 #: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Key"
 msgstr "Κλειδί"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:11
+#: ../gkr/seahorse-gkr-item-properties.xml.h:10
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
 #: ../ssh/seahorse-ssh-key-properties.xml.h:20
 msgid "Technical Details:"
 msgstr "Τεχνικές λεπτομέρειες:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:12
+#: ../gkr/seahorse-gkr-item-properties.xml.h:11
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
 #: ../ssh/seahorse-ssh-key-properties.xml.h:22
 msgid "Details"
 msgstr "Λεπτομέρειες"
 
-#: ../gkr/seahorse-gkr-keyring.c:475
-msgid "A keyring that is automatically unlocked on login"
-msgstr "Μια κλειδοθήκη που ξεκλειδώνεται αυτόματα κατά την σύνδεση"
-
-#: ../gkr/seahorse-gkr-keyring.c:476
-msgid "A keyring used to store passwords"
-msgstr ""
-"Μια κλειδοθήκη που χρησιμοποιείται για την αποθήκευση κωδικών πρόσβασης"
-
-#: ../gkr/seahorse-gkr-keyring-deleter.c:76
-#, c-format
-msgid "Are you sure you want to delete the password keyring '%s'?"
-msgstr ""
-"Είστε σίγουροι ότι επιθυμείτε να διαγράψετε την κλειδοθήκη κωδικών '%s';"
-
-#: ../gkr/seahorse-gkr-keyring-deleter.c:79
-msgid "I understand that all items will be permanently deleted."
-msgstr "Κατανοώ πως όλα τα αντικείμενα θα διαγραφούν οριστικά."
-
 #: ../gkr/seahorse-gkr-keyring.xml.h:1
-msgid "Keyring Properties"
-msgstr "Ιδιότητες κλειδοθήκης"
-
-#: ../gkr/seahorse-gkr-keyring.xml.h:2
 msgid "Name:"
 msgstr "Όνομα:"
 
 #. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-keyring.xml.h:4
+#: ../gkr/seahorse-gkr-keyring.xml.h:3
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
 msgid "Created:"
 msgstr "Δημιουργήθηκε:"
 
-#: ../gkr/seahorse-gkr-keyring.xml.h:5
+#: ../gkr/seahorse-gkr-keyring.xml.h:4
 msgid "Keyring"
 msgstr "Κλειδοθήκη"
 
@@ -618,124 +714,18 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "Θύρα πρόσβασης στον εξυπηρετητή."
 
-#: ../libseahorse/seahorse-application.c:132
+#: ../libseahorse/seahorse-application.c:136
 msgid "Version of this application"
 msgstr "Η έκδοση της εφαρμογής"
 
-#: ../libseahorse/seahorse-application.c:138
-#: ../libseahorse/seahorse-application.c:182
+#: ../libseahorse/seahorse-application.c:142
+#: ../libseahorse/seahorse-application.c:186
 msgid "- System Settings"
 msgstr "- Ρυθμίσεις συστήματος"
 
-#: ../libseahorse/seahorse-application.c:178
+#: ../libseahorse/seahorse-application.c:182
 msgid "Don't display a window"
 msgstr "Να μην εμφανίζεται παράθυρο"
-
-#: ../libseahorse/seahorse-catalog.c:86
-msgid "Contributions:"
-msgstr "Συντελεστές:"
-
-#: ../libseahorse/seahorse-catalog.c:110 ../src/seahorse.desktop.in.in.h:1
-#: ../src/seahorse-key-manager.c:658
-msgid "Passwords and Keys"
-msgstr "Κωδικοί πρόσβασης και κλειδιά κρυπτογράφησης"
-
-#: ../libseahorse/seahorse-catalog.c:112
-msgid "translator-credits"
-msgstr ""
-"Ελληνική μεταφραστική ομάδα GNOME\n"
-" Δημήτρης Σπίγγος <dmtrs32@gmail.com>\n"
-" Κώστας Παπαδήμας <pkst@gnome.org>\n"
-" Δημήτριος Τυπάλδος <dtfedora@yahoo.com>\n"
-" Νίκος Χαρωνιτάκης <nikosx@gmail.com>\n"
-" Σίμος Ξενιτέλλης <simos@gnome.org>\n"
-" Νίκος Αγιαννιώτης <nickagian@gmail.com>\n"
-" Τζένη Πετούμενου <epetoumenou@gmail.com>\n"
-"\n"
-"Για περισσότερα δείτε http://www.gnome.gr/"
-
-#: ../libseahorse/seahorse-catalog.c:115
-msgid "Seahorse Project Homepage"
-msgstr "Αρχική σελίδα του Seahorse"
-
-#: ../libseahorse/seahorse-catalog.c:189
-msgid "Cannot delete"
-msgstr "Αδυναμία διαγραφής"
-
-#: ../libseahorse/seahorse-catalog.c:237
-#: ../libseahorse/seahorse-key-manager-store.c:443
-msgid "Couldn't export keys"
-msgstr "Αδυναμία εξαγωγής κλειδιών"
-
-#: ../libseahorse/seahorse-catalog.c:266
-msgid "Couldn't export data"
-msgstr "Αδυναμία εξαγωγής δεδομένων"
-
-#. Top menu items
-#: ../libseahorse/seahorse-catalog.c:275
-msgid "_File"
-msgstr "_Αρχείο"
-
-#: ../libseahorse/seahorse-catalog.c:276
-msgid "E_xport..."
-msgstr "Ε_ξαγωγή..."
-
-#: ../libseahorse/seahorse-catalog.c:277
-msgid "Export to a file"
-msgstr "Εξαγωγή σε αρχείο"
-
-#: ../libseahorse/seahorse-catalog.c:278
-msgid "_Edit"
-msgstr "_Επεξεργασία"
-
-#: ../libseahorse/seahorse-catalog.c:281
-msgid "Copy to the clipboard"
-msgstr "Αντιγραφή στο πρόχειρο"
-
-#: ../libseahorse/seahorse-catalog.c:282
-#: ../pkcs11/seahorse-pkcs11-properties.c:232 ../src/seahorse-sidebar.c:966
-msgid "_Delete"
-msgstr "_Διαγραφή"
-
-#: ../libseahorse/seahorse-catalog.c:283
-msgid "Delete selected items"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
-
-#: ../libseahorse/seahorse-catalog.c:285
-msgid "Show the properties of this item"
-msgstr "Προβολή ιδιοτήτων αυτού του αντικειμένου"
-
-#: ../libseahorse/seahorse-catalog.c:287
-msgid "Show the properties of this keyring"
-msgstr "Προβολή ιδιοτήτων αυτής της κλειδοθήκης"
-
-#: ../libseahorse/seahorse-catalog.c:288
-msgid "Prefere_nces"
-msgstr "Προτι_μήσεις"
-
-#: ../libseahorse/seahorse-catalog.c:289
-msgid "Change preferences for this program"
-msgstr "Αλλαγή προτιμήσεων για το συγκεκριμένο πρόγραμμα"
-
-#: ../libseahorse/seahorse-catalog.c:290
-msgid "_View"
-msgstr "Προ_βολή"
-
-#: ../libseahorse/seahorse-catalog.c:291
-msgid "_Help"
-msgstr "_Βοήθεια"
-
-#: ../libseahorse/seahorse-catalog.c:293
-msgid "About this program"
-msgstr "Περί αυτού του προγράμματος"
-
-#: ../libseahorse/seahorse-catalog.c:294
-msgid "_Contents"
-msgstr "_Περιεχόμενα"
-
-#: ../libseahorse/seahorse-catalog.c:295
-msgid "Show Seahorse help"
-msgstr "Εμφάνιση βοήθειας Seahorse"
 
 #: ../libseahorse/seahorse-interaction.c:99
 #, c-format
@@ -747,11 +737,11 @@ msgstr "Εισαγωγή PIN ή κωδικού πρόσβασης για: %s"
 msgid "Confirm:"
 msgstr "Επιβεβαίωση:"
 
-#: ../libseahorse/seahorse-prefs.c:67
+#: ../libseahorse/seahorse-prefs.c:66
 msgid "Not a valid Key Server address."
 msgstr "Μη έγκυρη διεύθυνση εξυπηρετητή κλειδιών."
 
-#: ../libseahorse/seahorse-prefs.c:68
+#: ../libseahorse/seahorse-prefs.c:67
 msgid ""
 "For help contact your system adminstrator or the administrator of the key "
 "server."
@@ -759,15 +749,15 @@ msgstr ""
 "Για βοήθεια ελάτε σε επαφή με το διαχειριστή του συστήματός σας ή το "
 "διαχειριστή του εξυπηρετητή κλειδιών."
 
-#: ../libseahorse/seahorse-prefs.c:181
+#: ../libseahorse/seahorse-prefs.c:180
 msgid "URL"
 msgstr "URL"
 
-#: ../libseahorse/seahorse-prefs.c:351
+#: ../libseahorse/seahorse-prefs.c:350
 msgid "Custom"
 msgstr "Προσαρμοσμένο"
 
-#: ../libseahorse/seahorse-prefs.c:404
+#: ../libseahorse/seahorse-prefs.c:403
 msgid "None: Don't publish keys"
 msgstr "Κανένα: μη δημοσίευση κλειδιών"
 
@@ -796,12 +786,8 @@ msgstr ""
 msgid "Key Servers"
 msgstr "Εξυπηρετητές κλειδιών"
 
-#: ../libseahorse/seahorse-util.c:210
-msgid "%Y-%m-%d"
-msgstr "%Y-%m-%d"
-
 #: ../libseahorse/seahorse-validity.c:40
-#: ../pgp/seahorse-pgp-key-properties.c:1254
+#: ../pgp/seahorse-pgp-key-properties.c:1252
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
 msgctxt "Validity"
@@ -809,7 +795,7 @@ msgid "Unknown"
 msgstr "Άγνωστο"
 
 #: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-key-properties.c:1260
+#: ../pgp/seahorse-pgp-key-properties.c:1258
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
 msgctxt "Validity"
@@ -843,11 +829,6 @@ msgstr "Ανενεργό"
 msgctxt "Validity"
 msgid "Revoked"
 msgstr "Ανακλήθηκε"
-
-#: ../libseahorse/seahorse-widget.c:460
-#, c-format
-msgid "Could not display help: %s"
-msgstr "Αδύνατη η προβολή βοήθειας: %s"
 
 #: ../pgp/seahorse-add-subkey.xml.h:1
 msgid "Never E_xpires"
@@ -932,7 +913,7 @@ msgstr "Αδύνατη η προσθήκη υποκλειδιού"
 msgid "Add subkey to %s"
 msgstr "Προσθήκη υποκλειδιού στο %s"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:197 ../pgp/seahorse-gpgme-generate.c:134
+#: ../pgp/seahorse-gpgme-add-subkey.c:197 ../pgp/seahorse-gpgme-generate.c:132
 msgid "DSA (sign only)"
 msgstr "DSA (μόνο υπογραφή)"
 
@@ -940,7 +921,7 @@ msgstr "DSA (μόνο υπογραφή)"
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (μόνο κρυπτογράφηση)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:211 ../pgp/seahorse-gpgme-generate.c:135
+#: ../pgp/seahorse-gpgme-add-subkey.c:211 ../pgp/seahorse-gpgme-generate.c:133
 msgid "RSA (sign only)"
 msgstr "RSA (μόνο υπογραφή)"
 
@@ -957,14 +938,14 @@ msgstr "Αδύνατη η προσθήκη ταυτότητας χρήστη"
 msgid "Add user ID to %s"
 msgstr "Προσθήκη ταυτότητας χρήστη στο %s"
 
-#: ../pgp/seahorse-gpgme.c:69
+#: ../pgp/seahorse-gpgme.c:70
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
 "Η αποκρυπτογράφηση απέτυχε. Προφανώς δε διαθέτετε το κλειδί "
 "αποκρυπτογράφησης."
 
-#: ../pgp/seahorse-gpgme.c:73 ../pgp/seahorse-hkp-source.c:586
-#: ../ssh/seahorse-ssh-operation.c:194
+#: ../pgp/seahorse-gpgme.c:74 ../pgp/seahorse-hkp-source.c:512
+#: ../ssh/seahorse-ssh-operation.c:199
 msgid "The operation was cancelled"
 msgstr "Η λειτουργία ακυρώθηκε"
 
@@ -985,49 +966,49 @@ msgstr "Αδύνατη η αλλαγή ημερομηνίας λήξης"
 msgid "Expiry: %s"
 msgstr "Λήξη: %s"
 
-#: ../pgp/seahorse-gpgme-exporter.c:84
+#: ../pgp/seahorse-gpgme-exporter.c:85
 msgid "Multiple Keys"
 msgstr "Πολλαπλά κλειδιά"
 
-#: ../pgp/seahorse-gpgme-exporter.c:88
+#: ../pgp/seahorse-gpgme-exporter.c:89
 msgid "Key Data"
 msgstr "Δεδομένα κλειδιού"
 
-#: ../pgp/seahorse-gpgme-exporter.c:114
+#: ../pgp/seahorse-gpgme-exporter.c:117
 msgid "Armored PGP keys"
 msgstr "Θωρακισμένα PGP κλειδιά"
 
-#: ../pgp/seahorse-gpgme-exporter.c:118
+#: ../pgp/seahorse-gpgme-exporter.c:121
 msgid "PGP keys"
 msgstr "Κλειδιά PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:95
+#: ../pgp/seahorse-gpgme-generate.c:93
 msgid "PGP Key"
 msgstr "Κλειδί PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:96
+#: ../pgp/seahorse-gpgme-generate.c:94
 msgid "Used to encrypt email and files"
 msgstr "Για κρυπτογράφηση ηλεκτρονικών μηνυμάτων και αρχείων"
 
-#: ../pgp/seahorse-gpgme-generate.c:132
+#: ../pgp/seahorse-gpgme-generate.c:130
 #: ../pkcs11/seahorse-pkcs11-generate.c:91
 #: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:133
+#: ../pgp/seahorse-gpgme-generate.c:131
 msgid "DSA ElGamal"
 msgstr "DSA Elgamal"
 
-#: ../pgp/seahorse-gpgme-generate.c:182
+#: ../pgp/seahorse-gpgme-generate.c:180
 msgid "Couldn't generate PGP key"
 msgstr "Αδύνατη η δημιουργία κλειδιού PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:214
+#: ../pgp/seahorse-gpgme-generate.c:213
 msgid "Passphrase for New PGP Key"
 msgstr "Συνθηματικό για νέο κλειδί PGP"
 
-#: ../pgp/seahorse-gpgme-generate.c:215
+#: ../pgp/seahorse-gpgme-generate.c:214
 msgid "Enter the passphrase for your new key twice."
 msgstr "Εισάγετε το συνθηματικό για το νέο σας κλειδί δυο φορές."
 
@@ -1076,42 +1057,42 @@ msgstr ""
 "Αυτή ήταν η τρίτη φορά που εισάγατε έναν λανθασμένο κωδικό πρόσβασης. "
 "Παρακαλώ προσπαθήστε ξανά."
 
-#: ../pgp/seahorse-gpgme-keyring.c:91
+#: ../pgp/seahorse-gpgme-keyring.c:90
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Λανθασμένο συνθηματικό."
 
-#: ../pgp/seahorse-gpgme-keyring.c:95
+#: ../pgp/seahorse-gpgme-keyring.c:94
 #, c-format
 msgid "Enter new passphrase for '%s'"
 msgstr "Εισαγωγή νέου συνθηματικού για '%s'"
 
-#: ../pgp/seahorse-gpgme-keyring.c:97
+#: ../pgp/seahorse-gpgme-keyring.c:96
 #, c-format
 msgid "Enter passphrase for '%s'"
 msgstr "Εισαγωγή συνθηματικού για '%s'"
 
-#: ../pgp/seahorse-gpgme-keyring.c:100
+#: ../pgp/seahorse-gpgme-keyring.c:99
 #: ../src/seahorse-change-passphrase.xml.h:2
 msgid "Enter new passphrase"
 msgstr "Εισαγωγή νέου συνθηματικού"
 
-#: ../pgp/seahorse-gpgme-keyring.c:102
+#: ../pgp/seahorse-gpgme-keyring.c:101
 msgid "Enter passphrase"
 msgstr "Εισαγωγή συνθηματικού"
 
-#: ../pgp/seahorse-gpgme-keyring.c:107
+#: ../pgp/seahorse-gpgme-keyring.c:106
 msgid "Passphrase"
 msgstr "Συνθηματικό"
 
-#: ../pgp/seahorse-gpgme-keyring.c:308
+#: ../pgp/seahorse-gpgme-keyring.c:307
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Φορτώθηκε %d κλειδί"
 msgstr[1] "Φορτώθηκαν %d κλειδιά"
 
-#: ../pgp/seahorse-gpgme-keyring.c:655
+#: ../pgp/seahorse-gpgme-keyring.c:654
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1120,11 +1101,11 @@ msgstr ""
 "ενός υπολογιστή με ημερομηνία καθορισμένη σε μελλοντικό χρόνο ή λόγω "
 "απουσίας ιδιο-υπογραφής."
 
-#: ../pgp/seahorse-gpgme-keyring.c:815
+#: ../pgp/seahorse-gpgme-keyring.c:807
 msgid "GnuPG keys"
 msgstr "Κλειδιά GnuPG"
 
-#: ../pgp/seahorse-gpgme-keyring.c:818
+#: ../pgp/seahorse-gpgme-keyring.c:813
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: προεπιλεγμένος κατάλογος κλειδιών"
 
@@ -1163,7 +1144,7 @@ msgstr "Όλα τα αρχεία εικόνων"
 msgid "All JPEG files"
 msgstr "Όλα τα αρχεία JPEG"
 
-#: ../pgp/seahorse-gpgme-photos.c:242 ../src/seahorse-key-manager.c:307
+#: ../pgp/seahorse-gpgme-photos.c:242 ../src/seahorse-key-manager.c:289
 msgid "All files"
 msgstr "Όλα τα αρχεία"
 
@@ -1289,65 +1270,65 @@ msgstr "Άγνωστο"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: ../pgp/seahorse-hkp-source.c:604
+#: ../pgp/seahorse-hkp-source.c:530
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 "Ανεπαρκώς καθορισμένη αναζήτηση. Ο εξυπηρετητής '%s' βρήκε πάρα πολλά "
 "κλειδιά."
 
-#: ../pgp/seahorse-hkp-source.c:607
+#: ../pgp/seahorse-hkp-source.c:533
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Αδύνατη η επικοινωνία με τον εξυπηρετητή '%s': %s"
 
-#: ../pgp/seahorse-hkp-source.c:1127
+#: ../pgp/seahorse-hkp-source.c:1041
 msgid "HTTP Key Server"
 msgstr "Eξυπηρετητής κλειδιών HTTP"
 
-#: ../pgp/seahorse-keyserver-results.c:175
+#: ../pgp/seahorse-keyserver-results.c:168
 msgid "Couldn't import keys"
 msgstr "Αδύνατη η εισαγωγή κλειδιών"
 
-#: ../pgp/seahorse-keyserver-results.c:218
+#: ../pgp/seahorse-keyserver-results.c:211
 msgid "Importing keys from key servers"
 msgstr "Εισαγωγή κλειδιών από εξυπηρετητές κλειδιών"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: ../pgp/seahorse-keyserver-results.c:244 ../src/seahorse-key-manager.c:507
+#: ../pgp/seahorse-keyserver-results.c:237 ../src/seahorse-key-manager.c:502
 msgid "_Remote"
 msgstr "_Απομακρυσμένο"
 
-#: ../pgp/seahorse-keyserver-results.c:246
+#: ../pgp/seahorse-keyserver-results.c:239
 msgid "Close this window"
 msgstr "Κλείσιμο αυτού του παραθύρου"
 
-#: ../pgp/seahorse-keyserver-results.c:250 ../pgp/seahorse-pgp-actions.c:115
+#: ../pgp/seahorse-keyserver-results.c:243 ../pgp/seahorse-pgp-actions.c:113
 msgid "_Find Remote Keys..."
 msgstr "_Εύρεση απομακρυσμένων κλειδιών..."
 
-#: ../pgp/seahorse-keyserver-results.c:251 ../pgp/seahorse-pgp-actions.c:116
+#: ../pgp/seahorse-keyserver-results.c:244 ../pgp/seahorse-pgp-actions.c:114
 msgid "Search for keys on a key server"
 msgstr "Αναζήτηση για κλειδιά σε έναν εξυπηρετητή κλειδιών"
 
-#: ../pgp/seahorse-keyserver-results.c:255 ../src/seahorse-key-manager.xml.h:3
+#: ../pgp/seahorse-keyserver-results.c:248 ../src/seahorse-key-manager.xml.h:3
 msgid "_Import"
 msgstr "Ε_ισαγωγή"
 
-#: ../pgp/seahorse-keyserver-results.c:256
+#: ../pgp/seahorse-keyserver-results.c:249
 msgid "Import selected keys to local key ring"
 msgstr "Εισαγωγή επιλεγμένων κλειδιών στην τοπική κλειδοθήκη"
 
-#: ../pgp/seahorse-keyserver-results.c:286
+#: ../pgp/seahorse-keyserver-results.c:280
 msgid "Remote Keys"
 msgstr "Απομακρυσμένα κλειδιά"
 
-#: ../pgp/seahorse-keyserver-results.c:288
+#: ../pgp/seahorse-keyserver-results.c:282
 #, c-format
 msgid "Remote Keys Containing '%s'"
 msgstr "Απομακρυσμένα κλειδιά που περιέχουν '%s'"
 
-#: ../pgp/seahorse-keyserver-results.c:486
+#: ../pgp/seahorse-keyserver-results.c:485
 msgid "The search for keys failed."
 msgstr "Απέτυχε η αναζήτηση για κλειδιά."
 
@@ -1436,43 +1417,43 @@ msgstr "Ε_ξυπηρετητές κλειδιών"
 msgid "_Sync"
 msgstr "_Συγχρονισμός"
 
-#: ../pgp/seahorse-ldap-source.c:441
+#: ../pgp/seahorse-ldap-source.c:440
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "Αδύνατη η επικοινωνία με '%s': %s"
 
-#: ../pgp/seahorse-ldap-source.c:652
+#: ../pgp/seahorse-ldap-source.c:651
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Σύνδεση στο: %s"
 
-#: ../pgp/seahorse-ldap-source.c:658
+#: ../pgp/seahorse-ldap-source.c:657
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "Αδύνατη η ανάλυση διεύθυνσης: %s"
 
-#: ../pgp/seahorse-ldap-source.c:702
+#: ../pgp/seahorse-ldap-source.c:701
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Γίνεται ανάλυση διεύθυνσης εξυπηρετητή: %s"
 
-#: ../pgp/seahorse-ldap-source.c:1447
+#: ../pgp/seahorse-ldap-source.c:1438
 msgid "LDAP Key Server"
 msgstr "Εξυπηρετητής κλειδιών LDAP"
 
-#: ../pgp/seahorse-pgp-actions.c:120
+#: ../pgp/seahorse-pgp-actions.c:118
 msgid "_Sync and Publish Keys..."
 msgstr "_Συγχρονισμός και δημοσίευση κλειδιών..."
 
-#: ../pgp/seahorse-pgp-actions.c:121
+#: ../pgp/seahorse-pgp-actions.c:119
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Δημοσίευση και/ή συγχρονισμός των κλειδιών σας με εκείνα του δικτύου."
 
-#: ../pgp/seahorse-pgp-backend.c:172
+#: ../pgp/seahorse-pgp-backend.c:167
 msgid "PGP Keys"
 msgstr "Κλειδιά PGP"
 
-#: ../pgp/seahorse-pgp-backend.c:175
+#: ../pgp/seahorse-pgp-backend.c:173
 msgid "PGP keys are for encrypting email or files"
 msgstr ""
 "Τα κλειδιά PGP είναι για κρυπτογράφηση ηλεκτρονικών μηνυμάτων και αρχείων"
@@ -1492,12 +1473,12 @@ msgstr ""
 "χρήστες."
 
 #: ../pgp/seahorse-pgp-generate.xml.h:7
-msgid "_Comment:"
-msgstr "_Σχόλιο:"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:8
 msgid "Ne_ver Expires"
 msgstr "Δεν λήγει _ποτέ"
+
+#: ../pgp/seahorse-pgp-generate.xml.h:8
+msgid "_Comment:"
+msgstr "_Σχόλιο:"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:7
 msgid "Encryption _Type:"
@@ -1519,141 +1500,147 @@ msgstr "Ημερομηνία λή_ξης:"
 msgid "_Advanced key options"
 msgstr "_Προχωρημένες επιλογές κλειδιού"
 
-#: ../pgp/seahorse-pgp-key.c:353
+#: ../pgp/seahorse-pgp-key.c:352
 msgid "Personal PGP key"
 msgstr "Προσωπικό κλειδί PGP"
 
-#: ../pgp/seahorse-pgp-key.c:355
+#: ../pgp/seahorse-pgp-key.c:354
 msgid "PGP key"
 msgstr "Κλειδί PGP"
 
-#: ../pgp/seahorse-pgp-key-properties.c:324
+#: ../pgp/seahorse-pgp-key-properties.c:322
 msgid "Couldn't change primary user ID"
 msgstr "Αδυναμία αλλαγής κύριας ταυτότητας χρήστη"
 
-#: ../pgp/seahorse-pgp-key-properties.c:343
+#: ../pgp/seahorse-pgp-key-properties.c:341
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr ""
 "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε μόνιμα την ταυτότητα του χρήστη "
 "'%s';"
 
-#: ../pgp/seahorse-pgp-key-properties.c:353
+#: ../pgp/seahorse-pgp-key-properties.c:351
 msgid "Couldn't delete user ID"
 msgstr "Αδυναμία διαγραφής του αναγνωριστικού του χρήστη"
 
-#: ../pgp/seahorse-pgp-key-properties.c:428
-#: ../pgp/seahorse-pgp-key-properties.c:1571
+#: ../pgp/seahorse-pgp-key-properties.c:426
+#: ../pgp/seahorse-pgp-key-properties.c:1569
 msgid "[Unknown]"
 msgstr "[Άγνωστο]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:537
-#: ../pgp/seahorse-pgp-key-properties.c:1854
+#: ../pgp/seahorse-pgp-key-properties.c:535
+#: ../pgp/seahorse-pgp-key-properties.c:1852
 msgid "Name/Email"
 msgstr "Όνομα/Ηλ. διεύθυνση"
 
-#: ../pgp/seahorse-pgp-key-properties.c:544
+#: ../pgp/seahorse-pgp-key-properties.c:542
 msgid "Signature ID"
 msgstr "Ταυτότητα υπογραφής"
 
-#: ../pgp/seahorse-pgp-key-properties.c:677
+#: ../pgp/seahorse-pgp-key-properties.c:675
 msgid "Couldn't change primary photo"
 msgstr "Αδύνατη η αλλαγή βασικής φωτογραφίας"
 
 #. TRANSLATORS: (unknown) expiry date
-#: ../pgp/seahorse-pgp-key-properties.c:911
+#: ../pgp/seahorse-pgp-key-properties.c:909
 msgid "(unknown)"
 msgstr "(άγνωστο)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:914
+#: ../pgp/seahorse-pgp-key-properties.c:912
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Αυτό το κλειδί έληξε: %s"
 
-#: ../pgp/seahorse-pgp-key-properties.c:977
+#: ../pgp/seahorse-pgp-key-properties.c:975
 msgid "Name"
 msgstr "Όνομα"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1090
+#: ../pgp/seahorse-pgp-key-properties.c:1088
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε το υποκλειδί %d του %s;"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1099
+#: ../pgp/seahorse-pgp-key-properties.c:1097
 msgid "Couldn't delete subkey"
 msgstr "Αδύνατη η διαγραφή υποκλειδιού"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1139
-#: ../pgp/seahorse-pgp-key-properties.c:1545
+#: ../pgp/seahorse-pgp-key-properties.c:1137
+#: ../pgp/seahorse-pgp-key-properties.c:1543
 msgid "Unable to change trust"
 msgstr "Αδύνατη η αλλαγή τύπου εμπιστοσύνης"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1153
-#: ../ssh/seahorse-ssh-key-properties.c:200
+#: ../pgp/seahorse-pgp-key-properties.c:1151
+#: ../ssh/seahorse-ssh-key-properties.c:206
 msgid "Couldn't export key"
 msgstr "Αδυναμία εξαγωγής κλειδιού"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1267
+#: ../pgp/seahorse-pgp-key-properties.c:1265
 msgid "Marginal"
 msgstr "Οριακά"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1273
+#: ../pgp/seahorse-pgp-key-properties.c:1271
 msgid "Full"
 msgstr "Πλήρης"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1279
+#: ../pgp/seahorse-pgp-key-properties.c:1277
 msgid "Ultimate"
 msgstr "Μέγιστη"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1385
-#: ../pgp/seahorse-pgp-key-properties.c:1474
+#: ../pgp/seahorse-pgp-key-properties.c:1383
+#: ../pgp/seahorse-pgp-key-properties.c:1472
 msgctxt "Expires"
 msgid "Never"
 msgstr "Ποτέ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1432
+#: ../pgp/seahorse-pgp-key-properties.c:1430
 msgid "ID"
 msgstr "ID"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1435
+#: ../pgp/seahorse-pgp-key-properties.c:1433
 msgid "Type"
 msgstr "Τύπος"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1438
+#: ../pgp/seahorse-pgp-key-properties.c:1436
 msgid "Created"
 msgstr "Δημιουργήθηκε"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1441
+#: ../pgp/seahorse-pgp-key-properties.c:1439
 msgid "Expires"
 msgstr "Λήγει"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1444
+#: ../pgp/seahorse-pgp-key-properties.c:1442
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1447
+#: ../pgp/seahorse-pgp-key-properties.c:1445
 msgid "Strength"
 msgstr "Ισχύς"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1465
+#: ../pgp/seahorse-pgp-key-properties.c:1463
 msgid "Revoked"
 msgstr "Ανακλήθηκε"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1467
+#: ../pgp/seahorse-pgp-key-properties.c:1465
 msgid "Expired"
 msgstr "Έληξε"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1469
+#: ../pgp/seahorse-pgp-key-properties.c:1467
 msgid "Disabled"
 msgstr "Μη ενεργό"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1471
+#: ../pgp/seahorse-pgp-key-properties.c:1469
 msgid "Good"
 msgstr "Καλή"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1857
+#: ../pgp/seahorse-pgp-key-properties.c:1855
 msgid "Key ID"
 msgstr "Ταυτότητα κλειδιού"
+
+#: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
+#: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
+#: ../ssh/seahorse-ssh-key-properties.xml.h:1
+msgid "Key Properties"
+msgstr "Ιδιότητες κλειδιού"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
@@ -1796,8 +1783,8 @@ msgid "Override Owner _Trust:"
 msgstr "Τροποποίηση ε_μπιστοσύνης ιδιοκτήτη:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
-msgid "_Export Complete Key:"
-msgstr "Ε_ξαγωγή πλήρους κλειδιού:"
+msgid "_Export Secret Key:"
+msgstr "Ε_ξαγωγή Μυστικού Κλειδιού:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
 msgid "Actions"
@@ -2058,28 +2045,28 @@ msgstr "Αποστολή δεδομένων"
 msgid "Unavailable"
 msgstr "Μη διαθέσιμο"
 
-#: ../pkcs11/seahorse-certificate.c:441
-msgid "Personal certificate and key"
-msgstr "Προσωπικό πιστοποιητικό και κλειδί"
-
-#: ../pkcs11/seahorse-certificate.c:444
-msgid "Personal certificate"
-msgstr "Προσωπικό πιστοποιητικό"
-
-#: ../pkcs11/seahorse-certificate.c:446
-#: ../pkcs11/seahorse-certificate-der-exporter.c:77
+#: ../pkcs11/certificate-der-exporter.vala:46
+#: ../pkcs11/seahorse-certificate.c:454
 msgid "Certificate"
 msgstr "Πιστοποίηση"
 
-#: ../pkcs11/seahorse-certificate-der-exporter.c:99
+#: ../pkcs11/certificate-der-exporter.vala:60
 msgid "Certificates (DER encoded)"
 msgstr "Πιστοποιητικά (DER κωδικοποιημένα)"
+
+#: ../pkcs11/seahorse-certificate.c:449
+msgid "Personal certificate and key"
+msgstr "Προσωπικό πιστοποιητικό και κλειδί"
+
+#: ../pkcs11/seahorse-certificate.c:452
+msgid "Personal certificate"
+msgstr "Προσωπικό πιστοποιητικό"
 
 #: ../pkcs11/seahorse-pkcs11-backend.c:183
 msgid "Certificates"
 msgstr "Πιστοποιητικά"
 
-#: ../pkcs11/seahorse-pkcs11-backend.c:186
+#: ../pkcs11/seahorse-pkcs11-backend.c:189
 msgid "X.509 certificates and related keys"
 msgstr "X.509 πιστοποιητικά και συναφή κλειδιά"
 
@@ -2097,12 +2084,12 @@ msgid "Couldn't generate private key"
 msgstr "Αδύνατη η δημιουργία ιδωτικού κλειδιού"
 
 #: ../pkcs11/seahorse-pkcs11-generate.c:413
-#: ../pkcs11/seahorse-pkcs11-request.c:255
+#: ../pkcs11/seahorse-pkcs11-request.c:253
 msgid "Create"
 msgstr "Δημιουργία"
 
 #: ../pkcs11/seahorse-pkcs11-generate.c:506
-#: ../pkcs11/seahorse-private-key.c:176
+#: ../pkcs11/seahorse-private-key.c:175
 msgid "Private key"
 msgstr "Ιδιωτικό κλειδί"
 
@@ -2126,56 +2113,56 @@ msgstr "Αποθηκευμένο σε:"
 msgid "I understand that this key will be permanently deleted."
 msgstr "Κατανοώ πως αυτό το κλειδί θα διαγραφεί οριστικά."
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:146
-#: ../pkcs11/seahorse-pkcs11-properties.c:150
+#: ../pkcs11/seahorse-pkcs11-properties.c:143
+#: ../pkcs11/seahorse-pkcs11-properties.c:147
 msgid "Unnamed"
 msgstr "Ανώνυμο"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:174
+#: ../pkcs11/seahorse-pkcs11-properties.c:171
 msgid "Failed to export certificate"
 msgstr "Αποτυχία εξαγωγής πιστοποιητικού"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:189 ../src/seahorse-sidebar.c:884
+#: ../pkcs11/seahorse-pkcs11-properties.c:186 ../src/seahorse-sidebar.c:874
 msgid "Couldn't delete"
 msgstr "Αδυναμία διαγραφής"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:230
+#: ../pkcs11/seahorse-pkcs11-properties.c:227
 msgid "_Export"
 msgstr "_Εξαγωγή"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:231
+#: ../pkcs11/seahorse-pkcs11-properties.c:228
 msgid "Export the certificate"
 msgstr "Εξαγωγή πιστοποιητικού"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:233
+#: ../pkcs11/seahorse-pkcs11-properties.c:230
 msgid "Delete this certificate or key"
 msgstr "Διαγραφή αυτού του πιστοποιητικού ή κλειδιού"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:234
+#: ../pkcs11/seahorse-pkcs11-properties.c:231
 msgid "Request _Certificate"
 msgstr "Αίτηση πι_στοποιητικού"
 
-#: ../pkcs11/seahorse-pkcs11-properties.c:235
+#: ../pkcs11/seahorse-pkcs11-properties.c:232
 msgid "Create a certificate request file for this key"
 msgstr "Δημιουργία αίτησης πιστοποιητικού για αυτό το κλειδί"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:103
+#: ../pkcs11/seahorse-pkcs11-request.c:101
 msgid "Couldn't save certificate request"
 msgstr "Αδυναμία αποθήκευσης αίτησης πιστοποιητικού"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:126
+#: ../pkcs11/seahorse-pkcs11-request.c:124
 msgid "Save certificate request"
 msgstr "Αποθήκευση αίτησης πιστοποιητικού"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:137
+#: ../pkcs11/seahorse-pkcs11-request.c:135
 msgid "Certificate request"
 msgstr "Αίτηση πιστοποίησης"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:145
+#: ../pkcs11/seahorse-pkcs11-request.c:143
 msgid "PEM encoded request"
 msgstr "Κωδικοποιημένο αίτημα PEM"
 
-#: ../pkcs11/seahorse-pkcs11-request.c:193
+#: ../pkcs11/seahorse-pkcs11-request.c:191
 msgid "Couldn't create certificate request"
 msgstr "Αδυναμία δημιουργίας αίτησης πιστοποιητικού"
 
@@ -2191,11 +2178,11 @@ msgstr "Το κοινό όνομα (CN) τοποθετείται στην αίτ
 msgid "Name (CN):"
 msgstr "Όνομα (CN):"
 
-#: ../pkcs11/seahorse-private-key.c:129
+#: ../pkcs11/seahorse-private-key.c:128
 msgid "Unnamed private key"
 msgstr "Ανώνυμο ιδιωτικό κλειδί"
 
-#: ../pkcs11/seahorse-token.c:576
+#: ../pkcs11/seahorse-token.c:574
 msgctxt "Label"
 msgid "Unknown"
 msgstr "Άγνωστο"
@@ -2232,103 +2219,103 @@ msgstr "Συνέχεια"
 msgid "_Select the type of item to create:"
 msgstr "_Επιλέξτε τον τύπο του στοιχείου για δημιουργία:"
 
-#: ../src/seahorse-import-dialog.c:98
+#: ../src/seahorse-import-dialog.c:97
 msgid "Import failed"
 msgstr "Η εισαγωγή απέτυχε"
 
-#: ../src/seahorse-import-dialog.c:116
+#: ../src/seahorse-import-dialog.c:115
 msgid "Import"
 msgstr "Εισαγωγή"
 
-#: ../src/seahorse-import-dialog.c:129
+#: ../src/seahorse-import-dialog.c:128
 msgid "<b>Data to be imported:</b>"
 msgstr "<b>Δεδομένα προς εισαγωγή:</b>"
 
-#: ../src/seahorse-key-manager.c:261 ../ssh/seahorse-ssh-operation.c:845
+#: ../src/seahorse-key-manager.c:243 ../ssh/seahorse-ssh-operation.c:870
 msgid "Import Key"
 msgstr "Εισαγωγή κλειδιού"
 
-#: ../src/seahorse-key-manager.c:273
+#: ../src/seahorse-key-manager.c:255
 msgid "All key files"
 msgstr "Όλα τα αρχεία κλειδιών"
 
-#: ../src/seahorse-key-manager.c:374
+#: ../src/seahorse-key-manager.c:356
 msgid "Dropped text"
 msgstr "Παραλειπόμενο κείμενο"
 
-#: ../src/seahorse-key-manager.c:397
+#: ../src/seahorse-key-manager.c:392
 msgid "Clipboard text"
 msgstr "Πρόχειρο κείμενο"
 
-#: ../src/seahorse-key-manager.c:508
+#: ../src/seahorse-key-manager.c:503
 msgid "_New"
 msgstr "_Νέο"
 
-#: ../src/seahorse-key-manager.c:510
+#: ../src/seahorse-key-manager.c:505
 msgid "Close this program"
 msgstr "Κλείσιμο προγράμματος"
 
-#: ../src/seahorse-key-manager.c:511 ../src/seahorse-key-manager.c:513
+#: ../src/seahorse-key-manager.c:506 ../src/seahorse-key-manager.c:508
 msgid "_New..."
 msgstr "_Νέο..."
 
-#: ../src/seahorse-key-manager.c:512
+#: ../src/seahorse-key-manager.c:507
 msgid "Create a new key or item"
 msgstr "Δημιουργία νέου κλειδιού ή αντικειμένου"
 
-#: ../src/seahorse-key-manager.c:514
+#: ../src/seahorse-key-manager.c:509
 msgid "Add a new key or item"
 msgstr "Προσθέστε ένα νέο κλειδί ή αντικείμενο"
 
-#: ../src/seahorse-key-manager.c:515
+#: ../src/seahorse-key-manager.c:510
 msgid "_Import..."
 msgstr "Ε_ισαγωγή..."
 
-#: ../src/seahorse-key-manager.c:516
+#: ../src/seahorse-key-manager.c:511
 msgid "Import from a file"
 msgstr "Εισαγωγή από αρχείο"
 
-#: ../src/seahorse-key-manager.c:518
+#: ../src/seahorse-key-manager.c:513
 msgid "Import from the clipboard"
 msgstr "Εισαγωγή από το πρόχειρο"
 
-#: ../src/seahorse-key-manager.c:522
-msgid "By _keyring"
-msgstr "Κατά _κλειδοθήκη"
+#: ../src/seahorse-key-manager.c:517
+msgid "By _Keyring"
+msgstr "Κατά _Κλειδοθήκη"
 
-#: ../src/seahorse-key-manager.c:523
+#: ../src/seahorse-key-manager.c:518
 msgid "Show sidebar listing keyrings"
 msgstr "Εμφάνιση της πλευρικής στήλης κλειδοθηκών"
 
-#: ../src/seahorse-key-manager.c:527
-msgid "Show _personal"
-msgstr "Προβολή _προσωπικά"
+#: ../src/seahorse-key-manager.c:522
+msgid "Show _Personal"
+msgstr "Εμφάνιση _Προσωπικών"
 
-#: ../src/seahorse-key-manager.c:528
+#: ../src/seahorse-key-manager.c:523
 msgid "Only show personal keys, certificates and passwords"
 msgstr ""
 "Εμφάνισε μόνο τα προσωπικά κλειδιά, τις πιστοποιήσεις και τους κωδικούς "
 "πρόσβασης"
 
-#: ../src/seahorse-key-manager.c:529
-msgid "Show _trusted"
-msgstr "Εμφάνισε _αξιόπιστα"
+#: ../src/seahorse-key-manager.c:524
+msgid "Show _Trusted"
+msgstr "Εμφάνιση _Αξιόπιστων"
 
-#: ../src/seahorse-key-manager.c:530
+#: ../src/seahorse-key-manager.c:525
 msgid "Only show trusted keys, certificates and passwords"
 msgstr ""
 "Εμφάνισε μόνο τα αξιόπιστα κλειδιά, τις πιστοποιήσεις και τους κωδικούς "
 "πρόσβασης"
 
-#: ../src/seahorse-key-manager.c:531
-msgid "Show _any"
-msgstr "Εμφάνισε _οποιοδήποτε"
+#: ../src/seahorse-key-manager.c:526
+msgid "Show _Any"
+msgstr "Εμφάνιση _Οποιουδήποτε"
 
-#: ../src/seahorse-key-manager.c:532
+#: ../src/seahorse-key-manager.c:527
 msgid "Show all keys, certificates and passwords"
 msgstr "Εμφάνισε όλα τα κλειδιά, τις πιστοποιήσεις και τους κωδικούς πρόσβασης"
 
-#: ../src/seahorse-key-manager.c:736
+#: ../src/seahorse-key-manager.c:746
 msgid "Filter"
 msgstr "Φίλτρο"
 
@@ -2348,31 +2335,31 @@ msgstr "Εισαγωγή υπαρχόντων κλειδιών από αρχεί
 msgid "To get started with encryption you will need keys."
 msgstr "Για να ξεκινήσετε με κρυπτογράφηση θα χρειαστείτε κλειδιά."
 
-#: ../src/seahorse-sidebar.c:808
+#: ../src/seahorse-sidebar.c:798
 msgid "Couldn't lock"
 msgstr "Αδυναμία κλειδώματος"
 
-#: ../src/seahorse-sidebar.c:845
+#: ../src/seahorse-sidebar.c:835
 msgid "Couldn't unlock"
 msgstr "Αδυναμία ξεκλειδώματος"
 
-#: ../src/seahorse-sidebar.c:953
+#: ../src/seahorse-sidebar.c:942
 msgid "_Lock"
 msgstr "_Κλείδωμα"
 
-#: ../src/seahorse-sidebar.c:958
+#: ../src/seahorse-sidebar.c:947
 msgid "_Unlock"
 msgstr "_Ξεκλείδωμα"
 
-#: ../src/seahorse-sidebar.c:977
+#: ../src/seahorse-sidebar.c:966
 msgid "_Properties"
 msgstr "_Ιδιότητες"
 
-#: ../ssh/seahorse-ssh-actions.c:100
+#: ../ssh/seahorse-ssh-actions.c:98
 msgid "Configure Key for _Secure Shell..."
 msgstr "Ρύθμιση κλειδιού για α_σφαλές κέλυφος..."
 
-#: ../ssh/seahorse-ssh-actions.c:101
+#: ../ssh/seahorse-ssh-actions.c:99
 msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
@@ -2380,38 +2367,38 @@ msgstr ""
 "Αποστολή δημόσιου κλειδιού ασφαλούς κελύφους σε άλλο σύστημα και "
 "ενεργοποίηση συνδέσεων με χρήση αυτού του κλειδιού."
 
-#: ../ssh/seahorse-ssh-askpass.c:60 ../ssh/seahorse-ssh-askpass.c:68
+#: ../ssh/seahorse-ssh-askpass.c:80 ../ssh/seahorse-ssh-askpass.c:88
 msgid "Enter your Secure Shell passphrase:"
 msgstr "Εισάγετε το συνθηματικό σας Secure Shell (SSH):"
 
-#: ../ssh/seahorse-ssh-askpass.c:82
+#: ../ssh/seahorse-ssh-askpass.c:102
 msgid "Old Key Passphrase"
 msgstr "Παλιό συνθηματικό κλειδιού"
 
-#: ../ssh/seahorse-ssh-askpass.c:83
+#: ../ssh/seahorse-ssh-askpass.c:103
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "Εισαγωγή παλιού συνθηματικού για: %s"
 
-#: ../ssh/seahorse-ssh-askpass.c:87 ../ssh/seahorse-ssh-askpass.c:92
+#: ../ssh/seahorse-ssh-askpass.c:107 ../ssh/seahorse-ssh-askpass.c:112
 msgid "New Key Passphrase"
 msgstr "Νέο συνθηματικό κλειδιού"
 
-#: ../ssh/seahorse-ssh-askpass.c:88
+#: ../ssh/seahorse-ssh-askpass.c:108
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "Εισαγωγή νέου συνθηματικού για: %s"
 
-#: ../ssh/seahorse-ssh-askpass.c:93
+#: ../ssh/seahorse-ssh-askpass.c:113
 #, c-format
 msgid "Enter the new passphrase again: %s"
 msgstr "Εισάγετε ξανά το νέο συνθηματικό: %s"
 
-#: ../ssh/seahorse-ssh-backend.c:91
+#: ../ssh/seahorse-ssh-backend.c:89
 msgid "Secure Shell"
 msgstr "Ασφαλές κέλυφος"
 
-#: ../ssh/seahorse-ssh-backend.c:94
+#: ../ssh/seahorse-ssh-backend.c:95
 msgid "Keys used to connect securely to other computers"
 msgstr ""
 "Τα κλειδιά χρησιμοποιούνται για να συνδέεστε με ασφάλεια σε άλλους "
@@ -2432,36 +2419,36 @@ msgstr[0] ""
 msgstr[1] ""
 "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε τα %d κλειδιά ασφαλούς κελύφους;"
 
-#: ../ssh/seahorse-ssh-exporter.c:92
-msgid "Ssh Key"
-msgstr "Κλειδί Ssh"
+#: ../ssh/seahorse-ssh-exporter.c:93
+msgid "SSH Key"
+msgstr "Κλειδί SSH"
 
-#: ../ssh/seahorse-ssh-exporter.c:122
+#: ../ssh/seahorse-ssh-exporter.c:125
 msgid "Secret SSH keys"
 msgstr "Μυστικά κλειδιά SSH"
 
-#: ../ssh/seahorse-ssh-exporter.c:126
+#: ../ssh/seahorse-ssh-exporter.c:129
 msgid "Public SSH keys"
 msgstr "Δημόσια κλειδιά SSH"
 
-#: ../ssh/seahorse-ssh-exporter.c:290
+#: ../ssh/seahorse-ssh-exporter.c:298
 msgid "No public key file is available for this key."
 msgstr "Δεν υπάρχει διαθέσιμο δημόσιο αρχείο κλειδιού για αυτό το κλειδί."
 
-#: ../ssh/seahorse-ssh-generate.c:55 ../ssh/seahorse-ssh-key.c:112
-#: ../ssh/seahorse-ssh-key.c:116 ../ssh/seahorse-ssh-key-properties.xml.h:4
+#: ../ssh/seahorse-ssh-generate.c:53 ../ssh/seahorse-ssh-key.c:110
+#: ../ssh/seahorse-ssh-key.c:114 ../ssh/seahorse-ssh-key-properties.xml.h:4
 msgid "Secure Shell Key"
 msgstr "Κλειδί Secure Shell"
 
-#: ../ssh/seahorse-ssh-generate.c:56
+#: ../ssh/seahorse-ssh-generate.c:54
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Για πρόσβαση σε άλλους υπολογιστές (π.χ. μέσω τερματικού)"
 
-#: ../ssh/seahorse-ssh-generate.c:110 ../ssh/seahorse-ssh-generate.c:126
+#: ../ssh/seahorse-ssh-generate.c:108 ../ssh/seahorse-ssh-generate.c:124
 msgid "Couldn't generate Secure Shell key"
 msgstr "Αδύνατη η δημιουργία κλειδιού SSH"
 
-#: ../ssh/seahorse-ssh-generate.c:192
+#: ../ssh/seahorse-ssh-generate.c:191
 msgid "Creating Secure Shell Key"
 msgstr "Δημιουργία κλειδιού Secure Shell"
 
@@ -2502,15 +2489,15 @@ msgstr ""
 "το κλειδί, μπορείτε τώρα να ρυθμίσετε τον υπολογιστή αυτό ώστε να "
 "αναγνωρίζει το κλειδί σας."
 
-#: ../ssh/seahorse-ssh-key.c:108
+#: ../ssh/seahorse-ssh-key.c:106
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Μη αναγνώσιμο κλειδί Secure Shell/SSH)"
 
-#: ../ssh/seahorse-ssh-key.c:216
+#: ../ssh/seahorse-ssh-key.c:214
 msgid "Personal SSH key"
 msgstr "Προσωπικό SSH κλειδί"
 
-#: ../ssh/seahorse-ssh-key.c:218
+#: ../ssh/seahorse-ssh-key.c:216
 msgid "SSH key"
 msgstr "Αρχείο SSH"
 
@@ -2518,11 +2505,11 @@ msgstr "Αρχείο SSH"
 msgid "Couldn't rename key."
 msgstr "Αδύνατη η μετονομασία κλειδιού."
 
-#: ../ssh/seahorse-ssh-key-properties.c:133
+#: ../ssh/seahorse-ssh-key-properties.c:135
 msgid "Couldn't change authorization for key."
 msgstr "Αδύνατη η αλλαγή εξουσιοδότησης για το κλειδί."
 
-#: ../ssh/seahorse-ssh-key-properties.c:168
+#: ../ssh/seahorse-ssh-key-properties.c:172
 msgid "Couldn't change passphrase for key."
 msgstr "Αδύνατη η αλλαγή του συνθηματικού για το κλειδί."
 
@@ -2563,45 +2550,45 @@ msgstr "Τοποθεσία:"
 msgid "E_xport Complete Key"
 msgstr "Ε_ξαγωγή ολόκληρου κλειδιού"
 
-#: ../ssh/seahorse-ssh-operation.c:199
+#: ../ssh/seahorse-ssh-operation.c:204
 msgid "The SSH command was terminated unexpectedly."
 msgstr "Η εντολή SSH τερματίστηκε απρόσμενα."
 
-#: ../ssh/seahorse-ssh-operation.c:209
+#: ../ssh/seahorse-ssh-operation.c:214
 msgid "The SSH command failed."
 msgstr "Η εντολή SSH απέτυχε."
 
-#: ../ssh/seahorse-ssh-operation.c:502
+#: ../ssh/seahorse-ssh-operation.c:523
 msgid "Remote Host Password"
 msgstr "Κωδικός πρόσβασης απομακρυσμένου συστήματος"
 
-#: ../ssh/seahorse-ssh-operation.c:588
+#: ../ssh/seahorse-ssh-operation.c:610
 msgid "Enter Key Passphrase"
 msgstr "Εισαγωγή συνθηματικού κλειδιού"
 
-#: ../ssh/seahorse-ssh-operation.c:678
+#: ../ssh/seahorse-ssh-operation.c:701
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Συνθηματικό για νέο κλειδί Secure Shell (SSH)"
 
-#: ../ssh/seahorse-ssh-operation.c:862
+#: ../ssh/seahorse-ssh-operation.c:887
 #, c-format
 msgid "Importing key: %s"
 msgstr "Εισαγωγή κλειδιού: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:864
+#: ../ssh/seahorse-ssh-operation.c:889
 msgid "Importing key. Enter passphrase"
 msgstr "Εισαγωγή κλειδιού. Εισάγετε το συνθηματικό σας"
 
-#: ../ssh/seahorse-ssh-source.c:232
+#: ../ssh/seahorse-ssh-source.c:223
 msgid "OpenSSH keys"
 msgstr "Κλειδιά OpenSSH"
 
-#: ../ssh/seahorse-ssh-source.c:235
+#: ../ssh/seahorse-ssh-source.c:230
 #, c-format
 msgid "OpenSSH: %s"
 msgstr "OpenSSH: %s"
 
-#: ../ssh/seahorse-ssh-source.c:940
+#: ../ssh/seahorse-ssh-source.c:978
 msgid "No private key file is available for this key."
 msgstr "Δεν υπάρχει διαθέσιμο αρχείο προσωπικού κλειδιού για αυτό το κλειδί."
 
@@ -2632,16 +2619,31 @@ msgid "eg: fileserver.example.com:port"
 msgstr "π.χ: fileserver.example.com:port"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:5
-msgid "_Computer Name:"
-msgstr "Όνομα _υπολογιστή:"
+msgid "_Server address:"
+msgstr "Διεύθυνση _Διακομιστή:"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:6
-msgid "_Login Name:"
+msgid "_Login name:"
 msgstr "Όνομα ει_σόδου:"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_Ρύθμιση"
+
+#~ msgid "Updating password"
+#~ msgstr "Γίνεται ενημέρωση του κωδικού"
+
+#~ msgid "Keyring Properties"
+#~ msgstr "Ιδιότητες κλειδοθήκης"
+
+#~ msgid "%Y-%m-%d"
+#~ msgstr "%Y-%m-%d"
+
+#~ msgid "Ssh Key"
+#~ msgstr "Κλειδί Ssh"
+
+#~ msgid "_Computer Name:"
+#~ msgstr "Όνομα _υπολογιστή:"
 
 #~ msgid "<b>Password:</b>"
 #~ msgstr "<b>Κωδικός πρόσβασης:</b>"
