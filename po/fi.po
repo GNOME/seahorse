@@ -9,14 +9,15 @@
 # Ilkka Tuohela <hile@iki.fi>, 2004-2009.
 # Jani Välimaa <jani.valimaa@gmail.com>, 2009.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2012, 2013.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-01-22 08:46+0000\n"
-"PO-Revision-Date: 2013-03-10 20:59+0200\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
+"POT-Creation-Date: 2013-04-19 08:06+0000\n"
+"PO-Revision-Date: 2013-10-28 16:08+0200\n"
+"Last-Translator: Lasse Liehu <lasse.liehu@gmail.com>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -158,9 +159,8 @@ msgid "Encryption key password"
 msgstr "Salausavaimen salasana"
 
 #: ../gkr/seahorse-gkr-item.c:358
-#, fuzzy
 msgid "Key storage password"
-msgstr "Tallennettu salasana"
+msgstr "Avainsäilön salasana"
 
 #: ../gkr/seahorse-gkr-item.c:359
 msgid "Google Chrome password"
@@ -283,7 +283,6 @@ msgstr "Avain"
 #: ../gkr/seahorse-gkr-item-properties.xml.h:11
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
 #: ../ssh/seahorse-ssh-key-properties.xml.h:20
-#| msgid "<b>Technical Details:</b>"
 msgid "Technical Details:"
 msgstr "Tekniset yksityiskohdat:"
 
@@ -622,7 +621,7 @@ msgid "Contributions:"
 msgstr "Avustajat:"
 
 #: ../libseahorse/seahorse-catalog.c:112 ../src/seahorse.desktop.in.in.h:1
-#: ../src/seahorse-key-manager.c:659
+#: ../src/seahorse-key-manager.c:658
 msgid "Passwords and Keys"
 msgstr "Salasanat ja salausavaimet"
 
@@ -789,7 +788,6 @@ msgstr "%Y-%m-%d"
 #: ../pgp/seahorse-pgp-key-properties.c:1254
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
-#| msgid "Unknown"
 msgctxt "Validity"
 msgid "Unknown"
 msgstr "Tuntematon"
@@ -804,7 +802,6 @@ msgstr "Ei koskaan"
 
 #: ../libseahorse/seahorse-validity.c:44
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
-#, fuzzy
 #| msgid "Marginal"
 msgctxt "Validity"
 msgid "Marginal"
@@ -812,7 +809,6 @@ msgstr "Jonkin verran"
 
 #: ../libseahorse/seahorse-validity.c:46
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
-#, fuzzy
 #| msgid "Full"
 msgctxt "Validity"
 msgid "Full"
@@ -820,21 +816,18 @@ msgstr "Kokonaan"
 
 #: ../libseahorse/seahorse-validity.c:48
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
-#, fuzzy
 #| msgid "Ultimate"
 msgctxt "Validity"
 msgid "Ultimate"
 msgstr "Ehdottomasti"
 
 #: ../libseahorse/seahorse-validity.c:50
-#, fuzzy
 #| msgid "Disabled"
 msgctxt "Validity"
 msgid "Disabled"
 msgstr "Ei käytössä"
 
 #: ../libseahorse/seahorse-validity.c:52
-#| msgid "Revoked"
 msgctxt "Validity"
 msgid "Revoked"
 msgstr "Mitätöity"
@@ -987,9 +980,8 @@ msgid "Key Data"
 msgstr "Avaimen tiedot"
 
 #: ../pgp/seahorse-gpgme-exporter.c:114
-#, fuzzy
 msgid "Armored PGP keys"
-msgstr "Tuodut avaimet"
+msgstr "Panssaroidut PGP-avaimet"
 
 #: ../pgp/seahorse-gpgme-exporter.c:118
 msgid "PGP keys"
@@ -1010,7 +1002,6 @@ msgid "RSA"
 msgstr "RSA"
 
 #: ../pgp/seahorse-gpgme-generate.c:133
-#| msgid "DSA Elgamal"
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
@@ -1035,6 +1026,11 @@ msgid ""
 "the keyboard, moving the mouse, using applications.\n"
 "This gives the system the random data that it needs."
 msgstr ""
+"Avainta luodessa on luotava paljon satunnaisdataa\n"
+"ja siinä tarvitaan apuasi. Tee samalla muita\n"
+"toimintoja, kuten kirjoita näppäimistöllä, \n"
+"liikuta hiirtä ja käytä sovelluksia.\n"
+"Näin järjestelmä saa tarvitsemansa satunnaisdatan."
 
 #: ../pgp/seahorse-gpgme-generate.c:231
 #: ../pkcs11/seahorse-pkcs11-generate.c:459
@@ -1150,7 +1146,7 @@ msgstr "Kaikki kuvatiedostot"
 msgid "All JPEG files"
 msgstr "Kaikki JPEG-tiedostot"
 
-#: ../pgp/seahorse-gpgme-photos.c:242 ../src/seahorse-key-manager.c:308
+#: ../pgp/seahorse-gpgme-photos.c:242 ../src/seahorse-key-manager.c:307
 msgid "All files"
 msgstr "Kaikki tiedostot"
 
@@ -1264,7 +1260,6 @@ msgstr ""
 "ilmaista luottamuksesi siihen."
 
 #: ../pgp/seahorse-gpgme-subkey.c:197
-#| msgid "Unknown"
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Tuntematon"
@@ -1297,7 +1292,7 @@ msgid "Importing keys from key servers"
 msgstr "Tuodaan avaimia avainpalvelimilta"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: ../pgp/seahorse-keyserver-results.c:244 ../src/seahorse-key-manager.c:508
+#: ../pgp/seahorse-keyserver-results.c:244 ../src/seahorse-key-manager.c:507
 msgid "_Remote"
 msgstr "_Verkko"
 
@@ -1305,11 +1300,11 @@ msgstr "_Verkko"
 msgid "Close this window"
 msgstr "Sulje tämä ikkuna"
 
-#: ../pgp/seahorse-keyserver-results.c:250 ../pgp/seahorse-pgp-actions.c:113
+#: ../pgp/seahorse-keyserver-results.c:250 ../pgp/seahorse-pgp-actions.c:115
 msgid "_Find Remote Keys..."
 msgstr "Etsi _avaimia verkosta…"
 
-#: ../pgp/seahorse-keyserver-results.c:251 ../pgp/seahorse-pgp-actions.c:114
+#: ../pgp/seahorse-keyserver-results.c:251 ../pgp/seahorse-pgp-actions.c:116
 msgid "Search for keys on a key server"
 msgstr "Etsi avaimia avainpalvelimelta"
 
@@ -1351,12 +1346,10 @@ msgid "_Search for keys containing: "
 msgstr "Et_si avaimia, jotka sisältävät: "
 
 #: ../pgp/seahorse-keyserver-search.xml.h:4
-#| msgid "Key Servers"
 msgid "Key Servers:"
 msgstr "Avainpalvelimet:"
 
 #: ../pgp/seahorse-keyserver-search.xml.h:5
-#| msgid "<b>Shared Keys Near Me:</b>"
 msgid "Shared Keys Near Me:"
 msgstr "Lähellä olevat jaetut avaimet:"
 
@@ -1444,11 +1437,11 @@ msgstr "Selvitetään palvelimen osoitetta: %s"
 msgid "LDAP Key Server"
 msgstr "LDAP-avainpalvelin"
 
-#: ../pgp/seahorse-pgp-actions.c:118
+#: ../pgp/seahorse-pgp-actions.c:120
 msgid "_Sync and Publish Keys..."
 msgstr "_Synkronoi ja julkaise avaimia…"
 
-#: ../pgp/seahorse-pgp-actions.c:119
+#: ../pgp/seahorse-pgp-actions.c:121
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Julkaise ja jaa avaimia muiden linjoilla olevien kanssa."
 
@@ -1499,7 +1492,6 @@ msgstr "Vanh_enemispäivä:"
 #: ../pgp/seahorse-pgp-generate.xml.h:12
 #: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
 #: ../ssh/seahorse-ssh-generate.xml.h:11
-#| msgid "<b>_Advanced key options</b>"
 msgid "_Advanced key options"
 msgstr "Avaimen _lisäasetukset"
 
@@ -1639,7 +1631,6 @@ msgstr "Avaimen tunniste"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
-#| msgid "<b>This key has been revoked</b>"
 msgid "This key has been revoked"
 msgstr "Tämä avain on mitätöity"
 
@@ -1650,7 +1641,6 @@ msgstr "Avaimen omistaja mitätöi avaimen eikä sitä voida enää käyttää."
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
-#| msgid "<b>This key has expired</b>"
 msgid "This key has expired"
 msgstr "Tämä avain on vanhentunut"
 
@@ -1677,7 +1667,6 @@ msgstr "Siirry seuraavaan valokuvaan"
 #. A photograph
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
-#| msgid "<b>Photo </b>"
 msgid "Photo "
 msgstr "Valokuva "
 
@@ -1689,20 +1678,17 @@ msgstr "Avaimen tunniste:"
 #. Name of key, usually a persons name
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
-#| msgid "Name:"
 msgctxt "name-of-key"
 msgid "Name:"
 msgstr "Nimi:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
-#| msgid "<b>Email:</b>"
 msgid "Email:"
 msgstr "Sähköposti:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
-#| msgid "_Comment:"
 msgid "Comment:"
 msgstr "Kommentti:"
 
@@ -1725,10 +1711,9 @@ msgid "Owner"
 msgstr "Omistaja"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
-#, fuzzy
 #| msgid "Names and Signatures"
 msgid "Key Names and Signatures"
-msgstr "Nimet ja allekirjoitukset"
+msgstr "Avainten nimet ja allekirjoitukset"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
 msgid "Primary"
@@ -1763,12 +1748,10 @@ msgid "Strength:"
 msgstr "Vahvuus:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
-#| msgid "<b>Technical Details</b>"
 msgid "Technical Details"
 msgstr "Tekniset yksityiskohdat"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
-#| msgid "<b>Fingerprint</b>"
 msgid "Fingerprint"
 msgstr "Sormenjälki"
 
@@ -1778,10 +1761,9 @@ msgid "Expires:"
 msgstr "Vanhenee:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
-#, fuzzy
 #| msgid "Date"
 msgid "Dates"
-msgstr "Päiväys"
+msgstr "Päiväykset"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
 msgid "Override Owner _Trust:"
@@ -1792,7 +1774,6 @@ msgid "_Export Complete Key:"
 msgstr "Vi_e koko avain"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
-#| msgid "<b>Actions</b>"
 msgid "Actions"
 msgstr "Toiminnot"
 
@@ -1806,33 +1787,28 @@ msgstr "Vanhenna"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
-#| msgid "<b>_Subkeys</b>"
 msgid "_Subkeys"
 msgstr "_Aliavaimet"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
-#, fuzzy
 #| msgid "Marginally"
 msgctxt "Validity"
 msgid "Marginally"
 msgstr "Jonkin verran"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
-#, fuzzy
 #| msgid "Fully"
 msgctxt "Validity"
 msgid "Fully"
 msgstr "Kokonaan"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
-#, fuzzy
 #| msgid "Ultimately"
 msgctxt "Validity"
 msgid "Ultimately"
 msgstr "Ehdottomasti"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
-#| msgid "Encrypt files and email to the key's owner "
 msgid "Encrypt files and email to the key's owner"
 msgstr "Salaa tiedostoja ja sähköpostia avaimen omistajalle"
 
@@ -1842,12 +1818,10 @@ msgstr "Julkinen PGP-avain"
 
 #. Names set on the PGP key.
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
-#| msgid "<b>_Other Names:</b>"
 msgid "_Other Names:"
 msgstr "_Muut nimet:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
-#| msgid "<b>Your trust of this key</b>"
 msgid "Your trust of this key"
 msgstr "Luottamuksesi tähän avaimeen"
 
@@ -1886,7 +1860,6 @@ msgid "_Revoke Signature"
 msgstr "_Mitätöi allekirjoitus"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
-#| msgid "<b>_People who have signed this key:</b>"
 msgid "_People who have signed this key:"
 msgstr "_Henkilöt, jotka ovat allekirjoittaneet tämän avaimen:"
 
@@ -1901,18 +1874,15 @@ msgstr "Luottamus"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
 #: ../ssh/seahorse-ssh-key-properties.xml.h:19
-#| msgid "<b>Fingerprint:</b>"
 msgid "Fingerprint:"
 msgstr "Sormenjälki:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
-#, fuzzy
 #| msgid "Date"
 msgid "Dates:"
-msgstr "Päiväys"
+msgstr "Päiväykset:"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
-#| msgid "<b>Indicate Trust:</b>"
 msgid "Indicate Trust:"
 msgstr "Osoita luottamus:"
 
@@ -1963,12 +1933,10 @@ msgstr ""
 "henkilölle:"
 
 #: ../pgp/seahorse-sign.xml.h:3
-#| msgid "<i>Key Name</i>"
 msgid "Key Name"
 msgstr "Avaimen nimi"
 
 #: ../pgp/seahorse-sign.xml.h:4
-#| msgid "<b>How carefully have you checked this key?</b>"
 msgid "How carefully have you checked this key?"
 msgstr "Kuinka tarkasti olet tarkistanut tämän avaimen?"
 
@@ -1993,7 +1961,6 @@ msgstr ""
 "henkilölle, mutta et voinut tarkistaa tai et tarkistanut tätä todeksi."
 
 #: ../pgp/seahorse-sign.xml.h:9
-#, fuzzy
 #| msgid ""
 #| "<i>Casually:</i> means you have done a casual verification that the key "
 #| "is owned by the person who claims to own it. For example, you could read "
@@ -2003,8 +1970,8 @@ msgid ""
 "owned by the person who claims to own it. For example, you could read the "
 "key fingerprint to the owner over the phone."
 msgstr ""
-"<i>Pintapuolisesti</i>  tarkoittaa, että olet tarkistanut tavanomaisesti, "
-"että avain kuuluu sen omistajalle. Voit esimerkiksi lukea avaimen "
+"<i>Pintapuolisesti</i> tarkoittaa, että olet tarkistanut tavanomaisesti, "
+"että avain kuuluu sen väitetylle omistajalle. Voit esimerkiksi lukea avaimen "
 "sormenjäljen omistajalle puhelimessa."
 
 #: ../pgp/seahorse-sign.xml.h:10
@@ -2027,7 +1994,6 @@ msgstr ""
 "sähköpostiosoite kuuluu avaimen omistajalle."
 
 #: ../pgp/seahorse-sign.xml.h:12
-#| msgid "<b>How others will see this signature:</b>"
 msgid "How others will see this signature:"
 msgstr "Kuinka muut näkevät tämän allekirjoituksen:"
 
@@ -2040,7 +2006,6 @@ msgid "I can _revoke this signature at a later date."
 msgstr "Voin _mitätöidä tämän allekirjoituksen myöhemmin."
 
 #: ../pgp/seahorse-sign.xml.h:15
-#| msgid "<b>Sign key as:</b>"
 msgid "Sign key as:"
 msgstr "Allekirjoita avain avaimella:"
 
@@ -2095,7 +2060,7 @@ msgstr "Varmenteet"
 
 #: ../pkcs11/seahorse-pkcs11-backend.c:186
 msgid "X.509 certificates and related keys"
-msgstr ""
+msgstr "X.509-varmenteet ja liittyvät avaimet"
 
 #: ../pkcs11/seahorse-pkcs11-deleter.c:69
 #, c-format
@@ -2131,9 +2096,8 @@ msgid "Label:"
 msgstr "Nimike:"
 
 #: ../pkcs11/seahorse-pkcs11-generate.xml.h:3
-#, fuzzy
 msgid "Stored at:"
-msgstr "Tallennettu salasana"
+msgstr "Tallennussijainti:"
 
 #: ../pkcs11/seahorse-pkcs11-key-deleter.c:85
 msgid "I understand that this key will be permanently deleted."
@@ -2169,9 +2133,8 @@ msgid "Request _Certificate"
 msgstr "Pyydä _varmenne"
 
 #: ../pkcs11/seahorse-pkcs11-properties.c:236
-#, fuzzy
 msgid "Create a certificate request file for this key"
-msgstr "Tälle avaimelle ei ole saatavilla salaisen avaimen tiedostoa."
+msgstr "Luo varmennepyyntötiedosto tälle avaimelle"
 
 #: ../pkcs11/seahorse-pkcs11-request.c:103
 msgid "Couldn't save certificate request"
@@ -2210,7 +2173,6 @@ msgid "Unnamed private key"
 msgstr "Nimetön yksityinen avain"
 
 #: ../pkcs11/seahorse-token.c:576
-#| msgid "Unknown"
 msgctxt "Label"
 msgid "Unknown"
 msgstr "Tuntematon"
@@ -2238,15 +2200,14 @@ msgstr "Hallitse salasanoja ja salausavaimia"
 #: ../src/seahorse.desktop.in.in.h:3
 msgid "keyring;encryption;security;sign;ssh;"
 msgstr ""
-"keyring;encryption;security;sign;ssh;avainnippu;salaus;turvallisuus;tietoturva"
-";kirjautuminen;"
+"keyring;encryption;security;sign;ssh;avainnippu;salaus;turvallisuus;"
+"tietoturva;kirjautuminen;"
 
 #: ../src/seahorse-generate-select.c:229
 msgid "Continue"
 msgstr "Jatka"
 
 #: ../src/seahorse-generate-select.xml.h:1
-#| msgid "<b>_Select the type of item to create:</b>"
 msgid "_Select the type of item to create:"
 msgstr "Valitse luotavan kohteen tyyppi:"
 
@@ -2262,94 +2223,91 @@ msgstr "Tuo"
 msgid "<b>Data to be imported:</b>"
 msgstr "<b>Tuotavat tiedot:</b>"
 
-#: ../src/seahorse-key-manager.c:262 ../ssh/seahorse-ssh-operation.c:845
+#: ../src/seahorse-key-manager.c:261 ../ssh/seahorse-ssh-operation.c:845
 msgid "Import Key"
 msgstr "Tuo avain"
 
-#: ../src/seahorse-key-manager.c:274
+#: ../src/seahorse-key-manager.c:273
 msgid "All key files"
 msgstr "Kaikki avaintiedostot"
 
-#: ../src/seahorse-key-manager.c:375
+#: ../src/seahorse-key-manager.c:374
 msgid "Dropped text"
-msgstr ""
+msgstr "Pudotettu teksti"
 
-#: ../src/seahorse-key-manager.c:398
+#: ../src/seahorse-key-manager.c:397
 msgid "Clipboard text"
 msgstr "Leikepöydän teksti"
 
-#: ../src/seahorse-key-manager.c:509
+#: ../src/seahorse-key-manager.c:508
 msgid "_New"
 msgstr "_Uusi"
 
-#: ../src/seahorse-key-manager.c:511
+#: ../src/seahorse-key-manager.c:510
 msgid "Close this program"
 msgstr "Sulje ohjelma"
 
-#: ../src/seahorse-key-manager.c:512 ../src/seahorse-key-manager.c:514
+#: ../src/seahorse-key-manager.c:511 ../src/seahorse-key-manager.c:513
 msgid "_New..."
 msgstr "_Uusi…"
 
-#: ../src/seahorse-key-manager.c:513
+#: ../src/seahorse-key-manager.c:512
 msgid "Create a new key or item"
 msgstr "Luo uusi avain tai kohde"
 
-#: ../src/seahorse-key-manager.c:515
+#: ../src/seahorse-key-manager.c:514
 msgid "Add a new key or item"
 msgstr "Lisää uusi avain tai kohde"
 
-#: ../src/seahorse-key-manager.c:516
+#: ../src/seahorse-key-manager.c:515
 msgid "_Import..."
 msgstr "_Tuo…"
 
-#: ../src/seahorse-key-manager.c:517
+#: ../src/seahorse-key-manager.c:516
 msgid "Import from a file"
 msgstr "Tuo tiedostosta"
 
-#: ../src/seahorse-key-manager.c:519
+#: ../src/seahorse-key-manager.c:518
 msgid "Import from the clipboard"
 msgstr "Tuo leikepöydältä"
 
-#: ../src/seahorse-key-manager.c:523
-#, fuzzy
+#: ../src/seahorse-key-manager.c:522
 msgid "By _keyring"
-msgstr "_Avainnippu"
+msgstr "_Avainnipun mukaan"
 
-#: ../src/seahorse-key-manager.c:524
+#: ../src/seahorse-key-manager.c:523
 msgid "Show sidebar listing keyrings"
-msgstr ""
+msgstr "Näytä avainniput listaava sivupalkki"
 
-#: ../src/seahorse-key-manager.c:528
+#: ../src/seahorse-key-manager.c:527
 msgid "Show _personal"
 msgstr "Näytä _henkilökohtaiset"
 
-#: ../src/seahorse-key-manager.c:529
+#: ../src/seahorse-key-manager.c:528
 msgid "Only show personal keys, certificates and passwords"
 msgstr "Näytä vain henkilökohtaiset avaimet, varmenteet ja salasanat"
 
-#: ../src/seahorse-key-manager.c:530
+#: ../src/seahorse-key-manager.c:529
 msgid "Show _trusted"
 msgstr "Näytä _luotetut"
 
-#: ../src/seahorse-key-manager.c:531
+#: ../src/seahorse-key-manager.c:530
 msgid "Only show trusted keys, certificates and passwords"
 msgstr "Näytä vain luotetut avaimet, varmenteet ja salasanat"
 
-#: ../src/seahorse-key-manager.c:532
+#: ../src/seahorse-key-manager.c:531
 msgid "Show _any"
 msgstr "Näytä _mikä tahansa"
 
-#: ../src/seahorse-key-manager.c:533
+#: ../src/seahorse-key-manager.c:532
 msgid "Show all keys, certificates and passwords"
 msgstr "Näytä kaikki avaimet, varmenteet ja salasanat"
 
-#: ../src/seahorse-key-manager.c:737
-#, fuzzy
+#: ../src/seahorse-key-manager.c:736
 msgid "Filter"
-msgstr "Suodata:"
+msgstr "Suodata"
 
 #: ../src/seahorse-key-manager.xml.h:1
-#| msgid "<big><b>First time options:</b></big>"
 msgid "First time options:"
 msgstr "Ensimmäisen käyttökerran valinnat:"
 
@@ -2429,9 +2387,8 @@ msgid "Secure Shell"
 msgstr "Secure Shell"
 
 #: ../ssh/seahorse-ssh-backend.c:94
-#, fuzzy
 msgid "Keys used to connect securely to other computers"
-msgstr "Käytetään otettaessa yhteyttä muihin tietokoneisiin."
+msgstr "Muihin tietokoneisiin yhteyttä otettaessa käytettävät avaimet"
 
 #: ../ssh/seahorse-ssh-deleter.c:81 ../ssh/seahorse-ssh-deleter.c:86
 #, c-format
@@ -2440,7 +2397,6 @@ msgstr "Haluatko varmasti poistaa SSH-avaimen ”%s”?"
 
 #: ../ssh/seahorse-ssh-deleter.c:91
 #, c-format
-#| msgid "Are you sure you want to delete %d secure shell keys?"
 msgid "Are you sure you want to delete %d secure shell key?"
 msgid_plural "Are you sure you want to delete %d secure shell keys?"
 msgstr[0] "Haluatko varmasti poistaa %d SSH-avaimen?"
@@ -2459,9 +2415,8 @@ msgid "Public SSH keys"
 msgstr "Julkiset SSH-avaimet"
 
 #: ../ssh/seahorse-ssh-exporter.c:290
-#, fuzzy
 msgid "No public key file is available for this key."
-msgstr "Tälle avaimelle ei ole saatavilla salaisen avaimen tiedostoa."
+msgstr "Tälle avaimelle ei ole saatavilla julkista avainta."
 
 #: ../ssh/seahorse-ssh-generate.c:55 ../ssh/seahorse-ssh-key.c:114
 #: ../ssh/seahorse-ssh-key.c:118 ../ssh/seahorse-ssh-key-properties.xml.h:4
@@ -2497,11 +2452,8 @@ msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr "SSH mahdollistaa salattujen yhteyksien luonnin muihin tietokoneisiin."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:6
-#, fuzzy
 msgid "Your email address, or a reminder of what this key is for."
-msgstr ""
-"<i>Käytä sähköpostiosoitettasi tai muuta muistutusta kertomaan mihin "
-"tarkoitukseen tämä avain on.</i>"
+msgstr "Sähköpostiosoitteesi tai muu muistutus tämän avaimen tarkoitusperästä."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:10
 msgid "DSA"
@@ -2541,13 +2493,11 @@ msgid "Couldn't change passphrase for key."
 msgstr "Avaimen tunnuslausetta ei voitu vaihtaa."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:2
-#| msgid "<b>Identifier:</b>"
 msgid "Identifier:"
 msgstr "Tunniste:"
 
 #. Name of key, often a persons name
 #: ../ssh/seahorse-ssh-key-properties.xml.h:6
-#| msgid "Name:"
 msgctxt "name-of-ssh-key"
 msgid "Name:"
 msgstr "Nimi:"
@@ -2567,12 +2517,10 @@ msgid "This only applies to the <i>%s</i> account."
 msgstr "Tämä vaikuttaa vain tiliin <i>”%s”</i>."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:16
-#| msgid "<b>Algorithm:</b>"
 msgid "Algorithm:"
 msgstr "Algoritmi:"
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:18
-#| msgid "<b>Location:</b>"
 msgid "Location:"
 msgstr "Sijainti:"
 
@@ -2643,7 +2591,6 @@ msgstr ""
 "sinulla olla käyttäjätili kyseisessä tietokoneessa."
 
 #: ../ssh/seahorse-ssh-upload.xml.h:4
-#| msgid "<i>eg: fileserver.example.com:port</i>"
 msgid "eg: fileserver.example.com:port"
 msgstr "esim: tiedostopalvelin.esimerkki.fi:portti"
 
