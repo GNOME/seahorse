@@ -1162,6 +1162,7 @@ on_pgp_details_export_button (GtkWidget *widget,
 	GList *exporters = NULL;
 	GtkWindow *window;
 	GObject *object;
+	gchar *directory = NULL;
 	GFile *file;
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
@@ -1169,9 +1170,10 @@ on_pgp_details_export_button (GtkWidget *widget,
 	exporters = g_list_append (exporters, seahorse_gpgme_exporter_new (object, TRUE, TRUE));
 
 	window = GTK_WINDOW (seahorse_widget_get_toplevel (swidget));
-	if (seahorse_exportable_prompt (exporters, window, NULL, &file, &exporter)) {
+	if (seahorse_exportable_prompt (exporters, window, &directory, &file, &exporter)) {
 		seahorse_exporter_export_to_file (exporter, file, TRUE, NULL,
 		                                  on_export_complete, g_object_ref (window));
+		g_free (directory);
 		g_object_unref (file);
 		g_object_unref (exporter);
 	}

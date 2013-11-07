@@ -215,6 +215,7 @@ on_ssh_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 	GList *exporters = NULL;
 	GObject *object;
 	GtkWindow *window;
+	gchar *directory = NULL;
 	GFile *file;
 
 	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
@@ -222,9 +223,10 @@ on_ssh_export_button_clicked (GtkWidget *widget, SeahorseWidget *swidget)
 	exporters = g_list_append (exporters, seahorse_ssh_exporter_new (object, TRUE));
 
 	window = GTK_WINDOW (seahorse_widget_get_toplevel (swidget));
-	if (seahorse_exportable_prompt (exporters, window, NULL, &file, &exporter)) {
+	if (seahorse_exportable_prompt (exporters, window, &directory, &file, &exporter)) {
 		seahorse_exporter_export_to_file (exporter, file, TRUE, NULL,
 		                                  on_export_complete, g_object_ref (window));
+		g_free (directory);
 		g_object_unref (file);
 		g_object_unref (exporter);
 	}
