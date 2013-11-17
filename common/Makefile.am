@@ -31,11 +31,11 @@ libcommon_la_SOURCES = \
 AM_VALAFLAGS = \
 	$(VALA_FLAGS) \
 	--use-header \
-	--header=seahorse-internal.h \
+	--header=$(abs_builddir)/seahorse-internal.h \
+	--vapidir=$(abs_srcdir) \
 	--pkg gtk+-3.0 \
 	--pkg gcr-3 \
 	--pkg config \
-	--vapidir=$(srcdir) \
 	--vapi=common.vapi \
 	$(NULL)
 
