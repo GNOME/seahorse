@@ -917,7 +917,7 @@ seahorse_ssh_source_file_for_algorithm (SeahorseSSHSource *ssrc, guint algo)
         break;
     }
     
-    for (i = 0; i < ~0; i++) {
+    for (i = 0; i < G_MAXINT; i++) {
         t = (i == 0) ? g_strdup (pref) : g_strdup_printf ("%s.%d", pref, i);
         filename = g_build_filename (ssrc->priv->ssh_homedir, t, NULL);
         g_free (t);
