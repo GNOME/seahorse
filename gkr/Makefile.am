@@ -31,7 +31,6 @@ AM_VALAFLAGS = \
 	--pkg gcr-3 \
 	--pkg gcr-ui-3 \
 	--pkg libsecret-1 \
-	--pkg libsecret-unstable \
 	$(NULL)
 
 libseahorse_gkr_la_CFLAGS = \
