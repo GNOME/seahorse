@@ -37,7 +37,6 @@ EXTRA_DIST = \
     AUTHORS \
     COPYING \
     COPYING-DOCS \
-    COPYING-LGPL \
     ChangeLog \
     ChangeLog.pre-auto \
     ChangeLog.pre-1.0 \
