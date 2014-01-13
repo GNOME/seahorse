@@ -364,7 +364,7 @@ seahorse_ssh_key_properties_show (SeahorseSSHKey *skey,
     do_details (swidget);
     
     widget = seahorse_widget_get_widget (swidget, "comment-entry");
-    g_return_if_fail (widget != NULL);
+    g_return_val_if_fail (widget != NULL, NULL);
 
     /* A public key only */
     if (seahorse_object_get_usage (SEAHORSE_OBJECT (skey)) != SEAHORSE_USAGE_PRIVATE_KEY) {

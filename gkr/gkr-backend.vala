@@ -148,7 +148,7 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 	}
 
 	public static void initialize() {
-		return_if_fail(Backend._instance == null);
+		return_val_if_fail(Backend._instance == null, null);
 		(new Backend()).register();
 		return_if_fail(Backend._instance != null);
 	}
