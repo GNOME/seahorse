@@ -62,7 +62,7 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 	private Gtk.ActionGroup _actions;
 
 	construct {
-		return_if_fail(_instance == null);
+		return_val_if_fail(_instance == null, null);
 		Backend._instance = this;
 
 		this._actions = BackendActions.instance(this);
@@ -146,13 +146,13 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 	}
 
 	public static void initialize() {
-		return_val_if_fail(Backend._instance == null, null);
+		return_if_fail(Backend._instance == null);
 		(new Backend()).register();
 		return_if_fail(Backend._instance != null);
 	}
 
 	public static Backend instance() {
-		return_if_fail(Backend._instance != null);
+		return_val_if_fail(Backend._instance != null, null);
 		return Backend._instance;
 	}
 
