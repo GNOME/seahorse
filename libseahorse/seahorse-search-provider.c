@@ -29,6 +29,7 @@
 #include "seahorse-common.h"
 #include "seahorse-widget.h"
 #include "seahorse-collection.h"
+#include "src/seahorse-key-manager.h"
 
 #include "seahorse-shell-search-provider-generated.h"
 #include "seahorse-search-provider.h"
@@ -260,8 +261,7 @@ handle_activate_result (SeahorseShellSearchProvider2 *skeleton,
 {
 	SeahorseSearchProvider *self = SEAHORSE_SEARCH_PROVIDER (skeleton);
 	GObject *object;
-	SeahorseWidget *key_manager;
-	GtkWindow *window;
+	SeahorseKeyManager *key_manager;
 
 	sscanf (identifier, "%p", &object);
 
@@ -271,20 +271,8 @@ handle_activate_result (SeahorseShellSearchProvider2 *skeleton,
 		return TRUE;
 	}
 
-	key_manager = seahorse_widget_find ("key-manager");
-	if (key_manager == NULL) {
-		GtkApplication *app;
-
-		app = seahorse_application_get ();
-		g_application_activate (G_APPLICATION (app));
-
-		key_manager = seahorse_widget_find ("key-manager");
-	}
-
-	window = GTK_WINDOW (seahorse_widget_get_widget (key_manager, key_manager->name));
-	gtk_window_present_with_time (window, timestamp);
-
-	seahorse_viewable_view (object, window);
+	key_manager = seahorse_key_manager_show (timestamp);
+	seahorse_viewable_view (object, GTK_WINDOW (key_manager));
 
 	seahorse_shell_search_provider2_complete_activate_result (skeleton,
 	                                                          invocation);

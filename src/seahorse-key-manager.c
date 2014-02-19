@@ -841,8 +841,17 @@ seahorse_key_manager_class_init (SeahorseKeyManagerClass *klass)
 	catalog_class->get_focused_place = seahorse_key_manager_get_focused_place;
 }
 
-void
-seahorse_key_manager_show (void)
+SeahorseKeyManager *
+seahorse_key_manager_show (guint32 timestamp)
 {
-	g_object_new (SEAHORSE_TYPE_KEY_MANAGER, "ui-name", "key-manager", NULL);
+	static SeahorseKeyManager *singleton;
+
+	if (singleton) {
+		gtk_window_present_with_time (GTK_WINDOW (singleton), timestamp);
+		return singleton;
+	} else {
+		singleton = g_object_new (SEAHORSE_TYPE_KEY_MANAGER, "ui-name", "key-manager", NULL);
+		g_object_add_weak_pointer (G_OBJECT (singleton), (gpointer*) &singleton);
+		return singleton;
+	}
 }

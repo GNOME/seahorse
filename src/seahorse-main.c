@@ -36,7 +36,7 @@ static void
 on_application_activate (GApplication *application,
                          gpointer user_data)
 {
-	seahorse_key_manager_show ();
+	seahorse_key_manager_show (GDK_CURRENT_TIME);
 }
 
 /* Initializes context and preferences, then loads key manager */

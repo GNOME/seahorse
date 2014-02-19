@@ -53,7 +53,7 @@ struct _SeahorseKeyManagerClass {
 
 GType            seahorse_key_manager_get_type     (void) G_GNUC_CONST;
 
-void             seahorse_key_manager_show         (void);
+SeahorseKeyManager * seahorse_key_manager_show     (guint32 timestamp);
 
 
 G_END_DECLS
