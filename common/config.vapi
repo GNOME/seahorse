@@ -16,11 +16,13 @@ namespace Config
  */
 namespace Seahorse {
 
+[CCode (cheader_filename = "libseahorse/seahorse-prefs.h")]
 namespace Prefs {
 	public void show(Gtk.Window window, string? tabid);
 	public bool available();
 }
 
+[CCode (cheader_filename = "libseahorse/seahorse-application.h")]
 namespace Application {
 	public unowned Gtk.Application @get();
 }
