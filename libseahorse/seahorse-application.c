@@ -26,9 +26,6 @@
 
 #include "seahorse-common.h"
 
-#include "pgp/seahorse-pgp.h"
-#include "ssh/seahorse-ssh.h"
-
 #include "seahorse-search-provider.h"
 
 #include <gtk/gtk.h>
@@ -88,29 +85,11 @@ seahorse_application_finalize (GObject *gobject)
 	G_OBJECT_CLASS (seahorse_application_parent_class)->finalize (gobject);
 }
 
-#ifdef WITH_PKCS11
-void seahorse_pkcs11_backend_initialize (void);
-#endif
-
-void seahorse_gkr_backend_initialize (void);
-
 static void
 seahorse_application_startup (GApplication *application)
 {
 	/* Insert Icons into Stock */
 	seahorse_icons_init ();
-
-	/* Initialize the various components */
-#ifdef WITH_PGP
-	seahorse_pgp_backend_initialize ();
-#endif
-#ifdef WITH_SSH
-	seahorse_ssh_backend_initialize ();
-#endif
-#ifdef WITH_PKCS11
-	seahorse_pkcs11_backend_initialize ();
-#endif
-	seahorse_gkr_backend_initialize ();
 
 	seahorse_search_provider_initialize (SEAHORSE_APPLICATION (application)->search_provider);
 

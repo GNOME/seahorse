@@ -1,18 +1,18 @@
 
 if WITH_PGP
-PGP_LDADD = libseahorse-pgp.la
+PGP_LDADD = libseahorse-pgp.a
 else
 PGP_LDADD = 
 endif
 
 if WITH_SSH
-SSH_LDADD = libseahorse-ssh.la
+SSH_LDADD = libseahorse-ssh.a
 else
 SSH_LDADD = 
 endif
 
 if WITH_PKCS11
-PKCS11_LDADD = libseahorse-pkcs11.la
+PKCS11_LDADD = libseahorse-pkcs11.a
 else
 PKCS11_LDADD = 
 endif
@@ -27,14 +27,14 @@ seahorse_SOURCES = \
 	src/seahorse-sidebar.c src/seahorse-sidebar.h
 
 seahorse_LDADD = \
-	libcommon.la \
-	libseahorse.la \
 	$(PGP_LDADD) \
 	$(SSH_LDADD) \
 	$(PKCS11_LDADD) \
-	libseahorse-gkr.la \
-	libeggdatetime.la \
-	libeggtreemultidnd.la \
+	libseahorse.a \
+	libseahorse-gkr.a \
+	libcommon.a \
+	libeggdatetime.a \
+	libeggtreemultidnd.a \
 	$(SEAHORSE_LIBS)
 
 ui_DATA += \

@@ -19,7 +19,7 @@ BUILT_SOURCES += \
 	$(dbus_shell_search_provider_built_sources) \
 	$(MARSHAL_SRCS)
 
-noinst_LTLIBRARIES += libseahorse.la
+noinst_LIBRARIES += libseahorse.a
 
 if WITH_KEYSERVER
 KEYSERVER_SRCS = libseahorse/seahorse-keyserver-control.c libseahorse/seahorse-keyserver-control.h
@@ -27,7 +27,7 @@ else
 KEYSERVER_SRCS = 
 endif
 
-libseahorse_la_SOURCES = \
+libseahorse_a_SOURCES = \
 	libseahorse/seahorse-application.c libseahorse/seahorse-application.h \
 	libseahorse/seahorse-bind.c libseahorse/seahorse-bind.h \
 	libseahorse/seahorse-collection.c libseahorse/seahorse-collection.h \
@@ -50,9 +50,6 @@ libseahorse_la_SOURCES = \
 	$(dbus_shell_search_provider_built_sources) \
 	$(MARSHAL_SRCS) \
 	$(KEYSERVER_SRCS)
-
-libseahorse_la_LIBADD = \
-	libcommon.la
 
 seahorse-marshal.h: libseahorse/seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(AM_V_GEN) $(GLIB_GENMARSHAL) $< --header --prefix=seahorse_marshal > $@

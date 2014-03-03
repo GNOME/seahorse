@@ -28,6 +28,8 @@
 #include "libseahorse/seahorse-servers.h"
 #include "libseahorse/seahorse-util.h"
 
+#include "pgp/seahorse-pgp.h"
+#include "ssh/seahorse-ssh.h"
 
 #include <glib/gi18n.h>
 
@@ -39,6 +41,29 @@ on_application_activate (GApplication *application,
                          gpointer user_data)
 {
 	seahorse_key_manager_show (GDK_CURRENT_TIME);
+}
+
+#ifdef WITH_PKCS11
+void seahorse_pkcs11_backend_initialize (void);
+#endif
+
+void seahorse_gkr_backend_initialize (void);
+
+static void
+on_application_startup (GApplication *application,
+                        gpointer user_data)
+{
+	/* Initialize the various components */
+#ifdef WITH_PGP
+	seahorse_pgp_backend_initialize ();
+#endif
+#ifdef WITH_SSH
+	seahorse_ssh_backend_initialize ();
+#endif
+#ifdef WITH_PKCS11
+	seahorse_pkcs11_backend_initialize ();
+#endif
+	seahorse_gkr_backend_initialize ();
 }
 
 /* Initializes context and preferences, then loads key manager */
@@ -60,6 +85,7 @@ main (int argc, char **argv)
 
 	application = seahorse_application_new ();
 	g_signal_connect (application, "activate", G_CALLBACK (on_application_activate), NULL);
+	g_signal_connect (application, "startup", G_CALLBACK (on_application_startup), NULL);
 	status = g_application_run (G_APPLICATION (application), argc, argv);
 
 	seahorse_registry_cleanup ();

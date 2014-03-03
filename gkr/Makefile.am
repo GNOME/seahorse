@@ -1,6 +1,5 @@
 
-noinst_LTLIBRARIES += \
-	libseahorse-gkr.la
+noinst_LIBRARIES += libseahorse-gkr.a
 
 gkr_VALA = \
 	gkr/gkr-backend.vala \
@@ -18,10 +17,10 @@ gkr_HEADER = gkr/seahorse-gkr.h
 
 gkr_C = $(gkr_VALA:.vala=.c)
 
-libseahorse_gkr_la_SOURCES = \
+libseahorse_gkr_a_SOURCES = \
 	$(gkr_C) $(gkr_HEADER)
 
-libseahorse_gkr_la_CFLAGS = \
+libseahorse_gkr_a_CFLAGS = \
 	-include config.h -w \
 	-DSECRET_API_SUBJECT_TO_CHANGE
 

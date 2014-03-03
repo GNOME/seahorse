@@ -1,7 +1,7 @@
 
-noinst_LTLIBRARIES += libseahorse-ssh.la
+noinst_LIBRARIES += libseahorse-ssh.a
 
-libseahorse_ssh_la_SOURCES = \
+libseahorse_ssh_a_SOURCES = \
 	ssh/seahorse-ssh.h ssh/seahorse-ssh.c \
 	ssh/seahorse-ssh-actions.c ssh/seahorse-ssh-actions.h \
 	ssh/seahorse-ssh-backend.c ssh/seahorse-ssh-backend.h \
@@ -18,9 +18,10 @@ libseahorse_ssh_la_SOURCES = \
 
 seahorselibexecbin_PROGRAMS += seahorse-ssh-askpass
 
-seahorse_ssh_askpass_SOURCES = ssh/seahorse-ssh-askpass.c
+seahorse_ssh_askpass_SOURCES = \
+	libseahorse/seahorse-passphrase.c \
+	ssh/seahorse-ssh-askpass.c
 seahorse_ssh_askpass_LDADD = \
-	libseahorse.la \
 	$(SEAHORSE_LIBS)
 
 ui_DATA += \

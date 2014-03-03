@@ -1,5 +1,5 @@
 
-noinst_LTLIBRARIES += libseahorse-pgp.la
+noinst_LIBRARIES += libseahorse-pgp.a
 
 if WITH_LDAP
 LDAP_SRCS = pgp/seahorse-ldap-source.c pgp/seahorse-ldap-source.h
@@ -20,7 +20,7 @@ pgp_KEYSERVER_SRCS += pgp/seahorse-keyserver-sync.c pgp/seahorse-keyserver-sync.
 pgp_KEYSERVER_SRCS += pgp/seahorse-keyserver-results.c pgp/seahorse-keyserver-results.h
 endif
 
-libseahorse_pgp_la_SOURCES = \
+libseahorse_pgp_a_SOURCES = \
 	pgp/seahorse-combo-keys.c pgp/seahorse-combo-keys.h \
 	pgp/seahorse-discovery.c pgp/seahorse-discovery.h \
 	pgp/seahorse-gpgme.c pgp/seahorse-gpgme.h \
@@ -62,11 +62,7 @@ libseahorse_pgp_la_SOURCES = \
 	$(LDAP_SRCS) \
 	$(HKP_SRCS)
 
-libseahorse_pgp_la_LIBADD = \
-	libcommon.la \
-	libseahorse.la
-
-libseahorse_pgp_la_CFLAGS = \
+libseahorse_pgp_a_CFLAGS = \
 	-DLDAP_DEPRECATED
 
 seahorselibexecbin_PROGRAMS += xloadimage

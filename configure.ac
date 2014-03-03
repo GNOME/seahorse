@@ -29,7 +29,7 @@ AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_CC_C_O
 AC_PROG_INTLTOOL([0.35.0])
-AM_PROG_LIBTOOL
+AC_PROG_RANLIB
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 
 GETTEXT_PACKAGE=seahorse
@@ -59,13 +59,6 @@ case "$host" in
 esac
 AC_MSG_RESULT([$os_win32])
 AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
-
-if test "$platform_win32" = "yes" ; then
-	PLUGIN_LIBTOOL_FLAGS="-module -avoid-version -no-undefined"
-else
-	PLUGIN_LIBTOOL_FLAGS="-module -avoid-version"
-fi
-AC_SUBST(PLUGIN_LIBTOOL_FLAGS)
 
 AC_MSG_CHECKING(whether to build with valac)
 AC_ARG_ENABLE(valac,

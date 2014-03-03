@@ -1,6 +1,6 @@
 
-noinst_LTLIBRARIES += \
-	libseahorse-pkcs11.la
+noinst_LIBRARIES += \
+	libseahorse-pkcs11.a
 
 pkcs11_VALA = \
 	pkcs11/certificate-der-exporter.vala \
@@ -18,12 +18,12 @@ pkcs11_HEADER = pkcs11/seahorse-pkcs11.h
 
 pkcs11_C = $(pkcs11_VALA:.vala=.c)
 
-libseahorse_pkcs11_la_SOURCES = \
+libseahorse_pkcs11_a_SOURCES = \
 	$(pkcs11_C) $(pkcs11_HEADER) \
 	pkcs11/seahorse-pkcs11-backend.c pkcs11/seahorse-pkcs11-backend.h \
 	pkcs11/seahorse-pkcs11-generate.c pkcs11/seahorse-pkcs11-generate.h
 
-libseahorse_pkcs11_la_CFLAGS = \
+libseahorse_pkcs11_a_CFLAGS = \
 	-include config.h -w
 
 if WITH_VALAC

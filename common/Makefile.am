@@ -1,5 +1,5 @@
 
-noinst_LTLIBRARIES += libcommon.la
+noinst_LIBRARIES += libcommon.a
 
 common_VALA = \
 	common/actions.vala \
@@ -23,11 +23,11 @@ common_C = $(common_VALA:.vala=.c)
 
 common_HEADER = common/seahorse-common.h
 
-libcommon_la_SOURCES = \
+libcommon_a_SOURCES = \
 	$(common_C) \
 	common/seahorse-common.h
 
-libcommon_la_CFLAGS = \
+libcommon_a_CFLAGS = \
 	-include config.h -w
 
 if WITH_VALAC
