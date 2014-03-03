@@ -83,6 +83,11 @@ void        seahorse_util_determine_popup_menu_position  (GtkMenu *menu,
 
 SeahorseVersion seahorse_util_parse_version   (const char *version);
 
+guint       seahorse_ulong_hash    (gconstpointer v);
+
+gboolean    seahorse_ulong_equal   (gconstpointer v1,
+                                    gconstpointer v2);
+
 #define seahorse_util_version(a,b,c,d) ((SeahorseVersion)a << 48) + ((SeahorseVersion)b << 32) \
                                      + ((SeahorseVersion)c << 16) +  (SeahorseVersion)d
 

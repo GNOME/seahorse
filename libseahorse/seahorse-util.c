@@ -570,3 +570,22 @@ seahorse_util_parse_version (const char *version)
 	g_strfreev(tokens);
 	return ret;
 }
+
+guint
+seahorse_ulong_hash (gconstpointer v)
+{
+	const signed char *p = v;
+	guint32 i, h = *p;
+
+	for(i = 0; i < sizeof (gulong); ++i)
+		h = (h << 5) - h + *(p++);
+
+	return h;
+}
+
+gboolean
+seahorse_ulong_equal (gconstpointer v1,
+                             gconstpointer v2)
+{
+	return *((const gulong*)v1) == *((const gulong*)v2);
+}

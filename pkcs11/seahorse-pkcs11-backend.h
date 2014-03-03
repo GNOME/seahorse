@@ -22,7 +22,6 @@
 #define SEAHORSE_PKCS11_BACKEND_H_
 
 #include "seahorse-pkcs11.h"
-#include "seahorse-token.h"
 
 #include <gcr/gcr.h>
 

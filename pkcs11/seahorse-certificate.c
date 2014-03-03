@@ -25,7 +25,6 @@
 #include "seahorse-certificate.h"
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-deleter.h"
-#include "seahorse-pkcs11-helpers.h"
 #include "seahorse-pkcs11-properties.h"
 #include "seahorse-private-key.h"
 #include "seahorse-token.h"

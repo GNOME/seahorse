@@ -24,7 +24,6 @@
 
 #include "seahorse-pkcs11-backend.h"
 #include "seahorse-pkcs11-generate.h"
-#include "seahorse-token.h"
 
 #include "seahorse-common.h"
 #include "seahorse-progress.h"
@@ -51,7 +50,7 @@ struct _SeahorsePkcs11Generate {
 
 	GtkEntry *label_entry;
 
-	SeahorseToken *token;
+	SeahorsePkcs11Token *token;
 	GtkComboBox *token_box;
 	GcrCollectionModel *token_model;
 
@@ -244,7 +243,7 @@ on_token_changed (GtkComboBox *combo_box,
 	model = GTK_TREE_MODEL (self->mechanism_store);
 	valid = gtk_tree_model_get_iter_first (model, &iter);
 	if (self->token) {
-		mechanisms = seahorse_token_get_mechanisms (self->token);
+		mechanisms = seahorse_pkcs11_token_get_mechanisms (self->token);
 		for (i = 0; mechanisms && i < mechanisms->len; i++) {
 			type = g_array_index (mechanisms, gulong, i);
 			label = get_available_mechanism_label (type);
@@ -295,7 +294,7 @@ on_mechanism_changed (GtkComboBox *widget,
 		gtk_tree_model_get (GTK_TREE_MODEL (self->mechanism_store), &iter,
 		                    MECHANISM_TYPE, &self->mechanism->type, -1);
 
-		slot = seahorse_token_get_slot (self->token);
+		slot = seahorse_pkcs11_token_get_slot (self->token);
 		info = gck_slot_get_mechanism_info (slot, self->mechanism->type);
 		g_return_if_fail (info != NULL);
 
@@ -351,7 +350,7 @@ seahorse_pkcs11_generate_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_pkcs11_generate_parent_class)->constructed (obj);
 
 	builder = gtk_builder_new ();
-	path = SEAHORSE_UIDIR "/seahorse-pkcs11-generate.xml";
+	path = UIDIR "/seahorse-pkcs11-generate.xml";
 	gtk_builder_add_from_file (builder, path, &error);
 	if (error != NULL) {
 		g_warning ("couldn't load ui file: %s", path);
@@ -450,7 +449,7 @@ seahorse_pkcs11_generate_response (GtkDialog *dialog,
 		parent = gtk_window_get_transient_for (GTK_WINDOW (self));
 		interaction = seahorse_interaction_new (parent);
 
-		gck_session_open_async (seahorse_token_get_slot (self->token),
+		gck_session_open_async (seahorse_pkcs11_token_get_slot (self->token),
 		                        GCK_SESSION_READ_WRITE | GCK_SESSION_LOGIN_USER,
 		                        interaction, self->cancellable,
 		                        on_generate_open_session, g_object_ref (self));

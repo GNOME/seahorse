@@ -24,7 +24,6 @@
 #include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-backend.h"
 #include "seahorse-pkcs11-generate.h"
-#include "seahorse-token.h"
 
 #include "seahorse-util.h"
 
@@ -144,7 +143,7 @@ on_initialized_registered (GObject *unused,
 			if (token == NULL)
 				continue;
 			if (is_token_usable (self, s->data, token)) {
-				place = SEAHORSE_PLACE (seahorse_token_new (s->data));
+				place = SEAHORSE_PLACE (seahorse_pkcs11_token_new (s->data));
 				self->tokens = g_list_append (self->tokens, place);
 				gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (place));
 			}
@@ -307,7 +306,7 @@ seahorse_pkcs11_backend_lookup_place (SeahorseBackend *backend,
 		return NULL;
 
 	for (l = self->tokens; l != NULL; l = g_list_next (l)) {
-		if (gck_slot_match (seahorse_token_get_slot (l->data), uri_data))
+		if (gck_slot_match (seahorse_pkcs11_token_get_slot (l->data), uri_data))
 			break;
 	}
 
@@ -350,18 +349,18 @@ static gboolean
 on_filter_writable (GObject *object,
                     gpointer user_data)
 {
-	SeahorseToken *token = SEAHORSE_TOKEN (object);
+	SeahorsePkcs11Token *token = SEAHORSE_PKCS11_TOKEN (object);
 	guint mechanism = GPOINTER_TO_UINT (user_data);
 	GckTokenInfo *info;
 
-	info = seahorse_token_get_info (token);
+	info = seahorse_pkcs11_token_get_info (token);
 	g_return_val_if_fail (info != NULL, FALSE);
 
 	if (info->flags & CKF_WRITE_PROTECTED)
 		return FALSE;
 
 	if (mechanism != G_MAXUINT) {
-		if (!seahorse_token_has_mechanism (token, (gulong)mechanism))
+		if (!seahorse_pkcs11_token_has_mechanism (token, (gulong)mechanism))
 			return FALSE;
 	}
 

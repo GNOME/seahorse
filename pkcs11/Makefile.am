@@ -13,7 +13,7 @@ AM_CPPFLAGS = -I$(top_builddir) \
 	-I$(top_builddir)/common \
 	-I$(top_srcdir)/libseahorse \
 	$(SEAHORSE_CFLAGS) \
-	-DSEAHORSE_UIDIR=\""$(uidir)"\" \
+	-DUIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
 	-DGETTEXT_PACKAGE=\""seahorse\""
@@ -24,34 +24,36 @@ noinst_LTLIBRARIES = \
 
 AM_VALAFLAGS = \
 	$(VALA_FLAGS) \
-	--use-header \
 	--header=seahorse-pkcs11.h \
+	--use-header \
 	--vapidir $(top_builddir)/common \
+	--pkg config \
 	--pkg common \
 	--pkg gtk+-3.0 \
 	--pkg gcr-3 \
+	--pkg gcr-ui-3 \
+	--pkg pkcs11 \
 	$(NULL)
 
 libvala_code_la_SOURCES = \
 	certificate-der-exporter.vala \
+	pkcs11-certificate.vala \
+	pkcs11-deleter.vala \
+	pkcs11-key-deleter.vala \
 	pkcs11-module.vala \
+	pkcs11-private-key.vala \
+	pkcs11-properties.vala \
+	pkcs11-request.vala \
+	pkcs11-token.vala \
 	$(NULL)
 
 libvala_code_la_CFLAGS = \
-	-include config.h -w \
+	-include seahorse-pkcs11.h -w \
 	$(NULL)
 
 libseahorse_pkcs11_la_SOURCES = \
-	seahorse-certificate.c seahorse-certificate.h \
 	seahorse-pkcs11-backend.c seahorse-pkcs11-backend.h \
-	seahorse-pkcs11-deleter.c seahorse-pkcs11-deleter.h \
-	seahorse-pkcs11-helpers.c seahorse-pkcs11-helpers.h \
-	seahorse-pkcs11-generate.c seahorse-pkcs11-generate.h \
-	seahorse-pkcs11-key-deleter.c seahorse-pkcs11-key-deleter.h \
-	seahorse-pkcs11-properties.c seahorse-pkcs11-properties.h \
-	seahorse-pkcs11-request.c seahorse-pkcs11-request.h \
-	seahorse-private-key.c seahorse-private-key.h \
-	seahorse-token.c seahorse-token.h
+	seahorse-pkcs11-generate.c seahorse-pkcs11-generate.h
 
 libseahorse_pkcs11_la_LIBADD = \
 	$(top_builddir)/common/libcommon.la \
