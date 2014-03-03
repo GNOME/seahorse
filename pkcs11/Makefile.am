@@ -26,11 +26,13 @@ libseahorse_pkcs11_la_SOURCES = \
 libseahorse_pkcs11_la_CFLAGS = \
 	-include config.h -w
 
+if WITH_VALAC
 $(pkcs11_HEADER): $(pkcs11_VALA)
 	$(V_VALAC) $(VALAC) $(VALA_FLAGS) -C --use-header --header=$(pkcs11_HEADER) \
 		--vapidir=$(builddir)/common --vapidir=$(srcdir)/common \
 		--pkg common --pkg config --pkg gtk+-3.0  --pkg gcr-3 --pkg gcr-ui-3 --pkg pkcs11 \
 		--directory=pkcs11 $^
+endif
 
 $(pkcs11_C): $(pkcs11_HEADER)
 

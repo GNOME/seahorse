@@ -30,10 +30,12 @@ libcommon_la_SOURCES = \
 libcommon_la_CFLAGS = \
 	-include config.h -w
 
+if WITH_VALAC
 $(common_HEADER): $(common_VALA)
 	$(V_VALAC) $(VALAC) $(VALA_FLAGS) -C --use-header --header=$(common_HEADER) \
 		--vapidir=$(srcdir)/common --pkg gtk+-3.0 --pkg gcr-3 --pkg config \
 		--vapi=common.vapi --directory=common $^
+endif
 
 $(common_C): $(common_HEADER)
 

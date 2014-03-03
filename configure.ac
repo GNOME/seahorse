@@ -28,7 +28,6 @@ AC_CONFIG_MACRO_DIR([build/m4])
 AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_CC_C_O
-AM_PROG_VALAC([0.18.0])
 AC_PROG_INTLTOOL([0.35.0])
 AM_PROG_LIBTOOL
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
@@ -67,6 +66,20 @@ else
 	PLUGIN_LIBTOOL_FLAGS="-module -avoid-version"
 fi
 AC_SUBST(PLUGIN_LIBTOOL_FLAGS)
+
+AC_MSG_CHECKING(whether to build with valac)
+AC_ARG_ENABLE(valac,
+              AC_HELP_STRING([--disable-valac],
+                             [Build without invoking valac]))
+if test "$enable_valac" = "no"; then
+	VALAC="/bin/false/without-valac"
+	AC_SUBST(VALAC)
+else
+	enable_valac="yes"
+	AM_PROG_VALAC([0.22.0])
+fi
+AM_CONDITIONAL(WITH_VALAC, test "$enable_valac" = "yes")
+AC_MSG_RESULT($enable_valac)
 
 GNOME_CODE_COVERAGE
 CFLAGS="$CFLAGS $CODE_COVERAGE_CFLAGS"
@@ -573,5 +586,6 @@ Keyserver Support:          $with_keyserver
   Key Sharing:              $enable_sharing
 Debug:                      $debug_status
 Strict:                     $strict_status
+Vala build:                 $enable_valac
 Coverage:                   $enable_coverage
 "
