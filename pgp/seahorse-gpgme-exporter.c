@@ -27,11 +27,12 @@
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-keyring.h"
 #include "seahorse-gpg-op.h"
-#include "seahorse-progress.h"
 
 #include "seahorse-common.h"
-#include "seahorse-object.h"
-#include "seahorse-util.h"
+
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-object.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
 

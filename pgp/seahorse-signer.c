@@ -20,19 +20,20 @@
 
 #include <config.h>
 
-#include <stdlib.h>
+#include "seahorse-pgp-dialogs.h"
+
+#include "seahorse-combo-keys.h"
+#include "seahorse-pgp-key.h"
+#include "seahorse-pgp-keysets.h"
+
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-widget.h"
+#include "libseahorse/seahorse-validity.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
 
-#include "seahorse-pgp-dialogs.h"
-#include "seahorse-progress.h"
-#include "seahorse-widget.h"
-#include "seahorse-validity.h"
-#include "seahorse-combo-keys.h"
-#include "seahorse-util.h"
-
-#include "pgp/seahorse-pgp-key.h"
-#include "pgp/seahorse-pgp-keysets.h"
+#include <stdlib.h>
 
 SeahorsePgpKey*
 seahorse_signer_get (GtkWindow *parent)

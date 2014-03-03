@@ -30,16 +30,16 @@
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-subkey.h"
 #include "seahorse-pgp-uid.h"
-#include "seahorse-servers.h"
 
-#include "seahorse-object-list.h"
-#include "seahorse-progress.h"
-#include "seahorse-util.h"
+#include "libseahorse/seahorse-object-list.h"
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-servers.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <libsoup/soup.h>
 
 #define DEBUG_FLAG SEAHORSE_DEBUG_HKP
-#include "seahorse-debug.h"
+#include "libseahorse/seahorse-debug.h"
 
 /**
  * SECTION: seahorse-hkp-source

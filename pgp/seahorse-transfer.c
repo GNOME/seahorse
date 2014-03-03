@@ -20,17 +20,19 @@
 
 #include "config.h"
 
+#include "seahorse-transfer.h"
+
 #include "seahorse-server-source.h"
 #include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-keyring.h"
 
 #include "seahorse-common.h"
+
 #define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
-#include "seahorse-debug.h"
-#include "seahorse-object-list.h"
-#include "seahorse-progress.h"
-#include "seahorse-transfer.h"
-#include "seahorse-util.h"
+#include "libseahorse/seahorse-debug.h"
+#include "libseahorse/seahorse-object-list.h"
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
 

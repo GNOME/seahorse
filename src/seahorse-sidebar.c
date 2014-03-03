@@ -22,8 +22,9 @@
 #include "seahorse-sidebar.h"
 
 #include "seahorse-common.h"
-#include "seahorse-interaction.h"
-#include "seahorse-util.h"
+
+#include "libseahorse/seahorse-interaction.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
 

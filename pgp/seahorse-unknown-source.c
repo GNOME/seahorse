@@ -20,11 +20,12 @@
 
 #include "config.h"
 
-#include "seahorse-pgp-key.h"
 #include "seahorse-unknown-source.h"
 
-#include "seahorse-common.h"
+#include "seahorse-pgp-key.h"
 #include "seahorse-unknown.h"
+
+#include "seahorse-common.h"
 
 #include <gcr/gcr-base.h>
 

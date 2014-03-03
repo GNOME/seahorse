@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "seahorse-application.h"
+
 #include "seahorse-common.h"
 
 #include "pgp/seahorse-pgp.h"

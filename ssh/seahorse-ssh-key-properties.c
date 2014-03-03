@@ -24,12 +24,13 @@
 #include "seahorse-ssh-key.h"
 #include "seahorse-ssh-operation.h"
 
-#include "seahorse-bind.h"
 #include "seahorse-common.h"
-#include "seahorse-object.h"
-#include "seahorse-object-widget.h"
-#include "seahorse-util.h"
-#include "seahorse-validity.h"
+
+#include "libseahorse/seahorse-bind.h"
+#include "libseahorse/seahorse-object.h"
+#include "libseahorse/seahorse-object-widget.h"
+#include "libseahorse/seahorse-util.h"
+#include "libseahorse/seahorse-validity.h"
 
 #include <glib/gi18n.h>
 

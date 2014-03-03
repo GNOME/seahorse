@@ -18,18 +18,17 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <config.h>
+#include "config.h"
+
+#include "seahorse-keyserver-search.h"
 
 #include "seahorse-discovery.h"
-#include "seahorse-keyserver-search.h"
 #include "seahorse-keyserver-results.h"
 #include "seahorse-pgp-backend.h"
 
-#include "seahorse-servers.h"
-#include "seahorse-util.h"
-#include "seahorse-widget.h"
-
-#include "seahorse-keyserver-results.h"
+#include "libseahorse/seahorse-servers.h"
+#include "libseahorse/seahorse-util.h"
+#include "libseahorse/seahorse-widget.h"
 
 /**
  * SECTION:seahorse-keyserver-search

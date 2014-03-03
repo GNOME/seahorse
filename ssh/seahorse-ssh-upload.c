@@ -25,9 +25,9 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-common.h"
-#include "seahorse-widget.h"
-#include "seahorse-util.h"
-#include "seahorse-progress.h"
+#include "libseahorse/seahorse-widget.h"
+#include "libseahorse/seahorse-util.h"
+#include "libseahorse/seahorse-progress.h"
 
 #include "ssh/seahorse-ssh-dialogs.h"
 #include "ssh/seahorse-ssh-source.h"

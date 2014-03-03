@@ -21,13 +21,14 @@
 #include "config.h"
 
 #include "seahorse-combo-keys.h"
-#include "seahorse-common.h"
-#include "seahorse-object-widget.h"
-#include "seahorse-util.h"
+#include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-key-op.h"
+#include "seahorse-pgp-keysets.h"
 
-#include "pgp/seahorse-gpgme-dialogs.h"
-#include "pgp/seahorse-gpgme-key-op.h"
-#include "pgp/seahorse-pgp-keysets.h"
+#include "seahorse-common.h"
+
+#include "libseahorse/seahorse-object-widget.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
 

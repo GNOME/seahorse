@@ -20,15 +20,16 @@
 
 #include "config.h"
 
-#include "seahorse-application.h"
-#include "seahorse-collection.h"
-#include "seahorse-object.h"
-#include "seahorse-predicate.h"
+#include "seahorse-pgp-keysets.h"
 
 #include "seahorse-gpgme-key.h"
 #include "seahorse-pgp-backend.h"
 #include "seahorse-pgp-key.h"
-#include "seahorse-pgp-keysets.h"
+
+#include "libseahorse/seahorse-application.h"
+#include "libseahorse/seahorse-collection.h"
+#include "libseahorse/seahorse-object.h"
+#include "libseahorse/seahorse-predicate.h"
 
 /* -----------------------------------------------------------------------------
  * COMMON KEYSETS 

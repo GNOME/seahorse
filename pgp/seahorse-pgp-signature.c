@@ -25,7 +25,7 @@
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-signature.h"
 
-#include "seahorse-object.h"
+#include "libseahorse/seahorse-object.h"
 
 #include <string.h>
 

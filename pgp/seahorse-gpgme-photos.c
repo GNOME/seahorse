@@ -19,19 +19,20 @@
 
 #include "config.h"
 
-#include <sys/stat.h>
-#include <errno.h>
-#include <unistd.h>
+#include "seahorse-gpgme-dialogs.h"
 
-#include <glib/gi18n.h>
+#include "seahorse-gpgme-key-op.h"
+
+#include "libseahorse/seahorse-widget.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-#include "seahorse-widget.h"
-#include "seahorse-util.h"
+#include <glib/gi18n.h>
 
-#include "seahorse-gpgme-dialogs.h"
-#include "seahorse-gpgme-key-op.h"
+#include <sys/stat.h>
+#include <errno.h>
+#include <unistd.h>
 
 #define DEFAULT_WIDTH    120
 #define DEFAULT_HEIGHT   150

@@ -22,7 +22,8 @@
 
 #include "seahorse-ssh-key-data.h"
 #include "seahorse-ssh-source.h"
-#include "seahorse-util.h"
+
+#include "libseahorse/seahorse-util.h"
 
 #define SSH_PRIVATE_BEGIN "-----BEGIN "
 #define SSH_PRIVATE_END   "-----END "

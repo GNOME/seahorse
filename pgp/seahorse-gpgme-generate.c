@@ -20,26 +20,28 @@
 
 #include "config.h"
 
-#include <time.h>
-#include <string.h>
- 
-#include <glib/gi18n.h>
- 
-#include "egg-datetime.h"
-
-#include "seahorse-common.h"
-#include "seahorse-passphrase.h"
-#include "seahorse-progress.h"
-#include "seahorse-util.h"
-#include "seahorse-widget.h"
+#include "seahorse-gpgme-dialogs.h"
 
 #include "seahorse-pgp.h"
 #include "seahorse-pgp-backend.h"
 #include "seahorse-gpgme.h"
-#include "seahorse-gpgme-dialogs.h"
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-gpgme-keyring.h"
+
+#include "seahorse-common.h"
+
+#include "libegg/egg-datetime.h"
+
+#include "libseahorse/seahorse-passphrase.h"
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-util.h"
+#include "libseahorse/seahorse-widget.h"
+
+#include <glib/gi18n.h>
+
+#include <string.h>
+#include <time.h>
 
 /**
  * SECTION:seahorse-gpgme-generate

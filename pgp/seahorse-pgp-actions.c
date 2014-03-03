@@ -34,9 +34,10 @@
 #include "seahorse-keyserver-sync.h"
 
 #include "seahorse-common.h"
-#include "seahorse-object.h"
-#include "seahorse-object-list.h"
-#include "seahorse-util.h"
+
+#include "libseahorse/seahorse-object.h"
+#include "libseahorse/seahorse-object-list.h"
+#include "libseahorse/seahorse-util.h"
 
 GType   seahorse_pgp_backend_actions_get_type         (void) G_GNUC_CONST;
 #define SEAHORSE_TYPE_PGP_BACKEND_ACTIONS             (seahorse_pgp_backend_actions_get_type ())

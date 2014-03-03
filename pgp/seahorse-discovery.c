@@ -31,10 +31,10 @@
 #include <avahi-glib/glib-malloc.h>
 #endif /* WITH_SHARING */
 
-#include "seahorse-util.h"
+#include "libseahorse/seahorse-util.h"
 
 #define DEBUG_FLAG SEAHORSE_DEBUG_DNSSD
-#include "seahorse-debug.h"
+#include "libseahorse/seahorse-debug.h"
 
 #define HKP_SERVICE_TYPE "_pgpkey-hkp._tcp."
 

@@ -1,63 +1,53 @@
-NULL =
 
-uidir = $(datadir)/seahorse/ui/
+noinst_LTLIBRARIES += libcommon.la
 
-AM_CPPFLAGS = -I$(top_builddir) \
-	-I$(top_srcdir) \
-	-DPKGDATADIR=\""$(pkgdatadir)/"\" \
-	-DUIDIR=\""$(uidir)"\" \
-	$(SEAHORSE_CFLAGS)
+common_VALA = \
+	common/actions.vala \
+	common/backend.vala \
+	common/catalog.vala \
+	common/deletable.vala \
+	common/delete-dialog.vala \
+	common/deleter.vala \
+	common/exportable.vala \
+	common/exporter.vala \
+	common/icons.vala \
+	common/lockable.vala \
+	common/place.vala \
+	common/registry.vala \
+	common/types.vala \
+	common/util.vala \
+	common/viewable.vala \
+	$(NULL)
 
-noinst_LTLIBRARIES = libcommon.la
+common_C = $(common_VALA:.vala=.c)
+
+common_HEADER = common/seahorse-common.h
 
 libcommon_la_SOURCES = \
-	actions.vala \
-	backend.vala \
-	catalog.vala \
-	deletable.vala \
-	delete-dialog.vala \
-	deleter.vala \
-	exportable.vala \
-	exporter.vala \
-	icons.vala \
-	lockable.vala \
-	place.vala \
-	registry.vala \
-	types.vala \
-	util.vala \
-	viewable.vala \
-	$(NULL)
+	$(common_C) \
+	common/seahorse-common.h
 
-AM_VALAFLAGS = \
-	$(VALA_FLAGS) \
-	--use-header \
-	--header=$(abs_builddir)/seahorse-internal.h \
-	--vapidir=$(abs_srcdir) \
-	--pkg gtk+-3.0 \
-	--pkg gcr-3 \
-	--pkg config \
-	--vapi=common.vapi \
-	$(NULL)
+libcommon_la_CFLAGS = \
+	-include config.h -w
 
-all-local: seahorse-common.h
+$(common_HEADER): $(common_VALA)
+	$(V_VALAC) $(VALAC) $(VALA_FLAGS) -C --use-header --header=$(common_HEADER) \
+		--vapidir=$(srcdir)/common --pkg gtk+-3.0 --pkg gcr-3 --pkg config \
+		--vapi=common.vapi --directory=common $^
 
-seahorse-internal.h: backend.c
+$(common_C): $(common_HEADER)
 
-# Because vala produces broken headers
-seahorse-common.h: seahorse-internal.h
-	sed '/_constructv/d' $< > $@
+common/common.vapi: $(common_HEADER)
 
-CFLAGS += \
-	-include config.h -w \
-	$(NULL)
+common_BUILT = \
+	$(common_C) \
+	$(common_HEADER) \
+	common/common.vapi
 
-EXTRA_DIST = \
-	seahorse-common.h \
-	seahorse-internal.h \
-	common.vapi \
-	config.vapi \
-	$(NULL)
+BUILT_SOURCES += $(common_BUILT)
 
-DISTCLEANFILES = \
-	common.vapi \
+EXTRA_DIST += \
+	$(common_BUILT) \
+	$(common_VALA) \
+	common/config.vapi \
 	$(NULL)

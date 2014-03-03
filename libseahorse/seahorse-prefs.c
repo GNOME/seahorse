@@ -18,15 +18,16 @@
  */
 #include "config.h"
 
-#include <glib/gi18n.h>
-
 #include "seahorse-application.h"
-#include "seahorse-common.h"
 #include "seahorse-keyserver-control.h"
 #include "seahorse-prefs.h"
 #include "seahorse-servers.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
+
+#include "seahorse-common.h"
+
+#include <glib/gi18n.h>
 
 G_MODULE_EXPORT
 void           on_prefs_keyserver_add_clicked           (GtkButton *button,

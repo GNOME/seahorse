@@ -27,8 +27,9 @@
 #include "seahorse-ssh-source.h"
 
 #include "seahorse-common.h"
-#include "seahorse-object.h"
-#include "seahorse-util.h"
+
+#include "libseahorse/seahorse-object.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
 

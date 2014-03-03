@@ -26,7 +26,8 @@
 #include "seahorse-ssh-source.h"
 
 #include "seahorse-common.h"
-#include "seahorse-util.h"
+
+#include "libseahorse/seahorse-util.h"
 
 #include <gcr/gcr.h>
 
@@ -39,7 +40,7 @@
 #include <errno.h>
 
 #define DEBUG_FLAG SEAHORSE_DEBUG_LOAD
-#include "seahorse-debug.h"
+#include "libseahorse/seahorse-debug.h"
 
 enum {
 	PROP_0,

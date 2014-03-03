@@ -18,20 +18,21 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <config.h>
+#include "config.h"
 
-#include <glib/gi18n.h>
-
-#include "seahorse-object.h"
-#include "seahorse-progress.h"
-#include "seahorse-servers.h"
-#include "seahorse-util.h"
-#include "seahorse-widget.h"
-
-#include "seahorse-prefs.h"
 #include "seahorse-keyserver-sync.h"
+
 #include "seahorse-pgp-backend.h"
 #include "seahorse-transfer.h"
+
+#include "libseahorse/seahorse-object.h"
+#include "libseahorse/seahorse-prefs.h"
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-servers.h"
+#include "libseahorse/seahorse-util.h"
+#include "libseahorse/seahorse-widget.h"
+
+#include <glib/gi18n.h>
 
 void            on_sync_ok_clicked                (GtkButton *button,
                                                    SeahorseWidget *swidget);

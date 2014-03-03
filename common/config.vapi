@@ -15,7 +15,6 @@ namespace Config
  * listing stuff here. Otherwise things will get unmanageable.
  */
 
-[CCode (cheader_filename = "libseahorse/seahorse-util.h")]
 namespace Seahorse {
 
 [CCode (cheader_filename = "libseahorse/seahorse-prefs.h")]
@@ -29,7 +28,10 @@ namespace Application {
 	public unowned Gtk.Application @get();
 }
 
+[CCode (cheader_filename = "libseahorse/seahorse-util.h")]
 public static GLib.HashFunc<ulong?> ulong_hash;
+
+[CCode (cheader_filename = "libseahorse/seahorse-util.h")]
 public static GLib.EqualFunc<ulong?> ulong_equal;
 
 [CCode (cheader_filename = "libseahorse/seahorse-interaction.h")]

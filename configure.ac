@@ -476,7 +476,7 @@ if test "$GCC" = "yes"; then
 	-Wall \
 	-Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes \
 	-Wnested-externs -Wpointer-arith \
-	-Wcast-align -Wsign-compare \
+	-Wcast-align -Wsign-compare -Wno-deprecated-declarations \
 	$CFLAGS"
 
 	for option in -Wno-strict-aliasing -Wno-sign-compare; do
@@ -554,19 +554,11 @@ AC_SUBST(VALA_FLAGS)
 
 AC_OUTPUT([
 Makefile
-build/Makefile
-common/Makefile
-gkr/Makefile
-libegg/Makefile
-libseahorse/Makefile
-pgp/Makefile
 po/Makefile.in
 help/Makefile
 data/Makefile
 data/icons/Makefile
-pkcs11/Makefile
-src/Makefile
-ssh/Makefile
+src/seahorse.desktop.in
 ])
 
 echo "

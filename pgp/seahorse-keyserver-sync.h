@@ -20,6 +20,8 @@
 #ifndef __SEAHORSE_KEYSERVER_SYNC_H__
 #define __SEAHORSE_KEYSERVER_SYNC_H__
 
+#include <gtk/gtk.h>
+
 void        seahorse_keyserver_sync             (GList *keys);
 
 

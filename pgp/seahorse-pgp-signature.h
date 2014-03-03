@@ -22,7 +22,7 @@
 
 #include <glib-object.h>
 
-#include "seahorse-validity.h"
+#include "libseahorse/seahorse-validity.h"
 
 #define SEAHORSE_TYPE_PGP_SIGNATURE            (seahorse_pgp_signature_get_type ())
 

@@ -29,7 +29,8 @@
 #include "seahorse-ssh-source.h"
 
 #include "seahorse-common.h"
-#include "seahorse-validity.h"
+
+#include "libseahorse/seahorse-validity.h"
 
 #include <gcr/gcr.h>
 

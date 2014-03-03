@@ -21,16 +21,16 @@
 
 #include "config.h"
 
-#include "seahorse-application.h"
+#include "libseahorse/seahorse-application.h"
+#include "libseahorse/seahorse-collection.h"
+#include "libseahorse/seahorse-key-manager-store.h"
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-util.h"
+
 #include "seahorse-generate-select.h"
 #include "seahorse-import-dialog.h"
 #include "seahorse-key-manager.h"
-#include "seahorse-key-manager-store.h"
 #include "seahorse-sidebar.h"
-
-#include "seahorse-collection.h"
-#include "seahorse-progress.h"
-#include "seahorse-util.h"
 
 #include <glib/gi18n.h>
 

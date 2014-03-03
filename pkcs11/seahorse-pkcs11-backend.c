@@ -19,13 +19,16 @@
  */
 
 #include "config.h"
-#include "seahorse-common.h"
 
-#include "seahorse-pkcs11.h"
 #include "seahorse-pkcs11-backend.h"
+
 #include "seahorse-pkcs11-generate.h"
 
-#include "seahorse-util.h"
+#include "pkcs11/seahorse-pkcs11.h"
+
+#include "seahorse-common.h"
+
+#include "libseahorse/seahorse-util.h"
 
 #include <gcr/gcr-base.h>
 

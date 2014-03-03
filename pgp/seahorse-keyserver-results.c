@@ -21,14 +21,15 @@
 
 #include "config.h"
 
+#include "seahorse-keyserver-results.h"
+
 #include "seahorse-pgp-backend.h"
 #include "seahorse-gpgme-keyring.h"
 #include "seahorse-keyserver-search.h"
-#include "seahorse-keyserver-results.h"
 
-#include "seahorse-key-manager-store.h"
-#include "seahorse-progress.h"
-#include "seahorse-util.h"
+#include "libseahorse/seahorse-key-manager-store.h"
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
 

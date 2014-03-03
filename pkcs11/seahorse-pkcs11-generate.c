@@ -20,15 +20,16 @@
  */
 
 #include "config.h"
-#include "seahorse-common.h"
 
-#include "seahorse-pkcs11-backend.h"
 #include "seahorse-pkcs11-generate.h"
 
+#include "seahorse-pkcs11-backend.h"
+
 #include "seahorse-common.h"
-#include "seahorse-progress.h"
-#include "seahorse-interaction.h"
-#include "seahorse-util.h"
+
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-interaction.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
 

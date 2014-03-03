@@ -22,7 +22,7 @@
  
 #include "config.h"
 
-#include "seahorse-passphrase.h"
+#include "libseahorse/seahorse-passphrase.h"
 
 #include <stdio.h>
 #include <stdlib.h>

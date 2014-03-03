@@ -32,9 +32,10 @@
 #include "seahorse-pgp-key.h"
 
 #include "seahorse-common.h"
-#include "seahorse-predicate.h"
-#include "seahorse-object-list.h"
-#include "seahorse-util.h"
+
+#include "libseahorse/seahorse-predicate.h"
+#include "libseahorse/seahorse-object-list.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
 

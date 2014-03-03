@@ -27,7 +27,7 @@
 
 #include <gpgme.h>
 
-#include "seahorse-validity.h"
+#include "libseahorse/seahorse-validity.h"
 
 typedef struct _SeahorseKeyTypeTable *SeahorseKeyTypeTable;
 

@@ -19,15 +19,16 @@
 
 #include "config.h" 
 
-#include <glib/gi18n.h>
-
-#include "egg-datetime.h"
- 
-#include "seahorse-object-widget.h"
-#include "seahorse-util.h"
+#include "seahorse-gpgme-key-op.h"
 
 #include "seahorse-gpgme-dialogs.h"
-#include "seahorse-gpgme-key-op.h"
+
+#include "libseahorse/seahorse-object-widget.h"
+#include "libseahorse/seahorse-util.h"
+
+#include "libegg/egg-datetime.h"
+
+#include <glib/gi18n.h>
 
 #define LENGTH "length"
 

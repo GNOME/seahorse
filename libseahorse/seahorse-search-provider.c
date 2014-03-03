@@ -17,22 +17,25 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <config.h>
+#include "config.h"
 
-#include <string.h>
+#include "seahorse-search-provider.h"
+
+#include "seahorse-collection.h"
+#include "seahorse-predicate.h"
+#include "seahorse-widget.h"
+#include "seahorse-shell-search-provider-generated.h"
+
+#include "seahorse-common.h"
+
+#include "src/seahorse-key-manager.h"
 
 #include <gcr/gcr.h>
+
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
 
-#include "seahorse-predicate.h"
-#include "seahorse-common.h"
-#include "seahorse-widget.h"
-#include "seahorse-collection.h"
-#include "src/seahorse-key-manager.h"
-
-#include "seahorse-shell-search-provider-generated.h"
-#include "seahorse-search-provider.h"
+#include <string.h>
 
 struct _SeahorseSearchProvider {
 	SeahorseShellSearchProvider2Skeleton parent;

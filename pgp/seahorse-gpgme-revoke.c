@@ -19,16 +19,16 @@
 
 #include "config.h"
 
-#include <string.h>
- 
-#include <glib/gi18n.h>
- 
-#include "seahorse-object-widget.h"
-#include "seahorse-util.h"
-
 #include "seahorse-gpgme-dialogs.h"
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-pgp-dialogs.h"
+
+#include "libseahorse/seahorse-object-widget.h"
+#include "libseahorse/seahorse-util.h"
+
+#include <glib/gi18n.h>
+
+#include <string.h>
 
 enum {
   COLUMN_TEXT,

@@ -18,14 +18,15 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <config.h>
+#include "config.h"
 
-#include <string.h>
+#include "seahorse-widget.h"
+
+#include "seahorse-common.h"
 
 #include <glib/gi18n.h>
 
-#include "seahorse-common.h"
-#include "seahorse-widget.h"
+#include <string.h>
 
 /**
  * SECTION:seahorse-widget

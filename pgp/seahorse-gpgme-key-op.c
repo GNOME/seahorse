@@ -22,25 +22,26 @@
 
 #include "config.h"
 
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include "seahorse-gpgme-key-op.h"
+
+#include "seahorse-gpgme.h"
+#include "seahorse-gpgme-data.h"
+#include "seahorse-gpg-op.h"
+
+#include "libseahorse/seahorse-object-list.h"
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-util.h"
+
+#define DEBUG_FLAG SEAHORSE_DEBUG_KEYS
+#include "libseahorse/seahorse-debug.h"
 
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
-#include "seahorse-object-list.h"
-#include "seahorse-progress.h"
-#include "seahorse-util.h"
-
-#include "pgp/seahorse-gpgme.h"
-#include "pgp/seahorse-gpgme-data.h"
-#include "pgp/seahorse-gpg-op.h"
-#include "pgp/seahorse-gpgme-key-op.h"
-
-#define DEBUG_FLAG SEAHORSE_DEBUG_KEYS
-#include "seahorse-debug.h"
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #define PROMPT "keyedit.prompt"
 #define QUIT "quit"

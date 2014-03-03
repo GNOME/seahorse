@@ -21,7 +21,7 @@
 #ifndef __SEAHORSE_UNKNOWN_SOURCE_H__
 #define __SEAHORSE_UNKNOWN_SOURCE_H__
 
-#include "seahorse-object.h"
+#include "libseahorse/seahorse-object.h"
 
 #define SEAHORSE_TYPE_UNKNOWN_SOURCE            (seahorse_unknown_source_get_type ())
 #define SEAHORSE_UNKNOWN_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_UNKNOWN_SOURCE, SeahorseUnknownSource))

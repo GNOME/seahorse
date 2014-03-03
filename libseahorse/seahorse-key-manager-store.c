@@ -21,12 +21,12 @@
 
 #include "config.h"
 
-#include "seahorse-common.h"
-#include "seahorse-util.h"
-
 #include "seahorse-key-manager-store.h"
 #include "seahorse-prefs.h"
 #include "seahorse-validity.h"
+#include "seahorse-util.h"
+
+#include "seahorse-common.h"
 
 #include <string.h>
 #include <unistd.h>
@@ -37,7 +37,7 @@
 #define DEBUG_FLAG SEAHORSE_DEBUG_DRAG
 #include "seahorse-debug.h"
 
-#include "eggtreemultidnd.h"
+#include "libegg/eggtreemultidnd.h"
 
 #define KEY_MANAGER_SORT_KEY "/apps/seahorse/listing/sort_by"
 

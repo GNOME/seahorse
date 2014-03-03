@@ -21,9 +21,10 @@
 
 #include "config.h"
 
-#include "seahorse-common.h"
 #include "seahorse-object.h"
 #include "seahorse-predicate.h"
+
+#include "seahorse-common.h"
 
 #include "string.h"
 

@@ -22,8 +22,8 @@
 
 #include <glib-object.h>
 
-#include "seahorse-object.h"
-#include "seahorse-validity.h"
+#include "libseahorse/seahorse-object.h"
+#include "libseahorse/seahorse-validity.h"
 
 enum {
     SKEY_PGPSIG_TRUSTED = 0x0001,

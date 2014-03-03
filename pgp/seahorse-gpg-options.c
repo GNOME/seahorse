@@ -19,6 +19,12 @@
 
 #include "config.h"
 
+#include "seahorse-gpg-options.h"
+
+#include "seahorse-gpgme.h"
+
+#include "libseahorse/seahorse-util.h"
+
 #include <sys/param.h>
 #include <sys/wait.h>
 #include <sys/file.h>
@@ -30,11 +36,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
-
-#include "seahorse-util.h"
-
-#include "pgp/seahorse-gpgme.h"
-#include "pgp/seahorse-gpg-options.h"
 
 #define  GPG_CONF_HEADER    "# FILE CREATED BY SEAHORSE\n\n"
 #define  GPG_VERSION_PREFIX1   "1."

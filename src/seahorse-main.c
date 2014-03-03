@@ -20,12 +20,14 @@
 
 #include "config.h"
 
-#include "seahorse-application.h"
-#include "seahorse-common.h"
-#include "seahorse-servers.h"
-#include "seahorse-util.h"
-
 #include "seahorse-key-manager.h"
+
+#include "seahorse-common.h"
+
+#include "libseahorse/seahorse-application.h"
+#include "libseahorse/seahorse-servers.h"
+#include "libseahorse/seahorse-util.h"
+
 
 #include <glib/gi18n.h>
 

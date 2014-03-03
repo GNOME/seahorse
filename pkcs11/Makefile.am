@@ -1,71 +1,50 @@
-NULL =
 
-uidir = $(datadir)/seahorse/ui/
-localedir = $(datadir)/locale
-seahorselibexecbindir = $(libdir)/seahorse/
-
-# Generate seahorse-pkcs11.h before building libseahorse_pkcs11_la_SOURCES
-BUILT_SOURCES = libvala_code_la_vala.stamp
-
-AM_CPPFLAGS = -I$(top_builddir) \
-	-I$(top_srcdir) \
-	-I$(top_srcdir)/common \
-	-I$(top_builddir)/common \
-	-I$(top_srcdir)/libseahorse \
-	$(SEAHORSE_CFLAGS) \
-	-DUIDIR=\""$(uidir)"\" \
-	-DLOCALEDIR=\"$(localedir)\" \
-	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
-	-DGETTEXT_PACKAGE=\""seahorse\""
-
-noinst_LTLIBRARIES = \
-	libvala-code.la \
+noinst_LTLIBRARIES += \
 	libseahorse-pkcs11.la
 
-AM_VALAFLAGS = \
-	$(VALA_FLAGS) \
-	--header=seahorse-pkcs11.h \
-	--use-header \
-	--vapidir $(top_builddir)/common \
-	--pkg config \
-	--pkg common \
-	--pkg gtk+-3.0 \
-	--pkg gcr-3 \
-	--pkg gcr-ui-3 \
-	--pkg pkcs11 \
+pkcs11_VALA = \
+	pkcs11/certificate-der-exporter.vala \
+	pkcs11/pkcs11-certificate.vala \
+	pkcs11/pkcs11-deleter.vala \
+	pkcs11/pkcs11-key-deleter.vala \
+	pkcs11/pkcs11-module.vala \
+	pkcs11/pkcs11-private-key.vala \
+	pkcs11/pkcs11-properties.vala \
+	pkcs11/pkcs11-request.vala \
+	pkcs11/pkcs11-token.vala \
 	$(NULL)
 
-libvala_code_la_SOURCES = \
-	certificate-der-exporter.vala \
-	pkcs11-certificate.vala \
-	pkcs11-deleter.vala \
-	pkcs11-key-deleter.vala \
-	pkcs11-module.vala \
-	pkcs11-private-key.vala \
-	pkcs11-properties.vala \
-	pkcs11-request.vala \
-	pkcs11-token.vala \
-	$(NULL)
+pkcs11_HEADER = pkcs11/seahorse-pkcs11.h
 
-libvala_code_la_CFLAGS = \
-	-include seahorse-pkcs11.h -w \
-	$(NULL)
+pkcs11_C = $(pkcs11_VALA:.vala=.c)
 
 libseahorse_pkcs11_la_SOURCES = \
-	seahorse-pkcs11-backend.c seahorse-pkcs11-backend.h \
-	seahorse-pkcs11-generate.c seahorse-pkcs11-generate.h
+	$(pkcs11_C) $(pkcs11_HEADER) \
+	pkcs11/seahorse-pkcs11-backend.c pkcs11/seahorse-pkcs11-backend.h \
+	pkcs11/seahorse-pkcs11-generate.c pkcs11/seahorse-pkcs11-generate.h
 
-libseahorse_pkcs11_la_LIBADD = \
-	$(top_builddir)/common/libcommon.la \
-	$(top_builddir)/libseahorse/libseahorse.la \
-	libvala-code.la \
-	$(GCR_LIBS)
+libseahorse_pkcs11_la_CFLAGS = \
+	-include config.h -w
 
-ui_DATA = \
-	seahorse-pkcs11-generate.xml \
-	seahorse-pkcs11-request.xml
+$(pkcs11_HEADER): $(pkcs11_VALA)
+	$(V_VALAC) $(VALAC) $(VALA_FLAGS) -C --use-header --header=$(pkcs11_HEADER) \
+		--vapidir=$(builddir)/common --vapidir=$(srcdir)/common \
+		--pkg common --pkg config --pkg gtk+-3.0  --pkg gcr-3 --pkg gcr-ui-3 --pkg pkcs11 \
+		--directory=pkcs11 $^
 
-EXTRA_DIST = \
-	$(ui_DATA) \
-	seahorse-pkcs11.h \
+$(pkcs11_C): $(pkcs11_HEADER)
+
+pkcs11_BUILT = \
+	$(pkcs11_C) \
+	$(pkcs11_HEADER)
+
+BUILT_SOURCES += $(pkcs11_BUILT)
+
+EXTRA_DIST += \
+	$(pkcs11_BUILT) \
+	$(pkcs11_VALA) \
 	$(NULL)
+
+ui_DATA += \
+	pkcs11/seahorse-pkcs11-generate.xml \
+	pkcs11/seahorse-pkcs11-request.xml

@@ -24,17 +24,6 @@
 
 #include "config.h"
 
-#include <string.h>
-  
-#include <glib/gi18n.h>
-
-#include "seahorse-bind.h"
-#include "seahorse-common.h"
-#include "seahorse-object.h"
-#include "seahorse-object-model.h"
-#include "seahorse-object-widget.h"
-#include "seahorse-util.h"
-
 #include "seahorse-gpgme-dialogs.h"
 #include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-key.h"
@@ -47,9 +36,20 @@
 #include "seahorse-pgp-signature.h"
 #include "seahorse-pgp-subkey.h"
 
-#define DEBUG_FLAG SEAHORSE_DEBUG_KEYS
-#include "seahorse-debug.h"
+#include "seahorse-common.h"
 
+#include "libseahorse/seahorse-bind.h"
+#include "libseahorse/seahorse-object.h"
+#include "libseahorse/seahorse-object-model.h"
+#include "libseahorse/seahorse-object-widget.h"
+#include "libseahorse/seahorse-util.h"
+
+#define DEBUG_FLAG SEAHORSE_DEBUG_KEYS
+#include "libseahorse/seahorse-debug.h"
+
+#include <glib/gi18n.h>
+
+#include <string.h>
 #include <time.h>
 
 #define NOTEBOOK "notebook"

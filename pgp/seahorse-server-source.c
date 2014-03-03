@@ -20,18 +20,20 @@
 
 #include <config.h>
 
-#include <stdlib.h>
-#include <string.h>
-
-#include <glib/gi18n.h>
+#include "seahorse-server-source.h"
 
 #include "seahorse-hkp-source.h"
 #include "seahorse-ldap-source.h"
 #include "seahorse-pgp-key.h"
-#include "seahorse-server-source.h"
 
 #include "seahorse-common.h"
-#include "seahorse-util.h"
+
+#include "libseahorse/seahorse-util.h"
+
+#include <glib/gi18n.h>
+
+#include <stdlib.h>
+#include <string.h>
 
 /**
  * SECTION:seahorse-server-source

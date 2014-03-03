@@ -33,10 +33,11 @@
 #include "seahorse-pgp-uid.h"
 
 #include "seahorse-common.h"
-#include "seahorse-object-list.h"
-#include "seahorse-progress.h"
-#include "seahorse-servers.h"
-#include "seahorse-util.h"
+
+#include "libseahorse/seahorse-object-list.h"
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-servers.h"
+#include "libseahorse/seahorse-util.h"
 
 #include <ldap.h>
 
@@ -47,7 +48,7 @@
 #ifdef WITH_LDAP
 
 #define DEBUG_FLAG SEAHORSE_DEBUG_LDAP
-#include "seahorse-debug.h"
+#include "libseahorse/seahorse-debug.h"
 
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 30

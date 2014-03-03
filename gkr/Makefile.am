@@ -1,65 +1,51 @@
 
-pkgdatadir = $(datadir)/seahorse
-uidir = $(pkgdatadir)/ui
-localedir = $(datadir)/locale
-seahorselibexecbindir = $(libdir)/seahorse/
-
-AM_CPPFLAGS = -I$(top_builddir) \
-	-I$(top_srcdir) \
-	-I$(top_srcdir)/common \
-	-I$(top_builddir)/common \
-	-I$(top_srcdir)/libseahorse \
-	$(SEAHORSE_CFLAGS) \
-	-DSEAHORSE_UIDIR=\""$(uidir)/"\" \
-	-DUIDIR=\""$(uidir)/"\" \
-	-DLOCALEDIR=\"$(localedir)\" \
-	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
-	-DGETTEXT_PACKAGE=\""seahorse\"" \
-	-DSECRET_API_SUBJECT_TO_CHANGE
-
-noinst_LTLIBRARIES = \
+noinst_LTLIBRARIES += \
 	libseahorse-gkr.la
 
-AM_VALAFLAGS = \
-	$(VALA_FLAGS) \
-	--use-header \
-	--header=seahorse-gkr.h \
-	--vapidir $(top_builddir)/common \
-	--pkg common \
-	--pkg config \
-	--pkg gtk+-3.0 \
-	--pkg gcr-3 \
-	--pkg gcr-ui-3 \
-	--pkg libsecret-1 \
+gkr_VALA = \
+	gkr/gkr-backend.vala \
+	gkr/gkr-dialogs.vala \
+	gkr/gkr-module.vala \
+	gkr/gkr-item.vala \
+	gkr/gkr-item-add.vala \
+	gkr/gkr-item-properties.vala \
+	gkr/gkr-keyring.vala \
+	gkr/gkr-keyring-add.vala \
+	gkr/gkr-keyring-properties.vala \
 	$(NULL)
 
-libseahorse_gkr_la_CFLAGS = \
-	-include config.h -w
+gkr_HEADER = gkr/seahorse-gkr.h
+
+gkr_C = $(gkr_VALA:.vala=.c)
 
 libseahorse_gkr_la_SOURCES = \
-	gkr-backend.vala \
-	gkr-dialogs.vala \
-	gkr-module.vala \
-	gkr-item.vala \
-	gkr-item-add.vala \
-	gkr-item-properties.vala \
-	gkr-keyring.vala \
-	gkr-keyring-add.vala \
-	gkr-keyring-properties.vala \
+	$(gkr_C) $(gkr_HEADER)
+
+libseahorse_gkr_la_CFLAGS = \
+	-include config.h -w \
+	-DSECRET_API_SUBJECT_TO_CHANGE
+
+$(gkr_HEADER): $(gkr_VALA)
+	$(V_VALAC) $(VALAC) $(VALA_FLAGS) -C --use-header --header=$(gkr_HEADER) \
+		--vapidir=$(builddir)/common --vapidir=$(srcdir)/common \
+		--pkg common --pkg config --pkg gtk+-3.0 --pkg gcr-3 --pkg gcr-ui-3 --pkg libsecret-1 \
+		--directory=gkr $^
+
+$(gkr_C): $(gkr_HEADER)
+
+gkr_BUILT = \
+	$(gkr_C) \
+	$(gkr_HEADER)
+
+BUILT_SOURCES += $(gkr_BUILT)
+
+EXTRA_DIST += \
+	$(gkr_BUILT) \
+	$(gkr_VALA) \
 	$(NULL)
 
-libseahorse_gkr_la_LIBADD = \
-	$(top_builddir)/common/libcommon.la \
-	$(top_builddir)/libseahorse/libseahorse.la \
-	$(NULL)
-
-ui_DATA = \
-	seahorse-add-keyring.xml \
-	seahorse-gkr-add-item.xml \
-	seahorse-gkr-item-properties.xml \
-	seahorse-gkr-keyring.xml
-
-EXTRA_DIST = \
-	$(ui_DATA) \
-	seahorse-gkr.h \
-	$(NULL)
+ui_DATA += \
+	gkr/seahorse-add-keyring.xml \
+	gkr/seahorse-gkr-add-item.xml \
+	gkr/seahorse-gkr-item-properties.xml \
+	gkr/seahorse-gkr-keyring.xml

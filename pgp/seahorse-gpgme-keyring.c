@@ -30,9 +30,10 @@
 #include "seahorse-pgp-key.h"
 
 #include "seahorse-common.h"
-#include "seahorse-progress.h"
-#include "seahorse-util.h"
-#include "seahorse-passphrase.h"
+
+#include "libseahorse/seahorse-progress.h"
+#include "libseahorse/seahorse-util.h"
+#include "libseahorse/seahorse-passphrase.h"
 
 #include <gcr/gcr.h>
 
@@ -45,7 +46,7 @@
 #include <locale.h>
 
 #define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
-#include "seahorse-debug.h"
+#include "libseahorse/seahorse-debug.h"
 
 enum {
 	PROP_0,
