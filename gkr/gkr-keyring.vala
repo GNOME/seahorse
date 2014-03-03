@@ -40,7 +40,7 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 	public GLib.Icon icon {
 		owned get { return new GLib.ThemedIcon("folder"); }
 	}
-	public Gtk.ActionGroup actions {
+	public Gtk.ActionGroup? actions {
 		owned get {
 			if (this._actions == null)
 				this._actions = create_actions();
