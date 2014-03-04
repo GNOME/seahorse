@@ -21,6 +21,10 @@ common_VALA = \
 
 common_C = $(common_VALA:.vala=.c)
 
+common_VAPI = \
+	common/common.vapi \
+	common/config.vapi
+
 common_HEADER = common/seahorse-common.h
 
 libcommon_a_SOURCES = \

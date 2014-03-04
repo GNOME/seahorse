@@ -25,10 +25,9 @@ libseahorse_gkr_a_CFLAGS = \
 	-DSECRET_API_SUBJECT_TO_CHANGE
 
 if WITH_VALAC
-$(gkr_HEADER): $(gkr_VALA)
+$(gkr_HEADER): $(gkr_VALA) $(common_VAPI)
 	$(V_VALAC) $(VALAC) $(VALA_FLAGS) -C --use-header --header=$(gkr_HEADER) \
-		--vapidir=$(builddir)/common --vapidir=$(srcdir)/common \
-		--pkg common --pkg config --pkg gtk+-3.0 --pkg gcr-3 --pkg gcr-ui-3 --pkg libsecret-1 \
+		--pkg gtk+-3.0 --pkg gcr-3 --pkg gcr-ui-3 --pkg libsecret-1 \
 		--directory=gkr $^  && touch -c $(gkr_HEADER) $(gkr_C)
 endif
 
