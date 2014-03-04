@@ -26,13 +26,17 @@ seahorse_SOURCES = \
 	src/seahorse-main.c \
 	src/seahorse-sidebar.c src/seahorse-sidebar.h
 
+# HACK: One day libcommon.a and libseahorse.a will be one and
+# the same. Until then specify libseahorse.a twice when linking
+
 seahorse_LDADD = \
 	$(PGP_LDADD) \
 	$(SSH_LDADD) \
 	$(PKCS11_LDADD) \
-	libseahorse.a \
 	libseahorse-gkr.a \
+	libseahorse.a \
 	libcommon.a \
+	libseahorse.a \
 	libeggdatetime.a \
 	libeggtreemultidnd.a \
 	$(SEAHORSE_LIBS)
