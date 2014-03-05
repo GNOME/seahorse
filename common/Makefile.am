@@ -35,10 +35,10 @@ libcommon_a_CFLAGS = \
 	-include config.h -w
 
 if WITH_VALAC
-$(common_HEADER): $(common_VALA)
+$(common_HEADER): $(common_VALA) common/config.vapi
 	$(V_VALAC) $(VALAC) $(VALA_FLAGS) -C --use-header --header=$(common_HEADER) \
-		--vapidir=$(srcdir)/common --pkg gtk+-3.0 --pkg gcr-3 --pkg config \
-		--vapi=common.vapi --directory=common $^ && touch -c $(common_HEADER) $(common_C)
+		--vapidir=$(abs_srcdir)/common --pkg gtk+-3.0 --pkg gcr-3 \
+		--vapi=common.vapi --directory=$(builddir)/common --basedir=$(dir $<) $^
 endif
 
 $(common_C): $(common_HEADER)

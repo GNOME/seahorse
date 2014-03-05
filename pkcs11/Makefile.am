@@ -30,7 +30,7 @@ if WITH_VALAC
 $(pkcs11_HEADER): $(pkcs11_VALA) $(common_VAPI)
 	$(V_VALAC) $(VALAC) $(VALA_FLAGS) -C --use-header --header=$(pkcs11_HEADER) \
 		--pkg gtk+-3.0  --pkg gcr-3 --pkg gcr-ui-3 --pkg pkcs11 \
-		--directory=pkcs11 $^ && touch -c $(pkcs11_HEADER) $(pkcs11_C)
+		--directory=$(builddir)/pkcs11 --basedir=$(dir $<) $^
 endif
 
 $(pkcs11_C): $(pkcs11_HEADER)
