@@ -16,8 +16,13 @@
       <email its:translate="no">jwcampbell@gmail.com</email>
       <years>2013</years>
     </credit>
+    <credit type="author">
+      <name>Hashem Nasarat</name>
+      <email its:translate="no">hashem@riseup.net</email>
+      <years>2014</years>
+    </credit>
 
-    <desc>Create SSH keys to login to other computers.</desc>
+    <desc>Create SSH keys to log in to other computers.</desc>
   </info>
 
   <title>Create a new SSH key</title>
@@ -39,11 +44,11 @@
       strength by expanding the Advanced key options panel.</p></item>
     </steps>
 
-  <p>At this point, you can either just create your key, or create your key
-  and set it up on a remote server.</p>
+  <p>At this point, you can just create your key, or create your key
+  and install it on a remote computer to enable password-free login.</p>
 
   <section id="ssh-just-create-key" ui:expanded="true">
-    <title>Just create your key</title>
+    <title>Create your key and do not set up remote login</title>
     <p>You can create the SSH key, and choose to set it up later.</p>
 
     <steps>
@@ -68,10 +73,60 @@
 
   </section>
 
-  <section id="ssh-create-key-and-set-up" ui:expanded="false">
+  <section id="ssh-create-key-and-set-up" ui:expanded="true">
     <title>Create your key and install it on a remote computer</title>
-    <p>Instructions to create it and set it up.</p>
-
+    <p>One of the most useful things about having an SSH key is that you can
+    install the public key on a remote computer. Doing this allows you to log
+    in to a remote computer with SSH without needing to enter your password
+    every time.</p>
+    <steps>
+      <item>
+	<p>If you are in the process of creating a new SSH key:
+	  <p>Press the <gui style="button">Create and Set Up</gui> button,
+	  and follow the instructions on entering a passphrase, above.</p>
+	</p>
+	<p>If you have a preexisting key which you want to install on
+	a remote computer: right click on the <gui>SSH key</gui> and select
+	<gui>Configure Key for Secure Shell...</gui>.</p>
+      </item>
+      <item>
+	<p>In the dialog window that opens, enter the <gui>Server address</gui>
+	that you normally use to log in to the remote computer via SSH.</p>
+      </item>
+      <item>
+	<p>Ensure that the <gui>Login name</gui> you use on the remote
+	computer is correct.</p>
+      </item>
+      <item>
+	<p>Press the <gui style="button">Set Up</gui> button to proceed.
+	The program will now attempt to connect to the specified <gui>Server
+	address</gui> with the entered <gui>Login name</gui>.</p>
+	<p>If there are any problems in accessing the remote computer, a pop-up
+	window will appear that explains the problem, and you can try again.
+	Make sure that you have a network connection and that the remote
+	computer is on and accessible.</p>
+      </item>
+      <item>
+	<p>If connection to the remote computer was successful, a dialog box
+	will appear which asks for the <gui>Password</gui> you use to log in to
+	the remote computer. Enter your password, then press
+	<gui style="button">OK</gui>.</p>
+	<p>The public part of the selected SSH key will now be installed on the
+	remote computer and configured to allow password-free SSH login.</p>
+	<p>If the this step was successful, the dialog will close.</p>
+      </item>
+    </steps>
+    <p>You should now be able to log in to the remote computer via SSH without
+    a password.</p>
+    <note style="tip">
+      <p>Password-free login will currently only available when done from your
+      current local computer. When logging in, the SSH program will read the
+      installed public part of the SSH key on the remote computer and verify
+      it with the private part of the SSH key on your local computer. If this
+      authentication fails or is unavailable (e.g. on other local computers
+      you may have), SSH will resort to using a login password to authenticate.
+      You may also repeat the above steps on a different local computer to
+      install more than one public key on the remote.</p>
+    </note>
   </section>
-
 </page>
