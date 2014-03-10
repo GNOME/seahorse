@@ -25,7 +25,7 @@
 
   <p>If you are no longer communicating with someone, you can delete the copy
   of their GnuPG key on your computer using <app>Passwords and Keys</app>. You
-  can also permanently delete a key you own, provided it has never been
+  can also permanently delete a key you own as long it has never been
   published on a key server. Deleting a GnuPG key deletes both the public key
   and the secret key.</p>
 
@@ -50,13 +50,13 @@
   <note style="important">
     <p>When you delete a GnuPG key that has been published on a key server, you
     only delete the secret key in the GnuPG keypair because a copy of the
-    public key will still be present on some key server. This means that
-    someone can <link xref="pgp-retrieve-remote">retrieve</link> the public key
-    from a key server and use it to encrypt messages to you but you will not be
-    able to decrypt those messages with the corresponding secret key. To
-    prevent the published key from being used, retrieve it and revoke it. The
-    revoked key can then be <link xref="pgp-sync">synced</link> with a key
-    server to prevent people from retrieving and using it.</p>
+    public key will still be present on some key server. This means that your
+    public key can still be <link xref="pgp-retrieve-remote">retrieved</link>
+    from a key server and used to encrypt messages to you, even though the
+    secret key has been deleted. To prevent such a key from being used,
+    retrieve and revoke it. The revoked key can then be
+    <link xref="pgp-sync">synced</link> with a key server to prevent people
+    from retrieving and using it.</p>
     <!-- or when you <link xref="misc-key-revoke">revoke</link> it.- No
     revoking feature yet for SSH keys/PGP master keys-->
   </note>
