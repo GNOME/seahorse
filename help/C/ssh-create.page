@@ -36,18 +36,18 @@
       <item><p>Select <gui>Secure Shell Key</gui> and then click
       <gui>Continue</gui>.</p></item>
       <item><p>Enter a description for the key. The key description will help
-      you to identify the key later. For example, you could enter today's date,
-      something about how the key will be used, or the server name on which you
-      intend to install the key. The description field is optional, and how you
-      describe the key is entirely up to you.</p></item>
+      you to identify the key later. For example, you could enter the date for
+      the day, something about how the key will be used, or the server name on
+      which you intend to install the key. The description field is optional,
+      and how you describe the key is entirely up to you.</p></item>
       <item><p>You can change default settings for encryption type or key
-      strength by expanding the Advanced key options panel.</p></item>
+      strength by expanding the <gui>Advanced key options</gui> panel.</p></item>
     </steps>
 
   <p>At this point, you can just create your key, or create your key
   and install it on a remote computer to enable password-free login.</p>
 
-  <section id="ssh-just-create-key" ui:expanded="true">
+  <section id="ssh-just-create-key" ui:expanded="false">
     <title>Create your key and do not set up remote login</title>
     <p>You can create the SSH key, and choose to set it up later.</p>
 
@@ -57,10 +57,7 @@
       </item>
       <item>
 	<p>Type a passphrase for your SSH key and press
-	<gui style="button">OK</gui>. When you try to use this SSH key, your
-	operating system will prompt you for this passphrase. This ensures
-	that if someone gets access to your SSH key, they can't use it without
-	the passphrase.</p>
+	<gui style="button">OK</gui>.</p>
       </item>
       <item>
 	<p>Retype the passphrase and press <gui style="button">OK</gui> to
@@ -71,23 +68,26 @@
     <p>The SSH key will now be listed in the <gui>OpenSSH keys</gui>
     keyring.</p>
 
+    <note style="tip">
+      <p> When you try to use your SSH key, your operating system will prompt
+      you for the passphrase used during creation. This ensures that if someone
+      gets access to your SSH key, they can't use it without the
+      passphrase.</p>
+    </note>
+
   </section>
 
-  <section id="ssh-create-key-and-set-up" ui:expanded="true">
+  <section id="ssh-create-key-and-set-up" ui:expanded="false">
     <title>Create your key and install it on a remote computer</title>
     <p>One of the most useful things about having an SSH key is that you can
     install the public key on a remote computer. Doing this allows you to log
     in to a remote computer with SSH without needing to enter your password
     every time.</p>
+
     <steps>
       <item>
-	<p>If you are in the process of creating a new SSH key:
-	  <p>Press the <gui style="button">Create and Set Up</gui> button,
-	  and follow the instructions on entering a passphrase, above.</p>
-	</p>
-	<p>If you have a preexisting key which you want to install on
-	a remote computer: right click on the <gui>SSH key</gui> and select
-	<gui>Configure Key for Secure Shell...</gui>.</p>
+	<p>Press the <gui style="button">Create and Set Up</gui> button, and
+	follow the instructions on entering a passphrase, above.</p>
       </item>
       <item>
 	<p>In the dialog window that opens, enter the <gui>Server address</gui>
@@ -95,13 +95,12 @@
       </item>
       <item>
 	<p>Ensure that the <gui>Login name</gui> you use on the remote
-	computer is correct.</p>
+	computer is correct, and press <gui>Set Up</gui>.</p>
       </item>
       <item>
-	<p>Press the <gui style="button">Set Up</gui> button to proceed.
-	The program will now attempt to connect to the specified <gui>Server
-	address</gui> with the entered <gui>Login name</gui>.</p>
-	<p>If there are any problems in accessing the remote computer, a pop-up
+	<p>The program will now attempt to connect to the specified
+	<gui>Server address</gui> with the entered <gui>Login Name</gui>.If
+	there are any problems in accessing the remote computer, a pop-up
 	window will appear that explains the problem, and you can try again.
 	Make sure that you have a network connection and that the remote
 	computer is on and accessible.</p>
@@ -111,13 +110,14 @@
 	will appear which asks for the <gui>Password</gui> you use to log in to
 	the remote computer. Enter your password, then press
 	<gui style="button">OK</gui>.</p>
-	<p>The public part of the selected SSH key will now be installed on the
-	remote computer and configured to allow password-free SSH login.</p>
-	<p>If the this step was successful, the dialog will close.</p>
       </item>
     </steps>
-    <p>You should now be able to log in to the remote computer via SSH without
-    a password.</p>
+
+    <p>The public part of the selected SSH key will now be installed on the
+    remote computer and configured to allow password-free SSH login. You should
+    now be able to log in to the remote computer via SSH without a
+    password.</p>
+
     <note style="tip">
       <p>Password-free login will currently only available when done from your
       current local computer. When logging in, the SSH program will read the
