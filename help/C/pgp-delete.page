@@ -17,6 +17,12 @@
       <years>2013</years>
     </credit>
 
+    <credit type="editor copyright">
+      <name>Hashem Nasarat</name>
+      <email its:translate="no">hashem@riseup.net</email>
+      <years>2014</years>
+    </credit>
+
     <desc>Delete local copies of your keys or the keys of people you
     communicate with.</desc>
   </info>
@@ -32,12 +38,32 @@
   <steps>
     <title>To delete a key:</title>
     <item>
-      <p>Select the key.</p>
+      <p>Select the key. (You may need to show all keys, with
+        <guiseq>
+          <gui style="menu">View</gui><gui style="menuitem">Show any</gui>
+        </guiseq>)
+      </p>
     </item>
     <item>
       <p>Right click, and choose <gui>Delete</gui>. Alternatively you can also
       select <guiseq><gui style="menu">Edit</gui>
       <gui style="menuitem">Delete</gui></guiseq> to delete the key.</p>
+      <note style="important">
+        <p>When you delete a GnuPG key that has been published on a key server, you
+        only delete the key in your GnuPG keyring because a copy of the
+        public key will still be present on some key server.</p>
+        <p>If you delete your GnuPG key, this means that your private key will
+        be permanently deleted, even though your public key can still be
+        <link xref="pgp-retrieve-remote">retrieved</link>
+        from a key server and used to encrypt messages to you that you won't be
+        able to read! To prevent such a key from being used, retrieve and revoke
+        the key. <!--TODO add link on how to revoke from GUI-->
+        The revoked key can then be
+        <link xref="pgp-sync">synced</link> with a key server to prevent people
+        from retrieving and using it.</p>
+        <!-- or when you <link xref="misc-key-revoke">revoke</link> it.- No
+        revoking feature yet for SSH keys/PGP master keys-->
+      </note>
     </item>
     <item>
       <p>In the new dialog, confirm the deletion by ticking the
@@ -47,18 +73,5 @@
     </item>
   </steps>
 
-  <note style="important">
-    <p>When you delete a GnuPG key that has been published on a key server, you
-    only delete the secret key in the GnuPG keypair because a copy of the
-    public key will still be present on some key server. This means that your
-    public key can still be <link xref="pgp-retrieve-remote">retrieved</link>
-    from a key server and used to encrypt messages to you, even though the
-    secret key has been deleted. To prevent such a key from being used,
-    retrieve and revoke it. The revoked key can then be
-    <link xref="pgp-sync">synced</link> with a key server to prevent people
-    from retrieving and using it.</p>
-    <!-- or when you <link xref="misc-key-revoke">revoke</link> it.- No
-    revoking feature yet for SSH keys/PGP master keys-->
-  </note>
 
 </page>
