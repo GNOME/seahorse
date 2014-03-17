@@ -46,6 +46,7 @@ HELP_FILES = \
 	subkeys-examine.page \
 	subkeys-revoke.page
 
-HELP_MEDIA = 
+HELP_MEDIA = \
+	media/seahorse.png
 
 HELP_LINGUAS =
