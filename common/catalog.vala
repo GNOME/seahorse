@@ -352,7 +352,7 @@ public abstract class Catalog : Gtk.Window {
 	[CCode (instance_pos = -1)]
 	private void on_help_show(Gtk.Action action) {
 		try {
-			var document = "help:%s/introduction".printf(Config.PACKAGE);
+			var document = "help:%s".printf(Config.PACKAGE);
 			GLib.AppInfo.launch_default_for_uri(document, null);
 		} catch (GLib.Error err) {
 			Util.show_error(this, _("Could not display help: %s"), err.message);
