@@ -37,7 +37,8 @@ DISTCHECK_CONFIGURE_FLAGS = \
     --disable-update-mime-database \
     --disable-debug \
     --disable-strict \
-    --disable-valac
+    --disable-valac \
+    --enable-pgp
 
 CHANGELOG_START = \
 	d2f8367dc600080b6cf3edbe4e2fc204f929471e
