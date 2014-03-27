@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
-"POT-Creation-Date: 2014-03-24 23:52+0000\n"
-"PO-Revision-Date: 2014-03-26 17:41+0100\n"
+"POT-Creation-Date: 2014-03-26 23:54+0000\n"
+"PO-Revision-Date: 2014-03-27 13:59+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -449,6 +449,13 @@ msgid ""
 "while GNOME application passwords created before the change will remain in "
 "the <gui>Login</gui> keyring."
 msgstr ""
+"Las contraseñas de algunas aplicaciones de GNOME se guardan automáticamente "
+"en el depósito <gui>Inicio de de sesión</gui> de <app>Contraseñas y claves</"
+"app>, ya que es el depósito de claves predeterminado. Cuando cambia el "
+"depósito predeterminado, cualquier contraseña nueva creada por las "
+"aplicaciones de GNOME se guardará en el nuevo depósito predeterminado, "
+"mientras que las contraseñas de las aplicaciones de GNOME creadas antes del "
+"cambio permanecerán en el depósito de <gui>Inicio de sesión</gui>."
 
 #. (itstool) path: info/desc
 #: C/keyring-create.page:26
@@ -462,9 +469,6 @@ msgstr "Crear un depósito de claves"
 
 #. (itstool) path: page/p
 #: C/keyring-create.page:31
-#| msgid ""
-#| "Use <link xref=\"about-keyring\">keyrings</link> to group related "
-#| "passwords. You can choose to protect your keyring with a password."
 msgid ""
 "Use <link xref=\"keyring\">keyrings</link> to group related passwords. You "
 "can choose to protect your keyring with a password."
@@ -555,6 +559,11 @@ msgid ""
 "hidden till someone <link xref=\"keyring-unlock\">unlocks</link> the keyring "
 "with the correct password."
 msgstr ""
+"Para almacenar con seguridad sus contraseñas, guárdelas en un depósito de "
+"claves protegido por contraseña. Cuando se bloquea un depósito que está "
+"protegido por una contraseña, las contraseñas que contiene permanecen "
+"ocultas hasta que alguien <link xref=\"keyring-unlock\">desbloquea</link> el "
+"depósito con la clave correcta."
 
 #. (itstool) path: note/p
 #: C/keyring-lock.page:32
@@ -609,6 +618,10 @@ msgid ""
 "a trunk. In order to look at your passwords, you must unlock the keyring "
 "first."
 msgstr ""
+"A menudo, un depósito de claves puede estar <link xref=\"keyring-lock"
+"\">bloqueado</link> para bloquear las contraseñas que contiene, similar a "
+"bloquear algo de manera segura dentro de un baúl. Para buscar sus "
+"contraseñas, primero debe desbloquear el depósito de claves."
 
 #. (itstool) path: steps/title
 #: C/keyring-unlock.page:30
@@ -672,9 +685,6 @@ msgstr "Actualizar la contraseña del depósito de claves"
 
 #. (itstool) path: page/p
 #: C/keyring-update-password.page:27
-#| msgid ""
-#| "The password to unlock your <link xref=\"about-keyring\">keyring</link> "
-#| "can be updated at any time."
 msgid ""
 "The password to unlock your <link xref=\"keyring\">keyring</link> can be "
 "updated at any time."
@@ -752,6 +762,12 @@ msgid ""
 "<app>Accounts</app> etc. The <gui>Login</gui> keyring is the default keyring "
 "in <app>Passwords and keys</app>."
 msgstr ""
+"Cuando abre <app>Contraseñas y claves</app> por primera vez, verá todas sus "
+"contraseñas juntas. En el depósito de <gui>Inicio de sesión</gui> puede "
+"encontrar almacenadas contraseñas de aplicaciones de GNOME como "
+"<app>Epiphany</app>, <app>Cuentas en línea</app> etc. El depósito de "
+"<gui>Inicio de sesión</gui> es el depósito predeterminado en "
+"<app>Contraseñas y claves</app>."
 
 #. (itstool) path: p/link
 #: C/legal.xml:4
@@ -848,6 +864,12 @@ msgid ""
 "identify the key you are looking for is to compare the fingerprints of the "
 "two keys with the fingerprint of the key you require."
 msgstr ""
+"Una clave tiene varias propiedades, como el nombre o la dirección de correo-"
+"e del propietario, el tipo de clave, su fecha de caducidad y similares. "
+"Cuando está buscando una clave pública y encuentra varias claves con las "
+"mismas propiedades, la única manera de identificar la clave que está "
+"buscando es comparar las huellas de las dos claves con la huella de la clave "
+"que necesita."
 
 #. (itstool) path: page/p
 #: C/misc-key-fingerprint.page:38
@@ -858,6 +880,11 @@ msgid ""
 "verify the key owner's identity to ensure that you are signing the correct "
 "key."
 msgstr ""
+"Es la huella de la clave lo que se verifica cuando intenta iniciar sesión en "
+"un equipo remoto usando <link xref=\"ssh\">SSH</link>. Al firmar una clave "
+"<link xref=\"pgp\">PGP</link> siempre debe comprobar la huella y verificar "
+"la identidad del propietario para asegurarse de que está firmando la clave "
+"correcta."
 
 #. (itstool) path: section/title
 #: C/misc-key-fingerprint.page:45
@@ -1161,6 +1188,11 @@ msgid ""
 "app> to create a truly random key. The key will be listed under <gui>GnuPG "
 "keys</gui>."
 msgstr ""
+"<app>Contraseñas y claves</app> tardará un tiempo en generar su clave. "
+"Mientras se crea su clave, mueva el ratón, pulse algunas teclas o navegue "
+"por la web. Esto ayudará a que <app>Contraseñas y claves</app> genere una "
+"clave verdaderamente aleatoria. La clave se mostrará en <gui>claves GnuPG</"
+"gui>."
 
 #. (itstool) path: note/p
 #: C/pgp-create.page:73
@@ -1200,6 +1232,9 @@ msgid ""
 "for both encryption and signing. The RSA and DSA-Elgamal algorithms generate "
 "equally secure keys."
 msgstr ""
+"Dependiendo de sus necesidades, cree claves que se pueden usar sólo para "
+"firmar o para firmar y cifrar. Los algoritmos RSA y DSA-Elgamal generan "
+"claves igualmente seguras."
 
 #. (itstool) path: item/title
 #: C/pgp-create.page:92
@@ -1310,6 +1345,9 @@ msgid ""
 "only delete the key in your GnuPG keyring because a copy of the public key "
 "will still be present on some key server."
 msgstr ""
+"Cuando eliminar una clave GnuPG que se ha publicado en un servidor de "
+"claves, sólo elimina la clave en su depósito GnuPG ya que la copia de la "
+"clave pública seguirá estando en algún servidor de claves"
 
 #. (itstool) path: note/p
 #: C/pgp-delete.page:55
@@ -1330,6 +1368,9 @@ msgid ""
 "\">I understand that this secret key will be permanently deleted</gui> "
 "checkbox, and press the <gui style=\"button\">Delete</gui> button to finish."
 msgstr ""
+"En el nuevo diálogo, confirme la eliminación marcando la casilla <gui style="
+"\"checkbox\">Entiendo que esta clave secreta se eliminará permanentemente</"
+"gui>, y pulse el botón <gui style=\"button\">Eliminar</gui> para terminar."
 
 #. (itstool) path: info/desc
 #: C/pgp-expiration-change.page:19
@@ -1371,6 +1412,9 @@ msgid ""
 "the picture of a calendar next to <gui>Expires</gui>, on the right side of "
 "the dialog. You can then select the new expiration date from the calendar."
 msgstr ""
+"Para cambiar la fecha de caducidad de una clave maestra, pulse el botón con "
+"la imagen de un calendario junto a <gui>Caduca</gui>, en la parte derecha "
+"del diálogo. Podrá seleccionar la nueva fecha de caducidad en el calendario."
 
 #. (itstool) path: item/p
 #: C/pgp-expiration-change.page:48
@@ -1380,6 +1424,10 @@ msgid ""
 "Press the <gui style=\"button\">Expire</gui> button on the left of the panel "
 "and select the new expiration date."
 msgstr ""
+"Para cambiar la fecha de caducidad de una <link xref=\"pgp-subkeys"
+"\">subclave</link>, expanda el panel <gui>Subclaves</gui> y seleccione la "
+"subclave en la lista. Pulse el botón <gui style=\"button\">Caduca</gui> en "
+"la parte izquierda del panel y elija la nueva fecha de caducidad."
 
 #. (itstool) path: note/p
 #: C/pgp-expiration-change.page:59
@@ -1434,7 +1482,7 @@ msgid ""
 "want to stop using the expired key, you should <link xref=\"pgp-delete"
 "\">delete</link> or <link xref=\"subkeys-revoke\">revoke</link> it."
 msgstr ""
-"La fecha de caducidad de una calve se puede <link xref=\"pgp-expiration-"
+"La fecha de caducidad de una clave se puede <link xref=\"pgp-expiration-"
 "change\">cambiar</link> en cualquier momento, incluso después de que la "
 "clave haya expirado. Sin embargo, si quiere dejar de usar la clave caducada, "
 "debería <link xref=\"pgp-delete\">eliminarla</link> o <link xref=\"subkeys-"
@@ -1603,6 +1651,8 @@ msgid ""
 "Include a photo ID with your existing keys so that people can identify them "
 "easily."
 msgstr ""
+"Incluir un ID de foto a sus claves existentes, para que la gente pueda "
+"identificarlas fácilmente."
 
 #. (itstool) path: page/title
 #: C/pgp-photoid.page:24
@@ -1689,7 +1739,7 @@ msgid ""
 "Publish your public keys on key servers, or <link xref=\"pgp-export"
 "\">export</link> and mail them to your friends."
 msgstr ""
-"Publique sus calves públicas en servidores de claves o <link xref=\"pgp-"
+"Publique sus claves públicas en servidores de claves o <link xref=\"pgp-"
 "export\">expórtelas</link> y envíelas por correo-e a sus amigos."
 
 #. (itstool) path: page/title
@@ -1950,6 +2000,8 @@ msgid ""
 "When you own more than one PGP key, select the key you want to sign with, "
 "from the list next to <gui>Signer</gui>."
 msgstr ""
+"Cuando tiene más de una clave PGP, seleccione la clave con la que quiere "
+"firmar de la lista junto a <gui>Firmante</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-sign.page:63
@@ -2102,6 +2154,8 @@ msgid ""
 "Having many user IDs helps you to use the same key to communicate with "
 "different people."
 msgstr ""
+"Tener varios ID de usuario le ayuda a usar la misma clave para comunicarse "
+"con diferentes personas."
 
 #. (itstool) path: page/title
 #: C/pgp-userid-add.page:24
@@ -2181,6 +2235,9 @@ msgid ""
 "\">synchronize</link> it after adding new user IDs to update the remote copy "
 "of the key."
 msgstr ""
+"Si su clave se ha publicado en un servidor de claves, <link xref=\"pgp-sync"
+"\">sincronícela</link> después de añadir nuevos ID de usuario para "
+"actualizar la copia remota de la clave."
 
 #. (itstool) path: info/desc
 #: C/pgp-userid-primary.page:19
@@ -2226,6 +2283,8 @@ msgid ""
 "Select the new primary user ID from the list and click <gui style=\"button"
 "\">Primary</gui>."
 msgstr ""
+"Seleccione el nuevo ID de usuario primario de la lista y pulse <gui style="
+"\"button\">Primario</gui>."
 
 #. (itstool) path: page/p
 #: C/pgp-userid-primary.page:48
@@ -2233,6 +2292,8 @@ msgid ""
 "The user ID will move to the top of the <gui>Names and Signatures</gui> list "
 "to become your primary user ID."
 msgstr ""
+"El ID de usuario se moverá a la parte superior de la lista de <gui>Nombres y "
+"firmas</gui> para convertirse en su ID de usuario primario."
 
 #. (itstool) path: note/p
 #: C/pgp-userid-primary.page:52
@@ -2268,7 +2329,7 @@ msgstr "Para quitar un ID de usuario de una clave PGP:"
 #. (itstool) path: item/p
 #: C/pgp-userid-remove.page:34
 msgid "Select the <gui>Personal PGP key</gui> list."
-msgstr ""
+msgstr "Seleccione la lista <gui>clave PGP personal</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-userid-remove.page:37
@@ -2285,6 +2346,8 @@ msgid ""
 "Select the user ID you want to remove and click <gui style=\"button"
 "\">Delete</gui>."
 msgstr ""
+"Seleccione el ID de usuario que quiere quitar y pulse <gui style=\"button"
+"\">Eliminar</gui>."
 
 #. (itstool) path: note/p
 #: C/pgp-userid-remove.page:48
@@ -2297,6 +2360,8 @@ msgstr ""
 #: C/pgp-userid.page:19
 msgid "Create keys with good user IDs and learn to add and remove user IDs."
 msgstr ""
+"Crear claves con buenos ID de usuario y aprender cómo añadir y quitar ID de "
+"usuario."
 
 #. (itstool) path: page/title
 #: C/pgp-userid.page:23
@@ -2338,6 +2403,8 @@ msgstr "Crear y gestionar claves PGP"
 #: C/ssh-connect-remote.page:23
 msgid "Use SSH keys to log in to another computer without entering a password."
 msgstr ""
+"Usar claves SSH para iniciar sesión en otro equipo sin introducir una "
+"contraseña."
 
 #. (itstool) path: page/title
 #: C/ssh-connect-remote.page:27
@@ -2352,6 +2419,10 @@ msgid ""
 "create#ssh-create-key-and-set-up\">set up your SSH key for remote login "
 "while creating the key</link>."
 msgstr ""
+"Puede usar <app>Contraseñas y claves</app> para instalar su clave SSH en un "
+"equipo remoto que pueda ejecutar un servidor SSH. también puede <link xref="
+"\"ssh-create#ssh-create-key-and-set-up\">configurar su clave SSH para inicio "
+"de sesión remoto cuando crea la clave</link>."
 
 #. (itstool) path: item/p
 #: C/ssh-connect-remote.page:36
@@ -2398,6 +2469,8 @@ msgid ""
 "You should now be able to log in to the remote computer via SSH without a "
 "password."
 msgstr ""
+"Ahora debería poder iniciar sesión en el equipo remoto mediante SSH sin "
+"necesidad de contraseña."
 
 #. (itstool) path: info/desc
 #: C/ssh-create-vs-setup.page:18
@@ -2446,6 +2519,9 @@ msgid ""
 "Creating an SSH key creates both a <em>Public</em> and a <em>Private</em> "
 "key. Here is how to create a new key:"
 msgstr ""
+"Una clave SSH le ayudará a crear conexiones seguras entre equipos. Al crear "
+"una clave SSH se crean tanto la clave <em>Pública</em> como la <em>Privada</"
+"em>. Para crear una clave nueva.:"
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:36
@@ -2462,6 +2538,11 @@ msgid ""
 "intend to install the key. The description field is optional, and how you "
 "describe the key is entirely up to you."
 msgstr ""
+"Introduzca una descripción para la clave. Esta descripción le ayudará a "
+"identificar su clave posteriormente. Por ejemplo, puede introducir la la "
+"fecha, para qué se usará la clave o el nombre del servidor en el que "
+"pretende instalar la clave. El campo de descripción es opcional, y la manera "
+"de describir la clave depende totalmente de usted."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:43
@@ -2469,6 +2550,9 @@ msgid ""
 "You can change default settings for encryption type or key strength by "
 "expanding the <gui>Advanced key options</gui> panel."
 msgstr ""
+"Puede cambiar la configuración predeterminada del tipo de cifrado o la "
+"fortaleza de la clave expandiendo el panel <gui>Opciones avanzadas de clave</"
+"gui>."
 
 #. (itstool) path: page/p
 #: C/ssh-create.page:47
@@ -2476,21 +2560,23 @@ msgid ""
 "At this point, you can just create your key, or create your key and install "
 "it on a remote computer to enable password-free login."
 msgstr ""
+"En este punto, puede simplemente crear su clave o crearla e instalarla en un "
+"equipo remoto para permitir el inicio de sesión sin contraseña."
 
 #. (itstool) path: section/title
 #: C/ssh-create.page:51
 msgid "Create your key and do not set up remote login"
-msgstr ""
+msgstr "Crear su clave y con configurar el inicio de sesión remoto"
 
 #. (itstool) path: section/p
 #: C/ssh-create.page:52
 msgid "You can create the SSH key, and choose to set it up later."
-msgstr ""
+msgstr "Puede crear la clave SSH y elegir configurarla más tarde."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:56
 msgid "Press the <gui style=\"button\">Just Create Key</gui> button."
-msgstr ""
+msgstr "Pulse el botón <gui style=\"button\">Tan sólo crear clave</gui>."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:59
@@ -2505,11 +2591,13 @@ msgstr ""
 msgid ""
 "Retype the passphrase and press <gui style=\"button\">OK</gui> to finish."
 msgstr ""
+"Vuelva a escribir la contraseña y pulse <gui style=\"button\">Aceptar</gui> "
+"para terminar."
 
 #. (itstool) path: section/p
 #: C/ssh-create.page:68
 msgid "The SSH key will now be listed in the <gui>OpenSSH keys</gui> keyring."
-msgstr ""
+msgstr "La clave SSH aparecerá en el depósito de <gui>claves OpenSSH</gui>."
 
 #. (itstool) path: note/p
 #: C/ssh-create.page:72
@@ -2518,6 +2606,9 @@ msgid ""
 "the passphrase used during creation. This ensures that if someone gets "
 "access to your SSH key, they can't use it without the passphrase."
 msgstr ""
+"Cuando intente usar su clave SSH, su sistema operativo le pedirá la clave "
+"usada durante la creación. Esto asegura que, si alguien logra tener acceso a "
+"su clave SSH, no podrá usarla sin la contraseña."
 
 #. (itstool) path: section/title
 #: C/ssh-create.page:81
@@ -2532,6 +2623,10 @@ msgid ""
 "to a remote computer with SSH without needing to enter your password every "
 "time."
 msgstr ""
+"Una de las cosas más útiles que tiene una clave SSH es que puede instalar la "
+"clave pública en un equipo remoto, lo que le permitirá iniciar sesión en el "
+"equipo remoto mediante SSH sin necesidad de introducir su contraseña cada "
+"vez."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:89
@@ -2539,6 +2634,8 @@ msgid ""
 "Press the <gui style=\"button\">Create and Set Up</gui> button, and follow "
 "the instructions on entering a passphrase, above."
 msgstr ""
+"Pulse el botón <gui style=\"button\">Crear y configurar</gui> y siga las "
+"instrucciones para introducir una contraseña.."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:93
@@ -2546,6 +2643,9 @@ msgid ""
 "In the dialog window that opens, enter the <gui>Server address</gui> that "
 "you normally use to log in to the remote computer via SSH."
 msgstr ""
+"En la ventana de diálogo que se abre, introduzca la <gui>Dirección del "
+"servidor</gui> que usar normalmente para iniciar sesión en el equipo remoto "
+"mediante SSH."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:97
@@ -2553,6 +2653,8 @@ msgid ""
 "Ensure that the <gui>Login name</gui> you use on the remote computer is "
 "correct, and press <gui>Set Up</gui>."
 msgstr ""
+"Asegúrese de que el <gui>Nombre de inicio de sesión</gui> que usar en el "
+"equipo remoto es correcto y pulse <gui>Configurar</gui>."
 
 #. (itstool) path: section/p
 #: C/ssh-create.page:116
@@ -2561,6 +2663,10 @@ msgid ""
 "computer and configured to allow password-free SSH login. You should now be "
 "able to log in to the remote computer via SSH without a password."
 msgstr ""
+"La parte pública de la clave SSH seleccionada se instalará en el equipo "
+"remoto y se configurará para permitir el acceso por SSH sin contraseña. "
+"Ahora debería poder iniciar sesión en el equipo remoto mediante SSH sin "
+"necesidad de introducir su contraseña."
 
 #. (itstool) path: note/p
 #: C/ssh-create.page:122
@@ -2579,6 +2685,8 @@ msgstr ""
 #: C/ssh-export.page:19
 msgid "Export your public and private SSH keys to store them in keyfiles."
 msgstr ""
+"Exportar sus claves SSH pública y privada para guardarlas en archivos de "
+"claves."
 
 #. (itstool) path: page/title
 #: C/ssh-export.page:23
@@ -2591,6 +2699,9 @@ msgid ""
 "Export the contents of your SSH keys and store them in keyfiles, to have a "
 "backup of your keys or to share your public key with someone."
 msgstr ""
+"Exportar el contenido de sus claves SSH y guardarlas en archivos de claves, "
+"para tener una copia de respaldo de sus claves o para compartir su clave "
+"pública con alguien."
 
 #. (itstool) path: section/title
 #: C/ssh-export.page:29
@@ -2640,11 +2751,15 @@ msgid ""
 "Keep the exported private key file in a safe location, since the contents of "
 "the file must be kept private, to prevent misuse of your key."
 msgstr ""
+"Mantenga la clave privada exportada en un lugar seguro, ya que el contenido "
+"del archivo debe ser privado, para evitar un mal uso de la clave."
 
 #. (itstool) path: info/desc
 #: C/ssh-import.page:25
 msgid "Import SSH keys from keyfiles into <app>Passwords and Keys</app>."
 msgstr ""
+"Importar claves SSH desde archivos de claves en <app>Contraseñas y claves</"
+"app>."
 
 #. (itstool) path: page/title
 #: C/ssh-import.page:28
@@ -2660,6 +2775,11 @@ msgid ""
 "your computer. You can also manually import keys into <app>Passwords and "
 "Keys</app>."
 msgstr ""
+"Si ha recibido un archivo de clave por correo-e, puede querer importarlo en "
+"<app>Contraseñas y claves</app>. En la mayoría de los casos, "
+"<app>Contraseñas y claves</app> importa las claves SSH de la carpeta "
+"<file>~/.ssh</file> de su equipo. También puede importar claves manualmente "
+"en <app>Contraseñas y claves</app>."
 
 #. (itstool) path: item/p
 #: C/ssh-import.page:43
@@ -2676,6 +2796,9 @@ msgid ""
 "Imported keys are automatically grouped according to their type. So, "
 "<file>SSH</file> keys are listed in the <file>OpenSSH keys</file> section."
 msgstr ""
+"Las claves importadas se agrupan automáticamente en función de su tipo, por "
+"lo que las claves <file>SSH</file> se muestran en la sección <file>claves "
+"OpenSSH</file>."
 
 #. (itstool) path: info/desc
 #: C/ssh.page:21
@@ -2687,6 +2810,13 @@ msgid ""
 "updates. A software developer would use an <em>SSH key</em> to submit "
 "updated software code to a remote software repository."
 msgstr ""
+"Una <em>clave SSH</em> le ayuda a crear una conexión segura sobre una red no "
+"segura. Las <em>claves SSH</em> son las más usadas en situaciones en las que "
+"la seguridad es importante. Por ejemplo, un administrador de sistemas podría "
+"usar una <em>clave SSH</em> al conectarse a un servidor remoto para realizar "
+"actualizaciones del sistema. Un desarrollador de software puede usar una "
+"<em>clave SSH</em> para enviar actualizaciones del código a un repositorio "
+"de software."
 
 #. (itstool) path: page/title
 #: C/ssh.page:29
@@ -2709,6 +2839,8 @@ msgid ""
 "You can add extra subkeys to the same master key. You have to choose the "
 "right subkey each time you want to encrypt or sign when you do this."
 msgstr ""
+"Puede añadir subclaves adicionales a la misma clave maestra. Debe elegir la "
+"subclave correcta cada vez que quiera cifrar o firmar cuando hace esto."
 
 #. (itstool) path: steps/title
 #: C/subkeys-add.page:29
@@ -2733,6 +2865,9 @@ msgid ""
 "<gui>Key Type</gui>, <gui>Key Length</gui> and <gui>Expiration Date</gui> "
 "and click <gui style=\"button\">OK</gui>."
 msgstr ""
+"Elija las propiedades adecuadas de su clave seleccionando el <gui>Tipo de "
+"clave</gui>, la <gui>Longitud de la clave</gui> y la <gui>Fecha de "
+"caducidad</gui> correctas y pulse <gui style=\"button\">Aceptar</gui>."
 
 #. (itstool) path: note/p
 #: C/subkeys-add.page:55
@@ -2740,6 +2875,8 @@ msgid ""
 "Always ensure that your subkey expires before your master key since a subkey "
 "is useless when its master key has expired."
 msgstr ""
+"Asegúrese siempre de que la subclave caduca antes que la clave maestra, ya "
+"que no se puede usar una subclave  si la clave maestra ha caducado."
 
 #. (itstool) path: info/desc
 #: C/subkeys-examine.page:20
@@ -2780,7 +2917,7 @@ msgid ""
 "Right click on the key chosen in the previous step and select "
 "<guiseq><gui>Properties</gui><gui>Details</gui></guiseq>."
 msgstr ""
-"Pulse con el botón derecho sobre la calve elegida en el paso anterior y "
+"Pulse con el botón derecho sobre la clave elegida en el paso anterior y "
 "seleccione <guiseq><gui>Propiedades</gui><gui>Detalles</gui></guiseq>."
 
 #. (itstool) path: item/p
@@ -2796,6 +2933,9 @@ msgid ""
 "chooses the master key for signing, when you select a <gui>GnuPG keys</gui> "
 "keypair to sign with."
 msgstr ""
+"Al firmar otra clave, <app>Contraseñas y claves</app> elige automáticamente "
+"la clave maestra para firmar, cuando selecciona la pareja de <gui>claves "
+"GnuPG</gui> con la que firmar."
 
 #. (itstool) path: info/desc
 #: C/subkeys-revoke.page:20
