@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
-"POT-Creation-Date: 2014-03-27 23:57+0000\n"
-"PO-Revision-Date: 2014-03-28 13:44+0100\n"
+"POT-Creation-Date: 2014-03-31 11:03+0000\n"
+"PO-Revision-Date: 2014-04-01 14:13+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -1700,6 +1700,14 @@ msgid ""
 "anyone having your photos can create a key with your photo ID while the key "
 "fingerprint cannot be mimicked."
 msgstr ""
+"Puede adjuntar un ID de foto a sus claves PGP para que cualquiera pueda "
+"verificar la propiedad de sus claves después de mirar su foto. Aunque una "
+"clave con una foto adjunta proporciona un nivel de seguridad ligeramente "
+"mejor que una clave sin foto, comprobar la foto de una clave no es tan "
+"seguro como comprobar la <link xref=\"misc-key-fingerprint\">huella de la "
+"clave</link>, ya que cualquiera que tenga una foto suya puede crear una "
+"clave con su ID de foto, mientras que la huella de la clave no se puede "
+"imitar."
 
 #. (itstool) path: note/p
 #: C/pgp-photoid.page:35
@@ -1761,6 +1769,11 @@ msgid ""
 "<app>Passwords and Keys</app> resizes large photos to the optimal size after "
 "asking for your confirmation."
 msgstr ""
+"Las fotos que seleccione deben tener un tamaño pequeño, preferiblemente de "
+"120x150 píxeles. Dado que un ID de foto se adjunta siempre a su clave, una "
+"foto grande aumentará el tamaño de la clave y ralentizará las operaciones "
+"que usen esa clave. <app>Contraseñas y claves</app> redimensiona las fotos "
+"grandes a un tamaño óptimo después de pedirle su confirmación."
 
 #. (itstool) path: credit/name
 #: C/pgp-publish.page:15 C/pgp-retrieve-remote.page:15
@@ -1989,6 +2002,12 @@ msgid ""
 "identity, such as a passport, driver's license, or similar. If the two IDs "
 "match, the key is said to be trustworthy."
 msgstr ""
+"Para demostrar que confía y garantiza la autenticidad de la clave de "
+"alguien, puede firmarla. La clave de una persona sólo debe firmarse después "
+"de comparar el <link xref=\"pgp-userid\">ID del usuario</link> de la clave "
+"con una prueba válida de su identidad, como puede ser el pasaporte, el "
+"carnet de identidad o de conducir o similar. Si los ID coinciden, se dice "
+"que la clave es confiable."
 
 #. (itstool) path: steps/title
 #: C/pgp-sign.page:31
@@ -2253,6 +2272,12 @@ msgid ""
 "know. In such scenarios, if you do not want to create a new key with a "
 "different user ID, you can attach a new user ID to your existing key."
 msgstr ""
+"Una clave puede tener varios ID de usuario. Esto es útil cuando usa la misma "
+"clave para comunicarse con diferentes personas y una de ellas no reconoce, "
+"por ejemplo, la dirección de correo de su ID de usuario. Esta persona puede "
+"no querer importar su clave pública, ya que contiene información que no "
+"conoce. En estas situaciones, si no quiere crear una clave nueva con un ID "
+"de usuario diferente, puede adjuntar un ID de usuario nuevo a la clave."
 
 #. (itstool) path: steps/title
 #: C/pgp-userid-add.page:34
@@ -2467,6 +2492,12 @@ msgid ""
 "it. It is important to fill in authentic information while creating your "
 "user ID."
 msgstr ""
+"Cuando crea una clave, proporciona detalles como su nombre, su dirección de "
+"correo-e y una descripción de la clave. Esta información constituye un ID de "
+"usuario. Un buen ID de usuario ayuda a otras personas a reconocer su clave "
+"cuando intentan <link xref=\"pgp-retrieve-remote\">obtenerla</link> o <link "
+"xref=\"pgp-import\">importarla</link>. Es importante dar información "
+"verídica al crear el ID de usuario."
 
 #. (itstool) path: section/title
 #: C/pgp-userid.page:33
@@ -2482,6 +2513,12 @@ msgid ""
 "wishes to send you encrypted messages or files, but the private key must be "
 "known only to you and used to decrypt received messages."
 msgstr ""
+"Una clave PGP es una clave pública de cifrado que se puede usar para firmar "
+"y cifrar correos y archivos. Cuando crea una clave PGP, se genera un par de "
+"claves con la clave pública y la clave privada. Puede compartir la clave "
+"pública con cualquier persona que quiera enviarle mensajes cifrados, pero la "
+"clave privada sólo debe conocerla usted, para poder descifrar los mensajes "
+"recibidos."
 
 #. (itstool) path: page/title
 #: C/pgp.page:28
@@ -2542,6 +2579,12 @@ msgid ""
 "explains the problem, and you can try again. Make sure that you have a "
 "network connection and that the remote computer is on and accessible."
 msgstr ""
+"El programa intentará conectarse a la <gui>Dirección del servidor</gui> "
+"indicada cono el <gui>Nombre de inicio de sesión</gui> introducido. Si hay "
+"algún problema al intentar acceder al equipo remoto, aparecerá una ventana "
+"emergente explicando el problema, y podrá intentarlo de nuevo. Asegúrese de "
+"que está conectado a la red y de que ele equipo remoto está activo y "
+"accesible."
 
 #. (itstool) path: item/p
 #: C/ssh-connect-remote.page:53 C/ssh-create.page:109
@@ -2551,6 +2594,9 @@ msgid ""
 "remote computer. Enter your password, then press <gui style=\"button\">OK</"
 "gui>."
 msgstr ""
+"Si la conexión al equipo remoto se completa con éxito, aparecerá un cuadro "
+"de diálogo solicitando la <gui>Contraseña</gui> usada para iniciar sesión en "
+"el equipo remoto. Introdúzcala y pulse <gui style=\"button\">Aceptar</gui>."
 
 #. (itstool) path: page/p
 #: C/ssh-connect-remote.page:60
@@ -2769,6 +2815,14 @@ msgid ""
 "may also repeat the above steps on a different local computer to install "
 "more than one public key on the remote."
 msgstr ""
+"El inicio de sesión sin contraseña sólo está disponible cuando se hace desde "
+"su equipo local actual. Cuando inicie sesión, SSH leerá la parte pública de "
+"la clave SSH del equipo remoto y la verificará con la parte privada de la "
+"clave SSH de su equipo local. Si la autenticación falla o no está disponible "
+"(ej. en otro equipo local que tenga), SSH intentará usar un nombre de "
+"usuario y una contraseña para iniciar sesión. Puede repetir los pasos "
+"anteriores en un equipo local diferente para instalar más de una clave "
+"pública en el equipo remoto."
 
 #. (itstool) path: info/desc
 #: C/ssh-export.page:19
