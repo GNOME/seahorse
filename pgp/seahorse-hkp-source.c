@@ -245,6 +245,21 @@ parse_hkp_date (const gchar *text)
     return stamp == (time_t)-1 ? 0 : stamp;
 }
 
+static const gchar *
+get_fingerprint_string (const gchar *line)
+{
+	const gchar *p;
+
+	p = line;
+	while (*p && g_ascii_isspace (*p))
+		p++;
+
+	if (g_ascii_strncasecmp (p, "fingerprint=", 12) == 0)
+		return p + 12;
+	else
+		return NULL;
+}
+
 /**
 * response: The HKP server response to parse
 *
@@ -268,6 +283,7 @@ parse_hkp_index (const gchar *response)
 	gchar *line, *t;
     
 	SeahorsePgpKey *key = NULL;
+	SeahorsePgpSubkey *subkey_with_id = NULL;
 	GList *keys = NULL;
 	GList *subkeys = NULL;
 	GList *uids = NULL;
@@ -276,7 +292,6 @@ parse_hkp_index (const gchar *response)
 	lines = g_strsplit (response, "\n", 0);
     
 	for (l = lines; *l; l++) {
-
 		line = *l;	
 		dehtmlize (line);
 
@@ -341,6 +356,7 @@ parse_hkp_index (const gchar *response)
 					seahorse_object_list_free (subkeys);
 					seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
 					uids = subkeys = NULL;
+					subkey_with_id = NULL;
 					key = NULL;
 				}
 
@@ -351,9 +367,12 @@ parse_hkp_index (const gchar *response)
 				/* Add all the info to the key */
 				subkey = seahorse_pgp_subkey_new ();
 				seahorse_pgp_subkey_set_keyid (subkey, fpr);
+				subkey_with_id = subkey;
+
 				fingerprint = seahorse_pgp_subkey_calc_fingerprint (fpr);
 				seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
 				g_free (fingerprint);
+
 				seahorse_pgp_subkey_set_flags (subkey, flags);
 				seahorse_pgp_subkey_set_created (subkey, parse_hkp_date (v[1]));
 				seahorse_pgp_subkey_set_length (subkey, strtol (v[0], NULL, 10));
@@ -383,9 +402,30 @@ parse_hkp_index (const gchar *response)
             
 			/* TODO: Implement signatures */
             
-		} 
+		} else if (key && subkey_with_id) {
+			const char *fingerprint_str;
+
+			fingerprint_str = get_fingerprint_string (line);
+
+			if (fingerprint_str != NULL) {
+				char *str;
+
+				str = g_strdup (fingerprint_str);
+				g_strstrip (str);
+
+				if (str[0] != 0)
+					seahorse_pgp_subkey_set_fingerprint (subkey_with_id, str);
+
+				/* FIXME: we don't check that the fingerprint actually matches the key's ID.
+				 * We also don't validate the fingerprint at all; the keyserver may have returned
+				 * some garbage and we don't notice.
+				 */
+
+				g_free (str);
+			}
+		}
 	}
-    
+
 	g_strfreev (lines);
 
 	if (key) {
@@ -649,6 +689,8 @@ seahorse_hkp_source_search_async (SeahorseServerSource *source,
 	} else {
 		g_hash_table_insert (form, "search", (char *)match);
 	}
+
+	g_hash_table_insert (form, "fingerprint", "on");
 
 	soup_uri_set_query_from_form (uri, form);
 	g_hash_table_destroy (form);
