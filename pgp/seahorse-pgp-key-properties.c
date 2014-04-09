@@ -1349,7 +1349,7 @@ do_details (SeahorseWidget *swidget)
     widget = GTK_WIDGET (gtk_builder_get_object (swidget->gtkbuilder, "details-fingerprint-label"));
     if (widget) {
         fp_label = g_strdup (seahorse_pgp_key_get_fingerprint (pkey)); 
-        if (strlen (fp_label) > 24)
+        if (strlen (fp_label) > 24 && g_ascii_isspace (fp_label[24]))
             fp_label[24] = '\n';
         gtk_label_set_text (GTK_LABEL (widget), fp_label);
         g_free (fp_label);
