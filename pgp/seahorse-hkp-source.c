@@ -408,20 +408,19 @@ parse_hkp_index (const gchar *response)
 			fingerprint_str = get_fingerprint_string (line);
 
 			if (fingerprint_str != NULL) {
-				char *str;
+				char *pretty_fingerprint;
 
-				str = g_strdup (fingerprint_str);
-				g_strstrip (str);
-
-				if (str[0] != 0)
-					seahorse_pgp_subkey_set_fingerprint (subkey_with_id, str);
+				pretty_fingerprint = seahorse_pgp_subkey_calc_fingerprint (fingerprint_str);
 
 				/* FIXME: we don't check that the fingerprint actually matches the key's ID.
 				 * We also don't validate the fingerprint at all; the keyserver may have returned
 				 * some garbage and we don't notice.
 				 */
 
-				g_free (str);
+				if (pretty_fingerprint[0] != 0)
+					seahorse_pgp_subkey_set_fingerprint (subkey_with_id, pretty_fingerprint);
+
+				g_free (pretty_fingerprint);
 			}
 		}
 	}
