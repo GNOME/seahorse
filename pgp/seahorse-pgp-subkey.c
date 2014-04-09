@@ -369,12 +369,16 @@ seahorse_pgp_subkey_calc_description (const gchar *name, guint index)
 	return g_strdup_printf (_("Subkey %d of %s"), index, name);
 }
 
+/* Takes runs of hexadecimal digits, possibly with whitespace among them, and
+ * formats them nicely in groups of four digits.
+ */
 gchar*
 seahorse_pgp_subkey_calc_fingerprint (const gchar *raw_fingerprint)
 {
 	const gchar *raw;
 	GString *string;
-	guint index, len;
+	guint i, len;
+	guint num_digits;
 	gchar *fpr;
 	    
 	raw = raw_fingerprint;
@@ -382,15 +386,22 @@ seahorse_pgp_subkey_calc_fingerprint (const gchar *raw_fingerprint)
 
 	string = g_string_new ("");
 	len = strlen (raw);
-	    
-	for (index = 0; index < len; index++) {
-		if (index > 0 && index % 4 == 0)
-			g_string_append (string, " ");
-		g_string_append_c (string, raw[index]);
+
+	num_digits = 0;
+	for (i = 0; i < len; i++) {
+		if (g_ascii_isxdigit (raw[i])) {
+			g_string_append_c (string, g_ascii_toupper (raw[i]));
+			num_digits++;
+
+			if (num_digits > 0 && num_digits % 4 == 0)
+				g_string_append (string, " ");
+		}
 	}
-	    
+
 	fpr = string->str;
 	g_string_free (string, FALSE);
-	    
+
+	g_strchomp (fpr);
+
 	return fpr;
 }
