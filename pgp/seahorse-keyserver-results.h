@@ -54,7 +54,7 @@ struct _SeahorseKeyserverResultsClass {
 
 GType            seahorse_keyserver_results_get_type         (void);
 
-void             seahorse_keyserver_results_show             (const gchar *search_text);
+void             seahorse_keyserver_results_show             (const gchar *search_text, GtkWindow *parent);
 
 const gchar*     seahorse_keyserver_results_get_search       (SeahorseKeyserverResults* self);
 

@@ -490,14 +490,14 @@ on_search_completed (GObject *source,
 }
 /**
  * seahorse_keyserver_results_show:
- * @parent: A GTK window as parent (or NULL)
  * @search_text: The test to search for
+ * @parent: A GTK window as parent (or NULL)
  *
  * Creates a search results window and adds the operation to it's progress status.
  *
  */
 void
-seahorse_keyserver_results_show (const char* search_text)
+seahorse_keyserver_results_show (const char* search_text, GtkWindow *parent)
 {
 	SeahorseKeyserverResults* self;
 	GCancellable *cancellable;
@@ -508,6 +508,7 @@ seahorse_keyserver_results_show (const char* search_text)
 	self = g_object_new (SEAHORSE_TYPE_KEYSERVER_RESULTS,
 	                     "ui-name", "keyserver-results",
 	                     "search", search_text,
+			     "transient-for", parent,
 	                     NULL);
 
 	/* Destorys itself with destroy */
