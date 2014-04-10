@@ -58,7 +58,9 @@ public class Request : Gtk.Dialog {
 
 		this.update_response ();
 
-		GLib.return_if_fail (this.private_key is Gck.Object);
+		if (!(this.private_key is Gck.Object)) {
+			GLib.critical("private key is not of type %s", typeof(Gck.Object).name());
+		}
 	}
 
 	public static void prompt(Gtk.Window? parent,
