@@ -74,6 +74,8 @@ guint               seahorse_pgp_subkey_get_length        (SeahorsePgpSubkey *se
 void                seahorse_pgp_subkey_set_length        (SeahorsePgpSubkey *self,
                                                            guint index);
 
+gchar *             seahorse_pgp_subkey_get_usage         (SeahorsePgpSubkey *self);
+
 gulong              seahorse_pgp_subkey_get_created       (SeahorsePgpSubkey *self);
 
 void                seahorse_pgp_subkey_set_created       (SeahorsePgpSubkey *self,

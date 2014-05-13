@@ -1001,6 +1001,7 @@ enum {
 	SUBKEY_OBJECT,
 	SUBKEY_ID,
 	SUBKEY_TYPE,
+	SUBKEY_USAGE,
 	SUBKEY_CREATED,
 	SUBKEY_EXPIRES,
 	SUBKEY_STATUS,
@@ -1009,13 +1010,14 @@ enum {
 };
 
 const GType subkey_columns[] = {
-    G_TYPE_OBJECT,  /* index */
-    G_TYPE_STRING,  /* id */
-    G_TYPE_STRING,  /* created */
-    G_TYPE_STRING,  /* expires */
-    G_TYPE_STRING,  /* status  */
-    G_TYPE_STRING,  /* type */
-    G_TYPE_UINT     /* length*/
+    G_TYPE_OBJECT,  /* SUBKEY_OBJECT */
+    G_TYPE_STRING,  /* SUBKEY_ID */
+    G_TYPE_STRING,  /* SUBKEY_TYPE */
+    G_TYPE_STRING,  /* SUBKEY_USAGE */
+    G_TYPE_STRING,  /* SUBKEY_CREATED */
+    G_TYPE_STRING,  /* SUBKEY_EXPIRES  */
+    G_TYPE_STRING,  /* SUBKEY_STATUS */
+    G_TYPE_UINT     /* SUBKEY_LENGTH */
 };
 
 /* trust combo box list */
@@ -1433,6 +1435,9 @@ do_details (SeahorseWidget *swidget)
                                                      -1, _("Type"), gtk_cell_renderer_text_new (), 
                                                      "text", SUBKEY_TYPE, NULL);
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
+                                                     -1, _("Usage"), gtk_cell_renderer_text_new (),
+                                                     "text", SUBKEY_USAGE, NULL);
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
                                                      -1, _("Created"), gtk_cell_renderer_text_new (), 
                                                      "text", SUBKEY_CREATED, NULL);
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (widget),
@@ -1451,6 +1456,7 @@ do_details (SeahorseWidget *swidget)
 		const gchar *status = NULL;
 		gchar *expiration_date;
 		gchar *created_date;
+		gchar *usage;
 		gulong expires;
 		guint flags;
 		
@@ -1474,20 +1480,24 @@ do_details (SeahorseWidget *swidget)
 			expiration_date = seahorse_util_get_display_date_string (expires);
 
 		created_date = seahorse_util_get_display_date_string (seahorse_pgp_subkey_get_created (subkey));
-        
+
+		usage = seahorse_pgp_subkey_get_usage (subkey);
+
 		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,  
-		                    SUBKEY_OBJECT, l->data,
-		                    SUBKEY_ID, seahorse_pgp_subkey_get_keyid (l->data),
-		                    SUBKEY_TYPE, seahorse_pgp_subkey_get_algorithm (l->data),
+		gtk_list_store_set (store, &iter,
+		                    SUBKEY_OBJECT, subkey,
+		                    SUBKEY_ID, seahorse_pgp_subkey_get_keyid (subkey),
+		                    SUBKEY_TYPE, seahorse_pgp_subkey_get_algorithm (subkey),
+				    SUBKEY_USAGE, usage,
 		                    SUBKEY_CREATED, created_date,
 		                    SUBKEY_EXPIRES, expiration_date,
-		                    SUBKEY_STATUS,  status, 
+		                    SUBKEY_STATUS, status,
 		                    SUBKEY_LENGTH, seahorse_pgp_subkey_get_length (subkey),
 		                    -1);
-        
+
 		g_free (expiration_date);
 		g_free (created_date);
+		g_free (usage);
 	} 
 }
 

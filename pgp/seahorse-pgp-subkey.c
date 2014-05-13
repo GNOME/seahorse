@@ -279,6 +279,33 @@ seahorse_pgp_subkey_set_length (SeahorsePgpSubkey *self, guint length)
 	g_object_notify (G_OBJECT (self), "length");
 }
 
+gchar *
+seahorse_pgp_subkey_get_usage (SeahorsePgpSubkey *self)
+{
+	GString *str;
+	gboolean previous;
+
+	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), NULL);
+
+	str = g_string_new (NULL);
+
+	previous = FALSE;
+
+	if (self->pv->flags & SEAHORSE_FLAG_CAN_ENCRYPT) {
+		previous = TRUE;
+		g_string_append (str, _("Encrypt"));
+	}
+
+	if (self->pv->flags & SEAHORSE_FLAG_CAN_SIGN) {
+		if (previous)
+			g_string_append (str, ", ");
+
+		g_string_append (str, _("Sign"));
+	}
+
+	return g_string_free (str, FALSE);
+}
+
 const gchar*
 seahorse_pgp_subkey_get_algorithm (SeahorsePgpSubkey *self)
 {
