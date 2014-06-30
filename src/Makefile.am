@@ -47,18 +47,12 @@ ui_DATA += \
 	src/seahorse-change-passphrase.xml \
 	src/seahorse-generate-select.xml
 
-desktopdir = $(datadir)/applications
-desktop_in_files = src/seahorse.desktop.in
-desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
-
 man_MANS += src/seahorse.1
 
 EXTRA_DIST += \
 	$(man_MANS) \
 	$(ui_DATA) \
-	src/seahorse.desktop.in.in
+	$(NULL)
 
 CLEANFILES += *.xmlp* *.bak \
-	$(desktop_DATA) \
-	$(desktop_in_files)
+	$(NULL)

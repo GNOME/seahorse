@@ -564,7 +564,6 @@ po/Makefile.in
 help/Makefile
 data/Makefile
 data/icons/Makefile
-src/seahorse.desktop.in
 ])
 
 echo "
