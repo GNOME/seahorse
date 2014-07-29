@@ -230,6 +230,10 @@ seahorse_gpgme_subkey_set_subkey (SeahorseGpgmeSubkey *self, gpgme_subkey_t subk
 		flags |= SEAHORSE_FLAG_CAN_ENCRYPT;
 	if (subkey->can_sign)
 		flags |= SEAHORSE_FLAG_CAN_SIGN;
+	if (subkey->can_certify)
+		flags |= SEAHORSE_FLAG_CAN_CERTIFY;
+	if (subkey->can_authenticate)
+		flags |= SEAHORSE_FLAG_CAN_AUTHENTICATE;
 	
 	seahorse_pgp_subkey_set_flags (base, flags);
 	
