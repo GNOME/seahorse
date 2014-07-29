@@ -282,8 +282,21 @@ seahorse_pgp_subkey_set_length (SeahorsePgpSubkey *self, guint length)
 gchar *
 seahorse_pgp_subkey_get_usage (SeahorsePgpSubkey *self)
 {
+	typedef struct {
+		unsigned int flag;
+		const char *name;
+	} FlagNames;
+
+	const FlagNames const flag_names[] = {
+		{ SEAHORSE_FLAG_CAN_ENCRYPT,      N_("Encrypt") },
+		{ SEAHORSE_FLAG_CAN_SIGN,         N_("Sign") },
+		{ SEAHORSE_FLAG_CAN_CERTIFY,      N_("Certify") },
+		{ SEAHORSE_FLAG_CAN_AUTHENTICATE, N_("Authenticate") }
+	};
+
 	GString *str;
 	gboolean previous;
+	int i;
 
 	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), NULL);
 
@@ -291,16 +304,14 @@ seahorse_pgp_subkey_get_usage (SeahorsePgpSubkey *self)
 
 	previous = FALSE;
 
-	if (self->pv->flags & SEAHORSE_FLAG_CAN_ENCRYPT) {
-		previous = TRUE;
-		g_string_append (str, _("Encrypt"));
-	}
+	for (i = 0; i < G_N_ELEMENTS (flag_names); i++) {
+		if (self->pv->flags & flag_names[i].flag) {
+			if (previous)
+				g_string_append (str, ", ");
 
-	if (self->pv->flags & SEAHORSE_FLAG_CAN_SIGN) {
-		if (previous)
-			g_string_append (str, ", ");
-
-		g_string_append (str, _("Sign"));
+			previous = TRUE;
+			g_string_append (str, _(flag_names[i].name));
+		}
 	}
 
 	return g_string_free (str, FALSE);
