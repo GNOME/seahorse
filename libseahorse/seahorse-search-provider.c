@@ -44,6 +44,7 @@ struct _SeahorseSearchProvider {
 
 	SeahorsePredicate base_predicate;
 	GcrCollection *collection;
+	GHashTable *handles;
 };
 
 struct _SeahorseSearchProviderClass {
@@ -113,6 +114,16 @@ init_predicate (SeahorsePredicate  *predicate,
 	predicate->custom_target = terms;
 }
 
+static void
+on_object_gone (gpointer data,
+		GObject *where_the_object_was)
+{
+	GHashTable *handles = data;
+	gchar *str = g_strdup_printf ("%p", (gpointer)where_the_object_was);
+	g_hash_table_remove (handles, str);
+	g_free (str);
+}
+
 static gboolean
 handle_get_initial_result_set (SeahorseShellSearchProvider2 *skeleton,
                                GDBusMethodInvocation        *invocation,
@@ -133,6 +144,10 @@ handle_get_initial_result_set (SeahorseShellSearchProvider2 *skeleton,
 		if (seahorse_predicate_match (&predicate, l->data)) {
 			char *str = g_strdup_printf("%p", l->data);
 
+			if (!g_hash_table_contains (self->handles, str)) {
+				g_hash_table_insert (self->handles, g_strdup (str), l->data);
+				g_object_weak_ref (l->data, on_object_gone, self->handles);
+			}
 			g_ptr_array_add (array, str);
 		}
 	}
@@ -168,9 +183,8 @@ handle_get_subsearch_result_set (SeahorseShellSearchProvider2 *skeleton,
 	for (i = 0; previous_results[i]; i++) {
 		GObject *object;
 
-		sscanf (previous_results[i], "%p", &object);
-
-		if (!gcr_collection_contains (self->collection, object)) {
+		object = g_hash_table_lookup (self->handles, previous_results[i]);
+		if (!object || !gcr_collection_contains (self->collection, object)) {
 			/* Bogus value */
 			continue;
 		}
@@ -208,9 +222,8 @@ handle_get_result_metas (SeahorseShellSearchProvider2 *skeleton,
 	for (i = 0; results[i]; i++) {
 		GObject *object;
 
-		sscanf (results[i], "%p", &object);
-
-		if (!gcr_collection_contains (self->collection, object)) {
+		object = g_hash_table_lookup (self->handles, results[i]);
+		if (!object || !gcr_collection_contains (self->collection, object)) {
 			/* Bogus value */
 			continue;
 		}
@@ -266,9 +279,8 @@ handle_activate_result (SeahorseShellSearchProvider2 *skeleton,
 	GObject *object;
 	SeahorseKeyManager *key_manager;
 
-	sscanf (identifier, "%p", &object);
-
-	if (!gcr_collection_contains (self->collection, object) ||
+	object = g_hash_table_lookup (self->handles, identifier);
+	if (!object || !gcr_collection_contains (self->collection, object) ||
 	    !SEAHORSE_IS_VIEWABLE (object)) {
 		/* Bogus value */
 		return TRUE;
@@ -381,6 +393,8 @@ seahorse_search_provider_init (SeahorseSearchProvider *self)
 	filtered = seahorse_collection_new_for_predicate (base,
 	                                                  &self->base_predicate, NULL);
 	self->collection = GCR_COLLECTION (filtered);
+
+	self->handles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 }
 
 gboolean
@@ -422,11 +436,28 @@ seahorse_search_provider_dispose (GObject *object)
 }
 
 static void
+seahorse_search_provider_finalize (GObject *object)
+{
+	SeahorseSearchProvider *self = SEAHORSE_SEARCH_PROVIDER (object);
+	GHashTableIter iter;
+	gpointer value;
+
+	g_hash_table_iter_init (&iter, self->handles);
+	while (g_hash_table_iter_next (&iter, NULL, &value))
+		g_object_weak_unref (value, on_object_gone, self->handles);
+	g_hash_table_destroy (self->handles);
+
+	G_OBJECT_CLASS (seahorse_search_provider_parent_class)->finalize (object);
+}
+
+
+static void
 seahorse_search_provider_class_init (SeahorseSearchProviderClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->dispose = seahorse_search_provider_dispose;
+	object_class->finalize = seahorse_search_provider_finalize;
 }
 
 SeahorseSearchProvider *
