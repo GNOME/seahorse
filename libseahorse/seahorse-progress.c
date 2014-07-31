@@ -43,6 +43,7 @@ typedef struct {
 	GCancellable *cancellable;
 	gulong cancelled_sig;
 
+	SeahorseWidget *swidget;
 	GtkBuilder *builder;
 	gchar *title;
 	gchar *notice;
@@ -135,6 +136,8 @@ tracked_task_free (gpointer data)
 	g_free (task->notice);
 	if (task->builder)
 		g_object_unref (task->builder);
+	if (task->swidget)
+		g_object_unref (task->swidget);
 	g_free (task);
 }
 
@@ -562,7 +565,7 @@ on_timeout_show_progress (gpointer user_data)
 	task->showing = FALSE;
 	seahorse_progress_attach (task->cancellable, swidget->gtkbuilder);
 	gtk_widget_show (GTK_WIDGET (window));
-	g_object_unref (swidget);
+	task->swidget = swidget;
 
 	return FALSE; /* don't call again */
 }
