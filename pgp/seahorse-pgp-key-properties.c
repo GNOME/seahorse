@@ -44,9 +44,6 @@
 #include "libseahorse/seahorse-object-widget.h"
 #include "libseahorse/seahorse-util.h"
 
-#define DEBUG_FLAG SEAHORSE_DEBUG_KEYS
-#include "libseahorse/seahorse-debug.h"
-
 #include <glib/gi18n.h>
 
 #include <string.h>
@@ -1231,7 +1228,7 @@ setup_details_trust (SeahorseWidget *swidget)
     GtkTreeIter iter;
     GtkCellRenderer *text_cell = gtk_cell_renderer_text_new ();
 
-    seahorse_debug ("KeyProperties: Setting up Trust Combo Box Store");
+    g_debug ("KeyProperties: Setting up Trust Combo Box Store");
 
     object = SEAHORSE_OBJECT (SEAHORSE_OBJECT_WIDGET (swidget)->object);
     etype = seahorse_object_get_usage (object);
@@ -1283,7 +1280,7 @@ setup_details_trust (SeahorseWidget *swidget)
     
     gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (model));                                        
 
-    seahorse_debug ("KeyProperties: Finished Setting up Trust Combo Box Store");
+    g_debug ("KeyProperties: Finished Setting up Trust Combo Box Store");
 }
 
 static void

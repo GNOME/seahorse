@@ -47,9 +47,6 @@
 
 #ifdef WITH_LDAP
 
-#define DEBUG_FLAG SEAHORSE_DEBUG_LDAP
-#include "libseahorse/seahorse-debug.h"
-
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 30
 
@@ -140,7 +137,7 @@ dump_ldap_entry (LDAP *ld, LDAPMessage *res)
     char *t;
     
     t = ldap_get_dn (ld, res);
-    g_printerr ("dn: %s\n", t);
+    g_debug ("dn: %s\n", t);
     ldap_memfree (t);
     
     for (t = ldap_first_attribute (ld, res, &pos); t; 
@@ -148,8 +145,8 @@ dump_ldap_entry (LDAP *ld, LDAPMessage *res)
              
         values = get_ldap_values (ld, res, t);
         for (v = values; *v; v++) 
-            g_printerr ("%s: %s\n", t, *v);
-             
+            g_debug ("%s: %s\n", t, *v);
+
         g_strfreev (values);
         ldap_memfree (t);
     }
@@ -477,10 +474,9 @@ on_connect_server_info_completed (LDAPMessage *result,
 	/* If we have results then fill in the server info */
 	if (type == LDAP_RES_SEARCH_ENTRY) {
 
-		seahorse_debug ("Server Info Result:");
+		g_debug ("Server Info Result");
 #ifdef WITH_DEBUG
-		if (seahorse_debugging)
-			dump_ldap_entry (closure->ldap, result);
+		dump_ldap_entry (closure->ldap, result);
 #endif
 
 		/* NOTE: When adding attributes here make sure to add them to kServerAttributes */
@@ -871,10 +867,9 @@ on_search_search_completed (LDAPMessage *result,
 
 	/* An LDAP entry */
 	if (type == LDAP_RES_SEARCH_ENTRY) {
-		seahorse_debug ("Retrieved Key Entry:");
+		g_debug ("Retrieved Key Entry");
 #ifdef WITH_DEBUG
-		if (seahorse_debugging)
-			dump_ldap_entry (closure->ldap, result);
+		dump_ldap_entry (closure->ldap, result);
 #endif
 
 		search_parse_key_from_ldap_entry (self, closure->results,
@@ -932,8 +927,8 @@ on_search_connect_completed (GObject *source,
 
 	sinfo = get_ldap_server_info (self, TRUE);
 
-	seahorse_debug ("Searching Server ... base: %s, filter: %s",
-	                sinfo->base_dn, closure->filter);
+	g_debug ("Searching Server ... base: %s, filter: %s",
+	         sinfo->base_dn, closure->filter);
 
 	rc = ldap_search_ext (closure->ldap, sinfo->base_dn, LDAP_SCOPE_SUBTREE,
 	                      closure->filter, (char **)PGP_ATTRIBUTES, 0,
@@ -1243,10 +1238,9 @@ on_export_search_completed (LDAPMessage *result,
 	/* An LDAP Entry */
 	if (type == LDAP_RES_SEARCH_ENTRY) {
 
-		seahorse_debug ("Server Info Result:");
+		g_debug ("Server Info Result");
 #ifdef WITH_DEBUG
-		if (seahorse_debugging)
-			dump_ldap_entry (closure->ldap, result);
+		dump_ldap_entry (closure->ldap, result);
 #endif
 
 		key = get_string_attribute (closure->ldap, result, sinfo->key_attr);

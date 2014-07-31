@@ -93,6 +93,7 @@ AM_CPPFLAGS = \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DGETTEXT_PACKAGE=\""seahorse\"" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \
+	-DG_LOG_DOMAIN=\"seahorse\" \
 	$(SEAHORSE_CFLAGS) \
 	$(NULL)
 

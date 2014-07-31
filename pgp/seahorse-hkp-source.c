@@ -38,9 +38,6 @@
 
 #include <libsoup/soup.h>
 
-#define DEBUG_FLAG SEAHORSE_DEBUG_HKP
-#include "libseahorse/seahorse-debug.h"
-
 /**
  * SECTION: seahorse-hkp-source
  * @short_description: Implements the HKP (HTTP Keyserver protocol) Source object
@@ -118,6 +115,7 @@ create_hkp_soup_session (void)
 	SoupSession *session;
 #if WITH_DEBUG
 	SoupLogger *logger;
+	const gchar *env;
 #endif
 
         session = soup_session_async_new_with_options (SOUP_SESSION_ADD_FEATURE_BY_TYPE,
@@ -126,7 +124,8 @@ create_hkp_soup_session (void)
 
 
 #if WITH_DEBUG
-	if (seahorse_debugging) {
+        env = g_getenv ("G_MESSAGES_DEBUG");
+        if (env && strstr (env, "seahorse")) {
 		logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
 		soup_session_add_feature (session, SOUP_SESSION_FEATURE (logger));
 		g_object_unref (logger);
@@ -295,7 +294,7 @@ parse_hkp_index (const gchar *response)
 		line = *l;	
 		dehtmlize (line);
 
-		seahorse_debug ("%s", line);
+		g_debug ("%s", line);
 
 		/* Start a new key */
 		if (g_ascii_strncasecmp (line, "pub ", 4) == 0) {

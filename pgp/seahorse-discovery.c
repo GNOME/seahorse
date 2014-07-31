@@ -33,9 +33,6 @@
 
 #include "libseahorse/seahorse-util.h"
 
-#define DEBUG_FLAG SEAHORSE_DEBUG_DNSSD
-#include "libseahorse/seahorse-debug.h"
-
 #define HKP_SERVICE_TYPE "_pgpkey-hkp._tcp."
 
 /*
@@ -167,7 +164,7 @@ resolve_callback (AvahiServiceResolver *resolver, AvahiIfIndex iface, AvahiProto
 			g_object_unref (ssrc);
 		}
 
-		seahorse_debug ("added: %s %s\n", service_name, service_uri);
+		g_debug ("added: %s %s\n", service_name, service_uri);
 		break;
 
 	default:
@@ -232,7 +229,7 @@ browse_callback(AvahiServiceBrowser *browser, AvahiIfIndex iface, AvahiProtocol 
 		/* And remove it from our tables */
 		g_hash_table_remove (self->services, name);
 		g_signal_emit (self, signals[REMOVED], 0, name);
-		seahorse_debug ("removed: %s\n", name);
+		g_debug ("removed: %s\n", name);
 		break;
 
 	default:

@@ -39,9 +39,6 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#define DEBUG_FLAG SEAHORSE_DEBUG_LOAD
-#include "libseahorse/seahorse-debug.h"
-
 enum {
 	PROP_0,
 	PROP_LABEL,
@@ -123,7 +120,7 @@ static void
 cancel_scheduled_refresh (SeahorseSSHSource *ssrc)
 {
     if (ssrc->priv->scheduled_refresh != 0) {
-        seahorse_debug ("cancelling scheduled refresh event");
+        g_debug ("cancelling scheduled refresh event");
         g_source_remove (ssrc->priv->scheduled_refresh);
         ssrc->priv->scheduled_refresh = 0;
     }
@@ -145,7 +142,7 @@ remove_key_from_context (gpointer key,
 static gboolean
 scheduled_refresh (SeahorseSSHSource *ssrc)
 {
-    seahorse_debug ("scheduled refresh event ocurring now");
+    g_debug ("scheduled refresh event ocurring now");
     cancel_scheduled_refresh (ssrc);
     seahorse_place_load (SEAHORSE_PLACE (ssrc), NULL, NULL, NULL);
     return FALSE; /* don't run again */    
@@ -154,7 +151,7 @@ scheduled_refresh (SeahorseSSHSource *ssrc)
 static gboolean
 scheduled_dummy (SeahorseSSHSource *ssrc)
 {
-    seahorse_debug ("dummy refresh event occurring now");
+    g_debug ("dummy refresh event occurring now");
     ssrc->priv->scheduled_refresh = 0;
     return FALSE; /* don't run again */    
 }
@@ -197,7 +194,7 @@ monitor_ssh_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
 	}
 
 	g_free (path);
-	seahorse_debug ("scheduling refresh event due to file changes");
+	g_debug ("scheduling refresh event due to file changes");
 	ssrc->priv->scheduled_refresh = g_timeout_add (500, (GSourceFunc)scheduled_refresh, ssrc);
 }
 
@@ -632,7 +629,7 @@ seahorse_ssh_source_load_async (SeahorsePlace *place,
 	/* Schedule a dummy refresh. This blocks all monitoring for a while */
 	cancel_scheduled_refresh (self);
 	self->priv->scheduled_refresh = g_timeout_add (500, (GSourceFunc)scheduled_dummy, self);
-	seahorse_debug ("scheduled a dummy refresh");
+	g_debug ("scheduled a dummy refresh");
 
 	/* List the .ssh directory for private keys */
 	dir = g_dir_open (self->priv->ssh_homedir, 0, &error);

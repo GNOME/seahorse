@@ -20,6 +20,9 @@
 
 #include "config.h"
 
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "operation"
+
 #include "seahorse-gpgme-keyring.h"
 
 #include "seahorse-gpgme-data.h"
@@ -44,9 +47,6 @@
 #include <string.h>
 #include <libintl.h>
 #include <locale.h>
-
-#define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
-#include "libseahorse/seahorse-debug.h"
 
 enum {
 	PROP_0,
@@ -412,7 +412,7 @@ static void
 cancel_scheduled_refresh (SeahorseGpgmeKeyring *self)
 {
 	if (self->pv->scheduled_refresh != 0) {
-		seahorse_debug ("cancelling scheduled refresh event");
+		g_debug ("cancelling scheduled refresh event");
 		g_source_remove (self->pv->scheduled_refresh);
 		self->pv->scheduled_refresh = 0;
 	}
@@ -422,7 +422,7 @@ static gboolean
 scheduled_dummy (gpointer user_data)
 {
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (user_data);
-	seahorse_debug ("dummy refresh event occurring now");
+	g_debug ("dummy refresh event occurring now");
 	self->pv->scheduled_refresh = 0;
 	return FALSE; /* don't run again */
 }
@@ -486,9 +486,9 @@ seahorse_gpgme_keyring_load_full_async (SeahorseGpgmeKeyring *self,
 	/* Schedule a dummy refresh. This blocks all monitoring for a while */
 	cancel_scheduled_refresh (self);
 	self->pv->scheduled_refresh = g_timeout_add (500, scheduled_dummy, self);
-	seahorse_debug ("scheduled a dummy refresh");
+	g_debug ("scheduled a dummy refresh");
 
-	seahorse_debug ("refreshing keys...");
+	g_debug ("refreshing keys...");
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
 	                                 seahorse_gpgme_keyring_load_full_async);
@@ -733,7 +733,7 @@ scheduled_refresh (gpointer user_data)
 {
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (user_data);
 
-	seahorse_debug ("scheduled refresh event ocurring now");
+	g_debug ("scheduled refresh event ocurring now");
 	cancel_scheduled_refresh (self);
 	seahorse_gpgme_keyring_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 
@@ -754,7 +754,7 @@ monitor_gpg_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
 		name = g_file_get_basename (file);
 		if (g_str_has_suffix (name, ".gpg")) {
 			if (self->pv->scheduled_refresh == 0) {
-				seahorse_debug ("scheduling refresh event due to file changes");
+				g_debug ("scheduling refresh event due to file changes");
 				self->pv->scheduled_refresh = g_timeout_add (500, scheduled_refresh, self);
 			}
 		}
@@ -907,7 +907,7 @@ seahorse_gpgme_keyring_class_init (SeahorseGpgmeKeyringClass *klass)
 {
 	GObjectClass *gobject_class;
 
-	g_message ("init gpgme version %s", gpgme_check_version (NULL));
+	g_debug ("init gpgme version %s", gpgme_check_version (NULL));
 
 #ifdef ENABLE_NLS
 	gpgme_set_locale (NULL, LC_CTYPE, setlocale (LC_CTYPE, NULL));

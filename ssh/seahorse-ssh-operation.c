@@ -20,12 +20,13 @@
 
 #include "config.h"
 
+#undef G_LOG_DOMAIN
+#define G_LOG_DOMAIN "operation"
+
 #include "seahorse-ssh-operation.h"
 
 #include "seahorse-common.h"
 
-#define DEBUG_FLAG SEAHORSE_DEBUG_OPERATION
-#include "libseahorse/seahorse-debug.h"
 #include "libseahorse/seahorse-util.h"
 
 #include <sys/wait.h>
@@ -185,7 +186,7 @@ on_watch_ssh_process (GPid pid,
 	ssh_operation_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
 	const gchar *message;
 
-	seahorse_debug ("SSHOP: SSH process done");
+	g_debug ("SSHOP: SSH process done");
 
 	/* Already have an error? */
 	if (closure->previous_error) {
@@ -251,10 +252,10 @@ on_io_ssh_read (GIOChannel *source,
 	/* Figure out which buffer we're writing into */
 	if (source == closure->iout) {
 		str = closure->sout;
-		seahorse_debug ("SSHOP: SSH output: ");
+		g_debug ("SSHOP: SSH output: ");
 	} else if(source == closure->ierr) {
 		str = closure->serr;
-		seahorse_debug ("SSHOP: SSH errout: ");
+		g_debug ("SSHOP: SSH errout: ");
 	} else
 		g_assert_not_reached ();
 
@@ -275,7 +276,7 @@ on_io_ssh_read (GIOChannel *source,
 			break;
 		default:
 			g_string_append_len (str, buf, read);
-			seahorse_debug ("%s", str->str + (str->len - read));
+			g_debug ("%s", str->str + (str->len - read));
 			break;
 		}
 	} while (read == sizeof (buf));
@@ -296,7 +297,7 @@ on_io_ssh_write (GIOChannel *source,
 	gboolean ret = TRUE;
 
 	if (closure->sin) {
-		seahorse_debug ("SSHOP: SSH ready for input");
+		g_debug ("SSHOP: SSH ready for input");
 
 		if (!closure->previous_error)
 			error = &closure->previous_error;
@@ -311,20 +312,20 @@ on_io_ssh_write (GIOChannel *source,
 		case G_IO_STATUS_AGAIN:
 			break;
 		default:
-			seahorse_debug ("SSHOP: Wrote %d bytes to SSH", (gint)written);
+			g_debug ("SSHOP: Wrote %d bytes to SSH", (gint)written);
 			g_string_erase (closure->sin, 0, written);
 			break;
 		}
 	}
 
 	if (closure->sin && !closure->sin->len) {
-		seahorse_debug ("SSHOP: Finished writing SSH input");
+		g_debug ("SSHOP: Finished writing SSH input");
 		g_string_free (closure->sin, TRUE);
 		closure->sin = NULL;
 	}
 
 	if (!closure->sin) {
-		seahorse_debug ("SSHOP: Closing SSH input channel");
+		g_debug ("SSHOP: Closing SSH input channel");
 		g_io_channel_unref (closure->iin);
 		closure->iin = NULL;
 		g_source_remove (closure->win);
@@ -409,7 +410,7 @@ seahorse_ssh_operation_async (SeahorseSSHSource *source,
 
 	g_simple_async_result_set_op_res_gpointer (res, closure, ssh_operation_free);
 
-	seahorse_debug ("SSHOP: Executing SSH command: %s", command);
+	g_debug ("SSHOP: Executing SSH command: %s", command);
 
 	/* And off we go to run the program */
 	r = g_spawn_async_with_pipes (NULL, argv, NULL,
@@ -428,7 +429,7 @@ seahorse_ssh_operation_async (SeahorseSSHSource *source,
 	/* Copy the input for later writing */
 	if (input) {
                 closure->sin = g_string_new_len (input, length < 0 ? (gssize) strlen (input) : length);
-		seahorse_debug ("SSHOP: Will send SSH input: %s", closure->sin->str);
+		g_debug ("SSHOP: Will send SSH input: %s", closure->sin->str);
 
 		fcntl (fin, F_SETFL, O_NONBLOCK | fcntl (fin, F_GETFL));
 		closure->iin = g_io_channel_unix_new (fin);
@@ -1055,7 +1056,7 @@ seahorse_ssh_op_rename_async (SeahorseSSHSource *source,
 	if (!change_raw_comment (keydata, newcomment ? newcomment : ""))
 		g_return_if_reached ();
 
-	seahorse_debug ("renaming key to: %s", newcomment);
+	g_debug ("renaming key to: %s", newcomment);
 
 	/* Just part of a file for this key */
 	if (keydata->partial) {

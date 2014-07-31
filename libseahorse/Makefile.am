@@ -31,7 +31,6 @@ libseahorse_a_SOURCES = \
 	libseahorse/seahorse-application.c libseahorse/seahorse-application.h \
 	libseahorse/seahorse-bind.c libseahorse/seahorse-bind.h \
 	libseahorse/seahorse-collection.c libseahorse/seahorse-collection.h \
-	libseahorse/seahorse-debug.c libseahorse/seahorse-debug.h \
 	libseahorse/seahorse-interaction.c libseahorse/seahorse-interaction.h \
 	libseahorse/seahorse-key-manager-store.c libseahorse/seahorse-key-manager-store.h \
 	libseahorse/seahorse-object.c libseahorse/seahorse-object.h \
