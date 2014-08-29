@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: seahorse trunk\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-03-13 23:33+0000\n"
-"PO-Revision-Date: 2014-03-14 08:56+0300\n"
+"POT-Creation-Date: 2014-08-29 10:30+0000\n"
+"PO-Revision-Date: 2014-08-29 15:02+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -45,14 +45,22 @@ msgstr ""
 "управлять ключами SSH, публиковать и получать ключи с серверов, кэшировать "
 "парольные фразы, создавать резервные копии ключей и связок с ключами."
 
-#: ../common/catalog.vala:257
-msgid "Contributions:"
-msgstr "Помощники:"
-
-#: ../common/catalog.vala:285 ../src/seahorse.desktop.in.in.h:1
+#: ../data/seahorse.desktop.in.in.h:1 ../common/catalog.vala:285
 #: ../src/seahorse-key-manager.c:660
 msgid "Passwords and Keys"
 msgstr "Пароли и ключи"
+
+#: ../data/seahorse.desktop.in.in.h:2
+msgid "Manage your passwords and encryption keys"
+msgstr "Управление паролями и ключами шифрования"
+
+#: ../data/seahorse.desktop.in.in.h:3
+msgid "keyring;encryption;security;sign;ssh;"
+msgstr "связка;шифрование;безопасность;подпись;ssh;"
+
+#: ../common/catalog.vala:257
+msgid "Contributions:"
+msgstr "Помощники:"
 
 #: ../common/catalog.vala:287
 msgid "translator-credits"
@@ -353,12 +361,6 @@ msgstr ""
 msgid "New Keyring Name:"
 msgstr "Имя новой связки ключей:"
 
-#: ../gkr/seahorse-add-keyring.xml.h:3
-#: ../libseahorse/seahorse-add-keyserver.xml.h:5
-#: ../ssh/seahorse-ssh-upload.xml.h:3
-msgid "The host name or address of the server."
-msgstr "Имя узла или адрес сервера."
-
 #: ../gkr/seahorse-gkr-add-item.xml.h:1
 #: ../gkr/seahorse-gkr-item-properties.xml.h:1 ../pgp/seahorse-revoke.xml.h:3
 #: ../ssh/seahorse-ssh-generate.xml.h:5
@@ -410,7 +412,7 @@ msgid "Password:"
 msgstr "Пароль:"
 
 #: ../gkr/seahorse-gkr-item-properties.xml.h:9
-#: ../pgp/seahorse-pgp-subkey.c:364
+#: ../pgp/seahorse-pgp-subkey.c:402
 #: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Key"
 msgstr "Ключ"
@@ -714,6 +716,11 @@ msgstr "Тип сервера ключей:"
 msgid "Host:"
 msgstr "Узел:"
 
+#: ../libseahorse/seahorse-add-keyserver.xml.h:5
+#: ../ssh/seahorse-ssh-upload.xml.h:3
+msgid "The host name or address of the server."
+msgstr "Имя узла или адрес сервера."
+
 #: ../libseahorse/seahorse-add-keyserver.xml.h:6
 msgid ":"
 msgstr ":"
@@ -794,7 +801,7 @@ msgid "Key Servers"
 msgstr "Серверы ключей"
 
 #: ../libseahorse/seahorse-validity.c:38
-#: ../pgp/seahorse-pgp-key-properties.c:1252
+#: ../pgp/seahorse-pgp-key-properties.c:1251
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
 msgctxt "Validity"
@@ -802,7 +809,7 @@ msgid "Unknown"
 msgstr "Неизвестно"
 
 #: ../libseahorse/seahorse-validity.c:40
-#: ../pgp/seahorse-pgp-key-properties.c:1258
+#: ../pgp/seahorse-pgp-key-properties.c:1257
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
 msgctxt "Validity"
@@ -830,16 +837,16 @@ msgstr "Безоговорочно"
 #: ../libseahorse/seahorse-validity.c:48
 msgctxt "Validity"
 msgid "Disabled"
-msgstr "Отключено"
+msgstr "Отключён"
 
 #: ../libseahorse/seahorse-validity.c:50
 msgctxt "Validity"
 msgid "Revoked"
-msgstr "Отозвано"
+msgstr "Отозван"
 
 #: ../pgp/seahorse-add-subkey.xml.h:1
 msgid "Never E_xpires"
-msgstr "Никогда не истекает"
+msgstr "Никогда не _истекает"
 
 #: ../pgp/seahorse-add-subkey.xml.h:2
 msgid "If key never expires"
@@ -872,15 +879,15 @@ msgstr "Добавить идентификатор пользователя"
 
 #: ../pgp/seahorse-add-uid.xml.h:2
 msgid "Must be at least 5 characters long"
-msgstr "Должно быть не меньше 5 символов в длину"
+msgstr "Должен быть не менее 5 символов"
 
 #: ../pgp/seahorse-add-uid.xml.h:3
 msgid "Optional email address"
-msgstr "Необязательный электронный адрес"
+msgstr "Необязательный адрес эл. почты"
 
 #: ../pgp/seahorse-add-uid.xml.h:4
 msgid "Optional comment describing key"
-msgstr "Необязательный комментарий, описывающий ключ"
+msgstr "Необязательный комментарий с описанием ключа"
 
 #. Full name of the key, usually the name of the user.
 #: ../pgp/seahorse-add-uid.xml.h:6 ../pgp/seahorse-pgp-generate.xml.h:5
@@ -889,7 +896,7 @@ msgstr "_Полное имя:"
 
 #: ../pgp/seahorse-add-uid.xml.h:7 ../pgp/seahorse-pgp-generate.xml.h:6
 msgid "_Email Address:"
-msgstr "_Электронный адрес:"
+msgstr "_Адрес эл. почты:"
 
 #: ../pgp/seahorse-add-uid.xml.h:8
 msgid "Key Co_mment:"
@@ -922,7 +929,7 @@ msgstr "Добавить подключ к %s"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:132
 msgid "DSA (sign only)"
-msgstr "DSA (только подписывание)"
+msgstr "DSA (только подпись)"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:204
 msgid "ElGamal (encrypt only)"
@@ -930,7 +937,7 @@ msgstr "ElGamal (только шифрование)"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:210 ../pgp/seahorse-gpgme-generate.c:133
 msgid "RSA (sign only)"
-msgstr "RSA (только подписывание)"
+msgstr "RSA (только подпись)"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:216
 msgid "RSA (encrypt only)"
@@ -945,12 +952,12 @@ msgstr "Не удалось добавить идентификатор поль
 msgid "Add user ID to %s"
 msgstr "Добавить идентификатор пользователя к %s"
 
-#: ../pgp/seahorse-gpgme.c:70
+#: ../pgp/seahorse-gpgme.c:71
 msgid "Decryption failed. You probably do not have the decryption key."
-msgstr "Не удалось расшифровать. Вероятно, у вас нет ключа для расшифровки."
+msgstr "Не удалось расшифровать. Возможно, у вас нет ключа для расшифровки."
 
-#: ../pgp/seahorse-gpgme.c:74 ../pgp/seahorse-hkp-source.c:510
-#: ../ssh/seahorse-ssh-operation.c:198
+#: ../pgp/seahorse-gpgme.c:75 ../pgp/seahorse-hkp-source.c:548
+#: ../ssh/seahorse-ssh-operation.c:199
 msgid "The operation was cancelled"
 msgstr "Действие было отменено"
 
@@ -969,7 +976,7 @@ msgstr "Не удалось изменить срок действия"
 #: ../pgp/seahorse-gpgme-expires.c:138
 #, c-format
 msgid "Expiry: %s"
-msgstr "Годен до: %s"
+msgstr "Срок действия: %s"
 
 #: ../pgp/seahorse-gpgme-exporter.c:84
 msgid "Multiple Keys"
@@ -1015,7 +1022,7 @@ msgstr "Пароль для нового ключа PGP"
 
 #: ../pgp/seahorse-gpgme-generate.c:214
 msgid "Enter the passphrase for your new key twice."
-msgstr "Введите пароль для нового ключа два раза."
+msgstr "Введите дважды пароль для нового ключа."
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
 #: ../pgp/seahorse-gpgme-generate.c:226
@@ -1052,11 +1059,11 @@ msgstr[0] "Действительно безвозвратно удалить %d
 msgstr[1] "Действительно безвозвратно удалить %d ключа?"
 msgstr[2] "Действительно безвозвратно удалить %d ключей?"
 
-#: ../pgp/seahorse-gpgme-key-op.c:380
+#: ../pgp/seahorse-gpgme-key-op.c:377
 msgid "Wrong password"
 msgstr "Неправильный пароль"
 
-#: ../pgp/seahorse-gpgme-key-op.c:380
+#: ../pgp/seahorse-gpgme-key-op.c:377
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Вы уже третий раз ввели неправильный пароль. Попробуйте ещё раз."
 
@@ -1269,19 +1276,19 @@ msgstr "Неизвестно"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: ../pgp/seahorse-hkp-source.c:528
+#: ../pgp/seahorse-hkp-source.c:566
 #, c-format
 msgid "Search was not specific enough. Server '%s' found too many keys."
 msgstr ""
 "Параметры поиска были недостаточно определёнными. Сервер «%s» нашёл по ним "
 "слишком много ключей."
 
-#: ../pgp/seahorse-hkp-source.c:531
+#: ../pgp/seahorse-hkp-source.c:569
 #, c-format
 msgid "Couldn't communicate with server '%s': %s"
 msgstr "Не удалось связаться с сервером «%s»: %s"
 
-#: ../pgp/seahorse-hkp-source.c:1039
+#: ../pgp/seahorse-hkp-source.c:1079
 msgid "HTTP Key Server"
 msgstr "Сервер ключей HTTP"
 
@@ -1416,27 +1423,27 @@ msgstr "_Серверы ключей"
 msgid "_Sync"
 msgstr "_Синхронизировать"
 
-#: ../pgp/seahorse-ldap-source.c:439
+#: ../pgp/seahorse-ldap-source.c:436
 #, c-format
 msgid "Couldn't communicate with '%s': %s"
 msgstr "Не удалось связаться с «%s»: %s"
 
-#: ../pgp/seahorse-ldap-source.c:650
+#: ../pgp/seahorse-ldap-source.c:646
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Устанавливается соединение с: %s"
 
-#: ../pgp/seahorse-ldap-source.c:656
+#: ../pgp/seahorse-ldap-source.c:652
 #, c-format
 msgid "Couldn't resolve address: %s"
 msgstr "Не удалось определить адрес: %s"
 
-#: ../pgp/seahorse-ldap-source.c:700
+#: ../pgp/seahorse-ldap-source.c:696
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Идёт определение адреса сервера: %s"
 
-#: ../pgp/seahorse-ldap-source.c:1437
+#: ../pgp/seahorse-ldap-source.c:1431
 msgid "LDAP Key Server"
 msgstr "Сервер ключей LDAP"
 
@@ -1484,7 +1491,7 @@ msgstr "_Тип шифрования:"
 #: ../pkcs11/seahorse-pkcs11-generate.xml.h:5
 #: ../ssh/seahorse-ssh-generate.xml.h:8
 msgid "Key _Strength (bits):"
-msgstr "_Прочность ключа (в битах):"
+msgstr "_Стойкость ключа (в битах):"
 
 #: ../pgp/seahorse-pgp-generate.xml.h:11
 msgid "E_xpiration Date:"
@@ -1504,130 +1511,134 @@ msgstr "Личный ключ PGP"
 msgid "PGP key"
 msgstr "Ключ PGP"
 
-#: ../pgp/seahorse-pgp-key-properties.c:320
+#: ../pgp/seahorse-pgp-key-properties.c:317
 msgid "Couldn't change primary user ID"
 msgstr "Не удалось изменить главный идентификатор пользователя"
 
-#: ../pgp/seahorse-pgp-key-properties.c:339
+#: ../pgp/seahorse-pgp-key-properties.c:336
 #, c-format
 msgid "Are you sure you want to permanently delete the '%s' user ID?"
 msgstr ""
 "Уверены, что хотите безвозвратно удалить идентификатор пользователя «%s»?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:349
+#: ../pgp/seahorse-pgp-key-properties.c:346
 msgid "Couldn't delete user ID"
 msgstr "Не удалось удалить идентификатор пользователя"
 
-#: ../pgp/seahorse-pgp-key-properties.c:424
-#: ../pgp/seahorse-pgp-key-properties.c:1569
+#: ../pgp/seahorse-pgp-key-properties.c:421
+#: ../pgp/seahorse-pgp-key-properties.c:1576
 msgid "[Unknown]"
 msgstr "[Неизвестно]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:533
-#: ../pgp/seahorse-pgp-key-properties.c:1852
+#: ../pgp/seahorse-pgp-key-properties.c:530
+#: ../pgp/seahorse-pgp-key-properties.c:1859
 msgid "Name/Email"
-msgstr "Имя/Электропочта"
+msgstr "Имя/Эл.почта"
 
-#: ../pgp/seahorse-pgp-key-properties.c:540
+#: ../pgp/seahorse-pgp-key-properties.c:537
 msgid "Signature ID"
 msgstr "Идентификатор подписи"
 
-#: ../pgp/seahorse-pgp-key-properties.c:673
+#: ../pgp/seahorse-pgp-key-properties.c:670
 msgid "Couldn't change primary photo"
 msgstr "Не удалось изменить главную фотографию"
 
 #. TRANSLATORS: (unknown) expiry date
-#: ../pgp/seahorse-pgp-key-properties.c:907
+#: ../pgp/seahorse-pgp-key-properties.c:904
 msgid "(unknown)"
 msgstr "(неизвестно)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:910
+#: ../pgp/seahorse-pgp-key-properties.c:907
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Этот ключ истёк %s"
 
-#: ../pgp/seahorse-pgp-key-properties.c:973
+#: ../pgp/seahorse-pgp-key-properties.c:970
 msgid "Name"
 msgstr "Имя"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1086
+#: ../pgp/seahorse-pgp-key-properties.c:1085
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Уверены, что хотите безвозвратно удалить подключ %d ключа %s?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1095
+#: ../pgp/seahorse-pgp-key-properties.c:1094
 msgid "Couldn't delete subkey"
 msgstr "Не удалось удалить подключ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1135
-#: ../pgp/seahorse-pgp-key-properties.c:1543
+#: ../pgp/seahorse-pgp-key-properties.c:1134
+#: ../pgp/seahorse-pgp-key-properties.c:1550
 msgid "Unable to change trust"
-msgstr "Не удалось сменить уровень доверия"
+msgstr "Не удалось изменить уровень доверия"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1149
+#: ../pgp/seahorse-pgp-key-properties.c:1148
 #: ../ssh/seahorse-ssh-key-properties.c:205
 msgid "Couldn't export key"
 msgstr "Не удалось экспортировать ключ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1265
+#: ../pgp/seahorse-pgp-key-properties.c:1264
 msgid "Marginal"
 msgstr "Слабо"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1271
+#: ../pgp/seahorse-pgp-key-properties.c:1270
 msgid "Full"
 msgstr "Полностью"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1277
+#: ../pgp/seahorse-pgp-key-properties.c:1276
 msgid "Ultimate"
 msgstr "Безоговорочно"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1383
-#: ../pgp/seahorse-pgp-key-properties.c:1472
+#: ../pgp/seahorse-pgp-key-properties.c:1382
+#: ../pgp/seahorse-pgp-key-properties.c:1475
 msgctxt "Expires"
 msgid "Never"
 msgstr "Никогда"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1430
+#: ../pgp/seahorse-pgp-key-properties.c:1429
 msgid "ID"
 msgstr "Идентификатор"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1433
+#: ../pgp/seahorse-pgp-key-properties.c:1432
 msgid "Type"
 msgstr "Тип"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1436
+#: ../pgp/seahorse-pgp-key-properties.c:1435
+msgid "Usage"
+msgstr "Использование"
+
+#: ../pgp/seahorse-pgp-key-properties.c:1438
 msgid "Created"
 msgstr "Создан"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1439
+#: ../pgp/seahorse-pgp-key-properties.c:1441
 msgid "Expires"
 msgstr "Истекает"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1442
+#: ../pgp/seahorse-pgp-key-properties.c:1444
 msgid "Status"
 msgstr "Состояние"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1445
+#: ../pgp/seahorse-pgp-key-properties.c:1447
 msgid "Strength"
-msgstr "Прочность"
+msgstr "Стойкость"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1463
+#: ../pgp/seahorse-pgp-key-properties.c:1466
 msgid "Revoked"
-msgstr "Отозвано"
+msgstr "Отозван"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1465
+#: ../pgp/seahorse-pgp-key-properties.c:1468
 msgid "Expired"
-msgstr "Истёк"
+msgstr "Просрочен"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1467
+#: ../pgp/seahorse-pgp-key-properties.c:1470
 msgid "Disabled"
-msgstr "Отключено"
+msgstr "Отключён"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1469
+#: ../pgp/seahorse-pgp-key-properties.c:1472
 msgid "Good"
-msgstr "Хорошее"
+msgstr "Действителен"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1855
+#: ../pgp/seahorse-pgp-key-properties.c:1862
 msgid "Key ID"
 msgstr "Идентификатор ключа"
 
@@ -1727,6 +1738,7 @@ msgid "Primary"
 msgstr "Главный"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
+#: ../pgp/seahorse-pgp-subkey.c:292
 msgid "Sign"
 msgstr "Подписать"
 
@@ -1752,7 +1764,7 @@ msgstr "Имена и подписи"
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
 #: ../ssh/seahorse-ssh-key-properties.xml.h:17
 msgid "Strength:"
-msgstr "Прочность:"
+msgstr "Стойкость:"
 
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
 msgid "Technical Details"
@@ -1890,7 +1902,23 @@ msgstr "Уровень доверия:"
 msgid "You _Trust the Owner:"
 msgstr "Вы д_оверяете владельцу:"
 
-#: ../pgp/seahorse-pgp-subkey.c:369
+#: ../pgp/seahorse-pgp-subkey.c:291
+msgid "Encrypt"
+msgstr "Зашифровать"
+
+#: ../pgp/seahorse-pgp-subkey.c:293
+#, fuzzy
+#| msgid "Certificate"
+msgid "Certify"
+msgstr "Сертификат"
+
+#: ../pgp/seahorse-pgp-subkey.c:294
+#, fuzzy
+#| msgid "Certificate"
+msgid "Authenticate"
+msgstr "Сертификат"
+
+#: ../pgp/seahorse-pgp-subkey.c:407
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "Подключ %d ключа %s"
@@ -2013,19 +2041,19 @@ msgstr "_Автор подписи:"
 msgid "_Sign"
 msgstr "_Подписать"
 
-#: ../pgp/seahorse-transfer.c:237 ../pgp/seahorse-transfer.c:284
+#: ../pgp/seahorse-transfer.c:238 ../pgp/seahorse-transfer.c:285
 msgid "Exporting data"
 msgstr "Экспортирование данных"
 
-#: ../pgp/seahorse-transfer.c:237 ../pgp/seahorse-transfer.c:284
+#: ../pgp/seahorse-transfer.c:238 ../pgp/seahorse-transfer.c:285
 msgid "Retrieving data"
 msgstr "Получение данных"
 
-#: ../pgp/seahorse-transfer.c:240 ../pgp/seahorse-transfer.c:287
+#: ../pgp/seahorse-transfer.c:241 ../pgp/seahorse-transfer.c:288
 msgid "Importing data"
 msgstr "Импортирование данных"
 
-#: ../pgp/seahorse-transfer.c:240 ../pgp/seahorse-transfer.c:287
+#: ../pgp/seahorse-transfer.c:241 ../pgp/seahorse-transfer.c:288
 msgid "Sending data"
 msgstr "Отправка данных"
 
@@ -2131,23 +2159,23 @@ msgstr "Запрос _сертификата"
 msgid "Create a certificate request file for this key"
 msgstr "Создать файл с запросом сертификата для этого ключа"
 
-#: ../pkcs11/pkcs11-request.vala:85
+#: ../pkcs11/pkcs11-request.vala:87
 msgid "Couldn't create certificate request"
 msgstr "Не удалось создать запрос сертификата"
 
-#: ../pkcs11/pkcs11-request.vala:102
+#: ../pkcs11/pkcs11-request.vala:104
 msgid "Save certificate request"
 msgstr "Сохранить запрос сертификата"
 
-#: ../pkcs11/pkcs11-request.vala:111
+#: ../pkcs11/pkcs11-request.vala:113
 msgid "Certificate request"
 msgstr "Запрос сертификата"
 
-#: ../pkcs11/pkcs11-request.vala:119
+#: ../pkcs11/pkcs11-request.vala:121
 msgid "PEM encoded request"
 msgstr "Запрос, закодированный PEM"
 
-#: ../pkcs11/pkcs11-request.vala:147
+#: ../pkcs11/pkcs11-request.vala:149
 msgid "Couldn't save certificate request"
 msgstr "Не удалось сохранить запрос сертификата"
 
@@ -2188,14 +2216,6 @@ msgstr "Подтвердить новый пароль"
 msgid "Con_firm Passphrase:"
 msgstr "Подтверждение п_ароля:"
 
-#: ../src/seahorse.desktop.in.in.h:2
-msgid "Manage your passwords and encryption keys"
-msgstr "Управление паролями и ключами шифрования"
-
-#: ../src/seahorse.desktop.in.in.h:3
-msgid "keyring;encryption;security;sign;ssh;"
-msgstr "связка;шифрование;безопасность;подпись;ssh;"
-
 #: ../src/seahorse-generate-select.c:228
 msgid "Continue"
 msgstr "Продолжить"
@@ -2216,7 +2236,7 @@ msgstr "Импортировать"
 msgid "<b>Data to be imported:</b>"
 msgstr "<b>Импортируемые данные:</b>"
 
-#: ../src/seahorse-key-manager.c:242 ../ssh/seahorse-ssh-operation.c:869
+#: ../src/seahorse-key-manager.c:242 ../ssh/seahorse-ssh-operation.c:870
 msgid "Import Key"
 msgstr "Импортировать ключ"
 
@@ -2524,45 +2544,45 @@ msgstr "Местоположение:"
 msgid "E_xport Complete Key"
 msgstr "_Экспортировать полный ключ"
 
-#: ../ssh/seahorse-ssh-operation.c:203
+#: ../ssh/seahorse-ssh-operation.c:204
 msgid "The SSH command was terminated unexpectedly."
 msgstr "Команда SSH неожиданно завершилась."
 
-#: ../ssh/seahorse-ssh-operation.c:213
+#: ../ssh/seahorse-ssh-operation.c:214
 msgid "The SSH command failed."
 msgstr "Команда SSH завершилась с ошибкой."
 
-#: ../ssh/seahorse-ssh-operation.c:522
+#: ../ssh/seahorse-ssh-operation.c:523
 msgid "Remote Host Password"
 msgstr "Пароль удалённого сервера"
 
-#: ../ssh/seahorse-ssh-operation.c:609
+#: ../ssh/seahorse-ssh-operation.c:610
 msgid "Enter Key Passphrase"
 msgstr "Введите пароль ключа"
 
-#: ../ssh/seahorse-ssh-operation.c:700
+#: ../ssh/seahorse-ssh-operation.c:701
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Пароль для нового ключа SSH"
 
-#: ../ssh/seahorse-ssh-operation.c:886
+#: ../ssh/seahorse-ssh-operation.c:887
 #, c-format
 msgid "Importing key: %s"
-msgstr "Импорт ключа: %s"
+msgstr "Импортирование ключа: %s"
 
-#: ../ssh/seahorse-ssh-operation.c:888
+#: ../ssh/seahorse-ssh-operation.c:889
 msgid "Importing key. Enter passphrase"
-msgstr "Импорт ключа. Введите пароль"
+msgstr "Импортирование ключа. Введите пароль"
 
-#: ../ssh/seahorse-ssh-source.c:222
+#: ../ssh/seahorse-ssh-source.c:219
 msgid "OpenSSH keys"
 msgstr "Ключи OpenSSH"
 
-#: ../ssh/seahorse-ssh-source.c:229
+#: ../ssh/seahorse-ssh-source.c:226
 #, c-format
 msgid "OpenSSH: %s"
 msgstr "OpenSSH: %s"
 
-#: ../ssh/seahorse-ssh-source.c:977
+#: ../ssh/seahorse-ssh-source.c:974
 msgid "No private key file is available for this key."
 msgstr "Не удалось найти секретного ключа для этого публичного ключа."
 
@@ -2601,52 +2621,3 @@ msgstr "_Учётная запись:"
 #: ../ssh/seahorse-ssh-upload.xml.h:7
 msgid "_Set Up"
 msgstr "_Установить"
-
-#~ msgid "Ssh Key"
-#~ msgstr "Ключ SSH"
-
-#~ msgid "Updating password"
-#~ msgstr "Обновление пароля"
-
-#~ msgid "Keyring Properties"
-#~ msgstr "Свойства связки ключей"
-
-#~ msgid "%Y-%m-%d"
-#~ msgstr "%d.%m.%Y"
-
-#~ msgid "_Computer Name:"
-#~ msgstr "_Имя компьютера:"
-
-#~ msgid "<b>Password:</b>"
-#~ msgstr "<b>Пароль:</b>"
-
-#~ msgid "<b>Key Servers:</b>"
-#~ msgstr "<b>Серверы ключей:</b>"
-
-#~ msgid "Never"
-#~ msgstr "Никогда"
-
-#~ msgid "<b>Key ID:</b>"
-#~ msgstr "<b>Идентификатор ключа:</b>"
-
-#~ msgctxt "name-of-key"
-#~ msgid "<b>Name:</b>"
-#~ msgstr "<b>Имя:</b>"
-
-#~ msgid "<b>Comment:</b>"
-#~ msgstr "<b>Комментарий:</b>"
-
-#~ msgid "<b>Use:</b>"
-#~ msgstr "<b>Назначение:</b>"
-
-#~ msgid "<b>Type:</b>"
-#~ msgstr "<b>Тип:</b>"
-
-#~ msgid "<b>Key Names and Signatures</b>"
-#~ msgstr "<b>Имена и подписи ключа</b>"
-
-#~ msgid "<b>Dates</b>"
-#~ msgstr "<b>Даты</b>"
-
-#~ msgid "<b>Dates:</b>"
-#~ msgstr "<b>Даты:</b>"
