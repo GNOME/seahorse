@@ -37,7 +37,6 @@ HELP_FILES = \
 	pgp-userid.page \
 	pgp.page \
 	ssh-connect-remote.page \
-	ssh-create-vs-setup.page \
 	ssh-create.page \
 	ssh-export.page \
 	ssh-import.page \
