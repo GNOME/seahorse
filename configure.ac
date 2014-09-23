@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([seahorse], [3.12.2],
+AC_INIT([seahorse], [3.14.0],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=seahorse],
         [seahorse])
 
