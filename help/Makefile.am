@@ -48,4 +48,4 @@ HELP_FILES = \
 HELP_MEDIA = \
 	media/seahorse.png
 
-HELP_LINGUAS = de el es fr ru
+HELP_LINGUAS = de el es fr hu ru
