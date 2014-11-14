@@ -259,6 +259,7 @@ object_set_property (GObject *object, guint prop_id, const GValue *value, GParam
     SeahorseWidget *swidget;
     GtkWidget *w;
     char *path;
+    GError *error = NULL;
     
     swidget = SEAHORSE_WIDGET (object);
     
@@ -270,7 +271,12 @@ object_set_property (GObject *object, guint prop_id, const GValue *value, GParam
         path = g_strdup_printf ("%sseahorse-%s.xml",
                                 SEAHORSE_UIDIR, swidget->name);
         swidget->gtkbuilder = gtk_builder_new ();
-        gtk_builder_add_from_file (swidget->gtkbuilder, path, NULL);
+        gtk_builder_add_from_file (swidget->gtkbuilder, path, &error);
+        if (error)
+          {
+            g_warning ("Error parsing %s: %s\n", path, error->message);
+            g_error_free (error);
+          }
         g_free (path);
         g_return_if_fail (swidget->gtkbuilder != NULL);
         
