@@ -1,0 +1,41 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="about-ssh">
+
+  <info>
+    <link type="guide" xref="concepts" group="first"/>
+    <revision version="0.1" date="2011-10-23" status="stub"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jwcampbell@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>SSH keys are used to login to a remote computer, once a secure
+    connection has been established.</desc>
+  </info>
+
+  <title>What is a Secure Shell key?</title>
+
+  <p>A <em>Secure Shell key</em>, often just called an <em>SSH key</em>,
+  helps you create a secure connection over an unsecured network.</p>
+
+  <list>
+    <title>An SSH key actually consists of two parts:</title>
+    <item><p>A public key, which is widely available.</p></item>
+    <item><p>A private key, which is kept secret. The private key is used
+    to unlock messages encrypted with a corresponding public key.</p></item>
+  </list>
+
+  <p>The advantage of using an <em>SSH key</em> to create a connection between
+  computers is that only the <em>Public key</em> needs to be sent over
+  the network. Transmissions encrypted with a <em>Public key</em> can only be
+  decoded by unlocking them with the corresponding <em>Private key</em> and a
+  password. Because only the public key is sent over the network, the key's
+  password is kept secret.</p>
+
+</page>

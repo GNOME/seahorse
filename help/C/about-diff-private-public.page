@@ -1,0 +1,54 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      xmlns:its="http://www.w3.org/2005/11/its"
+      type="topic" style="task"
+      id="about-diff-private-public">
+  <info>
+    <link type="guide" xref="concepts" group="second"/>
+    <link type="seealso" xref="about-ssh"/>
+
+    <revision pkgversion="3.8" date="2013-02-26" status="incomplete"/>
+
+    <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
+
+    <credit type="author">
+      <name>Jim Campbell</name>
+      <email its:translate="no">jwcampbell@gmail.com</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>A public key is used to encrypt communication. A private key is
+    used to decrypt it.</desc>
+  </info>
+
+  <title>Public Key vs Private Key</title>
+
+  <p>Although <em>Public Keys</em> and <em>Private Keys</em> are both referred
+  to as <em>keys</em>, it helps to think of them a bit differently. Try to
+  think of a <em>Public Key</em> as being like a padlock, and a
+  <em>Private Key</em> as being like a key that unlocks the padlock.</p>
+
+  <section id="public-private-example">
+    <title>An Example: Sending a Secret Message in a Box</title>
+
+  <p>Let's use an example to see how this works. Imagine that you want your
+  friend to send you a secret message in a box. You could give your friend a
+  box and a padlock, but only you would have the key that unlocks the
+  padlock.</p>
+
+  <p>Your friend could put their message in the box, lock the padlock, and
+  then send you the locked box in the mail. When you receive it, you would use
+  your key to unlock the box.</p>
+
+  <p>This is similar to how a <em>Public Key</em> and a <em>Private Key</em>
+  work. Like the padlock, you can freely give out your <em>Public Key</em>.
+  This will make it easy for anyone to securely encrypt, or lock, a message
+  that they want to send to you.</p>
+  
+  <p>On the other hand, a <em>Private Key</em> is like the key that allows you
+  to decrypt, or unlock, the padlock. Because the <em>Private Key</em> is used
+  to decrypt secure messages, you will want to keep your <em>Private Key</em>
+  safe.</p>
+  
+  </section>
+
+</page>
