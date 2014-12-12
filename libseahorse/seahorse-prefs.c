@@ -63,7 +63,7 @@ keyserver_cell_edited (GtkCellRendererText *cell, gchar *path, gchar *text,
 
     if (!seahorse_servers_is_valid_uri (text)) {
         seahorse_util_show_error (NULL, _("Not a valid Key Server address."), 
-                                  _("For help contact your system adminstrator or the administrator of the key server." ));
+                                  _("For help contact your system administrator or the administrator of the key server." ));
         return;
     }
 
