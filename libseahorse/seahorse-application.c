@@ -44,7 +44,7 @@ struct _SeahorseApplicationClass {
 	GtkApplicationClass parent_class;
 };
 
-#define INACTIVITY_TIMEOUT 60 * 1000 /* One minute, in milliseconds */
+#define INACTIVITY_TIMEOUT 120 * 1000 /* Two minutes, in milliseconds */
 
 G_DEFINE_TYPE (SeahorseApplication, seahorse_application, GTK_TYPE_APPLICATION);
 
