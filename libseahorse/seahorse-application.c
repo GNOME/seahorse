@@ -91,12 +91,6 @@ seahorse_application_startup (GApplication *application)
 	/* Insert Icons into Stock */
 	seahorse_icons_init ();
 
-	seahorse_search_provider_initialize (SEAHORSE_APPLICATION (application)->search_provider);
-
-	/* HACK: get the inactivity timeout started */
-	g_application_hold (application);
-	g_application_release (application);
-
 	G_APPLICATION_CLASS (seahorse_application_parent_class)->startup (application);
 }
 
@@ -277,4 +271,10 @@ seahorse_application_pgp_settings (SeahorseApplication *self)
 		self = the_application;
 	g_return_val_if_fail (SEAHORSE_IS_APPLICATION (self), NULL);
 	return self->crypto_pgp_settings;
+}
+
+void
+seahorse_application_initialize_search (SeahorseApplication *self)
+{
+	seahorse_search_provider_initialize (self->search_provider);
 }

@@ -64,6 +64,9 @@ on_application_startup (GApplication *application,
 	seahorse_pkcs11_backend_initialize ();
 #endif
 	seahorse_gkr_backend_initialize ();
+
+	/* Initialize the search provider now that backends are registered */
+	seahorse_application_initialize_search (SEAHORSE_APPLICATION (application));
 }
 
 /* Initializes context and preferences, then loads key manager */

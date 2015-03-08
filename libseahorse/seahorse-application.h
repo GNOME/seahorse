@@ -46,4 +46,6 @@ GSettings *         seahorse_application_settings                (SeahorseApplic
 
 GSettings *         seahorse_application_pgp_settings            (SeahorseApplication *self);
 
+void                seahorse_application_initialize_search       (SeahorseApplication *self);
+
 #endif /* __SEAHORSE_APPLICATION_H__ */
