@@ -501,7 +501,7 @@ egg_datetime_init (EggDateTime *edt)
    priv->date_button = gtk_toggle_button_new ();
    _add_atk_name_desc (priv->date_button, _("Select Date"), _("Select the date from a calendar"));
    gtk_box_pack_start (GTK_BOX (priv->date_box), priv->date_button, FALSE, FALSE, 0);
-   arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+   arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
    gtk_container_add (GTK_CONTAINER (priv->date_button), arrow);
    gtk_widget_show (arrow);
    g_signal_connect_swapped (G_OBJECT (priv->date_button), "toggled",
@@ -526,7 +526,7 @@ egg_datetime_init (EggDateTime *edt)
    priv->time_button = gtk_toggle_button_new ();
    _add_atk_name_desc (priv->date_button, _("Select Time"), _("Select the time from a list"));
    gtk_box_pack_start (GTK_BOX (priv->time_box), priv->time_button, FALSE, FALSE, 0);
-   arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+   arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
    gtk_container_add (GTK_CONTAINER (priv->time_button), arrow);
    gtk_widget_show (arrow);
    g_signal_connect_swapped (G_OBJECT (priv->time_button), "toggled",
