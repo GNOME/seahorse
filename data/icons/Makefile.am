@@ -13,6 +13,7 @@ public_icons = \
 	hicolor_apps_48x48_seahorse.png \
 	hicolor_apps_48x48_seahorse-preferences.png \
 	hicolor_apps_256x256_seahorse.png \
+	hicolor_apps_symbolic_seahorse-symbolic.svg \
 	$(NULL)
 
 private_icons = \
