@@ -311,7 +311,7 @@ seahorse_pgp_backend_initialize (void)
 
 	g_return_if_fail (pgp_backend != NULL);
 
-	gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, GNUPG, NULL);
+	gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, NULL, NULL);
 }
 
 SeahorseGpgmeKeyring *

@@ -30,43 +30,10 @@
 #include "pgp/seahorse-gpgme-uid.h"
 #include "pgp/seahorse-gpgme-photo.h"
 
-/* 
- * Key type options. 
- * Sadly these are not consistent between versions of GPG.
+/*
+ * Key type options.
+ * We only support GPG version >=2.0.12 or >= 2.1.4
  */
-#if ( GPG_MAJOR == 2 &&   GPG_MINOR == 0 && GPG_MICRO < 12 ) || \
-    ( GPG_MAJOR == 1 && ( GPG_MINOR <  4 || GPG_MICRO < 10 ) )
-
-typedef enum {
-	/* DSA key with ElGamal subkey. The ElGamal length is variable
-	 * within #ELGAMAL_MIN and #LENGTH_MAX. The DSA key will have a
-	 * length equal to the ElGamal key's up to a limit of #DSA_MAX.
-	 * Only used in seahorse_ops_key_generate().
-	 */
-	DSA_ELGAMAL = 1,
-	/* DSA key, sign only. Can be a subkey or a primary key.
-	 * See #DSA_MIN and #DSA_MAX.
-	 */
-	DSA = 2,
-	/* ElGamal subkey, encrypt only. See #ELGAMAL_MIN and #LENGTH_MAX.
-	 * Only used in seahorse_ops_key_add_subkey().
-	 */
-	ELGAMAL = 4,
-	/* RSA key, sign only. Can be a subkey or a primary key.
-	 * See #RSA_MIN and #LENGTH_MAX.
-	 */
-	RSA_SIGN = 5,
-	/* RSA subkey, encrypt only. See #RSA_MIN and #LENGTH_MAX.
-	 * Only used in seahorse_ops_key_add_subkey().
-	 */
-	RSA_ENCRYPT = 6,
-	/* RSA sign-only key with RSA encrypt-only subkey. See #RSA_MIN and
-	 * #LENGTH_MAX. Only used in seahorse_ops_key_generate().
-	 */
-	RSA_RSA = 11
-} SeahorseKeyEncType;
-
-#else /* GPG version >=1.4.10 or >=2.0.12 */
 
 typedef enum {
 	RSA_RSA = 1,
@@ -76,8 +43,6 @@ typedef enum {
 	ELGAMAL = 5,
 	RSA_ENCRYPT = 6
 } SeahorseKeyEncType;
-
-#endif /* GPG version >=1.4.10 or >=2.0.12 */
 
 /* Length ranges for key types */
 typedef enum {

@@ -9,7 +9,7 @@ GCR_REQUIRED=3.11.91
 GTK_REQ=3.4.0
 GTK_MAX=GTK_VERSION_3_4
 
-GNUPG_ACCEPTED="1.2 1.4 2.0"
+GNUPG_ACCEPTED="2.0.12 2.1.4"
 GPGME_REQUIRED=1.0.0
 LIBSECRET_REQUIRED=0.16
 AVAHI_GLIB_REQUIRED=0.6
@@ -130,7 +130,7 @@ else
 		DO_CHECK=$enableval, DO_CHECK=yes)
 	
 	if test	"$DO_CHECK" = "yes"; then
-		AC_PATH_PROGS(GNUPG, [gpg gpg2], no)
+		AC_PATH_PROGS(GNUPG, [gpg2 gpg], no)
 		AC_DEFINE_UNQUOTED(GNUPG, "$GNUPG", [Path to gpg executable.])
 		ok="no"
 		if test "$GNUPG" != "no"; then
@@ -144,12 +144,16 @@ else
 				sed 's/^gpg (GnuPG) \([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
     
 			for ver in $GNUPG_ACCEPTED; do
-				if test "$ver" = "$major.$minor"; then
-					AC_DEFINE_UNQUOTED(GPG_MAJOR, [$major], [GPG Major Version])
-					AC_DEFINE_UNQUOTED(GPG_MINOR, [$minor], [GPG Minor Version])
-					AC_DEFINE_UNQUOTED(GPG_MICRO, [$micro], [GPG Micro Version])
-					ok="yes"
-					break
+				branch=`echo $ver | sed 's/\.[[0-9]]*$//'`
+				if test "$branch" = "$major.$minor"; then
+					min_micro=`echo $ver | sed 's/^[[0-9]]*\.[[0-9]]*\.//'`
+					if test "$min_micro" -le "$micro"; then
+						AC_DEFINE_UNQUOTED(GPG_MAJOR, [$major], [GPG Major Version])
+						AC_DEFINE_UNQUOTED(GPG_MINOR, [$minor], [GPG Minor Version])
+						AC_DEFINE_UNQUOTED(GPG_MICRO, [$micro], [GPG Micro Version])
+						ok="yes"
+						break
+					fi
 				fi
 			done
 		fi
@@ -206,7 +210,7 @@ fi
 
 if test "$enable_pgp" = "yes"; then
 	if test -z "$have_gpg"; then
-		AC_MSG_ERROR([Appropriate version of GnuPG not found. Please install one of versions: $GNUPG_ACCEPTED])
+		AC_MSG_ERROR([Appropriate version of GnuPG not found. Please install one of the following versions (or later): $GNUPG_ACCEPTED])
 	fi
 			
 	if test -z "$have_gpgme"; then

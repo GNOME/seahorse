@@ -111,9 +111,6 @@ seahorse_gpg_op_num_uids (gpgme_ctx_t ctx, const char *pattern, guint *number)
 		found += 3;
 	}
 
-	if ((GPG_MAJOR == 1) && (GPG_MINOR == 2))
-		*number = *number + 1;
-     
     g_free (output);
     return GPG_OK;
 }
