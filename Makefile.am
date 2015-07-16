@@ -78,7 +78,7 @@ seahorselibexecbindir = $(libdir)/seahorse/
 seahorselibexecbin_PROGRAMS =
 
 BUILT_SOURCES =
-CLEANFILES = *.c */*.c *.h */*.h $(BUILT_SOURCES)
+CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST += $(ui_DATA)
 DISTCLEANFILES +=
 
