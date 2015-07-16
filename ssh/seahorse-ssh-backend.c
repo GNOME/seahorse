@@ -86,7 +86,7 @@ on_place_loaded (GObject       *object,
 	}
 
 	backend->loaded = TRUE;
-	g_object_notify (backend, "loaded");
+	g_object_notify (G_OBJECT (backend), "loaded");
 
 	g_object_unref (backend);
 }

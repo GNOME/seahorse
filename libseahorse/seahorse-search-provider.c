@@ -145,7 +145,7 @@ hold_app (void)
 {
 	SeahorseApplication *app;
 
-	app = seahorse_application_get ();
+	app = SEAHORSE_APPLICATION (seahorse_application_get ());
 	g_application_hold (G_APPLICATION (app));
 }
 
@@ -154,7 +154,7 @@ release_app (void)
 {
 	SeahorseApplication *app;
 
-	app = seahorse_application_get ();
+	app = SEAHORSE_APPLICATION (seahorse_application_get ());
 	g_application_release (G_APPLICATION (app));
 }
 
