@@ -46,6 +46,6 @@ EXTRA_DIST += \
 	$(pkcs11_VALA) \
 	$(NULL)
 
-ui_DATA += \
+ui_files += \
 	pkcs11/seahorse-pkcs11-generate.xml \
 	pkcs11/seahorse-pkcs11-request.xml

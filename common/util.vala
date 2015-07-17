@@ -63,13 +63,13 @@ namespace Util {
 	public Gtk.Builder load_built_contents(Gtk.Container? frame,
 	                                       string name) {
 		var builder = new Gtk.Builder();
-		string path = GLib.Path.build_filename(Config.UIDIR, "seahorse-%s.xml".printf(name));
+		string path = "/org/gnome/Seahorse/seahorse-%s.xml".printf(name);
 
 		if (frame != null && frame is Gtk.Dialog)
 			frame = ((Gtk.Dialog)frame).get_content_area();
 
 		try {
-			builder.add_from_file(path);
+			builder.add_from_resource(path);
 			var obj = builder.get_object(name);
 			if (obj == null) {
 				GLib.critical("Couldn't find object named %s in %s", name, path);

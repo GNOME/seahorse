@@ -2,7 +2,6 @@
 namespace Config
 {
 	public const string PKGDATADIR;
-	public const string UIDIR;
 
 	public const string VERSION;
 	public const string PACKAGE;

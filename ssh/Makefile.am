@@ -24,7 +24,7 @@ seahorse_ssh_askpass_SOURCES = \
 seahorse_ssh_askpass_LDADD = \
 	$(SEAHORSE_LIBS)
 
-ui_DATA += \
+ui_files += \
 	ssh/seahorse-ssh-key-properties.xml \
 	ssh/seahorse-ssh-generate.xml \
 	ssh/seahorse-ssh-upload.xml

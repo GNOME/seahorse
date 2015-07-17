@@ -69,7 +69,7 @@ seahorselibexecbin_PROGRAMS += xloadimage
 
 xloadimage_SOURCES = pgp/seahorse-xloadimage.c
 
-ui_DATA += \
+ui_files += \
 	pgp/seahorse-add-subkey.xml \
 	pgp/seahorse-add-uid.xml \
 	pgp/seahorse-expires.xml \

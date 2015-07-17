@@ -34,9 +34,9 @@ public class Request : Gtk.Dialog {
 
 	construct {
 		var builder = new Gtk.Builder();
-		var path = Config.UIDIR + "seahorse-pkcs11-request.xml";
+		var path = "/org/gnome/Seahorse/seahorse-pkcs11-request.xml";
 		try {
-			builder.add_from_file(path);
+			builder.add_from_resource(path);
 		} catch (GLib.Error err) {
 			GLib.warning("couldn't load ui file: %s", path);
 			return;

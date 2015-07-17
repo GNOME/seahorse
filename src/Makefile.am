@@ -41,7 +41,7 @@ seahorse_LDADD = \
 	libeggtreemultidnd.a \
 	$(SEAHORSE_LIBS)
 
-ui_DATA += \
+ui_files += \
 	src/seahorse-key-manager.ui \
 	src/seahorse-key-manager.xml \
 	src/seahorse-change-passphrase.xml \
@@ -51,7 +51,7 @@ man_MANS += src/seahorse.1
 
 EXTRA_DIST += \
 	$(man_MANS) \
-	$(ui_DATA) \
+	$(ui_files) \
 	$(NULL)
 
 CLEANFILES += *.xmlp* *.bak \

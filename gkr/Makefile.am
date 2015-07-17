@@ -44,7 +44,7 @@ EXTRA_DIST += \
 	$(gkr_VALA) \
 	$(NULL)
 
-ui_DATA += \
+ui_files += \
 	gkr/seahorse-add-keyring.xml \
 	gkr/seahorse-gkr-add-item.xml \
 	gkr/seahorse-gkr-item-properties.xml \

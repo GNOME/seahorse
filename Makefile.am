@@ -31,7 +31,7 @@ DISTCLEANFILES = \
     intltool-extract \
     intltool-merge \
     intltool-update
-    
+
 DISTCHECK_CONFIGURE_FLAGS = \
     --disable-scrollkeeper \
     --disable-update-mime-database \
@@ -71,16 +71,15 @@ man_MANS =
 pkgdatadir = $(datadir)/seahorse
 localedir = $(datadir)/locale
 
-uidir = $(datadir)/seahorse/ui/
-ui_DATA =
+ui_files =
 
 seahorselibexecbindir = $(libdir)/seahorse/
 seahorselibexecbin_PROGRAMS =
 
 BUILT_SOURCES =
 CLEANFILES = $(BUILT_SOURCES)
-EXTRA_DIST += $(ui_DATA)
-DISTCLEANFILES +=
+EXTRA_DIST += $(ui_files)
+MAINTAINERCLEANFILES =
 
 AM_CPPFLAGS = \
 	-I$(top_builddir) \
@@ -88,8 +87,6 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/common \
 	-I$(top_srcdir)/common \
 	-DPKGDATADIR=\""$(pkgdatadir)/"\" \
-	-DUIDIR=\""$(uidir)"\" \
-	-DSEAHORSE_UIDIR=\""$(uidir)/"\" \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DGETTEXT_PACKAGE=\""seahorse\"" \
 	-DEXECDIR=\""$(seahorselibexecbindir)"\" \

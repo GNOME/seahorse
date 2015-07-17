@@ -208,8 +208,8 @@ seahorse_generate_select_constructed (GObject *obj)
 	}
 
 	builder = gtk_builder_new ();
-	path = SEAHORSE_UIDIR "/seahorse-generate-select.xml";
-	gtk_builder_add_from_file (builder, path, &error);
+	path = "/org/gnome/Seahorse/seahorse-generate-select.xml";
+	gtk_builder_add_from_resource (builder, path, &error);
 	if (error != NULL) {
 		g_warning ("couldn't load ui file: %s", path);
 		g_clear_error (&error);

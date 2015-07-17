@@ -15,9 +15,13 @@ $(dbus_shell_search_provider_built_sources) : Makefile.am $(srcdir)/libseahorse/
 MARSHAL_SRCS = \
 	seahorse-marshal.c seahorse-marshal.h
 
+RESOURCES_SRCS = \
+	seahorse-resources.c seahorse-resources.h
+
 BUILT_SOURCES += \
 	$(dbus_shell_search_provider_built_sources) \
-	$(MARSHAL_SRCS)
+	$(MARSHAL_SRCS) \
+	$(RESOURCES_SRCS)
 
 noinst_LIBRARIES += libseahorse.a
 
@@ -48,6 +52,7 @@ libseahorse_a_SOURCES = \
 	libseahorse/seahorse-widget.c libseahorse/seahorse-widget.h \
 	$(dbus_shell_search_provider_built_sources) \
 	$(MARSHAL_SRCS) \
+	$(RESOURCES_SRCS) \
 	$(KEYSERVER_SRCS)
 
 seahorse-marshal.h: libseahorse/seahorse-marshal.list $(GLIB_GENMARSHAL)
@@ -57,7 +62,32 @@ seahorse-marshal.c: libseahorse/seahorse-marshal.list $(GLIB_GENMARSHAL)
 	$(AM_V_GEN) echo "#include \"seahorse-marshal.h\"" > $@ && \
 	$(GLIB_GENMARSHAL) $< --body --prefix=seahorse_marshal >> $@
 
-ui_DATA += \
+seahorse-resources.h: libseahorse/seahorse.gresource.xml $(ui_files)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ \
+		--sourcedir=$(srcdir) --generate-header --manual-register $<
+
+seahorse-resources.c: libseahorse/seahorse.gresource.xml $(ui_files)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ \
+		--sourcedir=$(srcdir) --generate-source --manual-register $<
+
+libseahorse/seahorse.gresource.xml: Makefile.am
+	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \
+	echo "<gresources>" >> $@; \
+	echo "  <gresource prefix='/org/gnome/Seahorse'>" >> $@; \
+	list='$(ui_files)'; \
+	for f in $$list; do \
+	  n=`basename $$f`; \
+	  case "$$n" in \
+	  *.xml) \
+	    echo "    <file alias='"$$n"' preprocess='xml-stripblanks'>$$f</file>" >> $@ ;; \
+	  *) \
+	    echo "    <file alias='"$$n"'>$$f</file>" >> $@ ;; \
+	  esac; \
+	done; \
+	echo "  </gresource>" >> $@; \
+	echo "</gresources>" >> $@;
+
+ui_files += \
 	libseahorse/seahorse-prefs.xml \
 	libseahorse/seahorse-add-keyserver.xml \
 	libseahorse/seahorse-progress.xml \
@@ -65,4 +95,8 @@ ui_DATA += \
 
 EXTRA_DIST += \
 	libseahorse/seahorse-marshal.list \
-	libseahorse/org.gnome.ShellSearchProvider2.xml
+	libseahorse/org.gnome.ShellSearchProvider2.xml \
+	libseahorse/seahorse.gresource.xml
+
+MAINTAINERCLEANFILES += \
+	libseahorse/seahorse.gresource.xml

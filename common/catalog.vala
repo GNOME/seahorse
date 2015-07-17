@@ -87,8 +87,8 @@ public abstract class Catalog : Gtk.Window {
 
 		/* The widgts get added in an idle loop later */
 		try {
-			var path = GLib.Path.build_filename(Config.UIDIR, "seahorse-%s.ui".printf(this.ui_name));
-			this._ui_manager.add_ui_from_file(path);
+			var path = "/org/gnome/Seahorse/seahorse-%s.ui".printf(this.ui_name);
+			this._ui_manager.add_ui_from_resource(path);
 		} catch (GLib.Error err) {
 			GLib.warning("couldn't load ui description for '%s': %s",
 			             this.ui_name, err.message);

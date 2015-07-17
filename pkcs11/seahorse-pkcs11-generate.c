@@ -351,8 +351,8 @@ seahorse_pkcs11_generate_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_pkcs11_generate_parent_class)->constructed (obj);
 
 	builder = gtk_builder_new ();
-	path = UIDIR "/seahorse-pkcs11-generate.xml";
-	gtk_builder_add_from_file (builder, path, &error);
+	path = "/org/gnome/Seahorse/seahorse-pkcs11-generate.xml";
+	gtk_builder_add_from_resource (builder, path, &error);
 	if (error != NULL) {
 		g_warning ("couldn't load ui file: %s", path);
 		g_clear_error (&error);

@@ -150,7 +150,6 @@ class_init (SeahorseWidgetClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 	GtkCssProvider *css_provider;
-	GError *error = NULL;
 
 	parent_class = g_type_class_peek_parent (klass);
 
@@ -169,14 +168,10 @@ class_init (SeahorseWidgetClass *klass)
 	                                 NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
 	css_provider = gtk_css_provider_new ();
-	if (gtk_css_provider_load_from_path (css_provider, SEAHORSE_UIDIR "seahorse.css", &error)) {
-		gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-		                                           GTK_STYLE_PROVIDER (css_provider),
-		                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-	} else {
-		g_warning ("couldn't load %s file: %s", SEAHORSE_UIDIR "seahorse.css", error->message);
-		g_error_free (error);
-	}
+	gtk_css_provider_load_from_resource (css_provider, "/org/gnome/Seahorse/seahorse.css");
+	gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+						   GTK_STYLE_PROVIDER (css_provider),
+						   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	g_object_unref (css_provider);
 }
 
@@ -268,10 +263,10 @@ object_set_property (GObject *object, guint prop_id, const GValue *value, GParam
     case PROP_NAME:
         g_return_if_fail (swidget->name == NULL);
         swidget->name = g_value_dup_string (value);
-        path = g_strdup_printf ("%sseahorse-%s.xml",
-                                SEAHORSE_UIDIR, swidget->name);
+        path = g_strdup_printf ("/org/gnome/Seahorse/seahorse-%s.xml",
+                                swidget->name);
         swidget->gtkbuilder = gtk_builder_new ();
-        gtk_builder_add_from_file (swidget->gtkbuilder, path, &error);
+        gtk_builder_add_from_resource (swidget->gtkbuilder, path, &error);
         if (error)
           {
             g_warning ("Error parsing %s: %s\n", path, error->message);

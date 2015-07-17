@@ -33,8 +33,8 @@ public class ItemProperties : Gtk.Dialog {
 	construct {
 		this._builder = new Gtk.Builder();
 		try {
-			string path = GLib.Path.build_filename(Config.UIDIR, "seahorse-gkr-item-properties.xml");
-			this._builder.add_from_file(path);
+			string path = "/org/gnome/Seahorse/seahorse-gkr-item-properties.xml";
+			this._builder.add_from_resource(path);
 		} catch (GLib.Error err) {
 			GLib.critical ("%s", err.message);
 		}

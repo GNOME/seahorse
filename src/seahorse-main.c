@@ -23,6 +23,7 @@
 #include "seahorse-key-manager.h"
 
 #include "seahorse-common.h"
+#include "seahorse-resources.h"
 
 #include "libseahorse/seahorse-application.h"
 #include "libseahorse/seahorse-servers.h"
@@ -85,6 +86,8 @@ main (int argc, char **argv)
 #if !GLIB_CHECK_VERSION(2,35,0)
 	g_type_init ();
 #endif
+
+	seahorse_register_resource ();
 
 	application = seahorse_application_new ();
 	g_signal_connect (application, "activate", G_CALLBACK (on_application_activate), NULL);
