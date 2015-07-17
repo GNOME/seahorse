@@ -6,22 +6,21 @@
 # Andras Timar <timar at gnome dot hu>, 2003.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014.
 # Mate Ory <orymate at gmail dot com>, 2008.
-# Balázs Úr <urbalazs at gmail dot com>, 2013, 2014.
-# Balázs Úr <urbalazs@gmail.com>, 2014.
+# Balázs Úr <urbalazs at gmail dot com>, 2013, 2014, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-12-30 23:38+0000\n"
-"PO-Revision-Date: 2014-12-31 11:18+0100\n"
-"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
+"POT-Creation-Date: 2015-07-17 11:39+0000\n"
+"PO-Revision-Date: 2015-07-17 16:40+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 1.2\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../data/seahorse.appdata.xml.in.h:1
@@ -77,7 +76,7 @@ msgstr "A Seahorse projekt honlapja"
 msgid "Cannot delete"
 msgstr "Nem törölhető"
 
-#: ../common/catalog.vala:331 ../libseahorse/seahorse-key-manager-store.c:440
+#: ../common/catalog.vala:331 ../libseahorse/seahorse-key-manager-store.c:443
 msgid "Couldn't export keys"
 msgstr "Nem sikerült a kulcsok exportálása"
 
@@ -169,27 +168,27 @@ msgstr "Jelszavak"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Tárolt személyes jelszavak, hitelesítési adatok és titkos információk"
 
-#: ../gkr/gkr-backend.vala:241
+#: ../gkr/gkr-backend.vala:251
 msgid "New password keyring"
 msgstr "Új jelszókulcstartó"
 
-#: ../gkr/gkr-backend.vala:242 ../gkr/gkr-backend.vala:249
+#: ../gkr/gkr-backend.vala:252 ../gkr/gkr-backend.vala:259
 msgid "Used to store application and network passwords"
 msgstr "Alkalmazás- és hálózati jelszavak tárolására használatos"
 
-#: ../gkr/gkr-backend.vala:243
+#: ../gkr/gkr-backend.vala:253
 msgid "New password..."
 msgstr "Új jelszó…"
 
-#: ../gkr/gkr-backend.vala:244 ../gkr/gkr-backend.vala:251
+#: ../gkr/gkr-backend.vala:254 ../gkr/gkr-backend.vala:261
 msgid "Safely store a password or secret."
 msgstr "Jelszó vagy titkos információ biztonságos tárolása."
 
-#: ../gkr/gkr-backend.vala:248
+#: ../gkr/gkr-backend.vala:258
 msgid "Password Keyring"
 msgstr "Jelszókulcstartó"
 
-#: ../gkr/gkr-backend.vala:250
+#: ../gkr/gkr-backend.vala:260
 msgid "Stored Password"
 msgstr "Tárolt jelszó"
 
@@ -728,16 +727,16 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "A port, melyen a kiszolgáló elérhető."
 
-#: ../libseahorse/seahorse-application.c:114
+#: ../libseahorse/seahorse-application.c:108
 msgid "Version of this application"
 msgstr "Ezen alkalmazás verziója"
 
-#: ../libseahorse/seahorse-application.c:120
-#: ../libseahorse/seahorse-application.c:164
+#: ../libseahorse/seahorse-application.c:114
+#: ../libseahorse/seahorse-application.c:158
 msgid "- System Settings"
 msgstr "– Rendszerbeállítások"
 
-#: ../libseahorse/seahorse-application.c:160
+#: ../libseahorse/seahorse-application.c:154
 msgid "Don't display a window"
 msgstr "Ne jelenítsen meg ablakot"
 
@@ -756,9 +755,6 @@ msgid "Not a valid Key Server address."
 msgstr "Nem érvényes kulcskiszolgálócím."
 
 #: ../libseahorse/seahorse-prefs.c:66
-#| msgid ""
-#| "For help contact your system adminstrator or the administrator of the key "
-#| "server."
 msgid ""
 "For help contact your system administrator or the administrator of the key "
 "server."
@@ -801,6 +797,10 @@ msgstr "_Módosított kulcsok automatikus szinkronizálása kulcskiszolgálókka
 #: ../libseahorse/seahorse-prefs.xml.h:6
 msgid "Key Servers"
 msgstr "Kulcskiszolgálók"
+
+#: ../libseahorse/seahorse-search-provider.c:186
+msgid "The search provider is not loaded yet"
+msgstr "A keresőszolgáltató még nincs betöltve"
 
 #: ../libseahorse/seahorse-validity.c:38
 #: ../pgp/seahorse-pgp-key-properties.c:1251
@@ -1452,11 +1452,11 @@ msgstr "Kulcsok szinkronizálása és _közzététele…"
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Kulcsainak közzététele és/vagy szinkronizálása az online lévőkkel."
 
-#: ../pgp/seahorse-pgp-backend.c:167
+#: ../pgp/seahorse-pgp-backend.c:193
 msgid "PGP Keys"
 msgstr "PGP-kulcsok"
 
-#: ../pgp/seahorse-pgp-backend.c:173
+#: ../pgp/seahorse-pgp-backend.c:199
 msgid "PGP keys are for encrypting email or files"
 msgstr "A PGP-kulcsok e-mailek és fájlok titkosítására szolgálnak"
 
@@ -2070,11 +2070,11 @@ msgstr "Személyes tanúsítvány és kulcs"
 msgid "Personal certificate"
 msgstr "Személyes tanúsítvány"
 
-#: ../pkcs11/seahorse-pkcs11-backend.c:184
+#: ../pkcs11/seahorse-pkcs11-backend.c:189
 msgid "Certificates"
 msgstr "Tanúsítványok"
 
-#: ../pkcs11/seahorse-pkcs11-backend.c:190
+#: ../pkcs11/seahorse-pkcs11-backend.c:195
 msgid "X.509 certificates and related keys"
 msgstr "X.509 tanúsítványok és kapcsolódó kulcsok"
 
@@ -2386,11 +2386,11 @@ msgstr "Írja be az új jelmondatot %s számára"
 msgid "Enter the new passphrase again: %s"
 msgstr "Írja be ismét az új jelmondatot: %s"
 
-#: ../ssh/seahorse-ssh-backend.c:88
+#: ../ssh/seahorse-ssh-backend.c:115
 msgid "Secure Shell"
 msgstr "Biztonságos parancsértelmező"
 
-#: ../ssh/seahorse-ssh-backend.c:94
+#: ../ssh/seahorse-ssh-backend.c:121
 msgid "Keys used to connect securely to other computers"
 msgstr "Más számítógépekhez való biztonságos csatlakozásra használható kulcsok"
 
