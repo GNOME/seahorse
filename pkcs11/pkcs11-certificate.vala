@@ -197,6 +197,7 @@ public class Certificate : Gck.Object, Gcr.Comparable, Gcr.Certificate,
 		this.notify_property("attributes");
 	}
 
+	[CCode (array_length_type = "gsize")]
 	public unowned uint8[] get_der_data() {
 		if (this._der == null)
 			return EMPTY;
