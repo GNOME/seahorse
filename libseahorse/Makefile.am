@@ -71,7 +71,8 @@ seahorse-resources.c: libseahorse/seahorse.gresource.xml $(ui_files)
 		--sourcedir=$(srcdir) --generate-source --manual-register $<
 
 libseahorse/seahorse.gresource.xml: Makefile.am
-	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \
+	$(AM_V_GEN) $(MKDIR_P) libseahorse; \
+	echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \
 	echo "<gresources>" >> $@; \
 	echo "  <gresource prefix='/org/gnome/Seahorse'>" >> $@; \
 	list='$(ui_files)'; \
