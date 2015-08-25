@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-12 21:59+0100\n"
-"PO-Revision-Date: 2015-01-12 21:59+0200\n"
+"POT-Creation-Date: 2015-08-25 16:51+0200\n"
+"PO-Revision-Date: 2015-08-25 16:52+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -70,8 +70,8 @@ msgstr ""
 "Fran Diéguez <frandieguez@gnome.org>, 2009-2015.\n"
 "Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.\n"
 "Antón Méixome <meixome@mancomun.org>, 2009.\n"
-"Mancomún - Centro de Referencia e Servizos de Software Libre "
-"<g11n@mancomun.org>, 2009.\n"
+"Mancomún - Centro de Referencia e Servizos de Software Libre <g11n@mancomun."
+"org>, 2009.\n"
 "Suso Baleato <suso.baleato@xunta.es>, 2009.\n"
 "Ignacio Casal Quinteiro <icq@gnome.org>, 2007, 2008."
 
@@ -83,7 +83,7 @@ msgstr "Páxina web do Seahorse"
 msgid "Cannot delete"
 msgstr "Non é posíbel eliminar"
 
-#: ../common/catalog.vala:331 ../libseahorse/seahorse-key-manager-store.c:440
+#: ../common/catalog.vala:331 ../libseahorse/seahorse-key-manager-store.c:443
 msgid "Couldn't export keys"
 msgstr "Non foi posíbel exportar as chaves"
 
@@ -91,7 +91,7 @@ msgstr "Non foi posíbel exportar as chaves"
 msgid "Couldn't export data"
 msgstr "Non foi posíbel exportar os datos"
 
-#: ../common/catalog.vala:358 ../libseahorse/seahorse-widget.c:465
+#: ../common/catalog.vala:358 ../libseahorse/seahorse-widget.c:460
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Non foi posíbel mostrar a axuda: %s"
@@ -175,27 +175,27 @@ msgstr "Contrasinais"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Contrasinais personais, credenciais e segredos almacenados"
 
-#: ../gkr/gkr-backend.vala:241
+#: ../gkr/gkr-backend.vala:251
 msgid "New password keyring"
 msgstr "Contrasinal novo do anel de chaves"
 
-#: ../gkr/gkr-backend.vala:242 ../gkr/gkr-backend.vala:249
+#: ../gkr/gkr-backend.vala:252 ../gkr/gkr-backend.vala:259
 msgid "Used to store application and network passwords"
 msgstr "Úsase para gardar os contrasinais de rede e de aplicativos"
 
-#: ../gkr/gkr-backend.vala:243
+#: ../gkr/gkr-backend.vala:253
 msgid "New password..."
 msgstr "Contrasinal novo…"
 
-#: ../gkr/gkr-backend.vala:244 ../gkr/gkr-backend.vala:251
+#: ../gkr/gkr-backend.vala:254 ../gkr/gkr-backend.vala:261
 msgid "Safely store a password or secret."
 msgstr "Gardar de forma segura un contrasinal ou un segredo."
 
-#: ../gkr/gkr-backend.vala:248
+#: ../gkr/gkr-backend.vala:258
 msgid "Password Keyring"
 msgstr "Contrasinal do anel de chaves"
 
-#: ../gkr/gkr-backend.vala:250
+#: ../gkr/gkr-backend.vala:260
 msgid "Stored Password"
 msgstr "Contrasinal gardado"
 
@@ -421,8 +421,7 @@ msgstr "Mostrar _contrasinal"
 msgid "Password:"
 msgstr "Contrasinal:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:9
-#: ../pgp/seahorse-pgp-subkey.c:402
+#: ../gkr/seahorse-gkr-item-properties.xml.h:9 ../pgp/seahorse-pgp-subkey.c:402
 #: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Key"
 msgstr "Tecla"
@@ -740,16 +739,16 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "O porto para acceder ao servidor."
 
-#: ../libseahorse/seahorse-application.c:114
+#: ../libseahorse/seahorse-application.c:108
 msgid "Version of this application"
 msgstr "Versión deste aplicativo"
 
-#: ../libseahorse/seahorse-application.c:120
-#: ../libseahorse/seahorse-application.c:164
+#: ../libseahorse/seahorse-application.c:114
+#: ../libseahorse/seahorse-application.c:158
 msgid "- System Settings"
 msgstr "- Preferencias do sistema"
 
-#: ../libseahorse/seahorse-application.c:160
+#: ../libseahorse/seahorse-application.c:154
 msgid "Don't display a window"
 msgstr "Non mostrar unha xanela"
 
@@ -812,6 +811,10 @@ msgstr ""
 #: ../libseahorse/seahorse-prefs.xml.h:6
 msgid "Key Servers"
 msgstr "Servidores de chaves"
+
+#: ../libseahorse/seahorse-search-provider.c:186
+msgid "The search provider is not loaded yet"
+msgstr "O fornecedor de busca aínda non está cargado"
 
 #: ../libseahorse/seahorse-validity.c:38
 #: ../pgp/seahorse-pgp-key-properties.c:1251
@@ -1015,8 +1018,7 @@ msgstr "Chave PGP"
 msgid "Used to encrypt email and files"
 msgstr "Usado para cifrar correo e ficheiros"
 
-#: ../pgp/seahorse-gpgme-generate.c:130
-#: ../pkcs11/seahorse-pkcs11-generate.c:90
+#: ../pgp/seahorse-gpgme-generate.c:130 ../pkcs11/seahorse-pkcs11-generate.c:90
 #: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
@@ -1096,8 +1098,7 @@ msgstr "Introduza unha frase de paso nova para «%s»"
 msgid "Enter passphrase for '%s'"
 msgstr "Introduza a frase de paso para «%s»"
 
-#: ../pgp/seahorse-gpgme-keyring.c:98
-#: ../src/seahorse-change-passphrase.xml.h:2
+#: ../pgp/seahorse-gpgme-keyring.c:98 ../src/seahorse-change-passphrase.xml.h:2
 msgid "Enter new passphrase"
 msgstr "Introduza a frase de paso nova"
 
@@ -1469,11 +1470,11 @@ msgstr "_Sincronizar e publicar chaves…"
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Publicar ou sincronizar as chaves coas que están en liña."
 
-#: ../pgp/seahorse-pgp-backend.c:167
+#: ../pgp/seahorse-pgp-backend.c:193
 msgid "PGP Keys"
 msgstr "Chave PGP"
 
-#: ../pgp/seahorse-pgp-backend.c:173
+#: ../pgp/seahorse-pgp-backend.c:199
 msgid "PGP keys are for encrypting email or files"
 msgstr "Chaves PGP usadas para cifrar correo e ficheiros"
 
@@ -2092,11 +2093,11 @@ msgstr "Certificado persoal e chave"
 msgid "Personal certificate"
 msgstr "Certificado persoal"
 
-#: ../pkcs11/seahorse-pkcs11-backend.c:184
+#: ../pkcs11/seahorse-pkcs11-backend.c:189
 msgid "Certificates"
 msgstr "Certificados"
 
-#: ../pkcs11/seahorse-pkcs11-backend.c:190
+#: ../pkcs11/seahorse-pkcs11-backend.c:195
 msgid "X.509 certificates and related keys"
 msgstr "Certificados X.509 e chaves relacionadas"
 
@@ -2408,11 +2409,11 @@ msgstr "Escriba a nova frase de paso nova para: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Escriba a nova frase de paso nova de novo: %s"
 
-#: ../ssh/seahorse-ssh-backend.c:88
+#: ../ssh/seahorse-ssh-backend.c:115
 msgid "Secure Shell"
 msgstr "Secure Shell (SSH)"
 
-#: ../ssh/seahorse-ssh-backend.c:94
+#: ../ssh/seahorse-ssh-backend.c:121
 msgid "Keys used to connect securely to other computers"
 msgstr "Chaves usadas para conectar de maneira segura a outros equipos"
 
