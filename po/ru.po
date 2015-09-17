@@ -9,15 +9,16 @@
 # Yuri Kozlov <yuray@komyakino.ru>, 2010.
 # Yuri Myasoedov <ymyasoedov@yandex.ru>, 2012-2014.
 # Ivan Komaritsyn <vantu5z@mail.ru>, 2015.
+# Stas Solovey <whats_up@tut.by>, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse trunk\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-18 23:52+0000\n"
-"PO-Revision-Date: 2015-02-19 14:52+0300\n"
-"Last-Translator: Ivan Komaritsyn <vantu5z@mail.ru>\n"
+"POT-Creation-Date: 2015-09-16 23:57+0000\n"
+"PO-Revision-Date: 2015-09-17 14:51+0300\n"
+"Last-Translator: Stas Solovey <whats_up@tut.by>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: ../data/seahorse.appdata.xml.in.h:1
 msgid ""
@@ -79,7 +80,7 @@ msgstr "Домашняя страница проекта Seahorse"
 msgid "Cannot delete"
 msgstr "Не удалось удалить"
 
-#: ../common/catalog.vala:331 ../libseahorse/seahorse-key-manager-store.c:440
+#: ../common/catalog.vala:331 ../libseahorse/seahorse-key-manager-store.c:443
 msgid "Couldn't export keys"
 msgstr "Не удалось экспортировать ключи"
 
@@ -87,7 +88,7 @@ msgstr "Не удалось экспортировать ключи"
 msgid "Couldn't export data"
 msgstr "Не удалось экспортировать данные"
 
-#: ../common/catalog.vala:358 ../libseahorse/seahorse-widget.c:465
+#: ../common/catalog.vala:358 ../libseahorse/seahorse-widget.c:460
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Не удалось показать справку: %s"
@@ -171,27 +172,27 @@ msgstr "Пароли"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Хранящиеся личные пароли, мандаты и секреты"
 
-#: ../gkr/gkr-backend.vala:241
+#: ../gkr/gkr-backend.vala:251
 msgid "New password keyring"
 msgstr "Новая связка ключей для паролей"
 
-#: ../gkr/gkr-backend.vala:242 ../gkr/gkr-backend.vala:249
+#: ../gkr/gkr-backend.vala:252 ../gkr/gkr-backend.vala:259
 msgid "Used to store application and network passwords"
 msgstr "Используется для хранения паролей приложений и сетевых узлов"
 
-#: ../gkr/gkr-backend.vala:243
+#: ../gkr/gkr-backend.vala:253
 msgid "New password..."
 msgstr "Создать пароль…"
 
-#: ../gkr/gkr-backend.vala:244 ../gkr/gkr-backend.vala:251
+#: ../gkr/gkr-backend.vala:254 ../gkr/gkr-backend.vala:261
 msgid "Safely store a password or secret."
 msgstr "Безопасно хранит пароль или секрет."
 
-#: ../gkr/gkr-backend.vala:248
+#: ../gkr/gkr-backend.vala:258
 msgid "Password Keyring"
 msgstr "Связка ключей для паролей"
 
-#: ../gkr/gkr-backend.vala:250
+#: ../gkr/gkr-backend.vala:260
 msgid "Stored Password"
 msgstr "Сохраненный пароль"
 
@@ -413,8 +414,7 @@ msgstr "Показать _пароль"
 msgid "Password:"
 msgstr "Пароль:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:9
-#: ../pgp/seahorse-pgp-subkey.c:402
+#: ../gkr/seahorse-gkr-item-properties.xml.h:9 ../pgp/seahorse-pgp-subkey.c:402
 #: ../ssh/seahorse-ssh-key-properties.xml.h:15
 msgid "Key"
 msgstr "Ключ"
@@ -731,16 +731,16 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "Порт для доступа к серверу."
 
-#: ../libseahorse/seahorse-application.c:114
+#: ../libseahorse/seahorse-application.c:108
 msgid "Version of this application"
 msgstr "Версия этого приложения"
 
-#: ../libseahorse/seahorse-application.c:120
-#: ../libseahorse/seahorse-application.c:164
+#: ../libseahorse/seahorse-application.c:114
+#: ../libseahorse/seahorse-application.c:158
 msgid "- System Settings"
 msgstr "— системные параметры"
 
-#: ../libseahorse/seahorse-application.c:160
+#: ../libseahorse/seahorse-application.c:154
 msgid "Don't display a window"
 msgstr "Не показывать окно"
 
@@ -801,6 +801,10 @@ msgstr "Автоматически син_хронизировать измен�
 #: ../libseahorse/seahorse-prefs.xml.h:6
 msgid "Key Servers"
 msgstr "Серверы ключей"
+
+#: ../libseahorse/seahorse-search-provider.c:186
+msgid "The search provider is not loaded yet"
+msgstr "Поставщик поиска еще не загружен"
 
 #: ../libseahorse/seahorse-validity.c:38
 #: ../pgp/seahorse-pgp-key-properties.c:1251
@@ -1004,8 +1008,7 @@ msgstr "Ключ PGP"
 msgid "Used to encrypt email and files"
 msgstr "Используется для шифрования почты и файлов"
 
-#: ../pgp/seahorse-gpgme-generate.c:130
-#: ../pkcs11/seahorse-pkcs11-generate.c:90
+#: ../pgp/seahorse-gpgme-generate.c:130 ../pkcs11/seahorse-pkcs11-generate.c:90
 #: ../ssh/seahorse-ssh-generate.xml.h:9
 msgid "RSA"
 msgstr "RSA"
@@ -1084,8 +1087,7 @@ msgstr "Введите новый пароль для «%s»"
 msgid "Enter passphrase for '%s'"
 msgstr "Введите пароль для «%s»"
 
-#: ../pgp/seahorse-gpgme-keyring.c:98
-#: ../src/seahorse-change-passphrase.xml.h:2
+#: ../pgp/seahorse-gpgme-keyring.c:98 ../src/seahorse-change-passphrase.xml.h:2
 msgid "Enter new passphrase"
 msgstr "Введите новый пароль"
 
@@ -1457,11 +1459,11 @@ msgstr "_Синхронизировать и опубликовать ключи
 msgid "Publish and/or synchronize your keys with those online."
 msgstr "Опубликовать ключи и синхронизироваться с серверами в сети."
 
-#: ../pgp/seahorse-pgp-backend.c:167
+#: ../pgp/seahorse-pgp-backend.c:193
 msgid "PGP Keys"
 msgstr "Ключи PGP"
 
-#: ../pgp/seahorse-pgp-backend.c:173
+#: ../pgp/seahorse-pgp-backend.c:199
 msgid "PGP keys are for encrypting email or files"
 msgstr "Ключи PGP используются для шифрования почты и файлов"
 
@@ -2076,11 +2078,11 @@ msgstr "Личный сертификат и ключ"
 msgid "Personal certificate"
 msgstr "Личный сертификат"
 
-#: ../pkcs11/seahorse-pkcs11-backend.c:184
+#: ../pkcs11/seahorse-pkcs11-backend.c:189
 msgid "Certificates"
 msgstr "Сертификаты"
 
-#: ../pkcs11/seahorse-pkcs11-backend.c:190
+#: ../pkcs11/seahorse-pkcs11-backend.c:195
 msgid "X.509 certificates and related keys"
 msgstr "Ключи и сертификаты X.509"
 
@@ -2393,11 +2395,11 @@ msgstr "Введите новый пароль для: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Введите новый пароль ещё раз: %s"
 
-#: ../ssh/seahorse-ssh-backend.c:88
+#: ../ssh/seahorse-ssh-backend.c:115
 msgid "Secure Shell"
 msgstr "Безопасная оболочка"
 
-#: ../ssh/seahorse-ssh-backend.c:94
+#: ../ssh/seahorse-ssh-backend.c:121
 msgid "Keys used to connect securely to other computers"
 msgstr ""
 "Ключи, использующиеся для безопасного подключения к другим компьютерам."
