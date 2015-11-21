@@ -291,7 +291,8 @@ handle_get_result_metas (SeahorseShellSearchProvider2 *skeleton,
 	SeahorseSearchProvider *self = SEAHORSE_SEARCH_PROVIDER (skeleton);
 	int i;
 	GVariantBuilder builder;
-	char *name, *description, *escaped_description, *icon_string;
+	char *name, *description, *escaped_description;
+	GVariant *icon_variant;
 	GIcon *icon;
 
 	if (error_request_if_not_loaded (self, invocation))
@@ -324,11 +325,12 @@ handle_get_result_metas (SeahorseShellSearchProvider2 *skeleton,
 			g_free (name);
 		}
 		if (icon) {
-			icon_string = g_icon_to_string (icon);
-			g_variant_builder_add (&builder, "{sv}",
-			                       "gicon",
-			                       icon_string ? g_variant_new_string (icon_string) : NULL);
-			g_free (icon_string);
+			icon_variant = g_icon_serialize (icon);
+			if (icon_variant) {
+				g_variant_builder_add (&builder, "{sv}",
+						       "icon", icon_variant);
+				g_variant_unref (icon_variant);
+			}
 			g_object_unref (icon);
 		}
 		if (description) {
