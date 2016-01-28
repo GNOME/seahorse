@@ -161,6 +161,17 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 		}
 	}
 
+	public void delete_keyring_password(){
+	string object_path;
+	object_path = backend.instance().aliases.lookup("login");
+	if(backend.instance().keyrings.lookup(object_path)==null)
+		return;
+	else{
+		var keyring = backend.instance().keyrings.lookup(object_path);
+		keyring.refresh_collection();
+	    }
+	}
+
 	[CCode (instance_pos = -1)]
 	private void on_keyring_default(Gtk.Action action) {
 		var parent = Action.get_window(action);
@@ -244,6 +255,7 @@ class KeyringDeleter : Deleter {
 	}
 
 	public KeyringDeleter(Keyring keyring) {
+		keyring.delete_keyring_password();
 		if (!add_object(keyring))
 			GLib.assert_not_reached();
 	}
