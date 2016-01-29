@@ -60,6 +60,10 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 		get { return this._service; }
 	}
 
+	public Glib.HashTable<string, keyring> keyrings {
+		get { return this._keyrings; }
+	}
+
 	private static Backend? _instance = null;
 	private Secret.Service _service;
 	private GLib.HashTable<string, Keyring> _keyrings;

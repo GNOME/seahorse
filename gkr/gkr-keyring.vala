@@ -63,7 +63,12 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 	public bool deletable {
 		get { return true; }
 	}
+	
+	public bool is_locked {
+		get { return _locked; }
+	}
 
+	private bool _locked;
 	private GLib.HashTable<string, Item> _items;
 	private Gtk.ActionGroup? _actions;
 
@@ -110,6 +115,7 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 		GLib.List<GLib.DBusProxy> locked;
 		yield service.lock(objects, cancellable, out locked);
 		refresh_collection ();
+		this._locked = true;
 		return locked.length() > 0;
 	}
 
@@ -122,6 +128,7 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 		GLib.List<GLib.DBusProxy> unlocked;
 		yield service.unlock(objects, cancellable, out unlocked);
 		refresh_collection ();
+		this._locked = false;
 		return unlocked.length() > 0;
 	}
 
@@ -159,6 +166,17 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 				emit_removed (item);
 			}
 		}
+	}
+
+	public void delete_keyring_password(){
+	string object_path;
+	object_path = backend.instance().aliases.lookup("login");
+	if(backend.instance().keyrings.lookup(object_path)==null)
+		return;
+	else{
+		var keyring = backend.instance().keyrings.lookup(object_path);
+		keyring.refresh_collection();
+	    }
 	}
 
 	[CCode (instance_pos = -1)]
@@ -244,6 +262,7 @@ class KeyringDeleter : Deleter {
 	}
 
 	public KeyringDeleter(Keyring keyring) {
+		keyring.delete_keyring_password();
 		if (!add_object(keyring))
 			GLib.assert_not_reached();
 	}

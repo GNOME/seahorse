@@ -41,6 +41,9 @@ public class ItemAdd : Gtk.Dialog {
 
 		foreach (var keyring in Backend.instance().get_keyrings()) {
 			Gtk.TreeIter iter;
+			/* Locked keyring is not loaded */
+			if (keyring.is_locked == true)
+				continue;
 			store.append(out iter);
 			store.set(iter,
 			          0, keyring.label,
