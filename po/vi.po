@@ -4,15 +4,15 @@
 # This file is distributed under the same license as the seahorse package.
 # Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2007,2011-2013.
 # Clytie Siddall <clytie@riverland.net.au>, 2006-2009.
-# Trần Ngọc Quân <vnwildman@gmail.com>, 2013, 2014, 2015.
+# Trần Ngọc Quân <vnwildman@gmail.com>, 2013, 2014, 2015, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-09-26 00:22+0000\n"
-"PO-Revision-Date: 2015-09-26 15:02+0700\n"
+"POT-Creation-Date: 2016-07-08 22:56+0000\n"
+"PO-Revision-Date: 2016-07-09 07:33+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <gnome-vi-list@gnome.org>\n"
 "Language: vi\n"
@@ -161,6 +161,10 @@ msgstr "Hiện trợ giúp Seahorse"
 #: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
 msgid "Export"
 msgstr "Xuất ra"
+
+#: ../common/util.vala:59
+msgid "%Y-%m-%d"
+msgstr "%d-%m-%Y"
 
 #: ../gkr/gkr-backend.vala:39
 msgid "Passwords"
@@ -655,12 +659,12 @@ msgstr "24hr: no"
 #: ../libegg/egg-datetime.c:796 ../libegg/egg-datetime.c:1259
 #: ../libegg/egg-datetime.c:1263
 msgid "AM"
-msgstr "AM"
+msgstr "SA"
 
 #: ../libegg/egg-datetime.c:798 ../libegg/egg-datetime.c:1260
 #: ../libegg/egg-datetime.c:1267
 msgid "PM"
-msgstr "PM"
+msgstr "CH"
 
 #. Translators: This is hh:mm:ss AM/PM.
 #: ../libegg/egg-datetime.c:806
@@ -1177,7 +1181,7 @@ msgstr "Bạn có chắc muốn gỡ bỏ ảnh chụp hiện tại ra khỏi kh
 
 #: ../pgp/seahorse-gpgme-photos.c:334
 msgid "Couldn't delete photo"
-msgstr "Không thể xóa ảnh chụp"
+msgstr "Không thể xóa ảnh"
 
 #: ../pgp/seahorse-gpgme-revoke.c:73
 msgid "Couldn't revoke subkey"
@@ -1295,7 +1299,7 @@ msgstr "Không thể nhập khóa"
 
 #: ../pgp/seahorse-keyserver-results.c:211
 msgid "Importing keys from key servers"
-msgstr "Nhập khóa cho máy phục vụ khóa"
+msgstr "Nhập các khóa từ máy phục vụ khóa"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
 #: ../pgp/seahorse-keyserver-results.c:237 ../src/seahorse-key-manager.c:501
@@ -1312,11 +1316,11 @@ msgstr "_Tìm các khóa trên mạng…"
 
 #: ../pgp/seahorse-keyserver-results.c:244 ../pgp/seahorse-pgp-actions.c:114
 msgid "Search for keys on a key server"
-msgstr "Tìm khóa trên máy phục vụ khóa"
+msgstr "Tìm kiếm các khóa trên máy phục vụ khóa"
 
 #: ../pgp/seahorse-keyserver-results.c:248 ../src/seahorse-key-manager.xml.h:3
 msgid "_Import"
-msgstr "_Nhập"
+msgstr "_Nhập vào"
 
 #: ../pgp/seahorse-keyserver-results.c:249
 msgid "Import selected keys to local key ring"
@@ -1388,7 +1392,7 @@ msgstr "Đang đồng bộ hóa khóa…"
 
 #: ../pgp/seahorse-keyserver-sync.xml.h:1
 msgid "Sync Keys"
-msgstr "Đồng bộ hóa khóa"
+msgstr "Đồng bộ các khóa"
 
 #: ../pgp/seahorse-keyserver-sync.xml.h:2
 msgid ""
@@ -2406,7 +2410,7 @@ msgstr "Khóa SSH"
 
 #: ../ssh/seahorse-ssh-exporter.c:124
 msgid "Secret SSH keys"
-msgstr "Khóa mật SSH"
+msgstr "Khóa bí mật SSH"
 
 #: ../ssh/seahorse-ssh-exporter.c:128
 msgid "Public SSH keys"
@@ -2448,7 +2452,7 @@ msgstr "Tạ_o và Cài đặt"
 #: ../ssh/seahorse-ssh-generate.xml.h:4
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
-"Khóa Secure Shell (SSH) giúp bạn tạo kết nối một cách an toàn đến máy tính "
+"Khóa hệ vỏ bảo mật (SSH) giúp bạn tạo kết nối một cách an toàn đến máy tính "
 "khác."
 
 #: ../ssh/seahorse-ssh-generate.xml.h:6
@@ -2514,7 +2518,7 @@ msgstr "Người sở hữu khóa này có _quyền kết nối đến máy tín
 #: ../ssh/seahorse-ssh-key-properties.xml.h:14
 #, no-c-format
 msgid "This only applies to the <i>%s</i> account."
-msgstr "Chỉ áp dụng cho tài khoản </i>%s</i>."
+msgstr "Chỉ áp dụng cho tài khoản <i>%s</i>."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:16
 msgid "Algorithm:"
@@ -2551,11 +2555,11 @@ msgstr "Cụm từ mật khẩu cho khóa SSH mới"
 #: ../ssh/seahorse-ssh-operation.c:887
 #, c-format
 msgid "Importing key: %s"
-msgstr "Đang nhập khẩu khóa: %s"
+msgstr "Đang nhập vào khóa: %s"
 
 #: ../ssh/seahorse-ssh-operation.c:889
 msgid "Importing key. Enter passphrase"
-msgstr "Đang nhập khẩu khóa — gõ cụm từ mật khẩu"
+msgstr "Đang nhập vào khóa — gõ cụm từ mật khẩu"
 
 #: ../ssh/seahorse-ssh-source.c:219
 msgid "OpenSSH keys"
@@ -2617,9 +2621,6 @@ msgstr "_Cài đặt"
 
 #~ msgid "Keyring Properties"
 #~ msgstr "Thuộc tính chùm chìa khóa"
-
-#~ msgid "%Y-%m-%d"
-#~ msgstr "%d-%m-%Y"
 
 #~ msgid "<b>Password:</b>"
 #~ msgstr "<b>Mật khẩu :</b>"
