@@ -49,4 +49,4 @@ HELP_FILES = \
 HELP_MEDIA = \
 	media/seahorse.png
 
-HELP_LINGUAS = cs de el es fr hu ru
+HELP_LINGUAS = cs de el es fr hu ru sv
