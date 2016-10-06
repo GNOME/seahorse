@@ -96,7 +96,7 @@ on_gpgme_add_uid_ok_clicked (GtkButton *button,
 	err = seahorse_gpgme_key_op_add_uid (SEAHORSE_GPGME_KEY (object),
 	                                     name, email, comment);
 	if (!GPG_IS_OK (err))
-		seahorse_gpgme_handle_error (err, _("Couldn't add user id"));
+		seahorse_gpgme_handle_error (err, _("Couldn’t add user id"));
 	else
 		seahorse_widget_destroy (swidget);
 }

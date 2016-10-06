@@ -98,7 +98,7 @@ public class ItemAdd : Gtk.Dialog {
 
 					Secret.Item.create.end(res);
 				} catch (GLib.Error err) {
-					Util.show_error(this, _("Couldn't add item"), err.message);
+					Util.show_error(this, _("Couldn’t add item"), err.message);
 				}
 
 				this.destroy();

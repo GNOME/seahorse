@@ -165,7 +165,7 @@ on_import_complete (GObject *source,
 	if (!seahorse_pgp_backend_transfer_finish (SEAHORSE_PGP_BACKEND (source),
 	                                           result, &error))
 		seahorse_util_handle_error (&error, seahorse_catalog_get_window (self),
-		                            _("Couldn't import keys"));
+		                            _("Couldn’t import keys"));
 
 	g_object_unref (self);
 }
@@ -240,7 +240,7 @@ static const GtkActionEntry GENERAL_ENTRIES[] = {
 };
 
 static const GtkActionEntry SERVER_ENTRIES[] = {
-	{ "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
+	{ "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys…"), "",
 	  N_("Search for keys on a key server"), G_CALLBACK (on_remote_find) }
 };
 
@@ -279,7 +279,7 @@ seahorse_keyserver_results_constructed (GObject *obj)
 	if (g_utf8_strlen (self->pv->search_string, -1) == 0) {
 		title = g_strdup (_("Remote Keys"));
 	} else {
-		title = g_strdup_printf (_ ("Remote Keys Containing '%s'"), self->pv->search_string);
+		title = g_strdup_printf (_ ("Remote Keys Containing “%s”"), self->pv->search_string);
 	}
 
 	window = seahorse_catalog_get_window (SEAHORSE_CATALOG (self));

@@ -90,9 +90,9 @@ passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
 
 	if (split_uid && split_uid[0] && split_uid[1]) {
 		if (flags & SEAHORSE_PASS_NEW)
-			label = g_strdup_printf (_("Enter new passphrase for '%s'"), split_uid[1]);
+			label = g_strdup_printf (_("Enter new passphrase for “%s”"), split_uid[1]);
 		else
-			label = g_strdup_printf (_("Enter passphrase for '%s'"), split_uid[1]);
+			label = g_strdup_printf (_("Enter passphrase for “%s”"), split_uid[1]);
 	} else {
 		if (flags & SEAHORSE_PASS_NEW)
 			label = g_strdup (_("Enter new passphrase"));

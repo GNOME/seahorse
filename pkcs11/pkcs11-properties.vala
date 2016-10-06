@@ -185,7 +185,7 @@ public class Properties : Gtk.Window {
 					if (deleter.delete.end(res))
 						this.destroy();
 				} catch (GLib.Error err) {
-					Util.show_error(this, _("Couldn't delete"), err.message);
+					Util.show_error(this, _("Couldn’t delete"), err.message);
 				}
 			});
 		}

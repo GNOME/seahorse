@@ -232,7 +232,7 @@ public class ItemProperties : Gtk.Dialog {
 				password_display();
 			} catch (GLib.Error err) {
 				DBusError.strip_remote_error(err);
-				Util.show_error (this, _("Couldn't change password."), err.message);
+				Util.show_error (this, _("Couldn’t change password."), err.message);
 			}
 
 			this._password_expander.sensitive = true;
@@ -270,7 +270,7 @@ public class ItemProperties : Gtk.Dialog {
 			} catch (GLib.Error err) {
 				description.text = this.item.label;
 				DBusError.strip_remote_error(err);
-				Util.show_error (this, _("Couldn't set description."), err.message);
+				Util.show_error (this, _("Couldn’t set description."), err.message);
 			}
 
 			description.sensitive = true;

@@ -320,7 +320,7 @@ egg_datetime_class_init (EggDateTimeClass *klass)
    g_object_class_install_property (o_class, ARG_DISPLAY_MODE, pspec);
    pspec = g_param_spec_boolean ("lazy",
                   _("Lazy mode"),
-                  _("Lazy mode doesn't normalize entered date and time values"),
+                  _("Lazy mode doesn’t normalize entered date and time values"),
                   FALSE,
                   G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
    g_object_class_install_property (o_class, ARG_LAZY, pspec);

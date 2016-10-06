@@ -250,7 +250,7 @@ public class BackendActions : Seahorse.Actions {
 	private static const Gtk.ActionEntry[] BACKEND_ACTIONS = {
 		{ "keyring-new", null, N_("New password keyring"), "",
 		  N_("Used to store application and network passwords"), on_new_keyring },
-		{ "keyring-item-new", null, N_("New password..."), "",
+		{ "keyring-item-new", null, N_("New password…"), "",
 		  N_("Safely store a password or secret."), on_new_item },
 	};
 

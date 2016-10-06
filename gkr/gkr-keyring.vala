@@ -171,7 +171,7 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 				service.set_alias.end(res);
 				Backend.instance().refresh();
 			} catch (GLib.Error err) {
-				Util.show_error(parent, _("Couldn't set default keyring"), err.message);
+				Util.show_error(parent, _("Couldn’t set default keyring"), err.message);
 			}
 		});
 	}
@@ -195,12 +195,12 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 					try {
 						service.prompt_at_dbus_path.end(res);
 					} catch (GLib.Error err) {
-						Util.show_error(parent, _("Couldn't change keyring password"), err.message);
+						Util.show_error(parent, _("Couldn’t change keyring password"), err.message);
 					}
 					Backend.instance().refresh();
 				});
 			} catch (GLib.Error err) {
-				Util.show_error(parent, _("Couldn't change keyring password"), err.message);
+				Util.show_error(parent, _("Couldn’t change keyring password"), err.message);
 			}
 		});
 	}
@@ -234,7 +234,7 @@ class KeyringDeleter : Deleter {
 
 	public override Gtk.Dialog create_confirm(Gtk.Window? parent) {
 		var dialog = new DeleteDialog(parent,
-		                              _("Are you sure you want to delete the password keyring '%s'?"),
+		                              _("Are you sure you want to delete the password keyring “%s”?"),
 		                              this._keyring.label);
 
 		dialog.check_label = _("I understand that all items will be permanently deleted.");

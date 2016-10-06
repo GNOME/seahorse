@@ -69,12 +69,12 @@ suggest_resize (GtkWindow *parent)
     dlg = gtk_message_dialog_new_with_markup (parent, 
                 GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                 GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, 
-                _("<big><b>The photo is too large</b></big>\nThe recommended size for a photo on your key is %d x %d pixels."),
+                _("<big><b>The photo is too large</b></big>\nThe recommended size for a photo on your key is %d × %d pixels."),
                 DEFAULT_WIDTH, DEFAULT_HEIGHT);
     
     gtk_dialog_add_buttons (GTK_DIALOG (dlg), 
                             GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                            _("_Don't Resize"), GTK_RESPONSE_REJECT,
+                            _("_Don’t Resize"), GTK_RESPONSE_REJECT,
                             _("_Resize"), GTK_RESPONSE_ACCEPT,
                             NULL);
     
@@ -281,7 +281,7 @@ seahorse_gpgme_photo_add (SeahorseGpgmeKey *pkey,
 	}
 
 	if (!prepare_photo_id (parent, filename, &tempfile, &error)) {
-		seahorse_util_handle_error (&error, NULL, _("Couldn't prepare photo"));
+		seahorse_util_handle_error (&error, NULL, _("Couldn’t prepare photo"));
 		return FALSE;
 	}
 
@@ -291,10 +291,10 @@ seahorse_gpgme_photo_add (SeahorseGpgmeKey *pkey,
 		/* A special error value set by seahorse_key_op_photoid_add to
 		   denote an invalid format file */
 		if (gerr == GPG_E (GPG_ERR_USER_1))
-			seahorse_util_show_error (NULL, _("Couldn't add photo"),
+			seahorse_util_show_error (NULL, _("Couldn’t add photo"),
 			                          _("The file could not be loaded. It may be in an invalid format"));
 		else
-			seahorse_gpgme_handle_error (gerr, _("Couldn't add photo"));
+			seahorse_gpgme_handle_error (gerr, _("Couldn’t add photo"));
 		res = FALSE;
 	}
 
@@ -331,7 +331,7 @@ seahorse_gpgme_photo_delete (SeahorseGpgmePhoto *photo, GtkWindow *parent)
     
     gerr = seahorse_gpgme_key_op_photo_delete (photo);
     if (!GPG_IS_OK (gerr)) {
-	    seahorse_gpgme_handle_error (gerr, _("Couldn't delete photo"));
+	    seahorse_gpgme_handle_error (gerr, _("Couldn’t delete photo"));
         return FALSE;
     }
     

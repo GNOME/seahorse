@@ -794,7 +794,7 @@ on_place_locked (GObject *source,
 	GError *error = NULL;
 
 	if (!seahorse_lockable_lock_finish (SEAHORSE_LOCKABLE (source), result, &error))
-		seahorse_util_handle_error (&error, parent, _("Couldn't lock"));
+		seahorse_util_handle_error (&error, parent, _("Couldn’t lock"));
 
 	g_object_unref (parent);
 }
@@ -831,7 +831,7 @@ on_place_unlocked (GObject *source,
 	GError *error = NULL;
 
 	if (!seahorse_lockable_unlock_finish (SEAHORSE_LOCKABLE (source), result, &error))
-		seahorse_util_handle_error (&error, parent, _("Couldn't unlock"));
+		seahorse_util_handle_error (&error, parent, _("Couldn’t unlock"));
 
 	g_object_unref (parent);
 }
@@ -870,7 +870,7 @@ on_place_deleted (GObject *source,
 	GError *error = NULL;
 
 	if (!seahorse_deleter_delete_finish (SEAHORSE_DELETER (source), result, &error))
-		seahorse_util_handle_error (&error, parent, _("Couldn't delete"));
+		seahorse_util_handle_error (&error, parent, _("Couldn’t delete"));
 
 	g_object_unref (parent);
 }

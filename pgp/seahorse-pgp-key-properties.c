@@ -314,7 +314,7 @@ on_pgp_names_primary_clicked (GtkWidget *widget,
 		g_return_if_fail (SEAHORSE_IS_GPGME_UID (uid));
 		err = seahorse_gpgme_key_op_primary_uid (SEAHORSE_GPGME_UID (uid));
 		if (!GPG_IS_OK (err)) 
-			seahorse_gpgme_handle_error (err, _("Couldn't change primary user ID"));
+			seahorse_gpgme_handle_error (err, _("Couldn’t change primary user ID"));
 	}
 }
 
@@ -333,7 +333,7 @@ on_pgp_names_delete_clicked (GtkWidget *widget,
 		return;
 	
 	g_return_if_fail (SEAHORSE_IS_GPGME_UID (uid));
-	message = g_strdup_printf (_("Are you sure you want to permanently delete the '%s' user ID?"), 
+	message = g_strdup_printf (_("Are you sure you want to permanently delete the “%s” user ID?"), 
 	                           seahorse_object_get_label (SEAHORSE_OBJECT (uid)));
 	ret = seahorse_delete_dialog_prompt (GTK_WINDOW (seahorse_widget_get_toplevel (swidget)), message);
 	g_free (message);
@@ -343,7 +343,7 @@ on_pgp_names_delete_clicked (GtkWidget *widget,
 	
 	gerr = seahorse_gpgme_key_op_del_uid (SEAHORSE_GPGME_UID (uid));
 	if (!GPG_IS_OK (gerr))
-		seahorse_gpgme_handle_error (gerr, _("Couldn't delete user ID"));
+		seahorse_gpgme_handle_error (gerr, _("Couldn’t delete user ID"));
 }
 
 G_MODULE_EXPORT void
@@ -667,7 +667,7 @@ on_pgp_owner_photo_primary_button (GtkWidget *widget,
         
 	gerr = seahorse_gpgme_key_op_photo_primary (photo);
 	if (!GPG_IS_OK (gerr))
-		seahorse_gpgme_handle_error (gerr, _("Couldn't change primary photo"));
+		seahorse_gpgme_handle_error (gerr, _("Couldn’t change primary photo"));
 }
 
 static void
@@ -1091,7 +1091,7 @@ on_pgp_details_del_subkey_button (GtkButton *button,
 	
 	err = seahorse_gpgme_key_op_del_subkey (SEAHORSE_GPGME_SUBKEY (subkey));
 	if (!GPG_IS_OK (err))
-		seahorse_gpgme_handle_error (err, _("Couldn't delete subkey"));
+		seahorse_gpgme_handle_error (err, _("Couldn’t delete subkey"));
 }
 
 G_MODULE_EXPORT void
@@ -1145,7 +1145,7 @@ on_export_complete (GObject *source,
 
 	seahorse_exporter_export_to_file_finish (SEAHORSE_EXPORTER (source), result, &error);
 	if (error != NULL)
-		seahorse_util_handle_error (&error, parent, _("Couldn't export key"));
+		seahorse_util_handle_error (&error, parent, _("Couldn’t export key"));
 
 	g_object_unref (parent);
 }

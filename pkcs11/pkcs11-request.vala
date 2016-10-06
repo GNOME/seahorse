@@ -84,7 +84,7 @@ public class Request : Gtk.Dialog {
 					req.complete_async.end(res);
 					this.save_certificate_request(req, this.transient_for);
 				} catch (GLib.Error err) {
-					Util.show_error(this.transient_for, _("Couldn't create certificate request"), err.message);
+					Util.show_error(this.transient_for, _("Couldn’t create certificate request"), err.message);
 				}
 			});
 
@@ -146,7 +146,7 @@ public class Request : Gtk.Dialog {
 					string new_etag;
 					file.replace_contents_async.end(res, out new_etag);
 				} catch (GLib.Error err) {
-					Util.show_error(parent, _("Couldn't save certificate request"), err.message);
+					Util.show_error(parent, _("Couldn’t save certificate request"), err.message);
 				}
 			});
 		}

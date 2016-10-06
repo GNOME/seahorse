@@ -433,7 +433,7 @@ seahorse_ldap_source_propagate_error (SeahorseLDAPSource *self,
 		return FALSE;
 
 	g_object_get (self, "key-server", &server, NULL);
-	g_set_error (error, LDAP_ERROR_DOMAIN, rc, _("Couldn't communicate with '%s': %s"),
+	g_set_error (error, LDAP_ERROR_DOMAIN, rc, _("Couldn't communicate with %s: %s"),
 	             server, ldap_err2string (rc));
 	g_free (server);
 
@@ -649,7 +649,7 @@ on_address_resolved_complete (SoupAddress *address,
 	/* DNS failed */
 	if (!SOUP_STATUS_IS_SUCCESSFUL (status)) {
 		g_simple_async_result_set_error (res, SEAHORSE_ERROR, -1,
-		                                 _("Couldn't resolve address: %s"),
+		                                 _("Couldn’t resolve address: %s"),
 		                                 soup_address_get_name (address));
 		g_simple_async_result_complete_in_idle (res);
 

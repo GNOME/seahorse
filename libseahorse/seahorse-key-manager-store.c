@@ -440,7 +440,7 @@ drag_end (GtkWidget *widget, GdkDragContext *context, SeahorseKeyManagerStore *s
 
 	if (skstore->priv->drag_error) {
 		g_dbus_error_strip_remote_error (skstore->priv->drag_error);
-		seahorse_util_show_error (widget, _("Couldn't export keys"),
+		seahorse_util_show_error (widget, _("Couldn’t export keys"),
 		                          skstore->priv->drag_error->message);
 	}
 

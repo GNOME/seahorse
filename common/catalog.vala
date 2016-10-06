@@ -328,7 +328,7 @@ public abstract class Catalog : Gtk.Window {
 		try {
 			Exportable.export_to_prompt_wait(this.get_selected_objects(), this);
 		} catch (GLib.Error err) {
-			Util.show_error(window, _("Couldn't export keys"), err.message);
+			Util.show_error(window, _("Couldn’t export keys"), err.message);
 		}
 	}
 
@@ -339,7 +339,7 @@ public abstract class Catalog : Gtk.Window {
 			var objects = this.get_selected_objects ();
 			Exportable.export_to_text_wait (objects, out output);
 		} catch (GLib.Error err) {
-			Util.show_error(this, _("Couldn't export data"), err.message);
+			Util.show_error(this, _("Couldn’t export data"), err.message);
 			return;
 		}
 
@@ -362,7 +362,7 @@ public abstract class Catalog : Gtk.Window {
 	private static const Gtk.ActionEntry[] UI_ENTRIES = {
 		/* Top menu items */
 		{ "file-menu", null, N_("_File") },
-		{ "file-export", Gtk.Stock.SAVE_AS, N_("E_xport..."), null,
+		{ "file-export", Gtk.Stock.SAVE_AS, N_("E_xport…"), null,
 		  N_("Export to a file"), on_key_export_file },
 		{ "edit-menu", null, N_("_Edit") },
 		/*Translators: This text refers to deleting an item from its type's backing store*/

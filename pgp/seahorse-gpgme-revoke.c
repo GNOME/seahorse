@@ -70,7 +70,7 @@ on_gpgme_revoke_ok_clicked (GtkButton *button,
 	
 	err = seahorse_gpgme_key_op_revoke_subkey (subkey, reason, description);
 	if (!GPG_IS_OK (err))
-		seahorse_gpgme_handle_error (err, _("Couldn't revoke subkey"));
+		seahorse_gpgme_handle_error (err, _("Couldn’t revoke subkey"));
 	seahorse_widget_destroy (swidget);
 }
 
@@ -173,5 +173,5 @@ seahorse_gpgme_add_revoker_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 	
 	err = seahorse_gpgme_key_op_add_revoker (pkey, revoker);
 	if (!GPG_IS_OK (err))
-		seahorse_gpgme_handle_error (err, _("Couldn't add revoker"));
+		seahorse_gpgme_handle_error (err, _("Couldn’t add revoker"));
 }

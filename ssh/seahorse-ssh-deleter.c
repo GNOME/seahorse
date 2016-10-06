@@ -77,12 +77,12 @@ seahorse_ssh_deleter_create_confirm (SeahorseDeleter *deleter,
 	num = g_list_length (self->keys);
 	if (self->have_private) {
 		g_return_val_if_fail (num == 1, NULL);
-		prompt = g_strdup_printf (_("Are you sure you want to delete the secure shell key '%s'?"),
+		prompt = g_strdup_printf (_("Are you sure you want to delete the secure shell key “%s”?"),
 		                          seahorse_object_get_label (SEAHORSE_OBJECT (self->keys->data)));
 		confirm = _("I understand that this secret key will be permanently deleted.");
 
 	} else if (num == 1) {
-		prompt = g_strdup_printf (_("Are you sure you want to delete the secure shell key '%s'?"),
+		prompt = g_strdup_printf (_("Are you sure you want to delete the secure shell key “%s”?"),
 		                          seahorse_object_get_label (SEAHORSE_OBJECT (self->keys->data)));
 		confirm = NULL;
 

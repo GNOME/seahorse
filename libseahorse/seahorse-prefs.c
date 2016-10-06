@@ -399,7 +399,7 @@ setup_keyservers (SeahorseWidget *swidget)
 	widget = seahorse_widget_get_widget (swidget, "keyserver-publish");
 	g_return_if_fail (widget != NULL);
 
-	skc = seahorse_keyserver_control_new ("server-publish-to", _("None: Don't publish keys"));
+	skc = seahorse_keyserver_control_new ("server-publish-to", _("None: Don’t publish keys"));
 	gtk_container_add (GTK_CONTAINER (widget), GTK_WIDGET (skc));
 	gtk_widget_show_all (widget);
 

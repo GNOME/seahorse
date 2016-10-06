@@ -104,7 +104,7 @@ on_generate_complete (GObject *source,
 	                                 result, &error);
 
 	if (error != NULL)
-		seahorse_util_handle_error (&error, NULL, _("Couldn't generate Secure Shell key"));
+		seahorse_util_handle_error (&error, NULL, _("Couldn’t generate Secure Shell key"));
 }
 
 static void
@@ -120,7 +120,7 @@ on_generate_complete_and_upload (GObject *source,
 	                                          result, &error);
 
 	if (error != NULL) {
-		seahorse_util_handle_error (&error, NULL, _("Couldn't generate Secure Shell key"));
+		seahorse_util_handle_error (&error, NULL, _("Couldn’t generate Secure Shell key"));
 
 	} else {
 		keys = g_list_append (NULL, object);

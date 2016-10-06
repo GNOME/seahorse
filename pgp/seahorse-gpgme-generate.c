@@ -177,7 +177,7 @@ on_generate_key_complete (GObject *source,
 	GError *error = NULL;
 
 	if (!seahorse_gpgme_key_op_generate_finish (SEAHORSE_GPGME_KEYRING (source), result, &error))
-		seahorse_util_handle_error (&error, NULL, _("Couldn't generate PGP key"));
+		seahorse_util_handle_error (&error, NULL, _("Couldn’t generate PGP key"));
 }
 
 /**
@@ -224,7 +224,7 @@ seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
 
 		/* Has line breaks because GtkLabel is completely broken WRT wrapping */
 		notice = _("When creating a key we need to generate a lot of\n"
-		           "random data and we need you to help. It's a good\n"
+		           "random data and we need you to help. It’s a good\n"
 		           "idea to perform some other action like typing on\n"
 		           "the keyboard, moving the mouse, using applications.\n"
 		           "This gives the system the random data that it needs.");

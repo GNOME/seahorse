@@ -45,7 +45,7 @@ on_upload_complete (GObject *source,
 	GError *error = NULL;
 
 	if (!seahorse_ssh_op_upload_finish (SEAHORSE_SSH_SOURCE (source), result, &error))
-		seahorse_util_handle_error (&error, NULL, _("Couldn't configure Secure Shell keys on remote computer."));
+		seahorse_util_handle_error (&error, NULL, _("Couldn’t configure Secure Shell keys on remote computer."));
 }
 
 G_MODULE_EXPORT void
@@ -128,7 +128,7 @@ upload_keys (SeahorseWidget *swidget)
     g_free (host);
     g_free (user);
 
-    seahorse_progress_show (cancellable, _("Configuring Secure Shell Keys..."), FALSE);
+    seahorse_progress_show (cancellable, _("Configuring Secure Shell Keys…"), FALSE);
     g_object_unref (cancellable);
 }
 

@@ -110,12 +110,12 @@ on_remote_sync (GtkAction* action,
 }
 
 static const GtkActionEntry FIND_ACTIONS[] = {
-	{ "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys..."), "",
+	{ "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys…"), "",
 	  N_("Search for keys on a key server"), G_CALLBACK (on_remote_find) },
 };
 
 static const GtkActionEntry SYNC_ACTIONS[] = {
-	{ "remote-sync", GTK_STOCK_REFRESH, N_("_Sync and Publish Keys..."), "",
+	{ "remote-sync", GTK_STOCK_REFRESH, N_("_Sync and Publish Keys…"), "",
 	  N_("Publish and/or synchronize your keys with those online."), G_CALLBACK (on_remote_sync) }
 };
 

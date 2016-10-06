@@ -53,7 +53,7 @@ on_transfer_upload_complete (GObject *object,
 		publish_to = g_settings_get_string (seahorse_application_settings (NULL),
 		                                    "server-publish-to");
 		seahorse_util_handle_error (&error, NULL,
-		                            _("Couldn't publish keys to server"), publish_to);
+		                            _("Couldn’t publish keys to server"), publish_to);
 		g_free (publish_to);
 	}
 
@@ -72,7 +72,7 @@ on_transfer_download_complete (GObject *object,
 	if (!seahorse_transfer_finish (result, &error)) {
 		g_object_get (place, "key-server", &keyserver, NULL);
 		seahorse_util_handle_error (&error, NULL,
-		                            _("Couldn't retrieve keys from server: %s"), keyserver);
+		                            _("Couldn’t retrieve keys from server: %s"), keyserver);
 		g_free (keyserver);
 	}
 
@@ -236,6 +236,6 @@ seahorse_keyserver_sync (GList *keys)
 
 	g_free (keyserver);
 
-	seahorse_progress_show (cancellable, _("Synchronizing keys..."), FALSE);
+	seahorse_progress_show (cancellable, _("Synchronizing keys…"), FALSE);
 	g_object_unref (cancellable);
 }

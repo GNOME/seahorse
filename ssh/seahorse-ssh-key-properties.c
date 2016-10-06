@@ -76,7 +76,7 @@ on_rename_complete (GObject *source,
 	GError *error = NULL;
 
 	if (!seahorse_ssh_op_rename_finish (SEAHORSE_SSH_SOURCE (source), result, &error)) {
-		seahorse_util_handle_error (&error, closure->swidget, _("Couldn't rename key."));
+		seahorse_util_handle_error (&error, closure->swidget, _("Couldn’t rename key."));
 		gtk_entry_set_text (closure->entry, closure->original);
 	}
 
@@ -131,7 +131,7 @@ on_authorize_complete (GObject *source,
 
 	if (!seahorse_ssh_op_authorize_finish (SEAHORSE_SSH_SOURCE (source), result, &error)) {
 		seahorse_util_handle_error (&error, GTK_WIDGET (button),
-		                            _("Couldn't change authorization for key."));
+		                            _("Couldn’t change authorization for key."));
 	}
 
 	gtk_widget_set_sensitive (GTK_WIDGET (button), TRUE);
@@ -168,7 +168,7 @@ on_passphrase_complete (GObject *source,
 
 	if (!seahorse_ssh_op_change_passphrase_finish (SEAHORSE_SSH_KEY (source),
 	                                               result, &error)) {
-		seahorse_util_handle_error (&error, button, _("Couldn't change passphrase for key."));
+		seahorse_util_handle_error (&error, button, _("Couldn’t change passphrase for key."));
 	}
 
 	gtk_widget_set_sensitive (button, TRUE);
@@ -202,7 +202,7 @@ on_export_complete (GObject *source,
 	GError *error = NULL;
 
 	if (!seahorse_exporter_export_to_file_finish (SEAHORSE_EXPORTER (source), result, &error))
-		seahorse_util_handle_error (&error, parent, _("Couldn't export key"));
+		seahorse_util_handle_error (&error, parent, _("Couldn’t export key"));
 
 	g_object_unref (parent);
 }

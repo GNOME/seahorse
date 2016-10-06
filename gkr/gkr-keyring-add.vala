@@ -52,7 +52,7 @@ public class KeyringAdd : Gtk.Dialog {
 					try {
 						Secret.Collection.create.end(res);
 					} catch (GLib.Error err) {
-						Util.show_error(this, _("Couldn't add keyring"), err.message);
+						Util.show_error(this, _("Couldn’t add keyring"), err.message);
 					}
 
 					this.destroy();

@@ -96,12 +96,12 @@ sign_ok_clicked (SeahorseWidget *swidget, GtkWindow *parent)
     if (!GPG_IS_OK (err)) {
         if (gpgme_err_code (err) == GPG_ERR_EALREADY) {
             w = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
-                                        _("This key was already signed by\n\"%s\""),
+                                        _("This key was already signed by\n“%s”"),
                                         seahorse_object_get_label (SEAHORSE_OBJECT (signer)));
             gtk_dialog_run (GTK_DIALOG (w));
             gtk_widget_destroy (w);
         } else
-            seahorse_gpgme_handle_error (err, _("Couldn't sign key"));
+            seahorse_gpgme_handle_error (err, _("Couldn’t sign key"));
     }
 
     seahorse_widget_destroy (swidget);

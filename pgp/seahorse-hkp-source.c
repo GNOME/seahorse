@@ -563,10 +563,10 @@ hkp_message_propagate_error (SeahorseHKPSource *self,
 		return FALSE; /* not found is not an error */
 	} else if (text && strstr (text, "too many")) {
 		g_set_error (error, HKP_ERROR_DOMAIN, 0,
-		             _("Search was not specific enough. Server '%s' found too many keys."), server);
+		             _("Search was not specific enough. Server “%s” found too many keys."), server);
 	} else {
 		g_set_error (error, HKP_ERROR_DOMAIN, message->status_code,
-		             _("Couldn't communicate with server '%s': %s"),
+		             _("Couldn’t communicate with server “%s”: %s"),
 		             server, message->reason_phrase);
 	}
 

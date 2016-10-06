@@ -501,7 +501,7 @@ class ItemDeleter : Deleter {
 		var num = this._items.length();
 		if (num == 1) {
 			var label = ((Secret.Item)_items.data).label;
-			return new DeleteDialog(parent, _("Are you sure you want to delete the password '%s'?"), label);
+			return new DeleteDialog(parent, _("Are you sure you want to delete the password “%s”?"), label);
 		} else {
 			return new DeleteDialog(parent, GLib.ngettext ("Are you sure you want to delete %d password?",
 			                                               "Are you sure you want to delete %d passwords?", num), num);

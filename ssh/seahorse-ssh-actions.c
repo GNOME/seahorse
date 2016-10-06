@@ -94,7 +94,7 @@ on_ssh_upload (GtkAction* action,
 }
 
 static const GtkActionEntry KEYS_ACTIONS[] = {
-	{ "remote-ssh-upload", NULL, N_ ("Configure Key for _Secure Shell..."), "",
+	{ "remote-ssh-upload", NULL, N_ ("Configure Key for _Secure Shell…"), "",
 		N_ ("Send public Secure Shell key to another machine, and enable logins using that key."),
 		G_CALLBACK (on_ssh_upload) },
 };
