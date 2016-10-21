@@ -433,7 +433,7 @@ seahorse_ldap_source_propagate_error (SeahorseLDAPSource *self,
 		return FALSE;
 
 	g_object_get (self, "key-server", &server, NULL);
-	g_set_error (error, LDAP_ERROR_DOMAIN, rc, _("Couldn't communicate with %s: %s"),
+	g_set_error (error, LDAP_ERROR_DOMAIN, rc, _("Couldn’t communicate with %s: %s"),
 	             server, ldap_err2string (rc));
 	g_free (server);
 
