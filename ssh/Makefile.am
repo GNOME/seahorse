@@ -1,21 +1,60 @@
 
 noinst_LIBRARIES += libseahorse-ssh.a
 
-libseahorse_ssh_a_SOURCES = \
-	ssh/seahorse-ssh.h ssh/seahorse-ssh.c \
-	ssh/seahorse-ssh-actions.c ssh/seahorse-ssh-actions.h \
-	ssh/seahorse-ssh-backend.c ssh/seahorse-ssh-backend.h \
-	ssh/seahorse-ssh-deleter.c ssh/seahorse-ssh-deleter.h \
-	ssh/seahorse-ssh-dialogs.h \
-	ssh/seahorse-ssh-exporter.c ssh/seahorse-ssh-exporter.h \
-	ssh/seahorse-ssh-generate.c \
-	ssh/seahorse-ssh-key-data.c ssh/seahorse-ssh-key-data.h \
-	ssh/seahorse-ssh-key.c ssh/seahorse-ssh-key.h  \
-	ssh/seahorse-ssh-key-properties.c \
-	ssh/seahorse-ssh-source.c ssh/seahorse-ssh-source.h \
-	ssh/seahorse-ssh-operation.c ssh/seahorse-ssh-operation.h \
-	ssh/seahorse-ssh-upload.c
+ssh_VALA = \
+	ssh/actions.vala \
+	ssh/algorithm.vala \
+	ssh/backend.vala \
+	ssh/deleter.vala \
+	ssh/errors.vala \
+	ssh/exporter.vala \
+	ssh/generate.vala \
+	ssh/key-data.vala \
+	ssh/key-properties.vala \
+	ssh/key.vala \
+	ssh/operation.vala \
+	ssh/source.vala \
+	ssh/ssh.vala \
+	ssh/upload.vala \
+	$(NULL)
 
+ssh_HEADER = ssh/seahorse-ssh.h
+
+ssh_C = $(ssh_VALA:.vala=.c)
+
+libseahorse_ssh_a_SOURCES = \
+	$(ssh_C) $(ssh_HEADER)
+
+libseahorse_ssh_a_CFLAGS = \
+	-include config.h -w \
+	-DSECRET_API_SUBJECT_TO_CHANGE
+
+if WITH_VALAC
+$(ssh_HEADER): $(ssh_VALA) $(common_VAPI)
+	$(V_VALAC) $(VALAC) $(VALA_FLAGS) -C --use-header --header=$(ssh_HEADER) \
+		--pkg gtk+-3.0 --pkg gcr-3 --pkg gcr-ui-3 --pkg libsecret-1 --pkg posix \
+		--directory=$(builddir)/ssh --basedir=$(dir $<) $^
+endif
+
+$(ssh_C): $(ssh_HEADER)
+
+ssh_BUILT = \
+	$(ssh_C) \
+	$(ssh_HEADER)
+
+BUILT_SOURCES += $(ssh_BUILT)
+
+EXTRA_DIST += \
+	$(ssh_BUILT) \
+	$(ssh_VALA) \
+	$(NULL)
+
+ui_files += \
+	ssh/seahorse-ssh-key-properties.xml \
+	ssh/seahorse-ssh-generate.xml \
+	ssh/seahorse-ssh-upload.xml
+
+# Askpass binary
 seahorselibexecbin_PROGRAMS += seahorse-ssh-askpass
 
 seahorse_ssh_askpass_SOURCES = \
@@ -23,8 +62,3 @@ seahorse_ssh_askpass_SOURCES = \
 	ssh/seahorse-ssh-askpass.c
 seahorse_ssh_askpass_LDADD = \
 	$(SEAHORSE_LIBS)
-
-ui_files += \
-	ssh/seahorse-ssh-key-properties.xml \
-	ssh/seahorse-ssh-generate.xml \
-	ssh/seahorse-ssh-upload.xml

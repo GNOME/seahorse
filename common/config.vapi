@@ -3,9 +3,15 @@ namespace Config
 {
 	public const string PKGDATADIR;
 
+	public const string EXECDIR;
+
 	public const string VERSION;
 	public const string PACKAGE;
 	public const string GETTEXT_PACKAGE;
+
+	public const bool WITH_SSH;
+	public const string SSH_PATH;
+	public const string SSH_KEYGEN_PATH;
 }
 
 /*
@@ -37,6 +43,39 @@ public static GLib.EqualFunc<ulong?> ulong_equal;
 public class Interaction : GLib.TlsInteraction {
 	public Interaction(Gtk.Window? parent);
 	public Gtk.Window? parent;
+}
+
+[CCode (cheader_filename = "libseahorse/seahorse-object.h")]
+public class Object : GLib.Object {
+	public Place place { get; }
+	public Actions actions { get; }
+	public string label { get; }
+	public string markup { get; }
+	public string nickname { get; }
+	public GLib.Icon icon { get; }
+	public string identifier { get; }
+	public Usage usage { get; }
+	public Seahorse.Flags flags { get; }
+
+	public Object();
+}
+
+[CCode (cheader_filename = "libseahorse/seahorse-validity.h", cname = "SeahorseValidity", cprefix = "SEAHORSE_VALIDITY_", has_type_id = false)]
+public enum Validity {
+	REVOKED,
+	DISABLED,
+	NEVER,
+	UNKNOWN,
+	MARGINAL,
+	FULL,
+	ULTIMATE;
+
+	public string? get_string();
+}
+
+[CCode (cheader_filename = "libseahorse/seahorse-progress.h")]
+namespace Progress {
+	public void show(GLib.Cancellable? cancellable, string title, bool delayed);
 }
 
 }
