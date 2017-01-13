@@ -141,3 +141,4 @@ main (int argc, char* argv[])
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 	return result;
 }
+

@@ -65,7 +65,7 @@ public class Actions : Gtk.ActionGroup {
 	private unowned string? _definition;
 	private WeakRef _catalog;
 
-	Actions(string name) {
+	public Actions(string name) {
 		GLib.Object(
 			name: name
 		);

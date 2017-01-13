@@ -8,177 +8,64 @@
     <property name="step_increment">256</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkImage" id="create-image">
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-ok</property>
-  </object>
-  <object class="GtkDialog" id="ssh-generate">
+  <object class="GtkBox" id="ssh-generate">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">New Secure Shell Key</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
-    <signal name="delete-event" handler="on_widget_delete_event" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+    <property name="orientation">vertical</property>
+    <property name="spacing">2</property>
+    <child>
+      <object class="GtkBox" id="hbox4">
         <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
         <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
+        <property name="border_width">5</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkAlignment" id="alignment9">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="helpbutton1">
-                <property name="label" translatable="yes">_Just Create Key</property>
+              <object class="GtkImage" id="ssh-image">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_underline">True</property>
+                <property name="can_focus">False</property>
+                <property name="yalign">0</property>
+                <property name="pixel_size">48</property>
+                <property name="icon_name">gcr-key-pair</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button1">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button2">
-                <property name="label" translatable="yes">_Create and Set Up</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="image">create-image</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox4">
+          <object class="GtkBox" id="vbox5">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="can_focus">False</property>
-            <property name="border_width">5</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkAlignment" id="alignment9">
+              <object class="GtkBox" id="vbox3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkImage" id="ssh-image">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="yalign">0</property>
-                    <property name="pixel_size">48</property>
-                    <property name="icon_name">gcr-key-pair</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkVBox" id="vbox5">
-                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkVBox" id="vbox3">
+                  <object class="GtkBox" id="hbox41">
                     <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkHBox" id="hbox41">
+                      <object class="GtkLabel" id="label45">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">12</property>
-                        <child>
-                          <object class="GtkLabel" id="label45">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
-                            <property name="label" translatable="yes">A Secure Shell (SSH) key lets you connect securely to other computers.</property>
-                            <property name="wrap">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkAlignment" id="alignment8">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
-                            <property name="xscale">0</property>
-                            <property name="yscale">0</property>
-                            <child>
-                              <object class="GtkButton" id="button3">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
-                                <property name="relief">half</property>
-                                <signal name="clicked" handler="on_widget_help" swapped="no"/>
-                                <child>
-                                  <object class="GtkImage" id="image3">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="stock">gtk-help</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
+                        <property name="label" translatable="yes">A Secure Shell (SSH) key lets you connect securely to other computers.</property>
+                        <property name="wrap">True</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -187,77 +74,34 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkAlignment" id="alignment7">
+                      <object class="GtkAlignment" id="alignment8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
+                        <property name="xscale">0</property>
+                        <property name="yscale">0</property>
                         <child>
-                          <object class="GtkGrid" id="grid1">
+                          <object class="GtkButton" id="button3">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="relief">half</property>
+                            <signal name="clicked" handler="on_widget_help" swapped="no"/>
                             <child>
-                              <object class="GtkLabel" id="label46">
+                              <object class="GtkImage" id="image3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
-                                <property name="yalign">0</property>
-                                <property name="label" translatable="yes">_Description:</property>
-                                <property name="use_markup">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">email-entry</property>
+                                <property name="stock">gtk-help</property>
                               </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="email-entry">
-                                <property name="width_request">180</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="invisible_char">●</property>
-                                <property name="activates_default">True</property>
-                                <property name="invisible_char_set">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label53">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="xpad">3</property>
-                                <property name="label" translatable="yes">Your email address, or a reminder of what this key is for.</property>
-                                <property name="wrap">True</property>
-                                <attributes>
-                                 <attribute name="style" value="italic"/>
-                                </attributes>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                           </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -269,24 +113,25 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkExpander" id="expander1">
+                  <object class="GtkAlignment" id="alignment7">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkGrid" id="grid2">
+                      <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">20</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkLabel" id="label49">
+                          <object class="GtkLabel" id="label46">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Encryption _Type:</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
+                            <property name="label" translatable="yes">_Description:</property>
+                            <property name="use_markup">True</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">algorithm-choice</property>
+                            <property name="mnemonic_widget">email-entry</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -296,40 +141,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label50">
+                          <object class="GtkEntry" id="email-entry">
+                            <property name="width_request">180</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Key _Strength (bits):</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">bits-entry</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkAlignment" id="alignment4">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
-                            <property name="xscale">0</property>
-                            <child>
-                              <object class="GtkComboBoxText" id="algorithm-choice">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="entry_text_column">0</property>
-                                <property name="id_column">1</property>
-                                <items>
-                                  <item translatable="yes">RSA</item>
-                                  <item translatable="yes">DSA</item>
-                                </items>
-                              </object>
-                            </child>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">●</property>
+                            <property name="activates_default">True</property>
+                            <property name="invisible_char_set">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -339,24 +157,16 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkAlignment" id="alignment5">
+                          <object class="GtkLabel" id="label53">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="yalign">0</property>
-                            <property name="xscale">0</property>
-                            <property name="yscale">0</property>
-                            <child>
-                              <object class="GtkSpinButton" id="bits-entry">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
-                                <property name="adjustment">adjustment1</property>
-                                <property name="climb_rate">1</property>
-                                <property name="numeric">True</property>
-                              </object>
-                            </child>
+                            <property name="xpad">3</property>
+                            <property name="label" translatable="yes">Your email address, or a reminder of what this key is for.</property>
+                            <property name="wrap">True</property>
+                            <attributes>
+                             <attribute name="style" value="italic"/>
+                            </attributes>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -365,17 +175,9 @@
                             <property name="height">1</property>
                           </packing>
                         </child>
-                      </object>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel" id="label48">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Advanced key options</property>
-                        <property name="use_underline">True</property>
-                        <attributes>
-                         <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -385,19 +187,122 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkExpander" id="expander1">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
                 <child>
-                  <object class="GtkLabel" id="label54">
+                  <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">If there is a computer you want to use this key with, you can set up that computer to recognize your new key.</property>
-                    <property name="wrap">True</property>
+                    <property name="margin_left">20</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="label49">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Encryption _Type:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">algorithm-combo-box</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label50">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Key _Strength (bits):</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">bits-spin-button</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="alignment4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
+                        <property name="xscale">0</property>
+                        <child>
+                          <object class="GtkComboBoxText" id="algorithm-combo-box">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="entry_text_column">0</property>
+                            <property name="id_column">1</property>
+                            <items>
+                              <item translatable="yes">RSA</item>
+                              <item translatable="yes">DSA</item>
+                            </items>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="alignment5">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
+                        <property name="xscale">0</property>
+                        <property name="yscale">0</property>
+                        <child>
+                          <object class="GtkSpinButton" id="bits-spin-button">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">●</property>
+                            <property name="invisible_char_set">True</property>
+                            <property name="adjustment">adjustment1</property>
+                            <property name="climb_rate">1</property>
+                            <property name="numeric">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">2</property>
-                  </packing>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label48">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">_Advanced key options</property>
+                    <property name="use_underline">True</property>
+                    <attributes>
+                     <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -406,19 +311,63 @@
                 <property name="position">1</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="label54">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">If there is a computer you want to use this key with, you can set up that computer to recognize your new key.</property>
+                <property name="wrap">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
     </child>
-    <action-widgets>
-      <action-widget response="-7">helpbutton1</action-widget>
-      <action-widget response="-6">button1</action-widget>
-      <action-widget response="-5">button2</action-widget>
-    </action-widgets>
+  </object>
+  <object class="GtkButtonBox" id="action_area">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkButton" id="create-no-setup">
+        <property name="label" translatable="yes">_Just Create Key</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="can_default">True</property>
+        <property name="receives_default">False</property>
+        <property name="use_underline">True</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="create-with-setup">
+        <property name="label" translatable="yes">_Create and Set Up</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="use_underline">True</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+      </packing>
+    </child>
   </object>
 </interface>

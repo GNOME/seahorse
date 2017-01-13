@@ -22,10 +22,10 @@ public interface Backend : Gcr.Collection {
 	public abstract string name { get; }
 	public abstract string label { get; }
 	public abstract string description { get; }
-	public abstract Gtk.ActionGroup actions { owned get; }
+	public abstract Gtk.ActionGroup? actions { owned get; }
 	public abstract bool loaded { get; }
 
-	public abstract Place lookup_place(string uri);
+	public abstract Place? lookup_place(string uri);
 
 	public void register() {
 		Registry.register_object(this, "backend");

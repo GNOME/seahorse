@@ -2,209 +2,146 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
-  <object class="GtkImage" id="setup-image">
-    <property name="stock">gtk-go-up</property>
-  </object>
-  <object class="GtkDialog" id="ssh-upload">
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Set Up Computer for SSH Connection</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="default_width">400</property>
-    <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
-    <property name="skip_pager_hint">True</property>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox1">
+  <object class="GtkBox" id="ssh-upload">
+    <property name="visible">True</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">2</property>
+    <child>
+      <object class="GtkBox" id="vbox1">
         <property name="visible">True</property>
-        <property name="spacing">2</property>
+        <property name="orientation">vertical</property>
+        <property name="border_width">5</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkVBox" id="vbox1">
+          <object class="GtkBox" id="vbox2">
             <property name="visible">True</property>
-            <property name="border_width">5</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkVBox" id="vbox2">
+              <object class="GtkLabel" id="label5">
+                <property name="width_request">380</property>
                 <property name="visible">True</property>
-                <property name="spacing">12</property>
+                <property name="label" translatable="yes">To use your Secure Shell key with another computer that uses SSH, you must already have a login account on that computer.</property>
+                <property name="wrap">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkTable" id="table1">
+                <property name="visible">True</property>
+                <property name="n_rows">2</property>
+                <property name="n_columns">2</property>
+                <property name="column_spacing">12</property>
+                <property name="row_spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="label5">
-                    <property name="width_request">380</property>
+                  <object class="GtkBox" id="vbox3">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">To use your Secure Shell key with another computer that uses SSH, you must already have a login account on that computer.</property>
-                    <property name="wrap">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkTable" id="table1">
-                    <property name="visible">True</property>
-                    <property name="n_rows">2</property>
-                    <property name="n_columns">2</property>
-                    <property name="column_spacing">12</property>
-                    <property name="row_spacing">6</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">3</property>
                     <child>
-                      <object class="GtkVBox" id="vbox3">
-                        <property name="visible">True</property>
-                        <property name="spacing">3</property>
-                        <child>
-                          <object class="GtkEntry" id="host-label">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="has_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">The host name or address of the server.</property>
-                            <property name="invisible_char">&#x25CF;</property>
-                            <property name="activates_default">True</property>
-                            <signal name="changed" handler="on_upload_input_changed"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label7">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">eg: fileserver.example.com:port</property>
-                            <attributes>
-                             <attribute name="style" value="italic"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label3">
-                        <property name="visible">True</property>
-                        <property name="xalign">1</property>
-                        <property name="yalign">0</property>
-                        <property name="ypad">4</property>
-                        <property name="label" translatable="yes">_Server address:</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label2">
-                        <property name="visible">True</property>
-                        <property name="xalign">1</property>
-                        <property name="label" translatable="yes">_Login name:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">user-label</property>
-                      </object>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="user-label">
+                      <object class="GtkEntry" id="host-entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="has_focus">True</property>
                         <property name="tooltip_text" translatable="yes">The host name or address of the server.</property>
                         <property name="invisible_char">&#x25CF;</property>
                         <property name="activates_default">True</property>
-                        <signal name="changed" handler="on_upload_input_changed"/>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="y_options"></property>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label7">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">eg: fileserver.example.com:port</property>
+                        <attributes>
+                         <attribute name="style" value="italic"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="position">1</property>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
+                    <property name="ypad">4</property>
+                    <property name="label" translatable="yes">_Server address:</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">_Login name:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">user-entry</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="user-entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="has_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">The host name or address of the server.</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="activates_default">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes">_Set Up</property>
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="image">setup-image</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="position">1</property>
+      </packing>
     </child>
-    <action-widgets>
-      <action-widget response="-6">cancel</action-widget>
-      <action-widget response="-3">ok</action-widget>
-    </action-widgets>
   </object>
 </interface>

@@ -43,7 +43,7 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 		get { return _("Stored personal passwords, credentials and secrets"); }
 	}
 
-	public Gtk.ActionGroup actions {
+	public Gtk.ActionGroup? actions {
 		owned get { return this._actions; }
 	}
 
@@ -151,7 +151,7 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 		return false;
 	}
 
-	public Place lookup_place(string uri) {
+	public Place? lookup_place(string uri) {
 		return this._keyrings.lookup(uri);
 	}
 
