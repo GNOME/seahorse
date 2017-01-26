@@ -260,6 +260,8 @@ public class ItemProperties : Gtk.Dialog {
 	{
 		if (this._updating_description)
 			return;
+		if (this.item.label == description.text)
+			return;
 
 		this._updating_description = true;
 		description.sensitive = false;
