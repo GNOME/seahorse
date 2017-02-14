@@ -330,7 +330,8 @@ seahorse_gpgme_key_op_edit (gpointer data, gpgme_status_code_t status,
 	    status == GPGME_STATUS_BAD_PASSPHRASE || status == GPGME_STATUS_USERID_HINT ||
 	    status == GPGME_STATUS_SIGEXPIRED || status == GPGME_STATUS_KEYEXPIRED ||
 	    status == GPGME_STATUS_PROGRESS || status == GPGME_STATUS_KEY_CREATED ||
-	    status == GPGME_STATUS_ALREADY_SIGNED || status == GPGME_STATUS_MISSING_PASSPHRASE)		
+	    status == GPGME_STATUS_ALREADY_SIGNED || status == GPGME_STATUS_MISSING_PASSPHRASE ||
+	    status == GPGME_STATUS_KEY_CONSIDERED)
 		return parms->err;
 
 	g_debug ("[edit key] state: %d / status: %d / args: %s",
