@@ -74,6 +74,8 @@ public class Token : GLib.Object, Gcr.Collection, Place, Lockable {
 				return C_("Label", "Unknown");
 			return token.label;
 		}
+		set {
+		}
 	}
 
 	public string description {

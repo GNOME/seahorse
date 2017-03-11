@@ -21,7 +21,7 @@
 namespace Seahorse {
 
 public interface Place : Gcr.Collection {
-	public abstract string label { owned get; }
+	public abstract string label { owned get; set; }
 	public abstract string description { owned get; }
 	public abstract string uri { owned get; }
 	public abstract GLib.Icon icon { owned get; }
