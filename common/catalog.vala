@@ -21,7 +21,7 @@
 namespace Seahorse {
 
 public abstract class Catalog : Gtk.Window {
-	public static const string MENU_OBJECT = "ObjectPopup";
+	public const string MENU_OBJECT = "ObjectPopup";
 
 	/* For compatibility with old code */
 	public Gtk.Window window {
@@ -247,7 +247,7 @@ public abstract class Catalog : Gtk.Window {
 		Prefs.show(this, null);
 	}
 
-	private static const string[] AUTHORS = {
+	private const string[] AUTHORS = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
 		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
 		"Jean Schurger <yshark@schurger.org>",
@@ -260,14 +260,14 @@ public abstract class Catalog : Gtk.Window {
 		null
 	};
 
-	private static const string[] DOCUMENTERS = {
+	private const string[] DOCUMENTERS = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
 		"Adam Schreiber <sadam@clemson.edu>",
 		"Milo Casagrande <milo_casagrande@yahoo.it>",
 		null
 	};
 
-	private static const string[] ARTISTS = {
+	private const string[] ARTISTS = {
 		"Jacob Perkins <jap1@users.sourceforge.net>",
 		"Stef Walter <stef@memberwebs.com>",
 		null
@@ -359,7 +359,7 @@ public abstract class Catalog : Gtk.Window {
 		}
 	}
 
-	private static const Gtk.ActionEntry[] UI_ENTRIES = {
+	private const Gtk.ActionEntry[] UI_ENTRIES = {
 		/* Top menu items */
 		{ "file-menu", null, N_("_File") },
 		{ "file-export", Gtk.Stock.SAVE_AS, N_("E_xport…"), null,

@@ -28,7 +28,7 @@ namespace Pkcs11 {
 public class Properties : Gtk.Window {
 	public Gck.Object object { construct; get; }
 
-	private static string UI_STRING =
+	private string UI_STRING =
 		"""<ui>
 			<toolbar name='Toolbar'>
 				<toolitem action='export-object'/>
@@ -195,7 +195,7 @@ public class Properties : Gtk.Window {
 		Request.prompt(this, this._request_key);
 	}
 
-	private static const Gtk.ActionEntry[] UI_ACTIONS = {
+	private const Gtk.ActionEntry[] UI_ACTIONS = {
 		{ "export-object", Gtk.Stock.SAVE_AS, N_("_Export"), "",
 		  N_("Export the certificate"), on_export_certificate },
 		{ "delete-object", Gtk.Stock.DELETE, N_("_Delete"), "<Ctrl>Delete",

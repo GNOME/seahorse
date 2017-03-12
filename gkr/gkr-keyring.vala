@@ -205,7 +205,7 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 		});
 	}
 
-	private static const Gtk.ActionEntry[] KEYRING_ACTIONS = {
+	private const Gtk.ActionEntry[] KEYRING_ACTIONS = {
 		{ "keyring-default", null, N_("_Set as default"), null,
 		  N_("Applications usually store new passwords in the default keyring."), on_keyring_default },
 		{ "keyring-password", null, N_("Change _Password"), null,

@@ -247,21 +247,21 @@ public class BackendActions : Seahorse.Actions {
 		new ItemAdd(Action.get_window(action));
 	}
 
-	private static const Gtk.ActionEntry[] BACKEND_ACTIONS = {
+	private const Gtk.ActionEntry[] BACKEND_ACTIONS = {
 		{ "keyring-new", null, N_("New password keyring"), "",
 		  N_("Used to store application and network passwords"), on_new_keyring },
 		{ "keyring-item-new", null, N_("New password…"), "",
 		  N_("Safely store a password or secret."), on_new_item },
 	};
 
-	private static const Gtk.ActionEntry[] ENTRIES_NEW = {
+	private const Gtk.ActionEntry[] ENTRIES_NEW = {
 		{ "keyring-new", "folder", N_("Password Keyring"), "",
 		  N_("Used to store application and network passwords"), on_new_keyring },
 		{ "keyring-item-new", ICON_PASSWORD, N_("Stored Password"), "",
 		  N_("Safely store a password or secret."), on_new_item }
 	};
 
-	private static const string BACKEND_UI =
+	private const string BACKEND_UI =
 		""""<ui>
 			<popup name='SeahorseGkrBackend'>
 				<menuitem action='keyring-new'/>
