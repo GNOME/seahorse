@@ -38,12 +38,12 @@ public interface Deletable : GLib.Object {
 		int count = 0;
 
 		/* A table for monitoring which objects are still pending */
-		var pending = new GLib.HashTable<weak GLib.Object, weak GLib.Object>(GLib.direct_hash, GLib.direct_equal);
+		var pending = new GLib.GenericSet<weak GLib.Object>(GLib.direct_hash, GLib.direct_equal);
 		foreach (var obj in objects)
 			pending.add(obj);
 
 		foreach (var obj in objects) {
-			if (pending.lookup(obj) == null)
+			if (!pending.contains(obj))
 				continue;
 
 			if (!Deletable.can_delete (obj)) {
@@ -57,7 +57,7 @@ public interface Deletable : GLib.Object {
 			foreach (var x in objects) {
 				if (x == obj)
 					continue;
-				if (pending.lookup(x) != null)
+				if (pending.contains(x))
 					deleter.add_object(x);
 			}
 

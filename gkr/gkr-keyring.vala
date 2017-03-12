@@ -131,7 +131,7 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 	}
 
 	private void refresh_collection() {
-		var seen = new GLib.HashTable<string, weak string>(GLib.str_hash, GLib.str_equal);
+		var seen = new GLib.GenericSet<string>(GLib.str_hash, GLib.str_equal);
 
 		GLib.List<Secret.Item> items = null;
 		if (!get_locked())
@@ -152,7 +152,7 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 		var iter = GLib.HashTableIter<string, Item>(_items);
 		string object_path;
 		while (iter.next (out object_path, null)) {
-			if (seen.lookup(object_path) == null) {
+			if (!seen.contains(object_path)) {
 				var item = _items.lookup(object_path);
 				item.set("place", null);
 				iter.remove();

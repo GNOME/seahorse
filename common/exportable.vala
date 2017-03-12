@@ -117,12 +117,12 @@ public interface Exportable : GLib.Object {
 	                                        Gtk.Window? parent) throws GLib.Error {
 		int count = 0;
 
-		var pending = new GLib.HashTable<weak GLib.Object, weak GLib.Object>(GLib.direct_hash, GLib.direct_equal);
+		var pending = new GLib.GenericSet<weak GLib.Object>(GLib.direct_hash, GLib.direct_equal);
 		foreach (var object in objects)
 			pending.add(object);
 
 		foreach (var object in objects) {
-			if (pending.lookup(object) == null)
+			if (!pending.contains(object))
 				continue;
 
 			if (!Exportable.can_export(object)) {
@@ -137,7 +137,7 @@ public interface Exportable : GLib.Object {
 			foreach (var x in objects) {
 				if (x == object)
 					continue;
-				if (pending.lookup(x) != null) {
+				if (pending.contains(x)) {
 					foreach (var exporter in exporters)
 						exporter.add_object(x);
 				}

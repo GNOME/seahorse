@@ -101,7 +101,7 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 	}
 
 	public void refresh_collections() {
-		var seen = new GLib.HashTable<string, weak string>(GLib.str_hash, GLib.str_equal);
+		var seen = new GLib.GenericSet<string>(GLib.str_hash, GLib.str_equal);
 		var keyrings = this._service.get_collections();
 
 		string object_path;
@@ -122,7 +122,7 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 		/* Remove any that we didn't find */
 		var iter = GLib.HashTableIter<string, Keyring>(this._keyrings);
 		while (iter.next(out object_path, null)) {
-			if (seen.lookup(object_path) == null) {
+			if (!seen.contains(object_path)) {
 				var keyring = this._keyrings.lookup(object_path);
 				iter.remove();
 				emit_removed(keyring);

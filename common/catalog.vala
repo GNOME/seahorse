@@ -33,7 +33,7 @@ public abstract class Catalog : Gtk.Window {
 
 	private Gtk.Builder _builder;
 	private Gtk.UIManager _ui_manager;
-	private GLib.HashTable<Gtk.ActionGroup, weak Gtk.ActionGroup> _actions;
+	private GLib.GenericSet<Gtk.ActionGroup> _actions;
 	private Gtk.Action _edit_delete;
 	private Gtk.Action _properties_object;
 	private Gtk.Action _file_export;
@@ -49,7 +49,7 @@ public abstract class Catalog : Gtk.Window {
 	construct {
 		this._builder = Util.load_built_contents(this, this.ui_name);
 
-		this._actions = new GLib.HashTable<Gtk.ActionGroup, weak Gtk.ActionGroup>(GLib.direct_hash, GLib.direct_equal);
+		this._actions = new GLib.GenericSet<Gtk.ActionGroup>(GLib.direct_hash, GLib.direct_equal);
 		this._ui_manager = new Gtk.UIManager();
 
 		this._ui_manager.add_widget.connect((widget) => {
@@ -227,7 +227,7 @@ public abstract class Catalog : Gtk.Window {
 			object.get("actions", out actions, null);
 			if (actions == null)
 				continue;
-			if (this._actions.lookup(actions) == null)
+			if (!this._actions.contains(actions))
 				this.include_actions(actions);
 			this._actions.add(actions);
 		}
