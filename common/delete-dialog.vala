@@ -25,7 +25,6 @@ public class DeleteDialog : Gtk.MessageDialog {
 	private Gtk.ToggleButton _check;
 	private bool _check_require;
 
-	[Notify]
 	public string? check_label {
 		get {
 			if (_check.get_visible())
@@ -43,7 +42,6 @@ public class DeleteDialog : Gtk.MessageDialog {
 		}
 	}
 
-	[Notify]
 	public bool check_value {
 		get {
 			if (_check.get_visible())
@@ -55,7 +53,6 @@ public class DeleteDialog : Gtk.MessageDialog {
 		}
 	}
 
-	[Notify]
 	public bool check_require {
 		get {
 			return _check_require;
