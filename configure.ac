@@ -18,7 +18,7 @@ AVAHI_GLIB_REQUIRED=0.6
 # Basic tools
 
 AC_CONFIG_AUX_DIR([build/aux])
-AM_INIT_AUTOMAKE([1.11 tar-ustar foreign -Wno-portability])
+AM_INIT_AUTOMAKE([1.11 tar-ustar foreign -Wno-portability subdir-objects])
 AM_SANITY_CHECK
 AC_CONFIG_HEADERS([build/config.h])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
