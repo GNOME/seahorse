@@ -227,8 +227,9 @@ object_finalize (GObject *gobject)
 	gtk_application_remove_window (seahorse_application_get (),
 	                               GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)));
 
-    if (seahorse_widget_get_widget (swidget, swidget->name))
+    if (seahorse_widget_get_widget (swidget, swidget->name)) {
         gtk_widget_destroy (GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name)));
+    }
 	
 	g_object_unref (swidget->gtkbuilder);
 	swidget->gtkbuilder = NULL;
