@@ -20,29 +20,31 @@
 # vertaling besteed, want de kwaliteit liet nogal te wensen over. Neem a.u.b.
 # even contact op voordat je wijzigingen/aanvullingen maakt!
 #
+#
 # Tino Meinen <a.t.meinen@chello.nl>, 2003, 2004, 2005.
 # Reinout van Schouwen <reinouts@gnome.org>, 2007.
 # Vincent van Adrighem <adrighem@gnome.org>, 2007.
 # Wouter Bolsterlee <wbolster@gnome.org>, 2007–2011.
 # Redmar <redmar@ubuntu.com>, 2012, 2013.
-# Hannie Dumoleyn <hannie@ubuntu-nl.org>, 2013, 2014.
+# Hannie Dumoleyn <hannie@ubuntu-nl.org>, 2013, 2014, 2017.
 # Nathan Follens <nthn@unseen.is>, 2015-2016.
+# Justin van Steijn <justin50@live.nl>, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-18 14:35+0000\n"
-"PO-Revision-Date: 2016-02-18 17:34+0100\n"
-"Last-Translator: Nathan Follens <nthn@unseen.is>\n"
-"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
+"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=seahors"
+"e&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2017-03-29 06:33+0000\n"
+"PO-Revision-Date: 2017-08-25 12:25+0100\n"
+"Last-Translator: Hannie Dumoleyn <hannie@ubuntu-nl.org>\n"
+"Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-02-02 09:00+0000\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: ../data/seahorse.appdata.xml.in.h:1
 msgid "Seahorse"
@@ -50,7 +52,7 @@ msgstr "Seahorse"
 
 #: ../data/seahorse.appdata.xml.in.h:2 ../data/seahorse.desktop.in.in.h:2
 msgid "Manage your passwords and encryption keys"
-msgstr "Uw cryptografische sleutels en wachtwoorden beheren"
+msgstr "Uw encryptiesleutels en wachtwoorden beheren"
 
 #: ../data/seahorse.appdata.xml.in.h:3
 msgid ""
@@ -65,11 +67,11 @@ msgstr ""
 msgid ""
 "With seahorse you can create and manage PGP keys, create and manage SSH "
 "keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don't have to keep typing it and backup your keys and keyring."
+"you don’t have to keep typing it and backup your keys and keyring."
 msgstr ""
 "Met Seahorse kunt u PGP- en SSH-sleutels aanmaken en beheren, sleutels "
 "publiceren en ophalen van sleutelservers, uw wachtwoordzin bewaren zodat u "
-"die niet steeds hoeft in te typen en een reservekopie maken van uw sleutels "
+"die niet steeds hoeft in te typen, en een reservekopie maken van uw sleutels "
 "en sleutelbos."
 
 #: ../data/seahorse.desktop.in.in.h:1 ../common/catalog.vala:285
@@ -93,9 +95,9 @@ msgstr ""
 "Tino Meinen\n"
 "Reinout van Schouwen\n"
 "Nathan Follens\n"
-"\n"
-"Kijk voor meer info op http://nl.gnome.org/\n"
-"\n"
+"Justin van Steijn\n"
+"Hannie Dumoleyn\n"
+"Meer info over Gnome-NL http://nl.gnome.org\n"
 "Launchpad Contributions:\n"
 "  Daniel van Eeden https://launchpad.net/~gnomenl\n"
 "  Erwin Poeze https://launchpad.net/~donnut\n"
@@ -109,24 +111,24 @@ msgstr ""
 
 #: ../common/catalog.vala:290
 msgid "Seahorse Project Homepage"
-msgstr "Homepage van het Seahorse-project"
+msgstr "Startpagina van het Seahorse-project"
 
 #: ../common/catalog.vala:308
 msgid "Cannot delete"
-msgstr "Kan niet verwijderen"
+msgstr "Verwijderen niet mogelijk"
 
 #: ../common/catalog.vala:331 ../libseahorse/seahorse-key-manager-store.c:443
-msgid "Couldn't export keys"
-msgstr "Kon sleutels niet exporteren"
+msgid "Couldn’t export keys"
+msgstr "Exporteren van sleutels mislukt"
 
 #: ../common/catalog.vala:342
-msgid "Couldn't export data"
-msgstr "Kon gegevens niet exporteren"
+msgid "Couldn’t export data"
+msgstr "Exporteren van gegevens mislukt"
 
-#: ../common/catalog.vala:358 ../libseahorse/seahorse-widget.c:460
+#: ../common/catalog.vala:358 ../libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
-msgstr "Kon de hulp niet weergeven: %s"
+msgstr "Weergeven hulp niet gelukt: %s"
 
 #. Top menu items
 #: ../common/catalog.vala:364
@@ -134,7 +136,7 @@ msgid "_File"
 msgstr "_Bestand"
 
 #: ../common/catalog.vala:365
-msgid "E_xport..."
+msgid "E_xport…"
 msgstr "E_xporteren…"
 
 #: ../common/catalog.vala:366
@@ -199,6 +201,14 @@ msgstr "Hulpdocument tonen"
 msgid "Export"
 msgstr "Exporteren"
 
+#. TRANSLATORS: this date (Year-month-day) is used to display
+#. * when something happened, e.g. when a key was created. Feel
+#. * free to put it in the correct order for your language.
+#.
+#: ../common/util.vala:63
+msgid "%Y-%m-%d"
+msgstr "%d-%m-%Y"
+
 #: ../gkr/gkr-backend.vala:39
 msgid "Passwords"
 msgstr "Wachtwoorden"
@@ -216,7 +226,7 @@ msgid "Used to store application and network passwords"
 msgstr "Gebruikt voor toepassings- en netwerkwachtwoorden"
 
 #: ../gkr/gkr-backend.vala:253
-msgid "New password..."
+msgid "New password…"
 msgstr "Nieuw wachtwoord…"
 
 #: ../gkr/gkr-backend.vala:254 ../gkr/gkr-backend.vala:261
@@ -236,8 +246,8 @@ msgid "Add Password"
 msgstr "Wachtwoord toevoegen"
 
 #: ../gkr/gkr-item-add.vala:101
-msgid "Couldn't add item"
-msgstr "Kan item niet toevoegen."
+msgid "Couldn’t add item"
+msgstr "Item toevoegen mislukt"
 
 #: ../gkr/gkr-item-properties.vala:136
 msgid "Access a network share or resource"
@@ -268,12 +278,12 @@ msgid "Password"
 msgstr "Wachtwoord"
 
 #: ../gkr/gkr-item-properties.vala:235
-msgid "Couldn't change password."
-msgstr "Kan wachtwoord niet wijzigen"
+msgid "Couldn’t change password."
+msgstr "Wachtwoord wijzigen mislukt."
 
-#: ../gkr/gkr-item-properties.vala:273
-msgid "Couldn't set description."
-msgstr "Kan omschrijving niet instellen."
+#: ../gkr/gkr-item-properties.vala:275
+msgid "Couldn’t set description."
+msgstr "Omschrijving instellen mislukt."
 
 #. Translators: This should be the same as the string in empathy
 #: ../gkr/gkr-item.vala:388
@@ -310,7 +320,7 @@ msgstr "Google Chrome-wachtwoord"
 
 #: ../gkr/gkr-item.vala:451
 msgid "Gnome Online Accounts password"
-msgstr "Wachtwoord voor Gnome Online Accounts"
+msgstr "Wachtwoord voor Gnome online-accounts"
 
 #: ../gkr/gkr-item.vala:452
 msgid "Telepathy password"
@@ -322,11 +332,11 @@ msgstr "Chatwachtwoord"
 
 #: ../gkr/gkr-item.vala:454
 msgid "Network Manager secret"
-msgstr "Network Manager geheim"
+msgstr "Network Manager-geheim"
 
 #: ../gkr/gkr-item.vala:504
 #, c-format
-msgid "Are you sure you want to delete the password '%s'?"
+msgid "Are you sure you want to delete the password “%s”?"
 msgstr "Weet u zeker dat u het wachtwoord ‘%s’ wilt verwijderen?"
 
 #: ../gkr/gkr-item.vala:506
@@ -341,7 +351,7 @@ msgid "Add Password Keyring"
 msgstr "Wachtwoordsleutelbos toevoegen"
 
 #: ../gkr/gkr-keyring-add.vala:55
-msgid "Couldn't add keyring"
+msgid "Couldn’t add keyring"
 msgstr "Kon sleutelbos niet toevoegen"
 
 #: ../gkr/gkr-keyring.vala:28
@@ -353,12 +363,12 @@ msgid "A keyring used to store passwords"
 msgstr "Een sleutelbos om wachtwoorden in op te slaan"
 
 #: ../gkr/gkr-keyring.vala:174
-msgid "Couldn't set default keyring"
-msgstr "Kon standaardsleutelbos niet instellen"
+msgid "Couldn’t set default keyring"
+msgstr "Instellen van standaardsleutelbos mislukt"
 
 #: ../gkr/gkr-keyring.vala:198 ../gkr/gkr-keyring.vala:203
-msgid "Couldn't change keyring password"
-msgstr "Kan wachtwoord voor sleutelbos niet wijzigen"
+msgid "Couldn’t change keyring password"
+msgstr "Wijzigen van wachtwoord voor sleutelbos mislukt"
 
 #: ../gkr/gkr-keyring.vala:209
 msgid "_Set as default"
@@ -371,15 +381,15 @@ msgstr ""
 
 #: ../gkr/gkr-keyring.vala:211
 msgid "Change _Password"
-msgstr "_Wachtwoord veranderen"
+msgstr "_Wachtwoord wijzigen"
 
 #: ../gkr/gkr-keyring.vala:212
 msgid "Change the unlock password of the password storage keyring"
-msgstr "Het ontgrendelwachtwoord van de wachtwoordsleutelbos veranderen"
+msgstr "Het ontgrendelwachtwoord van de wachtwoordsleutelbos wijzigen"
 
 #: ../gkr/gkr-keyring.vala:237
 #, c-format
-msgid "Are you sure you want to delete the password keyring '%s'?"
+msgid "Are you sure you want to delete the password keyring “%s”?"
 msgstr "Weet u zeker dat u de wachtwoordsleutelbos ‘%s’ wilt verwijderen?"
 
 #: ../gkr/gkr-keyring.vala:240
@@ -391,8 +401,8 @@ msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
 msgstr ""
-"Kies een naam voor de nieuwe sleutelbos. Daarna zal om een "
-"ontgrendelwachtwoord gevraagd worden."
+"Kies een naam voor de nieuwe sleutelbos. Daarna zal om een"
+" ontgrendelwachtwoord gevraagd worden."
 
 #: ../gkr/seahorse-add-keyring.xml.h:2
 msgid "New Keyring Name:"
@@ -497,9 +507,9 @@ msgstr "Luie modus"
 
 # Urgh (Wouter Bolsterlee)
 #: ../libegg/egg-datetime.c:323
-msgid "Lazy mode doesn't normalize entered date and time values"
+msgid "Lazy mode doesn’t normalize entered date and time values"
 msgstr ""
-"In luie modus worden opgegeven datum- en tijdwaardes niet genormaliseerd."
+"In luie modus worden opgegeven datum- en tijdwaarden niet genormaliseerd"
 
 #: ../libegg/egg-datetime.c:328
 msgid "Year"
@@ -785,7 +795,7 @@ msgstr "Geen venster weergeven"
 #: ../libseahorse/seahorse-interaction.c:98
 #, c-format
 msgid "Enter PIN or password for: %s"
-msgstr "Voer PIN of wachtwoord in voor: %s"
+msgstr "Voer PIN-code of wachtwoord in voor: %s"
 
 #. The second and main entry
 #: ../libseahorse/seahorse-passphrase.c:241
@@ -813,7 +823,7 @@ msgid "Custom"
 msgstr "Aangepast"
 
 #: ../libseahorse/seahorse-prefs.c:402
-msgid "None: Don't publish keys"
+msgid "None: Don’t publish keys"
 msgstr "Geen: Geen sleutels publiceren"
 
 #: ../libseahorse/seahorse-prefs.xml.h:1
@@ -964,8 +974,8 @@ msgid "C_hange"
 msgstr "_Wijzigen"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:161
-msgid "Couldn't add subkey"
-msgstr "Kon subsleutel niet toevoegen"
+msgid "Couldn’t add subkey"
+msgstr "Toevoegen subsleutel mislukt"
 
 #: ../pgp/seahorse-gpgme-add-subkey.c:180
 #, c-format
@@ -989,13 +999,13 @@ msgid "RSA (encrypt only)"
 msgstr "RSA (alleen versleutelen)"
 
 #: ../pgp/seahorse-gpgme-add-uid.c:99
-msgid "Couldn't add user id"
-msgstr "Kon gebruiker-id niet toevoegen"
+msgid "Couldn’t add user id"
+msgstr "Toevoegen gebruikersnaam mislukt"
 
 #: ../pgp/seahorse-gpgme-add-uid.c:121
 #, c-format
 msgid "Add user ID to %s"
-msgstr "Gebruiker-id aan %s toevoegen"
+msgstr "Gebruikersnaam aan %s toevoegen"
 
 #: ../pgp/seahorse-gpgme.c:71
 msgid "Decryption failed. You probably do not have the decryption key."
@@ -1016,8 +1026,8 @@ msgid "The expiry date must be in the future"
 msgstr "De verloopdatum moet in de toekomst liggen"
 
 #: ../pgp/seahorse-gpgme-expires.c:77
-msgid "Couldn't change expiry date"
-msgstr "Kon verloopdatum niet wijzigen"
+msgid "Couldn’t change expiry date"
+msgstr "Wijzigen verloopdatum mislukt"
 
 #: ../pgp/seahorse-gpgme-expires.c:138
 #, c-format
@@ -1038,7 +1048,7 @@ msgstr "ASCII versleutelde PGP-sleutels"
 
 #: ../pgp/seahorse-gpgme-exporter.c:120
 msgid "PGP keys"
-msgstr "PGP-sleutel"
+msgstr "PGP-sleutels"
 
 #: ../pgp/seahorse-gpgme-generate.c:93
 msgid "PGP Key"
@@ -1058,8 +1068,8 @@ msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
 #: ../pgp/seahorse-gpgme-generate.c:180
-msgid "Couldn't generate PGP key"
-msgstr "Kon PGP-sleutel niet aanmaken"
+msgid "Couldn’t generate PGP key"
+msgstr "Aanmaken PGP-sleutel mislukt"
 
 #: ../pgp/seahorse-gpgme-generate.c:213
 msgid "Passphrase for New PGP Key"
@@ -1073,16 +1083,16 @@ msgstr "Voer de wachtwoordzin voor de nieuwe sleutel tweemaal in."
 #: ../pgp/seahorse-gpgme-generate.c:226
 msgid ""
 "When creating a key we need to generate a lot of\n"
-"random data and we need you to help. It's a good\n"
+"random data and we need you to help. It’s a good\n"
 "idea to perform some other action like typing on\n"
 "the keyboard, moving the mouse, using applications.\n"
 "This gives the system the random data that it needs."
 msgstr ""
 "We hebben veel willekeurige gegevens nodig bij het\n"
 "maken van een nieuwe sleutel en u kunt hierbij helpen.\n"
-"Het is goed veel acties uit te voeren,zoals typen op het\n"
-"toetsenbord, de muis bewegen, toepassingen gebruiken.\n"
-"Dit zorgt voor de willekeurige data voor het systeem.."
+"Het is goed om meerdere handelingen uit te voeren, zoals typen\n"
+"op het toetsenbord, de muis bewegen, toepassingen gebruiken.\n"
+"Dit voorziet het systeem van de willekeurige gegevens die het nodig heeft."
 
 #: ../pgp/seahorse-gpgme-generate.c:231
 #: ../pkcs11/seahorse-pkcs11-generate.c:458
@@ -1103,15 +1113,15 @@ msgid_plural "Are you sure you want to permanently delete %d keys?"
 msgstr[0] "Weet u zeker dat u deze %d sleutels permanent wilt verwijderen?"
 msgstr[1] "Weet u zeker dat u deze %d sleutel permanent wilt verwijderen?"
 
-#: ../pgp/seahorse-gpgme-key-op.c:377
+#: ../pgp/seahorse-gpgme-key-op.c:378
 msgid "Wrong password"
 msgstr "Onjuist wachtwoord"
 
-#: ../pgp/seahorse-gpgme-key-op.c:377
+#: ../pgp/seahorse-gpgme-key-op.c:378
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
-"Dit was de derde maal dat er een onjuist wachtwoord werd opgegeven. Probeer "
-"opnieuw."
+"Dit was de derde maal dat er een onjuist wachtwoord werd opgegeven. Probeer"
+" het opnieuw."
 
 #: ../pgp/seahorse-gpgme-keyring.c:89
 #, c-format
@@ -1120,12 +1130,12 @@ msgstr "Wachtwoordzin incorrect."
 
 #: ../pgp/seahorse-gpgme-keyring.c:93
 #, c-format
-msgid "Enter new passphrase for '%s'"
+msgid "Enter new passphrase for “%s”"
 msgstr "Nieuwe wachtwoordzin voor ‘%s’ opgeven"
 
 #: ../pgp/seahorse-gpgme-keyring.c:95
 #, c-format
-msgid "Enter passphrase for '%s'"
+msgid "Enter passphrase for “%s”"
 msgstr "Wachtwoordzin voor ‘%s’ opgeven"
 
 #: ../pgp/seahorse-gpgme-keyring.c:98 ../src/seahorse-change-passphrase.xml.h:2
@@ -1153,7 +1163,8 @@ msgid ""
 "set in the future or a missing self-signature."
 msgstr ""
 "Ongeldige sleutelgegevens (geen UIDs). Dit kan veroorzaakt worden doordat "
-"een computer een incorrecte datum ingesteld heeft, of dat de sleutel onjuist "
+"een computer een incorrecte datum ingesteld heeft, of doordat de sleutel"
+" onjuist "
 "ondertekend is."
 
 #: ../pgp/seahorse-gpgme-keyring.c:806
@@ -1168,13 +1179,13 @@ msgstr "GnuPG: standaardsleutelbosmap"
 #, c-format
 msgid ""
 "<big><b>The photo is too large</b></big>\n"
-"The recommended size for a photo on your key is %d x %d pixels."
+"The recommended size for a photo on your key is %d × %d pixels."
 msgstr ""
 "<big><b>De foto is te groot</b></big>\n"
-"De aanbevolen afmetingen is %d×%d pixels."
+"De aanbevolen grootte voor een foto op uw sleutel is %d×%d pixels."
 
 #: ../pgp/seahorse-gpgme-photos.c:77
-msgid "_Don't Resize"
+msgid "_Don’t Resize"
 msgstr "Niet _herschalen"
 
 #: ../pgp/seahorse-gpgme-photos.c:78
@@ -1187,8 +1198,8 @@ msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
 msgstr ""
-"Dit bestand is geen ondersteund afbeeldingsbestand. Probeer een JPEG-foto te "
-"gebruiken."
+"Dit is geen afbeeldingsbestand of een afbeeldingsbestand dat niet ondersteund"
+" wordt. Probeer een JPEG-foto te gebruiken."
 
 #: ../pgp/seahorse-gpgme-photos.c:223
 msgid "All image files"
@@ -1207,12 +1218,12 @@ msgid "Choose Photo to Add to Key"
 msgstr "Foto kiezen om aan sleutel toe te voegen"
 
 #: ../pgp/seahorse-gpgme-photos.c:284
-msgid "Couldn't prepare photo"
-msgstr "Kon foto niet prepareren"
+msgid "Couldn’t prepare photo"
+msgstr "Voorbereiden van foto is mislukt"
 
 #: ../pgp/seahorse-gpgme-photos.c:294 ../pgp/seahorse-gpgme-photos.c:297
-msgid "Couldn't add photo"
-msgstr "Kon foto niet toevoegen"
+msgid "Couldn’t add photo"
+msgstr "Toevoegen van foto mislukt"
 
 #: ../pgp/seahorse-gpgme-photos.c:295
 msgid "The file could not be loaded. It may be in an invalid format"
@@ -1223,17 +1234,17 @@ msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "Weet u zeker dat u de huidige foto van uw sleutel wilt verwijderen?"
 
 #: ../pgp/seahorse-gpgme-photos.c:334
-msgid "Couldn't delete photo"
-msgstr "Kon foto niet verwijderen"
+msgid "Couldn’t delete photo"
+msgstr "Verwijderen van foto mislukt"
 
 #: ../pgp/seahorse-gpgme-revoke.c:73
-msgid "Couldn't revoke subkey"
-msgstr "Kon subsleutel niet intrekken"
+msgid "Couldn’t revoke subkey"
+msgstr "Intrekken van subsleutel mislukt"
 
 #: ../pgp/seahorse-gpgme-revoke.c:94
 #, c-format
 msgid "Revoke: %s"
-msgstr "Intrekken:: %s"
+msgstr "Intrekken: %s"
 
 #: ../pgp/seahorse-gpgme-revoke.c:105
 msgid "No reason"
@@ -1253,15 +1264,15 @@ msgstr "De sleutel is gecompromitteerd"
 
 #: ../pgp/seahorse-gpgme-revoke.c:119
 msgid "Superseded"
-msgstr "In onbruik en vervangen"
+msgstr "Vervangen"
 
 #: ../pgp/seahorse-gpgme-revoke.c:120
 msgid "Key has been superseded"
-msgstr "Sleutel is in onbruik geraakt en vervangen"
+msgstr "Sleutel is vervangen"
 
 #: ../pgp/seahorse-gpgme-revoke.c:126
 msgid "Not Used"
-msgstr "Niet langer gebruikt"
+msgstr "Niet meer in gebruik"
 
 #: ../pgp/seahorse-gpgme-revoke.c:127
 msgid "Key is no longer used"
@@ -1273,12 +1284,13 @@ msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr ""
-"%s zal als (mogelijke) intrekker van %s toegevoegd worden. Dit kan niet "
+"U staat op het punt %s als (mogelijke) intrekker van %s toe te voegen. Dit"
+" kan niet "
 "ongedaan gemaakt worden. Weet u zeker dat u verder wilt gaan?"
 
 #: ../pgp/seahorse-gpgme-revoke.c:176
-msgid "Couldn't add revoker"
-msgstr "Kon intrekker niet toevoegen"
+msgid "Couldn’t add revoker"
+msgstr "Intrekker toevoegen mislukt"
 
 #: ../pgp/seahorse-gpgme-secret-deleter.c:81 ../ssh/seahorse-ssh-deleter.c:82
 msgid "I understand that this secret key will be permanently deleted."
@@ -1288,14 +1300,14 @@ msgstr "Ik begrijp dat deze geheime sleutel permanent verwijderd zal worden."
 #, c-format
 msgid ""
 "This key was already signed by\n"
-"\"%s\""
+"“%s”"
 msgstr ""
 "Deze sleutel is al ondertekend door\n"
 "‘%s’"
 
 #: ../pgp/seahorse-gpgme-sign.c:104
-msgid "Couldn't sign key"
-msgstr "Kon sleutel niet ondertekenen"
+msgid "Couldn’t sign key"
+msgstr "Ondertekenen van sleutel mislukt"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
@@ -1308,8 +1320,8 @@ msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr ""
-"U heeft geen persoonlijke PGP-sleutels die gebruikt kunnen worden om uw "
-"vertrouwen in deze sleutel aan te geven."
+"U heeft geen persoonlijke PGP-sleutels die gebruikt kunnen worden om uw"
+" vertrouwen in deze sleutel aan te geven."
 
 #: ../pgp/seahorse-gpgme-subkey.c:195
 msgctxt "Algorithm"
@@ -1322,21 +1334,21 @@ msgstr "ElGamal"
 
 #: ../pgp/seahorse-hkp-source.c:566
 #, c-format
-msgid "Search was not specific enough. Server '%s' found too many keys."
+msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr "Te algemene zoekopdracht; te veel sleutels gevonden op server ‘%s’."
 
 #: ../pgp/seahorse-hkp-source.c:569
 #, c-format
-msgid "Couldn't communicate with server '%s': %s"
-msgstr "Kon niet communiceren met server ‘%s’: %s"
+msgid "Couldn’t communicate with server “%s”: %s"
+msgstr "Communiceren met server ‘%s’ mislukt: %s"
 
 #: ../pgp/seahorse-hkp-source.c:1079
 msgid "HTTP Key Server"
 msgstr "HTTP-sleutelserver"
 
 #: ../pgp/seahorse-keyserver-results.c:168
-msgid "Couldn't import keys"
-msgstr "Kon sleutels niet importeren"
+msgid "Couldn’t import keys"
+msgstr "Imp;orteren van sleutels mislukt"
 
 #: ../pgp/seahorse-keyserver-results.c:211
 msgid "Importing keys from key servers"
@@ -1352,7 +1364,7 @@ msgid "Close this window"
 msgstr "Dit venster sluiten"
 
 #: ../pgp/seahorse-keyserver-results.c:243 ../pgp/seahorse-pgp-actions.c:113
-msgid "_Find Remote Keys..."
+msgid "_Find Remote Keys…"
 msgstr "Sleutels op afstand _zoeken…"
 
 #: ../pgp/seahorse-keyserver-results.c:244 ../pgp/seahorse-pgp-actions.c:114
@@ -1373,7 +1385,7 @@ msgstr "Sleutels op afstand"
 
 #: ../pgp/seahorse-keyserver-results.c:282
 #, c-format
-msgid "Remote Keys Containing '%s'"
+msgid "Remote Keys Containing “%s”"
 msgstr "Sleutels op afstand met daarin ‘%s’"
 
 #: ../pgp/seahorse-keyserver-results.c:485
@@ -1413,13 +1425,13 @@ msgid "_Search"
 msgstr "_Zoeken"
 
 #: ../pgp/seahorse-keyserver-sync.c:56
-msgid "Couldn't publish keys to server"
-msgstr "Kon sleutels niet naar de server publiceren"
+msgid "Couldn’t publish keys to server"
+msgstr "Publiceren van sleutels op de server mislukt"
 
 #: ../pgp/seahorse-keyserver-sync.c:75
 #, c-format
-msgid "Couldn't retrieve keys from server: %s"
-msgstr "Kon sleutelgegevens niet van sleutelserver halen: %s"
+msgid "Couldn’t retrieve keys from server: %s"
+msgstr "Ophalen van sleutels van de server mislukt: %s"
 
 #: ../pgp/seahorse-keyserver-sync.c:159
 #, c-format
@@ -1429,7 +1441,7 @@ msgstr[0] "<b>%d sleutel geselecteerd voor synchronisatie</b>"
 msgstr[1] "<b>%d sleutels geselecteerd voor synchronisatie</b>"
 
 #: ../pgp/seahorse-keyserver-sync.c:239
-msgid "Synchronizing keys..."
+msgid "Synchronizing keys…"
 msgstr "Sleutels synchroniseren…"
 
 #: ../pgp/seahorse-keyserver-sync.xml.h:1
@@ -1438,13 +1450,13 @@ msgstr "Sleutels synchroniseren"
 
 #: ../pgp/seahorse-keyserver-sync.xml.h:2
 msgid ""
-"This will publish the keys in your key ring so they're available for others "
-"to use. You'll also get any changes others have made since you received "
+"This will publish the keys in your key ring so they’re available for others "
+"to use. You’ll also get any changes others have made since you received "
 "their keys."
 msgstr ""
 "Hiermee kunt u de sleutels in de sleutelbos publiceren en voor anderen "
-"beschikbaar maken. Daarnaast worden anderen gemaakte wijzigingen aan "
-"sleutels doorgevoerd."
+"beschikbaar maken. Daarnaast zult u wijzigingen, die anderen hebben gemaakt "
+"sinds u hun sleutels hebt ontvangen, ontvangen."
 
 #: ../pgp/seahorse-keyserver-sync.xml.h:3
 msgid ""
@@ -1467,8 +1479,8 @@ msgstr "_Synchroniseren"
 
 #: ../pgp/seahorse-ldap-source.c:436
 #, c-format
-msgid "Couldn't communicate with '%s': %s"
-msgstr "Kon niet communiceren met ‘%s’: %s"
+msgid "Couldn’t communicate with %s: %s"
+msgstr "Communiceren met ‘%s’ mislukt: %s"
 
 #: ../pgp/seahorse-ldap-source.c:646
 #, c-format
@@ -1477,7 +1489,7 @@ msgstr "Verbinden met: %s"
 
 #: ../pgp/seahorse-ldap-source.c:652
 #, c-format
-msgid "Couldn't resolve address: %s"
+msgid "Couldn’t resolve address: %s"
 msgstr "Opzoeken van adres mislukt: %s"
 
 #: ../pgp/seahorse-ldap-source.c:696
@@ -1490,7 +1502,7 @@ msgid "LDAP Key Server"
 msgstr "LDAP-sleutelserver"
 
 #: ../pgp/seahorse-pgp-actions.c:118
-msgid "_Sync and Publish Keys..."
+msgid "_Sync and Publish Keys…"
 msgstr "_Sleutels synchroniseren en publiceren…"
 
 #: ../pgp/seahorse-pgp-actions.c:119
@@ -1516,8 +1528,7 @@ msgstr "Nieuwe sleutel genereren"
 #: ../pgp/seahorse-pgp-generate.xml.h:3
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
-"Met een PGP-sleutel kunt u anderen versleutelde berichten of bestanden "
-"sturen."
+"Met een PGP-sleutel kunt u anderen versleutelde berichten of bestanden sturen."
 
 #: ../pgp/seahorse-pgp-generate.xml.h:7
 msgid "Ne_ver Expires"
@@ -1556,23 +1567,25 @@ msgid "PGP key"
 msgstr "PGP-sleutel"
 
 #: ../pgp/seahorse-pgp-key-properties.c:317
-msgid "Couldn't change primary user ID"
-msgstr "Kon primaire gebruiker-id niet wijzigen"
+msgid "Couldn’t change primary user ID"
+msgstr "Wijzigen van primaire gebruikersnaam mislukt"
 
 #: ../pgp/seahorse-pgp-key-properties.c:336
 #, c-format
-msgid "Are you sure you want to permanently delete the '%s' user ID?"
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Weet u zeker dat u de gebruiker-id ‘%s’ permanent wilt verwijderen?"
 
 #: ../pgp/seahorse-pgp-key-properties.c:346
-msgid "Couldn't delete user ID"
-msgstr "Kon gebruiker-id niet verwijderen"
+msgid "Couldn’t delete user ID"
+msgstr "Verwijderen van gebruikersnaam mislukt"
 
+#. TRANSLATORS: [Unknown] signature name
 #: ../pgp/seahorse-pgp-key-properties.c:421
 #: ../pgp/seahorse-pgp-key-properties.c:1576
 msgid "[Unknown]"
 msgstr "[Onbekend]"
 
+#. TRANSLATORS: The name and email set on the PGP key
 #: ../pgp/seahorse-pgp-key-properties.c:530
 #: ../pgp/seahorse-pgp-key-properties.c:1859
 msgid "Name/Email"
@@ -1583,8 +1596,8 @@ msgid "Signature ID"
 msgstr "Ondertekening-id"
 
 #: ../pgp/seahorse-pgp-key-properties.c:670
-msgid "Couldn't change primary photo"
-msgstr "Kon primaire foto niet wijzigen"
+msgid "Couldn’t change primary photo"
+msgstr "Wijzigen van primaire foto mislukt"
 
 #. TRANSLATORS: (unknown) expiry date
 #: ../pgp/seahorse-pgp-key-properties.c:904
@@ -1606,18 +1619,18 @@ msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Weet u zeker dat u subsleutel %d van %s permanent wilt verwijderen?"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1094
-msgid "Couldn't delete subkey"
-msgstr "Kon subsleutel niet verwijderen"
+msgid "Couldn’t delete subkey"
+msgstr "Verwijderen van subsleutel mislukt"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1134
 #: ../pgp/seahorse-pgp-key-properties.c:1550
 msgid "Unable to change trust"
-msgstr "Kon vertrouwen niet aanpassen"
+msgstr "Vertrouwen kon niet worden aanpassen"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1148
 #: ../ssh/seahorse-ssh-key-properties.c:205
-msgid "Couldn't export key"
-msgstr "Kan sleutel niet exporteren"
+msgid "Couldn’t export key"
+msgstr "Exporteren van sleutel mislukt"
 
 #: ../pgp/seahorse-pgp-key-properties.c:1264
 msgid "Marginal"
@@ -1868,7 +1881,7 @@ msgid "Ultimately"
 msgstr "Meer dan volledig"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
-msgid "Encrypt files and email to the key's owner"
+msgid "Encrypt files and email to the key’s owner"
 msgstr "Bestanden en e-mail versleutelen voor de eigenaar van de sleutel"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
@@ -1891,13 +1904,13 @@ msgstr ""
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:28
 #, no-c-format
-msgid "I trust signatures from '%s' on other keys"
+msgid "I trust signatures from “%s” on other keys"
 msgstr "Ik vertrouw ondertekeningen van ‘%s’ op andere sleutels"
 
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
 #, no-c-format
 msgid ""
-"If you believe that the person that owns this key is '%s', <i>sign</i> this "
+"If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
 msgstr ""
 "Als u ervan overtuigd bent dat de persoon die deze sleutel bezit ‘%s’ is, "
@@ -1910,7 +1923,7 @@ msgstr "Deze sleutel _ondertekenen"
 #: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
 #, no-c-format
 msgid ""
-"If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
+"If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
 msgstr ""
 "Als u er niet langer van overtuigd bent dat de persoon die deze sleutel "
 "bezit ‘%s’ is, kunt u uw ondertekening van deze sleutel <i>intrekken</i>:"
@@ -2141,8 +2154,8 @@ msgstr[0] "Weet u zeker dat u %d certificaat permanent wilt verwijderen?"
 msgstr[1] "Weet u zeker dat u %d certificaten permanent wilt verwijderen?"
 
 #: ../pkcs11/seahorse-pkcs11-generate.c:113
-msgid "Couldn't generate private key"
-msgstr "Kon privésleutel niet aanmaken"
+msgid "Couldn’t generate private key"
+msgstr "Aanmaken van privésleutel mislukt"
 
 #: ../pkcs11/seahorse-pkcs11-generate.c:412 ../pkcs11/pkcs11-request.vala:56
 msgid "Create"
@@ -2182,8 +2195,8 @@ msgid "Failed to export certificate"
 msgstr "Certificaat exporteren mislukt"
 
 #: ../pkcs11/pkcs11-properties.vala:188 ../src/seahorse-sidebar.c:873
-msgid "Couldn't delete"
-msgstr "Kon niet verwijderen"
+msgid "Couldn’t delete"
+msgstr "Verwijderen mislukt"
 
 #: ../pkcs11/pkcs11-properties.vala:199
 msgid "_Export"
@@ -2206,8 +2219,8 @@ msgid "Create a certificate request file for this key"
 msgstr "Certificaataanvraagbestand voor deze sleutel aanmaken"
 
 #: ../pkcs11/pkcs11-request.vala:87
-msgid "Couldn't create certificate request"
-msgstr "Kon certificaataanvraag niet aanmaken"
+msgid "Couldn’t create certificate request"
+msgstr "Aanmaken van certificaataanvraag mislukt"
 
 #: ../pkcs11/pkcs11-request.vala:104
 msgid "Save certificate request"
@@ -2222,8 +2235,8 @@ msgid "PEM encoded request"
 msgstr "PEM gecodeerde aanvraag"
 
 #: ../pkcs11/pkcs11-request.vala:149
-msgid "Couldn't save certificate request"
-msgstr "Kon certificaataanvraag niet opslaan"
+msgid "Couldn’t save certificate request"
+msgstr "Opslaan van certificaataanvraag mislukt"
 
 #: ../pkcs11/seahorse-pkcs11-request.xml.h:1
 msgid "Create a certificate request file."
@@ -2301,14 +2314,14 @@ msgstr "Klembordtekst"
 
 #: ../src/seahorse-key-manager.c:502
 msgid "_New"
-msgstr "_New"
+msgstr "_Nieuw"
 
 #: ../src/seahorse-key-manager.c:504
 msgid "Close this program"
 msgstr "Deze toepassing afsluiten"
 
 #: ../src/seahorse-key-manager.c:505 ../src/seahorse-key-manager.c:507
-msgid "_New..."
+msgid "_New…"
 msgstr "_Nieuw…"
 
 #: ../src/seahorse-key-manager.c:506
@@ -2320,7 +2333,7 @@ msgid "Add a new key or item"
 msgstr "Nieuwe sleutel of nieuw item toevoegen"
 
 #: ../src/seahorse-key-manager.c:509
-msgid "_Import..."
+msgid "_Import…"
 msgstr "_Importeren…"
 
 #: ../src/seahorse-key-manager.c:510
@@ -2386,12 +2399,12 @@ msgid "To get started with encryption you will need keys."
 msgstr "Om te kunnen beginnen met versleutelen hebt u sleutels nodig."
 
 #: ../src/seahorse-sidebar.c:797
-msgid "Couldn't lock"
-msgstr "Kon niet vergrendelen"
+msgid "Couldn’t lock"
+msgstr "Vergrendelen mislukt"
 
 #: ../src/seahorse-sidebar.c:834
-msgid "Couldn't unlock"
-msgstr "Kon niet ontgrendelen"
+msgid "Couldn’t unlock"
+msgstr "Ontgrendelen mislukt"
 
 #: ../src/seahorse-sidebar.c:941
 msgid "_Lock"
@@ -2406,7 +2419,7 @@ msgid "_Properties"
 msgstr "_Eigenschappen"
 
 #: ../ssh/seahorse-ssh-actions.c:97
-msgid "Configure Key for _Secure Shell..."
+msgid "Configure Key for _Secure Shell…"
 msgstr "Sleutel configureren voor _Secure Shell…"
 
 #: ../ssh/seahorse-ssh-actions.c:98
@@ -2454,7 +2467,7 @@ msgstr "Sleutels gebruikt voor veilige verbindingen met andere computers"
 
 #: ../ssh/seahorse-ssh-deleter.c:80 ../ssh/seahorse-ssh-deleter.c:85
 #, c-format
-msgid "Are you sure you want to delete the secure shell key '%s'?"
+msgid "Are you sure you want to delete the secure shell key “%s”?"
 msgstr "Weet u zeker dat u de Secure Shell-sleutel ‘%s’ wilt verwijderen?"
 
 #: ../ssh/seahorse-ssh-deleter.c:90
@@ -2490,8 +2503,8 @@ msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Voor toegang tot andere computers (bijv. via een terminal)"
 
 #: ../ssh/seahorse-ssh-generate.c:107 ../ssh/seahorse-ssh-generate.c:123
-msgid "Couldn't generate Secure Shell key"
-msgstr "Kon SSH-sleutel niet genereren"
+msgid "Couldn’t generate Secure Shell key"
+msgstr "Genereren van SSH-sleutel mislukt"
 
 #: ../ssh/seahorse-ssh-generate.c:190
 msgid "Creating Secure Shell Key"
@@ -2546,16 +2559,16 @@ msgid "SSH key"
 msgstr "SSH-sleutel"
 
 #: ../ssh/seahorse-ssh-key-properties.c:79
-msgid "Couldn't rename key."
-msgstr "Kan sleutel niet hernoemen."
+msgid "Couldn’t rename key."
+msgstr "Sleutel hernoemen mislukt."
 
 #: ../ssh/seahorse-ssh-key-properties.c:134
-msgid "Couldn't change authorization for key."
-msgstr "Kan autorisatie voor sleutel niet wijzigen."
+msgid "Couldn’t change authorization for key."
+msgstr "Autorisatie voor sleutel wijzigen mislukt."
 
 #: ../ssh/seahorse-ssh-key-properties.c:171
-msgid "Couldn't change passphrase for key."
-msgstr "Kan wachtwoordzin van sleutel niet veranderen."
+msgid "Couldn’t change passphrase for key."
+msgstr "Wachtwoordzin van sleutel wijzigen mislukt."
 
 #: ../ssh/seahorse-ssh-key-properties.xml.h:2
 msgid "Identifier:"
@@ -2637,11 +2650,11 @@ msgid "No private key file is available for this key."
 msgstr "Er is geen privésleutel beschikbaar voor deze sleutel."
 
 #: ../ssh/seahorse-ssh-upload.c:48
-msgid "Couldn't configure Secure Shell keys on remote computer."
-msgstr "Kon SSH-sleutels niet instellen op andere computer."
+msgid "Couldn’t configure Secure Shell keys on remote computer."
+msgstr "Instellen van SSH-sleutels op andere computer mislukt."
 
 #: ../ssh/seahorse-ssh-upload.c:131
-msgid "Configuring Secure Shell Keys..."
+msgid "Configuring Secure Shell Keys…"
 msgstr "SSH-sleutels configureren…"
 
 #: ../ssh/seahorse-ssh-upload.xml.h:1
@@ -2672,14 +2685,26 @@ msgstr "_Gebruikersnaam:"
 msgid "_Set Up"
 msgstr "In_stellen"
 
+#~ msgid "E_xport..."
+#~ msgstr "E_xporteren…"
+
+#~ msgid "_Find Remote Keys..."
+#~ msgstr "Sleutels op afstand _zoeken…"
+
+#~ msgid "Synchronizing keys..."
+#~ msgstr "Sleutels synchroniseren…"
+
+#~ msgid "_New..."
+#~ msgstr "_Nieuw…"
+
+#~ msgid "_Import..."
+#~ msgstr "_Importeren…"
+
 #~ msgid "Updating password"
 #~ msgstr "Wachtwoord updaten"
 
 #~ msgid "Keyring Properties"
 #~ msgstr "Sleutelbos-eigenschappen"
-
-#~ msgid "%Y-%m-%d"
-#~ msgstr "%d-%m-%Y"
 
 #~ msgid "Ssh Key"
 #~ msgstr "SSH-sleutel"
@@ -3978,10 +4003,6 @@ msgstr "In_stellen"
 #, fuzzy
 #~ msgid "Sending keys to key server..."
 #~ msgstr "Sleutels importeren van sleutelservers"
-
-#, fuzzy
-#~ msgid "Synchronizing keys"
-#~ msgstr "Sleutels synchroniseren…"
 
 #, fuzzy
 #~ msgid "Private Secure Shell Key"
