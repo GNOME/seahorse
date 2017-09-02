@@ -219,6 +219,11 @@ seahorse_ssh_source_get_label (SeahorsePlace *place)
 	return g_strdup (_("OpenSSH keys"));
 }
 
+static void
+seahorse_ssh_source_set_label (SeahorsePlace *place, const char *label)
+{
+}
+
 static gchar *
 seahorse_ssh_source_get_description (SeahorsePlace *place)
 {
@@ -272,6 +277,24 @@ seahorse_ssh_source_get_property (GObject *obj,
 		break;
 	case PROP_ACTIONS:
 		g_value_take_object (value, seahorse_ssh_source_get_actions (place));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+seahorse_ssh_source_set_property (GObject *obj,
+                                  guint prop_id,
+                                  const GValue *value,
+                                  GParamSpec *pspec)
+{
+	SeahorsePlace *place = SEAHORSE_PLACE (obj);
+
+	switch (prop_id) {
+	case PROP_LABEL:
+		seahorse_ssh_source_set_label (place, g_value_get_boxed (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -360,6 +383,7 @@ seahorse_ssh_source_class_init (SeahorseSSHSourceClass *klass)
     gobject_class->dispose = seahorse_ssh_source_dispose;
     gobject_class->finalize = seahorse_ssh_source_finalize;
     gobject_class->get_property = seahorse_ssh_source_get_property;
+    gobject_class->set_property = seahorse_ssh_source_set_property;
 
     g_object_class_override_property (gobject_class, PROP_LABEL, "label");
     g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
@@ -862,6 +886,7 @@ seahorse_ssh_source_place_iface (SeahorsePlaceIface *iface)
 	iface->get_description = seahorse_ssh_source_get_description;
 	iface->get_icon = seahorse_ssh_source_get_icon;
 	iface->get_label = seahorse_ssh_source_get_label;
+	iface->set_label = seahorse_ssh_source_set_label;
 	iface->get_uri = seahorse_ssh_source_get_uri;
 }
 

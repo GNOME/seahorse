@@ -96,7 +96,7 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 
     /* These properties are used to conform to SeahorseSource, but are not actually used */
     g_object_class_install_property (gobject_class, PROP_LABEL,
-            g_param_spec_string ("label", "Label", "Label", "", G_PARAM_READABLE));
+            g_param_spec_string ("label", "Label", "Label", "", G_PARAM_READWRITE));
     g_object_class_install_property (gobject_class, PROP_DESCRIPTION,
             g_param_spec_string ("description", "Description", "Description", "", G_PARAM_READABLE));
     g_object_class_install_property (gobject_class, PROP_ICON,
@@ -174,6 +174,11 @@ seahorse_server_source_get_label (SeahorsePlace* self)
 	return g_strdup (SEAHORSE_SERVER_SOURCE (self)->priv->server);
 }
 
+static void
+seahorse_server_source_set_label (SeahorsePlace *self, const char *label)
+{
+}
+
 static gchar *
 seahorse_server_source_get_description (SeahorsePlace* self)
 {
@@ -207,6 +212,7 @@ seahorse_server_source_place_iface (SeahorsePlaceIface *iface)
 	iface->get_description = seahorse_server_source_get_description;
 	iface->get_icon = seahorse_server_source_get_icon;
 	iface->get_label = seahorse_server_source_get_label;
+	iface->set_label = seahorse_server_source_set_label;
 	iface->get_uri = seahorse_server_source_get_uri;
 }
 
@@ -227,6 +233,9 @@ seahorse_server_set_property (GObject *object, guint prop_id,
     SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (object);
  
     switch (prop_id) {
+	case PROP_LABEL:
+		seahorse_server_source_set_label (ssrc, g_value_get_boxed (value));
+		break;
     case PROP_KEY_SERVER:
         g_assert (ssrc->priv->server == NULL);
         ssrc->priv->server = g_strdup (g_value_get_string (value));

@@ -89,6 +89,11 @@ seahorse_unknown_source_get_label (SeahorsePlace* self)
 	return g_strdup ("");
 }
 
+static void
+seahorse_unknown_source_set_label (SeahorsePlace *self, const char *label)
+{
+}
+
 static gchar *
 seahorse_unknown_source_get_description (SeahorsePlace* self)
 {
@@ -144,6 +149,24 @@ seahorse_unknown_source_get_property (GObject *obj,
 }
 
 static void
+seahorse_unknown_source_set_property (GObject *obj,
+                                      guint prop_id,
+                                      const GValue *value,
+                                      GParamSpec *pspec)
+{
+	SeahorsePlace *place = SEAHORSE_PLACE (obj);
+
+	switch (prop_id) {
+	case PROP_LABEL:
+		seahorse_unknown_source_set_label (place, g_value_get_boxed (value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+		break;
+	}
+}
+
+static void
 seahorse_unknown_source_finalize (GObject *obj)
 {
 	SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (obj);
@@ -159,6 +182,7 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
 	gobject_class->get_property = seahorse_unknown_source_get_property;
+	gobject_class->set_property = seahorse_unknown_source_set_property;
 	gobject_class->finalize = seahorse_unknown_source_finalize;
 
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
@@ -208,6 +232,7 @@ seahorse_unknown_source_place_iface (SeahorsePlaceIface *iface)
 	iface->get_description = seahorse_unknown_source_get_description;
 	iface->get_icon = seahorse_unknown_source_get_icon;
 	iface->get_label = seahorse_unknown_source_get_label;
+	iface->set_label = seahorse_unknown_source_set_label;
 	iface->get_uri = seahorse_unknown_source_get_uri;
 }
 
