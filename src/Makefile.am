@@ -42,7 +42,7 @@ seahorse_LDADD = \
 	$(SEAHORSE_LIBS)
 
 ui_files += \
-	src/seahorse-key-manager.ui \
+	src/seahorse-key-manager-widgets.ui \
 	src/seahorse-key-manager.xml \
 	src/seahorse-change-passphrase.xml \
 	src/seahorse-generate-select.xml

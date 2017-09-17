@@ -74,7 +74,7 @@ ui_files += \
 	pgp/seahorse-add-uid.xml \
 	pgp/seahorse-expires.xml \
 	pgp/seahorse-keyserver-search.xml \
-	pgp/seahorse-keyserver-results.ui \
+	pgp/seahorse-keyserver-results-widgets.ui \
 	pgp/seahorse-keyserver-results.xml \
 	pgp/seahorse-keyserver-sync.xml \
 	pgp/seahorse-pgp-public-key-properties.xml \
