@@ -83,3 +83,5 @@ ui_files += \
 	pgp/seahorse-revoke.xml \
 	pgp/seahorse-sign.xml \
 	pgp/seahorse-signer.xml
+
+-include $(top_srcdir)/git.mk

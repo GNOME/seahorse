@@ -46,3 +46,5 @@ CLEANFILES = \
 	$(appdata_DATA) \
 	$(desktop_DATA) \
 	$(NULL)
+
+-include $(top_srcdir)/git.mk

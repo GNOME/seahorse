@@ -18,7 +18,6 @@ EXTRA_DIST = \
     ChangeLog.pre-0.6 \
     HACKING \
     INSTALL \
-    MAINTAINERS \
     NEWS \
     README \
     THANKS \
@@ -26,6 +25,11 @@ EXTRA_DIST = \
     intltool-extract.in \
     intltool-merge.in \
     intltool-update.in
+
+MAINTAINERCLEANFILES = \
+	$(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \
+	$(GITIGNORE_MAINTAINERCLEANFILES_MAKEFILE_IN) \
+	$(GITIGNORE_MAINTAINERCLEANFILES_M4_LIBTOOL)
 
 DISTCLEANFILES = \
     intltool-extract \
@@ -79,7 +83,6 @@ seahorselibexecbin_PROGRAMS =
 BUILT_SOURCES =
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST += $(ui_files)
-MAINTAINERCLEANFILES =
 
 AM_CPPFLAGS = \
 	-I$(top_builddir) \
@@ -115,3 +118,5 @@ endif
 if WITH_PKCS11
 include pkcs11/Makefile.am
 endif
+
+-include $(top_srcdir)/git.mk

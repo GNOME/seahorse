@@ -28,3 +28,5 @@ ui_files += \
 	ssh/seahorse-ssh-key-properties.xml \
 	ssh/seahorse-ssh-generate.xml \
 	ssh/seahorse-ssh-upload.xml
+
+-include $(top_srcdir)/git.mk

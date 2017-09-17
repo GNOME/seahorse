@@ -56,3 +56,5 @@ EXTRA_DIST += \
 
 CLEANFILES += *.xmlp* *.bak \
 	$(NULL)
+
+-include $(top_srcdir)/git.mk

@@ -50,3 +50,5 @@ HELP_MEDIA = \
 	media/seahorse.png
 
 HELP_LINGUAS = cs de el es fr hu ru sv
+
+-include $(top_srcdir)/git.mk

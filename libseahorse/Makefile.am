@@ -101,3 +101,5 @@ EXTRA_DIST += \
 
 MAINTAINERCLEANFILES += \
 	libseahorse/seahorse.gresource.xml
+
+-include $(top_srcdir)/git.mk

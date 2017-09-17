@@ -57,3 +57,5 @@ EXTRA_DIST += \
 	$(common_VALA) \
 	common/config.vapi \
 	$(NULL)
+
+-include $(top_srcdir)/git.mk

@@ -15,3 +15,5 @@ libeggtreemultidnd_a_CPPFLAGS = -DGTK_DISABLE_DEPRECATED \
 
 libeggtreemultidnd_a_CFLAGS = $(GTK_CFLAGS)
 libeggtreemultidnd_a_SOURCES = libegg/eggtreemultidnd.c libegg/eggtreemultidnd.h
+
+-include $(top_srcdir)/git.mk

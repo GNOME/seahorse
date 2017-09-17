@@ -49,3 +49,5 @@ ui_files += \
 	gkr/seahorse-gkr-add-item.xml \
 	gkr/seahorse-gkr-item-properties.xml \
 	gkr/seahorse-gkr-keyring.xml
+
+-include $(top_srcdir)/git.mk
