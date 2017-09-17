@@ -27,7 +27,7 @@ public class KeyringProperties : Gtk.Dialog {
 	construct {
 		this._builder = new Gtk.Builder();
 		try {
-			string path = "/org/gnome/Seahorse/seahorse-gkr-keyring.xml";
+			string path = "/org/gnome/Seahorse/seahorse-gkr-keyring.ui";
 			this._builder.add_from_resource(path);
 		} catch (GLib.Error err) {
 			GLib.critical ("%s", err.message);

@@ -25,8 +25,8 @@ seahorse_ssh_askpass_LDADD = \
 	$(SEAHORSE_LIBS)
 
 ui_files += \
-	ssh/seahorse-ssh-key-properties.xml \
-	ssh/seahorse-ssh-generate.xml \
-	ssh/seahorse-ssh-upload.xml
+	ssh/seahorse-ssh-key-properties.ui \
+	ssh/seahorse-ssh-generate.ui \
+	ssh/seahorse-ssh-upload.ui
 
 -include $(top_srcdir)/git.mk

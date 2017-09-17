@@ -34,7 +34,7 @@ public class Request : Gtk.Dialog {
 
 	construct {
 		var builder = new Gtk.Builder();
-		var path = "/org/gnome/Seahorse/seahorse-pkcs11-request.xml";
+		var path = "/org/gnome/Seahorse/seahorse-pkcs11-request.ui";
 		try {
 			builder.add_from_resource(path);
 		} catch (GLib.Error err) {

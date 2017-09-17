@@ -67,7 +67,7 @@ namespace Util {
 	public Gtk.Builder load_built_contents(Gtk.Container? frame,
 	                                       string name) {
 		var builder = new Gtk.Builder();
-		string path = "/org/gnome/Seahorse/seahorse-%s.xml".printf(name);
+		string path = "/org/gnome/Seahorse/seahorse-%s.ui".printf(name);
 
 		if (frame != null && frame is Gtk.Dialog)
 			frame = ((Gtk.Dialog)frame).get_content_area();

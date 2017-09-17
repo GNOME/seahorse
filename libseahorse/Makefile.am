@@ -89,9 +89,9 @@ libseahorse/seahorse.gresource.xml: Makefile.am
 	echo "</gresources>" >> $@;
 
 ui_files += \
-	libseahorse/seahorse-prefs.xml \
-	libseahorse/seahorse-add-keyserver.xml \
-	libseahorse/seahorse-progress.xml \
+	libseahorse/seahorse-prefs.ui \
+	libseahorse/seahorse-add-keyserver.ui \
+	libseahorse/seahorse-progress.ui \
 	libseahorse/seahorse.css
 
 EXTRA_DIST += \

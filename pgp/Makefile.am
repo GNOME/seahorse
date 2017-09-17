@@ -69,19 +69,20 @@ seahorselibexecbin_PROGRAMS += xloadimage
 
 xloadimage_SOURCES = pgp/seahorse-xloadimage.c
 
+# TODO keyserver-results?
 ui_files += \
-	pgp/seahorse-add-subkey.xml \
-	pgp/seahorse-add-uid.xml \
-	pgp/seahorse-expires.xml \
-	pgp/seahorse-keyserver-search.xml \
+	pgp/seahorse-add-subkey.ui \
+	pgp/seahorse-add-uid.ui \
+	pgp/seahorse-expires.ui \
+	pgp/seahorse-keyserver-search.ui \
 	pgp/seahorse-keyserver-results-widgets.ui \
-	pgp/seahorse-keyserver-results.xml \
-	pgp/seahorse-keyserver-sync.xml \
-	pgp/seahorse-pgp-public-key-properties.xml \
-	pgp/seahorse-pgp-private-key-properties.xml \
-	pgp/seahorse-pgp-generate.xml \
-	pgp/seahorse-revoke.xml \
-	pgp/seahorse-sign.xml \
-	pgp/seahorse-signer.xml
+	pgp/seahorse-keyserver-results.ui\
+	pgp/seahorse-keyserver-sync.ui \
+	pgp/seahorse-pgp-public-key-properties.ui \
+	pgp/seahorse-pgp-private-key-properties.ui \
+	pgp/seahorse-pgp-generate.ui \
+	pgp/seahorse-revoke.ui \
+	pgp/seahorse-sign.ui \
+	pgp/seahorse-signer.ui
 
 -include $(top_srcdir)/git.mk

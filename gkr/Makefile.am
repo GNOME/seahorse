@@ -45,9 +45,9 @@ EXTRA_DIST += \
 	$(NULL)
 
 ui_files += \
-	gkr/seahorse-add-keyring.xml \
-	gkr/seahorse-gkr-add-item.xml \
-	gkr/seahorse-gkr-item-properties.xml \
-	gkr/seahorse-gkr-keyring.xml
+	gkr/seahorse-add-keyring.ui \
+	gkr/seahorse-gkr-add-item.ui \
+	gkr/seahorse-gkr-item-properties.ui \
+	gkr/seahorse-gkr-keyring.ui
 
 -include $(top_srcdir)/git.mk

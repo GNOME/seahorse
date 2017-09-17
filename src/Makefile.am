@@ -43,9 +43,9 @@ seahorse_LDADD = \
 
 ui_files += \
 	src/seahorse-key-manager-widgets.ui \
-	src/seahorse-key-manager.xml \
-	src/seahorse-change-passphrase.xml \
-	src/seahorse-generate-select.xml
+	src/seahorse-key-manager.ui \
+	src/seahorse-change-passphrase.ui \
+	src/seahorse-generate-select.ui
 
 man_MANS += src/seahorse.1
 

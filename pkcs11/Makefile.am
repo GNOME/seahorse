@@ -47,7 +47,7 @@ EXTRA_DIST += \
 	$(NULL)
 
 ui_files += \
-	pkcs11/seahorse-pkcs11-generate.xml \
-	pkcs11/seahorse-pkcs11-request.xml
+	pkcs11/seahorse-pkcs11-generate.ui \
+	pkcs11/seahorse-pkcs11-request.ui
 
 -include $(top_srcdir)/git.mk
