@@ -16,6 +16,13 @@ make
 make install
 ```
 
+or using [Meson](http://mesonbuild.com/):
+```sh
+meson _build
+ninja -C _build
+ninja -C _build install
+```
+
 ## Issue tracker
 Seahorse uses the GNOME Bugzilla, where you can check the
 [list of open bugs](https://bugzilla.gnome.org/browse.cgi?product=seahorse).
