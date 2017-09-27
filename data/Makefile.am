@@ -47,6 +47,8 @@ CLEANFILES = \
 	org.gnome.seahorse.Application.service \
 	$(appdata_DATA) \
 	$(desktop_DATA) \
+	$(desktop_in_files) \
+	$(service_in_files) \
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
