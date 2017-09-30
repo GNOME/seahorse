@@ -67,7 +67,7 @@ public class Seahorse.Ssh.Upload : Gtk.Dialog {
         this.user_entry = (Gtk.Entry) builder.get_object("user-entry");
         this.user_entry.changed.connect(on_upload_input_changed);
 
-        this.ok_button = (Gtk.Button) add_button(_("Set up"), Gtk.ResponseType.OK);
+        this.ok_button = (Gtk.Button) add_button(_("Set Up"), Gtk.ResponseType.OK);
     }
 
     private void upload_keys() {

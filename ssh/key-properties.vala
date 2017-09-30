@@ -171,7 +171,7 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
             try {
                 op.change_passphrase_async.end(res);
             } catch (GLib.Error e) {
-                Seahorse.Util.show_error(this, _("Couldn't change passphrase for key."), e.message);
+                Seahorse.Util.show_error(this, _("Couldn’t change passphrase for key."), e.message);
             }
 
             button.sensitive = true;
