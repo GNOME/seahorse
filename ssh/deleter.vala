@@ -33,10 +33,10 @@ public class Seahorse.Ssh.Deleter : Seahorse.Deleter {
 
     public override Gtk.Dialog create_confirm(Gtk.Window? parent) {
         uint num = this.keys.length();
-        assert(num != 1);
 
         string confirm, prompt;
         if (this.have_private) {
+            assert(num == 1);
 
             prompt = _("Are you sure you want to delete the secure shell key “%s”?")
                          .printf(this.keys.data.label);
