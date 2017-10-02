@@ -448,7 +448,7 @@ private const DisplayEntry[] DISPLAY_ENTRIES = {
 	{ ENCRYPTION_KEY, N_("Encryption key password"), null },
 	{ PK_STORAGE, N_("Key storage password"), null },
 	{ CHROME_PASSWORD, N_("Google Chrome password"), chrome_custom },
-	{ GOA_PASSWORD, N_("Gnome Online Accounts password"), null },
+	{ GOA_PASSWORD, N_("GNOME Online Accounts password"), null },
 	{ TELEPATHY_PASSWORD, N_("Telepathy password"), telepathy_custom },
 	{ EMPATHY_PASSWORD, N_("Instant messaging password"), empathy_custom },
 	{ NETWORK_MANAGER_SECRET, N_("Network Manager secret"), null },
