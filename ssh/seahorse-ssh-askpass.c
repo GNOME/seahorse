@@ -22,7 +22,7 @@
  
 #include "config.h"
 
-#include "libseahorse/seahorse-passphrase.h"
+#include "seahorse-common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,7 +40,7 @@ int
 main (int argc, char* argv[])
 {
 	GdkWindow *transient_for = NULL;
-	GtkDialog *dialog;
+	SeahorsePassphrasePrompt *dialog;
 	const gchar *title;
 	const gchar *argument;
 	gchar *message;
@@ -114,7 +114,7 @@ main (int argc, char* argv[])
 		g_free (lower);
 	}
 
-	dialog = seahorse_passphrase_prompt_show (title, message, _("Password:"),
+	dialog = seahorse_passphrase_prompt_show_dialog (title, message, _("Password:"),
 	                                          NULL, FALSE);
 
 	g_free (message);
@@ -125,8 +125,8 @@ main (int argc, char* argv[])
 	}
 
 	result = 1;
-	if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT) {
-		pass = seahorse_passphrase_prompt_get (dialog);
+	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+		pass = seahorse_passphrase_prompt_get_text (dialog);
 		len = strlen (pass ? pass : "");
 		if (write (1, pass, len) != len) {
 			g_warning ("couldn't write out password properly");

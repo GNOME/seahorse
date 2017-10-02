@@ -33,7 +33,6 @@
 
 #include "libegg/egg-datetime.h"
 
-#include "libseahorse/seahorse-passphrase.h"
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
 #include "libseahorse/seahorse-widget.h"
@@ -207,15 +206,15 @@ seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
 {
 	GCancellable *cancellable;
 	const gchar *pass;
-	GtkDialog *dialog;
+	SeahorsePassphrasePrompt *dialog;
 	const gchar *notice;
 
-	dialog = seahorse_passphrase_prompt_show (_("Passphrase for New PGP Key"),
+	dialog = seahorse_passphrase_prompt_show_dialog (_("Passphrase for New PGP Key"),
 	                                          _("Enter the passphrase for your new key twice."),
 	                                          NULL, NULL, TRUE);
 	gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
-	if (gtk_dialog_run (dialog) == GTK_RESPONSE_ACCEPT) {
-		pass = seahorse_passphrase_prompt_get (dialog);
+	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+		pass = seahorse_passphrase_prompt_get_text (dialog);
 		cancellable = g_cancellable_new ();
 		seahorse_gpgme_key_op_generate_async (keyring, name, email, comment,
 		                                      pass, type, bits, expires,

@@ -12,6 +12,7 @@ common_VALA = \
 	common/exporter.vala \
 	common/icons.vala \
 	common/lockable.vala \
+	common/passphrase-prompt.vala \
 	common/place.vala \
 	common/registry.vala \
 	common/types.vala \

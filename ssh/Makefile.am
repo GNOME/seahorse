@@ -58,9 +58,9 @@ ui_files += \
 seahorselibexecbin_PROGRAMS += seahorse-ssh-askpass
 
 seahorse_ssh_askpass_SOURCES = \
-	libseahorse/seahorse-passphrase.c \
 	ssh/seahorse-ssh-askpass.c
 seahorse_ssh_askpass_LDADD = \
+	libcommon.a \
 	$(SEAHORSE_LIBS)
 
 -include $(top_srcdir)/git.mk

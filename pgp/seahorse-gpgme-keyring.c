@@ -36,7 +36,6 @@
 
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
-#include "libseahorse/seahorse-passphrase.h"
 
 #include <gcr/gcr.h>
 
@@ -69,7 +68,7 @@ static gpgme_error_t
 passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
                 const char* passphrase_info, int flags, int fd)
 {
-	GtkDialog *dialog;
+	SeahorsePassphrasePrompt *dialog;
 	gpgme_error_t err;
 	gchar **split_uid = NULL;
 	gchar *label = NULL;
@@ -102,14 +101,14 @@ passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
 
 	g_strfreev (split_uid);
 
-	dialog = seahorse_passphrase_prompt_show (_("Passphrase"), errmsg ? errmsg : label,
+	dialog = seahorse_passphrase_prompt_show_dialog (_("Passphrase"), errmsg ? errmsg : label,
 	                                          NULL, NULL, confirm);
 	g_free (label);
 	g_free (errmsg);
 
-	switch (gtk_dialog_run (dialog)) {
+	switch (gtk_dialog_run (GTK_DIALOG (dialog))) {
 	case GTK_RESPONSE_ACCEPT:
-		pass = seahorse_passphrase_prompt_get (dialog);
+		pass = seahorse_passphrase_prompt_get_text (dialog);
 		seahorse_util_printf_fd (fd, "%s\n", pass);
 		err = GPG_OK;
 		break;

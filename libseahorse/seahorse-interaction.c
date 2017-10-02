@@ -21,8 +21,9 @@
 
 #include "config.h"
 
+#include "seahorse-common.h"
+
 #include "seahorse-interaction.h"
-#include "seahorse-passphrase.h"
 
 #include <glib/gi18n.h>
 #include <gcr/gcr.h>
@@ -106,23 +107,23 @@ seahorse_interaction_ask_password (GTlsInteraction *interaction,
 {
 	SeahorseInteraction *self = SEAHORSE_INTERACTION (interaction);
 	GTlsInteractionResult res;
-	GtkDialog *dialog;
+	SeahorsePassphrasePrompt *dialog;
 	gchar *description;
 	const gchar *pass;
 	gsize length;
 
 	description = calc_description (password);
 
-	dialog = seahorse_passphrase_prompt_show (NULL, description, NULL, NULL, FALSE);
+	dialog = seahorse_passphrase_prompt_show_dialog (NULL, description, NULL, NULL, FALSE);
 
 	g_free (description);
 
 	if (self->pv->parent)
 		gtk_window_set_transient_for (GTK_WINDOW (dialog), self->pv->parent);
 
-	switch (gtk_dialog_run (dialog)) {
+	switch (gtk_dialog_run (GTK_DIALOG (dialog))) {
 	case GTK_RESPONSE_ACCEPT:
-		pass = seahorse_passphrase_prompt_get (dialog);
+		pass = seahorse_passphrase_prompt_get_text (dialog);
 		length = strlen (pass);
 		g_tls_password_set_value_full (password,
 		                               (guchar *)gcr_secure_memory_strdup (pass),
