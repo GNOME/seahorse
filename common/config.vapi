@@ -31,6 +31,7 @@ namespace Prefs {
 namespace Application {
 	public unowned Gtk.Application @get();
 	public unowned GLib.Settings pgp_settings(Gtk.Application? self = null);
+	public unowned GLib.Settings settings(Gtk.Application? self = null);
 }
 
 [CCode (cheader_filename = "libseahorse/seahorse-util.h")]

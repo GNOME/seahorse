@@ -1,6 +1,12 @@
 
 noinst_LIBRARIES += libcommon.a
 
+if WITH_KEYSERVER
+KEYSERVER_SRCS = common/keyserver-control.vala
+else
+KEYSERVER_SRCS = 
+endif
+
 common_VALA = \
 	common/actions.vala \
 	common/backend.vala \
@@ -20,6 +26,7 @@ common_VALA = \
 	common/util.vala \
 	common/validity.vala \
 	common/viewable.vala \
+	$(KEYSERVER_SRCS) \
 	$(NULL)
 
 common_C = $(common_VALA:.vala=.c)

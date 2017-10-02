@@ -19,7 +19,6 @@
 #include "config.h"
 
 #include "seahorse-application.h"
-#include "seahorse-keyserver-control.h"
 #include "seahorse-prefs.h"
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
