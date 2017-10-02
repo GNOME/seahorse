@@ -15,6 +15,7 @@ common_VALA = \
 	common/passphrase-prompt.vala \
 	common/place.vala \
 	common/registry.vala \
+	common/servers.vala \
 	common/types.vala \
 	common/util.vala \
 	common/validity.vala \

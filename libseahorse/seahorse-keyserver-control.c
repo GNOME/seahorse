@@ -21,8 +21,9 @@
 
 #include "seahorse-application.h"
 #include "seahorse-keyserver-control.h"
-#include "seahorse-servers.h"
 #include "seahorse-util.h"
+
+#include "seahorse-common.h"
 
 #define UPDATING    "updating"
 

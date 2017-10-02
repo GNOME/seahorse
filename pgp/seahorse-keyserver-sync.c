@@ -25,10 +25,11 @@
 #include "seahorse-pgp-backend.h"
 #include "seahorse-transfer.h"
 
+#include "seahorse-common.h"
+
 #include "libseahorse/seahorse-object.h"
 #include "libseahorse/seahorse-prefs.h"
 #include "libseahorse/seahorse-progress.h"
-#include "libseahorse/seahorse-servers.h"
 #include "libseahorse/seahorse-util.h"
 #include "libseahorse/seahorse-widget.h"
 

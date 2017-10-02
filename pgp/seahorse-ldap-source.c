@@ -36,7 +36,6 @@
 
 #include "libseahorse/seahorse-object-list.h"
 #include "libseahorse/seahorse-progress.h"
-#include "libseahorse/seahorse-servers.h"
 #include "libseahorse/seahorse-util.h"
 
 #include <ldap.h>

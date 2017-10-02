@@ -26,7 +26,6 @@
 #include "seahorse-resources.h"
 
 #include "libseahorse/seahorse-application.h"
-#include "libseahorse/seahorse-servers.h"
 #include "libseahorse/seahorse-util.h"
 
 #include "pgp/seahorse-pgp.h"

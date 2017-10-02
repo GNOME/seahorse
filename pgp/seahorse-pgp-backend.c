@@ -30,7 +30,6 @@
 #include "seahorse-common.h"
 
 #include "libseahorse/seahorse-progress.h"
-#include "libseahorse/seahorse-servers.h"
 #include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>

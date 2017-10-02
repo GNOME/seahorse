@@ -26,7 +26,8 @@
 #include "seahorse-keyserver-results.h"
 #include "seahorse-pgp-backend.h"
 
-#include "libseahorse/seahorse-servers.h"
+#include "seahorse-common.h"
+
 #include "libseahorse/seahorse-util.h"
 #include "libseahorse/seahorse-widget.h"
 
