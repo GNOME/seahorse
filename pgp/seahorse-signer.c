@@ -26,9 +26,10 @@
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-keysets.h"
 
+#include "seahorse-common.h"
+
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-widget.h"
-#include "libseahorse/seahorse-validity.h"
 #include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>

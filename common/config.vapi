@@ -59,19 +59,6 @@ public class Object : GLib.Object {
 	public Object();
 }
 
-[CCode (cheader_filename = "libseahorse/seahorse-validity.h", cname = "SeahorseValidity", cprefix = "SEAHORSE_VALIDITY_", has_type_id = false)]
-public enum Validity {
-	REVOKED,
-	DISABLED,
-	NEVER,
-	UNKNOWN,
-	MARGINAL,
-	FULL,
-	ULTIMATE;
-
-	public string? get_string();
-}
-
 [CCode (cheader_filename = "libseahorse/seahorse-progress.h")]
 namespace Progress {
 	public void show(GLib.Cancellable? cancellable, string title, bool delayed);

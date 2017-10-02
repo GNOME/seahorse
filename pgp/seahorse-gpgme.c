@@ -26,8 +26,6 @@
 
 #include "seahorse-gpgme.h"
 
-#include "seahorse-common.h"
-
 #include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>

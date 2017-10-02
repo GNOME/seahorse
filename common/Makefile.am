@@ -16,6 +16,7 @@ common_VALA = \
 	common/registry.vala \
 	common/types.vala \
 	common/util.vala \
+	common/validity.vala \
 	common/viewable.vala \
 	$(NULL)
 
@@ -37,7 +38,7 @@ libcommon_a_CFLAGS = \
 if WITH_VALAC
 $(common_HEADER): $(common_VALA) common/config.vapi
 	$(V_VALAC) $(VALAC) $(VALA_FLAGS) -C --use-header --header=$(common_HEADER) \
-		--vapidir=$(abs_srcdir)/common --pkg gtk+-3.0 --pkg gcr-3 \
+		--vapidir=$(abs_srcdir)/common --pkg gtk+-3.0 --pkg gcr-3 --pkg gcr-ui-3 \
 		--vapi=common.vapi --directory=$(builddir)/common --basedir=$(dir $<) $^
 endif
 

@@ -24,8 +24,6 @@
 #include "seahorse-pgp-uid.h"
 #include "seahorse-pgp-subkey.h"
 
-#include "seahorse-common.h"
-
 #include "libseahorse/seahorse-object-list.h"
 #include "libseahorse/seahorse-util.h"
 

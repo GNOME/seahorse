@@ -48,7 +48,6 @@ libseahorse_a_SOURCES = \
 	libseahorse/seahorse-search-provider.c libseahorse/seahorse-search-provider.h \
 	libseahorse/seahorse-servers.c libseahorse/seahorse-servers.h \
 	libseahorse/seahorse-util.c libseahorse/seahorse-util.h \
-	libseahorse/seahorse-validity.c libseahorse/seahorse-validity.h \
 	libseahorse/seahorse-widget.c libseahorse/seahorse-widget.h \
 	$(dbus_shell_search_provider_built_sources) \
 	$(MARSHAL_SRCS) \

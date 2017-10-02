@@ -22,8 +22,9 @@
 
 #include <glib-object.h>
 
+#include "seahorse-common.h"
+
 #include "libseahorse/seahorse-object.h"
-#include "libseahorse/seahorse-validity.h"
 
 #include "seahorse-pgp-key.h"
 
