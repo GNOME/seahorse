@@ -28,10 +28,7 @@
 #include "seahorse-gpgme-keyring.h"
 #include "seahorse-gpg-op.h"
 
-#include "seahorse-common.h"
-
 #include "libseahorse/seahorse-progress.h"
-#include "libseahorse/seahorse-object.h"
 #include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>

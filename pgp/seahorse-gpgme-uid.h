@@ -24,7 +24,7 @@
 
 #include <gpgme.h>
 
-#include "libseahorse/seahorse-object.h"
+#include "seahorse-common.h"
 
 #include "pgp/seahorse-gpgme-key.h"
 #include "pgp/seahorse-pgp-uid.h"

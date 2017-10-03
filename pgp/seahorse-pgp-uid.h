@@ -24,8 +24,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-object.h"
-
 #include "seahorse-pgp-key.h"
 
 #define SEAHORSE_TYPE_PGP_UID            (seahorse_pgp_uid_get_type ())

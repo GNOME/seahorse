@@ -21,7 +21,8 @@
 
 #include "config.h"
 
-#include "seahorse-object.h"
+#include "seahorse-common.h"
+
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 

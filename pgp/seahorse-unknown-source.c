@@ -25,8 +25,6 @@
 #include "seahorse-pgp-key.h"
 #include "seahorse-unknown.h"
 
-#include "seahorse-common.h"
-
 #include <gcr/gcr-base.h>
 
 #include <glib/gi18n.h>

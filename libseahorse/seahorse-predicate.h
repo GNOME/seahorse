@@ -22,7 +22,7 @@
 #ifndef __SEAHORSE_PREDICATE_H__
 #define __SEAHORSE_PREDICATE_H__
 
-#include "seahorse-object.h"
+#include "seahorse-common.h"
 
 #include <glib-object.h>
 

@@ -22,7 +22,7 @@
 
 #include <gtk/gtk.h>
 
-#include "seahorse-object.h"
+#include "seahorse-common.h"
 
 #define SEAHORSE_TYPE_OBJECT_MODEL               (seahorse_object_model_get_type ())
 #define SEAHORSE_OBJECT_MODEL(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_OBJECT_MODEL, SeahorseObjectModel))

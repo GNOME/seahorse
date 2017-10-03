@@ -28,8 +28,6 @@
 #include "seahorse-prefs.h"
 #include "seahorse-util.h"
 
-#include "seahorse-common.h"
-
 #include <string.h>
 #include <unistd.h>
 

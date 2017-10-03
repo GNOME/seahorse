@@ -24,8 +24,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-object.h"
-
 enum {
     SKEY_PGPSIG_TRUSTED = 0x0001,
     SKEY_PGPSIG_PERSONAL = 0x0002

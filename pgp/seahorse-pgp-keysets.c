@@ -26,9 +26,10 @@
 #include "seahorse-pgp-backend.h"
 #include "seahorse-pgp-key.h"
 
+#include "seahorse-common.h"
+
 #include "libseahorse/seahorse-application.h"
 #include "libseahorse/seahorse-collection.h"
-#include "libseahorse/seahorse-object.h"
 #include "libseahorse/seahorse-predicate.h"
 
 /* -----------------------------------------------------------------------------

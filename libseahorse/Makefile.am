@@ -31,7 +31,6 @@ libseahorse_a_SOURCES = \
 	libseahorse/seahorse-collection.c libseahorse/seahorse-collection.h \
 	libseahorse/seahorse-interaction.c libseahorse/seahorse-interaction.h \
 	libseahorse/seahorse-key-manager-store.c libseahorse/seahorse-key-manager-store.h \
-	libseahorse/seahorse-object.c libseahorse/seahorse-object.h \
 	libseahorse/seahorse-object-list.c libseahorse/seahorse-object-list.h \
 	libseahorse/seahorse-object-model.c libseahorse/seahorse-object-model.h \
 	libseahorse/seahorse-object-widget.c libseahorse/seahorse-object-widget.h \

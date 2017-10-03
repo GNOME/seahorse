@@ -22,7 +22,8 @@
 
 #include <glib.h>
 
-#include "seahorse-object.h"
+#include "seahorse-common.h"
+
 #include "seahorse-widget.h"
 
 #define SEAHORSE_TYPE_OBJECT_WIDGET		(seahorse_object_widget_get_type ())

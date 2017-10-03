@@ -21,7 +21,7 @@
 
 #include "seahorse-combo-keys.h"
 
-#include "libseahorse/seahorse-object.h"
+#include "seahorse-common.h"
 
 enum {
   COMBO_LABEL,

@@ -27,7 +27,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-object.h"
 #include "libseahorse/seahorse-prefs.h"
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"

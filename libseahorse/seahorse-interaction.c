@@ -21,8 +21,6 @@
 
 #include "config.h"
 
-#include "seahorse-common.h"
-
 #include "seahorse-interaction.h"
 
 #include <glib/gi18n.h>

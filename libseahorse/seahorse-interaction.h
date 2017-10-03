@@ -23,7 +23,7 @@
 
 #include <gtk/gtk.h>
 
-#include "seahorse-object.h"
+#include "seahorse-common.h"
 
 #define SEAHORSE_TYPE_INTERACTION                  (seahorse_interaction_get_type ())
 #define SEAHORSE_INTERACTION(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_INTERACTION, SeahorseInteraction))

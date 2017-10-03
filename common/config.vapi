@@ -46,21 +46,6 @@ public class Interaction : GLib.TlsInteraction {
 	public Gtk.Window? parent;
 }
 
-[CCode (cheader_filename = "libseahorse/seahorse-object.h")]
-public class Object : GLib.Object {
-	public Place place { get; }
-	public Actions actions { get; }
-	public string label { get; }
-	public string markup { get; }
-	public string nickname { get; }
-	public GLib.Icon icon { get; }
-	public string identifier { get; }
-	public Usage usage { get; }
-	public Seahorse.Flags flags { get; }
-
-	public Object();
-}
-
 [CCode (cheader_filename = "libseahorse/seahorse-progress.h")]
 namespace Progress {
 	public void show(GLib.Cancellable? cancellable, string title, bool delayed);

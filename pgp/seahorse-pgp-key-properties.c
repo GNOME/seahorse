@@ -39,7 +39,6 @@
 #include "seahorse-common.h"
 
 #include "libseahorse/seahorse-bind.h"
-#include "libseahorse/seahorse-object.h"
 #include "libseahorse/seahorse-object-model.h"
 #include "libseahorse/seahorse-object-widget.h"
 #include "libseahorse/seahorse-util.h"

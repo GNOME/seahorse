@@ -22,7 +22,7 @@
 
 #include <gtk/gtk.h>
 
-#include "libseahorse/seahorse-object.h"
+#include "seahorse-common.h"
 #include "seahorse-unknown-source.h"
 
 #define SEAHORSE_TYPE_UNKNOWN            (seahorse_unknown_get_type ())

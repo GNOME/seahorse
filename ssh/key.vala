@@ -81,14 +81,6 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
         get { return this.key_data != null ? this.key_data.length : 0; }
     }
 
-    public bool deletable {
-        get { return Seahorse.Flags.DELETABLE in this.flags; }
-    }
-
-    public bool exportable {
-        get { return Seahorse.Flags.EXPORTABLE in this.flags; }
-    }
-
     public Key(Source source, KeyData key_data) {
         GLib.Object(place: source, key_data: key_data);
     }

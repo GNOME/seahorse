@@ -22,7 +22,7 @@
 
 #include <glib-object.h>
 
-#include "libseahorse/seahorse-object.h"
+#include "seahorse-common.h"
 
 #define SEAHORSE_TYPE_PGP_SUBKEY            (seahorse_pgp_subkey_get_type ())
 
