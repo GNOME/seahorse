@@ -30,7 +30,6 @@
 
 #include "libseahorse/seahorse-application.h"
 #include "libseahorse/seahorse-collection.h"
-#include "libseahorse/seahorse-predicate.h"
 
 /* -----------------------------------------------------------------------------
  * COMMON KEYSETS 

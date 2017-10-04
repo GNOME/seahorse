@@ -19,6 +19,7 @@ common_VALA = \
 	common/icons.vala \
 	common/lockable.vala \
 	common/object.vala \
+	common/predicate.vala \
 	common/passphrase-prompt.vala \
 	common/place.vala \
 	common/registry.vala \

@@ -33,7 +33,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-predicate.h"
 #include "libseahorse/seahorse-object-list.h"
 #include "libseahorse/seahorse-util.h"
 

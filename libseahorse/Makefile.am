@@ -34,7 +34,6 @@ libseahorse_a_SOURCES = \
 	libseahorse/seahorse-object-list.c libseahorse/seahorse-object-list.h \
 	libseahorse/seahorse-object-model.c libseahorse/seahorse-object-model.h \
 	libseahorse/seahorse-object-widget.c libseahorse/seahorse-object-widget.h \
-	libseahorse/seahorse-predicate.c libseahorse/seahorse-predicate.h \
 	libseahorse/seahorse-prefs.c libseahorse/seahorse-prefs.h \
 	libseahorse/seahorse-progress.c libseahorse/seahorse-progress.h \
 	libseahorse/seahorse-search-provider.c libseahorse/seahorse-search-provider.h \

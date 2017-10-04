@@ -23,7 +23,7 @@
 
 #include <gcr/gcr.h>
 
-#include "seahorse-predicate.h"
+#include "seahorse-common.h"
 
 #define SEAHORSE_TYPE_COLLECTION               (seahorse_collection_get_type ())
 #define SEAHORSE_COLLECTION(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_COLLECTION, SeahorseCollection))

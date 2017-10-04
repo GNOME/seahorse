@@ -23,8 +23,6 @@
 
 #include "seahorse-application.h"
 #include "seahorse-collection.h"
-#include "seahorse-predicate.h"
-#include "seahorse-search-provider.h"
 #include "seahorse-widget.h"
 #include "seahorse-shell-search-provider-generated.h"
 
