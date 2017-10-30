@@ -9,7 +9,6 @@ namespace Config
 	public const string PACKAGE;
 	public const string GETTEXT_PACKAGE;
 
-	public const bool WITH_SSH;
 	public const string SSH_PATH;
 	public const string SSH_KEYGEN_PATH;
 }

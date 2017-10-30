@@ -429,28 +429,15 @@ AM_CONDITIONAL(WITH_PKCS11, test "$enable_pkcs11" = "yes")
 # -----------------------------------------------------------------------------
 #  SSH
 
-AC_ARG_ENABLE(ssh,
-        AC_HELP_STRING([--disable-ssh], 
-        [Support for managing SSH keys]))
-        
-if test "x$enable_ssh" = "xno"; then
-    echo "disabling ssh support"
+AC_PATH_PROG(SSH_KEYGEN_PATH, ssh-keygen, "failed")
+AC_PATH_PROG(SSH_PATH, ssh, "failed")
+
+if test $SSH_KEYGEN_PATH == "failed" || test $SSH_PATH == "failed"; then
+    AC_MSG_ERROR([ssh and ssh-keygen are required binaries])
 else
-
-    AC_PATH_PROG(SSH_KEYGEN_PATH, ssh-keygen, "failed")
-    AC_PATH_PROG(SSH_PATH, ssh, "failed")
-    
-    if test $SSH_KEYGEN_PATH != "failed" && 
-       test $SSH_PATH != "failed"; then
-        enable_ssh="yes"
-        AC_DEFINE(WITH_SSH, 1, [With SSH Support])
-        AC_DEFINE_UNQUOTED(SSH_KEYGEN_PATH, "$SSH_KEYGEN_PATH", [Path to ssh-keygen])
-        AC_DEFINE_UNQUOTED(SSH_PATH, "$SSH_PATH", [Path to ssh])
-    fi
-    
+    AC_DEFINE_UNQUOTED(SSH_KEYGEN_PATH, "$SSH_KEYGEN_PATH", [Path to ssh-keygen])
+    AC_DEFINE_UNQUOTED(SSH_PATH, "$SSH_PATH", [Path to ssh])
 fi
-
-AM_CONDITIONAL(WITH_SSH, test "$enable_ssh" = "yes")
 
 # -----------------------------------------------------------------------------
 # Compilation and linking options
@@ -578,7 +565,6 @@ PKCS11 Support:             $enable_pkcs11
 PGP Support:                $enable_pgp
   GnuPG Version:            $have_gpg
   GPGME Version:            $have_gpgme
-SSH Support:                $enable_ssh
 Keyserver Support:          $with_keyserver
   LDAP:                     $with_ldap
   HKP:                      $enable_hkp

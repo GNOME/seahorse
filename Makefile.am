@@ -99,13 +99,10 @@ include libegg/Makefile.am
 include libseahorse/Makefile.am
 include gkr/Makefile.am
 include src/Makefile.am
+include ssh/Makefile.am
 
 if WITH_PGP
 include pgp/Makefile.am
-endif
-
-if WITH_SSH
-include ssh/Makefile.am
 endif
 
 if WITH_PKCS11

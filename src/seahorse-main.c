@@ -55,11 +55,10 @@ on_application_startup (GApplication *application,
                         gpointer user_data)
 {
 	/* Initialize the various components */
+	seahorse_ssh_backend_initialize ();
+
 #ifdef WITH_PGP
 	seahorse_pgp_backend_initialize ();
-#endif
-#ifdef WITH_SSH
-	seahorse_ssh_backend_initialize ();
 #endif
 #ifdef WITH_PKCS11
 	seahorse_pkcs11_backend_initialize ();

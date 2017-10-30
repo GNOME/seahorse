@@ -72,10 +72,8 @@ public class Seahorse.Ssh.Backend : GLib.Object, Gcr.Collection, Seahorse.Backen
     }
 
     public static void initialize() {
-        if (Config.WITH_SSH) {
-            instance = new Backend();
-            Generate.register();
-        }
+        instance = new Backend();
+        Generate.register();
     }
 
     public Source get_dot_ssh() {

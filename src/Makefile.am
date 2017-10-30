@@ -1,14 +1,9 @@
+SSH_LDADD = libseahorse-ssh.a
 
 if WITH_PGP
 PGP_LDADD = libseahorse-pgp.a
 else
 PGP_LDADD = 
-endif
-
-if WITH_SSH
-SSH_LDADD = libseahorse-ssh.a
-else
-SSH_LDADD = 
 endif
 
 if WITH_PKCS11
