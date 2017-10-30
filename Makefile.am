@@ -29,8 +29,6 @@ MAINTAINERCLEANFILES = \
 	$(GITIGNORE_MAINTAINERCLEANFILES_M4_GETTEXT)
 
 DISTCHECK_CONFIGURE_FLAGS = \
-    --disable-scrollkeeper \
-    --disable-update-mime-database \
     --disable-debug \
     --disable-strict \
     --disable-valac \
