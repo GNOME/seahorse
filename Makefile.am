@@ -19,7 +19,7 @@ EXTRA_DIST = \
     HACKING \
     INSTALL \
     NEWS \
-    README \
+    README.md \
     THANKS
 
 MAINTAINERCLEANFILES = \
