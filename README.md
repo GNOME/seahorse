@@ -4,8 +4,9 @@ Currently it supports PGP keys (using GPG/GPGME) and SSH keys. Its goal is to
 provide an easy to use Key Management Tool, along with an easy to use interface
 for encryption operations.
 
-Seahorse is integrated into the GNOME Desktop Environment and allows users to
-perform operations from their regular applications, like nautilus or gedit.
+Seahorse is integrated into the [GNOME Desktop Environment](https://www.gnome.org)
+and allows users to perform operations from their regular applications, like
+nautilus or gedit.
 
 ## Building
 You can build and install Seahorse by issuing the following commands:
