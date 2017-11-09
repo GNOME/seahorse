@@ -16,8 +16,6 @@ EXTRA_DIST = \
     ChangeLog.pre-auto \
     ChangeLog.pre-1.0 \
     ChangeLog.pre-0.6 \
-    HACKING \
-    INSTALL \
     NEWS \
     README.md \
     THANKS
