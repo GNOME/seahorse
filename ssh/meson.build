@@ -32,13 +32,13 @@ ssh_lib = static_library('seahorse-ssh',
 # ssh-askpass helper binary
 ssh_askpass_sources = [
   'seahorse-ssh-askpass.c',
-  join_paths(meson.source_root(), 'libseahorse', 'seahorse-passphrase.c'),
 ]
 
 ssh_askpass_dependencies = [
   gcr,
   gtk,
   config,
+  common_dep,
 ]
 
 ssh_askpass = executable('ssh-askpass',

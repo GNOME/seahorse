@@ -9,10 +9,15 @@ common_sources = [
   'exporter.vala',
   'icons.vala',
   'lockable.vala',
+  'object.vala',
+  'passphrase-prompt.vala',
   'place.vala',
+  'predicate.vala',
   'registry.vala',
+  'servers.vala',
   'types.vala',
   'util.vala',
+  'validity.vala',
   'viewable.vala',
 ]
 
@@ -20,8 +25,13 @@ common_deps = [
   glib_deps,
   gtk,
   gcr,
+  gcr_ui,
   config,
 ]
+
+if with_keyservers
+  common_sources += 'keyserver-control.vala'
+endif
 
 common_lib = static_library('common',
   common_sources,
