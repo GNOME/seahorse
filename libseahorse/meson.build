@@ -35,6 +35,8 @@ libseahorse_deps = [
   libsecret,
   libtreemultidnd_dep,
   common_dep,
+  ssh_dep,
+  pgp_dep,
 ]
 
 libseahorse_lib = static_library('libseahorse',

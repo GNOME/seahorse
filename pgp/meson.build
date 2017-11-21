@@ -84,6 +84,11 @@ pgp_lib = static_library('seahorse-pgp',
   c_args: pgp_c_flags,
 )
 
+pgp_dep = declare_dependency(
+  link_with: pgp_lib,
+  include_directories: include_directories('.'),
+)
+
 # xloadimage helper binary
 xloadimage = executable('xloadimage',
   'seahorse-xloadimage.c',
