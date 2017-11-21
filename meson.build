@@ -101,14 +101,14 @@ if check_compatible_gpg
   endif
 endif
 
-pkcs11_dep = valac.find_library('pkcs11')
+pkcs11_dep = valac.find_library('pkcs11', required: with_pkcs11)
 if with_pkcs11 and not pkcs11_dep.found()
   error('Required library "pkcs11" not found (needed for PKCS#11 support)')
 endif
 
-libldap = cc.find_library('ldap')
-liblber = cc.find_library('lber')
 if with_ldap
+  libldap = cc.find_library('ldap')
+  liblber = cc.find_library('lber')
   if not libldap.found()
     error('Required library "ldap" not found (needed for LDAP support)')
   elif not liblber.found()
