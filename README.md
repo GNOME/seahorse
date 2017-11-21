@@ -9,14 +9,7 @@ and allows users to perform operations from their regular applications, like
 nautilus or gedit.
 
 ## Building
-You can build and install Seahorse by issuing the following commands:
-```sh
-./autogen.sh
-make
-make install
-```
-
-or using [Meson](http://mesonbuild.com/):
+You can build and install Seahorse using [Meson](http://mesonbuild.com/):
 ```sh
 meson _build
 ninja -C _build
