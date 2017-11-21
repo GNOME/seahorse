@@ -26,13 +26,9 @@
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 
-#include "ssh/seahorse-ssh.h"
-
 #include <gio/gio.h>
 #include <glib/gstdio.h>
 
-#include <sys/wait.h>
-#include <sys/stat.h>
 #include <unistd.h>
 #include <time.h>
 #include <stdio.h>
