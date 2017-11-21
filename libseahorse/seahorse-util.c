@@ -26,7 +26,9 @@
 #include "seahorse-util.h"
 #include "seahorse-widget.h"
 
+#if WITH_PGP
 #include "pgp/seahorse-pgp.h"
+#endif
 
 #include "ssh/seahorse-ssh.h"
 

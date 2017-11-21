@@ -36,8 +36,11 @@ libseahorse_deps = [
   libtreemultidnd_dep,
   common_dep,
   ssh_dep,
-  pgp_dep,
 ]
+
+if with_pgp
+  libseahorse_deps += pgp_dep
+endif
 
 libseahorse_lib = static_library('libseahorse',
   libseahorse_sources,
