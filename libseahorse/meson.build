@@ -40,6 +40,7 @@ libseahorse_deps = [
 libseahorse_lib = static_library('libseahorse',
   libseahorse_sources,
   dependencies: libseahorse_deps,
+  include_directories: include_directories('..'),
 )
 
 libseahorse_dep = declare_dependency(
