@@ -43,9 +43,6 @@ void        seahorse_util_handle_error          (GError **error,
                                                  const gchar* description,
                                                  ...);
 
-guchar*     seahorse_util_read_to_memory        (GInputStream *     input,
-                                                 guint              *len);
-
 guint       seahorse_util_read_data_block       (GString            *buf, 
                                                  GInputStream*      input, 
                                                  const gchar        *start, 
@@ -65,21 +62,7 @@ GList *     seahorse_util_objects_sort_by_place         (GList *objects);
 
 GList *     seahorse_util_objects_splice_by_place       (GList *objects);
 
-gboolean    seahorse_util_string_equals       (const gchar *s1, const gchar *s2);
-
 void        seahorse_util_string_lower        (gchar *s);
-
-gboolean    seahorse_util_string_is_whitespace (const gchar *text);
-
-void        seahorse_util_string_trim_whitespace (gchar *text);
-
-gchar*      seahorse_util_hex_encode (gconstpointer value, gsize length);
-
-void        seahorse_util_determine_popup_menu_position  (GtkMenu *menu,
-                                                           int *x,
-                                                           int *y,
-                                                           gboolean *push_in,
-                                                           gpointer gdata);
 
 SeahorseVersion seahorse_util_parse_version   (const char *version);
 

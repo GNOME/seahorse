@@ -127,103 +127,6 @@ seahorse_util_get_date_string (const time_t time)
 	return created_string;
 }
 
-/**
- * seahorse_util_read_to_memory:
- * @input: Data to read. The #GInputStream is read till the end.
- * @len: Length of the data read (out)
- *
- * Reads data from the input stream and returns them as #guchar
- *
- * Returns: The string read from data. The returned string should be freed
- * with #g_free when no longer needed.
- **/
-guchar*
-seahorse_util_read_to_memory (GInputStream *input, guint *len)
-{
-	gsize size = 128;
-	gchar *buffer, *text;
-	gsize nread = 0;
-	GString *string;
-	GSeekable *seek;
-
-	if (G_IS_SEEKABLE (input)) {
-		seek = G_SEEKABLE (input);
-		g_seekable_seek (seek, 0, SEEK_SET, NULL, NULL);
-	}
-
-	string = g_string_new ("");
-	buffer = g_new (gchar, size);
-    
-	while (g_input_stream_read_all (input, buffer, size, &nread, NULL, NULL)) {
-		string = g_string_append_len (string, buffer, nread);
-		if (nread != size)
-			break;
-	}
-
-	if (len)
-		*len = string->len;
-    
-	text = g_string_free (string, FALSE);
-	g_free (buffer);
-	
-	return (guchar*)text;
-}
-
-/** 
- * seahorse_util_read_data_block:
- * @buf: A string buffer to write the data to.
- * @input: The input stream to read from.
- * @start: The start signature to look for.
- * @end: The end signature to look for.
- *
- * Breaks out one block of data (usually a key)
- *
- * Returns: The number of bytes copied.
- */
-guint
-seahorse_util_read_data_block (GString *buf, GInputStream *input, 
-                               const gchar *start, const gchar* end)
-{
-    const gchar *t;
-    guint copied = 0;
-    gchar ch;
-    gsize read;
-     
-    /* Look for the beginning */
-    t = start;
-    while (g_input_stream_read_all (input, &ch, 1, &read, NULL, NULL) && read == 1) {
-        
-        /* Match next char */            
-        if (*t == ch)
-            t++;
-
-        /* Did we find the whole string? */
-        if (!*t) {
-            buf = g_string_append (buf, start);
-            copied += strlen (start);
-            break;
-        }
-    } 
-    
-    /* Look for the end */
-    t = end;
-    while (g_input_stream_read_all (input, &ch, 1, &read, NULL, NULL) && read == 1) {
-        
-        /* Match next char */
-        if (*t == ch)
-            t++;
-        
-        buf = g_string_append_c (buf, ch);
-        copied++;
-                
-        /* Did we find the whole string? */
-        if (!*t)
-            break;
-    }
-    
-    return copied;
-}
-
 /** 
  * seahorse_util_print_fd:
  * @fd: The file descriptor to write to
@@ -280,6 +183,61 @@ seahorse_util_printf_fd (int fd, const char* fmt, ...)
     ret = seahorse_util_print_fd (fd, t);
     g_free (t);
     return ret;
+}
+
+/** 
+ * seahorse_util_read_data_block:
+ * @buf: A string buffer to write the data to.
+ * @input: The input stream to read from.
+ * @start: The start signature to look for.
+ * @end: The end signature to look for.
+ *
+ * Breaks out one block of data (usually a key)
+ *
+ * Returns: The number of bytes copied.
+ */
+guint
+seahorse_util_read_data_block (GString *buf, GInputStream *input, 
+                               const gchar *start, const gchar* end)
+{
+    const gchar *t;
+    guint copied = 0;
+    gchar ch;
+    gsize read;
+     
+    /* Look for the beginning */
+    t = start;
+    while (g_input_stream_read_all (input, &ch, 1, &read, NULL, NULL) && read == 1) {
+        
+        /* Match next char */            
+        if (*t == ch)
+            t++;
+
+        /* Did we find the whole string? */
+        if (!*t) {
+            buf = g_string_append (buf, start);
+            copied += strlen (start);
+            break;
+        }
+    } 
+    
+    /* Look for the end */
+    t = end;
+    while (g_input_stream_read_all (input, &ch, 1, &read, NULL, NULL) && read == 1) {
+        
+        /* Match next char */
+        if (*t == ch)
+            t++;
+        
+        buf = g_string_append_c (buf, ch);
+        copied++;
+                
+        /* Did we find the whole string? */
+        if (!*t)
+            break;
+    }
+    
+    return copied;
 }
 
 /**
@@ -383,25 +341,6 @@ seahorse_util_objects_splice_by_place (GList *objects)
 }
 
 /**
- * seahorse_util_string_equals:
- * @s1: String, can be NULL
- * @s2: String, can be NULL
- *
- * Compares two string. If they are equal, it returns TRUE
- *
- * Returns: TRUE if strings are equal, FALSE else
- */
-gboolean    
-seahorse_util_string_equals (const gchar *s1, const gchar *s2)
-{
-    if (!s1 && !s2)
-        return TRUE;
-    if (!s1 || !s2)
-        return FALSE;
-    return g_str_equal (s1, s2);
-}
-
-/**
  * seahorse_util_string_lower:
  * @s: ASCII string to change
  *
@@ -412,132 +351,6 @@ seahorse_util_string_lower (gchar *s)
 {
     for ( ; *s; s++)
         *s = g_ascii_tolower (*s);
-}
-
-/**
- * seahorse_util_string_is_whitespace:
- * @text: The UTF8 string to test
- *
- *
- * Returns: TRUE if @text consists of whitespaces
- */
-gboolean 
-seahorse_util_string_is_whitespace (const gchar *text)
-{
-    g_assert (text);
-    g_assert (g_utf8_validate (text, -1, NULL));
-    
-    while (*text) {
-        if (!g_unichar_isspace (g_utf8_get_char (text)))
-            return FALSE;
-        text = g_utf8_next_char (text);
-    }
-    return TRUE;
-}
-
-/**
- * seahorse_util_string_trim_whitespace:
- * @text: The text to trim (UTF8)
- *
- * Whitespaces will be removed from the start and the end of the text.
- */
-void
-seahorse_util_string_trim_whitespace (gchar *text)
-{
-    gchar *b, *e, *n;
-    
-    g_assert (text);
-    g_assert (g_utf8_validate (text, -1, NULL));
-    
-    /* Trim the front */
-    b = text;
-    while (*b && g_unichar_isspace (g_utf8_get_char (b)))
-        b = g_utf8_next_char (b);
-    
-    /* Trim the end */
-    n = e = b + strlen (b);
-    while (n >= b) {
-        if (*n && !g_unichar_isspace (g_utf8_get_char (n)))
-            break;
-        e = n;
-        n = g_utf8_prev_char (e);
-    }
-    
-    g_assert (b >= text);
-    g_assert (e >= b);
-
-    *e = 0;
-    g_memmove (text, b, (e + 1) - b);
-}
-
-/**
- * seahorse_util_hex_encode:
- * @value: a buffer containing data
- * @length: The length of this buffer
- *
- * Creates a string contining the @value in hex for printing.
- *
- * Returns: The hex encoded @value. The returned string should be freed
- * with #g_free when no longer needed.
- */
-gchar*
-seahorse_util_hex_encode (gconstpointer value, gsize length)
-{
-	GString *result;
-	gsize i;
-	
-	result = g_string_sized_new ((length * 2) + 1);
-
-	for (i = 0; i < length; i++) {
-		char hex[3];
-		snprintf (hex, sizeof (hex), "%02x", (int)(((guchar*)value)[i]));
-		g_string_append (result, hex);
-	}
-
-	return g_string_free (result, FALSE);
-}
-
-/**
- * seahorse_util_determine_popup_menu_position:
- * @menu: The menu to place
- * @x: (out) x pos of the menu
- * @y: (out) y pos of the menu
- * @push_in: (out) will be set to TRUE
- * @gdata: GTK_WIDGET for which the menu is
- *
- *
- * Callback to determine where a popup menu should be placed
- *
- */
-void
-seahorse_util_determine_popup_menu_position (GtkMenu *menu, int *x, int *y,
-                                             gboolean *push_in, gpointer  gdata)
-{
-        GtkWidget      *widget;
-        GtkRequisition  requisition;
-        GtkAllocation   allocation;
-        gint            menu_xpos;
-        gint            menu_ypos;
-
-        widget = GTK_WIDGET (gdata);
-
-        gtk_widget_get_preferred_size (GTK_WIDGET (menu), &requisition, NULL);
-
-        gdk_window_get_origin (gtk_widget_get_window (widget), &menu_xpos, &menu_ypos);
-
-        gtk_widget_get_allocation (widget, &allocation);
-        menu_xpos += allocation.x;
-        menu_ypos += allocation.y;
-
-
-        if (menu_ypos > gdk_screen_get_height (gtk_widget_get_screen (widget)) / 2)
-                menu_ypos -= requisition.height;
-        else
-                menu_ypos += allocation.height;
-
-        *x = menu_xpos;
-        *y = menu_ypos;
-        *push_in = TRUE;
 }
 
 /**
