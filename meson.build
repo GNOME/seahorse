@@ -29,38 +29,6 @@ pkgdatadir = join_paths(datadir, meson.project_name())
 libexecbindir = join_paths(seahorse_prefix, get_option('libexecdir'), meson.project_name())
 localedir = join_paths(seahorse_prefix, get_option('localedir'))
 
-# Project-wide flags
-add_project_arguments([
-    '-DGCR_API_SUBJECT_TO_CHANGE',
-    '-DGCK_API_SUBJECT_TO_CHANGE',
-    '-include', 'config.h',
-  ],
-  language: 'c',
-)
-
-# Use more warnings
-warning_flags = [
-  '-Wchar-subscripts',
-  '-Wmissing-declarations',
-  '-Wmissing-prototypes',
-  '-Wnested-externs',
-  '-Wpointer-arith',
-  '-Wcast-align',
-  '-Wsign-compare',
-  '-Wno-deprecated-declarations',
-  '-Wno-strict-aliasing',
-  '-Wno-sign-compare',
-]
-supported_warning_flags = []
-foreach flag : warning_flags
-  if cc.has_argument(flag)
-    supported_warning_flags += flag
-  endif
-endforeach
-add_project_arguments(supported_warning_flags,
-  language: 'c',
-)
-
 # Dependencies
 min_glib_version = '2.44'
 min_gcr_version = '3.11.91'
@@ -119,6 +87,43 @@ endif
 libsoup = dependency('libsoup-2.4', version: '>= 2.33.92', required: with_hkp)
 avahi_client = dependency('avahi-client', required: with_key_sharing)
 avahi_glib = dependency('avahi-glib', version: '>= 0.6', required: with_key_sharing)
+
+
+# Project-wide flags
+add_project_arguments([
+    '--target-glib=@0@'.format(min_glib_version),
+  ],
+  language: 'vala',
+)
+add_project_arguments([
+    '-DGCR_API_SUBJECT_TO_CHANGE',
+    '-DGCK_API_SUBJECT_TO_CHANGE',
+    '-include', 'config.h',
+  ],
+  language: 'c',
+)
+
+# Use more warnings
+warning_flags = [
+  '-Wmissing-declarations',
+  '-Wmissing-prototypes',
+  '-Wnested-externs',
+  '-Wpointer-arith',
+  '-Wcast-align',
+  '-Wsign-compare',
+  '-Wno-deprecated-declarations',
+  '-Wno-strict-aliasing',
+  '-Wno-sign-compare',
+]
+supported_warning_flags = []
+foreach flag : warning_flags
+  if cc.has_argument(flag)
+    supported_warning_flags += flag
+  endif
+endforeach
+add_project_arguments(supported_warning_flags,
+  language: 'c',
+)
 
 
 # configuration
