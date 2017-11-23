@@ -242,9 +242,10 @@ public abstract class Catalog : Gtk.Window {
 	}
 
 	[CCode (instance_pos = -1)]
-	private void on_app_preferences (Gtk.Action action)
-	{
-		Prefs.show(this, null);
+	private void on_app_preferences (Gtk.Action action) {
+        Prefs prefs_dialog = new Prefs(this);
+        prefs_dialog.run();
+        prefs_dialog.destroy();
 	}
 
 	private const string[] AUTHORS = {

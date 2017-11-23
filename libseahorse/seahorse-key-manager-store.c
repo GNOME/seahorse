@@ -25,7 +25,6 @@
 #define G_LOG_DOMAIN "seahorse-drag"
 
 #include "seahorse-key-manager-store.h"
-#include "seahorse-prefs.h"
 #include "seahorse-util.h"
 
 #include <string.h>

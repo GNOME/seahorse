@@ -18,7 +18,6 @@ libseahorse_sources = [
   'seahorse-object-list.c',
   'seahorse-object-model.c',
   'seahorse-object-widget.c',
-  'seahorse-prefs.c',
   'seahorse-progress.c',
   'seahorse-search-provider.c',
   'seahorse-util.c',
