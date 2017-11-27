@@ -11,9 +11,9 @@ nautilus or gedit.
 ## Building
 You can build and install Seahorse using [Meson](http://mesonbuild.com/):
 ```sh
-meson _build
-ninja -C _build
-ninja -C _build install
+meson build
+ninja -C build
+ninja -C build install
 ```
 
 ## Issue tracker
