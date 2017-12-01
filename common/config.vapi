@@ -51,4 +51,8 @@ namespace Progress {
 	public void show(GLib.Cancellable? cancellable, string title, bool delayed);
 }
 
+[SimpleType]
+[CCode (has_type_id = false)]
+public struct Version : uint64 {
+}
 }

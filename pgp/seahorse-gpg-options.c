@@ -179,62 +179,6 @@ free_string_array (GArray *array)
 
 #define HOME_PREFIX "\nHome: "
 
-/* Discovers .gnupg home directory by running gpg */
-static gboolean
-parse_home_directory (gpgme_engine_info_t engine, GError **err)
-{
-    gboolean found = FALSE;
-    gchar *sout = NULL;
-    gchar *serr = NULL;
-    gchar *t;
-    gchar *x;
-    gint status;
-    gboolean b;
-
-    g_assert (engine);
-    g_assert (engine->file_name);
-
-    /* We run /usr/bin/gpg --version */
-    t = g_strconcat (engine->file_name, " --version", NULL);
-    b = g_spawn_command_line_sync (t, &sout, &serr, &status, err);
-    g_free (t);
-
-    if (b) {
-        if (sout && WIFEXITED (status) && WEXITSTATUS (status) == 0) {
-            /* Look for Home: */
-            t = strstr (sout, HOME_PREFIX);
-            if (t != NULL) {
-                t += strlen (HOME_PREFIX);
-                x = strchr (t, '\n');
-                if (x != NULL && x != t) {
-                    *x = 0;
-                    g_strstrip (t);
-
-                    g_free (gpg_homedir);
-
-                    /* If it's not a rooted path then expand */
-                    if (t[0] == '~') {
-                        gpg_homedir = g_strconcat (g_get_home_dir(), ++t, NULL);
-                    } else {
-                        gpg_homedir = g_strdup (t);
-                    }
-                    found = TRUE;
-                }
-            }
-        }
-
-        if (!found)
-            b = FALSE;
-    }
-
-    if (sout)
-        g_free (sout);
-    if (serr)
-        g_free (serr);
-
-    return b;
-}
-
 /* Initializes the gpg-options static info */
 static gboolean
 gpg_options_init (GError **err)
@@ -265,8 +209,10 @@ gpg_options_init (GError **err)
 	}
 
 	/* Now run the binary and read in the home directory */
-	if (!parse_home_directory (engine, err))
-		return FALSE;
+	if (engine->homedir)
+        gpg_homedir = engine->home_dir;
+    else
+		gpg_homedir = gpgmet_get_dirinfo("homedir");
 
 	gpg_options_inited = TRUE;
 	return TRUE;

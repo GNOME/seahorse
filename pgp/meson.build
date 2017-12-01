@@ -8,41 +8,49 @@ pgp_sources = [
   'seahorse-gpgme-expires.c',
   'seahorse-gpgme-exporter.c',
   'seahorse-gpgme-generate.c',
-  'seahorse-gpgme-key.c',
+  'gpgme-key.vala',
   'seahorse-gpgme-key-deleter.c',
   'seahorse-gpgme-key-op.c',
   'seahorse-gpgme-keyring.c',
-  'seahorse-gpgme-photo.c',
+  'gpgme-photo.vala',
   'seahorse-gpgme-photos.c',
   'seahorse-gpgme-revoke.c',
   'seahorse-gpgme-secret-deleter.c',
   'seahorse-gpgme-sign.c',
-  'seahorse-gpgme-subkey.c',
-  'seahorse-gpgme-uid.c',
+  'gpgme-subkey.vala',
+  'gpgme-uid.vala',
   'seahorse-gpg-op.c',
   'seahorse-gpg-options.c',
   'seahorse-pgp.c',
   'seahorse-pgp-actions.c',
   'seahorse-pgp-backend.c',
-  'seahorse-pgp-key.c',
+  'pgp-key.vala',
   'seahorse-pgp-key-properties.c',
   'seahorse-pgp-keysets.c',
-  'seahorse-pgp-photo.c',
-  'seahorse-pgp-signature.c',
-  'seahorse-pgp-subkey.c',
-  'seahorse-pgp-uid.c',
+  'pgp-photo.vala',
+  'pgp-signature.vala',
+  'pgp-subkey.vala',
+  'pgp-uid.vala',
   'seahorse-signer.c',
   'seahorse-transfer.c',
   'seahorse-unknown.c',
   'seahorse-unknown-source.c',
 ]
 
+# Also use our custom VAPI's
+gpg_vapis = [
+  valac.find_library('gpgme', dirs: join_paths(meson.source_root(), 'vapi')),
+  valac.find_library('gpg-error', dirs: join_paths(meson.source_root(), 'vapi')),
+]
+
 pgp_dependencies = [
   glib_deps,
   gcr,
   gpgme,
+  gtk,
   config,
   common_dep,
+  gpg_vapis,
 ]
 
 pgp_c_flags = [
@@ -74,7 +82,7 @@ endif
 if with_key_sharing
   pgp_dependencies += [
     avahi_client,
-    avahi_glib,
+    avahi_gobject,
   ]
 endif
 

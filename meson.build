@@ -33,7 +33,7 @@ localedir = join_paths(seahorse_prefix, get_option('localedir'))
 min_glib_version = '2.44'
 min_gcr_version = '3.11.91'
 min_gpgme_version = '1.7.0'
-accepted_gpg_versions = [ '2.0.12', '2.1.4', '2.2.0' ]
+accepted_gpg_versions = [ '2.1.13', '2.2.0' ]
 gpg_check_version = find_program(join_paths('meson', 'gpg_check_version.py'))
 
 glib_deps = [
@@ -86,7 +86,7 @@ endif
 
 libsoup = dependency('libsoup-2.4', version: '>= 2.33.92', required: with_hkp)
 avahi_client = dependency('avahi-client', required: with_key_sharing)
-avahi_glib = dependency('avahi-glib', version: '>= 0.6', required: with_key_sharing)
+avahi_gobject = dependency('avahi-gobject', version: '>= 0.6', required: with_key_sharing)
 
 
 # Project-wide flags
