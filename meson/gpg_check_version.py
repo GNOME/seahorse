@@ -16,9 +16,9 @@ def check_version(gpg_version, accepted_version, is_gpgme = False):
     gpg_major, gpg_minor, gpg_micro = gpg_version.split('.', 2)
     acc_major, acc_minor, acc_micro = accepted_version.split('.', 2)
     if is_gpgme:
-        return gpg_major == acc_major and gpg_minor >= acc_minor and gpg_micro >= acc_micro
+        return int(gpg_major) == int(acc_major) and int(gpg_minor) >= int(acc_minor) and int(gpg_micro) >= int(acc_micro)
     else:
-        return gpg_major == acc_major and gpg_minor == acc_minor and gpg_micro >= acc_micro
+        return int(gpg_major) == int(acc_major) and int(gpg_minor) == int(acc_minor) and int(gpg_micro) >= int(acc_micro)
 
 if len(sys.argv) <= 3:
     sys.exit(1)
