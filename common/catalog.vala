@@ -362,25 +362,25 @@ public abstract class Catalog : Gtk.Window {
 	private const Gtk.ActionEntry[] UI_ENTRIES = {
 		/* Top menu items */
 		{ "file-menu", null, N_("_File") },
-		{ "file-export", Gtk.Stock.SAVE_AS, N_("E_xport…"), null,
-		  N_("Export to a file"), on_key_export_file },
+		{ "file-export", null, N_("E_xport…"), null,
+          N_("Export to a file"), on_key_export_file },
 		{ "edit-menu", null, N_("_Edit") },
 		/*Translators: This text refers to deleting an item from its type's backing store*/
-		{ "edit-export-clipboard", Gtk.Stock.COPY, null, "<control>C",
+		{ "edit-export-clipboard", null, N_("_Copy"), "<control>C",
 		  N_("Copy to the clipboard"), on_key_export_clipboard },
-		{ "edit-delete", Gtk.Stock.DELETE, N_("_Delete"), null,
+		{ "edit-delete", null, N_("_Delete"), null,
 		  N_("Delete selected items"), on_object_delete },
-		{ "properties-object", Gtk.Stock.PROPERTIES, null, null,
+		{ "properties-object", null, N_("_Properties"), null,
 		  N_("Show the properties of this item"), on_properties_object },
-		{ "properties-keyring", Gtk.Stock.PROPERTIES, null, null,
+		{ "properties-keyring", null, N_("_Properties"), null,
 		  N_("Show the properties of this keyring"), on_properties_place },
-		{ "app-preferences", Gtk.Stock.PREFERENCES, N_("Prefere_nces"), null,
+		{ "app-preferences", null, N_("Prefere_nces"), null,
 		  N_("Change preferences for this program"), on_app_preferences },
 		{ "view-menu", null, N_("_View") },
 		{ "help-menu", null, N_("_Help") },
-		{ "app-about", Gtk.Stock.ABOUT, null, null,
+		{ "app-about", null, N_("_About"), null,
 		  N_("About this program"), on_app_about },
-		{ "help-show", Gtk.Stock.HELP, N_("_Contents"), "F1",
+		{ "help-show", null, N_("_Contents"), "F1",
 		  N_("Show Seahorse help"), on_help_show }
 	};
 

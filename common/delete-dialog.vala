@@ -84,11 +84,11 @@ public class DeleteDialog : Gtk.MessageDialog {
 			update_response_buttons();
 		});
 
-		var cancel = new Gtk.Button.from_stock(Gtk.Stock.CANCEL);
+		var cancel = new Gtk.Button.with_mnemonic(_("_Cancel"));
 		add_action_widget(cancel, Gtk.ResponseType.CANCEL);
 		cancel.show();
 
-		var delet = new Gtk.Button.from_stock(Gtk.Stock.DELETE);
+		var delet = new Gtk.Button.with_mnemonic(_("_Delete"));
 		add_action_widget(delet, Gtk.ResponseType.OK);
 		delet.show();
 	}

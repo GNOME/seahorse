@@ -188,7 +188,7 @@ public interface Exportable : GLib.Object {
 	                          out GLib.File chosen_file,
 	                          out Exporter chosen_exporter) {
 		var chooser = new Gtk.FileChooserDialog(null, parent, Gtk.FileChooserAction.SAVE,
-		                                        Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL,
+		                                        _("_Cancel"), Gtk.ResponseType.CANCEL,
 		                                        _("Export"), Gtk.ResponseType.ACCEPT,
 		                                        null);
 

@@ -42,7 +42,7 @@ public class Seahorse.PassphrasePrompt : Gtk.Dialog {
         GLib.Object(
             title: title,
             modal: true,
-            icon_name: Gtk.Stock.DIALOG_AUTHENTICATION
+            icon_name: "dialog-password-symbolic"
         );
 
         Gtk.Box wvbox = new Gtk.Box(Gtk.Orientation.VERTICAL, HIG_LARGE * 2);
@@ -53,7 +53,7 @@ public class Seahorse.PassphrasePrompt : Gtk.Dialog {
         wvbox.pack_start (chbox, false, false);
 
         // The image
-        Gtk.Image img = new Gtk.Image.from_stock(Gtk.Stock.DIALOG_AUTHENTICATION, Gtk.IconSize.DIALOG);
+        Gtk.Image img = new Gtk.Image.from_icon_name("dialog-password-symbolic", Gtk.IconSize.DIALOG);
         img.set_alignment(0.0f, 0.0f);
         chbox.pack_start(img, false, false);
 
@@ -114,11 +114,11 @@ public class Seahorse.PassphrasePrompt : Gtk.Dialog {
 
         grid.show_all();
 
-        Gtk.Button cancel_button = new Gtk.Button.from_stock(Gtk.Stock.CANCEL);
+        Gtk.Button cancel_button = new Gtk.Button.with_mnemonic(_("_Cancel"));
         add_action_widget(cancel_button, Gtk.ResponseType.REJECT);
         cancel_button.set_can_default(true);
 
-        Gtk.Button ok_button = new Gtk.Button.from_stock(Gtk.Stock.OK);
+        Gtk.Button ok_button = new Gtk.Button.with_mnemonic(_("_OK"));
         add_action_widget(ok_button, Gtk.ResponseType.ACCEPT);
         ok_button.set_can_default(true);
         ok_button.grab_default();
