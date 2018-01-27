@@ -17,6 +17,10 @@
  * License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+// FIXME: this is needed since the libsecret VAPI is broken (string is not marked as unowned).
+//        We're also using the sync version for the time being since it becomes a mess otherwise.
+extern unowned string? secret_service_read_alias_dbus_path_sync (Secret.Service service, string alias, Cancellable? cancellable = null) throws GLib.Error;
+
 namespace Seahorse {
 namespace Gkr {
 
@@ -170,27 +174,27 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 		return this._keyrings.get_values();
 	}
 
-	private void read_alias(string name) {
+	private async void read_alias(string name) {
 		if (this._service == null)
 			return;
-		this._service.read_alias_dbus_path.begin(name, null, (obj, res) => {
-			try {
-				var object_path = this._service.read_alias_dbus_path.end(res);
-				if (object_path != null) {
-					this._aliases.insert(name, object_path);
-					notify_property("aliases");
-				}
-			} catch (GLib.Error err) {
-				GLib.warning("Couldn't read secret service alias %s: %s", name, err.message);
-			}
-		});
 
+		try {
+            // FIXME: see the comment at the top of the file about the broken VAPI.
+            // Once the bindings are fixed, use the async version again.
+		    var object_path = secret_service_read_alias_dbus_path_sync(this._service, name);
+            if (object_path != null) {
+                this._aliases[name] = object_path;
+                notify_property("aliases");
+            }
+        } catch (GLib.Error err) {
+            warning("Couldn't read secret service alias %s: %s", name, err.message);
+        }
 	}
 
 	private void refresh_aliases() {
-		read_alias("default");
-		read_alias("session");
-		read_alias("login");
+		read_alias.begin ("default");
+		read_alias.begin ("session");
+		read_alias.begin ("login");
 	}
 
 	public void refresh() {
