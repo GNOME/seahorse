@@ -365,9 +365,9 @@ public abstract class Catalog : Gtk.Window {
 		{ "file-export", null, N_("E_xport…"), null,
           N_("Export to a file"), on_key_export_file },
 		{ "edit-menu", null, N_("_Edit") },
-		/*Translators: This text refers to deleting an item from its type's backing store*/
 		{ "edit-export-clipboard", null, N_("_Copy"), "<control>C",
 		  N_("Copy to the clipboard"), on_key_export_clipboard },
+		/*Translators: This text refers to deleting an item from its type's backing store*/
 		{ "edit-delete", null, N_("_Delete"), null,
 		  N_("Delete selected items"), on_object_delete },
 		{ "properties-object", null, N_("_Properties"), null,
