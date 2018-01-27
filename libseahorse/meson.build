@@ -13,7 +13,6 @@ search_provider_src = gnome.gdbus_codegen('seahorse-shell-search-provider-genera
 libseahorse_sources = [
   'seahorse-application.c',
   'seahorse-bind.c',
-  'seahorse-collection.c',
   'seahorse-interaction.c',
   'seahorse-key-manager-store.c',
   'seahorse-object-list.c',

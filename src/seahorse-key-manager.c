@@ -22,7 +22,6 @@
 #include "config.h"
 
 #include "libseahorse/seahorse-application.h"
-#include "libseahorse/seahorse-collection.h"
 #include "libseahorse/seahorse-key-manager-store.h"
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"

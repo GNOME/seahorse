@@ -21,8 +21,6 @@
 #ifndef __SEAHORSE_KEY_MANAGER_STORE_H__
 #define __SEAHORSE_KEY_MANAGER_STORE_H__
 
-#include "seahorse-collection.h"
-
 #include "seahorse-common.h"
 
 #include <gtk/gtk.h>

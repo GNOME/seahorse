@@ -21,9 +21,9 @@
  */
 
 [CCode (has_target = false)]
-public delegate bool Seahorse.PredicateFunc(Seahorse.Object obj, void* custom_target);
+public delegate bool Seahorse.PredicateFunc(GLib.Object obj, void* custom_target);
 
-public class Seahorse.Predicate {
+public struct Seahorse.Predicate {
     public Type type;
     public Usage usage;
     public Flags flags;
@@ -38,18 +38,26 @@ public class Seahorse.Predicate {
      *
      * @return false if predicate does not match the Object, true else
      */
-    public bool match(Object obj) {
+    public bool match(GLib.Object obj) {
         // Check all the fields
         if (this.type != 0 && !(obj.get_type().is_a(this.type) && this.type.is_a(obj.get_type())))
             return false;
 
-        if (this.usage != Usage.NONE && this.usage != obj.usage)
-            return false;
+        if (this.usage != Usage.NONE) {
+            Usage obj_usage = Usage.NONE;
+            obj.get("usage", out obj_usage, null);
+
+            if (this.usage != obj_usage)
+                return false;
+        }
 
         if (this.flags != 0 || this.nflags != 0) {
-            if (this.flags != Flags.NONE && (obj.object_flags in this.flags))
+            Flags obj_flags = Flags.NONE;
+            obj.get("object-flags", out obj_flags, null);
+
+            if (this.flags != Flags.NONE && (obj_flags in this.flags))
                 return false;
-            if (this.nflags != Flags.NONE && (obj.object_flags in this.nflags))
+            if (this.nflags != Flags.NONE && (obj_flags in this.nflags))
                 return false;
         }
 

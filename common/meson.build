@@ -2,6 +2,7 @@ common_sources = [
   'actions.vala',
   'backend.vala',
   'catalog.vala',
+  'collection.vala',
   'deletable.vala',
   'delete-dialog.vala',
   'deleter.vala',

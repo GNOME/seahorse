@@ -29,7 +29,6 @@
 #include "seahorse-common.h"
 
 #include "libseahorse/seahorse-application.h"
-#include "libseahorse/seahorse-collection.h"
 
 /* -----------------------------------------------------------------------------
  * COMMON KEYSETS 
