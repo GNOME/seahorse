@@ -37,7 +37,6 @@ public class Seahorse.Object : GLib.Object {
     /**
      * The place this Object came from.
      */
-    [Notify]
     public weak Place place { get; set; default = null; }
 
     /**
@@ -49,13 +48,11 @@ public class Seahorse.Object : GLib.Object {
      * Stock ID for this Object.
      * XXX Nullable?
      */
-    [Notify]
     public GLib.Icon? icon { get; set; default = new ThemedIcon("gtk-missing-image"); }
 
     /**
      * This object's displayable label.
      */
-    [Notify]
     public string label {
         get { return this._label; }
         set {
@@ -69,7 +66,6 @@ public class Seahorse.Object : GLib.Object {
      * This object's displayable markup.
      */
     // XXX explicit op true zetten in set;
-    [Notify]
     public string markup {
         get { return this._markup; }
         set {
@@ -86,7 +82,6 @@ public class Seahorse.Object : GLib.Object {
      * This object's short name.
      */
     // XXX explicit op true zetten in set;
-    [Notify]
     public string nickname {
         get { return this._nickname; }
         set {
@@ -103,7 +98,6 @@ public class Seahorse.Object : GLib.Object {
      * Displayable ID for the object.
      */
     // XXX explicit op true zetten in set;
-    [Notify]
     public string identifier {
         get { return this._identifier; }
         set {
@@ -116,14 +110,11 @@ public class Seahorse.Object : GLib.Object {
     /**
      * How this object is used.
      */
-    [Notify]
     public Usage usage { get; set; default = Usage.NONE; }
 
-    // XXX maybe we can set the property name with CCode?
     /**
      * This object's flags.
      */
-    [Notify]
     public Flags object_flags { get; set; default = Flags.NONE; }
 
     /**
