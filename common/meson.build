@@ -10,6 +10,7 @@ common_sources = [
   'exportable.vala',
   'exporter.vala',
   'icons.vala',
+  'key-manager-store.vala',
   'lockable.vala',
   'object.vala',
   'passphrase-prompt.vala',
@@ -50,4 +51,5 @@ common_lib = static_library('common',
 common_dep = declare_dependency(
   link_with: common_lib,
   include_directories: include_directories('.'),
+  dependencies: common_deps,
 )

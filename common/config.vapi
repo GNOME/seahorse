@@ -46,3 +46,9 @@ namespace Progress {
 }
 
 }
+
+namespace Egg {
+	namespace TreeMultiDrag {
+		public void add_drag_support(Gtk.TreeView view);
+	}
+}

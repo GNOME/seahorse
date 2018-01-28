@@ -27,7 +27,6 @@
 #include "seahorse-gpgme-keyring.h"
 #include "seahorse-keyserver-search.h"
 
-#include "libseahorse/seahorse-key-manager-store.h"
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
 

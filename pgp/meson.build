@@ -41,7 +41,6 @@ pgp_dependencies = [
   glib_deps,
   gcr,
   gpgme,
-  config,
   common_dep,
 ]
 

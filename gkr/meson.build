@@ -16,7 +16,6 @@ gkr_dependencies = [
   gcr,
   gcr_ui,
   libsecret,
-  config,
   common_dep,
 ]
 

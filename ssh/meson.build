@@ -20,7 +20,6 @@ ssh_dependencies = [
   gcr,
   posix,
   gtk,
-  config,
   common_dep,
 ]
 

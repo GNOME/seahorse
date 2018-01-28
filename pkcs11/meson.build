@@ -17,7 +17,6 @@ pkcs11_deps = [
   glib_deps,
   gcr_ui,
   pkcs11_dep,
-  config,
   common_dep,
 ]
 

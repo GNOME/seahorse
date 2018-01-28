@@ -14,7 +14,6 @@ libseahorse_sources = [
   'seahorse-application.c',
   'seahorse-bind.c',
   'seahorse-interaction.c',
-  'seahorse-key-manager-store.c',
   'seahorse-object-list.c',
   'seahorse-object-model.c',
   'seahorse-object-widget.c',

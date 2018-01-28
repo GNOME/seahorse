@@ -21,7 +21,7 @@
 public class Seahorse.Collection : Gcr.Collection, GLib.Object {
     private GenericSet<GLib.Object?> objects = new GenericSet<GLib.Object?>(direct_hash, direct_equal);
 
-    private DestroyNotify destroy_func;
+    private DestroyNotify? destroy_func;
 
     /**
      * Base_collection collection
@@ -33,7 +33,7 @@ public class Seahorse.Collection : Gcr.Collection, GLib.Object {
      */
     public Predicate? predicate { get; private set; }
 
-    public Collection.for_predicate (Gcr.Collection base_collection, Predicate? pred, DestroyNotify destroy_func) {
+    public Collection.for_predicate (Gcr.Collection base_collection, Predicate? pred, DestroyNotify? destroy_func) {
         GLib.Object (base_collection: base_collection);
         this.predicate = pred;
 
