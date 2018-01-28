@@ -20,18 +20,10 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-public class Seahorse.Object : GLib.Object {
-
 /**
- * @label: DBUS: "display-name"
- * @markup: Markup text
- * @nickname: DBUS: "simple-name"
- * @identifier: DBUS: "key-id", "display-id", "raw-id"
- * @identifier_explicit:
- * @location: describes the loaction of the object (local, remte, invalid...)
- * @usage: DBUS: "etype"
+ * The base class for passwords/keys and others that are handled by Seahorse.
  */
-
+public class Seahorse.Object : GLib.Object {
 
     // XXX only notify if changed
     /**
