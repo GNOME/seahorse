@@ -66,7 +66,7 @@ public class Seahorse.AddKeyserverDialog : Gtk.Dialog {
 
         // Buttons
         add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
-        Gtk.Button save_button = (Gtk.Button) add_button(("Save"), Gtk.ResponseType.OK);
+        Gtk.Button save_button = (Gtk.Button) add_button(_("Save"), Gtk.ResponseType.OK);
         save_button.get_style_context().add_class("suggested-action");
 
         show();
