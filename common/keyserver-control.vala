@@ -67,9 +67,9 @@ public class Seahorse.KeyserverControl : Gtk.ComboBox {
 
         populate_combo(true);
         this.changed.connect(on_keyserver_changed);
-        Application.pgp_settings().changed["keyserver"].connect(() => populate_combo(false));
+        PgpSettings.instance().changed["keyserver"].connect(() => populate_combo(false));
         if (this.settings_key != null)
-            Application.settings().changed[this.settings_key].connect(() => populate_combo(true));
+            AppSettings.instance().changed[this.settings_key].connect(() => populate_combo(true));
     }
 
     public string? selected() {
@@ -95,7 +95,7 @@ public class Seahorse.KeyserverControl : Gtk.ComboBox {
             return;
 
         if (this.settings_key != null)
-            Application.settings().set_string(this.settings_key, selected() ?? "");
+            AppSettings.instance().set_string(this.settings_key, selected() ?? "");
     }
 
     private int compare_func(Gtk.TreeModel model, Gtk.TreeIter a, Gtk.TreeIter b) {
@@ -127,7 +127,7 @@ public class Seahorse.KeyserverControl : Gtk.ComboBox {
         string? chosen = null;
         int chosen_info = Option.KEYSERVER;
         if (with_key && this.settings_key != null) {
-            chosen = Application.settings().get_string(this.settings_key);
+            chosen = AppSettings.instance().get_string(this.settings_key);
         } else {
             if (get_active_iter(out iter)) {
                 this.model.get(iter, Column.TEXT, out chosen,

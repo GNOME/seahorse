@@ -74,11 +74,9 @@ public void cleanup() {
 
 [CCode (array_null_terminated = true, array_length = false)]
 public string[] get_uris() {
-    string[] servers = Application.pgp_settings().get_strv("keyservers");
-
     // The values are 'uri name', remove the name part
     string[] uris = {};
-    foreach (string server in servers)
+    foreach (string server in PgpSettings.instance().keyservers)
         uris += server.strip().split(" ", 2)[0];
 
     return uris;
@@ -86,11 +84,9 @@ public string[] get_uris() {
 
 [CCode (array_null_terminated = true, array_length = false)]
 public string[] get_names() {
-    string[] servers = Application.pgp_settings().get_strv("keyservers");
-
     // The values are 'uri name', remove the name part
     string[] names = {};
-    foreach (string server in servers)
+    foreach (string server in PgpSettings.instance().keyservers)
         names += server.strip().split(" ", 2)[1];
 
     return names;

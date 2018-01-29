@@ -172,11 +172,11 @@ seahorse_pgp_backend_constructed (GObject *obj)
 	self->unknown = seahorse_unknown_source_new ();
 
 #ifdef WITH_KEYSERVER
-	g_signal_connect (seahorse_application_pgp_settings (NULL), "changed::keyservers",
+	g_signal_connect (seahorse_pgp_settings_instance (), "changed::keyservers",
 	                  G_CALLBACK (on_settings_keyservers_changed), self);
 
 	/* Initial loading */
-	on_settings_keyservers_changed (seahorse_application_pgp_settings (NULL), "keyservers", self);
+	on_settings_keyservers_changed (seahorse_pgp_settings_instance (), "keyservers", self);
 #endif
 }
 
@@ -241,7 +241,7 @@ seahorse_pgp_backend_finalize (GObject *obj)
 	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
 
 #ifdef WITH_KEYSERVER
-	g_signal_handlers_disconnect_by_func (seahorse_application_pgp_settings (NULL),
+	g_signal_handlers_disconnect_by_func (seahorse_pgp_settings_instance (),
 	                                      on_settings_keyservers_changed, self);
 #endif
 
@@ -356,16 +356,16 @@ SeahorsePgpKey *
 seahorse_pgp_backend_get_default_key (SeahorsePgpBackend *self)
 {
 	SeahorsePgpKey *key = NULL;
-	GSettings *settings;
+	SeahorsePgpSettings *settings;
 	const gchar *keyid;
 	gchar *value;
 
 	self = self ? self : seahorse_pgp_backend_get ();
 	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (self), NULL);
 
-	settings = seahorse_application_pgp_settings (NULL);
+	settings = seahorse_pgp_settings_instance ();
 	if (settings != NULL) {
-		value = g_settings_get_string (settings, "default-key");
+		value = seahorse_pgp_settings_get_default_key (settings);
 		if (value != NULL && value[0]) {
 			if (g_str_has_prefix (value, "openpgp:"))
 				keyid = value + strlen ("openpgp:");
@@ -485,7 +485,7 @@ seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
 	g_return_if_fail (SEAHORSE_IS_PGP_BACKEND (self));
 
 	/* Get a list of all selected key servers */
-	names = g_settings_get_strv (seahorse_application_settings (NULL), "last-search-servers");
+	names = g_settings_get_strv (seahorse_app_settings_instance (), "last-search-servers");
 	if (names != NULL && names[0] != NULL) {
 		servers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 		for (i = 0; names[i] != NULL; i++)
@@ -768,7 +768,7 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
 
 #ifdef WITH_KEYSERVER
 		/* Start a discover process on all todiscover */
-		if (g_settings_get_boolean (seahorse_application_settings (NULL), "server-auto-retrieve"))
+		if (seahorse_app_settings_get_server_auto_retrieve (seahorse_app_settings_instance ()))
 			seahorse_pgp_backend_retrieve_async (self, keyids, SEAHORSE_PLACE (self->keyring),
 			                                     cancellable, NULL, NULL);
 #endif

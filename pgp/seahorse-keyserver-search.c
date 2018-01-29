@@ -247,7 +247,7 @@ select_inital_keyservers (SeahorseWidget *swidget)
 	gchar *name;
 	guint i;
 
-	names = g_settings_get_strv (seahorse_application_settings (NULL), "last-search-servers");
+	names = g_settings_get_strv (seahorse_app_settings_instance (), "last-search-servers");
 
 	/* Close the expander if all servers are selected */
 	widget = seahorse_widget_get_widget (swidget, "search-where");
@@ -416,12 +416,12 @@ on_keyserver_search_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	/* Get search text and save it for next time */
 	search = gtk_entry_get_text (GTK_ENTRY (widget));
 	g_return_if_fail (search != NULL && search[0] != 0);
-	g_settings_set_string (seahorse_application_settings (NULL), "last-search-text", search);
+	seahorse_app_settings_set_last_search_text (seahorse_app_settings_instance (), search);
 
 	/* The keyservers to search, and save for next time */
 	selection = get_keyserver_selection (swidget);
 	g_return_if_fail (selection->uris != NULL);
-	g_settings_set_strv (seahorse_application_settings (NULL), "last-search-servers",
+	g_settings_set_strv (seahorse_app_settings_instance (), "last-search-servers",
 	                     selection->all ? NULL : (const gchar * const*)selection->uris->pdata);
 
 	/* Open the new result window; its transient parent is *our* transient
@@ -465,7 +465,7 @@ seahorse_keyserver_search_show (GtkWindow *parent)
 	SeahorseWidget *swidget;
 	GtkWindow *window;
 	GtkWidget *widget;
-	GSettings *settings;
+	SeahorsePgpSettings *settings;
 	gchar *search;
 
 	swidget = seahorse_widget_new ("keyserver-search", parent);
@@ -476,8 +476,7 @@ seahorse_keyserver_search_show (GtkWindow *parent)
 	widget = seahorse_widget_get_widget (swidget, "search-text");
 	g_return_val_if_fail (widget != NULL, window);
 
-	search = g_settings_get_string (seahorse_application_settings (NULL),
-	                                "last-search-text");
+	search = seahorse_app_settings_get_last_search_text (seahorse_app_settings_instance ());
 	if (search != NULL) {
 		gtk_entry_set_text (GTK_ENTRY (widget), search);
 		gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
@@ -485,7 +484,7 @@ seahorse_keyserver_search_show (GtkWindow *parent)
 	}
 
 	/* The key servers to list */
-	settings = seahorse_application_pgp_settings (NULL);
+	settings = seahorse_pgp_settings_instance ();
 	on_settings_keyservers_changed (settings, "keyservers", swidget);
 	g_signal_connect_object (settings, "changed::keyservers",
 	                         G_CALLBACK (on_settings_keyservers_changed), swidget, 0);

@@ -28,8 +28,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-application.h"
-
 /* -----------------------------------------------------------------------------
  * COMMON KEYSETS 
  */
@@ -78,7 +76,7 @@ seahorse_keyset_pgp_signers_new (void)
 	collection = seahorse_collection_new_for_predicate (GCR_COLLECTION (keyring),
 	                                                    predicate, g_free);
 
-	g_signal_connect_object (seahorse_application_pgp_settings (NULL), "changed::default-key",
+	g_signal_connect_object (seahorse_pgp_settings_instance (), "changed::default-key",
 	                         G_CALLBACK (on_settings_default_key_changed), collection, 0);
 
 	return GCR_COLLECTION (collection);

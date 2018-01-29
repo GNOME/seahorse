@@ -1,6 +1,7 @@
 common_sources = [
   'actions.vala',
   'add-keyserver-dialog.vala',
+  'app-settings.vala',
   'backend.vala',
   'catalog.vala',
   'collection.vala',
@@ -14,6 +15,7 @@ common_sources = [
   'lockable.vala',
   'object.vala',
   'passphrase-prompt.vala',
+  'pgp-settings.vala',
   'place.vala',
   'predicate.vala',
   'prefs.vala',

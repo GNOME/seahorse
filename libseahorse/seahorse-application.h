@@ -42,8 +42,6 @@ GtkApplication *    seahorse_application_new                     (void);
 
 GtkApplication *    seahorse_application_get                     (void);
 
-GSettings *         seahorse_application_settings                (SeahorseApplication *self);
-
 GSettings *         seahorse_application_pgp_settings            (SeahorseApplication *self);
 
 void                seahorse_application_initialize_search       (SeahorseApplication *self);

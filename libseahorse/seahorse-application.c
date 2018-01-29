@@ -34,8 +34,6 @@
 
 struct _SeahorseApplication {
 	GtkApplication parent;
-	GSettings *seahorse_settings;
-	GSettings *crypto_pgp_settings;
 
 	SeahorseSearchProvider *search_provider;
 };
@@ -60,13 +58,6 @@ seahorse_application_constructed (GObject *obj)
 	G_OBJECT_CLASS (seahorse_application_parent_class)->constructed (obj);
 
 	the_application = self;
-
-	self->seahorse_settings = g_settings_new ("org.gnome.seahorse");
-
-#ifdef WITH_PGP
-	/* This is installed by gnome-keyring */
-	self->crypto_pgp_settings = g_settings_new ("org.gnome.crypto.pgp");
-#endif
 }
 
 static void
@@ -74,11 +65,6 @@ seahorse_application_finalize (GObject *gobject)
 {
 	SeahorseApplication *self = SEAHORSE_APPLICATION (gobject);
 	the_application = NULL;
-
-#ifdef WITH_PGP
-	g_clear_object (&self->crypto_pgp_settings);
-#endif
-	g_clear_object (&self->seahorse_settings);
 
 	g_clear_object (&self->search_provider);
 
@@ -253,24 +239,6 @@ seahorse_application_get (void)
 {
 	g_return_val_if_fail (the_application != NULL, NULL);
 	return GTK_APPLICATION (the_application);
-}
-
-GSettings *
-seahorse_application_settings (SeahorseApplication *self)
-{
-	if (self == NULL)
-		self = the_application;
-	g_return_val_if_fail (SEAHORSE_IS_APPLICATION (self), NULL);
-	return self->seahorse_settings;
-}
-
-GSettings *
-seahorse_application_pgp_settings (SeahorseApplication *self)
-{
-	if (self == NULL)
-		self = the_application;
-	g_return_val_if_fail (SEAHORSE_IS_APPLICATION (self), NULL);
-	return self->crypto_pgp_settings;
 }
 
 void

@@ -142,7 +142,7 @@ public class Seahorse.Prefs : Gtk.Dialog {
         selection.set_mode(Gtk.SelectionMode.SINGLE);
         selection.changed.connect(keyserver_sel_changed);
 
-        Application.pgp_settings().changed["keyserver"].connect((settings, key) => {
+        PgpSettings.instance().changed["keyserver"].connect((settings, key) => {
             populate_keyservers(settings.get_strv(key));
         });
 
@@ -153,9 +153,9 @@ public class Seahorse.Prefs : Gtk.Dialog {
 
         this.keyserver_publish_to_label.set_mnemonic_widget(skc);
 
-        Application.settings().bind("server-auto-retrieve", this.auto_retrieve, "active",
+        AppSettings.instance().bind("server-auto-retrieve", this.auto_retrieve, "active",
                                     SettingsBindFlags.DEFAULT);
-        Application.settings().bind("server-auto-publish", this.auto_sync, "active",
+        AppSettings.instance().bind("server-auto-publish", this.auto_sync, "active",
                                     SettingsBindFlags.DEFAULT);
     }
 
@@ -199,7 +199,7 @@ public class Seahorse.Prefs : Gtk.Dialog {
             } while (model.iter_next(ref iter));
         }
 
-        Application.pgp_settings().set_strv("keyservers", values);
+        PgpSettings.instance().keyservers = values;
     }
 
     private void keyserver_row_changed (Gtk.TreeModel model, Gtk.TreePath arg1, Gtk.TreeIter arg2) {
