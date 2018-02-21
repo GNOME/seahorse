@@ -8,15 +8,15 @@
 # 
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011., 2011.
 # 
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011., 2012, 2013, 2014, 2015., 2016, 2017.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011., 2012, 2013, 2014, 2015., 2016, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-11-25 02:42+0000\n"
-"PO-Revision-Date: 2017-12-13 16:30+0100\n"
+"POT-Creation-Date: 2018-02-20 23:22+0000\n"
+"PO-Revision-Date: 2018-02-21 17:32+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -26,16 +26,33 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.6\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: common/catalog.vala:257
+#: common/add-keyserver-dialog.vala:32
+msgid "Add Key Server"
+msgstr "Añadir servidor de claves"
+
+#: common/add-keyserver-dialog.vala:64
+msgid "Custom"
+msgstr "Personalizado"
+
+#. Buttons
+#: common/add-keyserver-dialog.vala:68
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: common/add-keyserver-dialog.vala:69
+msgid "Save"
+msgstr "Guardar"
+
+#: common/catalog.vala:258
 msgid "Contributions:"
 msgstr "Contribuciones:"
 
-#: common/catalog.vala:285 data/seahorse.desktop.in.in:3
-#: src/seahorse-key-manager.c:660
+#: common/catalog.vala:286 data/seahorse.desktop.in.in:3
+#: src/seahorse-key-manager.c:658
 msgid "Passwords and Keys"
 msgstr "Contraseñas y claves"
 
-#: common/catalog.vala:287
+#: common/catalog.vala:288
 msgid "translator-credits"
 msgstr ""
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2013 - 2017\n"
@@ -44,92 +61,110 @@ msgstr ""
 "Germán Poo-Caamaño <gpoo@ubiobio.cl>, 2003\n"
 "José Carlos García Sogo <jsogo@debian.org>, 2002, 2003"
 
-#: common/catalog.vala:290
+#: common/catalog.vala:291
 msgid "Seahorse Project Homepage"
 msgstr "Página web de Seahorse"
 
-#: common/catalog.vala:308
+#: common/catalog.vala:309
 msgid "Cannot delete"
 msgstr "No se puede eliminar"
 
-#: common/catalog.vala:331 libseahorse/seahorse-key-manager-store.c:440
+#: common/catalog.vala:332 common/key-manager-store.vala:427
 msgid "Couldn’t export keys"
 msgstr "No se pudieron exportar las claves"
 
-#: common/catalog.vala:342
+#: common/catalog.vala:343
 msgid "Couldn’t export data"
 msgstr "No se pudieron exportar los datos"
 
-#: common/catalog.vala:358 libseahorse/seahorse-widget.c:461
+#: common/catalog.vala:359 libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "No se pudo mostrar la ayuda: %s"
 
 #. Top menu items
-#: common/catalog.vala:364
+#: common/catalog.vala:365
 msgid "_File"
 msgstr "_Archivo"
 
-#: common/catalog.vala:365
+#: common/catalog.vala:366
 msgid "E_xport…"
 msgstr "E_xportar…"
 
-#: common/catalog.vala:366
+#: common/catalog.vala:367
 msgid "Export to a file"
 msgstr "Exportar parte de la clave pública a un archivo"
 
-#: common/catalog.vala:367
+#: common/catalog.vala:368
 msgid "_Edit"
 msgstr "_Editar"
+
+#: common/catalog.vala:369
+msgid "_Copy"
+msgstr "_Copiar"
 
 #: common/catalog.vala:370
 msgid "Copy to the clipboard"
 msgstr "Importar claves desde el portapapeles"
 
-#: common/catalog.vala:371 pkcs11/pkcs11-properties.vala:201
-#: src/seahorse-sidebar.c:954
+#. Translators: This text refers to deleting an item from its type's backing store
+#: common/catalog.vala:372 common/delete-dialog.vala:91
+#: pkcs11/pkcs11-properties.vala:201 src/seahorse-sidebar.c:954
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: common/catalog.vala:372
+#: common/catalog.vala:373
 msgid "Delete selected items"
 msgstr "Eliminar las claves seleccionadas"
 
-#: common/catalog.vala:374
+#: common/catalog.vala:374 common/catalog.vala:376 src/seahorse-sidebar.c:965
+msgid "_Properties"
+msgstr "_Propiedades"
+
+#: common/catalog.vala:375
 msgid "Show the properties of this item"
 msgstr "Mostrar las propiedades de este elemento"
 
-#: common/catalog.vala:376
+#: common/catalog.vala:377
 msgid "Show the properties of this keyring"
 msgstr "Mostrar las propiedades de este depósito de claves"
 
-#: common/catalog.vala:377
+#: common/catalog.vala:378
 msgid "Prefere_nces"
 msgstr "Prefere_ncias"
 
-#: common/catalog.vala:378
+#: common/catalog.vala:379
 msgid "Change preferences for this program"
 msgstr "Cambia las preferencias de este programa"
 
-#: common/catalog.vala:379
+#: common/catalog.vala:380
 msgid "_View"
 msgstr "_Ver"
 
-#: common/catalog.vala:380
+#: common/catalog.vala:381
 msgid "_Help"
 msgstr "Ay_uda"
 
 #: common/catalog.vala:382
+msgid "_About"
+msgstr "Acerca _de"
+
+#: common/catalog.vala:383
 msgid "About this program"
 msgstr "Acerca de este programa"
 
-#: common/catalog.vala:383
+#: common/catalog.vala:384
 msgid "_Contents"
 msgstr "Índ_ice"
 
-#: common/catalog.vala:384
+#: common/catalog.vala:385
 msgid "Show Seahorse help"
 msgstr "Mostrar ayuda de seahorse"
+
+#: common/delete-dialog.vala:87 common/exportable.vala:191
+#: common/passphrase-prompt.vala:117
+msgid "_Cancel"
+msgstr "_Cancelar"
 
 #: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:1427
 msgid "Export"
@@ -140,10 +175,85 @@ msgstr "Exportar"
 msgid "Confirm:"
 msgstr "Confirmar:"
 
+#: common/passphrase-prompt.vala:121
+msgid "_OK"
+msgstr "_Aceptar"
+
 #: common/passphrase-prompt.vala:145 gkr/seahorse-gkr-item-properties.ui:246
 #: ssh/seahorse-ssh-askpass.c:117
 msgid "Password:"
 msgstr "Contraseña:"
+
+#: common/prefs.vala:42
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: common/prefs.vala:150
+msgid "None: Don’t publish keys"
+msgstr "Ninguno: no publicar claves"
+
+#: common/prefs.vala:166
+msgid "Not a valid Key Server address."
+msgstr "La dirección del servidor de claves no es válida."
+
+#: common/prefs.vala:167
+msgid ""
+"For help contact your system administrator or the administrator of the key "
+"server."
+msgstr ""
+"Para obtener ayuda, contacte con su administrador de sistemas o el "
+"administrador del servidor de claves."
+
+#: common/prefs.vala:236
+msgid "URL"
+msgstr "URL"
+
+#: common/seahorse-add-keyserver.ui:12
+msgid "initial temporary item"
+msgstr "elemento temporal inicial"
+
+#: common/seahorse-add-keyserver.ui:34
+msgid "Key Server Type:"
+msgstr "tipo de servidor de claves:"
+
+#: common/seahorse-add-keyserver.ui:58
+msgid "Host:"
+msgstr "Anfitrión:"
+
+#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:50
+#: ssh/seahorse-ssh-upload.ui:117
+msgid "The host name or address of the server."
+msgstr "El nombre del equipo o la dirección del servidor."
+
+#: common/seahorse-add-keyserver.ui:93
+msgid ":"
+msgstr ":"
+
+#: common/seahorse-add-keyserver.ui:105
+msgid "The port to access the server on."
+msgstr "El puerto por el que acceder al servidor."
+
+#: common/seahorse-prefs.ui:34
+msgid "_Find keys via:"
+msgstr "_Buscar claves vía:"
+
+#: common/seahorse-prefs.ui:105
+msgid "_Publish keys to:"
+msgstr "_Publicar claves en:"
+
+#: common/seahorse-prefs.ui:128
+msgid "Automatically retrieve keys from _key servers"
+msgstr "Obtener _automáticamente las claves de los servidores de claves"
+
+#: common/seahorse-prefs.ui:142
+msgid "Automatically synchronize _modified keys with key servers"
+msgstr ""
+"Sincronizar automáticamente las claves _modificadas con los servidores de "
+"claves"
+
+#: common/seahorse-prefs.ui:159
+msgid "Key Servers"
+msgstr "Servidores de claves"
 
 #. TRANSLATORS: this date (Year-month-day) is used to display
 #. * when something happened, e.g. when a key was created. Feel
@@ -227,39 +337,38 @@ msgstr "depósito de claves;cifrado;seguridad;firma;ssh;"
 
 #. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/seahorse.desktop.in.in:11
-#| msgid "Seahorse"
 msgid "seahorse"
 msgstr "seahorse"
 
-#: gkr/gkr-backend.vala:39
+#: gkr/gkr-backend.vala:43
 msgid "Passwords"
 msgstr "Contraseñas"
 
-#: gkr/gkr-backend.vala:43
+#: gkr/gkr-backend.vala:47
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Contraseñas personales, credenciales y secretos almacenados"
 
-#: gkr/gkr-backend.vala:251
+#: gkr/gkr-backend.vala:255
 msgid "New password keyring"
 msgstr "Contraseña nueva del depósito de contraseñas"
 
-#: gkr/gkr-backend.vala:252 gkr/gkr-backend.vala:259
+#: gkr/gkr-backend.vala:256 gkr/gkr-backend.vala:263
 msgid "Used to store application and network passwords"
 msgstr "Ubicación para las contraseñas de aplicaciones"
 
-#: gkr/gkr-backend.vala:253
+#: gkr/gkr-backend.vala:257
 msgid "New password…"
 msgstr "Contraseña nueva…"
 
-#: gkr/gkr-backend.vala:254 gkr/gkr-backend.vala:261
+#: gkr/gkr-backend.vala:258 gkr/gkr-backend.vala:265
 msgid "Safely store a password or secret."
 msgstr "Almacenar una contraseña o un secreto de forma segura."
 
-#: gkr/gkr-backend.vala:258
+#: gkr/gkr-backend.vala:262
 msgid "Password Keyring"
 msgstr "Depósitos de contraseñas"
 
-#: gkr/gkr-backend.vala:260
+#: gkr/gkr-backend.vala:264
 msgid "Stored Password"
 msgstr "Contraseña almacenada"
 
@@ -341,7 +450,6 @@ msgid "Google Chrome password"
 msgstr "Contraseña de Google chrome"
 
 #: gkr/gkr-item.vala:451
-#| msgid "Gnome Online Accounts password"
 msgid "GNOME Online Accounts password"
 msgstr "Contraseña de cuentas en línea de GNOME"
 
@@ -770,45 +878,16 @@ msgstr "%04d-%02d-%02d"
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
-#: libseahorse/seahorse-add-keyserver.ui:12
-msgid "initial temporary item"
-msgstr "elemento temporal inicial"
-
-#: libseahorse/seahorse-add-keyserver.ui:18
-msgid "Add Key Server"
-msgstr "Añadir servidor de claves"
-
-#: libseahorse/seahorse-add-keyserver.ui:41
-msgid "Key Server Type:"
-msgstr "tipo de servidor de claves:"
-
-#: libseahorse/seahorse-add-keyserver.ui:65
-msgid "Host:"
-msgstr "Anfitrión:"
-
-#: libseahorse/seahorse-add-keyserver.ui:83 ssh/seahorse-ssh-upload.ui:50
-#: ssh/seahorse-ssh-upload.ui:117
-msgid "The host name or address of the server."
-msgstr "El nombre del equipo o la dirección del servidor."
-
-#: libseahorse/seahorse-add-keyserver.ui:98
-msgid ":"
-msgstr ":"
-
-#: libseahorse/seahorse-add-keyserver.ui:110
-msgid "The port to access the server on."
-msgstr "El puerto por el que acceder al servidor."
-
-#: libseahorse/seahorse-application.c:108
+#: libseahorse/seahorse-application.c:94
 msgid "Version of this application"
 msgstr "Versión de esta aplicación"
 
-#: libseahorse/seahorse-application.c:114
-#: libseahorse/seahorse-application.c:158
+#: libseahorse/seahorse-application.c:100
+#: libseahorse/seahorse-application.c:144
 msgid "- System Settings"
 msgstr ": configuración del sistema"
 
-#: libseahorse/seahorse-application.c:154
+#: libseahorse/seahorse-application.c:140
 msgid "Don't display a window"
 msgstr "No mostrar una ventana"
 
@@ -817,57 +896,7 @@ msgstr "No mostrar una ventana"
 msgid "Enter PIN or password for: %s"
 msgstr "Introducir el PIN o la contraseña para: %s"
 
-#: libseahorse/seahorse-prefs.c:63
-msgid "Not a valid Key Server address."
-msgstr "La dirección del servidor de claves no es válida."
-
-#: libseahorse/seahorse-prefs.c:64
-msgid ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-msgstr ""
-"Para obtener ayuda, contacte con su administrador de sistemas o el "
-"administrador del servidor de claves."
-
-#: libseahorse/seahorse-prefs.c:177
-msgid "URL"
-msgstr "URL"
-
-#: libseahorse/seahorse-prefs.c:347
-msgid "Custom"
-msgstr "Personalizado"
-
-#: libseahorse/seahorse-prefs.c:400
-msgid "None: Don’t publish keys"
-msgstr "Ninguno: no publicar claves"
-
-#: libseahorse/seahorse-prefs.ui:7
-msgid "Preferences"
-msgstr "Preferencias"
-
-#: libseahorse/seahorse-prefs.ui:50
-msgid "_Find keys via:"
-msgstr "_Buscar claves vía:"
-
-#: libseahorse/seahorse-prefs.ui:121
-msgid "_Publish keys to:"
-msgstr "_Publicar claves en:"
-
-#: libseahorse/seahorse-prefs.ui:133
-msgid "Automatically retrieve keys from _key servers"
-msgstr "Obtener _automáticamente las claves de los servidores de claves"
-
-#: libseahorse/seahorse-prefs.ui:150
-msgid "Automatically synchronize _modified keys with key servers"
-msgstr ""
-"Sincronizar automáticamente las claves _modificadas con los servidores de "
-"claves"
-
-#: libseahorse/seahorse-prefs.ui:176
-msgid "Key Servers"
-msgstr "Servidores de claves"
-
-#: libseahorse/seahorse-search-provider.c:184
+#: libseahorse/seahorse-search-provider.c:183
 msgid "The search provider is not loaded yet"
 msgstr "Todavía no se ha cargado el proveedor de búsqueda"
 
@@ -1084,6 +1113,7 @@ msgstr ""
 "nuevo."
 
 #: pgp/seahorse-gpgme-keyring.c:88
+#, c-format
 msgid "Wrong passphrase."
 msgstr "Frase de paso errónea."
 
@@ -1150,6 +1180,7 @@ msgid "_Resize"
 msgstr "_Redimensionar"
 
 #: pgp/seahorse-gpgme-photos.c:127
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -1165,7 +1196,7 @@ msgstr "Todos los archivos de imagen"
 msgid "All JPEG files"
 msgstr "Todos los archivos JPEG"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:288
+#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:286
 msgid "All files"
 msgstr "Todos los archivos"
 
@@ -1311,49 +1342,49 @@ msgstr "No se pudo comunicar con  el servidor «%s»: %s"
 msgid "HTTP Key Server"
 msgstr "Servidor de claves HTTP"
 
-#: pgp/seahorse-keyserver-results.c:168
+#: pgp/seahorse-keyserver-results.c:167
 msgid "Couldn’t import keys"
 msgstr "No se pudieron importar las claves"
 
-#: pgp/seahorse-keyserver-results.c:211
+#: pgp/seahorse-keyserver-results.c:210
 msgid "Importing keys from key servers"
 msgstr "Importando claves desde servidores de claves"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: pgp/seahorse-keyserver-results.c:237 src/seahorse-key-manager.c:501
+#: pgp/seahorse-keyserver-results.c:236 src/seahorse-key-manager.c:499
 msgid "_Remote"
 msgstr "_Remota"
 
-#: pgp/seahorse-keyserver-results.c:239
+#: pgp/seahorse-keyserver-results.c:238
 msgid "Close this window"
 msgstr "Cerrar esta ventana"
 
-#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:112
+#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:112
 msgid "_Find Remote Keys…"
 msgstr "_Buscar claves remotas…"
 
-#: pgp/seahorse-keyserver-results.c:244 pgp/seahorse-pgp-actions.c:113
+#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:113
 msgid "Search for keys on a key server"
 msgstr "Buscar claves en un servidor de claves"
 
-#: pgp/seahorse-keyserver-results.c:248 src/seahorse-key-manager.ui:195
+#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:195
 msgid "_Import"
 msgstr "_Importar"
 
-#: pgp/seahorse-keyserver-results.c:249
+#: pgp/seahorse-keyserver-results.c:248
 msgid "Import selected keys to local key ring"
 msgstr "Importar las claves seleccionadas en el depósito local"
 
-#: pgp/seahorse-keyserver-results.c:280
+#: pgp/seahorse-keyserver-results.c:279
 msgid "Remote Keys"
 msgstr "Claves remotas"
 
-#: pgp/seahorse-keyserver-results.c:282
+#: pgp/seahorse-keyserver-results.c:281
 #, c-format
 msgid "Remote Keys Containing “%s”"
 msgstr "Claves remotas que contengan «%s»"
 
-#: pgp/seahorse-keyserver-results.c:485
+#: pgp/seahorse-keyserver-results.c:484
 msgid "The search for keys failed."
 msgstr "Falló al buscar claves."
 
@@ -1389,23 +1420,23 @@ msgstr "Dónde buscar:"
 msgid "_Search"
 msgstr "_Buscar"
 
-#: pgp/seahorse-keyserver-sync.c:56
+#: pgp/seahorse-keyserver-sync.c:54
 msgid "Couldn’t publish keys to server"
 msgstr "No se pudieron publicar las claves al servidor"
 
-#: pgp/seahorse-keyserver-sync.c:75
+#: pgp/seahorse-keyserver-sync.c:73
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "No se pudieron obtener las claves desde el servidor: %s"
 
-#: pgp/seahorse-keyserver-sync.c:159
+#: pgp/seahorse-keyserver-sync.c:158
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d clave está seleccionada para sincronizar</b>"
 msgstr[1] "<b>%d claves están seleccionadas para sincronizar</b>"
 
-#: pgp/seahorse-keyserver-sync.c:239
+#: pgp/seahorse-keyserver-sync.c:237
 msgid "Synchronizing keys…"
 msgstr "Sincronizando claves…"
 
@@ -2055,7 +2086,6 @@ msgstr ""
 "mensaje."
 
 #: pgp/seahorse-signer.ui:7
-#| msgid "Sign Key"
 msgid "Choose Signing Key"
 msgstr "Elija la clave para firmar"
 
@@ -2257,87 +2287,87 @@ msgid "<b>Data to be imported:</b>"
 msgstr "<b>Datos que importar:</b>"
 
 #. The prompt
-#: src/seahorse-key-manager.c:242 ssh/operation.vala:322
+#: src/seahorse-key-manager.c:240 ssh/operation.vala:322
 msgid "Import Key"
 msgstr "Importar clave"
 
-#: src/seahorse-key-manager.c:254
+#: src/seahorse-key-manager.c:252
 msgid "All key files"
 msgstr "Todos los archivos de claves"
 
-#: src/seahorse-key-manager.c:355
+#: src/seahorse-key-manager.c:353
 msgid "Dropped text"
 msgstr "Texto soltado"
 
-#: src/seahorse-key-manager.c:391
+#: src/seahorse-key-manager.c:389
 msgid "Clipboard text"
 msgstr "Texto del portapapeles"
 
-#: src/seahorse-key-manager.c:502
+#: src/seahorse-key-manager.c:500
 msgid "_New"
 msgstr "Nueva"
 
-#: src/seahorse-key-manager.c:504
+#: src/seahorse-key-manager.c:502
 msgid "Close this program"
 msgstr "Cerrar este programa"
 
-#: src/seahorse-key-manager.c:505 src/seahorse-key-manager.c:507
+#: src/seahorse-key-manager.c:503 src/seahorse-key-manager.c:505
 msgid "_New…"
 msgstr "_Nueva…"
 
-#: src/seahorse-key-manager.c:506
+#: src/seahorse-key-manager.c:504
 msgid "Create a new key or item"
 msgstr "Crear una clave o elemento nuevo"
 
-#: src/seahorse-key-manager.c:508
+#: src/seahorse-key-manager.c:506
 msgid "Add a new key or item"
 msgstr "Añadir una clave o un elemento nuevo"
 
-#: src/seahorse-key-manager.c:509
+#: src/seahorse-key-manager.c:507
 msgid "_Import…"
 msgstr "_Importar…"
 
-#: src/seahorse-key-manager.c:510
+#: src/seahorse-key-manager.c:508
 msgid "Import from a file"
 msgstr "Importar desde un archivo"
 
-#: src/seahorse-key-manager.c:512
+#: src/seahorse-key-manager.c:510
 msgid "Import from the clipboard"
 msgstr "Importar desde el portapapeles"
 
-#: src/seahorse-key-manager.c:516
+#: src/seahorse-key-manager.c:514
 msgid "By _Keyring"
 msgstr "Por _depósito de claves"
 
-#: src/seahorse-key-manager.c:517
+#: src/seahorse-key-manager.c:515
 msgid "Show sidebar listing keyrings"
 msgstr "Mostrar la barra lateral listando los depósitos de claves"
 
-#: src/seahorse-key-manager.c:521
+#: src/seahorse-key-manager.c:519
 msgid "Show _Personal"
 msgstr "Mostrar p_ersonal"
 
-#: src/seahorse-key-manager.c:522
+#: src/seahorse-key-manager.c:520
 msgid "Only show personal keys, certificates and passwords"
 msgstr "Mostrar sólo las claves, certificados y contraseñas personales"
 
-#: src/seahorse-key-manager.c:523
+#: src/seahorse-key-manager.c:521
 msgid "Show _Trusted"
 msgstr "Mostrar c_onfiados"
 
-#: src/seahorse-key-manager.c:524
+#: src/seahorse-key-manager.c:522
 msgid "Only show trusted keys, certificates and passwords"
 msgstr "Mostrar sólo claves, certificados y contraseñas en las que se confía"
 
-#: src/seahorse-key-manager.c:525
+#: src/seahorse-key-manager.c:523
 msgid "Show _Any"
 msgstr "Mostrar cualq_uiera"
 
-#: src/seahorse-key-manager.c:526
+#: src/seahorse-key-manager.c:524
 msgid "Show all keys, certificates and passwords"
 msgstr "Mostrar todas las claves, certificados y contraseñas"
 
-#: src/seahorse-key-manager.c:745
+#: src/seahorse-key-manager.c:743
 msgid "Filter"
 msgstr "Filtro"
 
@@ -2373,10 +2403,6 @@ msgstr "_Bloquear"
 msgid "_Unlock"
 msgstr "_Desbloquear"
 
-#: src/seahorse-sidebar.c:965
-msgid "_Properties"
-msgstr "_Propiedades"
-
 #: ssh/actions.vala:26
 msgid "Configure Key for _Secure Shell…"
 msgstr "Configurar clave para Shell _segura…"
@@ -2404,8 +2430,6 @@ msgstr "¿Está seguro de que quiere eliminar la clave de shell segura «%s»?"
 
 #: ssh/deleter.vala:51
 #, c-format
-#| msgid "Are you sure you want to delete %d secure shell key?"
-#| msgid_plural "Are you sure you want to delete %d secure shell keys?"
 msgid "Are you sure you want to delete %u secure shell key?"
 msgid_plural "Are you sure you want to delete %u secure shell keys?"
 msgstr[0] "¿Está seguro de que quiere eliminar %u clave de shell segura?"
@@ -2442,7 +2466,6 @@ msgid "New Secure Shell Key"
 msgstr "Clave de shell segura nueva"
 
 #: ssh/generate.vala:143
-#| msgid "Couldn’t generate Secure Shell key"
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "No se pudo cargar la clave de shell segura recién generada"
 
@@ -2455,8 +2478,6 @@ msgid "Creating Secure Shell Key"
 msgstr "Crear la clave de shell segura"
 
 #: ssh/key-properties.vala:112
-#| msgctxt "Validity"
-#| msgid "Unknown"
 msgid "Unknown type"
 msgstr "Tipo desconocido"
 
@@ -2644,7 +2665,6 @@ msgid "Set Up Computer for SSH Connection"
 msgstr "Configurar equipo para conexión SSH"
 
 #: ssh/upload.vala:70
-#| msgid "_Set Up"
 msgid "Set Up"
 msgstr "Configurar"
 
@@ -3523,12 +3543,6 @@ msgstr "Configurando las claves de shell seguras…"
 #~ "Marginal\n"
 #~ "Completa\n"
 #~ "Última"
-
-#~ msgid "_About"
-#~ msgstr "Acerca _de"
-
-#~ msgid "_Copy"
-#~ msgstr "_Copiar"
 
 #~ msgid "Unavailable Key"
 #~ msgstr "Clave no disponible"
