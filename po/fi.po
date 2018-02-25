@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-11-25 02:42+0000\n"
-"PO-Revision-Date: 2018-01-12 19:14+0200\n"
+"POT-Creation-Date: 2018-02-23 12:15+0000\n"
+"PO-Revision-Date: 2018-02-25 18:17+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -26,16 +26,33 @@ msgstr ""
 "X-Generator: Poedit 1.8.7.1\n"
 "X-POT-Import-Date: 2012-02-19 15:25:28+0000\n"
 
-#: common/catalog.vala:257
+#: common/add-keyserver-dialog.vala:32
+msgid "Add Key Server"
+msgstr "Lisää avainpalvelin"
+
+#: common/add-keyserver-dialog.vala:64
+msgid "Custom"
+msgstr "Oma määrittely"
+
+#. Buttons
+#: common/add-keyserver-dialog.vala:68
+msgid "Cancel"
+msgstr "Peru"
+
+#: common/add-keyserver-dialog.vala:69
+msgid "Save"
+msgstr "Tallenna"
+
+#: common/catalog.vala:258
 msgid "Contributions:"
 msgstr "Avustajat:"
 
-#: common/catalog.vala:285 data/seahorse.desktop.in.in:3
-#: src/seahorse-key-manager.c:660
+#: common/catalog.vala:286 data/seahorse.desktop.in.in:3
+#: src/seahorse-key-manager.c:658
 msgid "Passwords and Keys"
 msgstr "Salasanat ja salausavaimet"
 
-#: common/catalog.vala:287
+#: common/catalog.vala:288
 msgid "translator-credits"
 msgstr ""
 "Jarmo Kielosto, 2000\n"
@@ -46,92 +63,110 @@ msgstr ""
 "\n"
 "https://l10n.gnome.org/teams/fi/"
 
-#: common/catalog.vala:290
+#: common/catalog.vala:291
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse-projektin verkkosivusto"
 
-#: common/catalog.vala:308
+#: common/catalog.vala:309
 msgid "Cannot delete"
 msgstr "Poistaminen ei onnistunut"
 
-#: common/catalog.vala:331 libseahorse/seahorse-key-manager-store.c:440
+#: common/catalog.vala:332 common/key-manager-store.vala:427
 msgid "Couldn’t export keys"
 msgstr "Avaimia ei voitu viedä"
 
-#: common/catalog.vala:342
+#: common/catalog.vala:343
 msgid "Couldn’t export data"
 msgstr "Tietojen vienti ei onnistunut"
 
-#: common/catalog.vala:358 libseahorse/seahorse-widget.c:461
+#: common/catalog.vala:359 libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Ohjetta ei voitu näyttää: %s"
 
 #. Top menu items
-#: common/catalog.vala:364
+#: common/catalog.vala:365
 msgid "_File"
 msgstr "_Tiedosto"
 
-#: common/catalog.vala:365
+#: common/catalog.vala:366
 msgid "E_xport…"
 msgstr "_Vie…"
 
-#: common/catalog.vala:366
+#: common/catalog.vala:367
 msgid "Export to a file"
 msgstr "Vie tiedostoon"
 
-#: common/catalog.vala:367
+#: common/catalog.vala:368
 msgid "_Edit"
 msgstr "_Muokkaa"
+
+#: common/catalog.vala:369
+msgid "_Copy"
+msgstr "_Kopioi"
 
 #: common/catalog.vala:370
 msgid "Copy to the clipboard"
 msgstr "Kopioi leikepöydälle"
 
-#: common/catalog.vala:371 pkcs11/pkcs11-properties.vala:201
-#: src/seahorse-sidebar.c:954
+#. Translators: This text refers to deleting an item from its type's backing store
+#: common/catalog.vala:372 common/delete-dialog.vala:91
+#: pkcs11/pkcs11-properties.vala:201 src/seahorse-sidebar.c:954
 msgid "_Delete"
 msgstr "_Poista"
 
-#: common/catalog.vala:372
+#: common/catalog.vala:373
 msgid "Delete selected items"
 msgstr "Poista valitut kohteet"
 
-#: common/catalog.vala:374
+#: common/catalog.vala:374 common/catalog.vala:376 src/seahorse-sidebar.c:965
+msgid "_Properties"
+msgstr "_Ominaisuudet"
+
+#: common/catalog.vala:375
 msgid "Show the properties of this item"
 msgstr "Näytä kohteen ominaisuudet"
 
-#: common/catalog.vala:376
+#: common/catalog.vala:377
 msgid "Show the properties of this keyring"
 msgstr "Näytä avainnipun ominaisuudet"
 
-#: common/catalog.vala:377
+#: common/catalog.vala:378
 msgid "Prefere_nces"
 msgstr "_Asetukset"
 
-#: common/catalog.vala:378
+#: common/catalog.vala:379
 msgid "Change preferences for this program"
 msgstr "Muuta ohjelman asetuksia"
 
-#: common/catalog.vala:379
+#: common/catalog.vala:380
 msgid "_View"
 msgstr "_Näytä"
 
-#: common/catalog.vala:380
+#: common/catalog.vala:381
 msgid "_Help"
 msgstr "O_hje"
 
 #: common/catalog.vala:382
+msgid "_About"
+msgstr "_Tietoja"
+
+#: common/catalog.vala:383
 msgid "About this program"
 msgstr "Tietoja ohjelmasta"
 
-#: common/catalog.vala:383
+#: common/catalog.vala:384
 msgid "_Contents"
 msgstr "_Sisältö"
 
-#: common/catalog.vala:384
+#: common/catalog.vala:385
 msgid "Show Seahorse help"
 msgstr "Näytä Seahorsen ohje"
+
+#: common/delete-dialog.vala:87 common/exportable.vala:191
+#: common/passphrase-prompt.vala:117
+msgid "_Cancel"
+msgstr "_Peru"
 
 #: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:1427
 msgid "Export"
@@ -142,10 +177,82 @@ msgstr "Vie"
 msgid "Confirm:"
 msgstr "Vahvista:"
 
+#: common/passphrase-prompt.vala:121
+msgid "_OK"
+msgstr "_OK"
+
 #: common/passphrase-prompt.vala:145 gkr/seahorse-gkr-item-properties.ui:246
 #: ssh/seahorse-ssh-askpass.c:117
 msgid "Password:"
 msgstr "Salasana:"
+
+#: common/prefs.vala:42
+msgid "Preferences"
+msgstr "Asetukset"
+
+#: common/prefs.vala:150
+msgid "None: Don’t publish keys"
+msgstr "Ei mitään: älä julkaise avaimia"
+
+#: common/prefs.vala:166
+msgid "Not a valid Key Server address."
+msgstr "Arvo ei ole kelvollinen avainpalvelimen osoite."
+
+#: common/prefs.vala:167
+msgid ""
+"For help contact your system administrator or the administrator of the key "
+"server."
+msgstr ""
+"Pyydä apua järjestelmäsi ylläpitäjältä tai avainpalvelimen ylläpitäjältä."
+
+#: common/prefs.vala:236
+msgid "URL"
+msgstr "URL"
+
+#: common/seahorse-add-keyserver.ui:12
+msgid "initial temporary item"
+msgstr "ensimmäinen tilapäinen kohde"
+
+#: common/seahorse-add-keyserver.ui:34
+msgid "Key Server Type:"
+msgstr "Avainpalvelimen tyyppi:"
+
+#: common/seahorse-add-keyserver.ui:58
+msgid "Host:"
+msgstr "Verkkonimi:"
+
+#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:50
+#: ssh/seahorse-ssh-upload.ui:117
+msgid "The host name or address of the server."
+msgstr "Palvelimen verkkonimi tai osoite."
+
+#: common/seahorse-add-keyserver.ui:93
+msgid ":"
+msgstr ":"
+
+#: common/seahorse-add-keyserver.ui:105
+msgid "The port to access the server on."
+msgstr "Portti, jossa palvelin on."
+
+#: common/seahorse-prefs.ui:34
+msgid "_Find keys via:"
+msgstr "_Etsi uusia avaimia lähteestä:"
+
+#: common/seahorse-prefs.ui:105
+msgid "_Publish keys to:"
+msgstr "J_ulkaise avaimet:"
+
+#: common/seahorse-prefs.ui:128
+msgid "Automatically retrieve keys from _key servers"
+msgstr "Nouda avaimet automaattisesti avain_palvelimilta"
+
+#: common/seahorse-prefs.ui:142
+msgid "Automatically synchronize _modified keys with key servers"
+msgstr "Synkronoi _muokatut avaimet automaattisesti avainpalvelimille"
+
+#: common/seahorse-prefs.ui:159
+msgid "Key Servers"
+msgstr "Avainpalvelimet"
 
 #. TRANSLATORS: this date (Year-month-day) is used to display
 #. * when something happened, e.g. when a key was created. Feel
@@ -229,39 +336,38 @@ msgstr ""
 
 #. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/seahorse.desktop.in.in:11
-#| msgid "Seahorse"
 msgid "seahorse"
 msgstr "seahorse"
 
-#: gkr/gkr-backend.vala:39
+#: gkr/gkr-backend.vala:43
 msgid "Passwords"
 msgstr "Salasanat"
 
-#: gkr/gkr-backend.vala:43
+#: gkr/gkr-backend.vala:47
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Tallennetut henkilökohtaiset salasanat, pääsyoikeudet ja salaisuudet"
 
-#: gkr/gkr-backend.vala:251
+#: gkr/gkr-backend.vala:255
 msgid "New password keyring"
 msgstr "Uusi salasana-avainnippu"
 
-#: gkr/gkr-backend.vala:252 gkr/gkr-backend.vala:259
+#: gkr/gkr-backend.vala:256 gkr/gkr-backend.vala:263
 msgid "Used to store application and network passwords"
 msgstr "Käytetään tallentamaan ohjelmien ja verkon salasanoja"
 
-#: gkr/gkr-backend.vala:253
+#: gkr/gkr-backend.vala:257
 msgid "New password…"
 msgstr "Uusi salasana…"
 
-#: gkr/gkr-backend.vala:254 gkr/gkr-backend.vala:261
+#: gkr/gkr-backend.vala:258 gkr/gkr-backend.vala:265
 msgid "Safely store a password or secret."
 msgstr "Tallenna salasana tai salaisuus turvallisesti."
 
-#: gkr/gkr-backend.vala:258
+#: gkr/gkr-backend.vala:262
 msgid "Password Keyring"
 msgstr "Salasanojen avainnippu"
 
-#: gkr/gkr-backend.vala:260
+#: gkr/gkr-backend.vala:264
 msgid "Stored Password"
 msgstr "Tallennettu salasana"
 
@@ -763,45 +869,16 @@ msgstr "%04d-%02d-%02d"
 msgid "%u:%u:%u"
 msgstr "%u.%u.%u"
 
-#: libseahorse/seahorse-add-keyserver.ui:12
-msgid "initial temporary item"
-msgstr "ensimmäinen tilapäinen kohde"
-
-#: libseahorse/seahorse-add-keyserver.ui:18
-msgid "Add Key Server"
-msgstr "Lisää avainpalvelin"
-
-#: libseahorse/seahorse-add-keyserver.ui:41
-msgid "Key Server Type:"
-msgstr "Avainpalvelimen tyyppi:"
-
-#: libseahorse/seahorse-add-keyserver.ui:65
-msgid "Host:"
-msgstr "Verkkonimi:"
-
-#: libseahorse/seahorse-add-keyserver.ui:83 ssh/seahorse-ssh-upload.ui:50
-#: ssh/seahorse-ssh-upload.ui:117
-msgid "The host name or address of the server."
-msgstr "Palvelimen verkkonimi tai osoite."
-
-#: libseahorse/seahorse-add-keyserver.ui:98
-msgid ":"
-msgstr ":"
-
-#: libseahorse/seahorse-add-keyserver.ui:110
-msgid "The port to access the server on."
-msgstr "Portti, jossa palvelin on."
-
-#: libseahorse/seahorse-application.c:108
+#: libseahorse/seahorse-application.c:94
 msgid "Version of this application"
 msgstr "Tämän ohjelman versio"
 
-#: libseahorse/seahorse-application.c:114
-#: libseahorse/seahorse-application.c:158
+#: libseahorse/seahorse-application.c:100
+#: libseahorse/seahorse-application.c:144
 msgid "- System Settings"
 msgstr "- Järjestelmän asetukset"
 
-#: libseahorse/seahorse-application.c:154
+#: libseahorse/seahorse-application.c:140
 msgid "Don't display a window"
 msgstr "Älä näytä ikkunaa"
 
@@ -810,54 +887,7 @@ msgstr "Älä näytä ikkunaa"
 msgid "Enter PIN or password for: %s"
 msgstr "Syötä PIN tai salasana: %s"
 
-#: libseahorse/seahorse-prefs.c:63
-msgid "Not a valid Key Server address."
-msgstr "Arvo ei ole kelvollinen avainpalvelimen osoite."
-
-#: libseahorse/seahorse-prefs.c:64
-msgid ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-msgstr ""
-"Pyydä apua järjestelmäsi ylläpitäjältä tai avainpalvelimen ylläpitäjältä."
-
-#: libseahorse/seahorse-prefs.c:177
-msgid "URL"
-msgstr "URL"
-
-#: libseahorse/seahorse-prefs.c:347
-msgid "Custom"
-msgstr "Oma määrittely"
-
-#: libseahorse/seahorse-prefs.c:400
-msgid "None: Don’t publish keys"
-msgstr "Ei mitään: älä julkaise avaimia"
-
-#: libseahorse/seahorse-prefs.ui:7
-msgid "Preferences"
-msgstr "Asetukset"
-
-#: libseahorse/seahorse-prefs.ui:50
-msgid "_Find keys via:"
-msgstr "_Etsi uusia avaimia lähteestä:"
-
-#: libseahorse/seahorse-prefs.ui:121
-msgid "_Publish keys to:"
-msgstr "J_ulkaise avaimet:"
-
-#: libseahorse/seahorse-prefs.ui:133
-msgid "Automatically retrieve keys from _key servers"
-msgstr "Nouda avaimet automaattisesti avain_palvelimilta"
-
-#: libseahorse/seahorse-prefs.ui:150
-msgid "Automatically synchronize _modified keys with key servers"
-msgstr "Synkronoi _muokatut avaimet automaattisesti avainpalvelimille"
-
-#: libseahorse/seahorse-prefs.ui:176
-msgid "Key Servers"
-msgstr "Avainpalvelimet"
-
-#: libseahorse/seahorse-search-provider.c:184
+#: libseahorse/seahorse-search-provider.c:183
 msgid "The search provider is not loaded yet"
 msgstr "Hakupalvelua ei ole ladattu vielä"
 
@@ -1071,6 +1101,7 @@ msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Syötit väärän salasanan jo kolmannen kerran. Yritä uudelleen."
 
 #: pgp/seahorse-gpgme-keyring.c:88
+#, c-format
 msgid "Wrong passphrase."
 msgstr "Väärä tunnuslause."
 
@@ -1138,6 +1169,7 @@ msgid "_Resize"
 msgstr "_Muuta kokoa"
 
 #: pgp/seahorse-gpgme-photos.c:127
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -1153,7 +1185,7 @@ msgstr "Kaikki kuvatiedostot"
 msgid "All JPEG files"
 msgstr "Kaikki JPEG-tiedostot"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:288
+#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:286
 msgid "All files"
 msgstr "Kaikki tiedostot"
 
@@ -1298,49 +1330,49 @@ msgstr "Palvelimeen “%s” ei saatu yhteyttä: %s"
 msgid "HTTP Key Server"
 msgstr "HTTP-avainpalvelin"
 
-#: pgp/seahorse-keyserver-results.c:168
+#: pgp/seahorse-keyserver-results.c:167
 msgid "Couldn’t import keys"
 msgstr "Avaimia ei voitu tuoda"
 
-#: pgp/seahorse-keyserver-results.c:211
+#: pgp/seahorse-keyserver-results.c:210
 msgid "Importing keys from key servers"
 msgstr "Tuodaan avaimia avainpalvelimilta"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: pgp/seahorse-keyserver-results.c:237 src/seahorse-key-manager.c:501
+#: pgp/seahorse-keyserver-results.c:236 src/seahorse-key-manager.c:499
 msgid "_Remote"
 msgstr "_Verkko"
 
-#: pgp/seahorse-keyserver-results.c:239
+#: pgp/seahorse-keyserver-results.c:238
 msgid "Close this window"
 msgstr "Sulje tämä ikkuna"
 
-#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:112
+#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:112
 msgid "_Find Remote Keys…"
 msgstr "Etsi avaimia verkosta…"
 
-#: pgp/seahorse-keyserver-results.c:244 pgp/seahorse-pgp-actions.c:113
+#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:113
 msgid "Search for keys on a key server"
 msgstr "Etsi avaimia avainpalvelimelta"
 
-#: pgp/seahorse-keyserver-results.c:248 src/seahorse-key-manager.ui:195
+#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:195
 msgid "_Import"
 msgstr "_Tuo"
 
-#: pgp/seahorse-keyserver-results.c:249
+#: pgp/seahorse-keyserver-results.c:248
 msgid "Import selected keys to local key ring"
 msgstr "Tuo valitut avaimet paikalliseen avainnippuun"
 
-#: pgp/seahorse-keyserver-results.c:280
+#: pgp/seahorse-keyserver-results.c:279
 msgid "Remote Keys"
 msgstr "Avain verkosta"
 
-#: pgp/seahorse-keyserver-results.c:282
+#: pgp/seahorse-keyserver-results.c:281
 #, c-format
 msgid "Remote Keys Containing “%s”"
 msgstr "Avain verkosta, joka sisältää tunnisteen “%s”"
 
-#: pgp/seahorse-keyserver-results.c:485
+#: pgp/seahorse-keyserver-results.c:484
 msgid "The search for keys failed."
 msgstr "Avainten etsintä epäonnistui."
 
@@ -1376,23 +1408,23 @@ msgstr "Mistä avaimia etsitään:"
 msgid "_Search"
 msgstr "_Etsi"
 
-#: pgp/seahorse-keyserver-sync.c:56
+#: pgp/seahorse-keyserver-sync.c:54
 msgid "Couldn’t publish keys to server"
 msgstr "Avaimia ei voitu julkaista palvelimelle"
 
-#: pgp/seahorse-keyserver-sync.c:75
+#: pgp/seahorse-keyserver-sync.c:73
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Avaimia ei voitu hakea palvelimelta: %s"
 
-#: pgp/seahorse-keyserver-sync.c:159
+#: pgp/seahorse-keyserver-sync.c:158
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d avain on valittu synkronoitavaksi</b>"
 msgstr[1] "<b>%d avainta on valittu synkronoitavaksi</b>"
 
-#: pgp/seahorse-keyserver-sync.c:239
+#: pgp/seahorse-keyserver-sync.c:237
 msgid "Synchronizing keys…"
 msgstr "Synkronoidaan avaimia…"
 
@@ -2240,87 +2272,87 @@ msgid "<b>Data to be imported:</b>"
 msgstr "<b>Tuotavat tiedot:</b>"
 
 #. The prompt
-#: src/seahorse-key-manager.c:242 ssh/operation.vala:322
+#: src/seahorse-key-manager.c:240 ssh/operation.vala:322
 msgid "Import Key"
 msgstr "Tuo avain"
 
-#: src/seahorse-key-manager.c:254
+#: src/seahorse-key-manager.c:252
 msgid "All key files"
 msgstr "Kaikki avaintiedostot"
 
-#: src/seahorse-key-manager.c:355
+#: src/seahorse-key-manager.c:353
 msgid "Dropped text"
 msgstr "Pudotettu teksti"
 
-#: src/seahorse-key-manager.c:391
+#: src/seahorse-key-manager.c:389
 msgid "Clipboard text"
 msgstr "Leikepöydän teksti"
 
-#: src/seahorse-key-manager.c:502
+#: src/seahorse-key-manager.c:500
 msgid "_New"
 msgstr "_Uusi"
 
-#: src/seahorse-key-manager.c:504
+#: src/seahorse-key-manager.c:502
 msgid "Close this program"
 msgstr "Sulje ohjelma"
 
-#: src/seahorse-key-manager.c:505 src/seahorse-key-manager.c:507
+#: src/seahorse-key-manager.c:503 src/seahorse-key-manager.c:505
 msgid "_New…"
 msgstr "_Uusi…"
 
-#: src/seahorse-key-manager.c:506
+#: src/seahorse-key-manager.c:504
 msgid "Create a new key or item"
 msgstr "Luo uusi avain tai kohde"
 
-#: src/seahorse-key-manager.c:508
+#: src/seahorse-key-manager.c:506
 msgid "Add a new key or item"
 msgstr "Lisää uusi avain tai kohde"
 
-#: src/seahorse-key-manager.c:509
+#: src/seahorse-key-manager.c:507
 msgid "_Import…"
 msgstr "_Tuo…"
 
-#: src/seahorse-key-manager.c:510
+#: src/seahorse-key-manager.c:508
 msgid "Import from a file"
 msgstr "Tuo tiedostosta"
 
-#: src/seahorse-key-manager.c:512
+#: src/seahorse-key-manager.c:510
 msgid "Import from the clipboard"
 msgstr "Tuo leikepöydältä"
 
-#: src/seahorse-key-manager.c:516
+#: src/seahorse-key-manager.c:514
 msgid "By _Keyring"
 msgstr "_Avainnipun mukaan"
 
-#: src/seahorse-key-manager.c:517
+#: src/seahorse-key-manager.c:515
 msgid "Show sidebar listing keyrings"
 msgstr "Näytä avainniput listaava sivupalkki"
 
-#: src/seahorse-key-manager.c:521
+#: src/seahorse-key-manager.c:519
 msgid "Show _Personal"
 msgstr "Näytä _henkilökohtaiset"
 
-#: src/seahorse-key-manager.c:522
+#: src/seahorse-key-manager.c:520
 msgid "Only show personal keys, certificates and passwords"
 msgstr "Näytä vain henkilökohtaiset avaimet, varmenteet ja salasanat"
 
-#: src/seahorse-key-manager.c:523
+#: src/seahorse-key-manager.c:521
 msgid "Show _Trusted"
 msgstr "Näytä _luotetut"
 
-#: src/seahorse-key-manager.c:524
+#: src/seahorse-key-manager.c:522
 msgid "Only show trusted keys, certificates and passwords"
 msgstr "Näytä vain luotetut avaimet, varmenteet ja salasanat"
 
-#: src/seahorse-key-manager.c:525
+#: src/seahorse-key-manager.c:523
 msgid "Show _Any"
 msgstr "Näytä _mikä tahansa"
 
-#: src/seahorse-key-manager.c:526
+#: src/seahorse-key-manager.c:524
 msgid "Show all keys, certificates and passwords"
 msgstr "Näytä kaikki avaimet, varmenteet ja salasanat"
 
-#: src/seahorse-key-manager.c:745
+#: src/seahorse-key-manager.c:743
 msgid "Filter"
 msgstr "Suodata"
 
@@ -2355,10 +2387,6 @@ msgstr "_Lukitse"
 #: src/seahorse-sidebar.c:946
 msgid "_Unlock"
 msgstr "_Avaa lukitus"
-
-#: src/seahorse-sidebar.c:965
-msgid "_Properties"
-msgstr "_Ominaisuudet"
 
 #: ssh/actions.vala:26
 msgid "Configure Key for _Secure Shell…"
