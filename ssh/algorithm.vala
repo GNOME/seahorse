@@ -24,7 +24,9 @@
 public enum Seahorse.Ssh.Algorithm {
     UNKNOWN,
     RSA,
-    DSA;
+    DSA,
+    ECDSA,
+    ED25519;
 
     /**
      * Returns a (non-localized) string representation.
@@ -39,6 +41,10 @@ public enum Seahorse.Ssh.Algorithm {
                 return "RSA";
             case DSA:
                 return "DSA";
+            case ECDSA:
+                return "ECDSA";
+            case ED25519:
+                return "ED25519";
             default:
                 assert_not_reached ();
         };
@@ -60,6 +66,10 @@ public enum Seahorse.Ssh.Algorithm {
             case "dsa":
             case "dss":
                 return DSA;
+            case "ecdsa":
+                return ECDSA;
+            case "ed25519":
+                return ED25519;
             default:
                 return UNKNOWN;
         }
@@ -81,6 +91,12 @@ public enum Seahorse.Ssh.Algorithm {
 
         if (("dsa" in str_down) || ("dss" in str_down))
             return DSA;
+
+        if ("ecdsa" in str_down)
+            return ECDSA;
+
+        if ("ed25519" in str_down)
+            return ED25519;
 
         return UNKNOWN;
     }
