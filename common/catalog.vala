@@ -107,8 +107,6 @@ public abstract class Catalog : Gtk.Window {
 		this._edit_copy = actions.get_action("edit-export-clipboard");
 		this._file_export = actions.get_action("file-export");
 		this._ui_manager.insert_action_group (actions, 0);
-
-		Seahorse.Application.get().add_window(this);
 	}
 
 	public override void dispose() {
@@ -131,7 +129,6 @@ public abstract class Catalog : Gtk.Window {
 			this.get_size(out width, out height);
 			this._settings.set_int("width", width);
 			this._settings.set_int("height", height);
-			Seahorse.Application.get().remove_window (this);
 		}
 
 		base.dispose();

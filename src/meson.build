@@ -1,39 +1,54 @@
+search_provider_src = gnome.gdbus_codegen('seahorse-shell-search-provider-generated',
+  'org.gnome.ShellSearchProvider2.xml',
+  interface_prefix : 'org.gnome.',
+  namespace : 'Seahorse',
+)
+
 seahorse_sources = [
-  'seahorse-generate-select.c',
-  'seahorse-import-dialog.c',
-  'seahorse-key-manager.c',
-  'seahorse-main.c',
-  'seahorse-sidebar.c',
-  resources_src,
+  'application.vala',
+  'generate-select.vala',
+  'import-dialog.vala',
+  'key-manager.vala',
+  'main.vala',
+  'search-provider.vala',
+  'sidebar.vala',
+
+  # resources_src,
+  search_provider_src,
 ]
 
 seahorse_dependencies = [
   glib_deps,
   gtk,
-  gcr,
-  config,
+  libsecret,
   common_dep,
   libseahorse_dep,
+  gkr_dep,
+  ssh_dep,
 ]
 
 seahorse_linkedlibs = [
   libeggdatetime_lib,
   libtreemultidnd_lib,
-  gkr_lib,
-  ssh_lib,
+]
+
+seahorse_vala_flags = [
 ]
 
 if with_pgp
-  seahorse_linkedlibs += pgp_lib
+  seahorse_dependencies += pgp_dep
+  seahorse_vala_flags += [ '-D', 'WITH_PGP' ]
 endif
 if with_pkcs11
-  seahorse_linkedlibs += pkcs11_lib
+  seahorse_dependencies += pkcs11_dep
+  seahorse_vala_flags += [ '-D', 'WITH_PKCS11' ]
 endif
 
 
 seahorse_exe = executable('seahorse',
   seahorse_sources,
   dependencies: seahorse_dependencies,
+  vala_args: seahorse_vala_flags,
   link_with: seahorse_linkedlibs,
   install: true,
 )

@@ -24,3 +24,8 @@ pkcs11_lib = static_library('seahorse-pkcs11',
   pkcs11_sources,
   dependencies: pkcs11_deps,
 )
+
+pkcs11_dep = declare_dependency(
+  link_with: pkcs11_lib,
+  include_directories: include_directories('.'),
+)
