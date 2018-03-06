@@ -23,3 +23,8 @@ gkr_lib = static_library('seahorse-gkr',
   gkr_sources,
   dependencies: gkr_dependencies,
 )
+
+gkr_dep = declare_dependency(
+  link_with: gkr_lib,
+  include_directories: include_directories('.'),
+)

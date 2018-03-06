@@ -18,6 +18,7 @@ ssh_sources = [
 ssh_dependencies = [
   glib_deps,
   gcr,
+  gcr_ui,
   posix,
   gtk,
   common_dep,

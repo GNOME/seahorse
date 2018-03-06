@@ -4,13 +4,20 @@ namespace Config
 	public const string PKGDATADIR;
 
 	public const string EXECDIR;
+	public const string LOCALEDIR;
 
 	public const string VERSION;
 	public const string PACKAGE;
+	public const string PACKAGE_STRING;
 	public const string GETTEXT_PACKAGE;
 
 	public const string SSH_PATH;
 	public const string SSH_KEYGEN_PATH;
+
+	public const string GNUPG;
+	public const int GPG_MAJOR;
+	public const int GPG_MINOR;
+	public const int GPG_MICRO;
 }
 
 /*
@@ -21,10 +28,8 @@ namespace Config
 
 namespace Seahorse {
 
-[CCode (cheader_filename = "libseahorse/seahorse-application.h")]
-namespace Application {
-	public unowned Gtk.Application @get();
-}
+[CCode (cheader_filename = "data/seahorse-resources.h")]
+public void register_resource();
 
 [CCode (cheader_filename = "libseahorse/seahorse-util.h")]
 public static GLib.HashFunc<ulong?> ulong_hash;
@@ -43,10 +48,15 @@ namespace Progress {
 	public void show(GLib.Cancellable? cancellable, string title, bool delayed);
 }
 
+[CCode (cheader_filename = "pgp/seahorse-pgp-backend.h")]
+namespace Pgp.Backend {
+	public void initialize();
+}
 }
 
 namespace Egg {
-	namespace TreeMultiDrag {
-		public void add_drag_support(Gtk.TreeView view);
-	}
+[CCode (cheader_filename = "libegg/eggtreemultidnd.h")]
+namespace TreeMultiDrag {
+	public void add_drag_support(Gtk.TreeView view);
+}
 }

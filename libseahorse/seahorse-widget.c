@@ -135,8 +135,8 @@ seahorse_widget_constructed (GObject *object)
 		widgets = g_hash_table_new ((GHashFunc)g_str_hash, (GCompareFunc)g_str_equal);
 	g_hash_table_insert (widgets, g_strdup (self->name), self);
 
-	gtk_application_add_window (seahorse_application_get (),
-	                            GTK_WINDOW (seahorse_widget_get_widget (self, self->name)));
+	/* gtk_application_add_window (seahorse_application_get (), */
+	/*                             GTK_WINDOW (seahorse_widget_get_widget (self, self->name))); */
 }
 
 /**
@@ -224,8 +224,8 @@ object_finalize (GObject *gobject)
     	}
     }
 
-	gtk_application_remove_window (seahorse_application_get (),
-	                               GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)));
+	/* gtk_application_remove_window (seahorse_application_get (), */
+	/*                                GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name))); */
 
     if (seahorse_widget_get_widget (swidget, swidget->name)) {
         gtk_widget_destroy (GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name)));
