@@ -436,7 +436,7 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
 
     public static GLib.Object? get_object_from_path (Gtk.TreeView view, Gtk.TreePath? path) {
         Gtk.TreeIter? iter;
-        if (view.model.get_iter (out iter, path))
+        if (!view.model.get_iter (out iter, path))
             return null;
         return ((Gcr.CollectionModel) view.model).object_for_iter(iter);
     }
