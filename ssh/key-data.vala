@@ -73,7 +73,7 @@ public class Seahorse.Ssh.KeyData : GLib.Object {
 
         result.algo = Algorithm.guess_from_string(type);
         if (result.algo == Algorithm.UNKNOWN)
-            throw new Error.GENERAL("Key doesn't have a valid type.");
+            throw new Error.GENERAL("Key doesn't have a valid type (%s).".printf(type));
 
         // Prepare for decoding
         string rest = type_rest[1];
