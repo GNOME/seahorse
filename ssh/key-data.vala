@@ -63,7 +63,7 @@ public class Seahorse.Ssh.KeyData : GLib.Object {
         result.rawdata = no_leading;
 
         // Get the type
-        string[] type_rest = no_leading.split(" ", 2);
+        string[] type_rest = no_leading.split_set(" \t", 2);
         if (type_rest.length != 2)
             throw new Error.GENERAL("Can't distinguish type from data (space missing).");
 
@@ -79,7 +79,7 @@ public class Seahorse.Ssh.KeyData : GLib.Object {
         string rest = type_rest[1];
         if (rest == "")
             throw new Error.GENERAL("Key doesn't have any data.");
-        string[] data_comment = rest.split(" ", 2);
+        string[] data_comment = rest.split_set(" \t", 2);
 
         // Decode it, and parse binary stuff
         uchar[] bytes = Base64.decode(data_comment[0].strip());
