@@ -130,6 +130,9 @@ public class Seahorse.Ssh.KeyData : GLib.Object {
                 uint n = ((len - 50) * 8) / 3;
                 return ((n / 64) + (((n % 64) > 32) ? 1 : 0)) * 64; // round to 64
 
+            case Algorithm.ED25519:
+                return 256;
+
             default:
                 return 0;
         }
