@@ -30,7 +30,8 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
 
     private Source source;
 
-    private Gtk.SpinButton bits_spin_button;
+    private Gtk.Grid details_grid;
+    private KeyLengthChooser key_length_chooser;
     private Gtk.Entry email_entry;
     private Gtk.ComboBoxText algorithm_combo_box;
     private Gtk.Button create_with_setup_button;
@@ -46,7 +47,10 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
 
         load_ui();
 
-        // on_change() gets called, bits entry is setup
+        this.key_length_chooser = new KeyLengthChooser();
+        this.details_grid.attach(this.key_length_chooser, 1, 1);
+
+        // on_algo_changed() gets called, bits chooser is setup
         algorithm_combo_box.set_active(0);
     }
 
@@ -80,27 +84,21 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
         Gtk.Widget actions = (Gtk.Widget) builder.get_object("action_area");
         ((Gtk.Container)this.get_action_area()).add(actions);
 
-        this.bits_spin_button = (Gtk.SpinButton) builder.get_object("bits-spin-button");
+        this.details_grid = (Gtk.Grid) builder.get_object("details_grid");
         this.email_entry = (Gtk.Entry) builder.get_object("email-entry");
         this.algorithm_combo_box = (Gtk.ComboBoxText) builder.get_object("algorithm-combo-box");
         this.create_no_setup_button = (Gtk.Button) builder.get_object("create-no-setup");
         this.create_with_setup_button = (Gtk.Button) builder.get_object("create-with-setup");
 
         // Signals
-        this.algorithm_combo_box.changed.connect(on_change);
+        this.algorithm_combo_box.changed.connect(on_algo_changed);
         this.create_no_setup_button.clicked.connect((b) => create_key(false));
         this.create_with_setup_button.clicked.connect((b) => create_key(true));
     }
 
-    private void on_change(Gtk.ComboBox combo) {
+    private void on_algo_changed(Gtk.ComboBox combo) {
         string t = algorithm_combo_box.get_active_text();
-        if (Algorithm.from_string(t) == Algorithm.DSA) {
-           this.bits_spin_button.set_value(DEFAULT_DSA_SIZE);
-           this.bits_spin_button.sensitive = false;
-        } else {
-           this.bits_spin_button.set_value(DEFAULT_RSA_SIZE);
-           this.bits_spin_button.sensitive = true;
-        }
+        this.key_length_chooser.algorithm = Algorithm.from_string(t);
     }
 
     private void create_key(bool upload) {
@@ -112,12 +110,7 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
         Algorithm type = Algorithm.from_string(t);
         assert(type != Algorithm.UNKNOWN);
 
-        // The number of bits
-        uint bits = this.bits_spin_button.get_value_as_int();
-        if (bits < 512 || bits > 8192) {
-            message("Invalid key size: %s defaulting to 2048", t);
-            bits = 2048;
-        }
+        uint bits = this.key_length_chooser.get_length();
 
         // The filename
         string filename = this.source.new_filename_for_algorithm(type);

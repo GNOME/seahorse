@@ -7,6 +7,7 @@ ssh_sources = [
   'exporter.vala',
   'generate.vala',
   'key-data.vala',
+  'key-length-chooser.vala',
   'key-properties.vala',
   'key.vala',
   'operation.vala',

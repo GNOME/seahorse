@@ -282,14 +282,11 @@ public class GenerateOperation : Operation {
 
         this.prompt_title = _("Passphrase for New Secure Shell Key");
 
-        string comment = escape_shell_arg(email);
         string algo = type.to_string().down();
+        string bits_str = (bits != 0)? "-b '%u'".printf(bits) : "";
+        string comment = escape_shell_arg(email);
 
-        // Default number of bits
-        if (bits == 0)
-            bits = 2048;
-
-        string cmd = "%s -b '%u' -t '%s' -C %s -f '%s'".printf(Config.SSH_KEYGEN_PATH, bits, algo, comment, filename);
+        string cmd = "%s %s -t '%s' -C %s -f '%s'".printf(Config.SSH_KEYGEN_PATH, bits_str, algo, comment, filename);
 
         yield operation_async(cmd, null, cancellable);
     }
