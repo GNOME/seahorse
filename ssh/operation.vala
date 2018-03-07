@@ -24,7 +24,8 @@ namespace Seahorse.Ssh {
 /**
  * Wraps a command-line executable in its own async method.
  *
- * The basic idea is that we don't want to link to the OpenSSL/LibreSSL libraries.
+ * Since OpenSSH doesn't provide a library (or didn't at the time of writing),
+ * we use a small wrapper around the ssh and ssh-keygen executables.
  * So, create a subclass instead and do whatever you want with the output.
  */
 public abstract class Operation : GLib.Object {
