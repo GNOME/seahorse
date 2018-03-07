@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: seahorse 0\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-01-28 20:19+0000\n"
-"PO-Revision-Date: 2018-02-16 23:09+0100\n"
+"POT-Creation-Date: 2018-03-05 15:20+0000\n"
+"PO-Revision-Date: 2018-03-07 20:46+0100\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -41,7 +41,7 @@ msgid "Contributions:"
 msgstr "Doprinijeli:"
 
 #: common/catalog.vala:286 data/seahorse.desktop.in.in:3
-#: src/seahorse-key-manager.c:659
+#: src/seahorse-key-manager.c:658
 msgid "Passwords and Keys"
 msgstr "Lozinke i ključevi"
 
@@ -59,7 +59,7 @@ msgstr "Seahorse stranica projekta"
 msgid "Cannot delete"
 msgstr "Nemoguće obrisati"
 
-#: common/catalog.vala:332 libseahorse/seahorse-key-manager-store.c:439
+#: common/catalog.vala:332 common/key-manager-store.vala:427
 msgid "Couldn’t export keys"
 msgstr "Nemoguć izvoz ključeva"
 
@@ -145,7 +145,7 @@ msgstr "O ovom programu"
 
 #: common/catalog.vala:384
 msgid "_Contents"
-msgstr "_Sadržaj"
+msgstr "_Priručnik"
 
 #: common/catalog.vala:385
 msgid "Show Seahorse help"
@@ -860,16 +860,16 @@ msgstr "%02d-%02d-%04d"
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
-#: libseahorse/seahorse-application.c:108
+#: libseahorse/seahorse-application.c:94
 msgid "Version of this application"
 msgstr "Inačica ove aplikacije"
 
-#: libseahorse/seahorse-application.c:114
-#: libseahorse/seahorse-application.c:158
+#: libseahorse/seahorse-application.c:100
+#: libseahorse/seahorse-application.c:144
 msgid "- System Settings"
 msgstr "- Postavke sustava"
 
-#: libseahorse/seahorse-application.c:154
+#: libseahorse/seahorse-application.c:140
 msgid "Don't display a window"
 msgstr "Ne prikazuj prozor"
 
@@ -1094,6 +1094,7 @@ msgstr ""
 "Ovo je treći put kako ste upisali neispravnu lozinku. Pokušajte ponovno."
 
 #: pgp/seahorse-gpgme-keyring.c:88
+#, c-format
 msgid "Wrong passphrase."
 msgstr "Pogrešna lozinka."
 
@@ -1161,6 +1162,7 @@ msgid "_Resize"
 msgstr "_Promijeni veličinu"
 
 #: pgp/seahorse-gpgme-photos.c:127
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -1176,7 +1178,7 @@ msgstr "Sve datoteke slika"
 msgid "All JPEG files"
 msgstr "Sve JPEG datoteke"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:287
+#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:286
 msgid "All files"
 msgstr "Sve datoteke"
 
@@ -1321,49 +1323,49 @@ msgstr "Nemoguća komunikacija s poslužiteljem \"%s\": %s"
 msgid "HTTP Key Server"
 msgstr "HTTP poslužitelj ključeva"
 
-#: pgp/seahorse-keyserver-results.c:168
+#: pgp/seahorse-keyserver-results.c:167
 msgid "Couldn’t import keys"
 msgstr "Nemoguć uvoz ključeva"
 
-#: pgp/seahorse-keyserver-results.c:211
+#: pgp/seahorse-keyserver-results.c:210
 msgid "Importing keys from key servers"
 msgstr "Uvoz ključeva s poslužitelja ključeva"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: pgp/seahorse-keyserver-results.c:237 src/seahorse-key-manager.c:500
+#: pgp/seahorse-keyserver-results.c:236 src/seahorse-key-manager.c:499
 msgid "_Remote"
 msgstr "_Udaljeno"
 
-#: pgp/seahorse-keyserver-results.c:239
+#: pgp/seahorse-keyserver-results.c:238
 msgid "Close this window"
 msgstr "Zatvori ovaj prozor"
 
-#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:112
+#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:112
 msgid "_Find Remote Keys…"
 msgstr "_Pretraži udaljene ključeve…"
 
-#: pgp/seahorse-keyserver-results.c:244 pgp/seahorse-pgp-actions.c:113
+#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:113
 msgid "Search for keys on a key server"
 msgstr "Pretraži ključeve na poslužitelju ključeva"
 
-#: pgp/seahorse-keyserver-results.c:248 src/seahorse-key-manager.ui:195
+#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:195
 msgid "_Import"
 msgstr "_Uvoz"
 
-#: pgp/seahorse-keyserver-results.c:249
+#: pgp/seahorse-keyserver-results.c:248
 msgid "Import selected keys to local key ring"
 msgstr "Uvezi odabrani ključ u lokalni skup ključeva"
 
-#: pgp/seahorse-keyserver-results.c:280
+#: pgp/seahorse-keyserver-results.c:279
 msgid "Remote Keys"
 msgstr "Udaljeni ključevi"
 
-#: pgp/seahorse-keyserver-results.c:282
+#: pgp/seahorse-keyserver-results.c:281
 #, c-format
 msgid "Remote Keys Containing “%s”"
 msgstr "Udaljeni ključevi sadrže \"%s\""
 
-#: pgp/seahorse-keyserver-results.c:485
+#: pgp/seahorse-keyserver-results.c:484
 msgid "The search for keys failed."
 msgstr "Neuspjela pretraga ključeva."
 
@@ -1399,16 +1401,16 @@ msgstr "Gdje pretraživati:"
 msgid "_Search"
 msgstr "_Pretraži"
 
-#: pgp/seahorse-keyserver-sync.c:55
+#: pgp/seahorse-keyserver-sync.c:54
 msgid "Couldn’t publish keys to server"
 msgstr "Nemoguća objava ključeva na poslužitelju"
 
-#: pgp/seahorse-keyserver-sync.c:74
+#: pgp/seahorse-keyserver-sync.c:73
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Nemoguće preuzimanje ključeva s poslužitelja: %s"
 
-#: pgp/seahorse-keyserver-sync.c:160
+#: pgp/seahorse-keyserver-sync.c:158
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
@@ -1416,7 +1418,7 @@ msgstr[0] "<b>%d ključ je odabran za usklađivanje</b>"
 msgstr[1] "<b>%d ključa su odabrana za usklađivanje</b>"
 msgstr[2] "<b>%d ključeva je odabrano za usklađivanje</b>"
 
-#: pgp/seahorse-keyserver-sync.c:240
+#: pgp/seahorse-keyserver-sync.c:237
 msgid "Synchronizing keys…"
 msgstr "Usklađivanje ključeva…"
 
@@ -2262,87 +2264,87 @@ msgid "<b>Data to be imported:</b>"
 msgstr "<b>Podaci za uvoz:</b>"
 
 #. The prompt
-#: src/seahorse-key-manager.c:241 ssh/operation.vala:322
+#: src/seahorse-key-manager.c:240 ssh/operation.vala:322
 msgid "Import Key"
 msgstr "Uvezi ključ"
 
-#: src/seahorse-key-manager.c:253
+#: src/seahorse-key-manager.c:252
 msgid "All key files"
 msgstr "Sve datoteke ključa"
 
-#: src/seahorse-key-manager.c:354
+#: src/seahorse-key-manager.c:353
 msgid "Dropped text"
 msgstr "Ispušteni tekst"
 
-#: src/seahorse-key-manager.c:390
+#: src/seahorse-key-manager.c:389
 msgid "Clipboard text"
 msgstr "Tekst međuspremnika"
 
-#: src/seahorse-key-manager.c:501
+#: src/seahorse-key-manager.c:500
 msgid "_New"
 msgstr "_Novo"
 
-#: src/seahorse-key-manager.c:503
+#: src/seahorse-key-manager.c:502
 msgid "Close this program"
 msgstr "Zatvori ovaj program"
 
-#: src/seahorse-key-manager.c:504 src/seahorse-key-manager.c:506
+#: src/seahorse-key-manager.c:503 src/seahorse-key-manager.c:505
 msgid "_New…"
 msgstr "_Novo…"
 
-#: src/seahorse-key-manager.c:505
+#: src/seahorse-key-manager.c:504
 msgid "Create a new key or item"
 msgstr "Stvori novi ključ ili stavku"
 
-#: src/seahorse-key-manager.c:507
+#: src/seahorse-key-manager.c:506
 msgid "Add a new key or item"
 msgstr "Dodaj novi ključ ili stavku"
 
-#: src/seahorse-key-manager.c:508
+#: src/seahorse-key-manager.c:507
 msgid "_Import…"
 msgstr "_Uvoz…"
 
-#: src/seahorse-key-manager.c:509
+#: src/seahorse-key-manager.c:508
 msgid "Import from a file"
 msgstr "Uvezi iz datoteke"
 
-#: src/seahorse-key-manager.c:511
+#: src/seahorse-key-manager.c:510
 msgid "Import from the clipboard"
 msgstr "Uvezi iz međuspremnika"
 
-#: src/seahorse-key-manager.c:515
+#: src/seahorse-key-manager.c:514
 msgid "By _Keyring"
 msgstr "Po _skupu ključeva"
 
-#: src/seahorse-key-manager.c:516
+#: src/seahorse-key-manager.c:515
 msgid "Show sidebar listing keyrings"
 msgstr "Prikaži bočni popis skupa ključeva"
 
-#: src/seahorse-key-manager.c:520
+#: src/seahorse-key-manager.c:519
 msgid "Show _Personal"
 msgstr "Prikaži _osobno"
 
-#: src/seahorse-key-manager.c:521
+#: src/seahorse-key-manager.c:520
 msgid "Only show personal keys, certificates and passwords"
 msgstr "Samo prikaži osobne ključeve, vjerodajnice i lozinke"
 
-#: src/seahorse-key-manager.c:522
+#: src/seahorse-key-manager.c:521
 msgid "Show _Trusted"
 msgstr "Prikaži _povjereno"
 
-#: src/seahorse-key-manager.c:523
+#: src/seahorse-key-manager.c:522
 msgid "Only show trusted keys, certificates and passwords"
 msgstr "Samo prikaži povjerene ključeve vjerodajnice i lozinke"
 
-#: src/seahorse-key-manager.c:524
+#: src/seahorse-key-manager.c:523
 msgid "Show _Any"
 msgstr "Prikaži _sve"
 
-#: src/seahorse-key-manager.c:525
+#: src/seahorse-key-manager.c:524
 msgid "Show all keys, certificates and passwords"
 msgstr "Prikaži sve ključeve vjerodajnice i lozinke"
 
-#: src/seahorse-key-manager.c:744
+#: src/seahorse-key-manager.c:743
 msgid "Filter"
 msgstr "Filter"
 
