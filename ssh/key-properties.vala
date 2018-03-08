@@ -38,7 +38,7 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
     private Gtk.Label fingerprint_label;
     private Gtk.Label algo_label;
     private Gtk.Label location_label;
-    private Gtk.Label strength_label;
+    private Gtk.Label key_length_label;
 
     public KeyProperties(Key key, Gtk.Window parent) {
         GLib.Object(border_width: 5,
@@ -81,7 +81,7 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         this.fingerprint_label = (Gtk.Label) builder.get_object("fingerprint-label");
         this.algo_label = (Gtk.Label) builder.get_object("algo-label");
         this.location_label = (Gtk.Label) builder.get_object("location-label");
-        this.strength_label = (Gtk.Label) builder.get_object("strength-label");
+        this.key_length_label = (Gtk.Label) builder.get_object("key-length-label");
 
         // Signals
         this.comment_entry.activate.connect(on_ssh_comment_activate);
@@ -111,7 +111,7 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         this.fingerprint_label.label = this.key.fingerprint;
         this.algo_label.label = this.key.get_algo().to_string() ?? _("Unknown type");
         this.location_label.label = this.key.get_location();
-        this.strength_label.label = "%u".printf(this.key.get_strength());
+        this.key_length_label.label = "%u".printf(this.key.get_strength());
 
         this.updating_ui = false;
     }
