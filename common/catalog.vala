@@ -254,6 +254,7 @@ public abstract class Catalog : Gtk.Window {
 		"Jean Schurger <yshark@schurger.org>",
 		"Stef Walter <stef@memberwebs.com>",
 		"Adam Schreiber <sadam@clemson.edu>",
+		"Niels De Graef <nielsdegraef@gmail.com>",
 		"",
 		N_("Contributions:"),
 		"Albrecht Dreß <albrecht.dress@arcor.de>",
@@ -275,19 +276,17 @@ public abstract class Catalog : Gtk.Window {
 	};
 
 	[CCode (instance_pos = -1)]
-	private void on_app_about(Gtk.Action action)
-	{
-
+	private void on_app_about(Gtk.Action action) {
 		var about = new Gtk.AboutDialog();
 		about.set_artists(ARTISTS);
 		about.set_authors(AUTHORS);
 		about.set_documenters(DOCUMENTERS);
 		about.set_version(Config.VERSION);
 		about.set_comments(_("Passwords and Keys"));
-		about.set_copyright("Copyright \xc2\xa9 2002 - 2010 Seahorse Project");
+		about.set_copyright("© 2002 - 2018 Seahorse Contributors");
 		about.set_translator_credits(_("translator-credits"));
 		about.set_logo_icon_name("seahorse");
-		about.set_website("http://www.gnome.org/projects/seahorse");
+		about.set_website("https://wiki.gnome.org/Apps/Seahorse");
 		about.set_website_label(_("Seahorse Project Homepage"));
 
 		about.response.connect((response) => {
