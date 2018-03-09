@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=seahor"
 "se&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-01-28 20:19+0000\n"
-"PO-Revision-Date: 2018-02-03 09:10-0200\n"
+"POT-Creation-Date: 2018-03-08 21:29+0000\n"
+"PO-Revision-Date: 2018-03-09 01:26-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -53,7 +53,7 @@ msgid "Contributions:"
 msgstr "Contribuições:"
 
 #: common/catalog.vala:286 data/seahorse.desktop.in.in:3
-#: src/seahorse-key-manager.c:659
+#: src/seahorse-key-manager.c:658
 msgid "Passwords and Keys"
 msgstr "Senhas e chaves"
 
@@ -80,7 +80,7 @@ msgstr "Página do Projeto Seahorse"
 msgid "Cannot delete"
 msgstr "Não foi possível excluir"
 
-#: common/catalog.vala:332 libseahorse/seahorse-key-manager-store.c:439
+#: common/catalog.vala:332 common/key-manager-store.vala:427
 msgid "Couldn’t export keys"
 msgstr "Não foi possível exportar chaves"
 
@@ -354,7 +354,6 @@ msgstr "chaveiro;criptografia;segurança;assinar;ssh;"
 
 #. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 #: data/seahorse.desktop.in.in:11
-#| msgid "Seahorse"
 msgid "seahorse"
 msgstr "seahorse"
 
@@ -468,7 +467,6 @@ msgid "Google Chrome password"
 msgstr "Senha do Google Chrome"
 
 #: gkr/gkr-item.vala:451
-#| msgid "Gnome Online Accounts password"
 msgid "GNOME Online Accounts password"
 msgstr "Senha do GNOME Online Accounts"
 
@@ -558,7 +556,7 @@ msgid "New Keyring Name:"
 msgstr "Nome do novo chaveiro:"
 
 #: gkr/seahorse-gkr-add-item.ui:20 gkr/seahorse-gkr-item-properties.ui:42
-#: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:131
+#: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:124
 msgid "_Description:"
 msgstr "_Descrição:"
 
@@ -578,7 +576,6 @@ msgstr "Cha_veiro:"
 #: gkr/seahorse-gkr-item-properties.ui:69
 #: pgp/seahorse-pgp-private-key-properties.ui:553
 #: pgp/seahorse-pgp-public-key-properties.ui:442
-#: ssh/seahorse-ssh-key-properties.ui:166
 msgid "Use:"
 msgstr "Uso:"
 
@@ -587,7 +584,7 @@ msgstr "Uso:"
 #: pgp/seahorse-pgp-private-key-properties.ui:1106
 #: pgp/seahorse-pgp-public-key-properties.ui:557
 #: pgp/seahorse-pgp-public-key-properties.ui:1223
-#: ssh/seahorse-ssh-key-properties.ui:86
+#: ssh/seahorse-ssh-key-properties.ui:75
 msgid "Type:"
 msgstr "Tipo:"
 
@@ -604,20 +601,20 @@ msgid "Show pass_word"
 msgstr "Mostrar _senha"
 
 #: gkr/seahorse-gkr-item-properties.ui:266 pgp/seahorse-pgp-subkey.c:402
-#: ssh/seahorse-ssh-key-properties.ui:290
+#: ssh/seahorse-ssh-key-properties.ui:239
 msgid "Key"
 msgstr "Chave"
 
 #: gkr/seahorse-gkr-item-properties.ui:315
 #: pgp/seahorse-pgp-public-key-properties.ui:1151
-#: ssh/seahorse-ssh-key-properties.ui:459
+#: ssh/seahorse-ssh-key-properties.ui:408
 msgid "Technical Details:"
 msgstr "Detalhes técnicos:"
 
 #: gkr/seahorse-gkr-item-properties.ui:335
 #: pgp/seahorse-pgp-private-key-properties.ui:1722
 #: pgp/seahorse-pgp-public-key-properties.ui:1611
-#: ssh/seahorse-ssh-key-properties.ui:502
+#: ssh/seahorse-ssh-key-properties.ui:451
 msgid "Details"
 msgstr "Detalhes"
 
@@ -891,16 +888,16 @@ msgstr "%04d-%02d-%02d"
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
-#: libseahorse/seahorse-application.c:108
+#: libseahorse/seahorse-application.c:94
 msgid "Version of this application"
 msgstr "Versão deste aplicativo"
 
-#: libseahorse/seahorse-application.c:114
-#: libseahorse/seahorse-application.c:158
+#: libseahorse/seahorse-application.c:100
+#: libseahorse/seahorse-application.c:144
 msgid "- System Settings"
 msgstr "- Configurações do sistema"
 
-#: libseahorse/seahorse-application.c:154
+#: libseahorse/seahorse-application.c:140
 msgid "Don't display a window"
 msgstr "Não mostrar uma janela"
 
@@ -1062,7 +1059,7 @@ msgid "Used to encrypt email and files"
 msgstr "Usada para criptografar e-mail e arquivos"
 
 #: pgp/seahorse-gpgme-generate.c:129 pkcs11/seahorse-pkcs11-generate.c:90
-#: ssh/seahorse-ssh-generate.ui:254
+#: ssh/seahorse-ssh-generate.ui:246
 msgid "RSA"
 msgstr "RSA"
 
@@ -1126,6 +1123,7 @@ msgstr ""
 "tente novamente."
 
 #: pgp/seahorse-gpgme-keyring.c:88
+#, c-format
 msgid "Wrong passphrase."
 msgstr "Frase secreta incorreta."
 
@@ -1192,6 +1190,7 @@ msgid "_Resize"
 msgstr "_Redimensionar"
 
 #: pgp/seahorse-gpgme-photos.c:127
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -1207,7 +1206,7 @@ msgstr "Todos os arquivos de imagem"
 msgid "All JPEG files"
 msgstr "Todos os arquivos JPEG"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:287
+#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:286
 msgid "All files"
 msgstr "Todos os arquivos"
 
@@ -1357,49 +1356,49 @@ msgstr "Não foi possível comunicar com o servidor “%s”: %s"
 msgid "HTTP Key Server"
 msgstr "Servidor de chave HTTP"
 
-#: pgp/seahorse-keyserver-results.c:168
+#: pgp/seahorse-keyserver-results.c:167
 msgid "Couldn’t import keys"
 msgstr "Não foi possível importar as chaves"
 
-#: pgp/seahorse-keyserver-results.c:211
+#: pgp/seahorse-keyserver-results.c:210
 msgid "Importing keys from key servers"
 msgstr "Importando chaves dos servidores"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: pgp/seahorse-keyserver-results.c:237 src/seahorse-key-manager.c:500
+#: pgp/seahorse-keyserver-results.c:236 src/seahorse-key-manager.c:499
 msgid "_Remote"
 msgstr "_Remoto"
 
-#: pgp/seahorse-keyserver-results.c:239
+#: pgp/seahorse-keyserver-results.c:238
 msgid "Close this window"
 msgstr "Fechar esta janela"
 
-#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:112
+#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:112
 msgid "_Find Remote Keys…"
 msgstr "_Localizar chaves remotas…"
 
-#: pgp/seahorse-keyserver-results.c:244 pgp/seahorse-pgp-actions.c:113
+#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:113
 msgid "Search for keys on a key server"
 msgstr "Pesquisa por chaves em um servidor"
 
-#: pgp/seahorse-keyserver-results.c:248 src/seahorse-key-manager.ui:195
+#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:195
 msgid "_Import"
 msgstr "_Importar"
 
-#: pgp/seahorse-keyserver-results.c:249
+#: pgp/seahorse-keyserver-results.c:248
 msgid "Import selected keys to local key ring"
 msgstr "Importar chaves selecionadas para o chaveiro local"
 
-#: pgp/seahorse-keyserver-results.c:280
+#: pgp/seahorse-keyserver-results.c:279
 msgid "Remote Keys"
 msgstr "Chaves remotas"
 
-#: pgp/seahorse-keyserver-results.c:282
+#: pgp/seahorse-keyserver-results.c:281
 #, c-format
 msgid "Remote Keys Containing “%s”"
 msgstr "Chaves remotas contendo “%s”"
 
-#: pgp/seahorse-keyserver-results.c:485
+#: pgp/seahorse-keyserver-results.c:484
 msgid "The search for keys failed."
 msgstr "A pesquisa por chaves falhou."
 
@@ -1435,23 +1434,23 @@ msgstr "Onde pesquisar:"
 msgid "_Search"
 msgstr "_Pesquisar"
 
-#: pgp/seahorse-keyserver-sync.c:55
+#: pgp/seahorse-keyserver-sync.c:54
 msgid "Couldn’t publish keys to server"
 msgstr "Não foi possível publicar chaves para o servidor"
 
-#: pgp/seahorse-keyserver-sync.c:74
+#: pgp/seahorse-keyserver-sync.c:73
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Não foi possível recuperar chaves do servidor: %s"
 
-#: pgp/seahorse-keyserver-sync.c:160
+#: pgp/seahorse-keyserver-sync.c:158
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d chave foi selecionada para sincronização</b>"
 msgstr[1] "<b>%d chaves foram selecionadas para sincronização</b>"
 
-#: pgp/seahorse-keyserver-sync.c:240
+#: pgp/seahorse-keyserver-sync.c:237
 msgid "Synchronizing keys…"
 msgstr "Sincronizando chaves…"
 
@@ -1549,12 +1548,12 @@ msgstr "Nu_nca expira"
 msgid "_Comment:"
 msgstr "_Comentário:"
 
-#: pgp/seahorse-pgp-generate.ui:370 ssh/seahorse-ssh-generate.ui:213
+#: pgp/seahorse-pgp-generate.ui:370 ssh/seahorse-ssh-generate.ui:206
 msgid "Encryption _Type:"
 msgstr "_Tipo de criptografia:"
 
 #: pgp/seahorse-pgp-generate.ui:385 pkcs11/seahorse-pkcs11-generate.ui:164
-#: ssh/seahorse-ssh-generate.ui:229
+#: ssh/seahorse-ssh-generate.ui:222
 msgid "Key _Strength (bits):"
 msgstr "_Força da chave (bits):"
 
@@ -1563,7 +1562,7 @@ msgid "E_xpiration Date:"
 msgstr "Data de e_xpiração:"
 
 #: pgp/seahorse-pgp-generate.ui:418 pkcs11/seahorse-pkcs11-generate.ui:226
-#: ssh/seahorse-ssh-generate.ui:300
+#: ssh/seahorse-ssh-generate.ui:267
 msgid "_Advanced key options"
 msgstr "Opções _avançadas de chave"
 
@@ -1790,7 +1789,7 @@ msgid "Private PGP Key"
 msgstr "Chave privada PGP"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:649
-#: ssh/seahorse-ssh-key-properties.ui:195
+#: ssh/seahorse-ssh-key-properties.ui:144
 msgid "Change _Passphrase"
 msgstr "Alterar _frase secreta"
 
@@ -1832,7 +1831,6 @@ msgstr "Nomes e assinaturas"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1092
 #: pgp/seahorse-pgp-public-key-properties.ui:1208
-#: ssh/seahorse-ssh-key-properties.ui:339
 msgid "Strength:"
 msgstr "Força:"
 
@@ -1959,12 +1957,12 @@ msgid "_Only display the signatures of people I trust"
 msgstr "_Só exibir as assinaturas de pessoas em quem eu confio"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:1117
-#: ssh/seahorse-ssh-key-properties.ui:220
+#: ssh/seahorse-ssh-key-properties.ui:169
 msgid "Trust"
 msgstr "Confiança"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:1290
-#: ssh/seahorse-ssh-key-properties.ui:403
+#: ssh/seahorse-ssh-key-properties.ui:352
 msgid "Fingerprint:"
 msgstr "Impressão digital:"
 
@@ -2112,7 +2110,6 @@ msgstr ""
 
 # Este é o título do diálogo, não o item de menu.
 #: pgp/seahorse-signer.ui:7
-#| msgid "Sign Key"
 msgid "Choose Signing Key"
 msgstr "Escolher chave de assinatura"
 
@@ -2315,87 +2312,87 @@ msgid "<b>Data to be imported:</b>"
 msgstr "<b>Dados a serem importados:</b>"
 
 #. The prompt
-#: src/seahorse-key-manager.c:241 ssh/operation.vala:322
+#: src/seahorse-key-manager.c:240 ssh/operation.vala:320
 msgid "Import Key"
 msgstr "Importar chave"
 
-#: src/seahorse-key-manager.c:253
+#: src/seahorse-key-manager.c:252
 msgid "All key files"
 msgstr "Todos os arquivos de chave"
 
-#: src/seahorse-key-manager.c:354
+#: src/seahorse-key-manager.c:353
 msgid "Dropped text"
 msgstr "Texto arrastado"
 
-#: src/seahorse-key-manager.c:390
+#: src/seahorse-key-manager.c:389
 msgid "Clipboard text"
 msgstr "Texto da área de transferência"
 
-#: src/seahorse-key-manager.c:501
+#: src/seahorse-key-manager.c:500
 msgid "_New"
 msgstr "_Novo"
 
-#: src/seahorse-key-manager.c:503
+#: src/seahorse-key-manager.c:502
 msgid "Close this program"
 msgstr "Fecha este programa"
 
-#: src/seahorse-key-manager.c:504 src/seahorse-key-manager.c:506
+#: src/seahorse-key-manager.c:503 src/seahorse-key-manager.c:505
 msgid "_New…"
 msgstr "_Novo…"
 
-#: src/seahorse-key-manager.c:505
+#: src/seahorse-key-manager.c:504
 msgid "Create a new key or item"
 msgstr "Criar uma nova chave ou item"
 
-#: src/seahorse-key-manager.c:507
+#: src/seahorse-key-manager.c:506
 msgid "Add a new key or item"
 msgstr "Adicionar uma nova chave ou item"
 
-#: src/seahorse-key-manager.c:508
+#: src/seahorse-key-manager.c:507
 msgid "_Import…"
 msgstr "_Importar…"
 
-#: src/seahorse-key-manager.c:509
+#: src/seahorse-key-manager.c:508
 msgid "Import from a file"
 msgstr "Importar de um arquivo"
 
-#: src/seahorse-key-manager.c:511
+#: src/seahorse-key-manager.c:510
 msgid "Import from the clipboard"
 msgstr "Copiar da área de transferência"
 
-#: src/seahorse-key-manager.c:515
+#: src/seahorse-key-manager.c:514
 msgid "By _Keyring"
 msgstr "Por cha_veiro"
 
-#: src/seahorse-key-manager.c:516
+#: src/seahorse-key-manager.c:515
 msgid "Show sidebar listing keyrings"
 msgstr "Mostrar barra lateral com a listagem de chaveiros"
 
-#: src/seahorse-key-manager.c:520
+#: src/seahorse-key-manager.c:519
 msgid "Show _Personal"
 msgstr "Mostrar _pessoais"
 
-#: src/seahorse-key-manager.c:521
+#: src/seahorse-key-manager.c:520
 msgid "Only show personal keys, certificates and passwords"
 msgstr "Mostra apenas as chaves, certificados e senhas pessoais"
 
-#: src/seahorse-key-manager.c:522
+#: src/seahorse-key-manager.c:521
 msgid "Show _Trusted"
 msgstr "Mostrar _confiados"
 
-#: src/seahorse-key-manager.c:523
+#: src/seahorse-key-manager.c:522
 msgid "Only show trusted keys, certificates and passwords"
 msgstr "Mostra apenas as chaves, certificados e senhas confiados"
 
-#: src/seahorse-key-manager.c:524
+#: src/seahorse-key-manager.c:523
 msgid "Show _Any"
 msgstr "Mostrar _todos"
 
-#: src/seahorse-key-manager.c:525
+#: src/seahorse-key-manager.c:524
 msgid "Show all keys, certificates and passwords"
 msgstr "Mostra todas as chaves, certificados e senhas"
 
-#: src/seahorse-key-manager.c:744
+#: src/seahorse-key-manager.c:743
 msgid "Filter"
 msgstr "Filtro"
 
@@ -2458,8 +2455,6 @@ msgstr "Você tem certeza de que deseja excluir a chave de SSH “%s”?"
 
 #: ssh/deleter.vala:51
 #, c-format
-#| msgid "Are you sure you want to delete %d secure shell key?"
-#| msgid_plural "Are you sure you want to delete %d secure shell keys?"
 msgid "Are you sure you want to delete %u secure shell key?"
 msgid_plural "Are you sure you want to delete %u secure shell keys?"
 msgstr[0] "Você tem certeza de que deseja excluir %u chave de SSH?"
@@ -2483,7 +2478,7 @@ msgstr "Nenhum arquivo de chave pública está disponível para esta chave."
 
 #. No comment, but loaded
 #: ssh/generate.vala:27 ssh/key.vala:120 ssh/key.vala:124
-#: ssh/seahorse-ssh-key-properties.ui:103
+#: ssh/seahorse-ssh-key-properties.ui:90
 msgid "Secure Shell Key"
 msgstr "Chave de SSH"
 
@@ -2491,22 +2486,34 @@ msgstr "Chave de SSH"
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Usada para acessar outros computadores (ex: por um terminal)"
 
-#: ssh/generate.vala:41
+#: ssh/generate.vala:42
 msgid "New Secure Shell Key"
 msgstr "Nova chave de SSH"
 
-#: ssh/generate.vala:143
-#| msgid "Couldn’t generate Secure Shell key"
+#: ssh/generate.vala:136
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Não foi possível carregar chave de SSH recém-gerada"
 
-#: ssh/generate.vala:147
+#: ssh/generate.vala:140
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Não foi possível gerar chave de SSH"
 
-#: ssh/generate.vala:150
+#: ssh/generate.vala:143
 msgid "Creating Secure Shell Key"
 msgstr "Criando chave de SSH"
+
+#: ssh/key-length-chooser.vala:92
+msgid "1024 bits"
+msgstr "1024 bits"
+
+#: ssh/key-length-chooser.vala:96
+msgid "256 bits"
+msgstr "256 bits"
+
+#: ssh/key-length-chooser.vala:100
+#| msgid "Unknown type"
+msgid "Unknown key type!"
+msgstr "Tipo de chave desconhecido!"
 
 #: ssh/key-properties.vala:112
 msgid "Unknown type"
@@ -2537,26 +2544,26 @@ msgstr "Chave SSH"
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Chave de SSH ilegível)"
 
-#: ssh/operation.vala:214
+#: ssh/operation.vala:215
 msgid "Remote Host Password"
 msgstr "Senha da rede remota"
 
-#: ssh/operation.vala:257
+#: ssh/operation.vala:258
 msgid "Enter Key Passphrase"
 msgstr "Digite a frase secreta"
 
-#: ssh/operation.vala:283
+#: ssh/operation.vala:284
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Frase secreta para nova chave de SSH"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:319
+#: ssh/operation.vala:317
 #, c-format
 msgid "Importing key: %s"
 msgstr "Importando chave: %s"
 
-#: ssh/operation.vala:319
+#: ssh/operation.vala:317
 msgid "Importing key. Enter passphrase"
 msgstr "Importando chave. Digite a frase secreta"
 
@@ -2587,21 +2594,29 @@ msgstr "Digite a nova frase secreta para: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Digite a nova frase secreta novamente: %s"
 
-#: ssh/seahorse-ssh-generate.ui:67
+#: ssh/seahorse-ssh-generate.ui:60
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Uma chave de shell seguro (SSH) permite que você se conecte de forma segura "
 "a computadores."
 
-#: ssh/seahorse-ssh-generate.ui:165
+#: ssh/seahorse-ssh-generate.ui:158
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "Seu endereço de e-mail, ou um lembrete para o que essa chave serve."
 
-#: ssh/seahorse-ssh-generate.ui:255
+#: ssh/seahorse-ssh-generate.ui:247
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:319
+#: ssh/seahorse-ssh-generate.ui:248
+msgid "ECDSA"
+msgstr "ECDSA"
+
+#: ssh/seahorse-ssh-generate.ui:249
+msgid "ED25519"
+msgstr "ED25519"
+
+#: ssh/seahorse-ssh-generate.ui:286
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2609,46 +2624,47 @@ msgstr ""
 "Se existe um computador com o qual você queira usar esta chave, você pode "
 "configurá-lo para reconhecer sua nova chave."
 
-#: ssh/seahorse-ssh-generate.ui:348
+#: ssh/seahorse-ssh-generate.ui:315
 msgid "_Just Create Key"
 msgstr "_Apenas criar chave"
 
-#: ssh/seahorse-ssh-generate.ui:362
+#: ssh/seahorse-ssh-generate.ui:329
 msgid "_Create and Set Up"
 msgstr "_Criar e configurar"
 
-#: ssh/seahorse-ssh-key-properties.ui:52
-msgid "Identifier:"
-msgstr "Identificador:"
-
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:120
+#: ssh/seahorse-ssh-key-properties.ui:50
 msgctxt "name-of-ssh-key"
 msgid "Name:"
 msgstr "Nome:"
 
-#: ssh/seahorse-ssh-key-properties.ui:151
-msgid "Used to connect to other computers."
-msgstr "Usada para conectar a outros computadores."
+#: ssh/seahorse-ssh-key-properties.ui:102
+msgid "Identifier:"
+msgstr "Identificador:"
 
-#: ssh/seahorse-ssh-key-properties.ui:242
+#: ssh/seahorse-ssh-key-properties.ui:191
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr "O dono desta chave está _autorizado a conectar a este computador"
 
-#: ssh/seahorse-ssh-key-properties.ui:260
+#: ssh/seahorse-ssh-key-properties.ui:209
 #, c-format
 msgid "This only applies to the <i>%s</i> account."
 msgstr "Isto só é aplicável à conta <i>%s</i>."
 
-#: ssh/seahorse-ssh-key-properties.ui:324
+#: ssh/seahorse-ssh-key-properties.ui:273
 msgid "Algorithm:"
 msgstr "Algoritmo:"
 
-#: ssh/seahorse-ssh-key-properties.ui:387
+#: ssh/seahorse-ssh-key-properties.ui:288
+#| msgid "Key _Length:"
+msgid "Key length:"
+msgstr "Tamanho da chave:"
+
+#: ssh/seahorse-ssh-key-properties.ui:336
 msgid "Location:"
 msgstr "Localização:"
 
-#: ssh/seahorse-ssh-key-properties.ui:480
+#: ssh/seahorse-ssh-key-properties.ui:429
 msgid "E_xport Complete Key"
 msgstr "E_xportar chave completa"
 
@@ -2695,7 +2711,6 @@ msgid "Set Up Computer for SSH Connection"
 msgstr "Configurando computador para conexão SSH"
 
 #: ssh/upload.vala:70
-#| msgid "_Set Up"
 msgid "Set Up"
 msgstr "Configurar"
 
@@ -2706,6 +2721,9 @@ msgstr "Não foi possível configurar chaves de SSH no computador remoto."
 #: ssh/upload.vala:97
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configurando chaves de SSH…"
+
+#~ msgid "Used to connect to other computers."
+#~ msgstr "Usada para conectar a outros computadores."
 
 #~ msgid "The SSH command was terminated unexpectedly."
 #~ msgstr "O comando SSH terminou inesperadamente."
