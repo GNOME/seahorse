@@ -39,7 +39,6 @@ public class ItemProperties : Gtk.Dialog {
 			GLib.critical ("%s", err.message);
 		}
 
-		this.add_button(Gtk.Stock.CLOSE, Gtk.ResponseType.CLOSE);
 		var content = (Gtk.Widget)this._builder.get_object("gkr-item-properties");
 		((Gtk.Container)this.get_content_area()).add(content);
 		content.show();
