@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2006 Stefan Walter
  * Copyright (C) 2011 Collabora Ltd.
+ * Copyright (C) 2018 Niels De Graef
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +18,11 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Seahorse {
-namespace Gkr {
-
-public class ItemProperties : Gtk.Dialog {
+public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
 	public Item item { construct; get; }
 
 	private Gtk.Builder _builder;
 	private Gtk.Entry _password_entry;
-	private Gtk.Expander _password_expander;
 	private bool _password_changed;
 	private bool _updating_password;
 	private bool _updating_description;
@@ -62,16 +59,6 @@ public class ItemProperties : Gtk.Dialog {
 			return false;
 		});
 
-		/* The expander for showing password */
-		this._password_expander = (Gtk.Expander)this._builder.get_object("password-expander");
-		this._password_expander.activate.connect_after(expander_activate);
-
-		/* The check button for password visibility */
-		Gtk.CheckButton check = (Gtk.CheckButton)this._builder.get_object("show-password-check");
-		check.toggled.connect(() => {
-			this._password_entry.visibility = check.active;
-		});
-
 		/* Window title */
 		this.item.bind_property ("label", this, "title", GLib.BindingFlags.SYNC_CREATE);
 
@@ -94,15 +81,13 @@ public class ItemProperties : Gtk.Dialog {
 			}
 		});
 
-		/* Create the password entry */
-		var buffer = new Gcr.SecureEntryBuffer();
-		this._password_entry = new Gtk.Entry.with_buffer(buffer);
-		Gtk.Box box = (Gtk.Box)this._builder.get_object("password-box-area");
-		box.add(this._password_entry);
-		this._password_entry.visibility = false;
-		this._password_entry.show();
-		this._password_changed = false;
-		this._updating_password = false;
+        // Create the password entry
+        this._password_entry = new PasswordEntry();
+        Gtk.Box box = (Gtk.Box)this._builder.get_object("password-box-area");
+        box.add(this._password_entry);
+        this._password_changed = false;
+        this._updating_password = false;
+        password_display();
 
 		/* Now watch for changes in the password */
 		this._password_entry.activate.connect(password_activate);
@@ -212,17 +197,11 @@ public class ItemProperties : Gtk.Dialog {
 		details.label = contents.str;
 	}
 
-	private void password_activate()
-	{
-		if (!this._password_expander.expanded)
-			return;
-		if (!this._password_changed)
-			return;
-		if (this._updating_password)
-			return;
+    private void password_activate() {
+        if (!this._password_changed || this._updating_password)
+            return;
 
-		this._updating_password = true;
-		this._password_expander.sensitive = false;
+        this._updating_password = true;
 
 		var value = new Secret.Value(this._password_entry.text, -1, "text/plain");
 		this.item.set_secret.begin(value, null, (obj, res) => {
@@ -234,33 +213,28 @@ public class ItemProperties : Gtk.Dialog {
 				Util.show_error (this, _("Couldn’t change password."), err.message);
 			}
 
-			this._password_expander.sensitive = true;
 			this._updating_password = false;
 		});
 	}
 
-	private void password_display() {
-		if (this._password_expander.expanded) {
-			var secret = this.item.get_secret();
-			if (secret != null) {
-				unowned string? password = secret.get_text();
-				if (password != null) {
-					this._password_entry.set_text(password);
-					this._password_changed = false;
-					return;
-				}
-			}
-		}
-		this._password_entry.set_text("");
-		this._password_changed = false;
-	}
+    private void password_display() {
+        var secret = this.item.get_secret();
+        if (secret != null) {
+            unowned string? password = secret.get_text();
+            if (password != null) {
+                this._password_entry.set_text(password);
+                this._password_changed = false;
+                return;
+            }
+        }
 
-	private void description_activate(Gtk.Entry description)
-	{
-		if (this._updating_description)
-			return;
-		if (this.item.label == description.text)
-			return;
+        this._password_entry.set_text("");
+        this._password_changed = false;
+    }
+
+    private void description_activate(Gtk.Entry description) {
+        if (this._updating_description || this.item.label == description.text)
+            return;
 
 		this._updating_description = true;
 		description.sensitive = false;
@@ -278,20 +252,4 @@ public class ItemProperties : Gtk.Dialog {
 			this._updating_description = false;
 		});
 	}
-
-	private void expander_activate (Gtk.Expander expander)
-	{
-		if (!expander.expanded)
-			return;
-
-		/* Always have a hidden password when opening box */
-		Gtk.CheckButton check = (Gtk.CheckButton)this._builder.get_object("show-password-check");
-		check.set_active (false);
-
-		/* Make sure to trigger retrieving the secret */
-		password_display ();
-	}
-}
-
-}
 }

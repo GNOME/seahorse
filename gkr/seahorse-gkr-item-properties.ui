@@ -7,13 +7,15 @@
             <property name="can_focus">True</property>
             <property name="border_width">5</property>
             <child>
-              <object class="GtkVBox" id="vbox7">
+              <object class="GtkBox">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="border_width">12</property>
                 <property name="spacing">18</property>
                 <child>
-                  <object class="GtkHBox" id="hbox61">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkImage" id="key-image">
@@ -28,51 +30,70 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkTable" id="table9">
+                      <object class="GtkGrid">
                         <property name="visible">True</property>
-                        <property name="n_rows">5</property>
-                        <property name="n_columns">2</property>
                         <property name="column_spacing">12</property>
                         <property name="row_spacing">6</property>
                         <child>
-                          <object class="GtkLabel" id="label72">
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
+                            <property name="xalign">1</property>
                             <property name="label" translatable="yes">_Description:</property>
                             <property name="use_markup">True</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">description-field</property>
                           </object>
                           <packing>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
+                            <property name="top_attach">0</property>
+                            <property name="left_attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="description-field">
                             <property name="visible">True</property>
+                            <property name="hexpand">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
+                            <property name="top_attach">0</property>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="y_options"></property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label22228">
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">1</property>
-                            <property name="label" translatable="yes" comments="To translators: This is the noun not the verb.">Use:</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Password</property>
                           </object>
                           <packing>
                             <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
+                            <property name="left_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="password-box-area">
+                            <property name="visible">True</property>
+                            <property name="hexpand">True</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="top_attach">1</property>
+                            <property name="left_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes" comments="To translators: This is the noun not the verb.">Use:</property>
+                          </object>
+                          <packing>
+                            <property name="top_attach">2</property>
+                            <property name="left_attach">0</property>
                           </packing>
                         </child>
                         <child>
@@ -80,178 +101,97 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="xalign">0</property>
-                            <property name="yalign">1</property>
-                            <property name="label">[Use here]</property>
+                            <property name="label">Unknown</property>
+                            <property name="hexpand">True</property>
                             <property name="use_markup">True</property>
                             <property name="selectable">True</property>
                           </object>
                           <packing>
+                            <property name="top_attach">2</property>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options">GTK_FILL</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label93">
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
+                            <property name="xalign">1</property>
                             <property name="label" translatable="yes">Type:</property>
                           </object>
                           <packing>
-                            <property name="top_attach">2</property>
-                            <property name="bottom_attach">3</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="server-label">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Server:</property>
-                          </object>
-                          <packing>
                             <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="login-label">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Login:</property>
-                          </object>
-                          <packing>
-                            <property name="top_attach">4</property>
-                            <property name="bottom_attach">5</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="server-field">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="xalign">0</property>
-                            <property name="label">[server]</property>
-                            <property name="selectable">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
+                            <property name="left_attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="type-field">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="xalign">0</property>
                             <property name="label">[Type here]</property>
                             <property name="selectable">True</property>
                           </object>
                           <packing>
+                            <property name="top_attach">3</property>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">2</property>
-                            <property name="bottom_attach">3</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="server-label">
+                            <property name="visible">True</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Server:</property>
+                          </object>
+                          <packing>
+                            <property name="top_attach">4</property>
+                            <property name="left_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="server-field">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label">[server]</property>
+                            <property name="selectable">True</property>
+                          </object>
+                          <packing>
+                            <property name="top_attach">4</property>
+                            <property name="left_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="login-label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Login:</property>
+                            <property name="xalign">1</property>
+                          </object>
+                          <packing>
+                            <property name="top_attach">5</property>
+                            <property name="left_attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="login-field">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="xalign">0</property>
                             <property name="label">[login]</property>
                             <property name="selectable">True</property>
                           </object>
                           <packing>
+                            <property name="top_attach">5</property>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">4</property>
-                            <property name="bottom_attach">5</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
                           </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkExpander" id="password-expander">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <child>
-                      <object class="GtkAlignment" id="alignment45">
-                        <property name="visible">True</property>
-                        <property name="left_padding">12</property>
-                        <child>
-                          <object class="GtkVBox" id="vbox9">
-                            <property name="visible">True</property>
-                            <property name="spacing">6</property>
-                            <child>
-                              <object class="GtkHBox" id="password-box-area">
-                                <property name="visible">True</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="show-password-check">
-                                <property name="label" translatable="yes">Show pass_word</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel" id="label22229">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Password:</property>
-                        <attributes>
-                         <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
@@ -270,8 +210,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox8">
+              <object class="GtkBox" id="vbox8">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="border_width">8</property>
                 <child>
                   <object class="GtkFrame" id="frame4">

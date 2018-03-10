@@ -1,13 +1,14 @@
 gkr_sources = [
   'gkr-backend.vala',
   'gkr-dialogs.vala',
-  'gkr-module.vala',
-  'gkr-item.vala',
   'gkr-item-add.vala',
   'gkr-item-properties.vala',
-  'gkr-keyring.vala',
+  'gkr-item.vala',
   'gkr-keyring-add.vala',
   'gkr-keyring-properties.vala',
+  'gkr-keyring.vala',
+  'gkr-module.vala',
+  'gkr-password-entry.vala',
 ]
 
 gkr_dependencies = [
