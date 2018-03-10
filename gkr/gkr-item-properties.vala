@@ -19,237 +19,215 @@
  */
 
 public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
-	public Item item { construct; get; }
+    public Item item { construct; get; }
 
-	private Gtk.Builder _builder;
-	private Gtk.Entry _password_entry;
-	private bool _password_changed;
-	private bool _updating_password;
-	private bool _updating_description;
+    private Gtk.Builder _builder;
+    private PasswordEntry password_entry;
+    private Gtk.Entry description;
+    private bool description_has_changed;
 
-	construct {
-		this._builder = new Gtk.Builder();
-		try {
-			string path = "/org/gnome/Seahorse/seahorse-gkr-item-properties.ui";
-			this._builder.add_from_resource(path);
-		} catch (GLib.Error err) {
-			GLib.critical ("%s", err.message);
-		}
+    construct {
+        this._builder = new Gtk.Builder();
+        try {
+            string path = "/org/gnome/Seahorse/seahorse-gkr-item-properties.ui";
+            this._builder.add_from_resource(path);
+        } catch (GLib.Error err) {
+            GLib.critical ("%s", err.message);
+        }
 
-		var content = (Gtk.Widget)this._builder.get_object("gkr-item-properties");
-		((Gtk.Container)this.get_content_area()).add(content);
-		content.show();
+        var content = (Gtk.Widget)this._builder.get_object("gkr-item-properties");
+        ((Gtk.Container)this.get_content_area()).add(content);
+        content.show();
 
-		this.response.connect((response) => {
-			this.destroy();
-		});
+        // Setup the image properly
+        this.item.bind_property ("icon", this._builder.get_object("key-image"), "gicon",
+                                 GLib.BindingFlags.SYNC_CREATE);
 
-		/* Setup the image properly */
-		this.item.bind_property ("icon", this._builder.get_object("key-image"), "gicon",
-		                         GLib.BindingFlags.SYNC_CREATE);
+        // Setup the label properly
+        this.description = (Gtk.Entry)this._builder.get_object("description-field");
+        this.item.bind_property("label", this.description, "text", GLib.BindingFlags.SYNC_CREATE);
+        this.description.changed.connect(() => {
+            this.description_has_changed = true;
+        });
 
-		/* Setup the label properly */
-		Gtk.Entry description = (Gtk.Entry)this._builder.get_object("description-field");
-		this.item.bind_property("label", description, "text", GLib.BindingFlags.SYNC_CREATE);
-		description.activate.connect(() => {
-			description_activate(description);
-		});
-		description.focus_out_event.connect_after(() => {
-			description_activate(description);
-			return false;
-		});
+        /* Window title */
+        this.item.bind_property("label", this, "title", GLib.BindingFlags.SYNC_CREATE);
 
-		/* Window title */
-		this.item.bind_property ("label", this, "title", GLib.BindingFlags.SYNC_CREATE);
-
-		/* Update as appropriate */
-		this.item.notify.connect((pspec) => {
-			switch(pspec.name) {
-			case "use":
-				update_use();
-				update_type();
-				update_visibility();
-				break;
-			case "attributes":
-				update_details();
-				update_server();
-				update_user();
-				break;
-			case "has-secret":
-				password_display();
-				break;
-			}
-		});
+        /* Update as appropriate */
+        this.item.notify.connect((pspec) => {
+            switch(pspec.name) {
+            case "use":
+                update_use();
+                update_type();
+                update_visibility();
+                break;
+            case "attributes":
+                update_details();
+                update_server();
+                update_user();
+                break;
+            case "has-secret":
+                fetch_password();
+                break;
+            }
+        });
 
         // Create the password entry
-        this._password_entry = new PasswordEntry();
+        this.password_entry = new PasswordEntry();
         Gtk.Box box = (Gtk.Box)this._builder.get_object("password-box-area");
-        box.add(this._password_entry);
-        this._password_changed = false;
-        this._updating_password = false;
-        password_display();
+        box.add(this.password_entry);
+        fetch_password();
 
-		/* Now watch for changes in the password */
-		this._password_entry.activate.connect(password_activate);
-		this._password_entry.changed.connect(() => {
-			this._password_changed = true;
-		});
-		this._password_entry.focus_out_event.connect_after(() => {
-			password_activate ();
-			return false;
-		});
+        // Sensitivity of the password entry
+        this.item.bind_property("has-secret", this.password_entry, "sensitive");
+    }
 
-		/* Sensitivity of the password entry */
-		this.item.bind_property("has-secret", this._password_entry, "sensitive");
-	}
+    public ItemProperties(Item item, Gtk.Window? parent) {
+        GLib.Object (
+            item: item,
+            transient_for: parent
+        );
 
-	public ItemProperties(Item item,
-	                      Gtk.Window? parent) {
-		GLib.Object (
-			item: item,
-			transient_for: parent
-		);
+        item.refresh();
+    }
 
-		item.refresh();
-	}
-
-	private void update_use() {
-		Gtk.Label use = (Gtk.Label)this._builder.get_object("use-field");
-		switch (this.item.use) {
-		case Use.NETWORK:
-			use.label = _("Access a network share or resource");
-			break;
-		case Use.WEB:
-			use.label = _("Access a website");
-			break;
-		case Use.PGP:
-			use.label = _("Unlocks a PGP key");
-			break;
-		case Use.SSH:
-			use.label = _("Unlocks a Secure Shell key");
-			break;
-		case Use.OTHER:
-			use.label = _("Saved password or login");
-			break;
-		default:
-			use.label = "";
-			break;
-		};
-	}
-
-	private void update_type() {
-		Gtk.Label type = (Gtk.Label)this._builder.get_object("type-field");
-		switch (item.use) {
-		case Use.NETWORK:
-		case Use.WEB:
-			type.label = _("Network Credentials");
-			break;
-		case Use.PGP:
-		case Use.SSH:
-		case Use.OTHER:
-			type.label = _("Password");
-			break;
-		default:
-			type.label = "";
-			break;
-		};
-	}
-
-	private void update_visibility() {
-		var use = this.item.use;
-		bool visible = use == Use.NETWORK || use == Use.WEB;
-		this._builder.get_object("server-label").set("visible", visible);
-		this._builder.get_object("server-field").set("visible", visible);
-		this._builder.get_object("login-label").set("visible", visible);
-		this._builder.get_object("login-field").set("visible", visible);
-	}
-
-	private void update_server() {
-		Gtk.Label server = (Gtk.Label)this._builder.get_object("server-label");
-		var value = this.item.get_attribute("server");
-		if (value == null)
-			value = "";
-		server.label = value;
-	}
-
-	private void update_user() {
-		Gtk.Label login = (Gtk.Label)this._builder.get_object("login-label");
-		var value = this.item.get_attribute("user");
-		if (value == null)
-			value = "";
-		login.label = value;
-	}
-
-	private void update_details() {
-		var contents = new GLib.StringBuilder();
-		var attrs = this.item.attributes;
-		var iter = GLib.HashTableIter<string, string>(attrs);
-		string key, value;
-		while (iter.next(out key, out value)) {
-			if (key.has_prefix("gkr:") || key.has_prefix("xdg:"))
-				continue;
-			contents.append_printf("<b>%s</b>: %s\n",
-			                       GLib.Markup.escape_text(key),
-			                       GLib.Markup.escape_text(value));
-		}
-		Gtk.Label details = (Gtk.Label)this._builder.get_object("details-box");
-		details.use_markup = true;
-		details.label = contents.str;
-	}
-
-    private void password_activate() {
-        if (!this._password_changed || this._updating_password)
+    public override void response(int response) {
+        // In case of changes: ask for confirmation
+        if (!this.password_entry.has_changed && !this.description_has_changed) {
+            destroy();
             return;
+        }
 
-        this._updating_password = true;
+        var dialog = new Gtk.MessageDialog(this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING,
+                                           Gtk.ButtonsType.OK_CANCEL, _("Save changes for this item?"));
+        dialog.response.connect((resp) => {
+            if (resp == Gtk.ResponseType.OK) {
+                if (this.password_entry.has_changed)
+                    save_password.begin();
+                if (this.description_has_changed)
+                    save_description.begin();
+            }
 
-		var value = new Secret.Value(this._password_entry.text, -1, "text/plain");
-		this.item.set_secret.begin(value, null, (obj, res) => {
-			try {
-				this.item.set_secret.end(res);
-				password_display();
-			} catch (GLib.Error err) {
-				DBusError.strip_remote_error(err);
-				Util.show_error (this, _("Couldn’t change password."), err.message);
-			}
+            dialog.destroy();
+        });
+        dialog.run();
+    }
 
-			this._updating_password = false;
-		});
-	}
+    private void update_use() {
+        Gtk.Label use = (Gtk.Label)this._builder.get_object("use-field");
+        switch (this.item.use) {
+        case Use.NETWORK:
+            use.label = _("Access a network share or resource");
+            break;
+        case Use.WEB:
+            use.label = _("Access a website");
+            break;
+        case Use.PGP:
+            use.label = _("Unlocks a PGP key");
+            break;
+        case Use.SSH:
+            use.label = _("Unlocks a Secure Shell key");
+            break;
+        case Use.OTHER:
+            use.label = _("Saved password or login");
+            break;
+        default:
+            use.label = "";
+            break;
+        };
+    }
 
-    private void password_display() {
+    private void update_type() {
+        Gtk.Label type = (Gtk.Label)this._builder.get_object("type-field");
+        switch (item.use) {
+        case Use.NETWORK:
+        case Use.WEB:
+            type.label = _("Network Credentials");
+            break;
+        case Use.PGP:
+        case Use.SSH:
+        case Use.OTHER:
+            type.label = _("Password");
+            break;
+        default:
+            type.label = "";
+            break;
+        };
+    }
+
+    private void update_visibility() {
+        var use = this.item.use;
+        bool visible = use == Use.NETWORK || use == Use.WEB;
+        this._builder.get_object("server-label").set("visible", visible);
+        this._builder.get_object("server-field").set("visible", visible);
+        this._builder.get_object("login-label").set("visible", visible);
+        this._builder.get_object("login-field").set("visible", visible);
+    }
+
+    private void update_server() {
+        Gtk.Label server = (Gtk.Label)this._builder.get_object("server-label");
+        var value = this.item.get_attribute("server");
+        if (value == null)
+            value = "";
+        server.label = value;
+    }
+
+    private void update_user() {
+        Gtk.Label login = (Gtk.Label)this._builder.get_object("login-label");
+        var value = this.item.get_attribute("user");
+        if (value == null)
+            value = "";
+        login.label = value;
+    }
+
+    private void update_details() {
+        var contents = new GLib.StringBuilder();
+        var attrs = this.item.attributes;
+        var iter = GLib.HashTableIter<string, string>(attrs);
+        string key, value;
+        while (iter.next(out key, out value)) {
+            if (key.has_prefix("gkr:") || key.has_prefix("xdg:"))
+                continue;
+            contents.append_printf("<b>%s</b>: %s\n",
+                                   GLib.Markup.escape_text(key),
+                                   GLib.Markup.escape_text(value));
+        }
+        Gtk.Label details = (Gtk.Label)this._builder.get_object("details-box");
+        details.use_markup = true;
+        details.label = contents.str;
+    }
+
+    private async void save_password() {
+        var pw = new Secret.Value(this.password_entry.text, -1, "text/plain");
+        try {
+            yield this.item.set_secret(pw, null);
+        } catch (GLib.Error err) {
+            DBusError.strip_remote_error(err);
+            Util.show_error (this, _("Couldn’t change password."), err.message);
+        }
+        fetch_password();
+    }
+
+    private void fetch_password() {
         var secret = this.item.get_secret();
         if (secret != null) {
             unowned string? password = secret.get_text();
             if (password != null) {
-                this._password_entry.set_text(password);
-                this._password_changed = false;
+                this.password_entry.set_initial_password(password);
                 return;
             }
         }
 
-        this._password_entry.set_text("");
-        this._password_changed = false;
+        this.password_entry.set_initial_password("");
     }
 
-    private void description_activate(Gtk.Entry description) {
-        if (this._updating_description || this.item.label == description.text)
-            return;
-
-		this._updating_description = true;
-		description.sensitive = false;
-
-		this.item.set_label.begin(description.text, null, (obj, res) => {
-			try {
-				this.item.set_label.end(res);
-			} catch (GLib.Error err) {
-				description.text = this.item.label;
-				DBusError.strip_remote_error(err);
-				Util.show_error (this, _("Couldn’t set description."), err.message);
-			}
-
-			description.sensitive = true;
-			this._updating_description = false;
-		});
-	}
+    private async void save_description() {
+        try {
+            yield this.item.set_label(this.description.text, null);
+        } catch (GLib.Error err) {
+            this.description.text = this.item.label;
+            DBusError.strip_remote_error(err);
+            Util.show_error (this, _("Couldn’t set description."), err.message);
+        }
+    }
 }

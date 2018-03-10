@@ -16,7 +16,14 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * An entry specifically for password: the buffer is saved in a
+ * {@link Gcr.SecureEntryBuffer}, a secondary icon allows the user to hide or
+ * show the password.
+ */
 public class Seahorse.Gkr.PasswordEntry : Gtk.Entry {
+
+    public bool has_changed { get; set; default = false; }
 
     public PasswordEntry() {
         GLib.Object (
@@ -32,7 +39,13 @@ public class Seahorse.Gkr.PasswordEntry : Gtk.Entry {
         this.icon_press.connect((pos, event) => {
             this.visibility = !this.visibility;
         });
+        this.changed.connect(() => {
+            this.has_changed = true;
+        });
     }
 
-
+    public void set_initial_password (string? password) {
+        this.text = password;
+        this.has_changed = false;
+    }
 }
