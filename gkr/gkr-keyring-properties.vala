@@ -16,63 +16,111 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Seahorse {
-namespace Gkr {
+public class Seahorse.Gkr.KeyringProperties : Gtk.Dialog {
+    public Keyring keyring { construct; get; }
 
-public class KeyringProperties : Gtk.Dialog {
-	public Keyring keyring { construct; get; }
+    private Gtk.Builder _builder;
+    private Gtk.HeaderBar header;
+    private Gtk.Label name_label;
+    private Gtk.Label created_label;
+    private Gtk.Image keyring_image;
+    private Gtk.Button set_default_button;
+    private Gtk.Button change_pw_button;
+    private Gtk.Button lock_unlock_button;
+    private Gtk.Stack lock_unlock_stack;
 
-	private Gtk.Builder _builder;
+    construct {
+        this._builder = new Gtk.Builder();
+        try {
+            string path = "/org/gnome/Seahorse/seahorse-gkr-keyring.ui";
+            this._builder.add_from_resource(path);
+        } catch (GLib.Error err) {
+            critical("%s", err.message);
+        }
 
-	construct {
-		this._builder = new Gtk.Builder();
-		try {
-			string path = "/org/gnome/Seahorse/seahorse-gkr-keyring.ui";
-			this._builder.add_from_resource(path);
-		} catch (GLib.Error err) {
-			GLib.critical ("%s", err.message);
-		}
+        var content = (Gtk.Widget)this._builder.get_object("gkr-keyring");
+        ((Gtk.Container)this.get_content_area()).add(content);
+        content.show();
 
-		this.add_button(Gtk.Stock.CLOSE, Gtk.ResponseType.CLOSE);
-		var content = (Gtk.Widget)this._builder.get_object("gkr-item-properties");
-		((Gtk.Container)this.get_content_area()).add(content);
-		content.show();
+        // The header
+        this.use_header_bar = 1;
+        this.header = (Gtk.HeaderBar) this._builder.get_object("titlebar");
+        this.keyring.bind_property("label", this.header, "subtitle", GLib.BindingFlags.SYNC_CREATE);
+        set_titlebar(this.header);
 
-		this.response.connect((response) => {
-			this.destroy();
-		});
+        // The label
+        this.name_label = (Gtk.Label)this._builder.get_object("name_field");
+        this.keyring.bind_property ("label", this.name_label, "label", GLib.BindingFlags.SYNC_CREATE);
 
-		/* Setup the image properly */
-		this.keyring.bind_property ("icon", this._builder.get_object("keyring-image"), "gicon",
-		                            GLib.BindingFlags.SYNC_CREATE);
+        // The icon
+        this.keyring_image = (Gtk.Image) this._builder.get_object("keyring_image");
+        this.keyring.bind_property ("icon", this.keyring_image, "gicon", GLib.BindingFlags.SYNC_CREATE);
 
-		/* The window title */
-		this.keyring.bind_property ("label", this, "title", GLib.BindingFlags.SYNC_CREATE);
+        // The date field
+        this.created_label = (Gtk.Label)this._builder.get_object("created_field");
+        set_created(this.keyring.created);
+        this.keyring.notify["created"].connect((obj, pspec) => {
+            set_created(this.keyring.created);
+        });
 
-		/* Setup the label properly */
-		var name = (Gtk.Label)this._builder.get_object("name-field");
-		this.keyring.bind_property ("label", name, "label", GLib.BindingFlags.SYNC_CREATE);
+        // The buttons
+        this.change_pw_button = (Gtk.Button) this._builder.get_object("change_pw_button");
+        this.change_pw_button.clicked.connect(on_change_pw_button_clicked);
 
-		/* The date field */
-		this.keyring.notify.connect((pspec) => {
-			switch(pspec.name) {
-			case "created":
-				var created = (Gtk.Label)this._builder.get_object("created-field");
-				created.label = Util.get_display_date_string((long)this.keyring.created);
-				break;
-			}
-		});
-	}
+        this.set_default_button = (Gtk.Button) this._builder.get_object("set_default_button");
+        this.set_default_button.clicked.connect(on_set_default_button_clicked);
+        this.keyring.bind_property("is-default", this.set_default_button, "sensitive",
+                                   BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
 
-	public KeyringProperties(Keyring keyring,
-	                         Gtk.Window? parent) {
-		GLib.Object (
-			keyring: keyring,
-			transient_for: parent
-		);
-	}
+        this.lock_unlock_button = (Gtk.Button) this._builder.get_object("lock_unlock_button");
+        this.lock_unlock_stack = (Gtk.Stack) this._builder.get_object("lock_unlock_stack");
+        this.lock_unlock_button.clicked.connect(lock_unlock_button_clicked);
+        update_lock_unlock_button();
+    }
 
-}
+    public KeyringProperties(Keyring keyring, Gtk.Window? parent) {
+        GLib.Object(
+            keyring: keyring,
+            transient_for: parent
+        );
+    }
 
-}
+    private void set_created(uint64 timestamp) {
+        this.created_label.label = (timestamp != 0)? Util.get_display_date_string((long) timestamp)
+                                                   : _("Unknown date");
+    }
+
+    private void on_set_default_button_clicked(Gtk.Button button) {
+        this.keyring.on_keyring_default(null);
+    }
+
+    private void on_change_pw_button_clicked(Gtk.Button button) {
+        this.keyring.on_keyring_password(null);
+    }
+
+    private void update_lock_unlock_button() {
+        this.lock_unlock_stack.visible_child_name
+            = this.keyring.locked? "lock_unlock_button_locked" : "lock_unlock_button_unlocked";
+    }
+
+    private async void set_keyring_locked() {
+        this.lock_unlock_button.sensitive = false;
+        try {
+            if (this.keyring.locked)
+                yield this.keyring.unlock(null, null);
+            else
+                yield this.keyring.lock(null, null);
+        } catch (Error e) {
+            warning("Couldn't %s keyring <%s>",
+                this.keyring.locked? "lock" : "unlock",
+                this.keyring.label);
+        }
+
+        update_lock_unlock_button();
+        this.lock_unlock_button.sensitive = true;
+    }
+
+    private void lock_unlock_button_clicked(Gtk.Button button) {
+        set_keyring_locked.begin();
+    }
 }

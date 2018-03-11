@@ -1,178 +1,173 @@
 <?xml version="1.0"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
+  <requires lib="gtk+" version="3.22"/>
   <!-- interface-naming-policy toplevel-contextual -->
-      <object class="GtkVBox" id="gkr-keyring">
+      <object class="GtkHeaderBar" id="titlebar">
         <property name="visible">True</property>
-        <property name="spacing">2</property>
+        <property name="show_close_button">True</property>
+        <property name="title" translatable="yes">Keyring properties</property>
         <child>
-          <object class="GtkNotebook" id="notebook">
+          <object class="GtkButton" id="lock_unlock_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="border_width">5</property>
             <child>
-              <object class="GtkVBox" id="vbox7">
+              <object class="GtkStack" id="lock_unlock_stack">
                 <property name="visible">True</property>
-                <property name="border_width">12</property>
-                <property name="spacing">18</property>
+                <property name="homogeneous">False</property>
                 <child>
-                  <object class="GtkHBox" id="hbox61">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="spacing">12</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">6</property>
+                    <property name="tooltip_text" translatable="yes">Keyring is unlocked</property>
                     <child>
-                      <object class="GtkImage" id="keyring-image">
-                        <property name="visible">True</property>
-                        <property name="yalign">0</property>
-                        <property name="stock">gtk-missing-image</property>
-                        <property name="icon-size">6</property>
+                      <object class="GtkImage">
+                        <property name="visible">true</property>
+                        <property name="icon_name">changes-allow-symbolic</property>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkTable" id="table9">
-                        <property name="visible">True</property>
-                        <property name="n_rows">2</property>
-                        <property name="n_columns">2</property>
-                        <property name="column_spacing">12</property>
-                        <property name="row_spacing">6</property>
-                        <child>
-                          <object class="GtkLabel" id="label72">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
-                            <property name="label" translatable="yes">Name:</property>
-                            <property name="use_markup">True</property>
-                          </object>
-                          <packing>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label22228">
-                            <property name="visible">True</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">1</property>
-                            <property name="label" translatable="yes" comments="To translators: This is the noun not the verb.">Created:</property>
-                          </object>
-                          <packing>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="created-field">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">1</property>
-                            <property name="label">date</property>
-                            <property name="use_markup">True</property>
-                            <property name="selectable">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="name-field">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">1</property>
-                            <property name="label">keyring name</property>
-                            <property name="use_markup">True</property>
-                            <property name="selectable">True</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options"></property>
-                          </packing>
-                        </child>
+                      <object class="GtkLabel">
+                        <property name="visible">true</property>
+                        <property name="label" translatable="yes">Unlock</property>
                       </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="position">0</property>
+                    <property name="name">lock_unlock_button_unlocked</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">6</property>
+                    <property name="tooltip_text" translatable="yes">Keyring is locked</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">true</property>
+                        <property name="icon_name">changes-prevent-symbolic</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">true</property>
+                        <property name="label" translatable="yes">Lock</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">lock_unlock_button_locked</property>
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="xpad">3</property>
-                <property name="label" translatable="yes">Keyring</property>
-              </object>
-              <packing>
-                <property name="tab_fill">False</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
+      </object>
+      <object class="GtkBox" id="gkr-keyring">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="border_width">0</property>
+        <property name="width_request">300</property>
+        <child>
+          <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="layout_style">end</property>
+            <property name="margin">18</property>
+            <property name="column_spacing">18</property>
+            <property name="row_spacing">6</property>
+            <property name="vexpand">True</property>
             <child>
-              <object class="GtkButton" id="helpbutton1">
-                <property name="label">gtk-help</property>
+              <object class="GtkImage" id="keyring_image">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_widget_help"/>
+                <property name="halign">center</property>
+                <property name="valign">start</property>
+                <property name="margin_end">12</property>
+                <property name="icon-size">6</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
+                <property name="top_attach">0</property>
+                <property name="left_attach">0</property>
+                <property name="height">2</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="closebutton1">
-                <property name="label">gtk-close</property>
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_widget_closed"/>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes">Name</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="top_attach">0</property>
+                <property name="left_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="name_field">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="label">keyring name</property>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes">Created on</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="created_field">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">2</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkActionBar">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkButton" id="change_pw_button">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Change password</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="set_default_button">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Set as default</property>
+              </object>
+              <packing>
+                <property name="pack_type">end</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="pack_type">end</property>
-            <property name="position">0</property>
           </packing>
         </child>
       </object>
