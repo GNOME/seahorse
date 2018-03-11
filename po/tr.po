@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-01-28 20:19+0000\n"
-"PO-Revision-Date: 2018-02-17 15:30+0300\n"
+"POT-Creation-Date: 2018-03-08 21:29+0000\n"
+"PO-Revision-Date: 2018-03-10 17:26+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -48,7 +48,7 @@ msgid "Contributions:"
 msgstr "Katkılar:"
 
 #: common/catalog.vala:286 data/seahorse.desktop.in.in:3
-#: src/seahorse-key-manager.c:659
+#: src/seahorse-key-manager.c:658
 msgid "Passwords and Keys"
 msgstr "Parolalar ve Anahtarlar"
 
@@ -67,7 +67,7 @@ msgstr "Seahorse Web Safyası"
 msgid "Cannot delete"
 msgstr "Silinemiyor"
 
-#: common/catalog.vala:332 libseahorse/seahorse-key-manager-store.c:439
+#: common/catalog.vala:332 common/key-manager-store.vala:427
 msgid "Couldn’t export keys"
 msgstr "Anahtarlar dışa aktarılamadı"
 
@@ -199,8 +199,8 @@ msgid ""
 "For help contact your system administrator or the administrator of the key "
 "server."
 msgstr ""
-"Yardım için sistem yöneticiniz veya anahtar sunucusunun yöneticisi ile "
-"irtibata geçin."
+"Yardım için sistem yöneticiniz veya anahtar sunucusunun yöneticisiyle "
+"iletişime geçin."
 
 #: common/prefs.vala:236
 msgid "URL"
@@ -535,7 +535,7 @@ msgid "New Keyring Name:"
 msgstr "Yeni Anahtarlık Adı:"
 
 #: gkr/seahorse-gkr-add-item.ui:20 gkr/seahorse-gkr-item-properties.ui:42
-#: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:131
+#: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:124
 msgid "_Description:"
 msgstr "_Açıklama:"
 
@@ -555,7 +555,6 @@ msgstr "_Anahtarlık:"
 #: gkr/seahorse-gkr-item-properties.ui:69
 #: pgp/seahorse-pgp-private-key-properties.ui:553
 #: pgp/seahorse-pgp-public-key-properties.ui:442
-#: ssh/seahorse-ssh-key-properties.ui:166
 msgid "Use:"
 msgstr "Kullanım:"
 
@@ -564,7 +563,7 @@ msgstr "Kullanım:"
 #: pgp/seahorse-pgp-private-key-properties.ui:1106
 #: pgp/seahorse-pgp-public-key-properties.ui:557
 #: pgp/seahorse-pgp-public-key-properties.ui:1223
-#: ssh/seahorse-ssh-key-properties.ui:86
+#: ssh/seahorse-ssh-key-properties.ui:75
 msgid "Type:"
 msgstr "Tür:"
 
@@ -581,20 +580,20 @@ msgid "Show pass_word"
 msgstr "Parolayı _göster"
 
 #: gkr/seahorse-gkr-item-properties.ui:266 pgp/seahorse-pgp-subkey.c:402
-#: ssh/seahorse-ssh-key-properties.ui:290
+#: ssh/seahorse-ssh-key-properties.ui:239
 msgid "Key"
 msgstr "Anahtar"
 
 #: gkr/seahorse-gkr-item-properties.ui:315
 #: pgp/seahorse-pgp-public-key-properties.ui:1151
-#: ssh/seahorse-ssh-key-properties.ui:459
+#: ssh/seahorse-ssh-key-properties.ui:408
 msgid "Technical Details:"
 msgstr "Teknik Ayrıntılar:"
 
 #: gkr/seahorse-gkr-item-properties.ui:335
 #: pgp/seahorse-pgp-private-key-properties.ui:1722
 #: pgp/seahorse-pgp-public-key-properties.ui:1611
-#: ssh/seahorse-ssh-key-properties.ui:502
+#: ssh/seahorse-ssh-key-properties.ui:451
 msgid "Details"
 msgstr "Ayrıntılar"
 
@@ -868,16 +867,16 @@ msgstr "%04d-%02d-%02d"
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
-#: libseahorse/seahorse-application.c:108
+#: libseahorse/seahorse-application.c:94
 msgid "Version of this application"
 msgstr "Bu uygulamanın sürümü"
 
-#: libseahorse/seahorse-application.c:114
-#: libseahorse/seahorse-application.c:158
+#: libseahorse/seahorse-application.c:100
+#: libseahorse/seahorse-application.c:144
 msgid "- System Settings"
 msgstr "- Sistem Ayarları"
 
-#: libseahorse/seahorse-application.c:154
+#: libseahorse/seahorse-application.c:140
 msgid "Don't display a window"
 msgstr "Pencere gösterme"
 
@@ -928,11 +927,11 @@ msgstr "En azından 5 karakter uzunluğunda olmalı"
 
 #: pgp/seahorse-add-uid.ui:42
 msgid "Optional email address"
-msgstr "Tercihsel e-posta adresi"
+msgstr "İsteğe bağlı e-posta adresi"
 
 #: pgp/seahorse-add-uid.ui:58
 msgid "Optional comment describing key"
-msgstr "Anahtarı tanımlayacak tercihsel bir açıklama"
+msgstr "Anahtarı tanımlayacak isteğe bağlı açıklama"
 
 #. Full name of the key, usually the name of the user.
 #: pgp/seahorse-add-uid.ui:73 pgp/seahorse-pgp-generate.ui:191
@@ -1039,7 +1038,7 @@ msgid "Used to encrypt email and files"
 msgstr "E-postaların ve dosyaların şifresini çözmek için kullanılır"
 
 #: pgp/seahorse-gpgme-generate.c:129 pkcs11/seahorse-pkcs11-generate.c:90
-#: ssh/seahorse-ssh-generate.ui:254
+#: ssh/seahorse-ssh-generate.ui:246
 msgid "RSA"
 msgstr "RSA"
 
@@ -1097,9 +1096,10 @@ msgstr "Hatalı parola"
 
 #: pgp/seahorse-gpgme-key-op.c:378
 msgid "This was the third time you entered a wrong password. Please try again."
-msgstr "Üçüncü kez yanlış bir parola girdiniz. Lütfen tekrar deneyin."
+msgstr "Üçüncü kez yanlış bir parola girdiniz. Lütfen yeniden deneyin."
 
 #: pgp/seahorse-gpgme-keyring.c:88
+#, c-format
 msgid "Wrong passphrase."
 msgstr "Yanlış parola metni."
 
@@ -1165,6 +1165,7 @@ msgid "_Resize"
 msgstr "Yeniden _Boyutlandır"
 
 #: pgp/seahorse-gpgme-photos.c:127
+#, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -1180,7 +1181,7 @@ msgstr "Tüm resim dosyaları"
 msgid "All JPEG files"
 msgstr "Tüm JPEG dosyaları"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:287
+#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:286
 msgid "All files"
 msgstr "Tüm dosyalar"
 
@@ -1328,49 +1329,49 @@ msgstr "“%s” sunucusu ile iletişim kurulamadı: %s"
 msgid "HTTP Key Server"
 msgstr "HTTP Anahtar Sunucuları"
 
-#: pgp/seahorse-keyserver-results.c:168
+#: pgp/seahorse-keyserver-results.c:167
 msgid "Couldn’t import keys"
 msgstr "Anahtarlar içe aktarılamadı"
 
-#: pgp/seahorse-keyserver-results.c:211
+#: pgp/seahorse-keyserver-results.c:210
 msgid "Importing keys from key servers"
 msgstr "Anahtarlar anahtar sunucularından içe aktarılıyor"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: pgp/seahorse-keyserver-results.c:237 src/seahorse-key-manager.c:500
+#: pgp/seahorse-keyserver-results.c:236 src/seahorse-key-manager.c:499
 msgid "_Remote"
 msgstr "_Uzaktan"
 
-#: pgp/seahorse-keyserver-results.c:239
+#: pgp/seahorse-keyserver-results.c:238
 msgid "Close this window"
 msgstr "Bu pencereyi kapat"
 
-#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:112
+#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:112
 msgid "_Find Remote Keys…"
 msgstr "Uzaktaki Anahtarları _Bul…"
 
-#: pgp/seahorse-keyserver-results.c:244 pgp/seahorse-pgp-actions.c:113
+#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:113
 msgid "Search for keys on a key server"
 msgstr "Bir anahtar sunucusunda anahtar ara"
 
-#: pgp/seahorse-keyserver-results.c:248 src/seahorse-key-manager.ui:195
+#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:195
 msgid "_Import"
 msgstr "İçe _Aktar"
 
-#: pgp/seahorse-keyserver-results.c:249
+#: pgp/seahorse-keyserver-results.c:248
 msgid "Import selected keys to local key ring"
 msgstr "Seçili anahtarları yerel anahtarlığa aktar"
 
-#: pgp/seahorse-keyserver-results.c:280
+#: pgp/seahorse-keyserver-results.c:279
 msgid "Remote Keys"
 msgstr "Uzaktaki Anahtarlar"
 
-#: pgp/seahorse-keyserver-results.c:282
+#: pgp/seahorse-keyserver-results.c:281
 #, c-format
 msgid "Remote Keys Containing “%s”"
 msgstr "“%s” İçeren Uzaktaki Anahtarlar"
 
-#: pgp/seahorse-keyserver-results.c:485
+#: pgp/seahorse-keyserver-results.c:484
 msgid "The search for keys failed."
 msgstr "Anahtar arama başarısız oldu."
 
@@ -1406,22 +1407,22 @@ msgstr "Aranacak yer:"
 msgid "_Search"
 msgstr "_Ara"
 
-#: pgp/seahorse-keyserver-sync.c:55
+#: pgp/seahorse-keyserver-sync.c:54
 msgid "Couldn’t publish keys to server"
 msgstr "Anahtarlar sunucuya yayımlanamadı"
 
-#: pgp/seahorse-keyserver-sync.c:74
+#: pgp/seahorse-keyserver-sync.c:73
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Anahtarlar sunucudan alınamadı: %s"
 
-#: pgp/seahorse-keyserver-sync.c:160
+#: pgp/seahorse-keyserver-sync.c:158
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d anahtar güncelleme için seçildi</b>"
 
-#: pgp/seahorse-keyserver-sync.c:240
+#: pgp/seahorse-keyserver-sync.c:237
 msgid "Synchronizing keys…"
 msgstr "Anahtarlar eşzamanlanıyor…"
 
@@ -1518,12 +1519,12 @@ msgstr "_Kullanım Süresi Bitmez"
 msgid "_Comment:"
 msgstr "_Açıklama:"
 
-#: pgp/seahorse-pgp-generate.ui:370 ssh/seahorse-ssh-generate.ui:213
+#: pgp/seahorse-pgp-generate.ui:370 ssh/seahorse-ssh-generate.ui:206
 msgid "Encryption _Type:"
 msgstr "Şifreleme _Türü:"
 
 #: pgp/seahorse-pgp-generate.ui:385 pkcs11/seahorse-pkcs11-generate.ui:164
-#: ssh/seahorse-ssh-generate.ui:229
+#: ssh/seahorse-ssh-generate.ui:222
 msgid "Key _Strength (bits):"
 msgstr "Anahtar _Uzunluğu (bit):"
 
@@ -1532,7 +1533,7 @@ msgid "E_xpiration Date:"
 msgstr "_Son Kullanım Tarihi:"
 
 #: pgp/seahorse-pgp-generate.ui:418 pkcs11/seahorse-pkcs11-generate.ui:226
-#: ssh/seahorse-ssh-generate.ui:300
+#: ssh/seahorse-ssh-generate.ui:267
 msgid "_Advanced key options"
 msgstr "_Gelişmiş anahtar seçenekleri"
 
@@ -1754,7 +1755,7 @@ msgid "Private PGP Key"
 msgstr "PGP Gizli Anahtarı"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:649
-#: ssh/seahorse-ssh-key-properties.ui:195
+#: ssh/seahorse-ssh-key-properties.ui:144
 msgid "Change _Passphrase"
 msgstr "_Parola Metnini Değiştir"
 
@@ -1796,7 +1797,6 @@ msgstr "Adlar ve İmzalar"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1092
 #: pgp/seahorse-pgp-public-key-properties.ui:1208
-#: ssh/seahorse-ssh-key-properties.ui:339
 msgid "Strength:"
 msgstr "Uzunluk:"
 
@@ -1917,12 +1917,12 @@ msgid "_Only display the signatures of people I trust"
 msgstr "_Yalnızca güvendiğim kişilerin imzalarını göster"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:1117
-#: ssh/seahorse-ssh-key-properties.ui:220
+#: ssh/seahorse-ssh-key-properties.ui:169
 msgid "Trust"
 msgstr "Güven"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:1290
-#: ssh/seahorse-ssh-key-properties.ui:403
+#: ssh/seahorse-ssh-key-properties.ui:352
 msgid "Fingerprint:"
 msgstr "Parmak İzi:"
 
@@ -2220,7 +2220,7 @@ msgstr "Şuraya saklandı:"
 
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
-msgstr "Bir sertifika istek dosyası oluştur."
+msgstr "Sertifika istek dosyası oluştur."
 
 #: pkcs11/seahorse-pkcs11-request.ui:52
 msgid "The common name (CN) placed in the certificate request."
@@ -2267,87 +2267,87 @@ msgid "<b>Data to be imported:</b>"
 msgstr "<b>İçe aktarılacak veri:</b>"
 
 #. The prompt
-#: src/seahorse-key-manager.c:241 ssh/operation.vala:322
+#: src/seahorse-key-manager.c:240 ssh/operation.vala:320
 msgid "Import Key"
 msgstr "İçe Anahtar Aktar"
 
-#: src/seahorse-key-manager.c:253
+#: src/seahorse-key-manager.c:252
 msgid "All key files"
 msgstr "Tüm anahtar dosyaları"
 
-#: src/seahorse-key-manager.c:354
+#: src/seahorse-key-manager.c:353
 msgid "Dropped text"
 msgstr "Bırakılan metin"
 
-#: src/seahorse-key-manager.c:390
+#: src/seahorse-key-manager.c:389
 msgid "Clipboard text"
 msgstr "Pano metni"
 
-#: src/seahorse-key-manager.c:501
+#: src/seahorse-key-manager.c:500
 msgid "_New"
 msgstr "_Yeni"
 
-#: src/seahorse-key-manager.c:503
+#: src/seahorse-key-manager.c:502
 msgid "Close this program"
 msgstr "Bu programı kapat"
 
-#: src/seahorse-key-manager.c:504 src/seahorse-key-manager.c:506
+#: src/seahorse-key-manager.c:503 src/seahorse-key-manager.c:505
 msgid "_New…"
 msgstr "_Yeni…"
 
-#: src/seahorse-key-manager.c:505
+#: src/seahorse-key-manager.c:504
 msgid "Create a new key or item"
-msgstr "Yeni bir anahtar veya öge oluştur"
+msgstr "Yeni anahtar veya öge oluştur"
+
+#: src/seahorse-key-manager.c:506
+msgid "Add a new key or item"
+msgstr "Yeni anahtar ya da öge ekle"
 
 #: src/seahorse-key-manager.c:507
-msgid "Add a new key or item"
-msgstr "Yeni bir anahtar ya da öge ekle"
-
-#: src/seahorse-key-manager.c:508
 msgid "_Import…"
 msgstr "İçe _Aktar…"
 
-#: src/seahorse-key-manager.c:509
+#: src/seahorse-key-manager.c:508
 msgid "Import from a file"
 msgstr "Dosyadan içe aktar"
 
-#: src/seahorse-key-manager.c:511
+#: src/seahorse-key-manager.c:510
 msgid "Import from the clipboard"
 msgstr "Panodan içe aktar"
 
-#: src/seahorse-key-manager.c:515
+#: src/seahorse-key-manager.c:514
 msgid "By _Keyring"
 msgstr "_Anahtarlığa Göre"
 
-#: src/seahorse-key-manager.c:516
+#: src/seahorse-key-manager.c:515
 msgid "Show sidebar listing keyrings"
 msgstr "Anahtarlıkları listeleyen yan çubuğu göster"
 
-#: src/seahorse-key-manager.c:520
+#: src/seahorse-key-manager.c:519
 msgid "Show _Personal"
 msgstr "_Kişiseli Göster"
 
-#: src/seahorse-key-manager.c:521
+#: src/seahorse-key-manager.c:520
 msgid "Only show personal keys, certificates and passwords"
 msgstr "Yalnızca kişisel anahtarlar, sertifikalar ve parolaları göster"
 
-#: src/seahorse-key-manager.c:522
+#: src/seahorse-key-manager.c:521
 msgid "Show _Trusted"
 msgstr "_Güveniliri Göster"
 
-#: src/seahorse-key-manager.c:523
+#: src/seahorse-key-manager.c:522
 msgid "Only show trusted keys, certificates and passwords"
 msgstr "Yalnızca güvenilir anahtarlar, sertifikalar ve parolaları göster"
 
-#: src/seahorse-key-manager.c:524
+#: src/seahorse-key-manager.c:523
 msgid "Show _Any"
 msgstr "_Tümünü Göster"
 
-#: src/seahorse-key-manager.c:525
+#: src/seahorse-key-manager.c:524
 msgid "Show all keys, certificates and passwords"
 msgstr "Tüm parolaları, sertifikaları ve parolaları göster"
 
-#: src/seahorse-key-manager.c:744
+#: src/seahorse-key-manager.c:743
 msgid "Filter"
 msgstr "Filtre"
 
@@ -2357,11 +2357,11 @@ msgstr "İlk sefer seçenekleri:"
 
 #: src/seahorse-key-manager.ui:152
 msgid "Generate a new key of your own: "
-msgstr "Kendinize ait yeni bir anahtar oluşturun: "
+msgstr "Kendinize ait yeni anahtar oluşturun: "
 
 #: src/seahorse-key-manager.ui:223
 msgid "Import existing keys from a file:"
-msgstr "Var olan anahtarları bir dosyadan aktar:"
+msgstr "Var olan anahtarları dosyadan aktar:"
 
 #: src/seahorse-key-manager.ui:255
 msgid "To get started with encryption you will need keys."
@@ -2392,8 +2392,8 @@ msgid ""
 "Send public Secure Shell key to another machine, and enable logins using "
 "that key."
 msgstr ""
-"Genel Güvenli Kabuk anahtarını başka bir bilgisayara gönder, ve o anahtarı "
-"kullanarakerişimlere izin ver."
+"Genel Güvenli Kabuk anahtarını başka bilgisayara gönder, ve o anahtarı "
+"kullanarak erişimlere izin ver."
 
 #: ssh/backend.vala:27
 msgid "Secure Shell"
@@ -2402,7 +2402,7 @@ msgstr "Güvenli Kabuk"
 #: ssh/backend.vala:28
 msgid "Keys used to connect securely to other computers"
 msgstr ""
-"Diğer bilgisayarlara güvenli bir şekilde bağlanmak için kullanılan anahtarlar"
+"Diğer bilgisayarlara güvenli biçimde bağlanmak için kullanılan anahtarlar"
 
 #: ssh/deleter.vala:41 ssh/deleter.vala:46
 #, c-format
@@ -2435,7 +2435,7 @@ msgstr "Bu anahtar için hiçbir genel anahtar dosyası yok."
 
 #. No comment, but loaded
 #: ssh/generate.vala:27 ssh/key.vala:120 ssh/key.vala:124
-#: ssh/seahorse-ssh-key-properties.ui:103
+#: ssh/seahorse-ssh-key-properties.ui:90
 msgid "Secure Shell Key"
 msgstr "Güvenli Kabuk Anahtarı"
 
@@ -2443,21 +2443,34 @@ msgstr "Güvenli Kabuk Anahtarı"
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Başka bilgisayarlara (örneğin uçbirimden) erişirken kullanılır"
 
-#: ssh/generate.vala:41
+#: ssh/generate.vala:42
 msgid "New Secure Shell Key"
 msgstr "Yeni Güvenli Kabuk Anahtarı"
 
-#: ssh/generate.vala:143
+#: ssh/generate.vala:136
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Yeni oluşturulan Güvenli Kabuk anahtarı yüklenemedi."
 
-#: ssh/generate.vala:147
+#: ssh/generate.vala:140
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Güvenli Kabuk anahtarı oluşturulamadı"
 
-#: ssh/generate.vala:150
+#: ssh/generate.vala:143
 msgid "Creating Secure Shell Key"
 msgstr "Güvenli Kabuk Anahtarı Oluşturuluyor"
+
+#: ssh/key-length-chooser.vala:92
+msgid "1024 bits"
+msgstr "1024 bit"
+
+#: ssh/key-length-chooser.vala:96
+msgid "256 bits"
+msgstr "256 bit"
+
+#: ssh/key-length-chooser.vala:100
+#| msgid "Unknown type"
+msgid "Unknown key type!"
+msgstr "Bilinmeyen anahtar türü!"
 
 #: ssh/key-properties.vala:112
 msgid "Unknown type"
@@ -2488,26 +2501,26 @@ msgstr "SSH anahtarı"
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Okunamayan Güvenli Kabuk Anahtarı)"
 
-#: ssh/operation.vala:214
+#: ssh/operation.vala:215
 msgid "Remote Host Password"
 msgstr "Uzaktaki Makine Parolası"
 
-#: ssh/operation.vala:257
+#: ssh/operation.vala:258
 msgid "Enter Key Passphrase"
 msgstr "Anahtar Parola Metnini Girin"
 
-#: ssh/operation.vala:283
+#: ssh/operation.vala:284
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Yeni Güvenli Kabuk Anahtarı için parola metni"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:319
+#: ssh/operation.vala:317
 #, c-format
 msgid "Importing key: %s"
 msgstr "İçe aktarılan anahtar: %s"
 
-#: ssh/operation.vala:319
+#: ssh/operation.vala:317
 msgid "Importing key. Enter passphrase"
 msgstr "Anahtar içe aktarılıyor. Parola metni girin"
 
@@ -2536,24 +2549,32 @@ msgstr "%s için yeni parola metnini girin"
 #: ssh/seahorse-ssh-askpass.c:111
 #, c-format
 msgid "Enter the new passphrase again: %s"
-msgstr "Yeni parola metnini tekrar girin: %s"
+msgstr "Yeni parola metnini yeniden girin: %s"
 
-#: ssh/seahorse-ssh-generate.ui:67
+#: ssh/seahorse-ssh-generate.ui:60
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
-"Güvenli Kabuk (SSH) anahtarı, diğer bilgisayarlara güvenli bir şekilde "
+"Güvenli Kabuk (SSH) anahtarı, diğer bilgisayarlara güvenli biçimde "
 "bağlanmanızı sağlar."
 
-#: ssh/seahorse-ssh-generate.ui:165
+#: ssh/seahorse-ssh-generate.ui:158
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
-"E-posta adresiniz ya da bu anahtarın ne için olduğuna dair bir hatırlatıcı."
+"E-posta adresiniz ya da bu anahtarın ne için olduğuna dair bir anımsatıcı."
 
-#: ssh/seahorse-ssh-generate.ui:255
+#: ssh/seahorse-ssh-generate.ui:247
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:319
+#: ssh/seahorse-ssh-generate.ui:248
+msgid "ECDSA"
+msgstr "ECDSA"
+
+#: ssh/seahorse-ssh-generate.ui:249
+msgid "ED25519"
+msgstr "ED25519"
+
+#: ssh/seahorse-ssh-generate.ui:286
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2561,46 +2582,47 @@ msgstr ""
 "Eğer bu anahtarı kullanmak istediğiniz bir bilgisayar varsa, bilgisayarı "
 "yeni anahtarınızı tanıması için ayarlayabilirsiniz."
 
-#: ssh/seahorse-ssh-generate.ui:348
+#: ssh/seahorse-ssh-generate.ui:315
 msgid "_Just Create Key"
 msgstr "_Yalnızca Anahtar Oluştur"
 
-#: ssh/seahorse-ssh-generate.ui:362
+#: ssh/seahorse-ssh-generate.ui:329
 msgid "_Create and Set Up"
 msgstr "_Oluştur ve Kur"
 
-#: ssh/seahorse-ssh-key-properties.ui:52
-msgid "Identifier:"
-msgstr "Tanımlayıcı:"
-
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:120
+#: ssh/seahorse-ssh-key-properties.ui:50
 msgctxt "name-of-ssh-key"
 msgid "Name:"
 msgstr "Ad:"
 
-#: ssh/seahorse-ssh-key-properties.ui:151
-msgid "Used to connect to other computers."
-msgstr "Diğer bilgisayarlara bağlamak için kullanılır."
+#: ssh/seahorse-ssh-key-properties.ui:102
+msgid "Identifier:"
+msgstr "Tanımlayıcı:"
 
-#: ssh/seahorse-ssh-key-properties.ui:242
+#: ssh/seahorse-ssh-key-properties.ui:191
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr "Bu anahtarın _sahibine bu bilgisayara erişim için yetki ver"
 
-#: ssh/seahorse-ssh-key-properties.ui:260
+#: ssh/seahorse-ssh-key-properties.ui:209
 #, c-format
 msgid "This only applies to the <i>%s</i> account."
 msgstr "Bu yalnızca <i>%s</i> kullanıcısı için geçerlidir."
 
-#: ssh/seahorse-ssh-key-properties.ui:324
+#: ssh/seahorse-ssh-key-properties.ui:273
 msgid "Algorithm:"
 msgstr "Algoritma:"
 
-#: ssh/seahorse-ssh-key-properties.ui:387
+#: ssh/seahorse-ssh-key-properties.ui:288
+#| msgid "Key _Length:"
+msgid "Key length:"
+msgstr "Anahtar uzunluğu:"
+
+#: ssh/seahorse-ssh-key-properties.ui:336
 msgid "Location:"
 msgstr "Konum:"
 
-#: ssh/seahorse-ssh-key-properties.ui:480
+#: ssh/seahorse-ssh-key-properties.ui:429
 msgid "E_xport Complete Key"
 msgstr "Anahtarın _Tamamını Aktar"
 
@@ -2657,6 +2679,9 @@ msgstr "Uzak bilgisayardaki Güvenli Kabuk anahtarları yapılandırılamadı."
 #: ssh/upload.vala:97
 msgid "Configuring Secure Shell Keys…"
 msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
+
+#~ msgid "Used to connect to other computers."
+#~ msgstr "Diğer bilgisayarlara bağlamak için kullanılır."
 
 #~ msgid "The SSH command was terminated unexpectedly."
 #~ msgstr "SSH komutu beklenmeyen bir şekilde sonlandı."
