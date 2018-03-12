@@ -49,19 +49,12 @@ namespace Util {
 		dialog.destroy();
 	}
 
-	public string get_display_date_string (long time)
+	public string get_display_date_string (uint64 time)
 	{
 		if (time == 0)
 			return "";
-		var created_date = GLib.Date();
-		created_date.set_time_t (time);
-		var buffer = new char[128];
-		/* TRANSLATORS: this date (Year-month-day) is used to display
-		 * when something happened, e.g. when a key was created. Feel
-		 * free to put it in the correct order for your language.
-		 */
-		created_date.strftime(buffer, _("%Y-%m-%d"));
-		return (string)buffer;
+		var created_date = new DateTime.from_unix_utc((int64) time);
+		return created_date.format("%x");
 	}
 
 	public Gtk.Builder load_built_contents(Gtk.Container? frame,
