@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: seahorse 0\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-03-10 19:32+0000\n"
-"PO-Revision-Date: 2018-03-10 23:17+0100\n"
+"POT-Creation-Date: 2018-03-12 21:07+0000\n"
+"PO-Revision-Date: 2018-03-13 01:38+0100\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -242,14 +242,6 @@ msgstr "Automatski uskladi _promijenjene ključeve s poslužiteljem ključeva"
 msgid "Key Servers"
 msgstr "Poslužitelji ključeva"
 
-#. TRANSLATORS: this date (Year-month-day) is used to display
-#. * when something happened, e.g. when a key was created. Feel
-#. * free to put it in the correct order for your language.
-#.
-#: common/util.vala:63
-msgid "%Y-%m-%d"
-msgstr "%d-%m-%Y"
-
 #: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1250
 #: pgp/seahorse-pgp-private-key-properties.ui:12
 #: pgp/seahorse-pgp-public-key-properties.ui:12
@@ -476,6 +468,10 @@ msgstr "Dodaj lozinku skupa ključeva"
 msgid "Couldn’t add keyring"
 msgstr "Nemoguće dodavanje skupa ključeva"
 
+#: gkr/gkr-keyring-properties.vala:90
+msgid "Unknown date"
+msgstr "Nepoznat datum"
+
 #: gkr/gkr-keyring.vala:28
 msgid "A keyring that is automatically unlocked on login"
 msgstr "Skup ključeva koji je automatski otključan pri prijavi"
@@ -592,20 +588,41 @@ msgstr "Tehničke pojedinosti:"
 msgid "Details"
 msgstr "Pojedinosti"
 
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Name:"
-msgstr "Naziv:"
+#: gkr/seahorse-gkr-keyring.ui:8
+msgid "Keyring properties"
+msgstr "Svojstva skupa ključeva"
 
-#. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-keyring.ui:59
-#: pgp/seahorse-pgp-private-key-properties.ui:1233
-#: pgp/seahorse-pgp-public-key-properties.ui:1384
-msgid "Created:"
-msgstr "Stvoreno:"
+#: gkr/seahorse-gkr-keyring.ui:21
+msgid "Keyring is unlocked"
+msgstr "Skup ključeva je otključan"
 
-#: gkr/seahorse-gkr-keyring.ui:124
-msgid "Keyring"
-msgstr "Skup ključeva"
+#: gkr/seahorse-gkr-keyring.ui:31
+msgid "Unlock"
+msgstr "Otključaj"
+
+#: gkr/seahorse-gkr-keyring.ui:44
+msgid "Keyring is locked"
+msgstr "Skup ključeva je zaključan"
+
+#: gkr/seahorse-gkr-keyring.ui:54
+msgid "Lock"
+msgstr "Zaključaj"
+
+#: gkr/seahorse-gkr-keyring.ui:98 pgp/seahorse-pgp-key-properties.c:969
+msgid "Name"
+msgstr "Naziv"
+
+#: gkr/seahorse-gkr-keyring.ui:126
+msgid "Created on"
+msgstr "Stvoreno"
+
+#: gkr/seahorse-gkr-keyring.ui:156
+msgid "Change password"
+msgstr "Promijeni lozinku"
+
+#: gkr/seahorse-gkr-keyring.ui:162
+msgid "Set as default"
+msgstr "Postavi kako zadano"
 
 #: libegg/egg-datetime.c:316
 msgid "Display flags"
@@ -1577,10 +1594,6 @@ msgstr "(nepoznato)"
 msgid "This key expired on: %s"
 msgstr "Ovaj ključ istječe: %s"
 
-#: pgp/seahorse-pgp-key-properties.c:969
-msgid "Name"
-msgstr "Naziv"
-
 #: pgp/seahorse-pgp-key-properties.c:1084
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
@@ -1804,6 +1817,11 @@ msgstr "Tehničke pojedinosti"
 #: pgp/seahorse-pgp-private-key-properties.ui:1190
 msgid "Fingerprint"
 msgstr "Otisak"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:1233
+#: pgp/seahorse-pgp-public-key-properties.ui:1384
+msgid "Created:"
+msgstr "Stvoreno:"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1305
 #: pgp/seahorse-pgp-public-key-properties.ui:1397
@@ -2673,6 +2691,15 @@ msgstr "Nemoguće podešavanje ključeva osigurane ljuske na udaljenom računalu
 #: ssh/upload.vala:97
 msgid "Configuring Secure Shell Keys…"
 msgstr "Podešavanje ključeva osigurane ljuske…"
+
+#~ msgid "%Y-%m-%d"
+#~ msgstr "%d-%m-%Y"
+
+#~ msgid "Name:"
+#~ msgstr "Naziv:"
+
+#~ msgid "Keyring"
+#~ msgstr "Skup ključeva"
 
 #~ msgid "Used to connect to other computers."
 #~ msgstr "Koristi se za povezivanje s drugim računalima."
