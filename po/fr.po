@@ -20,8 +20,8 @@ msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-03-10 19:32+0000\n"
-"PO-Revision-Date: 2018-03-10 23:09+0100\n"
+"POT-Creation-Date: 2018-03-13 05:47+0000\n"
+"PO-Revision-Date: 2018-03-13 23:29+0100\n"
 "Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -263,14 +263,6 @@ msgstr ""
 msgid "Key Servers"
 msgstr "Serveurs de clés"
 
-#. TRANSLATORS: this date (Year-month-day) is used to display
-#. * when something happened, e.g. when a key was created. Feel
-#. * free to put it in the correct order for your language.
-#.
-#: common/util.vala:63
-msgid "%Y-%m-%d"
-msgstr "%d %m %Y"
-
 #: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1250
 #: pgp/seahorse-pgp-private-key-properties.ui:12
 #: pgp/seahorse-pgp-public-key-properties.ui:12
@@ -499,6 +491,10 @@ msgstr "Ajouter un trousseau de mots de passe"
 msgid "Couldn’t add keyring"
 msgstr "Impossible d’ajouter un trousseau"
 
+#: gkr/gkr-keyring-properties.vala:90
+msgid "Unknown date"
+msgstr "Date inconnue"
+
 #: gkr/gkr-keyring.vala:28
 msgid "A keyring that is automatically unlocked on login"
 msgstr "Un trousseau qui est automatiquement déverrouillé à la connexion"
@@ -619,20 +615,41 @@ msgstr "Détails techniques :"
 msgid "Details"
 msgstr "Détails"
 
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Name:"
-msgstr "Nom :"
+#: gkr/seahorse-gkr-keyring.ui:8
+msgid "Keyring properties"
+msgstr "Propriétés du trousseau"
 
-#. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-keyring.ui:59
-#: pgp/seahorse-pgp-private-key-properties.ui:1233
-#: pgp/seahorse-pgp-public-key-properties.ui:1384
-msgid "Created:"
-msgstr "Créée le :"
+#: gkr/seahorse-gkr-keyring.ui:21
+msgid "Keyring is unlocked"
+msgstr "Le trousseau est déverrouillé"
 
-#: gkr/seahorse-gkr-keyring.ui:124
-msgid "Keyring"
-msgstr "Trousseau"
+#: gkr/seahorse-gkr-keyring.ui:31
+msgid "Unlock"
+msgstr "Déverrouiller"
+
+#: gkr/seahorse-gkr-keyring.ui:44
+msgid "Keyring is locked"
+msgstr "Le trousseau est verrouillé"
+
+#: gkr/seahorse-gkr-keyring.ui:54
+msgid "Lock"
+msgstr "Verrouiller"
+
+#: gkr/seahorse-gkr-keyring.ui:98 pgp/seahorse-pgp-key-properties.c:969
+msgid "Name"
+msgstr "Nom"
+
+#: gkr/seahorse-gkr-keyring.ui:126
+msgid "Created on"
+msgstr "Créé le"
+
+#: gkr/seahorse-gkr-keyring.ui:156
+msgid "Change password"
+msgstr "Modifier le mot de passe"
+
+#: gkr/seahorse-gkr-keyring.ui:162
+msgid "Set as default"
+msgstr "Par défaut"
 
 #: libegg/egg-datetime.c:316
 msgid "Display flags"
@@ -1611,10 +1628,6 @@ msgstr "(inconnue)"
 msgid "This key expired on: %s"
 msgstr "Cette clé a expiré le : %s"
 
-#: pgp/seahorse-pgp-key-properties.c:969
-msgid "Name"
-msgstr "Nom"
-
 #: pgp/seahorse-pgp-key-properties.c:1084
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
@@ -1842,6 +1855,11 @@ msgstr "Détails techniques"
 #: pgp/seahorse-pgp-private-key-properties.ui:1190
 msgid "Fingerprint"
 msgstr "Empreinte"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:1233
+#: pgp/seahorse-pgp-public-key-properties.ui:1384
+msgid "Created:"
+msgstr "Créée le :"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1305
 #: pgp/seahorse-pgp-public-key-properties.ui:1397
@@ -2724,6 +2742,15 @@ msgstr ""
 #: ssh/upload.vala:97
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configuration de clés de shell sécurisé…"
+
+#~ msgid "%Y-%m-%d"
+#~ msgstr "%d %m %Y"
+
+#~ msgid "Name:"
+#~ msgstr "Nom :"
+
+#~ msgid "Keyring"
+#~ msgstr "Trousseau"
 
 #~ msgid "Used to connect to other computers."
 #~ msgstr "Utilisée pour se connecter à d'autres ordinateurs."
