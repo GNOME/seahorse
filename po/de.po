@@ -17,9 +17,9 @@ msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-03-10 19:32+0000\n"
-"PO-Revision-Date: 2018-03-10 21:01+0100\n"
-"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
+"POT-Creation-Date: 2018-03-12 21:07+0000\n"
+"PO-Revision-Date: 2018-03-13 11:16-0400\n"
+"Last-Translator: Florian Heiser <gnu.l10n.de@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -258,14 +258,6 @@ msgstr "_Veränderte Schlüssel automatisch mit den Schlüssel-Servern abgleiche
 msgid "Key Servers"
 msgstr "Schlüssel-Server"
 
-#. TRANSLATORS: this date (Year-month-day) is used to display
-#. * when something happened, e.g. when a key was created. Feel
-#. * free to put it in the correct order for your language.
-#.
-#: common/util.vala:63
-msgid "%Y-%m-%d"
-msgstr "%d.%m.%Y"
-
 #: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1250
 #: pgp/seahorse-pgp-private-key-properties.ui:12
 #: pgp/seahorse-pgp-public-key-properties.ui:12
@@ -492,6 +484,10 @@ msgstr "Passwort-Schlüsselbund hinzufügen"
 msgid "Couldn’t add keyring"
 msgstr "Schlüsselbund konnte nicht hinzugefügt werden"
 
+#: gkr/gkr-keyring-properties.vala:90
+msgid "Unknown date"
+msgstr "Unbekanntes Datum"
+
 #: gkr/gkr-keyring.vala:28
 msgid "A keyring that is automatically unlocked on login"
 msgstr "Ein Schlüsselbund, der bei der Anmeldung automatisch entsperrt wird"
@@ -611,20 +607,41 @@ msgstr "Technische Informationen:"
 msgid "Details"
 msgstr "Details"
 
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Name:"
-msgstr "Name:"
+#: gkr/seahorse-gkr-keyring.ui:8
+msgid "Keyring properties"
+msgstr "Schlüsselbund-Eigenschaften"
 
-#. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-keyring.ui:59
-#: pgp/seahorse-pgp-private-key-properties.ui:1233
-#: pgp/seahorse-pgp-public-key-properties.ui:1384
-msgid "Created:"
-msgstr "Erzeugt am:"
+#: gkr/seahorse-gkr-keyring.ui:21
+msgid "Keyring is unlocked"
+msgstr "Schlüsselbund ist entsperrt"
 
-#: gkr/seahorse-gkr-keyring.ui:124
-msgid "Keyring"
-msgstr "Schlüsselbund"
+#: gkr/seahorse-gkr-keyring.ui:31
+msgid "Unlock"
+msgstr "Entsperren"
+
+#: gkr/seahorse-gkr-keyring.ui:44
+msgid "Keyring is locked"
+msgstr "Schlüsselbund ist gesperrt"
+
+#: gkr/seahorse-gkr-keyring.ui:54
+msgid "Lock"
+msgstr "Sperren"
+
+#: gkr/seahorse-gkr-keyring.ui:98 pgp/seahorse-pgp-key-properties.c:969
+msgid "Name"
+msgstr "Name"
+
+#: gkr/seahorse-gkr-keyring.ui:126
+msgid "Created on"
+msgstr "Erzeugt am"
+
+#: gkr/seahorse-gkr-keyring.ui:156
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: gkr/seahorse-gkr-keyring.ui:162
+msgid "Set as default"
+msgstr "Zur Vorgabe machen"
 
 #: libegg/egg-datetime.c:316
 msgid "Display flags"
@@ -1617,10 +1634,6 @@ msgstr "(unbekannt)"
 msgid "This key expired on: %s"
 msgstr "Dieser Schlüssel ist am abgelaufen am: %s"
 
-#: pgp/seahorse-pgp-key-properties.c:969
-msgid "Name"
-msgstr "Name"
-
 #: pgp/seahorse-pgp-key-properties.c:1084
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
@@ -1848,6 +1861,11 @@ msgstr "Technische Informationen"
 #: pgp/seahorse-pgp-private-key-properties.ui:1190
 msgid "Fingerprint"
 msgstr "Fingerabdruck"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:1233
+#: pgp/seahorse-pgp-public-key-properties.ui:1384
+msgid "Created:"
+msgstr "Erzeugt am:"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1305
 #: pgp/seahorse-pgp-public-key-properties.ui:1397
@@ -2733,6 +2751,15 @@ msgstr ""
 #: ssh/upload.vala:97
 msgid "Configuring Secure Shell Keys…"
 msgstr "SSH-Schlüssel werden eingerichtet …"
+
+#~ msgid "%Y-%m-%d"
+#~ msgstr "%d.%m.%Y"
+
+#~ msgid "Name:"
+#~ msgstr "Name:"
+
+#~ msgid "Keyring"
+#~ msgstr "Schlüsselbund"
 
 #~ msgid "Used to connect to other computers."
 #~ msgstr "Wird benutzt, um sich mit anderen Rechnern zu verbinden."
