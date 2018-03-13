@@ -7,17 +7,17 @@
 # Sertaç Ö. Yıldız <sertacyildiz@gmail.com>, 2007.
 # Baris Cicek <baris@teamforce.name.tr>, 2004, 2007, 2008, 2009.
 # Nurperi Utlu <utlunurperi@gmail.com>, 2017.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2016, 2018.
 # Muhammet Kara <muhammetk@gmail.com>, 2011, 2012, 2014, 2015, 2016, 2017, 2018.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2016, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-03-11 04:32+0000\n"
-"PO-Revision-Date: 2018-03-11 10:12+0300\n"
-"Last-Translator: Muhammet Kara <muhammetk@gmail.com>\n"
+"POT-Creation-Date: 2018-03-12 21:07+0000\n"
+"PO-Revision-Date: 2018-03-13 10:37+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -91,7 +91,7 @@ msgstr "Dı_şa aktar…"
 
 #: common/catalog.vala:366
 msgid "Export to a file"
-msgstr "Bir dosyaya aktar"
+msgstr "Dosyaya aktar"
 
 #: common/catalog.vala:367
 msgid "_Edit"
@@ -250,14 +250,6 @@ msgstr "_Değişmiş anahtarları sunucu ile kendiliğinden eş zamanlandır"
 msgid "Key Servers"
 msgstr "Anahtar Sunucuları"
 
-#. TRANSLATORS: this date (Year-month-day) is used to display
-#. * when something happened, e.g. when a key was created. Feel
-#. * free to put it in the correct order for your language.
-#.
-#: common/util.vala:63
-msgid "%Y-%m-%d"
-msgstr "%Y-%m-%d"
-
 #: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1250
 #: pgp/seahorse-pgp-private-key-properties.ui:12
 #: pgp/seahorse-pgp-public-key-properties.ui:12
@@ -310,7 +302,7 @@ msgid ""
 "Seahorse is a GNOME application for managing encryption keys. It also "
 "integrates with nautilus, gedit and other places for encryption operations."
 msgstr ""
-"Seahorse, şifreleme anahtarlarını yönetmek için kullanabileceğiniz bir GNOME "
+"Seahorse, şifreleme anahtarlarını yönetmek için kullanabileceğiniz GNOME "
 "uygulamasıdır. Ayrıca şifreleme işlemleri için nautilus, gedit ve diğer "
 "uygulamalarla tümleşir."
 
@@ -381,19 +373,19 @@ msgstr "Bu ögedeki değişiklikler kaydedilsin mi?"
 
 #: gkr/gkr-item-properties.vala:120
 msgid "Access a network share or resource"
-msgstr "Ağdaki bir kaynağa veya paylaşıma erişim"
+msgstr "Ağdaki kaynağa veya paylaşıma erişim"
 
 #: gkr/gkr-item-properties.vala:123
 msgid "Access a website"
-msgstr "Bir web sitesine erişim"
+msgstr "Web sitesine erişim"
 
 #: gkr/gkr-item-properties.vala:126
 msgid "Unlocks a PGP key"
-msgstr "Bir PGP anahtarının kilidini açar"
+msgstr "PGP anahtarının kilidini açar"
 
 #: gkr/gkr-item-properties.vala:129
 msgid "Unlocks a Secure Shell key"
-msgstr "Bir Güvenli Kabuk anahtarının kilidini açar"
+msgstr "Güvenli Kabuk anahtarının kilidini açar"
 
 #: gkr/gkr-item-properties.vala:132
 msgid "Saved password or login"
@@ -483,13 +475,18 @@ msgstr "Parola Anahtarlığı Ekle"
 msgid "Couldn’t add keyring"
 msgstr "Anahtarlık eklenemedi"
 
+#: gkr/gkr-keyring-properties.vala:90
+#| msgid "Unknown type"
+msgid "Unknown date"
+msgstr "Bilinmeyen tarih"
+
 #: gkr/gkr-keyring.vala:28
 msgid "A keyring that is automatically unlocked on login"
-msgstr "Girişte kendiliğinden kilidi açılan bir anahtarlık"
+msgstr "Girişte kilidi kendiliğinden açılan anahtarlık"
 
 #: gkr/gkr-keyring.vala:29
 msgid "A keyring used to store passwords"
-msgstr "Parolaları saklamak için kullanılan bir anahtarlık"
+msgstr "Parolaları saklamak için kullanılan anahtarlık"
 
 #: gkr/gkr-keyring.vala:174
 msgid "Couldn’t set default keyring"
@@ -526,7 +523,6 @@ msgid "I understand that all items will be permanently deleted."
 msgstr "Tüm ögelerin kalıcı olarak silineceğini anlıyorum."
 
 #: gkr/gkr-password-entry.vala:35
-#| msgid "Show pass_word"
 msgid "Show/Hide password"
 msgstr "Parolayı Göster/Gizle"
 
@@ -535,8 +531,7 @@ msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
 msgstr ""
-"Lütfen yeni anahtarlık için bir ad seçin. Size bir kilit açma parolası "
-"sorulacak."
+"Lütfen yeni anahtarlık için ad seçin. Size kilit açma parolası sorulacak."
 
 #: gkr/seahorse-add-keyring.ui:34
 msgid "New Keyring Name:"
@@ -601,20 +596,49 @@ msgstr "Teknik Ayrıntılar:"
 msgid "Details"
 msgstr "Ayrıntılar"
 
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Name:"
-msgstr "Adı:"
+#: gkr/seahorse-gkr-keyring.ui:8
+#| msgid "Keyring Properties"
+msgid "Keyring properties"
+msgstr "Anahtarlık özellikleri"
 
-#. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-keyring.ui:59
-#: pgp/seahorse-pgp-private-key-properties.ui:1233
-#: pgp/seahorse-pgp-public-key-properties.ui:1384
-msgid "Created:"
-msgstr "Oluşturulma:"
+#: gkr/seahorse-gkr-keyring.ui:21
+#| msgid "Keyring password"
+msgid "Keyring is unlocked"
+msgstr "Anahtarlık açıldı"
 
-#: gkr/seahorse-gkr-keyring.ui:124
-msgid "Keyring"
-msgstr "Anahtarlık"
+#: gkr/seahorse-gkr-keyring.ui:31
+#| msgid "_Unlock"
+msgid "Unlock"
+msgstr "Kilidini Aç"
+
+#: gkr/seahorse-gkr-keyring.ui:44
+#| msgid "Keyring password"
+msgid "Keyring is locked"
+msgstr "Anahtarlık kilitlendi"
+
+#: gkr/seahorse-gkr-keyring.ui:54
+#| msgid "_Lock"
+msgid "Lock"
+msgstr "Kilitle"
+
+#: gkr/seahorse-gkr-keyring.ui:98 pgp/seahorse-pgp-key-properties.c:969
+msgid "Name"
+msgstr "Ad"
+
+#: gkr/seahorse-gkr-keyring.ui:126
+#| msgid "Created"
+msgid "Created on"
+msgstr "Oluşturulma"
+
+#: gkr/seahorse-gkr-keyring.ui:156
+#| msgid "Change _Password"
+msgid "Change password"
+msgstr "Parola değiştir"
+
+#: gkr/seahorse-gkr-keyring.ui:162
+#| msgid "_Set as default"
+msgid "Set as default"
+msgstr "Öntanımlı ata"
 
 #: libegg/egg-datetime.c:316
 msgid "Display flags"
@@ -919,7 +943,7 @@ msgstr "Anahtarın Uzunluğu"
 
 #: pgp/seahorse-add-subkey.ui:194
 msgid "Generate a new subkey"
-msgstr "Yeni bir alt anahtar oluştur"
+msgstr "Yeni alt anahtar oluştur"
 
 #: pgp/seahorse-add-uid.ui:8
 msgid "Add User ID"
@@ -1071,12 +1095,12 @@ msgid ""
 "the keyboard, moving the mouse, using applications.\n"
 "This gives the system the random data that it needs."
 msgstr ""
-"Bir anahtar oluştururken çok miktarda rasgele veri\n"
-"üretmemiz gerekiyor ve yardımınıza ihtiyacımız var.\n"
+"Anahtar oluştururken çok miktarda rastgele veri\n"
+"üretmemiz gerekiyor ve yardımınız gerekiyor.\n"
 "Klavyeyle yazı yazmak, fareyi hareket ettirmek,\n"
 "uygulamaları kullanmak gibi diğer bazı eylemleri\n"
 "gerçekleştirmeniz iyi bir fikirdir. Bu, sisteme\n"
-"ihtiyaç duyduğu rasgele veriyi sağlayacaktır."
+"gereksindiği rastgele veriyi sağlayacaktır."
 
 #: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
 msgid "Generating key"
@@ -1100,7 +1124,7 @@ msgstr "Hatalı parola"
 
 #: pgp/seahorse-gpgme-key-op.c:378
 msgid "This was the third time you entered a wrong password. Please try again."
-msgstr "Üçüncü kez yanlış bir parola girdiniz. Lütfen yeniden deneyin."
+msgstr "Üçüncü kez yanlış parola girdiniz. Lütfen yeniden deneyin."
 
 #: pgp/seahorse-gpgme-keyring.c:88
 #, c-format
@@ -1140,8 +1164,8 @@ msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
 msgstr ""
-"Geçersiz anahtar verisi (UID eksik). İlerideki bir tarihe ayarlanmış "
-"bilgisayar veya eksik bir öz-imza neden olmuş olabilir."
+"Geçersiz anahtar verisi (UID eksik). İlerideki tarihe ayarlanmış bilgisayar "
+"veya eksik öz-imza neden olmuş olabilir."
 
 #: pgp/seahorse-gpgme-keyring.c:805
 msgid "GnuPG keys"
@@ -1174,8 +1198,8 @@ msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
 msgstr ""
-"Bu bir resim dosyası değil, ya da tanınamayan bir resim dosyası türü. Bir "
-"JPEG dosyası kullanmayı deneyin."
+"Bu bir resim dosyası değil, ya da tanınamayan bir resim dosyası türü. JPEG "
+"dosyası kullanmayı deneyin."
 
 #: pgp/seahorse-gpgme-photos.c:223
 msgid "All image files"
@@ -1356,7 +1380,7 @@ msgstr "Uzaktaki Anahtarları _Bul…"
 
 #: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:113
 msgid "Search for keys on a key server"
-msgstr "Bir anahtar sunucusunda anahtar ara"
+msgstr "Anahtar sunucusunda anahtar ara"
 
 #: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:195
 msgid "_Import"
@@ -1451,8 +1475,8 @@ msgid ""
 "made available to others."
 msgstr ""
 "Bu, topladığınız anahtarlarda size ulaşmasından sonra yapılan değişiklikleri "
-"alacak. Yayımlama için bir sunucu seçilmemiş, dolayısıyla sizin "
-"anahtarlarınız diğerlerine erişilebilir olmayacak."
+"alacak. Yayımlama için sunucu seçilmemiş, dolayısıyla sizin anahtarlarınız "
+"diğerlerine erişilebilir olmayacak."
 
 #: pgp/seahorse-keyserver-sync.ui:115
 msgid "_Key Servers"
@@ -1508,7 +1532,7 @@ msgstr "Oluştu_r"
 
 #: pgp/seahorse-pgp-generate.ui:87
 msgid "Generate a new key"
-msgstr "Yeni bir anahtar oluştur"
+msgstr "Yeni anahtar oluştur"
 
 #: pgp/seahorse-pgp-generate.ui:137
 msgid "A PGP key allows you to encrypt email or files to other people."
@@ -1581,10 +1605,6 @@ msgstr "(bilinmeyen)"
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Bu anahtarın kullanım süresi %s tarihinde dolmuş"
-
-#: pgp/seahorse-pgp-key-properties.c:969
-msgid "Name"
-msgstr "Ad"
 
 #: pgp/seahorse-pgp-key-properties.c:1084
 #, c-format
@@ -1702,7 +1722,7 @@ msgstr "Bu anahtarın süresi dolmuş"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:222
 msgid "Add a photo to this key"
-msgstr "Bu anahtara bir fotoğraf ekle"
+msgstr "Bu anahtara fotoğraf ekle"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:246
 msgid "Remove this photo from this key"
@@ -1811,6 +1831,11 @@ msgstr "Teknik Ayrıntılar"
 #: pgp/seahorse-pgp-private-key-properties.ui:1190
 msgid "Fingerprint"
 msgstr "Parmak İzi"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:1233
+#: pgp/seahorse-pgp-public-key-properties.ui:1384
+msgid "Created:"
+msgstr "Oluşturulma:"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1305
 #: pgp/seahorse-pgp-public-key-properties.ui:1397
@@ -2011,7 +2036,7 @@ msgid ""
 "claims to own it, but you could not or did not verify this to be a fact."
 msgstr ""
 "<i>Tam olarak değil:</i> anahtarın kendine ait olduğunu iddia eden kişiye "
-"ait olduğuna inanıyorsunuz ama bunun bir gerçek olduğunu denetleyemiyorsunuz "
+"ait olduğuna inanıyorsunuz ama bunun gerçek olduğunu denetleyemiyorsunuz "
 "demektir."
 
 #: pgp/seahorse-sign.ui:197
@@ -2020,9 +2045,9 @@ msgid ""
 "owned by the person who claims to own it. For example, you could read the "
 "key fingerprint to the owner over the phone."
 msgstr ""
-"<i>Özensizce:</i> anahtarın kendine ait olduğunu iddia kişiye ait olduğuna "
-"dair özensiz bir doğrulama yaptınız demektir. Örneğin, telefon üzerinden "
-"sahibine anahtar parmak izinin okunması olabilir."
+"<i>Özensizce:</i> anahtarın kendine ait olduğunu iddia eden kişiye ait "
+"olduğuna dair özensiz bir doğrulama yaptınız demektir. Örneğin, telefon "
+"üzerinden sahibine anahtar parmak izinin okunması olabilir."
 
 #: pgp/seahorse-sign.ui:221
 msgid ""
@@ -2039,7 +2064,7 @@ msgid ""
 "used email to check that the email address belongs to the owner."
 msgstr ""
 "Anahtar üzerindeki adın doğru olduğunu denetlemek için resimli bir kimlik "
-"(bir pasaport gibi) kullanabilirsiniz. Ayrıca e-posta adresinin sahibine ait "
+"(pasaport gibi) kullanabilirsiniz. Ayrıca e-posta adresinin sahibine ait "
 "olduğunu denetlemek için e-posta kullanmalısınız."
 
 #: pgp/seahorse-sign.ui:289
@@ -2163,7 +2188,7 @@ msgstr "_Sertifika İste"
 
 #: pkcs11/pkcs11-properties.vala:204
 msgid "Create a certificate request file for this key"
-msgstr "Bu anahtar için bir sertifika istek dosyası oluştur"
+msgstr "Bu anahtar için sertifika istek dosyası oluştur"
 
 #: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.c:412
 msgid "Create"
@@ -2208,11 +2233,11 @@ msgstr "Özel anahtar oluşturulamadı"
 
 #: pkcs11/seahorse-pkcs11-generate.c:506
 msgid "Used to request a certificate"
-msgstr "Bir sertifika istemek için kullanılır"
+msgstr "Sertifika istemek için kullanılır"
 
 #: pkcs11/seahorse-pkcs11-generate.ui:34
 msgid "Create a new private key"
-msgstr "Yeni bir özel anahtar oluştur"
+msgstr "Yeni özel anahtar oluştur"
 
 #: pkcs11/seahorse-pkcs11-generate.ui:53
 msgid "Label:"
@@ -2562,8 +2587,7 @@ msgstr ""
 
 #: ssh/seahorse-ssh-generate.ui:158
 msgid "Your email address, or a reminder of what this key is for."
-msgstr ""
-"E-posta adresiniz ya da bu anahtarın ne için olduğuna dair bir anımsatıcı."
+msgstr "E-posta adresiniz ya da bu anahtarın ne için olduğuna dair anımsatıcı."
 
 #: ssh/seahorse-ssh-generate.ui:247
 msgid "DSA"
@@ -2582,8 +2606,8 @@ msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
 msgstr ""
-"Eğer bu anahtarı kullanmak istediğiniz bir bilgisayar varsa, bilgisayarı "
-"yeni anahtarınızı tanıması için ayarlayabilirsiniz."
+"Eğer bu anahtarı kullanmak istediğiniz bilgisayar varsa, bilgisayarı yeni "
+"anahtarınızı tanıması için ayarlayabilirsiniz."
 
 #: ssh/seahorse-ssh-generate.ui:315
 msgid "_Just Create Key"
@@ -2633,8 +2657,8 @@ msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
 msgstr ""
-"SSH kullanan başka bir bilgisayar ile Güvenli Kabuk anahtarınızı kullanmak "
-"için, o bilgisayarda bir giriş hesabınızın olması gerekir."
+"SSH kullanan başka bilgisayar ile Güvenli Kabuk anahtarınızı kullanmak için, "
+"o bilgisayarda giriş hesabınızın olması gerekir."
 
 #: ssh/seahorse-ssh-upload.ui:64
 msgid "eg: fileserver.example.com:port"
@@ -2682,6 +2706,15 @@ msgstr "Uzak bilgisayardaki Güvenli Kabuk anahtarları yapılandırılamadı."
 msgid "Configuring Secure Shell Keys…"
 msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
 
+#~ msgid "%Y-%m-%d"
+#~ msgstr "%Y-%m-%d"
+
+#~ msgid "Name:"
+#~ msgstr "Adı:"
+
+#~ msgid "Keyring"
+#~ msgstr "Anahtarlık"
+
 #~ msgid "Used to connect to other computers."
 #~ msgstr "Diğer bilgisayarlara bağlamak için kullanılır."
 
@@ -2711,9 +2744,6 @@ msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
 
 #~ msgid "<b>Password:</b>"
 #~ msgstr "<b>Parola:</b>"
-
-#~ msgid "Keyring Properties"
-#~ msgstr "Anahtarlık Özellikleri"
 
 #~ msgid "<b>Key Servers:</b>"
 #~ msgstr "<b>Anahtar Sunucuları:</b>"
