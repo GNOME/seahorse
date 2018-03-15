@@ -12,9 +12,9 @@ msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-03-11 09:04+0000\n"
-"PO-Revision-Date: 2018-03-11 20:21+0100\n"
-"Last-Translator: Meskó Balázs <mesko.balazs@fsf.hu>\n"
+"POT-Creation-Date: 2018-03-12 21:07+0000\n"
+"PO-Revision-Date: 2018-03-14 18:27+0100\n"
+"Last-Translator: Meskó Balázs <meskobalazs@fedoraproject.org>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -249,14 +249,6 @@ msgstr "_Módosított kulcsok automatikus szinkronizálása kulcskiszolgálókka
 msgid "Key Servers"
 msgstr "Kulcskiszolgálók"
 
-#. TRANSLATORS: this date (Year-month-day) is used to display
-#. * when something happened, e.g. when a key was created. Feel
-#. * free to put it in the correct order for your language.
-#.
-#: common/util.vala:63
-msgid "%Y-%m-%d"
-msgstr "%Y. %m. %d"
-
 #: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1250
 #: pgp/seahorse-pgp-private-key-properties.ui:12
 #: pgp/seahorse-pgp-public-key-properties.ui:12
@@ -483,6 +475,10 @@ msgstr "Jelszókulcstartó hozzáadása"
 msgid "Couldn’t add keyring"
 msgstr "Nem sikerült a kulcstartót hozzáadni"
 
+#: gkr/gkr-keyring-properties.vala:90
+msgid "Unknown date"
+msgstr "Ismeretlen dátum"
+
 #: gkr/gkr-keyring.vala:28
 msgid "A keyring that is automatically unlocked on login"
 msgstr "Bejelentkezéskor automatikusan feloldásra kerülő kulcstartó"
@@ -600,20 +596,41 @@ msgstr "Technikai részletek:"
 msgid "Details"
 msgstr "Részletek"
 
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Name:"
-msgstr "Név:"
+#: gkr/seahorse-gkr-keyring.ui:8
+msgid "Keyring properties"
+msgstr "Kulcstartó tulajdonságai"
 
-#. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-keyring.ui:59
-#: pgp/seahorse-pgp-private-key-properties.ui:1233
-#: pgp/seahorse-pgp-public-key-properties.ui:1384
-msgid "Created:"
-msgstr "Létrehozva:"
+#: gkr/seahorse-gkr-keyring.ui:21
+msgid "Keyring is unlocked"
+msgstr "Kulcstartó feloldva"
 
-#: gkr/seahorse-gkr-keyring.ui:124
-msgid "Keyring"
-msgstr "Kulcstartó"
+#: gkr/seahorse-gkr-keyring.ui:31
+msgid "Unlock"
+msgstr "Feloldás"
+
+#: gkr/seahorse-gkr-keyring.ui:44
+msgid "Keyring is locked"
+msgstr "Kulcstartó zárolva"
+
+#: gkr/seahorse-gkr-keyring.ui:54
+msgid "Lock"
+msgstr "Zárolás"
+
+#: gkr/seahorse-gkr-keyring.ui:98 pgp/seahorse-pgp-key-properties.c:969
+msgid "Name"
+msgstr "Név"
+
+#: gkr/seahorse-gkr-keyring.ui:126
+msgid "Created on"
+msgstr "Létrehozva"
+
+#: gkr/seahorse-gkr-keyring.ui:156
+msgid "Change password"
+msgstr "Jelszó módosítása"
+
+#: gkr/seahorse-gkr-keyring.ui:162
+msgid "Set as default"
+msgstr "Beállítás alapértelmezettként"
 
 #: libegg/egg-datetime.c:316
 msgid "Display flags"
@@ -1580,10 +1597,6 @@ msgstr "(ismeretlen)"
 msgid "This key expired on: %s"
 msgstr "A kulcs lejárt ekkor: %s"
 
-#: pgp/seahorse-pgp-key-properties.c:969
-msgid "Name"
-msgstr "Név"
-
 #: pgp/seahorse-pgp-key-properties.c:1084
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
@@ -1807,6 +1820,11 @@ msgstr "Technikai részletek"
 #: pgp/seahorse-pgp-private-key-properties.ui:1190
 msgid "Fingerprint"
 msgstr "Ujjlenyomat"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:1233
+#: pgp/seahorse-pgp-public-key-properties.ui:1384
+msgid "Created:"
+msgstr "Létrehozva:"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1305
 #: pgp/seahorse-pgp-public-key-properties.ui:1397
@@ -2674,6 +2692,15 @@ msgstr "Nem állíthatók be SSH kulcsok a távoli számítógépen."
 msgid "Configuring Secure Shell Keys…"
 msgstr "SSH kulcsok beállítása…"
 
+#~ msgid "%Y-%m-%d"
+#~ msgstr "%Y. %m. %d"
+
+#~ msgid "Name:"
+#~ msgstr "Név:"
+
+#~ msgid "Keyring"
+#~ msgstr "Kulcstartó"
+
 #~ msgid "Used to connect to other computers."
 #~ msgstr "Más számítógépekhez csatlakozásra használható."
 
@@ -2703,9 +2730,6 @@ msgstr "SSH kulcsok beállítása…"
 
 #~ msgid "Updating password"
 #~ msgstr "Jelszó frissítése"
-
-#~ msgid "Keyring Properties"
-#~ msgstr "Kulcstartó tulajdonságai"
 
 #~ msgid "_Computer Name:"
 #~ msgstr "_Számítógép neve:"
