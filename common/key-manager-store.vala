@@ -441,7 +441,7 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         return ((Gcr.CollectionModel) view.model).object_for_iter(iter);
     }
 
-    public List<GLib.Object> get_all_objects() {
+    public List<weak GLib.Object> get_all_objects() {
         return get_collection().get_objects();
     }
 

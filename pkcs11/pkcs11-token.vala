@@ -123,7 +123,7 @@ public class Token : GLib.Object, Gcr.Collection, Place, Lockable {
 	private Gck.Session? _session;
 	private GLib.HashTable<ulong?, GLib.Object> _object_for_handle;
 	private GLib.HashTable<Gck.Attribute, GLib.GenericArray<GLib.Object>> _objects_for_id;
-	private GLib.HashTable<GLib.Object, Gck.Attribute> _id_for_object;
+	private GLib.HashTable<GLib.Object, unowned Gck.Attribute> _id_for_object;
 	private GLib.HashTable<GLib.Object, GLib.Object> _objects_visible;
 
 	public Token(Gck.Slot slot) {

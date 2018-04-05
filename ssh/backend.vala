@@ -53,7 +53,7 @@ public class Seahorse.Ssh.Backend : GLib.Object, Gcr.Collection, Seahorse.Backen
     }
 
     public List<weak GLib.Object> get_objects() {
-        List<GLib.Object> list = new List<GLib.Object>();
+        List<weak GLib.Object> list = new List<weak GLib.Object>();
         list.append(this.dot_ssh);
         return list;
     }

@@ -89,10 +89,7 @@ public class Seahorse.Collection : Gcr.Collection, GLib.Object {
     }
 
     public List<weak GLib.Object> get_objects() {
-        List<GLib.Object> result = new List<GLib.Object>();
-        foreach (GLib.Object obj in this.objects)
-            result.append(obj);
-        return result;
+        return this.objects.get_values();
     }
 
     public bool contains(GLib.Object object) {

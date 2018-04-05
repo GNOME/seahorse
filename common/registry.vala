@@ -87,7 +87,7 @@ public class Registry : GLib.Object {
 	}
 
 	construct {
-		_objects = new GLib.HashTable<weak string, GLib.HashTable<GLib.Object, GLib.Object>>(GLib.str_hash, GLib.str_equal);
+		_objects = new GLib.HashTable<string, GLib.HashTable<GLib.Object, GLib.Object>>(GLib.str_hash, GLib.str_equal);
 	}
 }
 
