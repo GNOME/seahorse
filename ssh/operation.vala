@@ -181,7 +181,7 @@ public abstract class Operation : GLib.Object {
         // No terminal for this process
         Posix.setsid();
 
-        Environment.set_variable("SSH_ASKPASS", "%sseahorse-ssh-askpass".printf(Config.EXECDIR), false);
+        Environment.set_variable("SSH_ASKPASS", GLib.Path.build_filename(Config.EXECDIR, "ssh-askpass"), false);
 
         // We do screen scraping so we need locale C
         if (Environment.get_variable("LC_ALL") != null)
