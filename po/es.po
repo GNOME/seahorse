@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-03-11 09:04+0000\n"
-"PO-Revision-Date: 2018-03-12 13:12+0100\n"
+"POT-Creation-Date: 2018-04-23 19:46+0000\n"
+"PO-Revision-Date: 2018-04-25 13:07+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -254,14 +254,6 @@ msgstr ""
 msgid "Key Servers"
 msgstr "Servidores de claves"
 
-#. TRANSLATORS: this date (Year-month-day) is used to display
-#. * when something happened, e.g. when a key was created. Feel
-#. * free to put it in the correct order for your language.
-#.
-#: common/util.vala:63
-msgid "%Y-%m-%d"
-msgstr "%d/%m/%Y"
-
 #: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1250
 #: pgp/seahorse-pgp-private-key-properties.ui:12
 #: pgp/seahorse-pgp-public-key-properties.ui:12
@@ -488,6 +480,11 @@ msgstr "Añadir un depósito de contraseñas"
 msgid "Couldn’t add keyring"
 msgstr "No se pudo añadir el depósito"
 
+#: gkr/gkr-keyring-properties.vala:90
+#| msgid "Unknown type"
+msgid "Unknown date"
+msgstr "Fecha desconocida"
+
 #: gkr/gkr-keyring.vala:28
 msgid "A keyring that is automatically unlocked on login"
 msgstr ""
@@ -536,7 +533,6 @@ msgid "I understand that all items will be permanently deleted."
 msgstr "Entiendo que todos los elementos se eliminarán permanentemente."
 
 #: gkr/gkr-password-entry.vala:35
-#| msgid "Show pass_word"
 msgid "Show/Hide password"
 msgstr "Mostrar/ocultar contraseña"
 
@@ -611,20 +607,49 @@ msgstr "Detalles técnicos:"
 msgid "Details"
 msgstr "Detalles"
 
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Name:"
-msgstr "Nombre:"
+#: gkr/seahorse-gkr-keyring.ui:8
+#| msgid "Keyring Properties"
+msgid "Keyring properties"
+msgstr "Propiedades del depósito de claves"
 
-#. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-keyring.ui:59
-#: pgp/seahorse-pgp-private-key-properties.ui:1233
-#: pgp/seahorse-pgp-public-key-properties.ui:1384
-msgid "Created:"
-msgstr "Creada:"
+#: gkr/seahorse-gkr-keyring.ui:21
+#| msgid "Keyring password"
+msgid "Keyring is unlocked"
+msgstr "El depósito de claves está desbloqueado"
 
-#: gkr/seahorse-gkr-keyring.ui:124
-msgid "Keyring"
-msgstr "Depósito de claves"
+#: gkr/seahorse-gkr-keyring.ui:31
+#| msgid "_Unlock"
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#: gkr/seahorse-gkr-keyring.ui:44
+#| msgid "Keyring password"
+msgid "Keyring is locked"
+msgstr "El depósito de claves está bloqueado"
+
+#: gkr/seahorse-gkr-keyring.ui:54
+#| msgid "_Lock"
+msgid "Lock"
+msgstr "Bloquear"
+
+#: gkr/seahorse-gkr-keyring.ui:98 pgp/seahorse-pgp-key-properties.c:969
+msgid "Name"
+msgstr "Nombre"
+
+#: gkr/seahorse-gkr-keyring.ui:126
+#| msgid "Created"
+msgid "Created on"
+msgstr "Creado el"
+
+#: gkr/seahorse-gkr-keyring.ui:156
+#| msgid "Change _Password"
+msgid "Change password"
+msgstr "Cambiar la contraseña"
+
+#: gkr/seahorse-gkr-keyring.ui:162
+#| msgid "_Set as default"
+msgid "Set as default"
+msgstr "Establecer como predeterminado"
 
 #: libegg/egg-datetime.c:316
 msgid "Display flags"
@@ -1597,10 +1622,6 @@ msgstr "(desconocido)"
 msgid "This key expired on: %s"
 msgstr "Esta clave caducó el: %s"
 
-#: pgp/seahorse-pgp-key-properties.c:969
-msgid "Name"
-msgstr "Nombre"
-
 #: pgp/seahorse-pgp-key-properties.c:1084
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
@@ -1826,6 +1847,11 @@ msgstr "Detalles técnicos"
 #: pgp/seahorse-pgp-private-key-properties.ui:1190
 msgid "Fingerprint"
 msgstr "Huella"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:1233
+#: pgp/seahorse-pgp-public-key-properties.ui:1384
+msgid "Created:"
+msgstr "Creada:"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1305
 #: pgp/seahorse-pgp-public-key-properties.ui:1397
@@ -2488,7 +2514,6 @@ msgid "256 bits"
 msgstr "256 bits"
 
 #: ssh/key-length-chooser.vala:100
-#| msgid "Unknown type"
 msgid "Unknown key type!"
 msgstr "Tipo de clave desconocido"
 
@@ -2634,7 +2659,6 @@ msgid "Algorithm:"
 msgstr "Algoritmo:"
 
 #: ssh/seahorse-ssh-key-properties.ui:288
-#| msgid "Key _Length:"
 msgid "Key length:"
 msgstr "Longitud de clave:"
 
@@ -2701,6 +2725,15 @@ msgstr ""
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configurando las claves de shell seguras…"
 
+#~ msgid "%Y-%m-%d"
+#~ msgstr "%d/%m/%Y"
+
+#~ msgid "Name:"
+#~ msgstr "Nombre:"
+
+#~ msgid "Keyring"
+#~ msgstr "Depósito de claves"
+
 #~ msgid "Used to connect to other computers."
 #~ msgstr "Usado para conectar a otros equipos."
 
@@ -2730,9 +2763,6 @@ msgstr "Configurando las claves de shell seguras…"
 
 #~ msgid "Updating password"
 #~ msgstr "Actualizando contraseña"
-
-#~ msgid "Keyring Properties"
-#~ msgstr "Propiedades del depósito de claves"
 
 #~ msgid "_Computer Name:"
 #~ msgstr "_Equipo:"
