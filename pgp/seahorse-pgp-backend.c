@@ -42,7 +42,7 @@ enum {
 	PROP_LABEL,
 	PROP_DESCRIPTION,
 	PROP_ACTIONS,
-        PROP_LOADED
+	PROP_LOADED
 };
 
 static SeahorsePgpBackend *pgp_backend = NULL;
@@ -205,6 +205,14 @@ seahorse_pgp_backend_get_actions (SeahorseBackend *backend)
 	return g_object_ref (self->actions);
 }
 
+static gboolean
+seahorse_pgp_backend_get_loaded (SeahorseBackend *backend)
+{
+	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (backend), FALSE);
+
+	return SEAHORSE_PGP_BACKEND (backend)->loaded;
+}
+
 static void
 seahorse_pgp_backend_get_property (GObject *obj,
                                    guint prop_id,
@@ -227,7 +235,7 @@ seahorse_pgp_backend_get_property (GObject *obj,
 		g_value_take_object (value, seahorse_pgp_backend_get_actions (backend));
 		break;
 	case PROP_LOADED:
-		g_value_set_boolean (value, SEAHORSE_PGP_BACKEND (backend)->loaded);
+		g_value_set_boolean (value, seahorse_pgp_backend_get_loaded (backend));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -318,6 +326,7 @@ seahorse_pgp_backend_iface (SeahorseBackendIface *iface)
 	iface->get_description = seahorse_pgp_backend_get_description;
 	iface->get_label = seahorse_pgp_backend_get_label;
 	iface->get_name = seahorse_pgp_backend_get_name;
+	iface->get_loaded = seahorse_pgp_backend_get_loaded;
 }
 
 SeahorsePgpBackend *

@@ -160,7 +160,7 @@ on_initialized_registered (GObject *unused,
 	}
 
 	self->loaded = TRUE;
-	g_object_notify (self, "loaded");
+	g_object_notify (G_OBJECT (self), "loaded");
 
 	gck_list_unref_free (modules);
 	g_object_unref (self);
@@ -195,6 +195,14 @@ seahorse_pkcs11_backend_get_description (SeahorseBackend *backend)
 	return _("X.509 certificates and related keys");
 }
 
+static gboolean
+seahorse_pkcs11_backend_get_loaded (SeahorseBackend *backend)
+{
+	g_return_val_if_fail (SEAHORSE_IS_PKCS11_BACKEND (backend), FALSE);
+
+	return SEAHORSE_PKCS11_BACKEND (backend)->loaded;
+}
+
 static GtkActionGroup *
 seahorse_pkcs11_backend_get_actions (SeahorseBackend *backend)
 {
@@ -223,7 +231,7 @@ seahorse_pkcs11_backend_get_property (GObject *obj,
 		g_value_take_object (value, seahorse_pkcs11_backend_get_actions (backend));
 		break;
 	case PROP_LOADED:
-		g_value_set_boolean (value, SEAHORSE_PKCS11_BACKEND (backend)->loaded);
+		g_value_set_boolean (value, seahorse_pkcs11_backend_get_loaded (backend));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -334,6 +342,7 @@ seahorse_pkcs11_backend_iface (SeahorseBackendIface *iface)
 	iface->get_description = seahorse_pkcs11_backend_get_description;
 	iface->get_label = seahorse_pkcs11_backend_get_label;
 	iface->get_name = seahorse_pkcs11_backend_get_name;
+	iface->get_loaded = seahorse_pkcs11_backend_get_loaded;
 }
 
 void
