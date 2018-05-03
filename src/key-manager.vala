@@ -53,7 +53,6 @@ public class Seahorse.KeyManager : Catalog {
         { "new-menu", null, N_("_New") },
         { "app-quit", Gtk.Stock.QUIT, null, "<control>Q", N_("Close this program") },
         { "file-new", Gtk.Stock.NEW, N_("_New…"), "<control>N", N_("Create a new key or item") },
-        { "new-object", Gtk.Stock.ADD, N_("_New…"), null, N_("Add a new key or item") },
         { "file-import", Gtk.Stock.OPEN, N_("_Import…"), "<control>I", N_("Import from a file") },
         { "edit-import-clipboard", Gtk.Stock.PASTE, null, "<control>V", N_("Import from the clipboard") }
     };
@@ -111,45 +110,10 @@ public class Seahorse.KeyManager : Catalog {
         // Flush all updates
         ensure_updated();
 
-        // Find the toolbar
-        Gtk.Container placeholder = (Gtk.Container) builder.get_object("toolbar-placeholder");
-        if (placeholder != null) {
-            List<weak Gtk.Widget> children = placeholder.get_children();
-            if (children != null && children.data != null) {
-                // The toolbar is the first (and only) element
-                Gtk.Toolbar toolbar = (Gtk.Toolbar) children.data;
-                if (toolbar != null) {
-                    toolbar.get_style_context().add_class("sidebar");
-                    toolbar.reset_style();
-
-                    // Insert a separator to right align the filter
-                    Gtk.SeparatorToolItem sep = new Gtk.SeparatorToolItem();
-                    sep.set_draw(false);
-                    sep.set_expand(true);
-                    sep.show_all();
-                    toolbar.insert(sep, -1);
-
-                    // Insert a filter bar
-                    Gtk.Box box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-
-                    this.filter_entry = new Gtk.Entry();
-                    this.filter_entry.set_placeholder_text(_("Filter"));
-                    box.pack_start(this.filter_entry, false, true, 0);
-
-                    box.pack_start(new Gtk.Label(null), false, false, 0);
-                    box.show_all();
-
-                    Gtk.ToolItem item = new Gtk.ToolItem();
-                    item.add(box);
-                    item.show_all();
-                    toolbar.insert(item, -1);
-                }
-            }
-        }
-
+        // The toolbar
+        ((Gtk.Button) builder.get_object("new_item_button")).clicked.connect(on_keymanager_new_button);
+        this.filter_entry = (Gtk.Entry) builder.get_object("filter_entry");
         on_filter_changed(this.filter_entry);
-        this.filter_entry.set_width_chars(30);
-        this.filter_entry.icon_release.connect(() => this.filter_entry.set_text(""));
 
         // For the filtering
         this.filter_entry.changed.connect(on_filter_changed);
@@ -193,7 +157,6 @@ public class Seahorse.KeyManager : Catalog {
         actions.add_actions(GENERAL_ACTIONS, null);
         actions.get_action("app-quit").activate.connect(on_app_quit);
         actions.get_action("file-new").activate.connect(on_file_new);
-        actions.get_action("new-object").activate.connect(on_file_new);
         actions.get_action("file-import").activate.connect(on_key_import_file);
         actions.get_action("edit-import-clipboard").activate.connect(on_key_import_clipboard);
         include_actions(actions);
@@ -261,16 +224,6 @@ public class Seahorse.KeyManager : Catalog {
     private void on_filter_changed(Gtk.Editable entry) {
         string? text = this.filter_entry.get_text();
         this.store.filter = text;
-
-        if (text == null || text == "") {
-            this.filter_entry.secondary_icon_name = "edit-find-symbolic";
-            this.filter_entry.secondary_icon_activatable = false;
-            this.filter_entry.secondary_icon_sensitive = false;
-        } else {
-            this.filter_entry.secondary_icon_name = "edit-clear-symbolic";
-            this.filter_entry.secondary_icon_activatable = true;
-            this.filter_entry.secondary_icon_sensitive = true;
-        }
     }
 
     private void import_files(string[]? uris) {

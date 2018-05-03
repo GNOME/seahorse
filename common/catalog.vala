@@ -56,8 +56,6 @@ public abstract class Catalog : Gtk.Window {
 			unowned string? name;
 			if (widget is Gtk.MenuBar)
 				name = "menu-placeholder";
-			else if (widget is Gtk.Toolbar)
-				name = "toolbar-placeholder";
 			else
 				name = null;
 			var holder = this._builder.get_object(name);

@@ -41,11 +41,38 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkVBox" id="toolbar-placeholder">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_start">12</property>
+                    <property name="margin_end">12</property>
+                    <property name="margin_top">6</property>
+                    <property name="margin_bottom">6</property>
                     <child>
-                      <placeholder/>
+                      <object class="GtkButton" id="new_item_button">
+                        <property name="visible">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="halign">start</property>
+                        <property name="tooltip_text" translatable="yes">Add a new key or item</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="icon_name">list-add</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSearchEntry" id="filter_entry">
+                        <property name="visible">True</property>
+                        <property name="width_chars">30</property>
+                        <property name="placeholder_text" translatable="yes">Filter</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
