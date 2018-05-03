@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-03-12 21:07+0000\n"
-"PO-Revision-Date: 2018-03-13 06:46+0100\n"
+"POT-Creation-Date: 2018-05-03 08:05+0000\n"
+"PO-Revision-Date: 2018-05-04 00:34+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -46,16 +46,16 @@ msgstr "Zrušit"
 msgid "Save"
 msgstr "Uložit"
 
-#: common/catalog.vala:259
+#: common/catalog.vala:256
 msgid "Contributions:"
 msgstr "Přispěli:"
 
-#: common/catalog.vala:285 data/seahorse.desktop.in.in:3
-#: src/seahorse-key-manager.c:658
+#: common/catalog.vala:282 data/seahorse.desktop.in.in:3
+#: src/key-manager.vala:84
 msgid "Passwords and Keys"
 msgstr "Hesla a klíče"
 
-#: common/catalog.vala:287
+#: common/catalog.vala:284
 msgid "translator-credits"
 msgstr ""
 "Petr Domanský <doman@atlas.cz>\n"
@@ -66,108 +66,110 @@ msgstr ""
 "Lucas Lommer <llommer@svn.gnome.org>\n"
 "Markéta Nykrýnová <m.nykrynova@gmail.com>"
 
-#: common/catalog.vala:290
+#: common/catalog.vala:287
 msgid "Seahorse Project Homepage"
 msgstr "Domovská stránka projektu Seahorse"
 
-#: common/catalog.vala:308
+#: common/catalog.vala:305
 msgid "Cannot delete"
 msgstr "Nezdařilo se smazat"
 
-#: common/catalog.vala:331 common/key-manager-store.vala:427
+#: common/catalog.vala:328 common/key-manager-store.vala:427
 msgid "Couldn’t export keys"
 msgstr "Nezdařilo se exportovat klíče"
 
-#: common/catalog.vala:342
+#: common/catalog.vala:339
 msgid "Couldn’t export data"
 msgstr "Nezdařilo se exportovat data"
 
-#: common/catalog.vala:358 libseahorse/seahorse-widget.c:461
+#: common/catalog.vala:355 libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nebylo možno zobrazit nápovědu: %s"
 
 #. Top menu items
-#: common/catalog.vala:364
+#: common/catalog.vala:361
 msgid "_File"
 msgstr "_Soubor"
 
-#: common/catalog.vala:365
+#: common/catalog.vala:362
 msgid "E_xport…"
 msgstr "E_xportovat…"
 
-#: common/catalog.vala:366
+#: common/catalog.vala:363
 msgid "Export to a file"
 msgstr "Exportovat do souboru"
 
-#: common/catalog.vala:367
+#: common/catalog.vala:364
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: common/catalog.vala:368
+#: common/catalog.vala:365
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: common/catalog.vala:369
+#: common/catalog.vala:366
 msgid "Copy to the clipboard"
 msgstr "Zkopírovat do schránky"
 
 #. Translators: This text refers to deleting an item from its type's backing store
-#: common/catalog.vala:371 common/delete-dialog.vala:91
-#: pkcs11/pkcs11-properties.vala:201 src/seahorse-sidebar.c:954
+#. Delete item
+#: common/catalog.vala:368 common/delete-dialog.vala:91
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:655
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: common/catalog.vala:372
+#: common/catalog.vala:369
 msgid "Delete selected items"
 msgstr "Smazat vybrané položky"
 
-#: common/catalog.vala:373 common/catalog.vala:375 src/seahorse-sidebar.c:965
+#. Properties item
+#: common/catalog.vala:370 common/catalog.vala:372 src/sidebar.vala:664
 msgid "_Properties"
 msgstr "_Vlastnosti"
 
-#: common/catalog.vala:374
+#: common/catalog.vala:371
 msgid "Show the properties of this item"
 msgstr "Zobrazit vlastnosti této položky"
 
-#: common/catalog.vala:376
+#: common/catalog.vala:373
 msgid "Show the properties of this keyring"
 msgstr "Zobrazit vlastnosti této klíčenky"
 
-#: common/catalog.vala:377
+#: common/catalog.vala:374
 msgid "Prefere_nces"
 msgstr "_Předvolby"
 
-#: common/catalog.vala:378
+#: common/catalog.vala:375
 msgid "Change preferences for this program"
 msgstr "Změnit nastavení tohoto programu"
 
-#: common/catalog.vala:379
+#: common/catalog.vala:376
 msgid "_View"
 msgstr "_Zobrazit"
 
-#: common/catalog.vala:380
+#: common/catalog.vala:377
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: common/catalog.vala:381
+#: common/catalog.vala:378
 msgid "_About"
 msgstr "O _aplikaci"
 
-#: common/catalog.vala:382
+#: common/catalog.vala:379
 msgid "About this program"
 msgstr "O této aplikaci"
 
-#: common/catalog.vala:383
+#: common/catalog.vala:380
 msgid "_Contents"
 msgstr "_Obsah"
 
-#: common/catalog.vala:384
+#: common/catalog.vala:381
 msgid "Show Seahorse help"
 msgstr "Zobrazit nápovědu"
 
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117
+#: common/passphrase-prompt.vala:117 src/key-manager.vala:287
 msgid "_Cancel"
 msgstr "_Zrušit"
 
@@ -891,27 +893,10 @@ msgstr "%04d-%02d-%02d"
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
-#: libseahorse/seahorse-application.c:94
-msgid "Version of this application"
-msgstr "Verze této aplikace"
-
-#: libseahorse/seahorse-application.c:100
-#: libseahorse/seahorse-application.c:144
-msgid "- System Settings"
-msgstr "– Systémová nastavení"
-
-#: libseahorse/seahorse-application.c:140
-msgid "Don't display a window"
-msgstr "Nezobrazovat okno"
-
 #: libseahorse/seahorse-interaction.c:97
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Zadejte PIN nebo heslo pro: %s"
-
-#: libseahorse/seahorse-search-provider.c:183
-msgid "The search provider is not loaded yet"
-msgstr "Poskytovatel hledání zatím není načten"
 
 #: pgp/seahorse-add-subkey.ui:31
 msgid "Never E_xpires"
@@ -1209,7 +1194,7 @@ msgstr "Všechny obrázkové soubory"
 msgid "All JPEG files"
 msgstr "Všechny soubory JPEG"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:286
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:330
 msgid "All files"
 msgstr "Všechny soubor"
 
@@ -1363,7 +1348,7 @@ msgid "Importing keys from key servers"
 msgstr "Import klíčů ze serveru"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: pgp/seahorse-keyserver-results.c:236 src/seahorse-key-manager.c:499
+#: pgp/seahorse-keyserver-results.c:236 src/key-manager.vala:52
 msgid "_Remote"
 msgstr "_Vzdálené"
 
@@ -2167,7 +2152,7 @@ msgstr "Nepojmenované"
 msgid "Failed to export certificate"
 msgstr "Selhal export certifikátu"
 
-#: pkcs11/pkcs11-properties.vala:188 src/seahorse-sidebar.c:873
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:622
 msgid "Couldn’t delete"
 msgstr "Nezdařilo se smazat"
 
@@ -2260,6 +2245,124 @@ msgstr "Jméno (CN) použité v žádosti o certifikát."
 msgid "Name (CN):"
 msgstr "Jméno (CN):"
 
+#: src/application.vala:66
+msgid "Version of this application"
+msgstr "Verze této aplikace"
+
+#: src/application.vala:71 src/application.vala:107
+msgid "- System Settings"
+msgstr "– Systémová nastavení"
+
+#: src/application.vala:102
+msgid "Don't display a window"
+msgstr "Nezobrazovat okno"
+
+#: src/generate-select.vala:77
+msgid "Continue"
+msgstr "Pokračovat"
+
+#: src/import-dialog.vala:34
+msgid "Import"
+msgstr "Import"
+
+#: src/import-dialog.vala:40
+msgid "<b>Data to be imported:</b>"
+msgstr "<b>Údaje, které mají být importovány:</b>"
+
+#: src/import-dialog.vala:75
+msgid "Import failed"
+msgstr "Import selhal"
+
+#: src/key-manager.vala:53
+msgid "_New"
+msgstr "_Nový"
+
+#: src/key-manager.vala:54
+msgid "Close this program"
+msgstr "Ukončit program"
+
+#: src/key-manager.vala:55 src/key-manager.vala:56
+msgid "_New…"
+msgstr "_Nový…"
+
+#: src/key-manager.vala:55
+msgid "Create a new key or item"
+msgstr "Vytvořit nový klíč nebo položku"
+
+#: src/key-manager.vala:56
+msgid "Add a new key or item"
+msgstr "Přidat nový klíč nebo položku"
+
+#: src/key-manager.vala:57
+msgid "_Import…"
+msgstr "_Importovat…"
+
+#: src/key-manager.vala:57
+msgid "Import from a file"
+msgstr "Importovat ze souboru"
+
+#: src/key-manager.vala:58
+msgid "Import from the clipboard"
+msgstr "Importovat ze schránky"
+
+#: src/key-manager.vala:62
+msgid "By _Keyring"
+msgstr "Podle _klíčenky"
+
+#: src/key-manager.vala:62
+msgid "Show sidebar listing keyrings"
+msgstr "Zobrazit postranní panel se seznamem klíčenek"
+
+#: src/key-manager.vala:66
+msgid "Show _Personal"
+msgstr "Zobrazit _osobní"
+
+#: src/key-manager.vala:66
+msgid "Only show personal keys, certificates and passwords"
+msgstr "Zobrazit pouze osobní klíče, certifikáty a hesla"
+
+#: src/key-manager.vala:67
+msgid "Show _Trusted"
+msgstr "Zobrazit _důvěryhodné"
+
+#: src/key-manager.vala:67
+msgid "Only show trusted keys, certificates and passwords"
+msgstr "Zobrazit pouze důvěryhodné klíče, certifikáty a hesla"
+
+#: src/key-manager.vala:68
+msgid "Show _Any"
+msgstr "Zobrazit _všechny"
+
+#: src/key-manager.vala:68
+msgid "Show all keys, certificates and passwords"
+msgstr "Zobrazit všechny klíče, certifikáty a hesla"
+
+#: src/key-manager.vala:136
+msgid "Filter"
+msgstr "Filtr"
+
+#. The prompt
+#: src/key-manager.vala:285 ssh/operation.vala:320
+msgid "Import Key"
+msgstr "Importovat klíč"
+
+#: src/key-manager.vala:288
+msgid "_Open"
+msgstr "_Otevřít"
+
+#. TODO: This should come from libgcr somehow
+#: src/key-manager.vala:296
+msgid "All key files"
+msgstr "Všechny soubory klíčů"
+
+#: src/key-manager.vala:371
+msgid "Dropped text"
+msgstr "Zkopírovaný text"
+
+#: src/key-manager.vala:394
+msgid "Clipboard text"
+msgstr "Text ze schránky"
+
 #: src/seahorse-change-passphrase.ui:8
 msgid "Change Passphrase"
 msgstr "Změnit heslo"
@@ -2276,110 +2379,9 @@ msgstr "Potvrdit nové heslo"
 msgid "Con_firm Passphrase:"
 msgstr "P_otvrdit heslo:"
 
-#: src/seahorse-generate-select.c:228
-msgid "Continue"
-msgstr "Pokračovat"
-
 #: src/seahorse-generate-select.ui:15
 msgid "_Select the type of item to create:"
 msgstr "Zvo_lte druh položky, kterou chcete vytvořit:"
-
-#: src/seahorse-import-dialog.c:95
-msgid "Import failed"
-msgstr "Import selhal"
-
-#: src/seahorse-import-dialog.c:113
-msgid "Import"
-msgstr "Import"
-
-#: src/seahorse-import-dialog.c:126
-msgid "<b>Data to be imported:</b>"
-msgstr "<b>Údaje, které mají být importovány:</b>"
-
-#. The prompt
-#: src/seahorse-key-manager.c:240 ssh/operation.vala:320
-msgid "Import Key"
-msgstr "Importovat klíč"
-
-#: src/seahorse-key-manager.c:252
-msgid "All key files"
-msgstr "Všechny soubory klíčů"
-
-#: src/seahorse-key-manager.c:353
-msgid "Dropped text"
-msgstr "Zkopírovaný text"
-
-#: src/seahorse-key-manager.c:389
-msgid "Clipboard text"
-msgstr "Text ze schránky"
-
-#: src/seahorse-key-manager.c:500
-msgid "_New"
-msgstr "_Nový"
-
-#: src/seahorse-key-manager.c:502
-msgid "Close this program"
-msgstr "Ukončit program"
-
-#: src/seahorse-key-manager.c:503 src/seahorse-key-manager.c:505
-msgid "_New…"
-msgstr "_Nový…"
-
-#: src/seahorse-key-manager.c:504
-msgid "Create a new key or item"
-msgstr "Vytvořit nový klíč nebo položku"
-
-#: src/seahorse-key-manager.c:506
-msgid "Add a new key or item"
-msgstr "Přidat nový klíč nebo položku"
-
-#: src/seahorse-key-manager.c:507
-msgid "_Import…"
-msgstr "_Importovat…"
-
-#: src/seahorse-key-manager.c:508
-msgid "Import from a file"
-msgstr "Importovat ze souboru"
-
-#: src/seahorse-key-manager.c:510
-msgid "Import from the clipboard"
-msgstr "Importovat ze schránky"
-
-#: src/seahorse-key-manager.c:514
-msgid "By _Keyring"
-msgstr "Podle _klíčenky"
-
-#: src/seahorse-key-manager.c:515
-msgid "Show sidebar listing keyrings"
-msgstr "Zobrazit postranní panel se seznamem klíčenek"
-
-#: src/seahorse-key-manager.c:519
-msgid "Show _Personal"
-msgstr "Zobrazit _osobní"
-
-#: src/seahorse-key-manager.c:520
-msgid "Only show personal keys, certificates and passwords"
-msgstr "Zobrazit pouze osobní klíče, certifikáty a hesla"
-
-#: src/seahorse-key-manager.c:521
-msgid "Show _Trusted"
-msgstr "Zobrazit _důvěryhodné"
-
-#: src/seahorse-key-manager.c:522
-msgid "Only show trusted keys, certificates and passwords"
-msgstr "Zobrazit pouze důvěryhodné klíče, certifikáty a hesla"
-
-#: src/seahorse-key-manager.c:523
-msgid "Show _Any"
-msgstr "Zobrazit _všechny"
-
-#: src/seahorse-key-manager.c:524
-msgid "Show all keys, certificates and passwords"
-msgstr "Zobrazit všechny klíče, certifikáty a hesla"
-
-#: src/seahorse-key-manager.c:743
-msgid "Filter"
-msgstr "Filtr"
 
 #: src/seahorse-key-manager.ui:97
 msgid "First time options:"
@@ -2397,19 +2399,20 @@ msgstr "Importovat existující klíče ze souboru:"
 msgid "To get started with encryption you will need keys."
 msgstr "Abyste mohli začít používat šifrování, budete potřebovat klíče."
 
-#: src/seahorse-sidebar.c:797
+#: src/sidebar.vala:589
 msgid "Couldn’t lock"
 msgstr "Nezdařilo se zamknout"
 
-#: src/seahorse-sidebar.c:834
+#: src/sidebar.vala:606
 msgid "Couldn’t unlock"
 msgstr "Nezdařilo se odemknout"
 
-#: src/seahorse-sidebar.c:941
+#. Lock and unlock items
+#: src/sidebar.vala:642
 msgid "_Lock"
 msgstr "_Zamknout"
 
-#: src/seahorse-sidebar.c:946
+#: src/sidebar.vala:647
 msgid "_Unlock"
 msgstr "_Odemknout"
 
@@ -2702,3 +2705,6 @@ msgstr "Na vzdáleném počítači se nezdařilo nastavit SSH klíče."
 #: ssh/upload.vala:97
 msgid "Configuring Secure Shell Keys…"
 msgstr "Nastavují se klíče SSH…"
+
+#~ msgid "The search provider is not loaded yet"
+#~ msgstr "Poskytovatel hledání zatím není načten"
