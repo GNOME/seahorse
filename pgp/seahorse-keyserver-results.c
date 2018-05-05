@@ -150,7 +150,7 @@ on_remote_find (GtkAction* action, SeahorseKeyserverResults* self)
 {
 	g_return_if_fail (SEAHORSE_IS_KEYSERVER_RESULTS (self));
 	g_return_if_fail (GTK_IS_ACTION (action));
-	seahorse_keyserver_search_show (seahorse_catalog_get_window (SEAHORSE_CATALOG (self)));
+	seahorse_keyserver_search_show (GTK_WINDOW (self));
 }
 
 static void
@@ -163,7 +163,7 @@ on_import_complete (GObject *source,
 
 	if (!seahorse_pgp_backend_transfer_finish (SEAHORSE_PGP_BACKEND (source),
 	                                           result, &error))
-		seahorse_util_handle_error (&error, seahorse_catalog_get_window (self),
+		seahorse_util_handle_error (&error, GTK_WINDOW (self),
 		                            _("Couldn’t import keys"));
 
 	g_object_unref (self);
@@ -281,7 +281,7 @@ seahorse_keyserver_results_constructed (GObject *obj)
 		title = g_strdup_printf (_ ("Remote Keys Containing “%s”"), self->pv->search_string);
 	}
 
-	window = seahorse_catalog_get_window (SEAHORSE_CATALOG (self));
+	window = GTK_WINDOW (self);
 	gtk_window_set_default_geometry(window, 640, 476);
 	gtk_widget_set_events (GTK_WIDGET (window), GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
 	gtk_window_set_title (window, title);
@@ -474,13 +474,11 @@ on_search_completed (GObject *source,
 {
 	SeahorseKeyserverResults *self = SEAHORSE_KEYSERVER_RESULTS (user_data);
 	GError *error = NULL;
-	GtkWindow *window;
 
 	seahorse_pgp_backend_search_remote_finish (NULL, result, &error);
 	if (error != NULL) {
-		window = seahorse_catalog_get_window (SEAHORSE_CATALOG (self));
 		g_dbus_error_strip_remote_error (error);
-		seahorse_util_show_error (GTK_WIDGET (window),
+		seahorse_util_show_error (GTK_WIDGET (self),
 		                          _("The search for keys failed."), error->message);
 		g_error_free (error);
 	}

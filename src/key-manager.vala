@@ -74,13 +74,12 @@ public class Seahorse.KeyManager : Catalog {
         );
         this.settings = new GLib.Settings("org.gnome.seahorse.manager");
 
-        Gtk.Window window = this.window;
-        window.set_default_geometry(640, 476);
-        window.set_events(Gdk.EventMask.POINTER_MOTION_MASK
-                          | Gdk.EventMask.POINTER_MOTION_HINT_MASK
-                          | Gdk.EventMask.BUTTON_PRESS_MASK
-                          | Gdk.EventMask.BUTTON_RELEASE_MASK);
-        window.set_title(_("Passwords and Keys"));
+        set_default_geometry(640, 476);
+        set_events(Gdk.EventMask.POINTER_MOTION_MASK
+                   | Gdk.EventMask.POINTER_MOTION_HINT_MASK
+                   | Gdk.EventMask.BUTTON_PRESS_MASK
+                   | Gdk.EventMask.BUTTON_RELEASE_MASK);
+        set_title(_("Passwords and Keys"));
 
         this.collection = setup_sidebar();
 
@@ -130,14 +129,13 @@ public class Seahorse.KeyManager : Catalog {
         show();
 
         // Setup drops
-        Gtk.drag_dest_set(window, Gtk.DestDefaults.ALL, {}, Gdk.DragAction.COPY);
+        Gtk.drag_dest_set(this, Gtk.DestDefaults.ALL, {}, Gdk.DragAction.COPY);
         Gtk.TargetList targets = new Gtk.TargetList(null);
         targets.add_uri_targets(DndTarget.URIS);
         targets.add_text_targets(DndTarget.PLAIN);
-        Gtk.drag_dest_set_target_list(window, targets);
+        Gtk.drag_dest_set_target_list(this, targets);
 
-        window.drag_data_received.connect(on_target_drag_data_received);
-
+        this.drag_data_received.connect(on_target_drag_data_received);
         this.view.button_press_event.connect(on_keymanager_key_list_button_pressed);
         this.view.row_activated.connect(on_keymanager_row_activated);
         this.view.popup_menu.connect(on_keymanager_key_list_popup_menu);
@@ -210,13 +208,13 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     private void on_file_new(Gtk.Action action) {
-        GenerateSelect dialog = new GenerateSelect(this.window);
+        GenerateSelect dialog = new GenerateSelect(this);
         dialog.run();
         dialog.destroy();
     }
 
     private void on_keymanager_new_button(Gtk.Button button) {
-        GenerateSelect dialog = new GenerateSelect(this.window);
+        GenerateSelect dialog = new GenerateSelect(this);
         dialog.run();
         dialog.destroy();
     }
@@ -226,7 +224,7 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     private void import_files(string[]? uris) {
-        ImportDialog dialog = new ImportDialog(this.window);
+        ImportDialog dialog = new ImportDialog(this);
         dialog.add_uris(uris);
         dialog.run();
         dialog.destroy();
@@ -234,7 +232,7 @@ public class Seahorse.KeyManager : Catalog {
 
     private void import_prompt() {
         Gtk.FileChooserDialog dialog =
-            new Gtk.FileChooserDialog(_("Import Key"), this.window,
+            new Gtk.FileChooserDialog(_("Import Key"), this,
                                       Gtk.FileChooserAction.OPEN,
                                       _("_Cancel"), Gtk.ResponseType.CANCEL,
                                       _("_Open"), Gtk.ResponseType.ACCEPT,
@@ -307,7 +305,7 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     private void import_text(string? display_name, string? text) {
-        ImportDialog dialog = new ImportDialog(this.window);
+        ImportDialog dialog = new ImportDialog(this);
         dialog.add_text(display_name, text);
         dialog.run();
         dialog.destroy();

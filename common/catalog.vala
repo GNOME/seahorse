@@ -20,13 +20,8 @@
 
 namespace Seahorse {
 
-public abstract class Catalog : Gtk.Window {
+public abstract class Catalog : Gtk.ApplicationWindow {
 	public const string MENU_OBJECT = "ObjectPopup";
-
-	/* For compatibility with old code */
-	public Gtk.Window window {
-		get { return this; }
-	}
 
 	/* Set by the derived classes */
 	public string ui_name { construct; get; }
@@ -300,7 +295,7 @@ public abstract class Catalog : Gtk.Window {
 			var objects = this.get_selected_objects();
 			Deletable.delete_with_prompt_wait(objects, this);
 		} catch (GLib.Error err) {
-			Util.show_error(window, _("Cannot delete"), err.message);
+			Util.show_error(this, _("Cannot delete"), err.message);
 		}
 	}
 
@@ -323,7 +318,7 @@ public abstract class Catalog : Gtk.Window {
 		try {
 			Exportable.export_to_prompt_wait(this.get_selected_objects(), this);
 		} catch (GLib.Error err) {
-			Util.show_error(window, _("Couldn’t export keys"), err.message);
+			Util.show_error(this, _("Couldn’t export keys"), err.message);
 		}
 	}
 
