@@ -42,8 +42,6 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         { "XdndDirectSave0", 0, DragInfo.XDS }
     };
 
-    private uint filter_stag;
-
     private string? drag_destination;
     private GLib.Error? drag_error;
     private List<GLib.Object>? drag_objects;
@@ -54,39 +52,18 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
     public GLib.Settings settings { get; construct set; }
 
     /**
-     * Key store mode controls which keys to display
+     * Key store filter
      */
-    public Mode filter_mode {
-        get { return this._filter_mode; }
+    public string filter {
+        get { return this._filter; }
         set {
-            if (this._filter_mode != value) {
-                this._filter_mode = value;
-                refilter_later();
+            if (this._filter != value) {
+                this._filter = value;
+                refilter ();
             }
         }
     }
-    private Mode _filter_mode;
-
-    /**
-     * Key store filter for when in filtered mode
-     */
-    public string? filter {
-        get { return (this.filter_mode == Mode.FILTERED)? this._filter : ""; }
-        set {
-            // If we're not in filtered mode and there is text OR
-            // we're in filtered mode (regardless of text or not)
-            // then update the filter
-            if ((this._filter_mode != Mode.FILTERED && value != null && value != "")
-                || (this._filter_mode == Mode.FILTERED)) {
-                this._filter_mode = Mode.FILTERED;
-
-                // We always use lower case text (see filter_callback)
-                this._filter = value.down();
-                refilter_later ();
-            }
-        }
-    }
-    private string? _filter;
+    private string _filter = "";
 
     private enum Column {
         ICON,
@@ -114,14 +91,10 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
     }
 
     public KeyManagerStore (Gcr.Collection? collection, Gtk.TreeView? view, Predicate? pred, GLib.Settings settings) {
-        Collection filtered = new Collection.for_predicate (collection, pred, null);
         pred.custom = on_filter_visible;
         pred.custom_target = this;
-
-        GLib.Object (
-            collection: filtered,
-            settings: settings
-        );
+        this.collection = new Collection.for_predicate (collection, pred, null);
+        this.settings = settings;
 
         // The sorted model is the top level model
         view.model = this;
@@ -160,10 +133,6 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         col.set_sort_column_id(Column.LABEL);
 
         // Use predicate to figure out which columns to add
-        if (collection is Collection)
-            pred = ((Collection) collection).predicate;
-        else
-            pred = null;
 
         // Also watch for sort-changed on the store
         this.sort_column_changed.connect(on_sort_column_changed);
@@ -218,32 +187,11 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
     // Called to filter each row
     private static bool on_filter_visible (GLib.Object? obj, void* custom_target) {
         KeyManagerStore self = (KeyManagerStore) custom_target;
-
-        // Check the row requested
-        switch (self.filter_mode) {
-            case Mode.FILTERED:
-                return self.object_contains_filtered_text (obj, self.filter);
-            case Mode.ALL:
-                return true;
-            default:
-                assert_not_reached();
-        };
+        return self.object_contains_filtered_text (obj, self.filter);
     }
 
     public void refilter() {
         ((Collection) get_collection()).refresh();
-    }
-
-    // Refilter the tree after a timeout has passed
-    private void refilter_later() {
-        if (this.filter_stag != 0)
-            Source.remove (this.filter_stag);
-
-        this.filter_stag = Timeout.add (200, () => {
-            this.filter_stag = 0;
-            refilter();
-            return false;
-        });
     }
 
     // Update the sort order for a column

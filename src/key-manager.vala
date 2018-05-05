@@ -24,7 +24,7 @@ public class Seahorse.KeyManager : Catalog {
 
     private Gtk.ActionGroup view_actions;
     private Gtk.RadioAction show_action;
-    private Gtk.Entry filter_entry;
+    private Gtk.SearchEntry filter_entry;
     private Predicate pred;
     private Sidebar sidebar;
 
@@ -112,11 +112,11 @@ public class Seahorse.KeyManager : Catalog {
 
         // The toolbar
         ((Gtk.Button) builder.get_object("new_item_button")).clicked.connect(on_keymanager_new_button);
-        this.filter_entry = (Gtk.Entry) builder.get_object("filter_entry");
+        this.filter_entry = (Gtk.SearchEntry) builder.get_object("filter_entry");
         on_filter_changed(this.filter_entry);
 
         // For the filtering
-        this.filter_entry.changed.connect(on_filter_changed);
+        this.filter_entry.search_changed.connect(on_filter_changed);
         this.view.start_interactive_search.connect(() => {
             this.filter_entry.grab_focus();
             return false;
@@ -222,8 +222,7 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     private void on_filter_changed(Gtk.Editable entry) {
-        string? text = this.filter_entry.get_text();
-        this.store.filter = text;
+        this.store.filter = this.filter_entry.text;
     }
 
     private void import_files(string[]? uris) {
