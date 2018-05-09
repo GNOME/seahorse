@@ -13,7 +13,7 @@ seahorse_sources = [
   'search-provider.vala',
   'sidebar.vala',
 
-  # resources_src,
+  resources_src,
   search_provider_src,
 ]
 

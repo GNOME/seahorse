@@ -13,10 +13,6 @@ install_data(gsettings_files,
 # Resources
 resources_src = gnome.compile_resources('seahorse-resources',
   'seahorse.gresource.xml',
-  c_name: 'seahorse',
-  extra_args: [
-    '--manual-register',
-  ]
 )
 
 # The appdata file

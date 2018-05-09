@@ -24,8 +24,6 @@ public int main (string[] args) {
     Intl.bind_textdomain_codeset(Config.GETTEXT_PACKAGE, "UTF-8");
     Intl.textdomain(Config.GETTEXT_PACKAGE);
 
-    Seahorse.register_resource();
-
     Seahorse.Application app = new Seahorse.Application();
     int status = app.run(args);
 

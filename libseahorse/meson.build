@@ -14,7 +14,6 @@ libseahorse_sources = [
   'seahorse-util.c',
   'seahorse-widget.c',
   marshaller,
-  resources_src,
 ]
 
 libseahorse_deps = [
