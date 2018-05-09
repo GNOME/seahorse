@@ -19,28 +19,21 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+[GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-ssh-upload.ui")]
 public class Seahorse.Ssh.Upload : Gtk.Dialog {
 
     private unowned List<Key> keys;
 
+    [GtkChild]
     private Gtk.Entry user_entry;
+    [GtkChild]
     private Gtk.Entry host_entry;
-    private Gtk.Button ok_button;
+    [GtkChild]
+    private Gtk.Button setup_button;
 
     public Upload(List<Key> keys, Gtk.Window? parent) {
-        GLib.Object(border_width: 5,
-                    title: _("Set Up Computer for SSH Connection"),
-                    resizable: false,
-                    default_width: 400,
-                    skip_taskbar_hint: true,
-                    skip_pager_hint: true,
-                    window_position: Gtk.WindowPosition.CENTER_ON_PARENT,
-                    modal: true,
-                    transient_for: parent);
-
+        this.transient_for = parent;
         this.keys = keys;
-
-        load_ui();
 
         // Default to the users current name
         this.user_entry.text = Environment.get_user_name();
@@ -48,26 +41,6 @@ public class Seahorse.Ssh.Upload : Gtk.Dialog {
         this.host_entry.grab_focus();
 
         on_upload_input_changed();
-    }
-
-    // FIXME: normally we would do this using GtkTemplate, but this is quite hard with the current build setup
-    private void load_ui() {
-        Gtk.Builder builder = new Gtk.Builder();
-        try {
-            string path = "/org/gnome/Seahorse/seahorse-ssh-upload.ui";
-            builder.add_from_resource(path);
-        } catch (GLib.Error err) {
-            GLib.critical("%s", err.message);
-        }
-        Gtk.Container content = (Gtk.Container) builder.get_object("ssh-upload");
-        ((Gtk.Container)this.get_content_area()).add(content);
-
-        this.host_entry = (Gtk.Entry) builder.get_object("host-entry");
-        this.host_entry.changed.connect(on_upload_input_changed);
-        this.user_entry = (Gtk.Entry) builder.get_object("user-entry");
-        this.user_entry.changed.connect(on_upload_input_changed);
-
-        this.ok_button = (Gtk.Button) add_button(_("Set Up"), Gtk.ResponseType.OK);
     }
 
     private void upload_keys() {
@@ -97,6 +70,7 @@ public class Seahorse.Ssh.Upload : Gtk.Dialog {
         Seahorse.Progress.show(cancellable, _("Configuring Secure Shell Keys…"), false);
     }
 
+    [GtkCallback]
     private void on_upload_input_changed () {
         string user = this.user_entry.text;
         string host = this.host_entry.text;
@@ -110,7 +84,7 @@ public class Seahorse.Ssh.Upload : Gtk.Dialog {
             host = host.substring(0, port_pos);
         }
 
-        this.ok_button.sensitive = (host.strip() != "") && (user.strip() != "");
+        this.setup_button.sensitive = (host.strip() != "") && (user.strip() != "");
     }
 
     /**

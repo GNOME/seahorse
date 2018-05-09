@@ -19,6 +19,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+[GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-ssh-key-properties.ui")]
 public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
 
     private Key key;
@@ -26,69 +27,44 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
     // Used to make sure we don't start calling command unnecessarily
     private bool updating_ui = false;
 
+    [GtkChild]
     private Gtk.Image key_image;
+    [GtkChild]
     private Gtk.Entry comment_entry;
+    [GtkChild]
     private Gtk.Label id_label;
+    [GtkChild]
     private Gtk.Label trust_message;
+    [GtkChild]
     private Gtk.ToggleButton trust_check;
 
+    [GtkChild]
     private Gtk.Button passphrase_button;
+    [GtkChild]
     private Gtk.Button export_button;
 
+    [GtkChild]
     private Gtk.Label fingerprint_label;
+    [GtkChild]
     private Gtk.Label algo_label;
+    [GtkChild]
     private Gtk.Label location_label;
+    [GtkChild]
     private Gtk.Label key_length_label;
 
     public KeyProperties(Key key, Gtk.Window parent) {
-        GLib.Object(border_width: 5,
-                    title: _("Key Properties"),
-                    resizable: false,
-                    transient_for: parent);
+        this.transient_for = parent;
         this.key = key;
 
-        load_ui();
         update_ui();
 
         // A public key only
         if (key.usage != Seahorse.Usage.PRIVATE_KEY) {
-            passphrase_button.visible = false;
-            export_button.visible = false;
+            this.passphrase_button.visible = false;
+            this.export_button.visible = false;
         }
 
         this.key.notify.connect(() => update_ui());
-    }
-
-    // FIXME: normally we would do this using GtkTemplate, but this is quite hard with the current build setup
-    private void load_ui() {
-        Gtk.Builder builder = new Gtk.Builder();
-        try {
-            string path = "/org/gnome/Seahorse/seahorse-ssh-key-properties.ui";
-            builder.add_from_resource(path);
-        } catch (GLib.Error err) {
-            GLib.critical("%s", err.message);
-        }
-        Gtk.Container content = (Gtk.Container) builder.get_object("ssh-key-properties");
-        ((Gtk.Container)this.get_content_area()).add(content);
-
-        this.key_image = (Gtk.Image) builder.get_object("key-image");
-        this.comment_entry = (Gtk.Entry) builder.get_object("comment-entry");
-        this.id_label = (Gtk.Label) builder.get_object("id-label");
-        this.trust_message = (Gtk.Label) builder.get_object("trust-message");
-        this.trust_check = (Gtk.ToggleButton) builder.get_object("trust-check");
-        this.passphrase_button = (Gtk.Button) builder.get_object("passphrase-button");
-        this.export_button = (Gtk.Button) builder.get_object("export-button");
-        this.fingerprint_label = (Gtk.Label) builder.get_object("fingerprint-label");
-        this.algo_label = (Gtk.Label) builder.get_object("algo-label");
-        this.location_label = (Gtk.Label) builder.get_object("location-label");
-        this.key_length_label = (Gtk.Label) builder.get_object("key-length-label");
-
-        // Signals
-        this.comment_entry.activate.connect(on_ssh_comment_activate);
-        this.comment_entry.focus_out_event.connect(on_ssh_comment_focus_out);
-        this.trust_check.toggled.connect(on_ssh_trust_toggled);
-        this.passphrase_button.clicked.connect(on_ssh_passphrase_button_clicked);
-        this.export_button.clicked.connect(on_ssh_export_button_clicked);
     }
 
     private void update_ui() {
@@ -120,6 +96,7 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         destroy();
     }
 
+    [GtkCallback]
     public void on_ssh_comment_activate(Gtk.Entry entry) {
         // Make sure not the same
         if (key.key_data.comment != null && entry.text == key.key_data.comment)
@@ -140,11 +117,13 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         });
     }
 
+    [GtkCallback]
     private bool on_ssh_comment_focus_out(Gtk.Widget widget, Gdk.EventFocus event) {
         on_ssh_comment_activate((Gtk.Entry) widget);
         return false;
     }
 
+    [GtkCallback]
     private void on_ssh_trust_toggled(Gtk.ToggleButton button) {
         if (updating_ui)
             return;
@@ -163,6 +142,7 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         });
     }
 
+    [GtkCallback]
     private void on_ssh_passphrase_button_clicked (Gtk.Button button) {
         button.sensitive = false;
 
@@ -178,6 +158,7 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         });
     }
 
+    [GtkCallback]
     private void on_ssh_export_button_clicked (Gtk.Widget widget) {
         List<Exporter> exporters = new List<Exporter>();
         exporters.append(new Exporter(key, true));

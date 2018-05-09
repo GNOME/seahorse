@@ -19,6 +19,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+[GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-ssh-generate.ui")]
 public class Seahorse.Ssh.Generate : Gtk.Dialog {
     public const int DEFAULT_DSA_SIZE = 1024;
     public const int DEFAULT_RSA_SIZE = 2048;
@@ -30,22 +31,24 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
 
     private Source source;
 
+    [GtkChild]
     private Gtk.Grid details_grid;
     private KeyLengthChooser key_length_chooser;
+    [GtkChild]
     private Gtk.Entry email_entry;
+    [GtkChild]
     private Gtk.ComboBoxText algorithm_combo_box;
+    [GtkChild]
     private Gtk.Button create_with_setup_button;
+    [GtkChild]
     private Gtk.Button create_no_setup_button;
 
     public Generate(Source src, Gtk.Window parent) {
-        GLib.Object(border_width: 5,
-                    title: _("New Secure Shell Key"),
-                    resizable: false,
-                    modal: true,
-                    transient_for: parent);
+        this.transient_for = parent;
         this.source = src;
 
-        load_ui();
+        this.create_no_setup_button.clicked.connect((b) => create_key(false));
+        this.create_with_setup_button.clicked.connect((b) => create_key(true));
 
         this.key_length_chooser = new KeyLengthChooser();
         this.details_grid.attach(this.key_length_chooser, 1, 1);
@@ -70,32 +73,7 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
         Seahorse.Registry.register_object(actions, "generator");
     }
 
-    // FIXME: normally we would do this using GtkTemplate, but this is quite hard with the current build setup
-    private void load_ui() {
-        Gtk.Builder builder = new Gtk.Builder();
-        try {
-            string path = "/org/gnome/Seahorse/seahorse-ssh-generate.ui";
-            builder.add_from_resource(path);
-        } catch (GLib.Error err) {
-            GLib.critical("%s", err.message);
-        }
-        Gtk.Container content = (Gtk.Container) builder.get_object("ssh-generate");
-        ((Gtk.Container)this.get_content_area()).add(content);
-        Gtk.Widget actions = (Gtk.Widget) builder.get_object("action_area");
-        ((Gtk.Container)this.get_action_area()).add(actions);
-
-        this.details_grid = (Gtk.Grid) builder.get_object("details_grid");
-        this.email_entry = (Gtk.Entry) builder.get_object("email-entry");
-        this.algorithm_combo_box = (Gtk.ComboBoxText) builder.get_object("algorithm-combo-box");
-        this.create_no_setup_button = (Gtk.Button) builder.get_object("create-no-setup");
-        this.create_with_setup_button = (Gtk.Button) builder.get_object("create-with-setup");
-
-        // Signals
-        this.algorithm_combo_box.changed.connect(on_algo_changed);
-        this.create_no_setup_button.clicked.connect((b) => create_key(false));
-        this.create_with_setup_button.clicked.connect((b) => create_key(true));
-    }
-
+    [GtkCallback]
     private void on_algo_changed(Gtk.ComboBox combo) {
         string t = algorithm_combo_box.get_active_text();
         this.key_length_chooser.algorithm = Algorithm.from_string(t);

@@ -25,8 +25,13 @@ ssh_dependencies = [
   common_dep,
 ]
 
+ssh_vala_args = [
+  '--gresources', resources_xml,
+]
+
 ssh_lib = static_library('seahorse-ssh',
   ssh_sources,
+  vala_args: ssh_vala_args,
   dependencies: ssh_dependencies,
 )
 
