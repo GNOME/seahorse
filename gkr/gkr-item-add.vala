@@ -30,7 +30,7 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
     private Gtk.CheckButton show_password_checkbutton;
 
     construct {
-        // Load up a list of all the keyrings, and select the default 
+        // Load up a list of all the keyrings, and select the default
         var store = new Gtk.ListStore(2, typeof(string), typeof(Secret.Collection));
         this.item_keyring_combo.set_model(store);
 
@@ -62,8 +62,8 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
 
     public ItemAdd(Gtk.Window? parent) {
         GLib.Object(transient_for: parent);
-        this.show();
-        this.present();
+        show();
+        present();
     }
 
     [GtkCallback]
