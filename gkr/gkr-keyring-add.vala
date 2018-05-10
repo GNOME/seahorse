@@ -17,59 +17,47 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Seahorse {
-namespace Gkr {
+[GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-gkr-add-keyring.ui")]
+public class Seahorse.Gkr.KeyringAdd : Gtk.Dialog {
+    [GtkChild]
+    private Gtk.Entry name_entry;
 
-public class KeyringAdd : Gtk.Dialog {
-	construct {
-		this.title = _("Add Password Keyring");
-		this.modal = true;
-		this.window_position = Gtk.WindowPosition.CENTER_ON_PARENT;
-		this.border_width = 5;
+    construct {
+        set_response_sensitive(Gtk.ResponseType.ACCEPT, false);
+    }
 
-		var builder = Util.load_built_contents(this, "add-keyring");
-		this.add_buttons(Gtk.Stock.OK, Gtk.ResponseType.ACCEPT,
-		                 Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL);
+    public KeyringAdd(Gtk.Window? parent) {
+        GLib.Object(transient_for: parent);
+        show();
+        present();
+    }
 
-		var entry = (Gtk.Entry)builder.get_object("keyring-name");
-		this.set_response_sensitive(Gtk.ResponseType.ACCEPT, false);
-		entry.changed.connect((editable) => {
-			var name = entry.get_text();
-			this.set_response_sensitive(Gtk.ResponseType.ACCEPT, name != "");
-		});
+    public override void response(int resp) {
+        if (resp != Gtk.ResponseType.ACCEPT) {
+            destroy();
+            return;
+        }
 
-		this.response.connect((resp) => {
-			if (resp == Gtk.ResponseType.ACCEPT) {
-				var name = entry.get_text();
-				var cancellable = Dialog.begin_request(this);
-				var service = Backend.instance().service;
-				Secret.Collection.create.begin(service, name, null,
-				                               Secret.CollectionCreateFlags.COLLECTION_CREATE_NONE,
-				                               cancellable, (obj, res) => {
-					/* Clear the operation without cancelling it since it is complete */
-					Dialog.complete_request(this, false);
+        var cancellable = Dialog.begin_request(this);
+        var service = Backend.instance().service;
+        Secret.Collection.create.begin(service, this.name_entry.text, null,
+                                       Secret.CollectionCreateFlags.COLLECTION_CREATE_NONE,
+                                       cancellable, (obj, res) => {
+            /* Clear the operation without cancelling it since it is complete */
+            Dialog.complete_request(this, false);
 
-					try {
-						Secret.Collection.create.end(res);
-					} catch (GLib.Error err) {
-						Util.show_error(this, _("Couldn’t add keyring"), err.message);
-					}
+            try {
+                Secret.Collection.create.end(res);
+            } catch (GLib.Error err) {
+                Util.show_error(this, _("Couldn’t add keyring"), err.message);
+            }
 
-					this.destroy();
-				});
-			} else {
-				this.destroy();
-			}
-		});
+            destroy();
+        });
+    }
 
-	}
-
-	public KeyringAdd(Gtk.Window? parent) {
-		GLib.Object(transient_for: parent);
-		this.show();
-		this.present();
-	}
-}
-
-}
+    [GtkCallback]
+    private void on_name_entry_changed(Gtk.Editable editable) {
+        set_response_sensitive(Gtk.ResponseType.ACCEPT, this.name_entry.text != "");
+    }
 }
