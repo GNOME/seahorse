@@ -104,7 +104,7 @@ seahorse_gpgme_secret_deleter_add_object (SeahorseDeleter *deleter,
 		return FALSE;
 	if (seahorse_object_get_usage (SEAHORSE_OBJECT (object)) != SEAHORSE_USAGE_PRIVATE_KEY)
 		return FALSE;
-	self->key = g_object_ref (object);
+	self->key = SEAHORSE_GPGME_KEY (g_object_ref (object));
 	self->keys = g_list_append (self->keys, object);
 	return TRUE;
 }

@@ -287,7 +287,7 @@ seahorse_pgp_subkey_get_usage (SeahorsePgpSubkey *self)
 		const char *name;
 	} FlagNames;
 
-	const FlagNames const flag_names[] = {
+	const FlagNames flag_names[] = {
 		{ SEAHORSE_FLAG_CAN_ENCRYPT,      N_("Encrypt") },
 		{ SEAHORSE_FLAG_CAN_SIGN,         N_("Sign") },
 		{ SEAHORSE_FLAG_CAN_CERTIFY,      N_("Certify") },

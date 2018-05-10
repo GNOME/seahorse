@@ -247,7 +247,8 @@ select_inital_keyservers (SeahorseWidget *swidget)
 	gchar *name;
 	guint i;
 
-	names = g_settings_get_strv (seahorse_app_settings_instance (), "last-search-servers");
+	names = g_settings_get_strv (G_SETTINGS (seahorse_app_settings_instance ()),
+								"last-search-servers");
 
 	/* Close the expander if all servers are selected */
 	widget = seahorse_widget_get_widget (swidget, "search-where");
@@ -421,7 +422,7 @@ on_keyserver_search_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 	/* The keyservers to search, and save for next time */
 	selection = get_keyserver_selection (swidget);
 	g_return_if_fail (selection->uris != NULL);
-	g_settings_set_strv (seahorse_app_settings_instance (), "last-search-servers",
+	g_settings_set_strv (G_SETTINGS (seahorse_app_settings_instance ()), "last-search-servers",
 	                     selection->all ? NULL : (const gchar * const*)selection->uris->pdata);
 
 	/* Open the new result window; its transient parent is *our* transient
@@ -485,7 +486,7 @@ seahorse_keyserver_search_show (GtkWindow *parent)
 
 	/* The key servers to list */
 	settings = seahorse_pgp_settings_instance ();
-	on_settings_keyservers_changed (settings, "keyservers", swidget);
+	on_settings_keyservers_changed (G_SETTINGS (settings), "keyservers", swidget);
 	g_signal_connect_object (settings, "changed::keyservers",
 	                         G_CALLBACK (on_settings_keyservers_changed), swidget, 0);
 

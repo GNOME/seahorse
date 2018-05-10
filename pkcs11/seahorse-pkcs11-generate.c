@@ -238,7 +238,7 @@ on_token_changed (GtkComboBox *combo_box,
 
 	if (gtk_combo_box_get_active_iter (combo_box, &iter)) {
 		object = gcr_collection_model_object_for_iter (self->token_model, &iter);
-		self->token = g_object_ref (object);
+		self->token = SEAHORSE_PKCS11_TOKEN (g_object_ref (object));
 	}
 
 	model = GTK_TREE_MODEL (self->mechanism_store);

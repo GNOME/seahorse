@@ -1982,7 +1982,7 @@ seahorse_pgp_key_properties_show (SeahorsePgpKey *pkey, GtkWindow *parent)
 		swidget = setup_private_properties (pkey, parent);
 	if (swidget) {
 		seahorse_widget_show (swidget);
-		return g_object_ref (seahorse_widget_get_toplevel (swidget));
+		return GTK_WINDOW (g_object_ref (seahorse_widget_get_toplevel (swidget)));
 	}
 
 	return NULL;

@@ -96,7 +96,7 @@ on_sync_configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
     SeahorsePrefs *prefs_dialog = seahorse_prefs_new (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)), "keyserver-tab");
     gtk_dialog_run (GTK_DIALOG (prefs_dialog));
-    gtk_widget_destroy (GTK_DIALOG (prefs_dialog));
+    gtk_widget_destroy (GTK_WIDGET (prefs_dialog));
 }
 
 static void
