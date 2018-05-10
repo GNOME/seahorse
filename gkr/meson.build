@@ -20,8 +20,13 @@ gkr_dependencies = [
   common_dep,
 ]
 
+gkr_vala_args = [
+  '--gresources', resources_xml,
+]
+
 gkr_lib = static_library('seahorse-gkr',
   gkr_sources,
+  vala_args: gkr_vala_args,
   dependencies: gkr_dependencies,
 )
 

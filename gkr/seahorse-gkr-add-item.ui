@@ -1,118 +1,127 @@
 <?xml version="1.0"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
-          <object class="GtkVBox" id="gkr-add-item">
+  <requires lib="gtk+" version="3.22"/>
+  <template class="SeahorseGkrItemAdd" parent="GtkDialog">
+    <property name="title" translatable="yes">Add Password</property>
+    <property name="modal">True</property>
+    <property name="window-position">center-on-parent</property>
+    <property name="border_width">5</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="border_width">5</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="border_width">5</property>
-            <property name="spacing">6</property>
+            <property name="column_spacing">12</property>
+            <property name="row_spacing">6</property>
             <child>
-              <object class="GtkTable" id="table1">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="n_rows">4</property>
-                <property name="n_columns">2</property>
-                <property name="column_spacing">12</property>
-                <property name="row_spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Description:</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="x_options">GTK_FILL</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="item-label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="invisible_char">&#x2022;</property>
-                    <property name="activates_default">True</property>
-                    <property name="width_chars">16</property>
-                    <signal name="changed" handler="on_add_item_label_changed"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label1">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Password:</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                    <property name="x_options">GTK_FILL</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="show-password">
-                    <property name="label" translatable="yes">_Show Password</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_add_item_password_toggled"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkAlignment" id="password-area">
-                    <property name="visible">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label2">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Keyring:</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="x_options">GTK_FILL</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="item-keyring">
-                    <property name="visible">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                  </packing>
-                </child>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Keyring:</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="item_keyring_combo">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Description:</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="item_entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="invisible_char">&#x2022;</property>
+                <property name="activates_default">True</property>
+                <property name="width_chars">16</property>
+                <signal name="changed" handler="on_add_item_entry_changed"/>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Password:</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="top_attach">2</property>
+                <property name="left_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="password_area">
+                <property name="visible">True</property>
                 <child>
                   <placeholder/>
                 </child>
               </object>
               <packing>
-                <property name="position">0</property>
+                <property name="top_attach">2</property>
+                <property name="left_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="show_password_checkbutton">
+                <property name="label" translatable="yes">_Show Password</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="top_attach">3</property>
+                <property name="left_attach">1</property>
               </packing>
             </child>
           </object>
+        </child>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="cancel_button">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Cancel</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="ok_button">
+        <property name="visible">True</property>
+        <property name="can-default">True</property>
+        <property name="label" translatable="yes">Ok</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="cancel">cancel_button</action-widget>
+      <action-widget response="accept" default="true">ok_button</action-widget>
+    </action-widgets>
+  </template>
 </interface>
