@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-03-12 21:07+0000\n"
-"PO-Revision-Date: 2018-03-13 00:16+0100\n"
+"POT-Creation-Date: 2018-05-10 15:19+0000\n"
+"PO-Revision-Date: 2018-05-20 19:21+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.0.7\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -30,7 +30,8 @@ msgid "Custom"
 msgstr "Anpassad"
 
 #. Buttons
-#: common/add-keyserver-dialog.vala:68
+#: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
+#: gkr/seahorse-gkr-add-keyring.ui:82
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -38,16 +39,16 @@ msgstr "Avbryt"
 msgid "Save"
 msgstr "Spara"
 
-#: common/catalog.vala:259
+#: common/catalog.vala:249
 msgid "Contributions:"
 msgstr "Bidrag:"
 
-#: common/catalog.vala:285 data/seahorse.desktop.in.in:3
-#: src/seahorse-key-manager.c:658
+#: common/catalog.vala:275 data/seahorse.desktop.in.in:3
+#: src/key-manager.vala:82
 msgid "Passwords and Keys"
 msgstr "Lösenord och nycklar"
 
-#: common/catalog.vala:287
+#: common/catalog.vala:277
 msgid "translator-credits"
 msgstr ""
 "Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
@@ -57,108 +58,110 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
 
-#: common/catalog.vala:290
+#: common/catalog.vala:280
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse-projektets webbplats"
 
-#: common/catalog.vala:308
+#: common/catalog.vala:298
 msgid "Cannot delete"
 msgstr "Kunde inte ta bort"
 
-#: common/catalog.vala:331 common/key-manager-store.vala:427
+#: common/catalog.vala:321 common/key-manager-store.vala:375
 msgid "Couldn’t export keys"
 msgstr "Kunde inte exportera nycklar"
 
-#: common/catalog.vala:342
+#: common/catalog.vala:332
 msgid "Couldn’t export data"
 msgstr "Kunde inte exportera data"
 
-#: common/catalog.vala:358 libseahorse/seahorse-widget.c:461
+#: common/catalog.vala:348 libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Kunde inte visa hjälp: %s"
 
 #. Top menu items
-#: common/catalog.vala:364
+#: common/catalog.vala:354
 msgid "_File"
 msgstr "_Arkiv"
 
-#: common/catalog.vala:365
+#: common/catalog.vala:355
 msgid "E_xport…"
 msgstr "E_xportera…"
 
-#: common/catalog.vala:366
+#: common/catalog.vala:356
 msgid "Export to a file"
 msgstr "Exportera till en fil"
 
-#: common/catalog.vala:367
+#: common/catalog.vala:357
 msgid "_Edit"
 msgstr "R_edigera"
 
-#: common/catalog.vala:368
+#: common/catalog.vala:358
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: common/catalog.vala:369
+#: common/catalog.vala:359
 msgid "Copy to the clipboard"
 msgstr "Kopiera till urklipp"
 
 #. Translators: This text refers to deleting an item from its type's backing store
-#: common/catalog.vala:371 common/delete-dialog.vala:91
-#: pkcs11/pkcs11-properties.vala:201 src/seahorse-sidebar.c:954
+#. Delete item
+#: common/catalog.vala:361 common/delete-dialog.vala:91
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:655
 msgid "_Delete"
 msgstr "_Ta bort"
 
-#: common/catalog.vala:372
+#: common/catalog.vala:362
 msgid "Delete selected items"
 msgstr "Ta bort markerade objekt"
 
-#: common/catalog.vala:373 common/catalog.vala:375 src/seahorse-sidebar.c:965
+#. Properties item
+#: common/catalog.vala:363 common/catalog.vala:365 src/sidebar.vala:664
 msgid "_Properties"
 msgstr "_Egenskaper"
 
-#: common/catalog.vala:374
+#: common/catalog.vala:364
 msgid "Show the properties of this item"
 msgstr "Visa egenskaper för detta objekt"
 
-#: common/catalog.vala:376
+#: common/catalog.vala:366
 msgid "Show the properties of this keyring"
 msgstr "Visa egenskaper för denna nyckelring"
 
-#: common/catalog.vala:377
+#: common/catalog.vala:367
 msgid "Prefere_nces"
 msgstr "Inställni_ngar"
 
-#: common/catalog.vala:378
+#: common/catalog.vala:368
 msgid "Change preferences for this program"
 msgstr "Ändra inställningar för detta program"
 
-#: common/catalog.vala:379
+#: common/catalog.vala:369
 msgid "_View"
 msgstr "_Visa"
 
-#: common/catalog.vala:380
+#: common/catalog.vala:370
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: common/catalog.vala:381
+#: common/catalog.vala:371
 msgid "_About"
 msgstr "_Om"
 
-#: common/catalog.vala:382
+#: common/catalog.vala:372
 msgid "About this program"
 msgstr "Om detta program"
 
-#: common/catalog.vala:383
+#: common/catalog.vala:373
 msgid "_Contents"
 msgstr "_Innehåll"
 
-#: common/catalog.vala:384
+#: common/catalog.vala:374
 msgid "Show Seahorse help"
 msgstr "Visa hjälp för Seahorse"
 
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117
+#: common/passphrase-prompt.vala:117 src/key-manager.vala:237
 msgid "_Cancel"
 msgstr "A_vbryt"
 
@@ -215,8 +218,8 @@ msgstr "Typ av nyckelserver:"
 msgid "Host:"
 msgstr "Värd:"
 
-#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:50
-#: ssh/seahorse-ssh-upload.ui:117
+#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:59
+#: ssh/seahorse-ssh-upload.ui:127
 msgid "The host name or address of the server."
 msgstr "Värdnamnet eller adressen för servern."
 
@@ -356,11 +359,7 @@ msgstr "Lösenordsnyckelring"
 msgid "Stored Password"
 msgstr "Lagrat lösenord"
 
-#: gkr/gkr-item-add.vala:24
-msgid "Add Password"
-msgstr "Lägg till lösenord"
-
-#: gkr/gkr-item-add.vala:101
+#: gkr/gkr-item-add.vala:103
 msgid "Couldn’t add item"
 msgstr "Kunde inte lägga till objekt"
 
@@ -465,15 +464,11 @@ msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "Är du säker på att du vill ta bort %d lösenord?"
 msgstr[1] "Är du säker på att du vill ta bort %d lösenord?"
 
-#: gkr/gkr-keyring-add.vala:25
-msgid "Add Password Keyring"
-msgstr "Lägg till lösenordsnyckelring"
-
-#: gkr/gkr-keyring-add.vala:55
+#: gkr/gkr-keyring-add.vala:52
 msgid "Couldn’t add keyring"
 msgstr "Kunde inte lägga till nyckelring"
 
-#: gkr/gkr-keyring-properties.vala:90
+#: gkr/gkr-keyring-properties.vala:66
 msgid "Unknown date"
 msgstr "Okänt datum"
 
@@ -522,7 +517,37 @@ msgstr "Jag förstår att alla objekt kommer tas bort permanent."
 msgid "Show/Hide password"
 msgstr "Visa/dölj lösenord"
 
-#: gkr/seahorse-add-keyring.ui:17
+#: gkr/seahorse-gkr-add-item.ui:5
+msgid "Add Password"
+msgstr "Lägg till lösenord"
+
+#: gkr/seahorse-gkr-add-item.ui:24
+msgid "_Keyring:"
+msgstr "N_yckelring:"
+
+#: gkr/seahorse-gkr-add-item.ui:45 gkr/seahorse-gkr-item-properties.ui:41
+#: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:130
+msgid "_Description:"
+msgstr "_Beskrivning:"
+
+#: gkr/seahorse-gkr-add-item.ui:71
+msgid "_Password:"
+msgstr "_Lösenord:"
+
+#: gkr/seahorse-gkr-add-item.ui:93
+msgid "_Show Password"
+msgstr "Visa lösen_ord"
+
+#: gkr/seahorse-gkr-add-item.ui:119 gkr/seahorse-gkr-add-keyring.ui:89
+#| msgid "_OK"
+msgid "OK"
+msgstr "OK"
+
+#: gkr/seahorse-gkr-add-keyring.ui:6
+msgid "Add password keyring"
+msgstr "Lägg till lösenordsnyckelring"
+
+#: gkr/seahorse-gkr-add-keyring.ui:24
 msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
@@ -530,26 +555,9 @@ msgstr ""
 "Välj ett namn för den nya nyckelringen. Du kommer att bli tillfrågad efter "
 "ett upplåsningslösenord."
 
-#: gkr/seahorse-add-keyring.ui:34
+#: gkr/seahorse-gkr-add-keyring.ui:42
 msgid "New Keyring Name:"
 msgstr "Nytt nyckelringsnamn:"
-
-#: gkr/seahorse-gkr-add-item.ui:20 gkr/seahorse-gkr-item-properties.ui:41
-#: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:124
-msgid "_Description:"
-msgstr "_Beskrivning:"
-
-#: gkr/seahorse-gkr-add-item.ui:49
-msgid "_Password:"
-msgstr "_Lösenord:"
-
-#: gkr/seahorse-gkr-add-item.ui:60
-msgid "_Show Password"
-msgstr "Visa lösen_ord"
-
-#: gkr/seahorse-gkr-add-item.ui:93
-msgid "_Keyring:"
-msgstr "N_yckelring:"
 
 #. To translators: This is the noun not the verb.
 #: gkr/seahorse-gkr-item-properties.ui:92
@@ -563,7 +571,7 @@ msgstr "Användning:"
 #: pgp/seahorse-pgp-private-key-properties.ui:1106
 #: pgp/seahorse-pgp-public-key-properties.ui:557
 #: pgp/seahorse-pgp-public-key-properties.ui:1223
-#: ssh/seahorse-ssh-key-properties.ui:75
+#: ssh/seahorse-ssh-key-properties.ui:81
 msgid "Type:"
 msgstr "Typ:"
 
@@ -576,56 +584,56 @@ msgid "Login:"
 msgstr "Inloggningsnamn:"
 
 #: gkr/seahorse-gkr-item-properties.ui:206 pgp/seahorse-pgp-subkey.c:402
-#: ssh/seahorse-ssh-key-properties.ui:239
+#: ssh/seahorse-ssh-key-properties.ui:245
 msgid "Key"
 msgstr "Nyckel"
 
 #: gkr/seahorse-gkr-item-properties.ui:256
 #: pgp/seahorse-pgp-public-key-properties.ui:1151
-#: ssh/seahorse-ssh-key-properties.ui:408
+#: ssh/seahorse-ssh-key-properties.ui:414
 msgid "Technical Details:"
 msgstr "Tekniska detaljer:"
 
 #: gkr/seahorse-gkr-item-properties.ui:276
 #: pgp/seahorse-pgp-private-key-properties.ui:1722
 #: pgp/seahorse-pgp-public-key-properties.ui:1611
-#: ssh/seahorse-ssh-key-properties.ui:451
+#: ssh/seahorse-ssh-key-properties.ui:458
 msgid "Details"
 msgstr "Detaljer"
 
-#: gkr/seahorse-gkr-keyring.ui:8
+#: gkr/seahorse-gkr-keyring.ui:9
 msgid "Keyring properties"
 msgstr "Nyckelringsegenskaper"
 
-#: gkr/seahorse-gkr-keyring.ui:21
+#: gkr/seahorse-gkr-keyring.ui:23
 msgid "Keyring is unlocked"
 msgstr "Nyckelringen är upplåst"
 
-#: gkr/seahorse-gkr-keyring.ui:31
+#: gkr/seahorse-gkr-keyring.ui:33
 msgid "Unlock"
 msgstr "Lås upp"
 
-#: gkr/seahorse-gkr-keyring.ui:44
+#: gkr/seahorse-gkr-keyring.ui:46
 msgid "Keyring is locked"
 msgstr "Nyckelringen är låst"
 
-#: gkr/seahorse-gkr-keyring.ui:54
+#: gkr/seahorse-gkr-keyring.ui:56
 msgid "Lock"
 msgstr "Lås"
 
-#: gkr/seahorse-gkr-keyring.ui:98 pgp/seahorse-pgp-key-properties.c:969
+#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:969
 msgid "Name"
 msgstr "Namn"
 
-#: gkr/seahorse-gkr-keyring.ui:126
+#: gkr/seahorse-gkr-keyring.ui:130
 msgid "Created on"
 msgstr "Skapad"
 
-#: gkr/seahorse-gkr-keyring.ui:156
+#: gkr/seahorse-gkr-keyring.ui:160
 msgid "Change password"
 msgstr "Ändra lösenord"
 
-#: gkr/seahorse-gkr-keyring.ui:162
+#: gkr/seahorse-gkr-keyring.ui:167
 msgid "Set as default"
 msgstr "Ange som standard"
 
@@ -884,27 +892,10 @@ msgstr "%04d-%02d-%02d"
 msgid "%u:%u:%u"
 msgstr "%u∶%u∶%u"
 
-#: libseahorse/seahorse-application.c:94
-msgid "Version of this application"
-msgstr "Versionsnummer för detta program"
-
-#: libseahorse/seahorse-application.c:100
-#: libseahorse/seahorse-application.c:144
-msgid "- System Settings"
-msgstr "- Systeminställningar"
-
-#: libseahorse/seahorse-application.c:140
-msgid "Don't display a window"
-msgstr "Visa inget fönster"
-
 #: libseahorse/seahorse-interaction.c:97
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Ange PIN-kod eller lösenord för: %s"
-
-#: libseahorse/seahorse-search-provider.c:183
-msgid "The search provider is not loaded yet"
-msgstr "Söktjänsten är inte inläst än"
 
 #: pgp/seahorse-add-subkey.ui:31
 msgid "Never E_xpires"
@@ -1055,7 +1046,7 @@ msgid "Used to encrypt email and files"
 msgstr "Används för att kryptera e-post och filer"
 
 #: pgp/seahorse-gpgme-generate.c:129 pkcs11/seahorse-pkcs11-generate.c:90
-#: ssh/seahorse-ssh-generate.ui:246
+#: ssh/seahorse-ssh-generate.ui:252
 msgid "RSA"
 msgstr "RSA"
 
@@ -1201,7 +1192,7 @@ msgstr "Alla bildfiler"
 msgid "All JPEG files"
 msgstr "Alla JPEG-filer"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/seahorse-key-manager.c:286
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:280
 msgid "All files"
 msgstr "Alla filer"
 
@@ -1356,7 +1347,7 @@ msgid "Importing keys from key servers"
 msgstr "Importerar nycklar från nyckelservrar"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: pgp/seahorse-keyserver-results.c:236 src/seahorse-key-manager.c:499
+#: pgp/seahorse-keyserver-results.c:236 src/key-manager.vala:52
 msgid "_Remote"
 msgstr "_Fjärr"
 
@@ -1372,7 +1363,7 @@ msgstr "_Sök fjärrnycklar…"
 msgid "Search for keys on a key server"
 msgstr "Sök efter nycklar på en nyckelserver"
 
-#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:195
+#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:222
 msgid "_Import"
 msgstr "_Importera"
 
@@ -1389,7 +1380,7 @@ msgstr "Fjärrnycklar"
 msgid "Remote Keys Containing “%s”"
 msgstr "Fjärrnycklar innehållande ”%s”"
 
-#: pgp/seahorse-keyserver-results.c:484
+#: pgp/seahorse-keyserver-results.c:482
 msgid "The search for keys failed."
 msgstr "Sökningen efter nycklar misslyckades."
 
@@ -1538,12 +1529,12 @@ msgstr "_Går aldrig ut"
 msgid "_Comment:"
 msgstr "_Kommentar:"
 
-#: pgp/seahorse-pgp-generate.ui:370 ssh/seahorse-ssh-generate.ui:206
+#: pgp/seahorse-pgp-generate.ui:370 ssh/seahorse-ssh-generate.ui:212
 msgid "Encryption _Type:"
 msgstr "Krypterings_typ:"
 
 #: pgp/seahorse-pgp-generate.ui:385 pkcs11/seahorse-pkcs11-generate.ui:164
-#: ssh/seahorse-ssh-generate.ui:222
+#: ssh/seahorse-ssh-generate.ui:228
 msgid "Key _Strength (bits):"
 msgstr "Nyckel_styrka (bitar):"
 
@@ -1552,7 +1543,7 @@ msgid "E_xpiration Date:"
 msgstr "U_tgångsdatum:"
 
 #: pgp/seahorse-pgp-generate.ui:418 pkcs11/seahorse-pkcs11-generate.ui:226
-#: ssh/seahorse-ssh-generate.ui:267
+#: ssh/seahorse-ssh-generate.ui:274
 msgid "_Advanced key options"
 msgstr "_Avancerade nyckelalternativ"
 
@@ -1611,7 +1602,7 @@ msgstr "Kunde inte ta bort undernyckel"
 msgid "Unable to change trust"
 msgstr "Kunde inte ändra tillit"
 
-#: pgp/seahorse-pgp-key-properties.c:1147 ssh/key-properties.vala:193
+#: pgp/seahorse-pgp-key-properties.c:1147 ssh/key-properties.vala:174
 msgid "Couldn’t export key"
 msgstr "Kunde inte exportera nyckeln"
 
@@ -1690,7 +1681,7 @@ msgid "PGP key"
 msgstr "PGP-nyckel"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:31
-#: pgp/seahorse-pgp-public-key-properties.ui:32 ssh/key-properties.vala:45
+#: pgp/seahorse-pgp-public-key-properties.ui:32
 msgid "Key Properties"
 msgstr "Nyckelegenskaper"
 
@@ -1768,7 +1759,7 @@ msgid "Private PGP Key"
 msgstr "Privat PGP-nyckel"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:649
-#: ssh/seahorse-ssh-key-properties.ui:144
+#: ssh/seahorse-ssh-key-properties.ui:150
 msgid "Change _Passphrase"
 msgstr "Ändra _lösenfras"
 
@@ -1935,12 +1926,12 @@ msgid "_Only display the signatures of people I trust"
 msgstr "_Visa endast signaturer för personer som jag litar på"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:1117
-#: ssh/seahorse-ssh-key-properties.ui:169
+#: ssh/seahorse-ssh-key-properties.ui:175
 msgid "Trust"
 msgstr "Tillit"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:1290
-#: ssh/seahorse-ssh-key-properties.ui:352
+#: ssh/seahorse-ssh-key-properties.ui:358
 msgid "Fingerprint:"
 msgstr "Fingeravtryck:"
 
@@ -2157,7 +2148,7 @@ msgstr "Namnlös"
 msgid "Failed to export certificate"
 msgstr "Misslyckades med att exportera certifikatet"
 
-#: pkcs11/pkcs11-properties.vala:188 src/seahorse-sidebar.c:873
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:622
 msgid "Couldn’t delete"
 msgstr "Kunde inte ta bort"
 
@@ -2250,6 +2241,116 @@ msgstr "Common Name (CN) placerad i certifikatbegäran."
 msgid "Name (CN):"
 msgstr "Namn (CN):"
 
+#: src/application.vala:66
+msgid "Version of this application"
+msgstr "Versionsnummer för detta program"
+
+#: src/application.vala:71 src/application.vala:107
+msgid "- System Settings"
+msgstr "- Systeminställningar"
+
+#: src/application.vala:102
+msgid "Don't display a window"
+msgstr "Visa inget fönster"
+
+#: src/generate-select.vala:77
+msgid "Continue"
+msgstr "Fortsätt"
+
+#: src/import-dialog.vala:34
+msgid "Import"
+msgstr "Importera"
+
+#: src/import-dialog.vala:40
+msgid "<b>Data to be imported:</b>"
+msgstr "<b>Data att importeras:</b>"
+
+#: src/import-dialog.vala:75
+msgid "Import failed"
+msgstr "Import misslyckades"
+
+#: src/key-manager.vala:53
+msgid "_New"
+msgstr "_Ny"
+
+#: src/key-manager.vala:54
+msgid "Close this program"
+msgstr "Stäng detta program"
+
+#: src/key-manager.vala:55
+msgid "_New…"
+msgstr "_Ny…"
+
+#: src/key-manager.vala:55
+msgid "Create a new key or item"
+msgstr "Skapa en ny nyckel eller objekt"
+
+#: src/key-manager.vala:56
+msgid "_Import…"
+msgstr "_Importera…"
+
+#: src/key-manager.vala:56
+msgid "Import from a file"
+msgstr "Importera från en fil"
+
+#: src/key-manager.vala:57
+msgid "Import from the clipboard"
+msgstr "Importera från urklipp"
+
+#: src/key-manager.vala:61
+msgid "By _Keyring"
+msgstr "Efter nyc_kelring"
+
+#: src/key-manager.vala:61
+msgid "Show sidebar listing keyrings"
+msgstr "Visa listning av nyckelringar i sidopanel"
+
+#: src/key-manager.vala:65
+msgid "Show _Personal"
+msgstr "Visa _personliga"
+
+#: src/key-manager.vala:65
+msgid "Only show personal keys, certificates and passwords"
+msgstr "Visa endast personliga nycklar, certifikat och lösenord"
+
+#: src/key-manager.vala:66
+msgid "Show _Trusted"
+msgstr "Visa påli_tliga"
+
+#: src/key-manager.vala:66
+msgid "Only show trusted keys, certificates and passwords"
+msgstr "Visa endast pålitliga nycklar, certifikat och lösenord"
+
+#: src/key-manager.vala:67
+msgid "Show _Any"
+msgstr "Visa _alla"
+
+#: src/key-manager.vala:67
+msgid "Show all keys, certificates and passwords"
+msgstr "Visa alla nycklar, certifikat och lösenord"
+
+#. The prompt
+#: src/key-manager.vala:235 ssh/operation.vala:320
+msgid "Import Key"
+msgstr "Importera nyckel"
+
+#: src/key-manager.vala:238
+msgid "_Open"
+msgstr "Öpp_na"
+
+#. TODO: This should come from libgcr somehow
+#: src/key-manager.vala:246
+msgid "All key files"
+msgstr "Alla nyckelfiler"
+
+#: src/key-manager.vala:321
+msgid "Dropped text"
+msgstr "Släppt text"
+
+#: src/key-manager.vala:344
+msgid "Clipboard text"
+msgstr "Urklippstext"
+
 #: src/seahorse-change-passphrase.ui:8
 msgid "Change Passphrase"
 msgstr "Ändra lösenfras"
@@ -2266,140 +2367,48 @@ msgstr "Bekräfta ny lösenfras"
 msgid "Con_firm Passphrase:"
 msgstr "_Bekräfta lösenfras:"
 
-#: src/seahorse-generate-select.c:228
-msgid "Continue"
-msgstr "Fortsätt"
-
 #: src/seahorse-generate-select.ui:15
 msgid "_Select the type of item to create:"
 msgstr "_Välj vilket sorts objekt som du vill skapa:"
 
-#: src/seahorse-import-dialog.c:95
-msgid "Import failed"
-msgstr "Import misslyckades"
-
-#: src/seahorse-import-dialog.c:113
-msgid "Import"
-msgstr "Importera"
-
-#: src/seahorse-import-dialog.c:126
-msgid "<b>Data to be imported:</b>"
-msgstr "<b>Data att importeras:</b>"
-
-#. The prompt
-#: src/seahorse-key-manager.c:240 ssh/operation.vala:320
-msgid "Import Key"
-msgstr "Importera nyckel"
-
-#: src/seahorse-key-manager.c:252
-msgid "All key files"
-msgstr "Alla nyckelfiler"
-
-#: src/seahorse-key-manager.c:353
-msgid "Dropped text"
-msgstr "Släppt text"
-
-#: src/seahorse-key-manager.c:389
-msgid "Clipboard text"
-msgstr "Urklippstext"
-
-#: src/seahorse-key-manager.c:500
-msgid "_New"
-msgstr "_Ny"
-
-#: src/seahorse-key-manager.c:502
-msgid "Close this program"
-msgstr "Stäng detta program"
-
-#: src/seahorse-key-manager.c:503 src/seahorse-key-manager.c:505
-msgid "_New…"
-msgstr "_Ny…"
-
-#: src/seahorse-key-manager.c:504
-msgid "Create a new key or item"
-msgstr "Skapa en ny nyckel eller objekt"
-
-#: src/seahorse-key-manager.c:506
+#: src/seahorse-key-manager.ui:57
 msgid "Add a new key or item"
 msgstr "Lägg till en ny nyckel eller objekt"
 
-#: src/seahorse-key-manager.c:507
-msgid "_Import…"
-msgstr "_Importera…"
-
-#: src/seahorse-key-manager.c:508
-msgid "Import from a file"
-msgstr "Importera från en fil"
-
-#: src/seahorse-key-manager.c:510
-msgid "Import from the clipboard"
-msgstr "Importera från urklipp"
-
-#: src/seahorse-key-manager.c:514
-msgid "By _Keyring"
-msgstr "Efter nyc_kelring"
-
-#: src/seahorse-key-manager.c:515
-msgid "Show sidebar listing keyrings"
-msgstr "Visa listning av nyckelringar i sidopanel"
-
-#: src/seahorse-key-manager.c:519
-msgid "Show _Personal"
-msgstr "Visa _personliga"
-
-#: src/seahorse-key-manager.c:520
-msgid "Only show personal keys, certificates and passwords"
-msgstr "Visa endast personliga nycklar, certifikat och lösenord"
-
-#: src/seahorse-key-manager.c:521
-msgid "Show _Trusted"
-msgstr "Visa påli_tliga"
-
-#: src/seahorse-key-manager.c:522
-msgid "Only show trusted keys, certificates and passwords"
-msgstr "Visa endast pålitliga nycklar, certifikat och lösenord"
-
-#: src/seahorse-key-manager.c:523
-msgid "Show _Any"
-msgstr "Visa _alla"
-
-#: src/seahorse-key-manager.c:524
-msgid "Show all keys, certificates and passwords"
-msgstr "Visa alla nycklar, certifikat och lösenord"
-
-#: src/seahorse-key-manager.c:743
+#: src/seahorse-key-manager.ui:74
 msgid "Filter"
 msgstr "Filter"
 
-#: src/seahorse-key-manager.ui:97
+#: src/seahorse-key-manager.ui:124
 msgid "First time options:"
 msgstr "Förstagångsalternativ:"
 
-#: src/seahorse-key-manager.ui:152
+#: src/seahorse-key-manager.ui:179
 msgid "Generate a new key of your own: "
 msgstr "Generera en ny nyckel åt dig själv: "
 
-#: src/seahorse-key-manager.ui:223
+#: src/seahorse-key-manager.ui:250
 msgid "Import existing keys from a file:"
 msgstr "Importera existerande nycklar från en fil:"
 
-#: src/seahorse-key-manager.ui:255
+#: src/seahorse-key-manager.ui:282
 msgid "To get started with encryption you will need keys."
 msgstr "För att komma igång med kryptering behöver du nycklar."
 
-#: src/seahorse-sidebar.c:797
+#: src/sidebar.vala:589
 msgid "Couldn’t lock"
 msgstr "Kunde inte låsa"
 
-#: src/seahorse-sidebar.c:834
+#: src/sidebar.vala:606
 msgid "Couldn’t unlock"
 msgstr "Kunde inte låsa upp"
 
-#: src/seahorse-sidebar.c:941
+#. Lock and unlock items
+#: src/sidebar.vala:642
 msgid "_Lock"
 msgstr "_Lås"
 
-#: src/seahorse-sidebar.c:946
+#: src/sidebar.vala:647
 msgid "_Unlock"
 msgstr "Lås _upp"
 
@@ -2452,28 +2461,24 @@ msgid "No public key file is available for this key."
 msgstr "Ingen öppen nyckelfil finns tillgänglig för denna nyckel."
 
 #. No comment, but loaded
-#: ssh/generate.vala:27 ssh/key.vala:120 ssh/key.vala:124
-#: ssh/seahorse-ssh-key-properties.ui:90
+#: ssh/generate.vala:28 ssh/key.vala:120 ssh/key.vala:124
+#: ssh/seahorse-ssh-key-properties.ui:96
 msgid "Secure Shell Key"
 msgstr "Secure Shell-nyckel"
 
-#: ssh/generate.vala:28
+#: ssh/generate.vala:29
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Används för att komma åt andra datorer (t.ex. via en terminal)"
 
-#: ssh/generate.vala:42
-msgid "New Secure Shell Key"
-msgstr "Ny Secure Shell-nyckel"
-
-#: ssh/generate.vala:136
+#: ssh/generate.vala:114
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Kunde inte läsa in nyligen genererad Secure Shell-nyckel"
 
-#: ssh/generate.vala:140
+#: ssh/generate.vala:118
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Kunde inte generera Secure Shell-nyckel"
 
-#: ssh/generate.vala:143
+#: ssh/generate.vala:121
 msgid "Creating Secure Shell Key"
 msgstr "Skapar Secure Shell-nyckel"
 
@@ -2489,19 +2494,19 @@ msgstr "256 bitar"
 msgid "Unknown key type!"
 msgstr "Okänd nyckeltyp!"
 
-#: ssh/key-properties.vala:112
+#: ssh/key-properties.vala:88
 msgid "Unknown type"
 msgstr "Okänd typ"
 
-#: ssh/key-properties.vala:135
+#: ssh/key-properties.vala:112
 msgid "Couldn’t rename key."
 msgstr "Kunde inte byta namn på nyckel."
 
-#: ssh/key-properties.vala:159
+#: ssh/key-properties.vala:138
 msgid "Couldn’t change authorization for key."
 msgstr "Kunde inte ändra behörighet för nyckel."
 
-#: ssh/key-properties.vala:174
+#: ssh/key-properties.vala:154
 msgid "Couldn’t change passphrase for key."
 msgstr "Kunde inte ändra lösenfras för nyckel."
 
@@ -2568,29 +2573,33 @@ msgstr "Ange den nya lösenfrasen för: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Ange den nya lösenfrasen igen: %s"
 
-#: ssh/seahorse-ssh-generate.ui:60
+#: ssh/seahorse-ssh-generate.ui:8
+msgid "New Secure Shell Key"
+msgstr "Ny Secure Shell-nyckel"
+
+#: ssh/seahorse-ssh-generate.ui:66
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "En Secure Shell-nyckel (SSH) låter dig ansluta säkert till andra datorer."
 
-#: ssh/seahorse-ssh-generate.ui:158
+#: ssh/seahorse-ssh-generate.ui:164
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "Din e-postadress, eller en påminnelse om vad den här nyckeln är till för."
 
-#: ssh/seahorse-ssh-generate.ui:247
+#: ssh/seahorse-ssh-generate.ui:253
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:248
+#: ssh/seahorse-ssh-generate.ui:254
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:249
+#: ssh/seahorse-ssh-generate.ui:255
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:286
+#: ssh/seahorse-ssh-generate.ui:293
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2598,50 +2607,54 @@ msgstr ""
 "Om det finns en dator som du vill använda den här nyckeln med så kan du "
 "konfigurera den datorn till att känna igen din nya nyckel."
 
-#: ssh/seahorse-ssh-generate.ui:315
+#: ssh/seahorse-ssh-generate.ui:324
 msgid "_Just Create Key"
 msgstr "_Skapa bara nyckel"
 
-#: ssh/seahorse-ssh-generate.ui:329
+#: ssh/seahorse-ssh-generate.ui:338
 msgid "_Create and Set Up"
 msgstr "_Skapa och konfigurera"
 
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:50
+#: ssh/seahorse-ssh-key-properties.ui:54
 msgctxt "name-of-ssh-key"
 msgid "Name:"
 msgstr "Namn:"
 
-#: ssh/seahorse-ssh-key-properties.ui:102
+#: ssh/seahorse-ssh-key-properties.ui:108
 msgid "Identifier:"
 msgstr "Identifierare:"
 
-#: ssh/seahorse-ssh-key-properties.ui:191
+#: ssh/seahorse-ssh-key-properties.ui:197
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr "Ägaren av den här nyckeln är _behörig att ansluta till den här datorn"
 
-#: ssh/seahorse-ssh-key-properties.ui:209
+#: ssh/seahorse-ssh-key-properties.ui:215
 #, c-format
 msgid "This only applies to the <i>%s</i> account."
 msgstr "Det här gäller endast för kontot <i>%s</i>."
 
-#: ssh/seahorse-ssh-key-properties.ui:273
+#: ssh/seahorse-ssh-key-properties.ui:279
 msgid "Algorithm:"
 msgstr "Algoritm:"
 
-#: ssh/seahorse-ssh-key-properties.ui:288
+#: ssh/seahorse-ssh-key-properties.ui:294
 msgid "Key length:"
 msgstr "Nyckellängd:"
 
-#: ssh/seahorse-ssh-key-properties.ui:336
+#: ssh/seahorse-ssh-key-properties.ui:342
 msgid "Location:"
 msgstr "Plats:"
 
-#: ssh/seahorse-ssh-key-properties.ui:429
+#: ssh/seahorse-ssh-key-properties.ui:435
 msgid "E_xport Complete Key"
 msgstr "E_xportera komplett nyckel"
 
-#: ssh/seahorse-ssh-upload.ui:24
+#: ssh/seahorse-ssh-upload.ui:5
+msgid "Set Up Computer for SSH Connection"
+msgstr "Konfigurera dator för SSH-anslutning"
+
+#: ssh/seahorse-ssh-upload.ui:33
 msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
@@ -2649,17 +2662,21 @@ msgstr ""
 "För att använda din Secure Shell-nyckel med en annan dator som använder SSH "
 "så måste du redan ha ett inloggningskonto på den datorn."
 
-#: ssh/seahorse-ssh-upload.ui:64
+#: ssh/seahorse-ssh-upload.ui:74
 msgid "eg: fileserver.example.com:port"
 msgstr "t.ex: filserver.example.com:port"
 
-#: ssh/seahorse-ssh-upload.ui:89
+#: ssh/seahorse-ssh-upload.ui:99
 msgid "_Server address:"
 msgstr "_Serveradress:"
 
-#: ssh/seahorse-ssh-upload.ui:101
+#: ssh/seahorse-ssh-upload.ui:111
 msgid "_Login name:"
 msgstr "_Inloggningsnamn:"
+
+#: ssh/seahorse-ssh-upload.ui:162
+msgid "Set Up"
+msgstr "Konfigurera"
 
 #: ssh/source.vala:42
 msgid "OpenSSH keys"
@@ -2679,21 +2696,16 @@ msgstr "openssh://%s"
 msgid "No private key file is available for this key."
 msgstr "Ingen privat nyckelfil finns tillgänglig för denna nyckel."
 
-#: ssh/upload.vala:32
-msgid "Set Up Computer for SSH Connection"
-msgstr "Konfigurera dator för SSH-anslutning"
-
-#: ssh/upload.vala:70
-msgid "Set Up"
-msgstr "Konfigurera"
-
-#: ssh/upload.vala:93
+#: ssh/upload.vala:66
 msgid "Couldn’t configure Secure Shell keys on remote computer."
 msgstr "Kunde inte konfigurera Secure Shell-nycklar på fjärrdator."
 
-#: ssh/upload.vala:97
+#: ssh/upload.vala:70
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigurerar Secure Shell-nycklar…"
+
+#~ msgid "The search provider is not loaded yet"
+#~ msgstr "Söktjänsten är inte inläst än"
 
 #~ msgid "%Y-%m-%d"
 #~ msgstr "%Y-%m-%d"
