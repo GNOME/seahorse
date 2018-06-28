@@ -7,10 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 3.3.4\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
-"product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-05-22 11:12+0000\n"
-"PO-Revision-Date: 2018-06-09 00:25+0800\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
+"POT-Creation-Date: 2018-06-23 08:04+0000\n"
+"PO-Revision-Date: 2018-06-28 22:32+0800\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -237,7 +236,7 @@ msgstr "發行金鑰至(_P)："
 
 #: common/seahorse-prefs.ui:128
 msgid "Automatically retrieve keys from _key servers"
-msgstr "自動從金鑰伺服器取得金鑰(_K)"
+msgstr "自動從金鑰伺服器取回金鑰(_K)"
 
 #: common/seahorse-prefs.ui:142
 msgid "Automatically synchronize _modified keys with key servers"
@@ -286,6 +285,138 @@ msgctxt "Validity"
 msgid "Revoked"
 msgstr "已撤銷"
 
+#: data/org.gnome.seahorse.gschema.xml:5
+msgid "Auto retrieve keys"
+msgstr "自動取回金鑰"
+
+#: data/org.gnome.seahorse.gschema.xml:6
+msgid "Whether or not keys should be automatically retrieved from key servers."
+msgstr "決定是否從金鑰伺服器自動取回金鑰。"
+
+#: data/org.gnome.seahorse.gschema.xml:10
+msgid "Auto publish keys"
+msgstr "自動發行金鑰"
+
+#: data/org.gnome.seahorse.gschema.xml:11
+msgid "Whether or not modified keys should be automatically published."
+msgstr "決定要不要自動發行金鑰"
+
+#: data/org.gnome.seahorse.gschema.xml:15
+msgid "Publish keys to this key server"
+msgstr "在此金鑰伺服器發行金鑰"
+
+#: data/org.gnome.seahorse.gschema.xml:16
+msgid ""
+"The key server to publish PGP keys to. Or empty to suppress publishing of "
+"PGP keys."
+msgstr "發行 PGP 金鑰到的金鑰伺服器，或者留白以禁止發行 PGP 金鑰。"
+
+#: data/org.gnome.seahorse.gschema.xml:20
+msgid "Last key server search pattern"
+msgstr "上次金鑰伺服器的搜尋模式"
+
+#: data/org.gnome.seahorse.gschema.xml:21
+msgid "The last search pattern searched for against a key server."
+msgstr "上一次針對金鑰伺服器的搜尋模式。"
+
+#: data/org.gnome.seahorse.gschema.xml:25
+msgid "Last key servers used"
+msgstr "上次使用的金鑰伺服器"
+
+#: data/org.gnome.seahorse.gschema.xml:26
+msgid ""
+"The last key server a search was performed against or empty for all key "
+"servers."
+msgstr "針對所有金鑰伺服器執行搜尋或留白的金鑰伺服器。"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:5
+msgid "Show keyrings sidebar"
+msgstr "顯示鑰匙圈的側邊欄"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:6
+msgid "Show keyrings sidebar in Seahorse."
+msgstr "在 Seahorse 顯示鑰匙圈的側邊欄"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:10
+msgid "Which items to show"
+msgstr "要顯示的項目"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:11
+msgid ""
+"Filter which items to show. If empty, show all items, if “personal” show "
+"personal keys, if “trusted” show trusted."
+msgstr ""
+"篩選要顯示的項目。如果爲空白，顯示所有項目；如果爲「個人」就顯示個人金鑰；如"
+"果爲「信任」就顯示信任的金鑰。"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:16
+msgid "Width of the side pane"
+msgstr "側邊窗格寬度"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:17
+msgid "The default width of the side pane."
+msgstr "側邊窗格的預設寬度。"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:21
+msgid "The keyrings chosen"
+msgstr "選擇的鑰匙圈"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:22
+msgid "The URIs of the keyrings chosen in the sidebar."
+msgstr "在側邊欄中選擇的鑰匙圈 URI。"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:29
+msgid "The column to sort the Seahorse keys by"
+msgstr "用於排序 Seahorse 金鑰的欄位"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:30
+msgid ""
+"Specify the column to sort the Seahorse key manager main window by. Columns "
+"are: “name”, “id”, “validity”, “expires”, “trust”, and “type”. Put a “-” in "
+"front of the column name to sort in descending order."
+msgstr ""
+"指定排序 Seahorse 金鑰管理員主視窗用的欄位。欄位包含：「名稱」、「ID」、「有"
+"效性」、「信任」和「類型」。在欄位名稱前加一個「-」以透過降冪排序來排序。"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:34
+msgid "Show validity column"
+msgstr "顯示有效性欄位"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:35
+#: data/org.gnome.seahorse.manager.gschema.xml:40
+#: data/org.gnome.seahorse.manager.gschema.xml:45
+#: data/org.gnome.seahorse.manager.gschema.xml:50
+msgid "No longer in use."
+msgstr "不再使用"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:39
+msgid "Show expiry column"
+msgstr "顯示過期欄位"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:44
+msgid "Show trust column"
+msgstr "顯示信任欄位"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:49
+msgid "Show type column"
+msgstr "顯示類型欄位"
+
+#: data/org.gnome.seahorse.window.gschema.xml:5
+msgid "Width of the window"
+msgstr "視窗的寬度"
+
+#: data/org.gnome.seahorse.window.gschema.xml:6
+msgid "Width (in pixels) of the window."
+msgstr "視窗的寬度（像素）"
+
+#: data/org.gnome.seahorse.window.gschema.xml:10
+msgid "Height of the window"
+msgstr "視窗的高度"
+
+#: data/org.gnome.seahorse.window.gschema.xml:11
+msgid "Height (in pixels) of the window."
+msgstr "視窗的高度（像素）"
+
 #: data/seahorse.appdata.xml.in:6
 msgid "Seahorse"
 msgstr "Seahorse"
@@ -308,8 +439,8 @@ msgid ""
 "keys, publish and retrieve keys from key servers, cache your passphrase so "
 "you don’t have to keep typing it and backup your keys and keyring."
 msgstr ""
-"使用 seahorse 您可以建立與管理 PGP 金鑰、建立與管理 SSH 金鑰，從金鑰伺服器發"
-"布與取回金鑰，快取您的密語讓您不用每次都輸入它，還可以備份您的金鑰與鑰匙圈。"
+"利用 seahorse，您可以建立與管理 PGP 金鑰、SSH 金鑰，從金鑰伺服器發布與取回金"
+"鑰，快取您的密語讓您不用每次都輸入它，還可以備份您的金鑰與鑰匙圈。"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/seahorse.desktop.in.in:6
@@ -1432,7 +1563,7 @@ msgid ""
 "made available to others."
 msgstr ""
 "這樣他們給您的金鑰若有任何改變時，您也可以取得。沒有選取金鑰伺服器作發行，所"
-"以其它人不會有您的金鑰。"
+"以其他人不會有您的金鑰。"
 
 #: pgp/seahorse-keyserver-sync.ui:115
 msgid "_Key Servers"
