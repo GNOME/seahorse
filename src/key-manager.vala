@@ -201,7 +201,7 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     private bool on_keymanager_key_list_popup_menu() {
-        GLib.List<weak GLib.Object> objects = get_selected_objects();
+        GLib.List<GLib.Object> objects = get_selected_objects();
         if (objects != null)
             show_context_menu(Catalog.MENU_OBJECT, 0, Gtk.get_current_event_time());
         return false;
@@ -393,7 +393,7 @@ public class Seahorse.KeyManager : Catalog {
         update_view_filter();
     }
 
-    public override GLib.List<weak GLib.Object> get_selected_objects() {
+    public override GLib.List<GLib.Object> get_selected_objects() {
         return KeyManagerStore.get_selected_objects(this.view);
     }
 

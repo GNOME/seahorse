@@ -39,7 +39,7 @@ public abstract class Catalog : Gtk.ApplicationWindow {
 
 	public abstract GLib.List<weak Backend> get_backends();
 	public abstract Place? get_focused_place();
-	public abstract GLib.List<weak GLib.Object> get_selected_objects();
+	public abstract GLib.List<GLib.Object> get_selected_objects();
 
 	construct {
 		this._builder = Util.load_built_contents(this, this.ui_name);
