@@ -4,7 +4,7 @@ foreach size: [ 16, 22, 24, 32, 48 ]
   icon_size_str = '@0@x@0@'.format(size)
   icon_subfolder = join_paths('hicolor', icon_size_str, 'apps')
 
-  foreach app: [ 'seahorse', 'seahorse-preferences' ]
+  foreach app: [ 'seahorse-preferences' ]
     install_data(
       join_paths(icon_subfolder, app + '.png'),
       install_dir: join_paths(icons_install_dir, icon_subfolder),
@@ -12,15 +12,15 @@ foreach size: [ 16, 22, 24, 32, 48 ]
   endforeach
 endforeach
 
-# special case for symbolic and 256
-icon_subfolder = join_paths('hicolor', '256x256', 'apps')
-install_data(
-  join_paths(icon_subfolder, 'seahorse.png'),
-  install_dir: join_paths(icons_install_dir, icon_subfolder),
-)
+# special case for symbolic
 icon_subfolder = join_paths('hicolor', 'symbolic', 'apps')
 install_data(
-  join_paths(icon_subfolder, 'seahorse-symbolic.svg'),
+  join_paths(icon_subfolder, 'org.gnome.seahorse.Application-symbolic.svg'),
+  install_dir: join_paths(icons_install_dir, icon_subfolder),
+)
+icon_subfolder = join_paths('hicolor', 'scalable', 'apps')
+install_data(
+  join_paths(icon_subfolder, 'org.gnome.seahorse.Application.svg'),
   install_dir: join_paths(icons_install_dir, icon_subfolder),
 )
 
