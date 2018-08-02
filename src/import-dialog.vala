@@ -27,7 +27,7 @@ public class Seahorse.ImportDialog : Gtk.Dialog {
     public ImportDialog(Gtk.Window? parent) {
         GLib.Object(transient_for: parent);
 
-        Gtk.Widget button = new Gtk.Button.from_stock(Gtk.Stock.CANCEL);
+        Gtk.Widget button = new Gtk.Button.with_mnemonic(_("_Cancel"));
         button.show();
         add_action_widget(button, Gtk.ResponseType.CANCEL);
 
