@@ -40,6 +40,7 @@ glib_deps = [
   dependency('glib-2.0',    version: '>=' + min_glib_version),
   dependency('gobject-2.0', version: '>=' + min_glib_version),
   dependency('gio-2.0',     version: '>=' + min_glib_version),
+  dependency('gio-unix-2.0',version: '>=' + min_glib_version),
   dependency('gmodule-2.0', version: '>=' + min_glib_version),
 ]
 gtk = dependency('gtk+-3.0', version: '>= 3.22.0')
