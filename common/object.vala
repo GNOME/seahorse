@@ -38,7 +38,6 @@ public class Seahorse.Object : GLib.Object {
 
     /**
      * Stock ID for this Object.
-     * XXX Nullable?
      */
     public GLib.Icon? icon { get; set; default = new ThemedIcon("gtk-missing-image"); }
 
@@ -57,7 +56,6 @@ public class Seahorse.Object : GLib.Object {
     /**
      * This object's displayable markup.
      */
-    // XXX explicit op true zetten in set;
     public string markup {
         get { return this._markup; }
         set {
@@ -73,7 +71,6 @@ public class Seahorse.Object : GLib.Object {
     /**
      * This object's short name.
      */
-    // XXX explicit op true zetten in set;
     public string nickname {
         get { return this._nickname; }
         set {
