@@ -34,7 +34,7 @@ min_glib_version = '2.44'
 min_gcr_version = '3.11.91'
 min_gpgme_version = '1.7.0'
 accepted_gpg_versions = [ '2.0.12', '2.1.4', '2.2.0' ]
-gpg_check_version = find_program(join_paths('meson', 'gpg_check_version.py'))
+gpg_check_version = find_program(join_paths('build-aux', 'gpg_check_version.py'))
 
 glib_deps = [
   dependency('glib-2.0',    version: '>=' + min_glib_version),
@@ -174,7 +174,7 @@ config = declare_dependency(
 )
 
 # Post-install scripts
-meson.add_install_script(join_paths('meson', 'post_install.py'))
+meson.add_install_script(join_paths('build-aux', 'meson_post_install.py'))
 
 # subdirs
 subdir('po')
