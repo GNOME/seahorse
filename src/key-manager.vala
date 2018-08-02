@@ -289,10 +289,7 @@ public class Seahorse.KeyManager : Catalog {
         dialog.destroy();
 
         if (uri != null) {
-            string? uris[2];
-            uris[0] = uri;
-            uris[1] = null;
-            import_files(uris);
+            import_files({ uri });
         }
     }
 
