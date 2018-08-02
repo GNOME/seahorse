@@ -51,10 +51,10 @@ public class Seahorse.KeyManager : Catalog {
         // TRANSLATORS: The "Remote" menu contains key operations on remote systems.
         { "remote-menu", null, N_("_Remote") },
         { "new-menu", null, N_("_New") },
-        { "app-quit", Gtk.Stock.QUIT, null, "<control>Q", N_("Close this program") },
-        { "file-new", Gtk.Stock.NEW, N_("_New…"), "<control>N", N_("Create a new key or item") },
-        { "file-import", Gtk.Stock.OPEN, N_("_Import…"), "<control>I", N_("Import from a file") },
-        { "edit-import-clipboard", Gtk.Stock.PASTE, null, "<control>V", N_("Import from the clipboard") }
+        { "app-quit", null, N_("_Quit"), "<control>Q", N_("Close this program") },
+        { "file-new", null, N_("_New…"), "<control>N", N_("Create a new key or item") },
+        { "file-import", null, N_("_Import…"), "<control>I", N_("Import from a file") },
+        { "edit-import-clipboard", null, N_("_Paste"), "<control>V", N_("Import from the clipboard") }
     };
 
     private const Gtk.ToggleActionEntry[] SIDEBAR_ACTIONS = {
