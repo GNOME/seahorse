@@ -4,43 +4,50 @@ Currently it supports PGP keys (using GPG/GPGME) and SSH keys. Its goal is to
 provide an easy to use Key Management Tool, along with an easy to use interface
 for encryption operations.
 
-Seahorse is integrated into the [GNOME Desktop Environment](https://www.gnome.org)
-and allows users to perform operations from their regular applications, like
-nautilus or gedit.
+Seahorse is integrated into the [GNOME] Desktop Environment and allows users to
+perform operations from their regular applications, like nautilus or gedit.
 
 ## Building
-You can build and install Seahorse using [Meson](http://mesonbuild.com/):
+You can build and install Seahorse using [Meson]:
 ```sh
 meson build
 ninja -C build
 ninja -C build install
 ```
 
-## Issue tracker
-Seahorse uses the GNOME Bugzilla, where you can check the
-[list of open bugs](https://bugzilla.gnome.org/browse.cgi?product=seahorse).
-
-If you'd like to report a bug in Seahorse or request an enhancement, please file
-an issue using the
-[appropriate form](https://bugzilla.gnome.org/enter_bug.cgi?product=seahorse).
-
-In case of a bug, please also add reproducible steps and the version of Seahorse.
-
 ## Contributing
-If you would like to contribute a patch, you should send it in to the GNOME
-Bugzilla as well. If the patch fixes an existing bug, add the patch as an
-attachment to that bug report; otherwise, enter a new bug report that describes
-the patch, and attach the patch to that bug report.
+You can browse the code, issues and more at Seahorse's [GitLab repository].
 
-For more information on the recommended workflow, please read
-[this wiki page](https://wiki.gnome.org/Git/WorkingWithPatches).
+If you find a bug in Seahorse, please file an issue on the [issue tracker].
+Please try to add reproducible steps and the relevant version of Seahorse. Note
+that for now, older issues are still present at our [bugzilla tracker].
+
+If you want to contribute functionality or bug fixes, please open a Merge
+Request (MR). For more info on how to do this, see GitLab's [help pages on
+MR's].
+
+If Seahorse is not translated in your language or you believe that the
+current translation has errors, you can join one of the various translation
+teams in GNOME. Translators do not commit directly to Git, but are advised to
+use our separate translation infrastructure instead. More info can be found at
+the [translation project wiki page].
 
 ## More information
 Seahorse has its own web page on https://wiki.gnome.org/Apps/Seahorse.
 
 To discuss issues with developers and other users, you can subscribe to the
-[mailing list](https://mail.gnome.org/mailman/listinfo/seahorse-list)
-or join [#seahorse](irc://irc.gnome.org/seahorse) on irc.gnome.org.
+[mailing list] or join [#seahorse] on irc.gnome.org.
 
 ## License
 Seahorse is released under the GPL. See COPYING for more info.
+
+
+[GNOME]: https://www.gnome.org
+[Meson]: http://mesonbuild.com
+[GitLab repository]: https://gitlab.gnome.org/GNOME/seahorse
+[help pages on MR's]: https://docs.gitlab.com/ee/gitlab-basics/add-merge-request.html
+[issue tracker]: https://gitlab.gnome.org/GNOME/seahorse/issues
+[bugzilla tracker]: https://bugzilla.gnome.org/buglist.cgi?quicksearch=product%3Aseahorse
+[translation project wiki page]: https://wiki.gnome.org/TranslationProject/
+[mailing list]: https://mail.gnome.org/mailman/listinfo/seahorse-list
+[#seahorse]: irc://irc.gnome.org/seahorse
