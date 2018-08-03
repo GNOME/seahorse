@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2018-06-20 17:03+0000\n"
-"PO-Revision-Date: 2018-07-29 21:23+0200\n"
+"POT-Creation-Date: 2018-08-03 00:39+0000\n"
+"PO-Revision-Date: 2018-08-03 04:12+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -165,7 +165,8 @@ msgid "Show Seahorse help"
 msgstr "Wyświetla pomoc programu Seahorse"
 
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117 src/key-manager.vala:237
+#: common/passphrase-prompt.vala:117 src/import-dialog.vala:30
+#: src/key-manager.vala:237
 msgid "_Cancel"
 msgstr "_Anuluj"
 
@@ -1075,7 +1076,7 @@ msgstr "Dodaje identyfikator użytkownika"
 
 #: pgp/seahorse-add-uid.ui:28
 msgid "Must be at least 5 characters long"
-msgstr "Musi mieć długość przynajmniej 5 znaków"
+msgstr "Musi mieć co najmniej 5 znaków"
 
 #: pgp/seahorse-add-uid.ui:42
 msgid "Optional email address"
@@ -1229,6 +1230,10 @@ msgstr ""
 #: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
 msgid "Generating key"
 msgstr "Tworzenie klucza"
+
+#: pgp/seahorse-gpgme-generate.c:362
+msgid "Name must be at least 5 characters long."
+msgstr "Nazwa musi mieć co najmniej 5 znaków."
 
 #: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
@@ -2427,6 +2432,10 @@ msgid "_New"
 msgstr "_Nowy"
 
 #: src/key-manager.vala:54
+msgid "_Quit"
+msgstr "Za_kończ"
+
+#: src/key-manager.vala:54
 msgid "Close this program"
 msgstr "Zamyka ten program"
 
@@ -2445,6 +2454,10 @@ msgstr "Zai_mportuj…"
 #: src/key-manager.vala:56
 msgid "Import from a file"
 msgstr "Importuje z pliku"
+
+#: src/key-manager.vala:57
+msgid "_Paste"
+msgstr "Wk_lej"
 
 #: src/key-manager.vala:57
 msgid "Import from the clipboard"
@@ -2496,11 +2509,11 @@ msgstr "_Otwórz"
 msgid "All key files"
 msgstr "Wszystkie pliki kluczy"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:318
 msgid "Dropped text"
 msgstr "Upuszczony tekst"
 
-#: src/key-manager.vala:344
+#: src/key-manager.vala:341
 msgid "Clipboard text"
 msgstr "Tekst ze schowka"
 
