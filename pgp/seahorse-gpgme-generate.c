@@ -347,23 +347,23 @@ on_gpgme_generate_entry_changed (GtkEditable *editable,
     SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
     GtkWidget *widget;
     gchar *name;
-	gboolean name_long_enough;
+    gboolean name_long_enough;
 
     /* A 5 character name is required */
     widget = seahorse_widget_get_widget (swidget, "name-entry");
     g_return_if_fail (widget != NULL);
     name = g_strdup (gtk_entry_get_text (GTK_ENTRY (widget)));
-	name_long_enough = name && strlen (g_strstrip (name)) >= 5;
+    name_long_enough = name && strlen (g_strstrip (name)) >= 5;
 
-	/* If not, show the user and disable the create button */
-	if (!name_long_enough) {
-		g_object_set (widget,
-			"secondary-icon-name", "dialog-warning-symbolic",
-			"secondary-icon-tooltip-text", _("Name must be at least 5 characters long."),
-			NULL);
-	} else {
-		g_object_set (widget, "secondary-icon-name", NULL, NULL);
-	}
+    /* If not, show the user and disable the create button */
+    if (!name_long_enough) {
+        g_object_set (widget,
+            "secondary-icon-name", "dialog-warning-symbolic",
+            "secondary-icon-tooltip-text", _("Name must be at least 5 characters long."),
+            NULL);
+    } else {
+        g_object_set (widget, "secondary-icon-name", NULL, NULL);
+    }
 
     widget = seahorse_widget_get_widget (swidget, "ok");
     g_return_if_fail (widget != NULL);
