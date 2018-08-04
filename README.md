@@ -19,8 +19,7 @@ ninja -C build install
 You can browse the code, issues and more at Seahorse's [GitLab repository].
 
 If you find a bug in Seahorse, please file an issue on the [issue tracker].
-Please try to add reproducible steps and the relevant version of Seahorse. Note
-that for now, older issues are still present at our [bugzilla tracker].
+Please try to add reproducible steps and the relevant version of Seahorse.
 
 If you want to contribute functionality or bug fixes, please open a Merge
 Request (MR). For more info on how to do this, see GitLab's [help pages on
@@ -47,7 +46,6 @@ Seahorse is released under the GPL. See COPYING for more info.
 [GitLab repository]: https://gitlab.gnome.org/GNOME/seahorse
 [help pages on MR's]: https://docs.gitlab.com/ee/gitlab-basics/add-merge-request.html
 [issue tracker]: https://gitlab.gnome.org/GNOME/seahorse/issues
-[bugzilla tracker]: https://bugzilla.gnome.org/buglist.cgi?quicksearch=product%3Aseahorse
 [translation project wiki page]: https://wiki.gnome.org/TranslationProject/
 [mailing list]: https://mail.gnome.org/mailman/listinfo/seahorse-list
 [#seahorse]: irc://irc.gnome.org/seahorse
