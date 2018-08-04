@@ -18,35 +18,42 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+[GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-gkr-item-properties.ui")]
 public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
     public Item item { construct; get; }
 
-    private Gtk.Builder _builder;
-    private PasswordEntry password_entry;
-    private Gtk.Entry description;
+    [GtkChild]
+    private Gtk.Image key_image;
+    [GtkChild]
+    private Gtk.Entry description_field;
     private bool description_has_changed;
+    [GtkChild]
+    private Gtk.Label use_field;
+    [GtkChild]
+    private Gtk.Label type_field;
+    [GtkChild]
+    private Gtk.Label details_box;
+    [GtkChild]
+    private Gtk.Label server_label;
+    [GtkChild]
+    private Gtk.Label server_field;
+    [GtkChild]
+    private Gtk.Label login_label;
+    [GtkChild]
+    private Gtk.Label login_field;
+    [GtkChild]
+    private Gtk.Box password_box_area;
+    private PasswordEntry password_entry;
 
     construct {
-        this._builder = new Gtk.Builder();
-        try {
-            string path = "/org/gnome/Seahorse/seahorse-gkr-item-properties.ui";
-            this._builder.add_from_resource(path);
-        } catch (GLib.Error err) {
-            GLib.critical ("%s", err.message);
-        }
-
-        var content = (Gtk.Widget)this._builder.get_object("gkr-item-properties");
-        ((Gtk.Container)this.get_content_area()).add(content);
-        content.show();
-
         // Setup the image properly
-        this.item.bind_property ("icon", this._builder.get_object("key-image"), "gicon",
+        this.item.bind_property ("icon", this.key_image, "gicon",
                                  GLib.BindingFlags.SYNC_CREATE);
 
         // Setup the label properly
-        this.description = (Gtk.Entry)this._builder.get_object("description-field");
-        this.item.bind_property("label", this.description, "text", GLib.BindingFlags.SYNC_CREATE);
-        this.description.changed.connect(() => {
+        this.item.bind_property("label", this.description_field, "text",
+                                GLib.BindingFlags.SYNC_CREATE);
+        this.description_field.changed.connect(() => {
             this.description_has_changed = true;
         });
 
@@ -74,8 +81,7 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
 
         // Create the password entry
         this.password_entry = new PasswordEntry();
-        Gtk.Box box = (Gtk.Box)this._builder.get_object("password-box-area");
-        box.add(this.password_entry);
+        this.password_box_area.add(this.password_entry);
         fetch_password();
 
         // Sensitivity of the password entry
@@ -114,43 +120,41 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
     }
 
     private void update_use() {
-        Gtk.Label use = (Gtk.Label)this._builder.get_object("use-field");
         switch (this.item.use) {
         case Use.NETWORK:
-            use.label = _("Access a network share or resource");
+            this.use_field.label = _("Access a network share or resource");
             break;
         case Use.WEB:
-            use.label = _("Access a website");
+            this.use_field.label = _("Access a website");
             break;
         case Use.PGP:
-            use.label = _("Unlocks a PGP key");
+            this.use_field.label = _("Unlocks a PGP key");
             break;
         case Use.SSH:
-            use.label = _("Unlocks a Secure Shell key");
+            this.use_field.label = _("Unlocks a Secure Shell key");
             break;
         case Use.OTHER:
-            use.label = _("Saved password or login");
+            this.use_field.label = _("Saved password or login");
             break;
         default:
-            use.label = "";
+            this.use_field.label = "";
             break;
         };
     }
 
     private void update_type() {
-        Gtk.Label type = (Gtk.Label)this._builder.get_object("type-field");
-        switch (item.use) {
+        switch (this.item.use) {
         case Use.NETWORK:
         case Use.WEB:
-            type.label = _("Network Credentials");
+            this.type_field.label = _("Network Credentials");
             break;
         case Use.PGP:
         case Use.SSH:
         case Use.OTHER:
-            type.label = _("Password");
+            this.type_field.label = _("Password");
             break;
         default:
-            type.label = "";
+            this.type_field.label = "";
             break;
         };
     }
@@ -158,26 +162,24 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
     private void update_visibility() {
         var use = this.item.use;
         bool visible = use == Use.NETWORK || use == Use.WEB;
-        this._builder.get_object("server-label").set("visible", visible);
-        this._builder.get_object("server-field").set("visible", visible);
-        this._builder.get_object("login-label").set("visible", visible);
-        this._builder.get_object("login-field").set("visible", visible);
+        this.server_label.visible = visible;
+        this.server_field.visible = visible;
+        this.login_label.visible = visible;
+        this.login_field.visible = visible;
     }
 
     private void update_server() {
-        Gtk.Label server = (Gtk.Label)this._builder.get_object("server-label");
         var value = this.item.get_attribute("server");
         if (value == null)
             value = "";
-        server.label = value;
+        this.server_field.label = value;
     }
 
     private void update_user() {
-        Gtk.Label login = (Gtk.Label)this._builder.get_object("login-label");
         var value = this.item.get_attribute("user");
         if (value == null)
             value = "";
-        login.label = value;
+        this.login_field.label = value;
     }
 
     private void update_details() {
@@ -192,9 +194,9 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
                                    GLib.Markup.escape_text(key),
                                    GLib.Markup.escape_text(value));
         }
-        Gtk.Label details = (Gtk.Label)this._builder.get_object("details-box");
-        details.use_markup = true;
-        details.label = contents.str;
+
+        this.details_box.use_markup = true;
+        this.details_box.label = contents.str;
     }
 
     private async void save_password() {
@@ -223,9 +225,9 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
 
     private async void save_description() {
         try {
-            yield this.item.set_label(this.description.text, null);
+            yield this.item.set_label(this.description_field.text, null);
         } catch (GLib.Error err) {
-            this.description.text = this.item.label;
+            this.description_field.text = this.item.label;
             DBusError.strip_remote_error(err);
             Util.show_error (this, _("Couldn’t set description."), err.message);
         }

@@ -2,6 +2,15 @@
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-naming-policy toplevel-contextual -->
+  <template class="SeahorseGkrItemProperties" parent="GtkDialog">
+    <property name="resizable">False</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <property name="border_width">5</property>
+        <child>
           <object class="GtkNotebook" id="gkr-item-properties">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -18,7 +27,7 @@
                     <property name="orientation">horizontal</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkImage" id="key-image">
+                      <object class="GtkImage" id="key_image">
                         <property name="visible">True</property>
                         <property name="yalign">0</property>
                         <property name="stock">gtk-missing-image</property>
@@ -41,7 +50,7 @@
                             <property name="label" translatable="yes">_Description:</property>
                             <property name="use_markup">True</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">description-field</property>
+                            <property name="mnemonic_widget">description_field</property>
                           </object>
                           <packing>
                             <property name="top_attach">0</property>
@@ -49,7 +58,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="description-field">
+                          <object class="GtkEntry" id="description_field">
                             <property name="visible">True</property>
                             <property name="hexpand">True</property>
                             <property name="can_focus">True</property>
@@ -73,7 +82,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="password-box-area">
+                          <object class="GtkBox" id="password_box_area">
                             <property name="visible">True</property>
                             <property name="hexpand">True</property>
                             <child>
@@ -97,7 +106,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="use-field">
+                          <object class="GtkLabel" id="use_field">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="xalign">0</property>
@@ -123,7 +132,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="type-field">
+                          <object class="GtkLabel" id="type_field">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
@@ -137,7 +146,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="server-label">
+                          <object class="GtkLabel" id="server_label">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
                             <property name="label" translatable="yes">Server:</property>
@@ -148,7 +157,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="server-field">
+                          <object class="GtkLabel" id="server_field">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
@@ -162,7 +171,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="login-label">
+                          <object class="GtkLabel" id="login_label">
                             <property name="visible">True</property>
                             <property name="label" translatable="yes">Login:</property>
                             <property name="xalign">1</property>
@@ -173,7 +182,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="login-field">
+                          <object class="GtkLabel" id="login_field">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
@@ -225,21 +234,20 @@
                         <property name="top_padding">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkScrolledWindow" id="scrolledwindow1">
+                          <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hscrollbar_policy">automatic</property>
                             <child>
-                              <object class="GtkViewport" id="viewport1">
+                              <object class="GtkViewport">
                                 <property name="visible">True</property>
                                 <child>
-                                  <object class="GtkLabel" id="details-box">
+                                  <object class="GtkLabel" id="details_box">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="xalign">0</property>
                                     <property name="yalign">0</property>
-                                    <property name="label">[details]
-</property>
+                                    <property name="label">[details]</property>
                                     <property name="use_markup">True</property>
                                     <property name="selectable">True</property>
                                   </object>
@@ -251,7 +259,7 @@
                       </object>
                     </child>
                     <child type="label">
-                      <object class="GtkLabel" id="label108">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Technical Details:</property>
                         <attributes>
@@ -281,4 +289,8 @@
               </packing>
             </child>
           </object>
+        </child>
+      </object>
+    </child>
+  </template>
 </interface>
