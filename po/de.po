@@ -16,16 +16,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2018-06-23 08:04+0000\n"
-"PO-Revision-Date: 2018-07-16 22:47+0200\n"
-"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
+"POT-Creation-Date: 2018-08-03 00:39+0000\n"
+"PO-Revision-Date: 2018-08-04 12:24+0200\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.0.9\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -170,7 +170,8 @@ msgid "Show Seahorse help"
 msgstr "Hilfe zu Seahorse anzeigen"
 
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117 src/key-manager.vala:237
+#: common/passphrase-prompt.vala:117 src/import-dialog.vala:30
+#: src/key-manager.vala:237
 msgid "_Cancel"
 msgstr "_Abbrechen"
 
@@ -1249,6 +1250,10 @@ msgstr ""
 #: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
 msgid "Generating key"
 msgstr "Schlüssel wird erstellt"
+
+#: pgp/seahorse-gpgme-generate.c:362
+msgid "Name must be at least 5 characters long."
+msgstr "Der Name muss mindestens 5 Zeichen umfassen."
 
 #: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
@@ -2463,6 +2468,10 @@ msgid "_New"
 msgstr "_Neu"
 
 #: src/key-manager.vala:54
+msgid "_Quit"
+msgstr "_Beenden"
+
+#: src/key-manager.vala:54
 msgid "Close this program"
 msgstr "Programm beenden"
 
@@ -2481,6 +2490,10 @@ msgstr "_Importieren …"
 #: src/key-manager.vala:56
 msgid "Import from a file"
 msgstr "Aus einer Datei importieren"
+
+#: src/key-manager.vala:57
+msgid "_Paste"
+msgstr "E_infügen"
 
 #: src/key-manager.vala:57
 msgid "Import from the clipboard"
@@ -2532,11 +2545,11 @@ msgstr "_Öffnen"
 msgid "All key files"
 msgstr "Schlüsseldateien"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:318
 msgid "Dropped text"
 msgstr "Eingefügter Text"
 
-#: src/key-manager.vala:344
+#: src/key-manager.vala:341
 msgid "Clipboard text"
 msgstr "Text der Zwischenablage"
 
