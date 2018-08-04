@@ -18,8 +18,10 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+[GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-generate-select.ui")]
 public class Seahorse.GenerateSelect : Gtk.Dialog {
     private Gtk.ListStore store;
+    [GtkChild]
     private Gtk.TreeView view;
     private List<Gtk.ActionGroup>? action_groups;
 
@@ -61,49 +63,25 @@ public class Seahorse.GenerateSelect : Gtk.Dialog {
             }
         }
 
-        Gtk.Builder builder = new Gtk.Builder();
-        try {
-            string path = "/org/gnome/Seahorse/seahorse-generate-select.ui";
-            builder.add_from_resource(path);
-        } catch (GLib.Error err) {
-            critical("%s", err.message);
-        }
-
-        // Setup the dialog
-        set_default_size(-1, 410);
-        get_content_area().pack_start((Gtk.Widget) builder.get_object("generate-select"),
-                                        true, true, 0);
-        add_buttons(Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL,
-                    _("Continue"), Gtk.ResponseType.OK,
-                    null);
-
         // Hook it into the view
-        this.view = (Gtk.TreeView) builder.get_object("keytype-tree");
-
         Gtk.CellRendererPixbuf pixcell = new Gtk.CellRendererPixbuf();
         pixcell.stock_size = Gtk.IconSize.DND;
         this.view.insert_column_with_attributes(-1, "", pixcell, "gicon", Column.ICON, null);
         this.view.insert_column_with_attributes(-1, "", new Gtk.CellRendererText(), "markup", Column.TEXT, null);
         this.view.set_model(this.store);
 
-        // Setup selection, select first item
-        Gtk.TreeSelection selection = this.view.get_selection();
-        selection.set_mode(Gtk.SelectionMode.BROWSE);
-
+        // Select first item
         Gtk.TreeIter iter;
         this.store.get_iter_first(out iter);
-        selection.select_iter(iter);
+        this.view.get_selection().select_iter(iter);
 
         this.view.row_activated.connect(on_row_activated);
-        this.view.height_request = 410;
     }
 
     private Gtk.Action? get_selected_action() {
-        Gtk.TreeSelection selection = this.view.get_selection();
-
         Gtk.TreeIter iter;
         Gtk.TreeModel? model;
-        if (!selection.get_selected(out model, out iter))
+        if (!this.view.get_selection().get_selected(out model, out iter))
             return null;
 
         Gtk.Action? action;
