@@ -233,9 +233,10 @@ seahorse_server_set_property (GObject *object, guint prop_id,
     SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (object);
  
     switch (prop_id) {
-	case PROP_LABEL:
-		seahorse_server_source_set_label (ssrc, g_value_get_boxed (value));
-		break;
+    case PROP_LABEL:
+        seahorse_server_source_set_label (SEAHORSE_PLACE (ssrc),
+                                          g_value_get_boxed (value));
+        break;
     case PROP_KEY_SERVER:
         g_assert (ssrc->priv->server == NULL);
         ssrc->priv->server = g_strdup (g_value_get_string (value));

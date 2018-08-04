@@ -275,7 +275,7 @@ seahorse_transfer_keyids_async (SeahorseServerSource *from,
 
 	closure = g_new0 (TransferClosure, 1);
 	closure->cancellable = cancellable ? g_object_ref (cancellable) : cancellable;
-	closure->from = g_object_ref (from);
+	closure->from = SEAHORSE_PLACE (g_object_ref (from));
 	closure->to = g_object_ref (to);
 	closure->keyids = g_strdupv ((gchar **)keyids);
 	g_simple_async_result_set_op_res_gpointer (res, closure, transfer_closure_free);
