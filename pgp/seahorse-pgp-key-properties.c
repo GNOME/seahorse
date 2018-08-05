@@ -51,10 +51,6 @@
 #define NOTEBOOK "notebook"
 
 /* Forward declarations */
-static void     properties_response                           (GtkDialog *dialog,
-                                                               int response,
-                                                               SeahorseWidget *swidget);
-
 void            on_pgp_trust_sign                             (GtkWidget *widget,
                                                                gpointer user_data);
 
@@ -1884,22 +1880,10 @@ key_notify (SeahorseObject *object, SeahorseWidget *swidget)
         do_details (swidget);
 }
 
-static void
-properties_response (GtkDialog *dialog, int response, SeahorseWidget *swidget)
-{
-    if (response == GTK_RESPONSE_HELP) {
-        seahorse_widget_show_help(swidget);
-        return;
-    }
-
-    seahorse_widget_destroy (swidget);
-}
-
 static SeahorseWidget*
 setup_public_properties (SeahorsePgpKey *pkey, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
-    GtkWidget *widget;
 
     swidget = seahorse_object_widget_new ("pgp-public-key-properties", parent, G_OBJECT (pkey));
 
@@ -1921,10 +1905,8 @@ setup_public_properties (SeahorsePgpKey *pkey, GtkWindow *parent)
     do_details_signals (swidget);
 
     do_trust (swidget);
-    do_trust_signals (swidget);        
+    do_trust_signals (swidget);
 
-    widget = seahorse_widget_get_toplevel(swidget);
-    g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
     seahorse_bind_objects (NULL, pkey, (SeahorseTransfer)key_notify, swidget);
 
     return swidget;
@@ -1934,7 +1916,6 @@ static SeahorseWidget*
 setup_private_properties (SeahorsePgpKey *pkey, GtkWindow *parent)
 {
     SeahorseWidget *swidget;
-    GtkWidget *widget;
 
     swidget = seahorse_object_widget_new ("pgp-private-key-properties", parent, G_OBJECT (pkey));
 
@@ -1958,10 +1939,8 @@ setup_private_properties (SeahorsePgpKey *pkey, GtkWindow *parent)
     do_details (swidget);
     do_details_signals (swidget);
 
-    widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
-    g_signal_connect (widget, "response", G_CALLBACK (properties_response), swidget);
     seahorse_bind_objects (NULL, pkey, (SeahorseTransfer)key_notify, swidget);
-    
+
     return swidget;
 }
 
