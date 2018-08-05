@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2018-06-20 17:03+0000\n"
-"PO-Revision-Date: 2018-07-28 17:11+0300\n"
+"POT-Creation-Date: 2018-08-04 17:20+0000\n"
+"PO-Revision-Date: 2018-08-05 15:48+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -37,7 +37,7 @@ msgstr "Kitoks"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
-#: gkr/seahorse-gkr-add-keyring.ui:82
+#: gkr/seahorse-gkr-add-keyring.ui:82 src/seahorse-generate-select.ui:67
 msgid "Cancel"
 msgstr "Atsisakyti"
 
@@ -165,7 +165,8 @@ msgid "Show Seahorse help"
 msgstr "Rodyti Seahorse pagalbą"
 
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117 src/key-manager.vala:237
+#: common/passphrase-prompt.vala:117 src/import-dialog.vala:30
+#: src/key-manager.vala:237
 msgid "_Cancel"
 msgstr "_Atsisakyti"
 
@@ -299,12 +300,10 @@ msgid "Auto retrieve keys"
 msgstr "Automatiškai gauti raktus"
 
 #: data/org.gnome.seahorse.gschema.xml:6
-#| msgid "Automatically retrieve keys from _key servers"
 msgid "Whether or not keys should be automatically retrieved from key servers."
 msgstr "Ar automatiškai parsiųsti raktus iš raktų serverių."
 
 #: data/org.gnome.seahorse.gschema.xml:10
-#| msgid "None: Don’t publish keys"
 msgid "Auto publish keys"
 msgstr "Automatiškai paskelbti raktus"
 
@@ -313,7 +312,6 @@ msgid "Whether or not modified keys should be automatically published."
 msgstr "Ar pakeisti raktai turi būti automatiškai paskelbti."
 
 #: data/org.gnome.seahorse.gschema.xml:15
-#| msgid "Couldn’t publish keys to server"
 msgid "Publish keys to this key server"
 msgstr "Nusiųsti raktus į raktų serverį"
 
@@ -350,7 +348,6 @@ msgid "Show keyrings sidebar"
 msgstr "Rodyti raktinių šoninę juostą"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:6
-#| msgid "Show sidebar listing keyrings"
 msgid "Show keyrings sidebar in Seahorse."
 msgstr "Rodyti šoninį polangį su raktinėmis."
 
@@ -405,7 +402,6 @@ msgstr "Rodyti galiojimo stulpelį."
 #: data/org.gnome.seahorse.manager.gschema.xml:40
 #: data/org.gnome.seahorse.manager.gschema.xml:45
 #: data/org.gnome.seahorse.manager.gschema.xml:50
-#| msgid "Key is no longer used"
 msgid "No longer in use."
 msgstr "Nebenaudojamas"
 
@@ -414,7 +410,6 @@ msgid "Show expiry column"
 msgstr "Rodyti galiojimo pabaigos stulpelį"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:44
-#| msgid "Show _Trusted"
 msgid "Show trust column"
 msgstr "Rodyti pasitikėjimo stulpelį"
 
@@ -423,7 +418,6 @@ msgid "Show type column"
 msgstr "Rodyti tipo stulpelį"
 
 #: data/org.gnome.seahorse.window.gschema.xml:5
-#| msgid "Close this window"
 msgid "Width of the window"
 msgstr "Lango plotis"
 
@@ -512,43 +506,43 @@ msgstr "Įrašytas slaptažodis"
 msgid "Couldn’t add item"
 msgstr "Nepavyko pridėti elemento"
 
-#: gkr/gkr-item-properties.vala:102
+#: gkr/gkr-item-properties.vala:108
 msgid "Save changes for this item?"
 msgstr "Įrašyti šio elemento pakeitimus?"
 
-#: gkr/gkr-item-properties.vala:120
+#: gkr/gkr-item-properties.vala:125
 msgid "Access a network share or resource"
 msgstr "Pasiekti tinkle paviešintą aplanką ar resursą"
 
-#: gkr/gkr-item-properties.vala:123
+#: gkr/gkr-item-properties.vala:128
 msgid "Access a website"
 msgstr "Pasiekti interneto svetainę"
 
-#: gkr/gkr-item-properties.vala:126
+#: gkr/gkr-item-properties.vala:131
 msgid "Unlocks a PGP key"
 msgstr "Atrakina PGP raktą"
 
-#: gkr/gkr-item-properties.vala:129
+#: gkr/gkr-item-properties.vala:134
 msgid "Unlocks a Secure Shell key"
 msgstr "Atrakina saugaus prisijungimo (SSH) raktą"
 
-#: gkr/gkr-item-properties.vala:132
+#: gkr/gkr-item-properties.vala:137
 msgid "Saved password or login"
 msgstr "Išsaugotas slaptažodis ar prisijungimo vardas"
 
-#: gkr/gkr-item-properties.vala:145
+#: gkr/gkr-item-properties.vala:149
 msgid "Network Credentials"
 msgstr "Tinklo prisijungimo duomenys"
 
-#: gkr/gkr-item-properties.vala:150 gkr/seahorse-gkr-item-properties.ui:68
+#: gkr/gkr-item-properties.vala:154 gkr/seahorse-gkr-item-properties.ui:77
 msgid "Password"
 msgstr "Slaptažodis"
 
-#: gkr/gkr-item-properties.vala:206
+#: gkr/gkr-item-properties.vala:208
 msgid "Couldn’t change password."
 msgstr "Nepavyko pakeisti slaptažodžio."
 
-#: gkr/gkr-item-properties.vala:230
+#: gkr/gkr-item-properties.vala:232
 msgid "Couldn’t set description."
 msgstr "Nepavyko pakeisti aprašymo."
 
@@ -619,7 +613,6 @@ msgid "Couldn’t add keyring"
 msgstr "Nepavyko pridėti raktinės"
 
 #: gkr/gkr-keyring-properties.vala:66
-#| msgid "Unknown type"
 msgid "Unknown date"
 msgstr "Nežinoma data"
 
@@ -676,7 +669,7 @@ msgstr "Pridėti slaptažodį"
 msgid "_Keyring:"
 msgstr "_Raktinė:"
 
-#: gkr/seahorse-gkr-add-item.ui:45 gkr/seahorse-gkr-item-properties.ui:41
+#: gkr/seahorse-gkr-add-item.ui:45 gkr/seahorse-gkr-item-properties.ui:50
 #: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:130
 msgid "_Description:"
 msgstr "Pa_aiškinimas:"
@@ -690,12 +683,10 @@ msgid "_Show Password"
 msgstr "Rodyti _slaptažodį"
 
 #: gkr/seahorse-gkr-add-item.ui:119 gkr/seahorse-gkr-add-keyring.ui:89
-#| msgid "_OK"
 msgid "OK"
 msgstr "Gerai"
 
 #: gkr/seahorse-gkr-add-keyring.ui:6
-#| msgid "Add Password Keyring"
 msgid "Add password keyring"
 msgstr "Pridėti slaptažodžių raktinę"
 
@@ -712,13 +703,13 @@ msgid "New Keyring Name:"
 msgstr "Naujos raktinės vardas:"
 
 #. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-item-properties.ui:92
+#: gkr/seahorse-gkr-item-properties.ui:101
 #: pgp/seahorse-pgp-private-key-properties.ui:553
 #: pgp/seahorse-pgp-public-key-properties.ui:442
 msgid "Use:"
 msgstr "Naudoti:"
 
-#: gkr/seahorse-gkr-item-properties.ui:118
+#: gkr/seahorse-gkr-item-properties.ui:127
 #: pgp/seahorse-pgp-private-key-properties.ui:567
 #: pgp/seahorse-pgp-private-key-properties.ui:1106
 #: pgp/seahorse-pgp-public-key-properties.ui:557
@@ -727,26 +718,26 @@ msgstr "Naudoti:"
 msgid "Type:"
 msgstr "Tipas:"
 
-#: gkr/seahorse-gkr-item-properties.ui:143
+#: gkr/seahorse-gkr-item-properties.ui:152
 msgid "Server:"
 msgstr "Serveris:"
 
-#: gkr/seahorse-gkr-item-properties.ui:167
+#: gkr/seahorse-gkr-item-properties.ui:176
 msgid "Login:"
 msgstr "Prisijungimo vardas:"
 
-#: gkr/seahorse-gkr-item-properties.ui:206 pgp/seahorse-pgp-subkey.c:402
+#: gkr/seahorse-gkr-item-properties.ui:215 pgp/seahorse-pgp-subkey.c:402
 #: ssh/seahorse-ssh-key-properties.ui:245
 msgid "Key"
 msgstr "Raktas"
 
-#: gkr/seahorse-gkr-item-properties.ui:256
+#: gkr/seahorse-gkr-item-properties.ui:264
 #: pgp/seahorse-pgp-public-key-properties.ui:1151
 #: ssh/seahorse-ssh-key-properties.ui:414
 msgid "Technical Details:"
 msgstr "Techninės detalės:"
 
-#: gkr/seahorse-gkr-item-properties.ui:276
+#: gkr/seahorse-gkr-item-properties.ui:284
 #: pgp/seahorse-pgp-private-key-properties.ui:1722
 #: pgp/seahorse-pgp-public-key-properties.ui:1611
 #: ssh/seahorse-ssh-key-properties.ui:458
@@ -754,27 +745,22 @@ msgid "Details"
 msgstr "Detalės"
 
 #: gkr/seahorse-gkr-keyring.ui:9
-#| msgid "Key Properties"
 msgid "Keyring properties"
 msgstr "Raktinės savybės"
 
 #: gkr/seahorse-gkr-keyring.ui:23
-#| msgid "Keyring password"
 msgid "Keyring is unlocked"
 msgstr "Raktinė yra atrakinta"
 
 #: gkr/seahorse-gkr-keyring.ui:33
-#| msgid "_Unlock"
 msgid "Unlock"
 msgstr "Atrakinti"
 
 #: gkr/seahorse-gkr-keyring.ui:46
-#| msgid "Keyring password"
 msgid "Keyring is locked"
 msgstr "Raktinės yra užrakinta"
 
 #: gkr/seahorse-gkr-keyring.ui:56
-#| msgid "_Lock"
 msgid "Lock"
 msgstr "Užrakinti"
 
@@ -783,17 +769,14 @@ msgid "Name"
 msgstr "Vardas"
 
 #: gkr/seahorse-gkr-keyring.ui:130
-#| msgid "Created"
 msgid "Created on"
 msgstr "Sukurta"
 
 #: gkr/seahorse-gkr-keyring.ui:160
-#| msgid "Change _Password"
 msgid "Change password"
 msgstr "Pakeisti slaptažodį"
 
 #: gkr/seahorse-gkr-keyring.ui:167
-#| msgid "_Set as default"
 msgid "Set as default"
 msgstr "Padaryti numatytąja"
 
@@ -1246,6 +1229,11 @@ msgstr ""
 #: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
 msgid "Generating key"
 msgstr "Kuriamas raktas"
+
+#: pgp/seahorse-gpgme-generate.c:362
+#| msgid "Must be at least 5 characters long"
+msgid "Name must be at least 5 characters long."
+msgstr "Pavadinimas turi būti bent 5 simbolių ilgio."
 
 #: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
@@ -2414,10 +2402,6 @@ msgstr "- Sistemos nustatymai"
 msgid "Don't display a window"
 msgstr "Nerodyti lango"
 
-#: src/generate-select.vala:77
-msgid "Continue"
-msgstr "Tęsti"
-
 #: src/import-dialog.vala:34
 msgid "Import"
 msgstr "Importuoti"
@@ -2433,6 +2417,10 @@ msgstr "Nepavyko importuoti"
 #: src/key-manager.vala:53
 msgid "_New"
 msgstr "_Naujas"
+
+#: src/key-manager.vala:54
+msgid "_Quit"
+msgstr "_Išeiti"
 
 #: src/key-manager.vala:54
 msgid "Close this program"
@@ -2453,6 +2441,10 @@ msgstr "_Importuoti…"
 #: src/key-manager.vala:56
 msgid "Import from a file"
 msgstr "Importuoti iš failo"
+
+#: src/key-manager.vala:57
+msgid "_Paste"
+msgstr "Į_dėti"
 
 #: src/key-manager.vala:57
 msgid "Import from the clipboard"
@@ -2504,11 +2496,11 @@ msgstr "_Atverti"
 msgid "All key files"
 msgstr "Visi raktų failai"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:318
 msgid "Dropped text"
 msgstr "Įrašytas tekstas"
 
-#: src/key-manager.vala:344
+#: src/key-manager.vala:341
 msgid "Clipboard text"
 msgstr "Iškarpinės tekstas"
 
@@ -2528,9 +2520,17 @@ msgstr "Patvirtinkite naująjį slaptažodį"
 msgid "Con_firm Passphrase:"
 msgstr "_Patvirtinkite slaptažodį:"
 
-#: src/seahorse-generate-select.ui:15
+#: src/seahorse-generate-select.ui:5
+msgid "New item"
+msgstr "Naujas elementas"
+
+#: src/seahorse-generate-select.ui:21
 msgid "_Select the type of item to create:"
 msgstr "Pa_sirinkite kuriamo elemento tipą:"
+
+#: src/seahorse-generate-select.ui:74
+msgid "Continue"
+msgstr "Tęsti"
 
 #: src/seahorse-key-manager.ui:57
 msgid "Add a new key or item"
