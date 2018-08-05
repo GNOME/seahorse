@@ -260,11 +260,6 @@ on_gpgme_generate_response (GtkDialog *dialog,
     guint type;
     time_t expires;
     guint bits;
-    
-    if (response == GTK_RESPONSE_HELP) {
-        seahorse_widget_show_help (swidget);
-        return;
-    }
 
     if (response != GTK_RESPONSE_OK) {
         seahorse_widget_destroy (swidget);
