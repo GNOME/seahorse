@@ -123,7 +123,7 @@ public class Seahorse.Ssh.KeyData : GLib.Object {
         switch (algo) {
             case Algorithm.RSA:
                 // Seems accurate to nearest 8 bits
-                return ((len - 21) * 8);
+                return ((len - 23) * 8);
 
             case Algorithm.DSA:
                 // DSA keys seem to only work at 'bits % 64 == 0' boundaries
