@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2018-06-20 17:03+0000\n"
-"PO-Revision-Date: 2018-06-23 10:03+0200\n"
+"POT-Creation-Date: 2018-08-04 17:20+0000\n"
+"PO-Revision-Date: 2018-08-08 06:15+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <f.t.public@gmail.com>\n"
 "Language: fur\n"
@@ -28,7 +28,7 @@ msgstr "Personalizât"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
-#: gkr/seahorse-gkr-add-keyring.ui:82
+#: gkr/seahorse-gkr-add-keyring.ui:82 src/seahorse-generate-select.ui:67
 msgid "Cancel"
 msgstr "Anule"
 
@@ -152,7 +152,8 @@ msgid "Show Seahorse help"
 msgstr "Mostre il jutori di Seahorse"
 
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117 src/key-manager.vala:237
+#: common/passphrase-prompt.vala:117 src/import-dialog.vala:30
+#: src/key-manager.vala:237
 msgid "_Cancel"
 msgstr "_Anule"
 
@@ -494,43 +495,43 @@ msgstr "Password salvadis"
 msgid "Couldn’t add item"
 msgstr "Impussibil zontâ l'element"
 
-#: gkr/gkr-item-properties.vala:102
+#: gkr/gkr-item-properties.vala:108
 msgid "Save changes for this item?"
 msgstr "Salvâ lis modifichis par chest element?"
 
-#: gkr/gkr-item-properties.vala:120
+#: gkr/gkr-item-properties.vala:125
 msgid "Access a network share or resource"
 msgstr "Acedi a une risorse o une condivision di rêt"
 
-#: gkr/gkr-item-properties.vala:123
+#: gkr/gkr-item-properties.vala:128
 msgid "Access a website"
 msgstr "Acedi a un sît web"
 
-#: gkr/gkr-item-properties.vala:126
+#: gkr/gkr-item-properties.vala:131
 msgid "Unlocks a PGP key"
 msgstr "Sbloche une clâf PGP"
 
-#: gkr/gkr-item-properties.vala:129
+#: gkr/gkr-item-properties.vala:134
 msgid "Unlocks a Secure Shell key"
 msgstr "Sbloche une clâf Secure Shell"
 
-#: gkr/gkr-item-properties.vala:132
+#: gkr/gkr-item-properties.vala:137
 msgid "Saved password or login"
 msgstr "Password o dâts di acès salvâts"
 
-#: gkr/gkr-item-properties.vala:145
+#: gkr/gkr-item-properties.vala:149
 msgid "Network Credentials"
 msgstr "Credenziâi di rêt"
 
-#: gkr/gkr-item-properties.vala:150 gkr/seahorse-gkr-item-properties.ui:68
+#: gkr/gkr-item-properties.vala:154 gkr/seahorse-gkr-item-properties.ui:77
 msgid "Password"
 msgstr "Password"
 
-#: gkr/gkr-item-properties.vala:206
+#: gkr/gkr-item-properties.vala:208
 msgid "Couldn’t change password."
 msgstr "Impussibil cambiâ la password."
 
-#: gkr/gkr-item-properties.vala:230
+#: gkr/gkr-item-properties.vala:232
 msgid "Couldn’t set description."
 msgstr "Impussibil stabilî une descrizion."
 
@@ -658,7 +659,7 @@ msgstr "Zonte password"
 msgid "_Keyring:"
 msgstr "_Puarteclâfs:"
 
-#: gkr/seahorse-gkr-add-item.ui:45 gkr/seahorse-gkr-item-properties.ui:41
+#: gkr/seahorse-gkr-add-item.ui:45 gkr/seahorse-gkr-item-properties.ui:50
 #: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:130
 msgid "_Description:"
 msgstr "_Descrizion:"
@@ -691,13 +692,13 @@ msgid "New Keyring Name:"
 msgstr "Non dal gnûf puarteclâfs:"
 
 #. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-item-properties.ui:92
+#: gkr/seahorse-gkr-item-properties.ui:101
 #: pgp/seahorse-pgp-private-key-properties.ui:553
 #: pgp/seahorse-pgp-public-key-properties.ui:442
 msgid "Use:"
 msgstr "Ûs:"
 
-#: gkr/seahorse-gkr-item-properties.ui:118
+#: gkr/seahorse-gkr-item-properties.ui:127
 #: pgp/seahorse-pgp-private-key-properties.ui:567
 #: pgp/seahorse-pgp-private-key-properties.ui:1106
 #: pgp/seahorse-pgp-public-key-properties.ui:557
@@ -706,26 +707,26 @@ msgstr "Ûs:"
 msgid "Type:"
 msgstr "Gjenar:"
 
-#: gkr/seahorse-gkr-item-properties.ui:143
+#: gkr/seahorse-gkr-item-properties.ui:152
 msgid "Server:"
 msgstr "Servidôr:"
 
-#: gkr/seahorse-gkr-item-properties.ui:167
+#: gkr/seahorse-gkr-item-properties.ui:176
 msgid "Login:"
 msgstr "Acès:"
 
-#: gkr/seahorse-gkr-item-properties.ui:206 pgp/seahorse-pgp-subkey.c:402
+#: gkr/seahorse-gkr-item-properties.ui:215 pgp/seahorse-pgp-subkey.c:402
 #: ssh/seahorse-ssh-key-properties.ui:245
 msgid "Key"
 msgstr "Clâf"
 
-#: gkr/seahorse-gkr-item-properties.ui:256
+#: gkr/seahorse-gkr-item-properties.ui:264
 #: pgp/seahorse-pgp-public-key-properties.ui:1151
 #: ssh/seahorse-ssh-key-properties.ui:414
 msgid "Technical Details:"
 msgstr "Detais tecnics:"
 
-#: gkr/seahorse-gkr-item-properties.ui:276
+#: gkr/seahorse-gkr-item-properties.ui:284
 #: pgp/seahorse-pgp-private-key-properties.ui:1722
 #: pgp/seahorse-pgp-public-key-properties.ui:1611
 #: ssh/seahorse-ssh-key-properties.ui:458
@@ -1215,6 +1216,10 @@ msgstr ""
 #: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
 msgid "Generating key"
 msgstr "Daûr a gjenerâ la clâf"
+
+#: pgp/seahorse-gpgme-generate.c:362
+msgid "Name must be at least 5 characters long."
+msgstr "Il non al scugne jessi lunc almancul 5 caratars."
 
 #: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
@@ -2384,10 +2389,6 @@ msgstr "- Impostazions di sisteme"
 msgid "Don't display a window"
 msgstr "No mostrâ un barcon"
 
-#: src/generate-select.vala:77
-msgid "Continue"
-msgstr "Continue"
-
 #: src/import-dialog.vala:34
 msgid "Import"
 msgstr "Impuarte"
@@ -2403,6 +2404,10 @@ msgstr "Importazion falide"
 #: src/key-manager.vala:53
 msgid "_New"
 msgstr "_Gnûf"
+
+#: src/key-manager.vala:54
+msgid "_Quit"
+msgstr "_Jes"
 
 #: src/key-manager.vala:54
 msgid "Close this program"
@@ -2423,6 +2428,10 @@ msgstr "_Impuarte…"
 #: src/key-manager.vala:56
 msgid "Import from a file"
 msgstr "Impuarte di un file"
+
+#: src/key-manager.vala:57
+msgid "_Paste"
+msgstr "_Tache"
 
 #: src/key-manager.vala:57
 msgid "Import from the clipboard"
@@ -2474,11 +2483,11 @@ msgstr "_Vierç"
 msgid "All key files"
 msgstr "Ducj i file clâf"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:318
 msgid "Dropped text"
 msgstr "Test molât"
 
-#: src/key-manager.vala:344
+#: src/key-manager.vala:341
 msgid "Clipboard text"
 msgstr "Test intes notis"
 
@@ -2498,9 +2507,17 @@ msgstr "Conferme gnove passphrase"
 msgid "Con_firm Passphrase:"
 msgstr "Con_ferme passphrase:"
 
-#: src/seahorse-generate-select.ui:15
+#: src/seahorse-generate-select.ui:5
+msgid "New item"
+msgstr "Gnûf element"
+
+#: src/seahorse-generate-select.ui:21
 msgid "_Select the type of item to create:"
 msgstr "_Selezione il gjenar di element di creâ:"
+
+#: src/seahorse-generate-select.ui:74
+msgid "Continue"
+msgstr "Continue"
 
 #: src/seahorse-key-manager.ui:57
 msgid "Add a new key or item"
