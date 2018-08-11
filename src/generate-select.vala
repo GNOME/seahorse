@@ -18,19 +18,17 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * The GenerateSelect dialog is the dialog that users get to see when they
+ * want to create a new item. It fills up the list with items by looking at
+ * the ActionGroups that added themselves to the {@link Seahorse.Registry}
+ * as generator.
+ */
 [GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-generate-select.ui")]
 public class Seahorse.GenerateSelect : Gtk.Dialog {
-    private Gtk.ListStore store;
-    [GtkChild]
-    private Gtk.TreeView view;
-    private List<Gtk.ActionGroup>? action_groups;
 
-    private enum Column {
-        ICON,
-        TEXT,
-        ACTION,
-        N_COLUMNS
-    }
+    [GtkChild]
+    private Gtk.ListBox generate_list;
 
     public GenerateSelect(Gtk.Window? parent) {
         GLib.Object(
@@ -38,80 +36,84 @@ public class Seahorse.GenerateSelect : Gtk.Dialog {
             transient_for: parent,
             modal: true
         );
-        this.store = new Gtk.ListStore(Column.N_COLUMNS, typeof(Icon), typeof(string), typeof(Gtk.Action));
-        this.store.set_default_sort_func(on_list_sort);
-        this.store.set_sort_column_id(Gtk.TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, Gtk.SortType.ASCENDING);
 
-        this.action_groups = (List<Gtk.ActionGroup>) Registry.object_instances("generator");
-        foreach (Gtk.ActionGroup action_group in this.action_groups) {
-            foreach (weak Gtk.Action action in action_group.list_actions()) {
-                string text = "<span size=\"larger\" weight=\"bold\">%s</span>\n%s"
-                                  .printf(action.label, action.tooltip);
+        ListStore store = new ListStore(typeof(Gtk.Action));
+        this.generate_list.bind_model(store, on_create_row);
 
-                Icon? icon = action.gicon;
-                if (icon == null) {
-                    if (action.icon_name != null)
-                        icon = new ThemedIcon(action.icon_name);
-                }
-
-                Gtk.TreeIter iter;
-                this.store.append(out iter);
-                this.store.set(iter, Column.TEXT, text,
-                                     Column.ICON, icon,
-                                     Column.ACTION, action,
-                                     -1);
-            }
+        // Fill up the model
+        var action_groups = (List<Gtk.ActionGroup>) Registry.object_instances("generator");
+        foreach (var action_group in action_groups) {
+            foreach (var action in action_group.list_actions())
+                store.append(action);
         }
-
-        // Hook it into the view
-        Gtk.CellRendererPixbuf pixcell = new Gtk.CellRendererPixbuf();
-        pixcell.stock_size = Gtk.IconSize.DND;
-        this.view.insert_column_with_attributes(-1, "", pixcell, "gicon", Column.ICON, null);
-        this.view.insert_column_with_attributes(-1, "", new Gtk.CellRendererText(), "markup", Column.TEXT, null);
-        this.view.set_model(this.store);
+        store.sort((a, b) => {
+            return ((Gtk.Action) a).label.collate(((Gtk.Action) b).label);
+        });
 
         // Select first item
-        Gtk.TreeIter iter;
-        this.store.get_iter_first(out iter);
-        this.view.get_selection().select_iter(iter);
-
-        this.view.row_activated.connect(on_row_activated);
+        this.generate_list.select_row(this.generate_list.get_row_at_index(0));
     }
 
-    private Gtk.Action? get_selected_action() {
-        Gtk.TreeIter iter;
-        Gtk.TreeModel? model;
-        if (!this.view.get_selection().get_selected(out model, out iter))
-            return null;
-
-        Gtk.Action? action;
-        this.store.get(iter, Column.ACTION, out action, -1);
-        assert (action != null);
-
-        return action;
+    private Gtk.ListBoxRow on_create_row(GLib.Object item) {
+        return new GenerateSelectRow((Gtk.Action) item);
     }
 
-    private void on_row_activated(Gtk.TreeView view, Gtk.TreePath path, Gtk.TreeViewColumn col) {
-        Gtk.Action? action = get_selected_action();
-        if (action != null) {
-            Action.activate_with_window(action, null, this.transient_for);
-            destroy();
-        }
+    [GtkCallback]
+    private void on_row_activated(Gtk.ListBoxRow row) {
+        Gtk.Action action = ((GenerateSelectRow) row).action;
+        Action.activate_with_window(action, null, this.transient_for);
+        destroy();
     }
 
     public override void response(int response)  {
-        Gtk.Action? action = (response == Gtk.ResponseType.OK)? get_selected_action() : null;
-        Gtk.Window? parent = (action != null)? this.transient_for : null;
+        if (response != Gtk.ResponseType.OK)
+            return;
 
-        if (action != null)
-            Action.activate_with_window(action, null, parent);
+        GenerateSelectRow? row = this.generate_list.get_selected_row() as GenerateSelectRow;
+        if (row == null)
+            return;
+
+        Action.activate_with_window(row.action, null, this.transient_for);
+    }
+}
+
+private class Seahorse.GenerateSelectRow : Gtk.ListBoxRow {
+    private Gtk.Image icon;
+    private Gtk.Label title;
+    private Gtk.Label description;
+
+    public Gtk.Action action { get; private set; }
+
+    construct {
+        var grid = new Gtk.Grid();
+        grid.column_spacing = 6;
+        grid.margin = 3;
+        add(grid);
+
+        this.icon = new Gtk.Image();
+        this.icon.icon_size = Gtk.IconSize.DND;
+        grid.attach(this.icon, 0, 0, 1, 2);
+
+        this.title = new Gtk.Label(null);
+        this.title.halign = Gtk.Align.START;
+        grid.attach(this.title, 1, 0);
+
+        this.description = new Gtk.Label(null);
+        this.description.get_style_context().add_class("dim-label");
+        grid.attach(this.description, 1, 1);
     }
 
-    private int on_list_sort (Gtk.TreeModel? model, Gtk.TreeIter a, Gtk.TreeIter b) {
-        string? a_text = null, b_text = null;
-        model.get(a, Column.TEXT, out a_text, -1);
-        model.get(b, Column.TEXT, out b_text, -1);
+    public GenerateSelectRow(Gtk.Action action) {
+        this.action = action;
 
-        return a_text.collate(b_text);
+        this.title.set_markup("<b>%s</b>".printf(action.label));
+        this.description.label = action.tooltip;
+
+        if (action.gicon != null)
+            this.icon.gicon = action.gicon;
+        else if (action.icon_name != null)
+            this.icon.icon_name = action.icon_name;
+
+        show_all();
     }
 }
