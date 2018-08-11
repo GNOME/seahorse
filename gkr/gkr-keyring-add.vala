@@ -27,7 +27,10 @@ public class Seahorse.Gkr.KeyringAdd : Gtk.Dialog {
     }
 
     public KeyringAdd(Gtk.Window? parent) {
-        GLib.Object(transient_for: parent);
+        GLib.Object(
+            transient_for: parent,
+            use_header_bar: 1
+        );
         show();
         present();
     }
