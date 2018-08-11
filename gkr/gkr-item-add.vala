@@ -61,7 +61,10 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
     }
 
     public ItemAdd(Gtk.Window? parent) {
-        GLib.Object(transient_for: parent);
+        GLib.Object(
+            transient_for: parent,
+            use_header_bar: 1
+        );
         show();
         present();
     }
