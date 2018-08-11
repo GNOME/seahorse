@@ -51,7 +51,8 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
         this.create_with_setup_button.clicked.connect((b) => create_key(true));
 
         this.key_length_chooser = new KeyLengthChooser();
-        this.details_grid.attach(this.key_length_chooser, 1, 1);
+        this.key_length_chooser.halign = Gtk.Align.START;
+        this.details_grid.attach(this.key_length_chooser, 1, 3);
 
         // on_algo_changed() gets called, bits chooser is setup
         algorithm_combo_box.set_active(0);
