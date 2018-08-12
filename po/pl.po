@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2018-08-11 17:26+0000\n"
-"PO-Revision-Date: 2018-08-11 23:25+0200\n"
+"POT-Creation-Date: 2018-08-12 17:17+0000\n"
+"PO-Revision-Date: 2018-08-12 19:33+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -34,7 +34,8 @@ msgstr "Niestandardowy"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
-#: gkr/seahorse-gkr-add-keyring.ui:82 src/seahorse-generate-select.ui:62
+#: gkr/seahorse-gkr-add-keyring.ui:82 pkcs11/seahorse-pkcs11-generate.ui:186
+#: src/seahorse-generate-select.ui:62
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -1050,7 +1051,7 @@ msgstr "Nigdy nie _wygasa"
 msgid "If key never expires"
 msgstr "Jeśli klucz nigdy nie wygasa"
 
-#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:149
+#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
 msgid "Key _Type:"
 msgstr "_Typ klucza:"
 
@@ -1149,6 +1150,15 @@ msgstr "Nie można dodać identyfikatora użytkownika"
 msgid "Add user ID to %s"
 msgstr "Dodaje identyfikator użytkownika do %s"
 
+#: pgp/seahorse-gpgme.c:69
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr ""
+"Deszyfrowanie się nie powiodło. Prawdopodobnie brak klucza deszyfrującego."
+
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
+msgid "The operation was cancelled"
+msgstr "Anulowano działanie"
+
 #: pgp/seahorse-gpgme-expires.c:63
 msgid "Invalid expiry date"
 msgstr "Nieprawidłowa data wygaśnięcia"
@@ -1190,7 +1200,7 @@ msgstr "Klucz PGP"
 msgid "Used to encrypt email and files"
 msgstr "Używany do szyfrowania poczty i plików"
 
-#: pgp/seahorse-gpgme-generate.c:129 pkcs11/seahorse-pkcs11-generate.c:90
+#: pgp/seahorse-gpgme-generate.c:129 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:141
 msgid "RSA"
 msgstr "RSA"
@@ -1227,7 +1237,7 @@ msgstr ""
 "używanie programów. Dostarcza to komputerowi losowe\n"
 "dane, których potrzebuje."
 
-#: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
+#: pgp/seahorse-gpgme-generate.c:230 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Tworzenie klucza"
 
@@ -1466,15 +1476,6 @@ msgstr "Nieznany"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-gpgme.c:69
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr ""
-"Deszyfrowanie się nie powiodło. Prawdopodobnie brak klucza deszyfrującego."
-
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
-msgid "The operation was cancelled"
-msgstr "Anulowano działanie"
-
 #: pgp/seahorse-hkp-source.c:567
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
@@ -1671,7 +1672,7 @@ msgstr "Nowy klucz PGP"
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "Klucz PGP umożliwia szyfrowanie poczty i plików."
 
-#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:226
+#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "_Zaawansowane opcje klucza"
 
@@ -1683,7 +1684,7 @@ msgstr "_Komentarz:"
 msgid "Encryption _Type:"
 msgstr "Typ _szyfrowania:"
 
-#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:164
+#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
 #: ssh/seahorse-ssh-generate.ui:158
 msgid "Key _Strength (bits):"
 msgstr "_Długość klucza (w bitach):"
@@ -1703,6 +1704,14 @@ msgstr "_Utwórz"
 #: pgp/seahorse-pgp-generate.ui:312
 msgid "Generate a new key"
 msgstr "Tworzy nowy klucz"
+
+#: pgp/seahorse-pgp-key.c:349
+msgid "Personal PGP key"
+msgstr "Osobisty klucz PGP"
+
+#: pgp/seahorse-pgp-key.c:351
+msgid "PGP key"
+msgstr "Klucz PGP"
 
 #: pgp/seahorse-pgp-key-properties.c:312
 msgid "Couldn’t change primary user ID"
@@ -1828,14 +1837,6 @@ msgstr "Dobry"
 #: pgp/seahorse-pgp-key-properties.c:1857
 msgid "Key ID"
 msgstr "Identyfikator klucza"
-
-#: pgp/seahorse-pgp-key.c:349
-msgid "Personal PGP key"
-msgstr "Osobisty klucz PGP"
-
-#: pgp/seahorse-pgp-key.c:351
-msgid "PGP key"
-msgstr "Klucz PGP"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:31
 #: pgp/seahorse-pgp-public-key-properties.ui:32
@@ -2139,6 +2140,21 @@ msgstr "Opcjonalny opis unieważnienia"
 msgid "Re_voke"
 msgstr "Unie_ważnij"
 
+#: pgp/seahorse-signer.c:63
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr ""
+"Brak osobistych kluczy PGP umożliwiających podpisywanie dokumentów "
+"i wiadomości."
+
+#: pgp/seahorse-signer.ui:7
+msgid "Choose Signing Key"
+msgstr "Wybór klucza do podpisywania"
+
+#: pgp/seahorse-signer.ui:25
+msgid "_Sign message with key:"
+msgstr "_Podpisanie wiadomości kluczem:"
+
 #: pgp/seahorse-sign.ui:7
 msgid "Sign Key"
 msgstr "Podpisywanie klucza"
@@ -2230,21 +2246,6 @@ msgstr "_Osoba podpisująca:"
 msgid "_Sign"
 msgstr "_Podpisz"
 
-#: pgp/seahorse-signer.c:63
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"Brak osobistych kluczy PGP umożliwiających podpisywanie dokumentów "
-"i wiadomości."
-
-#: pgp/seahorse-signer.ui:7
-msgid "Choose Signing Key"
-msgstr "Wybór klucza do podpisywania"
-
-#: pgp/seahorse-signer.ui:25
-msgid "_Sign message with key:"
-msgstr "_Podpisanie wiadomości kluczem:"
-
 #: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
 msgid "Exporting data"
 msgstr "Eksportowanie danych"
@@ -2289,6 +2290,18 @@ msgstr[0] "Na pewno trwale usunąć %d certyfikat?"
 msgstr[1] "Na pewno trwale usunąć %d certyfikaty?"
 msgstr[2] "Na pewno trwale usunąć %d certyfikatów?"
 
+#: pkcs11/pkcs11-generate.vala:229
+msgid "Couldn’t generate private key"
+msgstr "Nie można utworzyć prywatnego klucza"
+
+#: pkcs11/pkcs11-generate.vala:284 pkcs11/pkcs11-private-key.vala:70
+msgid "Private key"
+msgstr "Klucz prywatny"
+
+#: pkcs11/pkcs11-generate.vala:285
+msgid "Used to request a certificate"
+msgstr "Używane do żądania certyfikatu"
+
 #: pkcs11/pkcs11-key-deleter.vala:34
 msgid "I understand that this key will be permanently deleted."
 msgstr "Rozumiem, że ten klucz zostanie trwale usunięty."
@@ -2296,10 +2309,6 @@ msgstr "Rozumiem, że ten klucz zostanie trwale usunięty."
 #: pkcs11/pkcs11-private-key.vala:61
 msgid "Unnamed private key"
 msgstr "Klucz prywatny bez nazwy"
-
-#: pkcs11/pkcs11-private-key.vala:70 pkcs11/seahorse-pkcs11-generate.c:505
-msgid "Private key"
-msgstr "Klucz prywatny"
 
 #: pkcs11/pkcs11-properties.vala:134
 msgid "Unnamed"
@@ -2333,7 +2342,7 @@ msgstr "Zażądaj _certyfikat"
 msgid "Create a certificate request file for this key"
 msgstr "Tworzy plik żądania certyfikatu dla tego klucza"
 
-#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.c:412
+#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.ui:193
 msgid "Create"
 msgstr "Utwórz"
 
@@ -2362,31 +2371,27 @@ msgctxt "Label"
 msgid "Unknown"
 msgstr "Nieznana"
 
-#: pkcs11/seahorse-pkcs11-backend.c:189
+#: pkcs11/seahorse-pkcs11-backend.c:187
 msgid "Certificates"
 msgstr "Certyfikaty"
 
-#: pkcs11/seahorse-pkcs11-backend.c:195
+#: pkcs11/seahorse-pkcs11-backend.c:193
 msgid "X.509 certificates and related keys"
 msgstr "Certyfikaty i powiązane klucze X.509"
 
-#: pkcs11/seahorse-pkcs11-generate.c:113
-msgid "Couldn’t generate private key"
-msgstr "Nie można utworzyć prywatnego klucza"
+#: pkcs11/seahorse-pkcs11-generate.ui:6
+msgid "New private key"
+msgstr "Nowy klucz prywatny"
 
-#: pkcs11/seahorse-pkcs11-generate.c:506
-msgid "Used to request a certificate"
-msgstr "Używane do żądania certyfikatu"
-
-#: pkcs11/seahorse-pkcs11-generate.ui:34
+#: pkcs11/seahorse-pkcs11-generate.ui:39
 msgid "Create a new private key"
 msgstr "Tworzy nowy klucz prywatny"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:53
+#: pkcs11/seahorse-pkcs11-generate.ui:58
 msgid "Label:"
 msgstr "Etykieta:"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:66
+#: pkcs11/seahorse-pkcs11-generate.ui:71
 msgid "Stored at:"
 msgstr "Przechowywane w:"
 
@@ -2402,15 +2407,15 @@ msgstr "Wspólna nazwa (CN) umieszczona w żądaniu certyfikatu."
 msgid "Name (CN):"
 msgstr "Nazwa (CN):"
 
-#: src/application.vala:66
+#: src/application.vala:64
 msgid "Version of this application"
 msgstr "Wersja tego programu"
 
-#: src/application.vala:71 src/application.vala:107
+#: src/application.vala:69 src/application.vala:105
 msgid "- System Settings"
 msgstr "— ustawienia systemu"
 
-#: src/application.vala:102
+#: src/application.vala:100
 msgid "Don't display a window"
 msgstr "Bez wyświetlania okna"
 
