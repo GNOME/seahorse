@@ -21,8 +21,6 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-extern void seahorse_pkcs11_backend_initialize();
-
 public class Seahorse.Application : Gtk.Application {
     private SearchProvider? search_provider;
     private uint search_provider_dbus_id = 0;
@@ -50,7 +48,7 @@ public class Seahorse.Application : Gtk.Application {
         Pgp.Backend.initialize();
 #endif
 #if WITH_PKCS11
-        seahorse_pkcs11_backend_initialize();
+        Pkcs11.Backend.initialize();
 #endif
     }
 

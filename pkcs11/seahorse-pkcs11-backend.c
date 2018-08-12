@@ -22,8 +22,6 @@
 
 #include "seahorse-pkcs11-backend.h"
 
-#include "seahorse-pkcs11-generate.h"
-
 #include "pkcs11/seahorse-pkcs11.h"
 
 #include "seahorse-common.h"

@@ -21,8 +21,6 @@
 #ifndef SEAHORSE_PKCS11_BACKEND_H_
 #define SEAHORSE_PKCS11_BACKEND_H_
 
-#include "pkcs11/seahorse-pkcs11.h"
-
 #include <gcr/gcr.h>
 
 #define SEAHORSE_PKCS11_STR                    "pkcs11"

@@ -52,6 +52,12 @@ namespace Progress {
 namespace Pgp.Backend {
 	public void initialize();
 }
+
+[CCode (cheader_filename = "pkcs11/seahorse-pkcs11-backend.h")]
+public class Pkcs11.Backend {
+	public static void initialize();
+	public static Gcr.Collection get_writable_tokens(Pkcs11.Backend? self, ulong with_mechanism);
+}
 }
 
 namespace Egg {
