@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2018-06-20 17:03+0000\n"
-"PO-Revision-Date: 2018-06-23 18:20+0300\n"
+"POT-Creation-Date: 2018-08-04 17:20+0000\n"
+"PO-Revision-Date: 2018-08-08 10:35+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -35,7 +35,7 @@ msgstr "Özel"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
-#: gkr/seahorse-gkr-add-keyring.ui:82
+#: gkr/seahorse-gkr-add-keyring.ui:82 src/seahorse-generate-select.ui:67
 msgid "Cancel"
 msgstr "İptal"
 
@@ -162,7 +162,8 @@ msgid "Show Seahorse help"
 msgstr "Seahorse yardımını göster"
 
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117 src/key-manager.vala:237
+#: common/passphrase-prompt.vala:117 src/import-dialog.vala:30
+#: src/key-manager.vala:237
 msgid "_Cancel"
 msgstr "_İptal"
 
@@ -292,7 +293,6 @@ msgid "Revoked"
 msgstr "Feshedilmiş"
 
 #: data/org.gnome.seahorse.gschema.xml:5
-#| msgid "Auto Retrieve Keys"
 msgid "Auto retrieve keys"
 msgstr "Anahtarları kendiliğinden al"
 
@@ -302,19 +302,14 @@ msgstr ""
 "Anahtarların anahtar sunucularından otomatik olarak alınıp alınmayacağı."
 
 #: data/org.gnome.seahorse.gschema.xml:10
-#| msgid "None: Don’t publish keys"
 msgid "Auto publish keys"
 msgstr "Anahtarları kendiliğiden yayımla"
 
 #: data/org.gnome.seahorse.gschema.xml:11
-#| msgid ""
-#| "Whether or not modified keys should be automatically synced with the "
-#| "default key server."
 msgid "Whether or not modified keys should be automatically published."
 msgstr "Değiştirilen anahtarların kendiliğinden yayımlanıp yayımlanmayacağı."
 
 #: data/org.gnome.seahorse.gschema.xml:15
-#| msgid "Publish keys to this key server."
 msgid "Publish keys to this key server"
 msgstr "Anahtarları bu anahtar sunucusuna yayımla"
 
@@ -346,12 +341,10 @@ msgstr ""
 "Son anahtar sunucu araması burada (boş ise tüm sunucularda) yapılmıştı."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:5
-#| msgid "Show places sidebar"
 msgid "Show keyrings sidebar"
 msgstr "Anahtarlıklar kenar çubuğunu göster"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:6
-#| msgid "Show sidebar listing keyrings"
 msgid "Show keyrings sidebar in Seahorse."
 msgstr "Seahorseʼda anahtarlıklar kenar çubuğunu göster."
 
@@ -384,15 +377,10 @@ msgid "The URIs of the keyrings chosen in the sidebar."
 msgstr "Kenar çubukta seçilen anahtarlıkların URIʼleri."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:29
-#| msgid "The column to sort the seahorse keys by"
 msgid "The column to sort the Seahorse keys by"
 msgstr "Seahorse anahtarlarını sıralama sütunu"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:30
-#| msgid ""
-#| "Specify the column to sort the seahorse key manager main window by. "
-#| "Columns are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. "
-#| "Put a '-' in front of the column name to sort in descending order."
 msgid ""
 "Specify the column to sort the Seahorse key manager main window by. Columns "
 "are: “name”, “id”, “validity”, “expires”, “trust”, and “type”. Put a “-” in "
@@ -411,7 +399,6 @@ msgstr "Geçerlilik sütununu göster"
 #: data/org.gnome.seahorse.manager.gschema.xml:40
 #: data/org.gnome.seahorse.manager.gschema.xml:45
 #: data/org.gnome.seahorse.manager.gschema.xml:50
-#| msgid "Key is no longer used"
 msgid "No longer in use."
 msgstr "Artık kullanılmıyor."
 
@@ -420,7 +407,6 @@ msgid "Show expiry column"
 msgstr "Son Kullanım sütununu göster"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:44
-#| msgid "Show owner trust column"
 msgid "Show trust column"
 msgstr "Güven sütununu göster"
 
@@ -429,7 +415,6 @@ msgid "Show type column"
 msgstr "Tür sütununu göster"
 
 #: data/org.gnome.seahorse.window.gschema.xml:5
-#| msgid "Close this window"
 msgid "Width of the window"
 msgstr "Pencerenin genişliği"
 
@@ -519,43 +504,43 @@ msgstr "Saklı Parola"
 msgid "Couldn’t add item"
 msgstr "Öge eklenemedi"
 
-#: gkr/gkr-item-properties.vala:102
+#: gkr/gkr-item-properties.vala:108
 msgid "Save changes for this item?"
 msgstr "Bu ögedeki değişiklikler kaydedilsin mi?"
 
-#: gkr/gkr-item-properties.vala:120
+#: gkr/gkr-item-properties.vala:125
 msgid "Access a network share or resource"
 msgstr "Ağdaki kaynağa veya paylaşıma erişim"
 
-#: gkr/gkr-item-properties.vala:123
+#: gkr/gkr-item-properties.vala:128
 msgid "Access a website"
 msgstr "Web sitesine erişim"
 
-#: gkr/gkr-item-properties.vala:126
+#: gkr/gkr-item-properties.vala:131
 msgid "Unlocks a PGP key"
 msgstr "PGP anahtarının kilidini açar"
 
-#: gkr/gkr-item-properties.vala:129
+#: gkr/gkr-item-properties.vala:134
 msgid "Unlocks a Secure Shell key"
 msgstr "Güvenli Kabuk anahtarının kilidini açar"
 
-#: gkr/gkr-item-properties.vala:132
+#: gkr/gkr-item-properties.vala:137
 msgid "Saved password or login"
 msgstr "Kaydedilmiş parola veya kullanıcı adı"
 
-#: gkr/gkr-item-properties.vala:145
+#: gkr/gkr-item-properties.vala:149
 msgid "Network Credentials"
 msgstr "Ağ Kimliği"
 
-#: gkr/gkr-item-properties.vala:150 gkr/seahorse-gkr-item-properties.ui:68
+#: gkr/gkr-item-properties.vala:154 gkr/seahorse-gkr-item-properties.ui:77
 msgid "Password"
 msgstr "Parola"
 
-#: gkr/gkr-item-properties.vala:206
+#: gkr/gkr-item-properties.vala:208
 msgid "Couldn’t change password."
 msgstr "Parola değiştirilemedi."
 
-#: gkr/gkr-item-properties.vala:230
+#: gkr/gkr-item-properties.vala:232
 msgid "Couldn’t set description."
 msgstr "Açıklama belirlenemedi."
 
@@ -681,7 +666,7 @@ msgstr "Parola Ekle"
 msgid "_Keyring:"
 msgstr "_Anahtarlık:"
 
-#: gkr/seahorse-gkr-add-item.ui:45 gkr/seahorse-gkr-item-properties.ui:41
+#: gkr/seahorse-gkr-add-item.ui:45 gkr/seahorse-gkr-item-properties.ui:50
 #: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:130
 msgid "_Description:"
 msgstr "_Açıklama:"
@@ -695,12 +680,10 @@ msgid "_Show Password"
 msgstr "Parolayı _Göster"
 
 #: gkr/seahorse-gkr-add-item.ui:119 gkr/seahorse-gkr-add-keyring.ui:89
-#| msgid "_OK"
 msgid "OK"
 msgstr "Tamam"
 
 #: gkr/seahorse-gkr-add-keyring.ui:6
-#| msgid "Add Password Keyring"
 msgid "Add password keyring"
 msgstr "Parola anahtarlığı ekle"
 
@@ -716,13 +699,13 @@ msgid "New Keyring Name:"
 msgstr "Yeni Anahtarlık Adı:"
 
 #. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-item-properties.ui:92
+#: gkr/seahorse-gkr-item-properties.ui:101
 #: pgp/seahorse-pgp-private-key-properties.ui:553
 #: pgp/seahorse-pgp-public-key-properties.ui:442
 msgid "Use:"
 msgstr "Kullanım:"
 
-#: gkr/seahorse-gkr-item-properties.ui:118
+#: gkr/seahorse-gkr-item-properties.ui:127
 #: pgp/seahorse-pgp-private-key-properties.ui:567
 #: pgp/seahorse-pgp-private-key-properties.ui:1106
 #: pgp/seahorse-pgp-public-key-properties.ui:557
@@ -731,26 +714,26 @@ msgstr "Kullanım:"
 msgid "Type:"
 msgstr "Tür:"
 
-#: gkr/seahorse-gkr-item-properties.ui:143
+#: gkr/seahorse-gkr-item-properties.ui:152
 msgid "Server:"
 msgstr "Sunucu:"
 
-#: gkr/seahorse-gkr-item-properties.ui:167
+#: gkr/seahorse-gkr-item-properties.ui:176
 msgid "Login:"
 msgstr "Giriş:"
 
-#: gkr/seahorse-gkr-item-properties.ui:206 pgp/seahorse-pgp-subkey.c:402
+#: gkr/seahorse-gkr-item-properties.ui:215 pgp/seahorse-pgp-subkey.c:402
 #: ssh/seahorse-ssh-key-properties.ui:245
 msgid "Key"
 msgstr "Anahtar"
 
-#: gkr/seahorse-gkr-item-properties.ui:256
+#: gkr/seahorse-gkr-item-properties.ui:264
 #: pgp/seahorse-pgp-public-key-properties.ui:1151
 #: ssh/seahorse-ssh-key-properties.ui:414
 msgid "Technical Details:"
 msgstr "Teknik Ayrıntılar:"
 
-#: gkr/seahorse-gkr-item-properties.ui:276
+#: gkr/seahorse-gkr-item-properties.ui:284
 #: pgp/seahorse-pgp-private-key-properties.ui:1722
 #: pgp/seahorse-pgp-public-key-properties.ui:1611
 #: ssh/seahorse-ssh-key-properties.ui:458
@@ -1241,6 +1224,11 @@ msgstr ""
 #: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
 msgid "Generating key"
 msgstr "Anahtar oluşturuluyor"
+
+#: pgp/seahorse-gpgme-generate.c:362
+#| msgid "Must be at least 5 characters long"
+msgid "Name must be at least 5 characters long."
+msgstr "Ad en az 5 karakter uzunluğunda olmalı."
 
 #: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
@@ -2407,10 +2395,6 @@ msgstr "- Sistem Ayarları"
 msgid "Don't display a window"
 msgstr "Pencere gösterme"
 
-#: src/generate-select.vala:77
-msgid "Continue"
-msgstr "Devam"
-
 #: src/import-dialog.vala:34
 msgid "Import"
 msgstr "İçe Aktar"
@@ -2426,6 +2410,10 @@ msgstr "İçe aktarma başarısız oldu"
 #: src/key-manager.vala:53
 msgid "_New"
 msgstr "_Yeni"
+
+#: src/key-manager.vala:54
+msgid "_Quit"
+msgstr "_Çık"
 
 #: src/key-manager.vala:54
 msgid "Close this program"
@@ -2446,6 +2434,10 @@ msgstr "İçe _Aktar…"
 #: src/key-manager.vala:56
 msgid "Import from a file"
 msgstr "Dosyadan içe aktar"
+
+#: src/key-manager.vala:57
+msgid "_Paste"
+msgstr "_Yapıştır"
 
 #: src/key-manager.vala:57
 msgid "Import from the clipboard"
@@ -2497,11 +2489,11 @@ msgstr "_Aç"
 msgid "All key files"
 msgstr "Tüm anahtar dosyaları"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:318
 msgid "Dropped text"
 msgstr "Bırakılan metin"
 
-#: src/key-manager.vala:344
+#: src/key-manager.vala:341
 msgid "Clipboard text"
 msgstr "Pano metni"
 
@@ -2521,9 +2513,17 @@ msgstr "Yeni parola metnini onayla"
 msgid "Con_firm Passphrase:"
 msgstr "Parola Metnini _Onayla:"
 
-#: src/seahorse-generate-select.ui:15
+#: src/seahorse-generate-select.ui:5
+msgid "New item"
+msgstr "Yeni öge"
+
+#: src/seahorse-generate-select.ui:21
 msgid "_Select the type of item to create:"
 msgstr "_Oluşturmak için öge türünü seçin:"
+
+#: src/seahorse-generate-select.ui:74
+msgid "Continue"
+msgstr "Devam"
 
 #: src/seahorse-key-manager.ui:57
 msgid "Add a new key or item"
