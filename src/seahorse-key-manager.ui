@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.0"/>
-      <object class="GtkVBox" id="key-manager">
+  <requires lib="gtk+" version="3.22"/>
+      <object class="GtkBox" id="key-manager">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkVBox" id="menu-placeholder">
+          <object class="GtkBox" id="menu-placeholder">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="can_focus">False</property>
             <child>
               <placeholder/>
@@ -75,11 +77,6 @@
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkScrolledWindow" id="key-list-scroll-area">
@@ -101,7 +98,6 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -111,8 +107,9 @@
                     <property name="xalign">0</property>
                     <property name="yscale">0</property>
                     <child>
-                      <object class="GtkVBox" id="first-time-box">
+                      <object class="GtkBox" id="first-time-box">
                         <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
                         <property name="border_width">12</property>
                         <property name="spacing">6</property>
                         <child>
@@ -145,44 +142,51 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkTable" id="table2">
+                          <object class="GtkGrid" id="table2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="border_width">6</property>
-                            <property name="n_rows">3</property>
-                            <property name="n_columns">2</property>
                             <property name="column_spacing">12</property>
                             <property name="row_spacing">6</property>
                             <child>
-                              <object class="GtkButton" id="new-button">
-                                <property name="label">gtk-new</property>
+                              <object class="GtkButton" id="help-button">
+                                <property name="label">gtk-help</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="can_default">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_stock">True</property>
+                                <signal name="clicked" handler="on_widget_help" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="top_attach">0</property>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label21">
+                              <object class="GtkLabel" id="label18">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Generate a new key of your own: </property>
+                                <property name="label" translatable="yes">To get started with encryption you will need keys.</property>
+                                <property name="wrap">True</property>
                               </object>
                               <packing>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
+                                <property name="top_attach">0</property>
+                                <property name="left_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label19">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Import existing keys from a file:</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="left_attach">0</property>
                               </packing>
                             </child>
                             <child>
@@ -199,8 +203,9 @@
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox4">
+                                      <object class="GtkBox" id="hbox4">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="can_focus">False</property>
                                         <property name="spacing">2</property>
                                         <child>
@@ -234,57 +239,34 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
                                 <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
+                                <property name="left_attach">1</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label19">
+                              <object class="GtkLabel" id="label21">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Import existing keys from a file:</property>
+                                <property name="label" translatable="yes">Generate a new key of your own: </property>
                               </object>
                               <packing>
-                                <property name="top_attach">1</property>
-                                <property name="bottom_attach">2</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
+                                <property name="top_attach">2</property>
+                                <property name="left_attach">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="help-button">
-                                <property name="label">gtk-help</property>
+                              <object class="GtkButton" id="new-button">
+                                <property name="label">gtk-new</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="can_default">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_stock">True</property>
-                                <signal name="clicked" handler="on_widget_help" swapped="no"/>
                               </object>
                               <packing>
+                                <property name="top_attach">2</property>
                                 <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label18">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">To get started with encryption you will need keys.</property>
-                                <property name="wrap">True</property>
-                              </object>
-                              <packing>
-                                <property name="x_options"></property>
-                                <property name="y_options"></property>
                               </packing>
                             </child>
                           </object>
@@ -297,11 +279,6 @@
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
               </object>
               <packing>
