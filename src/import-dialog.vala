@@ -25,29 +25,28 @@ public class Seahorse.ImportDialog : Gtk.Dialog {
     private Gcr.ImportButton import;
 
     public ImportDialog(Gtk.Window? parent) {
-        GLib.Object(transient_for: parent);
+        GLib.Object(
+            transient_for: parent,
+            title: _("Data to be imported"),
+            use_header_bar: 1
+        );
 
         Gtk.Widget button = new Gtk.Button.with_mnemonic(_("_Cancel"));
         button.show();
         add_action_widget(button, Gtk.ResponseType.CANCEL);
 
         this.import = new Gcr.ImportButton(_("Import"));
+        this.import.halign = Gtk.Align.END;
+        this.import.visible = true;
+        this.import.get_style_context().add_class("suggested-action");
         this.import.importing.connect(() => this.viewer.clear_error());
         this.import.imported.connect(on_import_button_imported);
-        this.import.show();
-        ((Gtk.Box) get_action_area()).pack_start(this.import, false, true, 0);
-
-        Gtk.Frame frame = new Gtk.Frame(_("<b>Data to be imported:</b>"));
-        ((Gtk.Label) frame.label_widget).use_markup = true;
-        ((Gtk.Box) get_content_area()).pack_start(frame, true, true, 0);
-        frame.set_border_width(6);
-        frame.show();
+        add_action_widget(this.import, Gtk.ResponseType.OK);
 
         this.viewer = new Gcr.ViewerWidget();
         this.viewer.added.connect((v, r, parsed) => this.import.add_parsed(parsed));
         this.viewer.show();
-
-        frame.add(this.viewer);
+        ((Gtk.Box) get_content_area()).pack_end(this.viewer);
     }
 
     public void add_uris(string[] uris) {
