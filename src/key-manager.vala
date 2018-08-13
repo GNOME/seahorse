@@ -74,7 +74,7 @@ public class Seahorse.KeyManager : Catalog {
         );
         this.settings = new GLib.Settings("org.gnome.seahorse.manager");
 
-        set_default_geometry(640, 476);
+        set_default_size(640, 476);
         set_events(Gdk.EventMask.POINTER_MOTION_MASK
                    | Gdk.EventMask.POINTER_MOTION_HINT_MASK
                    | Gdk.EventMask.BUTTON_PRESS_MASK
