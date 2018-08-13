@@ -193,22 +193,17 @@ public abstract class Catalog : Gtk.ApplicationWindow {
 		Viewable.view(obj, this);
 	}
 
-	public void show_context_menu(string name,
-	                              uint button,
-	                              uint time)
-	{
-		var path = "/%s".printf(name);
-		var menu = this._ui_manager.get_widget(path);
+    public void show_context_menu(string name, Gdk.Event? event) {
+        var widget = this._ui_manager.get_widget("/%s".printf(name));
 
-		if (menu == null)
-			return;
-		if (menu is Gtk.Menu) {
-			((Gtk.Menu)menu).popup(null, null, null, button, time);
-			menu.show();
-		} else {
-			GLib.warning("the object /%s isn't a menu", name);
-		}
-	}
+        Gtk.Menu? menu = widget as Gtk.Menu;
+        if (menu == null) {
+            warning("the object /%s isn't a menu", name);
+            return;
+        }
+        menu.popup_at_pointer(event);
+        menu.show();
+    }
 
 	private GLib.List<Gtk.ActionGroup> lookup_actions_for_objects (GLib.List<GLib.Object> objects) {
 		var table = new GLib.HashTable<Gtk.ActionGroup, weak Gtk.ActionGroup>(GLib.direct_hash, GLib.direct_equal);

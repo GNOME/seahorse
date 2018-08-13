@@ -195,7 +195,7 @@ public class Seahorse.KeyManager : Catalog {
 
     private bool on_keymanager_key_list_button_pressed(Gdk.EventButton event) {
         if (event.button == 3)
-            show_context_menu(Catalog.MENU_OBJECT, event.button, event.time);
+            show_context_menu(Catalog.MENU_OBJECT, event);
 
         return false;
     }
@@ -203,7 +203,7 @@ public class Seahorse.KeyManager : Catalog {
     private bool on_keymanager_key_list_popup_menu() {
         GLib.List<GLib.Object> objects = get_selected_objects();
         if (objects != null)
-            show_context_menu(Catalog.MENU_OBJECT, 0, Gtk.get_current_event_time());
+            show_context_menu(Catalog.MENU_OBJECT, null);
         return false;
     }
 

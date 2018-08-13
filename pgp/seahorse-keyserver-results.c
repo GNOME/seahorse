@@ -109,7 +109,7 @@ on_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKe
 	if (event->button == 3)
 		seahorse_catalog_show_context_menu (SEAHORSE_CATALOG (self),
 		                                   SEAHORSE_CATALOG_MENU_OBJECT,
-		                                   event->button, event->time);
+		                                   event);
 	return FALSE;
 }
 
@@ -125,7 +125,7 @@ on_key_list_popup_menu (GtkTreeView* view, SeahorseKeyserverResults* self)
 	if (objects != NULL)
 		seahorse_catalog_show_context_menu (SEAHORSE_CATALOG (self),
 		                                   SEAHORSE_CATALOG_MENU_OBJECT,
-		                                   0, gtk_get_current_event_time ());
+		                                   NULL);
 	g_list_free (objects);
 	return TRUE;
 }
