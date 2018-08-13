@@ -51,10 +51,10 @@ public class Request : Gtk.Dialog {
 		this._name_entry = (Gtk.Entry)builder.get_object("request-name");
 		this._name_entry.changed.connect(() => { update_response(); });
 
-		/* The buttons */
-		this.add_buttons(Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL,
-		                 _("Create"), Gtk.ResponseType.OK);
-		this.set_default_response (Gtk.ResponseType.OK);
+        // The buttons
+        this.add_buttons(_("_Cancel"), Gtk.ResponseType.CANCEL,
+                         _("Create"), Gtk.ResponseType.OK);
+        this.set_default_response (Gtk.ResponseType.OK);
 
 		this.update_response ();
 
@@ -99,12 +99,12 @@ public class Request : Gtk.Dialog {
 
 	private static string BAD_FILENAME_CHARS = "/\\<>|?*";
 
-	private void save_certificate_request(Gcr.CertificateRequest req,
-	                                      Gtk.Window? parent) {
-		var chooser = new Gtk.FileChooserDialog(_("Save certificate request"),
-		                                        parent, Gtk.FileChooserAction.SAVE,
-		                                        Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL,
-		                                        Gtk.Stock.SAVE, Gtk.ResponseType.ACCEPT);
+    private void save_certificate_request(Gcr.CertificateRequest req,
+                                          Gtk.Window? parent) {
+        var chooser = new Gtk.FileChooserDialog(_("Save certificate request"),
+                                                parent, Gtk.FileChooserAction.SAVE,
+                                                _("_Cancel"), Gtk.ResponseType.CANCEL,
+                                                _("_Save"), Gtk.ResponseType.ACCEPT);
 
 		chooser.set_default_response(Gtk.ResponseType.ACCEPT);
 		chooser.set_local_only(false);
