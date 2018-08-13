@@ -109,7 +109,7 @@ on_key_list_button_pressed (GtkTreeView* view, GdkEventButton* event, SeahorseKe
 	if (event->button == 3)
 		seahorse_catalog_show_context_menu (SEAHORSE_CATALOG (self),
 		                                   SEAHORSE_CATALOG_MENU_OBJECT,
-		                                   event);
+		                                   (GdkEvent *) event);
 	return FALSE;
 }
 
