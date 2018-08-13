@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 3.3.4\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2018-08-11 17:26+0000\n"
+"POT-Creation-Date: 2018-08-12 17:17+0000\n"
 "PO-Revision-Date: 2018-08-12 16:51+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
@@ -29,7 +29,8 @@ msgstr "自訂"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
-#: gkr/seahorse-gkr-add-keyring.ui:82 src/seahorse-generate-select.ui:62
+#: gkr/seahorse-gkr-add-keyring.ui:82 pkcs11/seahorse-pkcs11-generate.ui:186
+#: src/seahorse-generate-select.ui:62
 msgid "Cancel"
 msgstr "取消"
 
@@ -1027,7 +1028,7 @@ msgstr "永不過期(_X)"
 msgid "If key never expires"
 msgstr "如果金鑰永不過期"
 
-#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:149
+#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
 msgid "Key _Type:"
 msgstr "金鑰類型(_T)："
 
@@ -1126,6 +1127,14 @@ msgstr "無法加入使用者 id"
 msgid "Add user ID to %s"
 msgstr "加入使用者 ID 至 %s"
 
+#: pgp/seahorse-gpgme.c:69
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr "解密失敗。您可能沒有解密的金鑰。"
+
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
+msgid "The operation was cancelled"
+msgstr "該操作已取消"
+
 #: pgp/seahorse-gpgme-expires.c:63
 msgid "Invalid expiry date"
 msgstr "無效的到期日"
@@ -1167,7 +1176,7 @@ msgstr "PGP 金鑰"
 msgid "Used to encrypt email and files"
 msgstr "用作加密郵件及檔案"
 
-#: pgp/seahorse-gpgme-generate.c:129 pkcs11/seahorse-pkcs11-generate.c:90
+#: pgp/seahorse-gpgme-generate.c:129 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:141
 msgid "RSA"
 msgstr "RSA"
@@ -1203,7 +1212,7 @@ msgstr ""
 "打字、移動滑鼠、使用應用程式等。\n"
 "這樣就會讓系統取得所需亂數資料。"
 
-#: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
+#: pgp/seahorse-gpgme-generate.c:230 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "正在產生金鑰"
 
@@ -1430,14 +1439,6 @@ msgstr "不明"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-gpgme.c:69
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr "解密失敗。您可能沒有解密的金鑰。"
-
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
-msgid "The operation was cancelled"
-msgstr "該操作已取消"
-
 #: pgp/seahorse-hkp-source.c:567
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
@@ -1626,7 +1627,7 @@ msgstr "新增 PGP 金鑰"
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "PGP 金鑰允許您將給別人的電郵及檔案加密。"
 
-#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:226
+#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "進階金鑰選項(_A)"
 
@@ -1638,7 +1639,7 @@ msgstr "附註(_C)："
 msgid "Encryption _Type:"
 msgstr "加密類型(_T)："
 
-#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:164
+#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
 #: ssh/seahorse-ssh-generate.ui:158
 msgid "Key _Strength (bits):"
 msgstr "金鑰強度[位元](_S)："
@@ -1658,6 +1659,14 @@ msgstr "建立(_R)"
 #: pgp/seahorse-pgp-generate.ui:312
 msgid "Generate a new key"
 msgstr "產生新的金鑰"
+
+#: pgp/seahorse-pgp-key.c:349
+msgid "Personal PGP key"
+msgstr "個人 PGP 金鑰"
+
+#: pgp/seahorse-pgp-key.c:351
+msgid "PGP key"
+msgstr "PGP 金鑰"
 
 #: pgp/seahorse-pgp-key-properties.c:312
 msgid "Couldn’t change primary user ID"
@@ -1783,14 +1792,6 @@ msgstr "良好"
 #: pgp/seahorse-pgp-key-properties.c:1857
 msgid "Key ID"
 msgstr "金鑰 ID"
-
-#: pgp/seahorse-pgp-key.c:349
-msgid "Personal PGP key"
-msgstr "個人 PGP 金鑰"
-
-#: pgp/seahorse-pgp-key.c:351
-msgid "PGP key"
-msgstr "PGP 金鑰"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:31
 #: pgp/seahorse-pgp-public-key-properties.ui:32
@@ -2088,6 +2089,19 @@ msgstr "撤銷的描述（非必要）"
 msgid "Re_voke"
 msgstr "撤銷(_V)"
 
+#: pgp/seahorse-signer.c:63
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr "您沒有  PGP 金鑰可用作簽署文件或訊息。"
+
+#: pgp/seahorse-signer.ui:7
+msgid "Choose Signing Key"
+msgstr "選擇簽署金鑰"
+
+#: pgp/seahorse-signer.ui:25
+msgid "_Sign message with key:"
+msgstr "簽署信息的金鑰(_S)："
+
 #: pgp/seahorse-sign.ui:7
 msgid "Sign Key"
 msgstr "簽署金鑰"
@@ -2172,19 +2186,6 @@ msgstr "簽章者(_S)"
 msgid "_Sign"
 msgstr "簽署(_S)"
 
-#: pgp/seahorse-signer.c:63
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr "您沒有  PGP 金鑰可用作簽署文件或訊息。"
-
-#: pgp/seahorse-signer.ui:7
-msgid "Choose Signing Key"
-msgstr "選擇簽署金鑰"
-
-#: pgp/seahorse-signer.ui:25
-msgid "_Sign message with key:"
-msgstr "簽署信息的金鑰(_S)："
-
 #: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
 msgid "Exporting data"
 msgstr "匯出資料"
@@ -2227,6 +2228,18 @@ msgid "Are you sure you want to permanently delete %d certificate?"
 msgid_plural "Are you sure you want to permanently delete %d certificates?"
 msgstr[0] "您確定要永久刪除 %d 個憑證？"
 
+#: pkcs11/pkcs11-generate.vala:229
+msgid "Couldn’t generate private key"
+msgstr "無法產生私密金鑰"
+
+#: pkcs11/pkcs11-generate.vala:284 pkcs11/pkcs11-private-key.vala:70
+msgid "Private key"
+msgstr "私密金鑰"
+
+#: pkcs11/pkcs11-generate.vala:285
+msgid "Used to request a certificate"
+msgstr "用來申請憑證"
+
 #: pkcs11/pkcs11-key-deleter.vala:34
 msgid "I understand that this key will be permanently deleted."
 msgstr "我知道這個金鑰會被永久刪除。"
@@ -2234,10 +2247,6 @@ msgstr "我知道這個金鑰會被永久刪除。"
 #: pkcs11/pkcs11-private-key.vala:61
 msgid "Unnamed private key"
 msgstr "未命名的私密金鑰"
-
-#: pkcs11/pkcs11-private-key.vala:70 pkcs11/seahorse-pkcs11-generate.c:505
-msgid "Private key"
-msgstr "私密金鑰"
 
 #: pkcs11/pkcs11-properties.vala:134
 msgid "Unnamed"
@@ -2271,7 +2280,7 @@ msgstr "申請憑證(_C)"
 msgid "Create a certificate request file for this key"
 msgstr "為這個金鑰建立憑證申請"
 
-#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.c:412
+#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.ui:193
 msgid "Create"
 msgstr "建立"
 
@@ -2300,31 +2309,27 @@ msgctxt "Label"
 msgid "Unknown"
 msgstr "不明"
 
-#: pkcs11/seahorse-pkcs11-backend.c:189
+#: pkcs11/seahorse-pkcs11-backend.c:187
 msgid "Certificates"
 msgstr "憑證"
 
-#: pkcs11/seahorse-pkcs11-backend.c:195
+#: pkcs11/seahorse-pkcs11-backend.c:193
 msgid "X.509 certificates and related keys"
 msgstr "X.509 憑證和相關金鑰"
 
-#: pkcs11/seahorse-pkcs11-generate.c:113
-msgid "Couldn’t generate private key"
-msgstr "無法產生私密金鑰"
+#: pkcs11/seahorse-pkcs11-generate.ui:6
+msgid "New private key"
+msgstr "新增私密金鑰"
 
-#: pkcs11/seahorse-pkcs11-generate.c:506
-msgid "Used to request a certificate"
-msgstr "用來申請憑證"
-
-#: pkcs11/seahorse-pkcs11-generate.ui:34
+#: pkcs11/seahorse-pkcs11-generate.ui:39
 msgid "Create a new private key"
 msgstr "建立新的私密金鑰"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:53
+#: pkcs11/seahorse-pkcs11-generate.ui:58
 msgid "Label:"
 msgstr "標籤："
 
-#: pkcs11/seahorse-pkcs11-generate.ui:66
+#: pkcs11/seahorse-pkcs11-generate.ui:71
 msgid "Stored at:"
 msgstr "儲存在："
 
@@ -2340,15 +2345,15 @@ msgstr "放在憑證申請中的一般名稱 (CN)。"
 msgid "Name (CN):"
 msgstr "一般名稱 (CN)："
 
-#: src/application.vala:66
+#: src/application.vala:64
 msgid "Version of this application"
 msgstr "這個應用程式的版本"
 
-#: src/application.vala:71 src/application.vala:107
+#: src/application.vala:69 src/application.vala:105
 msgid "- System Settings"
 msgstr "- 系統設定值"
 
-#: src/application.vala:102
+#: src/application.vala:100
 msgid "Don't display a window"
 msgstr "不要顯示視窗"
 
