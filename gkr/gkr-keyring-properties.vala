@@ -78,7 +78,7 @@ public class Seahorse.Gkr.KeyringProperties : Gtk.Dialog {
 
     private void update_lock_unlock_button() {
         this.lock_unlock_stack.visible_child_name
-            = this.keyring.locked? "lock_unlock_button_locked" : "lock_unlock_button_unlocked";
+            = this.keyring.locked? "lock_unlock_button_unlocked" : "lock_unlock_button_locked";
     }
 
     private async void set_keyring_locked() {
@@ -90,7 +90,7 @@ public class Seahorse.Gkr.KeyringProperties : Gtk.Dialog {
                 yield this.keyring.lock(null, null);
         } catch (Error e) {
             warning("Couldn't %s keyring <%s>",
-                this.keyring.locked? "lock" : "unlock",
+                this.keyring.locked? "unlock" : "lock",
                 this.keyring.label);
         }
 
