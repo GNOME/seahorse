@@ -32,6 +32,7 @@ public class Seahorse.Ssh.Upload : Gtk.Dialog {
     private Gtk.Button setup_button;
 
     public Upload(List<Key> keys, Gtk.Window? parent) {
+        GLib.Object(use_header_bar: 1);
         this.transient_for = parent;
         this.keys = keys;
 
