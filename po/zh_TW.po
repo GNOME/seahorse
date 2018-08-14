@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 3.3.4\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2018-08-12 17:17+0000\n"
-"PO-Revision-Date: 2018-08-12 16:51+0800\n"
+"POT-Creation-Date: 2018-08-13 19:47+0000\n"
+"PO-Revision-Date: 2018-08-14 19:47+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -158,8 +158,10 @@ msgstr "內容(_C)"
 msgid "Show Seahorse help"
 msgstr "顯示 Seahorse 的說明文件"
 
+#. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117 src/import-dialog.vala:30
+#: common/passphrase-prompt.vala:117 pkcs11/pkcs11-request.vala:55
+#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
 #: src/key-manager.vala:237
 msgid "_Cancel"
 msgstr "取消(_C)"
@@ -1478,7 +1480,7 @@ msgstr "尋找遠端金鑰(_F)…"
 msgid "Search for keys on a key server"
 msgstr "在金鑰伺服器尋找金鑰"
 
-#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:222
+#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:227
 msgid "_Import"
 msgstr "匯入(_I)"
 
@@ -2292,6 +2294,10 @@ msgstr "無法建立憑證申請"
 msgid "Save certificate request"
 msgstr "儲存憑證申請"
 
+#: pkcs11/pkcs11-request.vala:107
+msgid "_Save"
+msgstr "儲存(_S)"
+
 #: pkcs11/pkcs11-request.vala:113
 msgid "Certificate request"
 msgstr "憑證申請"
@@ -2357,15 +2363,15 @@ msgstr "- 系統設定值"
 msgid "Don't display a window"
 msgstr "不要顯示視窗"
 
-#: src/import-dialog.vala:34
+#: src/import-dialog.vala:30
+msgid "Data to be imported"
+msgstr "要匯入的資料"
+
+#: src/import-dialog.vala:38
 msgid "Import"
 msgstr "匯入"
 
-#: src/import-dialog.vala:40
-msgid "<b>Data to be imported:</b>"
-msgstr "<b>要匯入的資料：</b>"
-
-#: src/import-dialog.vala:75
+#: src/import-dialog.vala:74
 msgid "Import failed"
 msgstr "匯入失敗"
 
@@ -2487,29 +2493,29 @@ msgstr "選取想要建立的項目類型(_S)："
 msgid "Continue"
 msgstr "繼續"
 
-#: src/seahorse-key-manager.ui:57
+#: src/seahorse-key-manager.ui:59
 msgid "Add a new key or item"
 msgstr "加入新的金鑰或項目"
 
-#: src/seahorse-key-manager.ui:74
+#: src/seahorse-key-manager.ui:76
 msgid "Filter"
 msgstr "過濾條件"
 
-#: src/seahorse-key-manager.ui:124
+#: src/seahorse-key-manager.ui:121
 msgid "First time options:"
 msgstr "第一次執行選項："
 
-#: src/seahorse-key-manager.ui:179
-msgid "Generate a new key of your own: "
-msgstr "產生您的金鑰："
+#: src/seahorse-key-manager.ui:172
+msgid "To get started with encryption you will need keys."
+msgstr "開始加密前您需要擁有金鑰。"
 
-#: src/seahorse-key-manager.ui:250
+#: src/seahorse-key-manager.ui:185
 msgid "Import existing keys from a file:"
 msgstr "從檔案中匯入已存的金鑰"
 
-#: src/seahorse-key-manager.ui:282
-msgid "To get started with encryption you will need keys."
-msgstr "開始加密前您需要擁有金鑰。"
+#: src/seahorse-key-manager.ui:251
+msgid "Generate a new key of your own: "
+msgstr "產生您的金鑰："
 
 #: src/sidebar.vala:589
 msgid "Couldn’t lock"
