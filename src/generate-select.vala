@@ -50,8 +50,12 @@ public class Seahorse.GenerateSelect : Gtk.Dialog {
             return ((Gtk.Action) a).label.collate(((Gtk.Action) b).label);
         });
 
-        // Select first item
-        this.generate_list.select_row(this.generate_list.get_row_at_index(0));
+        // Select first item (and grab focus, so user can use the keyboard immediately)
+        weak Gtk.ListBoxRow? row = this.generate_list.get_row_at_index(0);
+        if (row != null) {
+            this.generate_list.select_row(row);
+            row.grab_focus();
+        }
     }
 
     private Gtk.ListBoxRow on_create_row(GLib.Object item) {
