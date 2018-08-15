@@ -71,7 +71,8 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         this.updating_ui = true;
 
         // Image
-        this.key_image.set_from_icon_name(Seahorse.ICON_KEY_SSH, Gtk.IconSize.DIALOG);
+        if (this.key.icon != null)
+            this.key_image.set_from_gicon(this.key.icon, Gtk.IconSize.DIALOG);
         // Name and title
         this.comment_entry.text = this.key.label;
         this.title = this.key.label;
