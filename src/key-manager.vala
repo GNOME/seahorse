@@ -25,7 +25,6 @@ public class Seahorse.KeyManager : Catalog {
     private Gtk.ActionGroup view_actions;
     private Gtk.RadioAction show_action;
     private Gtk.SearchEntry filter_entry;
-    private Predicate pred;
     private Sidebar sidebar;
 
     private Gtk.TreeView view;
@@ -35,12 +34,6 @@ public class Seahorse.KeyManager : Catalog {
     private GLib.Settings settings;
     private int sidebar_width;
     private uint sidebar_width_sig;
-
-    private enum ShowFilter {
-        ANY,
-        PERSONAL,
-        TRUSTED,
-    }
 
     private enum DndTarget { // Drag 'n Drop target type
         PLAIN,
@@ -62,9 +55,9 @@ public class Seahorse.KeyManager : Catalog {
     };
 
     private const Gtk.RadioActionEntry[] VIEW_RADIO_ACTIONS = {
-        { "view-personal", null, N_("Show _Personal"), null, N_("Only show personal keys, certificates and passwords"), ShowFilter.PERSONAL },
-        { "view-trusted", null, N_("Show _Trusted"), null, N_("Only show trusted keys, certificates and passwords"), ShowFilter.TRUSTED },
-        { "view-any", null, N_("Show _Any"), null, N_("Show all keys, certificates and passwords"), ShowFilter.ANY },
+        { "view-personal", null, N_("Show _Personal"), null, N_("Only show personal keys, certificates and passwords"), KeyManagerStore.ShowFilter.PERSONAL },
+        { "view-trusted", null, N_("Show _Trusted"), null, N_("Only show trusted keys, certificates and passwords"), KeyManagerStore.ShowFilter.TRUSTED },
+        { "view-any", null, N_("Show _Any"), null, N_("Show all keys, certificates and passwords"), KeyManagerStore.ShowFilter.ANY },
     };
 
     public KeyManager(Application app) {
@@ -94,7 +87,7 @@ public class Seahorse.KeyManager : Catalog {
         this.view.realize();
 
         // Add new key store and associate it
-        this.store = new KeyManagerStore(this.collection, this.view, this.pred, this.settings);
+        this.store = new KeyManagerStore(this.collection, this.view, this.settings);
 
         init_actions();
 
@@ -351,41 +344,14 @@ public class Seahorse.KeyManager : Catalog {
         this.application.quit();
     }
 
-    private string update_view_filter() {
-        string val = "";
-
-        switch (this.show_action.get_current_value()) {
-            case ShowFilter.PERSONAL:
-                this.pred.flags = Seahorse.Flags.PERSONAL;
-                val = "personal";
-                break;
-            case ShowFilter.TRUSTED:
-                this.pred.flags = Seahorse.Flags.TRUSTED;
-                val = "trusted";
-                break;
-            case ShowFilter.ANY:
-                this.pred.flags = 0;
-                val = "";
-                break;
-        }
-
+    private unowned string update_view_filter() {
+        this.store.showfilter = (KeyManagerStore.ShowFilter) this.show_action.current_value;
         this.store.refilter();
-        return val;
+        return this.store.showfilter.to_string();
     }
 
     private void on_item_filter_changed(GLib.Settings settings, string? key) {
-        int radio;
-
-        string? value = settings.get_string(key);
-        if (value == null || value == "")
-            radio = ShowFilter.ANY;
-        else if (value == "personal")
-            radio = ShowFilter.PERSONAL;
-        else if (value == "trusted")
-            radio = ShowFilter.TRUSTED;
-        else
-            radio = -1;
-
+        int radio = KeyManagerStore.ShowFilter.from_string(settings.get_string(key));
         this.show_action.set_current_value(radio);
         update_view_filter();
     }

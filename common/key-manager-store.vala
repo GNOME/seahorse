@@ -27,9 +27,37 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
     private static Gdk.Atom XDS_ATOM = Gdk.Atom.intern("XdndDirectSave0", false);
     private static Gdk.Atom TEXT_ATOM = Gdk.Atom.intern("text/plain", false);
 
-    public enum Mode {
-        ALL,
-        FILTERED
+    public enum ShowFilter {
+        ANY,
+        PERSONAL,
+        TRUSTED;
+
+        public unowned string? to_string() {
+            switch (this) {
+                case ShowFilter.ANY:
+                    return "";
+                case ShowFilter.PERSONAL:
+                    return "personal";
+                case ShowFilter.TRUSTED:
+                    return "trusted";
+                default:
+                    assert_not_reached();
+            }
+        }
+
+        public static ShowFilter from_string(string? str) {
+            switch (str) {
+                case null:
+                case "":
+                    return ShowFilter.ANY;
+                case "personal":
+                    return ShowFilter.PERSONAL;
+                case "trusted":
+                    return ShowFilter.TRUSTED;
+                default:
+                    assert_not_reached();
+            }
+        }
     }
 
     private enum DragInfo {
@@ -65,6 +93,8 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
     }
     private string _filter = "";
 
+    public ShowFilter showfilter { get; set; default = ShowFilter.ANY; }
+
     private enum Column {
         ICON,
         MARKUP,
@@ -90,10 +120,8 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
             null);
     }
 
-    public KeyManagerStore (Gcr.Collection? collection, Gtk.TreeView? view, Predicate? pred, GLib.Settings settings) {
-        pred.custom = on_filter_visible;
-        pred.custom_target = this;
-        this.collection = new Collection.for_predicate (collection, pred, null);
+    public KeyManagerStore (Gcr.Collection? collection, Gtk.TreeView? view, GLib.Settings settings) {
+        this.collection = new Gcr.FilterCollection.with_callback(collection, on_filter_visible);
         this.settings = settings;
 
         // The sorted model is the top level model
@@ -131,8 +159,6 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         col.set_expand(true);
         view.append_column(col);
         col.set_sort_column_id(Column.LABEL);
-
-        // Use predicate to figure out which columns to add
 
         // Also watch for sort-changed on the store
         this.sort_column_changed.connect(on_sort_column_changed);
@@ -184,14 +210,32 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         return false;
     }
 
+    private bool apply_showfilter(GLib.Object? obj) {
+        if (this.showfilter == ShowFilter.ANY)
+            return true;
+
+        unowned Object? object = obj as Object;
+        if (object == null)
+            return false;
+
+        switch (this.showfilter) {
+            case ShowFilter.PERSONAL:
+                return Seahorse.Flags.PERSONAL in object.object_flags;
+            case ShowFilter.TRUSTED:
+                return Seahorse.Flags.TRUSTED in object.object_flags;
+        }
+
+        return false;
+    }
+
     // Called to filter each row
-    private static bool on_filter_visible (GLib.Object? obj, void* custom_target) {
-        KeyManagerStore self = (KeyManagerStore) custom_target;
-        return self.object_contains_filtered_text (obj, self.filter);
+    private bool on_filter_visible (GLib.Object? obj) {
+        return apply_showfilter(obj)
+            && object_contains_filtered_text(obj, this.filter);
     }
 
     public void refilter() {
-        ((Collection) get_collection()).refresh();
+        ((Gcr.FilterCollection) this.collection).refilter();
     }
 
     // Update the sort order for a column
