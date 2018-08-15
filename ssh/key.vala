@@ -93,91 +93,53 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
     }
 
     private void changed_key() {
-        string display = null;
-        string simple = null;
-
-        // TODO - this is a stupid hack until we can set the properties normally
-        Value labelValue = Value(typeof(string));
-        Value actionsValue = Value(typeof(Gtk.ActionGroup));
-        Value iconValue = Value(typeof(Icon?));
-        Value usageValue = Value(typeof(Seahorse.Usage));
-        Value nicknameValue = Value(typeof(string));
-        Value flagsValue = Value(typeof(uint));
-        Value markupValue = Value(typeof(string));
-        Value identifierValue = Value(typeof(string));
+        if (this.key_data == null || this.key_data.fingerprint == null) {
+            this.label = "";
+            this.icon = null;
+            this.usage = Usage.NONE;
+            this.nickname = "";
+            this.object_flags = Flags.DISABLED;
+            return;
+        }
 
         if (this.key_data != null) {
             // Try to make display and simple names
             if (this.key_data.comment != null) {
-                display = this.key_data.comment;
-                simple = parse_first_word(this.key_data.comment);
+                this.label = this.key_data.comment;
+                this.nickname = parse_first_word(this.key_data.comment);
 
             // No names when not even the fingerpint loaded
             } else if (this.key_data.fingerprint == null) {
-                display = _("(Unreadable Secure Shell Key)");
+                this.label = _("(Unreadable Secure Shell Key)");
             // No comment, but loaded
             } else {
-                display = _("Secure Shell Key");
+                this.label = _("Secure Shell Key");
             }
 
-            if (simple == null)
-                simple = _("Secure Shell Key");
+            if (this.nickname == null || this.nickname == "")
+                this.nickname = _("Secure Shell Key");
         }
 
-        if (this.key_data == null || this.key_data.fingerprint == null) {
-            labelValue.set_string("");
-            set_property("label", labelValue);
-            iconValue.set_object(null);
-            set_property("icon", iconValue);
-            usageValue.set_enum(Seahorse.Usage.NONE);
-            set_property("usage", usageValue);
-            labelValue.set_string("");
-            set_property("nickname", nicknameValue);
-            usageValue.set_uint((uint) Seahorse.Flags.DISABLED);
-            set_property("object-flags", flagsValue);
-            return;
-        }
+        this.object_flags = Seahorse.Flags.EXPORTABLE | Seahorse.Flags.DELETABLE;
+        if (this.key_data.authorized)
+            this.object_flags |= Seahorse.Flags.TRUSTED;
 
-        Seahorse.Usage usage;
-        Seahorse.Flags flags = Seahorse.Flags.EXPORTABLE | Seahorse.Flags.DELETABLE;
-        Icon icon;
         if (this.key_data.privfile != null) {
-            usage = Seahorse.Usage.PRIVATE_KEY;
-            flags |= Seahorse.Flags.PERSONAL | Seahorse.Flags.TRUSTED;
-            icon = new ThemedIcon(Gcr.ICON_KEY_PAIR);
+            this.usage = Seahorse.Usage.PRIVATE_KEY;
+            this.object_flags |= Seahorse.Flags.PERSONAL | Seahorse.Flags.TRUSTED;
+            this.icon = new ThemedIcon(Gcr.ICON_KEY_PAIR);
         } else {
-            flags = 0;
-            usage = Seahorse.Usage.PUBLIC_KEY;
-            icon = new ThemedIcon(Gcr.ICON_KEY);
+            this.object_flags = 0;
+            this.usage = Seahorse.Usage.PUBLIC_KEY;
+            this.icon = new ThemedIcon(Gcr.ICON_KEY);
         }
 
         string filename = Path.get_basename(this.key_data.privfile ?? this.key_data.pubfile);
+        this.markup = Markup.printf_escaped("%s<span size='small' rise='0' foreground='#555555'>\n%s</span>",
+                                            this.label, filename);
 
-        string markup = Markup.printf_escaped("%s<span size='small' rise='0' foreground='#555555'>\n%s</span>",
-                                              display, filename);
-
-        string identifier = calc_identifier(this.key_data.fingerprint);
-        Actions actions = Actions.instance();
-
-        if (this.key_data.authorized)
-            flags |= Seahorse.Flags.TRUSTED;
-
-        actionsValue.set_object(actions);
-        set_property("actions", actionsValue);
-        markupValue.set_string(markup);
-        set_property("markup", markupValue);
-        labelValue.set_string(display);
-        set_property("label", labelValue);
-        iconValue.set_object(icon);
-        set_property("icon", iconValue);
-        usageValue.set_enum(usage);
-        set_property("usage", usageValue);
-        nicknameValue.set_string(simple);
-        set_property("nickname", nicknameValue);
-        identifierValue.set_string(identifier);
-        set_property("identifier", identifierValue);
-        flagsValue.set_uint((uint) flags);
-        set_property("object-flags", flagsValue);
+        this.actions = Actions.instance();
+        this.identifier = calc_identifier(this.key_data.fingerprint);
     }
 
     public void refresh() {
