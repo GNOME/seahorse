@@ -28,10 +28,8 @@ public class Seahorse.Collection : Gcr.Collection, GLib.Object {
      */
     public Gcr.Collection base_collection { get; construct set; }
 
-    /**
-     * Predicate for matching objects into this set.
-     */
-    public Predicate? predicate { get; private set; }
+    /* Predicate for matching objects into this set. */
+    private Predicate? predicate;
 
     public Collection.for_predicate (Gcr.Collection base_collection, Predicate? pred, DestroyNotify? destroy_func) {
         GLib.Object (base_collection: base_collection);
