@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2018-08-11 17:26+0000\n"
-"PO-Revision-Date: 2018-08-11 21:51+0300\n"
+"POT-Creation-Date: 2018-08-15 23:04+0000\n"
+"PO-Revision-Date: 2018-08-16 23:12+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -37,7 +37,8 @@ msgstr "Kitoks"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
-#: gkr/seahorse-gkr-add-keyring.ui:82 src/seahorse-generate-select.ui:62
+#: gkr/seahorse-gkr-add-keyring.ui:82 pkcs11/seahorse-pkcs11-generate.ui:186
+#: src/seahorse-generate-select.ui:62 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Atsisakyti"
 
@@ -45,16 +46,16 @@ msgstr "Atsisakyti"
 msgid "Save"
 msgstr "Įrašyti"
 
-#: common/catalog.vala:249
+#: common/catalog.vala:244
 msgid "Contributions:"
 msgstr "Padėkos:"
 
-#: common/catalog.vala:275 data/seahorse.desktop.in.in:3
-#: src/key-manager.vala:82
+#: common/catalog.vala:270 data/seahorse.desktop.in.in:3
+#: src/key-manager.vala:75
 msgid "Passwords and Keys"
 msgstr "Slaptažodžiai ir raktai"
 
-#: common/catalog.vala:277
+#: common/catalog.vala:272
 msgid "translator-credits"
 msgstr ""
 "Mantas Kriaučiūnas <mantas@akl.lt>\n"
@@ -62,111 +63,113 @@ msgstr ""
 "Vytautas Liuolia <vytautas.liuolia@gmail.com>\n"
 "Rimas Kudelis <rq@akl.lt>"
 
-#: common/catalog.vala:280
+#: common/catalog.vala:275
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse projekto tinklalapis"
 
-#: common/catalog.vala:298
+#: common/catalog.vala:293
 msgid "Cannot delete"
 msgstr "Nepavyko pašalinti"
 
-#: common/catalog.vala:321 common/key-manager-store.vala:375
+#: common/catalog.vala:316 common/key-manager-store.vala:419
 msgid "Couldn’t export keys"
 msgstr "Nepavyko eksportuoti raktų"
 
-#: common/catalog.vala:332
+#: common/catalog.vala:327
 msgid "Couldn’t export data"
 msgstr "Nepavyko eksportuoti duomenų"
 
-#: common/catalog.vala:348 libseahorse/seahorse-widget.c:461
+#: common/catalog.vala:343 libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nepavyko įkelti žinyno: %s"
 
 #. Top menu items
-#: common/catalog.vala:354
+#: common/catalog.vala:349
 msgid "_File"
 msgstr "_Failas"
 
-#: common/catalog.vala:355
+#: common/catalog.vala:350
 msgid "E_xport…"
 msgstr "_Eksportuoti…"
 
-#: common/catalog.vala:356
+#: common/catalog.vala:351
 msgid "Export to a file"
 msgstr "Eksportuoti į failą"
 
-#: common/catalog.vala:357
+#: common/catalog.vala:352
 msgid "_Edit"
 msgstr "_Keisti"
 
-#: common/catalog.vala:358
+#: common/catalog.vala:353
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: common/catalog.vala:359
+#: common/catalog.vala:354
 msgid "Copy to the clipboard"
 msgstr "Kopijuoti į iškarpinę"
 
 #. Translators: This text refers to deleting an item from its type's backing store
 #. Delete item
-#: common/catalog.vala:361 common/delete-dialog.vala:91
+#: common/catalog.vala:356 common/delete-dialog.vala:91
 #: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:655
 msgid "_Delete"
 msgstr "Pa_šalinti"
 
-#: common/catalog.vala:362
+#: common/catalog.vala:357
 msgid "Delete selected items"
 msgstr "Pašalinti pažymėtus elementus"
 
 #. Properties item
-#: common/catalog.vala:363 common/catalog.vala:365 src/sidebar.vala:664
+#: common/catalog.vala:358 common/catalog.vala:360 src/sidebar.vala:664
 msgid "_Properties"
 msgstr "_Savybės"
 
-#: common/catalog.vala:364
+#: common/catalog.vala:359
 msgid "Show the properties of this item"
 msgstr "Rodyti šio elemento savybes"
 
-#: common/catalog.vala:366
+#: common/catalog.vala:361
 msgid "Show the properties of this keyring"
 msgstr "Rodyti šios raktinės savybes"
 
-#: common/catalog.vala:367
+#: common/catalog.vala:362
 msgid "Prefere_nces"
 msgstr "_Nustatymai"
 
-#: common/catalog.vala:368
+#: common/catalog.vala:363
 msgid "Change preferences for this program"
 msgstr "Keisti šios programos nustatymus"
 
-#: common/catalog.vala:369
+#: common/catalog.vala:364
 msgid "_View"
 msgstr "R_odyti"
 
-#: common/catalog.vala:370
+#: common/catalog.vala:365
 msgid "_Help"
 msgstr "_Pagalba"
 
-#: common/catalog.vala:371
+#: common/catalog.vala:366
 msgid "_About"
 msgstr "_Apie"
 
-#: common/catalog.vala:372
+#: common/catalog.vala:367
 msgid "About this program"
 msgstr "Apie šią programą"
 
-#: common/catalog.vala:373
+#: common/catalog.vala:368
 msgid "_Contents"
 msgstr "_Turinys"
 
-#: common/catalog.vala:374
+#: common/catalog.vala:369
 msgid "Show Seahorse help"
 msgstr "Rodyti Seahorse pagalbą"
 
+#. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117 src/import-dialog.vala:30
-#: src/key-manager.vala:237
+#: common/passphrase-prompt.vala:117 pgp/seahorse-pgp-generate.ui:294
+#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
+#: src/import-dialog.vala:34 src/key-manager.vala:230
 msgid "_Cancel"
 msgstr "_Atsisakyti"
 
@@ -223,8 +226,8 @@ msgstr "Raktų serverio tipas:"
 msgid "Host:"
 msgstr "Serverio adresas:"
 
-#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:59
-#: ssh/seahorse-ssh-upload.ui:127
+#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:67
+#: ssh/seahorse-ssh-upload.ui:108
 msgid "The host name or address of the server."
 msgstr "Serverio kompiuterio vardas arba adresas."
 
@@ -749,16 +752,16 @@ msgid "Keyring properties"
 msgstr "Raktinės savybės"
 
 #: gkr/seahorse-gkr-keyring.ui:23
-msgid "Keyring is unlocked"
-msgstr "Raktinė yra atrakinta"
+msgid "Keyring is locked"
+msgstr "Raktinės yra užrakinta"
 
 #: gkr/seahorse-gkr-keyring.ui:33
 msgid "Unlock"
 msgstr "Atrakinti"
 
 #: gkr/seahorse-gkr-keyring.ui:46
-msgid "Keyring is locked"
-msgstr "Raktinės yra užrakinta"
+msgid "Keyring is unlocked"
+msgstr "Raktinė yra atrakinta"
 
 #: gkr/seahorse-gkr-keyring.ui:56
 msgid "Lock"
@@ -1050,7 +1053,7 @@ msgstr "Niekada _nesibaigia"
 msgid "If key never expires"
 msgstr "Jei rakto galiojimas niekada nesibaigia"
 
-#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:149
+#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
 msgid "Key _Type:"
 msgstr "Rakto _tipas:"
 
@@ -1149,6 +1152,14 @@ msgstr "Nepavyko pridėti vartotojo id"
 msgid "Add user ID to %s"
 msgstr "Įdėti naudotojo ID į %s"
 
+#: pgp/seahorse-gpgme.c:69
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr "Iššifravimas nepavyko. Greičiausiai neturite iššifravimo rakto."
+
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
+msgid "The operation was cancelled"
+msgstr "Veiksmas atšauktas"
+
 #: pgp/seahorse-gpgme-expires.c:63
 msgid "Invalid expiry date"
 msgstr "Netinkama galiojimo data"
@@ -1190,7 +1201,7 @@ msgstr "PGP raktas"
 msgid "Used to encrypt email and files"
 msgstr "Naudojamas laiškų bei failų šifravimui ir pasirašymui"
 
-#: pgp/seahorse-gpgme-generate.c:129 pkcs11/seahorse-pkcs11-generate.c:90
+#: pgp/seahorse-gpgme-generate.c:129 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:141
 msgid "RSA"
 msgstr "RSA"
@@ -1226,7 +1237,7 @@ msgstr ""
 "klaviatūra, judintumėt pelę, naudotumėtės programomis.\n"
 "Tai suteikia sistemai reikiamų atsitiktinių duomenų."
 
-#: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
+#: pgp/seahorse-gpgme-generate.c:230 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Kuriamas raktas"
 
@@ -1341,7 +1352,7 @@ msgstr "Visi vaizdo failai"
 msgid "All JPEG files"
 msgstr "Visi JPEG failai"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:280
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:273
 msgid "All files"
 msgstr "Visi failai"
 
@@ -1463,14 +1474,6 @@ msgstr "Nežinomas"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-gpgme.c:69
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr "Iššifravimas nepavyko. Greičiausiai neturite iššifravimo rakto."
-
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
-msgid "The operation was cancelled"
-msgstr "Veiksmas atšauktas"
-
 #: pgp/seahorse-hkp-source.c:567
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
@@ -1485,49 +1488,49 @@ msgstr "Nepavyko susisiekti su serveriu „%s“: %s"
 msgid "HTTP Key Server"
 msgstr "HTTP Raktų serveris"
 
-#: pgp/seahorse-keyserver-results.c:167
+#: pgp/seahorse-keyserver-results.c:166
 msgid "Couldn’t import keys"
 msgstr "Nepavyko importuoti raktų"
 
-#: pgp/seahorse-keyserver-results.c:210
+#: pgp/seahorse-keyserver-results.c:209
 msgid "Importing keys from key servers"
 msgstr "Importuojami raktai iš raktų serverių"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: pgp/seahorse-keyserver-results.c:236 src/key-manager.vala:52
+#: pgp/seahorse-keyserver-results.c:235 src/key-manager.vala:45
 msgid "_Remote"
 msgstr "_Darbas tinkle"
 
-#: pgp/seahorse-keyserver-results.c:238
+#: pgp/seahorse-keyserver-results.c:237
 msgid "Close this window"
 msgstr "Uždaryti šį langą"
 
-#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:112
+#: pgp/seahorse-keyserver-results.c:241 pgp/seahorse-pgp-actions.c:112
 msgid "_Find Remote Keys…"
 msgstr "_Ieškoti raktų internete…"
 
-#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:113
+#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:113
 msgid "Search for keys on a key server"
 msgstr "Ieškoti raktų raktų serveryje"
 
-#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:222
+#: pgp/seahorse-keyserver-results.c:246 src/seahorse-key-manager.ui:227
 msgid "_Import"
 msgstr "_Importuoti"
 
-#: pgp/seahorse-keyserver-results.c:248
+#: pgp/seahorse-keyserver-results.c:247
 msgid "Import selected keys to local key ring"
 msgstr "Pasirinktus raktus importuoti į vietinę raktinę"
 
-#: pgp/seahorse-keyserver-results.c:279
+#: pgp/seahorse-keyserver-results.c:278
 msgid "Remote Keys"
 msgstr "Raktai internete"
 
-#: pgp/seahorse-keyserver-results.c:281
+#: pgp/seahorse-keyserver-results.c:280
 #, c-format
 msgid "Remote Keys Containing “%s”"
 msgstr "Nutolę raktai, turintys „%s“"
 
-#: pgp/seahorse-keyserver-results.c:482
+#: pgp/seahorse-keyserver-results.c:480
 msgid "The search for keys failed."
 msgstr "Raktų paieška nepavyko."
 
@@ -1657,7 +1660,6 @@ msgid "PGP keys are for encrypting email or files"
 msgstr "PGP raktai, skirti laiškų bei failų šifravimui"
 
 #: pgp/seahorse-pgp-generate.ui:18
-#| msgid "PGP key"
 msgid "New PGP key"
 msgstr "Naujas PGP raktas"
 
@@ -1665,7 +1667,7 @@ msgstr "Naujas PGP raktas"
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "PGP raktas leidžia šifruoti el. laiškus ar failus kitiems žmonėms. "
 
-#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:226
+#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "_Papildomi rakto parametrai"
 
@@ -1677,7 +1679,7 @@ msgstr "_Komentaras:"
 msgid "Encryption _Type:"
 msgstr "Šifravimo _tipas:"
 
-#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:164
+#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
 #: ssh/seahorse-ssh-generate.ui:158
 msgid "Key _Strength (bits):"
 msgstr "Rakto _stiprumas (bitais):"
@@ -1690,13 +1692,21 @@ msgstr "_Galiojimo pabaigos data:"
 msgid "Ne_ver Expires"
 msgstr "_Niekada nesibaigia"
 
-#: pgp/seahorse-pgp-generate.ui:305
+#: pgp/seahorse-pgp-generate.ui:304
 msgid "C_reate"
 msgstr "_Sukurti"
 
-#: pgp/seahorse-pgp-generate.ui:312
+#: pgp/seahorse-pgp-generate.ui:311
 msgid "Generate a new key"
 msgstr "Sukurti naują raktą"
+
+#: pgp/seahorse-pgp-key.c:349
+msgid "Personal PGP key"
+msgstr "Asmeninis PGP raktas"
+
+#: pgp/seahorse-pgp-key.c:351
+msgid "PGP key"
+msgstr "PGP raktas"
 
 #: pgp/seahorse-pgp-key-properties.c:312
 msgid "Couldn’t change primary user ID"
@@ -1754,7 +1764,7 @@ msgstr "Nepavyko pašalinti antrinio rakto"
 msgid "Unable to change trust"
 msgstr "Nepavyko pakeisti pasitikėjimo reikšmės"
 
-#: pgp/seahorse-pgp-key-properties.c:1143 ssh/key-properties.vala:174
+#: pgp/seahorse-pgp-key-properties.c:1143 ssh/key-properties.vala:175
 msgid "Couldn’t export key"
 msgstr "Nepavyko eksportuoti rakto"
 
@@ -1823,14 +1833,6 @@ msgstr "Geras"
 #: pgp/seahorse-pgp-key-properties.c:1857
 msgid "Key ID"
 msgstr "Rakto ID"
-
-#: pgp/seahorse-pgp-key.c:349
-msgid "Personal PGP key"
-msgstr "Asmeninis PGP raktas"
-
-#: pgp/seahorse-pgp-key.c:351
-msgid "PGP key"
-msgstr "PGP raktas"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:31
 #: pgp/seahorse-pgp-public-key-properties.ui:32
@@ -2132,6 +2134,21 @@ msgstr "Neprivalomas rakto paskelbimo negaliojančiu aprašymas"
 msgid "Re_voke"
 msgstr "Paskelbti _negaliojančiu"
 
+#: pgp/seahorse-signer.c:63
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr ""
+"Jūs neturite asmeninių PGP raktų, kuriais galima pasirašyti dokumentą ar "
+"žinutę.  "
+
+#: pgp/seahorse-signer.ui:7
+msgid "Choose Signing Key"
+msgstr "Pasirinkite pasirašymo raktą"
+
+#: pgp/seahorse-signer.ui:25
+msgid "_Sign message with key:"
+msgstr "_Pasirašyti žinutę su raktu:"
+
 #: pgp/seahorse-sign.ui:7
 msgid "Sign Key"
 msgstr "Pasirašyti raktą"
@@ -2221,21 +2238,6 @@ msgstr "_Pasirašantysis:"
 msgid "_Sign"
 msgstr "_Pasirašyti"
 
-#: pgp/seahorse-signer.c:63
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"Jūs neturite asmeninių PGP raktų, kuriais galima pasirašyti dokumentą ar "
-"žinutę.  "
-
-#: pgp/seahorse-signer.ui:7
-msgid "Choose Signing Key"
-msgstr "Pasirinkite pasirašymo raktą"
-
-#: pgp/seahorse-signer.ui:25
-msgid "_Sign message with key:"
-msgstr "_Pasirašyti žinutę su raktu:"
-
 #: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
 msgid "Exporting data"
 msgstr "Eksportuojami duomenys"
@@ -2280,6 +2282,18 @@ msgstr[0] "Ar tikrai norite negrįžtamai pašalinti %d liudijimą?"
 msgstr[1] "Ar tikrai norite negrįžtamai pašalinti %d liudijimus?"
 msgstr[2] "Ar tikrai norite negrįžtamai pašalinti %d liudijimų?"
 
+#: pkcs11/pkcs11-generate.vala:229
+msgid "Couldn’t generate private key"
+msgstr "Nepavyko sugeneruoti privataus rakto"
+
+#: pkcs11/pkcs11-generate.vala:284 pkcs11/pkcs11-private-key.vala:70
+msgid "Private key"
+msgstr "Privatus raktas"
+
+#: pkcs11/pkcs11-generate.vala:285
+msgid "Used to request a certificate"
+msgstr "Naudojamas prašyti liudijimo."
+
 #: pkcs11/pkcs11-key-deleter.vala:34
 msgid "I understand that this key will be permanently deleted."
 msgstr "Aš suprantu, kad šis raktas bus negrįžtamai ištrintas."
@@ -2287,10 +2301,6 @@ msgstr "Aš suprantu, kad šis raktas bus negrįžtamai ištrintas."
 #: pkcs11/pkcs11-private-key.vala:61
 msgid "Unnamed private key"
 msgstr "Nepavadintas privatus raktas"
-
-#: pkcs11/pkcs11-private-key.vala:70 pkcs11/seahorse-pkcs11-generate.c:505
-msgid "Private key"
-msgstr "Privatus raktas"
 
 #: pkcs11/pkcs11-properties.vala:134
 msgid "Unnamed"
@@ -2324,7 +2334,7 @@ msgstr "Prašyti _liudijimo"
 msgid "Create a certificate request file for this key"
 msgstr "Sukurti liudijimo užklausos failą šiam raktui"
 
-#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.c:412
+#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.ui:193
 msgid "Create"
 msgstr "Sukurti"
 
@@ -2335,6 +2345,11 @@ msgstr "Nepavyko sukurti liudijimo užklausos"
 #: pkcs11/pkcs11-request.vala:104
 msgid "Save certificate request"
 msgstr "Įrašyti liudijimo užklausą"
+
+#: pkcs11/pkcs11-request.vala:107
+#| msgid "Save"
+msgid "_Save"
+msgstr "Į_rašyti"
 
 #: pkcs11/pkcs11-request.vala:113
 msgid "Certificate request"
@@ -2353,31 +2368,28 @@ msgctxt "Label"
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: pkcs11/seahorse-pkcs11-backend.c:189
+#: pkcs11/seahorse-pkcs11-backend.c:187
 msgid "Certificates"
 msgstr "Liudijimai"
 
-#: pkcs11/seahorse-pkcs11-backend.c:195
+#: pkcs11/seahorse-pkcs11-backend.c:193
 msgid "X.509 certificates and related keys"
 msgstr "X.509 liudijimai ir susiję raktai"
 
-#: pkcs11/seahorse-pkcs11-generate.c:113
-msgid "Couldn’t generate private key"
-msgstr "Nepavyko sugeneruoti privataus rakto"
+#: pkcs11/seahorse-pkcs11-generate.ui:6
+#| msgid "Private key"
+msgid "New private key"
+msgstr "Naujas privatus raktas"
 
-#: pkcs11/seahorse-pkcs11-generate.c:506
-msgid "Used to request a certificate"
-msgstr "Naudojamas prašyti liudijimo."
-
-#: pkcs11/seahorse-pkcs11-generate.ui:34
+#: pkcs11/seahorse-pkcs11-generate.ui:39
 msgid "Create a new private key"
 msgstr "Sukurti naują privatų raktą"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:53
+#: pkcs11/seahorse-pkcs11-generate.ui:58
 msgid "Label:"
 msgstr "Žyma:"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:66
+#: pkcs11/seahorse-pkcs11-generate.ui:71
 msgid "Stored at:"
 msgstr "Saugojimo vieta:"
 
@@ -2393,117 +2405,118 @@ msgstr "Bendras vardas (CN) patalpintas liudijimo užklausoje."
 msgid "Name (CN):"
 msgstr "Pavadinimas (CN):"
 
-#: src/application.vala:66
+#: src/application.vala:64
 msgid "Version of this application"
 msgstr "Šios programos versija"
 
-#: src/application.vala:71 src/application.vala:107
+#: src/application.vala:69 src/application.vala:105
 msgid "- System Settings"
 msgstr "- Sistemos nustatymai"
 
-#: src/application.vala:102
+#: src/application.vala:100
 msgid "Don't display a window"
 msgstr "Nerodyti lango"
 
-#: src/import-dialog.vala:34
+#: src/import-dialog.vala:30
+#| msgid "<b>Data to be imported:</b>"
+msgid "Data to be imported"
+msgstr "Duomenys importavimui"
+
+#: src/import-dialog.vala:38
 msgid "Import"
 msgstr "Importuoti"
 
-#: src/import-dialog.vala:40
-msgid "<b>Data to be imported:</b>"
-msgstr "<b>Duomenys importavimui:</b>"
-
-#: src/import-dialog.vala:75
+#: src/import-dialog.vala:74
 msgid "Import failed"
 msgstr "Nepavyko importuoti"
 
-#: src/key-manager.vala:53
+#: src/key-manager.vala:46
 msgid "_New"
 msgstr "_Naujas"
 
-#: src/key-manager.vala:54
+#: src/key-manager.vala:47
 msgid "_Quit"
 msgstr "_Išeiti"
 
-#: src/key-manager.vala:54
+#: src/key-manager.vala:47
 msgid "Close this program"
 msgstr "Užverti šią programą"
 
-#: src/key-manager.vala:55
+#: src/key-manager.vala:48
 msgid "_New…"
 msgstr "_Naujas…"
 
-#: src/key-manager.vala:55
+#: src/key-manager.vala:48
 msgid "Create a new key or item"
 msgstr "Sukurti naują raktą ar elementą"
 
-#: src/key-manager.vala:56
+#: src/key-manager.vala:49
 msgid "_Import…"
 msgstr "_Importuoti…"
 
-#: src/key-manager.vala:56
+#: src/key-manager.vala:49
 msgid "Import from a file"
 msgstr "Importuoti iš failo"
 
-#: src/key-manager.vala:57
+#: src/key-manager.vala:50
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: src/key-manager.vala:57
+#: src/key-manager.vala:50
 msgid "Import from the clipboard"
 msgstr "Importuoti iš iškarpinės"
 
-#: src/key-manager.vala:61
+#: src/key-manager.vala:54
 msgid "By _Keyring"
 msgstr "Pagal _raktinę"
 
-#: src/key-manager.vala:61
+#: src/key-manager.vala:54
 msgid "Show sidebar listing keyrings"
 msgstr "Rodyti šoninį polangį su raktinėmis"
 
-#: src/key-manager.vala:65
+#: src/key-manager.vala:58
 msgid "Show _Personal"
 msgstr "Rodyti _asmeninius"
 
-#: src/key-manager.vala:65
+#: src/key-manager.vala:58
 msgid "Only show personal keys, certificates and passwords"
 msgstr "Rodyti tik asmeninius raktus, liudijimus ir slaptažodžius"
 
-#: src/key-manager.vala:66
+#: src/key-manager.vala:59
 msgid "Show _Trusted"
 msgstr "Rodyti pat_ikimus"
 
-#: src/key-manager.vala:66
+#: src/key-manager.vala:59
 msgid "Only show trusted keys, certificates and passwords"
 msgstr "Rodyti tik patikimus raktus, liudijimus ir slaptažodžius"
 
-#: src/key-manager.vala:67
+#: src/key-manager.vala:60
 msgid "Show _Any"
 msgstr "Rodyti _visus"
 
-#: src/key-manager.vala:67
+#: src/key-manager.vala:60
 msgid "Show all keys, certificates and passwords"
 msgstr "Rodyti visus raktus, liudijimus ir slaptažodžius"
 
 #. The prompt
-#: src/key-manager.vala:235 ssh/operation.vala:320
+#: src/key-manager.vala:228 ssh/operation.vala:320
 msgid "Import Key"
 msgstr "Importuoti raktą"
 
-#: src/key-manager.vala:238
+#: src/key-manager.vala:231
 msgid "_Open"
 msgstr "_Atverti"
 
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:246
+#: src/key-manager.vala:239
 msgid "All key files"
 msgstr "Visi raktų failai"
 
-#: src/key-manager.vala:318
+#: src/key-manager.vala:311
 msgid "Dropped text"
 msgstr "Įrašytas tekstas"
 
-#: src/key-manager.vala:341
+#: src/key-manager.vala:334
 msgid "Clipboard text"
 msgstr "Iškarpinės tekstas"
 
@@ -2535,29 +2548,29 @@ msgstr "Pa_sirinkite kuriamo elemento tipą:"
 msgid "Continue"
 msgstr "Tęsti"
 
-#: src/seahorse-key-manager.ui:57
+#: src/seahorse-key-manager.ui:59
 msgid "Add a new key or item"
 msgstr "Pridėti naują raktą ar elementą"
 
-#: src/seahorse-key-manager.ui:74
+#: src/seahorse-key-manager.ui:76
 msgid "Filter"
 msgstr "Filtras"
 
-#: src/seahorse-key-manager.ui:124
+#: src/seahorse-key-manager.ui:121
 msgid "First time options:"
 msgstr "Pirmojo karto parametrai:"
 
-#: src/seahorse-key-manager.ui:179
-msgid "Generate a new key of your own: "
-msgstr "Susikurkite naują raktą sau:"
+#: src/seahorse-key-manager.ui:172
+msgid "To get started with encryption you will need keys."
+msgstr "Norint pradėti šifravimą Jums reikės raktų."
 
-#: src/seahorse-key-manager.ui:250
+#: src/seahorse-key-manager.ui:185
 msgid "Import existing keys from a file:"
 msgstr "Importuoti egzistuojančius raktus iš failo:"
 
-#: src/seahorse-key-manager.ui:282
-msgid "To get started with encryption you will need keys."
-msgstr "Norint pradėti šifravimą Jums reikės raktų."
+#: src/seahorse-key-manager.ui:251
+msgid "Generate a new key of your own: "
+msgstr "Susikurkite naują raktą sau:"
 
 #: src/sidebar.vala:589
 msgid "Couldn’t lock"
@@ -2626,7 +2639,7 @@ msgid "No public key file is available for this key."
 msgstr "Šiam raktui nėra viešo rakto failo."
 
 #. No comment, but loaded
-#: ssh/generate.vala:28 ssh/key.vala:120 ssh/key.vala:124
+#: ssh/generate.vala:28 ssh/key.vala:116 ssh/key.vala:120
 #: ssh/seahorse-ssh-key-properties.ui:96
 msgid "Secure Shell Key"
 msgstr "Saugaus prisijungimo (SSH) raktas"
@@ -2659,19 +2672,19 @@ msgstr "256 bitai"
 msgid "Unknown key type!"
 msgstr "Nežinomas rakto tipas!"
 
-#: ssh/key-properties.vala:88
+#: ssh/key-properties.vala:89
 msgid "Unknown type"
 msgstr "Nežinomas tipas"
 
-#: ssh/key-properties.vala:112
+#: ssh/key-properties.vala:113
 msgid "Couldn’t rename key."
 msgstr "Nepavyko pervadinti rakto."
 
-#: ssh/key-properties.vala:138
+#: ssh/key-properties.vala:139
 msgid "Couldn’t change authorization for key."
 msgstr "Nepavyko pakeisti leidimų šiam raktui."
 
-#: ssh/key-properties.vala:154
+#: ssh/key-properties.vala:155
 msgid "Couldn’t change passphrase for key."
 msgstr "Nepavyko pakeisti slaptafrazės šiam raktui."
 
@@ -2684,7 +2697,7 @@ msgid "SSH key"
 msgstr "SSH raktas"
 
 #. No names when not even the fingerpint loaded
-#: ssh/key.vala:117
+#: ssh/key.vala:113
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Nenuskaitomas saugaus prisijungimo (SSH) raktas)"
 
@@ -2820,7 +2833,7 @@ msgstr "_Eksportuoti visą raktą"
 msgid "Set Up Computer for SSH Connection"
 msgstr "Nustatyti kitą kompiuterį saugiam (SSH) prisijungimui"
 
-#: ssh/seahorse-ssh-upload.ui:33
+#: ssh/seahorse-ssh-upload.ui:32
 msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
@@ -2828,19 +2841,19 @@ msgstr ""
 "Norėdami naudoti saugaus prisijungimo (SSH) raktą jungimuisi prie kito "
 "kompiuterio, privalote turėti paskyrą šiame kompiuteryje."
 
-#: ssh/seahorse-ssh-upload.ui:74
-msgid "eg: fileserver.example.com:port"
-msgstr "pvz.: failųserveris.pavyzdys.lt:prievadas"
-
-#: ssh/seahorse-ssh-upload.ui:99
+#: ssh/seahorse-ssh-upload.ui:48
 msgid "_Server address:"
 msgstr "_Serverio adresas:"
 
-#: ssh/seahorse-ssh-upload.ui:111
+#: ssh/seahorse-ssh-upload.ui:77
+msgid "eg: fileserver.example.com:port"
+msgstr "pvz.: failųserveris.pavyzdys.lt:prievadas"
+
+#: ssh/seahorse-ssh-upload.ui:93
 msgid "_Login name:"
 msgstr "_Prisijungimo vardas:"
 
-#: ssh/seahorse-ssh-upload.ui:162
+#: ssh/seahorse-ssh-upload.ui:129
 msgid "Set Up"
 msgstr "Nustatyti"
 
@@ -2862,12 +2875,12 @@ msgstr "openssh://%s"
 msgid "No private key file is available for this key."
 msgstr "Šiam raktui nėra privataus rakto failo."
 
-#: ssh/upload.vala:66
+#: ssh/upload.vala:67
 msgid "Couldn’t configure Secure Shell keys on remote computer."
 msgstr ""
 "Nepavyko sukonfigūruoti saugaus apvalkalo raktų nutolusiame kompiuteryje."
 
-#: ssh/upload.vala:70
+#: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigūruojami saugaus apvalkalo raktai…"
 
