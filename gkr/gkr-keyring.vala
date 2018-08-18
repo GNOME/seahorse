@@ -189,9 +189,10 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 		                                    GLib.DBusCallFlags.NONE, -1, null, (obj, res) => {
 			try {
 				var retval = service.get_connection().call.end(res);
+				warning("RETVAL=%s", (retval==null).to_string());
 				string prompt_path;
 				retval.get("(o)", out prompt_path);
-				service.prompt_at_dbus_path.begin(prompt_path, null, null, (obj, res) => {
+				service.prompt_at_dbus_path.begin(prompt_path.dup(), null, null, (obj, res) => {
 					try {
 						service.prompt_at_dbus_path.end(res);
 					} catch (GLib.Error err) {
