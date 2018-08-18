@@ -1,0 +1,66 @@
+{
+    "app-id": "org.gnome.Seahorse",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "master",
+    "sdk": "org.gnome.Sdk",
+    "command": "seahorse",
+    "desktop-file-name-prefix": "(Development) ",
+    "rename-desktop-file": "seahorse.desktop",
+    "rename-appdata-file": "seahorse.appdata.xml",
+    "rename-icon": "seahorse",
+    "copy-icon": true,
+    "finish-args": [
+        /* X11 + XShm access */
+        "--share=ipc", "--socket=x11",
+        /* Wayland access */
+        "--socket=wayland",
+        "--device=dri",
+        /* Access for SSH keys */
+        "--filesystem=~/.ssh:create",
+        /* Access for GPG keys */
+        "--filesystem=~/.gnupg:create",
+        /* Secret Service API */
+        "--talk-name=org.freedesktop.secrets",
+        /* Needed for dconf to work */
+        "--filesystem=xdg-run/dconf", "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+    ],
+    "build-options" : {
+        "cflags": "-O2 -g",
+        "cxxflags": "-O2 -g",
+        "env": {
+            "V": "1"
+        }
+    },
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig", "/share/pkgconfig",
+        "/share/aclocal",
+        "/man", "/share/man",
+        "/share/gtk-doc",
+        "/share/vala",
+        "*.la", "*.a"
+    ],
+    "modules": [
+        {
+            "name": "gpgme",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.11.1.tar.bz2",
+                    "sha256": "2d1b111774d2e3dd26dcd7c251819ce4ef774ec5e566251eb9308fa7542fbd6f"
+                }
+            ]
+        },
+        {
+            "name": "seahorse",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://gitlab.gnome.org/GNOME/seahorse.git"
+                }
+            ]
+        }
+    ]
+}
