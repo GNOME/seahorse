@@ -15,10 +15,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
-"product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-05-10 15:19+0000\n"
-"PO-Revision-Date: 2018-05-12 12:35+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
+"POT-Creation-Date: 2018-08-15 23:04+0000\n"
+"PO-Revision-Date: 2018-08-20 14:11+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -39,7 +38,8 @@ msgstr "Uživatelský"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
-#: gkr/seahorse-gkr-add-keyring.ui:82
+#: gkr/seahorse-gkr-add-keyring.ui:82 pkcs11/seahorse-pkcs11-generate.ui:186
+#: src/seahorse-generate-select.ui:62 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -47,16 +47,16 @@ msgstr "Zrušit"
 msgid "Save"
 msgstr "Uložit"
 
-#: common/catalog.vala:249
+#: common/catalog.vala:244
 msgid "Contributions:"
 msgstr "Přispěli:"
 
-#: common/catalog.vala:275 data/seahorse.desktop.in.in:3
-#: src/key-manager.vala:82
+#: common/catalog.vala:270 data/seahorse.desktop.in.in:3
+#: src/key-manager.vala:75
 msgid "Passwords and Keys"
 msgstr "Hesla a klíče"
 
-#: common/catalog.vala:277
+#: common/catalog.vala:272
 msgid "translator-credits"
 msgstr ""
 "Petr Domanský <doman@atlas.cz>\n"
@@ -67,114 +67,117 @@ msgstr ""
 "Lucas Lommer <llommer@svn.gnome.org>\n"
 "Markéta Nykrýnová <m.nykrynova@gmail.com>"
 
-#: common/catalog.vala:280
+#: common/catalog.vala:275
 msgid "Seahorse Project Homepage"
 msgstr "Domovská stránka projektu Seahorse"
 
-#: common/catalog.vala:298
+#: common/catalog.vala:293
 msgid "Cannot delete"
 msgstr "Nezdařilo se smazat"
 
-#: common/catalog.vala:321 common/key-manager-store.vala:375
+#: common/catalog.vala:316 common/key-manager-store.vala:419
 msgid "Couldn’t export keys"
 msgstr "Nezdařilo se exportovat klíče"
 
-#: common/catalog.vala:332
+#: common/catalog.vala:327
 msgid "Couldn’t export data"
 msgstr "Nezdařilo se exportovat data"
 
-#: common/catalog.vala:348 libseahorse/seahorse-widget.c:461
+#: common/catalog.vala:343 libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nebylo možno zobrazit nápovědu: %s"
 
 #. Top menu items
-#: common/catalog.vala:354
+#: common/catalog.vala:349
 msgid "_File"
 msgstr "_Soubor"
 
-#: common/catalog.vala:355
+#: common/catalog.vala:350
 msgid "E_xport…"
 msgstr "E_xportovat…"
 
-#: common/catalog.vala:356
+#: common/catalog.vala:351
 msgid "Export to a file"
 msgstr "Exportovat do souboru"
 
-#: common/catalog.vala:357
+#: common/catalog.vala:352
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: common/catalog.vala:358
+#: common/catalog.vala:353
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: common/catalog.vala:359
+#: common/catalog.vala:354
 msgid "Copy to the clipboard"
 msgstr "Zkopírovat do schránky"
 
 #. Translators: This text refers to deleting an item from its type's backing store
 #. Delete item
-#: common/catalog.vala:361 common/delete-dialog.vala:91
+#: common/catalog.vala:356 common/delete-dialog.vala:91
 #: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:655
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: common/catalog.vala:362
+#: common/catalog.vala:357
 msgid "Delete selected items"
 msgstr "Smazat vybrané položky"
 
 #. Properties item
-#: common/catalog.vala:363 common/catalog.vala:365 src/sidebar.vala:664
+#: common/catalog.vala:358 common/catalog.vala:360 src/sidebar.vala:664
 msgid "_Properties"
 msgstr "_Vlastnosti"
 
-#: common/catalog.vala:364
+#: common/catalog.vala:359
 msgid "Show the properties of this item"
 msgstr "Zobrazit vlastnosti této položky"
 
-#: common/catalog.vala:366
+#: common/catalog.vala:361
 msgid "Show the properties of this keyring"
 msgstr "Zobrazit vlastnosti této klíčenky"
 
-#: common/catalog.vala:367
+#: common/catalog.vala:362
 msgid "Prefere_nces"
 msgstr "_Předvolby"
 
-#: common/catalog.vala:368
+#: common/catalog.vala:363
 msgid "Change preferences for this program"
 msgstr "Změnit nastavení tohoto programu"
 
-#: common/catalog.vala:369
+#: common/catalog.vala:364
 msgid "_View"
 msgstr "_Zobrazit"
 
-#: common/catalog.vala:370
+#: common/catalog.vala:365
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: common/catalog.vala:371
+#: common/catalog.vala:366
 msgid "_About"
 msgstr "O _aplikaci"
 
-#: common/catalog.vala:372
+#: common/catalog.vala:367
 msgid "About this program"
 msgstr "O této aplikaci"
 
-#: common/catalog.vala:373
+#: common/catalog.vala:368
 msgid "_Contents"
 msgstr "_Obsah"
 
-#: common/catalog.vala:374
+#: common/catalog.vala:369
 msgid "Show Seahorse help"
 msgstr "Zobrazit nápovědu"
 
+#. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117 src/key-manager.vala:237
+#: common/passphrase-prompt.vala:117 pgp/seahorse-pgp-generate.ui:294
+#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
+#: src/import-dialog.vala:34 src/key-manager.vala:230
 msgid "_Cancel"
 msgstr "_Zrušit"
 
-#: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:1427
+#: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:1426
 msgid "Export"
 msgstr "Exportovat"
 
@@ -225,8 +228,8 @@ msgstr "Typ serveru s klíči:"
 msgid "Host:"
 msgstr "Server:"
 
-#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:59
-#: ssh/seahorse-ssh-upload.ui:127
+#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:67
+#: ssh/seahorse-ssh-upload.ui:108
 msgid "The host name or address of the server."
 msgstr "Název nebo adresa serveru."
 
@@ -258,14 +261,14 @@ msgstr "Automaticky _synchronizovat změněné klíče se servery klíčů"
 msgid "Key Servers"
 msgstr "Servery klíčů"
 
-#: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1250
+#: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1246
 #: pgp/seahorse-pgp-private-key-properties.ui:12
 #: pgp/seahorse-pgp-public-key-properties.ui:12
 msgctxt "Validity"
 msgid "Unknown"
 msgstr "Nevím"
 
-#: common/validity.vala:40 pgp/seahorse-pgp-key-properties.c:1256
+#: common/validity.vala:40 pgp/seahorse-pgp-key-properties.c:1252
 #: pgp/seahorse-pgp-private-key-properties.ui:15
 #: pgp/seahorse-pgp-public-key-properties.ui:15
 msgctxt "Validity"
@@ -296,6 +299,145 @@ msgstr "Zakázaný"
 msgctxt "Validity"
 msgid "Revoked"
 msgstr "Odvolaný"
+
+#: data/org.gnome.seahorse.gschema.xml:5
+msgid "Auto retrieve keys"
+msgstr "Automaticky získávat klíče"
+
+#: data/org.gnome.seahorse.gschema.xml:6
+msgid "Whether or not keys should be automatically retrieved from key servers."
+msgstr ""
+"Zda klíče mají nebo nemají být získávány automaticky ze serverů s klíči."
+
+#: data/org.gnome.seahorse.gschema.xml:10
+msgid "Auto publish keys"
+msgstr "Automaticky zveřejňovat klíče"
+
+#: data/org.gnome.seahorse.gschema.xml:11
+msgid "Whether or not modified keys should be automatically published."
+msgstr "Zda klíče mají nebo nemají být automaticky zveřejňovány."
+
+#: data/org.gnome.seahorse.gschema.xml:15
+msgid "Publish keys to this key server"
+msgstr "Zveřejňovat klíče na tento server s klíči"
+
+#: data/org.gnome.seahorse.gschema.xml:16
+msgid ""
+"The key server to publish PGP keys to. Or empty to suppress publishing of "
+"PGP keys."
+msgstr ""
+"Server s klíči pro zveřejnění klíčů PGP. Když je prázdné, zveřejňování klíčů "
+"se potlačí."
+
+#: data/org.gnome.seahorse.gschema.xml:20
+msgid "Last key server search pattern"
+msgstr "Poslední vyhledávací vzor serveru s klíči"
+
+#: data/org.gnome.seahorse.gschema.xml:21
+msgid "The last search pattern searched for against a key server."
+msgstr "Poslední vzor hledání, podle kterého se hledalo vůči serveru s klíči."
+
+#: data/org.gnome.seahorse.gschema.xml:25
+msgid "Last key servers used"
+msgstr "Naposledy použité servery s klíči"
+
+#: data/org.gnome.seahorse.gschema.xml:26
+msgid ""
+"The last key server a search was performed against or empty for all key "
+"servers."
+msgstr ""
+"Poslední server s klíči, na kterém se provádělo hledání, nebo prázdná "
+"hodnota pro všechny servery s klíči."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:5
+msgid "Show keyrings sidebar"
+msgstr "Zobrazovat postranní panel s klíčenkami"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:6
+msgid "Show keyrings sidebar in Seahorse."
+msgstr "Zobrazovat v Seahorse postranní panel s klíčenkami"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:10
+msgid "Which items to show"
+msgstr "Které položky zobrazovat"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:11
+msgid ""
+"Filter which items to show. If empty, show all items, if “personal” show "
+"personal keys, if “trusted” show trusted."
+msgstr ""
+"Filtr pro zobrazování položek. Když je prázdný, zobrazují se všechny "
+"položky, „personal“ zobrazuje osobní klíče, „trusted“ důvěryhodné klíče."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:16
+msgid "Width of the side pane"
+msgstr "Šířka postranního panelu"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:17
+msgid "The default width of the side pane."
+msgstr "Výchozí šířka postranního panelu."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:21
+msgid "The keyrings chosen"
+msgstr "Zvolené klíčenky"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:22
+msgid "The URIs of the keyrings chosen in the sidebar."
+msgstr "Adresy URI klíčenek, které jsou zvolené v postranním panelu."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:29
+msgid "The column to sort the Seahorse keys by"
+msgstr "Sloupec, podle kterého Seahorse řadí klíče"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:30
+msgid ""
+"Specify the column to sort the Seahorse key manager main window by. Columns "
+"are: “name”, “id”, “validity”, “expires”, “trust”, and “type”. Put a “-” in "
+"front of the column name to sort in descending order."
+msgstr ""
+"Určuje sloupec, podle kterého se v hlavním okně správce klíčů Seahorse řadí. "
+"Sloupce jsou: „name“ (název), „id“ (ID), „validity“ (platnost), "
+"„expires“ (vyprší), „trust“ (důvěra) a „type“ (typ). Pokud chcete řadit v "
+"sestupném pořadí, připojte před název sloupce znak „-“."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:34
+msgid "Show validity column"
+msgstr "Zobrazovat sloupec s platností"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:35
+#: data/org.gnome.seahorse.manager.gschema.xml:40
+#: data/org.gnome.seahorse.manager.gschema.xml:45
+#: data/org.gnome.seahorse.manager.gschema.xml:50
+msgid "No longer in use."
+msgstr "Již se nepoužívá."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:39
+msgid "Show expiry column"
+msgstr "Zobrazovat sloupec s vypršením"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:44
+msgid "Show trust column"
+msgstr "Zobrazovat sloupec s důvěrou"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:49
+msgid "Show type column"
+msgstr "Zobrazovat sloupec s typem"
+
+#: data/org.gnome.seahorse.window.gschema.xml:5
+msgid "Width of the window"
+msgstr "Šířka okna"
+
+#: data/org.gnome.seahorse.window.gschema.xml:6
+msgid "Width (in pixels) of the window."
+msgstr "Šířka okna (v pixelech)"
+
+#: data/org.gnome.seahorse.window.gschema.xml:10
+msgid "Height of the window"
+msgstr "Výška okna"
+
+#: data/org.gnome.seahorse.window.gschema.xml:11
+msgid "Height (in pixels) of the window."
+msgstr "Výška okna (v pixelech)"
 
 #: data/seahorse.appdata.xml.in:6
 msgid "Seahorse"
@@ -366,47 +508,47 @@ msgstr "Klíčenka s hesly"
 msgid "Stored Password"
 msgstr "Uložené heslo"
 
-#: gkr/gkr-item-add.vala:103
+#: gkr/gkr-item-add.vala:106
 msgid "Couldn’t add item"
 msgstr "Nezdařilo se přidat položku"
 
-#: gkr/gkr-item-properties.vala:102
+#: gkr/gkr-item-properties.vala:108
 msgid "Save changes for this item?"
 msgstr "Uložit změny pro tuto položku?"
 
-#: gkr/gkr-item-properties.vala:120
+#: gkr/gkr-item-properties.vala:125
 msgid "Access a network share or resource"
 msgstr "Přístup k síťovému sdílenému prostředku"
 
-#: gkr/gkr-item-properties.vala:123
+#: gkr/gkr-item-properties.vala:128
 msgid "Access a website"
 msgstr "Přístup k webu"
 
-#: gkr/gkr-item-properties.vala:126
+#: gkr/gkr-item-properties.vala:131
 msgid "Unlocks a PGP key"
 msgstr "Odemkne klíč PGP"
 
-#: gkr/gkr-item-properties.vala:129
+#: gkr/gkr-item-properties.vala:134
 msgid "Unlocks a Secure Shell key"
 msgstr "Odemkne klíč SSH"
 
-#: gkr/gkr-item-properties.vala:132
+#: gkr/gkr-item-properties.vala:137
 msgid "Saved password or login"
 msgstr "Uložené heslo nebo přihlašovací jméno"
 
-#: gkr/gkr-item-properties.vala:145
+#: gkr/gkr-item-properties.vala:149
 msgid "Network Credentials"
 msgstr "Přihlašovací údaje pro síť"
 
-#: gkr/gkr-item-properties.vala:150 gkr/seahorse-gkr-item-properties.ui:68
+#: gkr/gkr-item-properties.vala:154 gkr/seahorse-gkr-item-properties.ui:77
 msgid "Password"
 msgstr "Heslo"
 
-#: gkr/gkr-item-properties.vala:206
+#: gkr/gkr-item-properties.vala:208
 msgid "Couldn’t change password."
 msgstr "Nezdařilo se změnit heslo."
 
-#: gkr/gkr-item-properties.vala:230
+#: gkr/gkr-item-properties.vala:232
 msgid "Couldn’t set description."
 msgstr "Nezdařilo se nastavit popis."
 
@@ -472,7 +614,7 @@ msgstr[0] "Opravdu chcete smazat %d heslo?"
 msgstr[1] "Opravdu chcete smazat %d hesla?"
 msgstr[2] "Opravdu chcete smazat %d hesel?"
 
-#: gkr/gkr-keyring-add.vala:52
+#: gkr/gkr-keyring-add.vala:55
 msgid "Couldn’t add keyring"
 msgstr "Nezdařilo se přidat klíčenku"
 
@@ -533,8 +675,8 @@ msgstr "Přidat heslo"
 msgid "_Keyring:"
 msgstr "_Klíčenka:"
 
-#: gkr/seahorse-gkr-add-item.ui:45 gkr/seahorse-gkr-item-properties.ui:41
-#: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:130
+#: gkr/seahorse-gkr-add-item.ui:45 gkr/seahorse-gkr-item-properties.ui:50
+#: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:78
 msgid "_Description:"
 msgstr "_Popis:"
 
@@ -566,44 +708,44 @@ msgid "New Keyring Name:"
 msgstr "Název nové klíčenky:"
 
 #. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-item-properties.ui:92
-#: pgp/seahorse-pgp-private-key-properties.ui:553
-#: pgp/seahorse-pgp-public-key-properties.ui:442
+#: gkr/seahorse-gkr-item-properties.ui:101
+#: pgp/seahorse-pgp-private-key-properties.ui:552
+#: pgp/seahorse-pgp-public-key-properties.ui:398
 msgid "Use:"
 msgstr "Použití:"
 
-#: gkr/seahorse-gkr-item-properties.ui:118
-#: pgp/seahorse-pgp-private-key-properties.ui:567
-#: pgp/seahorse-pgp-private-key-properties.ui:1106
-#: pgp/seahorse-pgp-public-key-properties.ui:557
-#: pgp/seahorse-pgp-public-key-properties.ui:1223
+#: gkr/seahorse-gkr-item-properties.ui:127
+#: pgp/seahorse-pgp-private-key-properties.ui:566
+#: pgp/seahorse-pgp-private-key-properties.ui:1105
+#: pgp/seahorse-pgp-public-key-properties.ui:513
+#: pgp/seahorse-pgp-public-key-properties.ui:1179
 #: ssh/seahorse-ssh-key-properties.ui:81
 msgid "Type:"
 msgstr "Typ:"
 
-#: gkr/seahorse-gkr-item-properties.ui:143
+#: gkr/seahorse-gkr-item-properties.ui:152
 msgid "Server:"
 msgstr "Server:"
 
-#: gkr/seahorse-gkr-item-properties.ui:167
+#: gkr/seahorse-gkr-item-properties.ui:176
 msgid "Login:"
 msgstr "Přihlášení:"
 
-#: gkr/seahorse-gkr-item-properties.ui:206 pgp/seahorse-pgp-subkey.c:402
-#: ssh/seahorse-ssh-key-properties.ui:245
+#: gkr/seahorse-gkr-item-properties.ui:215 pgp/seahorse-pgp-subkey.c:402
+#: ssh/seahorse-ssh-key-properties.ui:233
 msgid "Key"
 msgstr "Klíč"
 
-#: gkr/seahorse-gkr-item-properties.ui:256
-#: pgp/seahorse-pgp-public-key-properties.ui:1151
-#: ssh/seahorse-ssh-key-properties.ui:414
+#: gkr/seahorse-gkr-item-properties.ui:260
+#: pgp/seahorse-pgp-public-key-properties.ui:1107
+#: ssh/seahorse-ssh-key-properties.ui:376
 msgid "Technical Details:"
 msgstr "Technické podrobnosti:"
 
-#: gkr/seahorse-gkr-item-properties.ui:276
-#: pgp/seahorse-pgp-private-key-properties.ui:1722
-#: pgp/seahorse-pgp-public-key-properties.ui:1611
-#: ssh/seahorse-ssh-key-properties.ui:458
+#: gkr/seahorse-gkr-item-properties.ui:280
+#: pgp/seahorse-pgp-private-key-properties.ui:1721
+#: pgp/seahorse-pgp-public-key-properties.ui:1567
+#: ssh/seahorse-ssh-key-properties.ui:413
 msgid "Details"
 msgstr "Podrobnosti"
 
@@ -612,22 +754,22 @@ msgid "Keyring properties"
 msgstr "Vlastnosti klíčenky"
 
 #: gkr/seahorse-gkr-keyring.ui:23
-msgid "Keyring is unlocked"
-msgstr "Klíčenka je odemknutá"
+msgid "Keyring is locked"
+msgstr "Klíčenka je zamknutá"
 
 #: gkr/seahorse-gkr-keyring.ui:33
 msgid "Unlock"
 msgstr "Odemknout"
 
 #: gkr/seahorse-gkr-keyring.ui:46
-msgid "Keyring is locked"
-msgstr "Klíčenka je zamknutá"
+msgid "Keyring is unlocked"
+msgstr "Klíčenka je odemknutá"
 
 #: gkr/seahorse-gkr-keyring.ui:56
 msgid "Lock"
 msgstr "Zamknout"
 
-#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:969
+#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:965
 msgid "Name"
 msgstr "Název"
 
@@ -911,7 +1053,7 @@ msgstr "Nikdy ne_vyprší"
 msgid "If key never expires"
 msgstr "Pokud klíč nikdy nevyprší"
 
-#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:149
+#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
 msgid "Key _Type:"
 msgstr "_Typ klíče:"
 
@@ -948,11 +1090,11 @@ msgid "Optional comment describing key"
 msgstr "Nepovinná poznámka popisující klíč"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-add-uid.ui:73 pgp/seahorse-pgp-generate.ui:191
+#: pgp/seahorse-add-uid.ui:73 pgp/seahorse-pgp-generate.ui:86
 msgid "Full _Name:"
 msgstr "Celé _jméno:"
 
-#: pgp/seahorse-add-uid.ui:86 pgp/seahorse-pgp-generate.ui:204
+#: pgp/seahorse-add-uid.ui:86 pgp/seahorse-pgp-generate.ui:114
 msgid "_Email Address:"
 msgstr "_E-mailová adresa:"
 
@@ -1010,6 +1152,14 @@ msgstr "Nezdařilo se přidat ID uživatele"
 msgid "Add user ID to %s"
 msgstr "Přidat ID uživatele k %s"
 
+#: pgp/seahorse-gpgme.c:69
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr "Dešifrování selhalo. Pravděpodobně nemáte dešifrovací klíč."
+
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
+msgid "The operation was cancelled"
+msgstr "Operace byla zrušena"
+
 #: pgp/seahorse-gpgme-expires.c:63
 msgid "Invalid expiry date"
 msgstr "Neplatné datum vypršení"
@@ -1051,8 +1201,8 @@ msgstr "Klíč PGP"
 msgid "Used to encrypt email and files"
 msgstr "Pro šifrování souborů a elektronické pošty"
 
-#: pgp/seahorse-gpgme-generate.c:129 pkcs11/seahorse-pkcs11-generate.c:90
-#: ssh/seahorse-ssh-generate.ui:252
+#: pgp/seahorse-gpgme-generate.c:129 pkcs11/pkcs11-generate.vala:60
+#: ssh/seahorse-ssh-generate.ui:141
 msgid "RSA"
 msgstr "RSA"
 
@@ -1087,9 +1237,13 @@ msgstr ""
 "na klávesnici, hýbat myši, používat aplikace. Tím\n"
 "se systému dodávají náhodná data, která potřebuje."
 
-#: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
+#: pgp/seahorse-gpgme-generate.c:230 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Vytváření klíče"
+
+#: pgp/seahorse-gpgme-generate.c:357
+msgid "Name must be at least 5 characters long."
+msgstr "Název musí být alespoň 5 znaků dlouhý"
 
 #: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
@@ -1199,7 +1353,7 @@ msgstr "Všechny obrázkové soubory"
 msgid "All JPEG files"
 msgstr "Všechny soubory JPEG"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:280
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:273
 msgid "All files"
 msgstr "Všechny soubor"
 
@@ -1321,14 +1475,6 @@ msgstr "Neznámý"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-gpgme.c:69
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr "Dešifrování selhalo. Pravděpodobně nemáte dešifrovací klíč."
-
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
-msgid "The operation was cancelled"
-msgstr "Operace byla zrušena"
-
 #: pgp/seahorse-hkp-source.c:567
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
@@ -1344,49 +1490,49 @@ msgstr "Nelze komunikovat se serverem „%s“: %s"
 msgid "HTTP Key Server"
 msgstr "Servery klíčů HTTP"
 
-#: pgp/seahorse-keyserver-results.c:167
+#: pgp/seahorse-keyserver-results.c:166
 msgid "Couldn’t import keys"
 msgstr "Nezdařilo se importovat klíče"
 
-#: pgp/seahorse-keyserver-results.c:210
+#: pgp/seahorse-keyserver-results.c:209
 msgid "Importing keys from key servers"
 msgstr "Import klíčů ze serveru"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: pgp/seahorse-keyserver-results.c:236 src/key-manager.vala:52
+#: pgp/seahorse-keyserver-results.c:235 src/key-manager.vala:45
 msgid "_Remote"
 msgstr "_Vzdálené"
 
-#: pgp/seahorse-keyserver-results.c:238
+#: pgp/seahorse-keyserver-results.c:237
 msgid "Close this window"
 msgstr "Zavřít toto okno"
 
-#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:112
+#: pgp/seahorse-keyserver-results.c:241 pgp/seahorse-pgp-actions.c:112
 msgid "_Find Remote Keys…"
 msgstr "_Hledat vzdálené klíče…"
 
-#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:113
+#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:113
 msgid "Search for keys on a key server"
 msgstr "Hledat klíče na serveru klíčů"
 
-#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:222
+#: pgp/seahorse-keyserver-results.c:246 src/seahorse-key-manager.ui:227
 msgid "_Import"
 msgstr "_Importovat"
 
-#: pgp/seahorse-keyserver-results.c:248
+#: pgp/seahorse-keyserver-results.c:247
 msgid "Import selected keys to local key ring"
 msgstr "Importovat vybrané klíče do místní klíčenky"
 
-#: pgp/seahorse-keyserver-results.c:279
+#: pgp/seahorse-keyserver-results.c:278
 msgid "Remote Keys"
 msgstr "Vzdálené klíče"
 
-#: pgp/seahorse-keyserver-results.c:281
+#: pgp/seahorse-keyserver-results.c:280
 #, c-format
 msgid "Remote Keys Containing “%s”"
 msgstr "Vzdálené klíče obsahující „%s“"
 
-#: pgp/seahorse-keyserver-results.c:482
+#: pgp/seahorse-keyserver-results.c:480
 msgid "The search for keys failed."
 msgstr "Hledání klíčů se nezdařilo."
 
@@ -1515,170 +1661,48 @@ msgstr "Klíče PGP"
 msgid "PGP keys are for encrypting email or files"
 msgstr "Klíče PGP jsou pro zašifrování elektronické pošty nebo souborů"
 
-#: pgp/seahorse-pgp-generate.ui:80
-msgid "C_reate"
-msgstr "_Vytvořit"
+#: pgp/seahorse-pgp-generate.ui:18
+msgid "New PGP key"
+msgstr "Nový klíč PGP"
 
-#: pgp/seahorse-pgp-generate.ui:87
-msgid "Generate a new key"
-msgstr "Vygenerovat nový klíč"
-
-#: pgp/seahorse-pgp-generate.ui:137
+#: pgp/seahorse-pgp-generate.ui:67
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
 "Klíč PGP umožňuje zašifrovat soubory nebo elektronickou poštu (vždy pro "
 "konkrétního příjemce)."
 
-#: pgp/seahorse-pgp-generate.ui:254
-msgid "Ne_ver Expires"
-msgstr "Nikdy ne_vyprší"
-
-#: pgp/seahorse-pgp-generate.ui:354
-msgid "_Comment:"
-msgstr "_Poznámka:"
-
-#: pgp/seahorse-pgp-generate.ui:370 ssh/seahorse-ssh-generate.ui:212
-msgid "Encryption _Type:"
-msgstr "_Typ šifrování:"
-
-#: pgp/seahorse-pgp-generate.ui:385 pkcs11/seahorse-pkcs11-generate.ui:164
-#: ssh/seahorse-ssh-generate.ui:228
-msgid "Key _Strength (bits):"
-msgstr "_Délka klíče (v bitech):"
-
-#: pgp/seahorse-pgp-generate.ui:400
-msgid "E_xpiration Date:"
-msgstr "Datum _vypršení platnosti:"
-
-#: pgp/seahorse-pgp-generate.ui:418 pkcs11/seahorse-pkcs11-generate.ui:226
-#: ssh/seahorse-ssh-generate.ui:274
+#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "_Pokročilé volby"
 
-#: pgp/seahorse-pgp-key-properties.c:316
-msgid "Couldn’t change primary user ID"
-msgstr "Nezdařilo se změnit hlavní ID uživatele"
+#: pgp/seahorse-pgp-generate.ui:160
+msgid "_Comment:"
+msgstr "_Poznámka:"
 
-#: pgp/seahorse-pgp-key-properties.c:335
-#, c-format
-msgid "Are you sure you want to permanently delete the “%s” user ID?"
-msgstr "Opravdu chcete trvale smazat ID uživatele „%s“?"
+#: pgp/seahorse-pgp-generate.ui:188 ssh/seahorse-ssh-generate.ui:124
+msgid "Encryption _Type:"
+msgstr "_Typ šifrování:"
 
-#: pgp/seahorse-pgp-key-properties.c:345
-msgid "Couldn’t delete user ID"
-msgstr "Nezdařilo se smazat ID uživatele"
+#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
+#: ssh/seahorse-ssh-generate.ui:158
+msgid "Key _Strength (bits):"
+msgstr "_Délka klíče (v bitech):"
 
-#. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:420 pgp/seahorse-pgp-key-properties.c:1575
-msgid "[Unknown]"
-msgstr "[Neznámý]"
+#: pgp/seahorse-pgp-generate.ui:242
+msgid "E_xpiration Date:"
+msgstr "Datum _vypršení platnosti:"
 
-#. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:529 pgp/seahorse-pgp-key-properties.c:1858
-msgid "Name/Email"
-msgstr "Jméno / E-mail"
+#: pgp/seahorse-pgp-generate.ui:261
+msgid "Ne_ver Expires"
+msgstr "Nikdy ne_vyprší"
 
-#: pgp/seahorse-pgp-key-properties.c:536
-msgid "Signature ID"
-msgstr "ID podpisu"
+#: pgp/seahorse-pgp-generate.ui:304
+msgid "C_reate"
+msgstr "_Vytvořit"
 
-#: pgp/seahorse-pgp-key-properties.c:669
-msgid "Couldn’t change primary photo"
-msgstr "Nezdařilo se změnit hlavní fotografii"
-
-#. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:903
-msgid "(unknown)"
-msgstr "(neznámý)"
-
-#: pgp/seahorse-pgp-key-properties.c:906
-#, c-format
-msgid "This key expired on: %s"
-msgstr "Tento klíč vyprší dne: %s"
-
-#: pgp/seahorse-pgp-key-properties.c:1084
-#, c-format
-msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "Opravdu chcete trvale smazat podklíč %d z %s?"
-
-#: pgp/seahorse-pgp-key-properties.c:1093
-msgid "Couldn’t delete subkey"
-msgstr "Nezdařilo se smazat podklíč"
-
-#: pgp/seahorse-pgp-key-properties.c:1133
-#: pgp/seahorse-pgp-key-properties.c:1549
-msgid "Unable to change trust"
-msgstr "Nelze změnit stav důvěry"
-
-#: pgp/seahorse-pgp-key-properties.c:1147 ssh/key-properties.vala:174
-msgid "Couldn’t export key"
-msgstr "Nezdařilo se exportovat klíč"
-
-#: pgp/seahorse-pgp-key-properties.c:1263
-msgid "Marginal"
-msgstr "Věřím částečně"
-
-#: pgp/seahorse-pgp-key-properties.c:1269
-msgid "Full"
-msgstr "Věřím plně"
-
-#: pgp/seahorse-pgp-key-properties.c:1275
-msgid "Ultimate"
-msgstr "Věřím maximálně"
-
-#: pgp/seahorse-pgp-key-properties.c:1381
-#: pgp/seahorse-pgp-key-properties.c:1474
-msgctxt "Expires"
-msgid "Never"
-msgstr "Nikdy"
-
-#: pgp/seahorse-pgp-key-properties.c:1428
-msgid "ID"
-msgstr "ID"
-
-#: pgp/seahorse-pgp-key-properties.c:1431
-msgid "Type"
-msgstr "Typ"
-
-#: pgp/seahorse-pgp-key-properties.c:1434
-msgid "Usage"
-msgstr "Použití"
-
-#: pgp/seahorse-pgp-key-properties.c:1437
-msgid "Created"
-msgstr "Vytvořeno"
-
-#: pgp/seahorse-pgp-key-properties.c:1440
-msgid "Expires"
-msgstr "Vyprší"
-
-#: pgp/seahorse-pgp-key-properties.c:1443
-msgid "Status"
-msgstr "Stav"
-
-#: pgp/seahorse-pgp-key-properties.c:1446
-msgid "Strength"
-msgstr "Síla"
-
-#: pgp/seahorse-pgp-key-properties.c:1465
-msgid "Revoked"
-msgstr "Odvolaný"
-
-#: pgp/seahorse-pgp-key-properties.c:1467
-msgid "Expired"
-msgstr "Platnost vypršela"
-
-#: pgp/seahorse-pgp-key-properties.c:1469
-msgid "Disabled"
-msgstr "Zakázáno"
-
-#: pgp/seahorse-pgp-key-properties.c:1471
-msgid "Good"
-msgstr "V pořádku"
-
-#: pgp/seahorse-pgp-key-properties.c:1861
-msgid "Key ID"
-msgstr "Klíč ID"
+#: pgp/seahorse-pgp-generate.ui:311
+msgid "Generate a new key"
+msgstr "Vygenerovat nový klíč"
 
 #: pgp/seahorse-pgp-key.c:349
 msgid "Personal PGP key"
@@ -1688,174 +1712,299 @@ msgstr "Osobní klíč PGP"
 msgid "PGP key"
 msgstr "Klíč PGP"
 
+#: pgp/seahorse-pgp-key-properties.c:312
+msgid "Couldn’t change primary user ID"
+msgstr "Nezdařilo se změnit hlavní ID uživatele"
+
+#: pgp/seahorse-pgp-key-properties.c:331
+#, c-format
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
+msgstr "Opravdu chcete trvale smazat ID uživatele „%s“?"
+
+#: pgp/seahorse-pgp-key-properties.c:341
+msgid "Couldn’t delete user ID"
+msgstr "Nezdařilo se smazat ID uživatele"
+
+#. TRANSLATORS: [Unknown] signature name
+#: pgp/seahorse-pgp-key-properties.c:416 pgp/seahorse-pgp-key-properties.c:1571
+msgid "[Unknown]"
+msgstr "[Neznámý]"
+
+#. TRANSLATORS: The name and email set on the PGP key
+#: pgp/seahorse-pgp-key-properties.c:525 pgp/seahorse-pgp-key-properties.c:1854
+msgid "Name/Email"
+msgstr "Jméno / E-mail"
+
+#: pgp/seahorse-pgp-key-properties.c:532
+msgid "Signature ID"
+msgstr "ID podpisu"
+
+#: pgp/seahorse-pgp-key-properties.c:665
+msgid "Couldn’t change primary photo"
+msgstr "Nezdařilo se změnit hlavní fotografii"
+
+#. TRANSLATORS: (unknown) expiry date
+#: pgp/seahorse-pgp-key-properties.c:899
+msgid "(unknown)"
+msgstr "(neznámý)"
+
+#: pgp/seahorse-pgp-key-properties.c:902
+#, c-format
+msgid "This key expired on: %s"
+msgstr "Tento klíč vyprší dne: %s"
+
+#: pgp/seahorse-pgp-key-properties.c:1080
+#, c-format
+msgid "Are you sure you want to permanently delete subkey %d of %s?"
+msgstr "Opravdu chcete trvale smazat podklíč %d z %s?"
+
+#: pgp/seahorse-pgp-key-properties.c:1089
+msgid "Couldn’t delete subkey"
+msgstr "Nezdařilo se smazat podklíč"
+
+#: pgp/seahorse-pgp-key-properties.c:1129
+#: pgp/seahorse-pgp-key-properties.c:1545
+msgid "Unable to change trust"
+msgstr "Nelze změnit stav důvěry"
+
+#: pgp/seahorse-pgp-key-properties.c:1143 ssh/key-properties.vala:175
+msgid "Couldn’t export key"
+msgstr "Nezdařilo se exportovat klíč"
+
+#: pgp/seahorse-pgp-key-properties.c:1259
+msgid "Marginal"
+msgstr "Věřím částečně"
+
+#: pgp/seahorse-pgp-key-properties.c:1265
+msgid "Full"
+msgstr "Věřím plně"
+
+#: pgp/seahorse-pgp-key-properties.c:1271
+msgid "Ultimate"
+msgstr "Věřím maximálně"
+
+#: pgp/seahorse-pgp-key-properties.c:1377
+#: pgp/seahorse-pgp-key-properties.c:1470
+msgctxt "Expires"
+msgid "Never"
+msgstr "Nikdy"
+
+#: pgp/seahorse-pgp-key-properties.c:1424
+msgid "ID"
+msgstr "ID"
+
+#: pgp/seahorse-pgp-key-properties.c:1427
+msgid "Type"
+msgstr "Typ"
+
+#: pgp/seahorse-pgp-key-properties.c:1430
+msgid "Usage"
+msgstr "Použití"
+
+#: pgp/seahorse-pgp-key-properties.c:1433
+msgid "Created"
+msgstr "Vytvořeno"
+
+#: pgp/seahorse-pgp-key-properties.c:1436
+msgid "Expires"
+msgstr "Vyprší"
+
+#: pgp/seahorse-pgp-key-properties.c:1439
+msgid "Status"
+msgstr "Stav"
+
+#: pgp/seahorse-pgp-key-properties.c:1442
+msgid "Strength"
+msgstr "Síla"
+
+#: pgp/seahorse-pgp-key-properties.c:1461
+msgid "Revoked"
+msgstr "Odvolaný"
+
+#: pgp/seahorse-pgp-key-properties.c:1463
+msgid "Expired"
+msgstr "Platnost vypršela"
+
+#: pgp/seahorse-pgp-key-properties.c:1465
+msgid "Disabled"
+msgstr "Zakázáno"
+
+#: pgp/seahorse-pgp-key-properties.c:1467
+msgid "Good"
+msgstr "V pořádku"
+
+#: pgp/seahorse-pgp-key-properties.c:1857
+msgid "Key ID"
+msgstr "Klíč ID"
+
 #: pgp/seahorse-pgp-private-key-properties.ui:31
 #: pgp/seahorse-pgp-public-key-properties.ui:32
 msgid "Key Properties"
 msgstr "Vlastnosti klíče"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:70
-#: pgp/seahorse-pgp-public-key-properties.ui:120
+#: pgp/seahorse-pgp-private-key-properties.ui:69
+#: pgp/seahorse-pgp-public-key-properties.ui:76
 msgid "This key has been revoked"
 msgstr "Tento klíč byl odvolán"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:89
-#: pgp/seahorse-pgp-public-key-properties.ui:141
+#: pgp/seahorse-pgp-private-key-properties.ui:88
+#: pgp/seahorse-pgp-public-key-properties.ui:97
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "Vlastník klíče jej odvolat. Klíč je nyní nepoužitelný."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:132
-#: pgp/seahorse-pgp-public-key-properties.ui:192
+#: pgp/seahorse-pgp-private-key-properties.ui:131
+#: pgp/seahorse-pgp-public-key-properties.ui:148
 msgid "This key has expired"
 msgstr "Platnost tohoto klíče vypršela"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:222
+#: pgp/seahorse-pgp-private-key-properties.ui:221
 msgid "Add a photo to this key"
 msgstr "Přidat ke klíči fotografii"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:246
+#: pgp/seahorse-pgp-private-key-properties.ui:245
 msgid "Remove this photo from this key"
 msgstr "Odstranit z klíče tuto fotografii"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:270
+#: pgp/seahorse-pgp-private-key-properties.ui:269
 msgid "Make this photo the primary photo"
 msgstr "Nastavit jako hlavní fotografii"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:303
+#: pgp/seahorse-pgp-private-key-properties.ui:302
 msgid "Go to previous photo"
 msgstr "Předchozí fotografie"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:327
+#: pgp/seahorse-pgp-private-key-properties.ui:326
 msgid "Go to next photo"
 msgstr "Další fotografie"
 
 #. A photograph
-#: pgp/seahorse-pgp-private-key-properties.ui:389
-#: pgp/seahorse-pgp-public-key-properties.ui:395
+#: pgp/seahorse-pgp-private-key-properties.ui:388
+#: pgp/seahorse-pgp-public-key-properties.ui:351
 msgid "Photo "
 msgstr "Fotografie"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:425
-#: pgp/seahorse-pgp-private-key-properties.ui:1066
-#: pgp/seahorse-pgp-public-key-properties.ui:472
-#: pgp/seahorse-pgp-public-key-properties.ui:1181
+#: pgp/seahorse-pgp-private-key-properties.ui:424
+#: pgp/seahorse-pgp-private-key-properties.ui:1065
+#: pgp/seahorse-pgp-public-key-properties.ui:428
+#: pgp/seahorse-pgp-public-key-properties.ui:1137
 msgid "Key ID:"
 msgstr "Klíč ID:"
 
 #. Name of key, usually a persons name
-#: pgp/seahorse-pgp-private-key-properties.ui:442
-#: pgp/seahorse-pgp-public-key-properties.ui:506
+#: pgp/seahorse-pgp-private-key-properties.ui:441
+#: pgp/seahorse-pgp-public-key-properties.ui:462
 msgctxt "name-of-key"
 msgid "Name:"
 msgstr "Jméno:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:458
-#: pgp/seahorse-pgp-public-key-properties.ui:523
+#: pgp/seahorse-pgp-private-key-properties.ui:457
+#: pgp/seahorse-pgp-public-key-properties.ui:479
 msgid "Email:"
 msgstr "E-mail:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:474
-#: pgp/seahorse-pgp-public-key-properties.ui:540
+#: pgp/seahorse-pgp-private-key-properties.ui:473
+#: pgp/seahorse-pgp-public-key-properties.ui:496
 msgid "Comment:"
 msgstr "Poznámka:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:583
+#: pgp/seahorse-pgp-private-key-properties.ui:582
 msgid "Decrypt files and email sent to you."
 msgstr "Dešifrovat soubory a příchozí poštu."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:596
+#: pgp/seahorse-pgp-private-key-properties.ui:595
 msgid "Private PGP Key"
 msgstr "Soukromý klíč PGP"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:649
-#: ssh/seahorse-ssh-key-properties.ui:150
+#: pgp/seahorse-pgp-private-key-properties.ui:648
+#: ssh/seahorse-ssh-key-properties.ui:144
 msgid "Change _Passphrase"
 msgstr "Změnit heslo"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:691
-#: pgp/seahorse-pgp-public-key-properties.ui:711
+#: pgp/seahorse-pgp-private-key-properties.ui:690
+#: pgp/seahorse-pgp-public-key-properties.ui:667
 msgid "Owner"
 msgstr "Vlastník"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:706
+#: pgp/seahorse-pgp-private-key-properties.ui:705
 msgid "Key Names and Signatures"
 msgstr "Jména a podpisy"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:758
+#: pgp/seahorse-pgp-private-key-properties.ui:757
 msgid "Primary"
 msgstr "Hlavní"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:809 pgp/seahorse-pgp-subkey.c:292
+#: pgp/seahorse-pgp-private-key-properties.ui:808 pgp/seahorse-pgp-subkey.c:292
 msgid "Sign"
 msgstr "Podepsat"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:860
+#: pgp/seahorse-pgp-private-key-properties.ui:859
 msgid "Delete"
 msgstr "Smazat"
 
 #. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:911
+#: pgp/seahorse-pgp-private-key-properties.ui:910
 msgid "_Add Name"
 msgstr "_Přidat jméno"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:959
-#: pgp/seahorse-pgp-private-key-properties.ui:1649
+#: pgp/seahorse-pgp-private-key-properties.ui:958
+#: pgp/seahorse-pgp-private-key-properties.ui:1648
 msgid "Revoke"
 msgstr "Odvolat"
 
 #. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:1023
+#: pgp/seahorse-pgp-private-key-properties.ui:1022
 msgid "Names and Signatures"
 msgstr "Jména a podpisy"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1092
-#: pgp/seahorse-pgp-public-key-properties.ui:1208
+#: pgp/seahorse-pgp-private-key-properties.ui:1091
+#: pgp/seahorse-pgp-public-key-properties.ui:1164
 msgid "Strength:"
 msgstr "Síla:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1154
+#: pgp/seahorse-pgp-private-key-properties.ui:1153
 msgid "Technical Details"
 msgstr "Technické podrobnosti"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1190
+#: pgp/seahorse-pgp-private-key-properties.ui:1189
 msgid "Fingerprint"
 msgstr "Otisk klíče"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1233
-#: pgp/seahorse-pgp-public-key-properties.ui:1384
+#: pgp/seahorse-pgp-private-key-properties.ui:1232
+#: pgp/seahorse-pgp-public-key-properties.ui:1340
 msgid "Created:"
 msgstr "Vytvořeno:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1305
-#: pgp/seahorse-pgp-public-key-properties.ui:1397
+#: pgp/seahorse-pgp-private-key-properties.ui:1304
+#: pgp/seahorse-pgp-public-key-properties.ui:1353
 msgid "Expires:"
 msgstr "Vyprší:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1321
+#: pgp/seahorse-pgp-private-key-properties.ui:1320
 msgid "Dates"
 msgstr "Data"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1375
+#: pgp/seahorse-pgp-private-key-properties.ui:1374
 msgid "Override Owner _Trust:"
 msgstr "_Přebít důvěru vlastníka za:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1387
+#: pgp/seahorse-pgp-private-key-properties.ui:1386
 msgid "_Export Secret Key:"
 msgstr "_Exportovat tajný klíč:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1457
+#: pgp/seahorse-pgp-private-key-properties.ui:1456
 msgid "Actions"
 msgstr "Činnosti"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1532
+#: pgp/seahorse-pgp-private-key-properties.ui:1531
 msgid "Add"
 msgstr "Přidat"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1581
+#: pgp/seahorse-pgp-private-key-properties.ui:1580
 msgid "Expire"
 msgstr "Vyprší"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1701
-#: pgp/seahorse-pgp-public-key-properties.ui:1587
+#: pgp/seahorse-pgp-private-key-properties.ui:1700
+#: pgp/seahorse-pgp-public-key-properties.ui:1543
 msgid "_Subkeys"
 msgstr "_Podklíče"
 
@@ -1874,33 +2023,33 @@ msgctxt "Validity"
 msgid "Ultimately"
 msgstr "Věřím maximálně"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:457
+#: pgp/seahorse-pgp-public-key-properties.ui:413
 msgid "Encrypt files and email to the key’s owner"
 msgstr "Šifrování souborů a elektronické pošty pro vlastníka tohoto klíče "
 
-#: pgp/seahorse-pgp-public-key-properties.ui:621
+#: pgp/seahorse-pgp-public-key-properties.ui:577
 msgid "Public PGP Key"
 msgstr "Veřejný klíč PGP"
 
 #. Names set on the PGP key.
-#: pgp/seahorse-pgp-public-key-properties.ui:673
+#: pgp/seahorse-pgp-public-key-properties.ui:629
 msgid "_Other Names:"
 msgstr "_Jiná jména:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:753
+#: pgp/seahorse-pgp-public-key-properties.ui:709
 msgid "Your trust of this key"
 msgstr "Jak moc důvěřujete tomuto klíči"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:780
+#: pgp/seahorse-pgp-public-key-properties.ui:736
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr "Úroveň vaší důvěry je ručně zadána v záložce <i>Podrobnosti</i>."
 
-#: pgp/seahorse-pgp-public-key-properties.ui:796
+#: pgp/seahorse-pgp-public-key-properties.ui:752
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Důvěřuji podpisům, kterými „%s“ opatřuje jiné klíče"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:828
+#: pgp/seahorse-pgp-public-key-properties.ui:784
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1909,11 +2058,11 @@ msgstr ""
 "Pokud věříte, že osoba vlastnící tento klíč je „%s“, můžete tento klíč "
 "<i>podepsat</i>:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:879
+#: pgp/seahorse-pgp-public-key-properties.ui:835
 msgid "_Sign this Key"
 msgstr "_Podepsat klíč"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:919
+#: pgp/seahorse-pgp-public-key-properties.ui:875
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1921,37 +2070,37 @@ msgstr ""
 "Pokud nadále nevěříte, že osoba „%s“ tento klíč vlastní, můžete <i>odvolat</"
 "i> svůj podpis:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:970
+#: pgp/seahorse-pgp-public-key-properties.ui:926
 msgid "_Revoke Signature"
 msgstr "_Odvolat podpis"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1031
+#: pgp/seahorse-pgp-public-key-properties.ui:987
 msgid "_People who have signed this key:"
 msgstr "_Osoby, které podepsaly tento klíč:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1077
+#: pgp/seahorse-pgp-public-key-properties.ui:1033
 msgid "_Only display the signatures of people I trust"
 msgstr "Zobrazit _pouze podpisy osob, kterým důvěřuji"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1117
-#: ssh/seahorse-ssh-key-properties.ui:175
+#: pgp/seahorse-pgp-public-key-properties.ui:1073
+#: ssh/seahorse-ssh-key-properties.ui:168
 msgid "Trust"
 msgstr "Důvěra"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1290
-#: ssh/seahorse-ssh-key-properties.ui:358
+#: pgp/seahorse-pgp-public-key-properties.ui:1246
+#: ssh/seahorse-ssh-key-properties.ui:347
 msgid "Fingerprint:"
 msgstr "Otisk klíče:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1354
+#: pgp/seahorse-pgp-public-key-properties.ui:1310
 msgid "Dates:"
 msgstr "Data:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1460
+#: pgp/seahorse-pgp-public-key-properties.ui:1416
 msgid "Indicate Trust:"
 msgstr "Stav důvěry:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1485
+#: pgp/seahorse-pgp-public-key-properties.ui:1441
 msgid "You _Trust the Owner:"
 msgstr "_Důvěra tomuto vlastníkovi:"
 
@@ -1987,6 +2136,21 @@ msgstr "Nepovinný popis odvolání"
 #: pgp/seahorse-revoke.ui:154
 msgid "Re_voke"
 msgstr "_Odvolat"
+
+#: pgp/seahorse-signer.c:63
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr ""
+"Nemáte žádný osobní klíč PGP, který by bylo možno použít k podpisu dokumentu "
+"nebo zprávy."
+
+#: pgp/seahorse-signer.ui:7
+msgid "Choose Signing Key"
+msgstr "Výběr podepisovacího klíče"
+
+#: pgp/seahorse-signer.ui:25
+msgid "_Sign message with key:"
+msgstr "_Podepsat zprávu klíčem:"
 
 #: pgp/seahorse-sign.ui:7
 msgid "Sign Key"
@@ -2078,21 +2242,6 @@ msgstr "_Autor podpisu:"
 msgid "_Sign"
 msgstr "_Podepsat"
 
-#: pgp/seahorse-signer.c:63
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"Nemáte žádný osobní klíč PGP, který by bylo možno použít k podpisu dokumentu "
-"nebo zprávy."
-
-#: pgp/seahorse-signer.ui:7
-msgid "Choose Signing Key"
-msgstr "Výběr podepisovacího klíče"
-
-#: pgp/seahorse-signer.ui:25
-msgid "_Sign message with key:"
-msgstr "_Podepsat zprávu klíčem:"
-
 #: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
 msgid "Exporting data"
 msgstr "Export dat"
@@ -2137,6 +2286,18 @@ msgstr[0] "Chcete opravdu trvale smazat %d certifikát?"
 msgstr[1] "Chcete opravdu trvale smazat %d certifikáty?"
 msgstr[2] "Chcete opravdu trvale smazat %d certifikátů?"
 
+#: pkcs11/pkcs11-generate.vala:229
+msgid "Couldn’t generate private key"
+msgstr "Nezdařilo se vygenerovat soukromý klíč"
+
+#: pkcs11/pkcs11-generate.vala:284 pkcs11/pkcs11-private-key.vala:70
+msgid "Private key"
+msgstr "Soukromý klíč"
+
+#: pkcs11/pkcs11-generate.vala:285
+msgid "Used to request a certificate"
+msgstr "Použít k žádosti o certifikát"
+
 #: pkcs11/pkcs11-key-deleter.vala:34
 msgid "I understand that this key will be permanently deleted."
 msgstr "Chápu, že tento klíč bude trvale smazán."
@@ -2144,10 +2305,6 @@ msgstr "Chápu, že tento klíč bude trvale smazán."
 #: pkcs11/pkcs11-private-key.vala:61
 msgid "Unnamed private key"
 msgstr "Nepojmenovaný soukromý klíč"
-
-#: pkcs11/pkcs11-private-key.vala:70 pkcs11/seahorse-pkcs11-generate.c:505
-msgid "Private key"
-msgstr "Osobní klíč"
 
 #: pkcs11/pkcs11-properties.vala:134
 msgid "Unnamed"
@@ -2181,7 +2338,7 @@ msgstr "Zažádat o certifikát"
 msgid "Create a certificate request file for this key"
 msgstr "Vytvořit požadavek na certifikát pro tento klíč"
 
-#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.c:412
+#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.ui:193
 msgid "Create"
 msgstr "Vytvořit"
 
@@ -2192,6 +2349,10 @@ msgstr "Nezdařilo se vytvořit požadavek na certifikát"
 #: pkcs11/pkcs11-request.vala:104
 msgid "Save certificate request"
 msgstr "Uložit požadavek na certifikát"
+
+#: pkcs11/pkcs11-request.vala:107
+msgid "_Save"
+msgstr "_Uložit"
 
 #: pkcs11/pkcs11-request.vala:113
 msgid "Certificate request"
@@ -2210,31 +2371,27 @@ msgctxt "Label"
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: pkcs11/seahorse-pkcs11-backend.c:189
+#: pkcs11/seahorse-pkcs11-backend.c:187
 msgid "Certificates"
 msgstr "Certifikáty"
 
-#: pkcs11/seahorse-pkcs11-backend.c:195
+#: pkcs11/seahorse-pkcs11-backend.c:193
 msgid "X.509 certificates and related keys"
 msgstr "X.509 certifikáty a příslušné klíče"
 
-#: pkcs11/seahorse-pkcs11-generate.c:113
-msgid "Couldn’t generate private key"
-msgstr "Nezdařilo se vygenerovat osobní klíč"
+#: pkcs11/seahorse-pkcs11-generate.ui:6
+msgid "New private key"
+msgstr "Nový soukromý klíč"
 
-#: pkcs11/seahorse-pkcs11-generate.c:506
-msgid "Used to request a certificate"
-msgstr "Použít k žádosti o certifikát"
-
-#: pkcs11/seahorse-pkcs11-generate.ui:34
+#: pkcs11/seahorse-pkcs11-generate.ui:39
 msgid "Create a new private key"
-msgstr "Vytvořit nový osobní klíč"
+msgstr "Vytvořit nový soukromý klíč"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:53
+#: pkcs11/seahorse-pkcs11-generate.ui:58
 msgid "Label:"
 msgstr "Popisek:"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:66
+#: pkcs11/seahorse-pkcs11-generate.ui:71
 msgid "Stored at:"
 msgstr "Uložené jako:"
 
@@ -2250,113 +2407,117 @@ msgstr "Jméno (CN) použité v žádosti o certifikát."
 msgid "Name (CN):"
 msgstr "Jméno (CN):"
 
-#: src/application.vala:66
+#: src/application.vala:64
 msgid "Version of this application"
 msgstr "Verze této aplikace"
 
-#: src/application.vala:71 src/application.vala:107
+#: src/application.vala:69 src/application.vala:105
 msgid "- System Settings"
 msgstr "– Systémová nastavení"
 
-#: src/application.vala:102
+#: src/application.vala:100
 msgid "Don't display a window"
 msgstr "Nezobrazovat okno"
 
-#: src/generate-select.vala:77
-msgid "Continue"
-msgstr "Pokračovat"
+#: src/import-dialog.vala:30
+msgid "Data to be imported"
+msgstr "Údaje, které mají být importovány"
 
-#: src/import-dialog.vala:34
+#: src/import-dialog.vala:38
 msgid "Import"
 msgstr "Import"
 
-#: src/import-dialog.vala:40
-msgid "<b>Data to be imported:</b>"
-msgstr "<b>Údaje, které mají být importovány:</b>"
-
-#: src/import-dialog.vala:75
+#: src/import-dialog.vala:74
 msgid "Import failed"
 msgstr "Import selhal"
 
-#: src/key-manager.vala:53
+#: src/key-manager.vala:46
 msgid "_New"
 msgstr "_Nový"
 
-#: src/key-manager.vala:54
+#: src/key-manager.vala:47
+msgid "_Quit"
+msgstr "U_končit"
+
+#: src/key-manager.vala:47
 msgid "Close this program"
 msgstr "Ukončit program"
 
-#: src/key-manager.vala:55
+#: src/key-manager.vala:48
 msgid "_New…"
 msgstr "_Nový…"
 
-#: src/key-manager.vala:55
+#: src/key-manager.vala:48
 msgid "Create a new key or item"
 msgstr "Vytvořit nový klíč nebo položku"
 
-#: src/key-manager.vala:56
+#: src/key-manager.vala:49
 msgid "_Import…"
 msgstr "_Importovat…"
 
-#: src/key-manager.vala:56
+#: src/key-manager.vala:49
 msgid "Import from a file"
 msgstr "Importovat ze souboru"
 
-#: src/key-manager.vala:57
+#: src/key-manager.vala:50
+msgid "_Paste"
+msgstr "V_ložit"
+
+#: src/key-manager.vala:50
 msgid "Import from the clipboard"
 msgstr "Importovat ze schránky"
 
-#: src/key-manager.vala:61
+#: src/key-manager.vala:54
 msgid "By _Keyring"
 msgstr "Podle _klíčenky"
 
-#: src/key-manager.vala:61
+#: src/key-manager.vala:54
 msgid "Show sidebar listing keyrings"
 msgstr "Zobrazit postranní panel se seznamem klíčenek"
 
-#: src/key-manager.vala:65
+#: src/key-manager.vala:58
 msgid "Show _Personal"
 msgstr "Zobrazit _osobní"
 
-#: src/key-manager.vala:65
+#: src/key-manager.vala:58
 msgid "Only show personal keys, certificates and passwords"
 msgstr "Zobrazit pouze osobní klíče, certifikáty a hesla"
 
-#: src/key-manager.vala:66
+#: src/key-manager.vala:59
 msgid "Show _Trusted"
 msgstr "Zobrazit _důvěryhodné"
 
-#: src/key-manager.vala:66
+#: src/key-manager.vala:59
 msgid "Only show trusted keys, certificates and passwords"
 msgstr "Zobrazit pouze důvěryhodné klíče, certifikáty a hesla"
 
-#: src/key-manager.vala:67
+#: src/key-manager.vala:60
 msgid "Show _Any"
 msgstr "Zobrazit _všechny"
 
-#: src/key-manager.vala:67
+#: src/key-manager.vala:60
 msgid "Show all keys, certificates and passwords"
 msgstr "Zobrazit všechny klíče, certifikáty a hesla"
 
 #. The prompt
-#: src/key-manager.vala:235 ssh/operation.vala:320
+#: src/key-manager.vala:228 ssh/operation.vala:320
 msgid "Import Key"
 msgstr "Importovat klíč"
 
-#: src/key-manager.vala:238
+#: src/key-manager.vala:231
 msgid "_Open"
 msgstr "_Otevřít"
 
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:246
+#: src/key-manager.vala:239
 msgid "All key files"
 msgstr "Všechny soubory klíčů"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:311
 msgid "Dropped text"
 msgstr "Zkopírovaný text"
 
-#: src/key-manager.vala:344
+#: src/key-manager.vala:334
 msgid "Clipboard text"
 msgstr "Text ze schránky"
 
@@ -2376,33 +2537,41 @@ msgstr "Potvrdit nové heslo"
 msgid "Con_firm Passphrase:"
 msgstr "P_otvrdit heslo:"
 
-#: src/seahorse-generate-select.ui:15
+#: src/seahorse-generate-select.ui:5
+msgid "New item"
+msgstr "Nová položka"
+
+#: src/seahorse-generate-select.ui:21
 msgid "_Select the type of item to create:"
 msgstr "Zvo_lte druh položky, kterou chcete vytvořit:"
 
-#: src/seahorse-key-manager.ui:57
+#: src/seahorse-generate-select.ui:69
+msgid "Continue"
+msgstr "Pokračovat"
+
+#: src/seahorse-key-manager.ui:59
 msgid "Add a new key or item"
 msgstr "Přidat nový klíč nebo položku"
 
-#: src/seahorse-key-manager.ui:74
+#: src/seahorse-key-manager.ui:76
 msgid "Filter"
 msgstr "Filtr"
 
-#: src/seahorse-key-manager.ui:124
+#: src/seahorse-key-manager.ui:121
 msgid "First time options:"
 msgstr "Možnosti při prvním použití:"
 
-#: src/seahorse-key-manager.ui:179
-msgid "Generate a new key of your own: "
-msgstr "Vygenerovat nový klíč: "
+#: src/seahorse-key-manager.ui:172
+msgid "To get started with encryption you will need keys."
+msgstr "Abyste mohli začít používat šifrování, budete potřebovat klíče."
 
-#: src/seahorse-key-manager.ui:250
+#: src/seahorse-key-manager.ui:185
 msgid "Import existing keys from a file:"
 msgstr "Importovat existující klíče ze souboru:"
 
-#: src/seahorse-key-manager.ui:282
-msgid "To get started with encryption you will need keys."
-msgstr "Abyste mohli začít používat šifrování, budete potřebovat klíče."
+#: src/seahorse-key-manager.ui:251
+msgid "Generate a new key of your own: "
+msgstr "Vygenerovat nový klíč: "
 
 #: src/sidebar.vala:589
 msgid "Couldn’t lock"
@@ -2470,7 +2639,7 @@ msgid "No public key file is available for this key."
 msgstr "Pro tento klíč není k dispozici žádný soubor s veřejným klíčem."
 
 #. No comment, but loaded
-#: ssh/generate.vala:28 ssh/key.vala:120 ssh/key.vala:124
+#: ssh/generate.vala:28 ssh/key.vala:116 ssh/key.vala:120
 #: ssh/seahorse-ssh-key-properties.ui:96
 msgid "Secure Shell Key"
 msgstr "Klíč SSH"
@@ -2479,15 +2648,15 @@ msgstr "Klíč SSH"
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Pro přístup k jiným počítačům (např. terminálem)"
 
-#: ssh/generate.vala:114
+#: ssh/generate.vala:115
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Nezdařilo se načíst nově vygenerovaný klíč SSH"
 
-#: ssh/generate.vala:118
+#: ssh/generate.vala:119
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Nezdařilo se vygenerovat klíč SSH"
 
-#: ssh/generate.vala:121
+#: ssh/generate.vala:122
 msgid "Creating Secure Shell Key"
 msgstr "Vytvoření klíče SSH"
 
@@ -2503,19 +2672,19 @@ msgstr "256 bitů"
 msgid "Unknown key type!"
 msgstr "Neznámý typ klíče!"
 
-#: ssh/key-properties.vala:88
+#: ssh/key-properties.vala:89
 msgid "Unknown type"
 msgstr "Neznámý typ"
 
-#: ssh/key-properties.vala:112
+#: ssh/key-properties.vala:113
 msgid "Couldn’t rename key."
 msgstr "Nezdařilo se přejmenovat klíč."
 
-#: ssh/key-properties.vala:138
+#: ssh/key-properties.vala:139
 msgid "Couldn’t change authorization for key."
 msgstr "Nezdařilo se změnit autorizaci klíče."
 
-#: ssh/key-properties.vala:154
+#: ssh/key-properties.vala:155
 msgid "Couldn’t change passphrase for key."
 msgstr "Nezdařilo se změnit heslo klíče."
 
@@ -2528,7 +2697,7 @@ msgid "SSH key"
 msgstr "Klíč SSH"
 
 #. No names when not even the fingerpint loaded
-#: ssh/key.vala:117
+#: ssh/key.vala:113
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Nečitelný SSH klíč)"
 
@@ -2586,27 +2755,27 @@ msgstr "Zadejte znovu nové heslo pro: %s"
 msgid "New Secure Shell Key"
 msgstr "Nový klíč SSH"
 
-#: ssh/seahorse-ssh-generate.ui:66
+#: ssh/seahorse-ssh-generate.ui:55
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr "SSH klíč vám umožní bezpečně se připojit na jiné počítače."
 
-#: ssh/seahorse-ssh-generate.ui:164
+#: ssh/seahorse-ssh-generate.ui:108
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "Vaše e-mailová adresa nebo připomenutí účelu klíče."
 
-#: ssh/seahorse-ssh-generate.ui:253
+#: ssh/seahorse-ssh-generate.ui:142
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:254
+#: ssh/seahorse-ssh-generate.ui:143
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:255
+#: ssh/seahorse-ssh-generate.ui:144
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:293
+#: ssh/seahorse-ssh-generate.ui:186
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2614,11 +2783,11 @@ msgstr ""
 "Pokud existuje počítač, pro který chcete tento klíč použít, můžete jej pro "
 "použití tohoto klíče nastavit."
 
-#: ssh/seahorse-ssh-generate.ui:324
+#: ssh/seahorse-ssh-generate.ui:212
 msgid "_Just Create Key"
 msgstr "_Pouze vytvořit klíč"
 
-#: ssh/seahorse-ssh-generate.ui:338
+#: ssh/seahorse-ssh-generate.ui:226
 msgid "_Create and Set Up"
 msgstr "_Vytvořit a nastavit"
 
@@ -2632,28 +2801,28 @@ msgstr "Název:"
 msgid "Identifier:"
 msgstr "Identifikátor:"
 
-#: ssh/seahorse-ssh-key-properties.ui:197
+#: ssh/seahorse-ssh-key-properties.ui:187
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr "Vlastník tohoto klíče je autorizován pro připojení k to_muto počítači"
 
-#: ssh/seahorse-ssh-key-properties.ui:215
+#: ssh/seahorse-ssh-key-properties.ui:205
 #, c-format
 msgid "This only applies to the <i>%s</i> account."
 msgstr "Platí pouze pro účet <i>%s</i>."
 
-#: ssh/seahorse-ssh-key-properties.ui:279
+#: ssh/seahorse-ssh-key-properties.ui:262
 msgid "Algorithm:"
 msgstr "Algoritmus:"
 
-#: ssh/seahorse-ssh-key-properties.ui:294
+#: ssh/seahorse-ssh-key-properties.ui:290
 msgid "Key length:"
 msgstr "Délka klíče:"
 
-#: ssh/seahorse-ssh-key-properties.ui:342
+#: ssh/seahorse-ssh-key-properties.ui:317
 msgid "Location:"
 msgstr "Umístění:"
 
-#: ssh/seahorse-ssh-key-properties.ui:435
+#: ssh/seahorse-ssh-key-properties.ui:391
 msgid "E_xport Complete Key"
 msgstr "E_xportovat celý klíč"
 
@@ -2661,7 +2830,7 @@ msgstr "E_xportovat celý klíč"
 msgid "Set Up Computer for SSH Connection"
 msgstr "Nastavit počítač pro připojení pomocí SSH"
 
-#: ssh/seahorse-ssh-upload.ui:33
+#: ssh/seahorse-ssh-upload.ui:32
 msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
@@ -2669,19 +2838,19 @@ msgstr ""
 "Aby bylo možné pro připojení ke vzdálenému počítači použít SSH klíč, musí "
 "takový počítač používat SSH a také na něm musíte mít uživatelský účet."
 
-#: ssh/seahorse-ssh-upload.ui:74
-msgid "eg: fileserver.example.com:port"
-msgstr "například: fileserver.neco.cz:port"
-
-#: ssh/seahorse-ssh-upload.ui:99
+#: ssh/seahorse-ssh-upload.ui:48
 msgid "_Server address:"
 msgstr "Adresa _serveru:"
 
-#: ssh/seahorse-ssh-upload.ui:111
+#: ssh/seahorse-ssh-upload.ui:77
+msgid "eg: fileserver.example.com:port"
+msgstr "například: fileserver.neco.cz:port"
+
+#: ssh/seahorse-ssh-upload.ui:93
 msgid "_Login name:"
 msgstr "Přih_lašovací jméno:"
 
-#: ssh/seahorse-ssh-upload.ui:162
+#: ssh/seahorse-ssh-upload.ui:129
 msgid "Set Up"
 msgstr "Nastavit"
 
@@ -2703,10 +2872,10 @@ msgstr "openssh://%s"
 msgid "No private key file is available for this key."
 msgstr "Pro tento klíč není k dispozici žádný soubor se soukromým klíčem."
 
-#: ssh/upload.vala:66
+#: ssh/upload.vala:67
 msgid "Couldn’t configure Secure Shell keys on remote computer."
 msgstr "Na vzdáleném počítači se nezdařilo nastavit SSH klíče."
 
-#: ssh/upload.vala:70
+#: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Nastavují se klíče SSH…"
