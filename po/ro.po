@@ -7,10 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2018-08-04 17:20+0000\n"
-"PO-Revision-Date: 2018-08-07 22:27+0300\n"
-"Last-Translator: Florentina Mușat <florentina.musat.28 [at] gmail [dot] "
-"com>\n"
+"POT-Creation-Date: 2018-08-15 23:04+0000\n"
+"PO-Revision-Date: 2018-08-20 22:10+0200\n"
+"Last-Translator: Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
-"X-Generator: Poedit 2.0.9\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Launchpad-Export-Date: 2009-10-03 17:48+0000\n"
 "X-Project-Style: gnome\n"
 
@@ -32,7 +31,8 @@ msgstr "Personalizat"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
-#: gkr/seahorse-gkr-add-keyring.ui:82 src/seahorse-generate-select.ui:67
+#: gkr/seahorse-gkr-add-keyring.ui:82 pkcs11/seahorse-pkcs11-generate.ui:186
+#: src/seahorse-generate-select.ui:62 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Anulează"
 
@@ -40,19 +40,20 @@ msgstr "Anulează"
 msgid "Save"
 msgstr "Salvează"
 
-#: common/catalog.vala:249
+#: common/catalog.vala:244
 msgid "Contributions:"
 msgstr "Contribuții:"
 
-#: common/catalog.vala:275 data/seahorse.desktop.in.in:3
-#: src/key-manager.vala:82
+#: common/catalog.vala:270 data/seahorse.desktop.in.in:3
+#: src/key-manager.vala:75
 msgid "Passwords and Keys"
 msgstr "Parole și chei"
 
-#: common/catalog.vala:277
+#: common/catalog.vala:272
 msgid "translator-credits"
 msgstr ""
 "Lucian Adrian Grijincu\n"
+"Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018\n"
 "\n"
 "Launchpad Contributions:\n"
 "  Adi Roiban https://launchpad.net/~adiroiban\n"
@@ -63,115 +64,117 @@ msgstr ""
 "  Lucian Adrian Grijincu https://launchpad.net/~lucian.grijincu\n"
 "  ProMIX https://launchpad.net/~promix89-gmail"
 
-#: common/catalog.vala:280
+#: common/catalog.vala:275
 msgid "Seahorse Project Homepage"
 msgstr "Pagina proiectului Seahorse"
 
-#: common/catalog.vala:298
+#: common/catalog.vala:293
 msgid "Cannot delete"
 msgstr "Nu se poate șterge"
 
-#: common/catalog.vala:321 common/key-manager-store.vala:375
+#: common/catalog.vala:316 common/key-manager-store.vala:419
 msgid "Couldn’t export keys"
 msgstr "Nu s-au putut exporta cheile"
 
-#: common/catalog.vala:332
+#: common/catalog.vala:327
 msgid "Couldn’t export data"
 msgstr "Nu s-au putut exporta datele"
 
-#: common/catalog.vala:348 libseahorse/seahorse-widget.c:461
+#: common/catalog.vala:343 libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nu s-a putut afișa ajutorul: %s"
 
 #. Top menu items
-#: common/catalog.vala:354
+#: common/catalog.vala:349
 msgid "_File"
 msgstr "_Fișier"
 
-#: common/catalog.vala:355
+#: common/catalog.vala:350
 msgid "E_xport…"
 msgstr "E_xportă…"
 
-#: common/catalog.vala:356
+#: common/catalog.vala:351
 msgid "Export to a file"
 msgstr "Exportă într-un fișier"
 
-#: common/catalog.vala:357
+#: common/catalog.vala:352
 msgid "_Edit"
 msgstr "_Editare"
 
-#: common/catalog.vala:358
+#: common/catalog.vala:353
 msgid "_Copy"
 msgstr "_Copiază"
 
-#: common/catalog.vala:359
+#: common/catalog.vala:354
 msgid "Copy to the clipboard"
 msgstr "Copiază în clipboard"
 
 #. Translators: This text refers to deleting an item from its type's backing store
 #. Delete item
-#: common/catalog.vala:361 common/delete-dialog.vala:91
+#: common/catalog.vala:356 common/delete-dialog.vala:91
 #: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:655
 msgid "_Delete"
 msgstr "Ș_terge"
 
-#: common/catalog.vala:362
+#: common/catalog.vala:357
 msgid "Delete selected items"
 msgstr "Șterge elementele selectate"
 
 #. Properties item
-#: common/catalog.vala:363 common/catalog.vala:365 src/sidebar.vala:664
+#: common/catalog.vala:358 common/catalog.vala:360 src/sidebar.vala:664
 msgid "_Properties"
 msgstr "_Proprietăți"
 
-#: common/catalog.vala:364
+#: common/catalog.vala:359
 msgid "Show the properties of this item"
 msgstr "Afișează proprietățile acestui element"
 
-#: common/catalog.vala:366
+#: common/catalog.vala:361
 msgid "Show the properties of this keyring"
 msgstr "Arată proprietățile acestui inel de chei"
 
-#: common/catalog.vala:367
+#: common/catalog.vala:362
 msgid "Prefere_nces"
 msgstr "Preferi_nțe"
 
-#: common/catalog.vala:368
+#: common/catalog.vala:363
 msgid "Change preferences for this program"
 msgstr "Schimbă preferințele pentru acest program"
 
-#: common/catalog.vala:369
+#: common/catalog.vala:364
 msgid "_View"
 msgstr "_Vizualizare"
 
-#: common/catalog.vala:370
+#: common/catalog.vala:365
 msgid "_Help"
 msgstr "_Ajutor"
 
-#: common/catalog.vala:371
+#: common/catalog.vala:366
 msgid "_About"
 msgstr "_Despre"
 
-#: common/catalog.vala:372
+#: common/catalog.vala:367
 msgid "About this program"
 msgstr "Despre acest program"
 
-#: common/catalog.vala:373
+#: common/catalog.vala:368
 msgid "_Contents"
 msgstr "_Conținut"
 
-#: common/catalog.vala:374
+#: common/catalog.vala:369
 msgid "Show Seahorse help"
 msgstr "Afișează ajutorul pentru Seahorse"
 
+#. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
-#: common/passphrase-prompt.vala:117 src/import-dialog.vala:30
-#: src/key-manager.vala:237
+#: common/passphrase-prompt.vala:117 pgp/seahorse-pgp-generate.ui:294
+#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
+#: src/import-dialog.vala:34 src/key-manager.vala:230
 msgid "_Cancel"
 msgstr "_Anulează"
 
-#: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:1427
+#: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:1426
 msgid "Export"
 msgstr "Exportă"
 
@@ -201,15 +204,11 @@ msgid "Not a valid Key Server address."
 msgstr "Nu este o adresă validă pentru un server de chei."
 
 #: common/prefs.vala:167
-#, fuzzy
-#| msgid ""
-#| "For help contact your system adminstrator or the administrator of the key "
-#| "server."
 msgid ""
 "For help contact your system administrator or the administrator of the key "
 "server."
 msgstr ""
-"Pentur ajutor contactați administratorul de sistem sau administratorul "
+"Pentru ajutor contactați administratorul de sistem sau administratorul "
 "serverului de chei."
 
 #: common/prefs.vala:236
@@ -228,8 +227,8 @@ msgstr "Tip server de chei:"
 msgid "Host:"
 msgstr "Gazdă:"
 
-#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:59
-#: ssh/seahorse-ssh-upload.ui:127
+#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:67
+#: ssh/seahorse-ssh-upload.ui:108
 msgid "The host name or address of the server."
 msgstr "Numele sau adresa serverului."
 
@@ -261,14 +260,14 @@ msgstr "Sincronizează automat cheile _modificate cu serverele de chei"
 msgid "Key Servers"
 msgstr "Servere de chei"
 
-#: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1250
+#: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1246
 #: pgp/seahorse-pgp-private-key-properties.ui:12
 #: pgp/seahorse-pgp-public-key-properties.ui:12
 msgctxt "Validity"
 msgid "Unknown"
 msgstr "Necunoscută"
 
-#: common/validity.vala:40 pgp/seahorse-pgp-key-properties.c:1256
+#: common/validity.vala:40 pgp/seahorse-pgp-key-properties.c:1252
 #: pgp/seahorse-pgp-private-key-properties.ui:15
 #: pgp/seahorse-pgp-public-key-properties.ui:15
 msgctxt "Validity"
@@ -276,25 +275,19 @@ msgid "Never"
 msgstr "Niciodată"
 
 #: common/validity.vala:42 pgp/seahorse-pgp-private-key-properties.ui:18
-#, fuzzy
-#| msgid "Marginal"
 msgctxt "Validity"
 msgid "Marginal"
 msgstr "Marginală"
 
 #: common/validity.vala:44 pgp/seahorse-pgp-private-key-properties.ui:21
-#, fuzzy
-#| msgid "Full"
 msgctxt "Validity"
 msgid "Full"
 msgstr "Deplină"
 
 #: common/validity.vala:46 pgp/seahorse-pgp-private-key-properties.ui:24
-#, fuzzy
-#| msgid "Ultimate"
 msgctxt "Validity"
 msgid "Ultimate"
-msgstr "Fără echivoc"
+msgstr "Esențială"
 
 #: common/validity.vala:48
 msgctxt "Validity"
@@ -396,19 +389,15 @@ msgid "The column to sort the Seahorse keys by"
 msgstr "Coloana după care se sortează cheile Seahorse"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:30
-#, fuzzy
-#| msgid ""
-#| "Specify the column to sort the seahorse key manager main window by. "
-#| "Columns are: 'name', 'id', 'validity', 'expires', 'trust', and 'type'. "
-#| "Put a '-' in front of the column name to sort in descending order."
 msgid ""
 "Specify the column to sort the Seahorse key manager main window by. Columns "
 "are: “name”, “id”, “validity”, “expires”, “trust”, and “type”. Put a “-” in "
 "front of the column name to sort in descending order."
 msgstr ""
-"Specifică coloana după care se sortează fereastra de administrare a cheilor. "
-"Coloanele sunt: „nume”, „id”, „validitate”, „dată expirare”, „încredere” și "
-"„tip”. Puneți un „-” în fața numelui coloanei pentru a o sorta descrescător."
+"Specifică coloana după care se sortează fereastra principală de administrare "
+"a cheilor Seahorse. Coloanele sunt: „nume”, „id”, „validitate”, „expirare”, "
+"„încredere” și „tip”. Puneți un „-” în fața numelui coloanei pentru a o "
+"sorta descrescător."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:34
 msgid "Show validity column"
@@ -519,7 +508,7 @@ msgstr "Inel de chei pentru parole"
 msgid "Stored Password"
 msgstr "Parolă stocată"
 
-#: gkr/gkr-item-add.vala:103
+#: gkr/gkr-item-add.vala:106
 msgid "Couldn’t add item"
 msgstr "Nu s-a putut adăuga elementul"
 
@@ -597,10 +586,8 @@ msgid "Google Chrome password"
 msgstr "Parola pentru Google Chrome"
 
 #: gkr/gkr-item.vala:451
-#, fuzzy
-#| msgid "Gnome Online Accounts password"
 msgid "GNOME Online Accounts password"
-msgstr "Parola pentru conturile online Gnome"
+msgstr "Parola pentru conturile online GNOME"
 
 #: gkr/gkr-item.vala:452
 msgid "Telepathy password"
@@ -615,8 +602,7 @@ msgid "Network Manager secret"
 msgstr "Secretul pentru Network Manager"
 
 #: gkr/gkr-item.vala:504
-#, fuzzy, c-format
-#| msgid "Are you sure you want to delete the password '%s'?"
+#, c-format
 msgid "Are you sure you want to delete the password “%s”?"
 msgstr "Sigur doriți să ștergeți parola „%s”?"
 
@@ -628,7 +614,7 @@ msgstr[0] "Sigur doriți să ștergeți %d parolă?"
 msgstr[1] "Sigur doriți să ștergeți %d parole?"
 msgstr[2] "Sigur doriți să ștergeți %d de parole?"
 
-#: gkr/gkr-keyring-add.vala:52
+#: gkr/gkr-keyring-add.vala:55
 msgid "Couldn’t add keyring"
 msgstr "Nu s-a putut adăuga inelul de chei"
 
@@ -649,8 +635,6 @@ msgid "Couldn’t set default keyring"
 msgstr "Nu s-a putut stabili inelul de chei implicit"
 
 #: gkr/gkr-keyring.vala:198 gkr/gkr-keyring.vala:203
-#, fuzzy
-#| msgid "Couldn't change keyring password"
 msgid "Couldn’t change keyring password"
 msgstr "Nu s-a putut schimba parola inelului de chei"
 
@@ -672,10 +656,9 @@ msgid "Change the unlock password of the password storage keyring"
 msgstr "Schimbă parola de deblocare a inelului de chei de stocare a parolelor"
 
 #: gkr/gkr-keyring.vala:237
-#, fuzzy, c-format
-#| msgid "Are you sure you want to delete the password keyring '%s'?"
+#, c-format
 msgid "Are you sure you want to delete the password keyring “%s”?"
-msgstr "Sigur doriți să ștergeți inelul de chei de parole „%s”?"
+msgstr "Sigur doriți să ștergeți inelul de chei cu parole „%s”?"
 
 #: gkr/gkr-keyring.vala:240
 msgid "I understand that all items will be permanently deleted."
@@ -694,7 +677,7 @@ msgid "_Keyring:"
 msgstr "_Inel de chei:"
 
 #: gkr/seahorse-gkr-add-item.ui:45 gkr/seahorse-gkr-item-properties.ui:50
-#: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:130
+#: pgp/seahorse-revoke.ui:55 ssh/seahorse-ssh-generate.ui:78
 msgid "_Description:"
 msgstr "_Descriere:"
 
@@ -728,16 +711,16 @@ msgstr "Numele noului inel de chei:"
 
 #. To translators: This is the noun not the verb.
 #: gkr/seahorse-gkr-item-properties.ui:101
-#: pgp/seahorse-pgp-private-key-properties.ui:553
-#: pgp/seahorse-pgp-public-key-properties.ui:442
+#: pgp/seahorse-pgp-private-key-properties.ui:552
+#: pgp/seahorse-pgp-public-key-properties.ui:398
 msgid "Use:"
 msgstr "Utilizare:"
 
 #: gkr/seahorse-gkr-item-properties.ui:127
-#: pgp/seahorse-pgp-private-key-properties.ui:567
-#: pgp/seahorse-pgp-private-key-properties.ui:1106
-#: pgp/seahorse-pgp-public-key-properties.ui:557
-#: pgp/seahorse-pgp-public-key-properties.ui:1223
+#: pgp/seahorse-pgp-private-key-properties.ui:566
+#: pgp/seahorse-pgp-private-key-properties.ui:1105
+#: pgp/seahorse-pgp-public-key-properties.ui:513
+#: pgp/seahorse-pgp-public-key-properties.ui:1179
 #: ssh/seahorse-ssh-key-properties.ui:81
 msgid "Type:"
 msgstr "Tip:"
@@ -751,20 +734,20 @@ msgid "Login:"
 msgstr "Autentificare:"
 
 #: gkr/seahorse-gkr-item-properties.ui:215 pgp/seahorse-pgp-subkey.c:402
-#: ssh/seahorse-ssh-key-properties.ui:245
+#: ssh/seahorse-ssh-key-properties.ui:233
 msgid "Key"
 msgstr "Cheie"
 
-#: gkr/seahorse-gkr-item-properties.ui:264
-#: pgp/seahorse-pgp-public-key-properties.ui:1151
-#: ssh/seahorse-ssh-key-properties.ui:414
+#: gkr/seahorse-gkr-item-properties.ui:260
+#: pgp/seahorse-pgp-public-key-properties.ui:1107
+#: ssh/seahorse-ssh-key-properties.ui:376
 msgid "Technical Details:"
 msgstr "Detalii tehnice:"
 
-#: gkr/seahorse-gkr-item-properties.ui:284
-#: pgp/seahorse-pgp-private-key-properties.ui:1722
-#: pgp/seahorse-pgp-public-key-properties.ui:1611
-#: ssh/seahorse-ssh-key-properties.ui:458
+#: gkr/seahorse-gkr-item-properties.ui:280
+#: pgp/seahorse-pgp-private-key-properties.ui:1721
+#: pgp/seahorse-pgp-public-key-properties.ui:1567
+#: ssh/seahorse-ssh-key-properties.ui:413
 msgid "Details"
 msgstr "Detalii"
 
@@ -773,22 +756,22 @@ msgid "Keyring properties"
 msgstr "Proprietățile inelului de chei"
 
 #: gkr/seahorse-gkr-keyring.ui:23
-msgid "Keyring is unlocked"
-msgstr "Inelul de chei este deblocat"
+msgid "Keyring is locked"
+msgstr "Inelul de chei este blocat"
 
 #: gkr/seahorse-gkr-keyring.ui:33
 msgid "Unlock"
 msgstr "Deblochează"
 
 #: gkr/seahorse-gkr-keyring.ui:46
-msgid "Keyring is locked"
-msgstr "Inelul de chei este blocat"
+msgid "Keyring is unlocked"
+msgstr "Inelul de chei este deblocat"
 
 #: gkr/seahorse-gkr-keyring.ui:56
 msgid "Lock"
 msgstr "Blochează"
 
-#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:969
+#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:965
 msgid "Name"
 msgstr "Nume"
 
@@ -817,8 +800,6 @@ msgid "Lazy mode"
 msgstr "Modul leneș"
 
 #: libegg/egg-datetime.c:323
-#, fuzzy
-#| msgid "Lazy mode doesn't normalize entered date and time values"
 msgid "Lazy mode doesn’t normalize entered date and time values"
 msgstr "Modul leneș nu normalizează valorile datelor și orelor introduse"
 
@@ -1074,7 +1055,7 @@ msgstr "Nu e_xpiră niciodată"
 msgid "If key never expires"
 msgstr "Dacă cheia nu expiră niciodată"
 
-#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:149
+#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
 msgid "Key _Type:"
 msgstr "_Tip cheie:"
 
@@ -1111,11 +1092,11 @@ msgid "Optional comment describing key"
 msgstr "Comentariu opțional care descrie cheia"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-add-uid.ui:73 pgp/seahorse-pgp-generate.ui:191
+#: pgp/seahorse-add-uid.ui:73 pgp/seahorse-pgp-generate.ui:86
 msgid "Full _Name:"
 msgstr "_Nume complet:"
 
-#: pgp/seahorse-add-uid.ui:86 pgp/seahorse-pgp-generate.ui:204
+#: pgp/seahorse-add-uid.ui:86 pgp/seahorse-pgp-generate.ui:114
 msgid "_Email Address:"
 msgstr "Adresă _email:"
 
@@ -1173,6 +1154,14 @@ msgstr "Nu s-a putut adăuga id-ul de utilizator"
 msgid "Add user ID to %s"
 msgstr "Adaugă ID de utilizator la %s"
 
+#: pgp/seahorse-gpgme.c:69
+msgid "Decryption failed. You probably do not have the decryption key."
+msgstr "Decriptarea a eșuat. Probabil nu dețineți cheia de decriptare."
+
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
+msgid "The operation was cancelled"
+msgstr "Operația a fost anulată"
+
 #: pgp/seahorse-gpgme-expires.c:63
 msgid "Invalid expiry date"
 msgstr "Dată de expirare nevalidă"
@@ -1214,8 +1203,8 @@ msgstr "Cheie PGP"
 msgid "Used to encrypt email and files"
 msgstr "Folosită pentru a cripta emailuri și fișiere"
 
-#: pgp/seahorse-gpgme-generate.c:129 pkcs11/seahorse-pkcs11-generate.c:90
-#: ssh/seahorse-ssh-generate.ui:252
+#: pgp/seahorse-gpgme-generate.c:129 pkcs11/pkcs11-generate.vala:60
+#: ssh/seahorse-ssh-generate.ui:141
 msgid "RSA"
 msgstr "RSA"
 
@@ -1244,16 +1233,19 @@ msgid ""
 "the keyboard, moving the mouse, using applications.\n"
 "This gives the system the random data that it needs."
 msgstr ""
+"La crearea unei chei trebuie să generăm multe\n"
+"date aleatorii și avem nevoie de ajutorul dumneavoastră.\n"
+"Este o idee bună să efectuați și o altă acțiune cum ar fi\n"
+"tastarea pe tastatură, mișcarea mausului, utilizarea aplicațiilor.\n"
+"Aceasta oferă sistemului datele aleatorii de care are nevoie."
 
-#: pgp/seahorse-gpgme-generate.c:230 pkcs11/seahorse-pkcs11-generate.c:458
+#: pgp/seahorse-gpgme-generate.c:230 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Se generează cheia"
 
-#: pgp/seahorse-gpgme-generate.c:362
-#, fuzzy
-#| msgid "Must be at least 5 characters long"
+#: pgp/seahorse-gpgme-generate.c:357
 msgid "Name must be at least 5 characters long."
-msgstr "Trebuie să aibă minimum 5 caractere"
+msgstr "Trebuie să aibă minimum 5 caractere."
 
 #: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
@@ -1262,13 +1254,12 @@ msgid "Are you sure you want to permanently delete %s?"
 msgstr "Sigur doriți să ștergeți permanent %s?"
 
 #: pgp/seahorse-gpgme-key-deleter.c:80
-#, fuzzy, c-format
-#| msgid "Are you sure you want to permanently delete %d keys?"
+#, c-format
 msgid "Are you sure you want to permanently delete %d keys?"
 msgid_plural "Are you sure you want to permanently delete %d keys?"
-msgstr[0] "Sigur doriți să ștergeți permanent %d chei?"
+msgstr[0] "Sigur doriți să ștergeți permanent %d cheie?"
 msgstr[1] "Sigur doriți să ștergeți permanent %d chei?"
-msgstr[2] "Sigur doriți să ștergeți permanent %d chei?"
+msgstr[2] "Sigur doriți să ștergeți permanent %d de chei?"
 
 #: pgp/seahorse-gpgme-key-op.c:378
 msgid "Wrong password"
@@ -1332,16 +1323,13 @@ msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: dosarul implicit al inelului de chei"
 
 #: pgp/seahorse-gpgme-photos.c:72
-#, fuzzy, c-format
-#| msgid ""
-#| "<big><b>The photo is too large</b></big>\n"
-#| "The recommended size for a photo on your key is %d x %d pixels."
+#, c-format
 msgid ""
 "<big><b>The photo is too large</b></big>\n"
 "The recommended size for a photo on your key is %d × %d pixels."
 msgstr ""
 "<big><b>Fotografia este prea mare</b></big>\n"
-"Dimensiunea recomandata pentru o fotografie este de %d x %d pixeli."
+"Dimensiunea recomandată pentru o fotografie este de %d x %d pixeli."
 
 #: pgp/seahorse-gpgme-photos.c:77
 msgid "_Don’t Resize"
@@ -1368,7 +1356,7 @@ msgstr "Toate fișierele imagini"
 msgid "All JPEG files"
 msgstr "Toate fișierele JPEG"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:280
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:273
 msgid "All files"
 msgstr "Toate fișierele"
 
@@ -1447,16 +1435,12 @@ msgstr ""
 "nu poate fi anulată! Sigur doriți să continuați?"
 
 #: pgp/seahorse-gpgme-revoke.c:176
-#, fuzzy
-#| msgid "Couldn't add revoker"
 msgid "Couldn’t add revoker"
 msgstr "Nu s-a putut adăuga revocatorul"
 
 #: pgp/seahorse-gpgme-secret-deleter.c:81 ssh/deleter.vala:43
-#, fuzzy
-#| msgid "I understand that this action cannot be undone"
 msgid "I understand that this secret key will be permanently deleted."
-msgstr "Am înțeles că această acțiune nu poate fi anulată"
+msgstr "Înțeleg că această cheie secretă va fi ștearsă permanent."
 
 #: pgp/seahorse-gpgme-sign.c:99
 #, c-format
@@ -1494,24 +1478,14 @@ msgstr "Necunoscut"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-gpgme.c:69
-msgid "Decryption failed. You probably do not have the decryption key."
-msgstr "Decriptarea a eșuat. Probabil nu dețineți cheia de decriptare."
-
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
-msgid "The operation was cancelled"
-msgstr "Operația a fost anulată"
-
 #: pgp/seahorse-hkp-source.c:567
-#, fuzzy, c-format
-#| msgid "Search was not specific enough. Server '%s' found too many keys."
+#, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Căutarea nu a fost destul de precisă. Serverul „%s” a găsit prea multe chei."
 
 #: pgp/seahorse-hkp-source.c:570
-#, fuzzy, c-format
-#| msgid "Couldn't communicate with server '%s': %s"
+#, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Nu s-a putut comunica cu serverul „%s”: %s"
 
@@ -1519,51 +1493,49 @@ msgstr "Nu s-a putut comunica cu serverul „%s”: %s"
 msgid "HTTP Key Server"
 msgstr "Server HTTP de chei"
 
-#: pgp/seahorse-keyserver-results.c:167
+#: pgp/seahorse-keyserver-results.c:166
 msgid "Couldn’t import keys"
 msgstr "Nu s-au putut importa cheile"
 
-#: pgp/seahorse-keyserver-results.c:210
+#: pgp/seahorse-keyserver-results.c:209
 msgid "Importing keys from key servers"
 msgstr "Se importă chei de la serverele de chei"
 
 #. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: pgp/seahorse-keyserver-results.c:236 src/key-manager.vala:52
+#: pgp/seahorse-keyserver-results.c:235 src/key-manager.vala:45
 msgid "_Remote"
 msgstr "La di_stanță"
 
-#: pgp/seahorse-keyserver-results.c:238
+#: pgp/seahorse-keyserver-results.c:237
 msgid "Close this window"
 msgstr "Închide această fereastră"
 
-#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:112
-#, fuzzy
-#| msgid "Find Remote Keys"
+#: pgp/seahorse-keyserver-results.c:241 pgp/seahorse-pgp-actions.c:112
 msgid "_Find Remote Keys…"
-msgstr "Caută chei la distanță"
+msgstr "_Caută chei la distanță..."
 
-#: pgp/seahorse-keyserver-results.c:243 pgp/seahorse-pgp-actions.c:113
+#: pgp/seahorse-keyserver-results.c:242 pgp/seahorse-pgp-actions.c:113
 msgid "Search for keys on a key server"
 msgstr "Caută chei pe un server de chei"
 
-#: pgp/seahorse-keyserver-results.c:247 src/seahorse-key-manager.ui:222
+#: pgp/seahorse-keyserver-results.c:246 src/seahorse-key-manager.ui:227
 msgid "_Import"
 msgstr "_Importă"
 
-#: pgp/seahorse-keyserver-results.c:248
+#: pgp/seahorse-keyserver-results.c:247
 msgid "Import selected keys to local key ring"
 msgstr "Importă cheile selectate în inelul de chei local"
 
-#: pgp/seahorse-keyserver-results.c:279
+#: pgp/seahorse-keyserver-results.c:278
 msgid "Remote Keys"
 msgstr "Chei la distanță"
 
-#: pgp/seahorse-keyserver-results.c:281
+#: pgp/seahorse-keyserver-results.c:280
 #, c-format
 msgid "Remote Keys Containing “%s”"
 msgstr "Chei la distanță care conțin „%s”"
 
-#: pgp/seahorse-keyserver-results.c:482
+#: pgp/seahorse-keyserver-results.c:480
 msgid "The search for keys failed."
 msgstr "Căutarea cheilor a eșuat."
 
@@ -1588,10 +1560,8 @@ msgid "Key Servers:"
 msgstr "Servere de chei:"
 
 #: pgp/seahorse-keyserver-search.ui:153
-#, fuzzy
-#| msgid "<b>Shared Keys Near Me:</b>"
 msgid "Shared Keys Near Me:"
-msgstr "<b>Chei partajate în apropiere:</b>"
+msgstr "Chei partajate în apropiere:"
 
 #: pgp/seahorse-keyserver-search.ui:180
 msgid "Where to search:"
@@ -1627,11 +1597,6 @@ msgid "Sync Keys"
 msgstr "Sincronizează cheile"
 
 #: pgp/seahorse-keyserver-sync.ui:52
-#, fuzzy
-#| msgid ""
-#| "This will publish the keys in your key ring so they're available for "
-#| "others to use. You'll also get any changes others have made since you "
-#| "received their keys."
 msgid ""
 "This will publish the keys in your key ring so they’re available for others "
 "to use. You’ll also get any changes others have made since you received "
@@ -1660,8 +1625,7 @@ msgid "_Sync"
 msgstr "_Sincronizează"
 
 #: pgp/seahorse-ldap-source.c:435
-#, fuzzy, c-format
-#| msgid "Couldn't communicate with '%s': %s"
+#, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Nu s-a putut comunica cu „%s”: %s"
 
@@ -1685,8 +1649,6 @@ msgid "LDAP Key Server"
 msgstr "Server LDAP de chei"
 
 #: pgp/seahorse-pgp-actions.c:117
-#, fuzzy
-#| msgid "_Sync and Publish Keys..."
 msgid "_Sync and Publish Keys…"
 msgstr "_Sincronizează și publică cheile..."
 
@@ -1703,171 +1665,48 @@ msgstr "Chei PGP"
 msgid "PGP keys are for encrypting email or files"
 msgstr "Cheile PGP sunt folosite pentru a cripta emailuri și fișiere"
 
-#: pgp/seahorse-pgp-generate.ui:80
-msgid "C_reate"
-msgstr "C_reează"
+#: pgp/seahorse-pgp-generate.ui:18
+msgid "New PGP key"
+msgstr "Cheie PGP nouă"
 
-#: pgp/seahorse-pgp-generate.ui:87
-msgid "Generate a new key"
-msgstr "Generează o nouă cheie"
-
-#: pgp/seahorse-pgp-generate.ui:137
+#: pgp/seahorse-pgp-generate.ui:67
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
 "O cheie PGP vă permite să criptați emailuri și fișiere pe care le trimiteți "
 "altora."
 
-#: pgp/seahorse-pgp-generate.ui:254
-msgid "Ne_ver Expires"
-msgstr "Nu e_xpiră niciodată"
-
-#: pgp/seahorse-pgp-generate.ui:354
-msgid "_Comment:"
-msgstr "_Comentariu:"
-
-#: pgp/seahorse-pgp-generate.ui:370 ssh/seahorse-ssh-generate.ui:212
-msgid "Encryption _Type:"
-msgstr "_Tip criptare:"
-
-#: pgp/seahorse-pgp-generate.ui:385 pkcs11/seahorse-pkcs11-generate.ui:164
-#: ssh/seahorse-ssh-generate.ui:228
-msgid "Key _Strength (bits):"
-msgstr "Com_plexitate cheie (biți):"
-
-#: pgp/seahorse-pgp-generate.ui:400
-msgid "E_xpiration Date:"
-msgstr "Data e_xpirării:"
-
-#: pgp/seahorse-pgp-generate.ui:418 pkcs11/seahorse-pkcs11-generate.ui:226
-#: ssh/seahorse-ssh-generate.ui:274
+#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "Opțiuni _avansate pentru cheie"
 
-#: pgp/seahorse-pgp-key-properties.c:316
-msgid "Couldn’t change primary user ID"
-msgstr "Nu s-a putut modifica id-ul utilizatorului principal"
+#: pgp/seahorse-pgp-generate.ui:160
+msgid "_Comment:"
+msgstr "_Comentariu:"
 
-#: pgp/seahorse-pgp-key-properties.c:335
-#, fuzzy, c-format
-#| msgid "Are you sure you want to permanently delete the '%s' user ID?"
-msgid "Are you sure you want to permanently delete the “%s” user ID?"
-msgstr "Sigur doriți să ștergeți permanent identificatorul de utilizator „%s”?"
+#: pgp/seahorse-pgp-generate.ui:188 ssh/seahorse-ssh-generate.ui:124
+msgid "Encryption _Type:"
+msgstr "_Tip criptare:"
 
-#: pgp/seahorse-pgp-key-properties.c:345
-msgid "Couldn’t delete user ID"
-msgstr "Nu s-a putut șterge ID-ul utilizatorului"
+#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
+#: ssh/seahorse-ssh-generate.ui:158
+msgid "Key _Strength (bits):"
+msgstr "Com_plexitate cheie (biți):"
 
-#. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:420 pgp/seahorse-pgp-key-properties.c:1575
-msgid "[Unknown]"
-msgstr "[Nescunoscut]"
+#: pgp/seahorse-pgp-generate.ui:242
+msgid "E_xpiration Date:"
+msgstr "Data e_xpirării:"
 
-#. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:529 pgp/seahorse-pgp-key-properties.c:1858
-msgid "Name/Email"
-msgstr "Nume/Email"
+#: pgp/seahorse-pgp-generate.ui:261
+msgid "Ne_ver Expires"
+msgstr "Nu e_xpiră niciodată"
 
-#: pgp/seahorse-pgp-key-properties.c:536
-msgid "Signature ID"
-msgstr "ID semnătură"
+#: pgp/seahorse-pgp-generate.ui:304
+msgid "C_reate"
+msgstr "C_reează"
 
-#: pgp/seahorse-pgp-key-properties.c:669
-msgid "Couldn’t change primary photo"
-msgstr "Nu s-a putut modifica fotografia principală"
-
-#. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:903
-msgid "(unknown)"
-msgstr "(necunoscut)"
-
-#: pgp/seahorse-pgp-key-properties.c:906
-#, c-format
-msgid "This key expired on: %s"
-msgstr "Această cheie expiră la data: %s"
-
-#: pgp/seahorse-pgp-key-properties.c:1084
-#, c-format
-msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "Sigur doriți să ștergeți permanent subcheia %d din %s?"
-
-#: pgp/seahorse-pgp-key-properties.c:1093
-msgid "Couldn’t delete subkey"
-msgstr "Nu s-a putut șterge subcheia"
-
-#: pgp/seahorse-pgp-key-properties.c:1133
-#: pgp/seahorse-pgp-key-properties.c:1549
-msgid "Unable to change trust"
-msgstr "Nu s-a putut modifica nivelul de încredere"
-
-#: pgp/seahorse-pgp-key-properties.c:1147 ssh/key-properties.vala:174
-msgid "Couldn’t export key"
-msgstr "Nu s-a putut exporta cheia"
-
-#: pgp/seahorse-pgp-key-properties.c:1263
-msgid "Marginal"
-msgstr "Marginală"
-
-#: pgp/seahorse-pgp-key-properties.c:1269
-msgid "Full"
-msgstr "Deplină"
-
-#: pgp/seahorse-pgp-key-properties.c:1275
-msgid "Ultimate"
-msgstr "Fără echivoc"
-
-#: pgp/seahorse-pgp-key-properties.c:1381
-#: pgp/seahorse-pgp-key-properties.c:1474
-msgctxt "Expires"
-msgid "Never"
-msgstr "Niciodată"
-
-#: pgp/seahorse-pgp-key-properties.c:1428
-msgid "ID"
-msgstr "ID"
-
-#: pgp/seahorse-pgp-key-properties.c:1431
-msgid "Type"
-msgstr "Tip"
-
-#: pgp/seahorse-pgp-key-properties.c:1434
-msgid "Usage"
-msgstr "Utilizare"
-
-#: pgp/seahorse-pgp-key-properties.c:1437
-msgid "Created"
-msgstr "Creat"
-
-#: pgp/seahorse-pgp-key-properties.c:1440
-msgid "Expires"
-msgstr "Expiră"
-
-#: pgp/seahorse-pgp-key-properties.c:1443
-msgid "Status"
-msgstr "Stare"
-
-#: pgp/seahorse-pgp-key-properties.c:1446
-msgid "Strength"
-msgstr "Complexitate"
-
-#: pgp/seahorse-pgp-key-properties.c:1465
-msgid "Revoked"
-msgstr "Revocat"
-
-#: pgp/seahorse-pgp-key-properties.c:1467
-msgid "Expired"
-msgstr "Expirată"
-
-#: pgp/seahorse-pgp-key-properties.c:1469
-msgid "Disabled"
-msgstr "Dezactivat"
-
-#: pgp/seahorse-pgp-key-properties.c:1471
-msgid "Good"
-msgstr "Bună"
-
-#: pgp/seahorse-pgp-key-properties.c:1861
-msgid "Key ID"
-msgstr "ID cheie"
+#: pgp/seahorse-pgp-generate.ui:311
+msgid "Generate a new key"
+msgstr "Generează o nouă cheie"
 
 #: pgp/seahorse-pgp-key.c:349
 msgid "Personal PGP key"
@@ -1877,234 +1716,345 @@ msgstr "Cheie PGP personală"
 msgid "PGP key"
 msgstr "Cheie PGP"
 
+#: pgp/seahorse-pgp-key-properties.c:312
+msgid "Couldn’t change primary user ID"
+msgstr "Nu s-a putut modifica id-ul utilizatorului principal"
+
+#: pgp/seahorse-pgp-key-properties.c:331
+#, c-format
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
+msgstr "Sigur doriți să ștergeți permanent ID-ul de utilizator „%s”?"
+
+#: pgp/seahorse-pgp-key-properties.c:341
+msgid "Couldn’t delete user ID"
+msgstr "Nu s-a putut șterge ID-ul utilizatorului"
+
+#. TRANSLATORS: [Unknown] signature name
+#: pgp/seahorse-pgp-key-properties.c:416 pgp/seahorse-pgp-key-properties.c:1571
+msgid "[Unknown]"
+msgstr "[Nescunoscut]"
+
+#. TRANSLATORS: The name and email set on the PGP key
+#: pgp/seahorse-pgp-key-properties.c:525 pgp/seahorse-pgp-key-properties.c:1854
+msgid "Name/Email"
+msgstr "Nume/Email"
+
+#: pgp/seahorse-pgp-key-properties.c:532
+msgid "Signature ID"
+msgstr "ID semnătură"
+
+#: pgp/seahorse-pgp-key-properties.c:665
+msgid "Couldn’t change primary photo"
+msgstr "Nu s-a putut modifica fotografia principală"
+
+#. TRANSLATORS: (unknown) expiry date
+#: pgp/seahorse-pgp-key-properties.c:899
+msgid "(unknown)"
+msgstr "(necunoscut)"
+
+#: pgp/seahorse-pgp-key-properties.c:902
+#, c-format
+msgid "This key expired on: %s"
+msgstr "Această cheie expiră la data: %s"
+
+#: pgp/seahorse-pgp-key-properties.c:1080
+#, c-format
+msgid "Are you sure you want to permanently delete subkey %d of %s?"
+msgstr "Sigur doriți să ștergeți permanent subcheia %d din %s?"
+
+#: pgp/seahorse-pgp-key-properties.c:1089
+msgid "Couldn’t delete subkey"
+msgstr "Nu s-a putut șterge subcheia"
+
+#: pgp/seahorse-pgp-key-properties.c:1129
+#: pgp/seahorse-pgp-key-properties.c:1545
+msgid "Unable to change trust"
+msgstr "Nu s-a putut modifica nivelul de încredere"
+
+#: pgp/seahorse-pgp-key-properties.c:1143 ssh/key-properties.vala:175
+msgid "Couldn’t export key"
+msgstr "Nu s-a putut exporta cheia"
+
+#: pgp/seahorse-pgp-key-properties.c:1259
+msgid "Marginal"
+msgstr "Marginală"
+
+#: pgp/seahorse-pgp-key-properties.c:1265
+msgid "Full"
+msgstr "Deplină"
+
+#: pgp/seahorse-pgp-key-properties.c:1271
+msgid "Ultimate"
+msgstr "Fără echivoc"
+
+#: pgp/seahorse-pgp-key-properties.c:1377
+#: pgp/seahorse-pgp-key-properties.c:1470
+msgctxt "Expires"
+msgid "Never"
+msgstr "Niciodată"
+
+#: pgp/seahorse-pgp-key-properties.c:1424
+msgid "ID"
+msgstr "ID"
+
+#: pgp/seahorse-pgp-key-properties.c:1427
+msgid "Type"
+msgstr "Tip"
+
+#: pgp/seahorse-pgp-key-properties.c:1430
+msgid "Usage"
+msgstr "Utilizare"
+
+#: pgp/seahorse-pgp-key-properties.c:1433
+msgid "Created"
+msgstr "Creat"
+
+#: pgp/seahorse-pgp-key-properties.c:1436
+msgid "Expires"
+msgstr "Expiră"
+
+#: pgp/seahorse-pgp-key-properties.c:1439
+msgid "Status"
+msgstr "Stare"
+
+#: pgp/seahorse-pgp-key-properties.c:1442
+msgid "Strength"
+msgstr "Complexitate"
+
+#: pgp/seahorse-pgp-key-properties.c:1461
+msgid "Revoked"
+msgstr "Revocat"
+
+#: pgp/seahorse-pgp-key-properties.c:1463
+msgid "Expired"
+msgstr "Expirată"
+
+#: pgp/seahorse-pgp-key-properties.c:1465
+msgid "Disabled"
+msgstr "Dezactivat"
+
+#: pgp/seahorse-pgp-key-properties.c:1467
+msgid "Good"
+msgstr "Bună"
+
+#: pgp/seahorse-pgp-key-properties.c:1857
+msgid "Key ID"
+msgstr "ID cheie"
+
 #: pgp/seahorse-pgp-private-key-properties.ui:31
 #: pgp/seahorse-pgp-public-key-properties.ui:32
 msgid "Key Properties"
 msgstr "Proprietăți cheie"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:70
-#: pgp/seahorse-pgp-public-key-properties.ui:120
+#: pgp/seahorse-pgp-private-key-properties.ui:69
+#: pgp/seahorse-pgp-public-key-properties.ui:76
 msgid "This key has been revoked"
 msgstr "Această cheie a fost revocată"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:89
-#: pgp/seahorse-pgp-public-key-properties.ui:141
+#: pgp/seahorse-pgp-private-key-properties.ui:88
+#: pgp/seahorse-pgp-public-key-properties.ui:97
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "Deținătorul cheii a revocat cheia. Nu mai poate fi folosită."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:132
-#: pgp/seahorse-pgp-public-key-properties.ui:192
+#: pgp/seahorse-pgp-private-key-properties.ui:131
+#: pgp/seahorse-pgp-public-key-properties.ui:148
 msgid "This key has expired"
 msgstr "Această cheie a expirat"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:222
+#: pgp/seahorse-pgp-private-key-properties.ui:221
 msgid "Add a photo to this key"
 msgstr "Adaugă o fotografie la această cheie"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:246
+#: pgp/seahorse-pgp-private-key-properties.ui:245
 msgid "Remove this photo from this key"
 msgstr "Șterge această fotografie din această cheie"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:270
+#: pgp/seahorse-pgp-private-key-properties.ui:269
 msgid "Make this photo the primary photo"
 msgstr "Definește această fotografie ca fotografia principală"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:303
+#: pgp/seahorse-pgp-private-key-properties.ui:302
 msgid "Go to previous photo"
 msgstr "Treci la fotografia precedentă"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:327
+#: pgp/seahorse-pgp-private-key-properties.ui:326
 msgid "Go to next photo"
 msgstr "Treci la fotografia următoare"
 
 #. A photograph
-#: pgp/seahorse-pgp-private-key-properties.ui:389
-#: pgp/seahorse-pgp-public-key-properties.ui:395
+#: pgp/seahorse-pgp-private-key-properties.ui:388
+#: pgp/seahorse-pgp-public-key-properties.ui:351
 msgid "Photo "
 msgstr "Fotografie"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:425
-#: pgp/seahorse-pgp-private-key-properties.ui:1066
-#: pgp/seahorse-pgp-public-key-properties.ui:472
-#: pgp/seahorse-pgp-public-key-properties.ui:1181
+#: pgp/seahorse-pgp-private-key-properties.ui:424
+#: pgp/seahorse-pgp-private-key-properties.ui:1065
+#: pgp/seahorse-pgp-public-key-properties.ui:428
+#: pgp/seahorse-pgp-public-key-properties.ui:1137
 msgid "Key ID:"
 msgstr "ID cheie:"
 
 #. Name of key, usually a persons name
-#: pgp/seahorse-pgp-private-key-properties.ui:442
-#: pgp/seahorse-pgp-public-key-properties.ui:506
+#: pgp/seahorse-pgp-private-key-properties.ui:441
+#: pgp/seahorse-pgp-public-key-properties.ui:462
 msgctxt "name-of-key"
 msgid "Name:"
 msgstr "Nume:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:458
-#: pgp/seahorse-pgp-public-key-properties.ui:523
+#: pgp/seahorse-pgp-private-key-properties.ui:457
+#: pgp/seahorse-pgp-public-key-properties.ui:479
 msgid "Email:"
 msgstr "Email:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:474
-#: pgp/seahorse-pgp-public-key-properties.ui:540
+#: pgp/seahorse-pgp-private-key-properties.ui:473
+#: pgp/seahorse-pgp-public-key-properties.ui:496
 msgid "Comment:"
 msgstr "Comentariu:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:583
+#: pgp/seahorse-pgp-private-key-properties.ui:582
 msgid "Decrypt files and email sent to you."
 msgstr "Decriptează fișiere și emailuri primite."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:596
+#: pgp/seahorse-pgp-private-key-properties.ui:595
 msgid "Private PGP Key"
 msgstr "Cheie PGP privată"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:649
-#: ssh/seahorse-ssh-key-properties.ui:150
+#: pgp/seahorse-pgp-private-key-properties.ui:648
+#: ssh/seahorse-ssh-key-properties.ui:144
 msgid "Change _Passphrase"
 msgstr "Schimbă _frază secretă"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:691
-#: pgp/seahorse-pgp-public-key-properties.ui:711
+#: pgp/seahorse-pgp-private-key-properties.ui:690
+#: pgp/seahorse-pgp-public-key-properties.ui:667
 msgid "Owner"
 msgstr "Proprietar"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:706
-#, fuzzy
-#| msgid "Names and Signatures"
+#: pgp/seahorse-pgp-private-key-properties.ui:705
 msgid "Key Names and Signatures"
-msgstr "Nume și semnături"
+msgstr "Nume și semnături de chei"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:758
+#: pgp/seahorse-pgp-private-key-properties.ui:757
 msgid "Primary"
 msgstr "Primară"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:809 pgp/seahorse-pgp-subkey.c:292
+#: pgp/seahorse-pgp-private-key-properties.ui:808 pgp/seahorse-pgp-subkey.c:292
 msgid "Sign"
 msgstr "Semnează"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:860
+#: pgp/seahorse-pgp-private-key-properties.ui:859
 msgid "Delete"
 msgstr "Șterge"
 
 #. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:911
+#: pgp/seahorse-pgp-private-key-properties.ui:910
 msgid "_Add Name"
 msgstr "_Adaugă nume"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:959
-#: pgp/seahorse-pgp-private-key-properties.ui:1649
+#: pgp/seahorse-pgp-private-key-properties.ui:958
+#: pgp/seahorse-pgp-private-key-properties.ui:1648
 msgid "Revoke"
 msgstr "Revocă"
 
 #. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:1023
+#: pgp/seahorse-pgp-private-key-properties.ui:1022
 msgid "Names and Signatures"
 msgstr "Nume și semnături"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1092
-#: pgp/seahorse-pgp-public-key-properties.ui:1208
+#: pgp/seahorse-pgp-private-key-properties.ui:1091
+#: pgp/seahorse-pgp-public-key-properties.ui:1164
 msgid "Strength:"
 msgstr "Complexitate:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1154
+#: pgp/seahorse-pgp-private-key-properties.ui:1153
 msgid "Technical Details"
 msgstr "Detalii tehnice"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1190
+#: pgp/seahorse-pgp-private-key-properties.ui:1189
 msgid "Fingerprint"
 msgstr "Amprentă"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1233
-#: pgp/seahorse-pgp-public-key-properties.ui:1384
+#: pgp/seahorse-pgp-private-key-properties.ui:1232
+#: pgp/seahorse-pgp-public-key-properties.ui:1340
 msgid "Created:"
 msgstr "Creat:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1305
-#: pgp/seahorse-pgp-public-key-properties.ui:1397
+#: pgp/seahorse-pgp-private-key-properties.ui:1304
+#: pgp/seahorse-pgp-public-key-properties.ui:1353
 msgid "Expires:"
 msgstr "Expiră:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1321
+#: pgp/seahorse-pgp-private-key-properties.ui:1320
 msgid "Dates"
 msgstr "Date"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1375
+#: pgp/seahorse-pgp-private-key-properties.ui:1374
 msgid "Override Owner _Trust:"
 msgstr "Înlocuieș_te nivelul de încredere al proprietarului:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1387
+#: pgp/seahorse-pgp-private-key-properties.ui:1386
 msgid "_Export Secret Key:"
 msgstr "_Exportă cheia secretă:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1457
+#: pgp/seahorse-pgp-private-key-properties.ui:1456
 msgid "Actions"
 msgstr "Acțiuni"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1532
+#: pgp/seahorse-pgp-private-key-properties.ui:1531
 msgid "Add"
 msgstr "Adaugă"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1581
+#: pgp/seahorse-pgp-private-key-properties.ui:1580
 msgid "Expire"
 msgstr "Expiră"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1701
-#: pgp/seahorse-pgp-public-key-properties.ui:1587
+#: pgp/seahorse-pgp-private-key-properties.ui:1700
+#: pgp/seahorse-pgp-public-key-properties.ui:1543
 msgid "_Subkeys"
 msgstr "_Subchei"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:18
-#, fuzzy
-#| msgid "Marginally"
 msgctxt "Validity"
 msgid "Marginally"
 msgstr "Marginală"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:21
-#, fuzzy
-#| msgid "Fully"
 msgctxt "Validity"
 msgid "Fully"
 msgstr "Deplină"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:24
-#, fuzzy
-#| msgid "Ultimately"
 msgctxt "Validity"
 msgid "Ultimately"
-msgstr "Fără echivoc"
+msgstr "Esențială"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:457
-#, fuzzy
-#| msgid "Encrypt files and email to the key's owner "
+#: pgp/seahorse-pgp-public-key-properties.ui:413
 msgid "Encrypt files and email to the key’s owner"
-msgstr "Criptează fisiere și emailuri către deținătorul cheii"
+msgstr "Criptează fișiere și email-uri către deținătorul cheii"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:621
+#: pgp/seahorse-pgp-public-key-properties.ui:577
 msgid "Public PGP Key"
 msgstr "Cheie PGP publică"
 
 #. Names set on the PGP key.
-#: pgp/seahorse-pgp-public-key-properties.ui:673
+#: pgp/seahorse-pgp-public-key-properties.ui:629
 msgid "_Other Names:"
 msgstr "_Alte nume:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:753
+#: pgp/seahorse-pgp-public-key-properties.ui:709
 msgid "Your trust of this key"
 msgstr "Încrederea în această cheie"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:780
+#: pgp/seahorse-pgp-public-key-properties.ui:736
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr "Nivelul de încredere este specificat manual în tabul <i>Detalii</i>."
 
-#: pgp/seahorse-pgp-public-key-properties.ui:796
-#, fuzzy, c-format
-#| msgid "I trust signatures from '%s' on other keys"
+#: pgp/seahorse-pgp-public-key-properties.ui:752
+#, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Am încredere în semnăturile lui „%s” pe alte chei"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:828
-#, fuzzy, c-format
-#| msgid ""
-#| "If you believe that the person that owns this key is '%s', <i>sign</i> "
-#| "this key:"
+#: pgp/seahorse-pgp-public-key-properties.ui:784
+#, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
@@ -2112,51 +2062,48 @@ msgstr ""
 "Dacă credeți că persoana care deține cheia aceasta este „%s”, <i>semnați</i> "
 "această cheie:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:879
+#: pgp/seahorse-pgp-public-key-properties.ui:835
 msgid "_Sign this Key"
 msgstr "_Semnează această cheie"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:919
-#, fuzzy, c-format
-#| msgid ""
-#| "If you no longer trust that '%s' owns this key, <i>revoke</i> your "
-#| "signature:"
+#: pgp/seahorse-pgp-public-key-properties.ui:875
+#, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
 msgstr ""
 "Dacă nu mai aveți încredere că „%s” deține cheia, <i>revocați</i> semnătura:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:970
+#: pgp/seahorse-pgp-public-key-properties.ui:926
 msgid "_Revoke Signature"
 msgstr "_Revocă semnătura"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1031
+#: pgp/seahorse-pgp-public-key-properties.ui:987
 msgid "_People who have signed this key:"
 msgstr "_Persoanele care au semnat această cheie:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1077
+#: pgp/seahorse-pgp-public-key-properties.ui:1033
 msgid "_Only display the signatures of people I trust"
 msgstr "Afișează d_oar semnăturile persoanelor în care am încredere"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1117
-#: ssh/seahorse-ssh-key-properties.ui:175
+#: pgp/seahorse-pgp-public-key-properties.ui:1073
+#: ssh/seahorse-ssh-key-properties.ui:168
 msgid "Trust"
 msgstr "Încredere"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1290
-#: ssh/seahorse-ssh-key-properties.ui:358
+#: pgp/seahorse-pgp-public-key-properties.ui:1246
+#: ssh/seahorse-ssh-key-properties.ui:347
 msgid "Fingerprint:"
 msgstr "Amprentă:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1354
+#: pgp/seahorse-pgp-public-key-properties.ui:1310
 msgid "Dates:"
 msgstr "Date:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1460
+#: pgp/seahorse-pgp-public-key-properties.ui:1416
 msgid "Indicate Trust:"
 msgstr "Indică nivelul de încredere:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:1485
+#: pgp/seahorse-pgp-public-key-properties.ui:1441
 msgid "You _Trust the Owner:"
 msgstr "Aveți încredere în proprie_tar:"
 
@@ -2193,6 +2140,21 @@ msgstr "Descriere opțională de revocare"
 msgid "Re_voke"
 msgstr "Re_vocă"
 
+#: pgp/seahorse-signer.c:63
+msgid ""
+"You have no personal PGP keys that can be used to sign a document or message."
+msgstr ""
+"Nu aveți chei PGP personale care pot fi folosite pentru a semna un document "
+"sau un mesaj."
+
+#: pgp/seahorse-signer.ui:7
+msgid "Choose Signing Key"
+msgstr "Alege cheia cu care se semnează"
+
+#: pgp/seahorse-signer.ui:25
+msgid "_Sign message with key:"
+msgstr "_Semnează mesajul cu cheia:"
+
 #: pgp/seahorse-sign.ui:7
 msgid "Sign Key"
 msgstr "Semnează cheia"
@@ -2206,10 +2168,8 @@ msgid "Key Name"
 msgstr "Nume cheie"
 
 #: pgp/seahorse-sign.ui:86
-#, fuzzy
-#| msgid "<b>How carefully have you checked this key?</b>"
 msgid "How carefully have you checked this key?"
-msgstr "<b>Cât de atent ați verificat cheia aceasta?</b>"
+msgstr "Cât de atent ați verificat cheia aceasta?"
 
 #: pgp/seahorse-sign.ui:118
 msgid "_Not at all"
@@ -2232,11 +2192,6 @@ msgstr ""
 "revendică că o deține, dar credeți că este adevărat."
 
 #: pgp/seahorse-sign.ui:197
-#, fuzzy
-#| msgid ""
-#| "<i>Casually:</i> means you have done a casual verification that the key "
-#| "is owned by the person who claims to own it. For example, you could read "
-#| "the key fingerprint to the owner over the phone. "
 msgid ""
 "<i>Casually:</i> means you have done a casual verification that the key is "
 "owned by the person who claims to own it. For example, you could read the "
@@ -2265,10 +2220,8 @@ msgstr ""
 "emailul pentru a verifica dacă adresa de email aparține acestei persoane."
 
 #: pgp/seahorse-sign.ui:289
-#, fuzzy
-#| msgid "<b>How others will see this signature:</b>"
 msgid "How others will see this signature:"
-msgstr "<b>Cum vor vedea ceilalți această semnătură:</b>"
+msgstr "Cum vor vedea ceilalți această semnătură:<"
 
 #: pgp/seahorse-sign.ui:310
 msgid "_Others may not see this signature"
@@ -2289,21 +2242,6 @@ msgstr "_Semnatar:"
 #: pgp/seahorse-sign.ui:487
 msgid "_Sign"
 msgstr "_Semnează"
-
-#: pgp/seahorse-signer.c:63
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"Nu aveți chei PGP personale care pot fi folosite pentru a semna un document "
-"sau un mesaj."
-
-#: pgp/seahorse-signer.ui:7
-msgid "Choose Signing Key"
-msgstr "Alege cheia cu care se semnează"
-
-#: pgp/seahorse-signer.ui:25
-msgid "_Sign message with key:"
-msgstr "_Semnează mesajul cu cheia:"
 
 #: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
 msgid "Exporting data"
@@ -2342,27 +2280,32 @@ msgid "Personal certificate"
 msgstr "Certificat personal"
 
 #: pkcs11/pkcs11-deleter.vala:37
-#, fuzzy, c-format
-#| msgid "Are you sure you want to permanently delete %d identities?"
+#, c-format
 msgid "Are you sure you want to permanently delete %d certificate?"
 msgid_plural "Are you sure you want to permanently delete %d certificates?"
-msgstr[0] "Sigur doriți să ștergeți permanent %d identități?"
-msgstr[1] "Sigur doriți să ștergeți permanent %d identități?"
-msgstr[2] "Sigur doriți să ștergeți permanent %d identități?"
+msgstr[0] "Sigur doriți să ștergeți permanent %d certificat?"
+msgstr[1] "Sigur doriți să ștergeți permanent %d certificate?"
+msgstr[2] "Sigur doriți să ștergeți permanent %d de certificate?"
+
+#: pkcs11/pkcs11-generate.vala:229
+msgid "Couldn’t generate private key"
+msgstr "Nu s-a putut genera cheia privată"
+
+#: pkcs11/pkcs11-generate.vala:284 pkcs11/pkcs11-private-key.vala:70
+msgid "Private key"
+msgstr "Cheie privată"
+
+#: pkcs11/pkcs11-generate.vala:285
+msgid "Used to request a certificate"
+msgstr "Folosit pentru a cere un certificat"
 
 #: pkcs11/pkcs11-key-deleter.vala:34
-#, fuzzy
-#| msgid "I understand that this action cannot be undone"
 msgid "I understand that this key will be permanently deleted."
-msgstr "Am înțeles că această acțiune nu poate fi anulată"
+msgstr "Înțeleg că această cheie va fi ștearsă permanent."
 
 #: pkcs11/pkcs11-private-key.vala:61
 msgid "Unnamed private key"
 msgstr "Cheie privată nedenumită"
-
-#: pkcs11/pkcs11-private-key.vala:70 pkcs11/seahorse-pkcs11-generate.c:505
-msgid "Private key"
-msgstr "Cheie privată"
 
 #: pkcs11/pkcs11-properties.vala:134
 msgid "Unnamed"
@@ -2396,7 +2339,7 @@ msgstr "Cere un _certificat"
 msgid "Create a certificate request file for this key"
 msgstr "Creează un fișier pentru cererea certificatului acestei chei"
 
-#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.c:412
+#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.ui:193
 msgid "Create"
 msgstr "Creează"
 
@@ -2407,6 +2350,10 @@ msgstr "Nu s-a putut crea cererea pentru certificat"
 #: pkcs11/pkcs11-request.vala:104
 msgid "Save certificate request"
 msgstr "Salvează cererea certificatului"
+
+#: pkcs11/pkcs11-request.vala:107
+msgid "_Save"
+msgstr "_Salvează"
 
 #: pkcs11/pkcs11-request.vala:113
 msgid "Certificate request"
@@ -2425,31 +2372,27 @@ msgctxt "Label"
 msgid "Unknown"
 msgstr "Necunoscut"
 
-#: pkcs11/seahorse-pkcs11-backend.c:189
+#: pkcs11/seahorse-pkcs11-backend.c:187
 msgid "Certificates"
 msgstr "Certificate"
 
-#: pkcs11/seahorse-pkcs11-backend.c:195
+#: pkcs11/seahorse-pkcs11-backend.c:193
 msgid "X.509 certificates and related keys"
 msgstr "Certificate și chei asociate X.509"
 
-#: pkcs11/seahorse-pkcs11-generate.c:113
-msgid "Couldn’t generate private key"
-msgstr "Nu s-a putut genera cheia privată"
+#: pkcs11/seahorse-pkcs11-generate.ui:6
+msgid "New private key"
+msgstr "Cheie privată nouă"
 
-#: pkcs11/seahorse-pkcs11-generate.c:506
-msgid "Used to request a certificate"
-msgstr "Folosit pentru a cere un certificat"
-
-#: pkcs11/seahorse-pkcs11-generate.ui:34
+#: pkcs11/seahorse-pkcs11-generate.ui:39
 msgid "Create a new private key"
 msgstr "Creează o nouă cheie privată"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:53
+#: pkcs11/seahorse-pkcs11-generate.ui:58
 msgid "Label:"
 msgstr "Etichetă:"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:66
+#: pkcs11/seahorse-pkcs11-generate.ui:71
 msgid "Stored at:"
 msgstr "Stocat la:"
 
@@ -2465,117 +2408,117 @@ msgstr "Numele comun (CN) pus în cererea pentru certificat."
 msgid "Name (CN):"
 msgstr "Nume (CN):"
 
-#: src/application.vala:66
+#: src/application.vala:64
 msgid "Version of this application"
 msgstr "Versiunea aceastei aplicații"
 
-#: src/application.vala:71 src/application.vala:107
+#: src/application.vala:69 src/application.vala:105
 msgid "- System Settings"
 msgstr "- Configurări de sistem"
 
-#: src/application.vala:102
+#: src/application.vala:100
 msgid "Don't display a window"
 msgstr "Nu afișa o fereastră"
 
-#: src/import-dialog.vala:34
+#: src/import-dialog.vala:30
+msgid "Data to be imported"
+msgstr "Date de importat"
+
+#: src/import-dialog.vala:38
 msgid "Import"
 msgstr "Importă"
 
-#: src/import-dialog.vala:40
-msgid "<b>Data to be imported:</b>"
-msgstr "<b>Date de importat:</b>"
-
-#: src/import-dialog.vala:75
+#: src/import-dialog.vala:74
 msgid "Import failed"
 msgstr "Importarea a eșuat"
 
-#: src/key-manager.vala:53
+#: src/key-manager.vala:46
 msgid "_New"
 msgstr "_Nou"
 
-#: src/key-manager.vala:54
+#: src/key-manager.vala:47
 msgid "_Quit"
 msgstr "I_eși"
 
-#: src/key-manager.vala:54
+#: src/key-manager.vala:47
 msgid "Close this program"
 msgstr "Închide acest program"
 
-#: src/key-manager.vala:55
+#: src/key-manager.vala:48
 msgid "_New…"
 msgstr "_Nou…"
 
-#: src/key-manager.vala:55
+#: src/key-manager.vala:48
 msgid "Create a new key or item"
 msgstr "Creează o nouă cheie sau un nou element"
 
-#: src/key-manager.vala:56
+#: src/key-manager.vala:49
 msgid "_Import…"
 msgstr "_Importă…"
 
-#: src/key-manager.vala:56
+#: src/key-manager.vala:49
 msgid "Import from a file"
 msgstr "Importă dintr-un fișier"
 
-#: src/key-manager.vala:57
+#: src/key-manager.vala:50
 msgid "_Paste"
 msgstr "Li_pește"
 
-#: src/key-manager.vala:57
+#: src/key-manager.vala:50
 msgid "Import from the clipboard"
 msgstr "Importă din clipboard"
 
-#: src/key-manager.vala:61
+#: src/key-manager.vala:54
 msgid "By _Keyring"
 msgstr "După i_nelul de chei"
 
-#: src/key-manager.vala:61
+#: src/key-manager.vala:54
 msgid "Show sidebar listing keyrings"
 msgstr "Arată bara laterală care listează inelele de chei"
 
-#: src/key-manager.vala:65
+#: src/key-manager.vala:58
 msgid "Show _Personal"
 msgstr "Arată _personale"
 
-#: src/key-manager.vala:65
+#: src/key-manager.vala:58
 msgid "Only show personal keys, certificates and passwords"
 msgstr "Arată doar cheile, certificatele și parolele personale"
 
-#: src/key-manager.vala:66
+#: src/key-manager.vala:59
 msgid "Show _Trusted"
 msgstr "Arată de în_credere"
 
-#: src/key-manager.vala:66
+#: src/key-manager.vala:59
 msgid "Only show trusted keys, certificates and passwords"
 msgstr "Arată doar cheile, certificatele și parolele de încredere"
 
-#: src/key-manager.vala:67
+#: src/key-manager.vala:60
 msgid "Show _Any"
 msgstr "Arată oric_are"
 
-#: src/key-manager.vala:67
+#: src/key-manager.vala:60
 msgid "Show all keys, certificates and passwords"
 msgstr "Arată toate cheile, certificatele și parolele"
 
 #. The prompt
-#: src/key-manager.vala:235 ssh/operation.vala:320
+#: src/key-manager.vala:228 ssh/operation.vala:320
 msgid "Import Key"
 msgstr "Importă chei"
 
-#: src/key-manager.vala:238
+#: src/key-manager.vala:231
 msgid "_Open"
 msgstr "_Deschide"
 
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:246
+#: src/key-manager.vala:239
 msgid "All key files"
 msgstr "Toate fișierele chei"
 
-#: src/key-manager.vala:318
+#: src/key-manager.vala:311
 msgid "Dropped text"
 msgstr "Text aruncat"
 
-#: src/key-manager.vala:341
+#: src/key-manager.vala:334
 msgid "Clipboard text"
 msgstr "Text clipboard"
 
@@ -2600,40 +2543,36 @@ msgid "New item"
 msgstr "Element nou"
 
 #: src/seahorse-generate-select.ui:21
-#, fuzzy
-#| msgid "<b>_Select the type of item to create:</b>"
 msgid "_Select the type of item to create:"
-msgstr "<b>_Alegeți tipul de element de creat:</b>"
+msgstr "_Selectați tipul de element de creat:"
 
-#: src/seahorse-generate-select.ui:74
+#: src/seahorse-generate-select.ui:69
 msgid "Continue"
 msgstr "Continuă"
 
-#: src/seahorse-key-manager.ui:57
+#: src/seahorse-key-manager.ui:59
 msgid "Add a new key or item"
 msgstr "Adaugă o nouă cheie sau element"
 
-#: src/seahorse-key-manager.ui:74
+#: src/seahorse-key-manager.ui:76
 msgid "Filter"
 msgstr "Filtru"
 
-#: src/seahorse-key-manager.ui:124
-#, fuzzy
-#| msgid "<big><b>First time options:</b></big>"
+#: src/seahorse-key-manager.ui:121
 msgid "First time options:"
-msgstr "<big><b>Opțiuni la prima execuție:</b></big>"
+msgstr "Opțiuni la prima execuție:"
 
-#: src/seahorse-key-manager.ui:179
-msgid "Generate a new key of your own: "
-msgstr "Generează o nouă cheie personală:"
+#: src/seahorse-key-manager.ui:172
+msgid "To get started with encryption you will need keys."
+msgstr "Pentru a cripta veți avea nevoie de chei."
 
-#: src/seahorse-key-manager.ui:250
+#: src/seahorse-key-manager.ui:185
 msgid "Import existing keys from a file:"
 msgstr "Importă chei existente dintr-un fișiere:"
 
-#: src/seahorse-key-manager.ui:282
-msgid "To get started with encryption you will need keys."
-msgstr "Pentru a cripta veți avea nevoie de chei."
+#: src/seahorse-key-manager.ui:251
+msgid "Generate a new key of your own: "
+msgstr "Generează o nouă cheie personală:"
 
 #: src/sidebar.vala:589
 msgid "Couldn’t lock"
@@ -2653,8 +2592,6 @@ msgid "_Unlock"
 msgstr "_Deblochează"
 
 #: ssh/actions.vala:26
-#, fuzzy
-#| msgid "Configure Key for _Secure Shell..."
 msgid "Configure Key for _Secure Shell…"
 msgstr "Configurează cheia pentru _shell securizat (ssh)..."
 
@@ -2675,19 +2612,17 @@ msgid "Keys used to connect securely to other computers"
 msgstr "Chei folosite pentru conectarea securizată la alte calculatoare"
 
 #: ssh/deleter.vala:41 ssh/deleter.vala:46
-#, fuzzy, c-format
-#| msgid "Are you sure you want to delete the secure shell key '%s'?"
+#, c-format
 msgid "Are you sure you want to delete the secure shell key “%s”?"
 msgstr "Sigur doriți să ștergeți cheia de shell securizat (ssh) „%s”?"
 
 #: ssh/deleter.vala:51
-#, fuzzy, c-format
-#| msgid "Are you sure you want to delete %d secure shell keys?"
+#, c-format
 msgid "Are you sure you want to delete %u secure shell key?"
 msgid_plural "Are you sure you want to delete %u secure shell keys?"
-msgstr[0] "Sigur doriți să ștergeți %d chei de shell securizat (ssh)?"
-msgstr[1] "Sigur doriți să ștergeți %d chei de shell securizat (ssh)?"
-msgstr[2] "Sigur doriți să ștergeți %d chei de shell securizat (ssh)?"
+msgstr[0] "Sigur doriți să ștergeți %u cheie de shell securizat (ssh)?"
+msgstr[1] "Sigur doriți să ștergeți %u chei de shell securizat (ssh)?"
+msgstr[2] "Sigur doriți să ștergeți %u de chei de shell securizat (ssh)?"
 
 #: ssh/exporter.vala:52
 msgid "Secret SSH keys"
@@ -2707,7 +2642,7 @@ msgstr ""
 "Nu este disponibil niciun fișier de cheie publică pentru această cheie."
 
 #. No comment, but loaded
-#: ssh/generate.vala:28 ssh/key.vala:120 ssh/key.vala:124
+#: ssh/generate.vala:28 ssh/key.vala:116 ssh/key.vala:120
 #: ssh/seahorse-ssh-key-properties.ui:96
 msgid "Secure Shell Key"
 msgstr "Cheie pentru shell securizat (ssh)"
@@ -2716,16 +2651,16 @@ msgstr "Cheie pentru shell securizat (ssh)"
 msgid "Used to access other computers (eg: via a terminal)"
 msgstr "Folosită pentru a accesa alte calculatoare (de ex. printr-un terminal)"
 
-#: ssh/generate.vala:114
+#: ssh/generate.vala:115
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr ""
 "Nu s-a putut încărca cheia pentru shell securizat (ssh) generată recent"
 
-#: ssh/generate.vala:118
+#: ssh/generate.vala:119
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Nu s-a putut genera cheia pentru shell securizat (ssh)"
 
-#: ssh/generate.vala:121
+#: ssh/generate.vala:122
 msgid "Creating Secure Shell Key"
 msgstr "Se creează cheia pentru shell securizat (ssh)"
 
@@ -2741,23 +2676,19 @@ msgstr "256 biți"
 msgid "Unknown key type!"
 msgstr "Tip de cheie necunoscut!"
 
-#: ssh/key-properties.vala:88
+#: ssh/key-properties.vala:89
 msgid "Unknown type"
 msgstr "Tip necunoscut"
 
-#: ssh/key-properties.vala:112
+#: ssh/key-properties.vala:113
 msgid "Couldn’t rename key."
 msgstr "Nu s-a putut redenumi cheia."
 
-#: ssh/key-properties.vala:138
-#, fuzzy
-#| msgid "Couldn't change authorization for key."
+#: ssh/key-properties.vala:139
 msgid "Couldn’t change authorization for key."
 msgstr "Nu s-a putut schimba autorizarea cheii."
 
-#: ssh/key-properties.vala:154
-#, fuzzy
-#| msgid "Couldn't change passphrase for key."
+#: ssh/key-properties.vala:155
 msgid "Couldn’t change passphrase for key."
 msgstr "Nu s-a putut schimba fraza secretă a cheii."
 
@@ -2770,7 +2701,7 @@ msgid "SSH key"
 msgstr "Cheie SSH"
 
 #. No names when not even the fingerpint loaded
-#: ssh/key.vala:117
+#: ssh/key.vala:113
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(cheie shell securizat necitibilă)"
 
@@ -2828,37 +2759,31 @@ msgstr "Introduceți noua frază secretă din nou: %s"
 msgid "New Secure Shell Key"
 msgstr "Cheie pentru shell securizat nouă"
 
-#: ssh/seahorse-ssh-generate.ui:66
+#: ssh/seahorse-ssh-generate.ui:55
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Cheia pentru shellul securizat (SSH) vă permite să vă conectați în siguranță "
 "la alte calculatoare."
 
-#: ssh/seahorse-ssh-generate.ui:164
-#, fuzzy
-#| msgid "<i>Your email address, or a reminder of what this key is for.</i>"
+#: ssh/seahorse-ssh-generate.ui:108
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
-"<i>Folosiți adresa de email sau un alt memento pentru a ști pentru ce este "
-"această cheie.</i>"
+"Folosiți adresa de email sau un alt memento pentru a ști pentru ce este "
+"această cheie."
 
-#: ssh/seahorse-ssh-generate.ui:253
+#: ssh/seahorse-ssh-generate.ui:142
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:254
+#: ssh/seahorse-ssh-generate.ui:143
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:255
+#: ssh/seahorse-ssh-generate.ui:144
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:293
-#, fuzzy
-#| msgid ""
-#| "If there a computer you want to use this key with, you can set up that "
-#| "computer to recognize your new key."
+#: ssh/seahorse-ssh-generate.ui:186
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2866,11 +2791,11 @@ msgstr ""
 "Dacă există deja un calculator pe care doriți să-l utilizați folosind "
 "această cheie, puteți să-l configurați să recunoască noua cheie."
 
-#: ssh/seahorse-ssh-generate.ui:324
+#: ssh/seahorse-ssh-generate.ui:212
 msgid "_Just Create Key"
 msgstr "D_oar creează cheia"
 
-#: ssh/seahorse-ssh-generate.ui:338
+#: ssh/seahorse-ssh-generate.ui:226
 msgid "_Create and Set Up"
 msgstr "_Creează și configurează"
 
@@ -2884,31 +2809,30 @@ msgstr "Nume:"
 msgid "Identifier:"
 msgstr "Identificator:"
 
-#: ssh/seahorse-ssh-key-properties.ui:197
+#: ssh/seahorse-ssh-key-properties.ui:187
 msgid "The owner of this key is _authorized to connect to this computer"
 msgstr ""
 "Proprietarul aceastei chei este _autorizat să se conecteze la acest "
 "calculator"
 
-#: ssh/seahorse-ssh-key-properties.ui:215
-#, fuzzy, c-format
-#| msgid "<i>This only applies to the '%s'</i> account."
+#: ssh/seahorse-ssh-key-properties.ui:205
+#, c-format
 msgid "This only applies to the <i>%s</i> account."
-msgstr "<i>Acestea se aplică doar pentru contul „%s”</i>."
+msgstr "Acestea se aplică doar pentru contul „%s”."
 
-#: ssh/seahorse-ssh-key-properties.ui:279
+#: ssh/seahorse-ssh-key-properties.ui:262
 msgid "Algorithm:"
 msgstr "Algoritm:"
 
-#: ssh/seahorse-ssh-key-properties.ui:294
+#: ssh/seahorse-ssh-key-properties.ui:290
 msgid "Key length:"
 msgstr "Lungime cheie:"
 
-#: ssh/seahorse-ssh-key-properties.ui:342
+#: ssh/seahorse-ssh-key-properties.ui:317
 msgid "Location:"
 msgstr "Locație:"
 
-#: ssh/seahorse-ssh-key-properties.ui:435
+#: ssh/seahorse-ssh-key-properties.ui:391
 msgid "E_xport Complete Key"
 msgstr "E_xportă cheie completă"
 
@@ -2916,7 +2840,7 @@ msgstr "E_xportă cheie completă"
 msgid "Set Up Computer for SSH Connection"
 msgstr "Configurează un calculator pentru o conexiune SSH"
 
-#: ssh/seahorse-ssh-upload.ui:33
+#: ssh/seahorse-ssh-upload.ui:32
 msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
@@ -2925,21 +2849,19 @@ msgstr ""
 "folosește SSH, trebuie să aveți deja un cont de autentificare pe acel "
 "calculator."
 
-#: ssh/seahorse-ssh-upload.ui:74
-msgid "eg: fileserver.example.com:port"
-msgstr "de ex: exemplu.serverfișiere.com:port"
-
-#: ssh/seahorse-ssh-upload.ui:99
+#: ssh/seahorse-ssh-upload.ui:48
 msgid "_Server address:"
 msgstr "Adresă de _server:"
 
-#: ssh/seahorse-ssh-upload.ui:111
-#, fuzzy
-#| msgid "_Login Name:"
+#: ssh/seahorse-ssh-upload.ui:77
+msgid "eg: fileserver.example.com:port"
+msgstr "de ex: exemplu.serverfișiere.com:port"
+
+#: ssh/seahorse-ssh-upload.ui:93
 msgid "_Login name:"
 msgstr "Nume autentifica_re:"
 
-#: ssh/seahorse-ssh-upload.ui:162
+#: ssh/seahorse-ssh-upload.ui:129
 msgid "Set Up"
 msgstr "Configurează"
 
@@ -2961,17 +2883,13 @@ msgstr "openssh://%s"
 msgid "No private key file is available for this key."
 msgstr "Nu există fișier cheie privată pentru această cheie."
 
-#: ssh/upload.vala:66
-#, fuzzy
-#| msgid "Couldn't configure Secure Shell keys on remote computer."
+#: ssh/upload.vala:67
 msgid "Couldn’t configure Secure Shell keys on remote computer."
 msgstr ""
-"Nu s-a putut configura cheia pentru shell securizat (ssh) pe calculatorul de "
-"la distanță."
+"Nu s-au putut configura cheile pentru shell securizat (ssh) pe calculatorul "
+"de la distanță."
 
-#: ssh/upload.vala:70
-#, fuzzy
-#| msgid "Configuring Secure Shell Keys..."
+#: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Se configurează cheile pentru shell securizat (ssh)..."
 
@@ -3588,9 +3506,6 @@ msgstr "Se configurează cheile pentru shell securizat (ssh)..."
 
 #~ msgid "Sending keys to key server..."
 #~ msgstr "Se trimit cheile către serverul de chei..."
-
-#~ msgid "New PGP Key"
-#~ msgstr "Cheie PGP nouă"
 
 #~ msgid "Create New ..."
 #~ msgstr "Crează o nouă..."
