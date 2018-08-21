@@ -196,9 +196,9 @@ public class Properties : Gtk.Window {
 	}
 
 	private const Gtk.ActionEntry[] UI_ACTIONS = {
-		{ "export-object", Gtk.Stock.SAVE_AS, N_("_Export"), "",
+                { "export-object", "document-save-as", N_("_Export"), "",
 		  N_("Export the certificate"), on_export_certificate },
-		{ "delete-object", Gtk.Stock.DELETE, N_("_Delete"), "<Ctrl>Delete",
+		{ "delete-object", "edit-delete", N_("_Delete"), "<Ctrl>Delete",
 		  N_("Delete this certificate or key"), on_delete_objects },
 		{ "request-certificate", null, N_("Request _Certificate"), null,
 		  N_("Create a certificate request file for this key"), on_request_certificate },
