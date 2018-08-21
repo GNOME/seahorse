@@ -95,7 +95,7 @@ public class Token : GLib.Object, Gcr.Collection, Place, Lockable {
 		owned get {
 			var token = this._slot.get_token_info();
 			if (token == null)
-				return new GLib.ThemedIcon(Gtk.Stock.DIALOG_QUESTION);
+				return new GLib.ThemedIcon("dialog-question");
 			return Gcr.icon_for_token(token);
 		}
 	}
