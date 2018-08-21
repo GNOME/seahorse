@@ -37,7 +37,7 @@ public class Dialog {
 		 */
 		Gdk.Cursor? cursor = widget.get_data("wait-cursor");
 		if (cursor == null) {
-			cursor = new Gdk.Cursor (Gdk.CursorType.WATCH);
+                        cursor = new Gdk.Cursor.from_name (Gdk.Display.get_default(), "wait");
 			widget.set_data("wait-cursor", cursor);
 		}
 
