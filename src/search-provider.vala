@@ -24,20 +24,32 @@ public class Seahorse.SearchProvider : GLib.Object {
     private HashTable<string, weak GLib.Object> handles
         = new HashTable<string, weak GLib.Object>.full(str_hash, str_equal, free, null);
 
-    private Predicate base_predicate;
-    private Gcr.Collection collection;
+    private Gcr.FilterCollection collection;
     private GLib.Application app;
     private int n_loading = 0;
     private RWLock n_loading_lock = RWLock();
     private bool loaded = false;
 
     public SearchProvider(GLib.Application app) {
-        this.base_predicate = Predicate() {
-            flags = Flags.PERSONAL,
-            custom = check_object_type
-        };
         this.app = app;
-        this.collection = new Collection.for_predicate(this.union_collection, this.base_predicate, null);
+        this.collection = new Gcr.FilterCollection.with_callback(this.union_collection, filter_objects);
+    }
+
+    private static bool filter_objects (GLib.Object? obj) {
+        unowned Object? object = obj as Object;
+        if (!(Flags.PERSONAL in object.object_flags))
+            return false;
+
+        if (!(obj is Viewable))
+            return false;
+
+        if (obj is Secret.Item) {
+            string? schema_name = ((Secret.Item) obj).get_schema_name ();
+            if (schema_name != "org.gnome.keyring.Note")
+                return false;
+        }
+
+        return true;
     }
 
     ~SearchProvider() {
@@ -238,19 +250,6 @@ public class Seahorse.SearchProvider : GLib.Object {
         Place place = (Place) object;
         if (this.union_collection.have(place))
             this.union_collection.remove(place);
-    }
-
-    private static bool check_object_type (GLib.Object? object, void* custom_target) {
-        if (!(object is Viewable))
-            return false;
-
-        if (object is Secret.Item) {
-            string? schema_name = ((Secret.Item) object).get_schema_name ();
-            if (schema_name != "org.gnome.keyring.Note")
-                return false;
-        }
-
-        return true;
     }
 
     private static string? get_description_if_available (GLib.Object? obj) {
