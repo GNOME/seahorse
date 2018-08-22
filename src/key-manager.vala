@@ -187,8 +187,13 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     private bool on_keymanager_key_list_button_pressed(Gdk.EventButton event) {
-        if (event.button == 3)
+        if (event.button == 3) {
             show_context_menu(Catalog.MENU_OBJECT, event);
+            GLib.List<GLib.Object> objects = get_selected_objects();
+            if (objects.length() > 1) {
+                return true;
+            }
+        }
 
         return false;
     }
