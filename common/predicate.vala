@@ -57,7 +57,7 @@ public struct Seahorse.Predicate {
 
             if (this.flags != Flags.NONE && (obj_flags in this.flags))
                 return false;
-            if (this.nflags != Flags.NONE && (obj_flags in this.nflags))
+            if (this.nflags != Flags.NONE && !(obj_flags in this.nflags))
                 return false;
         }
 
