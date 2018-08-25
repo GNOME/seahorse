@@ -17,7 +17,7 @@
  * License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-/* This is installed by gnome-keyring */
+/* This schema is installed by libgcr */
 public class Seahorse.PgpSettings : GLib.Settings {
     public bool ascii_armor {
         get { return get_boolean("ascii-armor"); }
@@ -34,6 +34,10 @@ public class Seahorse.PgpSettings : GLib.Settings {
         set { set_boolean("encrypt-to-self", value); }
     }
 
+    /**
+     * Returns a list of keyservers. Each entry is of either the format "uri"
+     * or "uri name", where `name` is a display name of the given keyserver.
+     */
     public string[] keyservers {
         owned get { return get_strv("keyservers"); }
         set { set_strv("keyservers", value); }

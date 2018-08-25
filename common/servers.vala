@@ -84,10 +84,12 @@ public string[] get_uris() {
 
 [CCode (array_null_terminated = true, array_length = false)]
 public string[] get_names() {
-    // The values are 'uri name', remove the name part
     string[] names = {};
-    foreach (string server in PgpSettings.instance().keyservers)
-        names += server.strip().split(" ", 2)[1];
+    foreach (string server in PgpSettings.instance().keyservers) {
+        // The values are 'uri' or 'uri name', remove the name part if there
+        string[] split = server._strip().split(" ", 2);
+        names += (split.length == 1)? split[0] : split[1];
+    }
 
     return names;
 }
