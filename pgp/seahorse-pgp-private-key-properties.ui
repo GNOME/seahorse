@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <interface>
-  <requires lib="gtk+" version="3.0"/>
-  <!-- interface-naming-policy toplevel-contextual -->
+  <requires lib="gtk+" version="3.22"/>
   <object class="GtkListStore" id="model1">
     <columns>
       <!-- column-name gchararray -->
@@ -32,21 +31,24 @@
     <property name="type_hint">dialog</property>
     <signal name="delete_event" handler="on_widget_delete_event"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox1">
+      <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
           <object class="GtkNotebook" id="notebook">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <object class="GtkVBox" id="vbox7">
+              <object class="GtkBox" id="vbox7">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="border_width">12</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkHBox" id="revoked-area">
+                  <object class="GtkBox" id="revoked-area">
                     <property name="spacing">12</property>
+                    <property name="orientation">horizontal</property>
                     <child>
                       <object class="GtkImage" id="image40">
                         <property name="visible">True</property>
@@ -59,8 +61,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVBox" id="vbox31">
+                      <object class="GtkBox" id="vbox31">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label22225">
@@ -107,8 +110,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="expired-area">
+                  <object class="GtkBox" id="expired-area">
                     <property name="spacing">12</property>
+                    <property name="orientation">horizontal</property>
                     <child>
                       <object class="GtkImage" id="image41">
                         <property name="visible">True</property>
@@ -121,8 +125,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVBox" id="vbox32">
+                      <object class="GtkBox" id="vbox32">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label22227">
@@ -169,12 +174,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="hbox5">
+                  <object class="GtkBox" id="hbox5">
                     <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkHBox" id="hbox31">
+                      <object class="GtkBox" id="hbox31">
                         <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
                         <child>
                           <object class="GtkFrame" id="owner-photo-frame">
                             <property name="visible">True</property>
@@ -188,8 +195,9 @@
                                 <property name="left_padding">6</property>
                                 <property name="right_padding">6</property>
                                 <child>
-                                  <object class="GtkVBox" id="vbox33">
+                                  <object class="GtkBox" id="vbox33">
                                     <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
                                     <property name="spacing">6</property>
                                     <child>
                                       <object class="GtkEventBox" id="image_eventbox">
@@ -208,8 +216,9 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkHBox" id="hbox61">
+                                      <object class="GtkBox" id="hbox61">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">6</property>
                                         <child>
                                           <object class="GtkButton" id="owner-photo-add-button">
@@ -333,8 +342,9 @@
                                                 <property name="xscale">0</property>
                                                 <property name="yscale">0</property>
                                                 <child>
-                                                  <object class="GtkHBox" id="hbox62">
+                                                  <object class="GtkBox" id="hbox62">
                                                     <property name="visible">True</property>
+                                                    <property name="orientation">horizontal</property>
                                                     <property name="spacing">2</property>
                                                     <child>
                                                       <object class="GtkImage" id="image48">
@@ -405,8 +415,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVBox" id="vbox36">
+                      <object class="GtkBox" id="vbox36">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkTable" id="table12">
@@ -628,8 +639,9 @@
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox20">
+                                      <object class="GtkBox" id="hbox20">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">2</property>
                                         <child>
                                           <object class="GtkImage" id="image11">
@@ -694,8 +706,9 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox10">
+              <object class="GtkBox" id="vbox10">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="border_width">12</property>
                 <property name="spacing">6</property>
                 <child>
@@ -717,8 +730,9 @@
                   <object class="GtkAlignment" id="alignment52">
                     <property name="visible">True</property>
                     <child>
-                      <object class="GtkHBox" id="hbox8">
+                      <object class="GtkBox" id="hbox8">
                         <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
                         <property name="border_width">6</property>
                         <child>
                           <object class="GtkTable" id="table5">
@@ -737,8 +751,9 @@
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox13">
+                                      <object class="GtkBox" id="hbox13">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">2</property>
                                         <child>
                                           <object class="GtkImage" id="image7">
@@ -788,8 +803,9 @@
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox14">
+                                      <object class="GtkBox" id="hbox14">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">2</property>
                                         <child>
                                           <object class="GtkImage" id="image8">
@@ -839,8 +855,9 @@
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox9">
+                                      <object class="GtkBox" id="hbox9">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">2</property>
                                         <child>
                                           <object class="GtkImage" id="image4">
@@ -890,8 +907,9 @@
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox66">
+                                      <object class="GtkBox" id="hbox66">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">2</property>
                                         <child>
                                           <object class="GtkImage" id="image50">
@@ -938,8 +956,9 @@
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox29">
+                                      <object class="GtkBox" id="hbox29">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">2</property>
                                         <child>
                                           <object class="GtkImage" id="image15">
@@ -1000,6 +1019,7 @@
                           <packing>
                             <property name="padding">6</property>
                             <property name="position">1</property>
+                            <property name="expand">True</property>
                           </packing>
                         </child>
                       </object>
@@ -1027,18 +1047,21 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox8">
+              <object class="GtkBox" id="vbox8">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="border_width">12</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkHBox" id="hbox63">
+                  <object class="GtkBox" id="hbox63">
                     <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
                     <property name="spacing">12</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkVBox" id="vbox34">
+                      <object class="GtkBox" id="vbox34">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkFrame" id="frame9">
@@ -1204,8 +1227,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVBox" id="vbox35">
+                      <object class="GtkBox" id="vbox35">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkFrame" id="frame11">
@@ -1250,8 +1274,9 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkHBox" id="hbox65">
+                                      <object class="GtkBox" id="hbox65">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">6</property>
                                         <child>
                                           <object class="GtkLabel" id="details-expires-label">
@@ -1406,8 +1431,9 @@
                                             <property name="xscale">0</property>
                                             <property name="yscale">0</property>
                                             <child>
-                                              <object class="GtkHBox" id="hbox19">
+                                              <object class="GtkBox" id="hbox19">
                                                 <property name="visible">True</property>
+                                                <property name="orientation">horizontal</property>
                                                 <property name="spacing">2</property>
                                                 <child>
                                                   <object class="GtkImage" id="image10">
@@ -1492,8 +1518,9 @@
                     <property name="can_focus">True</property>
                     <property name="expanded">True</property>
                     <child>
-                      <object class="GtkHBox" id="hbox10">
+                      <object class="GtkBox" id="hbox10">
                         <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
                         <child>
                           <object class="GtkTable" id="table6">
                             <property name="visible">True</property>
@@ -1511,8 +1538,9 @@
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox11">
+                                      <object class="GtkBox" id="hbox11">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">2</property>
                                         <child>
                                           <object class="GtkImage" id="image5">
@@ -1560,8 +1588,9 @@
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox48">
+                                      <object class="GtkBox" id="hbox48">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">2</property>
                                         <child>
                                           <object class="GtkImage" id="image30">
@@ -1628,8 +1657,9 @@
                                     <property name="xscale">0</property>
                                     <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox30">
+                                      <object class="GtkBox" id="hbox30">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="spacing">2</property>
                                         <child>
                                           <object class="GtkImage" id="image16">
@@ -1690,6 +1720,7 @@
                           </object>
                           <packing>
                             <property name="position">1</property>
+                            <property name="expand">True</property>
                           </packing>
                         </child>
                       </object>
