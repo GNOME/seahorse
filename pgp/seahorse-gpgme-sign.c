@@ -212,11 +212,6 @@ sign_internal (SeahorseObject *to_sign, GtkWindow *parent)
     g_return_if_fail (w != NULL);
     seahorse_combo_keys_attach (GTK_COMBO_BOX (w), collection, NULL);
 
-    /* Image */
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "sign-image"));
-    g_return_if_fail (w != NULL);
-    gtk_image_set_from_icon_name (GTK_IMAGE (w), SEAHORSE_ICON_SIGN, GTK_ICON_SIZE_DIALOG);
-
     g_object_unref (collection);
     seahorse_widget_show (swidget);
     
