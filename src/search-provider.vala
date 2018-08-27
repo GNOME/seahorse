@@ -37,7 +37,7 @@ public class Seahorse.SearchProvider : GLib.Object {
 
     private static bool filter_objects (GLib.Object? obj) {
         unowned Object? object = obj as Object;
-        if (!(Flags.PERSONAL in object.object_flags))
+        if (object == null || !(Flags.PERSONAL in object.object_flags))
             return false;
 
         if (!(obj is Viewable))
