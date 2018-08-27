@@ -205,7 +205,7 @@ on_keyserver_search_control_changed (GtkWidget *widget, SeahorseWidget *swidget)
         g_free (text);
     }
 
-    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "search"));
+    w = GTK_WIDGET (seahorse_widget_get_widget (swidget, "searchbutton"));
     gtk_widget_set_sensitive (w, enabled);
 }
 
@@ -249,11 +249,6 @@ select_inital_keyservers (SeahorseWidget *swidget)
 
 	names = g_settings_get_strv (G_SETTINGS (seahorse_app_settings_instance ()),
 								"last-search-servers");
-
-	/* Close the expander if all servers are selected */
-	widget = seahorse_widget_get_widget (swidget, "search-where");
-	g_return_if_fail (widget != NULL);
-	gtk_expander_set_expanded (GTK_EXPANDER (widget), names != NULL && names[0] != NULL);
 
 	/* We do case insensitive matches */
 	for (i = 0; names[i] != NULL; i++) {
