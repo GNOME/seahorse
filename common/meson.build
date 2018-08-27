@@ -4,7 +4,6 @@ common_sources = [
   'app-settings.vala',
   'backend.vala',
   'catalog.vala',
-  'collection.vala',
   'deletable.vala',
   'delete-dialog.vala',
   'deleter.vala',
