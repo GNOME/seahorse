@@ -36,7 +36,7 @@ static void
 on_settings_default_key_changed (GSettings *settings, const gchar *key, gpointer user_data)
 {
 	/* Default key changed, refresh */
-	seahorse_collection_refresh (SEAHORSE_COLLECTION (user_data));
+	gcr_filter_collection_refilter (GCR_FILTER_COLLECTION (user_data));
 }
 
 static gboolean 
@@ -44,8 +44,18 @@ pgp_signers_match (GObject *obj,
                    gpointer data)
 {
 	SeahorsePgpKey *defkey;
+	SeahorseUsage usage;
+	SeahorseFlags flags;
 
-	if (!SEAHORSE_IS_PGP_KEY (obj))
+	if (!SEAHORSE_IS_GPGME_KEY (obj))
+		return FALSE;
+
+	g_object_get (obj, "usage", &usage, "object-flags", &flags, NULL);
+	if (usage != SEAHORSE_USAGE_PRIVATE_KEY)
+		return FALSE;
+	if (!(flags & SEAHORSE_FLAG_CAN_SIGN))
+		return FALSE;
+	if (flags & (SEAHORSE_FLAG_EXPIRED | SEAHORSE_FLAG_REVOKED | SEAHORSE_FLAG_DISABLED))
 		return FALSE;
 
 	defkey = seahorse_pgp_backend_get_default_key (NULL);
@@ -62,22 +72,16 @@ pgp_signers_match (GObject *obj,
 GcrCollection *
 seahorse_keyset_pgp_signers_new (void)
 {
-	SeahorsePredicate *predicate = g_new0 (SeahorsePredicate, 1);
-	SeahorseCollection *collection;
+	GcrCollection *collection;
 	SeahorseGpgmeKeyring *keyring;
 
-	predicate->type = SEAHORSE_TYPE_GPGME_KEY;
-	predicate->usage = SEAHORSE_USAGE_PRIVATE_KEY;
-	predicate->flags = SEAHORSE_FLAG_CAN_SIGN;
-	predicate->nflags = SEAHORSE_FLAG_EXPIRED | SEAHORSE_FLAG_REVOKED | SEAHORSE_FLAG_DISABLED;
-	predicate->custom = pgp_signers_match;
-
 	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-	collection = seahorse_collection_new_for_predicate (GCR_COLLECTION (keyring),
-	                                                    predicate, g_free);
+	collection = gcr_filter_collection_new_with_callback (GCR_COLLECTION (keyring),
+			pgp_signers_match,
+			NULL, NULL);
 
 	g_signal_connect_object (seahorse_pgp_settings_instance (), "changed::default-key",
 	                         G_CALLBACK (on_settings_default_key_changed), collection, 0);
 
-	return GCR_COLLECTION (collection);
+	return collection;
 }
