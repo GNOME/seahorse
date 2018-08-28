@@ -29,7 +29,6 @@ i18n.merge_file(
 # The configuration for the desktop and service files
 desktop_conf = configuration_data()
 desktop_conf.set('bindir', bindir)
-desktop_conf.set('VERSION', meson.project_version())
 
 # The desktop file
 configured_desktop_file = configure_file(
