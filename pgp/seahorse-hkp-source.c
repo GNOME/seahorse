@@ -114,7 +114,7 @@ static SoupSession *
 create_hkp_soup_session (void)
 {
 	SoupSession *session;
-#if WITH_DEBUG
+#ifdef WITH_DEBUG
 	SoupLogger *logger;
 	const gchar *env;
 #endif
@@ -124,7 +124,7 @@ create_hkp_soup_session (void)
                                                        NULL);
 
 
-#if WITH_DEBUG
+#ifdef WITH_DEBUG
         env = g_getenv ("G_MESSAGES_DEBUG");
         if (env && strstr (env, "seahorse")) {
 		logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);

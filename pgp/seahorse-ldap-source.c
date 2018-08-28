@@ -125,7 +125,7 @@ get_ldap_values (LDAP *ld, LDAPMessage *entry, const char *attribute)
     return (gchar**)g_array_free (array, FALSE);
 }
 
-#if WITH_DEBUG
+#ifdef WITH_DEBUG
 
 static void
 dump_ldap_entry (LDAP *ld, LDAPMessage *res)
