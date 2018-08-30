@@ -87,7 +87,7 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         set {
             if (this._filter != value) {
                 this._filter = value;
-                refilter ();
+                refilter();
             }
         }
     }
@@ -235,7 +235,10 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
     }
 
     public void refilter() {
-        ((Gcr.FilterCollection) this.collection).refilter();
+        unowned Gcr.FilterCollection collection = (Gcr.FilterCollection) this.collection;
+        collection.refilter();
+        debug("%u/%u elements visible after refilter",
+              collection.get_length(), collection.get_underlying().get_length());
     }
 
     // Update the sort order for a column
