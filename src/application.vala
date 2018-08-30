@@ -94,9 +94,7 @@ public class Seahorse.Application : Gtk.Application {
             return true;
         }
 
-        exit_status = 0;
-        /* return base.local_command_line(ref arguments, out exit_status); */
-        return false;
+        return base.local_command_line(ref arguments, out exit_status);
     }
 
     static bool no_window = false;
