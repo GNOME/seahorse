@@ -55,8 +55,12 @@ public class Seahorse.Application : Gtk.Application {
     public override void activate() {
         base.activate();
 
-        KeyManager key_mgr = new Seahorse.KeyManager(this);
-        key_mgr.show();
+        var key_mgr = get_active_window();
+
+        if (key_mgr == null)
+            key_mgr = new Seahorse.KeyManager(this);
+
+        key_mgr.present();
     }
 
     static bool show_version = false;
