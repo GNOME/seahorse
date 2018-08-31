@@ -24,11 +24,10 @@ public class Seahorse.Prefs : Gtk.Dialog {
 
     private Gtk.Notebook notebook;
     private Gtk.Grid keyserver_tab;
-    private Gtk.TreeView keyservers;
+    private Gtk.ListBox keyservers_list;
+    private GLib.ListStore store;
     private Gtk.Box keyserver_publish;
     private Gtk.Label keyserver_publish_to_label;
-    private Gtk.Button keyserver_remove;
-    private Gtk.Button keyserver_add;
     private Gtk.CheckButton auto_retrieve;
     private Gtk.CheckButton auto_sync;
 
@@ -57,16 +56,11 @@ public class Seahorse.Prefs : Gtk.Dialog {
         get_content_area().add(content);
         this.notebook = (Gtk.Notebook) builder.get_object("notebook");
         this.keyserver_tab = (Gtk.Grid) builder.get_object("keyserver-tab");
-        this.keyservers = (Gtk.TreeView) builder.get_object("keyservers");
+        this.keyservers_list = (Gtk.ListBox) builder.get_object("keyservers");
         this.keyserver_publish = (Gtk.Box) builder.get_object("keyserver-publish");
         this.keyserver_publish_to_label = (Gtk.Label) builder.get_object("keyserver-publish-to-label");
-        this.keyserver_remove = (Gtk.Button) builder.get_object("keyserver_remove");
-        this.keyserver_add = (Gtk.Button) builder.get_object("keyserver_add");
         this.auto_retrieve = (Gtk.CheckButton) builder.get_object("auto_retrieve");
         this.auto_sync = (Gtk.CheckButton) builder.get_object("auto_sync");
-
-        this.keyserver_remove.clicked.connect(on_prefs_keyserver_remove_clicked);
-        this.keyserver_add.clicked.connect(on_prefs_keyserver_add_clicked);
 
 #if WITH_KEYSERVER
         setup_keyservers();
@@ -122,25 +116,16 @@ public class Seahorse.Prefs : Gtk.Dialog {
             this.notebook.remove_page(pos);
     }
 
-#if WITH_KEYSERVER
-
-    private enum Columns {
-        KEYSERVER,
-        N_COLUMNS
-    }
-
     // Perform keyserver page initialization
     private void setup_keyservers () {
+        this.store = new ListStore(typeof(GLib.Object));
+        this.keyservers_list.bind_model(store, create_keyserver_row);
+
         string[] keyservers = Seahorse.Servers.get_uris();
         populate_keyservers(keyservers);
+        insert_add_button();
 
-        Gtk.TreeModel model = this.keyservers.get_model();
-        model.row_changed.connect(keyserver_row_changed);
-        model.row_deleted.connect(keyserver_row_deleted);
-
-        Gtk.TreeSelection selection = this.keyservers.get_selection();
-        selection.set_mode(Gtk.SelectionMode.SINGLE);
-        selection.changed.connect(keyserver_sel_changed);
+        this.store.items_changed.connect(keyserver_row_changed);
 
         PgpSettings.instance().changed["keyserver"].connect((settings, key) => {
             populate_keyservers(settings.get_strv(key));
@@ -159,117 +144,109 @@ public class Seahorse.Prefs : Gtk.Dialog {
                                     SettingsBindFlags.DEFAULT);
     }
 
-    // Called when a cell has completed being edited
-    private void keyserver_cell_edited (Gtk.CellRendererText cell, string? path, string? text, Gtk.TreeStore store) {
-        if (!Servers.is_valid_uri(text)) {
-            Util.show_error (null,
-                             _("Not a valid Key Server address."),
-                             _("For help contact your system administrator or the administrator of the key server." ));
-            return;
+    private int listbox_comparator(GLib.Object a, GLib.Object b) {
+        string? ks_a = a.get_data("keyserver"),
+                ks_b = b.get_data("keyserver");
+        if (ks_a == null)
+            return 1;
+        else if (ks_b == null)
+            return -1;
+        else
+            return ks_a.collate(ks_b);
+    }
+
+    private Gtk.ListBoxRow create_keyserver_row(GLib.Object item) {
+        var row = new Gtk.ListBoxRow();
+
+        var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+        row.add(box);
+
+        string? ks = item.get_data("keyserver");
+        if (ks != null) {
+            var uri = new Gtk.Label(item.get_data("keyserver"));
+            box.pack_start(uri, false);
+
+            var remove_button = new Gtk.Button.from_icon_name("list-remove");
+            remove_button.clicked.connect(() => {
+                this.store.remove(row.get_index());
+            });
+
+            box.pack_end(remove_button, false);
+        }
+        else {
+            box.set_center_widget(item.get_data("add_button"));
         }
 
-        Gtk.TreeIter iter;
-        warn_if_fail(store.get_iter_from_string(out iter, path));
-        store.set(iter, Columns.KEYSERVER, text, -1);
-    }
-
-    // The selection changed on the tree
-    private void keyserver_sel_changed (Gtk.TreeSelection selection) {
-        this.keyserver_remove.sensitive = (selection.count_selected_rows() > 0);
-    }
-
-    // User wants to remove selected rows
-    private void on_prefs_keyserver_remove_clicked (Gtk.Widget? button) {
-        this.keyservers.get_selection().selected_foreach((model, path, iter) => {
-            ((Gtk.TreeStore) model).remove(ref iter);
-        });
+        row.show_all();
+        return row;
     }
 
     // Write key server list to settings
-    private void save_keyservers (Gtk.TreeModel model) {
+    private void save_keyservers () {
         string[] values = {};
-        Gtk.TreeIter iter;
-        if (model.get_iter_first(out iter)) {
+        uint i = 0;
+        GLib.Object? item = this.store.get_object(i);
+        if (item != null) {
             do {
-                string? keyserver = null;
-                model.get(iter, Columns.KEYSERVER, out keyserver, -1);
-                if (keyserver == null)
-                    return;
+                string keyserver = item.get_data("keyserver");
                 values += keyserver;
-            } while (model.iter_next(ref iter));
+                item = this.store.get_object(++i);
+            } while (item != null);
         }
 
         PgpSettings.instance().keyservers = values;
     }
 
-    private void keyserver_row_changed (Gtk.TreeModel model, Gtk.TreePath arg1, Gtk.TreeIter arg2) {
+    private void keyserver_row_changed (uint position, uint removed, uint added) {
         // If currently updating (see populate_keyservers) ignore
         if (this.updating_model)
             return;
 
-        save_keyservers(model);
-    }
-
-    private void keyserver_row_deleted (Gtk.TreeModel model, Gtk.TreePath arg1) {
-        // If currently updating (see populate_keyservers) ignore
-        if (this.updating_model)
-            return;
-
-        save_keyservers(model);
+        save_keyservers();
     }
 
     private void populate_keyservers(string[] keyservers) {
-        Gtk.TreeStore store = (Gtk.TreeStore) this.keyservers.get_model();
-
-        // This is our first time so create a store
-        if (store == null) {
-            store = new Gtk.TreeStore(1, typeof(string));
-            this.keyservers.set_model(store);
-
-            // Make the column
-            Gtk.CellRendererText renderer = new Gtk.CellRendererText();
-            renderer.editable = true;
-            renderer.edited.connect((cell, path, text) => {
-                keyserver_cell_edited(cell, path, text, store);
-            });
-            Gtk.TreeViewColumn column = new Gtk.TreeViewColumn.with_attributes(
-                                                _("URL"), renderer,
-                                                "text", Columns.KEYSERVER,
-                                                null);
-            this.keyservers.append_column(column);
-        }
-
         // Mark this so we can ignore events
         this.updating_model = true;
 
         // We try and be inteligent about updating so we don't throw
         // away selections and stuff like that
-        uint i = 0;
-        Gtk.TreeIter iter;
-        if (store.get_iter_first(out iter)) {
-            bool cont = false;
+        uint i = 0, j = 0;
+        GLib.Object? item = this.store.get_object(j);
+        if (item != null) {
             do {
-                string? val;
-                store.get(iter, Columns.KEYSERVER, out val, -1);
+                string? val = item.get_data("keyserver");
+                Gtk.Button? add_button = item.get_data("add_button");
                 if (keyservers[i] != null
                         && val != null
                         && keyservers[i].collate(val) == 0) {
-                    cont = store.iter_next(ref iter);
                     i++;
-                } else {
-                    cont = store.remove(ref iter);
+                    j++;
                 }
-            } while (cont);
+                else if (add_button == null) {
+                    this.store.remove(j);
+                }
+                item = this.store.get_object(j);
+            } while (item != null);
         }
 
         // Any remaining extra rows
         for ( ; keyservers[i] != null; i++) {
-            store.append(out iter, null);
-            store.set(iter, Columns.KEYSERVER, keyservers[i], -1);
+            GLib.Object obj = new GLib.Object();
+            obj.set_data("keyserver", keyservers[i]);
+            store.insert_sorted(obj, listbox_comparator);
         }
 
         // Done updating
         this.updating_model = false;
+    }
+
+    private void insert_add_button() {
+        var item = new GLib.Object();
+        var button = new Gtk.Button.from_icon_name("list-add");
+        button.clicked.connect(on_prefs_keyserver_add_clicked);
+        item.set_data("add_button", button);
+        this.store.insert_sorted(item, listbox_comparator);
     }
 
     private void on_prefs_keyserver_add_clicked (Gtk.Button button) {
@@ -279,21 +256,13 @@ public class Seahorse.Prefs : Gtk.Dialog {
             string? result = dialog.calculate_keyserver_uri();
 
             if (result != null) {
-                Gtk.TreeStore store = (Gtk.TreeStore) this.keyservers.get_model();
-                Gtk.TreeIter iter;
-                store.append(out iter, null);
-                store.set(iter, Columns.KEYSERVER, result, -1);
+                var obj = new GLib.Object();
+                obj.set_data("keyserver", result);
+                this.store.insert_sorted(obj, listbox_comparator);
             }
         }
 
         dialog.destroy();
     }
-
-#else
-
-    private void on_prefs_keyserver_add_clicked (Gtk.Button? button) { }
-    void on_prefs_keyserver_remove_clicked (Gtk.Widget? button) { }
-
-#endif
 
 }
