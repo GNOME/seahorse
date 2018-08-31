@@ -179,7 +179,9 @@ meson.add_install_script(join_paths('build-aux', 'meson_post_install.py'))
 # subdirs
 subdir('po')
 subdir('data')
-subdir('help')
+if get_option('help')
+  subdir('help')
+endif
 subdir('common')
 subdir('libegg')
 subdir('gkr')
