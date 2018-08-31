@@ -140,8 +140,10 @@ public class Seahorse.Application : Gtk.Application {
     }
 
     public override void dbus_unregister (DBusConnection connection, string object_path) {
-        if (this.search_provider_dbus_id != 0)
+        if (this.search_provider_dbus_id != 0) {
             connection.unregister_object(this.search_provider_dbus_id);
+            this.search_provider_dbus_id = 0;
+        }
 
         base.dbus_unregister(connection, object_path);
     }
