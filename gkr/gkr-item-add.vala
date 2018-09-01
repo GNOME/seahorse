@@ -87,6 +87,21 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
         Secret.Collection collection;
         this.item_keyring_combo.model.get(iter, 1, out collection, -1);
 
+        var keyring = (Keyring) collection;
+        var cancellable = new Cancellable();
+        var interaction = new Interaction(this);
+
+        keyring.unlock.begin(interaction, cancellable, (obj, res) => {
+            try {
+                keyring.unlock.end(res);
+                create_secret(collection);
+            } catch (Error e) {
+                Util.show_error(this, _("Couldn’t unlock"), e.message);
+            }
+        });
+    }
+
+    private void create_secret(Secret.Collection collection) {
         var secret = new Secret.Value(this.password_entry.text, -1, "text/plain");
         var cancellable = Dialog.begin_request(this);
         var attributes = new HashTable<string, string>(GLib.str_hash, GLib.str_equal);
