@@ -130,10 +130,10 @@ add_project_arguments(supported_warning_flags,
 # configuration
 conf = configuration_data()
 
-conf.set_quoted('VERSION', meson.project_version())
+conf.set_quoted('VERSION', '@VCS_TAG@')
 conf.set_quoted('PACKAGE', meson.project_name())
 conf.set_quoted('PACKAGE_NAME', meson.project_name())
-conf.set_quoted('PACKAGE_VERSION', meson.project_version())
+conf.set_quoted('PACKAGE_VERSION', '@VCS_TAG@')
 conf.set_quoted('PACKAGE_STRING', '@0@ @1@'.format(meson.project_name(), meson.project_version()))
 conf.set_quoted('PKGDATADIR', pkgdatadir)
 conf.set_quoted('EXECDIR', libexecbindir)
@@ -159,6 +159,14 @@ if with_pgp
   conf.set('GPG_MINOR', gpg_version_split[1])
   conf.set('GPG_MICRO', gpg_version_split[2])
 endif
+
+vcs_tag(
+  input: configure_file(
+    output: 'config.h.in',
+    configuration: conf
+  ),
+  output: 'config.h'
+)
 
 config_file = configure_file(
   output: 'config.h',
