@@ -365,6 +365,25 @@ public class Seahorse.KeyManager : Catalog {
         return KeyManagerStore.get_selected_objects(this.view);
     }
 
+    public void set_focused_place(string target) {
+        string? place_label = null;
+        switch(target) {
+            case "ssh":
+            case "pkcs11":
+                place_label = "OpenSSH keys";
+                break;
+            case "gpgme":
+                place_label = "GnuPG keys";
+                break;
+            case "gkr":
+                place_label = "Login";
+                break;
+        }
+        if (place_label != null) {
+            this.sidebar.set_focused_place(place_label);
+        }
+    }
+
     public override Place? get_focused_place() {
         return this.sidebar.get_focused_place();
     }

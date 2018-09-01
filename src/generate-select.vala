@@ -43,6 +43,7 @@ public class Seahorse.GenerateSelect : Gtk.Dialog {
         // Fill up the model
         var action_groups = (List<Gtk.ActionGroup>) Registry.object_instances("generator");
         foreach (var action_group in action_groups) {
+            action_group.post_activate.connect(this.switch_view);
             foreach (var action in action_group.list_actions())
                 store.append(action);
         }
@@ -56,6 +57,11 @@ public class Seahorse.GenerateSelect : Gtk.Dialog {
             this.generate_list.select_row(row);
             row.grab_focus();
         }
+    }
+
+    private void switch_view(Gtk.Action action) {
+        string target = action.action_group.name.split("-", 2)[0];
+        ((KeyManager) this.transient_for).set_focused_place(target);
     }
 
     private Gtk.ListBoxRow on_create_row(GLib.Object item) {

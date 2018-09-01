@@ -881,6 +881,22 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
         return null;
     }
 
+    public void set_focused_place(string label) {
+        foreach (Backend backend in this.backends) {
+            foreach (weak GLib.Object obj in backend.get_objects()) {
+                Place place = obj as Place;
+                if (place == null)
+                    continue;
+                else if (place.label == label) {
+                    var chosen = new GenericSet<string?>(str_hash, str_equal);
+                    chosen.add(place.uri);
+                    this.update_objects_for_chosen(chosen);
+                    return;
+                }
+            }
+        }
+    }
+
     public List<weak Backend>? get_backends() {
         Gtk.TreeIter iter;
 
