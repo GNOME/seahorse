@@ -53,8 +53,6 @@ public class Seahorse.Application : Gtk.Application {
     }
 
     public override void activate() {
-        base.activate();
-
         var key_mgr = get_active_window();
 
         if (key_mgr == null)
