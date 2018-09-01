@@ -365,6 +365,10 @@ public class Seahorse.KeyManager : Catalog {
         return KeyManagerStore.get_selected_objects(this.view);
     }
 
+    public void set_focused_place(string target) {
+        this.sidebar.set_focused_place(target);
+    }
+
     public override Place? get_focused_place() {
         return this.sidebar.get_focused_place();
     }

@@ -881,6 +881,41 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
         return null;
     }
 
+    public void set_focused_place(string target) {
+
+        string? place_label = null;
+
+        switch(target) {
+            case "ssh":
+            case "pkcs11":
+                place_label = "OpenSSH keys";
+                break;
+            case "gpgme":
+                place_label = "GnuPG keys";
+                break;
+            case "gkr":
+                place_label = "Login";
+                break;
+        }
+
+        if (place_label != null) {
+            foreach (Backend backend in this.backends) {
+                foreach (weak GLib.Object obj in backend.get_objects()) {
+                    Place place = obj as Place;
+                    if (place == null)
+                        continue;
+                    else if (place.label == place_label) {
+                        var chosen = new GenericSet<string?>(str_hash, str_equal);
+                        chosen.add(place.uri);
+                        this.update_objects_for_chosen(chosen);
+                        return;
+                    }
+                }
+            }
+        }
+
+    }
+
     public List<weak Backend>? get_backends() {
         Gtk.TreeIter iter;
 
