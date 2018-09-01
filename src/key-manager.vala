@@ -365,6 +365,25 @@ public class Seahorse.KeyManager : Catalog {
         return KeyManagerStore.get_selected_objects(this.view);
     }
 
+    public void set_focused_place(string target) {
+        string? uri_prefix = null;
+        switch(target) {
+            case "ssh":
+            case "pkcs11":
+                uri_prefix = "openssh";
+                break;
+            case "gpgme":
+                uri_prefix = "gnupg";
+                break;
+            case "gkr":
+                uri_prefix = "secret-service";
+                break;
+        }
+        if (uri_prefix != null) {
+            this.sidebar.set_focused_place(uri_prefix);
+        }
+    }
+
     public override Place? get_focused_place() {
         return this.sidebar.get_focused_place();
     }
