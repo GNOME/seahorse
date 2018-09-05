@@ -27,12 +27,19 @@ public class Seahorse.Application : Gtk.Application {
 
     private const int INACTIVITY_TIMEOUT = 120 * 1000; // Two minutes, in milliseconds
 
+    const OptionEntry[] cmd_options = {
+        { "version", 'v', 0, OptionArg.NONE, null, N_("Version of this application"), null },
+        { "no-window", 0, 0, OptionArg.NONE, null, N_("Don't display a window"), null },
+        { null }
+    };
+
     public Application () {
         GLib.Object (
             application_id: "org.gnome.seahorse.Application",
             flags: ApplicationFlags.HANDLES_COMMAND_LINE
         );
         this.search_provider = new SearchProvider(this);
+        add_main_option_entries(cmd_options);
     }
 
     public override void startup() {
@@ -61,62 +68,23 @@ public class Seahorse.Application : Gtk.Application {
         key_mgr.present();
     }
 
-    static bool show_version = false;
-    const OptionEntry[] local_options = {
-        { "version", 'v', 0, OptionArg.NONE, out show_version, N_("Version of this application"), null },
-        { null }
-    };
-
-    public override bool local_command_line (ref weak string[] arguments, out int exit_status) {
-        OptionContext context = new OptionContext(N_("- System Settings"));
-        context.set_ignore_unknown_options(true);
-        context.add_main_entries(local_options, Config.GETTEXT_PACKAGE);
-        context.set_translation_domain(Config.GETTEXT_PACKAGE);
-        context.add_group(Gtk.get_option_group (true));
-
-        try {
-            unowned string[] tmp = arguments;
-            context.parse (ref tmp);
-        } catch (Error e) {
-            printerr ("seahorse: %s\n", e.message);
-            exit_status = 1;
-            return true;
-        }
-
-        if (show_version) {
+    public override int handle_local_options (VariantDict options) {
+        if (options.contains("version")) {
             print ("%s\n", Config.PACKAGE_STRING);
 #if WITH_PGP
             print ("GNUPG: %s (%d.%d.%d)\n", Config.GNUPG, Config.GPG_MAJOR, Config.GPG_MINOR, Config.GPG_MICRO);
 #endif
-            exit_status = 0;
-            return true;
+            return 0;
         }
 
-        return base.local_command_line(ref arguments, out exit_status);
+        return -1;
     }
 
-    static bool no_window = false;
-    const OptionEntry[] options = {
-        { "no-window", 0, 0, OptionArg.NONE, out no_window, N_("Don't display a window"), null },
-        { null }
-    };
-
     public override int command_line (ApplicationCommandLine command_line) {
-        OptionContext context = new OptionContext(N_("- System Settings"));
-        context.set_ignore_unknown_options (true);
-        context.add_main_entries (options, Config.GETTEXT_PACKAGE);
-        context.set_translation_domain(Config.GETTEXT_PACKAGE);
+        VariantDict options;
 
-        string[] arguments = command_line.get_arguments();
-        try {
-            unowned string[] tmp = arguments;
-            context.parse (ref tmp);
-        } catch (Error e) {
-            printerr ("seahorse: %s\n", e.message);
-            return 1;
-        }
-
-        if (no_window) {
+        options = command_line.get_options_dict();
+        if (options.contains("no-window")) {
             hold();
             set_inactivity_timeout(INACTIVITY_TIMEOUT);
             release();
