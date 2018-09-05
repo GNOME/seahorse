@@ -371,6 +371,7 @@ public class Seahorse.KeyManager : Catalog {
 
     private Gcr.Collection setup_sidebar() {
         this.sidebar = new Sidebar();
+        sidebar.hexpand = true;
 
         this.sidebar_width = this.settings.get_int("sidebar-width");
         Gtk.Builder builder = get_builder();
