@@ -20,16 +20,9 @@
 
 public class Seahorse.Prefs : Gtk.Dialog {
 
-    private bool updating_model;
-
     private Gtk.Notebook notebook;
-    private Gtk.Grid keyserver_tab;
-    private Gtk.ListBox keyservers_list;
-    private GLib.ListStore store;
-    private Gtk.Box keyserver_publish;
-    private Gtk.Label keyserver_publish_to_label;
-    private Gtk.CheckButton auto_retrieve;
-    private Gtk.CheckButton auto_sync;
+    private Keyservers keyservers;
+    public Gtk.Builder builder;
 
     /**
      * Create a new preferences window.
@@ -42,9 +35,8 @@ public class Seahorse.Prefs : Gtk.Dialog {
             transient_for: parent,
             modal: true
         );
-        this.updating_model = false;
 
-        Gtk.Builder builder = new Gtk.Builder();
+        this.builder = new Gtk.Builder();
         try {
             string path = "/org/gnome/Seahorse/seahorse-prefs.ui";
             builder.add_from_resource(path);
@@ -55,17 +47,12 @@ public class Seahorse.Prefs : Gtk.Dialog {
         get_content_area().border_width = 0;
         get_content_area().add(content);
         this.notebook = (Gtk.Notebook) builder.get_object("notebook");
-        this.keyserver_tab = (Gtk.Grid) builder.get_object("keyserver-tab");
-        this.keyservers_list = (Gtk.ListBox) builder.get_object("keyservers");
-        this.keyserver_publish = (Gtk.Box) builder.get_object("keyserver-publish");
-        this.keyserver_publish_to_label = (Gtk.Label) builder.get_object("keyserver-publish-to-label");
-        this.auto_retrieve = (Gtk.CheckButton) builder.get_object("auto_retrieve");
-        this.auto_sync = (Gtk.CheckButton) builder.get_object("auto_sync");
+        this.keyservers = (Keyservers) builder.get_object("keyserver-tab");
 
 #if WITH_KEYSERVER
-        setup_keyservers();
+        this.keyservers.setup(this);
 #else
-        remove_tab(this.keyserver_tab);
+        remove_tab(this.keyservers);
 #endif
 
         if (tabid != null) {
@@ -116,10 +103,35 @@ public class Seahorse.Prefs : Gtk.Dialog {
             this.notebook.remove_page(pos);
     }
 
+}
+
+private class Seahorse.Keyservers : Gtk.Grid {
+
 #if WITH_KEYSERVER
+    private bool updating_model;
+    private Prefs prefs_parent;
+
+    private Gtk.ListBox keyservers_list;
+    private GLib.ListStore store;
+    private Gtk.Box keyserver_publish;
+    private Gtk.Label keyserver_publish_to_label;
+    private Gtk.CheckButton auto_retrieve;
+    private Gtk.CheckButton auto_sync;
+
+    private void pre_setup(Gtk.Window? parent) {
+        this.prefs_parent = (Prefs) parent;
+        this.keyservers_list = (Gtk.ListBox) this.prefs_parent.builder.get_object("keyservers");
+        this.keyserver_publish = (Gtk.Box) this.prefs_parent.builder.get_object("keyserver-publish");
+        this.keyserver_publish_to_label = (Gtk.Label) this.prefs_parent.builder.get_object("keyserver-publish-to-label");
+        this.auto_retrieve = (Gtk.CheckButton) this.prefs_parent.builder.get_object("auto_retrieve");
+        this.auto_sync = (Gtk.CheckButton) this.prefs_parent.builder.get_object("auto_sync");
+        this.updating_model = false;
+    }
 
     // Perform keyserver page initialization
-    private void setup_keyservers () {
+    public void setup (Gtk.Window? parent) {
+        pre_setup(parent);
+
         this.store = new ListStore(typeof(GLib.Object));
         this.keyservers_list.bind_model(store, create_keyserver_row);
 
@@ -157,6 +169,12 @@ public class Seahorse.Prefs : Gtk.Dialog {
             return ks_a.collate(ks_b);
     }
 
+    private GLib.Object get_keyserver_obj(string uri) {
+        GLib.Object obj = new GLib.Object();
+        obj.set_data("keyserver", uri);
+        return obj;
+    }
+
     private Gtk.ListBoxRow create_keyserver_row(GLib.Object item) {
         var row = new Gtk.ListBoxRow();
 
@@ -165,18 +183,45 @@ public class Seahorse.Prefs : Gtk.Dialog {
 
         string? ks = item.get_data("keyserver");
         if (ks != null) {
-            var uri = new Gtk.Label(item.get_data("keyserver"));
-            box.pack_start(uri, false);
-
+            //  widget declaration
+            var uri_label = new Gtk.Label(item.get_data("keyserver"));
+            var uri_entry = new Gtk.Entry();
+            var edit_button = new Gtk.Button.from_icon_name("document-edit-symbolic");
             var remove_button = new Gtk.Button.from_icon_name("list-remove");
+            //  callbacks
+            edit_button.clicked.connect(() => {
+                uri_label.hide();
+                uri_entry.set_text(uri_label.get_text());
+                uri_entry.show_now();
+                uri_entry.grab_focus();
+            });
+            uri_entry.activate.connect(() => {
+                var uri = uri_entry.get_text();
+                if (!Servers.is_valid_uri(uri)) {
+                    uri_entry.get_style_context().add_class("error");
+                    return;
+                }
+                this.store.remove(row.get_index());
+                this.store.insert_sorted(get_keyserver_obj(uri), listbox_comparator);
+                uri_entry.hide();
+            });
             remove_button.clicked.connect(() => {
                 this.store.remove(row.get_index());
             });
-
+            //  styling
+            remove_button.get_style_context().add_class("flat");
+            edit_button.get_style_context().add_class("flat");
+            //  packing
+            box.pack_start(uri_entry);
+            box.pack_start(uri_label, false);
             box.pack_end(remove_button, false);
+            box.pack_end(edit_button, false);
+
+            uri_entry.set_no_show_all(true);
+            uri_entry.hide();
         }
         else {
-            box.set_center_widget(item.get_data("add_button"));
+            box.pack_start(item.get_data("add_button"));
         }
 
         row.show_all();
@@ -203,7 +248,6 @@ public class Seahorse.Prefs : Gtk.Dialog {
         // If currently updating (see populate_keyservers) ignore
         if (this.updating_model)
             return;
-
         save_keyservers();
     }
 
@@ -234,9 +278,7 @@ public class Seahorse.Prefs : Gtk.Dialog {
 
         // Any remaining extra rows
         for ( ; keyservers[i] != null; i++) {
-            GLib.Object obj = new GLib.Object();
-            obj.set_data("keyserver", keyservers[i]);
-            store.insert_sorted(obj, listbox_comparator);
+            this.store.insert_sorted(get_keyserver_obj(keyservers[i]), listbox_comparator);
         }
 
         // Done updating
@@ -247,12 +289,13 @@ public class Seahorse.Prefs : Gtk.Dialog {
         var item = new GLib.Object();
         var button = new Gtk.Button.from_icon_name("list-add");
         button.clicked.connect(on_prefs_keyserver_add_clicked);
+        button.get_style_context().add_class("flat");
         item.set_data("add_button", button);
         this.store.insert_sorted(item, listbox_comparator);
     }
 
     private void on_prefs_keyserver_add_clicked (Gtk.Button button) {
-        AddKeyserverDialog dialog = new AddKeyserverDialog(this);
+        AddKeyserverDialog dialog = new AddKeyserverDialog(this.prefs_parent);
 
         if (dialog.run() == Gtk.ResponseType.OK) {
             string? result = dialog.calculate_keyserver_uri();
@@ -260,13 +303,11 @@ public class Seahorse.Prefs : Gtk.Dialog {
             if (result != null) {
                 var obj = new GLib.Object();
                 obj.set_data("keyserver", result);
-                this.store.insert_sorted(obj, listbox_comparator);
+                this.store.insert_sorted(get_keyserver_obj(result), listbox_comparator);
             }
         }
 
         dialog.destroy();
     }
-
 #endif
-
 }
