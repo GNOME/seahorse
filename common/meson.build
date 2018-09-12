@@ -18,6 +18,7 @@ common_sources = [
   'place.vala',
   'predicate.vala',
   'prefs.vala',
+  'prefs-keyservers.vala',
   'registry.vala',
   'servers.vala',
   'types.vala',
@@ -35,6 +36,7 @@ common_deps = [
 ]
 
 common_vala_args = [
+  '--gresources', resources_xml,
 ]
 
 if with_keyservers
