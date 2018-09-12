@@ -35,10 +35,11 @@ common_deps = [
 ]
 
 common_vala_args = [
+  '--gresources', resources_xml,
 ]
 
 if with_keyservers
-  common_sources += 'keyserver-control.vala'
+  common_sources += ['keyserver-control.vala', 'prefs-keyservers.vala']
   common_vala_args += [ '-D', 'WITH_KEYSERVER' ]
 endif
 
