@@ -211,18 +211,16 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
     }
 
     private bool apply_showfilter(GLib.Object? obj) {
-        if (this.showfilter == ShowFilter.ANY)
-            return true;
-
-        unowned Object? object = obj as Object;
-        if (object == null)
-            return false;
+        Flags obj_flags = Flags.NONE;
+        obj.get("object-flags", out obj_flags, null);
 
         switch (this.showfilter) {
             case ShowFilter.PERSONAL:
-                return Seahorse.Flags.PERSONAL in object.object_flags;
+                return Seahorse.Flags.PERSONAL in obj_flags;
             case ShowFilter.TRUSTED:
-                return Seahorse.Flags.TRUSTED in object.object_flags;
+                return Seahorse.Flags.TRUSTED in obj_flags;
+            case ShowFilter.ANY:
+                return true;
         }
 
         return false;
