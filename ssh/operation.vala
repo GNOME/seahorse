@@ -127,17 +127,6 @@ public abstract class Operation : GLib.Object {
         });
     }
 
-    /**
-     * Escapes a command-line argument so it can be safely passed on.
-     *
-     * @param arg The argument that should be escaped.
-     * @return The escaped argument.
-     */
-    protected string escape_shell_arg (string arg) {
-        string escaped = arg.replace("'", "\'");
-        return "\'%s\'".printf(escaped);
-    }
-
     private bool on_io_ssh_read(IOChannel source, IOCondition condition, StringBuilder data) {
         try {
             IOStatus status = IOStatus.NORMAL;
@@ -285,7 +274,7 @@ public class GenerateOperation : Operation {
 
         string algo = type.to_string().down();
         string bits_str = (bits != 0)? "-b '%u'".printf(bits) : "";
-        string comment = escape_shell_arg(email);
+        string comment = GLib.Shell.quote(email);
 
         string cmd = "%s %s -t '%s' -C %s -f '%s'".printf(Config.SSH_KEYGEN_PATH, bits_str, algo, comment, filename);
 
