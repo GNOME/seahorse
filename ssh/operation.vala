@@ -134,8 +134,8 @@ public abstract class Operation : GLib.Object {
      * @return The escaped argument.
      */
     protected string escape_shell_arg (string arg) {
-        string escaped = arg.replace("'", "\'");
-        return "\'%s\'".printf(escaped);
+        string escaped = arg.replace("\"", "\\\"");
+        return "\"%s\"".printf(escaped);
     }
 
     private bool on_io_ssh_read(IOChannel source, IOCondition condition, StringBuilder data) {
