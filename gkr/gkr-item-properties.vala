@@ -79,7 +79,7 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
 
         // Create the password entry
         this.password_entry = new PasswordEntry();
-        this.password_box_area.add(this.password_entry);
+        this.password_box_area.pack_start(this.password_entry, true, true, 0);
         fetch_password();
 
         // Sensitivity of the password entry
@@ -232,5 +232,19 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
             DBusError.strip_remote_error(err);
             Util.show_error (this, _("Couldn’t set description."), err.message);
         }
+    }
+
+    [GtkCallback]
+    private void on_copy_button_clicked() {
+        var secret = this.item.get_secret();
+        if (secret == null)
+            return;
+
+        unowned string? password = secret.get_text();
+        if (password == null)
+            return;
+
+        var clipboard = Gtk.Clipboard.get_default(this.get_display());
+        clipboard.set_text(password, -1);
     }
 }
