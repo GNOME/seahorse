@@ -23,14 +23,14 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
     public Item item { construct; get; }
 
     [GtkChild]
-    private Gtk.Image key_image;
-    [GtkChild]
     private Gtk.Entry description_field;
     private bool description_has_changed;
     [GtkChild]
     private Gtk.Label use_field;
     [GtkChild]
     private Gtk.Label type_field;
+    [GtkChild]
+    private Gtk.Label details_label;
     [GtkChild]
     private Gtk.Label details_box;
     [GtkChild]
@@ -46,10 +46,6 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
     private PasswordEntry password_entry;
 
     construct {
-        // Setup the image properly
-        this.item.bind_property ("icon", this.key_image, "gicon",
-                                 GLib.BindingFlags.SYNC_CREATE);
-
         // Setup the label properly
         this.item.bind_property("label", this.description_field, "text",
                                 GLib.BindingFlags.SYNC_CREATE);
@@ -58,7 +54,9 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
         });
 
         /* Window title */
-        this.item.bind_property("label", this, "title", GLib.BindingFlags.SYNC_CREATE);
+        var headerbar = (Gtk.HeaderBar) this.get_header_bar();
+        this.item.bind_property("label", headerbar, "subtitle",
+                                GLib.BindingFlags.SYNC_CREATE);
 
         /* Update as appropriate */
         this.item.notify.connect((pspec) => {
@@ -91,9 +89,9 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
     public ItemProperties(Item item, Gtk.Window? parent) {
         GLib.Object (
             item: item,
-            transient_for: parent
+            transient_for: parent,
+            use_header_bar: 1
         );
-
         item.refresh();
     }
 
@@ -195,8 +193,11 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
                                    GLib.Markup.escape_text(value));
         }
 
-        this.details_box.use_markup = true;
-        this.details_box.label = contents.str;
+        if (contents.len > 0) {
+            this.details_label.visible = true;
+            this.details_box.visible = true;
+            this.details_box.label = contents.str;
+        }
     }
 
     private async void save_password() {
