@@ -247,4 +247,28 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
         var clipboard = Gtk.Clipboard.get_default(this.get_display());
         clipboard.set_text(password, -1);
     }
+
+    [GtkCallback]
+    private void on_delete_button_clicked() {
+        var deleter = this.item.create_deleter();
+        var ret = deleter.prompt(this);
+
+        if (!ret)
+            return;
+
+        deleter.delete.begin(null, (obj, res) => {
+            try {
+                deleter.delete.end(res);
+                this.destroy();
+            } catch (GLib.Error e) {
+                var dialog = new Gtk.MessageDialog(this,
+                    Gtk.DialogFlags.MODAL,
+                    Gtk.MessageType.ERROR,
+                    Gtk.ButtonsType.OK,
+                    _("Error deleting the password."));
+                dialog.run();
+                dialog.destroy();
+            }
+        });
+    }
 }
