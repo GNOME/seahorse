@@ -5,6 +5,7 @@ gkr_sources = [
   'gkr-item-properties.vala',
   'gkr-item.vala',
   'gkr-keyring-add.vala',
+  'gkr-keyring-permission.vala',
   'gkr-keyring-properties.vala',
   'gkr-keyring.vala',
   'gkr-module.vala',
