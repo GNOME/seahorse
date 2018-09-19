@@ -31,9 +31,7 @@ public class Seahorse.Gkr.KeyringProperties : Gtk.Dialog {
     [GtkChild]
     private Gtk.Button set_default_button;
     [GtkChild]
-    private Gtk.Button lock_unlock_button;
-    [GtkChild]
-    private Gtk.Stack lock_unlock_stack;
+    private Gtk.LockButton lock_button;
 
     construct {
         this.use_header_bar = 1;
@@ -51,7 +49,6 @@ public class Seahorse.Gkr.KeyringProperties : Gtk.Dialog {
         // The buttons
         this.keyring.bind_property("is-default", this.set_default_button, "sensitive",
                                    BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
-        update_lock_unlock_button();
     }
 
     public KeyringProperties(Keyring keyring, Gtk.Window? parent) {
@@ -59,6 +56,8 @@ public class Seahorse.Gkr.KeyringProperties : Gtk.Dialog {
             keyring: keyring,
             transient_for: parent
         );
+        var perm = new KeyringPermission(this.keyring);
+        this.lock_button.set_permission(perm);
     }
 
     private void set_created(uint64 timestamp) {
@@ -74,32 +73,5 @@ public class Seahorse.Gkr.KeyringProperties : Gtk.Dialog {
     [GtkCallback]
     private void on_change_pw_button_clicked(Gtk.Button button) {
         this.keyring.on_keyring_password(null);
-    }
-
-    private void update_lock_unlock_button() {
-        this.lock_unlock_stack.visible_child_name
-            = this.keyring.locked? "lock_unlock_button_unlocked" : "lock_unlock_button_locked";
-    }
-
-    private async void set_keyring_locked() {
-        this.lock_unlock_button.sensitive = false;
-        try {
-            if (this.keyring.locked)
-                yield this.keyring.unlock(null, null);
-            else
-                yield this.keyring.lock(null, null);
-        } catch (Error e) {
-            warning("Couldn't %s keyring <%s>",
-                this.keyring.locked? "unlock" : "lock",
-                this.keyring.label);
-        }
-
-        update_lock_unlock_button();
-        this.lock_unlock_button.sensitive = true;
-    }
-
-    [GtkCallback]
-    private void on_lock_unlock_button_clicked(Gtk.Button button) {
-        set_keyring_locked.begin();
     }
 }
