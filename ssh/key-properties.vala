@@ -28,21 +28,11 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
     private bool updating_ui = false;
 
     [GtkChild]
-    private Gtk.Image key_image;
-    [GtkChild]
     private Gtk.Entry comment_entry;
     [GtkChild]
-    private Gtk.Label id_label;
-    [GtkChild]
-    private Gtk.Label trust_message;
-    [GtkChild]
-    private Gtk.ToggleButton trust_check;
-
+    private Gtk.Switch trust_check;
     [GtkChild]
     private Gtk.Button passphrase_button;
-    [GtkChild]
-    private Gtk.Button export_button;
-
     [GtkChild]
     private Gtk.Label fingerprint_label;
     [GtkChild]
@@ -53,7 +43,10 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
     private Gtk.Label key_length_label;
 
     public KeyProperties(Key key, Gtk.Window parent) {
-        this.transient_for = parent;
+        GLib.Object(
+            use_header_bar: 1,
+            transient_for: parent
+        );
         this.key = key;
 
         update_ui();
@@ -61,7 +54,6 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         // A public key only
         if (key.usage != Seahorse.Usage.PRIVATE_KEY) {
             this.passphrase_button.visible = false;
-            this.export_button.visible = false;
         }
 
         this.key.notify.connect(() => update_ui());
@@ -70,17 +62,8 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
     private void update_ui() {
         this.updating_ui = true;
 
-        // Image
-        if (this.key.icon != null)
-            this.key_image.set_from_gicon(this.key.icon, Gtk.IconSize.DIALOG);
         // Name and title
         this.comment_entry.text = this.key.label;
-        this.title = this.key.label;
-        // Key id
-        this.id_label.label = this.key.identifier;
-        // Put in message
-        string template = this.trust_message.label;
-        this.trust_message.set_markup(template.printf(Environment.get_user_name()));
 
         // Setup the check
         this.trust_check.active = (this.key.trust >= Seahorse.Validity.FULL);
@@ -125,21 +108,21 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
     }
 
     [GtkCallback]
-    private void on_ssh_trust_toggled(Gtk.ToggleButton button) {
+    private void on_ssh_trust_changed(GLib.Object button, GLib.ParamSpec p) {
         if (updating_ui)
             return;
 
-        button.sensitive = false;
+        trust_check.sensitive = false;
 
         Source source = (Source) key.place;
-        source.authorize_async.begin(key, button.active, (obj, res) => {
+        source.authorize_async.begin(key, trust_check.active, (obj, res) => {
             try {
                 source.authorize_async.end(res);
             } catch (GLib.Error e) {
                 Seahorse.Util.show_error(this, _("Couldn’t change authorization for key."), e.message);
             }
 
-            button.sensitive = true;
+            trust_check.sensitive = true;
         });
     }
 
@@ -160,21 +143,27 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
     }
 
     [GtkCallback]
-    private void on_ssh_export_button_clicked (Gtk.Widget widget) {
-        List<Exporter> exporters = new List<Exporter>();
-        exporters.append(new Exporter(key, true));
+    private void on_delete_clicked(Gtk.Button button) {
+        var deleter = this.key.create_deleter();
+        var ret = deleter.prompt(this);
 
-        Seahorse.Exporter exporter;
-        string directory = null;
-        File file;
-        if (Seahorse.Exportable.prompt(exporters, this, ref directory, out file, out exporter)) {
-            exporter.export_to_file.begin(file, true, null, (obj, res) => {
-                try {
-                    exporter.export_to_file.end(res);
-                } catch (GLib.Error e) {
-                    Seahorse.Util.show_error(this, _("Couldn’t export key"), e.message);
-                }
-            });
-        }
+        if (!ret)
+            return;
+
+        deleter.delete.begin(null, (obj, res) => {
+            try {
+                deleter.delete.end(res);
+                this.destroy();
+            } catch (GLib.Error e) {
+                var dialog = new Gtk.MessageDialog(this,
+                    Gtk.DialogFlags.MODAL,
+                    Gtk.MessageType.ERROR,
+                    Gtk.ButtonsType.OK,
+                    _("Error deleting the password."));
+                dialog.run();
+                dialog.destroy();
+            }
+        });
     }
+
 }
