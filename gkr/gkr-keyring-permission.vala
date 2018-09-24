@@ -1,7 +1,7 @@
 /*
  * Seahorse
  *
- * Copyright (C) 2008 Stefan Walter
+ * Copyright (C) 2018 Anukul Sangwan
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
