@@ -61,6 +61,8 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
      */
     public Seahorse.Validity trust {
         get {
+            if (this.key_data == null)
+                warning("key_data is null");
             if (this.key_data != null && this.key_data.authorized)
                 return Seahorse.Validity.FULL;
             return 0;
