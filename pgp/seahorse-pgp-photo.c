@@ -19,7 +19,6 @@
 
 #include "config.h"
 
-#include "seahorse-pgp.h"
 #include "seahorse-pgp-photo.h"
 
 #include <string.h>

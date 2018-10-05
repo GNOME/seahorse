@@ -22,7 +22,6 @@
 
 #include "seahorse-gpgme-dialogs.h"
 
-#include "seahorse-pgp.h"
 #include "seahorse-pgp-backend.h"
 #include "seahorse-gpgme.h"
 #include "seahorse-gpgme-key.h"

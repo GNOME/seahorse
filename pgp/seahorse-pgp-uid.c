@@ -19,7 +19,6 @@
 
 #include "config.h"
 
-#include "seahorse-pgp.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-uid.h"
 #include "seahorse-pgp-signature.h"

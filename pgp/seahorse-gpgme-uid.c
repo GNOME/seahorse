@@ -21,7 +21,6 @@
 
 #include "seahorse-gpgme.h"
 #include "seahorse-gpgme-uid.h"
-#include "seahorse-pgp.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-signature.h"
 

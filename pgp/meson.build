@@ -21,7 +21,6 @@ pgp_sources = [
   'seahorse-gpgme-uid.c',
   'seahorse-gpg-op.c',
   'seahorse-gpg-options.c',
-  'seahorse-pgp.c',
   'seahorse-pgp-actions.c',
   'seahorse-pgp-backend.c',
   'seahorse-pgp-key.c',
