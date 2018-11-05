@@ -64,7 +64,7 @@ public class Seahorse.Ssh.Deleter : Seahorse.Deleter {
         return dialog;
     }
 
-    public override unowned List<weak GLib.Object> get_objects () {
+    public override unowned GLib.List<GLib.Object> get_objects () {
         return this.keys;
     }
 

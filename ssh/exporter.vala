@@ -97,7 +97,7 @@ public class Seahorse.Ssh.Exporter : GLib.Object, Seahorse.Exporter {
         }
     }
 
-    public unowned GLib.List<weak GLib.Object> get_objects() {
+    public unowned GLib.List<GLib.Object> get_objects() {
         return this.objects;
     }
 
