@@ -208,7 +208,7 @@ public class Token : GLib.Object, Gcr.Collection, Place, Lockable {
 	public void remove_object(Gck.Object object) {
 		GLib.List<Gck.Object> objects = null;
 		objects.append(object);
-		remove_objects(objects);
+		remove_objects(objects.copy());
 	}
 
 	public bool has_mechanism(ulong mechanism) {
@@ -387,7 +387,7 @@ public class Token : GLib.Object, Gcr.Collection, Place, Lockable {
 		update_visibility(show, true);
 	}
 
-	private void remove_objects(GLib.List<GLib.Object> objects) {
+	private void remove_objects(GLib.List<weak GLib.Object> objects) {
 		var depaired = new GLib.List<GLib.Object>();
 		var hide = new GLib.List<GLib.Object>();
 

@@ -24,7 +24,7 @@ namespace Seahorse {
 public abstract class Deleter : GLib.Object {
 	public abstract Gtk.Dialog create_confirm(Gtk.Window? parent);
 
-	public abstract unowned GLib.List<weak GLib.Object> get_objects();
+	public abstract unowned GLib.List<GLib.Object> get_objects();
 
 	public abstract bool add_object (GLib.Object obj);
 

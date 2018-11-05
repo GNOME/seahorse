@@ -23,7 +23,7 @@ namespace Seahorse {
 
 public class CertificateDerExporter : GLib.Object, Exporter {
 	private Gcr.Certificate _certificate;
-	private GLib.List<weak GLib.Object> _objects;
+	private GLib.List<GLib.Object> _objects;
 
 	public CertificateDerExporter(Gcr.Certificate certificate)
 	{
@@ -67,7 +67,7 @@ public class CertificateDerExporter : GLib.Object, Exporter {
 		}
 	}
 
-	public unowned GLib.List<weak GLib.Object> get_objects() {
+	public unowned GLib.List<GLib.Object> get_objects() {
 		return this._objects;
 	}
 

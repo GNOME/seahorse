@@ -513,7 +513,7 @@ class ItemDeleter : Deleter {
 			GLib.assert_not_reached();
 	}
 
-	public override unowned GLib.List<weak GLib.Object> get_objects() {
+	public override unowned GLib.List<GLib.Object> get_objects() {
 		return this._items;
 	}
 
