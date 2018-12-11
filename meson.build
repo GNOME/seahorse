@@ -1,5 +1,5 @@
 project('seahorse', ['vala', 'c'],
-  version: '3.30.1',
+  version: '3.30.1.1',
   meson_version: '>= 0.42',
   license: 'GPL2+',
 )
