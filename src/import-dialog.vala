@@ -55,7 +55,7 @@ public class Seahorse.ImportDialog : Gtk.Dialog {
     }
 
     public void add_text(string? display_name, string text) {
-        this.viewer.load_data(display_name, (uint8[]) text);
+        this.viewer.load_data(display_name, text.data);
     }
 
     private void on_import_button_imported(GLib.Object importer, Error? error) {

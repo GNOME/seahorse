@@ -333,7 +333,7 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         if (this.drag_objects != null) {
             Gdk.Window? source_window = context.get_source_window();
             Gdk.property_change (source_window, XDS_ATOM, TEXT_ATOM, 8, Gdk.PropMode.REPLACE,
-                                 (uint8[]) XDS_FILENAME, XDS_FILENAME.length);
+                                 XDS_FILENAME.data, XDS_FILENAME.length);
         }
 
         debug("drag_begin <--");
@@ -398,7 +398,7 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
                     return;
                 this.drag_destination = Path.get_dirname (destination);
 
-                selection_data.set(selection_data.get_target(), 8, (uint8[]) "S");
+                selection_data.set(selection_data.get_target(), 8, "S".data);
             }
 
         // Unrecognized format
