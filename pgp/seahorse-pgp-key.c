@@ -198,14 +198,14 @@ calc_markup (SeahorsePgpKey *self)
 static GList*
 _seahorse_pgp_key_get_uids (SeahorsePgpKey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), NULL);
 	return self->pv->uids;
 }
 
 static void
 _seahorse_pgp_key_set_uids (SeahorsePgpKey *self, GList *uids)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_KEY (self));
 
 	seahorse_object_list_free (self->pv->uids);
 	self->pv->uids = seahorse_object_list_copy (uids);
@@ -216,7 +216,7 @@ _seahorse_pgp_key_set_uids (SeahorsePgpKey *self, GList *uids)
 static GList*
 _seahorse_pgp_key_get_subkeys (SeahorsePgpKey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), NULL);
 	return self->pv->subkeys;
 }
 
@@ -225,7 +225,7 @@ _seahorse_pgp_key_set_subkeys (SeahorsePgpKey *self, GList *subkeys)
 {
 	const gchar *keyid = NULL;
 
-	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_KEY (self));
 	g_return_if_fail (subkeys);
 
 	keyid = seahorse_pgp_subkey_get_keyid (subkeys->data);
@@ -253,14 +253,14 @@ _seahorse_pgp_key_set_subkeys (SeahorsePgpKey *self, GList *subkeys)
 static GList*
 _seahorse_pgp_key_get_photos (SeahorsePgpKey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), NULL);
 	return self->pv->photos;
 }
 
 static void
 _seahorse_pgp_key_set_photos (SeahorsePgpKey *self, GList *photos)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_KEY (self));
 	
 	seahorse_object_list_free (self->pv->photos);
 	self->pv->photos = seahorse_object_list_copy (photos);
@@ -319,7 +319,7 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
 static void
 seahorse_pgp_key_init (SeahorsePgpKey *self)
 {
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_PGP_KEY, SeahorsePgpKeyPrivate);
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_PGP_TYPE_KEY, SeahorsePgpKeyPrivate);
 }
 
 static void
@@ -508,13 +508,13 @@ seahorse_pgp_key_calc_identifier (const gchar *keyid)
 SeahorsePgpKey*
 seahorse_pgp_key_new (void)
 {
-	return g_object_new (SEAHORSE_TYPE_PGP_KEY, NULL);
+	return g_object_new (SEAHORSE_PGP_TYPE_KEY, NULL);
 }
 
 GList*
 seahorse_pgp_key_get_uids (SeahorsePgpKey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), NULL);
 	if (!SEAHORSE_PGP_KEY_GET_CLASS (self)->get_uids)
 		return NULL;
 	return SEAHORSE_PGP_KEY_GET_CLASS (self)->get_uids (self);
@@ -523,7 +523,7 @@ seahorse_pgp_key_get_uids (SeahorsePgpKey *self)
 void
 seahorse_pgp_key_set_uids (SeahorsePgpKey *self, GList *uids)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_KEY (self));
 	g_return_if_fail (SEAHORSE_PGP_KEY_GET_CLASS (self)->set_uids);
 	SEAHORSE_PGP_KEY_GET_CLASS (self)->set_uids (self, uids);
 }
@@ -531,7 +531,7 @@ seahorse_pgp_key_set_uids (SeahorsePgpKey *self, GList *uids)
 GList*
 seahorse_pgp_key_get_subkeys (SeahorsePgpKey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), NULL);
 	if (!SEAHORSE_PGP_KEY_GET_CLASS (self)->get_subkeys)
 		return NULL;
 	return SEAHORSE_PGP_KEY_GET_CLASS (self)->get_subkeys (self);
@@ -540,7 +540,7 @@ seahorse_pgp_key_get_subkeys (SeahorsePgpKey *self)
 void
 seahorse_pgp_key_set_subkeys (SeahorsePgpKey *self, GList *subkeys)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_KEY (self));
 	g_return_if_fail (SEAHORSE_PGP_KEY_GET_CLASS (self)->set_subkeys);
 	SEAHORSE_PGP_KEY_GET_CLASS (self)->set_subkeys (self, subkeys);
 }
@@ -548,7 +548,7 @@ seahorse_pgp_key_set_subkeys (SeahorsePgpKey *self, GList *subkeys)
 GList*
 seahorse_pgp_key_get_photos (SeahorsePgpKey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), NULL);
 	if (!SEAHORSE_PGP_KEY_GET_CLASS (self)->get_photos)
 		return NULL;
 	return SEAHORSE_PGP_KEY_GET_CLASS (self)->get_photos (self);
@@ -557,7 +557,7 @@ seahorse_pgp_key_get_photos (SeahorsePgpKey *self)
 void
 seahorse_pgp_key_set_photos (SeahorsePgpKey *self, GList *photos)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_KEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_KEY (self));
 	g_return_if_fail (SEAHORSE_PGP_KEY_GET_CLASS (self)->set_photos);
 	SEAHORSE_PGP_KEY_GET_CLASS (self)->set_photos (self, photos);
 }
@@ -567,7 +567,7 @@ seahorse_pgp_key_get_fingerprint (SeahorsePgpKey *self)
 {
 	GList *subkeys;
 	    
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), NULL);
 
 	subkeys = seahorse_pgp_key_get_subkeys (self);
 	if (!subkeys)
@@ -589,7 +589,7 @@ seahorse_pgp_key_get_expires (SeahorsePgpKey *self)
 {
 	GList *subkeys;
 	    
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), 0);
 
 	subkeys = seahorse_pgp_key_get_subkeys (self);
 	if (!subkeys)
@@ -611,7 +611,7 @@ seahorse_pgp_key_get_length (SeahorsePgpKey *self)
 {
 	GList *subkeys;
 	    
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), 0);
 
 	subkeys = seahorse_pgp_key_get_subkeys (self);
 	if (!subkeys)
@@ -625,7 +625,7 @@ seahorse_pgp_key_get_algo (SeahorsePgpKey *self)
 {
 	GList *subkeys;
 	    
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), 0);
 
 	subkeys = seahorse_pgp_key_get_subkeys (self);
 	if (!subkeys)
@@ -639,7 +639,7 @@ seahorse_pgp_key_get_keyid (SeahorsePgpKey *self)
 {
 	GList *subkeys;
 	    
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), 0);
 
 	subkeys = seahorse_pgp_key_get_subkeys (self);
 	if (!subkeys)
@@ -656,7 +656,7 @@ seahorse_pgp_key_has_keyid (SeahorsePgpKey *self, const gchar *match)
 	const gchar *keyid;
 	guint n_match, n_keyid;
 	
-	g_return_val_if_fail (SEAHORSE_IS_PGP_KEY (self), FALSE);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), FALSE);
 	g_return_val_if_fail (match, FALSE);
 
 	subkeys = seahorse_pgp_key_get_subkeys (self);

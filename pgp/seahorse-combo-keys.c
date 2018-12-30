@@ -90,7 +90,7 @@ calculate_markup_for_object (GtkComboBox *combo,
 		}
 	}
 
-	if (closure->collision && SEAHORSE_IS_PGP_KEY (object)) {
+	if (closure->collision && SEAHORSE_PGP_IS_KEY (object)) {
 		keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (object));
 		ident = seahorse_pgp_key_calc_identifier (keyid);
 		markup = g_markup_printf_escaped ("%s <span size='small'>[%s]</span>", label, ident);

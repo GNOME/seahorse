@@ -41,12 +41,12 @@ G_BEGIN_DECLS
 
 void       seahorse_pgp_backend_initialize    (void);
 
-#define SEAHORSE_TYPE_PGP_BACKEND            (seahorse_pgp_backend_get_type ())
-#define SEAHORSE_PGP_BACKEND(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_BACKEND, SeahorsePgpBackend))
-#define SEAHORSE_PGP_BACKEND_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_BACKEND, SeahorsePgpBackendClass))
-#define SEAHORSE_IS_PGP_BACKEND(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_BACKEND))
-#define SEAHORSE_IS_PGP_BACKEND_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_BACKEND))
-#define SEAHORSE_PGP_BACKEND_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_BACKEND, SeahorsePgpBackendClass))
+#define SEAHORSE_PGP_TYPE_BACKEND            (seahorse_pgp_backend_get_type ())
+#define SEAHORSE_PGP_BACKEND(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_BACKEND, SeahorsePgpBackend))
+#define SEAHORSE_PGP_BACKEND_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_BACKEND, SeahorsePgpBackendClass))
+#define SEAHORSE_PGP_IS_BACKEND(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_BACKEND))
+#define SEAHORSE_PGP_IS_BACKEND_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_BACKEND))
+#define SEAHORSE_PGP_BACKEND_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_BACKEND, SeahorsePgpBackendClass))
 
 typedef struct _SeahorsePgpBackend SeahorsePgpBackend;
 typedef struct _SeahorsePgpBackendClass SeahorsePgpBackendClass;

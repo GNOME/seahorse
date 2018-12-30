@@ -43,7 +43,7 @@ struct _SeahorsePgpPhotoPrivate {
 static void
 seahorse_pgp_photo_init (SeahorsePgpPhoto *self)
 {
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_PGP_PHOTO, SeahorsePgpPhotoPrivate);
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_PGP_TYPE_PHOTO, SeahorsePgpPhotoPrivate);
 }
 
 static void
@@ -108,20 +108,20 @@ seahorse_pgp_photo_class_init (SeahorsePgpPhotoClass *klass)
 SeahorsePgpPhoto* 
 seahorse_pgp_photo_new (GdkPixbuf *pixbuf) 
 {
-	return g_object_new (SEAHORSE_TYPE_PGP_PHOTO, "pixbuf", pixbuf, NULL);
+	return g_object_new (SEAHORSE_PGP_TYPE_PHOTO, "pixbuf", pixbuf, NULL);
 }
 
 GdkPixbuf*
 seahorse_pgp_photo_get_pixbuf (SeahorsePgpPhoto *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_PHOTO (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_PHOTO (self), NULL);
 	return self->pv->pixbuf;
 }
 
 void
 seahorse_pgp_photo_set_pixbuf (SeahorsePgpPhoto *self, GdkPixbuf* pixbuf)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_PHOTO (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_PHOTO (self));
 
 	if (self->pv->pixbuf)
 		g_object_unref (self->pv->pixbuf);

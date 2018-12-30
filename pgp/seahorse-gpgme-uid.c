@@ -38,7 +38,7 @@ enum {
 	PROP_ACTUAL_INDEX
 };
 
-G_DEFINE_TYPE (SeahorseGpgmeUid, seahorse_gpgme_uid, SEAHORSE_TYPE_PGP_UID);
+G_DEFINE_TYPE (SeahorseGpgmeUid, seahorse_gpgme_uid, SEAHORSE_PGP_TYPE_UID);
 
 struct _SeahorseGpgmeUidPrivate {
 	gpgme_key_t pubkey;         /* The public key that this uid is part of */

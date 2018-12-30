@@ -29,12 +29,12 @@ enum {
     SKEY_PGPSIG_PERSONAL = 0x0002
 };
 
-#define SEAHORSE_TYPE_PGP_KEY            (seahorse_pgp_key_get_type ())
-#define SEAHORSE_PGP_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_KEY, SeahorsePgpKey))
-#define SEAHORSE_PGP_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_KEY, SeahorsePgpKeyClass))
-#define SEAHORSE_IS_PGP_KEY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_KEY))
-#define SEAHORSE_IS_PGP_KEY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_KEY))
-#define SEAHORSE_PGP_KEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_KEY, SeahorsePgpKeyClass))
+#define SEAHORSE_PGP_TYPE_KEY            (seahorse_pgp_key_get_type ())
+#define SEAHORSE_PGP_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_KEY, SeahorsePgpKey))
+#define SEAHORSE_PGP_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_KEY, SeahorsePgpKeyClass))
+#define SEAHORSE_PGP_IS_KEY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_KEY))
+#define SEAHORSE_PGP_IS_KEY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_KEY))
+#define SEAHORSE_PGP_KEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_KEY, SeahorsePgpKeyClass))
 
 
 typedef struct _SeahorsePgpKey SeahorsePgpKey;

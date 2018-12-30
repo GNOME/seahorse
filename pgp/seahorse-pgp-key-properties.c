@@ -240,7 +240,7 @@ on_pgp_signature_row_activated (GtkTreeView *treeview,
 	g_return_if_fail (gtk_tree_model_get_iter (model, &iter, path));
 
 	object = seahorse_object_model_get_row_key (SEAHORSE_OBJECT_MODEL (model), &iter);
-	if (object != NULL && SEAHORSE_IS_PGP_KEY (object)) {
+	if (object != NULL && SEAHORSE_PGP_IS_KEY (object)) {
 		seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (object), 
 		                                  GTK_WINDOW (gtk_widget_get_parent (seahorse_widget_get_toplevel (swidget))));
 	}
@@ -404,7 +404,7 @@ names_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
 	GIcon *icon;
 	const gchar *name, *id;
 
-	icon = g_themed_icon_new (SEAHORSE_IS_PGP_KEY (object) ?
+	icon = g_themed_icon_new (SEAHORSE_PGP_IS_KEY (object) ?
 	                               SEAHORSE_ICON_SIGN : GTK_STOCK_DIALOG_QUESTION);
 	name = seahorse_object_get_markup (object);
 	id = seahorse_object_get_identifier (object);
@@ -679,7 +679,7 @@ set_photoid_state (SeahorseWidget *swidget, SeahorsePgpKey *pkey)
 	photos = seahorse_pgp_key_get_photos (pkey);
 	
 	photo = g_object_get_data (G_OBJECT (swidget), "current-photoid");
-	g_return_if_fail (!photo || SEAHORSE_IS_PGP_PHOTO (photo));
+	g_return_if_fail (!photo || SEAHORSE_PGP_IS_PHOTO (photo));
 	is_gpgme = SEAHORSE_IS_GPGME_KEY (pkey);
 
 	/* Show when adding a photo is possible */
@@ -753,7 +753,7 @@ on_pgp_owner_photoid_next (GtkWidget *widget,
 	
 	photo = g_object_get_data (G_OBJECT (swidget), "current-photoid");
 	if (photo) {
-		g_return_if_fail (SEAHORSE_IS_PGP_PHOTO (photo));
+		g_return_if_fail (SEAHORSE_PGP_IS_PHOTO (photo));
 		photos = g_list_find (photos, photo);
 		if(photos && photos->next)
 			g_object_set_data_full (G_OBJECT (swidget), "current-photoid", 
@@ -778,7 +778,7 @@ on_pgp_owner_photoid_prev (GtkWidget *widget,
 
 	photo = g_object_get_data (G_OBJECT (swidget), "current-photoid");
 	if (photo) {
-		g_return_if_fail (SEAHORSE_IS_PGP_PHOTO (photo));
+		g_return_if_fail (SEAHORSE_PGP_IS_PHOTO (photo));
 		photos = g_list_find (photos, photo);
 		if(photos && photos->prev)
 			g_object_set_data_full (G_OBJECT (swidget), "current-photoid", 
@@ -1560,7 +1560,7 @@ trust_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
 	else if (seahorse_object_get_flags (object) & SEAHORSE_FLAG_TRUSTED)
 		trusted = TRUE;
 
-	icon = g_themed_icon_new (SEAHORSE_IS_PGP_KEY (object) ?
+	icon = g_themed_icon_new (SEAHORSE_PGP_IS_KEY (object) ?
 	                               SEAHORSE_ICON_SIGN : GTK_STOCK_DIALOG_QUESTION);
 	name = seahorse_object_get_label (object);
 	id = seahorse_object_get_identifier (object);

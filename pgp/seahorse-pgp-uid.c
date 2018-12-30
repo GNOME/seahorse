@@ -219,7 +219,7 @@ seahorse_pgp_uid_realize (SeahorsePgpUid *self)
 static void
 seahorse_pgp_uid_init (SeahorsePgpUid *self)
 {
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_PGP_UID, SeahorsePgpUidPrivate);
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_PGP_TYPE_UID, SeahorsePgpUidPrivate);
 	g_object_set (self, "icon", NULL, "usage", SEAHORSE_USAGE_IDENTITY, NULL);
 }
 
@@ -326,7 +326,7 @@ seahorse_pgp_uid_class_init (SeahorsePgpUidClass *klass)
 
 	g_object_class_install_property (gobject_class, PROP_PARENT,
 	        g_param_spec_object ("parent", "Parent Key", "Parent Key",
-	                             SEAHORSE_TYPE_PGP_KEY, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+	                             SEAHORSE_PGP_TYPE_KEY, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
         g_object_class_install_property (gobject_class, PROP_NAME,
                 g_param_spec_string ("name", "Name", "User ID name",
@@ -361,7 +361,7 @@ seahorse_pgp_uid_new (SeahorsePgpKey *parent,
 	if (uid_string)
 		parse_user_id (uid_string, &name, &email, &comment);
 
-	uid = g_object_new (SEAHORSE_TYPE_PGP_UID,
+	uid = g_object_new (SEAHORSE_PGP_TYPE_UID,
 	                    "parent", parent,
 	                    "name", name,
 	                    "email", email,
@@ -378,21 +378,21 @@ seahorse_pgp_uid_new (SeahorsePgpKey *parent,
 SeahorsePgpKey *
 seahorse_pgp_uid_get_parent (SeahorsePgpUid *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_UID (self), NULL);
 	return self->pv->parent;
 }
 
 GList*
 seahorse_pgp_uid_get_signatures (SeahorsePgpUid *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_UID (self), NULL);
 	return self->pv->signatures;
 }
 
 void
 seahorse_pgp_uid_set_signatures (SeahorsePgpUid *self, GList *signatures)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
 	
 	seahorse_object_list_free (self->pv->signatures);
 	self->pv->signatures = seahorse_object_list_copy (signatures);
@@ -403,14 +403,14 @@ seahorse_pgp_uid_set_signatures (SeahorsePgpUid *self, GList *signatures)
 SeahorseValidity
 seahorse_pgp_uid_get_validity (SeahorsePgpUid *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), SEAHORSE_VALIDITY_UNKNOWN);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_UID (self), SEAHORSE_VALIDITY_UNKNOWN);
 	return self->pv->validity;
 }
 
 void
 seahorse_pgp_uid_set_validity (SeahorsePgpUid *self, SeahorseValidity validity)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
 	self->pv->validity = validity;
 	g_object_notify (G_OBJECT (self), "validity");
 }
@@ -418,7 +418,7 @@ seahorse_pgp_uid_set_validity (SeahorsePgpUid *self, SeahorseValidity validity)
 const gchar*
 seahorse_pgp_uid_get_name (SeahorsePgpUid *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_UID (self), NULL);
 	if (!self->pv->name)
 		self->pv->name = g_strdup ("");
 	return self->pv->name;
@@ -429,7 +429,7 @@ seahorse_pgp_uid_set_name (SeahorsePgpUid *self, const gchar *name)
 {
 	GObject *obj;
 	
-	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
 	
 	g_free (self->pv->name);
 	self->pv->name = convert_string (name);
@@ -445,7 +445,7 @@ seahorse_pgp_uid_set_name (SeahorsePgpUid *self, const gchar *name)
 const gchar*
 seahorse_pgp_uid_get_email (SeahorsePgpUid *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_UID (self), NULL);
 	if (!self->pv->email)
 		self->pv->email = g_strdup ("");
 	return self->pv->email;
@@ -456,7 +456,7 @@ seahorse_pgp_uid_set_email (SeahorsePgpUid *self, const gchar *email)
 {
 	GObject *obj;
 	
-	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
 	
 	g_free (self->pv->email);
 	self->pv->email = convert_string (email);
@@ -472,7 +472,7 @@ seahorse_pgp_uid_set_email (SeahorsePgpUid *self, const gchar *email)
 const gchar*
 seahorse_pgp_uid_get_comment (SeahorsePgpUid *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_UID (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_UID (self), NULL);
 	if (!self->pv->comment)
 		self->pv->comment = g_strdup ("");
 	return self->pv->comment;
@@ -483,7 +483,7 @@ seahorse_pgp_uid_set_comment (SeahorsePgpUid *self, const gchar *comment)
 {
 	GObject *obj;
 	
-	g_return_if_fail (SEAHORSE_IS_PGP_UID (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
 	
 	g_free (self->pv->comment);
 	self->pv->comment = convert_string (comment);

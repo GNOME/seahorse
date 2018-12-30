@@ -26,13 +26,13 @@
 
 #include "seahorse-pgp-key.h"
 
-#define SEAHORSE_TYPE_PGP_UID            (seahorse_pgp_uid_get_type ())
+#define SEAHORSE_PGP_TYPE_UID            (seahorse_pgp_uid_get_type ())
 
-#define SEAHORSE_PGP_UID(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_UID, SeahorsePgpUid))
-#define SEAHORSE_PGP_UID_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_UID, SeahorsePgpUidClass))
-#define SEAHORSE_IS_PGP_UID(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_UID))
-#define SEAHORSE_IS_PGP_UID_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_UID))
-#define SEAHORSE_PGP_UID_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_UID, SeahorsePgpUidClass))
+#define SEAHORSE_PGP_UID(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_UID, SeahorsePgpUid))
+#define SEAHORSE_PGP_UID_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_UID, SeahorsePgpUidClass))
+#define SEAHORSE_PGP_IS_UID(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_UID))
+#define SEAHORSE_PGP_IS_UID_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_UID))
+#define SEAHORSE_PGP_UID_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_UID, SeahorsePgpUidClass))
 
 typedef struct _SeahorsePgpUid SeahorsePgpUid;
 typedef struct _SeahorsePgpUidClass SeahorsePgpUidClass;

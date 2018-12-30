@@ -39,12 +39,12 @@
 #include "libseahorse/seahorse-util.h"
 
 GType   seahorse_pgp_backend_actions_get_type         (void) G_GNUC_CONST;
-#define SEAHORSE_TYPE_PGP_BACKEND_ACTIONS             (seahorse_pgp_backend_actions_get_type ())
-#define SEAHORSE_PGP_BACKEND_ACTIONS(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_BACKEND_ACTIONS, SeahorsePgpBackendActions))
-#define SEAHORSE_PGP_BACKEND_ACTIONS_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_BACKEND_ACTIONS, SeahorsePgpBackendActionsClass))
-#define SEAHORSE_IS_PGP_BACKEND_ACTIONS(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_BACKEND_ACTIONS))
-#define SEAHORSE_IS_PGP_BACKEND_ACTIONS_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_BACKEND_ACTIONS))
-#define SEAHORSE_PGP_BACKEND_ACTIONS_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_BACKEND_ACTIONS, SeahorsePgpBackendActionsClass))
+#define SEAHORSE_PGP_TYPE_BACKEND_ACTIONS             (seahorse_pgp_backend_actions_get_type ())
+#define SEAHORSE_PGP_BACKEND_ACTIONS(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_BACKEND_ACTIONS, SeahorsePgpBackendActions))
+#define SEAHORSE_PGP_BACKEND_ACTIONS_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_BACKEND_ACTIONS, SeahorsePgpBackendActionsClass))
+#define SEAHORSE_PGP_IS_BACKEND_ACTIONS(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_BACKEND_ACTIONS))
+#define SEAHORSE_PGP_IS_BACKEND_ACTIONS_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_BACKEND_ACTIONS))
+#define SEAHORSE_PGP_BACKEND_ACTIONS_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_BACKEND_ACTIONS, SeahorsePgpBackendActionsClass))
 
 typedef struct {
 	SeahorseActions parent_instance;
@@ -92,7 +92,7 @@ on_remote_sync (GtkAction* action,
 	if (catalog != NULL) {
 		objects = seahorse_catalog_get_selected_objects (catalog);
 		for (l = objects; l != NULL; l = g_list_next (l)) {
-			if (SEAHORSE_IS_PGP_KEY (l->data))
+			if (SEAHORSE_PGP_IS_KEY (l->data))
 				keys = g_list_prepend (keys, l->data);
 		}
 		g_list_free (objects);
@@ -146,7 +146,7 @@ seahorse_pgp_backend_actions_instance (void)
 	static GtkActionGroup *actions = NULL;
 
 	if (actions == NULL) {
-		actions = g_object_new (SEAHORSE_TYPE_PGP_BACKEND_ACTIONS,
+		actions = g_object_new (SEAHORSE_PGP_TYPE_BACKEND_ACTIONS,
 		                        "name", "pgp-backend",
 		                        NULL);
 		g_object_add_weak_pointer (G_OBJECT (actions),
@@ -160,11 +160,11 @@ seahorse_pgp_backend_actions_instance (void)
 
 GType   seahorse_gpgme_key_actions_get_type       (void) G_GNUC_CONST;
 #define SEAHORSE_TYPE_GPGME_KEY_ACTIONS           (seahorse_gpgme_key_actions_get_type ())
-#define seahorse_gpgme_key_actions(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_ACTIONS, SeahorseGpgmeKeyActions))
-#define seahorse_gpgme_key_actions_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_ACTIONS, SeahorseGpgmeKeyActionsClass))
-#define SEAHORSE_IS_PGP_ACTIONS(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_ACTIONS))
-#define SEAHORSE_IS_PGP_ACTIONS_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_ACTIONS))
-#define seahorse_gpgme_key_actions_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_ACTIONS, SeahorseGpgmeKeyActionsClass))
+#define seahorse_gpgme_key_actions(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_ACTIONS, SeahorseGpgmeKeyActions))
+#define seahorse_gpgme_key_actions_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_ACTIONS, SeahorseGpgmeKeyActionsClass))
+#define SEAHORSE_PGP_IS_ACTIONS(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_ACTIONS))
+#define SEAHORSE_PGP_IS_ACTIONS_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_ACTIONS))
+#define seahorse_gpgme_key_actions_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_ACTIONS, SeahorseGpgmeKeyActionsClass))
 
 typedef struct {
 	SeahorseActions parent_instance;

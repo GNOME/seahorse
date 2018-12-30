@@ -32,7 +32,7 @@ enum {
 	PROP_INDEX
 };
 
-G_DEFINE_TYPE (SeahorseGpgmePhoto, seahorse_gpgme_photo, SEAHORSE_TYPE_PGP_PHOTO);
+G_DEFINE_TYPE (SeahorseGpgmePhoto, seahorse_gpgme_photo, SEAHORSE_PGP_TYPE_PHOTO);
 
 struct _SeahorseGpgmePhotoPrivate {
 	gpgme_key_t pubkey;        /* Key that this photo is on */

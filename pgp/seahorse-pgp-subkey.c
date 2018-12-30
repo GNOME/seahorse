@@ -61,7 +61,7 @@ struct _SeahorsePgpSubkeyPrivate {
 static void
 seahorse_pgp_subkey_init (SeahorsePgpSubkey *self)
 {
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_PGP_SUBKEY, SeahorsePgpSubkeyPrivate);
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_PGP_TYPE_SUBKEY, SeahorsePgpSubkeyPrivate);
 }
 
 static void
@@ -214,20 +214,20 @@ seahorse_pgp_subkey_class_init (SeahorsePgpSubkeyClass *klass)
 SeahorsePgpSubkey*
 seahorse_pgp_subkey_new (void)
 {
-	return g_object_new (SEAHORSE_TYPE_PGP_SUBKEY, NULL);
+	return g_object_new (SEAHORSE_PGP_TYPE_SUBKEY, NULL);
 }
 
 guint
 seahorse_pgp_subkey_get_index (SeahorsePgpSubkey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), 0);
 	return self->pv->index;
 }
 
 void
 seahorse_pgp_subkey_set_index (SeahorsePgpSubkey *self, guint index)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 	self->pv->index = index;
 	g_object_notify (G_OBJECT (self), "index");
 }
@@ -235,14 +235,14 @@ seahorse_pgp_subkey_set_index (SeahorsePgpSubkey *self, guint index)
 const gchar*
 seahorse_pgp_subkey_get_keyid (SeahorsePgpSubkey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), NULL);
 	return self->pv->keyid;
 }
 
 void
 seahorse_pgp_subkey_set_keyid (SeahorsePgpSubkey *self, const gchar *keyid)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 	g_free (self->pv->keyid);
 	self->pv->keyid = g_strdup (keyid);
 	g_object_notify (G_OBJECT (self), "keyid");
@@ -251,14 +251,14 @@ seahorse_pgp_subkey_set_keyid (SeahorsePgpSubkey *self, const gchar *keyid)
 guint
 seahorse_pgp_subkey_get_flags (SeahorsePgpSubkey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), 0);
 	return self->pv->flags;
 }
 
 void
 seahorse_pgp_subkey_set_flags (SeahorsePgpSubkey *self, guint flags)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 	self->pv->flags = flags;
 	g_object_notify (G_OBJECT (self), "flags");
 }
@@ -266,14 +266,14 @@ seahorse_pgp_subkey_set_flags (SeahorsePgpSubkey *self, guint flags)
 guint
 seahorse_pgp_subkey_get_length (SeahorsePgpSubkey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), 0);
 	return self->pv->length;
 }
 
 void
 seahorse_pgp_subkey_set_length (SeahorsePgpSubkey *self, guint length)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 	self->pv->length = length;
 	g_object_notify (G_OBJECT (self), "length");
 }
@@ -297,7 +297,7 @@ seahorse_pgp_subkey_get_usage (SeahorsePgpSubkey *self)
 	gboolean previous;
 	int i;
 
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), NULL);
 
 	str = g_string_new (NULL);
 
@@ -319,14 +319,14 @@ seahorse_pgp_subkey_get_usage (SeahorsePgpSubkey *self)
 const gchar*
 seahorse_pgp_subkey_get_algorithm (SeahorsePgpSubkey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), NULL);
 	return self->pv->algorithm;
 }
 
 void
 seahorse_pgp_subkey_set_algorithm (SeahorsePgpSubkey *self, const gchar *algorithm)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 	g_free (self->pv->algorithm);
 	self->pv->algorithm = g_strdup (algorithm);
 	g_object_notify (G_OBJECT (self), "algorithm");
@@ -335,14 +335,14 @@ seahorse_pgp_subkey_set_algorithm (SeahorsePgpSubkey *self, const gchar *algorit
 gulong
 seahorse_pgp_subkey_get_created (SeahorsePgpSubkey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), 0);
 	return self->pv->created;
 }
 
 void
 seahorse_pgp_subkey_set_created (SeahorsePgpSubkey *self, gulong created)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 	self->pv->created = created;
 	g_object_notify (G_OBJECT (self), "created");
 }
@@ -350,14 +350,14 @@ seahorse_pgp_subkey_set_created (SeahorsePgpSubkey *self, gulong created)
 gulong
 seahorse_pgp_subkey_get_expires (SeahorsePgpSubkey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), 0);
 	return self->pv->expires;
 }
 
 void
 seahorse_pgp_subkey_set_expires (SeahorsePgpSubkey *self, gulong expires)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 	self->pv->expires = expires;
 	g_object_notify (G_OBJECT (self), "expires");
 }
@@ -365,14 +365,14 @@ seahorse_pgp_subkey_set_expires (SeahorsePgpSubkey *self, gulong expires)
 const gchar*
 seahorse_pgp_subkey_get_fingerprint (SeahorsePgpSubkey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), NULL);
 	return self->pv->fingerprint;
 }
 
 void
 seahorse_pgp_subkey_set_fingerprint (SeahorsePgpSubkey *self, const gchar *fingerprint)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 	g_free (self->pv->fingerprint);
 	self->pv->fingerprint = g_strdup (fingerprint);
 	g_object_notify (G_OBJECT (self), "fingerprint");
@@ -381,14 +381,14 @@ seahorse_pgp_subkey_set_fingerprint (SeahorsePgpSubkey *self, const gchar *finge
 const gchar*
 seahorse_pgp_subkey_get_description (SeahorsePgpSubkey *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SUBKEY (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), NULL);
 	return self->pv->description;
 }
 
 void
 seahorse_pgp_subkey_set_description (SeahorsePgpSubkey *self, const gchar *description)
 {
-	g_return_if_fail (SEAHORSE_IS_PGP_SUBKEY (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 	g_free (self->pv->description);
 	self->pv->description = g_strdup (description);
 	g_object_notify (G_OBJECT (self), "description");

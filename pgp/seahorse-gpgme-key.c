@@ -52,7 +52,7 @@ static void       seahorse_gpgme_key_deletable_iface       (SeahorseDeletableIfa
 
 static void       seahorse_gpgme_key_exportable_iface      (SeahorseExportableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (SeahorseGpgmeKey, seahorse_gpgme_key, SEAHORSE_TYPE_PGP_KEY,
+G_DEFINE_TYPE_WITH_CODE (SeahorseGpgmeKey, seahorse_gpgme_key, SEAHORSE_PGP_TYPE_KEY,
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_EXPORTABLE, seahorse_gpgme_key_exportable_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_gpgme_key_deletable_iface);
 );

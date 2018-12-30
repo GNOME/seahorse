@@ -24,13 +24,13 @@
 
 #include "seahorse-common.h"
 
-#define SEAHORSE_TYPE_PGP_SUBKEY            (seahorse_pgp_subkey_get_type ())
+#define SEAHORSE_PGP_TYPE_SUBKEY            (seahorse_pgp_subkey_get_type ())
 
-#define SEAHORSE_PGP_SUBKEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_SUBKEY, SeahorsePgpSubkey))
-#define SEAHORSE_PGP_SUBKEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_SUBKEY, SeahorsePgpSubkeyClass))
-#define SEAHORSE_IS_PGP_SUBKEY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_SUBKEY))
-#define SEAHORSE_IS_PGP_SUBKEY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_SUBKEY))
-#define SEAHORSE_PGP_SUBKEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_SUBKEY, SeahorsePgpSubkeyClass))
+#define SEAHORSE_PGP_SUBKEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_SUBKEY, SeahorsePgpSubkey))
+#define SEAHORSE_PGP_SUBKEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_SUBKEY, SeahorsePgpSubkeyClass))
+#define SEAHORSE_PGP_IS_SUBKEY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_SUBKEY))
+#define SEAHORSE_PGP_IS_SUBKEY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_SUBKEY))
+#define SEAHORSE_PGP_SUBKEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_SUBKEY, SeahorsePgpSubkeyClass))
 
 typedef struct _SeahorsePgpSubkey SeahorsePgpSubkey;
 typedef struct _SeahorsePgpSubkeyClass SeahorsePgpSubkeyClass;

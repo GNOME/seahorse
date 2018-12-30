@@ -208,7 +208,7 @@ seahorse_pgp_backend_get_actions (SeahorseBackend *backend)
 static gboolean
 seahorse_pgp_backend_get_loaded (SeahorseBackend *backend)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (backend), FALSE);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (backend), FALSE);
 
 	return SEAHORSE_PGP_BACKEND (backend)->loaded;
 }
@@ -342,7 +342,7 @@ seahorse_pgp_backend_initialize (void)
 	SeahorsePgpBackend *self;
 
 	g_return_if_fail (pgp_backend == NULL);
-	self = g_object_new (SEAHORSE_TYPE_PGP_BACKEND, NULL);
+	self = g_object_new (SEAHORSE_PGP_TYPE_BACKEND, NULL);
 
 	seahorse_backend_register (SEAHORSE_BACKEND (self));
 	g_object_unref (self);
@@ -356,7 +356,7 @@ SeahorseGpgmeKeyring *
 seahorse_pgp_backend_get_default_keyring (SeahorsePgpBackend *self)
 {
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
 	g_return_val_if_fail (self->keyring, NULL);
 	return self->keyring;
 }
@@ -370,7 +370,7 @@ seahorse_pgp_backend_get_default_key (SeahorsePgpBackend *self)
 	gchar *value;
 
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
 
 	settings = seahorse_pgp_settings_instance ();
 	if (settings != NULL) {
@@ -394,7 +394,7 @@ SeahorseDiscovery *
 seahorse_pgp_backend_get_discovery (SeahorsePgpBackend *self)
 {
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
 	g_return_val_if_fail (self->discovery, NULL);
 	return self->discovery;
 }
@@ -404,7 +404,7 @@ seahorse_pgp_backend_lookup_remote (SeahorsePgpBackend *self,
                                     const gchar *uri)
 {
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
 
 	return g_hash_table_lookup (self->remotes, uri);
 }
@@ -415,7 +415,7 @@ seahorse_pgp_backend_add_remote (SeahorsePgpBackend *self,
                                  SeahorseServerSource *source)
 {
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_if_fail (SEAHORSE_IS_PGP_BACKEND (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
 	g_return_if_fail (uri != NULL);
 	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (source));
 	g_return_if_fail (g_hash_table_lookup (self->remotes, uri) == NULL);
@@ -428,7 +428,7 @@ seahorse_pgp_backend_remove_remote (SeahorsePgpBackend *self,
                                     const gchar *uri)
 {
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_if_fail (SEAHORSE_IS_PGP_BACKEND (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
 	g_return_if_fail (uri != NULL);
 
 	g_hash_table_remove (self->remotes, uri);
@@ -491,7 +491,7 @@ seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
 	guint i;
 
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_if_fail (SEAHORSE_IS_PGP_BACKEND (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
 
 	/* Get a list of all selected key servers */
 	names = g_settings_get_strv (G_SETTINGS (seahorse_app_settings_instance ()), "last-search-servers");
@@ -544,7 +544,7 @@ seahorse_pgp_backend_search_remote_finish (SeahorsePgpBackend *self,
 	GSimpleAsyncResult *res;
 
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (self), FALSE);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), FALSE);
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
 	                      seahorse_pgp_backend_search_remote_async), FALSE);
 
@@ -609,7 +609,7 @@ seahorse_pgp_backend_transfer_async (SeahorsePgpBackend *self,
 	GList *next;
 
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_if_fail (SEAHORSE_IS_PGP_BACKEND (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
 	g_return_if_fail (SEAHORSE_IS_PLACE (to));
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
@@ -663,7 +663,7 @@ seahorse_pgp_backend_transfer_finish (SeahorsePgpBackend *self,
 	GSimpleAsyncResult *res;
 
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (self), FALSE);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), FALSE);
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
 	                      seahorse_pgp_backend_transfer_async), FALSE);
 
@@ -689,7 +689,7 @@ seahorse_pgp_backend_retrieve_async (SeahorsePgpBackend *self,
 	GHashTableIter iter;
 
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_if_fail (SEAHORSE_IS_PGP_BACKEND (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
 	g_return_if_fail (SEAHORSE_IS_PLACE (to));
 
 	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
@@ -723,7 +723,7 @@ seahorse_pgp_backend_retrieve_finish (SeahorsePgpBackend *self,
 	GSimpleAsyncResult *res;
 
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (self), FALSE);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), FALSE);
 	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
 	                      seahorse_pgp_backend_retrieve_async), FALSE);
 
@@ -750,7 +750,7 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
 	gint i;
 
 	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_IS_PGP_BACKEND (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
 
 	todiscover = g_ptr_array_new ();
 

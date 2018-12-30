@@ -23,12 +23,12 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#define SEAHORSE_TYPE_PGP_PHOTO            (seahorse_pgp_photo_get_type ())
-#define SEAHORSE_PGP_PHOTO(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_PHOTO, SeahorsePgpPhoto))
-#define SEAHORSE_PGP_PHOTO_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_PHOTO, SeahorsePgpPhotoClass))
-#define SEAHORSE_IS_PGP_PHOTO(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_PHOTO))
-#define SEAHORSE_IS_PGP_PHOTO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_PHOTO))
-#define SEAHORSE_PGP_PHOTO_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_PHOTO, SeahorsePgpPhotoClass))
+#define SEAHORSE_PGP_TYPE_PHOTO            (seahorse_pgp_photo_get_type ())
+#define SEAHORSE_PGP_PHOTO(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_PHOTO, SeahorsePgpPhoto))
+#define SEAHORSE_PGP_PHOTO_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_PHOTO, SeahorsePgpPhotoClass))
+#define SEAHORSE_PGP_IS_PHOTO(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_PHOTO))
+#define SEAHORSE_PGP_IS_PHOTO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_PHOTO))
+#define SEAHORSE_PGP_PHOTO_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_PHOTO, SeahorsePgpPhotoClass))
 
 typedef struct _SeahorsePgpPhoto SeahorsePgpPhoto;
 typedef struct _SeahorsePgpPhotoClass SeahorsePgpPhotoClass;

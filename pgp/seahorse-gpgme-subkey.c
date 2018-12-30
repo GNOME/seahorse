@@ -33,7 +33,7 @@ enum {
 	PROP_SUBKEY
 };
 
-G_DEFINE_TYPE (SeahorseGpgmeSubkey, seahorse_gpgme_subkey, SEAHORSE_TYPE_PGP_SUBKEY);
+G_DEFINE_TYPE (SeahorseGpgmeSubkey, seahorse_gpgme_subkey, SEAHORSE_PGP_TYPE_SUBKEY);
 
 struct _SeahorseGpgmeSubkeyPrivate {
 	gpgme_key_t pubkey;         /* The public key that this subkey is part of */

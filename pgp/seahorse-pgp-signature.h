@@ -24,13 +24,13 @@
 
 #include "seahorse-common.h"
 
-#define SEAHORSE_TYPE_PGP_SIGNATURE            (seahorse_pgp_signature_get_type ())
+#define SEAHORSE_PGP_TYPE_SIGNATURE            (seahorse_pgp_signature_get_type ())
 
-#define SEAHORSE_PGP_SIGNATURE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_PGP_SIGNATURE, SeahorsePgpSignature))
-#define SEAHORSE_PGP_SIGNATURE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_PGP_SIGNATURE, SeahorsePgpSignatureClass))
-#define SEAHORSE_IS_PGP_SIGNATURE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_PGP_SIGNATURE))
-#define SEAHORSE_IS_PGP_SIGNATURE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_PGP_SIGNATURE))
-#define SEAHORSE_PGP_SIGNATURE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_PGP_SIGNATURE, SeahorsePgpSignatureClass))
+#define SEAHORSE_PGP_SIGNATURE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_SIGNATURE, SeahorsePgpSignature))
+#define SEAHORSE_PGP_SIGNATURE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_SIGNATURE, SeahorsePgpSignatureClass))
+#define SEAHORSE_PGP_IS_SIGNATURE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_SIGNATURE))
+#define SEAHORSE_PGP_IS_SIGNATURE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_SIGNATURE))
+#define SEAHORSE_PGP_SIGNATURE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_SIGNATURE, SeahorsePgpSignatureClass))
 
 typedef struct _SeahorsePgpSignature SeahorsePgpSignature;
 typedef struct _SeahorsePgpSignatureClass SeahorsePgpSignatureClass;

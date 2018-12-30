@@ -50,7 +50,7 @@ struct _SeahorsePgpSignaturePrivate {
 static void
 seahorse_pgp_signature_init (SeahorsePgpSignature *self)
 {
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_PGP_SIGNATURE, SeahorsePgpSignaturePrivate);
+	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_PGP_TYPE_SIGNATURE, SeahorsePgpSignaturePrivate);
 }
 
 static void
@@ -131,13 +131,13 @@ seahorse_pgp_signature_class_init (SeahorsePgpSignatureClass *klass)
 SeahorsePgpSignature*
 seahorse_pgp_signature_new (const gchar *keyid)
 {
-	return g_object_new (SEAHORSE_TYPE_PGP_SIGNATURE, "keyid", keyid, NULL);
+	return g_object_new (SEAHORSE_PGP_TYPE_SIGNATURE, "keyid", keyid, NULL);
 }
  
 guint
 seahorse_pgp_signature_get_flags (SeahorsePgpSignature *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SIGNATURE (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self), 0);
 	return self->pv->flags;
 }
 
@@ -146,7 +146,7 @@ seahorse_pgp_signature_set_flags (SeahorsePgpSignature *self, guint flags)
 {
 	GObject *obj;
 	
-	g_return_if_fail (SEAHORSE_IS_PGP_SIGNATURE (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self));
 	self->pv->flags = flags;
 
 	obj = G_OBJECT (self);
@@ -159,7 +159,7 @@ seahorse_pgp_signature_set_flags (SeahorsePgpSignature *self, guint flags)
 const gchar*
 seahorse_pgp_signature_get_keyid (SeahorsePgpSignature *self)
 {
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SIGNATURE (self), NULL);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self), NULL);
 	return self->pv->keyid;
 }
 
@@ -168,7 +168,7 @@ seahorse_pgp_signature_set_keyid (SeahorsePgpSignature *self, const gchar *keyid
 {
 	GObject *obj;
 	
-	g_return_if_fail (SEAHORSE_IS_PGP_SIGNATURE (self));
+	g_return_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self));
 	g_free (self->pv->keyid);
 	self->pv->keyid = g_strdup (keyid);
 	
@@ -186,7 +186,7 @@ seahorse_pgp_signature_get_sigtype (SeahorsePgpSignature *self)
 	SeahorseGpgmeKey *key;
 	SeahorseObject *obj;
 
-	g_return_val_if_fail (SEAHORSE_IS_PGP_SIGNATURE (self), 0);
+	g_return_val_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self), 0);
 
 	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
 	key = seahorse_gpgme_keyring_lookup (keyring, self->pv->keyid);
