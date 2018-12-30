@@ -11,6 +11,7 @@ common_sources = [
   'exporter.vala',
   'icons.vala',
   'key-manager-store.vala',
+  'interaction.vala',
   'lockable.vala',
   'object.vala',
   'passphrase-prompt.vala',
