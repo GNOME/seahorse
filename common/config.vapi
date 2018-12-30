@@ -37,12 +37,6 @@ public static GLib.HashFunc<ulong?> ulong_hash;
 [CCode (cheader_filename = "libseahorse/seahorse-util.h")]
 public static GLib.EqualFunc<ulong?> ulong_equal;
 
-[CCode (cheader_filename = "libseahorse/seahorse-interaction.h")]
-public class Interaction : GLib.TlsInteraction {
-	public Interaction(Gtk.Window? parent);
-	public Gtk.Window? parent;
-}
-
 [CCode (cheader_filename = "libseahorse/seahorse-progress.h")]
 namespace Progress {
 	public void show(GLib.Cancellable? cancellable, string title, bool delayed);
