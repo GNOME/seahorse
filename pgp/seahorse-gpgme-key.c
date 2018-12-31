@@ -27,7 +27,6 @@
 #include "seahorse-gpgme-keyring.h"
 #include "seahorse-gpgme-secret-deleter.h"
 #include "seahorse-gpgme-uid.h"
-#include "seahorse-pgp-actions.h"
 #include "seahorse-pgp-backend.h"
 #include "seahorse-pgp-key.h"
 
@@ -308,7 +307,6 @@ void
 seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 {
 	SeahorseUsage usage;
-	GtkActionGroup *actions;
 	guint flags;
 
 	if (!self->pv->pubkey)
@@ -359,13 +357,10 @@ seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 		usage = SEAHORSE_USAGE_PUBLIC_KEY;
 	}
 
-	actions = seahorse_gpgme_key_actions_instance ();
 	g_object_set (self,
 	              "usage", usage,
 	              "object-flags", flags,
-	              "actions", actions,
 	              NULL);
-	g_object_unref (actions);
 
 	seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (self));
 }

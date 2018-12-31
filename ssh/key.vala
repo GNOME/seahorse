@@ -140,7 +140,6 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
         this.markup = Markup.printf_escaped("%s<span size='small' rise='0' foreground='#555555'>\n%s</span>",
                                             this.label, filename);
 
-        this.actions = Actions.instance();
         this.identifier = calc_identifier(this.key_data.fingerprint);
     }
 
