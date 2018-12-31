@@ -24,11 +24,6 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
     public const int DEFAULT_DSA_SIZE = 1024;
     public const int DEFAULT_RSA_SIZE = 2048;
 
-    private const Gtk.ActionEntry ACTION_ENTRIES[] = {
-        { "ssh-generate-key", Gcr.ICON_KEY_PAIR, N_ ("Secure Shell Key"), "",
-          N_("Used to access other computers (eg: via a terminal)"), on_ssh_generate_key }
-    };
-
     private Source source;
 
     [GtkChild]
@@ -56,22 +51,6 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
 
         // on_algo_changed() gets called, bits chooser is setup
         algorithm_combo_box.set_active(0);
-    }
-
-    private static void on_ssh_generate_key(Gtk.Action action) {
-        Generate generate_dialog = new Generate(Backend.instance.get_dot_ssh(),
-                                                Action.get_window(action));
-        generate_dialog.show();
-    }
-
-    public static void register() {
-        Gtk.ActionGroup actions = new Gtk.ActionGroup("ssh-generate");
-
-        actions.set_translation_domain(Config.GETTEXT_PACKAGE);
-        actions.add_actions(ACTION_ENTRIES, null);
-
-        // Register this as a generator
-        Seahorse.Registry.register_object(actions, "generator");
     }
 
     [GtkCallback]

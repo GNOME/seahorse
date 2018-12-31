@@ -30,6 +30,8 @@ public class Seahorse.GenerateSelect : Gtk.Dialog {
     [GtkChild]
     private Gtk.ListBox generate_list;
 
+    private SimpleActionGroup action_group = new SimpleActionGroup();
+
     public GenerateSelect(Gtk.Window? parent) {
         GLib.Object(
             use_header_bar: 1,
@@ -37,19 +39,16 @@ public class Seahorse.GenerateSelect : Gtk.Dialog {
             modal: true
         );
 
-        ListStore store = new ListStore(typeof(Gtk.Action));
+        ListStore store = new ListStore(typeof(Action));
         this.generate_list.bind_model(store, on_create_row);
 
-        // Fill up the model
-        var action_groups = (List<Gtk.ActionGroup>) Registry.object_instances("generator");
-        foreach (var action_group in action_groups) {
-            action_group.post_activate.connect(this.switch_view);
-            foreach (var action in action_group.list_actions())
-                store.append(action);
+        // Fetch and process the generator actions
+        var actions = (List<Action>) Registry.object_instances("generator");
+        foreach (var action in actions) {
+            this.action_group.add_action(action);
+            store.insert_sorted(action, compare_generator_actions);
         }
-        store.sort((a, b) => {
-            return ((Gtk.Action) a).label.collate(((Gtk.Action) b).label);
-        });
+        insert_action_group("gen", action_group);
 
         // Select first item (and grab focus, so user can use the keyboard immediately)
         weak Gtk.ListBoxRow? row = this.generate_list.get_row_at_index(0);
@@ -59,20 +58,19 @@ public class Seahorse.GenerateSelect : Gtk.Dialog {
         }
     }
 
+    private int compare_generator_actions(GLib.Object a, GLib.Object b) {
+        unowned string? a_label = a.get_data("label");
+        unowned string? b_label = b.get_data("label");
+        return a_label.collate(b_label);
+    }
+
     private void switch_view(Gtk.Action action) {
         string target = action.action_group.name.split("-", 2)[0];
         ((KeyManager) this.transient_for).set_focused_place(target);
     }
 
     private Gtk.ListBoxRow on_create_row(GLib.Object item) {
-        return new GenerateSelectRow((Gtk.Action) item);
-    }
-
-    [GtkCallback]
-    private void on_row_activated(Gtk.ListBoxRow row) {
-        Gtk.Action action = ((GenerateSelectRow) row).action;
-        Action.activate_with_window(action, null, this.transient_for);
-        destroy();
+        return new GenerateSelectRow((Action) item);
     }
 
     public override void response(int response)  {
@@ -83,16 +81,24 @@ public class Seahorse.GenerateSelect : Gtk.Dialog {
         if (row == null)
             return;
 
-        Action.activate_with_window(row.action, null, this.transient_for);
+        row.activate();
+    }
+
+    [GtkCallback]
+    private void on_row_activated(Gtk.ListBox listbox, Gtk.ListBoxRow row) {
+        var generate_row = (GenerateSelectRow) row;
+        this.action_group.activate_action(generate_row.action_name, null);
+        destroy();
     }
 }
 
 private class Seahorse.GenerateSelectRow : Gtk.ListBoxRow {
-    private Gtk.Image icon;
     private Gtk.Label title;
     private Gtk.Label description;
 
-    public Gtk.Action action { get; private set; }
+    // Note that we can't use the actual "action-name" property,
+    // or the row-activated signal doesn't get emitted for some reason
+    public unowned string? action_name;
 
     construct {
         var grid = new Gtk.Grid();
@@ -100,29 +106,22 @@ private class Seahorse.GenerateSelectRow : Gtk.ListBoxRow {
         grid.margin = 3;
         add(grid);
 
-        this.icon = new Gtk.Image();
-        this.icon.icon_size = Gtk.IconSize.DND;
-        grid.attach(this.icon, 0, 0, 1, 2);
-
         this.title = new Gtk.Label(null);
         this.title.halign = Gtk.Align.START;
-        grid.attach(this.title, 1, 0);
+        grid.attach(this.title, 0, 0);
 
         this.description = new Gtk.Label(null);
         this.description.get_style_context().add_class("dim-label");
-        grid.attach(this.description, 1, 1);
+        grid.attach(this.description, 0, 1);
     }
 
-    public GenerateSelectRow(Gtk.Action action) {
-        this.action = action;
+    public GenerateSelectRow(Action action) {
+        this.action_name = action.name;
 
-        this.title.set_markup("<b>%s</b>".printf(action.label));
-        this.description.label = action.tooltip;
+        unowned string? label = action.get_data<string?>("label");
 
-        if (action.gicon != null)
-            this.icon.gicon = action.gicon;
-        else if (action.icon_name != null)
-            this.icon.icon_name = action.icon_name;
+        this.title.set_markup("<b>%s</b>".printf(label));
+        this.description.label = action.get_data<string?>("description");
 
         show_all();
     }

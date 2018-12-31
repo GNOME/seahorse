@@ -1,31 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.22"/>
+  <menu id="main_menu">
+    <section>
+      <attribute name="label" translatable="yes">Filter items:</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Show personal</attribute>
+        <attribute name="action">win.filter-items</attribute>
+        <attribute name="target">personal</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Show trusted</attribute>
+        <attribute name="action">win.filter-items</attribute>
+        <attribute name="target">trusted</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Show any</attribute>
+        <attribute name="action">win.filter-items</attribute>
+        <attribute name="target">any</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Combine all keyrings</attribute>
+        <attribute name="action">win.combine-keyrings</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Import from file…</attribute>
+        <attribute name="action">win.import-file</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find remote keys…</attribute>
+        <attribute name="action">pgp.remote-find</attribute>
+        <attribute name="hidden-when">action-missing</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Sync and publish keys…</attribute>
+        <attribute name="action">pgp.remote-sync</attribute>
+        <attribute name="hidden-when">action-missing</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Help</attribute>
+        <attribute name="action">app.help</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">About</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
   <template class="SeahorseKeyManager" parent="SeahorseCatalog">
-    <property name="title" translatable="yes">Passwords and Keys</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="show-close-button">True</property>
+        <property name="title" translatable="yes">Passwords and Keys</property>
+        <child>
+          <object class="GtkButton" id="new_item_button">
+            <property name="visible">True</property>
+            <property name="hexpand">True</property>
+            <property name="halign">start</property>
+            <property name="tooltip_text" translatable="yes">Add a new key or item</property>
+            <property name="action-name">win.new-item</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon_name">list-add-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="main_menu_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
+            <property name="menu-model">main_menu</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">open-menu-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="show_search_button">
+            <property name="visible">True</property>
+            <property name="tooltip_text" translatable="yes">Search for a key or password</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon_name">edit-find-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkBox" id="menu_placeholder">
-            <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <property name="can_focus">False</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkPaned" id="sidebar_panes">
             <property name="visible">True</property>
+            <property name="vexpand">True</property>
             <property name="can_focus">True</property>
             <child>
               <object class="GtkBox" id="sidebar_area">
@@ -35,43 +132,17 @@
                   <placeholder/>
                 </child>
               </object>
-              <packing>
-                <property name="resize">False</property>
-                <property name="shrink">False</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box1">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkSearchBar">
                     <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
+                    <property name="search-mode-enabled" bind-source="show_search_button" bind-property="active" bind-flags="bidirectional|sync-create" />
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
-                    <property name="margin_end">12</property>
-                    <property name="margin_top">6</property>
-                    <property name="margin_bottom">6</property>
-                    <child>
-                      <object class="GtkButton" id="new_item_button">
-                        <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="halign">start</property>
-                        <property name="tooltip_text" translatable="yes">Add a new key or item</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="visible">True</property>
-                            <property name="icon_name">list-add</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="GtkSearchEntry" id="filter_entry">
                         <property name="visible">True</property>
@@ -89,8 +160,10 @@
                       <object class="GtkTreeView" id="key_list">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="margin_left">12</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="margin-left">18</property>
+                        <property name="margin-right">18</property>
                         <property name="rules_hint">True</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="treeview-selection"/>
@@ -199,6 +272,7 @@
                                 <property name="can_default">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_action_appearance">False</property>
+                                <property name="action-name">win.import-file</property>
                                 <child>
                                   <object class="GtkAlignment" id="alignment6">
                                     <property name="visible">True</property>
@@ -266,6 +340,7 @@
                                 <property name="receives_default">True</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_stock">True</property>
+                                <property name="action-name">win.new-item</property>
                               </object>
                               <packing>
                                 <property name="top_attach">2</property>
@@ -284,17 +359,8 @@
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="resize">True</property>
-                <property name="shrink">False</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

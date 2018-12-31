@@ -308,7 +308,7 @@ void
 seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 {
 	SeahorseUsage usage;
-	GtkActionGroup *actions;
+	/* GtkActionGroup *actions; */
 	guint flags;
 
 	if (!self->pv->pubkey)
@@ -359,13 +359,13 @@ seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 		usage = SEAHORSE_USAGE_PUBLIC_KEY;
 	}
 
-	actions = seahorse_gpgme_key_actions_instance ();
+	/* actions = seahorse_gpgme_key_actions_instance (); */
 	g_object_set (self,
 	              "usage", usage,
 	              "object-flags", flags,
-	              "actions", actions,
+	              /* "actions", actions, */
 	              NULL);
-	g_object_unref (actions);
+	/* g_object_unref (actions); */
 
 	seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (self));
 }

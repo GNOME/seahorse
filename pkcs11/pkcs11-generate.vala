@@ -273,22 +273,4 @@ public class Seahorse.Pkcs11.Generate : Gtk.Dialog {
         publi.clear();
         priva.clear();
     }
-
-    private static void on_generate_activate(Gtk.Action action) {
-        Generate dialog = new Generate(null);
-        dialog.run();
-        dialog.destroy();
-    }
-
-    private const Gtk.ActionEntry ACTION_ENTRIES[] = {
-        { "pkcs11-generate-key", Gcr.ICON_KEY_PAIR, N_ ("Private key"), "",
-          N_("Used to request a certificate"), on_generate_activate }
-    };
-
-    public static void register () {
-        Gtk.ActionGroup actions = new Gtk.ActionGroup("pkcs11-generate");
-        actions.set_translation_domain(Config.GETTEXT_PACKAGE);
-        actions.add_actions(ACTION_ENTRIES, null);
-        Registry.register_object(actions, "generator");
-    }
 }

@@ -47,9 +47,9 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 		get { return _("Stored personal passwords, credentials and secrets"); }
 	}
 
-	public Gtk.ActionGroup? actions {
-		owned get { return this._actions; }
-	}
+    public ActionGroup actions {
+        owned get { return this._actions; }
+    }
 
 	public GLib.HashTable<string, string> aliases {
 		get { return this._aliases; }
@@ -68,7 +68,7 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 	private Secret.Service _service;
 	private GLib.HashTable<string, Keyring> _keyrings;
 	private GLib.HashTable<string, string> _aliases;
-	private Gtk.ActionGroup _actions;
+	private ActionGroup _actions;
 
 	construct {
 		return_val_if_fail(_instance == null, null);
@@ -100,7 +100,7 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 	public override void dispose() {
 		this._aliases.remove_all();
 		this._keyrings.remove_all();
-		this._actions.sensitive = false;
+		/* this._actions.sensitive = false; */
 		base.dispose();
 	}
 
@@ -208,14 +208,18 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 	}
 }
 
-public class BackendActions : Seahorse.Actions {
+public class BackendActions : Seahorse.ActionGroup {
 	public Backend backend { construct; get; }
 	private static WeakRef _instance;
 	private bool _initialized;
 
+	private const ActionEntry[] BACKEND_ACTIONS = {
+		{ "keyring-new",      on_new_keyring },
+		{ "keyring-item-new", on_new_item },
+	};
+
 	construct {
 		this._initialized = false;
-		this.set_translation_domain(Config.GETTEXT_PACKAGE);
 
 		this.backend.notify.connect_after((pspec) => {
 			if (pspec.name == "service")
@@ -226,53 +230,41 @@ public class BackendActions : Seahorse.Actions {
 					return;
 
 			this._initialized = true;
-			this.add_actions(BACKEND_ACTIONS, null);
-			this.register_definition(BACKEND_UI);
-
-			/* Register another set of actions as a generator */
-			var actions = new Gtk.ActionGroup("gkr-generate");
-			actions.set_translation_domain(Config.GETTEXT_PACKAGE);
-			actions.add_actions(ENTRIES_NEW, null);
-			Registry.register_object(actions, "generator");
+			add_action_entries(BACKEND_ACTIONS, this);
+			register_generator_actions();
 		});
 
 		this.backend.notify_property("service");
 	}
 
 	private BackendActions(Backend backend) {
-		GLib.Object(name: "KeyringBackend", backend: backend);
+		GLib.Object(
+			prefix: "gkr",
+			backend: backend
+		);
 	}
 
-	private static void on_new_keyring(Gtk.Action action) {
-		new KeyringAdd(Action.get_window(action));
+    public void register_generator_actions() {
+        var new_keyring_action = lookup_action("keyring-new");
+        new_keyring_action.set_data("label", _("Password keyring"));
+        new_keyring_action.set_data("description", _("Used to store application and network passwords"));
+		Registry.register_object(new_keyring_action, "generator");
+
+        var new_pw_action = lookup_action("keyring-item-new");
+        new_pw_action.set_data("label", _("Password"));
+        new_pw_action.set_data("description", _("Safely store a password or secret."));
+		Registry.register_object(new_pw_action, "generator");
+    }
+
+	private void on_new_keyring(SimpleAction action, Variant? param) {
+		new KeyringAdd(this.catalog);
 	}
 
-	private static void on_new_item(Gtk.Action action) {
-		new ItemAdd(Action.get_window(action));
+	private void on_new_item(SimpleAction action, Variant? param) {
+		new ItemAdd(this.catalog);
 	}
 
-	private const Gtk.ActionEntry[] BACKEND_ACTIONS = {
-		{ "keyring-new", null, N_("New password keyring"), "",
-		  N_("Used to store application and network passwords"), on_new_keyring },
-		{ "keyring-item-new", null, N_("New password…"), "",
-		  N_("Safely store a password or secret."), on_new_item },
-	};
-
-	private const Gtk.ActionEntry[] ENTRIES_NEW = {
-		{ "keyring-new", "folder", N_("Password Keyring"), "",
-		  N_("Used to store application and network passwords"), on_new_keyring },
-		{ "keyring-item-new", ICON_PASSWORD, N_("Stored Password"), "",
-		  N_("Safely store a password or secret."), on_new_item }
-	};
-
-	private const string BACKEND_UI =
-		""""<ui>
-			<popup name='SeahorseGkrBackend'>
-				<menuitem action='keyring-new'/>
-			</popup>
-		</ui>""";
-
-	public static Gtk.ActionGroup instance(Backend backend) {
+	public static ActionGroup instance(Backend backend) {
 		BackendActions? actions = (BackendActions?)_instance.get();
 		if (actions != null)
 			return actions;

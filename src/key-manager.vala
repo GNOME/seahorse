@@ -24,56 +24,32 @@
 public class Seahorse.KeyManager : Catalog {
 
     [GtkChild]
-    private Gtk.Container menu_placeholder;
-    [GtkChild]
-    private Gtk.TreeView key_list;
+    private Gtk.SearchEntry filter_entry;
+
     [GtkChild]
     private Gtk.Paned sidebar_panes;
-    [GtkChild]
-    private Gtk.Button import_button;
-    [GtkChild]
-    private Gtk.Button new_button;
-    [GtkChild]
-    private Gtk.Button new_item_button;
-    [GtkChild]
-    private Gtk.SearchEntry filter_entry;
     [GtkChild]
     private Gtk.Container sidebar_area;
     private Sidebar sidebar;
 
-    private Gtk.ActionGroup view_actions;
-    private Gtk.RadioAction show_action;
-
+    [GtkChild]
+    private Gtk.TreeView key_list;
     private Gcr.Collection collection;
     private KeyManagerStore store;
 
     private GLib.Settings settings;
-    private int sidebar_width;
-    private uint sidebar_width_sig;
 
     private enum DndTarget { // Drag 'n Drop target type
         PLAIN,
         URIS
     }
 
-    private const Gtk.ActionEntry[] GENERAL_ACTIONS = {
-        // TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-        { "remote-menu", null, N_("_Remote") },
-        { "new-menu", null, N_("_New") },
-        { "app-quit", null, N_("_Quit"), "<control>Q", N_("Close this program") },
-        { "file-new", null, N_("_New…"), "<control>N", N_("Create a new key or item") },
-        { "file-import", null, N_("_Import…"), "<control>I", N_("Import from a file") },
-        { "edit-import-clipboard", null, N_("_Paste"), "<control>V", N_("Import from the clipboard") }
-    };
-
-    private const Gtk.ToggleActionEntry[] SIDEBAR_ACTIONS = {
-        { "view-sidebar", null, N_("By _Keyring"), null, N_("Show sidebar listing keyrings"), null, false },
-    };
-
-    private const Gtk.RadioActionEntry[] VIEW_RADIO_ACTIONS = {
-        { "view-personal", null, N_("Show _Personal"), null, N_("Only show personal keys, certificates and passwords"), KeyManagerStore.ShowFilter.PERSONAL },
-        { "view-trusted", null, N_("Show _Trusted"), null, N_("Only show trusted keys, certificates and passwords"), KeyManagerStore.ShowFilter.TRUSTED },
-        { "view-any", null, N_("Show _Any"), null, N_("Show all keys, certificates and passwords"), KeyManagerStore.ShowFilter.ANY },
+    private const GLib.ActionEntry[] action_entries = {
+         { "new-item",           on_new_item                                                     },
+         { "filter-items",       on_filter_items,              "s",                      "'any'" },
+         { "import-file",        on_import_file                                                  },
+         { "combine-keyrings",   on_toggle_action,  null,  "false",  on_combine_keyrings_toggled },
+         { "paste",              on_paste,                                                       },
     };
 
     public KeyManager(Application app) {
@@ -106,18 +82,8 @@ public class Seahorse.KeyManager : Catalog {
         this.settings.changed["item-filter"].connect(on_item_filter_changed);
         on_item_filter_changed(this.settings, "item-filter");
 
-        // first time signals
-        this.import_button.clicked.connect(on_keymanager_import_button);
-        this.new_button.clicked.connect(on_keymanager_new_button);
-
-        // Flush all updates
-        ensure_updated();
-
-        // The toolbar
-        this.new_item_button.clicked.connect(on_keymanager_new_button);
-        on_filter_changed(this.filter_entry);
-
         // For the filtering
+        on_filter_changed(this.filter_entry);
         this.filter_entry.search_changed.connect(on_filter_changed);
         this.key_list.start_interactive_search.connect(() => {
             this.filter_entry.grab_focus();
@@ -127,9 +93,6 @@ public class Seahorse.KeyManager : Catalog {
         // Set focus to the current key list
         this.key_list.grab_focus();
         selection_changed();
-
-        // To avoid flicker
-        show();
 
         // Setup drops
         Gtk.drag_dest_set(this, Gtk.DestDefaults.ALL, {}, Gdk.DragAction.COPY);
@@ -144,42 +107,8 @@ public class Seahorse.KeyManager : Catalog {
         this.key_list.popup_menu.connect(on_keymanager_key_list_popup_menu);
     }
 
-    ~KeyManager() {
-        if (this.sidebar_width_sig != 0) {
-            Source.remove(this.sidebar_width_sig);
-            this.sidebar_width_sig = 0;
-        }
-    }
-
     private void init_actions() {
-        // General actions
-        Gtk.ActionGroup actions = new Gtk.ActionGroup("general");
-        actions.set_translation_domain(Config.GETTEXT_PACKAGE);
-        actions.add_actions(GENERAL_ACTIONS, null);
-        actions.get_action("app-quit").activate.connect(on_app_quit);
-        actions.get_action("file-new").activate.connect(on_file_new);
-        actions.get_action("file-import").activate.connect(on_key_import_file);
-        actions.get_action("edit-import-clipboard").activate.connect(on_key_import_clipboard);
-        include_actions(actions);
-
-        // View actions
-        this.view_actions = new Gtk.ActionGroup("view");
-        this.view_actions.set_translation_domain(Config.GETTEXT_PACKAGE);
-        this.view_actions.add_radio_actions(VIEW_RADIO_ACTIONS, -1, () => {
-            this.settings.set_string("item-filter", update_view_filter());
-        });
-        this.show_action = (Gtk.RadioAction) this.view_actions.get_action("view-personal");
-        include_actions(this.view_actions);
-
-        // Make sure import is only available with clipboard content
-        Gtk.Clipboard clipboard = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY);
-        clipboard.owner_change.connect((c, e) => update_clipboard_state(c, e, actions));
-        update_clipboard_state(clipboard, null, actions);
-    }
-
-    protected override void add_menu(Gtk.Widget menu) {
-        this.menu_placeholder.add(menu);
-        menu.show();
+        add_action_entries (action_entries, this);
     }
 
     private void on_view_selection_changed(Gtk.TreeSelection selection) {
@@ -189,6 +118,14 @@ public class Seahorse.KeyManager : Catalog {
             // Return false so we don't get run again
             return false;
         });
+    }
+
+    public override void selection_changed() {
+        base.selection_changed();
+
+        var objects = get_selected_objects();
+        foreach (weak Backend backend in get_backends())
+            backend.actions.set_actions_for_selected_objects(objects);
     }
 
     private void on_keymanager_row_activated(Gtk.TreeView key_list, Gtk.TreePath? path, Gtk.TreeViewColumn column) {
@@ -202,7 +139,7 @@ public class Seahorse.KeyManager : Catalog {
 
     private bool on_keymanager_key_list_button_pressed(Gdk.EventButton event) {
         if (event.button == 3) {
-            show_context_menu(Catalog.MENU_OBJECT, event);
+            show_context_menu(event);
             GLib.List<GLib.Object> objects = get_selected_objects();
             if (objects.length() > 1) {
                 return true;
@@ -215,20 +152,29 @@ public class Seahorse.KeyManager : Catalog {
     private bool on_keymanager_key_list_popup_menu() {
         GLib.List<GLib.Object> objects = get_selected_objects();
         if (objects != null)
-            show_context_menu(Catalog.MENU_OBJECT, null);
+            show_context_menu(null);
         return false;
     }
 
-    private void on_file_new(Gtk.Action action) {
+    private void on_new_item(SimpleAction action, GLib.Variant? param) {
         GenerateSelect dialog = new GenerateSelect(this);
         dialog.run();
         dialog.destroy();
     }
 
-    private void on_keymanager_new_button(Gtk.Button button) {
-        GenerateSelect dialog = new GenerateSelect(this);
-        dialog.run();
-        dialog.destroy();
+    private void on_toggle_action(SimpleAction action, GLib.Variant? param) {
+        action.change_state(!action.state.get_boolean());
+    }
+
+    private void on_combine_keyrings_toggled(SimpleAction action, GLib.Variant? new_state) {
+        bool combined = new_state.get_boolean();
+        action.set_state(combined);
+
+        this.sidebar.combined = combined;
+
+        /* Don't show the sidebar if everyhing is combined */
+        this.sidebar_area.visible = !combined;
+        this.settings.set_boolean("sidebar-visible", !combined);
     }
 
     private void on_filter_changed(Gtk.Editable entry) {
@@ -242,7 +188,7 @@ public class Seahorse.KeyManager : Catalog {
         dialog.destroy();
     }
 
-    private void import_prompt() {
+    private void on_import_file(SimpleAction action, GLib.Variant? parameter) {
         Gtk.FileChooserDialog dialog =
             new Gtk.FileChooserDialog(_("Import Key"), this,
                                       Gtk.FileChooserAction.OPEN,
@@ -305,14 +251,6 @@ public class Seahorse.KeyManager : Catalog {
         }
     }
 
-    private void on_key_import_file(Gtk.Action action) {
-        import_prompt();
-    }
-
-    private void on_keymanager_import_button(Gtk.Button button) {
-        import_prompt();
-    }
-
     private void import_text(string? display_name, string? text) {
         ImportDialog dialog = new ImportDialog(this);
         dialog.add_text(display_name, text);
@@ -336,9 +274,14 @@ public class Seahorse.KeyManager : Catalog {
         }
     }
 
-    private void update_clipboard_state(Gtk.Clipboard clipboard, Gdk.Event? event, Gtk.ActionGroup group) {
-        Gtk.Action action = group.get_action("edit-import-clipboard");
-        action.set_sensitive(clipboard.wait_is_text_available());
+    private void on_paste(SimpleAction action, Variant? param) {
+        Gdk.Atom atom = Gdk.Atom.intern("CLIPBOARD", false);
+        Gtk.Clipboard clipboard = Gtk.Clipboard.get(atom);
+
+        if (clipboard.wait_is_text_available())
+            return;
+
+        clipboard.request_text(on_clipboard_received);
     }
 
     private void on_clipboard_received(Gtk.Clipboard board, string? text) {
@@ -353,26 +296,26 @@ public class Seahorse.KeyManager : Catalog {
                 import_text(_("Clipboard text"), text);
     }
 
-    private void on_key_import_clipboard(Gtk.Action action) {
-        Gdk.Atom atom = Gdk.Atom.intern("CLIPBOARD", false);
-        Gtk.Clipboard clipboard = Gtk.Clipboard.get(atom);
-        clipboard.request_text(on_clipboard_received);
-    }
+    private void update_view_filter(string filter_str, bool update_settings = true) {
+        // Update the setting
+        if (update_settings)
+            this.settings.set_string("item-filter", filter_str);
 
-    private void on_app_quit(Gtk.Action action) {
-        this.application.quit();
-    }
+        // Update the action
+        SimpleAction action = lookup_action("filter-items") as SimpleAction;
+        action.set_state(filter_str);
 
-    private unowned string update_view_filter() {
-        this.store.showfilter = (KeyManagerStore.ShowFilter) this.show_action.current_value;
+        // Update the store
+        this.store.showfilter = KeyManagerStore.ShowFilter.from_string(filter_str);
         this.store.refilter();
-        return this.store.showfilter.to_string();
+    }
+
+    private void on_filter_items(SimpleAction action, Variant? param) {
+        update_view_filter (param.get_string());
     }
 
     private void on_item_filter_changed(GLib.Settings settings, string? key) {
-        int radio = KeyManagerStore.ShowFilter.from_string(settings.get_string(key));
-        this.show_action.set_current_value(radio);
-        update_view_filter();
+        update_view_filter(settings.get_string("item-filter"), false);
     }
 
     public override GLib.List<GLib.Object> get_selected_objects() {
@@ -406,9 +349,7 @@ public class Seahorse.KeyManager : Catalog {
         this.sidebar = new Sidebar();
         sidebar.hexpand = true;
 
-        this.sidebar_width = this.settings.get_int("sidebar-width");
-
-        this.sidebar_panes.position = this.sidebar_width;
+        this.sidebar_panes.position = this.settings.get_int("sidebar-width");
         this.sidebar_panes.realize.connect(() =>   { this.sidebar_panes.position = this.settings.get_int("sidebar-width"); });
         this.sidebar_panes.unrealize.connect(() => { this.settings.set_int("sidebar-width", this.sidebar_panes.position);  });
 
@@ -416,21 +357,13 @@ public class Seahorse.KeyManager : Catalog {
         this.sidebar_panes.get_child2().set_size_request(150, -1);
 
         foreach (weak Backend backend in get_backends()) {
-            if (backend.actions != null)
-                include_actions(backend.actions);
+            ActionGroup actions = backend.actions;
+            actions.catalog = this;
+            insert_action_group(actions.prefix, actions);
         }
 
         this.sidebar_area.add(this.sidebar);
         this.sidebar.show();
-
-        Gtk.ActionGroup actions = new Gtk.ActionGroup("sidebar");
-        actions.set_translation_domain(Config.GETTEXT_PACKAGE);
-        actions.add_toggle_actions(SIDEBAR_ACTIONS, null);
-        Gtk.Action action = actions.get_action("view-sidebar");
-        this.settings.bind("sidebar-visible", action, "active", SettingsBindFlags.DEFAULT);
-        action.bind_property("active", this.sidebar_area, "visible", BindingFlags.SYNC_CREATE);
-        action.bind_property("active", this.sidebar, "combined", BindingFlags.INVERT_BOOLEAN | BindingFlags.SYNC_CREATE);
-        include_actions(actions);
 
         this.settings.bind("keyrings-selected", this.sidebar, "selected-uris", SettingsBindFlags.DEFAULT);
 

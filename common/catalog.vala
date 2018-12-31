@@ -21,43 +21,26 @@
 namespace Seahorse {
 
 public abstract class Catalog : Gtk.ApplicationWindow {
-	public const string MENU_OBJECT = "ObjectPopup";
 
 	/* Set by the derived classes */
 	public string ui_name { construct; get; }
 
-	private Gtk.UIManager _ui_manager;
-	private GLib.GenericSet<Gtk.ActionGroup> _actions;
-	private Gtk.Action _edit_delete;
-	private Gtk.Action _properties_object;
-	private Gtk.Action _file_export;
-	private Gtk.Action _edit_copy;
-	private GLib.List<Gtk.ActionGroup> _selection_actions;
+    protected MenuModel context_menu;
 	private bool _disposed;
 	private GLib.Settings _settings;
 
 	public abstract GLib.List<weak Backend> get_backends();
 	public abstract Place? get_focused_place();
 	public abstract GLib.List<GLib.Object> get_selected_objects();
-	protected abstract void add_menu(Gtk.Widget menu);
+
+    private const ActionEntry[] ACTION_ENTRIES = {
+        { "file-export",         on_key_export_file },
+        { "copy",                on_key_export_clipboard },
+        { "edit-delete",         on_object_delete },
+        { "properties-object",   on_properties_object },
+    };
 
 	construct {
-		this._actions = new GLib.GenericSet<Gtk.ActionGroup>(GLib.direct_hash, GLib.direct_equal);
-		this._ui_manager = new Gtk.UIManager();
-
-		this._ui_manager.add_widget.connect((widget) => {
-			if (widget is Gtk.MenuBar)
-				add_menu(widget);
-		});
-
-		this._ui_manager.pre_activate.connect((action) => {
-			Action.pre_activate(action, this, this);
-		});
-
-		this._ui_manager.post_activate.connect((action) => {
-			Action.post_activate(action);
-		});
-
 		/* Load window size for windows that aren't dialogs */
 		var key = "/apps/seahorse/windows/%s/".printf(this.ui_name);
 		this._settings = new GLib.Settings.with_path("org.gnome.seahorse.window", key);
@@ -66,43 +49,15 @@ public abstract class Catalog : Gtk.ApplicationWindow {
 		if (width > 0 && height > 0)
 			this.resize (width, height);
 
-		/* The widgts get added in an idle loop later */
-		try {
-			var path = "/org/gnome/Seahorse/seahorse-%s-widgets.ui".printf(this.ui_name);
-			this._ui_manager.add_ui_from_resource(path);
-		} catch (GLib.Error err) {
-			GLib.warning("couldn't load ui description for '%s': %s",
-			             this.ui_name, err.message);
-		}
+        Gtk.Builder builder = new Gtk.Builder.from_resource(
+            "/org/gnome/Seahorse/seahorse-%s-widgets.ui".printf(this.ui_name)
+        );
+        this.context_menu = (MenuModel) builder.get_object("context_menu");
 
-		this.add_accel_group (this._ui_manager.get_accel_group());
-
-		var actions = new Gtk.ActionGroup("main");
-		actions.set_translation_domain(Config.GETTEXT_PACKAGE);
-		actions.add_actions(UI_ENTRIES, this);
-
-		var action = actions.get_action("app-preferences");
-		action.set_visible (Prefs.available());
-		this._edit_delete = actions.get_action("edit-delete");
-		this._properties_object = actions.get_action("properties-object");
-		this._edit_copy = actions.get_action("edit-export-clipboard");
-		this._file_export = actions.get_action("file-export");
-		this._ui_manager.insert_action_group (actions, 0);
+        add_action_entries (ACTION_ENTRIES, this);
 	}
 
 	public override void dispose() {
-		this._edit_copy = null;
-		this._edit_delete = null;
-		this._file_export = null;
-		this._properties_object = null;
-
-		foreach (var group in this._selection_actions)
-			this._ui_manager.remove_action_group(group);
-		this._selection_actions = null;
-
-		this._ui_manager = null;
-		this._actions.remove_all();
-
 		if (!this._disposed) {
 			this._disposed = true;
 
@@ -132,140 +87,28 @@ public abstract class Catalog : Gtk.ApplicationWindow {
 				break;
 		}
 
-		this._properties_object.sensitive = can_properties;
-		this._edit_delete.sensitive = can_delete;
-		this._edit_copy.sensitive = can_export;
-		this._file_export.sensitive = can_export;
-
-		foreach (var group in this._selection_actions)
-			group.visible = false;
-		this._selection_actions = lookup_actions_for_objects(objects);
-		foreach (var group in this._selection_actions)
-			group.visible = true;
-	}
-
-	public void ensure_updated() {
-		this._ui_manager.ensure_update();
-	}
-
-	public void include_actions(Gtk.ActionGroup group) {
-		this._ui_manager.insert_action_group(group, 10);
-
-		if (group is Actions) {
-			var actions = (Actions)group;
-			actions.catalog = this;
-
-			var definition = actions.definition;
-			if (definition != null) {
-				try {
-					this._ui_manager.add_ui_from_string (definition, -1);
-				} catch (GLib.Error err) {
-					GLib.warning ("couldn't add ui defintion for action group: %s: %s",
-					              actions.name, definition);
-				}
-			}
-		}
-
-		this._actions.add(group);
-	}
+        ((SimpleAction) lookup_action("properties-object")).set_enabled(can_properties);
+        ((SimpleAction) lookup_action("edit-delete")).set_enabled(can_delete);;
+        ((SimpleAction) lookup_action("copy")).set_enabled(can_export);
+        ((SimpleAction) lookup_action("file-export")).set_enabled(can_export);
+    }
 
 	public void show_properties(GLib.Object obj) {
 		Viewable.view(obj, this);
 	}
 
-    public void show_context_menu(string name, Gdk.Event? event) {
-        var widget = this._ui_manager.get_widget("/%s".printf(name));
-
-        Gtk.Menu? menu = widget as Gtk.Menu;
-        if (menu == null) {
-            warning("the object /%s isn't a menu", name);
-            return;
+    public void show_context_menu(Gdk.Event? event) {
+        Gtk.Menu menu = new Gtk.Menu.from_model(this.context_menu);
+        menu.insert_action_group("win", this);
+        foreach (weak Backend backend in get_backends()) {
+            ActionGroup actions = backend.actions;
+            menu.insert_action_group(actions.prefix, actions);
         }
         menu.popup_at_pointer(event);
         menu.show();
     }
 
-	private GLib.List<Gtk.ActionGroup> lookup_actions_for_objects (GLib.List<GLib.Object> objects) {
-		var table = new GLib.HashTable<Gtk.ActionGroup, weak Gtk.ActionGroup>(GLib.direct_hash, GLib.direct_equal);
-		foreach (var object in objects) {
-			Gtk.ActionGroup? actions = null;
-			object.get("actions", out actions, null);
-			if (actions == null)
-				continue;
-			if (!this._actions.contains(actions))
-				this.include_actions(actions);
-			this._actions.add(actions);
-		}
-
-		var iter = GLib.HashTableIter<Gtk.ActionGroup, weak Gtk.ActionGroup>(table);
-		var results = new GLib.List<Gtk.ActionGroup>();
-		Gtk.ActionGroup group;
-		while (iter.next(out group, null))
-			results.prepend(group);
-
-		return results;
-	}
-
-	[CCode (instance_pos = -1)]
-	private void on_app_preferences (Gtk.Action action) {
-        Prefs prefs_dialog = new Prefs(this);
-        prefs_dialog.run();
-        prefs_dialog.destroy();
-	}
-
-	private const string[] AUTHORS = {
-		"Jacob Perkins <jap1@users.sourceforge.net>",
-		"Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
-		"Jean Schurger <yshark@schurger.org>",
-		"Stef Walter <stef@memberwebs.com>",
-		"Adam Schreiber <sadam@clemson.edu>",
-		"Niels De Graef <nielsdegraef@gmail.com>",
-		"",
-		N_("Contributions:"),
-		"Albrecht Dreß <albrecht.dress@arcor.de>",
-		"Jim Pharis <binbrain@gmail.com>",
-		null
-	};
-
-	private const string[] DOCUMENTERS = {
-		"Jacob Perkins <jap1@users.sourceforge.net>",
-		"Adam Schreiber <sadam@clemson.edu>",
-		"Milo Casagrande <milo_casagrande@yahoo.it>",
-		null
-	};
-
-	private const string[] ARTISTS = {
-		"Jacob Perkins <jap1@users.sourceforge.net>",
-		"Stef Walter <stef@memberwebs.com>",
-		null
-	};
-
-	[CCode (instance_pos = -1)]
-	private void on_app_about(Gtk.Action action) {
-		var about = new Gtk.AboutDialog();
-		about.set_artists(ARTISTS);
-		about.set_authors(AUTHORS);
-		about.set_documenters(DOCUMENTERS);
-		about.set_version(Config.VERSION);
-		about.set_comments(_("Passwords and Keys"));
-		about.set_copyright("© 2002 - 2018 Seahorse Contributors");
-		about.set_translator_credits(_("translator-credits"));
-		about.set_logo_icon_name("seahorse");
-		about.set_website("https://wiki.gnome.org/Apps/Seahorse");
-		about.set_website_label(_("Seahorse Project Homepage"));
-
-		about.response.connect((response) => {
-			about.hide();
-		});
-
-		about.set_transient_for(this);
-		about.run();
-		about.destroy();
-	}
-
-	[CCode (instance_pos = -1)]
-	private void on_object_delete(Gtk.Action action)
-	{
+	private void on_object_delete(SimpleAction action, Variant? param) {
 		try {
 			var objects = this.get_selected_objects();
 			Deletable.delete_with_prompt_wait(objects, this);
@@ -274,31 +117,21 @@ public abstract class Catalog : Gtk.ApplicationWindow {
 		}
 	}
 
-	[CCode (instance_pos = -1)]
-	private void on_properties_object(Gtk.Action action) {
+	private void on_properties_object(SimpleAction action, Variant? param) {
 		var objects = get_selected_objects();
 		if (objects.length() > 0)
-			this.show_properties(objects.data);
+			show_properties(objects.data);
 	}
 
-	[CCode (instance_pos = -1)]
-	private void on_properties_place (Gtk.Action action) {
-		var place = this.get_focused_place ();
-		if (place != null)
-			this.show_properties (place);
-	}
-
-	[CCode (instance_pos = -1)]
-	private void on_key_export_file (Gtk.Action action) {
+	private void on_key_export_file(SimpleAction action, Variant? param) {
 		try {
-			Exportable.export_to_prompt_wait(this.get_selected_objects(), this);
+			Exportable.export_to_prompt_wait(get_selected_objects(), this);
 		} catch (GLib.Error err) {
 			Util.show_error(this, _("Couldn’t export keys"), err.message);
 		}
 	}
 
-	[CCode (instance_pos = -1)]
-	private void on_key_export_clipboard (Gtk.Action action) {
+	private void on_key_export_clipboard (SimpleAction action, Variant? param) {
 		uint8[] output;
 		try {
 			var objects = this.get_selected_objects ();
@@ -313,43 +146,6 @@ public abstract class Catalog : Gtk.ApplicationWindow {
 		var board = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD);
 		board.set_text ((string)output, output.length);
 	}
-
-	[CCode (instance_pos = -1)]
-	private void on_help_show(Gtk.Action action) {
-		try {
-			var document = "help:%s".printf(Config.PACKAGE);
-			GLib.AppInfo.launch_default_for_uri(document, null);
-		} catch (GLib.Error err) {
-			Util.show_error(this, _("Could not display help: %s"), err.message);
-		}
-	}
-
-	private const Gtk.ActionEntry[] UI_ENTRIES = {
-		/* Top menu items */
-		{ "file-menu", null, N_("_File") },
-		{ "file-export", null, N_("E_xport…"), null,
-          N_("Export to a file"), on_key_export_file },
-		{ "edit-menu", null, N_("_Edit") },
-		{ "edit-export-clipboard", null, N_("_Copy"), "<control>C",
-		  N_("Copy to the clipboard"), on_key_export_clipboard },
-		/*Translators: This text refers to deleting an item from its type's backing store*/
-		{ "edit-delete", null, N_("_Delete"), null,
-		  N_("Delete selected items"), on_object_delete },
-		{ "properties-object", null, N_("_Properties"), null,
-		  N_("Show the properties of this item"), on_properties_object },
-		{ "properties-keyring", null, N_("_Properties"), null,
-		  N_("Show the properties of this keyring"), on_properties_place },
-		{ "app-preferences", null, N_("Prefere_nces"), null,
-		  N_("Change preferences for this program"), on_app_preferences },
-		{ "view-menu", null, N_("_View") },
-		{ "help-menu", null, N_("_Help") },
-		{ "app-about", null, N_("_About"), null,
-		  N_("About this program"), on_app_about },
-		{ "help-show", null, N_("_Contents"), "F1",
-		  N_("Show Seahorse help"), on_help_show }
-	};
-
-
 }
 
 }

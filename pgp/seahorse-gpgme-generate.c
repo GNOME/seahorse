@@ -61,58 +61,6 @@ void           on_gpgme_generate_algorithm_changed           (GtkComboBox *combo
                                                               gpointer user_data);
 
 /* --------------------------------------------------------------------------
- * ACTIONS
- */
-
-/**
- * on_pgp_generate_key:
- * @action: verified to be an action, not more
- * @unused: not used
- *
- * Calls the function that displays the key creation dialog
- *
- */
-static void
-on_pgp_generate_key (GtkAction *action, gpointer unused)
-{
-	SeahorseGpgmeKeyring* keyring;
-
-	g_return_if_fail (GTK_IS_ACTION (action));
-
-	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-	g_return_if_fail (keyring != NULL);
-
-	seahorse_gpgme_generate_show (keyring,
-	                              seahorse_action_get_window (action),
-	                              NULL, NULL, NULL);
-}
-
-static const GtkActionEntry ACTION_ENTRIES[] = {
-	{ "pgp-generate-key", GCR_ICON_KEY_PAIR, N_ ("PGP Key"), "",
-	  N_("Used to encrypt email and files"), G_CALLBACK (on_pgp_generate_key) }
-};
-
-/**
- * seahorse_gpgme_generate_register:
- *
- * Registers the action group for the pgp key creation dialog
- *
- */
-void
-seahorse_gpgme_generate_register (void)
-{
-	GtkActionGroup *actions;
-	
-	actions = gtk_action_group_new ("gpgme-generate");
-
-	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, ACTION_ENTRIES, G_N_ELEMENTS (ACTION_ENTRIES), NULL);
-	
-	/* Register this as a generator */
-	seahorse_registry_register_object (G_OBJECT (actions), "generator");
-}
-
-/* --------------------------------------------------------------------------
  * DIALOGS
  */
 

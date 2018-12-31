@@ -1,38 +1,29 @@
-<ui>
-	<menubar>
-		<menu name="File" action="file-menu">
-			<menuitem action="file-new"/>
-			<menuitem action="file-import"/>
-			<menuitem action="file-export"/>
-			<separator/>
-			<menuitem action="app-quit"/>
-		</menu>
-		<menu name="Edit" action="edit-menu">
-			<menuitem action="edit-export-clipboard"/>
-			<menuitem action="edit-import-clipboard"/>
-			<menuitem action="edit-delete"/>
-			<separator/>
-			<menuitem action="app-preferences"/>
-		</menu>
-		<placeholder name="RemoteMenu">
-		</placeholder>
-		<menu name="View" action="view-menu">
-			<menuitem action="view-sidebar"/>
-			<separator/>
-			<menuitem action="view-personal"/>
-			<menuitem action="view-trusted"/>
-			<menuitem action="view-any"/>
-		</menu>
-		<menu name="Help" action="help-menu">
-			<menuitem action="help-show"/>
-			<menuitem action="app-about"/>
-		</menu>
-
-	</menubar>
-
-	<popup name="ObjectPopup">
-		<menuitem action="edit-delete"/>
-		<separator/>
-		<menuitem action="properties-object"/>
-	</popup>
-</ui>
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="context_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Export…</attribute>
+        <attribute name="action">win.file-export</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <!-- Translators: This text refers to deleting an item from its type's backing store -->
+        <attribute name="label" translatable="yes">Delete</attribute>
+        <attribute name="action">win.edit-delete</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Properties</attribute>
+        <attribute name="action">win.properties-object</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Configure Key for Secure Shell……</attribute>
+        <attribute name="action">ssh.remote-upload</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
