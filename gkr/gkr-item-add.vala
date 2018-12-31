@@ -65,8 +65,6 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
             transient_for: parent,
             use_header_bar: 1
         );
-        show();
-        present();
     }
 
     [GtkCallback]
@@ -75,10 +73,8 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
     }
 
     public override void response(int resp) {
-        if (resp != Gtk.ResponseType.ACCEPT) {
-            this.destroy();
+        if (resp != Gtk.ResponseType.ACCEPT)
             return;
-        }
 
         Gtk.TreeIter iter;
         if (!this.item_keyring_combo.get_active_iter(out iter))
@@ -90,11 +86,13 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
         var keyring = (Keyring) collection;
         var cancellable = new Cancellable();
         var interaction = new Interaction(this);
+        var item_buffer = this.item_entry.buffer;
+        var secret_buffer = this.password_entry.buffer;
 
         keyring.unlock.begin(interaction, cancellable, (obj, res) => {
             try {
                 if (keyring.unlock.end(res)) {
-                    create_secret(collection);
+                    create_secret(item_buffer, secret_buffer, collection);
                 }
             } catch (Error e) {
                 Util.show_error(this, _("Couldn’t unlock"), e.message);
@@ -102,8 +100,10 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
         });
     }
 
-    private void create_secret(Secret.Collection collection) {
-        var secret = new Secret.Value(this.password_entry.text, -1, "text/plain");
+    private void create_secret(Gtk.EntryBuffer item_buffer,
+                               Gtk.EntryBuffer secret_buffer,
+                               Secret.Collection collection) {
+        var secret = new Secret.Value(secret_buffer.text, -1, "text/plain");
         var cancellable = Dialog.begin_request(this);
         var attributes = new HashTable<string, string>(GLib.str_hash, GLib.str_equal);
 
@@ -111,7 +111,7 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
         var schema = new Secret.Schema("org.gnome.keyring.Note", Secret.SchemaFlags.NONE);
 
         Secret.Item.create.begin(collection, schema, attributes,
-                                 this.item_entry.text, secret, Secret.ItemCreateFlags.NONE,
+                                 item_buffer.text, secret, Secret.ItemCreateFlags.NONE,
                                  cancellable, (obj, res) => {
             try {
                 /* Clear the operation without cancelling it since it is complete */
@@ -121,8 +121,6 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
             } catch (GLib.Error err) {
                 Util.show_error(this, _("Couldn’t add item"), err.message);
             }
-
-            this.destroy();
         });
     }
 }

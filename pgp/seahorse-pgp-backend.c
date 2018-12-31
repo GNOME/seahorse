@@ -54,7 +54,7 @@ struct _SeahorsePgpBackend {
     SeahorseDiscovery *discovery;
     SeahorseUnknownSource *unknown;
     GHashTable *remotes;
-    GtkActionGroup *actions;
+    SeahorseActionGroup *actions;
     gboolean loaded;
 };
 
@@ -77,8 +77,6 @@ seahorse_pgp_backend_init (SeahorsePgpBackend *self)
 	                                       g_free, g_object_unref);
 
 	self->actions = seahorse_pgp_backend_actions_instance ();
-
-	seahorse_gpgme_generate_register ();
 }
 
 #ifdef WITH_KEYSERVER
@@ -195,7 +193,7 @@ seahorse_pgp_backend_get_description (SeahorseBackend *backend)
 	return _("PGP keys are for encrypting email or files");
 }
 
-static GtkActionGroup *
+static SeahorseActionGroup *
 seahorse_pgp_backend_get_actions (SeahorseBackend *backend)
 {
 	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (backend);

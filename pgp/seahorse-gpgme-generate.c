@@ -61,58 +61,6 @@ void           on_gpgme_generate_algorithm_changed           (GtkComboBox *combo
                                                               gpointer user_data);
 
 /* --------------------------------------------------------------------------
- * ACTIONS
- */
-
-/**
- * on_pgp_generate_key:
- * @action: verified to be an action, not more
- * @unused: not used
- *
- * Calls the function that displays the key creation dialog
- *
- */
-static void
-on_pgp_generate_key (GtkAction *action, gpointer unused)
-{
-	SeahorseGpgmeKeyring* keyring;
-
-	g_return_if_fail (GTK_IS_ACTION (action));
-
-	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-	g_return_if_fail (keyring != NULL);
-
-	seahorse_gpgme_generate_show (keyring,
-	                              seahorse_action_get_window (action),
-	                              NULL, NULL, NULL);
-}
-
-static const GtkActionEntry ACTION_ENTRIES[] = {
-	{ "pgp-generate-key", GCR_ICON_KEY_PAIR, N_ ("PGP Key"), "",
-	  N_("Used to encrypt email and files"), G_CALLBACK (on_pgp_generate_key) }
-};
-
-/**
- * seahorse_gpgme_generate_register:
- *
- * Registers the action group for the pgp key creation dialog
- *
- */
-void
-seahorse_gpgme_generate_register (void)
-{
-	GtkActionGroup *actions;
-	
-	actions = gtk_action_group_new ("gpgme-generate");
-
-	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, ACTION_ENTRIES, G_N_ELEMENTS (ACTION_ENTRIES), NULL);
-	
-	/* Register this as a generator */
-	seahorse_registry_register_object (G_OBJECT (actions), "generator");
-}
-
-/* --------------------------------------------------------------------------
  * DIALOGS
  */
 
@@ -172,10 +120,19 @@ on_generate_key_complete (GObject *source,
                           GAsyncResult *result,
                           gpointer user_data)
 {
-	GError *error = NULL;
+    SeahorseCatalog *catalog = SEAHORSE_CATALOG (user_data);
+    GError *error = NULL;
 
-	if (!seahorse_gpgme_key_op_generate_finish (SEAHORSE_GPGME_KEYRING (source), result, &error))
-		seahorse_util_handle_error (&error, NULL, _("Couldn’t generate PGP key"));
+    if (!seahorse_gpgme_key_op_generate_finish (SEAHORSE_GPGME_KEYRING (source), result, &error)) {
+        seahorse_util_handle_error (&error,
+                                    GTK_WINDOW (catalog),
+                                    _("Couldn’t generate PGP key"));
+        return;
+    }
+
+    g_action_group_activate_action (G_ACTION_GROUP (catalog),
+                                    "focus-place",
+                                    g_variant_new_string ("gnupg"));
 }
 
 /**
@@ -203,34 +160,34 @@ seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
                              time_t expires,
                              GtkWindow *parent)
 {
-	GCancellable *cancellable;
-	const gchar *pass;
-	SeahorsePassphrasePrompt *dialog;
-	const gchar *notice;
+    GCancellable *cancellable;
+    const gchar *pass;
+    SeahorsePassphrasePrompt *dialog;
+    const gchar *notice;
 
-	dialog = seahorse_passphrase_prompt_show_dialog (_("Passphrase for New PGP Key"),
-	                                          _("Enter the passphrase for your new key twice."),
-	                                          NULL, NULL, TRUE);
-	gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
-	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
-		pass = seahorse_passphrase_prompt_get_text (dialog);
-		cancellable = g_cancellable_new ();
-		seahorse_gpgme_key_op_generate_async (keyring, name, email, comment,
-		                                      pass, type, bits, expires,
-		                                      cancellable, on_generate_key_complete,
-		                                      NULL);
+    dialog = seahorse_passphrase_prompt_show_dialog (_("Passphrase for New PGP Key"),
+                                              _("Enter the passphrase for your new key twice."),
+                                              NULL, NULL, TRUE);
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+        pass = seahorse_passphrase_prompt_get_text (dialog);
+        cancellable = g_cancellable_new ();
+        seahorse_gpgme_key_op_generate_async (keyring, name, email, comment,
+                                              pass, type, bits, expires,
+                                              cancellable, on_generate_key_complete,
+                                              parent);
 
-		/* Has line breaks because GtkLabel is completely broken WRT wrapping */
-		notice = _("When creating a key we need to generate a lot of\n"
-		           "random data and we need you to help. It’s a good\n"
-		           "idea to perform some other action like typing on\n"
-		           "the keyboard, moving the mouse, using applications.\n"
-		           "This gives the system the random data that it needs.");
-		seahorse_progress_show_with_notice (cancellable, _("Generating key"), notice, FALSE);
-		g_object_unref (cancellable);
-	}
+        /* Has line breaks because GtkLabel is completely broken WRT wrapping */
+        notice = _("When creating a key we need to generate a lot of\n"
+                   "random data and we need you to help. It’s a good\n"
+                   "idea to perform some other action like typing on\n"
+                   "the keyboard, moving the mouse, using applications.\n"
+                   "This gives the system the random data that it needs.");
+        seahorse_progress_show_with_notice (cancellable, _("Generating key"), notice, FALSE);
+        g_object_unref (cancellable);
+    }
 
-	gtk_widget_destroy (GTK_WIDGET (dialog));
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 

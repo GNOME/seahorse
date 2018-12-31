@@ -32,11 +32,6 @@ public class Seahorse.Object : GLib.Object {
     public weak Place place { get; set; default = null; }
 
     /**
-     * Actions for the object
-     */
-    public Gtk.ActionGroup? actions { get; set; default = null; }
-
-    /**
      * Stock ID for this Object.
      */
     public GLib.Icon? icon { get; set; default = new ThemedIcon("gtk-missing-image"); }

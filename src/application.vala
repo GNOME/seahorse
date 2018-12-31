@@ -25,6 +25,42 @@ public class Seahorse.Application : Gtk.Application {
     private SearchProvider? search_provider;
     private uint search_provider_dbus_id = 0;
 
+    private KeyManager? key_mgr = null;
+
+    private const string[] AUTHORS = {
+        "Jacob Perkins <jap1@users.sourceforge.net>",
+        "Jose Carlos Garcia Sogo <jsogo@users.sourceforge.net>",
+        "Jean Schurger <yshark@schurger.org>",
+        "Stef Walter <stef@memberwebs.com>",
+        "Adam Schreiber <sadam@clemson.edu>",
+        "Niels De Graef <nielsdegraef@gmail.com>",
+        "",
+        N_("Contributions:"),
+        "Albrecht Dreß <albrecht.dress@arcor.de>",
+        "Jim Pharis <binbrain@gmail.com>",
+        null
+    };
+
+    private const string[] DOCUMENTERS = {
+        "Jacob Perkins <jap1@users.sourceforge.net>",
+        "Adam Schreiber <sadam@clemson.edu>",
+        "Milo Casagrande <milo_casagrande@yahoo.it>",
+        null
+    };
+
+    private const string[] ARTISTS = {
+        "Jacob Perkins <jap1@users.sourceforge.net>",
+        "Stef Walter <stef@memberwebs.com>",
+        null
+    };
+
+    private const GLib.ActionEntry[] action_entries = {
+         { "quit",            quit                  },
+         { "help",            on_app_help           },
+         { "about",           on_app_about          },
+         { "preferences",     on_app_preferences    },
+    };
+
     const OptionEntry[] cmd_options = {
         { "version", 'v', 0, OptionArg.NONE, null, N_("Version of this application"), null },
         { null }
@@ -36,7 +72,23 @@ public class Seahorse.Application : Gtk.Application {
             flags: ApplicationFlags.FLAGS_NONE
         );
         this.search_provider = new SearchProvider(this);
+
+        add_action_entries(action_entries, this);
+        var pref_action = lookup_action("preferences") as SimpleAction;
+        pref_action.set_enabled(Prefs.available());
+        add_action_accelerators();
+
         add_main_option_entries(cmd_options);
+    }
+
+    private void add_action_accelerators() {
+        set_accels_for_action ("app.help",        {"F1"});
+        set_accels_for_action ("app.quit",        {"<control>Q"});
+
+        set_accels_for_action ("win.new-item",    { "<control>N" });
+        set_accels_for_action ("win.import-file", { "<control>I" });
+        set_accels_for_action ("win.copy",        { "<control>C" });
+        set_accels_for_action ("win.paste",       { "<control>V" });
     }
 
     public override void startup() {
@@ -57,12 +109,10 @@ public class Seahorse.Application : Gtk.Application {
     }
 
     public override void activate() {
-        var key_mgr = get_active_window();
+        if (get_active_window() == null)
+            this.key_mgr = new Seahorse.KeyManager(this);
 
-        if (key_mgr == null)
-            key_mgr = new Seahorse.KeyManager(this);
-
-        key_mgr.present();
+        this.key_mgr.present();
     }
 
     public override int handle_local_options (VariantDict options) {
@@ -96,5 +146,41 @@ public class Seahorse.Application : Gtk.Application {
 
     public void initialize_search () {
         this.search_provider.load.begin();
+    }
+
+    private void on_app_about(SimpleAction action, Variant? param) {
+        var about = new Gtk.AboutDialog();
+        about.set_artists(ARTISTS);
+        about.set_authors(AUTHORS);
+        about.set_documenters(DOCUMENTERS);
+        about.set_version(Config.VERSION);
+        about.set_comments(_("Passwords and Keys"));
+        about.set_copyright("© 2002 - 2018 Seahorse Contributors");
+        about.set_translator_credits(_("translator-credits"));
+        about.set_logo_icon_name("seahorse");
+        about.set_website("https://wiki.gnome.org/Apps/Seahorse");
+        about.set_website_label(_("Seahorse Project Homepage"));
+
+        about.response.connect((response) => {
+            about.hide();
+        });
+
+        about.set_transient_for(this.key_mgr);
+        about.run();
+        about.destroy();
+    }
+
+    private void on_app_help(SimpleAction action, Variant? param) {
+        try {
+          Gtk.show_uri_on_window(this.key_mgr, "help:seahorse", Gtk.get_current_event_time ());
+        } catch (GLib.Error err) {
+          warning("Error showing help: %s", err.message);
+        }
+    }
+
+    private void on_app_preferences(SimpleAction action, Variant? param) {
+        Prefs prefs_dialog = new Prefs(this.key_mgr);
+        prefs_dialog.run();
+        prefs_dialog.destroy();
     }
 }

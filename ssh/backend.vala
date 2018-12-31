@@ -26,7 +26,7 @@ public class Seahorse.Ssh.Backend : GLib.Object, Gcr.Collection, Seahorse.Backen
     public string name { get { return SEAHORSE_SSH_NAME; } }
     public string label { get { return _("Secure Shell"); } }
     public string description { get { return _("Keys used to connect securely to other computers"); } }
-    public Gtk.ActionGroup? actions { owned get { return null; } }
+    public ActionGroup actions { owned get { return Ssh.Actions.instance(); } }
 
     private bool _loaded;
     public bool loaded { get { return _loaded; } }
@@ -73,7 +73,6 @@ public class Seahorse.Ssh.Backend : GLib.Object, Gcr.Collection, Seahorse.Backen
 
     public static void initialize() {
         instance = new Backend();
-        Generate.register();
     }
 
     public Source get_dot_ssh() {

@@ -6,7 +6,6 @@ search_provider_src = gnome.gdbus_codegen('seahorse-shell-search-provider-genera
 
 seahorse_sources = [
   'application.vala',
-  'generate-select.vala',
   'import-dialog.vala',
   'key-manager.vala',
   'main.vala',

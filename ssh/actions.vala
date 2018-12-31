@@ -20,49 +20,53 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-public class Seahorse.Ssh.Actions : Seahorse.Actions {
+public class Seahorse.Ssh.Actions : ActionGroup {
 
-    private const Gtk.ActionEntry KEYS_ACTIONS[] = {
-        { "remote-ssh-upload", null, N_("Configure Key for _Secure Shell…"), null,
-            N_("Send public Secure Shell key to another machine, and enable logins using that key."),
-            on_ssh_upload }
+    private const ActionEntry KEYS_ACTIONS[] = {
+        { "generate-key",    on_ssh_generate_key },
+        { "remote-upload",   on_ssh_upload       },
     };
 
-    public const string UI_DEFINITION = """
-    <ui>
-      <menubar>
-        <placeholder name="RemoteMenu">
-          <menu name="Remote" action="remote-menu">
-            <menuitem action="remote-ssh-upload"/>
-          </menu>
-        </placeholder>
-      </menubar>
-      <popup name="ObjectPopup">
-        <menuitem action="remote-ssh-upload"/>
-      </popup>
-    </ui>""";
-
     construct {
-        set_translation_domain(Config.GETTEXT_PACKAGE);
-        add_actions(KEYS_ACTIONS, this);
-        register_definition(UI_DEFINITION);
+        add_action_entries(KEYS_ACTIONS, this);
     }
 
-    private Actions(string name) {
-        base(name);
+    private Actions() {
+        GLib.Object(prefix: "ssh");
     }
 
     private static Actions _instance = null;
-
     public static unowned Actions instance() {
-        if (_instance == null) {
-            _instance = new Actions("SshKey");
-        }
+        if (_instance == null)
+            _instance = new Actions();
 
         return _instance;
     }
 
-    private void on_ssh_upload (Gtk.Action action) {
+    public override void set_actions_for_selected_objects(List<GLib.Object> objects) {
+        bool is_ssh_key = false;
+
+        foreach (var object in objects) {
+            if (object is Ssh.Key) {
+                is_ssh_key = true;
+                break;
+            }
+        }
+
+        ((SimpleAction) lookup_action("remote-upload")).set_enabled(is_ssh_key);
+    }
+
+    private void on_ssh_generate_key(SimpleAction action, Variant? param) {
+        Generate generate_dialog = new Generate(Backend.instance.get_dot_ssh(),
+                                                this.catalog);
+
+        int response = generate_dialog.run();
+        if (response == Gtk.ResponseType.ACCEPT)
+            this.catalog.activate_action("focus-place", "openssh");
+        generate_dialog.destroy();
+    }
+
+    private void on_ssh_upload(SimpleAction action, Variant? param) {
         List<Key> keys = new List<Key>();
 
         if (this.catalog != null) {
@@ -73,6 +77,6 @@ public class Seahorse.Ssh.Actions : Seahorse.Actions {
             }
         }
 
-        Upload.prompt(keys, Seahorse.Action.get_window(action));
+        Upload.prompt(keys, this.catalog);
     }
 }

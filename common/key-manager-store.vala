@@ -49,12 +49,14 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
             switch (str) {
                 case null:
                 case "":
+                case "any":
                     return ShowFilter.ANY;
                 case "personal":
                     return ShowFilter.PERSONAL;
                 case "trusted":
                     return ShowFilter.TRUSTED;
                 default:
+                    critical ("Got unknown ShowFilter string: %s", str);
                     assert_not_reached();
             }
         }

@@ -31,8 +31,6 @@ public class Seahorse.Gkr.KeyringAdd : Gtk.Dialog {
             transient_for: parent,
             use_header_bar: 1
         );
-        show();
-        present();
     }
 
     public override void response(int resp) {

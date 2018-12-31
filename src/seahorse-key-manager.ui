@@ -1,31 +1,324 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.22"/>
+  <menu id="main_menu">
+    <section>
+      <attribute name="label" translatable="yes">Filter items:</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Show personal</attribute>
+        <attribute name="action">win.filter-items</attribute>
+        <attribute name="target">personal</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Show trusted</attribute>
+        <attribute name="action">win.filter-items</attribute>
+        <attribute name="target">trusted</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Show any</attribute>
+        <attribute name="action">win.filter-items</attribute>
+        <attribute name="target">any</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Combine all keyrings</attribute>
+        <attribute name="action">win.combine-keyrings</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Find remote keys…</attribute>
+        <attribute name="action">pgp.remote-find</attribute>
+        <attribute name="hidden-when">action-missing</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Sync and publish keys…</attribute>
+        <attribute name="action">pgp.remote-sync</attribute>
+        <attribute name="hidden-when">action-missing</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Help</attribute>
+        <attribute name="action">app.help</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">About</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+  <object class="GtkPopover" id="new_item_menu_popover">
+    <signal name="grab-notify" handler="on_popover_grab_notify" after="yes"/>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="can_focus">False</property>
+        <property name="border_width">6</property>
+        <child>
+          <object class="GtkListBox" id="generate_list">
+            <property name="visible">True</property>
+            <property name="selection-mode">none</property>
+            <property name="can_focus">True</property>
+            <property name="has_focus">True</property>
+            <property name="selection-mode">browse</property>
+            <style>
+              <class name="new-item-list"/>
+            </style>
+            <child>
+              <object class="GtkListBoxRow" id="ssh_generate_key_button">
+                <property name="visible" bind-source="ssh_generate_key_button" bind-property="sensitive" />
+                <property name="margin">3</property>
+                <property name="selectable">False</property>
+                <property name="action-name">ssh.generate-key</property>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Secure Shell key</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Used to access other computers</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBoxRow" id="pgp_generate_key_button">
+                <property name="visible" bind-source="pgp_generate_key_button" bind-property="sensitive" />
+                <property name="margin">3</property>
+                <property name="selectable">False</property>
+                <property name="action-name">pgp.pgp-generate-key</property>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">GPG key</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Used to encrypt email and files</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBoxRow" id="gkr_generate_keyring_button">
+                <property name="visible" bind-source="gkr_generate_keyring_button" bind-property="sensitive" />
+                <property name="margin">3</property>
+                <property name="selectable">False</property>
+                <property name="action-name">gkr.keyring-new</property>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Password keyring</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Used to store application and network passwords</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBoxRow" id="gkr_generate_item_button">
+                <property name="visible" bind-source="gkr_generate_item_button" bind-property="sensitive" />
+                <property name="margin">3</property>
+                <property name="selectable">False</property>
+                <property name="action-name">gkr.keyring-item-new</property>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Password</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Safely store a password or secret</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBoxRow" id="pkcs11_generate_key_button">
+                <property name="visible" bind-source="pkcs11_generate_key_button" bind-property="sensitive" />
+                <property name="margin">3</property>
+                <property name="selectable">False</property>
+                <property name="action-name">pkcs11.pkcs11-generate-key</property>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Private key</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Used to request a certificate</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBoxRow" id="import_from_file_button">
+                <property name="visible" bind-source="import_from_file_button" bind-property="sensitive" />
+                <property name="margin">6</property>
+                <property name="selectable">False</property>
+                <property name="action-name">win.import-file</property>
+                <child>
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="halign">start</property>
+                        <property name="vexpand">True</property>
+                        <property name="label" translatable="yes">Import from file…</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
   <template class="SeahorseKeyManager" parent="SeahorseCatalog">
-    <property name="title" translatable="yes">Passwords and Keys</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="show-close-button">True</property>
+        <property name="title" translatable="yes">Passwords and Keys</property>
+        <child>
+          <object class="GtkMenuButton" id="new_item_button">
+            <property name="visible">True</property>
+            <property name="hexpand">True</property>
+            <property name="halign">start</property>
+            <property name="tooltip_text" translatable="yes">Add a new key or item</property>
+            <property name="popover">new_item_menu_popover</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon_name">list-add-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="main_menu_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
+            <property name="menu-model">main_menu</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">open-menu-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="show_search_button">
+            <property name="visible">True</property>
+            <property name="tooltip_text" translatable="yes">Search for a key or password</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon_name">edit-find-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkBox" id="menu_placeholder">
-            <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <property name="can_focus">False</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkPaned" id="sidebar_panes">
             <property name="visible">True</property>
+            <property name="vexpand">True</property>
             <property name="can_focus">True</property>
             <child>
               <object class="GtkBox" id="sidebar_area">
@@ -35,43 +328,17 @@
                   <placeholder/>
                 </child>
               </object>
-              <packing>
-                <property name="resize">False</property>
-                <property name="shrink">False</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box1">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkSearchBar">
                     <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
+                    <property name="search-mode-enabled" bind-source="show_search_button" bind-property="active" bind-flags="bidirectional|sync-create" />
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
-                    <property name="margin_end">12</property>
-                    <property name="margin_top">6</property>
-                    <property name="margin_bottom">6</property>
-                    <child>
-                      <object class="GtkButton" id="new_item_button">
-                        <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="halign">start</property>
-                        <property name="tooltip_text" translatable="yes">Add a new key or item</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="visible">True</property>
-                            <property name="icon_name">list-add</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="GtkSearchEntry" id="filter_entry">
                         <property name="visible">True</property>
@@ -89,8 +356,10 @@
                       <object class="GtkTreeView" id="key_list">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="margin_left">12</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="margin-left">18</property>
+                        <property name="margin-right">18</property>
                         <property name="rules_hint">True</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="treeview-selection"/>
@@ -199,6 +468,7 @@
                                 <property name="can_default">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_action_appearance">False</property>
+                                <property name="action-name">win.import-file</property>
                                 <child>
                                   <object class="GtkAlignment" id="alignment6">
                                     <property name="visible">True</property>
@@ -266,6 +536,7 @@
                                 <property name="receives_default">True</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_stock">True</property>
+                                <property name="action-name">win.new-item</property>
                               </object>
                               <packing>
                                 <property name="top_attach">2</property>
@@ -284,17 +555,8 @@
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="resize">True</property>
-                <property name="shrink">False</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>

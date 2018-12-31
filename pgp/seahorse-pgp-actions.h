@@ -21,8 +21,8 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <seahorse-common.h>
 
-GtkActionGroup *      seahorse_pgp_backend_actions_instance    (void);
+SeahorseActionGroup * seahorse_pgp_backend_actions_instance    (void);
 
-GtkActionGroup *      seahorse_gpgme_key_actions_instance      (void);
+SeahorseActionGroup * seahorse_gpgme_key_actions_instance      (void);

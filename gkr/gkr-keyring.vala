@@ -163,7 +163,7 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 
 	[CCode (instance_pos = -1)]
 	public void on_keyring_default(Gtk.Action? action) {
-		var parent = (action != null)? Action.get_window(action) : null;
+        var parent = null;
 		var service = this.service;
 
 		service.set_alias.begin("default", this, null, (obj, res) => {
@@ -178,7 +178,7 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 
 	[CCode (instance_pos = -1)]
 	public void on_keyring_password (Gtk.Action? action) {
-		var parent = (action != null)? Action.get_window(action) : null;
+        var parent = null;
 		var service = this.service;
 		service.get_connection().call.begin(service.get_name(),
 		                                    service.get_object_path(),

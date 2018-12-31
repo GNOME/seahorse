@@ -47,91 +47,100 @@ GType   seahorse_pgp_backend_actions_get_type         (void) G_GNUC_CONST;
 #define SEAHORSE_PGP_BACKEND_ACTIONS_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_BACKEND_ACTIONS, SeahorsePgpBackendActionsClass))
 
 typedef struct {
-	SeahorseActions parent_instance;
+    SeahorseActionGroup parent_instance;
 } SeahorsePgpBackendActions;
 
 typedef struct {
-	SeahorseActionsClass parent_class;
+    SeahorseActionGroupClass parent_class;
 } SeahorsePgpBackendActionsClass;
 
-G_DEFINE_TYPE (SeahorsePgpBackendActions, seahorse_pgp_backend_actions, SEAHORSE_TYPE_ACTIONS);
+G_DEFINE_TYPE (SeahorsePgpBackendActions, seahorse_pgp_backend_actions, SEAHORSE_TYPE_ACTION_GROUP);
 
 #ifdef WITH_KEYSERVER
 
-static const gchar* BACKEND_DEFINITION = ""\
-"<ui>"\
-"	<menubar>"\
-"		<placeholder name='RemoteMenu'>"\
-"			<menu name='Remote' action='remote-menu'>"\
-"				<menuitem action='remote-find'/>"\
-"				<menuitem action='remote-sync'/>"\
-"			</menu>"\
-"		</placeholder>"\
-"	</menubar>"\
-"</ui>";
-
 static void
-on_remote_find (GtkAction* action,
+on_remote_find (GSimpleAction *action,
+                GVariant *param,
                 gpointer user_data)
 {
-	seahorse_keyserver_search_show (seahorse_action_get_window (action));
+  SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
+  SeahorseCatalog *catalog;
+
+  catalog = seahorse_action_group_get_catalog (actions);
+  seahorse_keyserver_search_show (GTK_WINDOW (catalog));
+  g_clear_object (&catalog);
 }
 
 static void
-on_remote_sync (GtkAction* action,
+on_remote_sync (GSimpleAction *action,
+                GVariant *param,
                 gpointer user_data)
 {
-	SeahorseActions *actions = SEAHORSE_ACTIONS (user_data);
-	SeahorseGpgmeKeyring *keyring;
-	SeahorseCatalog *catalog;
-	GList *objects = NULL;
-	GList *keys = NULL;
-	GList *l;
+  SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
+  SeahorseGpgmeKeyring *keyring;
+  SeahorseCatalog *catalog;
+  GList *objects = NULL;
+  GList *keys = NULL;
+  GList *l;
 
-	catalog = seahorse_actions_get_catalog (actions);
-	if (catalog != NULL) {
-		objects = seahorse_catalog_get_selected_objects (catalog);
-		for (l = objects; l != NULL; l = g_list_next (l)) {
-			if (SEAHORSE_PGP_IS_KEY (l->data))
-				keys = g_list_prepend (keys, l->data);
-		}
-		g_list_free (objects);
-	}
-	g_object_unref (catalog);
+  catalog = seahorse_action_group_get_catalog (actions);
+  if (catalog != NULL) {
+    objects = seahorse_catalog_get_selected_objects (catalog);
+    for (l = objects; l != NULL; l = g_list_next (l)) {
+      if (SEAHORSE_PGP_IS_KEY (l->data))
+        keys = g_list_prepend (keys, l->data);
+    }
+    g_list_free (objects);
+  }
+  g_object_unref (catalog);
 
-	if (keys == NULL) {
-		keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-		keys = gcr_collection_get_objects (GCR_COLLECTION (keyring));
-	}
+  if (keys == NULL) {
+    keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+    keys = gcr_collection_get_objects (GCR_COLLECTION (keyring));
+  }
 
-	seahorse_keyserver_sync_show (keys, seahorse_action_get_window (action));
-	g_list_free (keys);
+  seahorse_keyserver_sync_show (keys, GTK_WINDOW (catalog));
+  g_list_free (keys);
 }
-
-static const GtkActionEntry FIND_ACTIONS[] = {
-	{ "remote-find", GTK_STOCK_FIND, N_("_Find Remote Keys…"), "",
-	  N_("Search for keys on a key server"), G_CALLBACK (on_remote_find) },
-};
-
-static const GtkActionEntry SYNC_ACTIONS[] = {
-	{ "remote-sync", GTK_STOCK_REFRESH, N_("_Sync and Publish Keys…"), "",
-	  N_("Publish and/or synchronize your keys with those online."), G_CALLBACK (on_remote_sync) }
-};
 
 #endif /* WITH_KEYSERVER */
 
 static void
+on_pgp_generate_key (GSimpleAction *action,
+                     GVariant *param,
+                     gpointer user_data)
+{
+  SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
+  SeahorseGpgmeKeyring* keyring;
+  SeahorseCatalog *catalog;
+
+  keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+  g_return_if_fail (keyring != NULL);
+
+  catalog = seahorse_action_group_get_catalog (actions);
+  seahorse_gpgme_generate_show (keyring,
+                                GTK_WINDOW (catalog),
+                                NULL, NULL, NULL);
+  g_clear_object (&catalog);
+}
+
+static const GActionEntry ACTION_ENTRIES[] = {
+    { "pgp-generate-key", on_pgp_generate_key },
+#ifdef WITH_KEYSERVER
+    { "remote-sync",      on_remote_sync },
+    { "remote-find",      on_remote_find }
+#endif /* WITH_KEYSERVER */
+};
+
+static void
 seahorse_pgp_backend_actions_init (SeahorsePgpBackendActions *self)
 {
-#ifdef WITH_KEYSERVER
-	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
-	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, FIND_ACTIONS,
-	                              G_N_ELEMENTS (FIND_ACTIONS), NULL);
-	gtk_action_group_add_actions (actions, SYNC_ACTIONS,
-	                              G_N_ELEMENTS (SYNC_ACTIONS), self);
-	seahorse_actions_register_definition (SEAHORSE_ACTIONS (self), BACKEND_DEFINITION);
-#endif
+    GActionMap *action_map = G_ACTION_MAP (self);
+
+    g_action_map_add_action_entries (action_map,
+                                     ACTION_ENTRIES,
+                                     G_N_ELEMENTS (ACTION_ENTRIES),
+                                     self);
 }
 
 static void
@@ -140,22 +149,22 @@ seahorse_pgp_backend_actions_class_init (SeahorsePgpBackendActionsClass *klass)
 
 }
 
-GtkActionGroup *
+SeahorseActionGroup *
 seahorse_pgp_backend_actions_instance (void)
 {
-	static GtkActionGroup *actions = NULL;
+    static SeahorseActionGroup *actions = NULL;
 
-	if (actions == NULL) {
-		actions = g_object_new (SEAHORSE_PGP_TYPE_BACKEND_ACTIONS,
-		                        "name", "pgp-backend",
-		                        NULL);
-		g_object_add_weak_pointer (G_OBJECT (actions),
-		                           (gpointer *)&actions);
-	} else {
-		g_object_ref (actions);
-	}
+    if (actions == NULL) {
+        actions = g_object_new (SEAHORSE_PGP_TYPE_BACKEND_ACTIONS,
+                                "prefix", "pgp",
+                                NULL);
+        g_object_add_weak_pointer (G_OBJECT (actions),
+                                   (gpointer *)&actions);
+    } else {
+        g_object_ref (actions);
+    }
 
-	return actions;
+    return actions;
 }
 
 GType   seahorse_gpgme_key_actions_get_type       (void) G_GNUC_CONST;
@@ -167,24 +176,18 @@ GType   seahorse_gpgme_key_actions_get_type       (void) G_GNUC_CONST;
 #define seahorse_gpgme_key_actions_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_ACTIONS, SeahorseGpgmeKeyActionsClass))
 
 typedef struct {
-	SeahorseActions parent_instance;
+    SeahorseActionGroup parent_instance;
 } SeahorseGpgmeKeyActions;
 
 typedef struct {
-	SeahorseActionsClass parent_class;
+    SeahorseActionGroupClass parent_class;
 } SeahorseGpgmeKeyActionsClass;
 
-G_DEFINE_TYPE (SeahorseGpgmeKeyActions, seahorse_gpgme_key_actions, SEAHORSE_TYPE_ACTIONS);
+G_DEFINE_TYPE (SeahorseGpgmeKeyActions, seahorse_gpgme_key_actions, SEAHORSE_TYPE_ACTION_GROUP);
 
 static void
 seahorse_gpgme_key_actions_init (SeahorseGpgmeKeyActions *self)
 {
-#ifdef WITH_KEYSERVER
-	GtkActionGroup *actions = GTK_ACTION_GROUP (self);
-	gtk_action_group_set_translation_domain (actions, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (actions, SYNC_ACTIONS,
-	                              G_N_ELEMENTS (SYNC_ACTIONS), NULL);
-#endif
 }
 
 static void
@@ -193,20 +196,20 @@ seahorse_gpgme_key_actions_class_init (SeahorseGpgmeKeyActionsClass *klass)
 
 }
 
-GtkActionGroup *
+SeahorseActionGroup *
 seahorse_gpgme_key_actions_instance (void)
 {
-	static GtkActionGroup *actions = NULL;
+    static SeahorseActionGroup *actions = NULL;
 
-	if (actions == NULL) {
-		actions = g_object_new (SEAHORSE_TYPE_GPGME_KEY_ACTIONS,
-		                        "name", "gpgme-key",
-		                        NULL);
-		g_object_add_weak_pointer (G_OBJECT (actions),
-		                           (gpointer *)&actions);
-	} else {
-		g_object_ref (actions);
-	}
+    if (actions == NULL) {
+        actions = g_object_new (SEAHORSE_TYPE_GPGME_KEY_ACTIONS,
+                                "prefix", "gpgme",
+                                NULL);
+        g_object_add_weak_pointer (G_OBJECT (actions),
+                                   (gpointer *)&actions);
+    } else {
+        g_object_ref (actions);
+    }
 
-	return actions;
+    return actions;
 }

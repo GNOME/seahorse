@@ -49,6 +49,7 @@ static SeahorsePkcs11Backend *pkcs11_backend = NULL;
 
 struct _SeahorsePkcs11Backend {
 	GObject parent;
+	SeahorseActionGroup *actions;
 	GList *tokens;
 	GList *blacklist;
 	gboolean loaded;
@@ -65,6 +66,13 @@ static const char *token_blacklist[] = {
 	NULL
 };
 
+static void
+on_generate_activate (GSimpleAction *action, GVariant *param, gpointer user_data);
+
+static const GActionEntry ACTION_ENTRIES[] = {
+    { "pkcs11-generate-key", on_generate_activate  }
+};
+
 static void         seahorse_pkcs11_backend_iface            (SeahorseBackendIface *iface);
 
 static void         seahorse_pkcs11_backend_collection_init  (GcrCollectionIface *iface);
@@ -73,6 +81,18 @@ G_DEFINE_TYPE_WITH_CODE (SeahorsePkcs11Backend, seahorse_pkcs11_backend, G_TYPE_
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_pkcs11_backend_collection_init)
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_pkcs11_backend_iface);
 );
+
+static void
+init_actions (SeahorsePkcs11Backend *self)
+{
+    self->actions = g_object_new (SEAHORSE_TYPE_ACTION_GROUP,
+                                  "prefix", "pkcs11",
+                                  NULL);
+    g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
+                                     ACTION_ENTRIES,
+                                     G_N_ELEMENTS (ACTION_ENTRIES),
+                                     self->actions);
+}
 
 static void
 seahorse_pkcs11_backend_init (SeahorsePkcs11Backend *self)
@@ -93,7 +113,7 @@ seahorse_pkcs11_backend_init (SeahorsePkcs11Backend *self)
 		self->blacklist = g_list_prepend (self->blacklist, uri);
 	}
 
-	seahorse_pkcs11_generate_register ();
+    init_actions (self);
 }
 
 static gboolean
@@ -201,10 +221,10 @@ seahorse_pkcs11_backend_get_loaded (SeahorseBackend *backend)
 	return SEAHORSE_PKCS11_BACKEND (backend)->loaded;
 }
 
-static GtkActionGroup *
+static SeahorseActionGroup *
 seahorse_pkcs11_backend_get_actions (SeahorseBackend *backend)
 {
-	return NULL;
+    return g_object_ref (SEAHORSE_PKCS11_BACKEND (backend)->actions);
 }
 
 static void
@@ -254,6 +274,7 @@ seahorse_pkcs11_backend_finalize (GObject *obj)
 	SeahorsePkcs11Backend *self = SEAHORSE_PKCS11_BACKEND (obj);
 
 	g_list_free_full (self->blacklist, (GDestroyNotify)gck_uri_data_free);
+    g_clear_object (&self->actions);
 	g_assert (self->tokens == NULL);
 	g_return_if_fail (pkcs11_backend == self);
 	pkcs11_backend = NULL;
@@ -403,4 +424,20 @@ seahorse_pkcs11_backend_get_writable_tokens (SeahorsePkcs11Backend *self,
 	return gcr_filter_collection_new_with_callback (GCR_COLLECTION (self),
 	                                                on_filter_writable,
 	                                                mechanism, NULL);
+}
+
+static void
+on_generate_activate (GSimpleAction *action,
+                      GVariant *param,
+                      gpointer user_data)
+{
+    SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
+    SeahorseCatalog *catalog;
+    SeahorsePkcs11Generate *dialog;
+
+    catalog = seahorse_action_group_get_catalog (actions);
+    dialog = seahorse_pkcs11_generate_new (GTK_WINDOW (catalog));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (GTK_WIDGET (dialog));
+    g_clear_object (&catalog);
 }
