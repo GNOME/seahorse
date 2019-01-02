@@ -30,27 +30,8 @@
 G_BEGIN_DECLS
 
 
-#define SEAHORSE_TYPE_KEYSERVER_RESULTS              (seahorse_keyserver_results_get_type ())
-#define SEAHORSE_KEYSERVER_RESULTS(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResults))
-#define SEAHORSE_KEYSERVER_RESULTS_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResultsClass))
-#define SEAHORSE_IS_KEYSERVER_RESULTS(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_KEYSERVER_RESULTS))
-#define SEAHORSE_IS_KEYSERVER_RESULTS_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_KEYSERVER_RESULTS))
-#define SEAHORSE_KEYSERVER_RESULTS_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_KEYSERVER_RESULTS, SeahorseKeyserverResultsClass))
-
-typedef struct _SeahorseKeyserverResults SeahorseKeyserverResults;
-typedef struct _SeahorseKeyserverResultsClass SeahorseKeyserverResultsClass;
-typedef struct _SeahorseKeyserverResultsPrivate SeahorseKeyserverResultsPrivate;
-
-struct _SeahorseKeyserverResults {
-	SeahorseCatalog parent_instance;
-	SeahorseKeyserverResultsPrivate *pv;
-};
-
-struct _SeahorseKeyserverResultsClass {
-	SeahorseCatalogClass parent_class;
-};
-
-GType            seahorse_keyserver_results_get_type         (void);
+#define SEAHORSE_TYPE_KEYSERVER_RESULTS (seahorse_keyserver_results_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseKeyserverResults, seahorse_keyserver_results, SEAHORSE, KEYSERVER_RESULTS, GtkDialog)
 
 void             seahorse_keyserver_results_show             (const gchar *search_text, GtkWindow *parent);
 
