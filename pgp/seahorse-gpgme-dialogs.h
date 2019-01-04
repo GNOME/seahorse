@@ -21,9 +21,8 @@
 /*
  * Various UI elements and dialogs used in pgp component.
  */
- 
-#ifndef __SEAHORSE_GPGME_DIALOGS_H__
-#define __SEAHORSE_GPGME_DIALOGS_H__
+
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -75,8 +74,6 @@ void            seahorse_gpgme_revoke_new           (SeahorseGpgmeSubkey *subkey
 gboolean        seahorse_gpgme_photo_add            (SeahorseGpgmeKey *pkey, 
                                                      GtkWindow *parent,
                                                      const gchar *path);
-                                         
+
 gboolean        seahorse_gpgme_photo_delete         (SeahorseGpgmePhoto *photo,
                                                      GtkWindow *parent);
-
-#endif /* __SEAHORSE_GPGME_DIALOGS_H__ */

@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_GPG_OP_H__
-#define __SEAHORSE_GPG_OP_H__
+#pragma once
 
 #include "config.h"
 
@@ -31,5 +30,3 @@ gpgme_error_t seahorse_gpg_op_export_secret  (gpgme_ctx_t ctx,
 gpgme_error_t seahorse_gpg_op_num_uids       (gpgme_ctx_t ctx, 
                                               const char *pattern,
                                               guint *number);
-
-#endif /* __SEAHORSE_GPG_OP_H__ */

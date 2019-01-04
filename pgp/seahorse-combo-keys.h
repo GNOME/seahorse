@@ -24,8 +24,7 @@
  * - Gets its list of keys from a SeahorseSet.
  */
 
-#ifndef __SEAHORSE_COMBO_KEYS_H__
-#define __SEAHORSE_COMBO_KEYS_H__
+#pragma once
 
 #include "seahorse-pgp-key.h"
 
@@ -45,5 +44,3 @@ void                        seahorse_combo_keys_set_active          (GtkComboBox
 SeahorsePgpKey *            seahorse_combo_keys_get_active          (GtkComboBox *combo);
 
 const gchar *               seahorse_combo_keys_get_active_id       (GtkComboBox *combo);
-
-#endif /* __SEAHORSE_COMBO_KEYS_H__ */

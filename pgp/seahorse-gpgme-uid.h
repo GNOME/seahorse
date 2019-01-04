@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_GPGME_UID_H__
-#define __SEAHORSE_GPGME_UID_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -77,5 +76,3 @@ gchar*              seahorse_gpgme_uid_calc_markup          (gpgme_user_id_t use
 
 gboolean            seahorse_gpgme_uid_is_same              (SeahorseGpgmeUid *self,
                                                              gpgme_user_id_t userid);
-
-#endif /* __SEAHORSE_GPGME_UID_H__ */

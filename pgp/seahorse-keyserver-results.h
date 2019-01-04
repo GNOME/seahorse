@@ -19,8 +19,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_KEYSERVER_RESULTS_H__
-#define __SEAHORSE_KEYSERVER_RESULTS_H__
+#pragma once
 
 #include <glib.h>
 #include <glib-object.h>
@@ -59,5 +58,3 @@ const gchar*     seahorse_keyserver_results_get_search       (SeahorseKeyserverR
 
 
 G_END_DECLS
-
-#endif

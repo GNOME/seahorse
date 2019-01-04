@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_GPGME_SUBKEY_H__
-#define __SEAHORSE_GPGME_SUBKEY_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -57,5 +56,3 @@ gpgme_subkey_t        seahorse_gpgme_subkey_get_subkey        (SeahorseGpgmeSubk
 
 void                  seahorse_gpgme_subkey_set_subkey        (SeahorseGpgmeSubkey *self,
                                                                gpgme_subkey_t subkey);
-
-#endif /* __SEAHORSE_GPGME_SUBKEY_H__ */

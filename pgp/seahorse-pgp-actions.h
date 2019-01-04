@@ -19,13 +19,10 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_PGP_ACTIONS_H__
-#define __SEAHORSE_PGP_ACTIONS_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
 GtkActionGroup *      seahorse_pgp_backend_actions_instance    (void);
 
 GtkActionGroup *      seahorse_gpgme_key_actions_instance      (void);
-
-#endif

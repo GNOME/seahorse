@@ -22,9 +22,8 @@
  * A gpgme_data_t implementation which maps to a gio handle.
  * Allows for accessing data on remote machines (ie: smb, sftp)
  */
- 
-#ifndef __SEAHORSE_GPGME_IO__
-#define __SEAHORSE_GPGME_IO__
+
+#pragma once
 
 #include <gpgme.h>
 #include <gio/gio.h>
@@ -45,5 +44,3 @@ void                seahorse_gpgme_data_release      (gpgme_data_t data);
 int                 seahorse_gpgme_data_write_all    (gpgme_data_t data, const void* buffer, size_t len);
 
 gpgme_data_t        seahorse_gpgme_data_new_from_mem (const char *buffer, size_t size, gboolean copy);
-
-#endif /* __SEAHORSE_GPGME_IO__ */

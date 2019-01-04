@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_GPGME_PHOTO_H__
-#define __SEAHORSE_GPGME_PHOTO_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -59,5 +58,3 @@ guint               seahorse_gpgme_photo_get_index       (SeahorseGpgmePhoto *se
 
 void                seahorse_gpgme_photo_set_index       (SeahorseGpgmePhoto *self,
                                                           guint index);
-
-#endif /* __SEAHORSE_GPGME_PHOTO_H__ */

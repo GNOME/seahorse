@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_DNS_SD_H__
-#define __SEAHORSE_DNS_SD_H__
+#pragma once
 
 #include <glib.h>
 #include <glib-object.h>
@@ -77,5 +76,3 @@ const gchar*                seahorse_discovery_get_uri   (SeahorseDiscovery *ssd
 
 gchar **                    seahorse_discovery_get_uris  (SeahorseDiscovery *ssd,
                                                           const gchar **services);
-
-#endif /* __SEAHORSE_DISCOVERY_H__ */

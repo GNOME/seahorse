@@ -20,8 +20,7 @@
  * Author: Stef Walter <stefw@collabora.co.uk>
  */
 
-#ifndef __SEAHORSE_GPGME_SECRET_DELETER_H__
-#define __SEAHORSE_GPGME_SECRET_DELETER_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -37,5 +36,3 @@ typedef struct _SeahorseGpgmeSecretDeleter SeahorseGpgmeSecretDeleter;
 GType              seahorse_gpgme_secret_deleter_get_type   (void) G_GNUC_CONST;
 
 SeahorseDeleter *  seahorse_gpgme_secret_deleter_new        (SeahorseGpgmeKey *key);
-
-#endif /* __SEAHORSE_GPGME_SECRET_DELETER_H__ */

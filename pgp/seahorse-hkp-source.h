@@ -24,9 +24,8 @@
  * - Adds found keys to SeahorseContext. 
  * - Used by SeahorseServiceDiscovery for retrieving shared keys.
  */
- 
-#ifndef __SEAHORSE_HKP_SOURCE_H__
-#define __SEAHORSE_HKP_SOURCE_H__
+
+#pragma once
 
 #include "config.h"
 #include "seahorse-server-source.h"
@@ -61,5 +60,3 @@ SeahorseHKPSource*    seahorse_hkp_source_new      (const gchar *uri,
 gboolean              seahorse_hkp_is_valid_uri    (const gchar *uri);
 
 #endif /* WITH_HKP */
-
-#endif /* __SEAHORSE_HKP_SOURCE_H__ */

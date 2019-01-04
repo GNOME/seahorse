@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_PGP_PHOTO_H__
-#define __SEAHORSE_PGP_PHOTO_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -51,5 +50,3 @@ GdkPixbuf*          seahorse_pgp_photo_get_pixbuf        (SeahorsePgpPhoto *self
 
 void                seahorse_pgp_photo_set_pixbuf        (SeahorsePgpPhoto *self,
                                                           GdkPixbuf *pixbuf);
-
-#endif /* __SEAHORSE_PGP_PHOTO_H__ */

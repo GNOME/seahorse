@@ -35,9 +35,8 @@
  *   uri: (gchar*) Only for remote key sources. The full URI of the keyserver 
  *        being used. 
  */
- 
-#ifndef __SEAHORSE_SERVER_SOURCE_H__
-#define __SEAHORSE_SERVER_SOURCE_H__
+
+#pragma once
 
 #include "seahorse-pgp-key.h"
 
@@ -130,5 +129,3 @@ gpointer               seahorse_server_source_export_finish    (SeahorseServerSo
                                                                 GAsyncResult *result,
                                                                 gsize *size,
                                                                 GError **error);
-
-#endif /* __SEAHORSE_SERVER_SOURCE_H__ */

@@ -23,9 +23,8 @@
  * - Derived from SeahorseServerSource.
  * - Adds found keys to SeahorseContext. 
  */
- 
-#ifndef __SEAHORSE_LDAP_SOURCE_H__
-#define __SEAHORSE_LDAP_SOURCE_H__
+
+#pragma once
 
 #include "seahorse-server-source.h"
 
@@ -59,5 +58,3 @@ SeahorseLDAPSource*   seahorse_ldap_source_new     (const gchar *uri,
 gboolean              seahorse_ldap_is_valid_uri   (const gchar *uri);
 
 #endif /* WITH_LDAP */
-
-#endif /* __SEAHORSE_SERVER_SOURCE_H__ */

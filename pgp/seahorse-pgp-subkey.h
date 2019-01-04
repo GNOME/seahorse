@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_PGP_SUBKEY_H__
-#define __SEAHORSE_PGP_SUBKEY_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -99,7 +98,4 @@ const gchar*        seahorse_pgp_subkey_get_fingerprint   (SeahorsePgpSubkey *se
 void                seahorse_pgp_subkey_set_fingerprint   (SeahorsePgpSubkey *self,
                                                            const gchar *description);
 
-gchar*              seahorse_pgp_subkey_calc_fingerprint  (const gchar *raw_fingerprint); 
-
-
-#endif /* __SEAHORSE_PGP_SUBKEY_H__ */
+gchar*              seahorse_pgp_subkey_calc_fingerprint  (const gchar *raw_fingerprint);

@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_GPGME_KEY_OP_H__
-#define __SEAHORSE_GPGME_KEY_OP_H__
+#pragma once
 
 #include <glib.h>
 #include <gpgme.h>
@@ -170,5 +169,3 @@ gpgme_error_t         seahorse_gpgme_key_op_photo_delete     (SeahorseGpgmePhoto
 gpgme_error_t         seahorse_gpgme_key_op_photos_load      (SeahorseGpgmeKey *key);
 
 gpgme_error_t         seahorse_gpgme_key_op_photo_primary    (SeahorseGpgmePhoto *photo);
-
-#endif /* __SEAHORSE_GPGME_KEY_OP_H__ */

@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_PGP_SIGNATURE_H__
-#define __SEAHORSE_PGP_SIGNATURE_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -60,5 +59,3 @@ void                   seahorse_pgp_signature_set_flags      (SeahorsePgpSignatu
                                                               guint flags);
 
 guint                  seahorse_pgp_signature_get_sigtype    (SeahorsePgpSignature *self);
-
-#endif /* __SEAHORSE_PGP_SIGNATURE_H__ */

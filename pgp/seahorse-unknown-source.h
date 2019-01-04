@@ -18,8 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_UNKNOWN_SOURCE_H__
-#define __SEAHORSE_UNKNOWN_SOURCE_H__
+#pragma once
 
 #include "seahorse-common.h"
 
@@ -41,5 +40,3 @@ SeahorseUnknownSource*   seahorse_unknown_source_new           (void);
 SeahorseObject*          seahorse_unknown_source_add_object    (SeahorseUnknownSource *self,
                                                                 const gchar *keyid,
                                                                 GCancellable *cancellable);
-
-#endif /* __SEAHORSE_UNKNOWN_SOURCE_H__ */

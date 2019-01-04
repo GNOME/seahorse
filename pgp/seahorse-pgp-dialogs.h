@@ -21,9 +21,8 @@
 /*
  * Various UI elements and dialogs used in pgp component.
  */
- 
-#ifndef __SEAHORSE_PGP_DIALOGS_H__
-#define __SEAHORSE_PGP_DIALOGS_H__
+
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -33,5 +32,3 @@ SeahorsePgpKey* seahorse_signer_get                 (GtkWindow *parent);
 
 GtkWindow *     seahorse_pgp_key_properties_show    (SeahorsePgpKey *pkey,
                                                      GtkWindow *parent);
-
-#endif /* __SEAHORSE_PGP_DIALOGS_H__ */

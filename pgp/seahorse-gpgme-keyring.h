@@ -33,8 +33,7 @@
  *         keyring. (ie: SEAHORSE_LOCATION_LOCAL, SEAHORSE_LOCATION_REMOTE)
  */
 
-#ifndef __SEAHORSE_GPGME_KEYRING_H__
-#define __SEAHORSE_GPGME_KEYRING_H__
+#pragma once
 
 #include <gpgme.h>
 
@@ -85,5 +84,3 @@ void                   seahorse_gpgme_keyring_import_async   (SeahorseGpgmeKeyri
 GList *                seahorse_gpgme_keyring_import_finish  (SeahorseGpgmeKeyring *self,
                                                               GAsyncResult *result,
                                                               GError **error);
-
-#endif /* __SEAHORSE_GPGME_KEYRING_H__ */

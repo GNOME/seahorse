@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_KEYSERVER_SYNC_H__
-#define __SEAHORSE_KEYSERVER_SYNC_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -27,5 +26,3 @@ void        seahorse_keyserver_sync             (GList *keys);
 
 GtkWindow*  seahorse_keyserver_sync_show        (GList *keys,
                                                  GtkWindow *parent);
-
-#endif

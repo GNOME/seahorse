@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_PGP_KEY_H__
-#define __SEAHORSE_PGP_KEY_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -104,5 +103,3 @@ guint             seahorse_pgp_keyid_hash               (gconstpointer v);
 
 gboolean          seahorse_pgp_keyid_equal              (gconstpointer v1,
                                                          gconstpointer v2);
-
-#endif /* __SEAHORSE_KEY_H__ */

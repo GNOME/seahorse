@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_GPGME_KEY_H__
-#define __SEAHORSE_GPGME_KEY_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -74,5 +73,3 @@ void              seahorse_gpgme_key_refresh_matching     (gpgme_key_t key);
 SeahorseValidity  seahorse_gpgme_key_get_validity         (SeahorseGpgmeKey *self);
 
 SeahorseValidity  seahorse_gpgme_key_get_trust            (SeahorseGpgmeKey *self);
-
-#endif /* __SEAHORSE_KEY_H__ */

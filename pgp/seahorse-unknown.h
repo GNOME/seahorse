@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_UNKNOWN_H__
-#define __SEAHORSE_UNKNOWN_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -51,5 +50,3 @@ GType                seahorse_unknown_get_type         (void);
 SeahorseUnknown*     seahorse_unknown_new              (SeahorseUnknownSource *usrc,
                                                         const gchar *keyid,
                                                         const gchar *display);
-
-#endif /* __SEAHORSE_UNKNOWN_H__ */

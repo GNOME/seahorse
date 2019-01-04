@@ -18,8 +18,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_TRANSFER_H__
-#define __SEAHORSE_TRANSFER_H__
+#pragma once
 
 #include "seahorse-common.h"
 
@@ -41,5 +40,3 @@ void            seahorse_transfer_keys_async    (SeahorsePlace *from,
 
 gboolean        seahorse_transfer_finish        (GAsyncResult *result,
                                                  GError **error);
-
-#endif /* __SEAHORSE_TRANSFER_H__ */

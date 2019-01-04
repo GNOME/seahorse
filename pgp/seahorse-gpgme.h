@@ -19,8 +19,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SEAHORSEGPGME_H_
-#define SEAHORSEGPGME_H_
+#pragma once
 
 #include <glib.h>
 #include <glib-object.h>
@@ -60,5 +59,3 @@ gpgme_error_t      seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table
 
 GSource *          seahorse_gpgme_gsource_new       (gpgme_ctx_t gctx,
                                                      GCancellable *cancellable);
-
-#endif /* SEAHORSEGPGME_H_ */

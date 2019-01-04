@@ -17,8 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEAHORSE_PGP_UID_H__
-#define __SEAHORSE_PGP_UID_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -92,5 +91,3 @@ gchar*            seahorse_pgp_uid_calc_markup          (const gchar *name,
 
 GQuark            seahorse_pgp_uid_calc_id              (GQuark key_id,
                                                          guint index);
-
-#endif /* __SEAHORSE_PGP_UID_H__ */

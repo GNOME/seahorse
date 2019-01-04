@@ -19,8 +19,7 @@
  * Author: Stef Walter <stefw@collabora.co.uk>
  */
 
-#ifndef __SEAHORSE_GPGME_EXPORTER_H__
-#define __SEAHORSE_GPGME_EXPORTER_H__
+#pragma once
 
 #include <glib-object.h>
 
@@ -40,6 +39,3 @@ SeahorseExporter *        seahorse_gpgme_exporter_new          (GObject *object,
 
 SeahorseExporter *        seahorse_gpgme_exporter_new_multiple (GList *keys,
                                                                 gboolean armor);
-
-
-#endif /* __SEAHORSE_GPGME_EXPORTER_H__ */
