@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.22"/>
-      <object class="GtkBox" id="key-manager">
+  <template class="SeahorseKeyManager" parent="SeahorseCatalog">
+    <property name="title" translatable="yes">Passwords and Keys</property>
+    <child>
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkBox" id="menu-placeholder">
+          <object class="GtkBox" id="menu_placeholder">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <property name="can_focus">False</property>
@@ -21,11 +24,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkPaned" id="sidebar-panes">
+          <object class="GtkPaned" id="sidebar_panes">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <object class="GtkBox" id="sidebar-area">
+              <object class="GtkBox" id="sidebar_area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -83,7 +86,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <child>
-                      <object class="GtkTreeView" id="key-list">
+                      <object class="GtkTreeView" id="key_list">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="margin_left">12</property>
@@ -190,7 +193,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="import-button">
+                              <object class="GtkButton" id="import_button">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="can_default">True</property>
@@ -256,7 +259,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="new-button">
+                              <object class="GtkButton" id="new_button">
                                 <property name="label">gtk-new</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -294,4 +297,6 @@
           </packing>
         </child>
       </object>
+    </child>
+  </template>
 </interface>

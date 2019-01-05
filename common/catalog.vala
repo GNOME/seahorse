@@ -26,7 +26,6 @@ public abstract class Catalog : Gtk.ApplicationWindow {
 	/* Set by the derived classes */
 	public string ui_name { construct; get; }
 
-	private Gtk.Builder _builder;
 	private Gtk.UIManager _ui_manager;
 	private GLib.GenericSet<Gtk.ActionGroup> _actions;
 	private Gtk.Action _edit_delete;
@@ -40,26 +39,15 @@ public abstract class Catalog : Gtk.ApplicationWindow {
 	public abstract GLib.List<weak Backend> get_backends();
 	public abstract Place? get_focused_place();
 	public abstract GLib.List<GLib.Object> get_selected_objects();
+	protected abstract void add_menu(Gtk.Widget menu);
 
 	construct {
-		this._builder = Util.load_built_contents(this, this.ui_name);
-
 		this._actions = new GLib.GenericSet<Gtk.ActionGroup>(GLib.direct_hash, GLib.direct_equal);
 		this._ui_manager = new Gtk.UIManager();
 
 		this._ui_manager.add_widget.connect((widget) => {
-			unowned string? name;
 			if (widget is Gtk.MenuBar)
-				name = "menu-placeholder";
-			else
-				name = null;
-			var holder = this._builder.get_object(name);
-			if (holder != null) {
-				((Gtk.Container)holder).add(widget);
-				widget.show();
-			} else {
-				GLib.warning ("no place holder found for: %s", name);
-			}
+				add_menu(widget);
 		});
 
 		this._ui_manager.pre_activate.connect((action) => {
@@ -154,14 +142,6 @@ public abstract class Catalog : Gtk.ApplicationWindow {
 		this._selection_actions = lookup_actions_for_objects(objects);
 		foreach (var group in this._selection_actions)
 			group.visible = true;
-	}
-
-	public unowned Gtk.Builder get_builder() {
-		return this._builder;
-	}
-
-	public unowned T? get_widget<T>(string name) {
-		return (T)this._builder.get_object(name);
 	}
 
 	public void ensure_updated() {

@@ -20,14 +20,30 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+[GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-key-manager.ui")]
 public class Seahorse.KeyManager : Catalog {
+
+    [GtkChild]
+    private Gtk.Container menu_placeholder;
+    [GtkChild]
+    private Gtk.TreeView key_list;
+    [GtkChild]
+    private Gtk.Paned sidebar_panes;
+    [GtkChild]
+    private Gtk.Button import_button;
+    [GtkChild]
+    private Gtk.Button new_button;
+    [GtkChild]
+    private Gtk.Button new_item_button;
+    [GtkChild]
+    private Gtk.SearchEntry filter_entry;
+    [GtkChild]
+    private Gtk.Container sidebar_area;
+    private Sidebar sidebar;
 
     private Gtk.ActionGroup view_actions;
     private Gtk.RadioAction show_action;
-    private Gtk.SearchEntry filter_entry;
-    private Sidebar sidebar;
 
-    private Gtk.TreeView view;
     private Gcr.Collection collection;
     private KeyManagerStore store;
 
@@ -72,22 +88,17 @@ public class Seahorse.KeyManager : Catalog {
                    | Gdk.EventMask.POINTER_MOTION_HINT_MASK
                    | Gdk.EventMask.BUTTON_PRESS_MASK
                    | Gdk.EventMask.BUTTON_RELEASE_MASK);
-        set_title(_("Passwords and Keys"));
 
         this.collection = setup_sidebar();
 
         // Init key list & selection settings
-        Gtk.Builder builder = get_builder();
-        this.view = (Gtk.TreeView) builder.get_object("key-list");
-        assert (this.view != null);
-
-        Gtk.TreeSelection selection = this.view.get_selection();
+        Gtk.TreeSelection selection = this.key_list.get_selection();
         selection.set_mode(Gtk.SelectionMode.MULTIPLE);
         selection.changed.connect(on_view_selection_changed);
-        this.view.realize();
+        this.key_list.realize();
 
         // Add new key store and associate it
-        this.store = new KeyManagerStore(this.collection, this.view, this.settings);
+        this.store = new KeyManagerStore(this.collection, this.key_list, this.settings);
 
         init_actions();
 
@@ -96,26 +107,25 @@ public class Seahorse.KeyManager : Catalog {
         on_item_filter_changed(this.settings, "item-filter");
 
         // first time signals
-        ((Gtk.Button) builder.get_object("import-button")).clicked.connect(on_keymanager_import_button);
-        ((Gtk.Button) builder.get_object("new-button")).clicked.connect(on_keymanager_new_button);
+        this.import_button.clicked.connect(on_keymanager_import_button);
+        this.new_button.clicked.connect(on_keymanager_new_button);
 
         // Flush all updates
         ensure_updated();
 
         // The toolbar
-        ((Gtk.Button) builder.get_object("new_item_button")).clicked.connect(on_keymanager_new_button);
-        this.filter_entry = (Gtk.SearchEntry) builder.get_object("filter_entry");
+        this.new_item_button.clicked.connect(on_keymanager_new_button);
         on_filter_changed(this.filter_entry);
 
         // For the filtering
         this.filter_entry.search_changed.connect(on_filter_changed);
-        this.view.start_interactive_search.connect(() => {
+        this.key_list.start_interactive_search.connect(() => {
             this.filter_entry.grab_focus();
             return false;
         });
 
         // Set focus to the current key list
-        this.view.grab_focus();
+        this.key_list.grab_focus();
         selection_changed();
 
         // To avoid flicker
@@ -129,9 +139,9 @@ public class Seahorse.KeyManager : Catalog {
         Gtk.drag_dest_set_target_list(this, targets);
 
         this.drag_data_received.connect(on_target_drag_data_received);
-        this.view.button_press_event.connect(on_keymanager_key_list_button_pressed);
-        this.view.row_activated.connect(on_keymanager_row_activated);
-        this.view.popup_menu.connect(on_keymanager_key_list_popup_menu);
+        this.key_list.button_press_event.connect(on_keymanager_key_list_button_pressed);
+        this.key_list.row_activated.connect(on_keymanager_row_activated);
+        this.key_list.popup_menu.connect(on_keymanager_key_list_popup_menu);
     }
 
     ~KeyManager() {
@@ -165,7 +175,11 @@ public class Seahorse.KeyManager : Catalog {
         Gtk.Clipboard clipboard = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY);
         clipboard.owner_change.connect((c, e) => update_clipboard_state(c, e, actions));
         update_clipboard_state(clipboard, null, actions);
+    }
 
+    protected override void add_menu(Gtk.Widget menu) {
+        this.menu_placeholder.add(menu);
+        menu.show();
     }
 
     private void on_view_selection_changed(Gtk.TreeSelection selection) {
@@ -177,11 +191,11 @@ public class Seahorse.KeyManager : Catalog {
         });
     }
 
-    private void on_keymanager_row_activated(Gtk.TreeView view, Gtk.TreePath? path, Gtk.TreeViewColumn column) {
+    private void on_keymanager_row_activated(Gtk.TreeView key_list, Gtk.TreePath? path, Gtk.TreeViewColumn column) {
         if (path == null)
             return;
 
-        GLib.Object obj = KeyManagerStore.get_object_from_path(view, path);
+        GLib.Object obj = KeyManagerStore.get_object_from_path(key_list, path);
         if (obj != null)
             show_properties(obj);
     }
@@ -362,7 +376,7 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     public override GLib.List<GLib.Object> get_selected_objects() {
-        return KeyManagerStore.get_selected_objects(this.view);
+        return KeyManagerStore.get_selected_objects(this.key_list);
     }
 
     public void set_focused_place(string target) {
@@ -393,23 +407,20 @@ public class Seahorse.KeyManager : Catalog {
         sidebar.hexpand = true;
 
         this.sidebar_width = this.settings.get_int("sidebar-width");
-        Gtk.Builder builder = get_builder();
 
-        Gtk.Paned panes = (Gtk.Paned) builder.get_object("sidebar-panes");
-        panes.position = this.sidebar_width;
-        panes.realize.connect(() =>   { panes.position = this.settings.get_int("sidebar-width"); });
-        panes.unrealize.connect(() => { this.settings.set_int("sidebar-width", panes.position);  });
+        this.sidebar_panes.position = this.sidebar_width;
+        this.sidebar_panes.realize.connect(() =>   { this.sidebar_panes.position = this.settings.get_int("sidebar-width"); });
+        this.sidebar_panes.unrealize.connect(() => { this.settings.set_int("sidebar-width", this.sidebar_panes.position);  });
 
-        panes.get_child1().set_size_request(50, -1);
-        panes.get_child2().set_size_request(150, -1);
+        this.sidebar_panes.get_child1().set_size_request(50, -1);
+        this.sidebar_panes.get_child2().set_size_request(150, -1);
 
         foreach (weak Backend backend in get_backends()) {
             if (backend.actions != null)
                 include_actions(backend.actions);
         }
 
-        Gtk.Container area = (Gtk.Container) builder.get_object("sidebar-area");
-        area.add(this.sidebar);
+        this.sidebar_area.add(this.sidebar);
         this.sidebar.show();
 
         Gtk.ActionGroup actions = new Gtk.ActionGroup("sidebar");
@@ -417,7 +428,7 @@ public class Seahorse.KeyManager : Catalog {
         actions.add_toggle_actions(SIDEBAR_ACTIONS, null);
         Gtk.Action action = actions.get_action("view-sidebar");
         this.settings.bind("sidebar-visible", action, "active", SettingsBindFlags.DEFAULT);
-        action.bind_property("active", area, "visible", BindingFlags.SYNC_CREATE);
+        action.bind_property("active", this.sidebar_area, "visible", BindingFlags.SYNC_CREATE);
         action.bind_property("active", this.sidebar, "combined", BindingFlags.INVERT_BOOLEAN | BindingFlags.SYNC_CREATE);
         include_actions(actions);
 
