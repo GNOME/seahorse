@@ -48,17 +48,14 @@ enum {
 static SeahorsePgpBackend *pgp_backend = NULL;
 
 struct _SeahorsePgpBackend {
-	GObject parent;
-	SeahorseGpgmeKeyring *keyring;
-	SeahorseDiscovery *discovery;
-	SeahorseUnknownSource *unknown;
-	GHashTable *remotes;
-	GtkActionGroup *actions;
-	gboolean loaded;
-};
+    GObject parent;
 
-struct _SeahorsePgpBackendClass {
-	GObjectClass parent_class;
+    SeahorseGpgmeKeyring *keyring;
+    SeahorseDiscovery *discovery;
+    SeahorseUnknownSource *unknown;
+    GHashTable *remotes;
+    GtkActionGroup *actions;
+    gboolean loaded;
 };
 
 static void         seahorse_pgp_backend_iface            (SeahorseBackendIface *iface);

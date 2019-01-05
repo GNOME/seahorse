@@ -20,8 +20,7 @@
  * Author: Stef Walter <stefw@collabora.co.uk>
  */
 
-#ifndef SEAHORSE_PGP_BACKEND_H_
-#define SEAHORSE_PGP_BACKEND_H_
+#pragma once
 
 #include <glib.h>
 #include <glib-object.h>
@@ -35,23 +34,14 @@
 
 G_BEGIN_DECLS
 
-#define SEAHORSE_PGP_NAME "openpgp"
-#define SEAHORSE_PGP_TYPE_STR SEAHORSE_PGP_NAME
-#define SEAHORSE_PGP g_quark_from_string (SEAHORSE_PGP_NAME)
+#define SEAHORSE_PGP_NAME      "openpgp"
+#define SEAHORSE_PGP_TYPE_STR  SEAHORSE_PGP_NAME
+#define SEAHORSE_PGP           g_quark_from_string (SEAHORSE_PGP_NAME)
 
 void       seahorse_pgp_backend_initialize    (void);
 
-#define SEAHORSE_PGP_TYPE_BACKEND            (seahorse_pgp_backend_get_type ())
-#define SEAHORSE_PGP_BACKEND(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_BACKEND, SeahorsePgpBackend))
-#define SEAHORSE_PGP_BACKEND_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_BACKEND, SeahorsePgpBackendClass))
-#define SEAHORSE_PGP_IS_BACKEND(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_BACKEND))
-#define SEAHORSE_PGP_IS_BACKEND_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_BACKEND))
-#define SEAHORSE_PGP_BACKEND_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_BACKEND, SeahorsePgpBackendClass))
-
-typedef struct _SeahorsePgpBackend SeahorsePgpBackend;
-typedef struct _SeahorsePgpBackendClass SeahorsePgpBackendClass;
-
-GType                  seahorse_pgp_backend_get_type             (void) G_GNUC_CONST;
+#define SEAHORSE_PGP_TYPE_BACKEND (seahorse_pgp_backend_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorsePgpBackend, seahorse_pgp_backend, SEAHORSE_PGP, BACKEND, GObject)
 
 SeahorsePgpBackend *   seahorse_pgp_backend_get                  (void);
 
@@ -113,5 +103,3 @@ GList*                 seahorse_pgp_backend_discover_keys        (SeahorsePgpBac
 
 
 G_END_DECLS
-
-#endif /*SEAHORSE_PGP_BACKEND_H_*/
