@@ -18,8 +18,8 @@ resources_src = gnome.compile_resources('seahorse-resources',
 
 # The appdata file
 i18n.merge_file(
-  input: 'seahorse.appdata.xml.in',
-  output: 'seahorse.appdata.xml',
+  input: 'org.gnome.seahorse.Application.appdata.xml.in',
+  output: 'org.gnome.seahorse.Application.appdata.xml',
   type: 'xml',
   po_dir: po_dir,
   install: true,
@@ -32,13 +32,13 @@ desktop_conf.set('bindir', bindir)
 
 # The desktop file
 configured_desktop_file = configure_file(
-  input: 'seahorse.desktop.in.in',
-  output: 'seahorse.desktop.in',
+  input: 'org.gnome.seahorse.Application.desktop.in.in',
+  output: 'org.gnome.seahorse.Application.desktop.in',
   configuration: desktop_conf,
 )
 i18n.merge_file(
   input: configured_desktop_file,
-  output: 'seahorse.desktop',
+  output: 'org.gnome.seahorse.Application.desktop',
   type: 'desktop',
   po_dir: po_dir,
   install: true,
