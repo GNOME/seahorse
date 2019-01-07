@@ -15,12 +15,12 @@ endforeach
 # special case for symbolic
 icon_subfolder = join_paths('hicolor', 'symbolic', 'apps')
 install_data(
-  join_paths(icon_subfolder, 'org.gnome.Seahorse-symbolic.svg'),
+  join_paths(icon_subfolder, 'org.gnome.seahorse.Application-symbolic.svg'),
   install_dir: join_paths(icons_install_dir, icon_subfolder),
 )
 icon_subfolder = join_paths('hicolor', 'scalable', 'apps')
 install_data(
-  join_paths(icon_subfolder, 'org.gnome.Seahorse.svg'),
+  join_paths(icon_subfolder, 'org.gnome.seahorse.Application.svg'),
   install_dir: join_paths(icons_install_dir, icon_subfolder),
 )
 
