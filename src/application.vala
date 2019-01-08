@@ -85,6 +85,7 @@ public class Seahorse.Application : Gtk.Application {
         set_accels_for_action ("app.help",        {"F1"});
         set_accels_for_action ("app.quit",        {"<control>Q"});
 
+        set_accels_for_action ("win.show-search", { "<control>F" });
         set_accels_for_action ("win.new-item",    { "<control>N" });
         set_accels_for_action ("win.import-file", { "<control>I" });
         set_accels_for_action ("win.copy",        { "<control>C" });

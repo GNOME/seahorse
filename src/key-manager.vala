@@ -34,6 +34,8 @@ public class Seahorse.KeyManager : Catalog {
 
     [GtkChild]
     private Gtk.MenuButton new_item_button;
+    [GtkChild]
+    private Gtk.ToggleButton show_search_button;
 
     [GtkChild]
     private Gtk.TreeView key_list;
@@ -49,6 +51,7 @@ public class Seahorse.KeyManager : Catalog {
 
     private const GLib.ActionEntry[] action_entries = {
          { "new-item",           on_new_item                                                     },
+         { "show-search",        on_show_search,                                                      },
          { "filter-items",       on_filter_items,              "s",                      "'any'" },
          { "focus-place",        on_focus_place,               "s",           "'secret-service'" },
          { "import-file",        on_import_file                                                  },
@@ -330,6 +333,10 @@ public class Seahorse.KeyManager : Catalog {
         // Update the store
         this.store.showfilter = KeyManagerStore.ShowFilter.from_string(filter_str);
         this.store.refilter();
+    }
+
+    private void on_show_search(SimpleAction action, Variant? param) {
+        this.show_search_button.active = true;
     }
 
     private void on_filter_items(SimpleAction action, Variant? param) {
