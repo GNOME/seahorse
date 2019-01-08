@@ -363,9 +363,6 @@ public class Seahorse.KeyManager : Catalog {
         this.sidebar_panes.realize.connect(() =>   { this.sidebar_panes.position = this.settings.get_int("sidebar-width"); });
         this.sidebar_panes.unrealize.connect(() => { this.settings.set_int("sidebar-width", this.sidebar_panes.position);  });
 
-        this.sidebar_panes.get_child1().set_size_request(50, -1);
-        this.sidebar_panes.get_child2().set_size_request(150, -1);
-
         foreach (weak Backend backend in get_backends()) {
             ActionGroup actions = backend.actions;
             actions.catalog = this;

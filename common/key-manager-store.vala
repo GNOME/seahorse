@@ -132,7 +132,8 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         // add the icon column
         Gtk.CellRendererPixbuf icon_renderer = new Gtk.CellRendererPixbuf();
         icon_renderer.stock_size = Gtk.IconSize.DND;
-        icon_renderer.ypad = 6;
+        icon_renderer.ypad = 12;
+        icon_renderer.xpad = 12;
         icon_renderer.yalign = 0.0f;
         Gtk.TreeViewColumn? col = new Gtk.TreeViewColumn.with_attributes ("", icon_renderer, "gicon", Column.ICON, null);
         col.set_resizable(false);
@@ -142,15 +143,16 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         col = new Gtk.TreeViewColumn();
 
         Gtk.CellRendererText text_renderer = new Gtk.CellRendererText();
-        text_renderer.ypad = 6;
+        text_renderer.ypad = 12;
         text_renderer.yalign = 0.0f;
+        text_renderer.width_chars = 30;
         text_renderer.ellipsize = Pango.EllipsizeMode.END;
         col.pack_start(text_renderer, true);
         col.set_attributes(text_renderer, "markup", Column.MARKUP, null);
 
         text_renderer = new Gtk.CellRendererText();
-        text_renderer.ypad = 6;
-        text_renderer.xpad = 3;
+        text_renderer.ypad = 12;
+        text_renderer.xpad = 12;
         text_renderer.yalign = 0.0f;
         text_renderer.xalign = 1.0f;
         text_renderer.scale = Pango.Scale.SMALL;
@@ -158,7 +160,6 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         col.pack_start(text_renderer, false);
         col.set_attributes(text_renderer, "markup", Column.DESCRIPTION, null);
         col.set_resizable(true);
-        col.set_expand(true);
         view.append_column(col);
         col.set_sort_column_id(Column.LABEL);
 

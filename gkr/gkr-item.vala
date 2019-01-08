@@ -87,17 +87,19 @@ public class Item : Secret.Item, Deletable, Viewable {
 		}
 	}
 
-	public string markup {
-		owned get {
-			ensure_display_info ();
-			var result = new GLib.StringBuilder("");
-			result.append(GLib.Markup.escape_text(this._info.label));
-			result.append("<span size='small' rise='0' foreground='#555555'>\n");
-			result.append(this._info.details);
-			result.append("</span>");
-			return result.str;
-		}
-	}
+    public string markup {
+        owned get {
+            ensure_display_info ();
+            var result = new StringBuilder("");
+            result.append(Markup.escape_text(this._info.label));
+            if (this._info.details != null && this._info.details != "") {
+                result.append("<span size='small' rise='0' foreground='#555555'>\n");
+                result.append(this._info.details);
+                result.append("</span>");
+            }
+            return result.str;
+        }
+    }
 
 	public Usage usage {
 		get { return Usage.CREDENTIALS; }
