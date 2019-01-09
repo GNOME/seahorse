@@ -29,7 +29,7 @@ public class Seahorse.KeyManager : Catalog {
     [GtkChild]
     private Gtk.Paned sidebar_panes;
     [GtkChild]
-    private Gtk.Container sidebar_area;
+    private Gtk.ScrolledWindow sidebar_area;
     private Sidebar sidebar;
 
     [GtkChild]

@@ -18,11 +18,9 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-public class Seahorse.Sidebar : Gtk.ScrolledWindow {
+public class Seahorse.Sidebar : Gtk.TreeView {
 
     private const int ACTION_BUTTON_XPAD = 6;
-
-    private Gtk.TreeView tree_view = new Gtk.TreeView();
 
     private Gtk.ListStore store = new Gtk.ListStore.newv(Column.types());
     private List<Backend> backends = new List<Backend>();
@@ -106,11 +104,7 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
     }
 
     public Sidebar() {
-        get_style_context().add_class("sidebar");
-
-        set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        set_shadow_type(Gtk.ShadowType.OUT);
-        get_style_context().set_junction_sides(Gtk.JunctionSides.RIGHT | Gtk.JunctionSides.LEFT);
+        /* get_style_context().set_junction_sides(Gtk.JunctionSides.RIGHT | Gtk.JunctionSides.LEFT); */
 
         // tree view
         Gtk.TreeViewColumn col = new Gtk.TreeViewColumn();
@@ -159,20 +153,18 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
         col.pack_start(this.action_cell_renderer, false);
         col.set_cell_data_func(this.action_cell_renderer, on_cell_renderer_action_icon);
         col.set_max_width(24);
-        this.tree_view.append_column(col);
+        append_column(col);
 
-        this.tree_view.set_headers_visible(false);
-        this.tree_view.set_tooltip_column(Column.TOOLTIP);
-        this.tree_view.set_search_column(Column.LABEL);
-        this.tree_view.set_model(this.store);
-        this.tree_view.popup_menu.connect(on_tree_view_popup_menu);
-        this.tree_view.button_press_event.connect(on_tree_view_button_press_event);
-        this.tree_view.motion_notify_event.connect(on_tree_view_motion_notify_event);
-        this.tree_view.button_release_event.connect(on_tree_view_button_release_event);
-        add(this.tree_view);
-        this.tree_view.show();
+        set_headers_visible(false);
+        set_tooltip_column(Column.TOOLTIP);
+        set_search_column(Column.LABEL);
+        set_model(this.store);
+        this.popup_menu.connect(on_popup_menu);
+        this.button_press_event.connect(on_button_press_event);
+        this.motion_notify_event.connect(on_motion_notify_event);
+        this.button_release_event.connect(on_button_release_event);
 
-        Gtk.TreeSelection selection = this.tree_view.get_selection();
+        Gtk.TreeSelection selection = get_selection();
         selection.set_mode(Gtk.SelectionMode.MULTIPLE);
         selection.set_select_function(on_tree_selection_validate);
         selection.changed.connect(() => update_objects_for_selection(selection));
@@ -418,7 +410,7 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
     private void update_objects_for_chosen(GenericSet<string?> chosen) {
         this.updating = true;
 
-        Gtk.TreeSelection selection = this.tree_view.get_selection();
+        Gtk.TreeSelection selection = get_selection();
 
         // Update the display
         Gtk.TreeIter iter;
@@ -682,9 +674,9 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
         }
     }
 
-    private bool on_tree_view_popup_menu(Gtk.Widget? widget) {
+    private bool on_popup_menu(Gtk.Widget? widget) {
         Gtk.TreePath? path;
-        this.tree_view.get_cursor(out path, null);
+        get_cursor(out path, null);
         if (path == null)
             return false;
 
@@ -728,12 +720,12 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
 
         path = null;
         Gtk.TreeViewColumn column;
-        if (this.tree_view.get_path_at_pos(x, y, out path, out column, null, null)) {
+        if (get_path_at_pos(x, y, out path, out column, null, null)) {
             Gtk.TreeIter iter;
             this.store.get_iter(out iter, path);
 
             int hseparator;
-            this.tree_view.style_get("horizontal-separator", out hseparator, null);
+            style_get("horizontal-separator", out hseparator, null);
 
             // Reload cell attributes for this particular row
             column.cell_set_cell_data(this.store, iter, false, false);
@@ -755,7 +747,7 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
         return false;
     }
 
-    private bool on_tree_view_motion_notify_event(Gtk.Widget? widget, Gdk.EventMotion event) {
+    private bool on_motion_notify_event(Gtk.Widget? widget, Gdk.EventMotion event) {
         Gtk.TreePath? path = null;
         if (over_action_button((int) event.x, (int) event.y, out path)) {
             update_action_buttons_take_path(path);
@@ -766,15 +758,15 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
         return false;
     }
 
-    private bool on_tree_view_button_press_event (Gtk.Widget? widget, Gdk.EventButton event) {
+    private bool on_button_press_event (Gtk.Widget? widget, Gdk.EventButton event) {
         if (event.button != 3 || event.type != Gdk.EventType.BUTTON_PRESS)
             return false;
 
         Gtk.TreePath? path;
-        if (!this.tree_view.get_path_at_pos((int) event.x, (int) event.y, out path, null, null, null))
+        if (!get_path_at_pos((int) event.x, (int) event.y, out path, null, null, null))
             return false;
 
-        this.tree_view.set_cursor(path, null, false);
+        set_cursor(path, null, false);
         Gtk.TreeIter iter;
         if (!this.store.get_iter(out iter, path))
             return false;
@@ -788,7 +780,7 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
         return true;
     }
 
-    private bool on_tree_view_button_release_event (Gtk.Widget? widget, Gdk.EventButton event) {
+    private bool on_button_release_event (Gtk.Widget? widget, Gdk.EventButton event) {
         if (event.type != Gdk.EventType.BUTTON_RELEASE)
             return true;
 
@@ -837,7 +829,7 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
         List<weak Gcr.Collection> places = this.objects.elements();
 
         Gtk.TreePath? path = null;
-        this.tree_view.get_cursor(out path, null);
+        get_cursor(out path, null);
         if (path != null) {
 
             Gtk.TreeIter iter;
@@ -864,7 +856,7 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
         Gtk.TreeIter iter;
 
         Gtk.TreePath? path = null;
-        this.tree_view.get_cursor(out path, null);
+        get_cursor(out path, null);
         if (path != null) {
             if (!this.store.get_iter(out iter, path))
                 return null;
@@ -904,7 +896,7 @@ public class Seahorse.Sidebar : Gtk.ScrolledWindow {
         backends.reverse();
 
         Gtk.TreePath? path = null;
-        this.tree_view.get_cursor(out path, null);
+        get_cursor(out path, null);
         if (path != null) {
             if (!this.store.get_iter(out iter, path))
                 return null;
