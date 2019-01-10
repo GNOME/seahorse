@@ -211,167 +211,135 @@
                             <property name="orientation">vertical</property>
                             <property name="can_focus">False</property>
                             <child>
-                              <object class="GtkFrame" id="photo-id">
+                              <object class="GtkBox" id="vbox19">
                                 <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
                                 <property name="can_focus">False</property>
-                                <property name="label_xalign">0</property>
-                                <property name="shadow_type">none</property>
+                                <property name="spacing">6</property>
+                                <property name="margin">6</property>
+                                <property name="margin-top">6</property>
                                 <child>
-                                  <object class="GtkAlignment" id="alignment18">
+                                  <object class="GtkEventBox" id="image_eventbox">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="bottom_padding">6</property>
-                                    <property name="left_padding">6</property>
-                                    <property name="right_padding">6</property>
+                                    <signal name="scroll-event" handler="on_pgp_owner_photoid_button" swapped="no"/>
                                     <child>
-                                      <object class="GtkBox" id="vbox19">
+                                      <object class="GtkImage" id="photoid">
+                                        <property name="width_request">150</property>
+                                        <property name="height_request">160</property>
                                         <property name="visible">True</property>
-                                        <property name="orientation">vertical</property>
                                         <property name="can_focus">False</property>
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkEventBox" id="image_eventbox">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <signal name="scroll-event" handler="on_pgp_owner_photoid_button" swapped="no"/>
-                                            <child>
-                                              <object class="GtkImage" id="photoid">
-                                                <property name="width_request">150</property>
-                                                <property name="height_request">160</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="icon-name">avatar-default-symbolic</property>
-                                                <property name="icon-size">6</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkBox" id="key-controls">
-                                            <property name="visible">True</property>
-                                            <property name="orientation">horizontal</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="spacing">6</property>
-                                            <child>
-                                              <object class="GtkLabel" id="add-photo-help">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="xalign">1</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="owner-photo-previous-button">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">False</property>
-                                                <property name="focus_on_click">False</property>
-                                                <signal name="clicked" handler="on_pgp_owner_photoid_prev" swapped="no"/>
-                                                <child>
-                                                  <object class="GtkImage" id="image27">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="stock">gtk-go-back</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">False</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="owner-photo-next-button">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">False</property>
-                                                <signal name="clicked" handler="on_pgp_owner_photoid_next" swapped="no"/>
-                                                <child>
-                                                  <object class="GtkAlignment" id="alignment17">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="xscale">0</property>
-                                                    <property name="yscale">0</property>
-                                                    <child>
-                                                      <object class="GtkBox" id="hbox44">
-                                                        <property name="visible">True</property>
-                                                        <property name="orientation">horizontal</property>
-                                                        <property name="can_focus">False</property>
-                                                        <property name="spacing">2</property>
-                                                        <child>
-                                                          <object class="GtkImage" id="image24">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="stock">gtk-go-forward</property>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="expand">False</property>
-                                                            <property name="fill">False</property>
-                                                            <property name="position">0</property>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkLabel" id="label85">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="use_underline">True</property>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="expand">False</property>
-                                                            <property name="fill">False</property>
-                                                            <property name="position">1</property>
-                                                          </packing>
-                                                        </child>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">False</property>
-                                                <property name="position">2</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
+                                        <property name="icon-name">avatar-default-symbolic</property>
+                                        <property name="icon-size">6</property>
                                       </object>
                                     </child>
                                   </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
-                                <child type="label">
-                                  <object class="GtkLabel" id="label89">
+                                <child>
+                                  <object class="GtkBox" id="key-controls">
                                     <property name="visible">True</property>
+                                    <property name="orientation">horizontal</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
-                                    <property name="yalign">0</property>
-                                    <property name="label" translatable="yes" comments="A photograph">Photo </property>
-                                    <attributes>
-                                      <attribute name="weight" value="bold"/>
-                                    </attributes>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="add-photo-help">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="xalign">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="owner-photo-previous-button">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="focus_on_click">False</property>
+                                        <signal name="clicked" handler="on_pgp_owner_photoid_prev" swapped="no"/>
+                                        <child>
+                                          <object class="GtkImage" id="image27">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="stock">gtk-go-back</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="owner-photo-next-button">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <signal name="clicked" handler="on_pgp_owner_photoid_next" swapped="no"/>
+                                        <child>
+                                          <object class="GtkAlignment" id="alignment17">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="xscale">0</property>
+                                            <property name="yscale">0</property>
+                                            <child>
+                                              <object class="GtkBox" id="hbox44">
+                                                <property name="visible">True</property>
+                                                <property name="orientation">horizontal</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="spacing">2</property>
+                                                <child>
+                                                  <object class="GtkImage" id="image24">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="stock">gtk-go-forward</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">False</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLabel" id="label85">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="use_underline">True</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">False</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
                                   </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
                             </child>
                           </object>
                           <packing>
