@@ -183,225 +183,201 @@
                         <property name="visible">True</property>
                         <property name="orientation">horizontal</property>
                         <child>
-                          <object class="GtkFrame" id="owner-photo-frame">
+                          <object class="GtkBox" id="owner-photo-frame">
                             <property name="visible">True</property>
-                            <property name="label_xalign">0</property>
-                            <property name="shadow_type">none</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <property name="margin">6</property>
+                            <property name="margin-top">6</property>
                             <signal name="drag_data_received" handler="on_pgp_owner_photo_drag_received"/>
                             <child>
-                              <object class="GtkAlignment" id="alignment45">
+                              <object class="GtkEventBox" id="image_eventbox">
                                 <property name="visible">True</property>
-                                <property name="bottom_padding">6</property>
-                                <property name="left_padding">6</property>
-                                <property name="right_padding">6</property>
+                                <signal name="scroll_event" handler="on_pgp_owner_photoid_button"/>
                                 <child>
-                                  <object class="GtkBox" id="vbox33">
+                                  <object class="GtkImage" id="photoid">
+                                    <property name="width_request">150</property>
+                                    <property name="height_request">160</property>
                                     <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <property name="spacing">6</property>
-                                    <child>
-                                      <object class="GtkEventBox" id="image_eventbox">
-                                        <property name="visible">True</property>
-                                        <signal name="scroll_event" handler="on_pgp_owner_photoid_button"/>
-                                        <child>
-                                          <object class="GtkImage" id="photoid">
-                                            <property name="width_request">150</property>
-                                            <property name="height_request">160</property>
-                                            <property name="visible">True</property>
-                                            <property name="icon-name">avatar-default-symbolic</property>
-                                            <property name="icon-size">6</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox" id="hbox61">
-                                        <property name="visible">True</property>
-                                        <property name="orientation">horizontal</property>
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkButton" id="owner-photo-add-button">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="owner-photo-add-button-atkobject">
-                                                <property name="AtkObject::accessible-description" translatable="yes">Add a photo to this key</property>
-                                              </object>
-                                            </child>
-                                            <signal name="clicked" handler="on_pgp_owner_photo_add_button"/>
-                                            <child>
-                                              <object class="GtkImage" id="image46">
-                                                <property name="visible">True</property>
-                                                <property name="stock">gtk-add</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton" id="owner-photo-delete-button">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="owner-photo-delete-button-atkobject">
-                                                <property name="AtkObject::accessible-description" translatable="yes">Remove this photo from this key</property>
-                                              </object>
-                                            </child>
-                                            <signal name="clicked" handler="on_pgp_owner_photo_delete_button"/>
-                                            <child>
-                                              <object class="GtkImage" id="image45">
-                                                <property name="visible">True</property>
-                                                <property name="stock">gtk-delete</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton" id="owner-photo-primary-button">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="owner-photo-primary-button-atkobject">
-                                                <property name="AtkObject::accessible-description" translatable="yes">Make this photo the primary photo</property>
-                                              </object>
-                                            </child>
-                                            <signal name="clicked" handler="on_pgp_owner_photo_primary_button"/>
-                                            <child>
-                                              <object class="GtkImage" id="image47">
-                                                <property name="visible">True</property>
-                                                <property name="stock">gtk-go-up</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label22232">
-                                            <property name="visible">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">3</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton" id="owner-photo-previous-button">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="focus_on_click">False</property>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="owner-photo-previous-button-atkobject">
-                                                <property name="AtkObject::accessible-description" translatable="yes">Go to previous photo</property>
-                                              </object>
-                                            </child>
-                                            <signal name="clicked" handler="on_pgp_owner_photoid_prev"/>
-                                            <child>
-                                              <object class="GtkImage" id="image43">
-                                                <property name="visible">True</property>
-                                                <property name="stock">gtk-go-back</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">4</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton" id="owner-photo-next-button">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="owner-photo-next-button-atkobject">
-                                                <property name="AtkObject::accessible-description" translatable="yes">Go to next photo</property>
-                                              </object>
-                                            </child>
-                                            <signal name="clicked" handler="on_pgp_owner_photoid_next"/>
-                                            <child>
-                                              <object class="GtkAlignment" id="alignment46">
-                                                <property name="visible">True</property>
-                                                <property name="xscale">0</property>
-                                                <property name="yscale">0</property>
-                                                <child>
-                                                  <object class="GtkBox" id="hbox62">
-                                                    <property name="visible">True</property>
-                                                    <property name="orientation">horizontal</property>
-                                                    <property name="spacing">2</property>
-                                                    <child>
-                                                      <object class="GtkImage" id="image48">
-                                                        <property name="visible">True</property>
-                                                        <property name="stock">gtk-go-forward</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">False</property>
-                                                        <property name="position">0</property>
-                                                      </packing>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel" id="label22233">
-                                                        <property name="visible">True</property>
-                                                        <property name="use_underline">True</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">False</property>
-                                                        <property name="position">1</property>
-                                                      </packing>
-                                                    </child>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">5</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
+                                    <property name="icon-name">avatar-default-symbolic</property>
+                                    <property name="icon-size">6</property>
                                   </object>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
-                            <child type="label">
-                              <object class="GtkLabel" id="label22231">
+                            <child>
+                              <object class="GtkBox" id="hbox61">
                                 <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="yalign">0</property>
-                                <property name="label" translatable="yes" comments="A photograph">Photo </property>
-                                <attributes>
-                                 <attribute name="weight" value="bold"/>
-                                </attributes>
+                                <property name="orientation">horizontal</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkButton" id="owner-photo-add-button">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="owner-photo-add-button-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes">Add a photo to this key</property>
+                                      </object>
+                                    </child>
+                                    <signal name="clicked" handler="on_pgp_owner_photo_add_button"/>
+                                    <child>
+                                      <object class="GtkImage" id="image46">
+                                        <property name="visible">True</property>
+                                        <property name="stock">gtk-add</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="owner-photo-delete-button">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="owner-photo-delete-button-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes">Remove this photo from this key</property>
+                                      </object>
+                                    </child>
+                                    <signal name="clicked" handler="on_pgp_owner_photo_delete_button"/>
+                                    <child>
+                                      <object class="GtkImage" id="image45">
+                                        <property name="visible">True</property>
+                                        <property name="stock">gtk-delete</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="owner-photo-primary-button">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="owner-photo-primary-button-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes">Make this photo the primary photo</property>
+                                      </object>
+                                    </child>
+                                    <signal name="clicked" handler="on_pgp_owner_photo_primary_button"/>
+                                    <child>
+                                      <object class="GtkImage" id="image47">
+                                        <property name="visible">True</property>
+                                        <property name="stock">gtk-go-up</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label22232">
+                                    <property name="visible">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="owner-photo-previous-button">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="focus_on_click">False</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="owner-photo-previous-button-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes">Go to previous photo</property>
+                                      </object>
+                                    </child>
+                                    <signal name="clicked" handler="on_pgp_owner_photoid_prev"/>
+                                    <child>
+                                      <object class="GtkImage" id="image43">
+                                        <property name="visible">True</property>
+                                        <property name="stock">gtk-go-back</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">4</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="owner-photo-next-button">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="owner-photo-next-button-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes">Go to next photo</property>
+                                      </object>
+                                    </child>
+                                    <signal name="clicked" handler="on_pgp_owner_photoid_next"/>
+                                    <child>
+                                      <object class="GtkAlignment" id="alignment46">
+                                        <property name="visible">True</property>
+                                        <property name="xscale">0</property>
+                                        <property name="yscale">0</property>
+                                        <child>
+                                          <object class="GtkBox" id="hbox62">
+                                            <property name="visible">True</property>
+                                            <property name="orientation">horizontal</property>
+                                            <property name="spacing">2</property>
+                                            <child>
+                                              <object class="GtkImage" id="image48">
+                                                <property name="visible">True</property>
+                                                <property name="stock">gtk-go-forward</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">False</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label22233">
+                                                <property name="visible">True</property>
+                                                <property name="use_underline">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">False</property>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">5</property>
+                                  </packing>
+                                </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
                             </child>
                           </object>
                           <packing>
