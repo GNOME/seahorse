@@ -1737,7 +1737,7 @@ do_trust (SeahorseWidget *swidget)
     /* Remote keys */
     if (!SEAHORSE_IS_GPGME_KEY (object)) {
         show_gtkbuilder_widget (swidget, "manual-trust-area", FALSE);
-        show_gtkbuilder_widget (swidget, "manage-trust-area", TRUE);
+        show_gtkbuilder_widget (swidget, "trust-marginal-check", TRUE);
         show_gtkbuilder_widget (swidget, "sign-area", FALSE);
         show_gtkbuilder_widget (swidget, "revoke-area", FALSE);
         sensitive_gtkbuilder_widget (swidget, "trust-marginal-check", FALSE);
@@ -1794,7 +1794,7 @@ do_trust (SeahorseWidget *swidget)
         
         /* Managed and unmanaged areas */
         show_gtkbuilder_widget (swidget, "manual-trust-area", !managed);
-        show_gtkbuilder_widget (swidget, "manage-trust-area", managed);
+        show_gtkbuilder_widget (swidget, "trust-marginal-check", managed);
     
         /* Managed check boxes */
         if (managed) {

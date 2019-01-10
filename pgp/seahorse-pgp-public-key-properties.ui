@@ -31,7 +31,7 @@
     <property name="title" translatable="yes">Key Properties</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">2</property>
@@ -40,7 +40,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <object class="GtkBox" id="vbox7">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <property name="can_focus">False</property>
@@ -52,26 +52,21 @@
                     <property name="orientation">horizontal</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkImage" id="image36">
+                      <object class="GtkImage">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="stock">gtk-dialog-error</property>
+                        <property name="icon-name">dialog-error</property>
                         <property name="icon_size">6</property>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="vbox28">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkLabel" id="label114">
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -80,45 +75,19 @@
                               <attribute name="weight" value="bold"/>
                             </attributes>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                         <child>
-                          <object class="GtkAlignment" id="alignment39">
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="left_padding">12</property>
-                            <child>
-                              <object class="GtkLabel" id="label115">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">The owner of the key revoked the key. It can no longer be used.</property>
-                              </object>
-                            </child>
+                            <property name="xalign">0</property>
+                            <property name="margin-start">12</property>
+                            <property name="label" translatable="yes">The owner of the key revoked the key. It can no longer be used.</property>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="expired-area">
@@ -126,26 +95,21 @@
                     <property name="orientation">horizontal</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkImage" id="image37">
+                      <object class="GtkImage">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="stock">gtk-dialog-error</property>
+                        <property name="icon-name">dialog-error</property>
                         <property name="icon_size">6</property>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="vbox29">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkLabel" id="label116">
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -154,210 +118,109 @@
                               <attribute name="weight" value="bold"/>
                             </attributes>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                         <child>
-                          <object class="GtkAlignment" id="alignment40">
+                          <object class="GtkLabel" id="expired-message">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="left_padding">12</property>
-                            <child>
-                              <object class="GtkLabel" id="expired-message">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label">This key expired on: (placeholder)</property>
-                              </object>
-                            </child>
+                            <property name="xalign">0</property>
+                            <property name="margin-start">12</property>
+                            <property name="label">This key expired on: (placeholder)</property>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="hbox5">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="orientation">horizontal</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkBox" id="hbox31">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="orientation">horizontal</property>
                         <property name="can_focus">False</property>
+                        <property name="margin">12</property>
                         <child>
-                          <object class="GtkBox" id="vbox12">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="orientation">vertical</property>
                             <property name="can_focus">False</property>
+                            <property name="spacing">6</property>
+                            <property name="margin">6</property>
+                            <property name="margin-top">0</property>
                             <child>
-                              <object class="GtkBox" id="vbox19">
+                              <object class="GtkEventBox">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">6</property>
-                                <property name="margin">6</property>
-                                <property name="margin-top">6</property>
+                                <signal name="scroll-event" handler="on_pgp_owner_photoid_button" swapped="no"/>
                                 <child>
-                                  <object class="GtkEventBox" id="image_eventbox">
+                                  <object class="GtkImage" id="photoid">
+                                    <property name="width_request">150</property>
+                                    <property name="height_request">160</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <signal name="scroll-event" handler="on_pgp_owner_photoid_button" swapped="no"/>
+                                    <property name="icon-name">avatar-default-symbolic</property>
+                                    <property name="icon-size">6</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="key-controls">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <property name="halign">center</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkButton" id="owner-photo-previous-button">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="focus_on_click">False</property>
+                                    <property name="focus_on_click">False</property>
+                                    <signal name="clicked" handler="on_pgp_owner_photoid_prev" swapped="no"/>
                                     <child>
-                                      <object class="GtkImage" id="photoid">
-                                        <property name="width_request">150</property>
-                                        <property name="height_request">160</property>
+                                      <object class="GtkImage">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="icon-name">avatar-default-symbolic</property>
-                                        <property name="icon-size">6</property>
+                                        <property name="icon-name">go-previous</property>
                                       </object>
                                     </child>
                                   </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="key-controls">
+                                  <object class="GtkButton" id="owner-photo-next-button">
                                     <property name="visible">True</property>
-                                    <property name="orientation">horizontal</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="spacing">6</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <signal name="clicked" handler="on_pgp_owner_photoid_next" swapped="no"/>
                                     <child>
-                                      <object class="GtkLabel" id="add-photo-help">
+                                      <object class="GtkBox">
                                         <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">1</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">True</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton" id="owner-photo-previous-button">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="focus_on_click">False</property>
-                                        <signal name="clicked" handler="on_pgp_owner_photoid_prev" swapped="no"/>
+                                        <property name="spacing">2</property>
                                         <child>
-                                          <object class="GtkImage" id="image27">
+                                          <object class="GtkImage">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="stock">gtk-go-back</property>
+                                            <property name="icon-name">go-next</property>
                                           </object>
                                         </child>
                                       </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton" id="owner-photo-next-button">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <signal name="clicked" handler="on_pgp_owner_photoid_next" swapped="no"/>
-                                        <child>
-                                          <object class="GtkAlignment" id="alignment17">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="xscale">0</property>
-                                            <property name="yscale">0</property>
-                                            <child>
-                                              <object class="GtkBox" id="hbox44">
-                                                <property name="visible">True</property>
-                                                <property name="orientation">horizontal</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="spacing">2</property>
-                                                <child>
-                                                  <object class="GtkImage" id="image24">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="stock">gtk-go-forward</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">False</property>
-                                                    <property name="position">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="label85">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="use_underline">True</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">False</property>
-                                                    <property name="position">1</property>
-                                                  </packing>
-                                                </child>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">2</property>
-                                      </packing>
                                     </child>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
                                 </child>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="padding">12</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="vbox38">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <property name="can_focus">False</property>
@@ -507,44 +370,33 @@
                               </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkExpander" id="uids-area">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment23">
+                              <object class="GtkScrolledWindow" id="scrolledwindow1">
+                                <property name="height_request">130</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="top_padding">3</property>
+                                <property name="can_focus">True</property>
+                                <property name="hscrollbar_policy">never</property>
+                                <property name="shadow_type">in</property>
+                                <property name="margin-top">3</property>
                                 <child>
-                                  <object class="GtkScrolledWindow" id="scrolledwindow1">
-                                    <property name="height_request">130</property>
+                                  <object class="GtkTreeView" id="owner-userid-tree">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="hscrollbar_policy">never</property>
-                                    <property name="shadow_type">in</property>
-                                    <child>
-                                      <object class="GtkTreeView" id="owner-userid-tree">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="headers_visible">False</property>
-                                        <child internal-child="selection">
-                                          <object class="GtkTreeSelection" id="treeview-selection1"/>
-                                        </child>
-                                      </object>
+                                    <property name="headers_visible">False</property>
+                                    <child internal-child="selection">
+                                      <object class="GtkTreeSelection" id="treeview-selection1"/>
                                     </child>
                                   </object>
                                 </child>
                               </object>
                             </child>
                             <child type="label">
-                              <object class="GtkLabel" id="label28">
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes" comments="Names set on the PGP key.">_Other Names:</property>
@@ -555,355 +407,170 @@
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="tab_fill">False</property>
-              </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label1">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xpad">3</property>
+                <property name="margin-start">3</property>
+                <property name="margin-end">3</property>
                 <property name="label" translatable="yes">Owner</property>
               </object>
-              <packing>
-                <property name="tab_fill">False</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="trust-page">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <property name="can_focus">False</property>
-                <property name="border_width">12</property>
-                <property name="spacing">12</property>
+                <property name="margin">12</property>
+                <property name="spacing">24</property>
                 <child>
-                  <object class="GtkBox" id="hbox59">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
+                    <property name="orientation">vertical</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">12</property>
+                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkImage" id="sign-image">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="yalign">0</property>
-                        <property name="stock">gtk-dialog-info</property>
-                        <property name="icon_size">6</property>
+                        <property name="label" translatable="yes">Your trust of this key</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="vbox36">
+                      <object class="GtkLabel" id="manual-trust-area">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
+                        <property name="xalign">0</property>
+                        <property name="margin-start">4</property>
+                        <property name="margin-end">4</property>
+                        <property name="label" translatable="yes">Your trust is manually specified on the &lt;i&gt;Details&lt;/i&gt; tab.</property>
+                        <property name="use_markup">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="trust-marginal-check">
+                        <property name="label" translatable="yes">I trust signatures from “%s” on other keys</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_pgp_trust_marginal_toggled" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="sign-area">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="can_focus">False</property>
+                        <property name="spacing">12</property>
                         <child>
-                          <object class="GtkLabel" id="label22225">
+                          <object class="GtkLabel" id="trust-sign-label">
+                            <property name="width_request">270</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="yalign">0</property>
-                            <property name="label" translatable="yes">Your trust of this key</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
+                            <property name="label" translatable="yes">If you believe that the person that owns this key is “%s”, &lt;i&gt;sign&lt;/i&gt; this key:</property>
+                            <property name="use_markup">True</property>
+                            <property name="wrap">True</property>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                         <child>
-                          <object class="GtkAlignment" id="alignment43">
+                          <object class="GtkButton" id="sign-button">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="left_padding">12</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <signal name="clicked" handler="on_pgp_trust_sign" swapped="no"/>
                             <child>
-                              <object class="GtkBox" id="vbox37">
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
+                                <property name="orientation">horizontal</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">6</property>
+                                <property name="spacing">2</property>
                                 <child>
-                                  <object class="GtkLabel" id="manual-trust-area">
+                                  <object class="GtkImage">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
-                                    <property name="xpad">4</property>
-                                    <property name="label" translatable="yes">Your trust is manually specified on the &lt;i&gt;Details&lt;/i&gt; tab.</property>
-                                    <property name="use_markup">True</property>
+                                    <property name="stock">gtk-index</property>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkBox" id="manage-trust-area">
+                                  <object class="GtkLabel">
                                     <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
                                     <property name="can_focus">False</property>
-                                    <property name="spacing">6</property>
-                                    <child>
-                                      <object class="GtkCheckButton" id="trust-marginal-check">
-                                        <property name="label" translatable="yes">I trust signatures from “%s” on other keys</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_pgp_trust_marginal_toggled" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
+                                    <property name="label" translatable="yes">_Sign this Key</property>
+                                    <property name="use_underline">True</property>
                                   </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkBox" id="sign-area">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">horizontal</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="spacing">12</property>
-                                    <child>
-                                      <object class="GtkLabel" id="trust-sign-label">
-                                        <property name="width_request">270</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">If you believe that the person that owns this key is “%s”, &lt;i&gt;sign&lt;/i&gt; this key:</property>
-                                        <property name="use_markup">True</property>
-                                        <property name="wrap">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">True</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkAlignment" id="alignment45">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">1</property>
-                                        <property name="yalign">0</property>
-                                        <property name="xscale">0</property>
-                                        <property name="yscale">0</property>
-                                        <child>
-                                          <object class="GtkButton" id="sign-button">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <signal name="clicked" handler="on_pgp_trust_sign" swapped="no"/>
-                                            <child>
-                                              <object class="GtkAlignment" id="alignment22">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="xscale">0</property>
-                                                <property name="yscale">0</property>
-                                                <child>
-                                                  <object class="GtkBox" id="hbox49">
-                                                    <property name="visible">True</property>
-                                                    <property name="orientation">horizontal</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="spacing">2</property>
-                                                    <child>
-                                                      <object class="GtkImage" id="image30">
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">False</property>
-                                                        <property name="stock">gtk-index</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">False</property>
-                                                        <property name="position">0</property>
-                                                      </packing>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel" id="label101">
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">False</property>
-                                                        <property name="label" translatable="yes">_Sign this Key</property>
-                                                        <property name="use_underline">True</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">False</property>
-                                                        <property name="position">1</property>
-                                                      </packing>
-                                                    </child>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkBox" id="revoke-area">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">horizontal</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="spacing">12</property>
-                                    <child>
-                                      <object class="GtkLabel" id="trust-revoke-label">
-                                        <property name="width_request">270</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">If you no longer trust that “%s” owns this key, &lt;i&gt;revoke&lt;/i&gt; your signature:</property>
-                                        <property name="use_markup">True</property>
-                                        <property name="wrap">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">True</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkAlignment" id="alignment44">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">1</property>
-                                        <property name="yalign">0</property>
-                                        <property name="xscale">0</property>
-                                        <property name="yscale">0</property>
-                                        <child>
-                                          <object class="GtkButton" id="revoke-button">
-                                            <property name="visible">True</property>
-                                            <property name="sensitive">False</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <child>
-                                              <object class="GtkAlignment" id="alignment25">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="xscale">0</property>
-                                                <property name="yscale">0</property>
-                                                <child>
-                                                  <object class="GtkBox" id="hbox51">
-                                                    <property name="visible">True</property>
-                                                    <property name="orientation">horizontal</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="spacing">2</property>
-                                                    <child>
-                                                      <object class="GtkImage" id="image32">
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">False</property>
-                                                        <property name="stock">gtk-remove</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">False</property>
-                                                        <property name="position">0</property>
-                                                      </packing>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkLabel" id="label104">
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">False</property>
-                                                        <property name="label" translatable="yes">_Revoke Signature</property>
-                                                        <property name="use_underline">True</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">False</property>
-                                                        <property name="position">1</property>
-                                                      </packing>
-                                                    </child>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">3</property>
-                                  </packing>
                                 </child>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="revoke-area">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="can_focus">False</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="trust-revoke-label">
+                            <property name="width_request">270</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">If you no longer trust that “%s” owns this key, &lt;i&gt;revoke&lt;/i&gt; your signature:</property>
+                            <property name="use_markup">True</property>
+                            <property name="wrap">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="revoke-button">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">2</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="stock">gtk-remove</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">_Revoke Signature</property>
+                                    <property name="use_underline">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="signatures-area">
@@ -911,7 +578,7 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="label99">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
@@ -921,122 +588,76 @@
                           <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkAlignment" id="alignment20">
+                      <object class="GtkScrolledWindow" id="scrolledwindow4">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
+                        <property name="shadow_type">in</property>
                         <child>
-                          <object class="GtkBox" id="vbox22">
+                          <object class="GtkTreeView" id="signatures-tree">
                             <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
-                            <property name="can_focus">False</property>
-                            <property name="spacing">6</property>
-                            <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow4">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="shadow_type">in</property>
-                                <child>
-                                  <object class="GtkTreeView" id="signatures-tree">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <signal name="row-activated" handler="on_pgp_signature_row_activated" swapped="no"/>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection2"/>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="signatures-toggle">
-                                <property name="label" translatable="yes">_Only display the signatures of people I trust</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0.5</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
+                            <property name="vexpand">True</property>
+                            <property name="can_focus">True</property>
+                            <signal name="row-activated" handler="on_pgp_signature_row_activated" swapped="no"/>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="treeview-selection2"/>
                             </child>
                           </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="signatures-toggle">
+                        <property name="label" translatable="yes">_Only display the signatures of people I trust</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0.5</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label96">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xpad">3</property>
+                <property name="margin-start">3</property>
+                <property name="margin-end">3</property>
                 <property name="label" translatable="yes">Trust</property>
               </object>
-              <packing>
-                <property name="position">1</property>
-                <property name="tab_fill">False</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkBox" id="vbox8">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkBox" id="hbox53">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="orientation">horizontal</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">12</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkBox" id="vbox27">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">18</property>
                         <child>
-                          <object class="GtkBox" id="vbox32">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="orientation">vertical</property>
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="label108">
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
@@ -1045,11 +666,6 @@
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkGrid">
@@ -1137,27 +753,17 @@
                                   </packing>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="vbox33">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="orientation">vertical</property>
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="label113">
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
@@ -1166,64 +772,38 @@
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkAlignment" id="alignment32">
+                              <object class="GtkLabel" id="details-fingerprint-label">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="left_padding">12</property>
-                                <child>
-                                  <object class="GtkLabel" id="details-fingerprint-label">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="yalign">0</property>
-                                    <property name="label">PLAC EHOL DER0 9023 435F
+                                <property name="can_focus">True</property>
+                                <property name="xalign">0</property>
+                                <property name="yalign">0</property>
+                                <property name="label">PLAC EHOL DER0 9023 435F
 B4C3 4349 0932 7854 3452</property>
-                                    <property name="use_markup">True</property>
-                                    <property name="selectable">True</property>
-                                  </object>
-                                </child>
+                                <property name="use_markup">True</property>
+                                <property name="selectable">True</property>
+                                <property name="margin-start">12</property>
                               </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="vbox26">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">18</property>
                         <child>
-                          <object class="GtkBox" id="vbox34">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="orientation">vertical</property>
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="label110">
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
@@ -1291,27 +871,17 @@ B4C3 4349 0932 7854 3452</property>
                                   </packing>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="vbox35">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="orientation">vertical</property>
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="label111">
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
@@ -1320,129 +890,70 @@ B4C3 4349 0932 7854 3452</property>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
                             </child>
                             <child>
-                              <object class="GtkAlignment" id="alignment31">
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
                                 <property name="can_focus">False</property>
-                                <property name="left_padding">12</property>
+                                <property name="spacing">12</property>
+                                <property name="margin-start">12</property>
                                 <child>
-                                  <object class="GtkBox" id="hbox54">
+                                  <object class="GtkLabel">
                                     <property name="visible">True</property>
-                                    <property name="orientation">horizontal</property>
                                     <property name="can_focus">False</property>
-                                    <property name="spacing">12</property>
+                                    <property name="label" translatable="yes">You _Trust the Owner:</property>
+                                    <property name="use_underline">True</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="details-trust-combobox">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="model">model1</property>
+                                    <signal name="changed" handler="on_pgp_details_trust_changed" swapped="no"/>
                                     <child>
-                                      <object class="GtkLabel" id="label112">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">You _Trust the Owner:</property>
-                                        <property name="use_underline">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkComboBox" id="details-trust-combobox">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="model">model1</property>
-                                        <signal name="changed" handler="on_pgp_details_trust_changed" swapped="no"/>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="renderer1"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
+                                      <object class="GtkCellRendererText"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
                                     </child>
                                   </object>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkExpander" id="subkey-expander">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <child>
-                      <object class="GtkBox" id="hbox10">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="shadow_type">in</property>
                         <property name="vexpand">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="can_focus">False</property>
+                        <property name="margin-top">6</property>
+                        <property name="margin-start">12</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment28">
+                          <object class="GtkTreeView" id="details-subkey-tree">
+                            <property name="height_request">100</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="top_padding">6</property>
-                            <property name="left_padding">12</property>
-                            <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="shadow_type">in</property>
-                                <child>
-                                  <object class="GtkTreeView" id="details-subkey-tree">
-                                    <property name="height_request">100</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection3"/>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
+                            <property name="can_focus">True</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="treeview-selection3"/>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
                     <child type="label">
-                      <object class="GtkLabel" id="label33">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">_Subkeys</property>
@@ -1453,35 +964,19 @@ B4C3 4349 0932 7854 3452</property>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label22222">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xpad">3</property>
+                <property name="margin-start">3</property>
+                <property name="margin-end">3</property>
                 <property name="label" translatable="yes">Details</property>
               </object>
-              <packing>
-                <property name="position">2</property>
-                <property name="tab_fill">False</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
     </child>
