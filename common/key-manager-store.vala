@@ -173,7 +173,6 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
 
         view.set_enable_search(false);
         view.set_show_expanders(false);
-        view.set_rules_hint(true);
         view.set_headers_visible(false);
 
         set_sort_column_id (Column.LABEL, Gtk.SortType.ASCENDING);
