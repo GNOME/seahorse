@@ -171,10 +171,6 @@ public class Seahorse.KeyManagerStore : Gcr.CollectionModel {
         if (sort_by != null)
             set_sort_to(sort_by);
 
-        view.set_enable_search(false);
-        view.set_show_expanders(false);
-        view.set_headers_visible(false);
-
         set_sort_column_id (Column.LABEL, Gtk.SortType.ASCENDING);
 
         // Tree drag

@@ -66,7 +66,6 @@ public class Seahorse.KeyManager : Catalog {
         );
         this.settings = new GLib.Settings("org.gnome.seahorse.manager");
 
-        set_default_size(640, 476);
         set_events(Gdk.EventMask.POINTER_MOTION_MASK
                    | Gdk.EventMask.POINTER_MOTION_HINT_MASK
                    | Gdk.EventMask.BUTTON_PRESS_MASK
@@ -75,12 +74,6 @@ public class Seahorse.KeyManager : Catalog {
         this.collection = setup_sidebar();
 
         load_css();
-
-        // Init key list & selection settings
-        Gtk.TreeSelection selection = this.key_list.get_selection();
-        selection.set_mode(Gtk.SelectionMode.MULTIPLE);
-        selection.changed.connect(on_view_selection_changed);
-        this.key_list.realize();
 
         // Add new key store and associate it
         this.store = new KeyManagerStore(this.collection, this.key_list, this.settings);
@@ -93,7 +86,6 @@ public class Seahorse.KeyManager : Catalog {
 
         // For the filtering
         on_filter_changed(this.filter_entry);
-        this.filter_entry.search_changed.connect(on_filter_changed);
         this.key_list.start_interactive_search.connect(() => {
             this.filter_entry.grab_focus();
             return false;
@@ -109,11 +101,6 @@ public class Seahorse.KeyManager : Catalog {
         targets.add_uri_targets(DndTarget.URIS);
         targets.add_text_targets(DndTarget.PLAIN);
         Gtk.drag_dest_set_target_list(this, targets);
-
-        this.drag_data_received.connect(on_target_drag_data_received);
-        this.key_list.button_press_event.connect(on_keymanager_key_list_button_pressed);
-        this.key_list.row_activated.connect(on_keymanager_row_activated);
-        this.key_list.popup_menu.connect(on_keymanager_key_list_popup_menu);
     }
 
     private void init_actions() {
@@ -138,6 +125,7 @@ public class Seahorse.KeyManager : Catalog {
         provider.load_from_resource("/org/gnome/Seahorse/seahorse.css");
     }
 
+    [GtkCallback]
     private void on_view_selection_changed(Gtk.TreeSelection selection) {
         Idle.add(() => {
             // Fire the signal
@@ -155,7 +143,8 @@ public class Seahorse.KeyManager : Catalog {
             backend.actions.set_actions_for_selected_objects(objects);
     }
 
-    private void on_keymanager_row_activated(Gtk.TreeView key_list, Gtk.TreePath? path, Gtk.TreeViewColumn column) {
+    [GtkCallback]
+    private void on_key_list_row_activated(Gtk.TreeView key_list, Gtk.TreePath? path, Gtk.TreeViewColumn column) {
         if (path == null)
             return;
 
@@ -164,7 +153,8 @@ public class Seahorse.KeyManager : Catalog {
             show_properties(obj);
     }
 
-    private bool on_keymanager_key_list_button_pressed(Gdk.EventButton event) {
+    [GtkCallback]
+    private bool on_key_list_button_pressed(Gdk.EventButton event) {
         if (event.button == 3) {
             show_context_menu(event);
             GLib.List<GLib.Object> objects = get_selected_objects();
@@ -176,7 +166,8 @@ public class Seahorse.KeyManager : Catalog {
         return false;
     }
 
-    private bool on_keymanager_key_list_popup_menu() {
+    [GtkCallback]
+    private bool on_key_list_popup_menu() {
         GLib.List<GLib.Object> objects = get_selected_objects();
         if (objects != null)
             show_context_menu(null);
@@ -202,6 +193,7 @@ public class Seahorse.KeyManager : Catalog {
         this.settings.set_boolean("sidebar-visible", !combined);
     }
 
+    [GtkCallback]
     private void on_filter_changed(Gtk.Editable entry) {
         this.store.filter = this.filter_entry.text;
     }
@@ -283,8 +275,9 @@ public class Seahorse.KeyManager : Catalog {
         dialog.destroy();
     }
 
-    private void on_target_drag_data_received(Gdk.DragContext context, int x, int y,
-                                              Gtk.SelectionData? selection_data, uint info, uint time) {
+    [GtkCallback]
+    private void on_drag_data_received(Gdk.DragContext context, int x, int y,
+                                       Gtk.SelectionData? selection_data, uint info, uint time) {
         if (selection_data == null)
             return;
 

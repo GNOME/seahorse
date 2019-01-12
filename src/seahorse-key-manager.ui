@@ -266,6 +266,9 @@
     </child>
   </object>
   <template class="SeahorseKeyManager" parent="SeahorseCatalog">
+    <property name="default-width">600</property>
+    <property name="default-height">476</property>
+    <signal name="drag-data-received" handler="on_drag_data_received" />
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="visible">True</property>
@@ -355,6 +358,7 @@
                     <property name="visible">True</property>
                     <property name="width_chars">30</property>
                     <property name="placeholder_text" translatable="yes">Filter</property>
+                    <signal name="search-changed" handler="on_filter_changed" />
                   </object>
                 </child>
               </object>
@@ -397,10 +401,19 @@
                         <child>
                           <object class="GtkTreeView" id="key_list">
                             <property name="visible">True</property>
+                            <property name="enable-search">False</property>
+                            <property name="show-expanders">False</property>
+                            <property name="headers-visible">False</property>
                             <property name="can_focus">True</property>
                             <property name="enable-grid-lines">horizontal</property>
+                            <signal name="row-activated" handler="on_key_list_row_activated"/>
+                            <signal name="button-press-event" handler="on_key_list_button_pressed" />
+                            <signal name="popup-menu" handler="on_key_list_popup_menu" />
                             <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection"/>
+                              <object class="GtkTreeSelection" id="treeview-selection">
+                                <property name="mode">multiple</property>
+                                <signal name="changed" handler="on_view_selection_changed" />
+                              </object>
                             </child>
                           </object>
                         </child>
