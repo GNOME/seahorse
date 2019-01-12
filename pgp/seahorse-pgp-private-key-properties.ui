@@ -43,7 +43,6 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
-                <property name="border_width">12</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkBox" id="revoked-area">
@@ -281,45 +280,36 @@
                             <property name="column_spacing">12</property>
                             <property name="row_spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="owner-name-label">
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="xalign">0</property>
-                                <property name="selectable">True</property>
-                                <attributes>
-                                  <attribute name="scale" value="1.75"/>
-                                </attributes>
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">3</property>
+                                <property name="margin-bottom">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="owner-name-label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="selectable">True</property>
+                                    <attributes>
+                                      <attribute name="scale" value="1.75"/>
+                                    </attributes>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="owner-email-label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="selectable">True</property>
+                                    <property name="use-markup">True</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
-                                <property name="top_attach">1</property>
+                                <property name="top_attach">0</property>
                                 <property name="left_attach">0</property>
                                 <property name="width">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="xalign">1</property>
-                                <property name="label" translatable="yes">Email</property>
-                                <style>
-                                  <class name="dim-label"/>
-                                </style>
-                              </object>
-                              <packing>
-                                <property name="top_attach">2</property>
-                                <property name="left_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="owner-email-label">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="xalign">0</property>
-                                <property name="selectable">True</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">2</property>
-                                <property name="left_attach">1</property>
                               </packing>
                             </child>
                             <child>
@@ -332,7 +322,7 @@
                                 </style>
                               </object>
                               <packing>
-                                <property name="top_attach">3</property>
+                                <property name="top_attach">1</property>
                                 <property name="left_attach">0</property>
                               </packing>
                             </child>
@@ -344,7 +334,7 @@
                                 <property name="selectable">True</property>
                               </object>
                               <packing>
-                                <property name="top_attach">3</property>
+                                <property name="top_attach">1</property>
                                 <property name="left_attach">1</property>
                               </packing>
                             </child>
@@ -359,7 +349,7 @@
                                 </style>
                               </object>
                               <packing>
-                                <property name="top_attach">4</property>
+                                <property name="top_attach">2</property>
                                 <property name="left_attach">0</property>
                               </packing>
                             </child>
@@ -370,7 +360,7 @@
                                 <property name="label" translatable="yes">Private PGP Key</property>
                               </object>
                               <packing>
-                                <property name="top_attach">4</property>
+                                <property name="top_attach">2</property>
                                 <property name="left_attach">1</property>
                               </packing>
                             </child>
@@ -385,7 +375,7 @@
                                 </style>
                               </object>
                               <packing>
-                                <property name="top_attach">5</property>
+                                <property name="top_attach">3</property>
                                 <property name="left_attach">0</property>
                               </packing>
                             </child>
@@ -397,7 +387,7 @@
                                 <property name="selectable">True</property>
                               </object>
                               <packing>
-                                <property name="top_attach">5</property>
+                                <property name="top_attach">3</property>
                                 <property name="left_attach">1</property>
                               </packing>
                             </child>

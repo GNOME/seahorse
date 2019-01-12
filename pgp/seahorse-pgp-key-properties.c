@@ -861,7 +861,6 @@ do_owner (SeahorseWidget *swidget)
 {
 	SeahorseObject *object;
 	SeahorsePgpKey *pkey;
-	SeahorsePgpUid *uid;
 	GtkWidget *widget;
 	GtkCellRenderer *renderer;
 	GtkListStore *store;
@@ -912,17 +911,25 @@ do_owner (SeahorseWidget *swidget)
 	uids = seahorse_pgp_key_get_uids (pkey);
 	show_gtkbuilder_widget (swidget, "uids-area", uids != NULL);
 	if (uids != NULL) {
+        g_autofree gchar *email_escaped = NULL;
+        g_autofree gchar *email_label = NULL;
+        SeahorsePgpUid *uid;
+
 		uid = SEAHORSE_PGP_UID (uids->data);
-    
+
 		label = seahorse_pgp_uid_get_name (uid);
 		widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "owner-name-label"));
 		gtk_label_set_text (GTK_LABEL (widget), label); 
 		widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
 		gtk_window_set_title (GTK_WINDOW (widget), label);
 
-		label = seahorse_pgp_uid_get_email (uid);
-		widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "owner-email-label"));
-		gtk_label_set_text (GTK_LABEL (widget), label); 
+        label = seahorse_pgp_uid_get_email (uid);
+        if (label && *label) {
+            email_escaped = g_markup_escape_text (label, -1);
+            email_label = g_strdup_printf ("<a href=\"mailto:%s\">%s</a>", label, email_escaped);
+            widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "owner-email-label"));
+            gtk_label_set_markup (GTK_LABEL (widget), email_label);
+        }
 
 		label = seahorse_pgp_uid_get_comment (uid);
 		widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "owner-comment-label"));
