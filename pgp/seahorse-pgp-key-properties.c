@@ -911,6 +911,7 @@ do_owner (SeahorseWidget *swidget)
 	uids = seahorse_pgp_key_get_uids (pkey);
 	show_gtkbuilder_widget (swidget, "uids-area", uids != NULL);
 	if (uids != NULL) {
+        g_autofree gchar *title = NULL;
         g_autofree gchar *email_escaped = NULL;
         g_autofree gchar *email_label = NULL;
         SeahorsePgpUid *uid;
@@ -920,8 +921,16 @@ do_owner (SeahorseWidget *swidget)
 		label = seahorse_pgp_uid_get_name (uid);
 		widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, "owner-name-label"));
 		gtk_label_set_text (GTK_LABEL (widget), label); 
-		widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
-		gtk_window_set_title (GTK_WINDOW (widget), label);
+
+        widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
+        if (seahorse_object_get_usage (object) != SEAHORSE_USAGE_PRIVATE_KEY) {
+            /* Translators: the 1st part of the title is the owner's name */
+            title = g_strdup_printf (_("%s ‒ Public key"), label);
+        } else {
+            /* Translators: the 1st part of the title is the owner's name */
+            title = g_strdup_printf (_("%s ‒ Private key"), label);
+        }
+        gtk_window_set_title (GTK_WINDOW (widget), title);
 
         label = seahorse_pgp_uid_get_email (uid);
         if (label && *label) {
