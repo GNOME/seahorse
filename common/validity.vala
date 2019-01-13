@@ -32,7 +32,7 @@ public enum Seahorse.Validity {
     /**
      * @return A string describing the validity.
      */
-    public string? get_string () {
+    public unowned string? get_string () {
         switch (this) {
             case Seahorse.Validity.UNKNOWN:
                 return C_("Validity", "Unknown");

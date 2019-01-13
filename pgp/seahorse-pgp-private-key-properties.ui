@@ -24,19 +24,7 @@
       </row>
     </data>
   </object>
-  <object class="GtkDialog" id="pgp-private-key-properties">
-    <property name="visible">True</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Key Properties</property>
-    <property name="type_hint">dialog</property>
-    <signal name="delete_event" handler="on_widget_delete_event"/>
-    <child internal-child="vbox">
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child>
-          <object class="GtkNotebook" id="notebook">
+          <object class="GtkNotebook" id="window-content">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
@@ -83,7 +71,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkBox" id="expired-area">
                     <property name="spacing">12</property>
                     <property name="orientation">horizontal</property>
                     <child>
@@ -140,11 +128,9 @@
                             <property name="spacing">6</property>
                             <property name="margin">6</property>
                             <property name="margin-top">0</property>
-                            <signal name="drag_data_received" handler="on_pgp_owner_photo_drag_received"/>
                             <child>
-                              <object class="GtkEventBox">
+                              <object class="GtkEventBox" id="photo-event-box">
                                 <property name="visible">True</property>
-                                <signal name="scroll_event" handler="on_pgp_owner_photoid_button"/>
                                 <child>
                                   <object class="GtkImage" id="photoid">
                                     <property name="width_request">150</property>
@@ -166,12 +152,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="action-name">props.photos.add</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="owner-photo-add-button-atkobject">
                                         <property name="AtkObject::accessible-description" translatable="yes">Add a photo to this key</property>
                                       </object>
                                     </child>
-                                    <signal name="clicked" handler="on_pgp_owner_photo_add_button"/>
                                     <child>
                                       <object class="GtkImage">
                                         <property name="visible">True</property>
@@ -185,12 +171,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="action-name">props.photos.delete</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="owner-photo-delete-button-atkobject">
                                         <property name="AtkObject::accessible-description" translatable="yes">Remove this photo from this key</property>
                                       </object>
                                     </child>
-                                    <signal name="clicked" handler="on_pgp_owner_photo_delete_button"/>
                                     <child>
                                       <object class="GtkImage">
                                         <property name="visible">True</property>
@@ -204,12 +190,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="action-name">props.photos.make-primary</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="owner-photo-primary-button-atkobject">
                                         <property name="AtkObject::accessible-description" translatable="yes">Make this photo the primary photo</property>
                                       </object>
                                     </child>
-                                    <signal name="clicked" handler="on_pgp_owner_photo_primary_button"/>
                                     <child>
                                       <object class="GtkImage">
                                         <property name="visible">True</property>
@@ -229,12 +215,12 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="focus_on_click">False</property>
+                                    <property name="action-name">props.photos.previous</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="owner-photo-previous-button-atkobject">
                                         <property name="AtkObject::accessible-description" translatable="yes">Go to previous photo</property>
                                       </object>
                                     </child>
-                                    <signal name="clicked" handler="on_pgp_owner_photoid_prev"/>
                                     <child>
                                       <object class="GtkImage">
                                         <property name="visible">True</property>
@@ -248,12 +234,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="action-name">props.photos.next</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="owner-photo-next-button-atkobject">
                                         <property name="AtkObject::accessible-description" translatable="yes">Go to next photo</property>
                                       </object>
                                     </child>
-                                    <signal name="clicked" handler="on_pgp_owner_photoid_next"/>
                                     <child>
                                       <object class="GtkImage">
                                         <property name="visible">True</property>
@@ -375,7 +361,7 @@
                             <property name="halign">end</property>
                             <property name="label" translatable="yes">Change _Passphrase</property>
                             <property name="use_underline">True</property>
-                            <signal name="clicked" handler="on_pgp_owner_passphrase_button_clicked"/>
+                            <property name="action-name">props.change-password</property>
                           </object>
                         </child>
                       </object>
@@ -424,7 +410,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="border_width">6</property>
-                            <signal name="clicked" handler="on_pgp_names_primary_clicked"/>
+                            <property name="action-name">props.uids.make-primary</property>
                             <child>
                               <object class="GtkBox">
                                 <property name="visible">True</property>
@@ -454,7 +440,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="border_width">6</property>
-                            <signal name="clicked" handler="on_pgp_names_sign_clicked"/>
+                            <property name="action-name">props.uids.sign</property>
                             <child>
                               <object class="GtkBox">
                                 <property name="visible">True</property>
@@ -484,7 +470,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="border_width">6</property>
-                            <signal name="clicked" handler="on_pgp_names_delete_clicked"/>
+                            <property name="action-name">props.uids.delete</property>
                             <child>
                               <object class="GtkBox">
                                 <property name="visible">True</property>
@@ -514,7 +500,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="border_width">6</property>
-                            <signal name="clicked" handler="on_pgp_names_add_clicked"/>
+                            <property name="action-name">props.uids.add</property>
                             <child>
                               <object class="GtkBox">
                                 <property name="visible">True</property>
@@ -540,10 +526,11 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="names-revoke-button">
+                            <property name="visible">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="border_width">6</property>
-                            <signal name="clicked" handler="on_pgp_names_revoke_clicked"/>
+                            <property name="action-name">props.uids.revoke</property>
                             <child>
                               <object class="GtkBox">
                                 <property name="visible">True</property>
@@ -817,7 +804,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
-                                        <signal name="clicked" handler="on_pgp_details_expires_button"/>
+                                        <property name="action-name">props.change-expires</property>
                                         <child>
                                           <object class="GtkImage">
                                             <property name="visible">True</property>
@@ -872,7 +859,6 @@
                                   <object class="GtkComboBox" id="details-trust-combobox">
                                     <property name="visible">True</property>
                                     <property name="model">model1</property>
-                                    <signal name="changed" handler="on_pgp_details_trust_changed"/>
                                     <child>
                                       <object class="GtkCellRendererText"/>
                                       <attributes>
@@ -903,7 +889,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <signal name="clicked" handler="on_pgp_details_export_button"/>
+                                    <property name="action-name">props.export-secret</property>
                                     <child>
                                       <object class="GtkBox">
                                         <property name="visible">True</property>
@@ -974,7 +960,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="border_width">6</property>
-                                <signal name="clicked" handler="on_pgp_details_add_subkey_button"/>
+                                <property name="action-name">props.subkeys.add</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
@@ -1004,7 +990,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="border_width">6</property>
-                                <signal name="clicked" handler="on_pgp_details_expires_subkey"/>
+                                <property name="action-name">props.subkeys.change-expires</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
@@ -1034,7 +1020,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="border_width">6</property>
-                                <signal name="clicked" handler="on_pgp_details_revoke_subkey_button"/>
+                                <property name="action-name">props.subkeys.revoke</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
@@ -1066,7 +1052,7 @@
                                 <property name="receives_default">False</property>
                                 <property name="border_width">6</property>
                                 <property name="use_stock">True</property>
-                                <signal name="clicked" handler="on_pgp_details_del_subkey_button"/>
+                                <property name="action-name">props.subkeys.delete</property>
                               </object>
                             </child>
                           </object>
@@ -1121,13 +1107,4 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-  </object>
 </interface>

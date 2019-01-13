@@ -24,19 +24,7 @@
       </row>
     </data>
   </object>
-  <object class="GtkDialog" id="pgp-public-key-properties">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Key Properties</property>
-    <property name="type_hint">dialog</property>
-    <child internal-child="vbox">
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">2</property>
-        <child>
-          <object class="GtkNotebook" id="notebook">
+          <object class="GtkNotebook" id="window-content">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
@@ -143,10 +131,9 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkEventBox">
+                          <object class="GtkEventBox" id="photo-event-box">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <signal name="scroll-event" handler="on_pgp_owner_photoid_button" swapped="no"/>
                             <child>
                               <object class="GtkImage" id="photoid">
                                 <property name="width_request">150</property>
@@ -171,7 +158,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="focus_on_click">False</property>
-                                <signal name="clicked" handler="on_pgp_owner_photoid_prev" swapped="no"/>
+                                <property name="action-name">props.photos.previous</property>
                                 <child>
                                   <object class="GtkImage">
                                     <property name="visible">True</property>
@@ -185,7 +172,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <signal name="clicked" handler="on_pgp_owner_photoid_next" swapped="no"/>
+                                <property name="action-name">props.photos.next</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
@@ -396,14 +383,30 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="trust-marginal-check">
-                        <property name="label" translatable="yes">I trust signatures from “%s” on other keys</property>
+                      <object class="GtkBox" id="trust-marginal-area">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_pgp_trust_marginal_toggled" swapped="no"/>
+                        <property name="orientation">horizontal</property>
+                        <child>
+                          <object class="GtkLabel" id="trust-marginal-label">
+                            <property name="visible">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
+                            <property name="can_focus">True</property>
+                            <property name="wrap">True</property>
+                            <property name="max-width-chars">70</property>
+                            <property name="mnemonic-widget">trust-marginal-switch</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSwitch" id="trust-marginal-switch">
+                            <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">center</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="action-name">props.trust-marginal</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -414,21 +417,23 @@
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="trust-sign-label">
-                            <property name="width_request">270</property>
                             <property name="visible">True</property>
+                            <property name="hexpand">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">If you believe that the person that owns this key is “%s”, &lt;i&gt;sign&lt;/i&gt; this key:</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
+                            <property name="max-width-chars">70</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkButton" id="sign-button">
                             <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">center</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <signal name="clicked" handler="on_pgp_trust_sign" swapped="no"/>
+                            <property name="action-name">props.sign-key</property>
                             <child>
                               <object class="GtkBox">
                                 <property name="visible">True</property>
@@ -464,13 +469,12 @@
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="trust-revoke-label">
-                            <property name="width_request">270</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">If you no longer trust that “%s” owns this key, &lt;i&gt;revoke&lt;/i&gt; your signature:</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
+                            <property name="max-width-chars">70</property>
                           </object>
                         </child>
                         <child>
@@ -534,7 +538,6 @@
                             <property name="visible">True</property>
                             <property name="vexpand">True</property>
                             <property name="can_focus">True</property>
-                            <signal name="row-activated" handler="on_pgp_signature_row_activated" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="treeview-selection2"/>
                             </child>
@@ -847,7 +850,6 @@ B4C3 4349 0932 7854 3452</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">model1</property>
-                                    <signal name="changed" handler="on_pgp_details_trust_changed" swapped="no"/>
                                     <child>
                                       <object class="GtkCellRendererText"/>
                                       <attributes>
@@ -913,8 +915,4 @@ B4C3 4349 0932 7854 3452</property>
               </object>
             </child>
           </object>
-        </child>
-      </object>
-    </child>
-  </object>
 </interface>
