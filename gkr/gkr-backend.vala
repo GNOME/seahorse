@@ -82,12 +82,16 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 		                          Secret.ServiceFlags.OPEN_SESSION, null, (obj, res) => {
 			try {
 				this._service = Secret.Service.open.end(res);
-				this._service.notify.connect((pspec) => {
-					if (pspec.name == "collections")
-						refresh_collections();
+				this._service.notify["collections"].connect((obj, pspec) => {
+					refresh_collections();
 				});
 				this._service.load_collections.begin(null, (obj, res) => {
-					refresh_collections();
+					try {
+						this._service.load_collections.end(res);
+						refresh_collections();
+					} catch (GLib.Error e) {
+						warning("couldn't load all secret collections: %s", e.message);
+					}
 				});
 				refresh_aliases();
 			} catch (GLib.Error err) {
