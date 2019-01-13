@@ -31,14 +31,16 @@ public class Seahorse.KeyManager : Catalog {
     [GtkChild]
     private Gtk.ScrolledWindow sidebar_area;
     private Sidebar sidebar;
+    [GtkChild]
+    private Gtk.Stack content_stack;
+    [GtkChild]
+    private Gtk.TreeView key_list;
 
     [GtkChild]
     private Gtk.MenuButton new_item_button;
     [GtkChild]
     private Gtk.ToggleButton show_search_button;
 
-    [GtkChild]
-    private Gtk.TreeView key_list;
     private Gcr.Collection collection;
     private KeyManagerStore store;
 
@@ -77,6 +79,8 @@ public class Seahorse.KeyManager : Catalog {
 
         // Add new key store and associate it
         this.store = new KeyManagerStore(this.collection, this.key_list, this.settings);
+        this.store.row_inserted.connect(on_store_row_inserted);
+        this.store.row_deleted.connect(on_store_row_deleted);
 
         init_actions();
 
@@ -101,6 +105,9 @@ public class Seahorse.KeyManager : Catalog {
         targets.add_uri_targets(DndTarget.URIS);
         targets.add_text_targets(DndTarget.PLAIN);
         Gtk.drag_dest_set_target_list(this, targets);
+
+        // In the beginning, nothing's selected, so show empty state
+        check_empty_state();
     }
 
     private void init_actions() {
@@ -151,6 +158,34 @@ public class Seahorse.KeyManager : Catalog {
         GLib.Object obj = KeyManagerStore.get_object_from_path(key_list, path);
         if (obj != null)
             show_properties(obj);
+    }
+
+    private void on_store_row_inserted(Gtk.TreeModel store, Gtk.TreePath path, Gtk.TreeIter iter) {
+        check_empty_state();
+    }
+
+    private void on_store_row_deleted(Gtk.TreeModel store, Gtk.TreePath path) {
+        check_empty_state();
+    }
+
+    private void check_empty_state() {
+        bool empty = (store.iter_n_children(null) == 0);
+
+        this.show_search_button.sensitive = !empty;
+        if (!empty) {
+            this.content_stack.visible_child_name = "key_list_page";
+            return;
+        }
+
+        // We have an empty page, that might still have 2 reasons:
+        // - we really have no items in our collections
+        // - we're dealing with a locked keyring
+        Place? place = get_focused_place();
+        if (place != null && place is Lockable && ((Lockable) place).unlockable) {
+            this.content_stack.visible_child_name = "locked_keyring_page";
+            return;
+        }
+        this.content_stack.visible_child_name = "empty_state_page";
     }
 
     [GtkCallback]
@@ -358,6 +393,8 @@ public class Seahorse.KeyManager : Catalog {
     private Gcr.Collection setup_sidebar() {
         this.sidebar = new Sidebar();
         sidebar.hexpand = true;
+        /* Make sure we get */
+        this.sidebar.get_selection().changed.connect((sel) => check_empty_state());
 
         this.sidebar_panes.position = this.settings.get_int("sidebar-width");
         this.sidebar_panes.realize.connect(() =>   { this.sidebar_panes.position = this.settings.get_int("sidebar-width"); });
@@ -385,5 +422,22 @@ public class Seahorse.KeyManager : Catalog {
     private void on_popover_grab_notify(Gtk.Widget widget, bool was_grabbed) {
         if (!was_grabbed)
             widget.hide();
+    }
+
+    [GtkCallback]
+    private void on_locked_keyring_unlock_button_clicked(Gtk.Button unlock_button) {
+        Lockable? place = get_focused_place() as Lockable;
+        return_if_fail(place != null && place.unlockable);
+
+        unlock_button.sensitive = false;
+        place.unlock.begin(null, null, (obj, res) => {
+            try {
+                unlock_button.sensitive = true;
+                place.unlock.end(res);
+            } catch (GLib.Error e) {
+                unlock_button.sensitive = true;
+                Util.show_error(this, _("Couldn't unlock keyring"), e.message);
+            }
+        });
     }
 }

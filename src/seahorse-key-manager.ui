@@ -364,55 +364,61 @@
               </object>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="key-list-scroll-area">
+              <object class="GtkStack" id="content_stack">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hscrollbar-policy">never</property>
+                <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="margin-top">24</property>
-                    <property name="margin-bottom">24</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar-policy">never</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="pack_type">end</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkFrame">
-                        <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="margin-start">18</property>
-                        <property name="margin-end">18</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin-top">24</property>
+                        <property name="margin-bottom">24</property>
                         <child>
-                          <object class="GtkTreeView" id="key_list">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
-                            <property name="enable-search">False</property>
-                            <property name="show-expanders">False</property>
-                            <property name="headers-visible">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="enable-grid-lines">horizontal</property>
-                            <signal name="row-activated" handler="on_key_list_row_activated"/>
-                            <signal name="button-press-event" handler="on_key_list_button_pressed" />
-                            <signal name="popup-menu" handler="on_key_list_popup_menu" />
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection">
-                                <property name="mode">multiple</property>
-                                <signal name="changed" handler="on_view_selection_changed" />
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                          </object>
+                          <packing>
+                            <property name="pack_type">end</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkFrame">
+                            <property name="visible">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="margin-start">18</property>
+                            <property name="margin-end">18</property>
+                            <child>
+                              <object class="GtkTreeView" id="key_list">
+                                <property name="visible">True</property>
+                                <property name="enable-search">False</property>
+                                <property name="show-expanders">False</property>
+                                <property name="headers-visible">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="enable-grid-lines">horizontal</property>
+                                <signal name="row-activated" handler="on_key_list_row_activated"/>
+                                <signal name="button-press-event" handler="on_key_list_button_pressed" />
+                                <signal name="popup-menu" handler="on_key_list_popup_menu" />
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection">
+                                    <property name="mode">multiple</property>
+                                    <signal name="changed" handler="on_view_selection_changed" />
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -420,6 +426,84 @@
                       </object>
                     </child>
                   </object>
+                  <packing>
+                    <property name="name">key_list_page</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="spacing">24</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="visible">True</property>
+                        <property name="pixel-size">100</property>
+                        <property name="icon-name">org.gnome.seahorse.Application-symbolic</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">This collection seems to be empty</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">empty_state_page</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="spacing">24</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="visible">True</property>
+                        <property name="pixel-size">100</property>
+                        <property name="icon-name">org.gnome.seahorse.Application-symbolic</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Keyring is locked</property>
+                        <attributes>
+                          <attribute name="scale" value="2"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="locked_keyring_unlock_button">
+                        <property name="visible">True</property>
+                        <property name="halign">center</property>
+                        <property name="label" translatable="yes">Unlock</property>
+                        <signal name="clicked" handler="on_locked_keyring_unlock_button_clicked"/>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">locked_keyring_page</property>
+                  </packing>
                 </child>
               </object>
               <packing>
