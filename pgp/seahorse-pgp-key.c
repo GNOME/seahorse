@@ -482,7 +482,12 @@ static GtkWindow *
 seahorse_pgp_key_create_viewer (SeahorseViewable *viewable,
                                 GtkWindow *parent)
 {
-	return seahorse_pgp_key_properties_show (SEAHORSE_PGP_KEY (viewable), parent);
+    SeahorsePgpKey *self = SEAHORSE_PGP_KEY (viewable);
+    g_autoptr(GtkWindow) viewer = NULL;
+
+    viewer = seahorse_pgp_key_properties_new (self, parent);
+    g_object_ref_sink (viewer);
+    return GTK_WINDOW (g_steal_pointer (&viewer));
 }
 
 static void
