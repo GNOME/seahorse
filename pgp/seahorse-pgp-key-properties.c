@@ -925,10 +925,10 @@ do_owner (SeahorseWidget *swidget)
         widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
         if (seahorse_object_get_usage (object) != SEAHORSE_USAGE_PRIVATE_KEY) {
             /* Translators: the 1st part of the title is the owner's name */
-            title = g_strdup_printf (_("%s ‒ Public key"), label);
+            title = g_strdup_printf (_("%s — Public key"), label);
         } else {
             /* Translators: the 1st part of the title is the owner's name */
-            title = g_strdup_printf (_("%s ‒ Private key"), label);
+            title = g_strdup_printf (_("%s — Private key"), label);
         }
         gtk_window_set_title (GTK_WINDOW (widget), title);
 
