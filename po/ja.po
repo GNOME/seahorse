@@ -11,10 +11,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=seahorse&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-03-19 02:36+0000\n"
-"PO-Revision-Date: 2016-03-19 18:34+0900\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
+"POT-Creation-Date: 2019-01-14 08:02+0000\n"
+"PO-Revision-Date: 2019-01-26 23:00+0900\n"
 "Last-Translator: Hajime Taira <htaira@redhat.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -23,15 +22,344 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../data/seahorse.appdata.xml.in.h:1
+#: common/add-keyserver-dialog.vala:32
+msgid "Add Key Server"
+msgstr "鍵サーバーの追加"
+
+#: common/add-keyserver-dialog.vala:64
+msgid "Custom"
+msgstr "その他"
+
+#. Buttons
+#: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
+#: gkr/seahorse-gkr-add-keyring.ui:82 pkcs11/seahorse-pkcs11-generate.ui:186
+#: ssh/seahorse-ssh-upload.ui:138
+msgid "Cancel"
+msgstr ""
+
+#: common/add-keyserver-dialog.vala:69
+msgid "Save"
+msgstr ""
+
+#: common/catalog.vala:116
+msgid "Cannot delete"
+msgstr "削除できません"
+
+#: common/catalog.vala:130 common/key-manager-store.vala:418
+#, fuzzy
+#| msgid "Couldn't export keys"
+msgid "Couldn’t export keys"
+msgstr "鍵をエクスポートできません"
+
+#: common/catalog.vala:140
+#, fuzzy
+#| msgid "Couldn't export data"
+msgid "Couldn’t export data"
+msgstr "データをエクスポートできません"
+
+#. The buttons
+#: common/delete-dialog.vala:87 common/exportable.vala:191
+#: common/passphrase-prompt.vala:117 pgp/seahorse-pgp-generate.ui:294
+#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
+#: src/import-dialog.vala:34 src/key-manager.vala:247
+msgid "_Cancel"
+msgstr ""
+
+#. Delete item
+#: common/delete-dialog.vala:91 pkcs11/pkcs11-properties.vala:201
+#: src/sidebar.vala:647
+msgid "_Delete"
+msgstr "削除(_D)"
+
+#: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:922
+#: ssh/seahorse-ssh-key-properties.ui:280
+msgid "Export"
+msgstr "エクスポート"
+
+#: common/interaction.vala:61
+#, c-format
+msgid "Enter PIN or password for: %s"
+msgstr "'%s' の PIN またはパスワードを入力してください"
+
+#. The second and main entry
+#: common/passphrase-prompt.vala:92
+msgid "Confirm:"
+msgstr "パスワードの確認:"
+
+#: common/passphrase-prompt.vala:121
+msgid "_OK"
+msgstr ""
+
+#: common/passphrase-prompt.vala:145 ssh/seahorse-ssh-askpass.c:117
+msgid "Password:"
+msgstr "パスワード:"
+
+#: common/prefs.vala:42 src/seahorse-key-manager.ui:43
+msgid "Preferences"
+msgstr "設定"
+
+#: common/prefs.vala:150
+#, fuzzy
+#| msgid "None: Don't publish keys"
+msgid "None: Don’t publish keys"
+msgstr "なし: 鍵を公開しない"
+
+#: common/prefs.vala:166
+msgid "Not a valid Key Server address."
+msgstr "鍵サーバーのアドレスが無効です。"
+
+#: common/prefs.vala:167
+msgid ""
+"For help contact your system administrator or the administrator of the key "
+"server."
+msgstr ""
+"詳細はシステム管理者、あるいは鍵サーバーの管理者に問い合わせてください。"
+
+#: common/prefs.vala:236
+msgid "URL"
+msgstr "URL"
+
+#: common/seahorse-add-keyserver.ui:12
+msgid "initial temporary item"
+msgstr "初回に一時生成する項目"
+
+#: common/seahorse-add-keyserver.ui:34
+msgid "Key Server Type:"
+msgstr "鍵サーバーの種類:"
+
+#: common/seahorse-add-keyserver.ui:58
+msgid "Host:"
+msgstr "ホスト名:"
+
+#: common/seahorse-add-keyserver.ui:77 ssh/seahorse-ssh-upload.ui:67
+#: ssh/seahorse-ssh-upload.ui:108
+msgid "The host name or address of the server."
+msgstr "サーバーのホスト名や IP アドレスです"
+
+#: common/seahorse-add-keyserver.ui:93
+msgid ":"
+msgstr ":"
+
+#: common/seahorse-add-keyserver.ui:105
+msgid "The port to access the server on."
+msgstr "サーバーにアクセスする際に使用するポート番号です。"
+
+#: common/seahorse-prefs.ui:34
+msgid "_Find keys via:"
+msgstr "鍵サーバーの一覧(_F):"
+
+#: common/seahorse-prefs.ui:105
+msgid "_Publish keys to:"
+msgstr "鍵の公開先(_P):"
+
+#: common/seahorse-prefs.ui:128
+msgid "Automatically retrieve keys from _key servers"
+msgstr "鍵サーバーから鍵を自動的に取得する(_K)"
+
+#: common/seahorse-prefs.ui:142
+msgid "Automatically synchronize _modified keys with key servers"
+msgstr "変更した鍵を鍵サーバーと自動的に同期する(_M)"
+
+#: common/seahorse-prefs.ui:159
+msgid "Key Servers"
+msgstr "鍵サーバー"
+
+#: common/validity.vala:38 pgp/seahorse-pgp-key-properties.c:1258
+#: pgp/seahorse-pgp-private-key-properties.ui:11
+#: pgp/seahorse-pgp-public-key-properties.ui:11
+msgctxt "Validity"
+msgid "Unknown"
+msgstr "不明"
+
+# 参考: http://pgp.iijlab.net/trans/
+#: common/validity.vala:40 pgp/seahorse-pgp-key-properties.c:1264
+#: pgp/seahorse-pgp-private-key-properties.ui:14
+#: pgp/seahorse-pgp-public-key-properties.ui:14
+msgctxt "Validity"
+msgid "Never"
+msgstr "信用しない"
+
+#: common/validity.vala:42 pgp/seahorse-pgp-private-key-properties.ui:17
+msgctxt "Validity"
+msgid "Marginal"
+msgstr "ぎりぎり信用する"
+
+#: common/validity.vala:44 pgp/seahorse-pgp-private-key-properties.ui:20
+msgctxt "Validity"
+msgid "Full"
+msgstr "完全に信用する"
+
+#: common/validity.vala:46 pgp/seahorse-pgp-private-key-properties.ui:23
+msgctxt "Validity"
+msgid "Ultimate"
+msgstr "究極に信用する"
+
+#: common/validity.vala:48
+msgctxt "Validity"
+msgid "Disabled"
+msgstr "無効にする"
+
+#: common/validity.vala:50
+msgctxt "Validity"
+msgid "Revoked"
+msgstr "失効済み"
+
+#: data/org.gnome.seahorse.gschema.xml:5
+#, fuzzy
+#| msgid "Retrieving keys"
+msgid "Auto retrieve keys"
+msgstr "鍵の取得中"
+
+#: data/org.gnome.seahorse.gschema.xml:6
+#, fuzzy
+#| msgid "Automatically retrieve keys from _key servers"
+msgid "Whether or not keys should be automatically retrieved from key servers."
+msgstr "鍵サーバーから鍵を自動的に取得する(_K)"
+
+#: data/org.gnome.seahorse.gschema.xml:10
+#, fuzzy
+#| msgid "None: Don't publish keys"
+msgid "Auto publish keys"
+msgstr "なし: 鍵を公開しない"
+
+#: data/org.gnome.seahorse.gschema.xml:11
+msgid "Whether or not modified keys should be automatically published."
+msgstr ""
+
+#: data/org.gnome.seahorse.gschema.xml:15
+#, fuzzy
+#| msgid "Couldn't publish keys to server"
+msgid "Publish keys to this key server"
+msgstr "鍵をサーバーに出力できません"
+
+#: data/org.gnome.seahorse.gschema.xml:16
+msgid ""
+"The key server to publish PGP keys to. Or empty to suppress publishing of "
+"PGP keys."
+msgstr ""
+
+#: data/org.gnome.seahorse.gschema.xml:20
+msgid "Last key server search pattern"
+msgstr ""
+
+#: data/org.gnome.seahorse.gschema.xml:21
+msgid "The last search pattern searched for against a key server."
+msgstr ""
+
+#: data/org.gnome.seahorse.gschema.xml:25
+msgid "Last key servers used"
+msgstr ""
+
+#: data/org.gnome.seahorse.gschema.xml:26
+msgid ""
+"The last key server a search was performed against or empty for all key "
+"servers."
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:5
+#, fuzzy
+#| msgid "Show places sidebar"
+msgid "Show keyrings sidebar"
+msgstr "場所のサイドバーを表示する"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:6
+#, fuzzy
+#| msgid "Show sidebar listing keyrings"
+msgid "Show keyrings sidebar in Seahorse."
+msgstr "キーリング一覧をサイドバーに表示"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:10
+msgid "Which items to show"
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:11
+msgid ""
+"Filter which items to show. If empty, show all items, if “personal” show "
+"personal keys, if “trusted” show trusted."
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:16
+msgid "Width of the side pane"
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:17
+msgid "The default width of the side pane."
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:21
+msgid "The keyrings chosen"
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:22
+msgid "The URIs of the keyrings chosen in the sidebar."
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:29
+msgid "The column to sort the Seahorse keys by"
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:30
+msgid ""
+"Specify the column to sort the Seahorse key manager main window by. Columns "
+"are: “name”, “id”, “validity”, “expires”, “trust”, and “type”. Put a “-” in "
+"front of the column name to sort in descending order."
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:34
+msgid "Show validity column"
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:35
+#: data/org.gnome.seahorse.manager.gschema.xml:40
+#: data/org.gnome.seahorse.manager.gschema.xml:45
+#: data/org.gnome.seahorse.manager.gschema.xml:50
+#, fuzzy
+#| msgid "Key is no longer used"
+msgid "No longer in use."
+msgstr "鍵が使われていません"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:39
+msgid "Show expiry column"
+msgstr ""
+
+#: data/org.gnome.seahorse.manager.gschema.xml:44
+#, fuzzy
+#| msgid "Show _Trusted"
+msgid "Show trust column"
+msgstr "信頼済みのみ表示する(_T)"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:49
+msgid "Show type column"
+msgstr ""
+
+#: data/org.gnome.seahorse.window.gschema.xml:5
+#, fuzzy
+#| msgid "Close this window"
+msgid "Width of the window"
+msgstr "このウィンドウを閉じます"
+
+#: data/org.gnome.seahorse.window.gschema.xml:6
+msgid "Width (in pixels) of the window."
+msgstr ""
+
+#: data/org.gnome.seahorse.window.gschema.xml:10
+msgid "Height of the window"
+msgstr ""
+
+#: data/org.gnome.seahorse.window.gschema.xml:11
+msgid "Height (in pixels) of the window."
+msgstr ""
+
+#: data/org.gnome.seahorse.Application.appdata.xml.in:6
 msgid "Seahorse"
 msgstr "Seahorse"
 
-#: ../data/seahorse.appdata.xml.in.h:2 ../data/seahorse.desktop.in.in.h:2
+#: data/org.gnome.seahorse.Application.appdata.xml.in:7
+#: data/org.gnome.seahorse.Application.desktop.in.in:4
 msgid "Manage your passwords and encryption keys"
 msgstr "パスワードや暗号鍵を管理します"
 
-#: ../data/seahorse.appdata.xml.in.h:3
+#: data/org.gnome.seahorse.Application.appdata.xml.in:9
 msgid ""
 "Seahorse is a GNOME application for managing encryption keys. It also "
 "integrates with nautilus, gedit and other places for encryption operations."
@@ -39,323 +367,271 @@ msgstr ""
 "Seahorse は 暗号化の鍵の管理を行うための GNOME アプリケーションです。"
 "Nautilus や Gedit などのアプリケーションと暗号化操作を統合化します。"
 
-#: ../data/seahorse.appdata.xml.in.h:4
+#: data/org.gnome.seahorse.Application.appdata.xml.in:13
+#, fuzzy
+#| msgid ""
+#| "With seahorse you can create and manage PGP keys, create and manage SSH "
+#| "keys, publish and retrieve keys from key servers, cache your passphrase "
+#| "so you don't have to keep typing it and backup your keys and keyring."
 msgid ""
 "With seahorse you can create and manage PGP keys, create and manage SSH "
 "keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don't have to keep typing it and backup your keys and keyring."
+"you don’t have to keep typing it and backup your keys and keyring."
 msgstr ""
 "Seahorse を使うと PGP 鍵、SSH 鍵の生成および管理、鍵サーバーへの公開や取得が"
 "可能です。パスフレーズをキャッシュしておけるため、何度もパスフレーズを入力す"
 "る必要がなくなります。また、鍵やキーリングのバックアップを取ることもできま"
 "す。"
 
-#: ../data/seahorse.desktop.in.in.h:1 ../common/catalog.vala:285
-#: ../src/seahorse-key-manager.c:660
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:158
+#: src/seahorse-key-manager.ui:276
 msgid "Passwords and Keys"
 msgstr "パスワードと鍵"
 
-#: ../data/seahorse.desktop.in.in.h:3
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.seahorse.Application.desktop.in.in:6
 msgid "keyring;encryption;security;sign;ssh;"
 msgstr ""
 "keyring;encryption;security;sign;ssh;キーリング;鍵束;暗号化;セキュリティ;サイ"
 "ン;署名;gpg;pgp;"
 
-#: ../common/catalog.vala:257
-msgid "Contributions:"
-msgstr "貢献者:"
-
-#: ../common/catalog.vala:287
-msgid "translator-credits"
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+#: data/org.gnome.seahorse.Application.desktop.in.in:11
+msgid "org.gnome.seahorse.Application"
 msgstr ""
-"相花 毅 <takeshi.aihana@gmail.com>\n"
-"Anthony Mulcahy <anthony@kcn.ne.jp>\n"
-"草野 貴之 <AE5T-KSN@asahi-net.or.jp>\n"
-"やまねひでき <henrich@debian.org>\n"
-"松澤 二郎 <jmatsuzawa@gnome.org>\n"
-"平 初 <htaira@redhat.com>\n"
-"日本GNOMEユーザー会 http://www.gnome.gr.jp/"
 
-#: ../common/catalog.vala:290
-msgid "Seahorse Project Homepage"
-msgstr "Seahorse プロジェクトのページ"
-
-#: ../common/catalog.vala:308
-msgid "Cannot delete"
-msgstr "削除できません"
-
-#: ../common/catalog.vala:331 ../libseahorse/seahorse-key-manager-store.c:443
-msgid "Couldn't export keys"
-msgstr "鍵をエクスポートできません"
-
-#: ../common/catalog.vala:342
-msgid "Couldn't export data"
-msgstr "データをエクスポートできません"
-
-#: ../common/catalog.vala:358 ../libseahorse/seahorse-widget.c:460
-#, c-format
-msgid "Could not display help: %s"
-msgstr "ヘルプを表示できません: %s"
-
-#. Top menu items
-#: ../common/catalog.vala:364
-msgid "_File"
-msgstr "ファイル(_F)"
-
-#: ../common/catalog.vala:365
-msgid "E_xport..."
-msgstr "エクスポート(_X)..."
-
-#: ../common/catalog.vala:366
-msgid "Export to a file"
-msgstr "ファイルへ書き出します"
-
-#: ../common/catalog.vala:367
-msgid "_Edit"
-msgstr "編集(_E)"
-
-#: ../common/catalog.vala:370
-msgid "Copy to the clipboard"
-msgstr "クリップボードへコピーします"
-
-#: ../common/catalog.vala:371 ../pkcs11/pkcs11-properties.vala:201
-#: ../src/seahorse-sidebar.c:954
-msgid "_Delete"
-msgstr "削除(_D)"
-
-#: ../common/catalog.vala:372
-msgid "Delete selected items"
-msgstr "選択したアイテムを削除します"
-
-#: ../common/catalog.vala:374
-msgid "Show the properties of this item"
-msgstr "このアイテムのプロパティを表示します"
-
-#: ../common/catalog.vala:376
-msgid "Show the properties of this keyring"
-msgstr "このキーリングのプロパティを表示します"
-
-#: ../common/catalog.vala:377
-msgid "Prefere_nces"
-msgstr "設定(_N)"
-
-#: ../common/catalog.vala:378
-msgid "Change preferences for this program"
-msgstr "このプログラムの設定を変更します"
-
-#: ../common/catalog.vala:379
-msgid "_View"
-msgstr "表示(_V)"
-
-#: ../common/catalog.vala:380
-msgid "_Help"
-msgstr "ヘルプ(_H)"
-
-#: ../common/catalog.vala:382
-msgid "About this program"
-msgstr "このプログラムの情報を表示します"
-
-#: ../common/catalog.vala:383
-msgid "_Contents"
-msgstr "目次(_C)"
-
-#: ../common/catalog.vala:384
-msgid "Show Seahorse help"
-msgstr "Seahorse のヘルプを表示します"
-
-#: ../common/exportable.vala:192
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:46
-msgid "Export"
-msgstr "エクスポート"
-
-#: ../gkr/gkr-backend.vala:39
+#: gkr/gkr-backend.vala:43
 msgid "Passwords"
 msgstr "パスワード"
 
-#: ../gkr/gkr-backend.vala:43
+#: gkr/gkr-backend.vala:47
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "保存された自分のパスワード、資格情報および秘密鍵"
 
-#: ../gkr/gkr-backend.vala:251
-msgid "New password keyring"
-msgstr "新しいパスワードキーリング"
+#: gkr/gkr-item-add.vala:98 src/sidebar.vala:598
+#, fuzzy
+#| msgid "Couldn't unlock"
+msgid "Couldn’t unlock"
+msgstr "解除できません"
 
-#: ../gkr/gkr-backend.vala:252 ../gkr/gkr-backend.vala:259
-msgid "Used to store application and network passwords"
-msgstr ""
-"アプリケーションやネットワークで使用するパスワードを保管する際に使用します"
-
-#: ../gkr/gkr-backend.vala:253
-msgid "New password..."
-msgstr "新規パスワード..."
-
-#: ../gkr/gkr-backend.vala:254 ../gkr/gkr-backend.vala:261
-msgid "Safely store a password or secret."
-msgstr "パスワードや秘密鍵を安全に保存する。"
-
-#: ../gkr/gkr-backend.vala:258
-msgid "Password Keyring"
-msgstr "パスワードキーリング"
-
-#: ../gkr/gkr-backend.vala:260
-msgid "Stored Password"
-msgstr "保存されているパスワード"
-
-#: ../gkr/gkr-item-add.vala:24
-msgid "Add Password"
-msgstr "パスワードを追加"
-
-#: ../gkr/gkr-item-add.vala:101
-msgid "Couldn't add item"
+#: gkr/gkr-item-add.vala:122
+#, fuzzy
+#| msgid "Couldn't add item"
+msgid "Couldn’t add item"
 msgstr "アイテムを追加できません"
 
-#: ../gkr/gkr-item-properties.vala:136
+#: gkr/gkr-item-properties.vala:106
+msgid "Save changes for this item?"
+msgstr ""
+
+#: gkr/gkr-item-properties.vala:123
 msgid "Access a network share or resource"
 msgstr "ネットワーク共有やリソースへのアクセス"
 
-#: ../gkr/gkr-item-properties.vala:139
+#: gkr/gkr-item-properties.vala:126
 msgid "Access a website"
 msgstr "ウェブサイトへのアクセス"
 
-#: ../gkr/gkr-item-properties.vala:142
+#: gkr/gkr-item-properties.vala:129
 msgid "Unlocks a PGP key"
 msgstr "PGP 鍵のロックを解除"
 
-#: ../gkr/gkr-item-properties.vala:145
+#: gkr/gkr-item-properties.vala:132
 msgid "Unlocks a Secure Shell key"
 msgstr "SSH 鍵のロックを解除"
 
-#: ../gkr/gkr-item-properties.vala:148
+#: gkr/gkr-item-properties.vala:135
 msgid "Saved password or login"
 msgstr "保存されているパスワードまたはログイン"
 
-#: ../gkr/gkr-item-properties.vala:161
+#: gkr/gkr-item-properties.vala:147
 msgid "Network Credentials"
 msgstr "ネットワークの資格情報"
 
-#: ../gkr/gkr-item-properties.vala:166
+#: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:70
+#: src/seahorse-key-manager.ui:191
 msgid "Password"
 msgstr "パスワード"
 
-#: ../gkr/gkr-item-properties.vala:235
-msgid "Couldn't change password."
+#: gkr/gkr-item-properties.vala:209
+#, fuzzy
+#| msgid "Couldn't change password."
+msgid "Couldn’t change password."
 msgstr "パスワードを変更できません"
 
-#: ../gkr/gkr-item-properties.vala:273
-msgid "Couldn't set description."
+#: gkr/gkr-item-properties.vala:233
+#, fuzzy
+#| msgid "Couldn't set description."
+msgid "Couldn’t set description."
 msgstr "説明を設定できません。"
 
+#: gkr/gkr-item-properties.vala:268
+#, fuzzy
+#| msgid "Delete the password."
+msgid "Error deleting the password."
+msgstr "パスワードを削除する。"
+
 #. Translators: This should be the same as the string in empathy
-#: ../gkr/gkr-item.vala:388
+#: gkr/gkr-item.vala:390
 msgid "IM account password for "
 msgstr "メッセンジャーのアカウントパスワード: "
 
-#: ../gkr/gkr-item.vala:444
+#: gkr/gkr-item.vala:446
 msgid "Password or secret"
 msgstr "パスワードまたは秘密鍵"
 
-#: ../gkr/gkr-item.vala:445
+#: gkr/gkr-item.vala:447
 msgid "Network password"
 msgstr "ネットワークパスワード"
 
-#: ../gkr/gkr-item.vala:446
+#: gkr/gkr-item.vala:448
 msgid "Stored note"
 msgstr "保存されているメモ"
 
-#: ../gkr/gkr-item.vala:447
+#: gkr/gkr-item.vala:449
 msgid "Keyring password"
 msgstr "キーリングのパスワード"
 
-#: ../gkr/gkr-item.vala:448
+#: gkr/gkr-item.vala:450
 msgid "Encryption key password"
 msgstr "暗号鍵のパスワード"
 
-#: ../gkr/gkr-item.vala:449
+#: gkr/gkr-item.vala:451
 msgid "Key storage password"
 msgstr "鍵の保管パスワード"
 
-#: ../gkr/gkr-item.vala:450
+#: gkr/gkr-item.vala:452
 msgid "Google Chrome password"
 msgstr "Google Chrome のパスワード"
 
-#: ../gkr/gkr-item.vala:451
-msgid "Gnome Online Accounts password"
+#: gkr/gkr-item.vala:453
+#, fuzzy
+#| msgid "Gnome Online Accounts password"
+msgid "GNOME Online Accounts password"
 msgstr "Gnome オンラインアカウントのパスワード"
 
-#: ../gkr/gkr-item.vala:452
+#: gkr/gkr-item.vala:454
 msgid "Telepathy password"
 msgstr "Telepathy のパスワード"
 
-#: ../gkr/gkr-item.vala:453
+#: gkr/gkr-item.vala:455
 msgid "Instant messaging password"
 msgstr "インスタントメッセンジャーのパスワード"
 
-#: ../gkr/gkr-item.vala:454
+#: gkr/gkr-item.vala:456
 msgid "Network Manager secret"
 msgstr "ネットワークマネージャーの秘密鍵"
 
-#: ../gkr/gkr-item.vala:504
-#, c-format
-msgid "Are you sure you want to delete the password '%s'?"
+#: gkr/gkr-item.vala:506
+#, fuzzy, c-format
+#| msgid "Are you sure you want to delete the password '%s'?"
+msgid "Are you sure you want to delete the password “%s”?"
 msgstr "本当にパスワード '%s' を削除しますか?"
 
-#: ../gkr/gkr-item.vala:506
+#: gkr/gkr-item.vala:508
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "本当に%d個のパスワードを削除しますか?"
 
-#: ../gkr/gkr-keyring-add.vala:25
-msgid "Add Password Keyring"
-msgstr "パスワードキーリングの追加"
-
-#: ../gkr/gkr-keyring-add.vala:55
-msgid "Couldn't add keyring"
+#: gkr/gkr-keyring-add.vala:53
+#, fuzzy
+#| msgid "Couldn't add keyring"
+msgid "Couldn’t add keyring"
 msgstr "キーリングを追加できません"
 
-#: ../gkr/gkr-keyring.vala:28
+#: gkr/gkr-keyring-properties.vala:66
+#, fuzzy
+#| msgctxt "Validity"
+#| msgid "Unknown"
+msgid "Unknown date"
+msgstr "不明"
+
+#: gkr/gkr-keyring.vala:28
 msgid "A keyring that is automatically unlocked on login"
 msgstr "ログイン時に自動的に解除するキーリング"
 
-#: ../gkr/gkr-keyring.vala:29
+#: gkr/gkr-keyring.vala:29
 msgid "A keyring used to store passwords"
 msgstr "パスワードの保存に利用するキーリング"
 
-#: ../gkr/gkr-keyring.vala:174
-msgid "Couldn't set default keyring"
+#: gkr/gkr-keyring.vala:174
+#, fuzzy
+#| msgid "Couldn't set default keyring"
+msgid "Couldn’t set default keyring"
 msgstr "デフォルトのキーリングに指定できません"
 
-#: ../gkr/gkr-keyring.vala:198 ../gkr/gkr-keyring.vala:203
-msgid "Couldn't change keyring password"
+#: gkr/gkr-keyring.vala:198 gkr/gkr-keyring.vala:203
+#, fuzzy
+#| msgid "Couldn't change keyring password"
+msgid "Couldn’t change keyring password"
 msgstr "キーリングのパスワードを変更できません"
 
-#: ../gkr/gkr-keyring.vala:209
+#: gkr/gkr-keyring.vala:209
 msgid "_Set as default"
 msgstr "デフォルトにする(_S)"
 
-#: ../gkr/gkr-keyring.vala:210
+#: gkr/gkr-keyring.vala:210
 msgid "Applications usually store new passwords in the default keyring."
 msgstr ""
 "アプリケーションがパスワードを保管するデフォルトのキーリングに指定します"
 
-#: ../gkr/gkr-keyring.vala:211
+#: gkr/gkr-keyring.vala:211
 msgid "Change _Password"
 msgstr "パスワードの変更(_P)"
 
-#: ../gkr/gkr-keyring.vala:212
+#: gkr/gkr-keyring.vala:212
 msgid "Change the unlock password of the password storage keyring"
 msgstr "キーリングのロックを解除する際に必要なパスワードを変更します"
 
-#: ../gkr/gkr-keyring.vala:237
-#, c-format
-msgid "Are you sure you want to delete the password keyring '%s'?"
+#: gkr/gkr-keyring.vala:237
+#, fuzzy, c-format
+#| msgid "Are you sure you want to delete the password keyring '%s'?"
+msgid "Are you sure you want to delete the password keyring “%s”?"
 msgstr "本当に '%s' というパスワードキーリングを削除しますか?"
 
-#: ../gkr/gkr-keyring.vala:240
+#: gkr/gkr-keyring.vala:240
 msgid "I understand that all items will be permanently deleted."
 msgstr "項目が全て抹消されることを理解します。"
 
-#: ../gkr/seahorse-add-keyring.xml.h:1
+#: gkr/gkr-password-entry.vala:35
+#, fuzzy
+#| msgid "Show pass_word"
+msgid "Show/Hide password"
+msgstr "パスワードの内容を表示する(_W)"
+
+#: gkr/seahorse-gkr-add-item.ui:5
+msgid "Add Password"
+msgstr "パスワードを追加"
+
+#: gkr/seahorse-gkr-add-item.ui:24
+msgid "_Keyring:"
+msgstr "キーリング(_K):"
+
+#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
+#: ssh/seahorse-ssh-generate.ui:78
+msgid "_Description:"
+msgstr "説明(_D):"
+
+#: gkr/seahorse-gkr-add-item.ui:71
+msgid "_Password:"
+msgstr "パスワード(_P):"
+
+#: gkr/seahorse-gkr-add-item.ui:93
+msgid "_Show Password"
+msgstr "パスワードを表示(_S)"
+
+#: gkr/seahorse-gkr-add-item.ui:119 gkr/seahorse-gkr-add-keyring.ui:89
+msgid "OK"
+msgstr ""
+
+#: gkr/seahorse-gkr-add-keyring.ui:6
+#, fuzzy
+#| msgid "Add Password Keyring"
+msgid "Add password keyring"
+msgstr "パスワードキーリングの追加"
+
+#: gkr/seahorse-gkr-add-keyring.ui:24
 msgid ""
 "Please choose a name for the new keyring. You will be prompted for an unlock "
 "password."
@@ -363,250 +639,273 @@ msgstr ""
 "新しいキーリングの名前を指定してください (この名前はパスワードを解除する際に"
 "必要になります)。"
 
-#: ../gkr/seahorse-add-keyring.xml.h:2
+#: gkr/seahorse-gkr-add-keyring.ui:42
 msgid "New Keyring Name:"
 msgstr "新しいキーリングの名前:"
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:1
-#: ../gkr/seahorse-gkr-item-properties.xml.h:1 ../pgp/seahorse-revoke.xml.h:3
-#: ../ssh/seahorse-ssh-generate.xml.h:5
-msgid "_Description:"
+#: gkr/seahorse-gkr-item-properties.ui:8
+#, fuzzy
+#| msgid "Key Properties"
+msgid "Item Properties"
+msgstr "鍵のプロパティ"
+
+#: gkr/seahorse-gkr-item-properties.ui:43
+#, fuzzy
+#| msgid "_Description:"
+msgid "Description"
 msgstr "説明(_D):"
 
-#: ../gkr/seahorse-gkr-add-item.xml.h:2
-msgid "_Password:"
-msgstr "パスワード(_P):"
-
-#: ../gkr/seahorse-gkr-add-item.xml.h:3
-msgid "_Show Password"
-msgstr "パスワードを表示(_S)"
-
-#: ../gkr/seahorse-gkr-add-item.xml.h:4
-msgid "_Keyring:"
-msgstr "キーリング(_K):"
+#: gkr/seahorse-gkr-item-properties.ui:86
+msgid "Copy"
+msgstr ""
 
 #. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-item-properties.xml.h:3
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:23
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:13
-#: ../ssh/seahorse-ssh-key-properties.xml.h:9
-msgid "Use:"
+#: gkr/seahorse-gkr-item-properties.ui:113
+#, fuzzy
+#| msgid "Use:"
+msgid "Use"
 msgstr "使用目的:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:4
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:24
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:20
-#: ../ssh/seahorse-ssh-key-properties.xml.h:3
-msgid "Type:"
-msgstr "種類:"
+#: gkr/seahorse-gkr-item-properties.ui:139
+#: pgp/seahorse-pgp-key-properties.c:1439
+msgid "Type"
+msgstr "種類"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:5
-msgid "Server:"
+#: gkr/seahorse-gkr-item-properties.ui:165
+#, fuzzy
+#| msgid "Server:"
+msgid "Server"
 msgstr "サーバー名:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:6
-msgid "Login:"
+#: gkr/seahorse-gkr-item-properties.ui:191
+#, fuzzy
+#| msgid "Login:"
+msgid "Login"
 msgstr "ログイン名:"
 
-#: ../gkr/seahorse-gkr-item-properties.xml.h:7
-msgid "Show pass_word"
-msgstr "パスワードの内容を表示する(_W)"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:8
-#: ../libseahorse/seahorse-passphrase.c:179 ../ssh/seahorse-ssh-askpass.c:117
-msgid "Password:"
-msgstr "パスワード:"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:9 ../pgp/seahorse-pgp-subkey.c:402
-#: ../ssh/seahorse-ssh-key-properties.xml.h:15
-msgid "Key"
-msgstr "鍵"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:10
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:38
-#: ../ssh/seahorse-ssh-key-properties.xml.h:20
-msgid "Technical Details:"
-msgstr "技術的な詳細:"
-
-#: ../gkr/seahorse-gkr-item-properties.xml.h:11
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:51
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:47
-#: ../ssh/seahorse-ssh-key-properties.xml.h:22
+#: gkr/seahorse-gkr-item-properties.ui:218
+#: pgp/seahorse-pgp-private-key-properties.ui:1116
+#: pgp/seahorse-pgp-public-key-properties.ui:912
 msgid "Details"
 msgstr "詳細"
 
-#: ../gkr/seahorse-gkr-keyring.xml.h:1
-msgid "Name:"
-msgstr "名前:"
+#: gkr/seahorse-gkr-item-properties.ui:255
+#, fuzzy
+#| msgid "Delete the password."
+msgid "Delete Password"
+msgstr "パスワードを削除する。"
 
-#. To translators: This is the noun not the verb.
-#: ../gkr/seahorse-gkr-keyring.xml.h:3
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:41
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:42
-msgid "Created:"
-msgstr "生成:"
+#: gkr/seahorse-gkr-keyring.ui:9
+#, fuzzy
+#| msgid "Keyring Properties"
+msgid "Keyring properties"
+msgstr "キーリングのプロパティ"
 
-#: ../gkr/seahorse-gkr-keyring.xml.h:4
-msgid "Keyring"
-msgstr "キーリング"
+#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:486
+#, fuzzy
+#| msgid "Keyring password"
+msgid "Keyring is locked"
+msgstr "キーリングのパスワード"
 
-#: ../libegg/egg-datetime.c:316
+#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:496
+#, fuzzy
+#| msgid "_Unlock"
+msgid "Unlock"
+msgstr "ロックの解除(_U)"
+
+#: gkr/seahorse-gkr-keyring.ui:46
+#, fuzzy
+#| msgid "Keyring password"
+msgid "Keyring is unlocked"
+msgstr "キーリングのパスワード"
+
+#: gkr/seahorse-gkr-keyring.ui:56
+#, fuzzy
+#| msgid "_Lock"
+msgid "Lock"
+msgstr "ロック(_L)"
+
+#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:977
+msgid "Name"
+msgstr "名前"
+
+#: gkr/seahorse-gkr-keyring.ui:130
+#, fuzzy
+#| msgid "Created"
+msgid "Created on"
+msgstr "作成日"
+
+#: gkr/seahorse-gkr-keyring.ui:160
+#, fuzzy
+#| msgid "Change _Password"
+msgid "Change password"
+msgstr "パスワードの変更(_P)"
+
+#: gkr/seahorse-gkr-keyring.ui:167
+#, fuzzy
+#| msgid "_Set as default"
+msgid "Set as default"
+msgstr "デフォルトにする(_S)"
+
+#: libegg/egg-datetime.c:316
 msgid "Display flags"
 msgstr "表示する日付の書式"
 
-#: ../libegg/egg-datetime.c:317
+#: libegg/egg-datetime.c:317
 msgid "Displayed date and/or time properties"
 msgstr "表示する日付や時刻の書式を指定するプロパティです"
 
-#: ../libegg/egg-datetime.c:322
+#: libegg/egg-datetime.c:322
 msgid "Lazy mode"
 msgstr "日付を正規化するかどうか"
 
-#: ../libegg/egg-datetime.c:323
-msgid "Lazy mode doesn't normalize entered date and time values"
+#: libegg/egg-datetime.c:323
+#, fuzzy
+#| msgid "Lazy mode doesn't normalize entered date and time values"
+msgid "Lazy mode doesn’t normalize entered date and time values"
 msgstr "入力した日付や時刻の値を正規化しないかどうかです"
 
-#: ../libegg/egg-datetime.c:328
+#: libegg/egg-datetime.c:328
 msgid "Year"
 msgstr "年"
 
-#: ../libegg/egg-datetime.c:329
+#: libegg/egg-datetime.c:329
 msgid "Displayed year"
 msgstr "表示する日付 (年) です"
 
-#: ../libegg/egg-datetime.c:334
+#: libegg/egg-datetime.c:334
 msgid "Month"
 msgstr "月"
 
-#: ../libegg/egg-datetime.c:335
+#: libegg/egg-datetime.c:335
 msgid "Displayed month"
 msgstr "表示する日付 (月) です"
 
-#: ../libegg/egg-datetime.c:340
+#: libegg/egg-datetime.c:340
 msgid "Day"
 msgstr "日"
 
-#: ../libegg/egg-datetime.c:341
+#: libegg/egg-datetime.c:341
 msgid "Displayed day of month"
 msgstr "表示する日付 (日) です"
 
-#: ../libegg/egg-datetime.c:346
+#: libegg/egg-datetime.c:346
 msgid "Hour"
 msgstr "時"
 
-#: ../libegg/egg-datetime.c:347
+#: libegg/egg-datetime.c:347
 msgid "Displayed hour"
 msgstr "表示する時間 (時) です"
 
-#: ../libegg/egg-datetime.c:352
+#: libegg/egg-datetime.c:352
 msgid "Minute"
 msgstr "分"
 
-#: ../libegg/egg-datetime.c:353
+#: libegg/egg-datetime.c:353
 msgid "Displayed minute"
 msgstr "表示する時間 (分) です"
 
-#: ../libegg/egg-datetime.c:358
+#: libegg/egg-datetime.c:358
 msgid "Second"
 msgstr "秒"
 
-#: ../libegg/egg-datetime.c:359
+#: libegg/egg-datetime.c:359
 msgid "Displayed second"
 msgstr "表示する時間 (秒) です"
 
-#: ../libegg/egg-datetime.c:364
+#: libegg/egg-datetime.c:364
 msgid "Lower limit year"
 msgstr "最小年"
 
-#: ../libegg/egg-datetime.c:365
+#: libegg/egg-datetime.c:365
 msgid "Year part of the lower date limit"
 msgstr "表示する年の最小値です"
 
-#: ../libegg/egg-datetime.c:370
+#: libegg/egg-datetime.c:370
 msgid "Upper limit year"
 msgstr "最大年"
 
-#: ../libegg/egg-datetime.c:371
+#: libegg/egg-datetime.c:371
 msgid "Year part of the upper date limit"
 msgstr "表示する年の最大値です"
 
-#: ../libegg/egg-datetime.c:376
+#: libegg/egg-datetime.c:376
 msgid "Lower limit month"
 msgstr "最小月"
 
-#: ../libegg/egg-datetime.c:377
+#: libegg/egg-datetime.c:377
 msgid "Month part of the lower date limit"
 msgstr "表示する月の最小値です"
 
-#: ../libegg/egg-datetime.c:382
+#: libegg/egg-datetime.c:382
 msgid "Upper limit month"
 msgstr "最大月"
 
-#: ../libegg/egg-datetime.c:383
+#: libegg/egg-datetime.c:383
 msgid "Month part of the upper date limit"
 msgstr "表示する月の最大値です"
 
-#: ../libegg/egg-datetime.c:388
+#: libegg/egg-datetime.c:388
 msgid "Lower limit day"
 msgstr "最小日"
 
-#: ../libegg/egg-datetime.c:389
+#: libegg/egg-datetime.c:389
 msgid "Day of month part of the lower date limit"
 msgstr "表示する日の最小値です"
 
-#: ../libegg/egg-datetime.c:394
+#: libegg/egg-datetime.c:394
 msgid "Upper limit day"
 msgstr "最大日"
 
-#: ../libegg/egg-datetime.c:395
+#: libegg/egg-datetime.c:395
 msgid "Day of month part of the upper date limit"
 msgstr "表示する日数の最大値です"
 
-#: ../libegg/egg-datetime.c:400
+#: libegg/egg-datetime.c:400
 msgid "Lower limit hour"
 msgstr "最小時間"
 
-#: ../libegg/egg-datetime.c:401
+#: libegg/egg-datetime.c:401
 msgid "Hour part of the lower time limit"
 msgstr "表示する時間の最小値です"
 
-#: ../libegg/egg-datetime.c:406
+#: libegg/egg-datetime.c:406
 msgid "Upper limit hour"
 msgstr "最大時間"
 
-#: ../libegg/egg-datetime.c:407
+#: libegg/egg-datetime.c:407
 msgid "Hour part of the upper time limit"
 msgstr "表示する時間の最大値です"
 
-#: ../libegg/egg-datetime.c:412
+#: libegg/egg-datetime.c:412
 msgid "Lower limit minute"
 msgstr "最小分数"
 
-#: ../libegg/egg-datetime.c:413
+#: libegg/egg-datetime.c:413
 msgid "Minute part of the lower time limit"
 msgstr "表示する分の最小値です"
 
-#: ../libegg/egg-datetime.c:418
+#: libegg/egg-datetime.c:418
 msgid "Upper limit minute"
 msgstr "最大分数"
 
-#: ../libegg/egg-datetime.c:419
+#: libegg/egg-datetime.c:419
 msgid "Minute part of the upper time limit"
 msgstr "表示する分の最大値です"
 
-#: ../libegg/egg-datetime.c:424
+#: libegg/egg-datetime.c:424
 msgid "Lower limit second"
 msgstr "最小秒数"
 
-#: ../libegg/egg-datetime.c:425
+#: libegg/egg-datetime.c:425
 msgid "Second part of the lower time limit"
 msgstr "表示する秒の最小値です"
 
-#: ../libegg/egg-datetime.c:430
+#: libegg/egg-datetime.c:430
 msgid "Upper limit second"
 msgstr "最大秒数"
 
-#: ../libegg/egg-datetime.c:431
+#: libegg/egg-datetime.c:431
 msgid "Second part of the upper time limit"
 msgstr "表示する秒の最大値です"
 
@@ -615,428 +914,290 @@ msgstr "表示する秒の最大値です"
 #. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
 #. * or calendar:week_start:0 it will not work.
 #.
-#: ../libegg/egg-datetime.c:473
+#: libegg/egg-datetime.c:473
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
-#: ../libegg/egg-datetime.c:495
+#: libegg/egg-datetime.c:495
 msgid "Date"
 msgstr "日付"
 
-#: ../libegg/egg-datetime.c:495
+#: libegg/egg-datetime.c:495
 msgid "Enter the date directly"
 msgstr "日付を直接入力してください"
 
-#: ../libegg/egg-datetime.c:502
+#: libegg/egg-datetime.c:502
 msgid "Select Date"
 msgstr "日付の選択"
 
-#: ../libegg/egg-datetime.c:502
+#: libegg/egg-datetime.c:502
 msgid "Select the date from a calendar"
 msgstr "カレンダーから日付を選択してください"
 
-#: ../libegg/egg-datetime.c:520 ../libegg/egg-datetime.c:2198
+#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2198
 msgid "Time"
 msgstr "時刻"
 
-#: ../libegg/egg-datetime.c:520
+#: libegg/egg-datetime.c:520
 msgid "Enter the time directly"
 msgstr "時刻を直接入力してください"
 
-#: ../libegg/egg-datetime.c:527
+#: libegg/egg-datetime.c:527
 msgid "Select Time"
 msgstr "時刻の選択"
 
-#: ../libegg/egg-datetime.c:527
+#: libegg/egg-datetime.c:527
 msgid "Select the time from a list"
 msgstr "一覧から時刻を選択してください"
 
 #. Translators: set this to anything else if you want to use a
 #. * 24 hour clock.
 #.
-#: ../libegg/egg-datetime.c:792
+#: libegg/egg-datetime.c:792
 msgid "24hr: no"
 msgstr "24hr: no"
 
-#: ../libegg/egg-datetime.c:796 ../libegg/egg-datetime.c:1259
-#: ../libegg/egg-datetime.c:1263
+#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1259
+#: libegg/egg-datetime.c:1263
 msgid "AM"
 msgstr "午前"
 
-#: ../libegg/egg-datetime.c:798 ../libegg/egg-datetime.c:1260
-#: ../libegg/egg-datetime.c:1267
+#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1260
+#: libegg/egg-datetime.c:1267
 msgid "PM"
 msgstr "午後"
 
 #. Translators: This is hh:mm:ss AM/PM.
-#: ../libegg/egg-datetime.c:806
+#: libegg/egg-datetime.c:806
 #, c-format
 msgid "%02d:%02d:%02d %s"
 msgstr "%4$s%1$02d:%2$02d:%3$02d"
 
 #. Translators: This is hh:mm AM/PM.
-#: ../libegg/egg-datetime.c:809
+#: libegg/egg-datetime.c:809
 #, c-format
 msgid "%02d:%02d %s"
 msgstr "%3$s%1$02d:%2$02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:813
+#: libegg/egg-datetime.c:813
 #, c-format
 msgid "%02d:%02d:%02d"
 msgstr "%02d:%02d:%02d"
 
 #. Translators: This is hh:mm.
-#: ../libegg/egg-datetime.c:816
+#: libegg/egg-datetime.c:816
 #, c-format
 msgid "%02d:%02d"
 msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: ../libegg/egg-datetime.c:1175
+#: libegg/egg-datetime.c:1175
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: ../libegg/egg-datetime.c:1240
+#: libegg/egg-datetime.c:1240
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
 
-#: ../libseahorse/seahorse-add-keyserver.xml.h:1
-msgid "initial temporary item"
-msgstr "初回に一時生成する項目"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:2
-msgid "Add Key Server"
-msgstr "鍵サーバーの追加"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:3
-msgid "Key Server Type:"
-msgstr "鍵サーバーの種類:"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:4
-msgid "Host:"
-msgstr "ホスト名:"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:5
-#: ../ssh/seahorse-ssh-upload.xml.h:3
-msgid "The host name or address of the server."
-msgstr "サーバーのホスト名や IP アドレスです"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:6
-msgid ":"
-msgstr ":"
-
-#: ../libseahorse/seahorse-add-keyserver.xml.h:7
-msgid "The port to access the server on."
-msgstr "サーバーにアクセスする際に使用するポート番号です。"
-
-#: ../libseahorse/seahorse-application.c:108
-msgid "Version of this application"
-msgstr "このアプリケーションのバージョン"
-
-#: ../libseahorse/seahorse-application.c:114
-#: ../libseahorse/seahorse-application.c:158
-msgid "- System Settings"
-msgstr "- システム設定"
-
-#: ../libseahorse/seahorse-application.c:154
-msgid "Don't display a window"
-msgstr "ウィンドウを表示しない"
-
-#: ../libseahorse/seahorse-interaction.c:98
+#: libseahorse/seahorse-widget.c:461
 #, c-format
-msgid "Enter PIN or password for: %s"
-msgstr "'%s' の PIN またはパスワードを入力してください"
+msgid "Could not display help: %s"
+msgstr "ヘルプを表示できません: %s"
 
-#. The second and main entry
-#: ../libseahorse/seahorse-passphrase.c:241
-msgid "Confirm:"
-msgstr "パスワードの確認:"
-
-#: ../libseahorse/seahorse-prefs.c:65
-msgid "Not a valid Key Server address."
-msgstr "鍵サーバーのアドレスが無効です。"
-
-#: ../libseahorse/seahorse-prefs.c:66
-msgid ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-msgstr ""
-"詳細はシステム管理者、あるいは鍵サーバーの管理者に問い合わせてください。"
-
-#: ../libseahorse/seahorse-prefs.c:179
-msgid "URL"
-msgstr "URL"
-
-#: ../libseahorse/seahorse-prefs.c:349
-msgid "Custom"
-msgstr "その他"
-
-#: ../libseahorse/seahorse-prefs.c:402
-msgid "None: Don't publish keys"
-msgstr "なし: 鍵を公開しない"
-
-#: ../libseahorse/seahorse-prefs.xml.h:1
-msgid "Preferences"
-msgstr "設定"
-
-#: ../libseahorse/seahorse-prefs.xml.h:2
-msgid "_Find keys via:"
-msgstr "鍵サーバーの一覧(_F):"
-
-#: ../libseahorse/seahorse-prefs.xml.h:3
-msgid "_Publish keys to:"
-msgstr "鍵の公開先(_P):"
-
-#: ../libseahorse/seahorse-prefs.xml.h:4
-msgid "Automatically retrieve keys from _key servers"
-msgstr "鍵サーバーから鍵を自動的に取得する(_K)"
-
-#: ../libseahorse/seahorse-prefs.xml.h:5
-msgid "Automatically synchronize _modified keys with key servers"
-msgstr "変更した鍵を鍵サーバーと自動的に同期する(_M)"
-
-#: ../libseahorse/seahorse-prefs.xml.h:6
-msgid "Key Servers"
-msgstr "鍵サーバー"
-
-#: ../libseahorse/seahorse-search-provider.c:186
-msgid "The search provider is not loaded yet"
-msgstr "サーチプロバイダーがまだロードされていません"
-
-#: ../libseahorse/seahorse-validity.c:38
-#: ../pgp/seahorse-pgp-key-properties.c:1251
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:1
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:1
-msgctxt "Validity"
-msgid "Unknown"
-msgstr "不明"
-
-# 参考: http://pgp.iijlab.net/trans/
-#: ../libseahorse/seahorse-validity.c:40
-#: ../pgp/seahorse-pgp-key-properties.c:1257
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:2
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:2
-msgctxt "Validity"
-msgid "Never"
-msgstr "信用しない"
-
-#: ../libseahorse/seahorse-validity.c:42
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:3
-msgctxt "Validity"
-msgid "Marginal"
-msgstr "ぎりぎり信用する"
-
-#: ../libseahorse/seahorse-validity.c:44
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:4
-msgctxt "Validity"
-msgid "Full"
-msgstr "完全に信用する"
-
-#: ../libseahorse/seahorse-validity.c:46
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:5
-msgctxt "Validity"
-msgid "Ultimate"
-msgstr "究極に信用する"
-
-#: ../libseahorse/seahorse-validity.c:48
-msgctxt "Validity"
-msgid "Disabled"
-msgstr "無効にする"
-
-#: ../libseahorse/seahorse-validity.c:50
-msgctxt "Validity"
-msgid "Revoked"
-msgstr "失効済み"
-
-#: ../pgp/seahorse-add-subkey.xml.h:1
+#: pgp/seahorse-add-subkey.ui:31
 msgid "Never E_xpires"
 msgstr "有効期限を設定しない(_X)"
 
-#: ../pgp/seahorse-add-subkey.xml.h:2
+#: pgp/seahorse-add-subkey.ui:35
 msgid "If key never expires"
 msgstr "鍵の有効期限を設定しない場合"
 
-#: ../pgp/seahorse-add-subkey.xml.h:3
-#: ../pkcs11/seahorse-pkcs11-generate.xml.h:4
+#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
 msgid "Key _Type:"
 msgstr "鍵の種類(_T):"
 
-#: ../pgp/seahorse-add-subkey.xml.h:4
+#: pgp/seahorse-add-subkey.ui:78
 msgid "Key _Length:"
 msgstr "鍵の長さ(_L):"
 
-#: ../pgp/seahorse-add-subkey.xml.h:5
+#: pgp/seahorse-add-subkey.ui:93
 msgid "Expiration Date:"
 msgstr "有効期限:"
 
-#: ../pgp/seahorse-add-subkey.xml.h:6
+#: pgp/seahorse-add-subkey.ui:112
 msgid "Length of Key"
 msgstr "鍵の長さを指定します"
 
-#: ../pgp/seahorse-add-subkey.xml.h:7
+#: pgp/seahorse-add-subkey.ui:194
 msgid "Generate a new subkey"
 msgstr "新しい副鍵の生成"
 
-#: ../pgp/seahorse-add-uid.xml.h:1
+#: pgp/seahorse-add-uid.ui:8
 msgid "Add User ID"
 msgstr "ユーザー ID の追加"
 
-#: ../pgp/seahorse-add-uid.xml.h:2
+#: pgp/seahorse-add-uid.ui:28
 msgid "Must be at least 5 characters long"
 msgstr "名前は5文字以上にしてください"
 
-#: ../pgp/seahorse-add-uid.xml.h:3
+#: pgp/seahorse-add-uid.ui:42
 msgid "Optional email address"
 msgstr "オプションでメールアドレスを入力します"
 
-#: ../pgp/seahorse-add-uid.xml.h:4
+#: pgp/seahorse-add-uid.ui:58
 msgid "Optional comment describing key"
 msgstr "オプションで鍵の説明を入力します"
 
 #. Full name of the key, usually the name of the user.
-#: ../pgp/seahorse-add-uid.xml.h:6 ../pgp/seahorse-pgp-generate.xml.h:5
+#: pgp/seahorse-add-uid.ui:73 pgp/seahorse-pgp-generate.ui:86
 msgid "Full _Name:"
 msgstr "氏名(_N):"
 
-#: ../pgp/seahorse-add-uid.xml.h:7 ../pgp/seahorse-pgp-generate.xml.h:6
+#: pgp/seahorse-add-uid.ui:86 pgp/seahorse-pgp-generate.ui:114
 msgid "_Email Address:"
 msgstr "メールアドレス(_E):"
 
-#: ../pgp/seahorse-add-uid.xml.h:8
+#: pgp/seahorse-add-uid.ui:101
 msgid "Key Co_mment:"
 msgstr "鍵の説明(_M):"
 
-#: ../pgp/seahorse-add-uid.xml.h:9
+#: pgp/seahorse-add-uid.ui:162
 msgid "Create the new user ID"
 msgstr "新しいユーザー ID の生成"
 
-#: ../pgp/seahorse-expires.xml.h:1
+#: pgp/seahorse-expires.ui:22
 msgid "_Never expires"
 msgstr "有効期限を設定しない(_N)"
 
-#: ../pgp/seahorse-expires.xml.h:2 ../pgp/seahorse-revoke.xml.h:5
+#: pgp/seahorse-expires.ui:80 pgp/seahorse-revoke.ui:129
 msgid "Revoke key"
 msgstr "鍵の失効"
 
-#: ../pgp/seahorse-expires.xml.h:3
+#: pgp/seahorse-expires.ui:106
 msgid "C_hange"
 msgstr "変更(_H)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:161
-msgid "Couldn't add subkey"
+#: pgp/seahorse-gpgme-add-subkey.c:161
+#, fuzzy
+#| msgid "Couldn't add subkey"
+msgid "Couldn’t add subkey"
 msgstr "副鍵を追加できません"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:180
+#: pgp/seahorse-gpgme-add-subkey.c:180
 #, c-format
 msgid "Add subkey to %s"
 msgstr "%s へ副鍵を追加する"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:196 ../pgp/seahorse-gpgme-generate.c:132
+#: pgp/seahorse-gpgme-add-subkey.c:196 pgp/seahorse-gpgme-generate.c:78
 msgid "DSA (sign only)"
 msgstr "DSA (署名のみ)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:204
+#: pgp/seahorse-gpgme-add-subkey.c:204
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (暗号化のみ)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:210 ../pgp/seahorse-gpgme-generate.c:133
+#: pgp/seahorse-gpgme-add-subkey.c:210 pgp/seahorse-gpgme-generate.c:79
 msgid "RSA (sign only)"
 msgstr "RSA (署名のみ)"
 
-#: ../pgp/seahorse-gpgme-add-subkey.c:216
+#: pgp/seahorse-gpgme-add-subkey.c:216
 msgid "RSA (encrypt only)"
 msgstr "RSA (暗号化のみ)"
 
-#: ../pgp/seahorse-gpgme-add-uid.c:99
-msgid "Couldn't add user id"
+#: pgp/seahorse-gpgme-add-uid.c:99
+#, fuzzy
+#| msgid "Couldn't add user id"
+msgid "Couldn’t add user id"
 msgstr "ユーザー ID を追加できません"
 
-#: ../pgp/seahorse-gpgme-add-uid.c:121
+#: pgp/seahorse-gpgme-add-uid.c:121
 #, c-format
 msgid "Add user ID to %s"
 msgstr "%s にユーザー ID を追加する"
 
-#: ../pgp/seahorse-gpgme.c:71
+#: pgp/seahorse-gpgme.c:69
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "復号できません (おそらく復号鍵をお持ちでないようです)"
 
-#: ../pgp/seahorse-gpgme.c:75 ../pgp/seahorse-hkp-source.c:548
-#: ../ssh/seahorse-ssh-operation.c:199
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:549
 msgid "The operation was cancelled"
 msgstr "操作はキャンセルされました"
 
-#: ../pgp/seahorse-gpgme-expires.c:63
+#: pgp/seahorse-gpgme-expires.c:63
 msgid "Invalid expiry date"
 msgstr "有効期限の日付が無効です"
 
-#: ../pgp/seahorse-gpgme-expires.c:64
+#: pgp/seahorse-gpgme-expires.c:64
 msgid "The expiry date must be in the future"
 msgstr "有効期限には将来の日付を指定してください"
 
-#: ../pgp/seahorse-gpgme-expires.c:77
-msgid "Couldn't change expiry date"
+#: pgp/seahorse-gpgme-expires.c:77
+#, fuzzy
+#| msgid "Couldn't change expiry date"
+msgid "Couldn’t change expiry date"
 msgstr "有効期限を変更できません"
 
-#: ../pgp/seahorse-gpgme-expires.c:138
+#: pgp/seahorse-gpgme-expires.c:138
 #, c-format
 msgid "Expiry: %s"
 msgstr "有効期限: %s"
 
-#: ../pgp/seahorse-gpgme-exporter.c:84
+#: pgp/seahorse-gpgme-exporter.c:81
 msgid "Multiple Keys"
 msgstr "複数の鍵"
 
-#: ../pgp/seahorse-gpgme-exporter.c:88
+#: pgp/seahorse-gpgme-exporter.c:85
 msgid "Key Data"
 msgstr "鍵のデータ"
 
-#: ../pgp/seahorse-gpgme-exporter.c:116
+#: pgp/seahorse-gpgme-exporter.c:113
 msgid "Armored PGP keys"
 msgstr "アスキー形式の PGP 鍵"
 
-#: ../pgp/seahorse-gpgme-exporter.c:120
+#: pgp/seahorse-gpgme-exporter.c:117
 msgid "PGP keys"
 msgstr "PGP 鍵"
 
-#: ../pgp/seahorse-gpgme-generate.c:93
-msgid "PGP Key"
-msgstr "PGP 鍵"
-
-#: ../pgp/seahorse-gpgme-generate.c:94
-msgid "Used to encrypt email and files"
-msgstr "メールやファイルを暗号化する際に使用します"
-
-#: ../pgp/seahorse-gpgme-generate.c:130 ../pkcs11/seahorse-pkcs11-generate.c:90
-#: ../ssh/seahorse-ssh-generate.xml.h:9
+#: pgp/seahorse-gpgme-generate.c:76 pkcs11/pkcs11-generate.vala:60
+#: ssh/seahorse-ssh-generate.ui:141
 msgid "RSA"
 msgstr "RSA"
 
-#: ../pgp/seahorse-gpgme-generate.c:131
+#: pgp/seahorse-gpgme-generate.c:77
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
-#: ../pgp/seahorse-gpgme-generate.c:180
-msgid "Couldn't generate PGP key"
+#: pgp/seahorse-gpgme-generate.c:129
+#, fuzzy
+#| msgid "Couldn't generate PGP key"
+msgid "Couldn’t generate PGP key"
 msgstr "PGP 鍵を生成できません"
 
-#: ../pgp/seahorse-gpgme-generate.c:213
+#: pgp/seahorse-gpgme-generate.c:168
 msgid "Passphrase for New PGP Key"
 msgstr "新しい PGP 鍵のパスフレーズ"
 
-#: ../pgp/seahorse-gpgme-generate.c:214
+#: pgp/seahorse-gpgme-generate.c:169
 msgid "Enter the passphrase for your new key twice."
 msgstr "新しい鍵のパスフレーズを二回入力してください:"
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: ../pgp/seahorse-gpgme-generate.c:226
+#: pgp/seahorse-gpgme-generate.c:181
+#, fuzzy
+#| msgid ""
+#| "When creating a key we need to generate a lot of\n"
+#| "random data and we need you to help. It's a good\n"
+#| "idea to perform some other action like typing on\n"
+#| "the keyboard, moving the mouse, using applications.\n"
+#| "This gives the system the random data that it needs."
 msgid ""
 "When creating a key we need to generate a lot of\n"
-"random data and we need you to help. It's a good\n"
+"random data and we need you to help. It’s a good\n"
 "idea to perform some other action like typing on\n"
 "the keyboard, moving the mouse, using applications.\n"
 "This gives the system the random data that it needs."
@@ -1047,66 +1208,72 @@ msgstr ""
 "何か行うのは良い考えです。そうすることで、必要と\n"
 "するでたらめなデータをシステムに与えることになります。"
 
-#: ../pgp/seahorse-gpgme-generate.c:231
-#: ../pkcs11/seahorse-pkcs11-generate.c:458
+#: pgp/seahorse-gpgme-generate.c:186 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "鍵の生成中"
 
-#: ../pgp/seahorse-gpgme-key-deleter.c:77
-#: ../pgp/seahorse-gpgme-secret-deleter.c:76 ../pkcs11/pkcs11-deleter.vala:35
-#: ../pkcs11/pkcs11-key-deleter.vala:33
+#: pgp/seahorse-gpgme-generate.c:313
+#, fuzzy
+#| msgid "Must be at least 5 characters long"
+msgid "Name must be at least 5 characters long."
+msgstr "名前は5文字以上にしてください"
+
+#: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
+#: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "本当に %s という鍵を抹消しますか?"
 
-#: ../pgp/seahorse-gpgme-key-deleter.c:80
+#: pgp/seahorse-gpgme-key-deleter.c:80
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys?"
 msgid_plural "Are you sure you want to permanently delete %d keys?"
 msgstr[0] "本当に %d個の鍵を抹消しますか?"
 
-#: ../pgp/seahorse-gpgme-key-op.c:377
+#: pgp/seahorse-gpgme-key-op.c:378
 msgid "Wrong password"
 msgstr "パスワードが間違っています"
 
-#: ../pgp/seahorse-gpgme-key-op.c:377
+#: pgp/seahorse-gpgme-key-op.c:378
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "間違ったパスワードを入力したのは3回目です。再度試してください。"
 
-#: ../pgp/seahorse-gpgme-keyring.c:89
+#: pgp/seahorse-gpgme-keyring.c:88
 #, c-format
 msgid "Wrong passphrase."
 msgstr "パスフレーズが間違っています。"
 
-#: ../pgp/seahorse-gpgme-keyring.c:93
-#, c-format
-msgid "Enter new passphrase for '%s'"
+#: pgp/seahorse-gpgme-keyring.c:92
+#, fuzzy, c-format
+#| msgid "Enter new passphrase for '%s'"
+msgid "Enter new passphrase for “%s”"
 msgstr "'%s' の新しいパスフレーズを入力してください"
 
-#: ../pgp/seahorse-gpgme-keyring.c:95
-#, c-format
-msgid "Enter passphrase for '%s'"
+#: pgp/seahorse-gpgme-keyring.c:94
+#, fuzzy, c-format
+#| msgid "Enter passphrase for '%s'"
+msgid "Enter passphrase for “%s”"
 msgstr "'%s' のパスフレーズを入力してください"
 
-#: ../pgp/seahorse-gpgme-keyring.c:98 ../src/seahorse-change-passphrase.xml.h:2
+#: pgp/seahorse-gpgme-keyring.c:97 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "新しいパスフレーズを入力してください"
 
-#: ../pgp/seahorse-gpgme-keyring.c:100
+#: pgp/seahorse-gpgme-keyring.c:99
 msgid "Enter passphrase"
 msgstr "パスフレーズを入力してください"
 
-#: ../pgp/seahorse-gpgme-keyring.c:105
+#: pgp/seahorse-gpgme-keyring.c:104
 msgid "Passphrase"
 msgstr "パスフレーズ"
 
-#: ../pgp/seahorse-gpgme-keyring.c:306
+#: pgp/seahorse-gpgme-keyring.c:305
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] " %d個の鍵を読み込みました"
 
-#: ../pgp/seahorse-gpgme-keyring.c:653
+#: pgp/seahorse-gpgme-keyring.c:652
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1115,32 +1282,37 @@ msgstr ""
 "されているか、あるいは自分自身の署名が存在しない場合に発生する場合がありま"
 "す。"
 
-#: ../pgp/seahorse-gpgme-keyring.c:806
+#: pgp/seahorse-gpgme-keyring.c:805
 msgid "GnuPG keys"
 msgstr "GnuPG 鍵"
 
-#: ../pgp/seahorse-gpgme-keyring.c:812
+#: pgp/seahorse-gpgme-keyring.c:816
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: デフォルトのキーリングディレクトリ"
 
-#: ../pgp/seahorse-gpgme-photos.c:72
-#, c-format
+#: pgp/seahorse-gpgme-photos.c:72
+#, fuzzy, c-format
+#| msgid ""
+#| "<big><b>The photo is too large</b></big>\n"
+#| "The recommended size for a photo on your key is %d x %d pixels."
 msgid ""
 "<big><b>The photo is too large</b></big>\n"
-"The recommended size for a photo on your key is %d x %d pixels."
+"The recommended size for a photo on your key is %d × %d pixels."
 msgstr ""
 "<big><b>写真のサイズが大きすぎます</b></big>\n"
 "推奨する写真のサイズは %d x %d ピクセルです。"
 
-#: ../pgp/seahorse-gpgme-photos.c:77
-msgid "_Don't Resize"
+#: pgp/seahorse-gpgme-photos.c:77
+#, fuzzy
+#| msgid "_Don't Resize"
+msgid "_Don’t Resize"
 msgstr "大きさを変更しない(_D)"
 
-#: ../pgp/seahorse-gpgme-photos.c:78
+#: pgp/seahorse-gpgme-photos.c:78
 msgid "_Resize"
 msgstr "大きさを変更する(_R)"
 
-#: ../pgp/seahorse-gpgme-photos.c:127
+#: pgp/seahorse-gpgme-photos.c:127
 #, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
@@ -1149,84 +1321,92 @@ msgstr ""
 "これは画像ファイルではないか、または認識できない種類の画像ファイルです。JPEG "
 "の画像を指定してみてください。"
 
-#: ../pgp/seahorse-gpgme-photos.c:223
+#: pgp/seahorse-gpgme-photos.c:223
 msgid "All image files"
 msgstr "すべての画像ファイル"
 
-#: ../pgp/seahorse-gpgme-photos.c:236
+#: pgp/seahorse-gpgme-photos.c:236
 msgid "All JPEG files"
 msgstr "すべての JPEG ファイル"
 
-#: ../pgp/seahorse-gpgme-photos.c:241 ../src/seahorse-key-manager.c:288
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:290
 msgid "All files"
 msgstr "すべてのファイル"
 
-#: ../pgp/seahorse-gpgme-photos.c:262
+#: pgp/seahorse-gpgme-photos.c:262
 msgid "Choose Photo to Add to Key"
 msgstr "鍵に登録する写真の選択"
 
-#: ../pgp/seahorse-gpgme-photos.c:284
-msgid "Couldn't prepare photo"
+#: pgp/seahorse-gpgme-photos.c:284
+#, fuzzy
+#| msgid "Couldn't prepare photo"
+msgid "Couldn’t prepare photo"
 msgstr "写真の準備ができません"
 
-#: ../pgp/seahorse-gpgme-photos.c:294 ../pgp/seahorse-gpgme-photos.c:297
-msgid "Couldn't add photo"
+#: pgp/seahorse-gpgme-photos.c:294 pgp/seahorse-gpgme-photos.c:297
+#, fuzzy
+#| msgid "Couldn't add photo"
+msgid "Couldn’t add photo"
 msgstr "写真を追加できません"
 
-#: ../pgp/seahorse-gpgme-photos.c:295
+#: pgp/seahorse-gpgme-photos.c:295
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr "ファイルを読み込めませんでした (無効なフォーマットの可能性があります)"
 
-#: ../pgp/seahorse-gpgme-photos.c:321
+#: pgp/seahorse-gpgme-photos.c:321
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "本当にこの鍵に登録した写真を削除してもよろしいですか?"
 
-#: ../pgp/seahorse-gpgme-photos.c:334
-msgid "Couldn't delete photo"
+#: pgp/seahorse-gpgme-photos.c:334
+#, fuzzy
+#| msgid "Couldn't delete photo"
+msgid "Couldn’t delete photo"
 msgstr "写真を削除できません"
 
-#: ../pgp/seahorse-gpgme-revoke.c:73
-msgid "Couldn't revoke subkey"
+#: pgp/seahorse-gpgme-revoke.c:73
+#, fuzzy
+#| msgid "Couldn't revoke subkey"
+msgid "Couldn’t revoke subkey"
 msgstr "副鍵を失効できません"
 
-#: ../pgp/seahorse-gpgme-revoke.c:94
+#: pgp/seahorse-gpgme-revoke.c:94
 #, c-format
 msgid "Revoke: %s"
 msgstr "失効: %s"
 
-#: ../pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke.c:105
 msgid "No reason"
 msgstr "理由なし"
 
-#: ../pgp/seahorse-gpgme-revoke.c:106
+#: pgp/seahorse-gpgme-revoke.c:106
 msgid "No reason for revoking key"
 msgstr "鍵を失効させる理由がありません"
 
-#: ../pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke.c:112
 msgid "Compromised"
 msgstr "漏洩"
 
-#: ../pgp/seahorse-gpgme-revoke.c:113
+#: pgp/seahorse-gpgme-revoke.c:113
 msgid "Key has been compromised"
 msgstr "鍵が漏洩しています"
 
-#: ../pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke.c:119
 msgid "Superseded"
 msgstr "交換済"
 
-#: ../pgp/seahorse-gpgme-revoke.c:120
+#: pgp/seahorse-gpgme-revoke.c:120
 msgid "Key has been superseded"
 msgstr "鍵は新しいものに交換されました"
 
-#: ../pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke.c:126
 msgid "Not Used"
 msgstr "未使用"
 
-#: ../pgp/seahorse-gpgme-revoke.c:127
+#: pgp/seahorse-gpgme-revoke.c:127
 msgid "Key is no longer used"
 msgstr "鍵が使われていません"
 
-#: ../pgp/seahorse-gpgme-revoke.c:164
+#: pgp/seahorse-gpgme-revoke.c:164
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -1235,115 +1415,120 @@ msgstr ""
 "%s を %s の失効者 (Revoker) として追加しようとしています。この処理は取り消し"
 "ができません! 続行してもよろしいですか?"
 
-#: ../pgp/seahorse-gpgme-revoke.c:176
-msgid "Couldn't add revoker"
+#: pgp/seahorse-gpgme-revoke.c:176
+#, fuzzy
+#| msgid "Couldn't add revoker"
+msgid "Couldn’t add revoker"
 msgstr "失効者を追加できません"
 
-#: ../pgp/seahorse-gpgme-secret-deleter.c:81 ../ssh/seahorse-ssh-deleter.c:82
+#: pgp/seahorse-gpgme-secret-deleter.c:81 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
 msgstr "この秘密鍵が抹消されることを理解します。"
 
-#: ../pgp/seahorse-gpgme-sign.c:99
-#, c-format
+#: pgp/seahorse-gpgme-sign.c:99
+#, fuzzy, c-format
+#| msgid ""
+#| "This key was already signed by\n"
+#| "\"%s\""
 msgid ""
 "This key was already signed by\n"
-"\"%s\""
+"“%s”"
 msgstr ""
 "この鍵は既に以下の人に署名されてます。\n"
 "\"%s\""
 
-#: ../pgp/seahorse-gpgme-sign.c:104
-msgid "Couldn't sign key"
+#: pgp/seahorse-gpgme-sign.c:104
+#, fuzzy
+#| msgid "Couldn't sign key"
+msgid "Couldn’t sign key"
 msgstr "鍵に署名できません"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: ../pgp/seahorse-gpgme-sign.c:163 ../pgp/seahorse-signer.c:61
+#: pgp/seahorse-gpgme-sign.c:163 pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr "署名に利用できる鍵がありません"
 
-#: ../pgp/seahorse-gpgme-sign.c:164
+#: pgp/seahorse-gpgme-sign.c:164
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr "この鍵の信用度を表すのに使用する自身の PGP 鍵がありません。"
 
-#: ../pgp/seahorse-gpgme-subkey.c:195
+#: pgp/seahorse-gpgme-subkey.c:194
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "不明"
 
-#: ../pgp/seahorse-gpgme-subkey.c:197
+#: pgp/seahorse-gpgme-subkey.c:196
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: ../pgp/seahorse-hkp-source.c:566
-#, c-format
-msgid "Search was not specific enough. Server '%s' found too many keys."
+#: pgp/seahorse-hkp-source.c:567
+#, fuzzy, c-format
+#| msgid "Search was not specific enough. Server '%s' found too many keys."
+msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "サーバー '%s' には非常にたくさんの鍵があるため、一致する鍵を特定できませんで"
 "した"
 
-#: ../pgp/seahorse-hkp-source.c:569
-#, c-format
-msgid "Couldn't communicate with server '%s': %s"
+#: pgp/seahorse-hkp-source.c:570
+#, fuzzy, c-format
+#| msgid "Couldn't communicate with server '%s': %s"
+msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "サーバー '%s' と通信できません: %s"
 
-#: ../pgp/seahorse-hkp-source.c:1079
+#: pgp/seahorse-hkp-source.c:1080
 msgid "HTTP Key Server"
 msgstr "HTTP 鍵サーバー"
 
-#: ../pgp/seahorse-keyserver-results.c:168
-msgid "Couldn't import keys"
+#: pgp/seahorse-keyserver-results.c:62
+#, fuzzy, c-format
+#| msgid "Couldn't import keys"
+msgid "Couldn't import key: %s"
 msgstr "鍵をインポートできません"
 
-#: ../pgp/seahorse-keyserver-results.c:211
-msgid "Importing keys from key servers"
-msgstr "鍵を鍵サーバーからインポートする"
+#: pgp/seahorse-keyserver-results.c:66
+msgid "Key import succeeded"
+msgstr ""
 
-#. TRANSLATORS: The "Remote" menu contains key operations on remote systems.
-#: ../pgp/seahorse-keyserver-results.c:237 ../src/seahorse-key-manager.c:501
-msgid "_Remote"
-msgstr "リモート(_R)"
+#: pgp/seahorse-keyserver-results.c:154 src/import-dialog.vala:38
+msgid "Import"
+msgstr "インポート"
 
-#: ../pgp/seahorse-keyserver-results.c:239
-msgid "Close this window"
-msgstr "このウィンドウを閉じます"
+#: pgp/seahorse-keyserver-results.c:156
+#, fuzzy
+#| msgid "Couldn't import keys"
+msgid "Can't import key"
+msgstr "鍵をインポートできません"
 
-#: ../pgp/seahorse-keyserver-results.c:243 ../pgp/seahorse-pgp-actions.c:113
-msgid "_Find Remote Keys..."
-msgstr "リモートにある鍵の検索(_F)..."
-
-#: ../pgp/seahorse-keyserver-results.c:244 ../pgp/seahorse-pgp-actions.c:114
-msgid "Search for keys on a key server"
-msgstr "鍵サーバーから鍵を検索します"
-
-#: ../pgp/seahorse-keyserver-results.c:248 ../src/seahorse-key-manager.xml.h:3
-msgid "_Import"
-msgstr "インポート(_I)"
-
-#: ../pgp/seahorse-keyserver-results.c:249
-msgid "Import selected keys to local key ring"
-msgstr "選択した鍵をローカルのキーリングへインポートします"
-
-#: ../pgp/seahorse-keyserver-results.c:280
-msgid "Remote Keys"
+#: pgp/seahorse-keyserver-results.c:240
+#, fuzzy
+#| msgid "Remote Keys"
+msgid "Remote keys"
 msgstr "リモートの鍵"
 
-#: ../pgp/seahorse-keyserver-results.c:282
-#, c-format
-msgid "Remote Keys Containing '%s'"
+#: pgp/seahorse-keyserver-results.c:242
+#, fuzzy, c-format
+#| msgid "Remote Keys Containing '%s'"
+msgid "Remote keys containing “%s”"
 msgstr "'%s' を含むリモートの鍵"
 
-#: ../pgp/seahorse-keyserver-results.c:485
+#: pgp/seahorse-keyserver-results.c:356
 msgid "The search for keys failed."
 msgstr "鍵の検索が失敗しました。"
 
-#: ../pgp/seahorse-keyserver-search.xml.h:1
+#: pgp/seahorse-keyserver-results.ui:16
+msgid ""
+"Double click on a key to inspect it, or click the import button to import it "
+"into your local keyring."
+msgstr ""
+
+#: pgp/seahorse-keyserver-search.ui:8
 msgid "Find Remote Keys"
 msgstr "リモートにある鍵の検索"
 
-#: ../pgp/seahorse-keyserver-search.xml.h:2
+#: pgp/seahorse-keyserver-search.ui:37
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -1351,59 +1536,69 @@ msgstr ""
 "インターネット上にある他の鍵を検索し、その結果をローカルのキーリングに取り込"
 "みます。"
 
-#: ../pgp/seahorse-keyserver-search.xml.h:3
+#: pgp/seahorse-keyserver-search.ui:52
 msgid "_Search for keys containing: "
 msgstr "検索する鍵の内容(_S): "
 
-#: ../pgp/seahorse-keyserver-search.xml.h:4
-msgid "Key Servers:"
-msgstr "鍵サーバー:"
-
-#: ../pgp/seahorse-keyserver-search.xml.h:5
-msgid "Shared Keys Near Me:"
-msgstr "近くで共有している鍵:"
-
-#: ../pgp/seahorse-keyserver-search.xml.h:6
+#: pgp/seahorse-keyserver-search.ui:74
 msgid "Where to search:"
 msgstr "検索する鍵サーバー:"
 
-#: ../pgp/seahorse-keyserver-search.xml.h:7
+#: pgp/seahorse-keyserver-search.ui:103
+msgid "Key Servers:"
+msgstr "鍵サーバー:"
+
+#: pgp/seahorse-keyserver-search.ui:117
+msgid "Shared Keys Near Me:"
+msgstr "近くで共有している鍵:"
+
+#: pgp/seahorse-keyserver-search.ui:146
 msgid "_Search"
 msgstr "検索(_S)"
 
-#: ../pgp/seahorse-keyserver-sync.c:56
-msgid "Couldn't publish keys to server"
+#: pgp/seahorse-keyserver-sync.c:54
+#, fuzzy
+#| msgid "Couldn't publish keys to server"
+msgid "Couldn’t publish keys to server"
 msgstr "鍵をサーバーに出力できません"
 
-#: ../pgp/seahorse-keyserver-sync.c:75
-#, c-format
-msgid "Couldn't retrieve keys from server: %s"
+#: pgp/seahorse-keyserver-sync.c:73
+#, fuzzy, c-format
+#| msgid "Couldn't retrieve keys from server: %s"
+msgid "Couldn’t retrieve keys from server: %s"
 msgstr "サーバーから鍵を取得できません: %s"
 
-#: ../pgp/seahorse-keyserver-sync.c:159
+#: pgp/seahorse-keyserver-sync.c:158
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d個の鍵を同期します</b>"
 
-#: ../pgp/seahorse-keyserver-sync.c:239
-msgid "Synchronizing keys..."
+#: pgp/seahorse-keyserver-sync.c:237
+#, fuzzy
+#| msgid "Synchronizing keys..."
+msgid "Synchronizing keys…"
 msgstr "鍵の同期中..."
 
-#: ../pgp/seahorse-keyserver-sync.xml.h:1
+#: pgp/seahorse-keyserver-sync.ui:14
 msgid "Sync Keys"
 msgstr "鍵の同期"
 
-#: ../pgp/seahorse-keyserver-sync.xml.h:2
+#: pgp/seahorse-keyserver-sync.ui:52
+#, fuzzy
+#| msgid ""
+#| "This will publish the keys in your key ring so they're available for "
+#| "others to use. You'll also get any changes others have made since you "
+#| "received their keys."
 msgid ""
-"This will publish the keys in your key ring so they're available for others "
-"to use. You'll also get any changes others have made since you received "
+"This will publish the keys in your key ring so they’re available for others "
+"to use. You’ll also get any changes others have made since you received "
 "their keys."
 msgstr ""
 "キーリングの中にある鍵を公開して他の人達から利用できるようにします。さらに鍵"
 "を同期して変更内容を適用します。"
 
-#: ../pgp/seahorse-keyserver-sync.xml.h:3
+#: pgp/seahorse-keyserver-sync.ui:65
 msgid ""
 "This will retrieve any changes others have made since you received their "
 "keys. No key server has been chosen for publishing, so your keys will not be "
@@ -1412,567 +1607,580 @@ msgstr ""
 "鍵を受け取ってから発生した変更点を取得します。鍵を公開する鍵サーバーが選択さ"
 "れていないので、他の人達から利用することはできません。"
 
-#: ../pgp/seahorse-keyserver-sync.xml.h:4
+#: pgp/seahorse-keyserver-sync.ui:115
 msgid "_Key Servers"
 msgstr "鍵サーバー(_K)"
 
-#: ../pgp/seahorse-keyserver-sync.xml.h:5
+#: pgp/seahorse-keyserver-sync.ui:148
 msgid "_Sync"
 msgstr "同期する(_S)"
 
-#: ../pgp/seahorse-ldap-source.c:436
-#, c-format
-msgid "Couldn't communicate with '%s': %s"
+#: pgp/seahorse-ldap-source.c:435
+#, fuzzy, c-format
+#| msgid "Couldn't communicate with '%s': %s"
+msgid "Couldn’t communicate with %s: %s"
 msgstr "'%s' と通信できません: %s"
 
-#: ../pgp/seahorse-ldap-source.c:646
+#: pgp/seahorse-ldap-source.c:645
 #, c-format
 msgid "Connecting to: %s"
 msgstr "接続中: %s"
 
-#: ../pgp/seahorse-ldap-source.c:652
-#, c-format
-msgid "Couldn't resolve address: %s"
+#: pgp/seahorse-ldap-source.c:651
+#, fuzzy, c-format
+#| msgid "Couldn't resolve address: %s"
+msgid "Couldn’t resolve address: %s"
 msgstr "次のアドレスを解決できません: %s"
 
-#: ../pgp/seahorse-ldap-source.c:696
+#: pgp/seahorse-ldap-source.c:695
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "次のサーバーのアドレスを解決しています: %s"
 
-#: ../pgp/seahorse-ldap-source.c:1431
+#: pgp/seahorse-ldap-source.c:1430
 msgid "LDAP Key Server"
 msgstr "LDAP 鍵サーバー"
 
-#: ../pgp/seahorse-pgp-actions.c:118
-msgid "_Sync and Publish Keys..."
-msgstr "鍵の公開と同期(_S)..."
-
-#: ../pgp/seahorse-pgp-actions.c:119
-msgid "Publish and/or synchronize your keys with those online."
-msgstr "この鍵を公開してオンライン上の鍵と同期します"
-
-#: ../pgp/seahorse-pgp-backend.c:193
+#: pgp/seahorse-pgp-backend.c:187
 msgid "PGP Keys"
 msgstr "PGP 鍵"
 
-#: ../pgp/seahorse-pgp-backend.c:199
+#: pgp/seahorse-pgp-backend.c:193
 msgid "PGP keys are for encrypting email or files"
 msgstr "PGP 鍵はメールやファイルを暗号化するのに使われます"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:1
-msgid "C_reate"
-msgstr "生成(_R)"
+#: pgp/seahorse-pgp-generate.ui:18
+#, fuzzy
+#| msgid "PGP key"
+msgid "New PGP key"
+msgstr "PGP 鍵"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:2
-msgid "Generate a new key"
-msgstr "新しい鍵を生成します"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:3
+#: pgp/seahorse-pgp-generate.ui:67
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "PGP 鍵を利用すると他の人達に暗号化したメールやファイルを送信できます。"
 
-#: ../pgp/seahorse-pgp-generate.xml.h:7
-msgid "Ne_ver Expires"
-msgstr "有効期限を設定しない(_V)"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:8
-msgid "_Comment:"
-msgstr "コメント(_C):"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:9 ../ssh/seahorse-ssh-generate.xml.h:7
-msgid "Encryption _Type:"
-msgstr "暗号化の種類(_T):"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:10
-#: ../pkcs11/seahorse-pkcs11-generate.xml.h:5
-#: ../ssh/seahorse-ssh-generate.xml.h:8
-msgid "Key _Strength (bits):"
-msgstr "鍵の長さ (ビット)(_S):"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:11
-msgid "E_xpiration Date:"
-msgstr "有効期限(_X):"
-
-#: ../pgp/seahorse-pgp-generate.xml.h:12
-#: ../pkcs11/seahorse-pkcs11-generate.xml.h:6
-#: ../ssh/seahorse-ssh-generate.xml.h:11
+#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "鍵の拡張オプション(_A)"
 
-#: ../pgp/seahorse-pgp-key.c:351
+#: pgp/seahorse-pgp-generate.ui:160
+msgid "_Comment:"
+msgstr "コメント(_C):"
+
+#: pgp/seahorse-pgp-generate.ui:188 ssh/seahorse-ssh-generate.ui:124
+msgid "Encryption _Type:"
+msgstr "暗号化の種類(_T):"
+
+#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
+#: ssh/seahorse-ssh-generate.ui:158
+msgid "Key _Strength (bits):"
+msgstr "鍵の長さ (ビット)(_S):"
+
+#: pgp/seahorse-pgp-generate.ui:242
+msgid "E_xpiration Date:"
+msgstr "有効期限(_X):"
+
+#: pgp/seahorse-pgp-generate.ui:261
+msgid "Ne_ver Expires"
+msgstr "有効期限を設定しない(_V)"
+
+#: pgp/seahorse-pgp-generate.ui:304
+msgid "C_reate"
+msgstr "生成(_R)"
+
+#: pgp/seahorse-pgp-generate.ui:311
+msgid "Generate a new key"
+msgstr "新しい鍵を生成します"
+
+#: pgp/seahorse-pgp-key.c:348
 msgid "Personal PGP key"
 msgstr "自分の PGP 鍵"
 
-#: ../pgp/seahorse-pgp-key.c:353
+#: pgp/seahorse-pgp-key.c:350
 msgid "PGP key"
 msgstr "PGP 鍵"
 
-#: ../pgp/seahorse-pgp-key-properties.c:317
-msgid "Couldn't change primary user ID"
+#: pgp/seahorse-pgp-key-properties.c:312
+#, fuzzy
+#| msgid "Couldn't change primary user ID"
+msgid "Couldn’t change primary user ID"
 msgstr "プライマリユーザー ID が変更できません"
 
-#: ../pgp/seahorse-pgp-key-properties.c:336
-#, c-format
-msgid "Are you sure you want to permanently delete the '%s' user ID?"
+#: pgp/seahorse-pgp-key-properties.c:331
+#, fuzzy, c-format
+#| msgid "Are you sure you want to permanently delete the '%s' user ID?"
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "本当に '%s' というユーザー ID を抹消しますか?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:346
-msgid "Couldn't delete user ID"
+#: pgp/seahorse-pgp-key-properties.c:341
+#, fuzzy
+#| msgid "Couldn't delete user ID"
+msgid "Couldn’t delete user ID"
 msgstr "ユーザー ID を削除できません"
 
-#: ../pgp/seahorse-pgp-key-properties.c:421
-#: ../pgp/seahorse-pgp-key-properties.c:1576
+#. TRANSLATORS: [Unknown] signature name
+#: pgp/seahorse-pgp-key-properties.c:416 pgp/seahorse-pgp-key-properties.c:1583
 msgid "[Unknown]"
 msgstr "[不明]"
 
-#: ../pgp/seahorse-pgp-key-properties.c:530
-#: ../pgp/seahorse-pgp-key-properties.c:1859
+#. TRANSLATORS: The name and email set on the PGP key
+#: pgp/seahorse-pgp-key-properties.c:525 pgp/seahorse-pgp-key-properties.c:1866
 msgid "Name/Email"
 msgstr "名前/メール"
 
-#: ../pgp/seahorse-pgp-key-properties.c:537
+#: pgp/seahorse-pgp-key-properties.c:532
 msgid "Signature ID"
 msgstr "署名の ID"
 
-#: ../pgp/seahorse-pgp-key-properties.c:670
-msgid "Couldn't change primary photo"
+#: pgp/seahorse-pgp-key-properties.c:665
+#, fuzzy
+#| msgid "Couldn't change primary photo"
+msgid "Couldn’t change primary photo"
 msgstr "プライマリの写真を変更できません"
 
 #. TRANSLATORS: (unknown) expiry date
-#: ../pgp/seahorse-pgp-key-properties.c:904
+#: pgp/seahorse-pgp-key-properties.c:894
 msgid "(unknown)"
 msgstr "(不明)"
 
-#: ../pgp/seahorse-pgp-key-properties.c:907
+#: pgp/seahorse-pgp-key-properties.c:897
 #, c-format
 msgid "This key expired on: %s"
 msgstr "この鍵の有効期限: %s"
 
-#: ../pgp/seahorse-pgp-key-properties.c:970
-msgid "Name"
-msgstr "名前"
+#. Translators: the 1st part of the title is the owner's name
+#: pgp/seahorse-pgp-key-properties.c:928
+#, fuzzy, c-format
+#| msgid "Sign public key"
+msgid "%s — Public key"
+msgstr "公開鍵に署名します"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1085
+#. Translators: the 1st part of the title is the owner's name
+#: pgp/seahorse-pgp-key-properties.c:931
+#, fuzzy, c-format
+#| msgid "Private key"
+msgid "%s — Private key"
+msgstr "秘密鍵"
+
+#: pgp/seahorse-pgp-key-properties.c:1092
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "本当に副鍵 %d (%s) を完全に削除しますか?"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1094
-msgid "Couldn't delete subkey"
+#: pgp/seahorse-pgp-key-properties.c:1101
+#, fuzzy
+#| msgid "Couldn't delete subkey"
+msgid "Couldn’t delete subkey"
 msgstr "副鍵を削除できません"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1134
-#: ../pgp/seahorse-pgp-key-properties.c:1550
+#: pgp/seahorse-pgp-key-properties.c:1141
+#: pgp/seahorse-pgp-key-properties.c:1557
 msgid "Unable to change trust"
 msgstr "信用度を変更できません"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1148
-#: ../ssh/seahorse-ssh-key-properties.c:205
-msgid "Couldn't export key"
+#: pgp/seahorse-pgp-key-properties.c:1155 ssh/key-properties.vala:185
+#, fuzzy
+#| msgid "Couldn't export key"
+msgid "Couldn’t export key"
 msgstr "鍵をエクスポートできません"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1264
+#: pgp/seahorse-pgp-key-properties.c:1271
 msgid "Marginal"
 msgstr "ぎりぎり信用する"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1270
+#: pgp/seahorse-pgp-key-properties.c:1277
 msgid "Full"
 msgstr "完全に信用する"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1276
+#: pgp/seahorse-pgp-key-properties.c:1283
 msgid "Ultimate"
 msgstr "究極に信用する"
 
 # 参考: http://pgp.iijlab.net/trans/
-#: ../pgp/seahorse-pgp-key-properties.c:1382
-#: ../pgp/seahorse-pgp-key-properties.c:1475
+#: pgp/seahorse-pgp-key-properties.c:1389
+#: pgp/seahorse-pgp-key-properties.c:1482
 msgctxt "Expires"
 msgid "Never"
 msgstr "有効期限なし"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1429
+#: pgp/seahorse-pgp-key-properties.c:1436
 msgid "ID"
 msgstr "ID"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1432
-msgid "Type"
-msgstr "種類"
-
-#: ../pgp/seahorse-pgp-key-properties.c:1435
+#: pgp/seahorse-pgp-key-properties.c:1442
 msgid "Usage"
 msgstr "用途"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1438
+#: pgp/seahorse-pgp-key-properties.c:1445
 msgid "Created"
 msgstr "作成日"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1441
+#: pgp/seahorse-pgp-key-properties.c:1448
 msgid "Expires"
 msgstr "有効期限"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1444
+#: pgp/seahorse-pgp-key-properties.c:1451
 msgid "Status"
 msgstr "状態"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1447
+#: pgp/seahorse-pgp-key-properties.c:1454
 msgid "Strength"
 msgstr "強度"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1466
+#: pgp/seahorse-pgp-key-properties.c:1473
 msgid "Revoked"
 msgstr "失効済み"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1468
+#: pgp/seahorse-pgp-key-properties.c:1475
 msgid "Expired"
 msgstr "期限切れ"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1470
+#: pgp/seahorse-pgp-key-properties.c:1477
 msgid "Disabled"
 msgstr "無効にする"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1472
+#: pgp/seahorse-pgp-key-properties.c:1479
 msgid "Good"
 msgstr "良い"
 
-#: ../pgp/seahorse-pgp-key-properties.c:1862
+#: pgp/seahorse-pgp-key-properties.c:1869
+#: pgp/seahorse-pgp-private-key-properties.ui:346
+#: pgp/seahorse-pgp-public-key-properties.ui:286
 msgid "Key ID"
 msgstr "鍵の ID"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:6
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:6
-#: ../ssh/seahorse-ssh-key-properties.xml.h:1
+#: pgp/seahorse-pgp-private-key-properties.ui:30
+#: pgp/seahorse-pgp-public-key-properties.ui:31
 msgid "Key Properties"
 msgstr "鍵のプロパティ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:7
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:7
+#: pgp/seahorse-pgp-private-key-properties.ui:67
+#: pgp/seahorse-pgp-public-key-properties.ui:72
 msgid "This key has been revoked"
 msgstr "この鍵は失効しています"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:8
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:8
+#: pgp/seahorse-pgp-private-key-properties.ui:77
+#: pgp/seahorse-pgp-public-key-properties.ui:84
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "鍵の所有者が鍵を破棄したので、もう利用できません。"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:9
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:9
+#: pgp/seahorse-pgp-private-key-properties.ui:105
+#: pgp/seahorse-pgp-public-key-properties.ui:115
 msgid "This key has expired"
 msgstr "この鍵は有効期限が切れています"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:10
+#: pgp/seahorse-pgp-private-key-properties.ui:171
 msgid "Add a photo to this key"
 msgstr "この鍵に写真を登録します"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:11
+#: pgp/seahorse-pgp-private-key-properties.ui:190
 msgid "Remove this photo from this key"
 msgstr "この鍵からこの写真を削除します"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:12
+#: pgp/seahorse-pgp-private-key-properties.ui:209
 msgid "Make this photo the primary photo"
 msgstr "この写真をプライマリの写真にします"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:13
+#: pgp/seahorse-pgp-private-key-properties.ui:234
 msgid "Go to previous photo"
 msgstr "前の写真へ移動します"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:14
+#: pgp/seahorse-pgp-private-key-properties.ui:253
 msgid "Go to next photo"
 msgstr "次の写真へ移動します"
 
-#. A photograph
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:16
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:11
-msgid "Photo "
-msgstr "写真 "
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:17
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:15
-msgid "Key ID:"
-msgstr "鍵 ID:"
-
-#. Name of key, usually a persons name
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:19
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:17
-msgctxt "name-of-key"
-msgid "Name:"
-msgstr "名前:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:20
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:18
-msgid "Email:"
-msgstr "メールアドレス:"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:21
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:19
-msgid "Comment:"
+#: pgp/seahorse-pgp-private-key-properties.ui:319
+#: pgp/seahorse-pgp-public-key-properties.ui:258
+#, fuzzy
+#| msgid "Comment:"
+msgid "Comment"
 msgstr "コメント:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:25
-msgid "Decrypt files and email sent to you."
-msgstr "送付されたファイルやメールを復号します。"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:26
-msgid "Private PGP Key"
-msgstr "プライベート PGP 鍵"
-
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:27
-#: ../ssh/seahorse-ssh-key-properties.xml.h:10
+#: pgp/seahorse-pgp-private-key-properties.ui:376
+#: ssh/seahorse-ssh-key-properties.ui:294
 msgid "Change _Passphrase"
 msgstr "パスフレーズの変更(_P)"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:28
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:24
+#: pgp/seahorse-pgp-private-key-properties.ui:392
+#: pgp/seahorse-pgp-public-key-properties.ui:359
 msgid "Owner"
 msgstr "所有者"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:29
+#: pgp/seahorse-pgp-private-key-properties.ui:405
 msgid "Key Names and Signatures"
 msgstr "鍵の名前と署名"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:30
+#: pgp/seahorse-pgp-private-key-properties.ui:443
 msgid "Primary"
 msgstr "プライマリ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:31
-#: ../pgp/seahorse-pgp-subkey.c:292
+#: pgp/seahorse-pgp-private-key-properties.ui:473 pgp/seahorse-pgp-subkey.c:291
 msgid "Sign"
 msgstr "署名"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:32
+#. Translators: This text refers to deleting an item from its type's backing store
+#: pgp/seahorse-pgp-private-key-properties.ui:503
+#: src/seahorse-key-manager-widgets.ui:12
 msgid "Delete"
 msgstr "削除"
 
 #. Add another name to the PGP key.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:34
+#: pgp/seahorse-pgp-private-key-properties.ui:533
 msgid "_Add Name"
 msgstr "名前の追加(_A)"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:35
+#: pgp/seahorse-pgp-private-key-properties.ui:562
+#: pgp/seahorse-pgp-private-key-properties.ui:1053
 msgid "Revoke"
 msgstr "失効"
 
 #. List of names and signatures on the PGP key.
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:37
+#: pgp/seahorse-pgp-private-key-properties.ui:598
 msgid "Names and Signatures"
 msgstr "名前と署名"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:38
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:39
-#: ../ssh/seahorse-ssh-key-properties.xml.h:17
+#: pgp/seahorse-pgp-private-key-properties.ui:635
+#: pgp/seahorse-pgp-public-key-properties.ui:619
+msgid "Key ID:"
+msgstr "鍵 ID:"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:660
+#: pgp/seahorse-pgp-public-key-properties.ui:645
+msgid "Type:"
+msgstr "種類:"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:685
+#: pgp/seahorse-pgp-public-key-properties.ui:671
 msgid "Strength:"
 msgstr "強度:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:39
+#: pgp/seahorse-pgp-private-key-properties.ui:710
 msgid "Technical Details"
 msgstr "技術的な詳細"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:40
+#: pgp/seahorse-pgp-private-key-properties.ui:738
+#: ssh/seahorse-ssh-key-properties.ui:174
 msgid "Fingerprint"
 msgstr "指紋"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:42
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:43
+#: pgp/seahorse-pgp-private-key-properties.ui:770
+#: pgp/seahorse-pgp-public-key-properties.ui:765
+msgid "Created:"
+msgstr "生成:"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:794
+#: pgp/seahorse-pgp-public-key-properties.ui:790
 msgid "Expires:"
 msgstr "有効期限:"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:43
+#: pgp/seahorse-pgp-private-key-properties.ui:840
 msgid "Dates"
 msgstr "日付"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:44
+#: pgp/seahorse-pgp-private-key-properties.ui:863
 msgid "Override Owner _Trust:"
 msgstr "所有者の信用度(_T):"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:45
+#: pgp/seahorse-pgp-private-key-properties.ui:892
 msgid "_Export Secret Key:"
 msgstr "秘密鍵のエクスポート(_E):"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:47
+#: pgp/seahorse-pgp-private-key-properties.ui:939
 msgid "Actions"
 msgstr "アクション"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:48
+#: pgp/seahorse-pgp-private-key-properties.ui:993
 msgid "Add"
 msgstr "追加"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:49
+#: pgp/seahorse-pgp-private-key-properties.ui:1023
 msgid "Expire"
 msgstr "期限切れ"
 
-#: ../pgp/seahorse-pgp-private-key-properties.xml.h:50
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:46
+#: pgp/seahorse-pgp-private-key-properties.ui:1097
+#: pgp/seahorse-pgp-public-key-properties.ui:895
 msgid "_Subkeys"
 msgstr "副鍵(_S)"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:3
+#: pgp/seahorse-pgp-public-key-properties.ui:17
 msgctxt "Validity"
 msgid "Marginally"
 msgstr "ぎりぎり信用する"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:4
+#: pgp/seahorse-pgp-public-key-properties.ui:20
 msgctxt "Validity"
 msgid "Fully"
 msgstr "完全に信用する"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:5
+#: pgp/seahorse-pgp-public-key-properties.ui:23
 msgctxt "Validity"
 msgid "Ultimately"
 msgstr "究極に信用する"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:14
-msgid "Encrypt files and email to the key's owner"
-msgstr "鍵の所有者へ送付するファイルやメールを暗号化する"
-
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:21
-msgid "Public PGP Key"
-msgstr "公開 PGP 鍵"
-
 #. Names set on the PGP key.
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:23
+#: pgp/seahorse-pgp-public-key-properties.ui:338
 msgid "_Other Names:"
 msgstr "他の名前(_O):"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:25
+#: pgp/seahorse-pgp-public-key-properties.ui:381
 msgid "Your trust of this key"
 msgstr "この鍵の信用度"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:26
+#: pgp/seahorse-pgp-public-key-properties.ui:394
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr "[<i>詳細</i>] タブで信用度を細かく指定できます:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:28
-#, no-c-format
-msgid "I trust signatures from '%s' on other keys"
+#: pgp/seahorse-pgp-public-key-properties.ui:400
+#, fuzzy, c-format
+#| msgid "I trust signatures from '%s' on other keys"
+msgid "I trust signatures from “%s” on other keys"
 msgstr "他の鍵にある '%s' からの署名を信用する"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:30
-#, no-c-format
+#: pgp/seahorse-pgp-public-key-properties.ui:421
+#, fuzzy, c-format
+#| msgid ""
+#| "If you believe that the person that owns this key is '%s', <i>sign</i> "
+#| "this key:"
 msgid ""
-"If you believe that the person that owns this key is '%s', <i>sign</i> this "
+"If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
 msgstr ""
 "'%s' という鍵の所有者を信用する場合は、この鍵に<i>署名</i>してください:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:31
+#: pgp/seahorse-pgp-public-key-properties.ui:449
 msgid "_Sign this Key"
 msgstr "この鍵に署名する(_S)"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:33
-#, no-c-format
+#: pgp/seahorse-pgp-public-key-properties.ui:471
+#, fuzzy, c-format
+#| msgid ""
+#| "If you no longer trust that '%s' owns this key, <i>revoke</i> your "
+#| "signature:"
 msgid ""
-"If you no longer trust that '%s' owns this key, <i>revoke</i> your signature:"
+"If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
 msgstr ""
 "この鍵を所有している '%s' という人物を信用しないのであれば、署名を<i>失効</i>"
 "させてください:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:34
+#: pgp/seahorse-pgp-public-key-properties.ui:499
 msgid "_Revoke Signature"
 msgstr "署名の失効(_R)"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:35
+#: pgp/seahorse-pgp-public-key-properties.ui:521
 msgid "_People who have signed this key:"
 msgstr "この鍵に署名した人(_P):"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:36
+#: pgp/seahorse-pgp-public-key-properties.ui:547
 msgid "_Only display the signatures of people I trust"
 msgstr "信用している人達の署名だけを表示する(_O)"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:37
-#: ../ssh/seahorse-ssh-key-properties.xml.h:11
+#: pgp/seahorse-pgp-public-key-properties.ui:566
 msgid "Trust"
 msgstr "信用度"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:40
-#: ../ssh/seahorse-ssh-key-properties.xml.h:19
+#: pgp/seahorse-pgp-public-key-properties.ui:600
+msgid "Technical Details:"
+msgstr "技術的な詳細:"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:706
 msgid "Fingerprint:"
 msgstr "指紋:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:41
+#: pgp/seahorse-pgp-public-key-properties.ui:746
 msgid "Dates:"
 msgstr "日付:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:44
+#: pgp/seahorse-pgp-public-key-properties.ui:824
 msgid "Indicate Trust:"
 msgstr "信用度の提示:"
 
-#: ../pgp/seahorse-pgp-public-key-properties.xml.h:45
+#: pgp/seahorse-pgp-public-key-properties.ui:841
 msgid "You _Trust the Owner:"
 msgstr "この所有者の信用度(_T):"
 
-#: ../pgp/seahorse-pgp-subkey.c:291
+#: pgp/seahorse-pgp-subkey.c:290
 msgid "Encrypt"
 msgstr "暗号化"
 
-#: ../pgp/seahorse-pgp-subkey.c:293
+#: pgp/seahorse-pgp-subkey.c:292
 msgid "Certify"
 msgstr "証明"
 
-#: ../pgp/seahorse-pgp-subkey.c:294
+#: pgp/seahorse-pgp-subkey.c:293
 msgid "Authenticate"
 msgstr "認証"
 
-#: ../pgp/seahorse-pgp-subkey.c:407
+#: pgp/seahorse-pgp-subkey.c:401
+msgid "Key"
+msgstr "鍵"
+
+#: pgp/seahorse-pgp-subkey.c:406
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "副鍵 %d / %s"
 
-#: ../pgp/seahorse-revoke.xml.h:1
+#: pgp/seahorse-revoke.ui:35
 msgid "Reason for revoking the key"
 msgstr "鍵を失効させる理由です"
 
-#: ../pgp/seahorse-revoke.xml.h:2
+#: pgp/seahorse-revoke.ui:40
 msgid "_Reason:"
 msgstr "理由(_R):"
 
-#: ../pgp/seahorse-revoke.xml.h:4
+#: pgp/seahorse-revoke.ui:70
 msgid "Optional description of revocation"
 msgstr "失効の追加説明"
 
-#: ../pgp/seahorse-revoke.xml.h:6
+#: pgp/seahorse-revoke.ui:154
 msgid "Re_voke"
 msgstr "失効(_V)"
 
-#: ../pgp/seahorse-signer.c:62
+#: pgp/seahorse-signer.c:63
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
 msgstr ""
 "ドキュメントやメッセージに署名する際に使用できる自分の PGP 鍵を所有していませ"
 "ん。"
 
-#: ../pgp/seahorse-signer.xml.h:1
+#: pgp/seahorse-signer.ui:7
+#, fuzzy
+#| msgid "Sign Key"
+msgid "Choose Signing Key"
+msgstr "鍵に署名する"
+
+#: pgp/seahorse-signer.ui:25
 msgid "_Sign message with key:"
 msgstr "次の鍵を使ってメッセージに署名する(_S):"
 
-#: ../pgp/seahorse-sign.xml.h:1
+#: pgp/seahorse-sign.ui:6
 msgid "Sign Key"
 msgstr "鍵に署名する"
 
-#: ../pgp/seahorse-sign.xml.h:2
+#: pgp/seahorse-sign.ui:27
 msgid "By signing you indicate your trust that this key belongs to:"
 msgstr "署名を行うことで、次に属す鍵を信用したものと見なします:"
 
-#: ../pgp/seahorse-sign.xml.h:3
+#: pgp/seahorse-sign.ui:34
 msgid "Key Name"
 msgstr "鍵の名前"
 
-#: ../pgp/seahorse-sign.xml.h:4
+#: pgp/seahorse-sign.ui:54
 msgid "How carefully have you checked this key?"
 msgstr "この鍵をどれくらい入念にチェックしたか:"
 
-#: ../pgp/seahorse-sign.xml.h:5
+#: pgp/seahorse-sign.ui:84
 msgid "_Not at all"
 msgstr "全くチェックしていない(_N)"
 
-#: ../pgp/seahorse-sign.xml.h:6
+#: pgp/seahorse-sign.ui:95
 msgid "_Casually"
 msgstr "軽くチェックした(_C)"
 
-#: ../pgp/seahorse-sign.xml.h:7
+#: pgp/seahorse-sign.ui:107
 msgid "_Very Carefully"
 msgstr "かなり注意深くチェックした(_V)"
 
-#: ../pgp/seahorse-sign.xml.h:8
+#: pgp/seahorse-sign.ui:134
 msgid ""
 "<i>Not at all:</i> means you believe the key is owned by the person who "
 "claims to own it, but you could not or did not verify this to be a fact."
@@ -1981,7 +2189,7 @@ msgstr ""
 "いることを、あなたは信じているがその真偽を確認できないまたは確認していない、"
 "ということを意味します。"
 
-#: ../pgp/seahorse-sign.xml.h:9
+#: pgp/seahorse-sign.ui:147
 msgid ""
 "<i>Casually:</i> means you have done a casual verification that the key is "
 "owned by the person who claims to own it. For example, you could read the "
@@ -1991,7 +2199,7 @@ msgstr ""
 "とを、略式で確認したということを意味します。例えば、電話ごしに鍵の指紋を所有"
 "者と読み合うことができるというレベルです。"
 
-#: ../pgp/seahorse-sign.xml.h:10
+#: pgp/seahorse-sign.ui:168
 msgid ""
 "<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
 "key is genuine."
@@ -1999,7 +2207,7 @@ msgstr ""
 "「<i>かなり注意深くチェックした</i>」はこの鍵が本物であることを完全に把握して"
 "いる場合にのみ選択してください。"
 
-#: ../pgp/seahorse-sign.xml.h:11
+#: pgp/seahorse-sign.ui:184
 msgid ""
 "You could use a hard to forge photo identification (such as a passport) to "
 "personally check that the name on the key is correct. You should have also "
@@ -2010,460 +2218,624 @@ msgstr ""
 "に念を入れて、電子メールを送って、このメールアドレスが本人のものであることも"
 "確認した方が良いでしょう。"
 
-#: ../pgp/seahorse-sign.xml.h:12
+#: pgp/seahorse-sign.ui:215
 msgid "How others will see this signature:"
 msgstr "この署名をどこまで公開するか:"
 
-#: ../pgp/seahorse-sign.xml.h:13
+#: pgp/seahorse-sign.ui:232
 msgid "_Others may not see this signature"
 msgstr "この署名を他人に公開しない(_O)"
 
-#: ../pgp/seahorse-sign.xml.h:14
+#: pgp/seahorse-sign.ui:243
 msgid "I can _revoke this signature at a later date."
 msgstr "後日、この署名を失効させることができます。(_R)"
 
-#: ../pgp/seahorse-sign.xml.h:15
+#: pgp/seahorse-sign.ui:268
 msgid "Sign key as:"
 msgstr "鍵の署名者:"
 
-#: ../pgp/seahorse-sign.xml.h:16
+#: pgp/seahorse-sign.ui:286
 msgid "_Signer:"
 msgstr "署名者(_S):"
 
-#: ../pgp/seahorse-sign.xml.h:17
+#: pgp/seahorse-sign.ui:321
 msgid "_Sign"
 msgstr "署名する(_S)"
 
-#: ../pgp/seahorse-transfer.c:238 ../pgp/seahorse-transfer.c:285
+#: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
 msgid "Exporting data"
 msgstr "データをエクスポート中"
 
-#: ../pgp/seahorse-transfer.c:238 ../pgp/seahorse-transfer.c:285
+#: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
 msgid "Retrieving data"
 msgstr "データの取得中"
 
-#: ../pgp/seahorse-transfer.c:241 ../pgp/seahorse-transfer.c:288
+#: pgp/seahorse-transfer.c:241 pgp/seahorse-transfer.c:288
 msgid "Importing data"
 msgstr "鍵のインポート中"
 
-#: ../pgp/seahorse-transfer.c:241 ../pgp/seahorse-transfer.c:288
+#: pgp/seahorse-transfer.c:241 pgp/seahorse-transfer.c:288
 msgid "Sending data"
 msgstr "データの送信中"
 
-#: ../pgp/seahorse-unknown.c:59
+#: pgp/seahorse-unknown.c:59
 msgid "Unavailable"
 msgstr "利用不可"
 
-#: ../pkcs11/certificate-der-exporter.vala:43
-#: ../pkcs11/pkcs11-certificate.vala:98
+#: pkcs11/certificate-der-exporter.vala:43 pkcs11/pkcs11-certificate.vala:98
 msgid "Certificate"
 msgstr "証明書"
 
-#: ../pkcs11/certificate-der-exporter.vala:57
+#: pkcs11/certificate-der-exporter.vala:57
 msgid "Certificates (DER encoded)"
 msgstr "証明書 (DER エンコード)"
 
-#: ../pkcs11/pkcs11-certificate.vala:94
+#: pkcs11/pkcs11-certificate.vala:94
 msgid "Personal certificate and key"
 msgstr "個人的な証明書と鍵"
 
-#: ../pkcs11/pkcs11-certificate.vala:96
+#: pkcs11/pkcs11-certificate.vala:96
 msgid "Personal certificate"
 msgstr "個人証明書"
 
-#: ../pkcs11/seahorse-pkcs11-backend.c:189
-msgid "Certificates"
-msgstr "証明書"
-
-#: ../pkcs11/seahorse-pkcs11-backend.c:195
-msgid "X.509 certificates and related keys"
-msgstr "X.509 証明書と関連の鍵"
-
-#: ../pkcs11/pkcs11-deleter.vala:37
+#: pkcs11/pkcs11-deleter.vala:37
 #, c-format
 msgid "Are you sure you want to permanently delete %d certificate?"
 msgid_plural "Are you sure you want to permanently delete %d certificates?"
 msgstr[0] "本当に %d個の証明書を抹消しますか?"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:113
-msgid "Couldn't generate private key"
+#: pkcs11/pkcs11-generate.vala:229
+#, fuzzy
+#| msgid "Couldn't generate private key"
+msgid "Couldn’t generate private key"
 msgstr "秘密鍵を生成できません"
 
-#: ../pkcs11/seahorse-pkcs11-generate.c:412 ../pkcs11/pkcs11-request.vala:56
-msgid "Create"
-msgstr "生成"
-
-#: ../pkcs11/seahorse-pkcs11-generate.c:505
-#: ../pkcs11/pkcs11-private-key.vala:70
-msgid "Private key"
-msgstr "秘密鍵"
-
-#: ../pkcs11/seahorse-pkcs11-generate.c:506
-msgid "Used to request a certificate"
-msgstr "証明書要求に利用します"
-
-#: ../pkcs11/seahorse-pkcs11-generate.xml.h:1
-msgid "Create a new private key"
-msgstr "新しい秘密鍵を生成します"
-
-#: ../pkcs11/seahorse-pkcs11-generate.xml.h:2
-msgid "Label:"
-msgstr "ラベル:"
-
-#: ../pkcs11/seahorse-pkcs11-generate.xml.h:3
-msgid "Stored at:"
-msgstr "保存先:"
-
-#: ../pkcs11/pkcs11-key-deleter.vala:34
+#: pkcs11/pkcs11-key-deleter.vala:34
 msgid "I understand that this key will be permanently deleted."
 msgstr "この鍵が抹消されることを理解します。"
 
-#: ../pkcs11/pkcs11-properties.vala:134
-msgid "Unnamed"
-msgstr "名前無し"
-
-#: ../pkcs11/pkcs11-properties.vala:165
-msgid "Failed to export certificate"
-msgstr "証明書のエクスポートに失敗しました"
-
-#: ../pkcs11/pkcs11-properties.vala:188 ../src/seahorse-sidebar.c:873
-msgid "Couldn't delete"
-msgstr "削除できません"
-
-#: ../pkcs11/pkcs11-properties.vala:199
-msgid "_Export"
-msgstr "エクスポート(_E)"
-
-#: ../pkcs11/pkcs11-properties.vala:200
-msgid "Export the certificate"
-msgstr "証明書をエクスポートします"
-
-#: ../pkcs11/pkcs11-properties.vala:202
-msgid "Delete this certificate or key"
-msgstr "この証明書または鍵を削除します"
-
-#: ../pkcs11/pkcs11-properties.vala:203
-msgid "Request _Certificate"
-msgstr "証明書を要求(_C)"
-
-#: ../pkcs11/pkcs11-properties.vala:204
-msgid "Create a certificate request file for this key"
-msgstr "この鍵の証明書要求を生成"
-
-#: ../pkcs11/pkcs11-request.vala:87
-msgid "Couldn't create certificate request"
-msgstr "証明書要求を作成できません"
-
-#: ../pkcs11/pkcs11-request.vala:104
-msgid "Save certificate request"
-msgstr "証明書要求を保存"
-
-#: ../pkcs11/pkcs11-request.vala:113
-msgid "Certificate request"
-msgstr "証明書要求"
-
-#: ../pkcs11/pkcs11-request.vala:121
-msgid "PEM encoded request"
-msgstr "PEM エンコードを要求"
-
-#: ../pkcs11/pkcs11-request.vala:149
-msgid "Couldn't save certificate request"
-msgstr "証明書要求を保存できません"
-
-#: ../pkcs11/seahorse-pkcs11-request.xml.h:1
-msgid "Create a certificate request file."
-msgstr "証明書要求を作成"
-
-#: ../pkcs11/seahorse-pkcs11-request.xml.h:2
-msgid "The common name (CN) placed in the certificate request."
-msgstr "証明書要求の一般名 (CN)"
-
-#: ../pkcs11/seahorse-pkcs11-request.xml.h:3
-msgid "Name (CN):"
-msgstr "一般名(CN):"
-
-#: ../pkcs11/pkcs11-private-key.vala:61
+#: pkcs11/pkcs11-private-key.vala:61
 msgid "Unnamed private key"
 msgstr "名前のない秘密鍵"
 
-#: ../pkcs11/pkcs11-token.vala:74
+#: pkcs11/pkcs11-private-key.vala:70 src/seahorse-key-manager.ui:225
+msgid "Private key"
+msgstr "秘密鍵"
+
+#: pkcs11/pkcs11-properties.vala:134
+msgid "Unnamed"
+msgstr "名前無し"
+
+#: pkcs11/pkcs11-properties.vala:165
+msgid "Failed to export certificate"
+msgstr "証明書のエクスポートに失敗しました"
+
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:614
+#, fuzzy
+#| msgid "Couldn't delete"
+msgid "Couldn’t delete"
+msgstr "削除できません"
+
+#: pkcs11/pkcs11-properties.vala:199
+msgid "_Export"
+msgstr "エクスポート(_E)"
+
+#: pkcs11/pkcs11-properties.vala:200
+msgid "Export the certificate"
+msgstr "証明書をエクスポートします"
+
+#: pkcs11/pkcs11-properties.vala:202
+msgid "Delete this certificate or key"
+msgstr "この証明書または鍵を削除します"
+
+#: pkcs11/pkcs11-properties.vala:203
+msgid "Request _Certificate"
+msgstr "証明書を要求(_C)"
+
+#: pkcs11/pkcs11-properties.vala:204
+msgid "Create a certificate request file for this key"
+msgstr "この鍵の証明書要求を生成"
+
+#: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.ui:193
+msgid "Create"
+msgstr "生成"
+
+#: pkcs11/pkcs11-request.vala:87
+#, fuzzy
+#| msgid "Couldn't create certificate request"
+msgid "Couldn’t create certificate request"
+msgstr "証明書要求を作成できません"
+
+#: pkcs11/pkcs11-request.vala:104
+msgid "Save certificate request"
+msgstr "証明書要求を保存"
+
+#: pkcs11/pkcs11-request.vala:107
+msgid "_Save"
+msgstr ""
+
+#: pkcs11/pkcs11-request.vala:113
+msgid "Certificate request"
+msgstr "証明書要求"
+
+#: pkcs11/pkcs11-request.vala:121
+msgid "PEM encoded request"
+msgstr "PEM エンコードを要求"
+
+#: pkcs11/pkcs11-request.vala:149
+#, fuzzy
+#| msgid "Couldn't save certificate request"
+msgid "Couldn’t save certificate request"
+msgstr "証明書要求を保存できません"
+
+#: pkcs11/pkcs11-token.vala:74
 msgctxt "Label"
 msgid "Unknown"
 msgstr "不明"
 
-#: ../src/seahorse-change-passphrase.xml.h:1
-msgid "Change Passphrase"
-msgstr "パスフレーズの変更"
+#: pkcs11/seahorse-pkcs11-backend.c:207
+msgid "Certificates"
+msgstr "証明書"
 
-#: ../src/seahorse-change-passphrase.xml.h:3
-msgid "New _Passphrase:"
-msgstr "新しいパスフレーズ(_P):"
+#: pkcs11/seahorse-pkcs11-backend.c:213
+msgid "X.509 certificates and related keys"
+msgstr "X.509 証明書と関連の鍵"
 
-#: ../src/seahorse-change-passphrase.xml.h:4
-msgid "Confirm new passphrase"
-msgstr "確認のため、もう一度新しいパスフレーズを入力してください"
+#: pkcs11/seahorse-pkcs11-generate.ui:6
+#, fuzzy
+#| msgid "Private key"
+msgid "New private key"
+msgstr "秘密鍵"
 
-#: ../src/seahorse-change-passphrase.xml.h:5
-msgid "Con_firm Passphrase:"
-msgstr "パスフレーズの確認(_F):"
+#: pkcs11/seahorse-pkcs11-generate.ui:39
+msgid "Create a new private key"
+msgstr "新しい秘密鍵を生成します"
 
-#: ../src/seahorse-generate-select.c:228
-msgid "Continue"
-msgstr "続行"
+#: pkcs11/seahorse-pkcs11-generate.ui:58
+msgid "Label:"
+msgstr "ラベル:"
 
-#: ../src/seahorse-generate-select.xml.h:1
-msgid "_Select the type of item to create:"
-msgstr "生成する項目の種類を選択してください(_S):"
+#: pkcs11/seahorse-pkcs11-generate.ui:71
+msgid "Stored at:"
+msgstr "保存先:"
 
-#: ../src/seahorse-import-dialog.c:95
+#: pkcs11/seahorse-pkcs11-request.ui:34
+msgid "Create a certificate request file."
+msgstr "証明書要求を作成"
+
+#: pkcs11/seahorse-pkcs11-request.ui:52
+msgid "The common name (CN) placed in the certificate request."
+msgstr "証明書要求の一般名 (CN)"
+
+#: pkcs11/seahorse-pkcs11-request.ui:54
+msgid "Name (CN):"
+msgstr "一般名(CN):"
+
+#: src/application.vala:38
+msgid "Contributions:"
+msgstr "貢献者:"
+
+#: src/application.vala:65
+msgid "Version of this application"
+msgstr "このアプリケーションのバージョン"
+
+#: src/application.vala:160
+msgid "translator-credits"
+msgstr ""
+"相花 毅 <takeshi.aihana@gmail.com>\n"
+"Anthony Mulcahy <anthony@kcn.ne.jp>\n"
+"草野 貴之 <AE5T-KSN@asahi-net.or.jp>\n"
+"やまねひでき <henrich@debian.org>\n"
+"松澤 二郎 <jmatsuzawa@gnome.org>\n"
+"平 初 <htaira@redhat.com>\n"
+"日本GNOMEユーザー会 http://www.gnome.gr.jp/"
+
+#: src/application.vala:163
+msgid "Seahorse Project Homepage"
+msgstr "Seahorse プロジェクトのページ"
+
+#: src/import-dialog.vala:30
+#, fuzzy
+#| msgid "<b>Data to be imported:</b>"
+msgid "Data to be imported"
+msgstr "<b>インポートする日付:</b>"
+
+#: src/import-dialog.vala:74
 msgid "Import failed"
 msgstr "インポートが失敗しました"
 
-#: ../src/seahorse-import-dialog.c:113
-msgid "Import"
-msgstr "インポート"
-
-#: ../src/seahorse-import-dialog.c:126
-msgid "<b>Data to be imported:</b>"
-msgstr "<b>インポートする日付:</b>"
-
-#: ../src/seahorse-key-manager.c:242 ../ssh/seahorse-ssh-operation.c:870
+#. The prompt
+#: src/key-manager.vala:245 ssh/operation.vala:309
 msgid "Import Key"
 msgstr "鍵のインポート"
 
-#: ../src/seahorse-key-manager.c:254
+#: src/key-manager.vala:248
+msgid "_Open"
+msgstr ""
+
+#. TODO: This should come from libgcr somehow
+#: src/key-manager.vala:256
 msgid "All key files"
 msgstr "すべての鍵ファイル"
 
-#: ../src/seahorse-key-manager.c:355
+#: src/key-manager.vala:321
 msgid "Dropped text"
 msgstr "ドラッグしたテキスト"
 
-#: ../src/seahorse-key-manager.c:391
+#: src/key-manager.vala:349
 msgid "Clipboard text"
 msgstr "クリップボードのテキスト"
 
-#: ../src/seahorse-key-manager.c:502
-msgid "_New"
-msgstr "新規(_N)"
+#: src/key-manager.vala:439
+#, fuzzy
+#| msgid "Couldn't add keyring"
+msgid "Couldn't unlock keyring"
+msgstr "キーリングを追加できません"
 
-#: ../src/seahorse-key-manager.c:504
-msgid "Close this program"
-msgstr "このプログラムを終了します"
+#: src/seahorse-change-passphrase.ui:8
+msgid "Change Passphrase"
+msgstr "パスフレーズの変更"
 
-#: ../src/seahorse-key-manager.c:505 ../src/seahorse-key-manager.c:507
-msgid "_New..."
-msgstr "新規(_N)..."
+#: src/seahorse-change-passphrase.ui:43
+msgid "New _Passphrase:"
+msgstr "新しいパスフレーズ(_P):"
 
-#: ../src/seahorse-key-manager.c:506
-msgid "Create a new key or item"
-msgstr "新しい鍵またはアイテムを生成します"
+#: src/seahorse-change-passphrase.ui:56
+msgid "Confirm new passphrase"
+msgstr "確認のため、もう一度新しいパスフレーズを入力してください"
 
-#: ../src/seahorse-key-manager.c:508
+#: src/seahorse-change-passphrase.ui:73
+msgid "Con_firm Passphrase:"
+msgstr "パスフレーズの確認(_F):"
+
+#: src/seahorse-key-manager.ui:6
+#, fuzzy
+#| msgid "Filter"
+msgid "Filter items:"
+msgstr "フィルター"
+
+#: src/seahorse-key-manager.ui:8
+#, fuzzy
+#| msgid "Show _Personal"
+msgid "Show personal"
+msgstr "自分のものを表示する(_P)"
+
+#: src/seahorse-key-manager.ui:13
+#, fuzzy
+#| msgid "Show _Trusted"
+msgid "Show trusted"
+msgstr "信頼済みのみ表示する(_T)"
+
+#: src/seahorse-key-manager.ui:18
+#, fuzzy
+#| msgid "Show _Any"
+msgid "Show any"
+msgstr "すべてを表示(_A)"
+
+#: src/seahorse-key-manager.ui:25
+#, fuzzy
+#| msgid "Login keyring"
+msgid "Combine all keyrings"
+msgstr "ログインキーリング"
+
+#: src/seahorse-key-manager.ui:31
+#, fuzzy
+#| msgid "Find Remote Keys"
+msgid "Find remote keys…"
+msgstr "リモートにある鍵の検索"
+
+#: src/seahorse-key-manager.ui:36
+#, fuzzy
+#| msgid "_Sync and Publish Keys..."
+msgid "Sync and publish keys…"
+msgstr "鍵の公開と同期(_S)..."
+
+#: src/seahorse-key-manager.ui:48
+#, fuzzy
+#| msgid "_Help"
+msgid "Help"
+msgstr "ヘルプ(_H)"
+
+#: src/seahorse-key-manager.ui:52
+msgid "About"
+msgstr ""
+
+#: src/seahorse-key-manager.ui:89
+#, fuzzy
+#| msgid "Secure Shell Key"
+msgid "Secure Shell key"
+msgstr "セキュアシェルの鍵"
+
+#: src/seahorse-key-manager.ui:96
+#, fuzzy
+#| msgid "Used to connect to other computers."
+msgid "Used to access other computers"
+msgstr "他のコンピューターに接続する際に使用します。"
+
+#: src/seahorse-key-manager.ui:123
+#, fuzzy
+#| msgid "PGP key"
+msgid "GPG key"
+msgstr "PGP 鍵"
+
+#: src/seahorse-key-manager.ui:130
+msgid "Used to encrypt email and files"
+msgstr "メールやファイルを暗号化する際に使用します"
+
+#: src/seahorse-key-manager.ui:157
+#, fuzzy
+#| msgid "Password Keyring"
+msgid "Password keyring"
+msgstr "パスワードキーリング"
+
+#: src/seahorse-key-manager.ui:164
+msgid "Used to store application and network passwords"
+msgstr ""
+"アプリケーションやネットワークで使用するパスワードを保管する際に使用します"
+
+#: src/seahorse-key-manager.ui:198
+#, fuzzy
+#| msgid "Safely store a password or secret."
+msgid "Safely store a password or secret"
+msgstr "パスワードや秘密鍵を安全に保存する。"
+
+#: src/seahorse-key-manager.ui:232
+msgid "Used to request a certificate"
+msgstr "証明書要求に利用します"
+
+#: src/seahorse-key-manager.ui:258
+#, fuzzy
+#| msgid "Import from a file"
+msgid "Import from file…"
+msgstr "ファイルから取り込みます"
+
+#: src/seahorse-key-manager.ui:282
 msgid "Add a new key or item"
 msgstr "新しい鍵またはアイテムを追加します"
 
-#: ../src/seahorse-key-manager.c:509
-msgid "_Import..."
-msgstr "インポート(_I)..."
+#: src/seahorse-key-manager.ui:313
+#, fuzzy
+#| msgid "Search for keys on a key server"
+msgid "Search for a key or password"
+msgstr "鍵サーバーから鍵を検索します"
 
-#: ../src/seahorse-key-manager.c:510
-msgid "Import from a file"
-msgstr "ファイルから取り込みます"
-
-#: ../src/seahorse-key-manager.c:512
-msgid "Import from the clipboard"
-msgstr "クリップボードから取り込みます"
-
-#: ../src/seahorse-key-manager.c:516
-msgid "By _Keyring"
-msgstr "キーリングで(_K)"
-
-#: ../src/seahorse-key-manager.c:517
-msgid "Show sidebar listing keyrings"
-msgstr "キーリング一覧をサイドバーに表示"
-
-#: ../src/seahorse-key-manager.c:521
-msgid "Show _Personal"
-msgstr "自分のものを表示する(_P)"
-
-#: ../src/seahorse-key-manager.c:522
-msgid "Only show personal keys, certificates and passwords"
-msgstr "自分の鍵、証明書およびパスワードのみを表示します"
-
-#: ../src/seahorse-key-manager.c:523
-msgid "Show _Trusted"
-msgstr "信頼済みのみ表示する(_T)"
-
-#: ../src/seahorse-key-manager.c:524
-msgid "Only show trusted keys, certificates and passwords"
-msgstr "信頼している鍵、証明書そしてパスワードのみを表示します"
-
-#: ../src/seahorse-key-manager.c:525
-msgid "Show _Any"
-msgstr "すべてを表示(_A)"
-
-#: ../src/seahorse-key-manager.c:526
-msgid "Show all keys, certificates and passwords"
-msgstr "すべての鍵、証明書およびパスワードを表示します"
-
-#: ../src/seahorse-key-manager.c:745
+#: src/seahorse-key-manager.ui:360
 msgid "Filter"
 msgstr "フィルター"
 
-#: ../src/seahorse-key-manager.xml.h:1
-msgid "First time options:"
-msgstr "初回起動時のオプション:"
+#: src/seahorse-key-manager.ui:454
+msgid "This collection seems to be empty"
+msgstr ""
 
-#: ../src/seahorse-key-manager.xml.h:2
-msgid "Generate a new key of your own: "
-msgstr "自分で新しい鍵を生成する: "
+#: src/seahorse-key-manager-widgets.ui:6
+#, fuzzy
+#| msgid "Export"
+msgid "Export…"
+msgstr "エクスポート"
 
-#: ../src/seahorse-key-manager.xml.h:4
-msgid "Import existing keys from a file:"
-msgstr "既存の鍵をファイルからインポートする: "
+#: src/seahorse-key-manager-widgets.ui:19
+#, fuzzy
+#| msgid "_Properties"
+msgid "Properties"
+msgstr "プロパティ(_P)"
 
-#: ../src/seahorse-key-manager.xml.h:5
-msgid "To get started with encryption you will need keys."
-msgstr "暗号化を始めるには鍵が必要です。"
+#: src/seahorse-key-manager-widgets.ui:23
+#, fuzzy
+#| msgid "Configure Key for _Secure Shell..."
+msgid "Configure Key for Secure Shell……"
+msgstr "SSH 鍵の設定(_S)..."
 
-#: ../src/seahorse-sidebar.c:797
-msgid "Couldn't lock"
+#: src/sidebar.vala:581
+#, fuzzy
+#| msgid "Couldn't lock"
+msgid "Couldn’t lock"
 msgstr "ロックできません"
 
-#: ../src/seahorse-sidebar.c:834
-msgid "Couldn't unlock"
-msgstr "解除できません"
-
-#: ../src/seahorse-sidebar.c:941
+#. Lock and unlock items
+#: src/sidebar.vala:634
 msgid "_Lock"
 msgstr "ロック(_L)"
 
-#: ../src/seahorse-sidebar.c:946
+#: src/sidebar.vala:639
 msgid "_Unlock"
 msgstr "ロックの解除(_U)"
 
-#: ../src/seahorse-sidebar.c:965
+#. Properties item
+#: src/sidebar.vala:656
 msgid "_Properties"
 msgstr "プロパティ(_P)"
 
-#: ../ssh/seahorse-ssh-actions.c:97
-msgid "Configure Key for _Secure Shell..."
-msgstr "SSH 鍵の設定(_S)..."
+#: ssh/backend.vala:27
+msgid "Secure Shell"
+msgstr "セキュアシェル"
 
-#: ../ssh/seahorse-ssh-actions.c:98
-msgid ""
-"Send public Secure Shell key to another machine, and enable logins using "
-"that key."
+#: ssh/backend.vala:28
+msgid "Keys used to connect securely to other computers"
+msgstr "他のコンピューターに安全に接続する際に使用される鍵"
+
+#: ssh/deleter.vala:41 ssh/deleter.vala:46
+#, fuzzy, c-format
+#| msgid "Are you sure you want to delete the secure shell key '%s'?"
+msgid "Are you sure you want to delete the secure shell key “%s”?"
+msgstr "本当に '%s' という SSH 鍵を削除しますか?"
+
+#: ssh/deleter.vala:51
+#, fuzzy, c-format
+#| msgid "Are you sure you want to delete %d secure shell key?"
+#| msgid_plural "Are you sure you want to delete %d secure shell keys?"
+msgid "Are you sure you want to delete %u secure shell key?"
+msgid_plural "Are you sure you want to delete %u secure shell keys?"
+msgstr[0] "本当に %d個の SSH 鍵を削除しますか?"
+
+#: ssh/exporter.vala:52
+msgid "Secret SSH keys"
+msgstr "SSH の秘密鍵"
+
+#: ssh/exporter.vala:56
+msgid "Public SSH keys"
+msgstr "SSH の公開鍵"
+
+#: ssh/exporter.vala:87
+msgid "SSH Key"
+msgstr "SSH 鍵"
+
+#: ssh/exporter.vala:125
+msgid "No public key file is available for this key."
+msgstr "この鍵に対して利用できる公開鍵ファイルはありません"
+
+#: ssh/generate.vala:94
+#, fuzzy
+#| msgid "Couldn't generate Secure Shell key"
+msgid "Couldn’t load newly generated Secure Shell key"
+msgstr "SSH 鍵を生成できません"
+
+#: ssh/generate.vala:98
+#, fuzzy
+#| msgid "Couldn't generate Secure Shell key"
+msgid "Couldn’t generate Secure Shell key"
+msgstr "SSH 鍵を生成できません"
+
+#: ssh/generate.vala:101
+msgid "Creating Secure Shell Key"
+msgstr "SSH 鍵の生成"
+
+#: ssh/key-length-chooser.vala:92
+msgid "1024 bits"
 msgstr ""
-"SSH 公開鍵を他のコンピューターに送信し、それを使ってログインできるようにしま"
-"す。"
 
-#: ../ssh/seahorse-ssh-askpass.c:78 ../ssh/seahorse-ssh-askpass.c:86
+#: ssh/key-length-chooser.vala:96
+msgid "256 bits"
+msgstr ""
+
+#: ssh/key-length-chooser.vala:100
+msgid "Unknown key type!"
+msgstr ""
+
+#: ssh/key-properties.vala:75
+#, fuzzy
+#| msgctxt "Validity"
+#| msgid "Unknown"
+msgid "Unknown type"
+msgstr "不明"
+
+#: ssh/key-properties.vala:99
+#, fuzzy
+#| msgid "Couldn't rename key."
+msgid "Couldn’t rename key."
+msgstr "鍵の名前を変更できません。"
+
+#: ssh/key-properties.vala:125
+#, fuzzy
+#| msgid "Couldn't change authorization for key."
+msgid "Couldn’t change authorization for key."
+msgstr "鍵の認証を変更できません。"
+
+#: ssh/key-properties.vala:141
+#, fuzzy
+#| msgid "Couldn't change passphrase for key."
+msgid "Couldn’t change passphrase for key."
+msgstr "鍵のパスフレーズを変更できません。"
+
+#: ssh/key-properties.vala:165
+#, fuzzy
+#| msgid "Delete the key."
+msgid "Error deleting the SSH key."
+msgstr "この鍵を削除します。"
+
+#: ssh/key.vala:45
+msgid "Personal SSH key"
+msgstr "自分の SSH 鍵"
+
+#: ssh/key.vala:45
+msgid "SSH key"
+msgstr "SSH 鍵"
+
+#. No names when not even the fingerpint loaded
+#: ssh/key.vala:115
+msgid "(Unreadable Secure Shell Key)"
+msgstr "(読み込むことができない SSH 鍵)"
+
+#. No comment, but loaded
+#: ssh/key.vala:118 ssh/key.vala:122
+msgid "Secure Shell Key"
+msgstr "セキュアシェルの鍵"
+
+#: ssh/operation.vala:204
+msgid "Remote Host Password"
+msgstr "リモートホストのパスワード"
+
+#: ssh/operation.vala:247
+msgid "Enter Key Passphrase"
+msgstr "鍵のパスフレーズを入力する"
+
+#: ssh/operation.vala:273
+msgid "Passphrase for New Secure Shell Key"
+msgstr "セキュアシェルで使用する新しい鍵のパスフレーズ"
+
+#. No filename specified, make one up
+#. Add the comment to the output
+#: ssh/operation.vala:306
+#, c-format
+msgid "Importing key: %s"
+msgstr "鍵のインポート: %s"
+
+#: ssh/operation.vala:306
+msgid "Importing key. Enter passphrase"
+msgstr "鍵をインポートします。パスフレーズを入力してください"
+
+#: ssh/seahorse-ssh-askpass.c:78 ssh/seahorse-ssh-askpass.c:86
 msgid "Enter your Secure Shell passphrase:"
 msgstr "SSH のパスフレーズを入力してください:"
 
-#: ../ssh/seahorse-ssh-askpass.c:100
+#: ssh/seahorse-ssh-askpass.c:100
 msgid "Old Key Passphrase"
 msgstr "以前の鍵パスフレーズ"
 
-#: ../ssh/seahorse-ssh-askpass.c:101
+#: ssh/seahorse-ssh-askpass.c:101
 #, c-format
 msgid "Enter the old passphrase for: %s"
 msgstr "'%s' の古いパスフレーズを入力してください"
 
-#: ../ssh/seahorse-ssh-askpass.c:105 ../ssh/seahorse-ssh-askpass.c:110
+#: ssh/seahorse-ssh-askpass.c:105 ssh/seahorse-ssh-askpass.c:110
 msgid "New Key Passphrase"
 msgstr "新しい鍵パスフレーズ"
 
-#: ../ssh/seahorse-ssh-askpass.c:106
+#: ssh/seahorse-ssh-askpass.c:106
 #, c-format
 msgid "Enter the new passphrase for: %s"
 msgstr "'%s' の新しいパスフレーズを入力してください"
 
-#: ../ssh/seahorse-ssh-askpass.c:111
+#: ssh/seahorse-ssh-askpass.c:111
 #, c-format
 msgid "Enter the new passphrase again: %s"
 msgstr "'%s' の新しいパスフレーズをもう一度入力してください"
 
-#: ../ssh/seahorse-ssh-backend.c:115
-msgid "Secure Shell"
-msgstr "セキュアシェル"
-
-#: ../ssh/seahorse-ssh-backend.c:121
-msgid "Keys used to connect securely to other computers"
-msgstr "他のコンピューターに安全に接続する際に使用される鍵"
-
-#: ../ssh/seahorse-ssh-deleter.c:80 ../ssh/seahorse-ssh-deleter.c:85
-#, c-format
-msgid "Are you sure you want to delete the secure shell key '%s'?"
-msgstr "本当に '%s' という SSH 鍵を削除しますか?"
-
-#: ../ssh/seahorse-ssh-deleter.c:90
-#, c-format
-msgid "Are you sure you want to delete %d secure shell key?"
-msgid_plural "Are you sure you want to delete %d secure shell keys?"
-msgstr[0] "本当に %d個の SSH 鍵を削除しますか?"
-
-#: ../ssh/seahorse-ssh-exporter.c:92
-msgid "SSH Key"
-msgstr "SSH 鍵"
-
-#: ../ssh/seahorse-ssh-exporter.c:124
-msgid "Secret SSH keys"
-msgstr "SSH の秘密鍵"
-
-#: ../ssh/seahorse-ssh-exporter.c:128
-msgid "Public SSH keys"
-msgstr "SSH の公開鍵"
-
-#: ../ssh/seahorse-ssh-exporter.c:297
-msgid "No public key file is available for this key."
-msgstr "この鍵に対して利用できる公開鍵ファイルはありません"
-
-#: ../ssh/seahorse-ssh-generate.c:52 ../ssh/seahorse-ssh-key.c:109
-#: ../ssh/seahorse-ssh-key.c:113 ../ssh/seahorse-ssh-key-properties.xml.h:4
-msgid "Secure Shell Key"
-msgstr "セキュアシェルの鍵"
-
-#: ../ssh/seahorse-ssh-generate.c:53
-msgid "Used to access other computers (eg: via a terminal)"
-msgstr "端末などから他のコンピューターにアクセスする際に使用します"
-
-#: ../ssh/seahorse-ssh-generate.c:107 ../ssh/seahorse-ssh-generate.c:123
-msgid "Couldn't generate Secure Shell key"
-msgstr "SSH 鍵を生成できません"
-
-#: ../ssh/seahorse-ssh-generate.c:190
-msgid "Creating Secure Shell Key"
-msgstr "SSH 鍵の生成"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:1
+#: ssh/seahorse-ssh-generate.ui:8
 msgid "New Secure Shell Key"
 msgstr "新しいセキュアシェルの鍵"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:2
-msgid "_Just Create Key"
-msgstr "生成のみ(_J)"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:3
-msgid "_Create and Set Up"
-msgstr "生成と設定(_C)"
-
-#: ../ssh/seahorse-ssh-generate.xml.h:4
+#: ssh/seahorse-ssh-generate.ui:55
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "セキュアシェル (SSH) 鍵を利用すると、他のコンピューターに安全に接続できます。"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:6
+#: ssh/seahorse-ssh-generate.ui:108
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "メールアドレス、またはこの鍵の目的のメモです。"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:10
+#: ssh/seahorse-ssh-generate.ui:142
 msgid "DSA"
 msgstr "DSA"
 
-#: ../ssh/seahorse-ssh-generate.xml.h:12
+#: ssh/seahorse-ssh-generate.ui:143
+msgid "ECDSA"
+msgstr ""
+
+#: ssh/seahorse-ssh-generate.ui:144
+msgid "ED25519"
+msgstr ""
+
+#: ssh/seahorse-ssh-generate.ui:186
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2471,120 +2843,67 @@ msgstr ""
 "この鍵で接続したいコンピューターがあれば、新しい鍵を認識するようにコンピュー"
 "ター側を設定することができます。 "
 
-#: ../ssh/seahorse-ssh-key.c:105
-msgid "(Unreadable Secure Shell Key)"
-msgstr "(読み込むことができない SSH 鍵)"
+#: ssh/seahorse-ssh-generate.ui:212
+msgid "_Just Create Key"
+msgstr "生成のみ(_J)"
 
-#: ../ssh/seahorse-ssh-key.c:213
-msgid "Personal SSH key"
-msgstr "自分の SSH 鍵"
+#: ssh/seahorse-ssh-generate.ui:226
+msgid "_Create and Set Up"
+msgstr "生成と設定(_C)"
 
-#: ../ssh/seahorse-ssh-key.c:215
-msgid "SSH key"
-msgstr "SSH 鍵"
-
-#: ../ssh/seahorse-ssh-key-properties.c:79
-msgid "Couldn't rename key."
-msgstr "鍵の名前を変更できません。"
-
-#: ../ssh/seahorse-ssh-key-properties.c:134
-msgid "Couldn't change authorization for key."
-msgstr "鍵の認証を変更できません。"
-
-#: ../ssh/seahorse-ssh-key-properties.c:171
-msgid "Couldn't change passphrase for key."
-msgstr "鍵のパスフレーズを変更できません。"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:2
-msgid "Identifier:"
-msgstr "識別子:"
+#: ssh/seahorse-ssh-key-properties.ui:16
+#, fuzzy
+#| msgid "Key Properties"
+msgid "SSH Key Properties"
+msgstr "鍵のプロパティ"
 
 #. Name of key, often a persons name
-#: ../ssh/seahorse-ssh-key-properties.xml.h:6
+#: ssh/seahorse-ssh-key-properties.ui:55
+#, fuzzy
+#| msgid "Name"
 msgctxt "name-of-ssh-key"
-msgid "Name:"
-msgstr "名前:"
+msgid "Name"
+msgstr "名前"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:7
-msgid "Used to connect to other computers."
-msgstr "他のコンピューターに接続する際に使用します。"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:12
-msgid "The owner of this key is _authorized to connect to this computer"
-msgstr "このコンピューターに接続するのに、この鍵の所有者を認証する(_A)"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:14
-#, no-c-format
-msgid "This only applies to the <i>%s</i> account."
-msgstr "この鍵を <i>%s</i> というアカウントにのみ適用します。"
-
-#: ../ssh/seahorse-ssh-key-properties.xml.h:16
-msgid "Algorithm:"
+#: ssh/seahorse-ssh-key-properties.ui:88
+#, fuzzy
+#| msgid "Algorithm:"
+msgid "Algorithm"
 msgstr "アルゴリズム:"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:18
-msgid "Location:"
+#: ssh/seahorse-ssh-key-properties.ui:115
+#, fuzzy
+#| msgid "Key _Length:"
+msgid "Key Length"
+msgstr "鍵の長さ(_L):"
+
+#: ssh/seahorse-ssh-key-properties.ui:142
+#, fuzzy
+#| msgid "Location:"
+msgid "Location"
 msgstr "場所:"
 
-#: ../ssh/seahorse-ssh-key-properties.xml.h:21
-msgid "E_xport Complete Key"
-msgstr "鍵をまるごとエクスポート(_X)"
+#: ssh/seahorse-ssh-key-properties.ui:220
+#, fuzzy
+#| msgid "Remote Keys"
+msgid "Remote Access"
+msgstr "リモートの鍵"
 
-#: ../ssh/seahorse-ssh-operation.c:204
-msgid "The SSH command was terminated unexpectedly."
-msgstr "SSH のコマンドが強制終了されました。"
+#: ssh/seahorse-ssh-key-properties.ui:233
+msgid "Allows accessing this computer remotely"
+msgstr ""
 
-#: ../ssh/seahorse-ssh-operation.c:214
-msgid "The SSH command failed."
-msgstr "SSH コマンドの投入に失敗しました。"
+#: ssh/seahorse-ssh-key-properties.ui:311
+#, fuzzy
+#| msgid "Delete the key."
+msgid "Delete SSH Key"
+msgstr "この鍵を削除します。"
 
-#: ../ssh/seahorse-ssh-operation.c:523
-msgid "Remote Host Password"
-msgstr "リモートホストのパスワード"
-
-#: ../ssh/seahorse-ssh-operation.c:610
-msgid "Enter Key Passphrase"
-msgstr "鍵のパスフレーズを入力する"
-
-#: ../ssh/seahorse-ssh-operation.c:701
-msgid "Passphrase for New Secure Shell Key"
-msgstr "セキュアシェルで使用する新しい鍵のパスフレーズ"
-
-#: ../ssh/seahorse-ssh-operation.c:887
-#, c-format
-msgid "Importing key: %s"
-msgstr "鍵のインポート: %s"
-
-#: ../ssh/seahorse-ssh-operation.c:889
-msgid "Importing key. Enter passphrase"
-msgstr "鍵をインポートします。パスフレーズを入力してください"
-
-#: ../ssh/seahorse-ssh-source.c:219
-msgid "OpenSSH keys"
-msgstr "OpenSSH 鍵"
-
-#: ../ssh/seahorse-ssh-source.c:226
-#, c-format
-msgid "OpenSSH: %s"
-msgstr "OpenSSH: %s"
-
-#: ../ssh/seahorse-ssh-source.c:974
-msgid "No private key file is available for this key."
-msgstr "この鍵に対して利用できる秘密鍵ファイルはありません"
-
-#: ../ssh/seahorse-ssh-upload.c:48
-msgid "Couldn't configure Secure Shell keys on remote computer."
-msgstr "リモートのコンピューター上にある SSH 鍵を設定できません"
-
-#: ../ssh/seahorse-ssh-upload.c:131
-msgid "Configuring Secure Shell Keys..."
-msgstr "SSH 鍵を設定しています..."
-
-#: ../ssh/seahorse-ssh-upload.xml.h:1
+#: ssh/seahorse-ssh-upload.ui:5
 msgid "Set Up Computer for SSH Connection"
 msgstr "SSH で接続するコンピューターの設定"
 
-#: ../ssh/seahorse-ssh-upload.xml.h:2
+#: ssh/seahorse-ssh-upload.ui:32
 msgid ""
 "To use your Secure Shell key with another computer that uses SSH, you must "
 "already have a login account on that computer."
@@ -2592,21 +2911,242 @@ msgstr ""
 "SSH 鍵を別のコンピューターで利用する場合は、そのコンピューターのログインアカ"
 "ウントが必要になります。"
 
-#: ../ssh/seahorse-ssh-upload.xml.h:4
-msgid "eg: fileserver.example.com:port"
-msgstr "例: fileserver.example.com:port"
-
-#: ../ssh/seahorse-ssh-upload.xml.h:5
+#: ssh/seahorse-ssh-upload.ui:48
 msgid "_Server address:"
 msgstr "サーバーのアドレス(_S):"
 
-#: ../ssh/seahorse-ssh-upload.xml.h:6
+#: ssh/seahorse-ssh-upload.ui:77
+msgid "eg: fileserver.example.com:port"
+msgstr "例: fileserver.example.com:port"
+
+#: ssh/seahorse-ssh-upload.ui:93
 msgid "_Login name:"
 msgstr "ログイン名(_L):"
 
-#: ../ssh/seahorse-ssh-upload.xml.h:7
-msgid "_Set Up"
+#: ssh/seahorse-ssh-upload.ui:129
+#, fuzzy
+#| msgid "_Set Up"
+msgid "Set Up"
 msgstr "設定(_S)"
+
+#: ssh/source.vala:42
+msgid "OpenSSH keys"
+msgstr "OpenSSH 鍵"
+
+#: ssh/source.vala:47
+#, c-format
+msgid "OpenSSH: %s"
+msgstr "OpenSSH: %s"
+
+#: ssh/source.vala:51
+#, c-format
+msgid "openssh://%s"
+msgstr ""
+
+#: ssh/source.vala:237
+msgid "No private key file is available for this key."
+msgstr "この鍵に対して利用できる秘密鍵ファイルはありません"
+
+#: ssh/upload.vala:67
+#, fuzzy
+#| msgid "Couldn't configure Secure Shell keys on remote computer."
+msgid "Couldn’t configure Secure Shell keys on remote computer."
+msgstr "リモートのコンピューター上にある SSH 鍵を設定できません"
+
+#: ssh/upload.vala:71
+#, fuzzy
+#| msgid "Configuring Secure Shell Keys..."
+msgid "Configuring Secure Shell Keys…"
+msgstr "SSH 鍵を設定しています..."
+
+#~ msgid "_File"
+#~ msgstr "ファイル(_F)"
+
+#~ msgid "E_xport..."
+#~ msgstr "エクスポート(_X)..."
+
+#~ msgid "Export to a file"
+#~ msgstr "ファイルへ書き出します"
+
+#~ msgid "_Edit"
+#~ msgstr "編集(_E)"
+
+#~ msgid "Copy to the clipboard"
+#~ msgstr "クリップボードへコピーします"
+
+#~ msgid "Delete selected items"
+#~ msgstr "選択したアイテムを削除します"
+
+#~ msgid "Show the properties of this item"
+#~ msgstr "このアイテムのプロパティを表示します"
+
+#~ msgid "Show the properties of this keyring"
+#~ msgstr "このキーリングのプロパティを表示します"
+
+#~ msgid "Prefere_nces"
+#~ msgstr "設定(_N)"
+
+#~ msgid "Change preferences for this program"
+#~ msgstr "このプログラムの設定を変更します"
+
+#~ msgid "_View"
+#~ msgstr "表示(_V)"
+
+#~ msgid "About this program"
+#~ msgstr "このプログラムの情報を表示します"
+
+#~ msgid "_Contents"
+#~ msgstr "目次(_C)"
+
+#~ msgid "Show Seahorse help"
+#~ msgstr "Seahorse のヘルプを表示します"
+
+#~ msgid "New password keyring"
+#~ msgstr "新しいパスワードキーリング"
+
+#~ msgid "New password..."
+#~ msgstr "新規パスワード..."
+
+#~ msgid "Stored Password"
+#~ msgstr "保存されているパスワード"
+
+#~ msgid "Name:"
+#~ msgstr "名前:"
+
+#~ msgid "Keyring"
+#~ msgstr "キーリング"
+
+#~ msgid "- System Settings"
+#~ msgstr "- システム設定"
+
+#~ msgid "Don't display a window"
+#~ msgstr "ウィンドウを表示しない"
+
+#~ msgid "The search provider is not loaded yet"
+#~ msgstr "サーチプロバイダーがまだロードされていません"
+
+#~ msgid "PGP Key"
+#~ msgstr "PGP 鍵"
+
+#~ msgid "Importing keys from key servers"
+#~ msgstr "鍵を鍵サーバーからインポートする"
+
+#~ msgid "_Remote"
+#~ msgstr "リモート(_R)"
+
+#~ msgid "_Find Remote Keys..."
+#~ msgstr "リモートにある鍵の検索(_F)..."
+
+#~ msgid "_Import"
+#~ msgstr "インポート(_I)"
+
+#~ msgid "Import selected keys to local key ring"
+#~ msgstr "選択した鍵をローカルのキーリングへインポートします"
+
+#~ msgid "Publish and/or synchronize your keys with those online."
+#~ msgstr "この鍵を公開してオンライン上の鍵と同期します"
+
+#~ msgid "Photo "
+#~ msgstr "写真 "
+
+#~ msgctxt "name-of-key"
+#~ msgid "Name:"
+#~ msgstr "名前:"
+
+#~ msgid "Email:"
+#~ msgstr "メールアドレス:"
+
+#~ msgid "Decrypt files and email sent to you."
+#~ msgstr "送付されたファイルやメールを復号します。"
+
+#~ msgid "Private PGP Key"
+#~ msgstr "プライベート PGP 鍵"
+
+#~ msgid "Encrypt files and email to the key's owner"
+#~ msgstr "鍵の所有者へ送付するファイルやメールを暗号化する"
+
+#~ msgid "Public PGP Key"
+#~ msgstr "公開 PGP 鍵"
+
+#~ msgid "Continue"
+#~ msgstr "続行"
+
+#~ msgid "_Select the type of item to create:"
+#~ msgstr "生成する項目の種類を選択してください(_S):"
+
+#~ msgid "_New"
+#~ msgstr "新規(_N)"
+
+#~ msgid "Close this program"
+#~ msgstr "このプログラムを終了します"
+
+#~ msgid "_New..."
+#~ msgstr "新規(_N)..."
+
+#~ msgid "Create a new key or item"
+#~ msgstr "新しい鍵またはアイテムを生成します"
+
+#~ msgid "_Import..."
+#~ msgstr "インポート(_I)..."
+
+#~ msgid "Import from the clipboard"
+#~ msgstr "クリップボードから取り込みます"
+
+#~ msgid "By _Keyring"
+#~ msgstr "キーリングで(_K)"
+
+#~ msgid "Only show personal keys, certificates and passwords"
+#~ msgstr "自分の鍵、証明書およびパスワードのみを表示します"
+
+#~ msgid "Only show trusted keys, certificates and passwords"
+#~ msgstr "信頼している鍵、証明書そしてパスワードのみを表示します"
+
+#~ msgid "Show all keys, certificates and passwords"
+#~ msgstr "すべての鍵、証明書およびパスワードを表示します"
+
+#~ msgid "First time options:"
+#~ msgstr "初回起動時のオプション:"
+
+#~ msgid "Generate a new key of your own: "
+#~ msgstr "自分で新しい鍵を生成する: "
+
+#~ msgid "Import existing keys from a file:"
+#~ msgstr "既存の鍵をファイルからインポートする: "
+
+#~ msgid "To get started with encryption you will need keys."
+#~ msgstr "暗号化を始めるには鍵が必要です。"
+
+#~ msgid ""
+#~ "Send public Secure Shell key to another machine, and enable logins using "
+#~ "that key."
+#~ msgstr ""
+#~ "SSH 公開鍵を他のコンピューターに送信し、それを使ってログインできるようにし"
+#~ "ます。"
+
+#~ msgid "Used to access other computers (eg: via a terminal)"
+#~ msgstr "端末などから他のコンピューターにアクセスする際に使用します"
+
+#~ msgid "Identifier:"
+#~ msgstr "識別子:"
+
+#~ msgctxt "name-of-ssh-key"
+#~ msgid "Name:"
+#~ msgstr "名前:"
+
+#~ msgid "The owner of this key is _authorized to connect to this computer"
+#~ msgstr "このコンピューターに接続するのに、この鍵の所有者を認証する(_A)"
+
+#~ msgid "This only applies to the <i>%s</i> account."
+#~ msgstr "この鍵を <i>%s</i> というアカウントにのみ適用します。"
+
+#~ msgid "E_xport Complete Key"
+#~ msgstr "鍵をまるごとエクスポート(_X)"
+
+#~ msgid "The SSH command was terminated unexpectedly."
+#~ msgstr "SSH のコマンドが強制終了されました。"
+
+#~ msgid "The SSH command failed."
+#~ msgstr "SSH コマンドの投入に失敗しました。"
 
 #~ msgid "Ssh Key"
 #~ msgstr "SSH 鍵"
@@ -2616,12 +3156,6 @@ msgstr "設定(_S)"
 
 #~ msgid "<b>Password:</b>"
 #~ msgstr "<b>パスワード:</b>"
-
-#~ msgid "Login keyring"
-#~ msgstr "ログインキーリング"
-
-#~ msgid "Keyring Properties"
-#~ msgstr "キーリングのプロパティ"
 
 #~ msgid "Access to the key ring was denied"
 #~ msgstr "キーリングへのアクセスが拒否されました"
@@ -2688,9 +3222,6 @@ msgstr "設定(_S)"
 #~ msgid "P_laces"
 #~ msgstr "場所(_L)"
 
-#~ msgid "Show places sidebar"
-#~ msgstr "場所のサイドバーを表示する"
-
 #~ msgid "<b>Name:</b>"
 #~ msgstr "<b>名前:</b>"
 
@@ -2740,9 +3271,6 @@ msgstr "設定(_S)"
 #~ msgid "Properties of the password."
 #~ msgstr "パスワードのプロパティです。"
 
-#~ msgid "Delete the password."
-#~ msgstr "パスワードを削除する。"
-
 #~ msgid "To do Keyring"
 #~ msgstr "To do キーリング"
 
@@ -2773,9 +3301,6 @@ msgstr "設定(_S)"
 #~ msgid "Couldn't retrieve data from key server"
 #~ msgstr "鍵サーバーから鍵データを取得できません"
 
-#~ msgid "Retrieving keys"
-#~ msgstr "鍵の取得中"
-
 #~ msgid "Are you sure you want to permanently delete %d keys and identities?"
 #~ msgstr "本当に %d個の鍵と ID を抹消しますか?"
 
@@ -2785,14 +3310,8 @@ msgstr "設定(_S)"
 #~ msgid "_Sign Key..."
 #~ msgstr "鍵に署名する(_S)..."
 
-#~ msgid "Sign public key"
-#~ msgstr "公開鍵に署名します"
-
 #~ msgid "Properties of the key."
 #~ msgstr "この鍵のプロパティです。"
-
-#~ msgid "Delete the key."
-#~ msgstr "この鍵を削除します。"
 
 #~ msgid "Export Complete Key"
 #~ msgstr "鍵のエクスポート"
