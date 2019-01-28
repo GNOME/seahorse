@@ -55,17 +55,18 @@ enum {
 /* -----------------------------------------------------------------------------
  *  SERVER SOURCE
  */
- 
-struct _SeahorseServerSourcePrivate {
+
+typedef struct _SeahorseServerSourcePrivate {
     gchar *server;
     gchar *uri;
-};
+} SeahorseServerSourcePrivate;
 
 static void      seahorse_server_source_collection_init    (GcrCollectionIface *iface);
 
 static void      seahorse_server_source_place_iface        (SeahorsePlaceIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseServerSource, seahorse_server_source, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (SeahorseServerSource)
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_server_source_collection_init);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_server_source_place_iface);
 );
@@ -77,19 +78,11 @@ static void seahorse_server_get_property      (GObject *object, guint prop_id,
 static void seahorse_server_set_property      (GObject *object, guint prop_id,
                                                const GValue *value, GParamSpec *pspec);
 
-/**
-* klass: Class to initialize
-*
-* Initialize the basic class stuff
-*
-**/
 static void
 seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 {
-    GObjectClass *gobject_class;
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-    gobject_class = G_OBJECT_CLASS (klass);
-    
     gobject_class->finalize = seahorse_server_source_finalize;
     gobject_class->set_property = seahorse_server_set_property;
     gobject_class->get_property = seahorse_server_get_property;
@@ -116,37 +109,20 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
                                  G_PARAM_READWRITE));
 }
 
-/**
-* ssrc: A #SeahorseServerSource object
-*
-* init context, private vars, set prefs, connect signals
-*
-**/
 static void
 seahorse_server_source_init (SeahorseServerSource *ssrc)
-
 {
-    /* init private vars */
-    ssrc->priv = g_new0 (SeahorseServerSourcePrivate, 1);
 }
 
-/**
-* gobject: A #SeahorseServerSource object
-*
-* free private vars
-*
-**/
 static void
 seahorse_server_source_finalize (GObject *gobject)
 {
-    SeahorseServerSource *ssrc;
-  
-    ssrc = SEAHORSE_SERVER_SOURCE (gobject);
-    g_assert (ssrc->priv);
-    
-    g_free (ssrc->priv->server);
-    g_free (ssrc->priv->uri);
-    g_free (ssrc->priv);
+    SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (gobject);
+    SeahorseServerSourcePrivate *priv =
+        seahorse_server_source_get_instance_private (ssrc);
+
+    g_free (priv->server);
+    g_free (priv->uri);
  
     G_OBJECT_CLASS (seahorse_server_source_parent_class)->finalize (gobject);
 }
@@ -171,7 +147,11 @@ seahorse_server_source_load_finish (SeahorsePlace *self,
 static gchar *
 seahorse_server_source_get_label (SeahorsePlace* self)
 {
-	return g_strdup (SEAHORSE_SERVER_SOURCE (self)->priv->server);
+    SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (self);
+    SeahorseServerSourcePrivate *priv =
+        seahorse_server_source_get_instance_private (ssrc);
+
+	return g_strdup (priv->server);
 }
 
 static void
@@ -182,13 +162,21 @@ seahorse_server_source_set_label (SeahorsePlace *self, const char *label)
 static gchar *
 seahorse_server_source_get_description (SeahorsePlace* self)
 {
-	return g_strdup (SEAHORSE_SERVER_SOURCE (self)->priv->uri);
+    SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (self);
+    SeahorseServerSourcePrivate *priv =
+        seahorse_server_source_get_instance_private (ssrc);
+
+	return g_strdup (priv->uri);
 }
 
 static gchar *
 seahorse_server_source_get_uri (SeahorsePlace* self)
 {
-	return g_strdup (SEAHORSE_SERVER_SOURCE (self)->priv->uri);
+    SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (self);
+    SeahorseServerSourcePrivate *priv =
+        seahorse_server_source_get_instance_private (ssrc);
+
+	return g_strdup (priv->uri);
 }
 
 static GIcon *
@@ -231,6 +219,8 @@ seahorse_server_set_property (GObject *object, guint prop_id,
                               const GValue *value, GParamSpec *pspec)
 {
     SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (object);
+    SeahorseServerSourcePrivate *priv =
+        seahorse_server_source_get_instance_private (ssrc);
  
     switch (prop_id) {
     case PROP_LABEL:
@@ -238,14 +228,14 @@ seahorse_server_set_property (GObject *object, guint prop_id,
                                           g_value_get_boxed (value));
         break;
     case PROP_KEY_SERVER:
-        g_assert (ssrc->priv->server == NULL);
-        ssrc->priv->server = g_strdup (g_value_get_string (value));
-        g_return_if_fail (ssrc->priv->server && ssrc->priv->server[0]);
+        g_assert (priv->server == NULL);
+        priv->server = g_strdup (g_value_get_string (value));
+        g_return_if_fail (priv->server && priv->server[0]);
         break;
     case PROP_URI:
-        g_free (ssrc->priv->uri);
-        ssrc->priv->uri = g_strdup (g_value_get_string (value));
-        g_return_if_fail (ssrc->priv->uri && ssrc->priv->uri[0]);
+        g_free (priv->uri);
+        priv->uri = g_strdup (g_value_get_string (value));
+        g_return_if_fail (priv->uri && priv->uri[0]);
         break;
     default:
         break;
@@ -270,13 +260,15 @@ seahorse_server_get_property (GObject *obj,
 {
 	SeahorseServerSource *self = SEAHORSE_SERVER_SOURCE (obj);
 	SeahorsePlace *place = SEAHORSE_PLACE (self);
+    SeahorseServerSourcePrivate *priv =
+        seahorse_server_source_get_instance_private (self);
 
 	switch (prop_id) {
 	case PROP_LABEL:
 		g_value_take_string (value, seahorse_server_source_get_label (place));
 		break;
 	case PROP_KEY_SERVER:
-		g_value_set_string (value, self->priv->server);
+		g_value_set_string (value, priv->server);
 		break;
 	case PROP_DESCRIPTION:
 		g_value_take_string (value, seahorse_server_source_get_description (place));

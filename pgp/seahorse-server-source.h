@@ -19,21 +19,21 @@
  */
 
 /**
- * SeahorseServerSoruce: A base class for key sources that retrieve keys
+ * SeahorseServerSource: A base class for key sources that retrieve keys
  * from remote key servers.
- * 
+ *
  * - Derived from SeahorseSource.
  * - Also includes functions for parsing keyserver URIs and mapping them
  *   to the appropriate key sources (such as SeahorseHKPSource)
- * - There's some GPGME specific stuff in here that may eventually need to be 
+ * - There's some GPGME specific stuff in here that may eventually need to be
  *   moved elsewhere.
- * 
+ *
  * Properties:
  *   key-type: (GQuark) The type of keys generated (ie: SKEY_PGP)
  *   location: (gchar*) The location of keys from this key source (ie: SEAHORSE_LOCATION_REMOTE)
  *   key-server: (gchar*) The host:port of the keyserver to search.
- *   uri: (gchar*) Only for remote key sources. The full URI of the keyserver 
- *        being used. 
+ *   uri: (gchar*) Only for remote key sources. The full URI of the keyserver
+ *        being used.
  */
 
 #pragma once
@@ -42,21 +42,10 @@
 
 #include <gcr/gcr.h>
 
-#define SEAHORSE_TYPE_SERVER_SOURCE            (seahorse_server_source_get_type ())
-#define SEAHORSE_SERVER_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_SERVER_SOURCE, SeahorseServerSource))
-#define SEAHORSE_SERVER_SOURCE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_SERVER_SOURCE, SeahorseServerSourceClass))
-#define SEAHORSE_IS_SERVER_SOURCE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_SERVER_SOURCE))
-#define SEAHORSE_IS_SERVER_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_SERVER_SOURCE))
-#define SEAHORSE_SERVER_SOURCE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_SERVER_SOURCE, SeahorseServerSourceClass))
-
-typedef struct _SeahorseServerSource SeahorseServerSource;
-typedef struct _SeahorseServerSourceClass SeahorseServerSourceClass;
-typedef struct _SeahorseServerSourcePrivate SeahorseServerSourcePrivate;
-
-struct _SeahorseServerSource {
-	GObject parent;
-	SeahorseServerSourcePrivate *priv;
-};
+#define SEAHORSE_TYPE_SERVER_SOURCE (seahorse_server_source_get_type ())
+G_DECLARE_DERIVABLE_TYPE (SeahorseServerSource, seahorse_server_source,
+                          SEAHORSE, SERVER_SOURCE,
+                          GObject)
 
 struct _SeahorseServerSourceClass {
 	GObjectClass parent_class;
@@ -93,8 +82,6 @@ struct _SeahorseServerSourceClass {
 	                                          GAsyncResult *result,
 	                                          GError **error);
 };
-
-GType                  seahorse_server_source_get_type         (void);
 
 SeahorseServerSource*  seahorse_server_source_new              (const gchar *uri);
 
