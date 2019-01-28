@@ -73,6 +73,12 @@ get_hkp_error_domain (void)
     return q;
 }
 
+struct _SeahorseHKPSource {
+    SeahorseServerSource parent;
+};
+
+G_DEFINE_TYPE (SeahorseHKPSource, seahorse_hkp_source, SEAHORSE_TYPE_SERVER_SOURCE);
+
 /**
 * src: The SeahorseSource to use as server for the uri
 * path: The path to add to the SOUP uri
@@ -525,8 +531,6 @@ detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
 /* -----------------------------------------------------------------------------
  *  SEAHORSE HKP SOURCE
  */
-
-G_DEFINE_TYPE (SeahorseHKPSource, seahorse_hkp_source, SEAHORSE_TYPE_SERVER_SOURCE);
 
 static void 
 seahorse_hkp_source_init (SeahorseHKPSource *hsrc)
