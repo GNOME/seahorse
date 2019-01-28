@@ -18,10 +18,10 @@
  */
 
 /**
- * SeahorseHKPSource: A key source which searches LDAP PGP key servers. 
- * 
+ * SeahorseHKPSource: A key source which searches LDAP PGP key servers.
+ *
  * - Derived from SeahorseServerSource.
- * - Adds found keys to SeahorseContext. 
+ * - Adds found keys to SeahorseContext.
  */
 
 #pragma once
@@ -30,29 +30,12 @@
 
 #ifdef WITH_LDAP
 
-#define SEAHORSE_TYPE_LDAP_SOURCE            (seahorse_ldap_source_get_type ())
-#define SEAHORSE_LDAP_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_LDAP_SOURCE, SeahorseLDAPSource))
-#define SEAHORSE_LDAP_SOURCE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_LDAP_SOURCE, SeahorseLDAPSourceClass))
-#define SEAHORSE_IS_LDAP_SOURCE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_LDAP_SOURCE))
-#define SEAHORSE_IS_LDAP_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_LDAP_SOURCE))
-#define SEAHORSE_LDAP_SOURCE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_LDAP_SOURCE, SeahorseLDAPSourceClass))
+#define SEAHORSE_TYPE_LDAP_SOURCE (seahorse_ldap_source_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseLDAPSource, seahorse_ldap_source,
+                      SEAHORSE, LDAP_SOURCE,
+                      SeahorseServerSource)
 
-typedef struct _SeahorseLDAPSource SeahorseLDAPSource;
-typedef struct _SeahorseLDAPSourceClass SeahorseLDAPSourceClass;
-
-struct _SeahorseLDAPSource {
-    SeahorseServerSource parent;
-
-    /*< private >*/
-};
-
-struct _SeahorseLDAPSourceClass {
-    SeahorseServerSourceClass parent_class;
-};
-
-GType                 seahorse_ldap_source_get_type (void);
-
-SeahorseLDAPSource*   seahorse_ldap_source_new     (const gchar *uri, 
+SeahorseLDAPSource*   seahorse_ldap_source_new     (const gchar *uri,
                                                     const gchar *host);
 
 gboolean              seahorse_ldap_is_valid_uri   (const gchar *uri);

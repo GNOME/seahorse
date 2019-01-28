@@ -49,6 +49,10 @@
 /* Amount of keys to load in a batch */
 #define DEFAULT_LOAD_BATCH 30
 
+struct _SeahorseLDAPSource {
+    SeahorseServerSource parent;
+};
+
 /* -----------------------------------------------------------------------------
  * SERVER INFO
  */
