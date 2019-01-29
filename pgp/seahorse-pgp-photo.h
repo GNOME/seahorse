@@ -23,26 +23,13 @@
 #include <gtk/gtk.h>
 
 #define SEAHORSE_PGP_TYPE_PHOTO            (seahorse_pgp_photo_get_type ())
-#define SEAHORSE_PGP_PHOTO(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_PHOTO, SeahorsePgpPhoto))
-#define SEAHORSE_PGP_PHOTO_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_PHOTO, SeahorsePgpPhotoClass))
-#define SEAHORSE_PGP_IS_PHOTO(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_PHOTO))
-#define SEAHORSE_PGP_IS_PHOTO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_PHOTO))
-#define SEAHORSE_PGP_PHOTO_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_PHOTO, SeahorsePgpPhotoClass))
-
-typedef struct _SeahorsePgpPhoto SeahorsePgpPhoto;
-typedef struct _SeahorsePgpPhotoClass SeahorsePgpPhotoClass;
-typedef struct _SeahorsePgpPhotoPrivate SeahorsePgpPhotoPrivate;
-
-struct _SeahorsePgpPhoto {
-	GObject parent;
-	SeahorsePgpPhotoPrivate *pv;
-};
+G_DECLARE_DERIVABLE_TYPE (SeahorsePgpPhoto, seahorse_pgp_photo,
+                          SEAHORSE_PGP, PHOTO,
+                          GObject);
 
 struct _SeahorsePgpPhotoClass {
 	GObjectClass parent_class;
 };
-
-GType               seahorse_pgp_photo_get_type          (void);
 
 SeahorsePgpPhoto*   seahorse_pgp_photo_new               (GdkPixbuf *pixbuf);
 

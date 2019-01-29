@@ -30,20 +30,15 @@ enum {
 	PROP_PIXBUF
 };
 
-G_DEFINE_TYPE (SeahorsePgpPhoto, seahorse_pgp_photo, G_TYPE_OBJECT);
+typedef struct _SeahorsePgpPhotoPrivate {
+	GdkPixbuf *pixbuf;
+} SeahorsePgpPhotoPrivate;
 
-struct _SeahorsePgpPhotoPrivate {
-	GdkPixbuf *pixbuf;         
-};
-
-/* -----------------------------------------------------------------------------
- * OBJECT 
- */
+G_DEFINE_TYPE_WITH_PRIVATE (SeahorsePgpPhoto, seahorse_pgp_photo, G_TYPE_OBJECT);
 
 static void
 seahorse_pgp_photo_init (SeahorsePgpPhoto *self)
 {
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_PGP_TYPE_PHOTO, SeahorsePgpPhotoPrivate);
 }
 
 static void
@@ -51,7 +46,7 @@ seahorse_pgp_photo_get_property (GObject *object, guint prop_id,
                                   GValue *value, GParamSpec *pspec)
 {
 	SeahorsePgpPhoto *self = SEAHORSE_PGP_PHOTO (object);
-	
+
 	switch (prop_id) {
 	case PROP_PIXBUF:
 		g_value_set_object (value, seahorse_pgp_photo_get_pixbuf (self));
@@ -60,8 +55,8 @@ seahorse_pgp_photo_get_property (GObject *object, guint prop_id,
 }
 
 static void
-seahorse_pgp_photo_set_property (GObject *object, guint prop_id, const GValue *value, 
-                                  GParamSpec *pspec)
+seahorse_pgp_photo_set_property (GObject *object, guint prop_id,
+                                 const GValue *value, GParamSpec *pspec)
 {
 	SeahorsePgpPhoto *self = SEAHORSE_PGP_PHOTO (object);
 
@@ -76,37 +71,30 @@ static void
 seahorse_pgp_photo_finalize (GObject *gobject)
 {
 	SeahorsePgpPhoto *self = SEAHORSE_PGP_PHOTO (gobject);
+	SeahorsePgpPhotoPrivate *priv =
+		seahorse_pgp_photo_get_instance_private (self);
 
-	if (self->pv->pixbuf)
-		g_object_unref (self->pv->pixbuf);
-	self->pv->pixbuf = NULL;
-    
+	g_clear_object (&priv->pixbuf);
+
 	G_OBJECT_CLASS (seahorse_pgp_photo_parent_class)->finalize (gobject);
 }
 
 static void
 seahorse_pgp_photo_class_init (SeahorsePgpPhotoClass *klass)
 {
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);    
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-	seahorse_pgp_photo_parent_class = g_type_class_peek_parent (klass);
-	g_type_class_add_private (klass, sizeof (SeahorsePgpPhotoPrivate));
-    
 	gobject_class->finalize = seahorse_pgp_photo_finalize;
 	gobject_class->set_property = seahorse_pgp_photo_set_property;
 	gobject_class->get_property = seahorse_pgp_photo_get_property;
-    
+
 	g_object_class_install_property (gobject_class, PROP_PIXBUF,
 	        g_param_spec_object ("pixbuf", "Pixbuf", "Photo Pixbuf",
 	                             GDK_TYPE_PIXBUF, G_PARAM_READWRITE));
 }
 
-/* -----------------------------------------------------------------------------
- * PUBLIC 
- */
-
-SeahorsePgpPhoto* 
-seahorse_pgp_photo_new (GdkPixbuf *pixbuf) 
+SeahorsePgpPhoto*
+seahorse_pgp_photo_new (GdkPixbuf *pixbuf)
 {
 	return g_object_new (SEAHORSE_PGP_TYPE_PHOTO, "pixbuf", pixbuf, NULL);
 }
@@ -114,20 +102,26 @@ seahorse_pgp_photo_new (GdkPixbuf *pixbuf)
 GdkPixbuf*
 seahorse_pgp_photo_get_pixbuf (SeahorsePgpPhoto *self)
 {
+	SeahorsePgpPhotoPrivate *priv;
+
 	g_return_val_if_fail (SEAHORSE_PGP_IS_PHOTO (self), NULL);
-	return self->pv->pixbuf;
+
+	priv = seahorse_pgp_photo_get_instance_private (self);
+	return priv->pixbuf;
 }
 
 void
 seahorse_pgp_photo_set_pixbuf (SeahorsePgpPhoto *self, GdkPixbuf* pixbuf)
 {
+	SeahorsePgpPhotoPrivate *priv;
+
 	g_return_if_fail (SEAHORSE_PGP_IS_PHOTO (self));
 
-	if (self->pv->pixbuf)
-		g_object_unref (self->pv->pixbuf);
-	self->pv->pixbuf = pixbuf;
-	if (self->pv->pixbuf)
-		g_object_ref (self->pv->pixbuf);
-	
+	priv = seahorse_pgp_photo_get_instance_private (self);
+	g_clear_object (&priv->pixbuf);
+	priv->pixbuf = pixbuf;
+	if (priv->pixbuf)
+		g_object_ref (priv->pixbuf);
+
 	g_object_notify (G_OBJECT (self), "pixbuf");
 }
