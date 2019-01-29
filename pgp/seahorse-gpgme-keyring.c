@@ -141,8 +141,6 @@ G_DEFINE_TYPE_WITH_CODE (SeahorseGpgmeKeyring, seahorse_gpgme_keyring, G_TYPE_OB
 
 typedef struct {
 	SeahorseGpgmeKeyring *keyring;
-	GCancellable *cancellable;
-	gulong cancelled_sig;
 	gpgme_ctx_t gctx;
 	GHashTable *checks;
 	gint parts;
@@ -157,9 +155,6 @@ keyring_list_free (gpointer data)
 		gpgme_release (closure->gctx);
 	if (closure->checks)
 		g_hash_table_destroy (closure->checks);
-	g_cancellable_disconnect (closure->cancellable,
-	                          closure->cancelled_sig);
-	g_clear_object (&closure->cancellable);
 	g_clear_object (&closure->keyring);
 	g_free (closure);
 }
@@ -253,20 +248,19 @@ remove_key (SeahorseGpgmeKeyring *self,
 static gboolean
 on_idle_list_batch_of_keys (gpointer data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (data);
-	keyring_list_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GTask *task = G_TASK (data);
+	keyring_list_closure *closure = g_task_get_task_data (task);
 	SeahorseGpgmeKey *pkey;
 	GHashTableIter iter;
 	gpgme_key_t key;
 	guint batch;
-	gchar *detail;
+	g_autofree gchar *detail = NULL;
 	const gchar *keyid;
 
 	/* We load until done if batch is zero */
 	batch = DEFAULT_LOAD_BATCH;
 
 	while (batch-- > 0) {
-
 		if (!GPG_IS_OK (gpgme_op_keylist_next (closure->gctx, &key))) {
 
 			gpgme_op_keylist_end (closure->gctx);
@@ -278,8 +272,8 @@ on_idle_list_batch_of_keys (gpointer data)
 					remove_key (closure->keyring, keyid);
 			}
 
-			seahorse_progress_end (closure->cancellable, res);
-			g_simple_async_result_complete (res);
+			seahorse_progress_end (g_task_get_cancellable (task), task);
+			g_task_return_boolean (task, TRUE);
 			return FALSE; /* Remove event handler */
 		}
 
@@ -287,10 +281,8 @@ on_idle_list_batch_of_keys (gpointer data)
 
 		/* During a refresh if only new or removed keys */
 		if (closure->checks) {
-
 			/* Make note that this key exists in key ring */
 			g_hash_table_remove (closure->checks, key->subkeys->keyid);
-
 		}
 
 		pkey = add_key_to_context (closure->keyring, key);
@@ -304,8 +296,7 @@ on_idle_list_batch_of_keys (gpointer data)
 	}
 
 	detail = g_strdup_printf (ngettext("Loaded %d key", "Loaded %d keys", closure->loaded), closure->loaded);
-	seahorse_progress_update (closure->cancellable, res, detail);
-	g_free (detail);
+	seahorse_progress_update (g_task_get_cancellable (task), task, detail);
 
 	return TRUE;
 }
@@ -314,8 +305,8 @@ static void
 on_keyring_list_cancelled (GCancellable *cancellable,
                            gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	keyring_list_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GTask *task = G_TASK (user_data);
+	keyring_list_closure *closure = g_task_get_task_data (task);
 
 	gpgme_op_keylist_end (closure->gctx);
 }
@@ -329,23 +320,20 @@ seahorse_gpgme_keyring_list_async (SeahorseGpgmeKeyring *self,
                                    GAsyncReadyCallback callback,
                                    gpointer user_data)
 {
+	g_autoptr(GTask) task = NULL;
 	keyring_list_closure *closure;
-	GSimpleAsyncResult *res;
 	SeahorseObject *object;
 	gpgme_error_t gerr = 0;
 	GHashTableIter iter;
-	GError *error = NULL;
-	gchar *keyid;
+	g_autoptr(GError) error = NULL;
 
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_gpgme_keyring_list_async);
+	task = g_task_new (self, cancellable, callback, user_data);
 
 	closure = g_new0 (keyring_list_closure, 1);
 	closure->parts = parts;
 	closure->gctx = seahorse_gpgme_keyring_new_context (&gerr);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	closure->keyring = g_object_ref (self);
-	g_simple_async_result_set_op_res_gpointer (res, closure, keyring_list_free);
+	g_task_set_task_data (task, closure, keyring_list_free);
 
 	/* Start the key listing */
 	if (closure->gctx) {
@@ -360,14 +348,13 @@ seahorse_gpgme_keyring_list_async (SeahorseGpgmeKeyring *self,
 
 	if (gerr != 0) {
 		seahorse_gpgme_propagate_error (gerr, &error);
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
-		g_object_unref (res);
+		g_task_return_error (task, g_steal_pointer (&error));
 		return;
 	}
 
 	/* Loading all the keys? */
 	if (patterns == NULL) {
+		gchar *keyid;
 
 		closure->checks = g_hash_table_new_full (seahorse_pgp_keyid_hash,
 		                                         seahorse_pgp_keyid_equal,
@@ -382,16 +369,14 @@ seahorse_gpgme_keyring_list_async (SeahorseGpgmeKeyring *self,
 		}
 	}
 
-	seahorse_progress_prep_and_begin (cancellable, res, NULL);
+	seahorse_progress_prep_and_begin (cancellable, task, NULL);
 	if (cancellable)
-		closure->cancelled_sig = g_cancellable_connect (cancellable,
-		                                                G_CALLBACK (on_keyring_list_cancelled),
-		                                                res, NULL);
+		g_cancellable_connect (cancellable,
+		                       G_CALLBACK (on_keyring_list_cancelled),
+		                       task, NULL);
 
 	g_idle_add_full (G_PRIORITY_LOW, on_idle_list_batch_of_keys,
-	                 g_object_ref (res), g_object_unref);
-
-	g_object_unref (res);
+	                 g_steal_pointer (&task), g_object_unref);
 }
 
 static gboolean
@@ -399,13 +384,9 @@ seahorse_gpgme_keyring_list_finish (SeahorseGpgmeKeyring *keyring,
                                     GAsyncResult *result,
                                     GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (keyring),
-	                      seahorse_gpgme_keyring_list_async), FALSE);
+	g_return_val_if_fail (g_task_is_valid (result, keyring), FALSE);
 
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return FALSE;
-
-	return TRUE;
+	return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
@@ -437,19 +418,20 @@ on_keyring_secret_list_complete (GObject *source,
                                  GAsyncResult *result,
                                  gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	keyring_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
-
-	if (!seahorse_gpgme_keyring_list_finish (SEAHORSE_GPGME_KEYRING (source),
-	                                         result, &error))
-		g_simple_async_result_take_error (res, error);
+	g_autoptr(GTask) task = G_TASK (user_data);
+	keyring_load_closure *closure = g_task_get_task_data (task);
+	g_autoptr(GError) error = NULL;
 
 	closure->secret_done = TRUE;
-	if (closure->public_done)
-		g_simple_async_result_complete (res);
 
-	g_object_unref (res);
+	if (!seahorse_gpgme_keyring_list_finish (SEAHORSE_GPGME_KEYRING (source),
+	                                         result, &error)) {
+		g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
+
+	if (closure->public_done)
+		g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -457,19 +439,20 @@ on_keyring_public_list_complete (GObject *source,
                                  GAsyncResult *result,
                                  gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	keyring_load_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
-
-	if (!seahorse_gpgme_keyring_list_finish (SEAHORSE_GPGME_KEYRING (source),
-	                                         result, &error))
-		g_simple_async_result_take_error (res, error);
+	g_autoptr(GTask) task = G_TASK (user_data);
+	keyring_load_closure *closure = g_task_get_task_data (task);
+	g_autoptr(GError) error = NULL;
 
 	closure->public_done = TRUE;
-	if (closure->secret_done)
-		g_simple_async_result_complete (res);
 
-	g_object_unref (res);
+	if (!seahorse_gpgme_keyring_list_finish (SEAHORSE_GPGME_KEYRING (source),
+	                                         result, &error)) {
+		g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
+
+	if (closure->secret_done)
+		g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -480,7 +463,7 @@ seahorse_gpgme_keyring_load_full_async (SeahorseGpgmeKeyring *self,
                                         GAsyncReadyCallback callback,
                                         gpointer user_data)
 {
-	GSimpleAsyncResult *res;
+	g_autoptr(GTask) task = NULL;
 	keyring_load_closure *closure;
 
 	/* Schedule a dummy refresh. This blocks all monitoring for a while */
@@ -490,22 +473,19 @@ seahorse_gpgme_keyring_load_full_async (SeahorseGpgmeKeyring *self,
 
 	g_debug ("refreshing keys...");
 
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_gpgme_keyring_load_full_async);
+	task = g_task_new (self, cancellable, callback, user_data);
 	closure = g_new0 (keyring_load_closure, 1);
-	g_simple_async_result_set_op_res_gpointer (res, closure, g_free);
+	g_task_set_task_data (task, closure, g_free);
 
 	/* Secret keys */
 	seahorse_gpgme_keyring_list_async (self, patterns, 0, TRUE, cancellable,
-	                                  on_keyring_secret_list_complete,
-	                                  g_object_ref (res));
+	                                   on_keyring_secret_list_complete,
+	                                   g_object_ref (task));
 
 	/* Public keys */
 	seahorse_gpgme_keyring_list_async (self, patterns, 0, FALSE, cancellable,
-	                                  on_keyring_public_list_complete,
-	                                  g_object_ref (res));
-
-	g_object_unref (res);
+	                                   on_keyring_public_list_complete,
+	                                   g_steal_pointer (&task));
 }
 
 SeahorseGpgmeKey *
@@ -553,35 +533,27 @@ seahorse_gpgme_keyring_load_finish (SeahorsePlace *place,
                                     GAsyncResult *result,
                                     GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (place),
-	                      seahorse_gpgme_keyring_load_full_async), FALSE);
+	g_return_val_if_fail (g_task_is_valid (result, place), FALSE);
 
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return FALSE;
-
-	return TRUE;
+	return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 typedef struct {
-	GCancellable *cancellable;
 	SeahorseGpgmeKeyring *keyring;
 	gpgme_ctx_t gctx;
 	gpgme_data_t data;
 	gchar **patterns;
-	GList *keys;
 } keyring_import_closure;
 
 static void
 keyring_import_free (gpointer data)
 {
 	keyring_import_closure *closure = data;
-	g_clear_object (&closure->cancellable);
 	if (closure->gctx)
 		gpgme_release (closure->gctx);
 	gpgme_data_release (closure->data);
 	g_object_unref (closure->keyring);
 	g_strfreev (closure->patterns);
-	g_list_free (closure->keys);
 	g_free (closure);
 }
 
@@ -590,12 +562,14 @@ on_keyring_import_loaded (GObject *source,
                          GAsyncResult *result,
                          gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	keyring_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	SeahorseObject *object;
+	g_autoptr(GTask) task = G_TASK (user_data);
+	keyring_import_closure *closure = g_task_get_task_data (task);
+    g_autoptr(GList) keys = NULL;
 	guint i;
 
 	for (i = 0; closure->patterns[i] != NULL; i++) {
+	    SeahorseObject *object;
+
 		object = g_hash_table_lookup (closure->keyring->keys, closure->patterns[i]);
 		if (object == NULL) {
 			g_warning ("imported key but then couldn't find it in keyring: %s",
@@ -603,20 +577,18 @@ on_keyring_import_loaded (GObject *source,
 			continue;
 		}
 
-		closure->keys = g_list_prepend (closure->keys, object);
+		keys = g_list_prepend (keys, object);
 	}
 
-	seahorse_progress_end (closure->cancellable, res);
-	g_simple_async_result_complete (res);
-	g_object_unref (res);
+	seahorse_progress_end (g_task_get_cancellable (task), result);
+	g_task_return_pointer (task, g_steal_pointer (&keys), (GDestroyNotify) g_list_free);
 }
 
 static gboolean
-on_keyring_import_complete (gpgme_error_t gerr,
-                           gpointer user_data)
+on_keyring_import_complete (gpgme_error_t gerr, gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	keyring_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
+	GTask *task = G_TASK (user_data);
+	keyring_import_closure *closure = g_task_get_task_data (task);
 	gpgme_import_result_t results;
 	gpgme_import_status_t import;
 	GError *error = NULL;
@@ -624,15 +596,14 @@ on_keyring_import_complete (gpgme_error_t gerr,
 	gint i;
 
 	if (seahorse_gpgme_propagate_error (gerr, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete (res);
+		g_task_return_error (task, g_steal_pointer (&error));
 		return FALSE; /* don't call again */
 	}
 
 	/* Figure out which keys were imported */
 	results = gpgme_op_import_result (closure->gctx);
 	if (results == NULL) {
-		g_simple_async_result_complete (res);
+		g_task_return_pointer (task, NULL, NULL);
 		return FALSE; /* don't call again */
 	}
 
@@ -647,21 +618,20 @@ on_keyring_import_complete (gpgme_error_t gerr,
 
 	/* See if we've managed to import any ... */
 	if (closure->patterns[0] == NULL) {
-
 		/* ... try and find out why */
 		if (results->considered > 0 && results->no_user_id) {
 			msg = _("Invalid key data (missing UIDs). This may be due to a computer with a date set in the future or a missing self-signature.");
-			g_simple_async_result_set_error (res, SEAHORSE_ERROR, -1, "%s", msg);
+			g_task_return_new_error (task, SEAHORSE_ERROR, -1, "%s", msg);
 		}
 
-		g_simple_async_result_complete (res);
+		g_task_return_pointer (task, NULL, NULL);
 		return FALSE; /* don't call again */
 	}
 
 	/* Reload public keys */
 	seahorse_gpgme_keyring_load_full_async (closure->keyring, (const gchar **)closure->patterns,
-	                                        LOAD_FULL, closure->cancellable,
-	                                        on_keyring_import_loaded, g_object_ref (res));
+	                                        LOAD_FULL, g_task_get_cancellable (task),
+	                                        on_keyring_import_loaded, g_object_ref (task));
 
 	return FALSE; /* don't call again */
 }
@@ -673,39 +643,33 @@ seahorse_gpgme_keyring_import_async (SeahorseGpgmeKeyring *self,
                                      GAsyncReadyCallback callback,
                                      gpointer user_data)
 {
-	GSimpleAsyncResult *res;
+	g_autoptr(GTask) task = NULL;
 	keyring_import_closure *closure;
 	gpgme_error_t gerr = 0;
-	GError *error = NULL;
-	GSource *gsource = NULL;
+	g_autoptr(GError) error = NULL;
+	g_autoptr(GSource) gsource = NULL;
 
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_gpgme_keyring_import_async);
+	task = g_task_new (self, cancellable, callback, user_data);
 	closure = g_new0 (keyring_import_closure, 1);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
 	closure->gctx = seahorse_gpgme_keyring_new_context (&gerr);
 	closure->data = seahorse_gpgme_data_input (input);
 	closure->keyring = g_object_ref (self);
-	g_simple_async_result_set_op_res_gpointer (res, closure, keyring_import_free);
+	g_task_set_task_data (task, closure, keyring_import_free);
 
 	if (gerr == 0) {
-		seahorse_progress_prep_and_begin (cancellable, res, NULL);
+		seahorse_progress_prep_and_begin (cancellable, task, NULL);
 		gsource = seahorse_gpgme_gsource_new (closure->gctx, cancellable);
 		g_source_set_callback (gsource, (GSourceFunc)on_keyring_import_complete,
-		                       g_object_ref (res), g_object_unref);
+		                       g_steal_pointer (&task), g_object_unref);
 		gerr = gpgme_op_import_start (closure->gctx, closure->data);
 	}
 
 	if (seahorse_gpgme_propagate_error (gerr, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
-
-	} else {
-		g_source_attach (gsource, g_main_context_default ());
+		g_task_return_error (task, g_steal_pointer (&error));
+        return;
 	}
 
-	g_source_unref (gsource);
-	g_object_unref (res);
+	g_source_attach (gsource, g_main_context_default ());
 }
 
 GList *
@@ -713,19 +677,9 @@ seahorse_gpgme_keyring_import_finish (SeahorseGpgmeKeyring *self,
                                       GAsyncResult *result,
                                       GError **error)
 {
-	keyring_import_closure *closure;
-	GList *results;
+	g_return_val_if_fail (g_task_is_valid (result, self), NULL);
 
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
-	                      seahorse_gpgme_keyring_import_async), NULL);
-
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return NULL;
-
-	closure = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-	results = closure->keys;
-	closure->keys = NULL;
-	return results;
+	return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 static gboolean
