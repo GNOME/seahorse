@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkDialog" id="keyserver-search">
+  <template class="SeahorseKeyserverSearch" parent="GtkDialog">
     <property name="visible">True</property>
     <property name="border_width">6</property>
     <property name="use_header_bar">1</property>
@@ -51,11 +51,11 @@
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">_Search for keys containing: </property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">search-text</property>
+                <property name="mnemonic_widget">search_entry</property>
               </object>
             </child>
             <child>
-              <object class="GtkEntry" id="search-text">
+              <object class="GtkEntry" id="search_entry">
                 <property name="visible">True</property>
                 <property name="hexpand">True</property>
                 <property name="can_focus">True</property>
@@ -92,7 +92,7 @@
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox" id="key-server-list">
+                  <object class="GtkBox" id="key_server_list">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
                     <property name="border_width">6</property>
@@ -106,7 +106,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkBox" id="shared-keys-list">
+                  <object class="GtkBox" id="shared_keys_list">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
                     <property name="border_width">6</property>
@@ -127,13 +127,11 @@
     </child>
     <child type="action">
       <object class="GtkButton" id="cancelbutton">
-        <property name="label">gtk-cancel</property>
+        <property name="label" translatable="yes">Cancel</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="can_default">True</property>
         <property name="receives_default">False</property>
-        <property name="use_stock">True</property>
-        <signal name="clicked" handler="on_widget_closed"/>
       </object>
     </child>
     <child type="action">
@@ -152,5 +150,5 @@
       <action-widget response="-6">cancelbutton</action-widget>
       <action-widget response="-5" default="true">searchbutton</action-widget>
     </action-widgets>
-  </object>
+  </template>
 </interface>
