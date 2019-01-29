@@ -64,10 +64,13 @@ on_remote_find (GSimpleAction *action,
                 gpointer user_data)
 {
   SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
-  SeahorseCatalog *catalog;
+  SeahorseCatalog *catalog = NULL;
+  g_autoptr(SeahorseKeyserverSearch) search = NULL;
 
   catalog = seahorse_action_group_get_catalog (actions);
-  seahorse_keyserver_search_show (GTK_WINDOW (catalog));
+  search = seahorse_keyserver_search_new (GTK_WINDOW (catalog));
+  gtk_dialog_run (GTK_DIALOG (search));
+  gtk_widget_destroy (GTK_WIDGET (search));
   g_clear_object (&catalog);
 }
 

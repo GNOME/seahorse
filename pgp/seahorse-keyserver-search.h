@@ -23,4 +23,9 @@
 
 #include <gtk/gtk.h>
 
-GtkWindow *  seahorse_keyserver_search_show      (GtkWindow *parent);
+#define SEAHORSE_TYPE_KEYSERVER_SEARCH (seahorse_keyserver_search_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseKeyserverSearch, seahorse_keyserver_search,
+                      SEAHORSE, KEYSERVER_SEARCH,
+                      GtkDialog)
+
+SeahorseKeyserverSearch *         seahorse_keyserver_search_new      (GtkWindow *parent);
