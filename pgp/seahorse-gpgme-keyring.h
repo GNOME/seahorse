@@ -36,34 +36,15 @@
 #pragma once
 
 #include <gpgme.h>
-
 #include <glib-object.h>
-
 #include <gio/gio.h>
 
 #include "seahorse-gpgme-key.h"
 
-#define SEAHORSE_TYPE_GPGME_KEYRING            (seahorse_gpgme_keyring_get_type ())
-#define SEAHORSE_GPGME_KEYRING(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GPGME_KEYRING, SeahorseGpgmeKeyring))
-#define SEAHORSE_GPGME_KEYRING_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GPGME_KEYRING, SeahorseGpgmeKeyringClass))
-#define SEAHORSE_IS_GPGME_KEYRING(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GPGME_KEYRING))
-#define SEAHORSE_IS_GPGME_KEYRING_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GPGME_KEYRING))
-#define SEAHORSE_GPGME_KEYRING_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GPGME_KEYRING, SeahorseGpgmeKeyringClass))
-
-typedef struct _SeahorseGpgmeKeyring SeahorseGpgmeKeyring;
-typedef struct _SeahorseGpgmeKeyringClass SeahorseGpgmeKeyringClass;
-typedef struct _SeahorseGpgmeKeyringPrivate SeahorseGpgmeKeyringPrivate;
-
-struct _SeahorseGpgmeKeyring {
-	GObject parent;
-	SeahorseGpgmeKeyringPrivate *pv;
-};
-
-struct _SeahorseGpgmeKeyringClass {
-	GObjectClass parent_class;
-};
-
-GType                  seahorse_gpgme_keyring_get_type       (void);
+#define SEAHORSE_TYPE_GPGME_KEYRING (seahorse_gpgme_keyring_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseGpgmeKeyring, seahorse_gpgme_keyring,
+                      SEAHORSE, GPGME_KEYRING,
+                      GObject);
 
 SeahorseGpgmeKeyring * seahorse_gpgme_keyring_new            (void);
 
