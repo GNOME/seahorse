@@ -43,7 +43,6 @@ struct _SeahorseKeyserverSearch {
 	GtkWidget *search_entry;
 	GtkWidget *key_server_list;
 	GtkWidget *shared_keys_list;
-	GtkWidget *searchbutton;
 };
 
 G_DEFINE_TYPE (SeahorseKeyserverSearch, seahorse_keyserver_search, GTK_TYPE_DIALOG)
@@ -167,7 +166,7 @@ have_keyserver_selection (SeahorseKeyserverSearch *self)
 static void
 on_keyserver_search_control_changed (GtkWidget *widget, gpointer user_data)
 {
-	SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (user_data);
+    SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (user_data);
     gboolean enabled = TRUE;
 
     /* Need to have at least one key server selected ... */
@@ -183,7 +182,7 @@ on_keyserver_search_control_changed (GtkWidget *widget, gpointer user_data)
             enabled = FALSE;
     }
 
-    gtk_widget_set_sensitive (self->searchbutton, enabled);
+    gtk_dialog_set_response_sensitive (GTK_DIALOG (self), GTK_RESPONSE_ACCEPT, enabled);
 }
 
 /* Initial Selection -------------------------------------------------------- */
@@ -338,6 +337,14 @@ refresh_shared_keys (SeahorseDiscovery *ssd,
 
 /* -------------------------------------------------------------------------- */
 
+gchar *
+seahorse_keyserver_search_get_search_text (SeahorseKeyserverSearch *self)
+{
+	g_return_val_if_fail (SEAHORSE_IS_KEYSERVER_SEARCH (self), NULL);
+
+	return g_strdup (gtk_entry_get_text (GTK_ENTRY (self->search_entry)));
+}
+
 /* Extracts data, stores it in settings and starts a search using the entered
  * search data. */
 static void
@@ -345,26 +352,12 @@ on_keyserver_search_ok_clicked (GtkButton *button, gpointer user_data)
 {
 	SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (user_data);
 	KeyserverSelection *selection;
-	const gchar *search;
-	GtkWindow *parent;
-
-	/* Get search text and save it for next time */
-	search = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
-	g_return_if_fail (search != NULL && search[0] != 0);
-	seahorse_app_settings_set_last_search_text (seahorse_app_settings_instance (), search);
 
 	/* The keyservers to search, and save for next time */
 	selection = get_keyserver_selection (self);
 	g_return_if_fail (selection->uris != NULL);
 	g_settings_set_strv (G_SETTINGS (seahorse_app_settings_instance ()), "last-search-servers",
 	                     selection->all ? NULL : (const gchar * const*)selection->uris->pdata);
-
-	/* Open the new result window; its transient parent is *our* transient
-	 * parent (Seahorse's primary window), not ourselves, as *we* will
-	 * disappear when "OK" is clicked.
-	 */
-	parent = gtk_window_get_transient_for (GTK_WINDOW (self));
-	seahorse_keyserver_results_show (search, parent);
 
 	free_keyserver_selection (selection);
 }
@@ -419,7 +412,6 @@ seahorse_keyserver_search_class_init (SeahorseKeyserverSearchClass *klass)
 	gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSearch, search_entry);
 	gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSearch, key_server_list);
 	gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSearch, shared_keys_list);
-	gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSearch, searchbutton);
 
 	gtk_widget_class_bind_template_callback (widget_class, on_keyserver_search_control_changed);
 	gtk_widget_class_bind_template_callback (widget_class, on_keyserver_search_ok_clicked);
