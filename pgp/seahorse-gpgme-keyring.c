@@ -39,7 +39,6 @@
 
 #include <gcr/gcr.h>
 
-#include <gio/gio.h>
 #include <glib/gi18n.h>
 
 #include <stdlib.h>
@@ -121,7 +120,9 @@ passphrase_get (gconstpointer dummy, const gchar *passphrase_hint,
 	return err;
 }
 
-struct _SeahorseGpgmeKeyringPrivate {
+struct _SeahorseGpgmeKeyring {
+    GObject parent_instance;
+
 	GHashTable *keys;
 	guint scheduled_refresh;                /* Source for refresh timeout */
 	GFileMonitor *monitor_handle;           /* For monitoring the .gnupg directory */
@@ -196,7 +197,7 @@ add_key_to_context (SeahorseGpgmeKeyring *self,
 		pkey = seahorse_gpgme_key_new (SEAHORSE_PLACE (self), NULL, key);
 
 		/* Since we don't have a public key yet, save this away */
-		self->pv->orphan_secret = g_list_append (self->pv->orphan_secret, pkey);
+		self->orphan_secret = g_list_append (self->orphan_secret, pkey);
 
 		/* No key was loaded as far as everyone is concerned */
 		return NULL;
@@ -205,7 +206,7 @@ add_key_to_context (SeahorseGpgmeKeyring *self,
 	/* Just a new public key */
 
 	/* Check for orphans */
-	for (l = self->pv->orphan_secret; l; l = g_list_next (l)) {
+	for (l = self->orphan_secret; l; l = g_list_next (l)) {
 
 		seckey = seahorse_gpgme_key_get_private (l->data);
 		g_return_val_if_fail (seckey && seckey->subkeys && seckey->subkeys->keyid, NULL);
@@ -219,7 +220,7 @@ add_key_to_context (SeahorseGpgmeKeyring *self,
 			g_object_set (pkey, "pubkey", key, NULL);
 
 			/* Remove item from orphan list cleanly */
-			self->pv->orphan_secret = g_list_remove_link (self->pv->orphan_secret, l);
+			self->orphan_secret = g_list_remove_link (self->orphan_secret, l);
 			g_list_free (l);
 			break;
 		}
@@ -229,7 +230,7 @@ add_key_to_context (SeahorseGpgmeKeyring *self,
 		pkey = seahorse_gpgme_key_new (SEAHORSE_PLACE (self), key, NULL);
 
 	/* Add to context */
-	g_hash_table_insert (self->pv->keys, g_strdup (keyid), pkey);
+	g_hash_table_insert (self->keys, g_strdup (keyid), pkey);
 	gcr_collection_emit_added (GCR_COLLECTION (self), G_OBJECT (pkey));
 
 	return pkey;
@@ -243,7 +244,7 @@ remove_key (SeahorseGpgmeKeyring *self,
 {
 	SeahorseGpgmeKey *key;
 
-	key = g_hash_table_lookup (self->pv->keys, keyid);
+	key = g_hash_table_lookup (self->keys, keyid);
 	if (key != NULL)
 		seahorse_gpgme_keyring_remove_key (self, key);
 }
@@ -371,7 +372,7 @@ seahorse_gpgme_keyring_list_async (SeahorseGpgmeKeyring *self,
 		closure->checks = g_hash_table_new_full (seahorse_pgp_keyid_hash,
 		                                         seahorse_pgp_keyid_equal,
 		                                         g_free, NULL);
-		g_hash_table_iter_init (&iter, self->pv->keys);
+		g_hash_table_iter_init (&iter, self->keys);
 		while (g_hash_table_iter_next (&iter, (gpointer *)&keyid, (gpointer *)&object)) {
 			if ((secret && seahorse_object_get_usage (object) == SEAHORSE_USAGE_PRIVATE_KEY) ||
 			    (!secret && seahorse_object_get_usage (object) == SEAHORSE_USAGE_PUBLIC_KEY)) {
@@ -410,10 +411,10 @@ seahorse_gpgme_keyring_list_finish (SeahorseGpgmeKeyring *keyring,
 static void
 cancel_scheduled_refresh (SeahorseGpgmeKeyring *self)
 {
-	if (self->pv->scheduled_refresh != 0) {
+	if (self->scheduled_refresh != 0) {
 		g_debug ("cancelling scheduled refresh event");
-		g_source_remove (self->pv->scheduled_refresh);
-		self->pv->scheduled_refresh = 0;
+		g_source_remove (self->scheduled_refresh);
+		self->scheduled_refresh = 0;
 	}
 }
 
@@ -422,7 +423,7 @@ scheduled_dummy (gpointer user_data)
 {
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (user_data);
 	g_debug ("dummy refresh event occurring now");
-	self->pv->scheduled_refresh = 0;
+	self->scheduled_refresh = 0;
 	return FALSE; /* don't run again */
 }
 
@@ -484,7 +485,7 @@ seahorse_gpgme_keyring_load_full_async (SeahorseGpgmeKeyring *self,
 
 	/* Schedule a dummy refresh. This blocks all monitoring for a while */
 	cancel_scheduled_refresh (self);
-	self->pv->scheduled_refresh = g_timeout_add (500, scheduled_dummy, self);
+	self->scheduled_refresh = g_timeout_add (500, scheduled_dummy, self);
 	g_debug ("scheduled a dummy refresh");
 
 	g_debug ("refreshing keys...");
@@ -514,7 +515,7 @@ seahorse_gpgme_keyring_lookup (SeahorseGpgmeKeyring *self,
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEYRING (self), NULL);
 	g_return_val_if_fail (keyid != NULL, NULL);
 
-	return g_hash_table_lookup (self->pv->keys, keyid);
+	return g_hash_table_lookup (self->keys, keyid);
 }
 
 void
@@ -527,10 +528,10 @@ seahorse_gpgme_keyring_remove_key (SeahorseGpgmeKeyring *self,
 	g_return_if_fail (SEAHORSE_IS_GPGME_KEY (key));
 
 	keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (key));
-	g_return_if_fail (g_hash_table_lookup (self->pv->keys, keyid) == key);
+	g_return_if_fail (g_hash_table_lookup (self->keys, keyid) == key);
 
 	g_object_ref (key);
-	g_hash_table_remove (self->pv->keys, keyid);
+	g_hash_table_remove (self->keys, keyid);
 	gcr_collection_emit_removed (GCR_COLLECTION (self), G_OBJECT (key));
 	g_object_unref (key);
 
@@ -595,7 +596,7 @@ on_keyring_import_loaded (GObject *source,
 	guint i;
 
 	for (i = 0; closure->patterns[i] != NULL; i++) {
-		object = g_hash_table_lookup (closure->keyring->pv->keys, closure->patterns[i]);
+		object = g_hash_table_lookup (closure->keyring->keys, closure->patterns[i]);
 		if (object == NULL) {
 			g_warning ("imported key but then couldn't find it in keyring: %s",
 			           closure->patterns[i]);
@@ -752,9 +753,9 @@ monitor_gpg_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
 
 		name = g_file_get_basename (file);
 		if (g_str_has_suffix (name, ".gpg")) {
-			if (self->pv->scheduled_refresh == 0) {
+			if (self->scheduled_refresh == 0) {
 				g_debug ("scheduling refresh event due to file changes");
-				self->pv->scheduled_refresh = g_timeout_add (500, scheduled_refresh, self);
+				self->scheduled_refresh = g_timeout_add (500, scheduled_refresh, self);
 			}
 		}
 	}
@@ -767,30 +768,23 @@ seahorse_gpgme_keyring_init (SeahorseGpgmeKeyring *self)
 	const gchar *gpg_homedir;
 	GFile *file;
 
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GPGME_KEYRING,
-	                                        SeahorseGpgmeKeyringPrivate);
-
-	self->pv->keys = g_hash_table_new_full (seahorse_pgp_keyid_hash,
+	self->keys = g_hash_table_new_full (seahorse_pgp_keyid_hash,
 	                                        seahorse_pgp_keyid_equal,
 	                                        g_free, g_object_unref);
 
-	/* init private vars */
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GPGME_KEYRING,
-	                                        SeahorseGpgmeKeyringPrivate);
-
-	self->pv->scheduled_refresh = 0;
-	self->pv->monitor_handle = NULL;
+	self->scheduled_refresh = 0;
+	self->monitor_handle = NULL;
 
 	gpg_homedir = seahorse_gpg_homedir ();
 	if (gpg_homedir) {
 		file = g_file_new_for_path (gpg_homedir);
 		g_return_if_fail (file != NULL);
 
-		self->pv->monitor_handle = g_file_monitor_directory (file, G_FILE_MONITOR_NONE, NULL, &err);
+		self->monitor_handle = g_file_monitor_directory (file, G_FILE_MONITOR_NONE, NULL, &err);
 		g_object_unref (file);
 
-		if (self->pv->monitor_handle) {
-			g_signal_connect (self->pv->monitor_handle, "changed",
+		if (self->monitor_handle) {
+			g_signal_connect (self->monitor_handle, "changed",
 			                  G_CALLBACK (monitor_gpg_homedir), self);
 		} else {
 			g_warning ("couldn't monitor the GPG home directory: %s: %s",
@@ -826,8 +820,8 @@ static GtkActionGroup *
 seahorse_gpgme_keyring_get_actions (SeahorsePlace *place)
 {
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (place);
-	if (self->pv->actions)
-		return g_object_ref (self->pv->actions);
+	if (self->actions)
+		return g_object_ref (self->actions);
 	return NULL;
 }
 
@@ -891,20 +885,16 @@ seahorse_gpgme_keyring_dispose (GObject *object)
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (object);
 	GList *l;
 
-	if (self->pv->actions)
-		gtk_action_group_set_sensitive (self->pv->actions, TRUE);
-	g_hash_table_remove_all (self->pv->keys);
+	if (self->actions)
+		gtk_action_group_set_sensitive (self->actions, TRUE);
+	g_hash_table_remove_all (self->keys);
 
 	cancel_scheduled_refresh (self);
-	if (self->pv->monitor_handle) {
-		g_object_unref (self->pv->monitor_handle);
-		self->pv->monitor_handle = NULL;
-	}
+	g_clear_object (&self->monitor_handle);
 
-	for (l = self->pv->orphan_secret; l != NULL; l = g_list_next (l))
+	for (l = self->orphan_secret; l != NULL; l = g_list_next (l))
 		g_object_unref (l->data);
-	g_list_free (self->pv->orphan_secret);
-	self->pv->orphan_secret = NULL;
+	g_clear_pointer (&self->orphan_secret, g_list_free);
 
 	G_OBJECT_CLASS (seahorse_gpgme_keyring_parent_class)->dispose (object);
 }
@@ -914,12 +904,12 @@ seahorse_gpgme_keyring_finalize (GObject *object)
 {
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (object);
 
-	g_clear_object (&self->pv->actions);
-	g_hash_table_destroy (self->pv->keys);
+	g_clear_object (&self->actions);
+	g_hash_table_destroy (self->keys);
 
 	/* All monitoring and scheduling should be done */
-	g_assert (self->pv->scheduled_refresh == 0);
-	g_assert (self->pv->monitor_handle == 0);
+	g_assert (self->scheduled_refresh == 0);
+	g_assert (self->monitor_handle == 0);
 
 	G_OBJECT_CLASS (seahorse_gpgme_keyring_parent_class)->finalize (object);
 }
@@ -941,8 +931,6 @@ seahorse_gpgme_keyring_class_init (SeahorseGpgmeKeyringClass *klass)
 	gobject_class->set_property = seahorse_gpgme_keyring_set_property;
 	gobject_class->dispose = seahorse_gpgme_keyring_dispose;
 	gobject_class->finalize = seahorse_gpgme_keyring_finalize;
-
-	g_type_class_add_private (klass, sizeof (SeahorseGpgmeKeyringPrivate));
 
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
@@ -968,14 +956,14 @@ static guint
 seahorse_gpgme_keyring_get_length (GcrCollection *collection)
 {
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (collection);
-	return g_hash_table_size (self->pv->keys);
+	return g_hash_table_size (self->keys);
 }
 
 static GList *
 seahorse_gpgme_keyring_get_objects (GcrCollection *collection)
 {
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (collection);
-	return g_hash_table_get_values (self->pv->keys);
+	return g_hash_table_get_values (self->keys);
 }
 
 static gboolean
@@ -989,7 +977,7 @@ seahorse_gpgme_keyring_contains (GcrCollection *collection,
 		return FALSE;
 
 	keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (object));
-	return g_hash_table_lookup (self->pv->keys, keyid) == object;
+	return g_hash_table_lookup (self->keys, keyid) == object;
 }
 
 static void
