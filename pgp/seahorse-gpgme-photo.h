@@ -26,27 +26,10 @@
 #include "pgp/seahorse-gpgme.h"
 #include "pgp/seahorse-pgp-photo.h"
 
-#define SEAHORSE_TYPE_GPGME_PHOTO            (seahorse_gpgme_photo_get_type ())
-#define SEAHORSE_GPGME_PHOTO(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GPGME_PHOTO, SeahorseGpgmePhoto))
-#define SEAHORSE_GPGME_PHOTO_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GPGME_PHOTO, SeahorseGpgmePhotoClass))
-#define SEAHORSE_IS_GPGME_PHOTO(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GPGME_PHOTO))
-#define SEAHORSE_IS_GPGME_PHOTO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GPGME_PHOTO))
-#define SEAHORSE_GPGME_PHOTO_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GPGME_PHOTO, SeahorseGpgmePhotoClass))
-
-typedef struct _SeahorseGpgmePhoto SeahorseGpgmePhoto;
-typedef struct _SeahorseGpgmePhotoClass SeahorseGpgmePhotoClass;
-typedef struct _SeahorseGpgmePhotoPrivate SeahorseGpgmePhotoPrivate;
-
-struct _SeahorseGpgmePhoto {
-	SeahorsePgpPhoto parent;
-	SeahorseGpgmePhotoPrivate *pv;
-};
-
-struct _SeahorseGpgmePhotoClass {
-	SeahorsePgpPhotoClass parent_class;
-};
-
-GType               seahorse_gpgme_photo_get_type        (void);
+#define SEAHORSE_TYPE_GPGME_PHOTO (seahorse_gpgme_photo_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseGpgmePhoto, seahorse_gpgme_photo,
+                      SEAHORSE, GPGME_PHOTO,
+                      SeahorsePgpPhoto);
 
 SeahorseGpgmePhoto* seahorse_gpgme_photo_new             (gpgme_key_t key,
                                                           GdkPixbuf *pixbuf,
