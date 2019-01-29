@@ -32,12 +32,14 @@ enum {
 	PROP_INDEX
 };
 
-G_DEFINE_TYPE (SeahorseGpgmePhoto, seahorse_gpgme_photo, SEAHORSE_PGP_TYPE_PHOTO);
+struct _SeahorseGpgmePhoto {
+	SeahorsePgpPhoto parent_instance;
 
-struct _SeahorseGpgmePhotoPrivate {
 	gpgme_key_t pubkey;        /* Key that this photo is on */
 	guint index;               /* The GPGME index of the photo */
 };
+
+G_DEFINE_TYPE (SeahorseGpgmePhoto, seahorse_gpgme_photo, SEAHORSE_PGP_TYPE_PHOTO);
 
 /* -----------------------------------------------------------------------------
  * OBJECT 
@@ -46,7 +48,6 @@ struct _SeahorseGpgmePhotoPrivate {
 static void
 seahorse_gpgme_photo_init (SeahorseGpgmePhoto *self)
 {
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_TYPE_GPGME_PHOTO, SeahorseGpgmePhotoPrivate);
 }
 
 static GObject*
@@ -57,7 +58,7 @@ seahorse_gpgme_photo_constructor (GType type, guint n_props, GObjectConstructPar
 	
 	if (obj) {
 		self = SEAHORSE_GPGME_PHOTO (obj);
-		g_return_val_if_fail (self->pv->pubkey, NULL);
+		g_return_val_if_fail (self->pubkey, NULL);
 	}
 	
 	return obj;
@@ -87,10 +88,10 @@ seahorse_gpgme_photo_set_property (GObject *object, guint prop_id, const GValue 
 
 	switch (prop_id) {
 	case PROP_PUBKEY:
-		g_return_if_fail (!self->pv->pubkey);
-		self->pv->pubkey = g_value_get_boxed (value);
-		if (self->pv->pubkey)
-			gpgme_key_ref (self->pv->pubkey);
+		g_return_if_fail (!self->pubkey);
+		self->pubkey = g_value_get_boxed (value);
+		if (self->pubkey)
+			gpgme_key_ref (self->pubkey);
 		break;
 	case PROP_INDEX:
 		seahorse_gpgme_photo_set_index (self, g_value_get_uint (value));
@@ -103,10 +104,8 @@ seahorse_gpgme_photo_finalize (GObject *gobject)
 {
 	SeahorseGpgmePhoto *self = SEAHORSE_GPGME_PHOTO (gobject);
 
-	if (self->pv->pubkey)
-		gpgme_key_unref (self->pv->pubkey);
-	self->pv->pubkey = NULL;
-    
+	g_clear_object (&self->pubkey);
+
 	G_OBJECT_CLASS (seahorse_gpgme_photo_parent_class)->finalize (gobject);
 }
 
@@ -115,14 +114,11 @@ seahorse_gpgme_photo_class_init (SeahorseGpgmePhotoClass *klass)
 {
 	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);    
 
-	seahorse_gpgme_photo_parent_class = g_type_class_peek_parent (klass);
-	g_type_class_add_private (klass, sizeof (SeahorseGpgmePhotoPrivate));
-    
 	gobject_class->constructor = seahorse_gpgme_photo_constructor;
 	gobject_class->finalize = seahorse_gpgme_photo_finalize;
 	gobject_class->set_property = seahorse_gpgme_photo_set_property;
 	gobject_class->get_property = seahorse_gpgme_photo_get_property;
-    
+
 	g_object_class_install_property (gobject_class, PROP_PUBKEY,
 	        g_param_spec_boxed ("pubkey", "Public Key", "GPGME Public Key that this subkey is on",
 	                            SEAHORSE_GPGME_BOXED_KEY, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
@@ -149,15 +145,15 @@ gpgme_key_t
 seahorse_gpgme_photo_get_pubkey (SeahorseGpgmePhoto *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_PHOTO (self), NULL);
-	g_return_val_if_fail (self->pv->pubkey, NULL);
-	return self->pv->pubkey;
+	g_return_val_if_fail (self->pubkey, NULL);
+	return self->pubkey;
 }
 
 guint
 seahorse_gpgme_photo_get_index (SeahorseGpgmePhoto *self)
 {
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_PHOTO (self), 0);
-	return self->pv->index;
+	return self->index;
 }
 
 void
@@ -165,6 +161,6 @@ seahorse_gpgme_photo_set_index (SeahorseGpgmePhoto *self, guint index)
 {
 	g_return_if_fail (SEAHORSE_IS_GPGME_PHOTO (self));
 
-	self->pv->index = index;
+	self->index = index;
 	g_object_notify (G_OBJECT (self), "index");
 }
