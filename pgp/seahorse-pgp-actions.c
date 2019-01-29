@@ -30,6 +30,7 @@
 #include "seahorse-pgp-backend.h"
 #include "seahorse-pgp-actions.h"
 #include "seahorse-pgp-dialogs.h"
+#include "seahorse-keyserver-results.h"
 #include "seahorse-keyserver-search.h"
 #include "seahorse-keyserver-sync.h"
 
@@ -64,10 +65,32 @@ on_remote_find (GSimpleAction *action,
                 gpointer user_data)
 {
   SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
-  SeahorseCatalog *catalog;
+  SeahorseCatalog *catalog = NULL;
+  g_autoptr(SeahorseKeyserverSearch) search_dialog = NULL;
+  gint response;
+  g_autofree gchar *search_text = NULL;
 
+  /* Make a new "Find remote keys" dialog */
   catalog = seahorse_action_group_get_catalog (actions);
-  seahorse_keyserver_search_show (GTK_WINDOW (catalog));
+  search_dialog = seahorse_keyserver_search_new (GTK_WINDOW (catalog));
+
+  /* Run it and get the search text */
+  response = gtk_dialog_run (GTK_DIALOG (search_dialog));
+  search_text = seahorse_keyserver_search_get_search_text (search_dialog);
+
+  /* We can safely destroy it */
+  gtk_widget_destroy (GTK_WIDGET (g_steal_pointer (&search_dialog)));
+
+  /* If the user pressed "Search", make it happen */
+  if (response == GTK_RESPONSE_ACCEPT) {
+    /* Get search text and save it for next time */
+    g_return_if_fail (search_text && *search_text);
+
+    seahorse_app_settings_set_last_search_text (seahorse_app_settings_instance (),
+                                                search_text);
+    seahorse_keyserver_results_show (search_text, GTK_WINDOW (catalog));
+  }
+
   g_clear_object (&catalog);
 }
 
