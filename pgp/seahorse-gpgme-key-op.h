@@ -127,7 +127,14 @@ gpgme_error_t         seahorse_gpgme_key_op_sign_uid         (SeahorseGpgmeUid *
                                                               SeahorseSignCheck check, 
                                                               SeahorseSignOptions options);
 
-gpgme_error_t         seahorse_gpgme_key_op_change_pass      (SeahorseGpgmeKey *pkey);
+void                 seahorse_gpgme_key_op_change_pass_async (SeahorseGpgmeKey *pkey,
+                                                              GCancellable *cancellable,
+                                                              GAsyncReadyCallback callback,
+                                                              gpointer user_data);
+
+gboolean              seahorse_gpgme_key_op_generate_finish  (SeahorseGpgmeKey *pkey,
+                                                              GAsyncResult *Result,
+                                                              GError **error);
 
 gpgme_error_t         seahorse_gpgme_key_op_set_trust        (SeahorseGpgmeKey *pkey,
                                                               SeahorseValidity validity);

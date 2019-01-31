@@ -56,11 +56,11 @@
 #define GPG_ULTIMATE    5
 
 static void
-on_key_op_generate_progress (void *opaque,
-                             const char *what,
-                             int type,
-                             int current,
-                             int total)
+on_key_op_progress (void *opaque,
+                    const char *what,
+                    int type,
+                    int current,
+                    int total)
 {
 	GTask *task = G_TASK (opaque);
 	seahorse_progress_update (g_task_get_cancellable (task), task, "%s", what);
@@ -174,7 +174,7 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
 	gctx = seahorse_gpgme_keyring_new_context (&gerr);
 
 	task = g_task_new (keyring, cancellable, callback, user_data);
-	gpgme_set_progress_cb (gctx, on_key_op_generate_progress, task);
+	gpgme_set_progress_cb (gctx, on_key_op_progress, task);
 	g_task_set_task_data (task, gctx, (GDestroyNotify) gpgme_release);
 
 	seahorse_progress_prep_and_begin (cancellable, task, NULL);
@@ -739,20 +739,64 @@ edit_pass_transit (guint current_state, gpgme_status_code_t status,
     return next_state;
 }
 
-gpgme_error_t
-seahorse_gpgme_key_op_change_pass (SeahorseGpgmeKey *pkey)
+static gboolean
+on_key_op_change_pass_complete (gpgme_error_t gerr,
+                                gpointer user_data)
+{
+	GTask *task = G_TASK (user_data);
+	g_autoptr(GError) error = NULL;
+
+	if (seahorse_gpgme_propagate_error (gerr, &error)) {
+		g_task_return_error (task, g_steal_pointer (&error));
+        return FALSE; /* don't call again */
+	}
+
+	seahorse_progress_end (g_task_get_cancellable (task), task);
+	g_task_return_boolean (task, TRUE);
+	return FALSE; /* don't call again */
+}
+
+void
+seahorse_gpgme_key_op_change_pass_async (SeahorseGpgmeKey *pkey)
 {
 	SeahorseEditParm *parms;
 	gpgme_error_t err;
+    gpgme_key_t key;
 	
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
 	g_return_val_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	
-	parms = seahorse_edit_parm_new (PASS_START, edit_pass_action, edit_pass_transit, NULL);
-	
-	err = edit_key (pkey, parms);
-	
-	return err;
+
+	gctx = seahorse_gpgme_keyring_new_context (&gerr);
+
+	task = g_task_new (pkey, cancellable, callback, user_data);
+	gpgme_set_progress_cb (gctx, on_key_op_progress, task);
+	g_task_set_task_data (task, gctx, (GDestroyNotify) gpgme_release);
+
+	seahorse_progress_prep_and_begin (cancellable, task, NULL);
+	gsource = seahorse_gpgme_gsource_new (gctx, cancellable);
+	g_source_set_callback (gsource, (GSourceFunc)on_key_op_change_pass_complete,
+	                       g_object_ref (task), g_object_unref);
+
+    key = seahorse_gpmge_key_get_key (pkey);
+	if (gerr == 0)
+		gerr = gpgme_op_passwd_start (gctx, key, 0);
+
+	if (seahorse_gpgme_propagate_error (gerr, &error)) {
+		g_task_return_error (task, g_steal_pointer (&error));
+        return;
+	}
+
+	g_source_attach (gsource, g_main_context_default ());
+}
+
+gboolean
+seahorse_gpgme_key_op_change_pass_finish (SeahorseGpgmeKey *pkey,
+                                          GAsyncResult *result,
+                                          GError **error)
+{
+	g_return_val_if_fail (g_task_is_valid (result, keyring), FALSE);
+
+	return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 typedef enum
