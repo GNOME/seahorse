@@ -75,30 +75,46 @@ on_gpgme_add_uid_email_changed (GtkEditable *editable,
 	check_ok (swidget);
 }
 
+static void
+on_gpgme_key_op_uid_added (GObject *source, GAsyncResult *result, gpointer user_data)
+{
+    SeahorseGpgmeKey *pkey = SEAHORSE_GPGME_KEY (source);
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+    g_autoptr(GError) error = NULL;
+
+    if (seahorse_gpgme_key_op_add_uid_finish (pkey, result, &error)) {
+        seahorse_gpgme_key_refresh (pkey);
+    } else {
+        GtkWidget *window;
+
+        window = GTK_WIDGET (seahorse_widget_get_toplevel (swidget));
+        seahorse_util_show_error (window, _("Couldn't add user id"), error->message);
+    }
+
+    g_object_unref (swidget);
+}
+
 G_MODULE_EXPORT void
 on_gpgme_add_uid_ok_clicked (GtkButton *button,
                              gpointer user_data)
 {
-	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
-	GObject *object;
-	const gchar *name, *email, *comment;
-	gpgme_error_t err;
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+    GObject *object;
+    const gchar *name, *email, *comment;
 
-	object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
-	
-	name = gtk_entry_get_text (GTK_ENTRY (
-		seahorse_widget_get_widget (swidget, NAME)));
-	email = gtk_entry_get_text (GTK_ENTRY (
-		seahorse_widget_get_widget (swidget, EMAIL)));
-	comment = gtk_entry_get_text (GTK_ENTRY (
-		seahorse_widget_get_widget (swidget, "comment")));
-	
-	err = seahorse_gpgme_key_op_add_uid (SEAHORSE_GPGME_KEY (object),
-	                                     name, email, comment);
-	if (!GPG_IS_OK (err))
-		seahorse_gpgme_handle_error (err, _("Couldn’t add user id"));
-	else
-		seahorse_widget_destroy (swidget);
+    object = SEAHORSE_OBJECT_WIDGET (swidget)->object;
+
+    name = gtk_entry_get_text (GTK_ENTRY (
+        seahorse_widget_get_widget (swidget, NAME)));
+    email = gtk_entry_get_text (GTK_ENTRY (
+        seahorse_widget_get_widget (swidget, EMAIL)));
+    comment = gtk_entry_get_text (GTK_ENTRY (
+        seahorse_widget_get_widget (swidget, "comment")));
+
+    seahorse_gpgme_key_op_add_uid_async (SEAHORSE_GPGME_KEY (object),
+                                         name, email, comment,
+                                         NULL,
+                                         on_gpgme_key_op_uid_added, swidget);
 }
 
 /**

@@ -148,10 +148,17 @@ gpgme_error_t         seahorse_gpgme_key_op_set_expires      (SeahorseGpgmeSubke
 gpgme_error_t         seahorse_gpgme_key_op_add_revoker      (SeahorseGpgmeKey *pkey, 
                                                               SeahorseGpgmeKey *revoker);
 
-gpgme_error_t         seahorse_gpgme_key_op_add_uid          (SeahorseGpgmeKey *pkey,
+void                  seahorse_gpgme_key_op_add_uid_async    (SeahorseGpgmeKey *pkey,
                                                               const gchar *name,
                                                               const gchar *email,
-                                                              const gchar *comment);
+                                                              const gchar *comment,
+                                                              GCancellable *cancellable,
+                                                              GAsyncReadyCallback callback,
+                                                              gpointer user_data);
+
+gboolean              seahorse_gpgme_key_op_add_uid_finish  (SeahorseGpgmeKey *pkey,
+                                                             GAsyncResult *result,
+                                                             GError **error);
 
 gpgme_error_t         seahorse_gpgme_key_op_primary_uid      (SeahorseGpgmeUid *uid);
 

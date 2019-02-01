@@ -1240,149 +1240,75 @@ seahorse_gpgme_key_op_add_revoker (SeahorseGpgmeKey *pkey, SeahorseGpgmeKey *rev
 	return edit_key (pkey, parms);
 }
 
-typedef enum {
-	ADD_UID_START,
-	ADD_UID_COMMAND,
-	ADD_UID_NAME,
-	ADD_UID_EMAIL,
-	ADD_UID_COMMENT,
-	ADD_UID_QUIT,
-	ADD_UID_SAVE,
-	ADD_UID_ERROR
-} AddUidState;
-
-typedef struct
+static gboolean
+on_key_op_add_uid_complete (gpgme_error_t gerr,
+                            gpointer user_data)
 {
-	const gchar	*name;
-	const gchar	*email;
-	const gchar	*comment;
-} UidParm;
+    GTask *task = G_TASK (user_data);
+    g_autoptr(GError) error = NULL;
 
-/* action helper for adding a new user ID */
-static gpgme_error_t
-add_uid_action (guint state, gpointer data, int fd)
-{
-	UidParm *parm = (UidParm*)data;
-	
-	switch (state) {
-		case ADD_UID_COMMAND:
-            PRINT ((fd, "adduid"));
-			break;
-		case ADD_UID_NAME:
-            PRINT ((fd, parm->name));
-			break;
-		case ADD_UID_EMAIL:
-            PRINT ((fd, parm->email));
-			break;
-		case ADD_UID_COMMENT:
-            PRINT ((fd, parm->comment));
-			break;
-		case ADD_UID_QUIT:
-            PRINT ((fd, QUIT));
-			break;
-		case ADD_UID_SAVE:
-            PRINT ((fd, YES));
-			break;
-		default:
-			return GPG_E (GPG_ERR_GENERAL);
-	}
-	
-    PRINT ((fd, "\n"));
-	return GPG_OK;
+    if (seahorse_gpgme_propagate_error (gerr, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return FALSE; /* don't call again */
+    }
+
+    seahorse_progress_end (g_task_get_cancellable (task), task);
+    g_task_return_boolean (task, TRUE);
+    return FALSE; /* don't call again */
 }
 
-/* transition helper for adding a new user ID */
-static guint
-add_uid_transit (guint current_state, gpgme_status_code_t status,
-		 const gchar *args, gpointer data, gpgme_error_t *err)
+void
+seahorse_gpgme_key_op_add_uid_async (SeahorseGpgmeKey *pkey,
+                                     const gchar *name,
+                                     const gchar *email,
+                                     const gchar *comment,
+                                     GCancellable *cancellable,
+                                     GAsyncReadyCallback callback,
+                                     gpointer user_data)
 {
-	guint next_state;
-	
-	switch (current_state) {
-		/* start, do command */
-		case ADD_UID_START:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = ADD_UID_COMMAND;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (ADD_UID_ERROR);
-			}
-			break;
-		/* did command, do name */
-		case ADD_UID_COMMAND:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.name"))
-				next_state = ADD_UID_NAME;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (ADD_UID_ERROR);
-			}
-			break;
-		/* did name, do email */
-		case ADD_UID_NAME:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.email"))
-				next_state = ADD_UID_EMAIL;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (ADD_UID_ERROR);
-			}
-			break;
-		/* did email, do comment */
-		case ADD_UID_EMAIL:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.comment"))
-				next_state = ADD_UID_COMMENT;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (ADD_UID_ERROR);
-			}
-			break;
-		/* did comment, quit */
-		case ADD_UID_COMMENT:
-			next_state = ADD_UID_QUIT;
-			break;
-		/* quit, save */
-		case ADD_UID_QUIT:
-			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
-				next_state = ADD_UID_SAVE;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (ADD_UID_ERROR);
-			}
-			break;
-		/* error, quit */
-		case ADD_UID_ERROR:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = ADD_UID_QUIT;
-			else
-				next_state = ADD_UID_ERROR;
-			break;
-		default:
-            *err = GPG_E (GPG_ERR_GENERAL);
-            g_return_val_if_reached (ADD_UID_ERROR);
-			break;
-	}
-	
-	return next_state;
+    g_autoptr(GTask) task = NULL;
+    gpgme_ctx_t gctx;
+    gpgme_error_t gerr;
+    g_autoptr(GError) error = NULL;
+    g_autoptr(GSource) gsource = NULL;
+    gpgme_key_t key;
+    g_autofree gchar* uid = NULL;
+
+    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (pkey));
+    g_return_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY);
+
+    gctx = seahorse_gpgme_keyring_new_context (&gerr);
+
+    task = g_task_new (pkey, cancellable, callback, user_data);
+    gpgme_set_progress_cb (gctx, on_key_op_progress, task);
+    g_task_set_task_data (task, gctx, (GDestroyNotify) gpgme_release);
+
+    seahorse_progress_prep_and_begin (cancellable, task, NULL);
+    gsource = seahorse_gpgme_gsource_new (gctx, cancellable);
+    g_source_set_callback (gsource, (GSourceFunc)on_key_op_add_uid_complete,
+                           g_object_ref (task), g_object_unref);
+
+    key = seahorse_gpgme_key_get_private (pkey);
+    uid = seahorse_pgp_uid_calc_label (name, email, comment);
+    if (gerr == 0)
+        gerr = gpgme_op_adduid_start (gctx, key, uid, 0);
+
+    if (seahorse_gpgme_propagate_error (gerr, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
+
+    g_source_attach (gsource, g_main_context_default ());
 }
 
-gpgme_error_t
-seahorse_gpgme_key_op_add_uid (SeahorseGpgmeKey *pkey, const gchar *name, 
-                               const gchar *email, const gchar *comment)
+gboolean
+seahorse_gpgme_key_op_add_uid_finish (SeahorseGpgmeKey *pkey,
+                                      GAsyncResult *result,
+                                      GError **error)
 {
-	SeahorseEditParm *parms;
-	UidParm *uid_parm;
-	
-    g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
-    g_return_val_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	g_return_val_if_fail (name != NULL && strlen (name) >= 5, GPG_E (GPG_ERR_INV_VALUE));
-	
-	uid_parm = g_new (UidParm, 1);
-	uid_parm->name = name;
-	uid_parm->email = email;
-	uid_parm->comment = comment;
-	
-	parms = seahorse_edit_parm_new (ADD_UID_START, add_uid_action, add_uid_transit, uid_parm);
-	
-	return edit_key (pkey, parms);
+    g_return_val_if_fail (g_task_is_valid (result, pkey), FALSE);
+
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 typedef enum {
