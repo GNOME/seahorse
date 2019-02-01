@@ -823,15 +823,39 @@ static GType uid_columns[] = {
     G_TYPE_STRING   /* comment */
 };
 
+static void
+on_gpgme_key_change_pass_done (GObject *source,
+                               GAsyncResult *res,
+                               gpointer user_data)
+{
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+    SeahorseGpgmeKey *pkey = SEAHORSE_GPGME_KEY (source);
+    g_autoptr(GError) error = NULL;
+
+    if (!seahorse_gpgme_key_op_change_pass_finish (pkey, res, &error)) {
+        GtkWidget *window;
+
+        window = GTK_WIDGET (seahorse_widget_get_toplevel (swidget));
+        seahorse_util_show_error (window, _("Error changing password"), error->message);
+    }
+
+    g_object_unref (swidget);
+}
+
 G_MODULE_EXPORT void
 on_pgp_owner_passphrase_button_clicked (GtkWidget *widget,
                                         gpointer user_data)
 {
-	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
-	SeahorseObject *object = SEAHORSE_OBJECT (SEAHORSE_OBJECT_WIDGET (swidget)->object);
-	if (seahorse_object_get_usage (object) == SEAHORSE_USAGE_PRIVATE_KEY && 
-	    SEAHORSE_IS_GPGME_KEY (object))
-		seahorse_gpgme_key_op_change_pass (SEAHORSE_GPGME_KEY (object));
+    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
+    SeahorseObject *object = SEAHORSE_OBJECT (SEAHORSE_OBJECT_WIDGET (swidget)->object);
+
+    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (object));
+    g_return_if_fail (seahorse_object_get_usage (object) == SEAHORSE_USAGE_PRIVATE_KEY);
+
+    seahorse_gpgme_key_op_change_pass_async (SEAHORSE_GPGME_KEY (object),
+                                             NULL,
+                                             on_gpgme_key_change_pass_done,
+                                             g_object_ref (swidget));
 }
 
 static void

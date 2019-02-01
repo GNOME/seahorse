@@ -174,7 +174,7 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
     gctx = seahorse_gpgme_keyring_new_context (&gerr);
 
     task = g_task_new (keyring, cancellable, callback, user_data);
-    gpgme_set_progress_cb (gctx, on_key_op_generate_progress, task);
+    gpgme_set_progress_cb (gctx, on_key_op_progress, task);
     g_task_set_task_data (task, gctx, (GDestroyNotify) gpgme_release);
 
     seahorse_progress_prep_and_begin (cancellable, task, NULL);
@@ -634,125 +634,80 @@ seahorse_gpgme_key_op_sign (SeahorseGpgmeKey *pkey, SeahorseGpgmeKey *signer,
 	return sign_process (signed_key, signing_key, 0, check, options);
 }
 
-typedef enum {
-    PASS_START,
-    PASS_COMMAND,
-    PASS_PASSPHRASE,
-    PASS_QUIT,
-    PASS_SAVE,
-    PASS_ERROR
-} PassState;
-
-/* action helper for changing passphrase */
-static gpgme_error_t
-edit_pass_action (guint state, gpointer data, int fd)
+static gboolean
+on_key_op_change_pass_complete (gpgme_error_t gerr,
+                                gpointer user_data)
 {
-    switch (state) {
-    case PASS_COMMAND:
-        PRINT ((fd, "passwd"));
-        break;
-    case PASS_PASSPHRASE:
-        /* Do nothing */
-        return GPG_OK;
-    case PASS_QUIT:
-        PRINT ((fd, QUIT));
-        break;
-    case PASS_SAVE:
-        PRINT ((fd, YES));
-        break;
-    default:
-        return GPG_E (GPG_ERR_GENERAL);
+    GTask *task = G_TASK (user_data);
+    g_autoptr(GError) error = NULL;
+
+    if (seahorse_gpgme_propagate_error (gerr, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return FALSE; /* don't call again */
     }
-    
-    PRINT ((fd, "\n"));
-    return GPG_OK;
+
+    seahorse_progress_end (g_task_get_cancellable (task), task);
+    g_task_return_boolean (task, TRUE);
+    return FALSE; /* don't call again */
 }
 
-/* transition helper for changing passphrase */
-static guint
-edit_pass_transit (guint current_state, gpgme_status_code_t status,
-                   const gchar *args, gpointer data, gpgme_error_t *err)
+/**
+ * seahorse_gpgme_key_op_change_pass_async:
+ * @pkey: The key that you want to change the password of
+ * @cancellable: (nullable): A #GCancellable
+ * @callback: The callback that will be called when the operation finishes
+ * @user_data: (closure callback): User data passed on to @callback
+ *
+ * Changes the password of @pkey. The actual changing will be done by GPGME, so
+ * this function doesn't allow to specify the new password.
+ */
+void
+seahorse_gpgme_key_op_change_pass_async (SeahorseGpgmeKey *pkey,
+                                         GCancellable *cancellable,
+                                         GAsyncReadyCallback callback,
+                                         gpointer user_data)
 {
-    guint next_state;
-    
-    switch (current_state) {
-    /* start state, go to command */
-    case PASS_START:
-        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-            next_state = PASS_COMMAND;
-        else {
-            *err = GPG_E (GPG_ERR_GENERAL);
-            g_return_val_if_reached (PASS_ERROR);
-        }
-        break;
+    g_autoptr(GTask) task = NULL;
+    gpgme_ctx_t gctx;
+    gpgme_error_t gerr;
+    g_autoptr(GError) error = NULL;
+    g_autoptr(GSource) gsource = NULL;
+    gpgme_key_t key;
 
-    case PASS_COMMAND:
-        /* did command, go to should be the passphrase now */
-        if (status == GPGME_STATUS_NEED_PASSPHRASE_SYM)
-            next_state = PASS_PASSPHRASE;
-        
-        /* If all tries for passphrase were wrong, we get here */
-        else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT)) {
-            *err = GPG_E (GPG_ERR_BAD_PASSPHRASE);
-            next_state = PASS_ERROR;
-        
-        /* No idea how we got here ... */
-        } else {
-            *err = GPG_E (GPG_ERR_GENERAL);
-            g_return_val_if_reached (PASS_ERROR);
-        }
-        break;
-    /* got passphrase now quit */
-    case PASS_PASSPHRASE:
-        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-            next_state = PASS_QUIT;
-        else {
-            *err = GPG_E (GPG_ERR_GENERAL);
-            g_return_val_if_reached (PASS_ERROR);
-        }
-        break;
-        
-    /* quit, go to save */
-    case PASS_QUIT:
-        if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
-            next_state = PASS_SAVE;
-        else {
-            *err = GPG_E (GPG_ERR_GENERAL);
-            g_return_val_if_reached (PASS_ERROR);
-        }
-        break;
-    
-    /* error, go to quit */
-    case PASS_ERROR:    
-        if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-            next_state = PASS_QUIT;
-        else
-            next_state = PASS_ERROR;
-        break;
-    
-    default:
-        *err = GPG_E (GPG_ERR_GENERAL);
-        g_return_val_if_reached (PASS_ERROR);
-        break;
+    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (pkey));
+    g_return_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY);
+
+    gctx = seahorse_gpgme_keyring_new_context (&gerr);
+
+    task = g_task_new (pkey, cancellable, callback, user_data);
+    gpgme_set_progress_cb (gctx, on_key_op_progress, task);
+    g_task_set_task_data (task, gctx, (GDestroyNotify) gpgme_release);
+
+    seahorse_progress_prep_and_begin (cancellable, task, NULL);
+    gsource = seahorse_gpgme_gsource_new (gctx, cancellable);
+    g_source_set_callback (gsource, (GSourceFunc)on_key_op_change_pass_complete,
+                           g_object_ref (task), g_object_unref);
+
+    key = seahorse_gpgme_key_get_private (pkey);
+    if (gerr == 0)
+        gerr = gpgme_op_passwd_start (gctx, key, 0);
+
+    if (seahorse_gpgme_propagate_error (gerr, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
     }
-    
-    return next_state;
+
+    g_source_attach (gsource, g_main_context_default ());
 }
 
-gpgme_error_t
-seahorse_gpgme_key_op_change_pass (SeahorseGpgmeKey *pkey)
+gboolean
+seahorse_gpgme_key_op_change_pass_finish (SeahorseGpgmeKey *pkey,
+                                          GAsyncResult *result,
+                                          GError **error)
 {
-	SeahorseEditParm *parms;
-	gpgme_error_t err;
-	
-	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
-	g_return_val_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	
-	parms = seahorse_edit_parm_new (PASS_START, edit_pass_action, edit_pass_transit, NULL);
-	
-	err = edit_key (pkey, parms);
-	
-	return err;
+    g_return_val_if_fail (g_task_is_valid (result, pkey), FALSE);
+
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 typedef enum
