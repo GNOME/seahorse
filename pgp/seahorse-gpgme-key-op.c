@@ -55,48 +55,32 @@
 #define GPG_FULL        4
 #define GPG_ULTIMATE    5
 
-typedef struct {
-	GCancellable *cancellable;
-	gpgme_ctx_t gctx;
-} key_op_generate_closure;
-
 static void
-key_op_generate_free (gpointer data)
+on_key_op_progress (void *opaque,
+                    const char *what,
+                    int type,
+                    int current,
+                    int total)
 {
-	key_op_generate_closure *closure = data;
-	g_clear_object (&closure->cancellable);
-	if (closure->gctx)
-		gpgme_release (closure->gctx);
-	g_free (closure);
-}
-
-static void
-on_key_op_generate_progress (void *opaque,
-                             const char *what,
-                             int type,
-                             int current,
-                             int total)
-{
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (opaque);
-	key_op_generate_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	seahorse_progress_update (closure->cancellable, res, "%s", what);
+    GTask *task = G_TASK (opaque);
+    seahorse_progress_update (g_task_get_cancellable (task), task, "%s", what);
 }
 
 static gboolean
 on_key_op_generate_complete (gpgme_error_t gerr,
                              gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	key_op_generate_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
+    GTask *task = G_TASK (user_data);
+    g_autoptr(GError) error = NULL;
 
-	if (seahorse_gpgme_propagate_error (gerr, &error)) {
-		g_simple_async_result_take_error (res, error);
-	}
+    if (seahorse_gpgme_propagate_error (gerr, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return FALSE; /* don't call again */
+    }
 
-	seahorse_progress_end (closure->cancellable, res);
-	g_simple_async_result_complete (res);
-	return FALSE; /* don't call again */
+    seahorse_progress_end (g_task_get_cancellable (task), task);
+    g_task_return_boolean (task, TRUE);
+    return FALSE; /* don't call again */
 }
 
 
@@ -126,98 +110,87 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
                                       GAsyncReadyCallback callback,
                                       gpointer user_data)
 {
-	gchar *common, *key_type, *start, *expires_date;
-	key_op_generate_closure *closure;
-	GSimpleAsyncResult *res;
-	GError *error = NULL;
-	const gchar *parms;
-	gpgme_error_t gerr = 0;
-	GSource *gsource;
+    const gchar* key_type;
+    g_autofree gchar *common = NULL, *start = NULL, *expires_date = NULL;
+    gpgme_ctx_t gctx;
+    g_autoptr(GTask) task = NULL;
+    g_autoptr(GError) error = NULL;
+    const gchar *parms;
+    gpgme_error_t gerr = 0;
+    g_autoptr(GSource) gsource = NULL;
 
-	g_return_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring));
-	g_return_if_fail (name);
-	g_return_if_fail (strlen (name) > 4);
-	g_return_if_fail (passphrase);
+    g_return_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring));
+    g_return_if_fail (name);
+    g_return_if_fail (strlen (name) > 4);
+    g_return_if_fail (passphrase);
 
-	/* Check lengths for each type */
-	switch (type) {
-	case DSA_ELGAMAL:
-		g_return_if_fail (length >= ELGAMAL_MIN || length <= LENGTH_MAX);
-		break;
-	case DSA:
-		g_return_if_fail (length >= DSA_MIN || length <= DSA_MAX);
-		break;
-	case RSA_RSA:
-	case RSA_SIGN:
-		g_return_if_fail (length >= RSA_MIN || length <= LENGTH_MAX);
-		break;
-	default:
-		g_return_if_reached ();
-		break;
-	}
+    /* Check lengths for each type */
+    switch (type) {
+    case DSA_ELGAMAL:
+        g_return_if_fail (length >= ELGAMAL_MIN || length <= LENGTH_MAX);
+        break;
+    case DSA:
+        g_return_if_fail (length >= DSA_MIN || length <= DSA_MAX);
+        break;
+    case RSA_RSA:
+    case RSA_SIGN:
+        g_return_if_fail (length >= RSA_MIN || length <= LENGTH_MAX);
+        break;
+    default:
+        g_return_if_reached ();
+        break;
+    }
 
-	if (expires != 0)
-		expires_date = seahorse_util_get_date_string (expires);
-	else
-		expires_date = g_strdup ("0");
+    if (expires != 0)
+        expires_date = seahorse_util_get_date_string (expires);
+    else
+        expires_date = g_strdup ("0");
 
-	/* Common xml */
-	common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\nPassphrase: %s\n"
-			"</GnupgKeyParms>", name, expires_date, passphrase);
-	if (email != NULL && strlen (email) > 0)
-		common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
-	if (comment != NULL && strlen (comment) > 0)
-		common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
+    /* Common xml */
+    common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\nPassphrase: %s\n"
+            "</GnupgKeyParms>", name, expires_date, passphrase);
+    if (email != NULL && strlen (email) > 0)
+        common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
+    if (comment != NULL && strlen (comment) > 0)
+        common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
 
-	if (type == DSA || type == DSA_ELGAMAL)
-		key_type = "Key-Type: DSA\nKey-Usage: sign";
-	else
-		key_type = "Key-Type: RSA\nKey-Usage: sign";
+    if (type == DSA || type == DSA_ELGAMAL)
+        key_type = "Key-Type: DSA\nKey-Usage: sign";
+    else
+        key_type = "Key-Type: RSA\nKey-Usage: sign";
 
-	start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
+    start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
 
-	/* Subkey xml */
-	if (type == DSA_ELGAMAL)
-		parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
-		                         start, (length < DSA_MAX) ? length : DSA_MAX, length, common);
-	else if (type == RSA_RSA)
-		parms = g_strdup_printf ("%s%d\nSubkey-Type: RSA\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
-		                         start, length, length, common);
-	else
-		parms = g_strdup_printf ("%s%d\n%s", start, length, common);
+    /* Subkey xml */
+    if (type == DSA_ELGAMAL)
+        parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
+                                 start, (length < DSA_MAX) ? length : DSA_MAX, length, common);
+    else if (type == RSA_RSA)
+        parms = g_strdup_printf ("%s%d\nSubkey-Type: RSA\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
+                                 start, length, length, common);
+    else
+        parms = g_strdup_printf ("%s%d\n%s", start, length, common);
 
-	res = g_simple_async_result_new (G_OBJECT (keyring), callback, user_data,
-	                                 seahorse_gpgme_key_op_generate_async);
+    gctx = seahorse_gpgme_keyring_new_context (&gerr);
 
-	closure = g_new0 (key_op_generate_closure, 1);
-	closure->gctx = seahorse_gpgme_keyring_new_context (&gerr);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	gpgme_set_progress_cb (closure->gctx, on_key_op_generate_progress, res);
-	g_simple_async_result_set_op_res_gpointer (res, closure, key_op_generate_free);
+    task = g_task_new (keyring, cancellable, callback, user_data);
+    gpgme_set_progress_cb (gctx, on_key_op_generate_progress, task);
+    g_task_set_task_data (task, gctx, (GDestroyNotify) gpgme_release);
 
-	seahorse_progress_prep_and_begin (cancellable, res, NULL);
-	gsource = seahorse_gpgme_gsource_new (closure->gctx, cancellable);
-	g_source_set_callback (gsource, (GSourceFunc)on_key_op_generate_complete,
-	                       g_object_ref (res), g_object_unref);
+    seahorse_progress_prep_and_begin (cancellable, task, NULL);
+    gsource = seahorse_gpgme_gsource_new (gctx, cancellable);
+    g_source_set_callback (gsource, (GSourceFunc)on_key_op_generate_complete,
+                           g_object_ref (task), g_object_unref);
 
-	if (gerr == 0)
-		gerr = gpgme_op_genkey_start (closure->gctx, parms, NULL, NULL);
+    if (gerr == 0)
+        gerr = gpgme_op_genkey_start (gctx, parms, NULL, NULL);
 
-	if (seahorse_gpgme_propagate_error (gerr, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
-	} else {
-		g_source_attach (gsource, g_main_context_default ());
-	}
+    if (seahorse_gpgme_propagate_error (gerr, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
 
-	g_source_unref (gsource);
-
-	/* Free xmls */
-	g_free (start);
-	g_free (common);
-	g_free (expires_date);
-
-	g_object_unref (res);
+    g_source_attach (gsource, g_main_context_default ());
 }
 
 gboolean
@@ -225,13 +198,9 @@ seahorse_gpgme_key_op_generate_finish (SeahorseGpgmeKeyring *keyring,
                                        GAsyncResult *result,
                                        GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (keyring),
-	                      seahorse_gpgme_key_op_generate_async), FALSE);
+    g_return_val_if_fail (g_task_is_valid (result, keyring), FALSE);
 
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return FALSE;
-
-	return TRUE;
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 /* helper function for deleting @skey */
