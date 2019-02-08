@@ -59,7 +59,7 @@ on_import_complete (GObject *source, GAsyncResult *result, gpointer user_data)
 
     if (!seahorse_pgp_backend_transfer_finish (backend, result, &err)) {
         result_icon_name = "dialog-warning-symbolic";
-        result_tooltip = g_strdup_printf (_("Couldn't import key: %s"),
+        result_tooltip = g_strdup_printf (_("Couldn’t import key: %s"),
                                           err->message);
     } else {
         result_icon_name = "emblem-ok-symbolic";
@@ -153,7 +153,7 @@ seahorse_keyserver_results_row_new (GObject *item)
     if (item_exportable)
         gtk_widget_set_tooltip_text (import_button, _("Import"));
     else
-        gtk_widget_set_tooltip_text (import_button, _("Can't import key"));
+        gtk_widget_set_tooltip_text (import_button, _("Can’t import key"));
     gtk_grid_attach (GTK_GRID (grid), g_steal_pointer (&import_button), 1, 0, 1, 1);
 
     gtk_container_add (GTK_CONTAINER (row), g_steal_pointer (&grid));

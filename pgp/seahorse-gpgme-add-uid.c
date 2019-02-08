@@ -88,7 +88,7 @@ on_gpgme_key_op_uid_added (GObject *source, GAsyncResult *result, gpointer user_
         GtkWidget *window;
 
         window = GTK_WIDGET (seahorse_widget_get_toplevel (swidget));
-        seahorse_util_show_error (window, _("Couldn't add user id"), error->message);
+        seahorse_util_show_error (window, _("Couldn’t add user ID"), error->message);
     }
 
     g_object_unref (swidget);

@@ -436,7 +436,7 @@ public class Seahorse.KeyManager : Catalog {
                 place.unlock.end(res);
             } catch (GLib.Error e) {
                 unlock_button.sensitive = true;
-                Util.show_error(this, _("Couldn't unlock keyring"), e.message);
+                Util.show_error(this, _("Couldn’t unlock keyring"), e.message);
             }
         });
     }
