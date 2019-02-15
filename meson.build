@@ -113,8 +113,6 @@ warning_flags = [
   '-Wcast-align',
   '-Wsign-compare',
   '-Wno-deprecated-declarations',
-  '-Wno-strict-aliasing',
-  '-Wno-sign-compare',
 ]
 supported_warning_flags = []
 foreach flag : warning_flags

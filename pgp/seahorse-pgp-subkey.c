@@ -295,7 +295,7 @@ seahorse_pgp_subkey_get_usage (SeahorsePgpSubkey *self)
 
 	GString *str;
 	gboolean previous;
-	int i;
+	uint i;
 
 	g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), NULL);
 
