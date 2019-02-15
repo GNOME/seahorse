@@ -223,24 +223,6 @@ names_get_selected_uid (SeahorsePgpKeyProperties *self)
 }
 
 static void
-on_gpgme_key_op_uid_added (GObject *source, GAsyncResult *result, gpointer user_data)
-{
-    g_autoptr(SeahorseGpgmeAddUid) self = SEAHORSE_GPGME_ADD_UID (user_data);
-    SeahorseGpgmeKey *key = SEAHORSE_GPGME_KEY (source);
-    g_autoptr(GError) error = NULL;
-
-    if (!seahorse_gpgme_key_op_add_uid_finish (key, result, &error)) {
-        GtkWindow *window = gtk_window_get_transient_for (GTK_WINDOW (self));
-        seahorse_util_show_error (GTK_WIDGET (window),
-                                  _("Couldn’t add user ID"),
-                                  error->message);
-        return;
-    }
-
-    seahorse_gpgme_key_refresh (key);
-}
-
-static void
 on_uids_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
