@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include "seahorse-pgp-dialogs.h"
+#include "seahorse-gpgme-add-uid.h"
 #include "seahorse-gpgme-dialogs.h"
 #include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-key.h"
@@ -222,12 +223,30 @@ names_get_selected_uid (SeahorsePgpKeyProperties *self)
 }
 
 static void
+on_gpgme_key_op_uid_added (GObject *source, GAsyncResult *result, gpointer user_data)
+{
+    g_autoptr(SeahorseGpgmeAddUid) self = SEAHORSE_GPGME_ADD_UID (user_data);
+    SeahorseGpgmeKey *key = SEAHORSE_GPGME_KEY (source);
+    g_autoptr(GError) error = NULL;
+
+    if (!seahorse_gpgme_key_op_add_uid_finish (key, result, &error)) {
+        GtkWindow *window = gtk_window_get_transient_for (GTK_WINDOW (self));
+        seahorse_util_show_error (GTK_WIDGET (window),
+                                  _("Couldn’t add user ID"),
+                                  error->message);
+        return;
+    }
+
+    seahorse_gpgme_key_refresh (key);
+}
+
+static void
 on_uids_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     g_return_if_fail (SEAHORSE_IS_GPGME_KEY (self->key));
-    seahorse_gpgme_add_uid_new (SEAHORSE_GPGME_KEY (self->key),
-                                GTK_WINDOW (self));
+    seahorse_gpgme_add_uid_run_dialog (SEAHORSE_GPGME_KEY (self->key),
+                                       GTK_WINDOW (self));
 }
 
 static void

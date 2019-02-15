@@ -65,9 +65,6 @@ void            seahorse_gpgme_expires_new          (SeahorseGpgmeSubkey *subkey
 void            seahorse_gpgme_add_subkey_new       (SeahorseGpgmeKey *pkey,
                                                      GtkWindow *parent);
 
-void            seahorse_gpgme_add_uid_new          (SeahorseGpgmeKey *pkey,
-                                                     GtkWindow *parent);
-
 void            seahorse_gpgme_revoke_new           (SeahorseGpgmeSubkey *subkey,
                                                      GtkWindow *parent);
 
