@@ -27,7 +27,11 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
     [GtkChild]
     private Gtk.Entry item_entry;
     [GtkChild]
-    private Gtk.CheckButton show_password_checkbutton;
+    private Gtk.LevelBar password_strength_bar;
+    [GtkChild]
+    private Gtk.Image password_strength_icon;
+
+    private PasswordQuality.Settings pwquality = new PasswordQuality.Settings();
 
     construct {
         // Load up a list of all the keyrings, and select the default
@@ -49,15 +53,11 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
 
         set_response_sensitive(Gtk.ResponseType.ACCEPT, false);
 
-        var buffer = new Gcr.SecureEntryBuffer();
-        this.password_entry = new Gtk.Entry.with_buffer(buffer);
+        this.password_entry = new PasswordEntry();
         this.password_entry.visibility = false;
+        this.password_entry.changed.connect(on_password_entry_changed);
         this.password_area.add(this.password_entry);
         this.password_entry.show();
-
-        this.show_password_checkbutton.toggled.connect(() => {
-            this.password_entry.visibility = this.show_password_checkbutton.active;
-        });
     }
 
     public ItemAdd(Gtk.Window? parent) {
@@ -70,6 +70,21 @@ public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
     [GtkCallback]
     private void on_add_item_entry_changed (Gtk.Editable entry) {
         set_response_sensitive(Gtk.ResponseType.ACCEPT, this.item_entry.text != "");
+    }
+
+    private void on_password_entry_changed (Gtk.Editable entry) {
+        void* auxerr;
+        int score = this.pwquality.check(entry.get_chars(), null, null, out auxerr);
+
+        if (score < 0) {
+            PasswordQuality.Error err = ((PasswordQuality.Error) score);
+            this.password_strength_icon.tooltip_text = dgettext("libpwquality", err.to_string(auxerr));
+            this.password_strength_icon.show();
+        } else {
+            this.password_strength_icon.hide();
+        }
+
+        this.password_strength_bar.value = ((score / 25) + 1).clamp(1, 5);
     }
 
     public override void response(int resp) {
