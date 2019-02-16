@@ -17,11 +17,14 @@ gkr_dependencies = [
   gcr,
   gcr_ui,
   libsecret,
+  libpwquality,
   common_dep,
 ]
 
 gkr_vala_args = [
   '--gresources', resources_xml,
+  '--vapidir', meson.current_source_dir(),
+  '--pkg=pwquality',
 ]
 
 gkr_lib = static_library('seahorse-gkr',
