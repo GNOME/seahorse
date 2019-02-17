@@ -238,6 +238,7 @@ private const string GOA_PASSWORD = "org.gnome.OnlineAccounts";
 private const string TELEPATHY_PASSWORD = "org.freedesktop.Telepathy";
 private const string EMPATHY_PASSWORD = "org.freedesktop.Empathy";
 private const string NETWORK_MANAGER_SECRET = "org.freedesktop.NetworkManager";
+private const string NETWORK_MANAGER_CONNECTION = "org.freedesktop.NetworkManager.Connection";
 
 private string? get_attribute_string(GLib.HashTable<string, string>? attrs,
                                      string name) {
@@ -445,6 +446,15 @@ private void telepathy_custom(string? display,
 		info.details = GLib.Markup.escape_text(account);
 }
 
+private void network_manager_connection_custom(string? display,
+                                               HashTable<string, string>? attrs,
+                                               ref DisplayInfo info) {
+    var setting_name = get_attribute_string(attrs, "setting-name");
+    if (setting_name == "802-11-wireless-security") {
+        info.icon = new ThemedIcon("network-wireless-symbolic");
+        info.description = _("Wi-Fi password");
+    }
+}
 
 private const DisplayEntry[] DISPLAY_ENTRIES = {
 	{ GENERIC_SECRET, N_("Password or secret"), null},
@@ -458,6 +468,7 @@ private const DisplayEntry[] DISPLAY_ENTRIES = {
 	{ TELEPATHY_PASSWORD, N_("Telepathy password"), telepathy_custom },
 	{ EMPATHY_PASSWORD, N_("Instant messaging password"), empathy_custom },
 	{ NETWORK_MANAGER_SECRET, N_("Network Manager secret"), null },
+    { NETWORK_MANAGER_CONNECTION, N_("Network connection secret"), network_manager_connection_custom },
 };
 
 private struct MappingEntry {
