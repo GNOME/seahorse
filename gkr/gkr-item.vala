@@ -34,6 +34,14 @@ private struct DisplayInfo {
 	string? details;
 	string? description;
     GLib.Icon? icon;
+
+    public void query_installed_apps(string item_type) {
+        DesktopAppInfo? app_info = new DesktopAppInfo("%s.desktop".printf(item_type));
+        if (app_info == null)
+            return;
+
+        this.icon = app_info.get_icon();
+    }
 }
 
 [CCode (has_target = false)]
@@ -152,36 +160,42 @@ public class Item : Secret.Item, Deletable, Viewable {
 		return new ItemProperties(this, parent);
 	}
 
-	private void ensure_display_info() {
-		if (this._info != null)
-			return;
+    private void ensure_display_info() {
+        if (this._info != null)
+            return;
 
-		this._info = DisplayInfo();
+        this._info = DisplayInfo();
 
-		var attrs = this.attributes;
-		var item_type = get_attribute_string (attrs, "xdg:schema");
-		item_type = map_item_type_to_specific (item_type, attrs);
-		assert (item_type != null);
-		this._info.item_type = item_type;
+        var attrs = this.attributes;
+        var item_type = get_attribute_string (attrs, "xdg:schema");
+        item_type = map_item_type_to_specific (item_type, attrs);
+        assert (item_type != null);
+        this._info.item_type = item_type;
 
-		var label = base.get_label();
-		foreach (var entry in DISPLAY_ENTRIES) {
-			if (entry.item_type == item_type) {
-				if (entry.custom_func != null)
-					entry.custom_func(label, attrs, ref this._info);
-				if (this._info.description == null)
-					this._info.description = _(entry.description);
-				break;
-			}
-		}
+        var label = base.get_label();
+        bool found_custom = false;
+        foreach (var entry in DISPLAY_ENTRIES) {
+            if (entry.item_type == item_type) {
+                found_custom = true;
+                if (entry.custom_func != null)
+                    entry.custom_func(label, attrs, ref this._info);
+                if (this._info.description == null)
+                    this._info.description = _(entry.description);
+                break;
+            }
+        }
 
-		if (this._info.label == null)
-			this._info.label = label;
-		if (this._info.label == null)
-			this._info.label = "";
-		if (this._info.details == null)
-			this._info.details = "";
-	}
+        // If we look at the schema, we might be able to deduce the app
+        if (!found_custom)
+            this._info.query_installed_apps (item_type);
+
+        if (this._info.label == null)
+            this._info.label = label;
+        if (this._info.label == null)
+            this._info.label = "";
+        if (this._info.details == null)
+            this._info.details = "";
+    }
 
 	private void load_item_secret() {
 		if (this._req_secret == null) {
@@ -472,43 +486,53 @@ private const DisplayEntry[] DISPLAY_ENTRIES = {
 };
 
 private struct MappingEntry {
-	string item_type;
-	string mapped_type;
-	string match_attribute;
-	string? match_pattern;
+    unowned string item_type;
+    unowned string mapped_type;
+    unowned string? match_attribute;
+    unowned string? match_pattern;
 }
 
 private const MappingEntry[] MAPPING_ENTRIES = {
-	{ GENERIC_SECRET, CHROME_PASSWORD, "application", "chrome*" },
-	{ GENERIC_SECRET, GOA_PASSWORD, "goa-identity", null },
-	{ GENERIC_SECRET, TELEPATHY_PASSWORD, "account", "*/*/*" },
-	{ GENERIC_SECRET, EMPATHY_PASSWORD, "account-id", "*/*/*" },
-	/* Network secret for Auto anna/802-11-wireless-security/psk */
-	{ GENERIC_SECRET, NETWORK_MANAGER_SECRET, "connection-uuid", null },
+    /* Map some known schema's to their application IDs */
+    { "org.gnome.Polari.Identify", "org.gnome.Polari" },
+    { "_chrome_dummy_schema_for_unlocking", "google-chrome" },
+    { "chrome_libsecret_os_crypt_password_v2", "chromium-browser" },
+
+    { "org.epiphany.FormPassword", EPIPHANY_PASSWORD },
+    { GENERIC_SECRET, CHROME_PASSWORD, "application", "chrome*" },
+    { GENERIC_SECRET, GOA_PASSWORD, "goa-identity", null },
+    { GENERIC_SECRET, TELEPATHY_PASSWORD, "account", "*/*/*" },
+    { GENERIC_SECRET, EMPATHY_PASSWORD, "account-id", "*/*/*" },
+    /* Network secret for Auto anna/802-11-wireless-security/psk */
+    { GENERIC_SECRET, NETWORK_MANAGER_SECRET, "connection-uuid", null },
 };
 
 private string map_item_type_to_specific(string? item_type,
                                          GLib.HashTable<string, string>? attrs)
 {
 
-	if (item_type == null)
-		return GENERIC_SECRET;
-	if (attrs == null)
-		return item_type;
+    if (item_type == null)
+        return GENERIC_SECRET;
+    if (attrs == null)
+        return item_type;
 
-	foreach (var mapping in MAPPING_ENTRIES) {
-		if (item_type == mapping.item_type) {
-			var value = get_attribute_string (attrs, mapping.match_attribute);
-			if (value != null && mapping.match_pattern != null) {
-				if (GLib.PatternSpec.match_simple(mapping.match_pattern, value))
-					return mapping.mapped_type;
-			} else if (value != null) {
-				return mapping.mapped_type;
-			}
-		}
-	}
+    foreach (var mapping in MAPPING_ENTRIES) {
+        if (item_type != mapping.item_type)
+            continue;
 
-	return item_type;
+        if (mapping.match_attribute == null)
+            return mapping.mapped_type;
+
+        var value = get_attribute_string (attrs, mapping.match_attribute);
+        if (value != null && mapping.match_pattern != null) {
+            if (GLib.PatternSpec.match_simple(mapping.match_pattern, value))
+                return mapping.mapped_type;
+        } else if (value != null) {
+            return mapping.mapped_type;
+        }
+    }
+
+    return item_type;
 }
 
 class ItemDeleter : Deleter {
