@@ -25,13 +25,8 @@
 
 #include "seahorse-common.h"
 
-#define SEAHORSE_TYPE_GPGME_EXPORTER            (seahorse_gpgme_exporter_get_type ())
-#define SEAHORSE_GPGME_EXPORTER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GPGME_EXPORTER, SeahorseGpgmeExporter))
-#define SEAHORSE_IS_GPGME_EXPORTER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GPGME_EXPORTER))
-
-typedef struct _SeahorseGpgmeExporter SeahorseGpgmeExporter;
-
-GType                     seahorse_gpgme_exporter_get_type     (void) G_GNUC_CONST;
+#define SEAHORSE_GPGME_TYPE_EXPORTER (seahorse_gpgme_exporter_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseGpgmeExporter, seahorse_gpgme_exporter, SEAHORSE_GPGME, EXPORTER, GObject)
 
 SeahorseExporter *        seahorse_gpgme_exporter_new          (GObject *object,
                                                                 gboolean armor,
