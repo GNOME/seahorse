@@ -33,6 +33,7 @@ private struct DisplayInfo {
 	string? label;
 	string? details;
 	string? description;
+    GLib.Icon? icon;
 }
 
 [CCode (has_target = false)]
@@ -76,9 +77,12 @@ public class Item : Secret.Item, Deletable, Viewable {
 		get { return Flags.DELETABLE | Flags.PERSONAL; }
 	}
 
-	public GLib.Icon icon {
-		owned get { return new GLib.ThemedIcon (ICON_PASSWORD); }
-	}
+    public GLib.Icon icon {
+        owned get {
+            ensure_display_info();
+            return this._info.icon ?? new GLib.ThemedIcon (ICON_PASSWORD);
+        }
+    }
 
 	public new string label {
 		owned get {
