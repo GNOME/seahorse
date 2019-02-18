@@ -12,7 +12,7 @@ flatpak:master:
     - flatpak-builder --stop-at=seahorse app ${MANIFEST_PATH}
     # Make sure to keep this in sync with the Flatpak manifest, all arguments
     # are passed except the config-args because we build it ourselves
-    - flatpak build app meson --prefix=/app -Dkeyservers-support=false -Dhkp-support=false -Dldap-support=false -Dkey-sharing=false _build
+    - flatpak build app meson --prefix=/app _build
     - flatpak build app ninja -C _build install
     - flatpak-builder --finish-only --repo=repo app ${MANIFEST_PATH}
     # Make a Flatpak Seahorse bundle for people to test
