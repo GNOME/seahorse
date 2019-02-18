@@ -248,6 +248,7 @@ private const string CHAINED_KEYRING = "org.gnome.keyring.ChainedKeyring";
 private const string ENCRYPTION_KEY = "org.gnome.keyring.EncryptionKey";
 private const string PK_STORAGE = "org.gnome.keyring.PkStorage";
 private const string CHROME_PASSWORD = "x.internal.Chrome";
+private const string EPIPHANY_PASSWORD = "x.internal.Epiphany";
 private const string GOA_PASSWORD = "org.gnome.OnlineAccounts";
 private const string TELEPATHY_PASSWORD = "org.freedesktop.Telepathy";
 private const string EMPATHY_PASSWORD = "org.freedesktop.Empathy";
@@ -364,6 +365,21 @@ private void network_custom(string? display,
 	}
 }
 
+private void epiphany_custom(string? display,
+                             HashTable<string, string>? attrs,
+                             ref DisplayInfo info) {
+    /* Set the Epiphany icon */
+    info.query_installed_apps("org.gnome.Epiphany");
+
+    var uri = get_attribute_string(attrs, "uri");
+    if (uri != null)
+        info.label = uri;
+
+    var username = get_attribute_string(attrs, "username");
+    if (uri != null)
+        info.details = Markup.escape_text(username);
+}
+
 private void chrome_custom(string? display,
                            GLib.HashTable<string, string>? attrs,
                            ref DisplayInfo info)
@@ -477,6 +493,7 @@ private const DisplayEntry[] DISPLAY_ENTRIES = {
 	{ CHAINED_KEYRING, N_("Keyring password"), null },
 	{ ENCRYPTION_KEY, N_("Encryption key password"), null },
 	{ PK_STORAGE, N_("Key storage password"), null },
+	{ EPIPHANY_PASSWORD, N_("GNOME Web password"), epiphany_custom },
 	{ CHROME_PASSWORD, N_("Google Chrome password"), chrome_custom },
 	{ GOA_PASSWORD, N_("GNOME Online Accounts password"), null },
 	{ TELEPATHY_PASSWORD, N_("Telepathy password"), telepathy_custom },
