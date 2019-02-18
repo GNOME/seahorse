@@ -515,8 +515,11 @@ private const MappingEntry[] MAPPING_ENTRIES = {
     { "_chrome_dummy_schema_for_unlocking", "google-chrome" },
     { "chrome_libsecret_os_crypt_password_v2", "chromium-browser" },
 
+    /* Browsers */
     { "org.epiphany.FormPassword", EPIPHANY_PASSWORD },
+    { "chrome_libsecret_password_schema", CHROME_PASSWORD },
     { GENERIC_SECRET, CHROME_PASSWORD, "application", "chrome*" },
+
     { GENERIC_SECRET, GOA_PASSWORD, "goa-identity", null },
     { GENERIC_SECRET, TELEPATHY_PASSWORD, "account", "*/*/*" },
     { GENERIC_SECRET, EMPATHY_PASSWORD, "account-id", "*/*/*" },
