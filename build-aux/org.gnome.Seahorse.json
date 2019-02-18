@@ -40,12 +40,57 @@
     ],
     "modules": [
         {
+            "name": "avahi",
+            "cleanup": [ "/bin/*avahi*", "share/man/man1/*avahi*" ],
+            "config-opts": [
+                "--with-distro=none",
+                "--enable-gobject",
+                "--with-xml=expat",
+                "--disable-libdaemon",
+                "--disable-core-docs",
+                "--disable-manpages",
+                "--disable-mono",
+                "--disable-qt3",
+                "--disable-qt4",
+                "--disable-python",
+                "--disable-gtk",
+                "--disable-gtk3"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://avahi.org/download/avahi-0.7.tar.gz",
+                    "sha256": "57a99b5dfe7fdae794e3d1ee7a62973a368e91e414bd0dfa5d84434de5b14804"
+                }
+            ]
+        },
+        {
             "name": "gpgme",
             "sources": [
                 {
                     "type": "archive",
                     "url": "https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.11.1.tar.bz2",
                     "sha256": "2d1b111774d2e3dd26dcd7c251819ce4ef774ec5e566251eb9308fa7542fbd6f"
+                }
+            ]
+        },
+        {
+            "name": "libsoup",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://gitlab.gnome.org/GNOME/libsoup.git"
+                }
+            ]
+        },
+        {
+            "name": "openldap",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.45.tgz",
+                    "sha256": "cdd6cffdebcd95161a73305ec13fc7a78e9707b46ca9f84fb897cd5626df3824"
                 }
             ]
         },
