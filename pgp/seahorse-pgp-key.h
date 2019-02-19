@@ -38,26 +38,26 @@ enum {
 
 typedef struct _SeahorsePgpKey SeahorsePgpKey;
 typedef struct _SeahorsePgpKeyClass SeahorsePgpKeyClass;
-typedef struct _SeahorsePgpKeyPrivate SeahorsePgpKeyPrivate;
 
 struct _SeahorsePgpKey {
-	SeahorseObject parent;
-	SeahorsePgpKeyPrivate *pv;
+    SeahorseObject parent;
 };
 
 struct _SeahorsePgpKeyClass {
-	SeahorseObjectClass parent_class;
+    SeahorseObjectClass parent_class;
 
-	/* virtual methods */
-	GList* (*get_uids) (SeahorsePgpKey *self);
-	void   (*set_uids) (SeahorsePgpKey *self, GList *uids);
-	
-	GList* (*get_subkeys) (SeahorsePgpKey *self);
-	void   (*set_subkeys) (SeahorsePgpKey *self, GList *uids);
-	
-	GList* (*get_photos) (SeahorsePgpKey *self);
-	void   (*set_photos) (SeahorsePgpKey *self, GList *uids);
+    /* virtual methods */
+    GList* (*get_uids) (SeahorsePgpKey *self);
+    void   (*set_uids) (SeahorsePgpKey *self, GList *uids);
+    
+    GList* (*get_subkeys) (SeahorsePgpKey *self);
+    void   (*set_subkeys) (SeahorsePgpKey *self, GList *uids);
+    
+    GList* (*get_photos) (SeahorsePgpKey *self);
+    void   (*set_photos) (SeahorsePgpKey *self, GList *uids);
 };
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (SeahorsePgpKey, g_object_unref)
 
 GType             seahorse_pgp_key_get_type             (void);
 
@@ -94,7 +94,7 @@ const gchar*      seahorse_pgp_key_get_algo             (SeahorsePgpKey *self);
 
 const gchar*      seahorse_pgp_key_get_keyid            (SeahorsePgpKey *self);
 
-gboolean          seahorse_pgp_key_has_keyid            (SeahorsePgpKey *self, 
+gboolean          seahorse_pgp_key_has_keyid            (SeahorsePgpKey *self,
                                                          const gchar *keyid);
 
 gchar*            seahorse_pgp_key_calc_identifier      (const gchar *keyid);
