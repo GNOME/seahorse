@@ -16,54 +16,22 @@
  * along with this program; if not, see
  * <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef __SEAHORSE_OBJECT_MODEL_H__
-#define __SEAHORSE_OBJECT_MODEL_H__
+
+#pragma once
 
 #include <gtk/gtk.h>
 
 #include "seahorse-common.h"
 
-#define SEAHORSE_TYPE_OBJECT_MODEL               (seahorse_object_model_get_type ())
-#define SEAHORSE_OBJECT_MODEL(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_OBJECT_MODEL, SeahorseObjectModel))
-#define SEAHORSE_OBJECT_MODEL_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_OBJECT_MODEL, SeahorseObjectModelClass))
-#define SEAHORSE_IS_OBJECT_MODEL(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_OBJECT_MODEL))
-#define SEAHORSE_IS_OBJECT_MODEL_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_OBJECT_MODEL))
-#define SEAHORSE_OBJECT_MODEL_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_OBJECT_MODEL, SeahorseObjectModelClass))
-
-typedef struct _SeahorseObjectModel SeahorseObjectModel;
-typedef struct _SeahorseObjectModelClass SeahorseObjectModelClass;
-
-/**
- * SeahorseObjectModel:
- * @parent: The parent #GtkTreeStore
- *
- * A GtkTreeModel that can assign certain rows as
- * 'key rows' which are updated when a key is updated.
- *
- * Signals:
- *   update-row: A request to update a row
- */
-
-struct _SeahorseObjectModel {
-    GtkTreeStore parent;
-};
-
-struct _SeahorseObjectModelClass {
-	GtkTreeStoreClass parent_class;
-
-	/* A key was added to this view */
-	void           (*update_row)     (SeahorseObjectModel *self,
-	                                  GObject *object,
-	                                  GtkTreeIter *iter);
-};
-
-GType               seahorse_object_model_get_type                (void);
+#define SEAHORSE_TYPE_OBJECT_MODEL (seahorse_object_model_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseObjectModel, seahorse_object_model,
+                      SEAHORSE, OBJECT_MODEL,
+                      GtkTreeStore)
 
 SeahorseObjectModel*   seahorse_object_model_new                  (gint n_columns,
                                                                    GType *types);
 
-void                seahorse_object_model_set_column_types        (SeahorseObjectModel *self, 
+void                seahorse_object_model_set_column_types        (SeahorseObjectModel *self,
                                                                    gint n_columns,
                                                                    GType *types);
 
@@ -81,5 +49,3 @@ void                seahorse_object_model_remove_rows_for_object  (SeahorseObjec
                                                                    GObject *object);
 
 void                seahorse_object_model_free_rows               (GList *rows);
-
-#endif /* __SEAHORSE_OBJECT_MODEL_H__ */
