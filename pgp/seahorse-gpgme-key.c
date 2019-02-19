@@ -252,7 +252,7 @@ realize_uids (SeahorseGpgmeKey *self)
 
 	/* Look for out of sync or missing UIDs */
 	while (uids != NULL) {
-		g_return_if_fail (SEAHORSE_IS_GPGME_UID (uids->data));
+		g_return_if_fail (SEAHORSE_GPGME_IS_UID (uids->data));
 		uid = SEAHORSE_GPGME_UID (uids->data);
 		uids = g_list_next (uids);
 

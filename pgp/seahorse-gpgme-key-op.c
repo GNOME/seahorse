@@ -600,7 +600,7 @@ seahorse_gpgme_key_op_sign_uid (SeahorseGpgmeUid *uid,  SeahorseGpgmeKey *signer
 	
 	seahorse_gpgme_key_get_private (signer);
 
-	g_return_val_if_fail (SEAHORSE_IS_GPGME_UID (uid), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (SEAHORSE_GPGME_IS_UID (uid), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (signer), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	signing_key = seahorse_gpgme_key_get_private (signer);
@@ -1893,7 +1893,7 @@ seahorse_gpgme_key_op_primary_uid (SeahorseGpgmeUid *uid)
 	gpgme_user_id_t userid;
 	gpgme_key_t key;
 
-	g_return_val_if_fail (SEAHORSE_IS_GPGME_UID (uid), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (SEAHORSE_GPGME_IS_UID (uid), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
     
 	/* Make sure not revoked */
 	userid = seahorse_gpgme_uid_get_userid (uid);
@@ -2042,7 +2042,7 @@ seahorse_gpgme_key_op_del_uid (SeahorseGpgmeUid *uid)
 	SeahorseEditParm *parms;
 	gpgme_key_t key;
 	
-	g_return_val_if_fail (SEAHORSE_IS_GPGME_UID (uid), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (SEAHORSE_GPGME_IS_UID (uid), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
     
 	key = seahorse_gpgme_uid_get_pubkey (uid);
 	g_return_val_if_fail (key, GPG_E (GPG_ERR_INV_VALUE));

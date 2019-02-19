@@ -28,27 +28,10 @@
 #include "pgp/seahorse-gpgme-key.h"
 #include "pgp/seahorse-pgp-uid.h"
 
-#define SEAHORSE_TYPE_GPGME_UID            (seahorse_gpgme_uid_get_type ())
-#define SEAHORSE_GPGME_UID(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GPGME_UID, SeahorseGpgmeUid))
-#define SEAHORSE_GPGME_UID_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GPGME_UID, SeahorseGpgmeUidClass))
-#define SEAHORSE_IS_GPGME_UID(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GPGME_UID))
-#define SEAHORSE_IS_GPGME_UID_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GPGME_UID))
-#define SEAHORSE_GPGME_UID_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GPGME_UID, SeahorseGpgmeUidClass))
-
-typedef struct _SeahorseGpgmeUid SeahorseGpgmeUid;
-typedef struct _SeahorseGpgmeUidClass SeahorseGpgmeUidClass;
-typedef struct _SeahorseGpgmeUidPrivate SeahorseGpgmeUidPrivate;
-
-struct _SeahorseGpgmeUid {
-	SeahorsePgpUid parent;
-	SeahorseGpgmeUidPrivate *pv;
-};
-
-struct _SeahorseGpgmeUidClass {
-	SeahorsePgpUidClass parent_class;
-};
-
-GType               seahorse_gpgme_uid_get_type             (void);
+#define SEAHORSE_GPGME_TYPE_UID (seahorse_gpgme_uid_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseGpgmeUid, seahorse_gpgme_uid,
+                      SEAHORSE_GPGME, UID,
+                      SeahorsePgpUid)
 
 SeahorseGpgmeUid*   seahorse_gpgme_uid_new                  (SeahorseGpgmeKey *parent,
                                                              gpgme_user_id_t userid);

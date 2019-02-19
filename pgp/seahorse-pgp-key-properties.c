@@ -240,7 +240,7 @@ on_uids_make_primary (GSimpleAction *action, GVariant *param, gpointer user_data
 
     uid = names_get_selected_uid (self);
     if (uid) {
-        g_return_if_fail (SEAHORSE_IS_GPGME_UID (uid));
+        g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
         err = seahorse_gpgme_key_op_primary_uid (SEAHORSE_GPGME_UID (uid));
         if (!GPG_IS_OK (err))
             seahorse_gpgme_handle_error (err, _("Couldn’t change primary user ID"));
@@ -260,7 +260,7 @@ on_uids_delete (GSimpleAction *action, GVariant *param, gpointer user_data)
     if (uid == NULL)
         return;
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_UID (uid));
+    g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
     message = g_strdup_printf (_("Are you sure you want to permanently delete the “%s” user ID?"),
                                seahorse_object_get_label (SEAHORSE_OBJECT (uid)));
     ret = seahorse_delete_dialog_prompt (GTK_WINDOW (self), message);
@@ -281,7 +281,7 @@ on_uids_sign (GSimpleAction *action, GVariant *param, gpointer user_data)
 
     uid = names_get_selected_uid (self);
     if (uid != NULL) {
-        g_return_if_fail (SEAHORSE_IS_GPGME_UID (uid));
+        g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
         seahorse_gpgme_sign_prompt_uid (SEAHORSE_GPGME_UID (uid),
                                         GTK_WINDOW (self));
     }
@@ -317,7 +317,7 @@ update_names (GtkTreeSelection *selection, SeahorsePgpKeyProperties *self)
     SeahorsePgpUid *uid = names_get_selected_uid (self);
     gint index = -1;
 
-    if (uid && SEAHORSE_IS_GPGME_UID (uid))
+    if (uid && SEAHORSE_GPGME_IS_UID (uid))
         index = seahorse_gpgme_uid_get_gpgme_index (SEAHORSE_GPGME_UID (uid));
 
     set_action_enabled (self, "uids.make-primary", index > 0);
