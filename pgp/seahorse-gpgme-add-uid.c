@@ -169,7 +169,7 @@ seahorse_gpgme_add_uid_class_init (SeahorseGpgmeAddUidClass *klass)
     g_object_class_install_property (gobject_class, PROP_KEY,
         g_param_spec_object ("key", "GPGME key",
                              "The GPGME key which we're adding a new UID to",
-                             SEAHORSE_TYPE_GPGME_KEY,
+                             SEAHORSE_GPGME_TYPE_KEY,
                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
     gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Seahorse/seahorse-gpgme-add-uid.ui");
@@ -193,7 +193,7 @@ seahorse_gpgme_add_uid_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 {
     g_autoptr(SeahorseGpgmeAddUid) self = NULL;
 
-    g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), NULL);
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY (pkey), NULL);
 
     self = g_object_new (SEAHORSE_GPGME_TYPE_ADD_UID,
                          "key", pkey,
@@ -230,7 +230,7 @@ seahorse_gpgme_add_uid_run_dialog (SeahorseGpgmeKey *pkey, GtkWindow *parent)
     GtkResponseType response;
     const gchar *name, *email, *comment;
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (pkey));
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (pkey));
 
     dialog = seahorse_gpgme_add_uid_new (pkey, parent);
     response = gtk_dialog_run (GTK_DIALOG (dialog));

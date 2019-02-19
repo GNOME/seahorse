@@ -505,7 +505,7 @@ seahorse_gpgme_keyring_remove_key (SeahorseGpgmeKeyring *self,
 	const gchar *keyid;
 
 	g_return_if_fail (SEAHORSE_IS_GPGME_KEYRING (self));
-	g_return_if_fail (SEAHORSE_IS_GPGME_KEY (key));
+	g_return_if_fail (SEAHORSE_GPGME_IS_KEY (key));
 
 	keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (key));
 	g_return_if_fail (g_hash_table_lookup (self->keys, keyid) == key);
@@ -927,7 +927,7 @@ seahorse_gpgme_keyring_contains (GcrCollection *collection,
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (collection);
 	const gchar *keyid;
 
-	if (!SEAHORSE_IS_GPGME_KEY (object))
+	if (!SEAHORSE_GPGME_IS_KEY (object))
 		return FALSE;
 
 	keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (object));

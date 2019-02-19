@@ -98,7 +98,7 @@ seahorse_gpgme_secret_deleter_add_object (SeahorseDeleter *deleter,
 {
 	SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
 
-	if (!SEAHORSE_IS_GPGME_KEY (object))
+	if (!SEAHORSE_GPGME_IS_KEY (object))
 		return FALSE;
 	if (self->key)
 		return FALSE;

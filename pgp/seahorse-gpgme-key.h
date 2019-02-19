@@ -25,26 +25,10 @@
 
 #include "seahorse-pgp-key.h"
 
-#define SEAHORSE_TYPE_GPGME_KEY            (seahorse_gpgme_key_get_type ())
-#define SEAHORSE_GPGME_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_GPGME_KEY, SeahorseGpgmeKey))
-#define SEAHORSE_GPGME_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_GPGME_KEY, SeahorseGpgmeKeyClass))
-#define SEAHORSE_IS_GPGME_KEY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_GPGME_KEY))
-#define SEAHORSE_IS_GPGME_KEY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_GPGME_KEY))
-#define SEAHORSE_GPGME_KEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_GPGME_KEY, SeahorseGpgmeKeyClass))
-
-
-typedef struct _SeahorseGpgmeKey SeahorseGpgmeKey;
-typedef struct _SeahorseGpgmeKeyClass SeahorseGpgmeKeyClass;
-typedef struct _SeahorseGpgmeKeyPrivate SeahorseGpgmeKeyPrivate;
-
-struct _SeahorseGpgmeKey {
-	SeahorsePgpKey parent;
-	SeahorseGpgmeKeyPrivate *pv;
-};
-
-struct _SeahorseGpgmeKeyClass {
-	SeahorsePgpKeyClass         parent_class;
-};
+#define SEAHORSE_GPGME_TYPE_KEY (seahorse_gpgme_key_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseGpgmeKey, seahorse_gpgme_key,
+                      SEAHORSE_GPGME, KEY,
+                      SeahorsePgpKey)
 
 SeahorseGpgmeKey* seahorse_gpgme_key_new                 (SeahorsePlace *sksrc,
                                                           gpgme_key_t pubkey,
@@ -55,8 +39,6 @@ void              seahorse_gpgme_key_refresh              (SeahorseGpgmeKey *sel
 void              seahorse_gpgme_key_realize              (SeahorseGpgmeKey *self);
 
 void              seahorse_gpgme_key_ensure_signatures    (SeahorseGpgmeKey *self);
-
-GType             seahorse_gpgme_key_get_type             (void);
 
 gpgme_key_t       seahorse_gpgme_key_get_public           (SeahorseGpgmeKey *self);
 

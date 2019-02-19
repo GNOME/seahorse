@@ -102,7 +102,7 @@ seahorse_gpgme_key_deleter_add_object (SeahorseDeleter *deleter,
 {
 	SeahorseGpgmeKeyDeleter *self = SEAHORSE_GPGME_KEY_DELETER (deleter);
 
-	if (!SEAHORSE_IS_GPGME_KEY (object))
+	if (!SEAHORSE_GPGME_IS_KEY (object))
 		return FALSE;
 	self->keys = g_list_append (self->keys, g_object_ref (object));
 	return TRUE;

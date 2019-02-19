@@ -81,13 +81,13 @@ sign_ok_clicked (SeahorseWidget *swidget, GtkWindow *parent)
     g_return_val_if_fail (w != NULL, FALSE);
     signer = seahorse_combo_keys_get_active (GTK_COMBO_BOX (w));
     
-    g_assert (!signer || (SEAHORSE_IS_GPGME_KEY (signer) && 
+    g_assert (!signer || (SEAHORSE_GPGME_IS_KEY (signer) && 
                           seahorse_object_get_usage (SEAHORSE_OBJECT (signer)) == SEAHORSE_USAGE_PRIVATE_KEY));
     
     to_sign = g_object_get_data (G_OBJECT (swidget), "to-sign");
     if (SEAHORSE_GPGME_IS_UID (to_sign))
 	    err = seahorse_gpgme_key_op_sign_uid (SEAHORSE_GPGME_UID (to_sign), SEAHORSE_GPGME_KEY (signer), check, options);
-    else if (SEAHORSE_IS_GPGME_KEY (to_sign))
+    else if (SEAHORSE_GPGME_IS_KEY (to_sign))
 	    err = seahorse_gpgme_key_op_sign (SEAHORSE_GPGME_KEY (to_sign), SEAHORSE_GPGME_KEY (signer), check, options);
     else
 	    g_assert (FALSE);

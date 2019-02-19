@@ -47,7 +47,7 @@ pgp_signers_match (GObject *obj,
 	SeahorseUsage usage;
 	SeahorseFlags flags;
 
-	if (!SEAHORSE_IS_GPGME_KEY (obj))
+	if (!SEAHORSE_GPGME_IS_KEY (obj))
 		return FALSE;
 
 	g_object_get (obj, "usage", &usage, "object-flags", &flags, NULL);

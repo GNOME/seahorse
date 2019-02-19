@@ -256,7 +256,7 @@ seahorse_gpgme_photo_add (SeahorseGpgmeKey *pkey,
 	GtkWidget *chooser;
 	gboolean res = TRUE;
 
-	g_return_val_if_fail (SEAHORSE_IS_GPGME_KEY (pkey), FALSE);
+	g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY (pkey), FALSE);
 
 	if (NULL == path) {
 		chooser = gtk_file_chooser_dialog_new (_("Choose Photo to Add to Key"), parent,

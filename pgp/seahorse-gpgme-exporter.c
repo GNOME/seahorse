@@ -221,7 +221,7 @@ seahorse_gpgme_exporter_add_object (SeahorseExporter *exporter,
     SeahorseGpgmeExporter *self = SEAHORSE_GPGME_EXPORTER (exporter);
     SeahorseGpgmeKey *key;
 
-    if (SEAHORSE_IS_GPGME_KEY (object)) {
+    if (SEAHORSE_GPGME_IS_KEY (object)) {
         key = SEAHORSE_GPGME_KEY (object);
         if (self->secret && seahorse_gpgme_key_get_private (key) == NULL)
             return FALSE;

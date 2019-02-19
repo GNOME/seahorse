@@ -150,7 +150,7 @@ seahorse_gpgme_add_revoker_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 	gpgme_error_t err;
 	const gchar *userid1, *userid2;
 	
-	g_return_if_fail (pkey != NULL && SEAHORSE_IS_GPGME_KEY (pkey));
+	g_return_if_fail (pkey != NULL && SEAHORSE_GPGME_IS_KEY (pkey));
 
 	revoker = SEAHORSE_GPGME_KEY (seahorse_signer_get (parent));
 	if (revoker == NULL)

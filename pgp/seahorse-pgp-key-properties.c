@@ -226,7 +226,7 @@ static void
 on_uids_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (self->key));
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
     seahorse_gpgme_add_uid_run_dialog (SEAHORSE_GPGME_KEY (self->key),
                                        GTK_WINDOW (self));
 }
@@ -484,7 +484,7 @@ on_pgp_owner_photo_drag_received (GtkWidget *widget,
     gboolean dnd_success = FALSE;
     gint len = 0;
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (self->key));
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
 
     /*
      * This needs to be improved, support should be added for remote images
@@ -520,7 +520,7 @@ on_photos_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (self->key));
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
 
     if (seahorse_gpgme_photo_add (SEAHORSE_GPGME_KEY (self->key),
                                   GTK_WINDOW (self), NULL))
@@ -569,7 +569,7 @@ set_photoid_state (SeahorsePgpKeyProperties *self)
 
     photo = g_object_get_data (G_OBJECT (self), "current-photoid");
     g_return_if_fail (!photo || SEAHORSE_PGP_IS_PHOTO (photo));
-    is_gpgme = SEAHORSE_IS_GPGME_KEY (self->key);
+    is_gpgme = SEAHORSE_GPGME_IS_KEY (self->key);
 
     if (etype == SEAHORSE_USAGE_PRIVATE_KEY) {
         gtk_widget_set_visible (self->owner_photo_add_button, is_gpgme);
@@ -725,7 +725,7 @@ on_change_password (GSimpleAction *action, GVariant *param, gpointer user_data)
 
     usage = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
     g_return_if_fail (usage == SEAHORSE_USAGE_PRIVATE_KEY);
-    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (self->key));
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
 
     seahorse_gpgme_key_op_change_pass_async (SEAHORSE_GPGME_KEY (self->key),
                                              NULL,
@@ -924,7 +924,7 @@ on_subkeys_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (self->key));
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
     seahorse_gpgme_add_subkey_new (SEAHORSE_GPGME_KEY (self->key),
                                    GTK_WINDOW (self));
 }
@@ -1004,7 +1004,7 @@ on_pgp_details_trust_changed (GtkComboBox *selection, gpointer user_data)
     if (!gtk_combo_box_get_active_iter (selection, &iter))
         return;
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (self->key));
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
 
     model = gtk_combo_box_get_model (selection);
     gtk_tree_model_get (model, &iter, TRUST_VALIDITY, &trust, -1);
@@ -1155,7 +1155,7 @@ do_details (SeahorsePgpKeyProperties *self)
     gtk_label_set_text (self->details_strength_label, dbuffer);
 
     gulong expires = seahorse_pgp_subkey_get_expires (subkey);
-    if (!SEAHORSE_IS_GPGME_KEY (self->key))
+    if (!SEAHORSE_GPGME_IS_KEY (self->key))
         expires_str = NULL;
     else if (expires == 0)
         expires_str = g_strdup (C_("Expires", "Never"));
@@ -1164,7 +1164,7 @@ do_details (SeahorsePgpKeyProperties *self)
     gtk_label_set_text (self->details_expires_label, expires_str);
 
     gtk_widget_set_visible (GTK_WIDGET (self->details_trust_combobox),
-                            SEAHORSE_IS_GPGME_KEY (self->key));
+                            SEAHORSE_GPGME_IS_KEY (self->key));
     gtk_widget_set_sensitive (GTK_WIDGET (self->details_trust_combobox),
                               !(seahorse_object_get_flags (SEAHORSE_OBJECT (self->key)) & SEAHORSE_FLAG_DISABLED));
 
@@ -1299,7 +1299,7 @@ on_trust_marginal_changed (GSimpleAction *action, GVariant *new_state, gpointer 
     SeahorseValidity trust;
     gpgme_error_t err;
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (self->key));
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
 
     trust = g_variant_get_boolean (new_state) ?
             SEAHORSE_VALIDITY_MARGINAL : SEAHORSE_VALIDITY_UNKNOWN;
@@ -1411,7 +1411,7 @@ on_sign_key (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_KEY (self->key));
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
     seahorse_gpgme_sign_prompt (SEAHORSE_GPGME_KEY (self->key), GTK_WINDOW (self));
 }
 
@@ -1456,7 +1456,7 @@ do_trust (SeahorsePgpKeyProperties *self)
         return;
 
     /* Remote keys */
-    if (!SEAHORSE_IS_GPGME_KEY (self->key)) {
+    if (!SEAHORSE_GPGME_IS_KEY (self->key)) {
         gtk_widget_set_visible (self->manual_trust_area, FALSE);
         gtk_widget_set_visible (GTK_WIDGET (self->trust_marginal_switch), TRUE);
         gtk_widget_set_sensitive (GTK_WIDGET (self->trust_marginal_switch), FALSE);
@@ -1851,7 +1851,7 @@ seahorse_pgp_key_properties_new (SeahorsePgpKey *pkey, GtkWindow *parent)
     g_autoptr(SeahorsePgpKeyProperties) dialog = NULL;
 
     /* This causes the key source to get any specific info about the key */
-    if (SEAHORSE_IS_GPGME_KEY (pkey)) {
+    if (SEAHORSE_GPGME_IS_KEY (pkey)) {
         seahorse_gpgme_key_refresh (SEAHORSE_GPGME_KEY (pkey));
         seahorse_gpgme_key_ensure_signatures (SEAHORSE_GPGME_KEY (pkey));
     }
