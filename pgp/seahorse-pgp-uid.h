@@ -39,12 +39,13 @@ typedef struct _SeahorsePgpUidPrivate SeahorsePgpUidPrivate;
 
 struct _SeahorsePgpUid {
 	SeahorseObject parent;
-	SeahorsePgpUidPrivate *pv;
 };
 
 struct _SeahorsePgpUidClass {
 	SeahorseObjectClass parent_class;
 };
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (SeahorsePgpUid, g_object_unref)
 
 GType             seahorse_pgp_uid_get_type             (void);
 
