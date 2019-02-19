@@ -1100,7 +1100,7 @@ seahorse_gpgme_key_op_set_expires (SeahorseGpgmeSubkey *subkey, const time_t exp
 	SeahorseEditParm *parms;
 	gpgme_key_t key;
 	
-	g_return_val_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	g_return_val_if_fail (expires != (time_t)seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (subkey)), GPG_E (GPG_ERR_INV_VALUE));
 	
 	key = seahorse_gpgme_subkey_get_pubkey (subkey);
@@ -1581,7 +1581,7 @@ seahorse_gpgme_key_op_del_subkey (SeahorseGpgmeSubkey *subkey)
 	gpgme_key_t key;
 	int index;
 	
-	g_return_val_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	key = seahorse_gpgme_subkey_get_pubkey (subkey);
 	g_return_val_if_fail (key, GPG_E (GPG_ERR_INV_VALUE));
@@ -1759,7 +1759,7 @@ seahorse_gpgme_key_op_revoke_subkey (SeahorseGpgmeSubkey *subkey, SeahorseRevoke
 	gpgme_subkey_t gsubkey;
 	gpgme_key_t key;
 	
-	g_return_val_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+	g_return_val_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 	
 	gsubkey = seahorse_gpgme_subkey_get_subkey (subkey);
 	g_return_val_if_fail (!gsubkey->revoked, GPG_E (GPG_ERR_INV_VALUE));

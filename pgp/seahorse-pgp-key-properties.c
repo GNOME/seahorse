@@ -944,7 +944,7 @@ on_subkeys_delete (GSimpleAction *action, GVariant *param, gpointer user_data)
     if (!subkey)
         return;
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey));
+    g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
 
     index = seahorse_pgp_subkey_get_index (subkey);
     label = seahorse_object_get_label (SEAHORSE_OBJECT (self->key));
@@ -967,7 +967,7 @@ on_subkeys_revoke (GSimpleAction *action, GVariant *param, gpointer user_data)
     if (subkey != NULL)
         return;
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey));
+    g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
     seahorse_gpgme_revoke_new (SEAHORSE_GPGME_SUBKEY (subkey),
                                GTK_WINDOW (self));
 }
@@ -986,7 +986,7 @@ on_subkeys_change_expires (GSimpleAction *action, GVariant *param, gpointer user
             subkey = subkeys->data;
     }
 
-    g_return_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey));
+    g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
 
     if (subkey != NULL)
         seahorse_gpgme_expires_new (SEAHORSE_GPGME_SUBKEY (subkey),

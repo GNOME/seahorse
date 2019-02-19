@@ -105,7 +105,7 @@ seahorse_gpgme_expires_new (SeahorseGpgmeSubkey *subkey, GtkWindow *parent)
 	gchar *title;
 	const gchar *label;
 	
-	g_return_if_fail (subkey != NULL && SEAHORSE_IS_GPGME_SUBKEY (subkey));
+	g_return_if_fail (subkey != NULL && SEAHORSE_GPGME_IS_SUBKEY (subkey));
 
 	swidget = seahorse_widget_new_allow_multiple ("expires", parent);
 	g_return_if_fail (swidget != NULL);

@@ -66,7 +66,7 @@ on_gpgme_revoke_ok_clicked (GtkButton *button,
 	
 	description = gtk_entry_get_text (GTK_ENTRY (seahorse_widget_get_widget (swidget, "description")));
 	subkey = g_object_get_data (G_OBJECT (swidget), "subkey");
-	g_return_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey));
+	g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
 	
 	err = seahorse_gpgme_key_op_revoke_subkey (subkey, reason, description);
 	if (!GPG_IS_OK (err))
@@ -85,7 +85,7 @@ seahorse_gpgme_revoke_new (SeahorseGpgmeSubkey *subkey, GtkWindow *parent)
 	GtkTreeIter iter;
 	GtkCellRenderer *renderer;
 	
-	g_return_if_fail (SEAHORSE_IS_GPGME_SUBKEY (subkey));
+	g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
 	
 	swidget = seahorse_widget_new ("revoke", parent);
 	g_return_if_fail (swidget != NULL);
