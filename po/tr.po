@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-02-18 12:37+0000\n"
-"PO-Revision-Date: 2019-02-18 20:00+0300\n"
+"POT-Creation-Date: 2019-02-19 16:31+0000\n"
+"PO-Revision-Date: 2019-02-19 21:37+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -59,15 +59,16 @@ msgstr "Veri dışa aktarılamadı"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-pgp-generate.ui:294 pkcs11/pkcs11-request.vala:55
-#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:247
+#: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
+#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:294
+#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
+#: src/import-dialog.vala:34 src/key-manager.vala:247
 msgid "_Cancel"
 msgstr "_İptal"
 
 #. Delete item
-#: common/delete-dialog.vala:91 pkcs11/pkcs11-properties.vala:201
-#: src/sidebar.vala:647
+#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:647
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -449,7 +450,6 @@ msgid "IM account password for "
 msgstr "Şunun Anlık İleti hesabı parolası: "
 
 #: gkr/gkr-item.vala:485
-#| msgid "Wrong password"
 msgid "Wi-Fi password"
 msgstr "Wi-Fi parolası"
 
@@ -478,7 +478,6 @@ msgid "Key storage password"
 msgstr "Anahtar deposu parolası"
 
 #: gkr/gkr-item.vala:496
-#| msgid "Web Password"
 msgid "GNOME Web password"
 msgstr "GNOME Web parolası"
 
@@ -503,7 +502,6 @@ msgid "Network Manager secret"
 msgstr "Ağ Yöneticisi gizi"
 
 #: gkr/gkr-item.vala:502
-#| msgid "Network Manager secret"
 msgid "Network connection secret"
 msgstr "Ağ bağlantısı gizi"
 
@@ -1250,6 +1248,10 @@ msgstr "Tüm dosyalar"
 msgid "Choose Photo to Add to Key"
 msgstr "Anahtara Eklenecek Fotoğrafı Seçin"
 
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:248
+msgid "_Open"
+msgstr "_Aç"
+
 #: pgp/seahorse-gpgme-photos.c:284
 msgid "Couldn’t prepare photo"
 msgstr "Fotoğraf hazırlanamadı"
@@ -1355,12 +1357,12 @@ msgstr ""
 "Bu anahtara güveninizi belirtmek için kullanılacak kişisel bir anahtarınız "
 "yok."
 
-#: pgp/seahorse-gpgme-subkey.c:194
+#: pgp/seahorse-gpgme-subkey.c:89
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Bilinmiyor"
 
-#: pgp/seahorse-gpgme-subkey.c:196
+#: pgp/seahorse-gpgme-subkey.c:91
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -1584,11 +1586,11 @@ msgstr "Oluştu_r"
 msgid "Generate a new key"
 msgstr "Yeni anahtar oluştur"
 
-#: pgp/seahorse-pgp-key.c:348
+#: pgp/seahorse-pgp-key.c:555
 msgid "Personal PGP key"
 msgstr "Kişisel PGP anahtarı"
 
-#: pgp/seahorse-pgp-key.c:350
+#: pgp/seahorse-pgp-key.c:557
 msgid "PGP key"
 msgstr "PGP anahtarı"
 
@@ -1801,7 +1803,7 @@ msgstr "Anahtar Adları ve İmzalar"
 msgid "Primary"
 msgstr "Birincil"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:460 pgp/seahorse-pgp-subkey.c:291
+#: pgp/seahorse-pgp-private-key-properties.ui:460 pgp/seahorse-pgp-subkey.c:160
 msgid "Sign"
 msgstr "İmzala"
 
@@ -1957,23 +1959,23 @@ msgstr "Güven Dereceniz:"
 msgid "You _Trust the Owner:"
 msgstr "Anahtarın _Sahibine Güven Dereceniz:"
 
-#: pgp/seahorse-pgp-subkey.c:290
+#: pgp/seahorse-pgp-subkey.c:159
 msgid "Encrypt"
 msgstr "Şifrele"
 
-#: pgp/seahorse-pgp-subkey.c:292
+#: pgp/seahorse-pgp-subkey.c:161
 msgid "Certify"
 msgstr "Sertifikalandır"
 
-#: pgp/seahorse-pgp-subkey.c:293
+#: pgp/seahorse-pgp-subkey.c:162
 msgid "Authenticate"
 msgstr "Kimlik Doğrula"
 
-#: pgp/seahorse-pgp-subkey.c:401
+#: pgp/seahorse-pgp-subkey.c:311
 msgid "Key"
 msgstr "Anahtar"
 
-#: pgp/seahorse-pgp-subkey.c:406
+#: pgp/seahorse-pgp-subkey.c:316
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "Alt anahtar %d / %s"
@@ -2289,10 +2291,6 @@ msgstr "İçe aktarma başarısız oldu"
 msgid "Import Key"
 msgstr "İçe Anahtar Aktar"
 
-#: src/key-manager.vala:248
-msgid "_Open"
-msgstr "_Aç"
-
 #. TODO: This should come from libgcr somehow
 #: src/key-manager.vala:256
 msgid "All key files"
@@ -2359,8 +2357,9 @@ msgid "Help"
 msgstr "Yardım"
 
 #: src/seahorse-key-manager.ui:52
-msgid "About"
-msgstr "Hakkında"
+#| msgid "Seahorse"
+msgid "About Seahorse"
+msgstr "Seahorse Hakkında"
 
 #: src/seahorse-key-manager.ui:89
 msgid "Secure Shell key"
@@ -2723,6 +2722,9 @@ msgstr "Uzak bilgisayardaki Güvenli Kabuk anahtarları yapılandırılamadı."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
+
+#~ msgid "About"
+#~ msgstr "Hakkında"
 
 #~ msgid "_Show Password"
 #~ msgstr "Parolayı _Göster"
