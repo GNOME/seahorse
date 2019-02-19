@@ -30,174 +30,178 @@
 #include <glib/gi18n.h>
 
 enum {
-	PROP_0,
-	PROP_KEYID,
-	PROP_FLAGS,
-	PROP_SIGTYPE
+    PROP_0,
+    PROP_KEYID,
+    PROP_FLAGS,
+    PROP_SIGTYPE
 };
 
-G_DEFINE_TYPE (SeahorsePgpSignature, seahorse_pgp_signature, G_TYPE_OBJECT);
+typedef struct _SeahorsePgpSignaturePrivate {
+    guint flags;
+    gchar *keyid;
+} SeahorsePgpSignaturePrivate;
 
-struct _SeahorsePgpSignaturePrivate {
-	guint flags;
-	gchar *keyid;
-};
+G_DEFINE_TYPE_WITH_PRIVATE (SeahorsePgpSignature, seahorse_pgp_signature, G_TYPE_OBJECT);
 
-/* -----------------------------------------------------------------------------
- * OBJECT 
- */
-
-static void
-seahorse_pgp_signature_init (SeahorsePgpSignature *self)
+guint
+seahorse_pgp_signature_get_flags (SeahorsePgpSignature *self)
 {
-	self->pv = G_TYPE_INSTANCE_GET_PRIVATE (self, SEAHORSE_PGP_TYPE_SIGNATURE, SeahorsePgpSignaturePrivate);
+    SeahorsePgpSignaturePrivate *priv
+        = seahorse_pgp_signature_get_instance_private (self);
+
+    g_return_val_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self), 0);
+    return priv->flags;
+}
+
+void
+seahorse_pgp_signature_set_flags (SeahorsePgpSignature *self, guint flags)
+{
+    SeahorsePgpSignaturePrivate *priv
+        = seahorse_pgp_signature_get_instance_private (self);
+    GObject *obj;
+
+    g_return_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self));
+    priv->flags = flags;
+
+    obj = G_OBJECT (self);
+    g_object_freeze_notify (obj);
+    g_object_notify (obj, "flags");
+    g_object_notify (obj, "sigtype");
+    g_object_thaw_notify (obj);
+}
+
+const gchar*
+seahorse_pgp_signature_get_keyid (SeahorsePgpSignature *self)
+{
+    SeahorsePgpSignaturePrivate *priv
+        = seahorse_pgp_signature_get_instance_private (self);
+
+    g_return_val_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self), NULL);
+    return priv->keyid;
+}
+
+void
+seahorse_pgp_signature_set_keyid (SeahorsePgpSignature *self, const gchar *keyid)
+{
+    SeahorsePgpSignaturePrivate *priv
+        = seahorse_pgp_signature_get_instance_private (self);
+    GObject *obj;
+
+    g_return_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self));
+    g_free (priv->keyid);
+    priv->keyid = g_strdup (keyid);
+
+    obj = G_OBJECT (self);
+    g_object_freeze_notify (obj);
+    g_object_notify (obj, "keyid");
+    g_object_notify (obj, "sigtype");
+    g_object_thaw_notify (obj);
+}
+
+guint
+seahorse_pgp_signature_get_sigtype (SeahorsePgpSignature *self)
+{
+    SeahorsePgpSignaturePrivate *priv
+        = seahorse_pgp_signature_get_instance_private (self);
+    SeahorseGpgmeKeyring *keyring;
+    SeahorseGpgmeKey *key;
+    SeahorseObject *obj;
+
+    g_return_val_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self), 0);
+
+    keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+    key = seahorse_gpgme_keyring_lookup (keyring, priv->keyid);
+
+    if (key != NULL) {
+        obj = SEAHORSE_OBJECT (key);
+        if (seahorse_object_get_usage (obj) == SEAHORSE_USAGE_PRIVATE_KEY)
+            return SKEY_PGPSIG_TRUSTED | SKEY_PGPSIG_PERSONAL;
+        if (seahorse_object_get_flags (obj) & SEAHORSE_FLAG_TRUSTED)
+            return SKEY_PGPSIG_TRUSTED;
+    }
+
+    return 0;
 }
 
 static void
 seahorse_pgp_signature_get_property (GObject *object, guint prop_id,
                                   GValue *value, GParamSpec *pspec)
 {
-	SeahorsePgpSignature *self = SEAHORSE_PGP_SIGNATURE (object);
-	
-	switch (prop_id) {
-	case PROP_KEYID:
-		g_value_set_string (value, seahorse_pgp_signature_get_keyid (self));
-		break;
-	case PROP_FLAGS:
-		g_value_set_uint (value, seahorse_pgp_signature_get_flags (self));
-		break;
-	case PROP_SIGTYPE:
-		g_value_set_uint (value, seahorse_pgp_signature_get_sigtype (self));
-		break;
-	}
+    SeahorsePgpSignature *self = SEAHORSE_PGP_SIGNATURE (object);
+
+    switch (prop_id) {
+    case PROP_KEYID:
+        g_value_set_string (value, seahorse_pgp_signature_get_keyid (self));
+        break;
+    case PROP_FLAGS:
+        g_value_set_uint (value, seahorse_pgp_signature_get_flags (self));
+        break;
+    case PROP_SIGTYPE:
+        g_value_set_uint (value, seahorse_pgp_signature_get_sigtype (self));
+        break;
+    }
 }
 
 static void
-seahorse_pgp_signature_set_property (GObject *object, guint prop_id, const GValue *value, 
+seahorse_pgp_signature_set_property (GObject *object, guint prop_id, const GValue *value,
                                   GParamSpec *pspec)
 {
-	SeahorsePgpSignature *self = SEAHORSE_PGP_SIGNATURE (object);
-	
-	switch (prop_id) {
-	case PROP_KEYID:
-		seahorse_pgp_signature_set_keyid (self, g_value_get_string (value));
-		break;
-	case PROP_FLAGS:
-		seahorse_pgp_signature_set_flags (self, g_value_get_uint (value));
-		break;
-	}
+    SeahorsePgpSignature *self = SEAHORSE_PGP_SIGNATURE (object);
+
+    switch (prop_id) {
+    case PROP_KEYID:
+        seahorse_pgp_signature_set_keyid (self, g_value_get_string (value));
+        break;
+    case PROP_FLAGS:
+        seahorse_pgp_signature_set_flags (self, g_value_get_uint (value));
+        break;
+    }
 }
 
 static void
 seahorse_pgp_signature_finalize (GObject *gobject)
 {
-	SeahorsePgpSignature *self = SEAHORSE_PGP_SIGNATURE (gobject);
+    SeahorsePgpSignature *self = SEAHORSE_PGP_SIGNATURE (gobject);
+    SeahorsePgpSignaturePrivate *priv
+        = seahorse_pgp_signature_get_instance_private (self);
 
-	g_free (self->pv->keyid);
-	self->pv->keyid = NULL;
-    
-	G_OBJECT_CLASS (seahorse_pgp_signature_parent_class)->finalize (gobject);
+    g_clear_pointer (&priv->keyid, g_free);
+
+    G_OBJECT_CLASS (seahorse_pgp_signature_parent_class)->finalize (gobject);
+}
+
+static void
+seahorse_pgp_signature_init (SeahorsePgpSignature *self)
+{
 }
 
 static void
 seahorse_pgp_signature_class_init (SeahorsePgpSignatureClass *klass)
 {
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);    
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-	seahorse_pgp_signature_parent_class = g_type_class_peek_parent (klass);
-	g_type_class_add_private (klass, sizeof (SeahorsePgpSignaturePrivate));
-	
-	gobject_class->finalize = seahorse_pgp_signature_finalize;
-	gobject_class->set_property = seahorse_pgp_signature_set_property;
-	gobject_class->get_property = seahorse_pgp_signature_get_property;
+    gobject_class->finalize = seahorse_pgp_signature_finalize;
+    gobject_class->set_property = seahorse_pgp_signature_set_property;
+    gobject_class->get_property = seahorse_pgp_signature_get_property;
 
-        g_object_class_install_property (gobject_class, PROP_KEYID,
-                g_param_spec_string ("keyid", "Key ID", "GPG Key ID",
-                                     "", G_PARAM_READWRITE));
+    g_object_class_install_property (gobject_class, PROP_KEYID,
+        g_param_spec_string ("keyid", "Key ID", "GPG Key ID",
+                             "",
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-	g_object_class_install_property (gobject_class, PROP_FLAGS,
-	        g_param_spec_uint ("flags", "Flags", "PGP signature flags",
-	                           0, G_MAXUINT, 0, G_PARAM_READWRITE));
+    g_object_class_install_property (gobject_class, PROP_FLAGS,
+        g_param_spec_uint ("flags", "Flags", "PGP signature flags",
+                           0, G_MAXUINT, 0,
+                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-	g_object_class_install_property (gobject_class, PROP_SIGTYPE,
-	        g_param_spec_uint ("sigtype", "Sig Type", "PGP signature type",
-	                           0, G_MAXUINT, 0, G_PARAM_READABLE));
+    g_object_class_install_property (gobject_class, PROP_SIGTYPE,
+        g_param_spec_uint ("sigtype", "Sig Type", "PGP signature type",
+                           0, G_MAXUINT, 0,
+                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 }
-
-/* -----------------------------------------------------------------------------
- * PUBLIC 
- */
 
 SeahorsePgpSignature*
 seahorse_pgp_signature_new (const gchar *keyid)
 {
-	return g_object_new (SEAHORSE_PGP_TYPE_SIGNATURE, "keyid", keyid, NULL);
-}
- 
-guint
-seahorse_pgp_signature_get_flags (SeahorsePgpSignature *self)
-{
-	g_return_val_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self), 0);
-	return self->pv->flags;
-}
-
-void
-seahorse_pgp_signature_set_flags (SeahorsePgpSignature *self, guint flags)
-{
-	GObject *obj;
-	
-	g_return_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self));
-	self->pv->flags = flags;
-
-	obj = G_OBJECT (self);
-	g_object_freeze_notify (obj);
-	g_object_notify (obj, "flags");
-	g_object_notify (obj, "sigtype");
-	g_object_thaw_notify (obj);
-}
-
-const gchar*
-seahorse_pgp_signature_get_keyid (SeahorsePgpSignature *self)
-{
-	g_return_val_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self), NULL);
-	return self->pv->keyid;
-}
-
-void
-seahorse_pgp_signature_set_keyid (SeahorsePgpSignature *self, const gchar *keyid)
-{
-	GObject *obj;
-	
-	g_return_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self));
-	g_free (self->pv->keyid);
-	self->pv->keyid = g_strdup (keyid);
-	
-	obj = G_OBJECT (self);
-	g_object_freeze_notify (obj);
-	g_object_notify (obj, "keyid");
-	g_object_notify (obj, "sigtype");
-	g_object_thaw_notify (obj);
-}
-
-guint
-seahorse_pgp_signature_get_sigtype (SeahorsePgpSignature *self)
-{
-	SeahorseGpgmeKeyring *keyring;
-	SeahorseGpgmeKey *key;
-	SeahorseObject *obj;
-
-	g_return_val_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self), 0);
-
-	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-	key = seahorse_gpgme_keyring_lookup (keyring, self->pv->keyid);
-
-	if (key != NULL) {
-		obj = SEAHORSE_OBJECT (key);
-		if (seahorse_object_get_usage (obj) == SEAHORSE_USAGE_PRIVATE_KEY)
-			return SKEY_PGPSIG_TRUSTED | SKEY_PGPSIG_PERSONAL;
-		if (seahorse_object_get_flags (obj) & SEAHORSE_FLAG_TRUSTED)
-			return SKEY_PGPSIG_TRUSTED;
-	}
-
-	return 0;
+    return g_object_new (SEAHORSE_PGP_TYPE_SIGNATURE, "keyid", keyid, NULL);
 }

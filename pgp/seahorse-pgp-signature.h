@@ -23,28 +23,15 @@
 
 #include "seahorse-common.h"
 
-#define SEAHORSE_PGP_TYPE_SIGNATURE            (seahorse_pgp_signature_get_type ())
+#define SEAHORSE_PGP_TYPE_SIGNATURE (seahorse_pgp_signature_get_type ())
+G_DECLARE_DERIVABLE_TYPE (SeahorsePgpSignature, seahorse_pgp_signature,
+                          SEAHORSE_PGP, SIGNATURE,
+                          GObject)
 
-#define SEAHORSE_PGP_SIGNATURE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_SIGNATURE, SeahorsePgpSignature))
-#define SEAHORSE_PGP_SIGNATURE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_SIGNATURE, SeahorsePgpSignatureClass))
-#define SEAHORSE_PGP_IS_SIGNATURE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_SIGNATURE))
-#define SEAHORSE_PGP_IS_SIGNATURE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_SIGNATURE))
-#define SEAHORSE_PGP_SIGNATURE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_SIGNATURE, SeahorsePgpSignatureClass))
-
-typedef struct _SeahorsePgpSignature SeahorsePgpSignature;
-typedef struct _SeahorsePgpSignatureClass SeahorsePgpSignatureClass;
-typedef struct _SeahorsePgpSignaturePrivate SeahorsePgpSignaturePrivate;
-
-struct _SeahorsePgpSignature {
-	GObject parent;
-	SeahorsePgpSignaturePrivate *pv;
-};
 
 struct _SeahorsePgpSignatureClass {
-	GObjectClass parent_class;
+    GObjectClass parent_class;
 };
-
-GType                  seahorse_pgp_signature_get_type       (void);
 
 SeahorsePgpSignature*  seahorse_pgp_signature_new            (const gchar *keyid);
 
