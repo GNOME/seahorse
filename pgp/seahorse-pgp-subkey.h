@@ -24,27 +24,13 @@
 #include "seahorse-common.h"
 
 #define SEAHORSE_PGP_TYPE_SUBKEY            (seahorse_pgp_subkey_get_type ())
-
-#define SEAHORSE_PGP_SUBKEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_SUBKEY, SeahorsePgpSubkey))
-#define SEAHORSE_PGP_SUBKEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_SUBKEY, SeahorsePgpSubkeyClass))
-#define SEAHORSE_PGP_IS_SUBKEY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_SUBKEY))
-#define SEAHORSE_PGP_IS_SUBKEY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_SUBKEY))
-#define SEAHORSE_PGP_SUBKEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_SUBKEY, SeahorsePgpSubkeyClass))
-
-typedef struct _SeahorsePgpSubkey SeahorsePgpSubkey;
-typedef struct _SeahorsePgpSubkeyClass SeahorsePgpSubkeyClass;
-typedef struct _SeahorsePgpSubkeyPrivate SeahorsePgpSubkeyPrivate;
-
-struct _SeahorsePgpSubkey {
-	GObject parent;
-	SeahorsePgpSubkeyPrivate *pv;
-};
+G_DECLARE_DERIVABLE_TYPE (SeahorsePgpSubkey, seahorse_pgp_subkey,
+                          SEAHORSE_PGP, SUBKEY,
+                          GObject)
 
 struct _SeahorsePgpSubkeyClass {
-	GObjectClass parent_class;
+    GObjectClass parent_class;
 };
-
-GType               seahorse_pgp_subkey_get_type          (void);
 
 SeahorsePgpSubkey*  seahorse_pgp_subkey_new               (void);
 
