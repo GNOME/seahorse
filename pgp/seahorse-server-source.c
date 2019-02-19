@@ -182,7 +182,7 @@ seahorse_server_source_get_uri (SeahorsePlace* self)
 static GIcon *
 seahorse_server_source_get_icon (SeahorsePlace* self)
 {
-	return g_themed_icon_new (GTK_STOCK_DIALOG_QUESTION);
+	return g_themed_icon_new (NULL);
 }
 
 static GtkActionGroup *

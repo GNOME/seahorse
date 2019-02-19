@@ -334,7 +334,7 @@ names_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
     const gchar *name, *id;
 
     icon = g_themed_icon_new (SEAHORSE_PGP_IS_KEY (object) ?
-                              SEAHORSE_ICON_SIGN : GTK_STOCK_DIALOG_QUESTION);
+                              SEAHORSE_ICON_SIGN : "dialog-question");
     name = seahorse_object_get_markup (object);
     id = seahorse_object_get_identifier (object);
 
@@ -1327,7 +1327,7 @@ trust_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
         trusted = TRUE;
 
     icon = g_themed_icon_new (SEAHORSE_PGP_IS_KEY (object) ?
-                              SEAHORSE_ICON_SIGN : GTK_STOCK_DIALOG_QUESTION);
+                              SEAHORSE_ICON_SIGN : "dialog-question");
     name = seahorse_object_get_label (object);
     id = seahorse_object_get_identifier (object);
 

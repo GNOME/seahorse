@@ -73,7 +73,7 @@ suggest_resize (GtkWindow *parent)
                 DEFAULT_WIDTH, DEFAULT_HEIGHT);
     
     gtk_dialog_add_buttons (GTK_DIALOG (dlg), 
-                            GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                            _("_Cancel"), GTK_RESPONSE_CANCEL,
                             _("_Don’t Resize"), GTK_RESPONSE_REJECT,
                             _("_Resize"), GTK_RESPONSE_ACCEPT,
                             NULL);
@@ -261,8 +261,8 @@ seahorse_gpgme_photo_add (SeahorseGpgmeKey *pkey,
 	if (NULL == path) {
 		chooser = gtk_file_chooser_dialog_new (_("Choose Photo to Add to Key"), parent,
 		                                      GTK_FILE_CHOOSER_ACTION_OPEN,
-		                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+		                                      _("_Cancel"), GTK_RESPONSE_CANCEL,
+		                                      _("_Open"), GTK_RESPONSE_ACCEPT,
 		                                      NULL);
 
 		gtk_dialog_set_default_response (GTK_DIALOG (chooser), GTK_RESPONSE_ACCEPT);
@@ -320,8 +320,8 @@ seahorse_gpgme_photo_delete (SeahorseGpgmePhoto *photo, GtkWindow *parent)
                                   GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
                                   _("Are you sure you want to remove the current photo from your key?"));
 
-    gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
-    gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT);
+    gtk_dialog_add_button (GTK_DIALOG (dlg), _("_Delete"), GTK_RESPONSE_ACCEPT);
+    gtk_dialog_add_button (GTK_DIALOG (dlg), _("_Cancel"), GTK_RESPONSE_REJECT);
        
     response = gtk_dialog_run (GTK_DIALOG (dlg));
     gtk_widget_destroy (dlg);
