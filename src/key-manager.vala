@@ -393,8 +393,10 @@ public class Seahorse.KeyManager : Catalog {
     private Gcr.Collection setup_sidebar() {
         this.sidebar = new Sidebar();
         sidebar.hexpand = true;
-        /* Make sure we get */
+
+        /* Make sure we update the empty state on any change */
         this.sidebar.get_selection().changed.connect((sel) => check_empty_state());
+        this.sidebar.current_collection_changed.connect (() => check_empty_state ());
 
         this.sidebar_panes.position = this.settings.get_int("sidebar-width");
         this.sidebar_panes.realize.connect(() =>   { this.sidebar_panes.position = this.settings.get_int("sidebar-width"); });

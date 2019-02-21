@@ -75,6 +75,12 @@ public class Seahorse.Sidebar : Gtk.TreeView {
     }
     private bool _combined;
 
+    /**
+     * Emitted when the state of the current collection changed.
+     * For example: when going from locked to unlocked and vice versa.
+     */
+    public signal void current_collection_changed();
+
     private enum RowType {
         BACKEND,
         PLACE,
@@ -577,6 +583,7 @@ public class Seahorse.Sidebar : Gtk.TreeView {
         lockable.lock.begin(interaction, cancellable, (obj, res) => {
             try {
                 lockable.lock.end(res);
+                current_collection_changed();
             } catch (Error e) {
                 Util.show_error(window, _("Couldn’t lock"), e.message);
             }
@@ -594,6 +601,7 @@ public class Seahorse.Sidebar : Gtk.TreeView {
         lockable.unlock.begin(interaction, cancellable, (obj, res) => {
             try {
                 lockable.unlock.end(res);
+                current_collection_changed();
             } catch (Error e) {
                 Util.show_error(window, _("Couldn’t unlock"), e.message);
             }
