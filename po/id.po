@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-02-18 12:37+0000\n"
-"PO-Revision-Date: 2019-02-18 22:22+0700\n"
+"POT-Creation-Date: 2019-02-19 16:31+0000\n"
+"PO-Revision-Date: 2019-02-21 22:48+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -53,15 +53,16 @@ msgstr "Tidak dapat mengekspor data"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-pgp-generate.ui:294 pkcs11/pkcs11-request.vala:55
-#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:247
+#: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
+#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:294
+#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
+#: src/import-dialog.vala:34 src/key-manager.vala:247
 msgid "_Cancel"
 msgstr "_Batal"
 
 #. Delete item
-#: common/delete-dialog.vala:91 pkcs11/pkcs11-properties.vala:201
-#: src/sidebar.vala:647
+#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:647
 msgid "_Delete"
 msgstr "_Hapus"
 
@@ -1245,6 +1246,10 @@ msgstr "Semua berkas"
 msgid "Choose Photo to Add to Key"
 msgstr "Pilih Foto untuk Ditambahkan ke Kunci"
 
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:248
+msgid "_Open"
+msgstr "B_uka"
+
 #: pgp/seahorse-gpgme-photos.c:284
 msgid "Couldn’t prepare photo"
 msgstr "Tidak dapat menyiapkan foto"
@@ -1350,12 +1355,12 @@ msgstr ""
 "Anda tak punya kunci PGP pribadi yang dapat dipakai untuk mengindikasikan "
 "kepercayaan Anda atas kunci ini."
 
-#: pgp/seahorse-gpgme-subkey.c:194
+#: pgp/seahorse-gpgme-subkey.c:89
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Tak diketahui"
 
-#: pgp/seahorse-gpgme-subkey.c:196
+#: pgp/seahorse-gpgme-subkey.c:91
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -1581,11 +1586,11 @@ msgstr "_Buat"
 msgid "Generate a new key"
 msgstr "Buat suatu kunci baru"
 
-#: pgp/seahorse-pgp-key.c:348
+#: pgp/seahorse-pgp-key.c:555
 msgid "Personal PGP key"
 msgstr "Kunci pribadi PGP"
 
-#: pgp/seahorse-pgp-key.c:350
+#: pgp/seahorse-pgp-key.c:557
 msgid "PGP key"
 msgstr "Kunci PGP"
 
@@ -1796,7 +1801,7 @@ msgstr "Tanda Tangan dan Nama Kunci"
 msgid "Primary"
 msgstr "Utama"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:460 pgp/seahorse-pgp-subkey.c:291
+#: pgp/seahorse-pgp-private-key-properties.ui:460 pgp/seahorse-pgp-subkey.c:160
 msgid "Sign"
 msgstr "Tandatangani"
 
@@ -1952,23 +1957,23 @@ msgstr "Indikasikan Kepercayaan:"
 msgid "You _Trust the Owner:"
 msgstr "Anda Mem_percayai sang Pemilik:"
 
-#: pgp/seahorse-pgp-subkey.c:290
+#: pgp/seahorse-pgp-subkey.c:159
 msgid "Encrypt"
 msgstr "Enkrip"
 
-#: pgp/seahorse-pgp-subkey.c:292
+#: pgp/seahorse-pgp-subkey.c:161
 msgid "Certify"
 msgstr "Sertifikasikan"
 
-#: pgp/seahorse-pgp-subkey.c:293
+#: pgp/seahorse-pgp-subkey.c:162
 msgid "Authenticate"
 msgstr "Otentikasikan"
 
-#: pgp/seahorse-pgp-subkey.c:401
+#: pgp/seahorse-pgp-subkey.c:311
 msgid "Key"
 msgstr "Kunci"
 
-#: pgp/seahorse-pgp-subkey.c:406
+#: pgp/seahorse-pgp-subkey.c:316
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "Sub kunci %d dari %s"
@@ -2289,10 +2294,6 @@ msgstr "Pengimporan gagal"
 msgid "Import Key"
 msgstr "Impor Kunci"
 
-#: src/key-manager.vala:248
-msgid "_Open"
-msgstr "B_uka"
-
 #. TODO: This should come from libgcr somehow
 #: src/key-manager.vala:256
 msgid "All key files"
@@ -2359,8 +2360,8 @@ msgid "Help"
 msgstr "Bantuan"
 
 #: src/seahorse-key-manager.ui:52
-msgid "About"
-msgstr "Tentang"
+msgid "About Seahorse"
+msgstr "Tentang Seahorse"
 
 #: src/seahorse-key-manager.ui:89
 msgid "Secure Shell key"
@@ -2721,6 +2722,9 @@ msgstr "Tidak dapat menata kunci Secure Shell pada komputer jauh."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Mengkonfigurasi Kunci Secure Shell…"
+
+#~ msgid "About"
+#~ msgstr "Tentang"
 
 #~ msgid "_File"
 #~ msgstr "_Berkas"
