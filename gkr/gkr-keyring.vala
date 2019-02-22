@@ -22,6 +22,12 @@ namespace Seahorse {
 namespace Gkr {
 
 public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lockable, Viewable {
+
+    private const ActionEntry[] KEYRING_ACTIONS = {
+        { "set-default",     on_action_set_default },
+        { "change-password", on_action_change_password },
+    };
+
 	public string description {
 		owned get {
 			if (Backend.instance().has_alias ("login", this))
@@ -40,13 +46,20 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 	public GLib.Icon icon {
 		owned get { return new GLib.ThemedIcon("folder"); }
 	}
-	public Gtk.ActionGroup? actions {
-		owned get {
-			if (this._actions == null)
-				this._actions = create_actions();
-			return this._actions;
-		}
-	}
+
+    private GLib.ActionGroup? _actions = null;
+    public GLib.ActionGroup? actions {
+        owned get { return this._actions; }
+    }
+
+    public unowned string? action_prefix {
+        get { return "gkr-keyring"; }
+    }
+
+    private MenuModel? _menu_model = null;
+    public MenuModel? menu_model {
+        owned get { return this._menu_model; }
+    }
 
 	public bool is_default {
 		get { return Backend.instance().has_alias ("default", this); }
@@ -65,7 +78,6 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 	}
 
 	private GLib.HashTable<string, Item> _items;
-	private Gtk.ActionGroup? _actions;
 
 	construct {
 		this._items = new GLib.HashTable<string, Item>(GLib.str_hash, GLib.str_equal);
@@ -77,6 +89,9 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 			notify_property ("is-default");
 			notify_property ("description");
 		});
+
+        this._actions = create_actions();
+        this._menu_model = create_menu_model();
 	}
 
 	public uint get_length() {
@@ -161,8 +176,11 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 		}
 	}
 
-	[CCode (instance_pos = -1)]
-	public void on_keyring_default(Gtk.Action? action) {
+    public void on_action_set_default(SimpleAction action, Variant? param) {
+        set_as_default();
+    }
+
+    public void set_as_default() {
         var parent = null;
 		var service = this.service;
 
@@ -174,10 +192,13 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 				Util.show_error(parent, _("Couldn’t set default keyring"), err.message);
 			}
 		});
-	}
+    }
 
-	[CCode (instance_pos = -1)]
-	public void on_keyring_password (Gtk.Action? action) {
+    public void on_action_change_password(SimpleAction action, Variant? param) {
+        change_password();
+    }
+
+    public void change_password() {
         var parent = null;
 		var service = this.service;
 		service.get_connection().call.begin(service.get_name(),
@@ -203,29 +224,26 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 				Util.show_error(parent, _("Couldn’t change keyring password"), err.message);
 			}
 		});
-	}
+    }
 
-	private const Gtk.ActionEntry[] KEYRING_ACTIONS = {
-		{ "keyring-default", null, N_("_Set as default"), null,
-		  N_("Applications usually store new passwords in the default keyring."), on_keyring_default },
-		{ "keyring-password", null, N_("Change _Password"), null,
-		  N_("Change the unlock password of the password storage keyring"), on_keyring_password },
-	};
+    private SimpleActionGroup create_actions() {
+        var group = new SimpleActionGroup();
+        group.add_action_entries (KEYRING_ACTIONS, this);
 
-	private Gtk.ActionGroup create_actions() {
-		Gtk.ActionGroup actions = new Gtk.ActionGroup("KeyringActions");
+        var action = group.lookup_action("set-default");
+        bind_property("is-default", action, "enabled", BindingFlags.INVERT_BOOLEAN);
 
-		/* Add these actions, but none of them are visible until cloned */
-		actions.set_translation_domain(Config.GETTEXT_PACKAGE);
-		actions.add_actions(KEYRING_ACTIONS, this);
+        return group;
+    }
 
-		var action = actions.get_action("keyring-default");
-		this.bind_property("is-default", action, "sensitive",
-		                   GLib.BindingFlags.INVERT_BOOLEAN | GLib.BindingFlags.SYNC_CREATE);
+    private GLib.Menu create_menu_model() {
+        var menu = new GLib.Menu();
+        unowned string prefix = this.action_prefix;
 
-		return actions;
-	}
-
+        menu.insert(0, _("_Set as default"),  prefix + ".set-default");
+        menu.insert(1, _("Change _Password"), prefix + ".change-password");
+        return menu;
+    }
 }
 
 class KeyringDeleter : Deleter {

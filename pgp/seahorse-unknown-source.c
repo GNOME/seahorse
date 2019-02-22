@@ -35,7 +35,9 @@ enum {
 	PROP_DESCRIPTION,
 	PROP_ICON,
 	PROP_URI,
-	PROP_ACTIONS
+	PROP_ACTIONS,
+	PROP_ACTION_PREFIX,
+	PROP_MENU_MODEL
 };
 
 struct _SeahorseUnknownSource {
@@ -110,8 +112,20 @@ seahorse_unknown_source_get_icon (SeahorsePlace* self)
 	return NULL;
 }
 
-static GtkActionGroup *
+static GActionGroup *
 seahorse_unknown_source_get_actions (SeahorsePlace* self)
+{
+	return NULL;
+}
+
+static const gchar *
+seahorse_unknown_source_get_action_prefix (SeahorsePlace* self)
+{
+    return NULL;
+}
+
+static GMenuModel *
+seahorse_unknown_source_get_menu_model (SeahorsePlace* self)
 {
 	return NULL;
 }
@@ -137,9 +151,15 @@ seahorse_unknown_source_get_property (GObject *obj,
 	case PROP_ICON:
 		g_value_take_object (value, seahorse_unknown_source_get_icon (place));
 		break;
-	case PROP_ACTIONS:
-		g_value_take_object (value, seahorse_unknown_source_get_actions (place));
-		break;
+    case PROP_ACTIONS:
+        g_value_take_object (value, seahorse_unknown_source_get_actions (place));
+        break;
+    case PROP_ACTION_PREFIX:
+        g_value_set_string (value, seahorse_unknown_source_get_action_prefix (place));
+        break;
+    case PROP_MENU_MODEL:
+        g_value_take_object (value, seahorse_unknown_source_get_menu_model (place));
+        break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -187,6 +207,8 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
 	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+	g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
+	g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
 	g_object_class_override_property (gobject_class, PROP_URI, "uri");
 }
 
@@ -227,6 +249,7 @@ seahorse_unknown_source_place_iface (SeahorsePlaceIface *iface)
 	iface->load = seahorse_unknown_source_load;
 	iface->load_finish = seahorse_unknown_source_load_finish;
 	iface->get_actions = seahorse_unknown_source_get_actions;
+	iface->get_menu_model = seahorse_unknown_source_get_menu_model;
 	iface->get_description = seahorse_unknown_source_get_description;
 	iface->get_icon = seahorse_unknown_source_get_icon;
 	iface->get_label = seahorse_unknown_source_get_label;
