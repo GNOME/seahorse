@@ -242,7 +242,7 @@ seahorse_keyserver_results_constructed (GObject *obj)
         title = g_strdup_printf (_("Remote keys containing “%s”"), self->search_string);
     }
 
-    gtk_window_set_default_geometry (window, 640, 476);
+    gtk_window_set_default_size (window, 640, 476);
     gtk_window_set_title (window, title);
     gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
 
