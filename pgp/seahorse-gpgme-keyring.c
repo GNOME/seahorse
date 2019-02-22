@@ -52,7 +52,9 @@ enum {
 	PROP_DESCRIPTION,
 	PROP_ICON,
 	PROP_URI,
-	PROP_ACTIONS
+    PROP_ACTIONS,
+    PROP_ACTION_PREFIX,
+    PROP_MENU_MODEL
 };
 
 /* Amount of keys to load in a batch */
@@ -127,7 +129,7 @@ struct _SeahorseGpgmeKeyring {
 	guint scheduled_refresh;                /* Source for refresh timeout */
 	GFileMonitor *monitor_handle;           /* For monitoring the .gnupg directory */
 	GList *orphan_secret;                   /* Orphan secret keys */
-	GtkActionGroup *actions;
+    GActionGroup *actions;
 };
 
 static void     seahorse_gpgme_keyring_place_iface        (SeahorsePlaceIface *iface);
@@ -770,13 +772,25 @@ seahorse_gpgme_keyring_get_icon (SeahorsePlace *place)
 	return g_themed_icon_new (GCR_ICON_GNUPG);
 }
 
-static GtkActionGroup *
+static GActionGroup *
 seahorse_gpgme_keyring_get_actions (SeahorsePlace *place)
 {
-	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (place);
-	if (self->actions)
-		return g_object_ref (self->actions);
-	return NULL;
+    SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (place);
+    if (self->actions)
+        return g_object_ref (self->actions);
+    return NULL;
+}
+
+static const gchar *
+seahorse_gpgme_keyring_get_action_prefix (SeahorsePlace* self)
+{
+    return NULL;
+}
+
+static GMenuModel *
+seahorse_gpgme_keyring_get_menu_model (SeahorsePlace *place)
+{
+    return NULL;
 }
 
 static gchar *
@@ -809,6 +823,12 @@ seahorse_gpgme_keyring_get_property (GObject *obj,
 	case PROP_ACTIONS:
 		g_value_take_object (value, seahorse_gpgme_keyring_get_actions (place));
 		break;
+	case PROP_ACTION_PREFIX:
+		g_value_set_string (value, seahorse_gpgme_keyring_get_action_prefix (place));
+		break;
+	case PROP_MENU_MODEL:
+		g_value_take_object (value, seahorse_gpgme_keyring_get_menu_model (place));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
 		break;
@@ -839,8 +859,6 @@ seahorse_gpgme_keyring_dispose (GObject *object)
 	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (object);
 	GList *l;
 
-	if (self->actions)
-		gtk_action_group_set_sensitive (self->actions, TRUE);
 	g_hash_table_remove_all (self->keys);
 
 	cancel_scheduled_refresh (self);
@@ -890,7 +908,9 @@ seahorse_gpgme_keyring_class_init (SeahorseGpgmeKeyringClass *klass)
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 	g_object_class_override_property (gobject_class, PROP_URI, "uri");
 	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
-	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+    g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+    g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
+    g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
 }
 
 static void
@@ -898,7 +918,9 @@ seahorse_gpgme_keyring_place_iface (SeahorsePlaceIface *iface)
 {
 	iface->load = seahorse_gpgme_keyring_load_async;
 	iface->load_finish = seahorse_gpgme_keyring_load_finish;
-	iface->get_actions = seahorse_gpgme_keyring_get_actions;
+    iface->get_actions = seahorse_gpgme_keyring_get_actions;
+    iface->get_action_prefix = seahorse_gpgme_keyring_get_action_prefix;
+    iface->get_menu_model = seahorse_gpgme_keyring_get_menu_model;
 	iface->get_description = seahorse_gpgme_keyring_get_description;
 	iface->get_icon = seahorse_gpgme_keyring_get_icon;
 	iface->get_label = seahorse_gpgme_keyring_get_label;

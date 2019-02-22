@@ -42,7 +42,6 @@ public class Seahorse.Sidebar : Gtk.TreeView {
     private Gtk.TreePath? action_highlight_path;
     private Gtk.CellRendererPixbuf action_cell_renderer;
     private int action_button_size;
-    private Gtk.AccelGroup accel_group = new Gtk.AccelGroup();
 
     private uint update_places_sig;
 
@@ -626,16 +625,13 @@ public class Seahorse.Sidebar : Gtk.TreeView {
     }
 
     private void popup_menu_for_place(Place place) {
-        Gtk.Menu menu = new Gtk.Menu();
+        // Start from the menu model provided by the place (if any)
+        var menu = (place.menu_model != null)? new Gtk.Menu.from_model(place.menu_model)
+                                             : new Gtk.Menu();
 
-        // First add all the actions from the collection
-        Gtk.ActionGroup actions = place.actions;
-        if (actions != null) {
-            foreach (weak Gtk.Action action in actions.list_actions()) {
-                action.set_accel_group(this.accel_group);
-                menu.append((Gtk.MenuItem) action.create_menu_item());
-            }
-        }
+        // Make sure the actions from the collection
+        if (place.actions != null)
+            menu.insert_action_group(place.action_prefix, place.actions);
 
         // Lock and unlock items
         if (place is Lockable) {

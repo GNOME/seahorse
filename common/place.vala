@@ -18,16 +18,37 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Seahorse {
+/**
+ * A SeahorsePlace is a collection of objects (passwords/keys/certificates/...).
+ * An example of this is a keyring.
+ */
+public interface Seahorse.Place : Gcr.Collection {
+    public abstract string label { owned get; set; }
+    public abstract string description { owned get; }
+    public abstract string uri { owned get; }
+    public abstract Icon icon { owned get; }
 
-public interface Place : Gcr.Collection {
-	public abstract string label { owned get; set; }
-	public abstract string description { owned get; }
-	public abstract string uri { owned get; }
-	public abstract GLib.Icon icon { owned get; }
-	public abstract Gtk.ActionGroup? actions { owned get; }
+    /**
+     * Returns the {@link GLib.Action}s that are defined for this Place,
+     * or null if none.
+     */
+    public abstract GLib.ActionGroup? actions { owned get; }
 
-	public abstract async bool load(GLib.Cancellable? cancellable) throws GLib.Error;
-}
+    /**
+     * Returns the prefix that is used for the actions in this.menu_model.
+     */
+    public abstract unowned string? action_prefix { get; }
 
+    /**
+     * Returns the menu of basic actions that apply specifically to
+     * this Place. Can be used for example to show a context menu.
+     */
+    public abstract MenuModel? menu_model { owned get; }
+
+    /**
+     * Loads the items in this Place so they are available.
+     *
+     * Returns false if an error occurre
+     */
+    public abstract async bool load(Cancellable? cancellable) throws GLib.Error;
 }

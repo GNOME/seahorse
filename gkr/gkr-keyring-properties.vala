@@ -68,12 +68,12 @@ public class Seahorse.Gkr.KeyringProperties : Gtk.Dialog {
 
     [GtkCallback]
     private void on_set_default_button_clicked(Gtk.Button button) {
-        this.keyring.on_keyring_default(null);
+        this.keyring.set_as_default();
     }
 
     [GtkCallback]
     private void on_change_pw_button_clicked(Gtk.Button button) {
-        this.keyring.on_keyring_password(null);
+        this.keyring.change_password();
     }
 
     private void update_lock_unlock_button() {

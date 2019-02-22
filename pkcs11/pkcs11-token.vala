@@ -100,9 +100,17 @@ public class Token : GLib.Object, Gcr.Collection, Place, Lockable {
 		}
 	}
 
-	public Gtk.ActionGroup? actions {
-		owned get { return null; }
-	}
+    public GLib.ActionGroup? actions {
+        owned get { return null; }
+    }
+
+    public unowned string? action_prefix {
+        get { return null; }
+    }
+
+    public MenuModel? menu_model {
+        owned get { return null; }
+    }
 
 	public Flags object_flags {
 		get { return 0; }
