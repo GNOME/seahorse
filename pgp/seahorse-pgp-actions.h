@@ -24,5 +24,3 @@
 #include <seahorse-common.h>
 
 SeahorseActionGroup * seahorse_pgp_backend_actions_instance    (void);
-
-SeahorseActionGroup * seahorse_gpgme_key_actions_instance      (void);
