@@ -17,12 +17,12 @@
  * along with this program; if not, see
  * <http://www.gnu.org/licenses/>.
  */
- 
+
 #include "config.h"
- 
+
 #include <stdlib.h>
 #include <string.h>
- 
+
 #include <glib/gi18n.h>
 
 #include "seahorse-hkp-source.h"
@@ -56,22 +56,8 @@
     (SOUP_STATUS_IS_TRANSPORT_ERROR((msg)->status_code) || \
      SOUP_STATUS_IS_CLIENT_ERROR((msg)->status_code) || \
      SOUP_STATUS_IS_SERVER_ERROR((msg)->status_code))
-    
-#define HKP_ERROR_DOMAIN (get_hkp_error_domain())
 
-/**
-*
-* Returns The GQuark for the HKP error
-*
-**/
-static GQuark
-get_hkp_error_domain (void)
-{
-    static GQuark q = 0;
-    if(q == 0)
-        q = g_quark_from_static_string ("seahorse-hkp-error");
-    return q;
-}
+G_DEFINE_QUARK (seahorse-hkp-error, seahorse_hkp_error);
 
 struct _SeahorseHKPSource {
     SeahorseServerSource parent;
@@ -80,18 +66,17 @@ struct _SeahorseHKPSource {
 G_DEFINE_TYPE (SeahorseHKPSource, seahorse_hkp_source, SEAHORSE_TYPE_SERVER_SOURCE);
 
 /**
-* src: The SeahorseSource to use as server for the uri
-* path: The path to add to the SOUP uri
-*
-*
-*
-* Returns A Soup uri with server, port and paths
-**/
+ * self: The SeahorseSource to use as server for the uri
+ * path: The path to add to the SOUP uri
+ *
+ * Returns: A #SoupUri with server, port and paths
+ */
 static SoupURI*
 get_http_server_uri (SeahorseHKPSource *self, const char *path)
 {
-    SoupURI *uri;
-    gchar *server, *port;
+    g_autoptr(SoupURI) uri = NULL;
+    g_autofree gchar *server = NULL;
+    gchar *port;
 
     g_object_get (self, "key-server", &server, NULL);
     g_return_val_if_fail (server != NULL, NULL);
@@ -106,40 +91,38 @@ get_http_server_uri (SeahorseHKPSource *self, const char *path)
         soup_uri_set_port (uri, atoi (port));
     } else {
         /* default HKP port */
-        soup_uri_set_port (uri, 11371); 
+        soup_uri_set_port (uri, 11371);
     }
 
     soup_uri_set_host (uri, server);
     soup_uri_set_path (uri, path);
-    g_free (server);
 
-    return uri;
+    return g_steal_pointer (&uri);
 }
 
 static SoupSession *
 create_hkp_soup_session (void)
 {
-	SoupSession *session;
+    SoupSession *session;
 #ifdef WITH_DEBUG
-	SoupLogger *logger;
-	const gchar *env;
+    g_autoptr(SoupLogger) logger = NULL;
+    const gchar *env;
 #endif
 
-        session = soup_session_async_new_with_options (SOUP_SESSION_ADD_FEATURE_BY_TYPE,
-                                                       SOUP_TYPE_PROXY_RESOLVER_DEFAULT,
-                                                       NULL);
+    session = soup_session_async_new_with_options (SOUP_SESSION_ADD_FEATURE_BY_TYPE,
+                                                   SOUP_TYPE_PROXY_RESOLVER_DEFAULT,
+                                                   NULL);
 
 
 #ifdef WITH_DEBUG
-        env = g_getenv ("G_MESSAGES_DEBUG");
-        if (env && strstr (env, "seahorse")) {
-		logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
-		soup_session_add_feature (session, SOUP_SESSION_FEATURE (logger));
-		g_object_unref (logger);
-	}
+    env = g_getenv ("G_MESSAGES_DEBUG");
+    if (env && strstr (env, "seahorse")) {
+        logger = soup_logger_new (SOUP_LOGGER_LOG_BODY, -1);
+        soup_session_add_feature (session, SOUP_SESSION_FEATURE (logger));
+    }
 #endif
 
-	return session;
+    return session;
 }
 
 
@@ -154,65 +137,65 @@ create_hkp_soup_session (void)
 *
 **/
 static void
-dehtmlize(gchar *line)
+dehtmlize (gchar *line)
 {
     int parsedindex = 0;
     gchar *parsed = line;
-    
+
     g_return_if_fail (line);
 
     while (*line != '\0') {
         switch(*line) {
-	    case '<':
-	        while (*line != '>' && *line != '\0')
-	            line++;
-	        if (*line!='\0')
-	            line++;
-	        break;
-	    case '&':
-	        if ((*(line + 1) != '\0' && g_ascii_tolower (*(line + 1)) == 'l') &&
-	            (*(line + 2) != '\0' && g_ascii_tolower (*(line + 2)) == 't') &&
-	            (*(line + 3) != '\0' && *(line + 3) == ';')) {
-	            parsed[parsedindex++] = '<';
-	            line += 4;
-	            break;
-	        } else if ((*(line + 1) != '\0' && g_ascii_tolower (*(line + 1)) == 'g') &&
-		               (*(line + 2) != '\0' && g_ascii_tolower (*(line + 2)) == 't') &&
-		               (*(line + 3) != '\0' && *(line + 3) == ';')) {
-	            parsed[parsedindex++] = '>';
-	            line += 4;
-	            break;
-	        } else if((*(line + 1) != '\0' && g_ascii_tolower (*(line + 1)) == 'a') &&
-		              (*(line + 2) != '\0' && g_ascii_tolower (*(line + 2))=='m') &&
-		              (*(line + 3) != '\0' && g_ascii_tolower (*(line + 3))=='p') &&
-		              (*(line + 4) != '\0' && *(line + 4) == ';')) {
-	            parsed[parsedindex++] = '&';
-	            line += 5;
-	            break;
-	        }
+        case '<':
+            while (*line != '>' && *line != '\0')
+                line++;
+            if (*line!='\0')
+                line++;
+            break;
+        case '&':
+            if ((*(line + 1) != '\0' && g_ascii_tolower (*(line + 1)) == 'l') &&
+                (*(line + 2) != '\0' && g_ascii_tolower (*(line + 2)) == 't') &&
+                (*(line + 3) != '\0' && *(line + 3) == ';')) {
+                parsed[parsedindex++] = '<';
+                line += 4;
+                break;
+            } else if ((*(line + 1) != '\0' && g_ascii_tolower (*(line + 1)) == 'g') &&
+                       (*(line + 2) != '\0' && g_ascii_tolower (*(line + 2)) == 't') &&
+                       (*(line + 3) != '\0' && *(line + 3) == ';')) {
+                parsed[parsedindex++] = '>';
+                line += 4;
+                break;
+            } else if((*(line + 1) != '\0' && g_ascii_tolower (*(line + 1)) == 'a') &&
+                      (*(line + 2) != '\0' && g_ascii_tolower (*(line + 2))=='m') &&
+                      (*(line + 3) != '\0' && g_ascii_tolower (*(line + 3))=='p') &&
+                      (*(line + 4) != '\0' && *(line + 4) == ';')) {
+                parsed[parsedindex++] = '&';
+                line += 5;
+                break;
+            }
             /* Fall through */
         default:
-        	parsed[parsedindex++] = *line;
-	        line++;
-	        break;
-	    };
+            parsed[parsedindex++] = *line;
+            line++;
+            break;
+        };
     }
 
     parsed[parsedindex] = '\0';
 
-    /* 
+    /*
      * Chop off any trailing whitespace.  Note that the HKP servers have
-     * \r\n as line endings, and the NAI HKP servers have just \n. 
+     * \r\n as line endings, and the NAI HKP servers have just \n.
      */
 
-    if(parsedindex > 0) {
+    if (parsedindex > 0) {
         parsedindex--;
-        while (g_ascii_isspace(((unsigned char*)parsed)[parsedindex])) {
-	        parsed[parsedindex] = '\0';
-	        if(parsedindex == 0)
-	            break;
-	        parsedindex--;
-	    }
+        while (g_ascii_isspace (((unsigned char*)parsed)[parsedindex])) {
+            parsed[parsedindex] = '\0';
+            if (parsedindex == 0)
+                break;
+            parsedindex--;
+        }
     }
 }
 
@@ -232,21 +215,21 @@ parse_hkp_date (const gchar *text)
     time_t stamp;
 
     if (strlen (text) != 10 || text[4] != '-' || text[7] != '-')
-	    return 0;
-    
+        return 0;
+
     /* YYYY-MM-DD */
     sscanf (text, "%4d-%2d-%2d", &year, &month, &day);
 
     /* some basic checks */
     if (year < 1970 || month < 1 || month > 12 || day < 1 || day > 31)
-	    return 0;
-    
+        return 0;
+
     memset (&tmbuf, 0, sizeof tmbuf);
     tmbuf.tm_mday = day;
     tmbuf.tm_mon = month - 1;
     tmbuf.tm_year = year - 1900;
     tmbuf.tm_isdst = -1;
-    
+
     stamp = mktime (&tmbuf);
     return stamp == (time_t)-1 ? 0 : stamp;
 }
@@ -254,16 +237,16 @@ parse_hkp_date (const gchar *text)
 static const gchar *
 get_fingerprint_string (const gchar *line)
 {
-	const gchar *p;
+    const gchar *p;
 
-	p = line;
-	while (*p && g_ascii_isspace (*p))
-		p++;
+    p = line;
+    while (*p && g_ascii_isspace (*p))
+        p++;
 
-	if (g_ascii_strncasecmp (p, "fingerprint=", 12) == 0)
-		return p + 12;
-	else
-		return NULL;
+    if (g_ascii_strncasecmp (p, "fingerprint=", 12) == 0)
+        return p + 12;
+
+    return NULL;
 }
 
 /**
@@ -276,172 +259,160 @@ get_fingerprint_string (const gchar *line)
 static GList*
 parse_hkp_index (const gchar *response)
 {
-	/* 
-	 * Luckily enough, both the HKP server and NAI HKP interface to their
-	 * LDAP server are close enough in output so the same function can
-	 * parse them both. 
-	 */
+    /* Luckily enough, both the HKP server and NAI HKP interface to their
+     * LDAP server are close enough in output so the same function can
+     * parse them both. */
 
-	/* pub  2048/<a href="/pks/lookup?op=get&search=0x3CB3B415">3CB3B415</a> 1998/04/03 David M. Shaw &lt;<a href="/pks/lookup?op=get&search=0x3CB3B415">dshaw@jabberwocky.com</a>&gt; */
+    /* pub  2048/<a href="/pks/lookup?op=get&search=0x3CB3B415">3CB3B415</a> 1998/04/03 David M. Shaw &lt;<a href="/pks/lookup?op=get&search=0x3CB3B415">dshaw@jabberwocky.com</a>&gt; */
 
-	gchar **lines, **l;
-	gchar **v;
-	gchar *line, *t;
-    
-	SeahorsePgpKey *key = NULL;
-	SeahorsePgpSubkey *subkey_with_id = NULL;
-	GList *keys = NULL;
-	GList *subkeys = NULL;
-	GList *uids = NULL;
-	guint flags;
-    
-	lines = g_strsplit (response, "\n", 0);
-    
-	for (l = lines; *l; l++) {
-		line = *l;	
-		dehtmlize (line);
+    g_auto(GStrv) lines = NULL;
+    gchar **l;
 
-		g_debug ("%s", line);
+    SeahorsePgpKey *key = NULL;
+    SeahorsePgpSubkey *subkey_with_id = NULL;
+    GList *keys = NULL;
+    GList *subkeys = NULL;
+    GList *uids = NULL;
+    SeahorseFlags flags;
 
-		/* Start a new key */
-		if (g_ascii_strncasecmp (line, "pub ", 4) == 0) {
-            
-			t = line + 4;
-			while (*t && g_ascii_isspace (*t))
-				t++;
-            
-			v = g_strsplit_set (t, " ", 3);
-			if (!v[0] || !v[1] || !v[2]) {
-				g_message ("Invalid key line from server: %s", line);
-                
-			} else {
-				gchar *fingerprint, *fpr = NULL;
-				const gchar *algo;
-				gboolean has_uid = TRUE;
-				SeahorsePgpSubkey *subkey;
-				
-				flags = SEAHORSE_FLAG_EXPORTABLE;
-       	
-				/* Cut the length and fingerprint */
-				fpr = strchr (v[0], '/');
-				if (fpr == NULL) {
-					g_message ("couldn't find key fingerprint in line from server: %s", line);
-					fpr = "";
-				} else {
-					*(fpr++) = 0;
-				}
-                
-				/* Check out the key type */
-				switch (g_ascii_toupper (v[0][strlen(v[0]) - 1])) {
-				case 'D':
-					algo = "DSA";
-					break;
-				case 'R':
-					algo = "RSA";
-					break;
-				default:
-					algo = "";
-					break;
-				};
+    lines = g_strsplit (response, "\n", 0);
+    for (l = lines; *l; l++) {
+        gchar *line, *t;
 
-				/* Format the date for our parse function */
-				g_strdelimit (v[1], "/", '-');
-                
-				/* Cleanup the UID */
-				g_strstrip (v[2]);
-            
-				if (g_ascii_strcasecmp (v[2], "*** KEY REVOKED ***") == 0) {
-					flags |= SEAHORSE_FLAG_REVOKED;
-					has_uid = FALSE;
-				} 
-				
-				if (key) {
-					seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
-					seahorse_object_list_free (uids);
-					seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
-					seahorse_object_list_free (subkeys);
-					seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
-					uids = subkeys = NULL;
-					subkey_with_id = NULL;
-					key = NULL;
-				}
+        line = *l;
+        dehtmlize (line);
 
-				key = seahorse_pgp_key_new ();
-				keys = g_list_prepend (keys, key);
-				g_object_set (key, "object-flags", flags, NULL);
+        g_debug ("%s", line);
 
-				/* Add all the info to the key */
-				subkey = seahorse_pgp_subkey_new ();
-				seahorse_pgp_subkey_set_keyid (subkey, fpr);
-				subkey_with_id = subkey;
+        /* Start a new key */
+        if (g_ascii_strncasecmp (line, "pub ", 4) == 0) {
+            g_auto(GStrv) v = NULL;
+            gchar *fingerprint, *fpr = NULL;
+            const gchar *algo;
+            gboolean has_uid = TRUE;
+            SeahorsePgpSubkey *subkey;
 
-				fingerprint = seahorse_pgp_subkey_calc_fingerprint (fpr);
-				seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
-				g_free (fingerprint);
+            t = line + 4;
+            while (*t && g_ascii_isspace (*t))
+                t++;
 
-				seahorse_pgp_subkey_set_flags (subkey, flags);
-				seahorse_pgp_subkey_set_created (subkey, parse_hkp_date (v[1]));
-				seahorse_pgp_subkey_set_length (subkey, strtol (v[0], NULL, 10));
-				seahorse_pgp_subkey_set_algorithm (subkey, algo);
-				subkeys = g_list_prepend (subkeys, subkey);
+            v = g_strsplit_set (t, " ", 3);
+            if (!v[0] || !v[1] || !v[2]) {
+                g_message ("Invalid key line from server: %s", line);
+                continue;
+            }
 
-				/* And the UID if one was found */                
-				if (has_uid) {
-					SeahorsePgpUid *uid = seahorse_pgp_uid_new (key, v[2]);
-					uids = g_list_prepend (uids, uid);
-				}
-			}
-            
-			g_strfreev (v);
-            
-		/* A UID for the key */
-		} else if (key && g_ascii_strncasecmp (line, "    ", 4) == 0) {
-            
-			SeahorsePgpUid *uid;
-			
-			g_strstrip (line);
-			uid = seahorse_pgp_uid_new (key, line);
-			uids = g_list_prepend (uids, uid);
-            
-		/* Signatures */
-		} else if (key && g_ascii_strncasecmp (line, "sig ", 4) == 0) {
-            
-			/* TODO: Implement signatures */
-            
-		} else if (key && subkey_with_id) {
-			const char *fingerprint_str;
+            flags = SEAHORSE_FLAG_EXPORTABLE;
 
-			fingerprint_str = get_fingerprint_string (line);
+            /* Cut the length and fingerprint */
+            fpr = strchr (v[0], '/');
+            if (fpr == NULL) {
+                g_message ("couldn't find key fingerprint in line from server: %s", line);
+                fpr = "";
+            } else {
+                *(fpr++) = 0;
+            }
 
-			if (fingerprint_str != NULL) {
-				char *pretty_fingerprint;
+            /* Check out the key type */
+            switch (g_ascii_toupper (v[0][strlen (v[0]) - 1])) {
+            case 'D':
+                algo = "DSA";
+                break;
+            case 'R':
+                algo = "RSA";
+                break;
+            default:
+                algo = "";
+                break;
+            };
 
-				pretty_fingerprint = seahorse_pgp_subkey_calc_fingerprint (fingerprint_str);
+            /* Format the date for our parse function */
+            g_strdelimit (v[1], "/", '-');
 
-				/* FIXME: we don't check that the fingerprint actually matches the key's ID.
-				 * We also don't validate the fingerprint at all; the keyserver may have returned
-				 * some garbage and we don't notice.
-				 */
+            /* Cleanup the UID */
+            g_strstrip (v[2]);
 
-				if (pretty_fingerprint[0] != 0)
-					seahorse_pgp_subkey_set_fingerprint (subkey_with_id, pretty_fingerprint);
+            if (g_ascii_strcasecmp (v[2], "*** KEY REVOKED ***") == 0) {
+                flags |= SEAHORSE_FLAG_REVOKED;
+                has_uid = FALSE;
+            }
 
-				g_free (pretty_fingerprint);
-			}
-		}
-	}
+            if (key) {
+                seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
+                g_list_free_full (uids, g_object_unref);
+                seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
+                g_list_free_full (subkeys, g_object_unref);
+                seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
+                uids = subkeys = NULL;
+                subkey_with_id = NULL;
+                key = NULL;
+            }
 
-	g_strfreev (lines);
+            key = seahorse_pgp_key_new ();
+            keys = g_list_prepend (keys, key);
+            g_object_set (key, "object-flags", flags, NULL);
 
-	if (key) {
-		seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), g_list_reverse (uids));
-		seahorse_object_list_free (uids);
-		seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), g_list_reverse (subkeys));
-		seahorse_object_list_free (subkeys);
-		seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
-	}
-	
-	return keys; 
+            /* Add all the info to the key */
+            subkey = seahorse_pgp_subkey_new ();
+            seahorse_pgp_subkey_set_keyid (subkey, fpr);
+            subkey_with_id = subkey;
+
+            fingerprint = seahorse_pgp_subkey_calc_fingerprint (fpr);
+            seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
+            g_free (fingerprint);
+
+            seahorse_pgp_subkey_set_flags (subkey, flags);
+            seahorse_pgp_subkey_set_created (subkey, parse_hkp_date (v[1]));
+            seahorse_pgp_subkey_set_length (subkey, strtol (v[0], NULL, 10));
+            seahorse_pgp_subkey_set_algorithm (subkey, algo);
+            subkeys = g_list_prepend (subkeys, subkey);
+
+            /* And the UID if one was found */
+            if (has_uid) {
+                SeahorsePgpUid *uid = seahorse_pgp_uid_new (key, v[2]);
+                uids = g_list_prepend (uids, uid);
+            }
+
+        /* A UID for the key */
+        } else if (key && g_ascii_strncasecmp (line, "    ", 4) == 0) {
+            SeahorsePgpUid *uid;
+
+            g_strstrip (line);
+            uid = seahorse_pgp_uid_new (key, line);
+            uids = g_list_prepend (uids, uid);
+
+        /* Signatures */
+        } else if (key && g_ascii_strncasecmp (line, "sig ", 4) == 0) {
+            /* TODO: Implement signatures */
+
+        } else if (key && subkey_with_id) {
+            const char *fingerprint_str;
+            g_autofree gchar *pretty_fingerprint = NULL;
+
+            fingerprint_str = get_fingerprint_string (line);
+            if (fingerprint_str == NULL)
+                continue;
+
+            pretty_fingerprint = seahorse_pgp_subkey_calc_fingerprint (fingerprint_str);
+
+            /* FIXME: we don't check that the fingerprint actually matches
+             * the key's ID.  We also don't validate the fingerprint at
+             * all; the keyserver may have returned some garbage and we
+             * don't notice. */
+            if (pretty_fingerprint[0] != 0)
+                seahorse_pgp_subkey_set_fingerprint (subkey_with_id, pretty_fingerprint);
+        }
+    }
+
+    if (key) {
+        seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), g_list_reverse (uids));
+        g_list_free_full (uids, g_object_unref);
+        seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), g_list_reverse (subkeys));
+        g_list_free_full (subkeys, g_object_unref);
+        seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
+    }
+
+    return keys;
 }
 
 /**
@@ -460,37 +431,37 @@ get_send_result (const gchar *response)
     gchar *t;
     gchar *last = NULL;
     gboolean is_error = FALSE;
-    
+
     if (!*response)
         return g_strdup ("");
-    
-    lines = g_strsplit (response, "\n", 0); 
+
+    lines = g_strsplit (response, "\n", 0);
 
     for (l = lines; *l; l++) {
 
         dehtmlize (*l);
         g_strstrip (*l);
-        
+
         if (!(*l)[0])
             continue;
 
         t = g_ascii_strdown (*l, -1);
-        
+
         /* Look for the word 'error' */
         if (strstr (t, "error"))
             is_error = TRUE;
-        
+
         g_free (t);
 
         if ((*l)[0])
             last = *l;
     }
-    
+
     /* Use last line as the message */
     last = is_error ? g_strdup (last) : NULL;
-    
+
     g_strfreev (lines);
-    
+
     return last;
 }
 
@@ -512,30 +483,20 @@ detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
 
     if (len == -1)
         len = strlen (text);
-    
+
     /* Find the first of the headers */
-    if((t = g_strstr_len (text, len, PGP_KEY_BEGIN)) == NULL)
+    if ((t = g_strstr_len (text, len, PGP_KEY_BEGIN)) == NULL)
         return FALSE;
     if (start)
         *start = t;
-        
+
     /* Find the end of that block */
-    if((t = g_strstr_len (t, len - (t - text), PGP_KEY_END)) == NULL)
+    if ((t = g_strstr_len (t, len - (t - text), PGP_KEY_END)) == NULL)
         return FALSE;
     if (end)
         *end = t;
-    
-    return TRUE; 
-}
 
-/* -----------------------------------------------------------------------------
- *  SEAHORSE HKP SOURCE
- */
-
-static void 
-seahorse_hkp_source_init (SeahorseHKPSource *hsrc)
-{
-
+    return TRUE;
 }
 
 static gboolean
@@ -543,69 +504,69 @@ hkp_message_propagate_error (SeahorseHKPSource *self,
                              SoupMessage *message,
                              GError **error)
 {
-	gchar *text, *server;
+    gchar *server;
+    g_autofree gchar *text = NULL;
 
-	if (!SOUP_MESSAGE_IS_ERROR (message))
-		return FALSE;
+    if (!SOUP_MESSAGE_IS_ERROR (message))
+        return FALSE;
 
-	if (message->status_code == SOUP_STATUS_CANCELLED) {
-		g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_CANCELLED,
-		                     _("The operation was cancelled"));
-		return TRUE;
-	}
+    if (message->status_code == SOUP_STATUS_CANCELLED) {
+        g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_CANCELLED,
+                             _("The operation was cancelled"));
+        return TRUE;
+    }
 
-	g_object_get (self, "key-server", &server, NULL);
+    g_object_get (self, "key-server", &server, NULL);
 
-	/* Make the body lower case, and no tags */
-	text = g_strndup (message->response_body->data, message->response_body->length);
-	if (text != NULL) {
-		dehtmlize (text);
-		seahorse_util_string_lower (text);
-	}
+    /* Make the body lower case, and no tags */
+    text = g_strndup (message->response_body->data, message->response_body->length);
+    if (text != NULL) {
+        dehtmlize (text);
+        seahorse_util_string_lower (text);
+    }
 
-	if (text && strstr (text, "no keys")) {
-		g_free (text);
-		return FALSE; /* not found is not an error */
-	} else if (text && strstr (text, "too many")) {
-		g_set_error (error, HKP_ERROR_DOMAIN, 0,
-		             _("Search was not specific enough. Server “%s” found too many keys."), server);
-	} else {
-		g_set_error (error, HKP_ERROR_DOMAIN, message->status_code,
-		             _("Couldn’t communicate with server “%s”: %s"),
-		             server, message->reason_phrase);
-	}
+    if (text && strstr (text, "no keys"))
+        return FALSE; /* not found is not an error */
 
-	g_free (text);
-	return TRUE;
+    if (text && strstr (text, "too many")) {
+        g_set_error (error, HKP_ERROR_DOMAIN, 0,
+                     _("Search was not specific enough. Server “%s” found too many keys."), server);
+    } else {
+        g_set_error (error, HKP_ERROR_DOMAIN, message->status_code,
+                     _("Couldn’t communicate with server “%s”: %s"),
+                     server, message->reason_phrase);
+    }
+
+    return TRUE;
 }
 
 static void
 on_session_cancelled (GCancellable *cancellable,
                      gpointer user_data)
 {
-	SoupSession *session = user_data;
-	soup_session_abort (session);
+    SoupSession *session = user_data;
+    soup_session_abort (session);
 }
 
 typedef struct {
-	SeahorseHKPSource *source;
-	GCancellable *cancellable;
-	gulong cancelled_sig;
-	SoupSession *session;
-	gint requests;
-	GcrSimpleCollection *results;
+    SeahorseHKPSource *source;
+    GCancellable *cancellable;
+    gulong cancelled_sig;
+    SoupSession *session;
+    gint requests;
+    GcrSimpleCollection *results;
 } source_search_closure;
 
 static void
 source_search_free (gpointer data)
 {
-	source_search_closure *closure = data;
-	g_object_unref (closure->source);
-	g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
-	g_clear_object (&closure->cancellable);
-	g_object_unref (closure->session);
-	g_clear_object (&closure->results);
-	g_free (closure);
+    source_search_closure *closure = data;
+    g_object_unref (closure->source);
+    g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
+    g_clear_object (&closure->cancellable);
+    g_object_unref (closure->session);
+    g_clear_object (&closure->results);
+    g_free (closure);
 }
 
 static void
@@ -613,47 +574,47 @@ on_search_message_complete (SoupSession *session,
                             SoupMessage *message,
                             gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	source_search_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
-	GList *keys, *l;
+    g_autoptr(GTask) task = G_TASK (user_data);
+    source_search_closure *closure = g_task_get_task_data (task);
+    g_autoptr(GError) error = NULL;
+    GList *keys, *l;
 
-	seahorse_progress_end (closure->cancellable, message);
+    seahorse_progress_end (closure->cancellable, message);
 
-	if (hkp_message_propagate_error (closure->source, message, &error)) {
-		g_simple_async_result_take_error (res, error);
+    if (hkp_message_propagate_error (closure->source, message, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
 
-	} else {
-		keys = parse_hkp_index (message->response_body->data);
-		for (l = keys; l; l = g_list_next (l)) {
-			g_object_set (l->data, "place", closure->source, NULL);
-			gcr_simple_collection_add (closure->results, l->data);
-		}
-		g_list_free_full (keys, g_object_unref);
-	}
+    keys = parse_hkp_index (message->response_body->data);
+    for (l = keys; l; l = g_list_next (l)) {
+        g_object_set (l->data, "place", closure->source, NULL);
+        gcr_simple_collection_add (closure->results, l->data);
+    }
+    g_list_free_full (keys, g_object_unref);
 
-	g_simple_async_result_complete_in_idle (res);
-	g_object_unref (res);
+    g_task_return_boolean (task, TRUE);
 }
 
 static gboolean
 is_hex_keyid (const gchar *match)
 {
-	const gchar *text = match;
+    const gchar *text = match;
 
-	if (strlen (match) != 8)
-		return FALSE;
+    if (strlen (match) != 8)
+        return FALSE;
 
-	while (*text != '\0') {
-		if (!((*text >= 0x30 && *text <= 0x39) ||
-		      (*text >= 0x41 && *text <= 0x46) ||
-		      (*text >= 0x61 && *text <= 0x66)))
-			return FALSE;
-		text++;
-	}
+    while (*text != '\0') {
+        if (!((*text >= 0x30 && *text <= 0x39) ||
+              (*text >= 0x41 && *text <= 0x46) ||
+              (*text >= 0x61 && *text <= 0x66)))
+            return FALSE;
+        text++;
+    }
 
-	return TRUE;
+    return TRUE;
 }
+
 static void
 seahorse_hkp_source_search_async (SeahorseServerSource *source,
                                   const gchar *match,
@@ -662,55 +623,51 @@ seahorse_hkp_source_search_async (SeahorseServerSource *source,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
 {
-	SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
-	source_search_closure *closure;
-	GSimpleAsyncResult *res;
-	SoupMessage *message;
-	GHashTable *form;
-	SoupURI *uri;
-	gchar hexfpr[11];
+    SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
+    source_search_closure *closure;
+    g_autoptr(GTask) task = NULL;
+    g_autoptr(GHashTable) form = NULL;
+    SoupMessage *message;
+    g_autoptr(SoupURI) uri = NULL;
+    gchar hexfpr[11];
 
-	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
-	                                 seahorse_hkp_source_search_async);
-	closure = g_new0 (source_search_closure, 1);
-	closure->source = g_object_ref (self);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	closure->session = create_hkp_soup_session ();
-	closure->results = g_object_ref (results);
-	g_simple_async_result_set_op_res_gpointer (res, closure, source_search_free);
+    task = g_task_new (source, cancellable, callback, user_data);
+    closure = g_new0 (source_search_closure, 1);
+    closure->source = g_object_ref (self);
+    closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+    closure->session = create_hkp_soup_session ();
+    closure->results = g_object_ref (results);
+    g_task_set_task_data (task, closure, source_search_free);
 
-	uri = get_http_server_uri (self, "/pks/lookup");
-	g_return_if_fail (uri);
+    uri = get_http_server_uri (self, "/pks/lookup");
+    g_return_if_fail (uri);
 
-	form = g_hash_table_new (g_str_hash, g_str_equal);
-	g_hash_table_insert (form, "op", "index");
+    form = g_hash_table_new (g_str_hash, g_str_equal);
+    g_hash_table_insert (form, "op", "index");
 
-	if (is_hex_keyid (match)) {
-		strncpy (hexfpr, "0x", 3);
-		strncpy (hexfpr + 2, match, 9);
-		g_hash_table_insert (form, "search", hexfpr);
-	} else {
-		g_hash_table_insert (form, "search", (char *)match);
-	}
+    if (is_hex_keyid (match)) {
+        strncpy (hexfpr, "0x", 3);
+        strncpy (hexfpr + 2, match, 9);
+        g_hash_table_insert (form, "search", hexfpr);
+    } else {
+        g_hash_table_insert (form, "search", (char *)match);
+    }
 
-	g_hash_table_insert (form, "fingerprint", "on");
+    g_hash_table_insert (form, "fingerprint", "on");
 
-	soup_uri_set_query_from_form (uri, form);
-	g_hash_table_destroy (form);
+    soup_uri_set_query_from_form (uri, form);
+    message = soup_message_new_from_uri ("GET", uri);
 
-	message = soup_message_new_from_uri ("GET", uri);
-	soup_session_queue_message (closure->session, message,
-	                            on_search_message_complete, g_object_ref (res));
+    seahorse_progress_prep_and_begin (cancellable, message, NULL);
 
-	seahorse_progress_prep_and_begin (cancellable, message, NULL);
+    soup_session_queue_message (closure->session, g_steal_pointer (&message),
+                                on_search_message_complete,
+                                g_steal_pointer (&task));
 
-	if (cancellable)
-		closure->cancelled_sig = g_cancellable_connect (cancellable,
-		                                                G_CALLBACK (on_session_cancelled),
-		                                                closure->session, NULL);
-
-	soup_uri_free (uri);
-	g_object_unref (res);
+    if (cancellable)
+        closure->cancelled_sig = g_cancellable_connect (cancellable,
+                                                        G_CALLBACK (on_session_cancelled),
+                                                        closure->session, NULL);
 }
 
 static gboolean
@@ -718,34 +675,31 @@ seahorse_hkp_source_search_finish (SeahorseServerSource *source,
                                    GAsyncResult *result,
                                    GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
-	                      seahorse_hkp_source_search_async), FALSE);
+    g_return_val_if_fail (SEAHORSE_IS_HKP_SOURCE (source), FALSE);
+    g_return_val_if_fail (g_task_is_valid (result, source), FALSE);
 
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return FALSE;
-
-	return TRUE;
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 typedef struct {
-	SeahorseHKPSource *source;
-	GInputStream *input;
-	GCancellable *cancellable;
-	gulong cancelled_sig;
-	SoupSession *session;
-	gint requests;
+    SeahorseHKPSource *source;
+    GInputStream *input;
+    GCancellable *cancellable;
+    gulong cancelled_sig;
+    SoupSession *session;
+    gint requests;
 } source_import_closure;
 
 static void
 source_import_free (gpointer data)
 {
-	source_import_closure *closure = data;
-	g_object_unref (closure->source);
-	g_object_unref (closure->input);
-	g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
-	g_clear_object (&closure->cancellable);
-	g_object_unref (closure->session);
-	g_free (closure);
+    source_import_closure *closure = data;
+    g_object_unref (closure->source);
+    g_object_unref (closure->input);
+    g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
+    g_clear_object (&closure->cancellable);
+    g_object_unref (closure->session);
+    g_free (closure);
 }
 
 static void
@@ -753,40 +707,33 @@ on_import_message_complete (SoupSession *session,
                             SoupMessage *message,
                             gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	source_import_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
-	gchar *errmsg;
+    g_autoptr(GTask) task = G_TASK (user_data);
+    source_import_closure *closure = g_task_get_task_data (task);
+    g_autoptr(GError) error = NULL;
+    g_autofree gchar *errmsg = NULL;
 
-	g_assert (closure->requests > 0);
-	seahorse_progress_end (closure->cancellable, GUINT_TO_POINTER (closure->requests));
-	closure->requests--;
+    g_assert (closure->requests > 0);
+    seahorse_progress_end (closure->cancellable, GUINT_TO_POINTER (closure->requests));
+    closure->requests--;
 
-	if (hkp_message_propagate_error (closure->source, message, &error)) {
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
+    if (hkp_message_propagate_error (closure->source, message, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
 
-	} else if ((errmsg = get_send_result (message->response_body->data)) != NULL) {
-		g_set_error (&error, HKP_ERROR_DOMAIN, message->status_code, "%s", errmsg);
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete_in_idle (res);
-		g_free (errmsg);
+    if ((errmsg = get_send_result (message->response_body->data)) != NULL) {
+        g_task_return_new_error (task, HKP_ERROR_DOMAIN, message->status_code,
+                                 "%s", errmsg);
+        return;
+    }
 
-	/* A successful status from the server is all we want in this case */
-	} else {
-		if (closure->requests == 0)
-			g_simple_async_result_complete_in_idle (res);
-	}
-
-	g_object_unref (res);
+    /* A successful status from the server is all we want in this case */
+    if (closure->requests == 0) {
+        /* We don't know which keys got imported, so just return NULL */
+        g_task_return_pointer (task, NULL, NULL);
+    }
 }
 
-/**
-* sksrc: The HKP source to use
-* input: The input stream to add
-*
-* Imports a list of keys from the input stream to the keyserver
-**/
 static void
 seahorse_hkp_source_import_async (SeahorseServerSource *source,
                                   GInputStream *input,
@@ -794,87 +741,79 @@ seahorse_hkp_source_import_async (SeahorseServerSource *source,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
 {
-	SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
-	GSimpleAsyncResult *res;
-	source_import_closure *closure;
-	SoupMessage *message;
-	GList *keydata = NULL;
-	GString *buf = NULL;
-	GHashTable *form;
-	gchar *key;
-	SoupURI *uri;
-	GList *l;
-	guint len;
+    SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
+    g_autoptr(GTask) task = NULL;
+    source_import_closure *closure;
+    g_autoptr(GList) keydata = NULL;
+    g_autoptr(GHashTable) form = NULL;
+    g_autoptr(SoupURI) uri = NULL;
+    GList *l;
 
-	res = g_simple_async_result_new (G_OBJECT (source), callback, user_data,
-	                                 seahorse_hkp_source_import_async);
-	closure = g_new0 (source_import_closure, 1);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	closure->input = g_object_ref (input);
-	closure->source = g_object_ref (self);
-	closure->session = create_hkp_soup_session ();
-	g_simple_async_result_set_op_res_gpointer (res, closure, source_import_free);
+    task = g_task_new (source, cancellable, callback, user_data);
+    closure = g_new0 (source_import_closure, 1);
+    closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+    closure->input = g_object_ref (input);
+    closure->source = g_object_ref (self);
+    closure->session = create_hkp_soup_session ();
+    g_task_set_task_data (task, closure, source_import_free);
 
-	for (;;) {
+    for (;;) {
+        g_autoptr(GString) buf = g_string_sized_new (2048);
+        guint len;
 
-		buf = g_string_sized_new (2048);
-		len = seahorse_util_read_data_block (buf, input,
-		                                     "-----BEGIN PGP PUBLIC KEY BLOCK-----",
-		                                     "-----END PGP PUBLIC KEY BLOCK-----");
+        len = seahorse_util_read_data_block (buf, input,
+                                             "-----BEGIN PGP PUBLIC KEY BLOCK-----",
+                                             "-----END PGP PUBLIC KEY BLOCK-----");
+        if (len <= 0)
+            break;
 
-		if (len > 0) {
-			keydata = g_list_prepend (keydata, g_string_free (buf, FALSE));
-		} else {
-			g_string_free (buf, TRUE);
-			break;
-		}
-	}
+        keydata = g_list_prepend (keydata,
+                                  g_string_free (g_steal_pointer (&buf), FALSE));
+    }
 
-	if (g_list_length (keydata) == 0) {
-		g_simple_async_result_complete_in_idle (res);
-		g_object_unref (res);
-		return;
-	}
+    if (g_list_length (keydata) == 0) {
+        g_task_return_pointer (task, NULL, NULL);
+        return;
+    }
 
-	/* Figure out the URI we're sending to */
-	uri = get_http_server_uri (self, "/pks/add");
-	g_return_if_fail (uri);
+    /* Figure out the URI we're sending to */
+    uri = get_http_server_uri (self, "/pks/add");
+    g_return_if_fail (uri);
 
-	/* New operation and away we go */
-	keydata = g_list_reverse (keydata);
+    /* New operation and away we go */
+    keydata = g_list_reverse (keydata);
 
-	form = g_hash_table_new (g_str_hash, g_str_equal);
-	for (l = keydata; l; l = g_list_next (l)) {
-		g_assert (l->data != NULL);
-		g_hash_table_remove_all (form);
+    form = g_hash_table_new (g_str_hash, g_str_equal);
+    for (l = keydata; l; l = g_list_next (l)) {
+        g_autoptr(SoupMessage) message = NULL;
+        gchar *key;
 
-		g_hash_table_insert (form, "keytext", l->data);
-		key = soup_form_encode_urlencoded (form);
+        g_assert (l->data != NULL);
+        g_hash_table_remove_all (form);
 
-		message = soup_message_new_from_uri ("POST", uri);
-		soup_message_set_request (message, "application/x-www-form-urlencoded",
-		                          SOUP_MEMORY_TAKE, key, strlen (key));
+        g_hash_table_insert (form, "keytext", l->data);
+        key = soup_form_encode_urlencoded (form);
 
-		soup_session_queue_message (closure->session, message,
-		                            on_import_message_complete, g_object_ref (res));
+        message = soup_message_new_from_uri ("POST", uri);
+        soup_message_set_request (message, "application/x-www-form-urlencoded",
+                                  SOUP_MEMORY_TAKE, key, strlen (key));
 
-		closure->requests++;
-		seahorse_progress_prep_and_begin (cancellable, GUINT_TO_POINTER (closure->requests), NULL);
-	}
-	g_hash_table_destroy (form);
+        soup_session_queue_message (closure->session,
+                                    g_steal_pointer (&message),
+                                    on_import_message_complete,
+                                    g_object_ref (task));
 
-	if (cancellable)
-		closure->cancelled_sig = g_cancellable_connect (cancellable,
-		                                                G_CALLBACK (on_session_cancelled),
-		                                                closure->session, NULL);
+        closure->requests++;
+        seahorse_progress_prep_and_begin (cancellable, GUINT_TO_POINTER (closure->requests), NULL);
+    }
 
-	soup_uri_free (uri);
+    if (cancellable)
+        closure->cancelled_sig = g_cancellable_connect (cancellable,
+                                                        G_CALLBACK (on_session_cancelled),
+                                                        closure->session, NULL);
 
-	for (l = keydata; l != NULL; l = g_list_next (l))
-		g_free (l->data);
-	g_list_free (keydata);
-
-	g_object_unref (res);
+    for (l = keydata; l != NULL; l = g_list_next (l))
+        g_free (l->data);
 }
 
 static GList *
@@ -882,37 +821,33 @@ seahorse_hkp_source_import_finish (SeahorseServerSource *source,
                                    GAsyncResult *result,
                                    GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
-	                      seahorse_hkp_source_import_async), NULL);
+    g_return_val_if_fail (g_task_is_valid (result, source), NULL);
 
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return NULL;
-
-	/* We don't know which keys got imported, so just return NULL */
-	return NULL;
+    return g_task_propagate_pointer (G_TASK (result), error);
 }
 
 
 typedef struct {
-	SeahorseHKPSource *source;
-	GString *data;
-	GCancellable *cancellable;
-	gulong cancelled_sig;
-	SoupSession *session;
-	gint requests;
+    SeahorseHKPSource *source;
+    GString *data;
+    gsize data_len;
+    GCancellable *cancellable;
+    gulong cancelled_sig;
+    SoupSession *session;
+    gint requests;
 } ExportClosure;
 
 static void
 export_closure_free (gpointer data)
 {
-	ExportClosure *closure = data;
-	g_object_unref (closure->source);
-	if (closure->data)
-		g_string_free (closure->data, TRUE);
-	g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
-	g_clear_object (&closure->cancellable);
-	g_object_unref (closure->session);
-	g_free (closure);
+    ExportClosure *closure = data;
+    g_object_unref (closure->source);
+    if (closure->data)
+        g_string_free (closure->data, TRUE);
+    g_cancellable_disconnect (closure->cancellable, closure->cancelled_sig);
+    g_clear_object (&closure->cancellable);
+    g_object_unref (closure->session);
+    g_free (closure);
 }
 
 static void
@@ -920,51 +855,44 @@ on_export_message_complete (SoupSession *session,
                             SoupMessage *message,
                             gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	ExportClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
-	const gchar *start;
-	const gchar *end;
-	const gchar *text;
-	guint len;
+    g_autoptr(GTask) task = G_TASK (user_data);
+    ExportClosure *closure = g_task_get_task_data (task);
+    g_autoptr(GError) error = NULL;
+    const gchar *start, *end, *text;
+    guint len;
 
-	seahorse_progress_end (closure->cancellable, message);
+    seahorse_progress_end (closure->cancellable, message);
 
-	if (hkp_message_propagate_error (closure->source, message, &error)) {
-		g_simple_async_result_take_error (res, error);
-	} else {
-		end = text = message->response_body->data;
-		len = message->response_body->length;
+    if (hkp_message_propagate_error (closure->source, message, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
 
-		for (;;) {
+    end = text = message->response_body->data;
+    len = message->response_body->length;
 
-			len -= end - text;
-			text = end;
+    for (;;) {
+        len -= end - text;
+        text = end;
 
-			if (!detect_key (text, len, &start, &end))
-				break;
+        if (!detect_key (text, len, &start, &end))
+            break;
 
-			g_string_append_len (closure->data, start, end - start);
-			g_string_append_c (closure->data, '\n');
-		}
-	}
+        g_string_append_len (closure->data, start, end - start);
+        g_string_append_c (closure->data, '\n');
+    }
 
-	g_assert (closure->requests > 0);
-	closure->requests--;
+    g_assert (closure->requests > 0);
+    closure->requests--;
 
-	if (closure->requests == 0)
-		g_simple_async_result_complete_in_idle (res);
-
-	g_object_unref (res);
+    if (closure->requests == 0) {
+        closure->data_len = closure->data->len;
+        g_task_return_pointer (task,
+                               g_string_free (g_steal_pointer (&closure->data), FALSE),
+                               g_free);
+    }
 }
 
-/**
-* sksrc: A HKP source
-* keyids: the keyids to look up
-* output: The output stream the data will end in
-*
-* Gets data from the keyserver, writes it to the output stream
-**/
 static void
 seahorse_hkp_source_export_async (SeahorseServerSource *source,
                                   const gchar **keyids,
@@ -972,72 +900,67 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
                                   GAsyncReadyCallback callback,
                                   gpointer user_data)
 {
-	SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
-	ExportClosure *closure;
-	GSimpleAsyncResult *res;
-	SoupMessage *message;
-	SoupURI *uri;
-	const gchar *fpr;
-	gchar hexfpr[11];
-	GHashTable *form;
-	guint len;
-	gint i;
+    SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
+    ExportClosure *closure;
+    g_autoptr(GTask) task = NULL;
+    SoupURI *uri;
+    g_autoptr(GHashTable) form = NULL;
+    gchar hexfpr[11];
+    gint i;
 
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_hkp_source_export_async);
-	closure = g_new0 (ExportClosure, 1);
-	closure->source = g_object_ref (self);
-	closure->data = g_string_sized_new (1024);
-	closure->session = create_hkp_soup_session ();
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
-	g_simple_async_result_set_op_res_gpointer (res, closure, export_closure_free);
+    task = g_task_new (self, cancellable, callback, user_data);
+    closure = g_new0 (ExportClosure, 1);
+    closure->source = g_object_ref (self);
+    closure->data = g_string_sized_new (1024);
+    closure->session = create_hkp_soup_session ();
+    closure->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+    g_task_set_task_data (task, closure, export_closure_free);
 
-	if (!keyids || !keyids[0]) {
-		g_simple_async_result_complete_in_idle (res);
-		g_object_unref (res);
-		return;
-	}
+    if (!keyids || !keyids[0]) {
+        g_task_return_pointer (task, NULL, NULL);
+        return;
+    }
 
-	uri = get_http_server_uri (self, "/pks/lookup");
-	g_return_if_fail (uri);
+    uri = get_http_server_uri (self, "/pks/lookup");
+    g_return_if_fail (uri);
 
-	/* prepend the hex prefix (0x) to make keyservers happy */
-	strncpy (hexfpr, "0x", 3);
+    /* prepend the hex prefix (0x) to make keyservers happy */
+    strncpy (hexfpr, "0x", 3);
 
-	form = g_hash_table_new (g_str_hash, g_str_equal);
-	for (i = 0; keyids[i] != NULL; i++) {
-		g_hash_table_remove_all (form);
+    form = g_hash_table_new (g_str_hash, g_str_equal);
+    for (i = 0; keyids[i] != NULL; i++) {
+        const gchar *fpr = keyids[i];
+        guint len;
+        SoupMessage *message;
 
-		/* Get the key id and limit it to 8 characters */
-		fpr = keyids[i];
-		len = strlen (fpr);
-		if (len > 8)
-			fpr += (len - 8);
-	
-		strncpy (hexfpr + 2, fpr, 9);
+        g_hash_table_remove_all (form);
 
-		/* The get key URI */
-		g_hash_table_insert (form, "op", "get");
-		g_hash_table_insert (form, "search", (char *)hexfpr);
-		soup_uri_set_query_from_form (uri, form);
+        /* Get the key id and limit it to 8 characters */
+        len = strlen (fpr);
+        if (len > 8)
+            fpr += (len - 8);
 
-		message = soup_message_new_from_uri ("GET", uri);
+        strncpy (hexfpr + 2, fpr, 9);
 
-		soup_session_queue_message (closure->session, message,
-		                            on_export_message_complete,
-		                            g_object_ref (res));
+        /* The get key URI */
+        g_hash_table_insert (form, "op", "get");
+        g_hash_table_insert (form, "search", (char *)hexfpr);
+        soup_uri_set_query_from_form (uri, form);
 
-		closure->requests++;
-		seahorse_progress_prep_and_begin (cancellable, message, NULL);
-	}
+        message = soup_message_new_from_uri ("GET", uri);
 
-	if (cancellable)
-		closure->cancelled_sig = g_cancellable_connect (cancellable,
-		                                                G_CALLBACK (on_session_cancelled),
-		                                                closure->session, NULL);
+        soup_session_queue_message (closure->session, message,
+                                    on_export_message_complete,
+                                    g_object_ref (task));
 
-	g_hash_table_destroy (form);
-	g_object_unref (res);
+        closure->requests++;
+        seahorse_progress_prep_and_begin (cancellable, message, NULL);
+    }
+
+    if (cancellable)
+        closure->cancelled_sig = g_cancellable_connect (cancellable,
+                                                        G_CALLBACK (on_session_cancelled),
+                                                        closure->session, NULL);
 }
 
 static gpointer
@@ -1046,89 +969,79 @@ seahorse_hkp_source_export_finish (SeahorseServerSource *source,
                                    gsize *size,
                                    GError **error)
 {
-	ExportClosure *closure;
-	gpointer output;
+    ExportClosure *closure;
 
-	g_return_val_if_fail (size != NULL, NULL);
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (source),
-	                      seahorse_hkp_source_export_async), NULL);
+    g_return_val_if_fail (size != NULL, NULL);
+    g_return_val_if_fail (g_task_is_valid (result, source), NULL);
 
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return NULL;
-
-	closure = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (result));
-	*size = closure->data->len;
-	output = g_string_free (closure->data, FALSE);
-	closure->data = NULL;
-	return output;
+    closure = g_task_get_task_data (G_TASK (result));
+    *size = closure->data->len;
+    return g_task_propagate_pointer (G_TASK (result), error);
 }
 
-/**
-* klass:
-*
-* Initialize the basic class stuff
-*
-**/
+static void
+seahorse_hkp_source_init (SeahorseHKPSource *hsrc)
+{
+}
+
 static void
 seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
 {
-	SeahorseServerSourceClass *server_class = SEAHORSE_SERVER_SOURCE_CLASS (klass);
+    SeahorseServerSourceClass *server_class = SEAHORSE_SERVER_SOURCE_CLASS (klass);
 
-	server_class->search_async = seahorse_hkp_source_search_async;
-	server_class->search_finish = seahorse_hkp_source_search_finish;
-	server_class->export_async = seahorse_hkp_source_export_async;
-	server_class->export_finish = seahorse_hkp_source_export_finish;
-	server_class->import_async = seahorse_hkp_source_import_async;
-	server_class->import_finish = seahorse_hkp_source_import_finish;
+    server_class->search_async = seahorse_hkp_source_search_async;
+    server_class->search_finish = seahorse_hkp_source_search_finish;
+    server_class->export_async = seahorse_hkp_source_export_async;
+    server_class->export_finish = seahorse_hkp_source_export_finish;
+    server_class->import_async = seahorse_hkp_source_import_async;
+    server_class->import_finish = seahorse_hkp_source_import_finish;
 
-	seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
+    seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
 }
 /**
- * seahorse_hkp_source_new
- * @uri: The server to connect to 
- * 
+ * seahorse_hkp_source_new:
+ * @uri: The server to connect to
+ *
  * Creates a new key source for an HKP PGP server.
- * 
+ *
  * Returns: A new HKP Key Source
  */
-SeahorseHKPSource*   
+SeahorseHKPSource*
 seahorse_hkp_source_new (const gchar *uri, const gchar *host)
 {
     g_return_val_if_fail (seahorse_hkp_is_valid_uri (uri), NULL);
     g_return_val_if_fail (host && *host, NULL);
+
     return g_object_new (SEAHORSE_TYPE_HKP_SOURCE, "uri", uri,
                          "key-server", host, NULL);
 }
 
 /**
- * seahorse_hkp_is_valid_uri
+ * seahorse_hkp_is_valid_uri:
  * @uri: The uri to check
- * 
+ *
  * Returns: Whether the passed uri is valid for an HKP key source
  */
-gboolean              
+gboolean
 seahorse_hkp_is_valid_uri (const gchar *uri)
 {
     SoupURI *soup;
     gboolean ret = FALSE;
-    gchar *t;
-    
+
     g_return_val_if_fail (uri && uri[0], FALSE);
-    
+
     /* Replace 'hkp' with 'http' at the beginning of the URI */
     if (strncasecmp (uri, "hkp:", 4) == 0) {
-        t = g_strdup_printf("http:%s", uri + 4);
+        g_autofree gchar *t = g_strdup_printf ("http:%s", uri + 4);
         soup = soup_uri_new (t);
-        g_free (t);
-        
     /* Not 'hkp', but maybe 'http' */
     } else {
         soup = soup_uri_new (uri);
     }
-    
+
     if (soup) {
         /* Must be http or https, have a host. No querystring, user, path, passwd etc... */
-        if ((soup->scheme == SOUP_URI_SCHEME_HTTP || soup->scheme == SOUP_URI_SCHEME_HTTPS) && 
+        if ((soup->scheme == SOUP_URI_SCHEME_HTTP || soup->scheme == SOUP_URI_SCHEME_HTTPS) &&
             !soup->user && !soup->password && !soup->query && !soup->fragment &&
             soup->host && soup->host[0] && g_str_equal (soup->path ? soup->path : "/", "/"))
             ret = TRUE;
