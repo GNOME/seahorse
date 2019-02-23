@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-02-16 16:33+0000\n"
-"PO-Revision-Date: 2019-02-17 17:45+0100\n"
+"POT-Creation-Date: 2019-02-22 18:32+0000\n"
+"PO-Revision-Date: 2019-02-23 10:15+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -54,19 +54,20 @@ msgstr "Kunde inte exportera data"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-pgp-generate.ui:294 pkcs11/pkcs11-request.vala:55
-#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:247
+#: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
+#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:294
+#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
+#: src/import-dialog.vala:34 src/key-manager.vala:247
 msgid "_Cancel"
 msgstr "A_vbryt"
 
 #. Delete item
-#: common/delete-dialog.vala:91 pkcs11/pkcs11-properties.vala:201
-#: src/sidebar.vala:647
+#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:651
 msgid "_Delete"
 msgstr "_Ta bort"
 
-#: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:908
+#: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:909
 #: ssh/seahorse-ssh-key-properties.ui:280
 msgid "Export"
 msgstr "Exportera"
@@ -383,7 +384,7 @@ msgstr "Lösenord"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Lagrade personliga lösenord, inloggningsuppgifter och hemligheter"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:598
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:605
 msgid "Couldn’t unlock"
 msgstr "Kunde inte låsa upp"
 
@@ -437,60 +438,72 @@ msgid "Error deleting the password."
 msgstr "Fel vid borttagning av lösenordet."
 
 #. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item.vala:390
+#: gkr/gkr-item.vala:425
 msgid "IM account password for "
 msgstr "Lösenord för snabbmeddelandekonto för "
 
-#: gkr/gkr-item.vala:446
+#: gkr/gkr-item.vala:485
+msgid "Wi-Fi password"
+msgstr "Wi-Fi-lösenord"
+
+#: gkr/gkr-item.vala:490
 msgid "Password or secret"
 msgstr "Lösenord eller hemlighet"
 
-#: gkr/gkr-item.vala:447
+#: gkr/gkr-item.vala:491
 msgid "Network password"
 msgstr "Nätverkslösenord"
 
-#: gkr/gkr-item.vala:448
+#: gkr/gkr-item.vala:492
 msgid "Stored note"
 msgstr "Lagrad anteckning"
 
-#: gkr/gkr-item.vala:449
+#: gkr/gkr-item.vala:493
 msgid "Keyring password"
 msgstr "Lösenord för nyckelring"
 
-#: gkr/gkr-item.vala:450
+#: gkr/gkr-item.vala:494
 msgid "Encryption key password"
 msgstr "Lösenord för krypteringsnyckel"
 
-#: gkr/gkr-item.vala:451
+#: gkr/gkr-item.vala:495
 msgid "Key storage password"
 msgstr "Lösenord för nyckellagring"
 
-#: gkr/gkr-item.vala:452
+#: gkr/gkr-item.vala:496
+msgid "GNOME Web password"
+msgstr "Lösenord för GNOME Webb"
+
+#: gkr/gkr-item.vala:497
 msgid "Google Chrome password"
 msgstr "Lösenord för Google Chrome"
 
-#: gkr/gkr-item.vala:453
+#: gkr/gkr-item.vala:498
 msgid "GNOME Online Accounts password"
 msgstr "Lösenord för GNOME Nätkonton"
 
-#: gkr/gkr-item.vala:454
+#: gkr/gkr-item.vala:499
 msgid "Telepathy password"
 msgstr "Lösenord för Telepathy"
 
-#: gkr/gkr-item.vala:455
+#: gkr/gkr-item.vala:500
 msgid "Instant messaging password"
 msgstr "Lösenord för snabbmeddelanden"
 
-#: gkr/gkr-item.vala:456
+#: gkr/gkr-item.vala:501
 msgid "Network Manager secret"
 msgstr "Hemlighet för Nätverkshanterare"
 
-#: gkr/gkr-item.vala:506
+#: gkr/gkr-item.vala:502
+msgid "Network connection secret"
+msgstr "Hemlighet för nätverksanslutning"
+
+#: gkr/gkr-item.vala:565
 #, c-format
 msgid "Are you sure you want to delete the password “%s”?"
 msgstr "Är du säker på att du vill ta bort lösenordet ”%s”?"
 
-#: gkr/gkr-item.vala:508
+#: gkr/gkr-item.vala:567
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
@@ -505,44 +518,36 @@ msgstr "Kunde inte lägga till nyckelring"
 msgid "Unknown date"
 msgstr "Okänt datum"
 
-#: gkr/gkr-keyring.vala:28
+#: gkr/gkr-keyring.vala:34
 msgid "A keyring that is automatically unlocked on login"
 msgstr "En nyckelring som automatiskt låses upp vid inloggning"
 
-#: gkr/gkr-keyring.vala:29
+#: gkr/gkr-keyring.vala:35
 msgid "A keyring used to store passwords"
 msgstr "En nyckelring som används för att lagra lösenord"
 
-#: gkr/gkr-keyring.vala:174
+#: gkr/gkr-keyring.vala:192
 msgid "Couldn’t set default keyring"
 msgstr "Kunde inte ställa in standardnyckelringen"
 
-#: gkr/gkr-keyring.vala:198 gkr/gkr-keyring.vala:203
+#: gkr/gkr-keyring.vala:219 gkr/gkr-keyring.vala:224
 msgid "Couldn’t change keyring password"
 msgstr "Kunde inte ändra lösenord för nyckelring"
 
-#: gkr/gkr-keyring.vala:209
+#: gkr/gkr-keyring.vala:243
 msgid "_Set as default"
 msgstr "_Ange som standard"
 
-#: gkr/gkr-keyring.vala:210
-msgid "Applications usually store new passwords in the default keyring."
-msgstr "Program lagrar vanligtvis nya lösenord i standardnyckelringen."
-
-#: gkr/gkr-keyring.vala:211
+#: gkr/gkr-keyring.vala:244
 msgid "Change _Password"
 msgstr "Ändra _lösenord"
 
-#: gkr/gkr-keyring.vala:212
-msgid "Change the unlock password of the password storage keyring"
-msgstr "Ändra upplåsningslösenordet för nyckelring för lösenordslagring"
-
-#: gkr/gkr-keyring.vala:237
+#: gkr/gkr-keyring.vala:255
 #, c-format
 msgid "Are you sure you want to delete the password keyring “%s”?"
 msgstr "Är du säker på att du vill ta bort lösenordsnyckelringen ”%s”?"
 
-#: gkr/gkr-keyring.vala:240
+#: gkr/gkr-keyring.vala:258
 msgid "I understand that all items will be permanently deleted."
 msgstr "Jag förstår att alla objekt kommer tas bort permanent."
 
@@ -618,8 +623,8 @@ msgid "Login"
 msgstr "Inloggning"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1102
-#: pgp/seahorse-pgp-public-key-properties.ui:914
+#: pgp/seahorse-pgp-private-key-properties.ui:1103
+#: pgp/seahorse-pgp-public-key-properties.ui:915
 msgid "Details"
 msgstr "Detaljer"
 
@@ -1055,19 +1060,19 @@ msgstr "Kunde inte ändra utgångsdatum"
 msgid "Expiry: %s"
 msgstr "Utgång: %s"
 
-#: pgp/seahorse-gpgme-exporter.c:81
+#: pgp/seahorse-gpgme-exporter.c:72
 msgid "Multiple Keys"
 msgstr "Flera nycklar"
 
-#: pgp/seahorse-gpgme-exporter.c:85
+#: pgp/seahorse-gpgme-exporter.c:76
 msgid "Key Data"
 msgstr "Nyckeldata"
 
-#: pgp/seahorse-gpgme-exporter.c:113
+#: pgp/seahorse-gpgme-exporter.c:104
 msgid "Armored PGP keys"
 msgstr "Textbaserade PGP-nycklar"
 
-#: pgp/seahorse-gpgme-exporter.c:117
+#: pgp/seahorse-gpgme-exporter.c:108
 msgid "PGP keys"
 msgstr "PGP-nycklar"
 
@@ -1137,41 +1142,41 @@ msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 "Detta var den tredje gången som du angav ett felaktigt lösenord. Försök igen."
 
-#: pgp/seahorse-gpgme-keyring.c:87
+#: pgp/seahorse-gpgme-keyring.c:89
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Felaktig lösenfras."
 
-#: pgp/seahorse-gpgme-keyring.c:91
+#: pgp/seahorse-gpgme-keyring.c:93
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "Ange ny lösenfras för ”%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:93
+#: pgp/seahorse-gpgme-keyring.c:95
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "Ange lösenfras för ”%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:96 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:98 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Ange ny lösenfras"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:100
 msgid "Enter passphrase"
 msgstr "Ange lösenfras"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:105
 msgid "Passphrase"
 msgstr "Lösenfras"
 
-#: pgp/seahorse-gpgme-keyring.c:298
+#: pgp/seahorse-gpgme-keyring.c:300
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Läste in %d nyckel"
 msgstr[1] "Läste in %d nycklar"
 
-#: pgp/seahorse-gpgme-keyring.c:623
+#: pgp/seahorse-gpgme-keyring.c:625
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1179,11 +1184,11 @@ msgstr ""
 "Ogiltigt nyckeldata (UID:er saknas). Det här kan bero på en dator som har "
 "datumet inställt till framtiden eller att en självsignatur saknas."
 
-#: pgp/seahorse-gpgme-keyring.c:753
+#: pgp/seahorse-gpgme-keyring.c:755
 msgid "GnuPG keys"
 msgstr "GnuPG-nycklar"
 
-#: pgp/seahorse-gpgme-keyring.c:764
+#: pgp/seahorse-gpgme-keyring.c:766
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: standardkatalog för nyckelringar"
 
@@ -1229,6 +1234,10 @@ msgstr "Alla filer"
 #: pgp/seahorse-gpgme-photos.c:262
 msgid "Choose Photo to Add to Key"
 msgstr "Välj foto att lägga till i nyckeln"
+
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:248
+msgid "_Open"
+msgstr "Öpp_na"
 
 #: pgp/seahorse-gpgme-photos.c:284
 msgid "Couldn’t prepare photo"
@@ -1335,12 +1344,12 @@ msgstr ""
 "Du har inga personliga PGP-nycklar som kan användas för att indikera din "
 "tillit till den här nyckeln."
 
-#: pgp/seahorse-gpgme-subkey.c:194
+#: pgp/seahorse-gpgme-subkey.c:89
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Okänd"
 
-#: pgp/seahorse-gpgme-subkey.c:196
+#: pgp/seahorse-gpgme-subkey.c:91
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -1565,11 +1574,11 @@ msgstr "Ska_pa"
 msgid "Generate a new key"
 msgstr "Generera en ny nyckel"
 
-#: pgp/seahorse-pgp-key.c:348
+#: pgp/seahorse-pgp-key.c:555
 msgid "Personal PGP key"
 msgstr "Personlig PGP-nyckel"
 
-#: pgp/seahorse-pgp-key.c:350
+#: pgp/seahorse-pgp-key.c:557
 msgid "PGP key"
 msgstr "PGP-nyckel"
 
@@ -1695,8 +1704,8 @@ msgid "Good"
 msgstr "Bra"
 
 #: pgp/seahorse-pgp-key-properties.c:1545
-#: pgp/seahorse-pgp-private-key-properties.ui:332
-#: pgp/seahorse-pgp-public-key-properties.ui:273
+#: pgp/seahorse-pgp-private-key-properties.ui:333
+#: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Nyckel-id"
 
@@ -1722,149 +1731,149 @@ msgstr ""
 "Du kan <i>spärra</i> din signatur om du inte längre litar på att ”%s” äger "
 "den här nyckeln:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:55
-#: pgp/seahorse-pgp-public-key-properties.ui:60
+#: pgp/seahorse-pgp-private-key-properties.ui:56
+#: pgp/seahorse-pgp-public-key-properties.ui:61
 msgid "This key has been revoked"
 msgstr "Den här nyckeln har spärrats"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:65
-#: pgp/seahorse-pgp-public-key-properties.ui:72
+#: pgp/seahorse-pgp-private-key-properties.ui:66
+#: pgp/seahorse-pgp-public-key-properties.ui:73
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "Ägaren av nyckeln har spärrat nyckeln. Den kan inte användas längre."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:93
-#: pgp/seahorse-pgp-public-key-properties.ui:103
+#: pgp/seahorse-pgp-private-key-properties.ui:94
+#: pgp/seahorse-pgp-public-key-properties.ui:104
 msgid "This key has expired"
 msgstr "Den här nyckeln har gått ut"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:158
+#: pgp/seahorse-pgp-private-key-properties.ui:159
 msgid "Add a photo to this key"
 msgstr "Lägg till ett foto till denna nyckel"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:177
+#: pgp/seahorse-pgp-private-key-properties.ui:178
 msgid "Remove this photo from this key"
 msgstr "Ta bort det här fotot från nyckeln"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:196
+#: pgp/seahorse-pgp-private-key-properties.ui:197
 msgid "Make this photo the primary photo"
 msgstr "Gör det här fotot till det primära fotot"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:221
+#: pgp/seahorse-pgp-private-key-properties.ui:222
 msgid "Go to previous photo"
 msgstr "Gå till föregående foto"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:240
+#: pgp/seahorse-pgp-private-key-properties.ui:241
 msgid "Go to next photo"
 msgstr "Gå till nästa foto"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:305
-#: pgp/seahorse-pgp-public-key-properties.ui:245
+#: pgp/seahorse-pgp-private-key-properties.ui:306
+#: pgp/seahorse-pgp-public-key-properties.ui:246
 msgid "Comment"
 msgstr "Kommentar"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:362
+#: pgp/seahorse-pgp-private-key-properties.ui:363
 #: ssh/seahorse-ssh-key-properties.ui:294
 msgid "Change _Passphrase"
 msgstr "Ändra _lösenfras"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:378
-#: pgp/seahorse-pgp-public-key-properties.ui:346
+#: pgp/seahorse-pgp-private-key-properties.ui:379
+#: pgp/seahorse-pgp-public-key-properties.ui:347
 msgid "Owner"
 msgstr "Ägare"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:391
+#: pgp/seahorse-pgp-private-key-properties.ui:392
 msgid "Key Names and Signatures"
 msgstr "Nyckelnamn och signaturer"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:429
+#: pgp/seahorse-pgp-private-key-properties.ui:430
 msgid "Primary"
 msgstr "Primär"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:459 pgp/seahorse-pgp-subkey.c:291
+#: pgp/seahorse-pgp-private-key-properties.ui:460 pgp/seahorse-pgp-subkey.c:160
 msgid "Sign"
 msgstr "Signera"
 
 #. Translators: This text refers to deleting an item from its type's backing store
-#: pgp/seahorse-pgp-private-key-properties.ui:489
+#: pgp/seahorse-pgp-private-key-properties.ui:490
 #: src/seahorse-key-manager-widgets.ui:12
 msgid "Delete"
 msgstr "Ta bort"
 
 #. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:519
+#: pgp/seahorse-pgp-private-key-properties.ui:520
 msgid "_Add Name"
 msgstr "_Lägg till namn"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:549
-#: pgp/seahorse-pgp-private-key-properties.ui:1039
+#: pgp/seahorse-pgp-private-key-properties.ui:550
+#: pgp/seahorse-pgp-private-key-properties.ui:1040
 msgid "Revoke"
 msgstr "Spärra"
 
 #. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:585
+#: pgp/seahorse-pgp-private-key-properties.ui:586
 msgid "Names and Signatures"
 msgstr "Namn och signaturer"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:622
-#: pgp/seahorse-pgp-public-key-properties.ui:622
+#: pgp/seahorse-pgp-private-key-properties.ui:623
+#: pgp/seahorse-pgp-public-key-properties.ui:623
 msgid "Key ID:"
 msgstr "Nyckel-id:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:647
-#: pgp/seahorse-pgp-public-key-properties.ui:648
+#: pgp/seahorse-pgp-private-key-properties.ui:648
+#: pgp/seahorse-pgp-public-key-properties.ui:649
 msgid "Type:"
 msgstr "Typ:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:672
-#: pgp/seahorse-pgp-public-key-properties.ui:674
+#: pgp/seahorse-pgp-private-key-properties.ui:673
+#: pgp/seahorse-pgp-public-key-properties.ui:675
 msgid "Strength:"
 msgstr "Styrka:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:697
+#: pgp/seahorse-pgp-private-key-properties.ui:698
 msgid "Technical Details"
 msgstr "Tekniska detaljer"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:725
+#: pgp/seahorse-pgp-private-key-properties.ui:726
 #: ssh/seahorse-ssh-key-properties.ui:174
 msgid "Fingerprint"
 msgstr "Fingeravtryck"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:757
-#: pgp/seahorse-pgp-public-key-properties.ui:768
+#: pgp/seahorse-pgp-private-key-properties.ui:758
+#: pgp/seahorse-pgp-public-key-properties.ui:769
 msgid "Created:"
 msgstr "Skapad:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:781
-#: pgp/seahorse-pgp-public-key-properties.ui:793
+#: pgp/seahorse-pgp-private-key-properties.ui:782
+#: pgp/seahorse-pgp-public-key-properties.ui:794
 msgid "Expires:"
 msgstr "Går ut:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:827
+#: pgp/seahorse-pgp-private-key-properties.ui:828
 msgid "Dates"
 msgstr "Datum"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:850
+#: pgp/seahorse-pgp-private-key-properties.ui:851
 msgid "Override Owner _Trust:"
 msgstr "Åsidosätt ägar_tillit:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:878
+#: pgp/seahorse-pgp-private-key-properties.ui:879
 msgid "_Export Secret Key:"
 msgstr "_Exportera hemlig nyckel:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:925
+#: pgp/seahorse-pgp-private-key-properties.ui:926
 msgid "Actions"
 msgstr "Aktiviteter"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:979
+#: pgp/seahorse-pgp-private-key-properties.ui:980
 msgid "Add"
 msgstr "Lägg till"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1009
+#: pgp/seahorse-pgp-private-key-properties.ui:1010
 msgid "Expire"
 msgstr "Utgång"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:897
+#: pgp/seahorse-pgp-private-key-properties.ui:1084
+#: pgp/seahorse-pgp-public-key-properties.ui:898
 msgid "_Subkeys"
 msgstr "_Undernycklar"
 
@@ -1884,75 +1893,75 @@ msgid "Ultimately"
 msgstr "Förbehållslöst"
 
 #. Names set on the PGP key.
-#: pgp/seahorse-pgp-public-key-properties.ui:325
+#: pgp/seahorse-pgp-public-key-properties.ui:326
 msgid "_Other Names:"
 msgstr "_Andra namn:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:368
+#: pgp/seahorse-pgp-public-key-properties.ui:369
 msgid "Your trust of this key"
 msgstr "Din tillit för den här nyckeln"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:381
+#: pgp/seahorse-pgp-public-key-properties.ui:382
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr "Din tillit anges manuellt under fliken <i>Detaljer</i>."
 
-#: pgp/seahorse-pgp-public-key-properties.ui:454
+#: pgp/seahorse-pgp-public-key-properties.ui:455
 msgid "_Sign this Key"
 msgstr "_Signera denna nyckel"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:503
+#: pgp/seahorse-pgp-public-key-properties.ui:504
 msgid "_Revoke Signature"
 msgstr "_Spärra signatur"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:525
+#: pgp/seahorse-pgp-public-key-properties.ui:526
 msgid "_People who have signed this key:"
 msgstr "_Personer som har signerat den här nyckeln:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:550
+#: pgp/seahorse-pgp-public-key-properties.ui:551
 msgid "_Only display the signatures of people I trust"
 msgstr "_Visa endast signaturer för personer som jag litar på"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:569
+#: pgp/seahorse-pgp-public-key-properties.ui:570
 msgid "Trust"
 msgstr "Tillit"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:603
+#: pgp/seahorse-pgp-public-key-properties.ui:604
 msgid "Technical Details:"
 msgstr "Tekniska detaljer:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:709
+#: pgp/seahorse-pgp-public-key-properties.ui:710
 msgid "Fingerprint:"
 msgstr "Fingeravtryck:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:749
+#: pgp/seahorse-pgp-public-key-properties.ui:750
 msgid "Dates:"
 msgstr "Datum:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:827
+#: pgp/seahorse-pgp-public-key-properties.ui:828
 msgid "Indicate Trust:"
 msgstr "Indikera tillit:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:844
+#: pgp/seahorse-pgp-public-key-properties.ui:845
 msgid "You _Trust the Owner:"
 msgstr "Du _litar på ägaren:"
 
-#: pgp/seahorse-pgp-subkey.c:290
+#: pgp/seahorse-pgp-subkey.c:159
 msgid "Encrypt"
 msgstr "Kryptera"
 
-#: pgp/seahorse-pgp-subkey.c:292
+#: pgp/seahorse-pgp-subkey.c:161
 msgid "Certify"
 msgstr "Certifiera"
 
-#: pgp/seahorse-pgp-subkey.c:293
+#: pgp/seahorse-pgp-subkey.c:162
 msgid "Authenticate"
 msgstr "Autentisera"
 
-#: pgp/seahorse-pgp-subkey.c:401
+#: pgp/seahorse-pgp-subkey.c:311
 msgid "Key"
 msgstr "Nyckel"
 
-#: pgp/seahorse-pgp-subkey.c:406
+#: pgp/seahorse-pgp-subkey.c:316
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "Undernyckel %d av %s"
@@ -2145,7 +2154,7 @@ msgstr "Namnlös"
 msgid "Failed to export certificate"
 msgstr "Misslyckades med att exportera certifikatet"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:614
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:621
 msgid "Couldn’t delete"
 msgstr "Kunde inte ta bort"
 
@@ -2273,10 +2282,6 @@ msgstr "Import misslyckades"
 msgid "Import Key"
 msgstr "Importera nyckel"
 
-#: src/key-manager.vala:248
-msgid "_Open"
-msgstr "Öpp_na"
-
 #. TODO: This should come from libgcr somehow
 #: src/key-manager.vala:256
 msgid "All key files"
@@ -2290,7 +2295,7 @@ msgstr "Släppt text"
 msgid "Clipboard text"
 msgstr "Urklippstext"
 
-#: src/key-manager.vala:439
+#: src/key-manager.vala:441
 msgid "Couldn’t unlock keyring"
 msgstr "Kunde inte låsa upp nyckelring"
 
@@ -2343,8 +2348,8 @@ msgid "Help"
 msgstr "Hjälp"
 
 #: src/seahorse-key-manager.ui:52
-msgid "About"
-msgstr "Om"
+msgid "About Seahorse"
+msgstr "Om Seahorse"
 
 #: src/seahorse-key-manager.ui:89
 msgid "Secure Shell key"
@@ -2410,21 +2415,21 @@ msgstr "Egenskaper"
 msgid "Configure Key for Secure Shell…"
 msgstr "Konfigurera nyckel för Secure Shell…"
 
-#: src/sidebar.vala:581
+#: src/sidebar.vala:587
 msgid "Couldn’t lock"
 msgstr "Kunde inte låsa"
 
 #. Lock and unlock items
-#: src/sidebar.vala:634
+#: src/sidebar.vala:638
 msgid "_Lock"
 msgstr "_Lås"
 
-#: src/sidebar.vala:639
+#: src/sidebar.vala:643
 msgid "_Unlock"
 msgstr "Lås _upp"
 
 #. Properties item
-#: src/sidebar.vala:656
+#: src/sidebar.vala:660
 msgid "_Properties"
 msgstr "_Egenskaper"
 
@@ -2694,7 +2699,7 @@ msgstr "OpenSSH: %s"
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:237
+#: ssh/source.vala:245
 msgid "No private key file is available for this key."
 msgstr "Ingen privat nyckelfil finns tillgänglig för denna nyckel."
 
@@ -2705,6 +2710,15 @@ msgstr "Kunde inte konfigurera Secure Shell-nycklar på fjärrdator."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigurerar Secure Shell-nycklar…"
+
+#~ msgid "Applications usually store new passwords in the default keyring."
+#~ msgstr "Program lagrar vanligtvis nya lösenord i standardnyckelringen."
+
+#~ msgid "Change the unlock password of the password storage keyring"
+#~ msgstr "Ändra upplåsningslösenordet för nyckelring för lösenordslagring"
+
+#~ msgid "About"
+#~ msgstr "Om"
 
 #~ msgid "_Show Password"
 #~ msgstr "Visa lösen_ord"
