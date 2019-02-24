@@ -37,76 +37,58 @@
 typedef struct _SeahorseGpgmeSecretDeleterClass SeahorseGpgmeSecretDeleterClass;
 
 struct _SeahorseGpgmeSecretDeleter {
-	SeahorseDeleter parent;
-	SeahorseGpgmeKey *key;
-	GList *keys;
+    SeahorseDeleter parent;
+    SeahorseGpgmeKey *key;
+    GList *keys;
 };
 
 struct _SeahorseGpgmeSecretDeleterClass {
-	SeahorseDeleterClass parent_class;
+    SeahorseDeleterClass parent_class;
 };
 
 G_DEFINE_TYPE (SeahorseGpgmeSecretDeleter, seahorse_gpgme_secret_deleter, SEAHORSE_TYPE_DELETER);
-
-static void
-seahorse_gpgme_secret_deleter_init (SeahorseGpgmeSecretDeleter *self)
-{
-
-}
-
-static void
-seahorse_gpgme_secret_deleter_finalize (GObject *obj)
-{
-	SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (obj);
-
-	g_clear_object (&self->key);
-	g_list_free (self->keys);
-
-	G_OBJECT_CLASS (seahorse_gpgme_secret_deleter_parent_class)->finalize (obj);
-}
 
 static GtkDialog *
 seahorse_gpgme_secret_deleter_create_confirm (SeahorseDeleter *deleter,
                                            GtkWindow *parent)
 {
-	SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
-	GtkDialog *dialog;
-	gchar *prompt;
+    SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
+    GtkDialog *dialog;
+    g_autofree gchar *prompt = NULL;
 
-	prompt = g_strdup_printf (_("Are you sure you want to permanently delete %s?"),
-	                          seahorse_object_get_label (SEAHORSE_OBJECT (self->key)));
+    prompt = g_strdup_printf (_("Are you sure you want to permanently delete %s?"),
+                              seahorse_object_get_label (SEAHORSE_OBJECT (self->key)));
 
-	dialog = seahorse_delete_dialog_new (parent, "%s", prompt);
+    dialog = seahorse_delete_dialog_new (parent, "%s", prompt);
 
-	seahorse_delete_dialog_set_check_label (SEAHORSE_DELETE_DIALOG (dialog), _("I understand that this secret key will be permanently deleted."));
-	seahorse_delete_dialog_set_check_require (SEAHORSE_DELETE_DIALOG (dialog), TRUE);
+    seahorse_delete_dialog_set_check_label (SEAHORSE_DELETE_DIALOG (dialog), _("I understand that this secret key will be permanently deleted."));
+    seahorse_delete_dialog_set_check_require (SEAHORSE_DELETE_DIALOG (dialog), TRUE);
 
-	g_free (prompt);
-	return g_object_ref (dialog);
+    return g_object_ref (dialog);
 }
 
 static GList *
 seahorse_gpgme_secret_deleter_get_objects (SeahorseDeleter *deleter)
 {
-	SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
-	return self->keys;
+    SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
+    return self->keys;
 }
 
 static gboolean
 seahorse_gpgme_secret_deleter_add_object (SeahorseDeleter *deleter,
                                           GObject *object)
 {
-	SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
+    SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
 
-	if (!SEAHORSE_GPGME_IS_KEY (object))
-		return FALSE;
-	if (self->key)
-		return FALSE;
-	if (seahorse_object_get_usage (SEAHORSE_OBJECT (object)) != SEAHORSE_USAGE_PRIVATE_KEY)
-		return FALSE;
-	self->key = SEAHORSE_GPGME_KEY (g_object_ref (object));
-	self->keys = g_list_append (self->keys, object);
-	return TRUE;
+    if (!SEAHORSE_GPGME_IS_KEY (object))
+        return FALSE;
+    if (self->key)
+        return FALSE;
+    if (seahorse_object_get_usage (SEAHORSE_OBJECT (object)) != SEAHORSE_USAGE_PRIVATE_KEY)
+        return FALSE;
+    self->key = SEAHORSE_GPGME_KEY (g_object_ref (object));
+    self->keys = g_list_append (self->keys, object);
+    return TRUE;
 }
 
 static void
@@ -115,20 +97,20 @@ seahorse_gpgme_secret_deleter_delete_async (SeahorseDeleter *deleter,
                                             GAsyncReadyCallback callback,
                                             gpointer user_data)
 {
-	SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
-	GSimpleAsyncResult *res;
-	GError *error = NULL;
-	gpgme_error_t gerr;
+    SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
+    g_autoptr(GTask) task = NULL;
+    g_autoptr(GError) error = NULL;
+    gpgme_error_t gerr;
 
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_gpgme_secret_deleter_delete_async);
+    task = g_task_new (self, cancellable, callback, user_data);
 
-	gerr = seahorse_gpgme_key_op_delete_pair (self->key);
-	if (seahorse_gpgme_propagate_error (gerr, &error))
-		g_simple_async_result_take_error (res, error);
+    gerr = seahorse_gpgme_key_op_delete_pair (self->key);
+    if (seahorse_gpgme_propagate_error (gerr, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
 
-	g_simple_async_result_complete_in_idle (res);
-	g_object_unref (res);
+    g_task_return_boolean (task, TRUE);
 }
 
 static gboolean
@@ -136,41 +118,52 @@ seahorse_gpgme_secret_deleter_delete_finish (SeahorseDeleter *deleter,
                                              GAsyncResult *result,
                                              GError **error)
 {
-	SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
+    SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (deleter);
 
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
-	                      seahorse_gpgme_secret_deleter_delete_async), FALSE);
+    g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
 
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return FALSE;
-
-	return TRUE;
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
 
+static void
+seahorse_gpgme_secret_deleter_init (SeahorseGpgmeSecretDeleter *self)
+{
+}
+
+static void
+seahorse_gpgme_secret_deleter_finalize (GObject *obj)
+{
+    SeahorseGpgmeSecretDeleter *self = SEAHORSE_GPGME_SECRET_DELETER (obj);
+
+    g_clear_object (&self->key);
+    g_list_free (self->keys);
+
+    G_OBJECT_CLASS (seahorse_gpgme_secret_deleter_parent_class)->finalize (obj);
+}
 
 static void
 seahorse_gpgme_secret_deleter_class_init (SeahorseGpgmeSecretDeleterClass *klass)
 {
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-	SeahorseDeleterClass *deleter_class = SEAHORSE_DELETER_CLASS (klass);
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    SeahorseDeleterClass *deleter_class = SEAHORSE_DELETER_CLASS (klass);
 
-	gobject_class->finalize = seahorse_gpgme_secret_deleter_finalize;
+    gobject_class->finalize = seahorse_gpgme_secret_deleter_finalize;
 
-	deleter_class->add_object = seahorse_gpgme_secret_deleter_add_object;
-	deleter_class->create_confirm = seahorse_gpgme_secret_deleter_create_confirm;
-	deleter_class->delete = seahorse_gpgme_secret_deleter_delete_async;
-	deleter_class->delete_finish = seahorse_gpgme_secret_deleter_delete_finish;
-	deleter_class->get_objects = seahorse_gpgme_secret_deleter_get_objects;
+    deleter_class->add_object = seahorse_gpgme_secret_deleter_add_object;
+    deleter_class->create_confirm = seahorse_gpgme_secret_deleter_create_confirm;
+    deleter_class->delete = seahorse_gpgme_secret_deleter_delete_async;
+    deleter_class->delete_finish = seahorse_gpgme_secret_deleter_delete_finish;
+    deleter_class->get_objects = seahorse_gpgme_secret_deleter_get_objects;
 }
 
 SeahorseDeleter *
 seahorse_gpgme_secret_deleter_new (SeahorseGpgmeKey *key)
 {
-	SeahorseDeleter *deleter;
+    SeahorseDeleter *deleter;
 
-	deleter = g_object_new (SEAHORSE_TYPE_GPGME_SECRET_DELETER, NULL);
-	if (!seahorse_deleter_add_object (deleter, G_OBJECT (key)))
-		g_assert_not_reached ();
+    deleter = g_object_new (SEAHORSE_TYPE_GPGME_SECRET_DELETER, NULL);
+    if (!seahorse_deleter_add_object (deleter, G_OBJECT (key)))
+        g_assert_not_reached ();
 
-	return deleter;
+    return deleter;
 }
