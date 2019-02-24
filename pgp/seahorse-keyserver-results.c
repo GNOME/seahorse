@@ -347,9 +347,10 @@ static void
 on_search_completed (GObject *source, GAsyncResult *result, gpointer user_data)
 {
     SeahorseKeyserverResults *self = SEAHORSE_KEYSERVER_RESULTS (user_data);
+    SeahorsePgpBackend *backend = seahorse_pgp_backend_get ();
     g_autoptr(GError) error = NULL;
 
-    seahorse_pgp_backend_search_remote_finish (NULL, result, &error);
+    seahorse_pgp_backend_search_remote_finish (backend, result, &error);
     if (error != NULL) {
         g_dbus_error_strip_remote_error (error);
         seahorse_util_show_error (GTK_WIDGET (self),
@@ -385,7 +386,8 @@ seahorse_keyserver_results_show (const gchar* search_text, GtkWindow *parent)
 
     cancellable = g_cancellable_new ();
 
-    seahorse_pgp_backend_search_remote_async (NULL, search_text,
+    seahorse_pgp_backend_search_remote_async (seahorse_pgp_backend_get (),
+                                              search_text,
                                               self->collection,
                                               cancellable, on_search_completed,
                                               g_object_ref (self));

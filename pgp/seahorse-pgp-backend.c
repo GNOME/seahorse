@@ -430,18 +430,14 @@ seahorse_pgp_backend_remove_remote (SeahorsePgpBackend *self,
 }
 
 typedef struct {
-	GCancellable *cancellable;
-	gint num_searches;
-	GList *objects;
+    gint num_searches;
 } search_remote_closure;
 
 static void
 search_remote_closure_free (gpointer user_data)
 {
-	search_remote_closure *closure = user_data;
-	g_clear_object (&closure->cancellable);
-	g_list_free (closure->objects);
-	g_free (closure);
+    search_remote_closure *closure = user_data;
+    g_free (closure);
 }
 
 static void
@@ -449,23 +445,24 @@ on_source_search_ready (GObject *source,
                         GAsyncResult *result,
                         gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	search_remote_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
+    g_autoptr(GTask) task = G_TASK (user_data);
+    search_remote_closure *closure = g_task_get_task_data (task);
+    g_autoptr(GError) error = NULL;
 
-	g_return_if_fail (closure->num_searches > 0);
+    g_return_if_fail (closure->num_searches > 0);
 
-	if (!seahorse_server_source_search_finish (SEAHORSE_SERVER_SOURCE (source),
-	                                           result, &error))
-		g_simple_async_result_take_error (res, error);
+    if (!seahorse_server_source_search_finish (SEAHORSE_SERVER_SOURCE (source),
+                                               result, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
 
-	closure->num_searches--;
-	seahorse_progress_end (closure->cancellable, GINT_TO_POINTER (closure->num_searches));
+    closure->num_searches--;
+    seahorse_progress_end (g_task_get_cancellable (task),
+                           GINT_TO_POINTER (closure->num_searches));
 
-	if (closure->num_searches == 0)
-		g_simple_async_result_complete (res);
-
-	g_object_unref (user_data);
+    if (closure->num_searches == 0)
+        g_task_return_boolean (task, TRUE);
 }
 
 void
@@ -476,59 +473,46 @@ seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
                                           GAsyncReadyCallback callback,
                                           gpointer user_data)
 {
-	search_remote_closure *closure;
-	GSimpleAsyncResult *res;
-	SeahorseServerSource *source;
-	GHashTable *servers = NULL;
-	GHashTableIter iter;
-	gchar **names;
-	gchar *uri;
-	guint i;
+    search_remote_closure *closure;
+    g_autoptr(GTask) task = NULL;
+    SeahorseServerSource *source;
+    g_autoptr(GHashTable) servers = NULL;
+    GHashTableIter iter;
+    g_auto(GStrv) names = NULL;
+    guint i;
 
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
+    self = self ? self : seahorse_pgp_backend_get ();
+    g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
 
-	/* Get a list of all selected key servers */
-	names = g_settings_get_strv (G_SETTINGS (seahorse_app_settings_instance ()), "last-search-servers");
-	if (names != NULL && names[0] != NULL) {
-		servers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-		for (i = 0; names[i] != NULL; i++)
-			g_hash_table_insert (servers, g_strdup (names[i]), GINT_TO_POINTER (TRUE));
-	}
-	g_strfreev (names);
+    /* Get a list of all selected key servers */
+    names = g_settings_get_strv (G_SETTINGS (seahorse_app_settings_instance ()), "last-search-servers");
+    if (names != NULL && names[0] != NULL) {
+        servers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+        for (i = 0; names[i] != NULL; i++)
+            g_hash_table_insert (servers, g_strdup (names[i]), GINT_TO_POINTER (TRUE));
+    }
 
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_pgp_backend_search_remote_async);
-	closure = g_new0 (search_remote_closure, 1);
-	g_simple_async_result_set_op_res_gpointer (res, closure,
-	                                           search_remote_closure_free);
-	if (cancellable)
-		closure->cancellable = g_object_ref (cancellable);
+    task = g_task_new (self, cancellable, callback, user_data);
+    closure = g_new0 (search_remote_closure, 1);
+    g_task_set_task_data (task, closure, search_remote_closure_free);
 
-	g_hash_table_iter_init (&iter, self->remotes);
-	while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&source)) {
-		if (servers) {
-			g_object_get (source, "uri", &uri, NULL);
-			if (!g_hash_table_lookup (servers, uri)) {
-				g_free (uri);
-				continue;
-			}
-			g_free (uri);
-		}
+    g_hash_table_iter_init (&iter, self->remotes);
+    while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&source)) {
+        if (servers) {
+            g_autofree gchar *uri = NULL;
+            g_object_get (source, "uri", &uri, NULL);
+            if (!g_hash_table_lookup (servers, uri))
+                continue;
+        }
 
-		seahorse_progress_prep_and_begin (closure->cancellable, GINT_TO_POINTER (closure->num_searches), NULL);
-		seahorse_server_source_search_async (source, search, results, closure->cancellable,
-		                                     on_source_search_ready, g_object_ref (res));
-		closure->num_searches++;
-	}
+        seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_searches), NULL);
+        seahorse_server_source_search_async (source, search, results, cancellable,
+                                             on_source_search_ready, g_object_ref (task));
+        closure->num_searches++;
+    }
 
-	if (servers)
-		g_hash_table_unref (servers);
-
-	if (closure->num_searches == 0)
-		g_simple_async_result_complete_in_idle (res);
-
-	g_object_unref (res);
+    if (closure->num_searches == 0)
+        g_task_return_boolean (task, FALSE);
 }
 
 gboolean
@@ -536,32 +520,21 @@ seahorse_pgp_backend_search_remote_finish (SeahorsePgpBackend *self,
                                            GAsyncResult *result,
                                            GError **error)
 {
-	GSimpleAsyncResult *res;
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), FALSE);
+    g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
 
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), FALSE);
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
-	                      seahorse_pgp_backend_search_remote_async), FALSE);
-
-	res = G_SIMPLE_ASYNC_RESULT (result);
-
-	if (g_simple_async_result_propagate_error (res, error))
-		return FALSE;
-
-	return TRUE;
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 typedef struct {
-	GCancellable *cancellable;
-	gint num_transfers;
+    gint num_transfers;
 } transfer_closure;
 
 static void
 transfer_closure_free (gpointer user_data)
 {
-	transfer_closure *closure = user_data;
-	g_clear_object (&closure->cancellable);
-	g_free (closure);
+    transfer_closure *closure = user_data;
+    g_free (closure);
 }
 
 static void
@@ -569,24 +542,24 @@ on_source_transfer_ready (GObject *source,
                           GAsyncResult *result,
                           gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	transfer_closure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
+    g_autoptr(GTask) task = G_TASK (user_data);
+    transfer_closure *closure = g_task_get_task_data (task);
+    g_autoptr(GError) error = NULL;
 
-	g_return_if_fail (closure->num_transfers > 0);
+    g_return_if_fail (closure->num_transfers > 0);
 
-	seahorse_transfer_finish (result, &error);
-	if (error != NULL)
-		g_simple_async_result_take_error (res, error);
+    seahorse_transfer_finish (result, &error);
+    if (error != NULL) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
 
-	closure->num_transfers--;
-	seahorse_progress_end (closure->cancellable, GINT_TO_POINTER (closure->num_transfers));
+    closure->num_transfers--;
+    seahorse_progress_end (g_task_get_cancellable (task),
+                           GINT_TO_POINTER (closure->num_transfers));
 
-	if (closure->num_transfers == 0) {
-		g_simple_async_result_complete (res);
-	}
-
-	g_object_unref (user_data);
+    if (closure->num_transfers == 0)
+        g_task_return_boolean (task, TRUE);
 }
 
 void
@@ -597,57 +570,50 @@ seahorse_pgp_backend_transfer_async (SeahorsePgpBackend *self,
                                      GAsyncReadyCallback callback,
                                      gpointer user_data)
 {
-	transfer_closure *closure;
-	SeahorseObject *object;
-	GSimpleAsyncResult *res;
-	SeahorsePlace *from;
-	GList *next;
+    transfer_closure *closure;
+    SeahorseObject *object;
+    g_autoptr(GTask) task = NULL;
+    SeahorsePlace *from;
 
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
-	g_return_if_fail (SEAHORSE_IS_PLACE (to));
+    self = self ? self : seahorse_pgp_backend_get ();
+    g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
+    g_return_if_fail (SEAHORSE_IS_PLACE (to));
 
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_pgp_backend_transfer_async);
-	closure = g_new0 (transfer_closure, 1);
-	g_simple_async_result_set_op_res_gpointer (res, closure,
-	                                           transfer_closure_free);
-	if (cancellable)
-		closure->cancellable = g_object_ref (cancellable);
+    task = g_task_new (self, cancellable, callback, user_data);
+    closure = g_new0 (transfer_closure, 1);
+    g_task_set_task_data (task, closure, transfer_closure_free);
 
-	keys = g_list_copy (keys);
+    keys = g_list_copy (keys);
+    /* Sort by key place */
+    keys = seahorse_util_objects_sort_by_place (keys);
 
-	/* Sort by key plage */
-	keys = seahorse_util_objects_sort_by_place (keys);
+    while (keys) {
+        GList *next;
 
-	while (keys) {
+        /* break off one set (same keysource) */
+        next = seahorse_util_objects_splice_by_place (keys);
 
-		/* break off one set (same keysource) */
-		next = seahorse_util_objects_splice_by_place (keys);
+        g_assert (SEAHORSE_IS_OBJECT (keys->data));
+        object = SEAHORSE_OBJECT (keys->data);
 
-		g_assert (SEAHORSE_IS_OBJECT (keys->data));
-		object = SEAHORSE_OBJECT (keys->data);
+        /* Export from this key place */
+        from = seahorse_object_get_place (object);
+        g_return_if_fail (SEAHORSE_IS_PLACE (from));
 
-		/* Export from this key place */
-		from = seahorse_object_get_place (object);
-		g_return_if_fail (SEAHORSE_IS_PLACE (from));
+        if (from != to) {
+            /* Start a new transfer operation between the two places */
+            seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
+            seahorse_transfer_keys_async (from, to, keys, cancellable,
+                                          on_source_transfer_ready, g_object_ref (task));
+            closure->num_transfers++;
+        }
 
-		if (from != to) {
-			/* Start a new transfer operation between the two places */
-			seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
-			seahorse_transfer_keys_async (from, to, keys, cancellable,
-			                              on_source_transfer_ready, g_object_ref (res));
-			closure->num_transfers++;
-		}
+        g_list_free (keys);
+        keys = next;
+    }
 
-		g_list_free (keys);
-		keys = next;
-	}
-
-	if (closure->num_transfers == 0)
-		g_simple_async_result_complete_in_idle (res);
-
-	g_object_unref (res);
+    if (closure->num_transfers == 0)
+        g_task_return_boolean (task, TRUE);
 }
 
 gboolean
@@ -655,19 +621,10 @@ seahorse_pgp_backend_transfer_finish (SeahorsePgpBackend *self,
                                       GAsyncResult *result,
                                       GError **error)
 {
-	GSimpleAsyncResult *res;
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), FALSE);
+    g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
 
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), FALSE);
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
-	                      seahorse_pgp_backend_transfer_async), FALSE);
-
-	res = G_SIMPLE_ASYNC_RESULT (result);
-
-	if (g_simple_async_result_propagate_error (res, error))
-		return FALSE;
-
-	return TRUE;
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 void
@@ -678,36 +635,31 @@ seahorse_pgp_backend_retrieve_async (SeahorsePgpBackend *self,
                                      GAsyncReadyCallback callback,
                                      gpointer user_data)
 {
-	transfer_closure *closure;
-	GSimpleAsyncResult *res;
-	SeahorsePlace *place;
-	GHashTableIter iter;
+    transfer_closure *closure;
+    g_autoptr(GTask) task = NULL;
+    SeahorsePlace *place;
+    GHashTableIter iter;
 
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
-	g_return_if_fail (SEAHORSE_IS_PLACE (to));
+    g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
+    g_return_if_fail (SEAHORSE_IS_PLACE (to));
 
-	res = g_simple_async_result_new (G_OBJECT (self), callback, user_data,
-	                                 seahorse_pgp_backend_retrieve_async);
-	closure = g_new0 (transfer_closure, 1);
-	g_simple_async_result_set_op_res_gpointer (res, closure,
-	                                           transfer_closure_free);
-	if (cancellable)
-		closure->cancellable = g_object_ref (cancellable);
+    task = g_task_new (self, cancellable, callback, user_data);
+    closure = g_new0 (transfer_closure, 1);
+    g_task_set_task_data (task, closure, transfer_closure_free);
 
-	g_hash_table_iter_init (&iter, self->remotes);
-	while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&place)) {
-		/* Start a new transfer operation between the two places */
-		seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
-		seahorse_transfer_keyids_async (SEAHORSE_SERVER_SOURCE (place), to, keyids, cancellable,
-		                                on_source_transfer_ready, g_object_ref (res));
-		closure->num_transfers++;
-	}
+    g_hash_table_iter_init (&iter, self->remotes);
+    while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&place)) {
+        /* Start a new transfer operation between the two places */
+        seahorse_progress_prep_and_begin (cancellable,
+                                          GINT_TO_POINTER (closure->num_transfers), NULL);
+        seahorse_transfer_keyids_async (SEAHORSE_SERVER_SOURCE (place),
+                                        to, keyids, cancellable,
+                                        on_source_transfer_ready, g_object_ref (task));
+        closure->num_transfers++;
+    }
 
-	if (closure->num_transfers == 0)
-		g_simple_async_result_complete_in_idle (res);
-
-	g_object_unref (res);
+    if (closure->num_transfers == 0)
+        g_task_return_boolean (task, TRUE);
 }
 
 gboolean
@@ -715,19 +667,10 @@ seahorse_pgp_backend_retrieve_finish (SeahorsePgpBackend *self,
                                       GAsyncResult *result,
                                       GError **error)
 {
-	GSimpleAsyncResult *res;
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), FALSE);
+    g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
 
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), FALSE);
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, G_OBJECT (self),
-	                      seahorse_pgp_backend_retrieve_async), FALSE);
-
-	res = G_SIMPLE_ASYNC_RESULT (result);
-
-	if (g_simple_async_result_propagate_error (res, error))
-		return FALSE;
-
-	return TRUE;
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 #endif /* WITH_KEYSERVER */
@@ -737,53 +680,51 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
                                     const gchar **keyids,
                                     GCancellable *cancellable)
 {
-	GList *robjects = NULL;
-	const gchar *keyid;
-	SeahorseGpgmeKey *key;
-	SeahorseObject *object;
-	GPtrArray *todiscover;
-	gint i;
+    GList *robjects = NULL;
+    SeahorseGpgmeKey *key;
+    SeahorseObject *object;
+    g_autoptr(GPtrArray) todiscover = NULL;
+    gint i;
 
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
+    self = self ? self : seahorse_pgp_backend_get ();
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
 
-	todiscover = g_ptr_array_new ();
+    todiscover = g_ptr_array_new ();
 
-	/* Check all the ids */
-	for (i = 0; keyids[i] != NULL; i++) {
-		keyid = keyids[i];
+    /* Check all the ids */
+    for (i = 0; keyids[i] != NULL; i++) {
+        const gchar *keyid = keyids[i];
 
-		/* Do we know about this object? */
-		key = seahorse_gpgme_keyring_lookup (self->keyring, keyid);
+        /* Do we know about this object? */
+        key = seahorse_gpgme_keyring_lookup (self->keyring, keyid);
 
-		/* No such object anywhere, discover it */
-		if (key == NULL) {
-			g_ptr_array_add (todiscover, (gchar *)keyid);
-			continue;
-		}
+        /* No such object anywhere, discover it */
+        if (key == NULL) {
+            g_ptr_array_add (todiscover, (gchar *)keyid);
+            continue;
+        }
 
-		/* Our return value */
-		robjects = g_list_prepend (robjects, key);
-	}
+        /* Our return value */
+        robjects = g_list_prepend (robjects, key);
+    }
 
-	if (todiscover->len > 0) {
-		g_ptr_array_add (todiscover, NULL);
-		keyids = (const gchar **)todiscover->pdata;
+    if (todiscover->len > 0) {
+        g_ptr_array_add (todiscover, NULL);
+        keyids = (const gchar **)todiscover->pdata;
 
 #ifdef WITH_KEYSERVER
-		/* Start a discover process on all todiscover */
-		if (seahorse_app_settings_get_server_auto_retrieve (seahorse_app_settings_instance ()))
-			seahorse_pgp_backend_retrieve_async (self, keyids, SEAHORSE_PLACE (self->keyring),
-			                                     cancellable, NULL, NULL);
+        /* Start a discover process on all todiscover */
+        if (seahorse_app_settings_get_server_auto_retrieve (seahorse_app_settings_instance ()))
+            seahorse_pgp_backend_retrieve_async (self, keyids, SEAHORSE_PLACE (self->keyring),
+                                                 cancellable, NULL, NULL);
 #endif
 
-		/* Add unknown objects for all these */
-		for (i = 0; keyids[i] != NULL; i++) {
-			object = seahorse_unknown_source_add_object (self->unknown, keyids[i], cancellable);
-			robjects = g_list_prepend (robjects, object);
-		}
-	}
+        /* Add unknown objects for all these */
+        for (i = 0; keyids[i] != NULL; i++) {
+            object = seahorse_unknown_source_add_object (self->unknown, keyids[i], cancellable);
+            robjects = g_list_prepend (robjects, object);
+        }
+    }
 
-	g_ptr_array_free (todiscover, TRUE);
-	return robjects;
+    return robjects;
 }
