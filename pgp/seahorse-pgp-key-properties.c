@@ -232,19 +232,35 @@ on_uids_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 }
 
 static void
+on_uids_make_primary_cb (GObject *source, GAsyncResult *res, gpointer user_data)
+{
+    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
+    SeahorseGpgmeUid *uid = SEAHORSE_GPGME_UID (source);
+    g_autoptr(GError) error = NULL;
+
+    if (!seahorse_gpgme_key_op_make_primary_finish (uid, res, &error)) {
+        GtkWindow *window;
+        window = gtk_window_get_transient_for (GTK_WINDOW (self));
+        seahorse_util_show_error (GTK_WIDGET (window),
+                                  _("Couldn’t change primary user ID"),
+                                  error->message);
+    }
+}
+
+static void
 on_uids_make_primary (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorsePgpUid *uid;
-    gpgme_error_t err;
 
     uid = names_get_selected_uid (self);
-    if (uid) {
-        g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
-        err = seahorse_gpgme_key_op_primary_uid (SEAHORSE_GPGME_UID (uid));
-        if (!GPG_IS_OK (err))
-            seahorse_gpgme_handle_error (err, _("Couldn’t change primary user ID"));
-    }
+    if (!uid)
+        return;
+
+    g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
+    seahorse_gpgme_key_op_make_primary_async (SEAHORSE_GPGME_UID (uid),
+                                              NULL,
+                                              on_uids_make_primary_cb, self);
 }
 
 static void

@@ -160,7 +160,14 @@ gboolean              seahorse_gpgme_key_op_add_uid_finish  (SeahorseGpgmeKey *p
                                                              GAsyncResult *result,
                                                              GError **error);
 
-gpgme_error_t         seahorse_gpgme_key_op_primary_uid      (SeahorseGpgmeUid *uid);
+void              seahorse_gpgme_key_op_make_primary_async  (SeahorseGpgmeUid *uid,
+                                                             GCancellable *cancellable,
+                                                             GAsyncReadyCallback callback,
+                                                             gpointer user_data);
+
+gboolean          seahorse_gpgme_key_op_make_primary_finish (SeahorseGpgmeUid *uid,
+                                                             GAsyncResult *result,
+                                                             GError **error);
 
 gpgme_error_t         seahorse_gpgme_key_op_del_uid          (SeahorseGpgmeUid *uid);
                              

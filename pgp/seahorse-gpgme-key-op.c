@@ -1884,31 +1884,81 @@ primary_transit (guint current_state, gpgme_status_code_t status,
     
     return next_state;
 }
-                
-gpgme_error_t   
-seahorse_gpgme_key_op_primary_uid (SeahorseGpgmeUid *uid)
-{
-	PrimaryParm pri_parm;
-	SeahorseEditParm *parms;
-	gpgme_user_id_t userid;
-	gpgme_key_t key;
 
-	g_return_val_if_fail (SEAHORSE_GPGME_IS_UID (uid), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-    
-	/* Make sure not revoked */
-	userid = seahorse_gpgme_uid_get_userid (uid);
-	g_return_val_if_fail (userid != NULL && !userid->revoked && !userid->invalid, 
-	                      GPG_E (GPG_ERR_INV_VALUE));
-    
-	key = seahorse_gpgme_uid_get_pubkey (uid);
-	g_return_val_if_fail (key, GPG_E (GPG_ERR_INV_VALUE));
-    
-	pri_parm.index = seahorse_gpgme_uid_get_actual_index (uid);
-   
-	parms = seahorse_edit_parm_new (PRIMARY_START, primary_action,
-	                                primary_transit, &pri_parm);
- 
-	return edit_refresh_gpgme_key (NULL, key, parms);
+static gboolean
+on_key_op_make_primary_complete (gpgme_error_t gerr,
+                                 gpointer user_data)
+{
+    GTask *task = G_TASK (user_data);
+    SeahorseGpgmeUid *uid = SEAHORSE_GPGME_UID (g_task_get_source_object (task));
+    SeahorsePgpKey *parent_key = NULL;
+    g_autoptr(GError) error = NULL;
+
+    if (seahorse_gpgme_propagate_error (gerr, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return FALSE; /* don't call again */
+    }
+
+    parent_key = seahorse_pgp_uid_get_parent (SEAHORSE_PGP_UID (uid));
+    seahorse_gpgme_key_refresh (SEAHORSE_GPGME_KEY (parent_key));
+
+    g_task_return_boolean (task, TRUE);
+    return FALSE; /* don't call again */
+}
+
+void
+seahorse_gpgme_key_op_make_primary_async (SeahorseGpgmeUid *uid,
+                                          GCancellable *cancellable,
+                                          GAsyncReadyCallback callback,
+                                          gpointer user_data)
+{
+    g_autoptr(GTask) task = NULL;
+    gpgme_ctx_t gctx;
+    gpgme_error_t gerr;
+    g_autoptr(GError) error = NULL;
+    g_autoptr(GSource) gsource = NULL;
+    gpgme_key_t key = NULL;
+    gpgme_user_id_t gpg_uid = NULL;
+
+    g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
+
+    gpg_uid = seahorse_gpgme_uid_get_userid (uid);
+    g_return_if_fail (!gpg_uid->revoked && !gpg_uid->invalid);
+
+    key = seahorse_gpgme_uid_get_pubkey (uid);
+    g_return_if_fail (key);
+
+    gctx = seahorse_gpgme_keyring_new_context (&gerr);
+
+    task = g_task_new (uid, cancellable, callback, user_data);
+    gpgme_set_progress_cb (gctx, on_key_op_progress, task);
+    g_task_set_task_data (task, gctx, (GDestroyNotify) gpgme_release);
+
+    seahorse_progress_prep_and_begin (cancellable, task, NULL);
+    gsource = seahorse_gpgme_gsource_new (gctx, cancellable);
+    g_source_set_callback (gsource, G_SOURCE_FUNC (on_key_op_make_primary_complete),
+                           g_object_ref (task), g_object_unref);
+
+    if (gerr == 0)
+        gerr = gpgme_op_set_uid_flag_start (gctx, key, gpg_uid->uid, "primary", NULL);
+
+    if (seahorse_gpgme_propagate_error (gerr, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
+
+    g_source_attach (gsource, g_main_context_default ());
+}
+
+gboolean
+seahorse_gpgme_key_op_make_primary_finish (SeahorseGpgmeUid *uid,
+                                           GAsyncResult *result,
+                                           GError **error)
+{
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_UID (uid), FALSE);
+    g_return_val_if_fail (g_task_is_valid (result, uid), FALSE);
+
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 
