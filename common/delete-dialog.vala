@@ -89,6 +89,7 @@ public class DeleteDialog : Gtk.MessageDialog {
 		cancel.show();
 
 		var delet = new Gtk.Button.with_mnemonic(_("_Delete"));
+		delet.get_style_context().add_class("destructive-action");
 		add_action_widget(delet, Gtk.ResponseType.OK);
 		delet.show();
 	}
