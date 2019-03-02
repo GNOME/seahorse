@@ -23,7 +23,6 @@ namespace Seahorse {
 	public const string ICON_KEY = "seahorse-key";
 	public const string ICON_SECRET = "seahorse-key-personal";
 	public const string ICON_KEY_SSH = "seahorse-key-ssh";
-	public const string ICON_PERSON = "seahorse-person";
 	public const string ICON_SIGN = "seahorse-sign";
 	public const string ICON_SIGN_OK = "seahorse-sign-ok";
 	public const string ICON_SIGN_BAD = "seahorse-sign-bad";

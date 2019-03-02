@@ -32,7 +32,7 @@ foreach size: [ 22, 48 ]
 
   # ..../apps
   icon_subfolder = join_paths('hicolor', icon_size_str, 'apps')
-  foreach private_icon: [ 'key', 'key-personal', 'key-ssh', 'person' ]
+  foreach private_icon: [ 'key', 'key-personal', 'key-ssh' ]
     install_data(
       join_paths(icon_subfolder, 'seahorse-@0@.png'.format(private_icon)),
       install_dir: join_paths(private_icons_install_dir, icon_subfolder),

@@ -381,7 +381,7 @@ names_populate (SeahorsePgpKeyProperties *self, GtkTreeStore *store, SeahorsePgp
         g_autoptr(GCancellable) cancellable = NULL;
 
         uid = SEAHORSE_PGP_UID (u->data);
-        icon = g_themed_icon_new (SEAHORSE_ICON_PERSON);
+        icon = g_themed_icon_new ("avatar-default-symbolic");
         gtk_tree_store_append (store, &uiditer, NULL);
         gtk_tree_store_set (store, &uiditer,
                             UIDSIG_OBJECT, uid,
@@ -446,7 +446,6 @@ do_names (SeahorsePgpKeyProperties *self)
 
         /* Icon column */
         renderer = gtk_cell_renderer_pixbuf_new ();
-        g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
         gtk_tree_view_insert_column_with_attributes (self->names_tree,
                                                      -1, "", renderer,
                                                      "gicon", UIDSIG_ICON, NULL);
@@ -844,7 +843,6 @@ do_owner (SeahorsePgpKeyProperties *self)
 
             /* Make the columns for the view */
             renderer = gtk_cell_renderer_pixbuf_new ();
-            g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
             gtk_tree_view_insert_column_with_attributes (self->owner_userid_tree,
                                                          -1, "", renderer,
                                                          "gicon", UID_ICON, NULL);
@@ -859,7 +857,7 @@ do_owner (SeahorsePgpKeyProperties *self)
             g_autoptr(GIcon) icon = NULL;
 
             markup = seahorse_object_get_markup (l->data);
-            icon = g_themed_icon_new (SEAHORSE_ICON_PERSON);
+            icon = g_themed_icon_new ("avatar-default-symbolic");
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter,
                                 UID_OBJECT, l->data,
