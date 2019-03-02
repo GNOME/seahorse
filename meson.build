@@ -99,6 +99,7 @@ add_project_arguments([
 add_project_arguments([
     '-DGCR_API_SUBJECT_TO_CHANGE',
     '-DGCK_API_SUBJECT_TO_CHANGE',
+    '-DSECRET_WITH_UNSTABLE',
     '-include', 'config.h',
   ],
   language: 'c',
