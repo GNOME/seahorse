@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-02-19 16:31+0000\n"
-"PO-Revision-Date: 2019-02-20 22:40+0200\n"
+"POT-Creation-Date: 2019-02-27 17:45+0000\n"
+"PO-Revision-Date: 2019-03-02 09:25+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -68,7 +68,7 @@ msgstr "_Peru"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:647
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:651
 msgid "_Delete"
 msgstr "_Poista"
 
@@ -382,7 +382,7 @@ msgstr "Salasanat"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Tallennetut henkilökohtaiset salasanat, pääsyoikeudet ja salaisuudet"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:598
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:605
 msgid "Couldn’t unlock"
 msgstr "Lukituksen avaus ei onnistunut"
 
@@ -516,44 +516,36 @@ msgstr "Avainnippua ei voitu lisätä"
 msgid "Unknown date"
 msgstr "Tuntematon päiväys"
 
-#: gkr/gkr-keyring.vala:28
+#: gkr/gkr-keyring.vala:34
 msgid "A keyring that is automatically unlocked on login"
 msgstr "Avainnippu, joka avataan automaattisesti kirjautumisen yhteydessä"
 
-#: gkr/gkr-keyring.vala:29
+#: gkr/gkr-keyring.vala:35
 msgid "A keyring used to store passwords"
 msgstr "Avainnippu, johon varastoidaan salasanat"
 
-#: gkr/gkr-keyring.vala:174
+#: gkr/gkr-keyring.vala:192
 msgid "Couldn’t set default keyring"
 msgstr "Oletusavainnippua ei voitu asettaa"
 
-#: gkr/gkr-keyring.vala:198 gkr/gkr-keyring.vala:203
+#: gkr/gkr-keyring.vala:219 gkr/gkr-keyring.vala:224
 msgid "Couldn’t change keyring password"
 msgstr "Avainnipun salasanaa ei voitu vaihtaa"
 
-#: gkr/gkr-keyring.vala:209
+#: gkr/gkr-keyring.vala:243
 msgid "_Set as default"
 msgstr "A_seta oletus"
 
-#: gkr/gkr-keyring.vala:210
-msgid "Applications usually store new passwords in the default keyring."
-msgstr "Ohjelmat yleensä tallentavat uuden salasana oletusavainnippuun."
-
-#: gkr/gkr-keyring.vala:211
+#: gkr/gkr-keyring.vala:244
 msgid "Change _Password"
 msgstr "Vaihda _salasana"
 
-#: gkr/gkr-keyring.vala:212
-msgid "Change the unlock password of the password storage keyring"
-msgstr "Vaihda salasana-avainnipun pääsalasanaa"
-
-#: gkr/gkr-keyring.vala:237
+#: gkr/gkr-keyring.vala:255
 #, c-format
 msgid "Are you sure you want to delete the password keyring “%s”?"
 msgstr "Haluatko varmasti poistaa salasana-avainnipun “%s”?"
 
-#: gkr/gkr-keyring.vala:240
+#: gkr/gkr-keyring.vala:258
 msgid "I understand that all items will be permanently deleted."
 msgstr "Ymmärrän, että kaikki kohteet poistetaan lopullisesti."
 
@@ -1043,7 +1035,7 @@ msgstr "Luo uusi käyttäjätunniste"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Salauksen purku ei onnistunut. Sinulla ei ehkä ole purkuavainta."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:553
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:515
 msgid "The operation was cancelled"
 msgstr "Toiminto keskeytettiin"
 
@@ -1124,13 +1116,13 @@ msgstr "Luodaan avainta"
 msgid "Name must be at least 5 characters long."
 msgstr "Nimen tulee olla vähintään 5 merkkiä pitkä."
 
-#: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
+#: pgp/seahorse-gpgme-key-deleter.c:76 pgp/seahorse-gpgme-secret-deleter.c:76
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Haluatko varmasti poistaa avaimen %s?"
 
-#: pgp/seahorse-gpgme-key-deleter.c:80
+#: pgp/seahorse-gpgme-key-deleter.c:79
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys?"
 msgid_plural "Are you sure you want to permanently delete %d keys?"
@@ -1145,41 +1137,41 @@ msgstr "Väärä salasana"
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Syötit väärän salasanan jo kolmannen kerran. Yritä uudelleen."
 
-#: pgp/seahorse-gpgme-keyring.c:87
+#: pgp/seahorse-gpgme-keyring.c:89
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Väärä tunnuslause."
 
-#: pgp/seahorse-gpgme-keyring.c:91
+#: pgp/seahorse-gpgme-keyring.c:93
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "Syötä uusi tunnuslause avaimelle “%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:93
+#: pgp/seahorse-gpgme-keyring.c:95
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "Syötä tunnuslause avaimelle “%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:96 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:98 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Syötä uusi tunnuslause"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:100
 msgid "Enter passphrase"
 msgstr "Syötä tunnuslause"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:105
 msgid "Passphrase"
 msgstr "Tunnuslause"
 
-#: pgp/seahorse-gpgme-keyring.c:298
+#: pgp/seahorse-gpgme-keyring.c:300
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Ladattiin %d avain"
 msgstr[1] "Ladattiin %d avainta"
 
-#: pgp/seahorse-gpgme-keyring.c:623
+#: pgp/seahorse-gpgme-keyring.c:625
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1188,11 +1180,11 @@ msgstr ""
 "tietokoneesta, jonka kello on tulevaisuudessa, tai puuttuvasta "
 "itseallekirjoituksesta."
 
-#: pgp/seahorse-gpgme-keyring.c:753
+#: pgp/seahorse-gpgme-keyring.c:755
 msgid "GnuPG keys"
 msgstr "GnuPG-avaimet"
 
-#: pgp/seahorse-gpgme-keyring.c:764
+#: pgp/seahorse-gpgme-keyring.c:766
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: avainnipun oletushakemisto"
 
@@ -1356,18 +1348,18 @@ msgstr "Tuntematon"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:571
+#: pgp/seahorse-hkp-source.c:533
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Haku ei ollut tarpeeksi tarkka. Palvelin “%s” löysi liian monta avainta."
 
-#: pgp/seahorse-hkp-source.c:574
+#: pgp/seahorse-hkp-source.c:536
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Palvelimeen “%s” ei saatu yhteyttä: %s"
 
-#: pgp/seahorse-hkp-source.c:1084
+#: pgp/seahorse-hkp-source.c:999
 msgid "HTTP Key Server"
 msgstr "HTTP-avainpalvelin"
 
@@ -2158,7 +2150,7 @@ msgstr "Nimetön"
 msgid "Failed to export certificate"
 msgstr "Varmenteen vienti epäonnistui"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:614
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:621
 msgid "Couldn’t delete"
 msgstr "Ei voitu poistaa"
 
@@ -2300,7 +2292,7 @@ msgstr "Pudotettu teksti"
 msgid "Clipboard text"
 msgstr "Leikepöydän teksti"
 
-#: src/key-manager.vala:439
+#: src/key-manager.vala:441
 msgid "Couldn’t unlock keyring"
 msgstr "Avainnippua ei voitu avata"
 
@@ -2353,8 +2345,8 @@ msgid "Help"
 msgstr "Ohje"
 
 #: src/seahorse-key-manager.ui:52
-msgid "About Seahorse"
-msgstr "Tietoja - Seahorse"
+msgid "_About Passwords and Keys"
+msgstr "_Tietoja - Salasanat ja salausavaimet"
 
 #: src/seahorse-key-manager.ui:89
 msgid "Secure Shell key"
@@ -2420,21 +2412,21 @@ msgstr "Ominaisuudet"
 msgid "Configure Key for Secure Shell…"
 msgstr "Määritä SSH-avain…"
 
-#: src/sidebar.vala:581
+#: src/sidebar.vala:587
 msgid "Couldn’t lock"
 msgstr "Lukitus ei onnistunut"
 
 #. Lock and unlock items
-#: src/sidebar.vala:634
+#: src/sidebar.vala:638
 msgid "_Lock"
 msgstr "_Lukitse"
 
-#: src/sidebar.vala:639
+#: src/sidebar.vala:643
 msgid "_Unlock"
 msgstr "_Avaa lukitus"
 
 #. Properties item
-#: src/sidebar.vala:656
+#: src/sidebar.vala:660
 msgid "_Properties"
 msgstr "_Ominaisuudet"
 
@@ -2702,7 +2694,7 @@ msgstr "OpenSSH: %s"
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:237
+#: ssh/source.vala:245
 msgid "No private key file is available for this key."
 msgstr "Tälle avaimelle ei ole saatavilla salaisen avaimen tiedostoa."
 
@@ -2713,6 +2705,15 @@ msgstr "SSH-avaimia ei voitu määritellä etätietokoneella."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Määritellään SSH-avaimia…"
+
+#~ msgid "Applications usually store new passwords in the default keyring."
+#~ msgstr "Ohjelmat yleensä tallentavat uuden salasana oletusavainnippuun."
+
+#~ msgid "Change the unlock password of the password storage keyring"
+#~ msgstr "Vaihda salasana-avainnipun pääsalasanaa"
+
+#~ msgid "About Seahorse"
+#~ msgstr "Tietoja - Seahorse"
 
 #~ msgid "_Show Password"
 #~ msgstr "Näytä _salasana"
