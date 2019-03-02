@@ -17,10 +17,6 @@
  * License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-// FIXME: this is needed since the libsecret VAPI is broken (string is not marked as unowned).
-//        We're also using the sync version for the time being since it becomes a mess otherwise.
-extern unowned string? secret_service_read_alias_dbus_path_sync (Secret.Service service, string alias, Cancellable? cancellable = null) throws GLib.Error;
-
 namespace Seahorse {
 namespace Gkr {
 
@@ -182,9 +178,7 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 			return;
 
 		try {
-            // FIXME: see the comment at the top of the file about the broken VAPI.
-            // Once the bindings are fixed, use the async version again.
-		    var object_path = secret_service_read_alias_dbus_path_sync(this._service, name);
+		    var object_path = this._service.read_alias_dbus_path_sync(name);
             if (object_path != null) {
                 this._aliases[name] = object_path;
                 notify_property("aliases");
