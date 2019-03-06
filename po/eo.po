@@ -1,14 +1,15 @@
 # Esperanto translation for seahorse.
 # Copyright (C) 2011 Free Software Foundation, Inc.
 # This file is distributed under the same license as the seahorse package.
-# Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>, 2011, 2013, 2017, 2018, 2019.
 # Carmen Bianca BAKKER <carmen@carmenbianca.eu>, 2019.
+# Tirifto <tirifto@posteo.cz>, 2019.
+# Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>, 2011-2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-02-19 16:31+0000\n"
-"PO-Revision-Date: 2019-02-23 10:51+0200\n"
+"POT-Creation-Date: 2019-03-02 19:22+0000\n"
+"PO-Revision-Date: 2019-03-06 22:33+0200\n"
 "Last-Translator: Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>\n"
 "Language-Team: Esperanto <gnome-eo-list@gnome.org>\n"
 "Language: eo\n"
@@ -63,7 +64,7 @@ msgstr "_Nuligi"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:647
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:651
 msgid "_Delete"
 msgstr "_Forigi"
 
@@ -196,6 +197,10 @@ msgctxt "Validity"
 msgid "Revoked"
 msgstr "Senvalidigita"
 
+#: data/org.gnome.seahorse.gschema.xml:5
+msgid "Auto retrieve keys"
+msgstr "Aŭtomate ricevi ŝlosilojn"
+
 #: data/org.gnome.seahorse.gschema.xml:6
 msgid "Whether or not keys should be automatically retrieved from key servers."
 msgstr "Ĉu aŭ neoni devus aŭtomate ricevi ŝlosilojn el ŝlosilaj serviloj."
@@ -204,9 +209,18 @@ msgstr "Ĉu aŭ neoni devus aŭtomate ricevi ŝlosilojn el ŝlosilaj serviloj."
 msgid "Auto publish keys"
 msgstr "Aŭtomate eldoni ŝlosilojn"
 
+#: data/org.gnome.seahorse.gschema.xml:11
+msgid "Whether or not modified keys should be automatically published."
+msgstr "Ĉu aŭtomate eldoni ŝanĝitajn ŝlosilojn aŭ ne."
+
 #: data/org.gnome.seahorse.gschema.xml:15
 msgid "Publish keys to this key server"
 msgstr "Eldoni ŝlosilojn al ĉi tiu ŝlosila servilo"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:5
+#| msgid "Show keyrings sidebar in Seahorse."
+msgid "Show keyrings sidebar"
+msgstr "Montri flankan breton de ŝlosilaroj"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:6
 msgid "Show keyrings sidebar in Seahorse."
@@ -216,6 +230,15 @@ msgstr "Montri flankan breton de ŝlosilaroj en Seahorse."
 msgid "Width of the side pane"
 msgstr "Larĝo de la flanka breto"
 
+#: data/org.gnome.seahorse.manager.gschema.xml:17
+msgid "The default width of the side pane."
+msgstr "La norma larĝo de la flanka breto."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:34
+#| msgid "Show trust column"
+msgid "Show validity column"
+msgstr "Montri la validecan kolumnon"
+
 #: data/org.gnome.seahorse.manager.gschema.xml:35
 #: data/org.gnome.seahorse.manager.gschema.xml:40
 #: data/org.gnome.seahorse.manager.gschema.xml:45
@@ -223,9 +246,17 @@ msgstr "Larĝo de la flanka breto"
 msgid "No longer in use."
 msgstr "Jam ne uzata."
 
+#: data/org.gnome.seahorse.manager.gschema.xml:39
+msgid "Show expiry column"
+msgstr "Montri senvalidiĝan kolumnon"
+
 #: data/org.gnome.seahorse.manager.gschema.xml:44
 msgid "Show trust column"
 msgstr "Montri fidan kolumnon"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:49
+msgid "Show type column"
+msgstr "Montri specan kolumnon"
 
 #: data/org.gnome.seahorse.window.gschema.xml:5
 msgid "Width of the window"
@@ -257,7 +288,7 @@ msgid ""
 "Seahorse is a GNOME application for managing encryption keys. It also "
 "integrates with nautilus, gedit and other places for encryption operations."
 msgstr ""
-"Seahorse estas GNOME aplikaĵo por mastrumi ĉifrajn ŝlosilojn. Ĝi ankaŭ "
+"Seahorse estas aplikaĵo de GNOME por mastrumi ĉifrajn ŝlosilojn. Ĝi ankaŭ "
 "integras kun Naŭtilo, gedit, kaj aliaj lokoj por ĉifraj agoj."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:13
@@ -268,8 +299,8 @@ msgid ""
 msgstr ""
 "Kun Seahorse vi povas krei kaj mastrumi PGP-ŝlosilojn, krei kaj mastrumi SSH-"
 "ŝlosilojn, afiŝi kaj ricevi ŝlosilojn el ŝlosilaj serviloj, kaŝmemori vian "
-"pasfrazon por ke vi ne devas retajpi ĝin, kaj sekurkopii viajn ŝlosilojn kaj "
-"ŝlosilaro."
+"pasfrazon por ke vi ne devu retajpi ĝin, kaj sekurkopii viajn ŝlosilojn kaj "
+"ŝlosilaron."
 
 #: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:158
 #: src/seahorse-key-manager.ui:276
@@ -294,7 +325,7 @@ msgstr "Pasvortoj"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Konservitaj personaj pasvortoj, salutiloj kaj sekretoj"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:598
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:605
 msgid "Couldn’t unlock"
 msgstr "Ne eblis malŝlosi"
 
@@ -308,7 +339,7 @@ msgstr "Ĉu konservi ŝanĝojn por ĉi tiu ero?"
 
 #: gkr/gkr-item-properties.vala:123
 msgid "Access a network share or resource"
-msgstr "Aliri retdividejon aŭ -risurcon"
+msgstr "Aliri retdividejon aŭ risurcon"
 
 #: gkr/gkr-item-properties.vala:126
 msgid "Access a website"
@@ -428,45 +459,36 @@ msgstr "Ne eblis aldoni ŝlosilaron"
 msgid "Unknown date"
 msgstr "Nekonata dato"
 
-#: gkr/gkr-keyring.vala:28
+#: gkr/gkr-keyring.vala:34
 msgid "A keyring that is automatically unlocked on login"
 msgstr "Ŝlosilaro, kiu estas aŭtomate malŝlosita dum saluto"
 
-#: gkr/gkr-keyring.vala:29
+#: gkr/gkr-keyring.vala:35
 msgid "A keyring used to store passwords"
 msgstr "Ŝlosilaro, kiu estas uzata por konservi pasvortojn"
 
-#: gkr/gkr-keyring.vala:174
+#: gkr/gkr-keyring.vala:192
 msgid "Couldn’t set default keyring"
 msgstr "Ne eblis agordi implicitan ŝlosilaron"
 
-#: gkr/gkr-keyring.vala:198 gkr/gkr-keyring.vala:203
+#: gkr/gkr-keyring.vala:219 gkr/gkr-keyring.vala:224
 msgid "Couldn’t change keyring password"
 msgstr "Ne eblis ŝanĝi ŝlosilaran pasvorton"
 
-#: gkr/gkr-keyring.vala:209
+#: gkr/gkr-keyring.vala:243
 msgid "_Set as default"
-msgstr "_Agordi kiel defaŭlto"
+msgstr "_Agordi kiel implicitan"
 
-#: gkr/gkr-keyring.vala:210
-msgid "Applications usually store new passwords in the default keyring."
-msgstr ""
-"Aplikaĵoj kutime konservas novajn pasvortojn en la implicita ŝlosilaro."
-
-#: gkr/gkr-keyring.vala:211
+#: gkr/gkr-keyring.vala:244
 msgid "Change _Password"
 msgstr "Ŝanĝi _pasvorton"
 
-#: gkr/gkr-keyring.vala:212
-msgid "Change the unlock password of the password storage keyring"
-msgstr "Ŝanĝi la malŝlos-pasvorton de la pasvorta konserveja ŝlosilaro"
-
-#: gkr/gkr-keyring.vala:237
+#: gkr/gkr-keyring.vala:255
 #, c-format
 msgid "Are you sure you want to delete the password keyring “%s”?"
 msgstr "Ĉu vi certe volas forigi la pasvortan ŝlosilaron “%s”?"
 
-#: gkr/gkr-keyring.vala:240
+#: gkr/gkr-keyring.vala:258
 msgid "I understand that all items will be permanently deleted."
 msgstr "Mi komprenas, ke ĉiuj eroj estos forigitaj daŭre."
 
@@ -529,7 +551,7 @@ msgid "Use"
 msgstr "Uzo"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1203
+#: pgp/seahorse-pgp-key-properties.c:1217
 msgid "Type"
 msgstr "Speco"
 
@@ -571,7 +593,7 @@ msgstr "Ŝlosilaro estas ŝlosita"
 msgid "Lock"
 msgstr "Ŝlosi"
 
-#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:837
+#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:851
 msgid "Name"
 msgstr "Nomo"
 
@@ -585,7 +607,7 @@ msgstr "Ŝanĝi pasvorton"
 
 #: gkr/seahorse-gkr-keyring.ui:167
 msgid "Set as default"
-msgstr "Agordi kiel implicita"
+msgstr "Agordi kiel implicitan"
 
 #: libegg/egg-datetime.c:316
 msgid "Display flags"
@@ -593,7 +615,7 @@ msgstr "Montraj flagoj"
 
 #: libegg/egg-datetime.c:317
 msgid "Displayed date and/or time properties"
-msgstr "Montrita dataj kaj/aŭ horaj ecoj"
+msgstr "Montritaj dataj kaj/aŭ horaj ecoj"
 
 #: libegg/egg-datetime.c:322
 msgid "Lazy mode"
@@ -853,7 +875,7 @@ msgstr "N_eniam senvalidiĝos"
 
 #: pgp/seahorse-add-subkey.ui:35
 msgid "If key never expires"
-msgstr "Se la ŝlosila nenian senvalidiĝos"
+msgstr "Se la ŝlosilo neniam senvalidiĝos"
 
 #: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
 msgid "Key _Type:"
@@ -877,7 +899,7 @@ msgstr "Generi novan subŝlosilon"
 
 #: pgp/seahorse-expires.ui:22
 msgid "_Never expires"
-msgstr "_Nenian senvalidiĝos"
+msgstr "_Neniam senvalidiĝos"
 
 #: pgp/seahorse-expires.ui:80 pgp/seahorse-revoke.ui:129
 msgid "Revoke key"
@@ -915,7 +937,7 @@ msgstr "RSA (nur ĉifra)"
 #: pgp/seahorse-gpgme-add-uid.c:149
 #, c-format
 msgid "Add user ID to %s"
-msgstr "Aldoni uzantan ID al %s"
+msgstr "Aldoni uzanto-identigilon al %s"
 
 #: pgp/seahorse-gpgme-add-uid.c:217
 msgid "Couldn’t add user ID"
@@ -923,7 +945,7 @@ msgstr "Ne eblis aldoni uzanto-identigilon"
 
 #: pgp/seahorse-gpgme-add-uid.ui:8
 msgid "Add User ID"
-msgstr "Aldon uzantan ID"
+msgstr "Aldon uzanto-identigilon"
 
 #. Full name of the key, usually the name of the user.
 #: pgp/seahorse-gpgme-add-uid.ui:24
@@ -958,7 +980,7 @@ msgstr "Krei la novan uzantan ID"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Malĉifro malsukcesis. Vi probable ne havas la malĉifran ŝlosilon."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:553
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:515
 msgid "The operation was cancelled"
 msgstr "La ago estis nuligita"
 
@@ -977,7 +999,7 @@ msgstr "Ne eblis ŝanĝi senvalidigan daton"
 #: pgp/seahorse-gpgme-expires.c:138
 #, c-format
 msgid "Expiry: %s"
-msgstr "Senvalidigo: %s"
+msgstr "Senvalidiĝo: %s"
 
 #: pgp/seahorse-gpgme-exporter.c:72
 msgid "Multiple Keys"
@@ -1039,13 +1061,13 @@ msgstr "Generante ŝlosilon"
 msgid "Name must be at least 5 characters long."
 msgstr "Nomo devas esti malpleje 5 signoj."
 
-#: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
+#: pgp/seahorse-gpgme-key-deleter.c:76 pgp/seahorse-gpgme-secret-deleter.c:59
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
 msgstr "Ĉu vi certe volas daŭre forigi %s?"
 
-#: pgp/seahorse-gpgme-key-deleter.c:80
+#: pgp/seahorse-gpgme-key-deleter.c:79
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys?"
 msgid_plural "Are you sure you want to permanently delete %d keys?"
@@ -1061,41 +1083,41 @@ msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 "Ĉi tiu estis la tria fojo, ke vi enigis malĝustan pasvorton. Bonvolu reprovi."
 
-#: pgp/seahorse-gpgme-keyring.c:87
+#: pgp/seahorse-gpgme-keyring.c:89
 #, c-format
 msgid "Wrong passphrase."
-msgstr "Falsa pasfrazo."
+msgstr "Malĝusta pasfrazo."
 
-#: pgp/seahorse-gpgme-keyring.c:91
+#: pgp/seahorse-gpgme-keyring.c:93
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "Enigi novan pasfrazon por “%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:93
+#: pgp/seahorse-gpgme-keyring.c:95
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "Enigi pasfrazon por “%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:96 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:98 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Enigi novan pasfrazon"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:100
 msgid "Enter passphrase"
 msgstr "Enigi pasfrazon"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:105
 msgid "Passphrase"
 msgstr "Pasfrazo"
 
-#: pgp/seahorse-gpgme-keyring.c:298
+#: pgp/seahorse-gpgme-keyring.c:300
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Ŝargis %d ŝlosilon"
 msgstr[1] "Ŝargis %d ŝlosilojn"
 
-#: pgp/seahorse-gpgme-keyring.c:623
+#: pgp/seahorse-gpgme-keyring.c:625
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1103,11 +1125,11 @@ msgstr ""
 "Nevalida ŝlosil-datumo (UID-oj mankante). Ĉi tio povus esti pro komputilo "
 "kun dato en la estonteco aŭ mankanta mem-subskribo."
 
-#: pgp/seahorse-gpgme-keyring.c:753
+#: pgp/seahorse-gpgme-keyring.c:755
 msgid "GnuPG keys"
 msgstr "GnuPG-ŝlosiloj"
 
-#: pgp/seahorse-gpgme-keyring.c:764
+#: pgp/seahorse-gpgme-keyring.c:766
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: implicita ŝlosilara dosierujo"
 
@@ -1166,7 +1188,7 @@ msgstr "Ne eblis prepari fotaĵon"
 
 #: pgp/seahorse-gpgme-photos.c:295
 msgid "The file could not be loaded. It may be in an invalid format"
-msgstr "La dosieron oni ne eblis ŝargi. Ĝi povus esti en nevalida formo"
+msgstr "La dosieron ne eblis ŝargi. Ĝi povus esti en nevalida formo"
 
 #: pgp/seahorse-gpgme-photos.c:321
 msgid "Are you sure you want to remove the current photo from your key?"
@@ -1223,14 +1245,14 @@ msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr ""
-"Vi estas aldonta %s kiel senvalidiganto por %s. Ĉi tiun agon oni ne povas "
+"Vi estas aldononta %s kiel senvalidiganton por %s. Ĉi tiun agon oni ne povas "
 "malfari! Ĉu vi certe volas daŭrigi?"
 
 #: pgp/seahorse-gpgme-revoke.c:176
 msgid "Couldn’t add revoker"
 msgstr "Ne eblis aldoni senvalidiganton"
 
-#: pgp/seahorse-gpgme-secret-deleter.c:81 ssh/deleter.vala:43
+#: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
 msgstr "Mi komprenas, ke ĉi tiu sekreta ŝlosilo estos daŭre forigita."
 
@@ -1270,18 +1292,18 @@ msgstr "Nekonate"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:571
+#: pgp/seahorse-hkp-source.c:533
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Serĉo ne estis sufiĉe specifa. Servilo “%s” trovis tro multe da ŝlosiloj."
 
-#: pgp/seahorse-hkp-source.c:574
+#: pgp/seahorse-hkp-source.c:536
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Ne povis komuniki al servilo “%s”: %s"
 
-#: pgp/seahorse-hkp-source.c:1084
+#: pgp/seahorse-hkp-source.c:999
 msgid "HTTP Key Server"
 msgstr "HTTP ŝlosila servilo"
 
@@ -1309,9 +1331,9 @@ msgstr "Deforaj ŝlosiloj"
 #: pgp/seahorse-keyserver-results.c:242
 #, c-format
 msgid "Remote keys containing “%s”"
-msgstr "Deforaj ŝlosiloj enhavante “%s”"
+msgstr "Deforaj ŝlosiloj enhavantaj “%s”"
 
-#: pgp/seahorse-keyserver-results.c:356
+#: pgp/seahorse-keyserver-results.c:357
 msgid "The search for keys failed."
 msgstr "La serĉado por ŝlosiloj malsukcesis."
 
@@ -1320,7 +1342,7 @@ msgid ""
 "Double click on a key to inspect it, or click the import button to import it "
 "into your local keyring."
 msgstr ""
-"Klaki duoble sur ŝlosilo por inspekti ĝin, aŭ alklaki la enport-butonon por "
+"Klaku duoble sur ŝlosilo por inspekti ĝin, aŭ alklaku la enport-butonon por "
 "enporti ĝin en vian ŝlosilaron."
 
 #: pgp/seahorse-keyserver-search.ui:8
@@ -1337,7 +1359,7 @@ msgstr ""
 
 #: pgp/seahorse-keyserver-search.ui:52
 msgid "_Search for keys containing: "
-msgstr "_Serĉi por ŝlosiloj enhavante: "
+msgstr "_Serĉi por ŝlosiloj enhavantaj: "
 
 #: pgp/seahorse-keyserver-search.ui:74
 msgid "Where to search:"
@@ -1475,11 +1497,11 @@ msgstr "Ŝlosila _forteco (bitoj):"
 
 #: pgp/seahorse-pgp-generate.ui:242
 msgid "E_xpiration Date:"
-msgstr "Sen_validiga dato:"
+msgstr "S_envalidiĝa dato:"
 
 #: pgp/seahorse-pgp-generate.ui:261
 msgid "Ne_ver Expires"
-msgstr "_Neniam senvalidigos"
+msgstr "_Neniam senvalidiĝos"
 
 #: pgp/seahorse-pgp-generate.ui:304
 msgid "C_reate"
@@ -1497,139 +1519,139 @@ msgstr "Persona PGP-ŝlosilo"
 msgid "PGP key"
 msgstr "PGP-ŝlosilo"
 
-#: pgp/seahorse-pgp-key-properties.c:246
+#: pgp/seahorse-pgp-key-properties.c:245
 msgid "Couldn’t change primary user ID"
-msgstr "Ne povis ŝanĝi ĉefan uzantan ID-on"
+msgstr "Ne povis ŝanĝi ĉefan uzanto-identigilon"
 
-#: pgp/seahorse-pgp-key-properties.c:264
+#: pgp/seahorse-pgp-key-properties.c:280
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
-msgstr "Ĉu vi certe volas daŭre forigi la “%s” uzantan ID-on?"
+msgstr "Ĉu vi certe volas daŭre forigi la uzanto-identigilon “%s”?"
 
-#: pgp/seahorse-pgp-key-properties.c:273
+#: pgp/seahorse-pgp-key-properties.c:289
 msgid "Couldn’t delete user ID"
 msgstr "Ne eblis forigi unzonto-identigilon"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:345 pgp/seahorse-pgp-key-properties.c:1337
+#: pgp/seahorse-pgp-key-properties.c:361 pgp/seahorse-pgp-key-properties.c:1351
 msgid "[Unknown]"
 msgstr "[Nekonate]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:442 pgp/seahorse-pgp-key-properties.c:1542
+#: pgp/seahorse-pgp-key-properties.c:457 pgp/seahorse-pgp-key-properties.c:1556
 msgid "Name/Email"
 msgstr "Nomo/retpoŝtadreso"
 
-#: pgp/seahorse-pgp-key-properties.c:449
+#: pgp/seahorse-pgp-key-properties.c:464
 msgid "Signature ID"
-msgstr "Subskriba ID"
+msgstr "Subskriba identigilo"
 
-#: pgp/seahorse-pgp-key-properties.c:555
+#: pgp/seahorse-pgp-key-properties.c:570
 msgid "Couldn’t change primary photo"
 msgstr "Ne povis ŝanĝi ĉefan foton"
 
-#: pgp/seahorse-pgp-key-properties.c:715
+#: pgp/seahorse-pgp-key-properties.c:730
 msgid "Error changing password"
 msgstr "Eraro dum ŝanĝo de pasvorto"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:761
+#: pgp/seahorse-pgp-key-properties.c:776
 msgid "(unknown)"
 msgstr "(nekonate)"
 
-#: pgp/seahorse-pgp-key-properties.c:766
+#: pgp/seahorse-pgp-key-properties.c:781
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Ĉi tiu ŝlosilo senvalidiĝis je: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:794
+#: pgp/seahorse-pgp-key-properties.c:809
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — Publika ŝlosilo"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:797
+#: pgp/seahorse-pgp-key-properties.c:812
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Privata ŝlosilo"
 
-#: pgp/seahorse-pgp-key-properties.c:951
+#: pgp/seahorse-pgp-key-properties.c:965
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Ĉu vi certe volas daŭre forigi subŝlosilon %d de %s?"
 
-#: pgp/seahorse-pgp-key-properties.c:959
+#: pgp/seahorse-pgp-key-properties.c:973
 msgid "Couldn’t delete subkey"
 msgstr "Ne eblis forigi subŝlosilon"
 
-#: pgp/seahorse-pgp-key-properties.c:1018
-#: pgp/seahorse-pgp-key-properties.c:1311
+#: pgp/seahorse-pgp-key-properties.c:1032
+#: pgp/seahorse-pgp-key-properties.c:1325
 msgid "Unable to change trust"
 msgstr "Ne eblas ŝanĝi fidon"
 
-#: pgp/seahorse-pgp-key-properties.c:1030 ssh/key-properties.vala:185
+#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:185
 msgid "Couldn’t export key"
 msgstr "Ne eblis elporti ŝlosilon"
 
-#: pgp/seahorse-pgp-key-properties.c:1161
-#: pgp/seahorse-pgp-key-properties.c:1245
+#: pgp/seahorse-pgp-key-properties.c:1175
+#: pgp/seahorse-pgp-key-properties.c:1259
 msgctxt "Expires"
 msgid "Never"
 msgstr "Neniam"
 
-#: pgp/seahorse-pgp-key-properties.c:1200
+#: pgp/seahorse-pgp-key-properties.c:1214
 msgid "ID"
-msgstr "ID"
+msgstr "Identigilo"
 
-#: pgp/seahorse-pgp-key-properties.c:1206
+#: pgp/seahorse-pgp-key-properties.c:1220
 msgid "Usage"
 msgstr "Uzado"
 
-#: pgp/seahorse-pgp-key-properties.c:1209
+#: pgp/seahorse-pgp-key-properties.c:1223
 msgid "Created"
 msgstr "Kreite"
 
-#: pgp/seahorse-pgp-key-properties.c:1212
+#: pgp/seahorse-pgp-key-properties.c:1226
 msgid "Expires"
 msgstr "Senvalidiĝo"
 
-#: pgp/seahorse-pgp-key-properties.c:1215
+#: pgp/seahorse-pgp-key-properties.c:1229
 msgid "Status"
 msgstr "Stato"
 
-#: pgp/seahorse-pgp-key-properties.c:1218
+#: pgp/seahorse-pgp-key-properties.c:1232
 msgid "Strength"
 msgstr "Forto"
 
-#: pgp/seahorse-pgp-key-properties.c:1236
+#: pgp/seahorse-pgp-key-properties.c:1250
 msgid "Revoked"
 msgstr "Senvalidigita"
 
-#: pgp/seahorse-pgp-key-properties.c:1238
+#: pgp/seahorse-pgp-key-properties.c:1252
 msgid "Expired"
 msgstr "Senvalidiĝis"
 
-#: pgp/seahorse-pgp-key-properties.c:1240
+#: pgp/seahorse-pgp-key-properties.c:1254
 msgid "Disabled"
 msgstr "Elŝaltite"
 
-#: pgp/seahorse-pgp-key-properties.c:1242
+#: pgp/seahorse-pgp-key-properties.c:1256
 msgid "Good"
 msgstr "Bona"
 
-#: pgp/seahorse-pgp-key-properties.c:1545
+#: pgp/seahorse-pgp-key-properties.c:1559
 #: pgp/seahorse-pgp-private-key-properties.ui:333
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Ŝlosila ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1686
+#: pgp/seahorse-pgp-key-properties.c:1700
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Mi fidas subskribojn de “%s” sur aliaj ŝlosiloj"
 
-#: pgp/seahorse-pgp-key-properties.c:1693
+#: pgp/seahorse-pgp-key-properties.c:1707
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1638,7 +1660,7 @@ msgstr ""
 "Se vi kredas, ke la persono kiu posedas ĉi tiun ŝlosilon estas “%s”, "
 "<i>subskribu</i> ĉi tiun ŝlosilon:"
 
-#: pgp/seahorse-pgp-key-properties.c:1700
+#: pgp/seahorse-pgp-key-properties.c:1714
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1665,11 +1687,11 @@ msgstr "Ĉi tiu ŝlosilo senvalidiĝis"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:159
 msgid "Add a photo to this key"
-msgstr "Aldoni fotaĵon al tiu ŝlosilo"
+msgstr "Aldoni foton al tiu ŝlosilo"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:178
 msgid "Remove this photo from this key"
-msgstr "Forigi tiun fotaĵon de tiu ŝlosilo"
+msgstr "Forigi tiun foton de tiu ŝlosilo"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:197
 msgid "Make this photo the primary photo"
@@ -1677,11 +1699,11 @@ msgstr "Fari ĉi tiun foton la ĉefa foto"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:222
 msgid "Go to previous photo"
-msgstr "Iri al antaŭa fotaĵo"
+msgstr "Iri al antaŭa foto"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:241
 msgid "Go to next photo"
-msgstr "Iri al sekva fotaĵo"
+msgstr "Iri al sekva foto"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:306
 #: pgp/seahorse-pgp-public-key-properties.ui:246
@@ -1775,7 +1797,7 @@ msgstr "Transpasi posedantan _fidon:"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:879
 msgid "_Export Secret Key:"
-msgstr "_Elport sekretan ŝlosilon:"
+msgstr "_Elporti sekretan ŝlosilon:"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:926
 msgid "Actions"
@@ -1820,7 +1842,7 @@ msgstr "Via fido je ĉi tiu ŝlosilo"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:382
 msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr "Via fido estas mane specifita en la <i>Detaloj</i> langeto."
+msgstr "Via fido estas mane specifita en la langeto <i>Detaloj</i>."
 
 #: pgp/seahorse-pgp-public-key-properties.ui:455
 msgid "_Sign this Key"
@@ -1920,8 +1942,7 @@ msgstr "Subskribi ŝlosilon"
 
 #: pgp/seahorse-sign.ui:27
 msgid "By signing you indicate your trust that this key belongs to:"
-msgstr ""
-"Per subskribante, vi indikas vian fidon ke ĉi tiu ŝlosilo apartenas al:"
+msgstr "Per subskribo, vi indikas vian fidon ke ĉi tiu ŝlosilo apartenas al:"
 
 #: pgp/seahorse-sign.ui:34
 msgid "Key Name"
@@ -1975,7 +1996,7 @@ msgid ""
 "personally check that the name on the key is correct. You should have also "
 "used email to check that the email address belongs to the owner."
 msgstr ""
-"Vi povus uzi malfacile falsifeblan legitimilon (kiel pasporto) por persone "
+"Vi povus uzi malfacile falseblan legitimilon (kiel pasporton) por persone "
 "kontroli ĉu la nomo de la ŝlosilo ĝustas. Vi ankaŭ devus kontroli retpoŝte "
 "ĉu la retpoŝtadreso apartenas al la posedanto."
 
@@ -2070,7 +2091,7 @@ msgstr "Sennoma"
 msgid "Failed to export certificate"
 msgstr "Malsukcesis elporti atestilon"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:614
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:621
 msgid "Couldn’t delete"
 msgstr "Ne eblis forigi"
 
@@ -2175,7 +2196,8 @@ msgstr "Versio de ĉi tiu aplikaĵo"
 msgid "translator-credits"
 msgstr ""
 "Kristjan SCHMIDT\n"
-"Carmen Bianca BAKKER <carmen@carmenbianca.eu>"
+"Carmen Bianca BAKKER <carmen@carmenbianca.eu>\n"
+"Tirifto <tirifto@posteo.cz>"
 
 #: src/application.vala:163
 msgid "Seahorse Project Homepage"
@@ -2183,7 +2205,7 @@ msgstr "Retpaĝaro de la Seahorse-projekto"
 
 #: src/import-dialog.vala:30
 msgid "Data to be imported"
-msgstr "Enportendaj datumoj"
+msgstr "Enportotaj datumoj"
 
 #: src/import-dialog.vala:74
 msgid "Import failed"
@@ -2192,7 +2214,7 @@ msgstr "Enporto malsukcesis"
 #. The prompt
 #: src/key-manager.vala:245 ssh/operation.vala:309
 msgid "Import Key"
-msgstr "Enport ŝlosilon"
+msgstr "Enporti ŝlosilon"
 
 #. TODO: This should come from libgcr somehow
 #: src/key-manager.vala:256
@@ -2205,9 +2227,9 @@ msgstr "Enmetita teksto"
 
 #: src/key-manager.vala:349
 msgid "Clipboard text"
-msgstr "Tunduja teksto"
+msgstr "Tonduja teksto"
 
-#: src/key-manager.vala:439
+#: src/key-manager.vala:441
 msgid "Couldn’t unlock keyring"
 msgstr "Ne eblis malŝlosi ŝlosilaron"
 
@@ -2260,8 +2282,8 @@ msgid "Help"
 msgstr "Helpo"
 
 #: src/seahorse-key-manager.ui:52
-msgid "About Seahorse"
-msgstr "Pri Seahorse"
+msgid "_About Passwords and Keys"
+msgstr "_Pri pasvortoj kaj ŝlosiloj"
 
 #: src/seahorse-key-manager.ui:89
 msgid "Secure Shell key"
@@ -2327,21 +2349,21 @@ msgstr "Ecoj"
 msgid "Configure Key for Secure Shell…"
 msgstr "Agordi ŝlosilon por Sekura Ŝelo…"
 
-#: src/sidebar.vala:581
+#: src/sidebar.vala:587
 msgid "Couldn’t lock"
 msgstr "Ne eblis ŝlosi"
 
 #. Lock and unlock items
-#: src/sidebar.vala:634
+#: src/sidebar.vala:638
 msgid "_Lock"
 msgstr "Ŝ_losi"
 
-#: src/sidebar.vala:639
+#: src/sidebar.vala:643
 msgid "_Unlock"
 msgstr "_Malŝlosi"
 
 #. Properties item
-#: src/sidebar.vala:656
+#: src/sidebar.vala:660
 msgid "_Properties"
 msgstr "_Ecoj"
 
@@ -2383,7 +2405,7 @@ msgstr "Neniu publika ŝlosila dosiero disponeblas por ĉi tiu ŝlosilo."
 
 #: ssh/generate.vala:94
 msgid "Couldn’t load newly generated Secure Shell key"
-msgstr "Ne povis ŝargi nove generatan SSH-ŝlosilon"
+msgstr "Ne povis enlegi nove generitan SSH-ŝlosilon"
 
 #: ssh/generate.vala:98
 msgid "Couldn’t generate Secure Shell key"
@@ -2610,7 +2632,7 @@ msgstr "OpenSSH: %s"
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:237
+#: ssh/source.vala:245
 msgid "No private key file is available for this key."
 msgstr "Neniu privata ŝlosila dosiero disponeblas por ĉi tiu ŝlosilo."
 
@@ -2621,6 +2643,16 @@ msgstr "Ne povis agordi SSH-ŝlosilojn sur defora komputilo."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Agordante SSH-ŝlosilojn…"
+
+#~ msgid "Applications usually store new passwords in the default keyring."
+#~ msgstr ""
+#~ "Aplikaĵoj kutime konservas novajn pasvortojn en la implicita ŝlosilaro."
+
+#~ msgid "Change the unlock password of the password storage keyring"
+#~ msgstr "Ŝanĝi la malŝlos-pasvorton de la pasvorta konserveja ŝlosilaro"
+
+#~ msgid "About Seahorse"
+#~ msgstr "Pri Seahorse"
 
 #~ msgid "_File"
 #~ msgstr "_Dosiero"
