@@ -36,15 +36,15 @@ public class Seahorse.KeyManager : Catalog {
     [GtkChild]
     private Gtk.Stack content_stack;
     [GtkChild]
-    private Gtk.TreeView key_list;
+    private Gtk.ListBox item_listbox;
 
     [GtkChild]
     private Gtk.MenuButton new_item_button;
     [GtkChild]
     private Gtk.ToggleButton show_search_button;
 
+    private Seahorse.ItemList item_list;
     private Gcr.Collection collection;
-    private KeyManagerStore store;
 
     private GLib.Settings settings;
 
@@ -70,19 +70,18 @@ public class Seahorse.KeyManager : Catalog {
         );
         this.settings = new GLib.Settings("org.gnome.seahorse.manager");
 
-        set_events(Gdk.EventMask.POINTER_MOTION_MASK
-                   | Gdk.EventMask.POINTER_MOTION_HINT_MASK
-                   | Gdk.EventMask.BUTTON_PRESS_MASK
-                   | Gdk.EventMask.BUTTON_RELEASE_MASK);
-
         this.collection = setup_sidebar();
 
         load_css();
 
-        // Add new key store and associate it
-        this.store = new KeyManagerStore(this.collection, this.key_list, this.settings);
-        this.store.row_inserted.connect(on_store_row_inserted);
-        this.store.row_deleted.connect(on_store_row_deleted);
+        // Add new item list and bind our listbox to it
+        this.item_list = new Seahorse.ItemList(this.collection);
+        this.item_list.items_changed.connect((idx, removed, added) => check_empty_state());
+        this.item_listbox.bind_model(this.item_list, (obj) => new KeyManagerItemRow(obj));
+        this.item_listbox.row_activated.connect(on_item_listbox_row_activated);
+        this.item_listbox.selected_rows_changed.connect(on_item_listbox_selected_rows_changed);
+        this.item_listbox.popup_menu.connect(on_item_listbox_popup_menu);
+        this.item_listbox.button_press_event.connect(on_item_listbox_button_press_event);
 
         init_actions();
 
@@ -92,14 +91,6 @@ public class Seahorse.KeyManager : Catalog {
 
         // For the filtering
         on_filter_changed(this.filter_entry);
-        this.key_list.start_interactive_search.connect(() => {
-            this.filter_entry.grab_focus();
-            return false;
-        });
-
-        // Set focus to the current key list
-        this.key_list.grab_focus();
-        selection_changed();
 
         // Setup drops
         Gtk.drag_dest_set(this, Gtk.DestDefaults.ALL, {}, Gdk.DragAction.COPY);
@@ -134,14 +125,52 @@ public class Seahorse.KeyManager : Catalog {
         provider.load_from_resource("/org/gnome/Seahorse/seahorse.css");
     }
 
-    [GtkCallback]
-    private void on_view_selection_changed(Gtk.TreeSelection selection) {
-        Idle.add(() => {
-            // Fire the signal
-            selection_changed();
-            // Return false so we don't get run again
-            return false;
-        });
+    private void on_item_listbox_row_activated(Gtk.ListBox item_listbox, Gtk.ListBoxRow row) {
+        unowned GLib.Object obj = ((KeyManagerItemRow) row).object;
+        assert(obj != null);
+        show_properties(obj);
+    }
+
+    private void on_item_listbox_selected_rows_changed(Gtk.ListBox item_listbox) {
+        selection_changed();
+    }
+
+    private bool on_item_listbox_button_press_event (Gdk.EventButton event) {
+        // Check for right click
+        if ((event.type == Gdk.EventType.BUTTON_PRESS) && (event.button == 3)) {
+            // Make sure that the right-clicked row is also selected
+            var row = this.item_listbox.get_row_at_y((int) event.y);
+            if (row != null) {
+                this.item_listbox.unselect_all();
+                this.item_listbox.select_row(row);
+            }
+
+            // Show context menu (unless no row was right clicked or nothing was selected)
+            var objects = get_selected_item_listbox_items();
+            warning("We have %u selected objects", objects.length());
+            if (objects != null)
+                show_context_menu(null);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool on_item_listbox_popup_menu(Gtk.Widget? listview) {
+        var objects = get_selected_item_listbox_items();
+        if (objects != null)
+            show_context_menu(null);
+        return false;
+    }
+
+    private GLib.List<weak GLib.Object> get_selected_item_listbox_items() {
+        var rows = this.item_listbox.get_selected_rows();
+        var objects = new GLib.List<weak GLib.Object>();
+
+        foreach (var row in rows)
+            objects.prepend(((KeyManagerItemRow) row).object);
+
+        return objects;
     }
 
     public override void selection_changed() {
@@ -152,30 +181,12 @@ public class Seahorse.KeyManager : Catalog {
             backend.actions.set_actions_for_selected_objects(objects);
     }
 
-    [GtkCallback]
-    private void on_key_list_row_activated(Gtk.TreeView key_list, Gtk.TreePath? path, Gtk.TreeViewColumn column) {
-        if (path == null)
-            return;
-
-        GLib.Object obj = KeyManagerStore.get_object_from_path(key_list, path);
-        if (obj != null)
-            show_properties(obj);
-    }
-
-    private void on_store_row_inserted(Gtk.TreeModel store, Gtk.TreePath path, Gtk.TreeIter iter) {
-        check_empty_state();
-    }
-
-    private void on_store_row_deleted(Gtk.TreeModel store, Gtk.TreePath path) {
-        check_empty_state();
-    }
-
     private void check_empty_state() {
-        bool empty = (store.iter_n_children(null) == 0);
+        bool empty = (this.item_list.get_n_items() == 0);
 
         this.show_search_button.sensitive = !empty;
         if (!empty) {
-            this.content_stack.visible_child_name = "key_list_page";
+            this.content_stack.visible_child_name = "item_listbox_page";
             return;
         }
 
@@ -188,27 +199,6 @@ public class Seahorse.KeyManager : Catalog {
             return;
         }
         this.content_stack.visible_child_name = "empty_state_page";
-    }
-
-    [GtkCallback]
-    private bool on_key_list_button_pressed(Gdk.EventButton event) {
-        if (event.button == 3) {
-            show_context_menu(event);
-            GLib.List<GLib.Object> objects = get_selected_objects();
-            if (objects.length() > 1) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    [GtkCallback]
-    private bool on_key_list_popup_menu() {
-        GLib.List<GLib.Object> objects = get_selected_objects();
-        if (objects != null)
-            show_context_menu(null);
-        return false;
     }
 
     private void on_new_item(SimpleAction action, GLib.Variant? param) {
@@ -232,7 +222,8 @@ public class Seahorse.KeyManager : Catalog {
 
     [GtkCallback]
     private void on_filter_changed(Gtk.Editable entry) {
-        this.store.filter = this.filter_entry.text;
+        //XXX
+        this.item_list.filter_text = this.filter_entry.text;
     }
 
     public void import_files(string[]? uris) {
@@ -360,9 +351,9 @@ public class Seahorse.KeyManager : Catalog {
         SimpleAction action = lookup_action("filter-items") as SimpleAction;
         action.set_state(filter_str);
 
-        // Update the store
-        this.store.showfilter = KeyManagerStore.ShowFilter.from_string(filter_str);
-        this.store.refilter();
+        // Update the item list
+        this.item_list.showfilter = ItemList.ShowFilter.from_string(filter_str);
+        this.item_list.refilter();
     }
 
     private void on_show_search(SimpleAction action, Variant? param) {
@@ -378,7 +369,12 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     public override GLib.List<GLib.Object> get_selected_objects() {
-        return KeyManagerStore.get_selected_objects(this.key_list);
+        var objects = new GLib.List<GLib.Object>();
+
+        foreach (var row in this.item_listbox.get_selected_rows()) {
+            objects.append(((KeyManagerItemRow) row).object);
+        }
+        return objects;
     }
 
     private void on_focus_place(SimpleAction action, Variant? param) {
