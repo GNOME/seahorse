@@ -8,6 +8,7 @@ seahorse_sources = [
   'application.vala',
   'import-dialog.vala',
   'key-manager.vala',
+  'key-manager-item-row.vala',
   'main.vala',
   'search-provider.vala',
   'sidebar.vala',
