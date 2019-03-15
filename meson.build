@@ -55,18 +55,18 @@ gpg_bin = find_program('gpg2', 'gpg', required: with_pgp)
 gpgme = cc.find_library('gpgme', required: with_pgp)
 gpgme_config = find_program('gpgme-config', required: with_pgp)
 
-if check_compatible_gpg
+if with_pgp
   gpg_version_check = run_command([gpg_check_version, gpg_bin.path(), 'false', accepted_gpg_versions ])
   gpg_version = gpg_version_check.stdout()
   message('GnuPG Version: @0@'.format(gpg_version))
-  if gpg_version_check.returncode() != 0
+  if check_compatible_gpg and gpg_version_check.returncode() != 0
     error('Incompatible version of GnuPG. Accepted versions are: @0@'.format(accepted_gpg_versions))
   endif
 
   gpgme_version_check = run_command([gpg_check_version, gpgme_config.path(), 'true', min_gpgme_version ])
   gpgme_version = gpgme_version_check.stdout()
   message('GPGME version: @0@'.format(gpgme_version))
-  if gpgme_version_check.returncode() != 0
+  if check_compatible_gpg and gpgme_version_check.returncode() != 0
     error('Incompatible version of GPGME. Minimal version required is @0@'.format(min_gpgme_version))
   endif
 endif
