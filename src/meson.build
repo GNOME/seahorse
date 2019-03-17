@@ -51,6 +51,3 @@ seahorse_exe = executable('seahorse',
   link_with: seahorse_linkedlibs,
   install: true,
 )
-
-# Manpage
-install_man('seahorse.1')

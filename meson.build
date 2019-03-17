@@ -15,6 +15,7 @@ with_hkp = get_option('hkp-support')
 with_ldap = get_option('ldap-support')
 with_keyservers = get_option('keyservers-support')
 with_key_sharing = get_option('key-sharing')
+with_manpage = get_option('manpage')
 
 # Some variables
 cc = meson.get_compiler('c')
