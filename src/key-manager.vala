@@ -233,7 +233,7 @@ public class Seahorse.KeyManager : Catalog {
         this.store.filter = this.filter_entry.text;
     }
 
-    private void import_files(string[]? uris) {
+    public void import_files(string[]? uris) {
         ImportDialog dialog = new ImportDialog(this);
         dialog.add_uris(uris);
         dialog.run();

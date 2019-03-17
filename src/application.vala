@@ -69,7 +69,7 @@ public class Seahorse.Application : Gtk.Application {
     public Application () {
         GLib.Object (
             application_id: "org.gnome.seahorse.Application",
-            flags: ApplicationFlags.FLAGS_NONE
+            flags: ApplicationFlags.HANDLES_OPEN
         );
         this.search_provider = new SearchProvider(this);
 
@@ -114,6 +114,16 @@ public class Seahorse.Application : Gtk.Application {
             this.key_mgr = new Seahorse.KeyManager(this);
 
         this.key_mgr.present();
+    }
+
+    public override void open(File[] files, string hint) {
+        activate();
+        return_if_fail(this.key_mgr != null);
+
+        string[] uris = {};
+        foreach (File file in files)
+            uris += file.get_uri();
+        this.key_mgr.import_files(uris);
     }
 
     public override int handle_local_options (VariantDict options) {
