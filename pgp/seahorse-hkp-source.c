@@ -975,7 +975,7 @@ seahorse_hkp_source_export_finish (SeahorseServerSource *source,
     g_return_val_if_fail (g_task_is_valid (result, source), NULL);
 
     closure = g_task_get_task_data (G_TASK (result));
-    *size = closure->data->len;
+    *size = closure->data_len;
     return g_task_propagate_pointer (G_TASK (result), error);
 }
 
