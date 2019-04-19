@@ -24,6 +24,8 @@
 public class Seahorse.KeyManager : Catalog {
 
     [GtkChild]
+    private Gtk.SearchBar search_bar;
+    [GtkChild]
     private Gtk.SearchEntry filter_entry;
 
     [GtkChild]
@@ -441,5 +443,10 @@ public class Seahorse.KeyManager : Catalog {
                 Util.show_error(this, _("Couldn’t unlock keyring"), e.message);
             }
         });
+    }
+
+    [GtkCallback]
+    private bool on_key_pressed(Gtk.Widget widget, Gdk.EventKey event) {
+        return this.search_bar.handle_event(event);
     }
 }

@@ -269,6 +269,7 @@
     <property name="default-width">600</property>
     <property name="default-height">476</property>
     <signal name="drag-data-received" handler="on_drag_data_received" />
+    <signal name="key-press-event" handler="on_key_pressed"/>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="visible">True</property>
@@ -349,7 +350,7 @@
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkSearchBar">
+              <object class="GtkSearchBar" id="search_bar">
                 <property name="visible">True</property>
                 <property name="search-mode-enabled" bind-source="show_search_button" bind-property="active" bind-flags="bidirectional|sync-create" />
                 <property name="can_focus">False</property>

@@ -162,7 +162,6 @@ public class Seahorse.Sidebar : Gtk.TreeView {
 
         set_headers_visible(false);
         set_tooltip_column(Column.TOOLTIP);
-        set_search_column(Column.LABEL);
         set_model(this.store);
         this.popup_menu.connect(on_popup_menu);
         this.button_press_event.connect(on_button_press_event);
