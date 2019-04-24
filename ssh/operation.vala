@@ -80,8 +80,15 @@ public abstract class Operation : GLib.Object {
                                        on_spawn_setup_child, out this.pid, out fin, out fout, out ferr);
 
         ulong cancelled_sig = 0;
-        if (cancellable != null)
-            cancelled_sig = cancellable.connect(() =>  { Posix.kill(this.pid, Posix.Signal.TERM); });
+        if (cancellable != null) {
+            cancelled_sig = cancellable.connect(() =>  {
+#if VALA_0_40
+                Posix.kill(this.pid, Posix.Signal.TERM);
+#else
+                Posix.kill(this.pid, Posix.SIGTERM);
+#endif
+            });
+        }
 
         // Copy the input for later writing
         if (input != null) {
@@ -141,7 +148,11 @@ public abstract class Operation : GLib.Object {
             }
         } catch (GLib.Error e) {
             critical("Couldn't read output of SSH command. Error: %s", e.message);
+#if VALA_0_40
             Posix.kill(this.pid, Posix.Signal.TERM);
+#else
+            Posix.kill(this.pid, Posix.SIGTERM);
+#endif
             return false;
         }
 
@@ -159,7 +170,11 @@ public abstract class Operation : GLib.Object {
             }
         } catch (GLib.Error e) {
             critical("Couldn't write to STDIN of SSH command. Error: %s", e.message);
+#if VALA_0_40
             Posix.kill(this.pid, Posix.Signal.TERM);
+#else
+            Posix.kill(this.pid, Posix.SIGTERM);
+#endif
             return false;
         }
 
