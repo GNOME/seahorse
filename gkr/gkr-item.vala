@@ -376,7 +376,7 @@ private void epiphany_custom(string? display,
         info.label = uri;
 
     var username = get_attribute_string(attrs, "username");
-    if (uri != null)
+    if (username != null)
         info.details = Markup.escape_text(username);
 }
 
