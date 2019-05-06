@@ -1,17 +1,5 @@
 icons_install_dir = get_option('datadir') / 'icons'
 
-foreach size: [ 16, 22, 24, 32, 48 ]
-  icon_size_str = '@0@x@0@'.format(size)
-  icon_subfolder = 'hicolor' / icon_size_str / 'apps'
-
-  foreach app: [ 'seahorse-preferences' ]
-    install_data(
-      icon_subfolder / (app + '.png'),
-      install_dir: icons_install_dir / icon_subfolder,
-    )
-  endforeach
-endforeach
-
 # special case for symbolic
 icon_subfolder = 'hicolor' / 'symbolic' / 'apps'
 install_data(icon_subfolder / 'org.gnome.seahorse.Application-symbolic.svg',
