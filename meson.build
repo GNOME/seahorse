@@ -103,27 +103,10 @@ add_project_arguments([
     '-DGCK_API_SUBJECT_TO_CHANGE',
     '-DSECRET_WITH_UNSTABLE',
     '-include', 'config.h',
+    # Don't care about unused parameters (which can happen a lot with callbacks)
+    '-Wno-unused-parameter',
+    '-Wno-missing-field-initializers',
   ],
-  language: 'c',
-)
-
-# Use more warnings
-warning_flags = [
-  '-Wmissing-declarations',
-  '-Wmissing-prototypes',
-  '-Wnested-externs',
-  '-Wpointer-arith',
-  '-Wcast-align',
-  '-Wsign-compare',
-  '-Wno-deprecated-declarations',
-]
-supported_warning_flags = []
-foreach flag : warning_flags
-  if cc.has_argument(flag)
-    supported_warning_flags += flag
-  endif
-endforeach
-add_project_arguments(supported_warning_flags,
   language: 'c',
 )
 
