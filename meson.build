@@ -1,6 +1,6 @@
 project('seahorse', ['vala', 'c'],
   version: '3.32',
-  meson_version: '>= 0.42',
+  meson_version: '>= 0.49',
   license: 'GPL2+',
 )
 
@@ -23,19 +23,16 @@ valac = meson.get_compiler('vala')
 buildtype = get_option('buildtype')
 
 seahorse_prefix = get_option('prefix')
-po_dir = join_paths(meson.source_root(), 'po')
-datadir = join_paths(seahorse_prefix, get_option('datadir'))
-bindir = join_paths(seahorse_prefix, get_option('bindir'))
-pkgdatadir = join_paths(datadir, meson.project_name())
-libexecbindir = join_paths(seahorse_prefix, get_option('libexecdir'), meson.project_name())
-localedir = join_paths(seahorse_prefix, get_option('localedir'))
+po_dir = meson.source_root() / 'po'
+datadir = seahorse_prefix / get_option('datadir')
+libexecbindir = seahorse_prefix / get_option('libexecdir') / meson.project_name()
 
 # Dependencies
 min_glib_version = '2.44'
 min_gcr_version = '3.11.91'
 min_gpgme_version = '1.7.0'
 accepted_gpg_versions = [ '2.0.12', '2.1.4', '2.2.0' ]
-gpg_check_version = find_program(join_paths('build-aux', 'gpg_check_version.py'))
+gpg_check_version = find_program('build-aux' / 'gpg_check_version.py')
 
 glib_deps = [
   dependency('glib-2.0',    version: '>=' + min_glib_version),
@@ -119,9 +116,9 @@ conf.set_quoted('PACKAGE', meson.project_name())
 conf.set_quoted('PACKAGE_NAME', meson.project_name())
 conf.set_quoted('PACKAGE_VERSION', '@VCS_TAG@')
 conf.set_quoted('PACKAGE_STRING', '@0@ @1@'.format(meson.project_name(), meson.project_version()))
-conf.set_quoted('PKGDATADIR', pkgdatadir)
+conf.set_quoted('PKGDATADIR', get_option('datadir') / meson.project_name())
 conf.set_quoted('EXECDIR', libexecbindir)
-conf.set_quoted('LOCALEDIR', localedir)
+conf.set_quoted('LOCALEDIR', seahorse_prefix / get_option('localedir'))
 conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
 conf.set_quoted('G_LOG_DOMAIN', meson.project_name())
 conf.set('WITH_DEBUG', buildtype.contains('debug'))
@@ -160,13 +157,13 @@ config_file = configure_file(
 config = declare_dependency(
   sources: config_file,
   dependencies: [
-    valac.find_library('config', dirs: join_paths(meson.source_root(), 'common')),
+    valac.find_library('config', dirs: meson.source_root() / 'common'),
   ],
   include_directories: include_directories('.'),
 )
 
 # Post-install scripts
-meson.add_install_script(join_paths('build-aux', 'meson_post_install.py'))
+meson.add_install_script('build-aux' / 'meson_post_install.py')
 
 # subdirs
 subdir('po')
