@@ -41,8 +41,7 @@ public class Seahorse.Gkr.KeyringAdd : Gtk.Dialog {
 
         var cancellable = Dialog.begin_request(this);
         var service = Backend.instance().service;
-        Secret.Collection.create.begin(service, this.name_entry.text, null,
-                                       Secret.CollectionCreateFlags.COLLECTION_CREATE_NONE,
+        Secret.Collection.create.begin(service, this.name_entry.text, null, 0,
                                        cancellable, (obj, res) => {
             /* Clear the operation without cancelling it since it is complete */
             Dialog.complete_request(this, false);
