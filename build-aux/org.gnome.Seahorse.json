@@ -5,7 +5,6 @@
     "sdk": "org.gnome.Sdk",
     "command": "seahorse",
     "desktop-file-name-prefix": "(Development) ",
-    "copy-icon": true,
     "finish-args": [
         /* X11 + XShm access */
         "--share=ipc", "--socket=x11",
@@ -24,13 +23,6 @@
         /* Needed for importing,exporting from,to keyservers */
         "--share=network"
     ],
-    "build-options" : {
-        "cflags": "-O2 -g",
-        "cxxflags": "-O2 -g",
-        "env": {
-            "V": "1"
-        }
-    },
     "cleanup": [
         "/include",
         "/lib/pkgconfig", "/share/pkgconfig",
