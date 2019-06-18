@@ -33,8 +33,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-02-26 19:23+0000\n"
-"PO-Revision-Date: 2019-02-27 11:50+0100\n"
+"POT-Creation-Date: 2019-06-15 10:35+0000\n"
+"PO-Revision-Date: 2019-06-18 11:05+0200\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
 "Language: nl\n"
@@ -43,7 +43,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-02-02 09:00+0000\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -80,15 +80,15 @@ msgstr "Exporteren van gegevens mislukt"
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
 #: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
-#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:294
+#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:287
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:247
+#: src/import-dialog.vala:34 src/key-manager.vala:249
 msgid "_Cancel"
 msgstr "Annu_leren"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:651
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:650
 msgid "_Delete"
 msgstr "_Verwijderen"
 
@@ -115,7 +115,7 @@ msgstr "_Oké"
 msgid "Password:"
 msgstr "Wachtwoord:"
 
-#: common/prefs.vala:42 src/seahorse-key-manager.ui:43
+#: common/prefs.vala:42
 msgid "Preferences"
 msgstr "Voorkeuren"
 
@@ -389,8 +389,12 @@ msgstr ""
 "niet steeds hoeft in te typen, en een reservekopie maken van uw sleutels en "
 "sleutelbos."
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:158
-#: src/seahorse-key-manager.ui:276
+#: data/org.gnome.seahorse.Application.appdata.xml.in:77
+msgid "The GNOME Project"
+msgstr "Het Gnome-project"
+
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:168
+#: src/seahorse-key-manager.ui:277
 msgid "Passwords and Keys"
 msgstr "Wachtwoorden en sleutels"
 
@@ -399,20 +403,15 @@ msgstr "Wachtwoorden en sleutels"
 msgid "keyring;encryption;security;sign;ssh;"
 msgstr "sleutelbos;sleutelring;encryptie;versleuteling;beveiliging;ssh;"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/org.gnome.seahorse.Application.desktop.in.in:11
-msgid "org.gnome.seahorse.Application"
-msgstr "org.gnome.seahorse.Application"
-
-#: gkr/gkr-backend.vala:43
+#: gkr/gkr-backend.vala:39
 msgid "Passwords"
 msgstr "Wachtwoorden"
 
-#: gkr/gkr-backend.vala:47
+#: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Opgeslagen persoonlijke wachtwoorden, aanmeldgegevens en geheimen"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:605
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:604
 msgid "Couldn’t unlock"
 msgstr "Ontgrendelen mislukt"
 
@@ -538,7 +537,7 @@ msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "Weet u zeker dat u %d wachtwoord wilt verwijderen?"
 msgstr[1] "Weet u zeker dat u %d wachtwoorden wilt verwijderen?"
 
-#: gkr/gkr-keyring-add.vala:53
+#: gkr/gkr-keyring-add.vala:52
 msgid "Couldn’t add keyring"
 msgstr "Kon sleutelbos niet toevoegen"
 
@@ -601,8 +600,9 @@ msgid "_Password:"
 msgstr "_Wachtwoord:"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-msgid "OK"
-msgstr "Ok"
+#: pgp/seahorse-pgp-private-key-properties.ui:980
+msgid "Add"
+msgstr "Toevoegen"
 
 #: gkr/seahorse-gkr-add-keyring.ui:6
 msgid "Add password keyring"
@@ -638,7 +638,7 @@ msgid "Use"
 msgstr "Gebruik"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1203
+#: pgp/seahorse-pgp-key-properties.c:1217
 msgid "Type"
 msgstr "Type"
 
@@ -664,11 +664,11 @@ msgstr "Wachtwoord verwijderen"
 msgid "Keyring properties"
 msgstr "Sleutelbos-eigenschappen"
 
-#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:486
+#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:487
 msgid "Keyring is locked"
 msgstr "Sleutelbos is vergrendeld"
 
-#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:496
+#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:497
 msgid "Unlock"
 msgstr "Ontgrendelen"
 
@@ -680,7 +680,7 @@ msgstr "Sleutelbos is ontgrendeld"
 msgid "Lock"
 msgstr "Vergrendelen"
 
-#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:837
+#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:851
 msgid "Name"
 msgstr "Naam"
 
@@ -1039,7 +1039,7 @@ msgid "Add User ID"
 msgstr "Gebruiker-id toevoegen"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-gpgme-add-uid.ui:24
+#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-pgp-generate.ui:66
 msgid "Full _Name"
 msgstr "Volledige _naam"
 
@@ -1047,7 +1047,7 @@ msgstr "Volledige _naam"
 msgid "Must be at least 5 characters long"
 msgstr "Moet tenminste 5 tekens lang zijn"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-pgp-generate.ui:97
 msgid "_Email Address"
 msgstr "_E-mailadres"
 
@@ -1155,7 +1155,7 @@ msgstr "Sleutel aanmaken…"
 msgid "Name must be at least 5 characters long."
 msgstr "De naam moet tenminste 5 tekens lang zijn."
 
-#: pgp/seahorse-gpgme-key-deleter.c:76 pgp/seahorse-gpgme-secret-deleter.c:76
+#: pgp/seahorse-gpgme-key-deleter.c:76 pgp/seahorse-gpgme-secret-deleter.c:59
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
@@ -1263,7 +1263,7 @@ msgstr "Alle afbeeldingstypen"
 msgid "All JPEG files"
 msgstr "Alle JPEG-bestanden"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:290
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:292
 msgid "All files"
 msgstr "Alle bestanden"
 
@@ -1271,7 +1271,7 @@ msgstr "Alle bestanden"
 msgid "Choose Photo to Add to Key"
 msgstr "Foto kiezen om aan sleutel toe te voegen"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:248
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:250
 msgid "_Open"
 msgstr "_Openen"
 
@@ -1349,7 +1349,7 @@ msgstr ""
 msgid "Couldn’t add revoker"
 msgstr "Intrekker toevoegen mislukt"
 
-#: pgp/seahorse-gpgme-secret-deleter.c:81 ssh/deleter.vala:43
+#: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
 msgstr "Ik begrijp dat deze geheime sleutel permanent verwijderd zal worden."
 
@@ -1429,7 +1429,7 @@ msgstr "Sleutels op afstand"
 msgid "Remote keys containing “%s”"
 msgstr "Sleutels op afstand met daarin ‘%s’"
 
-#: pgp/seahorse-keyserver-results.c:356
+#: pgp/seahorse-keyserver-results.c:357
 msgid "The search for keys failed."
 msgstr "Zoeken naar sleutels mislukt."
 
@@ -1562,51 +1562,41 @@ msgstr "PGP-sleutels zijn voor versleuteling van e-mail en bestanden"
 msgid "New PGP key"
 msgstr "Nieuwe PGP-sleutel"
 
-#: pgp/seahorse-pgp-generate.ui:67
+#: pgp/seahorse-pgp-generate.ui:47
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
 "Met een PGP-sleutel kunt u anderen versleutelde berichten of bestanden "
 "sturen."
 
-#. Full name of the key, usually the name of the user.
-#: pgp/seahorse-pgp-generate.ui:86
-msgid "Full _Name:"
-msgstr "Volledige _naam:"
-
-#: pgp/seahorse-pgp-generate.ui:114
-msgid "_Email Address:"
-msgstr "_E-mailadres:"
-
-#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
+#: pgp/seahorse-pgp-generate.ui:129 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "Ge_avanceerde sleutelopties"
 
-#: pgp/seahorse-pgp-generate.ui:160
-msgid "_Comment:"
-msgstr "_Commentaar:"
+#: pgp/seahorse-pgp-generate.ui:143
+msgid "_Comment"
+msgstr "_Commentaar"
 
-#: pgp/seahorse-pgp-generate.ui:188 ssh/seahorse-ssh-generate.ui:124
-msgid "Encryption _Type:"
-msgstr "Versleutelings_type:"
+#: pgp/seahorse-pgp-generate.ui:174
+msgid "Encryption _Type"
+msgstr "Versleutelings_type"
 
-#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
-#: ssh/seahorse-ssh-generate.ui:158
-msgid "Key _Strength (bits):"
-msgstr "_Sleutelsterkte (bits):"
+#: pgp/seahorse-pgp-generate.ui:204
+msgid "Key _Strength (bits)"
+msgstr "_Sleutelsterkte (bits)"
 
-#: pgp/seahorse-pgp-generate.ui:242
-msgid "E_xpiration Date:"
-msgstr "Verloopdatum:"
+#: pgp/seahorse-pgp-generate.ui:234
+msgid "E_xpiration Date"
+msgstr "_Verloopdatum"
 
-#: pgp/seahorse-pgp-generate.ui:261
+#: pgp/seahorse-pgp-generate.ui:256
 msgid "Ne_ver Expires"
 msgstr "Geen _verloopdatum"
 
-#: pgp/seahorse-pgp-generate.ui:304
+#: pgp/seahorse-pgp-generate.ui:297
 msgid "C_reate"
 msgstr "Aan_maken"
 
-#: pgp/seahorse-pgp-generate.ui:311
+#: pgp/seahorse-pgp-generate.ui:304
 msgid "Generate a new key"
 msgstr "Nieuwe sleutel genereren"
 
@@ -1618,139 +1608,139 @@ msgstr "Persoonlijke PGP-sleutel"
 msgid "PGP key"
 msgstr "PGP-sleutel"
 
-#: pgp/seahorse-pgp-key-properties.c:246
+#: pgp/seahorse-pgp-key-properties.c:245
 msgid "Couldn’t change primary user ID"
 msgstr "Wijzigen van primaire gebruikersnaam mislukt"
 
-#: pgp/seahorse-pgp-key-properties.c:264
+#: pgp/seahorse-pgp-key-properties.c:280
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Weet u zeker dat u de gebruiker-id ‘%s’ permanent wilt verwijderen?"
 
-#: pgp/seahorse-pgp-key-properties.c:273
+#: pgp/seahorse-pgp-key-properties.c:289
 msgid "Couldn’t delete user ID"
 msgstr "Verwijderen van gebruikersnaam mislukt"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:345 pgp/seahorse-pgp-key-properties.c:1337
+#: pgp/seahorse-pgp-key-properties.c:361 pgp/seahorse-pgp-key-properties.c:1351
 msgid "[Unknown]"
 msgstr "[Onbekend]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:442 pgp/seahorse-pgp-key-properties.c:1542
+#: pgp/seahorse-pgp-key-properties.c:457 pgp/seahorse-pgp-key-properties.c:1556
 msgid "Name/Email"
 msgstr "Naam/E-mail"
 
-#: pgp/seahorse-pgp-key-properties.c:449
+#: pgp/seahorse-pgp-key-properties.c:464
 msgid "Signature ID"
 msgstr "Ondertekening-id"
 
-#: pgp/seahorse-pgp-key-properties.c:555
+#: pgp/seahorse-pgp-key-properties.c:570
 msgid "Couldn’t change primary photo"
 msgstr "Wijzigen van primaire foto mislukt"
 
-#: pgp/seahorse-pgp-key-properties.c:715
+#: pgp/seahorse-pgp-key-properties.c:730
 msgid "Error changing password"
 msgstr "Fout bij wijzigen van wachtwoord"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:761
+#: pgp/seahorse-pgp-key-properties.c:776
 msgid "(unknown)"
 msgstr "(onbekend)"
 
-#: pgp/seahorse-pgp-key-properties.c:766
+#: pgp/seahorse-pgp-key-properties.c:781
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Deze sleutel is verlopen op %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:794
+#: pgp/seahorse-pgp-key-properties.c:809
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — publieke sleutel"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:797
+#: pgp/seahorse-pgp-key-properties.c:812
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — privésleutel"
 
-#: pgp/seahorse-pgp-key-properties.c:951
+#: pgp/seahorse-pgp-key-properties.c:965
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Weet u zeker dat u subsleutel %d van %s permanent wilt verwijderen?"
 
-#: pgp/seahorse-pgp-key-properties.c:959
+#: pgp/seahorse-pgp-key-properties.c:973
 msgid "Couldn’t delete subkey"
 msgstr "Verwijderen van subsleutel mislukt"
 
-#: pgp/seahorse-pgp-key-properties.c:1018
-#: pgp/seahorse-pgp-key-properties.c:1311
+#: pgp/seahorse-pgp-key-properties.c:1032
+#: pgp/seahorse-pgp-key-properties.c:1325
 msgid "Unable to change trust"
 msgstr "Vertrouwen kon niet worden aanpassen"
 
-#: pgp/seahorse-pgp-key-properties.c:1030 ssh/key-properties.vala:185
+#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:185
 msgid "Couldn’t export key"
 msgstr "Exporteren van sleutel mislukt"
 
-#: pgp/seahorse-pgp-key-properties.c:1161
-#: pgp/seahorse-pgp-key-properties.c:1245
+#: pgp/seahorse-pgp-key-properties.c:1175
+#: pgp/seahorse-pgp-key-properties.c:1259
 msgctxt "Expires"
 msgid "Never"
 msgstr "Nooit"
 
-#: pgp/seahorse-pgp-key-properties.c:1200
+#: pgp/seahorse-pgp-key-properties.c:1214
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1206
+#: pgp/seahorse-pgp-key-properties.c:1220
 msgid "Usage"
 msgstr "Gebruik"
 
-#: pgp/seahorse-pgp-key-properties.c:1209
+#: pgp/seahorse-pgp-key-properties.c:1223
 msgid "Created"
 msgstr "Aangemaakt"
 
-#: pgp/seahorse-pgp-key-properties.c:1212
+#: pgp/seahorse-pgp-key-properties.c:1226
 msgid "Expires"
 msgstr "Verloopdatum"
 
-#: pgp/seahorse-pgp-key-properties.c:1215
+#: pgp/seahorse-pgp-key-properties.c:1229
 msgid "Status"
 msgstr "Status"
 
-#: pgp/seahorse-pgp-key-properties.c:1218
+#: pgp/seahorse-pgp-key-properties.c:1232
 msgid "Strength"
 msgstr "Sterkte"
 
-#: pgp/seahorse-pgp-key-properties.c:1236
+#: pgp/seahorse-pgp-key-properties.c:1250
 msgid "Revoked"
 msgstr "Ingetrokken"
 
-#: pgp/seahorse-pgp-key-properties.c:1238
+#: pgp/seahorse-pgp-key-properties.c:1252
 msgid "Expired"
 msgstr "Verlopen"
 
-#: pgp/seahorse-pgp-key-properties.c:1240
+#: pgp/seahorse-pgp-key-properties.c:1254
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: pgp/seahorse-pgp-key-properties.c:1242
+#: pgp/seahorse-pgp-key-properties.c:1256
 msgid "Good"
 msgstr "Goed"
 
-#: pgp/seahorse-pgp-key-properties.c:1545
+#: pgp/seahorse-pgp-key-properties.c:1559
 #: pgp/seahorse-pgp-private-key-properties.ui:333
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Sleutel-id"
 
-#: pgp/seahorse-pgp-key-properties.c:1686
+#: pgp/seahorse-pgp-key-properties.c:1700
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Ik vertrouw ondertekeningen van ‘%s’ op andere sleutels"
 
-#: pgp/seahorse-pgp-key-properties.c:1693
+#: pgp/seahorse-pgp-key-properties.c:1707
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1759,7 +1749,7 @@ msgstr ""
 "Als u ervan overtuigd bent dat de persoon die deze sleutel bezit ‘%s’ is, "
 "kunt u deze sleutel <i>ondertekenen</i>:"
 
-#: pgp/seahorse-pgp-key-properties.c:1700
+#: pgp/seahorse-pgp-key-properties.c:1714
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1900,10 +1890,6 @@ msgstr "Geheime sleutel _exporteren:"
 #: pgp/seahorse-pgp-private-key-properties.ui:926
 msgid "Actions"
 msgstr "Acties"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:980
-msgid "Add"
-msgstr "Toevoegen"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1010
 msgid "Expire"
@@ -2197,7 +2183,7 @@ msgstr "Naamloos"
 msgid "Failed to export certificate"
 msgstr "Certificaat exporteren mislukt"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:621
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:620
 msgid "Couldn’t delete"
 msgstr "Verwijderen mislukt"
 
@@ -2278,6 +2264,10 @@ msgstr "Label:"
 msgid "Stored at:"
 msgstr "Opgeslagen in:"
 
+#: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
+msgid "Key _Strength (bits):"
+msgstr "_Sleutelsterkte (bits):"
+
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
 msgstr "Een certificaataanvraagbestand aanmaken."
@@ -2298,7 +2288,7 @@ msgstr "Bijdragen:"
 msgid "Version of this application"
 msgstr "Versie van deze toepassing"
 
-#: src/application.vala:160
+#: src/application.vala:170
 msgid "translator-credits"
 msgstr ""
 "Vincent van Adrighem\n"
@@ -2322,7 +2312,7 @@ msgstr ""
 "  Wouter Bolsterlee (uws) https://launchpad.net/~uws\n"
 "  rob https://launchpad.net/~rvdb"
 
-#: src/application.vala:163
+#: src/application.vala:173
 msgid "Seahorse Project Homepage"
 msgstr "Startpagina van het Seahorse-project"
 
@@ -2335,24 +2325,24 @@ msgid "Import failed"
 msgstr "Importeren mislukt"
 
 #. The prompt
-#: src/key-manager.vala:245 ssh/operation.vala:309
+#: src/key-manager.vala:247 ssh/operation.vala:324
 msgid "Import Key"
 msgstr "Sleutel importeren"
 
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:256
+#: src/key-manager.vala:258
 msgid "All key files"
 msgstr "Alle sleutelbestanden"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:323
 msgid "Dropped text"
 msgstr "Ingevoerde tekst"
 
-#: src/key-manager.vala:349
+#: src/key-manager.vala:351
 msgid "Clipboard text"
 msgstr "Klembordtekst"
 
-#: src/key-manager.vala:441
+#: src/key-manager.vala:443
 msgid "Couldn’t unlock keyring"
 msgstr "Kon sleutelbos niet ontgrendelen"
 
@@ -2377,32 +2367,36 @@ msgid "Filter items:"
 msgstr "Items filteren:"
 
 #: src/seahorse-key-manager.ui:8
-msgid "Show personal"
-msgstr "Persoonlijk tonen"
+msgid "Show p_ersonal"
+msgstr "P_ersoonlijk tonen"
 
 #: src/seahorse-key-manager.ui:13
-msgid "Show trusted"
-msgstr "Vertrouwd tonen"
+msgid "Show _trusted"
+msgstr "Ver_trouwd tonen"
 
 #: src/seahorse-key-manager.ui:18
-msgid "Show any"
-msgstr "Alle tonen"
+msgid "Show an_y"
+msgstr "A_lle tonen"
 
 #: src/seahorse-key-manager.ui:25
-msgid "Combine all keyrings"
-msgstr "Alle sleutelbossen samenvoegen"
+msgid "_Combine all keyrings"
+msgstr "Alle sleutelbossen _samenvoegen"
 
 #: src/seahorse-key-manager.ui:31
-msgid "Find remote keys…"
-msgstr "Sleutels op afstand zoeken…"
+msgid "_Find remote keys…"
+msgstr "Sleutels op afstand _zoeken…"
 
 #: src/seahorse-key-manager.ui:36
-msgid "Sync and publish keys…"
-msgstr "Sleutels synchroniseren en publiceren…"
+msgid "_Sync and publish keys…"
+msgstr "Sleutels _synchroniseren en publiceren…"
+
+#: src/seahorse-key-manager.ui:43
+msgid "_Preferences"
+msgstr "_Voorkeuren"
 
 #: src/seahorse-key-manager.ui:48
-msgid "Help"
-msgstr "Hulp"
+msgid "_Help"
+msgstr "_Hulp"
 
 #: src/seahorse-key-manager.ui:52
 msgid "_About Passwords and Keys"
@@ -2444,19 +2438,19 @@ msgstr "Gebruikt om een certificaat aan te vragen"
 msgid "Import from file…"
 msgstr "Importeren uit bestand…"
 
-#: src/seahorse-key-manager.ui:282
+#: src/seahorse-key-manager.ui:283
 msgid "Add a new key or item"
 msgstr "Nieuwe sleutel of nieuw item toevoegen"
 
-#: src/seahorse-key-manager.ui:313
+#: src/seahorse-key-manager.ui:314
 msgid "Search for a key or password"
 msgstr "Zoeken naar sleutel of wachtwoord"
 
-#: src/seahorse-key-manager.ui:360
+#: src/seahorse-key-manager.ui:361
 msgid "Filter"
 msgstr "Filter"
 
-#: src/seahorse-key-manager.ui:454
+#: src/seahorse-key-manager.ui:455
 msgid "This collection seems to be empty"
 msgstr "Deze verzameling lijkt leeg te zijn"
 
@@ -2472,21 +2466,21 @@ msgstr "Eigenschappen"
 msgid "Configure Key for Secure Shell…"
 msgstr "Sleutel configureren voor Secure Shell…"
 
-#: src/sidebar.vala:587
+#: src/sidebar.vala:586
 msgid "Couldn’t lock"
 msgstr "Vergrendelen mislukt"
 
 #. Lock and unlock items
-#: src/sidebar.vala:638
+#: src/sidebar.vala:637
 msgid "_Lock"
 msgstr "Ver_grendelen"
 
-#: src/sidebar.vala:643
+#: src/sidebar.vala:642
 msgid "_Unlock"
 msgstr "_Ontgrendelen"
 
 #. Properties item
-#: src/sidebar.vala:660
+#: src/sidebar.vala:659
 msgid "_Properties"
 msgstr "_Eigenschappen"
 
@@ -2588,26 +2582,26 @@ msgstr "(Onleesbare Secure Shell-sleutel)"
 msgid "Secure Shell Key"
 msgstr "Secure Shell-sleutel"
 
-#: ssh/operation.vala:204
+#: ssh/operation.vala:219
 msgid "Remote Host Password"
 msgstr "Wachtwoord voor machine op afstand"
 
-#: ssh/operation.vala:247
+#: ssh/operation.vala:262
 msgid "Enter Key Passphrase"
 msgstr "Voer wachtwoord in"
 
-#: ssh/operation.vala:273
+#: ssh/operation.vala:288
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Wachtwoord voor nieuwe Secure Shell-sleutel"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:306
+#: ssh/operation.vala:321
 #, c-format
 msgid "Importing key: %s"
 msgstr "Sleutel importeren: %s"
 
-#: ssh/operation.vala:306
+#: ssh/operation.vala:321
 msgid "Importing key. Enter passphrase"
 msgstr "Sleutel importeren. Voer wachtwoord in"
 
@@ -2653,6 +2647,10 @@ msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "Gebruik uw e-mailadres en eventueel  andere geheugensteuntjes om te "
 "onthouden waar deze sleutel voor dient."
+
+#: ssh/seahorse-ssh-generate.ui:124
+msgid "Encryption _Type:"
+msgstr "Versleutelings_type:"
 
 #: ssh/seahorse-ssh-generate.ui:142
 msgid "DSA"
@@ -2769,6 +2767,18 @@ msgstr "Instellen van Secure Shell-sleutels op andere computer mislukt."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Secure Shell-sleutels configureren…"
+
+#~ msgid "org.gnome.seahorse.Application"
+#~ msgstr "org.gnome.seahorse.Application"
+
+#~ msgid "OK"
+#~ msgstr "Ok"
+
+#~ msgid "Full _Name:"
+#~ msgstr "Volledige _naam:"
+
+#~ msgid "_Email Address:"
+#~ msgstr "_E-mailadres:"
 
 #~ msgid "About Seahorse"
 #~ msgstr "Over Seahorse"
