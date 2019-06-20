@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-03-22 20:38+0000\n"
-"PO-Revision-Date: 2019-04-01 15:09+0200\n"
+"POT-Creation-Date: 2019-06-15 10:35+0000\n"
+"PO-Revision-Date: 2019-06-21 01:25+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2016-09-22 22:36+0000\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -53,15 +53,15 @@ msgstr "Nemoguć izvoz podataka"
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
 #: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
-#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:294
+#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:287
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:247
+#: src/import-dialog.vala:34 src/key-manager.vala:249
 msgid "_Cancel"
 msgstr "_Odustani"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:651
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:650
 msgid "_Delete"
 msgstr "_Obriši"
 
@@ -88,7 +88,7 @@ msgstr "_U redu"
 msgid "Password:"
 msgstr "Lozinka:"
 
-#: common/prefs.vala:42 src/seahorse-key-manager.ui:43
+#: common/prefs.vala:42
 msgid "Preferences"
 msgstr "Osobitosti"
 
@@ -359,8 +359,12 @@ msgstr ""
 "poslužitelja, spremati vaše lozinke tako da ih ne morate stalno upisivati i "
 "sigurnosno kopira vaše ključeve i skupove ključeva."
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:158
-#: src/seahorse-key-manager.ui:276
+#: data/org.gnome.seahorse.Application.appdata.xml.in:77
+msgid "The GNOME Project"
+msgstr "GNOME projekt"
+
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:168
+#: src/seahorse-key-manager.ui:277
 msgid "Passwords and Keys"
 msgstr "Lozinke i ključevi"
 
@@ -377,7 +381,7 @@ msgstr "Lozinke"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Spremljene osobne lozinke vjerodajnice i tajne"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:605
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:604
 msgid "Couldn’t unlock"
 msgstr "Namoguće otključavanje"
 
@@ -504,7 +508,7 @@ msgstr[0] "Sigurno želite obrisati %d lozinku?"
 msgstr[1] "Sigurno želite obrisati %d lozinke?"
 msgstr[2] "Sigurno želite obrisati %d lozinka?"
 
-#: gkr/gkr-keyring-add.vala:53
+#: gkr/gkr-keyring-add.vala:52
 msgid "Couldn’t add keyring"
 msgstr "Nemoguće dodavanje skupa ključeva"
 
@@ -567,8 +571,9 @@ msgid "_Password:"
 msgstr "_Lozinka:"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-msgid "OK"
-msgstr "U redu"
+#: pgp/seahorse-pgp-private-key-properties.ui:980
+msgid "Add"
+msgstr "Dodaj"
 
 #: gkr/seahorse-gkr-add-keyring.ui:6
 msgid "Add password keyring"
@@ -630,11 +635,11 @@ msgstr "Obriši lozinku"
 msgid "Keyring properties"
 msgstr "Svojstva skupa ključeva"
 
-#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:486
+#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:487
 msgid "Keyring is locked"
 msgstr "Skup ključeva je zaključan"
 
-#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:496
+#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:497
 msgid "Unlock"
 msgstr "Otključaj"
 
@@ -1001,7 +1006,7 @@ msgid "Add User ID"
 msgstr "Dodaj ID korisnika"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-gpgme-add-uid.ui:24
+#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-pgp-generate.ui:66
 msgid "Full _Name"
 msgstr "Puno _ime"
 
@@ -1009,7 +1014,7 @@ msgstr "Puno _ime"
 msgid "Must be at least 5 characters long"
 msgstr "Mora biti dužine bar 5 znakova"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-pgp-generate.ui:97
 msgid "_Email Address"
 msgstr "_Adresa e-pošte"
 
@@ -1222,7 +1227,7 @@ msgstr "Sve datoteke slika"
 msgid "All JPEG files"
 msgstr "Sve JPEG datoteke"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:290
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:292
 msgid "All files"
 msgstr "Sve datoteke"
 
@@ -1230,7 +1235,7 @@ msgstr "Sve datoteke"
 msgid "Choose Photo to Add to Key"
 msgstr "Odaberite fotografiju za dodavanje ključu"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:248
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:250
 msgid "_Open"
 msgstr "_Otvori"
 
@@ -1522,51 +1527,41 @@ msgstr "PGP ključevi se koriste za šifrirnje e-pošte ili datoteka"
 msgid "New PGP key"
 msgstr "Novi PGP ključ"
 
-#: pgp/seahorse-pgp-generate.ui:67
+#: pgp/seahorse-pgp-generate.ui:47
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
 "PGP ključ omogućuje vam šifriranje e-pošte ili datoteka prema ostalim "
 "korisnicima."
 
-#. Full name of the key, usually the name of the user.
-#: pgp/seahorse-pgp-generate.ui:86
-msgid "Full _Name:"
-msgstr "_Puno ime:"
-
-#: pgp/seahorse-pgp-generate.ui:114
-msgid "_Email Address:"
-msgstr "_Adresa e-pošte:"
-
-#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
+#: pgp/seahorse-pgp-generate.ui:129 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "_Napredne mogućnosti ključa"
 
-#: pgp/seahorse-pgp-generate.ui:160
-msgid "_Comment:"
-msgstr "_Komentar:"
+#: pgp/seahorse-pgp-generate.ui:143
+msgid "_Comment"
+msgstr "_Komentar"
 
-#: pgp/seahorse-pgp-generate.ui:188 ssh/seahorse-ssh-generate.ui:124
-msgid "Encryption _Type:"
-msgstr "Vrsta _šifriranja:"
+#: pgp/seahorse-pgp-generate.ui:174
+msgid "Encryption _Type"
+msgstr "Vrsta _šifriranja"
 
-#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
-#: ssh/seahorse-ssh-generate.ui:158
-msgid "Key _Strength (bits):"
-msgstr "Jačina _ključa (bitovi):"
+#: pgp/seahorse-pgp-generate.ui:204
+msgid "Key _Strength (bits)"
+msgstr "Jačina _ključa (bitovi)"
 
-#: pgp/seahorse-pgp-generate.ui:242
-msgid "E_xpiration Date:"
-msgstr "D_atum isteka:"
+#: pgp/seahorse-pgp-generate.ui:234
+msgid "E_xpiration Date"
+msgstr "D_atum isteka"
 
-#: pgp/seahorse-pgp-generate.ui:261
+#: pgp/seahorse-pgp-generate.ui:256
 msgid "Ne_ver Expires"
 msgstr "Ni_kada ne istječe"
 
-#: pgp/seahorse-pgp-generate.ui:304
+#: pgp/seahorse-pgp-generate.ui:297
 msgid "C_reate"
 msgstr "S_tvori"
 
-#: pgp/seahorse-pgp-generate.ui:311
+#: pgp/seahorse-pgp-generate.ui:304
 msgid "Generate a new key"
 msgstr "Stvori novi ključ"
 
@@ -1860,10 +1855,6 @@ msgstr "_Izvezi tajni ključ:"
 msgid "Actions"
 msgstr "Radnje"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:980
-msgid "Add"
-msgstr "Dodaj"
-
 #: pgp/seahorse-pgp-private-key-properties.ui:1010
 msgid "Expire"
 msgstr "Istječe"
@@ -2149,7 +2140,7 @@ msgstr "Neimenovan"
 msgid "Failed to export certificate"
 msgstr "Neuspješan izvoz jerodajnice"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:621
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:620
 msgid "Couldn’t delete"
 msgstr "Neuspješno brisanje"
 
@@ -2230,6 +2221,10 @@ msgstr "Naslov:"
 msgid "Stored at:"
 msgstr "Spremljen u:"
 
+#: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
+msgid "Key _Strength (bits):"
+msgstr "Jačina _ključa (bitovi):"
+
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
 msgstr "Stvorite datoteku zahtjeva vjerodajnice."
@@ -2250,13 +2245,13 @@ msgstr "Doprinijeli:"
 msgid "Version of this application"
 msgstr "Inačica ove aplikacije"
 
-#: src/application.vala:160
+#: src/application.vala:170
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  gogo https://launchpad.net/~trebelnik-stefina"
 
-#: src/application.vala:163
+#: src/application.vala:173
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse stranica projekta"
 
@@ -2269,24 +2264,24 @@ msgid "Import failed"
 msgstr "Neuspjeli uvoz"
 
 #. The prompt
-#: src/key-manager.vala:245 ssh/operation.vala:309
+#: src/key-manager.vala:247 ssh/operation.vala:324
 msgid "Import Key"
 msgstr "Uvezi ključ"
 
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:256
+#: src/key-manager.vala:258
 msgid "All key files"
 msgstr "Sve datoteke ključa"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:323
 msgid "Dropped text"
 msgstr "Ispušteni tekst"
 
-#: src/key-manager.vala:349
+#: src/key-manager.vala:351
 msgid "Clipboard text"
 msgstr "Tekst međuspremnika"
 
-#: src/key-manager.vala:441
+#: src/key-manager.vala:443
 msgid "Couldn’t unlock keyring"
 msgstr "Nemoguće otključavanje skupa ključeva"
 
@@ -2311,32 +2306,36 @@ msgid "Filter items:"
 msgstr "Stavke filtra:"
 
 #: src/seahorse-key-manager.ui:8
-msgid "Show personal"
-msgstr "Prikaži osobno"
+msgid "Show p_ersonal"
+msgstr "Prikaži o_sobno"
 
 #: src/seahorse-key-manager.ui:13
-msgid "Show trusted"
-msgstr "Prikaži povjereno"
+msgid "Show _trusted"
+msgstr "Prikaži _povjereno"
 
 #: src/seahorse-key-manager.ui:18
-msgid "Show any"
-msgstr "Prikaži sve"
+msgid "Show an_y"
+msgstr "Prikaži sv_e"
 
 #: src/seahorse-key-manager.ui:25
-msgid "Combine all keyrings"
-msgstr "Kombiniraj sve skupove ključeva"
+msgid "_Combine all keyrings"
+msgstr "_Kombiniraj sve skupove ključeva"
 
 #: src/seahorse-key-manager.ui:31
-msgid "Find remote keys…"
-msgstr "Potraži udaljene ključeve…"
+msgid "_Find remote keys…"
+msgstr "_Potraži udaljene ključeve…"
 
 #: src/seahorse-key-manager.ui:36
-msgid "Sync and publish keys…"
-msgstr "Uskladi i objavi ključ…"
+msgid "_Sync and publish keys…"
+msgstr "_Uskladi i objavi ključ…"
+
+#: src/seahorse-key-manager.ui:43
+msgid "_Preferences"
+msgstr "_Osobitosti"
 
 #: src/seahorse-key-manager.ui:48
-msgid "Help"
-msgstr "Priručnik"
+msgid "_Help"
+msgstr "_Priručnik"
 
 #: src/seahorse-key-manager.ui:52
 msgid "_About Passwords and Keys"
@@ -2378,19 +2377,19 @@ msgstr "Koristi se za zahtjev vjerodajnice"
 msgid "Import from file…"
 msgstr "Uvezi iz datoteke…"
 
-#: src/seahorse-key-manager.ui:282
+#: src/seahorse-key-manager.ui:283
 msgid "Add a new key or item"
 msgstr "Dodaj novi ključ ili stavku"
 
-#: src/seahorse-key-manager.ui:313
+#: src/seahorse-key-manager.ui:314
 msgid "Search for a key or password"
 msgstr "Pretraži ključ ili lozinku"
 
-#: src/seahorse-key-manager.ui:360
+#: src/seahorse-key-manager.ui:361
 msgid "Filter"
 msgstr "Filter"
 
-#: src/seahorse-key-manager.ui:454
+#: src/seahorse-key-manager.ui:455
 msgid "This collection seems to be empty"
 msgstr "Izgleda da je ova kolekcija prazna"
 
@@ -2406,21 +2405,21 @@ msgstr "Svojstva"
 msgid "Configure Key for Secure Shell…"
 msgstr "Podesi ključ za Osiguranu ljusku…"
 
-#: src/sidebar.vala:587
+#: src/sidebar.vala:586
 msgid "Couldn’t lock"
 msgstr "Namoguće zaključavanje"
 
 #. Lock and unlock items
-#: src/sidebar.vala:638
+#: src/sidebar.vala:637
 msgid "_Lock"
 msgstr "_Zaključaj"
 
-#: src/sidebar.vala:643
+#: src/sidebar.vala:642
 msgid "_Unlock"
 msgstr "_Otključaj"
 
 #. Properties item
-#: src/sidebar.vala:660
+#: src/sidebar.vala:659
 msgid "_Properties"
 msgstr "_Svojstva"
 
@@ -2523,26 +2522,26 @@ msgstr "(Nečitljivi ključ osigurane ljuske)"
 msgid "Secure Shell Key"
 msgstr "Ključ osigurane ljuske"
 
-#: ssh/operation.vala:204
+#: ssh/operation.vala:219
 msgid "Remote Host Password"
 msgstr "Lozinka udaljenog računala"
 
-#: ssh/operation.vala:247
+#: ssh/operation.vala:262
 msgid "Enter Key Passphrase"
 msgstr "Upišite lozinku ključa"
 
-#: ssh/operation.vala:273
+#: ssh/operation.vala:288
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Lozinka za novi ključ osigurane ljuske"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:306
+#: ssh/operation.vala:321
 #, c-format
 msgid "Importing key: %s"
 msgstr "Uvoz ključa: %s"
 
-#: ssh/operation.vala:306
+#: ssh/operation.vala:321
 msgid "Importing key. Enter passphrase"
 msgstr "Uvoz ključa. Upišite lozinku"
 
@@ -2586,6 +2585,10 @@ msgstr ""
 #: ssh/seahorse-ssh-generate.ui:108
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "Vaša adresa e-pošte ili podsjetnik čemu ovaj ključ služi."
+
+#: ssh/seahorse-ssh-generate.ui:124
+msgid "Encryption _Type:"
+msgstr "Vrsta _šifriranja:"
 
 #: ssh/seahorse-ssh-generate.ui:142
 msgid "DSA"
@@ -2702,6 +2705,15 @@ msgstr "Nemoguće podešavanje ključeva osigurane ljuske na udaljenom računalu
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Podešavanje ključeva osigurane ljuske…"
+
+#~ msgid "OK"
+#~ msgstr "U redu"
+
+#~ msgid "Full _Name:"
+#~ msgstr "_Puno ime:"
+
+#~ msgid "_Email Address:"
+#~ msgstr "_Adresa e-pošte:"
 
 #~ msgid "_File"
 #~ msgstr "_Datoteka"
