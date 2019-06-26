@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-05-16 19:11+0000\n"
-"PO-Revision-Date: 2019-06-02 21:27+0200\n"
+"POT-Creation-Date: 2019-06-15 10:35+0000\n"
+"PO-Revision-Date: 2019-06-27 01:12+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -55,7 +55,7 @@ msgstr "Kunde inte exportera data"
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
 #: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
-#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:294
+#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:287
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
 #: src/import-dialog.vala:34 src/key-manager.vala:249
 msgid "_Cancel"
@@ -90,7 +90,7 @@ msgstr "_OK"
 msgid "Password:"
 msgstr "Lösenord:"
 
-#: common/prefs.vala:42 src/seahorse-key-manager.ui:43
+#: common/prefs.vala:42
 msgid "Preferences"
 msgstr "Inställningar"
 
@@ -361,11 +361,11 @@ msgstr ""
 "lösenfraser så du inte behöver ange dem och säkerhetskopiera dina nycklar "
 "och din nyckelring."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:92
+#: data/org.gnome.seahorse.Application.appdata.xml.in:77
 msgid "The GNOME Project"
 msgstr "GNOME-projektet"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:158
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:168
 #: src/seahorse-key-manager.ui:277
 msgid "Passwords and Keys"
 msgstr "Lösenord och nycklar"
@@ -509,7 +509,7 @@ msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "Är du säker på att du vill ta bort %d lösenord?"
 msgstr[1] "Är du säker på att du vill ta bort %d lösenord?"
 
-#: gkr/gkr-keyring-add.vala:53
+#: gkr/gkr-keyring-add.vala:52
 msgid "Couldn’t add keyring"
 msgstr "Kunde inte lägga till nyckelring"
 
@@ -572,8 +572,9 @@ msgid "_Password:"
 msgstr "_Lösenord:"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-msgid "OK"
-msgstr "OK"
+#: pgp/seahorse-pgp-private-key-properties.ui:980
+msgid "Add"
+msgstr "Lägg till"
 
 #: gkr/seahorse-gkr-add-keyring.ui:6
 msgid "Add password keyring"
@@ -1006,7 +1007,7 @@ msgid "Add User ID"
 msgstr "Lägg till användaridentitet"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-gpgme-add-uid.ui:24
+#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-pgp-generate.ui:66
 msgid "Full _Name"
 msgstr "Fullständigt _namn"
 
@@ -1014,7 +1015,7 @@ msgstr "Fullständigt _namn"
 msgid "Must be at least 5 characters long"
 msgstr "Måste vara minst 5 tecken lång"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-pgp-generate.ui:97
 msgid "_Email Address"
 msgstr "_E-postadress"
 
@@ -1526,50 +1527,40 @@ msgstr "PGP-nycklar används för att kryptera e-post eller filer"
 msgid "New PGP key"
 msgstr "Ny PGP-nyckel"
 
-#: pgp/seahorse-pgp-generate.ui:67
+#: pgp/seahorse-pgp-generate.ui:47
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
 "En PGP-nyckel låter dig kryptera e-post eller filer till andra personer."
 
-#. Full name of the key, usually the name of the user.
-#: pgp/seahorse-pgp-generate.ui:86
-msgid "Full _Name:"
-msgstr "Fullständigt _namn:"
-
-#: pgp/seahorse-pgp-generate.ui:114
-msgid "_Email Address:"
-msgstr "_E-postadress:"
-
-#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
+#: pgp/seahorse-pgp-generate.ui:129 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "_Avancerade nyckelalternativ"
 
-#: pgp/seahorse-pgp-generate.ui:160
-msgid "_Comment:"
-msgstr "_Kommentar:"
+#: pgp/seahorse-pgp-generate.ui:143
+msgid "_Comment"
+msgstr "_Kommentar"
 
-#: pgp/seahorse-pgp-generate.ui:188 ssh/seahorse-ssh-generate.ui:124
-msgid "Encryption _Type:"
-msgstr "Krypterings_typ:"
+#: pgp/seahorse-pgp-generate.ui:174
+msgid "Encryption _Type"
+msgstr "Krypterings_typ"
 
-#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
-#: ssh/seahorse-ssh-generate.ui:158
-msgid "Key _Strength (bits):"
-msgstr "Nyckel_styrka (bitar):"
+#: pgp/seahorse-pgp-generate.ui:204
+msgid "Key _Strength (bits)"
+msgstr "Nyckel_styrka (bitar)"
 
-#: pgp/seahorse-pgp-generate.ui:242
-msgid "E_xpiration Date:"
-msgstr "U_tgångsdatum:"
+#: pgp/seahorse-pgp-generate.ui:234
+msgid "E_xpiration Date"
+msgstr "Ut_gångsdatum"
 
-#: pgp/seahorse-pgp-generate.ui:261
+#: pgp/seahorse-pgp-generate.ui:256
 msgid "Ne_ver Expires"
 msgstr "_Går aldrig ut"
 
-#: pgp/seahorse-pgp-generate.ui:304
+#: pgp/seahorse-pgp-generate.ui:297
 msgid "C_reate"
 msgstr "Ska_pa"
 
-#: pgp/seahorse-pgp-generate.ui:311
+#: pgp/seahorse-pgp-generate.ui:304
 msgid "Generate a new key"
 msgstr "Generera en ny nyckel"
 
@@ -1862,10 +1853,6 @@ msgstr "_Exportera hemlig nyckel:"
 #: pgp/seahorse-pgp-private-key-properties.ui:926
 msgid "Actions"
 msgstr "Aktiviteter"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:980
-msgid "Add"
-msgstr "Lägg till"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1010
 msgid "Expire"
@@ -2234,6 +2221,10 @@ msgstr "Etikett:"
 msgid "Stored at:"
 msgstr "Lagrad i:"
 
+#: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
+msgid "Key _Strength (bits):"
+msgstr "Nyckel_styrka (bitar):"
+
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
 msgstr "Skapa en fil för certifikatbegäran."
@@ -2254,7 +2245,7 @@ msgstr "Bidrag:"
 msgid "Version of this application"
 msgstr "Versionsnummer för detta program"
 
-#: src/application.vala:160
+#: src/application.vala:170
 msgid "translator-credits"
 msgstr ""
 "Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
@@ -2264,7 +2255,7 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
 
-#: src/application.vala:163
+#: src/application.vala:173
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse-projektets webbplats"
 
@@ -2319,32 +2310,36 @@ msgid "Filter items:"
 msgstr "Filtrera objekt:"
 
 #: src/seahorse-key-manager.ui:8
-msgid "Show personal"
-msgstr "Visa personliga"
+msgid "Show p_ersonal"
+msgstr "Visa p_ersonliga"
 
 #: src/seahorse-key-manager.ui:13
-msgid "Show trusted"
-msgstr "Visa pålitliga"
+msgid "Show _trusted"
+msgstr "Visa påli_tliga"
 
 #: src/seahorse-key-manager.ui:18
-msgid "Show any"
-msgstr "Visa alla"
+msgid "Show an_y"
+msgstr "Visa a_lla"
 
 #: src/seahorse-key-manager.ui:25
-msgid "Combine all keyrings"
-msgstr "Kombinera alla nyckelringar"
+msgid "_Combine all keyrings"
+msgstr "_Kombinera alla nyckelringar"
 
 #: src/seahorse-key-manager.ui:31
-msgid "Find remote keys…"
-msgstr "Sök fjärrnycklar…"
+msgid "_Find remote keys…"
+msgstr "Sök _fjärrnycklar…"
 
 #: src/seahorse-key-manager.ui:36
-msgid "Sync and publish keys…"
-msgstr "Synkronisera och publicera nycklar…"
+msgid "_Sync and publish keys…"
+msgstr "_Synkronisera och publicera nycklar…"
+
+#: src/seahorse-key-manager.ui:43
+msgid "_Preferences"
+msgstr "_Inställningar"
 
 #: src/seahorse-key-manager.ui:48
-msgid "Help"
-msgstr "Hjälp"
+msgid "_Help"
+msgstr "_Hjälp"
 
 #: src/seahorse-key-manager.ui:52
 msgid "_About Passwords and Keys"
@@ -2594,6 +2589,10 @@ msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "Din e-postadress, eller en påminnelse om vad den här nyckeln är till för."
 
+#: ssh/seahorse-ssh-generate.ui:124
+msgid "Encryption _Type:"
+msgstr "Krypterings_typ:"
+
 #: ssh/seahorse-ssh-generate.ui:142
 msgid "DSA"
 msgstr "DSA"
@@ -2709,6 +2708,15 @@ msgstr "Kunde inte konfigurera Secure Shell-nycklar på fjärrdator."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigurerar Secure Shell-nycklar…"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Full _Name:"
+#~ msgstr "Fullständigt _namn:"
+
+#~ msgid "_Email Address:"
+#~ msgstr "_E-postadress:"
 
 #~ msgid "org.gnome.seahorse.Application"
 #~ msgstr "org.gnome.seahorse.Application"
