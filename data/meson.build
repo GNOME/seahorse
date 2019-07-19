@@ -64,6 +64,7 @@ if with_manpage
   xsltproc = find_program('xsltproc')
   custom_target('manfile-seahorse',
     input: 'seahorse.xml',
+    output: 'seahorse.1',
     install: true,
     install_dir: get_option('mandir') / 'man1',
     command: [
