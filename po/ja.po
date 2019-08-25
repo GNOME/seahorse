@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-03-05 20:31+0000\n"
+"POT-Creation-Date: 2019-06-15 10:35+0000\n"
 "PO-Revision-Date: 2019-03-07 19:39+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -58,15 +58,15 @@ msgstr "データをエクスポートできません"
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
 #: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
-#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:294
+#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:287
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:247
+#: src/import-dialog.vala:34 src/key-manager.vala:249
 msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:651
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:650
 msgid "_Delete"
 msgstr "削除(_D)"
 
@@ -93,7 +93,7 @@ msgstr "OK(_O)"
 msgid "Password:"
 msgstr "パスワード:"
 
-#: common/prefs.vala:42 src/seahorse-key-manager.ui:43
+#: common/prefs.vala:42
 msgid "Preferences"
 msgstr "設定"
 
@@ -355,8 +355,12 @@ msgstr ""
 "る必要がなくなります。また、鍵やキーリングのバックアップを取ることもできま"
 "す。"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:158
-#: src/seahorse-key-manager.ui:276
+#: data/org.gnome.seahorse.Application.appdata.xml.in:77
+msgid "The GNOME Project"
+msgstr ""
+
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:168
+#: src/seahorse-key-manager.ui:277
 msgid "Passwords and Keys"
 msgstr "パスワードと鍵"
 
@@ -367,11 +371,6 @@ msgstr ""
 "keyring;encryption;security;sign;ssh;キーリング;鍵束;暗号化;セキュリティ;サイ"
 "ン;署名;gpg;pgp;"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/org.gnome.seahorse.Application.desktop.in.in:11
-msgid "org.gnome.seahorse.Application"
-msgstr "org.gnome.seahorse.Application"
-
 #: gkr/gkr-backend.vala:39
 msgid "Passwords"
 msgstr "パスワード"
@@ -380,7 +379,7 @@ msgstr "パスワード"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "保存された自分のパスワード、資格情報および秘密鍵"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:605
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:604
 msgid "Couldn’t unlock"
 msgstr "解除できません"
 
@@ -505,7 +504,7 @@ msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "本当に%d個のパスワードを削除しますか?"
 
-#: gkr/gkr-keyring-add.vala:53
+#: gkr/gkr-keyring-add.vala:52
 msgid "Couldn’t add keyring"
 msgstr "キーリングを追加できません"
 
@@ -568,8 +567,9 @@ msgid "_Password:"
 msgstr "パスワード(_P):"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-msgid "OK"
-msgstr "OK"
+#: pgp/seahorse-pgp-private-key-properties.ui:980
+msgid "Add"
+msgstr "追加"
 
 #: gkr/seahorse-gkr-add-keyring.ui:6
 msgid "Add password keyring"
@@ -631,11 +631,11 @@ msgstr "パスワードを削除"
 msgid "Keyring properties"
 msgstr "キーリングのプロパティ"
 
-#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:486
+#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:487
 msgid "Keyring is locked"
 msgstr "キーリングはロックされています"
 
-#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:496
+#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:497
 msgid "Unlock"
 msgstr "ロックの解除"
 
@@ -1002,7 +1002,7 @@ msgid "Add User ID"
 msgstr "ユーザー ID の追加"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-gpgme-add-uid.ui:24
+#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-pgp-generate.ui:66
 msgid "Full _Name"
 msgstr "氏名(_N)"
 
@@ -1010,7 +1010,7 @@ msgstr "氏名(_N)"
 msgid "Must be at least 5 characters long"
 msgstr "名前は5文字以上にしてください"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-pgp-generate.ui:97
 msgid "_Email Address"
 msgstr "メールアドレス(_E)"
 
@@ -1219,7 +1219,7 @@ msgstr "すべての画像ファイル"
 msgid "All JPEG files"
 msgstr "すべての JPEG ファイル"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:290
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:292
 msgid "All files"
 msgstr "すべてのファイル"
 
@@ -1227,7 +1227,7 @@ msgstr "すべてのファイル"
 msgid "Choose Photo to Add to Key"
 msgstr "鍵に登録する写真の選択"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:248
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:250
 msgid "_Open"
 msgstr "開く(_O)"
 
@@ -1512,49 +1512,47 @@ msgstr "PGP 鍵はメールやファイルを暗号化するのに使われま�
 msgid "New PGP key"
 msgstr "新しい PGP 鍵"
 
-#: pgp/seahorse-pgp-generate.ui:67
+#: pgp/seahorse-pgp-generate.ui:47
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "PGP 鍵を利用すると他の人達に暗号化したメールやファイルを送信できます。"
 
-#. Full name of the key, usually the name of the user.
-#: pgp/seahorse-pgp-generate.ui:86
-msgid "Full _Name:"
-msgstr "氏名(_N):"
-
-#: pgp/seahorse-pgp-generate.ui:114
-msgid "_Email Address:"
-msgstr "メールアドレス(_E):"
-
-#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
+#: pgp/seahorse-pgp-generate.ui:129 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "鍵の拡張オプション(_A)"
 
-#: pgp/seahorse-pgp-generate.ui:160
-msgid "_Comment:"
+#: pgp/seahorse-pgp-generate.ui:143
+#, fuzzy
+#| msgid "_Comment:"
+msgid "_Comment"
 msgstr "コメント(_C):"
 
-#: pgp/seahorse-pgp-generate.ui:188 ssh/seahorse-ssh-generate.ui:124
-msgid "Encryption _Type:"
+#: pgp/seahorse-pgp-generate.ui:174
+#, fuzzy
+#| msgid "Encryption _Type:"
+msgid "Encryption _Type"
 msgstr "暗号化の種類(_T):"
 
-#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
-#: ssh/seahorse-ssh-generate.ui:158
-msgid "Key _Strength (bits):"
+#: pgp/seahorse-pgp-generate.ui:204
+#, fuzzy
+#| msgid "Key _Strength (bits):"
+msgid "Key _Strength (bits)"
 msgstr "鍵の長さ (ビット)(_S):"
 
-#: pgp/seahorse-pgp-generate.ui:242
-msgid "E_xpiration Date:"
+#: pgp/seahorse-pgp-generate.ui:234
+#, fuzzy
+#| msgid "E_xpiration Date:"
+msgid "E_xpiration Date"
 msgstr "有効期限(_X):"
 
-#: pgp/seahorse-pgp-generate.ui:261
+#: pgp/seahorse-pgp-generate.ui:256
 msgid "Ne_ver Expires"
 msgstr "有効期限を設定しない(_V)"
 
-#: pgp/seahorse-pgp-generate.ui:304
+#: pgp/seahorse-pgp-generate.ui:297
 msgid "C_reate"
 msgstr "生成(_R)"
 
-#: pgp/seahorse-pgp-generate.ui:311
+#: pgp/seahorse-pgp-generate.ui:304
 msgid "Generate a new key"
 msgstr "新しい鍵を生成します"
 
@@ -1847,10 +1845,6 @@ msgstr "秘密鍵のエクスポート(_E):"
 msgid "Actions"
 msgstr "アクション"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:980
-msgid "Add"
-msgstr "追加"
-
 #: pgp/seahorse-pgp-private-key-properties.ui:1010
 msgid "Expire"
 msgstr "期限切れ"
@@ -2136,7 +2130,7 @@ msgstr "名前無し"
 msgid "Failed to export certificate"
 msgstr "証明書のエクスポートに失敗しました"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:621
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:620
 msgid "Couldn’t delete"
 msgstr "削除できません"
 
@@ -2217,6 +2211,10 @@ msgstr "ラベル:"
 msgid "Stored at:"
 msgstr "保存先:"
 
+#: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
+msgid "Key _Strength (bits):"
+msgstr "鍵の長さ (ビット)(_S):"
+
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
 msgstr "証明書要求を作成"
@@ -2237,7 +2235,7 @@ msgstr "貢献者:"
 msgid "Version of this application"
 msgstr "このアプリケーションのバージョン"
 
-#: src/application.vala:160
+#: src/application.vala:170
 msgid "translator-credits"
 msgstr ""
 "相花 毅 <takeshi.aihana@gmail.com>\n"
@@ -2249,7 +2247,7 @@ msgstr ""
 "日本GNOMEユーザー会 http://www.gnome.gr.jp/\n"
 "sicklylife <translation@sicklylife.jp>"
 
-#: src/application.vala:163
+#: src/application.vala:173
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse プロジェクトのページ"
 
@@ -2262,24 +2260,24 @@ msgid "Import failed"
 msgstr "インポートが失敗しました"
 
 #. The prompt
-#: src/key-manager.vala:245 ssh/operation.vala:309
+#: src/key-manager.vala:247 ssh/operation.vala:324
 msgid "Import Key"
 msgstr "鍵のインポート"
 
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:256
+#: src/key-manager.vala:258
 msgid "All key files"
 msgstr "すべての鍵ファイル"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:323
 msgid "Dropped text"
 msgstr "ドラッグしたテキスト"
 
-#: src/key-manager.vala:349
+#: src/key-manager.vala:351
 msgid "Clipboard text"
 msgstr "クリップボードのテキスト"
 
-#: src/key-manager.vala:441
+#: src/key-manager.vala:443
 msgid "Couldn’t unlock keyring"
 msgstr "キーリングのロックを解除できません"
 
@@ -2304,31 +2302,51 @@ msgid "Filter items:"
 msgstr ""
 
 #: src/seahorse-key-manager.ui:8
-msgid "Show personal"
+#, fuzzy
+#| msgid "Show personal"
+msgid "Show p_ersonal"
 msgstr "自分のものを表示"
 
 #: src/seahorse-key-manager.ui:13
-msgid "Show trusted"
+#, fuzzy
+#| msgid "Show trusted"
+msgid "Show _trusted"
 msgstr "信頼済みのみ表示"
 
 #: src/seahorse-key-manager.ui:18
-msgid "Show any"
+#, fuzzy
+#| msgid "Show any"
+msgid "Show an_y"
 msgstr "すべてを表示"
 
 #: src/seahorse-key-manager.ui:25
-msgid "Combine all keyrings"
-msgstr ""
+#, fuzzy
+#| msgid "Couldn’t add keyring"
+msgid "_Combine all keyrings"
+msgstr "キーリングを追加できません"
 
 #: src/seahorse-key-manager.ui:31
-msgid "Find remote keys…"
+#, fuzzy
+#| msgid "Find remote keys…"
+msgid "_Find remote keys…"
 msgstr "リモートにある鍵を検索…"
 
 #: src/seahorse-key-manager.ui:36
-msgid "Sync and publish keys…"
+#, fuzzy
+#| msgid "Sync and publish keys…"
+msgid "_Sync and publish keys…"
 msgstr "鍵の公開と同期…"
 
+#: src/seahorse-key-manager.ui:43
+#, fuzzy
+#| msgid "Preferences"
+msgid "_Preferences"
+msgstr "設定"
+
 #: src/seahorse-key-manager.ui:48
-msgid "Help"
+#, fuzzy
+#| msgid "Help"
+msgid "_Help"
 msgstr "ヘルプ"
 
 #: src/seahorse-key-manager.ui:52
@@ -2372,19 +2390,19 @@ msgstr "証明書要求に利用します"
 msgid "Import from file…"
 msgstr "ファイルからインポート…"
 
-#: src/seahorse-key-manager.ui:282
+#: src/seahorse-key-manager.ui:283
 msgid "Add a new key or item"
 msgstr "新しい鍵またはアイテムを追加します"
 
-#: src/seahorse-key-manager.ui:313
+#: src/seahorse-key-manager.ui:314
 msgid "Search for a key or password"
 msgstr "鍵またはパスワードを検索します"
 
-#: src/seahorse-key-manager.ui:360
+#: src/seahorse-key-manager.ui:361
 msgid "Filter"
 msgstr "フィルター"
 
-#: src/seahorse-key-manager.ui:454
+#: src/seahorse-key-manager.ui:455
 msgid "This collection seems to be empty"
 msgstr ""
 
@@ -2400,21 +2418,21 @@ msgstr "プロパティ"
 msgid "Configure Key for Secure Shell…"
 msgstr "SSH 鍵の設定…"
 
-#: src/sidebar.vala:587
+#: src/sidebar.vala:586
 msgid "Couldn’t lock"
 msgstr "ロックできません"
 
 #. Lock and unlock items
-#: src/sidebar.vala:638
+#: src/sidebar.vala:637
 msgid "_Lock"
 msgstr "ロック(_L)"
 
-#: src/sidebar.vala:643
+#: src/sidebar.vala:642
 msgid "_Unlock"
 msgstr "ロックの解除(_U)"
 
 #. Properties item
-#: src/sidebar.vala:660
+#: src/sidebar.vala:659
 msgid "_Properties"
 msgstr "プロパティ(_P)"
 
@@ -2515,26 +2533,26 @@ msgstr "(読み込むことができない SSH 鍵)"
 msgid "Secure Shell Key"
 msgstr "セキュアシェルの鍵"
 
-#: ssh/operation.vala:204
+#: ssh/operation.vala:219
 msgid "Remote Host Password"
 msgstr "リモートホストのパスワード"
 
-#: ssh/operation.vala:247
+#: ssh/operation.vala:262
 msgid "Enter Key Passphrase"
 msgstr "鍵のパスフレーズを入力する"
 
-#: ssh/operation.vala:273
+#: ssh/operation.vala:288
 msgid "Passphrase for New Secure Shell Key"
 msgstr "セキュアシェルで使用する新しい鍵のパスフレーズ"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:306
+#: ssh/operation.vala:321
 #, c-format
 msgid "Importing key: %s"
 msgstr "鍵のインポート: %s"
 
-#: ssh/operation.vala:306
+#: ssh/operation.vala:321
 msgid "Importing key. Enter passphrase"
 msgstr "鍵をインポートします。パスフレーズを入力してください"
 
@@ -2577,6 +2595,10 @@ msgstr ""
 #: ssh/seahorse-ssh-generate.ui:108
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "メールアドレス、またはこの鍵の目的のメモです。"
+
+#: ssh/seahorse-ssh-generate.ui:124
+msgid "Encryption _Type:"
+msgstr "暗号化の種類(_T):"
 
 #: ssh/seahorse-ssh-generate.ui:142
 msgid "DSA"
@@ -2693,6 +2715,18 @@ msgstr "リモートのコンピューター上にある SSH 鍵を設定でき�
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "SSH 鍵を設定しています…"
+
+#~ msgid "org.gnome.seahorse.Application"
+#~ msgstr "org.gnome.seahorse.Application"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Full _Name:"
+#~ msgstr "氏名(_N):"
+
+#~ msgid "_Email Address:"
+#~ msgstr "メールアドレス(_E):"
 
 #~ msgid "About Seahorse"
 #~ msgstr "Seahorse について"
