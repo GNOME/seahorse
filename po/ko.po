@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-03-01 18:43+0000\n"
-"PO-Revision-Date: 2019-03-02 19:26+0900\n"
+"POT-Creation-Date: 2019-06-15 10:35+0000\n"
+"PO-Revision-Date: 2019-08-26 09:19+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -59,15 +59,15 @@ msgstr "데이터를 내보낼 수 없습니다."
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
 #: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
-#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:294
+#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:287
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:247
+#: src/import-dialog.vala:34 src/key-manager.vala:249
 msgid "_Cancel"
 msgstr "취소(_C)"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:651
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:650
 msgid "_Delete"
 msgstr "삭제(_D)"
 
@@ -94,7 +94,7 @@ msgstr "확인(_O)"
 msgid "Password:"
 msgstr "암호:"
 
-#: common/prefs.vala:42 src/seahorse-key-manager.ui:43
+#: common/prefs.vala:42
 msgid "Preferences"
 msgstr "기본 설정"
 
@@ -359,8 +359,12 @@ msgstr ""
 "키 서버에 키를 공개하거나 가져올 수 있고, 암호를 임시 저장해서 반복해서 타이"
 "핑할 필요가 없게 해 주고, 키와 키 모음을 백업할 수 있습니다."
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:158
-#: src/seahorse-key-manager.ui:276
+#: data/org.gnome.seahorse.Application.appdata.xml.in:77
+msgid "The GNOME Project"
+msgstr "그놈 프로젝트"
+
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:168
+#: src/seahorse-key-manager.ui:277
 msgid "Passwords and Keys"
 msgstr "암호 및 키"
 
@@ -371,20 +375,15 @@ msgstr ""
 "keyring;키모음;키링;encryption;암호화;security;보안;sign;서명;사인;ssh;보안"
 "셸;보안쉘;"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/org.gnome.seahorse.Application.desktop.in.in:11
-msgid "org.gnome.seahorse.Application"
-msgstr "org.gnome.seahorse.Application"
-
-#: gkr/gkr-backend.vala:43
+#: gkr/gkr-backend.vala:39
 msgid "Passwords"
 msgstr "암호"
 
-#: gkr/gkr-backend.vala:47
+#: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "저장한 개인 암호, 인증 토큰, 비밀글"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:605
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:604
 msgid "Couldn’t unlock"
 msgstr "잠금을 풀 수 없습니다"
 
@@ -509,7 +508,7 @@ msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "정말로 암호 %d개를 삭제하시겠습니까?"
 
-#: gkr/gkr-keyring-add.vala:53
+#: gkr/gkr-keyring-add.vala:52
 msgid "Couldn’t add keyring"
 msgstr "키 모음을 추가할 수 없습니다"
 
@@ -572,8 +571,9 @@ msgid "_Password:"
 msgstr "암호(_P):"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-msgid "OK"
-msgstr "확인"
+#: pgp/seahorse-pgp-private-key-properties.ui:980
+msgid "Add"
+msgstr "추가"
 
 #: gkr/seahorse-gkr-add-keyring.ui:6
 msgid "Add password keyring"
@@ -607,7 +607,7 @@ msgid "Use"
 msgstr "사용"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1219
+#: pgp/seahorse-pgp-key-properties.c:1217
 msgid "Type"
 msgstr "종류"
 
@@ -633,11 +633,11 @@ msgstr "암호 삭제"
 msgid "Keyring properties"
 msgstr "키 모음 속성"
 
-#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:486
+#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:487
 msgid "Keyring is locked"
 msgstr "키 모음이 잠겨 있습니다"
 
-#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:496
+#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:497
 msgid "Unlock"
 msgstr "풀기"
 
@@ -649,7 +649,7 @@ msgstr "키 모음 잠금이 풀려 있습니다"
 msgid "Lock"
 msgstr "잠그기"
 
-#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:853
+#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:851
 msgid "Name"
 msgstr "이름"
 
@@ -1004,7 +1004,7 @@ msgid "Add User ID"
 msgstr "사용자 아이디 추가"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-gpgme-add-uid.ui:24
+#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-pgp-generate.ui:66
 msgid "Full _Name"
 msgstr "전체 이름(_N)"
 
@@ -1012,7 +1012,7 @@ msgstr "전체 이름(_N)"
 msgid "Must be at least 5 characters long"
 msgstr "길이가 최소 5글자가 되어야 합니다"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-pgp-generate.ui:97
 msgid "_Email Address"
 msgstr "전자메일 주소(_E)"
 
@@ -1118,7 +1118,7 @@ msgstr "키를 만드는 중"
 msgid "Name must be at least 5 characters long."
 msgstr "길이가 최소 5글자가 되어야 합니다."
 
-#: pgp/seahorse-gpgme-key-deleter.c:76 pgp/seahorse-gpgme-secret-deleter.c:76
+#: pgp/seahorse-gpgme-key-deleter.c:76 pgp/seahorse-gpgme-secret-deleter.c:59
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
@@ -1221,7 +1221,7 @@ msgstr "모든 그림 파일"
 msgid "All JPEG files"
 msgstr "모든 JPEG 파일"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:290
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:292
 msgid "All files"
 msgstr "모든 파일"
 
@@ -1229,7 +1229,7 @@ msgstr "모든 파일"
 msgid "Choose Photo to Add to Key"
 msgstr "키에 덧붙일 사진을 선택하십시오"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:248
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:250
 msgid "_Open"
 msgstr "열기(_O)"
 
@@ -1307,7 +1307,7 @@ msgstr ""
 msgid "Couldn’t add revoker"
 msgstr "철회 표시를 붙일 수 없습니다"
 
-#: pgp/seahorse-gpgme-secret-deleter.c:81 ssh/deleter.vala:43
+#: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
 msgstr "이 비밀 키가 영구히 지워지는 것을 이해합니다."
 
@@ -1387,7 +1387,7 @@ msgstr "원격 키"
 msgid "Remote keys containing “%s”"
 msgstr "“%s”이(가) 들어 있는 원격 키"
 
-#: pgp/seahorse-keyserver-results.c:356
+#: pgp/seahorse-keyserver-results.c:357
 msgid "The search for keys failed."
 msgstr "키 검색에 실패했습니다."
 
@@ -1517,51 +1517,41 @@ msgstr "PGP 키는 전자메일 및 파일 암호화에 사용합니다"
 msgid "New PGP key"
 msgstr "새 PGP 키"
 
-#: pgp/seahorse-pgp-generate.ui:67
+#: pgp/seahorse-pgp-generate.ui:47
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
 "PGP 키를 이용해 전자메일이나 파일을 다른 사람에게 보낼 때 암호화할 수 있습니"
 "다."
 
-#. Full name of the key, usually the name of the user.
-#: pgp/seahorse-pgp-generate.ui:86
-msgid "Full _Name:"
-msgstr "전체 이름(_N):"
-
-#: pgp/seahorse-pgp-generate.ui:114
-msgid "_Email Address:"
-msgstr "전자메일 주소(_E):"
-
-#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
+#: pgp/seahorse-pgp-generate.ui:129 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "고급 키 옵션(_A)"
 
-#: pgp/seahorse-pgp-generate.ui:160
-msgid "_Comment:"
-msgstr "추가 설명(_C):"
+#: pgp/seahorse-pgp-generate.ui:143
+msgid "_Comment"
+msgstr "설명(_C)"
 
-#: pgp/seahorse-pgp-generate.ui:188 ssh/seahorse-ssh-generate.ui:124
-msgid "Encryption _Type:"
-msgstr "암호화 종류(_T):"
+#: pgp/seahorse-pgp-generate.ui:174
+msgid "Encryption _Type"
+msgstr "암호화 종류(_T)"
 
-#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
-#: ssh/seahorse-ssh-generate.ui:158
-msgid "Key _Strength (bits):"
-msgstr "키 강도(_S) (비트수):"
+#: pgp/seahorse-pgp-generate.ui:204
+msgid "Key _Strength (bits)"
+msgstr "키 강도(_S) (비트수)"
 
-#: pgp/seahorse-pgp-generate.ui:242
-msgid "E_xpiration Date:"
-msgstr "만료 날짜(_X):"
+#: pgp/seahorse-pgp-generate.ui:234
+msgid "E_xpiration Date"
+msgstr "만료 날짜(_X)"
 
-#: pgp/seahorse-pgp-generate.ui:261
+#: pgp/seahorse-pgp-generate.ui:256
 msgid "Ne_ver Expires"
 msgstr "만료하지 않음(_V)"
 
-#: pgp/seahorse-pgp-generate.ui:304
+#: pgp/seahorse-pgp-generate.ui:297
 msgid "C_reate"
 msgstr "만들기(_R)"
 
-#: pgp/seahorse-pgp-generate.ui:311
+#: pgp/seahorse-pgp-generate.ui:304
 msgid "Generate a new key"
 msgstr "새 키를 만듭니다"
 
@@ -1587,126 +1577,126 @@ msgid "Couldn’t delete user ID"
 msgstr "사용자 아이디를 삭제할 수 없습니다"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:361 pgp/seahorse-pgp-key-properties.c:1353
+#: pgp/seahorse-pgp-key-properties.c:361 pgp/seahorse-pgp-key-properties.c:1351
 msgid "[Unknown]"
 msgstr "[알 수 없음]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:458 pgp/seahorse-pgp-key-properties.c:1558
+#: pgp/seahorse-pgp-key-properties.c:457 pgp/seahorse-pgp-key-properties.c:1556
 msgid "Name/Email"
 msgstr "이름/전자메일"
 
-#: pgp/seahorse-pgp-key-properties.c:465
+#: pgp/seahorse-pgp-key-properties.c:464
 msgid "Signature ID"
 msgstr "서명 아이디"
 
-#: pgp/seahorse-pgp-key-properties.c:571
+#: pgp/seahorse-pgp-key-properties.c:570
 msgid "Couldn’t change primary photo"
 msgstr "주요 사진을 바꿀 수 없습니다"
 
-#: pgp/seahorse-pgp-key-properties.c:731
+#: pgp/seahorse-pgp-key-properties.c:730
 msgid "Error changing password"
 msgstr "암호 바꾸는데 오류가 발생했습니다"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:777
+#: pgp/seahorse-pgp-key-properties.c:776
 msgid "(unknown)"
 msgstr "(알 수 없음)"
 
-#: pgp/seahorse-pgp-key-properties.c:782
+#: pgp/seahorse-pgp-key-properties.c:781
 #, c-format
 msgid "This key expired on: %s"
 msgstr "이 키는 다음 날짜에 만료되었습니다: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:810
+#: pgp/seahorse-pgp-key-properties.c:809
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — 공개 키"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:813
+#: pgp/seahorse-pgp-key-properties.c:812
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — 비밀 키"
 
-#: pgp/seahorse-pgp-key-properties.c:967
+#: pgp/seahorse-pgp-key-properties.c:965
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "정말로 %2$s 키의 서브키 %1$d번을 완전히 삭제하시겠습니까?"
 
-#: pgp/seahorse-pgp-key-properties.c:975
+#: pgp/seahorse-pgp-key-properties.c:973
 msgid "Couldn’t delete subkey"
 msgstr "서브키를 삭제할 수 없습니다"
 
-#: pgp/seahorse-pgp-key-properties.c:1034
-#: pgp/seahorse-pgp-key-properties.c:1327
+#: pgp/seahorse-pgp-key-properties.c:1032
+#: pgp/seahorse-pgp-key-properties.c:1325
 msgid "Unable to change trust"
 msgstr "신뢰도를 바꿀 수 없습니다"
 
-#: pgp/seahorse-pgp-key-properties.c:1046 ssh/key-properties.vala:185
+#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:185
 msgid "Couldn’t export key"
 msgstr "키를 내보낼 수 없습니다."
 
-#: pgp/seahorse-pgp-key-properties.c:1177
-#: pgp/seahorse-pgp-key-properties.c:1261
+#: pgp/seahorse-pgp-key-properties.c:1175
+#: pgp/seahorse-pgp-key-properties.c:1259
 msgctxt "Expires"
 msgid "Never"
 msgstr "하지 않음"
 
-#: pgp/seahorse-pgp-key-properties.c:1216
+#: pgp/seahorse-pgp-key-properties.c:1214
 msgid "ID"
 msgstr "<ID>"
 
-#: pgp/seahorse-pgp-key-properties.c:1222
+#: pgp/seahorse-pgp-key-properties.c:1220
 msgid "Usage"
 msgstr "사용"
 
-#: pgp/seahorse-pgp-key-properties.c:1225
+#: pgp/seahorse-pgp-key-properties.c:1223
 msgid "Created"
 msgstr "만든 때"
 
-#: pgp/seahorse-pgp-key-properties.c:1228
+#: pgp/seahorse-pgp-key-properties.c:1226
 msgid "Expires"
 msgstr "만료"
 
-#: pgp/seahorse-pgp-key-properties.c:1231
+#: pgp/seahorse-pgp-key-properties.c:1229
 msgid "Status"
 msgstr "상태"
 
-#: pgp/seahorse-pgp-key-properties.c:1234
+#: pgp/seahorse-pgp-key-properties.c:1232
 msgid "Strength"
 msgstr "강도"
 
-#: pgp/seahorse-pgp-key-properties.c:1252
+#: pgp/seahorse-pgp-key-properties.c:1250
 msgid "Revoked"
 msgstr "철회됨"
 
-#: pgp/seahorse-pgp-key-properties.c:1254
+#: pgp/seahorse-pgp-key-properties.c:1252
 msgid "Expired"
 msgstr "만료됨"
 
-#: pgp/seahorse-pgp-key-properties.c:1256
+#: pgp/seahorse-pgp-key-properties.c:1254
 msgid "Disabled"
 msgstr "사용하지 않음"
 
 # 번역주: revoked/expired의 상대말로 써야 하는데 괜찮을지?
-#: pgp/seahorse-pgp-key-properties.c:1258
+#: pgp/seahorse-pgp-key-properties.c:1256
 msgid "Good"
 msgstr "좋음"
 
-#: pgp/seahorse-pgp-key-properties.c:1561
+#: pgp/seahorse-pgp-key-properties.c:1559
 #: pgp/seahorse-pgp-private-key-properties.ui:333
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "키 아이디"
 
-#: pgp/seahorse-pgp-key-properties.c:1702
+#: pgp/seahorse-pgp-key-properties.c:1700
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "“%s”이(가) 다른 키에 한 서명을 신뢰합니다"
 
-#: pgp/seahorse-pgp-key-properties.c:1709
+#: pgp/seahorse-pgp-key-properties.c:1707
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1714,7 +1704,7 @@ msgid ""
 msgstr ""
 "이 키를 소유한 사람이 “%s”임을 신뢰한다면, 이 키에 <i>서명</i>하십시오:"
 
-#: pgp/seahorse-pgp-key-properties.c:1716
+#: pgp/seahorse-pgp-key-properties.c:1714
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1854,10 +1844,6 @@ msgstr "비밀 키 내보내기(_E):"
 #: pgp/seahorse-pgp-private-key-properties.ui:926
 msgid "Actions"
 msgstr "동작"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:980
-msgid "Add"
-msgstr "추가"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1010
 msgid "Expire"
@@ -2142,7 +2128,7 @@ msgstr "이름 없음"
 msgid "Failed to export certificate"
 msgstr "인증서를 내보내는데 실패했습니다"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:621
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:620
 msgid "Couldn’t delete"
 msgstr "삭제할 수 없습니다"
 
@@ -2223,6 +2209,10 @@ msgstr "레이블:"
 msgid "Stored at:"
 msgstr "저장 위치:"
 
+#: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
+msgid "Key _Strength (bits):"
+msgstr "키 강도(_S) (비트수):"
+
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
 msgstr "인증서 요청 파일을 만듭니다."
@@ -2243,11 +2233,11 @@ msgstr "기여한 분:"
 msgid "Version of this application"
 msgstr "이 프로그램의 버전"
 
-#: src/application.vala:160
+#: src/application.vala:170
 msgid "translator-credits"
 msgstr "류창우 <cwryu@debian.org>"
 
-#: src/application.vala:163
+#: src/application.vala:173
 msgid "Seahorse Project Homepage"
 msgstr "시호스 프로젝트 홈페이지"
 
@@ -2260,24 +2250,24 @@ msgid "Import failed"
 msgstr "가져오기 실패"
 
 #. The prompt
-#: src/key-manager.vala:245 ssh/operation.vala:309
+#: src/key-manager.vala:247 ssh/operation.vala:324
 msgid "Import Key"
 msgstr "키 가져오기"
 
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:256
+#: src/key-manager.vala:258
 msgid "All key files"
 msgstr "모든 키 파일"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:323
 msgid "Dropped text"
 msgstr "끌어놓은 텍스트"
 
-#: src/key-manager.vala:349
+#: src/key-manager.vala:351
 msgid "Clipboard text"
 msgstr "클립보드 텍스트"
 
-#: src/key-manager.vala:441
+#: src/key-manager.vala:443
 msgid "Couldn’t unlock keyring"
 msgstr "키 모음 잠금을 풀 수 없습니다"
 
@@ -2302,32 +2292,36 @@ msgid "Filter items:"
 msgstr "필터 항목:"
 
 #: src/seahorse-key-manager.ui:8
-msgid "Show personal"
-msgstr "개인 항목 표시"
+msgid "Show p_ersonal"
+msgstr "개인 항목 표시(_E)"
 
 #: src/seahorse-key-manager.ui:13
-msgid "Show trusted"
-msgstr "신뢰하는 항목 표시"
+msgid "Show _trusted"
+msgstr "신뢰하는 항목 표시(_T)"
 
 #: src/seahorse-key-manager.ui:18
-msgid "Show any"
-msgstr "모두 표시"
+msgid "Show an_y"
+msgstr "모두 표시(_Y)"
 
 #: src/seahorse-key-manager.ui:25
-msgid "Combine all keyrings"
-msgstr "모든 키 모음 합치기"
+msgid "_Combine all keyrings"
+msgstr "모든 키 모음 합치기(_C)"
 
 #: src/seahorse-key-manager.ui:31
-msgid "Find remote keys…"
-msgstr "원격 키 찾기…"
+msgid "_Find remote keys…"
+msgstr "원격 키 찾기(_F)…"
 
 #: src/seahorse-key-manager.ui:36
-msgid "Sync and publish keys…"
-msgstr "키 동기화 및 공개…"
+msgid "_Sync and publish keys…"
+msgstr "키 동기화 및 공개(_S)…"
+
+#: src/seahorse-key-manager.ui:43
+msgid "_Preferences"
+msgstr "기본 설정(_P)"
 
 #: src/seahorse-key-manager.ui:48
-msgid "Help"
-msgstr "도움말"
+msgid "_Help"
+msgstr "도움말(_H)"
 
 #: src/seahorse-key-manager.ui:52
 msgid "_About Passwords and Keys"
@@ -2369,19 +2363,19 @@ msgstr "인증서를 요청하는데 사용합니다"
 msgid "Import from file…"
 msgstr "파일에서 가져오기…"
 
-#: src/seahorse-key-manager.ui:282
+#: src/seahorse-key-manager.ui:283
 msgid "Add a new key or item"
 msgstr "새 키나 항목을 추가합니다"
 
-#: src/seahorse-key-manager.ui:313
+#: src/seahorse-key-manager.ui:314
 msgid "Search for a key or password"
 msgstr "키 또는 암호 검색"
 
-#: src/seahorse-key-manager.ui:360
+#: src/seahorse-key-manager.ui:361
 msgid "Filter"
 msgstr "필터"
 
-#: src/seahorse-key-manager.ui:454
+#: src/seahorse-key-manager.ui:455
 msgid "This collection seems to be empty"
 msgstr "이 모음은 비어 있습니다"
 
@@ -2397,21 +2391,21 @@ msgstr "속성"
 msgid "Configure Key for Secure Shell…"
 msgstr "보안 셸 키 설정…"
 
-#: src/sidebar.vala:587
+#: src/sidebar.vala:586
 msgid "Couldn’t lock"
 msgstr "잠글 수 없습니다"
 
 #. Lock and unlock items
-#: src/sidebar.vala:638
+#: src/sidebar.vala:637
 msgid "_Lock"
 msgstr "잠그기(_L)"
 
-#: src/sidebar.vala:643
+#: src/sidebar.vala:642
 msgid "_Unlock"
 msgstr "풀기(_U)"
 
 #. Properties item
-#: src/sidebar.vala:660
+#: src/sidebar.vala:659
 msgid "_Properties"
 msgstr "속성(_P)"
 
@@ -2512,26 +2506,26 @@ msgstr "(보안 셸 키를 읽을 수 없습니다)"
 msgid "Secure Shell Key"
 msgstr "보안 셸 키"
 
-#: ssh/operation.vala:204
+#: ssh/operation.vala:219
 msgid "Remote Host Password"
 msgstr "원격 호스트 암호"
 
-#: ssh/operation.vala:247
+#: ssh/operation.vala:262
 msgid "Enter Key Passphrase"
 msgstr "키 암호를 입력하십시오"
 
-#: ssh/operation.vala:273
+#: ssh/operation.vala:288
 msgid "Passphrase for New Secure Shell Key"
 msgstr "새 보안 셸 키의 암호"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:306
+#: ssh/operation.vala:321
 #, c-format
 msgid "Importing key: %s"
 msgstr "키를 가져오는 중: %s"
 
-#: ssh/operation.vala:306
+#: ssh/operation.vala:321
 msgid "Importing key. Enter passphrase"
 msgstr "키를 가져오는 중입니다. 암호를 입력하십시오"
 
@@ -2577,6 +2571,10 @@ msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "자기 전자메일 주소를 사용하거나, 기타 이 키의 용도가 무엇인지 알 수 있는 말"
 "을 사용하십시오."
+
+#: ssh/seahorse-ssh-generate.ui:124
+msgid "Encryption _Type:"
+msgstr "암호화 종류(_T):"
 
 #: ssh/seahorse-ssh-generate.ui:142
 msgid "DSA"
@@ -2693,6 +2691,18 @@ msgstr "원격 컴퓨터의 보안 셸 키를 설정할 수 없습니다."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "보안 셸 키를 설정하는 중…"
+
+#~ msgid "org.gnome.seahorse.Application"
+#~ msgstr "org.gnome.seahorse.Application"
+
+#~ msgid "OK"
+#~ msgstr "확인"
+
+#~ msgid "Full _Name:"
+#~ msgstr "전체 이름(_N):"
+
+#~ msgid "_Email Address:"
+#~ msgstr "전자메일 주소(_E):"
 
 #~ msgid "About Seahorse"
 #~ msgstr "시호스 정보"
