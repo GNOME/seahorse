@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-05-16 19:11+0000\n"
-"PO-Revision-Date: 2019-06-06 13:07+0200\n"
+"POT-Creation-Date: 2019-06-15 10:35+0000\n"
+"PO-Revision-Date: 2019-08-20 10:32+0200\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -59,7 +59,7 @@ msgstr "Impossibile esportare i dati"
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
 #: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
-#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:294
+#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:287
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
 #: src/import-dialog.vala:34 src/key-manager.vala:249
 msgid "_Cancel"
@@ -94,7 +94,7 @@ msgstr "_Ok"
 msgid "Password:"
 msgstr "Password:"
 
-#: common/prefs.vala:42 src/seahorse-key-manager.ui:43
+#: common/prefs.vala:42
 msgid "Preferences"
 msgstr "Preferenze"
 
@@ -370,11 +370,11 @@ msgstr ""
 "passphrase in modo da non doverle ripetere ed è in grado di eseguire backup "
 "delle proprie chiavi e del portachiavi."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:92
+#: data/org.gnome.seahorse.Application.appdata.xml.in:77
 msgid "The GNOME Project"
 msgstr "Il progetto GNOME"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:158
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:168
 #: src/seahorse-key-manager.ui:277
 msgid "Passwords and Keys"
 msgstr "Password e chiavi"
@@ -518,7 +518,7 @@ msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "Eliminare %d password?"
 msgstr[1] "Eliminare %d password?"
 
-#: gkr/gkr-keyring-add.vala:53
+#: gkr/gkr-keyring-add.vala:52
 msgid "Couldn’t add keyring"
 msgstr "Impossibile aggiungere portachiavi"
 
@@ -583,8 +583,9 @@ msgid "_Password:"
 msgstr "Pass_word:"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-msgid "OK"
-msgstr "Ok"
+#: pgp/seahorse-pgp-private-key-properties.ui:980
+msgid "Add"
+msgstr "Aggiungi"
 
 #: gkr/seahorse-gkr-add-keyring.ui:6
 msgid "Add password keyring"
@@ -1026,7 +1027,7 @@ msgid "Add User ID"
 msgstr "Aggiungi ID utente"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-gpgme-add-uid.ui:24
+#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-pgp-generate.ui:66
 msgid "Full _Name"
 msgstr "_Nome completo"
 
@@ -1034,7 +1035,7 @@ msgstr "_Nome completo"
 msgid "Must be at least 5 characters long"
 msgstr "Deve essere lungo almeno 5 caratteri"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-pgp-generate.ui:97
 msgid "_Email Address"
 msgstr "Indirizzo _email"
 
@@ -1550,49 +1551,39 @@ msgstr "Le chiavi PGP sono usate per cifrare email o file"
 msgid "New PGP key"
 msgstr "Nuova chiave PGP"
 
-#: pgp/seahorse-pgp-generate.ui:67
+#: pgp/seahorse-pgp-generate.ui:47
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "Una chiave PGP consente di cifrare email o file ad altre persone."
 
-#. Full name of the key, usually the name of the user.
-#: pgp/seahorse-pgp-generate.ui:86
-msgid "Full _Name:"
-msgstr "_Nome e cognome:"
-
-#: pgp/seahorse-pgp-generate.ui:114
-msgid "_Email Address:"
-msgstr "Indirizzo _email:"
-
-#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
+#: pgp/seahorse-pgp-generate.ui:129 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "Opzioni _avanzate"
 
-#: pgp/seahorse-pgp-generate.ui:160
-msgid "_Comment:"
-msgstr "_Commento:"
+#: pgp/seahorse-pgp-generate.ui:143
+msgid "_Comment"
+msgstr "_Commento"
 
-#: pgp/seahorse-pgp-generate.ui:188 ssh/seahorse-ssh-generate.ui:124
-msgid "Encryption _Type:"
-msgstr "_Tipo di cifratura:"
+#: pgp/seahorse-pgp-generate.ui:174
+msgid "Encryption _Type"
+msgstr "_Tipo di cifratura"
 
-#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
-#: ssh/seahorse-ssh-generate.ui:158
-msgid "Key _Strength (bits):"
-msgstr "_Dimensione della chiave (in bit):"
+#: pgp/seahorse-pgp-generate.ui:204
+msgid "Key _Strength (bits)"
+msgstr "_Dimensione della chiave (in bit)"
 
-#: pgp/seahorse-pgp-generate.ui:242
-msgid "E_xpiration Date:"
-msgstr "Data di scaden_za:"
+#: pgp/seahorse-pgp-generate.ui:234
+msgid "E_xpiration Date"
+msgstr "Data di scaden_za"
 
-#: pgp/seahorse-pgp-generate.ui:261
+#: pgp/seahorse-pgp-generate.ui:256
 msgid "Ne_ver Expires"
 msgstr "Ness_una scadenza"
 
-#: pgp/seahorse-pgp-generate.ui:304
+#: pgp/seahorse-pgp-generate.ui:297
 msgid "C_reate"
 msgstr "C_rea"
 
-#: pgp/seahorse-pgp-generate.ui:311
+#: pgp/seahorse-pgp-generate.ui:304
 msgid "Generate a new key"
 msgstr "Genera una nuova chiave"
 
@@ -1886,10 +1877,6 @@ msgstr "_Esporta chiave segreta:"
 #: pgp/seahorse-pgp-private-key-properties.ui:926
 msgid "Actions"
 msgstr "Azioni"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:980
-msgid "Add"
-msgstr "Aggiungi"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1010
 msgid "Expire"
@@ -2256,6 +2243,10 @@ msgstr "Etichetta:"
 msgid "Stored at:"
 msgstr "Salvata in:"
 
+#: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
+msgid "Key _Strength (bits):"
+msgstr "_Dimensione della chiave (in bit):"
+
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
 msgstr "Crea una richiesta di certificato"
@@ -2276,13 +2267,13 @@ msgstr "Contributi:"
 msgid "Version of this application"
 msgstr "Versione di questa applicazione"
 
-#: src/application.vala:160
+#: src/application.vala:170
 msgid "translator-credits"
 msgstr ""
 "Milo Casagrande <milo@milo.name>\n"
 "Luigi Maselli <metnik at tiscali.it>"
 
-#: src/application.vala:163
+#: src/application.vala:173
 msgid "Seahorse Project Homepage"
 msgstr "Sito web del progetto Seahorse"
 
@@ -2337,32 +2328,36 @@ msgid "Filter items:"
 msgstr "Filtra elementi:"
 
 #: src/seahorse-key-manager.ui:8
-msgid "Show personal"
-msgstr "Mostra personali"
+msgid "Show p_ersonal"
+msgstr "Mostra _personali"
 
 #: src/seahorse-key-manager.ui:13
-msgid "Show trusted"
-msgstr "Mostra fidati"
+msgid "Show _trusted"
+msgstr "Mostra _fidati"
 
 #: src/seahorse-key-manager.ui:18
-msgid "Show any"
-msgstr "Mostra qualsiasi"
+msgid "Show an_y"
+msgstr "Mostra _qualsiasi"
 
 #: src/seahorse-key-manager.ui:25
-msgid "Combine all keyrings"
-msgstr "Unisci tutti i portachiavi"
+msgid "_Combine all keyrings"
+msgstr "_Unisci tutti i portachiavi"
 
 #: src/seahorse-key-manager.ui:31
-msgid "Find remote keys…"
-msgstr "Cerca chiavi remote…"
+msgid "_Find remote keys…"
+msgstr "Cerca chiavi _remote…"
 
 #: src/seahorse-key-manager.ui:36
-msgid "Sync and publish keys…"
-msgstr "Sincronizza e pubblica le chiavi…"
+msgid "_Sync and publish keys…"
+msgstr "_Sincronizza e pubblica le chiavi…"
+
+#: src/seahorse-key-manager.ui:43
+msgid "_Preferences"
+msgstr "Preferen_ze"
 
 #: src/seahorse-key-manager.ui:48
-msgid "Help"
-msgstr "Aiuto"
+msgid "_Help"
+msgstr "A_iuto"
 
 #: src/seahorse-key-manager.ui:52
 msgid "_About Passwords and Keys"
@@ -2615,6 +2610,10 @@ msgstr ""
 "Il proprio indirizzo email o qualsiasi altro promemoria per ricordarsi lo "
 "scopo di questa chiave."
 
+#: ssh/seahorse-ssh-generate.ui:124
+msgid "Encryption _Type:"
+msgstr "_Tipo di cifratura:"
+
 #: ssh/seahorse-ssh-generate.ui:142
 msgid "DSA"
 msgstr "DSA"
@@ -2732,6 +2731,3 @@ msgstr "Impossibile configurare le chiavi Secure Shell sul computer remoto."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configurazione chiavi Secure Shell…"
-
-#~ msgid "org.gnome.seahorse.Application"
-#~ msgstr "org.gnome.seahorse.Application"
