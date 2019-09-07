@@ -56,6 +56,19 @@
                     "url": "https://avahi.org/download/avahi-0.7.tar.gz",
                     "sha256": "57a99b5dfe7fdae794e3d1ee7a62973a368e91e414bd0dfa5d84434de5b14804"
                 }
+            ],
+            "modules": [
+                {
+                  "name": "intltool",
+                  "cleanup": [ "*" ],
+                  "sources": [
+                    {
+                      "type": "archive",
+                      "url": "https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz",
+                      "sha256": "67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd"
+                    }
+                  ]
+                }
             ]
         },
         {
@@ -99,6 +112,9 @@
         },
         {
             "name": "libpwquality",
+            "config-opts": [
+                "--enable-python-bindings=no"  
+            ],
             "sources": [
                 {
                     "type": "archive",
