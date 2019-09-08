@@ -183,6 +183,7 @@ public class Seahorse.KeyManager : Catalog {
 
     private void check_empty_state() {
         bool empty = (this.item_list.get_n_items() == 0);
+        debug("Checking empty state: %s", empty.to_string());
 
         this.show_search_button.sensitive = !empty;
         if (!empty) {
@@ -193,7 +194,7 @@ public class Seahorse.KeyManager : Catalog {
         // We have an empty page, that might still have 2 reasons:
         // - we really have no items in our collections
         // - we're dealing with a locked keyring
-        Place? place = get_focused_place();
+        Place? place = this.sidebar.get_focused_place();
         if (place != null && place is Lockable && ((Lockable) place).unlockable) {
             this.content_stack.visible_child_name = "locked_keyring_page";
             return;
@@ -384,17 +385,13 @@ public class Seahorse.KeyManager : Catalog {
         }
     }
 
-    public override Place? get_focused_place() {
-        return this.sidebar.get_focused_place();
-    }
-
     private Gcr.Collection setup_sidebar() {
         this.sidebar = new Sidebar();
         sidebar.hexpand = true;
 
         /* Make sure we update the empty state on any change */
-        this.sidebar.get_selection().changed.connect((sel) => check_empty_state());
-        this.sidebar.current_collection_changed.connect (() => check_empty_state ());
+        this.sidebar.selected_rows_changed.connect((sidebar) => { check_empty_state(); });
+        this.sidebar.current_collection_changed.connect((sidebar) => { check_empty_state (); });
 
         this.sidebar_panes.position = this.settings.get_int("sidebar-width");
         this.sidebar_panes.realize.connect(() =>   { this.sidebar_panes.position = this.settings.get_int("sidebar-width"); });
@@ -411,7 +408,7 @@ public class Seahorse.KeyManager : Catalog {
 
         this.settings.bind("keyrings-selected", this.sidebar, "selected-uris", SettingsBindFlags.DEFAULT);
 
-        return this.sidebar.collection;
+        return this.sidebar.objects;
     }
 
     public override List<weak Backend> get_backends() {
@@ -426,7 +423,7 @@ public class Seahorse.KeyManager : Catalog {
 
     [GtkCallback]
     private void on_locked_keyring_unlock_button_clicked(Gtk.Button unlock_button) {
-        Lockable? place = get_focused_place() as Lockable;
+        Lockable? place = this.sidebar.get_focused_place() as Lockable;
         return_if_fail(place != null && place.unlockable);
 
         unlock_button.sensitive = false;

@@ -10,7 +10,6 @@ common_sources = [
   'exportable.vala',
   'exporter.vala',
   'icons.vala',
-  'key-manager-store.vala',
   'interaction.vala',
   'item-list.vala',
   'lockable.vala',

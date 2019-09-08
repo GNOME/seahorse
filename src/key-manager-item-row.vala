@@ -55,6 +55,7 @@ public class Seahorse.KeyManagerItemRow : Gtk.ListBoxRow {
         object.get("description", out description);
         var description_label = new Gtk.Label(description);
         description_label.xalign = 1.0f;
+        description_label.valign = Gtk.Align.START;
         description_label.get_style_context().add_class("seahorse-item-listbox-row-description");
         grid.attach(description_label, 2, 0);
 

@@ -115,18 +115,20 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 			if (this._aliases.lookup("session") == object_path)
 				continue;
 
-			seen.add(object_path);
-			if (this._keyrings.lookup(object_path) == null) {
-				this._keyrings.insert(object_path, (Keyring)keyring);
+			var uri = "secret-service://%s".printf(object_path);
+			seen.add(uri);
+			if (this._keyrings.lookup(uri) == null) {
+				this._keyrings.insert(uri, (Keyring)keyring);
 				emit_added(keyring);
 			}
 		}
 
 		/* Remove any that we didn't find */
 		var iter = GLib.HashTableIter<string, Keyring>(this._keyrings);
-		while (iter.next(out object_path, null)) {
-			if (!seen.contains(object_path)) {
-				var keyring = this._keyrings.lookup(object_path);
+		string uri;
+		while (iter.next(out uri, null)) {
+			if (!seen.contains(uri)) {
+				var keyring = this._keyrings.lookup(uri);
 				iter.remove();
 				emit_removed(keyring);
 			}
@@ -146,13 +148,13 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 		return get_keyrings();
 	}
 
-	public bool contains(GLib.Object object) {
-		if (object is Keyring) {
-			var keyring = (Keyring)object;
-			return this._keyrings.lookup(keyring.uri) == keyring;
-		}
-		return false;
-	}
+    public bool contains(GLib.Object object) {
+        var keyring = object as Gkr.Keyring;
+        if (keyring == null)
+            return false;
+
+        return this._keyrings.lookup(keyring.uri) == keyring;
+    }
 
 	public Place? lookup_place(string uri) {
 		return this._keyrings.lookup(uri);
@@ -169,7 +171,7 @@ public class Backend: GLib.Object , Gcr.Collection, Seahorse.Backend {
 		return Backend._instance;
 	}
 
-	public GLib.List<weak Keyring> get_keyrings() {
+	public GLib.List<unowned Keyring> get_keyrings() {
 		return this._keyrings.get_values();
 	}
 
