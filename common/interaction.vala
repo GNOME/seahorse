@@ -46,13 +46,15 @@ public class Seahorse.Interaction : GLib.TlsInteraction {
             dialog.transient_for = this.parent;
 
         int response = dialog.run();
+
+        if (response == Gtk.ResponseType.ACCEPT)
+			password.set_value_full((uint8[])gcr_secure_memory_strdup(dialog.get_text()),
+									gcr_secure_memory_free);
+
         dialog.destroy();
 
         if (response != Gtk.ResponseType.ACCEPT)
-            throw new GLib.IOError.CANCELLED("The password request was cancelled by the user");
-
-        password.set_value_full((uint8[])gcr_secure_memory_strdup(dialog.get_text()),
-                                gcr_secure_memory_free);
+			throw new GLib.IOError.CANCELLED("The password request was cancelled by the user");
 
         return TlsInteractionResult.HANDLED;
     }
