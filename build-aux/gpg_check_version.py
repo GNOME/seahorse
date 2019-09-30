@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import re
 import sys
 import subprocess
 
@@ -13,12 +14,23 @@ def parse_version(gpg_output):
 # For GPG, this means that the major and minor version should be equal;
 # for GPGME, this means only the major version should be equal.
 def check_version(gpg_version, accepted_version, is_gpgme = False):
-    gpg_major, gpg_minor, gpg_micro = gpg_version.split('.', 2)
     acc_major, acc_minor, acc_micro = accepted_version.split('.', 2)
+
+    # The GPG(ME) version we got still might have to be sanitized
+    # For example, sometimes it adds a "-unknown" suffix
+    gpg_major_str, gpg_minor_str, gpg_micro_str = gpg_version.split('.', 2)
+
+    gpg_major = int(gpg_major_str)
+    gpg_minor = int(gpg_minor_str)
+
+    # Get rid of any fuzz that comes after the version
+    _micro_match = re.match(r'^([0-9]+)[^0-9]*', gpg_micro_str)
+    gpg_micro = int(_micro_match.group(1)) if _micro_match != None else 0
+
     if is_gpgme:
-        return int(gpg_major) == int(acc_major) and int(gpg_minor) >= int(acc_minor) and int(gpg_micro) >= int(acc_micro)
-    else:
-        return int(gpg_major) == int(acc_major) and int(gpg_minor) == int(acc_minor) and int(gpg_micro) >= int(acc_micro)
+        return gpg_major == int(acc_major) and gpg_minor >= int(acc_minor) and gpg_micro >= int(acc_micro)
+
+    return gpg_major == int(acc_major) and gpg_minor == int(acc_minor) and gpg_micro >= int(acc_micro)
 
 if len(sys.argv) <= 3:
     sys.exit(1)
