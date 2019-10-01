@@ -8,61 +8,11 @@
         <property name="show_close_button">True</property>
         <property name="title" translatable="yes">Keyring properties</property>
         <child>
-          <object class="GtkButton" id="lock_unlock_button">
+          <object class="GtkLockButton" id="lock_button">
             <property name="visible">True</property>
-            <signal name="clicked" handler="on_lock_unlock_button_clicked"/>
-            <child>
-              <object class="GtkStack" id="lock_unlock_stack">
-                <property name="visible">True</property>
-                <property name="homogeneous">False</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="spacing">6</property>
-                    <property name="tooltip_text" translatable="yes">Keyring is locked</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">true</property>
-                        <property name="icon_name">changes-allow-symbolic</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">true</property>
-                        <property name="label" translatable="yes">Unlock</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="name">lock_unlock_button_unlocked</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="spacing">6</property>
-                    <property name="tooltip_text" translatable="yes">Keyring is unlocked</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">true</property>
-                        <property name="icon_name">changes-prevent-symbolic</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">true</property>
-                        <property name="label" translatable="yes">Lock</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="name">lock_unlock_button_locked</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
+            <property name="tooltip_lock">Keyring is unlocked</property>
+            <property name="tooltip_unlock">Keyring is locked</property>
+            <property name="tooltip_not_authorized"></property>
           </object>
         </child>
       </object>
