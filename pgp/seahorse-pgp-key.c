@@ -119,6 +119,7 @@ calc_markup (SeahorsePgpKey *self)
     const gchar *email;
     const gchar *comment;
     const gchar *primary = NULL;
+    guint i = 0;
 
     uids = seahorse_pgp_key_get_uids (self);
 
@@ -158,7 +159,24 @@ calc_markup (SeahorsePgpKey *self)
         uids = uids->next;
     }
 
-    while (uids != NULL) {
+    for (i = 0; uids != NULL; i++, uids = g_list_next (uids)) {
+        g_string_append_c (result, '\n');
+
+        // If we already have more than 5 UIDs, ellipsze the list.
+        // Otherwise we get huge rows in the list of GPG keys
+        if (i == 4) {
+            int n_others = g_list_length (uids);
+            g_autofree char *others_str = NULL;
+
+            g_string_append_printf (result,
+                                    ngettext ("(and %d other)",
+                                              "(and %d others)",
+                                              n_others),
+                                    n_others);
+
+            break;
+        }
+
         name = seahorse_pgp_uid_get_name (uids->data);
         if (name && !name[0])
             name = NULL;
@@ -170,7 +188,7 @@ calc_markup (SeahorsePgpKey *self)
         comment = seahorse_pgp_uid_get_comment (uids->data);
         if (comment && !comment[0])
             comment = NULL;
-        text = g_markup_printf_escaped ("\n%s%s%s%s%s%s%s",
+        text = g_markup_printf_escaped ("%s%s%s%s%s%s%s",
                                         name ? name : "",
                                         name ? ": " : "",
                                         email ? email : "",
