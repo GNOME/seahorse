@@ -6,7 +6,7 @@ install_data(icon_subfolder / 'org.gnome.seahorse.Application-symbolic.svg',
   install_dir: icons_install_dir / icon_subfolder,
 )
 icon_subfolder = 'hicolor' / 'scalable' / 'apps'
-install_data(icon_subfolder / 'org.gnome.seahorse.Application.svg',
+install_data(icon_subfolder / '@0@.svg'.format(application_id),
   install_dir: icons_install_dir / icon_subfolder,
 )
 
