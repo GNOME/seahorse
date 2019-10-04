@@ -27,6 +27,13 @@ po_dir = meson.source_root() / 'po'
 datadir = seahorse_prefix / get_option('datadir')
 libexecbindir = seahorse_prefix / get_option('libexecdir') / meson.project_name()
 
+# Application ID
+if get_option('profile') == 'default'
+  application_id = 'org.gnome.seahorse.Application'
+else
+  application_id = 'org.gnome.seahorse.ApplicationDevel'
+endif
+
 # Dependencies
 min_glib_version = '2.44'
 min_gcr_version = '3.11.91'
@@ -119,6 +126,7 @@ conf.set_quoted('PACKAGE_STRING', '@0@ @1@'.format(meson.project_name(), meson.p
 conf.set_quoted('PKGDATADIR', get_option('datadir') / meson.project_name())
 conf.set_quoted('EXECDIR', libexecbindir)
 conf.set_quoted('LOCALEDIR', seahorse_prefix / get_option('localedir'))
+conf.set_quoted('APPLICATION_ID', application_id)
 conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
 conf.set_quoted('G_LOG_DOMAIN', meson.project_name())
 conf.set('WITH_DEBUG', buildtype.contains('debug'))
