@@ -1,29 +1,35 @@
-stages:
-  - build-flatpak
+include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
-# We always use flatpak-builder to check if everything still works.
-flatpak:master:
+stages:
+- test
+- deploy
+
+variables:
+  BUNDLE: 'seahorse.flatpak'
+
+flatpak:
   image: registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master
-  stage: build-flatpak
   variables:
     MANIFEST_PATH: 'build-aux/org.gnome.Seahorse.json'
-    BUNDLE: 'seahorse-dev.flatpak'
+    MESON_ARGS: ""
+    FLATPAK_MODULE: "seahorse"
+    RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
+    APP_ID: "org.gnome.seahorse.ApplicationDevel"
+  extends: .flatpak
+
+review:
+  stage: deploy
+  dependencies:
+    - flatpak
   script:
-    - flatpak-builder --stop-at=seahorse app ${MANIFEST_PATH}
-    # Make sure to keep this in sync with the Flatpak manifest, all arguments
-    # are passed except the config-args because we build it ourselves
-    - flatpak build app meson --prefix=/app _build
-    - flatpak build app ninja -C _build install
-    - flatpak-builder --finish-only --repo=repo app ${MANIFEST_PATH}
-    # Make a Flatpak Seahorse bundle for people to test
-    - flatpak build-bundle repo ${BUNDLE} --runtime-repo=https://sdk.gnome.org/gnome-nightly.flatpakrepo org.gnome.seahorse.Application
-    # - xvfb-run -a -s "-screen 0 1024x768x24" flatpak build app ninja -C _build test
-  artifacts:
-    paths:
-      - ${BUNDLE}
-      - _build/meson-logs/meson-log.txt
-      - _build/meson-logs/testlog.txt
-    expire_in: 2 days
-  cache:
-    paths:
-      - .flatpak-builder/cache
+    - echo "Generating flatpak deployment"
+  extends: '.review'
+
+stop_review:
+  stage: deploy
+  script:
+    - echo "Stopping flatpak deployment"
+  extends: '.stop_review'
+
+nightly:
+  extends: '.publish_nightly'
