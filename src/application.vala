@@ -68,7 +68,7 @@ public class Seahorse.Application : Gtk.Application {
 
     public Application () {
         GLib.Object (
-            application_id: "org.gnome.seahorse.Application",
+            application_id: Config.APPLICATION_ID,
             flags: ApplicationFlags.HANDLES_OPEN
         );
         this.search_provider = new SearchProvider(this);
