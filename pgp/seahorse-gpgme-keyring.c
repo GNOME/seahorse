@@ -411,9 +411,14 @@ scheduled_dummy (gpointer user_data)
 }
 
 typedef struct {
-	gboolean public_done;
-	gboolean secret_done;
+	SeahorseGpgmeKeyring *self;
+	const gchar **patterns;
 } keyring_load_closure;
+
+static void
+on_keyring_public_list_complete (GObject *source,
+                                 GAsyncResult *result,
+                                 gpointer user_data);
 
 static void
 on_keyring_secret_list_complete (GObject *source,
@@ -421,19 +426,22 @@ on_keyring_secret_list_complete (GObject *source,
                                  gpointer user_data)
 {
 	g_autoptr(GTask) task = G_TASK (user_data);
+	GCancellable *cancellable = g_task_get_cancellable (task);
 	keyring_load_closure *closure = g_task_get_task_data (task);
+	SeahorseGpgmeKeyring *self = closure->self;
+	const gchar **patterns = closure->patterns;
 	g_autoptr(GError) error = NULL;
-
-	closure->secret_done = TRUE;
 
 	if (!seahorse_gpgme_keyring_list_finish (SEAHORSE_GPGME_KEYRING (source),
 	                                         result, &error)) {
 		g_task_return_error (task, g_steal_pointer (&error));
-        return;
-    }
+		return;
+	}
 
-	if (closure->public_done)
-		g_task_return_boolean (task, TRUE);
+	/* Public keys */
+	seahorse_gpgme_keyring_list_async (self, patterns, 0, FALSE, cancellable,
+	                                   on_keyring_public_list_complete,
+	                                   g_steal_pointer (&task));
 }
 
 static void
@@ -442,19 +450,15 @@ on_keyring_public_list_complete (GObject *source,
                                  gpointer user_data)
 {
 	g_autoptr(GTask) task = G_TASK (user_data);
-	keyring_load_closure *closure = g_task_get_task_data (task);
 	g_autoptr(GError) error = NULL;
-
-	closure->public_done = TRUE;
 
 	if (!seahorse_gpgme_keyring_list_finish (SEAHORSE_GPGME_KEYRING (source),
 	                                         result, &error)) {
 		g_task_return_error (task, g_steal_pointer (&error));
-        return;
-    }
+		return;
+	}
 
-	if (closure->secret_done)
-		g_task_return_boolean (task, TRUE);
+	g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -477,6 +481,8 @@ seahorse_gpgme_keyring_load_full_async (SeahorseGpgmeKeyring *self,
 
 	task = g_task_new (self, cancellable, callback, user_data);
 	closure = g_new0 (keyring_load_closure, 1);
+	closure->self = self;
+	closure->patterns = patterns;
 	g_task_set_task_data (task, closure, g_free);
 
 	/* Secret keys */
@@ -484,10 +490,7 @@ seahorse_gpgme_keyring_load_full_async (SeahorseGpgmeKeyring *self,
 	                                   on_keyring_secret_list_complete,
 	                                   g_object_ref (task));
 
-	/* Public keys */
-	seahorse_gpgme_keyring_list_async (self, patterns, 0, FALSE, cancellable,
-	                                   on_keyring_public_list_complete,
-	                                   g_steal_pointer (&task));
+	/* Public keys -- see on_keyring_secret_list_complete() */
 }
 
 SeahorseGpgmeKey *
