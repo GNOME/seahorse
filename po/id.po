@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-06-15 10:35+0000\n"
-"PO-Revision-Date: 2019-06-21 18:40+0700\n"
+"POT-Creation-Date: 2019-10-01 20:04+0000\n"
+"PO-Revision-Date: 2019-10-28 13:10+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural= n!=1;\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -72,7 +72,7 @@ msgstr "_Hapus"
 msgid "Export"
 msgstr "Ekspor"
 
-#: common/interaction.vala:61
+#: common/interaction.vala:63
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Masukkan PIN atau kata sandi bagi: %s"
@@ -365,7 +365,7 @@ msgstr ""
 "menyinggahkan frasa sandi Anda sehingga Anda tak perlu setiap kali "
 "mengetikkannya, dan membuat cadangan kunci dan ring kunci Anda."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:77
+#: data/org.gnome.seahorse.Application.appdata.xml.in:94
 msgid "The GNOME Project"
 msgstr "Proyek GNOME"
 
@@ -517,7 +517,7 @@ msgstr[1] "Anda yakin ingin menghapus %d kata sandi?"
 msgid "Couldn’t add keyring"
 msgstr "Tidak dapat menambah ring kunci"
 
-#: gkr/gkr-keyring-properties.vala:66
+#: gkr/gkr-keyring-properties.vala:65
 msgid "Unknown date"
 msgstr "Tanggal tak dikenal"
 
@@ -640,35 +640,19 @@ msgstr "Hapus Kata Sandi"
 msgid "Keyring properties"
 msgstr "Properti ring kunci"
 
-#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:487
-msgid "Keyring is locked"
-msgstr "Ring kunci terkunci"
-
-#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:497
-msgid "Unlock"
-msgstr "Buka Kunci"
-
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Keyring is unlocked"
-msgstr "Ring kunci terbuka"
-
-#: gkr/seahorse-gkr-keyring.ui:56
-msgid "Lock"
-msgstr "Kunci"
-
-#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:851
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:851
 msgid "Name"
 msgstr "Nama"
 
-#: gkr/seahorse-gkr-keyring.ui:130
+#: gkr/seahorse-gkr-keyring.ui:80
 msgid "Created on"
 msgstr "Dibuat pada"
 
-#: gkr/seahorse-gkr-keyring.ui:160
+#: gkr/seahorse-gkr-keyring.ui:110
 msgid "Change password"
 msgstr "Ubah kata sandi"
 
-#: gkr/seahorse-gkr-keyring.ui:167
+#: gkr/seahorse-gkr-keyring.ui:117
 msgid "Set as default"
 msgstr "Atur sebagai bawaan"
 
@@ -1569,11 +1553,18 @@ msgstr "_Buat"
 msgid "Generate a new key"
 msgstr "Buat suatu kunci baru"
 
-#: pgp/seahorse-pgp-key.c:555
+#: pgp/seahorse-pgp-key.c:172
+#, c-format
+msgid "(and %d other)"
+msgid_plural "(and %d others)"
+msgstr[0] "(dan %d lainnya)"
+msgstr[1] "(dan %d lainnya)"
+
+#: pgp/seahorse-pgp-key.c:573
 msgid "Personal PGP key"
 msgstr "Kunci pribadi PGP"
 
-#: pgp/seahorse-pgp-key.c:557
+#: pgp/seahorse-pgp-key.c:575
 msgid "PGP key"
 msgstr "Kunci PGP"
 
@@ -2402,6 +2393,14 @@ msgstr "Penyaring"
 msgid "This collection seems to be empty"
 msgstr "Koleksi ini tampaknya kosong"
 
+#: src/seahorse-key-manager.ui:487
+msgid "Keyring is locked"
+msgstr "Ring kunci terkunci"
+
+#: src/seahorse-key-manager.ui:497
+msgid "Unlock"
+msgstr "Buka Kunci"
+
 #: src/seahorse-key-manager-widgets.ui:6
 msgid "Export…"
 msgstr "Ekspor…"
@@ -2713,6 +2712,12 @@ msgstr "Tidak dapat menata kunci Secure Shell pada komputer jauh."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Mengkonfigurasi Kunci Secure Shell…"
+
+#~ msgid "Keyring is unlocked"
+#~ msgstr "Ring kunci terbuka"
+
+#~ msgid "Lock"
+#~ msgstr "Kunci"
 
 #~ msgid "OK"
 #~ msgstr "OK"
