@@ -42,6 +42,8 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
     [GtkChild]
     private Gtk.Label location_label;
     [GtkChild]
+    private Gtk.Label pubkey_label;
+    [GtkChild]
     private Gtk.Label key_length_label;
 
     public KeyProperties(Key key, Gtk.Window parent) {
@@ -75,6 +77,7 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         this.algo_label.label = this.key.get_algo().to_string() ?? _("Unknown type");
         this.location_label.label = this.key.get_location();
         this.key_length_label.label = "%u".printf(this.key.get_strength());
+        this.pubkey_label.label = this.key.pubkey;
 
         this.updating_ui = false;
     }
