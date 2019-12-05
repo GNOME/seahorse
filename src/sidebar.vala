@@ -70,14 +70,9 @@ public class Seahorse.Sidebar : Gtk.ListBox {
     }
 
     ~Sidebar() {
-        foreach (Backend backend in this.backends) {
-            SignalHandler.disconnect_by_func((void*) backend, (void*) on_place_added, this);
-            SignalHandler.disconnect_by_func((void*) backend, (void*) on_place_removed, this);
-            SignalHandler.disconnect_by_func((void*) backend, (void*) on_backend_changed, this);
-
+        foreach (Backend backend in this.backends)
             foreach (weak GLib.Object obj in backend.get_objects())
                 on_place_removed (backend, (Place) obj);
-        }
     }
 
     private void load_backends() {
@@ -119,7 +114,7 @@ public class Seahorse.Sidebar : Gtk.ListBox {
     }
 
     private void on_sidebar_item_changed(SidebarItem item) {
-        /* current_collection_changed(); */
+        current_collection_changed();
     }
 
     private void place_header_cb(Gtk.ListBoxRow row, Gtk.ListBoxRow? before) {
@@ -238,7 +233,7 @@ public class Seahorse.Sidebar : Gtk.ListBox {
         this.store.sort(compare_places);
 
         // Update selection
-        /* update_objects(); */
+        update_objects();
     }
 
     private void update_backend(Backend? backend) {
@@ -336,8 +331,7 @@ public class Seahorse.Sidebar : Gtk.ListBox {
                 else if (place.uri.has_prefix(uri_prefix)) {
                     var chosen = new GenericSet<string?>(str_hash, str_equal);
                     chosen.add(place.uri);
-                    //XXX
-                    /* update_objects(); */
+                    update_objects();
                     return;
                 }
             }

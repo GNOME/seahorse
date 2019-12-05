@@ -391,7 +391,7 @@ public class Seahorse.KeyManager : Catalog {
 
         /* Make sure we update the empty state on any change */
         this.sidebar.selected_rows_changed.connect((sidebar) => { check_empty_state(); });
-        this.sidebar.current_collection_changed.connect((sidebar) => { check_empty_state (); });
+        this.sidebar.current_collection_changed.connect((sidebar) => { warning("collection changed!");check_empty_state (); });
 
         this.sidebar_panes.position = this.settings.get_int("sidebar-width");
         this.sidebar_panes.realize.connect(() =>   { this.sidebar_panes.position = this.settings.get_int("sidebar-width"); });
