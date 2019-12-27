@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-06-15 10:35+0000\n"
-"PO-Revision-Date: 2019-08-26 00:47+0200\n"
+"POT-Creation-Date: 2019-10-01 20:04+0000\n"
+"PO-Revision-Date: 2019-12-27 12:35+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.4\n"
 "X-Project-Style: gnome\n"
 
 #: common/add-keyserver-dialog.vala:32
@@ -81,7 +81,7 @@ msgstr "E_liminar"
 msgid "Export"
 msgstr "Exportar"
 
-#: common/interaction.vala:61
+#: common/interaction.vala:63
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Escriba o PIN ou contrasinal para: %s"
@@ -361,8 +361,8 @@ msgid ""
 "Seahorse is a GNOME application for managing encryption keys. It also "
 "integrates with nautilus, gedit and other places for encryption operations."
 msgstr ""
-"Seahorse é un aplicativo de GNOME para a xestión de chaves de cifrado. Tamén "
-"se integra con nautilus, gedit e outros lugares para as operacións de "
+"Seahorse é unha aplicación de GNOME para a xestión de chaves de cifrado. "
+"Tamén se integra con nautilus, gedit e outros lugares para as operacións de "
 "cifrado."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:13
@@ -376,7 +376,7 @@ msgstr ""
 "a súa frase de paso deste xeito non terá que escribila continuamente e facer "
 "un respaldo das súas chaves e do anel de chaves."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:77
+#: data/org.gnome.seahorse.Application.appdata.xml.in:94
 msgid "The GNOME Project"
 msgstr "O Proxecto GNOME"
 
@@ -528,7 +528,7 @@ msgstr[1] "Está seguro de que quere eliminar %d contrasinais?"
 msgid "Couldn’t add keyring"
 msgstr "Non foi posíbel engadir o anel de chaves"
 
-#: gkr/gkr-keyring-properties.vala:66
+#: gkr/gkr-keyring-properties.vala:65
 msgid "Unknown date"
 msgstr "Data descoñecida"
 
@@ -652,35 +652,19 @@ msgstr "Eliminar contrasinal"
 msgid "Keyring properties"
 msgstr "Propiedades do anel de chaves"
 
-#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:487
-msgid "Keyring is locked"
-msgstr "O anel de chaves está bloqueado"
-
-#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:497
-msgid "Unlock"
-msgstr "Desbloquear"
-
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Keyring is unlocked"
-msgstr "O anel de chaves está desbloqueado"
-
-#: gkr/seahorse-gkr-keyring.ui:56
-msgid "Lock"
-msgstr "Bloquear"
-
-#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:851
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:851
 msgid "Name"
 msgstr "Nome"
 
-#: gkr/seahorse-gkr-keyring.ui:130
+#: gkr/seahorse-gkr-keyring.ui:80
 msgid "Created on"
 msgstr "Creado o"
 
-#: gkr/seahorse-gkr-keyring.ui:160
+#: gkr/seahorse-gkr-keyring.ui:110
 msgid "Change password"
 msgstr "Cambiar o contrasinal"
 
-#: gkr/seahorse-gkr-keyring.ui:167
+#: gkr/seahorse-gkr-keyring.ui:117
 msgid "Set as default"
 msgstr "Definir como predeterminado"
 
@@ -1126,7 +1110,7 @@ msgstr ""
 "Ao crear unha chave débense xerar moitos\n"
 "datos aleatorios e precísase da súa axuda. É unha\n"
 "boa idea realizar outras tarefas como escribir\n"
-"co teclado, mover o rato ou usar aplicativos.\n"
+"co teclado, mover o rato ou usar aplicacións.\n"
 "Isto fornécelle ao sistema os datos aleatorios\n"
 "necesarios."
 
@@ -1585,11 +1569,18 @@ msgstr "C_rear"
 msgid "Generate a new key"
 msgstr "Xerar unha nova chave"
 
-#: pgp/seahorse-pgp-key.c:555
+#: pgp/seahorse-pgp-key.c:172
+#, c-format
+msgid "(and %d other)"
+msgid_plural "(and %d others)"
+msgstr[0] "(e %d outro)"
+msgstr[1] "(e %d outros)"
+
+#: pgp/seahorse-pgp-key.c:573
 msgid "Personal PGP key"
 msgstr "Chave PGP persoal"
 
-#: pgp/seahorse-pgp-key.c:557
+#: pgp/seahorse-pgp-key.c:575
 msgid "PGP key"
 msgstr "Chave PGP"
 
@@ -2266,12 +2257,12 @@ msgstr "Colaboracións:"
 
 #: src/application.vala:65
 msgid "Version of this application"
-msgstr "Versión deste aplicativo"
+msgstr "Versión desta aplicación"
 
 #: src/application.vala:170
 msgid "translator-credits"
 msgstr ""
-"Fran Diéguez <frandieguez@gnome.org>, 2009-2019.\n"
+"Fran Diéguez <frandieguez@gnome.org>, 2009-2020.\n"
 "Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.\n"
 "Antón Méixome <meixome@mancomun.org>, 2009.\n"
 "Mancomún - Centro de Referencia e Servizos de Software Libre <g11n@mancomun."
@@ -2391,7 +2382,7 @@ msgstr "Contrasinal do anel de chaves"
 
 #: src/seahorse-key-manager.ui:164
 msgid "Used to store application and network passwords"
-msgstr "Úsase para gardar os contrasinais de rede e de aplicativos"
+msgstr "Úsase para gardar os contrasinais de rede e de aplicacións"
 
 #: src/seahorse-key-manager.ui:198
 msgid "Safely store a password or secret"
@@ -2420,6 +2411,14 @@ msgstr "Filtro"
 #: src/seahorse-key-manager.ui:455
 msgid "This collection seems to be empty"
 msgstr "Esta colección semella estar baleira"
+
+#: src/seahorse-key-manager.ui:487
+msgid "Keyring is locked"
+msgstr "O anel de chaves está bloqueado"
+
+#: src/seahorse-key-manager.ui:497
+msgid "Unlock"
+msgstr "Desbloquear"
 
 #: src/seahorse-key-manager-widgets.ui:6
 msgid "Export…"
@@ -2736,937 +2735,3 @@ msgstr ""
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configurando as chaves de Secure Shell (SSH)…"
-
-#~ msgid "org.gnome.seahorse.Application"
-#~ msgstr "org.gnome.seahorse.Application"
-
-#~ msgid "OK"
-#~ msgstr "Aceptar"
-
-#~ msgid "Full _Name:"
-#~ msgstr "_Nome completo:"
-
-#~ msgid "_Email Address:"
-#~ msgstr "Enderezo de corr_eo:"
-
-#~ msgid "Applications usually store new passwords in the default keyring."
-#~ msgstr ""
-#~ "Os aplicativos normalmente almacenan os contrasinais novos no anel de "
-#~ "chaves predeterminado."
-
-#~ msgid "Change the unlock password of the password storage keyring"
-#~ msgstr ""
-#~ "Cambiar o contrasinal de desbloqueo do anel de chaves de almacenamento de "
-#~ "contrasinais"
-
-#~| msgid "Seahorse"
-#~ msgid "About Seahorse"
-#~ msgstr "Sobre Seahorse"
-
-#~ msgid "_Show Password"
-#~ msgstr "Mostrar o _contrasinal"
-
-#~ msgid "About"
-#~ msgstr "Sobre"
-
-#~ msgid "Marginal"
-#~ msgstr "Mínima"
-
-#~ msgid "Full"
-#~ msgstr "Completa"
-
-#~ msgid "Ultimate"
-#~ msgstr "Absoluta"
-
-#~ msgid "Key Properties"
-#~ msgstr "Propiedades da chave"
-
-#~ msgid "_File"
-#~ msgstr "_Ficheiro"
-
-#~ msgid "Export to a file"
-#~ msgstr "Exportar a un ficheiro"
-
-#~ msgid "_Edit"
-#~ msgstr "_Editar"
-
-#~ msgid "Copy to the clipboard"
-#~ msgstr "Copiar ao portapapeis"
-
-#~ msgid "Delete selected items"
-#~ msgstr "Eliminar os elementos seleccionados"
-
-#~ msgid "Show the properties of this item"
-#~ msgstr "Mostrar as propiedades para este elemento"
-
-#~ msgid "Show the properties of this keyring"
-#~ msgstr "Mostrar as propiedades para este anel"
-
-#~ msgid "Prefere_nces"
-#~ msgstr "_Preferencias"
-
-#~ msgid "Change preferences for this program"
-#~ msgstr "Cambia as preferencias deste programa"
-
-#~ msgid "_View"
-#~ msgstr "_Ver"
-
-#~ msgid "About this program"
-#~ msgstr "Sobre este programa"
-
-#~ msgid "_Contents"
-#~ msgstr "_Contidos"
-
-#~ msgid "Show Seahorse help"
-#~ msgstr "Mostrar a axuda do Seahorse"
-
-#~ msgid "seahorse"
-#~ msgstr "seahorse"
-
-#~ msgid "New password keyring"
-#~ msgstr "Contrasinal novo do anel de chaves"
-
-#~ msgid "New password…"
-#~ msgstr "Contrasinal novo…"
-
-#~ msgid "Stored Password"
-#~ msgstr "Contrasinal gardado"
-
-#~ msgid "PGP Key"
-#~ msgstr "Chave PGP"
-
-#~ msgid "Importing keys from key servers"
-#~ msgstr "Importando chaves desde servidores de chaves"
-
-#~ msgid "_Remote"
-#~ msgstr "_Remoto"
-
-#~ msgid "Close this window"
-#~ msgstr "Pechar esta xanela"
-
-#~ msgid "Search for keys on a key server"
-#~ msgstr "Buscar chaves nun servidor de chaves"
-
-#~ msgid "_Import"
-#~ msgstr "_Importar"
-
-#~ msgid "Import selected keys to local key ring"
-#~ msgstr "Importar as chaves seleccionadas no anel de chaves local"
-
-#~ msgid "Publish and/or synchronize your keys with those online."
-#~ msgstr "Publicar ou sincronizar as chaves coas que están en liña."
-
-#~ msgid "Photo "
-#~ msgstr "Foto "
-
-#~ msgctxt "name-of-key"
-#~ msgid "Name:"
-#~ msgstr "Nome:"
-
-#~ msgid "Email:"
-#~ msgstr "Correo electrónico:"
-
-#~ msgid "Decrypt files and email sent to you."
-#~ msgstr "Descifrar ficheiros e correos electrónicos enviados a vostede."
-
-#~ msgid "Private PGP Key"
-#~ msgstr "Chave PGP privada"
-
-#~ msgid "Encrypt files and email to the key’s owner"
-#~ msgstr "Cifra ficheiros e correo-e para o propietario da chave"
-
-#~ msgid "Public PGP Key"
-#~ msgstr "Chave PGP pública"
-
-#~ msgid "- System Settings"
-#~ msgstr "- Preferencias do sistema"
-
-#~ msgid "Don't display a window"
-#~ msgstr "Non mostrar unha xanela"
-
-#~ msgid "_New"
-#~ msgstr "_Nova"
-
-#~ msgid "_Quit"
-#~ msgstr "_Saír"
-
-#~ msgid "Close this program"
-#~ msgstr "Pechar este programa"
-
-#~ msgid "_New…"
-#~ msgstr "_Nova"
-
-#~ msgid "Create a new key or item"
-#~ msgstr "Crear unha chave ou elemento novo"
-
-#~ msgid "_Import…"
-#~ msgstr "_Importar"
-
-#~ msgid "_Paste"
-#~ msgstr "_Pegar"
-
-#~ msgid "Import from the clipboard"
-#~ msgstr "Importar desde o portapapeis"
-
-#~ msgid "By _Keyring"
-#~ msgstr "Por _anel de chaves"
-
-#~ msgid "Show sidebar listing keyrings"
-#~ msgstr "Mostrar a barra lateral listando os aneis de chaves"
-
-#~ msgid "Only show personal keys, certificates and passwords"
-#~ msgstr "Mostrar só as chaves, certificados e contrasinais personais"
-
-#~ msgid "Only show trusted keys, certificates and passwords"
-#~ msgstr "Mostrar só as chaves, certificados e contrasinais confiábeis"
-
-#~ msgid "Show all keys, certificates and passwords"
-#~ msgstr "Mostrar tódalas chaves, certificados ou contrasinais"
-
-#~ msgid "New item"
-#~ msgstr "Novo elemento"
-
-#~ msgid "_Select the type of item to create:"
-#~ msgstr "_Seleccione o tipo de elemento a crear:"
-
-#~ msgid "Continue"
-#~ msgstr "Continuar"
-
-#~ msgid "First time options:"
-#~ msgstr "Opcións de primeiro uso:"
-
-#~ msgid "To get started with encryption you will need keys."
-#~ msgstr "Para poder comezar o proceso de cifrado precisará chaves."
-
-#~ msgid "Import existing keys from a file:"
-#~ msgstr "Importar as chaves existentes nun ficheiro:"
-
-#~ msgid "Generate a new key of your own: "
-#~ msgstr "Xerar unha nova chave para un mesmo: "
-
-#~ msgid ""
-#~ "Send public Secure Shell key to another machine, and enable logins using "
-#~ "that key."
-#~ msgstr ""
-#~ "Enviar a chave pública de Secure Shell (SSH) a outra máquina e activar os "
-#~ "inicios de sesión usando esa chave."
-
-#~ msgid "Used to access other computers (eg: via a terminal)"
-#~ msgstr ""
-#~ "Úsase para acceder a outros equipos (por exemplo a través dun terminal)"
-
-#~ msgctxt "name-of-ssh-key"
-#~ msgid "Name:"
-#~ msgstr "Nome:"
-
-#~ msgid "Identifier:"
-#~ msgstr "Identificador:"
-
-#~ msgid "The owner of this key is _authorized to connect to this computer"
-#~ msgstr ""
-#~ "O propietario desta chave está _autorizado para conectarse a este "
-#~ "computador"
-
-#~ msgid "This only applies to the <i>%s</i> account."
-#~ msgstr "Isto só se lle aplica á conta <i>«%s»</i>."
-
-#~ msgid "Key length:"
-#~ msgstr "Lonxitude de chave:"
-
-#~ msgid "E_xport Complete Key"
-#~ msgstr "E_xportar a chave completa"
-
-#~ msgid "The search provider is not loaded yet"
-#~ msgstr "O fornecedor de busca aínda non está cargado"
-
-#~ msgid "%Y-%m-%d"
-#~ msgstr "%d-%m-%Y"
-
-#~ msgid "Name:"
-#~ msgstr "Nome:"
-
-#~ msgid "Keyring"
-#~ msgstr "Anel de chaves"
-
-#~ msgid "The SSH command was terminated unexpectedly."
-#~ msgstr "A orde SSH terminou inesperadamente."
-
-#~ msgid "The SSH command failed."
-#~ msgstr "A orde SSH fallou."
-
-#~ msgid "E_xport..."
-#~ msgstr "E_xportar…"
-
-#~ msgid "_Find Remote Keys..."
-#~ msgstr "_Buscar chaves remotas…"
-
-#~ msgid "Synchronizing keys..."
-#~ msgstr "Sincronización de chaves…"
-
-#~ msgid "_New..."
-#~ msgstr "_Novo…"
-
-#~ msgid "_Import..."
-#~ msgstr "_Importar…"
-
-#~ msgid "Ssh Key"
-#~ msgstr "Chave SSH"
-
-#~ msgid "Updating password"
-#~ msgstr "Actualizando o contrasinal"
-
-#~ msgid "_Computer Name:"
-#~ msgstr "Nome do _computador:"
-
-#~ msgid "<b>Password:</b>"
-#~ msgstr "<b>Contrasinal:</b>"
-
-#~ msgid "<b>Key Servers:</b>"
-#~ msgstr "<b>Servidores de chaves:</b>"
-
-#~ msgid "<b>Key ID:</b>"
-#~ msgstr "<b>ID de chave:</b>"
-
-#~ msgctxt "name-of-key"
-#~ msgid "<b>Name:</b>"
-#~ msgstr "<b>Nome:</b>"
-
-#~ msgid "<b>Comment:</b>"
-#~ msgstr "<b>Comentario:</b>"
-
-#~ msgid "<b>Use:</b>"
-#~ msgstr "<b>Uso:</b>"
-
-#~ msgid "<b>Type:</b>"
-#~ msgstr "<b>Tipo:</b>"
-
-#~ msgid "<b>Key Names and Signatures</b>"
-#~ msgstr "<b>Nomes de chave e sinaturas</b>"
-
-#~ msgid "<b>Dates</b>"
-#~ msgstr "<b>Datas</b>"
-
-#~ msgid "<b>Actions</b>"
-#~ msgstr "<b>Accións</b>"
-
-#~ msgid "<b>Dates:</b>"
-#~ msgstr "<b>Datas:</b>"
-
-#~ msgctxt "name-of-ssh-key"
-#~ msgid "<b>Name:</b>"
-#~ msgstr "<b>Nome:</b>"
-
-#~ msgid "<b>Trust</b>"
-#~ msgstr "<b>Confianza</b>"
-
-#~ msgid "<b>Strength:</b>"
-#~ msgstr "Fortaleza:"
-
-#~ msgid "Never"
-#~ msgstr "Nunca"
-
-#~ msgid "Access to the key ring was denied"
-#~ msgstr "Denegouse o acceso ao anel de chaves"
-
-#~ msgid "The gnome-keyring daemon is not running"
-#~ msgstr "O daemon do anel de chaves de GNOME non se está executando"
-
-#~ msgid "The key ring has already been unlocked"
-#~ msgstr "O anel de chaves xa foi desbloqueado"
-
-#~ msgid "No such key ring exists"
-#~ msgstr "Non existe ese anel de chaves"
-
-#~ msgid "Couldn't communicate with key ring daemon"
-#~ msgstr "Non foi posíbel comunicar co daemon do anel de chaves"
-
-#~ msgid "The item already exists"
-#~ msgstr "O elemento xa existe"
-
-#~ msgid "Internal error accessing gnome-keyring"
-#~ msgstr "Produciuse un erro interno ao acceder ao anel de chaves de GNOME"
-
-#~ msgid "Algorithms here"
-#~ msgstr "Algoritmos aquí"
-
-#~ msgid "Show the properties of this place"
-#~ msgstr "Mostrar as propiedades para este lugar"
-
-#~ msgid "P_laces"
-#~ msgstr "_Lugares"
-
-#~ msgid "OpenSSH directory"
-#~ msgstr "Cartafol de OpenSSH"
-
-#~ msgid ""
-#~ "Lock the password storage keyring so a master password is required to "
-#~ "unlock it."
-#~ msgstr ""
-#~ "Bloquear o almacenamento de anel de chaves do contrasinal para que se "
-#~ "requira un contrasinal mestre para desbloquealo."
-
-#~ msgid ""
-#~ "Unlock the password storage keyring with a master password so it is "
-#~ "available for use."
-#~ msgstr ""
-#~ "Desbloquear o almacenamento do anel de chaves do contrasinal cun "
-#~ "contrasinal mestre para que o seu uso estea dispoñíbel."
-
-#~ msgid "Properties of the keyring."
-#~ msgstr "Propiedades do anel de chaves."
-
-#~ msgid "Delete the keyring."
-#~ msgstr "Eliminar o anel de chaves."
-
-#~ msgid "Lock the password storage keyring."
-#~ msgstr "Bloquear o anel de chaves de almacenamento de contrasinais."
-
-#~ msgid "Unlock the password storage keyring."
-#~ msgstr "Desbloquear o anel de chaves de almacenamento de contrasinais."
-
-#~ msgid "Properties of the password."
-#~ msgstr "Propiedades do contrasinal."
-
-#~ msgid "_Sign Key..."
-#~ msgstr "A_sinar unha chave…"
-
-#~ msgid "Properties of the key."
-#~ msgstr "Propiedades da chave."
-
-#~ msgid "Lock this token"
-#~ msgstr "Bloquear este token"
-
-#~ msgid "Unlock this token"
-#~ msgstr "Desbloquear este token"
-
-#~ msgid "Properties of the certificate."
-#~ msgstr "Propiedades do certificado."
-
-#~ msgid "Deleting keyring"
-#~ msgid_plural "Deleting keyrings"
-#~ msgstr[0] "Eliminando o anel de chaves"
-#~ msgstr[1] "Eliminando os aneis de chaves"
-
-#~ msgid "Deleting item"
-#~ msgid_plural "Deleting items"
-#~ msgstr[0] "Eliminando o elemento"
-#~ msgstr[1] "Eliminando os elementos"
-
-#, fuzzy
-#~ msgid "To do Keyring"
-#~ msgstr "Anel de chaves"
-
-#~ msgid "Archive files"
-#~ msgstr "Arquivar ficheiros"
-
-#~ msgid ""
-#~ "<b>A file already exists with this name.</b>\n"
-#~ "\n"
-#~ "Do you want to replace it with a new file?"
-#~ msgstr ""
-#~ "<b>Xa existe un ficheiro con este nome.</b>\n"
-#~ "\n"
-#~ "Quere substituílo por un novo?"
-
-#~ msgid "_Replace"
-#~ msgstr "_Substituír"
-
-#~ msgid "Export public key"
-#~ msgstr "Exportar a chave pública"
-
-#~ msgid "Couldn't export key to \"%s\""
-#~ msgstr "Non foi posíbel exportar a chave a «%s»"
-
-#~ msgid "Exporting keys"
-#~ msgstr "Exportar chaves"
-
-#~ msgid "Couldn't retrieve data from key server"
-#~ msgstr "Non foi posíbel obter os datos do servidor de chaves"
-
-#~ msgid "Retrieving keys"
-#~ msgstr "Obter chaves"
-
-#~ msgid "Are you sure you want to permanently delete %d keys and identities?"
-#~ msgstr ""
-#~ "Está seguro de que desexa eliminar permanentemente %d chaves e "
-#~ "identidades?"
-
-#~ msgid "Couldn't delete public key"
-#~ msgstr "Non foi posíbel eliminar a chave pública"
-
-#~ msgid "Export Complete Key"
-#~ msgstr "Exportar a chave completa"
-
-#~ msgid "Couldn't export key."
-#~ msgstr "Non foi posíbel exportar a chave."
-
-#~ msgid "Are you sure you want to delete the certificate '%s'?"
-#~ msgstr "Está seguro de que quere eliminar o certificado «%s»?"
-
-#~ msgid "Are you sure you want to delete %d certificate?"
-#~ msgid_plural "Are you sure you want to delete %d certificates?"
-#~ msgstr[0] "Está seguro de que quere eliminar %d certificado?"
-#~ msgstr[1] "Está seguro de que quere eliminar %d certificados?"
-
-#~ msgid "Deleting"
-#~ msgstr "Eliminando"
-
-#~ msgid "Couldn't delete key"
-#~ msgstr "Non foi posíbel eliminar a chave"
-
-#~ msgid "Passwords: %s"
-#~ msgstr "Contrasinais: %s"
-
-#~ msgid "<b>Passwords:</b> %s"
-#~ msgstr "<b>Contrasinais:</b> %s"
-
-#~ msgid "Create New ..."
-#~ msgstr "Crear unha nova…"
-
-#~ msgid "Importing keys"
-#~ msgstr "Importando chaves"
-
-#~ msgid "Unrecognized key type, or invalid data format"
-#~ msgstr "Non se recoñece o tipo de chave ou o formato de datos non é válido"
-
-#~ msgid "Importing Keys"
-#~ msgstr "Importando chaves"
-
-#~ msgid "T_ypes"
-#~ msgstr "T_ipos"
-
-#~ msgid "_Expiry"
-#~ msgstr "_Caducidade"
-
-#~ msgid "_Trust"
-#~ msgstr "_Confianza"
-
-#~ msgid "_Validity"
-#~ msgstr "_Validación"
-
-#~ msgid "Other _Keys"
-#~ msgstr "Outras c_haves"
-
-#~ msgid "Validity"
-#~ msgstr "Validez"
-
-#~ msgid "Expiration Date"
-#~ msgstr "Data de caducidade"
-
-#~ msgid "_Expand All"
-#~ msgstr "_Expandir todo"
-
-#~ msgid "Expand all listings"
-#~ msgstr "Expandir todas as listas"
-
-#~ msgid "_Collapse All"
-#~ msgstr "_Contraer todo"
-
-#~ msgid "Collapse all listings"
-#~ msgstr "Contraer todas as listas"
-
-#~ msgid "Copied keys"
-#~ msgstr "Chaves copiadas"
-
-#~ msgid "%s is a private key. Are you sure you want to proceed?"
-#~ msgstr "%s é unha chave privada. Está seguro de que quere proceder?"
-
-#~ msgid "_Key Description:"
-#~ msgstr "Descrición da cha_ve:"
-
-#~ msgid "Enter a passphrase for your new Secure Shell key."
-#~ msgstr ""
-#~ "Introduza unha frase de paso para a nova chave do intérprete de ordes "
-#~ "seguro (SSH)."
-
-#~ msgid "Deleting items"
-#~ msgstr "Eliminando os elementos"
-
-#~ msgid "Symmetric Key"
-#~ msgstr "Chave simétrica"
-
-#~ msgid "Credentials"
-#~ msgstr "Credenciais"
-
-#~ msgid "Identity"
-#~ msgstr "Identidade"
-
-#~ msgid "Invalid"
-#~ msgstr "Non é válido"
-
-#~ msgid "Private Secure Shell Key"
-#~ msgstr "Chave privada de intérprete de ordes seguro (SSH)"
-
-#~ msgid "Public Secure Shell Key"
-#~ msgstr "Chave pública de intérprete de ordes seguro (SSH)"
-
-#~ msgid "Do not run seahorse-daemon as a daemon"
-#~ msgstr "Non executar o seahorse-daemon como un daemon"
-
-#~ msgid "couldn't fork process"
-#~ msgstr "non foi posíbel facer o fork do proceso"
-
-#~ msgid "Encryption Daemon (Seahorse)"
-#~ msgstr "Daemon de cifrado (Seahorse)"
-
-#~ msgid "Invalid or unrecognized key type: %s"
-#~ msgstr "Tipo de chave non válida ou non recoñecida: %s"
-
-#~ msgid "This keytype is not supported: %s"
-#~ msgstr "Non se admite este tipo de chave: %s"
-
-#~ msgid "Support for this feature was not enabled at build time"
-#~ msgstr ""
-#~ "A compatibilidade para esta característica non se activou no momento da "
-#~ "construción deste aplicativo."
-
-#~ msgid "Invalid or unrecognized key: %s"
-#~ msgstr "Chave non válida ou non recoñecida: %s"
-
-#~ msgid "Signed by <i><key id='%s'/> <b>expired</b></i> on %s."
-#~ msgstr "Asinada por <i><key id=«%s»/> <b>caducou</b></i> en %s."
-
-#~ msgid "Invalid Signature"
-#~ msgstr "A sinatura non é válida"
-
-#~ msgid "Signed by <i><key id='%s'/></i> on %s <b>Expired</b>."
-#~ msgstr "Asinada por <i><key id=«%s»/></i> en %s<b>Caducou</b>."
-
-#~ msgid "Expired Signature"
-#~ msgstr "A sinatura está caducada"
-
-#~ msgid "Signed by <i><key id='%s'/> <b>Revoked</b></i> on %s."
-#~ msgstr "Asinada por <i><key id=«%s»/> <b>Revogada</b></i> en %s."
-
-#~ msgid "Revoked Signature"
-#~ msgstr "A sinatura está revogada"
-
-#~ msgid "Signed by <i><key id='%s'/></i> on %s."
-#~ msgstr "Asinado por <i><key id=«%s»/></i> en %s."
-
-#~ msgid "Good Signature"
-#~ msgstr "A sinatura é correcta"
-
-#~ msgid "Signing key not in keyring."
-#~ msgstr "A chave da sinatura non está no anel de chaves."
-
-#~ msgid "Unknown Signature"
-#~ msgstr "A sinatura é descoñecida"
-
-#~ msgid "Bad or forged signature. The signed data was modified."
-#~ msgstr ""
-#~ "Sinatura incorrecta ou falsificada. Os datos asinados modificáronse."
-
-#~ msgid "Bad Signature"
-#~ msgstr "A sinatura é incorrecta"
-
-#~ msgid "Invalid or unrecognized signer: %s"
-#~ msgstr "Asinante non válido ou non recoñecido: %s"
-
-#~ msgid "Key is not valid for signing: %s"
-#~ msgstr "A chave non é válida para asinar: %s"
-
-#~ msgid "Invalid or unrecognized recipient: %s"
-#~ msgstr "Destinatario non válido ou non recoñecido: %s"
-
-#~ msgid "Key is not a valid recipient for encryption: %s"
-#~ msgstr "A chave non é un destinatario válido para o cifrado: %s"
-
-#~ msgid "No recipients specified"
-#~ msgstr "Non se especificaron os destinatarios"
-
-#~ msgid "Invalid key type for decryption: %s"
-#~ msgstr "Tipo de chave non válido para descifrar: %s"
-
-#~ msgid "Please set clearuri"
-#~ msgstr "Estabeleza clearuri"
-
-#~ msgid "Please set crypturi"
-#~ msgstr "Estabeleza crypturi"
-
-#~ msgid "Error opening clearuri"
-#~ msgstr "Produciuse un erro ao abrir clearuri"
-
-#~ msgid "No signer specified"
-#~ msgstr "Non se especificou un asinante"
-
-#~ msgid "Invalid key type for verifying: %s"
-#~ msgstr "Tipo de chave non válido para a verificación: %s"
-
-#~ msgid "Invalid key id: %s"
-#~ msgstr "Id de chave non válido: %s"
-
-#~ msgid ""
-#~ "A list of key server URIs to search for remote PGP keys. In later "
-#~ "versions a display name can be included, by appending a space and then "
-#~ "the name."
-#~ msgstr ""
-#~ "Unha lista de URI de servidores nos que buscar as chaves PGP remotas. En "
-#~ "versións posteriores pódese incluír un nome de pantalla, anexando un "
-#~ "espazo e despois o nome."
-
-#~ msgid "Auto Sync Keys"
-#~ msgstr "Sincronizar as chaves automaticamente"
-
-#~ msgid "Controls the visibility of the expires column for the key manager."
-#~ msgstr ""
-#~ "Controla a visibilidade da columna de caducidade do xestor de chaves."
-
-#~ msgid "Controls the visibility of the trust column for the key manager."
-#~ msgstr ""
-#~ "Controla a visibilidade da columna de confianza do xestor de chaves."
-
-#~ msgid "Controls the visibility of the type column for the key manager."
-#~ msgstr "Controla a visibilidade da columna de tipo do xestor de chaves."
-
-#~ msgid "Controls the visibility of the validity column for the key manager."
-#~ msgstr ""
-#~ "Controla a visibilidade da columna de validación do xestor de chaves."
-
-#~ msgid "Enable DNS-SD sharing"
-#~ msgstr "Activar a compartición DNS-SD"
-
-#~ msgid ""
-#~ "Enables DNS-SD (Apple Bonjour) sharing of keys. seahorse-daemon must be "
-#~ "running and must be built with HKP and DNS-SD support."
-#~ msgstr ""
-#~ "Activa a compartición de chaves por DNS-SD (Apple Bonjour). O seahorse-"
-#~ "daemon debe estar en execución e débese compilar con soporte para HKP e "
-#~ "DNS-SD."
-
-#~ msgid "ID of the default key"
-#~ msgstr "ID da chave predeterminada"
-
-#~ msgid ""
-#~ "If set to true, then files encrypted with seahorse will be ASCII armor "
-#~ "encoded."
-#~ msgstr ""
-#~ "Se se define como true, os ficheiros cifrados co seahorse codificaranse "
-#~ "con armadura ASCII."
-
-#~ msgid ""
-#~ "If set to true, then the default key will always be added to an "
-#~ "encryption recipients list."
-#~ msgstr ""
-#~ "Se se define como true, a chave predeterminada engadirase sempre a unha "
-#~ "lista de destinatarios de cifrado."
-
-#~ msgid "Last key used to sign a message."
-#~ msgstr "Última chave usada para asinar unha mensaxe."
-
-#~ msgid "PGP Key servers"
-#~ msgstr "Servidores de chaves PGP"
-
-#~ msgid "Show expires column in key manager"
-#~ msgstr "Mostrar a columna de caducidade no xestor de chaves"
-
-#~ msgid "Show trust column in key manager"
-#~ msgstr "Mostrar a columna de confianza no xestor de chaves"
-
-#~ msgid "Show type column in key manager"
-#~ msgstr "Mostrar o tipo de columna no xestor de chaves"
-
-#~ msgid "Show validity column in key manager"
-#~ msgstr "Mostrar a columna de validación no xestor de chaves"
-
-#~ msgid ""
-#~ "Specify the column to sort the recipients window by. Columns are: 'name' "
-#~ "and 'id'. Put a '-' in front of the column name to sort in descending "
-#~ "order."
-#~ msgstr ""
-#~ "Especificar a columna pola que ordenar a xanela de destinatarios. As "
-#~ "columnas son: 'name' e 'id'. Poña un '-' diante do nome da columna para "
-#~ "ordenalos en orde descendente."
-
-#~ msgid "The ID of the last secret key used to sign a message."
-#~ msgstr "O ID da última chave secreta usada para asinar unha mensaxe."
-
-#~ msgid "The column to sort the recipients by"
-#~ msgstr "A columna pola que ordenar os destinatarios"
-
-#~ msgid ""
-#~ "This specifies the default key to use for certain operations, mainly "
-#~ "signing."
-#~ msgstr ""
-#~ "Isto especifica a chave predeterminada para usar en certas operacións, "
-#~ "principalmente para asinar."
-
-#~ msgid "Whether to always encrypt to default key"
-#~ msgstr "Indica se se debe cifrar sempre coa chave predeterminada"
-
-#~ msgid "Whether to use ASCII Armor"
-#~ msgstr "Indica se se debe usar a armadura ASCII"
-
-#~ msgid "Couldn't set application access."
-#~ msgstr "Non foi posíbel estabelecer o acceso do aplicativo."
-
-#~ msgid "<b>Path:</b>"
-#~ msgstr "<b>Camiño:</b>"
-
-#~ msgid "<b>Permissions:</b>"
-#~ msgstr "<b>Permisos:</b>"
-
-#~ msgid "_Read"
-#~ msgstr "_Ler"
-
-#~ msgid "_Write"
-#~ msgstr "Escri_bir"
-
-#~ msgctxt "infinitive"
-#~ msgid "_Delete"
-#~ msgstr "_Eliminar"
-
-#~ msgid "Saving item..."
-#~ msgstr "Gardar elemento…"
-
-#~ msgid "Listing password keyrings"
-#~ msgstr "Listar os aneis de chaves de contrasinais"
-
-#~ msgid ""
-#~ "No encryption keys were found with which to perform the operation you "
-#~ "requested.  The program <b>Passwords and Encryption Keys</b> will now be "
-#~ "started so that you may either create a key or import one."
-#~ msgstr ""
-#~ "Non se encontraron chaves de codificación sobre as que efectuar a "
-#~ "operación que solicitou. O programa <b>Contrasinais e chaves de "
-#~ "codificación</b> non será arrancado, así que deberá crear unha chave ou "
-#~ "importala."
-
-#~ msgid "All Keys"
-#~ msgstr "Todas as chaves"
-
-#~ msgid "Selected Recipients"
-#~ msgstr "Destinatarios seleccionados"
-
-#~ msgid "Search Results"
-#~ msgstr "Resultados da busca"
-
-#~ msgid "Search _for:"
-#~ msgstr "_Buscar:"
-
-#~ msgid "None (Don't Sign)"
-#~ msgstr "Ningún (Non asinar)"
-
-#~ msgid "Sign this message as %s"
-#~ msgstr "Asinar esta mensaxe como %s"
-
-#~ msgid "_Sign message as:"
-#~ msgstr "A_sinar a mensaxe como:"
-
-#~ msgid "File is not a valid .desktop file"
-#~ msgstr "O ficheiro non é un ficheiro .desktop válido"
-
-#~ msgid "Unrecognized desktop file Version '%s'"
-#~ msgstr "Non se recoñece a versión «%s» do ficheiro .desktop"
-
-#~ msgid "Starting %s"
-#~ msgstr "Iniciando %s"
-
-#~ msgid "Application does not accept documents on command line"
-#~ msgstr "Esta aplicativo non acepta documentos na liña de ordes"
-
-#~ msgid "Unrecognized launch option: %d"
-#~ msgstr "A opción de inicio non é recoñecida: %d"
-
-#~ msgid "Can't pass document URIs to a 'Type=Link' desktop entry"
-#~ msgstr ""
-#~ "Non é posíbel pasar os URI do documento a unha entrada de escritorio "
-#~ "'Type=Link'"
-
-#~ msgid "Not a launchable item"
-#~ msgstr "Non é un elemento executábel"
-
-#~ msgid "Disable connection to session manager"
-#~ msgstr "Desactivar a conexión co xestor de sesións"
-
-#~ msgid "Specify file containing saved configuration"
-#~ msgstr "Especifique o ficheiro que contén a configuración gardada"
-
-#~ msgid "FILE"
-#~ msgstr "FICHEIRO"
-
-#~ msgid "Specify session management ID"
-#~ msgstr "Especificar o ID de xestión de sesión"
-
-#~ msgid "Session management options:"
-#~ msgstr "Opcións de xestión de sesión:"
-
-#~ msgid "Show session management options"
-#~ msgstr "Mostrar as opcións de xestión de sesión"
-
-#~ msgid "Imported %i key"
-#~ msgid_plural "Imported %i keys"
-#~ msgstr[0] "%i chave importada"
-#~ msgstr[1] "%i chaves importadas"
-
-#~ msgid "Imported a key for"
-#~ msgid_plural "Imported keys for"
-#~ msgstr[0] "Chave importada para"
-#~ msgstr[1] "Chaves importadas para"
-
-#~ msgid "Notification Messages"
-#~ msgstr "Mensaxes de notificación"
-
-#~ msgid "Progress Title"
-#~ msgstr "Título do progreso"
-
-#~ msgid "Couldn't run file-roller"
-#~ msgstr "Non foi posíbel executar file-roller"
-
-#~ msgid "Couldn't package files"
-#~ msgstr "Non foi posíbel empaquetar os ficheiros"
-
-#~ msgid "The file-roller process did not complete successfully"
-#~ msgstr "O proceso file-roller non terminou con éxito"
-
-#~ msgid "Loading Keys..."
-#~ msgstr "Cargando chaves…"
-
-#~ msgid "Uploading keys..."
-#~ msgstr "Enviando chaves…"
-
-#~ msgid "Retrieving keys..."
-#~ msgstr "Obtendo chaves…"
-
-#~ msgid "Searching for keys containing '%s'..."
-#~ msgstr "Buscando chaves que conteñan «%s»…"
-
-#~ msgid "Searching for key id '%s'..."
-#~ msgstr "Buscando a chave co id «%s»…"
-
-#~ msgid "Retrieving remote keys..."
-#~ msgstr "Obtendo as chaves remotas…"
-
-#~ msgid "Sending keys to key server..."
-#~ msgstr "Enviando as chaves ao servidor de chaves…"
-
-#~ msgid "Passphrase:"
-#~ msgstr "Frase de paso:"
-
-#~ msgid "Couldn't share keys"
-#~ msgstr "Non foi posíbel compartir as chaves"
-
-#~ msgid "Can't publish discovery information on the network."
-#~ msgstr "Non foi posíbel publicar a información de descubrimento na rede."
-
-#~ msgid "%s's encryption keys"
-#~ msgstr "Chaves de cifrado de %s"
-
-#~ msgid "Key Sharing"
-#~ msgstr "Compartición de chaves"
-
-#~ msgid ""
-#~ "Sharing your keys allows other people on your network to use the keys "
-#~ "you've collected. This means they can automatically encrypt things for "
-#~ "you or those you know, without you having to send them your key.\n"
-#~ "\n"
-#~ "<b>Note:</b> Your personal keys will not be compromised."
-#~ msgstr ""
-#~ "Compartir as súas chaves permítelles ás outras persoas da súa rede usar "
-#~ "as chaves que compilou. Isto significa que eles poden cifrar cousas para "
-#~ "si ou para aqueles que coñece sen ter que enviarlles a súa chave.\n"
-#~ "\n"
-#~ "<b>Nota:</b> as súas chaves persoais non serán comprometidas."
-
-#~ msgid "_Share my keys with others on my network"
-#~ msgstr "_Compartir as miñas chaves con outros na miña rede"
