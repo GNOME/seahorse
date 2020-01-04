@@ -104,7 +104,7 @@ seahorse_gpgme_photo_finalize (GObject *gobject)
 {
 	SeahorseGpgmePhoto *self = SEAHORSE_GPGME_PHOTO (gobject);
 
-	g_clear_object (&self->pubkey);
+	g_clear_pointer (&self->pubkey, gpgme_key_unref);
 
 	G_OBJECT_CLASS (seahorse_gpgme_photo_parent_class)->finalize (gobject);
 }
