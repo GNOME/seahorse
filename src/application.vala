@@ -168,7 +168,7 @@ public class Seahorse.Application : Gtk.Application {
         about.set_comments(_("Passwords and Keys"));
         about.set_copyright("© 2002 - 2018 Seahorse Contributors");
         about.set_translator_credits(_("translator-credits"));
-        about.set_logo_icon_name("org.gnome.seahorse.Application");
+        about.set_logo_icon_name(Config.APPLICATION_ID);
         about.set_website("https://wiki.gnome.org/Apps/Seahorse");
         about.set_website_label(_("Seahorse Project Homepage"));
 
