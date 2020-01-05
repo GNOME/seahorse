@@ -32,6 +32,7 @@ configured_desktop_file = configure_file(
   output: 'org.gnome.seahorse.Application.desktop.in',
   configuration: {
     'bindir': seahorse_prefix / get_option('bindir'),
+    'icon': application_id,
   },
 )
 i18n.merge_file(
