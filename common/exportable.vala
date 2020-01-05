@@ -187,12 +187,9 @@ public interface Exportable : GLib.Object {
 	                          ref string? directory,
 	                          out GLib.File chosen_file,
 	                          out Exporter chosen_exporter) {
-		var chooser = new Gtk.FileChooserDialog(null, parent, Gtk.FileChooserAction.SAVE,
-		                                        _("_Cancel"), Gtk.ResponseType.CANCEL,
-		                                        _("Export"), Gtk.ResponseType.ACCEPT,
-		                                        null);
+		var chooser = new Gtk.FileChooserNative(null, parent, Gtk.FileChooserAction.SAVE,
+		                                        _("Export"), _("_Cancel"));
 
-		chooser.set_default_response(Gtk.ResponseType.ACCEPT);
 		chooser.set_local_only(false);
 		chooser.set_do_overwrite_confirmation(true);
 

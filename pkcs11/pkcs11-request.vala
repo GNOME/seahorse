@@ -101,12 +101,10 @@ public class Request : Gtk.Dialog {
 
     private void save_certificate_request(Gcr.CertificateRequest req,
                                           Gtk.Window? parent) {
-        var chooser = new Gtk.FileChooserDialog(_("Save certificate request"),
+        var chooser = new Gtk.FileChooserNative(_("Save certificate request"),
                                                 parent, Gtk.FileChooserAction.SAVE,
-                                                _("_Cancel"), Gtk.ResponseType.CANCEL,
-                                                _("_Save"), Gtk.ResponseType.ACCEPT);
+                                                _("_Save"), _("_Cancel"));
 
-		chooser.set_default_response(Gtk.ResponseType.ACCEPT);
 		chooser.set_local_only(false);
 
 		var der_filter = new Gtk.FileFilter();

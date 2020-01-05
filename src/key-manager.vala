@@ -247,14 +247,11 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     private void on_import_file(SimpleAction action, GLib.Variant? parameter) {
-        Gtk.FileChooserDialog dialog =
-            new Gtk.FileChooserDialog(_("Import Key"), this,
+        Gtk.FileChooserNative dialog =
+            new Gtk.FileChooserNative(_("Import Key"), this,
                                       Gtk.FileChooserAction.OPEN,
-                                      _("_Cancel"), Gtk.ResponseType.CANCEL,
-                                      _("_Open"), Gtk.ResponseType.ACCEPT,
-                                      null);
+                                      _("_Open"), _("_Cancel"));
 
-        dialog.set_default_response(Gtk.ResponseType.ACCEPT);
         dialog.set_local_only(false);
 
         // TODO: This should come from libgcr somehow
