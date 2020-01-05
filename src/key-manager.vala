@@ -132,6 +132,10 @@ public class Seahorse.KeyManager : Catalog {
         });
 
         provider.load_from_resource("/org/gnome/Seahorse/seahorse.css");
+
+        // Makes sure it's visible when people use nightlies
+        if (Config.PROFILE == "development")
+            get_style_context().add_class("devel");
     }
 
     [GtkCallback]

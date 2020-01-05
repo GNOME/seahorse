@@ -3,6 +3,8 @@ namespace Config
 {
     public const string APPLICATION_ID;
 
+    public const string PROFILE;
+
 	public const string PKGDATADIR;
 
 	public const string EXECDIR;
