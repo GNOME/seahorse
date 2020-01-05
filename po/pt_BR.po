@@ -1,5 +1,5 @@
 # Brazilian Portuguese translation of Seahorse.
-# Copyright (C) 2000-2019 the Seahorse authors.
+# Copyright (C) 2020 the Seahorse authors.
 # This file is distributed under the same license as the seahorse package.
 # Fábio Rafael da Rosa <f2r@users.sourceforge.net>, 2003.
 # Max Reinhold Jahnke <jahnke@brfree.com.br>, 2004.
@@ -14,14 +14,14 @@
 # Gabriel Speckhahn <gabspeck@gmail.com>, 2012.
 # Enrico Nicoletto <liverig@gmail.com>, 2013-2015.
 # Bruno Lopes da Silva <brunolopesbldsb@gmail.com>, 2018.
-# Rafael Fontenelle <rafaelff@gnome.org>, 2012-2019.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2012-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-06-15 10:35+0000\n"
-"PO-Revision-Date: 2019-07-22 01:58-0300\n"
+"POT-Creation-Date: 2019-10-01 20:04+0000\n"
+"PO-Revision-Date: 2020-01-04 23:02-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -84,7 +84,7 @@ msgstr "E_xcluir"
 msgid "Export"
 msgstr "Exportar"
 
-#: common/interaction.vala:61
+#: common/interaction.vala:63
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Digite o PIN ou a senha para: %s"
@@ -385,7 +385,7 @@ msgstr ""
 "secreta para que você não precise continuar digitando-a e efetuar cópia de "
 "segurança (backup) de suas chaves e chaveiro."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:77
+#: data/org.gnome.seahorse.Application.appdata.xml.in:94
 msgid "The GNOME Project"
 msgstr "O Projeto GNOME"
 
@@ -537,7 +537,7 @@ msgstr[1] "Você tem certeza de que quer excluir %d senhas?"
 msgid "Couldn’t add keyring"
 msgstr "Não foi possível adicionar o chaveiro"
 
-#: gkr/gkr-keyring-properties.vala:66
+#: gkr/gkr-keyring-properties.vala:65
 msgid "Unknown date"
 msgstr "Dada desconhecida"
 
@@ -660,35 +660,19 @@ msgstr "Excluir senha"
 msgid "Keyring properties"
 msgstr "Propriedades do chaveiro"
 
-#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:487
-msgid "Keyring is locked"
-msgstr "O chaveiro está bloqueado"
-
-#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:497
-msgid "Unlock"
-msgstr "Desbloquear"
-
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Keyring is unlocked"
-msgstr "O chaveiro está desbloqueado"
-
-#: gkr/seahorse-gkr-keyring.ui:56
-msgid "Lock"
-msgstr "Bloquear"
-
-#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:851
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:851
 msgid "Name"
 msgstr "Nome"
 
-#: gkr/seahorse-gkr-keyring.ui:130
+#: gkr/seahorse-gkr-keyring.ui:80
 msgid "Created on"
 msgstr "Criado em"
 
-#: gkr/seahorse-gkr-keyring.ui:160
+#: gkr/seahorse-gkr-keyring.ui:110
 msgid "Change password"
 msgstr "Alterar senha"
 
-#: gkr/seahorse-gkr-keyring.ui:167
+#: gkr/seahorse-gkr-keyring.ui:117
 msgid "Set as default"
 msgstr "Definir como padrão"
 
@@ -1567,22 +1551,18 @@ msgid "_Advanced key options"
 msgstr "Opções _avançadas de chave"
 
 #: pgp/seahorse-pgp-generate.ui:143
-#| msgid "_Comment:"
 msgid "_Comment"
 msgstr "_Comentário"
 
 #: pgp/seahorse-pgp-generate.ui:174
-#| msgid "Encryption _Type:"
 msgid "Encryption _Type"
 msgstr "_Tipo de criptografia"
 
 #: pgp/seahorse-pgp-generate.ui:204
-#| msgid "Key _Strength (bits):"
 msgid "Key _Strength (bits)"
 msgstr "_Força da chave (bits)"
 
 #: pgp/seahorse-pgp-generate.ui:234
-#| msgid "E_xpiration Date:"
 msgid "E_xpiration Date"
 msgstr "Data de e_xpiração"
 
@@ -1598,11 +1578,18 @@ msgstr "C_riar"
 msgid "Generate a new key"
 msgstr "Gerar uma nova chave"
 
-#: pgp/seahorse-pgp-key.c:555
+#: pgp/seahorse-pgp-key.c:172
+#, c-format
+msgid "(and %d other)"
+msgid_plural "(and %d others)"
+msgstr[0] "(e %d outra)"
+msgstr[1] "(e %d outras)"
+
+#: pgp/seahorse-pgp-key.c:573
 msgid "Personal PGP key"
 msgstr "Chave PGP pessoal"
 
-#: pgp/seahorse-pgp-key.c:557
+#: pgp/seahorse-pgp-key.c:575
 msgid "PGP key"
 msgstr "Chave PGP"
 
@@ -2362,42 +2349,34 @@ msgid "Filter items:"
 msgstr "Filtrar itens:"
 
 #: src/seahorse-key-manager.ui:8
-#| msgid "Show personal"
 msgid "Show p_ersonal"
 msgstr "Mostrar p_essoais"
 
 #: src/seahorse-key-manager.ui:13
-#| msgid "Show trusted"
 msgid "Show _trusted"
 msgstr "Mostrar con_fiados"
 
 #: src/seahorse-key-manager.ui:18
-#| msgid "Show any"
 msgid "Show an_y"
 msgstr "Mostrar _todos"
 
 #: src/seahorse-key-manager.ui:25
-#| msgid "Combine all keyrings"
 msgid "_Combine all keyrings"
 msgstr "_Combinar todos os chaveiros"
 
 #: src/seahorse-key-manager.ui:31
-#| msgid "Find remote keys…"
 msgid "_Find remote keys…"
 msgstr "_Localizar chaves remotas…"
 
 #: src/seahorse-key-manager.ui:36
-#| msgid "Sync and publish keys…"
 msgid "_Sync and publish keys…"
 msgstr "_Sincronizar e publicar chaves…"
 
 #: src/seahorse-key-manager.ui:43
-#| msgid "Preferences"
 msgid "_Preferences"
 msgstr "_Preferências"
 
 #: src/seahorse-key-manager.ui:48
-#| msgid "Help"
 msgid "_Help"
 msgstr "Aj_uda"
 
@@ -2456,6 +2435,14 @@ msgstr "Filtro"
 #: src/seahorse-key-manager.ui:455
 msgid "This collection seems to be empty"
 msgstr "Essa coleção parece estar vazia"
+
+#: src/seahorse-key-manager.ui:487
+msgid "Keyring is locked"
+msgstr "O chaveiro está bloqueado"
+
+#: src/seahorse-key-manager.ui:497
+msgid "Unlock"
+msgstr "Desbloquear"
 
 #: src/seahorse-key-manager-widgets.ui:6
 msgid "Export…"
@@ -2768,6 +2755,12 @@ msgstr "Não foi possível configurar chaves de SSH no computador remoto."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configurando chaves de SSH…"
+
+#~ msgid "Keyring is unlocked"
+#~ msgstr "O chaveiro está desbloqueado"
+
+#~ msgid "Lock"
+#~ msgstr "Bloquear"
 
 #~ msgid ""
 #~ "Version 3.32.2 is the next iteration in the stable 3.32 release series, "
