@@ -109,10 +109,7 @@ create_hkp_soup_session (void)
     const gchar *env;
 #endif
 
-    session = soup_session_async_new_with_options (SOUP_SESSION_ADD_FEATURE_BY_TYPE,
-                                                   SOUP_TYPE_PROXY_RESOLVER_DEFAULT,
-                                                   NULL);
-
+    session = soup_session_new ();
 
 #ifdef WITH_DEBUG
     env = g_getenv ("G_MESSAGES_DEBUG");
