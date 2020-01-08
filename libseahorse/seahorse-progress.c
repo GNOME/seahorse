@@ -301,6 +301,7 @@ progress_prep_va (GCancellable *cancellable,
 	progress_update_display (task);
 }
 
+
 void
 seahorse_progress_prep (GCancellable *cancellable,
                         gconstpointer progress_tag,
