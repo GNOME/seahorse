@@ -564,8 +564,8 @@ keyring_import_free (gpointer data)
 
 static void
 on_keyring_import_loaded (GObject *source,
-                         GAsyncResult *result,
-                         gpointer user_data)
+                          GAsyncResult *result,
+                          gpointer user_data)
 {
 	g_autoptr(GTask) task = G_TASK (user_data);
 	keyring_import_closure *closure = g_task_get_task_data (task);
@@ -585,7 +585,7 @@ on_keyring_import_loaded (GObject *source,
 		keys = g_list_prepend (keys, object);
 	}
 
-	seahorse_progress_end (g_task_get_cancellable (task), result);
+	seahorse_progress_end (g_task_get_cancellable (task), task);
 	g_task_return_pointer (task, g_steal_pointer (&keys), (GDestroyNotify) g_list_free);
 }
 
