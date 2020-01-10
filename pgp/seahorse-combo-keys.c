@@ -77,7 +77,7 @@ calculate_markup_for_object (GtkComboBox *combo,
 	ComboClosure *closure;
 	const gchar *keyid;
 	gchar *ident;
-	gchar *markup;
+	const char *markup;
 
 	closure = g_object_get_data (G_OBJECT (combo), "combo-keys-closure");
 

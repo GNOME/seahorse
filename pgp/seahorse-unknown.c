@@ -53,7 +53,7 @@ seahorse_unknown_new (SeahorseUnknownSource *source,
                       const gchar *keyid,
                       const gchar *display)
 {
-	gchar *identifier;
+	const char *identifier;
 
 	if (!display)
 		display = _("Unavailable");
