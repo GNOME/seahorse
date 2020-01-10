@@ -70,36 +70,36 @@ refresh_all_markup_in_combo (GtkComboBox *combo)
 }
 
 static gchar *
-calculate_markup_for_object (GtkComboBox *combo,
-                             const gchar *label,
+calculate_markup_for_object (GtkComboBox    *combo,
+                             const char     *label,
                              SeahorseObject *object)
 {
-	ComboClosure *closure;
-	const gchar *keyid;
-	gchar *ident;
-	const char *markup;
+    ComboClosure *closure;
+    char *markup;
 
-	closure = g_object_get_data (G_OBJECT (combo), "combo-keys-closure");
+    closure = g_object_get_data (G_OBJECT (combo), "combo-keys-closure");
 
-	if (!closure->collision) {
-		if (g_hash_table_lookup (closure->labels, label)) {
-			closure->collision = TRUE;
-			refresh_all_markup_in_combo (combo);
-		} else {
-			g_hash_table_insert (closure->labels, g_strdup (label), "X");
-		}
-	}
+    if (!closure->collision) {
+        if (g_hash_table_lookup (closure->labels, label)) {
+            closure->collision = TRUE;
+            refresh_all_markup_in_combo (combo);
+        } else {
+            g_hash_table_insert (closure->labels, g_strdup (label), "X");
+        }
+    }
 
-	if (closure->collision && SEAHORSE_PGP_IS_KEY (object)) {
-		keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (object));
-		ident = seahorse_pgp_key_calc_identifier (keyid);
-		markup = g_markup_printf_escaped ("%s <span size='small'>[%s]</span>", label, ident);
-		g_free (ident);
-	} else {
-		markup = g_markup_escape_text (label, -1);
-	}
+    if (closure->collision && SEAHORSE_PGP_IS_KEY (object)) {
+        const char *keyid;
+        const char *ident;
 
-	return markup;
+        keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (object));
+        ident = seahorse_pgp_key_calc_identifier (keyid);
+        markup = g_markup_printf_escaped ("%s <span size='small'>[%s]</span>", label, ident);
+    } else {
+        markup = g_markup_escape_text (label, -1);
+    }
+
+    return markup;
 }
 
 static void
