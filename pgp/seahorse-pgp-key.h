@@ -97,7 +97,7 @@ const gchar*      seahorse_pgp_key_get_keyid            (SeahorsePgpKey *self);
 gboolean          seahorse_pgp_key_has_keyid            (SeahorsePgpKey *self,
                                                          const gchar *keyid);
 
-gchar*            seahorse_pgp_key_calc_identifier      (const gchar *keyid);
+const char*       seahorse_pgp_key_calc_identifier      (const char *keyid);
 
 guint             seahorse_pgp_keyid_hash               (gconstpointer v);
 

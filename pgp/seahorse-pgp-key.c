@@ -299,7 +299,8 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
 {
     const gchar *nickname, *keyid;
     const gchar *icon_name;
-    gchar *markup, *name, *identifier;
+    gchar *markup, *name;
+    const char *identifier;
     SeahorseUsage usage;
     GList *subkeys;
     GIcon *icon;
@@ -309,7 +310,7 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
         keyid = seahorse_pgp_subkey_get_keyid (subkeys->data);
         identifier = seahorse_pgp_key_calc_identifier (keyid);
     } else {
-        identifier = g_strdup ("");
+        identifier = "";
     }
 
     name = calc_name (self);
@@ -337,7 +338,6 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
               NULL);
 
     g_object_unref (icon);
-    g_free (identifier);
     g_free (markup);
     g_free (name);
 }
@@ -360,18 +360,18 @@ seahorse_pgp_key_viewable_iface (SeahorseViewableIface *iface)
     iface->create_viewer = seahorse_pgp_key_create_viewer;
 }
 
-gchar*
-seahorse_pgp_key_calc_identifier (const gchar *keyid)
+const char*
+seahorse_pgp_key_calc_identifier (const char *keyid)
 {
     guint len;
 
     g_return_val_if_fail (keyid, NULL);
 
     len = strlen (keyid);
-    if (len > 8)
-        keyid += len - 8;
+    if (len > 16)
+        keyid += len - 16;
 
-    return g_strdup (keyid);
+    return keyid;
 }
 
 GList*
