@@ -37,8 +37,10 @@ enum {
     PROP_CREATED,
     PROP_EXPIRES,
     PROP_DESCRIPTION,
-    PROP_FINGERPRINT
+    PROP_FINGERPRINT,
+    N_PROPS
 };
+static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
 typedef struct _SeahorsePgpSubkeyPrivate {
     guint index;
@@ -74,7 +76,7 @@ seahorse_pgp_subkey_set_index (SeahorsePgpSubkey *self, guint index)
 
     priv = seahorse_pgp_subkey_get_instance_private (self);
     priv->index = index;
-    g_object_notify (G_OBJECT (self), "index");
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_INDEX]);
 }
 
 const gchar*
@@ -98,7 +100,7 @@ seahorse_pgp_subkey_set_keyid (SeahorsePgpSubkey *self, const gchar *keyid)
     priv = seahorse_pgp_subkey_get_instance_private (self);
     g_free (priv->keyid);
     priv->keyid = g_strdup (keyid);
-    g_object_notify (G_OBJECT (self), "keyid");
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_KEYID]);
 }
 
 guint
@@ -121,7 +123,7 @@ seahorse_pgp_subkey_set_flags (SeahorsePgpSubkey *self, guint flags)
 
     priv = seahorse_pgp_subkey_get_instance_private (self);
     priv->flags = flags;
-    g_object_notify (G_OBJECT (self), "flags");
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_FLAGS]);
 }
 
 guint
@@ -144,7 +146,7 @@ seahorse_pgp_subkey_set_length (SeahorsePgpSubkey *self, guint length)
 
     priv = seahorse_pgp_subkey_get_instance_private (self);
     priv->length = length;
-    g_object_notify (G_OBJECT (self), "length");
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_LENGTH]);
 }
 
 gchar *
@@ -207,7 +209,7 @@ seahorse_pgp_subkey_set_algorithm (SeahorsePgpSubkey *self, const gchar *algorit
     priv = seahorse_pgp_subkey_get_instance_private (self);
     g_free (priv->algorithm);
     priv->algorithm = g_strdup (algorithm);
-    g_object_notify (G_OBJECT (self), "algorithm");
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_ALGORITHM]);
 }
 
 gulong
@@ -230,7 +232,7 @@ seahorse_pgp_subkey_set_created (SeahorsePgpSubkey *self, gulong created)
 
     priv = seahorse_pgp_subkey_get_instance_private (self);
     priv->created = created;
-    g_object_notify (G_OBJECT (self), "created");
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_CREATED]);
 }
 
 gulong
@@ -253,7 +255,7 @@ seahorse_pgp_subkey_set_expires (SeahorsePgpSubkey *self, gulong expires)
 
     priv = seahorse_pgp_subkey_get_instance_private (self);
     priv->expires = expires;
-    g_object_notify (G_OBJECT (self), "expires");
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_EXPIRES]);
 }
 
 const gchar*
@@ -277,7 +279,7 @@ seahorse_pgp_subkey_set_fingerprint (SeahorsePgpSubkey *self, const gchar *finge
     priv = seahorse_pgp_subkey_get_instance_private (self);
     g_free (priv->fingerprint);
     priv->fingerprint = g_strdup (fingerprint);
-    g_object_notify (G_OBJECT (self), "fingerprint");
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_FINGERPRINT]);
 }
 
 const gchar*
@@ -301,7 +303,7 @@ seahorse_pgp_subkey_set_description (SeahorsePgpSubkey *self, const gchar *descr
     priv = seahorse_pgp_subkey_get_instance_private (self);
     g_free (priv->description);
     priv->description = g_strdup (description);
-    g_object_notify (G_OBJECT (self), "description");
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_DESCRIPTION]);
 }
 
 gchar*
@@ -456,50 +458,52 @@ seahorse_pgp_subkey_class_init (SeahorsePgpSubkeyClass *klass)
     gobject_class->set_property = seahorse_pgp_subkey_set_property;
     gobject_class->get_property = seahorse_pgp_subkey_get_property;
 
-    g_object_class_install_property (gobject_class, PROP_INDEX,
+    obj_props[PROP_INDEX] =
         g_param_spec_uint ("index", "Index", "PGP subkey index",
                            0, G_MAXUINT, 0,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-    g_object_class_install_property (gobject_class, PROP_KEYID,
+    obj_props[PROP_KEYID] =
         g_param_spec_string ("keyid", "Key ID", "GPG Key ID",
                              "",
-                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-    g_object_class_install_property (gobject_class, PROP_FLAGS,
+    obj_props[PROP_FLAGS] =
         g_param_spec_uint ("flags", "Flags", "PGP subkey flags",
                            0, G_MAXUINT, 0,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-    g_object_class_install_property (gobject_class, PROP_LENGTH,
+    obj_props[PROP_LENGTH] =
         g_param_spec_uint ("length", "Length", "PGP key length",
                            0, G_MAXUINT, 0,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-    g_object_class_install_property (gobject_class, PROP_ALGORITHM,
+    obj_props[PROP_ALGORITHM] =
         g_param_spec_string ("algorithm", "Algorithm", "GPG Algorithm",
                              "",
-                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-    g_object_class_install_property (gobject_class, PROP_CREATED,
+    obj_props[PROP_CREATED] =
         g_param_spec_ulong ("created", "Created On", "Date this key was created on",
                             0, G_MAXULONG, 0,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-    g_object_class_install_property (gobject_class, PROP_EXPIRES,
+    obj_props[PROP_EXPIRES] =
         g_param_spec_ulong ("expires", "Expires On", "Date this key expires on",
                             0, G_MAXULONG, 0,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-    g_object_class_install_property (gobject_class, PROP_DESCRIPTION,
+    obj_props[PROP_DESCRIPTION] =
         g_param_spec_string ("description", "Description", "Key Description",
                              "",
-                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-    g_object_class_install_property (gobject_class, PROP_FINGERPRINT,
+    obj_props[PROP_FINGERPRINT] =
         g_param_spec_string ("fingerprint", "Fingerprint", "PGP Key Fingerprint",
                              "",
-                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+    g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 }
 
 SeahorsePgpSubkey*
