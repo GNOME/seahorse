@@ -26,7 +26,7 @@
 
 void            seahorse_transfer_keyids_async  (SeahorseServerSource *from,
                                                  SeahorsePlace *to,
-                                                 const gchar **keyids,
+                                                 const char **keyids,
                                                  GCancellable *cancellable,
                                                  GAsyncReadyCallback callback,
                                                  gpointer user_data);
