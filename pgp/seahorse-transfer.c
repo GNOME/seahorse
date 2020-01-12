@@ -40,23 +40,21 @@
 #include <stdlib.h>
 
 typedef struct {
-	GCancellable *cancellable;
-	SeahorsePlace *from;
-	SeahorsePlace *to;
-	gchar **keyids;
-	GList *keys;
+    SeahorsePlace *from;
+    SeahorsePlace *to;
+    char **keyids;
+    GList *keys;
 } TransferClosure;
 
 static void
 transfer_closure_free (gpointer user_data)
 {
-	TransferClosure *closure = user_data;
-	g_clear_object (&closure->from);
-	g_clear_object (&closure->to);
-	g_clear_object (&closure->cancellable);
-	g_strfreev (closure->keyids);
-	seahorse_object_list_free (closure->keys);
-	g_free (closure);
+    TransferClosure *closure = user_data;
+    g_clear_object (&closure->from);
+    g_clear_object (&closure->to);
+    g_strfreev (closure->keyids);
+    seahorse_object_list_free (closure->keys);
+    g_free (closure);
 }
 
 static void
@@ -64,32 +62,30 @@ on_source_import_ready (GObject *object,
                         GAsyncResult *result,
                         gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	TransferClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
-	GList *results;
+    g_autoptr(GTask) task = G_TASK (user_data);
+    TransferClosure *closure = g_task_get_task_data (task);
+    GCancellable *cancellable = g_task_get_cancellable (task);
+    GError *error = NULL;
+    g_autoptr(GList) results = NULL;
 
-	g_debug ("[transfer] import done");
-	seahorse_progress_end (closure->cancellable, &closure->to);
+    g_debug ("[transfer] import done");
+    seahorse_progress_end (cancellable, &closure->to);
 
-	if (SEAHORSE_IS_GPGME_KEYRING (closure->to)) {
-		results = seahorse_gpgme_keyring_import_finish (SEAHORSE_GPGME_KEYRING (closure->to),
-		                                                result, &error);
-	} else {
-		results = seahorse_server_source_import_finish (SEAHORSE_SERVER_SOURCE (closure->to),
-		                                                result, &error);
-	}
+    if (SEAHORSE_IS_GPGME_KEYRING (closure->to)) {
+        results = seahorse_gpgme_keyring_import_finish (SEAHORSE_GPGME_KEYRING (closure->to),
+                                                        result, &error);
+    } else {
+        results = seahorse_server_source_import_finish (SEAHORSE_SERVER_SOURCE (closure->to),
+                                                        result, &error);
+    }
 
-	if (results != NULL)
-		g_cancellable_set_error_if_cancelled (closure->cancellable, &error);
+    if (results != NULL)
+        g_cancellable_set_error_if_cancelled (cancellable, &error);
 
-	g_list_free (results);
-
-	if (error != NULL)
-		g_simple_async_result_take_error (res, error);
-
-	g_simple_async_result_complete (res);
-	g_object_unref (user_data);
+    if (error != NULL)
+        g_task_return_error (task, g_steal_pointer (&error));
+    else
+        g_task_return_boolean (task, TRUE);
 }
 
 static void
@@ -97,98 +93,99 @@ on_source_export_ready (GObject *object,
                         GAsyncResult *result,
                         gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	TransferClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	GError *error = NULL;
-	gpointer stream_data = NULL;
-	gsize stream_size;
-	GInputStream *input;
+    g_autoptr(GTask) task = G_TASK (user_data);
+    TransferClosure *closure = g_task_get_task_data (task);
+    GCancellable *cancellable = g_task_get_cancellable (task);
+    GError *error = NULL;
+    gsize stream_size;
+    g_autoptr(GInputStream) input = NULL;
+    gpointer stream_data = NULL;
 
-	g_debug ("[transfer] export done");
-	seahorse_progress_end (closure->cancellable, &closure->from);
+    g_debug ("[transfer] export done");
+    seahorse_progress_end (cancellable, &closure->from);
 
-	if (SEAHORSE_IS_SERVER_SOURCE (closure->from)) {
-		stream_data = seahorse_server_source_export_finish (SEAHORSE_SERVER_SOURCE (object),
-		                                                    result, &stream_size, &error);
+    if (SEAHORSE_IS_SERVER_SOURCE (closure->from)) {
+        stream_data = seahorse_server_source_export_finish (SEAHORSE_SERVER_SOURCE (object),
+                                                            result, &stream_size, &error);
 
-	} else if (SEAHORSE_IS_GPGME_KEYRING (closure->from)) {
-		stream_data = seahorse_exporter_export_finish (SEAHORSE_EXPORTER (object), result,
-		                                               &stream_size, &error);
+    } else if (SEAHORSE_IS_GPGME_KEYRING (closure->from)) {
+        stream_data = seahorse_exporter_export_finish (SEAHORSE_EXPORTER (object), result,
+                                                       &stream_size, &error);
 
-	} else {
-		g_warning ("unsupported source for export: %s", G_OBJECT_TYPE_NAME (object));
-	}
+    } else {
+        g_warning ("unsupported source for export: %s", G_OBJECT_TYPE_NAME (object));
+    }
 
-	if (error == NULL)
-		g_cancellable_set_error_if_cancelled (closure->cancellable, &error);
+    if (error == NULL)
+        g_cancellable_set_error_if_cancelled (cancellable, &error);
 
-	if (error == NULL) {
-		seahorse_progress_begin (closure->cancellable, &closure->to);
+    if (error != NULL) {
+        g_debug ("[transfer] stopped after export");
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
 
-		if (!stream_size) {
-			g_debug ("[transfer] nothing to import");
-			seahorse_progress_end (closure->cancellable, &closure->to);
-			g_simple_async_result_complete (res);
+    seahorse_progress_begin (cancellable, &closure->to);
 
-		} else {
-			input = g_memory_input_stream_new_from_data (stream_data, stream_size, g_free);
-			stream_data = NULL;
-			stream_size = 0;
+    if (!stream_size) {
+        g_debug ("[transfer] nothing to import");
+        seahorse_progress_end (cancellable, &closure->to);
+        g_task_return_boolean (task, TRUE);
+        return;
+    }
 
-			g_debug ("[transfer] starting import");
-			if (SEAHORSE_IS_GPGME_KEYRING (closure->to)) {
-				seahorse_gpgme_keyring_import_async (SEAHORSE_GPGME_KEYRING (closure->to),
-				                                     input, closure->cancellable,
-				                                     on_source_import_ready,
-				                                     g_object_ref (res));
-			} else {
-				seahorse_server_source_import_async (SEAHORSE_SERVER_SOURCE (closure->to),
-				                                     input, closure->cancellable,
-				                                     on_source_import_ready,
-				                                     g_object_ref (res));
-			}
-			g_object_unref (input);
-		}
+    input = g_memory_input_stream_new_from_data (stream_data, stream_size, g_free);
+    stream_data = NULL;
+    stream_size = 0;
 
-	} else {
-		g_debug ("[transfer] stopped after export");
-		g_simple_async_result_take_error (res, error);
-		g_simple_async_result_complete (res);
-	}
+    g_debug ("[transfer] starting import");
+    if (SEAHORSE_IS_GPGME_KEYRING (closure->to)) {
+        seahorse_gpgme_keyring_import_async (SEAHORSE_GPGME_KEYRING (closure->to),
+                                             input, cancellable,
+                                             on_source_import_ready,
+                                             g_steal_pointer (&task));
+    } else {
+        seahorse_server_source_import_async (SEAHORSE_SERVER_SOURCE (closure->to),
+                                             input, cancellable,
+                                             on_source_import_ready,
+                                             g_steal_pointer (&task));
+    }
 
-	g_free (stream_data);
-	g_object_unref (user_data);
+    g_free (stream_data);
 }
 
 static gboolean
 on_timeout_start_transfer (gpointer user_data)
 {
-	GSimpleAsyncResult *res = G_SIMPLE_ASYNC_RESULT (user_data);
-	TransferClosure *closure = g_simple_async_result_get_op_res_gpointer (res);
-	SeahorseExporter *exporter;
+    GTask *task = G_TASK (user_data);
+    TransferClosure *closure = g_task_get_task_data (task);
+    GCancellable *cancellable = g_task_get_cancellable (task);
 
-	g_assert (SEAHORSE_IS_PLACE (closure->from));
+    g_assert (SEAHORSE_IS_PLACE (closure->from));
 
-	seahorse_progress_begin (closure->cancellable, &closure->from);
-	if (SEAHORSE_IS_SERVER_SOURCE (closure->from)) {
-		g_assert (closure->keyids != NULL);
-		seahorse_server_source_export_async (SEAHORSE_SERVER_SOURCE (closure->from),
-		                                     (const gchar **)closure->keyids,
-		                                     closure->cancellable, on_source_export_ready,
-		                                     g_object_ref (res));
+    seahorse_progress_begin (cancellable, &closure->from);
+    if (SEAHORSE_IS_SERVER_SOURCE (closure->from)) {
+        g_assert (closure->keyids != NULL);
+        seahorse_server_source_export_async (SEAHORSE_SERVER_SOURCE (closure->from),
+                                             (const char **) closure->keyids,
+                                             cancellable, on_source_export_ready,
+                                             g_object_ref (task));
+        return G_SOURCE_REMOVE;
+    }
 
-	} else if (SEAHORSE_IS_GPGME_KEYRING (closure->from)) {
-		g_assert (closure->keys != NULL);
-		exporter = seahorse_gpgme_exporter_new_multiple (closure->keys, TRUE);
-		seahorse_exporter_export (exporter, closure->cancellable,
-		                          on_source_export_ready, g_object_ref (res));
-		g_object_unref (exporter);
+    if (SEAHORSE_IS_GPGME_KEYRING (closure->from)) {
+        SeahorseExporter *exporter = NULL;
 
-	} else {
-		g_warning ("unsupported source for transfer: %s", G_OBJECT_TYPE_NAME (closure->from));
-	}
+        g_assert (closure->keys != NULL);
+        exporter = seahorse_gpgme_exporter_new_multiple (closure->keys, TRUE);
+        seahorse_exporter_export (exporter, cancellable,
+                                  on_source_export_ready, g_object_ref (task));
+        g_object_unref (exporter);
+        return G_SOURCE_REMOVE;
+    }
 
-	return FALSE; /* Don't run again */
+    g_warning ("unsupported source for transfer: %s", G_OBJECT_TYPE_NAME (closure->from));
+    return G_SOURCE_REMOVE;
 }
 
 void
@@ -199,113 +196,104 @@ seahorse_transfer_keys_async (SeahorsePlace *from,
                               GAsyncReadyCallback callback,
                               gpointer user_data)
 {
-	GSimpleAsyncResult *res;
-	TransferClosure *closure;
-	GPtrArray *keyids;
-	GList *l;
+    g_autoptr(GTask) task = NULL;
+    TransferClosure *closure;
 
-	g_return_if_fail (SEAHORSE_IS_PLACE (from));
-	g_return_if_fail (SEAHORSE_IS_PLACE (to));
+    g_return_if_fail (SEAHORSE_IS_PLACE (from));
+    g_return_if_fail (SEAHORSE_IS_PLACE (to));
 
-	res = g_simple_async_result_new (NULL, callback, user_data,
-	                                 seahorse_transfer_finish);
+    task = g_task_new (NULL, cancellable, callback, user_data);
+    g_task_set_source_tag (task, seahorse_transfer_finish);
 
-	if (!keys) {
-		g_simple_async_result_complete_in_idle (res);
-		g_object_unref (res);
-		return;
-	}
+    if (!keys) {
+        g_task_return_boolean (task, TRUE);
+        return;
+    }
 
-	closure = g_new0 (TransferClosure, 1);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : cancellable;
-	closure->from = g_object_ref (from);
-	closure->to = g_object_ref (to);
-	g_simple_async_result_set_op_res_gpointer (res, closure, transfer_closure_free);
+    closure = g_new0 (TransferClosure, 1);
+    closure->from = g_object_ref (from);
+    closure->to = g_object_ref (to);
+    g_task_set_task_data (task, closure, transfer_closure_free);
 
-	if (SEAHORSE_IS_GPGME_KEYRING (from)) {
-		closure->keys = seahorse_object_list_copy (keys);
+    if (SEAHORSE_IS_GPGME_KEYRING (from)) {
+        closure->keys = seahorse_object_list_copy (keys);
 
-	} else {
-		keyids = g_ptr_array_new ();
-		for (l = keys; l != NULL; l = g_list_next (l))
-			g_ptr_array_add (keyids, g_strdup (seahorse_pgp_key_get_keyid (l->data)));
-		g_ptr_array_add (keyids, NULL);
-		closure->keyids = (gchar **)g_ptr_array_free (keyids, FALSE);
-	}
+    } else {
+        GPtrArray *keyids;
+        GList *l;
 
-	seahorse_progress_prep (cancellable, &closure->from,
-	                        SEAHORSE_IS_GPGME_KEYRING (closure->from) ?
-	                        _("Exporting data") : _("Retrieving data"));
-	seahorse_progress_prep (cancellable, &closure->to,
-	                        SEAHORSE_IS_GPGME_KEYRING (closure->to) ?
-	                        _("Importing data") : _("Sending data"));
+        keyids = g_ptr_array_new ();
+        for (l = keys; l != NULL; l = g_list_next (l))
+            g_ptr_array_add (keyids, g_strdup (seahorse_pgp_key_get_keyid (l->data)));
+        g_ptr_array_add (keyids, NULL);
+        closure->keyids = (char **)g_ptr_array_free (keyids, FALSE);
+    }
 
-	g_debug ("starting export");
+    seahorse_progress_prep (cancellable, &closure->from,
+                            SEAHORSE_IS_GPGME_KEYRING (closure->from) ?
+                            _("Exporting data") : _("Retrieving data"));
+    seahorse_progress_prep (cancellable, &closure->to,
+                            SEAHORSE_IS_GPGME_KEYRING (closure->to) ?
+                            _("Importing data") : _("Sending data"));
 
-	/* We delay and continue from a callback */
-	g_timeout_add_seconds_full (G_PRIORITY_DEFAULT, 0,
-	                            on_timeout_start_transfer,
-	                            g_object_ref (res), g_object_unref);
+    g_debug ("starting export");
 
-	g_object_unref (res);
+    /* We delay and continue from a callback */
+    g_timeout_add_seconds_full (G_PRIORITY_DEFAULT, 0,
+                                on_timeout_start_transfer,
+                                g_steal_pointer (&task), g_object_unref);
 }
 
 void
 seahorse_transfer_keyids_async (SeahorseServerSource *from,
                                 SeahorsePlace *to,
-                                const gchar **keyids,
+                                const char **keyids,
                                 GCancellable *cancellable,
                                 GAsyncReadyCallback callback,
                                 gpointer user_data)
 {
-	GSimpleAsyncResult *res;
-	TransferClosure *closure;
+    g_autoptr(GTask) task = NULL;
+    TransferClosure *closure;
 
-	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (from));
-	g_return_if_fail (SEAHORSE_PLACE (to));
+    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (from));
+    g_return_if_fail (SEAHORSE_PLACE (to));
 
-	res = g_simple_async_result_new (NULL, callback, user_data,
-	                                 seahorse_transfer_finish);
+    task = g_task_new (NULL, cancellable, callback, user_data);
+    g_task_set_source_tag (task, seahorse_transfer_finish);
 
-	if (!keyids || !keyids[0]) {
-		g_simple_async_result_complete_in_idle (res);
-		g_object_unref (res);
-		return;
-	}
+    if (!keyids || !keyids[0]) {
+        g_task_return_boolean (task, TRUE);
+        return;
+    }
 
-	closure = g_new0 (TransferClosure, 1);
-	closure->cancellable = cancellable ? g_object_ref (cancellable) : cancellable;
-	closure->from = SEAHORSE_PLACE (g_object_ref (from));
-	closure->to = g_object_ref (to);
-	closure->keyids = g_strdupv ((gchar **)keyids);
-	g_simple_async_result_set_op_res_gpointer (res, closure, transfer_closure_free);
+    closure = g_new0 (TransferClosure, 1);
+    closure->from = SEAHORSE_PLACE (g_object_ref (from));
+    closure->to = g_object_ref (to);
+    closure->keyids = g_strdupv ((char **)keyids);
+    g_task_set_task_data (task, closure, transfer_closure_free);
 
-	seahorse_progress_prep (cancellable, &closure->from,
-	                        SEAHORSE_IS_GPGME_KEYRING (closure->from) ?
-	                        _("Exporting data") : _("Retrieving data"));
-	seahorse_progress_prep (cancellable, &closure->to,
-	                        SEAHORSE_IS_GPGME_KEYRING (closure->to) ?
-	                        _("Importing data") : _("Sending data"));
+    seahorse_progress_prep (cancellable, &closure->from,
+                            SEAHORSE_IS_GPGME_KEYRING (closure->from) ?
+                            _("Exporting data") : _("Retrieving data"));
+    seahorse_progress_prep (cancellable, &closure->to,
+                            SEAHORSE_IS_GPGME_KEYRING (closure->to) ?
+                            _("Importing data") : _("Sending data"));
 
-	g_debug ("starting export");
+    g_debug ("starting export");
 
-	/* We delay and continue from a callback */
-	g_timeout_add_seconds_full (G_PRIORITY_DEFAULT, 0,
-	                            on_timeout_start_transfer,
-	                            g_object_ref (res), g_object_unref);
-
-	g_object_unref (res);
+    /* We delay and continue from a callback */
+    g_timeout_add_seconds_full (G_PRIORITY_DEFAULT, 0,
+                                on_timeout_start_transfer,
+                                g_steal_pointer (&task), g_object_unref);
 }
 
 gboolean
 seahorse_transfer_finish (GAsyncResult *result,
                           GError **error)
 {
-	g_return_val_if_fail (g_simple_async_result_is_valid (result, NULL,
-	                      seahorse_transfer_finish), FALSE);
+    g_return_val_if_fail (g_task_is_valid (result, NULL), FALSE);
+    g_return_val_if_fail (g_task_get_source_tag (G_TASK (result))
+                          == seahorse_transfer_finish, FALSE);
 
-	if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result), error))
-		return FALSE;
-
-	return TRUE;
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
