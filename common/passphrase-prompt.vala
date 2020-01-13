@@ -184,11 +184,22 @@ public class Seahorse.PassphrasePrompt : Gtk.Dialog {
         return false;
     }
 
-    private bool grab_keyboard (Gtk.Widget win, Gdk.Event event) {
+    private bool grab_keyboard(Gtk.Widget win, Gdk.Event event) {
 #if ! _DEBUG
-        if (!this.keyboard_grabbed)
-            if (Gdk.keyboard_grab(win.get_window(), false, event.get_time()) != 0)
-                message("could not grab keyboard");
+        if (!this.keyboard_grabbed) {
+            Gdk.Display display = Gdk.Display.get_default();
+            Gdk.Seat seat = display.get_default_seat();
+
+            var grab_status = seat.grab(win.get_window(),
+                                        Gdk.SeatCapabilities.KEYBOARD,
+                                        false,
+                                        null,
+                                        event,
+                                        null);
+
+            if (grab_status != Gdk.GrabStatus.SUCCESS)
+                message("could not grab keyboard: %u", grab_status);
+        }
         this.keyboard_grabbed = true;
 #endif
         return false;
@@ -197,8 +208,12 @@ public class Seahorse.PassphrasePrompt : Gtk.Dialog {
     /* ungrab_keyboard - remove grab */
     private bool ungrab_keyboard (Gtk.Widget win, Gdk.Event event) {
 #if ! _DEBUG
-        if (this.keyboard_grabbed)
-            Gdk.keyboard_ungrab(event.get_time());
+        if (this.keyboard_grabbed) {
+            Gdk.Display display = Gdk.Display.get_default();
+            Gdk.Seat seat = display.get_default_seat();
+
+            seat.ungrab();
+		}
         this.keyboard_grabbed = false;
 #endif
         return false;
