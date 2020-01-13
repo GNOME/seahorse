@@ -307,29 +307,30 @@ egg_tree_multi_drag_motion_event (GtkWidget      *widget,
       di = get_info (GTK_TREE_VIEW (widget));
 
       if (di == NULL)
-	return FALSE;
-      
+        return FALSE;
+
       selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
       stop_drag_check (widget);
       gtk_tree_selection_selected_foreach (selection, selection_foreach, &path_list);
       path_list = g_list_reverse (path_list);
       model = gtk_tree_view_get_model (GTK_TREE_VIEW (widget));
       if (egg_tree_multi_drag_source_row_draggable (EGG_TREE_MULTI_DRAG_SOURCE (model), path_list))
-	{
+        {
 
-	  context = gtk_drag_begin (widget,
-                                    gtk_drag_source_get_target_list (widget),
-				    di->source_actions,
-				    priv_data->pressed_button,
-				    (GdkEvent*)event);
-	  set_context_data (context, path_list);
-	  gtk_drag_set_icon_default (context);
+          context = gtk_drag_begin_with_coordinates (widget,
+                                                     gtk_drag_source_get_target_list (widget),
+                                                     di->source_actions,
+                                                     priv_data->pressed_button,
+                                                     (GdkEvent *) event,
+                                                     -1, -1);
+          set_context_data (context, path_list);
+          gtk_drag_set_icon_default (context);
 
-	}
+        }
       else
-	{
-	  path_list_free (path_list);
-	}
+        {
+          path_list_free (path_list);
+        }
     }
 
   return TRUE;
