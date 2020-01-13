@@ -1022,24 +1022,24 @@ import_send_key (SeahorseLDAPSource *self, GTask *task)
     char *values[2];
     g_autoptr(GSource) gsource = NULL;
     GError *error = NULL;
-    const char *keydata;
+    char *keydata;
     int ldap_op;
     int rc;
 
     if (closure->current_index >= 0) {
-        keydata = closure->keydatas->pdata[closure->current_index];
+        keydata = g_ptr_array_index (closure->keydatas, closure->current_index);
         seahorse_progress_end (cancellable, keydata);
     }
 
     closure->current_index++;
 
     /* All done, complete operation */
-    if (closure->current_index == (int)closure->keydatas->len) {
+    if (closure->current_index == (int) closure->keydatas->len) {
         g_task_return_boolean (task, TRUE);
         return;
     }
 
-    keydata = closure->keydatas->pdata[closure->current_index];
+    keydata = g_ptr_array_index (closure->keydatas, closure->current_index);
     seahorse_progress_begin (cancellable, keydata);
     values[0] = keydata;
     values[1] = NULL;
