@@ -30,7 +30,6 @@ public abstract class Catalog : Gtk.ApplicationWindow {
     private GLib.Settings _settings;
 
     public abstract GLib.List<weak Backend> get_backends();
-    public abstract Place? get_focused_place();
     public abstract GLib.List<GLib.Object> get_selected_objects();
 
     private const ActionEntry[] ACTION_ENTRIES = {
