@@ -2,6 +2,7 @@ gkr_sources = [
   'gkr-backend.vala',
   'gkr-dialogs.vala',
   'gkr-item-add.vala',
+  'gkr-item-info.vala',
   'gkr-item-properties.vala',
   'gkr-item.vala',
   'gkr-keyring-add.vala',
