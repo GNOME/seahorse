@@ -390,7 +390,7 @@ public class Seahorse.KeyManager : Catalog {
         sidebar.hexpand = true;
 
         /* Make sure we update the empty state on any change */
-        this.sidebar.selected_rows_changed.connect((sidebar) => { check_empty_state(); });
+        this.sidebar.selected_rows_changed.connect(on_sidebar_selected_rows_changed);
         this.sidebar.current_collection_changed.connect((sidebar) => { check_empty_state (); });
 
         this.sidebar_panes.position = this.settings.get_int("sidebar-width");
@@ -406,9 +406,13 @@ public class Seahorse.KeyManager : Catalog {
         this.sidebar_area.add(this.sidebar);
         this.sidebar.show();
 
-        this.settings.bind("keyrings-selected", this.sidebar, "selected-uris", SettingsBindFlags.DEFAULT);
-
         return this.sidebar.objects;
+    }
+
+    private void on_sidebar_selected_rows_changed(Gtk.ListBox sidebar) {
+        check_empty_state();
+        // FIXME
+        //this.settings.set_strv("keyrings-selected", );
     }
 
     public override List<weak Backend> get_backends() {
