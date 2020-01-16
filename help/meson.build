@@ -44,7 +44,7 @@ help_pages = [
 ]
 
 help_media = [
-  'media/seahorse.png',
+  'media/org.gnome.seahorse.Application.svg',
 ]
 
 gnome.yelp(meson.project_name(),
