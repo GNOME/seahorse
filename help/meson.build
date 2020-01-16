@@ -44,6 +44,7 @@ help_pages = [
 ]
 
 help_media = [
+  'media/dialog-password-symbolic.svg',
   'media/org.gnome.seahorse.Application.svg',
 ]
 
