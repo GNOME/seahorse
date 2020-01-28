@@ -20,6 +20,7 @@ seahorse_sources = [
 seahorse_dependencies = [
   glib_deps,
   gtk,
+  libhandy_dep,
   libsecret,
   common_dep,
   libseahorse_dep,
@@ -30,6 +31,10 @@ seahorse_dependencies = [
 seahorse_linkedlibs = [
   libeggdatetime_lib,
   libtreemultidnd_lib,
+]
+
+seahorse_c_flags = [
+  '-DHANDY_USE_UNSTABLE_API',
 ]
 
 seahorse_vala_flags = [
@@ -49,6 +54,7 @@ seahorse_exe = executable('seahorse',
   seahorse_sources,
   dependencies: seahorse_dependencies,
   vala_args: seahorse_vala_flags,
+  c_args: seahorse_c_flags,
   link_with: seahorse_linkedlibs,
   install: true,
 )

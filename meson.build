@@ -49,6 +49,25 @@ glib_deps = [
   dependency('gmodule-2.0', version: '>=' + min_glib_version),
 ]
 gtk = dependency('gtk+-3.0', version: '>= 3.22.0')
+libhandy_dep = dependency('libhandy-0.0', version: '>= 0.0.12', required: false)
+if not libhandy_dep.found()
+  libhandy_subproj = subproject(
+    'libhandy',
+    default_options: [
+      'examples=false',
+      'glade_catalog=disabled',
+      'tests=false',
+    ]
+  )
+
+  # Make sure to also get the VAPI file
+  libhandy_dep = declare_dependency(
+    dependencies: [
+      libhandy_subproj.get_variable('libhandy_dep'),
+      libhandy_subproj.get_variable('libhandy_vapi'),
+    ]
+  )
+endif
 gcr = dependency('gcr-3',       version: '>=' + min_gcr_version)
 gcr_ui = dependency('gcr-ui-3', version: '>=' + min_gcr_version)
 libsecret = dependency('libsecret-1', version: '>= 0.16')
