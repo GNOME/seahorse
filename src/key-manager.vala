@@ -24,12 +24,21 @@
 public class Seahorse.KeyManager : Catalog {
 
     [GtkChild]
+    private Hdy.Leaflet header;
+    [GtkChild]
+    private Gtk.HeaderBar left_header;
+    [GtkChild]
+    private Gtk.HeaderBar right_header;
+    [GtkChild]
+    private Gtk.Revealer back_revealer;
+
+    [GtkChild]
     private Gtk.SearchBar search_bar;
     [GtkChild]
     private Gtk.SearchEntry filter_entry;
 
     [GtkChild]
-    private Gtk.Paned sidebar_panes;
+    private Hdy.Leaflet content_box;
     [GtkChild]
     private Gtk.ScrolledWindow sidebar_area;
     private Sidebar sidebar;
@@ -230,6 +239,39 @@ public class Seahorse.KeyManager : Catalog {
         this.item_list.filter_text = this.filter_entry.text;
     }
 
+    [GtkCallback]
+    private void on_back_clicked() {
+        show_sidebar_pane();
+    }
+
+    private void show_sidebar_pane() {
+        this.content_box.visible_child_name = "sidebar-pane";
+        update_header();
+    }
+
+    private void show_item_list_pane() {
+        this.content_box.visible_child_name = "item-list-pane";
+        update_header();
+    }
+
+    [GtkCallback]
+    private void on_fold () {
+        update_header();
+    }
+
+    private void update_header() {
+        bool folded = this.content_box.fold == Hdy.Fold.FOLDED;
+
+        this.left_header.show_close_button =
+            !folded || header.visible_child == left_header;
+
+        this.right_header.show_close_button =
+            !folded || header.visible_child == right_header;
+
+        this.back_revealer.reveal_child = this.back_revealer.visible =
+            folded && header.visible_child == right_header;
+    }
+
     public void import_files(string[]? uris) {
         ImportDialog dialog = new ImportDialog(this);
         dialog.add_uris(uris);
@@ -387,15 +429,10 @@ public class Seahorse.KeyManager : Catalog {
 
     private Gcr.Collection setup_sidebar() {
         this.sidebar = new Sidebar();
-        sidebar.hexpand = true;
 
         /* Make sure we update the empty state on any change */
         this.sidebar.selected_rows_changed.connect(on_sidebar_selected_rows_changed);
         this.sidebar.current_collection_changed.connect((sidebar) => { check_empty_state (); });
-
-        this.sidebar_panes.position = this.settings.get_int("sidebar-width");
-        this.sidebar_panes.realize.connect(() =>   { this.sidebar_panes.position = this.settings.get_int("sidebar-width"); });
-        this.sidebar_panes.unrealize.connect(() => { this.settings.set_int("sidebar-width", this.sidebar_panes.position);  });
 
         foreach (weak Backend backend in get_backends()) {
             ActionGroup actions = backend.actions;
@@ -411,6 +448,13 @@ public class Seahorse.KeyManager : Catalog {
 
     private void on_sidebar_selected_rows_changed(Gtk.ListBox sidebar) {
         check_empty_state();
+
+        show_item_list_pane();
+
+        Place? place = this.sidebar.get_focused_place();
+        if (place != null)
+            this.right_header.title = place.label;
+
         // FIXME
         //this.settings.set_strv("keyrings-selected", );
     }

@@ -3,30 +3,6 @@
   <requires lib="gtk+" version="3.22"/>
   <menu id="main_menu">
     <section>
-      <attribute name="label" translatable="yes">Filter items:</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Show p_ersonal</attribute>
-        <attribute name="action">win.filter-items</attribute>
-        <attribute name="target">personal</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Show _trusted</attribute>
-        <attribute name="action">win.filter-items</attribute>
-        <attribute name="target">trusted</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Show an_y</attribute>
-        <attribute name="action">win.filter-items</attribute>
-        <attribute name="target">any</attribute>
-      </item>
-    </section>
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">_Combine all keyrings</attribute>
-        <attribute name="action">win.combine-keyrings</attribute>
-      </item>
-    </section>
-    <section>
       <item>
         <attribute name="label" translatable="yes">_Find remote keys…</attribute>
         <attribute name="action">pgp.remote-find</attribute>
@@ -54,6 +30,34 @@
       </item>
     </section>
   </menu>
+
+  <menu id="items_menu">
+    <section>
+      <attribute name="label" translatable="yes">Filter items:</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Show p_ersonal</attribute>
+        <attribute name="action">win.filter-items</attribute>
+        <attribute name="target">personal</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Show _trusted</attribute>
+        <attribute name="action">win.filter-items</attribute>
+        <attribute name="target">trusted</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Show an_y</attribute>
+        <attribute name="action">win.filter-items</attribute>
+        <attribute name="target">any</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Combine all keyrings</attribute>
+        <attribute name="action">win.combine-keyrings</attribute>
+      </item>
+    </section>
+  </menu>
+
   <object class="GtkPopover" id="new_item_menu_popover">
     <signal name="grab-notify" handler="on_popover_grab_notify" after="yes"/>
     <child>
@@ -265,88 +269,190 @@
       </object>
     </child>
   </object>
+
   <template class="SeahorseKeyManager" parent="SeahorseCatalog">
     <property name="default-width">600</property>
     <property name="default-height">476</property>
     <signal name="drag-data-received" handler="on_drag_data_received" />
     <signal name="key-press-event" handler="on_key_pressed"/>
     <child type="titlebar">
-      <object class="GtkHeaderBar">
+      <object class="HdyTitleBar" id="titlebar">
         <property name="visible">True</property>
-        <property name="show-close-button">True</property>
-        <property name="title" translatable="yes">Passwords and Keys</property>
         <child>
-          <object class="GtkMenuButton" id="new_item_button">
+          <object class="HdyLeaflet" id="header">
             <property name="visible">True</property>
-            <property name="hexpand">True</property>
-            <property name="halign">start</property>
-            <property name="tooltip_text" translatable="yes">Add a new key or item</property>
-            <property name="popover">new_item_menu_popover</property>
+            <property name="can_focus">False</property>
+            <property name="mode-transition-duration" bind-source="content_box" bind-property="mode-transition-duration" bind-flags="bidirectional|sync-create"/>
+            <property name="child-transition-duration" bind-source="content_box" bind-property="child-transition-duration" bind-flags="bidirectional|sync-create"/>
+            <property name="transition-type" bind-source="content_box" bind-property="transition-type" bind-flags="bidirectional|sync-create"/>
             <child>
-              <object class="GtkImage">
+              <object class="GtkHeaderBar" id="left_header">
                 <property name="visible">True</property>
-                <property name="icon_name">list-add-symbolic</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="main_menu_button">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="focus_on_click">False</property>
-            <property name="menu-model">main_menu</property>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="hexpand">False</property>
                 <property name="can_focus">False</property>
-                <property name="icon_name">open-menu-symbolic</property>
+                <property name="title" translatable="yes">Passwords and Keys</property>
+                <property name="show_close_button">True</property>
+                <child>
+                  <object class="GtkMenuButton" id="new_item_button">
+                    <property name="visible">True</property>
+                    <property name="halign">start</property>
+                    <property name="tooltip_text" translatable="yes">Add a new key or item</property>
+                    <property name="popover">new_item_menu_popover</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="icon_name">list-add-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack_type">start</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="main_menu_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
+                    <property name="menu-model">main_menu</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">open-menu-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack_type">end</property>
+                  </packing>
+                </child>
               </object>
+              <packing>
+                <property name="name">sidebar-pane</property>
+              </packing>
             </child>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToggleButton" id="show_search_button">
-            <property name="visible">True</property>
-            <property name="tooltip_text" translatable="yes">Search for a key or password</property>
             <child>
-              <object class="GtkImage">
+              <object class="GtkSeparator" id="header_separator">
                 <property name="visible">True</property>
-                <property name="icon_name">edit-find-symbolic</property>
+                <style>
+                  <class name="sidebar"/>
+                </style>
               </object>
+              <packing>
+                <property name="allow-visible">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHeaderBar" id="right_header">
+                <property name="visible">True</property>
+                <property name="hexpand">True</property>
+                <property name="show_close_button">True</property>
+                <child>
+                  <object class="GtkRevealer" id="back_revealer">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="transition-type">slide-right</property>
+                    <property name="transition-duration" bind-source="content_box" bind-property="mode-transition-duration" bind-flags="bidirectional|sync-create"/>
+                    <child>
+                      <object class="GtkButton" id="back">
+                        <property name="visible">True</property>
+                        <property name="valign">center</property>
+                        <property name="use-underline">True</property>
+                        <signal name="clicked" handler="on_back_clicked"/>
+                        <style>
+                          <class name="image-button"/>
+                        </style>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="a11y-back">
+                            <property name="accessible-name" translatable="yes">Back</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="back_image">
+                            <property name="visible">True</property>
+                            <property name="icon-name">go-previous-symbolic</property>
+                            <property name="icon-size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="items_menu_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
+                    <property name="menu-model">items_menu</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">view-more-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack_type">end</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="show_search_button">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">Search for a key or password</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="icon_name">edit-find-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="pack_type">end</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="name">item-list-pane</property>
+              </packing>
             </child>
           </object>
-          <packing>
-            <property name="pack_type">end</property>
-          </packing>
         </child>
       </object>
     </child>
+
     <child>
-      <object class="GtkPaned" id="sidebar_panes">
+      <object class="HdyLeaflet" id="content_box">
         <property name="visible">True</property>
         <property name="vexpand">True</property>
         <property name="can_focus">True</property>
+        <property name="can-swipe-back">True</property>
+        <property name="transition-type">over</property>
+        <signal name="notify::fold" handler="on_fold" object="SeahorseKeyManager" after="yes" swapped="no"/>
         <child>
           <object class="GtkScrolledWindow" id="sidebar_area">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hscrollbar-policy">never</property>
-            <property name="shadow-type">out</property>
-            <property name="width-request">170</property>
+          </object>
+          <packing>
+            <property name="name">sidebar-pane</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
             <style>
               <class name="sidebar"/>
             </style>
           </object>
           <packing>
-            <property name="shrink">False</property>
+            <property name="allow-visible">False</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="right_content">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
@@ -374,37 +480,21 @@
                     <property name="can_focus">True</property>
                     <property name="hscrollbar-policy">never</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="HdyColumn">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="margin-top">24</property>
-                        <property name="margin-bottom">24</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
-                          </object>
-                          <packing>
-                            <property name="pack_type">end</property>
-                          </packing>
-                        </child>
+                        <property name="linear-growth-width">400</property>
+                        <property name="maximum-width">800</property>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
                         <child>
                           <object class="GtkListBox" id="item_listbox">
                             <property name="visible">True</property>
                             <property name="hexpand">True</property>
                             <property name="can-focus">True</property>
                             <property name="has-focus">True</property>
-                            <property name="margin-start">18</property>
-                            <property name="margin-end">18</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-end">12</property>
                             <property name="activate-on-single-click">False</property>
                             <property name="selection-mode">multiple</property>
                             <style>
@@ -502,10 +592,37 @@
             </child>
           </object>
           <packing>
-            <property name="shrink">False</property>
+            <property name="name">item-list-pane</property>
           </packing>
         </child>
       </object>
     </child>
   </template>
+
+  <object class="GtkSizeGroup" id="left_pane_size_group">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="left_header"/>
+      <widget name="sidebar_area"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="right_pane_size_group">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="right_header"/>
+      <widget name="right_content"/>
+    </widgets>
+  </object>
+  <object class="HdyHeaderGroup" id="header_group">
+    <headerbars>
+      <headerbar name="left_header"/>
+      <headerbar name="right_header"/>
+    </headerbars>
+  </object>
+  <object class="HdySwipeGroup" id="swipe_group">
+    <swipeables>
+      <swipeable name="header"/>
+      <swipeable name="content_box"/>
+    </swipeables>
+  </object>
 </interface>
