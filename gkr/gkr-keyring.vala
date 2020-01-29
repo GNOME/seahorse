@@ -61,6 +61,10 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
         owned get { return this._menu_model; }
     }
 
+    public bool show_if_empty {
+        get { return true; }
+    }
+
 	public bool is_default {
 		get { return Backend.instance().has_alias ("default", this); }
 	}

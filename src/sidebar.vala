@@ -73,7 +73,9 @@ public class Seahorse.Sidebar : Gtk.ListBox {
         return_if_fail (place != null);
 
         debug("New place '%s' added", place.label);
-        this.store.insert_sorted(place, compare_places);
+
+		if (place.get_length() > 0 || place.show_if_empty)
+            this.store.insert_sorted(place, compare_places);
         place.notify.connect(on_place_changed);
     }
 
@@ -246,7 +248,7 @@ public class Seahorse.Sidebar : Gtk.ListBox {
                 }
             }
 
-            if (!already_in)
+            if (!already_in && (place.get_length() > 0 || place.show_if_empty))
                 this.store.insert_sorted(place, compare_places);
         }
     }
