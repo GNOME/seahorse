@@ -29,6 +29,13 @@ public interface Seahorse.Place : Gcr.Collection {
     public abstract Icon icon { owned get; }
 
     /**
+     * In some cases, we do not want to show the Place in the sidebar
+     * if it's empty (for example p11-kit's System Trust), while we do
+     * want this for others (like libsecret keyrings).
+     */
+    public abstract bool show_if_empty { get; }
+
+    /**
      * Returns the {@link GLib.Action}s that are defined for this Place,
      * or null if none.
      */

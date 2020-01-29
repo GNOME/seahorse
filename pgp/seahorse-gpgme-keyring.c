@@ -54,7 +54,9 @@ enum {
 	PROP_URI,
     PROP_ACTIONS,
     PROP_ACTION_PREFIX,
-    PROP_MENU_MODEL
+    PROP_MENU_MODEL,
+    PROP_SHOW_IF_EMPTY,
+	N_PROPS
 };
 
 /* Amount of keys to load in a batch */
@@ -802,6 +804,12 @@ seahorse_gpgme_keyring_get_uri (SeahorsePlace *place)
 	return g_strdup ("gnupg://");
 }
 
+static gboolean
+seahorse_gpgme_keyring_get_show_if_empty (SeahorsePlace *place)
+{
+    return TRUE;
+}
+
 static void
 seahorse_gpgme_keyring_get_property (GObject *obj,
                                      guint prop_id,
@@ -831,6 +839,9 @@ seahorse_gpgme_keyring_get_property (GObject *obj,
 		break;
 	case PROP_MENU_MODEL:
 		g_value_take_object (value, seahorse_gpgme_keyring_get_menu_model (place));
+		break;
+	case PROP_SHOW_IF_EMPTY:
+		g_value_set_boolean (value, TRUE);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
@@ -914,6 +925,7 @@ seahorse_gpgme_keyring_class_init (SeahorseGpgmeKeyringClass *klass)
     g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
     g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
     g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
+    g_object_class_override_property (gobject_class, PROP_SHOW_IF_EMPTY, "show-if-empty");
 }
 
 static void
@@ -929,6 +941,7 @@ seahorse_gpgme_keyring_place_iface (SeahorsePlaceIface *iface)
 	iface->get_label = seahorse_gpgme_keyring_get_label;
 	iface->set_label = seahorse_gpgme_keyring_set_label;
 	iface->get_uri = seahorse_gpgme_keyring_get_uri;
+	iface->get_show_if_empty = seahorse_gpgme_keyring_get_show_if_empty;
 }
 
 static guint
