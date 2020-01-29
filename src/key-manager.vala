@@ -24,12 +24,21 @@
 public class Seahorse.KeyManager : Catalog {
 
     [GtkChild]
+    private Hdy.Leaflet header;
+    [GtkChild]
+    private Gtk.HeaderBar left_header;
+    [GtkChild]
+    private Gtk.HeaderBar right_header;
+    [GtkChild]
+    private Gtk.Revealer back_revealer;
+
+    [GtkChild]
     private Gtk.SearchBar search_bar;
     [GtkChild]
     private Gtk.SearchEntry filter_entry;
 
     [GtkChild]
-    private Gtk.Paned sidebar_panes;
+    private Hdy.Leaflet content_box;
     [GtkChild]
     private Gtk.ScrolledWindow sidebar_area;
     private Sidebar sidebar;
@@ -55,11 +64,10 @@ public class Seahorse.KeyManager : Catalog {
 
     private const GLib.ActionEntry[] action_entries = {
          { "new-item",           on_new_item                                                     },
-         { "show-search",        on_show_search,                                                      },
+         { "show-search",        on_show_search,                                                 },
          { "filter-items",       on_filter_items,              "s",                      "'any'" },
          { "focus-place",        on_focus_place,               "s",           "'secret-service'" },
          { "import-file",        on_import_file                                                  },
-         { "combine-keyrings",   on_toggle_action,  null,  "false",  on_combine_keyrings_toggled },
          { "paste",              on_paste,                                                       },
     };
 
@@ -214,20 +222,42 @@ public class Seahorse.KeyManager : Catalog {
         action.change_state(!action.state.get_boolean());
     }
 
-    private void on_combine_keyrings_toggled(SimpleAction action, GLib.Variant? new_state) {
-        bool combined = new_state.get_boolean();
-        action.set_state(combined);
-
-        this.sidebar.combined = combined;
-
-        /* Don't show the sidebar if everyhing is combined */
-        this.sidebar_area.visible = !combined;
-        this.settings.set_boolean("sidebar-visible", !combined);
-    }
-
     [GtkCallback]
     private void on_filter_changed(Gtk.Editable entry) {
         this.item_list.filter_text = this.filter_entry.text;
+    }
+
+    [GtkCallback]
+    private void on_back_clicked() {
+        show_sidebar_pane();
+    }
+
+    private void show_sidebar_pane() {
+        this.content_box.visible_child_name = "sidebar-pane";
+        update_header();
+    }
+
+    private void show_item_list_pane() {
+        this.content_box.visible_child_name = "item-list-pane";
+        update_header();
+    }
+
+    [GtkCallback]
+    private void on_fold () {
+        update_header();
+    }
+
+    private void update_header() {
+        bool folded = this.content_box.fold == Hdy.Fold.FOLDED;
+
+        this.left_header.show_close_button =
+            !folded || header.visible_child == left_header;
+
+        this.right_header.show_close_button =
+            !folded || header.visible_child == right_header;
+
+        this.back_revealer.reveal_child = this.back_revealer.visible =
+            folded && header.visible_child == right_header;
     }
 
     public void import_files(string[]? uris) {
@@ -387,15 +417,10 @@ public class Seahorse.KeyManager : Catalog {
 
     private Gcr.Collection setup_sidebar() {
         this.sidebar = new Sidebar();
-        sidebar.hexpand = true;
 
         /* Make sure we update the empty state on any change */
         this.sidebar.selected_rows_changed.connect(on_sidebar_selected_rows_changed);
         this.sidebar.current_collection_changed.connect((sidebar) => { check_empty_state (); });
-
-        this.sidebar_panes.position = this.settings.get_int("sidebar-width");
-        this.sidebar_panes.realize.connect(() =>   { this.sidebar_panes.position = this.settings.get_int("sidebar-width"); });
-        this.sidebar_panes.unrealize.connect(() => { this.settings.set_int("sidebar-width", this.sidebar_panes.position);  });
 
         foreach (weak Backend backend in get_backends()) {
             ActionGroup actions = backend.actions;
@@ -411,6 +436,13 @@ public class Seahorse.KeyManager : Catalog {
 
     private void on_sidebar_selected_rows_changed(Gtk.ListBox sidebar) {
         check_empty_state();
+
+        show_item_list_pane();
+
+        Place? place = this.sidebar.get_focused_place();
+        if (place != null)
+            this.right_header.title = place.label;
+
         // FIXME
         //this.settings.set_strv("keyrings-selected", );
     }

@@ -29,20 +29,6 @@ public class Seahorse.Sidebar : Gtk.ListBox {
     public Gcr.UnionCollection objects { get; private set; default = new Gcr.UnionCollection(); }
 
     /**
-     * Collection shows all objects combined
-     */
-    public bool combined {
-        get { return this._combined; }
-        set {
-            if (this._combined != value) {
-                this._combined = value;
-                on_row_selected (get_selected_row());
-            }
-        }
-    }
-    private bool _combined;
-
-    /**
      * Emitted when the state of the current collection changed.
      * For example: when going from locked to unlocked and vice versa.
      */
@@ -144,8 +130,9 @@ public class Seahorse.Sidebar : Gtk.ListBox {
                 label.tooltip_text = b.description;
                 label.get_style_context().add_class("seahorse-sidebar-item-header");
                 label.xalign = 0f;
-                label.margin_start = 6;
+                label.margin_start = 9;
                 label.margin_top = 6;
+                label.margin_bottom = 3;
                 label.show();
                 row.set_header(label);
                 return;
@@ -200,23 +187,11 @@ public class Seahorse.Sidebar : Gtk.ListBox {
     }
 
     private void on_row_selected(Gtk.ListBoxRow? row) {
-        debug("Updating objects (combined: %s)", this.combined.to_string());
+        debug("Updating objects");
 
         // First clear the list
         foreach (var place in this.objects.elements())
             this.objects.remove(place);
-
-        // Combined overrides and shows all objects
-        if (this.combined) {
-            foreach (Backend backend in this.backends) {
-                foreach (var obj in backend.get_objects()) {
-                    var place = (Place) obj;
-                    if (!this.objects.have(place))
-                        this.objects.add(place);
-                }
-            }
-            return;
-        }
 
         // Only selected ones should be in this.objects
         var selected = row as SidebarItem;
@@ -343,27 +318,27 @@ internal class Seahorse.SidebarItem : Gtk.ListBoxRow {
     public signal void place_changed();
 
     construct {
-      var grid = new Gtk.Grid();
-      grid.get_style_context().add_class("seahorse-sidebar-item");
-      grid.valign = Gtk.Align.CENTER;
-      grid.row_spacing = 6;
-      grid.column_spacing = 6;
-      add(grid);
+      var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
+      box.get_style_context().add_class("seahorse-sidebar-item");
+      box.valign = Gtk.Align.CENTER;
+      box.margin_top = 3;
+      box.margin_bottom = 3;
+      add(box);
 
       var icon = new Gtk.Image.from_gicon(place.icon, Gtk.IconSize.BUTTON);
-      grid.attach(icon, 0, 0);
+      box.pack_start(icon, false, false);
 
       var label = new Gtk.Label(place.label);
-      label.hexpand = true;
       label.ellipsize = Pango.EllipsizeMode.END;
       label.xalign = 0f;
-      grid.attach(label, 1, 0);
+      box.pack_start(label);
 
       var lockable = place as Lockable;
       if (lockable != null && (lockable.lockable || lockable.unlockable)) {
           this.lock_button = new Gtk.Button.from_icon_name(get_lock_icon_name(lockable),
                                                           Gtk.IconSize.BUTTON);
           this.lock_button.get_style_context().add_class("flat");
+          this.lock_button.halign = Gtk.Align.END;
           this.lock_button.clicked.connect((b) => {
               if (lockable.unlockable)
                   place_unlock(lockable, (Gtk.Window) get_toplevel());
@@ -372,7 +347,7 @@ internal class Seahorse.SidebarItem : Gtk.ListBoxRow {
 
               update_lock_icon(lockable);
           });
-          grid.attach(this.lock_button, 2, 0);
+          box.pack_end(this.lock_button, false, false);
       }
 
       show_all();
