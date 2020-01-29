@@ -29,20 +29,6 @@ public class Seahorse.Sidebar : Gtk.ListBox {
     public Gcr.UnionCollection objects { get; private set; default = new Gcr.UnionCollection(); }
 
     /**
-     * Collection shows all objects combined
-     */
-    public bool combined {
-        get { return this._combined; }
-        set {
-            if (this._combined != value) {
-                this._combined = value;
-                on_row_selected (get_selected_row());
-            }
-        }
-    }
-    private bool _combined;
-
-    /**
      * Emitted when the state of the current collection changed.
      * For example: when going from locked to unlocked and vice versa.
      */
@@ -201,23 +187,11 @@ public class Seahorse.Sidebar : Gtk.ListBox {
     }
 
     private void on_row_selected(Gtk.ListBoxRow? row) {
-        debug("Updating objects (combined: %s)", this.combined.to_string());
+        debug("Updating objects");
 
         // First clear the list
         foreach (var place in this.objects.elements())
             this.objects.remove(place);
-
-        // Combined overrides and shows all objects
-        if (this.combined) {
-            foreach (Backend backend in this.backends) {
-                foreach (var obj in backend.get_objects()) {
-                    var place = (Place) obj;
-                    if (!this.objects.have(place))
-                        this.objects.add(place);
-                }
-            }
-            return;
-        }
 
         // Only selected ones should be in this.objects
         var selected = row as SidebarItem;

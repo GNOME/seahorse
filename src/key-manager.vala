@@ -64,11 +64,10 @@ public class Seahorse.KeyManager : Catalog {
 
     private const GLib.ActionEntry[] action_entries = {
          { "new-item",           on_new_item                                                     },
-         { "show-search",        on_show_search,                                                      },
+         { "show-search",        on_show_search,                                                 },
          { "filter-items",       on_filter_items,              "s",                      "'any'" },
          { "focus-place",        on_focus_place,               "s",           "'secret-service'" },
          { "import-file",        on_import_file                                                  },
-         { "combine-keyrings",   on_toggle_action,  null,  "false",  on_combine_keyrings_toggled },
          { "paste",              on_paste,                                                       },
     };
 
@@ -221,17 +220,6 @@ public class Seahorse.KeyManager : Catalog {
 
     private void on_toggle_action(SimpleAction action, GLib.Variant? param) {
         action.change_state(!action.state.get_boolean());
-    }
-
-    private void on_combine_keyrings_toggled(SimpleAction action, GLib.Variant? new_state) {
-        bool combined = new_state.get_boolean();
-        action.set_state(combined);
-
-        this.sidebar.combined = combined;
-
-        /* Don't show the sidebar if everyhing is combined */
-        this.sidebar_area.visible = !combined;
-        this.settings.set_boolean("sidebar-visible", !combined);
     }
 
     [GtkCallback]
