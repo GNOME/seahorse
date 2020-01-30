@@ -67,6 +67,10 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         owned get { return null; }
     }
 
+    public bool show_if_empty {
+        get { return true; }
+    }
+
     /**
      * The directory containing the SSH keys.
      */

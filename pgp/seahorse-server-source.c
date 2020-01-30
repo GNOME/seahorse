@@ -51,7 +51,9 @@ enum {
     PROP_URI,
     PROP_ACTIONS,
     PROP_ACTION_PREFIX,
-    PROP_MENU_MODEL
+    PROP_MENU_MODEL,
+    PROP_SHOW_IF_EMPTY,
+    N_PROPS
 };
 
 /* -----------------------------------------------------------------------------
@@ -95,6 +97,7 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
 	g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
 	g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
+    g_object_class_override_property (gobject_class, PROP_SHOW_IF_EMPTY, "show-if-empty");
 
     g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
             g_param_spec_string ("key-server", "Key Server",
@@ -201,6 +204,12 @@ seahorse_server_source_get_menu_model (SeahorsePlace* self)
     return NULL;
 }
 
+static gboolean
+seahorse_server_source_get_show_if_empty (SeahorsePlace *place)
+{
+    return TRUE;
+}
+
 static void
 seahorse_server_source_place_iface (SeahorsePlaceIface *iface)
 {
@@ -214,6 +223,7 @@ seahorse_server_source_place_iface (SeahorsePlaceIface *iface)
 	iface->get_label = seahorse_server_source_get_label;
 	iface->set_label = seahorse_server_source_set_label;
 	iface->get_uri = seahorse_server_source_get_uri;
+    iface->get_show_if_empty = seahorse_server_source_get_show_if_empty;
 }
 
 /**
@@ -300,10 +310,13 @@ seahorse_server_get_property (GObject *obj,
     case PROP_MENU_MODEL:
         g_value_set_object (value, seahorse_server_source_get_menu_model (place));
         break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
+    case PROP_SHOW_IF_EMPTY:
+        g_value_set_boolean (value, TRUE);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+        break;
+    }
 }
 
 static guint

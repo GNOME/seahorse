@@ -116,6 +116,10 @@ public class Token : GLib.Object, Gcr.Collection, Place, Lockable {
 		get { return 0; }
 	}
 
+    public bool show_if_empty {
+        get { return false; }
+    }
+
 	public unowned GLib.Array<ulong> mechanisms {
 		get {
 			if (this._mechanisms == null)
