@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-01-29 07:08+0000\n"
-"PO-Revision-Date: 2020-01-29 22:29+0100\n"
+"POT-Creation-Date: 2020-01-31 08:50+0000\n"
+"PO-Revision-Date: 2020-01-31 13:41+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -57,13 +57,13 @@ msgstr "Kunde inte exportera data"
 #: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
 #: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:287
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:274
+#: src/import-dialog.vala:34 src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "A_vbryt"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:398
+#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:352
 msgid "_Delete"
 msgstr "_Ta bort"
 
@@ -195,6 +195,41 @@ msgstr "Inaktiverad"
 msgctxt "Validity"
 msgid "Revoked"
 msgstr "Spärrad"
+
+#: data/gtk/help-overlay.ui:9
+msgctxt "shortcut window"
+msgid "Overview"
+msgstr "Översikt"
+
+#: data/gtk/help-overlay.ui:14
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "Hjälp"
+
+#: data/gtk/help-overlay.ui:21
+msgctxt "shortcut window"
+msgid "Create a new item"
+msgstr "Skapa ett nytt objekt"
+
+#: data/gtk/help-overlay.ui:28
+msgctxt "shortcut window"
+msgid "Import item from file"
+msgstr "Importera objekt från fil"
+
+#: data/gtk/help-overlay.ui:35
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Sök"
+
+#: data/gtk/help-overlay.ui:42
+msgctxt "shortcut window"
+msgid "Shortcut list"
+msgstr "Genvägslista"
+
+#: data/gtk/help-overlay.ui:49
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Avsluta"
 
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
@@ -365,8 +400,8 @@ msgstr ""
 msgid "The GNOME Project"
 msgstr "GNOME-projektet"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:168
-#: src/seahorse-key-manager.ui:287
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:169
+#: src/seahorse-key-manager.ui:291
 msgid "Passwords and Keys"
 msgstr "Lösenord och nycklar"
 
@@ -383,7 +418,7 @@ msgstr "Lösenord"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Lagrade personliga lösenord, inloggningsuppgifter och hemligheter"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:456
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:410
 msgid "Couldn’t unlock"
 msgstr "Kunde inte låsa upp"
 
@@ -420,7 +455,7 @@ msgid "Network Credentials"
 msgstr "Nätverksinloggning"
 
 #: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:70
-#: src/seahorse-key-manager.ui:189
+#: src/seahorse-key-manager.ui:193
 msgid "Password"
 msgstr "Lösenord"
 
@@ -525,28 +560,28 @@ msgstr "En nyckelring som automatiskt låses upp vid inloggning"
 msgid "A keyring used to store passwords"
 msgstr "En nyckelring som används för att lagra lösenord"
 
-#: gkr/gkr-keyring.vala:192
+#: gkr/gkr-keyring.vala:200
 msgid "Couldn’t set default keyring"
 msgstr "Kunde inte ställa in standardnyckelringen"
 
-#: gkr/gkr-keyring.vala:219 gkr/gkr-keyring.vala:224
+#: gkr/gkr-keyring.vala:227 gkr/gkr-keyring.vala:232
 msgid "Couldn’t change keyring password"
 msgstr "Kunde inte ändra lösenord för nyckelring"
 
-#: gkr/gkr-keyring.vala:243
+#: gkr/gkr-keyring.vala:251
 msgid "_Set as default"
 msgstr "_Ange som standard"
 
-#: gkr/gkr-keyring.vala:244
+#: gkr/gkr-keyring.vala:252
 msgid "Change _Password"
 msgstr "Ändra _lösenord"
 
-#: gkr/gkr-keyring.vala:255
+#: gkr/gkr-keyring.vala:263
 #, c-format
 msgid "Are you sure you want to delete the password keyring “%s”?"
 msgstr "Är du säker på att du vill ta bort lösenordsnyckelringen ”%s”?"
 
-#: gkr/gkr-keyring.vala:258
+#: gkr/gkr-keyring.vala:266
 msgid "I understand that all items will be permanently deleted."
 msgstr "Jag förstår att alla objekt kommer tas bort permanent."
 
@@ -1126,41 +1161,41 @@ msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 "Detta var den tredje gången som du angav ett felaktigt lösenord. Försök igen."
 
-#: pgp/seahorse-gpgme-keyring.c:89
+#: pgp/seahorse-gpgme-keyring.c:92
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Felaktig lösenfras."
 
-#: pgp/seahorse-gpgme-keyring.c:93
+#: pgp/seahorse-gpgme-keyring.c:96
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "Ange ny lösenfras för ”%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:95
+#: pgp/seahorse-gpgme-keyring.c:98
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "Ange lösenfras för ”%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:98 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Ange ny lösenfras"
 
-#: pgp/seahorse-gpgme-keyring.c:100
+#: pgp/seahorse-gpgme-keyring.c:103
 msgid "Enter passphrase"
 msgstr "Ange lösenfras"
 
-#: pgp/seahorse-gpgme-keyring.c:105
+#: pgp/seahorse-gpgme-keyring.c:108
 msgid "Passphrase"
 msgstr "Lösenfras"
 
-#: pgp/seahorse-gpgme-keyring.c:300
+#: pgp/seahorse-gpgme-keyring.c:303
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Läste in %d nyckel"
 msgstr[1] "Läste in %d nycklar"
 
-#: pgp/seahorse-gpgme-keyring.c:628
+#: pgp/seahorse-gpgme-keyring.c:631
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1168,11 +1203,11 @@ msgstr ""
 "Ogiltigt nyckeldata (UID:er saknas). Det här kan bero på en dator som har "
 "datumet inställt till framtiden eller att en självsignatur saknas."
 
-#: pgp/seahorse-gpgme-keyring.c:758
+#: pgp/seahorse-gpgme-keyring.c:761
 msgid "GnuPG keys"
 msgstr "GnuPG-nycklar"
 
-#: pgp/seahorse-gpgme-keyring.c:769
+#: pgp/seahorse-gpgme-keyring.c:772
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: standardkatalog för nyckelringar"
 
@@ -1211,7 +1246,7 @@ msgstr "Alla bildfiler"
 msgid "All JPEG files"
 msgstr "Alla JPEG-filer"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:314
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:310
 msgid "All files"
 msgstr "Alla filer"
 
@@ -1219,7 +1254,7 @@ msgstr "Alla filer"
 msgid "Choose Photo to Add to Key"
 msgstr "Välj foto att lägga till i nyckeln"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:274
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:270
 msgid "_Open"
 msgstr "Öpp_na"
 
@@ -2119,7 +2154,7 @@ msgstr "Jag förstår att denna nyckel kommer tas bort permanent."
 msgid "Unnamed private key"
 msgstr "Namnlös privat nyckel"
 
-#: pkcs11/pkcs11-private-key.vala:70 src/seahorse-key-manager.ui:223
+#: pkcs11/pkcs11-private-key.vala:70 src/seahorse-key-manager.ui:227
 msgid "Private key"
 msgstr "Privat nyckel"
 
@@ -2131,7 +2166,7 @@ msgstr "Namnlös"
 msgid "Failed to export certificate"
 msgstr "Misslyckades med att exportera certifikatet"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:472
+#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:426
 msgid "Couldn’t delete"
 msgstr "Kunde inte ta bort"
 
@@ -2236,7 +2271,7 @@ msgstr "Bidrag:"
 msgid "Version of this application"
 msgstr "Versionsnummer för detta program"
 
-#: src/application.vala:170
+#: src/application.vala:171
 msgid "translator-credits"
 msgstr ""
 "Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
@@ -2246,7 +2281,7 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
 
-#: src/application.vala:173
+#: src/application.vala:174
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse-projektets webbplats"
 
@@ -2259,24 +2294,24 @@ msgid "Import failed"
 msgstr "Import misslyckades"
 
 #. The prompt
-#: src/key-manager.vala:272 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:324
 msgid "Import Key"
 msgstr "Importera nyckel"
 
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:280
+#: src/key-manager.vala:276
 msgid "All key files"
 msgstr "Alla nyckelfiler"
 
-#: src/key-manager.vala:345
+#: src/key-manager.vala:341
 msgid "Dropped text"
 msgstr "Släppt text"
 
-#: src/key-manager.vala:373
+#: src/key-manager.vala:369
 msgid "Clipboard text"
 msgstr "Urklippstext"
 
-#: src/key-manager.vala:472
+#: src/key-manager.vala:468
 msgid "Couldn’t unlock keyring"
 msgstr "Kunde inte låsa upp nyckelring"
 
@@ -2309,90 +2344,94 @@ msgid "_Preferences"
 msgstr "_Inställningar"
 
 #: src/seahorse-key-manager.ui:24
+msgid "_Keyboard Shortcuts"
+msgstr "_Tangentbordsgenvägar"
+
+#: src/seahorse-key-manager.ui:28
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: src/seahorse-key-manager.ui:28
+#: src/seahorse-key-manager.ui:32
 msgid "_About Passwords and Keys"
 msgstr "_Om Lösenord och nycklar"
 
-#: src/seahorse-key-manager.ui:36
+#: src/seahorse-key-manager.ui:40
 msgid "Filter items:"
 msgstr "Filtrera objekt:"
 
-#: src/seahorse-key-manager.ui:38
+#: src/seahorse-key-manager.ui:42
 msgid "Show p_ersonal"
 msgstr "Visa p_ersonliga"
 
-#: src/seahorse-key-manager.ui:43
+#: src/seahorse-key-manager.ui:47
 msgid "Show _trusted"
 msgstr "Visa påli_tliga"
 
-#: src/seahorse-key-manager.ui:48
+#: src/seahorse-key-manager.ui:52
 msgid "Show an_y"
 msgstr "Visa a_lla"
 
-#: src/seahorse-key-manager.ui:87
+#: src/seahorse-key-manager.ui:91
 msgid "Secure Shell key"
 msgstr "Secure Shell-nyckel"
 
-#: src/seahorse-key-manager.ui:94
+#: src/seahorse-key-manager.ui:98
 msgid "Used to access other computers"
 msgstr "Används för åtkomst till andra datorer"
 
-#: src/seahorse-key-manager.ui:121
+#: src/seahorse-key-manager.ui:125
 msgid "GPG key"
 msgstr "GPG-nyckel"
 
-#: src/seahorse-key-manager.ui:128
+#: src/seahorse-key-manager.ui:132
 msgid "Used to encrypt email and files"
 msgstr "Används för att kryptera e-post och filer"
 
-#: src/seahorse-key-manager.ui:155
+#: src/seahorse-key-manager.ui:159
 msgid "Password keyring"
 msgstr "Lösenordsnyckelring"
 
-#: src/seahorse-key-manager.ui:162
+#: src/seahorse-key-manager.ui:166
 msgid "Used to store application and network passwords"
 msgstr "Används för att lagra program- och nätverkslösenord"
 
-#: src/seahorse-key-manager.ui:196
+#: src/seahorse-key-manager.ui:200
 msgid "Safely store a password or secret"
 msgstr "Lagra ett lösenord eller hemlighet på ett säkert sätt"
 
-#: src/seahorse-key-manager.ui:230
+#: src/seahorse-key-manager.ui:234
 msgid "Used to request a certificate"
 msgstr "Används för att begära ett certifikat"
 
-#: src/seahorse-key-manager.ui:256
+#: src/seahorse-key-manager.ui:260
 msgid "Import from file…"
 msgstr "Importera från fil…"
 
-#: src/seahorse-key-manager.ui:293
+#: src/seahorse-key-manager.ui:297
 msgid "Add a new key or item"
 msgstr "Lägg till en ny nyckel eller objekt"
 
-#: src/seahorse-key-manager.ui:362
+#: src/seahorse-key-manager.ui:366
 msgid "Back"
 msgstr "Bakåt"
 
-#: src/seahorse-key-manager.ui:397
+#: src/seahorse-key-manager.ui:401
 msgid "Search for a key or password"
 msgstr "Sök efter en nyckel eller ett lösenord"
 
-#: src/seahorse-key-manager.ui:461
+#: src/seahorse-key-manager.ui:465
 msgid "Filter"
 msgstr "Filter"
 
-#: src/seahorse-key-manager.ui:527
+#: src/seahorse-key-manager.ui:531
 msgid "This collection seems to be empty"
 msgstr "Denna samling verkar vara tom"
 
-#: src/seahorse-key-manager.ui:559
+#: src/seahorse-key-manager.ui:563
 msgid "Keyring is locked"
 msgstr "Nyckelringen är låst"
 
-#: src/seahorse-key-manager.ui:569
+#: src/seahorse-key-manager.ui:573
 msgid "Unlock"
 msgstr "Lås upp"
 
@@ -2409,20 +2448,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "Konfigurera nyckel för Secure Shell…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:385
+#: src/sidebar.vala:339
 msgid "_Lock"
 msgstr "_Lås"
 
-#: src/sidebar.vala:390
+#: src/sidebar.vala:344
 msgid "_Unlock"
 msgstr "Lås _upp"
 
 #. Properties item
-#: src/sidebar.vala:407
+#: src/sidebar.vala:361
 msgid "_Properties"
 msgstr "_Egenskaper"
 
-#: src/sidebar.vala:437
+#: src/sidebar.vala:391
 msgid "Couldn’t lock"
 msgstr "Kunde inte låsa"
 
@@ -2696,7 +2735,7 @@ msgstr "OpenSSH: %s"
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:245
+#: ssh/source.vala:253
 msgid "No private key file is available for this key."
 msgstr "Ingen privat nyckelfil finns tillgänglig för denna nyckel."
 
@@ -2862,17 +2901,11 @@ msgstr "Konfigurerar Secure Shell-nycklar…"
 #~ msgid "_New"
 #~ msgstr "_Ny"
 
-#~ msgid "_Quit"
-#~ msgstr "A_vsluta"
-
 #~ msgid "Close this program"
 #~ msgstr "Stäng detta program"
 
 #~ msgid "_New…"
 #~ msgstr "_Ny…"
-
-#~ msgid "Create a new key or item"
-#~ msgstr "Skapa en ny nyckel eller objekt"
 
 #~ msgid "_Import…"
 #~ msgstr "_Importera…"
