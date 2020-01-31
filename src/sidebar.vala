@@ -60,12 +60,6 @@ public class Seahorse.Sidebar : Gtk.ListBox {
             foreach (weak GLib.Object obj in backend.get_objects())
                 on_place_added(backend, obj);
         }
-
-        this.backends.sort((a, b) => {
-            int ordera = order_from_backend((Backend) a);
-            int orderb = order_from_backend((Backend) b);
-            return ordera - orderb;
-        });
     }
 
     private void on_place_added(Gcr.Collection? backend, GLib.Object place_obj) {
@@ -114,78 +108,36 @@ public class Seahorse.Sidebar : Gtk.ListBox {
 
     private void place_header_cb(Gtk.ListBoxRow row, Gtk.ListBoxRow? before) {
         Seahorse.Place place = ((SidebarItem) row).place;
-        string scheme = Uri.parse_scheme(place.uri);
 
         // We don't need a title iff
         // * there is no previous row
-        // * the previous row is from another backend
+        // * the previous row is in the same category
         if (before != null) {
             Seahorse.Place before_place = ((SidebarItem) before).place;
-            if (Uri.parse_scheme(before_place.uri) == scheme)
+            if (place.category == before_place.category)
                 return;
         }
 
-        // Find the backend that has the given scheme
-        foreach (var b in this.backends) {
-            if (place in b) {
-                var label = new Gtk.Label(b.label);
-                label.tooltip_text = b.description;
-                label.get_style_context().add_class("seahorse-sidebar-item-header");
-                label.xalign = 0f;
-                label.margin_start = 9;
-                label.margin_top = 6;
-                label.margin_bottom = 3;
-                label.show();
-                row.set_header(label);
-                return;
-            }
-        }
-
-        warning("Couldn't find backend for place %s", place.label);
+        var label = new Gtk.Label(place.category.to_string());
+        label.get_style_context().add_class("seahorse-sidebar-item-header");
+        label.xalign = 0f;
+        label.margin_start = 9;
+        label.margin_top = 6;
+        label.margin_bottom = 3;
+        label.show();
+        row.set_header(label);
     }
 
     private int compare_places(GLib.Object obj_a, GLib.Object obj_b) {
         Seahorse.Place a = (Seahorse.Place) obj_a;
         Seahorse.Place b = (Seahorse.Place) obj_b;
 
-        // First of all, order the backends (SSH vs GPG)
-        // Since there is no easy way to map a place to its original backend,
-        // we can use the URI scheme
-        var a_scheme = GLib.Uri.parse_scheme(a.uri);
-        var b_scheme = GLib.Uri.parse_scheme(b.uri);
-        if (a_scheme != b_scheme)
-            return order_from_scheme(b_scheme) - order_from_scheme(a_scheme);
+        // First of all, order the categories
+        if (a.category != b.category)
+            return ((int) a.category) - ((int) b.category);
 
-        // In the same backend, order alphabetically
+        // In the same category, order alphabetically
         return a.label.casefold().collate(b.label.casefold());
-    }
-
-    private struct BackendEntry {
-        unowned string name;
-        unowned string scheme;
-    }
-    // Note that this is really the reverse order
-    const BackendEntry[] BACKEND_ORDER = {
-        { "pkcs11", "pkcs11" },
-        { "pgp", "gnupg" },
-        { "ssh", "openssh" },
-        { "gkr", "secret-service" },
-    };
-
-    private static int order_from_backend (Backend backend) {
-        for (int i = 0; i < BACKEND_ORDER.length; i++)
-            if (backend.name == BACKEND_ORDER[i].name)
-                return i;
-
-        return BACKEND_ORDER.length + 1;
-    }
-
-    private static int order_from_scheme(string scheme) {
-        for (int i = 0; i < BACKEND_ORDER.length; i++)
-            if (scheme == BACKEND_ORDER[i].scheme)
-                return i;
-
-        return BACKEND_ORDER.length + 1;
     }
 
     private void on_row_selected(Gtk.ListBoxRow? row) {

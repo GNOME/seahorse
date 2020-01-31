@@ -100,6 +100,10 @@ public class Token : GLib.Object, Gcr.Collection, Place, Lockable {
 		}
 	}
 
+    public Place.Category category {
+        get { return Place.Category.CERTIFICATES; }
+    }
+
     public GLib.ActionGroup? actions {
         owned get { return null; }
     }

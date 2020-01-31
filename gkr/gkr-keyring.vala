@@ -47,6 +47,10 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 		owned get { return new GLib.ThemedIcon("folder"); }
 	}
 
+    public Place.Category category {
+        get { return Place.Category.PASSWORDS; }
+    }
+
     private GLib.ActionGroup? _actions = null;
     public GLib.ActionGroup? actions {
         owned get { return this._actions; }

@@ -55,6 +55,10 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         owned get { return new ThemedIcon(Gcr.ICON_HOME_DIRECTORY); }
     }
 
+    public Place.Category category {
+        get { return Place.Category.KEYS; }
+    }
+
     public GLib.ActionGroup? actions {
         owned get { return null; }
     }

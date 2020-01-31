@@ -23,10 +23,36 @@
  * An example of this is a keyring.
  */
 public interface Seahorse.Place : Gcr.Collection {
+
+    /**
+     * We generally divide a SeahorsePlace in some high level categories.
+     *
+     * These are then used to group places in the sidebar.
+     */
+    public enum Category {
+        PASSWORDS,
+        KEYS,
+        CERTIFICATES;
+
+        public unowned string to_string() {
+            switch (this) {
+                case Category.PASSWORDS:
+                    return _("Passwords");
+                case Category.KEYS:
+                    return _("Keys");
+                case Category.CERTIFICATES:
+                    return _("Certificates");
+            }
+
+            return_val_if_reached(null);
+        }
+    }
+
     public abstract string label { owned get; set; }
     public abstract string description { owned get; }
     public abstract string uri { owned get; }
     public abstract Icon icon { owned get; }
+    public abstract Category category { owned get; }
 
     /**
      * In some cases, we do not want to show the Place in the sidebar

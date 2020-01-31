@@ -47,6 +47,7 @@ enum {
     PROP_LABEL,
     PROP_DESCRIPTION,
     PROP_ICON,
+    PROP_CATEGORY,
     PROP_KEY_SERVER,
     PROP_URI,
     PROP_ACTIONS,
@@ -93,7 +94,8 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 
 	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
-	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+    g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+    g_object_class_override_property (gobject_class, PROP_CATEGORY, "category");
 	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
 	g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
 	g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
@@ -186,6 +188,12 @@ seahorse_server_source_get_icon (SeahorsePlace* self)
 	return g_themed_icon_new (NULL);
 }
 
+static SeahorsePlaceCategory
+seahorse_server_source_get_category (SeahorsePlace *place)
+{
+    return SEAHORSE_PLACE_CATEGORY_KEYS;
+}
+
 static GActionGroup *
 seahorse_server_source_get_actions (SeahorsePlace* self)
 {
@@ -213,16 +221,17 @@ seahorse_server_source_get_show_if_empty (SeahorsePlace *place)
 static void
 seahorse_server_source_place_iface (SeahorsePlaceIface *iface)
 {
-	iface->load = seahorse_server_source_load;
-	iface->load_finish = seahorse_server_source_load_finish;
+    iface->load = seahorse_server_source_load;
+    iface->load_finish = seahorse_server_source_load_finish;
     iface->get_actions = seahorse_server_source_get_actions;
     iface->get_action_prefix = seahorse_server_source_get_action_prefix;
     iface->get_menu_model = seahorse_server_source_get_menu_model;
-	iface->get_description = seahorse_server_source_get_description;
-	iface->get_icon = seahorse_server_source_get_icon;
-	iface->get_label = seahorse_server_source_get_label;
-	iface->set_label = seahorse_server_source_set_label;
-	iface->get_uri = seahorse_server_source_get_uri;
+    iface->get_description = seahorse_server_source_get_description;
+    iface->get_icon = seahorse_server_source_get_icon;
+    iface->get_category = seahorse_server_source_get_category;
+    iface->get_label = seahorse_server_source_get_label;
+    iface->set_label = seahorse_server_source_set_label;
+    iface->get_uri = seahorse_server_source_get_uri;
     iface->get_show_if_empty = seahorse_server_source_get_show_if_empty;
 }
 
@@ -298,9 +307,12 @@ seahorse_server_get_property (GObject *obj,
 	case PROP_URI:
 		g_value_take_string (value, seahorse_server_source_get_uri (place));
 		break;
-	case PROP_ICON:
-		g_value_take_object (value, seahorse_server_source_get_icon (place));
-		break;
+    case PROP_ICON:
+        g_value_take_object (value, seahorse_server_source_get_icon (place));
+        break;
+    case PROP_CATEGORY:
+        g_value_set_enum (value, seahorse_server_source_get_category (place));
+        break;
     case PROP_ACTIONS:
         g_value_set_object (value, seahorse_server_source_get_actions (place));
         break;
