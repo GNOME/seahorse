@@ -30,14 +30,15 @@
 #include <glib/gi18n.h>
 
 enum {
-	PROP_0,
-	PROP_LABEL,
-	PROP_DESCRIPTION,
-	PROP_ICON,
-	PROP_URI,
-	PROP_ACTIONS,
-	PROP_ACTION_PREFIX,
-	PROP_MENU_MODEL,
+    PROP_0,
+    PROP_LABEL,
+    PROP_DESCRIPTION,
+    PROP_ICON,
+    PROP_CATEGORY,
+    PROP_URI,
+    PROP_ACTIONS,
+    PROP_ACTION_PREFIX,
+    PROP_MENU_MODEL,
     PROP_SHOW_IF_EMPTY,
     N_PROPS
 };
@@ -114,6 +115,12 @@ seahorse_unknown_source_get_icon (SeahorsePlace* self)
 	return NULL;
 }
 
+static SeahorsePlaceCategory
+seahorse_unknown_source_get_category (SeahorsePlace *place)
+{
+    return SEAHORSE_PLACE_CATEGORY_KEYS;
+}
+
 static GActionGroup *
 seahorse_unknown_source_get_actions (SeahorsePlace* self)
 {
@@ -156,9 +163,12 @@ seahorse_unknown_source_get_property (GObject *obj,
 	case PROP_URI:
 		g_value_take_string (value, seahorse_unknown_source_get_uri (place));
 		break;
-	case PROP_ICON:
-		g_value_take_object (value, seahorse_unknown_source_get_icon (place));
-		break;
+    case PROP_ICON:
+        g_value_take_object (value, seahorse_unknown_source_get_icon (place));
+        break;
+    case PROP_CATEGORY:
+        g_value_set_enum (value, seahorse_unknown_source_get_category (place));
+        break;
     case PROP_ACTIONS:
         g_value_take_object (value, seahorse_unknown_source_get_actions (place));
         break;
@@ -214,13 +224,14 @@ seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
 	gobject_class->set_property = seahorse_unknown_source_set_property;
 	gobject_class->finalize = seahorse_unknown_source_finalize;
 
-	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
-	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
-	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
-	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
-	g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
-	g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
-	g_object_class_override_property (gobject_class, PROP_URI, "uri");
+    g_object_class_override_property (gobject_class, PROP_LABEL, "label");
+    g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+    g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+    g_object_class_override_property (gobject_class, PROP_CATEGORY, "category");
+    g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+    g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
+    g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
+    g_object_class_override_property (gobject_class, PROP_URI, "uri");
     g_object_class_override_property (gobject_class, PROP_SHOW_IF_EMPTY, "show-if-empty");
 }
 
@@ -258,15 +269,16 @@ seahorse_unknown_source_collection_iface (GcrCollectionIface *iface)
 static void
 seahorse_unknown_source_place_iface (SeahorsePlaceIface *iface)
 {
-	iface->load = seahorse_unknown_source_load;
-	iface->load_finish = seahorse_unknown_source_load_finish;
-	iface->get_actions = seahorse_unknown_source_get_actions;
-	iface->get_menu_model = seahorse_unknown_source_get_menu_model;
-	iface->get_description = seahorse_unknown_source_get_description;
-	iface->get_icon = seahorse_unknown_source_get_icon;
-	iface->get_label = seahorse_unknown_source_get_label;
-	iface->set_label = seahorse_unknown_source_set_label;
-	iface->get_uri = seahorse_unknown_source_get_uri;
+    iface->load = seahorse_unknown_source_load;
+    iface->load_finish = seahorse_unknown_source_load_finish;
+    iface->get_actions = seahorse_unknown_source_get_actions;
+    iface->get_menu_model = seahorse_unknown_source_get_menu_model;
+    iface->get_description = seahorse_unknown_source_get_description;
+    iface->get_icon = seahorse_unknown_source_get_icon;
+    iface->get_category = seahorse_unknown_source_get_category;
+    iface->get_label = seahorse_unknown_source_get_label;
+    iface->set_label = seahorse_unknown_source_set_label;
+    iface->get_uri = seahorse_unknown_source_get_uri;
     iface->get_show_if_empty = seahorse_unknown_source_get_show_if_empty;
 }
 

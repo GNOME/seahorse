@@ -47,11 +47,12 @@
 #include <locale.h>
 
 enum {
-	PROP_0,
-	PROP_LABEL,
-	PROP_DESCRIPTION,
-	PROP_ICON,
-	PROP_URI,
+    PROP_0,
+    PROP_LABEL,
+    PROP_DESCRIPTION,
+    PROP_ICON,
+    PROP_CATEGORY,
+    PROP_URI,
     PROP_ACTIONS,
     PROP_ACTION_PREFIX,
     PROP_MENU_MODEL,
@@ -777,6 +778,12 @@ seahorse_gpgme_keyring_get_icon (SeahorsePlace *place)
 	return g_themed_icon_new (GCR_ICON_GNUPG);
 }
 
+static SeahorsePlaceCategory
+seahorse_gpgme_keyring_get_category (SeahorsePlace *place)
+{
+    return SEAHORSE_PLACE_CATEGORY_KEYS;
+}
+
 static GActionGroup *
 seahorse_gpgme_keyring_get_actions (SeahorsePlace *place)
 {
@@ -825,9 +832,12 @@ seahorse_gpgme_keyring_get_property (GObject *obj,
 	case PROP_DESCRIPTION:
 		g_value_take_string (value, seahorse_gpgme_keyring_get_description (place));
 		break;
-	case PROP_ICON:
-		g_value_take_object (value, seahorse_gpgme_keyring_get_icon (place));
-		break;
+    case PROP_ICON:
+        g_value_take_object (value, seahorse_gpgme_keyring_get_icon (place));
+        break;
+    case PROP_CATEGORY:
+        g_value_set_enum (value, seahorse_gpgme_keyring_get_category (place));
+        break;
 	case PROP_URI:
 		g_value_take_string (value, seahorse_gpgme_keyring_get_uri (place));
 		break;
@@ -922,6 +932,7 @@ seahorse_gpgme_keyring_class_init (SeahorseGpgmeKeyringClass *klass)
 	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
 	g_object_class_override_property (gobject_class, PROP_URI, "uri");
 	g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+    g_object_class_override_property (gobject_class, PROP_CATEGORY, "category");
     g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
     g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
     g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
@@ -937,7 +948,8 @@ seahorse_gpgme_keyring_place_iface (SeahorsePlaceIface *iface)
     iface->get_action_prefix = seahorse_gpgme_keyring_get_action_prefix;
     iface->get_menu_model = seahorse_gpgme_keyring_get_menu_model;
 	iface->get_description = seahorse_gpgme_keyring_get_description;
-	iface->get_icon = seahorse_gpgme_keyring_get_icon;
+    iface->get_icon = seahorse_gpgme_keyring_get_icon;
+    iface->get_category = seahorse_gpgme_keyring_get_category;
 	iface->get_label = seahorse_gpgme_keyring_get_label;
 	iface->set_label = seahorse_gpgme_keyring_set_label;
 	iface->get_uri = seahorse_gpgme_keyring_get_uri;
