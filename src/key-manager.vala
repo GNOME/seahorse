@@ -218,10 +218,6 @@ public class Seahorse.KeyManager : Catalog {
         this.new_item_button.activate();
     }
 
-    private void on_toggle_action(SimpleAction action, GLib.Variant? param) {
-        action.change_state(!action.state.get_boolean());
-    }
-
     [GtkCallback]
     private void on_filter_changed(Gtk.Editable entry) {
         this.item_list.filter_text = this.filter_entry.text;
