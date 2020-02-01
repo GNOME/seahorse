@@ -151,7 +151,7 @@ seahorse_keyserver_results_row_new (GObject *item)
     gtk_style_context_add_class (gtk_widget_get_style_context (import_button),
                                  "flat");
     if (item_exportable)
-        gtk_widget_set_tooltip_text (import_button, _("Import"));
+        gtk_widget_set_tooltip_text (import_button, _("_Import"));
     else
         gtk_widget_set_tooltip_text (import_button, _("Can’t import key"));
     gtk_grid_attach (GTK_GRID (grid), g_steal_pointer (&import_button), 1, 0, 1, 1);
