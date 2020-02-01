@@ -35,7 +35,7 @@ public class Seahorse.ImportDialog : Gtk.Dialog {
         button.show();
         add_action_widget(button, Gtk.ResponseType.CANCEL);
 
-        this.import = new Gcr.ImportButton(_("Import"));
+        this.import = new Gcr.ImportButton(_("_Import"));
         this.import.halign = Gtk.Align.END;
         this.import.visible = true;
         this.import.get_style_context().add_class("suggested-action");
