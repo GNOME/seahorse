@@ -39,7 +39,7 @@ pgp_sources = [
 pgp_dependencies = [
   glib_deps,
   gcr,
-  gpgme,
+  gpgme_dep,
   common_dep,
 ]
 

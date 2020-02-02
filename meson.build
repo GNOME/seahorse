@@ -1,6 +1,6 @@
 project('seahorse', ['vala', 'c'],
   version: '3.35.1',
-  meson_version: '>= 0.49',
+  meson_version: '>= 0.51',
   license: 'GPL2+',
 )
 
@@ -37,7 +37,6 @@ endif
 # Dependencies
 min_glib_version = '2.44'
 min_gcr_version = '3.11.91'
-min_gpgme_version = '1.7.0'
 accepted_gpg_versions = [ '2.0.12', '2.1.4', '2.2.0' ]
 gpg_check_version = find_program('build-aux' / 'gpg_check_version.py')
 
@@ -76,22 +75,14 @@ posix = valac.find_library('posix')
 ssh_bin = find_program('ssh')
 ssh_keygen = find_program('ssh-keygen')
 gpg_bin = find_program('gpg2', 'gpg', required: with_pgp)
-gpgme = cc.find_library('gpgme', required: with_pgp)
-gpgme_config = find_program('gpgme-config', required: with_pgp)
+gpgme_dep = dependency('gpgme', version: '>= 1.7.0', required: with_pgp)
 
 if with_pgp
-  gpg_version_check = run_command([gpg_check_version, gpg_bin.path(), 'false', accepted_gpg_versions ])
+  gpg_version_check = run_command([gpg_check_version, gpg_bin.path(), accepted_gpg_versions ])
   gpg_version = gpg_version_check.stdout()
   message('GnuPG Version: @0@'.format(gpg_version))
   if check_compatible_gpg and gpg_version_check.returncode() != 0
     error('Incompatible version of GnuPG. Accepted versions are: @0@'.format(accepted_gpg_versions))
-  endif
-
-  gpgme_version_check = run_command([gpg_check_version, gpgme_config.path(), 'true', min_gpgme_version ])
-  gpgme_version = gpgme_version_check.stdout()
-  message('GPGME version: @0@'.format(gpgme_version))
-  if check_compatible_gpg and gpgme_version_check.returncode() != 0
-    error('Incompatible version of GPGME. Minimal version required is @0@'.format(min_gpgme_version))
   endif
 endif
 
