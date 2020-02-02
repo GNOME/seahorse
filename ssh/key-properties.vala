@@ -36,11 +36,15 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
     [GtkChild]
     private Gtk.Button export_button;
     [GtkChild]
+    private Gtk.Button copy_button;
+    [GtkChild]
     private Gtk.Label fingerprint_label;
     [GtkChild]
     private Gtk.Label algo_label;
     [GtkChild]
     private Gtk.Label location_label;
+    [GtkChild]
+    private Gtk.Label pubkey_label;
     [GtkChild]
     private Gtk.Label key_length_label;
 
@@ -57,6 +61,7 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         if (key.usage != Seahorse.Usage.PRIVATE_KEY) {
             this.passphrase_button.visible = false;
             this.export_button.visible = false;
+            this.copy_button.visible = false;
         }
 
         this.key.notify.connect(() => update_ui());
@@ -75,6 +80,7 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         this.algo_label.label = this.key.get_algo().to_string() ?? _("Unknown type");
         this.location_label.label = this.key.get_location();
         this.key_length_label.label = "%u".printf(this.key.get_strength());
+        this.pubkey_label.label = this.key.pubkey;
 
         this.updating_ui = false;
     }
@@ -188,4 +194,11 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
         }
     }
 
+    [GtkCallback]
+    private void on_ssh_copy_button_clicked (Gtk.Widget widget) {
+        var display = widget.get_display ();
+        var clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+
+        clipboard.set_text(this.key.pubkey, -1);
+    }
 }
