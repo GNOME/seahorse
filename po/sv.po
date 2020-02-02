@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-01-31 08:50+0000\n"
-"PO-Revision-Date: 2020-01-31 13:41+0100\n"
+"POT-Creation-Date: 2020-02-01 12:59+0000\n"
+"PO-Revision-Date: 2020-02-01 16:05+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -63,11 +63,12 @@ msgstr "A_vbryt"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:352
+#: src/sidebar.vala:352
 msgid "_Delete"
 msgstr "_Ta bort"
 
 #: common/exportable.vala:191 pgp/seahorse-pgp-private-key-properties.ui:909
+#: pkcs11/seahorse-pkcs11-properties.ui:33
 #: ssh/seahorse-ssh-key-properties.ui:280
 msgid "Export"
 msgstr "Exportera"
@@ -89,6 +90,18 @@ msgstr "_OK"
 #: common/passphrase-prompt.vala:145 ssh/seahorse-ssh-askpass.c:117
 msgid "Password:"
 msgstr "Lösenord:"
+
+#: common/place.vala:40 gkr/gkr-backend.vala:39
+msgid "Passwords"
+msgstr "Lösenord"
+
+#: common/place.vala:42
+msgid "Keys"
+msgstr "Nycklar"
+
+#: common/place.vala:44 pkcs11/seahorse-pkcs11-backend.c:207
+msgid "Certificates"
+msgstr "Certifikat"
 
 #: common/prefs.vala:42
 msgid "Preferences"
@@ -410,10 +423,6 @@ msgstr "Lösenord och nycklar"
 msgid "keyring;encryption;security;sign;ssh;"
 msgstr "nyckelring;kryptering;säkerhet;signera;ssh;"
 
-#: gkr/gkr-backend.vala:39
-msgid "Passwords"
-msgstr "Lösenord"
-
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Lagrade personliga lösenord, inloggningsuppgifter och hemligheter"
@@ -425,6 +434,47 @@ msgstr "Kunde inte låsa upp"
 #: gkr/gkr-item-add.vala:137
 msgid "Couldn’t add item"
 msgstr "Kunde inte lägga till objekt"
+
+#: gkr/gkr-item-info.vala:30
+msgid "Password or Secret"
+msgstr "Lösenord eller hemlighet"
+
+#: gkr/gkr-item-info.vala:83
+msgid "Network connection secret"
+msgstr "Hemlighet för nätverksanslutning"
+
+#: gkr/gkr-item-info.vala:90
+msgid "Wi-Fi password"
+msgstr "Wi-Fi-lösenord"
+
+#: gkr/gkr-item-info.vala:103
+msgid "Network password"
+msgstr "Nätverkslösenord"
+
+#: gkr/gkr-item-info.vala:192
+msgid "GNOME Web password"
+msgstr "Lösenord för GNOME Webb"
+
+#: gkr/gkr-item-info.vala:212
+msgid "Google Chrome password"
+msgstr "Lösenord för Google Chrome"
+
+#: gkr/gkr-item-info.vala:246
+msgid "Instant messaging password"
+msgstr "Lösenord för snabbmeddelanden"
+
+#. Translators: This should be the same as the string in empathy
+#: gkr/gkr-item-info.vala:251
+msgid "IM account password for "
+msgstr "Lösenord för snabbmeddelandekonto för "
+
+#: gkr/gkr-item-info.vala:284
+msgid "Telepathy password"
+msgstr "Lösenord för Telepathy"
+
+#: gkr/gkr-item-info.vala:320
+msgid "GNOME Online Accounts password"
+msgstr "Lösenord för GNOME Nätkonton"
 
 #: gkr/gkr-item-properties.vala:106
 msgid "Save changes for this item?"
@@ -471,73 +521,32 @@ msgstr "Kunde inte ställa in beskrivning."
 msgid "Error deleting the password."
 msgstr "Fel vid borttagning av lösenordet."
 
-#. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item.vala:425
-msgid "IM account password for "
-msgstr "Lösenord för snabbmeddelandekonto för "
-
-#: gkr/gkr-item.vala:485
-msgid "Wi-Fi password"
-msgstr "Wi-Fi-lösenord"
-
-#: gkr/gkr-item.vala:490
-msgid "Password or secret"
-msgstr "Lösenord eller hemlighet"
-
-#: gkr/gkr-item.vala:491
-msgid "Network password"
-msgstr "Nätverkslösenord"
-
-#: gkr/gkr-item.vala:492
+#: gkr/gkr-item.vala:165
 msgid "Stored note"
 msgstr "Lagrad anteckning"
 
-#: gkr/gkr-item.vala:493
+#: gkr/gkr-item.vala:167
 msgid "Keyring password"
 msgstr "Lösenord för nyckelring"
 
-#: gkr/gkr-item.vala:494
+#: gkr/gkr-item.vala:169
 msgid "Encryption key password"
 msgstr "Lösenord för krypteringsnyckel"
 
-#: gkr/gkr-item.vala:495
+#: gkr/gkr-item.vala:171
 msgid "Key storage password"
 msgstr "Lösenord för nyckellagring"
 
-#: gkr/gkr-item.vala:496
-msgid "GNOME Web password"
-msgstr "Lösenord för GNOME Webb"
-
-#: gkr/gkr-item.vala:497
-msgid "Google Chrome password"
-msgstr "Lösenord för Google Chrome"
-
-#: gkr/gkr-item.vala:498
-msgid "GNOME Online Accounts password"
-msgstr "Lösenord för GNOME Nätkonton"
-
-#: gkr/gkr-item.vala:499
-msgid "Telepathy password"
-msgstr "Lösenord för Telepathy"
-
-#: gkr/gkr-item.vala:500
-msgid "Instant messaging password"
-msgstr "Lösenord för snabbmeddelanden"
-
-#: gkr/gkr-item.vala:501
+#: gkr/gkr-item.vala:173
 msgid "Network Manager secret"
 msgstr "Hemlighet för Nätverkshanterare"
 
-#: gkr/gkr-item.vala:502
-msgid "Network connection secret"
-msgstr "Hemlighet för nätverksanslutning"
-
-#: gkr/gkr-item.vala:565
+#: gkr/gkr-item.vala:312
 #, c-format
 msgid "Are you sure you want to delete the password “%s”?"
 msgstr "Är du säker på att du vill ta bort lösenordet ”%s”?"
 
-#: gkr/gkr-item.vala:567
+#: gkr/gkr-item.vala:314
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
@@ -1398,8 +1407,8 @@ msgid "Key import succeeded"
 msgstr "Nyckelimport lyckades"
 
 #: pgp/seahorse-keyserver-results.c:154 src/import-dialog.vala:38
-msgid "Import"
-msgstr "Importera"
+msgid "_Import"
+msgstr "_Importera"
 
 #: pgp/seahorse-keyserver-results.c:156
 msgid "Can’t import key"
@@ -1811,6 +1820,7 @@ msgstr "Signera"
 
 #. Translators: This text refers to deleting an item from its type's backing store
 #: pgp/seahorse-pgp-private-key-properties.ui:490
+#: pkcs11/seahorse-pkcs11-properties.ui:22
 #: src/seahorse-key-manager-widgets.ui:12
 msgid "Delete"
 msgstr "Ta bort"
@@ -2158,37 +2168,17 @@ msgstr "Namnlös privat nyckel"
 msgid "Private key"
 msgstr "Privat nyckel"
 
-#: pkcs11/pkcs11-properties.vala:134
+#: pkcs11/pkcs11-properties.vala:98
 msgid "Unnamed"
 msgstr "Namnlös"
 
-#: pkcs11/pkcs11-properties.vala:165
+#: pkcs11/pkcs11-properties.vala:130
 msgid "Failed to export certificate"
 msgstr "Misslyckades med att exportera certifikatet"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:426
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:426
 msgid "Couldn’t delete"
 msgstr "Kunde inte ta bort"
-
-#: pkcs11/pkcs11-properties.vala:199
-msgid "_Export"
-msgstr "E_xportera"
-
-#: pkcs11/pkcs11-properties.vala:200
-msgid "Export the certificate"
-msgstr "Exportera certifikatet"
-
-#: pkcs11/pkcs11-properties.vala:202
-msgid "Delete this certificate or key"
-msgstr "Ta bort detta certifikat eller nyckel"
-
-#: pkcs11/pkcs11-properties.vala:203
-msgid "Request _Certificate"
-msgstr "Begär _certifikat"
-
-#: pkcs11/pkcs11-properties.vala:204
-msgid "Create a certificate request file for this key"
-msgstr "Skapa en fil för certifikatbegäran för denna nyckel"
 
 #: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.ui:193
 msgid "Create"
@@ -2223,10 +2213,6 @@ msgctxt "Label"
 msgid "Unknown"
 msgstr "Okänd"
 
-#: pkcs11/seahorse-pkcs11-backend.c:207
-msgid "Certificates"
-msgstr "Certifikat"
-
 #: pkcs11/seahorse-pkcs11-backend.c:213
 msgid "X.509 certificates and related keys"
 msgstr "X.509-certifikat och relaterade nycklar"
@@ -2250,6 +2236,22 @@ msgstr "Lagrad i:"
 #: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
 msgid "Key _Strength (bits):"
 msgstr "Nyckel_styrka (bitar):"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:23
+msgid "Delete this certificate or key"
+msgstr "Ta bort detta certifikat eller nyckel"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:34
+msgid "Export the certificate"
+msgstr "Exportera certifikatet"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:41
+msgid "Request Certificate"
+msgstr "Begär certifikat"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:42
+msgid "Create a certificate request file for this key"
+msgstr "Skapa en fil för certifikatbegäran för denna nyckel"
 
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
@@ -2747,6 +2749,12 @@ msgstr "Kunde inte konfigurera Secure Shell-nycklar på fjärrdator."
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigurerar Secure Shell-nycklar…"
 
+#~ msgid "Import"
+#~ msgstr "Importera"
+
+#~ msgid "_Export"
+#~ msgstr "E_xportera"
+
 #~ msgid "_Combine all keyrings"
 #~ msgstr "_Kombinera alla nyckelringar"
 
@@ -2863,9 +2871,6 @@ msgstr "Konfigurerar Secure Shell-nycklar…"
 
 #~ msgid "Close this window"
 #~ msgstr "Stäng detta fönster"
-
-#~ msgid "_Import"
-#~ msgstr "_Importera"
 
 #~ msgid "Import selected keys to local key ring"
 #~ msgstr "Importera markerade nycklar till lokal nyckelring"
