@@ -39,6 +39,13 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
     }
 
     /**
+     * Public data for this key
+     */
+    public string? pubkey {
+        get { return (this.key_data != null) ? this.key_data.rawdata : null; }
+    }
+
+    /**
      * Description
      */
     public string description {
