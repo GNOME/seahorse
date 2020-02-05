@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-02-01 12:59+0000\n"
-"PO-Revision-Date: 2020-02-01 16:05+0100\n"
+"POT-Creation-Date: 2020-02-03 08:01+0000\n"
+"PO-Revision-Date: 2020-02-03 17:44+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -69,7 +69,7 @@ msgstr "_Ta bort"
 
 #: common/exportable.vala:191 pgp/seahorse-pgp-private-key-properties.ui:909
 #: pkcs11/seahorse-pkcs11-properties.ui:33
-#: ssh/seahorse-ssh-key-properties.ui:280
+#: ssh/seahorse-ssh-key-properties.ui:331
 msgid "Export"
 msgstr "Exportera"
 
@@ -1678,7 +1678,7 @@ msgstr "Kunde inte ta bort undernyckel"
 msgid "Unable to change trust"
 msgstr "Kunde inte ändra tillit"
 
-#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:185
+#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Kunde inte exportera nyckeln"
 
@@ -1797,7 +1797,7 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:363
-#: ssh/seahorse-ssh-key-properties.ui:294
+#: ssh/seahorse-ssh-key-properties.ui:344
 msgid "Change _Passphrase"
 msgstr "Ändra _lösenfras"
 
@@ -1860,7 +1860,7 @@ msgid "Technical Details"
 msgstr "Tekniska detaljer"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:726
-#: ssh/seahorse-ssh-key-properties.ui:174
+#: ssh/seahorse-ssh-key-properties.ui:173
 msgid "Fingerprint"
 msgstr "Fingeravtryck"
 
@@ -2527,41 +2527,41 @@ msgstr "256 bitar"
 msgid "Unknown key type!"
 msgstr "Okänd nyckeltyp!"
 
-#: ssh/key-properties.vala:75
+#: ssh/key-properties.vala:80
 msgid "Unknown type"
 msgstr "Okänd typ"
 
-#: ssh/key-properties.vala:99
+#: ssh/key-properties.vala:105
 msgid "Couldn’t rename key."
 msgstr "Kunde inte byta namn på nyckel."
 
-#: ssh/key-properties.vala:125
+#: ssh/key-properties.vala:131
 msgid "Couldn’t change authorization for key."
 msgstr "Kunde inte ändra behörighet för nyckel."
 
-#: ssh/key-properties.vala:141
+#: ssh/key-properties.vala:147
 msgid "Couldn’t change passphrase for key."
 msgstr "Kunde inte ändra lösenfras för nyckel."
 
-#: ssh/key-properties.vala:165
+#: ssh/key-properties.vala:171
 msgid "Error deleting the SSH key."
 msgstr "Fel vid borttagning av SSH-nyckeln."
 
-#: ssh/key.vala:45
+#: ssh/key.vala:52
 msgid "Personal SSH key"
 msgstr "Personlig SSH-nyckel"
 
-#: ssh/key.vala:45
+#: ssh/key.vala:52
 msgid "SSH key"
 msgstr "SSH-nyckel"
 
 #. No names when not even the fingerpint loaded
-#: ssh/key.vala:115
+#: ssh/key.vala:122
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Oläsbar Secure Shell-nyckel)"
 
 #. No comment, but loaded
-#: ssh/key.vala:118 ssh/key.vala:122
+#: ssh/key.vala:125 ssh/key.vala:129
 msgid "Secure Shell Key"
 msgstr "Secure Shell-nyckel"
 
@@ -2661,37 +2661,45 @@ msgstr "_Skapa bara nyckel"
 msgid "_Create and Set Up"
 msgstr "_Skapa och konfigurera"
 
-#: ssh/seahorse-ssh-key-properties.ui:16
+#: ssh/seahorse-ssh-key-properties.ui:15
 msgid "SSH Key Properties"
 msgstr "SSH-nyckelegenskaper"
 
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:55
+#: ssh/seahorse-ssh-key-properties.ui:54
 msgctxt "name-of-ssh-key"
 msgid "Name"
 msgstr "Namn"
 
-#: ssh/seahorse-ssh-key-properties.ui:88
+#: ssh/seahorse-ssh-key-properties.ui:87
 msgid "Algorithm"
 msgstr "Algoritm"
 
-#: ssh/seahorse-ssh-key-properties.ui:115
+#: ssh/seahorse-ssh-key-properties.ui:114
 msgid "Key Length"
 msgstr "Nyckellängd"
 
-#: ssh/seahorse-ssh-key-properties.ui:142
+#: ssh/seahorse-ssh-key-properties.ui:141
 msgid "Location"
 msgstr "Plats"
 
-#: ssh/seahorse-ssh-key-properties.ui:220
+#: ssh/seahorse-ssh-key-properties.ui:228
+msgid "Public Key"
+msgstr "Öppen nyckel"
+
+#: ssh/seahorse-ssh-key-properties.ui:242
+msgid "Copy public key to clipboard"
+msgstr "Kopiera öppen nyckel till urklipp"
+
+#: ssh/seahorse-ssh-key-properties.ui:271
 msgid "Remote Access"
 msgstr "Fjärråtkomst"
 
-#: ssh/seahorse-ssh-key-properties.ui:233
+#: ssh/seahorse-ssh-key-properties.ui:284
 msgid "Allows accessing this computer remotely"
 msgstr "Tillåter fjärråtkomst till denna dator"
 
-#: ssh/seahorse-ssh-key-properties.ui:311
+#: ssh/seahorse-ssh-key-properties.ui:360
 msgid "Delete SSH Key"
 msgstr "Ta bort SSH-nyckel"
 
@@ -2818,9 +2826,6 @@ msgstr "Konfigurerar Secure Shell-nycklar…"
 #~ msgid "_Copy"
 #~ msgstr "_Kopiera"
 
-#~ msgid "Copy to the clipboard"
-#~ msgstr "Kopiera till urklipp"
-
 #~ msgid "Delete selected items"
 #~ msgstr "Ta bort markerade objekt"
 
@@ -2899,9 +2904,6 @@ msgstr "Konfigurerar Secure Shell-nycklar…"
 
 #~ msgid "Encrypt files and email to the key’s owner"
 #~ msgstr "Kryptera filer och e-post till ägaren av nyckeln"
-
-#~ msgid "Public PGP Key"
-#~ msgstr "Öppen PGP-nyckel"
 
 #~ msgid "_New"
 #~ msgstr "_Ny"
