@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-02-01 12:59+0000\n"
-"PO-Revision-Date: 2020-02-02 19:39+0200\n"
+"POT-Creation-Date: 2020-02-06 23:13+0000\n"
+"PO-Revision-Date: 2020-02-08 14:20+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -76,7 +76,7 @@ msgstr "Pa_šalinti"
 
 #: common/exportable.vala:191 pgp/seahorse-pgp-private-key-properties.ui:909
 #: pkcs11/seahorse-pkcs11-properties.ui:33
-#: ssh/seahorse-ssh-key-properties.ui:280
+#: ssh/seahorse-ssh-key-properties.ui:331
 msgid "Export"
 msgstr "Eksportuoti"
 
@@ -103,7 +103,6 @@ msgid "Passwords"
 msgstr "Slaptažodžiai"
 
 #: common/place.vala:42
-#| msgid "PGP Keys"
 msgid "Keys"
 msgstr "Raktai"
 
@@ -223,25 +222,21 @@ msgid "Overview"
 msgstr "Apžvalga"
 
 #: data/gtk/help-overlay.ui:14
-#| msgid "_Help"
 msgctxt "shortcut window"
 msgid "Help"
 msgstr "Žinynas"
 
 #: data/gtk/help-overlay.ui:21
-#| msgid "Create a new key or item"
 msgctxt "shortcut window"
 msgid "Create a new item"
 msgstr "Sukurti naują elementą"
 
 #: data/gtk/help-overlay.ui:28
-#| msgid "Import from file…"
 msgctxt "shortcut window"
 msgid "Import item from file"
 msgstr "Importuoti elementą iš failo…"
 
 #: data/gtk/help-overlay.ui:35
-#| msgid "_Search"
 msgctxt "shortcut window"
 msgid "Search"
 msgstr "Ieškoti"
@@ -252,7 +247,6 @@ msgid "Shortcut list"
 msgstr "Trumpinių sąrašas"
 
 #: data/gtk/help-overlay.ui:49
-#| msgid "_Quit"
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Išeiti"
@@ -450,7 +444,6 @@ msgid "Couldn’t add item"
 msgstr "Nepavyko pridėti elemento"
 
 #: gkr/gkr-item-info.vala:30
-#| msgid "Password or secret"
 msgid "Password or Secret"
 msgstr "Slaptažodis ar paslaptis"
 
@@ -1696,7 +1689,7 @@ msgstr "Nepavyko pašalinti antrinio rakto"
 msgid "Unable to change trust"
 msgstr "Nepavyko pakeisti pasitikėjimo reikšmės"
 
-#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:185
+#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Nepavyko eksportuoti rakto"
 
@@ -1815,7 +1808,7 @@ msgid "Comment"
 msgstr "Komentaras"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:363
-#: ssh/seahorse-ssh-key-properties.ui:294
+#: ssh/seahorse-ssh-key-properties.ui:344
 msgid "Change _Passphrase"
 msgstr "Pakeisti _slaptažodį"
 
@@ -1878,7 +1871,7 @@ msgid "Technical Details"
 msgstr "Techninės detalės"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:726
-#: ssh/seahorse-ssh-key-properties.ui:174
+#: ssh/seahorse-ssh-key-properties.ui:173
 msgid "Fingerprint"
 msgstr "Atspaudas"
 
@@ -2264,7 +2257,6 @@ msgid "Export the certificate"
 msgstr "Eksportuoti liudijimą"
 
 #: pkcs11/seahorse-pkcs11-properties.ui:41
-#| msgid "Request _Certificate"
 msgid "Request Certificate"
 msgstr "Prašyti liudijimo"
 
@@ -2545,41 +2537,41 @@ msgstr "256 bitai"
 msgid "Unknown key type!"
 msgstr "Nežinomas rakto tipas!"
 
-#: ssh/key-properties.vala:75
+#: ssh/key-properties.vala:80
 msgid "Unknown type"
 msgstr "Nežinomas tipas"
 
-#: ssh/key-properties.vala:99
+#: ssh/key-properties.vala:105
 msgid "Couldn’t rename key."
 msgstr "Nepavyko pervadinti rakto."
 
-#: ssh/key-properties.vala:125
+#: ssh/key-properties.vala:131
 msgid "Couldn’t change authorization for key."
 msgstr "Nepavyko pakeisti leidimų šiam raktui."
 
-#: ssh/key-properties.vala:141
+#: ssh/key-properties.vala:147
 msgid "Couldn’t change passphrase for key."
 msgstr "Nepavyko pakeisti slaptafrazės šiam raktui."
 
-#: ssh/key-properties.vala:165
+#: ssh/key-properties.vala:171
 msgid "Error deleting the SSH key."
 msgstr "Klaida trinant SSH raktą."
 
-#: ssh/key.vala:45
+#: ssh/key.vala:52
 msgid "Personal SSH key"
 msgstr "Asmeninis SSH raktas"
 
-#: ssh/key.vala:45
+#: ssh/key.vala:52
 msgid "SSH key"
 msgstr "SSH raktas"
 
 #. No names when not even the fingerpint loaded
-#: ssh/key.vala:115
+#: ssh/key.vala:122
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Nenuskaitomas saugaus prisijungimo (SSH) raktas)"
 
 #. No comment, but loaded
-#: ssh/key.vala:118 ssh/key.vala:122
+#: ssh/key.vala:125 ssh/key.vala:129
 msgid "Secure Shell Key"
 msgstr "Saugaus prisijungimo (SSH) raktas"
 
@@ -2680,37 +2672,47 @@ msgstr "_Tik sukurti raktą"
 msgid "_Create and Set Up"
 msgstr "_Sukurti ir nustatyti"
 
-#: ssh/seahorse-ssh-key-properties.ui:16
+#: ssh/seahorse-ssh-key-properties.ui:15
 msgid "SSH Key Properties"
 msgstr "SSH rakto savybės"
 
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:55
+#: ssh/seahorse-ssh-key-properties.ui:54
 msgctxt "name-of-ssh-key"
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: ssh/seahorse-ssh-key-properties.ui:88
+#: ssh/seahorse-ssh-key-properties.ui:87
 msgid "Algorithm"
 msgstr "Algoritmas"
 
-#: ssh/seahorse-ssh-key-properties.ui:115
+#: ssh/seahorse-ssh-key-properties.ui:114
 msgid "Key Length"
 msgstr "Rakto ilgis"
 
-#: ssh/seahorse-ssh-key-properties.ui:142
+#: ssh/seahorse-ssh-key-properties.ui:141
 msgid "Location"
 msgstr "Vieta"
 
-#: ssh/seahorse-ssh-key-properties.ui:220
+#: ssh/seahorse-ssh-key-properties.ui:228
+#| msgid "Public PGP Key"
+msgid "Public Key"
+msgstr "Viešas raktas"
+
+#: ssh/seahorse-ssh-key-properties.ui:242
+#| msgid "Copy to the clipboard"
+msgid "Copy public key to clipboard"
+msgstr "Kopijuoti raktą į iškarpinę"
+
+#: ssh/seahorse-ssh-key-properties.ui:271
 msgid "Remote Access"
 msgstr "Nuotolinė prieiga"
 
-#: ssh/seahorse-ssh-key-properties.ui:233
+#: ssh/seahorse-ssh-key-properties.ui:284
 msgid "Allows accessing this computer remotely"
 msgstr "Leidžia pasiekti šį kompiuterį nuotoliniu būdu"
 
-#: ssh/seahorse-ssh-key-properties.ui:311
+#: ssh/seahorse-ssh-key-properties.ui:360
 msgid "Delete SSH Key"
 msgstr "Ištrinti SSH raktą"
 
@@ -2831,9 +2833,6 @@ msgstr "Konfigūruojami saugaus apvalkalo raktai…"
 #~ msgid "_Edit"
 #~ msgstr "_Keisti"
 
-#~ msgid "Copy to the clipboard"
-#~ msgstr "Kopijuoti į iškarpinę"
-
 #~ msgid "Delete selected items"
 #~ msgstr "Pašalinti pažymėtus elementus"
 
@@ -2906,9 +2905,6 @@ msgstr "Konfigūruojami saugaus apvalkalo raktai…"
 
 #~ msgid "Encrypt files and email to the key’s owner"
 #~ msgstr "Šifruoti failus ir siųsti el. paštu rakto savininkui"
-
-#~ msgid "Public PGP Key"
-#~ msgstr "Viešas PGP raktas"
 
 #~ msgid "- System Settings"
 #~ msgstr "- Sistemos nustatymai"
