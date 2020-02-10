@@ -29,6 +29,7 @@
 #include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
+#include "seahorse-gpgme-sign-dialog.h"
 #include "seahorse-pgp-backend.h"
 #include "seahorse-gpg-op.h"
 #include "seahorse-pgp-dialogs.h"
@@ -294,13 +295,17 @@ on_uids_sign (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorsePgpUid *uid;
+    SeahorseGpgmeSignDialog *dialog;
 
     uid = names_get_selected_uid (self);
-    if (uid != NULL) {
-        g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
-        seahorse_gpgme_sign_prompt_uid (SEAHORSE_GPGME_UID (uid),
-                                        GTK_WINDOW (self));
-    }
+    if (uid == NULL)
+        return;
+
+    g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
+
+    dialog = seahorse_gpgme_sign_dialog_new (SEAHORSE_OBJECT (uid));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -1424,9 +1429,14 @@ static void
 on_sign_key (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
+    SeahorseGpgmeSignDialog *dialog;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
-    seahorse_gpgme_sign_prompt (SEAHORSE_GPGME_KEY (self->key), GTK_WINDOW (self));
+
+    dialog = seahorse_gpgme_sign_dialog_new (SEAHORSE_OBJECT (self->key));
+
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 /* When the 'only display trusted' check is checked, hide untrusted rows */
