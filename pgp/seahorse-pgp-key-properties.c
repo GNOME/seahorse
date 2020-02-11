@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include "seahorse-pgp-dialogs.h"
+#include "seahorse-gpgme-add-subkey.h"
 #include "seahorse-gpgme-add-uid.h"
 #include "seahorse-gpgme-dialogs.h"
 #include "seahorse-gpgme-exporter.h"
@@ -942,10 +943,14 @@ static void
 on_subkeys_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
+    GtkDialog *dialog;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
-    seahorse_gpgme_add_subkey_new (SEAHORSE_GPGME_KEY (self->key),
-                                   GTK_WINDOW (self));
+
+    dialog = seahorse_gpgme_add_subkey_new (SEAHORSE_GPGME_KEY (self->key),
+                                            GTK_WINDOW (self));
+    gtk_dialog_run (dialog);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void

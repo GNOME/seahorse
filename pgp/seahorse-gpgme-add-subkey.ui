@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkAdjustment" id="length_spinner_adjustment">
+    <property name="value">1024</property>
+    <property name="lower">768</property>
+    <property name="upper">1024</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">128</property>
+  </object>
+  <template class="SeahorseGpgmeAddSubkey" parent="GtkDialog">
+    <property name="visible">True</property>
+    <property name="border_width">6</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="column-spacing">12</property>
+            <property name="row-spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">Key _Type</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">type_combo</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="type_combo">
+                <property name="visible">True</property>
+                <signal name="changed" handler="handler_gpgme_add_subkey_type_changed"/>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">Key _Length</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">length_spinner</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="length_spinner">
+                <property name="width_request">80</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">Length of Key</property>
+                <property name="adjustment">length_spinner_adjustment</property>
+                <property name="climb_rate">128</property>
+                <property name="snap_to_ticks">True</property>
+                <property name="numeric">True</property>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">Expiration Date</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="top_attach">2</property>
+                <property name="left_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="datetime_placeholder">
+                <property name="visible">True</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="top_attach">2</property>
+                <property name="left_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="never_expires_check">
+                <property name="label" translatable="yes">Never E_xpires</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip_text" translatable="yes">If key never expires</property>
+                <property name="use_underline">True</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="on_gpgme_add_subkey_never_expires_toggled"/>
+              </object>
+              <packing>
+                <property name="top_attach">2</property>
+                <property name="left_attach">2</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="cancelbutton1">
+                <property name="label">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="okbutton1">
+                <property name="label">gtk-ok</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip_text" translatable="yes">Generate a new subkey</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_gpgme_add_subkey_ok_clicked"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">cancelbutton1</action-widget>
+      <action-widget response="-5">okbutton1</action-widget>
+    </action-widgets>
+  </template>
+</interface>
