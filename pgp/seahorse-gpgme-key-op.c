@@ -1311,164 +1311,84 @@ seahorse_gpgme_key_op_add_uid_finish (SeahorseGpgmeKey *pkey,
     return g_task_propagate_boolean (G_TASK (result), error);
 }
 
-typedef enum {
-	ADD_KEY_START,
-	ADD_KEY_COMMAND,
-	ADD_KEY_TYPE,
-	ADD_KEY_LENGTH,
-	ADD_KEY_EXPIRES,
-	ADD_KEY_QUIT,
-	ADD_KEY_SAVE,
-	ADD_KEY_ERROR
-} AddKeyState;
-
-typedef struct {
-	guint               type;
-	guint               length;
-	time_t              expires;
-} SubkeyParm;
-
-/* action helper for adding a subkey */
-static gpgme_error_t
-add_key_action (guint state, gpointer data, int fd)
+void
+seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey *pkey,
+                                        SeahorseKeyEncType type,
+                                        guint length,
+                                        gulong expires,
+                                        GCancellable *cancellable,
+                                        GAsyncReadyCallback callback,
+                                        gpointer user_data)
 {
-	SubkeyParm *parm = (SubkeyParm*)data;
-	
-	switch (state) {
-		case ADD_KEY_COMMAND:
-            PRINT ((fd, "addkey"));
-			break;
-		case ADD_KEY_TYPE:
-            PRINTF ((fd, "%d", parm->type));
-			break;
-		case ADD_KEY_LENGTH:
-            PRINTF ((fd, "%d", parm->length));
-			break;
-		/* Get exact date or 0 */
-		case ADD_KEY_EXPIRES:
-            PRINT ((fd, (parm->expires) ?
-				seahorse_util_get_date_string (parm->expires) : "0"));
-			break;
-		case ADD_KEY_QUIT:
-            PRINT ((fd, QUIT));
-			break;
-		case ADD_KEY_SAVE:
-            PRINT ((fd, YES));
-			break;
-		default:
-			return GPG_E (GPG_ERR_GENERAL);
-	}
-	
-    PRINT ((fd, "\n"));
-	return GPG_OK;
+    g_autoptr(GTask) task = NULL;
+    gpgme_ctx_t gctx;
+    gpgme_error_t gerr;
+    g_autoptr(GError) error = NULL;
+    gpgme_key_t key;
+    const char *algo;
+    g_autofree char *algo_full = NULL;
+    g_autoptr(GSource) gsource = NULL;
+    guint flags = 0;
+
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (pkey));
+    g_return_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) ==
+                          SEAHORSE_USAGE_PRIVATE_KEY);
+
+    gctx = seahorse_gpgme_keyring_new_context (&gerr);
+
+    task = g_task_new (pkey, cancellable, callback, user_data);
+    gpgme_set_progress_cb (gctx, on_key_op_progress, task);
+    g_task_set_task_data (task, gctx, (GDestroyNotify) gpgme_release);
+
+    seahorse_progress_prep_and_begin (cancellable, task, NULL);
+    gsource = seahorse_gpgme_gsource_new (gctx, cancellable);
+    g_source_set_callback (gsource, (GSourceFunc)on_key_op_add_uid_complete,
+                           g_object_ref (task), g_object_unref);
+
+    /* Get the actual secret key */
+    key = seahorse_gpgme_key_get_private (pkey);
+
+    /* Get the algo string as GPG(ME) expects it */
+    algo = seahorse_gpgme_get_algo_string (type);
+    g_return_if_fail (algo);
+    algo_full = g_strdup_printf ("%s%u", algo, length);
+
+    /* 0 means "no expire" for us (GPGME picks a default otherwise) */
+    if (expires == 0)
+        flags |= GPGME_CREATE_NOEXPIRE;
+
+    /* Add usage flags */
+    switch (type) {
+        case RSA_SIGN:
+            flags |= GPGME_CREATE_SIGN;
+            break;
+        case RSA_ENCRYPT:
+            flags |= GPGME_CREATE_ENCR;
+            break;
+        default:
+            break;
+    }
+
+    if (gerr == 0)
+        gerr = gpgme_op_createsubkey_start (gctx, key, algo_full, 0, expires, flags);
+
+    if (seahorse_gpgme_propagate_error (gerr, &error)) {
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
+
+    g_source_attach (gsource, g_main_context_default ());
 }
 
-/* transition helper for adding a subkey */
-static guint
-add_key_transit (guint current_state, gpgme_status_code_t status,
-		 const gchar *args, gpointer data, gpgme_error_t *err)
+gboolean
+seahorse_gpgme_key_op_add_subkey_finish (SeahorseGpgmeKey *pkey,
+                                         GAsyncResult *result,
+                                         GError **error)
 {
-	guint next_state;
+    g_return_val_if_fail (g_task_is_valid (result, pkey), FALSE);
 
-	switch (current_state) {
-		/* start, do command */
-		case ADD_KEY_START:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = ADD_KEY_COMMAND;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (ADD_KEY_ERROR);
-			}
-			break;
-		/* did command, do type */
-		case ADD_KEY_COMMAND:
-		case ADD_KEY_TYPE:
-		case ADD_KEY_LENGTH:
-		case ADD_KEY_EXPIRES:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.algo"))
-				next_state = ADD_KEY_TYPE;
-			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.size"))
-				next_state = ADD_KEY_LENGTH;
-			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.valid"))
-				next_state = ADD_KEY_EXPIRES;
-			else if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = ADD_KEY_QUIT;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                return ADD_KEY_ERROR; /* Legitimate errors error here */
-			}
-			break;
-		/* quit, save */
-		case ADD_KEY_QUIT:
-			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
-				next_state = ADD_KEY_SAVE;
-			else {
-                *err = GPG_E (GPG_ERR_GENERAL);
-                g_return_val_if_reached (ADD_KEY_ERROR);
-			}
-			break;
-		/* error, quit */
-		case ADD_KEY_ERROR:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = ADD_KEY_QUIT;
-			else
-				next_state = ADD_KEY_ERROR;
-			break;
-		default:
-            *err = GPG_E (GPG_ERR_GENERAL);
-            g_return_val_if_reached (ADD_KEY_ERROR);
-			break;
-	}
-	
-	return next_state;
-}
-
-gpgme_error_t
-seahorse_gpgme_key_op_add_subkey (SeahorseGpgmeKey *pkey, const SeahorseKeyEncType type, 
-                                  const guint length, const time_t expires)
-{
-	SeahorseEditParm *parms;
-	SubkeyParm *key_parm;
-	guint real_type;
-	SeahorseKeyTypeTable table;
-	gpgme_error_t gerr;
-	
-    g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));    
-    g_return_val_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	
-	gerr = seahorse_gpgme_get_keytype_table (&table);
-	g_return_val_if_fail (GPG_IS_OK (gerr), gerr);
-	
-	/* Check length range & type */
-	switch (type) {
-		case DSA:
-			real_type = table->dsa_sign;
-			g_return_val_if_fail (length >= DSA_MIN && length <= DSA_MAX, GPG_E (GPG_ERR_INV_VALUE));
-			break;
-		case ELGAMAL:
-			real_type = table->elgamal_enc;
-			g_return_val_if_fail (length >= ELGAMAL_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
-			break;
-		case RSA_SIGN: case RSA_ENCRYPT:
-			if (type == RSA_SIGN)
-				real_type = table->rsa_sign;
-			else
-				real_type = table->rsa_enc;
-			g_return_val_if_fail (length >= RSA_MIN && length <= LENGTH_MAX, GPG_E (GPG_ERR_INV_VALUE));
-			break;
-		default:
-			g_return_val_if_reached (GPG_E (GPG_ERR_INV_VALUE));
-			break;
-	}
-	
-	key_parm = g_new (SubkeyParm, 1);
-	key_parm->type = real_type;
-	key_parm->length = length;
-	key_parm->expires = expires;
-	
-	parms = seahorse_edit_parm_new (ADD_KEY_START, add_key_action, add_key_transit, key_parm);
-	
-	return edit_key (pkey, parms);
+    seahorse_gpgme_key_refresh (pkey);
+    return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 typedef enum {

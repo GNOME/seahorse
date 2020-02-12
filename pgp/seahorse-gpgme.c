@@ -245,6 +245,32 @@ seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table)
 	return gerr;
 }
 
+/**
+ * seahorse_gpgme_get_algo_string:
+ * @type: The algo type
+ *
+ * Returns: (transfer none): A string version of the algorithm, which can be
+ * used for GPGME functions like gpgme_op_create(sub)key.
+ */
+const char *
+seahorse_gpgme_get_algo_string (SeahorseKeyEncType type)
+{
+    switch (type) {
+        case DSA:
+            return "dsa";
+        case RSA_RSA:
+        case RSA_SIGN:
+        case RSA_ENCRYPT:
+            return "rsa";
+        case ELGAMAL:
+            return "elg";
+        default:
+            return NULL;
+    }
+
+    g_return_val_if_reached (NULL);
+}
+
 typedef struct _WatchData {
 	GSource *gsource;
 	gboolean registered;

@@ -108,54 +108,52 @@ on_gpgme_add_subkey_never_expires_toggled (GtkToggleButton *togglebutton,
                               !gtk_toggle_button_get_active (togglebutton));
 }
 
-static void
-on_gpgme_add_subkey_ok_clicked (GtkButton *button,
-                                gpointer user_data)
+SeahorseKeyEncType
+seahorse_gpgme_add_subkey_get_active_type (SeahorseGpgmeAddSubkey *self)
 {
-    SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (user_data);
-    SeahorseKeyEncType real_type;
-    int type;
-    guint length;
-    time_t expires;
-    gpgme_error_t err;
     GtkTreeIter iter;
+    int type;
+
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
 
     gtk_combo_box_get_active_iter (GTK_COMBO_BOX (self->type_combo), &iter);
     gtk_tree_model_get (self->types_model, &iter,
                         COMBO_INT, &type,
                         -1);
 
-    length = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (self->length_spinner));
-
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->never_expires_check)))
-        expires = 0;
-    else {
-        egg_datetime_get_as_time_t (EGG_DATETIME (self->expires_datetime),
-                                    &expires);
-   }
-
     switch (type) {
         case 0:
-            real_type = DSA;
-            break;
+            return DSA;
         case 1:
-            real_type = ELGAMAL;
-            break;
+            return ELGAMAL;
         case 2:
-            real_type = RSA_SIGN;
-            break;
+            return RSA_SIGN;
         default:
-            real_type = RSA_ENCRYPT;
-            break;
+            return RSA_ENCRYPT;
     }
+}
 
-    gtk_widget_set_sensitive (GTK_WIDGET (self), FALSE);
-    err = seahorse_gpgme_key_op_add_subkey (SEAHORSE_GPGME_KEY (self->key),
-                                            real_type, length, expires);
-    gtk_widget_set_sensitive (GTK_WIDGET (self), TRUE);
+gulong
+seahorse_gpgme_add_subkey_get_expires (SeahorseGpgmeAddSubkey *self)
+{
+    time_t expires;
 
-    if (!GPG_IS_OK (err))
-        seahorse_gpgme_handle_error (err, _("Couldn’t add subkey"));
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
+
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->never_expires_check)))
+        return 0;
+
+    egg_datetime_get_as_time_t (EGG_DATETIME (self->expires_datetime),
+                                &expires);
+    return expires;
+}
+
+guint
+seahorse_gpgme_add_subkey_get_keysize (SeahorseGpgmeAddSubkey *self)
+{
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
+
+    return gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (self->length_spinner));
 }
 
 static void
@@ -294,7 +292,6 @@ seahorse_gpgme_add_subkey_class_init (SeahorseGpgmeAddSubkeyClass *klass)
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, never_expires_check);
     gtk_widget_class_bind_template_callback (widget_class, handler_gpgme_add_subkey_type_changed);
     gtk_widget_class_bind_template_callback (widget_class, on_gpgme_add_subkey_never_expires_toggled);
-    gtk_widget_class_bind_template_callback (widget_class, on_gpgme_add_subkey_ok_clicked);
 }
 
 /**
@@ -303,18 +300,18 @@ seahorse_gpgme_add_subkey_class_init (SeahorseGpgmeAddSubkeyClass *klass)
  *
  * Creates a new #SeahorseGpgmeAddSubkey dialog for adding a user ID to @skey.
  */
-GtkDialog *
+SeahorseGpgmeAddSubkey *
 seahorse_gpgme_add_subkey_new (SeahorseGpgmeKey *key, GtkWindow *parent)
 {
-	g_autoptr(SeahorseGpgmeAddSubkey) self = NULL;
+    g_autoptr(SeahorseGpgmeAddSubkey) self = NULL;
 
-	g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY (key), NULL);
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY (key), NULL);
 
-	self = g_object_new (SEAHORSE_GPGME_TYPE_ADD_SUBKEY,
+    self = g_object_new (SEAHORSE_GPGME_TYPE_ADD_SUBKEY,
                          "key", key,
                          "transient-for", parent,
                          "use-header-bar", 1,
                          NULL);
 
-    return GTK_DIALOG (g_steal_pointer (&self));
+    return g_steal_pointer (&self);
 }
