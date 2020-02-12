@@ -21,6 +21,7 @@
 
 #include <gtk/gtk.h>
 
+#include "pgp/seahorse-gpgme.h"
 #include "pgp/seahorse-gpgme-key.h"
 #include "pgp/seahorse-gpgme-subkey.h"
 
@@ -29,5 +30,11 @@ G_DECLARE_FINAL_TYPE (SeahorseGpgmeAddSubkey, seahorse_gpgme_add_subkey,
                       SEAHORSE_GPGME, ADD_SUBKEY,
                       GtkDialog)
 
-GtkDialog*  seahorse_gpgme_add_subkey_new   (SeahorseGpgmeKey *pkey,
-                                             GtkWindow *parent);
+SeahorseGpgmeAddSubkey*  seahorse_gpgme_add_subkey_new               (SeahorseGpgmeKey *pkey,
+                                                                      GtkWindow *parent);
+
+SeahorseKeyEncType       seahorse_gpgme_add_subkey_get_active_type   (SeahorseGpgmeAddSubkey *self);
+
+guint                    seahorse_gpgme_add_subkey_get_keysize       (SeahorseGpgmeAddSubkey *self);
+
+gulong                   seahorse_gpgme_add_subkey_get_expires       (SeahorseGpgmeAddSubkey *self);

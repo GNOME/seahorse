@@ -940,16 +940,45 @@ details_subkey_selected (GtkTreeSelection *selection, SeahorsePgpKeyProperties *
 }
 
 static void
+on_add_subkey_completed (GObject *object, GAsyncResult *res, gpointer user_data)
+{
+    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
+    g_autoptr(GError) error = NULL;
+
+    if (!seahorse_gpgme_key_op_add_subkey_finish (SEAHORSE_GPGME_KEY (self->key),
+                                                  res, &error)) {
+        seahorse_util_handle_error (&error, self, NULL);
+    }
+}
+
+static void
 on_subkeys_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    GtkDialog *dialog;
+    SeahorseGpgmeAddSubkey *dialog;
+    int response;
+    SeahorseKeyEncType type;
+    guint length;
+    gulong expires;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
 
     dialog = seahorse_gpgme_add_subkey_new (SEAHORSE_GPGME_KEY (self->key),
                                             GTK_WINDOW (self));
-    gtk_dialog_run (dialog);
+
+    response = gtk_dialog_run (GTK_DIALOG (dialog));
+    if (response != GTK_RESPONSE_OK) {
+        gtk_widget_destroy (GTK_WIDGET (dialog));
+        return;
+    }
+
+    length = seahorse_gpgme_add_subkey_get_keysize (dialog);
+    type = seahorse_gpgme_add_subkey_get_active_type (dialog);
+    expires = seahorse_gpgme_add_subkey_get_expires (dialog);
+    seahorse_gpgme_key_op_add_subkey_async (SEAHORSE_GPGME_KEY (self->key),
+                                            type, length, expires, NULL,
+                                            on_add_subkey_completed, self);
+
     gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 

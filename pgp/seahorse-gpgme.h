@@ -59,3 +59,37 @@ gpgme_error_t      seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table
 
 GSource *          seahorse_gpgme_gsource_new       (gpgme_ctx_t gctx,
                                                      GCancellable *cancellable);
+
+typedef enum {
+	RSA_RSA = 1,
+	DSA_ELGAMAL = 2,
+	DSA = 3,
+	RSA_SIGN = 4,
+	ELGAMAL = 5,
+	RSA_ENCRYPT = 6
+} SeahorseKeyEncType;
+
+/* Length ranges for key types */
+typedef enum {
+	/* Minimum length for #DSA. */
+	DSA_MIN = 768,
+	/* Maximum length for #DSA. */
+#if ( GPG_MAJOR == 2 &&   GPG_MINOR == 0 && GPG_MICRO < 12 ) || \
+    ( GPG_MAJOR == 1 && ( GPG_MINOR <  4 || GPG_MICRO < 10 ) )
+	DSA_MAX = 1024,
+#else
+	DSA_MAX = 3072,
+#endif
+	/* Minimum length for #ELGAMAL. Maximum length is #LENGTH_MAX. */
+	ELGAMAL_MIN = 768,
+	/* Minimum length of #RSA_SIGN and #RSA_ENCRYPT. Maximum length is
+	 * #LENGTH_MAX.
+	 */
+	RSA_MIN = 1024,
+	/* Maximum length for #ELGAMAL, #RSA_SIGN, and #RSA_ENCRYPT. */
+	LENGTH_MAX = 4096,
+	/* Default length for #ELGAMAL, #RSA_SIGN, #RSA_ENCRYPT, and #DSA. */
+	LENGTH_DEFAULT = 2048
+} SeahorseKeyLength;
+
+const char *    seahorse_gpgme_get_algo_string (SeahorseKeyEncType type);
