@@ -24,11 +24,13 @@
 #include "config.h"
 
 #include "seahorse-pgp-dialogs.h"
+#include "seahorse-gpgme-add-subkey.h"
 #include "seahorse-gpgme-add-uid.h"
 #include "seahorse-gpgme-dialogs.h"
 #include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
+#include "seahorse-gpgme-sign-dialog.h"
 #include "seahorse-pgp-backend.h"
 #include "seahorse-gpg-op.h"
 #include "seahorse-pgp-dialogs.h"
@@ -294,13 +296,17 @@ on_uids_sign (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorsePgpUid *uid;
+    SeahorseGpgmeSignDialog *dialog;
 
     uid = names_get_selected_uid (self);
-    if (uid != NULL) {
-        g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
-        seahorse_gpgme_sign_prompt_uid (SEAHORSE_GPGME_UID (uid),
-                                        GTK_WINDOW (self));
-    }
+    if (uid == NULL)
+        return;
+
+    g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
+
+    dialog = seahorse_gpgme_sign_dialog_new (SEAHORSE_OBJECT (uid));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -934,13 +940,46 @@ details_subkey_selected (GtkTreeSelection *selection, SeahorsePgpKeyProperties *
 }
 
 static void
+on_add_subkey_completed (GObject *object, GAsyncResult *res, gpointer user_data)
+{
+    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
+    g_autoptr(GError) error = NULL;
+
+    if (!seahorse_gpgme_key_op_add_subkey_finish (SEAHORSE_GPGME_KEY (self->key),
+                                                  res, &error)) {
+        seahorse_util_handle_error (&error, self, NULL);
+    }
+}
+
+static void
 on_subkeys_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
+    SeahorseGpgmeAddSubkey *dialog;
+    int response;
+    SeahorseKeyEncType type;
+    guint length;
+    gulong expires;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
-    seahorse_gpgme_add_subkey_new (SEAHORSE_GPGME_KEY (self->key),
-                                   GTK_WINDOW (self));
+
+    dialog = seahorse_gpgme_add_subkey_new (SEAHORSE_GPGME_KEY (self->key),
+                                            GTK_WINDOW (self));
+
+    response = gtk_dialog_run (GTK_DIALOG (dialog));
+    if (response != GTK_RESPONSE_OK) {
+        gtk_widget_destroy (GTK_WIDGET (dialog));
+        return;
+    }
+
+    length = seahorse_gpgme_add_subkey_get_keysize (dialog);
+    type = seahorse_gpgme_add_subkey_get_active_type (dialog);
+    expires = seahorse_gpgme_add_subkey_get_expires (dialog);
+    seahorse_gpgme_key_op_add_subkey_async (SEAHORSE_GPGME_KEY (self->key),
+                                            type, length, expires, NULL,
+                                            on_add_subkey_completed, self);
+
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -1424,9 +1463,14 @@ static void
 on_sign_key (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
+    SeahorseGpgmeSignDialog *dialog;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
-    seahorse_gpgme_sign_prompt (SEAHORSE_GPGME_KEY (self->key), GTK_WINDOW (self));
+
+    dialog = seahorse_gpgme_sign_dialog_new (SEAHORSE_OBJECT (self->key));
+
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 /* When the 'only display trusted' check is checked, hide untrusted rows */

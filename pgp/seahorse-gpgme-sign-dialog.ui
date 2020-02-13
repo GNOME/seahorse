@@ -1,0 +1,344 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="3.22"/>
+  <template class="SeahorseGpgmeSignDialog" parent="GtkDialog">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Sign Key</property>
+    <property name="resizable">False</property>
+    <property name="use_header_bar">1</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="border_width">12</property>
+        <property name="spacing">18</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
+                <property name="label" translatable="yes">By signing you indicate your trust that this key belongs to:</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="to_sign_name_label">
+                <property name="visible">True</property>
+                <property name="yalign">0</property>
+                <property name="label" translatable="yes">Key Name</property>
+                <property name="use_markup">True</property>
+                <property name="justify">center</property>
+                <attributes>
+                 <attribute name="style" value="italic"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="vbox6">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkLabel" id="label8">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
+                <property name="label" translatable="yes">How carefully have you checked this key?</property>
+                <attributes>
+                 <attribute name="weight" value="bold"/>
+               </attributes>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <property name="margin-start">12</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">12</property>
+                        <property name="homogeneous">True</property>
+                        <child>
+                          <object class="GtkRadioButton" id="sign_choice_not">
+                            <property name="label" translatable="yes">_Not at all</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_gpgme_sign_choice_toggled"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="sign_choice_casual">
+                            <property name="label" translatable="yes">_Casually</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">sign_choice_not</property>
+                            <signal name="toggled" handler="on_gpgme_sign_choice_toggled"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="sign_choice_careful">
+                            <property name="label" translatable="yes">_Very Carefully</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">sign_choice_not</property>
+                            <signal name="toggled" handler="on_gpgme_sign_choice_toggled"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="alignment2">
+                        <property name="visible">True</property>
+                        <property name="xalign">1</property>
+                        <property name="yalign">1</property>
+                        <property name="left_padding">18</property>
+                        <child>
+                          <object class="GtkBox" id="vbox12">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkLabel" id="sign_display_not">
+                                <property name="can_focus">True</property>
+                                <property name="xalign">0</property>
+                                <property name="yalign">0</property>
+                                <property name="label" translatable="yes">&lt;i&gt;Not at all:&lt;/i&gt; means you believe the key is owned by the person who claims to own it, but you could not or did not verify this to be a fact.</property>
+                                <property name="use_markup">True</property>
+                                <property name="justify">fill</property>
+                                <property name="wrap">True</property>
+                                <property name="max_width_chars">75</property>
+                                <property name="selectable">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="sign_display_casual">
+                                <property name="can_focus">True</property>
+                                <property name="xalign">0</property>
+                                <property name="yalign">0</property>
+                                <property name="label" translatable="yes">&lt;i&gt;Casually:&lt;/i&gt; means you have done a casual verification that the key is owned by the person who claims to own it. For example, you could read the key fingerprint to the owner over the phone.</property>
+                                <property name="use_markup">True</property>
+                                <property name="justify">fill</property>
+                                <property name="wrap">True</property>
+                                <property name="max_width_chars">75</property>
+                                <property name="selectable">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkBox" id="sign_display_careful">
+                                <property name="spacing">6</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkEventBox" id="eventbox1">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label7">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="yalign">0</property>
+                                        <property name="label" translatable="yes">&lt;i&gt;Very Carefully:&lt;/i&gt; Select this only if you are absolutely sure that this key is genuine.</property>
+                                        <property name="use_markup">True</property>
+                                        <property name="justify">fill</property>
+                                        <property name="wrap">True</property>
+                                        <property name="max_width_chars">75</property>
+                                        <property name="selectable">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label12">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="label" translatable="yes">You could use a hard to forge photo identification (such as a passport) to personally check that the name on the key is correct. You should have also used email to check that the email address belongs to the owner.</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="justify">fill</property>
+                                    <property name="wrap">True</property>
+                                    <property name="max_width_chars">75</property>
+                                    <property name="selectable">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkLabel" id="label9">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">How others will see this signature:</property>
+                <attributes>
+                 <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+            <child>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="row-spacing">12</property>
+                <property name="column-spacing">12</property>
+                <property name="margin-start">12</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">_Others may not see this signature</property>
+                    <property name="tooltip_text">If signature is local to the key ring and won't be exported with the key</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic-widget">sign_option_local</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="sign_option_local">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text">If signature is local to the key ring and won't be exported with the key</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">I can _revoke this signature at a later date.</property>
+                    <property name="tooltip_text">If signature can be revoked</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic-widget">sign_option_revocable</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="left_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="sign_option_revocable">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text">If signature can be revoked</property>
+                    <property name="active">True</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="left_attach">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="signer_frame">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Sign key as:</property>
+                <attributes>
+                 <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment7">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkBox" id="hbox2">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="label11">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Signer:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">signer_select</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="signer_select">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="cancel_button">
+        <property name="label">gtk-cancel</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="can_default">True</property>
+        <property name="receives_default">False</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="ok_button">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="can_default">True</property>
+        <property name="has_default">True</property>
+        <property name="receives_default">False</property>
+        <property name="label" translatable="yes">_Sign</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">cancel_button</action-widget>
+      <action-widget response="-5" default="true">ok_button</action-widget>
+    </action-widgets>
+  </template>
+</interface>

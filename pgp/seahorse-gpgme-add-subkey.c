@@ -17,212 +17,301 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h" 
-
-#include "seahorse-gpgme-key-op.h"
-
-#include "seahorse-gpgme-dialogs.h"
-
-#include "libseahorse/seahorse-object-widget.h"
-#include "libseahorse/seahorse-util.h"
-
-#include "libegg/egg-datetime.h"
-
 #include <glib/gi18n.h>
 
-#define LENGTH "length"
+#include "config.h"
+#include "libseahorse/seahorse-object-widget.h"
+#include "libseahorse/seahorse-util.h"
+#include "libegg/egg-datetime.h"
+#include "seahorse-gpgme-add-subkey.h"
+#include "seahorse-gpgme-key-op.h"
 
-enum {
-  COMBO_STRING,
-  COMBO_INT,
-  N_COLUMNS
+
+/**
+ * SECTION:seahorse-gpgme-add-subkey
+ * @short_description: A dialog that allows a user to add a new subkey to a
+ * key
+ **/
+
+struct _SeahorseGpgmeAddSubkey {
+    GtkDialog parent_instance;
+
+    SeahorseGpgmeKey *key;
+
+    GtkTreeModel *types_model;
+    GtkWidget *type_combo;
+
+    GtkWidget *length_spinner;
+
+    GtkWidget *datetime_placeholder;
+    GtkWidget *expires_datetime;
+    GtkWidget *never_expires_check;
 };
 
-void             hanlder_gpgme_add_subkey_type_changed          (GtkComboBox *combo,
-                                                                 gpointer user_data);
+enum {
+    PROP_0,
+    PROP_KEY,
+};
 
-void             on_gpgme_add_subkey_never_expires_toggled      (GtkToggleButton *togglebutton,
-                                                                 gpointer user_data);
+G_DEFINE_TYPE (SeahorseGpgmeAddSubkey, seahorse_gpgme_add_subkey, GTK_TYPE_DIALOG)
 
-void             on_gpgme_add_subkey_ok_clicked                 (GtkButton *button,
-                                                                 gpointer user_data);
+enum {
+    COMBO_STRING,
+    COMBO_INT,
+    N_COLUMNS
+};
 
-G_MODULE_EXPORT void
-hanlder_gpgme_add_subkey_type_changed (GtkComboBox *combo,
+static void
+handler_gpgme_add_subkey_type_changed (GtkComboBox *combo,
                                        gpointer user_data)
 {
-	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
-	gint type;
-	GtkSpinButton *length;
+    SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (user_data);
+    int type;
+    GtkSpinButton *length;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    	
-	length = GTK_SPIN_BUTTON (seahorse_widget_get_widget (swidget, LENGTH));
-	
-	model = gtk_combo_box_get_model (combo);
-	gtk_combo_box_get_active_iter (combo, &iter);
-	gtk_tree_model_get (model, &iter,
+
+    length = GTK_SPIN_BUTTON (self->length_spinner);
+
+    model = gtk_combo_box_get_model (combo);
+    gtk_combo_box_get_active_iter (combo, &iter);
+    gtk_tree_model_get (model, &iter,
                         COMBO_INT, &type,
                         -1);
-	
-	switch (type) {
-		/* DSA */
-		case 0:
-			gtk_spin_button_set_range (length, DSA_MIN, DSA_MAX);
-			gtk_spin_button_set_value (length, LENGTH_DEFAULT < DSA_MAX ? LENGTH_DEFAULT : DSA_MAX);
-			break;
-		/* ElGamal */
-		case 1:
-			gtk_spin_button_set_range (length, ELGAMAL_MIN, LENGTH_MAX);
-			gtk_spin_button_set_value (length, LENGTH_DEFAULT);
-			break;
-		/* RSA */
-		default:
-			gtk_spin_button_set_range (length, RSA_MIN, LENGTH_MAX);
-			gtk_spin_button_set_value (length, LENGTH_DEFAULT);
-			break;
-	}
+
+    switch (type) {
+        /* DSA */
+        case 0:
+            gtk_spin_button_set_range (length, DSA_MIN, DSA_MAX);
+            gtk_spin_button_set_value (length, LENGTH_DEFAULT < DSA_MAX ? LENGTH_DEFAULT : DSA_MAX);
+            break;
+        /* ElGamal */
+        case 1:
+            gtk_spin_button_set_range (length, ELGAMAL_MIN, LENGTH_MAX);
+            gtk_spin_button_set_value (length, LENGTH_DEFAULT);
+            break;
+        /* RSA */
+        default:
+            gtk_spin_button_set_range (length, RSA_MIN, LENGTH_MAX);
+            gtk_spin_button_set_value (length, LENGTH_DEFAULT);
+            break;
+    }
 }
 
-G_MODULE_EXPORT void
+static void
 on_gpgme_add_subkey_never_expires_toggled (GtkToggleButton *togglebutton,
                                            gpointer user_data)
 {
-    SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
-    GtkWidget *widget;
+    SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (user_data);
 
-    widget = GTK_WIDGET (g_object_get_data (G_OBJECT (swidget), "expires-datetime"));
-    g_return_if_fail (widget);
-
-    gtk_widget_set_sensitive (GTK_WIDGET (widget),
+    gtk_widget_set_sensitive (self->expires_datetime,
                               !gtk_toggle_button_get_active (togglebutton));
 }
 
-G_MODULE_EXPORT void
-on_gpgme_add_subkey_ok_clicked (GtkButton *button,
-                                gpointer user_data)
+SeahorseKeyEncType
+seahorse_gpgme_add_subkey_get_active_type (SeahorseGpgmeAddSubkey *self)
 {
-	SeahorseWidget *swidget = SEAHORSE_WIDGET (user_data);
-	SeahorseObjectWidget *skwidget;
-	SeahorseKeyEncType real_type;
-	gint type;
-	guint length;
-	time_t expires;
-	gpgme_error_t err;
-	GtkWidget *widget;
-	GtkComboBox *combo;
-	GtkTreeModel *model;
     GtkTreeIter iter;
-	
-	skwidget = SEAHORSE_OBJECT_WIDGET (swidget);
-	
-	combo = GTK_COMBO_BOX (seahorse_widget_get_widget (swidget, "type"));
-	gtk_combo_box_get_active_iter (combo, &iter);
-	model = gtk_combo_box_get_model (combo);
-	gtk_tree_model_get (model, &iter,
+    int type;
+
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
+
+    gtk_combo_box_get_active_iter (GTK_COMBO_BOX (self->type_combo), &iter);
+    gtk_tree_model_get (self->types_model, &iter,
                         COMBO_INT, &type,
-                        -1);	
-		
-	length = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (
-		seahorse_widget_get_widget (swidget, LENGTH)));
-	
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-	seahorse_widget_get_widget (swidget, "never_expires"))))
-		expires = 0;
-	else {
-        widget = GTK_WIDGET (g_object_get_data (G_OBJECT (swidget), "expires-datetime"));
-        g_return_if_fail (widget);
+                        -1);
 
-        egg_datetime_get_as_time_t (EGG_DATETIME (widget), &expires);
-   }
-	
-	switch (type) {
-		case 0:
-			real_type = DSA;
-			break;
-		case 1:
-			real_type = ELGAMAL;
-			break;
-		case 2:
-			real_type = RSA_SIGN;
-			break;
-		default:
-			real_type = RSA_ENCRYPT;
-			break;
-	}
-	
-	widget = GTK_WIDGET (seahorse_widget_get_widget (swidget, swidget->name));
-	gtk_widget_set_sensitive (widget, FALSE);
-	err = seahorse_gpgme_key_op_add_subkey (SEAHORSE_GPGME_KEY (skwidget->object), 
-	                                        real_type, length, expires);
-	gtk_widget_set_sensitive (widget, TRUE);
-	
-	if (!GPG_IS_OK (err))
-		seahorse_gpgme_handle_error (err, _("Couldn’t add subkey"));
-
-	seahorse_widget_destroy (swidget);
+    switch (type) {
+        case 0:
+            return DSA;
+        case 1:
+            return ELGAMAL;
+        case 2:
+            return RSA_SIGN;
+        default:
+            return RSA_ENCRYPT;
+    }
 }
 
-void
-seahorse_gpgme_add_subkey_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
+gulong
+seahorse_gpgme_add_subkey_get_expires (SeahorseGpgmeAddSubkey *self)
 {
-	SeahorseWidget *swidget;
-	GtkComboBox* combo;
-	GtkTreeModel *model;
-	GtkTreeIter iter;
-	GtkCellRenderer *renderer;
-	GtkWidget *widget, *datetime;
+    time_t expires;
 
-	swidget = seahorse_object_widget_new ("add-subkey", parent, G_OBJECT (pkey));
-	g_return_if_fail (swidget != NULL);
-	
-	gtk_window_set_title (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)),
-		g_strdup_printf (_("Add subkey to %s"), seahorse_object_get_label (SEAHORSE_OBJECT (pkey))));
-    
-    combo = GTK_COMBO_BOX (seahorse_widget_get_widget (swidget, "type"));
-    model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_INT));
-    
-    gtk_combo_box_set_model (combo, model);
-        
-    gtk_cell_layout_clear (GTK_CELL_LAYOUT (combo));
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
+
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->never_expires_check)))
+        return 0;
+
+    egg_datetime_get_as_time_t (EGG_DATETIME (self->expires_datetime),
+                                &expires);
+    return expires;
+}
+
+guint
+seahorse_gpgme_add_subkey_get_keysize (SeahorseGpgmeAddSubkey *self)
+{
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
+
+    return gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (self->length_spinner));
+}
+
+static void
+seahorse_gpgme_add_subkey_get_property (GObject *object,
+                                        guint prop_id,
+                                        GValue *value,
+                                        GParamSpec *pspec)
+{
+    SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (object);
+
+    switch (prop_id) {
+    case PROP_KEY:
+        g_value_set_object (value, self->key);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+}
+
+static void
+seahorse_gpgme_add_subkey_set_property (GObject *object,
+                                        guint prop_id,
+                                        const GValue *value,
+                                        GParamSpec *pspec)
+{
+    SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (object);
+
+    switch (prop_id) {
+    case PROP_KEY:
+        g_clear_object (&self->key);
+        self->key = g_value_dup_object (value);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+}
+
+static void
+seahorse_gpgme_add_subkey_finalize (GObject *obj)
+{
+    SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (obj);
+
+    g_clear_object (&self->key);
+
+    G_OBJECT_CLASS (seahorse_gpgme_add_subkey_parent_class)->finalize (obj);
+}
+
+static void
+seahorse_gpgme_add_subkey_constructed (GObject *obj)
+{
+    SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (obj);
+    g_autofree char *title = NULL;
+
+    G_OBJECT_CLASS (seahorse_gpgme_add_subkey_parent_class)->constructed (obj);
+
+    title = g_strdup_printf (_("Add subkey to %s"),
+                             seahorse_object_get_label (SEAHORSE_OBJECT (self->key)));
+    gtk_window_set_title (GTK_WINDOW (self), title);
+}
+
+static void
+seahorse_gpgme_add_subkey_init (SeahorseGpgmeAddSubkey *self)
+{
+    GtkTreeIter iter;
+    GtkCellRenderer *renderer;
+
+    gtk_widget_init_template (GTK_WIDGET (self));
+
+    self->types_model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_INT));
+    gtk_combo_box_set_model (GTK_COMBO_BOX (self->type_combo),
+                             GTK_TREE_MODEL (self->types_model));
+
+    gtk_cell_layout_clear (GTK_CELL_LAYOUT (self->type_combo));
     renderer = gtk_cell_renderer_text_new ();
-    
-    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-    gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (combo), renderer,
+
+    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self->type_combo), renderer, TRUE);
+    gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (self->type_combo), renderer,
                                     "text", COMBO_STRING);
-                                    
-    gtk_list_store_append (GTK_LIST_STORE (model), &iter);
-    gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+
+    gtk_list_store_append (GTK_LIST_STORE (self->types_model), &iter);
+    gtk_list_store_set (GTK_LIST_STORE (self->types_model), &iter,
                         COMBO_STRING, _("DSA (sign only)"),
                         COMBO_INT, 0,
                         -1);
-                        
-    gtk_combo_box_set_active_iter (combo, &iter);
-    
-    gtk_list_store_append (GTK_LIST_STORE (model), &iter);
-    gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+
+    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (self->type_combo), &iter);
+
+    gtk_list_store_append (GTK_LIST_STORE (self->types_model), &iter);
+    gtk_list_store_set (GTK_LIST_STORE (self->types_model), &iter,
                         COMBO_STRING, _("ElGamal (encrypt only)"),
                         COMBO_INT, 1,
                         -1);
-                        
-	gtk_list_store_append (GTK_LIST_STORE (model), &iter);
-    gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+
+    gtk_list_store_append (GTK_LIST_STORE (self->types_model), &iter);
+    gtk_list_store_set (GTK_LIST_STORE (self->types_model), &iter,
                         COMBO_STRING, _("RSA (sign only)"),
                         COMBO_INT, 2,
                         -1);
-    
-	gtk_list_store_append (GTK_LIST_STORE (model), &iter);
-    gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+
+    gtk_list_store_append (GTK_LIST_STORE (self->types_model), &iter);
+    gtk_list_store_set (GTK_LIST_STORE (self->types_model), &iter,
                         COMBO_STRING, _("RSA (encrypt only)"),
                         COMBO_INT, 3,
                         -1);
-    
-	widget = seahorse_widget_get_widget (swidget, "datetime-placeholder");
-	g_return_if_fail (widget != NULL);
 
-	datetime = egg_datetime_new ();
-	gtk_container_add (GTK_CONTAINER (widget), datetime);
-	gtk_widget_show (datetime);
-	gtk_widget_set_sensitive (datetime, FALSE);
-	g_object_set_data (G_OBJECT (swidget), "expires-datetime", datetime);
+    self->expires_datetime = egg_datetime_new ();
+    gtk_container_add (GTK_CONTAINER (self->datetime_placeholder),
+                       self->expires_datetime);
+    gtk_widget_show (self->expires_datetime);
+    gtk_widget_set_sensitive (self->expires_datetime, FALSE);
+}
+
+static void
+seahorse_gpgme_add_subkey_class_init (SeahorseGpgmeAddSubkeyClass *klass)
+{
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+    gobject_class->constructed = seahorse_gpgme_add_subkey_constructed;
+    gobject_class->get_property = seahorse_gpgme_add_subkey_get_property;
+    gobject_class->set_property = seahorse_gpgme_add_subkey_set_property;
+    gobject_class->finalize = seahorse_gpgme_add_subkey_finalize;
+
+    g_object_class_install_property (gobject_class, PROP_KEY,
+        g_param_spec_object ("key", "GPGME key",
+                             "The GPGME key which we're adding a new subkey to",
+                             SEAHORSE_GPGME_TYPE_KEY,
+                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+    gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Seahorse/seahorse-gpgme-add-subkey.ui");
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, type_combo);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, length_spinner);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, datetime_placeholder);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, never_expires_check);
+    gtk_widget_class_bind_template_callback (widget_class, handler_gpgme_add_subkey_type_changed);
+    gtk_widget_class_bind_template_callback (widget_class, on_gpgme_add_subkey_never_expires_toggled);
+}
+
+/**
+ * seahorse_add_subkey_new:
+ * @key: A #SeahorseGpgmeKey
+ *
+ * Creates a new #SeahorseGpgmeAddSubkey dialog for adding a user ID to @skey.
+ */
+SeahorseGpgmeAddSubkey *
+seahorse_gpgme_add_subkey_new (SeahorseGpgmeKey *key, GtkWindow *parent)
+{
+    g_autoptr(SeahorseGpgmeAddSubkey) self = NULL;
+
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY (key), NULL);
+
+    self = g_object_new (SEAHORSE_GPGME_TYPE_ADD_SUBKEY,
+                         "key", key,
+                         "transient-for", parent,
+                         "use-header-bar", 1,
+                         NULL);
+
+    return g_steal_pointer (&self);
 }

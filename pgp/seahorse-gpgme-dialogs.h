@@ -33,12 +33,6 @@
 #include "pgp/seahorse-gpgme-uid.h"
 #include "libseahorse/seahorse-widget.h"
 
-void            seahorse_gpgme_sign_prompt         (SeahorseGpgmeKey *key,
-                                                    GtkWindow *parent);
-
-void            seahorse_gpgme_sign_prompt_uid     (SeahorseGpgmeUid *uid,
-                                                    GtkWindow *parent);
-
 void            seahorse_gpgme_generate_register    (void);
 
 void            seahorse_gpgme_generate_show        (SeahorseGpgmeKeyring *keyring,
@@ -60,9 +54,6 @@ void            seahorse_gpgme_add_revoker_new      (SeahorseGpgmeKey *pkey,
                                                      GtkWindow *parent);
 
 void            seahorse_gpgme_expires_new          (SeahorseGpgmeSubkey *subkey,
-                                                     GtkWindow *parent);
-
-void            seahorse_gpgme_add_subkey_new       (SeahorseGpgmeKey *pkey,
                                                      GtkWindow *parent);
 
 void            seahorse_gpgme_revoke_new           (SeahorseGpgmeSubkey *subkey,

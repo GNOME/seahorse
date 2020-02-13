@@ -16,7 +16,7 @@ pgp_sources = [
   'seahorse-gpgme-photos.c',
   'seahorse-gpgme-revoke.c',
   'seahorse-gpgme-secret-deleter.c',
-  'seahorse-gpgme-sign.c',
+  'seahorse-gpgme-sign-dialog.c',
   'seahorse-gpgme-subkey.c',
   'seahorse-gpgme-uid.c',
   'seahorse-gpg-op.c',
