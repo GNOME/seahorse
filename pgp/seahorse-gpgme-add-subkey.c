@@ -20,7 +20,6 @@
 #include <glib/gi18n.h>
 
 #include "config.h"
-#include "libseahorse/seahorse-object-widget.h"
 #include "libseahorse/seahorse-util.h"
 #include "libegg/egg-datetime.h"
 #include "seahorse-gpgme-add-subkey.h"

@@ -8,7 +8,6 @@ libseahorse_sources = [
   'seahorse-bind.c',
   'seahorse-object-list.c',
   'seahorse-object-model.c',
-  'seahorse-object-widget.c',
   'seahorse-progress.c',
   'seahorse-util.c',
   'seahorse-widget.c',
