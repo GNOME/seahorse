@@ -317,7 +317,7 @@ on_uids_revoke (GSimpleAction *action, GVariant *param, gpointer user_data)
     gint index;
     Glist *keys = NULL;
 
-    skey = SEAHORSE_OBJECT_WIDGET (swidget)->skey;
+    skey = self->key;
     index = names_get_selected_uid (swidget);
 
     if (index >= 1) {
