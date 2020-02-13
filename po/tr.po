@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-02-05 11:35+0000\n"
-"PO-Revision-Date: 2020-02-06 00:40+0300\n"
+"POT-Creation-Date: 2020-02-13 17:17+0000\n"
+"PO-Revision-Date: 2020-02-13 22:05+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -660,7 +660,7 @@ msgid "Use"
 msgstr "Kullanım"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1217
+#: pgp/seahorse-pgp-key-properties.c:1256
 msgid "Type"
 msgstr "Tür"
 
@@ -686,7 +686,7 @@ msgstr "Parolayı Sil"
 msgid "Keyring properties"
 msgstr "Anahtarlık özellikleri"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:851
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:857
 msgid "Name"
 msgstr "Ad"
 
@@ -962,34 +962,6 @@ msgstr "%u:%u:%u"
 msgid "Could not display help: %s"
 msgstr "Yardım görüntülenemedi: %s"
 
-#: pgp/seahorse-add-subkey.ui:31
-msgid "Never E_xpires"
-msgstr "Süresi _Dolmaz"
-
-#: pgp/seahorse-add-subkey.ui:35
-msgid "If key never expires"
-msgstr "Anahtarın süresi hiç dolmayacaksa"
-
-#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
-msgid "Key _Type:"
-msgstr "Anahtar _Türü:"
-
-#: pgp/seahorse-add-subkey.ui:78
-msgid "Key _Length:"
-msgstr "Anahtar _Uzunluğu:"
-
-#: pgp/seahorse-add-subkey.ui:93
-msgid "Expiration Date:"
-msgstr "Son Kullanım Tarihi:"
-
-#: pgp/seahorse-add-subkey.ui:112
-msgid "Length of Key"
-msgstr "Anahtarın Uzunluğu"
-
-#: pgp/seahorse-add-subkey.ui:194
-msgid "Generate a new subkey"
-msgstr "Yeni alt anahtar oluştur"
-
 #: pgp/seahorse-expires.ui:22
 msgid "_Never expires"
 msgstr "_Asla süresi dolmaz"
@@ -1002,30 +974,54 @@ msgstr "Anahtarı feshet"
 msgid "C_hange"
 msgstr "Değişti_r"
 
-#: pgp/seahorse-gpgme-add-subkey.c:161
-msgid "Couldn’t add subkey"
-msgstr "Alt anahtar eklenemedi"
-
-#: pgp/seahorse-gpgme-add-subkey.c:180
+#: pgp/seahorse-gpgme-add-subkey.c:214
 #, c-format
 msgid "Add subkey to %s"
 msgstr "%s anahtarına alt anahtar ekle"
 
-#: pgp/seahorse-gpgme-add-subkey.c:196 pgp/seahorse-gpgme-generate.c:78
+#: pgp/seahorse-gpgme-add-subkey.c:240 pgp/seahorse-gpgme-generate.c:78
 msgid "DSA (sign only)"
 msgstr "DSA (yalnızca imzalama)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:204
+#: pgp/seahorse-gpgme-add-subkey.c:248
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (yalnızca şifreleme)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:210 pgp/seahorse-gpgme-generate.c:79
+#: pgp/seahorse-gpgme-add-subkey.c:254 pgp/seahorse-gpgme-generate.c:79
 msgid "RSA (sign only)"
 msgstr "RSA (yalnızca imzalama)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:216
+#: pgp/seahorse-gpgme-add-subkey.c:260
 msgid "RSA (encrypt only)"
 msgstr "RSA (yalnızca şifreleme)"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:28
+msgid "Key _Type"
+msgstr "Anahtar _Türü"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:54
+msgid "Key _Length"
+msgstr "Anahtar _Uzunluğu"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:71
+msgid "Length of Key"
+msgstr "Anahtarın Uzunluğu"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:86
+msgid "Expiration Date"
+msgstr "Son Kullanım Tarihi"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:110
+msgid "Never E_xpires"
+msgstr "Süresi _Dolmaz"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:114
+msgid "If key never expires"
+msgstr "Anahtarın süresi hiç dolmayacaksa"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:150
+msgid "Generate a new subkey"
+msgstr "Yeni alt anahtar oluştur"
 
 #: pgp/seahorse-gpgme-add-uid.c:149
 #, c-format
@@ -1350,7 +1346,7 @@ msgstr "Feshedici eklenemedi"
 msgid "I understand that this secret key will be permanently deleted."
 msgstr "Bu özel gizli anahtarın kalıcı olarak silineceğini anlıyorum."
 
-#: pgp/seahorse-gpgme-sign.c:99
+#: pgp/seahorse-gpgme-sign-dialog.c:146
 #, c-format
 msgid ""
 "This key was already signed by\n"
@@ -1359,23 +1355,114 @@ msgstr ""
 "Bu anahtar şu kişi tarafından zaten imzalanmış:\n"
 "“%s”"
 
-#: pgp/seahorse-gpgme-sign.c:104
+#: pgp/seahorse-gpgme-sign-dialog.c:151
 msgid "Couldn’t sign key"
 msgstr "Anahtar imzalanamadı"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: pgp/seahorse-gpgme-sign.c:163 pgp/seahorse-signer.c:62
+#: pgp/seahorse-gpgme-sign-dialog.c:281 pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr "İmzalama için kullanılabilir anahtar yok"
 
-#: pgp/seahorse-gpgme-sign.c:164
+#: pgp/seahorse-gpgme-sign-dialog.c:282
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr ""
 "Bu anahtara güveninizi belirtmek için kullanılacak kişisel bir anahtarınız "
 "yok."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:6
+msgid "Sign Key"
+msgstr "Anahtar İmzala"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:25
+msgid "By signing you indicate your trust that this key belongs to:"
+msgstr ""
+"İmzalayarak, bu anahtarın şu kişiye ait olduğuna inandığınızı "
+"gösteriyorsunuz:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:32
+msgid "Key Name"
+msgstr "Anahtar Adı"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:52
+msgid "How carefully have you checked this key?"
+msgstr "Bu anahtarı ne kadar dikkatli denetlediniz?"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:77
+msgid "_Not at all"
+msgstr "_Tam olarak değil"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:88
+msgid "_Casually"
+msgstr "Özensiz_ce"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:100
+msgid "_Very Carefully"
+msgstr "Ço_k Dikkatli"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:127
+msgid ""
+"<i>Not at all:</i> means you believe the key is owned by the person who "
+"claims to own it, but you could not or did not verify this to be a fact."
+msgstr ""
+"<i>Tam olarak değil:</i> anahtarın kendine ait olduğunu iddia eden kişiye "
+"ait olduğuna inanıyorsunuz ama bunun gerçek olduğunu denetleyemiyorsunuz "
+"demektir."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:140
+msgid ""
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone."
+msgstr ""
+"<i>Özensizce:</i> anahtarın kendine ait olduğunu iddia eden kişiye ait "
+"olduğuna dair özensiz bir doğrulama yaptınız demektir. Örneğin, telefon "
+"üzerinden sahibine anahtar parmak izinin okunması olabilir."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:161
+msgid ""
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
+"key is genuine."
+msgstr ""
+"<i>Çok Dikkatli:</i> Bunu yalnızca bu anahtarın kesinlikle orijinal olduğuna "
+"eminseniz seçin."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:177
+msgid ""
+"You could use a hard to forge photo identification (such as a passport) to "
+"personally check that the name on the key is correct. You should have also "
+"used email to check that the email address belongs to the owner."
+msgstr ""
+"Anahtar üzerindeki adın doğru olduğunu denetlemek için resimli bir kimlik "
+"(pasaport gibi) kullanabilirsiniz. Ayrıca e-posta adresinin sahibine ait "
+"olduğunu denetlemek için e-posta kullanmalısınız."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:206
+msgid "How others will see this signature:"
+msgstr "Başkaları bu imzayı nasıl görecek:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:222
+msgid "_Others may not see this signature"
+msgstr "_Başkaları bu imzayı görmesin"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:248
+msgid "I can _revoke this signature at a later date."
+msgstr "Bu imzayı ileride _feshedebilirim."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:282
+msgid "Sign key as:"
+msgstr "Şu anahtarımla imzalayacağım:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:300
+msgid "_Signer:"
+msgstr "İm_zalayan:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:335
+msgid "_Sign"
+msgstr "İ_mzala"
 
 #: pgp/seahorse-gpgme-subkey.c:89
 msgctxt "Algorithm"
@@ -1610,141 +1697,141 @@ msgstr "Kişisel PGP anahtarı"
 msgid "PGP key"
 msgstr "PGP anahtarı"
 
-#: pgp/seahorse-pgp-key-properties.c:245
+#: pgp/seahorse-pgp-key-properties.c:247
 msgid "Couldn’t change primary user ID"
 msgstr "Birincil kullanıcı ID değiştirilemedi"
 
-#: pgp/seahorse-pgp-key-properties.c:280
+#: pgp/seahorse-pgp-key-properties.c:282
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "“%s” kullanıcı IDʼsini kalıcı olarak silmek istediğinize emin misiniz?"
 
-#: pgp/seahorse-pgp-key-properties.c:289
+#: pgp/seahorse-pgp-key-properties.c:291
 msgid "Couldn’t delete user ID"
 msgstr "Kullanıcı ID silinemedi"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:361 pgp/seahorse-pgp-key-properties.c:1351
+#: pgp/seahorse-pgp-key-properties.c:367 pgp/seahorse-pgp-key-properties.c:1390
 msgid "[Unknown]"
 msgstr "[Bilinmeyen]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:457 pgp/seahorse-pgp-key-properties.c:1556
+#: pgp/seahorse-pgp-key-properties.c:463 pgp/seahorse-pgp-key-properties.c:1600
 msgid "Name/Email"
 msgstr "Ad/E-posta"
 
-#: pgp/seahorse-pgp-key-properties.c:464
+#: pgp/seahorse-pgp-key-properties.c:470
 msgid "Signature ID"
 msgstr "İmza IDʼsi"
 
-#: pgp/seahorse-pgp-key-properties.c:570
+#: pgp/seahorse-pgp-key-properties.c:576
 msgid "Couldn’t change primary photo"
 msgstr "Birincil fotoğraf değiştirilemedi"
 
-#: pgp/seahorse-pgp-key-properties.c:730
+#: pgp/seahorse-pgp-key-properties.c:736
 msgid "Error changing password"
 msgstr "Parolay değiştirilirken hata"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:776
+#: pgp/seahorse-pgp-key-properties.c:782
 msgid "(unknown)"
 msgstr "(bilinmeyen)"
 
-#: pgp/seahorse-pgp-key-properties.c:781
+#: pgp/seahorse-pgp-key-properties.c:787
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Bu anahtarın kullanım süresi %s tarihinde dolmuş"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:809
+#: pgp/seahorse-pgp-key-properties.c:815
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — Genel anahtar"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:812
+#: pgp/seahorse-pgp-key-properties.c:818
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Özel anahtar"
 
-#: pgp/seahorse-pgp-key-properties.c:965
+#: pgp/seahorse-pgp-key-properties.c:1004
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr ""
 "%2$s anahtarının %1$d alt anahtarını kalıcı olarak silmek istediğinize emin "
 "misiniz?"
 
-#: pgp/seahorse-pgp-key-properties.c:973
+#: pgp/seahorse-pgp-key-properties.c:1012
 msgid "Couldn’t delete subkey"
 msgstr "Alt anahtar silinemedi"
 
-#: pgp/seahorse-pgp-key-properties.c:1032
-#: pgp/seahorse-pgp-key-properties.c:1325
+#: pgp/seahorse-pgp-key-properties.c:1071
+#: pgp/seahorse-pgp-key-properties.c:1364
 msgid "Unable to change trust"
 msgstr "Güven derecesi değiştirilemedi"
 
-#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1083 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Anahtar dışa aktarılamadı"
 
-#: pgp/seahorse-pgp-key-properties.c:1175
-#: pgp/seahorse-pgp-key-properties.c:1259
+#: pgp/seahorse-pgp-key-properties.c:1214
+#: pgp/seahorse-pgp-key-properties.c:1298
 msgctxt "Expires"
 msgid "Never"
 msgstr "Asla"
 
-#: pgp/seahorse-pgp-key-properties.c:1214
+#: pgp/seahorse-pgp-key-properties.c:1253
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1220
+#: pgp/seahorse-pgp-key-properties.c:1259
 msgid "Usage"
 msgstr "Kullanım"
 
-#: pgp/seahorse-pgp-key-properties.c:1223
+#: pgp/seahorse-pgp-key-properties.c:1262
 msgid "Created"
 msgstr "Oluşturulma"
 
-#: pgp/seahorse-pgp-key-properties.c:1226
+#: pgp/seahorse-pgp-key-properties.c:1265
 msgid "Expires"
 msgstr "Son Kullanım"
 
-#: pgp/seahorse-pgp-key-properties.c:1229
+#: pgp/seahorse-pgp-key-properties.c:1268
 msgid "Status"
 msgstr "Durum"
 
-#: pgp/seahorse-pgp-key-properties.c:1232
+#: pgp/seahorse-pgp-key-properties.c:1271
 msgid "Strength"
 msgstr "Uzunluk"
 
-#: pgp/seahorse-pgp-key-properties.c:1250
+#: pgp/seahorse-pgp-key-properties.c:1289
 msgid "Revoked"
 msgstr "Feshedilmiş"
 
-#: pgp/seahorse-pgp-key-properties.c:1252
+#: pgp/seahorse-pgp-key-properties.c:1291
 msgid "Expired"
 msgstr "Süresi Dolmuş"
 
-#: pgp/seahorse-pgp-key-properties.c:1254
+#: pgp/seahorse-pgp-key-properties.c:1293
 msgid "Disabled"
 msgstr "Kapalı"
 
-#: pgp/seahorse-pgp-key-properties.c:1256
+#: pgp/seahorse-pgp-key-properties.c:1295
 msgid "Good"
 msgstr "İyi"
 
-#: pgp/seahorse-pgp-key-properties.c:1559
+#: pgp/seahorse-pgp-key-properties.c:1603
 #: pgp/seahorse-pgp-private-key-properties.ui:333
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Anahtar ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1700
+#: pgp/seahorse-pgp-key-properties.c:1744
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Diğer anahtarlardaki “%s” imzalarına güveniyorum"
 
-#: pgp/seahorse-pgp-key-properties.c:1707
+#: pgp/seahorse-pgp-key-properties.c:1751
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1753,7 +1840,7 @@ msgstr ""
 "Eğer bu anahtarın sahibi olan kişinin “%s” olduğuna inanıyorsanız, anahtarı "
 "<i>imzalayın</i>:"
 
-#: pgp/seahorse-pgp-key-properties.c:1714
+#: pgp/seahorse-pgp-key-properties.c:1758
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -2022,97 +2109,6 @@ msgstr "İmzalama Anahtarı Seç"
 msgid "_Sign message with key:"
 msgstr "Şu anahtar ile im_zala:"
 
-#: pgp/seahorse-sign.ui:6
-msgid "Sign Key"
-msgstr "Anahtar İmzala"
-
-#: pgp/seahorse-sign.ui:27
-msgid "By signing you indicate your trust that this key belongs to:"
-msgstr ""
-"İmzalayarak, bu anahtarın şu kişiye ait olduğuna inandığınızı "
-"gösteriyorsunuz:"
-
-#: pgp/seahorse-sign.ui:34
-msgid "Key Name"
-msgstr "Anahtar Adı"
-
-#: pgp/seahorse-sign.ui:54
-msgid "How carefully have you checked this key?"
-msgstr "Bu anahtarı ne kadar dikkatli denetlediniz?"
-
-#: pgp/seahorse-sign.ui:84
-msgid "_Not at all"
-msgstr "_Tam olarak değil"
-
-#: pgp/seahorse-sign.ui:95
-msgid "_Casually"
-msgstr "Özensiz_ce"
-
-#: pgp/seahorse-sign.ui:107
-msgid "_Very Carefully"
-msgstr "Ço_k Dikkatli"
-
-#: pgp/seahorse-sign.ui:134
-msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who "
-"claims to own it, but you could not or did not verify this to be a fact."
-msgstr ""
-"<i>Tam olarak değil:</i> anahtarın kendine ait olduğunu iddia eden kişiye "
-"ait olduğuna inanıyorsunuz ama bunun gerçek olduğunu denetleyemiyorsunuz "
-"demektir."
-
-#: pgp/seahorse-sign.ui:147
-msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone."
-msgstr ""
-"<i>Özensizce:</i> anahtarın kendine ait olduğunu iddia eden kişiye ait "
-"olduğuna dair özensiz bir doğrulama yaptınız demektir. Örneğin, telefon "
-"üzerinden sahibine anahtar parmak izinin okunması olabilir."
-
-#: pgp/seahorse-sign.ui:168
-msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
-"key is genuine."
-msgstr ""
-"<i>Çok Dikkatli:</i> Bunu yalnızca bu anahtarın kesinlikle orijinal olduğuna "
-"eminseniz seçin."
-
-#: pgp/seahorse-sign.ui:184
-msgid ""
-"You could use a hard to forge photo identification (such as a passport) to "
-"personally check that the name on the key is correct. You should have also "
-"used email to check that the email address belongs to the owner."
-msgstr ""
-"Anahtar üzerindeki adın doğru olduğunu denetlemek için resimli bir kimlik "
-"(pasaport gibi) kullanabilirsiniz. Ayrıca e-posta adresinin sahibine ait "
-"olduğunu denetlemek için e-posta kullanmalısınız."
-
-#: pgp/seahorse-sign.ui:215
-msgid "How others will see this signature:"
-msgstr "Başkaları bu imzayı nasıl görecek:"
-
-#: pgp/seahorse-sign.ui:232
-msgid "_Others may not see this signature"
-msgstr "_Başkaları bu imzayı görmesin"
-
-#: pgp/seahorse-sign.ui:243
-msgid "I can _revoke this signature at a later date."
-msgstr "Bu imzayı ileride _feshedebilirim."
-
-#: pgp/seahorse-sign.ui:268
-msgid "Sign key as:"
-msgstr "Şu anahtarımla imzalayacağım:"
-
-#: pgp/seahorse-sign.ui:286
-msgid "_Signer:"
-msgstr "İm_zalayan:"
-
-#: pgp/seahorse-sign.ui:321
-msgid "_Sign"
-msgstr "İ_mzala"
-
 #: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
 msgid "Exporting data"
 msgstr "Veri dışa aktarılıyor"
@@ -2235,6 +2231,10 @@ msgstr "Etiket:"
 #: pkcs11/seahorse-pkcs11-generate.ui:71
 msgid "Stored at:"
 msgstr "Şuraya saklandı:"
+
+#: pkcs11/seahorse-pkcs11-generate.ui:128
+msgid "Key _Type:"
+msgstr "Anahtar _Türü:"
 
 #: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
 msgid "Key _Strength (bits):"
@@ -2757,6 +2757,12 @@ msgstr "Uzak bilgisayardaki Güvenli Kabuk anahtarları yapılandırılamadı."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
+
+#~ msgid "Expiration Date:"
+#~ msgstr "Son Kullanım Tarihi:"
+
+#~ msgid "Couldn’t add subkey"
+#~ msgstr "Alt anahtar eklenemedi"
 
 #~ msgid "Keyring is unlocked"
 #~ msgstr "Anahtarlık açıldı"
@@ -3617,9 +3623,6 @@ msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
 
 #~ msgid "Validity"
 #~ msgstr "Geçerlilik"
-
-#~ msgid "Expiration Date"
-#~ msgstr "Son Kullanım Tarihi"
 
 #~ msgid "_Expand All"
 #~ msgstr "_Hepsini Genişlet"
