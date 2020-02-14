@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-02-06 23:13+0000\n"
+"POT-Creation-Date: 2020-02-14 07:27+0000\n"
 "PO-Revision-Date: 2020-02-08 00:00+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -603,7 +603,6 @@ msgid "_Keyring:"
 msgstr "キーリング(_K):"
 
 #: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
-#: ssh/seahorse-ssh-generate.ui:78
 msgid "_Description:"
 msgstr "説明(_D):"
 
@@ -650,7 +649,7 @@ msgid "Use"
 msgstr "使用目的"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1217
+#: pgp/seahorse-pgp-key-properties.c:1256
 msgid "Type"
 msgstr "種類"
 
@@ -676,7 +675,7 @@ msgstr "パスワードを削除"
 msgid "Keyring properties"
 msgstr "キーリングのプロパティ"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:851
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:857
 msgid "Name"
 msgstr "名前"
 
@@ -952,34 +951,6 @@ msgstr "%u:%u:%u"
 msgid "Could not display help: %s"
 msgstr "ヘルプを表示できません: %s"
 
-#: pgp/seahorse-add-subkey.ui:31
-msgid "Never E_xpires"
-msgstr "有効期限を設定しない(_X)"
-
-#: pgp/seahorse-add-subkey.ui:35
-msgid "If key never expires"
-msgstr "鍵の有効期限を設定しない場合"
-
-#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
-msgid "Key _Type:"
-msgstr "鍵の種類(_T):"
-
-#: pgp/seahorse-add-subkey.ui:78
-msgid "Key _Length:"
-msgstr "鍵の長さ(_L):"
-
-#: pgp/seahorse-add-subkey.ui:93
-msgid "Expiration Date:"
-msgstr "有効期限:"
-
-#: pgp/seahorse-add-subkey.ui:112
-msgid "Length of Key"
-msgstr "鍵の長さを指定します"
-
-#: pgp/seahorse-add-subkey.ui:194
-msgid "Generate a new subkey"
-msgstr "新しい副鍵の生成"
-
 #: pgp/seahorse-expires.ui:22
 msgid "_Never expires"
 msgstr "有効期限を設定しない(_N)"
@@ -992,30 +963,60 @@ msgstr "鍵の失効"
 msgid "C_hange"
 msgstr "変更(_H)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:161
-msgid "Couldn’t add subkey"
-msgstr "副鍵を追加できません"
-
-#: pgp/seahorse-gpgme-add-subkey.c:180
+#: pgp/seahorse-gpgme-add-subkey.c:213
 #, c-format
 msgid "Add subkey to %s"
 msgstr "%s へ副鍵を追加する"
 
-#: pgp/seahorse-gpgme-add-subkey.c:196 pgp/seahorse-gpgme-generate.c:78
+#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate.c:78
 msgid "DSA (sign only)"
 msgstr "DSA (署名のみ)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:204
+#: pgp/seahorse-gpgme-add-subkey.c:247
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (暗号化のみ)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:210 pgp/seahorse-gpgme-generate.c:79
+#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate.c:79
 msgid "RSA (sign only)"
 msgstr "RSA (署名のみ)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:216
+#: pgp/seahorse-gpgme-add-subkey.c:259
 msgid "RSA (encrypt only)"
 msgstr "RSA (暗号化のみ)"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:28
+#, fuzzy
+#| msgid "Key _Type:"
+msgid "Key _Type"
+msgstr "鍵の種類(_T):"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:54
+#, fuzzy
+#| msgid "Key _Length:"
+msgid "Key _Length"
+msgstr "鍵の長さ(_L):"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:71
+msgid "Length of Key"
+msgstr "鍵の長さを指定します"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:86
+#, fuzzy
+#| msgid "Expiration Date:"
+msgid "Expiration Date"
+msgstr "有効期限:"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:110
+msgid "Never E_xpires"
+msgstr "有効期限を設定しない(_X)"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:114
+msgid "If key never expires"
+msgstr "鍵の有効期限を設定しない場合"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:150
+msgid "Generate a new subkey"
+msgstr "新しい副鍵の生成"
 
 #: pgp/seahorse-gpgme-add-uid.c:149
 #, c-format
@@ -1067,19 +1068,19 @@ msgstr "復号できません (おそらく復号鍵をお持ちでないよう�
 msgid "The operation was cancelled"
 msgstr "操作はキャンセルされました"
 
-#: pgp/seahorse-gpgme-expires.c:63
+#: pgp/seahorse-gpgme-expires.c:62
 msgid "Invalid expiry date"
 msgstr "有効期限の日付が無効です"
 
-#: pgp/seahorse-gpgme-expires.c:64
+#: pgp/seahorse-gpgme-expires.c:63
 msgid "The expiry date must be in the future"
 msgstr "有効期限には将来の日付を指定してください"
 
-#: pgp/seahorse-gpgme-expires.c:77
+#: pgp/seahorse-gpgme-expires.c:76
 msgid "Couldn’t change expiry date"
 msgstr "有効期限を変更できません"
 
-#: pgp/seahorse-gpgme-expires.c:138
+#: pgp/seahorse-gpgme-expires.c:137
 #, c-format
 msgid "Expiry: %s"
 msgstr "有効期限: %s"
@@ -1101,7 +1102,7 @@ msgid "PGP keys"
 msgstr "PGP 鍵"
 
 #: pgp/seahorse-gpgme-generate.c:76 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:141
+#: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
@@ -1280,48 +1281,48 @@ msgstr "本当にこの鍵に登録した写真を削除してもよろしいで
 msgid "Couldn’t delete photo"
 msgstr "写真を削除できません"
 
-#: pgp/seahorse-gpgme-revoke.c:73
+#: pgp/seahorse-gpgme-revoke.c:72
 msgid "Couldn’t revoke subkey"
 msgstr "副鍵を失効できません"
 
-#: pgp/seahorse-gpgme-revoke.c:94
+#: pgp/seahorse-gpgme-revoke.c:93
 #, c-format
 msgid "Revoke: %s"
 msgstr "失効: %s"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke.c:104
 msgid "No reason"
 msgstr "理由なし"
 
-#: pgp/seahorse-gpgme-revoke.c:106
+#: pgp/seahorse-gpgme-revoke.c:105
 msgid "No reason for revoking key"
 msgstr "鍵を失効させる理由がありません"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke.c:111
 msgid "Compromised"
 msgstr "漏洩"
 
-#: pgp/seahorse-gpgme-revoke.c:113
+#: pgp/seahorse-gpgme-revoke.c:112
 msgid "Key has been compromised"
 msgstr "鍵が漏洩しています"
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke.c:118
 msgid "Superseded"
 msgstr "交換済"
 
-#: pgp/seahorse-gpgme-revoke.c:120
+#: pgp/seahorse-gpgme-revoke.c:119
 msgid "Key has been superseded"
 msgstr "鍵は新しいものに交換されました"
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke.c:125
 msgid "Not Used"
 msgstr "未使用"
 
-#: pgp/seahorse-gpgme-revoke.c:127
+#: pgp/seahorse-gpgme-revoke.c:126
 msgid "Key is no longer used"
 msgstr "鍵が使用されていません"
 
-#: pgp/seahorse-gpgme-revoke.c:164
+#: pgp/seahorse-gpgme-revoke.c:163
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -1330,7 +1331,7 @@ msgstr ""
 "%s を %s の失効者 (Revoker) として追加しようとしています。この処理は取り消し"
 "ができません! 続行してもよろしいですか?"
 
-#: pgp/seahorse-gpgme-revoke.c:176
+#: pgp/seahorse-gpgme-revoke.c:175
 msgid "Couldn’t add revoker"
 msgstr "失効者を追加できません"
 
@@ -1338,7 +1339,7 @@ msgstr "失効者を追加できません"
 msgid "I understand that this secret key will be permanently deleted."
 msgstr "この秘密鍵が完全に削除されることを理解します。"
 
-#: pgp/seahorse-gpgme-sign.c:99
+#: pgp/seahorse-gpgme-sign-dialog.c:146
 #, c-format
 msgid ""
 "This key was already signed by\n"
@@ -1347,21 +1348,111 @@ msgstr ""
 "この鍵は既に以下の人に署名されてます。\n"
 "“%s”"
 
-#: pgp/seahorse-gpgme-sign.c:104
+#: pgp/seahorse-gpgme-sign-dialog.c:151
 msgid "Couldn’t sign key"
 msgstr "鍵に署名できません"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: pgp/seahorse-gpgme-sign.c:163 pgp/seahorse-signer.c:62
+#: pgp/seahorse-gpgme-sign-dialog.c:281 pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr "署名に利用できる鍵がありません"
 
-#: pgp/seahorse-gpgme-sign.c:164
+#: pgp/seahorse-gpgme-sign-dialog.c:282
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr "この鍵の信用度を表すのに使用する自身の PGP 鍵がありません。"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:6
+msgid "Sign Key"
+msgstr "鍵に署名する"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:25
+msgid "By signing you indicate your trust that this key belongs to:"
+msgstr "署名を行うことで、次に属す鍵を信用したものと見なします:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:32
+msgid "Key Name"
+msgstr "鍵の名前"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:52
+msgid "How carefully have you checked this key?"
+msgstr "この鍵をどれくらい入念にチェックしたか:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:77
+msgid "_Not at all"
+msgstr "全くチェックしていない(_N)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:88
+msgid "_Casually"
+msgstr "軽くチェックした(_C)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:100
+msgid "_Very Carefully"
+msgstr "かなり注意深くチェックした(_V)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:127
+msgid ""
+"<i>Not at all:</i> means you believe the key is owned by the person who "
+"claims to own it, but you could not or did not verify this to be a fact."
+msgstr ""
+"「<i>全くチェックしていない</i>」は、鍵の所有を主張した人物によって所有されて"
+"いることを、あなたは信じているがその真偽を確認できないまたは確認していない、"
+"ということを意味します。"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:140
+msgid ""
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone."
+msgstr ""
+"「<i>軽くチェックした</i>」は、鍵の所有を主張した人物によって所有されているこ"
+"とを、略式で確認したということを意味します。例えば、電話ごしに鍵の指紋を所有"
+"者と読み合うことができるというレベルです。"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:161
+msgid ""
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
+"key is genuine."
+msgstr ""
+"「<i>かなり注意深くチェックした</i>」はこの鍵が本物であることを完全に把握して"
+"いる場合にのみ選択してください。"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:177
+msgid ""
+"You could use a hard to forge photo identification (such as a passport) to "
+"personally check that the name on the key is correct. You should have also "
+"used email to check that the email address belongs to the owner."
+msgstr ""
+"鍵の名前が妥当であることを個人的に証明するために、例えばパスポートに貼ってあ"
+"る写真のようなものを利用して身元を偽造させないようにすることが可能です。さら"
+"に念を入れて、電子メールを送って、このメールアドレスが本人のものであることも"
+"確認した方が良いでしょう。"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:206
+msgid "How others will see this signature:"
+msgstr "この署名をどこまで公開するか:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:222
+msgid "_Others may not see this signature"
+msgstr "この署名を他人に公開しない(_O)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:248
+msgid "I can _revoke this signature at a later date."
+msgstr "後日、この署名を失効させることができます。(_R)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:282
+msgid "Sign key as:"
+msgstr "鍵の署名者:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:300
+msgid "_Signer:"
+msgstr "署名者(_S):"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:335
+msgid "_Sign"
+msgstr "署名する(_S)"
 
 #: pgp/seahorse-gpgme-subkey.c:89
 msgctxt "Algorithm"
@@ -1555,11 +1646,11 @@ msgstr "鍵の拡張オプション(_A)"
 msgid "_Comment"
 msgstr "コメント(_C)"
 
-#: pgp/seahorse-pgp-generate.ui:174
+#: pgp/seahorse-pgp-generate.ui:174 ssh/seahorse-ssh-generate.ui:127
 msgid "Encryption _Type"
 msgstr "暗号化の種類(_T)"
 
-#: pgp/seahorse-pgp-generate.ui:204
+#: pgp/seahorse-pgp-generate.ui:204 ssh/seahorse-ssh-generate.ui:164
 msgid "Key _Strength (bits)"
 msgstr "鍵の長さ (ビット)(_S)"
 
@@ -1593,147 +1684,147 @@ msgstr "自分の PGP 鍵"
 msgid "PGP key"
 msgstr "PGP 鍵"
 
-#: pgp/seahorse-pgp-key-properties.c:245
+#: pgp/seahorse-pgp-key-properties.c:247
 msgid "Couldn’t change primary user ID"
 msgstr "プライマリユーザー ID が変更できません"
 
-#: pgp/seahorse-pgp-key-properties.c:280
+#: pgp/seahorse-pgp-key-properties.c:282
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "本当に“%s”というユーザー ID を完全に削除しますか?"
 
-#: pgp/seahorse-pgp-key-properties.c:289
+#: pgp/seahorse-pgp-key-properties.c:291
 msgid "Couldn’t delete user ID"
 msgstr "ユーザー ID を削除できません"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:361 pgp/seahorse-pgp-key-properties.c:1351
+#: pgp/seahorse-pgp-key-properties.c:367 pgp/seahorse-pgp-key-properties.c:1390
 msgid "[Unknown]"
 msgstr "[不明]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:457 pgp/seahorse-pgp-key-properties.c:1556
+#: pgp/seahorse-pgp-key-properties.c:463 pgp/seahorse-pgp-key-properties.c:1600
 msgid "Name/Email"
 msgstr "名前/メール"
 
-#: pgp/seahorse-pgp-key-properties.c:464
+#: pgp/seahorse-pgp-key-properties.c:470
 msgid "Signature ID"
 msgstr "署名の ID"
 
-#: pgp/seahorse-pgp-key-properties.c:570
+#: pgp/seahorse-pgp-key-properties.c:576
 msgid "Couldn’t change primary photo"
 msgstr "プライマリの写真を変更できません"
 
-#: pgp/seahorse-pgp-key-properties.c:730
+#: pgp/seahorse-pgp-key-properties.c:736
 msgid "Error changing password"
 msgstr "パスワードの変更中にエラーが発生しました"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:776
+#: pgp/seahorse-pgp-key-properties.c:782
 msgid "(unknown)"
 msgstr "(不明)"
 
-#: pgp/seahorse-pgp-key-properties.c:781
+#: pgp/seahorse-pgp-key-properties.c:787
 #, c-format
 msgid "This key expired on: %s"
 msgstr "この鍵の有効期限: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:809
+#: pgp/seahorse-pgp-key-properties.c:815
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — 公開鍵"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:812
+#: pgp/seahorse-pgp-key-properties.c:818
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — 秘密鍵"
 
-#: pgp/seahorse-pgp-key-properties.c:965
+#: pgp/seahorse-pgp-key-properties.c:1004
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "本当に副鍵 %d (%s) を完全に削除しますか?"
 
-#: pgp/seahorse-pgp-key-properties.c:973
+#: pgp/seahorse-pgp-key-properties.c:1012
 msgid "Couldn’t delete subkey"
 msgstr "副鍵を削除できません"
 
-#: pgp/seahorse-pgp-key-properties.c:1032
-#: pgp/seahorse-pgp-key-properties.c:1325
+#: pgp/seahorse-pgp-key-properties.c:1071
+#: pgp/seahorse-pgp-key-properties.c:1364
 msgid "Unable to change trust"
 msgstr "信用度を変更できません"
 
-#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1083 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "鍵をエクスポートできません"
 
 # 参考: http://pgp.iijlab.net/trans/
-#: pgp/seahorse-pgp-key-properties.c:1175
-#: pgp/seahorse-pgp-key-properties.c:1259
+#: pgp/seahorse-pgp-key-properties.c:1214
+#: pgp/seahorse-pgp-key-properties.c:1298
 msgctxt "Expires"
 msgid "Never"
 msgstr "有効期限なし"
 
-#: pgp/seahorse-pgp-key-properties.c:1214
+#: pgp/seahorse-pgp-key-properties.c:1253
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1220
+#: pgp/seahorse-pgp-key-properties.c:1259
 msgid "Usage"
 msgstr "用途"
 
-#: pgp/seahorse-pgp-key-properties.c:1223
+#: pgp/seahorse-pgp-key-properties.c:1262
 msgid "Created"
 msgstr "作成日"
 
-#: pgp/seahorse-pgp-key-properties.c:1226
+#: pgp/seahorse-pgp-key-properties.c:1265
 msgid "Expires"
 msgstr "有効期限"
 
-#: pgp/seahorse-pgp-key-properties.c:1229
+#: pgp/seahorse-pgp-key-properties.c:1268
 msgid "Status"
 msgstr "状態"
 
-#: pgp/seahorse-pgp-key-properties.c:1232
+#: pgp/seahorse-pgp-key-properties.c:1271
 msgid "Strength"
 msgstr "強度"
 
-#: pgp/seahorse-pgp-key-properties.c:1250
+#: pgp/seahorse-pgp-key-properties.c:1289
 msgid "Revoked"
 msgstr "失効済み"
 
-#: pgp/seahorse-pgp-key-properties.c:1252
+#: pgp/seahorse-pgp-key-properties.c:1291
 msgid "Expired"
 msgstr "期限切れ"
 
-#: pgp/seahorse-pgp-key-properties.c:1254
+#: pgp/seahorse-pgp-key-properties.c:1293
 msgid "Disabled"
 msgstr "無効にする"
 
-#: pgp/seahorse-pgp-key-properties.c:1256
+#: pgp/seahorse-pgp-key-properties.c:1295
 msgid "Good"
 msgstr "良い"
 
-#: pgp/seahorse-pgp-key-properties.c:1559
+#: pgp/seahorse-pgp-key-properties.c:1603
 #: pgp/seahorse-pgp-private-key-properties.ui:333
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "鍵 ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1700
+#: pgp/seahorse-pgp-key-properties.c:1744
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "他の鍵にある“%s”からの署名を信用する"
 
-#: pgp/seahorse-pgp-key-properties.c:1707
+#: pgp/seahorse-pgp-key-properties.c:1751
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
 msgstr "“%s”という鍵の所有者を信用する場合は、この鍵に<i>署名</i>してください:"
 
-#: pgp/seahorse-pgp-key-properties.c:1714
+#: pgp/seahorse-pgp-key-properties.c:1758
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -2004,96 +2095,6 @@ msgstr "署名鍵の選択"
 msgid "_Sign message with key:"
 msgstr "次の鍵を使用してメッセージに署名する(_S):"
 
-#: pgp/seahorse-sign.ui:6
-msgid "Sign Key"
-msgstr "鍵に署名する"
-
-#: pgp/seahorse-sign.ui:27
-msgid "By signing you indicate your trust that this key belongs to:"
-msgstr "署名を行うことで、次に属す鍵を信用したものと見なします:"
-
-#: pgp/seahorse-sign.ui:34
-msgid "Key Name"
-msgstr "鍵の名前"
-
-#: pgp/seahorse-sign.ui:54
-msgid "How carefully have you checked this key?"
-msgstr "この鍵をどれくらい入念にチェックしたか:"
-
-#: pgp/seahorse-sign.ui:84
-msgid "_Not at all"
-msgstr "全くチェックしていない(_N)"
-
-#: pgp/seahorse-sign.ui:95
-msgid "_Casually"
-msgstr "軽くチェックした(_C)"
-
-#: pgp/seahorse-sign.ui:107
-msgid "_Very Carefully"
-msgstr "かなり注意深くチェックした(_V)"
-
-#: pgp/seahorse-sign.ui:134
-msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who "
-"claims to own it, but you could not or did not verify this to be a fact."
-msgstr ""
-"「<i>全くチェックしていない</i>」は、鍵の所有を主張した人物によって所有されて"
-"いることを、あなたは信じているがその真偽を確認できないまたは確認していない、"
-"ということを意味します。"
-
-#: pgp/seahorse-sign.ui:147
-msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone."
-msgstr ""
-"「<i>軽くチェックした</i>」は、鍵の所有を主張した人物によって所有されているこ"
-"とを、略式で確認したということを意味します。例えば、電話ごしに鍵の指紋を所有"
-"者と読み合うことができるというレベルです。"
-
-#: pgp/seahorse-sign.ui:168
-msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
-"key is genuine."
-msgstr ""
-"「<i>かなり注意深くチェックした</i>」はこの鍵が本物であることを完全に把握して"
-"いる場合にのみ選択してください。"
-
-#: pgp/seahorse-sign.ui:184
-msgid ""
-"You could use a hard to forge photo identification (such as a passport) to "
-"personally check that the name on the key is correct. You should have also "
-"used email to check that the email address belongs to the owner."
-msgstr ""
-"鍵の名前が妥当であることを個人的に証明するために、例えばパスポートに貼ってあ"
-"る写真のようなものを利用して身元を偽造させないようにすることが可能です。さら"
-"に念を入れて、電子メールを送って、このメールアドレスが本人のものであることも"
-"確認した方が良いでしょう。"
-
-#: pgp/seahorse-sign.ui:215
-msgid "How others will see this signature:"
-msgstr "この署名をどこまで公開するか:"
-
-#: pgp/seahorse-sign.ui:232
-msgid "_Others may not see this signature"
-msgstr "この署名を他人に公開しない(_O)"
-
-#: pgp/seahorse-sign.ui:243
-msgid "I can _revoke this signature at a later date."
-msgstr "後日、この署名を失効させることができます。(_R)"
-
-#: pgp/seahorse-sign.ui:268
-msgid "Sign key as:"
-msgstr "鍵の署名者:"
-
-#: pgp/seahorse-sign.ui:286
-msgid "_Signer:"
-msgstr "署名者(_S):"
-
-#: pgp/seahorse-sign.ui:321
-msgid "_Sign"
-msgstr "署名する(_S)"
-
 #: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
 msgid "Exporting data"
 msgstr "データをエクスポート中"
@@ -2217,7 +2218,11 @@ msgstr "ラベル:"
 msgid "Stored at:"
 msgstr "保存先:"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
+#: pkcs11/seahorse-pkcs11-generate.ui:128
+msgid "Key _Type:"
+msgstr "鍵の種類(_T):"
+
+#: pkcs11/seahorse-pkcs11-generate.ui:151
 msgid "Key _Strength (bits):"
 msgstr "鍵の長さ (ビット)(_S):"
 
@@ -2611,27 +2616,29 @@ msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "セキュアシェル (SSH) 鍵を利用すると、他のコンピューターに安全に接続できます。"
 
-#: ssh/seahorse-ssh-generate.ui:108
+#: ssh/seahorse-ssh-generate.ui:78
+#, fuzzy
+#| msgid "_Description:"
+msgid "_Description"
+msgstr "説明(_D):"
+
+#: ssh/seahorse-ssh-generate.ui:111
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "メールアドレス、またはこの鍵の目的のメモです。"
 
-#: ssh/seahorse-ssh-generate.ui:124
-msgid "Encryption _Type:"
-msgstr "暗号化の種類(_T):"
-
-#: ssh/seahorse-ssh-generate.ui:142
+#: ssh/seahorse-ssh-generate.ui:148
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:143
+#: ssh/seahorse-ssh-generate.ui:149
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:144
+#: ssh/seahorse-ssh-generate.ui:150
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:186
+#: ssh/seahorse-ssh-generate.ui:195
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2639,11 +2646,11 @@ msgstr ""
 "この鍵で接続したいコンピューターがあれば、新しい鍵を認識するようにコンピュー"
 "ター側を設定することができます。 "
 
-#: ssh/seahorse-ssh-generate.ui:212
+#: ssh/seahorse-ssh-generate.ui:221
 msgid "_Just Create Key"
 msgstr "生成のみ(_J)"
 
-#: ssh/seahorse-ssh-generate.ui:226
+#: ssh/seahorse-ssh-generate.ui:235
 msgid "_Create and Set Up"
 msgstr "生成と設定(_C)"
 
@@ -2742,6 +2749,12 @@ msgstr "リモートのコンピューター上にある SSH 鍵を設定でき�
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "SSH 鍵を設定しています…"
+
+#~ msgid "Couldn’t add subkey"
+#~ msgstr "副鍵を追加できません"
+
+#~ msgid "Encryption _Type:"
+#~ msgstr "暗号化の種類(_T):"
 
 #~ msgid "_Combine all keyrings"
 #~ msgstr "すべてのキーリングをまとめる(_C)"
