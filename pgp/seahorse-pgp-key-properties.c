@@ -1084,9 +1084,8 @@ on_export_complete (GObject *source, GAsyncResult *result, gpointer user_data)
 }
 
 static void
-on_export_secret (GSimpleAction *action, GVariant *param, gpointer user_data)
+export_key_to_file (SeahorsePgpKeyProperties *self, gboolean secret)
 {
-    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     GList *exporters = NULL;
     GtkWindow *window;
     g_autofree gchar *directory = NULL;
@@ -1094,7 +1093,7 @@ on_export_secret (GSimpleAction *action, GVariant *param, gpointer user_data)
     SeahorseExporter *exporter = NULL;
 
     exporters = g_list_append (exporters,
-                               seahorse_gpgme_exporter_new (G_OBJECT (self->key), TRUE, TRUE));
+                               seahorse_gpgme_exporter_new (G_OBJECT (self->key), TRUE, secret));
 
     window = GTK_WINDOW (self);
     if (seahorse_exportable_prompt (exporters, window, &directory, &file, &exporter)) {
@@ -1104,6 +1103,22 @@ on_export_secret (GSimpleAction *action, GVariant *param, gpointer user_data)
 
     g_clear_object (&exporter);
     g_list_free_full (exporters, g_object_unref);
+}
+
+static void
+on_export_secret (GSimpleAction *action, GVariant *param, gpointer user_data)
+{
+    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
+
+    export_key_to_file (self, TRUE);
+}
+
+static void
+on_export_public (GSimpleAction *action, GVariant *param, gpointer user_data)
+{
+    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
+
+    export_key_to_file (self, FALSE);
 }
 
 static void
@@ -1622,6 +1637,7 @@ static const GActionEntry PRIVATE_KEY_ACTIONS[] = {
     { "change-password",  on_change_password  },
     { "change-expires",   on_change_expires   },
     { "export-secret",    on_export_secret    },
+    { "export-public",    on_export_public    },
     { "uids.add",           on_uids_add           },
     { "uids.delete",        on_uids_delete        },
     { "uids.make-primary",  on_uids_make_primary  },
