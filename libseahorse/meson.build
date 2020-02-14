@@ -1,18 +1,17 @@
-marshaller = gnome.genmarshal('seahorse-marshal',
+libseahorse_marshaller = gnome.genmarshal('seahorse-marshal',
   sources: 'seahorse-marshal.list',
   prefix: 'seahorse_marshal',
 )
 
 
-libseahorse_sources = [
+libseahorse_sources = files(
   'seahorse-bind.c',
   'seahorse-object-list.c',
   'seahorse-object-model.c',
   'seahorse-progress.c',
   'seahorse-util.c',
   'seahorse-widget.c',
-  marshaller,
-]
+)
 
 libseahorse_deps = [
   glib_deps,
@@ -23,7 +22,7 @@ libseahorse_deps = [
 ]
 
 libseahorse_lib = static_library('libseahorse',
-  libseahorse_sources,
+  [ libseahorse_sources, libseahorse_marshaller ],
   dependencies: libseahorse_deps,
   include_directories: include_directories('..'),
 )

@@ -1,4 +1,4 @@
-gkr_sources = [
+gkr_sources = files(
   'gkr-backend.vala',
   'gkr-dialogs.vala',
   'gkr-item-add.vala',
@@ -11,7 +11,7 @@ gkr_sources = [
   'gkr-keyring.vala',
   'gkr-module.vala',
   'gkr-password-entry.vala',
-]
+)
 
 gkr_dependencies = [
   glib_deps,

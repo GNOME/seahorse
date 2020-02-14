@@ -1,4 +1,4 @@
-ssh_sources = [
+ssh_sources = files(
   'actions.vala',
   'algorithm.vala',
   'backend.vala',
@@ -14,7 +14,7 @@ ssh_sources = [
   'source.vala',
   'ssh.vala',
   'upload.vala',
-]
+)
 
 ssh_dependencies = [
   glib_deps,
@@ -41,9 +41,9 @@ ssh_dep = declare_dependency(
 )
 
 # ssh-askpass helper binary
-ssh_askpass_sources = [
+ssh_askpass_sources = files(
   'seahorse-ssh-askpass.c',
-]
+)
 
 ssh_askpass_dependencies = [
   gcr,

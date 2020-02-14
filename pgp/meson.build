@@ -1,4 +1,4 @@
-pgp_sources = [
+pgp_sources = files(
   'seahorse-combo-keys.c',
   'seahorse-discovery.c',
   'seahorse-gpgme.c',
@@ -34,7 +34,7 @@ pgp_sources = [
   'seahorse-transfer.c',
   'seahorse-unknown.c',
   'seahorse-unknown-source.c',
-]
+)
 
 pgp_dependencies = [
   glib_deps,
@@ -47,7 +47,7 @@ pgp_c_flags = [
 ]
 
 if with_ldap
-  pgp_sources += 'seahorse-ldap-source.c'
+  pgp_sources = [ pgp_sources, 'seahorse-ldap-source.c' ]
   pgp_dependencies += [
     libldap,
     liblber,
@@ -56,12 +56,13 @@ if with_ldap
 endif
 
 if with_hkp
-  pgp_sources += 'seahorse-hkp-source.c'
+  pgp_sources += [ pgp_sources, 'seahorse-hkp-source.c' ]
   pgp_dependencies += libsoup
 endif
 
 if with_keyservers
-  pgp_sources += [
+  pgp_sources = [
+    pgp_sources,
     'seahorse-server-source.c',
     'seahorse-keyserver-search.c',
     'seahorse-keyserver-sync.c',

@@ -1,4 +1,4 @@
-pkcs11_sources = [
+pkcs11_sources = files(
   'certificate-der-exporter.vala',
   'pkcs11-certificate.vala',
   'pkcs11-deleter.vala',
@@ -12,7 +12,7 @@ pkcs11_sources = [
 
   'cryptoki.vapi',
   'seahorse-pkcs11-backend.c',
-]
+)
 
 pkcs11_deps = [
   glib_deps,

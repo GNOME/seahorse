@@ -1,4 +1,4 @@
-common_sources = [
+common_sources = files(
   'actions.vala',
   'add-keyserver-dialog.vala',
   'app-settings.vala',
@@ -25,7 +25,7 @@ common_sources = [
   'util.vala',
   'validity.vala',
   'viewable.vala',
-]
+)
 
 common_deps = [
   glib_deps,

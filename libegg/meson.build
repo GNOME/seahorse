@@ -11,7 +11,7 @@ libeggdatetime_cflags = [
 ]
 
 libeggdatetime_lib = static_library('libeggdatetime',
-  'egg-datetime.c',
+  files('egg-datetime.c'),
   c_args: libeggdatetime_cflags,
   dependencies: libeggdatetime_dependencies,
 )
@@ -30,7 +30,7 @@ libtreemultidnd_cflags = [
 ]
 
 libtreemultidnd_lib = static_library('libtreemultidnd',
-  'eggtreemultidnd.c',
+  files('eggtreemultidnd.c'),
   c_args: libtreemultidnd_cflags,
   dependencies: libtreemultidnd_dependencies,
 )
