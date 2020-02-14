@@ -7,7 +7,7 @@ pgp_sources = [
   'seahorse-gpgme-data.c',
   'seahorse-gpgme-expires.c',
   'seahorse-gpgme-exporter.c',
-  'seahorse-gpgme-generate.c',
+  'seahorse-gpgme-generate-dialog.c',
   'seahorse-gpgme-key.c',
   'seahorse-gpgme-key-deleter.c',
   'seahorse-gpgme-key-op.c',

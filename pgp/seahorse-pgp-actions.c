@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 
 #include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-generate-dialog.h"
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-gpgme-uid.h"
@@ -136,14 +137,17 @@ on_pgp_generate_key (GSimpleAction *action,
   SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
   SeahorseGpgmeKeyring* keyring;
   SeahorseCatalog *catalog;
+  GtkDialog *dialog;
 
   keyring = seahorse_pgp_backend_get_default_keyring (NULL);
   g_return_if_fail (keyring != NULL);
 
   catalog = seahorse_action_group_get_catalog (actions);
-  seahorse_gpgme_generate_show (keyring,
-                                GTK_WINDOW (catalog),
-                                NULL, NULL, NULL);
+
+  dialog = seahorse_gpgme_generate_dialog_new (keyring, GTK_WINDOW (catalog));
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
   g_clear_object (&catalog);
 }
 

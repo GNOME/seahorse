@@ -14,32 +14,28 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkDialog" id="pgp-generate">
+  <template class="SeahorseGpgmeGenerateDialog" parent="GtkDialog">
     <property name="title" translatable="yes">New PGP key</property>
     <property name="visible">True</property>
-    <property name="use_header_bar">1</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
-    <signal name="delete-event" handler="on_widget_delete_event" swapped="no"/>
-    <signal name="response" handler="on_gpgme_generate_response" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
-          <object class="GtkBox" id="vbox1">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <property name="can_focus">False</property>
             <property name="spacing">12</property>
             <property name="margin">12</property>
             <child>
-              <object class="GtkLabel" id="label45">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
@@ -53,19 +49,19 @@
               </packing>
             </child>
             <child>
-              <object class="GtkGrid" id="table12">
+              <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="column_spacing">12</property>
                 <property name="row_spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="name-label">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="label" translatable="yes" comments="Full name of the key, usually the name of the user.">Full _Name</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">name-entry</property>
+                    <property name="mnemonic_widget">name_entry</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -76,7 +72,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="name-entry">
+                  <object class="GtkEntry" id="name_entry">
                     <property name="width_request">180</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -96,7 +92,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">_Email Address</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">email-entry</property>
+                    <property name="mnemonic_widget">email_entry</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -107,7 +103,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="email-entry">
+                  <object class="GtkEntry" id="email_entry">
                     <property name="width_request">180</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -136,13 +132,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label54">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="halign">end</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">_Comment</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">comment-entry</property>
+                    <property name="mnemonic_widget">comment_entry</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -153,7 +149,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="comment-entry">
+                  <object class="GtkEntry" id="comment_entry">
                     <property name="width_request">180</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -183,7 +179,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="algorithm-choice">
+                  <object class="GtkComboBoxText" id="algorithm_choice">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
@@ -213,7 +209,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="bits-entry">
+                  <object class="GtkSpinButton" id="bits_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
@@ -227,7 +223,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label55">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
@@ -243,7 +239,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="expiry-date-container">
+                  <object class="GtkBox" id="expiry_date_container">
                     <property name="visible">True</property>
                     <property name="orientation">horizontal</property>
                     <property name="can_focus">False</property>
@@ -252,7 +248,7 @@
                       <placeholder/>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="expires-check">
+                      <object class="GtkCheckButton" id="expires_check">
                         <property name="label" translatable="yes">Ne_ver Expires</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -312,5 +308,5 @@
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5" default="true">ok</action-widget>
     </action-widgets>
-  </object>
+  </template>
 </interface>
