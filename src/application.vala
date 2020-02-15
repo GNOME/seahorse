@@ -84,13 +84,13 @@ public class Seahorse.Application : Gtk.Application {
 
     private void add_action_accelerators() {
         set_accels_for_action ("app.help",        {"F1"});
-        set_accels_for_action ("app.quit",        {"<control>Q"});
+        set_accels_for_action ("app.quit",        {"<control>q"});
 
-        set_accels_for_action ("win.show-search", { "<control>F" });
-        set_accels_for_action ("win.new-item",    { "<control>N" });
-        set_accels_for_action ("win.import-file", { "<control>I" });
-        set_accels_for_action ("win.copy",        { "<control>C" });
-        set_accels_for_action ("win.paste",       { "<control>V" });
+        set_accels_for_action ("win.show-search", { "<control>f" });
+        set_accels_for_action ("win.new-item",    { "<control>n" });
+        set_accels_for_action ("win.import-file", { "<control>i" });
+        set_accels_for_action ("win.copy",        { "<control>c" });
+        set_accels_for_action ("win.paste",       { "<control>v" });
     }
 
     public override void startup() {
