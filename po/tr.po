@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-02-14 07:27+0000\n"
-"PO-Revision-Date: 2020-02-14 18:21+0300\n"
+"POT-Creation-Date: 2020-02-15 00:31+0000\n"
+"PO-Revision-Date: 2020-02-15 12:52+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -60,8 +60,8 @@ msgstr "Veri dışa aktarılamadı"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
-#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:287
+#: pgp/seahorse-gpgme-generate-dialog.ui:283 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
 #: src/import-dialog.vala:34 src/key-manager.vala:270
 msgid "_Cancel"
@@ -73,9 +73,7 @@ msgstr "_İptal"
 msgid "_Delete"
 msgstr "_Sil"
 
-#: common/exportable.vala:191 pgp/seahorse-pgp-private-key-properties.ui:909
-#: pkcs11/seahorse-pkcs11-properties.ui:33
-#: ssh/seahorse-ssh-key-properties.ui:331
+#: common/exportable.vala:191 pkcs11/seahorse-pkcs11-properties.ui:33
 msgid "Export"
 msgstr "Aktar"
 
@@ -622,7 +620,7 @@ msgid "_Password:"
 msgstr "_Parola:"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-#: pgp/seahorse-pgp-private-key-properties.ui:980
+#: pgp/seahorse-pgp-private-key-properties.ui:960
 msgid "Add"
 msgstr "Ekle"
 
@@ -659,7 +657,7 @@ msgid "Use"
 msgstr "Kullanım"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1256
+#: pgp/seahorse-pgp-key-properties.c:1271
 msgid "Type"
 msgstr "Tür"
 
@@ -672,7 +670,7 @@ msgid "Login"
 msgstr "Giriş"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1103
+#: pgp/seahorse-pgp-private-key-properties.ui:1083
 #: pgp/seahorse-pgp-public-key-properties.ui:915
 msgid "Details"
 msgstr "Ayrıntılar"
@@ -978,7 +976,7 @@ msgstr "Değişti_r"
 msgid "Add subkey to %s"
 msgstr "%s anahtarına alt anahtar ekle"
 
-#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate.c:78
+#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
 msgid "DSA (sign only)"
 msgstr "DSA (yalnızca imzalama)"
 
@@ -986,7 +984,7 @@ msgstr "DSA (yalnızca imzalama)"
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (yalnızca şifreleme)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate.c:79
+#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
 msgid "RSA (sign only)"
 msgstr "RSA (yalnızca imzalama)"
 
@@ -1036,7 +1034,7 @@ msgid "Add User ID"
 msgstr "Kullanıcı ID ekle"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-pgp-generate.ui:66
+#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-gpgme-generate-dialog.ui:62
 msgid "Full _Name"
 msgstr "Tam _Ad"
 
@@ -1044,7 +1042,7 @@ msgstr "Tam _Ad"
 msgid "Must be at least 5 characters long"
 msgstr "En azından 5 karakter uzunluğunda olmalı"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-pgp-generate.ui:97
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:93
 msgid "_Email Address"
 msgstr "_E-posta Adresi"
 
@@ -1107,29 +1105,29 @@ msgstr "Zırhlanmış PGP anahtarları"
 msgid "PGP keys"
 msgstr "PGP anahtarları"
 
-#: pgp/seahorse-gpgme-generate.c:76 pkcs11/pkcs11-generate.vala:60
+#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
-#: pgp/seahorse-gpgme-generate.c:77
+#: pgp/seahorse-gpgme-generate-dialog.c:85
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
-#: pgp/seahorse-gpgme-generate.c:129
+#: pgp/seahorse-gpgme-generate-dialog.c:101
 msgid "Couldn’t generate PGP key"
 msgstr "PGP anahtarı oluşturulamadı"
 
-#: pgp/seahorse-gpgme-generate.c:168
+#: pgp/seahorse-gpgme-generate-dialog.c:140
 msgid "Passphrase for New PGP Key"
 msgstr "Yeni PGP Anahtarı için Parola Metni"
 
-#: pgp/seahorse-gpgme-generate.c:169
+#: pgp/seahorse-gpgme-generate-dialog.c:141
 msgid "Enter the passphrase for your new key twice."
 msgstr "Yeni anahtarınız için paro metnini iki kez girin."
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate.c:181
+#: pgp/seahorse-gpgme-generate-dialog.c:153
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1144,13 +1142,55 @@ msgstr ""
 "gerçekleştirmeniz iyi bir fikirdir. Bu, sisteme\n"
 "gereksindiği rastgele veriyi sağlayacaktır."
 
-#: pgp/seahorse-gpgme-generate.c:186 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Anahtar oluşturuluyor"
 
-#: pgp/seahorse-gpgme-generate.c:313
+#: pgp/seahorse-gpgme-generate-dialog.c:182
 msgid "Name must be at least 5 characters long."
 msgstr "Ad en az 5 karakter uzunluğunda olmalı."
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:18
+msgid "New PGP key"
+msgstr "Yeni PGP anahtarı"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:43
+msgid "A PGP key allows you to encrypt email or files to other people."
+msgstr ""
+"PGP anahtarı, e-posta veya dosyaları başkalarına şifrelemenize olanak sağlar."
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:125
+#: pkcs11/seahorse-pkcs11-generate.ui:110
+msgid "_Advanced key options"
+msgstr "_Gelişmiş anahtar seçenekleri"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:139
+msgid "_Comment"
+msgstr "_Açıklama"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:170 ssh/seahorse-ssh-generate.ui:127
+msgid "Encryption _Type"
+msgstr "Şifreleme _Türü"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:200 ssh/seahorse-ssh-generate.ui:164
+msgid "Key _Strength (bits)"
+msgstr "Anahtar _Uzunluğu (bit)"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:230
+msgid "E_xpiration Date"
+msgstr "_Son Kullanım Tarihi"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:252
+msgid "Ne_ver Expires"
+msgstr "_Kullanım Süresi Bitmez"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:293
+msgid "C_reate"
+msgstr "Oluştu_r"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:300
+msgid "Generate a new key"
+msgstr "Yeni anahtar oluştur"
 
 #: pgp/seahorse-gpgme-key-deleter.c:76 pgp/seahorse-gpgme-secret-deleter.c:59
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
@@ -1641,47 +1681,6 @@ msgstr "PGP Anahtarları"
 msgid "PGP keys are for encrypting email or files"
 msgstr "PGP anahtarları e-posta ya da dosyaların şifrelenmesi içindir"
 
-#: pgp/seahorse-pgp-generate.ui:18
-msgid "New PGP key"
-msgstr "Yeni PGP anahtarı"
-
-#: pgp/seahorse-pgp-generate.ui:47
-msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr ""
-"PGP anahtarı, e-posta veya dosyaları başkalarına şifrelemenize olanak sağlar."
-
-#: pgp/seahorse-pgp-generate.ui:129 pkcs11/seahorse-pkcs11-generate.ui:110
-msgid "_Advanced key options"
-msgstr "_Gelişmiş anahtar seçenekleri"
-
-#: pgp/seahorse-pgp-generate.ui:143
-msgid "_Comment"
-msgstr "_Açıklama"
-
-#: pgp/seahorse-pgp-generate.ui:174 ssh/seahorse-ssh-generate.ui:127
-msgid "Encryption _Type"
-msgstr "Şifreleme _Türü"
-
-#: pgp/seahorse-pgp-generate.ui:204 ssh/seahorse-ssh-generate.ui:164
-msgid "Key _Strength (bits)"
-msgstr "Anahtar _Uzunluğu (bit)"
-
-#: pgp/seahorse-pgp-generate.ui:234
-msgid "E_xpiration Date"
-msgstr "_Son Kullanım Tarihi"
-
-#: pgp/seahorse-pgp-generate.ui:256
-msgid "Ne_ver Expires"
-msgstr "_Kullanım Süresi Bitmez"
-
-#: pgp/seahorse-pgp-generate.ui:297
-msgid "C_reate"
-msgstr "Oluştu_r"
-
-#: pgp/seahorse-pgp-generate.ui:304
-msgid "Generate a new key"
-msgstr "Yeni anahtar oluştur"
-
 #: pgp/seahorse-pgp-key.c:172
 #, c-format
 msgid "(and %d other)"
@@ -1710,12 +1709,12 @@ msgid "Couldn’t delete user ID"
 msgstr "Kullanıcı ID silinemedi"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:367 pgp/seahorse-pgp-key-properties.c:1390
+#: pgp/seahorse-pgp-key-properties.c:367 pgp/seahorse-pgp-key-properties.c:1405
 msgid "[Unknown]"
 msgstr "[Bilinmeyen]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:463 pgp/seahorse-pgp-key-properties.c:1600
+#: pgp/seahorse-pgp-key-properties.c:463 pgp/seahorse-pgp-key-properties.c:1615
 msgid "Name/Email"
 msgstr "Ad/E-posta"
 
@@ -1765,7 +1764,7 @@ msgid "Couldn’t delete subkey"
 msgstr "Alt anahtar silinemedi"
 
 #: pgp/seahorse-pgp-key-properties.c:1071
-#: pgp/seahorse-pgp-key-properties.c:1364
+#: pgp/seahorse-pgp-key-properties.c:1379
 msgid "Unable to change trust"
 msgstr "Güven derecesi değiştirilemedi"
 
@@ -1773,64 +1772,64 @@ msgstr "Güven derecesi değiştirilemedi"
 msgid "Couldn’t export key"
 msgstr "Anahtar dışa aktarılamadı"
 
-#: pgp/seahorse-pgp-key-properties.c:1214
-#: pgp/seahorse-pgp-key-properties.c:1298
+#: pgp/seahorse-pgp-key-properties.c:1229
+#: pgp/seahorse-pgp-key-properties.c:1313
 msgctxt "Expires"
 msgid "Never"
 msgstr "Asla"
 
-#: pgp/seahorse-pgp-key-properties.c:1253
+#: pgp/seahorse-pgp-key-properties.c:1268
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1259
+#: pgp/seahorse-pgp-key-properties.c:1274
 msgid "Usage"
 msgstr "Kullanım"
 
-#: pgp/seahorse-pgp-key-properties.c:1262
+#: pgp/seahorse-pgp-key-properties.c:1277
 msgid "Created"
 msgstr "Oluşturulma"
 
-#: pgp/seahorse-pgp-key-properties.c:1265
+#: pgp/seahorse-pgp-key-properties.c:1280
 msgid "Expires"
 msgstr "Son Kullanım"
 
-#: pgp/seahorse-pgp-key-properties.c:1268
+#: pgp/seahorse-pgp-key-properties.c:1283
 msgid "Status"
 msgstr "Durum"
 
-#: pgp/seahorse-pgp-key-properties.c:1271
+#: pgp/seahorse-pgp-key-properties.c:1286
 msgid "Strength"
 msgstr "Uzunluk"
 
-#: pgp/seahorse-pgp-key-properties.c:1289
+#: pgp/seahorse-pgp-key-properties.c:1304
 msgid "Revoked"
 msgstr "Feshedilmiş"
 
-#: pgp/seahorse-pgp-key-properties.c:1291
+#: pgp/seahorse-pgp-key-properties.c:1306
 msgid "Expired"
 msgstr "Süresi Dolmuş"
 
-#: pgp/seahorse-pgp-key-properties.c:1293
+#: pgp/seahorse-pgp-key-properties.c:1308
 msgid "Disabled"
 msgstr "Kapalı"
 
-#: pgp/seahorse-pgp-key-properties.c:1295
+#: pgp/seahorse-pgp-key-properties.c:1310
 msgid "Good"
 msgstr "İyi"
 
-#: pgp/seahorse-pgp-key-properties.c:1603
-#: pgp/seahorse-pgp-private-key-properties.ui:333
+#: pgp/seahorse-pgp-key-properties.c:1618
+#: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Anahtar ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1744
+#: pgp/seahorse-pgp-key-properties.c:1760
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Diğer anahtarlardaki “%s” imzalarına güveniyorum"
 
-#: pgp/seahorse-pgp-key-properties.c:1751
+#: pgp/seahorse-pgp-key-properties.c:1767
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1839,7 +1838,7 @@ msgstr ""
 "Eğer bu anahtarın sahibi olan kişinin “%s” olduğuna inanıyorsanız, anahtarı "
 "<i>imzalayın</i>:"
 
-#: pgp/seahorse-pgp-key-properties.c:1758
+#: pgp/seahorse-pgp-key-properties.c:1774
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1847,145 +1846,153 @@ msgstr ""
 "Eğer bu anahtara “%s” sahipliğinden artık emin değilseniz, imzanızı "
 "<i>feshedin</i>:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:56
+#: pgp/seahorse-pgp-private-key-properties.ui:30
+msgid "Export _secret key"
+msgstr "Gizli anahtarı _dışa aktar"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:34
+msgid "Export _public key"
+msgstr "_Genel anahtarı dışa aktar"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:68
 #: pgp/seahorse-pgp-public-key-properties.ui:61
 msgid "This key has been revoked"
 msgstr "Bu anahtar feshedilmiş"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:66
+#: pgp/seahorse-pgp-private-key-properties.ui:78
 #: pgp/seahorse-pgp-public-key-properties.ui:73
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "Sahibi anahtarı feshetti. Artık kullanılamaz."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:94
+#: pgp/seahorse-pgp-private-key-properties.ui:106
 #: pgp/seahorse-pgp-public-key-properties.ui:104
 msgid "This key has expired"
 msgstr "Bu anahtarın süresi dolmuş"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:159
+#: pgp/seahorse-pgp-private-key-properties.ui:171
 msgid "Add a photo to this key"
 msgstr "Bu anahtara fotoğraf ekle"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:178
+#: pgp/seahorse-pgp-private-key-properties.ui:190
 msgid "Remove this photo from this key"
 msgstr "Bu fotoğrafı anahtardan kaldır"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:197
+#: pgp/seahorse-pgp-private-key-properties.ui:209
 msgid "Make this photo the primary photo"
 msgstr "Bu fotoğrafı birincil fotoğraf yap"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:222
+#: pgp/seahorse-pgp-private-key-properties.ui:234
 msgid "Go to previous photo"
 msgstr "Önceki fotoğrafa git"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:241
+#: pgp/seahorse-pgp-private-key-properties.ui:253
 msgid "Go to next photo"
 msgstr "Sonraki fotoğrafa git"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:306
+#: pgp/seahorse-pgp-private-key-properties.ui:318
 #: pgp/seahorse-pgp-public-key-properties.ui:246
 msgid "Comment"
 msgstr "Yorum"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:363
-#: ssh/seahorse-ssh-key-properties.ui:344
+#: pgp/seahorse-pgp-private-key-properties.ui:375
+#: ssh/seahorse-ssh-key-properties.ui:346
 msgid "Change _Passphrase"
 msgstr "_Parola Metnini Değiştir"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:379
+#: pgp/seahorse-pgp-private-key-properties.ui:391
 #: pgp/seahorse-pgp-public-key-properties.ui:347
 msgid "Owner"
 msgstr "Sahibi"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:392
+#: pgp/seahorse-pgp-private-key-properties.ui:404
 msgid "Key Names and Signatures"
 msgstr "Anahtar Adları ve İmzalar"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:430
+#: pgp/seahorse-pgp-private-key-properties.ui:442
 msgid "Primary"
 msgstr "Birincil"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:460 pgp/seahorse-pgp-subkey.c:162
+#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:162
 msgid "Sign"
 msgstr "İmzala"
 
 #. Translators: This text refers to deleting an item from its type's backing store
-#: pgp/seahorse-pgp-private-key-properties.ui:490
+#: pgp/seahorse-pgp-private-key-properties.ui:502
 #: pkcs11/seahorse-pkcs11-properties.ui:22
 #: src/seahorse-key-manager-widgets.ui:12
 msgid "Delete"
 msgstr "Sil"
 
 #. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:520
+#: pgp/seahorse-pgp-private-key-properties.ui:532
 msgid "_Add Name"
 msgstr "Ad _Ekle"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:550
-#: pgp/seahorse-pgp-private-key-properties.ui:1040
+#: pgp/seahorse-pgp-private-key-properties.ui:562
+#: pgp/seahorse-pgp-private-key-properties.ui:1020
 msgid "Revoke"
 msgstr "Feshet"
 
 #. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:586
+#: pgp/seahorse-pgp-private-key-properties.ui:598
 msgid "Names and Signatures"
 msgstr "Adlar ve İmzalar"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:623
+#: pgp/seahorse-pgp-private-key-properties.ui:635
 #: pgp/seahorse-pgp-public-key-properties.ui:623
 msgid "Key ID:"
 msgstr "Anahtar ID:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:648
+#: pgp/seahorse-pgp-private-key-properties.ui:660
 #: pgp/seahorse-pgp-public-key-properties.ui:649
 msgid "Type:"
 msgstr "Tür:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:673
+#: pgp/seahorse-pgp-private-key-properties.ui:685
 #: pgp/seahorse-pgp-public-key-properties.ui:675
 msgid "Strength:"
 msgstr "Uzunluk:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:698
+#: pgp/seahorse-pgp-private-key-properties.ui:710
 msgid "Technical Details"
 msgstr "Teknik Ayrıntılar"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:726
+#: pgp/seahorse-pgp-private-key-properties.ui:738
 #: ssh/seahorse-ssh-key-properties.ui:173
 msgid "Fingerprint"
 msgstr "Parmak İzi"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:758
+#: pgp/seahorse-pgp-private-key-properties.ui:770
 #: pgp/seahorse-pgp-public-key-properties.ui:769
 msgid "Created:"
 msgstr "Oluşturulma:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:782
+#: pgp/seahorse-pgp-private-key-properties.ui:794
 #: pgp/seahorse-pgp-public-key-properties.ui:794
 msgid "Expires:"
 msgstr "Son Kullanım:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:828
+#: pgp/seahorse-pgp-private-key-properties.ui:840
 msgid "Dates"
 msgstr "Tarihler"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:851
+#: pgp/seahorse-pgp-private-key-properties.ui:863
 msgid "Override Owner _Trust:"
 msgstr "Sahibine _Güven Derecenizi Değiştirin:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:879
-msgid "_Export Secret Key:"
-msgstr "Gizli Anahtarı _Dışa Aktar:"
+#: pgp/seahorse-pgp-private-key-properties.ui:890
+msgid "_Export to file"
+msgstr "Dosyaya _aktar"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:926
+#: pgp/seahorse-pgp-private-key-properties.ui:906
 msgid "Actions"
 msgstr "Eylemler"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1010
+#: pgp/seahorse-pgp-private-key-properties.ui:990
 msgid "Expire"
 msgstr "Son Kullanım"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1084
+#: pgp/seahorse-pgp-private-key-properties.ui:1064
 #: pgp/seahorse-pgp-public-key-properties.ui:898
 msgid "_Subkeys"
 msgstr "_Alt Anahtarlar"
@@ -2687,21 +2694,25 @@ msgstr "Konum"
 msgid "Public Key"
 msgstr "Genel Anahtar"
 
-#: ssh/seahorse-ssh-key-properties.ui:242
+#: ssh/seahorse-ssh-key-properties.ui:243
 msgid "Copy public key to clipboard"
 msgstr "Genel anahtarı panoya kopyala"
 
-#: ssh/seahorse-ssh-key-properties.ui:271
+#: ssh/seahorse-ssh-key-properties.ui:272
 msgid "Remote Access"
 msgstr "Uzaktan Erişim"
 
-#: ssh/seahorse-ssh-key-properties.ui:284
+#: ssh/seahorse-ssh-key-properties.ui:285
 msgid "Allows accessing this computer remotely"
 msgstr "Bu bilgisayara uzaktan erişilmeyi sağlar"
 
-#: ssh/seahorse-ssh-key-properties.ui:360
-msgid "Delete SSH Key"
-msgstr "SSH Anahtarını Sil"
+#: ssh/seahorse-ssh-key-properties.ui:332
+msgid "_Export"
+msgstr "_Dışa Aktar"
+
+#: ssh/seahorse-ssh-key-properties.ui:362
+msgid "_Delete SSH Key"
+msgstr "SSH Anahtarını _Sil"
 
 #: ssh/seahorse-ssh-upload.ui:5
 msgid "Set Up Computer for SSH Connection"
@@ -2775,9 +2786,6 @@ msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
 #~ msgid "Import"
 #~ msgstr "İçe Aktar"
 
-#~ msgid "_Export"
-#~ msgstr "_Dışa Aktar"
-
 #~ msgid "_Combine all keyrings"
 #~ msgstr "_Tüm anahtarlıkları birleştir"
 
@@ -2824,9 +2832,6 @@ msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
 
 #~ msgid "_File"
 #~ msgstr "_Dosya"
-
-#~ msgid "Export to a file"
-#~ msgstr "Dosyaya aktar"
 
 #~ msgid "_Edit"
 #~ msgstr "Düz_enle"
@@ -3182,9 +3187,6 @@ msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
 
 #~ msgid "_Replace"
 #~ msgstr "Ye_rine koy"
-
-#~ msgid "Export public key"
-#~ msgstr "Genel anahtarı dışa aktar"
 
 #~ msgid "Couldn't export key to \"%s\""
 #~ msgstr "Anahtar \"%s\" konumuna aktarılamadı"
