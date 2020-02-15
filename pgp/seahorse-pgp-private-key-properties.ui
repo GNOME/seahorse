@@ -24,6 +24,18 @@
       </row>
     </data>
   </object>
+  <menu id="export_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Export _secret key</attribute>
+        <attribute name="action">props.export-secret</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Export _public key</attribute>
+        <attribute name="action">props.export-public</attribute>
+      </item>
+    </section>
+  </menu>
           <object class="GtkNotebook" id="window-content">
             <property name="visible">True</property>
             <property name="vexpand">True</property>
@@ -873,49 +885,17 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkMenuButton">
                                     <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Export Secret Key:</property>
+                                    <property name="label" translatable="yes">_Export to file</property>
+                                    <property name="halign">start</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">details-export-button</property>
+                                    <property name="menu-model">export_menu</property>
                                   </object>
                                   <packing>
                                     <property name="top_attach">1</property>
                                     <property name="left_attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkButton" id="details-export-button">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="action-name">props.export-secret</property>
-                                    <child>
-                                      <object class="GtkBox">
-                                        <property name="visible">True</property>
-                                        <property name="orientation">horizontal</property>
-                                        <property name="halign">center</property>
-                                        <property name="spacing">2</property>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="visible">True</property>
-                                            <property name="stock">gtk-save</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">Export</property>
-                                            <property name="use_underline">True</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="top_attach">1</property>
-                                    <property name="left_attach">1</property>
+                                    <property name="width">2</property>
                                   </packing>
                                 </child>
                               </object>
