@@ -205,6 +205,7 @@
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
+                <property name="spacing">12</property>
                 <property name="orientation">horizontal</property>
                 <child>
                   <object class="GtkExpander">
@@ -217,8 +218,7 @@
                         <property name="wrap">True</property>
                         <property name="wrap_mode">char</property>
                         <property name="selectable">True</property>
-                        <property name="max_width_chars">80</property>
-                        <property name="track_visited_links">False</property>
+                        <property name="max-width-chars">45</property>
                       </object>
                     </child>
                     <child type="label">
@@ -237,6 +237,7 @@
                 <child>
                   <object class="GtkButton" id="copy_button">
                     <property name="visible">True</property>
+                    <property name="valign">start</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">Copy public key to clipboard</property>
@@ -328,8 +329,9 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkButton" id="export_button">
-                    <property name="label" translatable="yes">Export</property>
+                    <property name="label" translatable="yes">_Export</property>
                     <property name="visible">True</property>
+                    <property name="use_underline">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <signal name="clicked" handler="on_ssh_export_button_clicked" swapped="no"/>
@@ -357,8 +359,9 @@
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="label" translatable="yes">Delete SSH Key</property>
+                    <property name="label" translatable="yes">_Delete SSH Key</property>
                     <property name="visible">True</property>
+                    <property name="use_underline">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
