@@ -80,6 +80,7 @@ public class NmConnectionInfo : ItemInfo {
 
     public NmConnectionInfo(string label, HashTable<string, string>? attrs) {
         GLib.Object(label: label,
+                    icon: new ThemedIcon("network-wired-symbolic"),
                     description: _("Network connection secret"));
 
         unowned string? setting_name = get_attribute_string(attrs,
