@@ -33,7 +33,9 @@ public class ItemInfo : GLib.Object {
 
     public GLib.Icon? icon { get; protected set; }
 
-    public ItemInfo(string? label, string? description = null) {
+    public ItemInfo(string? label,
+                    HashTable<string, string>? attrs,
+                    string? description = null) {
         GLib.Object(label: label);
 
         if (label != null)
@@ -41,6 +43,11 @@ public class ItemInfo : GLib.Object {
 
         if (description != null)
             this.description = description;
+
+        if (this.details == "") {
+            // Maybe we can display the username
+            this.details = get_attribute_string(attrs, "username") ?? "";
+        }
     }
 
     public void query_installed_apps(string item_type) {
@@ -89,6 +96,11 @@ public class NmConnectionInfo : ItemInfo {
         if (setting_name == "802-11-wireless-security") {
             this.icon = new ThemedIcon("network-wireless-symbolic");
             this.description = _("Wi-Fi password");
+        }
+
+        // TODO: are we sure this isn't translated by NM?
+        if (label.has_prefix("Network secret for ")) {
+            this.label = this.label.substring("Network secret for ".length);
         }
     }
 }

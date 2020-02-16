@@ -160,17 +160,17 @@ public class Item : Secret.Item, Deletable, Viewable {
     private ItemInfo item_type_to_item_info(string item_type, string? label, HashTable<string, string>? attrs) {
         switch (item_type) {
             case GENERIC_SECRET:
-                return new ItemInfo(label);
+                return new ItemInfo(label, attrs);
             case KEYRING_NOTE:
-                return new ItemInfo(label, _("Stored note"));
+                return new ItemInfo(label, attrs, _("Stored note"));
             case CHAINED_KEYRING:
-                return new ItemInfo(label, _("Keyring password"));
+                return new ItemInfo(label, attrs, _("Keyring password"));
             case ENCRYPTION_KEY:
-                return new ItemInfo(label, _("Encryption key password"));
+                return new ItemInfo(label, attrs, _("Encryption key password"));
             case PK_STORAGE:
-                return new ItemInfo(label, _("Key storage password"));
+                return new ItemInfo(label, attrs, _("Key storage password"));
             case NETWORK_MANAGER_SECRET:
-                return new ItemInfo(label, _("Network Manager secret"));
+                return new ItemInfo(label, attrs, _("Network Manager secret"));
             case NETWORK_PASSWORD:
                 return new GkrNetworkPassInfo(label, attrs);
             case EPIPHANY_PASSWORD:
@@ -189,7 +189,7 @@ public class Item : Secret.Item, Deletable, Viewable {
                 break;
         }
 
-        return new ItemInfo(label);
+        return new ItemInfo(label, attrs);
     }
 
     private void load_item_secret() {
