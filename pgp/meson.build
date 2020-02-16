@@ -5,7 +5,7 @@ pgp_sources = files(
   'seahorse-gpgme-add-subkey.c',
   'seahorse-gpgme-add-uid.c',
   'seahorse-gpgme-data.c',
-  'seahorse-gpgme-expires.c',
+  'seahorse-gpgme-expires-dialog.c',
   'seahorse-gpgme-exporter.c',
   'seahorse-gpgme-generate-dialog.c',
   'seahorse-gpgme-key.c',
