@@ -27,6 +27,7 @@
 #include "seahorse-gpgme-add-subkey.h"
 #include "seahorse-gpgme-add-uid.h"
 #include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-expires-dialog.h"
 #include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
@@ -1031,6 +1032,7 @@ on_subkeys_change_expires (GSimpleAction *action, GVariant *param, gpointer user
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorsePgpSubkey *subkey;
     GList *subkeys;
+    GtkDialog *dialog;
 
     subkey = get_selected_subkey (self);
     if (subkey == NULL) {
@@ -1041,9 +1043,13 @@ on_subkeys_change_expires (GSimpleAction *action, GVariant *param, gpointer user
 
     g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
 
-    if (subkey != NULL)
-        seahorse_gpgme_expires_new (SEAHORSE_GPGME_SUBKEY (subkey),
-                                    GTK_WINDOW (self));
+    if (subkey == NULL)
+        return;
+
+    dialog = seahorse_gpgme_expires_dialog_new (SEAHORSE_GPGME_SUBKEY (subkey),
+                                                GTK_WINDOW (self));
+    gtk_dialog_run (dialog);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -1126,12 +1132,15 @@ on_change_expires (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     GList *subkeys;
+    GtkDialog *dialog;
 
     subkeys = seahorse_pgp_key_get_subkeys (self->key);
     g_return_if_fail (subkeys);
 
-    seahorse_gpgme_expires_new (SEAHORSE_GPGME_SUBKEY (subkeys->data),
-                                GTK_WINDOW (self));
+    dialog = seahorse_gpgme_expires_dialog_new (SEAHORSE_GPGME_SUBKEY (subkeys->data),
+                                                GTK_WINDOW (self));
+    gtk_dialog_run (dialog);
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
