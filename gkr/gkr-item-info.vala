@@ -90,6 +90,11 @@ public class NmConnectionInfo : ItemInfo {
             this.icon = new ThemedIcon("network-wireless-symbolic");
             this.description = _("Wi-Fi password");
         }
+
+        // TODO: are we sure this isn't translated by NM?
+        if (label.has_prefix("Network secret for ")) {
+            this.label = this.label.substring("Network secret for ".length);
+        }
     }
 }
 
