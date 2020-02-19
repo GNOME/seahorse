@@ -44,10 +44,34 @@ public class ItemInfo : GLib.Object {
         if (description != null)
             this.description = description;
 
-        if (this.details == "") {
-            // Maybe we can display the username
-            this.details = get_attribute_string(attrs, "username") ?? "";
-        }
+        this.details = guess_username(attrs);
+    }
+
+    private unowned string? guess_username(HashTable<string, string>? attrs) {
+        unowned string? username;
+
+        if (attrs == null || this.details != "")
+            return this.details;
+
+        username = attrs.lookup("username");
+        if (username != null && username != "")
+            return username;
+
+        username = attrs.lookup("user");
+        if (username != null && username != "")
+            return username;
+
+        // Used by e.g. Geary
+        username = attrs.lookup("login");
+        if (username != null && username != "")
+            return username;
+
+        // Used by e.g. Skype
+        username = attrs.lookup("account");
+        if (username != null && username != "")
+            return username;
+
+        return null;
     }
 
     public void query_installed_apps(string item_type) {
