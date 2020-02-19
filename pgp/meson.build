@@ -46,7 +46,7 @@ pgp_dependencies = [
 pgp_c_flags = [
 ]
 
-if with_ldap
+if get_option('ldap-support')
   pgp_sources = [ pgp_sources, 'seahorse-ldap-source.c' ]
   pgp_dependencies += [
     libldap,
@@ -55,12 +55,12 @@ if with_ldap
   pgp_c_flags += '-DLDAP_DEPRECATED'
 endif
 
-if with_hkp
+if get_option('hkp-support')
   pgp_sources += [ pgp_sources, 'seahorse-hkp-source.c' ]
   pgp_dependencies += libsoup
 endif
 
-if with_keyservers
+if get_option('keyservers-support')
   pgp_sources = [
     pgp_sources,
     'seahorse-server-source.c',
@@ -70,7 +70,7 @@ if with_keyservers
   ]
 endif
 
-if with_key_sharing
+if get_option('key-sharing')
   pgp_dependencies += [
     avahi_client,
     avahi_glib,

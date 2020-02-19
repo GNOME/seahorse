@@ -38,7 +38,7 @@ common_deps = [
 common_vala_args = [
 ]
 
-if with_keyservers
+if get_option('keyservers-support')
   common_sources += 'keyserver-control.vala'
   common_vala_args += [ '-D', 'WITH_KEYSERVER' ]
 endif

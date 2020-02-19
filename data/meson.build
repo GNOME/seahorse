@@ -62,7 +62,7 @@ install_data(
 )
 
 # manpage
-if with_manpage
+if get_option('manpage')
   xsltproc = find_program('xsltproc')
   custom_target('manfile-seahorse',
     input: 'seahorse.xml',

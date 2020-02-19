@@ -40,11 +40,11 @@ seahorse_c_flags = [
 seahorse_vala_flags = [
 ]
 
-if with_pgp
+if get_option('pgp-support')
   seahorse_dependencies += pgp_dep
   seahorse_vala_flags += [ '-D', 'WITH_PGP' ]
 endif
-if with_pkcs11
+if get_option('pkcs11-support')
   seahorse_dependencies += pkcs11_dep
   seahorse_vala_flags += [ '-D', 'WITH_PKCS11' ]
 endif

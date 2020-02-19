@@ -7,16 +7,6 @@ project('seahorse', ['vala', 'c'],
 gnome = import('gnome')
 i18n = import('i18n')
 
-# Options
-with_pgp = get_option('pgp-support')
-check_compatible_gpg = get_option('check-compatible-gpg')
-with_pkcs11 = get_option('pkcs11-support')
-with_hkp = get_option('hkp-support')
-with_ldap = get_option('ldap-support')
-with_keyservers = get_option('keyservers-support')
-with_key_sharing = get_option('key-sharing')
-with_manpage = get_option('manpage')
-
 # Some variables
 cc = meson.get_compiler('c')
 valac = meson.get_compiler('vala')
@@ -24,7 +14,6 @@ buildtype = get_option('buildtype')
 
 seahorse_prefix = get_option('prefix')
 po_dir = meson.source_root() / 'po'
-datadir = seahorse_prefix / get_option('datadir')
 libexecbindir = seahorse_prefix / get_option('libexecdir') / meson.project_name()
 
 # Application ID
@@ -74,24 +63,24 @@ libpwquality = dependency('pwquality')
 posix = valac.find_library('posix')
 ssh_bin = find_program('ssh')
 ssh_keygen = find_program('ssh-keygen')
-gpg_bin = find_program('gpg2', 'gpg', required: with_pgp)
-gpgme_dep = dependency('gpgme', version: '>= 1.7.0', required: with_pgp)
+gpg_bin = find_program('gpg2', 'gpg', required: get_option('pgp-support'))
+gpgme_dep = dependency('gpgme', version: '>= 1.7.0', required: get_option('pgp-support'))
 
-if with_pgp
+if get_option('pgp-support')
   gpg_version_check = run_command([gpg_check_version, gpg_bin.path(), accepted_gpg_versions ])
   gpg_version = gpg_version_check.stdout()
   message('GnuPG Version: @0@'.format(gpg_version))
-  if check_compatible_gpg and gpg_version_check.returncode() != 0
+  if get_option('check-compatible-gpg') and gpg_version_check.returncode() != 0
     error('Incompatible version of GnuPG. Accepted versions are: @0@'.format(accepted_gpg_versions))
   endif
 endif
 
-pkcs11_dep = valac.find_library('pkcs11', required: with_pkcs11)
-if with_pkcs11 and not pkcs11_dep.found()
+pkcs11_dep = valac.find_library('pkcs11', required: get_option('pkcs11-support'))
+if get_option('pkcs11-support') and not pkcs11_dep.found()
   error('Required library "pkcs11" not found (needed for PKCS#11 support)')
 endif
 
-if with_ldap
+if get_option('ldap-support')
   libldap = cc.find_library('ldap')
   liblber = cc.find_library('lber')
   if not libldap.found()
@@ -101,9 +90,9 @@ if with_ldap
   endif
 endif
 
-libsoup = dependency('libsoup-2.4', version: '>= 2.33.92', required: with_hkp)
-avahi_client = dependency('avahi-client', required: with_key_sharing)
-avahi_glib = dependency('avahi-glib', version: '>= 0.6', required: with_key_sharing)
+libsoup = dependency('libsoup-2.4', version: '>= 2.33.92', required: get_option('hkp-support'))
+avahi_client = dependency('avahi-client', required: get_option('key-sharing'))
+avahi_glib = dependency('avahi-glib', version: '>= 0.6', required: get_option('key-sharing'))
 
 
 # Project-wide flags
@@ -143,16 +132,16 @@ conf.set_quoted('G_LOG_DOMAIN', meson.project_name())
 conf.set('WITH_DEBUG', buildtype.contains('debug'))
 conf.set10('_DEBUG', buildtype.contains('debug'))
 conf.set('HAVE_STRSEP', cc.has_function('strsep'))
-conf.set('WITH_PGP', with_pgp)
-conf.set('WITH_PKCS11', with_pkcs11)
-conf.set('WITH_LDAP', with_ldap)
-conf.set('WITH_HKP', with_hkp)
-conf.set('WITH_SOUP', with_hkp)
-conf.set('WITH_KEYSERVER', with_keyservers)
-conf.set('WITH_SHARING', with_key_sharing)
+conf.set('WITH_PGP', get_option('pgp-support'))
+conf.set('WITH_PKCS11', get_option('pkcs11-support'))
+conf.set('WITH_LDAP', get_option('ldap-support'))
+conf.set('WITH_HKP', get_option('hkp-support'))
+conf.set('WITH_SOUP', get_option('hkp-support'))
+conf.set('WITH_KEYSERVER', get_option('keyservers-support'))
+conf.set('WITH_SHARING', get_option('key-sharing'))
 conf.set_quoted('SSH_KEYGEN_PATH', ssh_keygen.path())
 conf.set_quoted('SSH_PATH', ssh_bin.path())
-if with_pgp
+if get_option('pgp-support')
   conf.set_quoted('GNUPG', gpg_bin.path())
   gpg_version_split = gpg_version.split('.')
   conf.set('GPG_MAJOR', gpg_version_split[0])
@@ -194,10 +183,10 @@ subdir('common')
 subdir('libegg')
 subdir('gkr')
 subdir('ssh')
-if with_pgp
+if get_option('pgp-support')
   subdir('pgp')
 endif
-if with_pkcs11
+if get_option('pkcs11-support')
   subdir('pkcs11')
 endif
 subdir('libseahorse')
