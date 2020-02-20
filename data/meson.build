@@ -17,7 +17,7 @@ resources_src = gnome.compile_resources('seahorse-resources',
 )
 
 # The appdata file
-i18n.merge_file(
+appdata_file = i18n.merge_file(
   input: 'org.gnome.seahorse.Application.appdata.xml.in',
   output: '@0@.appdata.xml'.format(application_id),
   type: 'xml',
@@ -26,23 +26,43 @@ i18n.merge_file(
   install_dir: get_option('datadir') / 'metainfo',
 )
 
+appstream_util = find_program('appstream-util', required: false)
+if appstream_util.found()
+  test('validate-appdata', appstream_util,
+    suite: 'data',
+    args: [
+      'validate-relax', '--nonet', appdata_file.full_path()
+    ]
+  )
+endif
+
 # The desktop file
-configured_desktop_file = configure_file(
-  input: 'org.gnome.seahorse.Application.desktop.in.in',
-  output: 'org.gnome.seahorse.Application.desktop.in',
-  configuration: {
-    'bindir': seahorse_prefix / get_option('bindir'),
-    'icon': application_id,
-  },
-)
-i18n.merge_file(
-  input: configured_desktop_file,
+desktop_file = i18n.merge_file(
+  input: configure_file(
+    input: 'org.gnome.seahorse.Application.desktop.in.in',
+    output: '@BASENAME@',
+    configuration: {
+      'bindir': seahorse_prefix / get_option('bindir'),
+      'icon': application_id,
+    },
+  ),
   output: '@0@.desktop'.format(application_id),
   type: 'desktop',
   po_dir: po_dir,
   install: true,
   install_dir: get_option('datadir') / 'applications',
 )
+
+desktop_file_validate = find_program ('desktop-file-validate', required: false)
+if desktop_file_validate.found()
+  test('validate-desktop',
+    desktop_file_validate,
+    suite: 'data',
+    args: [
+      desktop_file.full_path()
+    ]
+  )
+endif
 
 # The service file
 configure_file(
