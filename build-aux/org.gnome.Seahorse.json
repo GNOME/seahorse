@@ -17,9 +17,6 @@
         "--filesystem=~/.gnupg:create",
         /* Secret Service API */
         "--talk-name=org.freedesktop.secrets",
-        /* Needed for dconf to work */
-        "--filesystem=xdg-run/dconf", "--filesystem=~/.config/dconf:ro",
-        "--talk-name=ca.desrt.dconf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         /* Needed for importing,exporting from,to keyservers */
         "--share=network"
     ],
@@ -82,16 +79,6 @@
             ]
         },
         {
-            "name": "libsoup",
-            "buildsystem": "meson",
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://gitlab.gnome.org/GNOME/libsoup.git"
-                }
-            ]
-        },
-        {
             "name": "openldap",
             "config-opts": [
                 "--disable-backends",
@@ -113,7 +100,7 @@
         {
             "name": "libpwquality",
             "config-opts": [
-                "--enable-python-bindings=no"  
+                "--enable-python-bindings=no"
             ],
             "sources": [
                 {
