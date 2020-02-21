@@ -38,7 +38,7 @@ To discuss issues with developers and other users, you can subscribe to the
 [mailing list] or join [#seahorse] on irc.gnome.org.
 
 ## License
-Seahorse is released under the GPL. See COPYING for more info.
+Seahorse is released under the GPL. See [COPYING] for more info.
 
 
 [GNOME]: https://www.gnome.org
@@ -49,3 +49,4 @@ Seahorse is released under the GPL. See COPYING for more info.
 [translation project wiki page]: https://wiki.gnome.org/TranslationProject/
 [mailing list]: https://mail.gnome.org/mailman/listinfo/seahorse-list
 [#seahorse]: irc://irc.gnome.org/seahorse
+[COPYING]: https://gitlab.gnome.org/GNOME/seahorse/COPYING
