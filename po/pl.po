@@ -1,20 +1,20 @@
 # Polish translation for seahorse.
-# Copyright © 2003-2019 the seahorse authors.
+# Copyright © 2003-2020 the seahorse authors.
 # This file is distributed under the same license as the seahorse package.
 # Artur Flinta <aflinta@at.kernel.pl>, 2003-2006.
 # Andrzej Polatyński <andrzej@datatel.net.pl>, 2007.
 # Tomasz Dominikowski <dominikowski@gmail.com>, 2007-2009.
 # Piotr Zaryk <pzaryk@aviary.pl>, 2009.
-# Piotr Drąg <piotrdrag@gmail.com>, 2010-2019.
+# Piotr Drąg <piotrdrag@gmail.com>, 2010-2020.
 # Paweł Żołnowski <pawel@zolnowski.name>, 2014.
-# Aviary.pl <community-poland@mozilla.org>, 2007-2019.
+# Aviary.pl <community-poland@mozilla.org>, 2007-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-08-16 17:37+0000\n"
-"PO-Revision-Date: 2019-08-20 17:35+0200\n"
+"POT-Creation-Date: 2020-02-15 11:47+0000\n"
+"PO-Revision-Date: 2020-02-29 15:05+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -43,40 +43,39 @@ msgstr "Anuluj"
 msgid "Save"
 msgstr "Zapisz"
 
-#: common/catalog.vala:116
+#: common/catalog.vala:115
 msgid "Cannot delete"
 msgstr "Nie można usunąć"
 
-#: common/catalog.vala:130 common/key-manager-store.vala:418
+#: common/catalog.vala:129
 msgid "Couldn’t export keys"
 msgstr "Nie można wyeksportować kluczy"
 
-#: common/catalog.vala:140
+#: common/catalog.vala:139
 msgid "Couldn’t export data"
 msgstr "Nie można wyeksportować danych"
 
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
-#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:287
+#: pgp/seahorse-gpgme-generate-dialog.ui:283 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:249
+#: src/import-dialog.vala:34 src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "_Anuluj"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:650
+#: src/sidebar.vala:352
 msgid "_Delete"
 msgstr "_Usuń"
 
-#: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:909
-#: ssh/seahorse-ssh-key-properties.ui:280
+#: common/exportable.vala:191 pkcs11/seahorse-pkcs11-properties.ui:33
 msgid "Export"
 msgstr "Wyeksportuj"
 
-#: common/interaction.vala:61
+#: common/interaction.vala:63
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Kod PIN lub hasło dla: %s"
@@ -93,6 +92,18 @@ msgstr "_OK"
 #: common/passphrase-prompt.vala:145 ssh/seahorse-ssh-askpass.c:117
 msgid "Password:"
 msgstr "Hasło:"
+
+#: common/place.vala:40 gkr/gkr-backend.vala:39
+msgid "Passwords"
+msgstr "Hasła"
+
+#: common/place.vala:42
+msgid "Keys"
+msgstr "Klucze"
+
+#: common/place.vala:44 pkcs11/seahorse-pkcs11-backend.c:207
+msgid "Certificates"
+msgstr "Certyfikaty"
 
 #: common/prefs.vala:42
 msgid "Preferences"
@@ -199,6 +210,46 @@ msgstr "Wyłączony"
 msgctxt "Validity"
 msgid "Revoked"
 msgstr "Unieważniony"
+
+#: data/gtk/help-overlay.ui:9
+msgctxt "shortcut window"
+msgid "Overview"
+msgstr "Przegląd"
+
+#: data/gtk/help-overlay.ui:14
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "Pomoc"
+
+#: data/gtk/help-overlay.ui:21
+msgctxt "shortcut window"
+msgid "Open menu"
+msgstr "Otwarcie menu"
+
+#: data/gtk/help-overlay.ui:28
+msgctxt "shortcut window"
+msgid "Create a new item"
+msgstr "Utworzenie nowego elementu"
+
+#: data/gtk/help-overlay.ui:35
+msgctxt "shortcut window"
+msgid "Import item from file"
+msgstr "Zaimportowanie elementu z pliku"
+
+#: data/gtk/help-overlay.ui:42
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Wyszukiwanie"
+
+#: data/gtk/help-overlay.ui:49
+msgctxt "shortcut window"
+msgid "Shortcut list"
+msgstr "Lista skrótów"
+
+#: data/gtk/help-overlay.ui:56
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Zakończenie działania"
 
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
@@ -366,12 +417,12 @@ msgstr ""
 "SSH, publikowanie i pobieranie kluczy z serwerów, zapamiętywanie haseł oraz "
 "tworzenie kopii zapasowych kluczy i baz kluczy."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:77
+#: data/org.gnome.seahorse.Application.appdata.xml.in:94
 msgid "The GNOME Project"
 msgstr "Projekt GNOME"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:168
-#: src/seahorse-key-manager.ui:277
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:169
+#: src/seahorse-key-manager.ui:291
 msgid "Passwords and Keys"
 msgstr "Hasła i klucze"
 
@@ -382,21 +433,58 @@ msgstr ""
 "baza kluczy;hasło;hasła;szyfrowanie;zaszyfruj;bezpieczeństwo;zabezpieczenia;"
 "podpisywanie;podpis;podpisz;ssh;"
 
-#: gkr/gkr-backend.vala:39
-msgid "Passwords"
-msgstr "Hasła"
-
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Przechowywane osobiste hasła i inne dane uwierzytelniające"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:604
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:410
 msgid "Couldn’t unlock"
 msgstr "Nie można odblokować"
 
 #: gkr/gkr-item-add.vala:137
 msgid "Couldn’t add item"
 msgstr "Nie można dodać elementu"
+
+#: gkr/gkr-item-info.vala:30
+msgid "Password or Secret"
+msgstr "Hasło"
+
+#: gkr/gkr-item-info.vala:83
+msgid "Network connection secret"
+msgstr "Hasło połączenia sieciowego"
+
+#: gkr/gkr-item-info.vala:90
+msgid "Wi-Fi password"
+msgstr "Hasło sieci Wi-Fi"
+
+#: gkr/gkr-item-info.vala:103
+msgid "Network password"
+msgstr "Hasło sieciowe"
+
+#: gkr/gkr-item-info.vala:192
+msgid "GNOME Web password"
+msgstr "Hasło przeglądarki WWW dla GNOME"
+
+#: gkr/gkr-item-info.vala:212
+msgid "Google Chrome password"
+msgstr "Hasło programu Google Chrome"
+
+#: gkr/gkr-item-info.vala:246
+msgid "Instant messaging password"
+msgstr "Hasło komunikatora"
+
+#. Translators: This should be the same as the string in empathy
+#: gkr/gkr-item-info.vala:251
+msgid "IM account password for "
+msgstr "Hasło konta komunikatora dla "
+
+#: gkr/gkr-item-info.vala:284
+msgid "Telepathy password"
+msgstr "Hasło Telepathy"
+
+#: gkr/gkr-item-info.vala:320
+msgid "GNOME Online Accounts password"
+msgstr "Hasło kont online GNOME"
 
 #: gkr/gkr-item-properties.vala:106
 msgid "Save changes for this item?"
@@ -427,7 +515,7 @@ msgid "Network Credentials"
 msgstr "Sieciowe dane uwierzytelniające"
 
 #: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:70
-#: src/seahorse-key-manager.ui:191
+#: src/seahorse-key-manager.ui:193
 msgid "Password"
 msgstr "Hasło"
 
@@ -443,73 +531,32 @@ msgstr "Nie można ustawić opisu."
 msgid "Error deleting the password."
 msgstr "Błąd podczas usuwania hasła."
 
-#. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item.vala:425
-msgid "IM account password for "
-msgstr "Hasło konta komunikatora dla "
-
-#: gkr/gkr-item.vala:485
-msgid "Wi-Fi password"
-msgstr "Hasło sieci Wi-Fi"
-
-#: gkr/gkr-item.vala:490
-msgid "Password or secret"
-msgstr "Hasło"
-
-#: gkr/gkr-item.vala:491
-msgid "Network password"
-msgstr "Hasło sieciowe"
-
-#: gkr/gkr-item.vala:492
+#: gkr/gkr-item.vala:165
 msgid "Stored note"
 msgstr "Przechowywana notatka"
 
-#: gkr/gkr-item.vala:493
+#: gkr/gkr-item.vala:167
 msgid "Keyring password"
 msgstr "Hasło bazy kluczy"
 
-#: gkr/gkr-item.vala:494
+#: gkr/gkr-item.vala:169
 msgid "Encryption key password"
 msgstr "Hasło klucza szyfrowania"
 
-#: gkr/gkr-item.vala:495
+#: gkr/gkr-item.vala:171
 msgid "Key storage password"
 msgstr "Hasło przechowalni kluczy"
 
-#: gkr/gkr-item.vala:496
-msgid "GNOME Web password"
-msgstr "Hasło przeglądarki WWW dla GNOME"
-
-#: gkr/gkr-item.vala:497
-msgid "Google Chrome password"
-msgstr "Hasło programu Google Chrome"
-
-#: gkr/gkr-item.vala:498
-msgid "GNOME Online Accounts password"
-msgstr "Hasło kont online GNOME"
-
-#: gkr/gkr-item.vala:499
-msgid "Telepathy password"
-msgstr "Hasło Telepathy"
-
-#: gkr/gkr-item.vala:500
-msgid "Instant messaging password"
-msgstr "Hasło komunikatora"
-
-#: gkr/gkr-item.vala:501
+#: gkr/gkr-item.vala:173
 msgid "Network Manager secret"
 msgstr "Hasło menedżera sieci"
 
-#: gkr/gkr-item.vala:502
-msgid "Network connection secret"
-msgstr "Hasło połączenia sieciowego"
-
-#: gkr/gkr-item.vala:565
+#: gkr/gkr-item.vala:312
 #, c-format
 msgid "Are you sure you want to delete the password “%s”?"
 msgstr "Na pewno usunąć hasło „%s”?"
 
-#: gkr/gkr-item.vala:567
+#: gkr/gkr-item.vala:314
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
@@ -521,7 +568,7 @@ msgstr[2] "Na pewno usunąć %d haseł?"
 msgid "Couldn’t add keyring"
 msgstr "Nie można dodać bazy kluczy"
 
-#: gkr/gkr-keyring-properties.vala:66
+#: gkr/gkr-keyring-properties.vala:65
 msgid "Unknown date"
 msgstr "Nieznana data"
 
@@ -533,28 +580,28 @@ msgstr "Baza kluczy automatycznie odblokowywana podczas logowania"
 msgid "A keyring used to store passwords"
 msgstr "Baza kluczy używana do przechowywania haseł"
 
-#: gkr/gkr-keyring.vala:192
+#: gkr/gkr-keyring.vala:200
 msgid "Couldn’t set default keyring"
 msgstr "Nie można ustawić domyślnej bazy kluczy"
 
-#: gkr/gkr-keyring.vala:219 gkr/gkr-keyring.vala:224
+#: gkr/gkr-keyring.vala:227 gkr/gkr-keyring.vala:232
 msgid "Couldn’t change keyring password"
 msgstr "Nie można zmienić hasła bazy kluczy"
 
-#: gkr/gkr-keyring.vala:243
+#: gkr/gkr-keyring.vala:251
 msgid "_Set as default"
 msgstr "_Ustaw jako domyślne"
 
-#: gkr/gkr-keyring.vala:244
+#: gkr/gkr-keyring.vala:252
 msgid "Change _Password"
 msgstr "Zmień _hasło"
 
-#: gkr/gkr-keyring.vala:255
+#: gkr/gkr-keyring.vala:263
 #, c-format
 msgid "Are you sure you want to delete the password keyring “%s”?"
 msgstr "Na pewno usunąć bazę haseł „%s”?"
 
-#: gkr/gkr-keyring.vala:258
+#: gkr/gkr-keyring.vala:266
 msgid "I understand that all items will be permanently deleted."
 msgstr "Rozumiem, że wszystkie elementy zostaną trwale usunięte."
 
@@ -571,7 +618,6 @@ msgid "_Keyring:"
 msgstr "Baza _kluczy:"
 
 #: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
-#: ssh/seahorse-ssh-generate.ui:78
 msgid "_Description:"
 msgstr "_Opis:"
 
@@ -580,7 +626,7 @@ msgid "_Password:"
 msgstr "_Hasło:"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-#: pgp/seahorse-pgp-private-key-properties.ui:980
+#: pgp/seahorse-pgp-private-key-properties.ui:960
 msgid "Add"
 msgstr "Dodaj"
 
@@ -618,7 +664,7 @@ msgid "Use"
 msgstr "Zastosowanie"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1217
+#: pgp/seahorse-pgp-key-properties.c:1271
 msgid "Type"
 msgstr "Typ"
 
@@ -631,7 +677,7 @@ msgid "Login"
 msgstr "Login"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1103
+#: pgp/seahorse-pgp-private-key-properties.ui:1083
 #: pgp/seahorse-pgp-public-key-properties.ui:915
 msgid "Details"
 msgstr "Szczegóły"
@@ -644,35 +690,19 @@ msgstr "Usuń hasło"
 msgid "Keyring properties"
 msgstr "Właściwości bazy kluczy"
 
-#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:487
-msgid "Keyring is locked"
-msgstr "Baza kluczy jest zablokowana"
-
-#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:497
-msgid "Unlock"
-msgstr "Odblokuj"
-
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Keyring is unlocked"
-msgstr "Baza kluczy jest odblokowana"
-
-#: gkr/seahorse-gkr-keyring.ui:56
-msgid "Lock"
-msgstr "Zablokuj"
-
-#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:851
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:857
 msgid "Name"
 msgstr "Nazwa"
 
-#: gkr/seahorse-gkr-keyring.ui:130
+#: gkr/seahorse-gkr-keyring.ui:80
 msgid "Created on"
 msgstr "Utworzono"
 
-#: gkr/seahorse-gkr-keyring.ui:160
+#: gkr/seahorse-gkr-keyring.ui:110
 msgid "Change password"
 msgstr "Zmień hasło"
 
-#: gkr/seahorse-gkr-keyring.ui:167
+#: gkr/seahorse-gkr-keyring.ui:117
 msgid "Set as default"
 msgstr "Ustaw jako domyślne"
 
@@ -861,7 +891,7 @@ msgstr "Wybór daty"
 msgid "Select the date from a calendar"
 msgstr "Wybór daty z kalendarza"
 
-#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2198
+#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2203
 msgid "Time"
 msgstr "Czas"
 
@@ -884,13 +914,13 @@ msgstr "Wybór czasu z listy"
 msgid "24hr: no"
 msgstr "24hr: yes"
 
-#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1259
-#: libegg/egg-datetime.c:1263
+#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1264
+#: libegg/egg-datetime.c:1268
 msgid "AM"
 msgstr "AM"
 
-#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1260
-#: libegg/egg-datetime.c:1267
+#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1265
+#: libegg/egg-datetime.c:1272
 msgid "PM"
 msgstr "PM"
 
@@ -920,13 +950,13 @@ msgstr "%02d∶%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: libegg/egg-datetime.c:1175
+#: libegg/egg-datetime.c:1180
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:1240
+#: libegg/egg-datetime.c:1245
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u∶%u∶%u"
@@ -935,34 +965,6 @@ msgstr "%u∶%u∶%u"
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nie można wyświetlić pomocy: %s"
-
-#: pgp/seahorse-add-subkey.ui:31
-msgid "Never E_xpires"
-msgstr "Nigdy nie _wygasa"
-
-#: pgp/seahorse-add-subkey.ui:35
-msgid "If key never expires"
-msgstr "Jeśli klucz nigdy nie wygasa"
-
-#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
-msgid "Key _Type:"
-msgstr "_Typ klucza:"
-
-#: pgp/seahorse-add-subkey.ui:78
-msgid "Key _Length:"
-msgstr "Długość k_lucza:"
-
-#: pgp/seahorse-add-subkey.ui:93
-msgid "Expiration Date:"
-msgstr "Data wygaśnięcia:"
-
-#: pgp/seahorse-add-subkey.ui:112
-msgid "Length of Key"
-msgstr "Długość klucza"
-
-#: pgp/seahorse-add-subkey.ui:194
-msgid "Generate a new subkey"
-msgstr "Tworzy nowy podklucz"
 
 #: pgp/seahorse-expires.ui:22
 msgid "_Never expires"
@@ -976,30 +978,54 @@ msgstr "Unieważnia klucz"
 msgid "C_hange"
 msgstr "Z_mień"
 
-#: pgp/seahorse-gpgme-add-subkey.c:161
-msgid "Couldn’t add subkey"
-msgstr "Nie można dodać podklucza"
-
-#: pgp/seahorse-gpgme-add-subkey.c:180
+#: pgp/seahorse-gpgme-add-subkey.c:213
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Dodaje podklucz do %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:196 pgp/seahorse-gpgme-generate.c:78
+#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
 msgid "DSA (sign only)"
 msgstr "DSA (tylko podpisywanie)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:204
+#: pgp/seahorse-gpgme-add-subkey.c:247
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (tylko szyfrowanie)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:210 pgp/seahorse-gpgme-generate.c:79
+#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
 msgid "RSA (sign only)"
 msgstr "RSA (tylko podpisywanie)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:216
+#: pgp/seahorse-gpgme-add-subkey.c:259
 msgid "RSA (encrypt only)"
 msgstr "RSA (tylko szyfrowanie)"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:28
+msgid "Key _Type"
+msgstr "_Typ klucza"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:54
+msgid "Key _Length"
+msgstr "Długość k_lucza"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:71
+msgid "Length of Key"
+msgstr "Długość klucza"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:86
+msgid "Expiration Date"
+msgstr "Data wygaśnięcia"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:110
+msgid "Never E_xpires"
+msgstr "Nigdy nie _wygasa"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:114
+msgid "If key never expires"
+msgstr "Jeśli klucz nigdy nie wygasa"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:150
+msgid "Generate a new subkey"
+msgstr "Tworzy nowy podklucz"
 
 #: pgp/seahorse-gpgme-add-uid.c:149
 #, c-format
@@ -1015,7 +1041,7 @@ msgid "Add User ID"
 msgstr "Dodanie identyfikatora użytkownika"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-pgp-generate.ui:66
+#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-gpgme-generate-dialog.ui:62
 msgid "Full _Name"
 msgstr "Imię i _nazwisko"
 
@@ -1023,7 +1049,7 @@ msgstr "Imię i _nazwisko"
 msgid "Must be at least 5 characters long"
 msgstr "Musi mieć co najmniej 5 znaków"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-pgp-generate.ui:97
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:93
 msgid "_Email Address"
 msgstr "Adres _e-mail"
 
@@ -1048,23 +1074,23 @@ msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
 "Deszyfrowanie się nie powiodło. Prawdopodobnie brak klucza deszyfrującego."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:515
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:512
 msgid "The operation was cancelled"
 msgstr "Anulowano działanie"
 
-#: pgp/seahorse-gpgme-expires.c:63
+#: pgp/seahorse-gpgme-expires.c:62
 msgid "Invalid expiry date"
 msgstr "Nieprawidłowa data wygaśnięcia"
 
-#: pgp/seahorse-gpgme-expires.c:64
+#: pgp/seahorse-gpgme-expires.c:63
 msgid "The expiry date must be in the future"
 msgstr "Data wygaśnięcia musi być datą przyszłą"
 
-#: pgp/seahorse-gpgme-expires.c:77
+#: pgp/seahorse-gpgme-expires.c:76
 msgid "Couldn’t change expiry date"
 msgstr "Nie można zmienić daty wygaśnięcia"
 
-#: pgp/seahorse-gpgme-expires.c:138
+#: pgp/seahorse-gpgme-expires.c:137
 #, c-format
 msgid "Expiry: %s"
 msgstr "Data wygaśnięcia: %s"
@@ -1085,29 +1111,29 @@ msgstr "Opakowane klucze PGP"
 msgid "PGP keys"
 msgstr "Klucze PGP"
 
-#: pgp/seahorse-gpgme-generate.c:76 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:141
+#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
+#: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
-#: pgp/seahorse-gpgme-generate.c:77
+#: pgp/seahorse-gpgme-generate-dialog.c:85
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
-#: pgp/seahorse-gpgme-generate.c:129
+#: pgp/seahorse-gpgme-generate-dialog.c:101
 msgid "Couldn’t generate PGP key"
 msgstr "Nie można utworzyć klucza PGP"
 
-#: pgp/seahorse-gpgme-generate.c:168
+#: pgp/seahorse-gpgme-generate-dialog.c:140
 msgid "Passphrase for New PGP Key"
 msgstr "Hasło dla nowego klucza PGP"
 
-#: pgp/seahorse-gpgme-generate.c:169
+#: pgp/seahorse-gpgme-generate-dialog.c:141
 msgid "Enter the passphrase for your new key twice."
 msgstr "Należy dwukrotnie wpisać hasło dla nowego klucza."
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate.c:181
+#: pgp/seahorse-gpgme-generate-dialog.c:153
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1122,13 +1148,54 @@ msgstr ""
 "używanie programów. Dostarcza to komputerowi losowe\n"
 "dane, których potrzebuje."
 
-#: pgp/seahorse-gpgme-generate.c:186 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Tworzenie klucza"
 
-#: pgp/seahorse-gpgme-generate.c:313
+#: pgp/seahorse-gpgme-generate-dialog.c:182
 msgid "Name must be at least 5 characters long."
 msgstr "Nazwa musi mieć co najmniej 5 znaków."
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:18
+msgid "New PGP key"
+msgstr "Nowy klucz PGP"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:43
+msgid "A PGP key allows you to encrypt email or files to other people."
+msgstr "Klucz PGP umożliwia szyfrowanie poczty i plików."
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:125
+#: pkcs11/seahorse-pkcs11-generate.ui:110
+msgid "_Advanced key options"
+msgstr "_Zaawansowane opcje klucza"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:139
+msgid "_Comment"
+msgstr "_Komentarz"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:170 ssh/seahorse-ssh-generate.ui:127
+msgid "Encryption _Type"
+msgstr "Typ _szyfrowania"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:200 ssh/seahorse-ssh-generate.ui:164
+msgid "Key _Strength (bits)"
+msgstr "_Długość klucza (w bitach)"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:230
+msgid "E_xpiration Date"
+msgstr "Data _wygaśnięcia"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:252
+msgid "Ne_ver Expires"
+msgstr "_Nie wygasa"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:293
+msgid "C_reate"
+msgstr "_Utwórz"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:300
+msgid "Generate a new key"
+msgstr "Tworzy nowy klucz"
 
 #: pgp/seahorse-gpgme-key-deleter.c:76 pgp/seahorse-gpgme-secret-deleter.c:59
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
@@ -1152,34 +1219,34 @@ msgstr "Błędne hasło"
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Po raz trzeci wprowadzono błędne hasło. Proszę spróbować ponownie."
 
-#: pgp/seahorse-gpgme-keyring.c:89
+#: pgp/seahorse-gpgme-keyring.c:92
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Błędne hasło."
 
-#: pgp/seahorse-gpgme-keyring.c:93
+#: pgp/seahorse-gpgme-keyring.c:96
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "Nowe hasło dla „%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:95
+#: pgp/seahorse-gpgme-keyring.c:98
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "Hasło dla „%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:98 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Nowe hasło"
 
-#: pgp/seahorse-gpgme-keyring.c:100
+#: pgp/seahorse-gpgme-keyring.c:103
 msgid "Enter passphrase"
 msgstr "Hasło"
 
-#: pgp/seahorse-gpgme-keyring.c:105
+#: pgp/seahorse-gpgme-keyring.c:108
 msgid "Passphrase"
 msgstr "Hasło"
 
-#: pgp/seahorse-gpgme-keyring.c:300
+#: pgp/seahorse-gpgme-keyring.c:303
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
@@ -1187,7 +1254,7 @@ msgstr[0] "Wczytano %d klucz"
 msgstr[1] "Wczytano %d klucze"
 msgstr[2] "Wczytano %d kluczy"
 
-#: pgp/seahorse-gpgme-keyring.c:625
+#: pgp/seahorse-gpgme-keyring.c:631
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1195,11 +1262,11 @@ msgstr ""
 "Nieprawidłowe dane klucza (brakujące UID). Przyczyną tego może być "
 "nieprawidłowo ustawiona data w systemie lub brak podpisu własnego."
 
-#: pgp/seahorse-gpgme-keyring.c:755
+#: pgp/seahorse-gpgme-keyring.c:761
 msgid "GnuPG keys"
 msgstr "Klucze GnuPG"
 
-#: pgp/seahorse-gpgme-keyring.c:766
+#: pgp/seahorse-gpgme-keyring.c:772
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: domyślny katalog bazy kluczy"
 
@@ -1237,7 +1304,7 @@ msgstr "Wszystkie pliki obrazów"
 msgid "All JPEG files"
 msgstr "Wszystkie pliki JPEG"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:292
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:310
 msgid "All files"
 msgstr "Wszystkie pliki"
 
@@ -1245,7 +1312,7 @@ msgstr "Wszystkie pliki"
 msgid "Choose Photo to Add to Key"
 msgstr "Wybór zdjęcia dla klucza"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:250
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:270
 msgid "_Open"
 msgstr "_Otwórz"
 
@@ -1271,48 +1338,48 @@ msgstr "Na pewno usunąć bieżące zdjęcie z klucza?"
 msgid "Couldn’t delete photo"
 msgstr "Nie można usunąć zdjęcia"
 
-#: pgp/seahorse-gpgme-revoke.c:73
+#: pgp/seahorse-gpgme-revoke.c:72
 msgid "Couldn’t revoke subkey"
 msgstr "Nie można unieważnić podklucza"
 
-#: pgp/seahorse-gpgme-revoke.c:94
+#: pgp/seahorse-gpgme-revoke.c:93
 #, c-format
 msgid "Revoke: %s"
 msgstr "Unieważnienie: %s"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke.c:104
 msgid "No reason"
 msgstr "Brak powodu"
 
-#: pgp/seahorse-gpgme-revoke.c:106
+#: pgp/seahorse-gpgme-revoke.c:105
 msgid "No reason for revoking key"
 msgstr "Brak powodu do unieważnienia klucza"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke.c:111
 msgid "Compromised"
 msgstr "Naruszenie ochrony danych"
 
-#: pgp/seahorse-gpgme-revoke.c:113
+#: pgp/seahorse-gpgme-revoke.c:112
 msgid "Key has been compromised"
 msgstr "Doszło do naruszenia ochrony danych"
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke.c:118
 msgid "Superseded"
 msgstr "Zastąpiony"
 
-#: pgp/seahorse-gpgme-revoke.c:120
+#: pgp/seahorse-gpgme-revoke.c:119
 msgid "Key has been superseded"
 msgstr "Klucz został zastąpiony"
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke.c:125
 msgid "Not Used"
 msgstr "Nie używany"
 
-#: pgp/seahorse-gpgme-revoke.c:127
+#: pgp/seahorse-gpgme-revoke.c:126
 msgid "Key is no longer used"
 msgstr "Klucz nie jest już używany"
 
-#: pgp/seahorse-gpgme-revoke.c:164
+#: pgp/seahorse-gpgme-revoke.c:163
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -1321,7 +1388,7 @@ msgstr ""
 "Dodanie %s unieważnieni %s. Działanie te nie będzie mogło zostać cofnięte. "
 "Na pewno kontynuować?"
 
-#: pgp/seahorse-gpgme-revoke.c:176
+#: pgp/seahorse-gpgme-revoke.c:175
 msgid "Couldn’t add revoker"
 msgstr "Nie można dodać unieważnienia"
 
@@ -1329,7 +1396,7 @@ msgstr "Nie można dodać unieważnienia"
 msgid "I understand that this secret key will be permanently deleted."
 msgstr "Rozumiem, że ten tajny klucz zostanie trwale usunięty."
 
-#: pgp/seahorse-gpgme-sign.c:99
+#: pgp/seahorse-gpgme-sign-dialog.c:146
 #, c-format
 msgid ""
 "This key was already signed by\n"
@@ -1338,23 +1405,114 @@ msgstr ""
 "Ten klucz został już podpisany przez\n"
 "„%s”"
 
-#: pgp/seahorse-gpgme-sign.c:104
+#: pgp/seahorse-gpgme-sign-dialog.c:151
 msgid "Couldn’t sign key"
 msgstr "Nie można podpisać klucza"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: pgp/seahorse-gpgme-sign.c:163 pgp/seahorse-signer.c:62
+#: pgp/seahorse-gpgme-sign-dialog.c:281 pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr "Brak kluczy zdolnych do podpisywania"
 
-#: pgp/seahorse-gpgme-sign.c:164
+#: pgp/seahorse-gpgme-sign-dialog.c:282
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr ""
 "Brak osobistych kluczy PGP, które mogłyby być użyte do wskazania twojego "
 "zaufania do tego klucza."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:6
+msgid "Sign Key"
+msgstr "Podpisywanie klucza"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:25
+msgid "By signing you indicate your trust that this key belongs to:"
+msgstr "Podpisanie wyraża przekonanie, że ten klucz należy do:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:32
+msgid "Key Name"
+msgstr "Nazwa klucza"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:52
+msgid "How carefully have you checked this key?"
+msgstr "Jak dokładnie był sprawdzany ten klucz?"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:77
+msgid "_Not at all"
+msgstr "_Wcale"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:88
+msgid "_Casually"
+msgstr "Pobi_eżnie"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:100
+msgid "_Very Carefully"
+msgstr "_Bardzo dokładnie"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:127
+msgid ""
+"<i>Not at all:</i> means you believe the key is owned by the person who "
+"claims to own it, but you could not or did not verify this to be a fact."
+msgstr ""
+"<i>Wcale:</i> oznacza, że istnieje przekonanie, że właścicielem klucza jest "
+"osoba, która się za niego podaje, ale nie było sprawdzane lub nie było "
+"możliwe sprawdzenie, czy tak jest faktycznie."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:140
+msgid ""
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone."
+msgstr ""
+"<i>Pobieżnie:</i> oznacza, że wykonano pobieżne sprawdzenie, czy "
+"właścicielem klucza jest osoba, która się za niego podaje. Przykładowo, "
+"takiego sprawdzenia można dokonać telefonicznie, odczytując odcisk palca "
+"klucza właścicielowi."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:161
+msgid ""
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
+"key is genuine."
+msgstr ""
+"<i>Bardzo dokładnie:</i> Wybierane tylko wtedy, gdy istnieje absolutna "
+"pewność, że klucz ten jest autentyczny."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:177
+msgid ""
+"You could use a hard to forge photo identification (such as a passport) to "
+"personally check that the name on the key is correct. You should have also "
+"used email to check that the email address belongs to the owner."
+msgstr ""
+"W tym przypadku, w celu zweryfikowania zgodności nazwy w kluczu, można użyć "
+"identyfikacji na podstawie zdjęcia z dokumentu stwierdzającego tożsamość "
+"(np. z paszportu). Dodatkowo wskazane jest sprawdzenie, czy adres e-mail "
+"należy do właściciela klucza."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:206
+msgid "How others will see this signature:"
+msgstr "Ustawienia podpisu:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:222
+msgid "_Others may not see this signature"
+msgstr "I_nni nie mogą oglądać tego podpisu"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:248
+msgid "I can _revoke this signature at a later date."
+msgstr "Możliwość _unieważnienia tego podpisu w późniejszym czasie."
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:282
+msgid "Sign key as:"
+msgstr "Podpisanie klucza jako:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:300
+msgid "_Signer:"
+msgstr "_Osoba podpisująca:"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:335
+msgid "_Sign"
+msgstr "_Podpisz"
 
 #: pgp/seahorse-gpgme-subkey.c:89
 msgctxt "Algorithm"
@@ -1365,19 +1523,19 @@ msgstr "Nieznany"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:533
+#: pgp/seahorse-hkp-source.c:530
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Kryterium wyszukiwania nie było dostatecznie sprecyzowane. Serwer „%s” "
 "znalazł zbyt wiele pasujących kluczy."
 
-#: pgp/seahorse-hkp-source.c:536
+#: pgp/seahorse-hkp-source.c:533
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Nie można połączyć się z serwerem „%s”: %s"
 
-#: pgp/seahorse-hkp-source.c:999
+#: pgp/seahorse-hkp-source.c:996
 msgid "HTTP Key Server"
 msgstr "Serwer HTTP kluczy"
 
@@ -1391,8 +1549,8 @@ msgid "Key import succeeded"
 msgstr "Pomyślnie zaimportowano klucz"
 
 #: pgp/seahorse-keyserver-results.c:154 src/import-dialog.vala:38
-msgid "Import"
-msgstr "Zaimportuj"
+msgid "_Import"
+msgstr "Zai_mportuj"
 
 #: pgp/seahorse-keyserver-results.c:156
 msgid "Can’t import key"
@@ -1510,22 +1668,22 @@ msgstr "Z_synchronizuj"
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Nie można połączyć z %s: %s"
 
-#: pgp/seahorse-ldap-source.c:649
+#: pgp/seahorse-ldap-source.c:642
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Łączenie z: %s"
 
-#: pgp/seahorse-ldap-source.c:655
+#: pgp/seahorse-ldap-source.c:647
 #, c-format
 msgid "Couldn’t resolve address: %s"
 msgstr "Nie można pobrać adresu IP dla nazwy: %s"
 
-#: pgp/seahorse-ldap-source.c:699
+#: pgp/seahorse-ldap-source.c:689
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Pobieranie adresu IP serwera: %s"
 
-#: pgp/seahorse-ldap-source.c:1434
+#: pgp/seahorse-ldap-source.c:1366
 msgid "LDAP Key Server"
 msgstr "Serwer LDAP kluczy"
 
@@ -1537,187 +1695,155 @@ msgstr "Klucze PGP"
 msgid "PGP keys are for encrypting email or files"
 msgstr "Klucze PGP są używane do szyfrowania poczty i plików"
 
-#: pgp/seahorse-pgp-generate.ui:18
-msgid "New PGP key"
-msgstr "Nowy klucz PGP"
+#: pgp/seahorse-pgp-key.c:172
+#, c-format
+msgid "(and %d other)"
+msgid_plural "(and %d others)"
+msgstr[0] "(i %d inny)"
+msgstr[1] "(i %d inne)"
+msgstr[2] "(i %d innych)"
 
-#: pgp/seahorse-pgp-generate.ui:47
-msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr "Klucz PGP umożliwia szyfrowanie poczty i plików."
-
-#: pgp/seahorse-pgp-generate.ui:129 pkcs11/seahorse-pkcs11-generate.ui:110
-msgid "_Advanced key options"
-msgstr "_Zaawansowane opcje klucza"
-
-#: pgp/seahorse-pgp-generate.ui:143
-msgid "_Comment"
-msgstr "_Komentarz"
-
-#: pgp/seahorse-pgp-generate.ui:174
-msgid "Encryption _Type"
-msgstr "Typ _szyfrowania"
-
-#: pgp/seahorse-pgp-generate.ui:204
-msgid "Key _Strength (bits)"
-msgstr "_Długość klucza (w bitach)"
-
-#: pgp/seahorse-pgp-generate.ui:234
-msgid "E_xpiration Date"
-msgstr "Data _wygaśnięcia"
-
-#: pgp/seahorse-pgp-generate.ui:256
-msgid "Ne_ver Expires"
-msgstr "_Nie wygasa"
-
-#: pgp/seahorse-pgp-generate.ui:297
-msgid "C_reate"
-msgstr "_Utwórz"
-
-#: pgp/seahorse-pgp-generate.ui:304
-msgid "Generate a new key"
-msgstr "Tworzy nowy klucz"
-
-#: pgp/seahorse-pgp-key.c:555
+#: pgp/seahorse-pgp-key.c:573
 msgid "Personal PGP key"
 msgstr "Osobisty klucz PGP"
 
-#: pgp/seahorse-pgp-key.c:557
+#: pgp/seahorse-pgp-key.c:575
 msgid "PGP key"
 msgstr "Klucz PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:245
+#: pgp/seahorse-pgp-key-properties.c:247
 msgid "Couldn’t change primary user ID"
 msgstr "Nie można zmienić identyfikatora głównego użytkownika"
 
-#: pgp/seahorse-pgp-key-properties.c:280
+#: pgp/seahorse-pgp-key-properties.c:282
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Na pewno trwale usunąć identyfikator użytkownika „%s”?"
 
-#: pgp/seahorse-pgp-key-properties.c:289
+#: pgp/seahorse-pgp-key-properties.c:291
 msgid "Couldn’t delete user ID"
 msgstr "Nie można usunąć identyfikatora użytkownika"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:361 pgp/seahorse-pgp-key-properties.c:1351
+#: pgp/seahorse-pgp-key-properties.c:367 pgp/seahorse-pgp-key-properties.c:1405
 msgid "[Unknown]"
 msgstr "[Nieznane]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:457 pgp/seahorse-pgp-key-properties.c:1556
+#: pgp/seahorse-pgp-key-properties.c:463 pgp/seahorse-pgp-key-properties.c:1615
 msgid "Name/Email"
 msgstr "Nazwa/e-mail"
 
-#: pgp/seahorse-pgp-key-properties.c:464
+#: pgp/seahorse-pgp-key-properties.c:470
 msgid "Signature ID"
 msgstr "Identyfikator podpisu"
 
-#: pgp/seahorse-pgp-key-properties.c:570
+#: pgp/seahorse-pgp-key-properties.c:576
 msgid "Couldn’t change primary photo"
 msgstr "Nie można zmienić podstawowego zdjęcia"
 
-#: pgp/seahorse-pgp-key-properties.c:730
+#: pgp/seahorse-pgp-key-properties.c:736
 msgid "Error changing password"
 msgstr "Błąd podczas zmiany hasła"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:776
+#: pgp/seahorse-pgp-key-properties.c:782
 msgid "(unknown)"
 msgstr "(nieznane)"
 
-#: pgp/seahorse-pgp-key-properties.c:781
+#: pgp/seahorse-pgp-key-properties.c:787
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Ten klucz wygasł dnia: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:809
+#: pgp/seahorse-pgp-key-properties.c:815
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — klucz publiczny"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:812
+#: pgp/seahorse-pgp-key-properties.c:818
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — klucz prywatny"
 
-#: pgp/seahorse-pgp-key-properties.c:965
+#: pgp/seahorse-pgp-key-properties.c:1004
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Na pewno trwale usunąć podklucz %d klucza %s?"
 
-#: pgp/seahorse-pgp-key-properties.c:973
+#: pgp/seahorse-pgp-key-properties.c:1012
 msgid "Couldn’t delete subkey"
 msgstr "Nie można usunąć podklucza"
 
-#: pgp/seahorse-pgp-key-properties.c:1032
-#: pgp/seahorse-pgp-key-properties.c:1325
+#: pgp/seahorse-pgp-key-properties.c:1071
+#: pgp/seahorse-pgp-key-properties.c:1379
 msgid "Unable to change trust"
 msgstr "Nie można zmienić zaufania"
 
-#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:185
+#: pgp/seahorse-pgp-key-properties.c:1083 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Nie można wyeksportować klucza"
 
-#: pgp/seahorse-pgp-key-properties.c:1175
-#: pgp/seahorse-pgp-key-properties.c:1259
+#: pgp/seahorse-pgp-key-properties.c:1229
+#: pgp/seahorse-pgp-key-properties.c:1313
 msgctxt "Expires"
 msgid "Never"
 msgstr "Nigdy"
 
-#: pgp/seahorse-pgp-key-properties.c:1214
+#: pgp/seahorse-pgp-key-properties.c:1268
 msgid "ID"
 msgstr "Identyfikator"
 
-#: pgp/seahorse-pgp-key-properties.c:1220
+#: pgp/seahorse-pgp-key-properties.c:1274
 msgid "Usage"
 msgstr "Zastosowanie"
 
-#: pgp/seahorse-pgp-key-properties.c:1223
+#: pgp/seahorse-pgp-key-properties.c:1277
 msgid "Created"
 msgstr "Utworzono"
 
-#: pgp/seahorse-pgp-key-properties.c:1226
+#: pgp/seahorse-pgp-key-properties.c:1280
 msgid "Expires"
 msgstr "Wygasa"
 
-#: pgp/seahorse-pgp-key-properties.c:1229
+#: pgp/seahorse-pgp-key-properties.c:1283
 msgid "Status"
 msgstr "Stan"
 
-#: pgp/seahorse-pgp-key-properties.c:1232
+#: pgp/seahorse-pgp-key-properties.c:1286
 msgid "Strength"
 msgstr "Długość"
 
-#: pgp/seahorse-pgp-key-properties.c:1250
+#: pgp/seahorse-pgp-key-properties.c:1304
 msgid "Revoked"
 msgstr "Unieważniony"
 
-#: pgp/seahorse-pgp-key-properties.c:1252
+#: pgp/seahorse-pgp-key-properties.c:1306
 msgid "Expired"
 msgstr "Wygasł"
 
-#: pgp/seahorse-pgp-key-properties.c:1254
+#: pgp/seahorse-pgp-key-properties.c:1308
 msgid "Disabled"
 msgstr "Wyłączony"
 
-#: pgp/seahorse-pgp-key-properties.c:1256
+#: pgp/seahorse-pgp-key-properties.c:1310
 msgid "Good"
 msgstr "Dobry"
 
-#: pgp/seahorse-pgp-key-properties.c:1559
-#: pgp/seahorse-pgp-private-key-properties.ui:333
+#: pgp/seahorse-pgp-key-properties.c:1618
+#: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Identyfikator klucza"
 
-#: pgp/seahorse-pgp-key-properties.c:1700
+#: pgp/seahorse-pgp-key-properties.c:1760
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Zaufanie do podpisów złożonych przez „%s” pod innymi kluczami"
 
-#: pgp/seahorse-pgp-key-properties.c:1707
+#: pgp/seahorse-pgp-key-properties.c:1767
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1726,7 +1852,7 @@ msgstr ""
 "Jeśli istnieje pewność, że właścicielem klucza jest „%s”, proszę "
 "<i>podpisać</i> ten klucz:"
 
-#: pgp/seahorse-pgp-key-properties.c:1714
+#: pgp/seahorse-pgp-key-properties.c:1774
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1734,146 +1860,155 @@ msgstr ""
 "Jeśli nie ma już pewności co do tożsamości osoby „%s”, można <i>unieważnić</"
 "i> własny podpis:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:56
+#: pgp/seahorse-pgp-private-key-properties.ui:30
+msgid "Export _secret key"
+msgstr "Wy_eksportuj tajny klucz"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:34
+msgid "Export _public key"
+msgstr "Wye_ksportuj klucz publiczny"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:68
 #: pgp/seahorse-pgp-public-key-properties.ui:61
 msgid "This key has been revoked"
 msgstr "Ten klucz został unieważniony"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:66
+#: pgp/seahorse-pgp-private-key-properties.ui:78
 #: pgp/seahorse-pgp-public-key-properties.ui:73
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr ""
 "Ten klucz został unieważniony przez właściciela. Klucz nie może być dłużej "
 "używany."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:94
+#: pgp/seahorse-pgp-private-key-properties.ui:106
 #: pgp/seahorse-pgp-public-key-properties.ui:104
 msgid "This key has expired"
 msgstr "Ten klucz wygasł"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:159
+#: pgp/seahorse-pgp-private-key-properties.ui:171
 msgid "Add a photo to this key"
 msgstr "Dodaje zdjęcie do tego klucza"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:178
+#: pgp/seahorse-pgp-private-key-properties.ui:190
 msgid "Remove this photo from this key"
 msgstr "Usuwa to zdjęcie z tego klucza"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:197
+#: pgp/seahorse-pgp-private-key-properties.ui:209
 msgid "Make this photo the primary photo"
 msgstr "Ustawia to zdjęcie jako podstawowe"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:222
+#: pgp/seahorse-pgp-private-key-properties.ui:234
 msgid "Go to previous photo"
 msgstr "Przechodzi do poprzedniego zdjęcia"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:241
+#: pgp/seahorse-pgp-private-key-properties.ui:253
 msgid "Go to next photo"
 msgstr "Przechodzi do następnego zdjęcia"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:306
+#: pgp/seahorse-pgp-private-key-properties.ui:318
 #: pgp/seahorse-pgp-public-key-properties.ui:246
 msgid "Comment"
 msgstr "Komentarz"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:363
-#: ssh/seahorse-ssh-key-properties.ui:294
+#: pgp/seahorse-pgp-private-key-properties.ui:375
+#: ssh/seahorse-ssh-key-properties.ui:346
 msgid "Change _Passphrase"
 msgstr "Zmień _hasło"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:379
+#: pgp/seahorse-pgp-private-key-properties.ui:391
 #: pgp/seahorse-pgp-public-key-properties.ui:347
 msgid "Owner"
 msgstr "Właściciel"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:392
+#: pgp/seahorse-pgp-private-key-properties.ui:404
 msgid "Key Names and Signatures"
 msgstr "Nazwy kluczy i podpisy"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:430
+#: pgp/seahorse-pgp-private-key-properties.ui:442
 msgid "Primary"
 msgstr "Główny"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:460 pgp/seahorse-pgp-subkey.c:160
+#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:162
 msgid "Sign"
 msgstr "Podpisz"
 
 #. Translators: This text refers to deleting an item from its type's backing store
-#: pgp/seahorse-pgp-private-key-properties.ui:490
+#: pgp/seahorse-pgp-private-key-properties.ui:502
+#: pkcs11/seahorse-pkcs11-properties.ui:22
 #: src/seahorse-key-manager-widgets.ui:12
 msgid "Delete"
 msgstr "Usuń"
 
 #. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:520
+#: pgp/seahorse-pgp-private-key-properties.ui:532
 msgid "_Add Name"
 msgstr "_Dodaj nazwę"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:550
-#: pgp/seahorse-pgp-private-key-properties.ui:1040
+#: pgp/seahorse-pgp-private-key-properties.ui:562
+#: pgp/seahorse-pgp-private-key-properties.ui:1020
 msgid "Revoke"
 msgstr "Unieważnij"
 
 #. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:586
+#: pgp/seahorse-pgp-private-key-properties.ui:598
 msgid "Names and Signatures"
 msgstr "Nazwy i podpisy"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:623
+#: pgp/seahorse-pgp-private-key-properties.ui:635
 #: pgp/seahorse-pgp-public-key-properties.ui:623
 msgid "Key ID:"
 msgstr "Identyfikator klucza:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:648
+#: pgp/seahorse-pgp-private-key-properties.ui:660
 #: pgp/seahorse-pgp-public-key-properties.ui:649
 msgid "Type:"
 msgstr "Typ:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:673
+#: pgp/seahorse-pgp-private-key-properties.ui:685
 #: pgp/seahorse-pgp-public-key-properties.ui:675
 msgid "Strength:"
 msgstr "Długość:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:698
+#: pgp/seahorse-pgp-private-key-properties.ui:710
 msgid "Technical Details"
 msgstr "Szczegóły techniczne"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:726
-#: ssh/seahorse-ssh-key-properties.ui:174
+#: pgp/seahorse-pgp-private-key-properties.ui:738
+#: ssh/seahorse-ssh-key-properties.ui:173
 msgid "Fingerprint"
 msgstr "Odcisk palca"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:758
+#: pgp/seahorse-pgp-private-key-properties.ui:770
 #: pgp/seahorse-pgp-public-key-properties.ui:769
 msgid "Created:"
 msgstr "Utworzono:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:782
+#: pgp/seahorse-pgp-private-key-properties.ui:794
 #: pgp/seahorse-pgp-public-key-properties.ui:794
 msgid "Expires:"
 msgstr "Wygasa:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:828
+#: pgp/seahorse-pgp-private-key-properties.ui:840
 msgid "Dates"
 msgstr "Daty"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:851
+#: pgp/seahorse-pgp-private-key-properties.ui:863
 msgid "Override Owner _Trust:"
 msgstr "Zmi_ana zaufania do właściciela:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:879
-msgid "_Export Secret Key:"
-msgstr "_Eksportowanie tajnego klucza:"
+#: pgp/seahorse-pgp-private-key-properties.ui:890
+msgid "_Export to file"
+msgstr "Wy_eksportuj do pliku"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:926
+#: pgp/seahorse-pgp-private-key-properties.ui:906
 msgid "Actions"
 msgstr "Działania"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1010
+#: pgp/seahorse-pgp-private-key-properties.ui:990
 msgid "Expire"
 msgstr "Wygaś"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1084
+#: pgp/seahorse-pgp-private-key-properties.ui:1064
 #: pgp/seahorse-pgp-public-key-properties.ui:898
 msgid "_Subkeys"
 msgstr "_Podklucze"
@@ -1946,23 +2081,23 @@ msgstr "Wskaźnik zaufania:"
 msgid "You _Trust the Owner:"
 msgstr "_Zaufanie do właściciela:"
 
-#: pgp/seahorse-pgp-subkey.c:159
+#: pgp/seahorse-pgp-subkey.c:161
 msgid "Encrypt"
 msgstr "Zaszyfruj"
 
-#: pgp/seahorse-pgp-subkey.c:161
+#: pgp/seahorse-pgp-subkey.c:163
 msgid "Certify"
 msgstr "Certyfikuj"
 
-#: pgp/seahorse-pgp-subkey.c:162
+#: pgp/seahorse-pgp-subkey.c:164
 msgid "Authenticate"
 msgstr "Uwierzytelnij"
 
-#: pgp/seahorse-pgp-subkey.c:311
+#: pgp/seahorse-pgp-subkey.c:313
 msgid "Key"
 msgstr "Klucz"
 
-#: pgp/seahorse-pgp-subkey.c:316
+#: pgp/seahorse-pgp-subkey.c:318
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "Podklucz %d klucza %s"
@@ -1998,110 +2133,19 @@ msgstr "Wybór klucza do podpisywania"
 msgid "_Sign message with key:"
 msgstr "_Podpisanie wiadomości kluczem:"
 
-#: pgp/seahorse-sign.ui:6
-msgid "Sign Key"
-msgstr "Podpisywanie klucza"
-
-#: pgp/seahorse-sign.ui:27
-msgid "By signing you indicate your trust that this key belongs to:"
-msgstr "Podpisanie wyraża przekonanie, że ten klucz należy do:"
-
-#: pgp/seahorse-sign.ui:34
-msgid "Key Name"
-msgstr "Nazwa klucza"
-
-#: pgp/seahorse-sign.ui:54
-msgid "How carefully have you checked this key?"
-msgstr "Jak dokładnie był sprawdzany ten klucz?"
-
-#: pgp/seahorse-sign.ui:84
-msgid "_Not at all"
-msgstr "_Wcale"
-
-#: pgp/seahorse-sign.ui:95
-msgid "_Casually"
-msgstr "Pobi_eżnie"
-
-#: pgp/seahorse-sign.ui:107
-msgid "_Very Carefully"
-msgstr "_Bardzo dokładnie"
-
-#: pgp/seahorse-sign.ui:134
-msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who "
-"claims to own it, but you could not or did not verify this to be a fact."
-msgstr ""
-"<i>Wcale:</i> oznacza, że istnieje przekonanie, że właścicielem klucza jest "
-"osoba, która się za niego podaje, ale nie było sprawdzane lub nie było "
-"możliwe sprawdzenie, czy tak jest faktycznie."
-
-#: pgp/seahorse-sign.ui:147
-msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone."
-msgstr ""
-"<i>Pobieżnie:</i> oznacza, że wykonano pobieżne sprawdzenie, czy "
-"właścicielem klucza jest osoba, która się za niego podaje. Przykładowo, "
-"takiego sprawdzenia można dokonać telefonicznie, odczytując odcisk palca "
-"klucza właścicielowi."
-
-#: pgp/seahorse-sign.ui:168
-msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
-"key is genuine."
-msgstr ""
-"<i>Bardzo dokładnie:</i> Wybierane tylko wtedy, gdy istnieje absolutna "
-"pewność, że klucz ten jest autentyczny."
-
-#: pgp/seahorse-sign.ui:184
-msgid ""
-"You could use a hard to forge photo identification (such as a passport) to "
-"personally check that the name on the key is correct. You should have also "
-"used email to check that the email address belongs to the owner."
-msgstr ""
-"W tym przypadku, w celu zweryfikowania zgodności nazwy w kluczu, można użyć "
-"identyfikacji na podstawie zdjęcia z dokumentu stwierdzającego tożsamość "
-"(np. z paszportu). Dodatkowo wskazane jest sprawdzenie, czy adres e-mail "
-"należy do właściciela klucza."
-
-#: pgp/seahorse-sign.ui:215
-msgid "How others will see this signature:"
-msgstr "Ustawienia podpisu:"
-
-#: pgp/seahorse-sign.ui:232
-msgid "_Others may not see this signature"
-msgstr "I_nni nie mogą oglądać tego podpisu"
-
-#: pgp/seahorse-sign.ui:243
-msgid "I can _revoke this signature at a later date."
-msgstr "Możliwość _unieważnienia tego podpisu w późniejszym czasie."
-
-#: pgp/seahorse-sign.ui:268
-msgid "Sign key as:"
-msgstr "Podpisanie klucza jako:"
-
-#: pgp/seahorse-sign.ui:286
-msgid "_Signer:"
-msgstr "_Osoba podpisująca:"
-
-#: pgp/seahorse-sign.ui:321
-msgid "_Sign"
-msgstr "_Podpisz"
-
-#: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
+#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
 msgid "Exporting data"
 msgstr "Eksportowanie danych"
 
-#: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
+#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
 msgid "Retrieving data"
 msgstr "Pobieranie danych"
 
-#: pgp/seahorse-transfer.c:241 pgp/seahorse-transfer.c:288
+#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
 msgid "Importing data"
 msgstr "Importowanie danych"
 
-#: pgp/seahorse-transfer.c:241 pgp/seahorse-transfer.c:288
+#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
 msgid "Sending data"
 msgstr "Wysyłanie danych"
 
@@ -2145,41 +2189,21 @@ msgstr "Rozumiem, że ten klucz zostanie trwale usunięty."
 msgid "Unnamed private key"
 msgstr "Klucz prywatny bez nazwy"
 
-#: pkcs11/pkcs11-private-key.vala:70 src/seahorse-key-manager.ui:225
+#: pkcs11/pkcs11-private-key.vala:70 src/seahorse-key-manager.ui:227
 msgid "Private key"
 msgstr "Klucz prywatny"
 
-#: pkcs11/pkcs11-properties.vala:134
+#: pkcs11/pkcs11-properties.vala:98
 msgid "Unnamed"
 msgstr "Bez nazwy"
 
-#: pkcs11/pkcs11-properties.vala:165
+#: pkcs11/pkcs11-properties.vala:130
 msgid "Failed to export certificate"
 msgstr "Wyeksportowanie certyfikatu się nie powiodło"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:620
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:426
 msgid "Couldn’t delete"
 msgstr "Nie można usunąć"
-
-#: pkcs11/pkcs11-properties.vala:199
-msgid "_Export"
-msgstr "Wy_eksportuj"
-
-#: pkcs11/pkcs11-properties.vala:200
-msgid "Export the certificate"
-msgstr "Eksportuje certyfikat"
-
-#: pkcs11/pkcs11-properties.vala:202
-msgid "Delete this certificate or key"
-msgstr "Usuwa ten certyfikat lub klucz"
-
-#: pkcs11/pkcs11-properties.vala:203
-msgid "Request _Certificate"
-msgstr "Zażądaj _certyfikat"
-
-#: pkcs11/pkcs11-properties.vala:204
-msgid "Create a certificate request file for this key"
-msgstr "Tworzy plik żądania certyfikatu dla tego klucza"
 
 #: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.ui:193
 msgid "Create"
@@ -2193,19 +2217,19 @@ msgstr "Nie można utworzyć żądania certyfikatu"
 msgid "Save certificate request"
 msgstr "Zapisuje żądanie certyfikatu"
 
-#: pkcs11/pkcs11-request.vala:107
+#: pkcs11/pkcs11-request.vala:106
 msgid "_Save"
 msgstr "_Zapisz"
 
-#: pkcs11/pkcs11-request.vala:113
+#: pkcs11/pkcs11-request.vala:111
 msgid "Certificate request"
 msgstr "Żądanie certyfikatu"
 
-#: pkcs11/pkcs11-request.vala:121
+#: pkcs11/pkcs11-request.vala:119
 msgid "PEM encoded request"
 msgstr "Żądanie zakodowane za pomocą PEM"
 
-#: pkcs11/pkcs11-request.vala:149
+#: pkcs11/pkcs11-request.vala:147
 msgid "Couldn’t save certificate request"
 msgstr "Nie można zapisać żądania certyfikatu"
 
@@ -2213,10 +2237,6 @@ msgstr "Nie można zapisać żądania certyfikatu"
 msgctxt "Label"
 msgid "Unknown"
 msgstr "Nieznana"
-
-#: pkcs11/seahorse-pkcs11-backend.c:207
-msgid "Certificates"
-msgstr "Certyfikaty"
 
 #: pkcs11/seahorse-pkcs11-backend.c:213
 msgid "X.509 certificates and related keys"
@@ -2238,9 +2258,29 @@ msgstr "Etykieta:"
 msgid "Stored at:"
 msgstr "Przechowywane w:"
 
-#: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
+#: pkcs11/seahorse-pkcs11-generate.ui:128
+msgid "Key _Type:"
+msgstr "_Typ klucza:"
+
+#: pkcs11/seahorse-pkcs11-generate.ui:151
 msgid "Key _Strength (bits):"
 msgstr "_Długość klucza (w bitach):"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:23
+msgid "Delete this certificate or key"
+msgstr "Usuwa ten certyfikat lub klucz"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:34
+msgid "Export the certificate"
+msgstr "Eksportuje certyfikat"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:41
+msgid "Request Certificate"
+msgstr "Zażądaj certyfikat"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:42
+msgid "Create a certificate request file for this key"
+msgstr "Tworzy plik żądania certyfikatu dla tego klucza"
 
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
@@ -2262,18 +2302,18 @@ msgstr "Współtwórcy:"
 msgid "Version of this application"
 msgstr "Wersja tego programu"
 
-#: src/application.vala:170
+#: src/application.vala:171
 msgid "translator-credits"
 msgstr ""
 "Artur Flinta <aflinta@at.kernel.pl>, 2003-2006\n"
 "Andrzej Polatyński <andrzej@datatel.net.pl>, 2007\n"
 "Tomasz Dominikowski <dominikowski@gmail.com>, 2007-2009\n"
 "Piotr Zaryk <pzaryk@aviary.pl>, 2009\n"
-"Piotr Drąg <piotrdrag@gmail.com>, 2010-2019\n"
+"Piotr Drąg <piotrdrag@gmail.com>, 2010-2020\n"
 "Paweł Żołnowski <pawel@zolnowski.name>, 2014\n"
-"Aviary.pl <community-poland@mozilla.org>, 2007-2019"
+"Aviary.pl <community-poland@mozilla.org>, 2007-2020"
 
-#: src/application.vala:173
+#: src/application.vala:174
 msgid "Seahorse Project Homepage"
 msgstr "Witryna projektu Seahorse"
 
@@ -2286,24 +2326,24 @@ msgid "Import failed"
 msgstr "Zaimportowanie się nie powiodło"
 
 #. The prompt
-#: src/key-manager.vala:247 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:324
 msgid "Import Key"
 msgstr "Importowanie klucza"
 
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:258
+#: src/key-manager.vala:276
 msgid "All key files"
 msgstr "Wszystkie pliki kluczy"
 
-#: src/key-manager.vala:323
+#: src/key-manager.vala:341
 msgid "Dropped text"
 msgstr "Upuszczony tekst"
 
-#: src/key-manager.vala:351
+#: src/key-manager.vala:369
 msgid "Clipboard text"
 msgstr "Tekst ze schowka"
 
-#: src/key-manager.vala:443
+#: src/key-manager.vala:468
 msgid "Couldn’t unlock keyring"
 msgstr "Nie można odblokować bazy kluczy"
 
@@ -2323,97 +2363,109 @@ msgstr "Proszę potwierdzić nowe hasło"
 msgid "Con_firm Passphrase:"
 msgstr "_Potwierdzenie hasła:"
 
-#: src/seahorse-key-manager.ui:6
-msgid "Filter items:"
-msgstr "Filtrowanie elementów:"
-
-#: src/seahorse-key-manager.ui:8
-msgid "Show p_ersonal"
-msgstr "_Osobiste"
-
-#: src/seahorse-key-manager.ui:13
-msgid "Show _trusted"
-msgstr "_Zaufane"
-
-#: src/seahorse-key-manager.ui:18
-msgid "Show an_y"
-msgstr "_Wszystkie"
-
-#: src/seahorse-key-manager.ui:25
-msgid "_Combine all keyrings"
-msgstr "Wszystkie _bazy kluczy"
-
-#: src/seahorse-key-manager.ui:31
+#: src/seahorse-key-manager.ui:7
 msgid "_Find remote keys…"
 msgstr "Wy_szukaj zdalne klucze…"
 
-#: src/seahorse-key-manager.ui:36
+#: src/seahorse-key-manager.ui:12
 msgid "_Sync and publish keys…"
 msgstr "Zsy_nchronizuj i opublikuj klucze…"
 
-#: src/seahorse-key-manager.ui:43
+#: src/seahorse-key-manager.ui:19
 msgid "_Preferences"
 msgstr "_Preferencje"
 
-#: src/seahorse-key-manager.ui:48
+#: src/seahorse-key-manager.ui:24
 msgid "_Help"
 msgstr "Pomo_c"
 
-#: src/seahorse-key-manager.ui:52
+#: src/seahorse-key-manager.ui:28
+msgid "_Keyboard Shortcuts"
+msgstr "_Skróty klawiszowe"
+
+#: src/seahorse-key-manager.ui:32
 msgid "_About Passwords and Keys"
 msgstr "_O programie"
 
-#: src/seahorse-key-manager.ui:89
+#: src/seahorse-key-manager.ui:40
+msgid "Filter items:"
+msgstr "Filtrowanie elementów:"
+
+#: src/seahorse-key-manager.ui:42
+msgid "Show p_ersonal"
+msgstr "_Osobiste"
+
+#: src/seahorse-key-manager.ui:47
+msgid "Show _trusted"
+msgstr "_Zaufane"
+
+#: src/seahorse-key-manager.ui:52
+msgid "Show an_y"
+msgstr "_Wszystkie"
+
+#: src/seahorse-key-manager.ui:91
 msgid "Secure Shell key"
 msgstr "Klucz SSH"
 
-#: src/seahorse-key-manager.ui:96
+#: src/seahorse-key-manager.ui:98
 msgid "Used to access other computers"
 msgstr "Używany do połączeń ze zdalnymi komputerami"
 
-#: src/seahorse-key-manager.ui:123
+#: src/seahorse-key-manager.ui:125
 msgid "GPG key"
 msgstr "Klucz GPG"
 
-#: src/seahorse-key-manager.ui:130
+#: src/seahorse-key-manager.ui:132
 msgid "Used to encrypt email and files"
 msgstr "Używany do szyfrowania poczty i plików"
 
-#: src/seahorse-key-manager.ui:157
+#: src/seahorse-key-manager.ui:159
 msgid "Password keyring"
 msgstr "Baza haseł"
 
-#: src/seahorse-key-manager.ui:164
+#: src/seahorse-key-manager.ui:166
 msgid "Used to store application and network passwords"
 msgstr "Używane do przechowywania haseł programów i haseł sieciowych"
 
-#: src/seahorse-key-manager.ui:198
+#: src/seahorse-key-manager.ui:200
 msgid "Safely store a password or secret"
 msgstr "Bezpieczne przechowywanie haseł programów i haseł sieciowych"
 
-#: src/seahorse-key-manager.ui:232
+#: src/seahorse-key-manager.ui:234
 msgid "Used to request a certificate"
 msgstr "Używane do żądania certyfikatu"
 
-#: src/seahorse-key-manager.ui:258
+#: src/seahorse-key-manager.ui:260
 msgid "Import from file…"
 msgstr "Zaimportuj z pliku…"
 
-#: src/seahorse-key-manager.ui:283
+#: src/seahorse-key-manager.ui:297
 msgid "Add a new key or item"
 msgstr "Dodaje nowy klucz lub element"
 
-#: src/seahorse-key-manager.ui:314
+#: src/seahorse-key-manager.ui:367
+msgid "Back"
+msgstr "Wstecz"
+
+#: src/seahorse-key-manager.ui:402
 msgid "Search for a key or password"
 msgstr "Wyszukuje klucz lub hasło"
 
-#: src/seahorse-key-manager.ui:361
+#: src/seahorse-key-manager.ui:466
 msgid "Filter"
 msgstr "Wyszukiwanie"
 
-#: src/seahorse-key-manager.ui:455
+#: src/seahorse-key-manager.ui:532
 msgid "This collection seems to be empty"
 msgstr "Ta kolekcja jest pusta"
+
+#: src/seahorse-key-manager.ui:564
+msgid "Keyring is locked"
+msgstr "Baza kluczy jest zablokowana"
+
+#: src/seahorse-key-manager.ui:574
+msgid "Unlock"
+msgstr "Odblokuj"
 
 #: src/seahorse-key-manager-widgets.ui:6
 msgid "Export…"
@@ -2427,23 +2479,23 @@ msgstr "Właściwości"
 msgid "Configure Key for Secure Shell…"
 msgstr "Skonfiguruj klucz dla SSH…"
 
-#: src/sidebar.vala:586
-msgid "Couldn’t lock"
-msgstr "Nie można zablokować"
-
 #. Lock and unlock items
-#: src/sidebar.vala:637
+#: src/sidebar.vala:339
 msgid "_Lock"
 msgstr "Za_blokuj"
 
-#: src/sidebar.vala:642
+#: src/sidebar.vala:344
 msgid "_Unlock"
 msgstr "_Odblokuj"
 
 #. Properties item
-#: src/sidebar.vala:659
+#: src/sidebar.vala:361
 msgid "_Properties"
 msgstr "_Właściwości"
+
+#: src/sidebar.vala:391
+msgid "Couldn’t lock"
+msgstr "Nie można zablokować"
 
 #: ssh/backend.vala:27
 msgid "Secure Shell"
@@ -2506,41 +2558,41 @@ msgstr "256 bitów"
 msgid "Unknown key type!"
 msgstr "Nieznany typ klucza."
 
-#: ssh/key-properties.vala:75
+#: ssh/key-properties.vala:80
 msgid "Unknown type"
 msgstr "Nieznany typ"
 
-#: ssh/key-properties.vala:99
+#: ssh/key-properties.vala:105
 msgid "Couldn’t rename key."
 msgstr "Nie można zmienić nazwy klucza."
 
-#: ssh/key-properties.vala:125
+#: ssh/key-properties.vala:131
 msgid "Couldn’t change authorization for key."
 msgstr "Nie można zmienić upoważnienia dla klucza."
 
-#: ssh/key-properties.vala:141
+#: ssh/key-properties.vala:147
 msgid "Couldn’t change passphrase for key."
 msgstr "Nie można zmienić hasła dla klucza."
 
-#: ssh/key-properties.vala:165
+#: ssh/key-properties.vala:171
 msgid "Error deleting the SSH key."
 msgstr "Błąd podczas usuwania klucza SSH."
 
-#: ssh/key.vala:45
+#: ssh/key.vala:52
 msgid "Personal SSH key"
 msgstr "Osobisty klucz SSH"
 
-#: ssh/key.vala:45
+#: ssh/key.vala:52
 msgid "SSH key"
 msgstr "Klucz SSH"
 
 #. No names when not even the fingerpint loaded
-#: ssh/key.vala:115
+#: ssh/key.vala:122
 msgid "(Unreadable Secure Shell Key)"
 msgstr "(Nieczytelny klucz SSH)"
 
 #. No comment, but loaded
-#: ssh/key.vala:118 ssh/key.vala:122
+#: ssh/key.vala:125 ssh/key.vala:129
 msgid "Secure Shell Key"
 msgstr "Klucz SSH"
 
@@ -2604,27 +2656,27 @@ msgstr ""
 "Klucz bezpiecznej powłoki (SSH) umożliwia bezpieczne połączenia z innymi "
 "komputerami."
 
-#: ssh/seahorse-ssh-generate.ui:108
+#: ssh/seahorse-ssh-generate.ui:78
+msgid "_Description"
+msgstr "_Opis"
+
+#: ssh/seahorse-ssh-generate.ui:111
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "Adres e-mail lub inna informacja opisujących ten klucz."
 
-#: ssh/seahorse-ssh-generate.ui:124
-msgid "Encryption _Type:"
-msgstr "Typ _szyfrowania:"
-
-#: ssh/seahorse-ssh-generate.ui:142
+#: ssh/seahorse-ssh-generate.ui:148
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:143
+#: ssh/seahorse-ssh-generate.ui:149
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:144
+#: ssh/seahorse-ssh-generate.ui:150
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:186
+#: ssh/seahorse-ssh-generate.ui:195
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2633,47 +2685,59 @@ msgstr ""
 "komputerem, można w tej chwili przygotować ten komputer do rozpoznawania "
 "nowego klucza."
 
-#: ssh/seahorse-ssh-generate.ui:212
+#: ssh/seahorse-ssh-generate.ui:221
 msgid "_Just Create Key"
 msgstr "Utwórz _tylko klucz"
 
-#: ssh/seahorse-ssh-generate.ui:226
+#: ssh/seahorse-ssh-generate.ui:235
 msgid "_Create and Set Up"
 msgstr "_Utwórz i przygotuj"
 
-#: ssh/seahorse-ssh-key-properties.ui:16
+#: ssh/seahorse-ssh-key-properties.ui:15
 msgid "SSH Key Properties"
 msgstr "Właściwości klucza SSH"
 
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:55
+#: ssh/seahorse-ssh-key-properties.ui:54
 msgctxt "name-of-ssh-key"
 msgid "Name"
 msgstr "Nazwa"
 
-#: ssh/seahorse-ssh-key-properties.ui:88
+#: ssh/seahorse-ssh-key-properties.ui:87
 msgid "Algorithm"
 msgstr "Algorytm"
 
-#: ssh/seahorse-ssh-key-properties.ui:115
+#: ssh/seahorse-ssh-key-properties.ui:114
 msgid "Key Length"
 msgstr "Długość klucza"
 
-#: ssh/seahorse-ssh-key-properties.ui:142
+#: ssh/seahorse-ssh-key-properties.ui:141
 msgid "Location"
 msgstr "Położenie"
 
-#: ssh/seahorse-ssh-key-properties.ui:220
+#: ssh/seahorse-ssh-key-properties.ui:228
+msgid "Public Key"
+msgstr "Klucz publiczny"
+
+#: ssh/seahorse-ssh-key-properties.ui:243
+msgid "Copy public key to clipboard"
+msgstr "Kopiuje klucz publiczny do schowka"
+
+#: ssh/seahorse-ssh-key-properties.ui:272
 msgid "Remote Access"
 msgstr "Zdalny dostęp"
 
-#: ssh/seahorse-ssh-key-properties.ui:233
+#: ssh/seahorse-ssh-key-properties.ui:285
 msgid "Allows accessing this computer remotely"
 msgstr "Umożliwia zdalny dostęp do tego komputera"
 
-#: ssh/seahorse-ssh-key-properties.ui:311
-msgid "Delete SSH Key"
-msgstr "Usuń klucz SSH"
+#: ssh/seahorse-ssh-key-properties.ui:332
+msgid "_Export"
+msgstr "Wy_eksportuj"
+
+#: ssh/seahorse-ssh-key-properties.ui:362
+msgid "_Delete SSH Key"
+msgstr "_Usuń klucz SSH"
 
 #: ssh/seahorse-ssh-upload.ui:5
 msgid "Set Up Computer for SSH Connection"
@@ -2717,7 +2781,7 @@ msgstr "OpenSSH: %s"
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:245
+#: ssh/source.vala:253
 msgid "No private key file is available for this key."
 msgstr "Brak klucza prywatnego dla tego klucza."
 
