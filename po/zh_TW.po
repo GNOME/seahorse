@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse 3.3.4\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-11-11 15:43+0000\n"
-"PO-Revision-Date: 2019-11-27 23:22+0800\n"
-"Last-Translator: pan93412 <pan93412@gmail.com>\n"
+"POT-Creation-Date: 2020-03-11 05:57+0000\n"
+"PO-Revision-Date: 2020-03-31 23:57+0800\n"
+"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 19.11.80\n"
+"X-Generator: Poedit 2.3\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -39,36 +39,35 @@ msgstr "取消"
 msgid "Save"
 msgstr "儲存"
 
-#: common/catalog.vala:116
+#: common/catalog.vala:115
 msgid "Cannot delete"
 msgstr "不能刪除"
 
-#: common/catalog.vala:130 common/key-manager-store.vala:418
+#: common/catalog.vala:129
 msgid "Couldn’t export keys"
 msgstr "無法匯出金錀"
 
-#: common/catalog.vala:140
+#: common/catalog.vala:139
 msgid "Couldn’t export data"
 msgstr "無法匯出資料"
 
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-photos.c:76 pgp/seahorse-gpgme-photos.c:264
-#: pgp/seahorse-gpgme-photos.c:324 pgp/seahorse-pgp-generate.ui:287
+#: pgp/seahorse-gpgme-generate-dialog.ui:283 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:249
+#: src/import-dialog.vala:34 src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "取消(_C)"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: pkcs11/pkcs11-properties.vala:201 src/sidebar.vala:650
+#: src/sidebar.vala:352
 msgid "_Delete"
 msgstr "刪除(_D)"
 
-#: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:909
-#: ssh/seahorse-ssh-key-properties.ui:280
+#: common/exportable.vala:191 pkcs11/seahorse-pkcs11-properties.ui:33
 msgid "Export"
 msgstr "匯出"
 
@@ -89,6 +88,18 @@ msgstr "確定(_O)"
 #: common/passphrase-prompt.vala:145 ssh/seahorse-ssh-askpass.c:117
 msgid "Password:"
 msgstr "密碼："
+
+#: common/place.vala:40 gkr/gkr-backend.vala:39
+msgid "Passwords"
+msgstr "密碼"
+
+#: common/place.vala:42
+msgid "Keys"
+msgstr "金鑰"
+
+#: common/place.vala:44 pkcs11/seahorse-pkcs11-backend.c:207
+msgid "Certificates"
+msgstr "憑證"
 
 #: common/prefs.vala:42
 msgid "Preferences"
@@ -194,6 +205,46 @@ msgctxt "Validity"
 msgid "Revoked"
 msgstr "已撤銷"
 
+#: data/gtk/help-overlay.ui:9
+msgctxt "shortcut window"
+msgid "Overview"
+msgstr "概覽"
+
+#: data/gtk/help-overlay.ui:14
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "求助"
+
+#: data/gtk/help-overlay.ui:21
+msgctxt "shortcut window"
+msgid "Open menu"
+msgstr "開啟選單"
+
+#: data/gtk/help-overlay.ui:28
+msgctxt "shortcut window"
+msgid "Create a new item"
+msgstr "建立新項目"
+
+#: data/gtk/help-overlay.ui:35
+msgctxt "shortcut window"
+msgid "Import item from file"
+msgstr "從檔案匯入項目"
+
+#: data/gtk/help-overlay.ui:42
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "搜尋"
+
+#: data/gtk/help-overlay.ui:49
+msgctxt "shortcut window"
+msgid "Shortcut list"
+msgstr "快捷鍵列表"
+
+#: data/gtk/help-overlay.ui:56
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "退出"
+
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
 msgstr "自動取回金鑰"
@@ -208,11 +259,11 @@ msgstr "自動發行金鑰"
 
 #: data/org.gnome.seahorse.gschema.xml:11
 msgid "Whether or not modified keys should be automatically published."
-msgstr "決定要不要自動發行金鑰"
+msgstr "決定要不要自動發行修改的金鑰。"
 
 #: data/org.gnome.seahorse.gschema.xml:15
 msgid "Publish keys to this key server"
-msgstr "在此金鑰伺服器發行金鑰"
+msgstr "在此金鑰伺服器上發行金鑰"
 
 #: data/org.gnome.seahorse.gschema.xml:16
 msgid ""
@@ -240,11 +291,11 @@ msgstr "針對所有金鑰伺服器執行搜尋或留白的金鑰伺服器。"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:5
 msgid "Show keyrings sidebar"
-msgstr "顯示鑰匙圈的側邊欄"
+msgstr "顯示鑰匙圈側邊欄"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:6
 msgid "Show keyrings sidebar in Seahorse."
-msgstr "在 Seahorse 顯示鑰匙圈的側邊欄"
+msgstr "在 Seahorse 中顯示鑰匙圈側邊欄。"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:10
 msgid "Which items to show"
@@ -296,7 +347,7 @@ msgstr "顯示有效性欄位"
 #: data/org.gnome.seahorse.manager.gschema.xml:45
 #: data/org.gnome.seahorse.manager.gschema.xml:50
 msgid "No longer in use."
-msgstr "不再使用"
+msgstr "已不再使用。"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:39
 msgid "Show expiry column"
@@ -352,12 +403,12 @@ msgstr ""
 "利用 seahorse，您可以建立與管理 PGP 金鑰、SSH 金鑰，從金鑰伺服器發布與取回金"
 "鑰，快取您的密語讓您不用每次都輸入它，還可以備份您的金鑰與鑰匙圈。"
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:94
+#: data/org.gnome.seahorse.Application.appdata.xml.in:127
 msgid "The GNOME Project"
 msgstr "GNOME 專案"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:168
-#: src/seahorse-key-manager.ui:277
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:169
+#: src/seahorse-key-manager.ui:291
 msgid "Passwords and Keys"
 msgstr "密碼及加密金鑰"
 
@@ -366,21 +417,58 @@ msgstr "密碼及加密金鑰"
 msgid "keyring;encryption;security;sign;ssh;"
 msgstr "keyring;encryption;security;sign;ssh;金鑰;加密;安全;簽署;"
 
-#: gkr/gkr-backend.vala:39
-msgid "Passwords"
-msgstr "密碼"
-
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "已儲存的個人密碼、憑證和密碼憑證"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:604
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:410
 msgid "Couldn’t unlock"
 msgstr "無法解鎖"
 
 #: gkr/gkr-item-add.vala:137
 msgid "Couldn’t add item"
 msgstr "無法加入項目"
+
+#: gkr/gkr-item-info.vala:30
+msgid "Password or Secret"
+msgstr "密碼或密碼憑證"
+
+#: gkr/gkr-item-info.vala:120
+msgid "Network connection secret"
+msgstr "網路連線密碼憑證"
+
+#: gkr/gkr-item-info.vala:127
+msgid "Wi-Fi password"
+msgstr "Wi-Fi 密碼"
+
+#: gkr/gkr-item-info.vala:145
+msgid "Network password"
+msgstr "網路密碼"
+
+#: gkr/gkr-item-info.vala:234
+msgid "GNOME Web password"
+msgstr "GNOME Web 密碼"
+
+#: gkr/gkr-item-info.vala:254
+msgid "Google Chrome password"
+msgstr "Google Chrome 密碼"
+
+#: gkr/gkr-item-info.vala:288
+msgid "Instant messaging password"
+msgstr "即時訊息密碼"
+
+#. Translators: This should be the same as the string in empathy
+#: gkr/gkr-item-info.vala:293
+msgid "IM account password for "
+msgstr "IM 帳號的密碼 "
+
+#: gkr/gkr-item-info.vala:326
+msgid "Telepathy password"
+msgstr "Telepathy 密碼"
+
+#: gkr/gkr-item-info.vala:362
+msgid "GNOME Online Accounts password"
+msgstr "GNOME 線上帳號密碼"
 
 #: gkr/gkr-item-properties.vala:106
 msgid "Save changes for this item?"
@@ -411,7 +499,7 @@ msgid "Network Credentials"
 msgstr "網路認證"
 
 #: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:70
-#: src/seahorse-key-manager.ui:191
+#: src/seahorse-key-manager.ui:193
 msgid "Password"
 msgstr "密碼"
 
@@ -427,73 +515,32 @@ msgstr "無法設定描述。"
 msgid "Error deleting the password."
 msgstr "刪除密碼時發生錯誤。"
 
-#. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item.vala:425
-msgid "IM account password for "
-msgstr "IM 帳號的密碼 "
-
-#: gkr/gkr-item.vala:485
-msgid "Wi-Fi password"
-msgstr "Wi-Fi 密碼"
-
-#: gkr/gkr-item.vala:490
-msgid "Password or secret"
-msgstr "密語或密碼憑證"
-
-#: gkr/gkr-item.vala:491
-msgid "Network password"
-msgstr "網路密碼"
-
-#: gkr/gkr-item.vala:492
+#: gkr/gkr-item.vala:165
 msgid "Stored note"
 msgstr "儲存的備註"
 
-#: gkr/gkr-item.vala:493
+#: gkr/gkr-item.vala:167
 msgid "Keyring password"
 msgstr "鑰匙圈密碼"
 
-#: gkr/gkr-item.vala:494
+#: gkr/gkr-item.vala:169
 msgid "Encryption key password"
 msgstr "加密金鑰密碼"
 
-#: gkr/gkr-item.vala:495
+#: gkr/gkr-item.vala:171
 msgid "Key storage password"
 msgstr "金鑰儲存密碼"
 
-#: gkr/gkr-item.vala:496
-msgid "GNOME Web password"
-msgstr "GNOME Web 密碼"
-
-#: gkr/gkr-item.vala:497
-msgid "Google Chrome password"
-msgstr "Google Chrome 密碼"
-
-#: gkr/gkr-item.vala:498
-msgid "GNOME Online Accounts password"
-msgstr "GNOME 線上帳號密碼"
-
-#: gkr/gkr-item.vala:499
-msgid "Telepathy password"
-msgstr "Telepathy 密碼"
-
-#: gkr/gkr-item.vala:500
-msgid "Instant messaging password"
-msgstr "即時訊息密碼"
-
-#: gkr/gkr-item.vala:501
+#: gkr/gkr-item.vala:173
 msgid "Network Manager secret"
 msgstr "網路管理員密碼憑證"
 
-#: gkr/gkr-item.vala:502
-msgid "Network connection secret"
-msgstr "網路連線密碼憑證"
-
-#: gkr/gkr-item.vala:565
+#: gkr/gkr-item.vala:312
 #, c-format
 msgid "Are you sure you want to delete the password “%s”?"
 msgstr "確定要刪除密碼「%s」？"
 
-#: gkr/gkr-item.vala:567
+#: gkr/gkr-item.vala:314
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
@@ -515,28 +562,28 @@ msgstr "登入時自動解鎖的鑰匙圈"
 msgid "A keyring used to store passwords"
 msgstr "用來儲存密碼的鑰匙圈"
 
-#: gkr/gkr-keyring.vala:192
+#: gkr/gkr-keyring.vala:200
 msgid "Couldn’t set default keyring"
 msgstr "無法設定預設的鑰匙圈"
 
-#: gkr/gkr-keyring.vala:219 gkr/gkr-keyring.vala:224
+#: gkr/gkr-keyring.vala:227 gkr/gkr-keyring.vala:232
 msgid "Couldn’t change keyring password"
 msgstr "無法變更鑰匙圈密碼"
 
-#: gkr/gkr-keyring.vala:243
+#: gkr/gkr-keyring.vala:251
 msgid "_Set as default"
 msgstr "設為預設值(_S)"
 
-#: gkr/gkr-keyring.vala:244
+#: gkr/gkr-keyring.vala:252
 msgid "Change _Password"
 msgstr "變更密碼(_P)"
 
-#: gkr/gkr-keyring.vala:255
+#: gkr/gkr-keyring.vala:263
 #, c-format
 msgid "Are you sure you want to delete the password keyring “%s”?"
 msgstr "您確定要刪除密碼鑰匙圈「%s」？"
 
-#: gkr/gkr-keyring.vala:258
+#: gkr/gkr-keyring.vala:266
 msgid "I understand that all items will be permanently deleted."
 msgstr "我知道所有的項目會永遠的被刪除。"
 
@@ -553,7 +600,6 @@ msgid "_Keyring:"
 msgstr "鑰匙圈(_K)："
 
 #: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
-#: ssh/seahorse-ssh-generate.ui:78
 msgid "_Description:"
 msgstr "描述(_D)："
 
@@ -562,7 +608,7 @@ msgid "_Password:"
 msgstr "密碼(_P)："
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-#: pgp/seahorse-pgp-private-key-properties.ui:980
+#: pgp/seahorse-pgp-private-key-properties.ui:960
 msgid "Add"
 msgstr "加入"
 
@@ -598,7 +644,7 @@ msgid "Use"
 msgstr "使用"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1217
+#: pgp/seahorse-pgp-key-properties.c:1280
 msgid "Type"
 msgstr "類型"
 
@@ -611,7 +657,7 @@ msgid "Login"
 msgstr "登入"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1103
+#: pgp/seahorse-pgp-private-key-properties.ui:1083
 #: pgp/seahorse-pgp-public-key-properties.ui:915
 msgid "Details"
 msgstr "詳細資料"
@@ -624,7 +670,7 @@ msgstr "刪除密碼"
 msgid "Keyring properties"
 msgstr "鑰匙圈屬性"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:851
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:858
 msgid "Name"
 msgstr "名稱"
 
@@ -825,7 +871,7 @@ msgstr "選擇日期"
 msgid "Select the date from a calendar"
 msgstr "從日曆中選取日期"
 
-#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2198
+#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2203
 msgid "Time"
 msgstr "時刻"
 
@@ -848,13 +894,13 @@ msgstr "從清單中選取時刻"
 msgid "24hr: no"
 msgstr "24hr: no"
 
-#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1259
-#: libegg/egg-datetime.c:1263
+#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1264
+#: libegg/egg-datetime.c:1268
 msgid "AM"
 msgstr "上午"
 
-#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1260
-#: libegg/egg-datetime.c:1267
+#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1265
+#: libegg/egg-datetime.c:1272
 msgid "PM"
 msgstr "下午"
 
@@ -884,13 +930,13 @@ msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: libegg/egg-datetime.c:1175
+#: libegg/egg-datetime.c:1180
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:1240
+#: libegg/egg-datetime.c:1245
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -900,70 +946,54 @@ msgstr "%u:%u:%u"
 msgid "Could not display help: %s"
 msgstr "無法顯示說明文件：%s"
 
-#: pgp/seahorse-add-subkey.ui:31
-msgid "Never E_xpires"
-msgstr "永不過期(_X)"
-
-#: pgp/seahorse-add-subkey.ui:35
-msgid "If key never expires"
-msgstr "如果金鑰永不過期"
-
-#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
-msgid "Key _Type:"
-msgstr "金鑰類型(_T)："
-
-#: pgp/seahorse-add-subkey.ui:78
-msgid "Key _Length:"
-msgstr "金鑰長度(_L)"
-
-#: pgp/seahorse-add-subkey.ui:93
-msgid "Expiration Date:"
-msgstr "有效日期："
-
-#: pgp/seahorse-add-subkey.ui:112
-msgid "Length of Key"
-msgstr "金鑰長度"
-
-#: pgp/seahorse-add-subkey.ui:194
-msgid "Generate a new subkey"
-msgstr "產生新的子鑰"
-
-#: pgp/seahorse-expires.ui:22
-msgid "_Never expires"
-msgstr "永不過期(_N)"
-
-#: pgp/seahorse-expires.ui:80 pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "撤銷金鑰"
-
-#: pgp/seahorse-expires.ui:106
-msgid "C_hange"
-msgstr "改變(_H)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:161
-msgid "Couldn’t add subkey"
-msgstr "無法加入子鑰"
-
-#: pgp/seahorse-gpgme-add-subkey.c:180
+#: pgp/seahorse-gpgme-add-subkey.c:213
 #, c-format
 msgid "Add subkey to %s"
 msgstr "加入子鑰至 %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:196 pgp/seahorse-gpgme-generate.c:78
+#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
 msgid "DSA (sign only)"
 msgstr "DSA (只能簽署)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:204
+#: pgp/seahorse-gpgme-add-subkey.c:247
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (只能加密)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:210 pgp/seahorse-gpgme-generate.c:79
+#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
 msgid "RSA (sign only)"
 msgstr "RSA (只能簽署)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:216
+#: pgp/seahorse-gpgme-add-subkey.c:259
 msgid "RSA (encrypt only)"
 msgstr "RSA (只能加密)"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:28
+msgid "Key _Type"
+msgstr "金鑰類型(_T)"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:54
+msgid "Key _Length"
+msgstr "金鑰長度(_L)"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:71
+msgid "Length of Key"
+msgstr "金鑰長度"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:86
+msgid "Expiration Date"
+msgstr "有效日期"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:110
+msgid "Never E_xpires"
+msgstr "永不過期(_X)"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:114
+msgid "If key never expires"
+msgstr "如果金鑰永不過期"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:150
+msgid "Generate a new subkey"
+msgstr "產生新的子鑰"
 
 #: pgp/seahorse-gpgme-add-uid.c:149
 #, c-format
@@ -979,7 +1009,7 @@ msgid "Add User ID"
 msgstr "加入使用者 ID"
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-pgp-generate.ui:66
+#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-gpgme-generate-dialog.ui:62
 msgid "Full _Name"
 msgstr "全名(_N)"
 
@@ -987,7 +1017,7 @@ msgstr "全名(_N)"
 msgid "Must be at least 5 characters long"
 msgstr "長度最少要有 5 個字元"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-pgp-generate.ui:97
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:93
 msgid "_Email Address"
 msgstr "電子信箱位址(_E)"
 
@@ -1011,26 +1041,34 @@ msgstr "建立新的使用者 ID"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "解密失敗。您可能沒有解密的金鑰。"
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:515
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:512
 msgid "The operation was cancelled"
 msgstr "該操作已取消"
 
-#: pgp/seahorse-gpgme-expires.c:63
+#: pgp/seahorse-gpgme-expires-dialog.c:72
 msgid "Invalid expiry date"
 msgstr "無效的到期日"
 
-#: pgp/seahorse-gpgme-expires.c:64
+#: pgp/seahorse-gpgme-expires-dialog.c:73
 msgid "The expiry date must be in the future"
 msgstr "到期日必須在未來"
 
-#: pgp/seahorse-gpgme-expires.c:77
+#: pgp/seahorse-gpgme-expires-dialog.c:83
 msgid "Couldn’t change expiry date"
 msgstr "無法變更有效日期"
 
-#: pgp/seahorse-gpgme-expires.c:138
+#: pgp/seahorse-gpgme-expires-dialog.c:155
 #, c-format
 msgid "Expiry: %s"
 msgstr "到期日：%s"
+
+#: pgp/seahorse-gpgme-expires-dialog.ui:16
+msgid "_Never expires"
+msgstr "永不過期(_N)"
+
+#: pgp/seahorse-gpgme-expires-dialog.ui:48
+msgid "C_hange"
+msgstr "改變(_H)"
 
 #: pgp/seahorse-gpgme-exporter.c:72
 msgid "Multiple Keys"
@@ -1048,29 +1086,29 @@ msgstr "防護的 PGP 金鑰"
 msgid "PGP keys"
 msgstr "PGP 金鑰"
 
-#: pgp/seahorse-gpgme-generate.c:76 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:141
+#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
+#: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
-#: pgp/seahorse-gpgme-generate.c:77
+#: pgp/seahorse-gpgme-generate-dialog.c:85
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
-#: pgp/seahorse-gpgme-generate.c:129
+#: pgp/seahorse-gpgme-generate-dialog.c:101
 msgid "Couldn’t generate PGP key"
 msgstr "無法產生 PGP 金鑰"
 
-#: pgp/seahorse-gpgme-generate.c:168
+#: pgp/seahorse-gpgme-generate-dialog.c:140
 msgid "Passphrase for New PGP Key"
 msgstr "PGP 金鑰的密語"
 
-#: pgp/seahorse-gpgme-generate.c:169
+#: pgp/seahorse-gpgme-generate-dialog.c:141
 msgid "Enter the passphrase for your new key twice."
 msgstr "輸入新金鑰的密語兩次。"
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate.c:181
+#: pgp/seahorse-gpgme-generate-dialog.c:153
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1084,13 +1122,54 @@ msgstr ""
 "打字、移動滑鼠、使用應用程式等。\n"
 "這樣就會讓系統取得所需亂數資料。"
 
-#: pgp/seahorse-gpgme-generate.c:186 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "正在產生金鑰"
 
-#: pgp/seahorse-gpgme-generate.c:313
+#: pgp/seahorse-gpgme-generate-dialog.c:182
 msgid "Name must be at least 5 characters long."
-msgstr "名稱最少要有 5 個字元"
+msgstr "名稱最少要有 5 個字元。"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:18
+msgid "New PGP key"
+msgstr "新增 PGP 金鑰"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:43
+msgid "A PGP key allows you to encrypt email or files to other people."
+msgstr "PGP 金鑰可以加密你要傳給別人的電子信件及檔案。"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:125
+#: pkcs11/seahorse-pkcs11-generate.ui:110
+msgid "_Advanced key options"
+msgstr "進階金鑰選項(_A)"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:139
+msgid "_Comment"
+msgstr "附註(_C)"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:170 ssh/seahorse-ssh-generate.ui:127
+msgid "Encryption _Type"
+msgstr "加密類型(_T)"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:200 ssh/seahorse-ssh-generate.ui:164
+msgid "Key _Strength (bits)"
+msgstr "金鑰強度 (位元)(_S)"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:230
+msgid "E_xpiration Date"
+msgstr "過期日期(_X)"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:252
+msgid "Ne_ver Expires"
+msgstr "永不過期(_V)"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:293
+msgid "C_reate"
+msgstr "建立(_R)"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:300
+msgid "Generate a new key"
+msgstr "產生新的金鑰"
 
 #: pgp/seahorse-gpgme-key-deleter.c:76 pgp/seahorse-gpgme-secret-deleter.c:59
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
@@ -1112,40 +1191,40 @@ msgstr "錯誤的密碼"
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "這是您第三次輸入錯誤的密碼。請再試一次。"
 
-#: pgp/seahorse-gpgme-keyring.c:89
+#: pgp/seahorse-gpgme-keyring.c:92
 #, c-format
 msgid "Wrong passphrase."
 msgstr "密語錯誤。"
 
-#: pgp/seahorse-gpgme-keyring.c:93
+#: pgp/seahorse-gpgme-keyring.c:96
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "輸入「%s」的新密語"
 
-#: pgp/seahorse-gpgme-keyring.c:95
+#: pgp/seahorse-gpgme-keyring.c:98
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "輸入「%s」的密語"
 
-#: pgp/seahorse-gpgme-keyring.c:98 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "輸入新的密語"
 
-#: pgp/seahorse-gpgme-keyring.c:100
+#: pgp/seahorse-gpgme-keyring.c:103
 msgid "Enter passphrase"
 msgstr "輸入密語"
 
-#: pgp/seahorse-gpgme-keyring.c:105
+#: pgp/seahorse-gpgme-keyring.c:108
 msgid "Passphrase"
 msgstr "密語"
 
-#: pgp/seahorse-gpgme-keyring.c:300
+#: pgp/seahorse-gpgme-keyring.c:303
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "已載入 %d 個金鑰"
 
-#: pgp/seahorse-gpgme-keyring.c:628
+#: pgp/seahorse-gpgme-keyring.c:631
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1153,11 +1232,11 @@ msgstr ""
 "無效的金鑰資料（遺漏了 UID）。這可能是電腦的時間不準確，設為未來的時間；或是"
 "遺漏了自身的簽章。"
 
-#: pgp/seahorse-gpgme-keyring.c:758
+#: pgp/seahorse-gpgme-keyring.c:761
 msgid "GnuPG keys"
 msgstr "GnuPG 金鑰"
 
-#: pgp/seahorse-gpgme-keyring.c:769
+#: pgp/seahorse-gpgme-keyring.c:772
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG：預設的鑰匙圈目錄"
 
@@ -1193,7 +1272,7 @@ msgstr "所有圖型檔"
 msgid "All JPEG files"
 msgstr "所有 JPEG 檔案"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:292
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:310
 msgid "All files"
 msgstr "所有檔案"
 
@@ -1201,7 +1280,7 @@ msgstr "所有檔案"
 msgid "Choose Photo to Add to Key"
 msgstr "選擇加入至金鑰的照片"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:250
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:270
 msgid "_Open"
 msgstr "開啟(_O)"
 
@@ -1225,55 +1304,55 @@ msgstr "確定要將目前的門口照片永遠地刪除‘%s’的使用者 ID�
 msgid "Couldn’t delete photo"
 msgstr "無法刪除相片"
 
-#: pgp/seahorse-gpgme-revoke.c:73
+#: pgp/seahorse-gpgme-revoke.c:72
 msgid "Couldn’t revoke subkey"
 msgstr "無法撤銷子鑰"
 
-#: pgp/seahorse-gpgme-revoke.c:94
+#: pgp/seahorse-gpgme-revoke.c:93
 #, c-format
 msgid "Revoke: %s"
 msgstr "撤銷：%s"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke.c:104
 msgid "No reason"
 msgstr "沒有原因"
 
-#: pgp/seahorse-gpgme-revoke.c:106
+#: pgp/seahorse-gpgme-revoke.c:105
 msgid "No reason for revoking key"
 msgstr "沒有撤銷金鑰的原因"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke.c:111
 msgid "Compromised"
 msgstr "已洩漏"
 
-#: pgp/seahorse-gpgme-revoke.c:113
+#: pgp/seahorse-gpgme-revoke.c:112
 msgid "Key has been compromised"
 msgstr "金鑰已洩漏"
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke.c:118
 msgid "Superseded"
 msgstr "已代換"
 
-#: pgp/seahorse-gpgme-revoke.c:120
+#: pgp/seahorse-gpgme-revoke.c:119
 msgid "Key has been superseded"
 msgstr "金鑰已被代換"
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke.c:125
 msgid "Not Used"
 msgstr "沒有使用"
 
-#: pgp/seahorse-gpgme-revoke.c:127
+#: pgp/seahorse-gpgme-revoke.c:126
 msgid "Key is no longer used"
 msgstr "金鑰不再使用"
 
-#: pgp/seahorse-gpgme-revoke.c:164
+#: pgp/seahorse-gpgme-revoke.c:163
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr "您要給%2$s 加入 %1$s 作為撤銷者。這動作無法回復！確定要繼續？"
 
-#: pgp/seahorse-gpgme-revoke.c:176
+#: pgp/seahorse-gpgme-revoke.c:175
 msgid "Couldn’t add revoker"
 msgstr "無法加入撤銷者"
 
@@ -1281,7 +1360,7 @@ msgstr "無法加入撤銷者"
 msgid "I understand that this secret key will be permanently deleted."
 msgstr "我知道這個私鑰會被永久刪除。"
 
-#: pgp/seahorse-gpgme-sign.c:99
+#: pgp/seahorse-gpgme-sign-dialog.c:146
 #, c-format
 msgid ""
 "This key was already signed by\n"
@@ -1290,21 +1369,105 @@ msgstr ""
 "這個金鑰已經由以下人士簽署\n"
 "「%s」"
 
-#: pgp/seahorse-gpgme-sign.c:104
+#: pgp/seahorse-gpgme-sign-dialog.c:151
 msgid "Couldn’t sign key"
 msgstr "無法簽署金鑰"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: pgp/seahorse-gpgme-sign.c:163 pgp/seahorse-signer.c:62
+#: pgp/seahorse-gpgme-sign-dialog.c:281 pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr "沒有金鑰能用作簽署"
 
-#: pgp/seahorse-gpgme-sign.c:164
+#: pgp/seahorse-gpgme-sign-dialog.c:282
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr "您沒有個人 PGP 金鑰可以代表您信任此金鑰。"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:6
+msgid "Sign Key"
+msgstr "簽署金鑰"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:25
+msgid "By signing you indicate your trust that this key belongs to:"
+msgstr "簽署代表您信任本金鑰是屬於："
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:32
+msgid "Key Name"
+msgstr "金鑰名稱"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:52
+msgid "How carefully have you checked this key?"
+msgstr "您要多小心的檢查本金鑰？"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:77
+msgid "_Not at all"
+msgstr "沒關係(_N)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:88
+msgid "_Casually"
+msgstr "隨意(_C)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:100
+msgid "_Very Carefully"
+msgstr "非常小心(_V)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:127
+msgid ""
+"<i>Not at all:</i> means you believe the key is owned by the person who "
+"claims to own it, but you could not or did not verify this to be a fact."
+msgstr ""
+"<i>沒關係：</i>代表您信任金鑰是由聲稱擁有它的人所擁有，但實際上您不能或是沒有"
+"驗證它。"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:140
+msgid ""
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone."
+msgstr ""
+"<i>隨意：</i>代表您隨意地檢驗過金鑰是由聲稱擁有它的人擁有。例如，您可以透過電"
+"話要求該人讀出金鑰的數位指紋。"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:161
+msgid ""
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
+"key is genuine."
+msgstr "<i>非常小心：</i>只有您在完全信任此金鑰為真時才選取此項。"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:177
+msgid ""
+"You could use a hard to forge photo identification (such as a passport) to "
+"personally check that the name on the key is correct. You should have also "
+"used email to check that the email address belongs to the owner."
+msgstr ""
+"您可以使用難以偽造的相片（像護照一樣）來檢查金鑰的名稱是否正確。您同時應以電"
+"子信件來檢查該電子信箱位址是否屬於該人擁有。"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:206
+msgid "How others will see this signature:"
+msgstr "其他人如何看到此簽章："
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:222
+msgid "_Others may not see this signature"
+msgstr "其他人可能無法看到此簽章(_O)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:248
+msgid "I can _revoke this signature at a later date."
+msgstr "我可以在稍後時間撤銷此簽章(_R)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:282
+msgid "Sign key as:"
+msgstr "簽署金鑰為："
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:300
+msgid "_Signer:"
+msgstr "簽章者(_S)"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:335
+msgid "_Sign"
+msgstr "簽署(_S)"
 
 #: pgp/seahorse-gpgme-subkey.c:89
 msgctxt "Algorithm"
@@ -1315,17 +1478,17 @@ msgstr "不明"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:533
+#: pgp/seahorse-hkp-source.c:530
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr "搜尋範圍過寬。伺服器「%s」中找到太多金鑰。"
 
-#: pgp/seahorse-hkp-source.c:536
+#: pgp/seahorse-hkp-source.c:533
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "無法與伺服器「%s」聯絡：%s"
 
-#: pgp/seahorse-hkp-source.c:999
+#: pgp/seahorse-hkp-source.c:996
 msgid "HTTP Key Server"
 msgstr "HTTP 金鑰伺服器"
 
@@ -1339,8 +1502,8 @@ msgid "Key import succeeded"
 msgstr "已成功匯入金鑰"
 
 #: pgp/seahorse-keyserver-results.c:154 src/import-dialog.vala:38
-msgid "Import"
-msgstr "匯入"
+msgid "_Import"
+msgstr "匯入(_I)"
 
 #: pgp/seahorse-keyserver-results.c:156
 msgid "Can’t import key"
@@ -1373,11 +1536,12 @@ msgstr "尋找遠端金鑰"
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
-msgstr "這樣會在網際網路上尋找給別人的金鑰。然後這些金鑰能匯入到您的本地鑰匙圈中。"
+msgstr ""
+"這樣會在網際網路上尋找給別人的金鑰。然後這些金鑰能匯入到您的本地鑰匙圈中。"
 
 #: pgp/seahorse-keyserver-search.ui:52
 msgid "_Search for keys containing: "
-msgstr "搜尋金鑰包含(_S)："
+msgstr "搜尋金鑰資訊中含有(_S)："
 
 #: pgp/seahorse-keyserver-search.ui:74
 msgid "Where to search:"
@@ -1449,22 +1613,22 @@ msgstr "同步(_S)"
 msgid "Couldn’t communicate with %s: %s"
 msgstr "無法與 %s 溝通：%s"
 
-#: pgp/seahorse-ldap-source.c:649
+#: pgp/seahorse-ldap-source.c:642
 #, c-format
 msgid "Connecting to: %s"
 msgstr "連接到：%s"
 
-#: pgp/seahorse-ldap-source.c:655
+#: pgp/seahorse-ldap-source.c:647
 #, c-format
 msgid "Couldn’t resolve address: %s"
 msgstr "無法解析位置：%s"
 
-#: pgp/seahorse-ldap-source.c:699
+#: pgp/seahorse-ldap-source.c:689
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "正在解析伺服器位址：%s"
 
-#: pgp/seahorse-ldap-source.c:1434
+#: pgp/seahorse-ldap-source.c:1366
 msgid "LDAP Key Server"
 msgstr "LDAP 金鑰伺服器"
 
@@ -1475,46 +1639,6 @@ msgstr "PGP 金鑰"
 #: pgp/seahorse-pgp-backend.c:193
 msgid "PGP keys are for encrypting email or files"
 msgstr "用來加密郵件或檔案的 PGP 金鑰"
-
-#: pgp/seahorse-pgp-generate.ui:18
-msgid "New PGP key"
-msgstr "新增 PGP 金鑰"
-
-#: pgp/seahorse-pgp-generate.ui:47
-msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr "PGP 金鑰可以加密你要傳給別人的電子信件及檔案。"
-
-#: pgp/seahorse-pgp-generate.ui:129 pkcs11/seahorse-pkcs11-generate.ui:110
-msgid "_Advanced key options"
-msgstr "進階金鑰選項(_A)"
-
-#: pgp/seahorse-pgp-generate.ui:143
-msgid "_Comment"
-msgstr "附註(_C)"
-
-#: pgp/seahorse-pgp-generate.ui:174
-msgid "Encryption _Type"
-msgstr "加密類型(_T)"
-
-#: pgp/seahorse-pgp-generate.ui:204
-msgid "Key _Strength (bits)"
-msgstr "金鑰強度 (位元)(_S)"
-
-#: pgp/seahorse-pgp-generate.ui:234
-msgid "E_xpiration Date"
-msgstr "過期日期(_X)"
-
-#: pgp/seahorse-pgp-generate.ui:256
-msgid "Ne_ver Expires"
-msgstr "永不過期(_V)"
-
-#: pgp/seahorse-pgp-generate.ui:297
-msgid "C_reate"
-msgstr "建立(_R)"
-
-#: pgp/seahorse-pgp-generate.ui:304
-msgid "Generate a new key"
-msgstr "產生新的金鑰"
 
 #: pgp/seahorse-pgp-key.c:172
 #, c-format
@@ -1530,289 +1654,298 @@ msgstr "個人 PGP 金鑰"
 msgid "PGP key"
 msgstr "PGP 金鑰"
 
-#: pgp/seahorse-pgp-key-properties.c:245
+#: pgp/seahorse-pgp-key-properties.c:248
 msgid "Couldn’t change primary user ID"
 msgstr "無法變更主要的使用者 ID"
 
-#: pgp/seahorse-pgp-key-properties.c:280
+#: pgp/seahorse-pgp-key-properties.c:283
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "確定要永久地刪除「%s」的使用者 ID？"
 
-#: pgp/seahorse-pgp-key-properties.c:289
+#: pgp/seahorse-pgp-key-properties.c:292
 msgid "Couldn’t delete user ID"
 msgstr "無法刪除使用者 ID"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:361 pgp/seahorse-pgp-key-properties.c:1351
+#: pgp/seahorse-pgp-key-properties.c:368 pgp/seahorse-pgp-key-properties.c:1414
 msgid "[Unknown]"
 msgstr "[不詳]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:457 pgp/seahorse-pgp-key-properties.c:1556
+#: pgp/seahorse-pgp-key-properties.c:464 pgp/seahorse-pgp-key-properties.c:1624
 msgid "Name/Email"
 msgstr "名稱/電子信箱"
 
-#: pgp/seahorse-pgp-key-properties.c:464
+#: pgp/seahorse-pgp-key-properties.c:471
 msgid "Signature ID"
 msgstr "簽章 ID"
 
-#: pgp/seahorse-pgp-key-properties.c:570
+#: pgp/seahorse-pgp-key-properties.c:577
 msgid "Couldn’t change primary photo"
 msgstr "無法變更主要的相片"
 
-#: pgp/seahorse-pgp-key-properties.c:730
+#: pgp/seahorse-pgp-key-properties.c:737
 msgid "Error changing password"
 msgstr "變更密碼時發生錯誤"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:776
+#: pgp/seahorse-pgp-key-properties.c:783
 msgid "(unknown)"
 msgstr "（不明）"
 
-#: pgp/seahorse-pgp-key-properties.c:781
+#: pgp/seahorse-pgp-key-properties.c:788
 #, c-format
 msgid "This key expired on: %s"
 msgstr "此金鑰的過期於：%s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:809
+#: pgp/seahorse-pgp-key-properties.c:816
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — 公鑰"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:812
+#: pgp/seahorse-pgp-key-properties.c:819
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — 私鑰"
 
-#: pgp/seahorse-pgp-key-properties.c:965
+#: pgp/seahorse-pgp-key-properties.c:1005
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "確定要永久地刪除 %2$s 的子鑰 %1$d？"
 
-#: pgp/seahorse-pgp-key-properties.c:973
+#: pgp/seahorse-pgp-key-properties.c:1013
 msgid "Couldn’t delete subkey"
 msgstr "無法刪除子鑰"
 
-#: pgp/seahorse-pgp-key-properties.c:1032
-#: pgp/seahorse-pgp-key-properties.c:1325
+#: pgp/seahorse-pgp-key-properties.c:1077
+#: pgp/seahorse-pgp-key-properties.c:1388
 msgid "Unable to change trust"
 msgstr "無法變更信任度"
 
-#: pgp/seahorse-pgp-key-properties.c:1044 ssh/key-properties.vala:185
+#: pgp/seahorse-pgp-key-properties.c:1089 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "無法匯出金鑰"
 
-#: pgp/seahorse-pgp-key-properties.c:1175
-#: pgp/seahorse-pgp-key-properties.c:1259
+#: pgp/seahorse-pgp-key-properties.c:1238
+#: pgp/seahorse-pgp-key-properties.c:1322
 msgctxt "Expires"
 msgid "Never"
 msgstr "永不"
 
-#: pgp/seahorse-pgp-key-properties.c:1214
+#: pgp/seahorse-pgp-key-properties.c:1277
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1220
+#: pgp/seahorse-pgp-key-properties.c:1283
 msgid "Usage"
 msgstr "用法"
 
-#: pgp/seahorse-pgp-key-properties.c:1223
+#: pgp/seahorse-pgp-key-properties.c:1286
 msgid "Created"
 msgstr "建立日期"
 
-#: pgp/seahorse-pgp-key-properties.c:1226
+#: pgp/seahorse-pgp-key-properties.c:1289
 msgid "Expires"
 msgstr "有效日期"
 
-#: pgp/seahorse-pgp-key-properties.c:1229
+#: pgp/seahorse-pgp-key-properties.c:1292
 msgid "Status"
 msgstr "狀態"
 
-#: pgp/seahorse-pgp-key-properties.c:1232
+#: pgp/seahorse-pgp-key-properties.c:1295
 msgid "Strength"
 msgstr "強度"
 
-#: pgp/seahorse-pgp-key-properties.c:1250
+#: pgp/seahorse-pgp-key-properties.c:1313
 msgid "Revoked"
 msgstr "已撤銷"
 
-#: pgp/seahorse-pgp-key-properties.c:1252
+#: pgp/seahorse-pgp-key-properties.c:1315
 msgid "Expired"
 msgstr "已過期"
 
-#: pgp/seahorse-pgp-key-properties.c:1254
+#: pgp/seahorse-pgp-key-properties.c:1317
 msgid "Disabled"
 msgstr "已停用"
 
-#: pgp/seahorse-pgp-key-properties.c:1256
+#: pgp/seahorse-pgp-key-properties.c:1319
 msgid "Good"
 msgstr "良好"
 
-#: pgp/seahorse-pgp-key-properties.c:1559
-#: pgp/seahorse-pgp-private-key-properties.ui:333
+#: pgp/seahorse-pgp-key-properties.c:1627
+#: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "金鑰 ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1700
+#: pgp/seahorse-pgp-key-properties.c:1769
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "我信任來自「%s」其它金鑰的簽章"
 
-#: pgp/seahorse-pgp-key-properties.c:1707
+#: pgp/seahorse-pgp-key-properties.c:1776
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
 msgstr "如果您信任擁有這個金鑰的人是「%s」，<i>簽署</i>此金鑰："
 
-#: pgp/seahorse-pgp-key-properties.c:1714
+#: pgp/seahorse-pgp-key-properties.c:1783
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
 msgstr "如果您不再信任此「%s」擁有這個金鑰，<i>撤銷</i>您的簽章："
 
-#: pgp/seahorse-pgp-private-key-properties.ui:56
+#: pgp/seahorse-pgp-private-key-properties.ui:30
+msgid "Export _secret key"
+msgstr "匯出私鑰(_E)"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:34
+msgid "Export _public key"
+msgstr "匯出公鑰(_P)"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:68
 #: pgp/seahorse-pgp-public-key-properties.ui:61
 msgid "This key has been revoked"
 msgstr "此金鑰已被撤銷"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:66
+#: pgp/seahorse-pgp-private-key-properties.ui:78
 #: pgp/seahorse-pgp-public-key-properties.ui:73
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr "金鑰的擁有者已將金鑰撤銷。它不能繼續使用。"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:94
+#: pgp/seahorse-pgp-private-key-properties.ui:106
 #: pgp/seahorse-pgp-public-key-properties.ui:104
 msgid "This key has expired"
 msgstr "此金鑰的已經過期"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:159
+#: pgp/seahorse-pgp-private-key-properties.ui:171
 msgid "Add a photo to this key"
 msgstr "加入照片至本金鑰"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:178
+#: pgp/seahorse-pgp-private-key-properties.ui:190
 msgid "Remove this photo from this key"
 msgstr "將此相片從本金鑰中移除"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:197
+#: pgp/seahorse-pgp-private-key-properties.ui:209
 msgid "Make this photo the primary photo"
 msgstr "使本相片成為主要的相片"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:222
+#: pgp/seahorse-pgp-private-key-properties.ui:234
 msgid "Go to previous photo"
 msgstr "回上一幅相片"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:241
+#: pgp/seahorse-pgp-private-key-properties.ui:253
 msgid "Go to next photo"
 msgstr "往下一幅相片"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:306
+#: pgp/seahorse-pgp-private-key-properties.ui:318
 #: pgp/seahorse-pgp-public-key-properties.ui:246
 msgid "Comment"
 msgstr "附註"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:363
-#: ssh/seahorse-ssh-key-properties.ui:294
+#: pgp/seahorse-pgp-private-key-properties.ui:375
+#: ssh/seahorse-ssh-key-properties.ui:346
 msgid "Change _Passphrase"
 msgstr "變更密語(_P)"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:379
+#: pgp/seahorse-pgp-private-key-properties.ui:391
 #: pgp/seahorse-pgp-public-key-properties.ui:347
 msgid "Owner"
 msgstr "擁有者"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:392
+#: pgp/seahorse-pgp-private-key-properties.ui:404
 msgid "Key Names and Signatures"
 msgstr "金鑰名稱及簽章"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:430
+#: pgp/seahorse-pgp-private-key-properties.ui:442
 msgid "Primary"
 msgstr "主要"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:460 pgp/seahorse-pgp-subkey.c:160
+#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:162
 msgid "Sign"
 msgstr "簽署"
 
 #. Translators: This text refers to deleting an item from its type's backing store
-#: pgp/seahorse-pgp-private-key-properties.ui:490
+#: pgp/seahorse-pgp-private-key-properties.ui:502
+#: pkcs11/seahorse-pkcs11-properties.ui:22
 #: src/seahorse-key-manager-widgets.ui:12
 msgid "Delete"
 msgstr "刪除"
 
 #. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:520
+#: pgp/seahorse-pgp-private-key-properties.ui:532
 msgid "_Add Name"
 msgstr "加入名稱(_A)"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:550
-#: pgp/seahorse-pgp-private-key-properties.ui:1040
+#: pgp/seahorse-pgp-private-key-properties.ui:562
+#: pgp/seahorse-pgp-private-key-properties.ui:1020
 msgid "Revoke"
 msgstr "撤銷"
 
 #. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:586
+#: pgp/seahorse-pgp-private-key-properties.ui:598
 msgid "Names and Signatures"
 msgstr "名稱及簽章"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:623
+#: pgp/seahorse-pgp-private-key-properties.ui:635
 #: pgp/seahorse-pgp-public-key-properties.ui:623
 msgid "Key ID:"
 msgstr "金鑰 ID："
 
-#: pgp/seahorse-pgp-private-key-properties.ui:648
+#: pgp/seahorse-pgp-private-key-properties.ui:660
 #: pgp/seahorse-pgp-public-key-properties.ui:649
 msgid "Type:"
 msgstr "類型："
 
-#: pgp/seahorse-pgp-private-key-properties.ui:673
+#: pgp/seahorse-pgp-private-key-properties.ui:685
 #: pgp/seahorse-pgp-public-key-properties.ui:675
 msgid "Strength:"
 msgstr "強度："
 
-#: pgp/seahorse-pgp-private-key-properties.ui:698
+#: pgp/seahorse-pgp-private-key-properties.ui:710
 msgid "Technical Details"
 msgstr "技術資料"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:726
-#: ssh/seahorse-ssh-key-properties.ui:174
+#: pgp/seahorse-pgp-private-key-properties.ui:738
+#: ssh/seahorse-ssh-key-properties.ui:173
 msgid "Fingerprint"
 msgstr "指紋"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:758
+#: pgp/seahorse-pgp-private-key-properties.ui:770
 #: pgp/seahorse-pgp-public-key-properties.ui:769
 msgid "Created:"
 msgstr "建立日期："
 
-#: pgp/seahorse-pgp-private-key-properties.ui:782
+#: pgp/seahorse-pgp-private-key-properties.ui:794
 #: pgp/seahorse-pgp-public-key-properties.ui:794
 msgid "Expires:"
 msgstr "有效日期："
 
-#: pgp/seahorse-pgp-private-key-properties.ui:828
+#: pgp/seahorse-pgp-private-key-properties.ui:840
 msgid "Dates"
 msgstr "日期"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:851
+#: pgp/seahorse-pgp-private-key-properties.ui:863
 msgid "Override Owner _Trust:"
 msgstr "取締擁有者的信任度(_T)："
 
-#: pgp/seahorse-pgp-private-key-properties.ui:879
-msgid "_Export Secret Key:"
-msgstr "匯出私鑰(_E)："
+#: pgp/seahorse-pgp-private-key-properties.ui:890
+msgid "_Export to file"
+msgstr "匯出為檔案(_E)"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:926
+#: pgp/seahorse-pgp-private-key-properties.ui:906
 msgid "Actions"
 msgstr "動作"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1010
+#: pgp/seahorse-pgp-private-key-properties.ui:990
 msgid "Expire"
 msgstr "有效日期"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1084
+#: pgp/seahorse-pgp-private-key-properties.ui:1064
 #: pgp/seahorse-pgp-public-key-properties.ui:898
 msgid "_Subkeys"
 msgstr "子鑰(_S)"
@@ -1851,7 +1984,7 @@ msgstr "簽署此金鑰(_S)"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:504
 msgid "_Revoke Signature"
-msgstr "撤銷簽章(_R)："
+msgstr "撤銷簽章(_R)"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:526
 msgid "_People who have signed this key:"
@@ -1885,23 +2018,23 @@ msgstr "信任度："
 msgid "You _Trust the Owner:"
 msgstr "您信任擁有者(_T)"
 
-#: pgp/seahorse-pgp-subkey.c:159
+#: pgp/seahorse-pgp-subkey.c:161
 msgid "Encrypt"
 msgstr "加密"
 
-#: pgp/seahorse-pgp-subkey.c:161
+#: pgp/seahorse-pgp-subkey.c:163
 msgid "Certify"
 msgstr "檢驗"
 
-#: pgp/seahorse-pgp-subkey.c:162
+#: pgp/seahorse-pgp-subkey.c:164
 msgid "Authenticate"
 msgstr "核對"
 
-#: pgp/seahorse-pgp-subkey.c:311
+#: pgp/seahorse-pgp-subkey.c:313
 msgid "Key"
 msgstr "金鑰"
 
-#: pgp/seahorse-pgp-subkey.c:316
+#: pgp/seahorse-pgp-subkey.c:318
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "%2$s 的子鑰 %1$d"
@@ -1917,6 +2050,10 @@ msgstr "原因(_R)："
 #: pgp/seahorse-revoke.ui:70
 msgid "Optional description of revocation"
 msgstr "撤銷的描述（非必要）"
+
+#: pgp/seahorse-revoke.ui:129
+msgid "Revoke key"
+msgstr "撤銷金鑰"
 
 #: pgp/seahorse-revoke.ui:154
 msgid "Re_voke"
@@ -1935,103 +2072,19 @@ msgstr "選擇簽署金鑰"
 msgid "_Sign message with key:"
 msgstr "簽署信息的金鑰(_S)："
 
-#: pgp/seahorse-sign.ui:6
-msgid "Sign Key"
-msgstr "簽署金鑰"
-
-#: pgp/seahorse-sign.ui:27
-msgid "By signing you indicate your trust that this key belongs to:"
-msgstr "簽署代表您信任本金鑰是屬於："
-
-#: pgp/seahorse-sign.ui:34
-msgid "Key Name"
-msgstr "金鑰名稱"
-
-#: pgp/seahorse-sign.ui:54
-msgid "How carefully have you checked this key?"
-msgstr "您要多小心的檢查本金鑰？"
-
-#: pgp/seahorse-sign.ui:84
-msgid "_Not at all"
-msgstr "沒關係(_N)"
-
-#: pgp/seahorse-sign.ui:95
-msgid "_Casually"
-msgstr "隨意(_C)"
-
-#: pgp/seahorse-sign.ui:107
-msgid "_Very Carefully"
-msgstr "非常小心(_V)"
-
-#: pgp/seahorse-sign.ui:134
-msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who "
-"claims to own it, but you could not or did not verify this to be a fact."
-msgstr ""
-"<i>沒關係：</i>代表您信任金鑰是由聲稱擁有它的人所擁有，但實際上您不能或是沒有"
-"驗證它。"
-
-#: pgp/seahorse-sign.ui:147
-msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone."
-msgstr ""
-"<i>隨意：</i>代表您隨意地檢驗過金鑰是由聲稱擁有它的人擁有。例如，您可以透過電"
-"話要求該人讀出金鑰的數位指紋。"
-
-#: pgp/seahorse-sign.ui:168
-msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
-"key is genuine."
-msgstr "<i>非常小心：</i>只有您在完全信任此金鑰為真時才選取此項。"
-
-#: pgp/seahorse-sign.ui:184
-msgid ""
-"You could use a hard to forge photo identification (such as a passport) to "
-"personally check that the name on the key is correct. You should have also "
-"used email to check that the email address belongs to the owner."
-msgstr ""
-"您可以使用難以偽造的相片（像護照一樣）來檢查金鑰的名稱是否正確。您同時應以電"
-"子信件來檢查該電子信箱位址是否屬於該人擁有。"
-
-#: pgp/seahorse-sign.ui:215
-msgid "How others will see this signature:"
-msgstr "其他人如何看到此簽章："
-
-#: pgp/seahorse-sign.ui:232
-msgid "_Others may not see this signature"
-msgstr "其他人可能無法看到此簽章(_O)"
-
-#: pgp/seahorse-sign.ui:243
-msgid "I can _revoke this signature at a later date."
-msgstr "我可以在稍後時間撤銷此簽章(_R)"
-
-#: pgp/seahorse-sign.ui:268
-msgid "Sign key as:"
-msgstr "簽署金鑰為："
-
-#: pgp/seahorse-sign.ui:286
-msgid "_Signer:"
-msgstr "簽章者(_S)"
-
-#: pgp/seahorse-sign.ui:321
-msgid "_Sign"
-msgstr "簽署(_S)"
-
-#: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
+#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
 msgid "Exporting data"
 msgstr "匯出資料"
 
-#: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
+#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
 msgid "Retrieving data"
 msgstr "取回資料"
 
-#: pgp/seahorse-transfer.c:241 pgp/seahorse-transfer.c:288
+#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
 msgid "Importing data"
 msgstr "輸入資料"
 
-#: pgp/seahorse-transfer.c:241 pgp/seahorse-transfer.c:288
+#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
 msgid "Sending data"
 msgstr "傳送資料"
 
@@ -2053,7 +2106,7 @@ msgstr "個人憑證與金鑰"
 
 #: pkcs11/pkcs11-certificate.vala:96
 msgid "Personal certificate"
-msgstr "個人憑證.."
+msgstr "個人憑證"
 
 #: pkcs11/pkcs11-deleter.vala:37
 #, c-format
@@ -2073,41 +2126,21 @@ msgstr "我知道這個金鑰會被永久刪除。"
 msgid "Unnamed private key"
 msgstr "未命名的私密金鑰"
 
-#: pkcs11/pkcs11-private-key.vala:70 src/seahorse-key-manager.ui:225
+#: pkcs11/pkcs11-private-key.vala:70 src/seahorse-key-manager.ui:227
 msgid "Private key"
 msgstr "私密金鑰"
 
-#: pkcs11/pkcs11-properties.vala:134
+#: pkcs11/pkcs11-properties.vala:98
 msgid "Unnamed"
 msgstr "未命名的"
 
-#: pkcs11/pkcs11-properties.vala:165
+#: pkcs11/pkcs11-properties.vala:130
 msgid "Failed to export certificate"
 msgstr "無法匯出憑證"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:620
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:426
 msgid "Couldn’t delete"
 msgstr "無法刪除"
-
-#: pkcs11/pkcs11-properties.vala:199
-msgid "_Export"
-msgstr "匯出(_E)"
-
-#: pkcs11/pkcs11-properties.vala:200
-msgid "Export the certificate"
-msgstr "匯出憑證"
-
-#: pkcs11/pkcs11-properties.vala:202
-msgid "Delete this certificate or key"
-msgstr "刪除這個憑證或金鑰"
-
-#: pkcs11/pkcs11-properties.vala:203
-msgid "Request _Certificate"
-msgstr "申請憑證(_C)"
-
-#: pkcs11/pkcs11-properties.vala:204
-msgid "Create a certificate request file for this key"
-msgstr "為這個金鑰建立憑證申請"
 
 #: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.ui:193
 msgid "Create"
@@ -2121,19 +2154,19 @@ msgstr "無法建立憑證申請"
 msgid "Save certificate request"
 msgstr "儲存憑證申請"
 
-#: pkcs11/pkcs11-request.vala:107
+#: pkcs11/pkcs11-request.vala:106
 msgid "_Save"
 msgstr "儲存(_S)"
 
-#: pkcs11/pkcs11-request.vala:113
+#: pkcs11/pkcs11-request.vala:111
 msgid "Certificate request"
 msgstr "憑證申請"
 
-#: pkcs11/pkcs11-request.vala:121
+#: pkcs11/pkcs11-request.vala:119
 msgid "PEM encoded request"
 msgstr "PEM 編碼的申請"
 
-#: pkcs11/pkcs11-request.vala:149
+#: pkcs11/pkcs11-request.vala:147
 msgid "Couldn’t save certificate request"
 msgstr "無法儲存憑證申請"
 
@@ -2141,10 +2174,6 @@ msgstr "無法儲存憑證申請"
 msgctxt "Label"
 msgid "Unknown"
 msgstr "不明"
-
-#: pkcs11/seahorse-pkcs11-backend.c:207
-msgid "Certificates"
-msgstr "憑證"
 
 #: pkcs11/seahorse-pkcs11-backend.c:213
 msgid "X.509 certificates and related keys"
@@ -2166,9 +2195,29 @@ msgstr "標籤："
 msgid "Stored at:"
 msgstr "儲存在："
 
-#: pkcs11/seahorse-pkcs11-generate.ui:151 ssh/seahorse-ssh-generate.ui:158
+#: pkcs11/seahorse-pkcs11-generate.ui:128
+msgid "Key _Type:"
+msgstr "金鑰類型(_T)："
+
+#: pkcs11/seahorse-pkcs11-generate.ui:151
 msgid "Key _Strength (bits):"
 msgstr "金鑰強度[位元](_S)："
+
+#: pkcs11/seahorse-pkcs11-properties.ui:23
+msgid "Delete this certificate or key"
+msgstr "刪除這個憑證或金鑰"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:34
+msgid "Export the certificate"
+msgstr "匯出憑證"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:41
+msgid "Request Certificate"
+msgstr "申請憑證"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:42
+msgid "Create a certificate request file for this key"
+msgstr "為這個金鑰建立憑證申請"
 
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
@@ -2190,7 +2239,7 @@ msgstr "貢獻："
 msgid "Version of this application"
 msgstr "這個應用程式的版本"
 
-#: src/application.vala:170
+#: src/application.vala:171
 msgid "translator-credits"
 msgstr ""
 "如對翻譯有任何意見，請送一封電子郵件給\n"
@@ -2199,7 +2248,7 @@ msgstr ""
 "\n"
 "Woodman Tuen <wmtuen@gmail.com>, 2005-07"
 
-#: src/application.vala:173
+#: src/application.vala:174
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse 專案網頁"
 
@@ -2212,24 +2261,24 @@ msgid "Import failed"
 msgstr "匯入失敗"
 
 #. The prompt
-#: src/key-manager.vala:247 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:324
 msgid "Import Key"
 msgstr "匯入金鑰"
 
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:258
+#: src/key-manager.vala:276
 msgid "All key files"
 msgstr "所有金鑰檔"
 
-#: src/key-manager.vala:323
+#: src/key-manager.vala:341
 msgid "Dropped text"
 msgstr "拖放的文字"
 
-#: src/key-manager.vala:351
+#: src/key-manager.vala:369
 msgid "Clipboard text"
 msgstr "剪貼簿文字"
 
-#: src/key-manager.vala:443
+#: src/key-manager.vala:468
 msgid "Couldn’t unlock keyring"
 msgstr "無法解鎖鑰匙圈"
 
@@ -2249,103 +2298,107 @@ msgstr "確認新的密語"
 msgid "Con_firm Passphrase:"
 msgstr "確認密語(_F)："
 
-#: src/seahorse-key-manager.ui:6
-msgid "Filter items:"
-msgstr "過濾項目："
-
-#: src/seahorse-key-manager.ui:8
-msgid "Show p_ersonal"
-msgstr "顯示個人(_E)"
-
-#: src/seahorse-key-manager.ui:13
-msgid "Show _trusted"
-msgstr "顯示信任(_T)"
-
-#: src/seahorse-key-manager.ui:18
-msgid "Show an_y"
-msgstr "檢視所有(_Y)"
-
-#: src/seahorse-key-manager.ui:25
-msgid "_Combine all keyrings"
-msgstr "合併所有鑰匙圈(_C)"
-
-#: src/seahorse-key-manager.ui:31
+#: src/seahorse-key-manager.ui:7
 msgid "_Find remote keys…"
 msgstr "尋找遠端金鑰(_F)…"
 
-#: src/seahorse-key-manager.ui:36
+#: src/seahorse-key-manager.ui:12
 msgid "_Sync and publish keys…"
 msgstr "同步及發行金鑰(_S)…"
 
-#: src/seahorse-key-manager.ui:43
+#: src/seahorse-key-manager.ui:19
 msgid "_Preferences"
 msgstr "偏好設定(_P)"
 
-#: src/seahorse-key-manager.ui:48
+#: src/seahorse-key-manager.ui:24
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: src/seahorse-key-manager.ui:52
+#: src/seahorse-key-manager.ui:28
+msgid "_Keyboard Shortcuts"
+msgstr "鍵盤快捷鍵(_K)"
+
+#: src/seahorse-key-manager.ui:32
 msgid "_About Passwords and Keys"
 msgstr "關於密碼及加密金鑰(_A)"
 
-#: src/seahorse-key-manager.ui:89
+#: src/seahorse-key-manager.ui:40
+msgid "Filter items:"
+msgstr "過濾項目："
+
+#: src/seahorse-key-manager.ui:42
+msgid "Show p_ersonal"
+msgstr "顯示個人(_E)"
+
+#: src/seahorse-key-manager.ui:47
+msgid "Show _trusted"
+msgstr "顯示信任(_T)"
+
+#: src/seahorse-key-manager.ui:52
+msgid "Show an_y"
+msgstr "檢視所有(_Y)"
+
+#: src/seahorse-key-manager.ui:91
 msgid "Secure Shell key"
 msgstr "SSH 金鑰"
 
-#: src/seahorse-key-manager.ui:96
+#: src/seahorse-key-manager.ui:98
 msgid "Used to access other computers"
 msgstr "用來存取其它電腦"
 
-#: src/seahorse-key-manager.ui:123
+#: src/seahorse-key-manager.ui:125
 msgid "GPG key"
 msgstr "GPG 金鑰"
 
-#: src/seahorse-key-manager.ui:130
+#: src/seahorse-key-manager.ui:132
 msgid "Used to encrypt email and files"
 msgstr "用作加密郵件及檔案"
 
-#: src/seahorse-key-manager.ui:157
+#: src/seahorse-key-manager.ui:159
 msgid "Password keyring"
 msgstr "密碼鑰匙圈"
 
-#: src/seahorse-key-manager.ui:164
+#: src/seahorse-key-manager.ui:166
 msgid "Used to store application and network passwords"
 msgstr "用來儲存應用程式和網路的密碼"
 
-#: src/seahorse-key-manager.ui:198
+#: src/seahorse-key-manager.ui:200
 msgid "Safely store a password or secret"
 msgstr "安全地存放密語或密碼憑證"
 
-#: src/seahorse-key-manager.ui:232
+#: src/seahorse-key-manager.ui:234
 msgid "Used to request a certificate"
 msgstr "用來申請憑證"
 
-#: src/seahorse-key-manager.ui:258
+#: src/seahorse-key-manager.ui:260
 msgid "Import from file…"
 msgstr "從檔案匯入…"
 
-#: src/seahorse-key-manager.ui:283
+#: src/seahorse-key-manager.ui:297
 msgid "Add a new key or item"
 msgstr "加入新的金鑰或項目"
 
-#: src/seahorse-key-manager.ui:314
+#: src/seahorse-key-manager.ui:367
+msgid "Back"
+msgstr "返回"
+
+#: src/seahorse-key-manager.ui:402
 msgid "Search for a key or password"
 msgstr "尋找金鑰或密碼"
 
-#: src/seahorse-key-manager.ui:361
+#: src/seahorse-key-manager.ui:466
 msgid "Filter"
 msgstr "過濾條件"
 
-#: src/seahorse-key-manager.ui:455
+#: src/seahorse-key-manager.ui:532
 msgid "This collection seems to be empty"
 msgstr "收藏看似是空的"
 
-#: src/seahorse-key-manager.ui:487
+#: src/seahorse-key-manager.ui:564
 msgid "Keyring is locked"
 msgstr "鑰匙圈已鎖定"
 
-#: src/seahorse-key-manager.ui:497
+#: src/seahorse-key-manager.ui:574
 msgid "Unlock"
 msgstr "解鎖"
 
@@ -2361,23 +2414,23 @@ msgstr "屬性"
 msgid "Configure Key for Secure Shell…"
 msgstr "正在設定 SSH 金鑰…"
 
-#: src/sidebar.vala:586
-msgid "Couldn’t lock"
-msgstr "無法鎖定"
-
 #. Lock and unlock items
-#: src/sidebar.vala:637
+#: src/sidebar.vala:339
 msgid "_Lock"
 msgstr "鎖定(_L)"
 
-#: src/sidebar.vala:642
+#: src/sidebar.vala:344
 msgid "_Unlock"
 msgstr "解鎖(_U)"
 
 #. Properties item
-#: src/sidebar.vala:659
+#: src/sidebar.vala:361
 msgid "_Properties"
 msgstr "屬性(_P)"
+
+#: src/sidebar.vala:391
+msgid "Couldn’t lock"
+msgstr "無法鎖定"
 
 #: ssh/backend.vala:27
 msgid "Secure Shell"
@@ -2438,47 +2491,47 @@ msgstr "256 位元"
 msgid "Unknown key type!"
 msgstr "未知金鑰類型！"
 
-#: ssh/key-properties.vala:75
+#: ssh/key-properties.vala:80
 msgid "Unknown type"
 msgstr "未知類型"
 
-#: ssh/key-properties.vala:99
+#: ssh/key-properties.vala:105
 msgid "Couldn’t rename key."
 msgstr "無法重新命名金鑰。"
 
-#: ssh/key-properties.vala:125
+#: ssh/key-properties.vala:131
 msgid "Couldn’t change authorization for key."
 msgstr "無法變更金鑰的核對。"
 
-#: ssh/key-properties.vala:141
+#: ssh/key-properties.vala:147
 msgid "Couldn’t change passphrase for key."
 msgstr "無法變更金鑰的密語。"
 
-#: ssh/key-properties.vala:165
+#: ssh/key-properties.vala:171
 msgid "Error deleting the SSH key."
 msgstr "刪除 SSH 金鑰時發生錯誤。"
 
-#: ssh/key.vala:45
+#: ssh/key.vala:52
 msgid "Personal SSH key"
 msgstr "個人的 SSH 金鑰"
 
-#: ssh/key.vala:45
+#: ssh/key.vala:52
 msgid "SSH key"
 msgstr "SSH 金鑰"
 
 #. No names when not even the fingerpint loaded
-#: ssh/key.vala:115
+#: ssh/key.vala:122
 msgid "(Unreadable Secure Shell Key)"
 msgstr "（不能讀取的 SSH 金鑰）"
 
 #. No comment, but loaded
-#: ssh/key.vala:118 ssh/key.vala:122
+#: ssh/key.vala:125 ssh/key.vala:129
 msgid "Secure Shell Key"
 msgstr "SSH 金鑰"
 
 #: ssh/operation.vala:219
 msgid "Remote Host Password"
-msgstr "遠端主機密碼 "
+msgstr "遠端主機密碼"
 
 #: ssh/operation.vala:262
 msgid "Enter Key Passphrase"
@@ -2534,73 +2587,85 @@ msgstr "新增 SSH 金鑰"
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr "SSH (Secure Shell) 金鑰能讓您安全的連接其他的電腦。"
 
-#: ssh/seahorse-ssh-generate.ui:108
+#: ssh/seahorse-ssh-generate.ui:78
+msgid "_Description"
+msgstr "描述(_D)"
+
+#: ssh/seahorse-ssh-generate.ui:111
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "您的電子郵件位址，及其他提示這金鑰要來做什麼。"
 
-#: ssh/seahorse-ssh-generate.ui:124
-msgid "Encryption _Type:"
-msgstr "加密類型(_T)："
-
-#: ssh/seahorse-ssh-generate.ui:142
+#: ssh/seahorse-ssh-generate.ui:148
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:143
+#: ssh/seahorse-ssh-generate.ui:149
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:144
+#: ssh/seahorse-ssh-generate.ui:150
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:186
+#: ssh/seahorse-ssh-generate.ui:195
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
 msgstr "如果有您想使用本金鑰的電腦，現在可以設定電腦認識您的金鑰。"
 
-#: ssh/seahorse-ssh-generate.ui:212
+#: ssh/seahorse-ssh-generate.ui:221
 msgid "_Just Create Key"
 msgstr "只是建立金鑰(_J)"
 
-#: ssh/seahorse-ssh-generate.ui:226
+#: ssh/seahorse-ssh-generate.ui:235
 msgid "_Create and Set Up"
 msgstr "建立及設置(_C)"
 
-#: ssh/seahorse-ssh-key-properties.ui:16
+#: ssh/seahorse-ssh-key-properties.ui:15
 msgid "SSH Key Properties"
 msgstr "SSH 金鑰屬性"
 
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:55
+#: ssh/seahorse-ssh-key-properties.ui:54
 msgctxt "name-of-ssh-key"
 msgid "Name"
 msgstr "名稱"
 
-#: ssh/seahorse-ssh-key-properties.ui:88
+#: ssh/seahorse-ssh-key-properties.ui:87
 msgid "Algorithm"
 msgstr "演算法"
 
-#: ssh/seahorse-ssh-key-properties.ui:115
+#: ssh/seahorse-ssh-key-properties.ui:114
 msgid "Key Length"
 msgstr "金鑰長度"
 
-#: ssh/seahorse-ssh-key-properties.ui:142
+#: ssh/seahorse-ssh-key-properties.ui:141
 msgid "Location"
 msgstr "位置"
 
-#: ssh/seahorse-ssh-key-properties.ui:220
+#: ssh/seahorse-ssh-key-properties.ui:228
+msgid "Public Key"
+msgstr "公鑰"
+
+#: ssh/seahorse-ssh-key-properties.ui:243
+msgid "Copy public key to clipboard"
+msgstr "複製公鑰到剪貼簿"
+
+#: ssh/seahorse-ssh-key-properties.ui:272
 msgid "Remote Access"
 msgstr "遠端存取"
 
-#: ssh/seahorse-ssh-key-properties.ui:233
+#: ssh/seahorse-ssh-key-properties.ui:285
 msgid "Allows accessing this computer remotely"
 msgstr "允許遠端存取此電腦"
 
-#: ssh/seahorse-ssh-key-properties.ui:311
-msgid "Delete SSH Key"
-msgstr "刪除 SSH 金鑰"
+#: ssh/seahorse-ssh-key-properties.ui:332
+msgid "_Export"
+msgstr "匯出(_E)"
+
+#: ssh/seahorse-ssh-key-properties.ui:362
+msgid "_Delete SSH Key"
+msgstr "刪除 SSH 金鑰(_D)"
 
 #: ssh/seahorse-ssh-upload.ui:5
 msgid "Set Up Computer for SSH Connection"
@@ -2642,7 +2707,7 @@ msgstr "OpenSSH：%s"
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:245
+#: ssh/source.vala:253
 msgid "No private key file is available for this key."
 msgstr "這個金鑰沒有可用的私密金鑰。"
 
@@ -2654,6 +2719,18 @@ msgstr "無法設定遠端電腦的 SSH 金鑰。"
 msgid "Configuring Secure Shell Keys…"
 msgstr "正在設定 SSH 金鑰…"
 
+#~ msgid "Couldn’t add subkey"
+#~ msgstr "無法加入子鑰"
+
+#~ msgid "Import"
+#~ msgstr "匯入"
+
+#~ msgid "_Combine all keyrings"
+#~ msgstr "合併所有鑰匙圈(_C)"
+
+#~ msgid "Encryption _Type:"
+#~ msgstr "加密類型(_T)："
+
 #~ msgid "Keyring is unlocked"
 #~ msgstr "鑰匙圈已解鎖"
 
@@ -2663,14 +2740,8 @@ msgstr "正在設定 SSH 金鑰…"
 #~ msgid "_File"
 #~ msgstr "檔案(_F)"
 
-#~ msgid "Export to a file"
-#~ msgstr "匯出為檔案"
-
 #~ msgid "_Edit"
 #~ msgstr "編輯(_E)"
-
-#~ msgid "Copy to the clipboard"
-#~ msgstr "複製到剪貼簿"
 
 #~ msgid "Delete selected items"
 #~ msgstr "刪除選取的項目"
@@ -2735,9 +2806,6 @@ msgstr "正在設定 SSH 金鑰…"
 #~ msgid "Close this window"
 #~ msgstr "關閉本視窗"
 
-#~ msgid "_Import"
-#~ msgstr "匯入(_I)"
-
 #~ msgid "Import selected keys to local key ring"
 #~ msgstr "匯入已選的金鑰到本機鑰匙圈"
 
@@ -2772,9 +2840,6 @@ msgstr "正在設定 SSH 金鑰…"
 #~ msgid "Encrypt files and email to the key’s owner"
 #~ msgstr "加密給金鑰擁有者的檔案及電郵"
 
-#~ msgid "Public PGP Key"
-#~ msgstr "公共 PGP 金鑰"
-
 #~ msgid "- System Settings"
 #~ msgstr "- 系統設定值"
 
@@ -2784,17 +2849,11 @@ msgstr "正在設定 SSH 金鑰…"
 #~ msgid "_New"
 #~ msgstr "新增(_N)"
 
-#~ msgid "_Quit"
-#~ msgstr "退出(_Q)"
-
 #~ msgid "Close this program"
 #~ msgstr "關閉本程式"
 
 #~ msgid "_New…"
 #~ msgstr "新增(_N)…"
-
-#~ msgid "Create a new key or item"
-#~ msgstr "建立新的金鑰或項目"
 
 #~ msgid "_Import…"
 #~ msgstr "匯入(_I)…"
@@ -2864,9 +2923,6 @@ msgstr "正在設定 SSH 金鑰…"
 
 #~ msgid "Key length:"
 #~ msgstr "金鑰長度："
-
-#~ msgid "E_xport Complete Key"
-#~ msgstr "匯出整個金鑰(_X)"
 
 #~ msgid "%Y-%m-%d"
 #~ msgstr "%Y-%m-%d"
