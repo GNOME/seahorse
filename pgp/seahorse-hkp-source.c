@@ -76,27 +76,23 @@ get_http_server_uri (SeahorseHKPSource *self, const char *path)
 {
     g_autoptr(SoupURI) uri = NULL;
     g_autofree gchar *server = NULL;
-    gchar *port;
+    g_autofree char *conf_uri = NULL;
 
     g_object_get (self, "key-server", &server, NULL);
     g_return_val_if_fail (server != NULL, NULL);
+    g_object_get (self, "uri", &conf_uri, NULL);
 
-    uri = soup_uri_new (NULL);
-    soup_uri_set_scheme (uri, SOUP_URI_SCHEME_HTTP);
-
-    /* If it already has a port then use that */
-    port = strchr (server, ':');
-    if (port) {
-        *port++ = '\0';
-        soup_uri_set_port (uri, atoi (port));
-    } else {
-        /* default HKP port */
-        soup_uri_set_port (uri, 11371);
+    if (strncasecmp (conf_uri, "hkp:", 4) == 0) {
+        g_autofree char *t = g_strdup_printf ("http:%s", conf_uri + 4);
+        uri = soup_uri_new (t);
+    } else if (strncasecmp (conf_uri, "hkps:", 5) == 0) {
+        g_autofree char *t = g_strdup_printf ("https:%s", conf_uri + 5);
+        uri = soup_uri_new (t);
     }
 
-    soup_uri_set_host (uri, server);
     soup_uri_set_path (uri, path);
 
+    g_debug ("HTTP Server URI: %s", soup_uri_to_string(uri, FALSE));
     return g_steal_pointer (&uri);
 }
 
@@ -197,53 +193,33 @@ dehtmlize (gchar *line)
 }
 
 /**
- * parse_hkp_date:
- * @text: The date string to parse, YYYY-MM-DD
- *
- *
- *
- * Returns: 0 on error or the timestamp
- */
-static unsigned int
-parse_hkp_date (const gchar *text)
+* flags: combintation of [rei] representing the key's status
+*
+* Parses the flags from the HKP output
+*
+* returns 0 on error or a combination of seahorse flags based on input
+**/
+static guint
+parse_hkp_flags (char *flags)
 {
-    int year, month, day;
-    struct tm tmbuf;
-    time_t stamp;
+    char flag = 0;
 
-    if (strlen (text) != 10 || text[4] != '-' || text[7] != '-')
-        return 0;
+    g_return_val_if_fail (flags, 0);
 
-    /* YYYY-MM-DD */
-    sscanf (text, "%4d-%2d-%2d", &year, &month, &day);
-
-    /* some basic checks */
-    if (year < 1970 || month < 1 || month > 12 || day < 1 || day > 31)
-        return 0;
-
-    memset (&tmbuf, 0, sizeof tmbuf);
-    tmbuf.tm_mday = day;
-    tmbuf.tm_mon = month - 1;
-    tmbuf.tm_year = year - 1900;
-    tmbuf.tm_isdst = -1;
-
-    stamp = mktime (&tmbuf);
-    return stamp == (time_t)-1 ? 0 : stamp;
-}
-
-static const gchar *
-get_fingerprint_string (const gchar *line)
-{
-    const gchar *p;
-
-    p = line;
-    while (*p && g_ascii_isspace (*p))
-        p++;
-
-    if (g_ascii_strncasecmp (p, "fingerprint=", 12) == 0)
-        return p + 12;
-
-    return NULL;
+    for (char *f = flags; *f; f++){
+        switch (*f){
+            case 'r':
+                flag |= SEAHORSE_FLAG_REVOKED;
+                break;
+            case 'e':
+                flag |= SEAHORSE_FLAG_EXPIRED;
+                break;
+            case 'd':
+                flag |= SEAHORSE_FLAG_DISABLED;
+                break;
+        }
+    }
+    return flag;
 }
 
 /**
@@ -254,159 +230,187 @@ get_fingerprint_string (const gchar *line)
 * Returns A GList of keys
 **/
 static GList*
-parse_hkp_index (const gchar *response)
+parse_hkp_index (const char *response)
 {
-    /* Luckily enough, both the HKP server and NAI HKP interface to their
-     * LDAP server are close enough in output so the same function can
-     * parse them both. */
-
-    /* pub  2048/<a href="/pks/lookup?op=get&search=0x3CB3B415">3CB3B415</a> 1998/04/03 David M. Shaw &lt;<a href="/pks/lookup?op=get&search=0x3CB3B415">dshaw@jabberwocky.com</a>&gt; */
-
+    /*
+     * Use The OpenPGP HTTP Keyserver Protocol (HKP) to search and get keys
+     * https://tools.ietf.org/html/draft-shaw-openpgp-hkp-00#section-5
+     */
     g_auto(GStrv) lines = NULL;
-    gchar **l;
-
     SeahorsePgpKey *key = NULL;
-    SeahorsePgpSubkey *subkey_with_id = NULL;
     GList *keys = NULL;
     GList *subkeys = NULL;
     GList *uids = NULL;
     SeahorseFlags flags;
+    gboolean has_uid = FALSE;
+    char *uid_string;
+    guint key_total = 0, key_count = 0;
 
     lines = g_strsplit (response, "\n", 0);
-    for (l = lines; *l; l++) {
-        gchar *line, *t;
-
-        line = *l;
-        dehtmlize (line);
+    for (char **l = lines; *l; l++) {
+        char *line = *l;
+        g_auto(GStrv) columns = NULL;
 
         g_debug ("%s", line);
 
-        /* Start a new key */
-        if (g_ascii_strncasecmp (line, "pub ", 4) == 0) {
-            g_auto(GStrv) v = NULL;
+        if (strlen(line) == 0) {
+          g_debug ("HKP Parser: skip empty line");
+          continue;
+        }
+
+        /* split the line using hkp delimiter */
+        columns = g_strsplit_set(line, ":", 7);
+
+        /* info header */
+        if (g_ascii_strncasecmp (columns[0], "info", 4) == 0) {
+            if (!columns[1] && !columns[2]){
+                g_debug("HKP Parse: Invalid info line: %s", line);
+            } else {
+                key_total = strtol(columns[2], NULL, 10);
+            }
+
+        /* start a new key */
+        /* pub:<keyid>:<algo>:<keylen>:<creationdate>:<expirationdate>:<flags> */
+        } else if (g_ascii_strncasecmp (columns[0], "pub", 3) == 0) {
             gchar *fingerprint, *fpr = NULL;
             const gchar *algo;
-            gboolean has_uid = TRUE;
             SeahorsePgpSubkey *subkey;
+            glong created = 0, expired = 0;
 
-            t = line + 4;
-            while (*t && g_ascii_isspace (*t))
-                t++;
+            key_count++;
 
-            v = g_strsplit_set (t, " ", 3);
-            if (!v[0] || !v[1] || !v[2]) {
+            /* reset previous key */
+            if (key) {
+                g_debug ("HKP Parse: previous key found");
+                if(has_uid) {
+                  seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
+                  g_list_free_full (uids, g_object_unref);
+                  seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
+                  g_list_free_full (subkeys, g_object_unref);
+                  seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
+                  keys = g_list_prepend (keys, key);
+                } else {
+                  g_debug("HKP Parse: no uid found");
+                }
+                uids = subkeys = NULL;
+                has_uid = FALSE;
+                key = NULL;
+            }
+
+            if (!columns[0] || !columns[1] || !columns[2] || !columns[3] || !columns[4]) {
                 g_message ("Invalid key line from server: %s", line);
                 continue;
             }
 
-            flags = SEAHORSE_FLAG_EXPORTABLE;
-
             /* Cut the length and fingerprint */
-            fpr = strchr (v[0], '/');
+            fpr = columns[1];
             if (fpr == NULL) {
                 g_message ("couldn't find key fingerprint in line from server: %s", line);
-                fpr = "";
-            } else {
-                *(fpr++) = 0;
             }
 
             /* Check out the key type */
-            switch (g_ascii_toupper (v[0][strlen (v[0]) - 1])) {
-            case 'D':
-                algo = "DSA";
-                break;
-            case 'R':
-                algo = "RSA";
-                break;
-            default:
-                algo = "";
-                break;
-            };
+            switch (strtol(columns[2], NULL, 10)) {
+                case 1:
+                case 2:
+                case 3:
+                     algo = "RSA";
+                    break;
+                case 17:
+                    algo = "DSA";
+                    break;
+                default:
+                   break;
+            }
+            g_debug("Algo: %s", algo);
 
-            /* Format the date for our parse function */
-            g_strdelimit (v[1], "/", '-');
-
-            /* Cleanup the UID */
-            g_strstrip (v[2]);
-
-            if (g_ascii_strcasecmp (v[2], "*** KEY REVOKED ***") == 0) {
-                flags |= SEAHORSE_FLAG_REVOKED;
-                has_uid = FALSE;
+            /* set dates */
+            /* created */
+            if (!columns[4]){
+                g_debug("HKP Parse: No created date for key on line: %s", line);
+            } else {
+                created = strtol(columns[4], NULL, 10);
             }
 
-            if (key) {
-                seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
-                g_list_free_full (uids, g_object_unref);
-                seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
-                g_list_free_full (subkeys, g_object_unref);
-                seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
-                uids = subkeys = NULL;
-                subkey_with_id = NULL;
-                key = NULL;
+            /* expires (optional) */
+            if (columns[5]){
+                expired = strtol(columns[5], NULL, 10);
             }
 
+            /* set flags (optional) */
+            flags = SEAHORSE_FLAG_EXPORTABLE;
+            if (columns[6]){
+                flags |= parse_hkp_flags(columns[6]);
+            }
+
+            /* create key */
+            g_debug("HKP Parse: found new key");
             key = seahorse_pgp_key_new ();
-            keys = g_list_prepend (keys, key);
             g_object_set (key, "object-flags", flags, NULL);
 
             /* Add all the info to the key */
             subkey = seahorse_pgp_subkey_new ();
             seahorse_pgp_subkey_set_keyid (subkey, fpr);
-            subkey_with_id = subkey;
 
             fingerprint = seahorse_pgp_subkey_calc_fingerprint (fpr);
             seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
             g_free (fingerprint);
 
             seahorse_pgp_subkey_set_flags (subkey, flags);
-            seahorse_pgp_subkey_set_created (subkey, parse_hkp_date (v[1]));
-            seahorse_pgp_subkey_set_length (subkey, strtol (v[0], NULL, 10));
+
+            seahorse_pgp_subkey_set_created (subkey, created);
+            seahorse_pgp_subkey_set_expires (subkey, expired);
+            seahorse_pgp_subkey_set_length (subkey, strtol (columns[3], NULL, 10));
             seahorse_pgp_subkey_set_algorithm (subkey, algo);
             subkeys = g_list_prepend (subkeys, subkey);
 
-            /* And the UID if one was found */
-            if (has_uid) {
-                SeahorsePgpUid *uid = seahorse_pgp_uid_new (key, v[2]);
-                uids = g_list_prepend (uids, uid);
-            }
-
         /* A UID for the key */
-        } else if (key && g_ascii_strncasecmp (line, "    ", 4) == 0) {
+        } else if (g_ascii_strncasecmp (columns[0], "uid", 3) == 0) {
             SeahorsePgpUid *uid;
 
-            g_strstrip (line);
-            uid = seahorse_pgp_uid_new (key, line);
-            uids = g_list_prepend (uids, uid);
-
-        /* Signatures */
-        } else if (key && g_ascii_strncasecmp (line, "sig ", 4) == 0) {
-            /* TODO: Implement signatures */
-
-        } else if (key && subkey_with_id) {
-            const char *fingerprint_str;
-            g_autofree gchar *pretty_fingerprint = NULL;
-
-            fingerprint_str = get_fingerprint_string (line);
-            if (fingerprint_str == NULL)
+            if (!key) {
+                g_debug("HKP Parse: Warning: seen uid line before keyline, skipping");
+                g_strfreev(columns);
                 continue;
+            }
 
-            pretty_fingerprint = seahorse_pgp_subkey_calc_fingerprint (fingerprint_str);
+            g_debug("HKP Parse: handle uid");
+            has_uid = TRUE;
 
-            /* FIXME: we don't check that the fingerprint actually matches
-             * the key's ID.  We also don't validate the fingerprint at
-             * all; the keyserver may have returned some garbage and we
-             * don't notice. */
-            if (pretty_fingerprint[0] != 0)
-                seahorse_pgp_subkey_set_fingerprint (subkey_with_id, pretty_fingerprint);
+            if (!columns[0] || !columns[1] || !columns[2]) {
+                g_message ("HKP Parse: Invalid uid line from server: %s", line);
+                continue;
+            }
+
+            uid_string = g_uri_unescape_string (columns[1], NULL);
+            g_debug("HKP Parse: decoded uid string: %s", uid_string);
+
+            uid = seahorse_pgp_uid_new (key, uid_string);
+            uids = g_list_prepend (uids, uid);
         }
     }
 
+    /* handle last entry */
     if (key) {
-        seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), g_list_reverse (uids));
-        g_list_free_full (uids, g_object_unref);
-        seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), g_list_reverse (subkeys));
-        g_list_free_full (subkeys, g_object_unref);
-        seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
+        if (has_uid) {
+            seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
+            g_list_free_full (uids, g_object_unref);
+            seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
+            g_list_free_full (subkeys, g_object_unref);
+            seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
+            keys = g_list_prepend (keys, key);
+        } else {
+            g_debug("HKP Parse: No UID found.");
+        }
+        uids = subkeys = NULL;
+        has_uid = FALSE;
+        key = NULL;
+    }
+
+    if (key_total != 0 && key_total != key_count) {
+        g_message("HKP Parse; Warning: Issue during HKP parsing, only %d keys were parsed out of %d", key_count, key_total);
+
+    } else {
+        g_debug("HKP Parse: %d keys parsed successfully", key_count);
     }
 
     return keys;
@@ -641,6 +645,7 @@ seahorse_hkp_source_search_async (SeahorseServerSource *source,
 
     form = g_hash_table_new (g_str_hash, g_str_equal);
     g_hash_table_insert (form, "op", "index");
+    g_hash_table_insert (form, "options", "mr");
 
     if (is_hex_keyid (match)) {
         strncpy (hexfpr, "0x", 3);
@@ -994,7 +999,9 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
     server_class->import_finish = seahorse_hkp_source_import_finish;
 
     seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
+    seahorse_servers_register_type ("hkps", _("HTTPS Key Server"), seahorse_hkp_is_valid_uri);
 }
+
 /**
  * seahorse_hkp_source_new:
  * @uri: The server to connect to
@@ -1029,9 +1036,12 @@ seahorse_hkp_is_valid_uri (const gchar *uri)
 
     /* Replace 'hkp' with 'http' at the beginning of the URI */
     if (strncasecmp (uri, "hkp:", 4) == 0) {
-        g_autofree gchar *t = g_strdup_printf ("http:%s", uri + 4);
+        g_autofree char *t = g_strdup_printf ("http:%s", uri + 4);
         soup = soup_uri_new (t);
     /* Not 'hkp', but maybe 'http' */
+    } else if (strncasecmp (uri, "hkps:", 5) == 0) {
+        g_autofree char *t = g_strdup_printf ("https:%s", uri + 5);
+        soup = soup_uri_new (t);
     } else {
         soup = soup_uri_new (uri);
     }
