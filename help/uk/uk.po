@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "POT-Creation-Date: 2020-03-31 16:04+0000\n"
-"PO-Revision-Date: 2020-05-09 21:53+0300\n"
+"PO-Revision-Date: 2020-05-10 20:15+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "MIME-Version: 1.0\n"
@@ -836,6 +836,10 @@ msgid ""
 "a trunk. In order to look at your passwords, you must unlock the keyring "
 "first."
 msgstr ""
+"В'язку ключів часто може бути <link xref=\"keyring-lock\">заблоковано</link>"
+" для захисту паролів, які у ній містяться, подібно до замикання важливих"
+" речей у сейфі. Щоб переглянути ваші паролі, вам доведеться спочатку"
+" розблокувати в'язку ключів."
 
 #. (itstool) path: steps/title
 #: C/keyring-unlock.page:30
@@ -858,6 +862,10 @@ msgid ""
 "menu, or alternatively, click the small picture of a closed lock next to the "
 "keyring name to unlock the keyring."
 msgstr ""
+"Клацніть правою кнопкою на вибраній в'язці ключів і виберіть пункт <gui"
+">Розблокувати</gui> або клацніть на малому зображенні замкненого замка поряд"
+" із"
+" пунктом із назвою в'язки ключів, щоб розблокувати в'язку ключів."
 
 #. (itstool) path: item/p
 #: C/keyring-unlock.page:41
@@ -866,6 +874,10 @@ msgid ""
 "unlock the keyring. Enter the correct password in the <gui>Password</gui> "
 "field and press <gui style=\"button\">Unlock</gui> to finish."
 msgstr ""
+"Якщо в'язку ключів захищено паролем, програма попросить вас ввести пароль для"
+" розблокування в'язки ключів. Введіть належний пароль у поле <gui>Пароль</gui"
+"> і натисніть кнопку <gui style=\"button\">Розблокувати</gui>, щоб завершити"
+" розблокування."
 
 #. (itstool) path: note/p
 #: C/keyring-unlock.page:49
@@ -873,6 +885,8 @@ msgid ""
 "You can choose to password-protect your keyrings while <link xref=\"keyring-"
 "create\">creating</link> them."
 msgstr ""
+"Ви можете захистити ваші в'язки ключів під час їхнього <link"
+" xref=\"keyring-create\">створення</link>."
 
 #. (itstool) path: info/desc
 #: C/keyring-update-password.page:20
@@ -880,6 +894,8 @@ msgid ""
 "Keep updating the passwords to your keyrings to ensure that they are "
 "protected well."
 msgstr ""
+"Час від часу оновлюйте паролі до ваших в'язок ключів, щоб забезпечити"
+" надійність їхнього захисту."
 
 #. (itstool) path: page/title
 #: C/keyring-update-password.page:25
@@ -892,6 +908,8 @@ msgid ""
 "The password to unlock your <link xref=\"keyring\">keyring</link> can be "
 "updated at any time."
 msgstr ""
+"Ви можете будь-коли оновити пароль для розблоковування вашої <link"
+" xref=\"keyring\">в'язки ключів</link>."
 
 #. (itstool) path: steps/title
 #: C/keyring-update-password.page:31
@@ -931,6 +949,9 @@ msgid ""
 "In the new dialog, type your new password, retype it to confirm the new "
 "password and press the <gui style=\"button\">Continue</gui> button to finish."
 msgstr ""
+"У діалоговому вікні, яке буде відкрито, введіть новий пароль, повторіть його"
+" введення для підтвердження і натисніть кнопку <gui style=\"button\""
+">Продовжити</gui>, щоб завершити внесення змін."
 
 #. (itstool) path: info/desc
 #: C/keyring.page:30
@@ -950,6 +971,9 @@ msgid ""
 "together, a keyring in <app>Passwords and Keys</app> allows you to keep "
 "passwords and keys in separate groups."
 msgstr ""
+"Подібно до звичайної в'язки ключів ви можете зберігати певні набори ключів"
+" разом — в'язка ключів у програмі <app>Паролі й ключі</app> надає вам змогу"
+" тримати паролі й ключі в окремих групах."
 
 #. (itstool) path: page/p
 #: C/keyring.page:39
@@ -960,6 +984,11 @@ msgid ""
 "<app>Accounts</app> etc. The <gui>Login</gui> keyring is the default keyring "
 "in <app>Passwords and keys</app>."
 msgstr ""
+"Після першого запуску програми <app>Паролі й ключі</app> ви побачите ключі і"
+" паролі зібрані разом. У в'язці ключів <gui>Вхід</gui> ви знайдете збережені"
+" паролі для програм GNOME, зокрема <app>Тенет</app>, <app>Облікових записів<"
+"/app> тощо. В'язка ключів <gui>Вхід</gui> є типовою в'язкою ключів у програмі"
+" <app>Паролі й ключі</app>."
 
 #. (itstool) path: p/link
 #: C/legal.xml:4
@@ -979,7 +1008,7 @@ msgstr "Зберігання копії ваших ключів на зовні�
 #. (itstool) path: page/title
 #: C/misc-key-backup.page:29
 msgid "Securely back-up your keys"
-msgstr ""
+msgstr "Безпечне резервне копіювання ваших ключів"
 
 #. (itstool) path: page/p
 #: C/misc-key-backup.page:31
@@ -989,31 +1018,35 @@ msgid ""
 "somewhere safe. This way you will always have a copy of the key if your "
 "computer breaks or if the data on your computer is corrupted in some way."
 msgstr ""
+"Завжди варто зберігати копію ваших ключів на пристрої зовнішньої пам'яті,"
+" зокрема флешці. Відповідний пристрій слід зберігати у захищеному безпечному"
+" місці. Таким чином, у вас завжди буде копія ключа у випадку втрати"
+" комп'ютера або пошкодження даних на основному носії даних."
 
 #. (itstool) path: steps/title
 #: C/misc-key-backup.page:37
 msgid "To back-up your keys:"
-msgstr ""
+msgstr "Для створення резервної копії ваших ключів, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/misc-key-backup.page:39
 msgid "Export your key files:"
-msgstr ""
+msgstr "Експортуйте ваші файли ключів:"
 
 #. (itstool) path: item/p
 #: C/misc-key-backup.page:41
 msgid "<link xref=\"pgp-export\">Export your PGP keys</link>."
-msgstr ""
+msgstr "<link xref=\"pgp-export\">Експортування ваших ключів PGP</link>."
 
 #. (itstool) path: item/p
 #: C/misc-key-backup.page:42
 msgid "<link xref=\"ssh-export\">Export your SSH keys</link>."
-msgstr ""
+msgstr "<link xref=\"ssh-export\">Експортування ваших ключів SSH</link>."
 
 #. (itstool) path: item/p
 #: C/misc-key-backup.page:46
 msgid "Copy the exported files on an external disk."
-msgstr ""
+msgstr "Скопіюйте експортовані файли на зовнішній диск."
 
 #. (itstool) path: info/desc
 #: C/misc-key-fingerprint.page:19
@@ -1021,11 +1054,13 @@ msgid ""
 "The key fingerprint is a unique ID for each key, often used to verify the "
 "ownership of a key"
 msgstr ""
+"Відбиток ключа — унікальний ідентифікатор для кожного ключа, яким часто"
+" користуються для перевірки ідентичності власника ключа"
 
 #. (itstool) path: page/title
 #: C/misc-key-fingerprint.page:23
 msgid "What is a key fingerprint?"
-msgstr ""
+msgstr "Що таке відбиток ключа?"
 
 #. (itstool) path: page/p
 #: C/misc-key-fingerprint.page:25
@@ -1035,6 +1070,10 @@ msgid ""
 "fingerprints of two different keys can never be identical. The fingerprint "
 "is the best way to identify a particular key."
 msgstr ""
+"Відбитком ключа є унікальна послідовність літер і цифр, яка використовується"
+" для ідентифікації ключа. Подібно до відбитків пальців людей, відбитки двох"
+" різних ключів ніколи не бувають однаковими. Відбиток є найкращим способом"
+" ідентифікації певного ключа."
 
 #. (itstool) path: page/p
 #: C/misc-key-fingerprint.page:30
@@ -1045,6 +1084,11 @@ msgid ""
 "identify the key you are looking for is to compare the fingerprints of the "
 "two keys with the fingerprint of the key you require."
 msgstr ""
+"У ключа є декілька властивостей, зокрема ім'я та адреса електронної пошти"
+" власника ключа, тип ключ, строк дії ключа тощо. Якщо під час пошуку"
+" відкритого ключа ви знайдете декілька ключів із однаковими властивостями,"
+" єдиним способом ідентифікації потрібного вам ключа є порівняння відбитків"
+" двох ключів із відбитком потрібного вам ключа."
 
 #. (itstool) path: page/p
 #: C/misc-key-fingerprint.page:36
@@ -1055,11 +1099,16 @@ msgid ""
 "check the key fingerprint and verify the key owner's identity to ensure that "
 "you are signing the correct key."
 msgstr ""
+"Це той самий відбиток ключа, який перевіряє програма коли ви входите до"
+" системи віддаленого комп'ютера за допомогою <link xref=\"index#ssh-keys\""
+">SSH</link>. Під час підписування ключа <link xref=\"index#pgp-keys\">PGP<"
+"/link> вам слід завжди перевіряти відбиток ключа та ідентичність власника"
+" ключа, щоб переконатися, що ви підписуєте належний ключ."
 
 #. (itstool) path: section/title
 #: C/misc-key-fingerprint.page:43
 msgid "Fingerprints on <app>Passwords and Keys</app>"
-msgstr ""
+msgstr "Відбитки у <app>Паролях й ключах</app>"
 
 #. (itstool) path: section/p
 #: C/misc-key-fingerprint.page:45
@@ -1067,48 +1116,53 @@ msgid ""
 "You can look at the fingerprint of a key on <app>Passwords and Keys</app> by "
 "checking the properties of the key."
 msgstr ""
+"Переглянути відбиток ключа у програмі <app>Паролі й ключі</app> можна за"
+" допомогою вікна властивостей ключа."
 
 #. (itstool) path: steps/title
 #: C/misc-key-fingerprint.page:49
 msgid "To check the fingerprint of a key:"
-msgstr ""
+msgstr "Щоб перевірити відбиток ключа, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/misc-key-fingerprint.page:51 C/pgp-photoid.page:44 C/pgp-publish.page:36
 #: C/subkeys-add.page:31
 msgid "Select <gui>GnuPG keys</gui> from the left side panel."
-msgstr ""
+msgstr "Виберіть пункт <gui>Ключі GnuPG</gui> на лівій бічній панелі."
 
 #. (itstool) path: item/p
 #: C/misc-key-fingerprint.page:54 C/pgp-expiration-change.page:31
 msgid "Select the PGP key from the list."
-msgstr ""
+msgstr "Виберіть ключ PGP зі списку."
 
 #. (itstool) path: item/p
 #: C/misc-key-fingerprint.page:57
 msgid ""
 "Right click the key and select <gui style=\"menuitem\">Properties</gui>."
 msgstr ""
+"Клацніть на пункті ключа правою кнопкою миші і виберіть у контекстному меню"
+" пункт <gui style=\"menuitem\">Властивості</gui>."
 
 #. (itstool) path: item/p
 #: C/misc-key-fingerprint.page:61 C/pgp-expiration-change.page:37
 msgid "In the new dialog, select the <gui>Details</gui> tab."
 msgstr ""
+"У відкритому діалоговому вікні перейдіть на вкладку <gui>Подробиці</gui>."
 
 #. (itstool) path: item/p
 #: C/misc-key-fingerprint.page:64
 msgid "You can see the fingerprint of the key on the left hand side."
-msgstr ""
+msgstr "Відбиток ключа буде показано ліворуч."
 
 #. (itstool) path: info/desc
 #: C/passwords-stored-create.page:19
 msgid "<app>Passwords and keys</app> can remember your passwords for you."
-msgstr ""
+msgstr "<app>Паролі й ключі</app> можуть запам'ятовувати ваші паролі."
 
 #. (itstool) path: page/title
 #: C/passwords-stored-create.page:23
 msgid "Store your passwords"
-msgstr ""
+msgstr "Збереження ваших паролів"
 
 #. (itstool) path: page/p
 #: C/passwords-stored-create.page:25
@@ -1117,16 +1171,19 @@ msgid ""
 "GNOME applications in the <gui>Login</gui> keyring. Additionally, you can "
 "store any other password you want to remember."
 msgstr ""
+"<app>Паролі й ключі</app> автоматично зберігають паролі для деяких програм"
+" GNOME у в'язці ключів <gui>Вхід</gui>. Крім того, ви можете зберігати"
+" будь-які інші паролі, які слід запам'ятати."
 
 #. (itstool) path: steps/title
 #: C/passwords-stored-create.page:30
 msgid "To create a new stored password:"
-msgstr ""
+msgstr "Щоб створити запис збереженого пароля, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/passwords-stored-create.page:35
 msgid "Select <gui style=\"menuitem\">Password</gui> from the list."
-msgstr ""
+msgstr "Виберіть у списку пункт <gui style=\"menuitem\">Пароль</gui>."
 
 #. (itstool) path: item/p
 #: C/passwords-stored-create.page:38
@@ -1134,6 +1191,8 @@ msgid ""
 "Select the password keyring in which you want to store your password from "
 "the <gui>Keyring</gui> menu."
 msgstr ""
+"Виберіть в'язку паролів, у якій ви хочете зберегти ваш пароль у меню <gui"
+">В'язка паролів</gui>."
 
 #. (itstool) path: item/p
 #: C/passwords-stored-create.page:42
@@ -1142,6 +1201,9 @@ msgid ""
 "<gui>Description</gui> field, like the date of creation, or the name of the "
 "application it protects, etc."
 msgstr ""
+"Ви можете додати додаткові відомості щодо пароля до поля <gui>Опис</gui>,"
+" зокрема вказати дату стоврення або назву програми, для якої призначено"
+" пароль."
 
 #. (itstool) path: item/p
 #: C/passwords-stored-create.page:47
@@ -1150,11 +1212,15 @@ msgid ""
 "style=\"checkbox\">Show password</gui> checkbox if you want to see the "
 "password text while typing it out."
 msgstr ""
+"Введіть пароль до поля <gui>Пароль</gui>. Ви можете позначити пункт <gui"
+" style=\"checkbox\">Показати пароль</gui>, якщо хочете бачити текст пароля"
+" під час набирання."
 
 #. (itstool) path: item/p
 #: C/passwords-stored-create.page:52
 msgid "Press the <gui style=\"button\">Add</gui> button to finish."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Додати</gui>, щоб завершити додавання."
 
 #. (itstool) path: note/p
 #: C/passwords-stored-create.page:57
@@ -1163,16 +1229,19 @@ msgid ""
 "gui> drop down menu. You can <link xref=\"keyring-change-default\">change "
 "the default keyring</link>."
 msgstr ""
+"Типову в'язку ключів буде показано як перший пункт у спадному меню <gui"
+">В'язка ключів</gui>. Ви можете <link xref=\"keyring-change-default\">змінити"
+" типову в'язку ключів</link>."
 
 #. (itstool) path: info/desc
 #: C/passwords-view.page:33
 msgid "Check a stored password which you have forgotten."
-msgstr ""
+msgstr "Отримання збереженого пароля, який ви забули."
 
 #. (itstool) path: page/title
 #: C/passwords-view.page:36
 msgid "View stored passwords"
-msgstr ""
+msgstr "Перегляд збережених паролів"
 
 #. (itstool) path: page/p
 #: C/passwords-view.page:38
@@ -1181,17 +1250,20 @@ msgid ""
 "link> in <app>Passwords and Keys</app>, you can view the contents of the "
 "stored password in <app>Passwords and Keys</app> to refresh your memory."
 msgstr ""
+"Якщо ви забудете пароль, який <link xref=\"passwords-stored-create\""
+">збережено</link> у програмі <app>Паролі й ключі</app>, ви можете переглянути"
+" дані збереженого пароля у <app>Паролі й ключі</app>, щоб згадати пароль."
 
 #. (itstool) path: steps/title
 #: C/passwords-view.page:44
 msgid "To view a password:"
-msgstr ""
+msgstr "Щоб переглянути пароль, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/passwords-view.page:46
 msgid ""
 "In the side bar on the left, select the keyring which contains the password."
-msgstr ""
+msgstr "На бічній панелі ліворуч виберіть в'язку ключів, яка містить пароль."
 
 #. (itstool) path: item/p
 #: C/passwords-view.page:50
@@ -1200,11 +1272,13 @@ msgid ""
 "contains your password. A list of passwords stored in the keyring will be "
 "displayed."
 msgstr ""
+"<link xref=\"keyring-unlock\">Розблокуйте</link> в'язку паролів, яка містить"
+" ваш пароль. Буде показано список паролів, які збережено у в'язці ключів."
 
 #. (itstool) path: note/p
 #: C/passwords-view.page:53
 msgid "Your <gui>Login</gui> keyring is already unlocked by default."
-msgstr ""
+msgstr "Типово, вашу в'язку <gui>Вхід</gui> вже розблоковано."
 
 #. (itstool) path: item/p
 #: C/passwords-view.page:56
@@ -1212,11 +1286,13 @@ msgid ""
 "Right click on the password you want to check, and select <gui>Properties</"
 "gui>."
 msgstr ""
+"Клацніть правою кнопкою миші на паролі, який ви хочете згадати, і виберіть"
+" пункт <gui>Властивості</gui>."
 
 #. (itstool) path: item/p
 #: C/passwords-view.page:60
 msgid "Select the <_:media-1/> icon to view the password."
-msgstr ""
+msgstr "Натисніть піктограму <_:media-1/>, щоб переглянути пароль."
 
 #. (itstool) path: note/p
 #: C/passwords-view.page:67
@@ -1226,6 +1302,10 @@ msgid ""
 "false sense of security, the contents of unlocked keyrings are able to be "
 "viewed without entering the password."
 msgstr ""
+"Оскільки дані будь-якої розблокованої в'язки доступні програмам, які ви"
+" можете запустити, а розробники <app>Паролів й ключів</app> не хочуть"
+" надавати вам оманливого відчуття безпеки, вміст розблокованих в'язок ключів"
+" можна переглядати без введення пароля."
 
 #. (itstool) path: note/p
 #: C/passwords-view.page:71
@@ -1234,6 +1314,9 @@ msgid ""
 "keyring will available without entering a password from <app>Passwords and "
 "Keys</app>."
 msgstr ""
+"Це означає, що якщо ви увійшли до свого облікового запису, вміст в'язки"
+" ключів <gui>Вхід</gui> буде доступним без введення пароля у <app>Паролях й"
+" ключах</app>."
 
 #. (itstool) path: note/p
 #: C/passwords-view.page:74
@@ -1241,36 +1324,43 @@ msgid ""
 "If you need to lend your computer to another person, it is recommended that "
 "you create a user account for them, or allow them to use a guest account."
 msgstr ""
+"Якщо ви спільно користуєтеся комп'ютером з кимось іншим, рекомендуємо вам"
+" створити окремі облікові записи для інших користувачів або дозволити їм"
+" користуватися гостьовим обліковим записом."
 
 #. (itstool) path: info/desc
 #: C/pgp-create.page:33
 msgid "Create and use GnuPG keys for encrypting and signing emails."
 msgstr ""
+"Створення ключів GnuPG та користування ними для шифрування та підписування"
+" поштових повідомлень."
 
 #. (itstool) path: page/title
 #: C/pgp-create.page:36
 msgid "Create PGP keys"
-msgstr ""
+msgstr "Створення ключів PGP"
 
 #. (itstool) path: page/p
 #: C/pgp-create.page:38
 msgid "To make a new PGP key:"
-msgstr ""
+msgstr "Щоб створити ключ PGP, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/pgp-create.page:45
 msgid "Select <gui>PGP Key</gui> from the list."
-msgstr ""
+msgstr "Виберіть пункт <gui>Ключ PGP</gui> зі списку."
 
 #. (itstool) path: item/p
 #: C/pgp-create.page:48
 msgid "Enter your full name in the <gui>Full Name</gui> field."
-msgstr ""
+msgstr "Вкажіть ваше ім'я повністю у полі <gui>Ім'я повністю</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-create.page:51
 msgid "Optionally, add your email address and a comment to describe the key."
 msgstr ""
+"Якщо хочете, додайте вашу адресу електронної пошти та коментар із описом"
+" ключа."
 
 #. (itstool) path: item/p
 #: C/pgp-create.page:55
@@ -1283,6 +1373,8 @@ msgid ""
 "In the password dialog, enter a password for the key. Retype the password to "
 "confirm your choice."
 msgstr ""
+"У діалоговому вікні паролів введіть пароль до ключа. Повторіть введення"
+" пароля, щоб підтвердити ваш вибір."
 
 #. (itstool) path: item/p
 #: C/pgp-create.page:62
@@ -1298,6 +1390,11 @@ msgid ""
 "app> to create a truly random key. The key will be listed under <gui>GnuPG "
 "keys</gui>."
 msgstr ""
+"<app>Паролям й ключам</app> знадобиться певний час для створення вашого"
+" ключа. Доки програма створюватиме ключ, рухайте вказівник миші, натискайте"
+" клавіші або переглядайте якісь сторінки в інтернеті. Це допоможе <app"
+">Паролям й ключам</app> створити стійкіший до зламу ключ. Створений ключ буде"
+" показано у списку <gui>Ключі GnuPG</gui>."
 
 #. (itstool) path: note/p
 #: C/pgp-create.page:73
@@ -1306,6 +1403,9 @@ msgid ""
 "details of a GnuPG key are called the <link xref=\"pgp-userid\">user ID</"
 "link> of the key."
 msgstr ""
+"Записи <gui>Ім'я повністю</gui>, <gui>Адреса ел. пошти</gui> та <gui"
+">Коментар</gui> ключа GnuPG називаються <link xref=\"pgp-userid\""
+">ідентифікатором користувача</link> ключа."
 
 #. (itstool) path: section/title
 #: C/pgp-create.page:79
@@ -1318,6 +1418,8 @@ msgid ""
 "Under <gui>Advanced key options</gui> you can choose custom values for "
 "encryption type, key strength and key expiration date."
 msgstr ""
+"За допомогою панелі <gui>Додаткові параметри ключа</gui> ви можете вибрати"
+" нетипові значення для типу шифрування, міцності ключа та строку дії ключа."
 
 #. (itstool) path: item/title
 #: C/pgp-create.page:86
@@ -1331,6 +1433,9 @@ msgid ""
 "for both encryption and signing. The RSA and DSA-Elgamal algorithms generate "
 "equally secure keys."
 msgstr ""
+"Залежно від ваших потреб, створюйте ключі, які можна буде використати лише"
+" для підписування або для шифрування і підписування. Алгоритми RSA та"
+" DSA-Elgamal дають ключі із однаковим степенем захисту."
 
 #. (itstool) path: item/title
 #: C/pgp-create.page:92
@@ -1347,6 +1452,12 @@ msgid ""
 "to use the key. A small key is sufficient for short term use while a large "
 "key is more suitable for long term use."
 msgstr ""
+"Міцність ключа співмірна до розміру ключа у бітах. Міцні ключі складніше і"
+" довше зламувати, але використання дуже міцних ключів уповільнює процес"
+" шифрування і підписування. Вам слід вибирати міцність ключа у <app>Паролях й"
+" ключах</app> залежно від того, наскільки довго ви маєте намір користуватися"
+" ключем. Ключа з малою міцністю достатньо для короткотермінового"
+" використання, а ключі із високою міцністю можна використовувати довго."
 
 #. (itstool) path: item/title
 #: C/pgp-create.page:101
@@ -1373,17 +1484,23 @@ msgid ""
 "the key. Even if your key expires, you can <link xref=\"pgp-expiration-change"
 "\"> change the expiration to a later date</link>."
 msgstr ""
+"Рекомендуємо встановити строк дії ключа для випадку втрати доступу до ключа."
+" Якщо строк дії ключа буде вичерпано, і ви захочете продовжити ним"
+" користуватися, ви можете <link xref=\"pgp-expiration-change\">продовжити"
+" строк дії ключа</link>."
 
 #. (itstool) path: info/desc
 #: C/pgp-delete.page:26
 msgid ""
 "Delete local copies of your keys or the keys of people you communicate with."
 msgstr ""
+"Вилучення локальних копій ваших ключів або ключів тих, із ким ви обмінюєтеся"
+" даними."
 
 #. (itstool) path: page/title
 #: C/pgp-delete.page:30
 msgid "Delete an existing key"
-msgstr ""
+msgstr "Вилучення наявного ключа"
 
 #. (itstool) path: page/p
 #: C/pgp-delete.page:32
@@ -1394,21 +1511,28 @@ msgid ""
 "published on a key server. Deleting a GnuPG key deletes both the public key "
 "and the secret key."
 msgstr ""
+"Якщо ви більше не маєте наміру обмінюватися даними з кимось, ви можете"
+" вилучити копію його ключа GnuPG з вашого комп'ютера за допомогою <app"
+">Паролів й ключів</app>. Ви також можете остаточно вилучити ваш власний ключ,"
+" якщо його ніколи не було оприлюднено за допомогою сервера ключів. Вилучення"
+" ключа GnuPG призводить до вилучення відкритого і закритого ключів."
 
 #. (itstool) path: steps/title
 #: C/pgp-delete.page:39
 msgid "To delete a key:"
-msgstr ""
+msgstr "Щоб вилучити ключ, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/pgp-delete.page:41
 msgid "Select the key."
-msgstr ""
+msgstr "Виберіть ключ."
 
 #. (itstool) path: item/p
 #: C/pgp-delete.page:45
 msgid "Right click, and choose <gui>Delete</gui>."
 msgstr ""
+"Клацніть правою кнопкою на його пункті і виберіть у контекстному меню пункт <"
+"gui>Вилучити</gui>."
 
 #. (itstool) path: note/p
 #: C/pgp-delete.page:47
@@ -1417,6 +1541,9 @@ msgid ""
 "only delete the key in your GnuPG keyring because a copy of the public key "
 "will still be present on some key server."
 msgstr ""
+"Якщо ви вилучите ключ GnuPG, який було оприлюднено на сервері ключів, ви"
+" можете лише вилучити ключ з вашої в'язки ключів GnuPG, оскільки копія"
+" відкритого ключа лишиться на зберіганні на якомусь із серверів ключів."
 
 #. (itstool) path: note/p
 #: C/pgp-delete.page:50
@@ -1429,6 +1556,14 @@ msgid ""
 "be <link xref=\"pgp-sync\">synced</link> with a key server to prevent people "
 "from retrieving and using it."
 msgstr ""
+"Якщо ви вилучите власний ключ GnuPG, це означатиме, що ваш закритий ключ буде"
+" назавжди вилучено. Хоча ваш відкритий ключ усе ще можна буде <link xref="
+"\"pgp-retrieve-remote\">отримати</link> з сервера ключів і використати для"
+" шифрування повідомлень для вас, ви не зможете прочитати отримані"
+" повідомлення! Щоб запобігти використанню непридатного ключа, ключ слід"
+" отримати і відкликати. Відкликаний ключ згодом може бути <link"
+" xref=\"pgp-sync\">синхронізовано</link> з сервером ключів для запобігання"
+" його отриманню і використанню."
 
 #. (itstool) path: item/p
 #: C/pgp-delete.page:64
@@ -1437,16 +1572,22 @@ msgid ""
 "\">I understand that this secret key will be permanently deleted</gui> "
 "checkbox, and press the <gui style=\"button\">Delete</gui> button to finish."
 msgstr ""
+"У новому діалоговому вікні підтвердьте вилучення позначенням пункту <gui"
+" style=\"checkbox\">Я розумію, що ця таємний ключ остаточно буде вилучено<"
+"/gui>. Потім натисніть кнопку <gui style=\"button\">Вилучити</gui>, щоб"
+" завершити вилучення."
 
 #. (itstool) path: info/desc
 #: C/pgp-expiration-change.page:19
 msgid "Advance or postpone the expiration date of your keys."
 msgstr ""
+"Зменшення терміну дії або відкладення моменту вичерпання строку дії ваших"
+" ключів."
 
 #. (itstool) path: page/title
 #: C/pgp-expiration-change.page:22
 msgid "Change the expiration date of your keys"
-msgstr ""
+msgstr "Зміна строку дії ваших ключів"
 
 #. (itstool) path: page/p
 #: C/pgp-expiration-change.page:24
@@ -1455,16 +1596,22 @@ msgid ""
 "its expiry date. You can also change the expiration settings to have a key "
 "expire on an earlier date."
 msgstr ""
+"Якщо строк дії вашого ключа PGP вичерпано, але ви хочете продовжувати ним"
+" користуватися, ви можете змінити дату завершення його строку дії. Ви також"
+" можете змінити параметри строку дій так, щоб строк дії ключа було вичерпано"
+" раніше."
 
 #. (itstool) path: steps/title
 #: C/pgp-expiration-change.page:29
 msgid "To change the expiration date of a PGP key:"
-msgstr ""
+msgstr "Щоб змінити строк дії ключа PGP, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/pgp-expiration-change.page:34
 msgid "Right click on the selected key and select <gui>Properties</gui>."
 msgstr ""
+"Клацніть на пункті ключа правою кнопкою миші і виберіть у контекстному меню"
+" пункт <gui>Властивості</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-expiration-change.page:42
@@ -1473,6 +1620,10 @@ msgid ""
 "the picture of a calendar next to <gui>Expires</gui>, on the right side of "
 "the dialog. You can then select the new expiration date from the calendar."
 msgstr ""
+"Щоб змінити строк дії основного ключа, натисніть маленьку кнопку із"
+" зображенням календаря, яку розташовано поруч із написом <gui>Закінчується"
+" дія</gui> у правій частині діалогового вікна. Далі, ви можете вибрати нову"
+" дату строку завершення дії з календаря."
 
 #. (itstool) path: item/p
 #: C/pgp-expiration-change.page:48
@@ -1482,6 +1633,10 @@ msgid ""
 "Press the <gui style=\"button\">Expire</gui> button on the left of the panel "
 "and select the new expiration date."
 msgstr ""
+"Щоб змінити строк дії <link xref=\"pgp-subkeys\">підключа</link>, розгорніть"
+" панель <gui>Підключі</gui> і виберіть підключ зі списку. Натисніть кнопку <"
+"gui style=\"button\">Закінчується дія</gui> на лівій панелі і виберіть нову"
+" дату строку завершення дії."
 
 #. (itstool) path: note/p
 #: C/pgp-expiration-change.page:59
@@ -1490,31 +1645,39 @@ msgid ""
 "you must <link xref=\"pgp-sync\">synchronize</link> the key with the key "
 "server after making the desired changes."
 msgstr ""
+"Якщо ви змінюєте строк дії ключа, який було оприлюднено, вам слід <link"
+" xref=\"pgp-sync\">синхронізувати</link> ключ із сервером ключів після"
+" внесення бажаних змін."
 
 #. (itstool) path: info/desc
 #: C/pgp-expired.page:20
 msgid "Can I still use it? Can expiration dates be changed?"
 msgstr ""
+"Чи можна продовжити користування ключем? Чи можна змінити строк дії ключа?"
 
 #. (itstool) path: page/title
 #: C/pgp-expired.page:23
 msgid "What happens if my key expires?"
-msgstr ""
+msgstr "Що трапиться, якщо строк дії вашого ключа буде вичерпано?"
 
 #. (itstool) path: page/p
 #: C/pgp-expired.page:25
 msgid "When your key expires, it becomes invalid. This means:"
 msgstr ""
+"Якщо строк дії ключа вичерпано, ключ стає некоректним. Це означає ось що:"
 
 #. (itstool) path: item/p
 #: C/pgp-expired.page:29
 msgid "It can no longer be used to encrypt and decrypt messages."
 msgstr ""
+"Ключем більше не можна користуватися для шифрування та розшифровування"
+" повідомлень."
 
 #. (itstool) path: item/p
 #: C/pgp-expired.page:32
 msgid "It cannot sign other keys or receive signatures from other keys."
 msgstr ""
+"Ключем не можна підписувати інші ключі або отримувати підписи з інших ключів."
 
 #. (itstool) path: page/p
 #: C/pgp-expired.page:37
@@ -1524,6 +1687,11 @@ msgid ""
 "<app>Passwords and Keys</app> sets all keys to be valid forever. That is, "
 "the keys never expire."
 msgstr ""
+"Залежно від того, наскільки довго ви маєте намір вважати ваш ключ чинним, ви"
+" можете <link xref="
+"\"pgp-create#advanced\">встановити для ключа строк завершення дії</link>."
+" Типово, <app>Паролі й ключі</app> встановлюють необмежений строк дії для"
+" усіх ключів. Це означає, що ключі вважатимуться дійсними нескінченно довго."
 
 #. (itstool) path: page/p
 #: C/pgp-expired.page:42
@@ -1533,6 +1701,11 @@ msgid ""
 "want to stop using the expired key, you should <link xref=\"pgp-delete"
 "\">delete</link> or <link xref=\"subkeys-revoke\">revoke</link> it."
 msgstr ""
+"Строк завершення дії ключа можна будь-коли <link"
+" xref=\"pgp-expiration-change\">змінити</link> навіть після завершення строку"
+" дії ключа. Втім, якщо ви хочете припинити користування ключем, строк дії"
+" якого вичерпано, вам слід <link xref=\"pgp-delete\">вилучити</link> або <"
+"link xref=\"subkeys-revoke\">відкликати</link> його."
 
 #. (itstool) path: note/p
 #: C/pgp-expired.page:49
@@ -1541,16 +1714,22 @@ msgid ""
 "expiration date on the key to decrypt such messages before deleting or "
 "revoking it."
 msgstr ""
+"Якщо у вас є якісь повідомлення, які було зашифровано за допомогою ключа,"
+" строк дії якого вичерпано, вам слід змінити дату завершення строку дії"
+" ключа, щоб розшифрувати такі повідомлення, до того, як ви вилучите і"
+" відкличете ключ."
 
 #. (itstool) path: info/desc
 #: C/pgp-export.page:19
 msgid "Export your public and private PGP keys to store them in keyfiles."
 msgstr ""
+"Експортування вашого відкритого і закритого ключів PGP для зберігання їх у"
+" форматі файлів ключів."
 
 #. (itstool) path: page/title
 #: C/pgp-export.page:23
 msgid "Export PGP keys"
-msgstr ""
+msgstr "Експортування ключів PGP"
 
 #. (itstool) path: page/p
 #: C/pgp-export.page:25
@@ -1558,17 +1737,20 @@ msgid ""
 "Export the contents of your PGP keys and store them in keyfiles, to have a "
 "backup of your keys or to share your public key with someone."
 msgstr ""
+"Ви можете експортувати дані ваших ключів PGP і зберегти їх у файлах ключів,"
+" щоб мати резервну копію ваших ключів або поділитися вашим відкритим ключем"
+" із кимось."
 
 #. (itstool) path: section/title
 #: C/pgp-export.page:29
 msgid "To export your public PGP key"
-msgstr ""
+msgstr "Експортування вашого відкритого ключа PGP"
 
 #. (itstool) path: item/p
 #: C/pgp-export.page:33 C/pgp-export.page:62 C/pgp-userid-add.page:36
 #: C/pgp-userid-primary.page:32 C/pgp-userid-remove.page:31
 msgid "Select the <gui>GnuPG keys</gui> keyring from the left side panel."
-msgstr ""
+msgstr "Виберіть в'язку ключів <gui>Ключі GnuPG</gui> на лівій бічній панелі."
 
 #. (itstool) path: item/p
 #: C/pgp-export.page:37 C/pgp-export.page:66
@@ -1576,12 +1758,15 @@ msgid ""
 "Select the <gui>Personal PGP key</gui> that has to be exported, from the "
 "list."
 msgstr ""
+"Виберіть у списку <gui>Особистий ключ PGP</gui>, який слід експортувати."
 
 #. (itstool) path: item/p
 #: C/pgp-export.page:41 C/ssh-export.page:42
 msgid ""
 "Right-click on the key and select <gui style=\"menuitem\">Export…</gui>."
 msgstr ""
+"Клацніть правою кнопкою миші на пункті ключа і виберіть у контекстному меню"
+" пункт <gui style=\"menuitem\">Експортувати…</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-export.page:44
@@ -1589,6 +1774,8 @@ msgid ""
 "To store the keys in the ASCII format, select <gui>Armored PGP keys</gui> "
 "from the menu at the bottom of the export window"
 msgstr ""
+"Щоб зберегти ключі у форматі ASCII, виберіть <gui>Захищені ключі через PGP<"
+"/gui> з меню у нижній частині вікна експортування"
 
 #. (itstool) path: item/p
 #: C/pgp-export.page:49 C/pgp-export.page:77
@@ -1596,11 +1783,13 @@ msgid ""
 "Choose a location for your keyfile, and press <gui style=\"button\">Export</"
 "gui> to finish."
 msgstr ""
+"Виберіть місце для вашого файла ключа і натисніть кнопку <gui"
+" style=\"button\">Експортувати</gui>, щоб завершити процес експортування."
 
 #. (itstool) path: section/title
 #: C/pgp-export.page:58
 msgid "To export your private PGP key"
-msgstr ""
+msgstr "Експортування вашого закритого ключа PGP"
 
 #. (itstool) path: item/p
 #: C/pgp-export.page:70 C/subkeys-add.page:37
@@ -1608,21 +1797,24 @@ msgid ""
 "Right click on the selected key and select <guiseq><gui>Properties</"
 "gui><gui>Details</gui></guiseq>."
 msgstr ""
+"Клацніть правою кнопкою миші на позначеному пункті ключа і виберіть у"
+" контекстному меню пункт <guiseq><gui>Властивості</gui><gui>Подробиці</gui><"
+"/guiseq>."
 
 #. (itstool) path: item/p
 #: C/pgp-export.page:74
 msgid "Press the <gui style=\"button\">Export</gui> button."
-msgstr ""
+msgstr "Натисніть кнопку <gui style=\"button\">Експортувати</gui>."
 
 #. (itstool) path: info/desc
 #: C/pgp-import.page:26
 msgid "Import keys from keyfiles into <app>Passwords and Keys</app>."
-msgstr ""
+msgstr "Імпортування ключів з файлів ключів до <app>Паролів й ключів</app>."
 
 #. (itstool) path: page/title
 #: C/pgp-import.page:29
 msgid "Import PGP keys"
-msgstr ""
+msgstr "Імпортування ключів PGP"
 
 #. (itstool) path: page/p
 #: C/pgp-import.page:31
@@ -1632,16 +1824,21 @@ msgid ""
 "automatically imports PGP keys from your computer. You can also manually "
 "import a particular key, if it has not been imported already."
 msgstr ""
+"Якщо ви отримали файл ключа електронною поштою, ви можете імпортувати його до"
+" <app>Паролів й ключів</app>. У більшості випадків <app>Паролі й ключі</app>"
+" автоматично імпортує ключі PGP з вашого комп'ютера. Ви також можете"
+" імпортувати певний ключ вручну, якщо його ще не було імпортовано."
 
 #. (itstool) path: steps/title
 #: C/pgp-import.page:37 C/ssh-import.page:37
 msgid "How do I manually import a key?"
-msgstr ""
+msgstr "Як імпортувати ключ вручну?"
 
 #. (itstool) path: item/p
 #: C/pgp-import.page:42 C/ssh-import.page:42
 msgid "Select <gui style=\"menuitem\">Import from file…</gui> from the list."
 msgstr ""
+"Виберіть у списку пункт <gui style=\"menuitem\">Імпортувати з файла…</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-import.page:45
@@ -1649,6 +1846,9 @@ msgid ""
 "In the new dialog, select the key you wish to import. PGP keys end with "
 "<file>pgp</file> or <file>asc</file>, GPG keys end with <file>gpg</file>."
 msgstr ""
+"У діалоговому вікні, яке буде відкрито, виберіть ключ, який ви хочете"
+" імпортувати. Файли ключів PGP мають назви із суфіксами <file>pgp</file> та <"
+"file>asc</file>, файли ключів GPG мають суфікс назви <file>gpg</file>."
 
 #. (itstool) path: item/p
 #: C/pgp-import.page:50 C/ssh-import.page:49
@@ -1660,6 +1860,8 @@ msgstr "Натисніть кнопку <gui style=\"button\">Відкрити»
 msgid ""
 "Once imported, the PGP and GPG keys are listed under <file>GnuPG keys</file>."
 msgstr ""
+"Після імпортування ключі PGP і GPG буде включено до списку <file>Ключі GnuPG<"
+"/file>."
 
 #. (itstool) path: info/desc
 #: C/pgp-photoid.page:20
@@ -1667,11 +1869,13 @@ msgid ""
 "Include a photo ID with your existing keys so that people can identify them "
 "easily."
 msgstr ""
+"Включення фотоідентифікатора до наявних ключів для спрощення ідентифікації"
+" ключів іншими особами."
 
 #. (itstool) path: page/title
 #: C/pgp-photoid.page:24
 msgid "Attach a photo to your key"
-msgstr ""
+msgstr "Долучення фотографії до вашого ключа"
 
 #. (itstool) path: page/p
 #: C/pgp-photoid.page:26
@@ -1702,7 +1906,7 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/pgp-photoid.page:47
 msgid "Select the PGP key."
-msgstr ""
+msgstr "Виберіть ключ PGP."
 
 #. (itstool) path: item/p
 #: C/pgp-photoid.page:50
@@ -1721,7 +1925,7 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/pgp-photoid.page:59
 msgid "Select the photo from your computer."
-msgstr ""
+msgstr "Виберіть фотографію з вашого комп'ютера."
 
 #. (itstool) path: item/p
 #: C/pgp-photoid.page:62
@@ -1753,7 +1957,7 @@ msgstr ""
 #. (itstool) path: page/title
 #: C/pgp-publish.page:24
 msgid "Share your public keys"
-msgstr ""
+msgstr "Оприлюднення ваших відкритих ключів"
 
 #. (itstool) path: page/p
 #: C/pgp-publish.page:26
@@ -1903,7 +2107,7 @@ msgstr ""
 #. (itstool) path: page/title
 #: C/pgp-sign.page:22
 msgid "Sign keys"
-msgstr ""
+msgstr "Підписування ключів"
 
 #. (itstool) path: page/p
 #: C/pgp-sign.page:24
@@ -1918,7 +2122,7 @@ msgstr ""
 #. (itstool) path: steps/title
 #: C/pgp-sign.page:31
 msgid "To sign a key:"
-msgstr ""
+msgstr "Щоб підписати ключ, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/pgp-sign.page:33
