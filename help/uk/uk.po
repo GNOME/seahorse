@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "POT-Creation-Date: 2020-03-31 16:04+0000\n"
-"PO-Revision-Date: 2020-05-10 20:15+0300\n"
+"PO-Revision-Date: 2020-05-11 21:11+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "MIME-Version: 1.0\n"
@@ -1888,6 +1888,13 @@ msgid ""
 "anyone having your photos can create a key with your photo ID while the key "
 "fingerprint cannot be mimicked."
 msgstr ""
+"Ви можете долучити фотоідентифікатор до ваших ключів PGP, щоб кожен між"
+" перевірити їхню ідентичність за допомогою вашої фотографії. Хоча ключ із"
+" фотографією захищено трошки краще, ніж ключ без фотографії, ідентифікація"
+" ключа за фотографією не є такою ж безпечною, які перевірка <link"
+" xref=\"misc-key-fingerprint\">відбитка ключа</link>, оскільки будь-хто, у"
+" кого є ваші фотографії, може створити ключ із вашим фотоідентифікатором, а"
+" відбиток ключа не можна підробити."
 
 #. (itstool) path: note/p
 #: C/pgp-photoid.page:35
@@ -1897,11 +1904,16 @@ msgid ""
 "lets you upload your photo in <file>png</file>, <file>jpg</file> and several "
 "other common image formats."
 msgstr ""
+"На відміну від обмежено у <app>GPG</app>, фотоідентифікатор, який ви хочете"
+" вивантажити, не обов'язково має зберігатися у форматі <file>JPEG</file>. <"
+"app>Паролі й ключі</app> надають вам змогу вивантажувати ваші фотографії у"
+" форматах <file>png</file>, <file>jpg</file> і декількох інших поширених"
+" форматах зображень."
 
 #. (itstool) path: steps/title
 #: C/pgp-photoid.page:42
 msgid "To attach a photo ID to a PGP key:"
-msgstr ""
+msgstr "Щоб долучити фотоідентифікатор до ключа PGP, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/pgp-photoid.page:47
@@ -1914,6 +1926,9 @@ msgid ""
 "Right click on the chosen key and select <guiseq><gui style=\"menuitem"
 "\">Properties</gui> <gui>Owner</gui></guiseq>."
 msgstr ""
+"Клацніть правою кнопкою миші на пункті ключа і виберіть у контекстному меню"
+" пункт <guiseq><gui style=\"menuitem\">Властивості</gui> <gui>Власник</gui><"
+"/guiseq>."
 
 #. (itstool) path: item/p
 #: C/pgp-photoid.page:55
@@ -1921,6 +1936,8 @@ msgid ""
 "Press the button marked with a <gui style=\"button\">+</gui> on the left "
 "hand side to add a photo."
 msgstr ""
+"Натисніть кнопку зі значком <gui style=\"button\">+</gui> у лівій частині"
+" вікна, щоб додати фотографію."
 
 #. (itstool) path: item/p
 #: C/pgp-photoid.page:59
@@ -1941,6 +1958,11 @@ msgid ""
 "<app>Passwords and Keys</app> resizes large photos to the optimal size after "
 "asking for your confirmation."
 msgstr ""
+"Вибрана вами фотографія має бути невеликою за розміром, бажано близько 120 на"
+" 150 пікселів. Оскільки фотоідентифікатор завжди долучено до його ключа,"
+" великі фотографії збільшують розміри ключа і уповільнюють усі дії, у яких"
+" використовується цей ключ. <app>Паролі й ключі</app> змінюють розміри"
+" великих фотографій до оптимальних після підтвердження вами цієї дії."
 
 #. (itstool) path: credit/name
 #: C/pgp-publish.page:15 C/pgp-retrieve-remote.page:15
@@ -1953,6 +1975,9 @@ msgid ""
 "Publish your public keys on key servers, or <link xref=\"pgp-export"
 "\">export</link> and mail them to your friends."
 msgstr ""
+"Оприлюднення ваших відкритих ключів на серверах ключів або <link"
+" xref=\"pgp-export\">експортування</link> і надсилання електронною поштою"
+" вашим друзям."
 
 #. (itstool) path: page/title
 #: C/pgp-publish.page:24
@@ -1968,17 +1993,25 @@ msgid ""
 "keyfile to them. To allow anyone to <link xref=\"pgp-retrieve-remote"
 "\">retrieve</link> and use your public key, publish it on a key server."
 msgstr ""
+"Якщо ви хочете, щоб вам надсилали зашифровані дані, вам слід поділитися вашим"
+" <gui>ключем GnuPG</gui> із тими, хто надсилатиме дані. Якщо ви хочете"
+" поділитися ключем лише із декількома вибраними особами, <link"
+" xref=\"pgp-export\">експортуйте ключ</link> і надішліть файл ключа"
+" електронною поштою вашим кореспондентам. Щоб надати доступ будь-кому до <"
+"link xref=\"pgp-retrieve-remote\">отримання</link> та використання вашого"
+" відкритого ключа, оприлюдніть його на сервері ключів."
 
 #. (itstool) path: steps/title
 #: C/pgp-publish.page:34
 msgid "How do I publish my key on a key server?"
-msgstr ""
+msgstr "Як оприлюднити ключ на сервері ключів?"
 
 #. (itstool) path: item/p
 #: C/pgp-publish.page:39
 msgid ""
 "From the list, select the <gui>Personal PGP key</gui> you want to publish."
 msgstr ""
+"У списку виберіть <gui>Особистий ключ PGP</gui>, який ви хочете оприлюднити."
 
 #. (itstool) path: item/p
 #: C/pgp-publish.page:43 C/pgp-sync.page:40
@@ -1986,6 +2019,8 @@ msgid ""
 "Press the menu button in the top-right corner of the window and select <gui "
 "style=\"menuitem\">Sync and Publish Keys…</gui>."
 msgstr ""
+"Натисніть кнопку меню у верхньому правому куті вікна і виберіть <gui"
+" style=\"menuitem\">Синхронізувати та опублікувати ключі…</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-publish.page:47
@@ -1993,6 +2028,8 @@ msgid ""
 "Press the <gui style=\"button\">Key Servers</gui> button to see the list of "
 "key servers on which you can publish your public key."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Сервери ключів</gui>, щоб переглянути"
+" список серверів ключів, на яких ви можете оприлюднити ваш відкритий ключ."
 
 #. (itstool) path: item/p
 #: C/pgp-publish.page:51
@@ -2000,27 +2037,35 @@ msgid ""
 "To publish your key on a key server, select the key server from the "
 "<gui>Publish keys to</gui> menu."
 msgstr ""
+"Щоб оприлюднити ключ на сервері ключів, виберіть сервер ключів у меню <gui"
+">Публікувати ключі у</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-publish.page:55
 msgid ""
 "Press <gui style=\"button\">Close</gui> to go back to the previous dialog."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Закрити</gui>, щоб повернутися до"
+" попереднього діалогового вікна."
 
 #. (itstool) path: item/p
 #: C/pgp-publish.page:59
 msgid "Press <gui style=\"button\">Sync</gui> to finish."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Синхронізувати</gui>, щоб завершити"
+" процедуру синхронізації."
 
 #. (itstool) path: note/p
 #: C/pgp-publish.page:74
 msgid "You need to be connected to the Internet while publishing your keys."
 msgstr ""
+"Для оприлюднення ваших ключів вам знадобиться працездатне з'єднання із"
+" інтернетом."
 
 #. (itstool) path: note/title
 #: C/pgp-publish.page:78
 msgid "What is a keyserver?"
-msgstr ""
+msgstr "Що таке сервер ключів?"
 
 #. (itstool) path: note/p
 #: C/pgp-publish.page:79
@@ -2029,6 +2074,9 @@ msgid ""
 "submitted to them, and share these copies with other key servers through the "
 "Internet."
 msgstr ""
+"Сервери ключів — комп'ютери, на яких зберігаються надіслані на них копії"
+" відкритих ключів. Ці комп'ютери розповсюджують копії ключа на інші"
+" комп'ютери за допомогою інтернету."
 
 #. (itstool) path: info/desc
 #: C/pgp-retrieve-remote.page:20
@@ -2036,11 +2084,14 @@ msgid ""
 "If you want to send an urgent encrypted message to someone, but do not have "
 "their key, you can retrieve their key from a remote key server."
 msgstr ""
+"Якщо ви терміново хочете надіслати комусь зашифроване повідомлення, але не"
+" маєте ключа вашого кореспондента, ви можете отримати його ключ із"
+" віддаленого сервера ключів."
 
 #. (itstool) path: page/title
 #: C/pgp-retrieve-remote.page:25
 msgid "Retrieve remote keys"
-msgstr ""
+msgstr "Отримання віддалених ключів"
 
 #. (itstool) path: page/p
 #: C/pgp-retrieve-remote.page:27
@@ -2048,11 +2099,13 @@ msgid ""
 "You can retrieve someone's public GnuPG key from the Internet and store it "
 "in <app>Passwords and Keys</app>."
 msgstr ""
+"Ви можете отримати чийсь відкритий ключ GnuPG з інтернету і зберегти його у <"
+"app>Паролях й ключах</app>."
 
 #. (itstool) path: steps/title
 #: C/pgp-retrieve-remote.page:31
 msgid "To retrieve a remote key:"
-msgstr ""
+msgstr "Щоб отримати віддалений ключ, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/pgp-retrieve-remote.page:33
@@ -2060,6 +2113,8 @@ msgid ""
 "Press the menu button in the top-right corner of the window and select <gui "
 "style=\"menuitem\">Find Remote Keys…</gui>."
 msgstr ""
+"Натисніть кнопку меню у верхньому правому куті вікна і виберіть <gui"
+" style=\"menuitem\">Знайти віддалені ключі…</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-retrieve-remote.page:37
@@ -2068,11 +2123,15 @@ msgid ""
 "Details like key ID or the key owner's email address give more accurate "
 "results than the name of the key owner."
 msgstr ""
+"Введіть дані щодо ключа, який хочете отримати, у поля показаного вікна."
+" Подробиці, зокрема ідентифікатор ключа або адреса електронної пошти"
+" власника, надають змогу отримати кращі результати пошуку, ніж просто ім'я"
+" власника ключа."
 
 #. (itstool) path: item/p
 #: C/pgp-retrieve-remote.page:42
 msgid "Press the <gui style=\"button\">Search</gui> button."
-msgstr ""
+msgstr "Натисніть кнопку <gui style=\"button\">Шукати</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-retrieve-remote.page:45
@@ -2082,11 +2141,17 @@ msgid ""
 "you can also press the <gui style=\"button\">Import</gui> button present at "
 "the top of the dialog after selecting the key."
 msgstr ""
+"У списку результатів пошуку виберіть ключ, який слід імпортувати, клацніть"
+" правою кнопкою на його пункті і виберіть у контекстному меню пункт <gui"
+" style=\"menuitem\">Імпортувати</gui>. Крім того, ви можете також натиснути"
+" кнопку <gui style=\"button\">Імпортувати</gui>, яку буде показано у верхній"
+" частині діалогового вікна після вибору ключа."
 
 #. (itstool) path: page/p
 #: C/pgp-retrieve-remote.page:52
 msgid "The imported key will be listed in the <gui>GnuPG keys</gui> keyring."
 msgstr ""
+"Імпортований ключ буде показано у в'язці ключів <gui>Ключі GnuPG</gui>."
 
 #. (itstool) path: note/p
 #: C/pgp-retrieve-remote.page:55
@@ -2098,11 +2163,18 @@ msgid ""
 "information like the key ID, key fingerprint, level of trust, owner's name, "
 "etc."
 msgstr ""
+"Якщо вам потрібно більше інформації щодо ключа, перш ніж ви його імпортуєте,"
+" позначте пункт ключа і натисніть кнопку властивостей, яку розташовано у"
+" верхній частині діалогового вікна. Крім того, ви можете навести вказівник"
+" миші на пункт ключа у списку, клацнути правою кнопкою миші і вибрати у"
+" контекстному меню пункт <gui style=\"menuitem\">Властивості</gui>. У"
+" результаті буде відкрито нове вікно із відомостями щодо ідентифікатора"
+" ключа, відбитка ключа, рівня довіри до ключа, власника ключа тощо."
 
 #. (itstool) path: info/desc
 #: C/pgp-sign.page:19
 msgid "If you trust a key, you can sign it."
-msgstr ""
+msgstr "Якщо ви довіряєте ключу, ви можете його підписати."
 
 #. (itstool) path: page/title
 #: C/pgp-sign.page:22
@@ -2118,6 +2190,13 @@ msgid ""
 "identity, such as a passport, driver's license, or similar. If the two IDs "
 "match, the key is said to be trustworthy."
 msgstr ""
+"Щоб продемонструвати вашу довіру та поручительство щодо справжності певного"
+" ключа, ви можете підписати його. Ключ певної особи слід підписувати, лише"
+" якщо ви порівняли <link "
+"xref=\"pgp-userid\">ідентифікатор користувача</link> ключа і певними доказами"
+" щодо ідентичності користувача, зокрема паспортом, водійськими правами або"
+" подібними документами. Якщо два ідентифікатора особи збігаються, кажуть, що"
+" ключ є довіреним."
 
 #. (itstool) path: steps/title
 #: C/pgp-sign.page:31
@@ -2131,11 +2210,14 @@ msgid ""
 "xref=\"pgp-import\">keyfile</link> containing the key to be signed into "
 "<app>Passwords and Keys</app>."
 msgstr ""
+"Імпортуйте <link xref=\"pgp-retrieve-remote\">віддалений ключ</link> або <"
+"link xref=\"pgp-import\">файл ключа</link>, що містить дані ключа, який ви"
+" хочете підписати, до <app>Паролів й ключів</app>."
 
 #. (itstool) path: item/p
 #: C/pgp-sign.page:38
 msgid "From the list of <gui>GnuPG keys</gui> select the imported key."
-msgstr ""
+msgstr "Зі списку <gui>Ключі GnuPG</gui> виберіть імпортований ключ."
 
 #. (itstool) path: item/p
 #: C/pgp-sign.page:41
@@ -2143,11 +2225,13 @@ msgid ""
 "Right click the key and select <guiseq><gui>Properties</gui><gui>Trust</"
 "gui></guiseq>."
 msgstr ""
+"Клацніть правою кнопкою миші на ключі і виберіть пункт <guiseq><gui"
+">Властивості</gui><gui>Довіряти</gui></guiseq>."
 
 #. (itstool) path: item/p
 #: C/pgp-sign.page:45
 msgid "Press the <gui style=\"button\">Sign this Key</gui> button."
-msgstr ""
+msgstr "Натисніть кнопку <gui style=\"button\">Підписати ключ</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-sign.page:48
@@ -2156,6 +2240,10 @@ msgid ""
 "style=\"radiobutton\">Not at all</gui>, <gui style=\"radiobutton\">Casually</"
 "gui> or <gui style=\"radiobutton\">Very carefully</gui>."
 msgstr ""
+"Залежно від того, наскільки ретельно було перевірено ключ, виберіть один із"
+" варіантів: <gui style=\"radiobutton\">Ніяк</gui>, <gui style=\"radiobutton\""
+">Поверхнево</"
+"gui> або <gui style=\"radiobutton\">Дуже обережно</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-sign.page:54
@@ -2163,6 +2251,8 @@ msgid ""
 "Decide if you want to revoke your signature at a later date and if you want "
 "to make your signature public, by ticking the checkboxes provided."
 msgstr ""
+"Вкажіть, чи бажаєте ви мати можливість пізніше відкликати підпис, і чи"
+" бажаєте ви оприлюднити ваш підпис, позначивши відповідні пункти."
 
 #. (itstool) path: item/p
 #: C/pgp-sign.page:59
@@ -2170,16 +2260,21 @@ msgid ""
 "When you own more than one PGP key, select the key you want to sign with, "
 "from the list next to <gui>Signer</gui>."
 msgstr ""
+"Якщо у вас є декілька ключів PGP, виберіть ключ, за допомогою якого ви хочете"
+" оформити підпис, зі списку, розташованого поруч із міткою <gui>Авто підпису<"
+"/gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-sign.page:63
 msgid "Press the <gui style=\"button\">Sign</gui> button to finish."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Підписати</gui>, щоб завершити"
+" процедуру."
 
 #. (itstool) path: note/title
 #: C/pgp-sign.page:68
 msgid "Can I sign my own keys?"
-msgstr ""
+msgstr "Чи можна підписувати власні ключі?"
 
 #. (itstool) path: note/p
 #: C/pgp-sign.page:69
@@ -2189,6 +2284,11 @@ msgid ""
 "\">created</link> using a <gui>GnuPG key</gui>, will also be signed "
 "automatically."
 msgstr ""
+"Коли ви <link xref=\"pgp-create\">створюєте</link> <gui>ключ GnuPG</gui>,"
+" програма автоматично підписує ваш ключ. Усі нові підключі, які <link"
+" xref=\"subkeys-add"
+"\">створено</link> за допомогою <gui>ключа GnuPG</gui>, також буде"
+" автоматично підписано."
 
 #. (itstool) path: info/desc
 #: C/pgp-subkeys.page:19
@@ -2196,11 +2296,13 @@ msgid ""
 "A subkey is always bound to a master key in a PGP keypair. It is used for "
 "encryption."
 msgstr ""
+"Підключ завжди пов'язується із основним ключем у пару ключів PGP. Підключ"
+" використовують для шифрування."
 
 #. (itstool) path: page/title
 #: C/pgp-subkeys.page:23
 msgid "What is a subkey?"
-msgstr ""
+msgstr "Що таке підключ?"
 
 #. (itstool) path: page/p
 #: C/pgp-subkeys.page:25
@@ -2210,6 +2312,10 @@ msgid ""
 "provides a simple solution to key safety by using <em>subkeys</em> for "
 "signing and encryption."
 msgstr ""
+"Хоча безпечне зберігання ваших ключів є дуже важливим, ця справа є дуже"
+" марудною, якщо у вас багато ключів. У <app>Паролях й ключах</app>"
+" реалізовано просте рішення для захисту ключів — <em>підключі</em> для"
+" підписування і шифрування."
 
 #. (itstool) path: page/p
 #: C/pgp-subkeys.page:30
@@ -2220,11 +2326,17 @@ msgid ""
 "<em>subkey</em>. A master key can be used to create additional subkeys that "
 "are then bound to it."
 msgstr ""
+"Кожного разу, коли ви <link xref=\"pgp-create\">створюєте</link> відкритий"
+" ключ для шифрування, програма створюватиме <em>пару ключів</em>, замість"
+" одного ключа. Ця пара ключів складатиметься із основного ключа, який також"
+" називають <em>майстер-ключем</em>, та <em>підключа</em>. Основним ключем"
+" можна скористатися для створення додаткових підключів, які буде з ним"
+" пов'язано."
 
 #. (itstool) path: list/title
 #: C/pgp-subkeys.page:37
 msgid "What does each key in a keypair do?"
-msgstr ""
+msgstr "Які завдання у кожного з ключів у парі ключів?"
 
 #. (itstool) path: item/p
 #: C/pgp-subkeys.page:39
@@ -2235,6 +2347,12 @@ msgid ""
 "are also collected on your master key. If the master key is compromised, you "
 "have no choice but to revoke it and all the subkeys attached to it."
 msgstr ""
+"<em>Основний ключ</em> використовується для <link xref=\"pgp-sign\""
+">підписування</link> інших ключів, створення підключів і <link"
+" xref=\"subkeys-revoke\">відкликання</link> підключів. Ваш основний ключ слід"
+" дуже надійно захистити. Підписи довіри також зберігаються у вашому основному"
+" ключі. Якщо основний ключ буде скомпрометовано, вам доведеться відкликати"
+" його і усі пов'язані із ним підключі."
 
 #. (itstool) path: item/p
 #: C/pgp-subkeys.page:47
@@ -2244,11 +2362,16 @@ msgid ""
 "important that your subkeys are kept safe, you can always revoke a subkey if "
 "it is compromised and create a new one with the original master key."
 msgstr ""
+"Типовий <em>підключ</em> використовується для шифрування і розшифрування"
+" повідомлень електронної пошти. Можна створити додаткові підключі для"
+" підписування. Хоча ваші підключі теж треба тримати у захищеному місці, ви"
+" завжди можете відкликати підключ, якщо його було скомпрометовано і створити"
+" новий за допомогою початкового основного ключа."
 
 #. (itstool) path: section/title
 #: C/pgp-subkeys.page:56
 msgid "More about subkeys"
-msgstr ""
+msgstr "Докладніше про підключі"
 
 #. (itstool) path: info/desc
 #: C/pgp-sync.page:20
@@ -2256,11 +2379,13 @@ msgid ""
 "Synchronize information present in your local key with the corresponding key "
 "on a key server."
 msgstr ""
+"Синхронізація відомостей у вашому локальному ключі із відповідним ключем на"
+" сервері ключів."
 
 #. (itstool) path: page/title
 #: C/pgp-sync.page:24
 msgid "Synchronize your keys"
-msgstr ""
+msgstr "Синхронізація ваших ключів"
 
 #. (itstool) path: page/p
 #: C/pgp-sync.page:26
@@ -2273,27 +2398,36 @@ msgid ""
 "the remote copy of the key. You need a working Internet connection to "
 "synchronize your keys."
 msgstr ""
+"Ключі PGP у вашій в'язці ключів слід синхронізувати із сервером ключів, щоб"
+" забезпечити зберігання усі змін, зокрема нових підписів, які було внесено до"
+" ключа на сервері, у вашій локальній копії ключа. Так само, якщо ви зміните"
+" якісь дані ключа у вашій локальній копії, зокрема встановите новий строк дії"
+" чи підпишете чийсь ключ, вам слід синхронізувати ключі, для оновлення даних"
+" у віддаленій копії ключа. Для синхронізації ключів вам знадобиться"
+" працездатне з'єднання з інтернетом."
 
 #. (itstool) path: steps/title
 #: C/pgp-sync.page:35
 msgid "How do I synchronize a key?"
-msgstr ""
+msgstr "Як синхронізувати ключ?"
 
 #. (itstool) path: item/p
 #: C/pgp-sync.page:37
 msgid "Select the PGP key you wish to synchronize."
-msgstr ""
+msgstr "Позначте ключ PGP, дані якого слід синхронізувати."
 
 #. (itstool) path: item/p
 #: C/pgp-sync.page:44
 msgid ""
 "Click the <gui style=\"button\">Sync</gui> button to synchronize your key."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Синхронізувати</gui>, щоб"
+" синхронізувати ваш ключ."
 
 #. (itstool) path: note/title
 #: C/pgp-sync.page:50
 msgid "Why is the <gui style=\"button\">Sync</gui> button not clickable?"
-msgstr ""
+msgstr "Чому кнопка <gui style=\"button\">Синхронізувати</gui> є неактивною?"
 
 #. (itstool) path: note/p
 #: C/pgp-sync.page:52
@@ -2303,6 +2437,10 @@ msgid ""
 "the key has been published on a key server. In the case of synchronizing "
 "your own keys, publish them, before synchronizing them."
 msgstr ""
+"Синхронізувати можна лише ключі PGP, які було оприлюднено на сервері ключів."
+" Якщо кнопка <gui style=\"button\">Синхронізувати</gui> є неактивною,"
+" перевірте, чи було оприлюднено ключ на сервері ключів. Якщо це ваш власний"
+" ключ, оприлюдніть його, перш ніж синхронізувати."
 
 #. (itstool) path: info/desc
 #: C/pgp-userid-add.page:20
@@ -2310,11 +2448,13 @@ msgid ""
 "Having many user IDs helps you to use the same key to communicate with "
 "different people."
 msgstr ""
+"Наявність декількох ідентифікаторів користувача допоможе вам скористатися тим"
+" самим ключем для обміну даними з різними особами."
 
 #. (itstool) path: page/title
 #: C/pgp-userid-add.page:24
 msgid "Add extra user IDs to a key"
-msgstr ""
+msgstr "Додавання ідентифікаторів користувача до ключа"
 
 #. (itstool) path: page/p
 #: C/pgp-userid-add.page:26
@@ -2326,16 +2466,24 @@ msgid ""
 "know. In such scenarios, if you do not want to create a new key with a "
 "different user ID, you can attach a new user ID to your existing key."
 msgstr ""
+"Ключ може бути пов'язано із декількома ідентифікаторами користувача. Це"
+" корисно, якщо ви хочете використовувати той самий ключ для спілкування із"
+" декількома особами, і одна з них не розпізнає, скажімо, адреси електронної"
+" пошти у вашому ідентифікаторі користувача. Ця особа може не захотіти"
+" імпортувати ваш відкритий ключ через те, що у ньому містяться дані, які вона"
+" не може підтвердити. У таких випадках, якщо ви не хочете створювати новий"
+" ключ із іншим ідентифікатором користувача, ви можете долучити новий"
+" ідентифікатор користувача до вашого наявного ключа."
 
 #. (itstool) path: steps/title
 #: C/pgp-userid-add.page:34
 msgid "To add an extra user ID:"
-msgstr ""
+msgstr "Щоб додати до ключа ідентифікатор користувача, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/pgp-userid-add.page:39
 msgid "From the list, select the <gui>Personal PGP key</gui> of your choice."
-msgstr ""
+msgstr "У списку виберіть потрібний <gui>Особистий ключ PGP</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-userid-add.page:43
@@ -2343,12 +2491,16 @@ msgid ""
 "Right click on the key and select <guiseq><gui>Properties</gui> <gui>Names "
 "and Signatures</gui></guiseq>."
 msgstr ""
+"Клацніть правою кнопкою на пункті ключа і виберіть у контекстному меню пункт"
+" <guiseq><gui>Властивості</gui> <gui>Імена та підписи</gui></guiseq>."
 
 #. (itstool) path: item/p
 #: C/pgp-userid-add.page:47
 msgid ""
 "Click the <gui style=\"button\">Add Name</gui> button to add a new user ID."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Додати ім'я</gui>, щоб додати новий"
+" ідентифікатор користувача."
 
 #. (itstool) path: item/p
 #: C/pgp-userid-add.page:51
@@ -2356,6 +2508,9 @@ msgid ""
 "In the new dialog, fill in details like <gui>Full Name</gui>, <gui>Email "
 "Address</gui> and <gui>Key Comment</gui> for the new user ID."
 msgstr ""
+"У діалоговому вікні, яке буде відкрито, вкажіть подробиці, зокрема <gui>Ім'я"
+" повністю</gui>, <gui>Адресу ел. пошти</gui> та <gui>Коментар до ключа</gui>"
+" для нового ідентифікатора користувача."
 
 #. (itstool) path: item/p
 #: C/pgp-userid-add.page:56
@@ -2363,6 +2518,8 @@ msgid ""
 "Enter the correct passphrase and click <gui style=\"button\">OK</gui> to "
 "finish."
 msgstr ""
+"Введіть належний пароль і натисніть кнопку <gui style=\"button\">Гаразд</gui"
+">, щоб завершити процедуру."
 
 #. (itstool) path: page/p
 #: C/pgp-userid-add.page:61
@@ -2370,6 +2527,8 @@ msgid ""
 "Your new user ID will now be listed under the <gui>Names and Signatures</"
 "gui> panel."
 msgstr ""
+"Тепер ваш новий ідентифікатор користувача буде показано на панелі <gui>Імена"
+" та підписи</gui>."
 
 #. (itstool) path: note/p
 #: C/pgp-userid-add.page:65
@@ -2378,16 +2537,19 @@ msgid ""
 "\">synchronize</link> it after adding new user IDs to update the remote copy "
 "of the key."
 msgstr ""
+"Якщо ваш ключ було оприлюднено на сервері ключів, <link xref=\"pgp-sync\""
+">синхронізуйте</link> його після додавання нового ідентифікатора користувача,"
+" щоб оновити віддалену копію ключа."
 
 #. (itstool) path: info/desc
 #: C/pgp-userid-primary.page:19
 msgid "Change your default user ID"
-msgstr ""
+msgstr "Зміна вашого типового ідентифікатора користувача"
 
 #. (itstool) path: page/title
 #: C/pgp-userid-primary.page:22
 msgid "What is a primary user ID?"
-msgstr ""
+msgstr "Що таке «основний ідентифікатор користувача»?"
 
 #. (itstool) path: page/p
 #: C/pgp-userid-primary.page:24
@@ -2397,17 +2559,24 @@ msgid ""
 "default with your key information, while encrypting or signing, unless you "
 "explicitly choose another user ID instead."
 msgstr ""
+"Якщо у вас є декілька ідентифікаторів користувача, один з цих ідентифікаторів"
+" можна зробити основним. <app>Паролі й ключі</app> типово долучать основний"
+" ідентифікатор користувача до даних вашого ключа під час шифрування або"
+" підписування, якщо ви не виберете явним чином інший ідентифікатор"
+" користувача."
 
 #. (itstool) path: steps/title
 #: C/pgp-userid-primary.page:30
 msgid "To change the primary user ID in a PGP key:"
 msgstr ""
+"Щоб змінити основний ідентифікатор користувача у ключі PGP, виконайте такі"
+" дії:"
 
 #. (itstool) path: item/p
 #: C/pgp-userid-primary.page:35 C/pgp-userid-remove.page:34
 #: C/subkeys-add.page:34
 msgid "Select the <gui>Personal PGP key</gui> from the list."
-msgstr ""
+msgstr "Виберіть у списку <gui>Особистий ключ PGP</gui>."
 
 #. (itstool) path: item/p
 #: C/pgp-userid-primary.page:38
@@ -2415,6 +2584,8 @@ msgid ""
 "Right click on the selected key and select <guiseq><gui>Properties</gui> "
 "<gui>Names and Signatures</gui></guiseq>."
 msgstr ""
+"Клацніть правою кнопкою на пункті ключа і виберіть у контекстному меню пункт"
+" <guiseq><gui>Властивості</gui> <gui>Імена та підписи</gui></guiseq>."
 
 #. (itstool) path: item/p
 #: C/pgp-userid-primary.page:43
@@ -2422,6 +2593,8 @@ msgid ""
 "Select the new primary user ID from the list and click <gui style=\"button"
 "\">Primary</gui>."
 msgstr ""
+"Виберіть новий основний ідентифікатор користувача зі списку і натисніть"
+" кнопку <gui style=\"button\">Первинний</gui>."
 
 #. (itstool) path: page/p
 #: C/pgp-userid-primary.page:48
@@ -2429,6 +2602,8 @@ msgid ""
 "The user ID will move to the top of the <gui>Names and Signatures</gui> list "
 "to become your primary user ID."
 msgstr ""
+"Ідентифікатор користувача буде пересунуто на перше місце у списку <gui>Імена"
+" та підписи</gui> — він стане вашим основним ідентифікатором користувача."
 
 #. (itstool) path: note/p
 #: C/pgp-userid-primary.page:52
@@ -2436,16 +2611,18 @@ msgid ""
 "Sync your keys after changing your primary user ID to update the remote "
 "copies of your key."
 msgstr ""
+"Виконайте синхронізацію ваших ключів після зміни основного ідентифікатора"
+" користувача, щоб оновити віддалені копії вашого ключа."
 
 #. (itstool) path: info/desc
 #: C/pgp-userid-remove.page:20
 msgid "Remove extra user IDs"
-msgstr ""
+msgstr "Вилучення зайвих ідентифікаторів користувача"
 
 #. (itstool) path: page/title
 #: C/pgp-userid-remove.page:23
 msgid "Detach a user ID from a key"
-msgstr ""
+msgstr "Від'єднання ідентифікатора користувача від ключа"
 
 #. (itstool) path: page/p
 #: C/pgp-userid-remove.page:25
@@ -2453,11 +2630,14 @@ msgid ""
 "While it is essential that all keys have at least one user ID, you can "
 "remove any additional user IDs that you have attached to the key."
 msgstr ""
+"У кожного ключа має бути принаймні один ідентифікатор користувача, але ви"
+" можете вилучити будь-які додаткові ідентифікатори користувача, які було"
+" пов'язано із ключем."
 
 #. (itstool) path: steps/title
 #: C/pgp-userid-remove.page:29
 msgid "To remove a user ID from a PGP key:"
-msgstr ""
+msgstr "Щоб вилучити запис ідентифікатора користувача з ключа PGP:"
 
 #. (itstool) path: item/p
 #: C/pgp-userid-remove.page:37
@@ -2465,6 +2645,8 @@ msgid ""
 "Right click on the selected key and choose <guiseq><gui>Properties</gui> "
 "<gui>Names and Signatures</gui></guiseq>."
 msgstr ""
+"Клацніть правою кнопкою на пункті ключа і виберіть у контекстному меню пункт"
+" <guiseq><gui>Властивості</gui> <gui>Імена та підписи</gui></guiseq>."
 
 #. (itstool) path: item/p
 #: C/pgp-userid-remove.page:42
@@ -2472,6 +2654,8 @@ msgid ""
 "Select the user ID you want to remove and click <gui style=\"button"
 "\">Delete</gui>."
 msgstr ""
+"Виберіть ідентифікатор користувача, який ви хочете вилучити, і натисніть"
+" кнопку <gui style=\"button\">Вилучити</gui>."
 
 #. (itstool) path: note/p
 #: C/pgp-userid-remove.page:48
@@ -2479,16 +2663,21 @@ msgid ""
 "<link xref=\"pgp-sync\">Synchronize</link> your keys after detaching the "
 "user ID to update the changes on the remote copy of the key."
 msgstr ""
+"<link xref=\"pgp-sync\">Синхронізуйте</link> ваші ключі після вилучення"
+" запису ідентифікатора користувача, щоб внести зміни до віддаленої копії"
+" ключа."
 
 #. (itstool) path: info/desc
 #: C/pgp-userid.page:19
 msgid "Create keys with good user IDs and learn to add and remove user IDs."
 msgstr ""
+"Створення ключів із якісними ідентифікаторами користувача та настанови з"
+" додавання та вилучення ідентифікаторів користувача."
 
 #. (itstool) path: page/title
 #: C/pgp-userid.page:23
 msgid "What is a user ID?"
-msgstr ""
+msgstr "Що таке ідентифікатор користувача?"
 
 #. (itstool) path: page/p
 #: C/pgp-userid.page:25
@@ -2500,21 +2689,29 @@ msgid ""
 "it. It is important to fill in authentic information while creating your "
 "user ID."
 msgstr ""
+"При створенні ключа ви надаєте певні дані, зокрема ваше ім'я, адресу"
+" електронної пошти та опис ключа. Разом ці дані складають ідентифікатор"
+" користувача. Якісний ідентифікатор користувача допомагає людям розпізнавати"
+" ваш ключ, коли вони намагаються <link xref=\"pgp-retrieve-remote\">отримати<"
+"/link> або <link xref=\"pgp-import\">імпортувати</link> його. Важливо вказати"
+" правдиву інформацію під час створення вашого ідентифікатора користувача."
 
 #. (itstool) path: section/title
 #: C/pgp-userid.page:33
 msgid "Add, remove user IDs"
-msgstr ""
+msgstr "Додавання, вилучення ідентифікаторів користувачів"
 
 #. (itstool) path: info/desc
 #: C/ssh-connect-remote.page:23
 msgid "Use SSH keys to log in to another computer without entering a password."
 msgstr ""
+"Використання ключів SSH для встановлення з'єднання із іншим комп'ютером без"
+" введення пароля."
 
 #. (itstool) path: page/title
 #: C/ssh-connect-remote.page:27
 msgid "Connect to other computers"
-msgstr ""
+msgstr "З'єднання із іншими комп'ютерами"
 
 #. (itstool) path: page/p
 #: C/ssh-connect-remote.page:29
@@ -2524,6 +2721,11 @@ msgid ""
 "create#ssh-create-key-and-set-up\">set up your SSH key for remote login "
 "while creating the key</link>."
 msgstr ""
+"Ви можете скористатися <app>Паролями й ключами</app> для встановлення вашого"
+" ключа SSH на віддаленому комп'ютері, який може працювати у режимі сервера"
+" SSH. Ви також можете <link xref=\"ssh-create#ssh-create-key-and-set-up\""
+">налаштувати сервер на використання вашого ключа SSH для віддаленого входу до"
+" системи під час створення ключа</link>."
 
 #. (itstool) path: item/p
 #: C/ssh-connect-remote.page:36
@@ -2531,6 +2733,8 @@ msgid ""
 "Right click on the <gui>SSH key</gui> and select <gui>Configure Key for "
 "Secure Shell…</gui>."
 msgstr ""
+"Клацніть правою кнопкою миші на <gui>ключі SSH</gui> і виберіть у"
+" контекстному меню пункт <gui>Налаштовувати ключ для SSH…</gui>."
 
 #. (itstool) path: item/p
 #: C/ssh-connect-remote.page:40
@@ -2539,6 +2743,10 @@ msgid ""
 "you normally use to log in to the remote computer via SSH, and press "
 "<gui>Set Up</gui>."
 msgstr ""
+"У діалоговому вікні, яке буде відкрито, введіть <gui>Адресу сервера</gui>,"
+" якою ви зазвичай користуєтеся для входу на віддалений комп'ютер за допомогою"
+" SSH, і натисніть кнопку "
+"<gui>Налаштувати</gui>."
 
 #. (itstool) path: item/p
 #: C/ssh-connect-remote.page:45 C/ssh-create.page:106
@@ -2549,6 +2757,12 @@ msgid ""
 "explains the problem, and you can try again. Make sure that you have a "
 "network connection and that the remote computer is on and accessible."
 msgstr ""
+"Програма спробує встановити з'єднання із вказаною <gui>Адресою сервера</gui>"
+" з використанням введеного <gui>Облікового запису</gui>. Якщо під час спроби"
+" отримання доступу до віддаленого комп'ютера виникнуть проблеми, програма"
+" покаже контекстне вікно із поясненням причин проблем, і ви з можете"
+" повторити спробу. Переконайтеся, що з'єднання із мережею є працездатним, і"
+" що віддалений комп'ютер увімкнено, і він є доступним."
 
 #. (itstool) path: item/p
 #: C/ssh-connect-remote.page:53 C/ssh-create.page:114
@@ -2558,6 +2772,10 @@ msgid ""
 "remote computer. Enter your password, then press <gui style=\"button\">OK</"
 "gui>."
 msgstr ""
+"Якщо програмі вдалося встановити з'єднання із віддаленим комп'ютером, буде"
+" показано діалогову панель із запитом <gui>Пароля</gui>, яким слід"
+" скористатися для входу до системи віддаленого комп'ютера. Введіть пароль і"
+" натисніть кнопку <gui style=\"button\">Гаразд</gui>."
 
 #. (itstool) path: page/p
 #: C/ssh-connect-remote.page:60
@@ -2565,16 +2783,17 @@ msgid ""
 "You should now be able to log in to the remote computer via SSH without a "
 "password."
 msgstr ""
+"Тепер ви можете входити до віддаленої системи за допомогою SSH без пароля."
 
 #. (itstool) path: info/desc
 #: C/ssh-create.page:31
 msgid "Create SSH keys to log in to other computers."
-msgstr ""
+msgstr "Створення ключа SSH для входу до систем інших комп'ютерів."
 
 #. (itstool) path: page/title
 #: C/ssh-create.page:34
 msgid "Create a new SSH key"
-msgstr ""
+msgstr "Створення ключа SSH"
 
 #. (itstool) path: page/p
 #: C/ssh-create.page:36
@@ -2583,11 +2802,14 @@ msgid ""
 "Creating an SSH key creates both a <em>Public</em> and a <em>Private</em> "
 "key. Here is how to create a new key:"
 msgstr ""
+"Ключ SSH допоможе вам створити захищене з'єднання між комп'ютерами. Створення"
+" ключа SSH призведе до створення одразу <em>відкритого</em> і <em>закритого<"
+"/em> ключів. Ось як створити ключ:"
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:42
 msgid "Select <gui>Secure Shell Key</gui> from the list."
-msgstr ""
+msgstr "Виберіть у списку пункт <gui>Ключ SSH</gui>."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:43
@@ -2598,12 +2820,18 @@ msgid ""
 "intend to install the key. The description field is optional, and how you "
 "describe the key is entirely up to you."
 msgstr ""
+"Введіть опис ключа. Опис ключа допоможе вам згодом ідентифікувати ключ."
+" Наприклад, ви можете ввести дату, щось щодо того, як ключ буде використано,"
+" або назву сервера, на якому ви хочете встановити ключ. Поле опису є"
+" необов'язковим — ви можете описати ключ довільним чином."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:48
 msgid ""
 "You can also change default settings for encryption type or key strength."
 msgstr ""
+"Ви також можете змінити типові параметри для типу шифрування або міцності"
+" ключа."
 
 #. (itstool) path: page/p
 #: C/ssh-create.page:52
@@ -2611,38 +2839,45 @@ msgid ""
 "At this point, you can just create your key, or create your key and install "
 "it on a remote computer to enable password-free login."
 msgstr ""
+"На цьому кроці ви можете просто створити ваш ключ або створити ваш ключ і"
+" встановити його на віддаленому комп'ютері для уможливлення безпарольного"
+" входу."
 
 #. (itstool) path: section/title
 #: C/ssh-create.page:56
 msgid "Create your key and do not set up remote login"
-msgstr ""
+msgstr "Створення вашого ключа без налаштовування віддаленого входу"
 
 #. (itstool) path: section/p
 #: C/ssh-create.page:57
 msgid "You can create the SSH key, and choose to set it up later."
-msgstr ""
+msgstr "Ви можете створити ключ SSH і налаштувати його пізніше."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:61
 msgid "Press the <gui style=\"button\">Just Create Key</gui> button."
-msgstr ""
+msgstr "Натисніть кнопку <gui style=\"button\">Просто створити ключ</gui>."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:64
 msgid ""
 "Type a passphrase for your SSH key and press <gui style=\"button\">OK</gui>."
 msgstr ""
+"Введіть пароль до вашого ключа SSH і натисніть кнопку <gui style=\"button\""
+">Гаразд</gui>."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:68
 msgid ""
 "Retype the passphrase and press <gui style=\"button\">OK</gui> to finish."
 msgstr ""
+"Повторно введіть пароль і натисніть кнопку <gui style=\"button\">Гаразд</gui>."
 
 #. (itstool) path: section/p
 #: C/ssh-create.page:73
 msgid "The SSH key will now be listed in the <gui>OpenSSH keys</gui> keyring."
 msgstr ""
+"Після цього ключ SSH буде показано у в'язці ключів <gui>Ключі OpenSSH</gui>."
 
 #. (itstool) path: note/p
 #: C/ssh-create.page:77
@@ -2651,11 +2886,15 @@ msgid ""
 "the passphrase used during creation. This ensures that if someone gets "
 "access to your SSH key, they can't use it without the passphrase."
 msgstr ""
+"Коли ви спробуєте скористатися вашим ключем SSH, ваша операційна система"
+" попросить вас ввести пароль, який було вказано під час створення ключа."
+" Таким чином, якщо хтось отримає доступ до вашого ключа SSH, він не зможе"
+" скористатися ним без пароля."
 
 #. (itstool) path: section/title
 #: C/ssh-create.page:86
 msgid "Create your key and install it on a remote computer"
-msgstr ""
+msgstr "Створення вашого ключа і встановлення його на віддаленому комп'ютері"
 
 #. (itstool) path: section/p
 #: C/ssh-create.page:87
@@ -2665,6 +2904,10 @@ msgid ""
 "to a remote computer with SSH without needing to enter your password every "
 "time."
 msgstr ""
+"Однією із найкорисніших можливостей ключа SSH є те, що ви можете встановити"
+" відкритий ключ на віддаленому комп'ютері. Після цього ви зможете входити до"
+" системи віддаленого комп'ютера за допомогою SSH без потреби у введенні"
+" пароля під час кожної спроби з'єднання."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:94
@@ -2672,6 +2915,8 @@ msgid ""
 "Press the <gui style=\"button\">Create and Set Up</gui> button, and follow "
 "the above instructions on entering a passphrase."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Створити та встановити</gui> і"
+" виконайте наведені вище настанови щодо введення пароля."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:98
@@ -2679,6 +2924,9 @@ msgid ""
 "In the dialog window that opens, enter the <gui>Server address</gui> that "
 "you normally use to log in to the remote computer via SSH."
 msgstr ""
+"У діалоговому вікні, яке буде відкрито, введіть <gui>Адресу сервера</gui>,"
+" якою ви зазвичай користуєтеся для входу на віддалений комп'ютер за допомогою"
+" SSH."
 
 #. (itstool) path: item/p
 #: C/ssh-create.page:102
@@ -2686,6 +2934,9 @@ msgid ""
 "Ensure that the <gui>Login name</gui> you use on the remote computer is "
 "correct, and press <gui>Set Up</gui>."
 msgstr ""
+"Переконайтеся, що <gui>Обліковий запис</gui>, який ви використовуєте на"
+" віддаленому комп'ютері, вказано правильно, і натисніть кнопку <gui"
+">Налаштувати</gui>."
 
 #. (itstool) path: section/p
 #: C/ssh-create.page:121
@@ -2694,6 +2945,10 @@ msgid ""
 "computer and configured to allow password-free SSH login. You should now be "
 "able to log in to the remote computer via SSH without a password."
 msgstr ""
+"Після цього відкриту частину вибраного ключа SSH буде встановлено на"
+" віддаленому комп'ютері і налаштовано на використання безпарольного входу"
+" SSH. Такий безпарольний вхід надасть вам змогу входити до системи"
+" віддаленого комп'ютера за допомогою SSH без введення пароля."
 
 #. (itstool) path: note/p
 #: C/ssh-create.page:127
@@ -2701,16 +2956,21 @@ msgid ""
 "If SSH key authentication fails and you cannot use password authentication, "
 "contact the service administrator for further help."
 msgstr ""
+"Якщо розпізнавання за ключем SSH не працює і ви не можете скористатися"
+" розпізнаванням за паролем, попросіть про допомогу адміністратора вашої"
+" системи."
 
 #. (itstool) path: info/desc
 #: C/ssh-export.page:20
 msgid "Export your public and private SSH keys to store them in keyfiles."
 msgstr ""
+"Експортування вашого відкритого і закритого ключів SSH для зберігання їх у"
+" форматі файлів ключів."
 
 #. (itstool) path: page/title
 #: C/ssh-export.page:24
 msgid "Export SSH keys"
-msgstr ""
+msgstr "Експортування ключів SSH"
 
 #. (itstool) path: page/p
 #: C/ssh-export.page:26
@@ -2718,16 +2978,20 @@ msgid ""
 "Export the contents of your SSH keys and store them in keyfiles, to have a "
 "backup of your keys or to share your public key with someone."
 msgstr ""
+"Ви можете експортувати дані ваших ключів SSH і зберегти їх у файлах ключів,"
+" щоб мати резервну копію ваших ключів або поділитися вашим відкритим ключем"
+" із кимось."
 
 #. (itstool) path: section/title
 #: C/ssh-export.page:30
 msgid "To export your public SSH key:"
-msgstr ""
+msgstr "Експортування вашого відкритого ключа SSH:"
 
 #. (itstool) path: item/p
 #: C/ssh-export.page:34 C/ssh-export.page:57
 msgid "Select the <gui>OpenSSH keys</gui> keyring from the left side panel."
 msgstr ""
+"Виберіть в'язку ключів <gui>Ключі OpenSSH</gui> на лівій бічній панелі."
 
 #. (itstool) path: item/p
 #: C/ssh-export.page:38 C/ssh-export.page:61
@@ -2735,6 +2999,7 @@ msgid ""
 "Select the <gui>Personal SSH key</gui>, that has to be exported, from the "
 "list."
 msgstr ""
+"Виберіть у списку <gui>Особистий ключ SSH</gui>, який слід експортувати."
 
 #. (itstool) path: item/p
 #: C/ssh-export.page:45
@@ -2742,11 +3007,13 @@ msgid ""
 "Press the <gui style=\"button\">Export</gui> button to save the exported "
 "public key on your computer."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Експортувати</gui>, щоб зберегти"
+" експортований відкритий ключ на вашому комп'ютері."
 
 #. (itstool) path: section/title
 #: C/ssh-export.page:53
 msgid "To export your private SSH key:"
-msgstr ""
+msgstr "Експортування вашого закритого ключа SSH:"
 
 #. (itstool) path: item/p
 #: C/ssh-export.page:65
@@ -2754,6 +3021,8 @@ msgid ""
 "Right click on the selected key and select <gui style=\"menuitem"
 "\">Properties</gui>."
 msgstr ""
+"Клацніть на пункті ключа правою кнопкою миші і виберіть у контекстному меню"
+" пункт <gui style=\"menuitem\">Властивості</gui>."
 
 #. (itstool) path: item/p
 #: C/ssh-export.page:69
@@ -2761,6 +3030,8 @@ msgid ""
 "Press the <gui style=\"button\">Export</gui> button to save the exported "
 "private key on your computer."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Експортувати</gui>, щоб зберегти"
+" експортований закритий ключ на вашому комп'ютері."
 
 #. (itstool) path: note/p
 #: C/ssh-export.page:75
@@ -2768,16 +3039,20 @@ msgid ""
 "Keep the exported private key file in a safe location, since the contents of "
 "the file must be kept private, to prevent misuse of your key."
 msgstr ""
+"Зберігайте експортований файл закритого ключа у безпечному місці, оскільки"
+" вміст файла має бути конфіденційним, щоб запобігти використанню вашого ключа"
+" зловмисниками."
 
 #. (itstool) path: info/desc
 #: C/ssh-import.page:25
 msgid "Import SSH keys from keyfiles into <app>Passwords and Keys</app>."
 msgstr ""
+"Імпортування ключів SSH з файлів ключів до <app>Паролів й ключів</app>."
 
 #. (itstool) path: page/title
 #: C/ssh-import.page:28
 msgid "Import SSH keys"
-msgstr ""
+msgstr "Імпортування ключів SSH"
 
 #. (itstool) path: page/p
 #: C/ssh-import.page:30
@@ -2788,6 +3063,11 @@ msgid ""
 "your computer. You can also manually import keys into <app>Passwords and "
 "Keys</app>."
 msgstr ""
+"Якщо ви отримали файл ключа електронною поштою, ви можете імпортувати його до"
+" <app>Паролів й ключів</app>. У більшості випадків <app>Паролі й ключі</app>"
+" автоматично імпортує ключі SSH з каталогу <file>~/.ssh</file> на вашому"
+" комп'ютері. Ви також можете вручну імпортувати ключі до <app>Паролів й"
+" ключів</app>."
 
 #. (itstool) path: item/p
 #: C/ssh-import.page:45
@@ -2795,6 +3075,8 @@ msgid ""
 "In the new dialog, select the key you wish to import. Public SSH keys end "
 "with <file>.pub</file>."
 msgstr ""
+"У діалоговому вікні, яке буде відкрито, виберіть ключ, який ви хочете"
+" імпортувати. Назви файлів ключів SSH завершуються суфіксом <file>.pub</file>."
 
 #. (itstool) path: page/p
 #: C/ssh-import.page:53
@@ -2802,16 +3084,18 @@ msgid ""
 "Imported keys are automatically grouped according to their type. So, "
 "<file>SSH</file> keys are listed in the <file>OpenSSH keys</file> section."
 msgstr ""
+"Імпортовані ключі буде автоматично згруповано за типом. Отже, ключі <file"
+">SSH</file> буде зібрано у розділі <file>Ключі OpenSSH</file>."
 
 #. (itstool) path: info/desc
 #: C/subkeys-add.page:20
 msgid "Additional subkeys make your master key more secure."
-msgstr ""
+msgstr "Додаткові підключі роблять ваш основний ключ захищенішим."
 
 #. (itstool) path: page/title
 #: C/subkeys-add.page:23
 msgid "Add extra subkeys"
-msgstr ""
+msgstr "Додавання підключів"
 
 #. (itstool) path: page/p
 #: C/subkeys-add.page:25
@@ -2819,21 +3103,25 @@ msgid ""
 "You can add extra subkeys to the same master key. You have to choose the "
 "right subkey each time you want to encrypt or sign when you do this."
 msgstr ""
+"Ви можете додати декілька підключів до вашого основного ключа. Після цього ви"
+" зможете вибирати належний підключ кожного разу, коли ви захочете зашифрувати"
+" або підписати дані."
 
 #. (itstool) path: steps/title
 #: C/subkeys-add.page:29
 msgid "To add extra subkeys to a PGP key:"
-msgstr ""
+msgstr "Щоб додати підключі до ключа PGP, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/subkeys-add.page:41 C/subkeys-examine.page:41
 msgid "If the <gui>Subkeys</gui> panel is not expanded, expand it."
-msgstr ""
+msgstr "Якщо панель <gui>Підключі</gui> не розгорнуто, розгорніть її."
 
 #. (itstool) path: item/p
 #: C/subkeys-add.page:44
 msgid "Click the <gui style=\"button\">Add</gui> button to add a new subkey."
 msgstr ""
+"Натисніть кнопку <gui style=\"button\">Додати</gui>, щоб додати новий підключ."
 
 #. (itstool) path: item/p
 #: C/subkeys-add.page:48
@@ -2842,6 +3130,9 @@ msgid ""
 "<gui>Key Type</gui>, <gui>Key Length</gui> and <gui>Expiration Date</gui> "
 "and click <gui style=\"button\">OK</gui>."
 msgstr ""
+"Виберіть належні властивості для вашого ключа, вибравши відповідний <gui>Тип"
+" ключа</gui>, <gui>Довжину ключа</gui> та <gui>Термін дії</gui>, і натисніть"
+" кнопку <gui style=\"button\">Гаразд</gui>."
 
 #. (itstool) path: note/p
 #: C/subkeys-add.page:55
@@ -2849,37 +3140,41 @@ msgid ""
 "Always ensure that your subkey expires before your master key since a subkey "
 "is useless when its master key has expired."
 msgstr ""
+"Завершення терміну дії вашого підключа завжди має передувати завершенню"
+" терміну дії вашого основного ключа, оскільки підключ не можна"
+" використовувати, коли спливе строк дії основного ключа."
 
 #. (itstool) path: info/desc
 #: C/subkeys-examine.page:20
 msgid "See all the subkeys listed under a PGP key."
-msgstr ""
+msgstr "Перегляд усіх підключів ключа PGP."
 
 #. (itstool) path: page/title
 #: C/subkeys-examine.page:23
 msgid "Where are my subkeys listed?"
-msgstr ""
+msgstr "Де можна переглянути список підключів?"
 
 #. (itstool) path: page/p
 #: C/subkeys-examine.page:25
 msgid ""
 "You can check the contents of a keypair to see the properties of a subkey."
 msgstr ""
+"Щоб переглянути властивості підключа, ознайомтеся із вмістом пари ключів."
 
 #. (itstool) path: steps/title
 #: C/subkeys-examine.page:29
 msgid "To see all the subkeys in a PGP key:"
-msgstr ""
+msgstr "Щоб переглянути усі підключі ключа PGP, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/subkeys-examine.page:31
 msgid "Select the <gui>GnuPG keys</gui> from the left side panel."
-msgstr ""
+msgstr "Виберіть в'язку ключів <gui>Ключі GnuPG</gui> на лівій бічній панелі."
 
 #. (itstool) path: item/p
 #: C/subkeys-examine.page:34
 msgid "Select the <gui>Personal PGP key</gui>."
-msgstr ""
+msgstr "Виберіть у списку <gui>Особистий ключ PGP</gui>."
 
 #. (itstool) path: item/p
 #: C/subkeys-examine.page:37
@@ -2887,11 +3182,15 @@ msgid ""
 "Right click on the key chosen in the previous step and select "
 "<guiseq><gui>Properties</gui><gui>Details</gui></guiseq>."
 msgstr ""
+"Клацніть правою кнопкою миші на пункті ключа, який було позначено на"
+" попередньому кроці, і виберіть у"
+" контекстному меню пункт <guiseq><gui>Властивості</gui><gui>Подробиці</gui><"
+"/guiseq>."
 
 #. (itstool) path: item/p
 #: C/subkeys-examine.page:44
 msgid "All the subkeys for the selected PGP key will be listed in the panel."
-msgstr ""
+msgstr "Усі підключі для вибраного ключа PGP буде показано у списку на панелі."
 
 #. (itstool) path: note/p
 #: C/subkeys-examine.page:50
@@ -2900,16 +3199,21 @@ msgid ""
 "chooses the master key for signing, when you select a <gui>GnuPG keys</gui> "
 "keypair to sign with."
 msgstr ""
+"Під час підписування іншого ключа <app>Паролі й ключі</app> автоматично"
+" виберуть основний ключ для підписування, коли ви виберете пару ключів <gui"
+">Ключі GnuPG</gui> для підписування."
 
 #. (itstool) path: info/desc
 #: C/subkeys-revoke.page:20
 msgid "Revoke a subkey that has been compromised or is not being used."
 msgstr ""
+"Відкликання підключа, який було скомпрометовано, або підключа, який не"
+" використовується."
 
 #. (itstool) path: page/title
 #: C/subkeys-revoke.page:24
 msgid "Revoke your subkeys"
-msgstr ""
+msgstr "Відкликання ваших підключів"
 
 #. (itstool) path: page/p
 #: C/subkeys-revoke.page:26
@@ -2917,11 +3221,14 @@ msgid ""
 "If your subkey has been compromised or is no longer in use, it might be a "
 "good idea to revoke it to prevent misuse of the key."
 msgstr ""
+"Якщо ваш підключ було скомпрометовано або ви більше ним не користуєтеся,"
+" варто його відкликати для запобігання потраплянню підключа у руки"
+" зловмисників."
 
 #. (itstool) path: steps/title
 #: C/subkeys-revoke.page:30
 msgid "To revoke a subkey:"
-msgstr ""
+msgstr "Щоб відкликати підключ, виконайте такі дії:"
 
 #. (itstool) path: item/p
 #: C/subkeys-revoke.page:32
@@ -2929,6 +3236,7 @@ msgid ""
 "<link xref=\"subkeys-examine\">Navigate</link> to the <gui>Subkeys</gui> "
 "panel."
 msgstr ""
+"<link xref=\"subkeys-examine\">Перейдіть</link> до панелі <gui>Підключі</gui>."
 
 #. (itstool) path: item/p
 #: C/subkeys-revoke.page:47
@@ -2936,6 +3244,8 @@ msgid ""
 "Select the subkey from the list and press the <gui style=\"button\">Revoke</"
 "gui> button."
 msgstr ""
+"Виберіть підключ зі списку і натисніть кнопку <gui style=\"button\""
+">Відкликати</gui>."
 
 #. (itstool) path: item/p
 #: C/subkeys-revoke.page:51
@@ -2943,16 +3253,18 @@ msgid ""
 "In the new dialog, select a reason for revoking the key. Optionally, "
 "describe your reason in more detail in the <gui>Description</gui> field."
 msgstr ""
+"У діалоговому вікні, яке буде відкрито, виберіть причину відкликання ключа."
+" Якщо хочете, опишіть вашу причину докладніше у полі <gui>Опис</gui>."
 
 #. (itstool) path: item/p
 #: C/subkeys-revoke.page:56
 msgid "Press the <gui style=\"button\">Revoke</gui> button."
-msgstr ""
+msgstr "Натисніть кнопку <gui style=\"button\">Відкликати</gui>."
 
 #. (itstool) path: item/p
 #: C/subkeys-revoke.page:59
 msgid "You will have to unlock the key with its passphrase."
-msgstr ""
+msgstr "Вам доведеться розблокувати ключ за допомогою пароля."
 
 #. (itstool) path: item/p
 #: C/subkeys-revoke.page:62
@@ -2960,6 +3272,8 @@ msgid ""
 "The <gui>Status</gui> of the subkey changes to <gui>Revoked</gui> in the "
 "<gui>Subkeys</gui> panel."
 msgstr ""
+"<gui>Стан</gui> підключа на панелі <gui>Підключі</gui> буде змінено на <gui"
+">Відкликано</gui>."
 
 #. (itstool) path: note/p
 #: C/subkeys-revoke.page:68
@@ -2968,3 +3282,6 @@ msgid ""
 "must <link xref=\"pgp-sync\">synchronize</link> it with the key servers "
 "after revoking it to apply the revocation on all copies of the key."
 msgstr ""
+"Якщо ваш ключ було <link xref=\"pgp-publish\">оприлюднено</link>, вам слід <"
+"link xref=\"pgp-sync\">синхронізувати</link> його з серверами ключів після"
+" відкликання, щоб відкликання було застосовано до усіх копій ключа."
