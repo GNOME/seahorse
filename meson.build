@@ -24,7 +24,7 @@ else
 endif
 
 # Dependencies
-min_glib_version = '2.44'
+min_glib_version = '2.58'
 min_gcr_version = '3.11.91'
 accepted_gpg_versions = [ '2.0.12', '2.1.4', '2.2.0' ]
 gpg_check_version = find_program('build-aux' / 'gpg_check_version.py')
