@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-03-11 05:57+0000\n"
+"POT-Creation-Date: 2020-06-04 07:19+0000\n"
 "PO-Revision-Date: 2020-03-14 00:30+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -58,7 +58,7 @@ msgstr "データをエクスポートできませんでした"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:283 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
 #: src/import-dialog.vala:34 src/key-manager.vala:270
@@ -389,14 +389,10 @@ msgid "Manage your passwords and encryption keys"
 msgstr "パスワードや暗号鍵を管理します"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid ""
-"Seahorse is a GNOME application for managing encryption keys. It also "
-"integrates with nautilus, gedit and other places for encryption operations."
+msgid "Seahorse is a GNOME application for managing encryption keys."
 msgstr ""
-"Seahorse は 暗号化の鍵の管理を行うための GNOME アプリケーションです。"
-"Nautilus や Gedit などのアプリケーションと暗号化操作を統合化します。"
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:13
+#: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
 "With seahorse you can create and manage PGP keys, create and manage SSH "
 "keys, publish and retrieve keys from key servers, cache your passphrase so "
@@ -407,7 +403,7 @@ msgstr ""
 "力する必要がなくなります。また、鍵やキーリングのバックアップを取ることもでき"
 "ます。"
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:127
+#: data/org.gnome.seahorse.Application.appdata.xml.in:126
 msgid "The GNOME Project"
 msgstr "The GNOME Project"
 
@@ -1025,7 +1021,7 @@ msgstr "氏名(_N)"
 msgid "Must be at least 5 characters long"
 msgstr "名前は 5 文字以上にしてください"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:93
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:92
 msgid "_Email Address"
 msgstr "メールアドレス(_E)"
 
@@ -1146,36 +1142,36 @@ msgstr "新しい PGP 鍵"
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "PGP 鍵を利用すると他の人達に暗号化したメールやファイルを送信できます。"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:125
+#: pgp/seahorse-gpgme-generate-dialog.ui:124
 #: pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "鍵の拡張オプション(_A)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:139
+#: pgp/seahorse-gpgme-generate-dialog.ui:138
 msgid "_Comment"
 msgstr "コメント(_C)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:170 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
 msgid "Encryption _Type"
 msgstr "暗号化の種類(_T)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:200 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
 msgid "Key _Strength (bits)"
 msgstr "鍵の長さ (ビット)(_S)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:230
+#: pgp/seahorse-gpgme-generate-dialog.ui:229
 msgid "E_xpiration Date"
 msgstr "有効期限(_X)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:252
+#: pgp/seahorse-gpgme-generate-dialog.ui:251
 msgid "Ne_ver Expires"
 msgstr "有効期限を設定しない(_V)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:293
+#: pgp/seahorse-gpgme-generate-dialog.ui:292
 msgid "C_reate"
 msgstr "生成(_R)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:300
+#: pgp/seahorse-gpgme-generate-dialog.ui:299
 msgid "Generate a new key"
 msgstr "新しい鍵を生成します"
 
@@ -1522,8 +1518,10 @@ msgstr "鍵をインポートできませんでした: %s"
 msgid "Key import succeeded"
 msgstr "鍵のインポートが成功しました"
 
-#: pgp/seahorse-keyserver-results.c:154 src/import-dialog.vala:38
-msgid "_Import"
+#: pgp/seahorse-keyserver-results.c:154
+#, fuzzy
+#| msgid "_Import"
+msgid "Import"
 msgstr "インポート(_I)"
 
 #: pgp/seahorse-keyserver-results.c:156
@@ -1548,8 +1546,8 @@ msgid ""
 "Double click on a key to inspect it, or click the import button to import it "
 "into your local keyring."
 msgstr ""
-"鍵をダブルクリックして確認し、インポートボタンをクリックしてローカルのキーリング"
-"に取り込んでください。"
+"鍵をダブルクリックして確認し、インポートボタンをクリックしてローカルのキーリ"
+"ングに取り込んでください。"
 
 #: pgp/seahorse-keyserver-search.ui:8
 msgid "Find Remote Keys"
@@ -2289,6 +2287,10 @@ msgstr "Seahorse プロジェクトのページ"
 msgid "Data to be imported"
 msgstr "インポートするデータ"
 
+#: src/import-dialog.vala:38
+msgid "_Import"
+msgstr "インポート(_I)"
+
 #: src/import-dialog.vala:74
 msgid "Import failed"
 msgstr "インポートが失敗しました"
@@ -2384,7 +2386,9 @@ msgid "GPG key"
 msgstr "PGP 鍵"
 
 #: src/seahorse-key-manager.ui:132
-msgid "Used to encrypt email and files"
+#, fuzzy
+#| msgid "Used to encrypt email and files"
+msgid "Used to encrypt emails and files"
 msgstr "メールやファイルを暗号化するときに使用します"
 
 #: src/seahorse-key-manager.ui:159
@@ -2757,6 +2761,14 @@ msgstr "リモートのコンピューター上にある SSH 鍵を設定でき�
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "SSH 鍵の設定中…"
+
+#~ msgid ""
+#~ "Seahorse is a GNOME application for managing encryption keys. It also "
+#~ "integrates with nautilus, gedit and other places for encryption "
+#~ "operations."
+#~ msgstr ""
+#~ "Seahorse は 暗号化の鍵の管理を行うための GNOME アプリケーションです。"
+#~ "Nautilus や Gedit などのアプリケーションと暗号化操作を統合化します。"
 
 #~ msgid "_Combine all keyrings"
 #~ msgstr "すべてのキーリングをまとめる(_C)"
