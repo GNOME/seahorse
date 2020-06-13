@@ -31,8 +31,9 @@ the [translation project wiki page].
 ## More information
 Seahorse has its own web page on https://wiki.gnome.org/Apps/Seahorse.
 
-To discuss issues with developers and other users, you can subscribe to the
-[mailing list] or join [#seahorse] on irc.gnome.org.
+To discuss issues with developers and other users, you can go to [GNOME's
+Discourse instance] and use the "seahorse" tag, or join [#seahorse] on
+irc.gnome.org.
 
 ## License
 Seahorse is released under the GPL. See [COPYING] for more info.
@@ -44,6 +45,6 @@ Seahorse is released under the GPL. See [COPYING] for more info.
 [help pages on MR's]: https://docs.gitlab.com/ee/gitlab-basics/add-merge-request.html
 [issue tracker]: https://gitlab.gnome.org/GNOME/seahorse/issues
 [translation project wiki page]: https://wiki.gnome.org/TranslationProject/
-[mailing list]: https://mail.gnome.org/mailman/listinfo/seahorse-list
+[GNOME's Discourse instance]: https://discourse.gnome.org
 [#seahorse]: irc://irc.gnome.org/seahorse
 [COPYING]: https://gitlab.gnome.org/GNOME/seahorse/COPYING
