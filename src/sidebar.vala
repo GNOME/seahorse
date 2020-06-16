@@ -68,7 +68,7 @@ public class Seahorse.Sidebar : Gtk.ListBox {
 
         debug("New place '%s' added", place.label);
 
-		if (place.get_length() > 0 || place.show_if_empty)
+        if (place.get_length() > 0 || place.show_if_empty)
             this.store.insert_sorted(place, compare_places);
         place.notify.connect(on_place_changed);
     }
