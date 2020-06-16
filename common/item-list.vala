@@ -214,8 +214,9 @@ public class Seahorse.ItemList : GLib.Object, GLib.ListModel {
         // Notify listeners
         items_changed(0, 0, this.items.length);
 
-        debug("%u/%u elements visible after refilter",
-              this.items.length, this.base_collection.get_length());
+        debug("%u/%u elements visible after refilter on '%s'",
+              this.items.length, this.base_collection.get_length(),
+              this._filter_text);
     }
 
     // Compares 2 labels in an intuitive way
