@@ -407,14 +407,38 @@ public class Seahorse.KeyManager : Catalog {
     private void on_focus_place(SimpleAction action, Variant? param) {
         string? uri_prefix = param.get_string();
         if (uri_prefix != null) {
-            this.sidebar.set_focused_place(uri_prefix);
+            this.sidebar.set_focused_place_for_scheme(uri_prefix);
         }
     }
 
     private Gcr.Collection setup_sidebar() {
         this.sidebar = new Sidebar();
 
-        /* Make sure we update the empty state on any change */
+        // On setup, select the LRU place from our last session (if any).
+        // Since libsecret inits asynchronously, wait a bit beforehand.
+        Timeout.add (200, () => {
+            var last_keyring = this.settings.get_strv("keyrings-selected");
+            if (last_keyring == null || last_keyring.length == 0)
+                return GLib.Source.REMOVE;
+
+            unowned string uri = last_keyring[0];
+
+            debug("Selecting last used place %s", uri);
+            if (this.sidebar.set_focused_place_for_uri(uri))
+                return GLib.Source.REMOVE;
+
+            // If that didn't work, try do a attempt by matching the scheme.
+            // FIXME should do this poperly (not always getting proper URIs atm)
+            var uri_scheme = uri.split(":")[0];
+            if (this.sidebar.set_focused_place_for_scheme(uri_scheme))
+                return GLib.Source.REMOVE;
+
+            // Still nothing. Can happen on first run -> just select first entry
+            this.sidebar.select_row(this.sidebar.get_row_at_index(0));
+            return GLib.Source.REMOVE;
+        });
+
+        // Make sure we update the empty state on any change
         this.sidebar.selected_rows_changed.connect(on_sidebar_selected_rows_changed);
         this.sidebar.current_collection_changed.connect((sidebar) => { check_empty_state (); });
 
@@ -436,11 +460,10 @@ public class Seahorse.KeyManager : Catalog {
         show_item_list_pane();
 
         Place? place = this.sidebar.get_focused_place();
-        if (place != null)
-            this.right_header.title = place.label;
+        return_if_fail (place != null);
 
-        // FIXME
-        //this.settings.set_strv("keyrings-selected", );
+        this.right_header.title = place.label;
+        this.settings.set_strv("keyrings-selected", { place.uri });
     }
 
     public override List<weak Backend> get_backends() {

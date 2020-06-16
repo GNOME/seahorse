@@ -241,14 +241,38 @@ public class Seahorse.Sidebar : Gtk.ListBox {
         return (row != null)? row.place : null;
     }
 
-    public void set_focused_place(string uri_prefix) {
+    /**
+     * Tries to find a place with the given URI and selects it.
+     *
+     * @return Whether a matching place was found
+     */
+    public bool set_focused_place_for_uri(string uri) {
+        // First, try to see if we have an exact match
         foreach (var row in get_children()) {
             var item = (SidebarItem) row;
-            if (item.place.uri.has_prefix(uri_prefix)) {
+            if (item.place.uri == uri) {
                 select_row(item);
-                break;
+                return true;
             }
         }
+
+        return false;
+    }
+
+    /**
+     * Tries to find a place with the given URI scheme and selects it.
+     *
+     * @return Whether a matching place was found
+     */
+    public bool set_focused_place_for_scheme(string uri_scheme) {
+        foreach (var row in get_children()) {
+            var item = (SidebarItem) row;
+            if (item.place.uri.has_prefix(uri_scheme)) {
+                select_row(item);
+                return true;
+            }
+        }
+        return false;
     }
 
     public List<weak Backend>? get_backends() {
