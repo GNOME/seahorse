@@ -109,13 +109,14 @@ public class Seahorse.Sidebar : Gtk.ListBox {
     private void place_header_cb(Gtk.ListBoxRow row, Gtk.ListBoxRow? before) {
         Seahorse.Place place = ((SidebarItem) row).place;
 
-        // We don't need a title iff
-        // * there is no previous row
-        // * the previous row is in the same category
+        // We need a title iff
+        // the previous row exists, and it's part of the same category
         if (before != null) {
             Seahorse.Place before_place = ((SidebarItem) before).place;
-            if (place.category == before_place.category)
+            if (place.category == before_place.category) {
+                row.set_header(null);
                 return;
+            }
         }
 
         var label = new Gtk.Label(place.category.to_string());
@@ -170,17 +171,9 @@ public class Seahorse.Sidebar : Gtk.ListBox {
         foreach (Backend backend in this.backends)
             update_backend(backend);
 
-        this.store.sort(compare_places);
-
-        // Restore selection -- this got cleared by the call to sort()
-        Gtk.ListBoxRow? new_row = null;
-        foreach (var row in this.get_children()) {
-            if (((SidebarItem)row).place == place) {
-                new_row = (Gtk.ListBoxRow) row;
-                break;
-            }
-        }
-        select_row(new_row ?? get_row_at_index(0));
+        // Needed when you have multiple keyrings (this can lead
+        // to multiple 'Password' titles).
+        invalidate_headers();
     }
 
     private void update_backend(Backend? backend) {
