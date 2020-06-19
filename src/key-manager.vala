@@ -63,12 +63,12 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     private const GLib.ActionEntry[] action_entries = {
-         { "new-item",           on_new_item                                                     },
-         { "show-search",        on_show_search,                                                 },
-         { "filter-items",       on_filter_items,              "s",                      "'any'" },
-         { "focus-place",        on_focus_place,               "s",           "'secret-service'" },
-         { "import-file",        on_import_file                                                  },
-         { "paste",              on_paste,                                                       },
+         { "new-item",         on_new_item            },
+         { "show-search",      on_show_search,        },
+         { "filter-items",     on_filter_items,       "s", "'any'" },
+         { "focus-place",      on_focus_place,        "s", "'secret-service'" },
+         { "import-file",      on_import_file          },
+         { "paste",            on_paste,               },
     };
 
     public KeyManager(Application app) {
@@ -495,6 +495,43 @@ public class Seahorse.KeyManager : Catalog {
 
     [GtkCallback]
     private bool on_key_pressed(Gtk.Widget widget, Gdk.EventKey event) {
+        bool folded = this.content_box.fold == Hdy.Fold.FOLDED;
+
+        switch (event.keyval) {
+          // <Alt>Down and <Alt>Up for easy sidebar navigation
+          case Gdk.Key.Down:
+              if (Gdk.ModifierType.MOD1_MASK in event.state && !folded) {
+                  this.sidebar.select_next_place();
+                  return true;
+              }
+              break;
+          case Gdk.Key.Up:
+              if (Gdk.ModifierType.MOD1_MASK in event.state && !folded) {
+                  this.sidebar.select_previous_place();
+                  return true;
+              }
+              break;
+
+          // <Alt>Left to go back to sidebar in folded mode
+          case Gdk.Key.Left:
+              if (Gdk.ModifierType.MOD1_MASK in event.state && folded) {
+                  show_sidebar_pane();
+                  return true;
+              }
+              break;
+
+          // <Alt>Right to open currently selected element in folded mode
+          case Gdk.Key.Right:
+              if (Gdk.ModifierType.MOD1_MASK in event.state && folded) {
+                  show_item_list_pane();
+                  return true;
+              }
+              break;
+          default:
+              break;
+        }
+
+        // By default: propagate to the search bar, for search-as-you-type
         return this.search_bar.handle_event(event);
     }
 }

@@ -275,6 +275,29 @@ public class Seahorse.Sidebar : Gtk.ListBox {
         return false;
     }
 
+    public void select_next_place() {
+      select_relative(1);
+    }
+
+    public void select_previous_place() {
+      select_relative(-1);
+    }
+
+    // Selects the item that is n positions lower/above the current selection
+    private void select_relative(int positions) {
+        var selected = get_selected_row();
+        if (selected == null) {
+            // Select the first row
+            select_row(get_row_at_index(0));
+            return;
+        }
+
+        var next = get_row_at_index(selected.get_index() + positions);
+        // If we're at the top/bottom of the list, don't do anything
+        if (next != null)
+            select_row(next);
+    }
+
     public List<weak Backend>? get_backends() {
         return this.backends.copy();
     }
