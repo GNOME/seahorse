@@ -414,13 +414,34 @@ public class Seahorse.KeyManager : Catalog {
     private Gcr.Collection setup_sidebar() {
         this.sidebar = new Sidebar();
 
-        // On setup, select the LRU place from our last session (if any).
-        // Since libsecret inits asynchronously, wait a bit beforehand.
-        Timeout.add (200, () => {
-            var last_keyring = this.settings.get_strv("keyrings-selected");
-            if (last_keyring == null || last_keyring.length == 0)
-                return GLib.Source.REMOVE;
+        restore_keyring_selection();
 
+        // Make sure we update the empty state on any change
+        this.sidebar.selected_rows_changed.connect(on_sidebar_selected_rows_changed);
+        this.sidebar.current_collection_changed.connect((sidebar) => { check_empty_state (); });
+
+        foreach (weak Backend backend in get_backends()) {
+            ActionGroup actions = backend.actions;
+            actions.catalog = this;
+            insert_action_group(actions.prefix, actions);
+        }
+
+        this.sidebar_area.add(this.sidebar);
+        this.sidebar.show();
+
+        return this.sidebar.objects;
+    }
+
+    // On setup, select the LRU place from the user's last session (if any).
+    private void restore_keyring_selection() {
+        // Make sure we already get the setting, or it might accidentally be
+        // changed meanwhile. If none is set (yet), then don't even bother
+        var last_keyring = this.settings.get_strv("keyrings-selected");
+        if (last_keyring == null || last_keyring.length == 0)
+            return;
+
+        // Since some backends take time to initialize, wait a bit beforehand.
+        Timeout.add(150, () => {
             unowned string uri = last_keyring[0];
 
             debug("Selecting last used place %s", uri);
@@ -437,21 +458,6 @@ public class Seahorse.KeyManager : Catalog {
             this.sidebar.select_row(this.sidebar.get_row_at_index(0));
             return GLib.Source.REMOVE;
         });
-
-        // Make sure we update the empty state on any change
-        this.sidebar.selected_rows_changed.connect(on_sidebar_selected_rows_changed);
-        this.sidebar.current_collection_changed.connect((sidebar) => { check_empty_state (); });
-
-        foreach (weak Backend backend in get_backends()) {
-            ActionGroup actions = backend.actions;
-            actions.catalog = this;
-            insert_action_group(actions.prefix, actions);
-        }
-
-        this.sidebar_area.add(this.sidebar);
-        this.sidebar.show();
-
-        return this.sidebar.objects;
     }
 
     private void on_sidebar_selected_rows_changed(Gtk.ListBox sidebar) {
