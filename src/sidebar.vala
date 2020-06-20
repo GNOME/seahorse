@@ -91,7 +91,8 @@ public class Seahorse.Sidebar : Gtk.ListBox {
     }
 
     private void on_backend_changed(GLib.Object obj, ParamSpec spec) {
-        debug("Backend changed");
+        Backend backend = (Backend) obj;
+        debug("Backend '%s' changed", backend.label);
         update_places();
     }
 
