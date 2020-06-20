@@ -18,9 +18,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Seahorse {
-
-namespace Util {
+namespace Seahorse.Util {
 
 	public void show_error (Gtk.Widget? parent,
 	                        string? heading,
@@ -57,30 +55,24 @@ namespace Util {
 		return created_date.format("%x");
 	}
 
-	public Gtk.Builder load_built_contents(Gtk.Container? frame,
-	                                       string name) {
-		var builder = new Gtk.Builder();
-		string path = "/org/gnome/Seahorse/seahorse-%s.ui".printf(name);
+    // TODO: one we rely on GLib >= 2.54, we can use g_list_store_find
+    public bool list_store_find(GLib.ListStore store, GLib.Object item, out uint position) {
+        return list_store_find_with_equal_func (store, item, GLib.direct_equal, out position);
+    }
 
-		if (frame != null && frame is Gtk.Dialog)
-			frame = ((Gtk.Dialog)frame).get_content_area();
+    // TODO: one we rely on GLib >= 2.54, we can use g_list_store_find_with_equal_func
+    public bool list_store_find_with_equal_func(GLib.ListStore store,
+                                                GLib.Object item,
+                                                GLib.EqualFunc func,
+                                                out uint position) {
+        for (uint i = 0; i < store.get_n_items(); i++) {
+            if (func(store.get_item(i), item)) {
+                if (&position != null)
+                    position = i;
+                return true;
+            }
+        }
 
-		try {
-			builder.add_from_resource(path);
-			var obj = builder.get_object(name);
-			if (obj == null) {
-				GLib.critical("Couldn't find object named %s in %s", name, path);
-			} else if (frame != null) {
-				var widget = (Gtk.Widget)obj;
-				frame.add(widget);
-				widget.show();
-			}
-		} catch (GLib.Error err) {
-			GLib.critical("Couldn't load %s: %s", path, err.message);
-		}
-
-		return builder;
-	}
-}
-
+        return false;
+    }
 }

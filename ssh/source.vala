@@ -25,18 +25,22 @@
  */
 public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
 
+    // Paths to the authorized_keys file and one for unauthorized keys
+    // The second file is Seahorse-specific, to allow users to retain public
+    // keys without trusting them. (this also has the nice side effect that you
+    // can undo certain operaions)
     public const string AUTHORIZED_KEYS_FILE = "authorized_keys";
     public const string OTHER_KEYS_FILE = "other_keys.seahorse";
 
     // The home directory for SSH keys.
     private string ssh_homedir;
     // Source for refresh timeout
-    private uint scheduled_refresh_source;
+    private uint scheduled_refresh_source = 0;
     // For monitoring the .ssh directory
-    private FileMonitor monitor_handle;
+    private FileMonitor? monitor_handle = null;
 
-    // Maps filenames (of the public parts) to keys
-    private HashTable<string, Key> keys;
+    // The list of Seahorse.Ssh.Keys
+    private ListStore keys = new ListStore(typeof(Ssh.Key));
 
     public string label {
         owned get { return _("OpenSSH keys"); }
@@ -83,11 +87,6 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
     }
 
     construct {
-        this.keys = new HashTable<string, Key>(str_hash, str_equal);
-
-        this.scheduled_refresh_source = 0;
-        this.monitor_handle = null;
-
         this.ssh_homedir = "%s/.ssh".printf(Environment.get_home_dir());
 
         // Make the .ssh directory if it doesn't exist
@@ -175,38 +174,34 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
     }
 
     public uint get_length() {
-        return this.keys.size();
+        return this.keys.get_n_items();
     }
 
     public List<weak GLib.Object> get_objects() {
-        return this.keys.get_values();
+        var objects = new List<weak GLib.Object>();
+        for (uint i = 0; i < this.keys.get_n_items(); i++)
+            objects.append(this.keys.get_item(i));
+        return objects;
     }
 
     public bool contains(GLib.Object object) {
-        Key? key = (object as Key);
-        if (key == null)
-            return false;
-
-        string filename = key.get_location();
-        return this.keys.lookup(filename) == object;
+        return Util.list_store_find(this.keys, object, null);
     }
 
     public void remove_object(GLib.Object object) {
-        Key? key = object as Key;
-        if (key == null)
-            return;
-
-        string? filename = key.get_location();
-        if (filename == null || this.keys.lookup(filename) != key)
-            return;
-
-        this.keys.remove(filename);
-        removed(key);
+        uint pos;
+        if (Util.list_store_find(this.keys, object, out pos)) {
+            this.keys.remove(pos);
+            removed(object);
+        }
     }
 
-    public string file_for_public(bool authorized) {
-        return Path.build_filename(this.ssh_homedir,
-                                   authorized ? AUTHORIZED_KEYS_FILE : OTHER_KEYS_FILE);
+    public string authorized_keys_path() {
+        return Path.build_filename(this.ssh_homedir, AUTHORIZED_KEYS_FILE);
+    }
+
+    public string other_keys_path() {
+        return Path.build_filename(this.ssh_homedir, OTHER_KEYS_FILE);
     }
 
     public async Key? add_key_from_filename(string? privfile) throws GLib.Error {
@@ -214,9 +209,12 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
             return null;
 
         // Check if it was already loaded once. If not, load it now
-        Key? key = this.keys.lookup(privfile);
-        if (key != null)
-            return key;
+        for (uint i = 0; i < this.keys.get_n_items(); i++) {
+            var key = (Ssh.Key) this.keys.get_item(i);
+            if (key.key_data.privfile == privfile) {
+                return key;
+            }
+        }
 
         return yield load_key_for_private_file(privfile);
     }
@@ -224,7 +222,6 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
     // Loads the (public) key for a private key.
     private async Key? load_key_for_private_file(string privfile) throws GLib.Error {
         string pubfile = privfile + ".pub";
-        Source src = this;
         Key? key = null;
 
         // possibly an SSH key?
@@ -233,7 +230,7 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
                 && check_file_for_ssh(privfile)) {
             try {
                 yield Key.parse_file(pubfile, (keydata) => {
-                    key = Source.add_key_from_parsed_data(src, keydata, pubfile, false, false, privfile);
+                    key = Source.add_key_from_parsed_data(this, keydata, pubfile, false, false, privfile);
                     return true;
                 });
             } catch (GLib.Error e) {
@@ -266,12 +263,6 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
      * @param cancellable Use this to cancel the operation.
      */
     public async bool load(GLib.Cancellable? cancellable) throws GLib.Error {
-        Source src = this;
-        // Since we can find duplicate keys, limit them with this hash
-        GenericSet<string> loaded = new GenericSet<string>(str_hash, str_equal);
-        // Keys that currently exist, so we can remove any that disappeared
-        GenericSet<string> checks = load_present_keys();
-
         // Schedule a dummy refresh. This blocks all monitoring for a while
         cancel_scheduled_refresh();
         this.scheduled_refresh_source = Timeout.add(500, scheduled_dummy);
@@ -287,27 +278,21 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
             load_key_for_private_file.begin(privfile);
         }
 
-        // Now load the authorized keys file
-        string pubfile = file_for_public(true);
+        // Now load the authorized keys
+        string pubfile = authorized_keys_path();
         Key.parse_file.begin(pubfile, (keydata) => {
-            Source.add_key_from_parsed_data(src, keydata, pubfile, true, true, null, checks, loaded);
+            Source.add_key_from_parsed_data(this, keydata, pubfile, true, true, null);
             return true;
         });
 
-        // Load the other keys file
-        pubfile = file_for_public(false);
+        // Load the "other keys" (public keys without authorization)
+        pubfile = other_keys_path();
         Key.parse_file.begin(pubfile, (keydata) => {
-            Source.add_key_from_parsed_data(src, keydata, pubfile, true, false, null, checks, loaded);
+            Source.add_key_from_parsed_data(this, keydata, pubfile, true, false, null);
             return true;
         });
 
         return true;
-    }
-
-    private GenericSet<string> load_present_keys() {
-        GenericSet<string> checks = new GenericSet<string>(str_hash, str_equal);
-        this.keys.foreach((filename, key) => checks.add(filename));
-        return checks;
     }
 
     public static Key? add_key_from_parsed_data(Source src,
@@ -316,10 +301,8 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
                                                 bool partial,
                                                 bool authorized,
                                                 string? privfile = null,
-                                                GenericSet<string>? checks = null,
-                                                GenericSet<string>? loaded = null) {
-        if (keydata == null || !keydata.is_valid())
-            return null;
+                                                GLib.GenericArray<string>? checks = null) {
+        return_val_if_fail (keydata != null && keydata.is_valid(), null);
 
         keydata.pubfile = pubfile;
         keydata.partial = partial;
@@ -327,38 +310,22 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         if (privfile != null)
             keydata.privfile = privfile;
 
-        string? location = keydata.get_location();
-        if (location == null)
-            return null;
-
-        // Does src key exist in the context?
-        Key? prev = src.keys.lookup(location);
-
         // Mark src key as seen
         if (checks != null)
-            checks.remove(location);
+            checks.remove(keydata.fingerprint);
 
-        // See if we've already gotten a key like src in this load batch
-        if (loaded != null) {
-            if (location in loaded) {
-                if (prev != null)
-                    prev.merge_keydata(keydata);
-                return null;
-            }
+        // Does src key exist in the context?
+        Key? prev = src.find_key_by_fingerprint(keydata.fingerprint);
+        if (prev != null)
+            prev.merge_keydata(keydata);
 
-            // Mark src key as loaded
-            loaded.add(location);
-        }
-
-        // If we already have src key then just transfer ownership of keydata
-        if (prev != null) {
-            prev.key_data = keydata;
+        // Don't create a new key if we already got one earlier
+        if (prev != null)
             return prev;
-        }
 
         // Create a new key
         Key key = new Key(src, keydata);
-        src.keys.insert(location, key);
+        src.keys.append(key);
         src.added(key);
 
         return key;
@@ -374,7 +341,7 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         size_t bytes_read;
         input.read_all(buffer, out bytes_read, cancellable);
 
-        string fullpath = file_for_public(false);
+        string fullpath = other_keys_path();
         Source src = this;
 
         Key.parse.begin((string) buffer,
@@ -442,20 +409,30 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         SourceFunc callback = authorize_async.callback;
         GLib.Error? err = null;
 
+        // Authorized key → add to authorized_keys
+        // otherwise      → add to other_keys.seahorse
+        string from, to;
+        if (authorize) {
+            from = other_keys_path();
+            to = authorized_keys_path();
+        } else {
+            from = authorized_keys_path();
+            to = other_keys_path();
+        }
+
         Thread<void*> thread = new Thread<void*>("authorize-async", () => {
             try {
                 KeyData? keydata = key.key_data;
                 if (keydata == null)
                     throw new Error.GENERAL("Can't authorize empty key.");
 
-                if (!authorize) {
-                    // Take it out of the file for authorized keys
-                    string from = file_for_public(true);
+                // Filter the public key out of the file, if it exists
+                if (FileUtils.test(from, FileTest.EXISTS)) {
                     KeyData.filter_file(from, null, keydata);
                 }
 
-                // Put it into the correct file
-                string to = file_for_public(authorize);
+                // Now put it into the correct one (make sure that it exists at this point)
+                ensure_file_exists(to);
                 KeyData.filter_file(to, keydata, null);
 
                 // Just reload that one key
@@ -474,5 +451,21 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
 
         if (err != null)
             throw err;
+    }
+
+    private void ensure_file_exists(string filename) {
+        int fd = Posix.open(filename, Posix.O_WRONLY | Posix.O_CREAT, 0644);
+        Posix.close(fd);
+    }
+
+    public Key? find_key_by_fingerprint(string fingerprint) {
+        for (uint i = 0; i < this.keys.get_n_items(); i++) {
+            var key = (Ssh.Key) this.keys.get_item(i);
+            if (key.fingerprint == fingerprint) {
+                return key;
+            }
+        }
+
+        return null;
     }
 }
