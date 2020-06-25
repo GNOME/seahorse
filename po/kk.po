@@ -1,14 +1,14 @@
 # Kazakh translation for seahorse.
 # Copyright (C) 2014 seahorse's COPYRIGHT HOLDER
 # This file is distributed under the same license as the seahorse package.
-# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2014-2017.
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2014-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2019-02-15 01:00+0000\n"
-"PO-Revision-Date: 2019-02-16 17:10+0500\n"
+"POT-Creation-Date: 2020-06-20 17:53+0000\n"
+"PO-Revision-Date: 2020-06-25 20:00+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.3.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -27,7 +27,7 @@ msgid "Custom"
 msgstr "Таңдауыңызша"
 
 #. Buttons
-#: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:112
+#: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:132
 #: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:130
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
@@ -37,39 +37,39 @@ msgstr "Бас тарту"
 msgid "Save"
 msgstr "Сақтау"
 
-#: common/catalog.vala:116
+#: common/catalog.vala:115
 msgid "Cannot delete"
 msgstr "Өшіру мүмкін емес"
 
-#: common/catalog.vala:130 common/key-manager-store.vala:418
+#: common/catalog.vala:129
 msgid "Couldn’t export keys"
 msgstr "Кілттерді экспорттау мүмкін емес"
 
-#: common/catalog.vala:140
+#: common/catalog.vala:139
 msgid "Couldn’t export data"
 msgstr "Деректерді экспорттау мүмкін емес"
 
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-pgp-generate.ui:294 pkcs11/pkcs11-request.vala:55
-#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:247
+#: pgp/seahorse-gpgme-generate-dialog.ui:283 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
+#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
+#: src/import-dialog.vala:34 src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "Ба_с тарту"
 
 #. Delete item
-#: common/delete-dialog.vala:91 pkcs11/pkcs11-properties.vala:201
-#: src/sidebar.vala:647
+#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
+#: src/sidebar.vala:352
 msgid "_Delete"
 msgstr "Ө_шіру"
 
-#: common/exportable.vala:192 pgp/seahorse-pgp-private-key-properties.ui:908
-#: ssh/seahorse-ssh-key-properties.ui:280
+#: common/exportable.vala:191 pkcs11/seahorse-pkcs11-properties.ui:33
 msgid "Export"
 msgstr "Экспорт"
 
-#: common/interaction.vala:61
+#: common/interaction.vala:63
 #, c-format
 msgid "Enter PIN or password for: %s"
 msgstr "Келесі үшін PIN не парольді енгізіңіз: %s"
@@ -87,7 +87,19 @@ msgstr "_ОК"
 msgid "Password:"
 msgstr "Пароль:"
 
-#: common/prefs.vala:42 src/seahorse-key-manager.ui:43
+#: common/place.vala:40 gkr/gkr-backend.vala:39
+msgid "Passwords"
+msgstr "Парольдер"
+
+#: common/place.vala:42
+msgid "Keys"
+msgstr "Кілттер"
+
+#: common/place.vala:44 pkcs11/seahorse-pkcs11-backend.c:207
+msgid "Certificates"
+msgstr "Сертификаттар"
+
+#: common/prefs.vala:42
 msgid "Preferences"
 msgstr "Баптаулар"
 
@@ -104,6 +116,7 @@ msgid ""
 "For help contact your system administrator or the administrator of the key "
 "server."
 msgstr ""
+"Көмек алу үшін жүйе әкімшісіне немесе кілт сервердің әкімшісіне хабарласыңыз."
 
 #: common/prefs.vala:236
 msgid "URL"
@@ -191,6 +204,46 @@ msgctxt "Validity"
 msgid "Revoked"
 msgstr "Қайта шақырылған"
 
+#: data/gtk/help-overlay.ui:9
+msgctxt "shortcut window"
+msgid "Overview"
+msgstr "Шолу"
+
+#: data/gtk/help-overlay.ui:14
+msgctxt "shortcut window"
+msgid "Help"
+msgstr "Көмек"
+
+#: data/gtk/help-overlay.ui:21
+msgctxt "shortcut window"
+msgid "Open menu"
+msgstr "Мәзірді ашу"
+
+#: data/gtk/help-overlay.ui:28
+msgctxt "shortcut window"
+msgid "Create a new item"
+msgstr "Жаңа элементті жасау"
+
+#: data/gtk/help-overlay.ui:35
+msgctxt "shortcut window"
+msgid "Import item from file"
+msgstr "Элементті файлдан импорттау"
+
+#: data/gtk/help-overlay.ui:42
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "Іздеу"
+
+#: data/gtk/help-overlay.ui:49
+msgctxt "shortcut window"
+msgid "Shortcut list"
+msgstr "Жарлықтар тізімі"
+
+#: data/gtk/help-overlay.ui:56
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Шығу"
+
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
 msgstr "Кілттерді автоматты түрде алу"
@@ -205,7 +258,7 @@ msgstr "Кілттерді автожариялау"
 
 #: data/org.gnome.seahorse.gschema.xml:11
 msgid "Whether or not modified keys should be automatically published."
-msgstr ""
+msgstr "Өзгертілген кілттерді автоматты түрде жариялау керек пе, жоқ па."
 
 #: data/org.gnome.seahorse.gschema.xml:15
 msgid "Publish keys to this key server"
@@ -245,7 +298,7 @@ msgstr "Seahorse бүйір панелін көрсету."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:10
 msgid "Which items to show"
-msgstr ""
+msgstr "Қай элементтерді көрсету керек"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:11
 msgid ""
@@ -259,11 +312,11 @@ msgstr "Бүйір панелінің ені"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:17
 msgid "The default width of the side pane."
-msgstr ""
+msgstr "Бүйір панелінің бастапқы ені."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:21
 msgid "The keyrings chosen"
-msgstr ""
+msgstr "Таңдалған кілттер баулары"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:22
 msgid "The URIs of the keyrings chosen in the sidebar."
@@ -282,7 +335,7 @@ msgstr ""
 
 #: data/org.gnome.seahorse.manager.gschema.xml:34
 msgid "Show validity column"
-msgstr ""
+msgstr "Жарамдылық бағанын көрсету"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:35
 #: data/org.gnome.seahorse.manager.gschema.xml:40
@@ -293,7 +346,7 @@ msgstr "Енді қолданылмайды."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:39
 msgid "Show expiry column"
-msgstr ""
+msgstr "Мерзімі аяқталуы бағанын көрсету"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:44
 msgid "Show trust column"
@@ -301,7 +354,7 @@ msgstr "Сенімділік бағанын көрсету"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:49
 msgid "Show type column"
-msgstr ""
+msgstr "Түрі бағанын көрсету"
 
 #: data/org.gnome.seahorse.window.gschema.xml:5
 msgid "Width of the window"
@@ -309,15 +362,15 @@ msgstr "Терезе ені"
 
 #: data/org.gnome.seahorse.window.gschema.xml:6
 msgid "Width (in pixels) of the window."
-msgstr ""
+msgstr "Терезенің ені (пиксельмен)."
 
 #: data/org.gnome.seahorse.window.gschema.xml:10
 msgid "Height of the window"
-msgstr ""
+msgstr "Терезенің биіктігі"
 
 #: data/org.gnome.seahorse.window.gschema.xml:11
 msgid "Height (in pixels) of the window."
-msgstr ""
+msgstr "Терезенің биіктігі (пиксельмен)."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
 msgid "Seahorse"
@@ -348,8 +401,12 @@ msgstr ""
 "кілттік фразаны қайта-қайта тере бермеу үшін оны кэштеу, кілттер және "
 "кілттер бауының қор көшірмелерін жасау әрекеттерін жасай аласыз."
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:158
-#: src/seahorse-key-manager.ui:276
+#: data/org.gnome.seahorse.Application.appdata.xml.in:149
+msgid "The GNOME Project"
+msgstr "GNOME жобасы"
+
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:169
+#: src/seahorse-key-manager.ui:291
 msgid "Passwords and Keys"
 msgstr "Парольдер және кілттер"
 
@@ -360,30 +417,62 @@ msgstr ""
 "keyring;encryption;security;sign;ssh;кілттер бауы;шифрлеу;қауіпсіздік;"
 "қолтаңба;"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#: data/org.gnome.seahorse.Application.desktop.in.in:11
-msgid "org.gnome.seahorse.Application"
-msgstr "org.gnome.seahorse.Application"
-
 #: gkr/gkr-backend.vala:43
-msgid "Passwords"
-msgstr "Парольдер"
-
-#: gkr/gkr-backend.vala:47
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Сақталған жеке парольдер, деректер және құпиялар"
 
-#: gkr/gkr-item-add.vala:98 src/sidebar.vala:598
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:410
 msgid "Couldn’t unlock"
 msgstr "Блоктаудан босату мүмкін емес"
 
-#: gkr/gkr-item-add.vala:122
+#: gkr/gkr-item-add.vala:137
 msgid "Couldn’t add item"
 msgstr "Нәрсені қосу мүмкін емес"
 
+#: gkr/gkr-item-info.vala:30
+msgid "Password or Secret"
+msgstr "Пароль немесе құпия"
+
+#: gkr/gkr-item-info.vala:120
+msgid "Network connection secret"
+msgstr "Желілік байланыс паролі"
+
+#: gkr/gkr-item-info.vala:127
+msgid "Wi-Fi password"
+msgstr "Wi-Fi паролі"
+
+#: gkr/gkr-item-info.vala:145
+msgid "Network password"
+msgstr "Желілік пароль"
+
+#: gkr/gkr-item-info.vala:234
+msgid "GNOME Web password"
+msgstr "GNOME веб браузері паролі"
+
+#: gkr/gkr-item-info.vala:254
+msgid "Google Chrome password"
+msgstr "Google Chrome паролі"
+
+#: gkr/gkr-item-info.vala:288
+msgid "Instant messaging password"
+msgstr "Жедел хабарласу паролі"
+
+#. Translators: This should be the same as the string in empathy
+#: gkr/gkr-item-info.vala:293
+msgid "IM account password for "
+msgstr "Жедел хабарласу паролі, тіркелгі: "
+
+#: gkr/gkr-item-info.vala:326
+msgid "Telepathy password"
+msgstr "Telepathy паролі"
+
+#: gkr/gkr-item-info.vala:362
+msgid "GNOME Online Accounts password"
+msgstr "Gnome желілік тіркелгілер паролі"
+
 #: gkr/gkr-item-properties.vala:106
 msgid "Save changes for this item?"
-msgstr ""
+msgstr "Бұл элемент өзгерістерін сақтау керек пе?"
 
 #: gkr/gkr-item-properties.vala:123
 msgid "Access a network share or resource"
@@ -410,7 +499,7 @@ msgid "Network Credentials"
 msgstr "Желілік тіркелу мәліметтері"
 
 #: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:70
-#: src/seahorse-key-manager.ui:191
+#: src/seahorse-key-manager.ui:193
 msgid "Password"
 msgstr "Пароль"
 
@@ -423,118 +512,80 @@ msgid "Couldn’t set description."
 msgstr "Сипаттамасын орнату мүмкін емес."
 
 #: gkr/gkr-item-properties.vala:268
-#| msgid "Encryption key password"
 msgid "Error deleting the password."
 msgstr "Парольді өшіру қатесі."
 
-#. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item.vala:390
-msgid "IM account password for "
-msgstr "Жедел хабарласу паролі, тіркелгі: "
-
-#: gkr/gkr-item.vala:446
-msgid "Password or secret"
-msgstr "Пароль немесе құпия"
-
-#: gkr/gkr-item.vala:447
-msgid "Network password"
-msgstr "Желілік пароль"
-
-#: gkr/gkr-item.vala:448
+#: gkr/gkr-item.vala:165
 msgid "Stored note"
 msgstr "Сақталған естелік"
 
-#: gkr/gkr-item.vala:449
+#: gkr/gkr-item.vala:167
 msgid "Keyring password"
 msgstr "Кілттер бауының паролі"
 
-#: gkr/gkr-item.vala:450
+#: gkr/gkr-item.vala:169
 msgid "Encryption key password"
 msgstr "Шифрлеу кілтінің паролі"
 
-#: gkr/gkr-item.vala:451
+#: gkr/gkr-item.vala:171
 msgid "Key storage password"
 msgstr "Кілттер қоймасының паролі"
 
-#: gkr/gkr-item.vala:452
-msgid "Google Chrome password"
-msgstr "Google Chrome паролі"
-
-#: gkr/gkr-item.vala:453
-msgid "GNOME Online Accounts password"
-msgstr "Gnome желілік тіркелгілер паролі"
-
-#: gkr/gkr-item.vala:454
-msgid "Telepathy password"
-msgstr "Telepathy паролі"
-
-#: gkr/gkr-item.vala:455
-msgid "Instant messaging password"
-msgstr "Жедел хабарласу паролі"
-
-#: gkr/gkr-item.vala:456
+#: gkr/gkr-item.vala:173
 msgid "Network Manager secret"
 msgstr "Желілік басқарушы паролі"
 
-#: gkr/gkr-item.vala:506
+#: gkr/gkr-item.vala:312
 #, c-format
 msgid "Are you sure you want to delete the password “%s”?"
 msgstr "\"%s\" паролін өшіруді шынымен қалайсыз ба?"
 
-#: gkr/gkr-item.vala:508
+#: gkr/gkr-item.vala:314
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "%d паролді өшіруді шынымен қалайсыз ба?"
 
-#: gkr/gkr-keyring-add.vala:53
+#: gkr/gkr-keyring-add.vala:52
 msgid "Couldn’t add keyring"
 msgstr "Кілттер бауын қосу мүмкін емес"
 
-#: gkr/gkr-keyring-properties.vala:66
+#: gkr/gkr-keyring-properties.vala:65
 msgid "Unknown date"
 msgstr "Күні белгісіз"
 
-#: gkr/gkr-keyring.vala:28
+#: gkr/gkr-keyring.vala:34
 msgid "A keyring that is automatically unlocked on login"
 msgstr "Жүйеге кірген кезде блоктауы автоматты түрде ашылатын кілттер бауы"
 
-#: gkr/gkr-keyring.vala:29
+#: gkr/gkr-keyring.vala:35
 msgid "A keyring used to store passwords"
 msgstr "Парольдерді сақтауға қолданылатын кілттер бауы"
 
-#: gkr/gkr-keyring.vala:174
+#: gkr/gkr-keyring.vala:200
 msgid "Couldn’t set default keyring"
 msgstr "Үнсіз келісім бойынша кілттер бауын орнату мүмкін емес"
 
-#: gkr/gkr-keyring.vala:198 gkr/gkr-keyring.vala:203
+#: gkr/gkr-keyring.vala:227 gkr/gkr-keyring.vala:232
 msgid "Couldn’t change keyring password"
 msgstr "Кілттер бауының паролін өзгерту мүмкін емес"
 
-#: gkr/gkr-keyring.vala:209
+#: gkr/gkr-keyring.vala:251
 msgid "_Set as default"
 msgstr "Бастапқы ретінде ор_нату"
 
-#: gkr/gkr-keyring.vala:210
-msgid "Applications usually store new passwords in the default keyring."
-msgstr "Қолданбалар әдетте жаңа парольдерді бастапқы кілттер бауында сақтайды."
-
-#: gkr/gkr-keyring.vala:211
+#: gkr/gkr-keyring.vala:252
 msgid "Change _Password"
 msgstr "_Парольді өзгерту"
 
-#: gkr/gkr-keyring.vala:212
-msgid "Change the unlock password of the password storage keyring"
-msgstr ""
-
-#: gkr/gkr-keyring.vala:237
+#: gkr/gkr-keyring.vala:263
 #, c-format
 msgid "Are you sure you want to delete the password keyring “%s”?"
 msgstr "\"%s\" парольдік кілттер бауын өшіруді шынымен қалайсыз ба?"
 
-#: gkr/gkr-keyring.vala:240
+#: gkr/gkr-keyring.vala:266
 msgid "I understand that all items will be permanently deleted."
-msgstr ""
+msgstr "Барлық элементтер толығымен өшірілетінін түсінемін."
 
 #: gkr/gkr-password-entry.vala:35
 msgid "Show/Hide password"
@@ -549,7 +600,6 @@ msgid "_Keyring:"
 msgstr "_Кілттер бауы:"
 
 #: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
-#: ssh/seahorse-ssh-generate.ui:78
 msgid "_Description:"
 msgstr "Ан_ықтамасы:"
 
@@ -557,13 +607,10 @@ msgstr "Ан_ықтамасы:"
 msgid "_Password:"
 msgstr "_Пароль:"
 
-#: gkr/seahorse-gkr-add-item.ui:93
-msgid "_Show Password"
-msgstr "Парольді көр_сету"
-
-#: gkr/seahorse-gkr-add-item.ui:119 gkr/seahorse-gkr-add-keyring.ui:89
-msgid "OK"
-msgstr "ОК"
+#: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
+#: pgp/seahorse-pgp-private-key-properties.ui:960
+msgid "Add"
+msgstr "Қосу"
 
 #: gkr/seahorse-gkr-add-keyring.ui:6
 msgid "Add password keyring"
@@ -580,9 +627,8 @@ msgid "New Keyring Name:"
 msgstr "Жаңа кілттер бауының аты:"
 
 #: gkr/seahorse-gkr-item-properties.ui:8
-#| msgid "_Properties"
 msgid "Item Properties"
-msgstr ""
+msgstr "Элемент қасиеттері"
 
 #: gkr/seahorse-gkr-item-properties.ui:43
 msgid "Description"
@@ -598,7 +644,7 @@ msgid "Use"
 msgstr "Қолдану"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1221
+#: pgp/seahorse-pgp-key-properties.c:1281
 msgid "Type"
 msgstr "Түрі"
 
@@ -611,13 +657,12 @@ msgid "Login"
 msgstr "Логин"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1102
-#: pgp/seahorse-pgp-public-key-properties.ui:914
+#: pgp/seahorse-pgp-private-key-properties.ui:1083
+#: pgp/seahorse-pgp-public-key-properties.ui:915
 msgid "Details"
 msgstr "Ақпараты"
 
 #: gkr/seahorse-gkr-item-properties.ui:255
-#| msgid "Stored Password"
 msgid "Delete Password"
 msgstr "Парольді өшіру"
 
@@ -625,35 +670,19 @@ msgstr "Парольді өшіру"
 msgid "Keyring properties"
 msgstr "Кілттер бауының баптаулары"
 
-#: gkr/seahorse-gkr-keyring.ui:23 src/seahorse-key-manager.ui:486
-msgid "Keyring is locked"
-msgstr "Кілттер бауы бұғатталған"
-
-#: gkr/seahorse-gkr-keyring.ui:33 src/seahorse-key-manager.ui:496
-msgid "Unlock"
-msgstr "Босату"
-
-#: gkr/seahorse-gkr-keyring.ui:46
-msgid "Keyring is unlocked"
-msgstr "Кілттер бауы босатылған"
-
-#: gkr/seahorse-gkr-keyring.ui:56
-msgid "Lock"
-msgstr "Бұғаттау"
-
-#: gkr/seahorse-gkr-keyring.ui:102 pgp/seahorse-pgp-key-properties.c:855
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
 msgid "Name"
 msgstr "Аты"
 
-#: gkr/seahorse-gkr-keyring.ui:130
+#: gkr/seahorse-gkr-keyring.ui:80
 msgid "Created on"
 msgstr "Жасалған күні"
 
-#: gkr/seahorse-gkr-keyring.ui:160
+#: gkr/seahorse-gkr-keyring.ui:110
 msgid "Change password"
 msgstr "Парольді өзгерту"
 
-#: gkr/seahorse-gkr-keyring.ui:167
+#: gkr/seahorse-gkr-keyring.ui:117
 msgid "Set as default"
 msgstr "Бастапқы ретінде орнату"
 
@@ -842,7 +871,7 @@ msgstr "Күнді таңдау"
 msgid "Select the date from a calendar"
 msgstr "Күнтізбеден күнді таңдаңыз"
 
-#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2198
+#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2203
 msgid "Time"
 msgstr "Уақыт"
 
@@ -865,13 +894,13 @@ msgstr "Тізімнен уақытты таңдаңыз"
 msgid "24hr: no"
 msgstr "24hr: yes"
 
-#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1259
-#: libegg/egg-datetime.c:1263
+#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1264
+#: libegg/egg-datetime.c:1268
 msgid "AM"
 msgstr "AM"
 
-#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1260
-#: libegg/egg-datetime.c:1267
+#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1265
+#: libegg/egg-datetime.c:1272
 msgid "PM"
 msgstr "PM"
 
@@ -901,13 +930,13 @@ msgstr "%02d:%02d"
 
 #. TODO: should handle other display modes as well...
 #. Translators: This is YYYY-MM-DD
-#: libegg/egg-datetime.c:1175
+#: libegg/egg-datetime.c:1180
 #, c-format
 msgid "%04d-%02d-%02d"
 msgstr "%04d-%02d-%02d"
 
 #. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:1240
+#: libegg/egg-datetime.c:1245
 #, c-format
 msgid "%u:%u:%u"
 msgstr "%u:%u:%u"
@@ -917,78 +946,61 @@ msgstr "%u:%u:%u"
 msgid "Could not display help: %s"
 msgstr "Көмекті көрсету мүмкін емес: %s"
 
-#: pgp/seahorse-add-subkey.ui:31
-msgid "Never E_xpires"
-msgstr "Мерзімі ешқаша_н аяқталмайды"
-
-#: pgp/seahorse-add-subkey.ui:35
-msgid "If key never expires"
-msgstr "Кілттің мерзімі ешқашан аяқталмаса"
-
-#: pgp/seahorse-add-subkey.ui:65 pkcs11/seahorse-pkcs11-generate.ui:128
-msgid "Key _Type:"
-msgstr "Кіль _түрі:"
-
-#: pgp/seahorse-add-subkey.ui:78
-msgid "Key _Length:"
-msgstr "Кілт ұ_зындығы:"
-
-#: pgp/seahorse-add-subkey.ui:93
-msgid "Expiration Date:"
-msgstr "Мерзімі аяқталу күні:"
-
-#: pgp/seahorse-add-subkey.ui:112
-msgid "Length of Key"
-msgstr "Кілт ұзындығы"
-
-#: pgp/seahorse-add-subkey.ui:194
-msgid "Generate a new subkey"
-msgstr "Жаңа ішкі кілтін генерациялау"
-
-#: pgp/seahorse-expires.ui:22
-msgid "_Never expires"
-msgstr "Мерзімі ешқаша_н аяқталмайды"
-
-#: pgp/seahorse-expires.ui:80 pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "Кілтті қайта шақыру"
-
-#: pgp/seahorse-expires.ui:106
-msgid "C_hange"
-msgstr "Ө_згерту"
-
-#: pgp/seahorse-gpgme-add-subkey.c:161
-msgid "Couldn’t add subkey"
-msgstr "Ішкі кілтті қосу мүмкін емес"
-
-#: pgp/seahorse-gpgme-add-subkey.c:180
+#: pgp/seahorse-gpgme-add-subkey.c:213
 #, c-format
 msgid "Add subkey to %s"
 msgstr "%s үшін ішкі кілтті қосу"
 
-#: pgp/seahorse-gpgme-add-subkey.c:196 pgp/seahorse-gpgme-generate.c:78
+#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
 msgid "DSA (sign only)"
 msgstr "DSA (тек қолтаңба қою)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:204
+#: pgp/seahorse-gpgme-add-subkey.c:247
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (тек шифрлеу)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:210 pgp/seahorse-gpgme-generate.c:79
+#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
 msgid "RSA (sign only)"
 msgstr "RSA (тек қолтаңба қою)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:216
+#: pgp/seahorse-gpgme-add-subkey.c:259
 msgid "RSA (encrypt only)"
 msgstr "RSA (тек шифрлеу)"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:28
+msgid "Key _Type"
+msgstr "Кілт _түрі"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:54
+msgid "Key _Length"
+msgstr "Кілт ұ_зындығы"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:71
+msgid "Length of Key"
+msgstr "Кілт ұзындығы"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:86
+msgid "Expiration Date"
+msgstr "Мерзімі аяқталу күні"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:110
+msgid "Never E_xpires"
+msgstr "Мерзімі ешқаша_н аяқталмайды"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:114
+msgid "If key never expires"
+msgstr "Кілттің мерзімі ешқашан аяқталмаса"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:150
+msgid "Generate a new subkey"
+msgstr "Жаңа ішкі кілтін генерациялау"
 
 #: pgp/seahorse-gpgme-add-uid.c:149
 #, c-format
 msgid "Add user ID to %s"
 msgstr ""
 
-#: pgp/seahorse-gpgme-add-uid.c:217 pgp/seahorse-pgp-key-properties.c:235
-#| msgid "Couldn’t add user id"
+#: pgp/seahorse-gpgme-add-uid.c:217
 msgid "Couldn’t add user ID"
 msgstr ""
 
@@ -997,26 +1009,23 @@ msgid "Add User ID"
 msgstr ""
 
 #. Full name of the key, usually the name of the user.
-#: pgp/seahorse-gpgme-add-uid.ui:24
-#| msgid "Full _Name:"
+#: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-gpgme-generate-dialog.ui:62
 msgid "Full _Name"
-msgstr ""
+msgstr "_Толық аты"
 
 #: pgp/seahorse-gpgme-add-uid.ui:42
 msgid "Must be at least 5 characters long"
-msgstr ""
+msgstr "Ұзындығы 5 таңбадан кем болмауы керек"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55
-#| msgid "_Email Address:"
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:93
 msgid "_Email Address"
-msgstr ""
+msgstr "_Эл. пошта адресі"
 
 #: pgp/seahorse-gpgme-add-uid.ui:72
 msgid "Optional email address"
 msgstr "Міндетті емес эл. пошта адресі"
 
 #: pgp/seahorse-gpgme-add-uid.ui:85
-#| msgid "Key Co_mment:"
 msgid "Key Co_mment"
 msgstr ""
 
@@ -1032,66 +1041,74 @@ msgstr ""
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:553
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:512
 msgid "The operation was cancelled"
-msgstr ""
+msgstr "Әрекеттен бас тартылды"
 
-#: pgp/seahorse-gpgme-expires.c:63
+#: pgp/seahorse-gpgme-expires-dialog.c:72
 msgid "Invalid expiry date"
 msgstr ""
 
-#: pgp/seahorse-gpgme-expires.c:64
+#: pgp/seahorse-gpgme-expires-dialog.c:73
 msgid "The expiry date must be in the future"
 msgstr ""
 
-#: pgp/seahorse-gpgme-expires.c:77
+#: pgp/seahorse-gpgme-expires-dialog.c:83
 msgid "Couldn’t change expiry date"
 msgstr "Аяқталу мерзімін өзгерту мүмкін емес"
 
-#: pgp/seahorse-gpgme-expires.c:138
+#: pgp/seahorse-gpgme-expires-dialog.c:155
 #, c-format
 msgid "Expiry: %s"
 msgstr ""
 
-#: pgp/seahorse-gpgme-exporter.c:81
+#: pgp/seahorse-gpgme-expires-dialog.ui:16
+msgid "_Never expires"
+msgstr "Мерзімі ешқаша_н аяқталмайды"
+
+#: pgp/seahorse-gpgme-expires-dialog.ui:48
+msgid "C_hange"
+msgstr "Ө_згерту"
+
+#: pgp/seahorse-gpgme-exporter.c:72
 msgid "Multiple Keys"
 msgstr ""
 
-#: pgp/seahorse-gpgme-exporter.c:85
+#: pgp/seahorse-gpgme-exporter.c:76
 msgid "Key Data"
-msgstr ""
+msgstr "Кілт деректері"
 
-#: pgp/seahorse-gpgme-exporter.c:113
+#: pgp/seahorse-gpgme-exporter.c:104
 msgid "Armored PGP keys"
 msgstr ""
 
-#: pgp/seahorse-gpgme-exporter.c:117
+#: pgp/seahorse-gpgme-exporter.c:108
 msgid "PGP keys"
 msgstr "PGP кілттері"
 
-#: pgp/seahorse-gpgme-generate.c:76 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:141
+#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
+#: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
-#: pgp/seahorse-gpgme-generate.c:77
+#: pgp/seahorse-gpgme-generate-dialog.c:85
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
-#: pgp/seahorse-gpgme-generate.c:129
+#: pgp/seahorse-gpgme-generate-dialog.c:101
 msgid "Couldn’t generate PGP key"
 msgstr "PGP кілтін генерациялау мүмкін емес"
 
-#: pgp/seahorse-gpgme-generate.c:168
+#: pgp/seahorse-gpgme-generate-dialog.c:140
 msgid "Passphrase for New PGP Key"
 msgstr ""
 
-#: pgp/seahorse-gpgme-generate.c:169
+#: pgp/seahorse-gpgme-generate-dialog.c:141
 msgid "Enter the passphrase for your new key twice."
 msgstr ""
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate.c:181
+#: pgp/seahorse-gpgme-generate-dialog.c:153
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1100,25 +1117,66 @@ msgid ""
 "This gives the system the random data that it needs."
 msgstr ""
 
-#: pgp/seahorse-gpgme-generate.c:186 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Кілтті генерациялау"
 
-#: pgp/seahorse-gpgme-generate.c:313
+#: pgp/seahorse-gpgme-generate-dialog.c:182
 msgid "Name must be at least 5 characters long."
 msgstr ""
 
-#: pgp/seahorse-gpgme-key-deleter.c:77 pgp/seahorse-gpgme-secret-deleter.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:18
+msgid "New PGP key"
+msgstr "Жаңа PGP кілті"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:43
+msgid "A PGP key allows you to encrypt email or files to other people."
+msgstr ""
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:125
+#: pkcs11/seahorse-pkcs11-generate.ui:110
+msgid "_Advanced key options"
+msgstr ""
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:139
+msgid "_Comment"
+msgstr "Тү_сіндірме"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:170 ssh/seahorse-ssh-generate.ui:127
+msgid "Encryption _Type"
+msgstr "Шифрлеу _түрі"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:200 ssh/seahorse-ssh-generate.ui:164
+msgid "Key _Strength (bits)"
+msgstr "Кілт қа_таңдығы (бит)"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:230
+msgid "E_xpiration Date"
+msgstr "Мер_зімі аяқталу күні"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:252
+msgid "Ne_ver Expires"
+msgstr ""
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:293
+msgid "C_reate"
+msgstr "Ж_асау"
+
+#: pgp/seahorse-gpgme-generate-dialog.ui:300
+msgid "Generate a new key"
+msgstr "Жана кілтті жасау"
+
+#: pgp/seahorse-gpgme-key-deleter.c:76 pgp/seahorse-gpgme-secret-deleter.c:59
 #: pkcs11/pkcs11-deleter.vala:35 pkcs11/pkcs11-key-deleter.vala:33
 #, c-format
 msgid "Are you sure you want to permanently delete %s?"
-msgstr ""
+msgstr "%s толығымен өшіруді шынымен қалайсыз ба?"
 
-#: pgp/seahorse-gpgme-key-deleter.c:80
+#: pgp/seahorse-gpgme-key-deleter.c:79
 #, c-format
 msgid "Are you sure you want to permanently delete %d keys?"
 msgid_plural "Are you sure you want to permanently delete %d keys?"
-msgstr[0] ""
+msgstr[0] "%d кілтті толығымен өшіруді шынымен қалайсыз ба?"
 
 #: pgp/seahorse-gpgme-key-op.c:347
 msgid "Wrong password"
@@ -1128,50 +1186,50 @@ msgstr "Пароль қате"
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 
-#: pgp/seahorse-gpgme-keyring.c:87
+#: pgp/seahorse-gpgme-keyring.c:92
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Кілттік фразасы қате."
 
-#: pgp/seahorse-gpgme-keyring.c:91
+#: pgp/seahorse-gpgme-keyring.c:96
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "\"%s\" үшін жаңа кілттік фразаны енгізіңіз"
 
-#: pgp/seahorse-gpgme-keyring.c:93
+#: pgp/seahorse-gpgme-keyring.c:98
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "\"%s\" үшін кілттік фразаны енгізіңіз"
 
-#: pgp/seahorse-gpgme-keyring.c:96 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Жаңа кілттік фразаны енгізіңіз"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:103
 msgid "Enter passphrase"
 msgstr "Кілттік фразаны енгізіңіз"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:108
 msgid "Passphrase"
 msgstr "Кілттік фраза"
 
-#: pgp/seahorse-gpgme-keyring.c:298
+#: pgp/seahorse-gpgme-keyring.c:303
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "%d кілт жүктелді"
 
-#: pgp/seahorse-gpgme-keyring.c:623
+#: pgp/seahorse-gpgme-keyring.c:631
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
 msgstr ""
 
-#: pgp/seahorse-gpgme-keyring.c:753
+#: pgp/seahorse-gpgme-keyring.c:761
 msgid "GnuPG keys"
 msgstr "GnuPG кілттері"
 
-#: pgp/seahorse-gpgme-keyring.c:764
+#: pgp/seahorse-gpgme-keyring.c:772
 msgid "GnuPG: default keyring directory"
 msgstr ""
 
@@ -1205,13 +1263,17 @@ msgstr "Барлық сурет файлдары"
 msgid "All JPEG files"
 msgstr "Барлық JPEG файлдары"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:290
+#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:310
 msgid "All files"
 msgstr "Барлық файлдар"
 
 #: pgp/seahorse-gpgme-photos.c:262
 msgid "Choose Photo to Add to Key"
 msgstr "Кілтке қосу үшін фотоны таңдаңыз"
+
+#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:270
+msgid "_Open"
+msgstr "А_шу"
 
 #: pgp/seahorse-gpgme-photos.c:284
 msgid "Couldn’t prepare photo"
@@ -1233,111 +1295,188 @@ msgstr ""
 msgid "Couldn’t delete photo"
 msgstr "Фотоны өшіру мүмкін емес"
 
-#: pgp/seahorse-gpgme-revoke.c:73
+#: pgp/seahorse-gpgme-revoke.c:72
 msgid "Couldn’t revoke subkey"
 msgstr "Ішкі кілтті қайта шақыру мүмкін емес"
 
-#: pgp/seahorse-gpgme-revoke.c:94
+#: pgp/seahorse-gpgme-revoke.c:93
 #, c-format
 msgid "Revoke: %s"
 msgstr "Қайта шақыру: %s"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke.c:104
 msgid "No reason"
 msgstr "Себебі жоқ"
 
-#: pgp/seahorse-gpgme-revoke.c:106
+#: pgp/seahorse-gpgme-revoke.c:105
 msgid "No reason for revoking key"
 msgstr "Кілтті қайта шақыру үшін себеп жоқ"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke.c:111
 msgid "Compromised"
 msgstr ""
 
-#: pgp/seahorse-gpgme-revoke.c:113
+#: pgp/seahorse-gpgme-revoke.c:112
 msgid "Key has been compromised"
 msgstr ""
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke.c:118
 msgid "Superseded"
 msgstr "Орынбасқан"
 
-#: pgp/seahorse-gpgme-revoke.c:120
+#: pgp/seahorse-gpgme-revoke.c:119
 msgid "Key has been superseded"
 msgstr ""
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke.c:125
 msgid "Not Used"
 msgstr "Қолданылмайды"
 
-#: pgp/seahorse-gpgme-revoke.c:127
+#: pgp/seahorse-gpgme-revoke.c:126
 msgid "Key is no longer used"
 msgstr "Кілт енді қолданылмайды"
 
-#: pgp/seahorse-gpgme-revoke.c:164
+#: pgp/seahorse-gpgme-revoke.c:163
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
 "undone! Are you sure you want to continue?"
 msgstr ""
 
-#: pgp/seahorse-gpgme-revoke.c:176
+#: pgp/seahorse-gpgme-revoke.c:175
 msgid "Couldn’t add revoker"
 msgstr "Қайта шақырушыны қосу мүмкін емес"
 
-#: pgp/seahorse-gpgme-secret-deleter.c:81 ssh/deleter.vala:43
+#: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
 msgstr ""
 
-#: pgp/seahorse-gpgme-sign.c:99
+#: pgp/seahorse-gpgme-sign-dialog.c:146
 #, c-format
 msgid ""
 "This key was already signed by\n"
 "“%s”"
 msgstr ""
 
-#: pgp/seahorse-gpgme-sign.c:104
+#: pgp/seahorse-gpgme-sign-dialog.c:151
 msgid "Couldn’t sign key"
 msgstr "Кілттерге қолтаңба қою мүмкін емес"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: pgp/seahorse-gpgme-sign.c:163 pgp/seahorse-signer.c:62
+#: pgp/seahorse-gpgme-sign-dialog.c:281 pgp/seahorse-signer.c:62
 msgid "No keys usable for signing"
 msgstr ""
 
-#: pgp/seahorse-gpgme-sign.c:164
+#: pgp/seahorse-gpgme-sign-dialog.c:282
 msgid ""
 "You have no personal PGP keys that can be used to indicate your trust of "
 "this key."
 msgstr ""
 
-#: pgp/seahorse-gpgme-subkey.c:194
+#: pgp/seahorse-gpgme-sign-dialog.ui:6
+msgid "Sign Key"
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:25
+msgid "By signing you indicate your trust that this key belongs to:"
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:32
+msgid "Key Name"
+msgstr "Кілт аты"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:52
+msgid "How carefully have you checked this key?"
+msgstr "Бұл кілтті қаншалықты мұқият тексердіңіз?"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:77
+msgid "_Not at all"
+msgstr "_Мүлдем жоқ"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:88
+msgid "_Casually"
+msgstr "Қа_лыпты"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:100
+msgid "_Very Carefully"
+msgstr "Ө_те тиянақты"
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:127
+msgid ""
+"<i>Not at all:</i> means you believe the key is owned by the person who "
+"claims to own it, but you could not or did not verify this to be a fact."
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:140
+msgid ""
+"<i>Casually:</i> means you have done a casual verification that the key is "
+"owned by the person who claims to own it. For example, you could read the "
+"key fingerprint to the owner over the phone."
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:161
+msgid ""
+"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
+"key is genuine."
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:177
+msgid ""
+"You could use a hard to forge photo identification (such as a passport) to "
+"personally check that the name on the key is correct. You should have also "
+"used email to check that the email address belongs to the owner."
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:206
+msgid "How others will see this signature:"
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:222
+msgid "_Others may not see this signature"
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:248
+msgid "I can _revoke this signature at a later date."
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:282
+msgid "Sign key as:"
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:300
+msgid "_Signer:"
+msgstr ""
+
+#: pgp/seahorse-gpgme-sign-dialog.ui:335
+msgid "_Sign"
+msgstr ""
+
+#: pgp/seahorse-gpgme-subkey.c:89
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Белгісіз"
 
-#: pgp/seahorse-gpgme-subkey.c:196
+#: pgp/seahorse-gpgme-subkey.c:91
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:571
+#: pgp/seahorse-hkp-source.c:530
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 
-#: pgp/seahorse-hkp-source.c:574
+#: pgp/seahorse-hkp-source.c:533
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr ""
 
-#: pgp/seahorse-hkp-source.c:1084
+#: pgp/seahorse-hkp-source.c:996
 msgid "HTTP Key Server"
 msgstr "HTTP кілттер сервері"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
-#| msgid "Couldn’t import keys"
 msgid "Couldn’t import key: %s"
 msgstr ""
 
@@ -1346,26 +1485,23 @@ msgid "Key import succeeded"
 msgstr ""
 
 #: pgp/seahorse-keyserver-results.c:154 src/import-dialog.vala:38
-msgid "Import"
-msgstr "Импорттау"
+msgid "_Import"
+msgstr "И_мпорттау"
 
 #: pgp/seahorse-keyserver-results.c:156
-#| msgid "Couldn’t import keys"
 msgid "Can’t import key"
 msgstr ""
 
 #: pgp/seahorse-keyserver-results.c:240
-#| msgid "Remote Keys"
 msgid "Remote keys"
 msgstr ""
 
 #: pgp/seahorse-keyserver-results.c:242
 #, c-format
-#| msgid "Remote Keys Containing “%s”"
 msgid "Remote keys containing “%s”"
 msgstr ""
 
-#: pgp/seahorse-keyserver-results.c:356
+#: pgp/seahorse-keyserver-results.c:357
 msgid "The search for keys failed."
 msgstr "Кілттерді іздеу сәтсіз аяқталды."
 
@@ -1457,22 +1593,22 @@ msgstr "_Синхрондау"
 msgid "Couldn’t communicate with %s: %s"
 msgstr ""
 
-#: pgp/seahorse-ldap-source.c:649
+#: pgp/seahorse-ldap-source.c:642
 #, c-format
 msgid "Connecting to: %s"
 msgstr ""
 
-#: pgp/seahorse-ldap-source.c:655
+#: pgp/seahorse-ldap-source.c:647
 #, c-format
 msgid "Couldn’t resolve address: %s"
 msgstr ""
 
-#: pgp/seahorse-ldap-source.c:699
+#: pgp/seahorse-ldap-source.c:689
 #, c-format
 msgid "Resolving server address: %s"
 msgstr ""
 
-#: pgp/seahorse-ldap-source.c:1434
+#: pgp/seahorse-ldap-source.c:1366
 msgid "LDAP Key Server"
 msgstr "LDAP кілттер сервері"
 
@@ -1484,355 +1620,313 @@ msgstr "PGP кілттері"
 msgid "PGP keys are for encrypting email or files"
 msgstr ""
 
-#: pgp/seahorse-pgp-generate.ui:18
-msgid "New PGP key"
-msgstr "Жаңа PGP кілті"
+#: pgp/seahorse-pgp-key.c:172
+#, c-format
+msgid "(and %d other)"
+msgid_plural "(and %d others)"
+msgstr[0] "(және %d басқа)"
 
-#: pgp/seahorse-pgp-generate.ui:67
-msgid "A PGP key allows you to encrypt email or files to other people."
-msgstr ""
-
-#. Full name of the key, usually the name of the user.
-#: pgp/seahorse-pgp-generate.ui:86
-msgid "Full _Name:"
-msgstr "Толық _аты:"
-
-#: pgp/seahorse-pgp-generate.ui:114
-msgid "_Email Address:"
-msgstr "_Эл. пошта адресі:"
-
-#: pgp/seahorse-pgp-generate.ui:143 pkcs11/seahorse-pkcs11-generate.ui:110
-msgid "_Advanced key options"
-msgstr ""
-
-#: pgp/seahorse-pgp-generate.ui:160
-msgid "_Comment:"
-msgstr ""
-
-#: pgp/seahorse-pgp-generate.ui:188 ssh/seahorse-ssh-generate.ui:124
-msgid "Encryption _Type:"
-msgstr ""
-
-#: pgp/seahorse-pgp-generate.ui:215 pkcs11/seahorse-pkcs11-generate.ui:151
-#: ssh/seahorse-ssh-generate.ui:158
-msgid "Key _Strength (bits):"
-msgstr ""
-
-#: pgp/seahorse-pgp-generate.ui:242
-msgid "E_xpiration Date:"
-msgstr ""
-
-#: pgp/seahorse-pgp-generate.ui:261
-msgid "Ne_ver Expires"
-msgstr ""
-
-#: pgp/seahorse-pgp-generate.ui:304
-msgid "C_reate"
-msgstr "Ж_асау"
-
-#: pgp/seahorse-pgp-generate.ui:311
-msgid "Generate a new key"
-msgstr "Жана кілтті жасау"
-
-#: pgp/seahorse-pgp-key.c:348
+#: pgp/seahorse-pgp-key.c:573
 msgid "Personal PGP key"
 msgstr "Жеке PGP кілті"
 
-#: pgp/seahorse-pgp-key.c:350
+#: pgp/seahorse-pgp-key.c:575
 msgid "PGP key"
 msgstr "PGP кілті"
 
-#: pgp/seahorse-pgp-key-properties.c:264
+#: pgp/seahorse-pgp-key-properties.c:249
 msgid "Couldn’t change primary user ID"
 msgstr "Біріншілік пайдаланушы идентификаторын өзгерту мүмкін емес"
 
-#: pgp/seahorse-pgp-key-properties.c:282
+#: pgp/seahorse-pgp-key-properties.c:284
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "\"%s\" пайдаланушы идентификаторын өшіруді шынымен қалайсыз ба?"
 
-#: pgp/seahorse-pgp-key-properties.c:291
+#: pgp/seahorse-pgp-key-properties.c:293
 msgid "Couldn’t delete user ID"
 msgstr "Пайдаланушы идентификаторын өшіру мүмкін емес"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:363 pgp/seahorse-pgp-key-properties.c:1355
+#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
 msgid "[Unknown]"
 msgstr "[Белгісіз]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:460 pgp/seahorse-pgp-key-properties.c:1560
+#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
 msgid "Name/Email"
 msgstr "Аты/Эл. пошта"
 
-#: pgp/seahorse-pgp-key-properties.c:467
+#: pgp/seahorse-pgp-key-properties.c:472
 msgid "Signature ID"
 msgstr ""
 
-#: pgp/seahorse-pgp-key-properties.c:573
+#: pgp/seahorse-pgp-key-properties.c:578
 msgid "Couldn’t change primary photo"
 msgstr "Біріншілік фотоны өзгерту мүмкін емес"
 
-#: pgp/seahorse-pgp-key-properties.c:733
-#| msgid "Wrong password"
+#: pgp/seahorse-pgp-key-properties.c:738
 msgid "Error changing password"
-msgstr ""
+msgstr "Парольді өзгерту қатесі"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:779
+#: pgp/seahorse-pgp-key-properties.c:784
 msgid "(unknown)"
 msgstr "(белгісіз)"
 
-#: pgp/seahorse-pgp-key-properties.c:784
+#: pgp/seahorse-pgp-key-properties.c:789
 #, c-format
 msgid "This key expired on: %s"
 msgstr ""
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:812
+#: pgp/seahorse-pgp-key-properties.c:817
 #, c-format
-#| msgid "Public SSH keys"
 msgid "%s — Public key"
 msgstr "%s — Публикалық кілті"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:815
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
-#| msgid "Private key"
 msgid "%s — Private key"
 msgstr "%s — Жеке кілті"
 
-#: pgp/seahorse-pgp-key-properties.c:969
+#: pgp/seahorse-pgp-key-properties.c:1006
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr ""
 
-#: pgp/seahorse-pgp-key-properties.c:977
+#: pgp/seahorse-pgp-key-properties.c:1014
 msgid "Couldn’t delete subkey"
 msgstr "Ішкі кілтті өшіру мүмкін емес"
 
-#: pgp/seahorse-pgp-key-properties.c:1036
-#: pgp/seahorse-pgp-key-properties.c:1329
+#: pgp/seahorse-pgp-key-properties.c:1078
+#: pgp/seahorse-pgp-key-properties.c:1389
 msgid "Unable to change trust"
 msgstr ""
 
-#: pgp/seahorse-pgp-key-properties.c:1048 ssh/key-properties.vala:185
+#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Кілтті экспорттау мүмкін емес"
 
-#: pgp/seahorse-pgp-key-properties.c:1179
-#: pgp/seahorse-pgp-key-properties.c:1263
+#: pgp/seahorse-pgp-key-properties.c:1239
+#: pgp/seahorse-pgp-key-properties.c:1323
 msgctxt "Expires"
 msgid "Never"
 msgstr "Ешқашан"
 
-#: pgp/seahorse-pgp-key-properties.c:1218
+#: pgp/seahorse-pgp-key-properties.c:1278
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1224
+#: pgp/seahorse-pgp-key-properties.c:1284
 msgid "Usage"
 msgstr "Қолданылуы"
 
-#: pgp/seahorse-pgp-key-properties.c:1227
+#: pgp/seahorse-pgp-key-properties.c:1287
 msgid "Created"
 msgstr "Жасалған"
 
-#: pgp/seahorse-pgp-key-properties.c:1230
+#: pgp/seahorse-pgp-key-properties.c:1290
 msgid "Expires"
 msgstr "Мерзімі аяқталады"
 
-#: pgp/seahorse-pgp-key-properties.c:1233
+#: pgp/seahorse-pgp-key-properties.c:1293
 msgid "Status"
 msgstr "Қалып-күйі"
 
-#: pgp/seahorse-pgp-key-properties.c:1236
+#: pgp/seahorse-pgp-key-properties.c:1296
 msgid "Strength"
 msgstr "Мықтылығы"
 
-#: pgp/seahorse-pgp-key-properties.c:1254
+#: pgp/seahorse-pgp-key-properties.c:1314
 msgid "Revoked"
 msgstr "Қайта шақырылған"
 
-#: pgp/seahorse-pgp-key-properties.c:1256
+#: pgp/seahorse-pgp-key-properties.c:1316
 msgid "Expired"
 msgstr "Ескірген"
 
-#: pgp/seahorse-pgp-key-properties.c:1258
+#: pgp/seahorse-pgp-key-properties.c:1318
 msgid "Disabled"
 msgstr "Сөндірулі"
 
-#: pgp/seahorse-pgp-key-properties.c:1260
+#: pgp/seahorse-pgp-key-properties.c:1320
 msgid "Good"
 msgstr "Жақсы"
 
-#: pgp/seahorse-pgp-key-properties.c:1563
-#: pgp/seahorse-pgp-private-key-properties.ui:332
-#: pgp/seahorse-pgp-public-key-properties.ui:273
+#: pgp/seahorse-pgp-key-properties.c:1628
+#: pgp/seahorse-pgp-private-key-properties.ui:345
+#: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Кілт идентификаторы"
 
-#: pgp/seahorse-pgp-key-properties.c:1704
+#: pgp/seahorse-pgp-key-properties.c:1771
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr ""
 
-#: pgp/seahorse-pgp-key-properties.c:1711
+#: pgp/seahorse-pgp-key-properties.c:1778
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
 msgstr ""
 
-#: pgp/seahorse-pgp-key-properties.c:1718
+#: pgp/seahorse-pgp-key-properties.c:1785
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:55
-#: pgp/seahorse-pgp-public-key-properties.ui:60
+#: pgp/seahorse-pgp-private-key-properties.ui:30
+msgid "Export _secret key"
+msgstr "Ж_еке кілтті экспорттау"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:34
+msgid "Export _public key"
+msgstr "А_шық кілтті экспорттау"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:68
+#: pgp/seahorse-pgp-public-key-properties.ui:61
 msgid "This key has been revoked"
 msgstr "Бұл кілт қайта шақырылған"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:65
-#: pgp/seahorse-pgp-public-key-properties.ui:72
+#: pgp/seahorse-pgp-private-key-properties.ui:78
+#: pgp/seahorse-pgp-public-key-properties.ui:73
 msgid "The owner of the key revoked the key. It can no longer be used."
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:93
-#: pgp/seahorse-pgp-public-key-properties.ui:103
+#: pgp/seahorse-pgp-private-key-properties.ui:106
+#: pgp/seahorse-pgp-public-key-properties.ui:104
 msgid "This key has expired"
 msgstr "Бұл кілттің мерзімі аяқталған"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:158
+#: pgp/seahorse-pgp-private-key-properties.ui:171
 msgid "Add a photo to this key"
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:177
+#: pgp/seahorse-pgp-private-key-properties.ui:190
 msgid "Remove this photo from this key"
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:196
+#: pgp/seahorse-pgp-private-key-properties.ui:209
 msgid "Make this photo the primary photo"
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:221
+#: pgp/seahorse-pgp-private-key-properties.ui:234
 msgid "Go to previous photo"
 msgstr "Алдыңғы фотоға өту"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:240
+#: pgp/seahorse-pgp-private-key-properties.ui:253
 msgid "Go to next photo"
 msgstr "Келесі фотоға өту"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:305
-#: pgp/seahorse-pgp-public-key-properties.ui:245
+#: pgp/seahorse-pgp-private-key-properties.ui:318
+#: pgp/seahorse-pgp-public-key-properties.ui:246
 msgid "Comment"
 msgstr "Түсіндірме"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:362
-#: ssh/seahorse-ssh-key-properties.ui:294
+#: pgp/seahorse-pgp-private-key-properties.ui:375
+#: ssh/seahorse-ssh-key-properties.ui:346
 msgid "Change _Passphrase"
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:378
-#: pgp/seahorse-pgp-public-key-properties.ui:346
+#: pgp/seahorse-pgp-private-key-properties.ui:391
+#: pgp/seahorse-pgp-public-key-properties.ui:347
 msgid "Owner"
 msgstr "Иесі"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:391
+#: pgp/seahorse-pgp-private-key-properties.ui:404
 msgid "Key Names and Signatures"
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:429
+#: pgp/seahorse-pgp-private-key-properties.ui:442
 msgid "Primary"
 msgstr "Біріншілік"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:459 pgp/seahorse-pgp-subkey.c:291
+#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:162
 msgid "Sign"
 msgstr "Қолтаңба"
 
 #. Translators: This text refers to deleting an item from its type's backing store
-#: pgp/seahorse-pgp-private-key-properties.ui:489
+#: pgp/seahorse-pgp-private-key-properties.ui:502
+#: pkcs11/seahorse-pkcs11-properties.ui:22
 #: src/seahorse-key-manager-widgets.ui:12
 msgid "Delete"
 msgstr "Өшіру"
 
 #. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:519
+#: pgp/seahorse-pgp-private-key-properties.ui:532
 msgid "_Add Name"
 msgstr "Атын қ_осу"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:549
-#: pgp/seahorse-pgp-private-key-properties.ui:1039
+#: pgp/seahorse-pgp-private-key-properties.ui:562
+#: pgp/seahorse-pgp-private-key-properties.ui:1020
 msgid "Revoke"
 msgstr "Қайта шақыру"
 
 #. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:585
+#: pgp/seahorse-pgp-private-key-properties.ui:598
 msgid "Names and Signatures"
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:622
-#: pgp/seahorse-pgp-public-key-properties.ui:622
+#: pgp/seahorse-pgp-private-key-properties.ui:635
+#: pgp/seahorse-pgp-public-key-properties.ui:623
 msgid "Key ID:"
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:647
-#: pgp/seahorse-pgp-public-key-properties.ui:648
+#: pgp/seahorse-pgp-private-key-properties.ui:660
+#: pgp/seahorse-pgp-public-key-properties.ui:649
 msgid "Type:"
 msgstr "Түрі:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:672
-#: pgp/seahorse-pgp-public-key-properties.ui:674
+#: pgp/seahorse-pgp-private-key-properties.ui:685
+#: pgp/seahorse-pgp-public-key-properties.ui:675
 msgid "Strength:"
 msgstr "Мықтылығы:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:697
+#: pgp/seahorse-pgp-private-key-properties.ui:710
 msgid "Technical Details"
 msgstr "Техникалық ақпараты"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:725
-#: ssh/seahorse-ssh-key-properties.ui:174
+#: pgp/seahorse-pgp-private-key-properties.ui:738
+#: ssh/seahorse-ssh-key-properties.ui:173
 msgid "Fingerprint"
 msgstr "Баспасы"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:757
-#: pgp/seahorse-pgp-public-key-properties.ui:768
+#: pgp/seahorse-pgp-private-key-properties.ui:770
+#: pgp/seahorse-pgp-public-key-properties.ui:769
 msgid "Created:"
 msgstr "Жасалған:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:781
-#: pgp/seahorse-pgp-public-key-properties.ui:793
+#: pgp/seahorse-pgp-private-key-properties.ui:794
+#: pgp/seahorse-pgp-public-key-properties.ui:794
 msgid "Expires:"
 msgstr "Мерзімі аяқталады:"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:827
+#: pgp/seahorse-pgp-private-key-properties.ui:840
 msgid "Dates"
 msgstr "Күндер"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:850
+#: pgp/seahorse-pgp-private-key-properties.ui:863
 msgid "Override Owner _Trust:"
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:878
-msgid "_Export Secret Key:"
-msgstr ""
+#: pgp/seahorse-pgp-private-key-properties.ui:890
+msgid "_Export to file"
+msgstr "Файлға _экспорттау"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:925
+#: pgp/seahorse-pgp-private-key-properties.ui:906
 msgid "Actions"
 msgstr "Әрекеттер"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:979
-msgid "Add"
-msgstr "Қосу"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:1009
+#: pgp/seahorse-pgp-private-key-properties.ui:990
 msgid "Expire"
 msgstr ""
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:897
+#: pgp/seahorse-pgp-private-key-properties.ui:1064
+#: pgp/seahorse-pgp-public-key-properties.ui:898
 msgid "_Subkeys"
 msgstr ""
 
@@ -1852,75 +1946,75 @@ msgid "Ultimately"
 msgstr "Өте жақсы"
 
 #. Names set on the PGP key.
-#: pgp/seahorse-pgp-public-key-properties.ui:325
+#: pgp/seahorse-pgp-public-key-properties.ui:326
 msgid "_Other Names:"
 msgstr ""
 
-#: pgp/seahorse-pgp-public-key-properties.ui:368
+#: pgp/seahorse-pgp-public-key-properties.ui:369
 msgid "Your trust of this key"
 msgstr ""
 
-#: pgp/seahorse-pgp-public-key-properties.ui:381
+#: pgp/seahorse-pgp-public-key-properties.ui:382
 msgid "Your trust is manually specified on the <i>Details</i> tab."
 msgstr ""
 
-#: pgp/seahorse-pgp-public-key-properties.ui:454
+#: pgp/seahorse-pgp-public-key-properties.ui:455
 msgid "_Sign this Key"
 msgstr ""
 
-#: pgp/seahorse-pgp-public-key-properties.ui:503
+#: pgp/seahorse-pgp-public-key-properties.ui:504
 msgid "_Revoke Signature"
 msgstr ""
 
-#: pgp/seahorse-pgp-public-key-properties.ui:525
+#: pgp/seahorse-pgp-public-key-properties.ui:526
 msgid "_People who have signed this key:"
 msgstr ""
 
-#: pgp/seahorse-pgp-public-key-properties.ui:550
+#: pgp/seahorse-pgp-public-key-properties.ui:551
 msgid "_Only display the signatures of people I trust"
 msgstr ""
 
-#: pgp/seahorse-pgp-public-key-properties.ui:569
+#: pgp/seahorse-pgp-public-key-properties.ui:570
 msgid "Trust"
 msgstr "Сену"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:603
+#: pgp/seahorse-pgp-public-key-properties.ui:604
 msgid "Technical Details:"
 msgstr "Техникалық ақпараты:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:709
+#: pgp/seahorse-pgp-public-key-properties.ui:710
 msgid "Fingerprint:"
 msgstr "Баспасы:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:749
+#: pgp/seahorse-pgp-public-key-properties.ui:750
 msgid "Dates:"
 msgstr "Күндер:"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:827
+#: pgp/seahorse-pgp-public-key-properties.ui:828
 msgid "Indicate Trust:"
 msgstr ""
 
-#: pgp/seahorse-pgp-public-key-properties.ui:844
+#: pgp/seahorse-pgp-public-key-properties.ui:845
 msgid "You _Trust the Owner:"
 msgstr ""
 
-#: pgp/seahorse-pgp-subkey.c:290
+#: pgp/seahorse-pgp-subkey.c:161
 msgid "Encrypt"
 msgstr "Шифрлеу"
 
-#: pgp/seahorse-pgp-subkey.c:292
+#: pgp/seahorse-pgp-subkey.c:163
 msgid "Certify"
 msgstr ""
 
-#: pgp/seahorse-pgp-subkey.c:293
+#: pgp/seahorse-pgp-subkey.c:164
 msgid "Authenticate"
 msgstr "Аутентификация"
 
-#: pgp/seahorse-pgp-subkey.c:401
+#: pgp/seahorse-pgp-subkey.c:313
 msgid "Key"
 msgstr "Кілт"
 
-#: pgp/seahorse-pgp-subkey.c:406
+#: pgp/seahorse-pgp-subkey.c:318
 #, c-format
 msgid "Subkey %d of %s"
 msgstr ""
@@ -1936,6 +2030,10 @@ msgstr "_Себебі:"
 #: pgp/seahorse-revoke.ui:70
 msgid "Optional description of revocation"
 msgstr "Қайта шақырудың міндетті емес себебі"
+
+#: pgp/seahorse-revoke.ui:129
+msgid "Revoke key"
+msgstr "Кілтті қайта шақыру"
 
 #: pgp/seahorse-revoke.ui:154
 msgid "Re_voke"
@@ -1954,97 +2052,19 @@ msgstr ""
 msgid "_Sign message with key:"
 msgstr ""
 
-#: pgp/seahorse-sign.ui:6
-msgid "Sign Key"
-msgstr ""
-
-#: pgp/seahorse-sign.ui:27
-msgid "By signing you indicate your trust that this key belongs to:"
-msgstr ""
-
-#: pgp/seahorse-sign.ui:34
-msgid "Key Name"
-msgstr "Кілт аты"
-
-#: pgp/seahorse-sign.ui:54
-msgid "How carefully have you checked this key?"
-msgstr "Бұл кілтті қаншалықты мұқият тексердіңіз?"
-
-#: pgp/seahorse-sign.ui:84
-msgid "_Not at all"
-msgstr "_Мүлдем жоқ"
-
-#: pgp/seahorse-sign.ui:95
-msgid "_Casually"
-msgstr "Қа_лыпты"
-
-#: pgp/seahorse-sign.ui:107
-msgid "_Very Carefully"
-msgstr "Ө_те тиянақты"
-
-#: pgp/seahorse-sign.ui:134
-msgid ""
-"<i>Not at all:</i> means you believe the key is owned by the person who "
-"claims to own it, but you could not or did not verify this to be a fact."
-msgstr ""
-
-#: pgp/seahorse-sign.ui:147
-msgid ""
-"<i>Casually:</i> means you have done a casual verification that the key is "
-"owned by the person who claims to own it. For example, you could read the "
-"key fingerprint to the owner over the phone."
-msgstr ""
-
-#: pgp/seahorse-sign.ui:168
-msgid ""
-"<i>Very Carefully:</i> Select this only if you are absolutely sure that this "
-"key is genuine."
-msgstr ""
-
-#: pgp/seahorse-sign.ui:184
-msgid ""
-"You could use a hard to forge photo identification (such as a passport) to "
-"personally check that the name on the key is correct. You should have also "
-"used email to check that the email address belongs to the owner."
-msgstr ""
-
-#: pgp/seahorse-sign.ui:215
-msgid "How others will see this signature:"
-msgstr ""
-
-#: pgp/seahorse-sign.ui:232
-msgid "_Others may not see this signature"
-msgstr ""
-
-#: pgp/seahorse-sign.ui:243
-msgid "I can _revoke this signature at a later date."
-msgstr ""
-
-#: pgp/seahorse-sign.ui:268
-msgid "Sign key as:"
-msgstr ""
-
-#: pgp/seahorse-sign.ui:286
-msgid "_Signer:"
-msgstr ""
-
-#: pgp/seahorse-sign.ui:321
-msgid "_Sign"
-msgstr ""
-
-#: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
+#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
 msgid "Exporting data"
 msgstr "Деректерді экспорттау"
 
-#: pgp/seahorse-transfer.c:238 pgp/seahorse-transfer.c:285
+#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
 msgid "Retrieving data"
 msgstr "Деректерді алу"
 
-#: pgp/seahorse-transfer.c:241 pgp/seahorse-transfer.c:288
+#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
 msgid "Importing data"
 msgstr "Деректерді импорттау"
 
-#: pgp/seahorse-transfer.c:241 pgp/seahorse-transfer.c:288
+#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
 msgid "Sending data"
 msgstr "Ақпарат жіберілуде"
 
@@ -2086,41 +2106,21 @@ msgstr ""
 msgid "Unnamed private key"
 msgstr "Атаусыз жеке кілт"
 
-#: pkcs11/pkcs11-private-key.vala:70 src/seahorse-key-manager.ui:225
+#: pkcs11/pkcs11-private-key.vala:70 src/seahorse-key-manager.ui:227
 msgid "Private key"
 msgstr "Жеке кілт"
 
-#: pkcs11/pkcs11-properties.vala:134
+#: pkcs11/pkcs11-properties.vala:98
 msgid "Unnamed"
 msgstr "Атаусыз"
 
-#: pkcs11/pkcs11-properties.vala:165
+#: pkcs11/pkcs11-properties.vala:130
 msgid "Failed to export certificate"
 msgstr "Сертификатты экспорттау сәтсіз аяқталды"
 
-#: pkcs11/pkcs11-properties.vala:188 src/sidebar.vala:614
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:426
 msgid "Couldn’t delete"
 msgstr "Өшіру мүмкін емес"
-
-#: pkcs11/pkcs11-properties.vala:199
-msgid "_Export"
-msgstr "Э_кспорт"
-
-#: pkcs11/pkcs11-properties.vala:200
-msgid "Export the certificate"
-msgstr "Сертификатты экспорттау"
-
-#: pkcs11/pkcs11-properties.vala:202
-msgid "Delete this certificate or key"
-msgstr "Бұл сертификатты немесе кілтті өшіру"
-
-#: pkcs11/pkcs11-properties.vala:203
-msgid "Request _Certificate"
-msgstr "_Сертификатқа сұраным жасау"
-
-#: pkcs11/pkcs11-properties.vala:204
-msgid "Create a certificate request file for this key"
-msgstr "Бұл кілт үшін сертификатқа сұраным файлын жасау"
 
 #: pkcs11/pkcs11-request.vala:56 pkcs11/seahorse-pkcs11-generate.ui:193
 msgid "Create"
@@ -2134,19 +2134,19 @@ msgstr "Сертификатқа сұранымды жасау мүмкін ем
 msgid "Save certificate request"
 msgstr "Сертификатқа сұранымды сақтау"
 
-#: pkcs11/pkcs11-request.vala:107
+#: pkcs11/pkcs11-request.vala:106
 msgid "_Save"
 msgstr "_Сақтау"
 
-#: pkcs11/pkcs11-request.vala:113
+#: pkcs11/pkcs11-request.vala:111
 msgid "Certificate request"
 msgstr "Сертификатқа сұраным"
 
-#: pkcs11/pkcs11-request.vala:121
+#: pkcs11/pkcs11-request.vala:119
 msgid "PEM encoded request"
 msgstr ""
 
-#: pkcs11/pkcs11-request.vala:149
+#: pkcs11/pkcs11-request.vala:147
 msgid "Couldn’t save certificate request"
 msgstr "Сертификатқа сұранымды сақтау мүмкін емес"
 
@@ -2154,10 +2154,6 @@ msgstr "Сертификатқа сұранымды сақтау мүмкін е
 msgctxt "Label"
 msgid "Unknown"
 msgstr "Белгісіз"
-
-#: pkcs11/seahorse-pkcs11-backend.c:207
-msgid "Certificates"
-msgstr "Сертификаттар"
 
 #: pkcs11/seahorse-pkcs11-backend.c:213
 msgid "X.509 certificates and related keys"
@@ -2179,6 +2175,30 @@ msgstr "Белгі:"
 msgid "Stored at:"
 msgstr "Сақталған жері:"
 
+#: pkcs11/seahorse-pkcs11-generate.ui:128
+msgid "Key _Type:"
+msgstr "Кіль _түрі:"
+
+#: pkcs11/seahorse-pkcs11-generate.ui:151
+msgid "Key _Strength (bits):"
+msgstr ""
+
+#: pkcs11/seahorse-pkcs11-properties.ui:23
+msgid "Delete this certificate or key"
+msgstr "Бұл сертификатты немесе кілтті өшіру"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:34
+msgid "Export the certificate"
+msgstr "Сертификатты экспорттау"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:41
+msgid "Request Certificate"
+msgstr "Сертификатқа сұраным жасау"
+
+#: pkcs11/seahorse-pkcs11-properties.ui:42
+msgid "Create a certificate request file for this key"
+msgstr "Бұл кілт үшін сертификатқа сұраным файлын жасау"
+
 #: pkcs11/seahorse-pkcs11-request.ui:34
 msgid "Create a certificate request file."
 msgstr "Сертификатқа сұраным файлын жасау."
@@ -2199,11 +2219,11 @@ msgstr "Үлес қосқандар:"
 msgid "Version of this application"
 msgstr "Осы бағдарламасының нұсқасы"
 
-#: src/application.vala:160
+#: src/application.vala:171
 msgid "translator-credits"
 msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>"
 
-#: src/application.vala:163
+#: src/application.vala:174
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse жобасының үй парағы"
 
@@ -2216,29 +2236,24 @@ msgid "Import failed"
 msgstr "Импорттау сәтсіз аяқталды"
 
 #. The prompt
-#: src/key-manager.vala:245 ssh/operation.vala:309
+#: src/key-manager.vala:268 ssh/operation.vala:324
 msgid "Import Key"
 msgstr "Кілтті импорттау"
 
-#: src/key-manager.vala:248
-msgid "_Open"
-msgstr "А_шу"
-
 #. TODO: This should come from libgcr somehow
-#: src/key-manager.vala:256
+#: src/key-manager.vala:276
 msgid "All key files"
 msgstr "Барлық кілттер файлдары"
 
-#: src/key-manager.vala:321
+#: src/key-manager.vala:341
 msgid "Dropped text"
 msgstr "Тасталған мәтін"
 
-#: src/key-manager.vala:349
+#: src/key-manager.vala:369
 msgid "Clipboard text"
 msgstr "Алмасу буфері мәтіні"
 
-#: src/key-manager.vala:439
-#| msgid "Couldn’t unlock"
+#: src/key-manager.vala:468
 msgid "Couldn’t unlock keyring"
 msgstr ""
 
@@ -2258,105 +2273,110 @@ msgstr "Жаңа кілттік фразасын растаңыз"
 msgid "Con_firm Passphrase:"
 msgstr "Кілттік фразаны _растау:"
 
-#: src/seahorse-key-manager.ui:6
-#| msgid "Filter"
+#: src/seahorse-key-manager.ui:7
+msgid "_Find remote keys…"
+msgstr "Қашықтағы кілттерді та_бу…"
+
+#: src/seahorse-key-manager.ui:12
+#| msgid "None: Don’t publish keys"
+msgid "_Sync and publish keys…"
+msgstr "Кілттерді _синхрондау және жариялау…"
+
+#: src/seahorse-key-manager.ui:19
+msgid "_Preferences"
+msgstr "_Баптаулар"
+
+#: src/seahorse-key-manager.ui:24
+msgid "_Help"
+msgstr "Кө_мек"
+
+#: src/seahorse-key-manager.ui:28
+msgid "_Keyboard Shortcuts"
+msgstr ""
+
+#: src/seahorse-key-manager.ui:32
+msgid "_About Passwords and Keys"
+msgstr "Парольдер және кілттер _туралы"
+
+#: src/seahorse-key-manager.ui:40
 msgid "Filter items:"
 msgstr ""
 
-#: src/seahorse-key-manager.ui:8
-#| msgid "Show _Personal"
-msgid "Show personal"
+#: src/seahorse-key-manager.ui:42
+msgid "Show p_ersonal"
 msgstr ""
 
-#: src/seahorse-key-manager.ui:13
-#| msgid "Show _Trusted"
-msgid "Show trusted"
-msgstr ""
-
-#: src/seahorse-key-manager.ui:18
-#| msgid "Show _Any"
-msgid "Show any"
-msgstr ""
-
-#: src/seahorse-key-manager.ui:25
-#| msgid "Couldn’t add keyring"
-msgid "Combine all keyrings"
-msgstr ""
-
-#: src/seahorse-key-manager.ui:31
-#| msgid "_Find Remote Keys…"
-msgid "Find remote keys…"
-msgstr ""
-
-#: src/seahorse-key-manager.ui:36
-#| msgid "None: Don’t publish keys"
-msgid "Sync and publish keys…"
-msgstr ""
-
-#: src/seahorse-key-manager.ui:48
-msgid "Help"
-msgstr "Көмек"
+#: src/seahorse-key-manager.ui:47
+msgid "Show _trusted"
+msgstr "Сенім_ділерді көрсету"
 
 #: src/seahorse-key-manager.ui:52
-msgid "About"
-msgstr "Осы туралы"
-
-#: src/seahorse-key-manager.ui:89
-#| msgid "Secure Shell Key"
-msgid "Secure Shell key"
+msgid "Show an_y"
 msgstr ""
 
-#: src/seahorse-key-manager.ui:96
+#: src/seahorse-key-manager.ui:91
+msgid "Secure Shell key"
+msgstr "Қауіпсіз қоршам кілті"
+
+#: src/seahorse-key-manager.ui:98
 msgid "Used to access other computers"
 msgstr ""
 
-#: src/seahorse-key-manager.ui:123
-#| msgid "PGP key"
+#: src/seahorse-key-manager.ui:125
 msgid "GPG key"
 msgstr "GPG кілті"
 
-#: src/seahorse-key-manager.ui:130
+#: src/seahorse-key-manager.ui:132
 msgid "Used to encrypt email and files"
 msgstr ""
 
-#: src/seahorse-key-manager.ui:157
-#| msgid "Password Keyring"
+#: src/seahorse-key-manager.ui:159
 msgid "Password keyring"
 msgstr ""
 
-#: src/seahorse-key-manager.ui:164
+#: src/seahorse-key-manager.ui:166
 msgid "Used to store application and network passwords"
 msgstr "Қолданбалар және желілік парольдерді сақтауға қолданылады"
 
-#: src/seahorse-key-manager.ui:198
-#| msgid "Safely store a password or secret."
+#: src/seahorse-key-manager.ui:200
 msgid "Safely store a password or secret"
 msgstr ""
 
-#: src/seahorse-key-manager.ui:232
+#: src/seahorse-key-manager.ui:234
 msgid "Used to request a certificate"
 msgstr ""
 
-#: src/seahorse-key-manager.ui:258
+#: src/seahorse-key-manager.ui:260
 msgid "Import from file…"
 msgstr "Файлдан импорттау…"
 
-#: src/seahorse-key-manager.ui:282
+#: src/seahorse-key-manager.ui:297
 msgid "Add a new key or item"
 msgstr "Жаңа кілтті не нәрсені қосу"
 
-#: src/seahorse-key-manager.ui:313
-#| msgid "Search for keys on a key server"
+#: src/seahorse-key-manager.ui:367
+msgid "Back"
+msgstr "Артқа"
+
+#: src/seahorse-key-manager.ui:402
 msgid "Search for a key or password"
 msgstr ""
 
-#: src/seahorse-key-manager.ui:360
+#: src/seahorse-key-manager.ui:466
 msgid "Filter"
 msgstr "Сүзгі"
 
-#: src/seahorse-key-manager.ui:454
+#: src/seahorse-key-manager.ui:532
 msgid "This collection seems to be empty"
 msgstr ""
+
+#: src/seahorse-key-manager.ui:564
+msgid "Keyring is locked"
+msgstr "Кілттер бауы бұғатталған"
+
+#: src/seahorse-key-manager.ui:574
+msgid "Unlock"
+msgstr "Босату"
 
 #: src/seahorse-key-manager-widgets.ui:6
 msgid "Export…"
@@ -2367,27 +2387,26 @@ msgid "Properties"
 msgstr "Қасиеттері"
 
 #: src/seahorse-key-manager-widgets.ui:23
-#| msgid "Configuring Secure Shell Keys…"
 msgid "Configure Key for Secure Shell…"
 msgstr ""
 
-#: src/sidebar.vala:581
-msgid "Couldn’t lock"
-msgstr "Блоктау мүмкін емес"
-
 #. Lock and unlock items
-#: src/sidebar.vala:634
+#: src/sidebar.vala:339
 msgid "_Lock"
 msgstr "Б_локтау"
 
-#: src/sidebar.vala:639
+#: src/sidebar.vala:344
 msgid "_Unlock"
 msgstr "Бо_сату"
 
 #. Properties item
-#: src/sidebar.vala:656
+#: src/sidebar.vala:361
 msgid "_Properties"
 msgstr "Қас_иеттері"
+
+#: src/sidebar.vala:391
+msgid "Couldn’t lock"
+msgstr "Блоктау мүмкін емес"
 
 #: ssh/backend.vala:27
 msgid "Secure Shell"
@@ -2448,64 +2467,64 @@ msgstr "256 бит"
 msgid "Unknown key type!"
 msgstr "Кілт түрі белгісіз!"
 
-#: ssh/key-properties.vala:75
+#: ssh/key-properties.vala:80
 msgid "Unknown type"
 msgstr "Белгісіз түрі"
 
-#: ssh/key-properties.vala:99
+#: ssh/key-properties.vala:105
 msgid "Couldn’t rename key."
 msgstr "Кілт атын өзгерту мүмкін емес."
 
-#: ssh/key-properties.vala:125
+#: ssh/key-properties.vala:131
 msgid "Couldn’t change authorization for key."
 msgstr ""
 
-#: ssh/key-properties.vala:141
+#: ssh/key-properties.vala:147
 msgid "Couldn’t change passphrase for key."
 msgstr "Кілттің кілттік фразасын өзгерту мүмкін емес."
 
-#: ssh/key-properties.vala:165
+#: ssh/key-properties.vala:171
 msgid "Error deleting the SSH key."
 msgstr ""
 
-#: ssh/key.vala:45
+#: ssh/key.vala:52
 msgid "Personal SSH key"
 msgstr "Жеке SSH кілті"
 
-#: ssh/key.vala:45
+#: ssh/key.vala:52
 msgid "SSH key"
 msgstr "SSH кілті"
 
 #. No names when not even the fingerpint loaded
-#: ssh/key.vala:115
+#: ssh/key.vala:122
 msgid "(Unreadable Secure Shell Key)"
 msgstr ""
 
 #. No comment, but loaded
-#: ssh/key.vala:118 ssh/key.vala:122
+#: ssh/key.vala:125 ssh/key.vala:129
 msgid "Secure Shell Key"
 msgstr "Қауіпсіз қоршам кілті"
 
-#: ssh/operation.vala:204
+#: ssh/operation.vala:219
 msgid "Remote Host Password"
 msgstr "Қашықтағы хост паролі"
 
-#: ssh/operation.vala:247
+#: ssh/operation.vala:262
 msgid "Enter Key Passphrase"
 msgstr "Кілттік кілттік фразасын енгізіңіз"
 
-#: ssh/operation.vala:273
+#: ssh/operation.vala:288
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Жаңа қауіпсіз қоршам кілті үшін кілттік фраза"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:306
+#: ssh/operation.vala:321
 #, c-format
 msgid "Importing key: %s"
 msgstr "Кілтті импорттау: %s"
 
-#: ssh/operation.vala:306
+#: ssh/operation.vala:321
 msgid "Importing key. Enter passphrase"
 msgstr "Кілтті импорттау. Кілттік фразаны енгізіңіз"
 
@@ -2544,75 +2563,85 @@ msgstr "Жаңа қауіпсіз қоршам кілті"
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 
-#: ssh/seahorse-ssh-generate.ui:108
+#: ssh/seahorse-ssh-generate.ui:78
+msgid "_Description"
+msgstr "Си_паттамасы"
+
+#: ssh/seahorse-ssh-generate.ui:111
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 
-#: ssh/seahorse-ssh-generate.ui:142
+#: ssh/seahorse-ssh-generate.ui:148
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:143
+#: ssh/seahorse-ssh-generate.ui:149
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:144
+#: ssh/seahorse-ssh-generate.ui:150
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:186
+#: ssh/seahorse-ssh-generate.ui:195
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
 msgstr ""
 
-#: ssh/seahorse-ssh-generate.ui:212
+#: ssh/seahorse-ssh-generate.ui:221
 msgid "_Just Create Key"
 msgstr "_Тек кілтті жасау"
 
-#: ssh/seahorse-ssh-generate.ui:226
+#: ssh/seahorse-ssh-generate.ui:235
 msgid "_Create and Set Up"
 msgstr "Жа_сау және баптау"
 
-#: ssh/seahorse-ssh-key-properties.ui:16
-#| msgid "Keyring properties"
+#: ssh/seahorse-ssh-key-properties.ui:15
 msgid "SSH Key Properties"
 msgstr "SSH кілті қасиеттері"
 
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:55
-#| msgid "Name"
+#: ssh/seahorse-ssh-key-properties.ui:54
 msgctxt "name-of-ssh-key"
 msgid "Name"
 msgstr "Аты"
 
-#: ssh/seahorse-ssh-key-properties.ui:88
-#| msgid "Algorithm:"
+#: ssh/seahorse-ssh-key-properties.ui:87
 msgid "Algorithm"
 msgstr "Алгоритмі"
 
-#: ssh/seahorse-ssh-key-properties.ui:115
-#| msgid "Key _Length:"
+#: ssh/seahorse-ssh-key-properties.ui:114
 msgid "Key Length"
 msgstr "Кілт ұзындығы"
 
-#: ssh/seahorse-ssh-key-properties.ui:142
+#: ssh/seahorse-ssh-key-properties.ui:141
 msgid "Location"
 msgstr "Орны"
 
-#: ssh/seahorse-ssh-key-properties.ui:220
-#| msgid "Remote Keys"
+#: ssh/seahorse-ssh-key-properties.ui:228
+msgid "Public Key"
+msgstr "Ашық кілт"
+
+#: ssh/seahorse-ssh-key-properties.ui:243
+msgid "Copy public key to clipboard"
+msgstr "Ашық кілтті алмасу буферіне көшіру"
+
+#: ssh/seahorse-ssh-key-properties.ui:272
 msgid "Remote Access"
 msgstr "Қашықтан қатынау"
 
-#: ssh/seahorse-ssh-key-properties.ui:233
+#: ssh/seahorse-ssh-key-properties.ui:285
 msgid "Allows accessing this computer remotely"
 msgstr "Бұл компьютерге қашықтан қатынауды рұқсат ету"
 
-#: ssh/seahorse-ssh-key-properties.ui:311
-#| msgid "Secret SSH keys"
-msgid "Delete SSH Key"
-msgstr "SSH кілтін өшіру"
+#: ssh/seahorse-ssh-key-properties.ui:332
+msgid "_Export"
+msgstr "Э_кспорт"
+
+#: ssh/seahorse-ssh-key-properties.ui:362
+msgid "_Delete SSH Key"
+msgstr "SSH кілтін ө_шіру"
 
 #: ssh/seahorse-ssh-upload.ui:5
 msgid "Set Up Computer for SSH Connection"
@@ -2654,7 +2683,7 @@ msgstr "OpenSSH: %s"
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:237
+#: ssh/source.vala:253
 msgid "No private key file is available for this key."
 msgstr "Бұл кілт үшін жеке кілт файлы қолжетерсіз."
 
@@ -2666,17 +2695,45 @@ msgstr "Қашықтағы компьютерде қауіпсіз қоршам 
 msgid "Configuring Secure Shell Keys…"
 msgstr "Қауіпсіз қоршам кілттерін баптау…"
 
+#~ msgid "org.gnome.seahorse.Application"
+#~ msgstr "org.gnome.seahorse.Application"
+
+#~ msgid "Applications usually store new passwords in the default keyring."
+#~ msgstr ""
+#~ "Қолданбалар әдетте жаңа парольдерді бастапқы кілттер бауында сақтайды."
+
+#~ msgid "_Show Password"
+#~ msgstr "Парольді көр_сету"
+
+#~ msgid "OK"
+#~ msgstr "ОК"
+
+#~ msgid "Keyring is unlocked"
+#~ msgstr "Кілттер бауы босатылған"
+
+#~ msgid "Lock"
+#~ msgstr "Бұғаттау"
+
+#~ msgid "Couldn’t add subkey"
+#~ msgstr "Ішкі кілтті қосу мүмкін емес"
+
+#~ msgid "Import"
+#~ msgstr "Импорттау"
+
+#~ msgid "Full _Name:"
+#~ msgstr "Толық _аты:"
+
+#~ msgid "_Email Address:"
+#~ msgstr "_Эл. пошта адресі:"
+
+#~ msgid "About"
+#~ msgstr "Осы туралы"
+
 #~ msgid "_File"
 #~ msgstr "_Файл"
 
-#~ msgid "Export to a file"
-#~ msgstr "Файлға экспорттау"
-
 #~ msgid "_Edit"
 #~ msgstr "Тү_зету"
-
-#~ msgid "Copy to the clipboard"
-#~ msgstr "Алмасу буферіне көшіру"
 
 #~ msgid "Delete selected items"
 #~ msgstr "Таңдалған нәрселерді өшіру"
@@ -2723,9 +2780,6 @@ msgstr "Қауіпсіз қоршам кілттерін баптау…"
 #~ msgid "Close this window"
 #~ msgstr "Бұл терезені жабу"
 
-#~ msgid "_Import"
-#~ msgstr "И_мпорттау"
-
 #~ msgid "Full"
 #~ msgstr "Толық"
 
@@ -2751,17 +2805,11 @@ msgstr "Қауіпсіз қоршам кілттерін баптау…"
 #~ msgid "_New"
 #~ msgstr "_Жаңа"
 
-#~ msgid "_Quit"
-#~ msgstr "_Шығу"
-
 #~ msgid "Close this program"
 #~ msgstr "Бұл бағдарламаны жабу"
 
 #~ msgid "_New…"
 #~ msgstr "_Жаңа…"
-
-#~ msgid "Create a new key or item"
-#~ msgstr "Жаңа кілтті не нәрсені жасау"
 
 #~ msgid "_Import…"
 #~ msgstr "И_мпорттау…"
