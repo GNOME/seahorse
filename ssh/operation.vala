@@ -90,6 +90,7 @@ public abstract class Operation : GLib.Object {
             });
         }
 
+        /*
         // Copy the input for later writing
         if (input != null) {
             StringBuilder std_in = new StringBuilder(input);
@@ -103,6 +104,7 @@ public abstract class Operation : GLib.Object {
                           (io, cond) => on_io_ssh_read(io, cond, this.std_out));
         create_io_channel(this.std_err, ferr, IOCondition.IN,
                           (io, cond) => on_io_ssh_read(io, cond, this.std_err));
+        */
 
         // Process watch
         watch_ssh_process(cancellable, cancelled_sig);
