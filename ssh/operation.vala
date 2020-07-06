@@ -94,7 +94,7 @@ public abstract class Operation : GLib.Object {
         if (input != null) {
             StringBuilder std_in = new StringBuilder(input);
             debug("Sending input to '%s': '%s'", this.command_name, std_in.str);
-            create_io_channel(std_in, fin, IOCondition.OUTi | IOCondition.HUP,
+            create_io_channel(std_in, fin, IOCondition.OUT | IOCondition.HUP,
                               (io, cond) => on_io_ssh_write(io, cond, std_in));
         }
 
