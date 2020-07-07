@@ -135,7 +135,6 @@ public abstract class Operation : GLib.Object {
     }
 
     private bool on_io_ssh_read(IOChannel source, IOCondition condition, StringBuilder data) {
-        debug("on_io_ssh_read: <here>");
         try {
             IOStatus status = IOStatus.NORMAL;
             while (status != IOStatus.EOF) {
