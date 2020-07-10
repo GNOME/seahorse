@@ -115,9 +115,9 @@ public class ItemInfo : GLib.Object {
 public class NmConnectionInfo : ItemInfo {
 
     public NmConnectionInfo(string label, HashTable<string, string>? attrs) {
-        GLib.Object(label: label,
-                    icon: new ThemedIcon("network-wired-symbolic"),
-                    description: _("Network connection secret"));
+        base(label, attrs, _("Network connection secret"));
+
+        this.icon = new ThemedIcon("network-wired-symbolic");
 
         unowned string? setting_name = get_attribute_string(attrs,
                                                             "setting-name");
@@ -141,8 +141,7 @@ public class NmConnectionInfo : ItemInfo {
 public class GkrNetworkPassInfo : ItemInfo {
 
     public GkrNetworkPassInfo(string label, HashTable<string, string>? attrs) {
-        GLib.Object(label: label,
-                    description: _("Network password"));
+        base(label, attrs, _("Network password"));
 
         unowned string? server = get_attribute_string(attrs, "server");
         unowned string? protocol = get_attribute_string(attrs, "protocol");
@@ -230,8 +229,7 @@ public class GkrNetworkPassInfo : ItemInfo {
 public class EpiphanyPassInfo : ItemInfo {
 
     public EpiphanyPassInfo(string label, HashTable<string, string>? attrs) {
-        GLib.Object(label: label,
-                    description: _("GNOME Web password"));
+        base(label, attrs, _("GNOME Web password"));
 
         // Set the Epiphany icon
         query_installed_apps("org.gnome.Epiphany");
@@ -250,8 +248,7 @@ public class EpiphanyPassInfo : ItemInfo {
 public class ChromePassInfo : ItemInfo {
 
     public ChromePassInfo(string label, HashTable<string, string>? attrs) {
-        GLib.Object(label: label,
-                    description: _("Google Chrome password"));
+        base(label, attrs, _("Google Chrome password"));
 
 
         unowned string? origin = get_attribute_string(attrs, "origin_url");
@@ -284,8 +281,7 @@ public class ChromePassInfo : ItemInfo {
 public class EmpathyInfo : ItemInfo {
 
     public EmpathyInfo(string label, HashTable<string, string>? attrs) {
-        GLib.Object(label: label,
-                    description: _("Instant messaging password"));
+        base(label, attrs, _("Instant messaging password"));
 
         unowned string? account = get_attribute_string(attrs, "account-id");
 
@@ -322,8 +318,7 @@ public class EmpathyInfo : ItemInfo {
 public class TelepathyInfo : ItemInfo {
 
     public TelepathyInfo(string label, HashTable<string, string>? attrs) {
-        GLib.Object(label: label,
-                    description: _("Telepathy password"));
+        base(label, attrs, _("Telepathy password"));
 
         unowned string? account = get_attribute_string (attrs, "account");
         if (account != null && label != null && label.index_of(account) != -1) {
@@ -358,8 +353,7 @@ public class TelepathyInfo : ItemInfo {
 public class GoaInfo : ItemInfo {
 
     public GoaInfo(string label, HashTable<string, string>? attrs) {
-        GLib.Object(label: label,
-                    description: _("GNOME Online Accounts password"));
+        base(label, attrs, _("GNOME Online Accounts password"));
     }
 }
 }
