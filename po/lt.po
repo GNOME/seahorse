@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-02-15 11:47+0000\n"
-"PO-Revision-Date: 2020-02-16 23:32+0200\n"
+"POT-Creation-Date: 2020-06-25 15:03+0000\n"
+"PO-Revision-Date: 2020-07-12 20:22+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 3.34.0\n"
+"X-Generator: Gtranslator 3.36.0\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: common/add-keyserver-dialog.vala:32
@@ -61,7 +61,7 @@ msgstr "Nepavyko eksportuoti duomenų"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:283 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
 #: src/import-dialog.vala:34 src/key-manager.vala:270
@@ -70,7 +70,7 @@ msgstr "_Atsisakyti"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: src/sidebar.vala:352
+#: src/sidebar.vala:393
 msgid "_Delete"
 msgstr "Pa_šalinti"
 
@@ -254,6 +254,33 @@ msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Išeiti"
 
+#: data/gtk/help-overlay.ui:64
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Judėjimas"
+
+#: data/gtk/help-overlay.ui:69
+msgctxt "shortcut window"
+msgid "Select previous keyring"
+msgstr "Pažymėti ankstesnę raktinę"
+
+#: data/gtk/help-overlay.ui:76
+#| msgid "Select Date"
+msgctxt "shortcut window"
+msgid "Select next keyring"
+msgstr "Pažymėti kitą raktinę"
+
+#: data/gtk/help-overlay.ui:83
+#| msgid "Show sidebar listing keyrings"
+msgctxt "shortcut window"
+msgid "Show sidebar (on small screens)"
+msgstr "Rodyti šoninę juostą (mažuose ekranuose)"
+
+#: data/gtk/help-overlay.ui:90
+msgctxt "shortcut window"
+msgid "Show keyring contents (on small screens)"
+msgstr "Rodyti raktinės turinį (mažuose ekranuose)"
+
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
 msgstr "Automatiškai gauti raktus"
@@ -402,15 +429,10 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Tvarkyti Jūsų slaptažodžius ir šifravimo raktus"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid ""
-"Seahorse is a GNOME application for managing encryption keys. It also "
-"integrates with nautilus, gedit and other places for encryption operations."
-msgstr ""
-"Seahorse yra GNOME programa šifravimo raktų tvarkymui. Ji taip pat "
-"integruojasi su nautilus, gedit ir kitomis vietomis šifravimo veiksmams "
-"atlikti."
+msgid "Seahorse is a GNOME application for managing encryption keys."
+msgstr "Seahorse yra GNOME programa šifravimo raktų tvarkymui."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:13
+#: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
 "With seahorse you can create and manage PGP keys, create and manage SSH "
 "keys, publish and retrieve keys from key servers, cache your passphrase so "
@@ -420,7 +442,7 @@ msgstr ""
 "gauti raktus iš raktų serverių, įrašyti savo slaptažodį, kad nebereikėtų jo "
 "rašyti, bei padaryti atsargines savo raktų bei raktinių kopijas."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:94
+#: data/org.gnome.seahorse.Application.appdata.xml.in:126
 msgid "The GNOME Project"
 msgstr "GNOME projektas"
 
@@ -438,7 +460,7 @@ msgstr "raktinė;šifravimas;saugumas;pasirašyti;ssh;"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Saugomi asmeniniai slaptažodžiai, įgaliojimai ir paslaptys"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:410
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
 msgid "Couldn’t unlock"
 msgstr "Nepavyko atrakinti"
 
@@ -450,40 +472,40 @@ msgstr "Nepavyko pridėti elemento"
 msgid "Password or Secret"
 msgstr "Slaptažodis ar paslaptis"
 
-#: gkr/gkr-item-info.vala:83
+#: gkr/gkr-item-info.vala:120
 msgid "Network connection secret"
 msgstr "Tinklo ryšio paslaptis"
 
-#: gkr/gkr-item-info.vala:90
+#: gkr/gkr-item-info.vala:127
 msgid "Wi-Fi password"
 msgstr "Wi-Fi slaptažodis"
 
-#: gkr/gkr-item-info.vala:103
+#: gkr/gkr-item-info.vala:145
 msgid "Network password"
 msgstr "Tinklo slaptažodis"
 
-#: gkr/gkr-item-info.vala:192
+#: gkr/gkr-item-info.vala:234
 msgid "GNOME Web password"
 msgstr "Gnome Žiniatinklio slaptažodis"
 
-#: gkr/gkr-item-info.vala:212
+#: gkr/gkr-item-info.vala:254
 msgid "Google Chrome password"
 msgstr "Google Chrome slaptažodis"
 
-#: gkr/gkr-item-info.vala:246
+#: gkr/gkr-item-info.vala:288
 msgid "Instant messaging password"
 msgstr "Momentinių pranešimų slaptažodis"
 
 #. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item-info.vala:251
+#: gkr/gkr-item-info.vala:293
 msgid "IM account password for "
 msgstr "IM paskyros slaptažodis skirtas "
 
-#: gkr/gkr-item-info.vala:284
+#: gkr/gkr-item-info.vala:326
 msgid "Telepathy password"
 msgstr "Telepathy slaptažodis"
 
-#: gkr/gkr-item-info.vala:320
+#: gkr/gkr-item-info.vala:362
 msgid "GNOME Online Accounts password"
 msgstr "Gnome Online Accounts slaptažodis"
 
@@ -665,7 +687,7 @@ msgid "Use"
 msgstr "Naudoti"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1271
+#: pgp/seahorse-pgp-key-properties.c:1281
 msgid "Type"
 msgstr "Tipas"
 
@@ -679,7 +701,7 @@ msgstr "Prisijungimo vardas"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
 #: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:915
+#: pgp/seahorse-pgp-public-key-properties.ui:916
 msgid "Details"
 msgstr "Detalės"
 
@@ -691,7 +713,7 @@ msgstr "Ištrinti slaptažodį"
 msgid "Keyring properties"
 msgstr "Raktinės savybės"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:857
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
 msgid "Name"
 msgstr "Vardas"
 
@@ -969,18 +991,6 @@ msgstr "%u:%u:%u"
 msgid "Could not display help: %s"
 msgstr "Nepavyko įkelti žinyno: %s"
 
-#: pgp/seahorse-expires.ui:22
-msgid "_Never expires"
-msgstr "_Niekada nenustoja galioti"
-
-#: pgp/seahorse-expires.ui:80 pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "Raktą paskelbti negaliojančiu"
-
-#: pgp/seahorse-expires.ui:106
-msgid "C_hange"
-msgstr "_Keisti"
-
 #: pgp/seahorse-gpgme-add-subkey.c:213
 #, c-format
 msgid "Add subkey to %s"
@@ -1003,12 +1013,10 @@ msgid "RSA (encrypt only)"
 msgstr "RSA (tik šifravimui)"
 
 #: pgp/seahorse-gpgme-add-subkey.ui:28
-#| msgid "Key _Type:"
 msgid "Key _Type"
 msgstr "Rakto _tipas"
 
 #: pgp/seahorse-gpgme-add-subkey.ui:54
-#| msgid "Key _Length:"
 msgid "Key _Length"
 msgstr "Rakto _ilgis"
 
@@ -1017,7 +1025,6 @@ msgid "Length of Key"
 msgstr "Rakto ilgis"
 
 #: pgp/seahorse-gpgme-add-subkey.ui:86
-#| msgid "Expiration Date:"
 msgid "Expiration Date"
 msgstr "Galioja iki"
 
@@ -1055,7 +1062,7 @@ msgstr "_Vardas ir pavardė"
 msgid "Must be at least 5 characters long"
 msgstr "Turi būti bent 5 simbolių ilgio"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:93
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:92
 msgid "_Email Address"
 msgstr "_El. pašto adresas"
 
@@ -1083,22 +1090,30 @@ msgstr "Iššifravimas nepavyko. Greičiausiai neturite iššifravimo rakto."
 msgid "The operation was cancelled"
 msgstr "Veiksmas atšauktas"
 
-#: pgp/seahorse-gpgme-expires.c:62
+#: pgp/seahorse-gpgme-expires-dialog.c:72
 msgid "Invalid expiry date"
 msgstr "Netinkama galiojimo data"
 
-#: pgp/seahorse-gpgme-expires.c:63
+#: pgp/seahorse-gpgme-expires-dialog.c:73
 msgid "The expiry date must be in the future"
 msgstr "Galiojimo data turi būti ateityje"
 
-#: pgp/seahorse-gpgme-expires.c:76
+#: pgp/seahorse-gpgme-expires-dialog.c:83
 msgid "Couldn’t change expiry date"
 msgstr "Nepavyko pakeisti galiojimo pabaigos datos"
 
-#: pgp/seahorse-gpgme-expires.c:137
+#: pgp/seahorse-gpgme-expires-dialog.c:155
 #, c-format
 msgid "Expiry: %s"
 msgstr "Galioja iki: %s"
+
+#: pgp/seahorse-gpgme-expires-dialog.ui:16
+msgid "_Never expires"
+msgstr "_Niekada nenustoja galioti"
+
+#: pgp/seahorse-gpgme-expires-dialog.ui:48
+msgid "C_hange"
+msgstr "_Keisti"
 
 #: pgp/seahorse-gpgme-exporter.c:72
 msgid "Multiple Keys"
@@ -1168,36 +1183,36 @@ msgstr "Naujas PGP raktas"
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "PGP raktas leidžia šifruoti el. laiškus ar failus kitiems žmonėms. "
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:125
+#: pgp/seahorse-gpgme-generate-dialog.ui:124
 #: pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "_Papildomi rakto parametrai"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:139
+#: pgp/seahorse-gpgme-generate-dialog.ui:138
 msgid "_Comment"
 msgstr "_Komentaras"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:170 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
 msgid "Encryption _Type"
 msgstr "Šifravimo _tipas"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:200 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
 msgid "Key _Strength (bits)"
 msgstr "Rakto _stiprumas (bitais)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:230
+#: pgp/seahorse-gpgme-generate-dialog.ui:229
 msgid "E_xpiration Date"
 msgstr "_Galiojimo pabaigos data"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:252
+#: pgp/seahorse-gpgme-generate-dialog.ui:251
 msgid "Ne_ver Expires"
 msgstr "_Niekada nesibaigia"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:293
+#: pgp/seahorse-gpgme-generate-dialog.ui:292
 msgid "C_reate"
 msgstr "_Sukurti"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:300
+#: pgp/seahorse-gpgme-generate-dialog.ui:299
 msgid "Generate a new key"
 msgstr "Sukurti naują raktą"
 
@@ -1546,9 +1561,9 @@ msgstr "Nepavyko importuoti rakto: %s"
 msgid "Key import succeeded"
 msgstr "Sėkmingai importuotas raktas"
 
-#: pgp/seahorse-keyserver-results.c:154 src/import-dialog.vala:38
-msgid "_Import"
-msgstr "_Importuoti"
+#: pgp/seahorse-keyserver-results.c:154
+msgid "Import"
+msgstr "Importuoti"
 
 #: pgp/seahorse-keyserver-results.c:156
 msgid "Can’t import key"
@@ -1708,140 +1723,140 @@ msgstr "Asmeninis PGP raktas"
 msgid "PGP key"
 msgstr "PGP raktas"
 
-#: pgp/seahorse-pgp-key-properties.c:247
+#: pgp/seahorse-pgp-key-properties.c:249
 msgid "Couldn’t change primary user ID"
 msgstr "Nepavyko pakeisti pirminio vartotojo ID"
 
-#: pgp/seahorse-pgp-key-properties.c:282
+#: pgp/seahorse-pgp-key-properties.c:284
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Ar tikrai norite negrįžtamai pašalinti „%s“ naudotojo ID?"
 
-#: pgp/seahorse-pgp-key-properties.c:291
+#: pgp/seahorse-pgp-key-properties.c:293
 msgid "Couldn’t delete user ID"
 msgstr "Nepavyko pašalinti naudotojo ID"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:367 pgp/seahorse-pgp-key-properties.c:1405
+#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
 msgid "[Unknown]"
 msgstr "[Nežinomas]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:463 pgp/seahorse-pgp-key-properties.c:1615
+#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
 msgid "Name/Email"
 msgstr "Vardas/el. paštas"
 
-#: pgp/seahorse-pgp-key-properties.c:470
+#: pgp/seahorse-pgp-key-properties.c:472
 msgid "Signature ID"
 msgstr "Parašo ID"
 
-#: pgp/seahorse-pgp-key-properties.c:576
+#: pgp/seahorse-pgp-key-properties.c:578
 msgid "Couldn’t change primary photo"
 msgstr "Nepavyko pakeisti pirminės nuotraukos"
 
-#: pgp/seahorse-pgp-key-properties.c:736
+#: pgp/seahorse-pgp-key-properties.c:738
 msgid "Error changing password"
 msgstr "Klaida trinant slaptažodį"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:782
+#: pgp/seahorse-pgp-key-properties.c:784
 msgid "(unknown)"
 msgstr "(nežinomas)"
 
-#: pgp/seahorse-pgp-key-properties.c:787
+#: pgp/seahorse-pgp-key-properties.c:789
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Šio rakto galiojimo laikas baigėsi: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:815
+#: pgp/seahorse-pgp-key-properties.c:817
 #, c-format
 msgid "%s — Public key"
 msgstr "%s – Viešas raktas"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:818
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
 msgid "%s — Private key"
 msgstr "%s – Privatus raktas"
 
-#: pgp/seahorse-pgp-key-properties.c:1004
+#: pgp/seahorse-pgp-key-properties.c:1006
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr ""
 "Ar tikrai norite negrįžtamai pašalinti antrinį raktą %d, priklausantį %s ?"
 
-#: pgp/seahorse-pgp-key-properties.c:1012
+#: pgp/seahorse-pgp-key-properties.c:1014
 msgid "Couldn’t delete subkey"
 msgstr "Nepavyko pašalinti antrinio rakto"
 
-#: pgp/seahorse-pgp-key-properties.c:1071
-#: pgp/seahorse-pgp-key-properties.c:1379
+#: pgp/seahorse-pgp-key-properties.c:1078
+#: pgp/seahorse-pgp-key-properties.c:1389
 msgid "Unable to change trust"
 msgstr "Nepavyko pakeisti pasitikėjimo reikšmės"
 
-#: pgp/seahorse-pgp-key-properties.c:1083 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Nepavyko eksportuoti rakto"
 
-#: pgp/seahorse-pgp-key-properties.c:1229
-#: pgp/seahorse-pgp-key-properties.c:1313
+#: pgp/seahorse-pgp-key-properties.c:1239
+#: pgp/seahorse-pgp-key-properties.c:1323
 msgctxt "Expires"
 msgid "Never"
 msgstr "Niekada"
 
-#: pgp/seahorse-pgp-key-properties.c:1268
+#: pgp/seahorse-pgp-key-properties.c:1278
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1274
+#: pgp/seahorse-pgp-key-properties.c:1284
 msgid "Usage"
 msgstr "Naudojimas"
 
-#: pgp/seahorse-pgp-key-properties.c:1277
+#: pgp/seahorse-pgp-key-properties.c:1287
 msgid "Created"
 msgstr "Sukurtas"
 
-#: pgp/seahorse-pgp-key-properties.c:1280
+#: pgp/seahorse-pgp-key-properties.c:1290
 msgid "Expires"
 msgstr "Galiojimas baigiasi"
 
-#: pgp/seahorse-pgp-key-properties.c:1283
+#: pgp/seahorse-pgp-key-properties.c:1293
 msgid "Status"
 msgstr "Būsena"
 
-#: pgp/seahorse-pgp-key-properties.c:1286
+#: pgp/seahorse-pgp-key-properties.c:1296
 msgid "Strength"
 msgstr "Stiprumas"
 
-#: pgp/seahorse-pgp-key-properties.c:1304
+#: pgp/seahorse-pgp-key-properties.c:1314
 msgid "Revoked"
 msgstr "Paskelbtas negaliojančiu"
 
-#: pgp/seahorse-pgp-key-properties.c:1306
+#: pgp/seahorse-pgp-key-properties.c:1316
 msgid "Expired"
 msgstr "Nebegaliojantis"
 
-#: pgp/seahorse-pgp-key-properties.c:1308
+#: pgp/seahorse-pgp-key-properties.c:1318
 msgid "Disabled"
 msgstr "Išjungtas"
 
-#: pgp/seahorse-pgp-key-properties.c:1310
+#: pgp/seahorse-pgp-key-properties.c:1320
 msgid "Good"
 msgstr "Geras"
 
-#: pgp/seahorse-pgp-key-properties.c:1618
+#: pgp/seahorse-pgp-key-properties.c:1628
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Rakto ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1760
+#: pgp/seahorse-pgp-key-properties.c:1771
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Aš pasitikiu asmens „%s“ parašais kituose raktuose"
 
-#: pgp/seahorse-pgp-key-properties.c:1767
+#: pgp/seahorse-pgp-key-properties.c:1778
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1849,7 +1864,7 @@ msgid ""
 msgstr ""
 "Jei tikite, kad šio rakto savininkas yra „%s“, <i>pasirašykite</i> šį raktą:"
 
-#: pgp/seahorse-pgp-key-properties.c:1774
+#: pgp/seahorse-pgp-key-properties.c:1785
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1858,12 +1873,10 @@ msgstr ""
 "negaliojančiu</i>:"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
-#| msgid "_Export Secret Key:"
 msgid "Export _secret key"
 msgstr "_Eksportuoti slaptą raktą"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:34
-#| msgid "E_xport Complete Key"
 msgid "Export _public key"
 msgstr "_Eksportuoti viešą raktą"
 
@@ -1995,7 +2008,6 @@ msgid "Override Owner _Trust:"
 msgstr "Nustatyti pasitikėjimą savo raktu:"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:890
-#| msgid "Export to a file"
 msgid "_Export to file"
 msgstr "_Eksportuoti į failą"
 
@@ -2008,7 +2020,7 @@ msgid "Expire"
 msgstr "Galiojimas baigsis"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1064
-#: pgp/seahorse-pgp-public-key-properties.ui:898
+#: pgp/seahorse-pgp-public-key-properties.ui:899
 msgid "_Subkeys"
 msgstr "_Antriniai raktai"
 
@@ -2073,12 +2085,14 @@ msgid "Dates:"
 msgstr "Datos:"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:828
-msgid "Indicate Trust:"
+#| msgid "Indicate Trust:"
+msgid "Indicate trust:"
 msgstr "Nurodykite pasitikėjimą:"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:845
-msgid "You _Trust the Owner:"
-msgstr "Jūsų pasi_tikėjimas savininku:"
+#| msgid "You _Trust the Owner:"
+msgid "You _trust the owner:"
+msgstr "Jūs pasi_tikite savininku:"
 
 #: pgp/seahorse-pgp-subkey.c:161
 msgid "Encrypt"
@@ -2112,6 +2126,10 @@ msgstr "_Priežastis:"
 #: pgp/seahorse-revoke.ui:70
 msgid "Optional description of revocation"
 msgstr "Neprivalomas rakto paskelbimo negaliojančiu aprašymas"
+
+#: pgp/seahorse-revoke.ui:129
+msgid "Revoke key"
+msgstr "Raktą paskelbti negaliojančiu"
 
 #: pgp/seahorse-revoke.ui:154
 msgid "Re_voke"
@@ -2200,7 +2218,7 @@ msgstr "Nepavadintas"
 msgid "Failed to export certificate"
 msgstr "Nepavyko eksportuoti liudijimo."
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:426
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
 msgid "Couldn’t delete"
 msgstr "Nepavyko pašalinti"
 
@@ -2317,6 +2335,10 @@ msgstr "Seahorse projekto tinklalapis"
 msgid "Data to be imported"
 msgstr "Duomenys importavimui"
 
+#: src/import-dialog.vala:38
+msgid "_Import"
+msgstr "_Importuoti"
+
 #: src/import-dialog.vala:74
 msgid "Import failed"
 msgstr "Nepavyko importuoti"
@@ -2339,7 +2361,7 @@ msgstr "Įrašytas tekstas"
 msgid "Clipboard text"
 msgstr "Iškarpinės tekstas"
 
-#: src/key-manager.vala:468
+#: src/key-manager.vala:497
 msgid "Couldn’t unlock keyring"
 msgstr "Nepavyko atrakinti raktinės"
 
@@ -2412,8 +2434,9 @@ msgid "GPG key"
 msgstr "PGP raktas"
 
 #: src/seahorse-key-manager.ui:132
-msgid "Used to encrypt email and files"
-msgstr "Naudojamas laiškų bei failų šifravimui ir pasirašymui"
+#| msgid "Used to encrypt email and files"
+msgid "Used to encrypt emails and files"
+msgstr "Naudojamas laiškų bei failų šifravimui"
 
 #: src/seahorse-key-manager.ui:159
 msgid "Password keyring"
@@ -2476,20 +2499,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "Konfigūruoti saugaus apvalkalo raktą…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:339
+#: src/sidebar.vala:380
 msgid "_Lock"
 msgstr "_Užrakinti"
 
-#: src/sidebar.vala:344
+#: src/sidebar.vala:385
 msgid "_Unlock"
 msgstr "_Atrakinti"
 
 #. Properties item
-#: src/sidebar.vala:361
+#: src/sidebar.vala:402
 msgid "_Properties"
 msgstr "_Savybės"
 
-#: src/sidebar.vala:391
+#: src/sidebar.vala:432
 msgid "Couldn’t lock"
 msgstr "Nepavyko užrakinti"
 
@@ -2653,7 +2676,6 @@ msgstr ""
 "kompiuterių."
 
 #: ssh/seahorse-ssh-generate.ui:78
-#| msgid "_Description:"
 msgid "_Description"
 msgstr "Pa_aiškinimas"
 
@@ -2733,7 +2755,6 @@ msgid "_Export"
 msgstr "_Eksportuoti"
 
 #: ssh/seahorse-ssh-key-properties.ui:362
-#| msgid "Delete SSH Key"
 msgid "_Delete SSH Key"
 msgstr "Iš_trinti SSH raktą"
 
@@ -2765,21 +2786,21 @@ msgstr "_Prisijungimo vardas:"
 msgid "Set Up"
 msgstr "Nustatyti"
 
-#: ssh/source.vala:42
+#: ssh/source.vala:46
 msgid "OpenSSH keys"
 msgstr "OpenSSH raktai"
 
-#: ssh/source.vala:47
+#: ssh/source.vala:51
 #, c-format
 msgid "OpenSSH: %s"
 msgstr "OpenSSH: %s"
 
-#: ssh/source.vala:51
+#: ssh/source.vala:55
 #, c-format
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:253
+#: ssh/source.vala:250
 msgid "No private key file is available for this key."
 msgstr "Šiam raktui nėra privataus rakto failo."
 
@@ -2792,6 +2813,15 @@ msgstr ""
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigūruojami saugaus apvalkalo raktai…"
 
+#~ msgid ""
+#~ "Seahorse is a GNOME application for managing encryption keys. It also "
+#~ "integrates with nautilus, gedit and other places for encryption "
+#~ "operations."
+#~ msgstr ""
+#~ "Seahorse yra GNOME programa šifravimo raktų tvarkymui. Ji taip pat "
+#~ "integruojasi su nautilus, gedit ir kitomis vietomis šifravimo veiksmams "
+#~ "atlikti."
+
 #~ msgid "Couldn’t add subkey"
 #~ msgstr "Nepavyko pridėti antrinio rakto"
 
@@ -2803,9 +2833,6 @@ msgstr "Konfigūruojami saugaus apvalkalo raktai…"
 
 #~ msgid "Lock"
 #~ msgstr "Užrakinti"
-
-#~ msgid "Import"
-#~ msgstr "Importuoti"
 
 #~| msgid "Combine all keyrings"
 #~ msgid "_Combine all keyrings"
@@ -2953,9 +2980,6 @@ msgstr "Konfigūruojami saugaus apvalkalo raktai…"
 
 #~ msgid "By _Keyring"
 #~ msgstr "Pagal _raktinę"
-
-#~ msgid "Show sidebar listing keyrings"
-#~ msgstr "Rodyti šoninį polangį su raktinėmis"
 
 #~ msgid "Only show personal keys, certificates and passwords"
 #~ msgstr "Rodyti tik asmeninius raktus, liudijimus ir slaptažodžius"
