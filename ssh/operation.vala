@@ -94,14 +94,14 @@ public abstract class Operation : GLib.Object {
         if (input != null) {
             StringBuilder std_in = new StringBuilder(input);
             debug("Sending input to '%s': '%s'", this.command_name, std_in.str);
-            create_io_channel(std_in, fin, IOCondition.OUT,
+            create_io_channel(std_in, fin, IOCondition.OUT | IOCondition.HUP,
                               (io, cond) => on_io_ssh_write(io, cond, std_in));
         }
 
         // Make all the proper IO Channels for the output/error
-        create_io_channel(this.std_out, fout, IOCondition.IN,
+        create_io_channel(this.std_out, fout, IOCondition.IN | IOCondition.HUP,
                           (io, cond) => on_io_ssh_read(io, cond, this.std_out));
-        create_io_channel(this.std_err, ferr, IOCondition.IN,
+        create_io_channel(this.std_err, ferr, IOCondition.IN | IOCondition.HUP,
                           (io, cond) => on_io_ssh_read(io, cond, this.std_err));
 
         // Process watch
