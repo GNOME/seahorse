@@ -236,16 +236,8 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
 
     [GtkCallback]
     private void on_copy_button_clicked() {
-        var secret = this.item.get_secret();
-        if (secret == null)
-            return;
-
-        unowned string? password = secret.get_text();
-        if (password == null)
-            return;
-
         var clipboard = Gtk.Clipboard.get_default(this.get_display());
-        clipboard.set_text(password, -1);
+        this.item.copy_secret_to_clipboard.begin(clipboard);
     }
 
     [GtkCallback]
