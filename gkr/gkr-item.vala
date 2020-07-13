@@ -192,31 +192,43 @@ public class Item : Secret.Item, Deletable, Viewable {
         return new ItemInfo(label, attrs);
     }
 
-    private void load_item_secret() {
-        if (this._req_secret == null) {
-            this._req_secret = new GLib.Cancellable();
-            load_secret.begin(this._req_secret, (obj, res) => {
-                try {
-                    this._req_secret = null;
-                    load_secret.end(res);
-                    this._item_secret = base.get_secret();
-                    notify_property("has-secret");
-                } catch (GLib.Error err) {
-                    GLib.warning("Couldn't retrieve secret: %s", err.message);
-                }
-            });
-        }
+    private async void load_item_secret() throws GLib.Error {
+        if (this._req_secret != null)
+            return;
+
+        this._req_secret = new GLib.Cancellable();
+
+        yield load_secret(this._req_secret);
+        this._req_secret = null;
+        this._item_secret = base.get_secret();
+        notify_property("has-secret");
     }
 
     public new void refresh() {
         base.refresh();
+
         if (this._item_secret != null)
-            load_item_secret();
+            return;
+
+        load_item_secret.begin((obj, res) => {
+            try {
+                load_item_secret.end(res);
+            } catch (GLib.Error e) {
+                warning("Couldn't load secret: %s", e.message);
+            }
+        });
     }
 
     public new Secret.Value? get_secret() {
-        if (this._item_secret == null)
-            load_item_secret();
+        if (this._item_secret == null) {
+            load_item_secret.begin((obj, res) => {
+                try {
+                    load_item_secret.end(res);
+                } catch (GLib.Error e) {
+                    warning("Couldn't load secret: %s", e.message);
+                }
+            });
+        }
         return this._item_secret;
     }
 
@@ -232,6 +244,23 @@ public class Item : Secret.Item, Deletable, Viewable {
         _item_secret = value;
         notify_property("has-secret");
         return true;
+    }
+
+    public async void copy_secret_to_clipboard(Gtk.Clipboard clipboard) throws GLib.Error {
+        if (this._item_secret == null)
+            yield load_item_secret();
+
+        if (this._item_secret == null) {
+            debug("Can't copy to clipboard: secret is NULL");
+            return;
+        }
+
+        unowned string? password = this._item_secret.get_text();
+        if (password == null)
+            return;
+
+        clipboard.set_text(password, -1);
+        debug("Succesfully copied secret to clipboard");
     }
 }
 

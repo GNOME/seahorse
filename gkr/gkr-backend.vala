@@ -215,6 +215,7 @@ public class BackendActions : Seahorse.ActionGroup {
     private const ActionEntry[] BACKEND_ACTIONS = {
         { "keyring-new",      on_new_keyring },
         { "keyring-item-new", on_new_item    },
+        { "copy-secret",      on_copy_secret },
     };
 
 	construct {
@@ -258,6 +259,37 @@ public class BackendActions : Seahorse.ActionGroup {
         if (response == Gtk.ResponseType.ACCEPT)
             this.catalog.activate_action("focus-place", "secret-service");
         dialog.destroy();
+    }
+
+    private void on_copy_secret(SimpleAction action, Variant? param) {
+        return_if_fail (this.catalog != null);
+
+        var selected = this.catalog.get_selected_objects();
+        // We checked for this in set_actions_for_selected_objects()
+        return_if_fail (selected.length() == 1);
+
+        var selected_item = selected.data as Gkr.Item;
+        return_if_fail (selected_item != null);
+
+        var clipboard = Gtk.Clipboard.get_default(this.catalog.get_display());
+        selected_item.copy_secret_to_clipboard.begin(clipboard, (obj, res) => {
+            try {
+                selected_item.copy_secret_to_clipboard.end(res);
+            } catch (GLib.Error e) {
+                Util.show_error(this.catalog, "Couldn't copy secret", e.message);
+            }
+        });
+    }
+
+    public override void set_actions_for_selected_objects(List<GLib.Object> objects) {
+        // Allow "copy secret" if there is only 1 Gkr.Item selected
+        bool can_copy_secret = false;
+
+        if (objects.length() == 1) {
+            can_copy_secret = objects.data is Gkr.Item;
+        }
+
+        ((SimpleAction) lookup_action("copy-secret")).set_enabled(can_copy_secret);
     }
 
 	public static ActionGroup instance(Backend backend) {
