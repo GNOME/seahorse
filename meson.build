@@ -45,6 +45,7 @@ if not libhandy_dep.found()
       'examples=false',
       'glade_catalog=disabled',
       'tests=false',
+      'vapi=true',
     ]
   )
 
