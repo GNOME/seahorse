@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-02-15 11:47+0000\n"
+"POT-Creation-Date: 2020-07-13 16:23+0000\n"
 "PO-Revision-Date: 2020-02-18 13:15+0300\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -60,7 +60,7 @@ msgstr "Veri dışa aktarılamadı"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:283 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
 #: src/import-dialog.vala:34 src/key-manager.vala:270
@@ -69,7 +69,7 @@ msgstr "_İptal"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: src/sidebar.vala:352
+#: src/sidebar.vala:393
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -253,6 +253,31 @@ msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Çık"
 
+#: data/gtk/help-overlay.ui:64
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Gezinim"
+
+#: data/gtk/help-overlay.ui:69
+msgctxt "shortcut window"
+msgid "Select previous keyring"
+msgstr "Önceki anahtarlığı seç"
+
+#: data/gtk/help-overlay.ui:76
+msgctxt "shortcut window"
+msgid "Select next keyring"
+msgstr "Sonraki anahtarlığı seç"
+
+#: data/gtk/help-overlay.ui:83
+msgctxt "shortcut window"
+msgid "Show sidebar (on small screens)"
+msgstr "Yan çubuğu göster (küçük ekranlarda)"
+
+#: data/gtk/help-overlay.ui:90
+msgctxt "shortcut window"
+msgid "Show keyring contents (on small screens)"
+msgstr "Anahtarlık içeriğini göster (küçük ekranlarda)"
+
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
 msgstr "Anahtarları kendiliğinden al"
@@ -401,15 +426,10 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Parolalarınızı ve şifreleme anahtarlarınızı yönetin"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid ""
-"Seahorse is a GNOME application for managing encryption keys. It also "
-"integrates with nautilus, gedit and other places for encryption operations."
-msgstr ""
-"Seahorse, şifreleme anahtarlarını yönetmek için kullanabileceğiniz GNOME "
-"uygulamasıdır. Ayrıca şifreleme işlemleri için nautilus, gedit ve diğer "
-"uygulamalarla tümleşir."
+msgid "Seahorse is a GNOME application for managing encryption keys."
+msgstr "Seahorse, şifreleme anahtarlarını yönetmede kullanılan GNOME uygulamasıdır."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:13
+#: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
 "With seahorse you can create and manage PGP keys, create and manage SSH "
 "keys, publish and retrieve keys from key servers, cache your passphrase so "
@@ -420,7 +440,7 @@ msgstr ""
 "kalmaması için parolanızı ön belleğe alabilir ve anahtarlarınızı ve "
 "anahtarlığınızı yedekleyebilirsiniz."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:94
+#: data/org.gnome.seahorse.Application.appdata.xml.in:126
 msgid "The GNOME Project"
 msgstr "GNOME Projesi"
 
@@ -438,7 +458,7 @@ msgstr "anahtarlık;şifreleme;güvenlik;imza;ssh;"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Saklanan kişisel parolalar, kimlik bilgileri ve gizli anahtarlar"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:410
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
 msgid "Couldn’t unlock"
 msgstr "Kilit açılamadı"
 
@@ -450,40 +470,40 @@ msgstr "Öge eklenemedi"
 msgid "Password or Secret"
 msgstr "Parola veya Giz"
 
-#: gkr/gkr-item-info.vala:83
+#: gkr/gkr-item-info.vala:120
 msgid "Network connection secret"
 msgstr "Ağ bağlantısı gizi"
 
-#: gkr/gkr-item-info.vala:90
+#: gkr/gkr-item-info.vala:127
 msgid "Wi-Fi password"
 msgstr "Wi-Fi parolası"
 
-#: gkr/gkr-item-info.vala:103
+#: gkr/gkr-item-info.vala:145
 msgid "Network password"
 msgstr "Ağ parolası"
 
-#: gkr/gkr-item-info.vala:192
+#: gkr/gkr-item-info.vala:234
 msgid "GNOME Web password"
 msgstr "GNOME Web parolası"
 
-#: gkr/gkr-item-info.vala:212
+#: gkr/gkr-item-info.vala:254
 msgid "Google Chrome password"
 msgstr "Google Chrome parolası"
 
-#: gkr/gkr-item-info.vala:246
+#: gkr/gkr-item-info.vala:288
 msgid "Instant messaging password"
 msgstr "Anlık mesajlaşma parolası"
 
 #. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item-info.vala:251
+#: gkr/gkr-item-info.vala:293
 msgid "IM account password for "
 msgstr "Şunun Anlık İleti hesabı parolası: "
 
-#: gkr/gkr-item-info.vala:284
+#: gkr/gkr-item-info.vala:326
 msgid "Telepathy password"
 msgstr "Telepathy parolası"
 
-#: gkr/gkr-item-info.vala:320
+#: gkr/gkr-item-info.vala:362
 msgid "GNOME Online Accounts password"
 msgstr "GNOME Çevrim İçi Hesaplar parolası"
 
@@ -528,7 +548,7 @@ msgstr "Parola değiştirilemedi."
 msgid "Couldn’t set description."
 msgstr "Açıklama belirlenemedi."
 
-#: gkr/gkr-item-properties.vala:268
+#: gkr/gkr-item-properties.vala:260
 msgid "Error deleting the password."
 msgstr "Parolayı silerken hata."
 
@@ -552,12 +572,12 @@ msgstr "Anahtar deposu parolası"
 msgid "Network Manager secret"
 msgstr "Ağ Yöneticisi gizi"
 
-#: gkr/gkr-item.vala:312
+#: gkr/gkr-item.vala:341
 #, c-format
 msgid "Are you sure you want to delete the password “%s”?"
 msgstr "“%s” parolasını silmek istediğinize emin misiniz?"
 
-#: gkr/gkr-item.vala:314
+#: gkr/gkr-item.vala:343
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
@@ -662,7 +682,7 @@ msgid "Use"
 msgstr "Kullanım"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1271
+#: pgp/seahorse-pgp-key-properties.c:1281
 msgid "Type"
 msgstr "Tür"
 
@@ -676,7 +696,7 @@ msgstr "Giriş"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
 #: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:915
+#: pgp/seahorse-pgp-public-key-properties.ui:916
 msgid "Details"
 msgstr "Ayrıntılar"
 
@@ -688,7 +708,7 @@ msgstr "Parolayı Sil"
 msgid "Keyring properties"
 msgstr "Anahtarlık özellikleri"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:857
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
 msgid "Name"
 msgstr "Ad"
 
@@ -964,18 +984,6 @@ msgstr "%u:%u:%u"
 msgid "Could not display help: %s"
 msgstr "Yardım görüntülenemedi: %s"
 
-#: pgp/seahorse-expires.ui:22
-msgid "_Never expires"
-msgstr "_Asla süresi dolmaz"
-
-#: pgp/seahorse-expires.ui:80 pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "Anahtarı feshet"
-
-#: pgp/seahorse-expires.ui:106
-msgid "C_hange"
-msgstr "Değişti_r"
-
 #: pgp/seahorse-gpgme-add-subkey.c:213
 #, c-format
 msgid "Add subkey to %s"
@@ -1047,7 +1055,7 @@ msgstr "Tam _Ad"
 msgid "Must be at least 5 characters long"
 msgstr "En azından 5 karakter uzunluğunda olmalı"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:93
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:92
 msgid "_Email Address"
 msgstr "_E-posta Adresi"
 
@@ -1077,22 +1085,30 @@ msgstr ""
 msgid "The operation was cancelled"
 msgstr "İşlem iptal edildi"
 
-#: pgp/seahorse-gpgme-expires.c:62
+#: pgp/seahorse-gpgme-expires-dialog.c:72
 msgid "Invalid expiry date"
 msgstr "Geçersiz son kullanma tarihi"
 
-#: pgp/seahorse-gpgme-expires.c:63
+#: pgp/seahorse-gpgme-expires-dialog.c:73
 msgid "The expiry date must be in the future"
 msgstr "Son kullanma tarihi gelecekte olmalıdır"
 
-#: pgp/seahorse-gpgme-expires.c:76
+#: pgp/seahorse-gpgme-expires-dialog.c:83
 msgid "Couldn’t change expiry date"
 msgstr "Son kullanım tarihi değiştirilemedi"
 
-#: pgp/seahorse-gpgme-expires.c:137
+#: pgp/seahorse-gpgme-expires-dialog.c:155
 #, c-format
 msgid "Expiry: %s"
 msgstr "Son Kullanım: %s"
+
+#: pgp/seahorse-gpgme-expires-dialog.ui:16
+msgid "_Never expires"
+msgstr "_Asla süresi dolmaz"
+
+#: pgp/seahorse-gpgme-expires-dialog.ui:48
+msgid "C_hange"
+msgstr "Değişti_r"
 
 #: pgp/seahorse-gpgme-exporter.c:72
 msgid "Multiple Keys"
@@ -1164,36 +1180,36 @@ msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr ""
 "PGP anahtarı, e-posta veya dosyaları başkalarına şifrelemenize olanak sağlar."
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:125
+#: pgp/seahorse-gpgme-generate-dialog.ui:124
 #: pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "_Gelişmiş anahtar seçenekleri"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:139
+#: pgp/seahorse-gpgme-generate-dialog.ui:138
 msgid "_Comment"
 msgstr "_Açıklama"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:170 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
 msgid "Encryption _Type"
 msgstr "Şifreleme _Türü"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:200 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
 msgid "Key _Strength (bits)"
 msgstr "Anahtar _Uzunluğu (bit)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:230
+#: pgp/seahorse-gpgme-generate-dialog.ui:229
 msgid "E_xpiration Date"
 msgstr "_Son Kullanım Tarihi"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:252
+#: pgp/seahorse-gpgme-generate-dialog.ui:251
 msgid "Ne_ver Expires"
 msgstr "_Kullanım Süresi Bitmez"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:293
+#: pgp/seahorse-gpgme-generate-dialog.ui:292
 msgid "C_reate"
 msgstr "Oluştu_r"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:300
+#: pgp/seahorse-gpgme-generate-dialog.ui:299
 msgid "Generate a new key"
 msgstr "Yeni anahtar oluştur"
 
@@ -1542,9 +1558,9 @@ msgstr "Anahtar içe aktarılamadı: %s"
 msgid "Key import succeeded"
 msgstr "Anahtar içe aktarımı başarılı"
 
-#: pgp/seahorse-keyserver-results.c:154 src/import-dialog.vala:38
-msgid "_Import"
-msgstr "İçe _Aktar"
+#: pgp/seahorse-keyserver-results.c:154
+msgid "Import"
+msgstr "İçe Aktar"
 
 #: pgp/seahorse-keyserver-results.c:156
 msgid "Can’t import key"
@@ -1700,141 +1716,141 @@ msgstr "Kişisel PGP anahtarı"
 msgid "PGP key"
 msgstr "PGP anahtarı"
 
-#: pgp/seahorse-pgp-key-properties.c:247
+#: pgp/seahorse-pgp-key-properties.c:249
 msgid "Couldn’t change primary user ID"
 msgstr "Birincil kullanıcı ID değiştirilemedi"
 
-#: pgp/seahorse-pgp-key-properties.c:282
+#: pgp/seahorse-pgp-key-properties.c:284
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "“%s” kullanıcı IDʼsini kalıcı olarak silmek istediğinize emin misiniz?"
 
-#: pgp/seahorse-pgp-key-properties.c:291
+#: pgp/seahorse-pgp-key-properties.c:293
 msgid "Couldn’t delete user ID"
 msgstr "Kullanıcı ID silinemedi"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:367 pgp/seahorse-pgp-key-properties.c:1405
+#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
 msgid "[Unknown]"
 msgstr "[Bilinmeyen]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:463 pgp/seahorse-pgp-key-properties.c:1615
+#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
 msgid "Name/Email"
 msgstr "Ad/E-posta"
 
-#: pgp/seahorse-pgp-key-properties.c:470
+#: pgp/seahorse-pgp-key-properties.c:472
 msgid "Signature ID"
 msgstr "İmza IDʼsi"
 
-#: pgp/seahorse-pgp-key-properties.c:576
+#: pgp/seahorse-pgp-key-properties.c:578
 msgid "Couldn’t change primary photo"
 msgstr "Birincil fotoğraf değiştirilemedi"
 
-#: pgp/seahorse-pgp-key-properties.c:736
+#: pgp/seahorse-pgp-key-properties.c:738
 msgid "Error changing password"
 msgstr "Parolay değiştirilirken hata"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:782
+#: pgp/seahorse-pgp-key-properties.c:784
 msgid "(unknown)"
 msgstr "(bilinmeyen)"
 
-#: pgp/seahorse-pgp-key-properties.c:787
+#: pgp/seahorse-pgp-key-properties.c:789
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Bu anahtarın kullanım süresi %s tarihinde dolmuş"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:815
+#: pgp/seahorse-pgp-key-properties.c:817
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — Genel anahtar"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:818
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Özel anahtar"
 
-#: pgp/seahorse-pgp-key-properties.c:1004
+#: pgp/seahorse-pgp-key-properties.c:1006
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr ""
 "%2$s anahtarının %1$d alt anahtarını kalıcı olarak silmek istediğinize emin "
 "misiniz?"
 
-#: pgp/seahorse-pgp-key-properties.c:1012
+#: pgp/seahorse-pgp-key-properties.c:1014
 msgid "Couldn’t delete subkey"
 msgstr "Alt anahtar silinemedi"
 
-#: pgp/seahorse-pgp-key-properties.c:1071
-#: pgp/seahorse-pgp-key-properties.c:1379
+#: pgp/seahorse-pgp-key-properties.c:1078
+#: pgp/seahorse-pgp-key-properties.c:1389
 msgid "Unable to change trust"
 msgstr "Güven derecesi değiştirilemedi"
 
-#: pgp/seahorse-pgp-key-properties.c:1083 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Anahtar dışa aktarılamadı"
 
-#: pgp/seahorse-pgp-key-properties.c:1229
-#: pgp/seahorse-pgp-key-properties.c:1313
+#: pgp/seahorse-pgp-key-properties.c:1239
+#: pgp/seahorse-pgp-key-properties.c:1323
 msgctxt "Expires"
 msgid "Never"
 msgstr "Asla"
 
-#: pgp/seahorse-pgp-key-properties.c:1268
+#: pgp/seahorse-pgp-key-properties.c:1278
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1274
+#: pgp/seahorse-pgp-key-properties.c:1284
 msgid "Usage"
 msgstr "Kullanım"
 
-#: pgp/seahorse-pgp-key-properties.c:1277
+#: pgp/seahorse-pgp-key-properties.c:1287
 msgid "Created"
 msgstr "Oluşturulma"
 
-#: pgp/seahorse-pgp-key-properties.c:1280
+#: pgp/seahorse-pgp-key-properties.c:1290
 msgid "Expires"
 msgstr "Son Kullanım"
 
-#: pgp/seahorse-pgp-key-properties.c:1283
+#: pgp/seahorse-pgp-key-properties.c:1293
 msgid "Status"
 msgstr "Durum"
 
-#: pgp/seahorse-pgp-key-properties.c:1286
+#: pgp/seahorse-pgp-key-properties.c:1296
 msgid "Strength"
 msgstr "Uzunluk"
 
-#: pgp/seahorse-pgp-key-properties.c:1304
+#: pgp/seahorse-pgp-key-properties.c:1314
 msgid "Revoked"
 msgstr "Feshedilmiş"
 
-#: pgp/seahorse-pgp-key-properties.c:1306
+#: pgp/seahorse-pgp-key-properties.c:1316
 msgid "Expired"
 msgstr "Süresi Dolmuş"
 
-#: pgp/seahorse-pgp-key-properties.c:1308
+#: pgp/seahorse-pgp-key-properties.c:1318
 msgid "Disabled"
 msgstr "Kapalı"
 
-#: pgp/seahorse-pgp-key-properties.c:1310
+#: pgp/seahorse-pgp-key-properties.c:1320
 msgid "Good"
 msgstr "İyi"
 
-#: pgp/seahorse-pgp-key-properties.c:1618
+#: pgp/seahorse-pgp-key-properties.c:1628
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Anahtar ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1760
+#: pgp/seahorse-pgp-key-properties.c:1771
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Diğer anahtarlardaki “%s” imzalarına güveniyorum"
 
-#: pgp/seahorse-pgp-key-properties.c:1767
+#: pgp/seahorse-pgp-key-properties.c:1778
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1843,7 +1859,7 @@ msgstr ""
 "Eğer bu anahtarın sahibi olan kişinin “%s” olduğuna inanıyorsanız, anahtarı "
 "<i>imzalayın</i>:"
 
-#: pgp/seahorse-pgp-key-properties.c:1774
+#: pgp/seahorse-pgp-key-properties.c:1785
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1924,7 +1940,7 @@ msgstr "İmzala"
 #. Translators: This text refers to deleting an item from its type's backing store
 #: pgp/seahorse-pgp-private-key-properties.ui:502
 #: pkcs11/seahorse-pkcs11-properties.ui:22
-#: src/seahorse-key-manager-widgets.ui:12
+#: src/seahorse-key-manager-widgets.ui:18
 msgid "Delete"
 msgstr "Sil"
 
@@ -1998,7 +2014,7 @@ msgid "Expire"
 msgstr "Son Kullanım"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1064
-#: pgp/seahorse-pgp-public-key-properties.ui:898
+#: pgp/seahorse-pgp-public-key-properties.ui:899
 msgid "_Subkeys"
 msgstr "_Alt Anahtarlar"
 
@@ -2063,12 +2079,12 @@ msgid "Dates:"
 msgstr "Tarihler:"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:828
-msgid "Indicate Trust:"
-msgstr "Güven Dereceniz:"
+msgid "Indicate trust:"
+msgstr "Güven dereceniz:"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:845
-msgid "You _Trust the Owner:"
-msgstr "Anahtarın _Sahibine Güven Dereceniz:"
+msgid "You _trust the owner:"
+msgstr "Anahtarın _sahibine güven dereceniz:"
 
 #: pgp/seahorse-pgp-subkey.c:161
 msgid "Encrypt"
@@ -2102,6 +2118,10 @@ msgstr "_Neden:"
 #: pgp/seahorse-revoke.ui:70
 msgid "Optional description of revocation"
 msgstr "Feshetmek için isteğe bağlı açıklama"
+
+#: pgp/seahorse-revoke.ui:129
+msgid "Revoke key"
+msgstr "Anahtarı feshet"
 
 #: pgp/seahorse-revoke.ui:154
 msgid "Re_voke"
@@ -2186,7 +2206,7 @@ msgstr "Adsız"
 msgid "Failed to export certificate"
 msgstr "Sertifikanın dışa aktarılması başarısız oldu"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:426
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
 msgid "Couldn’t delete"
 msgstr "Silinemedi"
 
@@ -2301,6 +2321,10 @@ msgstr "Seahorse Web Safyası"
 msgid "Data to be imported"
 msgstr "İçe aktarılacak veri"
 
+#: src/import-dialog.vala:38
+msgid "_Import"
+msgstr "İçe _Aktar"
+
 #: src/import-dialog.vala:74
 msgid "Import failed"
 msgstr "İçe aktarma başarısız oldu"
@@ -2323,7 +2347,7 @@ msgstr "Bırakılan metin"
 msgid "Clipboard text"
 msgstr "Pano metni"
 
-#: src/key-manager.vala:468
+#: src/key-manager.vala:497
 msgid "Couldn’t unlock keyring"
 msgstr "Anahtarlık kilidi açılamadı"
 
@@ -2389,15 +2413,15 @@ msgstr "Güvenli Kabuk Anahtarı"
 
 #: src/seahorse-key-manager.ui:98
 msgid "Used to access other computers"
-msgstr "Diğer bilgisayarlara erişmek için kullanılır"
+msgstr "Diğer bilgisayarlara erişmede kullanılır"
 
 #: src/seahorse-key-manager.ui:125
 msgid "GPG key"
 msgstr "GPG anahtarı"
 
 #: src/seahorse-key-manager.ui:132
-msgid "Used to encrypt email and files"
-msgstr "E-postaların ve dosyaların şifresini çözmek için kullanılır"
+msgid "Used to encrypt emails and files"
+msgstr "E-posta ve dosyaların şifresini çözmede kullanılır"
 
 #: src/seahorse-key-manager.ui:159
 msgid "Password keyring"
@@ -2405,7 +2429,7 @@ msgstr "Parola anahtarlığı"
 
 #: src/seahorse-key-manager.ui:166
 msgid "Used to store application and network passwords"
-msgstr "Uygulama ve ağ parolalarını saklamak için kullanılır"
+msgstr "Uygulama ve ağ parolalarını saklamada kullanılır"
 
 #: src/seahorse-key-manager.ui:200
 msgid "Safely store a password or secret"
@@ -2413,7 +2437,7 @@ msgstr "Parolayı ya da gizi güvenle kaydet"
 
 #: src/seahorse-key-manager.ui:234
 msgid "Used to request a certificate"
-msgstr "Sertifika istemek için kullanılır"
+msgstr "Sertifika istemede kullanılır"
 
 #: src/seahorse-key-manager.ui:260
 msgid "Import from file…"
@@ -2447,33 +2471,38 @@ msgstr "Anahtarlık kilitlendi"
 msgid "Unlock"
 msgstr "Kilidini Aç"
 
-#: src/seahorse-key-manager-widgets.ui:6
+#. Translators: This is only relevant for "Password" items
+#: src/seahorse-key-manager-widgets.ui:7
+msgid "Copy secret"
+msgstr "Gizi kopyala"
+
+#: src/seahorse-key-manager-widgets.ui:12
 msgid "Export…"
 msgstr "Dışa aktar…"
 
-#: src/seahorse-key-manager-widgets.ui:19
+#: src/seahorse-key-manager-widgets.ui:25
 msgid "Properties"
 msgstr "Özellikler"
 
-#: src/seahorse-key-manager-widgets.ui:23
+#: src/seahorse-key-manager-widgets.ui:29
 msgid "Configure Key for Secure Shell…"
 msgstr "Güvenli Kabuk İçin Anahtar Yapılandır…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:339
+#: src/sidebar.vala:380
 msgid "_Lock"
 msgstr "_Kilitle"
 
-#: src/sidebar.vala:344
+#: src/sidebar.vala:385
 msgid "_Unlock"
 msgstr "_Kilidini Aç"
 
 #. Properties item
-#: src/sidebar.vala:361
+#: src/sidebar.vala:402
 msgid "_Properties"
 msgstr "_Özellikler"
 
-#: src/sidebar.vala:391
+#: src/sidebar.vala:432
 msgid "Couldn’t lock"
 msgstr "Kilitlenemedi"
 
@@ -2484,7 +2513,7 @@ msgstr "Güvenli Kabuk"
 #: ssh/backend.vala:28
 msgid "Keys used to connect securely to other computers"
 msgstr ""
-"Diğer bilgisayarlara güvenli biçimde bağlanmak için kullanılan anahtarlar"
+"Diğer bilgisayarlara güvenli biçimde bağlanmada kullanılan anahtarlar"
 
 #: ssh/deleter.vala:41 ssh/deleter.vala:46
 #, c-format
@@ -2747,21 +2776,21 @@ msgstr "_Kullanıcı adı:"
 msgid "Set Up"
 msgstr "Ayarla"
 
-#: ssh/source.vala:42
+#: ssh/source.vala:46
 msgid "OpenSSH keys"
 msgstr "OpenSSH anahtarları"
 
-#: ssh/source.vala:47
+#: ssh/source.vala:51
 #, c-format
 msgid "OpenSSH: %s"
 msgstr "OpenSSH: %s"
 
-#: ssh/source.vala:51
+#: ssh/source.vala:55
 #, c-format
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:253
+#: ssh/source.vala:250
 msgid "No private key file is available for this key."
 msgstr "Bu anahtar için hiçbir özel anahtar dosyası yok."
 
@@ -2772,6 +2801,15 @@ msgstr "Uzak bilgisayardaki Güvenli Kabuk anahtarları yapılandırılamadı."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
+
+#~ msgid ""
+#~ "Seahorse is a GNOME application for managing encryption keys. It also "
+#~ "integrates with nautilus, gedit and other places for encryption "
+#~ "operations."
+#~ msgstr ""
+#~ "Seahorse, şifreleme anahtarlarını yönetmek için kullanabileceğiniz GNOME "
+#~ "uygulamasıdır. Ayrıca şifreleme işlemleri için nautilus, gedit ve diğer "
+#~ "uygulamalarla tümleşir."
 
 #~ msgid "Encryption _Type:"
 #~ msgstr "Şifreleme _Türü:"
@@ -2787,9 +2825,6 @@ msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
 
 #~ msgid "Lock"
 #~ msgstr "Kilitle"
-
-#~ msgid "Import"
-#~ msgstr "İçe Aktar"
 
 #~ msgid "_Combine all keyrings"
 #~ msgstr "_Tüm anahtarlıkları birleştir"
@@ -2937,9 +2972,6 @@ msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
 
 #~ msgid "By _Keyring"
 #~ msgstr "_Anahtarlığa Göre"
-
-#~ msgid "Show sidebar listing keyrings"
-#~ msgstr "Anahtarlıkları listeleyen yan çubuğu göster"
 
 #~ msgid "Only show personal keys, certificates and passwords"
 #~ msgstr "Yalnızca kişisel anahtarlar, sertifikalar ve parolaları göster"
@@ -3154,10 +3186,6 @@ msgstr "Güvenli Kabuk anahtarları yapılandırılıyor…"
 #~ msgstr ""
 #~ "Parola saklayan anahtarlığın kilidini bir ana parola ile aç böylelikle "
 #~ "kullanılabilir olsun."
-
-#~| msgid "Deleting keyring..."
-#~ msgid "Delete the keyring."
-#~ msgstr "Anahtarlığı sil."
 
 #~ msgid "Properties of the keyring."
 #~ msgstr "Anahtarlık özellikleri."
