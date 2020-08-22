@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse-help\n"
-"POT-Creation-Date: 2020-05-20 10:36+0000\n"
-"PO-Revision-Date: 2020-05-24 12:14+0200\n"
+"POT-Creation-Date: 2020-07-31 17:47+0000\n"
+"PO-Revision-Date: 2020-08-22 20:05+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -951,13 +951,13 @@ msgid ""
 "When you open <app>Passwords and Keys</app> for the first time, you will see "
 "keys and password grouped together. In the <gui>Login</gui> keyring, you may "
 "find stored passwords for GNOME applications such as <app>Web</app>, "
-"<app>Accounts</app> etc. The <gui>Login</gui> keyring is the default keyring "
-"in <app>Passwords and keys</app>."
+"<app>Online Accounts</app> etc. The <gui>Login</gui> keyring is the default "
+"keyring in <app>Passwords and keys</app>."
 msgstr ""
 "Po otwarciu programu <app>Hasła i klucze</app> po raz pierwszy zostaną "
 "wyświetlone grupy kluczy i haseł. W <gui>Bazie kluczy konta</gui> można "
 "znaleźć przechowywane hasła dla programów GNOME, takich jak <app>WWW</app>, "
-"<app>Konta</app> itp. <gui>Baza kluczy konta</gui> jest domyślną bazą "
+"<app>Konta online</app> itp. <gui>Baza kluczy konta</gui> jest domyślną bazą "
 "programu <app>Hasła i klucze</app>."
 
 #. (itstool) path: p/link
@@ -1314,8 +1314,8 @@ msgstr "Aby utworzyć nowy klucz PGP:"
 
 #. (itstool) path: item/p
 #: C/pgp-create.page:45
-msgid "Select <gui>PGP Key</gui> from the list."
-msgstr "Wybierz <gui>Klucz PGP</gui> z listy."
+msgid "Select <gui>GPG Key</gui> from the list."
+msgstr "Wybierz <gui>Klucz GPG</gui> z listy."
 
 #. (itstool) path: item/p
 #: C/pgp-create.page:48
@@ -1379,7 +1379,7 @@ msgstr "Zaawansowane opcje klucza PGP"
 #. (itstool) path: section/p
 #: C/pgp-create.page:81
 msgid ""
-"Under <gui>Advanced key options</gui> you can choose custom values for "
+"Under <gui>Advanced key options</gui>, you can choose custom values for "
 "encryption type, key strength and key expiration date."
 msgstr ""
 "W sekcji <gui>Zaawansowane opcje klucza</gui> można wybrać niestandardowe "
@@ -1433,20 +1433,19 @@ msgstr "Data wygaśnięcia"
 msgid ""
 "When a key expires, <link xref=\"pgp-expired\">certain actions no longer "
 "work</link>. In <app>Passwords and Keys</app>, you can either set your key "
-"to <gui style=\"checkbox\">Never Expire</gui>, or select an expiration date "
-"and time for it."
+"to <gui style=\"checkbox\">Never Expire</gui> or select an expiration date "
+"for it."
 msgstr ""
 "Po wygaśnięciu klucza <link xref=\"pgp-expired\">pewne działania przestają "
 "działać</link>. W programie <app>Hasła i klucze</app> można włączyć opcję "
-"<gui style=\"checkbox\">Nigdy nie wygasa</gui> lub ustawić datę i czas "
-"wygaśnięcia."
+"<gui style=\"checkbox\">Nigdy nie wygasa</gui> lub ustawić datę wygaśnięcia."
 
 #. (itstool) path: item/p
 #: C/pgp-create.page:106
 msgid ""
 "It is recommended that you set an expiration date in case you lose access to "
 "the key. Even if your key expires, you can <link xref=\"pgp-expiration-change"
-"\"> change the expiration to a later date</link>."
+"\">change the expiration to a later date</link>."
 msgstr ""
 "Zalecane jest ustawienie daty wygaśnięcia, w razie gdyby utracono dostęp do "
 "klucza. Nawet jeśli klucz wygasa, można <link xref=\"pgp-expiration-change"
@@ -1691,7 +1690,7 @@ msgstr ""
 
 #. (itstool) path: section/title
 #: C/pgp-export.page:29
-msgid "To export your public PGP key"
+msgid "To export your public PGP key:"
 msgstr "Aby wyeksportować publiczny klucz PGP:"
 
 #. (itstool) path: item/p
@@ -1735,7 +1734,7 @@ msgstr ""
 
 #. (itstool) path: section/title
 #: C/pgp-export.page:58
-msgid "To export your private PGP key"
+msgid "To export your private PGP key:"
 msgstr "Aby wyeksportować prywatny klucz PGP:"
 
 #. (itstool) path: item/p
@@ -1878,8 +1877,8 @@ msgstr ""
 #. (itstool) path: item/p
 #: C/pgp-photoid.page:55
 msgid ""
-"Press the button marked with a <gui style=\"button\">+</gui> on the left "
-"hand side to add a photo."
+"Press the <gui style=\"button\">+</gui> button on the left hand side to add "
+"a photo."
 msgstr ""
 "Kliknij przycisk <gui style=\"button\">+</gui> po lewej stronie, aby dodać "
 "zdjęcie."
@@ -2343,13 +2342,14 @@ msgid ""
 "Only PGP keys that have been published on a key server can be synchronized. "
 "If the <gui style=\"button\">Sync</gui> button is not clickable, check if "
 "the key has been published on a key server. In the case of synchronizing "
-"your own keys, publish them, before synchronizing them."
+"your own keys, <link xref=\"pgp-publish\">publish them</link> before "
+"synchronizing them."
 msgstr ""
 "Tylko klucze PGP opublikowane na serwerze kluczy mogą być synchronizowane. "
 "Jeśli przycisku <gui style=\"button\">Zsynchronizuj</gui> nie da się "
 "kliknąć, to sprawdź, czy klucz został opublikowany na serwerze kluczy. "
-"W przypadku synchronizowania własnych kluczy opublikuj je przed "
-"synchronizacją."
+"W przypadku synchronizowania własnych kluczy <link xref=\"pgp-publish"
+"\">opublikuj je</link> przed synchronizacją."
 
 #. (itstool) path: info/desc
 #: C/pgp-userid-add.page:20
