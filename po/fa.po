@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-02-21 16:40+0000\n"
-"PO-Revision-Date: 2020-02-22 08:44+0000\n"
+"POT-Creation-Date: 2020-07-13 16:23+0000\n"
+"PO-Revision-Date: 2020-08-25 16:18+0000\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "Language: fa\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2.4\n"
+"X-Generator: Poedit 2.4.1\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Poedit-Bookmarks: -1,38,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
@@ -54,7 +54,7 @@ msgstr "نتوانست داده‌ها را برون‌ریزی کند"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:283 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
 #: src/import-dialog.vala:34 src/key-manager.vala:270
@@ -63,7 +63,7 @@ msgstr "_لغو"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: src/sidebar.vala:352
+#: src/sidebar.vala:393
 msgid "_Delete"
 msgstr "_حذف"
 
@@ -245,6 +245,31 @@ msgctxt "shortcut window"
 msgid "Quit"
 msgstr "خروج"
 
+#: data/gtk/help-overlay.ui:64
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "ناوش"
+
+#: data/gtk/help-overlay.ui:69
+msgctxt "shortcut window"
+msgid "Select previous keyring"
+msgstr "گزینش دسته‌کلید پیشین"
+
+#: data/gtk/help-overlay.ui:76
+msgctxt "shortcut window"
+msgid "Select next keyring"
+msgstr "گزینش دسته‌کلید بعدی"
+
+#: data/gtk/help-overlay.ui:83
+msgctxt "shortcut window"
+msgid "Show sidebar (on small screens)"
+msgstr "نمایش نوار کناری (روی صفحه‌های کوچک)"
+
+#: data/gtk/help-overlay.ui:90
+msgctxt "shortcut window"
+msgid "Show keyring contents (on small screens)"
+msgstr "نمایش محتوای دسته‌کلید (روی صفحه‌های کوچک)"
+
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
 msgstr "دریافت خودکار کلیدها"
@@ -264,6 +289,80 @@ msgstr "این که کلیدهای تغییریافته باید به صورت �
 #: data/org.gnome.seahorse.gschema.xml:15
 msgid "Publish keys to this key server"
 msgstr "انتشار کلیدها روی این کارساز"
+
+#: data/org.gnome.seahorse.gschema.xml:16
+msgid ""
+"The key server to publish PGP keys to. Or empty to suppress publishing of PGP "
+"keys."
+msgstr ""
+"کارساز کلید برای انتشار کلید‌های PGP. یا خاللی برای توقّف انتشار کلیدهای PGP."
+
+#: data/org.gnome.seahorse.gschema.xml:20
+msgid "Last key server search pattern"
+msgstr "آخرین الگوی جست‌وجوی کارساز کلید"
+
+#: data/org.gnome.seahorse.gschema.xml:21
+msgid "The last search pattern searched for against a key server."
+msgstr "آخرین الگوی جست‌وجوی برای یک کارساز کلید."
+
+#: data/org.gnome.seahorse.gschema.xml:25
+msgid "Last key servers used"
+msgstr "آخرین کارساز کلید استفاده‌شده"
+
+#: data/org.gnome.seahorse.gschema.xml:26
+msgid ""
+"The last key server a search was performed against or empty for all key servers."
+msgstr "آخرین کارساز کلیدی که رویش جست‌وجو شده یا خالی برای همهٔ کارسازهای کلید."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:5
+msgid "Show keyrings sidebar"
+msgstr "نمایش نوار کناری دسته‌کلید"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:6
+msgid "Show keyrings sidebar in Seahorse."
+msgstr "نمایش نوار کناری دسته‌کلید در اسب‌دریایی."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:10
+msgid "Which items to show"
+msgstr "موارد برای نمایش"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:11
+msgid ""
+"Filter which items to show. If empty, show all items, if “personal” show "
+"personal keys, if “trusted” show trusted."
+msgstr ""
+"پالایش موارد برای نمایش. در صورت خالی بود، همهٔ موارد، برای «شخصی» کلیدهای شخصی و "
+"برای «مطمئن»، مطمئن‌ها نشان داده می‌شوند."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:16
+msgid "Width of the side pane"
+msgstr "پهنای قاب کناری"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:17
+msgid "The default width of the side pane."
+msgstr "پهنای پیش‌گزیدهٔ قاب کناری."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:21
+msgid "The keyrings chosen"
+msgstr "دسته‌کلید گزیده"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:22
+msgid "The URIs of the keyrings chosen in the sidebar."
+msgstr "نشانی‌های دسته‌کلیدهای گزیده در نوار کناری."
+
+#: data/org.gnome.seahorse.manager.gschema.xml:29
+msgid "The column to sort the Seahorse keys by"
+msgstr "ستون اساس چینش کلیدهای اسب‌دریایی"
+
+#: data/org.gnome.seahorse.manager.gschema.xml:30
+msgid ""
+"Specify the column to sort the Seahorse key manager main window by. Columns are: "
+"“name”, “id”, “validity”, “expires”, “trust”, and “type”. Put a “-” in front of "
+"the column name to sort in descending order."
+msgstr ""
+"مشخّص کردن ستون برا چینش پنجرهٔ اصلی مدیر کلید اسب‌دریایی بر اساسش. ستون‌ها شامل "
+"«نام»، «شناسه»، «اعتبار»، «انقضا»، «اعتماد» و گونه هستند. برای چینش به ترتیب "
+"نزولی، یک «-» جلوی نام ستون بگذارید."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:34
 msgid "Show validity column"
@@ -288,6 +387,22 @@ msgstr "نمایش ستون اطمینان"
 msgid "Show type column"
 msgstr "نمایش ستون گونه"
 
+#: data/org.gnome.seahorse.window.gschema.xml:5
+msgid "Width of the window"
+msgstr "پهنای پنجره"
+
+#: data/org.gnome.seahorse.window.gschema.xml:6
+msgid "Width (in pixels) of the window."
+msgstr "پهنای پنجره (به پیکسل)."
+
+#: data/org.gnome.seahorse.window.gschema.xml:10
+msgid "Height of the window"
+msgstr "بلندای پنجره"
+
+#: data/org.gnome.seahorse.window.gschema.xml:11
+msgid "Height (in pixels) of the window."
+msgstr "بلندای پنجره (به پیکسل)."
+
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
 msgid "Seahorse"
 msgstr "اسب‌دریایی"
@@ -298,14 +413,10 @@ msgid "Manage your passwords and encryption keys"
 msgstr "مدیریت گذرواژه‌ها و کلیدهای رمزنگاریتان"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid ""
-"Seahorse is a GNOME application for managing encryption keys. It also integrates "
-"with nautilus, gedit and other places for encryption operations."
-msgstr ""
-"اسب‌دریایی یک برنامهٔ گنوم برای مدریت کلیدهای رمزنگاری است. هم‌چنین برای عملیات "
-"رمزنگاری با پرونده‌ها، ویرایشگر متن و دیگر مکان‌ها یکپارچه می‌شود."
+msgid "Seahorse is a GNOME application for managing encryption keys."
+msgstr "اسب‌دریایی برنامهٔ گنوم برای مدیریت کلیدهای رمزنگاری است."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:13
+#: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
 "With seahorse you can create and manage PGP keys, create and manage SSH keys, "
 "publish and retrieve keys from key servers, cache your passphrase so you don’t "
@@ -315,7 +426,7 @@ msgstr ""
 "از کارسازهای کلید گرفته و رویشان منتشر کنید؛ عبارت عبورتان را انبار کرده تا دیگر "
 "نیازی به نوشتنش نباشد و از کلیدها و دسته‌کلیدتان، پشتیبان بگیرید."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:94
+#: data/org.gnome.seahorse.Application.appdata.xml.in:126
 msgid "The GNOME Project"
 msgstr "پروژهٔ گنوم"
 
@@ -334,7 +445,7 @@ msgstr ""
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "گذرواژه‌ها، گواهینامه‌ها و رمزهای ذخیره‌شده"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:410
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
 msgid "Couldn’t unlock"
 msgstr "نتوانست قفل‌گشایی کند"
 
@@ -424,7 +535,7 @@ msgstr "نتوانست گذرواژه را عوض کند."
 msgid "Couldn’t set description."
 msgstr "نتوانست توضیح را تنظیم کند."
 
-#: gkr/gkr-item-properties.vala:268
+#: gkr/gkr-item-properties.vala:260
 msgid "Error deleting the password."
 msgstr "خطا در حذف گذرواژه."
 
@@ -448,12 +559,12 @@ msgstr "گذرواژهٔ مخزن کلید"
 msgid "Network Manager secret"
 msgstr "رمز مدیر شبکه"
 
-#: gkr/gkr-item.vala:312
+#: gkr/gkr-item.vala:341
 #, c-format
 msgid "Are you sure you want to delete the password “%s”?"
 msgstr "مطمئنید که می‌خواهید گذرواژهٔ «%s» را حذف کنید؟"
 
-#: gkr/gkr-item.vala:314
+#: gkr/gkr-item.vala:343
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
@@ -557,7 +668,7 @@ msgstr "رونوشت"
 msgid "Use"
 msgstr "استفاده"
 
-#: gkr/seahorse-gkr-item-properties.ui:139 pgp/seahorse-pgp-key-properties.c:1280
+#: gkr/seahorse-gkr-item-properties.ui:139 pgp/seahorse-pgp-key-properties.c:1281
 msgid "Type"
 msgstr "گونه"
 
@@ -571,7 +682,7 @@ msgstr "ورود"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
 #: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:915
+#: pgp/seahorse-pgp-public-key-properties.ui:916
 msgid "Details"
 msgstr "جزئیات"
 
@@ -583,7 +694,7 @@ msgstr "حذف گذرواژه"
 msgid "Keyring properties"
 msgstr "ویژگی‌های دسته‌کلید"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:858
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
 msgid "Name"
 msgstr "نام"
 
@@ -928,7 +1039,7 @@ msgstr "_نام کامل"
 msgid "Must be at least 5 characters long"
 msgstr "باید لااقل ۵ نویسه داشته باشد"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:93
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:92
 msgid "_Email Address"
 msgstr "نشانی _رایانامه"
 
@@ -1049,35 +1160,35 @@ msgstr "کلید PGP جدید"
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "یک کلید PGP می‌گذارد رایانامه یا پرونده‌‌ها را برای دیگران رمزنگاری کنید."
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:125 pkcs11/seahorse-pkcs11-generate.ui:110
+#: pgp/seahorse-gpgme-generate-dialog.ui:124 pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "گزینه‌های _پیش‌رفتهٔ کلید"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:139
+#: pgp/seahorse-gpgme-generate-dialog.ui:138
 msgid "_Comment"
 msgstr "_نظر"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:170 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
 msgid "Encryption _Type"
 msgstr "_گونهٔ رمزنگاری"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:200 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
 msgid "Key _Strength (bits)"
 msgstr "_قدرت کلید (بیت)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:230
+#: pgp/seahorse-gpgme-generate-dialog.ui:229
 msgid "E_xpiration Date"
 msgstr "_تاریخ انقضا"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:252
+#: pgp/seahorse-gpgme-generate-dialog.ui:251
 msgid "Ne_ver Expires"
 msgstr "_هرگز منقضی نشود"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:293
+#: pgp/seahorse-gpgme-generate-dialog.ui:292
 msgid "C_reate"
 msgstr "_ایجاد"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:300
+#: pgp/seahorse-gpgme-generate-dialog.ui:299
 msgid "Generate a new key"
 msgstr "ایجاد کلیدی جدید"
 
@@ -1420,9 +1531,9 @@ msgstr "نتوانست کلید را درون‌ریزی کند: %s"
 msgid "Key import succeeded"
 msgstr "درون‌ریزی کلید موفّق بود"
 
-#: pgp/seahorse-keyserver-results.c:154 src/import-dialog.vala:38
-msgid "_Import"
-msgstr "_درون‌ریزی"
+#: pgp/seahorse-keyserver-results.c:154
+msgid "Import"
+msgstr "درون‌ریزی"
 
 #: pgp/seahorse-keyserver-results.c:156
 msgid "Can’t import key"
@@ -1577,143 +1688,143 @@ msgstr "کلید PGP شخصی"
 msgid "PGP key"
 msgstr "کلید PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:248
+#: pgp/seahorse-pgp-key-properties.c:249
 msgid "Couldn’t change primary user ID"
 msgstr "نتوانست شناسهٔ کاربری اصلی را عوض کند"
 
-#: pgp/seahorse-pgp-key-properties.c:283
+#: pgp/seahorse-pgp-key-properties.c:284
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "مطمئنید می‌خواهید شناسهٔ کاربری «%s» را برای همیشه حذف کنید؟"
 
-#: pgp/seahorse-pgp-key-properties.c:292
+#: pgp/seahorse-pgp-key-properties.c:293
 msgid "Couldn’t delete user ID"
 msgstr "نتوانست شناسهٔ کاربری را حذف کند"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:368 pgp/seahorse-pgp-key-properties.c:1414
+#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
 msgid "[Unknown]"
 msgstr "[ناشناخته]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:464 pgp/seahorse-pgp-key-properties.c:1624
+#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
 msgid "Name/Email"
 msgstr "نام/رایانامه"
 
-#: pgp/seahorse-pgp-key-properties.c:471
+#: pgp/seahorse-pgp-key-properties.c:472
 msgid "Signature ID"
 msgstr "شناسهٔ امضا"
 
-#: pgp/seahorse-pgp-key-properties.c:577
+#: pgp/seahorse-pgp-key-properties.c:578
 msgid "Couldn’t change primary photo"
 msgstr "نتوانست عکس اصلی را عوض کند"
 
-#: pgp/seahorse-pgp-key-properties.c:737
+#: pgp/seahorse-pgp-key-properties.c:738
 msgid "Error changing password"
 msgstr "خطا در تغییر گذرواژه"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:783
+#: pgp/seahorse-pgp-key-properties.c:784
 msgid "(unknown)"
 msgstr "(نامعلوم)"
 
-#: pgp/seahorse-pgp-key-properties.c:788
+#: pgp/seahorse-pgp-key-properties.c:789
 #, c-format
 msgid "This key expired on: %s"
 msgstr "این کلید منقضی می‌شود در: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:816
+#: pgp/seahorse-pgp-key-properties.c:817
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — کلید عمومی"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:819
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — کلید خصوصی"
 
-#: pgp/seahorse-pgp-key-properties.c:1005
+#: pgp/seahorse-pgp-key-properties.c:1006
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "مطمئنید می‌خواهید زیر کلید %Id از %s را برای همیشه حذف کنید؟"
 
-#: pgp/seahorse-pgp-key-properties.c:1013
+#: pgp/seahorse-pgp-key-properties.c:1014
 msgid "Couldn’t delete subkey"
 msgstr "نتوانست زیرکلید را حذف کند"
 
-#: pgp/seahorse-pgp-key-properties.c:1077 pgp/seahorse-pgp-key-properties.c:1388
+#: pgp/seahorse-pgp-key-properties.c:1078 pgp/seahorse-pgp-key-properties.c:1389
 msgid "Unable to change trust"
 msgstr "ناتوان در تعویض اطمینان"
 
-#: pgp/seahorse-pgp-key-properties.c:1089 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "نتوانست کلید را برون‌ریزد"
 
-#: pgp/seahorse-pgp-key-properties.c:1238 pgp/seahorse-pgp-key-properties.c:1322
+#: pgp/seahorse-pgp-key-properties.c:1239 pgp/seahorse-pgp-key-properties.c:1323
 msgctxt "Expires"
 msgid "Never"
 msgstr "هرگز"
 
-#: pgp/seahorse-pgp-key-properties.c:1277
+#: pgp/seahorse-pgp-key-properties.c:1278
 msgid "ID"
 msgstr "شناسه"
 
-#: pgp/seahorse-pgp-key-properties.c:1283
+#: pgp/seahorse-pgp-key-properties.c:1284
 msgid "Usage"
 msgstr "استفاده"
 
-#: pgp/seahorse-pgp-key-properties.c:1286
+#: pgp/seahorse-pgp-key-properties.c:1287
 msgid "Created"
 msgstr "ایجاد شد"
 
-#: pgp/seahorse-pgp-key-properties.c:1289
+#: pgp/seahorse-pgp-key-properties.c:1290
 msgid "Expires"
 msgstr "انقضا"
 
-#: pgp/seahorse-pgp-key-properties.c:1292
+#: pgp/seahorse-pgp-key-properties.c:1293
 msgid "Status"
 msgstr "وضعیت"
 
-#: pgp/seahorse-pgp-key-properties.c:1295
+#: pgp/seahorse-pgp-key-properties.c:1296
 msgid "Strength"
 msgstr "قدرت"
 
-#: pgp/seahorse-pgp-key-properties.c:1313
+#: pgp/seahorse-pgp-key-properties.c:1314
 msgid "Revoked"
 msgstr "لغو شده"
 
-#: pgp/seahorse-pgp-key-properties.c:1315
+#: pgp/seahorse-pgp-key-properties.c:1316
 msgid "Expired"
 msgstr "منقضی"
 
-#: pgp/seahorse-pgp-key-properties.c:1317
+#: pgp/seahorse-pgp-key-properties.c:1318
 msgid "Disabled"
 msgstr "از کار افتاده"
 
-#: pgp/seahorse-pgp-key-properties.c:1319
+#: pgp/seahorse-pgp-key-properties.c:1320
 msgid "Good"
 msgstr "خوب"
 
-#: pgp/seahorse-pgp-key-properties.c:1627
+#: pgp/seahorse-pgp-key-properties.c:1628
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "شناسه کلید"
 
-#: pgp/seahorse-pgp-key-properties.c:1769
+#: pgp/seahorse-pgp-key-properties.c:1771
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "به امضاهای %s روی دیگر کلیدها اطمینان دارم"
 
-#: pgp/seahorse-pgp-key-properties.c:1776
+#: pgp/seahorse-pgp-key-properties.c:1778
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this key:"
 msgstr "اگر باور دارید مالک این کلید %s است، این کلید را <i>امضا</i> کنید:"
 
-#: pgp/seahorse-pgp-key-properties.c:1783
+#: pgp/seahorse-pgp-key-properties.c:1785
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1792,7 +1903,7 @@ msgstr "امضا"
 
 #. Translators: This text refers to deleting an item from its type's backing store
 #: pgp/seahorse-pgp-private-key-properties.ui:502
-#: pkcs11/seahorse-pkcs11-properties.ui:22 src/seahorse-key-manager-widgets.ui:12
+#: pkcs11/seahorse-pkcs11-properties.ui:22 src/seahorse-key-manager-widgets.ui:18
 msgid "Delete"
 msgstr "حذف"
 
@@ -1866,7 +1977,7 @@ msgid "Expire"
 msgstr "انقضا"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1064
-#: pgp/seahorse-pgp-public-key-properties.ui:898
+#: pgp/seahorse-pgp-public-key-properties.ui:899
 msgid "_Subkeys"
 msgstr "_زیرکلیدها"
 
@@ -1931,11 +2042,11 @@ msgid "Dates:"
 msgstr "تاریخ‌ها:"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:828
-msgid "Indicate Trust:"
+msgid "Indicate trust:"
 msgstr "نشانهٔ اطمینان:"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:845
-msgid "You _Trust the Owner:"
+msgid "You _trust the owner:"
 msgstr "به مالک _اطمینان دارید:"
 
 #: pgp/seahorse-pgp-subkey.c:161
@@ -2059,7 +2170,7 @@ msgstr "بی‌نام"
 msgid "Failed to export certificate"
 msgstr "شکست در برون‌ریزی گواهینامه"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:426
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
 msgid "Couldn’t delete"
 msgstr "نتوانست حذف کند"
 
@@ -2172,6 +2283,10 @@ msgstr "صفحهٔ خانگی پروژهٔ اسب‌دریایی"
 msgid "Data to be imported"
 msgstr "داده‌ها برای درون‌ریزی"
 
+#: src/import-dialog.vala:38
+msgid "_Import"
+msgstr "_درون‌ریزی"
+
 #: src/import-dialog.vala:74
 msgid "Import failed"
 msgstr "درون‌ریزی شکست خورد"
@@ -2194,7 +2309,7 @@ msgstr "متن رهاشده"
 msgid "Clipboard text"
 msgstr "متن تخته‌گیره"
 
-#: src/key-manager.vala:468
+#: src/key-manager.vala:497
 msgid "Couldn’t unlock keyring"
 msgstr "نتوانست دسته‌کلید را قفل‌گشایی کند"
 
@@ -2267,7 +2382,7 @@ msgid "GPG key"
 msgstr "کلید GPG"
 
 #: src/seahorse-key-manager.ui:132
-msgid "Used to encrypt email and files"
+msgid "Used to encrypt emails and files"
 msgstr "استفاده برای رمزنگاری رایانامه و پرونده‌ها"
 
 #: src/seahorse-key-manager.ui:159
@@ -2318,33 +2433,38 @@ msgstr "دسته‌کلید قفل‌شده است"
 msgid "Unlock"
 msgstr "قفل گشایی"
 
-#: src/seahorse-key-manager-widgets.ui:6
+#. Translators: This is only relevant for "Password" items
+#: src/seahorse-key-manager-widgets.ui:7
+msgid "Copy secret"
+msgstr "رونوشت از رمز"
+
+#: src/seahorse-key-manager-widgets.ui:12
 msgid "Export…"
 msgstr "برون‌ریزی…"
 
-#: src/seahorse-key-manager-widgets.ui:19
+#: src/seahorse-key-manager-widgets.ui:25
 msgid "Properties"
 msgstr "ترجیحات"
 
-#: src/seahorse-key-manager-widgets.ui:23
+#: src/seahorse-key-manager-widgets.ui:29
 msgid "Configure Key for Secure Shell…"
 msgstr "پیکربندی کلید برای پوستهٔ امن…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:339
+#: src/sidebar.vala:380
 msgid "_Lock"
 msgstr "_قفل"
 
-#: src/sidebar.vala:344
+#: src/sidebar.vala:385
 msgid "_Unlock"
 msgstr "قفل‌_گشایی"
 
 #. Properties item
-#: src/sidebar.vala:361
+#: src/sidebar.vala:402
 msgid "_Properties"
 msgstr "_ترجیحات"
 
-#: src/sidebar.vala:391
+#: src/sidebar.vala:432
 msgid "Couldn’t lock"
 msgstr "نتوانست قفل کند"
 
@@ -2613,21 +2733,21 @@ msgstr "نام _ورود:"
 msgid "Set Up"
 msgstr "برپایی"
 
-#: ssh/source.vala:42
+#: ssh/source.vala:46
 msgid "OpenSSH keys"
 msgstr "کلید‌های OpenSSH"
 
-#: ssh/source.vala:47
+#: ssh/source.vala:51
 #, c-format
 msgid "OpenSSH: %s"
 msgstr "OpenSSH: %s"
 
-#: ssh/source.vala:51
+#: ssh/source.vala:55
 #, c-format
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:253
+#: ssh/source.vala:250
 msgid "No private key file is available for this key."
 msgstr "هیچ پروندهٔ کلید خصوصی‌ای برای این کلید موجود نیست."
 
@@ -2638,6 +2758,13 @@ msgstr "نتوانست کلیدهای پوستهٔ امن را روی رایان
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "در حال پیکربندی کلیدهای پوستهٔ امن…"
+
+#~ msgid ""
+#~ "Seahorse is a GNOME application for managing encryption keys. It also "
+#~ "integrates with nautilus, gedit and other places for encryption operations."
+#~ msgstr ""
+#~ "اسب‌دریایی یک برنامهٔ گنوم برای مدریت کلیدهای رمزنگاری است. هم‌چنین برای عملیات "
+#~ "رمزنگاری با پرونده‌ها، ویرایشگر متن و دیگر مکان‌ها یکپارچه می‌شود."
 
 #~ msgid "Lock"
 #~ msgstr "قفل"
