@@ -4,13 +4,13 @@
 #
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2008, 2009, 2010, 2011, 2012.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2013, 2014, 2015, 2016, 2017.
-# Asier Sarasua Garmendia <asier.sarasua@gmail.com>, 2019, 2020.
+# Asier Sarasua Garmendia <asiersarasua@ni.eus>, 2019, 2020.
 msgid ""
 msgstr "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-02-15 11:47+0000\n"
-"PO-Revision-Date: 2020-02-16 10:00+0100\n"
-"Last-Translator: Asier Sarasua Garmendia <asier.sarasua@gmail.com>\n"
+"POT-Creation-Date: 2020-07-13 16:23+0000\n"
+"PO-Revision-Date: 2020-08-28 10:00+0100\n"
+"Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
@@ -53,7 +53,7 @@ msgstr "Ezin izan dira datuak esportatu"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:283 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
 #: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
 #: src/import-dialog.vala:34 src/key-manager.vala:270
@@ -62,7 +62,7 @@ msgstr "_Utzi"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: src/sidebar.vala:352
+#: src/sidebar.vala:393
 msgid "_Delete"
 msgstr "Ez_abatu"
 
@@ -244,6 +244,31 @@ msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Irten"
 
+#: data/gtk/help-overlay.ui:64
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "Nabigazioa"
+
+#: data/gtk/help-overlay.ui:69
+msgctxt "shortcut window"
+msgid "Select previous keyring"
+msgstr "Hautatu aurreko gako sorta"
+
+#: data/gtk/help-overlay.ui:76
+msgctxt "shortcut window"
+msgid "Select next keyring"
+msgstr "Hautatu hurrengo gako sorta"
+
+#: data/gtk/help-overlay.ui:83
+msgctxt "shortcut window"
+msgid "Show sidebar (on small screens)"
+msgstr "Erakutsi alboko barra (pantaila txikietan)"
+
+#: data/gtk/help-overlay.ui:90
+msgctxt "shortcut window"
+msgid "Show keyring contents (on small screens)"
+msgstr "Erakutsi gako sortaren edukiak (pantaila txikietan)"
+
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
 msgstr "Berreskuratu gakoak automatikoki"
@@ -382,19 +407,17 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Kudeatu pasahitzak eta zifratze-gakoak"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid ""
-"Seahorse is a GNOME application for managing encryption keys. It also "
-"integrates with nautilus, gedit and other places for encryption operations."
-msgstr "Seahorse zifratutako gakoak kudeatzeko aplikazio bat da GNOME mahaigainerako. Nautilus, gedit eta zifratze-eragiketen beste lekuekin bateragarria da."
+msgid "Seahorse is a GNOME application for managing encryption keys."
+msgstr "Seahorse zifratutako gakoak kudeatzeko aplikazio bat da GNOME mahaigainerako."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:13
+#: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
 "With seahorse you can create and manage PGP keys, create and manage SSH "
 "keys, publish and retrieve keys from key servers, cache your passphrase so "
 "you don’t have to keep typing it and backup your keys and keyring."
 msgstr "Seahorse-rekin PGP eta SSH gakoak sor eta kudea ditzakezu, gako-zerbitzarietatik gakoak eskuratu eta argitara ditzakezu. Zure pasaesaldia gorde zuk hura berriro ez idazteko eta zure gako eta gako-sorten babeskopia egiten du."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:94
+#: data/org.gnome.seahorse.Application.appdata.xml.in:126
 msgid "The GNOME Project"
 msgstr "GNOME proiektua"
 
@@ -406,13 +429,13 @@ msgstr "Pasahitzak eta Gakoak"
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
 msgid "keyring;encryption;security;sign;ssh;"
-msgstr "gako-sorta;zifratzea;segurtasuna;sinadura;ssh;"
+msgstr "gako sorta;zifratzea;segurtasuna;sinadura;ssh;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Gorde pasahitz, kredentzial eta ezkutuko pertsonalak"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:410
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
 msgid "Couldn’t unlock"
 msgstr "Ezin izan da desblokeatu"
 
@@ -424,40 +447,40 @@ msgstr "Ezin izan da elementua gehitu"
 msgid "Password or Secret"
 msgstr "Pasahitza edo ezkutukoa"
 
-#: gkr/gkr-item-info.vala:83
+#: gkr/gkr-item-info.vala:120
 msgid "Network connection secret"
 msgstr "Sareko konexioaren ezkutukoa"
 
-#: gkr/gkr-item-info.vala:90
+#: gkr/gkr-item-info.vala:127
 msgid "Wi-Fi password"
 msgstr "Haririk gabekoaren pasahitza"
 
-#: gkr/gkr-item-info.vala:103
+#: gkr/gkr-item-info.vala:145
 msgid "Network password"
 msgstr "Sareko pasahitza"
 
-#: gkr/gkr-item-info.vala:192
+#: gkr/gkr-item-info.vala:234
 msgid "GNOME Web password"
 msgstr "GNOME Web-en pasahitza"
 
-#: gkr/gkr-item-info.vala:212
+#: gkr/gkr-item-info.vala:254
 msgid "Google Chrome password"
 msgstr "Google Chrome-ren pasahitza"
 
-#: gkr/gkr-item-info.vala:246
+#: gkr/gkr-item-info.vala:288
 msgid "Instant messaging password"
 msgstr "Berehalako mezularitzaren pasahitza"
 
 #. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item-info.vala:251
+#: gkr/gkr-item-info.vala:293
 msgid "IM account password for "
 msgstr "BM-ko kontuaren pasahitza "
 
-#: gkr/gkr-item-info.vala:284
+#: gkr/gkr-item-info.vala:326
 msgid "Telepathy password"
 msgstr "Telepathy-ren pasahitza"
 
-#: gkr/gkr-item-info.vala:320
+#: gkr/gkr-item-info.vala:362
 msgid "GNOME Online Accounts password"
 msgstr "GNOMEren lineako kontuen pasahitza"
 
@@ -502,7 +525,7 @@ msgstr "Ezin izan da pasahitza aldatu."
 msgid "Couldn’t set description."
 msgstr "Ezin izan da azalpena ezarri."
 
-#: gkr/gkr-item-properties.vala:268
+#: gkr/gkr-item-properties.vala:260
 msgid "Error deleting the password."
 msgstr "Errorea pasahitza ezabatzean."
 
@@ -526,12 +549,12 @@ msgstr "Gakoen biltegiaren pasahitza"
 msgid "Network Manager secret"
 msgstr "Sareko kudeatzailearen ezkutukoa"
 
-#: gkr/gkr-item.vala:312
+#: gkr/gkr-item.vala:341
 #, c-format
 msgid "Are you sure you want to delete the password “%s”?"
 msgstr "Ziur zaude “%s” pasahitza ezabatu nahi duzula?"
 
-#: gkr/gkr-item.vala:314
+#: gkr/gkr-item.vala:343
 #, c-format
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
@@ -636,7 +659,7 @@ msgid "Use"
 msgstr "Erabili"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1271
+#: pgp/seahorse-pgp-key-properties.c:1281
 msgid "Type"
 msgstr "Mota"
 
@@ -650,7 +673,7 @@ msgstr "Saio-hasiera"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
 #: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:915
+#: pgp/seahorse-pgp-public-key-properties.ui:916
 msgid "Details"
 msgstr "Xehetasunak"
 
@@ -662,7 +685,7 @@ msgstr "Ezabatu pasahitza"
 msgid "Keyring properties"
 msgstr "Gako sortaren propietateak"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:857
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
 msgid "Name"
 msgstr "Izena"
 
@@ -938,18 +961,6 @@ msgstr "%u:%u:%u"
 msgid "Could not display help: %s"
 msgstr "Ezin izan da laguntza erakutsi: %s"
 
-#: pgp/seahorse-expires.ui:22
-msgid "_Never expires"
-msgstr "_Ez da iraungitzen"
-
-#: pgp/seahorse-expires.ui:80 pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "Errebokatu gakoa"
-
-#: pgp/seahorse-expires.ui:106
-msgid "C_hange"
-msgstr "_Aldatu"
-
 #: pgp/seahorse-gpgme-add-subkey.c:213
 #, c-format
 msgid "Add subkey to %s"
@@ -1021,7 +1032,7 @@ msgstr "_Izen-abizenak"
 msgid "Must be at least 5 characters long"
 msgstr "Gutxienez 5 karaktere izan behar ditu"
 
-#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:93
+#: pgp/seahorse-gpgme-add-uid.ui:55 pgp/seahorse-gpgme-generate-dialog.ui:92
 msgid "_Email Address"
 msgstr "_Helbide elektronikoa"
 
@@ -1049,22 +1060,30 @@ msgstr "Deszifratzeak huts egin du. Ziur aski deszifratzeko gakoa falta duzu."
 msgid "The operation was cancelled"
 msgstr "Eragiketa bertan behera utzi da"
 
-#: pgp/seahorse-gpgme-expires.c:62
+#: pgp/seahorse-gpgme-expires-dialog.c:72
 msgid "Invalid expiry date"
 msgstr "Iraungitze-data baliogabea"
 
-#: pgp/seahorse-gpgme-expires.c:63
+#: pgp/seahorse-gpgme-expires-dialog.c:73
 msgid "The expiry date must be in the future"
 msgstr "Iraungitze-data etorkizunean izan behar du"
 
-#: pgp/seahorse-gpgme-expires.c:76
+#: pgp/seahorse-gpgme-expires-dialog.c:83
 msgid "Couldn’t change expiry date"
 msgstr "Ezin izan da iraungitze-data aldatu"
 
-#: pgp/seahorse-gpgme-expires.c:137
+#: pgp/seahorse-gpgme-expires-dialog.c:155
 #, c-format
 msgid "Expiry: %s"
 msgstr "Iraungitzea: %s"
+
+#: pgp/seahorse-gpgme-expires-dialog.ui:16
+msgid "_Never expires"
+msgstr "_Ez da iraungitzen"
+
+#: pgp/seahorse-gpgme-expires-dialog.ui:48
+msgid "C_hange"
+msgstr "_Aldatu"
 
 #: pgp/seahorse-gpgme-exporter.c:72
 msgid "Multiple Keys"
@@ -1134,36 +1153,36 @@ msgstr "PGP gako berria"
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "Besteen mezuak edo fitxategiak zifratzeko aukera ematen dute PGP gakoek."
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:125
+#: pgp/seahorse-gpgme-generate-dialog.ui:124
 #: pkcs11/seahorse-pkcs11-generate.ui:110
 msgid "_Advanced key options"
 msgstr "Gako-aukera _aurreratuak"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:139
+#: pgp/seahorse-gpgme-generate-dialog.ui:138
 msgid "_Comment"
 msgstr "I_ruzkina"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:170 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
 msgid "Encryption _Type"
 msgstr "Zifratze _mota"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:200 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
 msgid "Key _Strength (bits)"
 msgstr "Gakoaren _indarra (bitetan)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:230
+#: pgp/seahorse-gpgme-generate-dialog.ui:229
 msgid "E_xpiration Date"
 msgstr "I_raungitze-data"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:252
+#: pgp/seahorse-gpgme-generate-dialog.ui:251
 msgid "Ne_ver Expires"
 msgstr "_Ez da iraungitzen"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:293
+#: pgp/seahorse-gpgme-generate-dialog.ui:292
 msgid "C_reate"
 msgstr "_Sortu"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:300
+#: pgp/seahorse-gpgme-generate-dialog.ui:299
 msgid "Generate a new key"
 msgstr "Sortu gako berri bat"
 
@@ -1489,9 +1508,9 @@ msgstr "Ezin izan da gakoa inportatu: %s"
 msgid "Key import succeeded"
 msgstr "Gakoa ongi inportatu da"
 
-#: pgp/seahorse-keyserver-results.c:154 src/import-dialog.vala:38
-msgid "_Import"
-msgstr "_Inportatu"
+#: pgp/seahorse-keyserver-results.c:154
+msgid "Import"
+msgstr "Inportatu"
 
 #: pgp/seahorse-keyserver-results.c:156
 msgid "Can’t import key"
@@ -1639,146 +1658,146 @@ msgstr "PGP gako pertsonalak"
 msgid "PGP key"
 msgstr "PGP gakoa"
 
-#: pgp/seahorse-pgp-key-properties.c:247
+#: pgp/seahorse-pgp-key-properties.c:249
 msgid "Couldn’t change primary user ID"
 msgstr "Ezin izan da erabiltzailearen ID nagusia aldatu"
 
-#: pgp/seahorse-pgp-key-properties.c:282
+#: pgp/seahorse-pgp-key-properties.c:284
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Ziur zaude ”%s” erabiltzailearen IDa behin betiko ezabatu nahi duzula?"
 
-#: pgp/seahorse-pgp-key-properties.c:291
+#: pgp/seahorse-pgp-key-properties.c:293
 msgid "Couldn’t delete user ID"
 msgstr "Ezin izan da erabiltzailearen IDa ezabatu"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:367 pgp/seahorse-pgp-key-properties.c:1405
+#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
 msgid "[Unknown]"
 msgstr "[Ezezaguna]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:463 pgp/seahorse-pgp-key-properties.c:1615
+#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
 msgid "Name/Email"
 msgstr "Izena/Helbide elektronikoa"
 
-#: pgp/seahorse-pgp-key-properties.c:470
+#: pgp/seahorse-pgp-key-properties.c:472
 msgid "Signature ID"
 msgstr "Sinaduraren IDa"
 
-#: pgp/seahorse-pgp-key-properties.c:576
+#: pgp/seahorse-pgp-key-properties.c:578
 msgid "Couldn’t change primary photo"
 msgstr "Ezin izan da argazki nagusia aldatu"
 
-#: pgp/seahorse-pgp-key-properties.c:736
+#: pgp/seahorse-pgp-key-properties.c:738
 msgid "Error changing password"
 msgstr "Errorea pasahitza aldatzean"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:782
+#: pgp/seahorse-pgp-key-properties.c:784
 msgid "(unknown)"
 msgstr "(ezezaguna)"
 
-#: pgp/seahorse-pgp-key-properties.c:787
+#: pgp/seahorse-pgp-key-properties.c:789
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Gako hori data honetan iraungi zen: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:815
+#: pgp/seahorse-pgp-key-properties.c:817
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — Gako publikoa"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:818
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Gako pribatua"
 
-#: pgp/seahorse-pgp-key-properties.c:1004
+#: pgp/seahorse-pgp-key-properties.c:1006
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Ziur zaude %2$s(r)en %1$d azpigakoa behin betiko ezabatu nahi duzula?"
 
-#: pgp/seahorse-pgp-key-properties.c:1012
+#: pgp/seahorse-pgp-key-properties.c:1014
 msgid "Couldn’t delete subkey"
 msgstr "Ezin izan da azpigakoa ezabatu"
 
-#: pgp/seahorse-pgp-key-properties.c:1071
-#: pgp/seahorse-pgp-key-properties.c:1379
+#: pgp/seahorse-pgp-key-properties.c:1078
+#: pgp/seahorse-pgp-key-properties.c:1389
 msgid "Unable to change trust"
 msgstr "Ezin izan da fidagarritasuna aldatu"
 
-#: pgp/seahorse-pgp-key-properties.c:1083 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Ezin izan da gakoa esportatu"
 
-#: pgp/seahorse-pgp-key-properties.c:1229
-#: pgp/seahorse-pgp-key-properties.c:1313
+#: pgp/seahorse-pgp-key-properties.c:1239
+#: pgp/seahorse-pgp-key-properties.c:1323
 msgctxt "Expires"
 msgid "Never"
 msgstr "Inoiz ere ez"
 
-#: pgp/seahorse-pgp-key-properties.c:1268
+#: pgp/seahorse-pgp-key-properties.c:1278
 msgid "ID"
 msgstr "IDa"
 
-#: pgp/seahorse-pgp-key-properties.c:1274
+#: pgp/seahorse-pgp-key-properties.c:1284
 msgid "Usage"
 msgstr "Erabilera"
 
-#: pgp/seahorse-pgp-key-properties.c:1277
+#: pgp/seahorse-pgp-key-properties.c:1287
 msgid "Created"
 msgstr "Sortuta"
 
-#: pgp/seahorse-pgp-key-properties.c:1280
+#: pgp/seahorse-pgp-key-properties.c:1290
 msgid "Expires"
 msgstr "Iraungitze-data"
 
-#: pgp/seahorse-pgp-key-properties.c:1283
+#: pgp/seahorse-pgp-key-properties.c:1293
 msgid "Status"
 msgstr "Egoera"
 
-#: pgp/seahorse-pgp-key-properties.c:1286
+#: pgp/seahorse-pgp-key-properties.c:1296
 msgid "Strength"
 msgstr "Indarra"
 
-#: pgp/seahorse-pgp-key-properties.c:1304
+#: pgp/seahorse-pgp-key-properties.c:1314
 msgid "Revoked"
 msgstr "Errebokatuta"
 
-#: pgp/seahorse-pgp-key-properties.c:1306
+#: pgp/seahorse-pgp-key-properties.c:1316
 msgid "Expired"
 msgstr "Iraungita"
 
-#: pgp/seahorse-pgp-key-properties.c:1308
+#: pgp/seahorse-pgp-key-properties.c:1318
 msgid "Disabled"
 msgstr "Desgaituta"
 
-#: pgp/seahorse-pgp-key-properties.c:1310
+#: pgp/seahorse-pgp-key-properties.c:1320
 msgid "Good"
 msgstr "Ona"
 
-#: pgp/seahorse-pgp-key-properties.c:1618
+#: pgp/seahorse-pgp-key-properties.c:1628
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Gakoaren IDa"
 
-#: pgp/seahorse-pgp-key-properties.c:1760
+#: pgp/seahorse-pgp-key-properties.c:1771
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "”%s”(r)en beste gako batzuen sinaduretan fidatzen naiz"
 
-#: pgp/seahorse-pgp-key-properties.c:1767
+#: pgp/seahorse-pgp-key-properties.c:1778
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
 msgstr "Gako honen jabea ”%s” dela uste baduzu, <i>sinatu</i> gakoa:"
 
-#: pgp/seahorse-pgp-key-properties.c:1774
+#: pgp/seahorse-pgp-key-properties.c:1785
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1857,7 +1876,7 @@ msgstr "Sinatu"
 #. Translators: This text refers to deleting an item from its type's backing store
 #: pgp/seahorse-pgp-private-key-properties.ui:502
 #: pkcs11/seahorse-pkcs11-properties.ui:22
-#: src/seahorse-key-manager-widgets.ui:12
+#: src/seahorse-key-manager-widgets.ui:18
 msgid "Delete"
 msgstr "Ezabatu"
 
@@ -1931,7 +1950,7 @@ msgid "Expire"
 msgstr "Iraungi"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:1064
-#: pgp/seahorse-pgp-public-key-properties.ui:898
+#: pgp/seahorse-pgp-public-key-properties.ui:899
 msgid "_Subkeys"
 msgstr "_Azpigakoak"
 
@@ -1996,11 +2015,11 @@ msgid "Dates:"
 msgstr "Datak:"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:828
-msgid "Indicate Trust:"
+msgid "Indicate trust:"
 msgstr "Adierazi fidagarritasuna:"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:845
-msgid "You _Trust the Owner:"
+msgid "You _trust the owner:"
 msgstr "Jabeaz _fidatzen zara:"
 
 #: pgp/seahorse-pgp-subkey.c:161
@@ -2035,6 +2054,10 @@ msgstr "_Arrazoia:"
 #: pgp/seahorse-revoke.ui:70
 msgid "Optional description of revocation"
 msgstr "Errebokatzearen aukerako azalpena"
+
+#: pgp/seahorse-revoke.ui:129
+msgid "Revoke key"
+msgstr "Errebokatu gakoa"
 
 #: pgp/seahorse-revoke.ui:154
 msgid "Re_voke"
@@ -2120,7 +2143,7 @@ msgstr "Izengabea"
 msgid "Failed to export certificate"
 msgstr "Huts egin du ziurtagiria esportatzean"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:426
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
 msgid "Couldn’t delete"
 msgstr "Ezin izan da ezabatu"
 
@@ -2233,6 +2256,10 @@ msgstr "Seahorse proiektuaren etxeko orria"
 msgid "Data to be imported"
 msgstr "Inportatuko diren datuak"
 
+#: src/import-dialog.vala:38
+msgid "_Import"
+msgstr "_Inportatu"
+
 #: src/import-dialog.vala:74
 msgid "Import failed"
 msgstr "Huts egin du inportatzeak"
@@ -2255,7 +2282,7 @@ msgstr "Jaregindako testua"
 msgid "Clipboard text"
 msgstr "Arbeleko testua"
 
-#: src/key-manager.vala:468
+#: src/key-manager.vala:497
 msgid "Couldn’t unlock keyring"
 msgstr "Ezin izan da gako sortu desblokeatu"
 
@@ -2328,8 +2355,8 @@ msgid "GPG key"
 msgstr "GPG gakoa"
 
 #: src/seahorse-key-manager.ui:132
-msgid "Used to encrypt email and files"
-msgstr "Mezu elektronikoak eta fitxategiak zifratzeko erabilia"
+msgid "Used to encrypt emails and files"
+msgstr "Posta elektronikoak eta fitxategiak zifratzeko erabilia"
 
 #: src/seahorse-key-manager.ui:159
 msgid "Password keyring"
@@ -2379,33 +2406,38 @@ msgstr "Gako sorta blokeatuta dago"
 msgid "Unlock"
 msgstr "Desblokeatu"
 
-#: src/seahorse-key-manager-widgets.ui:6
+#. Translators: This is only relevant for "Password" items
+#: src/seahorse-key-manager-widgets.ui:7
+msgid "Copy secret"
+msgstr "Kopiatu ezkutukoa"
+
+#: src/seahorse-key-manager-widgets.ui:12
 msgid "Export…"
 msgstr "Esportatu…"
 
-#: src/seahorse-key-manager-widgets.ui:19
+#: src/seahorse-key-manager-widgets.ui:25
 msgid "Properties"
 msgstr "Propietateak"
 
-#: src/seahorse-key-manager-widgets.ui:23
+#: src/seahorse-key-manager-widgets.ui:29
 msgid "Configure Key for Secure Shell…"
 msgstr "Konfiguratu gakoa Shell segururako…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:339
+#: src/sidebar.vala:380
 msgid "_Lock"
 msgstr "_Blokeatu"
 
-#: src/sidebar.vala:344
+#: src/sidebar.vala:385
 msgid "_Unlock"
 msgstr "_Desblokeatu"
 
 #. Properties item
-#: src/sidebar.vala:361
+#: src/sidebar.vala:402
 msgid "_Properties"
 msgstr "_Propietateak"
 
-#: src/sidebar.vala:391
+#: src/sidebar.vala:432
 msgid "Couldn’t lock"
 msgstr "Ezin izan da blokeatu"
 
@@ -2647,7 +2679,7 @@ msgstr "Ezabatu _SSH gakoa"
 
 #: ssh/seahorse-ssh-upload.ui:5
 msgid "Set Up Computer for SSH Connection"
-msgstr "Konfiguratu ordenagailua SSH konexioak egiteko "
+msgstr "Konfiguratu ordenagailua SSH konexioak egiteko"
 
 #: ssh/seahorse-ssh-upload.ui:32
 msgid ""
@@ -2671,21 +2703,21 @@ msgstr "_Erabiltzaile-izena:"
 msgid "Set Up"
 msgstr "Konfigurazioa"
 
-#: ssh/source.vala:42
+#: ssh/source.vala:46
 msgid "OpenSSH keys"
 msgstr "OpenSSH gakoak"
 
-#: ssh/source.vala:47
+#: ssh/source.vala:51
 #, c-format
 msgid "OpenSSH: %s"
 msgstr "OpenSSH: %s"
 
-#: ssh/source.vala:51
+#: ssh/source.vala:55
 #, c-format
 msgid "openssh://%s"
 msgstr "openssh://%s"
 
-#: ssh/source.vala:253
+#: ssh/source.vala:250
 msgid "No private key file is available for this key."
 msgstr "Ez dago gako pribatuaren fitxategirik erabilgarri gako honentzako."
 
@@ -2696,6 +2728,15 @@ msgstr "Ezin izan dira konfiguratu Shell seguruko gakoak urruneko ordenagailuan.
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Shell seguruko gakoak konfiguratzen…"
+
+#~ msgid ""
+#~ "Seahorse is a GNOME application for managing encryption keys. It also "
+#~ "integrates with nautilus, gedit and other places for encryption "
+#~ "operations."
+#~ msgstr ""
+#~ "Seahorse zifratutako gakoak kudeatzeko aplikazio bat da GNOME "
+#~ "mahaigainerako. Nautilus, gedit eta zifratze-eragiketen beste lekuekin "
+#~ "bateragarria da."
 
 #~ msgid "Keyring is unlocked"
 #~ msgstr "Gako sorta desblokeatuta dago"
