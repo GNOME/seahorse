@@ -37,7 +37,7 @@ glib_deps = [
   dependency('gmodule-2.0', version: '>=' + min_glib_version),
 ]
 gtk = dependency('gtk+-3.0', version: '>= 3.22.0')
-libhandy_dep = dependency('libhandy-1.0', version: '>= 1.0.0', required: false)
+libhandy_dep = dependency('libhandy-1', version: '>= 1.0.0', required: false)
 if not libhandy_dep.found()
   libhandy_subproj = subproject(
     'libhandy',
