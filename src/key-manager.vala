@@ -244,7 +244,7 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     private void update_header() {
-        bool folded = this.content_box.fold == Hdy.Fold.FOLDED;
+        bool folded = this.content_box.folded;
 
         this.left_header.show_close_button =
             !folded || header.visible_child == left_header;
@@ -501,7 +501,7 @@ public class Seahorse.KeyManager : Catalog {
 
     [GtkCallback]
     private bool on_key_pressed(Gtk.Widget widget, Gdk.EventKey event) {
-        bool folded = this.content_box.fold == Hdy.Fold.FOLDED;
+        bool folded = this.content_box.folded;
 
         switch (event.keyval) {
           // <Alt>Down and <Alt>Up for easy sidebar navigation

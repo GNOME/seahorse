@@ -96,8 +96,10 @@ public class Seahorse.Application : Gtk.Application {
     public override void startup() {
         base.startup();
 
+        Hdy.init();
+
         // Insert Icons into Stock
-        icons_init ();
+        icons_init();
 
         // Initialize the backends
         Gkr.Backend.initialize();
