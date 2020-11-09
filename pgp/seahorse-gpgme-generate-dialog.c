@@ -195,7 +195,7 @@ on_gpgme_generate_expires_toggled (GtkToggleButton *button,
 {
     SeahorseGpgmeGenerateDialog *self = SEAHORSE_GPGME_GENERATE_DIALOG (user_data);
 
-    gtk_widget_set_sensitive (self->expiry_date_container,
+    gtk_widget_set_sensitive (self->expiry_date,
                               !gtk_toggle_button_get_active (button));
 }
 
