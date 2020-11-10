@@ -41,7 +41,7 @@ public class Seahorse.ImportDialog : Gtk.Dialog {
         this.import.get_style_context().add_class("suggested-action");
         this.import.importing.connect(() => this.viewer.clear_error());
         this.import.imported.connect(on_import_button_imported);
-        add_action_widget(this.import, Gtk.ResponseType.OK);
+        ((Gtk.HeaderBar) get_header_bar()).pack_end(this.import);
 
         this.viewer = new Gcr.ViewerWidget();
         this.viewer.added.connect((v, r, parsed) => this.import.add_parsed(parsed));
