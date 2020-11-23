@@ -103,6 +103,7 @@ public class Seahorse.Sidebar : Gtk.ListBox {
     }
 
     private void on_sidebar_item_changed(SidebarItem item) {
+        select_row(null);
         select_row(item);
         current_collection_changed();
     }

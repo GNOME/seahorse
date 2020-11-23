@@ -461,11 +461,12 @@ public class Seahorse.KeyManager : Catalog {
     }
 
     private void on_sidebar_selected_rows_changed(Gtk.ListBox sidebar) {
-        check_empty_state();
-
-        show_item_list_pane();
-
         Place? place = this.sidebar.get_focused_place();
+        if (place == null) // FIXME: temporary workaround
+            return;
+
+        check_empty_state();
+        show_item_list_pane();
         return_if_fail (place != null);
 
         this.right_header.title = place.label;
