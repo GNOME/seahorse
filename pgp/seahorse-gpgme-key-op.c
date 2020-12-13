@@ -122,7 +122,6 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
     g_return_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring));
     g_return_if_fail (name);
     g_return_if_fail (strlen (name) > 4);
-    g_return_if_fail (passphrase);
 
     /* Check lengths for each type */
     switch (type) {
@@ -147,8 +146,14 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
         expires_date = g_strdup ("0");
 
     /* Common xml */
-    common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\nPassphrase: %s\n"
-            "</GnupgKeyParms>", name, expires_date, passphrase);
+    common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\n"
+            "</GnupgKeyParms>", name, expires_date);
+
+    if (passphrase != NULL && strlen (passphrase) > 0)
+        common = g_strdup_printf ("Passphrase: %s\n%s", passphrase, common);
+    else
+        common = g_strdup_printf ("%%no-protection\n%s", common);
+
     if (email != NULL && strlen (email) > 0)
         common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
     if (comment != NULL && strlen (comment) > 0)
