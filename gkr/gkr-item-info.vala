@@ -143,6 +143,8 @@ public class GkrNetworkPassInfo : ItemInfo {
     public GkrNetworkPassInfo(string label, HashTable<string, string>? attrs) {
         base(label, attrs, _("Network password"));
 
+        this.icon = new ThemedIcon("network-server-symbolic");
+
         unowned string? server = get_attribute_string(attrs, "server");
         unowned string? protocol = get_attribute_string(attrs, "protocol");
         unowned string? object = get_attribute_string(attrs, "object");
