@@ -26,7 +26,7 @@ endif
 # Dependencies
 min_glib_version = '2.58'
 min_gcr_version = '3.38'
-accepted_gpg_versions = [ '2.0.12', '2.1.4', '2.2.0' ]
+accepted_gpg_versions = [ '2.2.0' ]
 gpg_check_version = find_program('build-aux' / 'gpg_check_version.py')
 
 glib_deps = [
@@ -46,7 +46,7 @@ posix = valac.find_library('posix')
 ssh_bin = find_program('ssh')
 ssh_keygen = find_program('ssh-keygen')
 gpg_bin = find_program('gpg2', 'gpg', required: get_option('pgp-support'))
-gpgme_dep = dependency('gpgme', version: '>= 1.7.0', required: get_option('pgp-support'))
+gpgme_dep = dependency('gpgme', version: '>= 1.14.0', required: get_option('pgp-support'))
 
 if get_option('pgp-support')
   gpg_version_check = run_command([gpg_check_version, gpg_bin.path(), accepted_gpg_versions ])
