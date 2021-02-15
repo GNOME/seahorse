@@ -41,9 +41,8 @@ public class Seahorse.KeyManagerItemRow : Gtk.ListBoxRow {
             grid.attach(img, 0, 0, 1, 2);
         }
 
-        string markup;
-        object.get("markup", out markup);
-        var markup_label = new Gtk.Label(markup);
+        var markup_label = new Gtk.Label(null);
+        object.bind_property("markup", markup_label, "label", BindingFlags.SYNC_CREATE);
         markup_label.use_markup = true;
         markup_label.halign = Gtk.Align.START;
         markup_label.xalign = 0.0f;
@@ -51,9 +50,8 @@ public class Seahorse.KeyManagerItemRow : Gtk.ListBoxRow {
         markup_label.ellipsize = Pango.EllipsizeMode.END;
         grid.attach(markup_label, 1, 0);
 
-        string description = "";
-        object.get("description", out description);
-        var description_label = new Gtk.Label(description);
+        var description_label = new Gtk.Label(null);
+        object.bind_property("description", description_label, "label", BindingFlags.SYNC_CREATE);
         description_label.xalign = 1.0f;
         description_label.valign = Gtk.Align.START;
         description_label.get_style_context().add_class("seahorse-item-listbox-row-description");
