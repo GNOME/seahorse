@@ -36,8 +36,8 @@ glib_deps = [
   dependency('gio-unix-2.0',version: '>=' + min_glib_version),
   dependency('gmodule-2.0', version: '>=' + min_glib_version),
 ]
-gtk = dependency('gtk+-3.0', version: '>= 3.22.0')
-libhandy_dep = dependency('libhandy-1', version: '>= 1.0.0')
+gtk = dependency('gtk+-3.0', version: '>= 3.24.0')
+libhandy_dep = dependency('libhandy-1', version: '>= 1.1.0')
 gcr = dependency('gcr-3',       version: '>=' + min_gcr_version)
 gcr_ui = dependency('gcr-ui-3', version: '>=' + min_gcr_version)
 libsecret = dependency('libsecret-1', version: '>= 0.16')
