@@ -65,11 +65,6 @@ endif
 if get_option('ldap-support')
   libldap = cc.find_library('ldap')
   liblber = cc.find_library('lber')
-  if not libldap.found()
-    error('Required library "ldap" not found (needed for LDAP support)')
-  elif not liblber.found()
-    error('Required library "lber" not found (needed for LDAP support)')
-  endif
 endif
 
 libsoup = dependency('libsoup-2.4', version: '>= 2.33.92', required: get_option('hkp-support'))
