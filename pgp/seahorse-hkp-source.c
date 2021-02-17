@@ -989,8 +989,8 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
     server_class->import_async = seahorse_hkp_source_import_async;
     server_class->import_finish = seahorse_hkp_source_import_finish;
 
-    seahorse_servers_register_type ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
-    seahorse_servers_register_type ("hkps", _("HTTPS Key Server"), seahorse_hkp_is_valid_uri);
+    seahorse_server_category_register ("hkp", _("HTTP Key Server"), seahorse_hkp_is_valid_uri);
+    seahorse_server_category_register ("hkps", _("HTTPS Key Server"), seahorse_hkp_is_valid_uri);
 }
 
 /**

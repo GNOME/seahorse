@@ -303,15 +303,18 @@ populate_keyserver_list (SeahorseKeyserverSearch *self, GtkWidget *box, gchar **
 }
 
 static void
-on_settings_keyservers_changed (GSettings *settings, const gchar *key, gpointer user_data)
+on_settings_keyservers_changed (GSettings  *settings,
+                                const char *key,
+                                gpointer    user_data)
 {
-	SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (user_data);
-	g_auto(GStrv) keyservers = NULL;
-	g_auto(GStrv) names = NULL;
+    SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (user_data);
+    SeahorsePgpSettings *pgp_settings = SEAHORSE_PGP_SETTINGS (settings);
+    g_auto(GStrv) keyservers = NULL;
+    g_auto(GStrv) names = NULL;
 
-	keyservers = seahorse_servers_get_uris ();
-	names = seahorse_servers_get_names ();
-	populate_keyserver_list (self, self->key_server_list, keyservers, names);
+    keyservers = seahorse_pgp_settings_get_uris (pgp_settings);
+    names = seahorse_pgp_settings_get_names (pgp_settings);
+    populate_keyserver_list (self, self->key_server_list, keyservers, names);
 }
 
 /**
@@ -385,11 +388,11 @@ seahorse_keyserver_search_init (SeahorseKeyserverSearch *self)
 		gtk_editable_select_region (GTK_EDITABLE (self->search_entry), 0, -1);
 	}
 
-	/* The key servers to list */
-	settings = seahorse_pgp_settings_instance ();
-	on_settings_keyservers_changed (G_SETTINGS (settings), "keyservers", self);
-	g_signal_connect_object (settings, "changed::keyservers",
-	                         G_CALLBACK (on_settings_keyservers_changed), self, 0);
+    /* The key servers to list */
+    settings = seahorse_pgp_settings_instance ();
+    on_settings_keyservers_changed (G_SETTINGS (settings), "keyservers", self);
+    g_signal_connect_object (settings, "changed::keyservers",
+                             G_CALLBACK (on_settings_keyservers_changed), self, 0);
 
 	/* Any shared keys to list */
 	ssd = seahorse_pgp_backend_get_discovery (NULL);

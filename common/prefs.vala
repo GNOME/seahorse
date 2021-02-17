@@ -131,7 +131,7 @@ public class Seahorse.Prefs : Gtk.Dialog {
 
     // Perform keyserver page initialization
     private void setup_keyservers () {
-        string[] keyservers = Seahorse.Servers.get_uris();
+        string[] keyservers = PgpSettings.instance().get_uris();
         populate_keyservers(keyservers);
 
         Gtk.TreeModel model = this.keyservers.get_model();
@@ -161,7 +161,7 @@ public class Seahorse.Prefs : Gtk.Dialog {
 
     // Called when a cell has completed being edited
     private void keyserver_cell_edited (Gtk.CellRendererText cell, string? path, string? text, Gtk.TreeStore store) {
-        if (!Servers.is_valid_uri(text)) {
+        if (!ServerCategory.is_valid_uri(text)) {
             Util.show_error (null,
                              _("Not a valid Key Server address."),
                              _("For help contact your system administrator or the administrator of the key server." ));

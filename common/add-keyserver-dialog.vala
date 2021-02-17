@@ -36,7 +36,7 @@ public class Seahorse.AddKeyserverDialog : Gtk.Dialog {
             default_width: 400,
             use_header_bar: 1
         );
-        this.keyserver_types = Seahorse.Servers.get_types();
+        this.keyserver_types = ServerCategory.get_types();
 
         // Load ui
         Gtk.Builder builder = new Gtk.Builder();
@@ -58,8 +58,10 @@ public class Seahorse.AddKeyserverDialog : Gtk.Dialog {
         this.keyserver_port.changed.connect(() => on_prefs_add_keyserver_uri_changed());
 
         // The description for the key server types, plus custom
-        foreach (string type in this.keyserver_types)
-            this.keyserver_type.append_text(Seahorse.Servers.get_description(type));
+        foreach (string type in this.keyserver_types) {
+            unowned var category = ServerCategory.find_category(type);
+            this.keyserver_type.append_text(category.description);
+        }
 
         this.keyserver_type.append_text(_("Custom"));
         this.keyserver_type.set_active(0);
@@ -90,7 +92,7 @@ public class Seahorse.AddKeyserverDialog : Gtk.Dialog {
             return null;
 
         if (scheme == null) // Custom URI?
-            return Servers.is_valid_uri(host)? host : null;
+            return ServerCategory.is_valid_uri(host)? host : null;
 
         string? port = this.keyserver_port.text;
         if (port == "")
@@ -102,7 +104,7 @@ public class Seahorse.AddKeyserverDialog : Gtk.Dialog {
             uri += ":%s".printf(port);
 
         // And check if it's valid
-        if (!Servers.is_valid_uri(uri))
+        if (!ServerCategory.is_valid_uri(uri))
             uri = null;
 
         return uri;

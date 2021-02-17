@@ -179,61 +179,55 @@ seahorse_keyserver_sync_show (GList *keys, GtkWindow *parent)
 void
 seahorse_keyserver_sync (GList *keys)
 {
-	SeahorseServerSource *source;
-	SeahorseGpgmeKeyring *keyring;
-	gchar *keyserver;
-	GCancellable *cancellable;
-	gchar **keyservers;
-	GPtrArray *keyids;
-	GList *l;
-	guint i;
+    SeahorseServerSource *source;
+    SeahorseGpgmeKeyring *keyring;
+    SeahorsePgpSettings *pgp_settings;
+    g_autofree char *keyserver = NULL;
+    g_autoptr(GCancellable) cancellable = NULL;
+    g_auto(GStrv) keyservers = NULL;
+    g_autoptr(GPtrArray) keyids = NULL;
 
-	if (!keys)
-		return;
+    if (!keys)
+        return;
 
-	cancellable = g_cancellable_new ();
+    keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+    pgp_settings = seahorse_pgp_settings_instance ();
+    cancellable = g_cancellable_new ();
 
-	keyids = g_ptr_array_new ();
-	for (l = keys; l != NULL; l = g_list_next (l))
-		g_ptr_array_add (keyids, (gchar *)seahorse_pgp_key_get_keyid (l->data));
-	g_ptr_array_add (keyids, NULL);
+    keyids = g_ptr_array_new ();
+    for (GList *l = keys; l != NULL; l = g_list_next (l))
+        g_ptr_array_add (keyids, (char *) seahorse_pgp_key_get_keyid (l->data));
+    g_ptr_array_add (keyids, NULL);
 
-	/* And now synchronizing keys from the servers */
-	keyservers = seahorse_servers_get_uris ();
-	for (i = 0; keyservers[i] != NULL; i++) {
-		source = seahorse_pgp_backend_lookup_remote (NULL, keyservers[i]);
+    /* And now synchronizing keys from the servers */
+    keyservers = seahorse_pgp_settings_get_uris (pgp_settings);
+    for (guint i = 0; keyservers[i] != NULL; i++) {
+        source = seahorse_pgp_backend_lookup_remote (NULL, keyservers[i]);
 
-		/* This can happen if the URI scheme is not supported */
-		if (source == NULL)
-			continue;
+        /* This can happen if the URI scheme is not supported */
+        if (source == NULL)
+            continue;
 
-		keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-		seahorse_transfer_keyids_async (SEAHORSE_SERVER_SOURCE (source),
-		                                SEAHORSE_PLACE (keyring),
-		                                (const gchar **)keyids->pdata,
-		                                cancellable,
-		                                on_transfer_download_complete,
-		                                g_object_ref (source));
-	}
+        seahorse_transfer_keyids_async (SEAHORSE_SERVER_SOURCE (source),
+                                        SEAHORSE_PLACE (keyring),
+                                        (const char **) keyids->pdata,
+                                        cancellable,
+                                        on_transfer_download_complete,
+                                        g_object_ref (source));
+    }
 
-	g_ptr_array_free (keyids, TRUE);
-	g_strfreev (keyservers);
+    /* Publishing keys online */
+    keyserver = seahorse_app_settings_get_server_publish_to (seahorse_app_settings_instance ());
+    if (keyserver && keyserver[0]) {
+        source = seahorse_pgp_backend_lookup_remote (NULL, keyserver);
 
-	/* Publishing keys online */
-	keyserver = seahorse_app_settings_get_server_publish_to (seahorse_app_settings_instance ());
-	if (keyserver && keyserver[0]) {
-		source = seahorse_pgp_backend_lookup_remote (NULL, keyserver);
+        /* This can happen if the URI scheme is not supported */
+        if (source != NULL) {
+            seahorse_pgp_backend_transfer_async (NULL, keys, SEAHORSE_PLACE (source),
+                                                 cancellable, on_transfer_upload_complete,
+                                                 g_object_ref (source));
+        }
+    }
 
-		/* This can happen if the URI scheme is not supported */
-		if (source != NULL) {
-			seahorse_pgp_backend_transfer_async (NULL, keys, SEAHORSE_PLACE (source),
-			                                     cancellable, on_transfer_upload_complete,
-			                                     g_object_ref (source));
-		}
-	}
-
-	g_free (keyserver);
-
-	seahorse_progress_show (cancellable, _("Synchronizing keys…"), FALSE);
-	g_object_unref (cancellable);
+    seahorse_progress_show (cancellable, _("Synchronizing keys…"), FALSE);
 }

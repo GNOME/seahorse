@@ -28,7 +28,6 @@ public int main (string[] args) {
     int status = app.run(args);
 
     Seahorse.Registry.cleanup();
-    Seahorse.Servers.cleanup();
 
     return status;
 }

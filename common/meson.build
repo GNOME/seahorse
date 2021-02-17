@@ -20,7 +20,7 @@ common_sources = files(
   'predicate.vala',
   'prefs.vala',
   'registry.vala',
-  'servers.vala',
+  'server-category.vala',
   'types.vala',
   'util.vala',
   'validity.vala',

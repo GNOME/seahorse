@@ -82,49 +82,46 @@ seahorse_pgp_backend_init (SeahorsePgpBackend *self)
 #ifdef WITH_KEYSERVER
 
 static void
-on_settings_keyservers_changed (GSettings *settings,
-                                gchar *key,
-                                gpointer user_data)
+on_settings_keyservers_changed (GSettings  *settings,
+                                const char *key,
+                                gpointer    user_data)
 {
-	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (user_data);
-	SeahorseServerSource *source;
-	gchar **keyservers;
-	GHashTable *check;
-	const gchar *uri;
-	GHashTableIter iter;
-	guint i;
+    SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (user_data);
+    SeahorsePgpSettings *pgp_settings = SEAHORSE_PGP_SETTINGS (settings);
+    SeahorseServerSource *source;
+    g_auto(GStrv) keyservers = NULL;
+    g_autoptr(GHashTable) check = NULL;
+    const char *uri;
+    GHashTableIter iter;
 
-	check = g_hash_table_new (g_str_hash, g_str_equal);
-	g_hash_table_iter_init (&iter, self->remotes);
-	while (g_hash_table_iter_next (&iter, (gpointer*)&uri, (gpointer*)&source))
-		g_hash_table_replace (check, (gpointer)uri, source);
+    check = g_hash_table_new (g_str_hash, g_str_equal);
+    g_hash_table_iter_init (&iter, self->remotes);
+    while (g_hash_table_iter_next (&iter, (gpointer*)&uri, (gpointer*)&source))
+        g_hash_table_replace (check, (gpointer)uri, source);
 
-	/* Load and strip names from keyserver list */
-	keyservers = seahorse_servers_get_uris ();
+    /* Load and strip names from keyserver list */
+    keyservers = seahorse_pgp_settings_get_uris (pgp_settings);
 
-	for (i = 0; keyservers[i] != NULL; i++) {
-		uri = keyservers[i];
+    for (guint i = 0; keyservers[i] != NULL; i++) {
+        uri = keyservers[i];
 
-		/* If we don't have a keysource then add it */
-		if (!g_hash_table_lookup (self->remotes, uri)) {
-			source = seahorse_server_source_new (uri);
-			if (source != NULL) {
-				seahorse_pgp_backend_add_remote (self, uri, source);
-				g_object_unref (source);
-			}
-		}
+        /* If we don't have a keysource then add it */
+        if (!g_hash_table_lookup (self->remotes, uri)) {
+            source = seahorse_server_source_new (uri);
+            if (source != NULL) {
+                seahorse_pgp_backend_add_remote (self, uri, source);
+                g_object_unref (source);
+            }
+        }
 
-		/* Mark this one as present */
-		g_hash_table_remove (check, uri);
-	}
+        /* Mark this one as present */
+        g_hash_table_remove (check, uri);
+    }
 
-	/* Now remove any extras */
-	g_hash_table_iter_init (&iter, check);
-	while (g_hash_table_iter_next (&iter, (gpointer*)&uri, NULL))
-		seahorse_pgp_backend_remove_remote (self, uri);
-
-	g_hash_table_destroy (check);
-	g_strfreev (keyservers);
+    /* Now remove any extras */
+    g_hash_table_iter_init (&iter, check);
+    while (g_hash_table_iter_next (&iter, (gpointer*)&uri, NULL))
+        seahorse_pgp_backend_remove_remote (self, uri);
 }
 
 #endif /* WITH_KEYSERVER */
@@ -167,11 +164,13 @@ seahorse_pgp_backend_constructed (GObject *obj)
 	self->unknown = seahorse_unknown_source_new ();
 
 #ifdef WITH_KEYSERVER
-	g_signal_connect (seahorse_pgp_settings_instance (), "changed::keyservers",
-	                  G_CALLBACK (on_settings_keyservers_changed), self);
+    g_signal_connect (seahorse_pgp_settings_instance (), "changed::keyservers",
+                      G_CALLBACK (on_settings_keyservers_changed), self);
 
-	/* Initial loading */
-	on_settings_keyservers_changed (G_SETTINGS (seahorse_pgp_settings_instance ()), "keyservers", self);
+    /* Initial loading */
+    on_settings_keyservers_changed (G_SETTINGS (seahorse_pgp_settings_instance ()),
+                                    "keyservers",
+                                    self);
 #endif
 }
 
@@ -241,11 +240,11 @@ seahorse_pgp_backend_get_property (GObject *obj,
 static void
 seahorse_pgp_backend_finalize (GObject *obj)
 {
-	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
+    SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
 
 #ifdef WITH_KEYSERVER
-	g_signal_handlers_disconnect_by_func (seahorse_pgp_settings_instance (),
-	                                      on_settings_keyservers_changed, self);
+    g_signal_handlers_disconnect_by_func (seahorse_pgp_settings_instance (),
+                                          on_settings_keyservers_changed, self);
 #endif
 
 	g_clear_object (&self->keyring);

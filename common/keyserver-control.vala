@@ -152,7 +152,7 @@ public class Seahorse.KeyserverControl : Gtk.ComboBox {
         }
 
         bool chosen_iter_set = false;
-        foreach (weak string keyserver in Servers.get_uris()) {
+        foreach (unowned string keyserver in PgpSettings.instance().get_uris()) {
             assert (keyserver != null);
             iter = append_entry(store, keyserver, Option.KEYSERVER);
             if (chosen != null && chosen == keyserver) {

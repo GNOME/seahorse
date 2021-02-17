@@ -63,4 +63,26 @@ public class Seahorse.PgpSettings : GLib.Settings {
 			_instance = new PgpSettings();
 		return _instance;
 	}
+
+    [CCode (array_null_terminated = true, array_length = false)]
+    public string[] get_uris() {
+        // The values are 'uri name', remove the name part
+        string[] uris = {};
+        foreach (string server in this.keyservers)
+            uris += server.strip().split(" ", 2)[0];
+
+        return uris;
+    }
+
+    [CCode (array_null_terminated = true, array_length = false)]
+    public string[] get_names() {
+        string[] names = {};
+        foreach (string server in this.keyservers) {
+            // The values are 'uri' or 'uri name', remove the name part if there
+            string[] split = server._strip().split(" ", 2);
+            names += (split.length == 1)? split[0] : split[1];
+        }
+
+        return names;
+    }
 }
