@@ -20,7 +20,7 @@
 [GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-gkr-add-keyring.ui")]
 public class Seahorse.Gkr.KeyringAdd : Gtk.Dialog {
     [GtkChild]
-    private Gtk.Entry name_entry;
+    private unowned Gtk.Entry name_entry;
 
     construct {
         set_response_sensitive(Gtk.ResponseType.ACCEPT, false);

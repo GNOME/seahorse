@@ -25,11 +25,11 @@ public class Seahorse.Ssh.Upload : Gtk.Dialog {
     private unowned List<Key> keys;
 
     [GtkChild]
-    private Gtk.Entry user_entry;
+    private unowned Gtk.Entry user_entry;
     [GtkChild]
-    private Gtk.Entry host_entry;
+    private unowned Gtk.Entry host_entry;
     [GtkChild]
-    private Gtk.Button setup_button;
+    private unowned Gtk.Button setup_button;
 
     public Upload(List<Key> keys, Gtk.Window? parent) {
         GLib.Object(use_header_bar: 1);

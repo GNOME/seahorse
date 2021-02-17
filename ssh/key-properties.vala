@@ -28,25 +28,25 @@ public class Seahorse.Ssh.KeyProperties : Gtk.Dialog {
     private bool updating_ui = false;
 
     [GtkChild]
-    private Gtk.Entry comment_entry;
+    private unowned Gtk.Entry comment_entry;
     [GtkChild]
-    private Gtk.Switch trust_check;
+    private unowned Gtk.Switch trust_check;
     [GtkChild]
-    private Gtk.Button passphrase_button;
+    private unowned Gtk.Button passphrase_button;
     [GtkChild]
-    private Gtk.Button export_button;
+    private unowned Gtk.Button export_button;
     [GtkChild]
-    private Gtk.Button copy_button;
+    private unowned Gtk.Button copy_button;
     [GtkChild]
-    private Gtk.Label fingerprint_label;
+    private unowned Gtk.Label fingerprint_label;
     [GtkChild]
-    private Gtk.Label algo_label;
+    private unowned Gtk.Label algo_label;
     [GtkChild]
-    private Gtk.Label location_label;
+    private unowned Gtk.Label location_label;
     [GtkChild]
-    private Gtk.Label pubkey_label;
+    private unowned Gtk.Label pubkey_label;
     [GtkChild]
-    private Gtk.Label key_length_label;
+    private unowned Gtk.Label key_length_label;
 
     public KeyProperties(Key key, Gtk.Window parent) {
         GLib.Object(

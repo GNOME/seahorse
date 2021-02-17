@@ -24,33 +24,33 @@
 public class Seahorse.KeyManager : Catalog {
 
     [GtkChild]
-    private Hdy.Leaflet header;
+    private unowned Hdy.Leaflet header;
     [GtkChild]
-    private Gtk.HeaderBar left_header;
+    private unowned Gtk.HeaderBar left_header;
     [GtkChild]
-    private Gtk.HeaderBar right_header;
+    private unowned Gtk.HeaderBar right_header;
     [GtkChild]
-    private Gtk.Revealer back_revealer;
+    private unowned Gtk.Revealer back_revealer;
 
     [GtkChild]
-    private Gtk.SearchBar search_bar;
+    private unowned Gtk.SearchBar search_bar;
     [GtkChild]
-    private Gtk.SearchEntry filter_entry;
+    private unowned Gtk.SearchEntry filter_entry;
 
     [GtkChild]
-    private Hdy.Leaflet content_box;
+    private unowned Hdy.Leaflet content_box;
     [GtkChild]
-    private Gtk.ScrolledWindow sidebar_area;
+    private unowned Gtk.ScrolledWindow sidebar_area;
     private Sidebar sidebar;
     [GtkChild]
-    private Gtk.Stack content_stack;
+    private unowned Gtk.Stack content_stack;
     [GtkChild]
-    private Gtk.ListBox item_listbox;
+    private unowned Gtk.ListBox item_listbox;
 
     [GtkChild]
-    private Gtk.MenuButton new_item_button;
+    private unowned Gtk.MenuButton new_item_button;
     [GtkChild]
-    private Gtk.ToggleButton show_search_button;
+    private unowned Gtk.ToggleButton show_search_button;
 
     private Seahorse.ItemList item_list;
     private Gcr.Collection collection;

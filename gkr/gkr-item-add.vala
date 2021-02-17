@@ -20,16 +20,16 @@
 [GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-gkr-add-item.ui")]
 public class Seahorse.Gkr.ItemAdd : Gtk.Dialog {
     [GtkChild]
-    private Gtk.ComboBox item_keyring_combo;
+    private unowned Gtk.ComboBox item_keyring_combo;
     [GtkChild]
-    private Gtk.Container password_area;
+    private unowned Gtk.Container password_area;
     private Gtk.Entry password_entry;
     [GtkChild]
-    private Gtk.Entry item_entry;
+    private unowned Gtk.Entry item_entry;
     [GtkChild]
-    private Gtk.LevelBar password_strength_bar;
+    private unowned Gtk.LevelBar password_strength_bar;
     [GtkChild]
-    private Gtk.Image password_strength_icon;
+    private unowned Gtk.Image password_strength_icon;
 
     private PasswordQuality.Settings pwquality = new PasswordQuality.Settings();
 

@@ -31,14 +31,14 @@ public class Seahorse.Pkcs11.Properties : Gtk.Dialog {
     /* [GtkChild] */
     /* private Gtk.HeaderBar header; */
     [GtkChild]
-    private Gtk.Button delete_button;
+    private unowned Gtk.Button delete_button;
     [GtkChild]
-    private Gtk.Button export_button;
+    private unowned Gtk.Button export_button;
     [GtkChild]
-    private Gtk.Button request_certificate_button;
+    private unowned Gtk.Button request_certificate_button;
 
     [GtkChild]
-    private Gtk.Box content;
+    private unowned Gtk.Box content;
 
     private Gcr.Viewer _viewer;
     private GLib.Cancellable _cancellable;

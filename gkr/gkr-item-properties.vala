@@ -23,26 +23,26 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
     public Item item { construct; get; }
 
     [GtkChild]
-    private Gtk.Entry description_field;
+    private unowned Gtk.Entry description_field;
     private bool description_has_changed;
     [GtkChild]
-    private Gtk.Label use_field;
+    private unowned Gtk.Label use_field;
     [GtkChild]
-    private Gtk.Label type_field;
+    private unowned Gtk.Label type_field;
     [GtkChild]
-    private Gtk.Label details_label;
+    private unowned Gtk.Label details_label;
     [GtkChild]
-    private Gtk.Label details_box;
+    private unowned Gtk.Label details_box;
     [GtkChild]
-    private Gtk.Label server_label;
+    private unowned Gtk.Label server_label;
     [GtkChild]
-    private Gtk.Label server_field;
+    private unowned Gtk.Label server_field;
     [GtkChild]
-    private Gtk.Label login_label;
+    private unowned Gtk.Label login_label;
     [GtkChild]
-    private Gtk.Label login_field;
+    private unowned Gtk.Label login_field;
     [GtkChild]
-    private Gtk.Box password_box_area;
+    private unowned Gtk.Box password_box_area;
     private PasswordEntry password_entry;
 
     construct {

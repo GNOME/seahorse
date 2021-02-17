@@ -21,17 +21,17 @@ public class Seahorse.Gkr.KeyringProperties : Gtk.Dialog {
     public Keyring keyring { construct; get; }
 
     [GtkChild]
-    private Gtk.HeaderBar header;
+    private unowned Gtk.HeaderBar header;
     [GtkChild]
-    private Gtk.Label name_label;
+    private unowned Gtk.Label name_label;
     [GtkChild]
-    private Gtk.Label created_label;
+    private unowned Gtk.Label created_label;
     [GtkChild]
-    private Gtk.Image keyring_image;
+    private unowned Gtk.Image keyring_image;
     [GtkChild]
-    private Gtk.Button set_default_button;
+    private unowned Gtk.Button set_default_button;
     [GtkChild]
-    private Gtk.LockButton lock_button;
+    private unowned Gtk.LockButton lock_button;
 
     construct {
         this.use_header_bar = 1;

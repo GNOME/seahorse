@@ -27,20 +27,20 @@ extern Gcr.CollectionModel gcr_collection_model_new(Gcr.Collection collection,
 public class Seahorse.Pkcs11.Generate : Gtk.Dialog {
 
     [GtkChild]
-    private Gtk.Entry label_entry;
+    private unowned Gtk.Entry label_entry;
 
     private Pkcs11.Token? token;
     [GtkChild]
-    private Gtk.ComboBox token_box;
+    private unowned Gtk.ComboBox token_box;
     private Gcr.CollectionModel? token_model;
 
     private Gck.Mechanism? mechanism;
     private Gtk.ListStore? mechanism_store;
     [GtkChild]
-    private Gtk.ComboBox mechanism_box;
+    private unowned Gtk.ComboBox mechanism_box;
 
     [GtkChild]
-    private Gtk.SpinButton key_bits;
+    private unowned Gtk.SpinButton key_bits;
 
     private Cancellable? cancellable;
     private Gck.Attributes? pub_attrs;

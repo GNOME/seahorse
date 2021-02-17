@@ -27,16 +27,16 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
     private Source source;
 
     [GtkChild]
-    private Gtk.Grid details_grid;
+    private unowned Gtk.Grid details_grid;
     private KeyLengthChooser key_length_chooser;
     [GtkChild]
-    private Gtk.Entry email_entry;
+    private unowned Gtk.Entry email_entry;
     [GtkChild]
-    private Gtk.ComboBoxText algorithm_combo_box;
+    private unowned Gtk.ComboBoxText algorithm_combo_box;
     [GtkChild]
-    private Gtk.Button create_with_setup_button;
+    private unowned Gtk.Button create_with_setup_button;
     [GtkChild]
-    private Gtk.Button create_no_setup_button;
+    private unowned Gtk.Button create_no_setup_button;
 
     public Generate(Source src, Gtk.Window parent) {
         this.transient_for = parent;
