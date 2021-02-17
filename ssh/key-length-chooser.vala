@@ -75,9 +75,9 @@ public class Seahorse.Ssh.KeyLengthChooser : Gtk.Stack {
                 return int.parse(this.combobox.get_active_text());
             case Algorithm.ED25519:
                 return 256;
+            default:
+                return 0;
         }
-
-        return 0;
     }
 
     private void on_algo_changed (GLib.Object src, ParamSpec pspec) {
