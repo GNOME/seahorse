@@ -140,17 +140,16 @@ dump_ldap_entry (LDAP *ld, LDAPMessage *res)
     char *t;
 
     t = ldap_get_dn (ld, res);
-    g_debug ("dn: %s\n", t);
+    g_debug ("dn: %s", t);
     ldap_memfree (t);
 
     for (t = ldap_first_attribute (ld, res, &pos); t;
          t = ldap_next_attribute (ld, res, pos)) {
         g_auto(GStrv) values = NULL;
-        char **v;
 
         values = get_ldap_values (ld, res, t);
-        for (v = values; *v; v++)
-            g_debug ("%s: %s\n", t, *v);
+        for (char **v = values; *v; v++)
+            g_debug ("%s: %s", t, *v);
 
         ldap_memfree (t);
     }
