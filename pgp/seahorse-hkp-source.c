@@ -423,20 +423,19 @@ parse_hkp_index (const char *response)
 *
 * Returns NULL if there was no error. The error message else
 **/
-static gchar*
-get_send_result (const gchar *response)
+static char*
+get_send_result (const char *response)
 {
-    gchar **lines, **l;
-    gchar *t;
-    gchar *last = NULL;
+    g_auto(GStrv) lines = NULL;
+    char *last = NULL;
     gboolean is_error = FALSE;
 
     if (!*response)
         return g_strdup ("");
 
     lines = g_strsplit (response, "\n", 0);
-
-    for (l = lines; *l; l++) {
+    for (char **l = lines; *l; l++) {
+        g_autofree char *t = NULL;
 
         dehtmlize (*l);
         g_strstrip (*l);
@@ -444,24 +443,17 @@ get_send_result (const gchar *response)
         if (!(*l)[0])
             continue;
 
-        t = g_ascii_strdown (*l, -1);
-
         /* Look for the word 'error' */
+        t = g_ascii_strdown (*l, -1);
         if (strstr (t, "error"))
             is_error = TRUE;
-
-        g_free (t);
 
         if ((*l)[0])
             last = *l;
     }
 
     /* Use last line as the message */
-    last = is_error ? g_strdup (last) : NULL;
-
-    g_strfreev (lines);
-
-    return last;
+    return is_error ? g_strdup (last) : NULL;
 }
 
 /**
