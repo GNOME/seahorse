@@ -107,7 +107,7 @@ on_settings_keyservers_changed (GSettings  *settings,
 
         /* If we don't have a keysource then add it */
         if (!g_hash_table_lookup (self->remotes, uri)) {
-            source = seahorse_server_source_new (uri);
+            source = seahorse_server_category_create_server (uri);
             if (source != NULL) {
                 seahorse_pgp_backend_add_remote (self, uri, source);
                 g_object_unref (source);

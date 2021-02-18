@@ -53,9 +53,12 @@ public class Seahorse.PgpSettings : GLib.Settings {
         set { set_string("sort-recipients-by", value); }
     }
 
-	public PgpSettings () {
+    public PgpSettings () {
         GLib.Object (schema_id: "org.gnome.crypto.pgp");
-	}
+
+        // Make sure ServerCategories are known before people try to read them
+        ServerCategory.init();
+    }
 
 	private static PgpSettings? _instance = null;
 	public static PgpSettings instance() {

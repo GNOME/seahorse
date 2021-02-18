@@ -69,7 +69,7 @@ static void      seahorse_server_source_collection_init    (GcrCollectionIface *
 
 static void      seahorse_server_source_place_iface        (SeahorsePlaceIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (SeahorseServerSource, seahorse_server_source, G_TYPE_OBJECT,
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (SeahorseServerSource, seahorse_server_source, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (SeahorseServerSource)
                          G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_server_source_collection_init);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_server_source_place_iface);
@@ -321,55 +321,6 @@ seahorse_server_source_collection_init (GcrCollectionIface *iface)
 	iface->get_length = seahorse_server_source_get_length;
 	iface->get_objects = seahorse_server_source_get_objects;
 	iface->contains = seahorse_server_source_contains;
-}
-
-/**
- * seahorse_server_source_new:
- * @uri: The server URI to create an object for
- *
- * Creates a #SeahorseServerSource object out of @uri. Depending
- * on the defines at compilation time other sources are supported
- * (ldap, hkp)
- *
- * Returns: A new #SeahorseServerSource or %NULL
- */
-SeahorseServerSource*
-seahorse_server_source_new (const char *uri)
-{
-    g_autofree char *scheme = NULL;
-
-    g_return_val_if_fail (uri && *uri, NULL);
-
-    scheme = g_uri_parse_scheme (uri);
-    if (!scheme) {
-        g_warning ("invalid uri passed (no scheme): %s", uri);
-		return NULL;
-    }
-
-#ifdef WITH_LDAP
-    /* LDAP Uris */
-    if (g_ascii_strcasecmp (scheme, "ldap") == 0)
-        return SEAHORSE_SERVER_SOURCE (seahorse_ldap_source_new (uri));
-#endif /* WITH_LDAP */
-
-#ifdef WITH_HKP
-    /* HKP Uris */
-    if (g_ascii_strcasecmp (scheme, "hkp") == 0 ||
-        g_ascii_strcasecmp (scheme, "hkps") == 0)
-
-        return SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (uri));
-
-    /* HTTP Uris */
-    if (g_ascii_strcasecmp (scheme, "http") == 0 ||
-        g_ascii_strcasecmp (scheme, "https") == 0) {
-
-        /* FIXME: if no port given, use port 80/443 */
-        return SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (uri));
-    }
-#endif /* WITH_HKP */
-
-    g_warning ("unsupported key server uri scheme: %s", scheme);
-    return NULL;
 }
 
 void

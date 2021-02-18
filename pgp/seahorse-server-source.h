@@ -38,8 +38,6 @@
 
 #pragma once
 
-#include "seahorse-pgp-key.h"
-
 #include <gcr/gcr.h>
 
 #define SEAHORSE_TYPE_SERVER_SOURCE (seahorse_server_source_get_type ())

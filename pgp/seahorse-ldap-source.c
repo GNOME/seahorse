@@ -1331,8 +1331,6 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
     server_class->export_finish = seahorse_ldap_source_export_finish;
     server_class->import_async = seahorse_ldap_source_import_async;
     server_class->import_finish = seahorse_ldap_source_import_finish;
-
-    seahorse_server_category_register ("ldap", _("LDAP Key Server"), seahorse_ldap_is_valid_uri);
 }
 
 /**

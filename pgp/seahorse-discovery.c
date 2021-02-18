@@ -158,7 +158,7 @@ resolve_callback (AvahiServiceResolver *resolver, AvahiIfIndex iface, AvahiProto
 
 		/* Add it to the context */
 		if (!seahorse_pgp_backend_lookup_remote (NULL, service_uri)) {
-			SeahorseServerSource *ssrc = seahorse_server_source_new (service_uri);
+			SeahorseServerSource *ssrc = seahorse_server_category_create_server (service_uri);
 			g_return_if_fail (ssrc != NULL);
 			seahorse_pgp_backend_add_remote (NULL, service_uri, ssrc);
 			g_object_unref (ssrc);

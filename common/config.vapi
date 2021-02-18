@@ -51,6 +51,28 @@ namespace Pgp.Backend {
 	public void initialize();
 }
 
+[CCode (cheader_filename = "pgp/seahorse-server-source.h")]
+public class ServerSource {
+}
+
+#if WITH_LDAP
+[CCode (cheader_filename = "pgp/seahorse-ldap-source.h")]
+public class LdapSource : ServerSource {
+}
+
+[CCode (cheader_filename = "pgp/seahorse-ldap-source.h")]
+public static bool ldap_is_valid_uri(string uri);
+#endif // WITH_LDAP
+
+#if WITH_HKP
+[CCode (cheader_filename = "pgp/seahorse-hkp-source.h")]
+public class HkpSource : ServerSource {
+}
+
+[CCode (cheader_filename = "pgp/seahorse-hkp-source.h")]
+public static bool hkp_is_valid_uri(string uri);
+#endif // WITH_HKP
+
 [CCode (cheader_filename = "pkcs11/seahorse-pkcs11-backend.h")]
 public class Pkcs11.Backend {
 	public static void initialize();

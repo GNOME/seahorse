@@ -26,34 +26,46 @@ public class Seahorse.ServerCategory : GLib.Object {
     public delegate bool ValidUriFunc(string uri);
 
     /** The scheme of servers (ie the scheme) */
-    public string scheme { get; construct set; }
+    public GLib.Type gtype { get; construct; }
+
+    /** The scheme of servers (ie the scheme) */
+    public string scheme { get; construct; }
 
     /** User-facing string to describe it */
-    public string description { get; construct set; }
+    public string description { get; construct; }
 
     /** Function to validate a given URI for this category */
     public ValidUriFunc validator;
 
-    private static GenericArray<ServerCategory> categories = null;
+    private static GenericArray<ServerCategory> categories;
 
-    public ServerCategory(string scheme, string description, ValidUriFunc validator) {
-        GLib.Object(scheme: scheme,
+    public ServerCategory(GLib.Type gtype, string scheme, string description, ValidUriFunc validator) {
+        GLib.Object(gtype: gtype,
+                    scheme: scheme,
                     description: description);
         this.validator = validator;
     }
 
-    public static void register(string? scheme, string? description, ValidUriFunc validate) {
-        if (categories == null)
-            categories = new GenericArray<ServerCategory>();
-
-        // Don't register double (if this happens, it's probably a programmer error)
-        if (find_category(scheme) != null) {
-            warning("Scheme '%s' is already registered", scheme);
-            return;
+    public static ServerSource? create_server(string uri) {
+        unowned var cat = find_category (Uri.parse_scheme(uri));
+        if (cat == null) {
+            warning("Unsupported scheme '%s'", Uri.parse_scheme(uri));
+            return null;
         }
 
-        var category = new ServerCategory(scheme, description, validate);
-        categories.add(category);
+        return (ServerSource) GLib.Object.new(cat.gtype, "uri", uri);
+    }
+
+    public static void init() {
+        categories = new GenericArray<ServerCategory>();
+
+#if WITH_LDAP
+        categories.add(new ServerCategory(typeof(LdapSource), "ldap", _("LDAP Key Server"), ldap_is_valid_uri));
+#endif // WITH_LDAP
+#if WITH_HKP
+        categories.add(new ServerCategory(typeof(HkpSource), "hkp", _("HTTP Key Server"), hkp_is_valid_uri));
+        categories.add(new ServerCategory(typeof(HkpSource), "hkps", _("HTTPS Key Server"), hkp_is_valid_uri));
+#endif // WITH_HKP
     }
 
     /**
