@@ -83,7 +83,7 @@ struct _SeahorseServerSourceClass {
 	                                          GError **error);
 };
 
-SeahorseServerSource*  seahorse_server_source_new              (const gchar *uri);
+SeahorseServerSource*  seahorse_server_source_new              (const char *uri);
 
 void                   seahorse_server_source_search_async     (SeahorseServerSource *self,
                                                                 const gchar *match,

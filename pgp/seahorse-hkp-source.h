@@ -37,10 +37,9 @@ G_DECLARE_FINAL_TYPE (SeahorseHKPSource, seahorse_hkp_source,
                       SEAHORSE, HKP_SOURCE,
                       SeahorseServerSource)
 
-SeahorseHKPSource*    seahorse_hkp_source_new      (const gchar *uri,
-                                                    const gchar *host);
+SeahorseHKPSource*    seahorse_hkp_source_new      (const char *uri);
 
-gboolean              seahorse_hkp_is_valid_uri    (const gchar *uri);
+gboolean              seahorse_hkp_is_valid_uri    (const char *uri);
 
 
 #define HKP_ERROR_DOMAIN (seahorse_hkp_error_quark())

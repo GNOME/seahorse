@@ -48,7 +48,6 @@ enum {
     PROP_DESCRIPTION,
     PROP_ICON,
     PROP_CATEGORY,
-    PROP_KEY_SERVER,
     PROP_URI,
     PROP_ACTIONS,
     PROP_ACTION_PREFIX,
@@ -101,15 +100,10 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
 	g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
     g_object_class_override_property (gobject_class, PROP_SHOW_IF_EMPTY, "show-if-empty");
 
-    g_object_class_install_property (gobject_class, PROP_KEY_SERVER,
-            g_param_spec_string ("key-server", "Key Server",
-                                 "Key Server to search on", "",
-                                 G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
-
     g_object_class_install_property (gobject_class, PROP_URI,
             g_param_spec_string ("uri", "Key Server URI",
                                  "Key Server full URI", "",
-                                 G_PARAM_READWRITE));
+                                 G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 static void
@@ -235,16 +229,6 @@ seahorse_server_source_place_iface (SeahorsePlaceIface *iface)
     iface->get_show_if_empty = seahorse_server_source_get_show_if_empty;
 }
 
-/**
-* object: A SeahorseServerSource object
-* prop_id: The ID of the property to set
-* value: The value to set
-* pspec: ignored
-*
-* Properties that can be set:
-* PROP_KEY_SERVER, PROP_URI
-*
-**/
 static void
 seahorse_server_set_property (GObject *object, guint prop_id,
                               const GValue *value, GParamSpec *pspec)
@@ -258,11 +242,6 @@ seahorse_server_set_property (GObject *object, guint prop_id,
         seahorse_server_source_set_label (SEAHORSE_PLACE (ssrc),
                                           g_value_get_boxed (value));
         break;
-    case PROP_KEY_SERVER:
-        g_assert (priv->server == NULL);
-        priv->server = g_strdup (g_value_get_string (value));
-        g_return_if_fail (priv->server && priv->server[0]);
-        break;
     case PROP_URI:
         g_free (priv->uri);
         priv->uri = g_strdup (g_value_get_string (value));
@@ -273,16 +252,6 @@ seahorse_server_set_property (GObject *object, guint prop_id,
     }
 }
 
-/**
-* object: A #SeahorseServerSource object
-* prop_id: The id of the property
-* value: The value to get
-* pspec: ignored
-*
-* The properties that can be read are:
-* PROP_KEY_SERVER, PROP_URI
-*
-**/
 static void
 seahorse_server_get_property (GObject *obj,
                               guint prop_id,
@@ -291,15 +260,10 @@ seahorse_server_get_property (GObject *obj,
 {
 	SeahorseServerSource *self = SEAHORSE_SERVER_SOURCE (obj);
 	SeahorsePlace *place = SEAHORSE_PLACE (self);
-    SeahorseServerSourcePrivate *priv =
-        seahorse_server_source_get_instance_private (self);
 
 	switch (prop_id) {
 	case PROP_LABEL:
 		g_value_take_string (value, seahorse_server_source_get_label (place));
-		break;
-	case PROP_KEY_SERVER:
-		g_value_set_string (value, priv->server);
 		break;
 	case PROP_DESCRIPTION:
 		g_value_take_string (value, seahorse_server_source_get_description (place));
@@ -359,124 +323,53 @@ seahorse_server_source_collection_init (GcrCollectionIface *iface)
 	iface->contains = seahorse_server_source_contains;
 }
 
-/* --------------------------------------------------------------------------
- * METHODS
- */
-
-/**
-* uri: the uri to parse
-* scheme: the scheme ("http") of this uri
-* host: the host part of the uri
-*
-*
-* Code adapted from GnuPG (file g10/keyserver.c)
-*
-* Returns FALSE if the separation failed
-**/
-static gboolean
-parse_keyserver_uri (char *uri, const char **scheme, const char **host)
-{
-    int assume_ldap = 0;
-
-    g_assert (uri != NULL);
-    g_assert (scheme != NULL && host != NULL);
-
-    *scheme = NULL;
-    *host = NULL;
-
-    /* Get the scheme */
-
-    *scheme = strsep(&uri, ":");
-    if (uri == NULL) {
-        /* Assume LDAP if there is no scheme */
-        assume_ldap = 1;
-        uri = (char*)*scheme;
-        *scheme = "ldap";
-    }
-
-    if (assume_ldap || (uri[0] == '/' && uri[1] == '/')) {
-        /* Two slashes means network path. */
-
-        /* Skip over the "//", if any */
-        if (!assume_ldap)
-            uri += 2;
-
-        /* Get the host */
-        *host = strsep (&uri, "/");
-        if (*host[0] == '\0')
-            return FALSE;
-    }
-
-    if (*scheme[0] == '\0')
-        return FALSE;
-
-    return TRUE;
-}
-
 /**
  * seahorse_server_source_new:
- * @server: The server uri to create an object for
+ * @uri: The server URI to create an object for
  *
- * Creates a #SeahorseServerSource object out of @server. Depending
+ * Creates a #SeahorseServerSource object out of @uri. Depending
  * on the defines at compilation time other sources are supported
  * (ldap, hkp)
  *
- * Returns: A new SeahorseServerSource or NULL
+ * Returns: A new #SeahorseServerSource or %NULL
  */
 SeahorseServerSource*
-seahorse_server_source_new (const gchar *server)
+seahorse_server_source_new (const char *uri)
 {
-    SeahorseServerSource *ssrc = NULL;
-    const gchar *scheme;
-    const gchar *host;
-    gchar *uri, *t;
+    g_autofree char *scheme = NULL;
 
-    g_return_val_if_fail (server && server[0], NULL);
+    g_return_val_if_fail (uri && *uri, NULL);
 
-    uri = g_strdup (server);
-
-    if (!parse_keyserver_uri (uri, &scheme, &host)) {
-        g_warning ("invalid uri passed: %s", server);
-
-
-    } else {
+    scheme = g_uri_parse_scheme (uri);
+    if (!scheme) {
+        g_warning ("invalid uri passed (no scheme): %s", uri);
+		return NULL;
+    }
 
 #ifdef WITH_LDAP
     /* LDAP Uris */
     if (g_ascii_strcasecmp (scheme, "ldap") == 0)
-        ssrc = SEAHORSE_SERVER_SOURCE (seahorse_ldap_source_new (server, host));
-    else
+        return SEAHORSE_SERVER_SOURCE (seahorse_ldap_source_new (uri));
 #endif /* WITH_LDAP */
 
 #ifdef WITH_HKP
     /* HKP Uris */
     if (g_ascii_strcasecmp (scheme, "hkp") == 0 ||
-        g_ascii_strcasecmp (scheme, "hkps") == 0) {
+        g_ascii_strcasecmp (scheme, "hkps") == 0)
 
-        ssrc = SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (server, host));
+        return SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (uri));
 
     /* HTTP Uris */
-    } else if (g_ascii_strcasecmp (scheme, "http") == 0 ||
-               g_ascii_strcasecmp (scheme, "https") == 0) {
+    if (g_ascii_strcasecmp (scheme, "http") == 0 ||
+        g_ascii_strcasecmp (scheme, "https") == 0) {
 
-        /* If already have a port */
-        if (strchr (host, ':'))
-            ssrc = SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (server, host));
-
-        /* No port make sure to use defaults */
-        else {
-            t = g_strdup_printf ("%s:%d", host, (g_ascii_strcasecmp (scheme, "http") == 0) ? 80 : 443);
-            ssrc = SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (server, t));
-            g_free (t);
-        }
-
-    } else
-#endif /* WITH_HKP */
-        g_message ("unsupported key server uri scheme: %s", scheme);
+        /* FIXME: if no port given, use port 80/443 */
+        return SEAHORSE_SERVER_SOURCE (seahorse_hkp_source_new (uri));
     }
+#endif /* WITH_HKP */
 
-    g_free (uri);
-    return ssrc;
+    g_warning ("unsupported key server uri scheme: %s", scheme);
+    return NULL;
 }
 
 void

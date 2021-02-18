@@ -75,12 +75,10 @@ static SoupURI*
 get_http_server_uri (SeahorseHKPSource *self, const char *path)
 {
     g_autoptr(SoupURI) uri = NULL;
-    g_autofree gchar *server = NULL;
     g_autofree char *conf_uri = NULL;
 
-    g_object_get (self, "key-server", &server, NULL);
-    g_return_val_if_fail (server != NULL, NULL);
-    g_object_get (self, "uri", &conf_uri, NULL);
+    conf_uri = seahorse_place_get_uri (SEAHORSE_PLACE (self));
+    g_return_val_if_fail (conf_uri != NULL, NULL);
 
     if (strncasecmp (conf_uri, "hkp:", 4) == 0) {
         g_autofree char *t = g_strdup_printf ("http:%s", conf_uri + 4);
@@ -505,8 +503,8 @@ hkp_message_propagate_error (SeahorseHKPSource *self,
                              SoupMessage *message,
                              GError **error)
 {
-    gchar *server;
-    g_autofree gchar *text = NULL;
+    g_autofree char *uri = NULL;
+    g_autofree char *text = NULL;
 
     if (!SOUP_MESSAGE_IS_ERROR (message))
         return FALSE;
@@ -517,7 +515,7 @@ hkp_message_propagate_error (SeahorseHKPSource *self,
         return TRUE;
     }
 
-    g_object_get (self, "key-server", &server, NULL);
+    uri = seahorse_place_get_uri (SEAHORSE_PLACE (self));
 
     /* Make the body lower case, and no tags */
     text = g_strndup (message->response_body->data, message->response_body->length);
@@ -531,11 +529,12 @@ hkp_message_propagate_error (SeahorseHKPSource *self,
 
     if (text && strstr (text, "too many")) {
         g_set_error (error, HKP_ERROR_DOMAIN, 0,
-                     _("Search was not specific enough. Server “%s” found too many keys."), server);
+                     _("Search was not specific enough. Server “%s” found too many keys."),
+                     uri);
     } else {
         g_set_error (error, HKP_ERROR_DOMAIN, message->status_code,
                      _("Couldn’t communicate with server “%s”: %s"),
-                     server, message->reason_phrase);
+                     uri, message->reason_phrase);
     }
 
     return TRUE;
@@ -1011,13 +1010,11 @@ seahorse_hkp_source_class_init (SeahorseHKPSourceClass *klass)
  * Returns: A new HKP Key Source
  */
 SeahorseHKPSource*
-seahorse_hkp_source_new (const gchar *uri, const gchar *host)
+seahorse_hkp_source_new (const char *uri)
 {
     g_return_val_if_fail (seahorse_hkp_is_valid_uri (uri), NULL);
-    g_return_val_if_fail (host && *host, NULL);
 
-    return g_object_new (SEAHORSE_TYPE_HKP_SOURCE, "uri", uri,
-                         "key-server", host, NULL);
+    return g_object_new (SEAHORSE_TYPE_HKP_SOURCE, "uri", uri, NULL);
 }
 
 /**

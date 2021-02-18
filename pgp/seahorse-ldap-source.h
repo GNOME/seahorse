@@ -35,8 +35,7 @@ G_DECLARE_FINAL_TYPE (SeahorseLDAPSource, seahorse_ldap_source,
                       SEAHORSE, LDAP_SOURCE,
                       SeahorseServerSource)
 
-SeahorseLDAPSource*   seahorse_ldap_source_new     (const char *uri,
-                                                    const char *host);
+SeahorseLDAPSource*   seahorse_ldap_source_new     (const char *uri);
 
 gboolean              seahorse_ldap_is_valid_uri   (const char *uri);
 

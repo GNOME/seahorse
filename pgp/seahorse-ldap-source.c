@@ -40,10 +40,6 @@
 
 #include <ldap.h>
 
-#ifdef WITH_SOUP
-#include <libsoup/soup-address.h>
-#endif
-
 #ifdef WITH_LDAP
 
 /* Amount of keys to load in a batch */
@@ -430,14 +426,14 @@ static gboolean
 seahorse_ldap_source_propagate_error (SeahorseLDAPSource *self,
                                       int rc, GError **error)
 {
-    g_autofree char *server = NULL;
+    g_autofree char *uri = NULL;
 
     if (rc == LDAP_SUCCESS)
         return FALSE;
 
-    g_object_get (self, "key-server", &server, NULL);
+    uri = seahorse_place_get_uri (SEAHORSE_PLACE (self));
     g_set_error (error, LDAP_ERROR_DOMAIN, rc, _("Couldn’t communicate with %s: %s"),
-                 server, ldap_err2string (rc));
+                 uri, ldap_err2string (rc));
 
     return TRUE;
 }
@@ -570,38 +566,43 @@ on_connect_bind_completed (LDAPMessage *result,
 }
 
 static void
-once_resolved_start_connect (SeahorseLDAPSource *self,
-                             GTask *task,
-                             const char *address)
+on_address_resolved (GObject      *src_object,
+                     GAsyncResult *res,
+                     gpointer      user_data)
 {
+    GSocketAddressEnumerator *enumer = G_SOCKET_ADDRESS_ENUMERATOR (src_object);
+    g_autoptr(GTask) task = user_data;
+    SeahorseLDAPSource *self = SEAHORSE_LDAP_SOURCE (g_task_get_source_object (task));
     ConnectClosure *closure = g_task_get_task_data (task);
     GCancellable *cancellable = g_task_get_cancellable (task);
-    g_autofree char *server = NULL;
-    char *text;
+    g_autofree char *uri = NULL;
+    g_autoptr(GSocketAddress) addr = NULL;
     g_autoptr(GError) error = NULL;
-    int port = LDAP_PORT;
-    g_autofree char *url = NULL;
+    g_autofree char *addr_str = NULL;
+    g_autofree char *resolved_url = NULL;
     int rc;
     struct berval cred;
     int ldap_op;
     g_autoptr(GSource) gsource = NULL;
 
-    /* Now that we've resolved our address, connect via IP */
-    g_object_get (self, "key-server", &server, NULL);
-    g_return_if_fail (server && server[0]);
+    /* Note: this is the original (unresolved) URI */
+    uri = seahorse_place_get_uri (SEAHORSE_PLACE (self));
 
-    if ((text = strchr (server, ':')) != NULL) {
-        *text = 0;
-        text++;
-        port = atoi (text);
-        if (port <= 0 || port >= G_MAXUINT16) {
-            g_warning ("invalid port number: %s (using default)", text);
-            port = LDAP_PORT;
-        }
+    /* Get the resolved IP */
+    addr = g_socket_address_enumerator_next_finish (enumer, res, &error);
+    if (!addr) {
+        g_task_return_new_error (task, SEAHORSE_ERROR, -1,
+                                 _("Couldn’t resolve address %s"), uri);
+        return;
     }
 
-    url = g_strdup_printf ("ldap://%s:%u", address, port);
-    rc = ldap_initialize (&closure->ldap, url);
+    /* Now that we've resolved our address, connect via IP */
+    seahorse_progress_update (cancellable, task, _("Connecting to: %s"), uri);
+
+    /* Re-create the URL with the resolved IP */
+    addr_str = g_socket_connectable_to_string (G_SOCKET_CONNECTABLE (addr));
+    resolved_url = g_strdup_printf ("ldap://%s", addr_str);
+    rc = ldap_initialize (&closure->ldap, resolved_url);
 
     if (seahorse_ldap_source_propagate_error (self, rc, &error)) {
         g_task_return_error (task, g_steal_pointer (&error));
@@ -625,36 +626,6 @@ once_resolved_start_connect (SeahorseLDAPSource *self,
     g_source_attach (gsource, g_main_context_default ());
 }
 
-#ifdef WITH_SOUP
-
-static void
-on_address_resolved_complete (SoupAddress *address,
-                              guint status,
-                              gpointer user_data)
-{
-    g_autoptr(GTask) task = user_data;
-    SeahorseLDAPSource *self = SEAHORSE_LDAP_SOURCE (g_task_get_source_object (task));
-    GCancellable *cancellable = g_task_get_cancellable (task);
-    g_autofree char *server = NULL;
-
-    g_object_get (self, "key-server", &server, NULL);
-    g_return_if_fail (server && server[0]);
-    seahorse_progress_update (cancellable, task, _("Connecting to: %s"), server);
-
-    /* DNS failed */
-    if (!SOUP_STATUS_IS_SUCCESSFUL (status)) {
-        g_task_return_new_error (task, SEAHORSE_ERROR, -1,
-                                 _("Couldn’t resolve address: %s"),
-                                 soup_address_get_name (address));
-        return;
-    }
-
-    /* Yay resolved */
-    once_resolved_start_connect (self, task, soup_address_get_physical (address));
-}
-
-#endif /* WITH_SOUP */
-
 static void
 seahorse_ldap_source_connect_async (SeahorseLDAPSource *source,
                                     GCancellable *cancellable,
@@ -663,11 +634,10 @@ seahorse_ldap_source_connect_async (SeahorseLDAPSource *source,
 {
     g_autoptr(GTask) task = NULL;
     ConnectClosure *closure;
-    g_autofree char *server = NULL;
-    char *pos;
-#ifdef WITH_SOUP
-    SoupAddress *address = NULL;
-#endif
+    g_autofree char *uri = NULL;
+    g_autoptr(GSocketConnectable) addr = NULL;
+    g_autoptr(GSocketAddressEnumerator) addr_enumer = NULL;
+    g_autoptr(GError) error = NULL;
 
     task = g_task_new (source, cancellable, callback, user_data);
     g_task_set_source_tag (task, seahorse_ldap_source_connect_async);
@@ -675,28 +645,28 @@ seahorse_ldap_source_connect_async (SeahorseLDAPSource *source,
     closure = g_new0 (ConnectClosure, 1);
     g_task_set_task_data (task, closure, connect_closure_free);
 
-    g_object_get (source, "key-server", &server, NULL);
-    g_return_if_fail (server && server[0]);
-    if ((pos = strchr (server, ':')) != NULL)
-        *pos = 0;
+    /* Take the URI & turn it into a GNetworkAddress, to do address resolving */
+    uri = seahorse_place_get_uri (SEAHORSE_PLACE (source));
+    g_return_if_fail (uri && uri[0]);
+
+    addr = g_network_address_parse_uri (uri, LDAP_PORT, &error);
+    if (!addr) {
+      g_task_return_new_error (task, SEAHORSE_ERROR, -1,
+                               _("Invalid URI: %s"), uri);
+      return;
+    }
 
     seahorse_progress_prep_and_begin (cancellable, task, NULL);
 
-    /* If we have libsoup, try and resolve asynchronously */
-#ifdef WITH_SOUP
-    address = soup_address_new (server, LDAP_PORT);
+    /* Now get a GSocketAddressEnumerator to do the resolving */
     seahorse_progress_update (cancellable, task,
-                              _("Resolving server address: %s"), server);
+                              _("Resolving server address: %s"), uri);
 
-    soup_address_resolve_async (address, NULL, cancellable,
-                                on_address_resolved_complete,
-                                g_steal_pointer (&task));
-    g_object_unref (address);
-#else /* !WITH_SOUP */
-
-    once_resolved_start_connect (source, task, server);
-
-#endif
+    addr_enumer = g_socket_connectable_enumerate (addr);
+    g_socket_address_enumerator_next_async (addr_enumer,
+                                            cancellable,
+                                            on_address_resolved,
+                                            g_steal_pointer (&task));
 }
 
 static LDAP *
@@ -1374,13 +1344,12 @@ seahorse_ldap_source_class_init (SeahorseLDAPSourceClass *klass)
  *
  * Returns: A new LDAP Key Source
  */
-SeahorseLDAPSource*
-seahorse_ldap_source_new (const char* uri, const char *host)
+SeahorseLDAPSource *
+seahorse_ldap_source_new (const char *uri)
 {
     g_return_val_if_fail (seahorse_ldap_is_valid_uri (uri), NULL);
-    g_return_val_if_fail (host && *host, NULL);
-    return g_object_new (SEAHORSE_TYPE_LDAP_SOURCE, "key-server", host,
-                         "uri", uri, NULL);
+
+    return g_object_new (SEAHORSE_TYPE_LDAP_SOURCE, "uri", uri, NULL);
 }
 
 /**
