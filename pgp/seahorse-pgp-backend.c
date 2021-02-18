@@ -53,7 +53,7 @@ struct _SeahorsePgpBackend {
     SeahorseGpgmeKeyring *keyring;
     SeahorseDiscovery *discovery;
     SeahorseUnknownSource *unknown;
-    GHashTable *remotes;
+    GListModel *remotes;
     SeahorseActionGroup *actions;
     gboolean loaded;
 };
@@ -70,13 +70,11 @@ G_DEFINE_TYPE_WITH_CODE (SeahorsePgpBackend, seahorse_pgp_backend, G_TYPE_OBJECT
 static void
 seahorse_pgp_backend_init (SeahorsePgpBackend *self)
 {
-	g_return_if_fail (pgp_backend == NULL);
-	pgp_backend = self;
+    g_return_if_fail (pgp_backend == NULL);
+    pgp_backend = self;
 
-	self->remotes = g_hash_table_new_full (g_str_hash, g_str_equal,
-	                                       g_free, g_object_unref);
-
-	self->actions = seahorse_pgp_backend_actions_instance ();
+    self->remotes = G_LIST_MODEL (g_list_store_new (SEAHORSE_TYPE_SERVER_SOURCE));
+    self->actions = seahorse_pgp_backend_actions_instance ();
 }
 
 #ifdef WITH_KEYSERVER
@@ -88,40 +86,46 @@ on_settings_keyservers_changed (GSettings  *settings,
 {
     SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (user_data);
     SeahorsePgpSettings *pgp_settings = SEAHORSE_PGP_SETTINGS (settings);
-    SeahorseServerSource *source;
     g_auto(GStrv) keyservers = NULL;
-    g_autoptr(GHashTable) check = NULL;
-    const char *uri;
-    GHashTableIter iter;
+    g_autoptr(GPtrArray) check = NULL;
 
-    check = g_hash_table_new (g_str_hash, g_str_equal);
-    g_hash_table_iter_init (&iter, self->remotes);
-    while (g_hash_table_iter_next (&iter, (gpointer*)&uri, (gpointer*)&source))
-        g_hash_table_replace (check, (gpointer)uri, source);
+    check = g_ptr_array_new_with_free_func (g_free);
+    for (guint i = 0; i < g_list_model_get_n_items (self->remotes); i++) {
+        g_autoptr(SeahorseServerSource) remote = NULL;
+        g_autofree char *uri = NULL;
+
+        remote = g_list_model_get_item (self->remotes, i);
+        uri = seahorse_place_get_uri (SEAHORSE_PLACE (remote));
+        g_ptr_array_add (check, uri);
+    }
 
     /* Load and strip names from keyserver list */
     keyservers = seahorse_pgp_settings_get_uris (pgp_settings);
 
     for (guint i = 0; keyservers[i] != NULL; i++) {
-        uri = keyservers[i];
+        const char *uri = keyservers[i];
+        gboolean found;
+        guint index;
 
         /* If we don't have a keysource then add it */
-        if (!g_hash_table_lookup (self->remotes, uri)) {
-            source = seahorse_server_category_create_server (uri);
-            if (source != NULL) {
-                seahorse_pgp_backend_add_remote (self, uri, source);
-                g_object_unref (source);
-            }
-        }
+        found = g_ptr_array_find_with_equal_func (check, uri, g_str_equal, &index);
+        if (found) {
+            /* Mark this one as present */
+            g_ptr_array_remove_index (check, index);
+        } else {
+            g_autoptr(SeahorseServerSource) source = NULL;
 
-        /* Mark this one as present */
-        g_hash_table_remove (check, uri);
+            source = seahorse_server_category_create_server (uri);
+            if (source != NULL)
+                seahorse_pgp_backend_add_remote (self, uri, source);
+        }
     }
 
     /* Now remove any extras */
-    g_hash_table_iter_init (&iter, check);
-    while (g_hash_table_iter_next (&iter, (gpointer*)&uri, NULL))
+    for (guint i = 0; i < check->len; i++) {
+        const char *uri = g_ptr_array_index (check, i);
         seahorse_pgp_backend_remove_remote (self, uri);
+    }
 }
 
 #endif /* WITH_KEYSERVER */
@@ -250,7 +254,7 @@ seahorse_pgp_backend_finalize (GObject *obj)
 	g_clear_object (&self->keyring);
 	g_clear_object (&self->discovery);
 	g_clear_object (&self->unknown);
-	g_hash_table_destroy (self->remotes);
+	g_clear_object (&self->remotes);
 	g_clear_object (&self->actions);
 	pgp_backend = NULL;
 
@@ -393,39 +397,74 @@ seahorse_pgp_backend_get_discovery (SeahorsePgpBackend *self)
 	return self->discovery;
 }
 
+/**
+ * seahorse_pgp_backend_get_remotes:
+ * @self: A #SeahorsePgpBackend
+ *
+ * Returns a list of remotes
+ *
+ * Returns: (transfer none) (element-type SeahorseServerSource):
+ */
+GListModel *
+seahorse_pgp_backend_get_remotes (SeahorsePgpBackend *self)
+{
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
+
+    return self->remotes;
+}
+
 SeahorseServerSource *
 seahorse_pgp_backend_lookup_remote (SeahorsePgpBackend *self,
-                                    const gchar *uri)
+                                    const char         *uri)
 {
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
+    self = self ? self : seahorse_pgp_backend_get ();
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
 
-	return g_hash_table_lookup (self->remotes, uri);
+    for (guint i = 0; i < g_list_model_get_n_items (self->remotes); i++) {
+        g_autoptr(SeahorseServerSource) ssrc = NULL;
+        g_autofree char *src_uri = NULL;
+
+        ssrc = g_list_model_get_item (self->remotes, i);
+        src_uri = seahorse_place_get_uri (SEAHORSE_PLACE (ssrc));
+
+        if (g_ascii_strcasecmp (uri, src_uri) == 0)
+            return ssrc;
+    }
+
+    return NULL;
 }
 
 void
-seahorse_pgp_backend_add_remote (SeahorsePgpBackend *self,
-                                 const gchar *uri,
+seahorse_pgp_backend_add_remote (SeahorsePgpBackend   *self,
+                                 const char           *uri,
                                  SeahorseServerSource *source)
 {
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
-	g_return_if_fail (uri != NULL);
-	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (source));
-	g_return_if_fail (g_hash_table_lookup (self->remotes, uri) == NULL);
+    self = self ? self : seahorse_pgp_backend_get ();
+    g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
+    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (source));
+    g_return_if_fail (seahorse_pgp_backend_lookup_remote (self, uri) == NULL);
 
-	g_hash_table_insert (self->remotes, g_strdup (uri), g_object_ref (source));
+    g_list_store_append (G_LIST_STORE (self->remotes), source);
 }
 
 void
 seahorse_pgp_backend_remove_remote (SeahorsePgpBackend *self,
-                                    const gchar *uri)
+                                    const char         *uri)
 {
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
-	g_return_if_fail (uri != NULL);
+    self = self ? self : seahorse_pgp_backend_get ();
+    g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
+    g_return_if_fail (uri && *uri);
 
-	g_hash_table_remove (self->remotes, uri);
+    for (guint i = 0; i < g_list_model_get_n_items (self->remotes); i++) {
+        g_autoptr(SeahorseServerSource) ssrc = NULL;
+        g_autofree char *src_uri = NULL;
+
+        ssrc = g_list_model_get_item (self->remotes, i);
+        src_uri = seahorse_place_get_uri (SEAHORSE_PLACE (ssrc));
+
+        if (g_ascii_strcasecmp (uri, src_uri) == 0)
+            g_list_store_remove (G_LIST_STORE (self->remotes), i);
+    }
 }
 
 typedef struct {
@@ -474,11 +513,8 @@ seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
 {
     search_remote_closure *closure;
     g_autoptr(GTask) task = NULL;
-    SeahorseServerSource *source;
     g_autoptr(GHashTable) servers = NULL;
-    GHashTableIter iter;
     g_auto(GStrv) names = NULL;
-    guint i;
 
     self = self ? self : seahorse_pgp_backend_get ();
     g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
@@ -487,7 +523,7 @@ seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
     names = g_settings_get_strv (G_SETTINGS (seahorse_app_settings_instance ()), "last-search-servers");
     if (names != NULL && names[0] != NULL) {
         servers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-        for (i = 0; names[i] != NULL; i++)
+        for (guint i = 0; names[i] != NULL; i++)
             g_hash_table_insert (servers, g_strdup (names[i]), GINT_TO_POINTER (TRUE));
     }
 
@@ -495,17 +531,19 @@ seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
     closure = g_new0 (search_remote_closure, 1);
     g_task_set_task_data (task, closure, search_remote_closure_free);
 
-    g_hash_table_iter_init (&iter, self->remotes);
-    while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&source)) {
+    for (guint i = 0; i < g_list_model_get_n_items (self->remotes); i++) {
+        g_autoptr(SeahorseServerSource) ssrc = NULL;
+
+        ssrc = g_list_model_get_item (self->remotes, i);
         if (servers) {
-            g_autofree gchar *uri = NULL;
-            g_object_get (source, "uri", &uri, NULL);
-            if (!g_hash_table_lookup (servers, uri))
+            g_autofree char *src_uri = NULL;
+            src_uri = seahorse_place_get_uri (SEAHORSE_PLACE (ssrc));
+            if (!g_hash_table_lookup (servers, src_uri))
                 continue;
         }
 
         seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_searches), NULL);
-        seahorse_server_source_search_async (source, search, results, cancellable,
+        seahorse_server_source_search_async (ssrc, search, results, cancellable,
                                              on_source_search_ready, g_object_ref (task));
         closure->num_searches++;
     }
@@ -636,8 +674,6 @@ seahorse_pgp_backend_retrieve_async (SeahorsePgpBackend *self,
 {
     transfer_closure *closure;
     g_autoptr(GTask) task = NULL;
-    SeahorsePlace *place;
-    GHashTableIter iter;
 
     g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
     g_return_if_fail (SEAHORSE_IS_PLACE (to));
@@ -646,13 +682,15 @@ seahorse_pgp_backend_retrieve_async (SeahorsePgpBackend *self,
     closure = g_new0 (transfer_closure, 1);
     g_task_set_task_data (task, closure, transfer_closure_free);
 
-    g_hash_table_iter_init (&iter, self->remotes);
-    while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&place)) {
+    for (guint i = 0; i < g_list_model_get_n_items (self->remotes); i++) {
+        g_autoptr(SeahorseServerSource) ssrc = NULL;
+
+        ssrc = g_list_model_get_item (self->remotes, i);
+
         /* Start a new transfer operation between the two places */
         seahorse_progress_prep_and_begin (cancellable,
                                           GINT_TO_POINTER (closure->num_transfers), NULL);
-        seahorse_transfer_keyids_async (SEAHORSE_SERVER_SOURCE (place),
-                                        to, keyids, cancellable,
+        seahorse_transfer_keyids_async (ssrc, to, keyids, cancellable,
                                         on_source_transfer_ready, g_object_ref (task));
         closure->num_transfers++;
     }

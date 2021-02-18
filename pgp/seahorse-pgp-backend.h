@@ -53,6 +53,8 @@ SeahorsePgpKey *       seahorse_pgp_backend_get_default_key      (SeahorsePgpBac
 
 SeahorseDiscovery *    seahorse_pgp_backend_get_discovery        (SeahorsePgpBackend *self);
 
+GListModel *           seahorse_pgp_backend_get_remotes          (SeahorsePgpBackend *self);
+
 SeahorseServerSource * seahorse_pgp_backend_lookup_remote        (SeahorsePgpBackend *self,
                                                                   const gchar *uri);
 
