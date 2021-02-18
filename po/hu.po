@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-16 17:00+0000\n"
-"PO-Revision-Date: 2021-02-16 19:47+0100\n"
+"POT-Creation-Date: 2021-02-18 13:51+0000\n"
+"PO-Revision-Date: 2021-02-18 20:28+0100\n"
 "Last-Translator: Meskó Balázs <mesko.balazs@fsf.hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -27,18 +27,18 @@ msgstr ""
 msgid "Add Key Server"
 msgstr "Kulcskiszolgáló hozzáadása"
 
-#: common/add-keyserver-dialog.vala:64
+#: common/add-keyserver-dialog.vala:66
 msgid "Custom"
 msgstr "Egyéni"
 
 #. Buttons
-#: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:132
+#: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
 #: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:130
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Mégse"
 
-#: common/add-keyserver-dialog.vala:69
+#: common/add-keyserver-dialog.vala:71
 msgid "Save"
 msgstr "Mentés"
 
@@ -1083,7 +1083,7 @@ msgstr ""
 "A visszafejtés sikertelen. Valószínűleg nem rendelkezik a visszafejtési "
 "kulccsal."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:516
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:506
 msgid "The operation was cancelled"
 msgstr "A művelet megszakítva"
 
@@ -1531,24 +1531,16 @@ msgstr "Ismeretlen"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:534
+#: pgp/seahorse-hkp-source.c:524
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "A keresés nem volt elég egyedi. A(z) „%s” kiszolgáló túl sok kulcsot talált."
 
-#: pgp/seahorse-hkp-source.c:537
+#: pgp/seahorse-hkp-source.c:528
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Nem lehet kommunikálni a(z) „%s” kiszolgálóval: %s"
-
-#: pgp/seahorse-hkp-source.c:1001
-msgid "HTTP Key Server"
-msgstr "HTTP kulcskiszolgáló"
-
-#: pgp/seahorse-hkp-source.c:1002
-msgid "HTTPS Key Server"
-msgstr "HTTPS kulcskiszolgáló"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1636,7 +1628,7 @@ msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d kulcs kiválasztva szinkronizáláshoz</b>"
 msgstr[1] "<b>%d kulcs kiválasztva szinkronizáláshoz</b>"
 
-#: pgp/seahorse-keyserver-sync.c:237
+#: pgp/seahorse-keyserver-sync.c:232
 msgid "Synchronizing keys…"
 msgstr "Kulcsok szinkronizálása…"
 
@@ -1672,35 +1664,37 @@ msgstr "K_ulcskiszolgálók"
 msgid "_Sync"
 msgstr "_Szinkronizálás"
 
-#: pgp/seahorse-ldap-source.c:439
+#: pgp/seahorse-ldap-source.c:434
 #, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Nem lehet kommunikálni a következővel: „%s”: %s"
 
-#: pgp/seahorse-ldap-source.c:642
+#: pgp/seahorse-ldap-source.c:594
+#, c-format
+msgid "Couldn’t resolve address %s"
+msgstr "Nem oldható fel a cím: %s"
+
+#. Now that we've resolved our address, connect via IP
+#: pgp/seahorse-ldap-source.c:599
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Kapcsolódás a következőhöz: %s"
 
-#: pgp/seahorse-ldap-source.c:647
+#: pgp/seahorse-ldap-source.c:654
 #, c-format
-msgid "Couldn’t resolve address: %s"
-msgstr "Nem oldható fel a cím: %s"
+msgid "Invalid URI: %s"
+msgstr "Érvénytelen URI: %s"
 
-#: pgp/seahorse-ldap-source.c:689
+#: pgp/seahorse-ldap-source.c:662
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Kiszolgálócím feloldása: %s"
 
-#: pgp/seahorse-ldap-source.c:1366
-msgid "LDAP Key Server"
-msgstr "LDAP kulcskiszolgáló"
-
-#: pgp/seahorse-pgp-backend.c:187
+#: pgp/seahorse-pgp-backend.c:186
 msgid "PGP Keys"
 msgstr "PGP-kulcsok"
 
-#: pgp/seahorse-pgp-backend.c:193
+#: pgp/seahorse-pgp-backend.c:192
 msgid "PGP keys are for encrypting email or files"
 msgstr "A PGP-kulcsok e-mailek és fájlok titkosítására szolgálnak"
 
@@ -2806,6 +2800,15 @@ msgstr "Nem állíthatók be SSH-kulcsok a távoli számítógépen."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "SSH-kulcsok beállítása…"
+
+#~ msgid "HTTP Key Server"
+#~ msgstr "HTTP kulcskiszolgáló"
+
+#~ msgid "HTTPS Key Server"
+#~ msgstr "HTTPS kulcskiszolgáló"
+
+#~ msgid "LDAP Key Server"
+#~ msgstr "LDAP kulcskiszolgáló"
 
 #~ msgid ""
 #~ "Seahorse is a GNOME application for managing encryption keys. It also "
