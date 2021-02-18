@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-16 17:00+0000\n"
-"PO-Revision-Date: 2021-02-16 19:54+0200\n"
+"POT-Creation-Date: 2021-02-18 13:51+0000\n"
+"PO-Revision-Date: 2021-02-18 18:33+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -25,18 +25,18 @@ msgstr ""
 msgid "Add Key Server"
 msgstr "Додати сервер ключів"
 
-#: common/add-keyserver-dialog.vala:64
+#: common/add-keyserver-dialog.vala:66
 msgid "Custom"
 msgstr "Інший"
 
 #. Buttons
-#: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:132
+#: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
 #: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:130
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: common/add-keyserver-dialog.vala:69
+#: common/add-keyserver-dialog.vala:71
 msgid "Save"
 msgstr "Зберегти"
 
@@ -1078,7 +1078,7 @@ msgstr ""
 "Не вдалося розшифрувати. Можливо, відсутній потрібний ключ для "
 "розшифровування."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:516
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:506
 msgid "The operation was cancelled"
 msgstr "Операцію скасовано"
 
@@ -1532,26 +1532,17 @@ msgstr "Невідомо"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:534
+#: pgp/seahorse-hkp-source.c:524
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Параметри пошуку були недостатньо визначеними. Сервер «%s» видав надто "
 "багато ключів."
 
-#: pgp/seahorse-hkp-source.c:537
+#: pgp/seahorse-hkp-source.c:528
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Не вдалося зв'язатись з сервером «%s»: %s"
-
-#: pgp/seahorse-hkp-source.c:1001
-msgid "HTTP Key Server"
-msgstr "Сервер ключів HTTP"
-
-#: pgp/seahorse-hkp-source.c:1002
-#| msgid "HTTP Key Server"
-msgid "HTTPS Key Server"
-msgstr "Сервер ключів HTTPS"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1641,7 +1632,7 @@ msgstr[0] "<b>%d ключ вибрано для синхронізації</b>"
 msgstr[1] "<b>%d ключі вибрано для синхронізації</b>"
 msgstr[2] "<b>%d ключі вибрано для синхронізації</b>"
 
-#: pgp/seahorse-keyserver-sync.c:237
+#: pgp/seahorse-keyserver-sync.c:232
 msgid "Synchronizing keys…"
 msgstr "Синхронізація ключів…"
 
@@ -1677,35 +1668,39 @@ msgstr "_Сервера ключів"
 msgid "_Sync"
 msgstr "_Синхронізувати"
 
-#: pgp/seahorse-ldap-source.c:439
+#: pgp/seahorse-ldap-source.c:434
 #, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Не вдалося зв'язатись з «%s»: %s"
 
-#: pgp/seahorse-ldap-source.c:642
+#: pgp/seahorse-ldap-source.c:594
+#, c-format
+#| msgid "Couldn’t resolve address: %s"
+msgid "Couldn’t resolve address %s"
+msgstr "Не вдалося визначити адресу %s"
+
+#. Now that we've resolved our address, connect via IP
+#: pgp/seahorse-ldap-source.c:599
 #, c-format
 msgid "Connecting to: %s"
 msgstr "З'єднання: %s"
 
-#: pgp/seahorse-ldap-source.c:647
+#: pgp/seahorse-ldap-source.c:654
 #, c-format
-msgid "Couldn’t resolve address: %s"
-msgstr "Не вдалося визначити адресу: %s"
+msgid "Invalid URI: %s"
+msgstr ""
+"Некоректна адреса: %s"
 
-#: pgp/seahorse-ldap-source.c:689
+#: pgp/seahorse-ldap-source.c:662
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Визначення адреси сервера: %s"
 
-#: pgp/seahorse-ldap-source.c:1366
-msgid "LDAP Key Server"
-msgstr "Сервер ключів LDAP"
-
-#: pgp/seahorse-pgp-backend.c:187
+#: pgp/seahorse-pgp-backend.c:186
 msgid "PGP Keys"
 msgstr "Ключі PGP"
 
-#: pgp/seahorse-pgp-backend.c:193
+#: pgp/seahorse-pgp-backend.c:192
 msgid "PGP keys are for encrypting email or files"
 msgstr "Ключі PGP для шифрування пошти або файлів"
 
@@ -2812,6 +2807,16 @@ msgstr "Не вдалося налаштувати ключі SSH на відд�
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Налаштовування ключів SSH…"
+
+#~ msgid "HTTP Key Server"
+#~ msgstr "Сервер ключів HTTP"
+
+#~| msgid "HTTP Key Server"
+#~ msgid "HTTPS Key Server"
+#~ msgstr "Сервер ключів HTTPS"
+
+#~ msgid "LDAP Key Server"
+#~ msgstr "Сервер ключів LDAP"
 
 #~ msgid ""
 #~ "Seahorse is a GNOME application for managing encryption keys. It also "
