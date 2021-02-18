@@ -28,20 +28,8 @@ enum {
     SKEY_PGPSIG_PERSONAL = 0x0002
 };
 
-#define SEAHORSE_PGP_TYPE_KEY            (seahorse_pgp_key_get_type ())
-#define SEAHORSE_PGP_KEY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_KEY, SeahorsePgpKey))
-#define SEAHORSE_PGP_KEY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_KEY, SeahorsePgpKeyClass))
-#define SEAHORSE_PGP_IS_KEY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_KEY))
-#define SEAHORSE_PGP_IS_KEY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_KEY))
-#define SEAHORSE_PGP_KEY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_KEY, SeahorsePgpKeyClass))
-
-
-typedef struct _SeahorsePgpKey SeahorsePgpKey;
-typedef struct _SeahorsePgpKeyClass SeahorsePgpKeyClass;
-
-struct _SeahorsePgpKey {
-    SeahorseObject parent;
-};
+#define SEAHORSE_PGP_TYPE_KEY (seahorse_pgp_key_get_type ())
+G_DECLARE_DERIVABLE_TYPE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_PGP, KEY, SeahorseObject)
 
 struct _SeahorsePgpKeyClass {
     SeahorseObjectClass parent_class;
@@ -49,17 +37,13 @@ struct _SeahorsePgpKeyClass {
     /* virtual methods */
     GList* (*get_uids) (SeahorsePgpKey *self);
     void   (*set_uids) (SeahorsePgpKey *self, GList *uids);
-    
+
     GList* (*get_subkeys) (SeahorsePgpKey *self);
     void   (*set_subkeys) (SeahorsePgpKey *self, GList *uids);
-    
+
     GList* (*get_photos) (SeahorsePgpKey *self);
     void   (*set_photos) (SeahorsePgpKey *self, GList *uids);
 };
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (SeahorsePgpKey, g_object_unref)
-
-GType             seahorse_pgp_key_get_type             (void);
 
 SeahorsePgpKey *  seahorse_pgp_key_new                  (void);
 
@@ -80,7 +64,7 @@ GList*            seahorse_pgp_key_get_photos           (SeahorsePgpKey *self);
 void              seahorse_pgp_key_set_photos           (SeahorsePgpKey *self,
                                                          GList *subkeys);
 
-const gchar*      seahorse_pgp_key_get_fingerprint      (SeahorsePgpKey *self);
+const char*       seahorse_pgp_key_get_fingerprint      (SeahorsePgpKey *self);
 
 SeahorseValidity  seahorse_pgp_key_get_validity         (SeahorsePgpKey *self);
 
@@ -90,12 +74,12 @@ SeahorseValidity  seahorse_pgp_key_get_trust            (SeahorsePgpKey *self);
 
 guint             seahorse_pgp_key_get_length           (SeahorsePgpKey *self);
 
-const gchar*      seahorse_pgp_key_get_algo             (SeahorsePgpKey *self);
+const char*       seahorse_pgp_key_get_algo             (SeahorsePgpKey *self);
 
-const gchar*      seahorse_pgp_key_get_keyid            (SeahorsePgpKey *self);
+const char*       seahorse_pgp_key_get_keyid            (SeahorsePgpKey *self);
 
 gboolean          seahorse_pgp_key_has_keyid            (SeahorsePgpKey *self,
-                                                         const gchar *keyid);
+                                                         const char     *keyid);
 
 const char*       seahorse_pgp_key_calc_identifier      (const char *keyid);
 

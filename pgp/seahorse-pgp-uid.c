@@ -39,15 +39,15 @@ enum {
     PROP_COMMENT
 };
 
-struct _SeahorsePgpUidPrivate {
+typedef struct _SeahorsePgpUidPrivate {
     SeahorsePgpKey *parent;
     GList *signatures;
     SeahorseValidity validity;
     gboolean realized;
-    gchar *name;
-    gchar *email;
-    gchar *comment;
-};
+    char *name;
+    char *email;
+    char *comment;
+} SeahorsePgpUidPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (SeahorsePgpUid, seahorse_pgp_uid, SEAHORSE_TYPE_OBJECT);
 

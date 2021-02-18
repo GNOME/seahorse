@@ -28,7 +28,7 @@ G_DECLARE_DERIVABLE_TYPE (SeahorsePgpPhoto, seahorse_pgp_photo,
                           GObject);
 
 struct _SeahorsePgpPhotoClass {
-	GObjectClass parent_class;
+    GObjectClass parent_class;
 };
 
 SeahorsePgpPhoto*   seahorse_pgp_photo_new               (GdkPixbuf *pixbuf);

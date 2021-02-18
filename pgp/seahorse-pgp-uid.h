@@ -26,31 +26,14 @@
 #include "seahorse-pgp-key.h"
 
 #define SEAHORSE_PGP_TYPE_UID            (seahorse_pgp_uid_get_type ())
-
-#define SEAHORSE_PGP_UID(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_PGP_TYPE_UID, SeahorsePgpUid))
-#define SEAHORSE_PGP_UID_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_PGP_TYPE_UID, SeahorsePgpUidClass))
-#define SEAHORSE_PGP_IS_UID(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_PGP_TYPE_UID))
-#define SEAHORSE_PGP_IS_UID_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_PGP_TYPE_UID))
-#define SEAHORSE_PGP_UID_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_PGP_TYPE_UID, SeahorsePgpUidClass))
-
-typedef struct _SeahorsePgpUid SeahorsePgpUid;
-typedef struct _SeahorsePgpUidClass SeahorsePgpUidClass;
-typedef struct _SeahorsePgpUidPrivate SeahorsePgpUidPrivate;
-
-struct _SeahorsePgpUid {
-	SeahorseObject parent;
-};
+G_DECLARE_DERIVABLE_TYPE (SeahorsePgpUid, seahorse_pgp_uid, SEAHORSE_PGP, UID, SeahorseObject)
 
 struct _SeahorsePgpUidClass {
-	SeahorseObjectClass parent_class;
+    SeahorseObjectClass parent_class;
 };
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (SeahorsePgpUid, g_object_unref)
-
-GType             seahorse_pgp_uid_get_type             (void);
-
 SeahorsePgpUid*   seahorse_pgp_uid_new                  (SeahorsePgpKey *parent,
-                                                         const gchar *uid_string);
+                                                         const char     *uid_string);
 
 SeahorsePgpKey *  seahorse_pgp_uid_get_parent           (SeahorsePgpUid *self);
 
@@ -66,29 +49,29 @@ SeahorseValidity  seahorse_pgp_uid_get_validity         (SeahorsePgpUid *self);
 void              seahorse_pgp_uid_set_validity         (SeahorsePgpUid *self,
                                                          SeahorseValidity validity);
 
-const gchar*      seahorse_pgp_uid_get_name             (SeahorsePgpUid *self);
+const char *      seahorse_pgp_uid_get_name             (SeahorsePgpUid *self);
 
 void              seahorse_pgp_uid_set_name             (SeahorsePgpUid *self,
-                                                         const gchar *name);
+                                                         const char     *name);
 
-const gchar*      seahorse_pgp_uid_get_email            (SeahorsePgpUid *self);
+const char *      seahorse_pgp_uid_get_email            (SeahorsePgpUid *self);
 
 void              seahorse_pgp_uid_set_email            (SeahorsePgpUid *self,
-                                                         const gchar *comment);
+                                                         const char     *comment);
 
-const gchar*      seahorse_pgp_uid_get_comment          (SeahorsePgpUid *self);
+const char *      seahorse_pgp_uid_get_comment          (SeahorsePgpUid *self);
 
 void              seahorse_pgp_uid_set_comment          (SeahorsePgpUid *self,
-                                                         const gchar *comment);
+                                                         const char     *comment);
 
-gchar*            seahorse_pgp_uid_calc_label           (const gchar *name,
-                                                         const gchar *email,
-                                                         const gchar *comment);
+char *            seahorse_pgp_uid_calc_label           (const char *name,
+                                                         const char *email,
+                                                         const char *comment);
 
-gchar*            seahorse_pgp_uid_calc_markup          (const gchar *name,
-                                                         const gchar *email,
-                                                         const gchar *comment,
-                                                         guint flags);
+char *            seahorse_pgp_uid_calc_markup          (const char *name,
+                                                         const char *email,
+                                                         const char *comment,
+                                                         guint       flags);
 
 GQuark            seahorse_pgp_uid_calc_id              (GQuark key_id,
                                                          guint index);
