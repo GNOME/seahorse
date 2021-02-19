@@ -47,12 +47,17 @@ namespace Progress {
 }
 
 [CCode (cheader_filename = "pgp/seahorse-pgp-backend.h")]
-namespace Pgp.Backend {
-	public void initialize();
+public class Pgp.Backend : GLib.Object, Gcr.Collection, Place {
+    public static void initialize();
+    public static unowned Pgp.Backend get();
+
+    public unowned GLib.ListModel get_remotes();
+    public void add_remote(string uri, bool persist);
+    public void remove_remote(string uri);
 }
 
 [CCode (cheader_filename = "pgp/seahorse-server-source.h")]
-public class ServerSource {
+public class ServerSource : GLib.Object, Gcr.Collection, Place {
 }
 
 #if WITH_LDAP

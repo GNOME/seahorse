@@ -59,11 +59,11 @@ SeahorseServerSource * seahorse_pgp_backend_lookup_remote        (SeahorsePgpBac
                                                                   const gchar *uri);
 
 void                   seahorse_pgp_backend_add_remote           (SeahorsePgpBackend *self,
-                                                                  const gchar *uri,
-                                                                  SeahorseServerSource *source);
+                                                                  const char         *uri,
+                                                                  gboolean            persist);
 
 void                   seahorse_pgp_backend_remove_remote        (SeahorsePgpBackend *self,
-                                                                  const gchar *uri);
+                                                                  const char         *uri);
 
 void                   seahorse_pgp_backend_search_remote_async  (SeahorsePgpBackend *self,
                                                                   const gchar *search,

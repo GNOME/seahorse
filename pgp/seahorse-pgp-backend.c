@@ -51,6 +51,7 @@ struct _SeahorsePgpBackend {
     GObject parent;
 
     SeahorseGpgmeKeyring *keyring;
+    SeahorsePgpSettings *pgp_settings;
     SeahorseDiscovery *discovery;
     SeahorseUnknownSource *unknown;
     GListModel *remotes;
@@ -73,6 +74,7 @@ seahorse_pgp_backend_init (SeahorsePgpBackend *self)
     g_return_if_fail (pgp_backend == NULL);
     pgp_backend = self;
 
+    self->pgp_settings = seahorse_pgp_settings_instance ();
     self->remotes = G_LIST_MODEL (g_list_store_new (SEAHORSE_TYPE_SERVER_SOURCE));
     self->actions = seahorse_pgp_backend_actions_instance ();
 }
@@ -96,7 +98,7 @@ on_settings_keyservers_changed (GSettings  *settings,
 
         remote = g_list_model_get_item (self->remotes, i);
         uri = seahorse_place_get_uri (SEAHORSE_PLACE (remote));
-        g_ptr_array_add (check, uri);
+        g_ptr_array_add (check, g_steal_pointer (&uri));
     }
 
     /* Load and strip names from keyserver list */
@@ -107,17 +109,13 @@ on_settings_keyservers_changed (GSettings  *settings,
         gboolean found;
         guint index;
 
-        /* If we don't have a keysource then add it */
         found = g_ptr_array_find_with_equal_func (check, uri, g_str_equal, &index);
         if (found) {
             /* Mark this one as present */
             g_ptr_array_remove_index (check, index);
         } else {
-            g_autoptr(SeahorseServerSource) source = NULL;
-
-            source = seahorse_server_category_create_server (uri);
-            if (source != NULL)
-                seahorse_pgp_backend_add_remote (self, uri, source);
+            /* If we don't have a keysource then add it */
+            seahorse_pgp_backend_add_remote (self, uri, FALSE);
         }
     }
 
@@ -168,11 +166,11 @@ seahorse_pgp_backend_constructed (GObject *obj)
 	self->unknown = seahorse_unknown_source_new ();
 
 #ifdef WITH_KEYSERVER
-    g_signal_connect (seahorse_pgp_settings_instance (), "changed::keyservers",
+    g_signal_connect (self->pgp_settings, "changed::keyservers",
                       G_CALLBACK (on_settings_keyservers_changed), self);
 
     /* Initial loading */
-    on_settings_keyservers_changed (G_SETTINGS (seahorse_pgp_settings_instance ()),
+    on_settings_keyservers_changed (G_SETTINGS (self->pgp_settings),
                                     "keyservers",
                                     self);
 #endif
@@ -247,7 +245,7 @@ seahorse_pgp_backend_finalize (GObject *obj)
     SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
 
 #ifdef WITH_KEYSERVER
-    g_signal_handlers_disconnect_by_func (seahorse_pgp_settings_instance (),
+    g_signal_handlers_disconnect_by_func (self->pgp_settings,
                                           on_settings_keyservers_changed, self);
 #endif
 
@@ -362,28 +360,25 @@ seahorse_pgp_backend_get_default_keyring (SeahorsePgpBackend *self)
 SeahorsePgpKey *
 seahorse_pgp_backend_get_default_key (SeahorsePgpBackend *self)
 {
-	SeahorsePgpKey *key = NULL;
-	SeahorsePgpSettings *settings;
-	const gchar *keyid;
-	gchar *value;
+    SeahorsePgpKey *key = NULL;
+    g_autofree char *value = NULL;
 
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
+    self = self ? self : seahorse_pgp_backend_get ();
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
 
-	settings = seahorse_pgp_settings_instance ();
-	if (settings != NULL) {
-		value = seahorse_pgp_settings_get_default_key (settings);
-		if (value != NULL && value[0]) {
-			if (g_str_has_prefix (value, "openpgp:"))
-				keyid = value + strlen ("openpgp:");
-			else
-				keyid = value;
-			key = SEAHORSE_PGP_KEY (seahorse_gpgme_keyring_lookup (self->keyring, keyid));
-		}
-		g_free (value);
-	}
+    value = seahorse_pgp_settings_get_default_key (self->pgp_settings);
+    if (value && *value) {
+        const char *keyid;
 
-	return key;
+        if (g_str_has_prefix (value, "openpgp:"))
+            keyid = value + strlen ("openpgp:");
+        else
+            keyid = value;
+
+        key = SEAHORSE_PGP_KEY (seahorse_gpgme_keyring_lookup (self->keyring, keyid));
+    }
+
+    return key;
 }
 
 #ifdef WITH_KEYSERVER
@@ -437,14 +432,21 @@ seahorse_pgp_backend_lookup_remote (SeahorsePgpBackend *self,
 void
 seahorse_pgp_backend_add_remote (SeahorsePgpBackend   *self,
                                  const char           *uri,
-                                 SeahorseServerSource *source)
+                                 gboolean              persist)
 {
-    self = self ? self : seahorse_pgp_backend_get ();
     g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
-    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (source));
     g_return_if_fail (seahorse_pgp_backend_lookup_remote (self, uri) == NULL);
 
-    g_list_store_append (G_LIST_STORE (self->remotes), source);
+    if (persist) {
+        /* Add to the PGP settings. That's all we need to do, since we're
+         * subscribed to the "changed" callback */
+        seahorse_pgp_settings_add_keyserver (self->pgp_settings, uri, NULL);
+    } else {
+        /* Don't persist, so just immediately create a ServerSource */
+        g_autoptr(SeahorseServerSource) ssrc = NULL;
+        ssrc = seahorse_server_category_create_server (uri);
+        g_list_store_append (G_LIST_STORE (self->remotes), ssrc);
+    }
 }
 
 void
@@ -454,6 +456,8 @@ seahorse_pgp_backend_remove_remote (SeahorsePgpBackend *self,
     self = self ? self : seahorse_pgp_backend_get ();
     g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
     g_return_if_fail (uri && *uri);
+
+    g_debug ("Removing remote %s", uri);
 
     for (guint i = 0; i < g_list_model_get_n_items (self->remotes); i++) {
         g_autoptr(SeahorseServerSource) ssrc = NULL;
@@ -465,6 +469,8 @@ seahorse_pgp_backend_remove_remote (SeahorsePgpBackend *self,
         if (g_ascii_strcasecmp (uri, src_uri) == 0)
             g_list_store_remove (G_LIST_STORE (self->remotes), i);
     }
+
+    seahorse_pgp_settings_remove_keyserver (self->pgp_settings, uri);
 }
 
 typedef struct {
@@ -520,7 +526,7 @@ seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
     g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
 
     /* Get a list of all selected key servers */
-    names = g_settings_get_strv (G_SETTINGS (seahorse_app_settings_instance ()), "last-search-servers");
+    names = g_settings_get_strv (G_SETTINGS (self->pgp_settings), "last-search-servers");
     if (names != NULL && names[0] != NULL) {
         servers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
         for (guint i = 0; names[i] != NULL; i++)

@@ -156,13 +156,10 @@ resolve_callback (AvahiServiceResolver *resolver, AvahiIfIndex iface, AvahiProto
 		g_hash_table_replace (self->services, service_name, service_uri);
 		g_signal_emit (self, signals[ADDED], 0, service_name);
 
-		/* Add it to the context */
-		if (!seahorse_pgp_backend_lookup_remote (NULL, service_uri)) {
-			SeahorseServerSource *ssrc = seahorse_server_category_create_server (service_uri);
-			g_return_if_fail (ssrc != NULL);
-			seahorse_pgp_backend_add_remote (NULL, service_uri, ssrc);
-			g_object_unref (ssrc);
-		}
+        /* Add it to the context */
+        if (!seahorse_pgp_backend_lookup_remote (NULL, service_uri)) {
+            seahorse_pgp_backend_add_remote (NULL, service_uri, FALSE);
+        }
 
 		g_debug ("added: %s %s\n", service_name, service_uri);
 		break;

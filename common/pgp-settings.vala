@@ -60,32 +60,71 @@ public class Seahorse.PgpSettings : GLib.Settings {
         ServerCategory.init();
     }
 
-	private static PgpSettings? _instance = null;
-	public static PgpSettings instance() {
-		if (_instance == null)
-			_instance = new PgpSettings();
-		return _instance;
-	}
+    private static PgpSettings? _instance = null;
+    public static PgpSettings instance() {
+        if (_instance == null)
+            _instance = new PgpSettings();
+        return _instance;
+    }
 
     [CCode (array_null_terminated = true, array_length = false)]
     public string[] get_uris() {
-        // The values are 'uri name', remove the name part
         string[] uris = {};
-        foreach (string server in this.keyservers)
-            uris += server.strip().split(" ", 2)[0];
-
+        foreach (unowned string server in this.keyservers)
+            uris += get_uri_for_keyserver_entry (server);
         return uris;
     }
 
     [CCode (array_null_terminated = true, array_length = false)]
     public string[] get_names() {
         string[] names = {};
-        foreach (string server in this.keyservers) {
-            // The values are 'uri' or 'uri name', remove the name part if there
-            string[] split = server._strip().split(" ", 2);
-            names += (split.length == 1)? split[0] : split[1];
-        }
-
+        foreach (unowned string server in this.keyservers)
+            names += get_name_for_keyserver_entry (server);
         return names;
+    }
+
+    public void add_keyserver(string uri, string? name) {
+        string[] servers = {};
+
+        if (uri in this.keyservers)
+            return;
+
+        debug("Adding key server URL '%s'", uri);
+        foreach (unowned string keyserver in this.keyservers)
+            servers += keyserver;
+
+        if (name != null)
+            servers += "%s %s".printf(uri, name);
+        else
+            servers += uri;
+        servers += null;
+
+        this.keyservers = servers;
+    }
+
+    public void remove_keyserver(string uri) {
+        string[] servers = {};
+
+        if (!(uri in this.keyservers))
+            return;
+
+        debug("Removing key server URL '%s'", uri);
+        foreach (unowned string keyserver in this.keyservers)
+            if (get_uri_for_keyserver_entry(keyserver) != uri)
+                servers += keyserver;
+        servers += null;
+
+        this.keyservers = servers;
+    }
+
+    private string? get_uri_for_keyserver_entry(string keyserver) {
+        // The values are "uri" or "uri name", so remove the name part (if any)
+        return keyserver.strip().split(" ", 2)[0];
+    }
+
+    private string? get_name_for_keyserver_entry(string keyserver) {
+        // The values are "uri" or "uri name", so fallback to uri if no name
+        string[] split = keyserver.strip().split(" ", 2);
+        return (split.length == 1)? split[0] : split[1];
     }
 }
