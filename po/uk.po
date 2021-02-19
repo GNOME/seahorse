@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-18 13:51+0000\n"
-"PO-Revision-Date: 2021-02-18 18:33+0200\n"
+"POT-Creation-Date: 2021-02-19 18:59+0000\n"
+"PO-Revision-Date: 2021-02-19 21:36+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -102,29 +102,13 @@ msgstr "Клавіші"
 msgid "Certificates"
 msgstr "Сертифікати"
 
-#: common/prefs.vala:42
+#: common/prefs.vala:32
 msgid "Preferences"
 msgstr "Параметри"
 
-#: common/prefs.vala:150
+#: common/prefs-keyservers.vala:44
 msgid "None: Don’t publish keys"
 msgstr "Немає: не публікувати ключі"
-
-#: common/prefs.vala:166
-msgid "Not a valid Key Server address."
-msgstr "Некоректна адреса сервера ключів."
-
-#: common/prefs.vala:167
-msgid ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-msgstr ""
-"Для отримання допомоги зв'яжіться з вашим адміністратором та адміністратором "
-"сервера ключів."
-
-#: common/prefs.vala:236
-msgid "URL"
-msgstr "URL"
 
 #: common/seahorse-add-keyserver.ui:12
 msgid "initial temporary item"
@@ -151,25 +135,27 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "Порт для доступу до сервера."
 
-#: common/seahorse-prefs.ui:34
-msgid "_Find keys via:"
-msgstr "Зн_айти ключі за допомогою:"
+#: common/seahorse-prefs-keyservers.ui:21
+#| msgid "Key Servers"
+msgid "Keyservers"
+msgstr "Сервери ключів"
 
-#: common/seahorse-prefs.ui:105
+#: common/seahorse-prefs-keyservers.ui:32
+#| msgid "Add a new key or item"
+msgid "Add a new keyserver"
+msgstr "Додати новий сервер ключів"
+
+#: common/seahorse-prefs-keyservers.ui:81
 msgid "_Publish keys to:"
 msgstr "_Публікувати ключі у:"
 
-#: common/seahorse-prefs.ui:128
+#: common/seahorse-prefs-keyservers.ui:104
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Автоматично отримувати _ключі з серверів"
 
-#: common/seahorse-prefs.ui:142
+#: common/seahorse-prefs-keyservers.ui:119
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "Автоматично синхронізувати з_мінені ключі з серверами ключів"
-
-#: common/seahorse-prefs.ui:159
-msgid "Key Servers"
-msgstr "Сервери ключів"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -1675,7 +1661,6 @@ msgstr "Не вдалося зв'язатись з «%s»: %s"
 
 #: pgp/seahorse-ldap-source.c:594
 #, c-format
-#| msgid "Couldn’t resolve address: %s"
 msgid "Couldn’t resolve address %s"
 msgstr "Не вдалося визначити адресу %s"
 
@@ -1688,19 +1673,18 @@ msgstr "З'єднання: %s"
 #: pgp/seahorse-ldap-source.c:654
 #, c-format
 msgid "Invalid URI: %s"
-msgstr ""
-"Некоректна адреса: %s"
+msgstr "Некоректна адреса: %s"
 
 #: pgp/seahorse-ldap-source.c:662
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Визначення адреси сервера: %s"
 
-#: pgp/seahorse-pgp-backend.c:186
+#: pgp/seahorse-pgp-backend.c:188
 msgid "PGP Keys"
 msgstr "Ключі PGP"
 
-#: pgp/seahorse-pgp-backend.c:192
+#: pgp/seahorse-pgp-backend.c:194
 msgid "PGP keys are for encrypting email or files"
 msgstr "Ключі PGP для шифрування пошти або файлів"
 
@@ -2807,6 +2791,22 @@ msgstr "Не вдалося налаштувати ключі SSH на відд�
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Налаштовування ключів SSH…"
+
+#~ msgid "Not a valid Key Server address."
+#~ msgstr "Некоректна адреса сервера ключів."
+
+#~ msgid ""
+#~ "For help contact your system administrator or the administrator of the "
+#~ "key server."
+#~ msgstr ""
+#~ "Для отримання допомоги зв'яжіться з вашим адміністратором та "
+#~ "адміністратором сервера ключів."
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "_Find keys via:"
+#~ msgstr "Зн_айти ключі за допомогою:"
 
 #~ msgid "HTTP Key Server"
 #~ msgstr "Сервер ключів HTTP"
