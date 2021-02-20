@@ -492,6 +492,8 @@ public class Seahorse.KeyManager : Catalog {
             try {
                 unlock_button.sensitive = true;
                 place.unlock.end(res);
+                // Explicitly trigger an update of the main view
+                check_empty_state();
             } catch (GLib.Error e) {
                 unlock_button.sensitive = true;
                 Util.show_error(this, _("Couldn’t unlock keyring"), e.message);
