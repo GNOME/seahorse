@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-18 16:34+0000\n"
-"PO-Revision-Date: 2021-02-18 17:45+0100\n"
+"POT-Creation-Date: 2021-02-20 08:41+0000\n"
+"PO-Revision-Date: 2021-02-20 22:09+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -103,28 +103,13 @@ msgstr "Ključi"
 msgid "Certificates"
 msgstr "Potrdila"
 
-#: common/prefs.vala:42
+#: common/prefs.vala:32
 msgid "Preferences"
 msgstr "Možnosti"
 
-#: common/prefs.vala:150
+#: common/prefs-keyservers.vala:44
 msgid "None: Don’t publish keys"
 msgstr "ne objavi ključev"
-
-#: common/prefs.vala:166
-msgid "Not a valid Key Server address."
-msgstr "Neveljaven naslov strežnika ključev."
-
-#: common/prefs.vala:167
-msgid ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-msgstr ""
-"Za pomoč se obrnite na skrbnika sistema ali skrbnika strežnika ključev."
-
-#: common/prefs.vala:236
-msgid "URL"
-msgstr "Naslov URL"
 
 #: common/seahorse-add-keyserver.ui:12
 msgid "initial temporary item"
@@ -151,25 +136,25 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "Vrata preko katerih je mogoč dostop do strežnika."
 
-#: common/seahorse-prefs.ui:34
-msgid "_Find keys via:"
-msgstr "_Poišči ključe na:"
+#: common/seahorse-prefs-keyservers.ui:21
+msgid "Keyservers"
+msgstr "Strežniki ključev"
 
-#: common/seahorse-prefs.ui:105
+#: common/seahorse-prefs-keyservers.ui:32
+msgid "Add a new keyserver"
+msgstr "Dodaj nov strežnik ključev"
+
+#: common/seahorse-prefs-keyservers.ui:81
 msgid "_Publish keys to:"
 msgstr "_Objavi ključe na:"
 
-#: common/seahorse-prefs.ui:128
+#: common/seahorse-prefs-keyservers.ui:104
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Samodejno pridobi ključe s strežnika _ključev"
 
-#: common/seahorse-prefs.ui:142
+#: common/seahorse-prefs-keyservers.ui:119
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "Samodejno uskladi spremenjene _ključe s strežnikom ključev"
-
-#: common/seahorse-prefs.ui:159
-msgid "Key Servers"
-msgstr "Strežniki ključev"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -1691,16 +1676,16 @@ msgstr "Neveljaven naslov URI: %s"
 msgid "Resolving server address: %s"
 msgstr "Razreševanje naslova strežnika: %s"
 
-#: pgp/seahorse-pgp-backend.c:190
+#: pgp/seahorse-pgp-backend.c:188
 msgid "PGP Keys"
 msgstr "Ključi PGP"
 
-#: pgp/seahorse-pgp-backend.c:196
+#: pgp/seahorse-pgp-backend.c:194
 msgid "PGP keys are for encrypting email or files"
 msgstr ""
 "Ključi PGP se uporabljajo za šifriranje elektronskih sporočil in datotek"
 
-#: pgp/seahorse-pgp-key.c:172
+#: pgp/seahorse-pgp-key.c:176
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
@@ -1709,11 +1694,11 @@ msgstr[1] "(in %d drug)"
 msgstr[2] "(in %d druga)"
 msgstr[3] "(in %d drugi)"
 
-#: pgp/seahorse-pgp-key.c:573
+#: pgp/seahorse-pgp-key.c:575
 msgid "Personal PGP key"
 msgstr "Osebni ključ PGP"
 
-#: pgp/seahorse-pgp-key.c:575
+#: pgp/seahorse-pgp-key.c:577
 msgid "PGP key"
 msgstr "Ključ PGP"
 
@@ -2346,7 +2331,7 @@ msgstr "Izpisano besedilo"
 msgid "Clipboard text"
 msgstr "Besedila odložišča"
 
-#: src/key-manager.vala:497
+#: src/key-manager.vala:499
 msgid "Couldn’t unlock keyring"
 msgstr "Ni mogoče odkleniti zbirke ključev"
 
@@ -2800,6 +2785,21 @@ msgstr "Ni mogoče nastaviti ključa varne lupine na oddaljenem računalniku."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Poteka nastavljanje ključev varne lupine …"
+
+#~ msgid "Not a valid Key Server address."
+#~ msgstr "Neveljaven naslov strežnika ključev."
+
+#~ msgid ""
+#~ "For help contact your system administrator or the administrator of the "
+#~ "key server."
+#~ msgstr ""
+#~ "Za pomoč se obrnite na skrbnika sistema ali skrbnika strežnika ključev."
+
+#~ msgid "URL"
+#~ msgstr "Naslov URL"
+
+#~ msgid "_Find keys via:"
+#~ msgstr "_Poišči ključe na:"
 
 #~ msgid "HTTP Key Server"
 #~ msgstr "Strežnik ključev HTTP"
