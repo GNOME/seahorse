@@ -51,7 +51,7 @@ static GParamSpec *obj_props[N_PROPS] = { NULL, };
 static void        seahorse_pgp_key_viewable_iface          (SeahorseViewableIface *iface);
 
 typedef struct _SeahorsePgpKeyPrivate {
-    gchar *keyid;
+    char *keyid;
     GList *uids;            /* All the UID objects */
     GList *subkeys;         /* All the Subkey objects */
     GList *photos;          /* List of photos */
@@ -71,7 +71,7 @@ G_DEFINE_TYPE_WITH_CODE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT,
 guint
 seahorse_pgp_keyid_hash (gconstpointer v)
 {
-    const gchar *keyid = v;
+    const char *keyid = v;
     gsize len = strlen (keyid);
     if (len > 8)
         keyid += len - 8;
@@ -82,8 +82,8 @@ gboolean
 seahorse_pgp_keyid_equal (gconstpointer v1,
                           gconstpointer v2)
 {
-    const gchar *keyid_1 = v1;
-    const gchar *keyid_2 = v2;
+    const char *keyid_1 = v1;
+    const char *keyid_2 = v2;
     gsize len_1 = strlen (keyid_1);
     gsize len_2 = strlen (keyid_2);
 
@@ -94,14 +94,14 @@ seahorse_pgp_keyid_equal (gconstpointer v1,
     return g_str_equal (keyid_1, keyid_2);
 }
 
-static const gchar*
+static const char*
 calc_short_name (SeahorsePgpKey *self)
 {
     GList *uids = seahorse_pgp_key_get_uids (self);
     return uids ? seahorse_pgp_uid_get_name (uids->data) : NULL;
 }
 
-static gchar*
+static char*
 calc_name (SeahorsePgpKey *self)
 {
     GList *uids = seahorse_pgp_key_get_uids (self);
@@ -110,18 +110,16 @@ calc_name (SeahorsePgpKey *self)
                                                seahorse_pgp_uid_get_comment (uids->data)) : g_strdup ("");
 }
 
-static gchar *
+static char *
 calc_markup (SeahorsePgpKey *self)
 {
     guint flags = seahorse_object_get_flags (SEAHORSE_OBJECT (self));
     GList *uids;
     GString *result;
-    gchar *text;
-    const gchar *name;
-    const gchar *email;
-    const gchar *comment;
-    const gchar *primary = NULL;
-    guint i = 0;
+    const char *name;
+    const char *email;
+    const char *comment;
+    const char *primary = NULL;
 
     uids = seahorse_pgp_key_get_uids (self);
 
@@ -135,15 +133,18 @@ calc_markup (SeahorsePgpKey *self)
 
     /* The first name is the key name */
     if (uids != NULL) {
+        g_autofree char *text = NULL;
+
         name = seahorse_pgp_uid_get_name (uids->data);
         text = g_markup_escape_text (name, -1);
         g_string_append (result, text);
-        g_free (text);
         primary = name;
     }
 
     g_string_append (result, "<span size='small' rise='0'>");
     if (uids != NULL) {
+        g_autofree char *text = NULL;
+
         email = seahorse_pgp_uid_get_email (uids->data);
         if (email && !email[0])
             email = NULL;
@@ -157,11 +158,12 @@ calc_markup (SeahorsePgpKey *self)
                                         comment ? comment : "",
                                         comment ? "'" : "");
         g_string_append (result, text);
-        g_free (text);
         uids = uids->next;
     }
 
-    for (i = 0; uids != NULL; i++, uids = g_list_next (uids)) {
+    for (guint i = 0; uids != NULL; i++, uids = g_list_next (uids)) {
+        g_autofree char *text = NULL;
+
         g_string_append_c (result, '\n');
 
         // If we already have more than 5 UIDs, ellipsze the list.
@@ -199,7 +201,6 @@ calc_markup (SeahorsePgpKey *self)
                                         comment ? comment : "",
                                         comment ? "'" : "");
         g_string_append (result, text);
-        g_free (text);
         uids = uids->next;
     }
 
@@ -247,7 +248,7 @@ static void
 _seahorse_pgp_key_set_subkeys (SeahorsePgpKey *self, GList *subkeys)
 {
     SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
-    const gchar *keyid = NULL;
+    const char *keyid = NULL;
 
     g_return_if_fail (SEAHORSE_PGP_IS_KEY (self));
     g_return_if_fail (subkeys);
@@ -299,13 +300,14 @@ _seahorse_pgp_key_set_photos (SeahorsePgpKey *self, GList *photos)
 void
 seahorse_pgp_key_realize (SeahorsePgpKey *self)
 {
-    const gchar *nickname, *keyid;
-    const gchar *icon_name;
-    gchar *markup, *name;
+    const char *nickname, *keyid;
+    const char *icon_name;
+    g_autofree char *name = NULL;
+    g_autofree char *markup = NULL;
     const char *identifier;
     SeahorseUsage usage;
     GList *subkeys;
-    GIcon *icon;
+    g_autoptr(GIcon) icon = NULL;
 
     subkeys = seahorse_pgp_key_get_subkeys (self);
     if (subkeys) {
@@ -338,10 +340,6 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
               "identifier", identifier,
               "icon", icon,
               NULL);
-
-    g_object_unref (icon);
-    g_free (markup);
-    g_free (name);
 }
 
 static GtkWindow *
@@ -427,7 +425,7 @@ seahorse_pgp_key_set_photos (SeahorsePgpKey *self, GList *photos)
     SEAHORSE_PGP_KEY_GET_CLASS (self)->set_photos (self, photos);
 }
 
-const gchar*
+const char*
 seahorse_pgp_key_get_fingerprint (SeahorsePgpKey *self)
 {
     GList *subkeys;
@@ -485,7 +483,7 @@ seahorse_pgp_key_get_length (SeahorsePgpKey *self)
     return seahorse_pgp_subkey_get_length (subkeys->data);
 }
 
-const gchar*
+const char*
 seahorse_pgp_key_get_algo (SeahorsePgpKey *self)
 {
     GList *subkeys;
@@ -494,12 +492,12 @@ seahorse_pgp_key_get_algo (SeahorsePgpKey *self)
 
     subkeys = seahorse_pgp_key_get_subkeys (self);
     if (!subkeys)
-        return 0;
+        return NULL;
 
     return seahorse_pgp_subkey_get_algorithm (subkeys->data);
 }
 
-const gchar*
+const char*
 seahorse_pgp_key_get_keyid (SeahorsePgpKey *self)
 {
     GList *subkeys;
@@ -508,18 +506,17 @@ seahorse_pgp_key_get_keyid (SeahorsePgpKey *self)
 
     subkeys = seahorse_pgp_key_get_subkeys (self);
     if (!subkeys)
-        return 0;
+        return NULL;
 
     return seahorse_pgp_subkey_get_keyid (subkeys->data);
 }
 
 gboolean
-seahorse_pgp_key_has_keyid (SeahorsePgpKey *self, const gchar *match)
+seahorse_pgp_key_has_keyid (SeahorsePgpKey *self, const char *match)
 {
-    GList *subkeys, *l;
+    GList *subkeys;
     SeahorsePgpSubkey *subkey;
-    const gchar *keyid;
-    guint n_match, n_keyid;
+    guint n_match;
 
     g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), FALSE);
     g_return_val_if_fail (match, FALSE);
@@ -530,7 +527,10 @@ seahorse_pgp_key_has_keyid (SeahorsePgpKey *self, const gchar *match)
 
     n_match = strlen (match);
 
-    for (l = subkeys; l && (subkey = SEAHORSE_PGP_SUBKEY (l->data)); l = g_list_next (l)) {
+    for (GList *l = subkeys; l && (subkey = SEAHORSE_PGP_SUBKEY (l->data)); l = g_list_next (l)) {
+        const char *keyid;
+        guint n_keyid;
+
         keyid = seahorse_pgp_subkey_get_keyid (subkey);
         g_return_val_if_fail (keyid, FALSE);
         n_keyid = strlen (keyid);
