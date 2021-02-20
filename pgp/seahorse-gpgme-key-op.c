@@ -2337,15 +2337,12 @@ gpgme_error_t
 seahorse_gpgme_key_op_photos_load (SeahorseGpgmeKey *pkey)
 {
 	/* Make sure there's enough room for the .jpg extension */
-	gchar image_path[]    = "/tmp/seahorse-photoid-XXXXXX\0\0\0\0";
-    
-	SeahorseEditParm *parms;
+    char image_path[]    = "/tmp/seahorse-photoid-XXXXXX\0\0\0\0";
+
 	PhotoIdLoadParm photoid_load_parm;
 	gpgme_error_t gerr;
 	gpgme_key_t key;
-	const gchar *oldpath;
 	const gchar *keyid;
-	gchar *path;
 	gint fd;
 
 	g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
@@ -2377,27 +2374,32 @@ seahorse_gpgme_key_op_photos_load (SeahorseGpgmeKey *pkey)
 		gerr = seahorse_gpg_op_num_uids (NULL, keyid, &(photoid_load_parm.num_uids));
 		g_debug ("PhotoIDLoad Number of UIDs %i", photoid_load_parm.num_uids);
 
-		if (GPG_IS_OK (gerr)) {
-            
-			setenv ("SEAHORSE_IMAGE_FILE", image_path, 1);
-			oldpath = getenv("PATH");
-            
-			path = g_strdup_printf ("%s:%s", EXECDIR, getenv ("PATH"));
-			setenv ("PATH", path, 1);
-			g_free (path);
-            
-			parms = seahorse_edit_parm_new (PHOTO_ID_LOAD_START, photoid_load_action,
-			                                photoid_load_transit, &photoid_load_parm);
-            
-			/* generate list */
-			gerr = edit_gpgme_key (NULL, key, parms);
-			setenv ("PATH", oldpath, 1);
+        if (GPG_IS_OK (gerr)) {
+            const char *oldpath;
+            g_autofree char *path = NULL;
+            SeahorseEditParm *parms;
 
-			if (GPG_IS_OK (gerr))
-				seahorse_pgp_key_set_photos (SEAHORSE_PGP_KEY (pkey), photoid_load_parm.photos);
-		}
-		
-		seahorse_object_list_free (photoid_load_parm.photos);
+            setenv ("SEAHORSE_IMAGE_FILE", image_path, 1);
+            oldpath = getenv("PATH");
+
+            path = g_strdup_printf ("%s:%s", EXECDIR, oldpath);
+            setenv ("PATH", path, 1);
+
+            parms = seahorse_edit_parm_new (PHOTO_ID_LOAD_START, photoid_load_action,
+                                            photoid_load_transit, &photoid_load_parm);
+
+            /* generate list */
+            gerr = edit_gpgme_key (NULL, key, parms);
+            setenv ("PATH", oldpath, 1);
+
+            if (GPG_IS_OK (gerr)) {
+                for (GList *p = photoid_load_parm.photos; p; p = p->next) {
+                    seahorse_pgp_key_add_photo (SEAHORSE_PGP_KEY (pkey), p->data);
+                }
+            }
+        }
+
+        g_list_free_full (photoid_load_parm.photos, g_object_unref);
 	}
 
 	g_debug ("PhotoIDLoad Done");

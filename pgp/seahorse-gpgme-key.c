@@ -32,7 +32,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-object-list.h"
 #include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
@@ -50,16 +49,14 @@ enum {
 struct _SeahorseGpgmeKey {
     SeahorsePgpKey parent_instance;
 
-    gpgme_key_t pubkey;           /* The public key */
+    gpgme_key_t pubkey;          /* The public key */
     gpgme_key_t seckey;          /* The secret key */
-    gboolean has_secret;        /* Whether we have a secret key or not */
+    gboolean has_secret;         /* Whether we have a secret key or not */
 
-    GList *uids;            /* We keep a copy of the uids. */
+    int list_mode;               /* What to load our public key as */
+    gboolean photos_loaded;      /* Photos were loaded */
 
-    int list_mode;                  /* What to load our public key as */
-    gboolean photos_loaded;        /* Photos were loaded */
-
-    gint block_loading;            /* Loading is blocked while this flag is set */
+    int block_loading;           /* Loading is blocked while this flag is set */
 };
 
 static void       seahorse_gpgme_key_deletable_iface       (SeahorseDeletableIface *iface);
@@ -157,18 +154,6 @@ require_key_private (SeahorseGpgmeKey *self)
     return self->seckey != NULL;
 }
 
-static gboolean
-require_key_uids (SeahorseGpgmeKey *self)
-{
-    return require_key_public (self, GPGME_KEYLIST_MODE_LOCAL);
-}
-
-static gboolean
-require_key_subkeys (SeahorseGpgmeKey *self)
-{
-    return require_key_public (self, GPGME_KEYLIST_MODE_LOCAL);
-}
-
 static void
 load_key_photos (SeahorseGpgmeKey *self)
 {
@@ -184,20 +169,12 @@ load_key_photos (SeahorseGpgmeKey *self)
         self->photos_loaded = TRUE;
 }
 
-static gboolean
-require_key_photos (SeahorseGpgmeKey *self)
-{
-    if (!self->photos_loaded)
-        load_key_photos (self);
-    return self->photos_loaded;
-}
-
 static void
 renumber_actual_uids (SeahorseGpgmeKey *self)
 {
     GArray *index_map;
-    GList *photos, *uids, *l;
-    guint index, i;
+    GListModel *photos;
+    GListModel *uids;
 
     g_assert (SEAHORSE_GPGME_IS_KEY (self));
 
@@ -210,26 +187,32 @@ renumber_actual_uids (SeahorseGpgmeKey *self)
 
     ++self->block_loading;
     photos = seahorse_pgp_key_get_photos (SEAHORSE_PGP_KEY (self));
-    uids = self->uids;
+    uids = seahorse_pgp_key_get_uids (SEAHORSE_PGP_KEY (self));
     --self->block_loading;
 
     /* First we build a bitmap of where all the photo uid indexes are */
     index_map = g_array_new (FALSE, TRUE, sizeof (gboolean));
-    for (l = photos; l; l = g_list_next (l)) {
-        index = seahorse_gpgme_photo_get_index (l->data);
+    for (guint i = 0; i < g_list_model_get_n_items (photos); i++) {
+        g_autoptr(SeahorseGpgmePhoto) photo = g_list_model_get_item (photos, i);
+        guint index;
+
+        index = seahorse_gpgme_photo_get_index (photo);
         if (index >= index_map->len)
             g_array_set_size (index_map, index + 1);
         g_array_index (index_map, gboolean, index) = TRUE;
     }
 
     /* Now for each UID we add however many photo indexes are below the gpgme index */
-    for (l = uids; l; l = g_list_next (l)) {
-        index = seahorse_gpgme_uid_get_gpgme_index (l->data);
-        for (i = 0; i < index_map->len && i < index; ++i) {
-            if(g_array_index (index_map, gboolean, index))
+    for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
+        g_autoptr(SeahorseGpgmeUid) uid = g_list_model_get_item (uids, i);
+        guint index;
+
+        index = seahorse_gpgme_uid_get_gpgme_index (uid);
+        for (guint j = 0; j < index_map->len && j < index; ++j) {
+            if (g_array_index (index_map, gboolean, index))
                 ++index;
         }
-        seahorse_gpgme_uid_set_actual_index (l->data, index + 1);
+        seahorse_gpgme_uid_set_actual_index (uid, index + 1);
     }
 
     g_array_free (index_map, TRUE);
@@ -238,20 +221,20 @@ renumber_actual_uids (SeahorseGpgmeKey *self)
 static void
 realize_uids (SeahorseGpgmeKey *self)
 {
+    GListModel *uids;
+    guint n_uids;
     gpgme_user_id_t guid;
-    SeahorseGpgmeUid *uid;
-    GList *results = NULL;
+    g_autoptr(GPtrArray) results = NULL;
     gboolean changed = FALSE;
-    GList *uids;
 
-    uids = self->uids;
+    uids = seahorse_pgp_key_get_uids (SEAHORSE_PGP_KEY (self));
+    n_uids = g_list_model_get_n_items (uids);
     guid = self->pubkey ? self->pubkey->uids : NULL;
+    results = g_ptr_array_new_with_free_func (g_object_unref);
 
     /* Look for out of sync or missing UIDs */
-    while (uids != NULL) {
-        g_return_if_fail (SEAHORSE_GPGME_IS_UID (uids->data));
-        uid = SEAHORSE_GPGME_UID (uids->data);
-        uids = g_list_next (uids);
+    for (guint i = 0; i < n_uids; i++) {
+        g_autoptr(SeahorseGpgmeUid) uid = g_list_model_get_item (uids, i);
 
         /* Bring this UID up to date */
         if (guid && seahorse_gpgme_uid_is_same (uid, guid)) {
@@ -259,45 +242,55 @@ realize_uids (SeahorseGpgmeKey *self)
                 g_object_set (uid, "pubkey", self->pubkey, "userid", guid, NULL);
                 changed = TRUE;
             }
-            results = seahorse_object_list_append (results, uid);
+            g_ptr_array_add (results, g_steal_pointer (&uid));
             guid = guid->next;
         }
     }
 
     /* Add new UIDs */
     while (guid != NULL) {
-        uid = seahorse_gpgme_uid_new (self, guid);
+        g_autoptr(SeahorseGpgmeUid) uid = seahorse_gpgme_uid_new (self, guid);
         changed = TRUE;
-        results = seahorse_object_list_append (results, uid);
-        g_object_unref (uid);
+        g_ptr_array_add (results, g_steal_pointer (&uid));
         guid = guid->next;
     }
 
-    if (changed)
-        seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (self), results);
-    seahorse_object_list_free (results);
+    if (!changed)
+        return;
+
+    /* Don't use remove_uid() and add_uid(), or we can get into an inconsistent
+     * state where we have no UIDs at all, but do it atomically by splicing */
+    /* FIXME: we should do this cleanly, without casting to GListStore */
+    g_list_store_splice (G_LIST_STORE (uids), 0, n_uids, results->pdata, results->len);
 }
 
 static void
 realize_subkeys (SeahorseGpgmeKey *self)
 {
+    g_autoptr(GPtrArray) results = NULL;
+    GListModel *subkeys;
+    guint n_subkeys;
     gpgme_subkey_t gsubkey;
-    SeahorseGpgmeSubkey *subkey;
-    GList *list = NULL;
+
+    results = g_ptr_array_new_with_free_func (g_object_unref);
+    subkeys = seahorse_pgp_key_get_subkeys (SEAHORSE_PGP_KEY (self));
+    n_subkeys = g_list_model_get_n_items (subkeys);
 
     if (self->pubkey) {
-
         for (gsubkey = self->pubkey->subkeys; gsubkey; gsubkey = gsubkey->next) {
-            subkey = seahorse_gpgme_subkey_new (self->pubkey, gsubkey);
-            list = seahorse_object_list_prepend (list, subkey);
-            g_object_unref (subkey);
-        }
+            g_autoptr(SeahorseGpgmeSubkey) subkey = NULL;
 
-        list = g_list_reverse (list);
+            subkey = seahorse_gpgme_subkey_new (self->pubkey, gsubkey);
+            g_ptr_array_add (results, g_steal_pointer (&subkey));
+        }
     }
 
-    seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (self), list);
-    seahorse_object_list_free (list);
+    /* Don't use remove/add_subkey(), or we can get into an inconsistent state
+     * where we have no subkeys at all, but do it atomically by splicing */
+    /* FIXME: we should do this cleanly, without casting to GListStore */
+    g_list_store_splice (G_LIST_STORE (subkeys),
+                         0, n_subkeys,
+                         results->pdata, results->len);
 }
 
 void
@@ -377,53 +370,6 @@ seahorse_gpgme_key_refresh (SeahorseGpgmeKey *self)
         load_key_private (self);
     if (self->photos_loaded)
         load_key_photos (self);
-}
-
-static GList*
-seahorse_gpgme_key_get_uids (SeahorsePgpKey *base)
-{
-    SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (base);
-    require_key_uids (self);
-    return SEAHORSE_PGP_KEY_CLASS (seahorse_gpgme_key_parent_class)->get_uids (base);
-}
-
-static void
-seahorse_gpgme_key_set_uids (SeahorsePgpKey *base, GList *uids)
-{
-    SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (base);
-
-    SEAHORSE_PGP_KEY_CLASS (seahorse_gpgme_key_parent_class)->set_uids (base, uids);
-
-    /* Keep our own copy of the UID list */
-    seahorse_object_list_free (self->uids);
-    self->uids = seahorse_object_list_copy (uids);
-
-    renumber_actual_uids (self);
-}
-
-static GList*
-seahorse_gpgme_key_get_subkeys (SeahorsePgpKey *base)
-{
-    SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (base);
-    require_key_subkeys (self);
-    return SEAHORSE_PGP_KEY_CLASS (seahorse_gpgme_key_parent_class)->get_subkeys (base);
-}
-
-static GList*
-seahorse_gpgme_key_get_photos (SeahorsePgpKey *base)
-{
-    SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (base);
-    require_key_photos (self);
-    return SEAHORSE_PGP_KEY_CLASS (seahorse_gpgme_key_parent_class)->get_photos (base);
-}
-
-static void
-seahorse_gpgme_key_set_photos (SeahorsePgpKey *base, GList *photos)
-{
-    SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (base);
-    self->photos_loaded = TRUE;
-    SEAHORSE_PGP_KEY_CLASS (seahorse_gpgme_key_parent_class)->set_photos (base, photos);
-    renumber_actual_uids (self);
 }
 
 static SeahorseDeleter *
@@ -590,18 +536,49 @@ seahorse_gpgme_key_init (SeahorseGpgmeKey *self)
 }
 
 static void
+on_photos_changed (GListModel *list,
+                   guint       position,
+                   guint       removed,
+                   guint       added,
+                   gpointer    user_data)
+{
+    SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (user_data);
+
+    renumber_actual_uids (self);
+}
+
+static void
+on_uids_changed (GListModel *list,
+                 guint       position,
+                 guint       removed,
+                 guint       added,
+                 gpointer    user_data)
+{
+    SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (user_data);
+
+    renumber_actual_uids (self);
+}
+
+static void
 seahorse_gpgme_key_object_constructed (GObject *object)
 {
     SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (object);
+    GListModel *uids;
+    GListModel *photos;
 
     G_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->constructed (object);
+
+    uids = seahorse_pgp_key_get_uids (SEAHORSE_PGP_KEY (self));
+    g_signal_connect (uids, "items-changed", G_CALLBACK (on_uids_changed), self);
+    photos = seahorse_pgp_key_get_photos (SEAHORSE_PGP_KEY (self));
+    g_signal_connect (photos, "items-changed", G_CALLBACK (on_photos_changed), self);
 
     seahorse_gpgme_key_realize (self);
 }
 
 static void
 seahorse_gpgme_key_get_property (GObject *object, guint prop_id,
-                               GValue *value, GParamSpec *pspec)
+                                 GValue *value, GParamSpec *pspec)
 {
     SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (object);
 
@@ -623,7 +600,7 @@ seahorse_gpgme_key_get_property (GObject *object, guint prop_id,
 
 static void
 seahorse_gpgme_key_set_property (GObject *object, guint prop_id, const GValue *value,
-                               GParamSpec *pspec)
+                                 GParamSpec *pspec)
 {
     SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (object);
 
@@ -648,9 +625,6 @@ seahorse_gpgme_key_object_dispose (GObject *obj)
         gpgme_key_unref (self->seckey);
     self->pubkey = self->seckey = NULL;
 
-    seahorse_object_list_free (self->uids);
-    self->uids = NULL;
-
     G_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->dispose (obj);
 }
 
@@ -661,7 +635,6 @@ seahorse_gpgme_key_object_finalize (GObject *obj)
 
     g_assert (self->pubkey == NULL);
     g_assert (self->seckey == NULL);
-    g_assert (self->uids == NULL);
 
     G_OBJECT_CLASS (seahorse_gpgme_key_parent_class)->finalize (G_OBJECT (self));
 }
@@ -670,19 +643,12 @@ static void
 seahorse_gpgme_key_class_init (SeahorseGpgmeKeyClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    SeahorsePgpKeyClass *pgp_class = SEAHORSE_PGP_KEY_CLASS (klass);
 
     gobject_class->constructed = seahorse_gpgme_key_object_constructed;
     gobject_class->dispose = seahorse_gpgme_key_object_dispose;
     gobject_class->finalize = seahorse_gpgme_key_object_finalize;
     gobject_class->set_property = seahorse_gpgme_key_set_property;
     gobject_class->get_property = seahorse_gpgme_key_get_property;
-
-    pgp_class->get_uids = seahorse_gpgme_key_get_uids;
-    pgp_class->set_uids = seahorse_gpgme_key_set_uids;
-    pgp_class->get_subkeys = seahorse_gpgme_key_get_subkeys;
-    pgp_class->get_photos = seahorse_gpgme_key_get_photos;
-    pgp_class->set_photos = seahorse_gpgme_key_set_photos;
 
     g_object_class_install_property (gobject_class, PROP_PUBKEY,
         g_param_spec_boxed ("pubkey", "GPGME Public Key", "GPGME Public Key that this object represents",

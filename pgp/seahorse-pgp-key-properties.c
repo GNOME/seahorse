@@ -376,19 +376,19 @@ names_populate (SeahorsePgpKeyProperties *self, GtkTreeStore *store, SeahorsePgp
     GObject *object;
     GtkTreeIter uiditer, sigiter;
     GList *keys, *l;
-    GList *uids, *u;
+    GListModel *uids;
     GList *sigs, *s;
 
     /* Insert all the fun-ness */
     uids = seahorse_pgp_key_get_uids (pkey);
 
-    for (u = uids; u; u = g_list_next (u)) {
-        SeahorsePgpUid *uid;
+    for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
+        g_autoptr(SeahorsePgpUid) uid = NULL;
         g_autoptr(GIcon) icon = NULL;
         g_autoptr(GPtrArray) keyids = NULL;
         g_autoptr(GCancellable) cancellable = NULL;
 
-        uid = SEAHORSE_PGP_UID (u->data);
+        uid = g_list_model_get_item (uids, i);
         icon = g_themed_icon_new ("avatar-default-symbolic");
         gtk_tree_store_append (store, &uiditer, NULL);
         gtk_tree_store_set (store, &uiditer,
@@ -585,10 +585,14 @@ set_photoid_state (SeahorsePgpKeyProperties *self)
     SeahorsePgpPhoto *photo;
     gboolean is_gpgme;
     GdkPixbuf *pixbuf;
-    GList *photos;
+    GListModel *photos;
+    guint n_photos;
+    g_autoptr(SeahorsePgpPhoto) first_photo = NULL;
+    g_autoptr(SeahorsePgpPhoto) last_photo = NULL;
 
     etype = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
     photos = seahorse_pgp_key_get_photos (self->key);
+    n_photos = g_list_model_get_n_items (photos);
 
     photo = g_object_get_data (G_OBJECT (self), "current-photoid");
     g_return_if_fail (!photo || SEAHORSE_PGP_IS_PHOTO (photo));
@@ -597,22 +601,22 @@ set_photoid_state (SeahorsePgpKeyProperties *self)
     if (etype == SEAHORSE_USAGE_PRIVATE_KEY) {
         gtk_widget_set_visible (self->owner_photo_add_button, is_gpgme);
         gtk_widget_set_visible (self->owner_photo_primary_button,
-                                is_gpgme && photos && photos->next);
+                                is_gpgme && n_photos> 1);
         gtk_widget_set_visible (self->owner_photo_delete_button,
                                 is_gpgme && photo);
     }
 
     /* Display both of these when there is more than one photo id */
-    gtk_widget_set_visible (self->owner_photo_previous_button,
-                            photos && photos->next);
-    gtk_widget_set_visible (self->owner_photo_next_button,
-                            photos && photos->next);
+    gtk_widget_set_visible (self->owner_photo_previous_button, n_photos > 1);
+    gtk_widget_set_visible (self->owner_photo_next_button, n_photos > 1);
 
     /* Change sensitivity if first/last photo id */
+    first_photo = g_list_model_get_item (photos, 0);
+    last_photo = g_list_model_get_item (photos, MAX (n_photos - 1, 0));
     set_action_enabled (self, "photos.previous",
-                        photo && photos && photo != g_list_first (photos)->data);
+                        photo && photo != first_photo);
     set_action_enabled (self, "photos.next",
-                        photo && photos && photo != g_list_last (photos)->data);
+                        photo && photo != last_photo);
 
     pixbuf = photo ? seahorse_pgp_photo_get_pixbuf (photo) : NULL;
     if (pixbuf)
@@ -622,16 +626,31 @@ set_photoid_state (SeahorsePgpKeyProperties *self)
 static void
 do_photo_id (SeahorsePgpKeyProperties *self)
 {
-    GList *photos;
+    GListModel *photos;
+    g_autoptr(SeahorsePgpPhoto) first_photo = NULL;
 
     photos = seahorse_pgp_key_get_photos (self->key);
-    if (!photos)
-        g_object_set_data (G_OBJECT (self), "current-photoid", NULL);
-    else
+    first_photo = g_list_model_get_item (photos, 0);
+    if (first_photo)
         g_object_set_data_full (G_OBJECT (self), "current-photoid",
-                                g_object_ref (photos->data), g_object_unref);
+                                g_steal_pointer (&first_photo), g_object_unref);
+    else
+        g_object_set_data (G_OBJECT (self), "current-photoid", NULL);
 
     set_photoid_state (self);
+}
+
+static guint
+find_photo_index (GListModel *photos, SeahorsePgpPhoto *photo)
+{
+    for (guint i = 0; i < g_list_model_get_n_items (photos); i++) {
+        g_autoptr(SeahorsePgpPhoto) foto = g_list_model_get_item (photos, i);
+
+        if (photo == foto)
+            return i;
+    }
+
+    g_return_val_if_reached (0);
 }
 
 static void
@@ -639,16 +658,19 @@ on_photos_next (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorsePgpPhoto *photo;
-    GList *photos;
+    GListModel *photos;
 
     photos = seahorse_pgp_key_get_photos (self->key);
     photo = g_object_get_data (G_OBJECT (self), "current-photoid");
     if (photo) {
-        g_return_if_fail (SEAHORSE_PGP_IS_PHOTO (photo));
-        photos = g_list_find (photos, photo);
-        if (photos && photos->next)
+        guint index;
+        g_autoptr(SeahorsePgpPhoto) next = NULL;
+
+        index = find_photo_index (photos, photo);
+        next = g_list_model_get_item (photos, index + 1);
+        if (next)
             g_object_set_data_full (G_OBJECT (self), "current-photoid",
-                                    g_object_ref (photos->next->data),
+                                    g_steal_pointer (&next),
                                     g_object_unref);
     }
 
@@ -660,17 +682,22 @@ on_photos_previous (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorsePgpPhoto *photo;
-    GList *photos;
+    GListModel *photos;
 
     photos = seahorse_pgp_key_get_photos (self->key);
     photo = g_object_get_data (G_OBJECT (self), "current-photoid");
     if (photo) {
-        g_return_if_fail (SEAHORSE_PGP_IS_PHOTO (photo));
-        photos = g_list_find (photos, photo);
-        if (photos && photos->prev)
+        guint index;
+
+        index = find_photo_index (photos, photo);
+        if (index > 0) {
+            g_autoptr(SeahorsePgpPhoto) prev = NULL;
+
+            prev = g_list_model_get_item (photos, index - 1);
             g_object_set_data_full (G_OBJECT (self), "current-photoid",
-                                    g_object_ref (photos->prev->data),
+                                    g_steal_pointer (&prev),
                                     g_object_unref);
+        }
     }
 
     set_photoid_state (self);
@@ -763,8 +790,9 @@ do_owner (SeahorsePgpKeyProperties *self)
     GtkListStore *store;
     GtkTreeIter iter;
     guint flags;
-    const gchar *label;
-    GList *uids, *l;
+    const char *label;
+    GListModel *uids;
+    g_autoptr(SeahorsePgpUid) primary_uid = NULL;
 
     flags = seahorse_object_get_flags (SEAHORSE_OBJECT (self->key));
 
@@ -799,17 +827,15 @@ do_owner (SeahorsePgpKeyProperties *self)
 
     /* Hide or show the uids area */
     uids = seahorse_pgp_key_get_uids (self->key);
+    primary_uid = g_list_model_get_item (uids, 0);
     if (self->uids_area != NULL)
-        gtk_widget_set_visible (self->uids_area, uids != NULL);
-    if (uids != NULL) {
+        gtk_widget_set_visible (self->uids_area, primary_uid != NULL);
+    if (primary_uid != NULL) {
         g_autofree gchar *title = NULL;
         g_autofree gchar *email_escaped = NULL;
         g_autofree gchar *email_label = NULL;
-        SeahorsePgpUid *uid;
 
-        uid = SEAHORSE_PGP_UID (uids->data);
-
-        label = seahorse_pgp_uid_get_name (uid);
+        label = seahorse_pgp_uid_get_name (primary_uid);
         gtk_label_set_text (self->owner_name_label, label);
 
         if (seahorse_object_get_usage (SEAHORSE_OBJECT (self->key)) != SEAHORSE_USAGE_PRIVATE_KEY) {
@@ -821,14 +847,14 @@ do_owner (SeahorsePgpKeyProperties *self)
         }
         gtk_window_set_title (GTK_WINDOW (self), title);
 
-        label = seahorse_pgp_uid_get_email (uid);
+        label = seahorse_pgp_uid_get_email (primary_uid);
         if (label && *label) {
             email_escaped = g_markup_escape_text (label, -1);
             email_label = g_strdup_printf ("<a href=\"mailto:%s\">%s</a>", label, email_escaped);
             gtk_label_set_markup (self->owner_email_label, email_label);
         }
 
-        label = seahorse_pgp_uid_get_comment (uid);
+        label = seahorse_pgp_uid_get_comment (primary_uid);
         gtk_label_set_text (self->owner_comment_label, label);
 
         label = seahorse_object_get_identifier (SEAHORSE_OBJECT (self->key));
@@ -860,15 +886,16 @@ do_owner (SeahorsePgpKeyProperties *self)
                                                          "markup", UID_MARKUP, NULL);
         }
 
-        for (l = uids; l; l = g_list_next (l)) {
-            const gchar *markup;
+        for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
+            g_autoptr(SeahorsePgpUid) uid = g_list_model_get_item (uids, i);
+            const char *markup;
             g_autoptr(GIcon) icon = NULL;
 
-            markup = seahorse_object_get_markup (l->data);
+            markup = seahorse_object_get_markup (SEAHORSE_OBJECT (uid));
             icon = g_themed_icon_new ("avatar-default-symbolic");
             gtk_list_store_append (store, &iter);
             gtk_list_store_set (store, &iter,
-                                UID_OBJECT, l->data,
+                                UID_OBJECT, uid,
                                 UID_ICON, icon,
                                 UID_MARKUP, markup, -1);
         }
@@ -1031,15 +1058,17 @@ static void
 on_subkeys_change_expires (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    SeahorsePgpSubkey *subkey;
-    GList *subkeys;
+    g_autoptr(SeahorsePgpSubkey) subkey = NULL;
     GtkDialog *dialog;
 
     subkey = get_selected_subkey (self);
     if (subkey == NULL) {
+        GListModel *subkeys;
+
         subkeys = seahorse_pgp_key_get_subkeys (self->key);
-        if (subkeys)
-            subkey = subkeys->data;
+        subkey = g_list_model_get_item (subkeys, 0);
+    } else {
+        g_object_ref (subkey);
     }
 
     g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
@@ -1132,14 +1161,17 @@ static void
 on_change_expires (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    GList *subkeys;
+    GListModel *subkeys;
+    g_autoptr(SeahorseGpgmeSubkey) subkey = NULL;
     GtkDialog *dialog;
 
     subkeys = seahorse_pgp_key_get_subkeys (self->key);
-    g_return_if_fail (subkeys);
+    g_return_if_fail (g_list_model_get_n_items (subkeys) > 0);
 
-    dialog = seahorse_gpgme_expires_dialog_new (SEAHORSE_GPGME_SUBKEY (subkeys->data),
-                                                GTK_WINDOW (self));
+    subkey = SEAHORSE_GPGME_SUBKEY (g_list_model_get_item (subkeys, 0));
+    g_return_if_fail (subkey);
+
+    dialog = seahorse_gpgme_expires_dialog_new (subkey, GTK_WINDOW (self));
     gtk_dialog_run (dialog);
     gtk_widget_destroy (GTK_WIDGET (dialog));
 }
@@ -1198,22 +1230,20 @@ setup_trust_combobox (SeahorsePgpKeyProperties *self)
 static void
 do_details (SeahorsePgpKeyProperties *self)
 {
-    SeahorsePgpSubkey *subkey;
     GtkListStore *store;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    gchar dbuffer[G_ASCII_DTOSTR_BUF_SIZE];
-    g_autofree gchar *fp_label = NULL;
-    g_autofree gchar *created_str = NULL;
-    g_autofree gchar *expires_str = NULL;
-    const gchar *label;
-    gint trust;
-    GList *subkeys, *l;
+    char dbuffer[G_ASCII_DTOSTR_BUF_SIZE];
+    g_autofree char *fp_label = NULL;
+    g_autofree char *created_str = NULL;
+    g_autofree char *expires_str = NULL;
+    const char *label;
+    int trust;
+    GListModel *subkeys;
     gboolean valid;
 
     subkeys = seahorse_pgp_key_get_subkeys (self->key);
-    g_return_if_fail (subkeys && subkeys->data);
-    subkey = SEAHORSE_PGP_SUBKEY (subkeys->data);
+    g_return_if_fail (g_list_model_get_n_items (subkeys) > 0);
 
     label = seahorse_object_get_identifier (SEAHORSE_OBJECT (self->key));
     gtk_label_set_text (self->details_id_label, label);
@@ -1226,13 +1256,13 @@ do_details (SeahorsePgpKeyProperties *self)
     label = seahorse_pgp_key_get_algo (self->key);
     gtk_label_set_text (self->details_algo_label, label);
 
-    created_str = seahorse_util_get_display_date_string (seahorse_pgp_subkey_get_created (subkey));
+    created_str = seahorse_util_get_display_date_string (seahorse_pgp_key_get_created (self->key));
     gtk_label_set_text (self->details_created_label, created_str);
 
-    g_ascii_dtostr (dbuffer, G_ASCII_DTOSTR_BUF_SIZE, seahorse_pgp_subkey_get_length (subkey));
+    g_ascii_dtostr (dbuffer, G_ASCII_DTOSTR_BUF_SIZE, seahorse_pgp_key_get_length (self->key));
     gtk_label_set_text (self->details_strength_label, dbuffer);
 
-    gulong expires = seahorse_pgp_subkey_get_expires (subkey);
+    gulong expires = seahorse_pgp_key_get_length (self->key);
     if (!SEAHORSE_GPGME_IS_KEY (self->key))
         expires_str = NULL;
     else if (expires == 0)
@@ -1297,15 +1327,16 @@ do_details (SeahorsePgpKeyProperties *self)
                                                      "text", SUBKEY_LENGTH, NULL);
     }
 
-    for (l = subkeys; l; l = g_list_next (l)) {
-        const gchar *status = NULL;
-        g_autofree gchar *expiration_date = NULL;
-        g_autofree gchar *created_date = NULL;
-        g_autofree gchar *usage = NULL;
+    for (guint i = 0; i < g_list_model_get_n_items (subkeys); i++) {
+        g_autoptr(SeahorsePgpSubkey) subkey = NULL;
+        const char *status = NULL;
+        g_autofree char *expiration_date = NULL;
+        g_autofree char *created_date = NULL;
+        g_autofree char *usage = NULL;
         gulong expires;
         guint flags;
 
-        subkey = SEAHORSE_PGP_SUBKEY (l->data);
+        subkey = g_list_model_get_item (subkeys, i);
         expires = seahorse_pgp_subkey_get_expires (subkey);
         flags = seahorse_pgp_subkey_get_flags (subkey);
         status = "";
@@ -1424,8 +1455,9 @@ signatures_populate_model (SeahorsePgpKeyProperties *self, SeahorseObjectModel *
     GtkTreeIter iter;
     gboolean have_sigs = FALSE;
     g_autoptr(GPtrArray) rawids = NULL;
-    GList *keys, *l, *uids;
+    GListModel *uids;
     GList *sigs, *s;
+    GList *keys, *l;
 
     if (self->signatures_tree == NULL)
         return;
@@ -1434,8 +1466,9 @@ signatures_populate_model (SeahorsePgpKeyProperties *self, SeahorseObjectModel *
     uids = seahorse_pgp_key_get_uids (self->key);
 
     /* Build a list of all the keyids */
-    for (l = uids; l; l = g_list_next (l)) {
-        sigs = seahorse_pgp_uid_get_signatures (l->data);
+    for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
+        g_autoptr(SeahorsePgpUid) uid = g_list_model_get_item (uids, i);
+        sigs = seahorse_pgp_uid_get_signatures (uid);
         for (s = sigs; s; s = g_list_next (s)) {
             /* Never show self signatures, they're implied */
             if (seahorse_pgp_key_has_keyid (self->key,
@@ -1511,13 +1544,15 @@ trust_filter (GtkTreeModel *model, GtkTreeIter *iter, gpointer userdata)
 static gboolean
 key_have_signatures (SeahorsePgpKey *pkey, guint types)
 {
-    GList *uids, *u;
-    GList *sigs, *s;
+    GListModel *uids;
 
     uids = seahorse_pgp_key_get_uids (pkey);
-    for (u = uids; u; u = g_list_next (u)) {
-        sigs = seahorse_pgp_uid_get_signatures (u->data);
-        for (s = sigs; s; s = g_list_next (s)) {
+    for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
+        g_autoptr(SeahorsePgpUid) uid = g_list_model_get_item (uids, i);
+        GList *sigs;
+
+        sigs = seahorse_pgp_uid_get_signatures (uid);
+        for (GList *s = sigs; s; s = g_list_next (s)) {
             if (seahorse_pgp_signature_get_sigtype (s->data) & types)
                 return TRUE;
         }

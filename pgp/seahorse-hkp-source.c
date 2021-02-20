@@ -33,7 +33,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-object-list.h"
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
 
@@ -237,11 +236,7 @@ parse_hkp_index (const char *response)
     g_auto(GStrv) lines = NULL;
     SeahorsePgpKey *key = NULL;
     GList *keys = NULL;
-    GList *subkeys = NULL;
-    GList *uids = NULL;
     SeahorseFlags flags;
-    gboolean has_uid = FALSE;
-    char *uid_string;
     guint key_total = 0, key_count = 0;
 
     lines = g_strsplit (response, "\n", 0);
@@ -270,28 +265,19 @@ parse_hkp_index (const char *response)
         /* start a new key */
         /* pub:<keyid>:<algo>:<keylen>:<creationdate>:<expirationdate>:<flags> */
         } else if (g_ascii_strncasecmp (columns[0], "pub", 3) == 0) {
-            gchar *fingerprint, *fpr = NULL;
-            const gchar *algo;
-            SeahorsePgpSubkey *subkey;
-            glong created = 0, expired = 0;
+            const char *fpr;
+            g_autofree char *fingerprint = NULL;
+            const char *algo;
+            g_autoptr (SeahorsePgpSubkey) subkey = NULL;
+            long created = 0, expired = 0;
 
             key_count++;
 
             /* reset previous key */
             if (key) {
                 g_debug ("HKP Parse: previous key found");
-                if(has_uid) {
-                  seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
-                  g_list_free_full (uids, g_object_unref);
-                  seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
-                  g_list_free_full (subkeys, g_object_unref);
-                  seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
-                  keys = g_list_prepend (keys, key);
-                } else {
-                  g_debug("HKP Parse: no uid found");
-                }
-                uids = subkeys = NULL;
-                has_uid = FALSE;
+                seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
+                keys = g_list_prepend (keys, key);
                 key = NULL;
             }
 
@@ -302,9 +288,8 @@ parse_hkp_index (const char *response)
 
             /* Cut the length and fingerprint */
             fpr = columns[1];
-            if (fpr == NULL) {
+            if (fpr == NULL)
                 g_message ("couldn't find key fingerprint in line from server: %s", line);
-            }
 
             /* Check out the key type */
             switch (strtol(columns[2], NULL, 10)) {
@@ -319,19 +304,19 @@ parse_hkp_index (const char *response)
                 default:
                    break;
             }
-            g_debug("Algo: %s", algo);
+            g_debug ("Algo: %s", algo);
 
             /* set dates */
             /* created */
-            if (!columns[4]){
-                g_debug("HKP Parse: No created date for key on line: %s", line);
+            if (!columns[4]) {
+                g_debug ("HKP Parse: No created date for key on line: %s", line);
             } else {
-                created = strtol(columns[4], NULL, 10);
+                created = strtol (columns[4], NULL, 10);
             }
 
             /* expires (optional) */
-            if (columns[5]){
-                expired = strtol(columns[5], NULL, 10);
+            if (columns[5]) {
+                expired = strtol (columns[5], NULL, 10);
             }
 
             /* set flags (optional) */
@@ -351,28 +336,25 @@ parse_hkp_index (const char *response)
 
             fingerprint = seahorse_pgp_subkey_calc_fingerprint (fpr);
             seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
-            g_free (fingerprint);
 
             seahorse_pgp_subkey_set_flags (subkey, flags);
-
             seahorse_pgp_subkey_set_created (subkey, created);
             seahorse_pgp_subkey_set_expires (subkey, expired);
             seahorse_pgp_subkey_set_length (subkey, strtol (columns[3], NULL, 10));
             seahorse_pgp_subkey_set_algorithm (subkey, algo);
-            subkeys = g_list_prepend (subkeys, subkey);
+            seahorse_pgp_key_add_subkey (key, subkey);
 
         /* A UID for the key */
         } else if (g_ascii_strncasecmp (columns[0], "uid", 3) == 0) {
-            SeahorsePgpUid *uid;
+            g_autoptr (SeahorsePgpUid) uid = NULL;
+            g_autofree char *uid_string = NULL;
 
             if (!key) {
                 g_debug("HKP Parse: Warning: seen uid line before keyline, skipping");
-                g_strfreev(columns);
                 continue;
             }
 
             g_debug("HKP Parse: handle uid");
-            has_uid = TRUE;
 
             if (!columns[0] || !columns[1] || !columns[2]) {
                 g_message ("HKP Parse: Invalid uid line from server: %s", line);
@@ -383,32 +365,18 @@ parse_hkp_index (const char *response)
             g_debug("HKP Parse: decoded uid string: %s", uid_string);
 
             uid = seahorse_pgp_uid_new (key, uid_string);
-            uids = g_list_prepend (uids, uid);
+            seahorse_pgp_key_add_uid (key, uid);
         }
     }
 
-    /* handle last entry */
-    if (key) {
-        if (has_uid) {
-            seahorse_pgp_key_set_uids (SEAHORSE_PGP_KEY (key), uids);
-            g_list_free_full (uids, g_object_unref);
-            seahorse_pgp_key_set_subkeys (SEAHORSE_PGP_KEY (key), subkeys);
-            g_list_free_full (subkeys, g_object_unref);
-            seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
-            keys = g_list_prepend (keys, key);
-        } else {
-            g_debug("HKP Parse: No UID found.");
-        }
-        uids = subkeys = NULL;
-        has_uid = FALSE;
-        key = NULL;
-    }
+    /* Make sure the keys are realized */
+    for (GList *k = keys; k; k = g_list_next (k))
+        seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (k->data));
 
     if (key_total != 0 && key_total != key_count) {
-        g_message("HKP Parse; Warning: Issue during HKP parsing, only %d keys were parsed out of %d", key_count, key_total);
-
+        g_message ("HKP Parse; Warning: Issue during HKP parsing, only %d keys were parsed out of %d", key_count, key_total);
     } else {
-        g_debug("HKP Parse: %d keys parsed successfully", key_count);
+        g_debug ("HKP Parse: %d keys parsed successfully", key_count);
     }
 
     return keys;

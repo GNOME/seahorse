@@ -22,6 +22,7 @@
 #include <glib-object.h>
 
 #include "seahorse-common.h"
+#include "seahorse-pgp-types.h"
 
 enum {
     SKEY_PGPSIG_TRUSTED = 0x0001,
@@ -33,42 +34,43 @@ G_DECLARE_DERIVABLE_TYPE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_PGP, KEY, S
 
 struct _SeahorsePgpKeyClass {
     SeahorseObjectClass parent_class;
-
-    /* virtual methods */
-    GList* (*get_uids) (SeahorsePgpKey *self);
-    void   (*set_uids) (SeahorsePgpKey *self, GList *uids);
-
-    GList* (*get_subkeys) (SeahorsePgpKey *self);
-    void   (*set_subkeys) (SeahorsePgpKey *self, GList *uids);
-
-    GList* (*get_photos) (SeahorsePgpKey *self);
-    void   (*set_photos) (SeahorsePgpKey *self, GList *uids);
 };
 
 SeahorsePgpKey *  seahorse_pgp_key_new                  (void);
 
 void              seahorse_pgp_key_realize              (SeahorsePgpKey *self);
 
-GList*            seahorse_pgp_key_get_subkeys          (SeahorsePgpKey *self);
+GListModel *      seahorse_pgp_key_get_subkeys          (SeahorsePgpKey *self);
 
-void              seahorse_pgp_key_set_subkeys          (SeahorsePgpKey *self,
-                                                         GList *subkeys);
+void              seahorse_pgp_key_add_subkey           (SeahorsePgpKey    *self,
+                                                         SeahorsePgpSubkey *subkey);
 
-GList*            seahorse_pgp_key_get_uids             (SeahorsePgpKey *self);
+void              seahorse_pgp_key_remove_subkey        (SeahorsePgpKey    *self,
+                                                         SeahorsePgpSubkey *subkey);
 
-void              seahorse_pgp_key_set_uids             (SeahorsePgpKey *self,
-                                                         GList *subkeys);
+GListModel *      seahorse_pgp_key_get_uids             (SeahorsePgpKey *self);
 
-GList*            seahorse_pgp_key_get_photos           (SeahorsePgpKey *self);
+void              seahorse_pgp_key_add_uid              (SeahorsePgpKey *self,
+                                                         SeahorsePgpUid *uid);
 
-void              seahorse_pgp_key_set_photos           (SeahorsePgpKey *self,
-                                                         GList *subkeys);
+void              seahorse_pgp_key_remove_uid           (SeahorsePgpKey *self,
+                                                         SeahorsePgpUid *uid);
+
+GListModel *      seahorse_pgp_key_get_photos           (SeahorsePgpKey *self);
+
+void              seahorse_pgp_key_add_photo            (SeahorsePgpKey *self,
+                                                         SeahorsePgpPhoto *photo);
+
+void              seahorse_pgp_key_remove_photo         (SeahorsePgpKey *self,
+                                                         SeahorsePgpPhoto *photo);
 
 const char*       seahorse_pgp_key_get_fingerprint      (SeahorsePgpKey *self);
 
 SeahorseValidity  seahorse_pgp_key_get_validity         (SeahorsePgpKey *self);
 
 gulong            seahorse_pgp_key_get_expires          (SeahorsePgpKey *self);
+
+gulong            seahorse_pgp_key_get_created          (SeahorsePgpKey *self);
 
 SeahorseValidity  seahorse_pgp_key_get_trust            (SeahorsePgpKey *self);
 

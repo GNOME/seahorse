@@ -23,7 +23,7 @@
 
 #include "seahorse-common.h"
 
-#include "seahorse-pgp-key.h"
+#include "seahorse-pgp-types.h"
 
 #define SEAHORSE_PGP_TYPE_UID            (seahorse_pgp_uid_get_type ())
 G_DECLARE_DERIVABLE_TYPE (SeahorsePgpUid, seahorse_pgp_uid, SEAHORSE_PGP, UID, SeahorseObject)

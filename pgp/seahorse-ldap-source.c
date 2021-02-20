@@ -34,7 +34,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-object-list.h"
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
 
@@ -744,11 +743,10 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
     length = get_int_attribute (ldap, res, "pgpkeysize");
 
     if (fpr && uidstr) {
-        SeahorsePgpSubkey *subkey;
+        g_autoptr (SeahorsePgpSubkey) subkey = NULL;
         g_autoptr(SeahorsePgpKey) key = NULL;
         g_autofree char *fingerprint = NULL;
-        SeahorsePgpUid *uid;
-        GList *list;
+        g_autoptr(SeahorsePgpUid) uid = NULL;
         guint flags;
 
         /* Build up a subkey */
@@ -774,14 +772,10 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
         uid = seahorse_pgp_uid_new (key, uidstr);
         if (revoked)
             seahorse_pgp_uid_set_validity (uid, SEAHORSE_VALIDITY_REVOKED);
+        seahorse_pgp_key_add_uid (key, uid);
 
         /* Now build them into a key */
-        list = g_list_prepend (NULL, uid);
-        seahorse_pgp_key_set_uids (key, list);
-        seahorse_object_list_free (list);
-        list = g_list_prepend (NULL, subkey);
-        seahorse_pgp_key_set_subkeys (key, list);
-        seahorse_object_list_free (list);
+        seahorse_pgp_key_add_subkey (key, subkey);
         g_object_set (key,
                       "object-flags", flags,
                       "place", self,
