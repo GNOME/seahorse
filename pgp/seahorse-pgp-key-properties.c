@@ -86,7 +86,6 @@ struct _SeahorsePgpKeyProperties {
     GtkLabel *details_created_label;
     GtkLabel *details_strength_label;
     GtkLabel *details_expires_label;
-    GtkBox *indicate_trust_box;
     GtkComboBox *details_trust_combobox;
     GtkTreeView *details_subkey_tree;
 
@@ -98,6 +97,7 @@ struct _SeahorsePgpKeyProperties {
     GtkWidget *owner_photo_primary_button;
 
     /* Public key widgets */
+    GtkBox *indicate_trust_box;
     GtkTreeView *owner_userid_tree;
     GtkTreeView *signatures_tree;
     GtkWidget *signatures_area;
@@ -1271,8 +1271,10 @@ do_details (SeahorsePgpKeyProperties *self)
         expires_str = seahorse_util_get_display_date_string (expires);
     gtk_label_set_text (self->details_expires_label, expires_str);
 
-    gtk_widget_set_visible (GTK_WIDGET (self->indicate_trust_box),
-                            SEAHORSE_GPGME_IS_KEY (self->key));
+    if (seahorse_object_get_usage (SEAHORSE_OBJECT (self->key)) == SEAHORSE_USAGE_PUBLIC_KEY) {
+        gtk_widget_set_visible (GTK_WIDGET (self->indicate_trust_box),
+                                SEAHORSE_GPGME_IS_KEY (self->key));
+    }
     gtk_widget_set_sensitive (GTK_WIDGET (self->details_trust_combobox),
                               !(seahorse_object_get_flags (SEAHORSE_OBJECT (self->key)) & SEAHORSE_FLAG_DISABLED));
 
@@ -1737,7 +1739,6 @@ get_common_widgets (SeahorsePgpKeyProperties *self, GtkBuilder *builder)
     self->details_created_label = GTK_LABEL (gtk_builder_get_object (builder, "details-created-label"));
     self->details_strength_label = GTK_LABEL (gtk_builder_get_object (builder, "details-strength-label"));
     self->details_expires_label = GTK_LABEL (gtk_builder_get_object (builder, "details-expires-label"));
-    self->indicate_trust_box = GTK_BOX (gtk_builder_get_object (builder, "indicate_trust_box"));
     self->details_trust_combobox = GTK_COMBO_BOX (gtk_builder_get_object (builder, "details-trust-combobox"));
     self->details_subkey_tree = GTK_TREE_VIEW (gtk_builder_get_object (builder, "details-subkey-tree"));
 
@@ -1778,6 +1779,7 @@ create_public_key_dialog (SeahorsePgpKeyProperties *self)
     self->signatures_area = GTK_WIDGET (gtk_builder_get_object (builder, "signatures-area"));
     self->uids_area = GTK_WIDGET (gtk_builder_get_object (builder, "uids-area"));
     self->trust_page = GTK_WIDGET (gtk_builder_get_object (builder, "trust-page"));
+    self->indicate_trust_box = GTK_BOX (gtk_builder_get_object (builder, "indicate_trust_box"));
     self->trust_sign_label = GTK_LABEL (gtk_builder_get_object (builder, "trust-sign-label"));
     self->trust_revoke_label = GTK_LABEL (gtk_builder_get_object (builder, "trust-revoke-label"));
     self->manual_trust_area = GTK_WIDGET (gtk_builder_get_object (builder, "manual-trust-area"));
