@@ -521,7 +521,7 @@ on_pgp_owner_photo_drag_received (GtkWidget *widget,
 
         uri_list = gtk_selection_data_get_uris (sel_data);
         while (uri_list && uri_list[len]) {
-            g_autofree gchar *uri;
+            g_autofree char *uri = NULL;
 
             uri = g_filename_from_uri (uri_list[len], NULL, NULL);
             if (!uri)
