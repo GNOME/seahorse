@@ -18,45 +18,24 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-public class Seahorse.Prefs : Gtk.Dialog {
-
-    private Gtk.Notebook notebook;
+public class Seahorse.Prefs : Hdy.PreferencesWindow {
 
     /**
      * Create a new preferences window.
      *
      * @param parent The Gtk.Window to set as the preferences dialog's parent
      */
-    public Prefs(Gtk.Window? parent, string? tabid = null) {
+    public Prefs(Gtk.Window? parent) {
         GLib.Object (
             title: _("Preferences"),
             transient_for: parent,
+            search_enabled: false,
             modal: true
         );
 
-        var builder = new Gtk.Builder();
-        try {
-            string path = "/org/gnome/Seahorse/seahorse-prefs.ui";
-            builder.add_from_resource(path);
-        } catch (GLib.Error err) {
-            GLib.critical("%s", err.message);
-        }
-        Gtk.Box content = (Gtk.Box) builder.get_object("prefs");
-        get_content_area().border_width = 0;
-        get_content_area().add(content);
-        this.notebook = (Gtk.Notebook) builder.get_object("notebook");
-
 #if WITH_KEYSERVER
-        var keyservers = new PrefsKeyservers(this);
-        var label = new Gtk.Label("Keyservers");
-        add_tab(label, keyservers);
+        add (new PrefsKeyservers());
 #endif
-
-        if (tabid != null) {
-            Gtk.Widget? tab = builder.get_object(tabid) as Gtk.Widget;
-            if (tab != null)
-                select_tab(tab);
-        }
     }
 
     public static bool available() {
@@ -65,38 +44,5 @@ public class Seahorse.Prefs : Gtk.Dialog {
 #else
         return false;
 #endif
-    }
-
-    /**
-     * Add a tab to the preferences window
-     *
-     * @param label Label for the tab to be added
-     * @param tab Tab to be added
-     */
-    public void add_tab(Gtk.Widget? label, Gtk.Widget? tab) {
-        label.show();
-        this.notebook.prepend_page(tab, label);
-    }
-
-    /**
-     * Sets the input tab to be the active one
-     *
-     * @param tab The tab to be set active
-     */
-    public void select_tab(Gtk.Widget? tab) {
-        int pos = this.notebook.page_num(tab);
-        if (pos != -1)
-            this.notebook.set_current_page(pos);
-    }
-
-    /**
-     * Removes a tab from the preferences window
-     *
-     * @tab: The tab to be removed
-     */
-    public void remove_tab(Gtk.Widget? tab) {
-        int pos = this.notebook.page_num(tab);
-        if (pos != -1)
-            this.notebook.remove_page(pos);
     }
 }

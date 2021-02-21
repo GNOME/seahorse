@@ -194,7 +194,6 @@ public class Seahorse.Application : Gtk.Application {
 
     private void on_app_preferences(SimpleAction action, Variant? param) {
         Prefs prefs_dialog = new Prefs(this.key_mgr);
-        prefs_dialog.run();
-        prefs_dialog.destroy();
+        prefs_dialog.present();
     }
 }

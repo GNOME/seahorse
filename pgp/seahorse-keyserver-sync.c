@@ -94,9 +94,8 @@ on_sync_ok_clicked (GtkButton *button, SeahorseWidget *swidget)
 G_MODULE_EXPORT void
 on_sync_configure_clicked (GtkButton *button, SeahorseWidget *swidget)
 {
-    SeahorsePrefs *prefs_dialog = seahorse_prefs_new (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)), "keyserver-tab");
-    gtk_dialog_run (GTK_DIALOG (prefs_dialog));
-    gtk_widget_destroy (GTK_WIDGET (prefs_dialog));
+    SeahorsePrefs *prefs = seahorse_prefs_new (GTK_WINDOW (seahorse_widget_get_widget (swidget, swidget->name)));
+    gtk_window_present (GTK_WINDOW (prefs));
 }
 
 static void

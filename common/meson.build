@@ -32,6 +32,7 @@ common_deps = [
   gtk,
   gcr,
   gcr_ui,
+  libhandy_dep,
   config,
 ]
 

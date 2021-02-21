@@ -19,7 +19,7 @@
  */
 
 [GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-prefs-keyservers.ui")]
-public class Seahorse.PrefsKeyservers : Gtk.Box {
+public class Seahorse.PrefsKeyservers : Hdy.PreferencesPage {
 
     [GtkChild]
     public unowned Gtk.Grid keyserver_tab;
@@ -34,7 +34,7 @@ public class Seahorse.PrefsKeyservers : Gtk.Box {
     [GtkChild]
     private unowned Gtk.CheckButton auto_sync;
 
-    public PrefsKeyservers(Gtk.Window? parent) {
+    public PrefsKeyservers() {
         var model = Pgp.Backend.get().get_remotes();
         this.keyservers_list.bind_model(model, (item) => {
             return new KeyServerRow(item as ServerSource);
