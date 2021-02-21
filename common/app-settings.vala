@@ -18,6 +18,8 @@
  */
 
 public class Seahorse.AppSettings : GLib.Settings {
+
+    [CCode (array_null_terminated = true, array_length = false)]
     public string[] last_search_servers {
         owned get { return get_strv("last-search-servers"); }
         set { set_strv("last-search-servers", value); }

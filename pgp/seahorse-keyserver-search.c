@@ -213,24 +213,23 @@ foreach_child_select_checks (GtkWidget *widget, gpointer user_data)
 static void
 select_inital_keyservers (SeahorseKeyserverSearch *self)
 {
-	SeahorseAppSettings *app_settings;
-	gchar **names;
-	guint i;
+    SeahorseAppSettings *app_settings;
+    g_auto(GStrv) names = NULL;
 
-	app_settings = seahorse_app_settings_instance ();
-	names = seahorse_app_settings_get_last_search_servers (app_settings, NULL);
+    app_settings = seahorse_app_settings_instance ();
+    names = seahorse_app_settings_get_last_search_servers (app_settings);
 
-	/* We do case insensitive matches */
-	for (i = 0; names[i] != NULL; i++) {
-		gchar *name;
+    /* We do case insensitive matches */
+    for (guint i = 0; names[i] != NULL; i++) {
+        char *name;
 
-		name = g_utf8_casefold (names[i], -1);
-		g_free (names[i]);
-		names[i] = name;
-	}
+        name = g_utf8_casefold (names[i], -1);
+        g_free (names[i]);
+        names[i] = name;
+    }
 
-	gtk_container_foreach (GTK_CONTAINER (self->key_server_list), foreach_child_select_checks, names);
-	gtk_container_foreach (GTK_CONTAINER (self->shared_keys_list), foreach_child_select_checks, names);
+    gtk_container_foreach (GTK_CONTAINER (self->key_server_list), foreach_child_select_checks, names);
+    gtk_container_foreach (GTK_CONTAINER (self->shared_keys_list), foreach_child_select_checks, names);
 }
 
 /* Populating Lists --------------------------------------------------------- */

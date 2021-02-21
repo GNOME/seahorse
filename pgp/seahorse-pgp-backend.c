@@ -526,7 +526,7 @@ seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
     g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
 
     /* Get a list of all selected key servers */
-    names = g_settings_get_strv (G_SETTINGS (self->pgp_settings), "last-search-servers");
+    names = seahorse_app_settings_get_last_search_servers (seahorse_app_settings_instance ());
     if (names != NULL && names[0] != NULL) {
         servers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
         for (guint i = 0; names[i] != NULL; i++)
