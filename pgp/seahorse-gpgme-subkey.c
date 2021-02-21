@@ -62,12 +62,14 @@ seahorse_gpgme_subkey_get_subkey (SeahorseGpgmeSubkey *self)
 void
 seahorse_gpgme_subkey_set_subkey (SeahorseGpgmeSubkey *self, gpgme_subkey_t subkey)
 {
-    g_autofree gchar *description = NULL, *fingerprint = NULL, *name = NULL;
+    g_autofree char *description = NULL, *fingerprint = NULL, *name = NULL;
     SeahorsePgpSubkey *base;
-    const gchar *algo_type;
+    const char *algo_type;
     GObject *obj;
     gpgme_subkey_t sub;
-    gint i, index;
+    int i, index;
+    g_autoptr(GDateTime) created = NULL;
+    g_autoptr(GDateTime) expires = NULL;
     guint flags;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (self));
@@ -107,8 +109,13 @@ seahorse_gpgme_subkey_set_subkey (SeahorseGpgmeSubkey *self, gpgme_subkey_t subk
     seahorse_pgp_subkey_set_length (base, subkey->length);
     seahorse_pgp_subkey_set_description (base, description);
     seahorse_pgp_subkey_set_fingerprint (base, fingerprint);
-    seahorse_pgp_subkey_set_created (base, subkey->timestamp);
-    seahorse_pgp_subkey_set_expires (base, subkey->expires);
+
+    if (subkey->timestamp > 0)
+        created = g_date_time_new_from_unix_utc (subkey->timestamp);
+    seahorse_pgp_subkey_set_created (base, created);
+    if (subkey->expires > 0)
+        expires = g_date_time_new_from_unix_utc (subkey->expires);
+    seahorse_pgp_subkey_set_expires (base, expires);
 
     /* The order below is significant */
     flags = 0;

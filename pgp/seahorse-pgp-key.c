@@ -471,7 +471,7 @@ seahorse_pgp_key_get_validity (SeahorsePgpKey *self)
     return validity;
 }
 
-gulong
+GDateTime *
 seahorse_pgp_key_get_expires (SeahorsePgpKey *self)
 {
     SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
@@ -483,7 +483,7 @@ seahorse_pgp_key_get_expires (SeahorsePgpKey *self)
     return subkey? seahorse_pgp_subkey_get_expires (subkey) : 0;
 }
 
-gulong
+GDateTime *
 seahorse_pgp_key_get_created (SeahorsePgpKey *self)
 {
     SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
@@ -607,7 +607,7 @@ seahorse_pgp_key_get_property (GObject *object, guint prop_id,
             g_value_set_string (value, _("PGP key"));
         break;
     case PROP_EXPIRES:
-        g_value_set_ulong (value, seahorse_pgp_key_get_expires (self));
+        g_value_set_boxed (value, seahorse_pgp_key_get_expires (self));
         break;
     case PROP_LENGTH:
         g_value_set_uint (value, seahorse_pgp_key_get_length (self));
@@ -693,8 +693,8 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
     obj_props[PROP_EXPIRES] =
-        g_param_spec_ulong ("expires", "Expires On", "Date this key expires on",
-                            0, G_MAXULONG, 0,
+        g_param_spec_boxed ("expires", "Expires On", "Date this key expires on",
+                            G_TYPE_DATE_TIME,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
     obj_props[PROP_LENGTH] =

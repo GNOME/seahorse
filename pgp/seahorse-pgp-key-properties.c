@@ -802,16 +802,16 @@ do_owner (SeahorsePgpKeyProperties *self)
 
     /* Update the expired message */
     if (flags & SEAHORSE_FLAG_EXPIRED) {
-        gulong expires_date;
-        g_autofree gchar *message = NULL;
-        g_autofree gchar *date_str = NULL;
+        GDateTime *expires_date;
+        g_autofree char *date_str = NULL;
+        g_autofree char *message = NULL;
 
         expires_date = seahorse_pgp_key_get_expires (self->key);
-        if (expires_date == 0) {
+        if (!expires_date) {
             /* TRANSLATORS: (unknown) expiry date */
             date_str = g_strdup (_("(unknown)"));
         } else {
-            date_str = seahorse_util_get_display_date_string (expires_date);
+            date_str = g_date_time_format (expires_date, "%x");
         }
 
         message = g_strdup_printf (_("This key expired on: %s"), date_str);
@@ -988,7 +988,7 @@ on_subkeys_add (GSimpleAction *action, GVariant *param, gpointer user_data)
     int response;
     SeahorseKeyEncType type;
     guint length;
-    gulong expires;
+    g_autoptr(GDateTime) expires = NULL;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
 
@@ -1235,8 +1235,7 @@ do_details (SeahorsePgpKeyProperties *self)
     GtkTreeIter iter;
     char dbuffer[G_ASCII_DTOSTR_BUF_SIZE];
     g_autofree char *fp_label = NULL;
-    g_autofree char *created_str = NULL;
-    g_autofree char *expires_str = NULL;
+    GDateTime *created;
     const char *label;
     int trust;
     GListModel *subkeys;
@@ -1256,20 +1255,30 @@ do_details (SeahorsePgpKeyProperties *self)
     label = seahorse_pgp_key_get_algo (self->key);
     gtk_label_set_text (self->details_algo_label, label);
 
-    created_str = seahorse_util_get_display_date_string (seahorse_pgp_key_get_created (self->key));
-    gtk_label_set_text (self->details_created_label, created_str);
+    created = seahorse_pgp_key_get_created (self->key);
+    if (created) {
+        g_autofree char *created_str = NULL;
+
+        created_str = g_date_time_format (created, "%x");
+        gtk_label_set_text (self->details_created_label, created_str);
+    }
 
     g_ascii_dtostr (dbuffer, G_ASCII_DTOSTR_BUF_SIZE, seahorse_pgp_key_get_length (self->key));
     gtk_label_set_text (self->details_strength_label, dbuffer);
 
-    gulong expires = seahorse_pgp_key_get_length (self->key);
-    if (!SEAHORSE_GPGME_IS_KEY (self->key))
-        expires_str = NULL;
-    else if (expires == 0)
-        expires_str = g_strdup (C_("Expires", "Never"));
-    else
-        expires_str = seahorse_util_get_display_date_string (expires);
-    gtk_label_set_text (self->details_expires_label, expires_str);
+    if (SEAHORSE_GPGME_IS_KEY (self->key)) {
+        GDateTime *expires;
+        g_autofree char *expires_str = NULL;
+
+        expires = seahorse_pgp_key_get_expires (self->key);
+        if (expires)
+            expires_str = g_date_time_format (expires, "%x");
+        else
+            expires_str = g_strdup (C_("Expires", "Never"));
+        gtk_label_set_text (self->details_expires_label, expires_str);
+    } else {
+        gtk_label_set_text (self->details_expires_label, NULL);
+    }
 
     if (seahorse_object_get_usage (SEAHORSE_OBJECT (self->key)) == SEAHORSE_USAGE_PUBLIC_KEY) {
         gtk_widget_set_visible (GTK_WIDGET (self->indicate_trust_box),
@@ -1335,7 +1344,7 @@ do_details (SeahorsePgpKeyProperties *self)
         g_autofree char *expiration_date = NULL;
         g_autofree char *created_date = NULL;
         g_autofree char *usage = NULL;
-        gulong expires;
+        GDateTime *expires;
         guint flags;
 
         subkey = g_list_model_get_item (subkeys, i);
@@ -1352,12 +1361,12 @@ do_details (SeahorsePgpKeyProperties *self)
         else if (flags & SEAHORSE_FLAG_IS_VALID)
             status = _("Good");
 
-        if (expires == 0)
+        if (!expires)
             expiration_date = g_strdup (C_("Expires", "Never"));
         else
-            expiration_date = seahorse_util_get_display_date_string (expires);
+            expiration_date = g_date_time_format (expires, "%x");
 
-        created_date = seahorse_util_get_display_date_string (seahorse_pgp_subkey_get_created (subkey));
+        created_date = g_date_time_format (seahorse_pgp_subkey_get_created (subkey), "%x");
 
         usage = seahorse_pgp_subkey_get_usage (subkey);
 

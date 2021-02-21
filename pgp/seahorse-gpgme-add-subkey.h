@@ -37,4 +37,4 @@ SeahorseKeyEncType       seahorse_gpgme_add_subkey_get_active_type   (SeahorseGp
 
 guint                    seahorse_gpgme_add_subkey_get_keysize       (SeahorseGpgmeAddSubkey *self);
 
-gulong                   seahorse_gpgme_add_subkey_get_expires       (SeahorseGpgmeAddSubkey *self);
+GDateTime *              seahorse_gpgme_add_subkey_get_expires       (SeahorseGpgmeAddSubkey *self);

@@ -132,7 +132,7 @@ seahorse_gpgme_add_subkey_get_active_type (SeahorseGpgmeAddSubkey *self)
     }
 }
 
-gulong
+GDateTime *
 seahorse_gpgme_add_subkey_get_expires (SeahorseGpgmeAddSubkey *self)
 {
     time_t expires;
@@ -144,7 +144,7 @@ seahorse_gpgme_add_subkey_get_expires (SeahorseGpgmeAddSubkey *self)
 
     egg_datetime_get_as_time_t (EGG_DATETIME (self->expires_datetime),
                                 &expires);
-    return expires;
+    return g_date_time_new_from_unix_utc (expires);
 }
 
 guint

@@ -270,6 +270,8 @@ parse_hkp_index (const char *response)
             const char *algo;
             g_autoptr (SeahorsePgpSubkey) subkey = NULL;
             long created = 0, expired = 0;
+            g_autoptr(GDateTime) created_date = NULL;
+            g_autoptr(GDateTime) expired_date = NULL;
 
             key_count++;
 
@@ -312,11 +314,15 @@ parse_hkp_index (const char *response)
                 g_debug ("HKP Parse: No created date for key on line: %s", line);
             } else {
                 created = strtol (columns[4], NULL, 10);
+                if (created > 0)
+                    created_date = g_date_time_new_from_unix_utc (created);
             }
 
             /* expires (optional) */
             if (columns[5]) {
                 expired = strtol (columns[5], NULL, 10);
+                if (expired > 0)
+                    expired_date = g_date_time_new_from_unix_utc (expired);
             }
 
             /* set flags (optional) */
@@ -338,8 +344,8 @@ parse_hkp_index (const char *response)
             seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
 
             seahorse_pgp_subkey_set_flags (subkey, flags);
-            seahorse_pgp_subkey_set_created (subkey, created);
-            seahorse_pgp_subkey_set_expires (subkey, expired);
+            seahorse_pgp_subkey_set_created (subkey, created_date);
+            seahorse_pgp_subkey_set_expires (subkey, expired_date);
             seahorse_pgp_subkey_set_length (subkey, strtol (columns[3], NULL, 10));
             seahorse_pgp_subkey_set_algorithm (subkey, algo);
             seahorse_pgp_key_add_subkey (key, subkey);

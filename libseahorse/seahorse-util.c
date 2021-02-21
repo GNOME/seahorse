@@ -103,31 +103,6 @@ seahorse_util_error_domain ()
 }
 
 /** 
- * seahorse_util_get_date_string:
- * @time: Time value to parse
- *
- * Creates a string representation of @time for use with gpg.
- *
- * Returns: A string representing @time. The returned string should be freed
- * with #g_free when no longer needed.
- **/
-gchar*
-seahorse_util_get_date_string (const time_t time)
-{
-	GDate *created_date;
-	gchar *created_string;
-	
-	if (time == 0)
-		return "0";
-	
-	created_date = g_date_new ();
-	g_date_set_time_t (created_date, time);
-	created_string = g_new (gchar, 11);
-	g_date_strftime (created_string, 11, "%Y-%m-%d", created_date);
-	return created_string;
-}
-
-/** 
  * seahorse_util_print_fd:
  * @fd: The file descriptor to write to
  * @s:  The data to write

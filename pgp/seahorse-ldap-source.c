@@ -754,10 +754,19 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
         seahorse_pgp_subkey_set_keyid (subkey, fpr);
         fingerprint = seahorse_pgp_subkey_calc_fingerprint (fpr);
         seahorse_pgp_subkey_set_fingerprint (subkey, fingerprint);
-        seahorse_pgp_subkey_set_created (subkey, timestamp);
-        seahorse_pgp_subkey_set_expires (subkey, expires);
         seahorse_pgp_subkey_set_algorithm (subkey, algo);
         seahorse_pgp_subkey_set_length (subkey, length);
+
+        if (timestamp > 0) {
+            g_autoptr(GDateTime) created_date = NULL;
+            created_date = g_date_time_new_from_unix_utc (timestamp);
+            seahorse_pgp_subkey_set_created (subkey, created_date);
+        }
+        if (expires > 0) {
+            g_autoptr(GDateTime) expires_date = NULL;
+            expires_date = g_date_time_new_from_unix_utc (expires);
+            seahorse_pgp_subkey_set_expires (subkey, expires_date);
+        }
 
         flags = SEAHORSE_FLAG_EXPORTABLE;
         if (revoked)

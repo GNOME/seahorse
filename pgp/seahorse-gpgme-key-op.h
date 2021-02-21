@@ -61,16 +61,16 @@ typedef enum {
 } SeahorseRevokeReason;
 
 void                  seahorse_gpgme_key_op_generate_async   (SeahorseGpgmeKeyring *keyring,
-                                                              const gchar *name,
-                                                              const gchar *email,
-                                                              const gchar *comment,
-                                                              const gchar *passphrase,
-                                                              SeahorseKeyEncType type,
-                                                              guint length,
-                                                              time_t expires,
-                                                              GCancellable *cancellable,
-                                                              GAsyncReadyCallback callback,
-                                                              gpointer user_data);
+                                                              const char           *name,
+                                                              const char           *email,
+                                                              const char           *comment,
+                                                              const char           *passphrase,
+                                                              SeahorseKeyEncType    type,
+                                                              unsigned int          length,
+                                                              GDateTime            *expires,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
 
 gboolean              seahorse_gpgme_key_op_generate_finish  (SeahorseGpgmeKeyring *keyring,
                                                               GAsyncResult *Result,
@@ -106,7 +106,7 @@ gpgme_error_t         seahorse_gpgme_key_op_set_disabled     (SeahorseGpgmeKey *
                                                               gboolean disabled);
 
 gpgme_error_t         seahorse_gpgme_key_op_set_expires      (SeahorseGpgmeSubkey *subkey,
-                                                              time_t expires);
+                                                              GDateTime           *expires);
 
 gpgme_error_t         seahorse_gpgme_key_op_add_revoker      (SeahorseGpgmeKey *pkey, 
                                                               SeahorseGpgmeKey *revoker);
@@ -134,13 +134,13 @@ gboolean          seahorse_gpgme_key_op_make_primary_finish (SeahorseGpgmeUid *u
 
 gpgme_error_t         seahorse_gpgme_key_op_del_uid          (SeahorseGpgmeUid *uid);
 
-void              seahorse_gpgme_key_op_add_subkey_async    (SeahorseGpgmeKey *pkey,
-                                                             SeahorseKeyEncType type,
-                                                             guint length,
-                                                             gulong expires,
-                                                             GCancellable *cancellable,
-                                                             GAsyncReadyCallback callback,
-                                                             gpointer user_data);
+void              seahorse_gpgme_key_op_add_subkey_async    (SeahorseGpgmeKey     *pkey,
+                                                             SeahorseKeyEncType    type,
+                                                             unsigned int          length,
+                                                             GDateTime            *expires,
+                                                             GCancellable         *cancellable,
+                                                             GAsyncReadyCallback   callback,
+                                                             gpointer              user_data);
 
 gboolean          seahorse_gpgme_key_op_add_subkey_finish   (SeahorseGpgmeKey *pkey,
                                                              GAsyncResult *result,
@@ -154,9 +154,9 @@ gpgme_error_t         seahorse_gpgme_key_op_revoke_subkey    (SeahorseGpgmeSubke
 
 gpgme_error_t         seahorse_gpgme_key_op_photo_add        (SeahorseGpgmeKey *pkey,
                                                               const gchar *filename);
- 
+
 gpgme_error_t         seahorse_gpgme_key_op_photo_delete     (SeahorseGpgmePhoto *photo);
-                                                     
+
 gpgme_error_t         seahorse_gpgme_key_op_photos_load      (SeahorseGpgmeKey *key);
 
 gpgme_error_t         seahorse_gpgme_key_op_photo_primary    (SeahorseGpgmePhoto *photo);

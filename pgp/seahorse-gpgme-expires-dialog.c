@@ -52,23 +52,21 @@ seahorse_gpgme_expires_dialog_response (GtkDialog *dialog, int response)
 {
     SeahorseGpgmeExpiresDialog *self = SEAHORSE_GPGME_EXPIRES_DIALOG (dialog);
     gpgme_error_t err;
-    time_t expiry = 0;
+    g_autoptr(GDateTime) expires = NULL;
+    GDateTime *old_expires;
 
     if (response != GTK_RESPONSE_OK)
         return;
 
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->never_expires_check))) {
-        struct tm when;
+        unsigned int y, m, d;
+        g_autoptr(GDateTime) now = NULL;
 
-        memset (&when, 0, sizeof (when));
-        gtk_calendar_get_date (GTK_CALENDAR (self->calendar),
-                               (guint*) &(when.tm_year),
-                               (guint*) &(when.tm_mon),
-                               (guint*) &(when.tm_mday));
-        when.tm_year -= 1900;
-        expiry = mktime (&when);
+        gtk_calendar_get_date (GTK_CALENDAR (self->calendar), &y, &m, &d);
+        expires = g_date_time_new_utc (y, m, d, 0, 0, 0);
+        now = g_date_time_new_now_utc ();
 
-        if (expiry <= time (NULL)) {
+        if (g_date_time_compare (expires, now) <= 0) {
             seahorse_util_show_error (self->calendar, _("Invalid expiry date"),
                                       _("The expiry date must be in the future"));
             return;
@@ -77,11 +75,13 @@ seahorse_gpgme_expires_dialog_response (GtkDialog *dialog, int response)
 
     gtk_widget_set_sensitive (gtk_dialog_get_content_area (GTK_DIALOG (self)), FALSE);
 
-    if (expiry != (time_t)seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (self->subkey))) {
-        err = seahorse_gpgme_key_op_set_expires (self->subkey, expiry);
-        if (!GPG_IS_OK (err))
-            seahorse_gpgme_handle_error (err, _("Couldn’t change expiry date"));
-    }
+    old_expires = seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (self->subkey));
+    if (expires == old_expires && (expires && g_date_time_equal (old_expires, expires)))
+        return;
+
+    err = seahorse_gpgme_key_op_set_expires (self->subkey, expires);
+    if (!GPG_IS_OK (err))
+        seahorse_gpgme_handle_error (err, _("Couldn’t change expiry date"));
 }
 
 static void
@@ -147,7 +147,7 @@ seahorse_gpgme_expires_dialog_constructed (GObject *obj)
     SeahorseGpgmeExpiresDialog *self = SEAHORSE_GPGME_EXPIRES_DIALOG (obj);
     g_autofree char *title = NULL;
     const char *label;
-    gulong expires;
+    GDateTime *expires;
 
     G_OBJECT_CLASS (seahorse_gpgme_expires_dialog_parent_class)->constructed (obj);
 
@@ -156,21 +156,18 @@ seahorse_gpgme_expires_dialog_constructed (GObject *obj)
     gtk_window_set_title (GTK_WINDOW (self), title);
 
     expires = seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (self->subkey));
-    if (expires == 0) {
+    if (expires == NULL) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->never_expires_check), TRUE);
         gtk_widget_set_sensitive (self->calendar, FALSE);
     } else {
+        int y, m, d;
+
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->never_expires_check), FALSE);
         gtk_widget_set_sensitive (self->calendar, TRUE);
-    }
 
-    if (expires) {
-        struct tm t;
-        time_t time = (time_t)expires;
-        if (gmtime_r (&time, &t)) {
-            gtk_calendar_select_month (GTK_CALENDAR (self->calendar), t.tm_mon, t.tm_year + 1900);
-            gtk_calendar_select_day (GTK_CALENDAR (self->calendar), t.tm_mday);
-        }
+        g_date_time_get_ymd (expires, &y, &m, &d);
+        gtk_calendar_select_month (GTK_CALENDAR (self->calendar), m, y);
+        gtk_calendar_select_day (GTK_CALENDAR (self->calendar), d);
     }
 }
 

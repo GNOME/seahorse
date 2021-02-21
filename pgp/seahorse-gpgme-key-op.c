@@ -93,29 +93,29 @@ on_key_op_generate_complete (gpgme_error_t gerr,
  * @passphrase: Passphrase for key
  * @type: Key type. Supported types are #DSA_ELGAMAL, #DSA, #RSA_SIGN, and #RSA_RSA
  * @length: Length of key, must be within the range of @type specified by #SeahorseKeyLength
- * @expires: Expiration date of key
- * 
+ * @expires: Expiration date of key (or %NULL if none)
+ *
  * Tries to generate a new key based on given parameters.
- **/
+ */
 void
 seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
-                                      const gchar *name,
-                                      const gchar *email,
-                                      const gchar *comment,
-                                      const gchar *passphrase,
-                                      const SeahorseKeyEncType type,
-                                      const guint length,
-                                      const time_t expires,
-                                      GCancellable *cancellable,
-                                      GAsyncReadyCallback callback,
-                                      gpointer user_data)
+                                      const char           *name,
+                                      const char           *email,
+                                      const char           *comment,
+                                      const char           *passphrase,
+                                      SeahorseKeyEncType   type,
+                                      guint                length,
+                                      GDateTime           *expires,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
 {
-    const gchar* key_type;
-    g_autofree gchar *common = NULL, *start = NULL, *expires_date = NULL;
+    const char* key_type;
+    g_autofree char *common = NULL, *start = NULL, *expires_date = NULL;
     gpgme_ctx_t gctx;
     g_autoptr(GTask) task = NULL;
     g_autoptr(GError) error = NULL;
-    const gchar *parms;
+    const char *parms;
     gpgme_error_t gerr = 0;
     g_autoptr(GSource) gsource = NULL;
 
@@ -140,8 +140,8 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
         break;
     }
 
-    if (expires != 0)
-        expires_date = seahorse_util_get_date_string (expires);
+    if (expires)
+        expires_date = g_date_time_format (expires, "%Y-%m-%d");
     else
         expires_date = g_strdup ("0");
 
@@ -980,143 +980,156 @@ seahorse_gpgme_key_op_set_disabled (SeahorseGpgmeKey *pkey, gboolean disabled)
 
 typedef struct
 {
-	guint	index;
-	time_t	expires;
+    unsigned int index;
+    GDateTime *expires;
 } ExpireParm;
 
 typedef enum
 {
-	EXPIRE_START,
-	EXPIRE_SELECT,
-	EXPIRE_COMMAND,
-	EXPIRE_DATE,
-	EXPIRE_QUIT,
-	EXPIRE_SAVE,
-	EXPIRE_ERROR
+    EXPIRE_START,
+    EXPIRE_SELECT,
+    EXPIRE_COMMAND,
+    EXPIRE_DATE,
+    EXPIRE_QUIT,
+    EXPIRE_SAVE,
+    EXPIRE_ERROR
 } ExpireState;
 
 /* action helper for changing expiration date of a key */
 static gpgme_error_t
 edit_expire_action (guint state, gpointer data, int fd)
 {
-	ExpireParm *parm = (ExpireParm*)data;
-  
-	switch (state) {
-		/* selected key */
-		case EXPIRE_SELECT:
+    ExpireParm *parm = (ExpireParm*)data;
+    g_autofree char *expires_str = NULL;
+
+    switch (state) {
+        /* selected key */
+        case EXPIRE_SELECT:
             PRINTF ((fd, "key %d", parm->index));
-			break;
-		case EXPIRE_COMMAND:
+            break;
+        case EXPIRE_COMMAND:
             PRINT ((fd, "expire"));
-			break;
-		/* set date */
-		case EXPIRE_DATE:
-            PRINT ((fd, (parm->expires) ?
-				seahorse_util_get_date_string (parm->expires) : "0"));
-			break;
-		case EXPIRE_QUIT:
+            break;
+        /* set date */
+        case EXPIRE_DATE:
+            expires_str = parm->expires?
+                g_date_time_format (parm->expires, "%Y-%m-%d") : g_strdup ("0");
+            PRINT ((fd, expires_str));
+            break;
+        case EXPIRE_QUIT:
             PRINT ((fd, QUIT));
-			break;
-		case EXPIRE_SAVE:
+            break;
+        case EXPIRE_SAVE:
             PRINT ((fd, YES));
-			break;
-		case EXPIRE_ERROR:
-			break;
-		default:
-			return GPG_E (GPG_ERR_GENERAL);
-	}
+            break;
+        case EXPIRE_ERROR:
+            break;
+        default:
+            return GPG_E (GPG_ERR_GENERAL);
+    }
 
     PRINT ((fd, "\n"));
-	return GPG_OK;
+    return GPG_OK;
 }
 
 /* transition helper for changing expiration date of a key */
 static guint
-edit_expire_transit (guint current_state, gpgme_status_code_t status,
-		     const gchar *args, gpointer data, gpgme_error_t *err)
+edit_expire_transit (unsigned int         current_state,
+                     gpgme_status_code_t  status,
+                     const char          *args,
+                     gpointer             data,
+                     gpgme_error_t       *err)
 {
-	guint next_state;
- 
-	switch (current_state) {
-		/* start state, selected key */
-		case EXPIRE_START:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = EXPIRE_SELECT;
-			else {
+    unsigned int next_state;
+
+    switch (current_state) {
+        /* start state, selected key */
+        case EXPIRE_START:
+            if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+                next_state = EXPIRE_SELECT;
+            else {
                 *err = GPG_E (GPG_ERR_GENERAL);
                 g_return_val_if_reached (EXPIRE_ERROR);
-			}
-			break;
-		/* selected key, do command */
-		case EXPIRE_SELECT:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = EXPIRE_COMMAND;
-			else {
+            }
+            break;
+        /* selected key, do command */
+        case EXPIRE_SELECT:
+            if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+                next_state = EXPIRE_COMMAND;
+            else {
                 *err = GPG_E (GPG_ERR_GENERAL);
                 g_return_val_if_reached (EXPIRE_ERROR);
-			}
-			break;
-		/* did command, set expires */
-		case EXPIRE_COMMAND:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.valid"))
-				next_state = EXPIRE_DATE;
-			else {
+            }
+            break;
+        /* did command, set expires */
+        case EXPIRE_COMMAND:
+            if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, "keygen.valid"))
+                next_state = EXPIRE_DATE;
+            else {
                 *err = GPG_E (GPG_ERR_GENERAL);
                 g_return_val_if_reached (EXPIRE_ERROR);
-			}
-			break;
-		/* set expires, quit */
-		case EXPIRE_DATE:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = EXPIRE_QUIT;
-			else {
+            }
+            break;
+        /* set expires, quit */
+        case EXPIRE_DATE:
+            if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+                next_state = EXPIRE_QUIT;
+            else {
                 *err = GPG_E (GPG_ERR_GENERAL);
                 g_return_val_if_reached (EXPIRE_ERROR);
-			}
-			break;
-		/* quit, save */
-		case EXPIRE_QUIT:
-			if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
-				next_state = EXPIRE_SAVE;
-			else {
+            }
+            break;
+        /* quit, save */
+        case EXPIRE_QUIT:
+            if (status == GPGME_STATUS_GET_BOOL && g_str_equal (args, SAVE))
+                next_state = EXPIRE_SAVE;
+            else {
                 *err = GPG_E (GPG_ERR_GENERAL);
                 g_return_val_if_reached (EXPIRE_ERROR);
-			}
-			break;
-		/* error, quit */
-		case EXPIRE_ERROR:
-			if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
-				next_state = EXPIRE_QUIT;
-			else
-				next_state = EXPIRE_ERROR;
-			break;
-		default:
+            }
+            break;
+        /* error, quit */
+        case EXPIRE_ERROR:
+            if (status == GPGME_STATUS_GET_LINE && g_str_equal (args, PROMPT))
+                next_state = EXPIRE_QUIT;
+            else
+                next_state = EXPIRE_ERROR;
+            break;
+        default:
             *err = GPG_E (GPG_ERR_GENERAL);
             g_return_val_if_reached (EXPIRE_ERROR);
-			break;
-	}
-	return next_state;
+            break;
+    }
+    return next_state;
 }
 
 gpgme_error_t
-seahorse_gpgme_key_op_set_expires (SeahorseGpgmeSubkey *subkey, const time_t expires)
+seahorse_gpgme_key_op_set_expires (SeahorseGpgmeSubkey *subkey,
+                                   GDateTime           *expires)
 {
-	ExpireParm exp_parm;
-	SeahorseEditParm *parms;
-	gpgme_key_t key;
-	
-	g_return_val_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-	g_return_val_if_fail (expires != (time_t)seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (subkey)), GPG_E (GPG_ERR_INV_VALUE));
-	
-	key = seahorse_gpgme_subkey_get_pubkey (subkey);
-	g_return_val_if_fail (key, GPG_E (GPG_ERR_INV_VALUE));
-	
-	exp_parm.index = seahorse_pgp_subkey_get_index (SEAHORSE_PGP_SUBKEY (subkey)); 
-	exp_parm.expires = expires;
-	
-	parms = seahorse_edit_parm_new (EXPIRE_START, edit_expire_action, edit_expire_transit, &exp_parm);
-	
-	return edit_refresh_gpgme_key (NULL, key, parms);
+    GDateTime *old_expires;
+    ExpireParm exp_parm;
+    SeahorseEditParm *parms;
+    gpgme_key_t key;
+
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+
+    old_expires = seahorse_pgp_subkey_get_expires (SEAHORSE_PGP_SUBKEY (subkey));
+    g_return_val_if_fail (expires != old_expires, GPG_E (GPG_ERR_INV_VALUE));
+
+    if (expires && old_expires)
+        g_return_val_if_fail (!g_date_time_equal (old_expires, expires),
+                              GPG_E (GPG_ERR_INV_VALUE));
+
+    key = seahorse_gpgme_subkey_get_pubkey (subkey);
+    g_return_val_if_fail (key, GPG_E (GPG_ERR_INV_VALUE));
+
+    exp_parm.index = seahorse_pgp_subkey_get_index (SEAHORSE_PGP_SUBKEY (subkey)); 
+    exp_parm.expires = expires;
+
+    parms = seahorse_edit_parm_new (EXPIRE_START, edit_expire_action, edit_expire_transit, &exp_parm);
+
+    return edit_refresh_gpgme_key (NULL, key, parms);
 }
 
 typedef enum {
@@ -1317,13 +1330,13 @@ seahorse_gpgme_key_op_add_uid_finish (SeahorseGpgmeKey *pkey,
 }
 
 void
-seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey *pkey,
-                                        SeahorseKeyEncType type,
-                                        guint length,
-                                        gulong expires,
-                                        GCancellable *cancellable,
-                                        GAsyncReadyCallback callback,
-                                        gpointer user_data)
+seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey    *pkey,
+                                        SeahorseKeyEncType   type,
+                                        unsigned int         length,
+                                        GDateTime           *expires,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
 {
     g_autoptr(GTask) task = NULL;
     gpgme_ctx_t gctx;
@@ -1374,8 +1387,14 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey *pkey,
             break;
     }
 
-    if (gerr == 0)
-        gerr = gpgme_op_createsubkey_start (gctx, key, algo_full, 0, expires, flags);
+    if (gerr == 0) {
+        gerr = gpgme_op_createsubkey_start (gctx,
+                                            key,
+                                            algo_full,
+                                            0,
+                                            g_date_time_to_unix (expires),
+                                            flags);
+    }
 
     if (seahorse_gpgme_propagate_error (gerr, &error)) {
         g_task_return_error (task, g_steal_pointer (&error));

@@ -44,14 +44,14 @@ static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
 typedef struct _SeahorsePgpSubkeyPrivate {
     guint index;
-    gchar *keyid;
+    char *keyid;
     guint flags;
     guint length;
-    gchar *algorithm;
-    gulong created;
-    gulong expires;
-    gchar *description;
-    gchar *fingerprint;
+    char *algorithm;
+    GDateTime *created;
+    GDateTime *expires;
+    char *description;
+    char *fingerprint;
 } SeahorsePgpSubkeyPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (SeahorsePgpSubkey, seahorse_pgp_subkey, G_TYPE_OBJECT);
@@ -212,49 +212,49 @@ seahorse_pgp_subkey_set_algorithm (SeahorsePgpSubkey *self, const gchar *algorit
     g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_ALGORITHM]);
 }
 
-gulong
+GDateTime *
 seahorse_pgp_subkey_get_created (SeahorsePgpSubkey *self)
 {
-    SeahorsePgpSubkeyPrivate *priv;
+    SeahorsePgpSubkeyPrivate *priv = seahorse_pgp_subkey_get_instance_private (self);
 
     g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), 0);
 
-    priv = seahorse_pgp_subkey_get_instance_private (self);
     return priv->created;
 }
 
 void
-seahorse_pgp_subkey_set_created (SeahorsePgpSubkey *self, gulong created)
+seahorse_pgp_subkey_set_created (SeahorsePgpSubkey *self,
+                                 GDateTime         *created)
 {
-    SeahorsePgpSubkeyPrivate *priv;
+    SeahorsePgpSubkeyPrivate *priv = seahorse_pgp_subkey_get_instance_private (self);
 
     g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 
-    priv = seahorse_pgp_subkey_get_instance_private (self);
-    priv->created = created;
+    g_clear_pointer (&priv->created, g_date_time_unref);
+    priv->created = created? g_date_time_ref (created) : NULL;
     g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_CREATED]);
 }
 
-gulong
+GDateTime *
 seahorse_pgp_subkey_get_expires (SeahorsePgpSubkey *self)
 {
-    SeahorsePgpSubkeyPrivate *priv;
+    SeahorsePgpSubkeyPrivate *priv = seahorse_pgp_subkey_get_instance_private (self);
 
     g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), 0);
 
-    priv = seahorse_pgp_subkey_get_instance_private (self);
     return priv->expires;
 }
 
 void
-seahorse_pgp_subkey_set_expires (SeahorsePgpSubkey *self, gulong expires)
+seahorse_pgp_subkey_set_expires (SeahorsePgpSubkey *self,
+                                 GDateTime         *expires)
 {
-    SeahorsePgpSubkeyPrivate *priv;
+    SeahorsePgpSubkeyPrivate *priv = seahorse_pgp_subkey_get_instance_private (self);
 
     g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
 
-    priv = seahorse_pgp_subkey_get_instance_private (self);
-    priv->expires = expires;
+    g_clear_pointer (&priv->expires, g_date_time_unref);
+    priv->expires = expires? g_date_time_ref (expires) : NULL;
     g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_EXPIRES]);
 }
 
@@ -378,10 +378,10 @@ seahorse_pgp_subkey_get_property (GObject *object, guint prop_id,
         g_value_set_string (value, seahorse_pgp_subkey_get_algorithm (self));
         break;
     case PROP_CREATED:
-        g_value_set_ulong (value, seahorse_pgp_subkey_get_created (self));
+        g_value_set_boxed (value, seahorse_pgp_subkey_get_created (self));
         break;
     case PROP_EXPIRES:
-        g_value_set_ulong (value, seahorse_pgp_subkey_get_expires (self));
+        g_value_set_boxed (value, seahorse_pgp_subkey_get_expires (self));
         break;
     case PROP_DESCRIPTION:
         g_value_set_string (value, seahorse_pgp_subkey_get_description (self));
@@ -415,10 +415,10 @@ seahorse_pgp_subkey_set_property (GObject *object, guint prop_id, const GValue *
         seahorse_pgp_subkey_set_algorithm (self, g_value_get_string (value));
         break;
     case PROP_CREATED:
-        seahorse_pgp_subkey_set_created (self, g_value_get_ulong (value));
+        seahorse_pgp_subkey_set_created (self, g_value_get_boxed (value));
         break;
     case PROP_EXPIRES:
-        seahorse_pgp_subkey_set_expires (self, g_value_get_ulong (value));
+        seahorse_pgp_subkey_set_expires (self, g_value_get_boxed (value));
         break;
     case PROP_FINGERPRINT:
         seahorse_pgp_subkey_set_fingerprint (self, g_value_get_string (value));
@@ -436,6 +436,8 @@ seahorse_pgp_subkey_finalize (GObject *gobject)
     SeahorsePgpSubkeyPrivate *priv
         = seahorse_pgp_subkey_get_instance_private (self);
 
+    g_clear_pointer (&priv->created, g_date_time_unref);
+    g_clear_pointer (&priv->expires, g_date_time_unref);
     g_clear_pointer (&priv->algorithm, g_free);
     g_clear_pointer (&priv->fingerprint, g_free);
     g_clear_pointer (&priv->description, g_free);
@@ -484,13 +486,13 @@ seahorse_pgp_subkey_class_init (SeahorsePgpSubkeyClass *klass)
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
     obj_props[PROP_CREATED] =
-        g_param_spec_ulong ("created", "Created On", "Date this key was created on",
-                            0, G_MAXULONG, 0,
+        g_param_spec_boxed ("created", "Created On", "Date this key was created on",
+                            G_TYPE_DATE_TIME,
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
     obj_props[PROP_EXPIRES] =
-        g_param_spec_ulong ("expires", "Expires On", "Date this key expires on",
-                            0, G_MAXULONG, 0,
+        g_param_spec_boxed ("expires", "Expires On", "Date this key expires on",
+                            G_TYPE_DATE_TIME,
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
     obj_props[PROP_DESCRIPTION] =

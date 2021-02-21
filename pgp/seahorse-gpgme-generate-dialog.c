@@ -115,7 +115,7 @@ on_generate_key_complete (GObject *source,
  * @comment: a comment, added to the key
  * @type: key type like DSA_ELGAMAL
  * @bits: the number of bits for the key to generate (2048)
- * @expires: expiry date can be 0
+ * @expires: expiry date (or %NULL if none)
  *
  * Displays a password generation box and creates a key afterwards. For the key
  * data it uses @name @email and @comment ncryption is chosen by @type and @bits
@@ -124,13 +124,13 @@ on_generate_key_complete (GObject *source,
  */
 void
 seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
-                             const char *name,
-                             const char *email,
-                             const char *comment,
-                             guint type,
-                             guint bits,
-                             time_t expires,
-                             GtkWindow *parent)
+                             const char           *name,
+                             const char           *email,
+                             const char           *comment,
+                             unsigned int         type,
+                             unsigned int         bits,
+                             GDateTime           *expires,
+                             GtkWindow           *parent)
 {
     GCancellable *cancellable;
     const gchar *pass;
@@ -229,7 +229,7 @@ seahorse_gpgme_generate_dialog_response (GtkDialog *dialog, int response)
     const char *email, *comment;
     int sel;
     guint type;
-    time_t expires;
+    g_autoptr(GDateTime) expires = NULL;
     guint bits;
 
     if (response != GTK_RESPONSE_OK)
@@ -257,10 +257,12 @@ seahorse_gpgme_generate_dialog_response (GtkDialog *dialog, int response)
     }
 
     /* The expiry */
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->expires_check)))
-        expires = 0;
-    else
-        egg_datetime_get_as_time_t (EGG_DATETIME (self->expiry_date), &expires);
+    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->expires_check))) {
+        time_t time_expires;
+
+        egg_datetime_get_as_time_t (EGG_DATETIME (self->expiry_date), &time_expires);
+        expires = g_date_time_new_from_unix_utc (time_expires);
+    }
 
     /* Less confusing with less on the screen */
     gtk_widget_hide (GTK_WIDGET (self));

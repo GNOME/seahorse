@@ -59,29 +59,29 @@ guint               seahorse_pgp_subkey_get_length        (SeahorsePgpSubkey *se
 void                seahorse_pgp_subkey_set_length        (SeahorsePgpSubkey *self,
                                                            guint index);
 
-gchar *             seahorse_pgp_subkey_get_usage         (SeahorsePgpSubkey *self);
+char *              seahorse_pgp_subkey_get_usage         (SeahorsePgpSubkey *self);
 
-gulong              seahorse_pgp_subkey_get_created       (SeahorsePgpSubkey *self);
+GDateTime *         seahorse_pgp_subkey_get_created       (SeahorsePgpSubkey *self);
 
 void                seahorse_pgp_subkey_set_created       (SeahorsePgpSubkey *self,
-                                                           gulong created);
+                                                           GDateTime         *created);
 
-gulong              seahorse_pgp_subkey_get_expires       (SeahorsePgpSubkey *self);
+GDateTime *         seahorse_pgp_subkey_get_expires       (SeahorsePgpSubkey *self);
 
 void                seahorse_pgp_subkey_set_expires       (SeahorsePgpSubkey *self,
-                                                           gulong expires);
+                                                           GDateTime         *expires);
 
-const gchar*        seahorse_pgp_subkey_get_description   (SeahorsePgpSubkey *self);
+const char *        seahorse_pgp_subkey_get_description   (SeahorsePgpSubkey *self);
 
 void                seahorse_pgp_subkey_set_description   (SeahorsePgpSubkey *self,
-                                                           const gchar *description);
+                                                           const char        *description);
 
-gchar*              seahorse_pgp_subkey_calc_description  (const gchar *name,
-                                                           guint index);
+char *              seahorse_pgp_subkey_calc_description  (const char *name,
+                                                           guint       index);
 
-const gchar*        seahorse_pgp_subkey_get_fingerprint   (SeahorsePgpSubkey *self);
+const char *        seahorse_pgp_subkey_get_fingerprint   (SeahorsePgpSubkey *self);
 
 void                seahorse_pgp_subkey_set_fingerprint   (SeahorsePgpSubkey *self,
-                                                           const gchar *description);
+                                                           const char        *description);
 
-gchar*              seahorse_pgp_subkey_calc_fingerprint  (const gchar *raw_fingerprint);
+char *              seahorse_pgp_subkey_calc_fingerprint  (const char *raw_fingerprint);
