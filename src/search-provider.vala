@@ -118,7 +118,7 @@ public class Seahorse.SearchProvider : GLib.Object {
         };
 
         string?[] results = {};
-        foreach (GLib.Object obj in this.collection.get_objects()) {
+        foreach (unowned GLib.Object obj in this.collection.get_objects()) {
             if (predicate.match(obj)) {
                 string str = "%p".printf(obj);
 
@@ -126,7 +126,7 @@ public class Seahorse.SearchProvider : GLib.Object {
                     this.handles.insert(str, obj);
                     obj.weak_ref(on_object_gone);
                 }
-                results += str;
+                results += (owned) str;
             }
         }
 
@@ -145,7 +145,7 @@ public class Seahorse.SearchProvider : GLib.Object {
 
         string?[] results = {};
         foreach (string previous_result in previous_results) {
-            GLib.Object? object = this.handles.lookup(previous_result);
+            unowned GLib.Object? object = this.handles.lookup(previous_result);
             if (object == null || !this.collection.contains(object))
                 continue; // Bogus value
 
@@ -162,8 +162,8 @@ public class Seahorse.SearchProvider : GLib.Object {
 
         var metas = new HashTable<string, Variant>[results.length];
         int good_results = 0;
-        foreach (string result in results) {
-            GLib.Object object = this.handles.lookup(result);
+        foreach (unowned string result in results) {
+            unowned GLib.Object object = this.handles.lookup(result);
             if (object == null || !(object in this.collection))
                 continue; // Bogus value
 
@@ -196,7 +196,7 @@ public class Seahorse.SearchProvider : GLib.Object {
     public void ActivateResult(string identifier, string[] terms, uint32 timestamp) throws GLib.Error {
         this.app.hold();
 
-        GLib.Object? object = null;
+        unowned GLib.Object? object = null;
         identifier.scanf("%p", &object);
         object = this.handles.lookup(identifier);
         if (object == null || !(object in this.collection) || !(object is Viewable))
@@ -214,7 +214,7 @@ public class Seahorse.SearchProvider : GLib.Object {
     }
 
     private static bool object_matches_search (GLib.Object? object, void* terms) {
-        foreach (string term in ((string[]) terms)) {
+        foreach (unowned string term in ((string[]) terms)) {
             if (!object_contains_filtered_text (object, term))
                 return false;
         }
@@ -241,13 +241,13 @@ public class Seahorse.SearchProvider : GLib.Object {
     }
 
     private void on_place_added (Gcr.Collection places, GLib.Object object) {
-        Place place = (Place) object;
+        unowned var place = (Place) object;
         if (!this.union_collection.have(place))
             this.union_collection.add(place);
     }
 
     private void on_place_removed (Gcr.Collection places, GLib.Object object) {
-        Place place = (Place) object;
+        unowned var place = (Place) object;
         if (this.union_collection.have(place))
             this.union_collection.remove(place);
     }
