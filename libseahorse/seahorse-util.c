@@ -316,19 +316,6 @@ seahorse_util_objects_splice_by_place (GList *objects)
 }
 
 /**
- * seahorse_util_string_lower:
- * @s: ASCII string to change
- *
- * The whole ASCII string will be lower cased.
- */
-void        
-seahorse_util_string_lower (gchar *s)
-{
-    for ( ; *s; s++)
-        *s = g_ascii_tolower (*s);
-}
-
-/**
  * seahorse_util_parse_version:
  *
  * @version: Version number string in the form xx.yy.zz

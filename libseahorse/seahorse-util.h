@@ -59,8 +59,6 @@ GList *     seahorse_util_objects_sort_by_place         (GList *objects);
 
 GList *     seahorse_util_objects_splice_by_place       (GList *objects);
 
-void        seahorse_util_string_lower        (gchar *s);
-
 SeahorseVersion seahorse_util_parse_version   (const char *version);
 
 guint       seahorse_ulong_hash    (gconstpointer v);

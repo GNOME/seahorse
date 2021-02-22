@@ -486,8 +486,12 @@ hkp_message_propagate_error (SeahorseHKPSource *self,
     /* Make the body lower case, and no tags */
     text = g_strndup (message->response_body->data, message->response_body->length);
     if (text != NULL) {
+        char *text_lower;
+
         dehtmlize (text);
-        seahorse_util_string_lower (text);
+        text_lower = g_ascii_strdown (text, -1);
+        g_free (text);
+        text = text_lower;
     }
 
     if (text && strstr (text, "no keys"))
