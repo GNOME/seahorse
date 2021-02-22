@@ -41,7 +41,7 @@ enum {
 
 typedef struct _SeahorsePgpUidPrivate {
     SeahorsePgpKey *parent;
-    GList *signatures;
+    GListModel *signatures;
     SeahorseValidity validity;
     gboolean realized;
     char *name;
@@ -217,6 +217,9 @@ seahorse_pgp_uid_realize (SeahorsePgpUid *self)
 static void
 seahorse_pgp_uid_init (SeahorsePgpUid *self)
 {
+    SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
+
+    priv->signatures = G_LIST_MODEL (g_list_store_new (SEAHORSE_PGP_TYPE_SIGNATURE));
     g_object_set (self, "icon", NULL, "usage", SEAHORSE_USAGE_IDENTITY, NULL);
 }
 
@@ -235,7 +238,7 @@ seahorse_pgp_uid_get_property (GObject *object, guint prop_id,
 
     switch (prop_id) {
     case PROP_SIGNATURES:
-        g_value_set_boxed (value, seahorse_pgp_uid_get_signatures (self));
+        g_value_set_object (value, seahorse_pgp_uid_get_signatures (self));
         break;
     case PROP_PARENT:
         g_value_set_object (value, seahorse_pgp_uid_get_parent (self));
@@ -263,9 +266,6 @@ seahorse_pgp_uid_set_property (GObject *object, guint prop_id, const GValue *val
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
 
     switch (prop_id) {
-    case PROP_SIGNATURES:
-        seahorse_pgp_uid_set_signatures (self, g_value_get_boxed (value));
-        break;
     case PROP_PARENT:
         g_return_if_fail (priv->parent == NULL);
         priv->parent = g_value_get_object (value);
@@ -291,7 +291,7 @@ seahorse_pgp_uid_object_finalize (GObject *gobject)
     SeahorsePgpUid *self = SEAHORSE_PGP_UID (gobject);
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
 
-    g_clear_pointer (&priv->signatures, seahorse_object_list_free);
+    g_clear_object (&priv->signatures);
     g_clear_pointer (&priv->name, g_free);
     g_clear_pointer (&priv->email, g_free);
     g_clear_pointer (&priv->comment, g_free);
@@ -332,9 +332,9 @@ seahorse_pgp_uid_class_init (SeahorsePgpUidClass *klass)
                              "", G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
     g_object_class_install_property (gobject_class, PROP_SIGNATURES,
-        g_param_spec_boxed ("signatures", "Signatures", "Signatures on this UID",
-                            SEAHORSE_BOXED_OBJECT_LIST,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+        g_param_spec_object ("signatures", "Signatures", "Signatures on this UID",
+                             G_TYPE_LIST_MODEL,
+                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 }
 
 /* -----------------------------------------------------------------------------
@@ -369,7 +369,7 @@ seahorse_pgp_uid_get_parent (SeahorsePgpUid *self)
     return priv->parent;
 }
 
-GList*
+GListModel *
 seahorse_pgp_uid_get_signatures (SeahorsePgpUid *self)
 {
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
@@ -379,16 +379,35 @@ seahorse_pgp_uid_get_signatures (SeahorsePgpUid *self)
 }
 
 void
-seahorse_pgp_uid_set_signatures (SeahorsePgpUid *self, GList *signatures)
+seahorse_pgp_uid_add_signature (SeahorsePgpUid       *self,
+                                SeahorsePgpSignature *signature)
 {
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
 
     g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
+    g_return_if_fail (SEAHORSE_PGP_IS_SIGNATURE (signature));
 
-    seahorse_object_list_free (priv->signatures);
-    priv->signatures = seahorse_object_list_copy (signatures);
+    g_list_store_append (G_LIST_STORE (priv->signatures), signature);
+}
 
-    g_object_notify (G_OBJECT (self), "signatures");
+void
+seahorse_pgp_uid_remove_signature (SeahorsePgpUid       *self,
+                                   SeahorsePgpSignature *signature)
+{
+    SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
+
+    g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
+    g_return_if_fail (SEAHORSE_PGP_IS_SIGNATURE (signature));
+
+    for (guint i = 0; i < g_list_model_get_n_items (priv->signatures); i++) {
+        g_autoptr(SeahorsePgpSignature) sig = NULL;
+
+        sig = g_list_model_get_item (priv->signatures, i);
+        if (signature == sig) {
+            g_list_store_remove (G_LIST_STORE (priv->signatures), i);
+            break;
+        }
+    }
 }
 
 SeahorseValidity

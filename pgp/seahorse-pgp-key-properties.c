@@ -377,7 +377,6 @@ names_populate (SeahorsePgpKeyProperties *self, GtkTreeStore *store, SeahorsePgp
     GtkTreeIter uiditer, sigiter;
     GList *keys, *l;
     GListModel *uids;
-    GList *sigs, *s;
 
     /* Insert all the fun-ness */
     uids = seahorse_pgp_key_get_uids (pkey);
@@ -387,6 +386,7 @@ names_populate (SeahorsePgpKeyProperties *self, GtkTreeStore *store, SeahorsePgp
         g_autoptr(GIcon) icon = NULL;
         g_autoptr(GPtrArray) keyids = NULL;
         g_autoptr(GCancellable) cancellable = NULL;
+        GListModel *sigs;
 
         uid = g_list_model_get_item (uids, i);
         icon = g_themed_icon_new ("avatar-default-symbolic");
@@ -401,11 +401,13 @@ names_populate (SeahorsePgpKeyProperties *self, GtkTreeStore *store, SeahorsePgp
 
         /* Build a list of all the keyids */
         sigs = seahorse_pgp_uid_get_signatures (uid);
-        for (s = sigs; s; s = g_list_next (s)) {
+        for (guint j = 0; j < g_list_model_get_n_items (sigs); j++) {
+            g_autoptr(SeahorsePgpSignature) sig = g_list_model_get_item (sigs, j);
+
             /* Never show self signatures, they're implied */
-            if (seahorse_pgp_key_has_keyid (pkey, seahorse_pgp_signature_get_keyid (s->data)))
+            if (seahorse_pgp_key_has_keyid (pkey, seahorse_pgp_signature_get_keyid (sig)))
                 continue;
-            g_ptr_array_add (keyids, (gpointer)seahorse_pgp_signature_get_keyid (s->data));
+            g_ptr_array_add (keyids, (void *) seahorse_pgp_signature_get_keyid (sig));
         }
 
         g_ptr_array_add (keyids, NULL);
@@ -1467,7 +1469,6 @@ signatures_populate_model (SeahorsePgpKeyProperties *self, SeahorseObjectModel *
     gboolean have_sigs = FALSE;
     g_autoptr(GPtrArray) rawids = NULL;
     GListModel *uids;
-    GList *sigs, *s;
     GList *keys, *l;
 
     if (self->signatures_tree == NULL)
@@ -1479,14 +1480,18 @@ signatures_populate_model (SeahorsePgpKeyProperties *self, SeahorseObjectModel *
     /* Build a list of all the keyids */
     for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
         g_autoptr(SeahorsePgpUid) uid = g_list_model_get_item (uids, i);
+        GListModel *sigs;
+
         sigs = seahorse_pgp_uid_get_signatures (uid);
-        for (s = sigs; s; s = g_list_next (s)) {
+        for (guint j = 0; j < g_list_model_get_n_items (sigs); j++) {
+            g_autoptr(SeahorsePgpSignature) sig = g_list_model_get_item (sigs, j);
+
             /* Never show self signatures, they're implied */
             if (seahorse_pgp_key_has_keyid (self->key,
-                                            seahorse_pgp_signature_get_keyid (s->data)))
+                                            seahorse_pgp_signature_get_keyid (sig)))
                 continue;
             have_sigs = TRUE;
-            g_ptr_array_add (rawids, (gchar *)seahorse_pgp_signature_get_keyid (s->data));
+            g_ptr_array_add (rawids, (char *) seahorse_pgp_signature_get_keyid (sig));
         }
     }
 
@@ -1560,11 +1565,12 @@ key_have_signatures (SeahorsePgpKey *pkey, guint types)
     uids = seahorse_pgp_key_get_uids (pkey);
     for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
         g_autoptr(SeahorsePgpUid) uid = g_list_model_get_item (uids, i);
-        GList *sigs;
+        GListModel *sigs;
 
         sigs = seahorse_pgp_uid_get_signatures (uid);
-        for (GList *s = sigs; s; s = g_list_next (s)) {
-            if (seahorse_pgp_signature_get_sigtype (s->data) & types)
+        for (guint j = 0; j < g_list_model_get_n_items (sigs); j++) {
+            g_autoptr(SeahorsePgpSignature) sig = g_list_model_get_item (sigs, j);
+            if (seahorse_pgp_signature_get_sigtype (sig) & types)
                 return TRUE;
         }
     }

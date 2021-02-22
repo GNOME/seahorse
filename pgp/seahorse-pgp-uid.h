@@ -39,10 +39,13 @@ SeahorsePgpKey *  seahorse_pgp_uid_get_parent           (SeahorsePgpUid *self);
 
 void              seahorse_pgp_uid_realize              (SeahorsePgpUid *self);
 
-GList*            seahorse_pgp_uid_get_signatures       (SeahorsePgpUid *self);
+GListModel *      seahorse_pgp_uid_get_signatures       (SeahorsePgpUid *self);
 
-void              seahorse_pgp_uid_set_signatures       (SeahorsePgpUid *self,
-                                                         GList *signatures);
+void              seahorse_pgp_uid_add_signature        (SeahorsePgpUid       *self,
+                                                         SeahorsePgpSignature *signature);
+
+void              seahorse_pgp_uid_remove_signature     (SeahorsePgpUid       *self,
+                                                         SeahorsePgpSignature *signature);
 
 SeahorseValidity  seahorse_pgp_uid_get_validity         (SeahorsePgpUid *self);
 

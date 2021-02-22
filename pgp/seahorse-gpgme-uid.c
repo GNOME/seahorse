@@ -66,8 +66,6 @@ static void
 realize_signatures (SeahorseGpgmeUid *self)
 {
     gpgme_key_sig_t gsig;
-    SeahorsePgpSignature *sig;
-    GList *sigs = NULL;
     guint flags;
 
     g_return_if_fail (self->pubkey);
@@ -78,6 +76,8 @@ realize_signatures (SeahorseGpgmeUid *self)
         return;
 
     for (gsig = self->userid->signatures; gsig; gsig = gsig->next) {
+        g_autoptr(SeahorsePgpSignature) sig = NULL;
+
         sig = seahorse_pgp_signature_new (gsig->keyid);
 
         /* Order of parsing these flags is important */
@@ -92,11 +92,8 @@ realize_signatures (SeahorseGpgmeUid *self)
             flags |= SEAHORSE_FLAG_EXPORTABLE;
 
         seahorse_pgp_signature_set_flags (sig, flags);
-        sigs = g_list_prepend (sigs, sig);
+        seahorse_pgp_uid_add_signature (SEAHORSE_PGP_UID (self), sig);
     }
-
-    seahorse_pgp_uid_set_signatures (SEAHORSE_PGP_UID (self), sigs);
-    seahorse_object_list_free (sigs);
 }
 
 static gboolean
