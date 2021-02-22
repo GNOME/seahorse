@@ -37,7 +37,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-object-list.h"
 #include "libseahorse/seahorse-util.h"
 
 GType   seahorse_pgp_backend_actions_get_type         (void) G_GNUC_CONST;

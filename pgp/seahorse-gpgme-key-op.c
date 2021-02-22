@@ -28,7 +28,6 @@
 #include "seahorse-gpgme-data.h"
 #include "seahorse-gpg-op.h"
 
-#include "libseahorse/seahorse-object-list.h"
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
 

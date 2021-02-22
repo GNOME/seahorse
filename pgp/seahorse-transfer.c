@@ -31,7 +31,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-object-list.h"
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
 
@@ -53,7 +52,7 @@ transfer_closure_free (gpointer user_data)
     g_clear_object (&closure->from);
     g_clear_object (&closure->to);
     g_strfreev (closure->keyids);
-    seahorse_object_list_free (closure->keys);
+    g_list_free_full (closure->keys, g_object_unref);
     g_free (closure);
 }
 
@@ -216,7 +215,7 @@ seahorse_transfer_keys_async (SeahorsePlace *from,
     g_task_set_task_data (task, closure, transfer_closure_free);
 
     if (SEAHORSE_IS_GPGME_KEYRING (from)) {
-        closure->keys = seahorse_object_list_copy (keys);
+        closure->keys = g_list_copy_deep (keys, (GCopyFunc) g_object_ref, NULL);
 
     } else {
         GPtrArray *keyids;

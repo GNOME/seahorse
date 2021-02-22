@@ -6,7 +6,6 @@ libseahorse_marshaller = gnome.genmarshal('seahorse-marshal',
 
 libseahorse_sources = files(
   'seahorse-bind.c',
-  'seahorse-object-list.c',
   'seahorse-object-model.c',
   'seahorse-progress.c',
   'seahorse-util.c',
