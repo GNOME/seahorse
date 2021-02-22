@@ -95,16 +95,6 @@ realize_signatures (SeahorseGpgmeUid *self)
 }
 
 static gboolean
-compare_strings (const gchar *a, const gchar *b)
-{
-    if (a == b)
-        return TRUE;
-    if (!a || !b)
-        return FALSE;
-    return g_str_equal (a, b);
-}
-
-static gboolean
 compare_pubkeys (gpgme_key_t a, gpgme_key_t b)
 {
     g_assert (a);
@@ -113,7 +103,7 @@ compare_pubkeys (gpgme_key_t a, gpgme_key_t b)
     g_return_val_if_fail (a->subkeys, FALSE);
     g_return_val_if_fail (b->subkeys, FALSE);
 
-    return compare_strings (a->subkeys->keyid, b->subkeys->keyid);
+    return g_strcmp0 (a->subkeys->keyid, b->subkeys->keyid) == 0;
 }
 
 /* -----------------------------------------------------------------------------
@@ -249,7 +239,7 @@ seahorse_gpgme_uid_is_same (SeahorseGpgmeUid *self, gpgme_user_id_t userid)
     g_return_val_if_fail (SEAHORSE_GPGME_IS_UID (self), FALSE);
     g_return_val_if_fail (userid, FALSE);
 
-    return compare_strings (self->userid->uid, userid->uid);
+    return g_strcmp0 (self->userid->uid, userid->uid) == 0;
 }
 
 static void
