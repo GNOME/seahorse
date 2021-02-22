@@ -91,7 +91,7 @@ public class Seahorse.ItemList : GLib.Object, GLib.ListModel {
         collection.removed.connect(on_collection_item_removed);
 
         // Add the existing elements
-        foreach (var obj in collection.get_objects())
+        foreach (weak GLib.Object obj in collection.get_objects())
             this.items.add(obj);
 
         // Sort afterwards
@@ -202,7 +202,7 @@ public class Seahorse.ItemList : GLib.Object, GLib.ListModel {
         this.items.remove_range(0, len);
 
         // Add only the ones that match the filter
-        foreach (var obj in this.base_collection.get_objects()) {
+        foreach (weak GLib.Object obj in this.base_collection.get_objects()) {
             if (item_matches_filters(obj))
                 this.items.add(obj);
         }
