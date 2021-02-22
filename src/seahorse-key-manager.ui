@@ -24,7 +24,7 @@
         <attribute name="label" translatable="yes">_Help</attribute>
         <attribute name="action">app.help</attribute>
       </item>
-	  <item>
+      <item>
         <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
@@ -509,64 +509,20 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="HdyStatusPage">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="spacing">24</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="visible">True</property>
-                        <property name="pixel-size">100</property>
-                        <property name="icon-name">org.gnome.seahorse.Application-symbolic</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">This collection seems to be empty</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                    </child>
+                    <property name="icon-name">org.gnome.seahorse.Application-symbolic</property>
+                    <property name="title" translatable="yes">This collection seems to be empty</property>
                   </object>
                   <packing>
                     <property name="name">empty_state_page</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="HdyStatusPage">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="spacing">24</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="visible">True</property>
-                        <property name="pixel-size">100</property>
-                        <property name="icon-name">org.gnome.seahorse.Application-symbolic</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Keyring is locked</property>
-                        <attributes>
-                          <attribute name="scale" value="2"/>
-                        </attributes>
-                      </object>
-                    </child>
+                    <property name="icon-name">org.gnome.seahorse.Application-symbolic</property>
+                    <property name="title" translatable="yes">Keyring is locked</property>
                     <child>
                       <object class="GtkButton" id="locked_keyring_unlock_button">
                         <property name="visible">True</property>
