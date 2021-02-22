@@ -200,7 +200,6 @@ public class Seahorse.ItemList : GLib.Object, GLib.ListModel {
         // First remove all items
         var len = this.items.length;
         this.items.remove_range(0, len);
-        items_changed(0, len, 0);
 
         // Add only the ones that match the filter
         foreach (var obj in this.base_collection.get_objects()) {
@@ -212,7 +211,7 @@ public class Seahorse.ItemList : GLib.Object, GLib.ListModel {
         this.items.sort(compare_items);
 
         // Notify listeners
-        items_changed(0, 0, this.items.length);
+        items_changed(0, len, this.items.length);
 
         debug("%u/%u elements visible after refilter on '%s'",
               this.items.length, this.base_collection.get_length(),
