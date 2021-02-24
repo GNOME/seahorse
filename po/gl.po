@@ -3,6 +3,8 @@
 # This file is distributed under the same license as the seahorse package.
 # Proxecto Trasno - Adaptación do software libre á lingua galega:  Se desexas
 # colaborar connosco, podes atopar máis información en http://www.trasno.net
+# Marcos Lans <MarcosLansGarza@gmail.com>
+#
 # Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2007.
 # Ignacio Casal Quinteiro <icq@cvs.gnome.org>, 2007.
 # Ignacio Casal Quinteiro <icq@svn.gnome.org>, 2007, 2008.
@@ -11,17 +13,15 @@
 # Antón Méixome <meixome@mancomun.org>, 2009.
 # Fran Diéguez <frandieguez@gnome.org>, 2009, 2010, 2011, 2012.
 # Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.
-# Marcos Lans <MarcosLansGarza@gmail.com>
 # Fran Dieguez <frandieguez@gnome.org>, 2012-2021.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-18 13:51+0000\n"
-"PO-Revision-Date: 2021-02-18 18:26+0100\n"
+"POT-Creation-Date: 2021-02-19 18:59+0000\n"
+"PO-Revision-Date: 2021-02-24 00:01+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language-Team: Proxecto Trasno <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -111,29 +111,13 @@ msgstr "Chaves"
 msgid "Certificates"
 msgstr "Certificados"
 
-#: common/prefs.vala:42
+#: common/prefs.vala:32
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: common/prefs.vala:150
+#: common/prefs-keyservers.vala:44
 msgid "None: Don’t publish keys"
 msgstr "Ningún: Non publicar as chaves"
-
-#: common/prefs.vala:166
-msgid "Not a valid Key Server address."
-msgstr "O enderezo do servidor de chaves non é válido."
-
-#: common/prefs.vala:167
-msgid ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-msgstr ""
-"Se precisa axuda contacte co seu administrador de sistemas ou co "
-"administrador do servidor de chaves."
-
-#: common/prefs.vala:236
-msgid "URL"
-msgstr "URL"
 
 #: common/seahorse-add-keyserver.ui:12
 msgid "initial temporary item"
@@ -160,26 +144,28 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "O porto para acceder ao servidor."
 
-#: common/seahorse-prefs.ui:34
-msgid "_Find keys via:"
-msgstr "_Buscar chaves en:"
+#: common/seahorse-prefs-keyservers.ui:21
+#| msgid "Key Servers"
+msgid "Keyservers"
+msgstr "Servidores de chaves"
 
-#: common/seahorse-prefs.ui:105
+#: common/seahorse-prefs-keyservers.ui:32
+#| msgid "Add a new key or item"
+msgid "Add a new keyserver"
+msgstr "Engadir un novo servidor de chaves"
+
+#: common/seahorse-prefs-keyservers.ui:81
 msgid "_Publish keys to:"
 msgstr "_Publicar chaves en:"
 
-#: common/seahorse-prefs.ui:128
+#: common/seahorse-prefs-keyservers.ui:104
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Recuperar automaticamente as chaves desde os servidores de ch_aves"
 
-#: common/seahorse-prefs.ui:142
+#: common/seahorse-prefs-keyservers.ui:119
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr ""
 "Sincronizar automaticamente as chaves _modificadas cos servidores de chaves"
-
-#: common/seahorse-prefs.ui:159
-msgid "Key Servers"
-msgstr "Servidores de chaves"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -315,7 +301,7 @@ msgstr ""
 
 #: data/org.gnome.seahorse.gschema.xml:20
 msgid "Last key server search pattern"
-msgstr "Patrón de búsqueda do último servidor de chaves"
+msgstr "Patrón de busca do último servidor de chaves"
 
 #: data/org.gnome.seahorse.gschema.xml:21
 msgid "The last search pattern searched for against a key server."
@@ -351,7 +337,7 @@ msgid ""
 "personal keys, if “trusted” show trusted."
 msgstr ""
 "Filtro dos elementos a mostrar. Se está baleiro, mostraranse todos os "
-"elementos, se é «personal» só se mostrarán as chaves personais, se é "
+"elementos, se é «personal» só se mostrarán as chaves persoais, se é "
 "«trusted» mostraranse as confiábeis."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:16
@@ -368,7 +354,7 @@ msgstr "Os aneis de chaves seleccionados"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:22
 msgid "The URIs of the keyrings chosen in the sidebar."
-msgstr "Os URIs dos aneis de chves seleccionados na barra lateral."
+msgstr "Os URIs dos aneis de chaves seleccionados na barra lateral."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:29
 msgid "The column to sort the Seahorse keys by"
@@ -464,7 +450,7 @@ msgstr "anel de chaves;cifrado;seguranza;sinatura;ssh;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
-msgstr "Contrasinais personais, credenciais e segredos almacenados"
+msgstr "Contrasinais persoais, credenciais e segredos almacenados"
 
 #: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
 msgid "Couldn’t unlock"
@@ -570,7 +556,7 @@ msgstr "Contrasinal do anel de chaves"
 
 #: gkr/gkr-item.vala:169
 msgid "Encryption key password"
-msgstr "Contrasina da chave de cifrado"
+msgstr "Contrasinal da chave de cifrado"
 
 #: gkr/gkr-item.vala:171
 msgid "Key storage password"
@@ -1395,7 +1381,7 @@ msgstr "Substituída"
 
 #: pgp/seahorse-gpgme-revoke.c:119
 msgid "Key has been superseded"
-msgstr "A chave foi subsituída"
+msgstr "A chave foi substituída"
 
 #: pgp/seahorse-gpgme-revoke.c:125
 msgid "Not Used"
@@ -1690,7 +1676,6 @@ msgstr "Non foi posíbel comunicar con %s: %s"
 
 #: pgp/seahorse-ldap-source.c:594
 #, c-format
-#| msgid "Couldn’t resolve address: %s"
 msgid "Couldn’t resolve address %s"
 msgstr "Non foi posíbel resolver o enderezo %s"
 
@@ -1710,11 +1695,11 @@ msgstr "URI non válido: %s"
 msgid "Resolving server address: %s"
 msgstr "Resolvendo o enderezo do servidor: %s"
 
-#: pgp/seahorse-pgp-backend.c:186
+#: pgp/seahorse-pgp-backend.c:188
 msgid "PGP Keys"
 msgstr "Chave PGP"
 
-#: pgp/seahorse-pgp-backend.c:192
+#: pgp/seahorse-pgp-backend.c:194
 msgid "PGP keys are for encrypting email or files"
 msgstr "Chaves PGP usadas para cifrar correo e ficheiros"
 
@@ -2569,7 +2554,7 @@ msgstr "Non hai ningún ficheiro de chave privada dispoñíbel para esta chave."
 
 #: ssh/generate.vala:94
 msgid "Couldn’t load newly generated Secure Shell key"
-msgstr "Non foi posíbel caragar a nova chave xerada de Secure Shell"
+msgstr "Non foi posíbel cargar a nova chave xerada de Secure Shell"
 
 #: ssh/generate.vala:98
 msgid "Couldn’t generate Secure Shell key"
@@ -2617,7 +2602,7 @@ msgstr "Chaves SSH persoal"
 
 #: ssh/key.vala:52
 msgid "SSH key"
-msgstr "Chvae SSH"
+msgstr "Chave SSH"
 
 #. No names when not even the fingerpint loaded
 #: ssh/key.vala:122
@@ -2828,6 +2813,22 @@ msgstr ""
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configurando as chaves de Secure Shell (SSH)…"
+
+#~ msgid "Not a valid Key Server address."
+#~ msgstr "O enderezo do servidor de chaves non é válido."
+
+#~ msgid ""
+#~ "For help contact your system administrator or the administrator of the "
+#~ "key server."
+#~ msgstr ""
+#~ "Se precisa axuda contacte co seu administrador de sistemas ou co "
+#~ "administrador do servidor de chaves."
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "_Find keys via:"
+#~ msgstr "_Buscar chaves en:"
 
 #~ msgid "HTTP Key Server"
 #~ msgstr "Servidor de chaves HTTP"
