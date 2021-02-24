@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-19 18:59+0000\n"
-"PO-Revision-Date: 2021-02-19 21:36+0200\n"
+"POT-Creation-Date: 2021-02-24 15:30+0000\n"
+"PO-Revision-Date: 2021-02-24 18:36+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -102,7 +102,7 @@ msgstr "Клавіші"
 msgid "Certificates"
 msgstr "Сертифікати"
 
-#: common/prefs.vala:32
+#: common/prefs.vala:30
 msgid "Preferences"
 msgstr "Параметри"
 
@@ -135,27 +135,44 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "Порт для доступу до сервера."
 
-#: common/seahorse-prefs-keyservers.ui:21
-#| msgid "Key Servers"
+#: common/seahorse-prefs-keyservers.ui:6 common/seahorse-prefs-keyservers.ui:10
 msgid "Keyservers"
 msgstr "Сервери ключів"
 
-#: common/seahorse-prefs-keyservers.ui:32
-#| msgid "Add a new key or item"
-msgid "Add a new keyserver"
-msgstr "Додати новий сервер ключів"
+#: common/seahorse-prefs-keyservers.ui:40
+#| msgid "Add Key Server"
+msgid "Add keyserver"
+msgstr "Додати сервер ключів"
 
-#: common/seahorse-prefs-keyservers.ui:81
+#: common/seahorse-prefs-keyservers.ui:51
+#| msgid "Synchronizing keys…"
+msgid "Key Synchronization"
+msgstr "Синхронізація ключів"
+
+#: common/seahorse-prefs-keyservers.ui:61
 msgid "_Publish keys to:"
 msgstr "_Публікувати ключі у:"
 
-#: common/seahorse-prefs-keyservers.ui:104
+#: common/seahorse-prefs-keyservers.ui:84
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Автоматично отримувати _ключі з серверів"
 
-#: common/seahorse-prefs-keyservers.ui:119
+#: common/seahorse-prefs-keyservers.ui:99
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "Автоматично синхронізувати з_мінені ключі з серверами ключів"
+
+#: common/server-category.vala:63
+msgid "LDAP Key Server"
+msgstr "Сервер ключів LDAP"
+
+#. WITH_LDAP
+#: common/server-category.vala:66
+msgid "HTTP Key Server"
+msgstr "Сервер ключів HTTP"
+
+#: common/server-category.vala:67
+msgid "HTTPS Key Server"
+msgstr "Сервер ключів HTTPS"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -665,7 +682,7 @@ msgid "Use"
 msgstr "Використання"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1281
+#: pgp/seahorse-pgp-key-properties.c:1324
 msgid "Type"
 msgstr "Тип"
 
@@ -691,7 +708,7 @@ msgstr "Вилучити пароль"
 msgid "Keyring properties"
 msgstr "Властивості в'язки"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:887
 msgid "Name"
 msgstr "Назва"
 
@@ -1064,19 +1081,19 @@ msgstr ""
 "Не вдалося розшифрувати. Можливо, відсутній потрібний ключ для "
 "розшифровування."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:506
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:480
 msgid "The operation was cancelled"
 msgstr "Операцію скасовано"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:72
+#: pgp/seahorse-gpgme-expires-dialog.c:70
 msgid "Invalid expiry date"
 msgstr "Некоректний термін дії"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:73
+#: pgp/seahorse-gpgme-expires-dialog.c:71
 msgid "The expiry date must be in the future"
 msgstr "Термін дії має закінчуватися у майбутньому"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:83
+#: pgp/seahorse-gpgme-expires-dialog.c:84
 msgid "Couldn’t change expiry date"
 msgstr "Не вдалося змінити термін дії"
 
@@ -1208,11 +1225,11 @@ msgstr[0] "Остаточно вилучити %d ключ?"
 msgstr[1] "Остаточно вилучити %d ключі?"
 msgstr[2] "Остаточно вилучити %d ключів?"
 
-#: pgp/seahorse-gpgme-key-op.c:352
+#: pgp/seahorse-gpgme-key-op.c:351
 msgid "Wrong password"
 msgstr "Неправильний пароль"
 
-#: pgp/seahorse-gpgme-key-op.c:352
+#: pgp/seahorse-gpgme-key-op.c:351
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Ви тричі ввели неправильний пароль. Спробуйте ще раз."
 
@@ -1509,23 +1526,23 @@ msgstr "_Автор підпису:"
 msgid "_Sign"
 msgstr "_Підписати"
 
-#: pgp/seahorse-gpgme-subkey.c:89
+#: pgp/seahorse-gpgme-subkey.c:91
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:93
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:524
+#: pgp/seahorse-hkp-source.c:502
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Параметри пошуку були недостатньо визначеними. Сервер «%s» видав надто "
 "багато ключів."
 
-#: pgp/seahorse-hkp-source.c:528
+#: pgp/seahorse-hkp-source.c:506
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Не вдалося зв'язатись з сервером «%s»: %s"
@@ -1610,7 +1627,7 @@ msgstr "Не вдалося опублікувати ключі на серве�
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Не вдалося завантажити ключі з сервера: %s"
 
-#: pgp/seahorse-keyserver-sync.c:158
+#: pgp/seahorse-keyserver-sync.c:157
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
@@ -1618,7 +1635,7 @@ msgstr[0] "<b>%d ключ вибрано для синхронізації</b>"
 msgstr[1] "<b>%d ключі вибрано для синхронізації</b>"
 msgstr[2] "<b>%d ключі вибрано для синхронізації</b>"
 
-#: pgp/seahorse-keyserver-sync.c:232
+#: pgp/seahorse-keyserver-sync.c:231
 msgid "Synchronizing keys…"
 msgstr "Синхронізація ключів…"
 
@@ -1654,28 +1671,28 @@ msgstr "_Сервера ключів"
 msgid "_Sync"
 msgstr "_Синхронізувати"
 
-#: pgp/seahorse-ldap-source.c:434
+#: pgp/seahorse-ldap-source.c:433
 #, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Не вдалося зв'язатись з «%s»: %s"
 
-#: pgp/seahorse-ldap-source.c:594
+#: pgp/seahorse-ldap-source.c:593
 #, c-format
 msgid "Couldn’t resolve address %s"
 msgstr "Не вдалося визначити адресу %s"
 
 #. Now that we've resolved our address, connect via IP
-#: pgp/seahorse-ldap-source.c:599
+#: pgp/seahorse-ldap-source.c:598
 #, c-format
 msgid "Connecting to: %s"
 msgstr "З'єднання: %s"
 
-#: pgp/seahorse-ldap-source.c:654
+#: pgp/seahorse-ldap-source.c:653
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Некоректна адреса: %s"
 
-#: pgp/seahorse-ldap-source.c:662
+#: pgp/seahorse-ldap-source.c:661
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Визначення адреси сервера: %s"
@@ -1688,7 +1705,7 @@ msgstr "Ключі PGP"
 msgid "PGP keys are for encrypting email or files"
 msgstr "Ключі PGP для шифрування пошти або файлів"
 
-#: pgp/seahorse-pgp-key.c:172
+#: pgp/seahorse-pgp-key.c:186
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
@@ -1696,11 +1713,11 @@ msgstr[0] "(і ще %d)"
 msgstr[1] "(і ще %d)"
 msgstr[2] "(і ще %d)"
 
-#: pgp/seahorse-pgp-key.c:573
+#: pgp/seahorse-pgp-key.c:604
 msgid "Personal PGP key"
 msgstr "Особистий ключ PGP"
 
-#: pgp/seahorse-pgp-key.c:575
+#: pgp/seahorse-pgp-key.c:606
 msgid "PGP key"
 msgstr "Ключ PGP"
 
@@ -1718,125 +1735,125 @@ msgid "Couldn’t delete user ID"
 msgstr "Не вдалося вилучити ідентифікатор користувача"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
+#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1459
 msgid "[Unknown]"
 msgstr "[Невідомо]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
+#: pgp/seahorse-pgp-key-properties.c:467 pgp/seahorse-pgp-key-properties.c:1677
 msgid "Name/Email"
 msgstr "Ім'я/ел. пошта"
 
-#: pgp/seahorse-pgp-key-properties.c:472
+#: pgp/seahorse-pgp-key-properties.c:474
 msgid "Signature ID"
 msgstr "Ідентифікатор підпису"
 
-#: pgp/seahorse-pgp-key-properties.c:578
+#: pgp/seahorse-pgp-key-properties.c:580
 msgid "Couldn’t change primary photo"
 msgstr "Не вдалося змінити головну фотографію"
 
-#: pgp/seahorse-pgp-key-properties.c:738
+#: pgp/seahorse-pgp-key-properties.c:767
 msgid "Error changing password"
 msgstr "Помилка під час спроби змінити пароль"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:784
+#: pgp/seahorse-pgp-key-properties.c:814
 msgid "(unknown)"
 msgstr "(невідомо)"
 
-#: pgp/seahorse-pgp-key-properties.c:789
+#: pgp/seahorse-pgp-key-properties.c:819
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Цей ключ закінчився %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:817
+#: pgp/seahorse-pgp-key-properties.c:845
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — відкритий ключ"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:820
+#: pgp/seahorse-pgp-key-properties.c:848
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — закритий ключ"
 
-#: pgp/seahorse-pgp-key-properties.c:1006
+#: pgp/seahorse-pgp-key-properties.c:1035
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Остаточно вилучити підключ %d з ключа %s?"
 
-#: pgp/seahorse-pgp-key-properties.c:1014
+#: pgp/seahorse-pgp-key-properties.c:1043
 msgid "Couldn’t delete subkey"
 msgstr "Не вдалося вилучити підключ"
 
-#: pgp/seahorse-pgp-key-properties.c:1078
-#: pgp/seahorse-pgp-key-properties.c:1389
+#: pgp/seahorse-pgp-key-properties.c:1109
+#: pgp/seahorse-pgp-key-properties.c:1433
 msgid "Unable to change trust"
 msgstr "Не вдалося змінити рівень довіри"
 
-#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1121 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Не вдалося експортувати ключ"
 
-#: pgp/seahorse-pgp-key-properties.c:1239
-#: pgp/seahorse-pgp-key-properties.c:1323
+#: pgp/seahorse-pgp-key-properties.c:1279
+#: pgp/seahorse-pgp-key-properties.c:1367
 msgctxt "Expires"
 msgid "Never"
 msgstr "Ніколи"
 
-#: pgp/seahorse-pgp-key-properties.c:1278
+#: pgp/seahorse-pgp-key-properties.c:1321
 msgid "ID"
 msgstr "Ідентифікатор"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1327
 msgid "Usage"
 msgstr "Використання"
 
-#: pgp/seahorse-pgp-key-properties.c:1287
+#: pgp/seahorse-pgp-key-properties.c:1330
 msgid "Created"
 msgstr "Створено"
 
-#: pgp/seahorse-pgp-key-properties.c:1290
+#: pgp/seahorse-pgp-key-properties.c:1333
 msgid "Expires"
 msgstr "Закінчується дія"
 
-#: pgp/seahorse-pgp-key-properties.c:1293
+#: pgp/seahorse-pgp-key-properties.c:1336
 msgid "Status"
 msgstr "Стан"
 
-#: pgp/seahorse-pgp-key-properties.c:1296
+#: pgp/seahorse-pgp-key-properties.c:1339
 msgid "Strength"
 msgstr "Міцність"
 
-#: pgp/seahorse-pgp-key-properties.c:1314
+#: pgp/seahorse-pgp-key-properties.c:1358
 msgid "Revoked"
 msgstr "Відкликаний"
 
-#: pgp/seahorse-pgp-key-properties.c:1316
+#: pgp/seahorse-pgp-key-properties.c:1360
 msgid "Expired"
 msgstr "Термін вийшов"
 
-#: pgp/seahorse-pgp-key-properties.c:1318
+#: pgp/seahorse-pgp-key-properties.c:1362
 msgid "Disabled"
 msgstr "Вимкнений"
 
-#: pgp/seahorse-pgp-key-properties.c:1320
+#: pgp/seahorse-pgp-key-properties.c:1364
 msgid "Good"
 msgstr "Добра"
 
-#: pgp/seahorse-pgp-key-properties.c:1628
+#: pgp/seahorse-pgp-key-properties.c:1680
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Ідентифікатор ключа"
 
-#: pgp/seahorse-pgp-key-properties.c:1771
+#: pgp/seahorse-pgp-key-properties.c:1823
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Я довіряю підписам, поставленим «%s» на інших ключах"
 
-#: pgp/seahorse-pgp-key-properties.c:1778
+#: pgp/seahorse-pgp-key-properties.c:1830
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1844,7 +1861,7 @@ msgid ""
 msgstr ""
 "Якщо ви впевнені, що власником ключа є «%s», <i>підпишіть</i> цей ключ:"
 
-#: pgp/seahorse-pgp-key-properties.c:1785
+#: pgp/seahorse-pgp-key-properties.c:1837
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -2127,19 +2144,19 @@ msgstr "Виберіть ключ для підпису"
 msgid "_Sign message with key:"
 msgstr "_Підписати повідомлення ключем:"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
 msgstr "Експортування даних"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Retrieving data"
 msgstr "Одержання даних"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Importing data"
 msgstr "Імпортування даних"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Sending data"
 msgstr "Надсилання даних"
 
@@ -2339,7 +2356,7 @@ msgstr "Кинутий текст"
 msgid "Clipboard text"
 msgstr "Текст з буфера"
 
-#: src/key-manager.vala:497
+#: src/key-manager.vala:499
 msgid "Couldn’t unlock keyring"
 msgstr "Не вдалося розблокувати в'язку ключів"
 
@@ -2451,15 +2468,15 @@ msgstr "Шукати ключ або пароль"
 msgid "Filter"
 msgstr "Фільтр"
 
-#: src/seahorse-key-manager.ui:532
+#: src/seahorse-key-manager.ui:515
 msgid "This collection seems to be empty"
 msgstr "Здається, у цій збірці нічого немає"
 
-#: src/seahorse-key-manager.ui:564
+#: src/seahorse-key-manager.ui:525
 msgid "Keyring is locked"
 msgstr "В'язку заблоковано"
 
-#: src/seahorse-key-manager.ui:574
+#: src/seahorse-key-manager.ui:530
 msgid "Unlock"
 msgstr "Розблокувати"
 
@@ -2792,6 +2809,10 @@ msgstr "Не вдалося налаштувати ключі SSH на відд�
 msgid "Configuring Secure Shell Keys…"
 msgstr "Налаштовування ключів SSH…"
 
+#~| msgid "Add a new key or item"
+#~ msgid "Add a new keyserver"
+#~ msgstr "Додати новий сервер ключів"
+
 #~ msgid "Not a valid Key Server address."
 #~ msgstr "Некоректна адреса сервера ключів."
 
@@ -2807,16 +2828,6 @@ msgstr "Налаштовування ключів SSH…"
 
 #~ msgid "_Find keys via:"
 #~ msgstr "Зн_айти ключі за допомогою:"
-
-#~ msgid "HTTP Key Server"
-#~ msgstr "Сервер ключів HTTP"
-
-#~| msgid "HTTP Key Server"
-#~ msgid "HTTPS Key Server"
-#~ msgstr "Сервер ключів HTTPS"
-
-#~ msgid "LDAP Key Server"
-#~ msgstr "Сервер ключів LDAP"
 
 #~ msgid ""
 #~ "Seahorse is a GNOME application for managing encryption keys. It also "
