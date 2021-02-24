@@ -267,7 +267,7 @@ parse_hkp_index (const char *response)
         } else if (g_ascii_strncasecmp (columns[0], "pub", 3) == 0) {
             const char *fpr;
             g_autofree char *fingerprint = NULL;
-            const char *algo;
+            const char *algo = NULL;
             g_autoptr (SeahorsePgpSubkey) subkey = NULL;
             long created = 0, expired = 0;
             g_autoptr(GDateTime) created_date = NULL;
@@ -347,7 +347,8 @@ parse_hkp_index (const char *response)
             seahorse_pgp_subkey_set_created (subkey, created_date);
             seahorse_pgp_subkey_set_expires (subkey, expired_date);
             seahorse_pgp_subkey_set_length (subkey, strtol (columns[3], NULL, 10));
-            seahorse_pgp_subkey_set_algorithm (subkey, algo);
+            if (algo)
+                seahorse_pgp_subkey_set_algorithm (subkey, algo);
             seahorse_pgp_key_add_subkey (key, subkey);
 
         /* A UID for the key */
