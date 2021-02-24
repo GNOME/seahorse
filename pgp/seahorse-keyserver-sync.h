@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2006 Adam Schreiber
+ * Copyright (C) 2020 Niels De Graef
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +22,12 @@
 
 #include <gtk/gtk.h>
 
-void        seahorse_keyserver_sync             (GList *keys);
+#define SEAHORSE_TYPE_KEYSERVER_SYNC (seahorse_keyserver_sync_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseKeyserverSync, seahorse_keyserver_sync,
+                      SEAHORSE, KEYSERVER_SYNC,
+                      GtkDialog)
 
+SeahorseKeyserverSync *    seahorse_keyserver_sync_new          (GList     *keys,
+                                                                 GtkWindow *parent);
 
-GtkWindow*  seahorse_keyserver_sync_show        (GList *keys,
-                                                 GtkWindow *parent);
+void                       seahorse_keyserver_sync_do_sync      (GList *keys);

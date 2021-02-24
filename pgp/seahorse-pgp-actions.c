@@ -99,31 +99,32 @@ on_remote_sync (GSimpleAction *action,
                 GVariant *param,
                 gpointer user_data)
 {
-  SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
-  SeahorseGpgmeKeyring *keyring;
-  SeahorseCatalog *catalog;
-  GList *objects = NULL;
-  GList *keys = NULL;
-  GList *l;
+    SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
+    g_autoptr(SeahorseCatalog) catalog = NULL;
+    g_autoptr(GList) keys = NULL;
+    SeahorseKeyserverSync *dialog = NULL;
 
-  catalog = seahorse_action_group_get_catalog (actions);
-  if (catalog != NULL) {
-    objects = seahorse_catalog_get_selected_objects (catalog);
-    for (l = objects; l != NULL; l = g_list_next (l)) {
-      if (SEAHORSE_PGP_IS_KEY (l->data))
-        keys = g_list_prepend (keys, l->data);
+    catalog = seahorse_action_group_get_catalog (actions);
+    if (catalog != NULL) {
+        g_autoptr(GList) objects = NULL;
+
+        objects = seahorse_catalog_get_selected_objects (catalog);
+        for (GList *l = objects; l != NULL; l = g_list_next (l)) {
+            if (SEAHORSE_PGP_IS_KEY (l->data))
+                keys = g_list_prepend (keys, l->data);
+        }
     }
-    g_list_free (objects);
-  }
-  g_object_unref (catalog);
 
-  if (keys == NULL) {
-    keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-    keys = gcr_collection_get_objects (GCR_COLLECTION (keyring));
-  }
+    if (keys == NULL) {
+        SeahorseGpgmeKeyring *keyring;
 
-  seahorse_keyserver_sync_show (keys, GTK_WINDOW (catalog));
-  g_list_free (keys);
+        keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+        keys = gcr_collection_get_objects (GCR_COLLECTION (keyring));
+    }
+
+    dialog = seahorse_keyserver_sync_new (keys, GTK_WINDOW (catalog));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 #endif /* WITH_KEYSERVER */
