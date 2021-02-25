@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-20 08:41+0000\n"
-"PO-Revision-Date: 2021-02-20 22:09+0100\n"
+"POT-Creation-Date: 2021-02-25 13:29+0000\n"
+"PO-Revision-Date: 2021-02-25 18:39+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -58,8 +58,9 @@ msgstr "Ni mogoče izvoziti podatkov"
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
 #: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
-#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:270
+#: pgp/seahorse-keyserver-sync.ui:79 pkcs11/pkcs11-request.vala:55
+#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
+#: src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "_Prekliči"
 
@@ -103,7 +104,7 @@ msgstr "Ključi"
 msgid "Certificates"
 msgstr "Potrdila"
 
-#: common/prefs.vala:32
+#: common/prefs.vala:30
 msgid "Preferences"
 msgstr "Možnosti"
 
@@ -136,25 +137,42 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "Vrata preko katerih je mogoč dostop do strežnika."
 
-#: common/seahorse-prefs-keyservers.ui:21
+#: common/seahorse-prefs-keyservers.ui:6 common/seahorse-prefs-keyservers.ui:10
 msgid "Keyservers"
 msgstr "Strežniki ključev"
 
-#: common/seahorse-prefs-keyservers.ui:32
-msgid "Add a new keyserver"
-msgstr "Dodaj nov strežnik ključev"
+#: common/seahorse-prefs-keyservers.ui:40
+msgid "Add keyserver"
+msgstr "Dodaj strežnika ključev"
 
-#: common/seahorse-prefs-keyservers.ui:81
+#: common/seahorse-prefs-keyservers.ui:51
+msgid "Key Synchronization"
+msgstr "Usklajevanje ključev"
+
+#: common/seahorse-prefs-keyservers.ui:61
 msgid "_Publish keys to:"
 msgstr "_Objavi ključe na:"
 
-#: common/seahorse-prefs-keyservers.ui:104
+#: common/seahorse-prefs-keyservers.ui:84
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Samodejno pridobi ključe s strežnika _ključev"
 
-#: common/seahorse-prefs-keyservers.ui:119
+#: common/seahorse-prefs-keyservers.ui:99
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "Samodejno uskladi spremenjene _ključe s strežnikom ključev"
+
+#: common/server-category.vala:63
+msgid "LDAP Key Server"
+msgstr "Strežnik LDAP ključev"
+
+#. WITH_LDAP
+#: common/server-category.vala:66
+msgid "HTTP Key Server"
+msgstr "Strežnik ključev HTTP"
+
+#: common/server-category.vala:67
+msgid "HTTPS Key Server"
+msgstr "Strežnik ključev HTTPS"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -667,7 +685,7 @@ msgid "Use"
 msgstr "Uporabi"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1281
+#: pgp/seahorse-pgp-key-properties.c:1324
 msgid "Type"
 msgstr "Vrsta"
 
@@ -693,7 +711,7 @@ msgstr "Izbriši geslo"
 msgid "Keyring properties"
 msgstr "Lastnosti zbirke ključev"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:887
 msgid "Name"
 msgstr "Ime"
 
@@ -1064,19 +1082,19 @@ msgstr "Ustvari nov ID uporabnika"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Odšifriranje ni uspelo. Najverjetneje manjka odšifrirni ključ."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:506
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
 msgid "The operation was cancelled"
 msgstr "Opravilo je bilo preklicano."
 
-#: pgp/seahorse-gpgme-expires-dialog.c:72
+#: pgp/seahorse-gpgme-expires-dialog.c:70
 msgid "Invalid expiry date"
 msgstr "Neveljavna vrednost datuma"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:73
+#: pgp/seahorse-gpgme-expires-dialog.c:71
 msgid "The expiry date must be in the future"
 msgstr "Datum preteka mora biti v prihodnosti"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:83
+#: pgp/seahorse-gpgme-expires-dialog.c:84
 msgid "Couldn’t change expiry date"
 msgstr "Ni mogoče spremeniti datum preteka"
 
@@ -1209,11 +1227,11 @@ msgstr[1] "Ali zares želite trajno izbrisati %d ključ?"
 msgstr[2] "Ali zares želite trajno izbrisati %d ključa?"
 msgstr[3] "Ali zares želite trajno izbrisati %d ključe?"
 
-#: pgp/seahorse-gpgme-key-op.c:352
+#: pgp/seahorse-gpgme-key-op.c:351
 msgid "Wrong password"
 msgstr "Napačno geslo"
 
-#: pgp/seahorse-gpgme-key-op.c:352
+#: pgp/seahorse-gpgme-key-op.c:351
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "To je bil tretji poskus prijave z napačnim geslom. Poskusite znova."
 
@@ -1506,22 +1524,22 @@ msgstr "_Podpisnik:"
 msgid "_Sign"
 msgstr "_Podpiši"
 
-#: pgp/seahorse-gpgme-subkey.c:89
+#: pgp/seahorse-gpgme-subkey.c:91
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:93
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:524
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Iskanje ni bilo dovolj podrobno. Strežnik »%s« je našel preveč ključev."
 
-#: pgp/seahorse-hkp-source.c:528
+#: pgp/seahorse-hkp-source.c:507
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Ni se mogoče povezati s strežnikom »%s«: %s"
@@ -1596,16 +1614,16 @@ msgstr "Dostopni ključi:"
 msgid "_Search"
 msgstr "I_skanje"
 
-#: pgp/seahorse-keyserver-sync.c:54
+#: pgp/seahorse-keyserver-sync.c:71
 msgid "Couldn’t publish keys to server"
 msgstr "Ni mogoče objaviti ključev na strežniku"
 
-#: pgp/seahorse-keyserver-sync.c:73
+#: pgp/seahorse-keyserver-sync.c:87
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Ni mogoče pridobiti ključev s strežnika: %s"
 
-#: pgp/seahorse-keyserver-sync.c:158
+#: pgp/seahorse-keyserver-sync.c:197
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
@@ -1614,15 +1632,15 @@ msgstr[1] "<b>%d ključ je izbran za usklajevanje</b>"
 msgstr[2] "<b>%d ključa sta izbrana za usklajevanje</b>"
 msgstr[3] "<b>%d ključi so izbrani za usklajevanje</b>"
 
-#: pgp/seahorse-keyserver-sync.c:232
+#: pgp/seahorse-keyserver-sync.c:305
 msgid "Synchronizing keys…"
 msgstr "Poteka usklajevanje ključev …"
 
-#: pgp/seahorse-keyserver-sync.ui:14
+#: pgp/seahorse-keyserver-sync.ui:5
 msgid "Sync Keys"
 msgstr "Uskladi ključe"
 
-#: pgp/seahorse-keyserver-sync.ui:52
+#: pgp/seahorse-keyserver-sync.ui:36
 msgid ""
 "This will publish the keys in your key ring so they’re available for others "
 "to use. You’ll also get any changes others have made since you received "
@@ -1632,7 +1650,7 @@ msgstr ""
 "Sprejeli boste tudi spremembe, ki so jih drugi naredili po tem, ko ste "
 "prejeli njihove ključe."
 
-#: pgp/seahorse-keyserver-sync.ui:65
+#: pgp/seahorse-keyserver-sync.ui:45
 msgid ""
 "This will retrieve any changes others have made since you received their "
 "keys. No key server has been chosen for publishing, so your keys will not be "
@@ -1642,36 +1660,36 @@ msgstr ""
 "ključe. Ni izbranega strežnika za objavljanje, zato vaši ključi ne bodo na "
 "voljo drugim."
 
-#: pgp/seahorse-keyserver-sync.ui:115
+#: pgp/seahorse-keyserver-sync.ui:65
 msgid "_Key Servers"
 msgstr "_Strežniki ključev"
 
-#: pgp/seahorse-keyserver-sync.ui:148
+#: pgp/seahorse-keyserver-sync.ui:89
 msgid "_Sync"
 msgstr "_Usklajevanje"
 
-#: pgp/seahorse-ldap-source.c:434
+#: pgp/seahorse-ldap-source.c:433
 #, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Ni mogoča vzpostaviti stika z »%s«: %s"
 
-#: pgp/seahorse-ldap-source.c:594
+#: pgp/seahorse-ldap-source.c:593
 #, c-format
 msgid "Couldn’t resolve address %s"
 msgstr "Ni mogoče razrešiti naslova %s"
 
 #. Now that we've resolved our address, connect via IP
-#: pgp/seahorse-ldap-source.c:599
+#: pgp/seahorse-ldap-source.c:598
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Povezovanje z: %s"
 
-#: pgp/seahorse-ldap-source.c:654
+#: pgp/seahorse-ldap-source.c:653
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "Neveljaven naslov URI: %s"
 
-#: pgp/seahorse-ldap-source.c:662
+#: pgp/seahorse-ldap-source.c:661
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Razreševanje naslova strežnika: %s"
@@ -1685,7 +1703,7 @@ msgid "PGP keys are for encrypting email or files"
 msgstr ""
 "Ključi PGP se uporabljajo za šifriranje elektronskih sporočil in datotek"
 
-#: pgp/seahorse-pgp-key.c:176
+#: pgp/seahorse-pgp-key.c:186
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
@@ -1694,11 +1712,11 @@ msgstr[1] "(in %d drug)"
 msgstr[2] "(in %d druga)"
 msgstr[3] "(in %d drugi)"
 
-#: pgp/seahorse-pgp-key.c:575
+#: pgp/seahorse-pgp-key.c:604
 msgid "Personal PGP key"
 msgstr "Osebni ključ PGP"
 
-#: pgp/seahorse-pgp-key.c:577
+#: pgp/seahorse-pgp-key.c:606
 msgid "PGP key"
 msgstr "Ključ PGP"
 
@@ -1716,132 +1734,132 @@ msgid "Couldn’t delete user ID"
 msgstr "Ni mogoče izbrisati ID uporabnika"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
+#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1459
 msgid "[Unknown]"
 msgstr "[neznano]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
+#: pgp/seahorse-pgp-key-properties.c:467 pgp/seahorse-pgp-key-properties.c:1677
 msgid "Name/Email"
 msgstr "Ime/Elektronski naslov"
 
-#: pgp/seahorse-pgp-key-properties.c:472
+#: pgp/seahorse-pgp-key-properties.c:474
 msgid "Signature ID"
 msgstr "ID podpisa"
 
-#: pgp/seahorse-pgp-key-properties.c:578
+#: pgp/seahorse-pgp-key-properties.c:580
 msgid "Couldn’t change primary photo"
 msgstr "Ni mogoče zamenjati osnovne slike"
 
-#: pgp/seahorse-pgp-key-properties.c:738
+#: pgp/seahorse-pgp-key-properties.c:767
 msgid "Error changing password"
 msgstr "Napaka spreminjanja gesla"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:784
+#: pgp/seahorse-pgp-key-properties.c:814
 msgid "(unknown)"
 msgstr "(neznano)"
 
-#: pgp/seahorse-pgp-key-properties.c:789
+#: pgp/seahorse-pgp-key-properties.c:819
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Ključ je pretekel na: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:817
+#: pgp/seahorse-pgp-key-properties.c:845
 #, c-format
 msgid "%s — Public key"
 msgstr "%s – javni ključ"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:820
+#: pgp/seahorse-pgp-key-properties.c:848
 #, c-format
 msgid "%s — Private key"
 msgstr "%s – osebni ključ"
 
-#: pgp/seahorse-pgp-key-properties.c:1006
+#: pgp/seahorse-pgp-key-properties.c:1035
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Ali zares želite trajno izbrisati podključ %d ključa %s?"
 
-#: pgp/seahorse-pgp-key-properties.c:1014
+#: pgp/seahorse-pgp-key-properties.c:1043
 msgid "Couldn’t delete subkey"
 msgstr "Ni mogoče izbrisati podključa"
 
-#: pgp/seahorse-pgp-key-properties.c:1078
-#: pgp/seahorse-pgp-key-properties.c:1389
+#: pgp/seahorse-pgp-key-properties.c:1109
+#: pgp/seahorse-pgp-key-properties.c:1433
 msgid "Unable to change trust"
 msgstr "Ni mogoče zamenjati zaupanja"
 
-#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1121 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Ni mogoče izvoziti ključa"
 
-#: pgp/seahorse-pgp-key-properties.c:1239
-#: pgp/seahorse-pgp-key-properties.c:1323
+#: pgp/seahorse-pgp-key-properties.c:1279
+#: pgp/seahorse-pgp-key-properties.c:1367
 msgctxt "Expires"
 msgid "Never"
 msgstr "Nikoli"
 
-#: pgp/seahorse-pgp-key-properties.c:1278
+#: pgp/seahorse-pgp-key-properties.c:1321
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1327
 msgid "Usage"
 msgstr "Uporaba"
 
-#: pgp/seahorse-pgp-key-properties.c:1287
+#: pgp/seahorse-pgp-key-properties.c:1330
 msgid "Created"
 msgstr "Ustvarjeno"
 
-#: pgp/seahorse-pgp-key-properties.c:1290
+#: pgp/seahorse-pgp-key-properties.c:1333
 msgid "Expires"
 msgstr "Preteče"
 
-#: pgp/seahorse-pgp-key-properties.c:1293
+#: pgp/seahorse-pgp-key-properties.c:1336
 msgid "Status"
 msgstr "Stanje"
 
-#: pgp/seahorse-pgp-key-properties.c:1296
+#: pgp/seahorse-pgp-key-properties.c:1339
 msgid "Strength"
 msgstr "Jakost"
 
-#: pgp/seahorse-pgp-key-properties.c:1314
+#: pgp/seahorse-pgp-key-properties.c:1358
 msgid "Revoked"
 msgstr "Preklicano"
 
-#: pgp/seahorse-pgp-key-properties.c:1316
+#: pgp/seahorse-pgp-key-properties.c:1360
 msgid "Expired"
 msgstr "Pretečeno"
 
-#: pgp/seahorse-pgp-key-properties.c:1318
+#: pgp/seahorse-pgp-key-properties.c:1362
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: pgp/seahorse-pgp-key-properties.c:1320
+#: pgp/seahorse-pgp-key-properties.c:1364
 msgid "Good"
 msgstr "Dobro"
 
-#: pgp/seahorse-pgp-key-properties.c:1628
+#: pgp/seahorse-pgp-key-properties.c:1680
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "ID ključa"
 
-#: pgp/seahorse-pgp-key-properties.c:1771
+#: pgp/seahorse-pgp-key-properties.c:1823
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Zaupam podpisom »%s« tudi pri drugih ključih"
 
-#: pgp/seahorse-pgp-key-properties.c:1778
+#: pgp/seahorse-pgp-key-properties.c:1830
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
 msgstr "Če ste prepričani, da je lastnik ključa »%s«, <i>podpišite</i> ključ:"
 
-#: pgp/seahorse-pgp-key-properties.c:1785
+#: pgp/seahorse-pgp-key-properties.c:1837
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -2123,19 +2141,19 @@ msgstr "Izbor ključa za podpis"
 msgid "_Sign message with key:"
 msgstr "_Podpis sporočila s ključem:"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
 msgstr "Izvažanje podatkov"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Retrieving data"
 msgstr "Pridobivanje podatkov"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Importing data"
 msgstr "Uvažanje podatkov"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Sending data"
 msgstr "Pošiljanje podatkov"
 
@@ -2443,15 +2461,15 @@ msgstr "Poišči ključ ali geslo"
 msgid "Filter"
 msgstr "Filter"
 
-#: src/seahorse-key-manager.ui:532
+#: src/seahorse-key-manager.ui:515
 msgid "This collection seems to be empty"
 msgstr "Kaže, da je zbirka prazna"
 
-#: src/seahorse-key-manager.ui:564
+#: src/seahorse-key-manager.ui:525
 msgid "Keyring is locked"
 msgstr "Zbirka ključev je zaklenjena"
 
-#: src/seahorse-key-manager.ui:574
+#: src/seahorse-key-manager.ui:530
 msgid "Unlock"
 msgstr "Odkleni"
 
@@ -2786,6 +2804,9 @@ msgstr "Ni mogoče nastaviti ključa varne lupine na oddaljenem računalniku."
 msgid "Configuring Secure Shell Keys…"
 msgstr "Poteka nastavljanje ključev varne lupine …"
 
+#~ msgid "Add a new keyserver"
+#~ msgstr "Dodaj nov strežnik ključev"
+
 #~ msgid "Not a valid Key Server address."
 #~ msgstr "Neveljaven naslov strežnika ključev."
 
@@ -2800,12 +2821,6 @@ msgstr "Poteka nastavljanje ključev varne lupine …"
 
 #~ msgid "_Find keys via:"
 #~ msgstr "_Poišči ključe na:"
-
-#~ msgid "HTTP Key Server"
-#~ msgstr "Strežnik ključev HTTP"
-
-#~ msgid "LDAP Key Server"
-#~ msgstr "Strežnik LDAP ključev"
 
 #~ msgid ""
 #~ "Seahorse is a GNOME application for managing encryption keys. It also "
