@@ -204,20 +204,6 @@ on_item_added (GcrCollection *collection, GObject *item, gpointer user_data)
                          -1);
 }
 
-static void
-key_list_header_func (GtkListBoxRow *row, GtkListBoxRow *prev, gpointer unused)
-{
-    if (prev == NULL)
-        return;
-
-    if (gtk_list_box_row_get_header (row) == NULL) {
-        g_autoptr(GtkWidget) separator = NULL;
-
-        separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-        gtk_list_box_row_set_header (row, g_steal_pointer (&separator));
-    }
-}
-
 static gboolean
 on_delete_event (GtkWidget* widget, GdkEvent* event, gpointer user_data)
 {
@@ -232,7 +218,7 @@ seahorse_keyserver_results_constructed (GObject *obj)
 {
     SeahorseKeyserverResults *self = SEAHORSE_KEYSERVER_RESULTS (obj);
     GtkWindow *window = GTK_WINDOW (self);
-    g_autofree gchar* title = NULL;
+    g_autofree char* title = NULL;
 
     G_OBJECT_CLASS (seahorse_keyserver_results_parent_class)->constructed (obj);
 
@@ -255,7 +241,6 @@ seahorse_keyserver_results_constructed (GObject *obj)
 
     /* init key list */
     self->key_list = GTK_LIST_BOX (gtk_builder_get_object (self->builder, "key_list"));
-    gtk_list_box_set_header_func (self->key_list, key_list_header_func, NULL, NULL);
     g_signal_connect_object (self->key_list, "row-activated",
                              G_CALLBACK (on_row_activated), self, 0);
     gtk_widget_show (GTK_WIDGET (self->key_list));
