@@ -3,14 +3,9 @@
   <requires lib="gtk+" version="3.22"/>
   <template class="SeahorseKeyserverSearch" parent="GtkDialog">
     <property name="visible">True</property>
-    <property name="border_width">6</property>
+    <property name="border_width">18</property>
     <property name="use_header_bar">1</property>
     <property name="title" translatable="yes">Find Remote Keys</property>
-    <property name="resizable">False</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
-    <property name="gravity">center</property>
     <signal name="delete_event" handler="on_widget_delete_event"/>
     <child internal-child="vbox">
       <object class="GtkBox">
@@ -35,7 +30,7 @@
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">This will find keys for others on the Internet. These keys can then be imported into your local key ring.</property>
-                <property name="max_width_chars">70</property>
+                <property name="max_width_chars">60</property>
                 <property name="wrap">True</property>
               </object>
             </child>
@@ -80,45 +75,21 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow1">
-            <property name="height_request">135</property>
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hscrollbar_policy">never</property>
             <property name="vscrollbar_policy">automatic</property>
-            <property name="shadow_type">etched-out</property>
+            <property name="propagate-natural-height">True</property>
+            <property name="max-content-height">250</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkListBox" id="key_server_list">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkBox" id="key_server_list">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="border_width">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Key Servers:</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="shared_keys_list">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="border_width">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Shared Keys Near Me:</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+                <property name="margin-start">18</property>
+                <property name="margin-end">18</property>
+                <style>
+                  <class name="content"/>
+                </style>
               </object>
             </child>
           </object>
