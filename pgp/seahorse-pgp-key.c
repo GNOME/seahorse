@@ -575,7 +575,7 @@ seahorse_pgp_key_init (SeahorsePgpKey *self)
 
     priv->uids = G_LIST_MODEL (g_list_store_new (SEAHORSE_PGP_TYPE_UID));
     priv->subkeys = G_LIST_MODEL (g_list_store_new (SEAHORSE_PGP_TYPE_SUBKEY));
-    priv->photos = G_LIST_MODEL (g_list_store_new (SEAHORSE_PGP_TYPE_SUBKEY));
+    priv->photos = G_LIST_MODEL (g_list_store_new (SEAHORSE_PGP_TYPE_PHOTO));
 }
 
 static void
