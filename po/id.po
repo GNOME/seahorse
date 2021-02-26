@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-19 18:59+0000\n"
-"PO-Revision-Date: 2021-02-21 20:15+0700\n"
+"POT-Creation-Date: 2021-02-26 01:22+0000\n"
+"PO-Revision-Date: 2021-02-26 18:21+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -30,7 +30,7 @@ msgstr "Gubahan"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:130
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:101
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Batal"
@@ -56,8 +56,9 @@ msgstr "Tidak dapat mengekspor data"
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
 #: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
-#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:270
+#: pgp/seahorse-keyserver-sync.ui:79 pkcs11/pkcs11-request.vala:55
+#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
+#: src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "_Batal"
 
@@ -101,7 +102,7 @@ msgstr "Kunci"
 msgid "Certificates"
 msgstr "Sertifikat"
 
-#: common/prefs.vala:32
+#: common/prefs.vala:30
 msgid "Preferences"
 msgstr "Preferensi"
 
@@ -134,25 +135,42 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "Nomor port untuk mengakses peladen."
 
-#: common/seahorse-prefs-keyservers.ui:21
+#: common/seahorse-prefs-keyservers.ui:6 common/seahorse-prefs-keyservers.ui:10
 msgid "Keyservers"
 msgstr "Peladen kunci"
 
-#: common/seahorse-prefs-keyservers.ui:32
-msgid "Add a new keyserver"
-msgstr "Tambahkan peladen kunci baru"
+#: common/seahorse-prefs-keyservers.ui:40
+msgid "Add keyserver"
+msgstr "Tambah peladen kunci"
 
-#: common/seahorse-prefs-keyservers.ui:81
+#: common/seahorse-prefs-keyservers.ui:51
+msgid "Key Synchronization"
+msgstr "Sinkronisasi Kunci"
+
+#: common/seahorse-prefs-keyservers.ui:61
 msgid "_Publish keys to:"
 msgstr "_Publikasikan kunci ke:"
 
-#: common/seahorse-prefs-keyservers.ui:104
+#: common/seahorse-prefs-keyservers.ui:84
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Otomatis ambil kunci dari peladen _kunci"
 
-#: common/seahorse-prefs-keyservers.ui:119
+#: common/seahorse-prefs-keyservers.ui:99
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "Oto_matis selaraskan kunci yang berubah dengan peladen kunci"
+
+#: common/server-category.vala:63
+msgid "LDAP Key Server"
+msgstr "Peladen Kunci LDAP"
+
+#. WITH_LDAP
+#: common/server-category.vala:66
+msgid "HTTP Key Server"
+msgstr "Peladen Kunci HTTP"
+
+#: common/server-category.vala:67
+msgid "HTTPS Key Server"
+msgstr "Peladen Kunci HTTPS"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -664,7 +682,7 @@ msgid "Use"
 msgstr "Pakai"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1281
+#: pgp/seahorse-pgp-key-properties.c:1324
 msgid "Type"
 msgstr "Jenis"
 
@@ -690,7 +708,7 @@ msgstr "Hapus Kata Sandi"
 msgid "Keyring properties"
 msgstr "Properti ring kunci"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:887
 msgid "Name"
 msgstr "Nama"
 
@@ -1061,19 +1079,19 @@ msgstr "Buat ID pengguna baru"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Dekripsi gagal. Anda barangkali tidak memiliki kunci dekripsi."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:506
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
 msgid "The operation was cancelled"
 msgstr "Operasi dibatalkan"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:72
+#: pgp/seahorse-gpgme-expires-dialog.c:70
 msgid "Invalid expiry date"
 msgstr "Tanggal kedaluwarsa tak valid"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:73
+#: pgp/seahorse-gpgme-expires-dialog.c:71
 msgid "The expiry date must be in the future"
 msgstr "Tanggal kedaluwarsa mesti di masa depan"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:83
+#: pgp/seahorse-gpgme-expires-dialog.c:84
 msgid "Couldn’t change expiry date"
 msgstr "Tidak dapat mengubah tanggal kedaluwarsa"
 
@@ -1207,11 +1225,11 @@ msgid_plural "Are you sure you want to permanently delete %d keys?"
 msgstr[0] "Anda yakin ingin menghapus %d kunci secara permanen?"
 msgstr[1] "Anda yakin ingin menghapus %d kunci secara permanen?"
 
-#: pgp/seahorse-gpgme-key-op.c:352
+#: pgp/seahorse-gpgme-key-op.c:351
 msgid "Wrong password"
 msgstr "Kata sandi salah"
 
-#: pgp/seahorse-gpgme-key-op.c:352
+#: pgp/seahorse-gpgme-key-op.c:351
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 "Ini kali ketiga Anda memasukkan kata sandi yang salah. Silakan coba lagi."
@@ -1509,23 +1527,23 @@ msgstr "_Penandatangan:"
 msgid "_Sign"
 msgstr "_Tandatangani"
 
-#: pgp/seahorse-gpgme-subkey.c:89
+#: pgp/seahorse-gpgme-subkey.c:91
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Tak diketahui"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:93
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:524
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Pencarian tidak cukup spesifik. Peladen \"%s\" menemukan terlalu banyak "
 "kunci."
 
-#: pgp/seahorse-hkp-source.c:528
+#: pgp/seahorse-hkp-source.c:507
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Tidak dapat berkomunikasi dengan peladen \"'%s\": %s"
@@ -1547,16 +1565,16 @@ msgstr "Impor"
 msgid "Can’t import key"
 msgstr "Tidak dapat mengimpor kunci"
 
-#: pgp/seahorse-keyserver-results.c:240
+#: pgp/seahorse-keyserver-results.c:226
 msgid "Remote keys"
 msgstr "Kunci Jauh"
 
-#: pgp/seahorse-keyserver-results.c:242
+#: pgp/seahorse-keyserver-results.c:228
 #, c-format
 msgid "Remote keys containing “%s”"
 msgstr "Kunci jauh memuat \"%s\""
 
-#: pgp/seahorse-keyserver-results.c:357
+#: pgp/seahorse-keyserver-results.c:342
 msgid "The search for keys failed."
 msgstr "Pencarian kunci gagal."
 
@@ -1572,7 +1590,7 @@ msgstr ""
 msgid "Find Remote Keys"
 msgstr "Cari Kunci Jauh"
 
-#: pgp/seahorse-keyserver-search.ui:37
+#: pgp/seahorse-keyserver-search.ui:32
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -1580,51 +1598,43 @@ msgstr ""
 "Ini akan mencari kunci milik orang lain di Internet. Kunci tersebut kemudian "
 "dapat diimpor ke ring kunci lokal Anda."
 
-#: pgp/seahorse-keyserver-search.ui:52
+#: pgp/seahorse-keyserver-search.ui:47
 msgid "_Search for keys containing: "
 msgstr "_Cari kunci yang memuat: "
 
-#: pgp/seahorse-keyserver-search.ui:74
+#: pgp/seahorse-keyserver-search.ui:69
 msgid "Where to search:"
 msgstr "Mencari di mana:"
 
-#: pgp/seahorse-keyserver-search.ui:103
-msgid "Key Servers:"
-msgstr "Peladen Kunci:"
-
-#: pgp/seahorse-keyserver-search.ui:117
-msgid "Shared Keys Near Me:"
-msgstr "Kunci Dipakai Bersama Dekat Aku:"
-
-#: pgp/seahorse-keyserver-search.ui:144
+#: pgp/seahorse-keyserver-search.ui:115
 msgid "_Search"
 msgstr "_Cari"
 
-#: pgp/seahorse-keyserver-sync.c:54
+#: pgp/seahorse-keyserver-sync.c:71
 msgid "Couldn’t publish keys to server"
 msgstr "Tidak dapat mempublikasikan kunci ke peladen"
 
-#: pgp/seahorse-keyserver-sync.c:73
+#: pgp/seahorse-keyserver-sync.c:87
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Tidak dapat mengambil kunci dari peladen: %s"
 
-#: pgp/seahorse-keyserver-sync.c:158
+#: pgp/seahorse-keyserver-sync.c:197
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d kunci dipilih untuk penyelarasan</b>"
 msgstr[1] "<b>%d kunci dipilih untuk penyelarasan</b>"
 
-#: pgp/seahorse-keyserver-sync.c:232
+#: pgp/seahorse-keyserver-sync.c:305
 msgid "Synchronizing keys…"
 msgstr "Menyelaraskan kunci…"
 
-#: pgp/seahorse-keyserver-sync.ui:14
+#: pgp/seahorse-keyserver-sync.ui:5
 msgid "Sync Keys"
 msgstr "Selaraskan Kunci"
 
-#: pgp/seahorse-keyserver-sync.ui:52
+#: pgp/seahorse-keyserver-sync.ui:36
 msgid ""
 "This will publish the keys in your key ring so they’re available for others "
 "to use. You’ll also get any changes others have made since you received "
@@ -1634,7 +1644,7 @@ msgstr ""
 "dipakai orang lain. Anda juga mendapat perubahan yang dilakukan orang lain "
 "sejak Anda menerima kunci mereka."
 
-#: pgp/seahorse-keyserver-sync.ui:65
+#: pgp/seahorse-keyserver-sync.ui:45
 msgid ""
 "This will retrieve any changes others have made since you received their "
 "keys. No key server has been chosen for publishing, so your keys will not be "
@@ -1644,36 +1654,36 @@ msgstr ""
 "Anda menerima kunci mereka. Tak ada peladen kunci yang dipilih untuk "
 "publikasi, sehingga kunci Anda tak akan disediakan bagi orang lain."
 
-#: pgp/seahorse-keyserver-sync.ui:115
+#: pgp/seahorse-keyserver-sync.ui:65
 msgid "_Key Servers"
 msgstr "Peladen _Kunci"
 
-#: pgp/seahorse-keyserver-sync.ui:148
+#: pgp/seahorse-keyserver-sync.ui:89
 msgid "_Sync"
 msgstr "_Selaraskan"
 
-#: pgp/seahorse-ldap-source.c:434
+#: pgp/seahorse-ldap-source.c:433
 #, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Tidak dapat berkomunikasi dengan %s': %s"
 
-#: pgp/seahorse-ldap-source.c:594
+#: pgp/seahorse-ldap-source.c:593
 #, c-format
 msgid "Couldn’t resolve address %s"
 msgstr "Tidak dapat memecah alamat %s"
 
 #. Now that we've resolved our address, connect via IP
-#: pgp/seahorse-ldap-source.c:599
+#: pgp/seahorse-ldap-source.c:598
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Menyambung ke: %s"
 
-#: pgp/seahorse-ldap-source.c:654
+#: pgp/seahorse-ldap-source.c:653
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "URI tidak valid: %s"
 
-#: pgp/seahorse-ldap-source.c:662
+#: pgp/seahorse-ldap-source.c:661
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Memecah alamat peladen: %s"
@@ -1686,18 +1696,18 @@ msgstr "Kunci PGP"
 msgid "PGP keys are for encrypting email or files"
 msgstr "Kunci PGP dipakai untuk mengenkripsi surel atau berkas"
 
-#: pgp/seahorse-pgp-key.c:172
+#: pgp/seahorse-pgp-key.c:186
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
 msgstr[0] "(dan %d lainnya)"
 msgstr[1] "(dan %d lainnya)"
 
-#: pgp/seahorse-pgp-key.c:573
+#: pgp/seahorse-pgp-key.c:604
 msgid "Personal PGP key"
 msgstr "Kunci pribadi PGP"
 
-#: pgp/seahorse-pgp-key.c:575
+#: pgp/seahorse-pgp-key.c:606
 msgid "PGP key"
 msgstr "Kunci PGP"
 
@@ -1715,125 +1725,125 @@ msgid "Couldn’t delete user ID"
 msgstr "Tidak dapat menghapus ID pengguna"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
+#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1459
 msgid "[Unknown]"
 msgstr "[Tak diketahui]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
+#: pgp/seahorse-pgp-key-properties.c:467 pgp/seahorse-pgp-key-properties.c:1677
 msgid "Name/Email"
 msgstr "Nama/Email"
 
-#: pgp/seahorse-pgp-key-properties.c:472
+#: pgp/seahorse-pgp-key-properties.c:474
 msgid "Signature ID"
 msgstr "ID Tanda Tangan"
 
-#: pgp/seahorse-pgp-key-properties.c:578
+#: pgp/seahorse-pgp-key-properties.c:580
 msgid "Couldn’t change primary photo"
 msgstr "Tidak dapat mengubah foto utama"
 
-#: pgp/seahorse-pgp-key-properties.c:738
+#: pgp/seahorse-pgp-key-properties.c:767
 msgid "Error changing password"
 msgstr "Galat mengganti kata sandi"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:784
+#: pgp/seahorse-pgp-key-properties.c:814
 msgid "(unknown)"
 msgstr "(tidak diketahui)"
 
-#: pgp/seahorse-pgp-key-properties.c:789
+#: pgp/seahorse-pgp-key-properties.c:819
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Kunci ini kedaluwarsa pada: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:817
+#: pgp/seahorse-pgp-key-properties.c:845
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — Kunci Publik"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:820
+#: pgp/seahorse-pgp-key-properties.c:848
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Kunci Privat"
 
-#: pgp/seahorse-pgp-key-properties.c:1006
+#: pgp/seahorse-pgp-key-properties.c:1035
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Anda yakin ingin menghapus sub kunci %d dari %s selamanya?"
 
-#: pgp/seahorse-pgp-key-properties.c:1014
+#: pgp/seahorse-pgp-key-properties.c:1043
 msgid "Couldn’t delete subkey"
 msgstr "Tidak dapat menghapus sub kunci"
 
-#: pgp/seahorse-pgp-key-properties.c:1078
-#: pgp/seahorse-pgp-key-properties.c:1389
+#: pgp/seahorse-pgp-key-properties.c:1109
+#: pgp/seahorse-pgp-key-properties.c:1433
 msgid "Unable to change trust"
 msgstr "Tidak dapat mengubah kepercayaan"
 
-#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1121 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Tidak dapat mengekspor kunci"
 
-#: pgp/seahorse-pgp-key-properties.c:1239
-#: pgp/seahorse-pgp-key-properties.c:1323
+#: pgp/seahorse-pgp-key-properties.c:1279
+#: pgp/seahorse-pgp-key-properties.c:1367
 msgctxt "Expires"
 msgid "Never"
 msgstr "Tak pernah"
 
-#: pgp/seahorse-pgp-key-properties.c:1278
+#: pgp/seahorse-pgp-key-properties.c:1321
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1327
 msgid "Usage"
 msgstr "Cara Pakai"
 
-#: pgp/seahorse-pgp-key-properties.c:1287
+#: pgp/seahorse-pgp-key-properties.c:1330
 msgid "Created"
 msgstr "Dibuat"
 
-#: pgp/seahorse-pgp-key-properties.c:1290
+#: pgp/seahorse-pgp-key-properties.c:1333
 msgid "Expires"
 msgstr "Kadaluwarsa"
 
-#: pgp/seahorse-pgp-key-properties.c:1293
+#: pgp/seahorse-pgp-key-properties.c:1336
 msgid "Status"
 msgstr "Status"
 
-#: pgp/seahorse-pgp-key-properties.c:1296
+#: pgp/seahorse-pgp-key-properties.c:1339
 msgid "Strength"
 msgstr "Kekuatan"
 
-#: pgp/seahorse-pgp-key-properties.c:1314
+#: pgp/seahorse-pgp-key-properties.c:1358
 msgid "Revoked"
 msgstr "Dicabut"
 
-#: pgp/seahorse-pgp-key-properties.c:1316
+#: pgp/seahorse-pgp-key-properties.c:1360
 msgid "Expired"
 msgstr "Kadaluarsa"
 
-#: pgp/seahorse-pgp-key-properties.c:1318
+#: pgp/seahorse-pgp-key-properties.c:1362
 msgid "Disabled"
 msgstr "Dimatikan"
 
-#: pgp/seahorse-pgp-key-properties.c:1320
+#: pgp/seahorse-pgp-key-properties.c:1364
 msgid "Good"
 msgstr "Bagus"
 
-#: pgp/seahorse-pgp-key-properties.c:1628
+#: pgp/seahorse-pgp-key-properties.c:1680
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "ID Kunci"
 
-#: pgp/seahorse-pgp-key-properties.c:1771
+#: pgp/seahorse-pgp-key-properties.c:1823
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Saya percaya tanda tangan dari \"%s\" pada kunci lain"
 
-#: pgp/seahorse-pgp-key-properties.c:1778
+#: pgp/seahorse-pgp-key-properties.c:1830
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1842,7 +1852,7 @@ msgstr ""
 "Bila Anda percaya bahwa orang yang memiliki kunci ini adalah \"'%s\", "
 "<i>tanda tangani</i> kunci ini:"
 
-#: pgp/seahorse-pgp-key-properties.c:1785
+#: pgp/seahorse-pgp-key-properties.c:1837
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -2125,19 +2135,19 @@ msgstr "Pilih Kunci Tanda Tangan"
 msgid "_Sign message with key:"
 msgstr "Tanda tangani pe_san dengan kunci:"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
 msgstr "Mengekspor data"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Retrieving data"
 msgstr "Mengambil data"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Importing data"
 msgstr "Mengimpor data"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Sending data"
 msgstr "Mengirim data"
 
@@ -2335,7 +2345,7 @@ msgstr "Teks yang dijatuhkan"
 msgid "Clipboard text"
 msgstr "Teks papan klip"
 
-#: src/key-manager.vala:497
+#: src/key-manager.vala:499
 msgid "Couldn’t unlock keyring"
 msgstr "Tidak dapat membuka ring kunci"
 
@@ -2447,15 +2457,15 @@ msgstr "Cari kunci atau kata sandi"
 msgid "Filter"
 msgstr "Penyaring"
 
-#: src/seahorse-key-manager.ui:532
+#: src/seahorse-key-manager.ui:515
 msgid "This collection seems to be empty"
 msgstr "Koleksi ini tampaknya kosong"
 
-#: src/seahorse-key-manager.ui:564
+#: src/seahorse-key-manager.ui:525
 msgid "Keyring is locked"
 msgstr "Ring kunci terkunci"
 
-#: src/seahorse-key-manager.ui:574
+#: src/seahorse-key-manager.ui:530
 msgid "Unlock"
 msgstr "Buka Kunci"
 
@@ -2788,6 +2798,15 @@ msgstr "Tidak dapat menata kunci Secure Shell pada komputer jauh."
 msgid "Configuring Secure Shell Keys…"
 msgstr "Mengkonfigurasi Kunci Secure Shell…"
 
+#~ msgid "Add a new keyserver"
+#~ msgstr "Tambahkan peladen kunci baru"
+
+#~ msgid "Key Servers:"
+#~ msgstr "Peladen Kunci:"
+
+#~ msgid "Shared Keys Near Me:"
+#~ msgstr "Kunci Dipakai Bersama Dekat Aku:"
+
 #~ msgid "Not a valid Key Server address."
 #~ msgstr "Bukan alamat Peladen Kunci yang valid."
 
@@ -2803,12 +2822,6 @@ msgstr "Mengkonfigurasi Kunci Secure Shell…"
 
 #~ msgid "_Find keys via:"
 #~ msgstr "_Cari kunci melalui:"
-
-#~ msgid "HTTP Key Server"
-#~ msgstr "Peladen Kunci HTTP"
-
-#~ msgid "LDAP Key Server"
-#~ msgstr "Peladen Kunci LDAP"
 
 #~ msgid ""
 #~ "Seahorse is a GNOME application for managing encryption keys. It also "
