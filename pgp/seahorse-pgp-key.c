@@ -367,6 +367,7 @@ seahorse_pgp_key_add_subkey (SeahorsePgpKey    *self,
     SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
 
     g_return_if_fail (SEAHORSE_PGP_IS_KEY (self));
+    g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (subkey));
 
     /* Don't try to add a key which already exists */
     for (guint i = 0; i < g_list_model_get_n_items (priv->subkeys); i++) {
@@ -415,6 +416,7 @@ seahorse_pgp_key_add_photo (SeahorsePgpKey   *self,
     SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
 
     g_return_if_fail (SEAHORSE_PGP_IS_KEY (self));
+    g_return_if_fail (SEAHORSE_PGP_IS_PHOTO (photo));
 
     /* Don't try to add a key which already exists */
     for (guint i = 0; i < g_list_model_get_n_items (priv->photos); i++) {
