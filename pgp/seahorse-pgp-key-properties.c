@@ -1048,7 +1048,8 @@ on_subkeys_revoke (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorsePgpSubkey *subkey = get_selected_subkey (self);
-    if (subkey != NULL)
+
+    if (!subkey)
         return;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
