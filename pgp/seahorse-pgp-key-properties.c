@@ -31,6 +31,7 @@
 #include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
+#include "seahorse-gpgme-revoke-dialog.h"
 #include "seahorse-gpgme-sign-dialog.h"
 #include "seahorse-pgp-backend.h"
 #include "seahorse-gpg-op.h"
@@ -1048,13 +1049,16 @@ on_subkeys_revoke (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorsePgpSubkey *subkey = get_selected_subkey (self);
+    GtkWidget *dialog;
 
     if (!subkey)
         return;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
-    seahorse_gpgme_revoke_new (SEAHORSE_GPGME_SUBKEY (subkey),
-                               GTK_WINDOW (self));
+    dialog = seahorse_gpgme_revoke_dialog_new (SEAHORSE_GPGME_SUBKEY (subkey),
+                                               GTK_WINDOW (self));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
 }
 
 static void

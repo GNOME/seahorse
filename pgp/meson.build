@@ -14,7 +14,7 @@ pgp_sources = files(
   'seahorse-gpgme-keyring.c',
   'seahorse-gpgme-photo.c',
   'seahorse-gpgme-photos.c',
-  'seahorse-gpgme-revoke.c',
+  'seahorse-gpgme-revoke-dialog.c',
   'seahorse-gpgme-secret-deleter.c',
   'seahorse-gpgme-sign-dialog.c',
   'seahorse-gpgme-subkey.c',

@@ -2,7 +2,8 @@
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <template class="SeahorseGpgmeRevokeDialog" parent="GtkDialog">
-    <property name="border_width">12</property>
+    <property name="visible">True</property>
+    <property name="border_width">5</property>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -16,7 +17,7 @@
             <child>
               <object class="GtkLabel" id="reason_label">
                 <property name="visible">True</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Reason:</property>
                 <property name="tooltip_text" translatable="yes">Reason for revoking the key</property>
                 <property name="use_underline">True</property>
@@ -39,10 +40,10 @@
             <child>
               <object class="GtkLabel" id="desription_label">
                 <property name="visible">True</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Description:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">description_entry</property>
+                <property name="mnemonic_widget">description</property>
               </object>
               <packing>
                 <property name="top_attach">1</property>
@@ -50,7 +51,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="description_entry">
+              <object class="GtkEntry" id="description">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Optional description of revocation</property>
@@ -72,10 +73,10 @@
       <object class="GtkButton" id="cancelbutton">
         <property name="label" translatable="yes">_Cancel</property>
         <property name="visible">True</property>
-        <property name="use-underline">True</property>
         <property name="can_focus">True</property>
         <property name="can_default">True</property>
         <property name="receives_default">False</property>
+        <signal name="clicked" handler="on_widget_closed"/>
       </object>
     </child>
     <child type="action">
