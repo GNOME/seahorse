@@ -228,6 +228,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes">E_xpiration Date</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic-widget">expires_datepicker</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -238,13 +239,16 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="expiry_date_container">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="orientation">horizontal</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">12</property>
                     <child>
-                      <placeholder/>
+                      <object class="SeahorseDatePicker" id="expires_datepicker">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                      </object>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="expires_check">

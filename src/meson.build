@@ -29,7 +29,6 @@ seahorse_dependencies = [
 ]
 
 seahorse_linkedlibs = [
-  libeggdatetime_lib,
   libtreemultidnd_lib,
 ]
 

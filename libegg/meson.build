@@ -1,22 +1,3 @@
-# Libeggdatetime
-libeggdatetime_dependencies = [
-  gtk,
-  config,
-]
-
-libeggdatetime_cflags = [
-  '-DGTK_DISABLE_DEPRECATED',
-  '-DGDK_DISABLE_DEPRECATED',
-  '-DG_DISABLE_DEPRECATED',
-]
-
-libeggdatetime_lib = static_library('libeggdatetime',
-  files('egg-datetime.c'),
-  c_args: libeggdatetime_cflags,
-  dependencies: libeggdatetime_dependencies,
-)
-
-
 # Libtreemultidnd
 libtreemultidnd_dependencies = [
   gtk,

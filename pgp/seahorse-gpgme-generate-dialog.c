@@ -30,8 +30,6 @@
 
 #include "seahorse-common.h"
 
-#include "libegg/egg-datetime.h"
-
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
 
@@ -59,8 +57,7 @@ struct _SeahorseGpgmeGenerateDialog {
     GtkWidget *bits_entry;
 
     GtkWidget *expires_check;
-    GtkWidget *expiry_date_container;
-    GtkWidget *expiry_date;
+    GtkWidget *expires_datepicker;
 };
 
 enum {
@@ -195,7 +192,7 @@ on_gpgme_generate_expires_toggled (GtkToggleButton *button,
 {
     SeahorseGpgmeGenerateDialog *self = SEAHORSE_GPGME_GENERATE_DIALOG (user_data);
 
-    gtk_widget_set_sensitive (self->expiry_date,
+    gtk_widget_set_sensitive (self->expires_datepicker,
                               !gtk_toggle_button_get_active (button));
 }
 
@@ -257,12 +254,8 @@ seahorse_gpgme_generate_dialog_response (GtkDialog *dialog, int response)
     }
 
     /* The expiry */
-    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->expires_check))) {
-        time_t time_expires;
-
-        egg_datetime_get_as_time_t (EGG_DATETIME (self->expiry_date), &time_expires);
-        expires = g_date_time_new_from_unix_utc (time_expires);
-    }
+    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->expires_check)))
+        expires = seahorse_date_picker_get_datetime (SEAHORSE_DATE_PICKER (self->expires_datepicker));
 
     /* Less confusing with less on the screen */
     gtk_widget_hide (GTK_WIDGET (self));
@@ -322,7 +315,8 @@ seahorse_gpgme_generate_dialog_finalize (GObject *obj)
 static void
 seahorse_gpgme_generate_dialog_init (SeahorseGpgmeGenerateDialog *self)
 {
-    time_t expires;
+    g_autoptr (GDateTime) now = NULL;
+    g_autoptr (GDateTime) next_year = NULL;
     guint i;
 
     gtk_widget_init_template (GTK_WIDGET (self));
@@ -337,15 +331,11 @@ seahorse_gpgme_generate_dialog_init (SeahorseGpgmeGenerateDialog *self)
     on_gpgme_generate_algorithm_changed (GTK_COMBO_BOX (self->algorithm_choice),
                                          self);
 
-    expires = time (NULL);
-    expires += (60 * 60 * 24 * 365); /* Seconds in a year */
-
     /* Default expiry date */
-    self->expiry_date = egg_datetime_new_from_time_t (expires);
-    gtk_box_pack_start (GTK_BOX (self->expiry_date_container),
-                        self->expiry_date, TRUE, TRUE, 0);
-    gtk_widget_set_sensitive (self->expiry_date, FALSE);
-    gtk_widget_show (self->expiry_date);
+    now = g_date_time_new_now_utc ();
+    next_year = g_date_time_add_years (now, 1);
+    seahorse_date_picker_set_datetime (SEAHORSE_DATE_PICKER (self->expires_datepicker),
+                                       next_year);
 
     on_gpgme_generate_entry_changed (NULL, self);
 }
@@ -377,7 +367,7 @@ seahorse_gpgme_generate_dialog_class_init (SeahorseGpgmeGenerateDialogClass *kla
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, comment_entry);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, algorithm_choice);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, bits_entry);
-    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expiry_date_container);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_datepicker);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_check);
     gtk_widget_class_bind_template_callback (widget_class, on_gpgme_generate_entry_changed);
     gtk_widget_class_bind_template_callback (widget_class, on_gpgme_generate_expires_toggled);

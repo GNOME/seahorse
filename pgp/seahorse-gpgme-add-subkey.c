@@ -20,8 +20,8 @@
 #include <glib/gi18n.h>
 
 #include "config.h"
+#include "seahorse-common.h"
 #include "libseahorse/seahorse-util.h"
-#include "libegg/egg-datetime.h"
 #include "seahorse-gpgme-add-subkey.h"
 #include "seahorse-gpgme-key-op.h"
 
@@ -42,8 +42,7 @@ struct _SeahorseGpgmeAddSubkey {
 
     GtkWidget *length_spinner;
 
-    GtkWidget *datetime_placeholder;
-    GtkWidget *expires_datetime;
+    GtkWidget *expires_datepicker;
     GtkWidget *never_expires_check;
 };
 
@@ -103,7 +102,7 @@ on_gpgme_add_subkey_never_expires_toggled (GtkToggleButton *togglebutton,
 {
     SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (user_data);
 
-    gtk_widget_set_sensitive (self->expires_datetime,
+    gtk_widget_set_sensitive (self->expires_datepicker,
                               !gtk_toggle_button_get_active (togglebutton));
 }
 
@@ -135,16 +134,12 @@ seahorse_gpgme_add_subkey_get_active_type (SeahorseGpgmeAddSubkey *self)
 GDateTime *
 seahorse_gpgme_add_subkey_get_expires (SeahorseGpgmeAddSubkey *self)
 {
-    time_t expires;
-
     g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->never_expires_check)))
         return 0;
 
-    egg_datetime_get_as_time_t (EGG_DATETIME (self->expires_datetime),
-                                &expires);
-    return g_date_time_new_from_unix_utc (expires);
+    return seahorse_date_picker_get_datetime (SEAHORSE_DATE_PICKER(self->expires_datepicker));
 }
 
 guint
@@ -220,6 +215,8 @@ seahorse_gpgme_add_subkey_init (SeahorseGpgmeAddSubkey *self)
 {
     GtkTreeIter iter;
     GtkCellRenderer *renderer;
+    g_autoptr (GDateTime) now = NULL;
+    g_autoptr (GDateTime) next_year = NULL;
 
     gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -260,11 +257,10 @@ seahorse_gpgme_add_subkey_init (SeahorseGpgmeAddSubkey *self)
                         COMBO_INT, 3,
                         -1);
 
-    self->expires_datetime = egg_datetime_new ();
-    gtk_container_add (GTK_CONTAINER (self->datetime_placeholder),
-                       self->expires_datetime);
-    gtk_widget_show (self->expires_datetime);
-    gtk_widget_set_sensitive (self->expires_datetime, FALSE);
+    now = g_date_time_new_now_utc ();
+    next_year = g_date_time_add_years (now, 1);
+    seahorse_date_picker_set_datetime (SEAHORSE_DATE_PICKER (self->expires_datepicker),
+                                       next_year);
 }
 
 static void
@@ -287,7 +283,7 @@ seahorse_gpgme_add_subkey_class_init (SeahorseGpgmeAddSubkeyClass *klass)
     gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Seahorse/seahorse-gpgme-add-subkey.ui");
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, type_combo);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, length_spinner);
-    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, datetime_placeholder);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, expires_datepicker);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, never_expires_check);
     gtk_widget_class_bind_template_callback (widget_class, handler_gpgme_add_subkey_type_changed);
     gtk_widget_class_bind_template_callback (widget_class, on_gpgme_add_subkey_never_expires_toggled);
