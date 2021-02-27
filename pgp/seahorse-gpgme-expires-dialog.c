@@ -209,12 +209,14 @@ seahorse_gpgme_expires_dialog_class_init (SeahorseGpgmeExpiresDialogClass *klass
 
 GtkDialog *
 seahorse_gpgme_expires_dialog_new (SeahorseGpgmeSubkey *subkey,
-                                   GtkWindow *parent)
+                                   GtkWindow           *parent)
 {
     g_return_val_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey), NULL);
+    g_return_val_if_fail (!parent || GTK_IS_WINDOW (parent), NULL);
 
     return g_object_new (SEAHORSE_GPGME_TYPE_EXPIRES_DIALOG,
                          "subkey", subkey,
+                         "transient-for", parent,
                          "use-header-bar", 1,
                          NULL);
 }
