@@ -28,10 +28,6 @@ seahorse_dependencies = [
   ssh_dep,
 ]
 
-seahorse_linkedlibs = [
-  libtreemultidnd_lib,
-]
-
 seahorse_c_flags = [
   '-DHANDY_USE_UNSTABLE_API',
 ]
@@ -54,6 +50,5 @@ seahorse_exe = executable('seahorse',
   dependencies: seahorse_dependencies,
   vala_args: seahorse_vala_flags,
   c_args: seahorse_c_flags,
-  link_with: seahorse_linkedlibs,
   install: true,
 )

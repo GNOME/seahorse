@@ -161,7 +161,6 @@ if get_option('help')
   subdir('help')
 endif
 subdir('common')
-subdir('libegg')
 subdir('gkr')
 subdir('ssh')
 if get_option('pgp-support')

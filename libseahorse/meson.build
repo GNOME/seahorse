@@ -16,7 +16,6 @@ libseahorse_deps = [
   glib_deps,
   gcr,
   libsecret,
-  libtreemultidnd_dep,
   common_dep,
 ]
 

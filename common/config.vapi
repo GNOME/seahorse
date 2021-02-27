@@ -84,10 +84,3 @@ public class Pkcs11.Backend {
 	public static Gcr.Collection get_writable_tokens(Pkcs11.Backend? self, ulong with_mechanism);
 }
 }
-
-namespace Egg {
-[CCode (cheader_filename = "libegg/eggtreemultidnd.h")]
-namespace TreeMultiDrag {
-	public void add_drag_support(Gtk.TreeView view);
-}
-}
