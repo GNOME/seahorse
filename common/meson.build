@@ -39,6 +39,7 @@ common_deps = [
 
 common_vala_args = [
   '--gresources', resources_xml,
+  '--use-header',
 ]
 
 if get_option('keyservers-support')
