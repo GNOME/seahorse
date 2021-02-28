@@ -288,7 +288,7 @@ seahorse_gpgme_photo_add (SeahorseGpgmeKey *pkey,
 		   denote an invalid format file */
 		if (gerr == GPG_E (GPG_ERR_USER_1))
 			seahorse_util_show_error (NULL, _("Couldn’t add photo"),
-			                          _("The file could not be loaded. It may be in an invalid format"));
+			                          _("The file could not be loaded. It may be in an invalid format."));
 		else
 			seahorse_gpgme_handle_error (gerr, _("Couldn’t add photo"));
 		res = FALSE;
