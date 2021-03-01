@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-17 18:33+0000\n"
-"PO-Revision-Date: 2021-02-17 22:24+0100\n"
+"POT-Creation-Date: 2021-02-28 18:14+0000\n"
+"PO-Revision-Date: 2021-02-28 20:15+0100\n"
 "Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -30,24 +30,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Gtranslator 3.38.0\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
 msgstr "Ajouter un serveur de clés"
 
-#: common/add-keyserver-dialog.vala:64
+#: common/add-keyserver-dialog.vala:66
 msgid "Custom"
 msgstr "Personnalisé"
 
 #. Buttons
-#: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:130
+#: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:101
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Annuler"
 
-#: common/add-keyserver-dialog.vala:69
+#: common/add-keyserver-dialog.vala:71
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -63,13 +63,23 @@ msgstr "Impossible d’exporter les clés"
 msgid "Couldn’t export data"
 msgstr "Impossible d’exporter les données"
 
+#: common/datepicker.vala:55
+msgid "Enter the date directly"
+msgstr "Saisissez directement la date"
+
+#: common/datepicker.vala:62
+msgid "Select the date from a calendar"
+msgstr "Sélectionnez la date dans un calendrier"
+
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
-#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:270
+#: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
+#: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
+#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
+#: src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "A_nnuler"
 
@@ -113,29 +123,13 @@ msgstr "Clés"
 msgid "Certificates"
 msgstr "Certificats"
 
-#: common/prefs.vala:42
+#: common/prefs.vala:30
 msgid "Preferences"
 msgstr "Préférences"
 
-#: common/prefs.vala:150
+#: common/prefs-keyservers.vala:44
 msgid "None: Don’t publish keys"
 msgstr "Aucun : ne pas publier les clés"
-
-#: common/prefs.vala:166
-msgid "Not a valid Key Server address."
-msgstr "Adresse de serveur de clés non valide."
-
-#: common/prefs.vala:167
-msgid ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-msgstr ""
-"Pour obtenir de l’aide, contactez votre administrateur système ou "
-"l’administrateur du serveur de clés."
-
-#: common/prefs.vala:236
-msgid "URL"
-msgstr "URL"
 
 #: common/seahorse-add-keyserver.ui:12
 msgid "initial temporary item"
@@ -162,26 +156,43 @@ msgstr " :"
 msgid "The port to access the server on."
 msgstr "Le port sur lequel accéder au serveur."
 
-#: common/seahorse-prefs.ui:34
-msgid "_Find keys via:"
-msgstr "_Trouver des clés avec :"
+#: common/seahorse-prefs-keyservers.ui:6 common/seahorse-prefs-keyservers.ui:10
+msgid "Keyservers"
+msgstr "Serveurs de clés"
 
-#: common/seahorse-prefs.ui:105
+#: common/seahorse-prefs-keyservers.ui:40
+msgid "Add keyserver"
+msgstr "Ajouter un serveur de clés"
+
+#: common/seahorse-prefs-keyservers.ui:51
+msgid "Key Synchronization"
+msgstr "Synchronisation des clés"
+
+#: common/seahorse-prefs-keyservers.ui:61
 msgid "_Publish keys to:"
 msgstr "_Publier les clés sur :"
 
-#: common/seahorse-prefs.ui:128
+#: common/seahorse-prefs-keyservers.ui:84
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Récupérer automatiquement les _clés depuis les serveurs de clés"
 
-#: common/seahorse-prefs.ui:142
+#: common/seahorse-prefs-keyservers.ui:99
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr ""
 "Synchroniser automatiquement les clés _modifiées avec les serveurs de clés"
 
-#: common/seahorse-prefs.ui:159
-msgid "Key Servers"
-msgstr "Serveurs de clés"
+#: common/server-category.vala:63
+msgid "LDAP Key Server"
+msgstr "Serveur de clés LDAP"
+
+#. WITH_LDAP
+#: common/server-category.vala:66
+msgid "HTTP Key Server"
+msgstr "Serveur de clés HTTP"
+
+#: common/server-category.vala:67
+msgid "HTTPS Key Server"
+msgstr "Serveur de clés HTTPS"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -439,7 +450,7 @@ msgstr "Gérer vos mots de passe et vos clés de chiffrement"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
 msgid "Seahorse is a GNOME application for managing encryption keys."
-msgstr "Seahorse est une application GNOME pour gérer les clés de chiffrement"
+msgstr "Seahorse est une application GNOME pour gérer les clés de chiffrement."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
@@ -649,7 +660,8 @@ msgstr "Ajouter un mot de passe"
 msgid "_Keyring:"
 msgstr "_Trousseau :"
 
-#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
+#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-gpgme-revoke-dialog.ui:44
+#: pgp/seahorse-revoke.ui:43
 msgid "_Description:"
 msgstr "_Description :"
 
@@ -696,7 +708,7 @@ msgid "Use"
 msgstr "Utilité"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1281
+#: pgp/seahorse-pgp-key-properties.c:1329
 msgid "Type"
 msgstr "Type"
 
@@ -722,7 +734,7 @@ msgstr "Supprimer le mot de passe"
 msgid "Keyring properties"
 msgstr "Propriétés du trousseau"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
 msgid "Name"
 msgstr "Nom"
 
@@ -738,285 +750,29 @@ msgstr "Modifier le mot de passe"
 msgid "Set as default"
 msgstr "Par défaut"
 
-#: libegg/egg-datetime.c:316
-msgid "Display flags"
-msgstr "Afficher les indicateurs"
-
-#: libegg/egg-datetime.c:317
-msgid "Displayed date and/or time properties"
-msgstr "Les propriétés de date et d’heure affichées"
-
-#: libegg/egg-datetime.c:322
-msgid "Lazy mode"
-msgstr "Mode paresseux"
-
-#: libegg/egg-datetime.c:323
-msgid "Lazy mode doesn’t normalize entered date and time values"
-msgstr ""
-"Le mode paresseux ne normalise pas les valeurs de date et d’heure saisies"
-
-#: libegg/egg-datetime.c:328
-msgid "Year"
-msgstr "Année"
-
-#: libegg/egg-datetime.c:329
-msgid "Displayed year"
-msgstr "Année affichée"
-
-#: libegg/egg-datetime.c:334
-msgid "Month"
-msgstr "Mois"
-
-#: libegg/egg-datetime.c:335
-msgid "Displayed month"
-msgstr "Mois affiché"
-
-#: libegg/egg-datetime.c:340
-msgid "Day"
-msgstr "Jour"
-
-#: libegg/egg-datetime.c:341
-msgid "Displayed day of month"
-msgstr "Jour du mois affiché"
-
-#: libegg/egg-datetime.c:346
-msgid "Hour"
-msgstr "Heure"
-
-#: libegg/egg-datetime.c:347
-msgid "Displayed hour"
-msgstr "Heure affichée"
-
-#: libegg/egg-datetime.c:352
-msgid "Minute"
-msgstr "Minute"
-
-#: libegg/egg-datetime.c:353
-msgid "Displayed minute"
-msgstr "Minute affichée"
-
-#: libegg/egg-datetime.c:358
-msgid "Second"
-msgstr "Seconde"
-
-#: libegg/egg-datetime.c:359
-msgid "Displayed second"
-msgstr "Seconde affichée"
-
-#: libegg/egg-datetime.c:364
-msgid "Lower limit year"
-msgstr "Année de la limite inférieure"
-
-#: libegg/egg-datetime.c:365
-msgid "Year part of the lower date limit"
-msgstr "La partie année de la date limite inférieure"
-
-#: libegg/egg-datetime.c:370
-msgid "Upper limit year"
-msgstr "Année de la limite supérieure"
-
-#: libegg/egg-datetime.c:371
-msgid "Year part of the upper date limit"
-msgstr "La partie année de la date limite supérieure"
-
-#: libegg/egg-datetime.c:376
-msgid "Lower limit month"
-msgstr "Mois de la limite inférieure"
-
-#: libegg/egg-datetime.c:377
-msgid "Month part of the lower date limit"
-msgstr "La partie mois de la date limite inférieure"
-
-#: libegg/egg-datetime.c:382
-msgid "Upper limit month"
-msgstr "Mois de la limite supérieure"
-
-#: libegg/egg-datetime.c:383
-msgid "Month part of the upper date limit"
-msgstr "La partie mois de la date limite supérieure"
-
-#: libegg/egg-datetime.c:388
-msgid "Lower limit day"
-msgstr "Jour de la limite inférieure"
-
-#: libegg/egg-datetime.c:389
-msgid "Day of month part of the lower date limit"
-msgstr "La partie jour de la date limite inférieure"
-
-#: libegg/egg-datetime.c:394
-msgid "Upper limit day"
-msgstr "Jour de la limite supérieure"
-
-#: libegg/egg-datetime.c:395
-msgid "Day of month part of the upper date limit"
-msgstr "La partie jour du mois de la date limite supérieure"
-
-#: libegg/egg-datetime.c:400
-msgid "Lower limit hour"
-msgstr "Heure de la limite inférieure"
-
-#: libegg/egg-datetime.c:401
-msgid "Hour part of the lower time limit"
-msgstr "La partie heure de l’heure limite inférieure"
-
-#: libegg/egg-datetime.c:406
-msgid "Upper limit hour"
-msgstr "Heure de la limite supérieure"
-
-#: libegg/egg-datetime.c:407
-msgid "Hour part of the upper time limit"
-msgstr "La partie heure de l’heure limite supérieure"
-
-#: libegg/egg-datetime.c:412
-msgid "Lower limit minute"
-msgstr "Minute de la limite inférieure"
-
-#: libegg/egg-datetime.c:413
-msgid "Minute part of the lower time limit"
-msgstr "La partie minute de l’heure limite inférieure"
-
-#: libegg/egg-datetime.c:418
-msgid "Upper limit minute"
-msgstr "Minute de la limite supérieure"
-
-#: libegg/egg-datetime.c:419
-msgid "Minute part of the upper time limit"
-msgstr "La partie minute de l’heure limite supérieure"
-
-#: libegg/egg-datetime.c:424
-msgid "Lower limit second"
-msgstr "Seconde de la limite inférieure"
-
-#: libegg/egg-datetime.c:425
-msgid "Second part of the lower time limit"
-msgstr "La partie seconde de l’heure limite inférieure"
-
-#: libegg/egg-datetime.c:430
-msgid "Upper limit second"
-msgstr "Seconde de la limite supérieure"
-
-#: libegg/egg-datetime.c:431
-msgid "Second part of the upper time limit"
-msgstr "La partie seconde de l’heure limite supérieure"
-
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
-#.
-#: libegg/egg-datetime.c:473
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
-
-#: libegg/egg-datetime.c:495
-msgid "Date"
-msgstr "Date"
-
-#: libegg/egg-datetime.c:495
-msgid "Enter the date directly"
-msgstr "Saisissez directement la date"
-
-#: libegg/egg-datetime.c:502
-msgid "Select Date"
-msgstr "Sélectionnez la date"
-
-#: libegg/egg-datetime.c:502
-msgid "Select the date from a calendar"
-msgstr "Sélectionnez la date dans un calendrier"
-
-#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2203
-msgid "Time"
-msgstr "Heure"
-
-#: libegg/egg-datetime.c:520
-msgid "Enter the time directly"
-msgstr "Saisissez directement l’heure"
-
-#: libegg/egg-datetime.c:527
-msgid "Select Time"
-msgstr "Sélectionnez l’heure"
-
-#: libegg/egg-datetime.c:527
-msgid "Select the time from a list"
-msgstr "Sélectionnez l’heure dans une liste"
-
-#. Translators: set this to anything else if you want to use a
-#. * 24 hour clock.
-#.
-#: libegg/egg-datetime.c:792
-msgid "24hr: no"
-msgstr "24hr: yes"
-
-#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1264
-#: libegg/egg-datetime.c:1268
-msgid "AM"
-msgstr "AM"
-
-#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1265
-#: libegg/egg-datetime.c:1272
-msgid "PM"
-msgstr "PM"
-
-#. Translators: This is hh:mm:ss AM/PM.
-#: libegg/egg-datetime.c:806
-#, c-format
-msgid "%02d:%02d:%02d %s"
-msgstr "%02d:%02d:%02d %s"
-
-#. Translators: This is hh:mm AM/PM.
-#: libegg/egg-datetime.c:809
-#, c-format
-msgid "%02d:%02d %s"
-msgstr "%02d:%02d %s"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:813
-#, c-format
-msgid "%02d:%02d:%02d"
-msgstr "%02d:%02d:%02d"
-
-#. Translators: This is hh:mm.
-#: libegg/egg-datetime.c:816
-#, c-format
-msgid "%02d:%02d"
-msgstr "%02d:%02d"
-
-#. TODO: should handle other display modes as well...
-#. Translators: This is YYYY-MM-DD
-#: libegg/egg-datetime.c:1180
-#, c-format
-msgid "%04d-%02d-%02d"
-msgstr "%3$02d/%2$02d/%1$04d"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:1245
-#, c-format
-msgid "%u:%u:%u"
-msgstr "%u:%u:%u"
-
 #: libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Impossible d’afficher l’aide : %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:213
+#: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Ajouter une sous-clé à %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
+#: pgp/seahorse-gpgme-add-subkey.c:236 pgp/seahorse-gpgme-generate-dialog.c:83
 msgid "DSA (sign only)"
 msgstr "DSA (signature seule)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:247
+#: pgp/seahorse-gpgme-add-subkey.c:244
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (chiffrement seul)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
+#: pgp/seahorse-gpgme-add-subkey.c:250 pgp/seahorse-gpgme-generate-dialog.c:84
 msgid "RSA (sign only)"
 msgstr "RSA (signature seule)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:259
+#: pgp/seahorse-gpgme-add-subkey.c:256
 msgid "RSA (encrypt only)"
 msgstr "RSA (chiffrement seul)"
 
@@ -1036,15 +792,15 @@ msgstr "Longueur de la clé"
 msgid "Expiration Date"
 msgstr "Date d’expiration"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:110
+#: pgp/seahorse-gpgme-add-subkey.ui:109
 msgid "Never E_xpires"
 msgstr "N’e_xpire jamais"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:114
+#: pgp/seahorse-gpgme-add-subkey.ui:113
 msgid "If key never expires"
 msgstr "Si la clé n’a pas une durée de vie limitée"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:150
+#: pgp/seahorse-gpgme-add-subkey.ui:149
 msgid "Generate a new subkey"
 msgstr "Générer une nouvelle sous-clé"
 
@@ -1096,19 +852,19 @@ msgstr ""
 "Le déchiffrement a échoué. Vous ne disposez probablement pas de la clé de "
 "déchiffrement."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:516
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
 msgid "The operation was cancelled"
 msgstr "L’opération a été annulée"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:72
+#: pgp/seahorse-gpgme-expires-dialog.c:70
 msgid "Invalid expiry date"
 msgstr "Date d’expiration non valide"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:73
+#: pgp/seahorse-gpgme-expires-dialog.c:71
 msgid "The expiry date must be in the future"
 msgstr "La date d’expiration doit être dans le futur"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:83
+#: pgp/seahorse-gpgme-expires-dialog.c:84
 msgid "Couldn’t change expiry date"
 msgstr "Impossible de modifier la date d’expiration"
 
@@ -1141,29 +897,29 @@ msgstr "Clés blindées PGP"
 msgid "PGP keys"
 msgstr "Clés PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
+#: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:85
+#: pgp/seahorse-gpgme-generate-dialog.c:82
 msgid "DSA ElGamal"
 msgstr "DSA et ElGamal"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:101
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "Impossible de générer la clé PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:140
+#: pgp/seahorse-gpgme-generate-dialog.c:137
 msgid "Passphrase for New PGP Key"
 msgstr "Phrase de passe pour la nouvelle clé PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:141
+#: pgp/seahorse-gpgme-generate-dialog.c:138
 msgid "Enter the passphrase for your new key twice."
 msgstr "Saisissez deux fois la phrase de passe pour votre nouvelle clé."
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:153
+#: pgp/seahorse-gpgme-generate-dialog.c:150
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1178,11 +934,11 @@ msgstr ""
 "applications. Cela fournit au système les données aléatoires\n"
 "dont il a besoin."
 
-#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:155 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Génération de clé"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:182
+#: pgp/seahorse-gpgme-generate-dialog.c:179
 msgid "Name must be at least 5 characters long."
 msgstr "Le nom doit comporter au moins 5 caractères."
 
@@ -1217,15 +973,15 @@ msgstr "_Force de la clé (bits)"
 msgid "E_xpiration Date"
 msgstr "Date d’e_xpiration"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:251
+#: pgp/seahorse-gpgme-generate-dialog.ui:255
 msgid "Ne_ver Expires"
 msgstr "N’expire _jamais"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:292
+#: pgp/seahorse-gpgme-generate-dialog.ui:296
 msgid "C_reate"
 msgstr "C_réer"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:299
+#: pgp/seahorse-gpgme-generate-dialog.ui:303
 msgid "Generate a new key"
 msgstr "Générer une nouvelle clé"
 
@@ -1242,11 +998,11 @@ msgid_plural "Are you sure you want to permanently delete %d keys?"
 msgstr[0] "Voulez-vous vraiment supprimer définitivement %d clé ?"
 msgstr[1] "Voulez-vous vraiment supprimer définitivement %d clés ?"
 
-#: pgp/seahorse-gpgme-key-op.c:352
+#: pgp/seahorse-gpgme-key-op.c:361
 msgid "Wrong password"
 msgstr "Mauvais mot de passe"
 
-#: pgp/seahorse-gpgme-key-op.c:352
+#: pgp/seahorse-gpgme-key-op.c:361
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 "C’est la troisième fois que vous saisissez un mauvais mot de passe. Essayez "
@@ -1370,48 +1126,48 @@ msgstr "Voulez-vous vraiment supprimer la photo actuelle de votre clé ?"
 msgid "Couldn’t delete photo"
 msgstr "Impossible de supprimer la photo"
 
-#: pgp/seahorse-gpgme-revoke.c:72
+#: pgp/seahorse-gpgme-revoke-dialog.c:81
 msgid "Couldn’t revoke subkey"
 msgstr "Impossible de révoquer la sous-clé"
 
-#: pgp/seahorse-gpgme-revoke.c:93
+#: pgp/seahorse-gpgme-revoke-dialog.c:141
 #, c-format
 msgid "Revoke: %s"
 msgstr "Révocation : %s"
 
-#: pgp/seahorse-gpgme-revoke.c:104
+#: pgp/seahorse-gpgme-revoke-dialog.c:159
 msgid "No reason"
 msgstr "Aucune raison"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke-dialog.c:160
 msgid "No reason for revoking key"
 msgstr "Aucune raison pour révoquer la clé"
 
-#: pgp/seahorse-gpgme-revoke.c:111
+#: pgp/seahorse-gpgme-revoke-dialog.c:166
 msgid "Compromised"
 msgstr "Compromise"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke-dialog.c:167
 msgid "Key has been compromised"
 msgstr "La clé a été compromise"
 
-#: pgp/seahorse-gpgme-revoke.c:118
+#: pgp/seahorse-gpgme-revoke-dialog.c:173
 msgid "Superseded"
 msgstr "Remplacée"
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke-dialog.c:174
 msgid "Key has been superseded"
 msgstr "La clé a été remplacée"
 
-#: pgp/seahorse-gpgme-revoke.c:125
+#: pgp/seahorse-gpgme-revoke-dialog.c:180
 msgid "Not Used"
 msgstr "Plus utilisée"
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke-dialog.c:181
 msgid "Key is no longer used"
 msgstr "La clé n’est plus utilisée"
 
-#: pgp/seahorse-gpgme-revoke.c:163
+#: pgp/seahorse-gpgme-revoke-dialog.c:264
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -1420,9 +1176,29 @@ msgstr ""
 "Vous êtes sur le point d’ajouter %s comme révocateur pour %s. Cette "
 "opération ne peut être annulée. Voulez-vous vraiment poursuivre ?"
 
-#: pgp/seahorse-gpgme-revoke.c:175
+#: pgp/seahorse-gpgme-revoke-dialog.c:276
 msgid "Couldn’t add revoker"
 msgstr "Impossible d’ajouter un révocateur"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:21 pgp/seahorse-revoke.ui:20
+msgid "_Reason:"
+msgstr "_Raison :"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:22 pgp/seahorse-revoke.ui:21
+msgid "Reason for revoking the key"
+msgstr "Raison pour révoquer la clé"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:57 pgp/seahorse-revoke.ui:56
+msgid "Optional description of revocation"
+msgstr "Description optionnelle de la révocation"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:89 pgp/seahorse-revoke.ui:88
+msgid "Revoke key"
+msgstr "Révoquer la clé"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:90 pgp/seahorse-revoke.ui:89
+msgid "Re_voke"
+msgstr "Ré_voquer"
 
 #: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
@@ -1546,34 +1322,26 @@ msgstr "Si_gnataire :"
 msgid "_Sign"
 msgstr "_Signer"
 
-#: pgp/seahorse-gpgme-subkey.c:89
+#: pgp/seahorse-gpgme-subkey.c:91
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:93
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:534
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "La requête n’était pas assez spécifique. Le serveur « %s » a trouvé trop de "
 "clés."
 
-#: pgp/seahorse-hkp-source.c:537
+#: pgp/seahorse-hkp-source.c:507
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Impossible de communiquer avec le serveur « %s » : %s"
-
-#: pgp/seahorse-hkp-source.c:1001
-msgid "HTTP Key Server"
-msgstr "Serveur de clés HTTP"
-
-#: pgp/seahorse-hkp-source.c:1002
-msgid "HTTPS Key Server"
-msgstr "Serveur de clés HTTPS"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1592,16 +1360,16 @@ msgstr "Importer"
 msgid "Can’t import key"
 msgstr "Impossible d’importer la clé"
 
-#: pgp/seahorse-keyserver-results.c:240
+#: pgp/seahorse-keyserver-results.c:226
 msgid "Remote keys"
 msgstr "Clés distantes"
 
-#: pgp/seahorse-keyserver-results.c:242
+#: pgp/seahorse-keyserver-results.c:228
 #, c-format
 msgid "Remote keys containing “%s”"
 msgstr "Clés distantes contenant « %s »"
 
-#: pgp/seahorse-keyserver-results.c:357
+#: pgp/seahorse-keyserver-results.c:342
 msgid "The search for keys failed."
 msgstr "La recherche de clés a échoué."
 
@@ -1617,7 +1385,7 @@ msgstr ""
 msgid "Find Remote Keys"
 msgstr "Chercher des clés distantes"
 
-#: pgp/seahorse-keyserver-search.ui:37
+#: pgp/seahorse-keyserver-search.ui:32
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -1625,51 +1393,43 @@ msgstr ""
 "Ceci cherchera les clés d’autres personnes sur Internet. Ces clés peuvent "
 "être importées dans votre trousseau de clés local."
 
-#: pgp/seahorse-keyserver-search.ui:52
+#: pgp/seahorse-keyserver-search.ui:47
 msgid "_Search for keys containing: "
 msgstr "Ch_ercher des clés contenant : "
 
-#: pgp/seahorse-keyserver-search.ui:74
+#: pgp/seahorse-keyserver-search.ui:69
 msgid "Where to search:"
 msgstr "Emplacements de recherche :"
 
-#: pgp/seahorse-keyserver-search.ui:103
-msgid "Key Servers:"
-msgstr "Serveurs de clés :"
-
-#: pgp/seahorse-keyserver-search.ui:117
-msgid "Shared Keys Near Me:"
-msgstr "Clés partagées dans le voisinage :"
-
-#: pgp/seahorse-keyserver-search.ui:144
+#: pgp/seahorse-keyserver-search.ui:115
 msgid "_Search"
 msgstr "_Chercher"
 
-#: pgp/seahorse-keyserver-sync.c:54
+#: pgp/seahorse-keyserver-sync.c:71
 msgid "Couldn’t publish keys to server"
 msgstr "Impossible de publier les clés vers le serveur"
 
-#: pgp/seahorse-keyserver-sync.c:73
+#: pgp/seahorse-keyserver-sync.c:87
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Impossible de récupérer les clés depuis le serveur : %s"
 
-#: pgp/seahorse-keyserver-sync.c:158
+#: pgp/seahorse-keyserver-sync.c:197
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d clé est sélectionnée pour synchronisation</b>"
 msgstr[1] "<b>%d clés sont sélectionnées pour synchronisation</b>"
 
-#: pgp/seahorse-keyserver-sync.c:237
+#: pgp/seahorse-keyserver-sync.c:305
 msgid "Synchronizing keys…"
 msgstr "Synchronisation des clés…"
 
-#: pgp/seahorse-keyserver-sync.ui:14
+#: pgp/seahorse-keyserver-sync.ui:5
 msgid "Sync Keys"
 msgstr "Synchroniser les clés"
 
-#: pgp/seahorse-keyserver-sync.ui:52
+#: pgp/seahorse-keyserver-sync.ui:36
 msgid ""
 "This will publish the keys in your key ring so they’re available for others "
 "to use. You’ll also get any changes others have made since you received "
@@ -1679,7 +1439,7 @@ msgstr ""
 "pour les autres. Vous obtiendrez également toutes les modifications que "
 "d’autres ont faites depuis que vous avez reçu leurs clés."
 
-#: pgp/seahorse-keyserver-sync.ui:65
+#: pgp/seahorse-keyserver-sync.ui:45
 msgid ""
 "This will retrieve any changes others have made since you received their "
 "keys. No key server has been chosen for publishing, so your keys will not be "
@@ -1689,196 +1449,198 @@ msgstr ""
 "vous avez reçu leurs clés. Aucun serveur de clés n’a été choisi pour "
 "publier, vos clés ne seront donc pas mises à disposition des autres."
 
-#: pgp/seahorse-keyserver-sync.ui:115
+#: pgp/seahorse-keyserver-sync.ui:65
 msgid "_Key Servers"
 msgstr "Serveurs de _clés"
 
-#: pgp/seahorse-keyserver-sync.ui:148
+#: pgp/seahorse-keyserver-sync.ui:89
 msgid "_Sync"
 msgstr "_Synchroniser"
 
-#: pgp/seahorse-ldap-source.c:439
+#: pgp/seahorse-ldap-source.c:433
 #, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Impossible de communiquer avec %s : %s"
 
-#: pgp/seahorse-ldap-source.c:642
+#: pgp/seahorse-ldap-source.c:593
+#, c-format
+msgid "Couldn’t resolve address %s"
+msgstr "Impossible de résoudre l’adresse %s"
+
+#. Now that we've resolved our address, connect via IP
+#: pgp/seahorse-ldap-source.c:598
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Connexion à : %s"
 
-#: pgp/seahorse-ldap-source.c:647
+#: pgp/seahorse-ldap-source.c:653
 #, c-format
-msgid "Couldn’t resolve address: %s"
-msgstr "Impossible de résoudre l’adresse : %s"
+msgid "Invalid URI: %s"
+msgstr "URI non valide : %s"
 
-#: pgp/seahorse-ldap-source.c:689
+#: pgp/seahorse-ldap-source.c:661
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Résolution de l’adresse du serveur : %s"
 
-#: pgp/seahorse-ldap-source.c:1366
-msgid "LDAP Key Server"
-msgstr "Serveur de clés LDAP"
-
-#: pgp/seahorse-pgp-backend.c:187
+#: pgp/seahorse-pgp-backend.c:188
 msgid "PGP Keys"
 msgstr "Clés PGP"
 
-#: pgp/seahorse-pgp-backend.c:193
+#: pgp/seahorse-pgp-backend.c:194
 msgid "PGP keys are for encrypting email or files"
 msgstr "Les clés PGP servent au chiffrement des courriels ou des fichiers"
 
-#: pgp/seahorse-pgp-key.c:172
+#: pgp/seahorse-pgp-key.c:186
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
 msgstr[0] "(et %d autre)"
 msgstr[1] "(et %d autres)"
 
-#: pgp/seahorse-pgp-key.c:573
+#: pgp/seahorse-pgp-key.c:606
 msgid "Personal PGP key"
 msgstr "Clé PGP personnelle"
 
-#: pgp/seahorse-pgp-key.c:575
+#: pgp/seahorse-pgp-key.c:608
 msgid "PGP key"
 msgstr "Clé PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:249
+#: pgp/seahorse-pgp-key-properties.c:250
 msgid "Couldn’t change primary user ID"
 msgstr "Impossible de modifier l’identifiant utilisateur principal"
 
-#: pgp/seahorse-pgp-key-properties.c:284
+#: pgp/seahorse-pgp-key-properties.c:285
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr ""
 "Voulez-vous vraiment supprimer définitivement l’identifiant utilisateur %s ?"
 
-#: pgp/seahorse-pgp-key-properties.c:293
+#: pgp/seahorse-pgp-key-properties.c:294
 msgid "Couldn’t delete user ID"
 msgstr "Impossible de supprimer l’identifiant utilisateur"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
+#: pgp/seahorse-pgp-key-properties.c:370 pgp/seahorse-pgp-key-properties.c:1464
 msgid "[Unknown]"
 msgstr "[Inconnue]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
+#: pgp/seahorse-pgp-key-properties.c:468 pgp/seahorse-pgp-key-properties.c:1682
 msgid "Name/Email"
 msgstr "Nom/Courriel"
 
 # src/dialogs/seahorse-signatures.glade2.h:
-#: pgp/seahorse-pgp-key-properties.c:472
+#: pgp/seahorse-pgp-key-properties.c:475
 msgid "Signature ID"
 msgstr "Identifiant de signature"
 
-#: pgp/seahorse-pgp-key-properties.c:578
+#: pgp/seahorse-pgp-key-properties.c:581
 msgid "Couldn’t change primary photo"
 msgstr "Impossible de modifier la photo principale"
 
-#: pgp/seahorse-pgp-key-properties.c:738
+#: pgp/seahorse-pgp-key-properties.c:768
 msgid "Error changing password"
 msgstr "Erreur lors de la modification du mot de passe"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:784
+#: pgp/seahorse-pgp-key-properties.c:815
 msgid "(unknown)"
 msgstr "(inconnue)"
 
-#: pgp/seahorse-pgp-key-properties.c:789
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Cette clé a expiré le : %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:817
+#: pgp/seahorse-pgp-key-properties.c:846
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — Clé publique"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:820
+#: pgp/seahorse-pgp-key-properties.c:849
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Clé privée"
 
-#: pgp/seahorse-pgp-key-properties.c:1006
+#: pgp/seahorse-pgp-key-properties.c:1036
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Voulez-vous vraiment supprimer définitivement la sous-clé %d de %s ?"
 
-#: pgp/seahorse-pgp-key-properties.c:1014
+#: pgp/seahorse-pgp-key-properties.c:1044
 msgid "Couldn’t delete subkey"
 msgstr "Impossible de supprimer la sous-clé"
 
-#: pgp/seahorse-pgp-key-properties.c:1078
-#: pgp/seahorse-pgp-key-properties.c:1389
+#: pgp/seahorse-pgp-key-properties.c:1114
+#: pgp/seahorse-pgp-key-properties.c:1438
 msgid "Unable to change trust"
 msgstr "Impossible de modifier la confiance"
 
-#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Impossible d’exporter la clé"
 
-#: pgp/seahorse-pgp-key-properties.c:1239
-#: pgp/seahorse-pgp-key-properties.c:1323
+#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1372
 msgctxt "Expires"
 msgid "Never"
 msgstr "Jamais"
 
-#: pgp/seahorse-pgp-key-properties.c:1278
+#: pgp/seahorse-pgp-key-properties.c:1326
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1332
 msgid "Usage"
 msgstr "Utilisation"
 
-#: pgp/seahorse-pgp-key-properties.c:1287
+#: pgp/seahorse-pgp-key-properties.c:1335
 msgid "Created"
 msgstr "Créée le"
 
-#: pgp/seahorse-pgp-key-properties.c:1290
+#: pgp/seahorse-pgp-key-properties.c:1338
 msgid "Expires"
 msgstr "Expire"
 
-#: pgp/seahorse-pgp-key-properties.c:1293
+#: pgp/seahorse-pgp-key-properties.c:1341
 msgid "Status"
 msgstr "État"
 
-#: pgp/seahorse-pgp-key-properties.c:1296
+#: pgp/seahorse-pgp-key-properties.c:1344
 msgid "Strength"
 msgstr "Force"
 
-#: pgp/seahorse-pgp-key-properties.c:1314
+#: pgp/seahorse-pgp-key-properties.c:1363
 msgid "Revoked"
 msgstr "Révoquée"
 
-#: pgp/seahorse-pgp-key-properties.c:1316
+#: pgp/seahorse-pgp-key-properties.c:1365
 msgid "Expired"
 msgstr "Expiré"
 
-#: pgp/seahorse-pgp-key-properties.c:1318
+#: pgp/seahorse-pgp-key-properties.c:1367
 msgid "Disabled"
 msgstr "Désactivée"
 
-#: pgp/seahorse-pgp-key-properties.c:1320
+#: pgp/seahorse-pgp-key-properties.c:1369
 msgid "Good"
 msgstr "Bon"
 
-#: pgp/seahorse-pgp-key-properties.c:1628
+#: pgp/seahorse-pgp-key-properties.c:1685
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Identifiant de la clé"
 
-#: pgp/seahorse-pgp-key-properties.c:1771
+#: pgp/seahorse-pgp-key-properties.c:1828
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "J’ai confiance dans les signatures de « %s » sur d’autres clés"
 
-#: pgp/seahorse-pgp-key-properties.c:1778
+#: pgp/seahorse-pgp-key-properties.c:1835
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1887,7 +1649,7 @@ msgstr ""
 "Si vous croyez que la personne propriétaire de cette clé est « %s », "
 "<i>signez</i> cette clé :"
 
-#: pgp/seahorse-pgp-key-properties.c:1785
+#: pgp/seahorse-pgp-key-properties.c:1842
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -2144,26 +1906,6 @@ msgstr "Clé"
 msgid "Subkey %d of %s"
 msgstr "Sous-clé %d de %s"
 
-#: pgp/seahorse-revoke.ui:35
-msgid "Reason for revoking the key"
-msgstr "Raison pour révoquer la clé"
-
-#: pgp/seahorse-revoke.ui:40
-msgid "_Reason:"
-msgstr "_Raison :"
-
-#: pgp/seahorse-revoke.ui:70
-msgid "Optional description of revocation"
-msgstr "Description optionnelle de la révocation"
-
-#: pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "Révoquer la clé"
-
-#: pgp/seahorse-revoke.ui:154
-msgid "Re_voke"
-msgstr "Ré_voquer"
-
 #: pgp/seahorse-signer.c:63
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
@@ -2179,19 +1921,19 @@ msgstr "Choisissez une clé de signature"
 msgid "_Sign message with key:"
 msgstr "_Signer le message avec la clé :"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
 msgstr "Exportation de données"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Retrieving data"
 msgstr "Récupération de données"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Importing data"
 msgstr "Importation de données"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Sending data"
 msgstr "Envoi de données"
 
@@ -2395,7 +2137,7 @@ msgstr "Texte déposé"
 msgid "Clipboard text"
 msgstr "Texte du presse-papiers"
 
-#: src/key-manager.vala:497
+#: src/key-manager.vala:499
 msgid "Couldn’t unlock keyring"
 msgstr "Impossible de déverrouiller le trousseau"
 
@@ -2508,15 +2250,15 @@ msgstr "Cherche une clé ou un mot de passe"
 msgid "Filter"
 msgstr "Filtrer"
 
-#: src/seahorse-key-manager.ui:532
+#: src/seahorse-key-manager.ui:515
 msgid "This collection seems to be empty"
 msgstr "Cette collection semble être vide"
 
-#: src/seahorse-key-manager.ui:564
+#: src/seahorse-key-manager.ui:525
 msgid "Keyring is locked"
 msgstr "Le trousseau est verrouillé"
 
-#: src/seahorse-key-manager.ui:574
+#: src/seahorse-key-manager.ui:530
 msgid "Unlock"
 msgstr "Déverrouiller"
 
@@ -2853,6 +2595,197 @@ msgstr ""
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configuration de clés de shell sécurisé…"
+
+#~ msgid "Not a valid Key Server address."
+#~ msgstr "Adresse de serveur de clés non valide."
+
+#~ msgid ""
+#~ "For help contact your system administrator or the administrator of the "
+#~ "key server."
+#~ msgstr ""
+#~ "Pour obtenir de l’aide, contactez votre administrateur système ou "
+#~ "l’administrateur du serveur de clés."
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "_Find keys via:"
+#~ msgstr "_Trouver des clés avec :"
+
+#~ msgid "Display flags"
+#~ msgstr "Afficher les indicateurs"
+
+#~ msgid "Displayed date and/or time properties"
+#~ msgstr "Les propriétés de date et d’heure affichées"
+
+#~ msgid "Lazy mode"
+#~ msgstr "Mode paresseux"
+
+#~ msgid "Lazy mode doesn’t normalize entered date and time values"
+#~ msgstr ""
+#~ "Le mode paresseux ne normalise pas les valeurs de date et d’heure saisies"
+
+#~ msgid "Year"
+#~ msgstr "Année"
+
+#~ msgid "Displayed year"
+#~ msgstr "Année affichée"
+
+#~ msgid "Month"
+#~ msgstr "Mois"
+
+#~ msgid "Displayed month"
+#~ msgstr "Mois affiché"
+
+#~ msgid "Day"
+#~ msgstr "Jour"
+
+#~ msgid "Displayed day of month"
+#~ msgstr "Jour du mois affiché"
+
+#~ msgid "Hour"
+#~ msgstr "Heure"
+
+#~ msgid "Displayed hour"
+#~ msgstr "Heure affichée"
+
+#~ msgid "Minute"
+#~ msgstr "Minute"
+
+#~ msgid "Displayed minute"
+#~ msgstr "Minute affichée"
+
+#~ msgid "Second"
+#~ msgstr "Seconde"
+
+#~ msgid "Displayed second"
+#~ msgstr "Seconde affichée"
+
+#~ msgid "Lower limit year"
+#~ msgstr "Année de la limite inférieure"
+
+#~ msgid "Year part of the lower date limit"
+#~ msgstr "La partie année de la date limite inférieure"
+
+#~ msgid "Upper limit year"
+#~ msgstr "Année de la limite supérieure"
+
+#~ msgid "Year part of the upper date limit"
+#~ msgstr "La partie année de la date limite supérieure"
+
+#~ msgid "Lower limit month"
+#~ msgstr "Mois de la limite inférieure"
+
+#~ msgid "Month part of the lower date limit"
+#~ msgstr "La partie mois de la date limite inférieure"
+
+#~ msgid "Upper limit month"
+#~ msgstr "Mois de la limite supérieure"
+
+#~ msgid "Month part of the upper date limit"
+#~ msgstr "La partie mois de la date limite supérieure"
+
+#~ msgid "Lower limit day"
+#~ msgstr "Jour de la limite inférieure"
+
+#~ msgid "Day of month part of the lower date limit"
+#~ msgstr "La partie jour de la date limite inférieure"
+
+#~ msgid "Upper limit day"
+#~ msgstr "Jour de la limite supérieure"
+
+#~ msgid "Day of month part of the upper date limit"
+#~ msgstr "La partie jour du mois de la date limite supérieure"
+
+#~ msgid "Lower limit hour"
+#~ msgstr "Heure de la limite inférieure"
+
+#~ msgid "Hour part of the lower time limit"
+#~ msgstr "La partie heure de l’heure limite inférieure"
+
+#~ msgid "Upper limit hour"
+#~ msgstr "Heure de la limite supérieure"
+
+#~ msgid "Hour part of the upper time limit"
+#~ msgstr "La partie heure de l’heure limite supérieure"
+
+#~ msgid "Lower limit minute"
+#~ msgstr "Minute de la limite inférieure"
+
+#~ msgid "Minute part of the lower time limit"
+#~ msgstr "La partie minute de l’heure limite inférieure"
+
+#~ msgid "Upper limit minute"
+#~ msgstr "Minute de la limite supérieure"
+
+#~ msgid "Minute part of the upper time limit"
+#~ msgstr "La partie minute de l’heure limite supérieure"
+
+#~ msgid "Lower limit second"
+#~ msgstr "Seconde de la limite inférieure"
+
+#~ msgid "Second part of the lower time limit"
+#~ msgstr "La partie seconde de l’heure limite inférieure"
+
+#~ msgid "Upper limit second"
+#~ msgstr "Seconde de la limite supérieure"
+
+#~ msgid "Second part of the upper time limit"
+#~ msgstr "La partie seconde de l’heure limite supérieure"
+
+#~ msgid "calendar:week_start:0"
+#~ msgstr "calendar:week_start:1"
+
+#~ msgid "Date"
+#~ msgstr "Date"
+
+#~ msgid "Select Date"
+#~ msgstr "Sélectionnez la date"
+
+#~ msgid "Time"
+#~ msgstr "Heure"
+
+#~ msgid "Enter the time directly"
+#~ msgstr "Saisissez directement l’heure"
+
+#~ msgid "Select Time"
+#~ msgstr "Sélectionnez l’heure"
+
+#~ msgid "Select the time from a list"
+#~ msgstr "Sélectionnez l’heure dans une liste"
+
+#~ msgid "24hr: no"
+#~ msgstr "24hr: yes"
+
+#~ msgid "AM"
+#~ msgstr "AM"
+
+#~ msgid "PM"
+#~ msgstr "PM"
+
+#~ msgid "%02d:%02d:%02d %s"
+#~ msgstr "%02d:%02d:%02d %s"
+
+#~ msgid "%02d:%02d %s"
+#~ msgstr "%02d:%02d %s"
+
+#~ msgid "%02d:%02d:%02d"
+#~ msgstr "%02d:%02d:%02d"
+
+#~ msgid "%02d:%02d"
+#~ msgstr "%02d:%02d"
+
+#~ msgid "%04d-%02d-%02d"
+#~ msgstr "%3$02d/%2$02d/%1$04d"
+
+#~ msgid "%u:%u:%u"
+#~ msgstr "%u:%u:%u"
+
+#~ msgid "Key Servers:"
+#~ msgstr "Serveurs de clés :"
+
+#~ msgid "Shared Keys Near Me:"
+#~ msgstr "Clés partagées dans le voisinage :"
 
 #~ msgid ""
 #~ "Seahorse is a GNOME application for managing encryption keys. It also "
