@@ -1,19 +1,19 @@
 # Serbian translation of seahorse
-# Courtesy of Prevod.org team (http://prevod.org/) -- 2003—2017.
+# Courtesy of Prevod.org team (http://prevod.org/) -- 2003—2021.
 # This file is distributed under the same license as the seahorse package.
 # Душан Живојнов <calvin@verat.net>
 # Бранко Кокановић <branko.kokanovic@gmail.com>, 2009.
 # Милош Поповић <gpopac@gmail.com>, 2010.
-# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011—2017.
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011—2021.
 # Борисав Живановић <borisavzivanovic@gmail.com>, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-07-13 16:23+0000\n"
-"PO-Revision-Date: 2020-09-03 20:10+0200\n"
-"Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
-"Language-Team: Serbian <(nothing)>\n"
+"POT-Creation-Date: 2021-02-28 18:14+0000\n"
+"PO-Revision-Date: 2021-03-02 20:23+0200\n"
+"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
+"Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,24 +21,23 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
-"X-Generator: Poedit 2.4.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
 msgstr "Додај сервер кључева"
 
-#: common/add-keyserver-dialog.vala:64
+#: common/add-keyserver-dialog.vala:66
 msgid "Custom"
 msgstr "Прилагођено"
 
 #. Buttons
-#: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:130
+#: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:101
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Откажи"
 
-#: common/add-keyserver-dialog.vala:69
+#: common/add-keyserver-dialog.vala:71
 msgid "Save"
 msgstr "Сачувај"
 
@@ -54,13 +53,23 @@ msgstr "Не могу да извезем кључеве"
 msgid "Couldn’t export data"
 msgstr "Не могу да извезем податке"
 
+#: common/datepicker.vala:55
+msgid "Enter the date directly"
+msgstr "Унесите датум директно"
+
+#: common/datepicker.vala:62
+msgid "Select the date from a calendar"
+msgstr "Изаберите датум из календара"
+
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
-#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:270
+#: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
+#: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
+#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
+#: src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "_Откажи"
 
@@ -104,29 +113,13 @@ msgstr "Кључеви"
 msgid "Certificates"
 msgstr "Уверења"
 
-#: common/prefs.vala:42
+#: common/prefs.vala:30
 msgid "Preferences"
 msgstr "Поставке"
 
-#: common/prefs.vala:150
+#: common/prefs-keyservers.vala:44
 msgid "None: Don’t publish keys"
 msgstr "Ништа: немој објављивати кључеве"
-
-#: common/prefs.vala:166
-msgid "Not a valid Key Server address."
-msgstr "Неисправна адреса сервера кључева."
-
-#: common/prefs.vala:167
-msgid ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-msgstr ""
-"За помоћ се обратите вашем администратору система или администратору сервера "
-"кључева."
-
-#: common/prefs.vala:236
-msgid "URL"
-msgstr "Адреса"
 
 #: common/seahorse-add-keyserver.ui:12
 msgid "initial temporary item"
@@ -153,25 +146,46 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "Прикључник преко кога се може приступити серверу."
 
-#: common/seahorse-prefs.ui:34
-msgid "_Find keys via:"
-msgstr "_Пронађи кључ преко:"
+#: common/seahorse-prefs-keyservers.ui:6 common/seahorse-prefs-keyservers.ui:10
+#| msgid "Key Servers"
+msgid "Keyservers"
+msgstr "Сервери кључева"
 
-#: common/seahorse-prefs.ui:105
+#: common/seahorse-prefs-keyservers.ui:40
+#| msgid "Add Key Server"
+msgid "Add keyserver"
+msgstr "Додај сервер кључева"
+
+#: common/seahorse-prefs-keyservers.ui:51
+#| msgid "Synchronizing keys…"
+msgid "Key Synchronization"
+msgstr "Усаглашавање кључа"
+
+#: common/seahorse-prefs-keyservers.ui:61
 msgid "_Publish keys to:"
 msgstr "_Објави кључеве на:"
 
-#: common/seahorse-prefs.ui:128
+#: common/seahorse-prefs-keyservers.ui:84
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Аутоматски преузми кључеве са сервера _кључева"
 
-#: common/seahorse-prefs.ui:142
+#: common/seahorse-prefs-keyservers.ui:99
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "Аутоматски усагласи _измењене кључеве са серверима кључева"
 
-#: common/seahorse-prefs.ui:159
-msgid "Key Servers"
-msgstr "Сервери кључева"
+#: common/server-category.vala:63
+msgid "LDAP Key Server"
+msgstr "ЛДАП сервер кључева"
+
+#. WITH_LDAP
+#: common/server-category.vala:66
+msgid "HTTP Key Server"
+msgstr "ХТТП сервер кључева"
+
+#: common/server-category.vala:67
+#| msgid "HTTP Key Server"
+msgid "HTTPS Key Server"
+msgstr "ХТТПС сервер кључева"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -438,11 +452,11 @@ msgstr ""
 "морате стално да је куцате и да направите резерве ваших кључева и привеска "
 "кључева."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:126
+#: data/org.gnome.seahorse.Application.appdata.xml.in:146
 msgid "The GNOME Project"
 msgstr "Гном пројекат"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:169
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
 #: src/seahorse-key-manager.ui:291
 msgid "Passwords and Keys"
 msgstr "Лозинке и кључеви"
@@ -470,7 +484,7 @@ msgstr "Не могу да додам ставку"
 msgid "Password or Secret"
 msgstr "Лозинка или тајна"
 
-#: gkr/gkr-item-info.vala:120
+#: gkr/gkr-item-info.vala:118
 msgid "Network connection secret"
 msgstr "Тајна мрежне везе"
 
@@ -478,7 +492,7 @@ msgstr "Тајна мрежне везе"
 msgid "Wi-Fi password"
 msgstr "Бежична лозинка"
 
-#: gkr/gkr-item-info.vala:145
+#: gkr/gkr-item-info.vala:144
 msgid "Network password"
 msgstr "Лозинка за мрежу"
 
@@ -486,24 +500,24 @@ msgstr "Лозинка за мрежу"
 msgid "GNOME Web password"
 msgstr "Лозинка Гномовог Веба"
 
-#: gkr/gkr-item-info.vala:254
+#: gkr/gkr-item-info.vala:253
 msgid "Google Chrome password"
 msgstr "Лозинка Гугл Хромијума"
 
-#: gkr/gkr-item-info.vala:288
+#: gkr/gkr-item-info.vala:286
 msgid "Instant messaging password"
 msgstr "Лозинка тренутних порука"
 
 #. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item-info.vala:293
+#: gkr/gkr-item-info.vala:291
 msgid "IM account password for "
 msgstr "Лозинка ТП налога за "
 
-#: gkr/gkr-item-info.vala:326
+#: gkr/gkr-item-info.vala:323
 msgid "Telepathy password"
 msgstr "Лозинка Интернет писмоноше"
 
-#: gkr/gkr-item-info.vala:362
+#: gkr/gkr-item-info.vala:358
 msgid "GNOME Online Accounts password"
 msgstr "Лозинка Гномових налога на мрежи"
 
@@ -639,7 +653,8 @@ msgstr "Додајте лозинку"
 msgid "_Keyring:"
 msgstr "_Привезак:"
 
-#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
+#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-gpgme-revoke-dialog.ui:44
+#: pgp/seahorse-revoke.ui:43
 msgid "_Description:"
 msgstr "_Опис:"
 
@@ -685,7 +700,7 @@ msgid "Use"
 msgstr "Употреби"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1281
+#: pgp/seahorse-pgp-key-properties.c:1329
 msgid "Type"
 msgstr "Врста"
 
@@ -711,7 +726,7 @@ msgstr "Обриши лозинку"
 msgid "Keyring properties"
 msgstr "Својства привеска"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
 msgid "Name"
 msgstr "Назив"
 
@@ -727,284 +742,29 @@ msgstr "Промени лозинку"
 msgid "Set as default"
 msgstr "Подеси као подразумевани"
 
-#: libegg/egg-datetime.c:316
-msgid "Display flags"
-msgstr "Ознаке за приказивање"
-
-#: libegg/egg-datetime.c:317
-msgid "Displayed date and/or time properties"
-msgstr "Својства приказаног датума и/или времена"
-
-#: libegg/egg-datetime.c:322
-msgid "Lazy mode"
-msgstr "Лењи режим"
-
-#: libegg/egg-datetime.c:323
-msgid "Lazy mode doesn’t normalize entered date and time values"
-msgstr "Лењи режим не нормализује унесене вредности за датум и време"
-
-#: libegg/egg-datetime.c:328
-msgid "Year"
-msgstr "Година"
-
-#: libegg/egg-datetime.c:329
-msgid "Displayed year"
-msgstr "Приказана година"
-
-#: libegg/egg-datetime.c:334
-msgid "Month"
-msgstr "Месец"
-
-#: libegg/egg-datetime.c:335
-msgid "Displayed month"
-msgstr "Приказани месец"
-
-#: libegg/egg-datetime.c:340
-msgid "Day"
-msgstr "Дан"
-
-#: libegg/egg-datetime.c:341
-msgid "Displayed day of month"
-msgstr "Приказани дан у месецу"
-
-#: libegg/egg-datetime.c:346
-msgid "Hour"
-msgstr "Сат"
-
-#: libegg/egg-datetime.c:347
-msgid "Displayed hour"
-msgstr "Приказани сат"
-
-#: libegg/egg-datetime.c:352
-msgid "Minute"
-msgstr "Минут"
-
-#: libegg/egg-datetime.c:353
-msgid "Displayed minute"
-msgstr "Приказани минут"
-
-#: libegg/egg-datetime.c:358
-msgid "Second"
-msgstr "Секунда"
-
-#: libegg/egg-datetime.c:359
-msgid "Displayed second"
-msgstr "Приказана секунда"
-
-#: libegg/egg-datetime.c:364
-msgid "Lower limit year"
-msgstr "Доња граница године"
-
-#: libegg/egg-datetime.c:365
-msgid "Year part of the lower date limit"
-msgstr "Део године доње границе датума"
-
-#: libegg/egg-datetime.c:370
-msgid "Upper limit year"
-msgstr "Горња граница године"
-
-#: libegg/egg-datetime.c:371
-msgid "Year part of the upper date limit"
-msgstr "Део године горње границе датума"
-
-#: libegg/egg-datetime.c:376
-msgid "Lower limit month"
-msgstr "Доња граница месеца"
-
-#: libegg/egg-datetime.c:377
-msgid "Month part of the lower date limit"
-msgstr "Део месеца доње границе датума"
-
-#: libegg/egg-datetime.c:382
-msgid "Upper limit month"
-msgstr "Горња граница месеца"
-
-#: libegg/egg-datetime.c:383
-msgid "Month part of the upper date limit"
-msgstr "Део месеца горње границе датума"
-
-#: libegg/egg-datetime.c:388
-msgid "Lower limit day"
-msgstr "Доња граница дана"
-
-#: libegg/egg-datetime.c:389
-msgid "Day of month part of the lower date limit"
-msgstr "Дан дела месеца доње границе датума"
-
-#: libegg/egg-datetime.c:394
-msgid "Upper limit day"
-msgstr "Горња граница дана"
-
-#: libegg/egg-datetime.c:395
-msgid "Day of month part of the upper date limit"
-msgstr "Дан дела месеца горње границе датума"
-
-#: libegg/egg-datetime.c:400
-msgid "Lower limit hour"
-msgstr "Доња граница сата"
-
-#: libegg/egg-datetime.c:401
-msgid "Hour part of the lower time limit"
-msgstr "Део сата доње границе времена"
-
-#: libegg/egg-datetime.c:406
-msgid "Upper limit hour"
-msgstr "Горња граница сата"
-
-#: libegg/egg-datetime.c:407
-msgid "Hour part of the upper time limit"
-msgstr "Део сата горње границе времена"
-
-#: libegg/egg-datetime.c:412
-msgid "Lower limit minute"
-msgstr "Доња граница минута"
-
-#: libegg/egg-datetime.c:413
-msgid "Minute part of the lower time limit"
-msgstr "Део минута доње границе времена"
-
-#: libegg/egg-datetime.c:418
-msgid "Upper limit minute"
-msgstr "Горња граница минута"
-
-#: libegg/egg-datetime.c:419
-msgid "Minute part of the upper time limit"
-msgstr "Део минута горње границе времена"
-
-#: libegg/egg-datetime.c:424
-msgid "Lower limit second"
-msgstr "Доња граница секунде"
-
-#: libegg/egg-datetime.c:425
-msgid "Second part of the lower time limit"
-msgstr "Део секунде доње границе времена"
-
-#: libegg/egg-datetime.c:430
-msgid "Upper limit second"
-msgstr "Горња граница секунде"
-
-#: libegg/egg-datetime.c:431
-msgid "Second part of the upper time limit"
-msgstr "Део секунде горње границе времена"
-
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
-#.
-#: libegg/egg-datetime.c:473
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
-
-#: libegg/egg-datetime.c:495
-msgid "Date"
-msgstr "Датум"
-
-#: libegg/egg-datetime.c:495
-msgid "Enter the date directly"
-msgstr "Унесите датум директно"
-
-#: libegg/egg-datetime.c:502
-msgid "Select Date"
-msgstr "Изабери датум"
-
-#: libegg/egg-datetime.c:502
-msgid "Select the date from a calendar"
-msgstr "Изаберите датум из календара"
-
-#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2203
-msgid "Time"
-msgstr "Време"
-
-#: libegg/egg-datetime.c:520
-msgid "Enter the time directly"
-msgstr "Унесите време директно"
-
-#: libegg/egg-datetime.c:527
-msgid "Select Time"
-msgstr "Изабери време"
-
-#: libegg/egg-datetime.c:527
-msgid "Select the time from a list"
-msgstr "Изаберите време са списка"
-
-#. Translators: set this to anything else if you want to use a
-#. * 24 hour clock.
-#.
-#: libegg/egg-datetime.c:792
-msgid "24hr: no"
-msgstr "24hr: не"
-
-#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1264
-#: libegg/egg-datetime.c:1268
-msgid "AM"
-msgstr "ПрП"
-
-#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1265
-#: libegg/egg-datetime.c:1272
-msgid "PM"
-msgstr "ПоП"
-
-#. Translators: This is hh:mm:ss AM/PM.
-#: libegg/egg-datetime.c:806
-#, c-format
-msgid "%02d:%02d:%02d %s"
-msgstr "%02d:%02d:%02d %s"
-
-#. Translators: This is hh:mm AM/PM.
-#: libegg/egg-datetime.c:809
-#, c-format
-msgid "%02d:%02d %s"
-msgstr "%02d:%02d %s"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:813
-#, c-format
-msgid "%02d:%02d:%02d"
-msgstr "%02d:%02d:%02d"
-
-#. Translators: This is hh:mm.
-#: libegg/egg-datetime.c:816
-#, c-format
-msgid "%02d:%02d"
-msgstr "%02d:%02d"
-
-#. TODO: should handle other display modes as well...
-#. Translators: This is YYYY-MM-DD
-#: libegg/egg-datetime.c:1180
-#, c-format
-msgid "%04d-%02d-%02d"
-msgstr "%02d.%02d.%04d."
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:1245
-#, c-format
-msgid "%u:%u:%u"
-msgstr "%u:%u:%u"
-
 #: libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Не могу да прикажем помоћ: %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:213
+#: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Додај подкључ за %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
+#: pgp/seahorse-gpgme-add-subkey.c:236 pgp/seahorse-gpgme-generate-dialog.c:83
 msgid "DSA (sign only)"
 msgstr "ДСА (само потпис)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:247
+#: pgp/seahorse-gpgme-add-subkey.c:244
 msgid "ElGamal (encrypt only)"
 msgstr "ЕлГамал (само шифровање)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
+#: pgp/seahorse-gpgme-add-subkey.c:250 pgp/seahorse-gpgme-generate-dialog.c:84
 msgid "RSA (sign only)"
 msgstr "РСА (само потпис)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:259
+#: pgp/seahorse-gpgme-add-subkey.c:256
 msgid "RSA (encrypt only)"
 msgstr "РСА (само шифровање)"
 
@@ -1024,15 +784,15 @@ msgstr "Дужина кључа"
 msgid "Expiration Date"
 msgstr "Датум истека"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:110
+#: pgp/seahorse-gpgme-add-subkey.ui:109
 msgid "Never E_xpires"
 msgstr "Никада не _истиче"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:114
+#: pgp/seahorse-gpgme-add-subkey.ui:113
 msgid "If key never expires"
 msgstr "Ако кључ никад не истиче"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:150
+#: pgp/seahorse-gpgme-add-subkey.ui:149
 msgid "Generate a new subkey"
 msgstr "Направите нови подкључ"
 
@@ -1082,19 +842,19 @@ msgstr "Направи нови ИБ корисника"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Дешифровање није успело. Вероватно немате кључ за дешифровање."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:512
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
 msgid "The operation was cancelled"
 msgstr "Радња је отказана"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:72
+#: pgp/seahorse-gpgme-expires-dialog.c:70
 msgid "Invalid expiry date"
 msgstr "Неисправан датум истека"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:73
+#: pgp/seahorse-gpgme-expires-dialog.c:71
 msgid "The expiry date must be in the future"
 msgstr "Датум истека мора бити у будућности"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:83
+#: pgp/seahorse-gpgme-expires-dialog.c:84
 msgid "Couldn’t change expiry date"
 msgstr "Не могу да променим датум истека"
 
@@ -1128,29 +888,29 @@ msgstr "Оклопљени ПГП кључеви"
 msgid "PGP keys"
 msgstr "ПГП кључеви"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
+#: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "РСА"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:85
+#: pgp/seahorse-gpgme-generate-dialog.c:82
 msgid "DSA ElGamal"
 msgstr "ДСА Елгамал"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:101
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "Не могу да створим ПГП кључ"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:140
+#: pgp/seahorse-gpgme-generate-dialog.c:137
 msgid "Passphrase for New PGP Key"
 msgstr "Лозинка за нови ПГП кључ"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:141
+#: pgp/seahorse-gpgme-generate-dialog.c:138
 msgid "Enter the passphrase for your new key twice."
 msgstr "Двапут унесите лозинку за нови кључ."
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:153
+#: pgp/seahorse-gpgme-generate-dialog.c:150
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1164,11 +924,11 @@ msgstr ""
 "куцање на тастатури, померање миша, коришћење програма.\n"
 "То ће систему обезебедити потребне насумичне податке."
 
-#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:155 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Стварам кључ"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:182
+#: pgp/seahorse-gpgme-generate-dialog.c:179
 msgid "Name must be at least 5 characters long."
 msgstr "Назив мора бити дугачак барем 5 знакова."
 
@@ -1203,15 +963,15 @@ msgstr "_Јачина кључа (битова)"
 msgid "E_xpiration Date"
 msgstr "Датум _истека"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:251
+#: pgp/seahorse-gpgme-generate-dialog.ui:255
 msgid "Ne_ver Expires"
 msgstr "Ника_да не истиче"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:292
+#: pgp/seahorse-gpgme-generate-dialog.ui:296
 msgid "C_reate"
 msgstr "_Направи"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:299
+#: pgp/seahorse-gpgme-generate-dialog.ui:303
 msgid "Generate a new key"
 msgstr "Направите нови кључ"
 
@@ -1230,11 +990,11 @@ msgstr[1] "Да ли сигурно желите трајно да обрише�
 msgstr[2] "Да ли сигурно желите трајно да обришете %d кључева?"
 msgstr[3] "Да ли сигурно желите трајно да обришете један кључ?"
 
-#: pgp/seahorse-gpgme-key-op.c:347
+#: pgp/seahorse-gpgme-key-op.c:361
 msgid "Wrong password"
 msgstr "Погрешна лозинка"
 
-#: pgp/seahorse-gpgme-key-op.c:347
+#: pgp/seahorse-gpgme-key-op.c:361
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Ово је трећи пут да сте унели погрешну лозинку. Покушајте поново."
 
@@ -1356,48 +1116,48 @@ msgstr "Да ли сигурно желите да уклоните тренут
 msgid "Couldn’t delete photo"
 msgstr "Не могу да избришем слику"
 
-#: pgp/seahorse-gpgme-revoke.c:72
+#: pgp/seahorse-gpgme-revoke-dialog.c:81
 msgid "Couldn’t revoke subkey"
 msgstr "Не могу да опзовем подкључ"
 
-#: pgp/seahorse-gpgme-revoke.c:93
+#: pgp/seahorse-gpgme-revoke-dialog.c:141
 #, c-format
 msgid "Revoke: %s"
 msgstr "Опозови: %s"
 
-#: pgp/seahorse-gpgme-revoke.c:104
+#: pgp/seahorse-gpgme-revoke-dialog.c:159
 msgid "No reason"
 msgstr "Нема разлога"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke-dialog.c:160
 msgid "No reason for revoking key"
 msgstr "Нема разлога за опозивање кључа"
 
-#: pgp/seahorse-gpgme-revoke.c:111
+#: pgp/seahorse-gpgme-revoke-dialog.c:166
 msgid "Compromised"
 msgstr "Компромитован"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke-dialog.c:167
 msgid "Key has been compromised"
 msgstr "Кључ је компромитован"
 
-#: pgp/seahorse-gpgme-revoke.c:118
+#: pgp/seahorse-gpgme-revoke-dialog.c:173
 msgid "Superseded"
 msgstr "Превазиђен"
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke-dialog.c:174
 msgid "Key has been superseded"
 msgstr "Кључ је превазиђен"
 
-#: pgp/seahorse-gpgme-revoke.c:125
+#: pgp/seahorse-gpgme-revoke-dialog.c:180
 msgid "Not Used"
 msgstr "Није коришћен"
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke-dialog.c:181
 msgid "Key is no longer used"
 msgstr "Кључ није више у употреби"
 
-#: pgp/seahorse-gpgme-revoke.c:163
+#: pgp/seahorse-gpgme-revoke-dialog.c:264
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be "
@@ -1406,9 +1166,29 @@ msgstr ""
 "Управо ћете додати %s као повлачење за %s. Ова операција се не може "
 "опозвати! Да ли сигурно желите да наставите?"
 
-#: pgp/seahorse-gpgme-revoke.c:175
+#: pgp/seahorse-gpgme-revoke-dialog.c:276
 msgid "Couldn’t add revoker"
 msgstr "Не могу да додам опозивача"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:21 pgp/seahorse-revoke.ui:20
+msgid "_Reason:"
+msgstr "_Разлог:"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:22 pgp/seahorse-revoke.ui:21
+msgid "Reason for revoking the key"
+msgstr "Разлог за повлачење кључа"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:57 pgp/seahorse-revoke.ui:56
+msgid "Optional description of revocation"
+msgstr "Необавезан опис за повлачење"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:89 pgp/seahorse-revoke.ui:88
+msgid "Revoke key"
+msgstr "Опозови кључ"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:90 pgp/seahorse-revoke.ui:89
+msgid "Re_voke"
+msgstr "_Опозови"
 
 #: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
@@ -1530,29 +1310,25 @@ msgstr "_Потписник:"
 msgid "_Sign"
 msgstr "_Потпиши"
 
-#: pgp/seahorse-gpgme-subkey.c:89
+#: pgp/seahorse-gpgme-subkey.c:91
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Непознат"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:93
 msgid "ElGamal"
 msgstr "ЕлГамал"
 
-#: pgp/seahorse-hkp-source.c:530
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Претрага није била довољно одређена. Сервер „%s“ је пронашао превише кључева."
 
-#: pgp/seahorse-hkp-source.c:533
+#: pgp/seahorse-hkp-source.c:507
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Не могу да се повежем са сервером „%s“: %s"
-
-#: pgp/seahorse-hkp-source.c:996
-msgid "HTTP Key Server"
-msgstr "ХТТП сервер кључева"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1571,16 +1347,16 @@ msgstr "Увези"
 msgid "Can’t import key"
 msgstr "Не могу да увезем кључ"
 
-#: pgp/seahorse-keyserver-results.c:240
+#: pgp/seahorse-keyserver-results.c:226
 msgid "Remote keys"
 msgstr "Удаљени кључеви"
 
-#: pgp/seahorse-keyserver-results.c:242
+#: pgp/seahorse-keyserver-results.c:228
 #, c-format
 msgid "Remote keys containing “%s”"
 msgstr "Удаљени кључеви који садрже „%s“"
 
-#: pgp/seahorse-keyserver-results.c:357
+#: pgp/seahorse-keyserver-results.c:342
 msgid "The search for keys failed."
 msgstr "Није успела претрага за кључевима."
 
@@ -1596,7 +1372,7 @@ msgstr ""
 msgid "Find Remote Keys"
 msgstr "Пронађите удаљене кључеве"
 
-#: pgp/seahorse-keyserver-search.ui:37
+#: pgp/seahorse-keyserver-search.ui:32
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -1604,36 +1380,28 @@ msgstr ""
 "Ова опција ће пронаћи кључеве за друге на Интернету. Ове кључеве можете "
 "затим да увезете у ваш привезак кључева."
 
-#: pgp/seahorse-keyserver-search.ui:52
+#: pgp/seahorse-keyserver-search.ui:47
 msgid "_Search for keys containing: "
 msgstr "_Тражи кључеве који садрже: "
 
-#: pgp/seahorse-keyserver-search.ui:74
+#: pgp/seahorse-keyserver-search.ui:69
 msgid "Where to search:"
 msgstr "Где тражити:"
 
-#: pgp/seahorse-keyserver-search.ui:103
-msgid "Key Servers:"
-msgstr "Сервери кључева:"
-
-#: pgp/seahorse-keyserver-search.ui:117
-msgid "Shared Keys Near Me:"
-msgstr "Дељени кључеви у близини:"
-
-#: pgp/seahorse-keyserver-search.ui:144
+#: pgp/seahorse-keyserver-search.ui:115
 msgid "_Search"
 msgstr "_Потражи"
 
-#: pgp/seahorse-keyserver-sync.c:54
+#: pgp/seahorse-keyserver-sync.c:71
 msgid "Couldn’t publish keys to server"
 msgstr "Не могу да објавим кључеве на сервер"
 
-#: pgp/seahorse-keyserver-sync.c:73
+#: pgp/seahorse-keyserver-sync.c:87
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Не могу да преузмем кључеве са сервера: %s"
 
-#: pgp/seahorse-keyserver-sync.c:158
+#: pgp/seahorse-keyserver-sync.c:197
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
@@ -1642,15 +1410,15 @@ msgstr[1] "<b>%d кључа су изабрана за усаглашавање<
 msgstr[2] "<b>%d кључева је изабрано за усаглашавање</b>"
 msgstr[3] "<b>Један кључ је изабран за усаглашавање</b>"
 
-#: pgp/seahorse-keyserver-sync.c:237
+#: pgp/seahorse-keyserver-sync.c:305
 msgid "Synchronizing keys…"
 msgstr "Усаглашавам кључеве…"
 
-#: pgp/seahorse-keyserver-sync.ui:14
+#: pgp/seahorse-keyserver-sync.ui:5
 msgid "Sync Keys"
 msgstr "Усагласите кључеве"
 
-#: pgp/seahorse-keyserver-sync.ui:52
+#: pgp/seahorse-keyserver-sync.ui:36
 msgid ""
 "This will publish the keys in your key ring so they’re available for others "
 "to use. You’ll also get any changes others have made since you received "
@@ -1660,7 +1428,7 @@ msgstr ""
 "другима на коришћење. Такође, добићете измене које су направили други од "
 "када сте примили њихове кључеве."
 
-#: pgp/seahorse-keyserver-sync.ui:65
+#: pgp/seahorse-keyserver-sync.ui:45
 msgid ""
 "This will retrieve any changes others have made since you received their "
 "keys. No key server has been chosen for publishing, so your keys will not be "
@@ -1670,47 +1438,50 @@ msgstr ""
 "примили њихове кључеве. Ниједан сервер кључева није изабран за објављивање, "
 "тако да ваши кључеви неће бити доступни другима."
 
-#: pgp/seahorse-keyserver-sync.ui:115
+#: pgp/seahorse-keyserver-sync.ui:65
 msgid "_Key Servers"
 msgstr "Сервери _кључева"
 
-#: pgp/seahorse-keyserver-sync.ui:148
+#: pgp/seahorse-keyserver-sync.ui:89
 msgid "_Sync"
 msgstr "_Усагласи"
 
-#: pgp/seahorse-ldap-source.c:439
+#: pgp/seahorse-ldap-source.c:433
 #, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Не могу да се повежем са „%s“: %s"
 
-#: pgp/seahorse-ldap-source.c:642
+#: pgp/seahorse-ldap-source.c:593
+#, c-format
+#| msgid "Couldn’t resolve address: %s"
+msgid "Couldn’t resolve address %s"
+msgstr "Не могу да разрешим адресу „%s“"
+
+#. Now that we've resolved our address, connect via IP
+#: pgp/seahorse-ldap-source.c:598
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Повезујем се на: %s"
 
-#: pgp/seahorse-ldap-source.c:647
+#: pgp/seahorse-ldap-source.c:653
 #, c-format
-msgid "Couldn’t resolve address: %s"
-msgstr "Не могу да разрешим адресу: %s"
+msgid "Invalid URI: %s"
+msgstr "Неисправна путања: %s"
 
-#: pgp/seahorse-ldap-source.c:689
+#: pgp/seahorse-ldap-source.c:661
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Разрешавам адресу сервера: %s"
 
-#: pgp/seahorse-ldap-source.c:1366
-msgid "LDAP Key Server"
-msgstr "ЛДАП сервер кључева"
-
-#: pgp/seahorse-pgp-backend.c:187
+#: pgp/seahorse-pgp-backend.c:188
 msgid "PGP Keys"
 msgstr "ПГП кључеви"
 
-#: pgp/seahorse-pgp-backend.c:193
+#: pgp/seahorse-pgp-backend.c:194
 msgid "PGP keys are for encrypting email or files"
 msgstr "ПГП кључеви се користе за шифровање ел. поште и датотека"
 
-#: pgp/seahorse-pgp-key.c:172
+#: pgp/seahorse-pgp-key.c:186
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
@@ -1719,147 +1490,147 @@ msgstr[1] "(и %d друге ставке)"
 msgstr[2] "(и %d других ставки)"
 msgstr[3] "(и једна друга ставка)"
 
-#: pgp/seahorse-pgp-key.c:573
+#: pgp/seahorse-pgp-key.c:606
 msgid "Personal PGP key"
 msgstr "Лични ПГП кључ"
 
-#: pgp/seahorse-pgp-key.c:575
+#: pgp/seahorse-pgp-key.c:608
 msgid "PGP key"
 msgstr "ПГП кључ"
 
-#: pgp/seahorse-pgp-key-properties.c:249
+#: pgp/seahorse-pgp-key-properties.c:250
 msgid "Couldn’t change primary user ID"
 msgstr "Не могу да променим ИБ основног корисника"
 
-#: pgp/seahorse-pgp-key-properties.c:284
+#: pgp/seahorse-pgp-key-properties.c:285
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Сигурно желите трајно да уклоните ИБ корисника „%s“?"
 
-#: pgp/seahorse-pgp-key-properties.c:293
+#: pgp/seahorse-pgp-key-properties.c:294
 msgid "Couldn’t delete user ID"
 msgstr "Не могу да уклоним ИБ корисника"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
+#: pgp/seahorse-pgp-key-properties.c:370 pgp/seahorse-pgp-key-properties.c:1464
 msgid "[Unknown]"
 msgstr "[Непознато]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
+#: pgp/seahorse-pgp-key-properties.c:468 pgp/seahorse-pgp-key-properties.c:1682
 msgid "Name/Email"
 msgstr "Име/Ел. пошта"
 
-#: pgp/seahorse-pgp-key-properties.c:472
+#: pgp/seahorse-pgp-key-properties.c:475
 msgid "Signature ID"
 msgstr "ИБ потписа"
 
-#: pgp/seahorse-pgp-key-properties.c:578
+#: pgp/seahorse-pgp-key-properties.c:581
 msgid "Couldn’t change primary photo"
 msgstr "Не могу да променим примарну слику"
 
-#: pgp/seahorse-pgp-key-properties.c:738
+#: pgp/seahorse-pgp-key-properties.c:768
 msgid "Error changing password"
 msgstr "Грешка при промени лозинке"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:784
+#: pgp/seahorse-pgp-key-properties.c:815
 msgid "(unknown)"
 msgstr "(непознато)"
 
-#: pgp/seahorse-pgp-key-properties.c:789
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Овај кључ је истекао: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:817
+#: pgp/seahorse-pgp-key-properties.c:846
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — јавни кључ"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:820
+#: pgp/seahorse-pgp-key-properties.c:849
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — приватни кључ"
 
-#: pgp/seahorse-pgp-key-properties.c:1006
+#: pgp/seahorse-pgp-key-properties.c:1036
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Да ли сигурно желите да трајно уклоните подкључ %d од %s?"
 
-#: pgp/seahorse-pgp-key-properties.c:1014
+#: pgp/seahorse-pgp-key-properties.c:1044
 msgid "Couldn’t delete subkey"
 msgstr "Не могу да обришем подкључ"
 
-#: pgp/seahorse-pgp-key-properties.c:1078
-#: pgp/seahorse-pgp-key-properties.c:1389
+#: pgp/seahorse-pgp-key-properties.c:1114
+#: pgp/seahorse-pgp-key-properties.c:1438
 msgid "Unable to change trust"
 msgstr "Не могу да променим поверење"
 
-#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Не могу да извезем кључ"
 
-#: pgp/seahorse-pgp-key-properties.c:1239
-#: pgp/seahorse-pgp-key-properties.c:1323
+#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1372
 msgctxt "Expires"
 msgid "Never"
 msgstr "Никада"
 
-#: pgp/seahorse-pgp-key-properties.c:1278
+#: pgp/seahorse-pgp-key-properties.c:1326
 msgid "ID"
 msgstr "ИБ"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1332
 msgid "Usage"
 msgstr "Употреба"
 
-#: pgp/seahorse-pgp-key-properties.c:1287
+#: pgp/seahorse-pgp-key-properties.c:1335
 msgid "Created"
 msgstr "Направљен"
 
-#: pgp/seahorse-pgp-key-properties.c:1290
+#: pgp/seahorse-pgp-key-properties.c:1338
 msgid "Expires"
 msgstr "Истиче"
 
-#: pgp/seahorse-pgp-key-properties.c:1293
+#: pgp/seahorse-pgp-key-properties.c:1341
 msgid "Status"
 msgstr "Стање"
 
-#: pgp/seahorse-pgp-key-properties.c:1296
+#: pgp/seahorse-pgp-key-properties.c:1344
 msgid "Strength"
 msgstr "Јачина"
 
-#: pgp/seahorse-pgp-key-properties.c:1314
+#: pgp/seahorse-pgp-key-properties.c:1363
 msgid "Revoked"
 msgstr "Повучен"
 
-#: pgp/seahorse-pgp-key-properties.c:1316
+#: pgp/seahorse-pgp-key-properties.c:1365
 msgid "Expired"
 msgstr "Истекао"
 
-#: pgp/seahorse-pgp-key-properties.c:1318
+#: pgp/seahorse-pgp-key-properties.c:1367
 msgid "Disabled"
 msgstr "Искључен"
 
-#: pgp/seahorse-pgp-key-properties.c:1320
+#: pgp/seahorse-pgp-key-properties.c:1369
 msgid "Good"
 msgstr "Добар"
 
-#: pgp/seahorse-pgp-key-properties.c:1628
+#: pgp/seahorse-pgp-key-properties.c:1685
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "ИБ кључа"
 
-#: pgp/seahorse-pgp-key-properties.c:1771
+#: pgp/seahorse-pgp-key-properties.c:1828
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Верујем потписима са „%s“ на другим кључевима"
 
-#: pgp/seahorse-pgp-key-properties.c:1778
+#: pgp/seahorse-pgp-key-properties.c:1835
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1867,7 +1638,7 @@ msgid ""
 msgstr ""
 "Ако верујете да је „%s“ особа која поседује овај кључ, <i>потпишите</i> кључ:"
 
-#: pgp/seahorse-pgp-key-properties.c:1785
+#: pgp/seahorse-pgp-key-properties.c:1842
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -2114,26 +1885,6 @@ msgstr "Кључ"
 msgid "Subkey %d of %s"
 msgstr "Подкључ %d од %s"
 
-#: pgp/seahorse-revoke.ui:35
-msgid "Reason for revoking the key"
-msgstr "Разлог за повлачење кључа"
-
-#: pgp/seahorse-revoke.ui:40
-msgid "_Reason:"
-msgstr "_Разлог:"
-
-#: pgp/seahorse-revoke.ui:70
-msgid "Optional description of revocation"
-msgstr "Необавезан опис за повлачење"
-
-#: pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "Опозови кључ"
-
-#: pgp/seahorse-revoke.ui:154
-msgid "Re_voke"
-msgstr "_Опозови"
-
 #: pgp/seahorse-signer.c:63
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
@@ -2149,19 +1900,19 @@ msgstr "Одаберите кључ за потписивање"
 msgid "_Sign message with key:"
 msgstr "Потпиши поруку _кључем:"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
 msgstr "Извозим податке"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Retrieving data"
 msgstr "Преузимам податке"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Importing data"
 msgstr "Увозим податке"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Sending data"
 msgstr "Шаљем податке"
 
@@ -2319,7 +2070,7 @@ msgstr "Доприносиоци:"
 msgid "Version of this application"
 msgstr "Издање овог програма"
 
-#: src/application.vala:171
+#: src/application.vala:173
 msgid "translator-credits"
 msgstr ""
 "Данило Шеган <danilo@gnome.org>\n"
@@ -2332,7 +2083,7 @@ msgstr ""
 "\n"
 "https://гном.срб — превод Гнома на српски језик"
 
-#: src/application.vala:174
+#: src/application.vala:176
 msgid "Seahorse Project Homepage"
 msgstr "Страница пројекта Морског коњића"
 
@@ -2366,7 +2117,7 @@ msgstr "Убачени текст"
 msgid "Clipboard text"
 msgstr "Текст из оставе"
 
-#: src/key-manager.vala:497
+#: src/key-manager.vala:499
 msgid "Couldn’t unlock keyring"
 msgstr "Не могу да откључам привезак"
 
@@ -2478,15 +2229,15 @@ msgstr "Потражи кључ или лозинку"
 msgid "Filter"
 msgstr "Филтер"
 
-#: src/seahorse-key-manager.ui:532
+#: src/seahorse-key-manager.ui:515
 msgid "This collection seems to be empty"
 msgstr "Изгледа да је ова збирка празна"
 
-#: src/seahorse-key-manager.ui:564
+#: src/seahorse-key-manager.ui:525
 msgid "Keyring is locked"
 msgstr "Привезак је закључан"
 
-#: src/seahorse-key-manager.ui:574
+#: src/seahorse-key-manager.ui:530
 msgid "Unlock"
 msgstr "Откључај"
 
@@ -2821,6 +2572,196 @@ msgstr "Не могу да подесим кључеве безбедне шко
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Подешавам кључеве безбедне шкољке…"
+
+#~ msgid "Not a valid Key Server address."
+#~ msgstr "Неисправна адреса сервера кључева."
+
+#~ msgid ""
+#~ "For help contact your system administrator or the administrator of the "
+#~ "key server."
+#~ msgstr ""
+#~ "За помоћ се обратите вашем администратору система или администратору "
+#~ "сервера кључева."
+
+#~ msgid "URL"
+#~ msgstr "Адреса"
+
+#~ msgid "_Find keys via:"
+#~ msgstr "_Пронађи кључ преко:"
+
+#~ msgid "Display flags"
+#~ msgstr "Ознаке за приказивање"
+
+#~ msgid "Displayed date and/or time properties"
+#~ msgstr "Својства приказаног датума и/или времена"
+
+#~ msgid "Lazy mode"
+#~ msgstr "Лењи режим"
+
+#~ msgid "Lazy mode doesn’t normalize entered date and time values"
+#~ msgstr "Лењи режим не нормализује унесене вредности за датум и време"
+
+#~ msgid "Year"
+#~ msgstr "Година"
+
+#~ msgid "Displayed year"
+#~ msgstr "Приказана година"
+
+#~ msgid "Month"
+#~ msgstr "Месец"
+
+#~ msgid "Displayed month"
+#~ msgstr "Приказани месец"
+
+#~ msgid "Day"
+#~ msgstr "Дан"
+
+#~ msgid "Displayed day of month"
+#~ msgstr "Приказани дан у месецу"
+
+#~ msgid "Hour"
+#~ msgstr "Сат"
+
+#~ msgid "Displayed hour"
+#~ msgstr "Приказани сат"
+
+#~ msgid "Minute"
+#~ msgstr "Минут"
+
+#~ msgid "Displayed minute"
+#~ msgstr "Приказани минут"
+
+#~ msgid "Second"
+#~ msgstr "Секунда"
+
+#~ msgid "Displayed second"
+#~ msgstr "Приказана секунда"
+
+#~ msgid "Lower limit year"
+#~ msgstr "Доња граница године"
+
+#~ msgid "Year part of the lower date limit"
+#~ msgstr "Део године доње границе датума"
+
+#~ msgid "Upper limit year"
+#~ msgstr "Горња граница године"
+
+#~ msgid "Year part of the upper date limit"
+#~ msgstr "Део године горње границе датума"
+
+#~ msgid "Lower limit month"
+#~ msgstr "Доња граница месеца"
+
+#~ msgid "Month part of the lower date limit"
+#~ msgstr "Део месеца доње границе датума"
+
+#~ msgid "Upper limit month"
+#~ msgstr "Горња граница месеца"
+
+#~ msgid "Month part of the upper date limit"
+#~ msgstr "Део месеца горње границе датума"
+
+#~ msgid "Lower limit day"
+#~ msgstr "Доња граница дана"
+
+#~ msgid "Day of month part of the lower date limit"
+#~ msgstr "Дан дела месеца доње границе датума"
+
+#~ msgid "Upper limit day"
+#~ msgstr "Горња граница дана"
+
+#~ msgid "Day of month part of the upper date limit"
+#~ msgstr "Дан дела месеца горње границе датума"
+
+#~ msgid "Lower limit hour"
+#~ msgstr "Доња граница сата"
+
+#~ msgid "Hour part of the lower time limit"
+#~ msgstr "Део сата доње границе времена"
+
+#~ msgid "Upper limit hour"
+#~ msgstr "Горња граница сата"
+
+#~ msgid "Hour part of the upper time limit"
+#~ msgstr "Део сата горње границе времена"
+
+#~ msgid "Lower limit minute"
+#~ msgstr "Доња граница минута"
+
+#~ msgid "Minute part of the lower time limit"
+#~ msgstr "Део минута доње границе времена"
+
+#~ msgid "Upper limit minute"
+#~ msgstr "Горња граница минута"
+
+#~ msgid "Minute part of the upper time limit"
+#~ msgstr "Део минута горње границе времена"
+
+#~ msgid "Lower limit second"
+#~ msgstr "Доња граница секунде"
+
+#~ msgid "Second part of the lower time limit"
+#~ msgstr "Део секунде доње границе времена"
+
+#~ msgid "Upper limit second"
+#~ msgstr "Горња граница секунде"
+
+#~ msgid "Second part of the upper time limit"
+#~ msgstr "Део секунде горње границе времена"
+
+#~ msgid "calendar:week_start:0"
+#~ msgstr "calendar:week_start:1"
+
+#~ msgid "Date"
+#~ msgstr "Датум"
+
+#~ msgid "Select Date"
+#~ msgstr "Изабери датум"
+
+#~ msgid "Time"
+#~ msgstr "Време"
+
+#~ msgid "Enter the time directly"
+#~ msgstr "Унесите време директно"
+
+#~ msgid "Select Time"
+#~ msgstr "Изабери време"
+
+#~ msgid "Select the time from a list"
+#~ msgstr "Изаберите време са списка"
+
+#~ msgid "24hr: no"
+#~ msgstr "24hr: не"
+
+#~ msgid "AM"
+#~ msgstr "ПрП"
+
+#~ msgid "PM"
+#~ msgstr "ПоП"
+
+#~ msgid "%02d:%02d:%02d %s"
+#~ msgstr "%02d:%02d:%02d %s"
+
+#~ msgid "%02d:%02d %s"
+#~ msgstr "%02d:%02d %s"
+
+#~ msgid "%02d:%02d:%02d"
+#~ msgstr "%02d:%02d:%02d"
+
+#~ msgid "%02d:%02d"
+#~ msgstr "%02d:%02d"
+
+#~ msgid "%04d-%02d-%02d"
+#~ msgstr "%02d.%02d.%04d."
+
+#~ msgid "%u:%u:%u"
+#~ msgstr "%u:%u:%u"
+
+#~ msgid "Key Servers:"
+#~ msgstr "Сервери кључева:"
+
+#~ msgid "Shared Keys Near Me:"
+#~ msgstr "Дељени кључеви у близини:"
 
 #~ msgid ""
 #~ "Seahorse is a GNOME application for managing encryption keys. It also "
