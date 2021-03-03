@@ -304,6 +304,7 @@ seahorse_gpgme_key_op_interact (void       *data,
         "EOF", "GOT_IT", "NEED_PASSPHRASE", "GOOD_PASSPHRASE", "BAD_PASSPHRASE",
         "USERID_HINT", "SIGEXPIRED", "KEYEXPIRED", "PROGRESS", "KEY_CREATED",
         "ALREADY_SIGNED", "MISSING_PASSPHRASE", "KEY_CONSIDERED",
+        "PINENTRY_LAUNCHED",
         NULL
     };
 
