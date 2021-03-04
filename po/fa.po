@@ -1,14 +1,14 @@
 # Persian translation for seahorse.
 # Copyright (C) 2019 seahorse's COPYRIGHT HOLDER
 # This file is distributed under the same license as the seahorse package.
-# Danial Behzadi <dani.behzi@ubuntu.com>, 2020.
+# Danial Behzadi <dani.behzi@ubuntu.com>, 2020-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-07-13 16:23+0000\n"
-"PO-Revision-Date: 2020-08-25 16:18+0000\n"
+"POT-Creation-Date: 2021-03-02 19:25+0000\n"
+"PO-Revision-Date: 2021-03-04 00:51+0000\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "Language: fa\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Poedit-Bookmarks: -1,38,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
@@ -24,18 +24,18 @@ msgstr ""
 msgid "Add Key Server"
 msgstr "افزودن کارساز کلید"
 
-#: common/add-keyserver-dialog.vala:64
+#: common/add-keyserver-dialog.vala:66
 msgid "Custom"
 msgstr "سفارشی"
 
 #. Buttons
-#: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:130
+#: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:101
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "لغو"
 
-#: common/add-keyserver-dialog.vala:69
+#: common/add-keyserver-dialog.vala:71
 msgid "Save"
 msgstr "ذخیره"
 
@@ -51,13 +51,23 @@ msgstr "نتوانست کلیدها را برون‌ریزی کند"
 msgid "Couldn’t export data"
 msgstr "نتوانست داده‌ها را برون‌ریزی کند"
 
+#: common/datepicker.vala:55
+msgid "Enter the date directly"
+msgstr "تاریخ را وارد کنید"
+
+#: common/datepicker.vala:62
+msgid "Select the date from a calendar"
+msgstr "انتخاب تاریخ از تقویم"
+
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
-#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:270
+#: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
+#: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
+#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
+#: src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "_لغو"
 
@@ -101,27 +111,13 @@ msgstr "کلید‌ها"
 msgid "Certificates"
 msgstr "گواهینامه‌ها"
 
-#: common/prefs.vala:42
+#: common/prefs.vala:30
 msgid "Preferences"
 msgstr "ترجیحات"
 
-#: common/prefs.vala:150
+#: common/prefs-keyservers.vala:44
 msgid "None: Don’t publish keys"
 msgstr "هیچ‌کدام: منتشر نکردن کلیدها"
-
-#: common/prefs.vala:166
-msgid "Not a valid Key Server address."
-msgstr "یک نشانی کارساز کلید معتبر نیست."
-
-#: common/prefs.vala:167
-msgid ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-msgstr "برای کمک، با مدیر سامانه یا مدیر کارساز کلید تماس بگیرید."
-
-#: common/prefs.vala:236
-msgid "URL"
-msgstr "نشانی اینترنتی"
 
 #: common/seahorse-add-keyserver.ui:12
 msgid "initial temporary item"
@@ -148,25 +144,42 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "درگاه برای دسترسی به کارساز رویش."
 
-#: common/seahorse-prefs.ui:34
-msgid "_Find keys via:"
-msgstr "_یافتن کلیدها ازطریق:"
+#: common/seahorse-prefs-keyservers.ui:6 common/seahorse-prefs-keyservers.ui:10
+msgid "Keyservers"
+msgstr "کارسازهای کلید"
 
-#: common/seahorse-prefs.ui:105
+#: common/seahorse-prefs-keyservers.ui:40
+msgid "Add keyserver"
+msgstr "افزودن کارساز کلید"
+
+#: common/seahorse-prefs-keyservers.ui:51
+msgid "Key Synchronization"
+msgstr "همگام‌سازی کلیدها"
+
+#: common/seahorse-prefs-keyservers.ui:61
 msgid "_Publish keys to:"
 msgstr "_انتشار کلیدها به:"
 
-#: common/seahorse-prefs.ui:128
+#: common/seahorse-prefs-keyservers.ui:84
 msgid "Automatically retrieve keys from _key servers"
 msgstr "دریافت خودکار کلیدها از _کارسازهای کلید"
 
-#: common/seahorse-prefs.ui:142
+#: common/seahorse-prefs-keyservers.ui:99
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "همگام‌سازی خودکار کلیدهای تغییریافته با کارسازهای کلید"
 
-#: common/seahorse-prefs.ui:159
-msgid "Key Servers"
-msgstr "کارسازهای کلید"
+#: common/server-category.vala:63
+msgid "LDAP Key Server"
+msgstr "کارساز کلید LDAP"
+
+#. WITH_LDAP
+#: common/server-category.vala:66
+msgid "HTTP Key Server"
+msgstr "کارساز کلید HTTP"
+
+#: common/server-category.vala:67
+msgid "HTTPS Key Server"
+msgstr "کارساز کلید HTTP"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -426,11 +439,11 @@ msgstr ""
 "از کارسازهای کلید گرفته و رویشان منتشر کنید؛ عبارت عبورتان را انبار کرده تا دیگر "
 "نیازی به نوشتنش نباشد و از کلیدها و دسته‌کلیدتان، پشتیبان بگیرید."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:126
+#: data/org.gnome.seahorse.Application.appdata.xml.in:146
 msgid "The GNOME Project"
 msgstr "پروژهٔ گنوم"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:169
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
 #: src/seahorse-key-manager.ui:291
 msgid "Passwords and Keys"
 msgstr "گذرواژه‌ها و کلیدها"
@@ -457,7 +470,7 @@ msgstr "مورد اضافه نشد"
 msgid "Password or Secret"
 msgstr "گذرواژه یا رمز"
 
-#: gkr/gkr-item-info.vala:120
+#: gkr/gkr-item-info.vala:118
 msgid "Network connection secret"
 msgstr "رمز اتّصال شبکه"
 
@@ -465,7 +478,7 @@ msgstr "رمز اتّصال شبکه"
 msgid "Wi-Fi password"
 msgstr "گذرواژهٔ وای‌فای"
 
-#: gkr/gkr-item-info.vala:145
+#: gkr/gkr-item-info.vala:144
 msgid "Network password"
 msgstr "گذرواژهٔ شبکه"
 
@@ -473,24 +486,24 @@ msgstr "گذرواژهٔ شبکه"
 msgid "GNOME Web password"
 msgstr "گذرواژهٔ وب گنوم"
 
-#: gkr/gkr-item-info.vala:254
+#: gkr/gkr-item-info.vala:253
 msgid "Google Chrome password"
 msgstr "گذرواژهٔ گوگل کروم"
 
-#: gkr/gkr-item-info.vala:288
+#: gkr/gkr-item-info.vala:286
 msgid "Instant messaging password"
 msgstr "گذرواژهٔ پیام‌رسانی آنی"
 
 #. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item-info.vala:293
+#: gkr/gkr-item-info.vala:291
 msgid "IM account password for "
 msgstr "گذرواژهٔ حساب پیام‌رسانی برای "
 
-#: gkr/gkr-item-info.vala:326
+#: gkr/gkr-item-info.vala:323
 msgid "Telepathy password"
 msgstr "گذرواژهٔ تله‌پاتی"
 
-#: gkr/gkr-item-info.vala:362
+#: gkr/gkr-item-info.vala:358
 msgid "GNOME Online Accounts password"
 msgstr "گذرواژهٔ حساب‌های برخط گنوم"
 
@@ -623,7 +636,8 @@ msgstr "افزودن گذرواژه"
 msgid "_Keyring:"
 msgstr "_دسته‌کلید:"
 
-#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
+#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-gpgme-revoke-dialog.ui:44
+#: pgp/seahorse-revoke.ui:43
 msgid "_Description:"
 msgstr "_توضیح:"
 
@@ -668,7 +682,7 @@ msgstr "رونوشت"
 msgid "Use"
 msgstr "استفاده"
 
-#: gkr/seahorse-gkr-item-properties.ui:139 pgp/seahorse-pgp-key-properties.c:1281
+#: gkr/seahorse-gkr-item-properties.ui:139 pgp/seahorse-pgp-key-properties.c:1329
 msgid "Type"
 msgstr "گونه"
 
@@ -694,7 +708,7 @@ msgstr "حذف گذرواژه"
 msgid "Keyring properties"
 msgstr "ویژگی‌های دسته‌کلید"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
 msgid "Name"
 msgstr "نام"
 
@@ -710,282 +724,29 @@ msgstr "تغییر گذرواژه"
 msgid "Set as default"
 msgstr "تنظیم به عنوان پیش‌گزیده"
 
-#: libegg/egg-datetime.c:316
-msgid "Display flags"
-msgstr "پرچم‌های نمایشی"
-
-#: libegg/egg-datetime.c:317
-msgid "Displayed date and/or time properties"
-msgstr "ویژگی‌های تاریخ و/یا زمان نمایشی"
-
-#: libegg/egg-datetime.c:322
-msgid "Lazy mode"
-msgstr "حالت تنبل"
-
-#: libegg/egg-datetime.c:323
-msgid "Lazy mode doesn’t normalize entered date and time values"
-msgstr "حالت تنبل مقدارهای تاریخ و زمان وارد شده را بهنجار نمی‌کند"
-
-#: libegg/egg-datetime.c:328
-msgid "Year"
-msgstr "سال"
-
-#: libegg/egg-datetime.c:329
-msgid "Displayed year"
-msgstr "سال نمایشی"
-
-#: libegg/egg-datetime.c:334
-msgid "Month"
-msgstr "ماه"
-
-#: libegg/egg-datetime.c:335
-msgid "Displayed month"
-msgstr "ماه نمایشی"
-
-#: libegg/egg-datetime.c:340
-msgid "Day"
-msgstr "روز"
-
-#: libegg/egg-datetime.c:341
-msgid "Displayed day of month"
-msgstr "روز ماه نمایشی"
-
-#: libegg/egg-datetime.c:346
-msgid "Hour"
-msgstr "ساعت"
-
-#: libegg/egg-datetime.c:347
-msgid "Displayed hour"
-msgstr "ساعت نمایشی"
-
-#: libegg/egg-datetime.c:352
-msgid "Minute"
-msgstr "دقیقه"
-
-#: libegg/egg-datetime.c:353
-msgid "Displayed minute"
-msgstr "دقیقهٔ نمایشی"
-
-#: libegg/egg-datetime.c:358
-msgid "Second"
-msgstr "ثانیه"
-
-#: libegg/egg-datetime.c:359
-msgid "Displayed second"
-msgstr "ثانیهٔ نمایشی"
-
-#: libegg/egg-datetime.c:364
-msgid "Lower limit year"
-msgstr "کران پایین سال"
-
-#: libegg/egg-datetime.c:365
-msgid "Year part of the lower date limit"
-msgstr "بخش سال کران پایین تاریخ"
-
-#: libegg/egg-datetime.c:370
-msgid "Upper limit year"
-msgstr "کران بالای سال"
-
-#: libegg/egg-datetime.c:371
-msgid "Year part of the upper date limit"
-msgstr "بخش سال کران بالای تاریخ"
-
-#: libegg/egg-datetime.c:376
-msgid "Lower limit month"
-msgstr "کران پایین ماه"
-
-#: libegg/egg-datetime.c:377
-msgid "Month part of the lower date limit"
-msgstr "بخش ماه کران پایین تاریخ"
-
-#: libegg/egg-datetime.c:382
-msgid "Upper limit month"
-msgstr "کران بالای ماه"
-
-#: libegg/egg-datetime.c:383
-msgid "Month part of the upper date limit"
-msgstr "بخش ماه کران بالای تاریخ"
-
-#: libegg/egg-datetime.c:388
-msgid "Lower limit day"
-msgstr "کران پایین روز"
-
-#: libegg/egg-datetime.c:389
-msgid "Day of month part of the lower date limit"
-msgstr "بخش روز کران پایین تاریخ"
-
-#: libegg/egg-datetime.c:394
-msgid "Upper limit day"
-msgstr "کران بالای روز"
-
-#: libegg/egg-datetime.c:395
-msgid "Day of month part of the upper date limit"
-msgstr "بخش روز کران بالای تاریخ"
-
-#: libegg/egg-datetime.c:400
-msgid "Lower limit hour"
-msgstr "کران پایین ساعت"
-
-#: libegg/egg-datetime.c:401
-msgid "Hour part of the lower time limit"
-msgstr "بخش ساعت کران پایین تاریخ"
-
-#: libegg/egg-datetime.c:406
-msgid "Upper limit hour"
-msgstr "کران بالای ساعت"
-
-#: libegg/egg-datetime.c:407
-msgid "Hour part of the upper time limit"
-msgstr "بخش ساعت کران بالای تاریخ"
-
-#: libegg/egg-datetime.c:412
-msgid "Lower limit minute"
-msgstr "کران پایین دقیقه"
-
-#: libegg/egg-datetime.c:413
-msgid "Minute part of the lower time limit"
-msgstr "بخش دقیقهٔ کران پایین تاریخ"
-
-#: libegg/egg-datetime.c:418
-msgid "Upper limit minute"
-msgstr "کران بالای دقیقه"
-
-#: libegg/egg-datetime.c:419
-msgid "Minute part of the upper time limit"
-msgstr "بخش دقیقهٔ کران بالای تاریخ"
-
-#: libegg/egg-datetime.c:424
-msgid "Lower limit second"
-msgstr "کران پایین ثانیه"
-
-#: libegg/egg-datetime.c:425
-msgid "Second part of the lower time limit"
-msgstr "بخش ثانیهٔ کران پایین تاریخ"
-
-#: libegg/egg-datetime.c:430
-msgid "Upper limit second"
-msgstr "کران بالای ثانیه"
-
-#: libegg/egg-datetime.c:431
-msgid "Second part of the upper time limit"
-msgstr "بخش ثانیهٔ کران بالای تاریخ"
-
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
-#.
-#: libegg/egg-datetime.c:473
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:6"
-
-#: libegg/egg-datetime.c:495
-msgid "Date"
-msgstr "تاریخ"
-
-#: libegg/egg-datetime.c:495
-msgid "Enter the date directly"
-msgstr "تاریخ را وارد کنید"
-
-#: libegg/egg-datetime.c:502
-msgid "Select Date"
-msgstr "انتخاب تاریخ"
-
-#: libegg/egg-datetime.c:502
-msgid "Select the date from a calendar"
-msgstr "انتخاب تاریخ از تقویم"
-
-#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2203
-msgid "Time"
-msgstr "زمان"
-
-#: libegg/egg-datetime.c:520
-msgid "Enter the time directly"
-msgstr "زمان را وارد کنید"
-
-#: libegg/egg-datetime.c:527
-msgid "Select Time"
-msgstr "انتخاب زمان"
-
-#: libegg/egg-datetime.c:527
-msgid "Select the time from a list"
-msgstr "انتخاب زمان از فهرست"
-
-#. Translators: set this to anything else if you want to use a
-#. * 24 hour clock.
-#.
-#: libegg/egg-datetime.c:792
-msgid "24hr: no"
-msgstr "24hr: yes"
-
-#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1264 libegg/egg-datetime.c:1268
-msgid "AM"
-msgstr "قبل از ظهر"
-
-#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1265 libegg/egg-datetime.c:1272
-msgid "PM"
-msgstr "بعد از ظهر"
-
-#. Translators: This is hh:mm:ss AM/PM.
-#: libegg/egg-datetime.c:806
-#, c-format
-msgid "%02d:%02d:%02d %s"
-msgstr "%I02d:%I02d:%I02d %s"
-
-#. Translators: This is hh:mm AM/PM.
-#: libegg/egg-datetime.c:809
-#, c-format
-msgid "%02d:%02d %s"
-msgstr "%I02d:%I02d %s"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:813
-#, c-format
-msgid "%02d:%02d:%02d"
-msgstr "%I02d:%I02d:%I02d"
-
-#. Translators: This is hh:mm.
-#: libegg/egg-datetime.c:816
-#, c-format
-msgid "%02d:%02d"
-msgstr "%I02d:%I02d"
-
-#. TODO: should handle other display modes as well...
-#. Translators: This is YYYY-MM-DD
-#: libegg/egg-datetime.c:1180
-#, c-format
-msgid "%04d-%02d-%02d"
-msgstr "%I04d-%I02d-%I02d"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:1245
-#, c-format
-msgid "%u:%u:%u"
-msgstr "%Iu:%Iu:%Iu"
-
 #: libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "نمایش راهنما ممکن نیست: %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:213
+#: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
 msgid "Add subkey to %s"
 msgstr "افزودن زیرکلید به %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
+#: pgp/seahorse-gpgme-add-subkey.c:236 pgp/seahorse-gpgme-generate-dialog.c:83
 msgid "DSA (sign only)"
 msgstr "DSA (فقط امضا)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:247
+#: pgp/seahorse-gpgme-add-subkey.c:244
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (فقط رمزنگاری)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
+#: pgp/seahorse-gpgme-add-subkey.c:250 pgp/seahorse-gpgme-generate-dialog.c:84
 msgid "RSA (sign only)"
 msgstr "RSA (فقط امضا)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:259
+#: pgp/seahorse-gpgme-add-subkey.c:256
 msgid "RSA (encrypt only)"
 msgstr "RSA (فقط رمزنگاری)"
 
@@ -1005,15 +766,15 @@ msgstr "طول کلید"
 msgid "Expiration Date"
 msgstr "تاریخ انقضا"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:110
+#: pgp/seahorse-gpgme-add-subkey.ui:109
 msgid "Never E_xpires"
 msgstr "هرگز _منقضی نمی‌شود"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:114
+#: pgp/seahorse-gpgme-add-subkey.ui:113
 msgid "If key never expires"
 msgstr "اگر کلید هرگز منقض نمی‌شود"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:150
+#: pgp/seahorse-gpgme-add-subkey.ui:149
 msgid "Generate a new subkey"
 msgstr "ایجاد زیرکلیدی جدید"
 
@@ -1063,19 +824,19 @@ msgstr "ایجاد شناسهٔ کاربریِ جدید"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "رمزگشایی شکست خورد. احتمالاً کلید رمزگشایی را ندارید."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:512
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
 msgid "The operation was cancelled"
 msgstr "عملیات لغو شد"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:72
+#: pgp/seahorse-gpgme-expires-dialog.c:70
 msgid "Invalid expiry date"
 msgstr "تاریخ انقضای نامعتبر"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:73
+#: pgp/seahorse-gpgme-expires-dialog.c:71
 msgid "The expiry date must be in the future"
 msgstr "تاریخ انقضا باید در آینده باشد"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:83
+#: pgp/seahorse-gpgme-expires-dialog.c:84
 msgid "Couldn’t change expiry date"
 msgstr "نتوانست تاریخ انقضا را عوض کند"
 
@@ -1108,29 +869,29 @@ msgstr "کلیدهای PGP زرهی"
 msgid "PGP keys"
 msgstr "کلیدهای PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
+#: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:85
+#: pgp/seahorse-gpgme-generate-dialog.c:82
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:101
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "نتوانست کلید PGP ایجاد کند"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:140
+#: pgp/seahorse-gpgme-generate-dialog.c:137
 msgid "Passphrase for New PGP Key"
 msgstr "عبارت عبور برای کلید PGP جدید"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:141
+#: pgp/seahorse-gpgme-generate-dialog.c:138
 msgid "Enter the passphrase for your new key twice."
 msgstr "عبارت عبورتان را دو بار برای کلید جدیدتان وارد کنید."
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:153
+#: pgp/seahorse-gpgme-generate-dialog.c:150
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1144,11 +905,11 @@ msgstr ""
 "موشی و استفاده از برنامه‌ها را انجام دهید. این\n"
 "کارها داده‌ّای کاتوره‌ای مورد نیاز سامانه را ایجاد می‌کنند."
 
-#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:155 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "در حال ایجاد کلید"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:182
+#: pgp/seahorse-gpgme-generate-dialog.c:179
 msgid "Name must be at least 5 characters long."
 msgstr "نام باید لااقل ۵ نویسه داشته باشد."
 
@@ -1180,15 +941,15 @@ msgstr "_قدرت کلید (بیت)"
 msgid "E_xpiration Date"
 msgstr "_تاریخ انقضا"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:251
+#: pgp/seahorse-gpgme-generate-dialog.ui:255
 msgid "Ne_ver Expires"
 msgstr "_هرگز منقضی نشود"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:292
+#: pgp/seahorse-gpgme-generate-dialog.ui:296
 msgid "C_reate"
 msgstr "_ایجاد"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:299
+#: pgp/seahorse-gpgme-generate-dialog.ui:303
 msgid "Generate a new key"
 msgstr "ایجاد کلیدی جدید"
 
@@ -1204,11 +965,11 @@ msgid "Are you sure you want to permanently delete %d keys?"
 msgid_plural "Are you sure you want to permanently delete %d keys?"
 msgstr[0] "مطمئنید که می‌خواهید %Id کلید را برای همیشه حذف کنید؟"
 
-#: pgp/seahorse-gpgme-key-op.c:347
+#: pgp/seahorse-gpgme-key-op.c:361
 msgid "Wrong password"
 msgstr "گذرواژهٔ اشتباه"
 
-#: pgp/seahorse-gpgme-key-op.c:347
+#: pgp/seahorse-gpgme-key-op.c:361
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "بار سومی بود که گذرواژه‌ای اشتباه وارد کردید. لطفاً دوباره تلاش کنید."
 
@@ -1327,48 +1088,48 @@ msgstr "مطمئنید می‌خواهید عکس کنونی را از کلید�
 msgid "Couldn’t delete photo"
 msgstr "نتوانست عکس را حذف کند"
 
-#: pgp/seahorse-gpgme-revoke.c:72
+#: pgp/seahorse-gpgme-revoke-dialog.c:81
 msgid "Couldn’t revoke subkey"
 msgstr "نتوانست زیرکلید را لغو کند"
 
-#: pgp/seahorse-gpgme-revoke.c:93
+#: pgp/seahorse-gpgme-revoke-dialog.c:141
 #, c-format
 msgid "Revoke: %s"
 msgstr "لغو: %s"
 
-#: pgp/seahorse-gpgme-revoke.c:104
+#: pgp/seahorse-gpgme-revoke-dialog.c:159
 msgid "No reason"
 msgstr "بدون دلیل"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke-dialog.c:160
 msgid "No reason for revoking key"
 msgstr "دلیلی برای لغو کلید وجود ندارد"
 
-#: pgp/seahorse-gpgme-revoke.c:111
+#: pgp/seahorse-gpgme-revoke-dialog.c:166
 msgid "Compromised"
 msgstr "لو رفته"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke-dialog.c:167
 msgid "Key has been compromised"
 msgstr "کلید لو رفته"
 
-#: pgp/seahorse-gpgme-revoke.c:118
+#: pgp/seahorse-gpgme-revoke-dialog.c:173
 msgid "Superseded"
 msgstr "جایگزین شده"
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke-dialog.c:174
 msgid "Key has been superseded"
 msgstr "کلید جایگزین شده"
 
-#: pgp/seahorse-gpgme-revoke.c:125
+#: pgp/seahorse-gpgme-revoke-dialog.c:180
 msgid "Not Used"
 msgstr "استفاده نشده"
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke-dialog.c:181
 msgid "Key is no longer used"
 msgstr "کلید دیگر استفاده نمی‌شود"
 
-#: pgp/seahorse-gpgme-revoke.c:163
+#: pgp/seahorse-gpgme-revoke-dialog.c:264
 #, c-format
 msgid ""
 "You are about to add %s as a revoker for %s. This operation cannot be undone! "
@@ -1377,9 +1138,29 @@ msgstr ""
 "در حال افزودن %s به عنوان لغوکنندهٔ %s هستید. عملیات قابل بازگردانی نیست! مطمئنید "
 "می‌خواهید ادامه دهید؟"
 
-#: pgp/seahorse-gpgme-revoke.c:175
+#: pgp/seahorse-gpgme-revoke-dialog.c:276
 msgid "Couldn’t add revoker"
 msgstr "نتوانست لغوکننده بیفزاید"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:21 pgp/seahorse-revoke.ui:20
+msgid "_Reason:"
+msgstr "_دلیل:"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:22 pgp/seahorse-revoke.ui:21
+msgid "Reason for revoking the key"
+msgstr "دلیل لغو کلید"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:57 pgp/seahorse-revoke.ui:56
+msgid "Optional description of revocation"
+msgstr "توضیح اختیاری لغو"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:89 pgp/seahorse-revoke.ui:88
+msgid "Revoke key"
+msgstr "لغو کلید"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:90 pgp/seahorse-revoke.ui:89
+msgid "Re_voke"
+msgstr "_لغو"
 
 #: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
@@ -1499,28 +1280,24 @@ msgstr "_امضاکننده:"
 msgid "_Sign"
 msgstr "_امضا"
 
-#: pgp/seahorse-gpgme-subkey.c:89
+#: pgp/seahorse-gpgme-subkey.c:91
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "ناشناخته"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:93
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:530
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr "جست‌وجو به قدر کافی خاص نبود. کارساز %s بیش از حد کلید یافت."
 
-#: pgp/seahorse-hkp-source.c:533
+#: pgp/seahorse-hkp-source.c:507
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "نمی‌توان با کارساز %s در ارتباط بود: %s"
-
-#: pgp/seahorse-hkp-source.c:996
-msgid "HTTP Key Server"
-msgstr "کارساز کلید HTTP"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1539,16 +1316,16 @@ msgstr "درون‌ریزی"
 msgid "Can’t import key"
 msgstr "نمی‌توان کلید را درون‌ریزی کرد"
 
-#: pgp/seahorse-keyserver-results.c:240
+#: pgp/seahorse-keyserver-results.c:226
 msgid "Remote keys"
 msgstr "کلیدهای دوردست"
 
-#: pgp/seahorse-keyserver-results.c:242
+#: pgp/seahorse-keyserver-results.c:228
 #, c-format
 msgid "Remote keys containing “%s”"
 msgstr "کلیدهای دوردست شامل %s"
 
-#: pgp/seahorse-keyserver-results.c:357
+#: pgp/seahorse-keyserver-results.c:342
 msgid "The search for keys failed."
 msgstr "جست‌وجو برای کلیدها شکست خورد."
 
@@ -1564,7 +1341,7 @@ msgstr ""
 msgid "Find Remote Keys"
 msgstr "یافتن کلیدهای دوردست"
 
-#: pgp/seahorse-keyserver-search.ui:37
+#: pgp/seahorse-keyserver-search.ui:32
 msgid ""
 "This will find keys for others on the Internet. These keys can then be imported "
 "into your local key ring."
@@ -1572,50 +1349,42 @@ msgstr ""
 "کلیدهای دیگران را روی اینترنت می‌یابد. این کلیدها می‌توانند در دسته‌کلید محلّیتان "
 "ریخته شوند."
 
-#: pgp/seahorse-keyserver-search.ui:52
+#: pgp/seahorse-keyserver-search.ui:47
 msgid "_Search for keys containing: "
 msgstr "_جست‌وجو برای کلیدهای شامل: "
 
-#: pgp/seahorse-keyserver-search.ui:74
+#: pgp/seahorse-keyserver-search.ui:69
 msgid "Where to search:"
 msgstr "مکان جست‌وجو:"
 
-#: pgp/seahorse-keyserver-search.ui:103
-msgid "Key Servers:"
-msgstr "کارسازهای کلید:"
-
-#: pgp/seahorse-keyserver-search.ui:117
-msgid "Shared Keys Near Me:"
-msgstr "کلیدهای هم‌رساندهٔ نزدیک من:"
-
-#: pgp/seahorse-keyserver-search.ui:144
+#: pgp/seahorse-keyserver-search.ui:115
 msgid "_Search"
 msgstr "_جست‌وجو"
 
-#: pgp/seahorse-keyserver-sync.c:54
+#: pgp/seahorse-keyserver-sync.c:71
 msgid "Couldn’t publish keys to server"
 msgstr "نتوانست کلیدها را روی کارساز منتشر کند"
 
-#: pgp/seahorse-keyserver-sync.c:73
+#: pgp/seahorse-keyserver-sync.c:87
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "نتوانست کلیدها را از کارساز دریافت کند: %s"
 
-#: pgp/seahorse-keyserver-sync.c:158
+#: pgp/seahorse-keyserver-sync.c:197
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%Id کلید برای هم‌گام‌سازی گزیده‌شد</b>"
 
-#: pgp/seahorse-keyserver-sync.c:237
+#: pgp/seahorse-keyserver-sync.c:305
 msgid "Synchronizing keys…"
 msgstr "در حال همگام‌سازی کلیدها…"
 
-#: pgp/seahorse-keyserver-sync.ui:14
+#: pgp/seahorse-keyserver-sync.ui:5
 msgid "Sync Keys"
 msgstr "همگام‌سازی کلیدها"
 
-#: pgp/seahorse-keyserver-sync.ui:52
+#: pgp/seahorse-keyserver-sync.ui:36
 msgid ""
 "This will publish the keys in your key ring so they’re available for others to "
 "use. You’ll also get any changes others have made since you received their keys."
@@ -1624,7 +1393,7 @@ msgstr ""
 "هم‌چنین هر تغییری که دیگران از زمانی که کلیدشان را گرفتید داده باشند را خواهید "
 "گرفت."
 
-#: pgp/seahorse-keyserver-sync.ui:65
+#: pgp/seahorse-keyserver-sync.ui:45
 msgid ""
 "This will retrieve any changes others have made since you received their keys. "
 "No key server has been chosen for publishing, so your keys will not be made "
@@ -1634,197 +1403,199 @@ msgstr ""
 "گرفت. هیچ کارساز کلیدی برای انتشار گزیده نشده، پس کلیدهایتان برای دیگران موجود "
 "نخواهند بود."
 
-#: pgp/seahorse-keyserver-sync.ui:115
+#: pgp/seahorse-keyserver-sync.ui:65
 msgid "_Key Servers"
 msgstr "_کارسازهای کلید"
 
-#: pgp/seahorse-keyserver-sync.ui:148
+#: pgp/seahorse-keyserver-sync.ui:89
 msgid "_Sync"
 msgstr "_همگام‌سازی"
 
-#: pgp/seahorse-ldap-source.c:439
+#: pgp/seahorse-ldap-source.c:433
 #, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "نمی‌توان با %s در ارتباط بود: %s"
 
-#: pgp/seahorse-ldap-source.c:642
+#: pgp/seahorse-ldap-source.c:593
+#, c-format
+msgid "Couldn’t resolve address %s"
+msgstr "نتوانست نشانی را تجزیه کند: %s"
+
+#. Now that we've resolved our address, connect via IP
+#: pgp/seahorse-ldap-source.c:598
 #, c-format
 msgid "Connecting to: %s"
 msgstr "درحال اتصال به: %s"
 
-#: pgp/seahorse-ldap-source.c:647
+#: pgp/seahorse-ldap-source.c:653
 #, c-format
-msgid "Couldn’t resolve address: %s"
-msgstr "نتوانست نشانی را تجزیه کند: %s"
+msgid "Invalid URI: %s"
+msgstr "نشانی نامعتبر: %s"
 
-#: pgp/seahorse-ldap-source.c:689
+#: pgp/seahorse-ldap-source.c:661
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "در حال تجزیهٔ نشانی کارساز: %s"
 
-#: pgp/seahorse-ldap-source.c:1366
-msgid "LDAP Key Server"
-msgstr "کارساز کلید LDAP"
-
-#: pgp/seahorse-pgp-backend.c:187
+#: pgp/seahorse-pgp-backend.c:188
 msgid "PGP Keys"
 msgstr "کلیدهای PGP"
 
-#: pgp/seahorse-pgp-backend.c:193
+#: pgp/seahorse-pgp-backend.c:194
 msgid "PGP keys are for encrypting email or files"
 msgstr "کلیدهای PGP برای رمزنگاری رایانامه و پرونده‌ها استفاده می‌شوند"
 
-#: pgp/seahorse-pgp-key.c:172
+#: pgp/seahorse-pgp-key.c:186
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
 msgstr[0] "(و %Id دیگر)"
 
-#: pgp/seahorse-pgp-key.c:573
+#: pgp/seahorse-pgp-key.c:606
 msgid "Personal PGP key"
 msgstr "کلید PGP شخصی"
 
-#: pgp/seahorse-pgp-key.c:575
+#: pgp/seahorse-pgp-key.c:608
 msgid "PGP key"
 msgstr "کلید PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:249
+#: pgp/seahorse-pgp-key-properties.c:250
 msgid "Couldn’t change primary user ID"
 msgstr "نتوانست شناسهٔ کاربری اصلی را عوض کند"
 
-#: pgp/seahorse-pgp-key-properties.c:284
+#: pgp/seahorse-pgp-key-properties.c:285
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "مطمئنید می‌خواهید شناسهٔ کاربری «%s» را برای همیشه حذف کنید؟"
 
-#: pgp/seahorse-pgp-key-properties.c:293
+#: pgp/seahorse-pgp-key-properties.c:294
 msgid "Couldn’t delete user ID"
 msgstr "نتوانست شناسهٔ کاربری را حذف کند"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
+#: pgp/seahorse-pgp-key-properties.c:370 pgp/seahorse-pgp-key-properties.c:1464
 msgid "[Unknown]"
 msgstr "[ناشناخته]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
+#: pgp/seahorse-pgp-key-properties.c:468 pgp/seahorse-pgp-key-properties.c:1682
 msgid "Name/Email"
 msgstr "نام/رایانامه"
 
-#: pgp/seahorse-pgp-key-properties.c:472
+#: pgp/seahorse-pgp-key-properties.c:475
 msgid "Signature ID"
 msgstr "شناسهٔ امضا"
 
-#: pgp/seahorse-pgp-key-properties.c:578
+#: pgp/seahorse-pgp-key-properties.c:581
 msgid "Couldn’t change primary photo"
 msgstr "نتوانست عکس اصلی را عوض کند"
 
-#: pgp/seahorse-pgp-key-properties.c:738
+#: pgp/seahorse-pgp-key-properties.c:768
 msgid "Error changing password"
 msgstr "خطا در تغییر گذرواژه"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:784
+#: pgp/seahorse-pgp-key-properties.c:815
 msgid "(unknown)"
 msgstr "(نامعلوم)"
 
-#: pgp/seahorse-pgp-key-properties.c:789
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
 msgid "This key expired on: %s"
 msgstr "این کلید منقضی می‌شود در: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:817
+#: pgp/seahorse-pgp-key-properties.c:846
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — کلید عمومی"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:820
+#: pgp/seahorse-pgp-key-properties.c:849
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — کلید خصوصی"
 
-#: pgp/seahorse-pgp-key-properties.c:1006
+#: pgp/seahorse-pgp-key-properties.c:1036
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "مطمئنید می‌خواهید زیر کلید %Id از %s را برای همیشه حذف کنید؟"
 
-#: pgp/seahorse-pgp-key-properties.c:1014
+#: pgp/seahorse-pgp-key-properties.c:1044
 msgid "Couldn’t delete subkey"
 msgstr "نتوانست زیرکلید را حذف کند"
 
-#: pgp/seahorse-pgp-key-properties.c:1078 pgp/seahorse-pgp-key-properties.c:1389
+#: pgp/seahorse-pgp-key-properties.c:1114 pgp/seahorse-pgp-key-properties.c:1438
 msgid "Unable to change trust"
 msgstr "ناتوان در تعویض اطمینان"
 
-#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "نتوانست کلید را برون‌ریزد"
 
-#: pgp/seahorse-pgp-key-properties.c:1239 pgp/seahorse-pgp-key-properties.c:1323
+#: pgp/seahorse-pgp-key-properties.c:1284 pgp/seahorse-pgp-key-properties.c:1372
 msgctxt "Expires"
 msgid "Never"
 msgstr "هرگز"
 
-#: pgp/seahorse-pgp-key-properties.c:1278
+#: pgp/seahorse-pgp-key-properties.c:1326
 msgid "ID"
 msgstr "شناسه"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1332
 msgid "Usage"
 msgstr "استفاده"
 
-#: pgp/seahorse-pgp-key-properties.c:1287
+#: pgp/seahorse-pgp-key-properties.c:1335
 msgid "Created"
 msgstr "ایجاد شد"
 
-#: pgp/seahorse-pgp-key-properties.c:1290
+#: pgp/seahorse-pgp-key-properties.c:1338
 msgid "Expires"
 msgstr "انقضا"
 
-#: pgp/seahorse-pgp-key-properties.c:1293
+#: pgp/seahorse-pgp-key-properties.c:1341
 msgid "Status"
 msgstr "وضعیت"
 
-#: pgp/seahorse-pgp-key-properties.c:1296
+#: pgp/seahorse-pgp-key-properties.c:1344
 msgid "Strength"
 msgstr "قدرت"
 
-#: pgp/seahorse-pgp-key-properties.c:1314
+#: pgp/seahorse-pgp-key-properties.c:1363
 msgid "Revoked"
 msgstr "لغو شده"
 
-#: pgp/seahorse-pgp-key-properties.c:1316
+#: pgp/seahorse-pgp-key-properties.c:1365
 msgid "Expired"
 msgstr "منقضی"
 
-#: pgp/seahorse-pgp-key-properties.c:1318
+#: pgp/seahorse-pgp-key-properties.c:1367
 msgid "Disabled"
 msgstr "از کار افتاده"
 
-#: pgp/seahorse-pgp-key-properties.c:1320
+#: pgp/seahorse-pgp-key-properties.c:1369
 msgid "Good"
 msgstr "خوب"
 
-#: pgp/seahorse-pgp-key-properties.c:1628
+#: pgp/seahorse-pgp-key-properties.c:1685
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "شناسه کلید"
 
-#: pgp/seahorse-pgp-key-properties.c:1771
+#: pgp/seahorse-pgp-key-properties.c:1828
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "به امضاهای %s روی دیگر کلیدها اطمینان دارم"
 
-#: pgp/seahorse-pgp-key-properties.c:1778
+#: pgp/seahorse-pgp-key-properties.c:1835
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this key:"
 msgstr "اگر باور دارید مالک این کلید %s است، این کلید را <i>امضا</i> کنید:"
 
-#: pgp/seahorse-pgp-key-properties.c:1785
+#: pgp/seahorse-pgp-key-properties.c:1842
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -2070,26 +1841,6 @@ msgstr "کلید"
 msgid "Subkey %d of %s"
 msgstr "زیرکلید %Id از %s"
 
-#: pgp/seahorse-revoke.ui:35
-msgid "Reason for revoking the key"
-msgstr "دلیل لغو کلید"
-
-#: pgp/seahorse-revoke.ui:40
-msgid "_Reason:"
-msgstr "_دلیل:"
-
-#: pgp/seahorse-revoke.ui:70
-msgid "Optional description of revocation"
-msgstr "توضیح اختیاری لغو"
-
-#: pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "لغو کلید"
-
-#: pgp/seahorse-revoke.ui:154
-msgid "Re_voke"
-msgstr "_لغو"
-
 #: pgp/seahorse-signer.c:63
 msgid ""
 "You have no personal PGP keys that can be used to sign a document or message."
@@ -2104,19 +1855,19 @@ msgstr "گزینش کلید امضا"
 msgid "_Sign message with key:"
 msgstr "_امضای پیام با کلید:"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
 msgstr "در حال برون‌ریزی داده"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Retrieving data"
 msgstr "در حال دریافت داده"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Importing data"
 msgstr "در حال درون‌ریزی داده"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Sending data"
 msgstr "در حال فرستادن داده"
 
@@ -2271,11 +2022,11 @@ msgstr "مشارکت‌ها:"
 msgid "Version of this application"
 msgstr "نگارش این برنامه"
 
-#: src/application.vala:171
+#: src/application.vala:173
 msgid "translator-credits"
 msgstr "دانیال بهزادی <dani.behzi@ubuntu.com>"
 
-#: src/application.vala:174
+#: src/application.vala:176
 msgid "Seahorse Project Homepage"
 msgstr "صفحهٔ خانگی پروژهٔ اسب‌دریایی"
 
@@ -2309,7 +2060,7 @@ msgstr "متن رهاشده"
 msgid "Clipboard text"
 msgstr "متن تخته‌گیره"
 
-#: src/key-manager.vala:497
+#: src/key-manager.vala:499
 msgid "Couldn’t unlock keyring"
 msgstr "نتوانست دسته‌کلید را قفل‌گشایی کند"
 
@@ -2421,15 +2172,15 @@ msgstr "جست‌وجو برای یک کلید یا گذرواژه"
 msgid "Filter"
 msgstr "پالایش"
 
-#: src/seahorse-key-manager.ui:532
+#: src/seahorse-key-manager.ui:515
 msgid "This collection seems to be empty"
 msgstr "به نظر این مجموعه خالی است"
 
-#: src/seahorse-key-manager.ui:564
+#: src/seahorse-key-manager.ui:525
 msgid "Keyring is locked"
 msgstr "دسته‌کلید قفل‌شده است"
 
-#: src/seahorse-key-manager.ui:574
+#: src/seahorse-key-manager.ui:530
 msgid "Unlock"
 msgstr "قفل گشایی"
 
@@ -2758,6 +2509,194 @@ msgstr "نتوانست کلیدهای پوستهٔ امن را روی رایان
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "در حال پیکربندی کلیدهای پوستهٔ امن…"
+
+#~ msgid "Not a valid Key Server address."
+#~ msgstr "یک نشانی کارساز کلید معتبر نیست."
+
+#~ msgid ""
+#~ "For help contact your system administrator or the administrator of the key "
+#~ "server."
+#~ msgstr "برای کمک، با مدیر سامانه یا مدیر کارساز کلید تماس بگیرید."
+
+#~ msgid "URL"
+#~ msgstr "نشانی اینترنتی"
+
+#~ msgid "_Find keys via:"
+#~ msgstr "_یافتن کلیدها ازطریق:"
+
+#~ msgid "Display flags"
+#~ msgstr "پرچم‌های نمایشی"
+
+#~ msgid "Displayed date and/or time properties"
+#~ msgstr "ویژگی‌های تاریخ و/یا زمان نمایشی"
+
+#~ msgid "Lazy mode"
+#~ msgstr "حالت تنبل"
+
+#~ msgid "Lazy mode doesn’t normalize entered date and time values"
+#~ msgstr "حالت تنبل مقدارهای تاریخ و زمان وارد شده را بهنجار نمی‌کند"
+
+#~ msgid "Year"
+#~ msgstr "سال"
+
+#~ msgid "Displayed year"
+#~ msgstr "سال نمایشی"
+
+#~ msgid "Month"
+#~ msgstr "ماه"
+
+#~ msgid "Displayed month"
+#~ msgstr "ماه نمایشی"
+
+#~ msgid "Day"
+#~ msgstr "روز"
+
+#~ msgid "Displayed day of month"
+#~ msgstr "روز ماه نمایشی"
+
+#~ msgid "Hour"
+#~ msgstr "ساعت"
+
+#~ msgid "Displayed hour"
+#~ msgstr "ساعت نمایشی"
+
+#~ msgid "Minute"
+#~ msgstr "دقیقه"
+
+#~ msgid "Displayed minute"
+#~ msgstr "دقیقهٔ نمایشی"
+
+#~ msgid "Second"
+#~ msgstr "ثانیه"
+
+#~ msgid "Displayed second"
+#~ msgstr "ثانیهٔ نمایشی"
+
+#~ msgid "Lower limit year"
+#~ msgstr "کران پایین سال"
+
+#~ msgid "Year part of the lower date limit"
+#~ msgstr "بخش سال کران پایین تاریخ"
+
+#~ msgid "Upper limit year"
+#~ msgstr "کران بالای سال"
+
+#~ msgid "Year part of the upper date limit"
+#~ msgstr "بخش سال کران بالای تاریخ"
+
+#~ msgid "Lower limit month"
+#~ msgstr "کران پایین ماه"
+
+#~ msgid "Month part of the lower date limit"
+#~ msgstr "بخش ماه کران پایین تاریخ"
+
+#~ msgid "Upper limit month"
+#~ msgstr "کران بالای ماه"
+
+#~ msgid "Month part of the upper date limit"
+#~ msgstr "بخش ماه کران بالای تاریخ"
+
+#~ msgid "Lower limit day"
+#~ msgstr "کران پایین روز"
+
+#~ msgid "Day of month part of the lower date limit"
+#~ msgstr "بخش روز کران پایین تاریخ"
+
+#~ msgid "Upper limit day"
+#~ msgstr "کران بالای روز"
+
+#~ msgid "Day of month part of the upper date limit"
+#~ msgstr "بخش روز کران بالای تاریخ"
+
+#~ msgid "Lower limit hour"
+#~ msgstr "کران پایین ساعت"
+
+#~ msgid "Hour part of the lower time limit"
+#~ msgstr "بخش ساعت کران پایین تاریخ"
+
+#~ msgid "Upper limit hour"
+#~ msgstr "کران بالای ساعت"
+
+#~ msgid "Hour part of the upper time limit"
+#~ msgstr "بخش ساعت کران بالای تاریخ"
+
+#~ msgid "Lower limit minute"
+#~ msgstr "کران پایین دقیقه"
+
+#~ msgid "Minute part of the lower time limit"
+#~ msgstr "بخش دقیقهٔ کران پایین تاریخ"
+
+#~ msgid "Upper limit minute"
+#~ msgstr "کران بالای دقیقه"
+
+#~ msgid "Minute part of the upper time limit"
+#~ msgstr "بخش دقیقهٔ کران بالای تاریخ"
+
+#~ msgid "Lower limit second"
+#~ msgstr "کران پایین ثانیه"
+
+#~ msgid "Second part of the lower time limit"
+#~ msgstr "بخش ثانیهٔ کران پایین تاریخ"
+
+#~ msgid "Upper limit second"
+#~ msgstr "کران بالای ثانیه"
+
+#~ msgid "Second part of the upper time limit"
+#~ msgstr "بخش ثانیهٔ کران بالای تاریخ"
+
+#~ msgid "calendar:week_start:0"
+#~ msgstr "calendar:week_start:6"
+
+#~ msgid "Date"
+#~ msgstr "تاریخ"
+
+#~ msgid "Select Date"
+#~ msgstr "انتخاب تاریخ"
+
+#~ msgid "Time"
+#~ msgstr "زمان"
+
+#~ msgid "Enter the time directly"
+#~ msgstr "زمان را وارد کنید"
+
+#~ msgid "Select Time"
+#~ msgstr "انتخاب زمان"
+
+#~ msgid "Select the time from a list"
+#~ msgstr "انتخاب زمان از فهرست"
+
+#~ msgid "24hr: no"
+#~ msgstr "24hr: yes"
+
+#~ msgid "AM"
+#~ msgstr "قبل از ظهر"
+
+#~ msgid "PM"
+#~ msgstr "بعد از ظهر"
+
+#~ msgid "%02d:%02d:%02d %s"
+#~ msgstr "%I02d:%I02d:%I02d %s"
+
+#~ msgid "%02d:%02d %s"
+#~ msgstr "%I02d:%I02d %s"
+
+#~ msgid "%02d:%02d:%02d"
+#~ msgstr "%I02d:%I02d:%I02d"
+
+#~ msgid "%02d:%02d"
+#~ msgstr "%I02d:%I02d"
+
+#~ msgid "%04d-%02d-%02d"
+#~ msgstr "%I04d-%I02d-%I02d"
+
+#~ msgid "%u:%u:%u"
+#~ msgstr "%Iu:%Iu:%Iu"
+
+#~ msgid "Key Servers:"
+#~ msgstr "کارسازهای کلید:"
+
+#~ msgid "Shared Keys Near Me:"
+#~ msgstr "کلیدهای هم‌رساندهٔ نزدیک من:"
 
 #~ msgid ""
 #~ "Seahorse is a GNOME application for managing encryption keys. It also "
