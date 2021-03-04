@@ -877,8 +877,7 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
     g_autoptr(GTask) task = NULL;
     SoupURI *uri;
     g_autoptr(GHashTable) form = NULL;
-    gchar hexfpr[11];
-    gint i;
+    char hexfpr[11];
 
     task = g_task_new (self, cancellable, callback, user_data);
     closure = g_new0 (ExportClosure, 1);
@@ -900,8 +899,8 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
     strncpy (hexfpr, "0x", 3);
 
     form = g_hash_table_new (g_str_hash, g_str_equal);
-    for (i = 0; keyids[i] != NULL; i++) {
-        const gchar *fpr = keyids[i];
+    for (int i = 0; keyids[i] != NULL; i++) {
+        const char *fpr = keyids[i];
         guint len;
         SoupMessage *message;
 
@@ -912,7 +911,8 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
         if (len > 8)
             fpr += (len - 8);
 
-        strncpy (hexfpr + 2, fpr, 9);
+        strncpy (hexfpr + 2, fpr, 8);
+        hexfpr[10] = '\0';
 
         /* The get key URI */
         g_hash_table_insert (form, "op", "get");
