@@ -41,6 +41,8 @@ SeahorseHKPSource*    seahorse_hkp_source_new      (const char *uri);
 
 gboolean              seahorse_hkp_is_valid_uri    (const char *uri);
 
+GList *               seahorse_hkp_parse_lookup_response  (const char *response);
+
 
 #define HKP_ERROR_DOMAIN (seahorse_hkp_error_quark())
 GQuark            seahorse_hkp_error_quark       (void);

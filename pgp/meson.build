@@ -95,3 +95,27 @@ xloadimage = executable('xloadimage',
   install: true,
   install_dir: libexecbindir,
 )
+
+
+# Tests
+test_names = [
+]
+
+if get_option('hkp-support')
+  test_names += 'hkp-source'
+endif
+
+foreach _test : test_names
+  test_bin = executable(_test,
+    files('test-@0@.c'.format(_test)),
+    dependencies: [
+      pgp_dep,
+      pgp_dependencies,
+    ],
+    include_directories: include_directories('..'),
+  )
+
+  test(_test, test_bin,
+    suite: 'pgp',
+  )
+endforeach

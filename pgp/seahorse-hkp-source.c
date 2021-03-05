@@ -220,14 +220,15 @@ parse_hkp_flags (char *flags)
 }
 
 /**
-* response: The HKP server response to parse
-*
-* Extracts the key data from the HKP server response
-*
-* Returns A GList of keys
-**/
-static GList*
-parse_hkp_index (const char *response)
+ * parse_hkp_index:
+ * response: The HKP server response to parse
+ *
+ * Extracts the key data from the HKP server response
+ *
+ * Returns: (transfer full): The parsed list of keys
+ */
+GList *
+seahorse_hkp_parse_lookup_response (const char *response)
 {
     /*
      * Use The OpenPGP HTTP Keyserver Protocol (HKP) to search and get keys
@@ -236,7 +237,6 @@ parse_hkp_index (const char *response)
     g_auto(GStrv) lines = NULL;
     SeahorsePgpKey *key = NULL;
     GList *keys = NULL;
-    SeahorseFlags flags;
     guint key_total = 0, key_count = 0;
 
     lines = g_strsplit (response, "\n", 0);
@@ -244,17 +244,18 @@ parse_hkp_index (const char *response)
         char *line = *l;
         g_auto(GStrv) columns = NULL;
 
-        g_debug ("%s", line);
-
-        if (strlen(line) == 0) {
+        if (!*line) {
           g_debug ("HKP Parser: skip empty line");
           continue;
         }
 
+        g_debug ("%s", line);
+
         /* split the line using hkp delimiter */
-        columns = g_strsplit_set(line, ":", 7);
+        columns = g_strsplit_set (line, ":", 7);
 
         /* info header */
+        /* info:<version>:<count> */
         if (g_ascii_strncasecmp (columns[0], "info", 4) == 0) {
             if (!columns[1] && !columns[2]){
                 g_debug("HKP Parse: Invalid info line: %s", line);
@@ -272,16 +273,9 @@ parse_hkp_index (const char *response)
             long created = 0, expired = 0;
             g_autoptr(GDateTime) created_date = NULL;
             g_autoptr(GDateTime) expired_date = NULL;
+            SeahorseFlags flags;
 
             key_count++;
-
-            /* reset previous key */
-            if (key) {
-                g_debug ("HKP Parse: previous key found");
-                seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (key));
-                keys = g_list_prepend (keys, key);
-                key = NULL;
-            }
 
             if (!columns[0] || !columns[1] || !columns[2] || !columns[3] || !columns[4]) {
                 g_message ("Invalid key line from server: %s", line);
@@ -327,9 +321,8 @@ parse_hkp_index (const char *response)
 
             /* set flags (optional) */
             flags = SEAHORSE_FLAG_EXPORTABLE;
-            if (columns[6]){
-                flags |= parse_hkp_flags(columns[6]);
-            }
+            if (columns[6])
+                flags |= parse_hkp_flags (columns[6]);
 
             /* create key */
             g_debug("HKP Parse: found new key");
@@ -350,6 +343,9 @@ parse_hkp_index (const char *response)
             if (algo)
                 seahorse_pgp_subkey_set_algorithm (subkey, algo);
             seahorse_pgp_key_add_subkey (key, subkey);
+
+            /* Now add it to the list */
+            keys = g_list_prepend (keys, key);
 
         /* A UID for the key */
         } else if (g_ascii_strncasecmp (columns[0], "uid", 3) == 0) {
@@ -557,7 +553,7 @@ on_search_message_complete (SoupSession *session,
         return;
     }
 
-    keys = parse_hkp_index (message->response_body->data);
+    keys = seahorse_hkp_parse_lookup_response (message->response_body->data);
     for (l = keys; l; l = g_list_next (l)) {
         g_object_set (l->data, "place", closure->source, NULL);
         gcr_simple_collection_add (closure->results, l->data);
