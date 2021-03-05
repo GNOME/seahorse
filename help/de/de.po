@@ -5,20 +5,20 @@
 # Christian Kirbach <Christian.Kirbach@gmail.com>, 2014-2015.
 # Benjamin Steinwender <b@stbe.at>, 2014.
 # Wolfgang Stöggl <c72578@yahoo.de>, 2015.
-# Mario Blättermann <mario.blaettermann@gmail.com>, 2016, 2018, 2019, 2020.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2016, 2018-2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
-"POT-Creation-Date: 2020-09-10 20:26+0000\n"
-"PO-Revision-Date: 2020-09-10 23:15+0200\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2021-03-02 19:25+0000\n"
+"PO-Revision-Date: 2021-03-04 18:39+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Lokalize 20.12.2\n"
 
 #. Put one translator per line, in the form NAME <EMAIL>, YEAR1, YEAR2
 msgctxt "_"
@@ -46,7 +46,7 @@ msgstr "Jim Campbell"
 #: C/keyring.page:27 C/misc-key-backup.page:17 C/misc-key-fingerprint.page:16
 #: C/passwords-stored-create.page:16 C/passwords-view.page:18
 #: C/pgp-create.page:18 C/pgp-create.page:24 C/pgp-delete.page:17
-#: C/pgp-expiration-change.page:16 C/pgp-expired.page:17 C/pgp-export.page:16
+#: C/pgp-expiration-change.page:16 C/pgp-expired.page:17 C/pgp-export.page:17
 #: C/pgp-import.page:18 C/pgp-import.page:23 C/pgp-photoid.page:17
 #: C/pgp-publish.page:18 C/pgp-retrieve-remote.page:18 C/pgp-sign.page:16
 #: C/pgp-subkeys.page:16 C/pgp-sync.page:18 C/pgp-userid-add.page:17
@@ -150,7 +150,7 @@ msgstr ""
 #: C/misc-key-backup.page:15 C/misc-key-fingerprint.page:14
 #: C/passwords-stored-create.page:14 C/passwords-view.page:16
 #: C/pgp-create.page:22 C/pgp-delete.page:15 C/pgp-expiration-change.page:14
-#: C/pgp-expired.page:15 C/pgp-export.page:14 C/pgp-import.page:16
+#: C/pgp-expired.page:15 C/pgp-export.page:15 C/pgp-import.page:16
 #: C/pgp-photoid.page:15 C/pgp-sign.page:14 C/pgp-subkeys.page:14
 #: C/pgp-sync.page:16 C/pgp-userid-add.page:15 C/pgp-userid-primary.page:14
 #: C/pgp-userid-remove.page:15 C/pgp-userid.page:14
@@ -1590,21 +1590,30 @@ msgstr ""
 
 #. (itstool) path: note/p
 #: C/pgp-delete.page:50
+#| msgid ""
+#| "If you delete your GnuPG key, this means that your private key will be "
+#| "permanently deleted, even though your public key can still be <link xref="
+#| "\"pgp-retrieve-remote\">retrieved</link> from a key server and used to "
+#| "encrypt messages to you that you won't be able to read! To prevent such a "
+#| "key from being used, retrieve and revoke the key. The revoked key can "
+#| "then be <link xref=\"pgp-sync\">synced</link> with a key server to "
+#| "prevent people from retrieving and using it."
 msgid ""
 "If you delete your GnuPG key, this means that your private key will be "
 "permanently deleted, even though your public key can still be <link xref="
 "\"pgp-retrieve-remote\">retrieved</link> from a key server and used to "
 "encrypt messages to you that you won't be able to read! To prevent such a "
-"key from being used, retrieve and revoke the key. The revoked key can then "
-"be <link xref=\"pgp-sync\">synced</link> with a key server to prevent people "
-"from retrieving and using it."
+"key from being used, retrieve and <link xref=\"subkeys-revoke\">revoke</"
+"link> the key. The revoked key can then be <link xref=\"pgp-sync\">synced</"
+"link> with a key server to prevent people from retrieving and using it."
 msgstr ""
 "Wenn Sie Ihren GnuPG-Schlüssel löschen, so hat dies zur Folge, dass Ihr "
 "geheimer Schlüssel dauerhaft gelöscht wird. Das gilt selbst dann, wenn Ihr "
 "öffentlicher Schlüssel immer noch von einem Schlüssel-Server <link xref="
 "\"pgp-retrieve-remote\">abgerufen</link> und zum Verschlüsseln von "
 "Nachrichten eingesetzt werden kann, die Sie dann nicht lesen können! Rufen "
-"Sie den Schlüssel ab und widerrufen Sie ihn, um eine weitere Verwendung zu "
+"Sie den Schlüssel ab und <link xref=\"subkeys-revoke\">widerrufen</link> Sie"
+" ihn, um eine weitere Verwendung zu "
 "verhindern. Sie sollten nach dem Widerrufen den Schlüssel mit dem Schlüssel-"
 "Server <link xref=\"pgp-sync\">abgleichen</link>, um zu verhindern, dass "
 "andere den alten Schlüssel abrufen und einsetzen."
@@ -1759,19 +1768,19 @@ msgstr ""
 "Zurückziehen ändern, um diese entschlüsseln zu können."
 
 #. (itstool) path: info/desc
-#: C/pgp-export.page:19
+#: C/pgp-export.page:20
 msgid "Export your public and private PGP keys to store them in keyfiles."
 msgstr ""
 "Exportieren Sie ihre öffentlichen und privaten PGP-Schlüssel zum Speichern "
 "in Schlüsseldateien."
 
 #. (itstool) path: page/title
-#: C/pgp-export.page:23
+#: C/pgp-export.page:24
 msgid "Export PGP keys"
 msgstr "PGP-Schlüssel exportieren"
 
 #. (itstool) path: page/p
-#: C/pgp-export.page:25
+#: C/pgp-export.page:26
 msgid ""
 "Export the contents of your PGP keys and store them in keyfiles, to have a "
 "backup of your keys or to share your public key with someone."
@@ -1781,12 +1790,12 @@ msgstr ""
 "um den öffentlichen Schlüssel mit einer Person zu teilen."
 
 #. (itstool) path: section/title
-#: C/pgp-export.page:29
+#: C/pgp-export.page:30
 msgid "To export your public PGP key:"
 msgstr "So exportieren Sie Ihren öffentlichen PGP-Schlüssel:"
 
 #. (itstool) path: item/p
-#: C/pgp-export.page:33 C/pgp-export.page:62 C/pgp-userid-add.page:36
+#: C/pgp-export.page:34 C/pgp-export.page:62 C/pgp-userid-add.page:36
 #: C/pgp-userid-primary.page:32 C/pgp-userid-remove.page:31
 msgid "Select the <gui>GnuPG keys</gui> keyring from the left side panel."
 msgstr ""
@@ -1794,7 +1803,7 @@ msgstr ""
 "Bereich."
 
 #. (itstool) path: item/p
-#: C/pgp-export.page:37 C/pgp-export.page:66
+#: C/pgp-export.page:38 C/pgp-export.page:66
 msgid ""
 "Select the <gui>Personal PGP key</gui> that has to be exported, from the "
 "list."
@@ -1803,7 +1812,7 @@ msgstr ""
 "exportiert werden soll."
 
 #. (itstool) path: item/p
-#: C/pgp-export.page:41 C/ssh-export.page:42
+#: C/pgp-export.page:42 C/ssh-export.page:42
 msgid ""
 "Right-click on the key and select <gui style=\"menuitem\">Export…</gui>."
 msgstr ""
@@ -1811,7 +1820,7 @@ msgstr ""
 "style=\"menuitem\">Exportieren …</gui>."
 
 #. (itstool) path: item/p
-#: C/pgp-export.page:44
+#: C/pgp-export.page:45
 msgid ""
 "To store the keys in the ASCII format, select <gui>Armored PGP keys</gui> "
 "from the menu at the bottom of the export window"
@@ -1820,7 +1829,7 @@ msgstr ""
 "des Export-Fensters."
 
 #. (itstool) path: item/p
-#: C/pgp-export.page:49 C/pgp-export.page:77
+#: C/pgp-export.page:50 C/pgp-export.page:80
 msgid ""
 "Choose a location for your keyfile, and press <gui style=\"button\">Export</"
 "gui> to finish."
@@ -1844,8 +1853,17 @@ msgstr ""
 
 #. (itstool) path: item/p
 #: C/pgp-export.page:74
-msgid "Press the <gui style=\"button\">Export</gui> button."
-msgstr "Klicken Sie auf den Knopf <gui style=\"button\">Exportieren</gui>."
+#| msgid "Press the <gui style=\"button\">Export</gui> button."
+msgid "Press the <gui style=\"button\">Export to file</gui> button."
+msgstr ""
+"Klicken Sie auf den Knopf <gui style=\"button\">In Datei exportieren</gui>."
+
+#. (itstool) path: item/p
+#: C/pgp-export.page:77
+#| msgid "Select <gui style=\"menuitem\">Preferences</gui>."
+msgid "Select <gui style=\"menuitem\">Export secret key</gui>."
+msgstr ""
+"Wählen Sie <gui style=\"menuitem\">Geheimen Schlüssel exportieren</gui>."
 
 #. (itstool) path: info/desc
 #: C/pgp-import.page:26
@@ -3123,12 +3141,15 @@ msgstr ""
 
 #. (itstool) path: item/p
 #: C/ssh-import.page:45
+#| msgid ""
+#| "In the new dialog, select the key you wish to import. Public SSH keys end "
+#| "with <file>.pub</file>."
 msgid ""
 "In the new dialog, select the key you wish to import. Public SSH keys end "
-"with <file>.pub</file>."
+"with <file>pub</file>."
 msgstr ""
 "Wählen Sie im neuen Dialog den Schlüssel, welchen Sie importieren wollen. "
-"Öffentliche SSH-Schlüssel haben die Dateiendung <file>.pub</file>."
+"Öffentliche SSH-Schlüssel haben die Dateiendung <file>pub</file>."
 
 #. (itstool) path: page/p
 #: C/ssh-import.page:53
