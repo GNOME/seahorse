@@ -240,38 +240,3 @@ seahorse_gpgme_revoke_dialog_new (SeahorseGpgmeSubkey *subkey,
                          "use-header-bar", 1,
                          NULL);
 }
-
-void
-seahorse_gpgme_add_revoker_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
-{
-    SeahorseGpgmeKey *revoker;
-    GtkWidget *dialog;
-    int response;
-    gpgme_error_t err;
-    const char *userid1, *userid2;
-
-    g_return_if_fail (pkey != NULL && SEAHORSE_GPGME_IS_KEY (pkey));
-
-    revoker = SEAHORSE_GPGME_KEY (seahorse_signer_get (parent));
-    if (revoker == NULL)
-        return;
-
-    userid1 = seahorse_object_get_label (SEAHORSE_OBJECT (revoker));
-    userid2 = seahorse_object_get_label (SEAHORSE_OBJECT (pkey));
-
-    dialog = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL,
-                                     GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO,
-                                     _("You are about to add %s as a revoker for %s."
-                                       " This operation cannot be undone! Are you sure you want to continue?"),
-                                       userid1, userid2);
-
-    response = gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-
-    if (response != GTK_RESPONSE_YES)
-        return;
-
-    err = seahorse_gpgme_key_op_add_revoker (pkey, revoker);
-    if (!GPG_IS_OK (err))
-        seahorse_gpgme_handle_error (err, _("Couldn’t add revoker"));
-}
