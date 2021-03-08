@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-19 18:59+0000\n"
-"PO-Revision-Date: 2021-02-21 12:33+0100\n"
+"POT-Creation-Date: 2021-03-06 10:56+0000\n"
+"PO-Revision-Date: 2021-03-08 16:45+0100\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -32,7 +32,7 @@ msgstr "Personalizat"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:130
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:101
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Anulează"
@@ -53,13 +53,23 @@ msgstr "Nu s-au putut exporta cheile"
 msgid "Couldn’t export data"
 msgstr "Nu s-au putut exporta datele"
 
+#: common/datepicker.vala:55
+msgid "Enter the date directly"
+msgstr "Introduceți direct data"
+
+#: common/datepicker.vala:62
+msgid "Select the date from a calendar"
+msgstr "Alegeți data dintr-un calendar"
+
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
-#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:270
+#: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
+#: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
+#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
+#: src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "_Anulează"
 
@@ -103,7 +113,7 @@ msgstr "Chei"
 msgid "Certificates"
 msgstr "Certificate"
 
-#: common/prefs.vala:32
+#: common/prefs.vala:30
 msgid "Preferences"
 msgstr "Preferințe"
 
@@ -136,25 +146,42 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "Portul pe care se poate accesa serverul."
 
-#: common/seahorse-prefs-keyservers.ui:21
+#: common/seahorse-prefs-keyservers.ui:6 common/seahorse-prefs-keyservers.ui:10
 msgid "Keyservers"
 msgstr "Servere de chei"
 
-#: common/seahorse-prefs-keyservers.ui:32
-msgid "Add a new keyserver"
-msgstr "Adaugă un nou server de chei"
+#: common/seahorse-prefs-keyservers.ui:40
+msgid "Add keyserver"
+msgstr "Adaugă server de chei"
 
-#: common/seahorse-prefs-keyservers.ui:81
+#: common/seahorse-prefs-keyservers.ui:51
+msgid "Key Synchronization"
+msgstr "Sincronizare chei"
+
+#: common/seahorse-prefs-keyservers.ui:61
 msgid "_Publish keys to:"
 msgstr "_Publică chei via:"
 
-#: common/seahorse-prefs-keyservers.ui:104
+#: common/seahorse-prefs-keyservers.ui:84
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Descarcă automat chei de la serverele de c_hei"
 
-#: common/seahorse-prefs-keyservers.ui:119
+#: common/seahorse-prefs-keyservers.ui:99
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "Sincronizează automat cheile _modificate cu serverele de chei"
+
+#: common/server-category.vala:63
+msgid "LDAP Key Server"
+msgstr "Server LDAP de chei"
+
+#. WITH_LDAP
+#: common/server-category.vala:66
+msgid "HTTP Key Server"
+msgstr "Server HTTP de chei"
+
+#: common/server-category.vala:67
+msgid "HTTPS Key Server"
+msgstr "Server HTTPS de chei"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -621,7 +648,8 @@ msgstr "Adaugă o parolă"
 msgid "_Keyring:"
 msgstr "_Inel de chei:"
 
-#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
+#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-gpgme-revoke-dialog.ui:44
+#: pgp/seahorse-revoke.ui:43
 msgid "_Description:"
 msgstr "_Descriere:"
 
@@ -668,7 +696,7 @@ msgid "Use"
 msgstr "Utilizează"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1281
+#: pgp/seahorse-pgp-key-properties.c:1329
 msgid "Type"
 msgstr "Tip"
 
@@ -694,7 +722,7 @@ msgstr "Șterge parola"
 msgid "Keyring properties"
 msgstr "Proprietățile inelului de chei"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
 msgid "Name"
 msgstr "Nume"
 
@@ -710,284 +738,29 @@ msgstr "Modifică parola"
 msgid "Set as default"
 msgstr "Stabilește ca implicit"
 
-#: libegg/egg-datetime.c:316
-msgid "Display flags"
-msgstr "Marcaje de afișaj"
-
-#: libegg/egg-datetime.c:317
-msgid "Displayed date and/or time properties"
-msgstr "Proprietăți dată și/sau oră afișate"
-
-#: libegg/egg-datetime.c:322
-msgid "Lazy mode"
-msgstr "Modul leneș"
-
-#: libegg/egg-datetime.c:323
-msgid "Lazy mode doesn’t normalize entered date and time values"
-msgstr "Modul leneș nu normalizează valorile datelor și orelor introduse"
-
-#: libegg/egg-datetime.c:328
-msgid "Year"
-msgstr "An"
-
-#: libegg/egg-datetime.c:329
-msgid "Displayed year"
-msgstr "An afișat"
-
-#: libegg/egg-datetime.c:334
-msgid "Month"
-msgstr "Lună"
-
-#: libegg/egg-datetime.c:335
-msgid "Displayed month"
-msgstr "Lună afișată"
-
-#: libegg/egg-datetime.c:340
-msgid "Day"
-msgstr "Zi"
-
-#: libegg/egg-datetime.c:341
-msgid "Displayed day of month"
-msgstr "Zi afișată"
-
-#: libegg/egg-datetime.c:346
-msgid "Hour"
-msgstr "Oră"
-
-#: libegg/egg-datetime.c:347
-msgid "Displayed hour"
-msgstr "Oră afișată"
-
-#: libegg/egg-datetime.c:352
-msgid "Minute"
-msgstr "Minut"
-
-#: libegg/egg-datetime.c:353
-msgid "Displayed minute"
-msgstr "Minut afișat"
-
-#: libegg/egg-datetime.c:358
-msgid "Second"
-msgstr "Secundă"
-
-#: libegg/egg-datetime.c:359
-msgid "Displayed second"
-msgstr "Secundă afișată"
-
-#: libegg/egg-datetime.c:364
-msgid "Lower limit year"
-msgstr "Anul limitei inferioare"
-
-#: libegg/egg-datetime.c:365
-msgid "Year part of the lower date limit"
-msgstr "Anul din limita inferioară a datei"
-
-#: libegg/egg-datetime.c:370
-msgid "Upper limit year"
-msgstr "Anul limitei superioare"
-
-#: libegg/egg-datetime.c:371
-msgid "Year part of the upper date limit"
-msgstr "Anul din limita superioară a datei"
-
-#: libegg/egg-datetime.c:376
-msgid "Lower limit month"
-msgstr "Luna limitei inferioare"
-
-#: libegg/egg-datetime.c:377
-msgid "Month part of the lower date limit"
-msgstr "Luna din limita inferioară a datei"
-
-#: libegg/egg-datetime.c:382
-msgid "Upper limit month"
-msgstr "Luna limitei superioare"
-
-#: libegg/egg-datetime.c:383
-msgid "Month part of the upper date limit"
-msgstr "Luna din limita superioară a datei"
-
-#: libegg/egg-datetime.c:388
-msgid "Lower limit day"
-msgstr "Ziua limitei inferioare"
-
-#: libegg/egg-datetime.c:389
-msgid "Day of month part of the lower date limit"
-msgstr "Ziua din limita inferioară a datei"
-
-#: libegg/egg-datetime.c:394
-msgid "Upper limit day"
-msgstr "Ziua limitei superioare"
-
-#: libegg/egg-datetime.c:395
-msgid "Day of month part of the upper date limit"
-msgstr "Ziua din limita superioară a datei"
-
-#: libegg/egg-datetime.c:400
-msgid "Lower limit hour"
-msgstr "Ora limitei inferioare"
-
-#: libegg/egg-datetime.c:401
-msgid "Hour part of the lower time limit"
-msgstr "Ora din limita inferioară a datei"
-
-#: libegg/egg-datetime.c:406
-msgid "Upper limit hour"
-msgstr "Ora limitei superioare"
-
-#: libegg/egg-datetime.c:407
-msgid "Hour part of the upper time limit"
-msgstr "Ora din limita superioară a datei"
-
-#: libegg/egg-datetime.c:412
-msgid "Lower limit minute"
-msgstr "Minutele limitei inferioare"
-
-#: libegg/egg-datetime.c:413
-msgid "Minute part of the lower time limit"
-msgstr "Minutele din limita inferioară a datei"
-
-#: libegg/egg-datetime.c:418
-msgid "Upper limit minute"
-msgstr "Minutele limitei superioare"
-
-#: libegg/egg-datetime.c:419
-msgid "Minute part of the upper time limit"
-msgstr "Minutele din limita superioară a datei"
-
-#: libegg/egg-datetime.c:424
-msgid "Lower limit second"
-msgstr "Secundele limitei inferioare"
-
-#: libegg/egg-datetime.c:425
-msgid "Second part of the lower time limit"
-msgstr "Secundele din limita inferioară a datei"
-
-#: libegg/egg-datetime.c:430
-msgid "Upper limit second"
-msgstr "Secundele limitei superioare"
-
-#: libegg/egg-datetime.c:431
-msgid "Second part of the upper time limit"
-msgstr "Secundele din limita superioară a datei"
-
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
-#.
-#: libegg/egg-datetime.c:473
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
-
-#: libegg/egg-datetime.c:495
-msgid "Date"
-msgstr "Data"
-
-#: libegg/egg-datetime.c:495
-msgid "Enter the date directly"
-msgstr "Introduceți direct data"
-
-#: libegg/egg-datetime.c:502
-msgid "Select Date"
-msgstr "Alegeți data"
-
-#: libegg/egg-datetime.c:502
-msgid "Select the date from a calendar"
-msgstr "Alegeți data dintr-un calendar"
-
-#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2203
-msgid "Time"
-msgstr "Ora"
-
-#: libegg/egg-datetime.c:520
-msgid "Enter the time directly"
-msgstr "Introduceți direct ora"
-
-#: libegg/egg-datetime.c:527
-msgid "Select Time"
-msgstr "Alegeți ora"
-
-#: libegg/egg-datetime.c:527
-msgid "Select the time from a list"
-msgstr "Alegeți ora dintr-o listă"
-
-#. Translators: set this to anything else if you want to use a
-#. * 24 hour clock.
-#.
-#: libegg/egg-datetime.c:792
-msgid "24hr: no"
-msgstr "24hr: yes"
-
-#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1264
-#: libegg/egg-datetime.c:1268
-msgid "AM"
-msgstr "AM"
-
-#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1265
-#: libegg/egg-datetime.c:1272
-msgid "PM"
-msgstr "PM"
-
-#. Translators: This is hh:mm:ss AM/PM.
-#: libegg/egg-datetime.c:806
-#, c-format
-msgid "%02d:%02d:%02d %s"
-msgstr "%02d:%02d:%02d %s"
-
-#. Translators: This is hh:mm AM/PM.
-#: libegg/egg-datetime.c:809
-#, c-format
-msgid "%02d:%02d %s"
-msgstr "%02d:%02d %s"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:813
-#, c-format
-msgid "%02d:%02d:%02d"
-msgstr "%02d:%02d:%02d"
-
-#. Translators: This is hh:mm.
-#: libegg/egg-datetime.c:816
-#, c-format
-msgid "%02d:%02d"
-msgstr "%02d:%02d"
-
-#. TODO: should handle other display modes as well...
-#. Translators: This is YYYY-MM-DD
-#: libegg/egg-datetime.c:1180
-#, c-format
-msgid "%04d-%02d-%02d"
-msgstr "%04d-%02d-%02d"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:1245
-#, c-format
-msgid "%u:%u:%u"
-msgstr "%u:%u:%u"
-
 #: libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Nu s-a putut afișa ajutorul: %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:213
+#: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Adaugă subcheia la %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
+#: pgp/seahorse-gpgme-add-subkey.c:236 pgp/seahorse-gpgme-generate-dialog.c:83
 msgid "DSA (sign only)"
 msgstr "DSA (doar pentru semnare)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:247
+#: pgp/seahorse-gpgme-add-subkey.c:244
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (doar pentru criptare)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
+#: pgp/seahorse-gpgme-add-subkey.c:250 pgp/seahorse-gpgme-generate-dialog.c:84
 msgid "RSA (sign only)"
 msgstr "RSA (doar pentru semnare)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:259
+#: pgp/seahorse-gpgme-add-subkey.c:256
 msgid "RSA (encrypt only)"
 msgstr "RSA (doar pentru criptare)"
 
@@ -1007,15 +780,15 @@ msgstr "Lungimea cheii"
 msgid "Expiration Date"
 msgstr "Data expirării"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:110
+#: pgp/seahorse-gpgme-add-subkey.ui:109
 msgid "Never E_xpires"
 msgstr "Nu e_xpiră niciodată"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:114
+#: pgp/seahorse-gpgme-add-subkey.ui:113
 msgid "If key never expires"
 msgstr "Dacă cheia nu expiră niciodată"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:150
+#: pgp/seahorse-gpgme-add-subkey.ui:149
 msgid "Generate a new subkey"
 msgstr "Generează o nouă subcheie"
 
@@ -1065,19 +838,19 @@ msgstr "Creează un nou ID utilizator"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Decriptarea a eșuat. Probabil nu dețineți cheia de decriptare."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:506
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
 msgid "The operation was cancelled"
 msgstr "Operația a fost anulată"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:72
+#: pgp/seahorse-gpgme-expires-dialog.c:70
 msgid "Invalid expiry date"
 msgstr "Dată de expirare nevalidă"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:73
+#: pgp/seahorse-gpgme-expires-dialog.c:71
 msgid "The expiry date must be in the future"
 msgstr "Data de expirare trebuie să fie în viitor"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:83
+#: pgp/seahorse-gpgme-expires-dialog.c:84
 msgid "Couldn’t change expiry date"
 msgstr "Nu s-a putut modifica data de expirare"
 
@@ -1110,29 +883,29 @@ msgstr "Chei PGP cu armură"
 msgid "PGP keys"
 msgstr "Chei PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
+#: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:85
+#: pgp/seahorse-gpgme-generate-dialog.c:82
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:101
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "Nu s-a putut genera cheia PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:140
+#: pgp/seahorse-gpgme-generate-dialog.c:137
 msgid "Passphrase for New PGP Key"
 msgstr "Fraza secretă pentru noua cheie PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:141
+#: pgp/seahorse-gpgme-generate-dialog.c:138
 msgid "Enter the passphrase for your new key twice."
 msgstr "Introduceți de două ori fraza secretă pentru noua cheie."
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:153
+#: pgp/seahorse-gpgme-generate-dialog.c:150
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1146,11 +919,11 @@ msgstr ""
 "tastarea pe tastatură, mișcarea mausului, utilizarea aplicațiilor.\n"
 "Aceasta oferă sistemului datele aleatorii de care are nevoie."
 
-#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:155 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Se generează cheia"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:182
+#: pgp/seahorse-gpgme-generate-dialog.c:179
 msgid "Name must be at least 5 characters long."
 msgstr "Trebuie să aibă minimum 5 caractere."
 
@@ -1185,15 +958,15 @@ msgstr "Com_plexitate cheie (biți)"
 msgid "E_xpiration Date"
 msgstr "Data e_xpirării"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:251
+#: pgp/seahorse-gpgme-generate-dialog.ui:255
 msgid "Ne_ver Expires"
 msgstr "Nu e_xpiră niciodată"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:292
+#: pgp/seahorse-gpgme-generate-dialog.ui:296
 msgid "C_reate"
 msgstr "C_reează"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:299
+#: pgp/seahorse-gpgme-generate-dialog.ui:303
 msgid "Generate a new key"
 msgstr "Generează o nouă cheie"
 
@@ -1211,11 +984,11 @@ msgstr[0] "Sigur doriți să ștergeți permanent %d cheie?"
 msgstr[1] "Sigur doriți să ștergeți permanent %d chei?"
 msgstr[2] "Sigur doriți să ștergeți permanent %d de chei?"
 
-#: pgp/seahorse-gpgme-key-op.c:352
+#: pgp/seahorse-gpgme-key-op.c:362
 msgid "Wrong password"
 msgstr "Arată parola"
 
-#: pgp/seahorse-gpgme-key-op.c:352
+#: pgp/seahorse-gpgme-key-op.c:362
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 "Aceasta a fost a treia încercare în care ați introdus o parolă greșită. "
@@ -1338,59 +1111,66 @@ msgstr "Sigur doriți să ștergeți fotografia curentă din cheie?"
 msgid "Couldn’t delete photo"
 msgstr "Nu s-a putut șterge fotografia"
 
-#: pgp/seahorse-gpgme-revoke.c:72
+#: pgp/seahorse-gpgme-revoke-dialog.c:81
 msgid "Couldn’t revoke subkey"
 msgstr "Nu s-a putut revoca subcheia"
 
-#: pgp/seahorse-gpgme-revoke.c:93
+#: pgp/seahorse-gpgme-revoke-dialog.c:141
 #, c-format
 msgid "Revoke: %s"
 msgstr "Revocă: %s"
 
-#: pgp/seahorse-gpgme-revoke.c:104
+#: pgp/seahorse-gpgme-revoke-dialog.c:159
 msgid "No reason"
 msgstr "Niciun motiv"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke-dialog.c:160
 msgid "No reason for revoking key"
 msgstr "Nu s-a dat niciun motiv pentru revocarea cheii"
 
-#: pgp/seahorse-gpgme-revoke.c:111
+#: pgp/seahorse-gpgme-revoke-dialog.c:166
 msgid "Compromised"
 msgstr "Compromisă"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke-dialog.c:167
 msgid "Key has been compromised"
 msgstr "Cheia a fost compromisă"
 
-#: pgp/seahorse-gpgme-revoke.c:118
+#: pgp/seahorse-gpgme-revoke-dialog.c:173
 msgid "Superseded"
 msgstr "Înlocuită"
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke-dialog.c:174
 msgid "Key has been superseded"
 msgstr "Cheia a fost înlocuită"
 
-#: pgp/seahorse-gpgme-revoke.c:125
+#: pgp/seahorse-gpgme-revoke-dialog.c:180
 msgid "Not Used"
 msgstr "Neutilizată"
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke-dialog.c:181
 msgid "Key is no longer used"
 msgstr "Cheia nu mai este folosită"
 
-#: pgp/seahorse-gpgme-revoke.c:163
-#, c-format
-msgid ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
-msgstr ""
-"Sunteți pe cale de a adăuga %s ca un revocator pentru %s. Această operație "
-"nu poate fi anulată! Sigur doriți să continuați?"
+#: pgp/seahorse-gpgme-revoke-dialog.ui:21 pgp/seahorse-revoke.ui:20
+msgid "_Reason:"
+msgstr "Mot_iv:"
 
-#: pgp/seahorse-gpgme-revoke.c:175
-msgid "Couldn’t add revoker"
-msgstr "Nu s-a putut adăuga revocatorul"
+#: pgp/seahorse-gpgme-revoke-dialog.ui:22 pgp/seahorse-revoke.ui:21
+msgid "Reason for revoking the key"
+msgstr "Motiv pentru revocarea cheii"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:57 pgp/seahorse-revoke.ui:56
+msgid "Optional description of revocation"
+msgstr "Descriere opțională de revocare"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:89 pgp/seahorse-revoke.ui:88
+msgid "Revoke key"
+msgstr "Revocă cheia"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:90 pgp/seahorse-revoke.ui:89
+msgid "Re_voke"
+msgstr "Re_vocă"
 
 #: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
@@ -1411,7 +1191,7 @@ msgstr "Nu s-a putut semna cheia"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: pgp/seahorse-gpgme-sign-dialog.c:281 pgp/seahorse-signer.c:62
+#: pgp/seahorse-gpgme-sign-dialog.c:281
 msgid "No keys usable for signing"
 msgstr "Nu există chei ce pot fi folosite la semnare"
 
@@ -1511,22 +1291,22 @@ msgstr "_Semnatar:"
 msgid "_Sign"
 msgstr "_Semnează"
 
-#: pgp/seahorse-gpgme-subkey.c:89
+#: pgp/seahorse-gpgme-subkey.c:91
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Necunoscut"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:93
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:524
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Căutarea nu a fost destul de precisă. Serverul „%s” a găsit prea multe chei."
 
-#: pgp/seahorse-hkp-source.c:528
+#: pgp/seahorse-hkp-source.c:507
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Nu s-a putut comunica cu serverul „%s”: %s"
@@ -1548,16 +1328,16 @@ msgstr "Importă"
 msgid "Can’t import key"
 msgstr "Nu s-au putut importa cheia"
 
-#: pgp/seahorse-keyserver-results.c:240
+#: pgp/seahorse-keyserver-results.c:226
 msgid "Remote keys"
 msgstr "Chei la distanță"
 
-#: pgp/seahorse-keyserver-results.c:242
+#: pgp/seahorse-keyserver-results.c:228
 #, c-format
 msgid "Remote keys containing “%s”"
 msgstr "Chei la distanță care conțin „%s”"
 
-#: pgp/seahorse-keyserver-results.c:357
+#: pgp/seahorse-keyserver-results.c:342
 msgid "The search for keys failed."
 msgstr "Căutarea cheilor a eșuat."
 
@@ -1573,7 +1353,7 @@ msgstr ""
 msgid "Find Remote Keys"
 msgstr "Caută chei la distanță"
 
-#: pgp/seahorse-keyserver-search.ui:37
+#: pgp/seahorse-keyserver-search.ui:32
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -1581,36 +1361,28 @@ msgstr ""
 "Aceasta va căuta chei la distanță pe Internet. Aceste chei pot fi apoi "
 "importate în inelul de chei local."
 
-#: pgp/seahorse-keyserver-search.ui:52
+#: pgp/seahorse-keyserver-search.ui:47
 msgid "_Search for keys containing: "
 msgstr "Cau_tă chei ce conțin: "
 
-#: pgp/seahorse-keyserver-search.ui:74
+#: pgp/seahorse-keyserver-search.ui:69
 msgid "Where to search:"
 msgstr "Unde să se caute:"
 
-#: pgp/seahorse-keyserver-search.ui:103
-msgid "Key Servers:"
-msgstr "Servere de chei:"
-
-#: pgp/seahorse-keyserver-search.ui:117
-msgid "Shared Keys Near Me:"
-msgstr "Chei partajate în apropiere:"
-
-#: pgp/seahorse-keyserver-search.ui:144
+#: pgp/seahorse-keyserver-search.ui:115
 msgid "_Search"
 msgstr "_Caută"
 
-#: pgp/seahorse-keyserver-sync.c:54
+#: pgp/seahorse-keyserver-sync.c:71
 msgid "Couldn’t publish keys to server"
 msgstr "Nu s-au putut publica cheile pe server"
 
-#: pgp/seahorse-keyserver-sync.c:73
+#: pgp/seahorse-keyserver-sync.c:87
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Nu s-au putut obține cheile de pe server: %s"
 
-#: pgp/seahorse-keyserver-sync.c:158
+#: pgp/seahorse-keyserver-sync.c:197
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
@@ -1618,15 +1390,15 @@ msgstr[0] "<b>%d cheie este selectată pentru sincronizare</b>"
 msgstr[1] "<b>%d chei sunt selectate pentru sincronizare</b>"
 msgstr[2] "<b>%d de chei sunt selectate pentru sincronizare</b>"
 
-#: pgp/seahorse-keyserver-sync.c:232
+#: pgp/seahorse-keyserver-sync.c:305
 msgid "Synchronizing keys…"
 msgstr "Se sincronizează cheile…"
 
-#: pgp/seahorse-keyserver-sync.ui:14
+#: pgp/seahorse-keyserver-sync.ui:5
 msgid "Sync Keys"
 msgstr "Sincronizează cheile"
 
-#: pgp/seahorse-keyserver-sync.ui:52
+#: pgp/seahorse-keyserver-sync.ui:36
 msgid ""
 "This will publish the keys in your key ring so they’re available for others "
 "to use. You’ll also get any changes others have made since you received "
@@ -1636,7 +1408,7 @@ msgstr ""
 "disponibile altora. De asemenea, veți primi și toate modificările pe care "
 "alții le-au făcut de când ați primit cheile lor."
 
-#: pgp/seahorse-keyserver-sync.ui:65
+#: pgp/seahorse-keyserver-sync.ui:45
 msgid ""
 "This will retrieve any changes others have made since you received their "
 "keys. No key server has been chosen for publishing, so your keys will not be "
@@ -1646,36 +1418,36 @@ msgstr ""
 "cheile lor. Niciun server de chei nu este selectat pentru publicare, prin "
 "urmare cheile dumneavoastră nu vor fi făcute publice."
 
-#: pgp/seahorse-keyserver-sync.ui:115
+#: pgp/seahorse-keyserver-sync.ui:65
 msgid "_Key Servers"
 msgstr "Servere de c_hei"
 
-#: pgp/seahorse-keyserver-sync.ui:148
+#: pgp/seahorse-keyserver-sync.ui:89
 msgid "_Sync"
 msgstr "_Sincronizează"
 
-#: pgp/seahorse-ldap-source.c:434
+#: pgp/seahorse-ldap-source.c:433
 #, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Nu s-a putut comunica cu „%s”: %s"
 
-#: pgp/seahorse-ldap-source.c:594
+#: pgp/seahorse-ldap-source.c:593
 #, c-format
 msgid "Couldn’t resolve address %s"
 msgstr "Nu s-a putut rezolva adresa %s"
 
 #. Now that we've resolved our address, connect via IP
-#: pgp/seahorse-ldap-source.c:599
+#: pgp/seahorse-ldap-source.c:598
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Se conectează la: %s"
 
-#: pgp/seahorse-ldap-source.c:654
+#: pgp/seahorse-ldap-source.c:653
 #, c-format
 msgid "Invalid URI: %s"
 msgstr "URInevalid: %s"
 
-#: pgp/seahorse-ldap-source.c:662
+#: pgp/seahorse-ldap-source.c:661
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Se rezolvă adresa serverului: %s"
@@ -1688,7 +1460,7 @@ msgstr "Chei PGP"
 msgid "PGP keys are for encrypting email or files"
 msgstr "Cheile PGP sunt folosite pentru a cripta emailuri și fișiere"
 
-#: pgp/seahorse-pgp-key.c:172
+#: pgp/seahorse-pgp-key.c:186
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
@@ -1696,147 +1468,147 @@ msgstr[0] "(și %d altul)"
 msgstr[1] "(și %d altele)"
 msgstr[2] "(și %d altele)"
 
-#: pgp/seahorse-pgp-key.c:573
+#: pgp/seahorse-pgp-key.c:606
 msgid "Personal PGP key"
 msgstr "Cheie PGP personală"
 
-#: pgp/seahorse-pgp-key.c:575
+#: pgp/seahorse-pgp-key.c:608
 msgid "PGP key"
 msgstr "Cheie PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:249
+#: pgp/seahorse-pgp-key-properties.c:250
 msgid "Couldn’t change primary user ID"
 msgstr "Nu s-a putut modifica id-ul utilizatorului principal"
 
-#: pgp/seahorse-pgp-key-properties.c:284
+#: pgp/seahorse-pgp-key-properties.c:285
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Sigur doriți să ștergeți permanent ID-ul de utilizator „%s”?"
 
-#: pgp/seahorse-pgp-key-properties.c:293
+#: pgp/seahorse-pgp-key-properties.c:294
 msgid "Couldn’t delete user ID"
 msgstr "Nu s-a putut șterge ID-ul utilizatorului"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
+#: pgp/seahorse-pgp-key-properties.c:370 pgp/seahorse-pgp-key-properties.c:1464
 msgid "[Unknown]"
 msgstr "[Nescunoscut]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
+#: pgp/seahorse-pgp-key-properties.c:468 pgp/seahorse-pgp-key-properties.c:1682
 msgid "Name/Email"
 msgstr "Nume/Email"
 
-#: pgp/seahorse-pgp-key-properties.c:472
+#: pgp/seahorse-pgp-key-properties.c:475
 msgid "Signature ID"
 msgstr "ID semnătură"
 
-#: pgp/seahorse-pgp-key-properties.c:578
+#: pgp/seahorse-pgp-key-properties.c:581
 msgid "Couldn’t change primary photo"
 msgstr "Nu s-a putut modifica fotografia principală"
 
-#: pgp/seahorse-pgp-key-properties.c:738
+#: pgp/seahorse-pgp-key-properties.c:768
 msgid "Error changing password"
 msgstr "Eroare la schimbarea parolei"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:784
+#: pgp/seahorse-pgp-key-properties.c:815
 msgid "(unknown)"
 msgstr "(necunoscut)"
 
-#: pgp/seahorse-pgp-key-properties.c:789
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Această cheie expiră la data: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:817
+#: pgp/seahorse-pgp-key-properties.c:846
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — Cheie publică"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:820
+#: pgp/seahorse-pgp-key-properties.c:849
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Cheie privată"
 
-#: pgp/seahorse-pgp-key-properties.c:1006
+#: pgp/seahorse-pgp-key-properties.c:1036
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Sigur doriți să ștergeți permanent subcheia %d din %s?"
 
-#: pgp/seahorse-pgp-key-properties.c:1014
+#: pgp/seahorse-pgp-key-properties.c:1044
 msgid "Couldn’t delete subkey"
 msgstr "Nu s-a putut șterge subcheia"
 
-#: pgp/seahorse-pgp-key-properties.c:1078
-#: pgp/seahorse-pgp-key-properties.c:1389
+#: pgp/seahorse-pgp-key-properties.c:1114
+#: pgp/seahorse-pgp-key-properties.c:1438
 msgid "Unable to change trust"
 msgstr "Nu s-a putut modifica nivelul de încredere"
 
-#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Nu s-a putut exporta cheia"
 
-#: pgp/seahorse-pgp-key-properties.c:1239
-#: pgp/seahorse-pgp-key-properties.c:1323
+#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1372
 msgctxt "Expires"
 msgid "Never"
 msgstr "Niciodată"
 
-#: pgp/seahorse-pgp-key-properties.c:1278
+#: pgp/seahorse-pgp-key-properties.c:1326
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1332
 msgid "Usage"
 msgstr "Utilizare"
 
-#: pgp/seahorse-pgp-key-properties.c:1287
+#: pgp/seahorse-pgp-key-properties.c:1335
 msgid "Created"
 msgstr "Creat"
 
-#: pgp/seahorse-pgp-key-properties.c:1290
+#: pgp/seahorse-pgp-key-properties.c:1338
 msgid "Expires"
 msgstr "Expiră"
 
-#: pgp/seahorse-pgp-key-properties.c:1293
+#: pgp/seahorse-pgp-key-properties.c:1341
 msgid "Status"
 msgstr "Stare"
 
-#: pgp/seahorse-pgp-key-properties.c:1296
+#: pgp/seahorse-pgp-key-properties.c:1344
 msgid "Strength"
 msgstr "Complexitate"
 
-#: pgp/seahorse-pgp-key-properties.c:1314
+#: pgp/seahorse-pgp-key-properties.c:1363
 msgid "Revoked"
 msgstr "Revocat"
 
-#: pgp/seahorse-pgp-key-properties.c:1316
+#: pgp/seahorse-pgp-key-properties.c:1365
 msgid "Expired"
 msgstr "Expirată"
 
-#: pgp/seahorse-pgp-key-properties.c:1318
+#: pgp/seahorse-pgp-key-properties.c:1367
 msgid "Disabled"
 msgstr "Dezactivat"
 
-#: pgp/seahorse-pgp-key-properties.c:1320
+#: pgp/seahorse-pgp-key-properties.c:1369
 msgid "Good"
 msgstr "Bună"
 
-#: pgp/seahorse-pgp-key-properties.c:1628
+#: pgp/seahorse-pgp-key-properties.c:1685
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "ID cheie"
 
-#: pgp/seahorse-pgp-key-properties.c:1771
+#: pgp/seahorse-pgp-key-properties.c:1828
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Am încredere în semnăturile lui „%s” pe alte chei"
 
-#: pgp/seahorse-pgp-key-properties.c:1778
+#: pgp/seahorse-pgp-key-properties.c:1835
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1845,7 +1617,7 @@ msgstr ""
 "Dacă credeți că persoana care deține cheia aceasta este „%s”, <i>semnați</i> "
 "această cheie:"
 
-#: pgp/seahorse-pgp-key-properties.c:1785
+#: pgp/seahorse-pgp-key-properties.c:1842
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -2092,54 +1864,19 @@ msgstr "Cheie"
 msgid "Subkey %d of %s"
 msgstr "Subcheia %d din %s"
 
-#: pgp/seahorse-revoke.ui:35
-msgid "Reason for revoking the key"
-msgstr "Motiv pentru revocarea cheii"
-
-#: pgp/seahorse-revoke.ui:40
-msgid "_Reason:"
-msgstr "Mot_iv:"
-
-#: pgp/seahorse-revoke.ui:70
-msgid "Optional description of revocation"
-msgstr "Descriere opțională de revocare"
-
-#: pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "Revocă cheia"
-
-#: pgp/seahorse-revoke.ui:154
-msgid "Re_voke"
-msgstr "Re_vocă"
-
-#: pgp/seahorse-signer.c:63
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"Nu aveți chei PGP personale care pot fi folosite pentru a semna un document "
-"sau un mesaj."
-
-#: pgp/seahorse-signer.ui:7
-msgid "Choose Signing Key"
-msgstr "Alege cheia cu care se semnează"
-
-#: pgp/seahorse-signer.ui:25
-msgid "_Sign message with key:"
-msgstr "_Semnează mesajul cu cheia:"
-
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
 msgstr "Se exportă date"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Retrieving data"
 msgstr "Se obțin date"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Importing data"
 msgstr "Se importă date"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Sending data"
 msgstr "Se trimit date"
 
@@ -2346,7 +2083,7 @@ msgstr "Text aruncat"
 msgid "Clipboard text"
 msgstr "Text clipboard"
 
-#: src/key-manager.vala:497
+#: src/key-manager.vala:499
 msgid "Couldn’t unlock keyring"
 msgstr "Nu s-a putut debloca inelul de chei"
 
@@ -2458,15 +2195,15 @@ msgstr "Caută după o cheie sau o parolă"
 msgid "Filter"
 msgstr "Filtru"
 
-#: src/seahorse-key-manager.ui:532
+#: src/seahorse-key-manager.ui:515
 msgid "This collection seems to be empty"
 msgstr "Această colecție pare să fie goală"
 
-#: src/seahorse-key-manager.ui:564
+#: src/seahorse-key-manager.ui:525
 msgid "Keyring is locked"
 msgstr "Inelul de chei este blocat"
 
-#: src/seahorse-key-manager.ui:574
+#: src/seahorse-key-manager.ui:530
 msgid "Unlock"
 msgstr "Deblochează"
 
@@ -2807,6 +2544,206 @@ msgstr ""
 msgid "Configuring Secure Shell Keys…"
 msgstr "Se configurează cheile pentru shell securizat (ssh)…"
 
+#~ msgid "Add a new keyserver"
+#~ msgstr "Adaugă un nou server de chei"
+
+#~ msgid "Display flags"
+#~ msgstr "Marcaje de afișaj"
+
+#~ msgid "Displayed date and/or time properties"
+#~ msgstr "Proprietăți dată și/sau oră afișate"
+
+#~ msgid "Lazy mode"
+#~ msgstr "Modul leneș"
+
+#~ msgid "Lazy mode doesn’t normalize entered date and time values"
+#~ msgstr "Modul leneș nu normalizează valorile datelor și orelor introduse"
+
+#~ msgid "Year"
+#~ msgstr "An"
+
+#~ msgid "Displayed year"
+#~ msgstr "An afișat"
+
+#~ msgid "Month"
+#~ msgstr "Lună"
+
+#~ msgid "Displayed month"
+#~ msgstr "Lună afișată"
+
+#~ msgid "Day"
+#~ msgstr "Zi"
+
+#~ msgid "Displayed day of month"
+#~ msgstr "Zi afișată"
+
+#~ msgid "Hour"
+#~ msgstr "Oră"
+
+#~ msgid "Displayed hour"
+#~ msgstr "Oră afișată"
+
+#~ msgid "Minute"
+#~ msgstr "Minut"
+
+#~ msgid "Displayed minute"
+#~ msgstr "Minut afișat"
+
+#~ msgid "Second"
+#~ msgstr "Secundă"
+
+#~ msgid "Displayed second"
+#~ msgstr "Secundă afișată"
+
+#~ msgid "Lower limit year"
+#~ msgstr "Anul limitei inferioare"
+
+#~ msgid "Year part of the lower date limit"
+#~ msgstr "Anul din limita inferioară a datei"
+
+#~ msgid "Upper limit year"
+#~ msgstr "Anul limitei superioare"
+
+#~ msgid "Year part of the upper date limit"
+#~ msgstr "Anul din limita superioară a datei"
+
+#~ msgid "Lower limit month"
+#~ msgstr "Luna limitei inferioare"
+
+#~ msgid "Month part of the lower date limit"
+#~ msgstr "Luna din limita inferioară a datei"
+
+#~ msgid "Upper limit month"
+#~ msgstr "Luna limitei superioare"
+
+#~ msgid "Month part of the upper date limit"
+#~ msgstr "Luna din limita superioară a datei"
+
+#~ msgid "Lower limit day"
+#~ msgstr "Ziua limitei inferioare"
+
+#~ msgid "Day of month part of the lower date limit"
+#~ msgstr "Ziua din limita inferioară a datei"
+
+#~ msgid "Upper limit day"
+#~ msgstr "Ziua limitei superioare"
+
+#~ msgid "Day of month part of the upper date limit"
+#~ msgstr "Ziua din limita superioară a datei"
+
+#~ msgid "Lower limit hour"
+#~ msgstr "Ora limitei inferioare"
+
+#~ msgid "Hour part of the lower time limit"
+#~ msgstr "Ora din limita inferioară a datei"
+
+#~ msgid "Upper limit hour"
+#~ msgstr "Ora limitei superioare"
+
+#~ msgid "Hour part of the upper time limit"
+#~ msgstr "Ora din limita superioară a datei"
+
+#~ msgid "Lower limit minute"
+#~ msgstr "Minutele limitei inferioare"
+
+#~ msgid "Minute part of the lower time limit"
+#~ msgstr "Minutele din limita inferioară a datei"
+
+#~ msgid "Upper limit minute"
+#~ msgstr "Minutele limitei superioare"
+
+#~ msgid "Minute part of the upper time limit"
+#~ msgstr "Minutele din limita superioară a datei"
+
+#~ msgid "Lower limit second"
+#~ msgstr "Secundele limitei inferioare"
+
+#~ msgid "Second part of the lower time limit"
+#~ msgstr "Secundele din limita inferioară a datei"
+
+#~ msgid "Upper limit second"
+#~ msgstr "Secundele limitei superioare"
+
+#~ msgid "Second part of the upper time limit"
+#~ msgstr "Secundele din limita superioară a datei"
+
+#~ msgid "calendar:week_start:0"
+#~ msgstr "calendar:week_start:1"
+
+#~ msgid "Date"
+#~ msgstr "Data"
+
+#~ msgid "Select Date"
+#~ msgstr "Alegeți data"
+
+#~ msgid "Time"
+#~ msgstr "Ora"
+
+#~ msgid "Enter the time directly"
+#~ msgstr "Introduceți direct ora"
+
+#~ msgid "Select Time"
+#~ msgstr "Alegeți ora"
+
+#~ msgid "Select the time from a list"
+#~ msgstr "Alegeți ora dintr-o listă"
+
+#~ msgid "24hr: no"
+#~ msgstr "24hr: yes"
+
+#~ msgid "AM"
+#~ msgstr "AM"
+
+#~ msgid "PM"
+#~ msgstr "PM"
+
+#~ msgid "%02d:%02d:%02d %s"
+#~ msgstr "%02d:%02d:%02d %s"
+
+#~ msgid "%02d:%02d %s"
+#~ msgstr "%02d:%02d %s"
+
+#~ msgid "%02d:%02d:%02d"
+#~ msgstr "%02d:%02d:%02d"
+
+#~ msgid "%02d:%02d"
+#~ msgstr "%02d:%02d"
+
+#~ msgid "%04d-%02d-%02d"
+#~ msgstr "%04d-%02d-%02d"
+
+#~ msgid "%u:%u:%u"
+#~ msgstr "%u:%u:%u"
+
+#~ msgid ""
+#~ "You are about to add %s as a revoker for %s. This operation cannot be "
+#~ "undone! Are you sure you want to continue?"
+#~ msgstr ""
+#~ "Sunteți pe cale de a adăuga %s ca un revocator pentru %s. Această "
+#~ "operație nu poate fi anulată! Sigur doriți să continuați?"
+
+#~ msgid "Couldn’t add revoker"
+#~ msgstr "Nu s-a putut adăuga revocatorul"
+
+#~ msgid "Key Servers:"
+#~ msgstr "Servere de chei:"
+
+#~ msgid "Shared Keys Near Me:"
+#~ msgstr "Chei partajate în apropiere:"
+
+#~ msgid ""
+#~ "You have no personal PGP keys that can be used to sign a document or "
+#~ "message."
+#~ msgstr ""
+#~ "Nu aveți chei PGP personale care pot fi folosite pentru a semna un "
+#~ "document sau un mesaj."
+
+#~ msgid "Choose Signing Key"
+#~ msgstr "Alege cheia cu care se semnează"
+
+#~ msgid "_Sign message with key:"
+#~ msgstr "_Semnează mesajul cu cheia:"
+
 #~ msgid "Not a valid Key Server address."
 #~ msgstr "Nu este o adresă validă pentru un server de chei."
 
@@ -2822,12 +2759,6 @@ msgstr "Se configurează cheile pentru shell securizat (ssh)…"
 
 #~ msgid "_Find keys via:"
 #~ msgstr "Cau_tă chei via:"
-
-#~ msgid "HTTP Key Server"
-#~ msgstr "Server HTTP de chei"
-
-#~ msgid "LDAP Key Server"
-#~ msgstr "Server LDAP de chei"
 
 #~ msgid ""
 #~ "Seahorse is a GNOME application for managing encryption keys. It also "
@@ -3693,9 +3624,6 @@ msgstr "Se configurează cheile pentru shell securizat (ssh)…"
 #~ "This text refers to deleting an item from its type's backing store."
 #~ msgid "_Delete"
 #~ msgstr "Șter_ge"
-
-#~ msgid "_Key Description:"
-#~ msgstr "Descriere c_heie:"
 
 #~ msgid "Invalid"
 #~ msgstr "Nevalid"
