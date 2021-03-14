@@ -99,23 +99,22 @@ seahorse_util_error_domain ()
     return q;
 }
 
-/** 
+/**
  * seahorse_util_print_fd:
  * @fd: The file descriptor to write to
  * @s:  The data to write
  *
  * Returns: FALSE on error, TRUE on success
- **/
-gboolean 
+ */
+gboolean
 seahorse_util_print_fd (int fd, const char* s)
 {
     /* Guarantee all data is written */
     int r, l = strlen (s);
 
     while (l > 0) {
-     
         r = write (fd, s, l);
-        
+
         if (r == -1) {
             if (errno == EPIPE)
                 return FALSE;
@@ -123,7 +122,7 @@ seahorse_util_print_fd (int fd, const char* s)
                 g_critical ("couldn't write data to socket: %s", strerror (errno));
                 return FALSE;
             }
-            
+
         } else {
             s += r;
             l -= r;
@@ -133,31 +132,28 @@ seahorse_util_print_fd (int fd, const char* s)
     return TRUE;
 }
 
-/** 
+/**
  * seahorse_util_printf_fd:
  * @fd: The file descriptor to write to
  * @fmt: The printf format of the data to write
  * @...: The parameters to insert
  *
  * Returns: TRUE on success, FALSE on error
- **/
-gboolean 
+ */
+gboolean
 seahorse_util_printf_fd (int fd, const char* fmt, ...)
 {
-    gchar* t;
+    g_autofree char *t = NULL;
     va_list ap;
-    gboolean ret;
-    
-    va_start (ap, fmt);    
+
+    va_start (ap, fmt);
     t = g_strdup_vprintf (fmt, ap);
     va_end (ap);
-    
-    ret = seahorse_util_print_fd (fd, t);
-    g_free (t);
-    return ret;
+
+    return seahorse_util_print_fd (fd, t);
 }
 
-/** 
+/**
  * seahorse_util_read_data_block:
  * @buf: A string buffer to write the data to.
  * @input: The input stream to read from.
@@ -169,19 +165,20 @@ seahorse_util_printf_fd (int fd, const char* fmt, ...)
  * Returns: The number of bytes copied.
  */
 guint
-seahorse_util_read_data_block (GString *buf, GInputStream *input, 
-                               const gchar *start, const gchar* end)
+seahorse_util_read_data_block (GString      *buf,
+                               GInputStream *input,
+                               const char   *start,
+                               const char   *end)
 {
-    const gchar *t;
+    const char *t;
     guint copied = 0;
-    gchar ch;
+    char ch;
     gsize read;
-     
+
     /* Look for the beginning */
     t = start;
     while (g_input_stream_read_all (input, &ch, 1, &read, NULL, NULL) && read == 1) {
-        
-        /* Match next char */            
+        /* Match next char */
         if (*t == ch)
             t++;
 
@@ -191,24 +188,23 @@ seahorse_util_read_data_block (GString *buf, GInputStream *input,
             copied += strlen (start);
             break;
         }
-    } 
-    
+    }
+
     /* Look for the end */
     t = end;
     while (g_input_stream_read_all (input, &ch, 1, &read, NULL, NULL) && read == 1) {
-        
         /* Match next char */
         if (*t == ch)
             t++;
-        
+
         buf = g_string_append_c (buf, ch);
         copied++;
-                
+
         /* Did we find the whole string? */
         if (!*t)
             break;
     }
-    
+
     return copied;
 }
 

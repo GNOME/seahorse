@@ -85,10 +85,10 @@ gpgme_error_t         seahorse_gpgme_key_op_sign             (SeahorseGpgmeKey *
                                                               SeahorseSignCheck check,
                                                               SeahorseSignOptions options);
 
-gpgme_error_t         seahorse_gpgme_key_op_sign_uid         (SeahorseGpgmeUid *uid, 
-                                                              SeahorseGpgmeKey *signer, 
-                                                              SeahorseSignCheck check, 
-                                                              SeahorseSignOptions options);
+gpgme_error_t         seahorse_gpgme_key_op_sign_uid         (SeahorseGpgmeUid    *uid,
+                                                              SeahorseGpgmeKey    *signer,
+                                                              SeahorseSignCheck    check,
+                                                              SeahorseSignOptions  options);
 
 void                 seahorse_gpgme_key_op_change_pass_async (SeahorseGpgmeKey *pkey,
                                                               GCancellable *cancellable,
@@ -108,16 +108,16 @@ gpgme_error_t         seahorse_gpgme_key_op_set_disabled     (SeahorseGpgmeKey *
 gpgme_error_t         seahorse_gpgme_key_op_set_expires      (SeahorseGpgmeSubkey *subkey,
                                                               GDateTime           *expires);
 
-gpgme_error_t         seahorse_gpgme_key_op_add_revoker      (SeahorseGpgmeKey *pkey, 
+gpgme_error_t         seahorse_gpgme_key_op_add_revoker      (SeahorseGpgmeKey *pkey,
                                                               SeahorseGpgmeKey *revoker);
 
-void                  seahorse_gpgme_key_op_add_uid_async    (SeahorseGpgmeKey *pkey,
-                                                              const gchar *name,
-                                                              const gchar *email,
-                                                              const gchar *comment,
-                                                              GCancellable *cancellable,
-                                                              GAsyncReadyCallback callback,
-                                                              gpointer user_data);
+void                  seahorse_gpgme_key_op_add_uid_async    (SeahorseGpgmeKey    *pkey,
+                                                              const char          *name,
+                                                              const char          *email,
+                                                              const char          *comment,
+                                                              GCancellable        *cancellable,
+                                                              GAsyncReadyCallback  callback,
+                                                              void                *user_data);
 
 gboolean              seahorse_gpgme_key_op_add_uid_finish  (SeahorseGpgmeKey *pkey,
                                                              GAsyncResult *result,

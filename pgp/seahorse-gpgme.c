@@ -1,19 +1,19 @@
-/* 
+/*
  * Seahorse
- * 
+ *
  * Copyright (C) 2008 Stefan Walter
  * Copyright (C) 2011 Collabora Ltd.
  *
- * This program is free software; you can redistribute it and/or modify 
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- *  
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *  
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program; if not, see
  * <http://www.gnu.org/licenses/>.
@@ -95,29 +95,28 @@ seahorse_gpgme_propagate_error (gpgme_error_t gerr, GError** error)
  *
  */
 void
-seahorse_gpgme_handle_error (gpgme_error_t err, const char* desc, ...)
+seahorse_gpgme_handle_error (gpgme_error_t err, const char *desc, ...)
 {
-	gchar *t = NULL;
+    va_list ap;
+    g_autofree char *t = NULL;
 
 	switch (gpgme_err_code(err)) {
 	case GPG_ERR_CANCELED:
 	case GPG_ERR_NO_ERROR:
 	case GPG_ERR_ECANCELED:
 		return;
-	default: 
+    default:
 		break;
 	}
 
-	va_list ap;
-	va_start(ap, desc);
-  
-	if (desc) 
-		t = g_strdup_vprintf (desc, ap);
+    va_start (ap, desc);
 
-	va_end(ap);
-        
+    if (desc)
+        t = g_strdup_vprintf (desc, ap);
+
+    va_end (ap);
+
 	seahorse_util_show_error (NULL, t, gpgme_strerror (err));
-	g_free(t);
 }
 
 /**
@@ -147,7 +146,7 @@ seahorse_gpgme_boxed_key_type (void)
 {
 	static GType type = 0;
 	if (!type)
-		type = g_boxed_type_register_static ("gpgme_key_t", 
+		type = g_boxed_type_register_static ("gpgme_key_t",
 		                                     (GBoxedCopyFunc)ref_return_key,
 		                                     (GBoxedFreeFunc)gpgme_key_unref);
 	return type;
@@ -177,7 +176,7 @@ seahorse_gpgme_convert_validity (gpgme_validity_t validity)
 	case GPGME_VALIDITY_UNKNOWN:
 	default:
 		return SEAHORSE_VALIDITY_UNKNOWN;
-	}	
+	}
 }
 
 /*
@@ -221,16 +220,16 @@ seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table)
 	gpgme_error_t gerr;
 	gpgme_engine_info_t engine;
 	SeahorseVersion ver;
-	
+
 	gerr = gpgme_get_engine_info (&engine);
 	g_return_val_if_fail (GPG_IS_OK (gerr), gerr);
-	
+
 	while (engine && engine->protocol != GPGME_PROTOCOL_OpenPGP)
 		engine = engine->next;
 	g_return_val_if_fail (engine != NULL, GPG_E (GPG_ERR_GENERAL));
-	
+
 	ver = seahorse_util_parse_version (engine->version);
-	
+
 	if (ver >= VER_2012 || (ver >= VER_1410 && ver < VER_190))
 		*table = (SeahorseKeyTypeTable)&KEYTYPES_2012;
 	else if (ver >= VER_140 || ver >= VER_190)
@@ -241,7 +240,7 @@ seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table)
 		*table = (SeahorseKeyTypeTable)&KEYTYPES_120;
 	else	// older versions not supported
 		gerr = GPG_E (GPG_ERR_USER_2);
-	
+
 	return gerr;
 }
 

@@ -41,10 +41,6 @@ struct _SeahorseGpgmePhoto {
 
 G_DEFINE_TYPE (SeahorseGpgmePhoto, seahorse_gpgme_photo, SEAHORSE_PGP_TYPE_PHOTO);
 
-/* -----------------------------------------------------------------------------
- * OBJECT 
- */
-
 static void
 seahorse_gpgme_photo_init (SeahorseGpgmePhoto *self)
 {
@@ -55,12 +51,12 @@ seahorse_gpgme_photo_constructor (GType type, guint n_props, GObjectConstructPar
 {
 	GObject *obj = G_OBJECT_CLASS (seahorse_gpgme_photo_parent_class)->constructor (type, n_props, props);
 	SeahorseGpgmePhoto *self = NULL;
-	
+
 	if (obj) {
 		self = SEAHORSE_GPGME_PHOTO (obj);
 		g_return_val_if_fail (self->pubkey, NULL);
 	}
-	
+
 	return obj;
 }
 
@@ -69,7 +65,7 @@ seahorse_gpgme_photo_get_property (GObject *object, guint prop_id,
                                   GValue *value, GParamSpec *pspec)
 {
 	SeahorseGpgmePhoto *self = SEAHORSE_GPGME_PHOTO (object);
-	
+
 	switch (prop_id) {
 	case PROP_PUBKEY:
 		g_value_set_boxed (value, seahorse_gpgme_photo_get_pubkey (self));
@@ -81,8 +77,10 @@ seahorse_gpgme_photo_get_property (GObject *object, guint prop_id,
 }
 
 static void
-seahorse_gpgme_photo_set_property (GObject *object, guint prop_id, const GValue *value, 
-                                  GParamSpec *pspec)
+seahorse_gpgme_photo_set_property (GObject      *object,
+                                   unsigned int  prop_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
 {
 	SeahorseGpgmePhoto *self = SEAHORSE_GPGME_PHOTO (object);
 
@@ -112,7 +110,7 @@ seahorse_gpgme_photo_finalize (GObject *gobject)
 static void
 seahorse_gpgme_photo_class_init (SeahorseGpgmePhotoClass *klass)
 {
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);    
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
 	gobject_class->constructor = seahorse_gpgme_photo_constructor;
 	gobject_class->finalize = seahorse_gpgme_photo_finalize;
@@ -129,15 +127,17 @@ seahorse_gpgme_photo_class_init (SeahorseGpgmePhotoClass *klass)
 }
 
 /* -----------------------------------------------------------------------------
- * PUBLIC 
+ * PUBLIC
  */
 
-SeahorseGpgmePhoto* 
-seahorse_gpgme_photo_new (gpgme_key_t pubkey, GdkPixbuf *pixbuf, guint index) 
+SeahorseGpgmePhoto*
+seahorse_gpgme_photo_new (gpgme_key_t   pubkey,
+                          GdkPixbuf    *pixbuf,
+                          unsigned int  index)
 {
 	return g_object_new (SEAHORSE_TYPE_GPGME_PHOTO,
 	                     "pubkey", pubkey,
-	                     "pixbuf", pixbuf, 
+	                     "pixbuf", pixbuf,
 	                     "index", index, NULL);
 }
 

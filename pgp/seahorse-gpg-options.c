@@ -49,7 +49,7 @@ create_file (const gchar *file, mode_t mode, GError **err)
 {
     int fd;
     g_assert (err && !*err);
-    
+
     if ((fd = open (file, O_CREAT | O_TRUNC | O_WRONLY, mode)) == -1) {
         g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
                      "%s", g_strerror (errno));
@@ -61,7 +61,7 @@ create_file (const gchar *file, mode_t mode, GError **err)
         g_set_error (err, G_IO_CHANNEL_ERROR, g_io_channel_error_from_errno (errno),
                      "%s", strerror (errno));
     }
-    
+
     close (fd);
     return *err ? FALSE : TRUE;
 }
@@ -81,20 +81,20 @@ find_config_file (gboolean read, GError **err)
 
     /* Check for and open ~/.gnupg/gpg.conf */
     conf = g_strconcat (gpg_homedir, "/gpg.conf", NULL);
-    if (g_file_test (conf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) 
+    if (g_file_test (conf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS))
         return conf;
     g_free (conf);
-    
+
     /* Check for and open ~/.gnupg/options */
     conf = g_strconcat (gpg_homedir, "/options", NULL);
-    if (g_file_test (conf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS)) 
+    if (g_file_test (conf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_EXISTS))
         return conf;
     g_free (conf);
 
     /* Make sure directory exists */
     if (!g_file_test (gpg_homedir, G_FILE_TEST_EXISTS)) {
         if (mkdir (gpg_homedir, 0700) == -1) {
-            g_set_error (err, G_IO_CHANNEL_ERROR, 
+            g_set_error (err, G_IO_CHANNEL_ERROR,
                          g_io_channel_error_from_errno (errno),
                          "%s", strerror (errno));
             return NULL;
@@ -120,45 +120,41 @@ read_config_file (GError **err)
     GError *e = NULL;
     gboolean ret;
     GArray *array;
-    gchar *conf, *contents;
-    gchar **lines, **l;
+    g_autofree char *conf = NULL;
+    g_autofree char *contents = NULL;
+    g_auto(GStrv) lines = NULL;
 
     g_assert (!err || !*err);
     if (!err)
         err = &e;
-    
+
     conf = find_config_file (TRUE, err);
     if (conf == NULL)
         return NULL;
-    
+
     ret = g_file_get_contents (conf, &contents, NULL, err);
-    g_free (conf);
-    
     if (!ret)
         return FALSE;
-        
+
     lines = g_strsplit (contents, "\n", -1);
-    g_free (contents);
-    
+
     array = g_array_new (TRUE, TRUE, sizeof (gchar**));
-    for (l = lines; *l; l++)
+    for (char **l = lines; *l; l++)
         g_array_append_val (array, *l);
-    
-    /* We took ownership of the individual lines */
-    g_free (lines);
+
     return array;
-}    
+}
 
 static gboolean
 write_config_file (GArray *array, GError **err)
 {
     GError *e = NULL;
-    gchar *conf, *contents;
+    char *conf, *contents;
 
     g_assert (!err || !*err);
     if (!err)
         err = &e;
-    
+
     conf = find_config_file (FALSE, err);
     if (conf == NULL)
         return FALSE;
@@ -274,7 +270,7 @@ gpg_options_init (GError **err)
 
 /**
  * seahorse_gpg_homedir
- * 
+ *
  * Returns: The home dir that GPG uses for it's keys and configuration
  **/
 const gchar *
@@ -287,15 +283,15 @@ seahorse_gpg_homedir (void)
 
 /**
  * seahorse_gpg_options_find
- * 
+ *
  * @option: The option to find
  * @value: Returns the value, or NULL when not found
  * @err: Returns an error value when errors
- * 
+ *
  * Find the value for a given option in the gpg config file.
  * Values without a value are returned as an empty string.
- * On success be sure to free *value after you're done with it. 
- * 
+ * On success be sure to free *value after you're done with it.
+ *
  * Returns: TRUE if success, FALSE if not
  **/
 gboolean
@@ -311,36 +307,36 @@ seahorse_gpg_options_find (const gchar *option, gchar **value, GError **err)
 
 /**
  * seahorse_gpg_options_find_vals
- * 
+ *
  * @option: null terminated array of option names
- * @value: An array of pointers for return values 
+ * @value: An array of pointers for return values
  * @err: Returns an error value when errors
- * 
+ *
  * Find the value for a given options in the gpg config file.
  * Values without a value are returned as an empty string.
- * On success be sure to free all *value after you're done 
+ * On success be sure to free all *value after you're done
  * with them. values should be at least as big as options
- * 
+ *
  * Returns: TRUE if success, FALSE if not
  **/
 gboolean
-seahorse_gpg_options_find_vals (const gchar *options[], gchar *values[],
+seahorse_gpg_options_find_vals (const char *options[], char *values[],
                                 GError **err)
 {
     GError *e = NULL;
     GArray *lines;
-    const gchar **opt;
-    gchar *line;
-    gchar *t;
+    const char **opt;
+    char *line;
+    char *t;
     guint i, j;
-    
+
     g_assert (!err || !*err);
     if (!err)
         err = &e;
 
     if (!gpg_options_init (err))
         return FALSE;
-    
+
     lines = read_config_file (err);
     if (!lines)
         return FALSE;
@@ -351,7 +347,7 @@ seahorse_gpg_options_find_vals (const gchar *options[], gchar *values[],
 
     for (j = 0; j < lines->len; j++) {
         line = g_array_index (lines, gchar*, j);
-        g_assert (line != NULL);        
+        g_assert (line != NULL);
 
         g_strstrip (line);
 
@@ -361,13 +357,11 @@ seahorse_gpg_options_find_vals (const gchar *options[], gchar *values[],
                 if (g_str_has_prefix (line, *opt)) {
                     t = line + strlen (*opt);
                     if (t[0] == 0 || g_ascii_isspace (t[0])) {
-                        /* 
-                         * We found a value. Fill it in. The caller
-                         * frees this stuff. Note that we don't short 
-                         * circuit the search because for gpg options 
-                         * can be specified multiple times, and the 
-                         * last one wins.
-                         */
+                        /* We found a value. Fill it in. The caller
+                         * frees this stuff. Note that we don't short
+                         * circuit the search because for gpg options
+                         * can be specified multiple times, and the
+                         * last one wins. */
 
                         g_free (values[i]);
                         values[i] = g_strdup (t);
@@ -396,12 +390,10 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
 
     for (j = 0; j < lines->len; j++) {
         line = g_array_index (lines, gchar*, j);
-        g_assert (line != NULL);        
+        g_assert (line != NULL);
 
-        /* 
-         * Does this line have an ending? 
-         * We use this below when appending lines.
-         */
+        /* Does this line have an ending?
+         * We use this below when appending lines. */
         n = line;
 
         /* Don't use g_strstrip as we don't want to modify the line */
@@ -431,7 +423,7 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
 
                 /* Are we setting this value? */
                 if (values[i]) {
-                    /* At this point we're rewriting the line, so we 
+                    /* At this point we're rewriting the line, so we
                      * can modify the old line */
                     *t = 0;
 
@@ -443,10 +435,8 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
                     else
                         n = g_strdup (n);
 
-                    /* 
-                     * We're done with this option, all other instances
-                     * of it need to be commented out 
-                     */
+                    /* We're done with this option, all other instances
+                     * of it need to be commented out */
                     values[i] = NULL;
                 }
 
@@ -488,19 +478,19 @@ process_conf_edits (GArray *lines, const gchar *options[], gchar *values[])
 
 /**
  * seahorse_gpg_options_change
- * 
+ *
  * @option: The option to change
  * @value: The value to change it to
  * @err: Returns an error value when errors
- * 
+ *
  * Changes the given option in the gpg config file.
  * If value is NULL, the option will be deleted. If you want
- * an empty value, set value to an empty string. 
- * 
+ * an empty value, set value to an empty string.
+ *
  * Returns: TRUE if success, FALSE if not
  **/
 gboolean
-seahorse_gpg_options_change (const gchar *option, const gchar *value,
+seahorse_gpg_options_change (const char *option, const char *value,
                              GError **err)
 {
     const gchar *options[2];
@@ -513,15 +503,15 @@ seahorse_gpg_options_change (const gchar *option, const gchar *value,
 
 /**
  * seahorse_gpg_options_change_vals
- * 
+ *
  * @option: null-terminated array of option names to change
  * @value: The values to change respective option to
  * @err: Returns an error value when errors
- * 
+ *
  * Changes the given option in the gpg config file.
  * If a value is NULL, the option will be deleted. If you want
- * an empty value, set value to an empty string. 
- * 
+ * an empty value, set value to an empty string.
+ *
  * Returns: TRUE if success, FALSE if not
  **/
 gboolean
@@ -543,9 +533,9 @@ seahorse_gpg_options_change_vals (const gchar *options[], gchar *values[],
         return FALSE;
 
     process_conf_edits (lines, options, values);
-    
+
     write_config_file (lines, err);
     free_string_array (lines);
-    
+
     return *err ? FALSE : TRUE;
 }

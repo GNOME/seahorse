@@ -49,7 +49,7 @@ int main (int argc, char* argv[])
         fprintf (stderr, "seahorse-xloadimage: couldn't write to output file: %s", fname);
         exit (1);
     }
-        
+
     fclose(f);
     return 0;
 }

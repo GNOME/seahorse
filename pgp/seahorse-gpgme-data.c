@@ -37,10 +37,10 @@ static int
 handle_gio_error (GError *err)
 {
 	g_return_val_if_fail (err, -1);
-	
+
 	if (err->message)
 		g_message ("%s", err->message);
-	
+
 	switch (err->code) {
 	case G_IO_ERROR_FAILED:
 		errno = EIO;
@@ -135,13 +135,13 @@ handle_gio_error (GError *err)
 		errno = EIO;
 		break;
 	};
-	
+
 	g_error_free (err);
 	return -1;
 }
 
 /* ----------------------------------------------------------------------------------------
- * OUTPUT 
+ * OUTPUT
  */
 
 /* Called by gpgme to read data */
@@ -151,15 +151,15 @@ output_write(void *handle, const void *buffer, size_t size)
 	GOutputStream* output = handle;
 	GError *err = NULL;
 	gsize written;
-	
+
 	g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), -1);
-	
+
 	if (!g_output_stream_write_all (output, buffer, size, &written, NULL, &err))
 		return handle_gio_error (err);
-	
+
 	if (!g_output_stream_flush (output, NULL, &err))
 		return handle_gio_error (err);
-		
+
 	return written;
 }
 
@@ -178,7 +178,7 @@ output_seek (void *handle, off_t offset, int whence)
 		errno = EOPNOTSUPP;
 		return -1;
 	}
-	
+
 	switch(whence)
 	{
 	case SEEK_SET:
@@ -198,7 +198,7 @@ output_seek (void *handle, off_t offset, int whence)
 	seek = G_SEEKABLE (output);
 	if (!g_seekable_seek (seek, offset, from, NULL, &err))
 		return handle_gio_error (err);
-			
+
 	return offset;
 }
 
@@ -208,12 +208,12 @@ output_release (void *handle)
 {
 	GOutputStream* output = handle;
 	g_return_if_fail (G_IS_OUTPUT_STREAM (output));
-	
+
 	g_object_unref (output);
 }
 
 /* GPGME vfs file operations */
-static struct gpgme_data_cbs output_cbs = 
+static struct gpgme_data_cbs output_cbs =
 {
     NULL,
     output_write,
@@ -228,11 +228,11 @@ seahorse_gpgme_data_output (GOutputStream* output)
 	gpgme_data_t ret = NULL;
 
 	g_return_val_if_fail (G_IS_OUTPUT_STREAM (output), NULL);
-	
+
 	gerr = gpgme_data_new_from_cbs (&ret, &output_cbs, output);
 	if (!GPG_IS_OK (gerr))
 		return NULL;
-	
+
 	g_object_ref (output);
 	return ret;
 }
@@ -248,12 +248,12 @@ input_read (void *handle, void *buffer, size_t size)
 	GInputStream* input = handle;
 	GError *err = NULL;
 	gsize nread;
-	
+
 	g_return_val_if_fail (G_IS_INPUT_STREAM (input), -1);
-	
+
 	if (!g_input_stream_read_all (input, buffer, size, &nread, NULL, &err))
 		return handle_gio_error (err);
-	
+
 	return nread;
 }
 
@@ -272,7 +272,7 @@ input_seek (void *handle, off_t offset, int whence)
 		errno = EOPNOTSUPP;
 		return -1;
 	}
-	
+
 	switch(whence)
 	{
 	case SEEK_SET:
@@ -302,12 +302,12 @@ input_release (void *handle)
 {
 	GInputStream* input = handle;
 	g_return_if_fail (G_IS_INPUT_STREAM (input));
-	
+
 	g_object_unref (input);
 }
 
 /* GPGME vfs file operations */
-static struct gpgme_data_cbs input_cbs = 
+static struct gpgme_data_cbs input_cbs =
 {
     input_read,
     NULL,
@@ -320,39 +320,39 @@ seahorse_gpgme_data_input (GInputStream* input)
 {
 	gpgme_error_t gerr;
 	gpgme_data_t ret = NULL;
-	
+
 	g_return_val_if_fail (G_IS_INPUT_STREAM (input), NULL);
-	
+
 	gerr = gpgme_data_new_from_cbs (&ret, &input_cbs, input);
 	if (!GPG_IS_OK (gerr))
 		return NULL;
-	
+
 	g_object_ref (input);
 	return ret;
 }
 
-gpgme_data_t 
+gpgme_data_t
 seahorse_gpgme_data_new ()
 {
 	gpgme_error_t gerr;
 	gpgme_data_t data;
-    
+
 	gerr = gpgme_data_new (&data);
 	if (!GPG_IS_OK (gerr)) {
-		if (gpgme_err_code_to_errno (gerr) == ENOMEM || 
+		if (gpgme_err_code_to_errno (gerr) == ENOMEM ||
 		    gpgme_err_code (gerr) == GPG_ERR_ENOMEM) {
-                
+
 			g_error ("%s: failed to allocate gpgme_data_t", G_STRLOC);
-                
+
 		} else {
 			/* The only reason this should fail is above */
 			g_assert_not_reached ();
-            
+
 			/* Just in case */
 			abort ();
 		}
 	}
-    
+
 	return data;
 }
 
@@ -361,35 +361,35 @@ seahorse_gpgme_data_new_from_mem (const char *buffer, size_t size, gboolean copy
 {
 	gpgme_data_t data;
 	gpgme_error_t gerr;
-    
+
 	gerr = gpgme_data_new_from_mem (&data, buffer, size, copy ? 1 : 0);
 	if (!GPG_IS_OK (gerr)) {
-		if (gpgme_err_code_to_errno (gerr) == ENOMEM || 
+		if (gpgme_err_code_to_errno (gerr) == ENOMEM ||
 		    gpgme_err_code (gerr) == GPG_ERR_ENOMEM) {
-                
+
 			g_error ("%s: failed to allocate gpgme_data_t", G_STRLOC);
-                
+
 		} else {
 			/* The only reason this should fail is above */
 			g_assert_not_reached ();
-            
+
 			/* Just in case */
 			abort ();
 		}
 	}
-    
+
 	return data;
 }
 
-int 
+int
 seahorse_gpgme_data_write_all (gpgme_data_t data, const void* buffer, size_t len)
 {
 	guchar *text = (guchar*)buffer;
-	gint written = 0;
-    
+	int written = 0;
+
 	if (len < 0)
-		len = strlen ((gchar*)text);
-    
+		len = strlen ((char *) text);
+
 	while (len > 0) {
 		written = gpgme_data_write (data, (void*)text, len);
 		if (written < 0) {
@@ -397,11 +397,11 @@ seahorse_gpgme_data_write_all (gpgme_data_t data, const void* buffer, size_t len
 				continue;
 			return -1;
 		}
-        
+
 		len -= written;
 		text += written;
 	}
-    
+
 	return written;
 }
 

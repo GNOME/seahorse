@@ -35,19 +35,19 @@
 void            seahorse_gpgme_generate_register    (void);
 
 void            seahorse_gpgme_generate_show        (SeahorseGpgmeKeyring *keyring,
-                                                     GtkWindow *parent,
-                                                     const char * name,
-                                                     const char *email,
-                                                     const gchar *comment);
+                                                     GtkWindow            *parent,
+                                                     const char           *name,
+                                                     const char           *email,
+                                                     const char           *comment);
 
 void            seahorse_gpgme_generate_key         (SeahorseGpgmeKeyring *keyring,
-                                                     const gchar *name,
-                                                     const gchar *email,
-                                                     const gchar *comment,
-                                                     guint type,
-                                                     guint bits,
-                                                     time_t expires,
-                                                     GtkWindow *parent);
+                                                     const char           *name,
+                                                     const char           *email,
+                                                     const char           *comment,
+                                                     unsigned int          type,
+                                                     unsigned int          bits,
+                                                     time_t                expires,
+                                                     GtkWindow            *parent);
 
 void            seahorse_gpgme_add_revoker_new      (SeahorseGpgmeKey *pkey,
                                                      GtkWindow *parent);
@@ -55,9 +55,9 @@ void            seahorse_gpgme_add_revoker_new      (SeahorseGpgmeKey *pkey,
 void            seahorse_gpgme_expires_new          (SeahorseGpgmeSubkey *subkey,
                                                      GtkWindow *parent);
 
-gboolean        seahorse_gpgme_photo_add            (SeahorseGpgmeKey *pkey, 
-                                                     GtkWindow *parent,
-                                                     const gchar *path);
+gboolean        seahorse_gpgme_photo_add            (SeahorseGpgmeKey *pkey,
+                                                     GtkWindow        *parent,
+                                                     const char       *path);
 
 gboolean        seahorse_gpgme_photo_delete         (SeahorseGpgmePhoto *photo,
                                                      GtkWindow *parent);

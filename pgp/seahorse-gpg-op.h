@@ -23,6 +23,6 @@
 
 #include <gpgme.h>
 
-gpgme_error_t seahorse_gpg_op_num_uids       (gpgme_ctx_t ctx, 
-                                              const char *pattern,
-                                              guint *number);
+gpgme_error_t seahorse_gpg_op_num_uids       (gpgme_ctx_t  ctx,
+                                              const char  *pattern,
+                                              guint       *number);

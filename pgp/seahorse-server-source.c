@@ -120,7 +120,7 @@ seahorse_server_source_finalize (GObject *gobject)
 
     g_free (priv->server);
     g_free (priv->uri);
- 
+
     G_OBJECT_CLASS (seahorse_server_source_parent_class)->finalize (gobject);
 }
 

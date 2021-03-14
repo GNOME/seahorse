@@ -18,7 +18,7 @@
  * along with this program; if not, see
  * <http://www.gnu.org/licenses/>.
  */
- 
+
 /**
  * A bunch of miscellaneous utility functions.
  */
@@ -31,35 +31,36 @@
 
 typedef guint64 SeahorseVersion;
 
-#define     SEAHORSE_ERROR                      (seahorse_util_error_domain ())
+#define         SEAHORSE_ERROR                          (seahorse_util_error_domain ())
 
-GQuark      seahorse_util_error_domain          (void);
+GQuark          seahorse_util_error_domain              (void);
 
-void        seahorse_util_handle_error          (GError **error,
-                                                 gpointer parent,
-                                                 const gchar* description,
-                                                 ...);
+void            seahorse_util_handle_error              (GError     **error,
+                                                         void        *parent,
+                                                         const char  *description,
+                                                         ...);
 
-guint       seahorse_util_read_data_block       (GString            *buf, 
-                                                 GInputStream*      input, 
-                                                 const gchar        *start, 
-                                                 const gchar*       end);
+unsigned int    seahorse_util_read_data_block           (GString      *buf,
+                                                         GInputStream *input,
+                                                         const char   *start,
+                                                         const char   *end);
 
-gboolean    seahorse_util_print_fd          (int fd, 
-                                             const char* data);
+gboolean        seahorse_util_print_fd                  (int         fd,
+                                                         const char *data);
 
-gboolean    seahorse_util_printf_fd         (int fd, 
-                                             const char* data, ...);
+gboolean        seahorse_util_printf_fd                 (int         fd,
+                                                         const char *fmt,
+                                                         ...);
 
-gboolean    seahorse_util_write_file_private            (const gchar* filename,
-                                                         const gchar* contents,
-                                                         GError **err);
+gboolean        seahorse_util_write_file_private        (const char  *filename,
+                                                         const char  *contents,
+                                                         GError     **err);
 
-GList *     seahorse_util_objects_sort_by_place         (GList *objects);
+GList *         seahorse_util_objects_sort_by_place     (GList *objects);
 
-GList *     seahorse_util_objects_splice_by_place       (GList *objects);
+GList *         seahorse_util_objects_splice_by_place   (GList *objects);
 
-SeahorseVersion seahorse_util_parse_version   (const char *version);
+SeahorseVersion seahorse_util_parse_version             (const char *version);
 
 guint       seahorse_ulong_hash    (gconstpointer v);
 

@@ -1,18 +1,18 @@
-/* 
+/*
  * Seahorse
- * 
+ *
  * Copyright (C) 2008 Stefan Walter
- * 
- * This program is free software; you can redistribute it and/or modify 
+ *
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- *  
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *  
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program; if not, see
  * <http://www.gnu.org/licenses/>.
@@ -29,7 +29,7 @@
 #include "seahorse-common.h"
 
 /* -----------------------------------------------------------------------------
- * COMMON KEYSETS 
+ * COMMON KEYSETS
  */
 
 static void
@@ -39,7 +39,7 @@ on_settings_default_key_changed (GSettings *settings, const gchar *key, gpointer
 	gcr_filter_collection_refilter (GCR_FILTER_COLLECTION (user_data));
 }
 
-static gboolean 
+static gboolean
 pgp_signers_match (GObject *obj,
                    gpointer data)
 {

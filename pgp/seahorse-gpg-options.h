@@ -17,7 +17,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-/** 
+/**
  * A collection of functions for changing options in gpg.conf.
  */
 
@@ -25,16 +25,24 @@
 
 #include <glib.h>
 
-const gchar * seahorse_gpg_homedir (void);
+G_BEGIN_DECLS
 
-gboolean seahorse_gpg_options_find(const gchar* option, 
-                                gchar** value, GError** err);
+const char *   seahorse_gpg_homedir             (void);
 
-gboolean seahorse_gpg_options_find_vals(const gchar* options[], 
-                                gchar* values[], GError** err);
+gboolean       seahorse_gpg_options_find        (const char  *option,
+                                                 char       **value,
+                                                 GError     **err);
 
-gboolean seahorse_gpg_options_change(const gchar* option, 
-                                const gchar* value, GError** err);
+gboolean       seahorse_gpg_options_find_vals   (const char  *options[],
+                                                 char        *values[],
+                                                 GError     **err);
 
-gboolean seahorse_gpg_options_change_vals(const gchar* options[], 
-                                gchar* values[], GError** err);
+gboolean       seahorse_gpg_options_change      (const char  *option,
+                                                 const char  *value,
+                                                 GError     **err);
+
+gboolean       seahorse_gpg_options_change_vals (const char  *options[],
+                                                 char        *values[],
+                                                 GError     **err);
+
+G_BEGIN_DECLS

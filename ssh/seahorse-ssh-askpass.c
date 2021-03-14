@@ -19,7 +19,7 @@
  *
  * Author: Stef Walter <stefw@collabora.co.uk>
  */
- 
+
 #include "config.h"
 
 #include "seahorse-common.h"
