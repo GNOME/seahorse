@@ -31,7 +31,6 @@
 #include "pgp/seahorse-gpgme-subkey.h"
 #include "pgp/seahorse-gpgme-keyring.h"
 #include "pgp/seahorse-gpgme-uid.h"
-#include "libseahorse/seahorse-widget.h"
 
 void            seahorse_gpgme_generate_register    (void);
 

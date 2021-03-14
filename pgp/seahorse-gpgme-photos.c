@@ -23,7 +23,6 @@
 
 #include "seahorse-gpgme-key-op.h"
 
-#include "libseahorse/seahorse-widget.h"
 #include "libseahorse/seahorse-util.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>

@@ -24,7 +24,6 @@
 #include "seahorse-common.h"
 
 #include "seahorse-util.h"
-#include "seahorse-widget.h"
 
 #include <gio/gio.h>
 #include <glib/gstdio.h>
@@ -76,8 +75,6 @@ seahorse_util_handle_error (GError **error,
 		widget = GTK_WIDGET (parent);
 	else if (GTK_IS_WINDOW (parent))
 		widget = GTK_WIDGET (parent);
-	else if (SEAHORSE_IS_WIDGET (parent))
-		widget = seahorse_widget_get_toplevel (parent);
 	else
 		g_warning ("unsupported 'parent' argument passed to seahorse_util_handle_error() ");
 

@@ -9,7 +9,6 @@ libseahorse_sources = files(
   'seahorse-object-model.c',
   'seahorse-progress.c',
   'seahorse-util.c',
-  'seahorse-widget.c',
 )
 
 libseahorse_deps = [

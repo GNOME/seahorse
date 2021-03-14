@@ -29,7 +29,6 @@
 
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
-#include "libseahorse/seahorse-widget.h"
 
 #include <glib/gi18n.h>
 
