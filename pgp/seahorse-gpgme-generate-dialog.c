@@ -380,8 +380,12 @@ GtkDialog *
 seahorse_gpgme_generate_dialog_new (SeahorseGpgmeKeyring *keyring,
                                     GtkWindow *parent)
 {
+    g_return_val_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring), NULL);
+    g_return_val_if_fail (!parent || GTK_IS_WINDOW (parent), NULL);
+
     return g_object_new (SEAHORSE_GPGME_TYPE_GENERATE_DIALOG,
                          "keyring", keyring,
+                         "transient-for", parent,
                          "use-header-bar", 1,
                          NULL);
 }
