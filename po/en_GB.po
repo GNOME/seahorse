@@ -3,41 +3,41 @@
 # This file is distributed under the same license as the seahorse package.
 # Gareth Owen <gowen72@yahoo.com>, David Lodge <dave@cirt.net>, 2004.
 # Philip Withnall <philip@tecnocode.co.uk>, 2009, 2010.
-# Zander Brown <zbrown@gnome.org>, 2019-2020.
 # Bruce Cowan <bruce@bcowan.me.uk>, 2010-2020.
+# Zander Brown <zbrown@gnome.org>, 2019-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2020-07-13 16:23+0000\n"
-"PO-Revision-Date: 2020-09-01 19:54+0100\n"
-"Last-Translator: Bruce Cowan <bruce@bcowan.me.uk>\n"
-"Language-Team: English - United Kingdom <en@li.org>\n"
+"POT-Creation-Date: 2021-03-06 10:56+0000\n"
+"PO-Revision-Date: 2021-03-08 02:41+0000\n"
+"Last-Translator: Zander Brown <zbrown@gnome.org>\n"
+"Language-Team: English - United Kingdom <en_GB@li.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 3.36.0\n"
+"X-Generator: Gtranslator 3.38.0\n"
 "X-Project-Style: gnome\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
 msgstr "Add Key Server"
 
-#: common/add-keyserver-dialog.vala:64
+#: common/add-keyserver-dialog.vala:66
 msgid "Custom"
 msgstr "Custom"
 
 #. Buttons
-#: common/add-keyserver-dialog.vala:68 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:130
+#: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:101
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Cancel"
 
-#: common/add-keyserver-dialog.vala:69
+#: common/add-keyserver-dialog.vala:71
 msgid "Save"
 msgstr "Save"
 
@@ -53,13 +53,23 @@ msgstr "Couldn’t export keys"
 msgid "Couldn’t export data"
 msgstr "Couldn’t export data"
 
+#: common/datepicker.vala:55
+msgid "Enter the date directly"
+msgstr "Enter the date directly"
+
+#: common/datepicker.vala:62
+msgid "Select the date from a calendar"
+msgstr "Select the date from a calendar"
+
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:76
 #: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
-#: pkcs11/pkcs11-request.vala:55 pkcs11/pkcs11-request.vala:106
-#: src/import-dialog.vala:34 src/key-manager.vala:270
+#: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
+#: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
+#: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
+#: src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "_Cancel"
 
@@ -103,29 +113,13 @@ msgstr "Keys"
 msgid "Certificates"
 msgstr "Certificates"
 
-#: common/prefs.vala:42
+#: common/prefs.vala:30
 msgid "Preferences"
 msgstr "Preferences"
 
-#: common/prefs.vala:150
+#: common/prefs-keyservers.vala:44
 msgid "None: Don’t publish keys"
 msgstr "None: Don’t publish keys"
-
-#: common/prefs.vala:166
-msgid "Not a valid Key Server address."
-msgstr "Not a valid Key Server address."
-
-#: common/prefs.vala:167
-msgid ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-msgstr ""
-"For help contact your system administrator or the administrator of the key "
-"server."
-
-#: common/prefs.vala:236
-msgid "URL"
-msgstr "URL"
 
 #: common/seahorse-add-keyserver.ui:12
 msgid "initial temporary item"
@@ -152,25 +146,46 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "The port to access the server on."
 
-#: common/seahorse-prefs.ui:34
-msgid "_Find keys via:"
-msgstr "_Find keys via:"
+#: common/seahorse-prefs-keyservers.ui:6 common/seahorse-prefs-keyservers.ui:10
+#| msgid "Key Servers"
+msgid "Keyservers"
+msgstr "Keyservers"
 
-#: common/seahorse-prefs.ui:105
+#: common/seahorse-prefs-keyservers.ui:40
+#| msgid "Add Key Server"
+msgid "Add keyserver"
+msgstr "Add Keyserver"
+
+#: common/seahorse-prefs-keyservers.ui:51
+#| msgid "Key creation date"
+msgid "Key Synchronization"
+msgstr "Key Synchronisation"
+
+#: common/seahorse-prefs-keyservers.ui:61
 msgid "_Publish keys to:"
 msgstr "_Publish keys to:"
 
-#: common/seahorse-prefs.ui:128
+#: common/seahorse-prefs-keyservers.ui:84
 msgid "Automatically retrieve keys from _key servers"
 msgstr "Automatically retrieve keys from _key servers"
 
-#: common/seahorse-prefs.ui:142
+#: common/seahorse-prefs-keyservers.ui:99
 msgid "Automatically synchronize _modified keys with key servers"
 msgstr "Automatically synchronise _modified keys with key servers"
 
-#: common/seahorse-prefs.ui:159
-msgid "Key Servers"
-msgstr "Key Servers"
+#: common/server-category.vala:63
+msgid "LDAP Key Server"
+msgstr "LDAP Key Server"
+
+#. WITH_LDAP
+#: common/server-category.vala:66
+msgid "HTTP Key Server"
+msgstr "HTTP Key Server"
+
+#: common/server-category.vala:67
+#| msgid "HTTP Key Server"
+msgid "HTTPS Key Server"
+msgstr "HTTPS Key Server"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -255,20 +270,16 @@ msgid "Navigation"
 msgstr "Navigation"
 
 #: data/gtk/help-overlay.ui:69
-#| msgid "Couldn't remove keyring"
 msgctxt "shortcut window"
 msgid "Select previous keyring"
 msgstr "Select previous keyring"
 
 #: data/gtk/help-overlay.ui:76
-#| msgid "Selected %d key"
-#| msgid_plural "Selected %d keys"
 msgctxt "shortcut window"
 msgid "Select next keyring"
 msgstr "Select next keyring"
 
 #: data/gtk/help-overlay.ui:83
-#| msgid "Show sidebar listing keyrings"
 msgctxt "shortcut window"
 msgid "Show sidebar (on small screens)"
 msgstr "Show sidebar (on small screens)"
@@ -439,11 +450,11 @@ msgstr ""
 "keys, publish and retrieve keys from key servers, cache your passphrase so "
 "you don’t have to keep typing it and backup your keys and keyring."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:126
+#: data/org.gnome.seahorse.Application.appdata.xml.in:146
 msgid "The GNOME Project"
 msgstr "The GNOME Project"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:169
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
 #: src/seahorse-key-manager.ui:291
 msgid "Passwords and Keys"
 msgstr "Passwords and Keys"
@@ -469,7 +480,7 @@ msgstr "Couldn’t add item"
 msgid "Password or Secret"
 msgstr "Password or Secret"
 
-#: gkr/gkr-item-info.vala:120
+#: gkr/gkr-item-info.vala:118
 msgid "Network connection secret"
 msgstr "Network connection secret"
 
@@ -477,7 +488,7 @@ msgstr "Network connection secret"
 msgid "Wi-Fi password"
 msgstr "Wi-Fi password"
 
-#: gkr/gkr-item-info.vala:145
+#: gkr/gkr-item-info.vala:144
 msgid "Network password"
 msgstr "Network password"
 
@@ -485,24 +496,24 @@ msgstr "Network password"
 msgid "GNOME Web password"
 msgstr "GNOME Web password"
 
-#: gkr/gkr-item-info.vala:254
+#: gkr/gkr-item-info.vala:253
 msgid "Google Chrome password"
 msgstr "Google Chrome password"
 
-#: gkr/gkr-item-info.vala:288
+#: gkr/gkr-item-info.vala:286
 msgid "Instant messaging password"
 msgstr "Instant messaging password"
 
 #. Translators: This should be the same as the string in empathy
-#: gkr/gkr-item-info.vala:293
+#: gkr/gkr-item-info.vala:291
 msgid "IM account password for "
 msgstr "IM account password for "
 
-#: gkr/gkr-item-info.vala:326
+#: gkr/gkr-item-info.vala:323
 msgid "Telepathy password"
 msgstr "Telepathy password"
 
-#: gkr/gkr-item-info.vala:362
+#: gkr/gkr-item-info.vala:358
 msgid "GNOME Online Accounts password"
 msgstr "GNOME Online Accounts password"
 
@@ -636,7 +647,8 @@ msgstr "Add Password"
 msgid "_Keyring:"
 msgstr "_Keyring:"
 
-#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
+#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-gpgme-revoke-dialog.ui:44
+#: pgp/seahorse-revoke.ui:43
 msgid "_Description:"
 msgstr "_Description:"
 
@@ -683,7 +695,7 @@ msgid "Use"
 msgstr "Use"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1281
+#: pgp/seahorse-pgp-key-properties.c:1329
 msgid "Type"
 msgstr "Type"
 
@@ -709,7 +721,7 @@ msgstr "Delete Password"
 msgid "Keyring properties"
 msgstr "Keyring properties"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:859
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
 msgid "Name"
 msgstr "Name"
 
@@ -725,284 +737,29 @@ msgstr "Change password"
 msgid "Set as default"
 msgstr "Set as default"
 
-#: libegg/egg-datetime.c:316
-msgid "Display flags"
-msgstr "Display flags"
-
-#: libegg/egg-datetime.c:317
-msgid "Displayed date and/or time properties"
-msgstr "Displayed date and/or time properties"
-
-#: libegg/egg-datetime.c:322
-msgid "Lazy mode"
-msgstr "Lazy mode"
-
-#: libegg/egg-datetime.c:323
-msgid "Lazy mode doesn’t normalize entered date and time values"
-msgstr "Lazy mode doesn’t normalise entered date and time values"
-
-#: libegg/egg-datetime.c:328
-msgid "Year"
-msgstr "Year"
-
-#: libegg/egg-datetime.c:329
-msgid "Displayed year"
-msgstr "Displayed year"
-
-#: libegg/egg-datetime.c:334
-msgid "Month"
-msgstr "Month"
-
-#: libegg/egg-datetime.c:335
-msgid "Displayed month"
-msgstr "Displayed month"
-
-#: libegg/egg-datetime.c:340
-msgid "Day"
-msgstr "Day"
-
-#: libegg/egg-datetime.c:341
-msgid "Displayed day of month"
-msgstr "Displayed day of month"
-
-#: libegg/egg-datetime.c:346
-msgid "Hour"
-msgstr "Hour"
-
-#: libegg/egg-datetime.c:347
-msgid "Displayed hour"
-msgstr "Displayed hour"
-
-#: libegg/egg-datetime.c:352
-msgid "Minute"
-msgstr "Minute"
-
-#: libegg/egg-datetime.c:353
-msgid "Displayed minute"
-msgstr "Displayed minute"
-
-#: libegg/egg-datetime.c:358
-msgid "Second"
-msgstr "Second"
-
-#: libegg/egg-datetime.c:359
-msgid "Displayed second"
-msgstr "Displayed second"
-
-#: libegg/egg-datetime.c:364
-msgid "Lower limit year"
-msgstr "Lower limit year"
-
-#: libegg/egg-datetime.c:365
-msgid "Year part of the lower date limit"
-msgstr "Year part of the lower date limit"
-
-#: libegg/egg-datetime.c:370
-msgid "Upper limit year"
-msgstr "Upper limit year"
-
-#: libegg/egg-datetime.c:371
-msgid "Year part of the upper date limit"
-msgstr "Year part of the upper date limit"
-
-#: libegg/egg-datetime.c:376
-msgid "Lower limit month"
-msgstr "Lower limit month"
-
-#: libegg/egg-datetime.c:377
-msgid "Month part of the lower date limit"
-msgstr "Month part of the lower date limit"
-
-#: libegg/egg-datetime.c:382
-msgid "Upper limit month"
-msgstr "Upper limit month"
-
-#: libegg/egg-datetime.c:383
-msgid "Month part of the upper date limit"
-msgstr "Month part of the upper date limit"
-
-#: libegg/egg-datetime.c:388
-msgid "Lower limit day"
-msgstr "Lower limit day"
-
-#: libegg/egg-datetime.c:389
-msgid "Day of month part of the lower date limit"
-msgstr "Day of month part of the lower date limit"
-
-#: libegg/egg-datetime.c:394
-msgid "Upper limit day"
-msgstr "Upper limit day"
-
-#: libegg/egg-datetime.c:395
-msgid "Day of month part of the upper date limit"
-msgstr "Day of month part of the upper date limit"
-
-#: libegg/egg-datetime.c:400
-msgid "Lower limit hour"
-msgstr "Lower limit hour"
-
-#: libegg/egg-datetime.c:401
-msgid "Hour part of the lower time limit"
-msgstr "Hour part of the lower time limit"
-
-#: libegg/egg-datetime.c:406
-msgid "Upper limit hour"
-msgstr "Upper limit hour"
-
-#: libegg/egg-datetime.c:407
-msgid "Hour part of the upper time limit"
-msgstr "Hour part of the upper time limit"
-
-#: libegg/egg-datetime.c:412
-msgid "Lower limit minute"
-msgstr "Lower limit minute"
-
-#: libegg/egg-datetime.c:413
-msgid "Minute part of the lower time limit"
-msgstr "Minute part of the lower time limit"
-
-#: libegg/egg-datetime.c:418
-msgid "Upper limit minute"
-msgstr "Upper limit minute"
-
-#: libegg/egg-datetime.c:419
-msgid "Minute part of the upper time limit"
-msgstr "Minute part of the upper time limit"
-
-#: libegg/egg-datetime.c:424
-msgid "Lower limit second"
-msgstr "Lower limit second"
-
-#: libegg/egg-datetime.c:425
-msgid "Second part of the lower time limit"
-msgstr "Second part of the lower time limit"
-
-#: libegg/egg-datetime.c:430
-msgid "Upper limit second"
-msgstr "Upper limit second"
-
-#: libegg/egg-datetime.c:431
-msgid "Second part of the upper time limit"
-msgstr "Second part of the upper time limit"
-
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
-#.
-#: libegg/egg-datetime.c:473
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
-
-#: libegg/egg-datetime.c:495
-msgid "Date"
-msgstr "Date"
-
-#: libegg/egg-datetime.c:495
-msgid "Enter the date directly"
-msgstr "Enter the date directly"
-
-#: libegg/egg-datetime.c:502
-msgid "Select Date"
-msgstr "Select Date"
-
-#: libegg/egg-datetime.c:502
-msgid "Select the date from a calendar"
-msgstr "Select the date from a calendar"
-
-#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2203
-msgid "Time"
-msgstr "Time"
-
-#: libegg/egg-datetime.c:520
-msgid "Enter the time directly"
-msgstr "Enter the time directly"
-
-#: libegg/egg-datetime.c:527
-msgid "Select Time"
-msgstr "Select Time"
-
-#: libegg/egg-datetime.c:527
-msgid "Select the time from a list"
-msgstr "Select the time from a list"
-
-#. Translators: set this to anything else if you want to use a
-#. * 24 hour clock.
-#.
-#: libegg/egg-datetime.c:792
-msgid "24hr: no"
-msgstr "24hr: no"
-
-#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1264
-#: libegg/egg-datetime.c:1268
-msgid "AM"
-msgstr "AM"
-
-#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1265
-#: libegg/egg-datetime.c:1272
-msgid "PM"
-msgstr "PM"
-
-#. Translators: This is hh:mm:ss AM/PM.
-#: libegg/egg-datetime.c:806
-#, c-format
-msgid "%02d:%02d:%02d %s"
-msgstr "%02d:%02d:%02d %s"
-
-#. Translators: This is hh:mm AM/PM.
-#: libegg/egg-datetime.c:809
-#, c-format
-msgid "%02d:%02d %s"
-msgstr "%02d:%02d %s"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:813
-#, c-format
-msgid "%02d:%02d:%02d"
-msgstr "%02d:%02d:%02d"
-
-#. Translators: This is hh:mm.
-#: libegg/egg-datetime.c:816
-#, c-format
-msgid "%02d:%02d"
-msgstr "%02d:%02d"
-
-#. TODO: should handle other display modes as well...
-#. Translators: This is YYYY-MM-DD
-#: libegg/egg-datetime.c:1180
-#, c-format
-msgid "%04d-%02d-%02d"
-msgstr "%04d-%02d-%02d"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:1245
-#, c-format
-msgid "%u:%u:%u"
-msgstr "%u:%u:%u"
-
 #: libseahorse/seahorse-widget.c:461
 #, c-format
 msgid "Could not display help: %s"
 msgstr "Could not display help: %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:213
+#: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Add subkey to %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
+#: pgp/seahorse-gpgme-add-subkey.c:236 pgp/seahorse-gpgme-generate-dialog.c:83
 msgid "DSA (sign only)"
 msgstr "DSA (sign only)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:247
+#: pgp/seahorse-gpgme-add-subkey.c:244
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (encrypt only)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
+#: pgp/seahorse-gpgme-add-subkey.c:250 pgp/seahorse-gpgme-generate-dialog.c:84
 msgid "RSA (sign only)"
 msgstr "RSA (sign only)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:259
+#: pgp/seahorse-gpgme-add-subkey.c:256
 msgid "RSA (encrypt only)"
 msgstr "RSA (encrypt only)"
 
@@ -1022,15 +779,15 @@ msgstr "Length of Key"
 msgid "Expiration Date"
 msgstr "Expiration Date"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:110
+#: pgp/seahorse-gpgme-add-subkey.ui:109
 msgid "Never E_xpires"
 msgstr "Never E_xpires"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:114
+#: pgp/seahorse-gpgme-add-subkey.ui:113
 msgid "If key never expires"
 msgstr "If key never expires"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:150
+#: pgp/seahorse-gpgme-add-subkey.ui:149
 msgid "Generate a new subkey"
 msgstr "Generate a new subkey"
 
@@ -1080,19 +837,19 @@ msgstr "Create the new user ID"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Decryption failed. You probably do not have the decryption key."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:512
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
 msgid "The operation was cancelled"
 msgstr "The operation was cancelled"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:72
+#: pgp/seahorse-gpgme-expires-dialog.c:70
 msgid "Invalid expiry date"
 msgstr "Invalid expiry date"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:73
+#: pgp/seahorse-gpgme-expires-dialog.c:71
 msgid "The expiry date must be in the future"
 msgstr "The expiry date must be in the future"
 
-#: pgp/seahorse-gpgme-expires-dialog.c:83
+#: pgp/seahorse-gpgme-expires-dialog.c:84
 msgid "Couldn’t change expiry date"
 msgstr "Couldn’t change expiry date"
 
@@ -1125,29 +882,29 @@ msgstr "Armoured PGP keys"
 msgid "PGP keys"
 msgstr "PGP keys"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
+#: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:85
+#: pgp/seahorse-gpgme-generate-dialog.c:82
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:101
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "Couldn’t generate PGP key"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:140
+#: pgp/seahorse-gpgme-generate-dialog.c:137
 msgid "Passphrase for New PGP Key"
 msgstr "Passphrase for New PGP Key"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:141
+#: pgp/seahorse-gpgme-generate-dialog.c:138
 msgid "Enter the passphrase for your new key twice."
 msgstr "Enter the passphrase for your new key twice."
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:153
+#: pgp/seahorse-gpgme-generate-dialog.c:150
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1161,11 +918,11 @@ msgstr ""
 "the keyboard, moving the mouse, using applications.\n"
 "This gives the system the random data that it needs."
 
-#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:155 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Generating key"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:182
+#: pgp/seahorse-gpgme-generate-dialog.c:179
 msgid "Name must be at least 5 characters long."
 msgstr "Name must be at least 5 characters long."
 
@@ -1198,15 +955,15 @@ msgstr "Key _Strength (bits)"
 msgid "E_xpiration Date"
 msgstr "E_xpiration Date"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:251
+#: pgp/seahorse-gpgme-generate-dialog.ui:255
 msgid "Ne_ver Expires"
 msgstr "Ne_ver Expires"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:292
+#: pgp/seahorse-gpgme-generate-dialog.ui:296
 msgid "C_reate"
 msgstr "C_reate"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:299
+#: pgp/seahorse-gpgme-generate-dialog.ui:303
 msgid "Generate a new key"
 msgstr "Generate a new key"
 
@@ -1223,11 +980,11 @@ msgid_plural "Are you sure you want to permanently delete %d keys?"
 msgstr[0] "Are you sure you want to permanently delete %d keys?"
 msgstr[1] "Are you sure you want to permanently delete %d keys?"
 
-#: pgp/seahorse-gpgme-key-op.c:347
+#: pgp/seahorse-gpgme-key-op.c:362
 msgid "Wrong password"
 msgstr "Wrong password"
 
-#: pgp/seahorse-gpgme-key-op.c:347
+#: pgp/seahorse-gpgme-key-op.c:362
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 "This was the third time you entered a wrong password. Please try again."
@@ -1348,59 +1105,66 @@ msgstr "Are you sure you want to remove the current photo from your key?"
 msgid "Couldn’t delete photo"
 msgstr "Couldn’t delete photo"
 
-#: pgp/seahorse-gpgme-revoke.c:72
+#: pgp/seahorse-gpgme-revoke-dialog.c:81
 msgid "Couldn’t revoke subkey"
 msgstr "Couldn’t revoke subkey"
 
-#: pgp/seahorse-gpgme-revoke.c:93
+#: pgp/seahorse-gpgme-revoke-dialog.c:141
 #, c-format
 msgid "Revoke: %s"
 msgstr "Revoke: %s"
 
-#: pgp/seahorse-gpgme-revoke.c:104
+#: pgp/seahorse-gpgme-revoke-dialog.c:159
 msgid "No reason"
 msgstr "No reason"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke-dialog.c:160
 msgid "No reason for revoking key"
 msgstr "No reason for revoking key"
 
-#: pgp/seahorse-gpgme-revoke.c:111
+#: pgp/seahorse-gpgme-revoke-dialog.c:166
 msgid "Compromised"
 msgstr "Compromised"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke-dialog.c:167
 msgid "Key has been compromised"
 msgstr "Key has been compromised"
 
-#: pgp/seahorse-gpgme-revoke.c:118
+#: pgp/seahorse-gpgme-revoke-dialog.c:173
 msgid "Superseded"
 msgstr "Superseded"
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke-dialog.c:174
 msgid "Key has been superseded"
 msgstr "Key has been superseded"
 
-#: pgp/seahorse-gpgme-revoke.c:125
+#: pgp/seahorse-gpgme-revoke-dialog.c:180
 msgid "Not Used"
 msgstr "Not Used"
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke-dialog.c:181
 msgid "Key is no longer used"
 msgstr "Key is no longer used"
 
-#: pgp/seahorse-gpgme-revoke.c:163
-#, c-format
-msgid ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
-msgstr ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
+#: pgp/seahorse-gpgme-revoke-dialog.ui:21 pgp/seahorse-revoke.ui:20
+msgid "_Reason:"
+msgstr "_Reason:"
 
-#: pgp/seahorse-gpgme-revoke.c:175
-msgid "Couldn’t add revoker"
-msgstr "Couldn’t add revoker"
+#: pgp/seahorse-gpgme-revoke-dialog.ui:22 pgp/seahorse-revoke.ui:21
+msgid "Reason for revoking the key"
+msgstr "Reason for revoking the key"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:57 pgp/seahorse-revoke.ui:56
+msgid "Optional description of revocation"
+msgstr "Optional description of revocation"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:89 pgp/seahorse-revoke.ui:88
+msgid "Revoke key"
+msgstr "Revoke key"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:90 pgp/seahorse-revoke.ui:89
+msgid "Re_voke"
+msgstr "Re_voke"
 
 #: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
@@ -1421,7 +1185,7 @@ msgstr "Couldn’t sign key"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: pgp/seahorse-gpgme-sign-dialog.c:281 pgp/seahorse-signer.c:62
+#: pgp/seahorse-gpgme-sign-dialog.c:281
 msgid "No keys usable for signing"
 msgstr "No keys usable for signing"
 
@@ -1521,28 +1285,24 @@ msgstr "_Signer:"
 msgid "_Sign"
 msgstr "_Sign"
 
-#: pgp/seahorse-gpgme-subkey.c:89
+#: pgp/seahorse-gpgme-subkey.c:91
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Unknown"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:93
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:530
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr "Search was not specific enough. Server “%s” found too many keys."
 
-#: pgp/seahorse-hkp-source.c:533
+#: pgp/seahorse-hkp-source.c:507
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Couldn’t communicate with server “%s”: %s"
-
-#: pgp/seahorse-hkp-source.c:996
-msgid "HTTP Key Server"
-msgstr "HTTP Key Server"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1561,16 +1321,16 @@ msgstr "Import"
 msgid "Can’t import key"
 msgstr "Can’t import key"
 
-#: pgp/seahorse-keyserver-results.c:240
+#: pgp/seahorse-keyserver-results.c:226
 msgid "Remote keys"
 msgstr "Remote keys"
 
-#: pgp/seahorse-keyserver-results.c:242
+#: pgp/seahorse-keyserver-results.c:228
 #, c-format
 msgid "Remote keys containing “%s”"
 msgstr "Remote keys containing “%s”"
 
-#: pgp/seahorse-keyserver-results.c:357
+#: pgp/seahorse-keyserver-results.c:342
 msgid "The search for keys failed."
 msgstr "The search for keys failed."
 
@@ -1586,7 +1346,7 @@ msgstr ""
 msgid "Find Remote Keys"
 msgstr "Find Remote Keys"
 
-#: pgp/seahorse-keyserver-search.ui:37
+#: pgp/seahorse-keyserver-search.ui:32
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -1594,51 +1354,43 @@ msgstr ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
 
-#: pgp/seahorse-keyserver-search.ui:52
+#: pgp/seahorse-keyserver-search.ui:47
 msgid "_Search for keys containing: "
 msgstr "_Search for keys containing: "
 
-#: pgp/seahorse-keyserver-search.ui:74
+#: pgp/seahorse-keyserver-search.ui:69
 msgid "Where to search:"
 msgstr "Where to search:"
 
-#: pgp/seahorse-keyserver-search.ui:103
-msgid "Key Servers:"
-msgstr "Key Servers:"
-
-#: pgp/seahorse-keyserver-search.ui:117
-msgid "Shared Keys Near Me:"
-msgstr "Shared Keys Near Me:"
-
-#: pgp/seahorse-keyserver-search.ui:144
+#: pgp/seahorse-keyserver-search.ui:115
 msgid "_Search"
 msgstr "_Search"
 
-#: pgp/seahorse-keyserver-sync.c:54
+#: pgp/seahorse-keyserver-sync.c:71
 msgid "Couldn’t publish keys to server"
 msgstr "Couldn’t publish keys to server"
 
-#: pgp/seahorse-keyserver-sync.c:73
+#: pgp/seahorse-keyserver-sync.c:87
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Couldn’t retrieve keys from server: %s"
 
-#: pgp/seahorse-keyserver-sync.c:158
+#: pgp/seahorse-keyserver-sync.c:197
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d key is selected for synchronising</b>"
 msgstr[1] "<b>%d keys are selected for synchronising</b>"
 
-#: pgp/seahorse-keyserver-sync.c:237
+#: pgp/seahorse-keyserver-sync.c:305
 msgid "Synchronizing keys…"
 msgstr "Synchronising keys…"
 
-#: pgp/seahorse-keyserver-sync.ui:14
+#: pgp/seahorse-keyserver-sync.ui:5
 msgid "Sync Keys"
 msgstr "Sync Keys"
 
-#: pgp/seahorse-keyserver-sync.ui:52
+#: pgp/seahorse-keyserver-sync.ui:36
 msgid ""
 "This will publish the keys in your key ring so they’re available for others "
 "to use. You’ll also get any changes others have made since you received "
@@ -1647,205 +1399,209 @@ msgstr ""
 "This will publish the keys in your key ring so they’re available for others "
 "to use. You’ll also get any changes others have made since you received "
 "their keys."
+
+#: pgp/seahorse-keyserver-sync.ui:45
+msgid ""
+"This will retrieve any changes others have made since you received their "
+"keys. No key server has been chosen for publishing, so your keys will not be "
+"made available to others."
+msgstr ""
+"This will retrieve any changes others have made since you received their "
+"keys. No key server has been chosen for publishing, so your keys will not be "
+"made available to others."
 
 #: pgp/seahorse-keyserver-sync.ui:65
-msgid ""
-"This will retrieve any changes others have made since you received their "
-"keys. No key server has been chosen for publishing, so your keys will not be "
-"made available to others."
-msgstr ""
-"This will retrieve any changes others have made since you received their "
-"keys. No key server has been chosen for publishing, so your keys will not be "
-"made available to others."
-
-#: pgp/seahorse-keyserver-sync.ui:115
 msgid "_Key Servers"
 msgstr "_Key Servers"
 
-#: pgp/seahorse-keyserver-sync.ui:148
+#: pgp/seahorse-keyserver-sync.ui:89
 msgid "_Sync"
 msgstr "_Sync"
 
-#: pgp/seahorse-ldap-source.c:439
+#: pgp/seahorse-ldap-source.c:433
 #, c-format
 msgid "Couldn’t communicate with %s: %s"
 msgstr "Couldn’t communicate with %s: %s"
 
-#: pgp/seahorse-ldap-source.c:642
+#: pgp/seahorse-ldap-source.c:593
+#, c-format
+#| msgid "Couldn’t resolve address: %s"
+msgid "Couldn’t resolve address %s"
+msgstr "Couldn’t resolve address %s"
+
+#. Now that we've resolved our address, connect via IP
+#: pgp/seahorse-ldap-source.c:598
 #, c-format
 msgid "Connecting to: %s"
 msgstr "Connecting to: %s"
 
-#: pgp/seahorse-ldap-source.c:647
+#: pgp/seahorse-ldap-source.c:653
 #, c-format
-msgid "Couldn’t resolve address: %s"
-msgstr "Couldn’t resolve address: %s"
+#| msgid "Invalid key id: %s"
+msgid "Invalid URI: %s"
+msgstr "Invalid URI: %s"
 
-#: pgp/seahorse-ldap-source.c:689
+#: pgp/seahorse-ldap-source.c:661
 #, c-format
 msgid "Resolving server address: %s"
 msgstr "Resolving server address: %s"
 
-#: pgp/seahorse-ldap-source.c:1366
-msgid "LDAP Key Server"
-msgstr "LDAP Key Server"
-
-#: pgp/seahorse-pgp-backend.c:187
+#: pgp/seahorse-pgp-backend.c:188
 msgid "PGP Keys"
 msgstr "PGP Keys"
 
-#: pgp/seahorse-pgp-backend.c:193
+#: pgp/seahorse-pgp-backend.c:194
 msgid "PGP keys are for encrypting email or files"
 msgstr "PGP keys are for encrypting e-mail or files"
 
-#: pgp/seahorse-pgp-key.c:172
+#: pgp/seahorse-pgp-key.c:186
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
 msgstr[0] "(and %d other)"
 msgstr[1] "(and %d others)"
 
-#: pgp/seahorse-pgp-key.c:573
+#: pgp/seahorse-pgp-key.c:606
 msgid "Personal PGP key"
 msgstr "Personal PGP key"
 
-#: pgp/seahorse-pgp-key.c:575
+#: pgp/seahorse-pgp-key.c:608
 msgid "PGP key"
 msgstr "PGP key"
 
-#: pgp/seahorse-pgp-key-properties.c:249
+#: pgp/seahorse-pgp-key-properties.c:250
 msgid "Couldn’t change primary user ID"
 msgstr "Couldn’t change primary user ID"
 
-#: pgp/seahorse-pgp-key-properties.c:284
+#: pgp/seahorse-pgp-key-properties.c:285
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Are you sure you want to permanently delete the “%s” user ID?"
 
-#: pgp/seahorse-pgp-key-properties.c:293
+#: pgp/seahorse-pgp-key-properties.c:294
 msgid "Couldn’t delete user ID"
 msgstr "Couldn’t delete user ID"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1415
+#: pgp/seahorse-pgp-key-properties.c:370 pgp/seahorse-pgp-key-properties.c:1464
 msgid "[Unknown]"
 msgstr "[Unknown]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:465 pgp/seahorse-pgp-key-properties.c:1625
+#: pgp/seahorse-pgp-key-properties.c:468 pgp/seahorse-pgp-key-properties.c:1682
 msgid "Name/Email"
 msgstr "Name/E-mail"
 
-#: pgp/seahorse-pgp-key-properties.c:472
+#: pgp/seahorse-pgp-key-properties.c:475
 msgid "Signature ID"
 msgstr "Signature ID"
 
-#: pgp/seahorse-pgp-key-properties.c:578
+#: pgp/seahorse-pgp-key-properties.c:581
 msgid "Couldn’t change primary photo"
 msgstr "Couldn’t change primary photo"
 
-#: pgp/seahorse-pgp-key-properties.c:738
+#: pgp/seahorse-pgp-key-properties.c:768
 msgid "Error changing password"
 msgstr "Error changing password"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:784
+#: pgp/seahorse-pgp-key-properties.c:815
 msgid "(unknown)"
 msgstr "(unknown)"
 
-#: pgp/seahorse-pgp-key-properties.c:789
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
 msgid "This key expired on: %s"
 msgstr "This key expired on: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:817
+#: pgp/seahorse-pgp-key-properties.c:846
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — Public key"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:820
+#: pgp/seahorse-pgp-key-properties.c:849
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Private key"
 
-#: pgp/seahorse-pgp-key-properties.c:1006
+#: pgp/seahorse-pgp-key-properties.c:1036
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Are you sure you want to permanently delete subkey %d of %s?"
 
-#: pgp/seahorse-pgp-key-properties.c:1014
+#: pgp/seahorse-pgp-key-properties.c:1044
 msgid "Couldn’t delete subkey"
 msgstr "Couldn’t delete subkey"
 
-#: pgp/seahorse-pgp-key-properties.c:1078
-#: pgp/seahorse-pgp-key-properties.c:1389
+#: pgp/seahorse-pgp-key-properties.c:1114
+#: pgp/seahorse-pgp-key-properties.c:1438
 msgid "Unable to change trust"
 msgstr "Unable to change trust"
 
-#: pgp/seahorse-pgp-key-properties.c:1090 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Couldn’t export key"
 
-#: pgp/seahorse-pgp-key-properties.c:1239
-#: pgp/seahorse-pgp-key-properties.c:1323
+#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1372
 msgctxt "Expires"
 msgid "Never"
 msgstr "Never"
 
-#: pgp/seahorse-pgp-key-properties.c:1278
+#: pgp/seahorse-pgp-key-properties.c:1326
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1332
 msgid "Usage"
 msgstr "Usage"
 
-#: pgp/seahorse-pgp-key-properties.c:1287
+#: pgp/seahorse-pgp-key-properties.c:1335
 msgid "Created"
 msgstr "Created"
 
-#: pgp/seahorse-pgp-key-properties.c:1290
+#: pgp/seahorse-pgp-key-properties.c:1338
 msgid "Expires"
 msgstr "Expires"
 
-#: pgp/seahorse-pgp-key-properties.c:1293
+#: pgp/seahorse-pgp-key-properties.c:1341
 msgid "Status"
 msgstr "Status"
 
-#: pgp/seahorse-pgp-key-properties.c:1296
+#: pgp/seahorse-pgp-key-properties.c:1344
 msgid "Strength"
 msgstr "Strength"
 
-#: pgp/seahorse-pgp-key-properties.c:1314
+#: pgp/seahorse-pgp-key-properties.c:1363
 msgid "Revoked"
 msgstr "Revoked"
 
-#: pgp/seahorse-pgp-key-properties.c:1316
+#: pgp/seahorse-pgp-key-properties.c:1365
 msgid "Expired"
 msgstr "Expired"
 
-#: pgp/seahorse-pgp-key-properties.c:1318
+#: pgp/seahorse-pgp-key-properties.c:1367
 msgid "Disabled"
 msgstr "Disabled"
 
-#: pgp/seahorse-pgp-key-properties.c:1320
+#: pgp/seahorse-pgp-key-properties.c:1369
 msgid "Good"
 msgstr "Good"
 
-#: pgp/seahorse-pgp-key-properties.c:1628
+#: pgp/seahorse-pgp-key-properties.c:1685
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Key ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1771
+#: pgp/seahorse-pgp-key-properties.c:1828
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "I trust signatures from “%s” on other keys"
 
-#: pgp/seahorse-pgp-key-properties.c:1778
+#: pgp/seahorse-pgp-key-properties.c:1835
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1854,7 +1610,7 @@ msgstr ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
 
-#: pgp/seahorse-pgp-key-properties.c:1785
+#: pgp/seahorse-pgp-key-properties.c:1842
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -2073,12 +1829,10 @@ msgid "Dates:"
 msgstr "Dates:"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:828
-#| msgid "Indicate Trust:"
 msgid "Indicate trust:"
 msgstr "Indicate trust:"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:845
-#| msgid "You _Trust the Owner:"
 msgid "You _trust the owner:"
 msgstr "You _trust the owner:"
 
@@ -2103,53 +1857,19 @@ msgstr "Key"
 msgid "Subkey %d of %s"
 msgstr "Subkey %d of %s"
 
-#: pgp/seahorse-revoke.ui:35
-msgid "Reason for revoking the key"
-msgstr "Reason for revoking the key"
-
-#: pgp/seahorse-revoke.ui:40
-msgid "_Reason:"
-msgstr "_Reason:"
-
-#: pgp/seahorse-revoke.ui:70
-msgid "Optional description of revocation"
-msgstr "Optional description of revocation"
-
-#: pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "Revoke key"
-
-#: pgp/seahorse-revoke.ui:154
-msgid "Re_voke"
-msgstr "Re_voke"
-
-#: pgp/seahorse-signer.c:63
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"You have no personal PGP keys that can be used to sign a document or message."
-
-#: pgp/seahorse-signer.ui:7
-msgid "Choose Signing Key"
-msgstr "Choose Signing Key"
-
-#: pgp/seahorse-signer.ui:25
-msgid "_Sign message with key:"
-msgstr "_Sign message with key:"
-
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
 msgstr "Exporting data"
 
-#: pgp/seahorse-transfer.c:234 pgp/seahorse-transfer.c:277
+#: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Retrieving data"
 msgstr "Retrieving data"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Importing data"
 msgstr "Importing data"
 
-#: pgp/seahorse-transfer.c:237 pgp/seahorse-transfer.c:280
+#: pgp/seahorse-transfer.c:236 pgp/seahorse-transfer.c:279
 msgid "Sending data"
 msgstr "Sending data"
 
@@ -2305,7 +2025,7 @@ msgstr "Contributions:"
 msgid "Version of this application"
 msgstr "Version of this application"
 
-#: src/application.vala:171
+#: src/application.vala:173
 msgid "translator-credits"
 msgstr ""
 "Abigail Brady <morwen@evilmagi_c.org>\n"
@@ -2318,7 +2038,7 @@ msgstr ""
 "Waldo Luís Ribeiro <waldoribeiro@sapo.pt>\n"
 "Zander Brown <zbrown@gnome.org>"
 
-#: src/application.vala:174
+#: src/application.vala:176
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse Project Homepage"
 
@@ -2352,7 +2072,7 @@ msgstr "Dropped text"
 msgid "Clipboard text"
 msgstr "Clipboard text"
 
-#: src/key-manager.vala:497
+#: src/key-manager.vala:499
 msgid "Couldn’t unlock keyring"
 msgstr "Couldn’t unlock keyring"
 
@@ -2425,7 +2145,6 @@ msgid "GPG key"
 msgstr "GPG key"
 
 #: src/seahorse-key-manager.ui:132
-#| msgid "Used to encrypt email and files"
 msgid "Used to encrypt emails and files"
 msgstr "Used to encrypt e-mails and files"
 
@@ -2465,21 +2184,20 @@ msgstr "Search for a key or password"
 msgid "Filter"
 msgstr "Filter"
 
-#: src/seahorse-key-manager.ui:532
+#: src/seahorse-key-manager.ui:515
 msgid "This collection seems to be empty"
 msgstr "This collection seems to be empty"
 
-#: src/seahorse-key-manager.ui:564
+#: src/seahorse-key-manager.ui:525
 msgid "Keyring is locked"
 msgstr "Keyring is locked"
 
-#: src/seahorse-key-manager.ui:574
+#: src/seahorse-key-manager.ui:530
 msgid "Unlock"
 msgstr "Unlock"
 
 #. Translators: This is only relevant for "Password" items
 #: src/seahorse-key-manager-widgets.ui:7
-#| msgid "_Copy Key"
 msgid "Copy secret"
 msgstr "Copy secret"
 
@@ -2804,6 +2522,219 @@ msgstr "Couldn’t configure Secure Shell keys on remote computer."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configuring Secure Shell Keys…"
+
+#~ msgid "Not a valid Key Server address."
+#~ msgstr "Not a valid Key Server address."
+
+#~ msgid ""
+#~ "For help contact your system administrator or the administrator of the "
+#~ "key server."
+#~ msgstr ""
+#~ "For help contact your system administrator or the administrator of the "
+#~ "key server."
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "_Find keys via:"
+#~ msgstr "_Find keys via:"
+
+#~ msgid "Display flags"
+#~ msgstr "Display flags"
+
+#~ msgid "Displayed date and/or time properties"
+#~ msgstr "Displayed date and/or time properties"
+
+#~ msgid "Lazy mode"
+#~ msgstr "Lazy mode"
+
+#~ msgid "Lazy mode doesn’t normalize entered date and time values"
+#~ msgstr "Lazy mode doesn’t normalise entered date and time values"
+
+#~ msgid "Year"
+#~ msgstr "Year"
+
+#~ msgid "Displayed year"
+#~ msgstr "Displayed year"
+
+#~ msgid "Month"
+#~ msgstr "Month"
+
+#~ msgid "Displayed month"
+#~ msgstr "Displayed month"
+
+#~ msgid "Day"
+#~ msgstr "Day"
+
+#~ msgid "Displayed day of month"
+#~ msgstr "Displayed day of month"
+
+#~ msgid "Hour"
+#~ msgstr "Hour"
+
+#~ msgid "Displayed hour"
+#~ msgstr "Displayed hour"
+
+#~ msgid "Minute"
+#~ msgstr "Minute"
+
+#~ msgid "Displayed minute"
+#~ msgstr "Displayed minute"
+
+#~ msgid "Second"
+#~ msgstr "Second"
+
+#~ msgid "Displayed second"
+#~ msgstr "Displayed second"
+
+#~ msgid "Lower limit year"
+#~ msgstr "Lower limit year"
+
+#~ msgid "Year part of the lower date limit"
+#~ msgstr "Year part of the lower date limit"
+
+#~ msgid "Upper limit year"
+#~ msgstr "Upper limit year"
+
+#~ msgid "Year part of the upper date limit"
+#~ msgstr "Year part of the upper date limit"
+
+#~ msgid "Lower limit month"
+#~ msgstr "Lower limit month"
+
+#~ msgid "Month part of the lower date limit"
+#~ msgstr "Month part of the lower date limit"
+
+#~ msgid "Upper limit month"
+#~ msgstr "Upper limit month"
+
+#~ msgid "Month part of the upper date limit"
+#~ msgstr "Month part of the upper date limit"
+
+#~ msgid "Lower limit day"
+#~ msgstr "Lower limit day"
+
+#~ msgid "Day of month part of the lower date limit"
+#~ msgstr "Day of month part of the lower date limit"
+
+#~ msgid "Upper limit day"
+#~ msgstr "Upper limit day"
+
+#~ msgid "Day of month part of the upper date limit"
+#~ msgstr "Day of month part of the upper date limit"
+
+#~ msgid "Lower limit hour"
+#~ msgstr "Lower limit hour"
+
+#~ msgid "Hour part of the lower time limit"
+#~ msgstr "Hour part of the lower time limit"
+
+#~ msgid "Upper limit hour"
+#~ msgstr "Upper limit hour"
+
+#~ msgid "Hour part of the upper time limit"
+#~ msgstr "Hour part of the upper time limit"
+
+#~ msgid "Lower limit minute"
+#~ msgstr "Lower limit minute"
+
+#~ msgid "Minute part of the lower time limit"
+#~ msgstr "Minute part of the lower time limit"
+
+#~ msgid "Upper limit minute"
+#~ msgstr "Upper limit minute"
+
+#~ msgid "Minute part of the upper time limit"
+#~ msgstr "Minute part of the upper time limit"
+
+#~ msgid "Lower limit second"
+#~ msgstr "Lower limit second"
+
+#~ msgid "Second part of the lower time limit"
+#~ msgstr "Second part of the lower time limit"
+
+#~ msgid "Upper limit second"
+#~ msgstr "Upper limit second"
+
+#~ msgid "Second part of the upper time limit"
+#~ msgstr "Second part of the upper time limit"
+
+#~ msgid "calendar:week_start:0"
+#~ msgstr "calendar:week_start:1"
+
+#~ msgid "Date"
+#~ msgstr "Date"
+
+#~ msgid "Select Date"
+#~ msgstr "Select Date"
+
+#~ msgid "Time"
+#~ msgstr "Time"
+
+#~ msgid "Enter the time directly"
+#~ msgstr "Enter the time directly"
+
+#~ msgid "Select Time"
+#~ msgstr "Select Time"
+
+#~ msgid "Select the time from a list"
+#~ msgstr "Select the time from a list"
+
+#~ msgid "24hr: no"
+#~ msgstr "24hr: no"
+
+#~ msgid "AM"
+#~ msgstr "AM"
+
+#~ msgid "PM"
+#~ msgstr "PM"
+
+#~ msgid "%02d:%02d:%02d %s"
+#~ msgstr "%02d:%02d:%02d %s"
+
+#~ msgid "%02d:%02d %s"
+#~ msgstr "%02d:%02d %s"
+
+#~ msgid "%02d:%02d:%02d"
+#~ msgstr "%02d:%02d:%02d"
+
+#~ msgid "%02d:%02d"
+#~ msgstr "%02d:%02d"
+
+#~ msgid "%04d-%02d-%02d"
+#~ msgstr "%04d-%02d-%02d"
+
+#~ msgid "%u:%u:%u"
+#~ msgstr "%u:%u:%u"
+
+#~ msgid ""
+#~ "You are about to add %s as a revoker for %s. This operation cannot be "
+#~ "undone! Are you sure you want to continue?"
+#~ msgstr ""
+#~ "You are about to add %s as a revoker for %s. This operation cannot be "
+#~ "undone! Are you sure you want to continue?"
+
+#~ msgid "Couldn’t add revoker"
+#~ msgstr "Couldn’t add revoker"
+
+#~ msgid "Key Servers:"
+#~ msgstr "Key Servers:"
+
+#~ msgid "Shared Keys Near Me:"
+#~ msgstr "Shared Keys Near Me:"
+
+#~ msgid ""
+#~ "You have no personal PGP keys that can be used to sign a document or "
+#~ "message."
+#~ msgstr ""
+#~ "You have no personal PGP keys that can be used to sign a document or "
+#~ "message."
+
+#~ msgid "Choose Signing Key"
+#~ msgstr "Choose Signing Key"
+
+#~ msgid "_Sign message with key:"
+#~ msgstr "_Sign message with key:"
 
 #~ msgid ""
 #~ "Seahorse is a GNOME application for managing encryption keys. It also "
@@ -3380,9 +3311,6 @@ msgstr "Configuring Secure Shell Keys…"
 
 #~ msgid "Invalid key type for verifying: %s"
 #~ msgstr "Invalid key type for verifying: %s"
-
-#~ msgid "Invalid key id: %s"
-#~ msgstr "Invalid key id: %s"
 
 #~ msgid ""
 #~ "A list of key server URIs to search for remote PGP keys. In later "
@@ -4982,9 +4910,6 @@ msgstr "Configuring Secure Shell Keys…"
 
 #~ msgid "Key identifier"
 #~ msgstr "Key identifier"
-
-#~ msgid "Key creation date"
-#~ msgstr "Key creation date"
 
 #~ msgid "Length:"
 #~ msgstr "Length:"
