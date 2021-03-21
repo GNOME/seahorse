@@ -213,8 +213,10 @@ calc_markup (SeahorsePgpKey *self)
         g_string_append (result, text);
     }
 
+    g_string_append (result, "</span>");
+
 done:
-    g_string_append (result, "</span></span>");
+    g_string_append (result, "</span>");
     return g_string_free (result, FALSE);
 }
 
