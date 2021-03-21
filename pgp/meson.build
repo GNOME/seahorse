@@ -36,10 +36,12 @@ pgp_sources = files(
 )
 
 pgp_dependencies = [
+  config,
   glib_deps,
   gcr,
   gpgme_dep,
   common_dep,
+  libseahorse_dep,
 ]
 
 pgp_c_flags = [

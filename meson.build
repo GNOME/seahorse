@@ -161,6 +161,7 @@ if get_option('help')
   subdir('help')
 endif
 subdir('common')
+subdir('libseahorse')
 subdir('gkr')
 subdir('ssh')
 if get_option('pgp-support')
@@ -169,5 +170,4 @@ endif
 if get_option('pkcs11-support')
   subdir('pkcs11')
 endif
-subdir('libseahorse')
 subdir('src')
