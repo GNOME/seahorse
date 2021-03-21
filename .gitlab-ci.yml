@@ -4,6 +4,24 @@ variables:
   BUNDLE: 'seahorse.flatpak'
   GIT_SUBMODULE_STRATEGY: recursive
 
+stages:
+  - review
+  - test
+  - deploy
+
+style-check:
+  stage: review
+  script:
+    - ./.gitlab/ci/style-check.sh
+  artifacts:
+    expire_in: 1 week
+    name: "style-check-junit-report"
+    when: always
+    reports:
+      junit: style-check-junit-report.xml
+    paths:
+      - "style-check-junit-report.xml"
+
 flatpak:
   image: registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master
   variables:
