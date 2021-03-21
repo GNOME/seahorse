@@ -105,6 +105,10 @@ if get_option('hkp-support')
   test_names += 'hkp-source'
 endif
 
+if get_option('ldap-support')
+  test_names += 'ldap-source'
+endif
+
 foreach _test : test_names
   test_bin = executable(_test,
     files('test-@0@.c'.format(_test)),
