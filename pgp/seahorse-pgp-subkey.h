@@ -34,30 +34,30 @@ struct _SeahorsePgpSubkeyClass {
 
 SeahorsePgpSubkey*  seahorse_pgp_subkey_new               (void);
 
-guint               seahorse_pgp_subkey_get_index         (SeahorsePgpSubkey *self);
+unsigned int        seahorse_pgp_subkey_get_index         (SeahorsePgpSubkey *self);
 
 void                seahorse_pgp_subkey_set_index         (SeahorsePgpSubkey *self,
-                                                           guint index);
+                                                           unsigned int       index);
 
-const gchar*        seahorse_pgp_subkey_get_keyid         (SeahorsePgpSubkey *self);
+const char *        seahorse_pgp_subkey_get_keyid         (SeahorsePgpSubkey *self);
 
 void                seahorse_pgp_subkey_set_keyid         (SeahorsePgpSubkey *self,
-                                                           const gchar *keyid);
+                                                           const char        *keyid);
 
-guint               seahorse_pgp_subkey_get_flags         (SeahorsePgpSubkey *self);
+unsigned int        seahorse_pgp_subkey_get_flags         (SeahorsePgpSubkey *self);
 
 void                seahorse_pgp_subkey_set_flags         (SeahorsePgpSubkey *self,
-                                                           guint flags);
+                                                           unsigned int       flags);
 
-const gchar*        seahorse_pgp_subkey_get_algorithm     (SeahorsePgpSubkey *self);
+const char *        seahorse_pgp_subkey_get_algorithm     (SeahorsePgpSubkey *self);
 
 void                seahorse_pgp_subkey_set_algorithm     (SeahorsePgpSubkey *self,
-                                                           const gchar *algorithm);
+                                                           const char        *algorithm);
 
-guint               seahorse_pgp_subkey_get_length        (SeahorsePgpSubkey *self);
+unsigned int        seahorse_pgp_subkey_get_length        (SeahorsePgpSubkey *self);
 
 void                seahorse_pgp_subkey_set_length        (SeahorsePgpSubkey *self,
-                                                           guint index);
+                                                           unsigned int       index);
 
 char *              seahorse_pgp_subkey_get_usage         (SeahorsePgpSubkey *self);
 
@@ -76,8 +76,8 @@ const char *        seahorse_pgp_subkey_get_description   (SeahorsePgpSubkey *se
 void                seahorse_pgp_subkey_set_description   (SeahorsePgpSubkey *self,
                                                            const char        *description);
 
-char *              seahorse_pgp_subkey_calc_description  (const char *name,
-                                                           guint       index);
+char *              seahorse_pgp_subkey_calc_description  (const char   *name,
+                                                           unsigned int  index);
 
 const char *        seahorse_pgp_subkey_get_fingerprint   (SeahorsePgpSubkey *self);
 
