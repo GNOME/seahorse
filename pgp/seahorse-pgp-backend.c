@@ -445,7 +445,10 @@ seahorse_pgp_backend_add_remote (SeahorsePgpBackend   *self,
         /* Don't persist, so just immediately create a ServerSource */
         g_autoptr(SeahorseServerSource) ssrc = NULL;
         ssrc = seahorse_server_category_create_server (uri);
-        g_list_store_append (G_LIST_STORE (self->remotes), ssrc);
+        /* If the scheme of the uri is ldap, but ldap support is disabled
+         * in the build, ssrc will be NULL. */
+        if (ssrc)
+            g_list_store_append (G_LIST_STORE (self->remotes), ssrc);
     }
 }
 
