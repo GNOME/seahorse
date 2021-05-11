@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: seahorse 3.40.x\n"
+"Project-Id-Version: seahorse 4.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-03-06 10:56+0000\n"
-"PO-Revision-Date: 2021-03-13 16:07+0100\n"
+"POT-Creation-Date: 2021-04-11 17:29+0000\n"
+"PO-Revision-Date: 2021-05-11 13:46+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -26,7 +26,7 @@ msgstr "Egendefinert"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:101
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:100
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Avbryt"
@@ -58,8 +58,8 @@ msgstr "Velg dato fra en kalender"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:76
-#: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
+#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:73
+#: pgp/seahorse-gpgme-photos.c:260 pgp/seahorse-gpgme-photos.c:320
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
@@ -68,7 +68,7 @@ msgid "_Cancel"
 msgstr "A_vbryt"
 
 #. Delete item
-#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
+#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
 #: src/sidebar.vala:393
 msgid "_Delete"
 msgstr "_Slett"
@@ -284,9 +284,8 @@ msgid "Auto retrieve keys"
 msgstr "Hent nøkler automatisk"
 
 #: data/org.gnome.seahorse.gschema.xml:6
-#, fuzzy
 msgid "Whether or not keys should be automatically retrieved from key servers."
-msgstr "Hent nøkler fra nø_kkeltjenere automatisk."
+msgstr "Hvorvidt nøkler hentes fra nøkkeltjenere automatisk."
 
 #: data/org.gnome.seahorse.gschema.xml:10
 msgid "Auto publish keys"
@@ -294,7 +293,7 @@ msgstr "Publiser nøkler automatisk"
 
 #: data/org.gnome.seahorse.gschema.xml:11
 msgid "Whether or not modified keys should be automatically published."
-msgstr ""
+msgstr "Hvorvidt endrede nøkler skal publiseres automatisk."
 
 #: data/org.gnome.seahorse.gschema.xml:15
 msgid "Publish keys to this key server"
@@ -344,15 +343,15 @@ msgstr ""
 
 #: data/org.gnome.seahorse.manager.gschema.xml:16
 msgid "Width of the side pane"
-msgstr ""
+msgstr "Bredde på sidepanelet"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:17
 msgid "The default width of the side pane."
-msgstr ""
+msgstr "Forvalgt bredde på sidepanelet."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:21
 msgid "The keyrings chosen"
-msgstr ""
+msgstr "Valgte nøkkelringer"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:22
 msgid "The URIs of the keyrings chosen in the sidebar."
@@ -371,7 +370,7 @@ msgstr ""
 
 #: data/org.gnome.seahorse.manager.gschema.xml:34
 msgid "Show validity column"
-msgstr ""
+msgstr "Vis kolonne for gyldighet"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:35
 #: data/org.gnome.seahorse.manager.gschema.xml:40
@@ -398,7 +397,7 @@ msgstr "Bredde på vinduet"
 
 #: data/org.gnome.seahorse.window.gschema.xml:6
 msgid "Width (in pixels) of the window."
-msgstr ""
+msgstr "Bredde på vinduet i piksler."
 
 #: data/org.gnome.seahorse.window.gschema.xml:10
 msgid "Height of the window"
@@ -406,7 +405,7 @@ msgstr "Høyde på vinduet"
 
 #: data/org.gnome.seahorse.window.gschema.xml:11
 msgid "Height (in pixels) of the window."
-msgstr ""
+msgstr "Høyde på vinduet i piksler."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
 msgid "Seahorse"
@@ -432,7 +431,7 @@ msgstr ""
 "ditt slik at du ikke må skrive det hver gang, og sikkerhetskopiere nøkler og "
 "nøkkelring."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:146
+#: data/org.gnome.seahorse.Application.appdata.xml.in:171
 msgid "The GNOME Project"
 msgstr "GNOME prosjektet"
 
@@ -719,11 +718,6 @@ msgstr "Bytt passord"
 msgid "Set as default"
 msgstr "Sett som forvalgt"
 
-#: libseahorse/seahorse-widget.c:461
-#, c-format
-msgid "Could not display help: %s"
-msgstr "Kunne ikke vise hjelp: %s"
-
 #: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
 msgid "Add subkey to %s"
@@ -819,7 +813,7 @@ msgstr "Opprett ny bruker-ID"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Dekryptering feilet. Du har muligens ikke dekrypteringsnøkkelen."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
 msgid "The operation was cancelled"
 msgstr "Operasjonen ble avbrutt"
 
@@ -1021,7 +1015,7 @@ msgstr "GnuPG-nøkler"
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: katalog for forvalgt nøkkelring"
 
-#: pgp/seahorse-gpgme-photos.c:72
+#: pgp/seahorse-gpgme-photos.c:69
 #, c-format
 msgid ""
 "<big><b>The photo is too large</b></big>\n"
@@ -1030,15 +1024,15 @@ msgstr ""
 "<big><b>Bildet er for stort</b></big>\n"
 "Anbefalt størrelse for et bilde på nøkkelringen din er %d × %d piksler."
 
-#: pgp/seahorse-gpgme-photos.c:77
+#: pgp/seahorse-gpgme-photos.c:74
 msgid "_Don’t Resize"
 msgstr "_Ikke endre størrelse"
 
-#: pgp/seahorse-gpgme-photos.c:78
+#: pgp/seahorse-gpgme-photos.c:75
 msgid "_Resize"
 msgstr "End_re størrelse"
 
-#: pgp/seahorse-gpgme-photos.c:127
+#: pgp/seahorse-gpgme-photos.c:124
 #, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
@@ -1047,43 +1041,43 @@ msgstr ""
 "Dette er ikke en bildefil, eller så er det et ukjent bildeformat. Prøv å "
 "bruk et JPEG-bilde."
 
-#: pgp/seahorse-gpgme-photos.c:223
+#: pgp/seahorse-gpgme-photos.c:219
 msgid "All image files"
 msgstr "Alle bildefiler"
 
-#: pgp/seahorse-gpgme-photos.c:236
+#: pgp/seahorse-gpgme-photos.c:232
 msgid "All JPEG files"
 msgstr "Alle JPEG-filer"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:310
+#: pgp/seahorse-gpgme-photos.c:237 src/key-manager.vala:310
 msgid "All files"
 msgstr "Alle filer"
 
-#: pgp/seahorse-gpgme-photos.c:262
+#: pgp/seahorse-gpgme-photos.c:258
 msgid "Choose Photo to Add to Key"
 msgstr "Velg bilde som skal legges til nøkkelen"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:270
+#: pgp/seahorse-gpgme-photos.c:261 src/key-manager.vala:270
 msgid "_Open"
 msgstr "Å_pne"
 
-#: pgp/seahorse-gpgme-photos.c:284
+#: pgp/seahorse-gpgme-photos.c:280
 msgid "Couldn’t prepare photo"
 msgstr "Kunne ikke forberede bilde"
 
-#: pgp/seahorse-gpgme-photos.c:294 pgp/seahorse-gpgme-photos.c:297
+#: pgp/seahorse-gpgme-photos.c:290 pgp/seahorse-gpgme-photos.c:293
 msgid "Couldn’t add photo"
 msgstr "Kunne ikke legge til bilde"
 
-#: pgp/seahorse-gpgme-photos.c:295
+#: pgp/seahorse-gpgme-photos.c:291
 msgid "The file could not be loaded. It may be in an invalid format"
 msgstr "Filen kunne ikke bli lastet. Den kan være i et ugyldig format"
 
-#: pgp/seahorse-gpgme-photos.c:321
+#: pgp/seahorse-gpgme-photos.c:317
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "Er du sikker på at du vil fjerne det nåværende bildet fra din nøkkel?"
 
-#: pgp/seahorse-gpgme-photos.c:334
+#: pgp/seahorse-gpgme-photos.c:330
 msgid "Couldn’t delete photo"
 msgstr "Kunne ikke slette bilde"
 
@@ -1276,12 +1270,12 @@ msgstr "Ukjent"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:503
+#: pgp/seahorse-hkp-source.c:499
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr "Søket var ikke spesifikt nok. Server «%s» fant for mange nøkler."
 
-#: pgp/seahorse-hkp-source.c:507
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Kunne ikke kommunisere med tjener «%s»: %s"
@@ -1328,7 +1322,7 @@ msgstr ""
 msgid "Find Remote Keys"
 msgstr "Finn eksterne nøkler"
 
-#: pgp/seahorse-keyserver-search.ui:32
+#: pgp/seahorse-keyserver-search.ui:31
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -1336,35 +1330,35 @@ msgstr ""
 "Finn andres nøkler på internett. Disse nøklene kan så importeres i din "
 "lokale nøkkelring."
 
-#: pgp/seahorse-keyserver-search.ui:47
+#: pgp/seahorse-keyserver-search.ui:46
 msgid "_Search for keys containing: "
 msgstr "_Søk etter nøkler som inneholder:"
 
-#: pgp/seahorse-keyserver-search.ui:69
+#: pgp/seahorse-keyserver-search.ui:68
 msgid "Where to search:"
 msgstr "Hvor skal det søkes:"
 
-#: pgp/seahorse-keyserver-search.ui:115
+#: pgp/seahorse-keyserver-search.ui:114
 msgid "_Search"
 msgstr "_Søk"
 
-#: pgp/seahorse-keyserver-sync.c:71
+#: pgp/seahorse-keyserver-sync.c:70
 msgid "Couldn’t publish keys to server"
 msgstr "Kunne ikke publisere nøkler til tjener"
 
-#: pgp/seahorse-keyserver-sync.c:87
+#: pgp/seahorse-keyserver-sync.c:86
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Kunne ikke motta nøkler fra tjener: %s"
 
-#: pgp/seahorse-keyserver-sync.c:197
+#: pgp/seahorse-keyserver-sync.c:196
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d nøkkel er valgt for synkronisering</b>"
 msgstr[1] "<b>%d nøkler er valgt for synkronisering</b>"
 
-#: pgp/seahorse-keyserver-sync.c:305
+#: pgp/seahorse-keyserver-sync.c:304
 msgid "Synchronizing keys…"
 msgstr "Synkroniserer nøkler …"
 
@@ -1406,10 +1400,9 @@ msgid "Couldn’t communicate with %s: %s"
 msgstr "Kunne ikke kommunisere med «%s»: %s"
 
 #: pgp/seahorse-ldap-source.c:593
-#, fuzzy, c-format
-#| msgid "Couldn’t resolve address: %s"
+#, c-format
 msgid "Couldn’t resolve address %s"
-msgstr "Kunne ikke slå opp adresse: %s"
+msgstr "Kunne ikke slå opp adressen %s"
 
 #. Now that we've resolved our address, connect via IP
 #: pgp/seahorse-ldap-source.c:598
@@ -1442,11 +1435,11 @@ msgid_plural "(and %d others)"
 msgstr[0] "(og %d annen)"
 msgstr[1] "(og %d andre)"
 
-#: pgp/seahorse-pgp-key.c:606
+#: pgp/seahorse-pgp-key.c:608
 msgid "Personal PGP key"
 msgstr "Personlig PGP-nøkkel"
 
-#: pgp/seahorse-pgp-key.c:608
+#: pgp/seahorse-pgp-key.c:610
 msgid "PGP key"
 msgstr "PGP-nøkkel"
 
@@ -1667,7 +1660,7 @@ msgstr "Nøkkelnavn og signaturer"
 msgid "Primary"
 msgstr "Primær"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:162
+#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:168
 msgid "Sign"
 msgstr "Signer"
 
@@ -1820,23 +1813,23 @@ msgstr "Indiker tillit:"
 msgid "You _trust the owner:"
 msgstr "Du s_toler på eieren:"
 
-#: pgp/seahorse-pgp-subkey.c:161
+#: pgp/seahorse-pgp-subkey.c:167
 msgid "Encrypt"
 msgstr "Krypter"
 
-#: pgp/seahorse-pgp-subkey.c:163
+#: pgp/seahorse-pgp-subkey.c:169
 msgid "Certify"
 msgstr "Sertifiser"
 
-#: pgp/seahorse-pgp-subkey.c:164
+#: pgp/seahorse-pgp-subkey.c:170
 msgid "Authenticate"
 msgstr "Autentiser"
 
-#: pgp/seahorse-pgp-subkey.c:313
+#: pgp/seahorse-pgp-subkey.c:363
 msgid "Key"
 msgstr "Nøkkel"
 
-#: pgp/seahorse-pgp-subkey.c:318
+#: pgp/seahorse-pgp-subkey.c:368
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "Undernøkkel %d av %s"
