@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the seahorse package.
 #
 # Andraž Tori <andraz.tori1@guest.arnes.si>, 2000.
-# Matej Urbančič <mateju@svn.gnome.org>, 2007–2021.
+# Matej Urbančič <mateju@src.gnome.org>, 2007–2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-25 13:29+0000\n"
-"PO-Revision-Date: 2021-02-25 18:39+0100\n"
-"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
+"POT-Creation-Date: 2021-07-10 20:31+0000\n"
+"PO-Revision-Date: 2021-07-13 21:56+0200\n"
+"Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -32,7 +32,7 @@ msgstr "Po meri"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:130
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:100
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Prekliči"
@@ -53,19 +53,28 @@ msgstr "Ni mogoče izvoziti ključev"
 msgid "Couldn’t export data"
 msgstr "Ni mogoče izvoziti podatkov"
 
+#: common/datepicker.vala:55
+msgid "Enter the date directly"
+msgstr "Neposreden vnos datuma"
+
+#: common/datepicker.vala:62
+msgid "Select the date from a calendar"
+msgstr "Izbor datuma iz koledarja"
+
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
-#: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
-#: pgp/seahorse-keyserver-sync.ui:79 pkcs11/pkcs11-request.vala:55
+#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:73
+#: pgp/seahorse-gpgme-photos.c:260 pgp/seahorse-gpgme-photos.c:320
+#: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
+#: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
 #: src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "_Prekliči"
 
 #. Delete item
-#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
+#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
 #: src/sidebar.vala:393
 msgid "_Delete"
 msgstr "_Izbriši"
@@ -439,7 +448,7 @@ msgstr ""
 "šifrirnih fraz, kar olajša delo znotraj zagnane seje. Omogoča ustvarjanje "
 "varnostnih kopij ključev in celotnih zbirk ključev."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:146
+#: data/org.gnome.seahorse.Application.appdata.xml.in:171
 msgid "The GNOME Project"
 msgstr "Projekt GNOME"
 
@@ -638,7 +647,8 @@ msgstr "Dodaj geslo"
 msgid "_Keyring:"
 msgstr "_Zbirka ključev:"
 
-#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
+#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-gpgme-revoke-dialog.ui:44
+#: pgp/seahorse-revoke.ui:43
 msgid "_Description:"
 msgstr "_Opis:"
 
@@ -682,10 +692,10 @@ msgstr "Kopiraj"
 #. To translators: This is the noun not the verb.
 #: gkr/seahorse-gkr-item-properties.ui:113
 msgid "Use"
-msgstr "Uporabi"
+msgstr "Uporaba"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1324
+#: pgp/seahorse-pgp-key-properties.c:1329
 msgid "Type"
 msgstr "Vrsta"
 
@@ -711,7 +721,7 @@ msgstr "Izbriši geslo"
 msgid "Keyring properties"
 msgstr "Lastnosti zbirke ključev"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:887
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
 msgid "Name"
 msgstr "Ime"
 
@@ -727,284 +737,24 @@ msgstr "Spremeni geslo"
 msgid "Set as default"
 msgstr "Nastavi kot privzeto"
 
-#: libegg/egg-datetime.c:316
-msgid "Display flags"
-msgstr "Pokaži zastavice"
-
-#: libegg/egg-datetime.c:317
-msgid "Displayed date and/or time properties"
-msgstr "Prikazane lastnosti datuma in časa"
-
-#: libegg/egg-datetime.c:322
-msgid "Lazy mode"
-msgstr "Leni način"
-
-#: libegg/egg-datetime.c:323
-msgid "Lazy mode doesn’t normalize entered date and time values"
-msgstr "Leni način ne normalizira vnesenih vrednosti datuma in časa"
-
-#: libegg/egg-datetime.c:328
-msgid "Year"
-msgstr "Leto"
-
-#: libegg/egg-datetime.c:329
-msgid "Displayed year"
-msgstr "Prikazano leto"
-
-#: libegg/egg-datetime.c:334
-msgid "Month"
-msgstr "Mesec"
-
-#: libegg/egg-datetime.c:335
-msgid "Displayed month"
-msgstr "Prikazan mesec"
-
-#: libegg/egg-datetime.c:340
-msgid "Day"
-msgstr "Dan"
-
-#: libegg/egg-datetime.c:341
-msgid "Displayed day of month"
-msgstr "Prikazan dan v mesecu"
-
-#: libegg/egg-datetime.c:346
-msgid "Hour"
-msgstr "Ura"
-
-#: libegg/egg-datetime.c:347
-msgid "Displayed hour"
-msgstr "Prikazana ura"
-
-#: libegg/egg-datetime.c:352
-msgid "Minute"
-msgstr "Minuta"
-
-#: libegg/egg-datetime.c:353
-msgid "Displayed minute"
-msgstr "Prikazana minuta"
-
-#: libegg/egg-datetime.c:358
-msgid "Second"
-msgstr "Sekunda"
-
-#: libegg/egg-datetime.c:359
-msgid "Displayed second"
-msgstr "Prikazana sekunda"
-
-#: libegg/egg-datetime.c:364
-msgid "Lower limit year"
-msgstr "Spodnja meja leta"
-
-#: libegg/egg-datetime.c:365
-msgid "Year part of the lower date limit"
-msgstr "Leto kot spodnja omejitev"
-
-#: libegg/egg-datetime.c:370
-msgid "Upper limit year"
-msgstr "Zgornja meja leta"
-
-#: libegg/egg-datetime.c:371
-msgid "Year part of the upper date limit"
-msgstr "Leto kot zgornja omejitev"
-
-#: libegg/egg-datetime.c:376
-msgid "Lower limit month"
-msgstr "Spodnja meja meseca"
-
-#: libegg/egg-datetime.c:377
-msgid "Month part of the lower date limit"
-msgstr "Mesec kot spodnja omejitev"
-
-#: libegg/egg-datetime.c:382
-msgid "Upper limit month"
-msgstr "Zgornja meja meseca"
-
-#: libegg/egg-datetime.c:383
-msgid "Month part of the upper date limit"
-msgstr "Mesec kot zgornja omejitev"
-
-#: libegg/egg-datetime.c:388
-msgid "Lower limit day"
-msgstr "Spodnja meja dneva"
-
-#: libegg/egg-datetime.c:389
-msgid "Day of month part of the lower date limit"
-msgstr "Dan meseca kot spodnja omejitev"
-
-#: libegg/egg-datetime.c:394
-msgid "Upper limit day"
-msgstr "Zgornja meja dneva"
-
-#: libegg/egg-datetime.c:395
-msgid "Day of month part of the upper date limit"
-msgstr "Dan meseca kot zgornja omejitev"
-
-#: libegg/egg-datetime.c:400
-msgid "Lower limit hour"
-msgstr "Spodnja meja ure"
-
-#: libegg/egg-datetime.c:401
-msgid "Hour part of the lower time limit"
-msgstr "Ura kot spodnja omejitev časa"
-
-#: libegg/egg-datetime.c:406
-msgid "Upper limit hour"
-msgstr "Zgornja meja ure"
-
-#: libegg/egg-datetime.c:407
-msgid "Hour part of the upper time limit"
-msgstr "Ura kot zgornja omejitev časa"
-
-#: libegg/egg-datetime.c:412
-msgid "Lower limit minute"
-msgstr "Spodnja meja minute"
-
-#: libegg/egg-datetime.c:413
-msgid "Minute part of the lower time limit"
-msgstr "Minuta kot spodnja omejitev"
-
-#: libegg/egg-datetime.c:418
-msgid "Upper limit minute"
-msgstr "Zgornja meja minute"
-
-#: libegg/egg-datetime.c:419
-msgid "Minute part of the upper time limit"
-msgstr "Minuta kot zgornja omejitev"
-
-#: libegg/egg-datetime.c:424
-msgid "Lower limit second"
-msgstr "Spodnja meja sekunde"
-
-#: libegg/egg-datetime.c:425
-msgid "Second part of the lower time limit"
-msgstr "Sekunda kot spodnja omejitev"
-
-#: libegg/egg-datetime.c:430
-msgid "Upper limit second"
-msgstr "Zgornja meja sekunde"
-
-#: libegg/egg-datetime.c:431
-msgid "Second part of the upper time limit"
-msgstr "Sekunda kot zgornja omejitev"
-
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
-#.
-#: libegg/egg-datetime.c:473
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
-
-#: libegg/egg-datetime.c:495
-msgid "Date"
-msgstr "Datum"
-
-#: libegg/egg-datetime.c:495
-msgid "Enter the date directly"
-msgstr "Neposreden vnos datuma"
-
-#: libegg/egg-datetime.c:502
-msgid "Select Date"
-msgstr "Izbor datuma"
-
-#: libegg/egg-datetime.c:502
-msgid "Select the date from a calendar"
-msgstr "Izbor datuma iz koledarja"
-
-#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2203
-msgid "Time"
-msgstr "Čas"
-
-#: libegg/egg-datetime.c:520
-msgid "Enter the time directly"
-msgstr "Neposreden vnos časa"
-
-#: libegg/egg-datetime.c:527
-msgid "Select Time"
-msgstr "Izbor časa"
-
-#: libegg/egg-datetime.c:527
-msgid "Select the time from a list"
-msgstr "Izbor časa iz seznama"
-
-#. Translators: set this to anything else if you want to use a
-#. * 24 hour clock.
-#.
-#: libegg/egg-datetime.c:792
-msgid "24hr: no"
-msgstr "24hr: da"
-
-#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1264
-#: libegg/egg-datetime.c:1268
-msgid "AM"
-msgstr "dop"
-
-#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1265
-#: libegg/egg-datetime.c:1272
-msgid "PM"
-msgstr "pop"
-
-#. Translators: This is hh:mm:ss AM/PM.
-#: libegg/egg-datetime.c:806
-#, c-format
-msgid "%02d:%02d:%02d %s"
-msgstr "%02d:%02d:%02d %s"
-
-#. Translators: This is hh:mm AM/PM.
-#: libegg/egg-datetime.c:809
-#, c-format
-msgid "%02d:%02d %s"
-msgstr "%02d:%02d %s"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:813
-#, c-format
-msgid "%02d:%02d:%02d"
-msgstr "%02d:%02d:%02d"
-
-#. Translators: This is hh:mm.
-#: libegg/egg-datetime.c:816
-#, c-format
-msgid "%02d:%02d"
-msgstr "%02d:%02d"
-
-#. TODO: should handle other display modes as well...
-#. Translators: This is YYYY-MM-DD
-#: libegg/egg-datetime.c:1180
-#, c-format
-msgid "%04d-%02d-%02d"
-msgstr "%04d-%02d-%02d"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:1245
-#, c-format
-msgid "%u:%u:%u"
-msgstr "%u:%u:%u"
-
-#: libseahorse/seahorse-widget.c:461
-#, c-format
-msgid "Could not display help: %s"
-msgstr "Pomoči ni mogoče prikazati: %s"
-
-#: pgp/seahorse-gpgme-add-subkey.c:213
+#: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Dodaj podključ v %s"
 
-#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
+#: pgp/seahorse-gpgme-add-subkey.c:236 pgp/seahorse-gpgme-generate-dialog.c:83
 msgid "DSA (sign only)"
 msgstr "DSA (le podpis)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:247
+#: pgp/seahorse-gpgme-add-subkey.c:244
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (le šifriranje)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
+#: pgp/seahorse-gpgme-add-subkey.c:250 pgp/seahorse-gpgme-generate-dialog.c:84
 msgid "RSA (sign only)"
 msgstr "RSA (le podpis)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:259
+#: pgp/seahorse-gpgme-add-subkey.c:256
 msgid "RSA (encrypt only)"
 msgstr "RSA (le šifriranje)"
 
@@ -1024,15 +774,15 @@ msgstr "Dolžina ključa"
 msgid "Expiration Date"
 msgstr "Datum preteka"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:110
+#: pgp/seahorse-gpgme-add-subkey.ui:109
 msgid "Never E_xpires"
 msgstr "Nikoli _ne preteče"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:114
+#: pgp/seahorse-gpgme-add-subkey.ui:113
 msgid "If key never expires"
 msgstr "V kolikor ključ nikoli ne poteče"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:150
+#: pgp/seahorse-gpgme-add-subkey.ui:149
 msgid "Generate a new subkey"
 msgstr "Ustvari novi podključ"
 
@@ -1082,7 +832,7 @@ msgstr "Ustvari nov ID uporabnika"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Odšifriranje ni uspelo. Najverjetneje manjka odšifrirni ključ."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
 msgid "The operation was cancelled"
 msgstr "Opravilo je bilo preklicano."
 
@@ -1127,29 +877,29 @@ msgstr "Zaščiteni ključi PGP"
 msgid "PGP keys"
 msgstr "Ključi PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
+#: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:85
+#: pgp/seahorse-gpgme-generate-dialog.c:82
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:101
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "Ni mogoče ustvariti ključa PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:140
+#: pgp/seahorse-gpgme-generate-dialog.c:137
 msgid "Passphrase for New PGP Key"
 msgstr "Šifrirno geslo za nov ključ PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:141
+#: pgp/seahorse-gpgme-generate-dialog.c:138
 msgid "Enter the passphrase for your new key twice."
 msgstr "Dvakrat vnesite šifrirno geslo za vaš novi ključ."
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:153
+#: pgp/seahorse-gpgme-generate-dialog.c:150
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1163,11 +913,11 @@ msgstr ""
 "tipkanje, premikanje miške, zaganjanje in zapiranje\n"
 "programov in podobno. Na ta način se ustvarja naključnost."
 
-#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:155 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Ustvari ključ"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:182
+#: pgp/seahorse-gpgme-generate-dialog.c:179
 msgid "Name must be at least 5 characters long."
 msgstr "Najmanjša sprejemljiva dolžina imena je 5 znakov."
 
@@ -1200,15 +950,15 @@ msgstr "_Moč ključa (v bitih):"
 msgid "E_xpiration Date"
 msgstr "Datum _preteka"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:251
+#: pgp/seahorse-gpgme-generate-dialog.ui:255
 msgid "Ne_ver Expires"
 msgstr "_Nikoli ne preteče"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:292
+#: pgp/seahorse-gpgme-generate-dialog.ui:296
 msgid "C_reate"
 msgstr "Ustva_ri"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:299
+#: pgp/seahorse-gpgme-generate-dialog.ui:303
 msgid "Generate a new key"
 msgstr "Ustvari nov ključ"
 
@@ -1227,11 +977,11 @@ msgstr[1] "Ali zares želite trajno izbrisati %d ključ?"
 msgstr[2] "Ali zares želite trajno izbrisati %d ključa?"
 msgstr[3] "Ali zares želite trajno izbrisati %d ključe?"
 
-#: pgp/seahorse-gpgme-key-op.c:351
+#: pgp/seahorse-gpgme-key-op.c:362
 msgid "Wrong password"
 msgstr "Napačno geslo"
 
-#: pgp/seahorse-gpgme-key-op.c:351
+#: pgp/seahorse-gpgme-key-op.c:362
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "To je bil tretji poskus prijave z napačnim geslom. Poskusite znova."
 
@@ -1287,7 +1037,7 @@ msgstr "Ključi GnuPG"
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: privzeta mapa zbirke ključev"
 
-#: pgp/seahorse-gpgme-photos.c:72
+#: pgp/seahorse-gpgme-photos.c:69
 #, c-format
 msgid ""
 "<big><b>The photo is too large</b></big>\n"
@@ -1296,15 +1046,15 @@ msgstr ""
 "<big><b>Slika je prevelika</b></big>\n"
 "Priporočljiva velikost slike za ključ je %d x %d točk."
 
-#: pgp/seahorse-gpgme-photos.c:77
+#: pgp/seahorse-gpgme-photos.c:74
 msgid "_Don’t Resize"
 msgstr "Ne spremeni velikosti"
 
-#: pgp/seahorse-gpgme-photos.c:78
+#: pgp/seahorse-gpgme-photos.c:75
 msgid "_Resize"
 msgstr "_Spremeni velikost"
 
-#: pgp/seahorse-gpgme-photos.c:127
+#: pgp/seahorse-gpgme-photos.c:124
 #, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
@@ -1313,99 +1063,107 @@ msgstr ""
 "Ta datoteka ni slika ali pa je neprepoznavna oblika slike. Poskusite "
 "uporabiti sliko JPEG."
 
-#: pgp/seahorse-gpgme-photos.c:223
+#: pgp/seahorse-gpgme-photos.c:219
 msgid "All image files"
 msgstr "Vse slikovne datoteke"
 
-#: pgp/seahorse-gpgme-photos.c:236
+#: pgp/seahorse-gpgme-photos.c:232
 msgid "All JPEG files"
 msgstr "Vse datoteke JPEG"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:310
+#: pgp/seahorse-gpgme-photos.c:237 src/key-manager.vala:310
 msgid "All files"
 msgstr "Vse datoteke"
 
-#: pgp/seahorse-gpgme-photos.c:262
+#: pgp/seahorse-gpgme-photos.c:258
 msgid "Choose Photo to Add to Key"
 msgstr "Izbor slike kot del ključa"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:270
+#: pgp/seahorse-gpgme-photos.c:261 src/key-manager.vala:270
 msgid "_Open"
 msgstr "_Odpri"
 
-#: pgp/seahorse-gpgme-photos.c:284
+#: pgp/seahorse-gpgme-photos.c:280
 msgid "Couldn’t prepare photo"
 msgstr "Slike ni mogoče pripraviti"
 
-#: pgp/seahorse-gpgme-photos.c:294 pgp/seahorse-gpgme-photos.c:297
+#: pgp/seahorse-gpgme-photos.c:290 pgp/seahorse-gpgme-photos.c:293
 msgid "Couldn’t add photo"
 msgstr "Ni mogoče dodati slike"
 
-#: pgp/seahorse-gpgme-photos.c:295
-msgid "The file could not be loaded. It may be in an invalid format"
-msgstr "Datoteke ni mogoče naložiti. Najverjetneje je neveljavna oblika."
+#: pgp/seahorse-gpgme-photos.c:291
+msgid "The file could not be loaded. It may be in an invalid format."
+msgstr ""
+"Datoteke ni mogoče naložiti. Najverjetneje je zapisana v neveljavni obliki."
 
-#: pgp/seahorse-gpgme-photos.c:321
+#: pgp/seahorse-gpgme-photos.c:317
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "Ali zares želite odstraniti trenutno sliko iz vašega ključa?"
 
-#: pgp/seahorse-gpgme-photos.c:334
+#: pgp/seahorse-gpgme-photos.c:330
 msgid "Couldn’t delete photo"
 msgstr "Ni mogoče izbrisati slike"
 
-#: pgp/seahorse-gpgme-revoke.c:72
+#: pgp/seahorse-gpgme-revoke-dialog.c:81
 msgid "Couldn’t revoke subkey"
 msgstr "Ni mogoče preklicati podključa"
 
-#: pgp/seahorse-gpgme-revoke.c:93
+#: pgp/seahorse-gpgme-revoke-dialog.c:141
 #, c-format
 msgid "Revoke: %s"
 msgstr "Preklic: %s"
 
-#: pgp/seahorse-gpgme-revoke.c:104
+#: pgp/seahorse-gpgme-revoke-dialog.c:159
 msgid "No reason"
 msgstr "Brez razloga"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke-dialog.c:160
 msgid "No reason for revoking key"
 msgstr "Ni razloga za preklic ključa"
 
-#: pgp/seahorse-gpgme-revoke.c:111
+#: pgp/seahorse-gpgme-revoke-dialog.c:166
 msgid "Compromised"
 msgstr "Ogroženo"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke-dialog.c:167
 msgid "Key has been compromised"
 msgstr "Ključ je bil ogrožen"
 
-#: pgp/seahorse-gpgme-revoke.c:118
+#: pgp/seahorse-gpgme-revoke-dialog.c:173
 msgid "Superseded"
 msgstr "Zamenjano"
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke-dialog.c:174
 msgid "Key has been superseded"
 msgstr "Ključ je bil zamenjan"
 
-#: pgp/seahorse-gpgme-revoke.c:125
+#: pgp/seahorse-gpgme-revoke-dialog.c:180
 msgid "Not Used"
 msgstr "Ni uporabljeno"
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke-dialog.c:181
 msgid "Key is no longer used"
 msgstr "Ključ ni več v uporabi"
 
-#: pgp/seahorse-gpgme-revoke.c:163
-#, c-format
-msgid ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
-msgstr ""
-"Dodali boste %s kot preklicnika %s. Postopka ni mogoče povrniti. Ali zares "
-"želite nadaljevati?"
+#: pgp/seahorse-gpgme-revoke-dialog.ui:21 pgp/seahorse-revoke.ui:20
+msgid "_Reason:"
+msgstr "_Vzrok:"
 
-#: pgp/seahorse-gpgme-revoke.c:175
-msgid "Couldn’t add revoker"
-msgstr "Ni mogoče dodati preklicnika"
+#: pgp/seahorse-gpgme-revoke-dialog.ui:22 pgp/seahorse-revoke.ui:21
+msgid "Reason for revoking the key"
+msgstr "Razlog za preklic ključa"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:57 pgp/seahorse-revoke.ui:56
+msgid "Optional description of revocation"
+msgstr "Opombe o razlogih za preklic"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:89 pgp/seahorse-revoke.ui:88
+msgid "Revoke key"
+msgstr "Prekliči ključ"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:90 pgp/seahorse-revoke.ui:89
+msgid "Re_voke"
+msgstr "Pre_kliči"
 
 #: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
@@ -1424,7 +1182,7 @@ msgstr "Ni mogoče podpisati ključa"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: pgp/seahorse-gpgme-sign-dialog.c:281 pgp/seahorse-signer.c:62
+#: pgp/seahorse-gpgme-sign-dialog.c:281
 msgid "No keys usable for signing"
 msgstr "Za podpisovanje ni uporabnih ključev"
 
@@ -1533,13 +1291,13 @@ msgstr "Neznano"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:503
+#: pgp/seahorse-hkp-source.c:499
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "Iskanje ni bilo dovolj podrobno. Strežnik »%s« je našel preveč ključev."
 
-#: pgp/seahorse-hkp-source.c:507
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Ni se mogoče povezati s strežnikom »%s«: %s"
@@ -1561,16 +1319,16 @@ msgstr "Uvozi"
 msgid "Can’t import key"
 msgstr "Ni mogoče uvoziti ključa"
 
-#: pgp/seahorse-keyserver-results.c:240
+#: pgp/seahorse-keyserver-results.c:226
 msgid "Remote keys"
 msgstr "Oddaljeni ključi"
 
-#: pgp/seahorse-keyserver-results.c:242
+#: pgp/seahorse-keyserver-results.c:228
 #, c-format
 msgid "Remote keys containing “%s”"
 msgstr "Oddaljeni ključi, ki vsebujejo »%s«"
 
-#: pgp/seahorse-keyserver-results.c:357
+#: pgp/seahorse-keyserver-results.c:342
 msgid "The search for keys failed."
 msgstr "Iskanje ključev je spodletelo."
 
@@ -1586,7 +1344,7 @@ msgstr ""
 msgid "Find Remote Keys"
 msgstr "Poišči oddaljene ključe"
 
-#: pgp/seahorse-keyserver-search.ui:37
+#: pgp/seahorse-keyserver-search.ui:31
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -1594,36 +1352,28 @@ msgstr ""
 "Program poišče ključe drugih oseb na spletu. Ključe lahko po tem uvozite v "
 "lastno zbirko ključev."
 
-#: pgp/seahorse-keyserver-search.ui:52
+#: pgp/seahorse-keyserver-search.ui:46
 msgid "_Search for keys containing: "
 msgstr "_Iskanje ključa, ki vsebuje: "
 
-#: pgp/seahorse-keyserver-search.ui:74
+#: pgp/seahorse-keyserver-search.ui:68
 msgid "Where to search:"
-msgstr "Kje iskati:"
+msgstr "Išči na naslovih:"
 
-#: pgp/seahorse-keyserver-search.ui:103
-msgid "Key Servers:"
-msgstr "Strežniki ključev:"
-
-#: pgp/seahorse-keyserver-search.ui:117
-msgid "Shared Keys Near Me:"
-msgstr "Dostopni ključi:"
-
-#: pgp/seahorse-keyserver-search.ui:144
+#: pgp/seahorse-keyserver-search.ui:114
 msgid "_Search"
 msgstr "I_skanje"
 
-#: pgp/seahorse-keyserver-sync.c:71
+#: pgp/seahorse-keyserver-sync.c:70
 msgid "Couldn’t publish keys to server"
 msgstr "Ni mogoče objaviti ključev na strežniku"
 
-#: pgp/seahorse-keyserver-sync.c:87
+#: pgp/seahorse-keyserver-sync.c:86
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Ni mogoče pridobiti ključev s strežnika: %s"
 
-#: pgp/seahorse-keyserver-sync.c:197
+#: pgp/seahorse-keyserver-sync.c:196
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
@@ -1632,7 +1382,7 @@ msgstr[1] "<b>%d ključ je izbran za usklajevanje</b>"
 msgstr[2] "<b>%d ključa sta izbrana za usklajevanje</b>"
 msgstr[3] "<b>%d ključi so izbrani za usklajevanje</b>"
 
-#: pgp/seahorse-keyserver-sync.c:305
+#: pgp/seahorse-keyserver-sync.c:304
 msgid "Synchronizing keys…"
 msgstr "Poteka usklajevanje ključev …"
 
@@ -1712,154 +1462,154 @@ msgstr[1] "(in %d drug)"
 msgstr[2] "(in %d druga)"
 msgstr[3] "(in %d drugi)"
 
-#: pgp/seahorse-pgp-key.c:604
+#: pgp/seahorse-pgp-key.c:608
 msgid "Personal PGP key"
 msgstr "Osebni ključ PGP"
 
-#: pgp/seahorse-pgp-key.c:606
+#: pgp/seahorse-pgp-key.c:610
 msgid "PGP key"
 msgstr "Ključ PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:249
+#: pgp/seahorse-pgp-key-properties.c:250
 msgid "Couldn’t change primary user ID"
 msgstr "Ni mogoče zamenjati ID osnovnega uporabnika"
 
-#: pgp/seahorse-pgp-key-properties.c:284
+#: pgp/seahorse-pgp-key-properties.c:285
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Ali zares želite trajno izbrisati ID uporabnika »%s«?"
 
-#: pgp/seahorse-pgp-key-properties.c:293
+#: pgp/seahorse-pgp-key-properties.c:294
 msgid "Couldn’t delete user ID"
 msgstr "Ni mogoče izbrisati ID uporabnika"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1459
+#: pgp/seahorse-pgp-key-properties.c:370 pgp/seahorse-pgp-key-properties.c:1464
 msgid "[Unknown]"
 msgstr "[neznano]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:467 pgp/seahorse-pgp-key-properties.c:1677
+#: pgp/seahorse-pgp-key-properties.c:468 pgp/seahorse-pgp-key-properties.c:1682
 msgid "Name/Email"
 msgstr "Ime/Elektronski naslov"
 
-#: pgp/seahorse-pgp-key-properties.c:474
+#: pgp/seahorse-pgp-key-properties.c:475
 msgid "Signature ID"
 msgstr "ID podpisa"
 
-#: pgp/seahorse-pgp-key-properties.c:580
+#: pgp/seahorse-pgp-key-properties.c:581
 msgid "Couldn’t change primary photo"
 msgstr "Ni mogoče zamenjati osnovne slike"
 
-#: pgp/seahorse-pgp-key-properties.c:767
+#: pgp/seahorse-pgp-key-properties.c:768
 msgid "Error changing password"
 msgstr "Napaka spreminjanja gesla"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:814
+#: pgp/seahorse-pgp-key-properties.c:815
 msgid "(unknown)"
 msgstr "(neznano)"
 
-#: pgp/seahorse-pgp-key-properties.c:819
+#: pgp/seahorse-pgp-key-properties.c:820
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Ključ je pretekel na: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:845
+#: pgp/seahorse-pgp-key-properties.c:846
 #, c-format
 msgid "%s — Public key"
 msgstr "%s – javni ključ"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:848
+#: pgp/seahorse-pgp-key-properties.c:849
 #, c-format
 msgid "%s — Private key"
 msgstr "%s – osebni ključ"
 
-#: pgp/seahorse-pgp-key-properties.c:1035
+#: pgp/seahorse-pgp-key-properties.c:1036
 #, c-format
 msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgstr "Ali zares želite trajno izbrisati podključ %d ključa %s?"
 
-#: pgp/seahorse-pgp-key-properties.c:1043
+#: pgp/seahorse-pgp-key-properties.c:1044
 msgid "Couldn’t delete subkey"
 msgstr "Ni mogoče izbrisati podključa"
 
-#: pgp/seahorse-pgp-key-properties.c:1109
-#: pgp/seahorse-pgp-key-properties.c:1433
+#: pgp/seahorse-pgp-key-properties.c:1114
+#: pgp/seahorse-pgp-key-properties.c:1438
 msgid "Unable to change trust"
 msgstr "Ni mogoče zamenjati zaupanja"
 
-#: pgp/seahorse-pgp-key-properties.c:1121 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Ni mogoče izvoziti ključa"
 
-#: pgp/seahorse-pgp-key-properties.c:1279
-#: pgp/seahorse-pgp-key-properties.c:1367
+#: pgp/seahorse-pgp-key-properties.c:1284
+#: pgp/seahorse-pgp-key-properties.c:1372
 msgctxt "Expires"
 msgid "Never"
 msgstr "Nikoli"
 
-#: pgp/seahorse-pgp-key-properties.c:1321
+#: pgp/seahorse-pgp-key-properties.c:1326
 msgid "ID"
 msgstr "ID"
 
-#: pgp/seahorse-pgp-key-properties.c:1327
+#: pgp/seahorse-pgp-key-properties.c:1332
 msgid "Usage"
 msgstr "Uporaba"
 
-#: pgp/seahorse-pgp-key-properties.c:1330
+#: pgp/seahorse-pgp-key-properties.c:1335
 msgid "Created"
 msgstr "Ustvarjeno"
 
-#: pgp/seahorse-pgp-key-properties.c:1333
+#: pgp/seahorse-pgp-key-properties.c:1338
 msgid "Expires"
 msgstr "Preteče"
 
-#: pgp/seahorse-pgp-key-properties.c:1336
+#: pgp/seahorse-pgp-key-properties.c:1341
 msgid "Status"
 msgstr "Stanje"
 
-#: pgp/seahorse-pgp-key-properties.c:1339
+#: pgp/seahorse-pgp-key-properties.c:1344
 msgid "Strength"
 msgstr "Jakost"
 
-#: pgp/seahorse-pgp-key-properties.c:1358
+#: pgp/seahorse-pgp-key-properties.c:1363
 msgid "Revoked"
 msgstr "Preklicano"
 
-#: pgp/seahorse-pgp-key-properties.c:1360
+#: pgp/seahorse-pgp-key-properties.c:1365
 msgid "Expired"
 msgstr "Pretečeno"
 
-#: pgp/seahorse-pgp-key-properties.c:1362
+#: pgp/seahorse-pgp-key-properties.c:1367
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: pgp/seahorse-pgp-key-properties.c:1364
+#: pgp/seahorse-pgp-key-properties.c:1369
 msgid "Good"
 msgstr "Dobro"
 
-#: pgp/seahorse-pgp-key-properties.c:1680
+#: pgp/seahorse-pgp-key-properties.c:1685
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "ID ključa"
 
-#: pgp/seahorse-pgp-key-properties.c:1823
+#: pgp/seahorse-pgp-key-properties.c:1828
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Zaupam podpisom »%s« tudi pri drugih ključih"
 
-#: pgp/seahorse-pgp-key-properties.c:1830
+#: pgp/seahorse-pgp-key-properties.c:1835
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
 msgstr "Če ste prepričani, da je lastnik ključa »%s«, <i>podpišite</i> ključ:"
 
-#: pgp/seahorse-pgp-key-properties.c:1837
+#: pgp/seahorse-pgp-key-properties.c:1842
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1933,7 +1683,7 @@ msgstr "Imena ključev in podpisi"
 msgid "Primary"
 msgstr "Osnovni"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:162
+#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:168
 msgid "Sign"
 msgstr "Podpiši"
 
@@ -2086,60 +1836,26 @@ msgstr "Določi zaupanje:"
 msgid "You _trust the owner:"
 msgstr "_Zaupate lastniku:"
 
-#: pgp/seahorse-pgp-subkey.c:161
+#: pgp/seahorse-pgp-subkey.c:167
 msgid "Encrypt"
 msgstr "Šifriraj"
 
-#: pgp/seahorse-pgp-subkey.c:163
+#: pgp/seahorse-pgp-subkey.c:169
 msgid "Certify"
 msgstr "Potrdi"
 
-#: pgp/seahorse-pgp-subkey.c:164
+#: pgp/seahorse-pgp-subkey.c:170
 msgid "Authenticate"
 msgstr "Overi"
 
-#: pgp/seahorse-pgp-subkey.c:313
+#: pgp/seahorse-pgp-subkey.c:363
 msgid "Key"
 msgstr "Ključ"
 
-#: pgp/seahorse-pgp-subkey.c:318
+#: pgp/seahorse-pgp-subkey.c:368
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "Podključ %d od %s"
-
-#: pgp/seahorse-revoke.ui:35
-msgid "Reason for revoking the key"
-msgstr "Razlog za preklic ključa"
-
-#: pgp/seahorse-revoke.ui:40
-msgid "_Reason:"
-msgstr "_Vzrok:"
-
-#: pgp/seahorse-revoke.ui:70
-msgid "Optional description of revocation"
-msgstr "Opombe o razlogih za preklic"
-
-#: pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "Prekliči ključ"
-
-#: pgp/seahorse-revoke.ui:154
-msgid "Re_voke"
-msgstr "Pre_kliči"
-
-#: pgp/seahorse-signer.c:63
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr ""
-"Ni določenega osebnega ključa PGP za podpisovanje dokumentov in sporočil."
-
-#: pgp/seahorse-signer.ui:7
-msgid "Choose Signing Key"
-msgstr "Izbor ključa za podpis"
-
-#: pgp/seahorse-signer.ui:25
-msgid "_Sign message with key:"
-msgstr "_Podpis sporočila s ključem:"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2313,7 +2029,7 @@ msgstr "Različica programa"
 
 #: src/application.vala:173
 msgid "translator-credits"
-msgstr "Matej Urbančič <mateju@svn.gnome.org>"
+msgstr "Matej Urbančič <mateju@src.gnome.org>"
 
 #: src/application.vala:176
 msgid "Seahorse Project Homepage"
@@ -2803,6 +2519,213 @@ msgstr "Ni mogoče nastaviti ključa varne lupine na oddaljenem računalniku."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Poteka nastavljanje ključev varne lupine …"
+
+#~ msgid "Display flags"
+#~ msgstr "Pokaži zastavice"
+
+#~ msgid "Displayed date and/or time properties"
+#~ msgstr "Prikazane lastnosti datuma in časa"
+
+#~ msgid "Lazy mode"
+#~ msgstr "Leni način"
+
+#~ msgid "Lazy mode doesn’t normalize entered date and time values"
+#~ msgstr "Leni način ne normalizira vnesenih vrednosti datuma in časa"
+
+#~ msgid "Year"
+#~ msgstr "Leto"
+
+#~ msgid "Displayed year"
+#~ msgstr "Prikazano leto"
+
+#~ msgid "Month"
+#~ msgstr "Mesec"
+
+#~ msgid "Displayed month"
+#~ msgstr "Prikazan mesec"
+
+#~ msgid "Day"
+#~ msgstr "Dan"
+
+#~ msgid "Displayed day of month"
+#~ msgstr "Prikazan dan v mesecu"
+
+#~ msgid "Hour"
+#~ msgstr "Ura"
+
+#~ msgid "Displayed hour"
+#~ msgstr "Prikazana ura"
+
+#~ msgid "Minute"
+#~ msgstr "Minuta"
+
+#~ msgid "Displayed minute"
+#~ msgstr "Prikazana minuta"
+
+#~ msgid "Second"
+#~ msgstr "Sekunda"
+
+#~ msgid "Displayed second"
+#~ msgstr "Prikazana sekunda"
+
+#~ msgid "Lower limit year"
+#~ msgstr "Spodnja meja leta"
+
+#~ msgid "Year part of the lower date limit"
+#~ msgstr "Leto kot spodnja omejitev"
+
+#~ msgid "Upper limit year"
+#~ msgstr "Zgornja meja leta"
+
+#~ msgid "Year part of the upper date limit"
+#~ msgstr "Leto kot zgornja omejitev"
+
+#~ msgid "Lower limit month"
+#~ msgstr "Spodnja meja meseca"
+
+#~ msgid "Month part of the lower date limit"
+#~ msgstr "Mesec kot spodnja omejitev"
+
+#~ msgid "Upper limit month"
+#~ msgstr "Zgornja meja meseca"
+
+#~ msgid "Month part of the upper date limit"
+#~ msgstr "Mesec kot zgornja omejitev"
+
+#~ msgid "Lower limit day"
+#~ msgstr "Spodnja meja dneva"
+
+#~ msgid "Day of month part of the lower date limit"
+#~ msgstr "Dan meseca kot spodnja omejitev"
+
+#~ msgid "Upper limit day"
+#~ msgstr "Zgornja meja dneva"
+
+#~ msgid "Day of month part of the upper date limit"
+#~ msgstr "Dan meseca kot zgornja omejitev"
+
+#~ msgid "Lower limit hour"
+#~ msgstr "Spodnja meja ure"
+
+#~ msgid "Hour part of the lower time limit"
+#~ msgstr "Ura kot spodnja omejitev časa"
+
+#~ msgid "Upper limit hour"
+#~ msgstr "Zgornja meja ure"
+
+#~ msgid "Hour part of the upper time limit"
+#~ msgstr "Ura kot zgornja omejitev časa"
+
+#~ msgid "Lower limit minute"
+#~ msgstr "Spodnja meja minute"
+
+#~ msgid "Minute part of the lower time limit"
+#~ msgstr "Minuta kot spodnja omejitev"
+
+#~ msgid "Upper limit minute"
+#~ msgstr "Zgornja meja minute"
+
+#~ msgid "Minute part of the upper time limit"
+#~ msgstr "Minuta kot zgornja omejitev"
+
+#~ msgid "Lower limit second"
+#~ msgstr "Spodnja meja sekunde"
+
+#~ msgid "Second part of the lower time limit"
+#~ msgstr "Sekunda kot spodnja omejitev"
+
+#~ msgid "Upper limit second"
+#~ msgstr "Zgornja meja sekunde"
+
+#~ msgid "Second part of the upper time limit"
+#~ msgstr "Sekunda kot zgornja omejitev"
+
+#~ msgid "calendar:week_start:0"
+#~ msgstr "calendar:week_start:1"
+
+#~ msgid "Date"
+#~ msgstr "Datum"
+
+#~ msgid "Select Date"
+#~ msgstr "Izbor datuma"
+
+#~ msgid "Time"
+#~ msgstr "Čas"
+
+#~ msgid "Enter the time directly"
+#~ msgstr "Neposreden vnos časa"
+
+#~ msgid "Select Time"
+#~ msgstr "Izbor časa"
+
+#~ msgid "Select the time from a list"
+#~ msgstr "Izbor časa iz seznama"
+
+#~ msgid "24hr: no"
+#~ msgstr "24hr: da"
+
+#~ msgid "AM"
+#~ msgstr "dop"
+
+#~ msgid "PM"
+#~ msgstr "pop"
+
+#, c-format
+#~ msgid "%02d:%02d:%02d %s"
+#~ msgstr "%02d:%02d:%02d %s"
+
+#, c-format
+#~ msgid "%02d:%02d %s"
+#~ msgstr "%02d:%02d %s"
+
+#, c-format
+#~ msgid "%02d:%02d:%02d"
+#~ msgstr "%02d:%02d:%02d"
+
+#, c-format
+#~ msgid "%02d:%02d"
+#~ msgstr "%02d:%02d"
+
+#, c-format
+#~ msgid "%04d-%02d-%02d"
+#~ msgstr "%04d-%02d-%02d"
+
+#, c-format
+#~ msgid "%u:%u:%u"
+#~ msgstr "%u:%u:%u"
+
+#, c-format
+#~ msgid "Could not display help: %s"
+#~ msgstr "Pomoči ni mogoče prikazati: %s"
+
+#, c-format
+#~ msgid ""
+#~ "You are about to add %s as a revoker for %s. This operation cannot be "
+#~ "undone! Are you sure you want to continue?"
+#~ msgstr ""
+#~ "Dodali boste %s kot preklicnika %s. Postopka ni mogoče povrniti. Ali "
+#~ "zares želite nadaljevati?"
+
+#~ msgid "Couldn’t add revoker"
+#~ msgstr "Ni mogoče dodati preklicnika"
+
+#~ msgid "Key Servers:"
+#~ msgstr "Strežniki ključev:"
+
+#~ msgid "Shared Keys Near Me:"
+#~ msgstr "Dostopni ključi:"
+
+#~ msgid ""
+#~ "You have no personal PGP keys that can be used to sign a document or "
+#~ "message."
+#~ msgstr ""
+#~ "Ni določenega osebnega ključa PGP za podpisovanje dokumentov in sporočil."
+
+#~ msgid "Choose Signing Key"
+#~ msgstr "Izbor ključa za podpis"
+
+#~ msgid "_Sign message with key:"
+#~ msgstr "_Podpis sporočila s ključem:"
 
 #~ msgid "Add a new keyserver"
 #~ msgstr "Dodaj nov strežnik ključev"
