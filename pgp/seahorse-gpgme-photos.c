@@ -52,8 +52,8 @@ calc_scale (int *width, int *height)
     /* Keep aspect ratio, and don't squash large aspect ratios
      * unnecessarily. */
     ratio = imgpx / recpx;
-    *height = ((gdouble)(*height)) / ratio;
-    *width = ((gdouble)(*width)) / ratio;
+    *height = ((double) (*height)) / ratio;
+    *width = ((double) (*width)) / ratio;
     return TRUE;
 }
 
