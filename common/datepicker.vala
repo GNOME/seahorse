@@ -72,6 +72,7 @@ public class Seahorse.DatePicker : Gtk.Box {
         this.calendar.show_day_names = true;
         this.calendar.show_heading = true;
         this.calendar.day_selected.connect(on_calendar_day_selected);
+        this.calendar.day_selected_double_click.connect(on_calendar_day_selected_double_click);
         this.calendar_popover.add(this.calendar);
     }
 
@@ -101,6 +102,9 @@ public class Seahorse.DatePicker : Gtk.Box {
         calendar.get_date(out y, out m, out d);
         // Note: GtkCalendar's months are [0,11] while GDateTime uses [1,12]
         this.datetime = new DateTime.utc((int) y, (int) m + 1, (int) d, 0, 0, 0);
+    }
+
+    private void on_calendar_day_selected_double_click(Gtk.Calendar calendar) {
         this.calendar_popover.popdown();
     }
 }
