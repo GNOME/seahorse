@@ -161,7 +161,7 @@ typedef struct _Binding {
 	SeahorseTransform transform;
 	gboolean processing;
 
-	gint references;
+	int references;
 } Binding;
 
 static void binding_unref (Binding *binding);

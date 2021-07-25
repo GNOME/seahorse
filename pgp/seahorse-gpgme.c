@@ -291,14 +291,14 @@ typedef struct {
 	gboolean busy;
 	GList *watches;
 	GCancellable *cancellable;
-	gint cancelled_sig;
+	int cancelled_sig;
 	gboolean finished;
 	gpgme_error_t status;
 } SeahorseGpgmeGSource;
 
 static gboolean
 seahorse_gpgme_gsource_prepare (GSource *gsource,
-                                gint *timeout)
+                                int *timeout)
 {
 	SeahorseGpgmeGSource *gpgme_gsource = (SeahorseGpgmeGSource *)gsource;
 

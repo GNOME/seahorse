@@ -45,7 +45,7 @@ main (int argc, char* argv[])
 	const gchar *argument;
 	gchar *message;
 	const gchar *flags;
-	gint result;
+	int result;
 	const gchar *pass;
 	gulong xid;
 	gssize len;

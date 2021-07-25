@@ -235,7 +235,7 @@ seahorse_util_write_file_private (const gchar* filename, const gchar* contents, 
  * Returns: if source of k1<k2 it returns -1,
  *          1 will be returned  if k1>k2. If the sources are equal it returns 0
  */
-static gint
+static int
 sort_objects_by_place (GObject *k1,
                        GObject *k2)
 {

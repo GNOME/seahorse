@@ -317,7 +317,7 @@ on_uids_revoke (GSimpleAction *action, GVariant *param, gpointer user_data)
 {
     /* TODO: */
 /*    SeahorseObject *skey;
-    gint index;
+    int index;
     Glist *keys = NULL;
 
     skey = self->key;
@@ -340,7 +340,7 @@ static void
 update_names (GtkTreeSelection *selection, SeahorsePgpKeyProperties *self)
 {
     SeahorsePgpUid *uid = names_get_selected_uid (self);
-    gint index = -1;
+    int index = -1;
 
     if (uid && SEAHORSE_GPGME_IS_UID (uid))
         index = seahorse_gpgme_uid_get_gpgme_index (SEAHORSE_GPGME_UID (uid));
@@ -499,8 +499,8 @@ static GtkTargetEntry target_list[] = {
 static void
 on_pgp_owner_photo_drag_received (GtkWidget *widget,
                                   GdkDragContext *context,
-                                  gint x,
-                                  gint y,
+                                  int x,
+                                  int y,
                                   GtkSelectionData *sel_data,
                                   guint target_type,
                                   guint time,
@@ -508,7 +508,7 @@ on_pgp_owner_photo_drag_received (GtkWidget *widget,
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     gboolean dnd_success = FALSE;
-    gint len = 0;
+    int len = 0;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
 
@@ -1093,7 +1093,7 @@ static void
 on_pgp_details_trust_changed (GtkComboBox *selection, gpointer user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    gint trust;
+    int trust;
     GtkTreeModel *model;
     GtkTreeIter iter;
 
@@ -1533,7 +1533,7 @@ on_pgp_trusted_toggled (GtkToggleButton *toggle, GtkTreeModelFilter *filter)
     /* Set flag on the store */
     GtkTreeModel *model = gtk_tree_model_filter_get_model (filter);
     g_object_set_data (G_OBJECT (model), "only-trusted",
-                GINT_TO_POINTER (gtk_toggle_button_get_active (toggle)));
+                       GINT_TO_POINTER (gtk_toggle_button_get_active (toggle)));
     gtk_tree_model_filter_refilter (filter);
 }
 

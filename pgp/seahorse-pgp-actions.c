@@ -67,7 +67,7 @@ on_remote_find (GSimpleAction *action,
   SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
   SeahorseCatalog *catalog = NULL;
   g_autoptr(SeahorseKeyserverSearch) search_dialog = NULL;
-  gint response;
+  int response;
   g_autofree gchar *search_text = NULL;
 
   /* Make a new "Find remote keys" dialog */

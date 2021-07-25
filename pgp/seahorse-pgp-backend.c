@@ -477,7 +477,7 @@ seahorse_pgp_backend_remove_remote (SeahorsePgpBackend *self,
 }
 
 typedef struct {
-    gint num_searches;
+    int num_searches;
 } search_remote_closure;
 
 static void
@@ -573,7 +573,7 @@ seahorse_pgp_backend_search_remote_finish (SeahorsePgpBackend *self,
 }
 
 typedef struct {
-    gint num_transfers;
+    int num_transfers;
 } transfer_closure;
 
 static void
@@ -730,7 +730,7 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
     SeahorseGpgmeKey *key;
     SeahorseObject *object;
     g_autoptr(GPtrArray) todiscover = NULL;
-    gint i;
+    int i;
 
     self = self ? self : seahorse_pgp_backend_get ();
     g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);

@@ -236,7 +236,7 @@ seahorse_gpgme_exporter_add_object (SeahorseExporter *exporter,
 
 typedef struct {
     GPtrArray *keyids;
-    gint at;
+    int at;
     gpgme_data_t data;
     gpgme_ctx_t gctx;
     GMemoryOutputStream *output;
@@ -272,10 +272,10 @@ on_keyring_export_complete (gpgme_error_t gerr,
         seahorse_progress_end (g_task_get_cancellable (task),
                                closure->keyids->pdata[closure->at]);
 
-    g_assert (closure->at < (gint)closure->keyids->len);
+    g_assert (closure->at < (int) closure->keyids->len);
     closure->at++;
 
-    if (closure->at == (gint)closure->keyids->len) {
+    if (closure->at == (int) closure->keyids->len) {
         g_task_return_pointer (task, g_steal_pointer (&closure->output), g_object_unref);
         return FALSE; /* don't run this again */
     }

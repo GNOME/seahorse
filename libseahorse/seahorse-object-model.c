@@ -47,7 +47,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 struct _SeahorseObjectModel {
     GtkTreeStore parent;
     GHashTable *rows;
-    gint data_column;
+    int data_column;
 };
 
 G_DEFINE_TYPE (SeahorseObjectModel, seahorse_object_model, GTK_TYPE_TREE_STORE);
@@ -264,7 +264,7 @@ seahorse_object_model_class_init (SeahorseObjectModelClass *klass)
 
 
 SeahorseObjectModel*
-seahorse_object_model_new (gint n_columns, GType *types)
+seahorse_object_model_new (int n_columns, GType *types)
 {
     SeahorseObjectModel *model;
 
@@ -275,7 +275,7 @@ seahorse_object_model_new (gint n_columns, GType *types)
 }
 
 void
-seahorse_object_model_set_column_types (SeahorseObjectModel *self, gint n_columns,
+seahorse_object_model_set_column_types (SeahorseObjectModel *self, int n_columns,
                                      GType *types)
 {
     GType *itypes;

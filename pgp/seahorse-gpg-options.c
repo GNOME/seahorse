@@ -184,7 +184,7 @@ parse_home_directory (gpgme_engine_info_t engine, GError **err)
     gchar *serr = NULL;
     gchar *t;
     gchar *x;
-    gint status;
+    int status;
     gboolean b;
 
     g_assert (engine);

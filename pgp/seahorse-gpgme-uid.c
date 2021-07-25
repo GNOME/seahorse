@@ -42,7 +42,7 @@ struct _SeahorseGpgmeUid {
     gpgme_key_t pubkey;         /* The public key that this uid is part of */
     gpgme_user_id_t userid;     /* The userid referred to */
     guint gpgme_index;          /* The GPGME index of the UID */
-    gint actual_index;          /* The actual index of this UID */
+    int actual_index;           /* The actual index of this UID */
 };
 
 G_DEFINE_TYPE (SeahorseGpgmeUid, seahorse_gpgme_uid, SEAHORSE_PGP_TYPE_UID);
@@ -133,7 +133,7 @@ seahorse_gpgme_uid_set_userid (SeahorseGpgmeUid *self, gpgme_user_id_t userid)
     GObject *obj;
     gpgme_user_id_t uid;
     gchar *string;
-    gint index, i;
+    int index, i;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_UID (self));
     g_return_if_fail (userid);

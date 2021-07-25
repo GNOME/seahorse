@@ -148,8 +148,8 @@ typedef struct {
 	SeahorseGpgmeKeyring *keyring;
 	gpgme_ctx_t gctx;
 	GHashTable *checks;
-	gint parts;
-	gint loaded;
+	int parts;
+	int loaded;
 } keyring_list_closure;
 
 static void
@@ -319,7 +319,7 @@ on_keyring_list_cancelled (GCancellable *cancellable,
 static void
 seahorse_gpgme_keyring_list_async (SeahorseGpgmeKeyring *self,
                                    const gchar **patterns,
-                                   gint parts,
+                                   int parts,
                                    gboolean secret,
                                    GCancellable *cancellable,
                                    GAsyncReadyCallback callback,
@@ -467,7 +467,7 @@ on_keyring_public_list_complete (GObject *source,
 static void
 seahorse_gpgme_keyring_load_full_async (SeahorseGpgmeKeyring *self,
                                         const gchar **patterns,
-                                        gint parts,
+                                        int parts,
                                         GCancellable *cancellable,
                                         GAsyncReadyCallback callback,
                                         gpointer user_data)
@@ -601,7 +601,7 @@ on_keyring_import_complete (gpgme_error_t gerr, gpointer user_data)
 	gpgme_import_status_t import;
 	GError *error = NULL;
 	const gchar *msg;
-	gint i;
+	int i;
 
 	if (seahorse_gpgme_propagate_error (gerr, &error)) {
 		g_task_return_error (task, g_steal_pointer (&error));

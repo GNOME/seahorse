@@ -28,11 +28,11 @@ G_DECLARE_FINAL_TYPE (SeahorseObjectModel, seahorse_object_model,
                       SEAHORSE, OBJECT_MODEL,
                       GtkTreeStore)
 
-SeahorseObjectModel*   seahorse_object_model_new                  (gint n_columns,
+SeahorseObjectModel*   seahorse_object_model_new                  (int n_columns,
                                                                    GType *types);
 
 void                seahorse_object_model_set_column_types        (SeahorseObjectModel *self,
-                                                                   gint n_columns,
+                                                                   int n_columns,
                                                                    GType *types);
 
 void                seahorse_object_model_set_row_object          (SeahorseObjectModel *self,

@@ -439,7 +439,7 @@ get_send_result (const char *response)
  * Returns: FALSE if no key is contained, TRUE else
  */
 static gboolean
-detect_key (const gchar *text, gint len, const gchar **start, const gchar **end)
+detect_key (const char *text, int len, const char **start, const char **end)
 {
     const gchar *t;
 
@@ -520,7 +520,7 @@ typedef struct {
     GCancellable *cancellable;
     gulong cancelled_sig;
     SoupSession *session;
-    gint requests;
+    int requests;
     GcrSimpleCollection *results;
 } source_search_closure;
 
@@ -655,7 +655,7 @@ typedef struct {
     GCancellable *cancellable;
     gulong cancelled_sig;
     SoupSession *session;
-    gint requests;
+    int requests;
 } source_import_closure;
 
 static void
@@ -802,7 +802,7 @@ typedef struct {
     GCancellable *cancellable;
     gulong cancelled_sig;
     SoupSession *session;
-    gint requests;
+    int requests;
 } ExportClosure;
 
 static void
