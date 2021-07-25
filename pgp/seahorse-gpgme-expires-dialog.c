@@ -63,7 +63,7 @@ seahorse_gpgme_expires_dialog_response (GtkDialog *dialog, int response)
         g_autoptr(GDateTime) now = NULL;
 
         gtk_calendar_get_date (GTK_CALENDAR (self->calendar), &y, &m, &d);
-        expires = g_date_time_new_utc (y, m, d, 0, 0, 0);
+        expires = g_date_time_new_utc (y, m + 1, d, 0, 0, 0);
         now = g_date_time_new_now_utc ();
 
         if (g_date_time_compare (expires, now) <= 0) {
@@ -166,7 +166,7 @@ seahorse_gpgme_expires_dialog_constructed (GObject *obj)
         gtk_widget_set_sensitive (self->calendar, TRUE);
 
         g_date_time_get_ymd (expires, &y, &m, &d);
-        gtk_calendar_select_month (GTK_CALENDAR (self->calendar), m, y);
+        gtk_calendar_select_month (GTK_CALENDAR (self->calendar), m - 1, y);
         gtk_calendar_select_day (GTK_CALENDAR (self->calendar), d);
     }
 }
