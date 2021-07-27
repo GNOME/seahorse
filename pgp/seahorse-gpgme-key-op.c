@@ -1376,6 +1376,7 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey    *pkey,
     gpgme_key_t key;
     const char *algo;
     g_autofree char *algo_full = NULL;
+    int64_t expires_ts;
     g_autoptr(GSource) gsource = NULL;
     unsigned int flags = 0;
 
@@ -1403,8 +1404,12 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey    *pkey,
     algo_full = g_strdup_printf ("%s%u", algo, length);
 
     /* 0 means "no expire" for us (GPGME picks a default otherwise) */
-    if (expires == 0)
+    if (expires) {
+        expires_ts = g_date_time_to_unix (expires);
+    } else {
+        expires_ts = 0;
         flags |= GPGME_CREATE_NOEXPIRE;
+    }
 
     /* Add usage flags */
     switch (type) {
@@ -1423,7 +1428,7 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey    *pkey,
                                             key,
                                             algo_full,
                                             0,
-                                            g_date_time_to_unix (expires),
+                                            expires_ts,
                                             flags);
     }
 

@@ -991,7 +991,7 @@ on_subkeys_add (GSimpleAction *action, GVariant *param, gpointer user_data)
     int response;
     SeahorseKeyEncType type;
     guint length;
-    g_autoptr(GDateTime) expires = NULL;
+    GDateTime *expires;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
 
