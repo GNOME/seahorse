@@ -280,7 +280,7 @@ realize_subkeys (SeahorseGpgmeKey *self)
         for (gsubkey = self->pubkey->subkeys; gsubkey; gsubkey = gsubkey->next) {
             g_autoptr(SeahorseGpgmeSubkey) subkey = NULL;
 
-            subkey = seahorse_gpgme_subkey_new (self->pubkey, gsubkey);
+            subkey = seahorse_gpgme_subkey_new (self, gsubkey);
             g_ptr_array_add (results, g_steal_pointer (&subkey));
         }
     }

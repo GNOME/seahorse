@@ -922,156 +922,38 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkExpander" id="subkey-expander">
+                  <object class="GtkBox" id="subkeys_container">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="expanded">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="orientation">horizontal</property>
                         <child>
-                          <object class="GtkBox">
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
-                            <property name="margin">12</property>
-                            <child>
-                              <object class="GtkButton" id="details-add-button">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="border_width">6</property>
-                                <property name="action-name">props.subkeys.add</property>
-                                <child>
-                                  <object class="GtkBox">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">horizontal</property>
-                                    <property name="halign">center</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <object class="GtkImage">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-add</property>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Add</property>
-                                        <property name="use_underline">True</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="details-date-button">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="border_width">6</property>
-                                <property name="action-name">props.subkeys.change-expires</property>
-                                <child>
-                                  <object class="GtkBox">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">horizontal</property>
-                                    <property name="halign">center</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <object class="GtkImage">
-                                        <property name="visible">True</property>
-                                        <property name="icon_name">x-office-calendar</property>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Expire</property>
-                                        <property name="use_underline">True</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="details-revoke-button">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="border_width">6</property>
-                                <property name="action-name">props.subkeys.revoke</property>
-                                <child>
-                                  <object class="GtkBox">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">horizontal</property>
-                                    <property name="halign">center</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <object class="GtkImage">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-close</property>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Revoke</property>
-                                        <property name="use_underline">True</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="details-delete-button">
-                                <property name="label">gtk-delete</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="border_width">6</property>
-                                <property name="use_stock">True</property>
-                                <property name="action-name">props.subkeys.delete</property>
-                              </object>
-                            </child>
+                            <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Subkeys</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkScrolledWindow">
+                          <object class="GtkButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="hscrollbar_policy">automatic</property>
-                            <property name="vscrollbar_policy">automatic</property>
-                            <property name="shadow_type">in</property>
-                            <child>
-                              <object class="GtkTreeView" id="details-subkey-tree">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                              </object>
-                            </child>
+                            <property name="receives_default">False</property>
+                            <property name="action-name">props.subkeys.add</property>
+                            <property name="use-underline">True</property>
+                            <property name="label" translatable="yes">_Add subkey</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
-                    <child type="label">
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Subkeys</property>
-                        <property name="use_underline">True</property>
-                        <attributes>
-                         <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
                   </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
               </object>
             </child>

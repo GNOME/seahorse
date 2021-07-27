@@ -380,6 +380,7 @@ seahorse_pgp_key_add_subkey (SeahorsePgpKey    *self,
             return;
     }
 
+    seahorse_pgp_subkey_set_parent_key (subkey, self);
     g_list_store_append (G_LIST_STORE (priv->subkeys), subkey);
 }
 

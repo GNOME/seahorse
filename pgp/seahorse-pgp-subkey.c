@@ -29,6 +29,7 @@
 
 enum {
     PROP_0,
+    PROP_PARENT_KEY,
     PROP_INDEX,
     PROP_KEYID,
     PROP_FLAGS,
@@ -43,6 +44,7 @@ enum {
 static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
 typedef struct _SeahorsePgpSubkeyPrivate {
+    SeahorsePgpKey *parent_key;
     unsigned int index;
     char *keyid;
     unsigned int flags;
@@ -55,6 +57,28 @@ typedef struct _SeahorsePgpSubkeyPrivate {
 } SeahorsePgpSubkeyPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (SeahorsePgpSubkey, seahorse_pgp_subkey, G_TYPE_OBJECT);
+
+SeahorsePgpKey *
+seahorse_pgp_subkey_get_parent_key (SeahorsePgpSubkey *self)
+{
+    SeahorsePgpSubkeyPrivate *priv = seahorse_pgp_subkey_get_instance_private (self);
+
+    g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), NULL);
+    return priv->parent_key;
+}
+
+void
+seahorse_pgp_subkey_set_parent_key (SeahorsePgpSubkey *self,
+                                    SeahorsePgpKey    *parent_key)
+{
+    SeahorsePgpSubkeyPrivate *priv = seahorse_pgp_subkey_get_instance_private (self);
+
+    g_return_if_fail (SEAHORSE_PGP_IS_SUBKEY (self));
+    g_return_if_fail (SEAHORSE_PGP_IS_KEY (parent_key));
+
+    priv->parent_key = parent_key;
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_PARENT_KEY]);
+}
 
 unsigned int
 seahorse_pgp_subkey_get_index (SeahorsePgpSubkey *self)
@@ -158,39 +182,61 @@ seahorse_pgp_subkey_set_length (SeahorsePgpSubkey *self, unsigned int length)
 char *
 seahorse_pgp_subkey_get_usage (SeahorsePgpSubkey *self)
 {
-    typedef struct {
-        unsigned int flag;
-        const char *name;
-    } FlagNames;
-
-    const FlagNames flag_names[] = {
-        { SEAHORSE_FLAG_CAN_ENCRYPT,      N_("Encrypt") },
-        { SEAHORSE_FLAG_CAN_SIGN,         N_("Sign") },
-        { SEAHORSE_FLAG_CAN_CERTIFY,      N_("Certify") },
-        { SEAHORSE_FLAG_CAN_AUTHENTICATE, N_("Authenticate") }
-    };
-
-    SeahorsePgpSubkeyPrivate *priv = seahorse_pgp_subkey_get_instance_private (self);
-    GString *str;
-    gboolean previous;
-    unsigned int i;
+    g_auto(GStrv) usages = NULL;
 
     g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), NULL);
 
-    str = g_string_new (NULL);
-    previous = FALSE;
+    usages = seahorse_pgp_subkey_get_usages (self, NULL);
+    return g_strjoinv (", ", usages);
+}
 
-    for (i = 0; i < G_N_ELEMENTS (flag_names); i++) {
+/**
+ * seahorse_pgp_subkey_get_usages:
+ * @self: A #SeahorsePgpSubkey
+ * @decriptions: (transfer full) (array zero-terminated=1) (optional):
+ *               The descriptions of the subkey's usages
+ *
+ * Returns: (transfer full) (array zero-terminated=1): the subkey's usages,
+ * for example: { "Encrypt" , "Sign" , "Certify", %NULL }
+ */
+char **
+seahorse_pgp_subkey_get_usages (SeahorsePgpSubkey *self, char ***descriptions)
+{
+    typedef struct {
+        unsigned int flag;
+        const char *name;
+        const char *description;
+    } FlagNames;
+
+    const FlagNames flag_names[] = {
+        { SEAHORSE_FLAG_CAN_ENCRYPT, N_("Encrypt"), N_("This subkey can be used for encryption") },
+        { SEAHORSE_FLAG_CAN_SIGN, N_("Sign"), N_("This subkey can be used to create data signatures") },
+        { SEAHORSE_FLAG_CAN_CERTIFY, N_("Certify"), N_("This subkey can be used to create certificates") },
+        { SEAHORSE_FLAG_CAN_AUTHENTICATE, N_("Authenticate"), N_("This subkey can be used for authentication") }
+    };
+
+    SeahorsePgpSubkeyPrivate *priv = seahorse_pgp_subkey_get_instance_private (self);
+    g_autoptr(GPtrArray) names = NULL, descs = NULL;
+
+    g_return_val_if_fail (SEAHORSE_PGP_IS_SUBKEY (self), NULL);
+
+    names = g_ptr_array_new_with_free_func (g_free);
+    descs = g_ptr_array_new_with_free_func (g_free);
+
+    for (unsigned i = 0; i < G_N_ELEMENTS (flag_names); i++) {
         if (priv->flags & flag_names[i].flag) {
-            if (previous)
-                g_string_append (str, ", ");
-
-            previous = TRUE;
-            g_string_append (str, _(flag_names[i].name));
+            g_ptr_array_add (names, g_strdup (_(flag_names[i].name)));
+            g_ptr_array_add (descs, g_strdup (_(flag_names[i].description)));
         }
     }
 
-    return g_string_free (str, FALSE);
+    g_ptr_array_add (names, NULL);
+    g_ptr_array_add (descs, NULL);
+
+    if (descriptions)
+        *descriptions = (char**) g_ptr_array_free (g_steal_pointer (&descs), FALSE);
+
+    return (char **) g_ptr_array_free (g_steal_pointer (&names), FALSE);
 }
 
 /**
@@ -413,6 +459,9 @@ seahorse_pgp_subkey_get_property (GObject      *object,
     SeahorsePgpSubkey *self = SEAHORSE_PGP_SUBKEY (object);
 
     switch (prop_id) {
+    case PROP_PARENT_KEY:
+        g_value_set_object (value, seahorse_pgp_subkey_get_parent_key (self));
+        break;
     case PROP_INDEX:
         g_value_set_uint (value, seahorse_pgp_subkey_get_index (self));
         break;
@@ -452,6 +501,9 @@ seahorse_pgp_subkey_set_property (GObject      *object,
     SeahorsePgpSubkey *self = SEAHORSE_PGP_SUBKEY (object);
 
     switch (prop_id) {
+    case PROP_PARENT_KEY:
+        seahorse_pgp_subkey_set_parent_key (self, g_value_get_object (value));
+        break;
     case PROP_INDEX:
         seahorse_pgp_subkey_set_index (self, g_value_get_uint (value));
         break;
@@ -512,6 +564,11 @@ seahorse_pgp_subkey_class_init (SeahorsePgpSubkeyClass *klass)
     gobject_class->finalize = seahorse_pgp_subkey_finalize;
     gobject_class->set_property = seahorse_pgp_subkey_set_property;
     gobject_class->get_property = seahorse_pgp_subkey_get_property;
+
+    obj_props[PROP_PARENT_KEY] =
+        g_param_spec_object ("parent-key", "Parent Key", "Key this subkey belongs to",
+                             SEAHORSE_PGP_TYPE_KEY,
+                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
     obj_props[PROP_INDEX] =
         g_param_spec_uint ("index", "Index", "PGP subkey index",

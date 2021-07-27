@@ -40,6 +40,7 @@
 #include "seahorse-pgp-uid.h"
 #include "seahorse-pgp-signature.h"
 #include "seahorse-pgp-subkey.h"
+#include "seahorse-pgp-subkey-list-box.h"
 
 #include "seahorse-common.h"
 
@@ -88,7 +89,7 @@ struct _SeahorsePgpKeyProperties {
     GtkLabel *details_strength_label;
     GtkLabel *details_expires_label;
     GtkComboBox *details_trust_combobox;
-    GtkTreeView *details_subkey_tree;
+    GtkWidget *subkeys_container;
 
     /* Private key widgets */
     GtkTreeView *names_tree;
@@ -949,28 +950,6 @@ const GType trust_columns[] = {
     G_TYPE_INT      /* validity */
 };
 
-static SeahorsePgpSubkey*
-get_selected_subkey (SeahorsePgpKeyProperties *self)
-{
-    return get_selected_object (self->details_subkey_tree, SUBKEY_OBJECT);
-}
-
-static void
-details_subkey_selected (GtkTreeSelection *selection, SeahorsePgpKeyProperties *self)
-{
-    SeahorsePgpSubkey* subkey;
-    guint flags = 0;
-
-    subkey = get_selected_object (self->details_subkey_tree, SUBKEY_OBJECT);
-    if (subkey)
-        flags = seahorse_pgp_subkey_get_flags (subkey);
-
-    set_action_enabled (self, "subkeys.change-expires", subkey != NULL);
-    set_action_enabled (self, "subkeys.revoke",
-                        subkey != NULL && !(flags & SEAHORSE_FLAG_REVOKED));
-    set_action_enabled (self, "subkeys.delete", subkey != NULL);
-}
-
 static void
 on_add_subkey_completed (GObject *object, GAsyncResult *res, gpointer user_data)
 {
@@ -1011,81 +990,6 @@ on_subkeys_add (GSimpleAction *action, GVariant *param, gpointer user_data)
                                             type, length, expires, NULL,
                                             on_add_subkey_completed, self);
 
-    gtk_widget_destroy (GTK_WIDGET (dialog));
-}
-
-static void
-on_subkeys_delete (GSimpleAction *action, GVariant *param, gpointer user_data)
-{
-    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    SeahorsePgpSubkey *subkey;
-    guint index;
-    gboolean ret;
-    const gchar *label;
-    g_autofree gchar *message = NULL;
-    gpgme_error_t err;
-
-    subkey = get_selected_subkey (self);
-    if (!subkey)
-        return;
-
-    g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
-
-    index = seahorse_pgp_subkey_get_index (subkey);
-    label = seahorse_object_get_label (SEAHORSE_OBJECT (self->key));
-    message = g_strdup_printf (_("Are you sure you want to permanently delete subkey %d of %s?"), index, label);
-    ret = seahorse_delete_dialog_prompt (GTK_WINDOW (self), message);
-
-    if (ret == FALSE)
-        return;
-
-    err = seahorse_gpgme_key_op_del_subkey (SEAHORSE_GPGME_SUBKEY (subkey));
-    if (!GPG_IS_OK (err))
-        seahorse_gpgme_handle_error (err, _("Couldn’t delete subkey"));
-}
-
-static void
-on_subkeys_revoke (GSimpleAction *action, GVariant *param, gpointer user_data)
-{
-    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    SeahorsePgpSubkey *subkey = get_selected_subkey (self);
-    GtkWidget *dialog;
-
-    if (!subkey)
-        return;
-
-    g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
-    dialog = seahorse_gpgme_revoke_dialog_new (SEAHORSE_GPGME_SUBKEY (subkey),
-                                               GTK_WINDOW (self));
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-}
-
-static void
-on_subkeys_change_expires (GSimpleAction *action, GVariant *param, gpointer user_data)
-{
-    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    g_autoptr(SeahorsePgpSubkey) subkey = NULL;
-    GtkDialog *dialog;
-
-    subkey = get_selected_subkey (self);
-    if (subkey == NULL) {
-        GListModel *subkeys;
-
-        subkeys = seahorse_pgp_key_get_subkeys (self->key);
-        subkey = g_list_model_get_item (subkeys, 0);
-    } else {
-        g_object_ref (subkey);
-    }
-
-    g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (subkey));
-
-    if (subkey == NULL)
-        return;
-
-    dialog = seahorse_gpgme_expires_dialog_new (SEAHORSE_GPGME_SUBKEY (subkey),
-                                                GTK_WINDOW (self));
-    gtk_dialog_run (dialog);
     gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
@@ -1237,7 +1141,6 @@ setup_trust_combobox (SeahorsePgpKeyProperties *self)
 static void
 do_details (SeahorsePgpKeyProperties *self)
 {
-    GtkListStore *store;
     GtkTreeModel *model;
     GtkTreeIter iter;
     char dbuffer[G_ASCII_DTOSTR_BUF_SIZE];
@@ -1309,85 +1212,6 @@ do_details (SeahorsePgpKeyProperties *self)
         }
 
         valid = gtk_tree_model_iter_next (model, &iter);
-    }
-
-    /* Clear/create table store */
-    store = GTK_LIST_STORE (gtk_tree_view_get_model (self->details_subkey_tree));
-    if (store) {
-        gtk_list_store_clear (store);
-    } else {
-
-        /* This is our first time so create a store */
-        store = gtk_list_store_newv (SUBKEY_N_COLUMNS, (GType*)subkey_columns);
-        gtk_tree_view_set_model (self->details_subkey_tree, GTK_TREE_MODEL (store));
-
-        /* Make the columns for the view */
-        gtk_tree_view_insert_column_with_attributes (self->details_subkey_tree,
-                                                     -1, _("ID"), gtk_cell_renderer_text_new (),
-                                                     "text", SUBKEY_ID, NULL);
-        gtk_tree_view_insert_column_with_attributes (self->details_subkey_tree,
-                                                     -1, _("Type"), gtk_cell_renderer_text_new (),
-                                                     "text", SUBKEY_TYPE, NULL);
-        gtk_tree_view_insert_column_with_attributes (self->details_subkey_tree,
-                                                     -1, _("Usage"), gtk_cell_renderer_text_new (),
-                                                     "text", SUBKEY_USAGE, NULL);
-        gtk_tree_view_insert_column_with_attributes (self->details_subkey_tree,
-                                                     -1, _("Created"), gtk_cell_renderer_text_new (),
-                                                     "text", SUBKEY_CREATED, NULL);
-        gtk_tree_view_insert_column_with_attributes (self->details_subkey_tree,
-                                                     -1, _("Expires"), gtk_cell_renderer_text_new (),
-                                                     "text", SUBKEY_EXPIRES, NULL);
-        gtk_tree_view_insert_column_with_attributes (self->details_subkey_tree,
-                                                     -1, _("Status"), gtk_cell_renderer_text_new (),
-                                                     "text", SUBKEY_STATUS, NULL);
-        gtk_tree_view_insert_column_with_attributes (self->details_subkey_tree,
-                                                     -1, _("Strength"), gtk_cell_renderer_text_new (),
-                                                     "text", SUBKEY_LENGTH, NULL);
-    }
-
-    for (guint i = 0; i < g_list_model_get_n_items (subkeys); i++) {
-        g_autoptr(SeahorsePgpSubkey) subkey = NULL;
-        const char *status = NULL;
-        g_autofree char *expiration_date = NULL;
-        g_autofree char *created_date = NULL;
-        g_autofree char *usage = NULL;
-        GDateTime *expires;
-        guint flags;
-
-        subkey = g_list_model_get_item (subkeys, i);
-        expires = seahorse_pgp_subkey_get_expires (subkey);
-        flags = seahorse_pgp_subkey_get_flags (subkey);
-        status = "";
-
-        if (flags & SEAHORSE_FLAG_REVOKED)
-            status = _("Revoked");
-        else if (flags & SEAHORSE_FLAG_EXPIRED)
-            status = _("Expired");
-        else if (flags & SEAHORSE_FLAG_DISABLED)
-            status = _("Disabled");
-        else if (flags & SEAHORSE_FLAG_IS_VALID)
-            status = _("Good");
-
-        if (!expires)
-            expiration_date = g_strdup (C_("Expires", "Never"));
-        else
-            expiration_date = g_date_time_format (expires, "%x");
-
-        created_date = g_date_time_format (seahorse_pgp_subkey_get_created (subkey), "%x");
-
-        usage = seahorse_pgp_subkey_get_usage (subkey);
-
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter,
-                            SUBKEY_OBJECT, subkey,
-                            SUBKEY_ID, seahorse_pgp_subkey_get_keyid (subkey),
-                            SUBKEY_TYPE, seahorse_pgp_subkey_get_algorithm (subkey),
-                            SUBKEY_USAGE, usage,
-                            SUBKEY_CREATED, created_date,
-                            SUBKEY_EXPIRES, expiration_date,
-                            SUBKEY_STATUS, status,
-                            SUBKEY_LENGTH, seahorse_pgp_subkey_get_length (subkey),
-                            -1);
     }
 }
 
@@ -1716,9 +1540,6 @@ static const GActionEntry PRIVATE_KEY_ACTIONS[] = {
     { "photos.next",          on_photos_next          },
     { "photos.make-primary",  on_photos_make_primary  },
     { "subkeys.add",             on_subkeys_add             },
-    { "subkeys.delete",          on_subkeys_delete          },
-    { "subkeys.revoke",          on_subkeys_revoke          },
-    { "subkeys.change-expires",  on_subkeys_change_expires  },
 };
 
 static const GActionEntry PUBLIC_KEY_ACTIONS[] = {
@@ -1742,6 +1563,8 @@ key_notify (GObject *object, GParamSpec *pspec, gpointer user_data)
 static void
 get_common_widgets (SeahorsePgpKeyProperties *self, GtkBuilder *builder)
 {
+    GtkWidget *subkeys_listbox;
+
     self->owner_name_label = GTK_LABEL (gtk_builder_get_object (builder, "owner-name-label"));
     self->owner_email_label = GTK_LABEL (gtk_builder_get_object (builder, "owner-email-label"));
     self->owner_comment_label = GTK_LABEL (gtk_builder_get_object (builder, "owner-comment-label"));
@@ -1760,7 +1583,7 @@ get_common_widgets (SeahorsePgpKeyProperties *self, GtkBuilder *builder)
     self->details_strength_label = GTK_LABEL (gtk_builder_get_object (builder, "details-strength-label"));
     self->details_expires_label = GTK_LABEL (gtk_builder_get_object (builder, "details-expires-label"));
     self->details_trust_combobox = GTK_COMBO_BOX (gtk_builder_get_object (builder, "details-trust-combobox"));
-    self->details_subkey_tree = GTK_TREE_VIEW (gtk_builder_get_object (builder, "details-subkey-tree"));
+    self->subkeys_container = GTK_WIDGET (gtk_builder_get_object (builder, "subkeys_container"));
 
     g_signal_connect_object (self->photo_event_box, "scroll-event",
                              G_CALLBACK (on_pgp_owner_photoid_button),
@@ -1768,6 +1591,11 @@ get_common_widgets (SeahorsePgpKeyProperties *self, GtkBuilder *builder)
     g_signal_connect_object (self->details_trust_combobox, "changed",
                              G_CALLBACK (on_pgp_details_trust_changed),
                              self, 0);
+
+    subkeys_listbox = seahorse_pgp_subkey_list_box_new (self->key);
+    gtk_widget_show (subkeys_listbox);
+    gtk_container_add (GTK_CONTAINER (self->subkeys_container),
+                       subkeys_listbox);
 }
 
 static void
@@ -1887,11 +1715,6 @@ create_private_key_dialog (SeahorsePgpKeyProperties *self)
                        GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT | GTK_DEST_DEFAULT_DROP,
                        target_list, G_N_ELEMENTS (target_list),
                        GDK_ACTION_COPY);
-
-    /* Enable and disable buttons as subkeys are selected */
-    g_signal_connect (gtk_tree_view_get_selection (self->details_subkey_tree),
-        "changed", G_CALLBACK (details_subkey_selected), self);
-    details_subkey_selected (NULL, self);
 
     /* Enable and disable buttons as UIDs are selected */
     selection = gtk_tree_view_get_selection (self->names_tree);

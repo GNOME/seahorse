@@ -29,6 +29,7 @@ pgp_sources = files(
   'seahorse-pgp-photo.c',
   'seahorse-pgp-signature.c',
   'seahorse-pgp-subkey.c',
+  'seahorse-pgp-subkey-list-box.c',
   'seahorse-pgp-uid.c',
   'seahorse-transfer.c',
   'seahorse-unknown.c',

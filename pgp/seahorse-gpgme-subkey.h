@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2008 Stefan Walter
+ * Copyright (C) 2021 Niels De Graef
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,16 +25,15 @@
 #include <gpgme.h>
 
 #include "pgp/seahorse-pgp-subkey.h"
+#include "pgp/seahorse-gpgme-key.h"
 
 #define SEAHORSE_GPGME_TYPE_SUBKEY (seahorse_gpgme_subkey_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorseGpgmeSubkey, seahorse_gpgme_subkey,
                       SEAHORSE_GPGME, SUBKEY,
                       SeahorsePgpSubkey)
 
-SeahorseGpgmeSubkey*  seahorse_gpgme_subkey_new               (gpgme_key_t pubkey,
-                                                               gpgme_subkey_t subkey);
-
-gpgme_key_t           seahorse_gpgme_subkey_get_pubkey        (SeahorseGpgmeSubkey *self);
+SeahorseGpgmeSubkey*  seahorse_gpgme_subkey_new               (SeahorseGpgmeKey *parent_key,
+                                                               gpgme_subkey_t    subkey);
 
 gpgme_subkey_t        seahorse_gpgme_subkey_get_subkey        (SeahorseGpgmeSubkey *self);
 

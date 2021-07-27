@@ -29,27 +29,17 @@
 
 enum {
     PROP_0,
-    PROP_PUBKEY,
-    PROP_SUBKEY
+    PROP_SUBKEY,
+    N_PROPS
 };
 
 struct _SeahorseGpgmeSubkey {
     SeahorsePgpSubkey parent_instance;
 
-    gpgme_key_t pubkey;         /* The public key that this subkey is part of */
-    gpgme_subkey_t subkey;      /* The subkey referred to */
+    gpgme_subkey_t subkey;
 };
 
 G_DEFINE_TYPE (SeahorseGpgmeSubkey, seahorse_gpgme_subkey, SEAHORSE_PGP_TYPE_SUBKEY);
-
-
-gpgme_key_t
-seahorse_gpgme_subkey_get_pubkey (SeahorseGpgmeSubkey *self)
-{
-    g_return_val_if_fail (SEAHORSE_GPGME_IS_SUBKEY (self), NULL);
-    g_return_val_if_fail (self->pubkey, NULL);
-    return self->pubkey;
-}
 
 gpgme_subkey_t
 seahorse_gpgme_subkey_get_subkey (SeahorseGpgmeSubkey *self)
@@ -62,22 +52,25 @@ seahorse_gpgme_subkey_get_subkey (SeahorseGpgmeSubkey *self)
 void
 seahorse_gpgme_subkey_set_subkey (SeahorseGpgmeSubkey *self, gpgme_subkey_t subkey)
 {
+    SeahorsePgpSubkey *base = SEAHORSE_PGP_SUBKEY (self);
+    SeahorseGpgmeKey *parent;
+    gpgme_key_t pubkey;
     g_autofree char *description = NULL, *fingerprint = NULL, *name = NULL;
-    SeahorsePgpSubkey *base;
     const char *algo_type;
-    GObject *obj;
     gpgme_subkey_t sub;
     int i, index;
     g_autoptr(GDateTime) created = NULL;
     g_autoptr(GDateTime) expires = NULL;
-    guint flags;
+    unsigned int flags;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (self));
     g_return_if_fail (subkey);
 
     /* Make sure that this subkey is in the pubkey */
+    parent = SEAHORSE_GPGME_KEY (seahorse_pgp_subkey_get_parent_key (base));
+    pubkey = seahorse_gpgme_key_get_public (parent);
     index = -1;
-    for (i = 0, sub = self->pubkey->subkeys; sub; ++i, sub = sub->next) {
+    for (i = 0, sub = pubkey->subkeys; sub; ++i, sub = sub->next) {
         if (sub == subkey) {
             index = i;
             break;
@@ -94,15 +87,13 @@ seahorse_gpgme_subkey_set_subkey (SeahorseGpgmeSubkey *self, gpgme_subkey_t subk
 
     /* Additional properties */
     fingerprint = seahorse_pgp_subkey_calc_fingerprint (subkey->fpr);
-    name = seahorse_gpgme_uid_calc_name (self->pubkey->uids);
+    name = seahorse_gpgme_uid_calc_name (pubkey->uids);
     description = seahorse_pgp_subkey_calc_description (name, index);
 
     self->subkey = subkey;
 
-    obj = G_OBJECT (self);
-    g_object_freeze_notify (obj);
+    g_object_freeze_notify (G_OBJECT (self));
 
-    base = SEAHORSE_PGP_SUBKEY (self);
     seahorse_pgp_subkey_set_index (base, index);
     seahorse_pgp_subkey_set_keyid (base, subkey->keyid);
     seahorse_pgp_subkey_set_algorithm (base, algo_type);
@@ -138,8 +129,8 @@ seahorse_gpgme_subkey_set_subkey (SeahorseGpgmeSubkey *self, gpgme_subkey_t subk
 
     seahorse_pgp_subkey_set_flags (base, flags);
 
-    g_object_notify (obj, "subkey");
-    g_object_thaw_notify (obj);
+    g_object_notify (G_OBJECT (self), "subkey");
+    g_object_thaw_notify (G_OBJECT (self));
 }
 
 static void
@@ -147,31 +138,15 @@ seahorse_gpgme_subkey_init (SeahorseGpgmeSubkey *self)
 {
 }
 
-static GObject*
-seahorse_gpgme_subkey_constructor (GType type, guint n_props, GObjectConstructParam *props)
-{
-    GObject *obj;
-    SeahorseGpgmeSubkey *self = NULL;
-
-    obj = G_OBJECT_CLASS (seahorse_gpgme_subkey_parent_class)->constructor (type, n_props, props);
-    if (obj) {
-        self = SEAHORSE_GPGME_SUBKEY (obj);
-        g_return_val_if_fail (self->pubkey, NULL);
-    }
-
-    return obj;
-}
-
 static void
-seahorse_gpgme_subkey_get_property (GObject *object, guint prop_id,
-                                  GValue *value, GParamSpec *pspec)
+seahorse_gpgme_subkey_get_property (GObject      *object,
+                                    unsigned int  prop_id,
+                                    GValue       *value,
+                                    GParamSpec *pspec)
 {
     SeahorseGpgmeSubkey *self = SEAHORSE_GPGME_SUBKEY (object);
 
     switch (prop_id) {
-    case PROP_PUBKEY:
-        g_value_set_boxed (value, seahorse_gpgme_subkey_get_pubkey (self));
-        break;
     case PROP_SUBKEY:
         g_value_set_pointer (value, seahorse_gpgme_subkey_get_subkey (self));
         break;
@@ -179,18 +154,14 @@ seahorse_gpgme_subkey_get_property (GObject *object, guint prop_id,
 }
 
 static void
-seahorse_gpgme_subkey_set_property (GObject *object, guint prop_id, const GValue *value,
-                                  GParamSpec *pspec)
+seahorse_gpgme_subkey_set_property (GObject      *object,
+                                    unsigned int  prop_id,
+                                    const GValue *value,
+                                    GParamSpec   *pspec)
 {
     SeahorseGpgmeSubkey *self = SEAHORSE_GPGME_SUBKEY (object);
 
     switch (prop_id) {
-    case PROP_PUBKEY:
-        g_return_if_fail (!self->pubkey);
-        self->pubkey = g_value_get_boxed (value);
-        if (self->pubkey)
-            gpgme_key_ref (self->pubkey);
-        break;
     case PROP_SUBKEY:
         seahorse_gpgme_subkey_set_subkey (self, g_value_get_pointer (value));
         break;
@@ -202,10 +173,6 @@ seahorse_gpgme_subkey_finalize (GObject *gobject)
 {
     SeahorseGpgmeSubkey *self = SEAHORSE_GPGME_SUBKEY (gobject);
 
-    /* Unref the key */
-    if (self->pubkey)
-        gpgme_key_unref (self->pubkey);
-    self->pubkey = NULL;
     self->subkey = NULL;
 
     G_OBJECT_CLASS (seahorse_gpgme_subkey_parent_class)->finalize (gobject);
@@ -216,15 +183,9 @@ seahorse_gpgme_subkey_class_init (SeahorseGpgmeSubkeyClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-    gobject_class->constructor = seahorse_gpgme_subkey_constructor;
     gobject_class->finalize = seahorse_gpgme_subkey_finalize;
     gobject_class->set_property = seahorse_gpgme_subkey_set_property;
     gobject_class->get_property = seahorse_gpgme_subkey_get_property;
-
-    g_object_class_install_property (gobject_class, PROP_PUBKEY,
-        g_param_spec_boxed ("pubkey", "Public Key", "GPGME Public Key that this subkey is on",
-                            SEAHORSE_GPGME_BOXED_KEY,
-                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY));
 
     g_object_class_install_property (gobject_class, PROP_SUBKEY,
         g_param_spec_pointer ("subkey", "Subkey", "GPGME Subkey",
@@ -232,9 +193,13 @@ seahorse_gpgme_subkey_class_init (SeahorseGpgmeSubkeyClass *klass)
 }
 
 SeahorseGpgmeSubkey*
-seahorse_gpgme_subkey_new (gpgme_key_t pubkey, gpgme_subkey_t subkey)
+seahorse_gpgme_subkey_new (SeahorseGpgmeKey *parent_key,
+                           gpgme_subkey_t    subkey)
 {
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY (parent_key), NULL);
+    g_return_val_if_fail (subkey, NULL);
+
     return g_object_new (SEAHORSE_GPGME_TYPE_SUBKEY,
-                         "pubkey", pubkey,
+                         "parent-key", parent_key,
                          "subkey", subkey, NULL);
 }

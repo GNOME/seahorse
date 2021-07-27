@@ -22,6 +22,7 @@
 #include <glib-object.h>
 
 #include "seahorse-common.h"
+#include "pgp/seahorse-pgp-key.h"
 
 #define SEAHORSE_PGP_TYPE_SUBKEY            (seahorse_pgp_subkey_get_type ())
 G_DECLARE_DERIVABLE_TYPE (SeahorsePgpSubkey, seahorse_pgp_subkey,
@@ -33,6 +34,11 @@ struct _SeahorsePgpSubkeyClass {
 };
 
 SeahorsePgpSubkey*  seahorse_pgp_subkey_new               (void);
+
+SeahorsePgpKey *    seahorse_pgp_subkey_get_parent_key    (SeahorsePgpSubkey *self);
+
+void                seahorse_pgp_subkey_set_parent_key    (SeahorsePgpSubkey *self,
+                                                           SeahorsePgpKey    *parent_key);
 
 unsigned int        seahorse_pgp_subkey_get_index         (SeahorsePgpSubkey *self);
 
@@ -60,6 +66,9 @@ void                seahorse_pgp_subkey_set_length        (SeahorsePgpSubkey *se
                                                            unsigned int       index);
 
 char *              seahorse_pgp_subkey_get_usage         (SeahorsePgpSubkey *self);
+
+char **             seahorse_pgp_subkey_get_usages        (SeahorsePgpSubkey  *self,
+                                                           char             ***descriptions);
 
 GDateTime *         seahorse_pgp_subkey_get_created       (SeahorsePgpSubkey *self);
 
