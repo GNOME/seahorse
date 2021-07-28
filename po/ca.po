@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-03-02 19:25+0000\n"
+"POT-Creation-Date: 2021-07-27 22:20+0000\n"
 "PO-Revision-Date: 2020-07-22 23:45+0200\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -32,7 +32,7 @@ msgstr "Personalitzat"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:101
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:100
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Cancel·la"
@@ -64,8 +64,8 @@ msgstr "Seleccioneu la data en un calendari"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:76
-#: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
+#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:73
+#: pgp/seahorse-gpgme-photos.c:260 pgp/seahorse-gpgme-photos.c:320
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
@@ -74,7 +74,7 @@ msgid "_Cancel"
 msgstr "_Cancel·la"
 
 #. Delete item
-#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
+#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
 #: src/sidebar.vala:393
 msgid "_Delete"
 msgstr "_Suprimeix"
@@ -454,7 +454,7 @@ msgstr ""
 " no haver-la d'introduir i també per a crear una còpia de seguretat de les "
 "vostres claus i anell de claus."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:146
+#: data/org.gnome.seahorse.Application.appdata.xml.in:171
 msgid "The GNOME Project"
 msgstr "El projecte GNOME"
 
@@ -664,7 +664,6 @@ msgid "_Password:"
 msgstr "_Contrasenya:"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-#: pgp/seahorse-pgp-private-key-properties.ui:960
 msgid "Add"
 msgstr "Afegeix"
 
@@ -702,7 +701,7 @@ msgid "Use"
 msgstr "Utilitza"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1329
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:120
 msgid "Type"
 msgstr "Tipus"
 
@@ -715,8 +714,8 @@ msgid "Login"
 msgstr "Inicia una sessió"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:916
+#: pgp/seahorse-pgp-private-key-properties.ui:965
+#: pgp/seahorse-pgp-public-key-properties.ui:903
 msgid "Details"
 msgstr "Detalls"
 
@@ -728,7 +727,7 @@ msgstr "Suprimeix contrasenya"
 msgid "Keyring properties"
 msgstr "Propietats de l'anell de claus"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:889
 msgid "Name"
 msgstr "Nom"
 
@@ -743,11 +742,6 @@ msgstr "Canvia la contrasenya"
 #: gkr/seahorse-gkr-keyring.ui:117
 msgid "Set as default"
 msgstr "Estableix com a predeterminat"
-
-#: libseahorse/seahorse-widget.c:461
-#, c-format
-msgid "Could not display help: %s"
-msgstr "No s'ha pogut mostrar l'ajuda: %s"
 
 #: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
@@ -845,7 +839,7 @@ msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
 "No s'ha pogut desencriptar. Possiblement no teniu la clau de desencriptació."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
 msgid "The operation was cancelled"
 msgstr "S'ha cancel·lat l'operació"
 
@@ -991,11 +985,11 @@ msgid_plural "Are you sure you want to permanently delete %d keys?"
 msgstr[0] "Segur que voleu suprimir permanentment %d clau?"
 msgstr[1] "Segur que voleu suprimir permanentment %d claus?"
 
-#: pgp/seahorse-gpgme-key-op.c:361
+#: pgp/seahorse-gpgme-key-op.c:362
 msgid "Wrong password"
 msgstr "La contrasenya és incorrecta"
 
-#: pgp/seahorse-gpgme-key-op.c:361
+#: pgp/seahorse-gpgme-key-op.c:362
 msgid ""
 "This was the third time you entered a wrong password. Please try again."
 msgstr ""
@@ -1052,7 +1046,7 @@ msgstr "Claus GnuPG"
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: directori per defecte de l'anell de claus"
 
-#: pgp/seahorse-gpgme-photos.c:72
+#: pgp/seahorse-gpgme-photos.c:69
 #, c-format
 msgid ""
 "<big><b>The photo is too large</b></big>\n"
@@ -1061,15 +1055,15 @@ msgstr ""
 "<big><b>La fotografia és massa gran</b></big>\n"
 "Es recomana que la mida de la fotografia sigui de %d x %d píxels."
 
-#: pgp/seahorse-gpgme-photos.c:77
+#: pgp/seahorse-gpgme-photos.c:74
 msgid "_Don’t Resize"
 msgstr "_No redimensionis"
 
-#: pgp/seahorse-gpgme-photos.c:78
+#: pgp/seahorse-gpgme-photos.c:75
 msgid "_Resize"
 msgstr "_Redimensiona"
 
-#: pgp/seahorse-gpgme-photos.c:127
+#: pgp/seahorse-gpgme-photos.c:124
 #, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
@@ -1078,44 +1072,44 @@ msgstr ""
 "Aquest no és un fitxer d'imatge, o no se'n reconeix el tipus. Intenteu fer "
 "servir un JPEG."
 
-#: pgp/seahorse-gpgme-photos.c:223
+#: pgp/seahorse-gpgme-photos.c:219
 msgid "All image files"
 msgstr "Tots els fitxers d'imatge"
 
-#: pgp/seahorse-gpgme-photos.c:236
+#: pgp/seahorse-gpgme-photos.c:232
 msgid "All JPEG files"
 msgstr "Tots els fitxers JPEG"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:310
+#: pgp/seahorse-gpgme-photos.c:237 src/key-manager.vala:310
 msgid "All files"
 msgstr "Tots els fitxers"
 
-#: pgp/seahorse-gpgme-photos.c:262
+#: pgp/seahorse-gpgme-photos.c:258
 msgid "Choose Photo to Add to Key"
 msgstr "Trieu la fotografia per a afegir a la clau"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:270
+#: pgp/seahorse-gpgme-photos.c:261 src/key-manager.vala:270
 msgid "_Open"
 msgstr "_Obre"
 
-#: pgp/seahorse-gpgme-photos.c:284
+#: pgp/seahorse-gpgme-photos.c:280
 msgid "Couldn’t prepare photo"
 msgstr "No s'ha pogut preparar la fotografia"
 
-#: pgp/seahorse-gpgme-photos.c:294 pgp/seahorse-gpgme-photos.c:297
+#: pgp/seahorse-gpgme-photos.c:290 pgp/seahorse-gpgme-photos.c:293
 msgid "Couldn’t add photo"
 msgstr "No s'ha pogut afegir la fotografia"
 
-#: pgp/seahorse-gpgme-photos.c:295
-msgid "The file could not be loaded. It may be in an invalid format"
+#: pgp/seahorse-gpgme-photos.c:291
+msgid "The file could not be loaded. It may be in an invalid format."
 msgstr ""
-"No s'ha pogut carregar el fitxer, pot ser que estigui en un format no vàlid"
+"No s'ha pogut carregar el fitxer. Pot ser que estigui en un format no vàlid."
 
-#: pgp/seahorse-gpgme-photos.c:321
+#: pgp/seahorse-gpgme-photos.c:317
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "Segur que voleu suprimir la fotografia actual de la vostra clau?"
 
-#: pgp/seahorse-gpgme-photos.c:334
+#: pgp/seahorse-gpgme-photos.c:330
 msgid "Couldn’t delete photo"
 msgstr "No s'ha pogut suprimir la fotografia"
 
@@ -1160,19 +1154,6 @@ msgstr "No es fa servir"
 msgid "Key is no longer used"
 msgstr "La clau no es fa servir més"
 
-#: pgp/seahorse-gpgme-revoke-dialog.c:264
-#, c-format
-msgid ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
-msgstr ""
-"Ara afegireu %s com a revocador de %s. Aquesta operació no es pot desfer. "
-"Segur que voleu continuar?"
-
-#: pgp/seahorse-gpgme-revoke-dialog.c:276
-msgid "Couldn’t add revoker"
-msgstr "No s'ha pogut afegir el revocador"
-
 #: pgp/seahorse-gpgme-revoke-dialog.ui:21 pgp/seahorse-revoke.ui:20
 msgid "_Reason:"
 msgstr "_Motiu:"
@@ -1212,7 +1193,7 @@ msgstr "No s'ha pogut signar la clau"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: pgp/seahorse-gpgme-sign-dialog.c:281 pgp/seahorse-signer.c:62
+#: pgp/seahorse-gpgme-sign-dialog.c:281
 msgid "No keys usable for signing"
 msgstr "No hi ha claus que es puguin fer servir per a signar"
 
@@ -1313,23 +1294,23 @@ msgstr "_Signant:"
 msgid "_Sign"
 msgstr "_Signa"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:84
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: pgp/seahorse-gpgme-subkey.c:93
+#: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:503
+#: pgp/seahorse-hkp-source.c:499
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "La cerca no ha estat prou específica. El servidor «%s» ha trobat massa "
 "claus."
 
-#: pgp/seahorse-hkp-source.c:507
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "No s'ha pogut comunicar amb el servidor «%s»: %s"
@@ -1376,7 +1357,7 @@ msgstr ""
 msgid "Find Remote Keys"
 msgstr "Cerca claus remotes"
 
-#: pgp/seahorse-keyserver-search.ui:32
+#: pgp/seahorse-keyserver-search.ui:31
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -1384,35 +1365,35 @@ msgstr ""
 "Això cercarà claus d'altres persones a Internet. Aquestes claus es poden "
 "importar més tard al vostre anell de claus local."
 
-#: pgp/seahorse-keyserver-search.ui:47
+#: pgp/seahorse-keyserver-search.ui:46
 msgid "_Search for keys containing: "
 msgstr "Ce_rca claus que continguin: "
 
-#: pgp/seahorse-keyserver-search.ui:69
+#: pgp/seahorse-keyserver-search.ui:68
 msgid "Where to search:"
 msgstr "On cercar:"
 
-#: pgp/seahorse-keyserver-search.ui:115
+#: pgp/seahorse-keyserver-search.ui:114
 msgid "_Search"
 msgstr "_Cerca"
 
-#: pgp/seahorse-keyserver-sync.c:71
+#: pgp/seahorse-keyserver-sync.c:70
 msgid "Couldn’t publish keys to server"
 msgstr "No s'han pogut publicar les claus al servidor"
 
-#: pgp/seahorse-keyserver-sync.c:87
+#: pgp/seahorse-keyserver-sync.c:86
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "No s'han pogut recuperar les claus del servidor: %s"
 
-#: pgp/seahorse-keyserver-sync.c:197
+#: pgp/seahorse-keyserver-sync.c:196
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>S'ha seleccionat %d clau per sincronitzar</b>"
 msgstr[1] "<b>S'han seleccionat %d claus per sincronitzar</b>"
 
-#: pgp/seahorse-keyserver-sync.c:305
+#: pgp/seahorse-keyserver-sync.c:304
 msgid "Synchronizing keys…"
 msgstr "S'estan sincronitzant les claus..."
 
@@ -1489,157 +1470,106 @@ msgid_plural "(and %d others)"
 msgstr[0] "(i %d altra)"
 msgstr[1] "(i %d altres)"
 
-#: pgp/seahorse-pgp-key.c:606
+#: pgp/seahorse-pgp-key.c:609
 msgid "Personal PGP key"
 msgstr "Clau PGP personal"
 
-#: pgp/seahorse-pgp-key.c:608
+#: pgp/seahorse-pgp-key.c:611
 msgid "PGP key"
 msgstr "Clau PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:250
+#: pgp/seahorse-pgp-key-properties.c:251
 msgid "Couldn’t change primary user ID"
 msgstr "No s'ha pogut canviar l'identificador primari de l'usuari"
 
-#: pgp/seahorse-pgp-key-properties.c:285
+#: pgp/seahorse-pgp-key-properties.c:286
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Segur que voleu suprimir permanentment l'identificador d'usuari «%s»?"
 
-#: pgp/seahorse-pgp-key-properties.c:294
+#: pgp/seahorse-pgp-key-properties.c:295
 msgid "Couldn’t delete user ID"
 msgstr "No s'ha pogut suprimir l'identificador d'usuari"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:370
-#: pgp/seahorse-pgp-key-properties.c:1464
+#: pgp/seahorse-pgp-key-properties.c:371
+#: pgp/seahorse-pgp-key-properties.c:1288
 msgid "[Unknown]"
 msgstr "[Desconegut]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:468
-#: pgp/seahorse-pgp-key-properties.c:1682
+#: pgp/seahorse-pgp-key-properties.c:469
+#: pgp/seahorse-pgp-key-properties.c:1506
 msgid "Name/Email"
 msgstr "Nom/adreça electrònica"
 
-#: pgp/seahorse-pgp-key-properties.c:475
+#: pgp/seahorse-pgp-key-properties.c:476
 msgid "Signature ID"
 msgstr "Identificador de la signatura"
 
-#: pgp/seahorse-pgp-key-properties.c:581
+#: pgp/seahorse-pgp-key-properties.c:582
 msgid "Couldn’t change primary photo"
 msgstr "No s'ha pogut canviar la fotografia primària"
 
-#: pgp/seahorse-pgp-key-properties.c:768
+#: pgp/seahorse-pgp-key-properties.c:769
 msgid "Error changing password"
 msgstr "S'ha produït un error en canviar la contrasenya"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:815
+#: pgp/seahorse-pgp-key-properties.c:816
 msgid "(unknown)"
 msgstr "(desconegut)"
 
-#: pgp/seahorse-pgp-key-properties.c:820
+#: pgp/seahorse-pgp-key-properties.c:821
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Aquesta clau va vèncer el: %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:846
+#: pgp/seahorse-pgp-key-properties.c:847
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — clau pública"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:849
+#: pgp/seahorse-pgp-key-properties.c:850
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — clau privada"
 
-#: pgp/seahorse-pgp-key-properties.c:1036
-#, c-format
-msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "Segur que voleu suprimir permanentment la subclau %d de %s?"
-
-#: pgp/seahorse-pgp-key-properties.c:1044
-msgid "Couldn’t delete subkey"
-msgstr "No s'ha pogut suprimir la subclau"
-
-#: pgp/seahorse-pgp-key-properties.c:1114
-#: pgp/seahorse-pgp-key-properties.c:1438
+#: pgp/seahorse-pgp-key-properties.c:1018
+#: pgp/seahorse-pgp-key-properties.c:1262
 msgid "Unable to change trust"
 msgstr "No s'ha pogut canviar la confiança"
 
-#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1030 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "No s'ha pogut exportar la clau"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
-#: pgp/seahorse-pgp-key-properties.c:1372
+#: pgp/seahorse-pgp-key-properties.c:1187
 msgctxt "Expires"
 msgid "Never"
 msgstr "Mai"
 
-#: pgp/seahorse-pgp-key-properties.c:1326
-msgid "ID"
-msgstr "ID"
-
-#: pgp/seahorse-pgp-key-properties.c:1332
-msgid "Usage"
-msgstr "Utilització"
-
-#: pgp/seahorse-pgp-key-properties.c:1335
-msgid "Created"
-msgstr "Creada"
-
-#: pgp/seahorse-pgp-key-properties.c:1338
-msgid "Expires"
-msgstr "Venç"
-
-#: pgp/seahorse-pgp-key-properties.c:1341
-msgid "Status"
-msgstr "Estat"
-
-# FIXME FIXME FIXME (josep)
-#: pgp/seahorse-pgp-key-properties.c:1344
-msgid "Strength"
-msgstr "Fortalesa"
-
-#: pgp/seahorse-pgp-key-properties.c:1363
-msgid "Revoked"
-msgstr "Revocada"
-
-#: pgp/seahorse-pgp-key-properties.c:1365
-msgid "Expired"
-msgstr "Ha vençut"
-
-#: pgp/seahorse-pgp-key-properties.c:1367
-msgid "Disabled"
-msgstr "Inhabilitada"
-
-#: pgp/seahorse-pgp-key-properties.c:1369
-msgid "Good"
-msgstr "Correcte"
-
-#: pgp/seahorse-pgp-key-properties.c:1685
+#: pgp/seahorse-pgp-key-properties.c:1509
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "ID de la clau"
 
-#: pgp/seahorse-pgp-key-properties.c:1828
+#: pgp/seahorse-pgp-key-properties.c:1656
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Confio en les signatures de «%s» a altres claus"
 
-#: pgp/seahorse-pgp-key-properties.c:1835
+#: pgp/seahorse-pgp-key-properties.c:1663
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
 "key:"
 msgstr "Si creieu que el propietari d'aquesta clau és «%s», <i>signeu-la</i>:"
 
-#: pgp/seahorse-pgp-key-properties.c:1842
+#: pgp/seahorse-pgp-key-properties.c:1670
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your "
@@ -1716,13 +1646,14 @@ msgid "Primary"
 msgstr "Primària"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:472
-#: pgp/seahorse-pgp-subkey.c:162
+#: pgp/seahorse-pgp-subkey.c:213
 msgid "Sign"
 msgstr "Signa"
 
 #. Translators: This text refers to deleting an item from its type's backing
 #. store
 #: pgp/seahorse-pgp-private-key-properties.ui:502
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:187
 #: pkcs11/seahorse-pkcs11-properties.ui:22
 #: src/seahorse-key-manager-widgets.ui:18
 msgid "Delete"
@@ -1734,7 +1665,7 @@ msgid "_Add Name"
 msgstr "_Afegeix un nom"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:562
-#: pgp/seahorse-pgp-private-key-properties.ui:1020
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:180
 msgid "Revoke"
 msgstr "Revoca"
 
@@ -1764,6 +1695,7 @@ msgid "Technical Details"
 msgstr "Detalls tècnics"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:738
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:95
 #: ssh/seahorse-ssh-key-properties.ui:173
 msgid "Fingerprint"
 msgstr "Empremta digital"
@@ -1794,14 +1726,14 @@ msgstr "_Exporta al fitxer"
 msgid "Actions"
 msgstr "Accions"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:990
-msgid "Expire"
-msgstr "Venç"
+#: pgp/seahorse-pgp-private-key-properties.ui:938
+#: pgp/seahorse-pgp-public-key-properties.ui:885
+msgid "Subkeys"
+msgstr "Subclaus"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1064
-#: pgp/seahorse-pgp-public-key-properties.ui:899
-msgid "_Subkeys"
-msgstr "_Subclaus"
+#: pgp/seahorse-pgp-private-key-properties.ui:951
+msgid "_Add subkey"
+msgstr "_Afegeix una subclau"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:17
 msgctxt "Validity"
@@ -1873,42 +1805,98 @@ msgstr "Indiqueu la confiança:"
 msgid "You _trust the owner:"
 msgstr "Confieu en el _propietari:"
 
-#: pgp/seahorse-pgp-subkey.c:161
+#: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
 msgstr "Encripta"
 
-#: pgp/seahorse-pgp-subkey.c:163
+#: pgp/seahorse-pgp-subkey.c:212
+msgid "This subkey can be used for encryption"
+msgstr "Aquesta subclau es pot utilitzar per a xifrar"
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "This subkey can be used to create data signatures"
+msgstr "Aquesta subclau es pot utilitzar per a crear signatures de dades"
+
+#: pgp/seahorse-pgp-subkey.c:214
 msgid "Certify"
 msgstr "Certifica"
 
-#: pgp/seahorse-pgp-subkey.c:164
+#: pgp/seahorse-pgp-subkey.c:214
+msgid "This subkey can be used to create certificates"
+msgstr "Aquesta subclau es pot utilitzar per a crear certificats"
+
+#: pgp/seahorse-pgp-subkey.c:215
 msgid "Authenticate"
 msgstr "Autentica"
 
-#: pgp/seahorse-pgp-subkey.c:313
+#: pgp/seahorse-pgp-subkey.c:215
+msgid "This subkey can be used for authentication"
+msgstr "Aquesta subclau es pot utilitzar per a l'autenticació"
+
+#: pgp/seahorse-pgp-subkey.c:409
 msgid "Key"
 msgstr "Clau"
 
-#: pgp/seahorse-pgp-subkey.c:318
+#: pgp/seahorse-pgp-subkey.c:414
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "Subclau %d de %s"
 
-#: pgp/seahorse-signer.c:63
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or "
-"message."
-msgstr ""
-"No teniu claus PGP personals que es puguin emprar per a signar cap document "
-"o missatge."
+#: pgp/seahorse-pgp-subkey-list-box.c:207
+#, c-format
+msgid "Are you sure you want to permanently delete subkey %s?"
+msgstr "Segur que voleu suprimir permanentment la subclau %s?"
 
-#: pgp/seahorse-signer.ui:7
-msgid "Choose Signing Key"
-msgstr "Trieu la clau de signatura"
+#: pgp/seahorse-pgp-subkey-list-box.c:214
+msgid "Couldn’t delete subkey"
+msgstr "No s'ha pogut suprimir la subclau"
 
-#: pgp/seahorse-signer.ui:25
-msgid "_Sign message with key:"
-msgstr "_Signa el fitxer amb la clau:"
+#: pgp/seahorse-pgp-subkey-list-box.c:284
+msgid "Subkey was revoked"
+msgstr "Aquesta subclau ha estat revocada"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:291
+msgid "Subkey has expired"
+msgstr "Aquesta subclau ha vençut"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:294
+msgid "Subkey is disabled"
+msgstr "La subclau està inhabilitada"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:320
+msgid "Never expires"
+msgstr "No venç mai"
+
+#. Translators: first part is the algorithm, second part is the length,
+#. * e.g. "RSA" (2048 bit)
+#: pgp/seahorse-pgp-subkey-list-box.c:331
+#, c-format
+msgid "%s (%d bit)"
+msgstr "%s (%d bits)"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:338
+msgid "Unknown"
+msgstr "Desconeguda"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:7
+msgid "Change expiration date"
+msgstr "Canvia la data de venciment"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:11
+msgid "Revoke subkey"
+msgstr "Revoca la subclau"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:15
+msgid "Delete subkey"
+msgstr "Suprimeix la subclau"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:144
+msgid "Created"
+msgstr "Creada"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:173
+msgid "Change expiry date"
+msgstr "Canvia la data de venciment"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2578,193 +2566,3 @@ msgstr ""
 msgid "Configuring Secure Shell Keys…"
 msgstr "S'estan configurant les claus de l'intèrpret d'ordres segur..."
 
-#~ msgid "Not a valid Key Server address."
-#~ msgstr "No és una adreça de servidor de claus vàlida."
-
-#~ msgid ""
-#~ "For help contact your system administrator or the administrator of the key "
-#~ "server."
-#~ msgstr ""
-#~ "Si us cal ajuda contacteu el vostre administrador de sistemes o "
-#~ "l'administrador del servidor de claus."
-
-#~ msgid "URL"
-#~ msgstr "URL"
-
-#~ msgid "_Find keys via:"
-#~ msgstr "_Cerca les claus a través de:"
-
-#~ msgid "Display flags"
-#~ msgstr "Mostra els senyaladors"
-
-#~ msgid "Displayed date and/or time properties"
-#~ msgstr "Propietats de la data i/o hora mostrades"
-
-#~ msgid "Lazy mode"
-#~ msgstr "Mode gandul"
-
-#~ msgid "Lazy mode doesn’t normalize entered date and time values"
-#~ msgstr ""
-#~ "El mode gandul no normalitza els valors de la data i l'hora introduïts"
-
-#~ msgid "Year"
-#~ msgstr "Any"
-
-#~ msgid "Displayed year"
-#~ msgstr "Any mostrat"
-
-#~ msgid "Month"
-#~ msgstr "Mes"
-
-#~ msgid "Displayed month"
-#~ msgstr "Mes mostrat"
-
-#~ msgid "Day"
-#~ msgstr "Dia"
-
-#~ msgid "Displayed day of month"
-#~ msgstr "Dia del mes mostrat"
-
-#~ msgid "Hour"
-#~ msgstr "Hora"
-
-#~ msgid "Displayed hour"
-#~ msgstr "Hora mostrada"
-
-#~ msgid "Minute"
-#~ msgstr "Minut"
-
-#~ msgid "Displayed minute"
-#~ msgstr "Minut mostrat"
-
-#~ msgid "Second"
-#~ msgstr "Segon"
-
-#~ msgid "Displayed second"
-#~ msgstr "Segon mostrat"
-
-#~ msgid "Lower limit year"
-#~ msgstr "Any límit més antic"
-
-#~ msgid "Year part of the lower date limit"
-#~ msgstr "Part de l'any de la data límit més antiga"
-
-#~ msgid "Upper limit year"
-#~ msgstr "Any límit més modern"
-
-#~ msgid "Year part of the upper date limit"
-#~ msgstr "Part de l'any de la data límit més moderna"
-
-#~ msgid "Lower limit month"
-#~ msgstr "Mes límit més antic"
-
-#~ msgid "Month part of the lower date limit"
-#~ msgstr "Part del mes de la data límit més antiga"
-
-#~ msgid "Upper limit month"
-#~ msgstr "Mes límit més modern"
-
-#~ msgid "Month part of the upper date limit"
-#~ msgstr "Part del mes de la data límit més moderna"
-
-#~ msgid "Lower limit day"
-#~ msgstr "Dia límit més antic"
-
-#~ msgid "Day of month part of the lower date limit"
-#~ msgstr "Part del dia del mes de la data límit més antiga"
-
-#~ msgid "Upper limit day"
-#~ msgstr "Dia límit més modern"
-
-#~ msgid "Day of month part of the upper date limit"
-#~ msgstr "Part del dia del mes de la data límit més moderna"
-
-#~ msgid "Lower limit hour"
-#~ msgstr "Hora límit més antiga"
-
-#~ msgid "Hour part of the lower time limit"
-#~ msgstr "Part de l'hora del temps límit més antic"
-
-#~ msgid "Upper limit hour"
-#~ msgstr "Hora límit més moderna"
-
-#~ msgid "Hour part of the upper time limit"
-#~ msgstr "Part de l'hora del temps límit més modern"
-
-#~ msgid "Lower limit minute"
-#~ msgstr "Minut límit més antic"
-
-#~ msgid "Minute part of the lower time limit"
-#~ msgstr "Part del minut del temps límit més antic"
-
-#~ msgid "Upper limit minute"
-#~ msgstr "Minut límit més modern"
-
-#~ msgid "Minute part of the upper time limit"
-#~ msgstr "Part del minut del temps límit més modern"
-
-#~ msgid "Lower limit second"
-#~ msgstr "Segon límit més antic"
-
-#~ msgid "Second part of the lower time limit"
-#~ msgstr "Part del segon del temps límit més antic"
-
-#~ msgid "Upper limit second"
-#~ msgstr "Segon límit més modern"
-
-#~ msgid "Second part of the upper time limit"
-#~ msgstr "Part del segon del temps límit més modern"
-
-#~ msgid "calendar:week_start:0"
-#~ msgstr "calendar:week_start:1"
-
-#~ msgid "Date"
-#~ msgstr "Data"
-
-#~ msgid "Select Date"
-#~ msgstr "Seleccioneu la data"
-
-#~ msgid "Time"
-#~ msgstr "Temps"
-
-#~ msgid "Enter the time directly"
-#~ msgstr "Introduïu l'hora directament"
-
-#~ msgid "Select Time"
-#~ msgstr "Seleccioneu l'hora"
-
-#~ msgid "Select the time from a list"
-#~ msgstr "Seleccioneu l'hora d'una llista"
-
-#~ msgid "24hr: no"
-#~ msgstr "24hr"
-
-#~ msgid "AM"
-#~ msgstr "AM"
-
-#~ msgid "PM"
-#~ msgstr "PM"
-
-#~ msgid "%02d:%02d:%02d %s"
-#~ msgstr "%02d:%02d:%02d %s"
-
-#~ msgid "%02d:%02d %s"
-#~ msgstr "%02d:%02d %s"
-
-#~ msgid "%02d:%02d:%02d"
-#~ msgstr "%02d:%02d:%02d"
-
-#~ msgid "%02d:%02d"
-#~ msgstr "%02d:%02d"
-
-#~ msgid "%04d-%02d-%02d"
-#~ msgstr "%3$02d/%2$02d/%1$04d"
-
-#~ msgid "%u:%u:%u"
-#~ msgstr "%u:%u:%u"
-
-#~ msgid "Key Servers:"
-#~ msgstr "Servidors de claus:"
-
-#~ msgid "Shared Keys Near Me:"
-#~ msgstr "Claus compartides a prop meu:"
