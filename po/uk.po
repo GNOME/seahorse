@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-05-14 14:05+0000\n"
-"PO-Revision-Date: 2021-05-20 10:17+0300\n"
+"POT-Creation-Date: 2021-07-27 22:20+0000\n"
+"PO-Revision-Date: 2021-07-28 14:43+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -653,7 +653,6 @@ msgid "_Password:"
 msgstr "_Пароль:"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-#: pgp/seahorse-pgp-private-key-properties.ui:960
 msgid "Add"
 msgstr "Додати"
 
@@ -691,7 +690,7 @@ msgid "Use"
 msgstr "Використання"
 
 #: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1329
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:120
 msgid "Type"
 msgstr "Тип"
 
@@ -704,8 +703,8 @@ msgid "Login"
 msgstr "Вхід"
 
 #: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:916
+#: pgp/seahorse-pgp-private-key-properties.ui:965
+#: pgp/seahorse-pgp-public-key-properties.ui:903
 msgid "Details"
 msgstr "Подробиці"
 
@@ -717,7 +716,7 @@ msgstr "Вилучити пароль"
 msgid "Keyring properties"
 msgstr "Властивості в'язки"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
+#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:889
 msgid "Name"
 msgstr "Назва"
 
@@ -1089,9 +1088,9 @@ msgid "Couldn’t add photo"
 msgstr "Не вдалося додати фотографію"
 
 #: pgp/seahorse-gpgme-photos.c:291
-#| msgid "The file could not be loaded. It may be in an invalid format"
 msgid "The file could not be loaded. It may be in an invalid format."
-msgstr "Не вдалося завантажити файл. Може бути, його записано у некоректному форматі."
+msgstr ""
+"Не вдалося завантажити файл. Може бути, його записано у некоректному форматі."
 
 #: pgp/seahorse-gpgme-photos.c:317
 msgid "Are you sure you want to remove the current photo from your key?"
@@ -1283,12 +1282,12 @@ msgstr "_Автор підпису:"
 msgid "_Sign"
 msgstr "_Підписати"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:84
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: pgp/seahorse-gpgme-subkey.c:93
+#: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -1462,147 +1461,97 @@ msgstr[0] "(і ще %d)"
 msgstr[1] "(і ще %d)"
 msgstr[2] "(і ще %d)"
 
-#: pgp/seahorse-pgp-key.c:608
+#: pgp/seahorse-pgp-key.c:609
 msgid "Personal PGP key"
 msgstr "Особистий ключ PGP"
 
-#: pgp/seahorse-pgp-key.c:610
+#: pgp/seahorse-pgp-key.c:611
 msgid "PGP key"
 msgstr "Ключ PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:250
+#: pgp/seahorse-pgp-key-properties.c:251
 msgid "Couldn’t change primary user ID"
 msgstr "Не вдалося змінити головний ідентифікатор користувача"
 
-#: pgp/seahorse-pgp-key-properties.c:285
+#: pgp/seahorse-pgp-key-properties.c:286
 #, c-format
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr "Вилучити ідентифікатор користувача «%s»?"
 
-#: pgp/seahorse-pgp-key-properties.c:294
+#: pgp/seahorse-pgp-key-properties.c:295
 msgid "Couldn’t delete user ID"
 msgstr "Не вдалося вилучити ідентифікатор користувача"
 
 #. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:370 pgp/seahorse-pgp-key-properties.c:1464
+#: pgp/seahorse-pgp-key-properties.c:371 pgp/seahorse-pgp-key-properties.c:1288
 msgid "[Unknown]"
 msgstr "[Невідомо]"
 
 #. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:468 pgp/seahorse-pgp-key-properties.c:1682
+#: pgp/seahorse-pgp-key-properties.c:469 pgp/seahorse-pgp-key-properties.c:1506
 msgid "Name/Email"
 msgstr "Ім'я/ел. пошта"
 
-#: pgp/seahorse-pgp-key-properties.c:475
+#: pgp/seahorse-pgp-key-properties.c:476
 msgid "Signature ID"
 msgstr "Ідентифікатор підпису"
 
-#: pgp/seahorse-pgp-key-properties.c:581
+#: pgp/seahorse-pgp-key-properties.c:582
 msgid "Couldn’t change primary photo"
 msgstr "Не вдалося змінити головну фотографію"
 
-#: pgp/seahorse-pgp-key-properties.c:768
+#: pgp/seahorse-pgp-key-properties.c:769
 msgid "Error changing password"
 msgstr "Помилка під час спроби змінити пароль"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:815
+#: pgp/seahorse-pgp-key-properties.c:816
 msgid "(unknown)"
 msgstr "(невідомо)"
 
-#: pgp/seahorse-pgp-key-properties.c:820
+#: pgp/seahorse-pgp-key-properties.c:821
 #, c-format
 msgid "This key expired on: %s"
 msgstr "Цей ключ закінчився %s"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:846
+#: pgp/seahorse-pgp-key-properties.c:847
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — відкритий ключ"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:849
+#: pgp/seahorse-pgp-key-properties.c:850
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — закритий ключ"
 
-#: pgp/seahorse-pgp-key-properties.c:1036
-#, c-format
-msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "Остаточно вилучити підключ %d з ключа %s?"
-
-#: pgp/seahorse-pgp-key-properties.c:1044
-msgid "Couldn’t delete subkey"
-msgstr "Не вдалося вилучити підключ"
-
-#: pgp/seahorse-pgp-key-properties.c:1114
-#: pgp/seahorse-pgp-key-properties.c:1438
+#: pgp/seahorse-pgp-key-properties.c:1018
+#: pgp/seahorse-pgp-key-properties.c:1262
 msgid "Unable to change trust"
 msgstr "Не вдалося змінити рівень довіри"
 
-#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:1030 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Не вдалося експортувати ключ"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
-#: pgp/seahorse-pgp-key-properties.c:1372
+#: pgp/seahorse-pgp-key-properties.c:1187
 msgctxt "Expires"
 msgid "Never"
 msgstr "Ніколи"
 
-#: pgp/seahorse-pgp-key-properties.c:1326
-msgid "ID"
-msgstr "Ідентифікатор"
-
-#: pgp/seahorse-pgp-key-properties.c:1332
-msgid "Usage"
-msgstr "Використання"
-
-#: pgp/seahorse-pgp-key-properties.c:1335
-msgid "Created"
-msgstr "Створено"
-
-#: pgp/seahorse-pgp-key-properties.c:1338
-msgid "Expires"
-msgstr "Закінчується дія"
-
-#: pgp/seahorse-pgp-key-properties.c:1341
-msgid "Status"
-msgstr "Стан"
-
-#: pgp/seahorse-pgp-key-properties.c:1344
-msgid "Strength"
-msgstr "Міцність"
-
-#: pgp/seahorse-pgp-key-properties.c:1363
-msgid "Revoked"
-msgstr "Відкликаний"
-
-#: pgp/seahorse-pgp-key-properties.c:1365
-msgid "Expired"
-msgstr "Термін вийшов"
-
-#: pgp/seahorse-pgp-key-properties.c:1367
-msgid "Disabled"
-msgstr "Вимкнений"
-
-#: pgp/seahorse-pgp-key-properties.c:1369
-msgid "Good"
-msgstr "Добра"
-
-#: pgp/seahorse-pgp-key-properties.c:1685
+#: pgp/seahorse-pgp-key-properties.c:1509
 #: pgp/seahorse-pgp-private-key-properties.ui:345
 #: pgp/seahorse-pgp-public-key-properties.ui:274
 msgid "Key ID"
 msgstr "Ідентифікатор ключа"
 
-#: pgp/seahorse-pgp-key-properties.c:1828
+#: pgp/seahorse-pgp-key-properties.c:1656
 #, c-format
 msgid "I trust signatures from “%s” on other keys"
 msgstr "Я довіряю підписам, поставленим «%s» на інших ключах"
 
-#: pgp/seahorse-pgp-key-properties.c:1835
+#: pgp/seahorse-pgp-key-properties.c:1663
 #, c-format
 msgid ""
 "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
@@ -1610,7 +1559,7 @@ msgid ""
 msgstr ""
 "Якщо ви впевнені, що власником ключа є «%s», <i>підпишіть</i> цей ключ:"
 
-#: pgp/seahorse-pgp-key-properties.c:1842
+#: pgp/seahorse-pgp-key-properties.c:1670
 #, c-format
 msgid ""
 "If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
@@ -1684,12 +1633,13 @@ msgstr "Імена та підписи"
 msgid "Primary"
 msgstr "Первинний"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:168
+#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:213
 msgid "Sign"
 msgstr "Підписати"
 
 #. Translators: This text refers to deleting an item from its type's backing store
 #: pgp/seahorse-pgp-private-key-properties.ui:502
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:187
 #: pkcs11/seahorse-pkcs11-properties.ui:22
 #: src/seahorse-key-manager-widgets.ui:18
 msgid "Delete"
@@ -1701,7 +1651,7 @@ msgid "_Add Name"
 msgstr "_Додати ім'я"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:562
-#: pgp/seahorse-pgp-private-key-properties.ui:1020
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:180
 msgid "Revoke"
 msgstr "Відкликати"
 
@@ -1730,6 +1680,7 @@ msgid "Technical Details"
 msgstr "Технічні подробиці"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:738
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:95
 #: ssh/seahorse-ssh-key-properties.ui:173
 msgid "Fingerprint"
 msgstr "Відбиток"
@@ -1760,14 +1711,16 @@ msgstr "Е_кспортувати у файл"
 msgid "Actions"
 msgstr "Дії"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:990
-msgid "Expire"
-msgstr "Закінчується дія"
+#: pgp/seahorse-pgp-private-key-properties.ui:938
+#: pgp/seahorse-pgp-public-key-properties.ui:885
+#| msgid "_Subkeys"
+msgid "Subkeys"
+msgstr "Підключі"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1064
-#: pgp/seahorse-pgp-public-key-properties.ui:899
-msgid "_Subkeys"
-msgstr "_Підключі"
+#: pgp/seahorse-pgp-private-key-properties.ui:951
+#| msgid "Add subkey to %s"
+msgid "_Add subkey"
+msgstr "_Додати підключ"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:17
 msgctxt "Validity"
@@ -1837,26 +1790,114 @@ msgstr "Рівень довіри:"
 msgid "You _trust the owner:"
 msgstr "Ви д_овіряєте власнику:"
 
-#: pgp/seahorse-pgp-subkey.c:167
+#: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
 msgstr "Шифрувати"
 
-#: pgp/seahorse-pgp-subkey.c:169
+#: pgp/seahorse-pgp-subkey.c:212
+msgid "This subkey can be used for encryption"
+msgstr ""
+"Цей підключ можна використовувати для шифрування"
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "This subkey can be used to create data signatures"
+msgstr ""
+"Цей підключ можна використовувати для створення підписів даних"
+
+#: pgp/seahorse-pgp-subkey.c:214
 msgid "Certify"
 msgstr "Сертифікувати"
 
-#: pgp/seahorse-pgp-subkey.c:170
+#: pgp/seahorse-pgp-subkey.c:214
+msgid "This subkey can be used to create certificates"
+msgstr ""
+"Цей підключ можна використовувати для створення сертифікатів"
+
+#: pgp/seahorse-pgp-subkey.c:215
 msgid "Authenticate"
 msgstr "Автентифікувати"
 
-#: pgp/seahorse-pgp-subkey.c:363
+#: pgp/seahorse-pgp-subkey.c:215
+msgid "This subkey can be used for authentication"
+msgstr ""
+"Цей підключ можна використовувати для розпізнавання"
+
+#: pgp/seahorse-pgp-subkey.c:409
 msgid "Key"
 msgstr "Ключ"
 
-#: pgp/seahorse-pgp-subkey.c:368
+#: pgp/seahorse-pgp-subkey.c:414
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "Підключ %d ключа %s"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:207
+#, c-format
+#| msgid "Are you sure you want to permanently delete subkey %d of %s?"
+msgid "Are you sure you want to permanently delete subkey %s?"
+msgstr "Остаточно вилучити підключ %s?"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:214
+msgid "Couldn’t delete subkey"
+msgstr "Не вдалося вилучити підключ"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:284
+#| msgid "This key has been revoked"
+msgid "Subkey was revoked"
+msgstr "Підключ було відкликано"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:291
+#| msgid "This key has expired"
+msgid "Subkey has expired"
+msgstr "Термін дії підключа закінчився"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:294
+msgid "Subkey is disabled"
+msgstr ""
+"Підключ вимкнено"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:320
+#| msgid "_Never expires"
+msgid "Never expires"
+msgstr "Ніколи не закінчується"
+
+#. Translators: first part is the algorithm, second part is the length,
+#. * e.g. "RSA" (2048 bit)
+#: pgp/seahorse-pgp-subkey-list-box.c:331
+#, c-format
+msgid "%s (%d bit)"
+msgstr ""
+"%s (%d-бітовий)"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:338
+#| msgctxt "Validity"
+#| msgid "Unknown"
+msgid "Unknown"
+msgstr "Невідомо"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:7
+#| msgid "Expiration Date"
+msgid "Change expiration date"
+msgstr "Змінити строк дії"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:11
+#| msgid "Revoke key"
+msgid "Revoke subkey"
+msgstr "Відкликати підключ"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:15
+#| msgid "Couldn’t delete subkey"
+msgid "Delete subkey"
+msgstr "Вилучити підключ"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:144
+msgid "Created"
+msgstr "Створено"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:173
+#| msgid "Couldn’t change expiry date"
+msgid "Change expiry date"
+msgstr "Змінити дату строку дії"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2522,6 +2563,36 @@ msgstr "Не вдалося налаштувати ключі SSH на відд�
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Налаштовування ключів SSH…"
+
+#~ msgid "ID"
+#~ msgstr "Ідентифікатор"
+
+#~ msgid "Usage"
+#~ msgstr "Використання"
+
+#~ msgid "Expires"
+#~ msgstr "Закінчується дія"
+
+#~ msgid "Status"
+#~ msgstr "Стан"
+
+#~ msgid "Strength"
+#~ msgstr "Міцність"
+
+#~ msgid "Revoked"
+#~ msgstr "Відкликаний"
+
+#~ msgid "Expired"
+#~ msgstr "Термін вийшов"
+
+#~ msgid "Disabled"
+#~ msgstr "Вимкнений"
+
+#~ msgid "Good"
+#~ msgstr "Добра"
+
+#~ msgid "Expire"
+#~ msgstr "Закінчується дія"
 
 #~ msgid "Display flags"
 #~ msgstr "Показувати прапорці"
