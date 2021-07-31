@@ -37,6 +37,6 @@ SeahorsePgpKey *     seahorse_pgp_subkey_list_box_get_key            (SeahorsePg
 #define SEAHORSE_PGP_TYPE_SUBKEY_LIST_BOX_ROW (seahorse_pgp_subkey_list_box_row_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorsePgpSubkeyListBoxRow, seahorse_pgp_subkey_list_box_row,
                       SEAHORSE_PGP, SUBKEY_LIST_BOX_ROW,
-                      GtkListBoxRow)
+                      HdyExpanderRow)
 
 SeahorsePgpSubkey *   seahorse_pgp_subkey_list_box_row_get_subkey    (SeahorsePgpSubkeyListBoxRow *self);

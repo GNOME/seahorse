@@ -154,19 +154,15 @@ seahorse_pgp_subkey_list_box_get_key (SeahorsePgpSubkeyListBox *self)
 /* SeahorsePhpSubkeyListBoxRow */
 
 struct _SeahorsePgpSubkeyListBoxRow {
-    GtkListBoxRow parent_instance;
+    HdyExpanderRow parent_instance;
 
     SeahorsePgpSubkey *subkey;
 
     GSimpleActionGroup *action_group;
 
     GtkWidget *status_box;
-    GtkWidget *keyid_label;
     GtkWidget *usages_box;
-    GtkWidget *revealer;
-    GtkWidget *reveal_icon;
     GtkWidget *algo_label;
-    GtkWidget *expires_label;
     GtkWidget *created_label;
     GtkWidget *fingerprint_label;
     GtkWidget *action_box;
@@ -179,7 +175,7 @@ enum {
 };
 static GParamSpec *row_props[ROW_N_PROPS] = { NULL, };
 
-G_DEFINE_TYPE (SeahorsePgpSubkeyListBoxRow, seahorse_pgp_subkey_list_box_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_TYPE (SeahorsePgpSubkeyListBoxRow, seahorse_pgp_subkey_list_box_row, HDY_TYPE_EXPANDER_ROW)
 
 static GtkWindow *
 get_toplevel_window (SeahorsePgpSubkeyListBoxRow *row)
@@ -242,24 +238,7 @@ on_subkey_change_expires (GSimpleAction *action, GVariant *param, void *user_dat
     gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
-static void
-on_subkey_toggle_reveal (GSimpleAction *action, GVariant *param, void *user_data)
-{
-    SeahorsePgpSubkeyListBoxRow *row = SEAHORSE_PGP_SUBKEY_LIST_BOX_ROW (user_data);
-    gboolean reveal;
-    const char *icon_name;
-
-    reveal = !gtk_revealer_get_reveal_child (GTK_REVEALER (row->revealer));
-    gtk_revealer_set_reveal_child (GTK_REVEALER (row->revealer), reveal);
-
-    icon_name = reveal? "pan-up-symbolic" : "pan-down-symbolic";
-    gtk_image_set_from_icon_name (GTK_IMAGE (row->reveal_icon),
-                                  icon_name,
-                                  GTK_ICON_SIZE_BUTTON);
-}
-
 static const GActionEntry SUBKEY_ACTIONS[] = {
-    { "toggle-reveal", on_subkey_toggle_reveal },
     { "delete", on_subkey_delete },
     { "revoke", on_subkey_revoke },
     { "change-expires", on_subkey_change_expires },
@@ -297,8 +276,12 @@ update_row (SeahorsePgpSubkeyListBoxRow *row)
     }
 
     /* Set the key id */
-    gtk_label_set_text (GTK_LABEL (row->keyid_label),
-                        seahorse_pgp_subkey_get_keyid (row->subkey));
+    hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row),
+                                   seahorse_pgp_subkey_get_keyid (row->subkey));
+    expires = seahorse_pgp_subkey_get_expires (row->subkey);
+    expires_str = expires? g_date_time_format (expires, "Expires on %x")
+                         : g_strdup (_("Never expires"));
+    hdy_expander_row_set_subtitle (HDY_EXPANDER_ROW (row), expires_str);
 
     /* Add the usage tags */
     usages = seahorse_pgp_subkey_get_usages (row->subkey, &descriptions);
@@ -313,12 +296,6 @@ update_row (SeahorsePgpSubkeyListBoxRow *row)
         gtk_style_context_add_class (gtk_widget_get_style_context (label),
                                      "pgp-subkey-usage-label");
     }
-
-    /* Expiration date */
-    expires = seahorse_pgp_subkey_get_expires (row->subkey);
-    expires_str = expires? g_date_time_format (expires, "Expires on %x")
-                         : g_strdup (_("Never expires"));
-    gtk_label_set_text (GTK_LABEL (row->expires_label), expires_str);
 
     /* Stuff that is hidden by default (but can be shown with the revealer) */
 
@@ -445,12 +422,8 @@ seahorse_pgp_subkey_list_box_row_class_init (SeahorsePgpSubkeyListBoxRowClass *k
     gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Seahorse/seahorse-pgp-subkey-list-box-row.ui");
 
     gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, status_box);
-    gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, keyid_label);
     gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, usages_box);
-    gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, revealer);
-    gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, reveal_icon);
     gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, algo_label);
-    gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, expires_label);
     gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, created_label);
     gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, fingerprint_label);
     gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, action_box);
