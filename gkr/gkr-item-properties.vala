@@ -30,15 +30,15 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
     [GtkChild]
     private unowned Gtk.Label type_field;
     [GtkChild]
-    private unowned Gtk.Label details_label;
+    private unowned Hdy.PreferencesGroup details_group;
     [GtkChild]
-    private unowned Gtk.Label details_box;
+    private unowned Gtk.ListBox details_box;
     [GtkChild]
-    private unowned Gtk.Label server_label;
+    private unowned Hdy.ActionRow server_row;
     [GtkChild]
     private unowned Gtk.Label server_field;
     [GtkChild]
-    private unowned Gtk.Label login_label;
+    private unowned Hdy.ActionRow login_row;
     [GtkChild]
     private unowned Gtk.Label login_field;
     [GtkChild]
@@ -159,11 +159,8 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
 
     private void update_visibility() {
         var use = this.item.use;
-        bool visible = use == Use.NETWORK || use == Use.WEB;
-        this.server_label.visible = visible;
-        this.server_field.visible = visible;
-        this.login_label.visible = visible;
-        this.login_field.visible = visible;
+        this.server_row.visible =
+            this.login_row.visible = (use == Use.NETWORK || use == Use.WEB);
     }
 
     private void update_server() {
@@ -181,23 +178,31 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
     }
 
     private void update_details() {
-        var contents = new GLib.StringBuilder();
         var attrs = this.item.attributes;
         var iter = GLib.HashTableIter<string, string>(attrs);
+
+        this.details_group.visible = (attrs.size() > 0);
         string key, value;
         while (iter.next(out key, out value)) {
             if (key.has_prefix("gkr:") || key.has_prefix("xdg:"))
                 continue;
-            contents.append_printf("<b>%s</b>: %s\n",
-                                   GLib.Markup.escape_text(key),
-                                   GLib.Markup.escape_text(value));
+
+            var row = new Hdy.ActionRow();
+            row.title = key;
+            row.can_focus = false;
+
+            var label = new Gtk.Label (value);
+            label.xalign = 1;
+            label.selectable = true;
+            label.wrap = true;
+            label.wrap_mode = Pango.WrapMode.WORD_CHAR;
+            label.max_width_chars = 32;
+            row.add(label);
+
+            row.show_all();
+            this.details_box.insert(row, -1);
         }
 
-        if (contents.len > 0) {
-            this.details_label.visible = true;
-            this.details_box.visible = true;
-            this.details_box.label = contents.str;
-        }
     }
 
     private async void save_password() {
