@@ -181,11 +181,13 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
         var attrs = this.item.attributes;
         var iter = GLib.HashTableIter<string, string>(attrs);
 
-        this.details_group.visible = (attrs.size() > 0);
+        bool any_details = false;
         string key, value;
         while (iter.next(out key, out value)) {
             if (key.has_prefix("gkr:") || key.has_prefix("xdg:"))
                 continue;
+
+            any_details = true;
 
             var row = new Hdy.ActionRow();
             row.title = key;
@@ -203,6 +205,7 @@ public class Seahorse.Gkr.ItemProperties : Gtk.Dialog {
             this.details_box.insert(row, -1);
         }
 
+        this.details_group.visible = any_details;
     }
 
     private async void save_password() {
