@@ -94,15 +94,6 @@ seahorse_pgp_keyid_equal (gconstpointer v1,
     return g_str_equal (keyid_1, keyid_2);
 }
 
-static const char*
-calc_short_name (SeahorsePgpKey *self)
-{
-    SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
-    g_autoptr(SeahorsePgpUid) uid = g_list_model_get_item (priv->uids, 0);
-
-    return uid ? seahorse_pgp_uid_get_name (uid) : NULL;
-}
-
 static char*
 calc_name (SeahorsePgpKey *self)
 {
@@ -247,7 +238,7 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
 
     name = calc_name (self);
     markup = calc_markup (self);
-    nickname = calc_short_name (self);
+    nickname = seahorse_pgp_key_get_primary_name (self);
 
     g_object_get (self, "usage", &usage, NULL);
 
@@ -309,6 +300,18 @@ seahorse_pgp_key_get_uids (SeahorsePgpKey *self)
 
     g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), NULL);
     return priv->uids;
+}
+
+const char *
+seahorse_pgp_key_get_primary_name (SeahorsePgpKey *self)
+{
+    SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
+    g_autoptr(SeahorsePgpUid) uid = NULL;
+
+    g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), NULL);
+
+    uid = g_list_model_get_item (priv->uids, 0);
+    return uid ? seahorse_pgp_uid_get_name (uid) : NULL;
 }
 
 void

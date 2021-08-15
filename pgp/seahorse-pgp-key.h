@@ -87,6 +87,8 @@ gboolean          seahorse_pgp_key_is_private_key       (SeahorsePgpKey *self);
 
 const char*       seahorse_pgp_key_calc_identifier      (const char *keyid);
 
+const char *       seahorse_pgp_key_get_primary_name    (SeahorsePgpKey *self);
+
 guint             seahorse_pgp_keyid_hash               (gconstpointer v);
 
 gboolean          seahorse_pgp_keyid_equal              (gconstpointer v1,
