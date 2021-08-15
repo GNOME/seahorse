@@ -627,7 +627,7 @@ seahorse_hkp_source_search_async (SeahorseServerSource *source,
 
     seahorse_progress_prep_and_begin (cancellable, message, NULL);
 
-    uri_str = soup_uri_to_string (uri_str, TRUE);
+    uri_str = soup_uri_to_string (uri, TRUE);
     g_debug ("Sending HKP search query to '%s'", uri_str);
 
     soup_session_queue_message (closure->session, g_steal_pointer (&message),
