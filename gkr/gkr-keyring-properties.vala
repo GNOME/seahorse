@@ -61,8 +61,13 @@ public class Seahorse.Gkr.KeyringProperties : Gtk.Dialog {
     }
 
     private void set_created(uint64 timestamp) {
-        this.created_label.label = (timestamp != 0)? Util.get_display_date_string((long) timestamp)
-                                                   : _("Unknown date");
+        if (timestamp == 0) {
+            this.created_label.label = _("Unknown date");
+            return;
+        }
+
+        var datetime = new DateTime.from_unix_utc((int64) timestamp);
+        this.created_label.label = datetime.format("%x");
     }
 
     [GtkCallback]

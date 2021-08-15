@@ -46,12 +46,4 @@ namespace Seahorse.Util {
 		dialog.run();
 		dialog.destroy();
 	}
-
-	public string get_display_date_string (uint64 time)
-	{
-		if (time == 0)
-			return "";
-		var created_date = new DateTime.from_unix_utc((int64) time);
-		return created_date.format("%x");
-	}
 }
