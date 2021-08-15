@@ -341,11 +341,13 @@ seahorse_pgp_uid_class_init (SeahorsePgpUidClass *klass)
 
 SeahorsePgpUid *
 seahorse_pgp_uid_new (SeahorsePgpKey *parent,
-                      const gchar *uid_string)
+                      const char     *uid_string)
 {
-    g_autofree gchar *name = NULL;
-    g_autofree gchar *email = NULL;
-    g_autofree gchar *comment = NULL;
+    g_autofree char *name = NULL;
+    g_autofree char *email = NULL;
+    g_autofree char *comment = NULL;
+
+    g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (parent), NULL);
 
     if (uid_string)
         parse_user_id (uid_string, &name, &email, &comment);
