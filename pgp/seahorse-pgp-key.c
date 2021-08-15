@@ -78,20 +78,30 @@ seahorse_pgp_keyid_hash (gconstpointer v)
     return g_str_hash (keyid);
 }
 
+/**
+ * seahorse_pgp_keyid_equal:
+ * @v1: A fingerprint or key id
+ * @v2: A fingerprint or key id
+ *
+ * Compares key IDs, regardless of casing.
+ */
 gboolean
-seahorse_pgp_keyid_equal (gconstpointer v1,
-                          gconstpointer v2)
+seahorse_pgp_keyid_equal (const void *v1,
+                          const void *v2)
 {
     const char *keyid_1 = v1;
     const char *keyid_2 = v2;
-    gsize len_1 = strlen (keyid_1);
-    gsize len_2 = strlen (keyid_2);
+    size_t len_1 = strlen (keyid_1);
+    size_t len_2 = strlen (keyid_2);
 
-    if (len_1 != len_2 && len_1 >= 8 && len_2 >= 8) {
-        keyid_1 += len_1 - 8;
-        keyid_2 += len_2 - 8;
+    /* In case we have a key ids of different length, go to the shortest
+     * reliable form: the long key id (16 characters) */
+    if (len_1 != len_2 && len_1 >= 16 && len_2 >= 16) {
+        keyid_1 += len_1 - 16;
+        keyid_2 += len_2 - 16;
     }
-    return g_str_equal (keyid_1, keyid_2);
+
+    return g_ascii_strcasecmp (keyid_1, keyid_2) == 0;
 }
 
 static char*
