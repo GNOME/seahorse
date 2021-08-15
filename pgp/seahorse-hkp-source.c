@@ -564,20 +564,18 @@ on_search_message_complete (SoupSession *session,
 }
 
 static gboolean
-is_hex_keyid (const gchar *match)
+is_hex_keyid (const char *match)
 {
-    const gchar *text = match;
+    size_t match_len;
 
-    if (strlen (match) != 8)
+    /* See HKP draft, section 3.1.1.1 */
+    match_len = strlen (match);
+    if (match_len != 8 || match_len != 16 || match_len != 32 || match_len != 40)
         return FALSE;
 
-    while (*text != '\0') {
-        if (!((*text >= 0x30 && *text <= 0x39) ||
-              (*text >= 0x41 && *text <= 0x46) ||
-              (*text >= 0x61 && *text <= 0x66)))
+    for (size_t i = 0; i < match_len; i++)
+        if (!g_ascii_isxdigit (match[i]))
             return FALSE;
-        text++;
-    }
 
     return TRUE;
 }
@@ -596,7 +594,6 @@ seahorse_hkp_source_search_async (SeahorseServerSource *source,
     g_autoptr(GHashTable) form = NULL;
     SoupMessage *message;
     g_autoptr(SoupURI) uri = NULL;
-    gchar hexfpr[11];
 
     task = g_task_new (source, cancellable, callback, user_data);
     closure = g_new0 (source_search_closure, 1);
@@ -614,8 +611,9 @@ seahorse_hkp_source_search_async (SeahorseServerSource *source,
     g_hash_table_insert (form, "options", "mr");
 
     if (is_hex_keyid (match)) {
-        strncpy (hexfpr, "0x", 3);
-        strncpy (hexfpr + 2, match, 9);
+        g_autofree char *hexfpr = NULL;
+
+        hexfpr = g_strdup_printf ("0x%s", match);
         g_hash_table_insert (form, "search", hexfpr);
     } else {
         g_hash_table_insert (form, "search", (char *)match);
@@ -873,7 +871,6 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
     g_autoptr(GTask) task = NULL;
     SoupURI *uri;
     g_autoptr(GHashTable) form = NULL;
-    char hexfpr[11];
 
     task = g_task_new (self, cancellable, callback, user_data);
     closure = g_new0 (ExportClosure, 1);
@@ -891,24 +888,22 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
     uri = get_http_server_uri (self, "/pks/lookup");
     g_return_if_fail (uri);
 
-    /* prepend the hex prefix (0x) to make keyservers happy */
-    strncpy (hexfpr, "0x", 3);
-
     form = g_hash_table_new (g_str_hash, g_str_equal);
     for (int i = 0; keyids[i] != NULL; i++) {
         const char *fpr = keyids[i];
-        guint len;
+        size_t len;
+        g_autofree char *hexfpr = NULL;
         SoupMessage *message;
 
         g_hash_table_remove_all (form);
 
-        /* Get the key id and limit it to 8 characters */
+        /* Get the key id and limit it to 16 characters */
         len = strlen (fpr);
-        if (len > 8)
-            fpr += (len - 8);
+        if (len > 16)
+            fpr += (len - 16);
 
-        strncpy (hexfpr + 2, fpr, 8);
-        hexfpr[10] = '\0';
+        /* prepend the hex prefix (0x) to make keyservers happy */
+        hexfpr = g_strdup_printf ("0x%s", fpr);
 
         /* The get key URI */
         g_hash_table_insert (form, "op", "get");
