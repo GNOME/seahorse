@@ -573,6 +573,17 @@ seahorse_pgp_key_has_keyid (SeahorsePgpKey *self, const char *match)
     return FALSE;
 }
 
+gboolean
+seahorse_pgp_key_is_private_key (SeahorsePgpKey *self)
+{
+    SeahorseUsage usage;
+
+    g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), FALSE);
+
+    usage = seahorse_object_get_usage (SEAHORSE_OBJECT (self));
+    return usage == SEAHORSE_USAGE_PRIVATE_KEY;
+}
+
 static void
 seahorse_pgp_key_init (SeahorsePgpKey *self)
 {
