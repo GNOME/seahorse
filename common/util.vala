@@ -54,25 +54,4 @@ namespace Seahorse.Util {
 		var created_date = new DateTime.from_unix_utc((int64) time);
 		return created_date.format("%x");
 	}
-
-    // TODO: one we rely on GLib >= 2.54, we can use g_list_store_find
-    public bool list_store_find(GLib.ListStore store, GLib.Object item, out uint position) {
-        return list_store_find_with_equal_func (store, item, GLib.direct_equal, out position);
-    }
-
-    // TODO: one we rely on GLib >= 2.54, we can use g_list_store_find_with_equal_func
-    public bool list_store_find_with_equal_func(GLib.ListStore store,
-                                                GLib.Object item,
-                                                GLib.EqualFunc func,
-                                                out uint position) {
-        for (uint i = 0; i < store.get_n_items(); i++) {
-            if (func(store.get_item(i), item)) {
-                if (&position != null)
-                    position = i;
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

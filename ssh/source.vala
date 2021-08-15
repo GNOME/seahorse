@@ -185,12 +185,12 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
     }
 
     public bool contains(GLib.Object object) {
-        return Util.list_store_find(this.keys, object, null);
+        return this.keys.find(object, null);
     }
 
     public void remove_object(GLib.Object object) {
         uint pos;
-        if (Util.list_store_find(this.keys, object, out pos)) {
+        if (this.keys.find(object, out pos)) {
             this.keys.remove(pos);
             removed(object);
         }
