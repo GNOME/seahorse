@@ -582,11 +582,11 @@ is_hex_keyid (const char *match)
 
 static void
 seahorse_hkp_source_search_async (SeahorseServerSource *source,
-                                  const gchar *match,
-                                  GcrSimpleCollection *results,
-                                  GCancellable *cancellable,
-                                  GAsyncReadyCallback callback,
-                                  gpointer user_data)
+                                  const char           *match,
+                                  GcrSimpleCollection  *results,
+                                  GCancellable         *cancellable,
+                                  GAsyncReadyCallback   callback,
+                                  void                 *user_data)
 {
     SeahorseHKPSource *self = SEAHORSE_HKP_SOURCE (source);
     source_search_closure *closure;
@@ -594,6 +594,7 @@ seahorse_hkp_source_search_async (SeahorseServerSource *source,
     g_autoptr(GHashTable) form = NULL;
     SoupMessage *message;
     g_autoptr(SoupURI) uri = NULL;
+    g_autofree char *uri_str = NULL;
 
     task = g_task_new (source, cancellable, callback, user_data);
     closure = g_new0 (source_search_closure, 1);
@@ -625,6 +626,9 @@ seahorse_hkp_source_search_async (SeahorseServerSource *source,
     message = soup_message_new_from_uri ("GET", uri);
 
     seahorse_progress_prep_and_begin (cancellable, message, NULL);
+
+    uri_str = soup_uri_to_string (uri_str, TRUE);
+    g_debug ("Sending HKP search query to '%s'", uri_str);
 
     soup_session_queue_message (closure->session, g_steal_pointer (&message),
                                 on_search_message_complete,
