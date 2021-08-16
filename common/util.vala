@@ -4,6 +4,7 @@
  * Copyright (C) 2003 Jacob Perkins
  * Copyright (C) 2004-2005 Stefan Walter
  * Copyright (C) 2011 Collabora Ltd.
+ * Copyright (C) 2020 Niels De Graef
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,4 +47,12 @@ namespace Seahorse.Util {
 		dialog.run();
 		dialog.destroy();
 	}
+
+    public void toggle_action (GLib.SimpleAction action,
+                               GLib.Variant?     variant,
+                               void*             user_data) {
+        var old_state = action.get_state();
+        var new_state = new GLib.Variant.boolean(!old_state.get_boolean());
+        action.change_state(new_state);
+    }
 }
