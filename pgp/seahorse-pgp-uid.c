@@ -383,9 +383,27 @@ seahorse_pgp_uid_add_signature (SeahorsePgpUid       *self,
                                 SeahorsePgpSignature *signature)
 {
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
+    const char *keyid;
 
     g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
     g_return_if_fail (SEAHORSE_PGP_IS_SIGNATURE (signature));
+
+    keyid = seahorse_pgp_signature_get_keyid (signature);
+
+    /* Don't add signature of the parent key */
+    if (seahorse_pgp_key_has_keyid (priv->parent, keyid))
+        return;
+
+    /* Don't allow duplicates */
+    for (unsigned i = 0; i < g_list_model_get_n_items (priv->signatures); i++) {
+        g_autoptr(SeahorsePgpSignature) sig = g_list_model_get_item (priv->signatures, i);
+        const char *sig_keyid;
+
+        sig = g_list_model_get_item (priv->signatures, i);
+        sig_keyid = seahorse_pgp_signature_get_keyid (sig);
+        if (seahorse_pgp_keyid_equal (keyid, sig_keyid))
+            return;
+    }
 
     g_list_store_append (G_LIST_STORE (priv->signatures), signature);
 }
