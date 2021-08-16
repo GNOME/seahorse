@@ -560,27 +560,19 @@ gboolean
 seahorse_pgp_key_has_keyid (SeahorsePgpKey *self, const char *match)
 {
     SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
-    guint n_match;
 
     g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), FALSE);
-    g_return_val_if_fail (match, FALSE);
-
-    n_match = strlen (match);
+    g_return_val_if_fail (match && *match, FALSE);
 
     for (guint i = 0; i < g_list_model_get_n_items (priv->subkeys); i++) {
         g_autoptr(SeahorsePgpSubkey) subkey = NULL;
         const char *keyid;
-        guint n_keyid;
 
         subkey = g_list_model_get_item (priv->subkeys, i);
         keyid = seahorse_pgp_subkey_get_keyid (subkey);
         g_return_val_if_fail (keyid, FALSE);
-        n_keyid = strlen (keyid);
-        if (n_match <= n_keyid) {
-            keyid += (n_keyid - n_match);
-            if (strncmp (keyid, match, n_match) == 0)
-                return TRUE;
-        }
+        if (seahorse_pgp_keyid_equal (keyid, match))
+            return TRUE;
     }
 
     return FALSE;
