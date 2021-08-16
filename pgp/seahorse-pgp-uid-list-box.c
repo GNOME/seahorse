@@ -131,6 +131,14 @@ seahorse_pgp_uid_list_box_class_init (SeahorsePgpUidListBoxClass *klass)
     g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 }
 
+/**
+ * seahorse_pgp_uid_list_box_new:
+ * @key: A PGP key
+ *
+ * Creates a new list box that shows the UIDs of @key
+ *
+ * Returns: (transfer floating): The new #SeahorsePgpUidListBox
+ */
 GtkWidget *
 seahorse_pgp_uid_list_box_new (SeahorsePgpKey *key)
 {

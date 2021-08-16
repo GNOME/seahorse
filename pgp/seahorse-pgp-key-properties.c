@@ -38,6 +38,7 @@
 #include "seahorse-pgp-dialogs.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-uid.h"
+#include "seahorse-pgp-uid-list-box.h"
 #include "seahorse-pgp-signature.h"
 #include "seahorse-pgp-subkey.h"
 #include "seahorse-pgp-subkey-list-box.h"
@@ -51,7 +52,6 @@
 #include <glib/gi18n.h>
 
 #include <string.h>
-#include <time.h>
 
 #define PUBLIC_KEY_PROPERTIES_UI "/org/gnome/Seahorse/seahorse-pgp-public-key-properties.ui"
 #define PRIVATE_KEY_PROPERTIES_UI  "/org/gnome/Seahorse/seahorse-pgp-private-key-properties.ui"
@@ -71,56 +71,44 @@ struct _SeahorsePgpKeyProperties {
     /* Common widgets */
     GtkWidget *revoked_area;
     GtkWidget *expired_area;
-    GtkLabel *expired_message;
+    GtkWidget *expired_message;
 
     GtkImage *photoid;
     GtkEventBox *photo_event_box;
 
-    GtkLabel *owner_name_label;
-    GtkLabel *owner_email_label;
-    GtkLabel *owner_comment_label;
-    GtkLabel *owner_keyid_label;
-    GtkWidget *owner_photo_previous_button;
-    GtkWidget *owner_photo_next_button;
-    GtkLabel *details_id_label;
-    GtkLabel *details_fingerprint_label;
-    GtkLabel *details_algo_label;
-    GtkLabel *details_created_label;
-    GtkLabel *details_strength_label;
-    GtkLabel *details_expires_label;
-    GtkComboBox *details_trust_combobox;
+    GtkWidget *name_label;
+    GtkWidget *email_label;
+    GtkWidget *comment_label;
+    GtkWidget *keyid_label;
+    GtkWidget *fingerprint_label;
+    GtkWidget *expires_label;
+    GtkWidget *photo_previous_button;
+    GtkWidget *photo_next_button;
+    GtkWidget *ownertrust_combobox;
+    GtkWidget *uids_container;
     GtkWidget *subkeys_container;
 
     /* Private key widgets */
-    GtkTreeView *names_tree;
+    GMenuModel *actions_menu;
     GtkWidget *owner_photo_frame;
     GtkWidget *owner_photo_add_button;
     GtkWidget *owner_photo_delete_button;
     GtkWidget *owner_photo_primary_button;
 
     /* Public key widgets */
-    GtkBox *indicate_trust_box;
-    GtkTreeView *owner_userid_tree;
-    GtkTreeView *signatures_tree;
-    GtkWidget *signatures_area;
-    GtkWidget *uids_area;
+    GtkWidget *indicate_trust_row;
     GtkWidget *trust_page;
-    GtkLabel *trust_sign_label;
-    GtkLabel *trust_revoke_label;
-    GtkWidget *manual_trust_area;
-    GtkWidget *sign_area;
-    GtkWidget *revoke_area;
-    GtkLabel *trust_marginal_label;
-    GtkSwitch *trust_marginal_switch;
-    GtkToggleButton *signatures_toggle;
+    GtkWidget *trust_sign_row;
+    GtkWidget *trust_revoke_row;
+    GtkWidget *trust_marginal_switch;
 };
 
 G_DEFINE_TYPE (SeahorsePgpKeyProperties, seahorse_pgp_key_properties, GTK_TYPE_DIALOG)
 
 static void
 set_action_enabled (SeahorsePgpKeyProperties *self,
-                    const gchar *action_str,
-                    gboolean enabled)
+                    const char               *action_str,
+                    gboolean                  enabled)
 {
     GAction *action;
 
@@ -129,365 +117,14 @@ set_action_enabled (SeahorsePgpKeyProperties *self,
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
 }
 
-static gpointer
-get_selected_object (GtkTreeView *widget, guint column)
-{
-    GtkTreeSelection *selection;
-    GtkTreeIter iter;
-    GtkTreeModel *model;
-    GList *rows;
-    gpointer object = NULL;
-
-    model = gtk_tree_view_get_model (widget);
-
-    selection = gtk_tree_view_get_selection (widget);
-    g_assert (gtk_tree_selection_get_mode (selection) == GTK_SELECTION_SINGLE);
-
-    rows = gtk_tree_selection_get_selected_rows (selection, NULL);
-
-    if (g_list_length (rows) > 0) {
-        gtk_tree_model_get_iter (model, &iter, rows->data);
-        gtk_tree_model_get (model, &iter, column, &object, -1);
-        if (object)
-            g_object_unref (object);
-    }
-
-    g_list_foreach (rows, (GFunc)gtk_tree_path_free, NULL);
-    g_list_free (rows);
-
-    return object;
-}
-
 static void
-on_pgp_signature_row_activated (GtkTreeView *treeview,
-                                GtkTreePath *path,
-                                GtkTreeViewColumn *arg2,
-                                gpointer user_data)
-{
-    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    GObject *object = NULL;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-
-    model = gtk_tree_view_get_model (treeview);
-
-    if (GTK_IS_TREE_MODEL_FILTER (model))
-        model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
-
-    g_return_if_fail (gtk_tree_model_get_iter (model, &iter, path));
-
-    object = seahorse_object_model_get_row_key (SEAHORSE_OBJECT_MODEL (model), &iter);
-    if (object != NULL && SEAHORSE_PGP_IS_KEY (object)) {
-        GtkWindow *parent;
-        g_autoptr(GtkWindow) dialog = NULL;
-
-        parent = GTK_WINDOW (gtk_widget_get_parent (GTK_WIDGET (self)));
-        dialog = seahorse_pgp_key_properties_new (SEAHORSE_PGP_KEY (object),
-                                                  parent);
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (GTK_WIDGET (dialog));
-    }
-}
-
-static void
-unique_strings (GPtrArray *keyids)
-{
-    guint i;
-
-    g_ptr_array_sort (keyids, (GCompareFunc)g_ascii_strcasecmp);
-    for (i = 0; i + 1 < keyids->len; ) {
-        if (g_ascii_strcasecmp (keyids->pdata[i], keyids->pdata[i + 1]) == 0)
-            g_ptr_array_remove_index (keyids, i);
-        else
-            i++;
-    }
-}
-
-/* -----------------------------------------------------------------------------
- * NAMES PAGE (PRIVATE KEYS)
- */
-
-enum {
-    UIDSIG_OBJECT,
-    UIDSIG_ICON,
-    UIDSIG_NAME,
-    UIDSIG_KEYID,
-    UIDSIG_N_COLUMNS
-};
-
-static GType uidsig_columns[] = {
-    G_TYPE_OBJECT,  /* index */
-    0 /* later */,  /* icon */
-    G_TYPE_STRING,  /* name */
-    G_TYPE_STRING   /* keyid */
-};
-
-static SeahorsePgpUid*
-names_get_selected_uid (SeahorsePgpKeyProperties *self)
-{
-    return get_selected_object (self->names_tree, UIDSIG_OBJECT);
-}
-
-static void
-on_uids_add (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_uids_add (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
     seahorse_gpgme_add_uid_run_dialog (SEAHORSE_GPGME_KEY (self->key),
                                        GTK_WINDOW (self));
 }
-
-static void
-on_uids_make_primary_cb (GObject *source, GAsyncResult *res, gpointer user_data)
-{
-    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    SeahorseGpgmeUid *uid = SEAHORSE_GPGME_UID (source);
-    g_autoptr(GError) error = NULL;
-
-    if (!seahorse_gpgme_key_op_make_primary_finish (uid, res, &error)) {
-        GtkWindow *window;
-        window = gtk_window_get_transient_for (GTK_WINDOW (self));
-        seahorse_util_show_error (GTK_WIDGET (window),
-                                  _("Couldn’t change primary user ID"),
-                                  error->message);
-    }
-}
-
-static void
-on_uids_make_primary (GSimpleAction *action, GVariant *param, gpointer user_data)
-{
-    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    SeahorsePgpUid *uid;
-
-    uid = names_get_selected_uid (self);
-    if (!uid)
-        return;
-
-    g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
-    seahorse_gpgme_key_op_make_primary_async (SEAHORSE_GPGME_UID (uid),
-                                              NULL,
-                                              on_uids_make_primary_cb, self);
-}
-
-static void
-on_uids_delete (GSimpleAction *action, GVariant *param, gpointer user_data)
-{
-    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    SeahorsePgpUid *uid;
-    gboolean ret;
-    g_autofree gchar *message = NULL;
-    gpgme_error_t gerr;
-
-    uid = names_get_selected_uid (self);
-    if (uid == NULL)
-        return;
-
-    g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
-    message = g_strdup_printf (_("Are you sure you want to permanently delete the “%s” user ID?"),
-                               seahorse_object_get_label (SEAHORSE_OBJECT (uid)));
-    ret = seahorse_delete_dialog_prompt (GTK_WINDOW (self), message);
-
-    if (ret == FALSE)
-        return;
-
-    gerr = seahorse_gpgme_key_op_del_uid (SEAHORSE_GPGME_UID (uid));
-    if (!GPG_IS_OK (gerr))
-        seahorse_gpgme_handle_error (gerr, _("Couldn’t delete user ID"));
-}
-
-static void
-on_uids_sign (GSimpleAction *action, GVariant *param, gpointer user_data)
-{
-    SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    SeahorsePgpUid *uid;
-    SeahorseGpgmeSignDialog *dialog;
-
-    uid = names_get_selected_uid (self);
-    if (uid == NULL)
-        return;
-
-    g_return_if_fail (SEAHORSE_GPGME_IS_UID (uid));
-
-    dialog = seahorse_gpgme_sign_dialog_new (SEAHORSE_OBJECT (uid));
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (GTK_WIDGET (dialog));
-}
-
-static void
-on_uids_revoke (GSimpleAction *action, GVariant *param, gpointer user_data)
-{
-    /* TODO: */
-/*    SeahorseObject *skey;
-    int index;
-    Glist *keys = NULL;
-
-    skey = self->key;
-    index = names_get_selected_uid (swidget);
-
-    if (index >= 1) {
-        seahorse_revoke_show (SEAHORSE_PGP_KEY (skey), index - 1);
-
-#ifdef WITH_KEYSERVER
-        if (g_settings_get_boolean(AUTOSYNC_KEY) == TRUE) {
-            keys = g_list_append (keys, skey);
-            seahorse_keyserver_sync (keys);
-            g_list_free(keys);
-        }
-#endif
-    }*/
-}
-
-static void
-update_names (GtkTreeSelection *selection, SeahorsePgpKeyProperties *self)
-{
-    SeahorsePgpUid *uid = names_get_selected_uid (self);
-    int index = -1;
-
-    if (uid && SEAHORSE_GPGME_IS_UID (uid))
-        index = seahorse_gpgme_uid_get_gpgme_index (SEAHORSE_GPGME_UID (uid));
-
-    set_action_enabled (self, "uids.make-primary", index > 0);
-    set_action_enabled (self, "uids.sign", index >= 0);
-    set_action_enabled (self, "uids.delete", index >= 0);
-}
-
-/* Is called whenever a signature key changes, to update row */
-static void
-names_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
-                  GtkTreeIter *iter, SeahorsePgpKeyProperties *self)
-{
-    g_autoptr(GIcon) icon = NULL;
-    const gchar *name, *id;
-
-    icon = g_themed_icon_new (SEAHORSE_PGP_IS_KEY (object) ?
-                              SEAHORSE_ICON_SIGN : "dialog-question");
-    name = seahorse_object_get_markup (object);
-    id = seahorse_object_get_identifier (object);
-
-    gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter,
-                        UIDSIG_OBJECT, NULL,
-                        UIDSIG_ICON, icon,
-                        /* TRANSLATORS: [Unknown] signature name */
-                        UIDSIG_NAME, name ? name : _("[Unknown]"),
-                        UIDSIG_KEYID, id, -1);
-}
-
-static void
-names_populate (SeahorsePgpKeyProperties *self, GtkTreeStore *store, SeahorsePgpKey *pkey)
-{
-    GObject *object;
-    GtkTreeIter uiditer, sigiter;
-    GList *keys, *l;
-    GListModel *uids;
-
-    /* Insert all the fun-ness */
-    uids = seahorse_pgp_key_get_uids (pkey);
-
-    for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
-        g_autoptr(SeahorsePgpUid) uid = NULL;
-        g_autoptr(GIcon) icon = NULL;
-        g_autoptr(GPtrArray) keyids = NULL;
-        g_autoptr(GCancellable) cancellable = NULL;
-        GListModel *sigs;
-
-        uid = g_list_model_get_item (uids, i);
-        icon = g_themed_icon_new ("avatar-default-symbolic");
-        gtk_tree_store_append (store, &uiditer, NULL);
-        gtk_tree_store_set (store, &uiditer,
-                            UIDSIG_OBJECT, uid,
-                            UIDSIG_ICON, icon,
-                            UIDSIG_NAME, seahorse_object_get_markup (SEAHORSE_OBJECT (uid)),
-                            -1);
-
-        keyids = g_ptr_array_new ();
-
-        /* Build a list of all the keyids */
-        sigs = seahorse_pgp_uid_get_signatures (uid);
-        for (guint j = 0; j < g_list_model_get_n_items (sigs); j++) {
-            g_autoptr(SeahorsePgpSignature) sig = g_list_model_get_item (sigs, j);
-
-            /* Never show self signatures, they're implied */
-            if (seahorse_pgp_key_has_keyid (pkey, seahorse_pgp_signature_get_keyid (sig)))
-                continue;
-            g_ptr_array_add (keyids, (void *) seahorse_pgp_signature_get_keyid (sig));
-        }
-
-        g_ptr_array_add (keyids, NULL);
-
-        /*
-         * Pass it to 'DiscoverKeys' for resolution/download, cancellable
-         * ties search scope together
-         */
-        cancellable = g_cancellable_new ();
-        keys = seahorse_pgp_backend_discover_keys (NULL, (const gchar **)keyids->pdata, cancellable);
-
-        /* Add the keys to the store */
-        for (l = keys; l; l = g_list_next (l)) {
-            object = G_OBJECT (l->data);
-            gtk_tree_store_append (store, &sigiter, &uiditer);
-
-            /* This calls the 'update-row' callback, to set the values for the key */
-            seahorse_object_model_set_row_object (SEAHORSE_OBJECT_MODEL (store), &sigiter, object);
-        }
-    }
-}
-
-static void
-do_names (SeahorsePgpKeyProperties *self)
-{
-    GtkTreeStore *store;
-    GtkCellRenderer *renderer;
-
-    if (seahorse_object_get_usage (SEAHORSE_OBJECT (self->key)) != SEAHORSE_USAGE_PRIVATE_KEY)
-        return;
-
-    /* Clear/create table store */
-    g_return_if_fail (self->names_tree != NULL);
-
-    store = GTK_TREE_STORE (gtk_tree_view_get_model (self->names_tree));
-    if (store) {
-        gtk_tree_store_clear (store);
-
-    } else {
-        g_assert (UIDSIG_N_COLUMNS == G_N_ELEMENTS (uidsig_columns));
-        uidsig_columns[UIDSIG_ICON] = G_TYPE_ICON;
-
-        /* This is our first time so create a store */
-        store = GTK_TREE_STORE (seahorse_object_model_new (UIDSIG_N_COLUMNS, uidsig_columns));
-        g_signal_connect (store, "update-row", G_CALLBACK (names_update_row), self);
-
-        /* Icon column */
-        renderer = gtk_cell_renderer_pixbuf_new ();
-        gtk_tree_view_insert_column_with_attributes (self->names_tree,
-                                                     -1, "", renderer,
-                                                     "gicon", UIDSIG_ICON, NULL);
-
-        renderer = gtk_cell_renderer_text_new ();
-        g_object_set (renderer, "yalign", 0.0, "xalign", 0.0, NULL);
-        gtk_tree_view_insert_column_with_attributes (self->names_tree,
-                                                     /* TRANSLATORS: The name and email set on the PGP key */
-                                                     -1, _("Name/Email"), renderer,
-                                                     "markup", UIDSIG_NAME, NULL);
-
-        /* The signature ID column */
-        renderer = gtk_cell_renderer_text_new ();
-        g_object_set (renderer, "yalign", 0.0, "xalign", 0.0, NULL);
-        gtk_tree_view_insert_column_with_attributes (self->names_tree,
-                                                     -1, _("Signature ID"), renderer,
-                                                     "text", UIDSIG_KEYID, NULL);
-    }
-
-    names_populate (self, store, self->key);
-
-    gtk_tree_view_set_model (self->names_tree, GTK_TREE_MODEL(store));
-    gtk_tree_view_expand_all (self->names_tree);
-
-    update_names (NULL, self);
-}
-
-/* -----------------------------------------------------------------------------
- * PHOTO ID AREA
- */
 
 /* drag-n-drop uri data */
 enum {
@@ -498,14 +135,14 @@ static GtkTargetEntry target_list[] = {
     { "text/uri-list", 0, TARGET_URI } };
 
 static void
-on_pgp_owner_photo_drag_received (GtkWidget *widget,
-                                  GdkDragContext *context,
-                                  int x,
-                                  int y,
+on_pgp_owner_photo_drag_received (GtkWidget        *widget,
+                                  GdkDragContext   *context,
+                                  int               x,
+                                  int               y,
                                   GtkSelectionData *sel_data,
-                                  guint target_type,
-                                  guint time,
-                                  gpointer user_data)
+                                  unsigned int      target_type,
+                                  unsigned int      time,
+                                  void             *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     gboolean dnd_success = FALSE;
@@ -543,7 +180,7 @@ on_pgp_owner_photo_drag_received (GtkWidget *widget,
 }
 
 static void
-on_photos_add (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_photos_add (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
 
@@ -555,7 +192,7 @@ on_photos_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 }
 
 static void
-on_photos_delete (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_photos_delete (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorseGpgmePhoto *photo;
@@ -568,7 +205,7 @@ on_photos_delete (GSimpleAction *action, GVariant *param, gpointer user_data)
 }
 
 static void
-on_photos_make_primary (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_photos_make_primary (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     gpgme_error_t gerr;
@@ -590,7 +227,7 @@ set_photoid_state (SeahorsePgpKeyProperties *self)
     gboolean is_gpgme;
     GdkPixbuf *pixbuf;
     GListModel *photos;
-    guint n_photos;
+    unsigned int n_photos;
     g_autoptr(SeahorsePgpPhoto) first_photo = NULL;
     g_autoptr(SeahorsePgpPhoto) last_photo = NULL;
 
@@ -611,8 +248,8 @@ set_photoid_state (SeahorsePgpKeyProperties *self)
     }
 
     /* Display both of these when there is more than one photo id */
-    gtk_widget_set_visible (self->owner_photo_previous_button, n_photos > 1);
-    gtk_widget_set_visible (self->owner_photo_next_button, n_photos > 1);
+    gtk_widget_set_visible (self->photo_previous_button, n_photos > 1);
+    gtk_widget_set_visible (self->photo_next_button, n_photos > 1);
 
     /* Change sensitivity if first/last photo id */
     first_photo = g_list_model_get_item (photos, 0);
@@ -644,10 +281,10 @@ do_photo_id (SeahorsePgpKeyProperties *self)
     set_photoid_state (self);
 }
 
-static guint
+static unsigned int
 find_photo_index (GListModel *photos, SeahorsePgpPhoto *photo)
 {
-    for (guint i = 0; i < g_list_model_get_n_items (photos); i++) {
+    for (unsigned int i = 0; i < g_list_model_get_n_items (photos); i++) {
         g_autoptr(SeahorsePgpPhoto) foto = g_list_model_get_item (photos, i);
 
         if (photo == foto)
@@ -658,7 +295,7 @@ find_photo_index (GListModel *photos, SeahorsePgpPhoto *photo)
 }
 
 static void
-on_photos_next (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_photos_next (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorsePgpPhoto *photo;
@@ -667,7 +304,7 @@ on_photos_next (GSimpleAction *action, GVariant *param, gpointer user_data)
     photos = seahorse_pgp_key_get_photos (self->key);
     photo = g_object_get_data (G_OBJECT (self), "current-photoid");
     if (photo) {
-        guint index;
+        unsigned int index;
         g_autoptr(SeahorsePgpPhoto) next = NULL;
 
         index = find_photo_index (photos, photo);
@@ -682,7 +319,7 @@ on_photos_next (GSimpleAction *action, GVariant *param, gpointer user_data)
 }
 
 static void
-on_photos_previous (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_photos_previous (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorsePgpPhoto *photo;
@@ -691,7 +328,7 @@ on_photos_previous (GSimpleAction *action, GVariant *param, gpointer user_data)
     photos = seahorse_pgp_key_get_photos (self->key);
     photo = g_object_get_data (G_OBJECT (self), "current-photoid");
     if (photo) {
-        guint index;
+        unsigned int index;
 
         index = find_photo_index (photos, photo);
         if (index > 0) {
@@ -709,11 +346,11 @@ on_photos_previous (GSimpleAction *action, GVariant *param, gpointer user_data)
 
 static void
 on_pgp_owner_photoid_button (GtkWidget *widget,
-                             GdkEvent *event,
-                             gpointer user_data)
+                             GdkEvent  *event,
+                             void      *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
-    const gchar *action_str;
+    const char *action_str;
 
     if (event->type != GDK_SCROLL)
         return;
@@ -733,30 +370,10 @@ on_pgp_owner_photoid_button (GtkWidget *widget,
                                     action_str, NULL);
 }
 
-/* -----------------------------------------------------------------------------
- * OWNER PAGE
- */
-
-/* owner uid list */
-enum {
-    UID_OBJECT,
-    UID_ICON,
-    UID_MARKUP,
-    UID_N_COLUMNS
-};
-
-static GType uid_columns[] = {
-    G_TYPE_OBJECT,  /* object */
-    0 /* later */,  /* icon */
-    G_TYPE_STRING,  /* name */
-    G_TYPE_STRING,  /* email */
-    G_TYPE_STRING   /* comment */
-};
-
 static void
-on_gpgme_key_change_pass_done (GObject *source,
+on_gpgme_key_change_pass_done (GObject      *source,
                                GAsyncResult *res,
-                               gpointer user_data)
+                               void         *user_data)
 {
     g_autoptr(SeahorsePgpKeyProperties) self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorseGpgmeKey *pkey = SEAHORSE_GPGME_KEY (source);
@@ -772,7 +389,7 @@ on_gpgme_key_change_pass_done (GObject *source,
 }
 
 static void
-on_change_password (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_change_password (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorseUsage usage;
@@ -788,15 +405,50 @@ on_change_password (GSimpleAction *action, GVariant *param, gpointer user_data)
 }
 
 static void
+setup_titlebar (SeahorsePgpKeyProperties *self)
+{
+    const char *name;
+    GtkWidget *headerbar;
+    GtkWidget *menu_icon;
+    GtkWidget *menu_button;
+    g_autofree char *title = NULL;
+
+    name = seahorse_pgp_key_get_primary_name (self->key);
+
+    headerbar = gtk_header_bar_new ();
+    gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (headerbar), TRUE);
+    gtk_widget_show (headerbar);
+
+    menu_button = gtk_menu_button_new ();
+    menu_icon = gtk_image_new_from_icon_name ("open-menu-symbolic", GTK_ICON_SIZE_BUTTON);
+    gtk_button_set_image (GTK_BUTTON (menu_button), menu_icon);
+    gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (menu_button), self->actions_menu);
+
+    gtk_header_bar_pack_start (GTK_HEADER_BAR (headerbar), menu_button);
+
+    if (seahorse_pgp_key_is_private_key (self->key)) {
+        /* Translators: the 1st part of the title is the owner's name */
+        title = g_strdup_printf (_("%s — Private key"), name);
+        gtk_widget_show (menu_button);
+    } else {
+        /* Translators: the 1st part of the title is the owner's name */
+        title = g_strdup_printf (_("%s — Public key"), name);
+        gtk_widget_hide (menu_button);
+    }
+    gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar), title);
+
+    gtk_window_set_titlebar (GTK_WINDOW (self), headerbar);
+}
+
+static void
 do_owner (SeahorsePgpKeyProperties *self)
 {
-    GtkCellRenderer *renderer;
-    GtkListStore *store;
-    GtkTreeIter iter;
-    guint flags;
+    unsigned int flags;
     const char *label;
     GListModel *uids;
     g_autoptr(SeahorsePgpUid) primary_uid = NULL;
+    GDateTime *expires;
+    g_autofree char *expires_str = NULL;
 
     flags = seahorse_object_get_flags (SEAHORSE_OBJECT (self->key));
 
@@ -818,8 +470,8 @@ do_owner (SeahorsePgpKeyProperties *self)
             date_str = g_date_time_format (expires_date, "%x");
         }
 
-        message = g_strdup_printf (_("This key expired on: %s"), date_str);
-        gtk_label_set_text (self->expired_message, message);
+        message = g_strdup_printf (_("This key expired on %s"), date_str);
+        gtk_label_set_text (GTK_LABEL (self->expired_message), message);
     }
 
     /* Hide trust page when above */
@@ -829,114 +481,51 @@ do_owner (SeahorsePgpKeyProperties *self)
                                                     (flags & SEAHORSE_FLAG_DISABLED)));
     }
 
-    /* Hide or show the uids area */
     uids = seahorse_pgp_key_get_uids (self->key);
     primary_uid = g_list_model_get_item (uids, 0);
-    if (self->uids_area != NULL)
-        gtk_widget_set_visible (self->uids_area, primary_uid != NULL);
     if (primary_uid != NULL) {
-        g_autofree gchar *title = NULL;
-        g_autofree gchar *email_escaped = NULL;
-        g_autofree gchar *email_label = NULL;
+        g_autofree char *title = NULL;
+        g_autofree char *email_escaped = NULL;
+        g_autofree char *email_label = NULL;
 
         label = seahorse_pgp_uid_get_name (primary_uid);
-        gtk_label_set_text (self->owner_name_label, label);
-
-        if (seahorse_object_get_usage (SEAHORSE_OBJECT (self->key)) != SEAHORSE_USAGE_PRIVATE_KEY) {
-            /* Translators: the 1st part of the title is the owner's name */
-            title = g_strdup_printf (_("%s — Public key"), label);
-        } else {
-            /* Translators: the 1st part of the title is the owner's name */
-            title = g_strdup_printf (_("%s — Private key"), label);
-        }
-        gtk_window_set_title (GTK_WINDOW (self), title);
+        gtk_label_set_text (GTK_LABEL (self->name_label), label);
 
         label = seahorse_pgp_uid_get_email (primary_uid);
         if (label && *label) {
             email_escaped = g_markup_escape_text (label, -1);
             email_label = g_strdup_printf ("<a href=\"mailto:%s\">%s</a>", label, email_escaped);
-            gtk_label_set_markup (self->owner_email_label, email_label);
+            gtk_label_set_markup (GTK_LABEL (self->email_label), email_label);
+            gtk_widget_show (self->email_label);
+        } else {
+            gtk_widget_hide (self->email_label);
         }
 
         label = seahorse_pgp_uid_get_comment (primary_uid);
-        gtk_label_set_text (self->owner_comment_label, label);
+        if (label && *label) {
+            gtk_label_set_markup (GTK_LABEL (self->comment_label), label);
+            gtk_widget_show (self->comment_label);
+        } else {
+            gtk_widget_hide (self->comment_label);
+        }
 
         label = seahorse_object_get_identifier (SEAHORSE_OBJECT (self->key));
-        gtk_label_set_text (self->owner_keyid_label, label);
+        gtk_label_set_text (GTK_LABEL (self->keyid_label), label);
     }
 
-    /* Clear/create table store */
-    if (self->owner_userid_tree) {
-        store = GTK_LIST_STORE (gtk_tree_view_get_model (self->owner_userid_tree));
+    gtk_label_set_text (GTK_LABEL (self->fingerprint_label),
+                        seahorse_pgp_key_get_fingerprint (self->key));
 
-        if (store) {
-            gtk_list_store_clear (GTK_LIST_STORE (store));
+    expires = seahorse_pgp_key_get_expires (self->key);
+    if (expires)
+        expires_str = g_date_time_format (expires, "%x");
+    else
+        expires_str = g_strdup (C_("Expires", "Never"));
+    gtk_label_set_text (GTK_LABEL (self->expires_label), expires_str);
 
-        } else {
-            g_assert (UID_N_COLUMNS != G_N_ELEMENTS (uid_columns));
-            uid_columns[1] = G_TYPE_ICON;
-
-            /* This is our first time so create a store */
-            store = gtk_list_store_newv (UID_N_COLUMNS, (GType*)uid_columns);
-
-            /* Make the columns for the view */
-            renderer = gtk_cell_renderer_pixbuf_new ();
-            gtk_tree_view_insert_column_with_attributes (self->owner_userid_tree,
-                                                         -1, "", renderer,
-                                                         "gicon", UID_ICON, NULL);
-
-            gtk_tree_view_insert_column_with_attributes (self->owner_userid_tree,
-                                                         -1, _("Name"), gtk_cell_renderer_text_new (),
-                                                         "markup", UID_MARKUP, NULL);
-        }
-
-        for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
-            g_autoptr(SeahorsePgpUid) uid = g_list_model_get_item (uids, i);
-            const char *markup;
-            g_autoptr(GIcon) icon = NULL;
-
-            markup = seahorse_object_get_markup (SEAHORSE_OBJECT (uid));
-            icon = g_themed_icon_new ("avatar-default-symbolic");
-            gtk_list_store_append (store, &iter);
-            gtk_list_store_set (store, &iter,
-                                UID_OBJECT, uid,
-                                UID_ICON, icon,
-                                UID_MARKUP, markup, -1);
-        }
-
-        gtk_tree_view_set_model (self->owner_userid_tree, GTK_TREE_MODEL (store));
-    }
-
+    setup_titlebar (self);
     do_photo_id (self);
 }
-
-/* -----------------------------------------------------------------------------
- * DETAILS PAGE
- */
-
-/* details subkey list */
-enum {
-    SUBKEY_OBJECT,
-    SUBKEY_ID,
-    SUBKEY_TYPE,
-    SUBKEY_USAGE,
-    SUBKEY_CREATED,
-    SUBKEY_EXPIRES,
-    SUBKEY_STATUS,
-    SUBKEY_LENGTH,
-    SUBKEY_N_COLUMNS
-};
-
-const GType subkey_columns[] = {
-    G_TYPE_OBJECT,  /* SUBKEY_OBJECT */
-    G_TYPE_STRING,  /* SUBKEY_ID */
-    G_TYPE_STRING,  /* SUBKEY_TYPE */
-    G_TYPE_STRING,  /* SUBKEY_USAGE */
-    G_TYPE_STRING,  /* SUBKEY_CREATED */
-    G_TYPE_STRING,  /* SUBKEY_EXPIRES  */
-    G_TYPE_STRING,  /* SUBKEY_STATUS */
-    G_TYPE_UINT     /* SUBKEY_LENGTH */
-};
 
 /* trust combo box list */
 enum {
@@ -951,7 +540,7 @@ const GType trust_columns[] = {
 };
 
 static void
-on_add_subkey_completed (GObject *object, GAsyncResult *res, gpointer user_data)
+on_add_subkey_completed (GObject *object, GAsyncResult *res, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     g_autoptr(GError) error = NULL;
@@ -963,13 +552,13 @@ on_add_subkey_completed (GObject *object, GAsyncResult *res, gpointer user_data)
 }
 
 static void
-on_subkeys_add (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_subkeys_add (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorseGpgmeAddSubkey *dialog;
     int response;
     SeahorseKeyEncType type;
-    guint length;
+    unsigned int length;
     GDateTime *expires;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
@@ -994,7 +583,7 @@ on_subkeys_add (GSimpleAction *action, GVariant *param, gpointer user_data)
 }
 
 static void
-on_pgp_details_trust_changed (GtkComboBox *selection, gpointer user_data)
+on_pgp_details_trust_changed (GtkComboBox *selection, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     int trust;
@@ -1020,7 +609,7 @@ on_pgp_details_trust_changed (GtkComboBox *selection, gpointer user_data)
 }
 
 static void
-on_export_complete (GObject *source, GAsyncResult *result, gpointer user_data)
+on_export_complete (GObject *source, GAsyncResult *result, void *user_data)
 {
     g_autoptr(GtkWindow) parent = GTK_WINDOW (user_data);
     GError *error = NULL;
@@ -1035,7 +624,7 @@ export_key_to_file (SeahorsePgpKeyProperties *self, gboolean secret)
 {
     GList *exporters = NULL;
     GtkWindow *window;
-    g_autofree gchar *directory = NULL;
+    g_autofree char *directory = NULL;
     g_autoptr(GFile) file = NULL;
     SeahorseExporter *exporter = NULL;
 
@@ -1053,7 +642,7 @@ export_key_to_file (SeahorsePgpKeyProperties *self, gboolean secret)
 }
 
 static void
-on_export_secret (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_export_secret (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
 
@@ -1061,7 +650,7 @@ on_export_secret (GSimpleAction *action, GVariant *param, gpointer user_data)
 }
 
 static void
-on_export_public (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_export_public (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
 
@@ -1069,7 +658,7 @@ on_export_public (GSimpleAction *action, GVariant *param, gpointer user_data)
 }
 
 static void
-on_change_expires (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_change_expires (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     GListModel *subkeys;
@@ -1096,10 +685,10 @@ setup_trust_combobox (SeahorsePgpKeyProperties *self)
 
     etype = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
 
-    gtk_cell_layout_clear (GTK_CELL_LAYOUT (self->details_trust_combobox));
-    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self->details_trust_combobox),
+    gtk_cell_layout_clear (GTK_CELL_LAYOUT (self->ownertrust_combobox));
+    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self->ownertrust_combobox),
                                 text_cell, FALSE);
-    gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (self->details_trust_combobox),
+    gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (self->ownertrust_combobox),
                                    text_cell,
                                    "text", TRUST_LABEL,
                                    NULL);
@@ -1135,69 +724,26 @@ setup_trust_combobox (SeahorsePgpKeyProperties *self)
                             -1);
     }
 
-    gtk_combo_box_set_model (self->details_trust_combobox, GTK_TREE_MODEL (model));
+    gtk_combo_box_set_model (GTK_COMBO_BOX (self->ownertrust_combobox),
+                             GTK_TREE_MODEL (model));
 }
 
 static void
 do_details (SeahorsePgpKeyProperties *self)
 {
+    int trust;
+    gboolean valid;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    char dbuffer[G_ASCII_DTOSTR_BUF_SIZE];
-    g_autofree char *fp_label = NULL;
-    GDateTime *created;
-    const char *label;
-    int trust;
-    GListModel *subkeys;
-    gboolean valid;
 
-    subkeys = seahorse_pgp_key_get_subkeys (self->key);
-    g_return_if_fail (g_list_model_get_n_items (subkeys) > 0);
-
-    label = seahorse_object_get_identifier (SEAHORSE_OBJECT (self->key));
-    gtk_label_set_text (self->details_id_label, label);
-
-    fp_label = g_strdup (seahorse_pgp_key_get_fingerprint (self->key));
-    if (strlen (fp_label) > 24 && g_ascii_isspace (fp_label[24]))
-        fp_label[24] = '\n';
-    gtk_label_set_text (self->details_fingerprint_label, fp_label);
-
-    label = seahorse_pgp_key_get_algo (self->key);
-    gtk_label_set_text (self->details_algo_label, label);
-
-    created = seahorse_pgp_key_get_created (self->key);
-    if (created) {
-        g_autofree char *created_str = NULL;
-
-        created_str = g_date_time_format (created, "%x");
-        gtk_label_set_text (self->details_created_label, created_str);
-    }
-
-    g_ascii_dtostr (dbuffer, G_ASCII_DTOSTR_BUF_SIZE, seahorse_pgp_key_get_length (self->key));
-    gtk_label_set_text (self->details_strength_label, dbuffer);
-
-    if (SEAHORSE_GPGME_IS_KEY (self->key)) {
-        GDateTime *expires;
-        g_autofree char *expires_str = NULL;
-
-        expires = seahorse_pgp_key_get_expires (self->key);
-        if (expires)
-            expires_str = g_date_time_format (expires, "%x");
-        else
-            expires_str = g_strdup (C_("Expires", "Never"));
-        gtk_label_set_text (self->details_expires_label, expires_str);
-    } else {
-        gtk_label_set_text (self->details_expires_label, NULL);
-    }
-
-    if (seahorse_object_get_usage (SEAHORSE_OBJECT (self->key)) == SEAHORSE_USAGE_PUBLIC_KEY) {
-        gtk_widget_set_visible (GTK_WIDGET (self->indicate_trust_box),
+    if (!seahorse_pgp_key_is_private_key (self->key)) {
+        gtk_widget_set_visible (self->indicate_trust_row,
                                 SEAHORSE_GPGME_IS_KEY (self->key));
     }
-    gtk_widget_set_sensitive (GTK_WIDGET (self->details_trust_combobox),
+    gtk_widget_set_sensitive (GTK_WIDGET (self->ownertrust_combobox),
                               !(seahorse_object_get_flags (SEAHORSE_OBJECT (self->key)) & SEAHORSE_FLAG_DISABLED));
 
-    model = gtk_combo_box_get_model (self->details_trust_combobox);
+    model = gtk_combo_box_get_model (GTK_COMBO_BOX (self->ownertrust_combobox));
     valid = gtk_tree_model_get_iter_first (model, &iter);
     while (valid) {
         gtk_tree_model_get (model, &iter,
@@ -1205,9 +751,9 @@ do_details (SeahorsePgpKeyProperties *self)
                             -1);
 
         if (trust == seahorse_pgp_key_get_trust (self->key)) {
-            g_signal_handlers_block_by_func (self->details_trust_combobox, on_pgp_details_trust_changed, self);
-            gtk_combo_box_set_active_iter (self->details_trust_combobox,  &iter);
-            g_signal_handlers_unblock_by_func (self->details_trust_combobox, on_pgp_details_trust_changed, self);
+            g_signal_handlers_block_by_func (self->ownertrust_combobox, on_pgp_details_trust_changed, self);
+            gtk_combo_box_set_active_iter (GTK_COMBO_BOX (self->ownertrust_combobox), &iter);
+            g_signal_handlers_unblock_by_func (self->ownertrust_combobox, on_pgp_details_trust_changed, self);
             break;
         }
 
@@ -1215,36 +761,10 @@ do_details (SeahorsePgpKeyProperties *self)
     }
 }
 
-/* -----------------------------------------------------------------------------
- * TRUST PAGE (PUBLIC KEYS)
- */
-
-enum {
-    SIGN_ICON,
-    SIGN_NAME,
-    SIGN_KEYID,
-    SIGN_TRUSTED,
-    SIGN_N_COLUMNS
-};
-
-static GType sign_columns[] = {
-    0 /* later */,
-    G_TYPE_STRING,
-    G_TYPE_STRING,
-    G_TYPE_BOOLEAN
-};
-
 static void
-on_toggle_action (GSimpleAction *action, GVariant *param, gpointer user_data) {
-    GVariant *old_state, *new_state;
-
-    old_state = g_action_get_state (G_ACTION (action));
-    new_state = g_variant_new_boolean (!g_variant_get_boolean (old_state));
-    g_action_change_state (G_ACTION (action), new_state);
-}
-
-static void
-on_trust_marginal_changed (GSimpleAction *action, GVariant *new_state, gpointer user_data)
+on_trust_marginal_changed (GSimpleAction *action,
+                           GVariant      *new_state,
+                           void          *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorseValidity trust;
@@ -1263,107 +783,9 @@ on_trust_marginal_changed (GSimpleAction *action, GVariant *new_state, gpointer 
     }
 }
 
-/* Is called whenever a signature key changes */
-static void
-trust_update_row (SeahorseObjectModel *skmodel, SeahorseObject *object,
-                  GtkTreeIter *iter, gpointer user_data)
-{
-    gboolean trusted = FALSE;
-    g_autoptr(GIcon) icon = NULL;
-    const gchar *name, *id;
-
-    if (seahorse_object_get_usage (object) == SEAHORSE_USAGE_PRIVATE_KEY)
-        trusted = TRUE;
-    else if (seahorse_object_get_flags (object) & SEAHORSE_FLAG_TRUSTED)
-        trusted = TRUE;
-
-    icon = g_themed_icon_new (SEAHORSE_PGP_IS_KEY (object) ?
-                              SEAHORSE_ICON_SIGN : "dialog-question");
-    name = seahorse_object_get_label (object);
-    id = seahorse_object_get_identifier (object);
-
-    gtk_tree_store_set (GTK_TREE_STORE (skmodel), iter,
-                        SIGN_ICON, icon,
-                        /* TRANSLATORS: [Unknown] signature name */
-                        SIGN_NAME, name ? name : _("[Unknown]"),
-                        SIGN_KEYID, id,
-                        SIGN_TRUSTED, trusted,
-                        -1);
-}
-
-static void
-signatures_populate_model (SeahorsePgpKeyProperties *self, SeahorseObjectModel *skmodel)
-{
-    GtkTreeIter iter;
-    gboolean have_sigs = FALSE;
-    g_autoptr(GPtrArray) rawids = NULL;
-    GListModel *uids;
-    GList *keys, *l;
-
-    if (self->signatures_tree == NULL)
-        return;
-
-    rawids = g_ptr_array_new ();
-    uids = seahorse_pgp_key_get_uids (self->key);
-
-    /* Build a list of all the keyids */
-    for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
-        g_autoptr(SeahorsePgpUid) uid = g_list_model_get_item (uids, i);
-        GListModel *sigs;
-
-        sigs = seahorse_pgp_uid_get_signatures (uid);
-        for (guint j = 0; j < g_list_model_get_n_items (sigs); j++) {
-            g_autoptr(SeahorsePgpSignature) sig = g_list_model_get_item (sigs, j);
-
-            /* Never show self signatures, they're implied */
-            if (seahorse_pgp_key_has_keyid (self->key,
-                                            seahorse_pgp_signature_get_keyid (sig)))
-                continue;
-            have_sigs = TRUE;
-            g_ptr_array_add (rawids, (char *) seahorse_pgp_signature_get_keyid (sig));
-        }
-    }
-
-    /* Strip out duplicates */
-    unique_strings (rawids);
-    g_ptr_array_add (rawids, NULL);
-
-    /* Only show signatures area when there are signatures */
-    gtk_widget_set_visible (self->signatures_area, have_sigs);
-
-    if (skmodel) {
-        g_autoptr(GCancellable) cancellable = NULL;
-
-        /* Pass it to 'DiscoverKeys' for resolution/download. cancellable ties
-         * search scope together */
-        cancellable = g_cancellable_new ();
-        keys = seahorse_pgp_backend_discover_keys (NULL, (const gchar **)rawids->pdata, cancellable);
-
-        /* Add the keys to the store */
-        for (l = keys; l; l = g_list_next (l)) {
-            GObject *object = G_OBJECT (l->data);
-
-            gtk_tree_store_append (GTK_TREE_STORE (skmodel), &iter, NULL);
-            /* This calls the 'update-row' callback, to set the values for the key */
-            seahorse_object_model_set_row_object (SEAHORSE_OBJECT_MODEL (skmodel), &iter, object);
-        }
-    }
-}
-
-/* Refilter when the user toggles the 'only show trusted' checkbox */
-static void
-on_pgp_trusted_toggled (GtkToggleButton *toggle, GtkTreeModelFilter *filter)
-{
-    /* Set flag on the store */
-    GtkTreeModel *model = gtk_tree_model_filter_get_model (filter);
-    g_object_set_data (G_OBJECT (model), "only-trusted",
-                       GINT_TO_POINTER (gtk_toggle_button_get_active (toggle)));
-    gtk_tree_model_filter_refilter (filter);
-}
-
 /* Add a signature */
 static void
-on_sign_key (GSimpleAction *action, GVariant *param, gpointer user_data)
+on_sign_key (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
     SeahorseGpgmeSignDialog *dialog;
@@ -1376,28 +798,18 @@ on_sign_key (GSimpleAction *action, GVariant *param, gpointer user_data)
     gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
-/* When the 'only display trusted' check is checked, hide untrusted rows */
 static gboolean
-trust_filter (GtkTreeModel *model, GtkTreeIter *iter, gpointer userdata)
-{
-    /* Read flag on the store */
-    gboolean trusted = FALSE;
-    gtk_tree_model_get (model, iter, SIGN_TRUSTED, &trusted, -1);
-    return !g_object_get_data (G_OBJECT (model), "only-trusted") || trusted;
-}
-
-static gboolean
-key_have_signatures (SeahorsePgpKey *pkey, guint types)
+key_have_signatures (SeahorsePgpKey *pkey, unsigned int types)
 {
     GListModel *uids;
 
     uids = seahorse_pgp_key_get_uids (pkey);
-    for (guint i = 0; i < g_list_model_get_n_items (uids); i++) {
+    for (unsigned int i = 0; i < g_list_model_get_n_items (uids); i++) {
         g_autoptr(SeahorsePgpUid) uid = g_list_model_get_item (uids, i);
         GListModel *sigs;
 
         sigs = seahorse_pgp_uid_get_signatures (uid);
-        for (guint j = 0; j < g_list_model_get_n_items (sigs); j++) {
+        for (unsigned int j = 0; j < g_list_model_get_n_items (sigs); j++) {
             g_autoptr(SeahorsePgpSignature) sig = g_list_model_get_item (sigs, j);
             if (seahorse_pgp_signature_get_sigtype (sig) & types)
                 return TRUE;
@@ -1410,10 +822,7 @@ key_have_signatures (SeahorsePgpKey *pkey, guint types)
 static void
 do_trust (SeahorsePgpKeyProperties *self)
 {
-    GtkTreeStore *store;
-    GtkTreeModelFilter *filter;
     gboolean sigpersonal;
-    GtkCellRenderer *renderer;
     GAction *trust_action;
 
     if (seahorse_object_get_usage (SEAHORSE_OBJECT (self->key)) != SEAHORSE_USAGE_PUBLIC_KEY)
@@ -1421,15 +830,14 @@ do_trust (SeahorsePgpKeyProperties *self)
 
     /* Remote keys */
     if (!SEAHORSE_GPGME_IS_KEY (self->key)) {
-        gtk_widget_set_visible (self->manual_trust_area, FALSE);
-        gtk_widget_set_visible (GTK_WIDGET (self->trust_marginal_switch), TRUE);
-        gtk_widget_set_sensitive (GTK_WIDGET (self->trust_marginal_switch), FALSE);
-        gtk_widget_set_visible (self->sign_area, FALSE);
-        gtk_widget_set_visible (self->revoke_area, FALSE);
+        gtk_widget_set_visible (self->trust_marginal_switch, TRUE);
+        gtk_widget_set_sensitive (self->trust_marginal_switch, FALSE);
+        gtk_widget_set_visible (self->trust_sign_row, FALSE);
+        gtk_widget_set_visible (self->trust_revoke_row, FALSE);
 
     /* Local keys */
     } else {
-        guint trust;
+        unsigned int trust;
         gboolean managed = FALSE;
 
         trust = seahorse_pgp_key_get_trust (self->key);
@@ -1457,8 +865,7 @@ do_trust (SeahorsePgpKeyProperties *self)
         }
 
         /* Managed and unmanaged areas */
-        gtk_widget_set_visible (self->manual_trust_area, !managed);
-        gtk_widget_set_visible (GTK_WIDGET (self->trust_marginal_switch), managed);
+        gtk_widget_set_visible (self->trust_marginal_switch, managed);
         trust_action = g_action_map_lookup_action (G_ACTION_MAP (self->action_group),
                                                    "trust-marginal");
 
@@ -1471,91 +878,39 @@ do_trust (SeahorsePgpKeyProperties *self)
 
         /* Signing and revoking */
         sigpersonal = key_have_signatures (self->key, SKEY_PGPSIG_PERSONAL);
-        gtk_widget_set_visible (self->sign_area, !sigpersonal);
-        gtk_widget_set_visible (self->revoke_area, sigpersonal);
-    }
-
-    /* The actual signatures listing */
-    if (self->signatures_tree != NULL) {
-        filter = GTK_TREE_MODEL_FILTER (gtk_tree_view_get_model (self->signatures_tree));
-
-        if (filter) {
-            /* First time create the store */
-            store = GTK_TREE_STORE (gtk_tree_model_filter_get_model (filter));
-            gtk_tree_store_clear (store);
-        } else {
-            /* Create a new SeahorseObjectModel store.... */
-            sign_columns[SIGN_ICON] = G_TYPE_ICON;
-            store = GTK_TREE_STORE (seahorse_object_model_new (SIGN_N_COLUMNS, (GType*)sign_columns));
-            g_signal_connect (store, "update-row",
-                              G_CALLBACK (trust_update_row), self);
-
-            /* .... and a filter to go ontop of it */
-            filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL));
-            gtk_tree_model_filter_set_visible_func (filter,
-                                                    (GtkTreeModelFilterVisibleFunc)trust_filter, NULL, NULL);
-
-            /* Make the colunms for the view */
-            renderer = gtk_cell_renderer_pixbuf_new ();
-            g_object_set (renderer, "stock-size", GTK_ICON_SIZE_LARGE_TOOLBAR, NULL);
-            gtk_tree_view_insert_column_with_attributes (self->signatures_tree,
-                                                         -1, "", renderer,
-                                                         "gicon", SIGN_ICON, NULL);
-            gtk_tree_view_insert_column_with_attributes (self->signatures_tree,
-                                                         /* TRANSLATORS: The name and email set on the PGP key */
-                                                         -1, _("Name/Email"), gtk_cell_renderer_text_new (),
-                                                         "text", SIGN_NAME, NULL);
-            gtk_tree_view_insert_column_with_attributes (self->signatures_tree,
-                                                         -1, _("Key ID"), gtk_cell_renderer_text_new (),
-                                                         "text", SIGN_KEYID, NULL);
-
-            gtk_tree_view_set_model (self->signatures_tree, GTK_TREE_MODEL (filter));
-
-            g_signal_connect (self->signatures_toggle, "toggled",
-                              G_CALLBACK (on_pgp_trusted_toggled), filter);
-            gtk_toggle_button_set_active (self->signatures_toggle, TRUE);
-        }
-
-        signatures_populate_model (self, SEAHORSE_OBJECT_MODEL (store));
+        gtk_widget_set_visible (self->trust_sign_row, !sigpersonal);
+        gtk_widget_set_visible (self->trust_revoke_row, sigpersonal);
     }
 }
-
-/* -----------------------------------------------------------------------------
- * GENERAL
- */
 
 static const GActionEntry PRIVATE_KEY_ACTIONS[] = {
     { "change-password",  on_change_password  },
     { "change-expires",   on_change_expires   },
     { "export-secret",    on_export_secret    },
     { "export-public",    on_export_public    },
-    { "uids.add",           on_uids_add           },
-    { "uids.delete",        on_uids_delete        },
-    { "uids.make-primary",  on_uids_make_primary  },
-    { "uids.revoke",        on_uids_revoke        },
-    { "uids.sign",          on_uids_sign          },
+    { "uids.add",         on_uids_add         },
+    { "subkeys.add",      on_subkeys_add      },
     { "photos.add",           on_photos_add           },
     { "photos.delete",        on_photos_delete        },
     { "photos.previous",      on_photos_previous      },
     { "photos.next",          on_photos_next          },
     { "photos.make-primary",  on_photos_make_primary  },
-    { "subkeys.add",             on_subkeys_add             },
 };
 
 static const GActionEntry PUBLIC_KEY_ACTIONS[] = {
-    { "sign-key",        on_sign_key  },
-    { "trust-marginal",  on_toggle_action,  NULL,  "false",  on_trust_marginal_changed },
-    { "photos.previous",      on_photos_previous      },
-    { "photos.next",          on_photos_next          },
+    { "sign-key",         on_sign_key  },
+    /* { "revoke-key",    on_revoke_key  },  TODO */
+    { "trust-marginal",   seahorse_util_toggle_action, NULL, "false", on_trust_marginal_changed },
+    { "photos.previous",  on_photos_previous      },
+    { "photos.next",      on_photos_next          },
 };
 
 static void
-key_notify (GObject *object, GParamSpec *pspec, gpointer user_data)
+key_notify (GObject *object, GParamSpec *pspec, void *user_data)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (user_data);
 
     do_owner (self);
-    do_names (self);
     do_trust (self);
     do_details (self);
 }
@@ -1563,34 +918,36 @@ key_notify (GObject *object, GParamSpec *pspec, gpointer user_data)
 static void
 get_common_widgets (SeahorsePgpKeyProperties *self, GtkBuilder *builder)
 {
-    GtkWidget *subkeys_listbox;
+    GtkWidget *uids_listbox, *subkeys_listbox;
 
-    self->owner_name_label = GTK_LABEL (gtk_builder_get_object (builder, "owner-name-label"));
-    self->owner_email_label = GTK_LABEL (gtk_builder_get_object (builder, "owner-email-label"));
-    self->owner_comment_label = GTK_LABEL (gtk_builder_get_object (builder, "owner-comment-label"));
-    self->owner_keyid_label = GTK_LABEL (gtk_builder_get_object (builder, "owner-keyid-label"));
-    self->owner_photo_previous_button = GTK_WIDGET (gtk_builder_get_object (builder, "owner-photo-previous-button"));
-    self->owner_photo_next_button = GTK_WIDGET (gtk_builder_get_object (builder, "owner-photo-next-button"));
-    self->revoked_area = GTK_WIDGET (gtk_builder_get_object (builder, "revoked-area"));
-    self->expired_area = GTK_WIDGET (gtk_builder_get_object (builder, "expired-area"));
-    self->expired_message = GTK_LABEL (gtk_builder_get_object (builder, "expired-message"));
+    self->name_label = GTK_WIDGET (gtk_builder_get_object (builder, "name_label"));
+    self->email_label = GTK_WIDGET (gtk_builder_get_object (builder, "email_label"));
+    self->comment_label = GTK_WIDGET (gtk_builder_get_object (builder, "comment_label"));
+    self->keyid_label = GTK_WIDGET (gtk_builder_get_object (builder, "keyid_label"));
+    self->fingerprint_label = GTK_WIDGET (gtk_builder_get_object (builder, "fingerprint_label"));
+    self->expires_label = GTK_WIDGET (gtk_builder_get_object (builder, "expires_label"));
+    self->photo_previous_button = GTK_WIDGET (gtk_builder_get_object (builder, "photo_previous_button"));
+    self->photo_next_button = GTK_WIDGET (gtk_builder_get_object (builder, "photo_next_button"));
+    self->revoked_area = GTK_WIDGET (gtk_builder_get_object (builder, "revoked_area"));
+    self->expired_area = GTK_WIDGET (gtk_builder_get_object (builder, "expired_area"));
+    self->expired_message = GTK_WIDGET (gtk_builder_get_object (builder, "expired_message"));
     self->photoid = GTK_IMAGE (gtk_builder_get_object (builder, "photoid"));
     self->photo_event_box = GTK_EVENT_BOX (gtk_builder_get_object (builder, "photo-event-box"));
-    self->details_id_label = GTK_LABEL (gtk_builder_get_object (builder, "details-id-label"));
-    self->details_fingerprint_label = GTK_LABEL (gtk_builder_get_object (builder, "details-fingerprint-label"));
-    self->details_algo_label = GTK_LABEL (gtk_builder_get_object (builder, "details-algo-label"));
-    self->details_created_label = GTK_LABEL (gtk_builder_get_object (builder, "details-created-label"));
-    self->details_strength_label = GTK_LABEL (gtk_builder_get_object (builder, "details-strength-label"));
-    self->details_expires_label = GTK_LABEL (gtk_builder_get_object (builder, "details-expires-label"));
-    self->details_trust_combobox = GTK_COMBO_BOX (gtk_builder_get_object (builder, "details-trust-combobox"));
+    self->ownertrust_combobox = GTK_WIDGET (gtk_builder_get_object (builder, "ownertrust_combobox"));
+    self->uids_container = GTK_WIDGET (gtk_builder_get_object (builder, "uids_container"));
     self->subkeys_container = GTK_WIDGET (gtk_builder_get_object (builder, "subkeys_container"));
 
     g_signal_connect_object (self->photo_event_box, "scroll-event",
                              G_CALLBACK (on_pgp_owner_photoid_button),
                              self, 0);
-    g_signal_connect_object (self->details_trust_combobox, "changed",
+    g_signal_connect_object (self->ownertrust_combobox, "changed",
                              G_CALLBACK (on_pgp_details_trust_changed),
                              self, 0);
+
+    uids_listbox = seahorse_pgp_uid_list_box_new (self->key);
+    gtk_widget_show (uids_listbox);
+    gtk_container_add (GTK_CONTAINER (self->uids_container),
+                       uids_listbox);
 
     subkeys_listbox = seahorse_pgp_subkey_list_box_new (self->key);
     gtk_widget_show (subkeys_listbox);
@@ -1603,14 +960,15 @@ create_public_key_dialog (SeahorsePgpKeyProperties *self)
 {
     g_autoptr(GtkBuilder) builder = NULL;
     GtkWidget *content_area, *content;
-    const gchar *user;
-    g_autofree gchar *user_escaped = NULL;
+    const char *user;
+    g_autofree char *sign_text = NULL;
+    g_autofree char *revoke_text = NULL;
 
     builder = gtk_builder_new_from_resource (PUBLIC_KEY_PROPERTIES_UI);
     gtk_builder_connect_signals (builder, self);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (self));
-    content = GTK_WIDGET (gtk_builder_get_object (builder, "window-content"));
+    content = GTK_WIDGET (gtk_builder_get_object (builder, "window_content"));
     gtk_container_add (GTK_CONTAINER (content_area), content);
 
     g_action_map_add_action_entries (G_ACTION_MAP (self->action_group),
@@ -1623,54 +981,29 @@ create_public_key_dialog (SeahorsePgpKeyProperties *self)
 
     get_common_widgets (self, builder);
 
-    self->signatures_tree = GTK_TREE_VIEW (gtk_builder_get_object (builder, "signatures-tree"));
-    self->signatures_area = GTK_WIDGET (gtk_builder_get_object (builder, "signatures-area"));
-    self->uids_area = GTK_WIDGET (gtk_builder_get_object (builder, "uids-area"));
     self->trust_page = GTK_WIDGET (gtk_builder_get_object (builder, "trust-page"));
-    self->indicate_trust_box = GTK_BOX (gtk_builder_get_object (builder, "indicate_trust_box"));
-    self->trust_sign_label = GTK_LABEL (gtk_builder_get_object (builder, "trust-sign-label"));
-    self->trust_revoke_label = GTK_LABEL (gtk_builder_get_object (builder, "trust-revoke-label"));
-    self->manual_trust_area = GTK_WIDGET (gtk_builder_get_object (builder, "manual-trust-area"));
-    self->sign_area = GTK_WIDGET (gtk_builder_get_object (builder, "sign-area"));
-    self->revoke_area = GTK_WIDGET (gtk_builder_get_object (builder, "revoke-area"));
-    self->trust_marginal_switch = GTK_SWITCH (gtk_builder_get_object (builder, "trust-marginal-switch"));
-    self->trust_marginal_label = GTK_LABEL (gtk_builder_get_object (builder, "trust-marginal-label"));
-    self->signatures_toggle = GTK_TOGGLE_BUTTON (gtk_builder_get_object (builder, "signatures-toggle"));
-    self->owner_userid_tree = GTK_TREE_VIEW (gtk_builder_get_object (builder, "owner-userid-tree"));
+    self->indicate_trust_row = GTK_WIDGET (gtk_builder_get_object (builder, "indicate_trust_row"));
+    self->trust_sign_row = GTK_WIDGET (gtk_builder_get_object (builder, "trust_sign_row"));
+    self->trust_revoke_row = GTK_WIDGET (gtk_builder_get_object (builder, "trust_revoke_row"));
+    self->trust_marginal_switch = GTK_WIDGET (gtk_builder_get_object (builder, "trust-marginal-switch"));
 
     setup_trust_combobox (self);
     do_owner (self);
     do_details (self);
     do_trust (self);
 
-    g_signal_connect_object (self->signatures_tree, "row-activated",
-                             G_CALLBACK (on_pgp_signature_row_activated),
-                             self, 0);
-
     /* Fill in trust labels with name. */
     user = seahorse_object_get_label (SEAHORSE_OBJECT (self->key));
-    user_escaped = g_markup_escape_text (user, -1);
 
-    {
-        g_autofree gchar *text = NULL;
-        text = g_strdup_printf(_("I trust signatures from “%s” on other keys"),
+    sign_text = g_strdup_printf(_("I believe “%s” is the owner of this key"),
                                user);
-        gtk_label_set_label (self->trust_marginal_label, text);
-    }
+    hdy_action_row_set_subtitle (HDY_ACTION_ROW (self->trust_sign_row), sign_text);
+    hdy_action_row_set_subtitle_lines (HDY_ACTION_ROW (self->trust_sign_row), 0);
 
-    {
-        g_autofree gchar *text = NULL;
-        text = g_strdup_printf(_("If you believe that the person that owns this key is “%s”, <i>sign</i> this key:"),
-                               user_escaped);
-        gtk_label_set_markup (self->trust_sign_label, text);
-    }
-
-    {
-        g_autofree gchar *text = NULL;
-        text = g_strdup_printf(_("If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"),
-                               user_escaped);
-        gtk_label_set_markup (self->trust_revoke_label, text);
-    }
+    revoke_text = g_strdup_printf(_("I no longer trust that “%s” owns this key"),
+                                  user);
+    hdy_action_row_set_subtitle (HDY_ACTION_ROW (self->trust_revoke_row), revoke_text);
+    hdy_action_row_set_subtitle_lines (HDY_ACTION_ROW (self->trust_revoke_row), 0);
 }
 
 static void
@@ -1678,12 +1011,12 @@ create_private_key_dialog (SeahorsePgpKeyProperties *self)
 {
     g_autoptr(GtkBuilder) builder = NULL;
     GtkWidget *content_area, *content;
-    GtkTreeSelection *selection;
 
     builder = gtk_builder_new_from_resource (PRIVATE_KEY_PROPERTIES_UI);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (self));
-    content = GTK_WIDGET (gtk_builder_get_object (builder, "window-content"));
+    content = GTK_WIDGET (gtk_builder_get_object (builder, "window_content"));
+    self->actions_menu = G_MENU_MODEL (gtk_builder_get_object (builder, "actions_menu"));
     gtk_container_add (GTK_CONTAINER (content_area), content);
 
     g_action_map_add_action_entries (G_ACTION_MAP (self->action_group),
@@ -1696,7 +1029,6 @@ create_private_key_dialog (SeahorsePgpKeyProperties *self)
 
     get_common_widgets (self, builder);
 
-    self->names_tree = GTK_TREE_VIEW (gtk_builder_get_object (builder, "names-tree"));
     self->owner_photo_frame = GTK_WIDGET (gtk_builder_get_object (builder, "owner-photo-frame"));
     self->owner_photo_add_button = GTK_WIDGET (gtk_builder_get_object (builder, "owner-photo-add-button"));
     self->owner_photo_delete_button = GTK_WIDGET (gtk_builder_get_object (builder, "owner-photo-delete-button"));
@@ -1704,7 +1036,6 @@ create_private_key_dialog (SeahorsePgpKeyProperties *self)
 
     setup_trust_combobox (self);
     do_owner (self);
-    do_names (self);
     do_details (self);
 
     /* Allow DnD on the photo frame */
@@ -1715,17 +1046,13 @@ create_private_key_dialog (SeahorsePgpKeyProperties *self)
                        GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_HIGHLIGHT | GTK_DEST_DEFAULT_DROP,
                        target_list, G_N_ELEMENTS (target_list),
                        GDK_ACTION_COPY);
-
-    /* Enable and disable buttons as UIDs are selected */
-    selection = gtk_tree_view_get_selection (self->names_tree);
-    g_signal_connect (selection, "changed", G_CALLBACK (update_names), self);
 }
 
 static void
-seahorse_pgp_key_properties_get_property (GObject *object,
-                                          guint prop_id,
-                                          GValue *value,
-                                          GParamSpec *pspec)
+seahorse_pgp_key_properties_get_property (GObject      *object,
+                                          unsigned int  prop_id,
+                                          GValue       *value,
+                                          GParamSpec   *pspec)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (object);
 
@@ -1740,10 +1067,10 @@ seahorse_pgp_key_properties_get_property (GObject *object,
 }
 
 static void
-seahorse_pgp_key_properties_set_property (GObject *object,
-                                          guint prop_id,
+seahorse_pgp_key_properties_set_property (GObject      *object,
+                                          unsigned int  prop_id,
                                           const GValue *value,
-                                          GParamSpec *pspec)
+                                          GParamSpec   *pspec)
 {
     SeahorsePgpKeyProperties *self = SEAHORSE_PGP_KEY_PROPERTIES (object);
 
@@ -1791,6 +1118,9 @@ static void
 seahorse_pgp_key_properties_init (SeahorsePgpKeyProperties *self)
 {
     self->action_group = g_simple_action_group_new ();
+
+    gtk_window_set_default_size (GTK_WINDOW (self), 300, 600);
+    gtk_container_set_border_width (GTK_CONTAINER (self), 0);
 }
 
 static void
