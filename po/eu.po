@@ -4,12 +4,12 @@
 #
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2008, 2009, 2010, 2011, 2012.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2013, 2014, 2015, 2016, 2017.
-# Asier Sarasua Garmendia <asiersarasua@ni.eus>, 2019, 2020.
+# Asier Sarasua Garmendia <asiersarasua@ni.eus>, 2019, 2020, 2021.
 msgid ""
 msgstr "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-02-26 01:22+0000\n"
-"PO-Revision-Date: 2021-02-27 10:00+0100\n"
+"POT-Creation-Date: 2021-08-17 16:18+0000\n"
+"PO-Revision-Date: 2021-08-18 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -29,7 +29,7 @@ msgstr "Pertsonalizatua"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:101
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:100
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "Utzi"
@@ -50,19 +50,28 @@ msgstr "Ezin izan dira gakoak esportatu"
 msgid "Couldn’t export data"
 msgstr "Ezin izan dira datuak esportatu"
 
+#: common/datepicker.vala:55
+msgid "Enter the date directly"
+msgstr "Sartu data zuzenean"
+
+#: common/datepicker.vala:62
+msgid "Select the date from a calendar"
+msgstr "Hautatu data egutegitik"
+
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:282 pgp/seahorse-gpgme-photos.c:76
-#: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
-#: pgp/seahorse-keyserver-sync.ui:79 pkcs11/pkcs11-request.vala:55
+#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:73
+#: pgp/seahorse-gpgme-photos.c:260 pgp/seahorse-gpgme-photos.c:320
+#: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
+#: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
 #: src/key-manager.vala:270
 msgid "_Cancel"
 msgstr "_Utzi"
 
 #. Delete item
-#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
+#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
 #: src/sidebar.vala:393
 msgid "_Delete"
 msgstr "Ez_abatu"
@@ -421,7 +430,7 @@ msgid ""
 "you don’t have to keep typing it and backup your keys and keyring."
 msgstr "Seahorse-rekin PGP eta SSH gakoak sor eta kudea ditzakezu, gako-zerbitzarietatik gakoak eskuratu eta argitara ditzakezu. Zure pasaesaldia gorde zuk hura berriro ez idazteko eta zure gako eta gako-sorten babeskopia egiten du."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:146
+#: data/org.gnome.seahorse.Application.appdata.xml.in:171
 msgid "The GNOME Project"
 msgstr "GNOME proiektua"
 
@@ -516,20 +525,20 @@ msgstr "Gordetako pasahitza edo erabiltzaile-izena"
 msgid "Network Credentials"
 msgstr "Sareko kredentzialak"
 
-#: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:70
+#: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:68
 #: src/seahorse-key-manager.ui:193
 msgid "Password"
 msgstr "Pasahitza"
 
-#: gkr/gkr-item-properties.vala:209
+#: gkr/gkr-item-properties.vala:217
 msgid "Couldn’t change password."
 msgstr "Ezin izan da pasahitza aldatu."
 
-#: gkr/gkr-item-properties.vala:233
+#: gkr/gkr-item-properties.vala:241
 msgid "Couldn’t set description."
 msgstr "Ezin izan da azalpena ezarri."
 
-#: gkr/gkr-item-properties.vala:260
+#: gkr/gkr-item-properties.vala:268
 msgid "Error deleting the password."
 msgstr "Errorea pasahitza ezabatzean."
 
@@ -618,7 +627,8 @@ msgstr "Gehitu pasahitza"
 msgid "_Keyring:"
 msgstr "_Gako sorta:"
 
-#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-revoke.ui:55
+#: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-gpgme-revoke-dialog.ui:44
+#: pgp/seahorse-revoke.ui:43
 msgid "_Description:"
 msgstr "_Azalpena:"
 
@@ -627,7 +637,6 @@ msgid "_Password:"
 msgstr "_Pasahitza:"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-#: pgp/seahorse-pgp-private-key-properties.ui:960
 msgid "Add"
 msgstr "Gehitu"
 
@@ -649,39 +658,37 @@ msgstr "Gako sorta berriaren izena:"
 msgid "Item Properties"
 msgstr "Elementuaren propietateak"
 
-#: gkr/seahorse-gkr-item-properties.ui:43
+#: gkr/seahorse-gkr-item-properties.ui:52
 msgid "Description"
 msgstr "Azalpena"
 
-#: gkr/seahorse-gkr-item-properties.ui:86
+#: gkr/seahorse-gkr-item-properties.ui:75
 msgid "Copy"
 msgstr "Kopiatu"
 
 #. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-item-properties.ui:113
+#: gkr/seahorse-gkr-item-properties.ui:99
 msgid "Use"
 msgstr "Erabili"
 
-#: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1324
+#: gkr/seahorse-gkr-item-properties.ui:112
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:96
 msgid "Type"
 msgstr "Mota"
 
-#: gkr/seahorse-gkr-item-properties.ui:165
+#: gkr/seahorse-gkr-item-properties.ui:125
 msgid "Server"
 msgstr "Zerbitzaria"
 
-#: gkr/seahorse-gkr-item-properties.ui:191
+#: gkr/seahorse-gkr-item-properties.ui:138
 msgid "Login"
 msgstr "Saio-hasiera"
 
-#: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:916
+#: gkr/seahorse-gkr-item-properties.ui:156
 msgid "Details"
 msgstr "Xehetasunak"
 
-#: gkr/seahorse-gkr-item-properties.ui:255
+#: gkr/seahorse-gkr-item-properties.ui:171
 msgid "Delete Password"
 msgstr "Ezabatu pasahitza"
 
@@ -689,7 +696,7 @@ msgstr "Ezabatu pasahitza"
 msgid "Keyring properties"
 msgstr "Gako sortaren propietateak"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:887
+#: gkr/seahorse-gkr-keyring.ui:52
 msgid "Name"
 msgstr "Izena"
 
@@ -705,284 +712,24 @@ msgstr "Aldatu pasahitza"
 msgid "Set as default"
 msgstr "Ezarri lehenetsi gisa"
 
-#: libegg/egg-datetime.c:316
-msgid "Display flags"
-msgstr "Bistaratu banderak"
-
-#: libegg/egg-datetime.c:317
-msgid "Displayed date and/or time properties"
-msgstr "Bistaratutako data edo/eta orduaren propietateak"
-
-#: libegg/egg-datetime.c:322
-msgid "Lazy mode"
-msgstr "Modu alferra"
-
-#: libegg/egg-datetime.c:323
-msgid "Lazy mode doesn’t normalize entered date and time values"
-msgstr "Modu alferrak ez ditu sartutako dataren eta orduaren balioak normalizatzen"
-
-#: libegg/egg-datetime.c:328
-msgid "Year"
-msgstr "Urtea"
-
-#: libegg/egg-datetime.c:329
-msgid "Displayed year"
-msgstr "Bistaratutako urtea"
-
-#: libegg/egg-datetime.c:334
-msgid "Month"
-msgstr "Hila"
-
-#: libegg/egg-datetime.c:335
-msgid "Displayed month"
-msgstr "Bistaratutako hilabetea"
-
-#: libegg/egg-datetime.c:340
-msgid "Day"
-msgstr "Eguna"
-
-#: libegg/egg-datetime.c:341
-msgid "Displayed day of month"
-msgstr "Bistaratutako hilabeteko eguna"
-
-#: libegg/egg-datetime.c:346
-msgid "Hour"
-msgstr "Ordua"
-
-#: libegg/egg-datetime.c:347
-msgid "Displayed hour"
-msgstr "Bistaratutako ordua"
-
-#: libegg/egg-datetime.c:352
-msgid "Minute"
-msgstr "Minutua"
-
-#: libegg/egg-datetime.c:353
-msgid "Displayed minute"
-msgstr "Bistaratutako minutua"
-
-#: libegg/egg-datetime.c:358
-msgid "Second"
-msgstr "Bigarrena"
-
-#: libegg/egg-datetime.c:359
-msgid "Displayed second"
-msgstr "Bistaratutako segundoa"
-
-#: libegg/egg-datetime.c:364
-msgid "Lower limit year"
-msgstr "Urtearen behe-muga"
-
-#: libegg/egg-datetime.c:365
-msgid "Year part of the lower date limit"
-msgstr "Dataren behe-mugan urteari dagokion zatia"
-
-#: libegg/egg-datetime.c:370
-msgid "Upper limit year"
-msgstr "Urtearen goi-muga"
-
-#: libegg/egg-datetime.c:371
-msgid "Year part of the upper date limit"
-msgstr "Dataren goi-mugan urteari dagokion zatia"
-
-#: libegg/egg-datetime.c:376
-msgid "Lower limit month"
-msgstr "Hilabetearen behe-muga"
-
-#: libegg/egg-datetime.c:377
-msgid "Month part of the lower date limit"
-msgstr "Dataren behe-mugan hilabeteari dagokion zatia"
-
-#: libegg/egg-datetime.c:382
-msgid "Upper limit month"
-msgstr "Hilabetearen goi-muga"
-
-#: libegg/egg-datetime.c:383
-msgid "Month part of the upper date limit"
-msgstr "Dataren goi-mugan hilabeteari dagokion zatia"
-
-#: libegg/egg-datetime.c:388
-msgid "Lower limit day"
-msgstr "Egunaren behe-muga"
-
-#: libegg/egg-datetime.c:389
-msgid "Day of month part of the lower date limit"
-msgstr "Dataren behe-mugan hilabeteko egunari dagokion zatia"
-
-#: libegg/egg-datetime.c:394
-msgid "Upper limit day"
-msgstr "Egunaren goi-muga"
-
-#: libegg/egg-datetime.c:395
-msgid "Day of month part of the upper date limit"
-msgstr "Dataren goi-mugan hilabeteko egunari dagokion zatia"
-
-#: libegg/egg-datetime.c:400
-msgid "Lower limit hour"
-msgstr "Orduaren behe-muga"
-
-#: libegg/egg-datetime.c:401
-msgid "Hour part of the lower time limit"
-msgstr "Orduaren behe-mugan orduari dagokion zatia"
-
-#: libegg/egg-datetime.c:406
-msgid "Upper limit hour"
-msgstr "Orduaren goi-muga"
-
-#: libegg/egg-datetime.c:407
-msgid "Hour part of the upper time limit"
-msgstr "Orduaren goi-mugan orduari dagokion zatia"
-
-#: libegg/egg-datetime.c:412
-msgid "Lower limit minute"
-msgstr "Minutuaren behe-muga"
-
-#: libegg/egg-datetime.c:413
-msgid "Minute part of the lower time limit"
-msgstr "Orduaren behe-mugan minutuari dagokion zatia"
-
-#: libegg/egg-datetime.c:418
-msgid "Upper limit minute"
-msgstr "Minutuaren goi-muga"
-
-#: libegg/egg-datetime.c:419
-msgid "Minute part of the upper time limit"
-msgstr "Orduaren goi-mugan minutuari dagokion zatia"
-
-#: libegg/egg-datetime.c:424
-msgid "Lower limit second"
-msgstr "Segundoaren behe-muga"
-
-#: libegg/egg-datetime.c:425
-msgid "Second part of the lower time limit"
-msgstr "Orduaren behe-mugan segundoari dagokion zatia"
-
-#: libegg/egg-datetime.c:430
-msgid "Upper limit second"
-msgstr "Segundoaren goi-muga"
-
-#: libegg/egg-datetime.c:431
-msgid "Second part of the upper time limit"
-msgstr "Orduaren goi-mugan segundoari dagokion zatia"
-
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
-#.
-#: libegg/egg-datetime.c:473
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
-
-#: libegg/egg-datetime.c:495
-msgid "Date"
-msgstr "Data"
-
-#: libegg/egg-datetime.c:495
-msgid "Enter the date directly"
-msgstr "Sartu data zuzenean"
-
-#: libegg/egg-datetime.c:502
-msgid "Select Date"
-msgstr "Hautatu data"
-
-#: libegg/egg-datetime.c:502
-msgid "Select the date from a calendar"
-msgstr "Hautatu data egutegitik"
-
-#: libegg/egg-datetime.c:520 libegg/egg-datetime.c:2203
-msgid "Time"
-msgstr "Ordua"
-
-#: libegg/egg-datetime.c:520
-msgid "Enter the time directly"
-msgstr "Sartu ordua zuzenean"
-
-#: libegg/egg-datetime.c:527
-msgid "Select Time"
-msgstr "Hautatu ordua"
-
-#: libegg/egg-datetime.c:527
-msgid "Select the time from a list"
-msgstr "Hautatu ordua zerrendatik"
-
-#. Translators: set this to anything else if you want to use a
-#. * 24 hour clock.
-#.
-#: libegg/egg-datetime.c:792
-msgid "24hr: no"
-msgstr "24hr: ez"
-
-#: libegg/egg-datetime.c:796 libegg/egg-datetime.c:1264
-#: libegg/egg-datetime.c:1268
-msgid "AM"
-msgstr "AM"
-
-#: libegg/egg-datetime.c:798 libegg/egg-datetime.c:1265
-#: libegg/egg-datetime.c:1272
-msgid "PM"
-msgstr "PM"
-
-#. Translators: This is hh:mm:ss AM/PM.
-#: libegg/egg-datetime.c:806
-#, c-format
-msgid "%02d:%02d:%02d %s"
-msgstr "%02d:%02d:%02d %s"
-
-#. Translators: This is hh:mm AM/PM.
-#: libegg/egg-datetime.c:809
-#, c-format
-msgid "%02d:%02d %s"
-msgstr "%02d:%02d %s"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:813
-#, c-format
-msgid "%02d:%02d:%02d"
-msgstr "%02d:%02d:%02d"
-
-#. Translators: This is hh:mm.
-#: libegg/egg-datetime.c:816
-#, c-format
-msgid "%02d:%02d"
-msgstr "%02d:%02d"
-
-#. TODO: should handle other display modes as well...
-#. Translators: This is YYYY-MM-DD
-#: libegg/egg-datetime.c:1180
-#, c-format
-msgid "%04d-%02d-%02d"
-msgstr "%04d-%02d-%02d"
-
-#. Translators: This is hh:mm:ss.
-#: libegg/egg-datetime.c:1245
-#, c-format
-msgid "%u:%u:%u"
-msgstr "%u:%u:%u"
-
-#: libseahorse/seahorse-widget.c:461
-#, c-format
-msgid "Could not display help: %s"
-msgstr "Ezin izan da laguntza erakutsi: %s"
-
-#: pgp/seahorse-gpgme-add-subkey.c:213
+#: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Gehitu azpigakoa %s(r)i"
 
-#: pgp/seahorse-gpgme-add-subkey.c:239 pgp/seahorse-gpgme-generate-dialog.c:86
+#: pgp/seahorse-gpgme-add-subkey.c:236 pgp/seahorse-gpgme-generate-dialog.c:83
 msgid "DSA (sign only)"
 msgstr "DSA (sinatzeko soilik)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:247
+#: pgp/seahorse-gpgme-add-subkey.c:244
 msgid "ElGamal (encrypt only)"
 msgstr "ElGamal (zifratzeko soilik)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:253 pgp/seahorse-gpgme-generate-dialog.c:87
+#: pgp/seahorse-gpgme-add-subkey.c:250 pgp/seahorse-gpgme-generate-dialog.c:84
 msgid "RSA (sign only)"
 msgstr "RSA (sinatzeko soilik)"
 
-#: pgp/seahorse-gpgme-add-subkey.c:259
+#: pgp/seahorse-gpgme-add-subkey.c:256
 msgid "RSA (encrypt only)"
 msgstr "RSA (zifratzeko soilik)"
 
@@ -1002,15 +749,15 @@ msgstr "Gakoaren luzera"
 msgid "Expiration Date"
 msgstr "Iraungitze-data"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:110
+#: pgp/seahorse-gpgme-add-subkey.ui:109
 msgid "Never E_xpires"
 msgstr "Ez da _iraungitzen"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:114
+#: pgp/seahorse-gpgme-add-subkey.ui:113
 msgid "If key never expires"
 msgstr "Gakoa inoiz ere iraungitzen ez bada"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:150
+#: pgp/seahorse-gpgme-add-subkey.ui:149
 msgid "Generate a new subkey"
 msgstr "Sortu azpigako berri bat"
 
@@ -1060,7 +807,7 @@ msgstr "Sortu erabiltzailearen ID berria"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Deszifratzeak huts egin du. Ziur aski deszifratzeko gakoa falta duzu."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
 msgid "The operation was cancelled"
 msgstr "Eragiketa bertan behera utzi da"
 
@@ -1105,29 +852,29 @@ msgstr "PGP gako blindatuak"
 msgid "PGP keys"
 msgstr "PGP gakoak"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:60
+#: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
 #: ssh/seahorse-ssh-generate.ui:147
 msgid "RSA"
 msgstr "RSA"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:85
+#: pgp/seahorse-gpgme-generate-dialog.c:82
 msgid "DSA ElGamal"
 msgstr "DSA ElGamal"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:101
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "Ezin izan da PGP gakoa sortu"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:140
+#: pgp/seahorse-gpgme-generate-dialog.c:137
 msgid "Passphrase for New PGP Key"
 msgstr "PGP gako berriaren pasaesaldia"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:141
+#: pgp/seahorse-gpgme-generate-dialog.c:138
 msgid "Enter the passphrase for your new key twice."
 msgstr "Idatzi gako berriaren pasaesaldia bi bider."
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:153
+#: pgp/seahorse-gpgme-generate-dialog.c:150
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -1141,11 +888,11 @@ msgstr "Gako bat sortzean ausazko datu ugari sortu behar dira\n"
 "Ekintza hauek sistemari behar dituen ausazko datuak\n"
 "ematen dizkio."
 
-#: pgp/seahorse-gpgme-generate-dialog.c:158 pkcs11/pkcs11-generate.vala:216
+#: pgp/seahorse-gpgme-generate-dialog.c:155 pkcs11/pkcs11-generate.vala:216
 msgid "Generating key"
 msgstr "Gakoa sortzea"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:182
+#: pgp/seahorse-gpgme-generate-dialog.c:179
 msgid "Name must be at least 5 characters long."
 msgstr "Izenak gutxienez 5 karaktere izan behar ditu."
 
@@ -1178,15 +925,15 @@ msgstr "Gakoaren _indarra (bitetan)"
 msgid "E_xpiration Date"
 msgstr "I_raungitze-data"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:251
+#: pgp/seahorse-gpgme-generate-dialog.ui:255
 msgid "Ne_ver Expires"
 msgstr "_Ez da iraungitzen"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:292
+#: pgp/seahorse-gpgme-generate-dialog.ui:296
 msgid "C_reate"
 msgstr "_Sortu"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:299
+#: pgp/seahorse-gpgme-generate-dialog.ui:303
 msgid "Generate a new key"
 msgstr "Sortu gako berri bat"
 
@@ -1203,11 +950,11 @@ msgid_plural "Are you sure you want to permanently delete %d keys?"
 msgstr[0] "Ziur zaude %d gako behin betiko ezabatu nahi dituzula?"
 msgstr[1] "Ziur zaude %d gako behin betiko ezabatu nahi dituzula?"
 
-#: pgp/seahorse-gpgme-key-op.c:351
+#: pgp/seahorse-gpgme-key-op.c:362
 msgid "Wrong password"
 msgstr "Pasahitza ez da zuzena"
 
-#: pgp/seahorse-gpgme-key-op.c:351
+#: pgp/seahorse-gpgme-key-op.c:362
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Okerreko pasahitza sartu duzun hirugarren aldia da unekoa. Saiatu berriro."
 
@@ -1259,7 +1006,7 @@ msgstr "GnuPG gakoak"
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: gako sortaren direktorio lehenetsia"
 
-#: pgp/seahorse-gpgme-photos.c:72
+#: pgp/seahorse-gpgme-photos.c:69
 #, c-format
 msgid ""
 "<big><b>The photo is too large</b></big>\n"
@@ -1267,112 +1014,121 @@ msgid ""
 msgstr "<big><b>Argazkia handiegia da.</b></big>\n"
 "Zure gakoan jartzeko gomendatzen den tamaina %d × %d pixelekoa da."
 
-#: pgp/seahorse-gpgme-photos.c:77
+#: pgp/seahorse-gpgme-photos.c:74
 msgid "_Don’t Resize"
 msgstr "_Ez aldatu tamaina"
 
-#: pgp/seahorse-gpgme-photos.c:78
+#: pgp/seahorse-gpgme-photos.c:75
 msgid "_Resize"
 msgstr "_Aldatu tamaina"
 
-#: pgp/seahorse-gpgme-photos.c:127
+#: pgp/seahorse-gpgme-photos.c:124
 #, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
 msgstr "Hori ez da irudi-fitxategi bat, edo irudi-fitxategi mota ezezaguna da. Saiatu JPEG irudi bat erabiltzen."
 
-#: pgp/seahorse-gpgme-photos.c:223
+#: pgp/seahorse-gpgme-photos.c:219
 msgid "All image files"
 msgstr "Irudi-fitxategi guztiak"
 
-#: pgp/seahorse-gpgme-photos.c:236
+#: pgp/seahorse-gpgme-photos.c:232
 msgid "All JPEG files"
 msgstr "JPEG fitxategi guztiak"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:310
+#: pgp/seahorse-gpgme-photos.c:237 src/key-manager.vala:310
 msgid "All files"
 msgstr "Fitxategi denak"
 
-#: pgp/seahorse-gpgme-photos.c:262
+#: pgp/seahorse-gpgme-photos.c:258
 msgid "Choose Photo to Add to Key"
 msgstr "Aukeratu gakoari gehitzeko argazkia"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:270
+#: pgp/seahorse-gpgme-photos.c:261 src/key-manager.vala:270
 msgid "_Open"
 msgstr "_Ireki"
 
-#: pgp/seahorse-gpgme-photos.c:284
+#: pgp/seahorse-gpgme-photos.c:280
 msgid "Couldn’t prepare photo"
 msgstr "Ezin izan da argazkia prestatu"
 
-#: pgp/seahorse-gpgme-photos.c:294 pgp/seahorse-gpgme-photos.c:297
+#: pgp/seahorse-gpgme-photos.c:290 pgp/seahorse-gpgme-photos.c:293
 msgid "Couldn’t add photo"
 msgstr "Ezin izan da argazkia gehitu"
 
-#: pgp/seahorse-gpgme-photos.c:295
-msgid "The file could not be loaded. It may be in an invalid format"
-msgstr "Ezin izan da fitxategia kargatu. Litekeena da formatua baliogabea izatea"
+#: pgp/seahorse-gpgme-photos.c:291
+msgid "The file could not be loaded. It may be in an invalid format."
+msgstr "Fitxategia ezin izan da kargatu. Litekeena da formatu baliogabea izatea."
 
-#: pgp/seahorse-gpgme-photos.c:321
+#: pgp/seahorse-gpgme-photos.c:317
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "Ziur zaude uneko argazkia gakotik kendu nahi duzula?"
 
-#: pgp/seahorse-gpgme-photos.c:334
+#: pgp/seahorse-gpgme-photos.c:330
 msgid "Couldn’t delete photo"
 msgstr "Ezin izan da argazkia ezabatu"
 
-#: pgp/seahorse-gpgme-revoke.c:72
+#: pgp/seahorse-gpgme-revoke-dialog.c:81
 msgid "Couldn’t revoke subkey"
 msgstr "Ezin izan da azpigakoa errebokatu"
 
-#: pgp/seahorse-gpgme-revoke.c:93
+#: pgp/seahorse-gpgme-revoke-dialog.c:141
 #, c-format
 msgid "Revoke: %s"
 msgstr "Errebokatu: %s"
 
-#: pgp/seahorse-gpgme-revoke.c:104
+#: pgp/seahorse-gpgme-revoke-dialog.c:159
 msgid "No reason"
 msgstr "Ez dago arrazoirik"
 
-#: pgp/seahorse-gpgme-revoke.c:105
+#: pgp/seahorse-gpgme-revoke-dialog.c:160
 msgid "No reason for revoking key"
 msgstr "Ez dago gakoa errebokatzeko arrazoirik"
 
-#: pgp/seahorse-gpgme-revoke.c:111
+#: pgp/seahorse-gpgme-revoke-dialog.c:166
 msgid "Compromised"
 msgstr "Arriskuan jarrita"
 
-#: pgp/seahorse-gpgme-revoke.c:112
+#: pgp/seahorse-gpgme-revoke-dialog.c:167
 msgid "Key has been compromised"
 msgstr "Gakoa arriskuan jarrita dago"
 
-#: pgp/seahorse-gpgme-revoke.c:118
+#: pgp/seahorse-gpgme-revoke-dialog.c:173
 msgid "Superseded"
 msgstr "Ordeztua"
 
-#: pgp/seahorse-gpgme-revoke.c:119
+#: pgp/seahorse-gpgme-revoke-dialog.c:174
 msgid "Key has been superseded"
 msgstr "Gakoa ordeztua izan da"
 
-#: pgp/seahorse-gpgme-revoke.c:125
+#: pgp/seahorse-gpgme-revoke-dialog.c:180
 msgid "Not Used"
 msgstr "Erabili gabea"
 
-#: pgp/seahorse-gpgme-revoke.c:126
+#: pgp/seahorse-gpgme-revoke-dialog.c:181
 msgid "Key is no longer used"
 msgstr "Gakoa ez da gehiago erabiliko"
 
-#: pgp/seahorse-gpgme-revoke.c:163
-#, c-format
-msgid ""
-"You are about to add %s as a revoker for %s. This operation cannot be "
-"undone! Are you sure you want to continue?"
-msgstr "%s %s(r)en errebokatzaile gisa gehitzera zoaz, eta eragiketa hori ezin da desegin. Ziur zaude jarraitu nahi duzula?"
+#: pgp/seahorse-gpgme-revoke-dialog.ui:21 pgp/seahorse-revoke.ui:20
+msgid "_Reason:"
+msgstr "_Arrazoia:"
 
-#: pgp/seahorse-gpgme-revoke.c:175
-msgid "Couldn’t add revoker"
-msgstr "Ezin izan da errebokatzailea gehitu"
+#: pgp/seahorse-gpgme-revoke-dialog.ui:22 pgp/seahorse-revoke.ui:21
+msgid "Reason for revoking the key"
+msgstr "Gakoa errebokatzeko arrazoia"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:57 pgp/seahorse-revoke.ui:56
+msgid "Optional description of revocation"
+msgstr "Errebokatzearen aukerako azalpena"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:89 pgp/seahorse-revoke.ui:88
+msgid "Revoke key"
+msgstr "Errebokatu gakoa"
+
+#: pgp/seahorse-gpgme-revoke-dialog.ui:90 pgp/seahorse-revoke.ui:89
+msgid "Re_voke"
+msgstr "Erre_bokatu"
 
 #: pgp/seahorse-gpgme-secret-deleter.c:64 ssh/deleter.vala:43
 msgid "I understand that this secret key will be permanently deleted."
@@ -1392,7 +1148,7 @@ msgstr "Ezin izan da gakoa sinatu"
 
 #. TODO: We should be giving an error message that allows them to
 #. generate or import a key
-#: pgp/seahorse-gpgme-sign-dialog.c:281 pgp/seahorse-signer.c:62
+#: pgp/seahorse-gpgme-sign-dialog.c:281
 msgid "No keys usable for signing"
 msgstr "Ez dago sinatzeko gako erabilgarririk"
 
@@ -1480,21 +1236,21 @@ msgstr "_Sinatzailea:"
 msgid "_Sign"
 msgstr "_Sinatu"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:84
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: pgp/seahorse-gpgme-subkey.c:93
+#: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:503
+#: pgp/seahorse-hkp-source.c:499
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr "Bilaketa ez da nahiko zehatza. ”%s” zerbitzariak gako gehiegi aurkitu ditu."
 
-#: pgp/seahorse-hkp-source.c:507
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "Ezin izan da ”%s” zerbitzariarekin komunikatu: %s"
@@ -1539,41 +1295,41 @@ msgstr "Egin klik bikoitza gako batean hura ikuskatzeko, edo egin klik inportatz
 msgid "Find Remote Keys"
 msgstr "Bilatu urruneko gakoak"
 
-#: pgp/seahorse-keyserver-search.ui:32
+#: pgp/seahorse-keyserver-search.ui:31
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
 msgstr "Horrek besteen gakoak bilatuko ditu Interneten. Gako horiek gako sorta lokalera inporta daitezke."
 
-#: pgp/seahorse-keyserver-search.ui:47
+#: pgp/seahorse-keyserver-search.ui:46
 msgid "_Search for keys containing: "
 msgstr "_Bilatu hau duten gakoak: "
 
-#: pgp/seahorse-keyserver-search.ui:69
+#: pgp/seahorse-keyserver-search.ui:68
 msgid "Where to search:"
 msgstr "Non bilatu:"
 
-#: pgp/seahorse-keyserver-search.ui:115
+#: pgp/seahorse-keyserver-search.ui:114
 msgid "_Search"
 msgstr "_Bilatu"
 
-#: pgp/seahorse-keyserver-sync.c:71
+#: pgp/seahorse-keyserver-sync.c:70
 msgid "Couldn’t publish keys to server"
 msgstr "Ezin izan dira gakoak zerbitzarian argitaratu"
 
-#: pgp/seahorse-keyserver-sync.c:87
+#: pgp/seahorse-keyserver-sync.c:86
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Ezin izan dira gakoak zerbitzaritik eskuratu: %s"
 
-#: pgp/seahorse-keyserver-sync.c:197
+#: pgp/seahorse-keyserver-sync.c:196
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>gako %d hautatu da sinkronizatzeko</b>"
 msgstr[1] "<b>%d gako hautatu dira sinkronizatzeko</b>"
 
-#: pgp/seahorse-keyserver-sync.c:305
+#: pgp/seahorse-keyserver-sync.c:304
 msgid "Synchronizing keys…"
 msgstr "Gakoak sinkronizatzen…"
 
@@ -1637,316 +1393,166 @@ msgstr "PGP gakoak"
 msgid "PGP keys are for encrypting email or files"
 msgstr "PGP gakoak mezu elektronikoak eta fitxategiak zifratzeko erabiltzen dira"
 
-#: pgp/seahorse-pgp-key.c:186
+#: pgp/seahorse-pgp-key.c:187
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
 msgstr[0] "(eta beste %d)"
 msgstr[1] "(eta beste %d)"
 
-#: pgp/seahorse-pgp-key.c:604
+#: pgp/seahorse-pgp-key.c:625
 msgid "Personal PGP key"
 msgstr "PGP gako pertsonalak"
 
-#: pgp/seahorse-pgp-key.c:606
+#: pgp/seahorse-pgp-key.c:627
 msgid "PGP key"
 msgstr "PGP gakoa"
 
-#: pgp/seahorse-pgp-key-properties.c:249
-msgid "Couldn’t change primary user ID"
-msgstr "Ezin izan da erabiltzailearen ID nagusia aldatu"
-
-#: pgp/seahorse-pgp-key-properties.c:284
-#, c-format
-msgid "Are you sure you want to permanently delete the “%s” user ID?"
-msgstr "Ziur zaude ”%s” erabiltzailearen IDa behin betiko ezabatu nahi duzula?"
-
-#: pgp/seahorse-pgp-key-properties.c:293
-msgid "Couldn’t delete user ID"
-msgstr "Ezin izan da erabiltzailearen IDa ezabatu"
-
-#. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:369 pgp/seahorse-pgp-key-properties.c:1459
-msgid "[Unknown]"
-msgstr "[Ezezaguna]"
-
-#. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:467 pgp/seahorse-pgp-key-properties.c:1677
-msgid "Name/Email"
-msgstr "Izena/Helbide elektronikoa"
-
-#: pgp/seahorse-pgp-key-properties.c:474
-msgid "Signature ID"
-msgstr "Sinaduraren IDa"
-
-#: pgp/seahorse-pgp-key-properties.c:580
+#: pgp/seahorse-pgp-key-properties.c:219
 msgid "Couldn’t change primary photo"
 msgstr "Ezin izan da argazki nagusia aldatu"
 
-#: pgp/seahorse-pgp-key-properties.c:767
+#: pgp/seahorse-pgp-key-properties.c:386
 msgid "Error changing password"
 msgstr "Errorea pasahitza aldatzean"
 
-#. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:814
-msgid "(unknown)"
-msgstr "(ezezaguna)"
-
-#: pgp/seahorse-pgp-key-properties.c:819
-#, c-format
-msgid "This key expired on: %s"
-msgstr "Gako hori data honetan iraungi zen: %s"
-
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:845
-#, c-format
-msgid "%s — Public key"
-msgstr "%s — Gako publikoa"
-
-#. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:848
+#: pgp/seahorse-pgp-key-properties.c:431
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Gako pribatua"
 
-#: pgp/seahorse-pgp-key-properties.c:1035
+#. Translators: the 1st part of the title is the owner's name
+#: pgp/seahorse-pgp-key-properties.c:435
 #, c-format
-msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "Ziur zaude %2$s(r)en %1$d azpigakoa behin betiko ezabatu nahi duzula?"
+msgid "%s — Public key"
+msgstr "%s — Gako publikoa"
 
-#: pgp/seahorse-pgp-key-properties.c:1043
-msgid "Couldn’t delete subkey"
-msgstr "Ezin izan da azpigakoa ezabatu"
+#. TRANSLATORS: (unknown) expiry date
+#: pgp/seahorse-pgp-key-properties.c:468
+msgid "(unknown)"
+msgstr "(ezezaguna)"
 
-#: pgp/seahorse-pgp-key-properties.c:1109
-#: pgp/seahorse-pgp-key-properties.c:1433
-msgid "Unable to change trust"
-msgstr "Ezin izan da fidagarritasuna aldatu"
+#: pgp/seahorse-pgp-key-properties.c:473
+#, c-format
+msgid "This key expired on %s"
+msgstr "Gako hori honako datan iraungi zen: %s"
 
-#: pgp/seahorse-pgp-key-properties.c:1121 ssh/key-properties.vala:191
-msgid "Couldn’t export key"
-msgstr "Ezin izan da gakoa esportatu"
-
-#: pgp/seahorse-pgp-key-properties.c:1279
-#: pgp/seahorse-pgp-key-properties.c:1367
+#: pgp/seahorse-pgp-key-properties.c:523
 msgctxt "Expires"
 msgid "Never"
 msgstr "Inoiz ere ez"
 
-#: pgp/seahorse-pgp-key-properties.c:1321
-msgid "ID"
-msgstr "IDa"
+#: pgp/seahorse-pgp-key-properties.c:607 pgp/seahorse-pgp-key-properties.c:782
+msgid "Unable to change trust"
+msgstr "Ezin izan da fidagarritasuna aldatu"
 
-#: pgp/seahorse-pgp-key-properties.c:1327
-msgid "Usage"
-msgstr "Erabilera"
+#: pgp/seahorse-pgp-key-properties.c:619 ssh/key-properties.vala:191
+msgid "Couldn’t export key"
+msgstr "Ezin izan da gakoa esportatu"
 
-#: pgp/seahorse-pgp-key-properties.c:1330
-msgid "Created"
-msgstr "Sortuta"
-
-#: pgp/seahorse-pgp-key-properties.c:1333
-msgid "Expires"
-msgstr "Iraungitze-data"
-
-#: pgp/seahorse-pgp-key-properties.c:1336
-msgid "Status"
-msgstr "Egoera"
-
-#: pgp/seahorse-pgp-key-properties.c:1339
-msgid "Strength"
-msgstr "Indarra"
-
-#: pgp/seahorse-pgp-key-properties.c:1358
-msgid "Revoked"
-msgstr "Errebokatuta"
-
-#: pgp/seahorse-pgp-key-properties.c:1360
-msgid "Expired"
-msgstr "Iraungita"
-
-#: pgp/seahorse-pgp-key-properties.c:1362
-msgid "Disabled"
-msgstr "Desgaituta"
-
-#: pgp/seahorse-pgp-key-properties.c:1364
-msgid "Good"
-msgstr "Ona"
-
-#: pgp/seahorse-pgp-key-properties.c:1680
-#: pgp/seahorse-pgp-private-key-properties.ui:345
-#: pgp/seahorse-pgp-public-key-properties.ui:274
-msgid "Key ID"
-msgstr "Gakoaren IDa"
-
-#: pgp/seahorse-pgp-key-properties.c:1823
+#: pgp/seahorse-pgp-key-properties.c:998
 #, c-format
-msgid "I trust signatures from “%s” on other keys"
-msgstr "”%s”(r)en beste gako batzuen sinaduretan fidatzen naiz"
+msgid "I believe “%s” is the owner of this key"
+msgstr "Uste dut “%s” gako honen jabea dela"
 
-#: pgp/seahorse-pgp-key-properties.c:1830
+#: pgp/seahorse-pgp-key-properties.c:1003
 #, c-format
-msgid ""
-"If you believe that the person that owns this key is “%s”, <i>sign</i> this "
-"key:"
-msgstr "Gako honen jabea ”%s” dela uste baduzu, <i>sinatu</i> gakoa:"
-
-#: pgp/seahorse-pgp-key-properties.c:1837
-#, c-format
-msgid ""
-"If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
-msgstr "Ez bazara fidatzen gako honen jabea ”%s” dela, <i>errebokatu</i> zure sinadura:"
+msgid "I no longer trust that “%s” owns this key"
+msgstr "Ez naiz fidatzen “%s” gako honen jabea denik dagoeneko"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
-msgid "Export _secret key"
-msgstr "Esportatu ez_kutuko gakoa"
+msgid "Change _passphrase"
+msgstr "Aldatu pa_saesaldia"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:34
+#: pgp/seahorse-pgp-private-key-properties.ui:36
 msgid "Export _public key"
 msgstr "Esportatu gako _publikoa"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:68
-#: pgp/seahorse-pgp-public-key-properties.ui:61
-msgid "This key has been revoked"
-msgstr "Gako hori errebokatu egin da"
+#: pgp/seahorse-pgp-private-key-properties.ui:40
+msgid "Export _secret key"
+msgstr "Esportatu ez_kutuko gakoa"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:78
-#: pgp/seahorse-pgp-public-key-properties.ui:73
-msgid "The owner of the key revoked the key. It can no longer be used."
-msgstr "Gakoaren jabeak gakoa errebokatu du. Ezin da gehiago erabili."
+#: pgp/seahorse-pgp-private-key-properties.ui:60
+#: pgp/seahorse-pgp-public-key-properties.ui:42
+msgid "The owner of the key revoked the key. It should no longer be used."
+msgstr "Gakoaren jabeak gakoa errebokatu du. Ez litzateke gehiago erabili beharko."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:106
-#: pgp/seahorse-pgp-public-key-properties.ui:104
-msgid "This key has expired"
-msgstr "Gako hori iraungi egin da"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:171
+#: pgp/seahorse-pgp-private-key-properties.ui:140
 msgid "Add a photo to this key"
 msgstr "Gehitu argazki bat gako horri"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:190
+#: pgp/seahorse-pgp-private-key-properties.ui:155
 msgid "Remove this photo from this key"
 msgstr "Kendu argazkia gako honetatik"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:209
+#: pgp/seahorse-pgp-private-key-properties.ui:170
 msgid "Make this photo the primary photo"
 msgstr "Bihurtu argazki hau argazki nagusi"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:234
+#: pgp/seahorse-pgp-private-key-properties.ui:191
+#: pgp/seahorse-pgp-public-key-properties.ui:125
 msgid "Go to previous photo"
 msgstr "Joan aurreko argazkira"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:253
+#: pgp/seahorse-pgp-private-key-properties.ui:206
+#: pgp/seahorse-pgp-public-key-properties.ui:146
 msgid "Go to next photo"
 msgstr "Joan hurrengo argazkira"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:318
-#: pgp/seahorse-pgp-public-key-properties.ui:246
+#: pgp/seahorse-pgp-private-key-properties.ui:262
+#: pgp/seahorse-pgp-public-key-properties.ui:210
 msgid "Comment"
 msgstr "Iruzkina"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:375
-#: ssh/seahorse-ssh-key-properties.ui:346
-msgid "Change _Passphrase"
-msgstr "Aldatu _pasaesaldia"
+#: pgp/seahorse-pgp-private-key-properties.ui:289
+#: pgp/seahorse-pgp-public-key-properties.ui:238
+msgid "Key ID"
+msgstr "Gakoaren IDa"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:391
-#: pgp/seahorse-pgp-public-key-properties.ui:347
-msgid "Owner"
-msgstr "Jabea"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:404
-msgid "Key Names and Signatures"
-msgstr "Gakoaren izenak eta sinadurak"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:442
-msgid "Primary"
-msgstr "Nagusia"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:162
-msgid "Sign"
-msgstr "Sinatu"
-
-#. Translators: This text refers to deleting an item from its type's backing store
-#: pgp/seahorse-pgp-private-key-properties.ui:502
-#: pkcs11/seahorse-pkcs11-properties.ui:22
-#: src/seahorse-key-manager-widgets.ui:18
-msgid "Delete"
-msgstr "Ezabatu"
-
-#. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:532
-msgid "_Add Name"
-msgstr "_Gehitu izena"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:562
-#: pgp/seahorse-pgp-private-key-properties.ui:1020
-msgid "Revoke"
-msgstr "Errebokatu"
-
-#. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:598
-msgid "Names and Signatures"
-msgstr "Izenak eta sinadurak"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:635
-#: pgp/seahorse-pgp-public-key-properties.ui:623
-msgid "Key ID:"
-msgstr "Gakoaren IDa:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:660
-#: pgp/seahorse-pgp-public-key-properties.ui:649
-msgid "Type:"
-msgstr "Mota:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:685
-#: pgp/seahorse-pgp-public-key-properties.ui:675
-msgid "Strength:"
-msgstr "Indarra:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:710
-msgid "Technical Details"
-msgstr "Xehetasun teknikoak"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:738
-#: ssh/seahorse-ssh-key-properties.ui:173
+#: pgp/seahorse-pgp-private-key-properties.ui:316
+#: pgp/seahorse-pgp-public-key-properties.ui:266
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:71
+#: ssh/seahorse-ssh-key-properties.ui:197
 msgid "Fingerprint"
 msgstr "Hatz-marka"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:770
-#: pgp/seahorse-pgp-public-key-properties.ui:769
-msgid "Created:"
-msgstr "Sortua:"
+#: pgp/seahorse-pgp-private-key-properties.ui:347
+#: pgp/seahorse-pgp-public-key-properties.ui:299
+msgid "Expires"
+msgstr "Iraungitze-data"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:794
-#: pgp/seahorse-pgp-public-key-properties.ui:794
-msgid "Expires:"
-msgstr "Iraungitze-data:"
+#: pgp/seahorse-pgp-private-key-properties.ui:408
+#: pgp/seahorse-pgp-public-key-properties.ui:334
+msgid "User IDs"
+msgstr "Erabiltzaileen IDak"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:840
-msgid "Dates"
-msgstr "Datak"
+#: pgp/seahorse-pgp-private-key-properties.ui:421
+msgid "Add user ID"
+msgstr "Gehitu erabiltzailearen IDa"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:863
-msgid "Override Owner _Trust:"
-msgstr "Jaramonik ez egin jabearen _fidagarritasunari:"
+#: pgp/seahorse-pgp-private-key-properties.ui:445
+#: pgp/seahorse-pgp-public-key-properties.ui:356
+msgid "Subkeys"
+msgstr "Azpigakoak"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:890
-msgid "_Export to file"
-msgstr "_Esportatu fitxategira"
+#: pgp/seahorse-pgp-private-key-properties.ui:458
+msgid "_Add subkey"
+msgstr "Gehitu a_zpigakoa"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:906
-msgid "Actions"
-msgstr "Ekintzak"
+#: pgp/seahorse-pgp-private-key-properties.ui:476
+#: pgp/seahorse-pgp-public-key-properties.ui:384
+msgid "Trust"
+msgstr "Fidagarritasuna"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:990
-msgid "Expire"
-msgstr "Iraungi"
+#: pgp/seahorse-pgp-private-key-properties.ui:477
+#: pgp/seahorse-pgp-public-key-properties.ui:385
+msgid "Your trust of this key"
+msgstr "Gako horrek zure ustez duen fidagarritasuna"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1064
-#: pgp/seahorse-pgp-public-key-properties.ui:899
-msgid "_Subkeys"
-msgstr "_Azpigakoak"
+#: pgp/seahorse-pgp-private-key-properties.ui:493
+msgid "Override owner trust"
+msgstr "Jaramonik ez egin jabearen fidagarritasunari"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:17
 msgctxt "Validity"
@@ -1963,112 +1569,149 @@ msgctxt "Validity"
 msgid "Ultimately"
 msgstr "Azkena"
 
-#. Names set on the PGP key.
-#: pgp/seahorse-pgp-public-key-properties.ui:326
-msgid "_Other Names:"
-msgstr "_Beste izen batzuk:"
+#: pgp/seahorse-pgp-public-key-properties.ui:401
+msgid "Signature trust"
+msgstr "Sinaduraren fidagarritasuna"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:369
-msgid "Your trust of this key"
-msgstr "Gako horrek zure ustez duen fidagarritasuna"
+#: pgp/seahorse-pgp-public-key-properties.ui:402
+msgid "I trust signatures from this key on other keys"
+msgstr "Gako honek beste gako batzuetan duen sinaduretan fidatzen naiz"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:382
-msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr "Zure fidagarritasuna eskuz adierazten da <i>Xehetasunak</i> fitxan."
+#: pgp/seahorse-pgp-public-key-properties.ui:418
+msgid "Sign key"
+msgstr "Sinatu gakoa"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:425
+msgid "_Sign key"
+msgstr "_Sinatu gakoa"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:436
+msgid "Revoke key signature"
+msgstr "Errebokatu gako-sinadura"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:443
+msgid "_Revoke"
+msgstr "_Errebokatu"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:454
+msgid "Owner trust"
+msgstr "Jabearen fidagarritasuna"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:455
-msgid "_Sign this Key"
-msgstr "_Sinatu gako hau"
+msgid "Give a trust level to the owner of this key"
+msgstr "Eman fidagarritasun-maila bat gako honen jabeari"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:504
-msgid "_Revoke Signature"
-msgstr "_Errebokatu sinadura"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:526
-msgid "_People who have signed this key:"
-msgstr "_Gako hori sinatu duen jendea:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:551
-msgid "_Only display the signatures of people I trust"
-msgstr "_Soilik bistaratu nik fidagarritzat jotako sinadurak"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:570
-msgid "Trust"
-msgstr "Fidagarritasuna"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:604
-msgid "Technical Details:"
-msgstr "Xehetasun teknikoak:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:710
-msgid "Fingerprint:"
-msgstr "Hatz-marka:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:750
-msgid "Dates:"
-msgstr "Datak:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:828
-msgid "Indicate trust:"
-msgstr "Adierazi fidagarritasuna:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:845
-msgid "You _trust the owner:"
-msgstr "Jabeaz _fidatzen zara:"
-
-#: pgp/seahorse-pgp-subkey.c:161
+#: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
 msgstr "Zifratu"
 
-#: pgp/seahorse-pgp-subkey.c:163
+#: pgp/seahorse-pgp-subkey.c:212
+msgid "This subkey can be used for encryption"
+msgstr "Azpigako hau zifratzeetarako erabili daiteke"
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "Sign"
+msgstr "Sinatu"
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "This subkey can be used to create data signatures"
+msgstr "Azpigako hau datu-sinadurak sortzeko erabili daiteke"
+
+#: pgp/seahorse-pgp-subkey.c:214
 msgid "Certify"
 msgstr "Ziurtatu"
 
-#: pgp/seahorse-pgp-subkey.c:164
+#: pgp/seahorse-pgp-subkey.c:214
+msgid "This subkey can be used to create certificates"
+msgstr "Azpigako hau ziurtagiriak sortzeko erabili daiteke"
+
+#: pgp/seahorse-pgp-subkey.c:215
 msgid "Authenticate"
 msgstr "Autentifikatu"
 
-#: pgp/seahorse-pgp-subkey.c:313
+#: pgp/seahorse-pgp-subkey.c:215
+msgid "This subkey can be used for authentication"
+msgstr "Azpigako hau autentifikaziorako erabili daiteke"
+
+#: pgp/seahorse-pgp-subkey.c:409
 msgid "Key"
 msgstr "Gakoa"
 
-#: pgp/seahorse-pgp-subkey.c:318
+#: pgp/seahorse-pgp-subkey.c:414
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "%2$s(r)en %1$d azpigakoa"
 
-#: pgp/seahorse-revoke.ui:35
-msgid "Reason for revoking the key"
-msgstr "Gakoa errebokatzeko arrazoia"
+#: pgp/seahorse-pgp-subkey-list-box.c:203
+#, c-format
+msgid "Are you sure you want to permanently delete subkey %s?"
+msgstr "Ziur zaude %s azpigakoa behin betiko ezabatu nahi duzula?"
 
-#: pgp/seahorse-revoke.ui:40
-msgid "_Reason:"
-msgstr "_Arrazoia:"
+#: pgp/seahorse-pgp-subkey-list-box.c:210
+msgid "Couldn’t delete subkey"
+msgstr "Ezin izan da azpigakoa ezabatu"
 
-#: pgp/seahorse-revoke.ui:70
-msgid "Optional description of revocation"
-msgstr "Errebokatzearen aukerako azalpena"
+#: pgp/seahorse-pgp-subkey-list-box.c:263
+msgid "Subkey was revoked"
+msgstr "Azpigakoa errebokatu da"
 
-#: pgp/seahorse-revoke.ui:129
-msgid "Revoke key"
-msgstr "Errebokatu gakoa"
+#: pgp/seahorse-pgp-subkey-list-box.c:270
+msgid "Subkey has expired"
+msgstr "Azpigakoa iraungi da"
 
-#: pgp/seahorse-revoke.ui:154
-msgid "Re_voke"
-msgstr "Erre_bokatu"
+#: pgp/seahorse-pgp-subkey-list-box.c:273
+msgid "Subkey is disabled"
+msgstr "Azpigakoa desgaituta dago"
 
-#: pgp/seahorse-signer.c:63
-msgid ""
-"You have no personal PGP keys that can be used to sign a document or message."
-msgstr "Ez duzu dokumentu edo mezu bat sinatzeko erabil daitekeen PGP gako pertsonalik."
+#: pgp/seahorse-pgp-subkey-list-box.c:283
+msgid "Never expires"
+msgstr "Ez da iraungitzen"
 
-#: pgp/seahorse-signer.ui:7
-msgid "Choose Signing Key"
-msgstr "Hautatu sinatzeko gakoa"
+#. Translators: first part is the algorithm, second part is the length,
+#. * e.g. "RSA" (2048 bit)
+#: pgp/seahorse-pgp-subkey-list-box.c:308
+#, c-format
+msgid "%s (%d bit)"
+msgstr "%s (%d bit)"
 
-#: pgp/seahorse-signer.ui:25
-msgid "_Sign message with key:"
-msgstr "_Sinatu mezua gako honekin:"
+#: pgp/seahorse-pgp-subkey-list-box.c:315
+msgid "Unknown"
+msgstr "Ezezaguna"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:7
+msgid "Change expiration date"
+msgstr "Aldatu iraungitze-data"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:11
+msgid "Revoke subkey"
+msgstr "Errebokatu azpigakoa"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:15
+msgid "Delete subkey"
+msgstr "Ezabatu azpigakoa"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:46
+msgid "Usages"
+msgstr "Erabilerak"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:120
+msgid "Created"
+msgstr "Sortuta"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:149
+msgid "Change expiry date"
+msgstr "Aldatu iraungitze-data"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:156
+msgid "Revoke"
+msgstr "Errebokatu"
+
+#. Translators: This text refers to deleting an item from its type's backing store
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:163
+#: pkcs11/seahorse-pkcs11-properties.ui:22
+#: src/seahorse-key-manager-widgets.ui:18
+msgid "Delete"
+msgstr "Ezabatu"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2625,49 +2268,53 @@ msgstr "_Soilik gakoa sortu"
 msgid "_Create and Set Up"
 msgstr "_Sortu eta konfiguratu"
 
-#: ssh/seahorse-ssh-key-properties.ui:15
+#: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
 msgstr "SSH gako-propietateak"
 
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:54
+#: ssh/seahorse-ssh-key-properties.ui:64
 msgctxt "name-of-ssh-key"
 msgid "Name"
 msgstr "Izena"
 
-#: ssh/seahorse-ssh-key-properties.ui:87
+#: ssh/seahorse-ssh-key-properties.ui:98
 msgid "Algorithm"
 msgstr "Algoritmoa"
 
-#: ssh/seahorse-ssh-key-properties.ui:114
+#: ssh/seahorse-ssh-key-properties.ui:131
 msgid "Key Length"
 msgstr "Gakoaren luzera"
 
-#: ssh/seahorse-ssh-key-properties.ui:141
+#: ssh/seahorse-ssh-key-properties.ui:163
 msgid "Location"
 msgstr "Kokalekua"
 
-#: ssh/seahorse-ssh-key-properties.ui:228
+#: ssh/seahorse-ssh-key-properties.ui:230
 msgid "Public Key"
 msgstr "Gako publikoa"
 
-#: ssh/seahorse-ssh-key-properties.ui:243
+#: ssh/seahorse-ssh-key-properties.ui:237
 msgid "Copy public key to clipboard"
 msgstr "Kopiatu gako publikoa arbelean"
 
-#: ssh/seahorse-ssh-key-properties.ui:272
-msgid "Remote Access"
+#: ssh/seahorse-ssh-key-properties.ui:276
+msgid "Remote access"
 msgstr "Urreneko sarbidea"
 
-#: ssh/seahorse-ssh-key-properties.ui:285
+#: ssh/seahorse-ssh-key-properties.ui:277
 msgid "Allows accessing this computer remotely"
 msgstr "Ordenagailu hau urrunetik atzitzea ahalbidetzen du"
 
-#: ssh/seahorse-ssh-key-properties.ui:332
+#: ssh/seahorse-ssh-key-properties.ui:299
 msgid "_Export"
 msgstr "_Esportatu"
 
-#: ssh/seahorse-ssh-key-properties.ui:362
+#: ssh/seahorse-ssh-key-properties.ui:313
+msgid "Change _Passphrase"
+msgstr "Aldatu _pasaesaldia"
+
+#: ssh/seahorse-ssh-key-properties.ui:328
 msgid "_Delete SSH Key"
 msgstr "Ezabatu _SSH gakoa"
 
@@ -2722,6 +2369,315 @@ msgstr "Ezin izan dira konfiguratu Shell seguruko gakoak urruneko ordenagailuan.
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Shell seguruko gakoak konfiguratzen…"
+
+#~ msgid "Display flags"
+#~ msgstr "Bistaratu banderak"
+
+#~ msgid "Displayed date and/or time properties"
+#~ msgstr "Bistaratutako data edo/eta orduaren propietateak"
+
+#~ msgid "Lazy mode"
+#~ msgstr "Modu alferra"
+
+#~ msgid "Lazy mode doesn’t normalize entered date and time values"
+#~ msgstr ""
+#~ "Modu alferrak ez ditu sartutako dataren eta orduaren balioak normalizatzen"
+
+#~ msgid "Year"
+#~ msgstr "Urtea"
+
+#~ msgid "Displayed year"
+#~ msgstr "Bistaratutako urtea"
+
+#~ msgid "Month"
+#~ msgstr "Hila"
+
+#~ msgid "Displayed month"
+#~ msgstr "Bistaratutako hilabetea"
+
+#~ msgid "Day"
+#~ msgstr "Eguna"
+
+#~ msgid "Displayed day of month"
+#~ msgstr "Bistaratutako hilabeteko eguna"
+
+#~ msgid "Hour"
+#~ msgstr "Ordua"
+
+#~ msgid "Displayed hour"
+#~ msgstr "Bistaratutako ordua"
+
+#~ msgid "Minute"
+#~ msgstr "Minutua"
+
+#~ msgid "Displayed minute"
+#~ msgstr "Bistaratutako minutua"
+
+#~ msgid "Second"
+#~ msgstr "Bigarrena"
+
+#~ msgid "Displayed second"
+#~ msgstr "Bistaratutako segundoa"
+
+#~ msgid "Lower limit year"
+#~ msgstr "Urtearen behe-muga"
+
+#~ msgid "Year part of the lower date limit"
+#~ msgstr "Dataren behe-mugan urteari dagokion zatia"
+
+#~ msgid "Upper limit year"
+#~ msgstr "Urtearen goi-muga"
+
+#~ msgid "Year part of the upper date limit"
+#~ msgstr "Dataren goi-mugan urteari dagokion zatia"
+
+#~ msgid "Lower limit month"
+#~ msgstr "Hilabetearen behe-muga"
+
+#~ msgid "Month part of the lower date limit"
+#~ msgstr "Dataren behe-mugan hilabeteari dagokion zatia"
+
+#~ msgid "Upper limit month"
+#~ msgstr "Hilabetearen goi-muga"
+
+#~ msgid "Month part of the upper date limit"
+#~ msgstr "Dataren goi-mugan hilabeteari dagokion zatia"
+
+#~ msgid "Lower limit day"
+#~ msgstr "Egunaren behe-muga"
+
+#~ msgid "Day of month part of the lower date limit"
+#~ msgstr "Dataren behe-mugan hilabeteko egunari dagokion zatia"
+
+#~ msgid "Upper limit day"
+#~ msgstr "Egunaren goi-muga"
+
+#~ msgid "Day of month part of the upper date limit"
+#~ msgstr "Dataren goi-mugan hilabeteko egunari dagokion zatia"
+
+#~ msgid "Lower limit hour"
+#~ msgstr "Orduaren behe-muga"
+
+#~ msgid "Hour part of the lower time limit"
+#~ msgstr "Orduaren behe-mugan orduari dagokion zatia"
+
+#~ msgid "Upper limit hour"
+#~ msgstr "Orduaren goi-muga"
+
+#~ msgid "Hour part of the upper time limit"
+#~ msgstr "Orduaren goi-mugan orduari dagokion zatia"
+
+#~ msgid "Lower limit minute"
+#~ msgstr "Minutuaren behe-muga"
+
+#~ msgid "Minute part of the lower time limit"
+#~ msgstr "Orduaren behe-mugan minutuari dagokion zatia"
+
+#~ msgid "Upper limit minute"
+#~ msgstr "Minutuaren goi-muga"
+
+#~ msgid "Minute part of the upper time limit"
+#~ msgstr "Orduaren goi-mugan minutuari dagokion zatia"
+
+#~ msgid "Lower limit second"
+#~ msgstr "Segundoaren behe-muga"
+
+#~ msgid "Second part of the lower time limit"
+#~ msgstr "Orduaren behe-mugan segundoari dagokion zatia"
+
+#~ msgid "Upper limit second"
+#~ msgstr "Segundoaren goi-muga"
+
+#~ msgid "Second part of the upper time limit"
+#~ msgstr "Orduaren goi-mugan segundoari dagokion zatia"
+
+#~ msgid "calendar:week_start:0"
+#~ msgstr "calendar:week_start:1"
+
+#~ msgid "Date"
+#~ msgstr "Data"
+
+#~ msgid "Select Date"
+#~ msgstr "Hautatu data"
+
+#~ msgid "Time"
+#~ msgstr "Ordua"
+
+#~ msgid "Enter the time directly"
+#~ msgstr "Sartu ordua zuzenean"
+
+#~ msgid "Select Time"
+#~ msgstr "Hautatu ordua"
+
+#~ msgid "Select the time from a list"
+#~ msgstr "Hautatu ordua zerrendatik"
+
+#~ msgid "24hr: no"
+#~ msgstr "24hr: ez"
+
+#~ msgid "AM"
+#~ msgstr "AM"
+
+#~ msgid "PM"
+#~ msgstr "PM"
+
+#~ msgid "%02d:%02d:%02d %s"
+#~ msgstr "%02d:%02d:%02d %s"
+
+#~ msgid "%02d:%02d %s"
+#~ msgstr "%02d:%02d %s"
+
+#~ msgid "%02d:%02d:%02d"
+#~ msgstr "%02d:%02d:%02d"
+
+#~ msgid "%02d:%02d"
+#~ msgstr "%02d:%02d"
+
+#~ msgid "%04d-%02d-%02d"
+#~ msgstr "%04d-%02d-%02d"
+
+#~ msgid "%u:%u:%u"
+#~ msgstr "%u:%u:%u"
+
+#~ msgid "Could not display help: %s"
+#~ msgstr "Ezin izan da laguntza erakutsi: %s"
+
+#~ msgid ""
+#~ "You are about to add %s as a revoker for %s. This operation cannot be "
+#~ "undone! Are you sure you want to continue?"
+#~ msgstr ""
+#~ "%s %s(r)en errebokatzaile gisa gehitzera zoaz, eta eragiketa hori ezin da "
+#~ "desegin. Ziur zaude jarraitu nahi duzula?"
+
+#~ msgid "Couldn’t add revoker"
+#~ msgstr "Ezin izan da errebokatzailea gehitu"
+
+#~ msgid "Couldn’t change primary user ID"
+#~ msgstr "Ezin izan da erabiltzailearen ID nagusia aldatu"
+
+#~ msgid "Are you sure you want to permanently delete the “%s” user ID?"
+#~ msgstr ""
+#~ "Ziur zaude ”%s” erabiltzailearen IDa behin betiko ezabatu nahi duzula?"
+
+#~ msgid "Couldn’t delete user ID"
+#~ msgstr "Ezin izan da erabiltzailearen IDa ezabatu"
+
+#~ msgid "[Unknown]"
+#~ msgstr "[Ezezaguna]"
+
+#~ msgid "Name/Email"
+#~ msgstr "Izena/Helbide elektronikoa"
+
+#~ msgid "ID"
+#~ msgstr "IDa"
+
+#~ msgid "Status"
+#~ msgstr "Egoera"
+
+#~ msgid "Strength"
+#~ msgstr "Indarra"
+
+#~ msgid "Revoked"
+#~ msgstr "Errebokatuta"
+
+#~ msgid "Expired"
+#~ msgstr "Iraungita"
+
+#~ msgid "Disabled"
+#~ msgstr "Desgaituta"
+
+#~ msgid "Good"
+#~ msgstr "Ona"
+
+#~ msgid ""
+#~ "If you believe that the person that owns this key is “%s”, <i>sign</i> "
+#~ "this key:"
+#~ msgstr "Gako honen jabea ”%s” dela uste baduzu, <i>sinatu</i> gakoa:"
+
+#~ msgid "Key Names and Signatures"
+#~ msgstr "Gakoaren izenak eta sinadurak"
+
+#~ msgid "Primary"
+#~ msgstr "Nagusia"
+
+#~ msgid "_Add Name"
+#~ msgstr "_Gehitu izena"
+
+#~ msgid "Names and Signatures"
+#~ msgstr "Izenak eta sinadurak"
+
+#~ msgid "Key ID:"
+#~ msgstr "Gakoaren IDa:"
+
+#~ msgid "Type:"
+#~ msgstr "Mota:"
+
+#~ msgid "Strength:"
+#~ msgstr "Indarra:"
+
+#~ msgid "Technical Details"
+#~ msgstr "Xehetasun teknikoak"
+
+#~ msgid "Created:"
+#~ msgstr "Sortua:"
+
+#~ msgid "Expires:"
+#~ msgstr "Iraungitze-data:"
+
+#~ msgid "Dates"
+#~ msgstr "Datak"
+
+#~ msgid "_Export to file"
+#~ msgstr "_Esportatu fitxategira"
+
+#~ msgid "Actions"
+#~ msgstr "Ekintzak"
+
+#~ msgid "Expire"
+#~ msgstr "Iraungi"
+
+#~ msgid "_Other Names:"
+#~ msgstr "_Beste izen batzuk:"
+
+#~ msgid "Your trust is manually specified on the <i>Details</i> tab."
+#~ msgstr "Zure fidagarritasuna eskuz adierazten da <i>Xehetasunak</i> fitxan."
+
+#~ msgid "_Sign this Key"
+#~ msgstr "_Sinatu gako hau"
+
+#~ msgid "_People who have signed this key:"
+#~ msgstr "_Gako hori sinatu duen jendea:"
+
+#~ msgid "_Only display the signatures of people I trust"
+#~ msgstr "_Soilik bistaratu nik fidagarritzat jotako sinadurak"
+
+#~ msgid "Technical Details:"
+#~ msgstr "Xehetasun teknikoak:"
+
+#~ msgid "Fingerprint:"
+#~ msgstr "Hatz-marka:"
+
+#~ msgid "Dates:"
+#~ msgstr "Datak:"
+
+#~ msgid "Indicate trust:"
+#~ msgstr "Adierazi fidagarritasuna:"
+
+#~ msgid "You _trust the owner:"
+#~ msgstr "Jabeaz _fidatzen zara:"
+
+#~ msgid ""
+#~ "You have no personal PGP keys that can be used to sign a document or "
+#~ "message."
+#~ msgstr ""
+#~ "Ez duzu dokumentu edo mezu bat sinatzeko erabil daitekeen PGP gako "
+#~ "pertsonalik."
+
+#~ msgid "Choose Signing Key"
+#~ msgstr "Hautatu sinatzeko gakoa"
+
+#~ msgid "_Sign message with key:"
+#~ msgstr "_Sinatu mezua gako honekin:"
 
 #~ msgid "Add a new keyserver"
 #~ msgstr "Gehitu gako-zerbitzari berria"
