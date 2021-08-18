@@ -1,5 +1,4 @@
 libseahorse_sources = files(
-  'seahorse-bind.c',
   'seahorse-progress.c',
   'seahorse-util.c',
 )
