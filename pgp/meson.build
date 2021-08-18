@@ -101,6 +101,7 @@ xloadimage = executable('xloadimage',
 
 # Tests
 test_names = [
+  'gpgme-backend',
 ]
 
 if get_option('hkp-support')
