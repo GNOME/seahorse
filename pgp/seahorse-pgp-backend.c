@@ -36,19 +36,12 @@
 
 #include <string.h>
 
-enum {
-	PROP_0,
-	PROP_NAME,
-	PROP_LABEL,
-	PROP_DESCRIPTION,
-	PROP_ACTIONS,
-	PROP_LOADED
-};
-
 static SeahorsePgpBackend *pgp_backend = NULL;
 
 struct _SeahorsePgpBackend {
     GObject parent;
+
+    char *gpg_homedir;
 
     SeahorseGpgmeKeyring *keyring;
     SeahorsePgpSettings *pgp_settings;
@@ -58,6 +51,20 @@ struct _SeahorsePgpBackend {
     SeahorseActionGroup *actions;
     gboolean loaded;
 };
+
+enum {
+    PROP_0,
+    PROP_GPG_HOMEDIR,
+    N_PROPS,
+
+    /* overridden properties */
+    PROP_NAME,
+    PROP_LABEL,
+    PROP_DESCRIPTION,
+    PROP_ACTIONS,
+    PROP_LOADED
+};
+static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
 static void         seahorse_pgp_backend_iface            (SeahorseBackendIface *iface);
 
@@ -154,16 +161,19 @@ on_place_loaded (GObject       *object,
 static void
 seahorse_pgp_backend_constructed (GObject *obj)
 {
-	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
+    SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
 
-	G_OBJECT_CLASS (seahorse_pgp_backend_parent_class)->constructed (obj);
+    G_OBJECT_CLASS (seahorse_pgp_backend_parent_class)->constructed (obj);
 
-	self->keyring = seahorse_gpgme_keyring_new ();
-	seahorse_place_load (SEAHORSE_PLACE (self->keyring), NULL, on_place_loaded,
-			     g_object_ref (self));
+    /* First of all: configure the GPG home directory */
+    gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, NULL, self->gpg_homedir);
 
-	self->discovery = seahorse_discovery_new ();
-	self->unknown = seahorse_unknown_source_new ();
+    self->keyring = seahorse_gpgme_keyring_new ();
+    seahorse_place_load (SEAHORSE_PLACE (self->keyring), NULL, on_place_loaded,
+                         g_object_ref (self));
+
+    self->discovery = seahorse_discovery_new ();
+    self->unknown = seahorse_unknown_source_new ();
 
 #ifdef WITH_KEYSERVER
     g_signal_connect (self->pgp_settings, "changed::keyservers",
@@ -209,34 +219,65 @@ seahorse_pgp_backend_get_loaded (SeahorseBackend *backend)
 	return SEAHORSE_PGP_BACKEND (backend)->loaded;
 }
 
+const char *
+seahorse_pgp_backend_get_gpg_homedir (SeahorsePgpBackend *self)
+{
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), FALSE);
+
+    return self->gpg_homedir;
+}
+
 static void
 seahorse_pgp_backend_get_property (GObject *obj,
                                    guint prop_id,
                                    GValue *value,
                                    GParamSpec *pspec)
 {
-	SeahorseBackend *backend = SEAHORSE_BACKEND (obj);
+    SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
+    SeahorseBackend *backend = SEAHORSE_BACKEND (obj);
 
-	switch (prop_id) {
-	case PROP_NAME:
-		g_value_set_string (value,  seahorse_pgp_backend_get_name (backend));
-		break;
-	case PROP_LABEL:
-		g_value_set_string (value,  seahorse_pgp_backend_get_label (backend));
-		break;
-	case PROP_DESCRIPTION:
-		g_value_set_string (value,  seahorse_pgp_backend_get_description (backend));
-		break;
-	case PROP_ACTIONS:
-		g_value_take_object (value, seahorse_pgp_backend_get_actions (backend));
-		break;
-	case PROP_LOADED:
-		g_value_set_boolean (value, seahorse_pgp_backend_get_loaded (backend));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
+    switch (prop_id) {
+    case PROP_GPG_HOMEDIR:
+        g_value_set_string (value,  seahorse_pgp_backend_get_gpg_homedir (self));
+        break;
+    case PROP_NAME:
+        g_value_set_string (value,  seahorse_pgp_backend_get_name (backend));
+        break;
+    case PROP_LABEL:
+        g_value_set_string (value,  seahorse_pgp_backend_get_label (backend));
+        break;
+    case PROP_DESCRIPTION:
+        g_value_set_string (value,  seahorse_pgp_backend_get_description (backend));
+        break;
+    case PROP_ACTIONS:
+        g_value_take_object (value, seahorse_pgp_backend_get_actions (backend));
+        break;
+    case PROP_LOADED:
+        g_value_set_boolean (value, seahorse_pgp_backend_get_loaded (backend));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+        break;
+    }
+}
+
+static void
+seahorse_pgp_backend_set_property (GObject      *obj,
+                                   unsigned int  prop_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
+{
+    SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
+
+    switch (prop_id) {
+    case PROP_GPG_HOMEDIR:
+        g_free (self->gpg_homedir);
+        self->gpg_homedir = g_value_dup_string (value);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+        break;
+    }
 }
 
 static void
@@ -249,30 +290,40 @@ seahorse_pgp_backend_finalize (GObject *obj)
                                           on_settings_keyservers_changed, self);
 #endif
 
-	g_clear_object (&self->keyring);
-	g_clear_object (&self->discovery);
-	g_clear_object (&self->unknown);
-	g_clear_object (&self->remotes);
-	g_clear_object (&self->actions);
-	pgp_backend = NULL;
+    g_clear_pointer (&self->gpg_homedir, g_free);
+    g_clear_object (&self->keyring);
+    g_clear_object (&self->discovery);
+    g_clear_object (&self->unknown);
+    g_clear_object (&self->remotes);
+    g_clear_object (&self->actions);
+    pgp_backend = NULL;
 
-	G_OBJECT_CLASS (seahorse_pgp_backend_parent_class)->finalize (obj);
+    G_OBJECT_CLASS (seahorse_pgp_backend_parent_class)->finalize (obj);
 }
 
 static void
 seahorse_pgp_backend_class_init (SeahorsePgpBackendClass *klass)
 {
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-	gobject_class->constructed = seahorse_pgp_backend_constructed;
-	gobject_class->finalize = seahorse_pgp_backend_finalize;
-	gobject_class->get_property = seahorse_pgp_backend_get_property;
+    gobject_class->constructed = seahorse_pgp_backend_constructed;
+    gobject_class->finalize = seahorse_pgp_backend_finalize;
+    gobject_class->get_property = seahorse_pgp_backend_get_property;
+    gobject_class->set_property = seahorse_pgp_backend_set_property;
 
-	g_object_class_override_property (gobject_class, PROP_NAME, "name");
-	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
-	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
-	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
-	g_object_class_override_property (gobject_class, PROP_LOADED, "loaded");
+    obj_props[PROP_GPG_HOMEDIR] =
+        g_param_spec_string ("gpg-homedir", "gpg-homedir", "GPG home directory",
+                             NULL,
+                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+    g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
+
+    /* Overridden properties */
+    g_object_class_override_property (gobject_class, PROP_NAME, "name");
+    g_object_class_override_property (gobject_class, PROP_LABEL, "label");
+    g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+    g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+    g_object_class_override_property (gobject_class, PROP_LOADED, "loaded");
 }
 
 static guint
@@ -332,20 +383,29 @@ seahorse_pgp_backend_get (void)
 	return pgp_backend;
 }
 
+/**
+ * seahorse_pgp_backend_initialize:
+ * @gpg_homedir: (nullable):
+ *
+ * Initializes the PGP backend using the given argument as GNUPGHOME directory.
+ * If @gpg_homedir is %NULL, the default will be used.
+ *
+ * (usually it only makes sense to set this to a nonnull value for tests).
+ */
 void
-seahorse_pgp_backend_initialize (void)
+seahorse_pgp_backend_initialize (const char *gpg_homedir)
 {
-	SeahorsePgpBackend *self;
+    SeahorsePgpBackend *self;
 
-	g_return_if_fail (pgp_backend == NULL);
-	self = g_object_new (SEAHORSE_PGP_TYPE_BACKEND, NULL);
+    g_return_if_fail (pgp_backend == NULL);
+    self = g_object_new (SEAHORSE_PGP_TYPE_BACKEND,
+                         "gpg-homedir", gpg_homedir,
+                         NULL);
 
-	seahorse_backend_register (SEAHORSE_BACKEND (self));
-	g_object_unref (self);
+    seahorse_backend_register (SEAHORSE_BACKEND (self));
+    g_object_unref (self);
 
-	g_return_if_fail (pgp_backend != NULL);
-
-	gpgme_set_engine_info (GPGME_PROTOCOL_OpenPGP, NULL, NULL);
+    g_return_if_fail (pgp_backend != NULL);
 }
 
 SeahorseGpgmeKeyring *

@@ -38,12 +38,14 @@ G_BEGIN_DECLS
 #define SEAHORSE_PGP_TYPE_STR  SEAHORSE_PGP_NAME
 #define SEAHORSE_PGP           g_quark_from_string (SEAHORSE_PGP_NAME)
 
-void       seahorse_pgp_backend_initialize    (void);
+void       seahorse_pgp_backend_initialize    (const char *gpg_homedir);
 
 #define SEAHORSE_PGP_TYPE_BACKEND (seahorse_pgp_backend_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorsePgpBackend, seahorse_pgp_backend, SEAHORSE_PGP, BACKEND, GObject)
 
 SeahorsePgpBackend *   seahorse_pgp_backend_get                  (void);
+
+const char *           seahorse_pgp_backend_get_gpg_homedir      (SeahorsePgpBackend *self);
 
 SeahorseGpgmeKeyring * seahorse_pgp_backend_get_default_keyring  (SeahorsePgpBackend *self);
 

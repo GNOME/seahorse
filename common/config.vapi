@@ -48,7 +48,7 @@ namespace Progress {
 
 [CCode (cheader_filename = "pgp/seahorse-pgp-backend.h")]
 public class Pgp.Backend : GLib.Object, Gcr.Collection, Place {
-    public static void initialize();
+    public static void initialize(string? gpg_homedir);
     public static unowned Pgp.Backend get();
 
     public unowned GLib.ListModel get_remotes();

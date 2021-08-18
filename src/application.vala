@@ -105,7 +105,7 @@ public class Seahorse.Application : Gtk.Application {
         Gkr.Backend.initialize();
         Ssh.Backend.initialize();
 #if WITH_PGP
-        Pgp.Backend.initialize();
+        Pgp.Backend.initialize(null);
 #endif
 #if WITH_PKCS11
         Pkcs11.Backend.initialize();
