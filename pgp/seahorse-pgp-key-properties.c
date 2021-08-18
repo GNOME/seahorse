@@ -45,7 +45,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-object-model.h"
 #include "libseahorse/seahorse-util.h"
 
 #include <glib.h>
