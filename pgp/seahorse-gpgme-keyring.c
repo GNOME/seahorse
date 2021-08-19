@@ -703,24 +703,31 @@ scheduled_refresh (gpointer user_data)
 }
 
 static void
-monitor_gpg_homedir (GFileMonitor *handle, GFile *file, GFile *other_file,
-                     GFileMonitorEvent event_type, gpointer user_data)
+monitor_gpg_homedir (GFileMonitor     *file_monitor,
+                     GFile            *file,
+                     GFile            *other_file,
+                     GFileMonitorEvent event_type,
+                     void             *user_data)
 {
-	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (user_data);
-	gchar *name;
+    SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (user_data);
+    g_autofree char *name = NULL;
 
-	if (event_type == G_FILE_MONITOR_EVENT_CHANGED ||
-	    event_type == G_FILE_MONITOR_EVENT_DELETED ||
-	    event_type == G_FILE_MONITOR_EVENT_CREATED) {
+    /* Ignore other event types */
+    if (event_type != G_FILE_MONITOR_EVENT_CHANGED &&
+        event_type != G_FILE_MONITOR_EVENT_DELETED &&
+        event_type != G_FILE_MONITOR_EVENT_CREATED)
+        return;
 
-		name = g_file_get_basename (file);
-		if (g_str_has_suffix (name, ".gpg")) {
-			if (self->scheduled_refresh == 0) {
-				g_debug ("scheduling refresh event due to file changes");
-				self->scheduled_refresh = g_timeout_add (500, scheduled_refresh, self);
-			}
-		}
-	}
+    /* If it's not the pubring.kbx or *ring.gpg (GPG <2.1), then also ignore */
+    name = g_file_get_basename (file);
+    if (!g_str_has_suffix (name, ".kbx") && !g_str_has_suffix (name, ".gpg"))
+        return;
+
+    /* Schedule a refresh if none planned yet */
+    if (self->scheduled_refresh == 0) {
+        g_debug ("scheduling refresh event due to file changes");
+        self->scheduled_refresh = g_timeout_add (500, scheduled_refresh, self);
+    }
 }
 
 static void
