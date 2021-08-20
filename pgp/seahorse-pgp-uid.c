@@ -53,8 +53,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (SeahorsePgpUid, seahorse_pgp_uid, SEAHORSE_TYPE_OBJE
  * INTERNAL HELPERS
  */
 
-static gchar*
-convert_string (const gchar *str)
+static char *
+convert_string (const char *str)
 {
     if (!str)
             return NULL;
@@ -111,10 +111,10 @@ strsep (char **stringp, const char *delim)
 
 /* Copied from GPGME */
 static void
-parse_user_id (const gchar *uid, gchar **name, gchar **email, gchar **comment)
+parse_user_id (const char *uid, char **name, char **email, char **comment)
 {
-    gchar *src, *tail;
-    g_autofree gchar *x = NULL;
+    char *src, *tail;
+    g_autofree char *x = NULL;
     int in_name = 0;
     int in_email = 0;
     int in_comment = 0;
@@ -198,8 +198,8 @@ void
 seahorse_pgp_uid_realize (SeahorsePgpUid *self)
 {
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
-    g_autofree gchar *markup = NULL;
-    g_autofree gchar *label = NULL;
+    g_autofree char *markup = NULL;
+    g_autofree char *label = NULL;
 
     /* Don't realize if no name present */
     if (!priv->name)
@@ -229,8 +229,10 @@ seahorse_pgp_uid_constructed (GObject *object)
 }
 
 static void
-seahorse_pgp_uid_get_property (GObject *object, guint prop_id,
-                               GValue *value, GParamSpec *pspec)
+seahorse_pgp_uid_get_property (GObject     *object,
+                               unsigned int prop_id,
+                               GValue      *value,
+                               GParamSpec  *pspec)
 {
     SeahorsePgpUid *self = SEAHORSE_PGP_UID (object);
 
@@ -257,8 +259,10 @@ seahorse_pgp_uid_get_property (GObject *object, guint prop_id,
 }
 
 static void
-seahorse_pgp_uid_set_property (GObject *object, guint prop_id, const GValue *value,
-                               GParamSpec *pspec)
+seahorse_pgp_uid_set_property (GObject      *object,
+                               unsigned int  prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
 {
     SeahorsePgpUid *self = SEAHORSE_PGP_UID (object);
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
@@ -360,6 +364,12 @@ seahorse_pgp_uid_new (SeahorsePgpKey *parent,
                          NULL);
 }
 
+/**
+ * seahorse_pgp_uid_get_signatures:
+ * @self: A uid
+ *
+ * Returns: (transfer none): The PGP key this UID belongs to
+ */
 SeahorsePgpKey *
 seahorse_pgp_uid_get_parent (SeahorsePgpUid *self)
 {
@@ -369,6 +379,12 @@ seahorse_pgp_uid_get_parent (SeahorsePgpUid *self)
     return priv->parent;
 }
 
+/**
+ * seahorse_pgp_uid_get_signatures:
+ * @self: A uid
+ *
+ * Returns: (transfer none): The list of #SeahorsePgpSignatures
+ */
 GListModel *
 seahorse_pgp_uid_get_signatures (SeahorsePgpUid *self)
 {
@@ -417,7 +433,7 @@ seahorse_pgp_uid_remove_signature (SeahorsePgpUid       *self,
     g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
     g_return_if_fail (SEAHORSE_PGP_IS_SIGNATURE (signature));
 
-    for (guint i = 0; i < g_list_model_get_n_items (priv->signatures); i++) {
+    for (unsigned i = 0; i < g_list_model_get_n_items (priv->signatures); i++) {
         g_autoptr(SeahorsePgpSignature) sig = NULL;
 
         sig = g_list_model_get_item (priv->signatures, i);
@@ -447,7 +463,13 @@ seahorse_pgp_uid_set_validity (SeahorsePgpUid *self, SeahorseValidity validity)
     g_object_notify (G_OBJECT (self), "validity");
 }
 
-const gchar*
+/**
+ * seahorse_pgp_uid_get_name:
+ * @self: A uid
+ *
+ * Returns: (transfer none): The name part of the UID
+ */
+const char *
 seahorse_pgp_uid_get_name (SeahorsePgpUid *self)
 {
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
@@ -459,7 +481,7 @@ seahorse_pgp_uid_get_name (SeahorsePgpUid *self)
 }
 
 void
-seahorse_pgp_uid_set_name (SeahorsePgpUid *self, const gchar *name)
+seahorse_pgp_uid_set_name (SeahorsePgpUid *self, const char *name)
 {
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
     GObject *obj;
@@ -477,7 +499,13 @@ seahorse_pgp_uid_set_name (SeahorsePgpUid *self, const gchar *name)
     g_object_thaw_notify (obj);
 }
 
-const gchar*
+/**
+ * seahorse_pgp_uid_get_email:
+ * @self: A uid
+ *
+ * Returns: (transfer none): The email part of the UID (if empty, returns "")
+ */
+const char *
 seahorse_pgp_uid_get_email (SeahorsePgpUid *self)
 {
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
@@ -489,17 +517,16 @@ seahorse_pgp_uid_get_email (SeahorsePgpUid *self)
 }
 
 void
-seahorse_pgp_uid_set_email (SeahorsePgpUid *self, const gchar *email)
+seahorse_pgp_uid_set_email (SeahorsePgpUid *self, const char *email)
 {
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
-    GObject *obj;
+    GObject *obj = G_OBJECT (self);
 
     g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
 
     g_free (priv->email);
     priv->email = convert_string (email);
 
-    obj = G_OBJECT (self);
     g_object_freeze_notify (obj);
     if (!priv->realized)
         seahorse_pgp_uid_realize (self);
@@ -507,7 +534,13 @@ seahorse_pgp_uid_set_email (SeahorsePgpUid *self, const gchar *email)
     g_object_thaw_notify (obj);
 }
 
-const gchar*
+/**
+ * seahorse_pgp_uid_get_comment:
+ * @self: A uid
+ *
+ * Returns: (transfer none): The comment part of the UID (if empty, returns "")
+ */
+const char *
 seahorse_pgp_uid_get_comment (SeahorsePgpUid *self)
 {
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
@@ -519,17 +552,16 @@ seahorse_pgp_uid_get_comment (SeahorsePgpUid *self)
 }
 
 void
-seahorse_pgp_uid_set_comment (SeahorsePgpUid *self, const gchar *comment)
+seahorse_pgp_uid_set_comment (SeahorsePgpUid *self, const char *comment)
 {
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
-    GObject *obj;
+    GObject *obj = G_OBJECT (self);
 
     g_return_if_fail (SEAHORSE_PGP_IS_UID (self));
 
     g_free (priv->comment);
     priv->comment = convert_string (comment);
 
-    obj = G_OBJECT (self);
     g_object_freeze_notify (obj);
     if (!priv->realized)
         seahorse_pgp_uid_realize (self);
@@ -537,9 +569,21 @@ seahorse_pgp_uid_set_comment (SeahorsePgpUid *self, const gchar *comment)
     g_object_thaw_notify (obj);
 }
 
-gchar*
-seahorse_pgp_uid_calc_label (const gchar *name, const gchar *email,
-                             const gchar *comment)
+/**
+ * seahorse_pgp_uid_calc_label:
+ * @name:
+ * @email: (nullable):
+ * @command: (nullable):
+ *
+ * Builds a PGP UID from the name (and if available) name and comment in the
+ * form of "name (comment) <email>"
+ *
+ * Returns: (transfer full): The PGP UID string
+ */
+char *
+seahorse_pgp_uid_calc_label (const char *name,
+                             const char *email,
+                             const char *comment)
 {
     GString *string;
 
@@ -563,11 +607,13 @@ seahorse_pgp_uid_calc_label (const gchar *name, const gchar *email,
     return g_string_free (string, FALSE);
 }
 
-gchar*
-seahorse_pgp_uid_calc_markup (const gchar *name, const gchar *email,
-                              const gchar *comment, guint flags)
+char *
+seahorse_pgp_uid_calc_markup (const char  *name,
+                              const char  *email,
+                              const char  *comment,
+                              unsigned int flags)
 {
-    const gchar *format;
+    const char *format;
     gboolean strike = FALSE;
     gboolean grayed = FALSE;
 
@@ -594,16 +640,4 @@ seahorse_pgp_uid_calc_markup (const gchar *name, const gchar *email,
                    comment && comment[0] ? "  '" : "",
                    comment && comment[0] ? comment : "",
                    comment && comment[0] ? "'" : "");
-}
-
-GQuark
-seahorse_pgp_uid_calc_id (GQuark key_id, guint index)
-{
-    g_autofree gchar *str = NULL;
-    GQuark id = 0;
-
-    str = g_strdup_printf ("%s:%u", g_quark_to_string (key_id), index + 1);
-    id = g_quark_from_string (str);
-
-    return id;
 }

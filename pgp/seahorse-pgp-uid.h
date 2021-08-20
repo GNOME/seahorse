@@ -71,10 +71,7 @@ char *            seahorse_pgp_uid_calc_label           (const char *name,
                                                          const char *email,
                                                          const char *comment);
 
-char *            seahorse_pgp_uid_calc_markup          (const char *name,
-                                                         const char *email,
-                                                         const char *comment,
-                                                         guint       flags);
-
-GQuark            seahorse_pgp_uid_calc_id              (GQuark key_id,
-                                                         guint index);
+char *            seahorse_pgp_uid_calc_markup          (const char  *name,
+                                                         const char  *email,
+                                                         const char  *comment,
+                                                         unsigned int flags);
