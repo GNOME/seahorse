@@ -28,7 +28,6 @@
 #include "seahorse-gpgme-data.h"
 #include "seahorse-gpgme.h"
 #include "seahorse-gpgme-key-op.h"
-#include "seahorse-gpg-options.h"
 #include "seahorse-pgp-actions.h"
 #include "seahorse-pgp-key.h"
 
@@ -691,15 +690,15 @@ seahorse_gpgme_keyring_import_finish (SeahorseGpgmeKeyring *self,
 }
 
 static gboolean
-scheduled_refresh (gpointer user_data)
+scheduled_refresh (void *user_data)
 {
-	SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (user_data);
+    SeahorseGpgmeKeyring *self = SEAHORSE_GPGME_KEYRING (user_data);
 
-	g_debug ("scheduled refresh event ocurring now");
-	cancel_scheduled_refresh (self);
-	seahorse_gpgme_keyring_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
+    g_debug ("scheduled refresh event ocurring now");
+    cancel_scheduled_refresh (self);
+    seahorse_gpgme_keyring_load_async (SEAHORSE_PLACE (self), NULL, NULL, NULL);
 
-	return FALSE; /* don't run again */
+    return G_SOURCE_REMOVE;
 }
 
 static void
@@ -733,33 +732,40 @@ monitor_gpg_homedir (GFileMonitor     *file_monitor,
 static void
 seahorse_gpgme_keyring_init (SeahorseGpgmeKeyring *self)
 {
-	GError *err = NULL;
-	const gchar *gpg_homedir;
-	GFile *file;
+    const char *gpg_homedir;
+    g_autoptr(GFile) file = NULL;
+    g_autoptr(GError) err = NULL;
 
-	self->keys = g_hash_table_new_full (seahorse_pgp_keyid_hash,
-	                                        seahorse_pgp_keyid_equal,
-	                                        g_free, g_object_unref);
+    self->keys = g_hash_table_new_full (seahorse_pgp_keyid_hash,
+                                        seahorse_pgp_keyid_equal,
+                                        g_free, g_object_unref);
 
-	self->scheduled_refresh = 0;
-	self->monitor_handle = NULL;
+    self->scheduled_refresh = 0;
+    self->monitor_handle = NULL;
 
-	gpg_homedir = seahorse_gpg_homedir ();
-	if (gpg_homedir) {
-		file = g_file_new_for_path (gpg_homedir);
-		g_return_if_fail (file != NULL);
+    /* Get the GPG home directory directly from GPGME */
+    gpg_homedir = gpgme_get_dirinfo ("homedir");
+    if (!gpg_homedir) {
+        g_warning ("Can't monitor GPG home directory: GPGME has no homedir");
+        return;
+    }
 
-		self->monitor_handle = g_file_monitor_directory (file, G_FILE_MONITOR_NONE, NULL, &err);
-		g_object_unref (file);
+    /* Try to put a file monitor on it */
+    file = g_file_new_for_path (gpg_homedir);
+    self->monitor_handle = g_file_monitor_directory (file,
+                                                     G_FILE_MONITOR_NONE,
+                                                     NULL,
+                                                     &err);
+    if (!self->monitor_handle) {
+        g_warning ("Can't monitor GPG home directory: %s: %s",
+                   gpg_homedir, err && err->message ? err->message : "");
+        return;
+    }
 
-		if (self->monitor_handle) {
-			g_signal_connect (self->monitor_handle, "changed",
-			                  G_CALLBACK (monitor_gpg_homedir), self);
-		} else {
-			g_warning ("couldn't monitor the GPG home directory: %s: %s",
-			           gpg_homedir, err && err->message ? err->message : "");
-		}
-	}
+    /* Listen for changes */
+    g_debug ("Monitoring GPG home directory '%s'", gpg_homedir);
+    g_signal_connect (self->monitor_handle, "changed",
+                      G_CALLBACK (monitor_gpg_homedir), self);
 }
 
 static gchar *

@@ -20,7 +20,6 @@ pgp_sources = files(
   'seahorse-gpgme-subkey.c',
   'seahorse-gpgme-uid.c',
   'seahorse-gpg-op.c',
-  'seahorse-gpg-options.c',
   'seahorse-pgp-actions.c',
   'seahorse-pgp-backend.c',
   'seahorse-pgp-key.c',
