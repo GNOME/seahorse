@@ -84,7 +84,7 @@ public class Item : Secret.Item, Deletable, Viewable {
         owned get {
             ensure_item_info ();
             var result = new StringBuilder("");
-            result.append(Markup.escape_text(this._info.label));
+            result.append(Markup.escape_text(this._info.label ?? ""));
             if (this._info.details != null && this._info.details != "") {
                 result.append("<span size='small' rise='0' foreground='#555555'>\n");
                 result.append(this._info.details);
