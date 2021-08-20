@@ -51,7 +51,7 @@ SeahorseGpgmeKeyring * seahorse_gpgme_keyring_new            (void);
 gpgme_ctx_t            seahorse_gpgme_keyring_new_context    (gpgme_error_t *gerr);
 
 SeahorseGpgmeKey *     seahorse_gpgme_keyring_lookup         (SeahorseGpgmeKeyring *self,
-                                                              const gchar *keyid);
+                                                              const char           *keyid);
 
 void                   seahorse_gpgme_keyring_remove_key     (SeahorseGpgmeKeyring *self,
                                                               SeahorseGpgmeKey *key);
