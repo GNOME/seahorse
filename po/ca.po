@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-02 05:51+0000\n"
+"POT-Creation-Date: 2021-08-17 16:18+0000\n"
 "PO-Revision-Date: 2020-07-22 23:45+0200\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -556,15 +556,15 @@ msgstr "Credencials de xarxa"
 msgid "Password"
 msgstr "Contrasenya"
 
-#: gkr/gkr-item-properties.vala:214
+#: gkr/gkr-item-properties.vala:217
 msgid "Couldn’t change password."
 msgstr "No s'ha pogut canviar la contrasenya."
 
-#: gkr/gkr-item-properties.vala:238
+#: gkr/gkr-item-properties.vala:241
 msgid "Couldn’t set description."
 msgstr "No s'ha pogut establir la descripció."
 
-#: gkr/gkr-item-properties.vala:265
+#: gkr/gkr-item-properties.vala:268
 msgid "Error deleting the password."
 msgstr "S'ha produït un error en suprimir la contrasenya."
 
@@ -714,8 +714,6 @@ msgid "Login"
 msgstr "Inicia una sessió"
 
 #: gkr/seahorse-gkr-item-properties.ui:156
-#: pgp/seahorse-pgp-private-key-properties.ui:965
-#: pgp/seahorse-pgp-public-key-properties.ui:903
 msgid "Details"
 msgstr "Detalls"
 
@@ -727,7 +725,7 @@ msgstr "Suprimeix contrasenya"
 msgid "Keyring properties"
 msgstr "Propietats de l'anell de claus"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:889
+#: gkr/seahorse-gkr-keyring.ui:52
 msgid "Name"
 msgstr "Nom"
 
@@ -1463,277 +1461,170 @@ msgstr "Claus PGP"
 msgid "PGP keys are for encrypting email or files"
 msgstr "Les claus PGP serveixen per a l'encriptació de correus i fitxers"
 
-#: pgp/seahorse-pgp-key.c:186
+#: pgp/seahorse-pgp-key.c:187
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
 msgstr[0] "(i %d altra)"
 msgstr[1] "(i %d altres)"
 
-#: pgp/seahorse-pgp-key.c:609
+#: pgp/seahorse-pgp-key.c:625
 msgid "Personal PGP key"
 msgstr "Clau PGP personal"
 
-#: pgp/seahorse-pgp-key.c:611
+#: pgp/seahorse-pgp-key.c:627
 msgid "PGP key"
 msgstr "Clau PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:251
-msgid "Couldn’t change primary user ID"
-msgstr "No s'ha pogut canviar l'identificador primari de l'usuari"
-
-#: pgp/seahorse-pgp-key-properties.c:286
-#, c-format
-msgid "Are you sure you want to permanently delete the “%s” user ID?"
-msgstr "Segur que voleu suprimir permanentment l'identificador d'usuari «%s»?"
-
-#: pgp/seahorse-pgp-key-properties.c:295
-msgid "Couldn’t delete user ID"
-msgstr "No s'ha pogut suprimir l'identificador d'usuari"
-
-#. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:371
-#: pgp/seahorse-pgp-key-properties.c:1288
-msgid "[Unknown]"
-msgstr "[Desconegut]"
-
-#. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:469
-#: pgp/seahorse-pgp-key-properties.c:1506
-msgid "Name/Email"
-msgstr "Nom/adreça electrònica"
-
-#: pgp/seahorse-pgp-key-properties.c:476
-msgid "Signature ID"
-msgstr "Identificador de la signatura"
-
-#: pgp/seahorse-pgp-key-properties.c:582
+#: pgp/seahorse-pgp-key-properties.c:219
 msgid "Couldn’t change primary photo"
 msgstr "No s'ha pogut canviar la fotografia primària"
 
-#: pgp/seahorse-pgp-key-properties.c:769
+#: pgp/seahorse-pgp-key-properties.c:386
 msgid "Error changing password"
 msgstr "S'ha produït un error en canviar la contrasenya"
 
-#. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:816
-msgid "(unknown)"
-msgstr "(desconegut)"
-
-#: pgp/seahorse-pgp-key-properties.c:821
-#, c-format
-msgid "This key expired on: %s"
-msgstr "Aquesta clau va vèncer el: %s"
-
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:847
-#, c-format
-msgid "%s — Public key"
-msgstr "%s — clau pública"
-
-#. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:850
+#: pgp/seahorse-pgp-key-properties.c:431
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — clau privada"
 
-#: pgp/seahorse-pgp-key-properties.c:1018
-#: pgp/seahorse-pgp-key-properties.c:1262
-msgid "Unable to change trust"
-msgstr "No s'ha pogut canviar la confiança"
+#. Translators: the 1st part of the title is the owner's name
+#: pgp/seahorse-pgp-key-properties.c:435
+#, c-format
+msgid "%s — Public key"
+msgstr "%s — clau pública"
 
-#: pgp/seahorse-pgp-key-properties.c:1030 ssh/key-properties.vala:191
-msgid "Couldn’t export key"
-msgstr "No s'ha pogut exportar la clau"
+#. TRANSLATORS: (unknown) expiry date
+#: pgp/seahorse-pgp-key-properties.c:468
+msgid "(unknown)"
+msgstr "(desconegut)"
 
-#: pgp/seahorse-pgp-key-properties.c:1187
+#: pgp/seahorse-pgp-key-properties.c:473
+#, c-format
+msgid "This key expired on %s"
+msgstr "Aquesta clau va vèncer el %s"
+
+#: pgp/seahorse-pgp-key-properties.c:523
 msgctxt "Expires"
 msgid "Never"
 msgstr "Mai"
 
-#: pgp/seahorse-pgp-key-properties.c:1509
-#: pgp/seahorse-pgp-private-key-properties.ui:345
-#: pgp/seahorse-pgp-public-key-properties.ui:274
-msgid "Key ID"
-msgstr "ID de la clau"
+#: pgp/seahorse-pgp-key-properties.c:607 pgp/seahorse-pgp-key-properties.c:782
+msgid "Unable to change trust"
+msgstr "No s'ha pogut canviar la confiança"
 
-#: pgp/seahorse-pgp-key-properties.c:1656
-#, c-format
-msgid "I trust signatures from “%s” on other keys"
-msgstr "Confio en les signatures de «%s» a altres claus"
+#: pgp/seahorse-pgp-key-properties.c:619 ssh/key-properties.vala:191
+msgid "Couldn’t export key"
+msgstr "No s'ha pogut exportar la clau"
 
-#: pgp/seahorse-pgp-key-properties.c:1663
+#: pgp/seahorse-pgp-key-properties.c:998
 #, c-format
-msgid ""
-"If you believe that the person that owns this key is “%s”, <i>sign</i> this "
-"key:"
-msgstr "Si creieu que el propietari d'aquesta clau és «%s», <i>signeu-la</i>:"
+msgid "I believe “%s” is the owner of this key"
+msgstr "Crec que «%s» és el propietari d'aquesta clau"
 
-#: pgp/seahorse-pgp-key-properties.c:1670
+#: pgp/seahorse-pgp-key-properties.c:1003
 #, c-format
-msgid ""
-"If you no longer trust that “%s” owns this key, <i>revoke</i> your "
-"signature:"
-msgstr ""
-"Si ja no creieu que el propietari d'aquesta clau és «%s», <i>revoqueu</i> la"
-" vostra signatura:"
+#| msgid ""
+#| "If you no longer trust that “%s” owns this key, <i>revoke</i> your "
+#| "signature:"
+msgid "I no longer trust that “%s” owns this key"
+msgstr "Ja no confio que «%s» posseeixi aquesta clau"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
-msgid "Export _secret key"
-msgstr "_Exporta la clau secreta"
+msgid "Change _passphrase"
+msgstr "Canvia la contrasen_ya"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:34
+#: pgp/seahorse-pgp-private-key-properties.ui:36
 msgid "Export _public key"
 msgstr "Exporta _la clau pública"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:68
-#: pgp/seahorse-pgp-public-key-properties.ui:61
-msgid "This key has been revoked"
-msgstr "Aquesta clau ha estat revocada"
+#: pgp/seahorse-pgp-private-key-properties.ui:40
+msgid "Export _secret key"
+msgstr "_Exporta la clau secreta"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:78
-#: pgp/seahorse-pgp-public-key-properties.ui:73
-msgid "The owner of the key revoked the key. It can no longer be used."
-msgstr "El propietari de la clau l'ha revocada, no es pot fer servir més."
+#: pgp/seahorse-pgp-private-key-properties.ui:60
+#: pgp/seahorse-pgp-public-key-properties.ui:42
+msgid "The owner of the key revoked the key. It should no longer be used."
+msgstr ""
+"El propietari de la clau l'ha revocada. No s'hauria de fer servir més."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:106
-#: pgp/seahorse-pgp-public-key-properties.ui:104
-msgid "This key has expired"
-msgstr "Aquesta clau ha vençut"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:171
+#: pgp/seahorse-pgp-private-key-properties.ui:140
 msgid "Add a photo to this key"
 msgstr "Afegeix una fotografia a aquesta clau"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:190
+#: pgp/seahorse-pgp-private-key-properties.ui:155
 msgid "Remove this photo from this key"
 msgstr "Suprimeix aquesta foto d'aquesta clau"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:209
+#: pgp/seahorse-pgp-private-key-properties.ui:170
 msgid "Make this photo the primary photo"
 msgstr "Fes que aquesta foto sigui la primària"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:234
+#: pgp/seahorse-pgp-private-key-properties.ui:191
+#: pgp/seahorse-pgp-public-key-properties.ui:125
 msgid "Go to previous photo"
 msgstr "Ves a la foto anterior"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:253
+#: pgp/seahorse-pgp-private-key-properties.ui:206
+#: pgp/seahorse-pgp-public-key-properties.ui:146
 msgid "Go to next photo"
 msgstr "Ves a la foto següent"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:318
-#: pgp/seahorse-pgp-public-key-properties.ui:246
+#: pgp/seahorse-pgp-private-key-properties.ui:262
+#: pgp/seahorse-pgp-public-key-properties.ui:210
 msgid "Comment"
 msgstr "Comentari"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:375
-#: ssh/seahorse-ssh-key-properties.ui:313
-msgid "Change _Passphrase"
-msgstr "Canvia la contrasen_ya"
+#: pgp/seahorse-pgp-private-key-properties.ui:289
+#: pgp/seahorse-pgp-public-key-properties.ui:238
+msgid "Key ID"
+msgstr "ID de la clau"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:391
-#: pgp/seahorse-pgp-public-key-properties.ui:347
-msgid "Owner"
-msgstr "Propietari"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:404
-msgid "Key Names and Signatures"
-msgstr "Noms de clau i signatures"
-
-# La clau o la foto (josep)
-#: pgp/seahorse-pgp-private-key-properties.ui:442
-msgid "Primary"
-msgstr "Primària"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:472
-#: pgp/seahorse-pgp-subkey.c:213
-msgid "Sign"
-msgstr "Signa"
-
-#. Translators: This text refers to deleting an item from its type's backing
-#. store
-#: pgp/seahorse-pgp-private-key-properties.ui:502
-#: pgp/seahorse-pgp-subkey-list-box-row.ui:163
-#: pkcs11/seahorse-pkcs11-properties.ui:22
-#: src/seahorse-key-manager-widgets.ui:18
-msgid "Delete"
-msgstr "Suprimeix"
-
-#. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:532
-msgid "_Add Name"
-msgstr "_Afegeix un nom"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:562
-#: pgp/seahorse-pgp-subkey-list-box-row.ui:156
-msgid "Revoke"
-msgstr "Revoca"
-
-#. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:598
-msgid "Names and Signatures"
-msgstr "Noms i signatures"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:635
-#: pgp/seahorse-pgp-public-key-properties.ui:623
-msgid "Key ID:"
-msgstr "Identificador de la clau:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:660
-#: pgp/seahorse-pgp-public-key-properties.ui:649
-msgid "Type:"
-msgstr "Tipus:"
-
-# FIXME FIXME FIXME (josep)
-#: pgp/seahorse-pgp-private-key-properties.ui:685
-#: pgp/seahorse-pgp-public-key-properties.ui:675
-msgid "Strength:"
-msgstr "Fortalesa:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:710
-msgid "Technical Details"
-msgstr "Detalls tècnics"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:738
+#: pgp/seahorse-pgp-private-key-properties.ui:316
+#: pgp/seahorse-pgp-public-key-properties.ui:266
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:71
 #: ssh/seahorse-ssh-key-properties.ui:197
 msgid "Fingerprint"
 msgstr "Empremta digital"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:770
-#: pgp/seahorse-pgp-public-key-properties.ui:769
-msgid "Created:"
-msgstr "Creada:"
+#: pgp/seahorse-pgp-private-key-properties.ui:347
+#: pgp/seahorse-pgp-public-key-properties.ui:299
+msgid "Expires"
+msgstr "Venç"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:794
-#: pgp/seahorse-pgp-public-key-properties.ui:794
-msgid "Expires:"
-msgstr "Venç:"
+#: pgp/seahorse-pgp-private-key-properties.ui:408
+#: pgp/seahorse-pgp-public-key-properties.ui:334
+msgid "User IDs"
+msgstr "Identificadors d'usuari"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:840
-msgid "Dates"
-msgstr "Dates"
+#: pgp/seahorse-pgp-private-key-properties.ui:421
+msgid "Add user ID"
+msgstr "Afegeix un identificador d'usuari"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:863
-msgid "Override Owner _Trust:"
-msgstr "_Canvia la confiança en el propietari:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:890
-msgid "_Export to file"
-msgstr "_Exporta al fitxer"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:906
-msgid "Actions"
-msgstr "Accions"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:938
-#: pgp/seahorse-pgp-public-key-properties.ui:885
+#: pgp/seahorse-pgp-private-key-properties.ui:445
+#: pgp/seahorse-pgp-public-key-properties.ui:356
 msgid "Subkeys"
 msgstr "Subclaus"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:951
+#: pgp/seahorse-pgp-private-key-properties.ui:458
 msgid "_Add subkey"
 msgstr "_Afegeix una subclau"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:476
+#: pgp/seahorse-pgp-public-key-properties.ui:384
+msgid "Trust"
+msgstr "Confiança"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:477
+#: pgp/seahorse-pgp-public-key-properties.ui:385
+msgid "Your trust of this key"
+msgstr "La confiança que teniu en aquesta clau"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:493
+msgid "Override owner trust"
+msgstr "Substitueix la confiança en el propietari"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:17
 msgctxt "Validity"
@@ -1750,60 +1641,37 @@ msgctxt "Validity"
 msgid "Ultimately"
 msgstr "Absoluta"
 
-#. Names set on the PGP key.
-#: pgp/seahorse-pgp-public-key-properties.ui:326
-msgid "_Other Names:"
-msgstr "_Altres noms:"
+#: pgp/seahorse-pgp-public-key-properties.ui:401
+msgid "Signature trust"
+msgstr "Confiança de la signatura"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:369
-msgid "Your trust of this key"
-msgstr "La confiança que teniu en aquesta clau"
+#: pgp/seahorse-pgp-public-key-properties.ui:402
+msgid "I trust signatures from this key on other keys"
+msgstr "Confio en les signatures d'aquesta clau sobre altres claus"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:382
-msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr ""
-"La confiança que hi teniu s'especifica manualment a la pestanya de "
-"<i>Detalls</i>."
+#: pgp/seahorse-pgp-public-key-properties.ui:418
+msgid "Sign key"
+msgstr "Signa la clau"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:425
+msgid "_Sign key"
+msgstr "_Signa la clau"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:436
+msgid "Revoke key signature"
+msgstr "Revoca la signatura"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:443
+msgid "_Revoke"
+msgstr "_Revoca"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:454
+msgid "Owner trust"
+msgstr "Confiança del propietari"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:455
-msgid "_Sign this Key"
-msgstr "_Signa aquesta clau"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:504
-msgid "_Revoke Signature"
-msgstr "_Revoca la signatura"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:526
-msgid "_People who have signed this key:"
-msgstr "_Persones que han signat aquesta clau:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:551
-msgid "_Only display the signatures of people I trust"
-msgstr "_Mostra només signatures de gent en qui confiï"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:570
-msgid "Trust"
-msgstr "Confiança"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:604
-msgid "Technical Details:"
-msgstr "Detalls tècnics:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:710
-msgid "Fingerprint:"
-msgstr "Empremta digital:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:750
-msgid "Dates:"
-msgstr "Dates:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:828
-msgid "Indicate trust:"
-msgstr "Indiqueu la confiança:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:845
-msgid "You _trust the owner:"
-msgstr "Confieu en el _propietari:"
+msgid "Give a trust level to the owner of this key"
+msgstr "Doneu un nivell de confiança al propietari d'aquesta clau"
 
 #: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
@@ -1812,6 +1680,10 @@ msgstr "Encripta"
 #: pgp/seahorse-pgp-subkey.c:212
 msgid "This subkey can be used for encryption"
 msgstr "Aquesta subclau es pot utilitzar per a xifrar"
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "Sign"
+msgstr "Signa"
 
 #: pgp/seahorse-pgp-subkey.c:213
 msgid "This subkey can be used to create data signatures"
@@ -1901,6 +1773,18 @@ msgstr "Creada"
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:149
 msgid "Change expiry date"
 msgstr "Canvia la data de venciment"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:156
+msgid "Revoke"
+msgstr "Revoca"
+
+#. Translators: This text refers to deleting an item from its type's backing
+#. store
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:163
+#: pkcs11/seahorse-pkcs11-properties.ui:22
+#: src/seahorse-key-manager-widgets.ui:18
+msgid "Delete"
+msgstr "Suprimeix"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2509,6 +2393,10 @@ msgstr "Permet accedir aquest ordinador remotament"
 msgid "_Export"
 msgstr "_Exporta"
 
+#: ssh/seahorse-ssh-key-properties.ui:313
+msgid "Change _Passphrase"
+msgstr "Canvia la contrasen_ya"
+
 #: ssh/seahorse-ssh-key-properties.ui:328
 msgid "_Delete SSH Key"
 msgstr "_Suprimeix clau SSH"
@@ -2569,3 +2457,99 @@ msgstr ""
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "S'estan configurant les claus de l'intèrpret d'ordres segur..."
+
+#~ msgid "Couldn’t change primary user ID"
+#~ msgstr "No s'ha pogut canviar l'identificador primari de l'usuari"
+
+#~ msgid "Are you sure you want to permanently delete the “%s” user ID?"
+#~ msgstr "Segur que voleu suprimir permanentment l'identificador d'usuari «%s»?"
+
+#~ msgid "Couldn’t delete user ID"
+#~ msgstr "No s'ha pogut suprimir l'identificador d'usuari"
+
+#~ msgid "[Unknown]"
+#~ msgstr "[Desconegut]"
+
+#~ msgid "Name/Email"
+#~ msgstr "Nom/adreça electrònica"
+
+#~ msgid ""
+#~ "If you believe that the person that owns this key is “%s”, <i>sign</i> this "
+#~ "key:"
+#~ msgstr "Si creieu que el propietari d'aquesta clau és «%s», <i>signeu-la</i>:"
+
+#~ msgid "This key has been revoked"
+#~ msgstr "Aquesta clau ha estat revocada"
+
+#~ msgid "This key has expired"
+#~ msgstr "Aquesta clau ha vençut"
+
+#~ msgid "Key Names and Signatures"
+#~ msgstr "Noms de clau i signatures"
+
+# La clau o la foto (josep)
+#~ msgid "Primary"
+#~ msgstr "Primària"
+
+#~ msgid "_Add Name"
+#~ msgstr "_Afegeix un nom"
+
+#~ msgid "Names and Signatures"
+#~ msgstr "Noms i signatures"
+
+#~ msgid "Key ID:"
+#~ msgstr "Identificador de la clau:"
+
+#~ msgid "Type:"
+#~ msgstr "Tipus:"
+
+# FIXME FIXME FIXME (josep)
+#~ msgid "Strength:"
+#~ msgstr "Fortalesa:"
+
+#~ msgid "Technical Details"
+#~ msgstr "Detalls tècnics"
+
+#~ msgid "Created:"
+#~ msgstr "Creada:"
+
+#~ msgid "Dates"
+#~ msgstr "Dates"
+
+#~ msgid "_Export to file"
+#~ msgstr "_Exporta al fitxer"
+
+#~ msgid "Actions"
+#~ msgstr "Accions"
+
+#~ msgid "_Other Names:"
+#~ msgstr "_Altres noms:"
+
+#~ msgid "Your trust is manually specified on the <i>Details</i> tab."
+#~ msgstr ""
+#~ "La confiança que hi teniu s'especifica manualment a la pestanya de "
+#~ "<i>Detalls</i>."
+
+#~ msgid "_Sign this Key"
+#~ msgstr "_Signa aquesta clau"
+
+#~ msgid "_People who have signed this key:"
+#~ msgstr "_Persones que han signat aquesta clau:"
+
+#~ msgid "_Only display the signatures of people I trust"
+#~ msgstr "_Mostra només signatures de gent en qui confiï"
+
+#~ msgid "Technical Details:"
+#~ msgstr "Detalls tècnics:"
+
+#~ msgid "Fingerprint:"
+#~ msgstr "Empremta digital:"
+
+#~ msgid "Dates:"
+#~ msgstr "Dates:"
+
+#~ msgid "Indicate trust:"
+#~ msgstr "Indiqueu la confiança:"
+
+#~ msgid "You _trust the owner:"
+#~ msgstr "Confieu en el _propietari:"
