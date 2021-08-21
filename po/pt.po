@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-17 16:18+0000\n"
-"PO-Revision-Date: 2021-08-18 12:26+0100\n"
+"POT-Creation-Date: 2021-08-21 10:41+0000\n"
+"PO-Revision-Date: 2021-08-21 22:56+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <@>\n"
 "Language: pt\n"
@@ -78,7 +78,7 @@ msgstr "_Cancelar"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -991,41 +991,41 @@ msgstr ""
 "Esta foi a terceira vez que inseriu uma palavra-passe incorreta. Tente "
 "novamente."
 
-#: pgp/seahorse-gpgme-keyring.c:92
+#: pgp/seahorse-gpgme-keyring.c:113
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Palavra-passe incorreta."
 
-#: pgp/seahorse-gpgme-keyring.c:96
+#: pgp/seahorse-gpgme-keyring.c:117
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "Insira uma nova palavra-passe para “%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:119
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "Insira a palavra-passe para “%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:122 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Insira a nova palavra-passe"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:124
 msgid "Enter passphrase"
 msgstr "Insira a palavra-passe"
 
-#: pgp/seahorse-gpgme-keyring.c:108
+#: pgp/seahorse-gpgme-keyring.c:127
 msgid "Passphrase"
 msgstr "Palavra-passe"
 
-#: pgp/seahorse-gpgme-keyring.c:303
+#: pgp/seahorse-gpgme-keyring.c:302
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "%d chave carregada"
 msgstr[1] "%d chaves carregadas"
 
-#: pgp/seahorse-gpgme-keyring.c:631
+#: pgp/seahorse-gpgme-keyring.c:638
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1033,11 +1033,11 @@ msgstr ""
 "Dados de chave inválidos (faltam UIDs). Isto pode dever-se a um computador "
 "com a data definida para o futuro ou uma assinatura pessoal em falta."
 
-#: pgp/seahorse-gpgme-keyring.c:761
+#: pgp/seahorse-gpgme-keyring.c:785
 msgid "GnuPG keys"
 msgstr "Chaves GnuPG"
 
-#: pgp/seahorse-gpgme-keyring.c:772
+#: pgp/seahorse-gpgme-keyring.c:796
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: pasta predefinida de chaveiros"
 
@@ -1285,6 +1285,7 @@ msgid "_Signer:"
 msgstr "_Assinante:"
 
 #: pgp/seahorse-gpgme-sign-dialog.ui:335
+#: pgp/seahorse-pgp-uid-list-box-row.ui:11
 msgid "_Sign"
 msgstr "A_ssinar"
 
@@ -1450,11 +1451,11 @@ msgstr "URI inválido: %s"
 msgid "Resolving server address: %s"
 msgstr "A resolver o endereço do servidor: %s"
 
-#: pgp/seahorse-pgp-backend.c:188
+#: pgp/seahorse-pgp-backend.c:198
 msgid "PGP Keys"
 msgstr "Chaves PGP"
 
-#: pgp/seahorse-pgp-backend.c:194
+#: pgp/seahorse-pgp-backend.c:204
 msgid "PGP keys are for encrypting email or files"
 msgstr "Chaves PGP são para encriptar correio ou ficheiros"
 
@@ -1473,55 +1474,55 @@ msgstr "Chave PGP pessoal"
 msgid "PGP key"
 msgstr "Chave PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:219
+#: pgp/seahorse-pgp-key-properties.c:218
 msgid "Couldn’t change primary photo"
 msgstr "Não foi possível alterar a fotografia principal"
 
-#: pgp/seahorse-pgp-key-properties.c:386
+#: pgp/seahorse-pgp-key-properties.c:385
 msgid "Error changing password"
 msgstr "Erro ao alterar a palavra-passe"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:431
+#: pgp/seahorse-pgp-key-properties.c:430
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Chave privada"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:435
+#: pgp/seahorse-pgp-key-properties.c:434
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — Chave Pública"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:468
+#: pgp/seahorse-pgp-key-properties.c:467
 msgid "(unknown)"
 msgstr "(desconhecido)"
 
-#: pgp/seahorse-pgp-key-properties.c:473
+#: pgp/seahorse-pgp-key-properties.c:472
 #, c-format
 msgid "This key expired on %s"
 msgstr "Esta chave expirou a %s"
 
-#: pgp/seahorse-pgp-key-properties.c:523
+#: pgp/seahorse-pgp-key-properties.c:522
 msgctxt "Expires"
 msgid "Never"
 msgstr "Nunca"
 
-#: pgp/seahorse-pgp-key-properties.c:607 pgp/seahorse-pgp-key-properties.c:782
+#: pgp/seahorse-pgp-key-properties.c:606 pgp/seahorse-pgp-key-properties.c:781
 msgid "Unable to change trust"
 msgstr "Impossível alterar confiança"
 
-#: pgp/seahorse-pgp-key-properties.c:619 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:618 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Não foi possível exportar a chave"
 
-#: pgp/seahorse-pgp-key-properties.c:998
+#: pgp/seahorse-pgp-key-properties.c:997
 #, c-format
 msgid "I believe “%s” is the owner of this key"
 msgstr "Creio que \"%s\" é o proprietário desta chave"
 
-#: pgp/seahorse-pgp-key-properties.c:1003
+#: pgp/seahorse-pgp-key-properties.c:1002
 #, c-format
 msgid "I no longer trust that “%s” owns this key"
 msgstr "Já não confio que \"%s\" seja proprietário desta chave"
@@ -1779,6 +1780,46 @@ msgstr "Revogar"
 #: src/seahorse-key-manager-widgets.ui:18
 msgid "Delete"
 msgstr "Eliminar"
+
+#: pgp/seahorse-pgp-uid-list-box.c:260
+#, c-format
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
+msgstr ""
+"Tem a certeza de que deseja remover definitivamente o ID de utilizador “%s”?"
+
+#: pgp/seahorse-pgp-uid-list-box.c:268
+msgid "Couldn’t delete user ID"
+msgstr "Não foi possível eliminar o ID de utilizador"
+
+#: pgp/seahorse-pgp-uid-list-box.c:280
+msgid "Couldn’t change primary user ID"
+msgstr "Não foi possível alterar o ID principal de utilizador"
+
+#. Translators: (Unknown) signature name
+#: pgp/seahorse-pgp-uid-list-box.c:372
+msgid "(Unknown)"
+msgstr "(Desconhecido)"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:7
+msgid "Make _primary"
+msgstr "Tornar _principal"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:64
+msgid "Signatures"
+msgstr "Assinaturas"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:77
+#: pgp/seahorse-pgp-uid-list-box-row.ui:88
+msgid "Only display the signatures of people I trust"
+msgstr "Mostrar apenas as assinaturas de pessoas em quem confio"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:87
+msgid "Only trusted"
+msgstr "Apenas confiável"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:106
+msgid "No signatures available"
+msgstr "Sem assinaturas disponíveis"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2447,17 +2488,6 @@ msgstr "Não foi possível configurar as chaves SSH no computador remoto."
 msgid "Configuring Secure Shell Keys…"
 msgstr "A configurar chaves SSH…"
 
-#~ msgid "Couldn’t change primary user ID"
-#~ msgstr "Não foi possível alterar o ID principal de utilizador"
-
-#~ msgid "Are you sure you want to permanently delete the “%s” user ID?"
-#~ msgstr ""
-#~ "Tem a certeza de que deseja remover definitivamente o ID de utilizador "
-#~ "“%s”?"
-
-#~ msgid "Couldn’t delete user ID"
-#~ msgstr "Não foi possível eliminar o ID de utilizador"
-
 #~ msgid "[Unknown]"
 #~ msgstr "[Desconhecido]"
 
@@ -2478,9 +2508,6 @@ msgstr "A configurar chaves SSH…"
 
 #~ msgid "Key Names and Signatures"
 #~ msgstr "Nomes e assinaturas da chave"
-
-#~ msgid "Primary"
-#~ msgstr "Primária"
 
 #~ msgid "_Add Name"
 #~ msgstr "_Adicionar nome"
@@ -2528,9 +2555,6 @@ msgstr "A configurar chaves SSH…"
 
 #~ msgid "_People who have signed this key:"
 #~ msgstr "_Pessoas que assinaram esta chave:"
-
-#~ msgid "_Only display the signatures of people I trust"
-#~ msgstr "_Mostrar só as assinaturas de pessoas em quem confio"
 
 #~ msgid "Technical Details:"
 #~ msgstr "Detalhes técnicos:"
@@ -4156,9 +4180,6 @@ msgstr "A configurar chaves SSH…"
 
 #~ msgid "Decrypt encrypted file"
 #~ msgstr "Desencriptar ficheiro encriptado"
-
-#~ msgid "Verify signature file"
-#~ msgstr "Verificar ficheiro de assinatura"
 
 #~ msgid "Read list of URIs on standard in"
 #~ msgstr "Ler a lista de URIs na consola"
