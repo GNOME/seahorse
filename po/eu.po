@@ -8,8 +8,8 @@
 msgid ""
 msgstr "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-17 16:18+0000\n"
-"PO-Revision-Date: 2021-08-18 10:00+0100\n"
+"POT-Creation-Date: 2021-08-21 10:41+0000\n"
+"PO-Revision-Date: 2021-08-22 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -72,7 +72,7 @@ msgstr "_Utzi"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
 msgid "_Delete"
 msgstr "Ez_abatu"
 
@@ -958,51 +958,51 @@ msgstr "Pasahitza ez da zuzena"
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Okerreko pasahitza sartu duzun hirugarren aldia da unekoa. Saiatu berriro."
 
-#: pgp/seahorse-gpgme-keyring.c:92
+#: pgp/seahorse-gpgme-keyring.c:113
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Pasaesaldi okerra."
 
-#: pgp/seahorse-gpgme-keyring.c:96
+#: pgp/seahorse-gpgme-keyring.c:117
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "Idatzi “%s”(r)en pasaesaldi berria"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:119
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "Idatzi “%s”(r)en pasaesaldia"
 
-#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:122 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Idatzi pasaesaldi berria"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:124
 msgid "Enter passphrase"
 msgstr "Idatzi pasaesaldia"
 
-#: pgp/seahorse-gpgme-keyring.c:108
+#: pgp/seahorse-gpgme-keyring.c:127
 msgid "Passphrase"
 msgstr "Pasaesaldia"
 
-#: pgp/seahorse-gpgme-keyring.c:303
+#: pgp/seahorse-gpgme-keyring.c:302
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Gako %d kargatu da"
 msgstr[1] "%d gako kargatu dira"
 
-#: pgp/seahorse-gpgme-keyring.c:631
+#: pgp/seahorse-gpgme-keyring.c:638
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
 msgstr "Gako-datu baliogabeak (UIDak falta dira). Litekeena da ordenagailu baten data etorkizunekoa izatea, edo autosinadura bat falta izatea."
 
-#: pgp/seahorse-gpgme-keyring.c:761
+#: pgp/seahorse-gpgme-keyring.c:785
 msgid "GnuPG keys"
 msgstr "GnuPG gakoak"
 
-#: pgp/seahorse-gpgme-keyring.c:772
+#: pgp/seahorse-gpgme-keyring.c:796
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: gako sortaren direktorio lehenetsia"
 
@@ -1233,6 +1233,7 @@ msgid "_Signer:"
 msgstr "_Sinatzailea:"
 
 #: pgp/seahorse-gpgme-sign-dialog.ui:335
+#: pgp/seahorse-pgp-uid-list-box-row.ui:11
 msgid "_Sign"
 msgstr "_Sinatu"
 
@@ -1385,11 +1386,11 @@ msgstr "URI baliogabea: %s"
 msgid "Resolving server address: %s"
 msgstr "Zerbitzariaren helbidea ebaztea: %s"
 
-#: pgp/seahorse-pgp-backend.c:188
+#: pgp/seahorse-pgp-backend.c:198
 msgid "PGP Keys"
 msgstr "PGP gakoak"
 
-#: pgp/seahorse-pgp-backend.c:194
+#: pgp/seahorse-pgp-backend.c:204
 msgid "PGP keys are for encrypting email or files"
 msgstr "PGP gakoak mezu elektronikoak eta fitxategiak zifratzeko erabiltzen dira"
 
@@ -1408,55 +1409,55 @@ msgstr "PGP gako pertsonalak"
 msgid "PGP key"
 msgstr "PGP gakoa"
 
-#: pgp/seahorse-pgp-key-properties.c:219
+#: pgp/seahorse-pgp-key-properties.c:218
 msgid "Couldn’t change primary photo"
 msgstr "Ezin izan da argazki nagusia aldatu"
 
-#: pgp/seahorse-pgp-key-properties.c:386
+#: pgp/seahorse-pgp-key-properties.c:385
 msgid "Error changing password"
 msgstr "Errorea pasahitza aldatzean"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:431
+#: pgp/seahorse-pgp-key-properties.c:430
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — Gako pribatua"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:435
+#: pgp/seahorse-pgp-key-properties.c:434
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — Gako publikoa"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:468
+#: pgp/seahorse-pgp-key-properties.c:467
 msgid "(unknown)"
 msgstr "(ezezaguna)"
 
-#: pgp/seahorse-pgp-key-properties.c:473
+#: pgp/seahorse-pgp-key-properties.c:472
 #, c-format
 msgid "This key expired on %s"
 msgstr "Gako hori honako datan iraungi zen: %s"
 
-#: pgp/seahorse-pgp-key-properties.c:523
+#: pgp/seahorse-pgp-key-properties.c:522
 msgctxt "Expires"
 msgid "Never"
 msgstr "Inoiz ere ez"
 
-#: pgp/seahorse-pgp-key-properties.c:607 pgp/seahorse-pgp-key-properties.c:782
+#: pgp/seahorse-pgp-key-properties.c:606 pgp/seahorse-pgp-key-properties.c:781
 msgid "Unable to change trust"
 msgstr "Ezin izan da fidagarritasuna aldatu"
 
-#: pgp/seahorse-pgp-key-properties.c:619 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:618 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Ezin izan da gakoa esportatu"
 
-#: pgp/seahorse-pgp-key-properties.c:998
+#: pgp/seahorse-pgp-key-properties.c:997
 #, c-format
 msgid "I believe “%s” is the owner of this key"
 msgstr "Uste dut “%s” gako honen jabea dela"
 
-#: pgp/seahorse-pgp-key-properties.c:1003
+#: pgp/seahorse-pgp-key-properties.c:1002
 #, c-format
 msgid "I no longer trust that “%s” owns this key"
 msgstr "Ez naiz fidatzen “%s” gako honen jabea denik dagoeneko"
@@ -1712,6 +1713,45 @@ msgstr "Errebokatu"
 #: src/seahorse-key-manager-widgets.ui:18
 msgid "Delete"
 msgstr "Ezabatu"
+
+#: pgp/seahorse-pgp-uid-list-box.c:260
+#, c-format
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
+msgstr "Ziur zaude ”%s” erabiltzailearen IDa behin betiko ezabatu nahi duzula?"
+
+#: pgp/seahorse-pgp-uid-list-box.c:268
+msgid "Couldn’t delete user ID"
+msgstr "Ezin izan da erabiltzailearen IDa ezabatu"
+
+#: pgp/seahorse-pgp-uid-list-box.c:280
+msgid "Couldn’t change primary user ID"
+msgstr "Ezin izan da erabiltzailearen ID nagusia aldatu"
+
+#. Translators: (Unknown) signature name
+#: pgp/seahorse-pgp-uid-list-box.c:372
+msgid "(Unknown)"
+msgstr "(Ezezaguna)"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:7
+msgid "Make _primary"
+msgstr "_Bihurtu nagusi"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:64
+msgid "Signatures"
+msgstr "Sinadurak"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:77
+#: pgp/seahorse-pgp-uid-list-box-row.ui:88
+msgid "Only display the signatures of people I trust"
+msgstr "Bistaratu nik fidagarritzat jotako sinadurak soilik"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:87
+msgid "Only trusted"
+msgstr "Fidagarriak soilik"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:106
+msgid "No signatures available"
+msgstr "Ez dago sinadurarik eskuragarri"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2552,16 +2592,6 @@ msgstr "Shell seguruko gakoak konfiguratzen…"
 #~ msgid "Couldn’t add revoker"
 #~ msgstr "Ezin izan da errebokatzailea gehitu"
 
-#~ msgid "Couldn’t change primary user ID"
-#~ msgstr "Ezin izan da erabiltzailearen ID nagusia aldatu"
-
-#~ msgid "Are you sure you want to permanently delete the “%s” user ID?"
-#~ msgstr ""
-#~ "Ziur zaude ”%s” erabiltzailearen IDa behin betiko ezabatu nahi duzula?"
-
-#~ msgid "Couldn’t delete user ID"
-#~ msgstr "Ezin izan da erabiltzailearen IDa ezabatu"
-
 #~ msgid "[Unknown]"
 #~ msgstr "[Ezezaguna]"
 
@@ -2596,9 +2626,6 @@ msgstr "Shell seguruko gakoak konfiguratzen…"
 
 #~ msgid "Key Names and Signatures"
 #~ msgstr "Gakoaren izenak eta sinadurak"
-
-#~ msgid "Primary"
-#~ msgstr "Nagusia"
 
 #~ msgid "_Add Name"
 #~ msgstr "_Gehitu izena"
@@ -2647,9 +2674,6 @@ msgstr "Shell seguruko gakoak konfiguratzen…"
 
 #~ msgid "_People who have signed this key:"
 #~ msgstr "_Gako hori sinatu duen jendea:"
-
-#~ msgid "_Only display the signatures of people I trust"
-#~ msgstr "_Soilik bistaratu nik fidagarritzat jotako sinadurak"
 
 #~ msgid "Technical Details:"
 #~ msgstr "Xehetasun teknikoak:"
