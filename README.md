@@ -1,18 +1,22 @@
-# Seahorse
+Seahorse
+========
 Seahorse is a graphical interface for managing and using encryption keys.
 Currently it supports PGP keys (using GPG/GPGME) and SSH keys. Its goal is to
-provide an easy to use Key Management Tool, along with an easy to use interface
+provide an easy to use key management tool, along with an easy to use interface
 for encryption operations.
 
-## Building
+Building
+--------
 You can build and install Seahorse using [Meson]:
+
 ```sh
-meson build
-ninja -C build
-ninja -C build install
+meson setup _build
+meson compile -C _build
+meson install -C _build
 ```
 
-## Contributing
+Contributing
+------------
 You can browse the code, issues and more at Seahorse's [GitLab repository].
 
 If you find a bug in Seahorse, please file an issue on the [issue tracker].
@@ -28,14 +32,16 @@ teams in GNOME. Translators do not commit directly to Git, but are advised to
 use our separate translation infrastructure instead. More info can be found at
 the [translation project wiki page].
 
-## More information
+More information
+----------------
 Seahorse has its own web page on https://wiki.gnome.org/Apps/Seahorse.
 
 To discuss issues with developers and other users, you can go to [GNOME's
 Discourse instance] and use the "seahorse" tag, or join [#seahorse] on
 irc.gnome.org.
 
-## License
+License
+-------
 Seahorse is released under the GPL. See [COPYING] for more info.
 
 
