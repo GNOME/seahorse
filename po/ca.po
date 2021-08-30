@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-17 16:18+0000\n"
+"POT-Creation-Date: 2021-08-21 10:41+0000\n"
 "PO-Revision-Date: 2020-07-22 23:45+0200\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -75,7 +75,7 @@ msgstr "_Cancel·la"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
 msgid "_Delete"
 msgstr "_Suprimeix"
 
@@ -994,41 +994,41 @@ msgstr ""
 "Heu introduït malament la contrasenya per tercera vegada, torneu-ho a "
 "provar."
 
-#: pgp/seahorse-gpgme-keyring.c:92
+#: pgp/seahorse-gpgme-keyring.c:113
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Contrasenya equivocada."
 
-#: pgp/seahorse-gpgme-keyring.c:96
+#: pgp/seahorse-gpgme-keyring.c:117
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "Introduïu una contrasenya nova per a «%s»"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:119
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "Introduïu la contrasenya per a «%s»"
 
-#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:122 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Introduïu una contrasenya nova"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:124
 msgid "Enter passphrase"
 msgstr "Introduïu la contrasenya"
 
-#: pgp/seahorse-gpgme-keyring.c:108
+#: pgp/seahorse-gpgme-keyring.c:127
 msgid "Passphrase"
 msgstr "Contrasenya"
 
-#: pgp/seahorse-gpgme-keyring.c:303
+#: pgp/seahorse-gpgme-keyring.c:302
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "S'ha carregat %d clau"
 msgstr[1] "S'han carregat %d claus"
 
-#: pgp/seahorse-gpgme-keyring.c:631
+#: pgp/seahorse-gpgme-keyring.c:638
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1036,11 +1036,11 @@ msgstr ""
 "Les dades de la clau no són vàlides (hi manquen els UID). Pot ser que sigui "
 "perquè un ordinador té la data al futur, o que manqui una autosignatura."
 
-#: pgp/seahorse-gpgme-keyring.c:761
+#: pgp/seahorse-gpgme-keyring.c:785
 msgid "GnuPG keys"
 msgstr "Claus GnuPG"
 
-#: pgp/seahorse-gpgme-keyring.c:772
+#: pgp/seahorse-gpgme-keyring.c:796
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: directori per defecte de l'anell de claus"
 
@@ -1289,6 +1289,7 @@ msgid "_Signer:"
 msgstr "_Signant:"
 
 #: pgp/seahorse-gpgme-sign-dialog.ui:335
+#: pgp/seahorse-pgp-uid-list-box-row.ui:11
 msgid "_Sign"
 msgstr "_Signa"
 
@@ -1453,11 +1454,11 @@ msgstr "URI no vàlid: %s"
 msgid "Resolving server address: %s"
 msgstr "S'està resolent l'adreça del servidor: %s"
 
-#: pgp/seahorse-pgp-backend.c:188
+#: pgp/seahorse-pgp-backend.c:198
 msgid "PGP Keys"
 msgstr "Claus PGP"
 
-#: pgp/seahorse-pgp-backend.c:194
+#: pgp/seahorse-pgp-backend.c:204
 msgid "PGP keys are for encrypting email or files"
 msgstr "Les claus PGP serveixen per a l'encriptació de correus i fitxers"
 
@@ -1476,59 +1477,56 @@ msgstr "Clau PGP personal"
 msgid "PGP key"
 msgstr "Clau PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:219
+#: pgp/seahorse-pgp-key-properties.c:218
 msgid "Couldn’t change primary photo"
 msgstr "No s'ha pogut canviar la fotografia primària"
 
-#: pgp/seahorse-pgp-key-properties.c:386
+#: pgp/seahorse-pgp-key-properties.c:385
 msgid "Error changing password"
 msgstr "S'ha produït un error en canviar la contrasenya"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:431
+#: pgp/seahorse-pgp-key-properties.c:430
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — clau privada"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:435
+#: pgp/seahorse-pgp-key-properties.c:434
 #, c-format
 msgid "%s — Public key"
 msgstr "%s — clau pública"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:468
+#: pgp/seahorse-pgp-key-properties.c:467
 msgid "(unknown)"
 msgstr "(desconegut)"
 
-#: pgp/seahorse-pgp-key-properties.c:473
+#: pgp/seahorse-pgp-key-properties.c:472
 #, c-format
 msgid "This key expired on %s"
 msgstr "Aquesta clau va vèncer el %s"
 
-#: pgp/seahorse-pgp-key-properties.c:523
+#: pgp/seahorse-pgp-key-properties.c:522
 msgctxt "Expires"
 msgid "Never"
 msgstr "Mai"
 
-#: pgp/seahorse-pgp-key-properties.c:607 pgp/seahorse-pgp-key-properties.c:782
+#: pgp/seahorse-pgp-key-properties.c:606 pgp/seahorse-pgp-key-properties.c:781
 msgid "Unable to change trust"
 msgstr "No s'ha pogut canviar la confiança"
 
-#: pgp/seahorse-pgp-key-properties.c:619 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:618 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "No s'ha pogut exportar la clau"
 
-#: pgp/seahorse-pgp-key-properties.c:998
+#: pgp/seahorse-pgp-key-properties.c:997
 #, c-format
 msgid "I believe “%s” is the owner of this key"
 msgstr "Crec que «%s» és el propietari d'aquesta clau"
 
-#: pgp/seahorse-pgp-key-properties.c:1003
+#: pgp/seahorse-pgp-key-properties.c:1002
 #, c-format
-#| msgid ""
-#| "If you no longer trust that “%s” owns this key, <i>revoke</i> your "
-#| "signature:"
 msgid "I no longer trust that “%s” owns this key"
 msgstr "Ja no confio que «%s» posseeixi aquesta clau"
 
@@ -1785,6 +1783,46 @@ msgstr "Revoca"
 #: src/seahorse-key-manager-widgets.ui:18
 msgid "Delete"
 msgstr "Suprimeix"
+
+#: pgp/seahorse-pgp-uid-list-box.c:260
+#, c-format
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
+msgstr "Segur que voleu suprimir permanentment l'identificador d'usuari «%s»?"
+
+#: pgp/seahorse-pgp-uid-list-box.c:268
+msgid "Couldn’t delete user ID"
+msgstr "No s'ha pogut suprimir l'identificador d'usuari"
+
+#: pgp/seahorse-pgp-uid-list-box.c:280
+msgid "Couldn’t change primary user ID"
+msgstr "No s'ha pogut canviar l'identificador primari de l'usuari"
+
+#. Translators: (Unknown) signature name
+#: pgp/seahorse-pgp-uid-list-box.c:372
+msgid "(Unknown)"
+msgstr "(desconegut)"
+
+# La clau o la foto (josep)
+#: pgp/seahorse-pgp-uid-list-box-row.ui:7
+msgid "Make _primary"
+msgstr "Fes-la primària"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:64
+msgid "Signatures"
+msgstr "Signatures"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:77
+#: pgp/seahorse-pgp-uid-list-box-row.ui:88
+msgid "Only display the signatures of people I trust"
+msgstr "Mostra només signatures de gent en qui confio"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:87
+msgid "Only trusted"
+msgstr "Només qui hi confio"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:106
+msgid "No signatures available"
+msgstr "No hi ha signatures disponibles"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2458,15 +2496,6 @@ msgstr ""
 msgid "Configuring Secure Shell Keys…"
 msgstr "S'estan configurant les claus de l'intèrpret d'ordres segur..."
 
-#~ msgid "Couldn’t change primary user ID"
-#~ msgstr "No s'ha pogut canviar l'identificador primari de l'usuari"
-
-#~ msgid "Are you sure you want to permanently delete the “%s” user ID?"
-#~ msgstr "Segur que voleu suprimir permanentment l'identificador d'usuari «%s»?"
-
-#~ msgid "Couldn’t delete user ID"
-#~ msgstr "No s'ha pogut suprimir l'identificador d'usuari"
-
 #~ msgid "[Unknown]"
 #~ msgstr "[Desconegut]"
 
@@ -2486,10 +2515,6 @@ msgstr "S'estan configurant les claus de l'intèrpret d'ordres segur..."
 
 #~ msgid "Key Names and Signatures"
 #~ msgstr "Noms de clau i signatures"
-
-# La clau o la foto (josep)
-#~ msgid "Primary"
-#~ msgstr "Primària"
 
 #~ msgid "_Add Name"
 #~ msgstr "_Afegeix un nom"
@@ -2535,9 +2560,6 @@ msgstr "S'estan configurant les claus de l'intèrpret d'ordres segur..."
 
 #~ msgid "_People who have signed this key:"
 #~ msgstr "_Persones que han signat aquesta clau:"
-
-#~ msgid "_Only display the signatures of people I trust"
-#~ msgstr "_Mostra només signatures de gent en qui confiï"
 
 #~ msgid "Technical Details:"
 #~ msgstr "Detalls tècnics:"
