@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-17 16:18+0000\n"
-"PO-Revision-Date: 2021-08-17 20:35+0200\n"
-"Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
+"POT-Creation-Date: 2021-08-21 10:41+0000\n"
+"PO-Revision-Date: 2021-08-22 08:30+0200\n"
+"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -74,7 +74,7 @@ msgstr "A_vbryt"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
 msgid "_Delete"
 msgstr "_Ta bort"
 
@@ -977,41 +977,41 @@ msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
 "Detta var den tredje gången som du angav ett felaktigt lösenord. Försök igen."
 
-#: pgp/seahorse-gpgme-keyring.c:92
+#: pgp/seahorse-gpgme-keyring.c:113
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Felaktig lösenfras."
 
-#: pgp/seahorse-gpgme-keyring.c:96
+#: pgp/seahorse-gpgme-keyring.c:117
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "Ange ny lösenfras för ”%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:119
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "Ange lösenfras för ”%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:122 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Ange ny lösenfras"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:124
 msgid "Enter passphrase"
 msgstr "Ange lösenfras"
 
-#: pgp/seahorse-gpgme-keyring.c:108
+#: pgp/seahorse-gpgme-keyring.c:127
 msgid "Passphrase"
 msgstr "Lösenfras"
 
-#: pgp/seahorse-gpgme-keyring.c:303
+#: pgp/seahorse-gpgme-keyring.c:302
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Läste in %d nyckel"
 msgstr[1] "Läste in %d nycklar"
 
-#: pgp/seahorse-gpgme-keyring.c:631
+#: pgp/seahorse-gpgme-keyring.c:638
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1019,11 +1019,11 @@ msgstr ""
 "Ogiltigt nyckeldata (UID:er saknas). Det här kan bero på en dator som har "
 "datumet inställt till framtiden eller att en självsignatur saknas."
 
-#: pgp/seahorse-gpgme-keyring.c:761
+#: pgp/seahorse-gpgme-keyring.c:785
 msgid "GnuPG keys"
 msgstr "GnuPG-nycklar"
 
-#: pgp/seahorse-gpgme-keyring.c:772
+#: pgp/seahorse-gpgme-keyring.c:796
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: standardkatalog för nyckelringar"
 
@@ -1273,6 +1273,7 @@ msgid "_Signer:"
 msgstr "_Signerare:"
 
 #: pgp/seahorse-gpgme-sign-dialog.ui:335
+#: pgp/seahorse-pgp-uid-list-box-row.ui:11
 msgid "_Sign"
 msgstr "_Signera"
 
@@ -1437,11 +1438,11 @@ msgstr "Ogiltig URI: %s"
 msgid "Resolving server address: %s"
 msgstr "Slår upp serveradress: %s"
 
-#: pgp/seahorse-pgp-backend.c:188
+#: pgp/seahorse-pgp-backend.c:198
 msgid "PGP Keys"
 msgstr "PGP-nycklar"
 
-#: pgp/seahorse-pgp-backend.c:194
+#: pgp/seahorse-pgp-backend.c:204
 msgid "PGP keys are for encrypting email or files"
 msgstr "PGP-nycklar används för att kryptera e-post eller filer"
 
@@ -1460,55 +1461,55 @@ msgstr "Personlig PGP-nyckel"
 msgid "PGP key"
 msgstr "PGP-nyckel"
 
-#: pgp/seahorse-pgp-key-properties.c:219
+#: pgp/seahorse-pgp-key-properties.c:218
 msgid "Couldn’t change primary photo"
 msgstr "Kunde inte ändra primärt foto"
 
-#: pgp/seahorse-pgp-key-properties.c:386
+#: pgp/seahorse-pgp-key-properties.c:385
 msgid "Error changing password"
 msgstr "Fel vid ändring av lösenord"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:431
+#: pgp/seahorse-pgp-key-properties.c:430
 #, c-format
 msgid "%s — Private key"
 msgstr "%s ‒ Privat nyckel"
 
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:435
+#: pgp/seahorse-pgp-key-properties.c:434
 #, c-format
 msgid "%s — Public key"
 msgstr "%s ‒ Öppen nyckel"
 
 #. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:468
+#: pgp/seahorse-pgp-key-properties.c:467
 msgid "(unknown)"
 msgstr "(okänd)"
 
-#: pgp/seahorse-pgp-key-properties.c:473
+#: pgp/seahorse-pgp-key-properties.c:472
 #, c-format
 msgid "This key expired on %s"
 msgstr "Den här nyckeln gick ut %s"
 
-#: pgp/seahorse-pgp-key-properties.c:523
+#: pgp/seahorse-pgp-key-properties.c:522
 msgctxt "Expires"
 msgid "Never"
 msgstr "Aldrig"
 
-#: pgp/seahorse-pgp-key-properties.c:607 pgp/seahorse-pgp-key-properties.c:782
+#: pgp/seahorse-pgp-key-properties.c:606 pgp/seahorse-pgp-key-properties.c:781
 msgid "Unable to change trust"
 msgstr "Kunde inte ändra tillit"
 
-#: pgp/seahorse-pgp-key-properties.c:619 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:618 ssh/key-properties.vala:191
 msgid "Couldn’t export key"
 msgstr "Kunde inte exportera nyckeln"
 
-#: pgp/seahorse-pgp-key-properties.c:998
+#: pgp/seahorse-pgp-key-properties.c:997
 #, c-format
 msgid "I believe “%s” is the owner of this key"
 msgstr "Jag tror att ”%s” är den här nyckelns ägare"
 
-#: pgp/seahorse-pgp-key-properties.c:1003
+#: pgp/seahorse-pgp-key-properties.c:1002
 #, c-format
 msgid "I no longer trust that “%s” owns this key"
 msgstr "Jag litar inte längre på att ”%s” äger den här nyckeln"
@@ -1765,6 +1766,45 @@ msgstr "Spärra"
 msgid "Delete"
 msgstr "Ta bort"
 
+#: pgp/seahorse-pgp-uid-list-box.c:260
+#, c-format
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
+msgstr "Är du säker på att du vill ta bort användaridentiteten ”%s” permanent?"
+
+#: pgp/seahorse-pgp-uid-list-box.c:268
+msgid "Couldn’t delete user ID"
+msgstr "Kunde inte ta bort användaridentitet"
+
+#: pgp/seahorse-pgp-uid-list-box.c:280
+msgid "Couldn’t change primary user ID"
+msgstr "Kunde inte ändra primär användaridentitet"
+
+#. Translators: (Unknown) signature name
+#: pgp/seahorse-pgp-uid-list-box.c:372
+msgid "(Unknown)"
+msgstr "(Okänd)"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:7
+msgid "Make _primary"
+msgstr "Gör _primär"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:64
+msgid "Signatures"
+msgstr "Signaturer"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:77
+#: pgp/seahorse-pgp-uid-list-box-row.ui:88
+msgid "Only display the signatures of people I trust"
+msgstr "Visa endast signaturer för personer som jag litar på"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:87
+msgid "Only trusted"
+msgstr "Endast betrodda"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:106
+msgid "No signatures available"
+msgstr "Inga signaturer tillgängliga"
+
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
 msgstr "Exporterar data"
@@ -1939,6 +1979,7 @@ msgstr ""
 "Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Daniel Nylander <po@danielnylander.se>\n"
 "Christian Rose\n"
+"Luna Jernberg <droidbittin@gmail.com>\n"
 "\n"
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
@@ -2434,16 +2475,6 @@ msgstr "Kunde inte konfigurera Secure Shell-nycklar på fjärrdator."
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigurerar Secure Shell-nycklar…"
 
-#~ msgid "Couldn’t change primary user ID"
-#~ msgstr "Kunde inte ändra primär användaridentitet"
-
-#~ msgid "Are you sure you want to permanently delete the “%s” user ID?"
-#~ msgstr ""
-#~ "Är du säker på att du vill ta bort användaridentiteten ”%s” permanent?"
-
-#~ msgid "Couldn’t delete user ID"
-#~ msgstr "Kunde inte ta bort användaridentitet"
-
 #~ msgid "[Unknown]"
 #~ msgstr "[Okänd]"
 
@@ -2465,9 +2496,6 @@ msgstr "Konfigurerar Secure Shell-nycklar…"
 
 #~ msgid "Key Names and Signatures"
 #~ msgstr "Nyckelnamn och signaturer"
-
-#~ msgid "Primary"
-#~ msgstr "Primär"
 
 #~ msgid "_Add Name"
 #~ msgstr "_Lägg till namn"
@@ -2513,9 +2541,6 @@ msgstr "Konfigurerar Secure Shell-nycklar…"
 
 #~ msgid "_People who have signed this key:"
 #~ msgstr "_Personer som har signerat den här nyckeln:"
-
-#~ msgid "_Only display the signatures of people I trust"
-#~ msgstr "_Visa endast signaturer för personer som jag litar på"
 
 #~ msgid "Technical Details:"
 #~ msgstr "Tekniska detaljer:"
