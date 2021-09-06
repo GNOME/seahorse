@@ -9,13 +9,14 @@
 # - 보안 관련 전문 용어가 많으므로 용어 선택에 주의. 사전 상의 번역 용어를
 #   사용하지 말고 널리 사용 중인 보안 용어를 사용한다.
 # - private key - 비밀 키 (personal key와 구별)
+# - subkey - 하위 키
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-03-06 10:56+0000\n"
-"PO-Revision-Date: 2021-03-07 15:32+0900\n"
+"POT-Creation-Date: 2021-08-21 10:41+0000\n"
+"PO-Revision-Date: 2021-09-04 21:10+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -34,7 +35,7 @@ msgstr "사용자 설정"
 
 #. Buttons
 #: common/add-keyserver-dialog.vala:70 gkr/seahorse-gkr-add-item.ui:132
-#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:101
+#: gkr/seahorse-gkr-add-keyring.ui:82 pgp/seahorse-keyserver-search.ui:100
 #: pkcs11/seahorse-pkcs11-generate.ui:186 ssh/seahorse-ssh-upload.ui:138
 msgid "Cancel"
 msgstr "취소"
@@ -66,8 +67,8 @@ msgstr "달력에서 날짜 선택"
 #. The buttons
 #: common/delete-dialog.vala:87 common/exportable.vala:191
 #: common/passphrase-prompt.vala:117 pgp/seahorse-gpgme-add-uid.ui:118
-#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:76
-#: pgp/seahorse-gpgme-photos.c:264 pgp/seahorse-gpgme-photos.c:324
+#: pgp/seahorse-gpgme-generate-dialog.ui:286 pgp/seahorse-gpgme-photos.c:73
+#: pgp/seahorse-gpgme-photos.c:260 pgp/seahorse-gpgme-photos.c:320
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
@@ -76,8 +77,8 @@ msgid "_Cancel"
 msgstr "취소(_C)"
 
 #. Delete item
-#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:323
-#: src/sidebar.vala:393
+#: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
 msgid "_Delete"
 msgstr "삭제(_D)"
 
@@ -443,7 +444,7 @@ msgstr ""
 "키 서버에 키를 공개하거나 가져올 수 있고, 암호를 임시 저장해서 반복해서 타이"
 "핑할 필요가 없게 해 주고, 키와 키 모음을 백업할 수 있습니다."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:146
+#: data/org.gnome.seahorse.Application.appdata.xml.in:171
 msgid "The GNOME Project"
 msgstr "그놈 프로젝트"
 
@@ -540,20 +541,20 @@ msgstr "저장한 암호 혹은 로그인"
 msgid "Network Credentials"
 msgstr "네트워크 인증서"
 
-#: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:70
+#: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:68
 #: src/seahorse-key-manager.ui:193
 msgid "Password"
 msgstr "암호"
 
-#: gkr/gkr-item-properties.vala:209
+#: gkr/gkr-item-properties.vala:217
 msgid "Couldn’t change password."
 msgstr "암호를 바꿀 수 없습니다."
 
-#: gkr/gkr-item-properties.vala:233
+#: gkr/gkr-item-properties.vala:241
 msgid "Couldn’t set description."
 msgstr "설명을 설정할 수 없습니다."
 
-#: gkr/gkr-item-properties.vala:260
+#: gkr/gkr-item-properties.vala:268
 msgid "Error deleting the password."
 msgstr "암호 삭제하는데 오류가 발생했습니다."
 
@@ -651,7 +652,6 @@ msgid "_Password:"
 msgstr "암호(_P):"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-#: pgp/seahorse-pgp-private-key-properties.ui:960
 msgid "Add"
 msgstr "추가"
 
@@ -673,39 +673,37 @@ msgstr "새 키 모음 이름:"
 msgid "Item Properties"
 msgstr "항목 속성"
 
-#: gkr/seahorse-gkr-item-properties.ui:43
+#: gkr/seahorse-gkr-item-properties.ui:52
 msgid "Description"
 msgstr "설명"
 
-#: gkr/seahorse-gkr-item-properties.ui:86
+#: gkr/seahorse-gkr-item-properties.ui:75
 msgid "Copy"
 msgstr "복사"
 
 #. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-item-properties.ui:113
+#: gkr/seahorse-gkr-item-properties.ui:99
 msgid "Use"
 msgstr "사용"
 
-#: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1329
+#: gkr/seahorse-gkr-item-properties.ui:112
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:96
 msgid "Type"
 msgstr "종류"
 
-#: gkr/seahorse-gkr-item-properties.ui:165
+#: gkr/seahorse-gkr-item-properties.ui:125
 msgid "Server"
 msgstr "서버"
 
-#: gkr/seahorse-gkr-item-properties.ui:191
+#: gkr/seahorse-gkr-item-properties.ui:138
 msgid "Login"
 msgstr "로그인"
 
-#: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:916
+#: gkr/seahorse-gkr-item-properties.ui:156
 msgid "Details"
 msgstr "자세한 정보"
 
-#: gkr/seahorse-gkr-item-properties.ui:255
+#: gkr/seahorse-gkr-item-properties.ui:171
 msgid "Delete Password"
 msgstr "암호 삭제"
 
@@ -713,7 +711,7 @@ msgstr "암호 삭제"
 msgid "Keyring properties"
 msgstr "키 모음 속성"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
+#: gkr/seahorse-gkr-keyring.ui:52
 msgid "Name"
 msgstr "이름"
 
@@ -729,15 +727,10 @@ msgstr "암호 바꾸기"
 msgid "Set as default"
 msgstr "기본으로 설정"
 
-#: libseahorse/seahorse-widget.c:461
-#, c-format
-msgid "Could not display help: %s"
-msgstr "도움말을 표시할 수 없습니다: %s"
-
 #: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
 msgid "Add subkey to %s"
-msgstr "%s에 서브키 추가"
+msgstr "%s에 하위 키 추가"
 
 #: pgp/seahorse-gpgme-add-subkey.c:236 pgp/seahorse-gpgme-generate-dialog.c:83
 msgid "DSA (sign only)"
@@ -781,7 +774,7 @@ msgstr "키가 만료되지 않는 지 여부"
 
 #: pgp/seahorse-gpgme-add-subkey.ui:149
 msgid "Generate a new subkey"
-msgstr "새 서브키 만들기"
+msgstr "새 하위 키 만들기"
 
 #: pgp/seahorse-gpgme-add-uid.c:149
 #, c-format
@@ -829,7 +822,7 @@ msgstr "새 사용자 아이디를 만듭니다"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "암호화 해제가 실패했습니다. 해제 키를 가지고 있지 않은 것 같습니다."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:481
+#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
 msgid "The operation was cancelled"
 msgstr "작업이 취소되었습니다"
 
@@ -982,40 +975,40 @@ msgstr "암호가 틀렸습니다"
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "세 번째로 틀린 암호를 입력했습니다. 다시 시도하십시오."
 
-#: pgp/seahorse-gpgme-keyring.c:92
+#: pgp/seahorse-gpgme-keyring.c:113
 #, c-format
 msgid "Wrong passphrase."
 msgstr "암호가 틀렸습니다."
 
-#: pgp/seahorse-gpgme-keyring.c:96
+#: pgp/seahorse-gpgme-keyring.c:117
 #, c-format
 msgid "Enter new passphrase for “%s”"
 msgstr "“%s”에 대한 새 암호를 입력하십시오"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:119
 #, c-format
 msgid "Enter passphrase for “%s”"
 msgstr "“%s”에 대한 암호를 입력하십시오"
 
-#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:122 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "새 암호를 입력하십시오"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:124
 msgid "Enter passphrase"
 msgstr "암호를 입력하십시오"
 
-#: pgp/seahorse-gpgme-keyring.c:108
+#: pgp/seahorse-gpgme-keyring.c:127
 msgid "Passphrase"
 msgstr "암호"
 
-#: pgp/seahorse-gpgme-keyring.c:303
+#: pgp/seahorse-gpgme-keyring.c:302
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "키 %d개를 읽어들였습니다"
 
-#: pgp/seahorse-gpgme-keyring.c:631
+#: pgp/seahorse-gpgme-keyring.c:638
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1023,15 +1016,15 @@ msgstr ""
 "키 데이터가 잘못되었습니다. (UID가 없습니다.) 컴퓨터의 날짜를 미래로 설정했거"
 "나 자체 서명을 하지 않았기 때문입니다."
 
-#: pgp/seahorse-gpgme-keyring.c:761
+#: pgp/seahorse-gpgme-keyring.c:785
 msgid "GnuPG keys"
 msgstr "GnuPG 키"
 
-#: pgp/seahorse-gpgme-keyring.c:772
+#: pgp/seahorse-gpgme-keyring.c:796
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: 기본 키 모음 디렉터리"
 
-#: pgp/seahorse-gpgme-photos.c:72
+#: pgp/seahorse-gpgme-photos.c:69
 #, c-format
 msgid ""
 "<big><b>The photo is too large</b></big>\n"
@@ -1040,15 +1033,15 @@ msgstr ""
 "<big><b>사진이 너무 큽니다</b></big>\n"
 "키에 집어 넣을 사진은 %d × %d 픽셀 크기를 추천합니다."
 
-#: pgp/seahorse-gpgme-photos.c:77
+#: pgp/seahorse-gpgme-photos.c:74
 msgid "_Don’t Resize"
 msgstr "크기 조정하지 않기(_D)"
 
-#: pgp/seahorse-gpgme-photos.c:78
+#: pgp/seahorse-gpgme-photos.c:75
 msgid "_Resize"
 msgstr "크기 조정(_R)"
 
-#: pgp/seahorse-gpgme-photos.c:127
+#: pgp/seahorse-gpgme-photos.c:124
 #, c-format
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
@@ -1057,49 +1050,49 @@ msgstr ""
 "그림 파일이 아니거나 알 수 없는 종류의 그림 파일입니다. JPEG 그림을 사용하십"
 "시오."
 
-#: pgp/seahorse-gpgme-photos.c:223
+#: pgp/seahorse-gpgme-photos.c:219
 msgid "All image files"
 msgstr "모든 그림 파일"
 
-#: pgp/seahorse-gpgme-photos.c:236
+#: pgp/seahorse-gpgme-photos.c:232
 msgid "All JPEG files"
 msgstr "모든 JPEG 파일"
 
-#: pgp/seahorse-gpgme-photos.c:241 src/key-manager.vala:310
+#: pgp/seahorse-gpgme-photos.c:237 src/key-manager.vala:310
 msgid "All files"
 msgstr "모든 파일"
 
-#: pgp/seahorse-gpgme-photos.c:262
+#: pgp/seahorse-gpgme-photos.c:258
 msgid "Choose Photo to Add to Key"
 msgstr "키에 덧붙일 사진을 선택하십시오"
 
-#: pgp/seahorse-gpgme-photos.c:265 src/key-manager.vala:270
+#: pgp/seahorse-gpgme-photos.c:261 src/key-manager.vala:270
 msgid "_Open"
 msgstr "열기(_O)"
 
-#: pgp/seahorse-gpgme-photos.c:284
+#: pgp/seahorse-gpgme-photos.c:280
 msgid "Couldn’t prepare photo"
 msgstr "사진을 준비할 수 없습니다"
 
-#: pgp/seahorse-gpgme-photos.c:294 pgp/seahorse-gpgme-photos.c:297
+#: pgp/seahorse-gpgme-photos.c:290 pgp/seahorse-gpgme-photos.c:293
 msgid "Couldn’t add photo"
 msgstr "사진을 덧붙일 수 없습니다"
 
-#: pgp/seahorse-gpgme-photos.c:295
-msgid "The file could not be loaded. It may be in an invalid format"
-msgstr "파일을 읽어들일 수 업습니다. 형식이 잘못되었습니다"
+#: pgp/seahorse-gpgme-photos.c:291
+msgid "The file could not be loaded. It may be in an invalid format."
+msgstr "파일을 읽어들일 수 업습니다. 형식이 잘못되었습니다."
 
-#: pgp/seahorse-gpgme-photos.c:321
+#: pgp/seahorse-gpgme-photos.c:317
 msgid "Are you sure you want to remove the current photo from your key?"
 msgstr "정말로 현재 사진을 키에서 제거하시겠습니까?"
 
-#: pgp/seahorse-gpgme-photos.c:334
+#: pgp/seahorse-gpgme-photos.c:330
 msgid "Couldn’t delete photo"
 msgstr "사진을 삭제할 수 없습니다"
 
 #: pgp/seahorse-gpgme-revoke-dialog.c:81
 msgid "Couldn’t revoke subkey"
-msgstr "서브키를 철회할 수 없습니다"
+msgstr "하위 키를 철회할 수 없습니다"
 
 #: pgp/seahorse-gpgme-revoke-dialog.c:141
 #, c-format
@@ -1273,26 +1266,27 @@ msgid "_Signer:"
 msgstr "서명에 사용할 키(_S):"
 
 #: pgp/seahorse-gpgme-sign-dialog.ui:335
+#: pgp/seahorse-pgp-uid-list-box-row.ui:11
 msgid "_Sign"
 msgstr "서명(_S)"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:84
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: pgp/seahorse-gpgme-subkey.c:93
+#: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:503
+#: pgp/seahorse-hkp-source.c:499
 #, c-format
 msgid "Search was not specific enough. Server “%s” found too many keys."
 msgstr ""
 "검색 기준이 구체적이지 않습니다. “%s” 서버에서 해당 기준에 맞는 키가 너무 많"
 "습니다."
 
-#: pgp/seahorse-hkp-source.c:507
+#: pgp/seahorse-hkp-source.c:503
 #, c-format
 msgid "Couldn’t communicate with server “%s”: %s"
 msgstr "“%s” 서버와 통신할 수 없습니다: %s"
@@ -1339,7 +1333,7 @@ msgstr ""
 msgid "Find Remote Keys"
 msgstr "원격 키 찾기"
 
-#: pgp/seahorse-keyserver-search.ui:32
+#: pgp/seahorse-keyserver-search.ui:31
 msgid ""
 "This will find keys for others on the Internet. These keys can then be "
 "imported into your local key ring."
@@ -1347,34 +1341,34 @@ msgstr ""
 "인터넷에서 다른 사람의 키를 찾습니다. 찾은 키는 로컬 키 모음으로 가져올 수 있"
 "습니다."
 
-#: pgp/seahorse-keyserver-search.ui:47
+#: pgp/seahorse-keyserver-search.ui:46
 msgid "_Search for keys containing: "
 msgstr "다음이 들어 있는 키 검색(_S): "
 
-#: pgp/seahorse-keyserver-search.ui:69
+#: pgp/seahorse-keyserver-search.ui:68
 msgid "Where to search:"
 msgstr "찾을 위치:"
 
-#: pgp/seahorse-keyserver-search.ui:115
+#: pgp/seahorse-keyserver-search.ui:114
 msgid "_Search"
 msgstr "검색(_S)"
 
-#: pgp/seahorse-keyserver-sync.c:71
+#: pgp/seahorse-keyserver-sync.c:70
 msgid "Couldn’t publish keys to server"
 msgstr "키를 서버에 공개할 수 없습니다"
 
-#: pgp/seahorse-keyserver-sync.c:87
+#: pgp/seahorse-keyserver-sync.c:86
 #, c-format
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "키를 서버에서 가져올 수 없습니다: %s"
 
-#: pgp/seahorse-keyserver-sync.c:197
+#: pgp/seahorse-keyserver-sync.c:196
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d개 키를 동기화한다고 선택했습니다</b>"
 
-#: pgp/seahorse-keyserver-sync.c:305
+#: pgp/seahorse-keyserver-sync.c:304
 msgid "Synchronizing keys…"
 msgstr "키 동기화하는 중…"
 
@@ -1435,327 +1429,173 @@ msgstr "잘못된 URI: %s"
 msgid "Resolving server address: %s"
 msgstr "서버 주소의 IP를 찾는 중: %s"
 
-#: pgp/seahorse-pgp-backend.c:188
+#: pgp/seahorse-pgp-backend.c:198
 msgid "PGP Keys"
 msgstr "PGP 키"
 
-#: pgp/seahorse-pgp-backend.c:194
+#: pgp/seahorse-pgp-backend.c:204
 msgid "PGP keys are for encrypting email or files"
 msgstr "PGP 키는 전자메일 및 파일 암호화에 사용합니다"
 
-#: pgp/seahorse-pgp-key.c:186
+#: pgp/seahorse-pgp-key.c:187
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
 msgstr[0] "(그리고 기타 %d개)"
 
-#: pgp/seahorse-pgp-key.c:606
+#: pgp/seahorse-pgp-key.c:625
 msgid "Personal PGP key"
 msgstr "개인 PGP 키"
 
-#: pgp/seahorse-pgp-key.c:608
+#: pgp/seahorse-pgp-key.c:627
 msgid "PGP key"
 msgstr "PGP 키"
 
-#: pgp/seahorse-pgp-key-properties.c:250
-msgid "Couldn’t change primary user ID"
-msgstr "주요 사용자 아이디를 바꿀 수 없습니다"
-
-#: pgp/seahorse-pgp-key-properties.c:285
-#, c-format
-msgid "Are you sure you want to permanently delete the “%s” user ID?"
-msgstr "정말로 “%s” 사용자 ID를 완전히 삭제하시겠습니까?"
-
-#: pgp/seahorse-pgp-key-properties.c:294
-msgid "Couldn’t delete user ID"
-msgstr "사용자 아이디를 삭제할 수 없습니다"
-
-#. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:370 pgp/seahorse-pgp-key-properties.c:1464
-msgid "[Unknown]"
-msgstr "[알 수 없음]"
-
-#. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:468 pgp/seahorse-pgp-key-properties.c:1682
-msgid "Name/Email"
-msgstr "이름/전자메일"
-
-#: pgp/seahorse-pgp-key-properties.c:475
-msgid "Signature ID"
-msgstr "서명 아이디"
-
-#: pgp/seahorse-pgp-key-properties.c:581
+#: pgp/seahorse-pgp-key-properties.c:218
 msgid "Couldn’t change primary photo"
 msgstr "주요 사진을 바꿀 수 없습니다"
 
-#: pgp/seahorse-pgp-key-properties.c:768
+#: pgp/seahorse-pgp-key-properties.c:385
 msgid "Error changing password"
 msgstr "암호 바꾸는데 오류가 발생했습니다"
 
-#. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:815
-msgid "(unknown)"
-msgstr "(알 수 없음)"
-
-#: pgp/seahorse-pgp-key-properties.c:820
-#, c-format
-msgid "This key expired on: %s"
-msgstr "이 키는 다음 날짜에 만료되었습니다: %s"
-
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:846
-#, c-format
-msgid "%s — Public key"
-msgstr "%s — 공개 키"
-
-#. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:849
+#: pgp/seahorse-pgp-key-properties.c:430
 #, c-format
 msgid "%s — Private key"
 msgstr "%s — 비밀 키"
 
-#: pgp/seahorse-pgp-key-properties.c:1036
+#. Translators: the 1st part of the title is the owner's name
+#: pgp/seahorse-pgp-key-properties.c:434
 #, c-format
-msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "정말로 %2$s 키의 서브키 %1$d번을 완전히 삭제하시겠습니까?"
+msgid "%s — Public key"
+msgstr "%s — 공개 키"
 
-#: pgp/seahorse-pgp-key-properties.c:1044
-msgid "Couldn’t delete subkey"
-msgstr "서브키를 삭제할 수 없습니다"
+#. TRANSLATORS: (unknown) expiry date
+#: pgp/seahorse-pgp-key-properties.c:467
+msgid "(unknown)"
+msgstr "(알 수 없음)"
 
-#: pgp/seahorse-pgp-key-properties.c:1114
-#: pgp/seahorse-pgp-key-properties.c:1438
-msgid "Unable to change trust"
-msgstr "신뢰도를 바꿀 수 없습니다"
+#: pgp/seahorse-pgp-key-properties.c:472
+#, c-format
+msgid "This key expired on %s"
+msgstr "이 키는 %s에 만료되었습니다"
 
-#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
-msgid "Couldn’t export key"
-msgstr "키를 내보낼 수 없습니다."
-
-#: pgp/seahorse-pgp-key-properties.c:1284
-#: pgp/seahorse-pgp-key-properties.c:1372
+#: pgp/seahorse-pgp-key-properties.c:522
 msgctxt "Expires"
 msgid "Never"
 msgstr "하지 않음"
 
-#: pgp/seahorse-pgp-key-properties.c:1326
-msgid "ID"
-msgstr "<ID>"
+#: pgp/seahorse-pgp-key-properties.c:606 pgp/seahorse-pgp-key-properties.c:781
+msgid "Unable to change trust"
+msgstr "신뢰도를 바꿀 수 없습니다"
 
-#: pgp/seahorse-pgp-key-properties.c:1332
-msgid "Usage"
-msgstr "사용"
+#: pgp/seahorse-pgp-key-properties.c:618 ssh/key-properties.vala:191
+msgid "Couldn’t export key"
+msgstr "키를 내보낼 수 없습니다."
 
-#: pgp/seahorse-pgp-key-properties.c:1335
-msgid "Created"
-msgstr "만든 때"
-
-#: pgp/seahorse-pgp-key-properties.c:1338
-msgid "Expires"
-msgstr "만료"
-
-#: pgp/seahorse-pgp-key-properties.c:1341
-msgid "Status"
-msgstr "상태"
-
-#: pgp/seahorse-pgp-key-properties.c:1344
-msgid "Strength"
-msgstr "강도"
-
-#: pgp/seahorse-pgp-key-properties.c:1363
-msgid "Revoked"
-msgstr "철회됨"
-
-#: pgp/seahorse-pgp-key-properties.c:1365
-msgid "Expired"
-msgstr "만료됨"
-
-#: pgp/seahorse-pgp-key-properties.c:1367
-msgid "Disabled"
-msgstr "사용하지 않음"
-
-# 번역주: revoked/expired의 상대말로 써야 하는데 괜찮을지?
-#: pgp/seahorse-pgp-key-properties.c:1369
-msgid "Good"
-msgstr "좋음"
-
-#: pgp/seahorse-pgp-key-properties.c:1685
-#: pgp/seahorse-pgp-private-key-properties.ui:345
-#: pgp/seahorse-pgp-public-key-properties.ui:274
-msgid "Key ID"
-msgstr "키 아이디"
-
-#: pgp/seahorse-pgp-key-properties.c:1828
+#: pgp/seahorse-pgp-key-properties.c:997
 #, c-format
-msgid "I trust signatures from “%s” on other keys"
-msgstr "“%s”이(가) 다른 키에 한 서명을 신뢰합니다"
+msgid "I believe “%s” is the owner of this key"
+msgstr "이 키를 소유한 사람이 “%s”임을 신뢰함"
 
-#: pgp/seahorse-pgp-key-properties.c:1835
+#: pgp/seahorse-pgp-key-properties.c:1002
 #, c-format
-msgid ""
-"If you believe that the person that owns this key is “%s”, <i>sign</i> this "
-"key:"
-msgstr ""
-"이 키를 소유한 사람이 “%s”임을 신뢰한다면, 이 키에 <i>서명</i>하십시오:"
-
-#: pgp/seahorse-pgp-key-properties.c:1842
-#, c-format
-msgid ""
-"If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
-msgstr ""
-"이 키를 소유한 사람이 “%s”임을 더 이상 신뢰하지 않으면, 서명을 <i>철회</i>하"
-"십시오:"
+msgid "I no longer trust that “%s” owns this key"
+msgstr "이 키를 소유한 사람이 “%s”임을 더 이상 신뢰하지 않음"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
-msgid "Export _secret key"
-msgstr "비밀 키 내보내기(_S)"
+msgid "Change _passphrase"
+msgstr "암호 바꾸기(_P)"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:34
+#: pgp/seahorse-pgp-private-key-properties.ui:36
 msgid "Export _public key"
 msgstr "공개 키 내보내기(_P)"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:68
-#: pgp/seahorse-pgp-public-key-properties.ui:61
-msgid "This key has been revoked"
-msgstr "이 키는 철회되었습니다"
+#: pgp/seahorse-pgp-private-key-properties.ui:40
+msgid "Export _secret key"
+msgstr "비밀 키 내보내기(_S)"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:78
-#: pgp/seahorse-pgp-public-key-properties.ui:73
-msgid "The owner of the key revoked the key. It can no longer be used."
-msgstr "키의 소유자가 키를 철회했습니다. 이 키는 더 이상 사용할 수 없습니다."
+#: pgp/seahorse-pgp-private-key-properties.ui:60
+#: pgp/seahorse-pgp-public-key-properties.ui:42
+msgid "The owner of the key revoked the key. It should no longer be used."
+msgstr "키의 소유자가 키를 철회했습니다. 이 키는 더 이상 사용하지 말아야 합니다."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:106
-#: pgp/seahorse-pgp-public-key-properties.ui:104
-msgid "This key has expired"
-msgstr "이 키는 만료되었습니다"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:171
+#: pgp/seahorse-pgp-private-key-properties.ui:140
 msgid "Add a photo to this key"
 msgstr "이 키에 사진을 추가합니다"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:190
+#: pgp/seahorse-pgp-private-key-properties.ui:155
 msgid "Remove this photo from this key"
 msgstr "이 사진을 이 키에서 지웁니다"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:209
+#: pgp/seahorse-pgp-private-key-properties.ui:170
 msgid "Make this photo the primary photo"
 msgstr "이 사진을 주요 사진으로 하기"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:234
+#: pgp/seahorse-pgp-private-key-properties.ui:191
+#: pgp/seahorse-pgp-public-key-properties.ui:125
 msgid "Go to previous photo"
 msgstr "이전 사진으로 이동"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:253
+#: pgp/seahorse-pgp-private-key-properties.ui:206
+#: pgp/seahorse-pgp-public-key-properties.ui:146
 msgid "Go to next photo"
 msgstr "다음 사진으로 이동"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:318
-#: pgp/seahorse-pgp-public-key-properties.ui:246
+#: pgp/seahorse-pgp-private-key-properties.ui:262
+#: pgp/seahorse-pgp-public-key-properties.ui:210
 msgid "Comment"
 msgstr "추가 설명"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:375
-#: ssh/seahorse-ssh-key-properties.ui:346
-msgid "Change _Passphrase"
-msgstr "암호 바꾸기(_P)"
+#: pgp/seahorse-pgp-private-key-properties.ui:289
+#: pgp/seahorse-pgp-public-key-properties.ui:238
+msgid "Key ID"
+msgstr "키 아이디"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:391
-#: pgp/seahorse-pgp-public-key-properties.ui:347
-msgid "Owner"
-msgstr "소유자"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:404
-msgid "Key Names and Signatures"
-msgstr "키 이름 및 서명"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:442
-msgid "Primary"
-msgstr "주요"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:162
-msgid "Sign"
-msgstr "서명"
-
-#. Translators: This text refers to deleting an item from its type's backing store
-#: pgp/seahorse-pgp-private-key-properties.ui:502
-#: pkcs11/seahorse-pkcs11-properties.ui:22
-#: src/seahorse-key-manager-widgets.ui:18
-msgid "Delete"
-msgstr "삭제"
-
-#. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:532
-msgid "_Add Name"
-msgstr "이름 추가(_A)"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:562
-#: pgp/seahorse-pgp-private-key-properties.ui:1020
-msgid "Revoke"
-msgstr "철회"
-
-#. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:598
-msgid "Names and Signatures"
-msgstr "이름 및 서명"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:635
-#: pgp/seahorse-pgp-public-key-properties.ui:623
-msgid "Key ID:"
-msgstr "키 아이디:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:660
-#: pgp/seahorse-pgp-public-key-properties.ui:649
-msgid "Type:"
-msgstr "종류:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:685
-#: pgp/seahorse-pgp-public-key-properties.ui:675
-msgid "Strength:"
-msgstr "강도:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:710
-msgid "Technical Details"
-msgstr "기술 정보"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:738
-#: ssh/seahorse-ssh-key-properties.ui:173
+#: pgp/seahorse-pgp-private-key-properties.ui:316
+#: pgp/seahorse-pgp-public-key-properties.ui:266
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:71
+#: ssh/seahorse-ssh-key-properties.ui:197
 msgid "Fingerprint"
 msgstr "핑거프린트"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:770
-#: pgp/seahorse-pgp-public-key-properties.ui:769
-msgid "Created:"
-msgstr "만든 때:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:794
-#: pgp/seahorse-pgp-public-key-properties.ui:794
-msgid "Expires:"
-msgstr "만료:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:840
-msgid "Dates"
-msgstr "날짜"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:863
-msgid "Override Owner _Trust:"
-msgstr "소유자 신뢰 무시(_T):"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:890
-msgid "_Export to file"
-msgstr "파일에 내보내기(_E)"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:906
-msgid "Actions"
-msgstr "동작"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:990
-msgid "Expire"
+#: pgp/seahorse-pgp-private-key-properties.ui:347
+#: pgp/seahorse-pgp-public-key-properties.ui:299
+msgid "Expires"
 msgstr "만료"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1064
-#: pgp/seahorse-pgp-public-key-properties.ui:899
-msgid "_Subkeys"
-msgstr "하위 키(_S)"
+#: pgp/seahorse-pgp-private-key-properties.ui:408
+#: pgp/seahorse-pgp-public-key-properties.ui:334
+msgid "User IDs"
+msgstr "사용자 아이디"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:421
+msgid "Add user ID"
+msgstr "사용자 아이디 추가"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:445
+#: pgp/seahorse-pgp-public-key-properties.ui:356
+msgid "Subkeys"
+msgstr "하위 키"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:458
+msgid "_Add subkey"
+msgstr "하위 키 추가(_A)"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:476
+#: pgp/seahorse-pgp-public-key-properties.ui:384
+msgid "Trust"
+msgstr "신뢰"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:477
+#: pgp/seahorse-pgp-public-key-properties.ui:385
+msgid "Your trust of this key"
+msgstr "이 키에 대한 나의 신뢰"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:493
+msgid "Override owner trust"
+msgstr "소유자 신뢰 무시"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:17
 msgctxt "Validity"
@@ -1772,79 +1612,189 @@ msgctxt "Validity"
 msgid "Ultimately"
 msgstr "절대적으로"
 
-#. Names set on the PGP key.
-#: pgp/seahorse-pgp-public-key-properties.ui:326
-msgid "_Other Names:"
-msgstr "다른 이름(_O):"
+#: pgp/seahorse-pgp-public-key-properties.ui:401
+msgid "Signature trust"
+msgstr "서명 신뢰"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:369
-msgid "Your trust of this key"
-msgstr "이 키에 대한 나의 신뢰"
+#: pgp/seahorse-pgp-public-key-properties.ui:402
+msgid "I trust signatures from this key on other keys"
+msgstr "이 키가 다른 키에 한 서명을 신뢰합니다"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:382
-msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr "나의 신뢰는 <i>자세한 정보</i> 탭에서 수동으로 지정합니다."
+#: pgp/seahorse-pgp-public-key-properties.ui:418
+msgid "Sign key"
+msgstr "키 서명"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:425
+msgid "_Sign key"
+msgstr "키 서명(_S)"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:436
+msgid "Revoke key signature"
+msgstr "키 서명 철회"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:443
+msgid "_Revoke"
+msgstr "철회(_R)"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:454
+msgid "Owner trust"
+msgstr "소유자 신뢰"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:455
-msgid "_Sign this Key"
-msgstr "이 키에 서명(_S)"
+msgid "Give a trust level to the owner of this key"
+msgstr "이 키의 소유자에 대한 신뢰 수준을 지정합니다"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:504
-msgid "_Revoke Signature"
-msgstr "서명 철회(_R)"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:526
-msgid "_People who have signed this key:"
-msgstr "이 키에 서명한 사람(_P):"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:551
-msgid "_Only display the signatures of people I trust"
-msgstr "내가 신뢰하는 사람의 서명만 표시(_O)"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:570
-msgid "Trust"
-msgstr "신뢰"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:604
-msgid "Technical Details:"
-msgstr "기술 정보:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:710
-msgid "Fingerprint:"
-msgstr "핑거프린트:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:750
-msgid "Dates:"
-msgstr "날짜:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:828
-msgid "Indicate trust:"
-msgstr "신뢰도 지정:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:845
-msgid "You _trust the owner:"
-msgstr "소유자에 대한 신뢰(_T):"
-
-#: pgp/seahorse-pgp-subkey.c:161
+#: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
 msgstr "암호화"
 
-#: pgp/seahorse-pgp-subkey.c:163
+#: pgp/seahorse-pgp-subkey.c:212
+msgid "This subkey can be used for encryption"
+msgstr "이 하위 키는 암호화에 사용될 수 있습니다"
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "Sign"
+msgstr "서명"
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "This subkey can be used to create data signatures"
+msgstr "이 하위 키는 데이터 서명을 만드는데 사용될 수 있습니다"
+
+#: pgp/seahorse-pgp-subkey.c:214
 msgid "Certify"
 msgstr "인증서 인증"
 
-#: pgp/seahorse-pgp-subkey.c:164
+#: pgp/seahorse-pgp-subkey.c:214
+msgid "This subkey can be used to create certificates"
+msgstr "이 하위 키는 인증서를 만드는데 사용될 수 있습니다"
+
+#: pgp/seahorse-pgp-subkey.c:215
 msgid "Authenticate"
 msgstr "자기 인증"
 
-#: pgp/seahorse-pgp-subkey.c:313
+#: pgp/seahorse-pgp-subkey.c:215
+msgid "This subkey can be used for authentication"
+msgstr "이 하위 키는 인증에 사용될 수 있습니다"
+
+#: pgp/seahorse-pgp-subkey.c:409
 msgid "Key"
 msgstr "키"
 
-#: pgp/seahorse-pgp-subkey.c:318
+#: pgp/seahorse-pgp-subkey.c:414
 #, c-format
 msgid "Subkey %d of %s"
-msgstr "%2$s의 서브키 %1$d번"
+msgstr "%2$s의 하위 키 %1$d번"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:203
+#, c-format
+msgid "Are you sure you want to permanently delete subkey %s?"
+msgstr "정말로 %s 하위 키를 완전히 삭제하시겠습니까?"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:210
+msgid "Couldn’t delete subkey"
+msgstr "하위 키를 삭제할 수 없습니다"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:263
+msgid "Subkey was revoked"
+msgstr "하위 키가 철회되었습니다"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:270
+msgid "Subkey has expired"
+msgstr "하위 키가 만료되었습니다"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:273
+msgid "Subkey is disabled"
+msgstr "하위 키가 사용 해제되었습니다"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:283
+msgid "Never expires"
+msgstr "만료되지 않음"
+
+#. Translators: first part is the algorithm, second part is the length,
+#. * e.g. "RSA" (2048 bit)
+#: pgp/seahorse-pgp-subkey-list-box.c:308
+#, c-format
+msgid "%s (%d bit)"
+msgstr "%s (%d 비트)"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:315
+msgid "Unknown"
+msgstr "알 수 없음"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:7
+msgid "Change expiration date"
+msgstr "만료 날짜 바꾸기"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:11
+msgid "Revoke subkey"
+msgstr "하위 키 철회"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:15
+msgid "Delete subkey"
+msgstr "하위 키 삭제"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:46
+msgid "Usages"
+msgstr "사용"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:120
+msgid "Created"
+msgstr "만든 때"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:149
+msgid "Change expiry date"
+msgstr "만료 날짜 바꾸기"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:156
+msgid "Revoke"
+msgstr "철회"
+
+#. Translators: This text refers to deleting an item from its type's backing store
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:163
+#: pkcs11/seahorse-pkcs11-properties.ui:22
+#: src/seahorse-key-manager-widgets.ui:18
+msgid "Delete"
+msgstr "삭제"
+
+#: pgp/seahorse-pgp-uid-list-box.c:260
+#, c-format
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
+msgstr "정말로 “%s” 사용자 ID를 완전히 삭제하시겠습니까?"
+
+#: pgp/seahorse-pgp-uid-list-box.c:268
+msgid "Couldn’t delete user ID"
+msgstr "사용자 아이디를 삭제할 수 없습니다"
+
+#: pgp/seahorse-pgp-uid-list-box.c:280
+msgid "Couldn’t change primary user ID"
+msgstr "주요 사용자 아이디를 바꿀 수 없습니다"
+
+#. Translators: (Unknown) signature name
+#: pgp/seahorse-pgp-uid-list-box.c:372
+msgid "(Unknown)"
+msgstr "(알 수 없음)"
+
+# Primary UID 설정
+#: pgp/seahorse-pgp-uid-list-box-row.ui:7
+msgid "Make _primary"
+msgstr "주요 아이디로 지정(_P)"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:64
+msgid "Signatures"
+msgstr "서명"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:77
+#: pgp/seahorse-pgp-uid-list-box-row.ui:88
+msgid "Only display the signatures of people I trust"
+msgstr "내가 신뢰하는 사람의 서명만 표시"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:87
+msgid "Only trusted"
+msgstr "신뢰하는 항목만"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:106
+msgid "No signatures available"
+msgstr "서명 없음"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2406,49 +2356,53 @@ msgstr "키만 만들기(_J)"
 msgid "_Create and Set Up"
 msgstr "만들고 설정(_C)"
 
-#: ssh/seahorse-ssh-key-properties.ui:15
+#: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
 msgstr "SSH 키 속성"
 
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:54
+#: ssh/seahorse-ssh-key-properties.ui:64
 msgctxt "name-of-ssh-key"
 msgid "Name"
 msgstr "이름"
 
-#: ssh/seahorse-ssh-key-properties.ui:87
+#: ssh/seahorse-ssh-key-properties.ui:98
 msgid "Algorithm"
 msgstr "알고리즘"
 
-#: ssh/seahorse-ssh-key-properties.ui:114
+#: ssh/seahorse-ssh-key-properties.ui:131
 msgid "Key Length"
 msgstr "키 길이"
 
-#: ssh/seahorse-ssh-key-properties.ui:141
+#: ssh/seahorse-ssh-key-properties.ui:163
 msgid "Location"
 msgstr "위치"
 
-#: ssh/seahorse-ssh-key-properties.ui:228
+#: ssh/seahorse-ssh-key-properties.ui:230
 msgid "Public Key"
 msgstr "공개 키"
 
-#: ssh/seahorse-ssh-key-properties.ui:243
+#: ssh/seahorse-ssh-key-properties.ui:237
 msgid "Copy public key to clipboard"
 msgstr "공개 키를 클립보드에 복사"
 
-#: ssh/seahorse-ssh-key-properties.ui:272
-msgid "Remote Access"
+#: ssh/seahorse-ssh-key-properties.ui:276
+msgid "Remote access"
 msgstr "원격 접속"
 
-#: ssh/seahorse-ssh-key-properties.ui:285
+#: ssh/seahorse-ssh-key-properties.ui:277
 msgid "Allows accessing this computer remotely"
 msgstr "이 컴퓨터에 원격으로 접속하는데 사용합니다"
 
-#: ssh/seahorse-ssh-key-properties.ui:332
+#: ssh/seahorse-ssh-key-properties.ui:299
 msgid "_Export"
 msgstr "내보내기(_E)"
 
-#: ssh/seahorse-ssh-key-properties.ui:362
+#: ssh/seahorse-ssh-key-properties.ui:313
+msgid "Change _Passphrase"
+msgstr "암호 바꾸기(_P)"
+
+#: ssh/seahorse-ssh-key-properties.ui:328
 msgid "_Delete SSH Key"
 msgstr "SSH 키 삭제(_D)"
 
@@ -2505,251 +2459,3 @@ msgstr "원격 컴퓨터의 보안 셸 키를 설정할 수 없습니다."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "보안 셸 키를 설정하는 중…"
-
-#~ msgid "Not a valid Key Server address."
-#~ msgstr "올바른 키 서버 주소가 아닙니다."
-
-#~ msgid ""
-#~ "For help contact your system administrator or the administrator of the "
-#~ "key server."
-#~ msgstr ""
-#~ "도움이 필요하면 시스템 관리자 혹은 해당 키 서버의 관리자에게 문의하십시오."
-
-#~ msgid "URL"
-#~ msgstr "URL"
-
-#~ msgid "_Find keys via:"
-#~ msgstr "키를 찾는 방법(_F):"
-
-#~ msgid "Display flags"
-#~ msgstr "표시 플래그"
-
-#~ msgid "Displayed date and/or time properties"
-#~ msgstr "표시할 날짜/시간 속성"
-
-#~ msgid "Lazy mode"
-#~ msgstr "직접 모드"
-
-#~ msgid "Lazy mode doesn’t normalize entered date and time values"
-#~ msgstr "직접 모드에서는 입력한 날짜와 시간 값을 정규화하지 않습니다"
-
-#~ msgid "Year"
-#~ msgstr "연도"
-
-#~ msgid "Displayed year"
-#~ msgstr "표시할 연도"
-
-#~ msgid "Month"
-#~ msgstr "달"
-
-#~ msgid "Displayed month"
-#~ msgstr "표시할 달"
-
-#~ msgid "Day"
-#~ msgstr "일"
-
-#~ msgid "Displayed day of month"
-#~ msgstr "표시할 일"
-
-#~ msgid "Hour"
-#~ msgstr "시간"
-
-#~ msgid "Displayed hour"
-#~ msgstr "표시할 시간"
-
-#~ msgid "Minute"
-#~ msgstr "분"
-
-#~ msgid "Displayed minute"
-#~ msgstr "표시할 분"
-
-#~ msgid "Second"
-#~ msgstr "초"
-
-#~ msgid "Displayed second"
-#~ msgstr "표시할 초"
-
-#~ msgid "Lower limit year"
-#~ msgstr "연도 최소값"
-
-#~ msgid "Year part of the lower date limit"
-#~ msgstr "날짜 최소값의 연도 부분"
-
-#~ msgid "Upper limit year"
-#~ msgstr "연도 최대값"
-
-#~ msgid "Year part of the upper date limit"
-#~ msgstr "날짜 최대값의 연도 부분"
-
-#~ msgid "Lower limit month"
-#~ msgstr "달 최소값"
-
-#~ msgid "Month part of the lower date limit"
-#~ msgstr "날짜 최소값의 달 부분"
-
-#~ msgid "Upper limit month"
-#~ msgstr "달 최대값"
-
-#~ msgid "Month part of the upper date limit"
-#~ msgstr "날짜 최대값의 달 부분"
-
-#~ msgid "Lower limit day"
-#~ msgstr "일 최소값"
-
-#~ msgid "Day of month part of the lower date limit"
-#~ msgstr "날짜 최소값의 일 부분"
-
-#~ msgid "Upper limit day"
-#~ msgstr "일 최대값"
-
-#~ msgid "Day of month part of the upper date limit"
-#~ msgstr "날짜 최대값의 일 부분"
-
-#~ msgid "Lower limit hour"
-#~ msgstr "시간 최소값"
-
-#~ msgid "Hour part of the lower time limit"
-#~ msgstr "날짜 최소값의 시간 부분"
-
-#~ msgid "Upper limit hour"
-#~ msgstr "시간 최대값"
-
-#~ msgid "Hour part of the upper time limit"
-#~ msgstr "날짜 최대값의 시간 부분"
-
-#~ msgid "Lower limit minute"
-#~ msgstr "분 최소값"
-
-#~ msgid "Minute part of the lower time limit"
-#~ msgstr "날짜 최소값의 분 부분"
-
-#~ msgid "Upper limit minute"
-#~ msgstr "분 최대값"
-
-#~ msgid "Minute part of the upper time limit"
-#~ msgstr "날짜 최대값의 분 부분"
-
-#~ msgid "Lower limit second"
-#~ msgstr "초 최소값"
-
-#~ msgid "Second part of the lower time limit"
-#~ msgstr "날짜 최소값의 초 부분"
-
-#~ msgid "Upper limit second"
-#~ msgstr "초 최대값"
-
-#~ msgid "Second part of the upper time limit"
-#~ msgstr "날짜 최대값의 초 부분"
-
-#~ msgid "calendar:week_start:0"
-#~ msgstr "calendar:week_start:0"
-
-#~ msgid "Date"
-#~ msgstr "날짜"
-
-#~ msgid "Select Date"
-#~ msgstr "날짜 선택"
-
-#~ msgid "Time"
-#~ msgstr "시각"
-
-#~ msgid "Enter the time directly"
-#~ msgstr "시각 직접 입력"
-
-#~ msgid "Select Time"
-#~ msgstr "시각 선택"
-
-#~ msgid "Select the time from a list"
-#~ msgstr "목록에서 시각을 선택"
-
-#~ msgid "24hr: no"
-#~ msgstr "24hr: no"
-
-#~ msgid "AM"
-#~ msgstr "오전"
-
-#~ msgid "PM"
-#~ msgstr "오후"
-
-#~ msgid "%02d:%02d:%02d %s"
-#~ msgstr "%4$s %1$02d:%2$02d:%3$02d"
-
-#~ msgid "%02d:%02d %s"
-#~ msgstr "%3$s %1$02d:%2$02d"
-
-#~ msgid "%02d:%02d:%02d"
-#~ msgstr "%02d:%02d:%02d"
-
-#~ msgid "%02d:%02d"
-#~ msgstr "%02d:%02d"
-
-#~ msgid "%04d-%02d-%02d"
-#~ msgstr "%04d-%02d-%02d"
-
-#~ msgid "%u:%u:%u"
-#~ msgstr "%u:%u:%u"
-
-#~ msgid ""
-#~ "You are about to add %s as a revoker for %s. This operation cannot be "
-#~ "undone! Are you sure you want to continue?"
-#~ msgstr ""
-#~ "철회 표시로 %s을(를) 붙여서 %s을(를) 철회하려 합니다. 한번 철회하면 취소"
-#~ "할 수 없습니다! 정말로 계속하시겠습니까?"
-
-#~ msgid "Couldn’t add revoker"
-#~ msgstr "철회 표시를 붙일 수 없습니다"
-
-#~ msgid "Key Servers:"
-#~ msgstr "키 서버:"
-
-#~ msgid "Shared Keys Near Me:"
-#~ msgstr "내 주변의 공유한 키:"
-
-#~ msgid ""
-#~ "You have no personal PGP keys that can be used to sign a document or "
-#~ "message."
-#~ msgstr "문서나 메시지에 서명할 때 쓸 수 있는 개인 PGP 키가 없습니다."
-
-#~ msgid "Choose Signing Key"
-#~ msgstr "서명할 키 선택"
-
-#~ msgid "_Sign message with key:"
-#~ msgstr "메시지 서명에 사용할 키(_S):"
-
-#~ msgid ""
-#~ "Seahorse is a GNOME application for managing encryption keys. It also "
-#~ "integrates with nautilus, gedit and other places for encryption "
-#~ "operations."
-#~ msgstr ""
-#~ "시호스는 암호화 키를 관리하는 그놈 프로그램입니다. 노틸러스, 지에디트 등에"
-#~ "서 암호화 관련 동작에 연동해서 동작합니다."
-
-#~ msgid "Keyring is unlocked"
-#~ msgstr "키 모음 잠금이 풀려 있습니다"
-
-#~ msgid "Lock"
-#~ msgstr "잠그기"
-
-#~ msgid "Couldn’t add subkey"
-#~ msgstr "서브키를 추가할 수 없습니다"
-
-#~ msgid "_Combine all keyrings"
-#~ msgstr "모든 키 모음 합치기(_C)"
-
-#~ msgid "Encryption _Type:"
-#~ msgstr "암호화 종류(_T):"
-
-#~ msgid "org.gnome.seahorse.Application"
-#~ msgstr "org.gnome.seahorse.Application"
-
-#~ msgid "OK"
-#~ msgstr "확인"
-
-#~ msgid "Full _Name:"
-#~ msgstr "전체 이름(_N):"
-
-#~ msgid "_Email Address:"
-#~ msgstr "전자메일 주소(_E):"
-
-#~ msgid "About Seahorse"
-#~ msgstr "시호스 정보"
