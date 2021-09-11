@@ -161,9 +161,15 @@
     </release>
   </releases>
 
-  <provides>
-    <binary>seahorse</binary>
-  </provides>
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>touch</control>
+  </recommends>
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+
   <url type="homepage">https://wiki.gnome.org/Apps/Seahorse</url>
   <url type="bugtracker">https://gitlab.gnome.org/GNOME/seahorse/issues</url>
   <url type="donation">http://www.gnome.org/friends/</url>
@@ -171,6 +177,10 @@
   <update_contact>nielsdegraef@gmail.com</update_contact>
   <project_group>GNOME</project_group>
   <developer_name>The GNOME Project</developer_name>
+
+  <provides>
+    <binary>seahorse</binary>
+  </provides>
   <launchable type="desktop-id">org.gnome.seahorse.Application.desktop</launchable>
   <translation type="gettext">seahorse</translation>
   <content_rating type="oars-1.1">
