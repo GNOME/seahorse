@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1\n"
+"Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-05-14 14:05+0000\n"
-"PO-Revision-Date: 2021-06-22 08:23+0300\n"
+"POT-Creation-Date: 2021-08-21 10:41+0000\n"
+"PO-Revision-Date: 2021-09-13 12:32+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
-msgstr "הוספת שרת מפתח"
+msgstr "הוספת שרת מפתחות"
 
 #: common/add-keyserver-dialog.vala:66
 msgid "Custom"
@@ -53,7 +53,7 @@ msgstr "לא ניתן לייצא נתונים"
 
 #: common/datepicker.vala:55
 msgid "Enter the date directly"
-msgstr "הזנת התאריך ישירות"
+msgstr "מילוי התאריך ישירות"
 
 #: common/datepicker.vala:62
 msgid "Select the date from a calendar"
@@ -73,7 +73,7 @@ msgstr "_ביטול"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
 msgid "_Delete"
 msgstr "מ_חיקה"
 
@@ -84,7 +84,7 @@ msgstr "ייצוא"
 #: common/interaction.vala:63
 #, c-format
 msgid "Enter PIN or password for: %s"
-msgstr "נא להזין את ססמת ה־PIN עבור: %s"
+msgstr "נא למלא את ססמת ה־PIN עבור: %s"
 
 #. The second and main entry
 #: common/passphrase-prompt.vala:92
@@ -166,7 +166,7 @@ msgstr "קבלת מפתחות מ_שרתי מפתחות אוטומטית"
 
 #: common/seahorse-prefs-keyservers.ui:99
 msgid "Automatically synchronize _modified keys with key servers"
-msgstr "ס_נכרון מפתחות שהשתנו בשרתי מפתחות אוטומטית"
+msgstr "ס_נכרון אוטומטי של מפתחות שהשתנו בשרתי מפתחות"
 
 #: common/server-category.vala:63
 msgid "LDAP Key Server"
@@ -206,12 +206,12 @@ msgstr "מלא"
 #: common/validity.vala:46 pgp/seahorse-pgp-private-key-properties.ui:23
 msgctxt "Validity"
 msgid "Ultimate"
-msgstr "אולטימטיבי"
+msgstr "סופי"
 
 #: common/validity.vala:48
 msgctxt "Validity"
 msgid "Disabled"
-msgstr "מנוטרל"
+msgstr "מושבת"
 
 #: common/validity.vala:50
 msgctxt "Validity"
@@ -285,20 +285,19 @@ msgstr "הצגת תוכן קבוצת מפתחות (במסכים קטנים)"
 
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
-msgstr "Auto retrieve keys"
+msgstr "משיכת מפתחות אוטומטית"
 
 #: data/org.gnome.seahorse.gschema.xml:6
 msgid "Whether or not keys should be automatically retrieved from key servers."
-msgstr ""
-"Whether or not keys should be automatically retrieved from key servers."
+msgstr "האם למשוך את המפתחות אוטומטית משרתי המפתחות."
 
 #: data/org.gnome.seahorse.gschema.xml:10
 msgid "Auto publish keys"
-msgstr "Auto publish keys"
+msgstr "פרסום מפתחות אוטומטית"
 
 #: data/org.gnome.seahorse.gschema.xml:11
 msgid "Whether or not modified keys should be automatically published."
-msgstr "Whether or not modified keys should be automatically published."
+msgstr "האם לפרסם אוטומטית מפתחות שהשתנו או לא."
 
 #: data/org.gnome.seahorse.gschema.xml:15
 msgid "Publish keys to this key server"
@@ -391,7 +390,7 @@ msgstr "הצגת עמודת התוקף"
 #: data/org.gnome.seahorse.manager.gschema.xml:45
 #: data/org.gnome.seahorse.manager.gschema.xml:50
 msgid "No longer in use."
-msgstr "No longer in use."
+msgstr "לא בשימוש עוד."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:39
 msgid "Show expiry column"
@@ -399,7 +398,7 @@ msgstr "הצגת עמודת התפוגה"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:44
 msgid "Show trust column"
-msgstr "Show trust column"
+msgstr "הצגת עמודת מהימנות"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:49
 msgid "Show type column"
@@ -539,20 +538,20 @@ msgstr "ססמה או נתוני כניסה שמורים"
 msgid "Network Credentials"
 msgstr "פרטי זיהוי ברשת"
 
-#: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:70
+#: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:68
 #: src/seahorse-key-manager.ui:193
 msgid "Password"
 msgstr "ססמה"
 
-#: gkr/gkr-item-properties.vala:209
+#: gkr/gkr-item-properties.vala:217
 msgid "Couldn’t change password."
 msgstr "לא ניתן לשנות ססמה."
 
-#: gkr/gkr-item-properties.vala:233
+#: gkr/gkr-item-properties.vala:241
 msgid "Couldn’t set description."
 msgstr "לא ניתן לקבוע תיאור."
 
-#: gkr/gkr-item-properties.vala:260
+#: gkr/gkr-item-properties.vala:268
 msgid "Error deleting the password."
 msgstr "ארעה שגיאה במחיקת הססמה."
 
@@ -653,7 +652,6 @@ msgid "_Password:"
 msgstr "_ססמה:"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-#: pgp/seahorse-pgp-private-key-properties.ui:960
 msgid "Add"
 msgstr "הוספה"
 
@@ -675,39 +673,37 @@ msgstr "שם קבוצת המפתחות החדשה:"
 msgid "Item Properties"
 msgstr "מאפייני פריט"
 
-#: gkr/seahorse-gkr-item-properties.ui:43
+#: gkr/seahorse-gkr-item-properties.ui:52
 msgid "Description"
 msgstr "תיאור"
 
-#: gkr/seahorse-gkr-item-properties.ui:86
+#: gkr/seahorse-gkr-item-properties.ui:75
 msgid "Copy"
 msgstr "העתקה"
 
 #. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-item-properties.ui:113
+#: gkr/seahorse-gkr-item-properties.ui:99
 msgid "Use"
 msgstr "שימוש"
 
-#: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1329
+#: gkr/seahorse-gkr-item-properties.ui:112
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:96
 msgid "Type"
 msgstr "סוג"
 
-#: gkr/seahorse-gkr-item-properties.ui:165
+#: gkr/seahorse-gkr-item-properties.ui:125
 msgid "Server"
 msgstr "שרת"
 
-#: gkr/seahorse-gkr-item-properties.ui:191
+#: gkr/seahorse-gkr-item-properties.ui:138
 msgid "Login"
 msgstr "התחברות"
 
-#: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:916
+#: gkr/seahorse-gkr-item-properties.ui:156
 msgid "Details"
 msgstr "פרטים"
 
-#: gkr/seahorse-gkr-item-properties.ui:255
+#: gkr/seahorse-gkr-item-properties.ui:171
 msgid "Delete Password"
 msgstr "מחיקת הססמה"
 
@@ -715,7 +711,7 @@ msgstr "מחיקת הססמה"
 msgid "Keyring properties"
 msgstr "מאפייני קבוצת המפתחות"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
+#: gkr/seahorse-gkr-keyring.ui:52
 msgid "Name"
 msgstr "שם"
 
@@ -979,34 +975,34 @@ msgstr "ססמה שגויה"
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "זוהי הפעם השלישית שהוקלדה ססמה שגויה. נא לנסות שוב."
 
-#: pgp/seahorse-gpgme-keyring.c:92
+#: pgp/seahorse-gpgme-keyring.c:113
 #, c-format
 msgid "Wrong passphrase."
 msgstr "מילת הצופן שגויה."
 
-#: pgp/seahorse-gpgme-keyring.c:96
+#: pgp/seahorse-gpgme-keyring.c:117
 #, c-format
 msgid "Enter new passphrase for “%s”"
-msgstr "נא להזין מילת צופן חדשה עבור „%s”"
+msgstr "נא למלא מילת צופן חדשה עבור „%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:119
 #, c-format
 msgid "Enter passphrase for “%s”"
-msgstr "נא להזין מילת צופן עבור „%s”"
+msgstr "נא למלא מילת צופן עבור „%s”"
 
-#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:122 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
-msgstr "נא להזין מילת צופן חדשה"
+msgstr "נא למלא מילת צופן חדשה"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:124
 msgid "Enter passphrase"
-msgstr "נא להזין מילת צופן"
+msgstr "נא למלא מילת צופן"
 
-#: pgp/seahorse-gpgme-keyring.c:108
+#: pgp/seahorse-gpgme-keyring.c:127
 msgid "Passphrase"
 msgstr "מילת צופן"
 
-#: pgp/seahorse-gpgme-keyring.c:303
+#: pgp/seahorse-gpgme-keyring.c:302
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
@@ -1015,7 +1011,7 @@ msgstr[1] "שני מפתחות נטענו"
 msgstr[2] "‫%d מפתחות נטענו"
 msgstr[3] "‫%d מפתחות נטענו"
 
-#: pgp/seahorse-gpgme-keyring.c:631
+#: pgp/seahorse-gpgme-keyring.c:638
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1023,11 +1019,11 @@ msgstr ""
 "נתוני המפתח שגויים (חסרים UID). שגיאה זאת נגרמה עקב מחשב ששעונו ממהר או "
 "חתימה עצמית חסרה."
 
-#: pgp/seahorse-gpgme-keyring.c:761
+#: pgp/seahorse-gpgme-keyring.c:785
 msgid "GnuPG keys"
 msgstr "מפתחות GnuPG"
 
-#: pgp/seahorse-gpgme-keyring.c:772
+#: pgp/seahorse-gpgme-keyring.c:796
 msgid "GnuPG: default keyring directory"
 msgstr "‏GnuPG: תיקיית בררת המחדל של קבוצת המפתחות"
 
@@ -1268,15 +1264,16 @@ msgid "_Signer:"
 msgstr "_חותם:"
 
 #: pgp/seahorse-gpgme-sign-dialog.ui:335
+#: pgp/seahorse-pgp-uid-list-box-row.ui:11
 msgid "_Sign"
 msgstr "_חתימה"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:84
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: pgp/seahorse-gpgme-subkey.c:93
+#: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "אל־גמאל"
 
@@ -1430,15 +1427,15 @@ msgstr "כתובת לא תקפה: %s"
 msgid "Resolving server address: %s"
 msgstr "כתובת השרת מפוענחת: %s"
 
-#: pgp/seahorse-pgp-backend.c:188
+#: pgp/seahorse-pgp-backend.c:198
 msgid "PGP Keys"
 msgstr "מפתחות PGP"
 
-#: pgp/seahorse-pgp-backend.c:194
+#: pgp/seahorse-pgp-backend.c:204
 msgid "PGP keys are for encrypting email or files"
 msgstr "מפתחות PGP מיועדים להצפנת דוא״ל או קבצים"
 
-#: pgp/seahorse-pgp-key.c:186
+#: pgp/seahorse-pgp-key.c:187
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
@@ -1447,312 +1444,159 @@ msgstr[1] "(ועוד שניים)"
 msgstr[2] "(ועוד %d)"
 msgstr[3] "(ועוד %d)"
 
-#: pgp/seahorse-pgp-key.c:608
+#: pgp/seahorse-pgp-key.c:625
 msgid "Personal PGP key"
 msgstr "מפתח PGP אישי"
 
-#: pgp/seahorse-pgp-key.c:610
+#: pgp/seahorse-pgp-key.c:627
 msgid "PGP key"
 msgstr "מפתח PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:250
-msgid "Couldn’t change primary user ID"
-msgstr "לא ניתן לשנות את מזהה המשתמש העיקרי"
-
-#: pgp/seahorse-pgp-key-properties.c:285
-#, c-format
-msgid "Are you sure you want to permanently delete the “%s” user ID?"
-msgstr "האם אכן ברצונך למחוק את מזהה המשתמש „%s” לצמיתות?"
-
-#: pgp/seahorse-pgp-key-properties.c:294
-msgid "Couldn’t delete user ID"
-msgstr "לא ניתן למחוק את מזהה המשתמש"
-
-#. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:370 pgp/seahorse-pgp-key-properties.c:1464
-msgid "[Unknown]"
-msgstr "[לא ידוע]"
-
-#. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:468 pgp/seahorse-pgp-key-properties.c:1682
-msgid "Name/Email"
-msgstr "שם/דוא״ל"
-
-#: pgp/seahorse-pgp-key-properties.c:475
-msgid "Signature ID"
-msgstr "זיהוי חתימה"
-
-#: pgp/seahorse-pgp-key-properties.c:581
+#: pgp/seahorse-pgp-key-properties.c:218
 msgid "Couldn’t change primary photo"
 msgstr "לא ניתן לשנות את התמונה הראשית"
 
-#: pgp/seahorse-pgp-key-properties.c:768
+#: pgp/seahorse-pgp-key-properties.c:385
 msgid "Error changing password"
 msgstr "אירעה שגיאה בשינוי הססמה"
 
-#. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:815
-msgid "(unknown)"
-msgstr "(לא ידוע)"
-
-#: pgp/seahorse-pgp-key-properties.c:820
-#, c-format
-msgid "This key expired on: %s"
-msgstr "תפוגת תוקף המפתח הזה: %s"
-
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:846
-#, c-format
-msgid "%s — Public key"
-msgstr "‏%s - מפתח ציבורי"
-
-#. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:849
+#: pgp/seahorse-pgp-key-properties.c:430
 #, c-format
 msgid "%s — Private key"
 msgstr "‏%s - מפתח פרטי"
 
-#: pgp/seahorse-pgp-key-properties.c:1036
+#. Translators: the 1st part of the title is the owner's name
+#: pgp/seahorse-pgp-key-properties.c:434
 #, c-format
-msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "האם אכן ברצונך למחוק את תת המפתח %d של %s לצמיתות?"
+msgid "%s — Public key"
+msgstr "‏%s - מפתח ציבורי"
 
-#: pgp/seahorse-pgp-key-properties.c:1044
-msgid "Couldn’t delete subkey"
-msgstr "לא ניתן למחוק תת־מפתח"
+#. TRANSLATORS: (unknown) expiry date
+#: pgp/seahorse-pgp-key-properties.c:467
+msgid "(unknown)"
+msgstr "(לא ידוע)"
 
-#: pgp/seahorse-pgp-key-properties.c:1114
-#: pgp/seahorse-pgp-key-properties.c:1438
-msgid "Unable to change trust"
-msgstr "לא ניתן לשנות את המהימנות"
+#: pgp/seahorse-pgp-key-properties.c:472
+#, c-format
+msgid "This key expired on %s"
+msgstr "תוקף המפתח פג ב־%s"
 
-#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
-msgid "Couldn’t export key"
-msgstr "לא ניתן לייצא מפתח"
-
-#: pgp/seahorse-pgp-key-properties.c:1284
-#: pgp/seahorse-pgp-key-properties.c:1372
+#: pgp/seahorse-pgp-key-properties.c:522
 msgctxt "Expires"
 msgid "Never"
 msgstr "לעולם לא"
 
-#: pgp/seahorse-pgp-key-properties.c:1326
-msgid "ID"
-msgstr "זיהוי"
+#: pgp/seahorse-pgp-key-properties.c:606 pgp/seahorse-pgp-key-properties.c:781
+msgid "Unable to change trust"
+msgstr "לא ניתן לשנות את המהימנות"
 
-#: pgp/seahorse-pgp-key-properties.c:1332
-msgid "Usage"
-msgstr "שימוש"
+#: pgp/seahorse-pgp-key-properties.c:618 ssh/key-properties.vala:191
+msgid "Couldn’t export key"
+msgstr "לא ניתן לייצא מפתח"
 
-#: pgp/seahorse-pgp-key-properties.c:1335
-msgid "Created"
-msgstr "נוצר"
-
-#: pgp/seahorse-pgp-key-properties.c:1338
-msgid "Expires"
-msgstr "תפוגה"
-
-#: pgp/seahorse-pgp-key-properties.c:1341
-msgid "Status"
-msgstr "מצב"
-
-#: pgp/seahorse-pgp-key-properties.c:1344
-msgid "Strength"
-msgstr "חוזק"
-
-#: pgp/seahorse-pgp-key-properties.c:1363
-msgid "Revoked"
-msgstr "בוטל"
-
-#: pgp/seahorse-pgp-key-properties.c:1365
-msgid "Expired"
-msgstr "פג תוקף"
-
-#: pgp/seahorse-pgp-key-properties.c:1367
-msgid "Disabled"
-msgstr "כבוי"
-
-#: pgp/seahorse-pgp-key-properties.c:1369
-msgid "Good"
-msgstr "טוב"
-
-#: pgp/seahorse-pgp-key-properties.c:1685
-#: pgp/seahorse-pgp-private-key-properties.ui:345
-#: pgp/seahorse-pgp-public-key-properties.ui:274
-msgid "Key ID"
-msgstr "זיהוי מפתח"
-
-#: pgp/seahorse-pgp-key-properties.c:1828
+#: pgp/seahorse-pgp-key-properties.c:997
 #, c-format
-msgid "I trust signatures from “%s” on other keys"
-msgstr "חתימות מ־„%s” במפתחות אחרים מהימנים בעיני"
+msgid "I believe “%s” is the owner of this key"
+msgstr "לדעתי הבעלות על המפתח אינה בידי „%s”"
 
-#: pgp/seahorse-pgp-key-properties.c:1835
+#: pgp/seahorse-pgp-key-properties.c:1002
 #, c-format
-msgid ""
-"If you believe that the person that owns this key is “%s”, <i>sign</i> this "
-"key:"
-msgstr ""
-"אם ישנה סבירות שהבעלים של מפתח זה הם „%s”, ניתן <i>לחתום</i> על מפתח זה:"
-
-#: pgp/seahorse-pgp-key-properties.c:1842
-#, c-format
-msgid ""
-"If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
-msgstr ""
-"אם קיים בעיניך חשד ש־„%s” אינו עוד הבעלים של מפתח זה, ניתן <i>לשלול</i> את "
-"החתימה שלך:"
+msgid "I no longer trust that “%s” owns this key"
+msgstr "להערכתי הבעלות על המפתח אינה עוד בידי „%s”"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
-msgid "Export _secret key"
-msgstr "יי_צוא מפתח סודי"
+msgid "Change _passphrase"
+msgstr "ה_חלפת מילת הצופן"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:34
+#: pgp/seahorse-pgp-private-key-properties.ui:36
 msgid "Export _public key"
 msgstr "ייצוא מפתח _ציבורי"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:68
-#: pgp/seahorse-pgp-public-key-properties.ui:61
-msgid "This key has been revoked"
-msgstr "מפתח זה נשלל"
+#: pgp/seahorse-pgp-private-key-properties.ui:40
+msgid "Export _secret key"
+msgstr "יי_צוא מפתח סודי"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:78
-#: pgp/seahorse-pgp-public-key-properties.ui:73
-msgid "The owner of the key revoked the key. It can no longer be used."
-msgstr "הבעלים של מפתח זה שלל את המפתח. לא ניתן עוד להשתמש בו."
+#: pgp/seahorse-pgp-private-key-properties.ui:60
+#: pgp/seahorse-pgp-public-key-properties.ui:42
+msgid "The owner of the key revoked the key. It should no longer be used."
+msgstr "מפתח זה נשלל על ידי בעליו. לא ניתן עוד להשתמש בו."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:106
-#: pgp/seahorse-pgp-public-key-properties.ui:104
-msgid "This key has expired"
-msgstr "התוקף של מפתח זה פג"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:171
+#: pgp/seahorse-pgp-private-key-properties.ui:140
 msgid "Add a photo to this key"
 msgstr "הוספת תמונה למפתח זה"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:190
+#: pgp/seahorse-pgp-private-key-properties.ui:155
 msgid "Remove this photo from this key"
 msgstr "הסרת התמונה ממפתח זה"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:209
+#: pgp/seahorse-pgp-private-key-properties.ui:170
 msgid "Make this photo the primary photo"
 msgstr "הפיכת תמונה זו לתמונה הראשית"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:234
+#: pgp/seahorse-pgp-private-key-properties.ui:191
+#: pgp/seahorse-pgp-public-key-properties.ui:125
 msgid "Go to previous photo"
 msgstr "חזרה אל התמונה הקודמת"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:253
+#: pgp/seahorse-pgp-private-key-properties.ui:206
+#: pgp/seahorse-pgp-public-key-properties.ui:146
 msgid "Go to next photo"
 msgstr "מעבר אל התמונה הבאה"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:318
-#: pgp/seahorse-pgp-public-key-properties.ui:246
+#: pgp/seahorse-pgp-private-key-properties.ui:262
+#: pgp/seahorse-pgp-public-key-properties.ui:210
 msgid "Comment"
 msgstr "הערה"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:375
-#: ssh/seahorse-ssh-key-properties.ui:346
-msgid "Change _Passphrase"
-msgstr "_שינוי מילת הצופן"
+#: pgp/seahorse-pgp-private-key-properties.ui:289
+#: pgp/seahorse-pgp-public-key-properties.ui:238
+msgid "Key ID"
+msgstr "זיהוי מפתח"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:391
-#: pgp/seahorse-pgp-public-key-properties.ui:347
-msgid "Owner"
-msgstr "בעלים"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:404
-msgid "Key Names and Signatures"
-msgstr "שמות וחתימות של המפתחות"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:442
-msgid "Primary"
-msgstr "ראשי"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:168
-msgid "Sign"
-msgstr "חתימה"
-
-#. Translators: This text refers to deleting an item from its type's backing store
-#: pgp/seahorse-pgp-private-key-properties.ui:502
-#: pkcs11/seahorse-pkcs11-properties.ui:22
-#: src/seahorse-key-manager-widgets.ui:18
-msgid "Delete"
-msgstr "מחיקה"
-
-#. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:532
-msgid "_Add Name"
-msgstr "הוספת _שם"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:562
-#: pgp/seahorse-pgp-private-key-properties.ui:1020
-msgid "Revoke"
-msgstr "שלילה"
-
-#. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:598
-msgid "Names and Signatures"
-msgstr "שמות וחתימות"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:635
-#: pgp/seahorse-pgp-public-key-properties.ui:623
-msgid "Key ID:"
-msgstr "זיהוי מפתח:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:660
-#: pgp/seahorse-pgp-public-key-properties.ui:649
-msgid "Type:"
-msgstr "סוג:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:685
-#: pgp/seahorse-pgp-public-key-properties.ui:675
-msgid "Strength:"
-msgstr "חוזק:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:710
-msgid "Technical Details"
-msgstr "פרטים טכניים"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:738
-#: ssh/seahorse-ssh-key-properties.ui:173
+#: pgp/seahorse-pgp-private-key-properties.ui:316
+#: pgp/seahorse-pgp-public-key-properties.ui:266
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:71
+#: ssh/seahorse-ssh-key-properties.ui:197
 msgid "Fingerprint"
 msgstr "טביעת אצבע"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:770
-#: pgp/seahorse-pgp-public-key-properties.ui:769
-msgid "Created:"
-msgstr "נוצרה:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:794
-#: pgp/seahorse-pgp-public-key-properties.ui:794
-msgid "Expires:"
-msgstr "תפוגה:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:840
-msgid "Dates"
-msgstr "תאריכים"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:863
-msgid "Override Owner _Trust:"
-msgstr "דריסת _מהימנות הבעלים:"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:890
-msgid "_Export to file"
-msgstr "_ייצוא לקובץ"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:906
-msgid "Actions"
-msgstr "פעולות"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:990
-msgid "Expire"
+#: pgp/seahorse-pgp-private-key-properties.ui:347
+#: pgp/seahorse-pgp-public-key-properties.ui:299
+msgid "Expires"
 msgstr "תפוגה"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:1064
-#: pgp/seahorse-pgp-public-key-properties.ui:899
-msgid "_Subkeys"
-msgstr "_תת מפתחות"
+#: pgp/seahorse-pgp-private-key-properties.ui:408
+#: pgp/seahorse-pgp-public-key-properties.ui:334
+msgid "User IDs"
+msgstr "זיהוי משתמשים"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:421
+msgid "Add user ID"
+msgstr "הוספת זיהוי משתמש"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:445
+#: pgp/seahorse-pgp-public-key-properties.ui:356
+msgid "Subkeys"
+msgstr "_תת־מפתחות"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:458
+msgid "_Add subkey"
+msgstr "הו_ספת תת־מפתח"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:476
+#: pgp/seahorse-pgp-public-key-properties.ui:384
+msgid "Trust"
+msgstr "מהימן"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:477
+#: pgp/seahorse-pgp-public-key-properties.ui:385
+msgid "Your trust of this key"
+msgstr "האמון שלך במפתח זה"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:493
+msgid "Override owner trust"
+msgstr "דריסת מהימנות בעלים"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:17
 msgctxt "Validity"
@@ -1767,81 +1611,190 @@ msgstr "באופן מלא"
 #: pgp/seahorse-pgp-public-key-properties.ui:23
 msgctxt "Validity"
 msgid "Ultimately"
-msgstr "באופן אולטימטיבי"
+msgstr "באופן סופי"
 
-#. Names set on the PGP key.
-#: pgp/seahorse-pgp-public-key-properties.ui:326
-msgid "_Other Names:"
-msgstr "_שמות אחרים:"
+#: pgp/seahorse-pgp-public-key-properties.ui:401
+msgid "Signature trust"
+msgstr "מהימנות חתימה"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:369
-msgid "Your trust of this key"
-msgstr "האמון שלך במפתח זה"
+#: pgp/seahorse-pgp-public-key-properties.ui:402
+msgid "I trust signatures from this key on other keys"
+msgstr "חתימות מהמפתח הזה וממפתחות אחרים מהימנות בעיני"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:382
-msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr "האמון שלך מצוין בלשונית „פרטים”."
+#: pgp/seahorse-pgp-public-key-properties.ui:418
+msgid "Sign key"
+msgstr "חתימה על המפתח"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:425
+msgid "_Sign key"
+msgstr "_חתימה על המפתח"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:436
+msgid "Revoke key signature"
+msgstr "שלילת חתימת מפתח"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:443
+msgid "_Revoke"
+msgstr "_שלילה"
+
+#: pgp/seahorse-pgp-public-key-properties.ui:454
+msgid "Owner trust"
+msgstr "מהימנות בעלים"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:455
-msgid "_Sign this Key"
-msgstr "_חתימה על מפתח זה"
+msgid "Give a trust level to the owner of this key"
+msgstr "לתת לבעלי המפתח הזה רמת מהימנות"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:504
-msgid "_Revoke Signature"
-msgstr "_ביטול החתימה"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:526
-msgid "_People who have signed this key:"
-msgstr "_אנשים שחתמו על מפתח זה:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:551
-msgid "_Only display the signatures of people I trust"
-msgstr "יש להציג אך ו_רק חתימות של אנשים מהימנים בעיני"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:570
-msgid "Trust"
-msgstr "מהימן"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:604
-msgid "Technical Details:"
-msgstr "פרטים טכניים:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:710
-msgid "Fingerprint:"
-msgstr "טביעת אצבע:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:750
-msgid "Dates:"
-msgstr "תאריכים:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:828
-msgid "Indicate trust:"
-msgstr "ציון מהימנות:"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:845
-msgid "You _trust the owner:"
-msgstr "הבעלים _מהימנים:"
-
-#: pgp/seahorse-pgp-subkey.c:167
+#: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
 msgstr "הצפנה"
 
-#: pgp/seahorse-pgp-subkey.c:169
+#: pgp/seahorse-pgp-subkey.c:212
+msgid "This subkey can be used for encryption"
+msgstr "ניתן להשתמש בתת־מפתח זה להצפנה"
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "Sign"
+msgstr "חתימה"
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "This subkey can be used to create data signatures"
+msgstr "ניתן להשתמש בתת־מפתח זה לחתימות על נתונים"
+
+#: pgp/seahorse-pgp-subkey.c:214
 msgid "Certify"
 msgstr "אישור"
 
-#: pgp/seahorse-pgp-subkey.c:170
+#: pgp/seahorse-pgp-subkey.c:214
+msgid "This subkey can be used to create certificates"
+msgstr "ניתן להשתמש בתת־מפתח זה ליצירת אישורים"
+
+#: pgp/seahorse-pgp-subkey.c:215
 msgid "Authenticate"
 msgstr "אימות"
 
-#: pgp/seahorse-pgp-subkey.c:363
+#: pgp/seahorse-pgp-subkey.c:215
+msgid "This subkey can be used for authentication"
+msgstr "ניתן להשתמש בתת־מפתח זה לאימות"
+
+#: pgp/seahorse-pgp-subkey.c:409
 msgid "Key"
 msgstr "מפתח"
 
-#: pgp/seahorse-pgp-subkey.c:368
+#: pgp/seahorse-pgp-subkey.c:414
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "תת־מפתח %d של %s"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:203
+#, c-format
+msgid "Are you sure you want to permanently delete subkey %s?"
+msgstr "למחוק את תת־המפתח %s לצמיתות?"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:210
+msgid "Couldn’t delete subkey"
+msgstr "לא ניתן למחוק תת־מפתח"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:263
+msgid "Subkey was revoked"
+msgstr "תת־המפתח נשלל"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:270
+msgid "Subkey has expired"
+msgstr "תוקף תת־המפתח פג"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:273
+msgid "Subkey is disabled"
+msgstr "תת־המפתח מושבת"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:283
+msgid "Never expires"
+msgstr "לעולם לא פג"
+
+#. Translators: first part is the algorithm, second part is the length,
+#. * e.g. "RSA" (2048 bit)
+#: pgp/seahorse-pgp-subkey-list-box.c:308
+#, c-format
+msgid "%s (%d bit)"
+msgstr "‫%s (%d סיביות)"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:315
+msgid "Unknown"
+msgstr "לא ידוע"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:7
+msgid "Change expiration date"
+msgstr "שינוי תאריך תפוגה"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:11
+msgid "Revoke subkey"
+msgstr "שלילת תת־מפתח"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:15
+msgid "Delete subkey"
+msgstr "מחיקת תת־מפתח"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:46
+msgid "Usages"
+msgstr "שימושים"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:120
+msgid "Created"
+msgstr "נוצר"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:149
+msgid "Change expiry date"
+msgstr "שינוי תאריך תפוגה"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:156
+msgid "Revoke"
+msgstr "שלילה"
+
+#. Translators: This text refers to deleting an item from its type's backing store
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:163
+#: pkcs11/seahorse-pkcs11-properties.ui:22
+#: src/seahorse-key-manager-widgets.ui:18
+msgid "Delete"
+msgstr "מחיקה"
+
+#: pgp/seahorse-pgp-uid-list-box.c:260
+#, c-format
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
+msgstr "האם אכן ברצונך למחוק את מזהה המשתמש „%s” לצמיתות?"
+
+#: pgp/seahorse-pgp-uid-list-box.c:268
+msgid "Couldn’t delete user ID"
+msgstr "לא ניתן למחוק את מזהה המשתמש"
+
+#: pgp/seahorse-pgp-uid-list-box.c:280
+msgid "Couldn’t change primary user ID"
+msgstr "לא ניתן לשנות את מזהה המשתמש העיקרי"
+
+#. Translators: (Unknown) signature name
+#: pgp/seahorse-pgp-uid-list-box.c:372
+msgid "(Unknown)"
+msgstr "(לא ידועה)"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:7
+msgid "Make _primary"
+msgstr "להפוך ל_ראשי"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:64
+msgid "Signatures"
+msgstr "חתימות"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:77
+#: pgp/seahorse-pgp-uid-list-box-row.ui:88
+msgid "Only display the signatures of people I trust"
+msgstr "להציג חתימות של אנשים מהימנים בעיני"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:87
+msgid "Only trusted"
+msgstr "מהימנים בלבד"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:106
+msgid "No signatures available"
+msgstr "אין חתימות זמינות"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -1947,7 +1900,7 @@ msgstr "לא ניתן לשמור את בקשת האישור"
 #: pkcs11/pkcs11-token.vala:74
 msgctxt "Label"
 msgid "Unknown"
-msgstr "לא ידוע"
+msgstr "לא ידועה"
 
 #: pkcs11/seahorse-pkcs11-backend.c:213
 msgid "X.509 certificates and related keys"
@@ -2082,7 +2035,7 @@ msgstr "_חיפוש מפתחות מרוחקים…"
 
 #: src/seahorse-key-manager.ui:12
 msgid "_Sync and publish keys…"
-msgstr "_סנכרון ופרסם מפתחות…"
+msgstr "_סנכרון ופרסום מפתחות…"
 
 #: src/seahorse-key-manager.ui:19
 msgid "_Preferences"
@@ -2098,7 +2051,7 @@ msgstr "_צירופי מקשים"
 
 #: src/seahorse-key-manager.ui:32
 msgid "_About Passwords and Keys"
-msgstr "_על אודות ססמאות ומפתחות"
+msgstr "_על ססמאות ומפתחות"
 
 #: src/seahorse-key-manager.ui:40
 msgid "Filter items:"
@@ -2106,7 +2059,7 @@ msgstr "מסנן פריטים:"
 
 #: src/seahorse-key-manager.ui:42
 msgid "Show p_ersonal"
-msgstr "הצגת _אישי"
+msgstr "הצגת _אישיים"
 
 #: src/seahorse-key-manager.ui:47
 msgid "Show _trusted"
@@ -2114,7 +2067,7 @@ msgstr "הצגת _מהימנים"
 
 #: src/seahorse-key-manager.ui:52
 msgid "Show an_y"
-msgstr "הצגת _כלשהו"
+msgstr "הצגת _כלשהם"
 
 #: src/seahorse-key-manager.ui:91
 msgid "Secure Shell key"
@@ -2409,49 +2362,53 @@ msgstr "יצירת מפתח _בלבד"
 msgid "_Create and Set Up"
 msgstr "י_צירה והגדרה"
 
-#: ssh/seahorse-ssh-key-properties.ui:15
+#: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
 msgstr "מאפייני מפתח SSH"
 
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:54
+#: ssh/seahorse-ssh-key-properties.ui:64
 msgctxt "name-of-ssh-key"
 msgid "Name"
 msgstr "שם"
 
-#: ssh/seahorse-ssh-key-properties.ui:87
+#: ssh/seahorse-ssh-key-properties.ui:98
 msgid "Algorithm"
 msgstr "אלגוריתם"
 
-#: ssh/seahorse-ssh-key-properties.ui:114
+#: ssh/seahorse-ssh-key-properties.ui:131
 msgid "Key Length"
 msgstr "אורך מפתח"
 
-#: ssh/seahorse-ssh-key-properties.ui:141
+#: ssh/seahorse-ssh-key-properties.ui:163
 msgid "Location"
 msgstr "מיקום"
 
-#: ssh/seahorse-ssh-key-properties.ui:228
+#: ssh/seahorse-ssh-key-properties.ui:230
 msgid "Public Key"
 msgstr "מפתח ציבורי"
 
-#: ssh/seahorse-ssh-key-properties.ui:243
+#: ssh/seahorse-ssh-key-properties.ui:237
 msgid "Copy public key to clipboard"
 msgstr "העתקת החלק הציבורי של המפתח ללוח הגזירים"
 
-#: ssh/seahorse-ssh-key-properties.ui:272
-msgid "Remote Access"
+#: ssh/seahorse-ssh-key-properties.ui:276
+msgid "Remote access"
 msgstr "גישה מרחוק"
 
-#: ssh/seahorse-ssh-key-properties.ui:285
+#: ssh/seahorse-ssh-key-properties.ui:277
 msgid "Allows accessing this computer remotely"
 msgstr "מאפשר גישה מרוחקת למחשב זה"
 
-#: ssh/seahorse-ssh-key-properties.ui:332
+#: ssh/seahorse-ssh-key-properties.ui:299
 msgid "_Export"
 msgstr "יי_צוא"
 
-#: ssh/seahorse-ssh-key-properties.ui:362
+#: ssh/seahorse-ssh-key-properties.ui:313
+msgid "Change _Passphrase"
+msgstr "_שינוי מילת הצופן"
+
+#: ssh/seahorse-ssh-key-properties.ui:328
 msgid "_Delete SSH Key"
 msgstr "מ_חיקת מפתח SSH"
 
@@ -2508,6 +2465,105 @@ msgstr "לא ניתן להגדיר מפתחות SSH על המחשב המרוחק
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "מפתחות SSH מוגדרים…"
+
+#~ msgid "[Unknown]"
+#~ msgstr "[לא ידוע]"
+
+#~ msgid "Name/Email"
+#~ msgstr "שם/דוא״ל"
+
+#~ msgid "ID"
+#~ msgstr "זיהוי"
+
+#~ msgid "Status"
+#~ msgstr "מצב"
+
+#~ msgid "Strength"
+#~ msgstr "חוזק"
+
+#~ msgid "Revoked"
+#~ msgstr "בוטל"
+
+#~ msgid "Expired"
+#~ msgstr "פג תוקף"
+
+#~ msgid "Disabled"
+#~ msgstr "כבוי"
+
+#~ msgid "Good"
+#~ msgstr "טוב"
+
+#~ msgid ""
+#~ "If you believe that the person that owns this key is “%s”, <i>sign</i> "
+#~ "this key:"
+#~ msgstr ""
+#~ "אם ישנה סבירות שהבעלים של מפתח זה הם „%s”, ניתן <i>לחתום</i> על מפתח זה:"
+
+#~ msgid "Key Names and Signatures"
+#~ msgstr "שמות וחתימות של המפתחות"
+
+#~ msgid "_Add Name"
+#~ msgstr "הוספת _שם"
+
+#~ msgid "Names and Signatures"
+#~ msgstr "שמות וחתימות"
+
+#~ msgid "Key ID:"
+#~ msgstr "זיהוי מפתח:"
+
+#~ msgid "Type:"
+#~ msgstr "סוג:"
+
+#~ msgid "Strength:"
+#~ msgstr "חוזק:"
+
+#~ msgid "Technical Details"
+#~ msgstr "פרטים טכניים"
+
+#~ msgid "Created:"
+#~ msgstr "נוצרה:"
+
+#~ msgid "Expires:"
+#~ msgstr "תפוגה:"
+
+#~ msgid "Dates"
+#~ msgstr "תאריכים"
+
+#~ msgid "_Export to file"
+#~ msgstr "_ייצוא לקובץ"
+
+#~ msgid "Actions"
+#~ msgstr "פעולות"
+
+#~ msgid "Expire"
+#~ msgstr "תפוגה"
+
+#~ msgid "_Other Names:"
+#~ msgstr "_שמות אחרים:"
+
+#~ msgid "Your trust is manually specified on the <i>Details</i> tab."
+#~ msgstr "האמון שלך מצוין בלשונית „פרטים”."
+
+#~ msgid "_Sign this Key"
+#~ msgstr "_חתימה על מפתח זה"
+
+#~ msgid "_People who have signed this key:"
+#~ msgstr "_אנשים שחתמו על מפתח זה:"
+
+#~ msgid "Technical Details:"
+#~ msgstr "פרטים טכניים:"
+
+#~ msgid "Fingerprint:"
+#~ msgstr "טביעת אצבע:"
+
+#~ msgid "Dates:"
+#~ msgstr "תאריכים:"
+
+#~ msgid "Indicate trust:"
+#~ msgstr "ציון מהימנות:"
+
+#~ msgid "You _trust the owner:"
+#~ msgstr "הבעלים _מהימנים:"
 
 #~ msgid "Not a valid Key Server address."
 #~ msgstr "כתובת שרת המפתחות לא תקפה."
@@ -3629,9 +3685,6 @@ msgstr "מפתחות SSH מוגדרים…"
 
 #~ msgid "Import keys into your key ring from a file"
 #~ msgstr "יבא מפתחות לקבוצת המפתחות שלך מקובץ"
-
-#~ msgid "User ID"
-#~ msgstr "זיהוי משתמש"
 
 #~ msgid "_Close"
 #~ msgstr "_סגור"
