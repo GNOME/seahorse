@@ -14,23 +14,23 @@
 # Gabriel Speckhahn <gabspeck@gmail.com>, 2012.
 # Bruno Lopes da Silva <brunolopesbldsb@gmail.com>, 2018.
 # Henrique Machado Campos <henriquecamposrj@gmail.com>, 2021.
-# Enrico Nicoletto <liverig@gmail.com>, 2013-2015, 2021.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2012-2021.
+# Enrico Nicoletto <liverig@gmail.com>, 2013-2015, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-08-24 10:26-0300\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2021-09-29 09:33+0000\n"
+"PO-Revision-Date: 2021-09-29 07:03-0300\n"
+"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 40.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.0\n"
 "X-Project-Style: gnome\n"
 
 #: common/add-keyserver-dialog.vala:32
@@ -445,8 +445,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Altura da janela (em pixels)."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Senhas e chaves"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -454,29 +456,26 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Gerencie suas senhas e chaves de criptografia"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
 msgstr ""
-"Seahorse é um aplicativo do GNOME para gerenciar chaves de criptografia."
+"Senhas e chaves é um aplicativo do GNOME para gerenciar chaves de "
+"criptografia."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"Com o Seahorse você pode criar e gerenciar chaves PGP e chaves SSH, publicar "
-"e recuperar chaves de servidores de chaves, armazenar em cache sua frase "
-"secreta para que você não precise continuar digitando-a e efetuar cópia de "
-"segurança (backup) de suas chaves e chaveiro."
+"Com o Senhas e chaves você pode criar e gerenciar chaves PGP e chaves SSH, "
+"publicar e recuperar chaves de servidores de chaves, armazenar em cache sua "
+"frase secreta para que você não precise continuar digitando-a e efetuar "
+"cópia de segurança (backup) de suas chaves e chaveiro."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "O Projeto GNOME"
-
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Senhas e chaves"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
@@ -1807,24 +1806,20 @@ msgstr "Excluir"
 
 #: pgp/seahorse-pgp-uid-list-box.c:260
 #, c-format
-#| msgid "Are you sure you want to permanently delete %s?"
 msgid "Are you sure you want to permanently delete the “%s” user ID?"
 msgstr ""
 "Você tem certeza de que deseja excluir permanentemente a ID de usuário “%s”?"
 
 #: pgp/seahorse-pgp-uid-list-box.c:268
-#| msgid "Couldn’t add user ID"
 msgid "Couldn’t delete user ID"
 msgstr "Não foi possível excluir a ID de usuário"
 
 #: pgp/seahorse-pgp-uid-list-box.c:280
-#| msgid "Couldn’t change primary photo"
 msgid "Couldn’t change primary user ID"
 msgstr "Não foi possível alterar a ID de usuário primária"
 
 #. Translators: (Unknown) signature name
 #: pgp/seahorse-pgp-uid-list-box.c:372
-#| msgid "(unknown)"
 msgid "(Unknown)"
 msgstr "(Desconhecido)"
 
@@ -1833,7 +1828,6 @@ msgid "Make _primary"
 msgstr "Tornar _primário"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:64
-#| msgid "Signature trust"
 msgid "Signatures"
 msgstr "Assinaturas"
 
@@ -1843,7 +1837,6 @@ msgid "Only display the signatures of people I trust"
 msgstr "Só exibir as assinaturas de pessoas em quem eu confio"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:87
-#| msgid "Owner trust"
 msgid "Only trusted"
 msgstr "Confiáveis apenas"
 
@@ -2034,7 +2027,8 @@ msgstr ""
 "André Gondim (In memoriam) <In memoriam>\n"
 "Carlos José Pereira <carlao2005@gmail.com>\n"
 "Antonio Fernandes C. Neto <fernandesn@gnome.org>\n"
-"Rafael Fontenelle <rafaelff@gnome.org>"
+"Rafael Fontenelle <rafaelff@gnome.org>\n"
+"Enrico Nicoletto <liverig@gmail.com>"
 
 #: src/application.vala:176
 msgid "Seahorse Project Homepage"
