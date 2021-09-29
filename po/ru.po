@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse trunk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-09-14 09:57+0300\n"
+"POT-Creation-Date: 2021-09-29 09:33+0000\n"
+"PO-Revision-Date: 2021-09-29 13:26+0300\n"
 "Last-Translator: Alexey Rubtsov <rushills@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -344,7 +344,7 @@ msgstr "Показывать боковую панель связок ключе
 
 #: data/org.gnome.seahorse.manager.gschema.xml:6
 msgid "Show keyrings sidebar in Seahorse."
-msgstr "Показывать боковую панель связок ключей в Seahorse."
+msgstr "Показывать боковую панель связок ключей в Паролях и ключах."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:10
 msgid "Which items to show"
@@ -377,7 +377,7 @@ msgstr "URI выбранных связок ключей в боковой па�
 
 #: data/org.gnome.seahorse.manager.gschema.xml:29
 msgid "The column to sort the Seahorse keys by"
-msgstr "Столбец сортировки ключей Seahorse"
+msgstr "Столбец сортировки ключей в Паролях и ключах"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:30
 msgid ""
@@ -385,9 +385,10 @@ msgid ""
 "are: “name”, “id”, “validity”, “expires”, “trust”, and “type”. Put a “-” in "
 "front of the column name to sort in descending order."
 msgstr ""
-"Укажите столбец для сортировки главного окна менеджера ключей Seahorse. "
-"Столбцы: «name», «id», «validity», «expires», «trust» и «type». Поместите "
-"символ «-» перед именем столбца, чтобы отсортировать его в обратном порядке."
+"Укажите столбец для сортировки главного окна менеджера ключей Пароли и "
+"ключи. Столбцы: «name», «id», «validity», «expires», «trust» и «type». "
+"Поместите символ «-» перед именем столбца, чтобы отсортировать его в "
+"обратном порядке."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:34
 msgid "Show validity column"
@@ -429,8 +430,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Высота окна в пикселях."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Пароли и ключи"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -438,28 +441,26 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Управление паролями и ключами шифрования"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
 msgstr ""
-"Seahorse это приложение GNOME для управления хранилищами ключей шифрования."
+"Пароли и ключи это приложение GNOME для управления хранилищами ключей "
+"шифрования."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"С помощью seahorse можно создавать и управлять ключами PGP, создавать и "
-"управлять ключами SSH, публиковать и получать ключи с серверов, кэшировать "
-"парольные фразы, создавать резервные копии ключей и связок с ключами."
+"С помощью Паролей и ключей можно создавать и управлять ключами PGP, "
+"создавать и управлять ключами SSH, публиковать и получать ключи с серверов, "
+"кэшировать парольные фразы, создавать резервные копии ключей и связок с "
+"ключами."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "Проект GNOME"
-
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Пароли и ключи"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
@@ -1996,7 +1997,7 @@ msgstr ""
 
 #: src/application.vala:176
 msgid "Seahorse Project Homepage"
-msgstr "Домашняя страница проекта Seahorse"
+msgstr "Домашняя страница проекта Пароли и ключи"
 
 #: src/import-dialog.vala:30
 msgid "Data to be imported"
@@ -2070,7 +2071,7 @@ msgstr "_Сочетания клавиш"
 
 #: src/seahorse-key-manager.ui:32
 msgid "_About Passwords and Keys"
-msgstr "О Seahorse"
+msgstr "О Паролях и ключах"
 
 #: src/seahorse-key-manager.ui:40
 msgid "Filter items:"
@@ -2485,6 +2486,9 @@ msgstr "Не удалось настроить ключи SSH на удалён�
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Настройка ключей SSH…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
 
 #~ msgid "[Unknown]"
 #~ msgstr "[Неизвестно]"
