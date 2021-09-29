@@ -9,16 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-08-21 22:43+0300\n"
+"POT-Creation-Date: 2021-09-29 09:33+0000\n"
+"PO-Revision-Date: 2021-09-29 16:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
-"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Lokalize 20.12.0\n"
 "X-Project-Style: gnome\n"
 
@@ -424,8 +423,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Висота вікна у пікселях."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Паролі й ключі"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -433,27 +434,26 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Керування паролями та ключами шифрування"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
-msgstr "Seahorse — програма GNOME для керування ключами шифрування."
+#| msgid "Seahorse is a GNOME application for managing encryption keys."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
+msgstr "«Паролі і ключі» — програма GNOME для керування ключами шифрування."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
+#| msgid ""
+#| "With seahorse you can create and manage PGP keys, create and manage SSH "
+#| "keys, publish and retrieve keys from key servers, cache your passphrase "
+#| "so you don’t have to keep typing it and backup your keys and keyring."
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"За допомогою цієї програми можете створювати і керувати ключами PGP, SSH "
-"тощо, оприлюднювати та одержувати ключі з сервера, кешувати паролі, щоб "
-"набирати їх кожного разу й не робити резервні копії."
+"За допомогою «Паролів і ключів» ви можете створювати ключі PGP, SSH тощо та керувати ними, оприлюднювати та одержувати ключі з сервера, кешувати паролі, щоб не набирати їх кожного разу, й робити резервні копії."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "Проєкт GNOME"
-
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Паролі й ключі"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
@@ -1789,28 +1789,23 @@ msgstr "Не вдалося змінити головний ідентифіка
 
 #. Translators: (Unknown) signature name
 #: pgp/seahorse-pgp-uid-list-box.c:372
-#| msgid "(unknown)"
 msgid "(Unknown)"
 msgstr "(невідома)"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:7
-#| msgid "Primary"
 msgid "Make _primary"
 msgstr "Зробити _основним"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:64
-#| msgid "Signature trust"
 msgid "Signatures"
 msgstr "Підписи"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:77
 #: pgp/seahorse-pgp-uid-list-box-row.ui:88
-#| msgid "_Only display the signatures of people I trust"
 msgid "Only display the signatures of people I trust"
 msgstr "Показувати _лише підписи людей, яким я довіряю"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:87
-#| msgid "Owner trust"
 msgid "Only trusted"
 msgstr "Лише довірені"
 
@@ -2486,6 +2481,9 @@ msgstr "Не вдалося налаштувати ключі SSH на відд�
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Налаштовування ключів SSH…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
 
 #~ msgid "[Unknown]"
 #~ msgstr "[Невідомо]"
