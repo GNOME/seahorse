@@ -98,6 +98,9 @@ public class Seahorse.Application : Gtk.Application {
 
         Hdy.init();
 
+        // Opt-in to Color Scheme user preference
+        Hdy.StyleManager.get_default ().color_scheme = Hdy.ColorScheme.PREFER_LIGHT;
+
         // Insert Icons into Stock
         icons_init();
 

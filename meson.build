@@ -37,7 +37,8 @@ glib_deps = [
   dependency('gmodule-2.0', version: '>=' + min_glib_version),
 ]
 gtk = dependency('gtk+-3.0', version: '>= 3.24.0')
-libhandy_dep = dependency('libhandy-1', version: '>= 1.1.0')
+# FIXME bump to 1.6.0 after libhandy 1.6 is released.
+libhandy_dep = dependency('libhandy-1', version: '>= 1.5.0')
 gcr = dependency('gcr-3',       version: '>=' + min_gcr_version)
 gcr_ui = dependency('gcr-ui-3', version: '>=' + min_gcr_version)
 libsecret = dependency('libsecret-1', version: '>= 0.16')
@@ -80,6 +81,8 @@ avahi_glib = dependency('avahi-glib', version: '>= 0.6', required: get_option('k
 # Project-wide flags
 add_project_arguments([
     '--target-glib=@0@'.format(min_glib_version),
+    # FIXME Remove and bump version after libhandy 1.6 is released.
+    '--disable-since-check',
   ],
   language: 'vala',
 )
