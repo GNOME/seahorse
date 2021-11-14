@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-04-11 17:29+0000\n"
-"PO-Revision-Date: 2021-06-19 23:07+0200\n"
+"POT-Creation-Date: 2021-09-29 10:36+0000\n"
+"PO-Revision-Date: 2021-11-14 13:27+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -79,7 +79,7 @@ msgstr "_Anullar"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
 msgid "_Delete"
 msgstr "_Suprimir"
 
@@ -263,11 +263,9 @@ msgid "Import item from file"
 msgstr "Importar dempuèi un fichièr"
 
 #: data/gtk/help-overlay.ui:42
-#, fuzzy
-#| msgid "_Search"
 msgctxt "shortcut window"
 msgid "Search"
-msgstr "_Recercar"
+msgstr "Recercar"
 
 #: data/gtk/help-overlay.ui:49
 msgctxt "shortcut window"
@@ -310,7 +308,7 @@ msgstr ""
 
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
-msgstr ""
+msgstr "Recuperacion auto de claus"
 
 #: data/org.gnome.seahorse.gschema.xml:6
 #, fuzzy
@@ -433,10 +431,8 @@ msgid "Show type column"
 msgstr ""
 
 #: data/org.gnome.seahorse.window.gschema.xml:5
-#, fuzzy
-#| msgid "Close this window"
 msgid "Width of the window"
-msgstr "Tampar aquesta fenèstra"
+msgstr "Largor de la fenèstra"
 
 #: data/org.gnome.seahorse.window.gschema.xml:6
 msgid "Width (in pixels) of the window."
@@ -470,7 +466,7 @@ msgid ""
 "you don’t have to keep typing it and backup your keys and keyring."
 msgstr ""
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "Lo projècte GNOME"
 
@@ -513,10 +509,8 @@ msgid "Network connection secret"
 msgstr "Secret del gestionari de ret"
 
 #: gkr/gkr-item-info.vala:127
-#, fuzzy
-#| msgid "Wrong password"
 msgid "Wi-Fi password"
-msgstr "Marrit senhal"
+msgstr "Senhal Wi-Fi"
 
 #: gkr/gkr-item-info.vala:144
 msgid "Network password"
@@ -579,24 +573,24 @@ msgstr "Senhal o identificat enregistrat"
 msgid "Network Credentials"
 msgstr "Entresenhas d'identificacion de la ret"
 
-#: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:70
+#: gkr/gkr-item-properties.vala:152 gkr/seahorse-gkr-item-properties.ui:68
 #: src/seahorse-key-manager.ui:193
 msgid "Password"
 msgstr "Senhal"
 
-#: gkr/gkr-item-properties.vala:209
+#: gkr/gkr-item-properties.vala:217
 #, fuzzy
 #| msgid "Couldn't change password."
 msgid "Couldn’t change password."
 msgstr "Impossible de modificar lo senhal."
 
-#: gkr/gkr-item-properties.vala:233
+#: gkr/gkr-item-properties.vala:241
 #, fuzzy
 #| msgid "Couldn't set description."
 msgid "Couldn’t set description."
 msgstr "Impossible de definir la descripcion."
 
-#: gkr/gkr-item-properties.vala:260
+#: gkr/gkr-item-properties.vala:268
 #, fuzzy
 #| msgid "Encryption key password"
 msgid "Error deleting the password."
@@ -642,11 +636,8 @@ msgid "Couldn’t add keyring"
 msgstr "Impossible d'apondre un trossèl"
 
 #: gkr/gkr-keyring-properties.vala:65
-#, fuzzy
-#| msgctxt "Validity"
-#| msgid "Unknown"
 msgid "Unknown date"
-msgstr "Desconeguda"
+msgstr "Data desconeguda"
 
 #: gkr/gkr-keyring.vala:34
 msgid "A keyring that is automatically unlocked on login"
@@ -696,7 +687,7 @@ msgstr "Apondre un senhal"
 
 #: gkr/seahorse-gkr-add-item.ui:24
 msgid "_Keyring:"
-msgstr "_Trossèl"
+msgstr "_Trossèl :"
 
 #: gkr/seahorse-gkr-add-item.ui:45 pgp/seahorse-gpgme-revoke-dialog.ui:44
 #: pgp/seahorse-revoke.ui:43
@@ -708,7 +699,6 @@ msgid "_Password:"
 msgstr "Sen_hal :"
 
 #: gkr/seahorse-gkr-add-item.ui:139 gkr/seahorse-gkr-add-keyring.ui:89
-#: pgp/seahorse-pgp-private-key-properties.ui:960
 msgid "Add"
 msgstr "Apondon"
 
@@ -736,43 +726,37 @@ msgstr "Nom del trossèl novèl :"
 msgid "Item Properties"
 msgstr "Proprietats de la tòca"
 
-#: gkr/seahorse-gkr-item-properties.ui:43
+#: gkr/seahorse-gkr-item-properties.ui:52
 msgid "Description"
 msgstr "Descripcion"
 
-#: gkr/seahorse-gkr-item-properties.ui:86
+#: gkr/seahorse-gkr-item-properties.ui:75
 msgid "Copy"
 msgstr "Copiar"
 
 #. To translators: This is the noun not the verb.
-#: gkr/seahorse-gkr-item-properties.ui:113
-#, fuzzy
-#| msgid "Use:"
+#: gkr/seahorse-gkr-item-properties.ui:99
 msgid "Use"
-msgstr "Utilitat :"
+msgstr "Usatge"
 
-#: gkr/seahorse-gkr-item-properties.ui:139
-#: pgp/seahorse-pgp-key-properties.c:1329
+#: gkr/seahorse-gkr-item-properties.ui:112
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:96
 msgid "Type"
 msgstr "Tipe"
 
-#: gkr/seahorse-gkr-item-properties.ui:165
+#: gkr/seahorse-gkr-item-properties.ui:125
 msgid "Server"
 msgstr "Servidor"
 
-#: gkr/seahorse-gkr-item-properties.ui:191
-#, fuzzy
-#| msgid "Login:"
+#: gkr/seahorse-gkr-item-properties.ui:138
 msgid "Login"
-msgstr "Nom d'utilizaire :"
+msgstr "Identificant"
 
-#: gkr/seahorse-gkr-item-properties.ui:218
-#: pgp/seahorse-pgp-private-key-properties.ui:1083
-#: pgp/seahorse-pgp-public-key-properties.ui:916
+#: gkr/seahorse-gkr-item-properties.ui:156
 msgid "Details"
 msgstr "Detalhs"
 
-#: gkr/seahorse-gkr-item-properties.ui:255
+#: gkr/seahorse-gkr-item-properties.ui:171
 #, fuzzy
 #| msgid "Stored Password"
 msgid "Delete Password"
@@ -784,27 +768,21 @@ msgstr "Senhal enregistrat"
 msgid "Keyring properties"
 msgstr "Proprietats de la tòca"
 
-#: gkr/seahorse-gkr-keyring.ui:52 pgp/seahorse-pgp-key-properties.c:888
+#: gkr/seahorse-gkr-keyring.ui:52
 msgid "Name"
 msgstr "Nom"
 
 #: gkr/seahorse-gkr-keyring.ui:80
-#, fuzzy
-#| msgid "Created"
 msgid "Created on"
-msgstr "Creada"
+msgstr "Creat lo"
 
 #: gkr/seahorse-gkr-keyring.ui:110
-#, fuzzy
-#| msgid "Change _Password"
 msgid "Change password"
-msgstr "Modificar lo _senhal"
+msgstr "Modificar lo senhal"
 
 #: gkr/seahorse-gkr-keyring.ui:117
-#, fuzzy
-#| msgid "_Set as default"
 msgid "Set as default"
-msgstr "_Per defaut"
+msgstr "Definir per defaut"
 
 #: pgp/seahorse-gpgme-add-subkey.c:208
 #, c-format
@@ -834,10 +812,8 @@ msgid "Key _Type"
 msgstr "_Tipe de la clau :"
 
 #: pgp/seahorse-gpgme-add-subkey.ui:54
-#, fuzzy
-#| msgid "Key _Length:"
 msgid "Key _Length"
-msgstr "_Longor de la clau :"
+msgstr "_Longor de la clau"
 
 #: pgp/seahorse-gpgme-add-subkey.ui:71
 msgid "Length of Key"
@@ -876,10 +852,8 @@ msgstr "Apondre un identificant utilizaire"
 
 #. Full name of the key, usually the name of the user.
 #: pgp/seahorse-gpgme-add-uid.ui:24 pgp/seahorse-gpgme-generate-dialog.ui:62
-#, fuzzy
-#| msgid "Full _Name:"
 msgid "Full _Name"
-msgstr "_Nom complet :"
+msgstr "_Nom complet"
 
 #: pgp/seahorse-gpgme-add-uid.ui:42
 msgid "Must be at least 5 characters long"
@@ -1086,43 +1060,43 @@ msgstr "Marrit senhal"
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Es lo tresen còp que picatz un senhal incorrècte. Ensajatz tornamai."
 
-#: pgp/seahorse-gpgme-keyring.c:92
+#: pgp/seahorse-gpgme-keyring.c:113
 #, c-format
 msgid "Wrong passphrase."
 msgstr "Frasa secreta incorrècta."
 
-#: pgp/seahorse-gpgme-keyring.c:96
+#: pgp/seahorse-gpgme-keyring.c:117
 #, fuzzy, c-format
 #| msgid "Enter new passphrase for '%s'"
 msgid "Enter new passphrase for “%s”"
 msgstr "Picatz la novèla frasa secreta per « %s »"
 
-#: pgp/seahorse-gpgme-keyring.c:98
+#: pgp/seahorse-gpgme-keyring.c:119
 #, fuzzy, c-format
 #| msgid "Enter passphrase for '%s'"
 msgid "Enter passphrase for “%s”"
 msgstr "Picatz la frasa secreta per « %s »"
 
-#: pgp/seahorse-gpgme-keyring.c:101 src/seahorse-change-passphrase.ui:28
+#: pgp/seahorse-gpgme-keyring.c:122 src/seahorse-change-passphrase.ui:28
 msgid "Enter new passphrase"
 msgstr "Picatz la novèla frasa secreta"
 
-#: pgp/seahorse-gpgme-keyring.c:103
+#: pgp/seahorse-gpgme-keyring.c:124
 msgid "Enter passphrase"
 msgstr "Picatz la frasa secreta"
 
-#: pgp/seahorse-gpgme-keyring.c:108
+#: pgp/seahorse-gpgme-keyring.c:127
 msgid "Passphrase"
 msgstr "Frasa secreta"
 
-#: pgp/seahorse-gpgme-keyring.c:303
+#: pgp/seahorse-gpgme-keyring.c:302
 #, c-format
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "%d clau cargada"
 msgstr[1] "%d claus cargadas"
 
-#: pgp/seahorse-gpgme-keyring.c:631
+#: pgp/seahorse-gpgme-keyring.c:638
 msgid ""
 "Invalid key data (missing UIDs). This may be due to a computer with a date "
 "set in the future or a missing self-signature."
@@ -1130,11 +1104,11 @@ msgstr ""
 "Donadas de clau invalidas (UID mancant). Aquò pòt provenir d'una data d'un "
 "ordenador configurada dins lo futur o d'una autosignatura mancanta."
 
-#: pgp/seahorse-gpgme-keyring.c:761
+#: pgp/seahorse-gpgme-keyring.c:785
 msgid "GnuPG keys"
 msgstr "Claus GnuPG"
 
-#: pgp/seahorse-gpgme-keyring.c:772
+#: pgp/seahorse-gpgme-keyring.c:796
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG : repertòri per defaut del trossèl"
 
@@ -1199,7 +1173,9 @@ msgid "Couldn’t add photo"
 msgstr "Impossible d'apondre una fotografia"
 
 #: pgp/seahorse-gpgme-photos.c:291
-msgid "The file could not be loaded. It may be in an invalid format"
+#, fuzzy
+#| msgid "The file could not be loaded. It may be in an invalid format"
+msgid "The file could not be loaded. It may be in an invalid format."
 msgstr ""
 "Lo fichièr a pas pogut èsser cargat. Es possible que son format siá pas "
 "valid."
@@ -1402,15 +1378,16 @@ msgid "_Signer:"
 msgstr "Si_gnatari :"
 
 #: pgp/seahorse-gpgme-sign-dialog.ui:335
+#: pgp/seahorse-pgp-uid-list-box-row.ui:11
 msgid "_Sign"
 msgstr "_Signar"
 
-#: pgp/seahorse-gpgme-subkey.c:91
+#: pgp/seahorse-gpgme-subkey.c:84
 msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Desconeguda"
 
-#: pgp/seahorse-gpgme-subkey.c:93
+#: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -1585,358 +1562,206 @@ msgstr ""
 msgid "Resolving server address: %s"
 msgstr "Resolucion de l'adreça del servidor : %s"
 
-#: pgp/seahorse-pgp-backend.c:188
+#: pgp/seahorse-pgp-backend.c:198
 msgid "PGP Keys"
 msgstr "Claus PGP"
 
-#: pgp/seahorse-pgp-backend.c:194
+#: pgp/seahorse-pgp-backend.c:204
 msgid "PGP keys are for encrypting email or files"
 msgstr "Las claus PGP servisson al chiframent dels corrièls o dels fichièrs"
 
-#: pgp/seahorse-pgp-key.c:186
+#: pgp/seahorse-pgp-key.c:187
 #, c-format
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: pgp/seahorse-pgp-key.c:608
+#: pgp/seahorse-pgp-key.c:625
 msgid "Personal PGP key"
 msgstr "Clau PGP personala"
 
-#: pgp/seahorse-pgp-key.c:610
+#: pgp/seahorse-pgp-key.c:627
 msgid "PGP key"
 msgstr "Clau PGP"
 
-#: pgp/seahorse-pgp-key-properties.c:250
-#, fuzzy
-#| msgid "Couldn't change primary user ID"
-msgid "Couldn’t change primary user ID"
-msgstr "Impossible de modificar l'identificant d'utilizaire primari"
-
-#: pgp/seahorse-pgp-key-properties.c:285
-#, fuzzy, c-format
-#| msgid "Are you sure you want to permanently delete the '%s' user ID?"
-msgid "Are you sure you want to permanently delete the “%s” user ID?"
-msgstr ""
-"Sètz segur que volètz suprimir definitivament l'identificant d'utilizaire "
-"%s ?"
-
-#: pgp/seahorse-pgp-key-properties.c:294
-#, fuzzy
-#| msgid "Couldn't delete user ID"
-msgid "Couldn’t delete user ID"
-msgstr "Impossible de suprimir l'identificant d'utilizaire"
-
-#. TRANSLATORS: [Unknown] signature name
-#: pgp/seahorse-pgp-key-properties.c:370 pgp/seahorse-pgp-key-properties.c:1464
-msgid "[Unknown]"
-msgstr "[Desconegut]"
-
-#. TRANSLATORS: The name and email set on the PGP key
-#: pgp/seahorse-pgp-key-properties.c:468 pgp/seahorse-pgp-key-properties.c:1682
-msgid "Name/Email"
-msgstr "Nom/adreça electronica"
-
-#: pgp/seahorse-pgp-key-properties.c:475
-msgid "Signature ID"
-msgstr "Identificant de signatura"
-
-#: pgp/seahorse-pgp-key-properties.c:581
+#: pgp/seahorse-pgp-key-properties.c:218
 #, fuzzy
 #| msgid "Couldn't change primary photo"
 msgid "Couldn’t change primary photo"
 msgstr "Impossible de modificar la fòto principala"
 
-#: pgp/seahorse-pgp-key-properties.c:768
+#: pgp/seahorse-pgp-key-properties.c:385
 #, fuzzy
 #| msgid "Wrong password"
 msgid "Error changing password"
 msgstr "Marrit senhal"
 
-#. TRANSLATORS: (unknown) expiry date
-#: pgp/seahorse-pgp-key-properties.c:815
-msgid "(unknown)"
-msgstr "(desconegut)"
-
-#: pgp/seahorse-pgp-key-properties.c:820
-#, c-format
-msgid "This key expired on: %s"
-msgstr "Aquesta clau a expirat lo : %s"
-
 #. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:846
-#, fuzzy, c-format
-#| msgid "Public SSH keys"
-msgid "%s — Public key"
-msgstr "Clau SSH publica"
-
-#. Translators: the 1st part of the title is the owner's name
-#: pgp/seahorse-pgp-key-properties.c:849
+#: pgp/seahorse-pgp-key-properties.c:430
 #, fuzzy, c-format
 #| msgid "Private key"
 msgid "%s — Private key"
 msgstr "Clau privada"
 
-#: pgp/seahorse-pgp-key-properties.c:1036
-#, c-format
-msgid "Are you sure you want to permanently delete subkey %d of %s?"
-msgstr "Sètz segur que volètz suprimir definitivament la sosclau %d de %s ?"
+#. Translators: the 1st part of the title is the owner's name
+#: pgp/seahorse-pgp-key-properties.c:434
+#, fuzzy, c-format
+#| msgid "Public SSH keys"
+msgid "%s — Public key"
+msgstr "Clau SSH publica"
 
-#: pgp/seahorse-pgp-key-properties.c:1044
-#, fuzzy
-#| msgid "Couldn't delete subkey"
-msgid "Couldn’t delete subkey"
-msgstr "Impossible de suprimir la sosclau"
+#. TRANSLATORS: (unknown) expiry date
+#: pgp/seahorse-pgp-key-properties.c:467
+msgid "(unknown)"
+msgstr "(desconegut)"
 
-#: pgp/seahorse-pgp-key-properties.c:1114
-#: pgp/seahorse-pgp-key-properties.c:1438
+#: pgp/seahorse-pgp-key-properties.c:472
+#, fuzzy, c-format
+#| msgid "This key expired on: %s"
+msgid "This key expired on %s"
+msgstr "Aquesta clau a expirat lo : %s"
+
+#: pgp/seahorse-pgp-key-properties.c:522
+msgctxt "Expires"
+msgid "Never"
+msgstr "Pas jamai"
+
+#: pgp/seahorse-pgp-key-properties.c:606 pgp/seahorse-pgp-key-properties.c:781
 msgid "Unable to change trust"
 msgstr "Impossible de modificar la fisança"
 
-#: pgp/seahorse-pgp-key-properties.c:1126 ssh/key-properties.vala:191
+#: pgp/seahorse-pgp-key-properties.c:618 ssh/key-properties.vala:191
 #, fuzzy
 #| msgid "Couldn't export key"
 msgid "Couldn’t export key"
 msgstr "Impossible d'exportar la clau"
 
-#: pgp/seahorse-pgp-key-properties.c:1284
-#: pgp/seahorse-pgp-key-properties.c:1372
-msgctxt "Expires"
-msgid "Never"
-msgstr "Pas jamai"
-
-#: pgp/seahorse-pgp-key-properties.c:1326
-msgid "ID"
-msgstr "Identificant"
-
-#: pgp/seahorse-pgp-key-properties.c:1332
-msgid "Usage"
+#: pgp/seahorse-pgp-key-properties.c:997
+#, c-format
+msgid "I believe “%s” is the owner of this key"
 msgstr ""
 
-#: pgp/seahorse-pgp-key-properties.c:1335
-msgid "Created"
-msgstr "Creada"
-
-#: pgp/seahorse-pgp-key-properties.c:1338
-msgid "Expires"
-msgstr "Expira"
-
-#: pgp/seahorse-pgp-key-properties.c:1341
-msgid "Status"
-msgstr "Estat"
-
-#: pgp/seahorse-pgp-key-properties.c:1344
-msgid "Strength"
-msgstr "Fòrça"
-
-#: pgp/seahorse-pgp-key-properties.c:1363
-msgid "Revoked"
-msgstr "Revocada"
-
-#: pgp/seahorse-pgp-key-properties.c:1365
-msgid "Expired"
-msgstr "Expirada"
-
-#: pgp/seahorse-pgp-key-properties.c:1367
-msgid "Disabled"
-msgstr "Desactivat"
-
-#: pgp/seahorse-pgp-key-properties.c:1369
-msgid "Good"
-msgstr "Bona"
-
-#: pgp/seahorse-pgp-key-properties.c:1685
-#: pgp/seahorse-pgp-private-key-properties.ui:345
-#: pgp/seahorse-pgp-public-key-properties.ui:274
-msgid "Key ID"
-msgstr "Identificant de la clau"
-
-#: pgp/seahorse-pgp-key-properties.c:1828
-#, fuzzy, c-format
-#| msgid "I trust signatures from '%s' on other keys"
-msgid "I trust signatures from “%s” on other keys"
-msgstr "Me fisi de las signaturas de « %s » sus d'autras claus"
-
-#: pgp/seahorse-pgp-key-properties.c:1835
-#, fuzzy, c-format
-#| msgid ""
-#| "If you believe that the person that owns this key is '%s', <i>sign</i> "
-#| "this key:"
-msgid ""
-"If you believe that the person that owns this key is “%s”, <i>sign</i> this "
-"key:"
-msgstr ""
-"Se cresètz que la persona proprietari d'aquesta clau es « %s », <i>signatz</"
-"i> aquesta clau :"
-
-#: pgp/seahorse-pgp-key-properties.c:1842
+#: pgp/seahorse-pgp-key-properties.c:1002
 #, fuzzy, c-format
 #| msgid ""
 #| "If you no longer trust that '%s' owns this key, <i>revoke</i> your "
 #| "signature:"
-msgid ""
-"If you no longer trust that “%s” owns this key, <i>revoke</i> your signature:"
+msgid "I no longer trust that “%s” owns this key"
 msgstr ""
 "Se cresètz pas pus que « %s » es proprietari d'aquesta clau, <i>revocatz</i> "
 "vòstra signatura :"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
 #, fuzzy
-#| msgid "_Export Secret Key:"
-msgid "Export _secret key"
-msgstr "E_xportar la clau secreta :"
+#| msgid "Change _Passphrase"
+msgid "Change _passphrase"
+msgstr "Cambiar la _frasa secreta"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:34
+#: pgp/seahorse-pgp-private-key-properties.ui:36
 #, fuzzy
 #| msgid "E_xport Complete Key"
 msgid "Export _public key"
 msgstr "E_xportar la clau completa"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:68
-#: pgp/seahorse-pgp-public-key-properties.ui:61
-msgid "This key has been revoked"
-msgstr "La clau es estada revocada"
+#: pgp/seahorse-pgp-private-key-properties.ui:40
+#, fuzzy
+#| msgid "_Export Secret Key:"
+msgid "Export _secret key"
+msgstr "E_xportar la clau secreta :"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:78
-#: pgp/seahorse-pgp-public-key-properties.ui:73
-msgid "The owner of the key revoked the key. It can no longer be used."
+#: pgp/seahorse-pgp-private-key-properties.ui:60
+#: pgp/seahorse-pgp-public-key-properties.ui:42
+#, fuzzy
+#| msgid "The owner of the key revoked the key. It can no longer be used."
+msgid "The owner of the key revoked the key. It should no longer be used."
 msgstr "Lo proprietari de la clau l'a revocada. Pòt pas pus èsser utilizada."
 
-#: pgp/seahorse-pgp-private-key-properties.ui:106
-#: pgp/seahorse-pgp-public-key-properties.ui:104
-msgid "This key has expired"
-msgstr "Aquesta clau a expirat"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:171
+#: pgp/seahorse-pgp-private-key-properties.ui:140
 msgid "Add a photo to this key"
 msgstr "Apondre una fotografia a aquesta clau"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:190
+#: pgp/seahorse-pgp-private-key-properties.ui:155
 msgid "Remove this photo from this key"
 msgstr "Levar aquesta fòto d'aquesta clau"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:209
+#: pgp/seahorse-pgp-private-key-properties.ui:170
 msgid "Make this photo the primary photo"
 msgstr "Far d'aquesta fòto la principala"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:234
+#: pgp/seahorse-pgp-private-key-properties.ui:191
+#: pgp/seahorse-pgp-public-key-properties.ui:125
 msgid "Go to previous photo"
 msgstr "Anar a la fotografia precedenta"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:253
+#: pgp/seahorse-pgp-private-key-properties.ui:206
+#: pgp/seahorse-pgp-public-key-properties.ui:146
 msgid "Go to next photo"
 msgstr "Anar a la fotografia seguenta"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:318
-#: pgp/seahorse-pgp-public-key-properties.ui:246
+#: pgp/seahorse-pgp-private-key-properties.ui:262
+#: pgp/seahorse-pgp-public-key-properties.ui:210
 msgid "Comment"
 msgstr "Comentari"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:375
-#: ssh/seahorse-ssh-key-properties.ui:346
-msgid "Change _Passphrase"
-msgstr "Cambiar la _frasa secreta"
+#: pgp/seahorse-pgp-private-key-properties.ui:289
+#: pgp/seahorse-pgp-public-key-properties.ui:238
+msgid "Key ID"
+msgstr "Identificant de la clau"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:391
-#: pgp/seahorse-pgp-public-key-properties.ui:347
-msgid "Owner"
-msgstr "Proprietari"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:404
-msgid "Key Names and Signatures"
-msgstr "Noms e signaturas de la clau"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:442
-msgid "Primary"
-msgstr "Principala"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:472 pgp/seahorse-pgp-subkey.c:168
-msgid "Sign"
-msgstr "Signar"
-
-#. Translators: This text refers to deleting an item from its type's backing store
-#: pgp/seahorse-pgp-private-key-properties.ui:502
-#: pkcs11/seahorse-pkcs11-properties.ui:22
-#: src/seahorse-key-manager-widgets.ui:18
-msgid "Delete"
-msgstr "Levar"
-
-#. Add another name to the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:532
-msgid "_Add Name"
-msgstr "_Apondre un nom"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:562
-#: pgp/seahorse-pgp-private-key-properties.ui:1020
-msgid "Revoke"
-msgstr "Revocar"
-
-#. List of names and signatures on the PGP key.
-#: pgp/seahorse-pgp-private-key-properties.ui:598
-msgid "Names and Signatures"
-msgstr "Noms e signaturas"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:635
-#: pgp/seahorse-pgp-public-key-properties.ui:623
-msgid "Key ID:"
-msgstr "Identificant de la clau :"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:660
-#: pgp/seahorse-pgp-public-key-properties.ui:649
-msgid "Type:"
-msgstr "Tipe :"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:685
-#: pgp/seahorse-pgp-public-key-properties.ui:675
-msgid "Strength:"
-msgstr "Fòrça :"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:710
-msgid "Technical Details"
-msgstr "Detalhs tecnics"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:738
-#: ssh/seahorse-ssh-key-properties.ui:173
+#: pgp/seahorse-pgp-private-key-properties.ui:316
+#: pgp/seahorse-pgp-public-key-properties.ui:266
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:71
+#: ssh/seahorse-ssh-key-properties.ui:197
 msgid "Fingerprint"
 msgstr "Emprenta"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:770
-#: pgp/seahorse-pgp-public-key-properties.ui:769
-msgid "Created:"
-msgstr "Creat lo :"
+#: pgp/seahorse-pgp-private-key-properties.ui:347
+#: pgp/seahorse-pgp-public-key-properties.ui:299
+msgid "Expires"
+msgstr "Expira"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:794
-#: pgp/seahorse-pgp-public-key-properties.ui:794
-msgid "Expires:"
-msgstr "Expira lo :"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:840
-msgid "Dates"
-msgstr "Datas"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:863
-msgid "Override Owner _Trust:"
-msgstr "Remplaçar la _fisança del proprietari :"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:890
+#: pgp/seahorse-pgp-private-key-properties.ui:408
+#: pgp/seahorse-pgp-public-key-properties.ui:334
 #, fuzzy
-#| msgid "Export to a file"
-msgid "_Export to file"
-msgstr "Expòrta dins un fichièr"
+#| msgid "Add User ID"
+msgid "User IDs"
+msgstr "Apondre un identificant utilizaire"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:906
-msgid "Actions"
-msgstr "Accions"
+#: pgp/seahorse-pgp-private-key-properties.ui:421
+#, fuzzy
+#| msgid "Add User ID"
+msgid "Add user ID"
+msgstr "Apondre un identificant utilizaire"
 
-#: pgp/seahorse-pgp-private-key-properties.ui:990
-msgid "Expire"
-msgstr "Expiracion"
-
-#: pgp/seahorse-pgp-private-key-properties.ui:1064
-#: pgp/seahorse-pgp-public-key-properties.ui:899
-msgid "_Subkeys"
+#: pgp/seahorse-pgp-private-key-properties.ui:445
+#: pgp/seahorse-pgp-public-key-properties.ui:356
+#, fuzzy
+#| msgid "_Subkeys"
+msgid "Subkeys"
 msgstr "_Sosclaus"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:458
+#, fuzzy
+#| msgid "Add subkey to %s"
+msgid "_Add subkey"
+msgstr "Apondre una sosclau a %s"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:476
+#: pgp/seahorse-pgp-public-key-properties.ui:384
+msgid "Trust"
+msgstr "Far fisança"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:477
+#: pgp/seahorse-pgp-public-key-properties.ui:385
+msgid "Your trust of this key"
+msgstr "Vòstra fisança dins aquesta clau"
+
+#: pgp/seahorse-pgp-private-key-properties.ui:493
+#, fuzzy
+#| msgid "Override Owner _Trust:"
+msgid "Override owner trust"
+msgstr "Remplaçar la _fisança del proprietari :"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:17
 msgctxt "Validity"
@@ -1953,84 +1778,226 @@ msgctxt "Validity"
 msgid "Ultimately"
 msgstr "Ultima"
 
-#. Names set on the PGP key.
-#: pgp/seahorse-pgp-public-key-properties.ui:326
-msgid "_Other Names:"
-msgstr "Autres _noms :"
+#: pgp/seahorse-pgp-public-key-properties.ui:401
+#, fuzzy
+#| msgid "Signature ID"
+msgid "Signature trust"
+msgstr "Identificant de signatura"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:369
-msgid "Your trust of this key"
-msgstr "Vòstra fisança dins aquesta clau"
+#: pgp/seahorse-pgp-public-key-properties.ui:402
+#, fuzzy
+#| msgid "I trust signatures from '%s' on other keys"
+msgid "I trust signatures from this key on other keys"
+msgstr "Me fisi de las signaturas de « %s » sus d'autras claus"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:382
-msgid "Your trust is manually specified on the <i>Details</i> tab."
-msgstr ""
-"Vòstre gra de fisança es indicat manualament dins l'onglet <i>Detalhs</i>."
+#: pgp/seahorse-pgp-public-key-properties.ui:418
+msgid "Sign key"
+msgstr "Signar la clau"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:455
-msgid "_Sign this Key"
+#: pgp/seahorse-pgp-public-key-properties.ui:425
+msgid "_Sign key"
 msgstr "_Signar la clau"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:504
-msgid "_Revoke Signature"
+#: pgp/seahorse-pgp-public-key-properties.ui:436
+#, fuzzy
+#| msgid "_Revoke Signature"
+msgid "Revoke key signature"
 msgstr "_Revocar la signatura"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:526
-msgid "_People who have signed this key:"
-msgstr "_Personas signatàrias d'aquesta clau :"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:551
-msgid "_Only display the signatures of people I trust"
-msgstr "Afichar _unicament las signaturas de las personas de fisança"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:570
-msgid "Trust"
-msgstr "Far fisança"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:604
-msgid "Technical Details:"
-msgstr "Detalhs tecnics :"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:710
-msgid "Fingerprint:"
-msgstr "Emprenta :"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:750
-msgid "Dates:"
-msgstr "Datas :"
-
-#: pgp/seahorse-pgp-public-key-properties.ui:828
+#: pgp/seahorse-pgp-public-key-properties.ui:443
 #, fuzzy
-#| msgid "Indicate Trust:"
-msgid "Indicate trust:"
-msgstr "Indicacion de fisança :"
+#| msgid "Revoke"
+msgid "_Revoke"
+msgstr "Revocar"
 
-#: pgp/seahorse-pgp-public-key-properties.ui:845
+#: pgp/seahorse-pgp-public-key-properties.ui:454
 #, fuzzy
-#| msgid "You _Trust the Owner:"
-msgid "You _trust the owner:"
-msgstr "Vòstra _fisança dins lo proprietari :"
+#| msgid "Owner"
+msgid "Owner trust"
+msgstr "Proprietari"
 
-#: pgp/seahorse-pgp-subkey.c:167
+#: pgp/seahorse-pgp-public-key-properties.ui:455
+msgid "Give a trust level to the owner of this key"
+msgstr ""
+
+#: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
 msgstr "Chiframent"
 
-#: pgp/seahorse-pgp-subkey.c:169
+#: pgp/seahorse-pgp-subkey.c:212
+msgid "This subkey can be used for encryption"
+msgstr ""
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "Sign"
+msgstr "Signar"
+
+#: pgp/seahorse-pgp-subkey.c:213
+msgid "This subkey can be used to create data signatures"
+msgstr ""
+
+#: pgp/seahorse-pgp-subkey.c:214
 msgid "Certify"
 msgstr "Certificacion"
 
-#: pgp/seahorse-pgp-subkey.c:170
+#: pgp/seahorse-pgp-subkey.c:214
+msgid "This subkey can be used to create certificates"
+msgstr ""
+
+#: pgp/seahorse-pgp-subkey.c:215
 msgid "Authenticate"
 msgstr "Autentificacion"
 
-#: pgp/seahorse-pgp-subkey.c:363
+#: pgp/seahorse-pgp-subkey.c:215
+msgid "This subkey can be used for authentication"
+msgstr ""
+
+#: pgp/seahorse-pgp-subkey.c:409
 msgid "Key"
 msgstr "Clau"
 
-#: pgp/seahorse-pgp-subkey.c:368
+#: pgp/seahorse-pgp-subkey.c:414
 #, c-format
 msgid "Subkey %d of %s"
 msgstr "Sosclau %d de %s"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:203
+#, fuzzy, c-format
+#| msgid "Are you sure you want to permanently delete subkey %d of %s?"
+msgid "Are you sure you want to permanently delete subkey %s?"
+msgstr "Sètz segur que volètz suprimir definitivament la sosclau %d de %s ?"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:210
+#, fuzzy
+#| msgid "Couldn't delete subkey"
+msgid "Couldn’t delete subkey"
+msgstr "Impossible de suprimir la sosclau"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:263
+#, fuzzy
+#| msgid "This key has been revoked"
+msgid "Subkey was revoked"
+msgstr "La clau es estada revocada"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:270
+#, fuzzy
+#| msgid "This key has expired"
+msgid "Subkey has expired"
+msgstr "Aquesta clau a expirat"
+
+#: pgp/seahorse-pgp-subkey-list-box.c:273
+msgid "Subkey is disabled"
+msgstr ""
+
+#: pgp/seahorse-pgp-subkey-list-box.c:283
+#, fuzzy
+#| msgid "_Never expires"
+msgid "Never expires"
+msgstr "Ex_pira pas jamai"
+
+#. Translators: first part is the algorithm, second part is the length,
+#. * e.g. "RSA" (2048 bit)
+#: pgp/seahorse-pgp-subkey-list-box.c:308
+#, c-format
+msgid "%s (%d bit)"
+msgstr ""
+
+#: pgp/seahorse-pgp-subkey-list-box.c:315
+msgid "Unknown"
+msgstr "Desconeguda"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:7
+#, fuzzy
+#| msgid "Expiration Date"
+msgid "Change expiration date"
+msgstr "Data d'expiracion"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:11
+#, fuzzy
+#| msgid "Revoke key"
+msgid "Revoke subkey"
+msgstr "Revocar la clau"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:15
+#, fuzzy
+#| msgid "Couldn't delete subkey"
+msgid "Delete subkey"
+msgstr "Impossible de suprimir la sosclau"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:46
+msgid "Usages"
+msgstr "Utilizacions"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:120
+msgid "Created"
+msgstr "Creada"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:149
+#, fuzzy
+#| msgid "Couldn't change expiry date"
+msgid "Change expiry date"
+msgstr "Impossible de modificar la data d'expiracion"
+
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:156
+msgid "Revoke"
+msgstr "Revocar"
+
+#. Translators: This text refers to deleting an item from its type's backing store
+#: pgp/seahorse-pgp-subkey-list-box-row.ui:163
+#: pkcs11/seahorse-pkcs11-properties.ui:22
+#: src/seahorse-key-manager-widgets.ui:18
+msgid "Delete"
+msgstr "Levar"
+
+#: pgp/seahorse-pgp-uid-list-box.c:260
+#, fuzzy, c-format
+#| msgid "Are you sure you want to permanently delete the '%s' user ID?"
+msgid "Are you sure you want to permanently delete the “%s” user ID?"
+msgstr ""
+"Sètz segur que volètz suprimir definitivament l'identificant d'utilizaire "
+"%s ?"
+
+#: pgp/seahorse-pgp-uid-list-box.c:268
+#, fuzzy
+#| msgid "Couldn't delete user ID"
+msgid "Couldn’t delete user ID"
+msgstr "Impossible de suprimir l'identificant d'utilizaire"
+
+#: pgp/seahorse-pgp-uid-list-box.c:280
+#, fuzzy
+#| msgid "Couldn't change primary user ID"
+msgid "Couldn’t change primary user ID"
+msgstr "Impossible de modificar l'identificant d'utilizaire primari"
+
+#. Translators: (Unknown) signature name
+#: pgp/seahorse-pgp-uid-list-box.c:372
+msgid "(Unknown)"
+msgstr "(Desconegut)"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:7
+#, fuzzy
+#| msgid "Primary"
+msgid "Make _primary"
+msgstr "Principala"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:64
+msgid "Signatures"
+msgstr "Signaturas"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:77
+#: pgp/seahorse-pgp-uid-list-box-row.ui:88
+#, fuzzy
+#| msgid "_Only display the signatures of people I trust"
+msgid "Only display the signatures of people I trust"
+msgstr "Afichar _unicament las signaturas de las personas de fisança"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:87
+msgid "Only trusted"
+msgstr "Sonque de fisança"
+
+#: pgp/seahorse-pgp-uid-list-box-row.ui:106
+msgid "No signatures available"
+msgstr ""
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2102,8 +2069,6 @@ msgid "Failed to export certificate"
 msgstr "L'exportacion del certificat a fracassat"
 
 #: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
-#, fuzzy
-#| msgid "Couldn't delete"
 msgid "Couldn’t delete"
 msgstr "Supression impossibla"
 
@@ -2183,8 +2148,6 @@ msgid "Export the certificate"
 msgstr "Expòrta lo certificat"
 
 #: pkcs11/seahorse-pkcs11-properties.ui:41
-#, fuzzy
-#| msgid "Request _Certificate"
 msgid "Request Certificate"
 msgstr "Demandar lo _certificat"
 
@@ -2308,10 +2271,8 @@ msgid "_About Passwords and Keys"
 msgstr "Senhals e claus"
 
 #: src/seahorse-key-manager.ui:40
-#, fuzzy
-#| msgid "Filter"
 msgid "Filter items:"
-msgstr "Filtrar"
+msgstr "Filtrar los elements :"
 
 #: src/seahorse-key-manager.ui:42
 #, fuzzy
@@ -2375,10 +2336,8 @@ msgid "Used to request a certificate"
 msgstr "Utilizat per far una demanda de certificat"
 
 #: src/seahorse-key-manager.ui:260
-#, fuzzy
-#| msgid "Import from a file"
 msgid "Import from file…"
-msgstr "Importar dempuèi un fichièr"
+msgstr "Importar d’un fichièr…"
 
 #: src/seahorse-key-manager.ui:297
 msgid "Add a new key or item"
@@ -2446,8 +2405,6 @@ msgid "_Properties"
 msgstr "_Proprietats"
 
 #: src/sidebar.vala:432
-#, fuzzy
-#| msgid "Couldn't lock"
 msgid "Couldn’t lock"
 msgstr "Impossible de verrolhar"
 
@@ -2520,11 +2477,8 @@ msgid "Unknown key type!"
 msgstr "Tipe de clau desconegut !"
 
 #: ssh/key-properties.vala:80
-#, fuzzy
-#| msgctxt "Validity"
-#| msgid "Unknown"
 msgid "Unknown type"
-msgstr "Desconeguda"
+msgstr "Tipe desconegut"
 
 #: ssh/key-properties.vala:105
 #, fuzzy
@@ -2664,59 +2618,57 @@ msgstr "Crear _solament"
 msgid "_Create and Set Up"
 msgstr "_Crear e configurar"
 
-#: ssh/seahorse-ssh-key-properties.ui:15
-#, fuzzy
-#| msgid "Key Properties"
+#: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
-msgstr "Proprietats de la tòca"
+msgstr "Proprietats de la clau SSH"
 
 #. Name of key, often a persons name
-#: ssh/seahorse-ssh-key-properties.ui:54
-#, fuzzy
-#| msgid "Name"
+#: ssh/seahorse-ssh-key-properties.ui:64
 msgctxt "name-of-ssh-key"
 msgid "Name"
 msgstr "Nom"
 
-#: ssh/seahorse-ssh-key-properties.ui:87
+#: ssh/seahorse-ssh-key-properties.ui:98
 msgid "Algorithm"
 msgstr "Algoritme"
 
-#: ssh/seahorse-ssh-key-properties.ui:114
-#, fuzzy
-#| msgid "Key _Length:"
+#: ssh/seahorse-ssh-key-properties.ui:131
 msgid "Key Length"
-msgstr "_Longor de la clau :"
+msgstr "Longor de la clau"
 
-#: ssh/seahorse-ssh-key-properties.ui:141
+#: ssh/seahorse-ssh-key-properties.ui:163
 msgid "Location"
 msgstr "Emplaçament"
 
-#: ssh/seahorse-ssh-key-properties.ui:228
+#: ssh/seahorse-ssh-key-properties.ui:230
 msgid "Public Key"
 msgstr "Clau publica"
 
-#: ssh/seahorse-ssh-key-properties.ui:243
+#: ssh/seahorse-ssh-key-properties.ui:237
 #, fuzzy
 #| msgid "Copy to the clipboard"
 msgid "Copy public key to clipboard"
 msgstr "Còpia cap al quichapapièrs"
 
-#: ssh/seahorse-ssh-key-properties.ui:272
+#: ssh/seahorse-ssh-key-properties.ui:276
 #, fuzzy
 #| msgid "Remote Keys"
-msgid "Remote Access"
+msgid "Remote access"
 msgstr "Claus distantas"
 
-#: ssh/seahorse-ssh-key-properties.ui:285
+#: ssh/seahorse-ssh-key-properties.ui:277
 msgid "Allows accessing this computer remotely"
 msgstr ""
 
-#: ssh/seahorse-ssh-key-properties.ui:332
+#: ssh/seahorse-ssh-key-properties.ui:299
 msgid "_Export"
 msgstr "_Exportar"
 
-#: ssh/seahorse-ssh-key-properties.ui:362
+#: ssh/seahorse-ssh-key-properties.ui:313
+msgid "Change _Passphrase"
+msgstr "Cambiar la _frasa secreta"
+
+#: ssh/seahorse-ssh-key-properties.ui:328
 #, fuzzy
 #| msgid "Secret SSH keys"
 msgid "_Delete SSH Key"
@@ -2748,10 +2700,8 @@ msgid "_Login name:"
 msgstr "Identificant de _connexion :"
 
 #: ssh/seahorse-ssh-upload.ui:129
-#, fuzzy
-#| msgid "_Set Up"
 msgid "Set Up"
-msgstr "_Configurar"
+msgstr "Configurar"
 
 #: ssh/source.vala:46
 msgid "OpenSSH keys"
@@ -2783,6 +2733,117 @@ msgstr ""
 #| msgid "Configuring Secure Shell Keys..."
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configuracion de claus de shell securizat..."
+
+#~ msgid "[Unknown]"
+#~ msgstr "[Desconegut]"
+
+#~ msgid "Name/Email"
+#~ msgstr "Nom/adreça electronica"
+
+#~ msgid "ID"
+#~ msgstr "Identificant"
+
+#~ msgid "Status"
+#~ msgstr "Estat"
+
+#~ msgid "Strength"
+#~ msgstr "Fòrça"
+
+#~ msgid "Revoked"
+#~ msgstr "Revocada"
+
+#~ msgid "Expired"
+#~ msgstr "Expirada"
+
+#~ msgid "Disabled"
+#~ msgstr "Desactivat"
+
+#~ msgid "Good"
+#~ msgstr "Bona"
+
+#, fuzzy
+#~| msgid ""
+#~| "If you believe that the person that owns this key is '%s', <i>sign</i> "
+#~| "this key:"
+#~ msgid ""
+#~ "If you believe that the person that owns this key is “%s”, <i>sign</i> "
+#~ "this key:"
+#~ msgstr ""
+#~ "Se cresètz que la persona proprietari d'aquesta clau es « %s », "
+#~ "<i>signatz</i> aquesta clau :"
+
+#~ msgid "Key Names and Signatures"
+#~ msgstr "Noms e signaturas de la clau"
+
+#~ msgid "_Add Name"
+#~ msgstr "_Apondre un nom"
+
+#~ msgid "Names and Signatures"
+#~ msgstr "Noms e signaturas"
+
+#~ msgid "Key ID:"
+#~ msgstr "Identificant de la clau :"
+
+#~ msgid "Type:"
+#~ msgstr "Tipe :"
+
+#~ msgid "Strength:"
+#~ msgstr "Fòrça :"
+
+#~ msgid "Technical Details"
+#~ msgstr "Detalhs tecnics"
+
+#~ msgid "Created:"
+#~ msgstr "Creat lo :"
+
+#~ msgid "Expires:"
+#~ msgstr "Expira lo :"
+
+#~ msgid "Dates"
+#~ msgstr "Datas"
+
+#, fuzzy
+#~| msgid "Export to a file"
+#~ msgid "_Export to file"
+#~ msgstr "Expòrta dins un fichièr"
+
+#~ msgid "Actions"
+#~ msgstr "Accions"
+
+#~ msgid "Expire"
+#~ msgstr "Expiracion"
+
+#~ msgid "_Other Names:"
+#~ msgstr "Autres _noms :"
+
+#~ msgid "Your trust is manually specified on the <i>Details</i> tab."
+#~ msgstr ""
+#~ "Vòstre gra de fisança es indicat manualament dins l'onglet <i>Detalhs</i>."
+
+#~ msgid "_Sign this Key"
+#~ msgstr "_Signar la clau"
+
+#~ msgid "_People who have signed this key:"
+#~ msgstr "_Personas signatàrias d'aquesta clau :"
+
+#~ msgid "Technical Details:"
+#~ msgstr "Detalhs tecnics :"
+
+#~ msgid "Fingerprint:"
+#~ msgstr "Emprenta :"
+
+#~ msgid "Dates:"
+#~ msgstr "Datas :"
+
+#, fuzzy
+#~| msgid "Indicate Trust:"
+#~ msgid "Indicate trust:"
+#~ msgstr "Indicacion de fisança :"
+
+#, fuzzy
+#~| msgid "You _Trust the Owner:"
+#~ msgid "You _trust the owner:"
+#~ msgstr "Vòstra _fisança dins lo proprietari :"
 
 #~ msgid "Could not display help: %s"
 #~ msgstr "Impossible de visualizar l'ajuda : %s"
