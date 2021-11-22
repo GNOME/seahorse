@@ -200,9 +200,6 @@ public class Seahorse.Sidebar : Gtk.ListBox {
     }
 
     public override bool popup_menu() {
-        if (base.popup_menu())
-            return true;
-
         var row = get_selected_row() as SidebarItem;
         if (row == null)
             return false;
