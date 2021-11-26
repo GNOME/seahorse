@@ -14,15 +14,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-08-25 15:13+0200\n"
+"POT-Creation-Date: 2021-10-05 05:47+0000\n"
+"PO-Revision-Date: 2021-11-26 18:02+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 40.0\n"
+"X-Generator: Gtranslator 41.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: common/add-keyserver-dialog.vala:32
@@ -433,8 +433,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Altura de la ventana en píxeles"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Contraseñas y claves"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -442,28 +444,31 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Administre sus claves y contraseñas de cifrado"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
-msgstr "Seahorse es una aplicación de GNOME para gestionar claves de cifrado."
+#| msgid "Seahorse is a GNOME application for managing encryption keys."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
+msgstr ""
+"Contraseñas y claves es una aplicación de GNOME para gestionar claves de "
+"cifrado."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
+#| msgid ""
+#| "With seahorse you can create and manage PGP keys, create and manage SSH "
+#| "keys, publish and retrieve keys from key servers, cache your passphrase "
+#| "so you don’t have to keep typing it and backup your keys and keyring."
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"Con Seahorse puede crear y gestionar claves PGP y SSH, publicar y obtener "
-"claves de servidores de claves, almacenar en la caché su contraseña para no "
-"tener que escribirla y hacer una copia de seguridad de sus claves y de su "
-"anillo de claves."
+"Con v puede crear y gestionar claves PGP y SSH, publicar y obtener claves de "
+"servidores de claves, almacenar en la caché su contraseña para no tener que "
+"escribirla y hacer una copia de seguridad de sus claves y de su anillo de "
+"claves."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "El Proyecto GNOME"
-
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Contraseñas y claves"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
@@ -1501,7 +1506,6 @@ msgstr "(desconocido)"
 
 #: pgp/seahorse-pgp-key-properties.c:472
 #, c-format
-#| msgid "This key expired on: %s"
 msgid "This key expired on %s"
 msgstr "Esta clave caducó el %s"
 
@@ -1525,14 +1529,10 @@ msgstr "Puede que «%s» sea el propietario de esta clave."
 
 #: pgp/seahorse-pgp-key-properties.c:1002
 #, c-format
-#| msgid ""
-#| "If you no longer trust that “%s” owns this key, <i>revoke</i> your "
-#| "signature:"
 msgid "I no longer trust that “%s” owns this key"
 msgstr "Ya no se confía en que «%s» sea el propietario de esta clave"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
-#| msgid "Change _Passphrase"
 msgid "Change _passphrase"
 msgstr "Cambiar _frase de paso"
 
@@ -1546,7 +1546,6 @@ msgstr "Exportar clave _secreta"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:60
 #: pgp/seahorse-pgp-public-key-properties.ui:42
-#| msgid "The owner of the key revoked the key. It can no longer be used."
 msgid "The owner of the key revoked the key. It should no longer be used."
 msgstr "El propietario de la clave la ha revocado. No se puede usar más."
 
@@ -1596,12 +1595,10 @@ msgstr "Caduca"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:408
 #: pgp/seahorse-pgp-public-key-properties.ui:334
-#| msgid "Add User ID"
 msgid "User IDs"
 msgstr "ID de usuario"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:421
-#| msgid "Add User ID"
 msgid "Add user ID"
 msgstr "Añadir ID de usuario"
 
@@ -1625,7 +1622,6 @@ msgid "Your trust of this key"
 msgstr "Su confianza en esta clave"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:493
-#| msgid "Override Owner _Trust:"
 msgid "Override owner trust"
 msgstr "Omitir confianza del propietario"
 
@@ -1645,37 +1641,30 @@ msgid "Ultimately"
 msgstr "Últimamente"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:401
-#| msgid "Signature ID"
 msgid "Signature trust"
 msgstr "Confianza de la firma"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:402
-#| msgid "I trust signatures from “%s” on other keys"
 msgid "I trust signatures from this key on other keys"
 msgstr "Se confía en las firmas de esta y otras claves"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:418
-#| msgid "Sign Key"
 msgid "Sign key"
 msgstr "Firmar clave"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:425
-#| msgid "Sign Key"
 msgid "_Sign key"
 msgstr "_Firmar clave"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:436
-#| msgid "_Revoke Signature"
 msgid "Revoke key signature"
 msgstr "_Revocar firma de clave"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:443
-#| msgid "Revoke"
 msgid "_Revoke"
 msgstr "_Revocar"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:454
-#| msgid "Owner"
 msgid "Owner trust"
 msgstr "Confianza del propietario"
 
@@ -1811,28 +1800,23 @@ msgstr "No se puede cambiar el ID de usuario primario"
 
 #. Translators: (Unknown) signature name
 #: pgp/seahorse-pgp-uid-list-box.c:372
-#| msgid "(unknown)"
 msgid "(Unknown)"
 msgstr "(Desconocido)"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:7
-#| msgid "Primary"
 msgid "Make _primary"
 msgstr "_Primaria"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:64
-#| msgid "Signature ID"
 msgid "Signatures"
 msgstr "Firmas"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:77
 #: pgp/seahorse-pgp-uid-list-box-row.ui:88
-#| msgid "_Only display the signatures of people I trust"
 msgid "Only display the signatures of people I trust"
 msgstr "Mostrar sólo las firmas de personas en quienes confío"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:87
-#| msgid "Show _trusted"
 msgid "Only trusted"
 msgstr "Sólo de confianza"
 
@@ -2509,6 +2493,9 @@ msgstr ""
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configurando las claves de shell seguras…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
 
 #~ msgid "[Unknown]"
 #~ msgstr "[Desconocido]"
