@@ -155,10 +155,10 @@ public class GkrNetworkPassInfo : ItemInfo {
             return;
 
         /* If it's customized by the application or user then display that */
-        if (!is_custom_network_label (server, user, object, port, label))
-            this.label = calc_network_label (attrs, true);
-        else
+        if (is_custom_network_label (server, user, object, port, label))
             this.label = label;
+        else
+            this.label = calc_network_label (attrs, true);
 
         unowned string symbol = "@";
         if (user == null) {
