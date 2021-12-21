@@ -198,7 +198,7 @@ public class GkrNetworkPassInfo : ItemInfo {
         if (object != null)
             generated.append_printf ("/%s", object);
 
-        return (generated.str == label);
+        return (generated.str != label);
     }
 
     private string? calc_network_label(HashTable<string, string>? attrs,
