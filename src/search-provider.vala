@@ -183,7 +183,7 @@ public class Seahorse.SearchProvider : GLib.Object {
 
             string? description = get_description_if_available(object);
             if (description != null)
-                meta["description"] = Markup.escape_text(description);
+                meta["description"] = description;
 
             metas[good_results] = meta;
             good_results++;
