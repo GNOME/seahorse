@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-08-26 13:31+0700\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
+"POT-Creation-Date: 2021-10-05 05:47+0000\n"
+"PO-Revision-Date: 2021-12-24 14:06+0700\n"
+"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural= n!=1;\n"
-"X-Generator: Poedit 2.4.3\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.0\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -424,8 +424,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Tinggi (dalam piksel) dari jendela."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Kata Sandi dan Kunci"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -433,28 +435,25 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Kelola kata sandi dan kunci enkripsi Anda"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
-msgstr "Seahorse adalah aplikasi GNOME untuk mengelola kunci enkripsi."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
+msgstr ""
+"Kata Sandi dan Kunci adalah aplikasi GNOME untuk mengelola kunci enkripsi."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"Dengan seahorse Anda dapat membuat dan mengelola kunci PGP, membuat dan "
-"mengelola kunci SSH, menerbitkan dan mengambil kunci dari peladen kunci, "
-"menyinggahkan frasa sandi Anda sehingga Anda tak perlu setiap kali "
-"mengetikkannya, dan membuat cadangan kunci dan ring kunci Anda."
+"Dengan Kata Sandi dan Kunci Anda dapat membuat dan mengelola kunci PGP, "
+"membuat dan mengelola kunci SSH, menerbitkan dan mengambil kunci dari "
+"peladen kunci, menyinggahkan frasa sandi Anda sehingga Anda tak perlu setiap "
+"kali mengetikkannya, dan membuat cadangan kunci dan ring kunci Anda."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "Proyek GNOME"
-
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Kata Sandi dan Kunci"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
@@ -589,7 +588,6 @@ msgstr "Anda yakin ingin menghapus kata sandi \"%s\"?"
 msgid "Are you sure you want to delete %d password?"
 msgid_plural "Are you sure you want to delete %d passwords?"
 msgstr[0] "Anda yakin ingin menghapus %d kata sandi?"
-msgstr[1] "Anda yakin ingin menghapus %d kata sandi?"
 
 #: gkr/gkr-keyring-add.vala:52
 msgid "Couldn’t add keyring"
@@ -970,7 +968,6 @@ msgstr "Anda yakin ingin menghapus %s secara permanen?"
 msgid "Are you sure you want to permanently delete %d keys?"
 msgid_plural "Are you sure you want to permanently delete %d keys?"
 msgstr[0] "Anda yakin ingin menghapus %d kunci secara permanen?"
-msgstr[1] "Anda yakin ingin menghapus %d kunci secara permanen?"
 
 #: pgp/seahorse-gpgme-key-op.c:362
 msgid "Wrong password"
@@ -1013,7 +1010,6 @@ msgstr "Frasa Sandi"
 msgid "Loaded %d key"
 msgid_plural "Loaded %d keys"
 msgstr[0] "Termuat %d kunci"
-msgstr[1] "Termuat %d kunci"
 
 #: pgp/seahorse-gpgme-keyring.c:638
 msgid ""
@@ -1379,7 +1375,6 @@ msgstr "Tidak dapat mengambil kunci dari peladen: %s"
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
 msgstr[0] "<b>%d kunci dipilih untuk penyelarasan</b>"
-msgstr[1] "<b>%d kunci dipilih untuk penyelarasan</b>"
 
 #: pgp/seahorse-keyserver-sync.c:304
 msgid "Synchronizing keys…"
@@ -1456,7 +1451,6 @@ msgstr "Kunci PGP dipakai untuk mengenkripsi surel atau berkas"
 msgid "(and %d other)"
 msgid_plural "(and %d others)"
 msgstr[0] "(dan %d lainnya)"
-msgstr[1] "(dan %d lainnya)"
 
 #: pgp/seahorse-pgp-key.c:625
 msgid "Personal PGP key"
@@ -1851,7 +1845,6 @@ msgstr "Sertifikat pribadi"
 msgid "Are you sure you want to permanently delete %d certificate?"
 msgid_plural "Are you sure you want to permanently delete %d certificates?"
 msgstr[0] "Anda yakin ingin menghapus %d sertifikat secara permanen?"
-msgstr[1] "Anda yakin ingin menghapus %d sertifikat secara permanen?"
 
 #: pkcs11/pkcs11-generate.vala:229
 msgid "Couldn’t generate private key"
@@ -2197,7 +2190,6 @@ msgstr "Anda yakin ingin menghapus kunci secure shell \"%s\"?"
 msgid "Are you sure you want to delete %u secure shell key?"
 msgid_plural "Are you sure you want to delete %u secure shell keys?"
 msgstr[0] "Anda yakin ingin menghapus %u kunci secure shell?"
-msgstr[1] "Anda yakin ingin menghapus %u kunci secure shell?"
 
 #: ssh/exporter.vala:52
 msgid "Secret SSH keys"
@@ -2476,3 +2468,6 @@ msgstr "Tidak dapat menata kunci Secure Shell pada komputer jauh."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Mengkonfigurasi Kunci Secure Shell…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
