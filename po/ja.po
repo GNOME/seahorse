@@ -1,5 +1,5 @@
 # Seahorse ja.po.
-# Copyright (C) 1999-2013, 2015-2016, 2019-2020 seahorse's COPYRIGHT HOLDER
+# Copyright (C) 1999-2013, 2015-2016, 2019-2020, 2022 seahorse's COPYRIGHT HOLDER
 # Anthony Mulcahy <anthony@kcn.ne.jp>, 1999-2000.
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2000-2009.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2009-2011.
@@ -8,14 +8,14 @@
 # OKANO Takayoshi <kano@na.rim.or.jp>, 2012.
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2013, 2015, 2016.
 # Hajime Taira <htaira@redhat.com>, 2015, 2016.
-# sicklylife <translation@sicklylife.jp>, 2019-2020.
+# sicklylife <translation@sicklylife.jp>, 2019-2020, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
 "POT-Creation-Date: 2021-09-29 10:36+0000\n"
-"PO-Revision-Date: 2020-08-18 23:18+0900\n"
+"PO-Revision-Date: 2022-02-10 21:30+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -149,22 +149,16 @@ msgid "The port to access the server on."
 msgstr "サーバーにアクセスするときに使用するポート番号です。"
 
 #: common/seahorse-prefs-keyservers.ui:6 common/seahorse-prefs-keyservers.ui:10
-#, fuzzy
-#| msgid "Key Servers"
 msgid "Keyservers"
 msgstr "鍵サーバー"
 
 #: common/seahorse-prefs-keyservers.ui:40
-#, fuzzy
-#| msgid "Add Key Server"
 msgid "Add keyserver"
 msgstr "鍵サーバーを追加"
 
 #: common/seahorse-prefs-keyservers.ui:51
-#, fuzzy
-#| msgid "Synchronizing keys…"
 msgid "Key Synchronization"
-msgstr "鍵を同期中…"
+msgstr "鍵の同期"
 
 #: common/seahorse-prefs-keyservers.ui:61
 msgid "_Publish keys to:"
@@ -188,10 +182,8 @@ msgid "HTTP Key Server"
 msgstr "HTTP 鍵サーバー"
 
 #: common/server-category.vala:67
-#, fuzzy
-#| msgid "HTTP Key Server"
 msgid "HTTPS Key Server"
-msgstr "HTTP 鍵サーバー"
+msgstr "HTTPS 鍵サーバー"
 
 #: common/validity.vala:38 pgp/seahorse-pgp-private-key-properties.ui:11
 #: pgp/seahorse-pgp-public-key-properties.ui:11
@@ -1083,10 +1075,8 @@ msgid "Couldn’t add photo"
 msgstr "写真を追加できませんでした"
 
 #: pgp/seahorse-gpgme-photos.c:291
-#, fuzzy
-#| msgid "The file could not be loaded. It may be in an invalid format"
 msgid "The file could not be loaded. It may be in an invalid format."
-msgstr "ファイルを読み込めませんでした (無効なフォーマットの可能性があります)"
+msgstr "ファイルを読み込めませんでした。無効なフォーマットの可能性があります。"
 
 #: pgp/seahorse-gpgme-photos.c:317
 msgid "Are you sure you want to remove the current photo from your key?"
@@ -1260,9 +1250,10 @@ msgstr "この署名をどこまで公開するか:"
 msgid "_Others may not see this signature"
 msgstr "この署名を他人に公開しない(_O)"
 
+# 「この署名を他人に公開しない(_O)」の下に表示されるスイッチのラベル
 #: pgp/seahorse-gpgme-sign-dialog.ui:248
 msgid "I can _revoke this signature at a later date."
-msgstr "後日、この署名を失効させることができます。(_R)"
+msgstr "後日この署名を失効できるようにする(_R)"
 
 #: pgp/seahorse-gpgme-sign-dialog.ui:282
 msgid "Sign key as:"
@@ -1415,8 +1406,7 @@ msgid "Couldn’t communicate with %s: %s"
 msgstr "%s と通信できませんでした: %s"
 
 #: pgp/seahorse-ldap-source.c:593
-#, fuzzy, c-format
-#| msgid "Couldn’t resolve address: %s"
+#, c-format
 msgid "Couldn’t resolve address %s"
 msgstr "次のアドレスを解決できませんでした: %s"
 
@@ -1429,7 +1419,7 @@ msgstr "接続中: %s"
 #: pgp/seahorse-ldap-source.c:653
 #, c-format
 msgid "Invalid URI: %s"
-msgstr ""
+msgstr "無効な URI です: %s"
 
 #: pgp/seahorse-ldap-source.c:661
 #, c-format
@@ -1484,8 +1474,7 @@ msgid "(unknown)"
 msgstr "(不明)"
 
 #: pgp/seahorse-pgp-key-properties.c:472
-#, fuzzy, c-format
-#| msgid "This key expired on: %s"
+#, c-format
 msgid "This key expired on %s"
 msgstr "この鍵の有効期限: %s"
 
@@ -1506,21 +1495,14 @@ msgstr "鍵をエクスポートできませんでした"
 #: pgp/seahorse-pgp-key-properties.c:997
 #, c-format
 msgid "I believe “%s” is the owner of this key"
-msgstr ""
+msgstr "この鍵を所有している“%s”という人物を信用します"
 
 #: pgp/seahorse-pgp-key-properties.c:1002
-#, fuzzy, c-format
-#| msgid ""
-#| "If you no longer trust that “%s” owns this key, <i>revoke</i> your "
-#| "signature:"
+#, c-format
 msgid "I no longer trust that “%s” owns this key"
-msgstr ""
-"この鍵を所有している“%s”という人物を信用しないのであれば、署名を<i>失効</i>さ"
-"せてください:"
+msgstr "この鍵を所有している“%s”という人物を信用しません"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
-#, fuzzy
-#| msgid "Change _Passphrase"
 msgid "Change _passphrase"
 msgstr "パスフレーズを変更(_P)"
 
@@ -1534,10 +1516,8 @@ msgstr "秘密鍵をエクスポート(_S)"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:60
 #: pgp/seahorse-pgp-public-key-properties.ui:42
-#, fuzzy
-#| msgid "The owner of the key revoked the key. It can no longer be used."
 msgid "The owner of the key revoked the key. It should no longer be used."
-msgstr "鍵の所有者が鍵を破棄したので、もう利用できません。"
+msgstr "鍵の所有者が鍵を破棄したので、もう使用しないでください。"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:140
 msgid "Add a photo to this key"
@@ -1585,29 +1565,21 @@ msgstr "有効期限"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:408
 #: pgp/seahorse-pgp-public-key-properties.ui:334
-#, fuzzy
-#| msgid "Add User ID"
 msgid "User IDs"
-msgstr "ユーザー ID を追加"
+msgstr "ユーザー ID"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:421
-#, fuzzy
-#| msgid "Add User ID"
 msgid "Add user ID"
 msgstr "ユーザー ID を追加"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:445
 #: pgp/seahorse-pgp-public-key-properties.ui:356
-#, fuzzy
-#| msgid "_Subkeys"
 msgid "Subkeys"
-msgstr "副鍵(_S)"
+msgstr "副鍵"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:458
-#, fuzzy
-#| msgid "Add subkey to %s"
 msgid "_Add subkey"
-msgstr "%s へ副鍵を追加する"
+msgstr "副鍵を追加(_A)"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:476
 #: pgp/seahorse-pgp-public-key-properties.ui:384
@@ -1620,10 +1592,8 @@ msgid "Your trust of this key"
 msgstr "この鍵の信用度"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:493
-#, fuzzy
-#| msgid "Override Owner _Trust:"
 msgid "Override owner trust"
-msgstr "所有者の信用度(_T):"
+msgstr "所有者の信用度"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:17
 msgctxt "Validity"
@@ -1641,50 +1611,36 @@ msgid "Ultimately"
 msgstr "究極に信用する"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:401
-#, fuzzy
-#| msgid "Signature ID"
 msgid "Signature trust"
-msgstr "署名の ID"
+msgstr "署名を信用する"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:402
-#, fuzzy
-#| msgid "I trust signatures from “%s” on other keys"
 msgid "I trust signatures from this key on other keys"
-msgstr "他の鍵にある“%s”からの署名を信用する"
+msgstr "他の鍵にあるこの鍵からの署名を信用します"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:418
-#, fuzzy
-#| msgid "Sign Key"
 msgid "Sign key"
-msgstr "鍵に署名する"
+msgstr "鍵の署名"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:425
-#, fuzzy
-#| msgid "Sign Key"
 msgid "_Sign key"
-msgstr "鍵に署名する"
+msgstr "鍵に署名(_S)"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:436
-#, fuzzy
-#| msgid "_Revoke Signature"
 msgid "Revoke key signature"
-msgstr "署名の失効(_R)"
+msgstr "鍵の署名の失効"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:443
-#, fuzzy
-#| msgid "Revoke"
 msgid "_Revoke"
-msgstr "失効"
+msgstr "失効(_R)"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:454
-#, fuzzy
-#| msgid "Owner"
 msgid "Owner trust"
-msgstr "所有者"
+msgstr "所有者の信用度"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:455
 msgid "Give a trust level to the owner of this key"
-msgstr ""
+msgstr "この鍵の所有者をどの程度信用するか指定します"
 
 #: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
@@ -1692,7 +1648,7 @@ msgstr "暗号化"
 
 #: pgp/seahorse-pgp-subkey.c:212
 msgid "This subkey can be used for encryption"
-msgstr ""
+msgstr "この副鍵は暗号化に使用できます"
 
 #: pgp/seahorse-pgp-subkey.c:213
 msgid "Sign"
@@ -1700,7 +1656,7 @@ msgstr "署名"
 
 #: pgp/seahorse-pgp-subkey.c:213
 msgid "This subkey can be used to create data signatures"
-msgstr ""
+msgstr "この副鍵はデータ署名の作成に使用できます"
 
 #: pgp/seahorse-pgp-subkey.c:214
 msgid "Certify"
@@ -1708,7 +1664,7 @@ msgstr "証明"
 
 #: pgp/seahorse-pgp-subkey.c:214
 msgid "This subkey can be used to create certificates"
-msgstr ""
+msgstr "この副鍵は証明書の作成に使用できます"
 
 #: pgp/seahorse-pgp-subkey.c:215
 msgid "Authenticate"
@@ -1716,7 +1672,7 @@ msgstr "認証"
 
 #: pgp/seahorse-pgp-subkey.c:215
 msgid "This subkey can be used for authentication"
-msgstr ""
+msgstr "この副鍵は認証に使用できます"
 
 #: pgp/seahorse-pgp-subkey.c:409
 msgid "Key"
@@ -1728,72 +1684,54 @@ msgid "Subkey %d of %s"
 msgstr "副鍵 %d / %s"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:203
-#, fuzzy, c-format
-#| msgid "Are you sure you want to permanently delete subkey %d of %s?"
+#, c-format
 msgid "Are you sure you want to permanently delete subkey %s?"
-msgstr "本当に副鍵 %d (%s) を完全に削除しますか?"
+msgstr "本当に副鍵 %s を完全に削除しますか?"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:210
 msgid "Couldn’t delete subkey"
 msgstr "副鍵を削除できませんでした"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:263
-#, fuzzy
-#| msgid "This key has been revoked"
 msgid "Subkey was revoked"
-msgstr "この鍵は失効しています"
+msgstr "副鍵は失効されました"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:270
-#, fuzzy
-#| msgid "This key has expired"
 msgid "Subkey has expired"
-msgstr "この鍵は有効期限が切れています"
+msgstr "副鍵の有効期限が切れています"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:273
 msgid "Subkey is disabled"
-msgstr ""
+msgstr "副鍵は無効になっています"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:283
-#, fuzzy
-#| msgid "_Never expires"
 msgid "Never expires"
-msgstr "有効期限を設定しない(_N)"
+msgstr "有効期限なし"
 
 #. Translators: first part is the algorithm, second part is the length,
 #. * e.g. "RSA" (2048 bit)
 #: pgp/seahorse-pgp-subkey-list-box.c:308
 #, c-format
 msgid "%s (%d bit)"
-msgstr ""
+msgstr "%s (%d bit)"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:315
-#, fuzzy
-#| msgctxt "Validity"
-#| msgid "Unknown"
 msgid "Unknown"
 msgstr "不明"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:7
-#, fuzzy
-#| msgid "Expiration Date"
 msgid "Change expiration date"
-msgstr "有効期限"
+msgstr "有効期限の変更"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:11
-#, fuzzy
-#| msgid "Revoke key"
 msgid "Revoke subkey"
-msgstr "鍵の失効"
+msgstr "副鍵の失効"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:15
-#, fuzzy
-#| msgid "Couldn’t delete subkey"
 msgid "Delete subkey"
-msgstr "副鍵を削除できませんでした"
+msgstr "副鍵の削除"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:46
-#, fuzzy
-#| msgid "Usage"
 msgid "Usages"
 msgstr "用途"
 
@@ -1802,10 +1740,8 @@ msgid "Created"
 msgstr "作成日"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:149
-#, fuzzy
-#| msgid "Couldn’t change expiry date"
 msgid "Change expiry date"
-msgstr "有効期限を変更できませんでした"
+msgstr "有効期限を変更"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:156
 msgid "Revoke"
@@ -1833,39 +1769,29 @@ msgstr "プライマリユーザー ID を変更できませんでした"
 
 #. Translators: (Unknown) signature name
 #: pgp/seahorse-pgp-uid-list-box.c:372
-#, fuzzy
-#| msgid "(unknown)"
 msgid "(Unknown)"
 msgstr "(不明)"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:7
-#, fuzzy
-#| msgid "Primary"
 msgid "Make _primary"
-msgstr "プライマリ"
+msgstr "プライマリにする(_P)"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:64
-#, fuzzy
-#| msgid "Signature ID"
 msgid "Signatures"
-msgstr "署名の ID"
+msgstr "署名"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:77
 #: pgp/seahorse-pgp-uid-list-box-row.ui:88
-#, fuzzy
-#| msgid "_Only display the signatures of people I trust"
 msgid "Only display the signatures of people I trust"
-msgstr "信用している人達の署名だけを表示する(_O)"
+msgstr "信用している人達の署名だけを表示します"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:87
-#, fuzzy
-#| msgid "Show _trusted"
 msgid "Only trusted"
-msgstr "信頼済みのみ表示(_T)"
+msgstr "信用済みのみ"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:106
 msgid "No signatures available"
-msgstr ""
+msgstr "利用可能な署名なし"
 
 #: pgp/seahorse-transfer.c:233 pgp/seahorse-transfer.c:276
 msgid "Exporting data"
@@ -2135,7 +2061,7 @@ msgstr "自分のものを表示(_E)"
 
 #: src/seahorse-key-manager.ui:47
 msgid "Show _trusted"
-msgstr "信頼済みのみ表示(_T)"
+msgstr "信用済みのみ表示(_T)"
 
 #: src/seahorse-key-manager.ui:52
 msgid "Show an_y"
@@ -2464,8 +2390,6 @@ msgid "Copy public key to clipboard"
 msgstr "公開鍵をクリップボードにコピーします"
 
 #: ssh/seahorse-ssh-key-properties.ui:276
-#, fuzzy
-#| msgid "Remote Access"
 msgid "Remote access"
 msgstr "リモートアクセス"
 
