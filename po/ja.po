@@ -1,5 +1,5 @@
 # Seahorse ja.po.
-# Copyright (C) 1999-2013, 2015-2016, 2019-2020 seahorse's COPYRIGHT HOLDER
+# Copyright (C) 1999-2013, 2015-2016, 2019-2021 seahorse's COPYRIGHT HOLDER
 # Anthony Mulcahy <anthony@kcn.ne.jp>, 1999-2000.
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2000-2009.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2009-2011.
@@ -9,14 +9,15 @@
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2013, 2015, 2016.
 # Hajime Taira <htaira@redhat.com>, 2015, 2016.
 # sicklylife <translation@sicklylife.jp>, 2019-2020.
+# Yuki Okushi <yokushi@gnome.org>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
 "POT-Creation-Date: 2020-08-17 00:28+0000\n"
-"PO-Revision-Date: 2020-08-18 23:18+0900\n"
-"Last-Translator: sicklylife <translation@sicklylife.jp>\n"
+"PO-Revision-Date: 2021-06-12 05:02+0000\n"
+"Last-Translator: Yuki Okushi <yokushi@gnome.org>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -153,6 +154,18 @@ msgstr ":"
 msgid "The port to access the server on."
 msgstr "サーバーにアクセスするときに使用するポート番号です。"
 
+#: common/seahorse-prefs-keyservers.ui:6 common/seahorse-prefs-keyservers.ui:10
+msgid "Keyservers"
+msgstr "鍵サーバー"
+
+#: common/seahorse-prefs-keyservers.ui:40
+msgid "Add keyserver"
+msgstr "鍵サーバーを追加"
+
+#: common/seahorse-prefs-keyservers.ui:51
+msgid "Key Synchronization"
+msgstr "鍵の同期"
+
 #: common/seahorse-prefs.ui:34
 msgid "_Find keys via:"
 msgstr "鍵サーバーの一覧(_F):"
@@ -278,47 +291,51 @@ msgstr "キーリングの内容を表示する (サイズが小さい場合)"
 
 #: data/org.gnome.seahorse.gschema.xml:5
 msgid "Auto retrieve keys"
-msgstr ""
+msgstr "鍵を自動的に取得する"
 
 #: data/org.gnome.seahorse.gschema.xml:6
 msgid "Whether or not keys should be automatically retrieved from key servers."
-msgstr ""
+msgstr "鍵サーバーから自動的に鍵を取得する"
 
 #: data/org.gnome.seahorse.gschema.xml:10
 msgid "Auto publish keys"
-msgstr ""
+msgstr "鍵を自動的に公開する"
 
 #: data/org.gnome.seahorse.gschema.xml:11
 msgid "Whether or not modified keys should be automatically published."
-msgstr ""
+msgstr "変更した鍵を自動的に鍵サーバーへ公開する"
 
 #: data/org.gnome.seahorse.gschema.xml:15
 msgid "Publish keys to this key server"
-msgstr ""
+msgstr "この鍵サーバーへ鍵を公開する"
 
 #: data/org.gnome.seahorse.gschema.xml:16
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
 msgstr ""
+"PGP 鍵を公開する鍵サーバーを選択します。PGP 鍵を公開したくない場合は空欄にし"
+"ます。"
 
 #: data/org.gnome.seahorse.gschema.xml:20
 msgid "Last key server search pattern"
-msgstr ""
+msgstr "最後に使った鍵サーバーの検索パターン"
 
 #: data/org.gnome.seahorse.gschema.xml:21
 msgid "The last search pattern searched for against a key server."
-msgstr ""
+msgstr "鍵サーバーを検索するために使われた最後の検索パターンです。"
 
 #: data/org.gnome.seahorse.gschema.xml:25
 msgid "Last key servers used"
-msgstr ""
+msgstr "最後に使った鍵サーバー"
 
 #: data/org.gnome.seahorse.gschema.xml:26
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
 msgstr ""
+"最後に検索を実行した鍵サーバーです。すべての鍵サーバーが該当する場合は空欄に"
+"なります。"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:5
 msgid "Show keyrings sidebar"
@@ -330,33 +347,35 @@ msgstr "Seahorse にキーリングサイドバーを表示します。"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:10
 msgid "Which items to show"
-msgstr ""
+msgstr "表示したいアイテムを選択する"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:11
 msgid ""
 "Filter which items to show. If empty, show all items, if “personal” show "
 "personal keys, if “trusted” show trusted."
 msgstr ""
+"表示したいアイテムをフィルタします。空欄の場合すべてのアイテムを、“personal” "
+"の場合個人用の鍵を、“trusted” の場合信頼済みの鍵を表示します。"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:16
 msgid "Width of the side pane"
-msgstr ""
+msgstr "サイドウィンドウの幅"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:17
 msgid "The default width of the side pane."
-msgstr ""
+msgstr "サイドウィンドウのデフォルトの幅。"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:21
 msgid "The keyrings chosen"
-msgstr ""
+msgstr "選択しているキーリング"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:22
 msgid "The URIs of the keyrings chosen in the sidebar."
-msgstr ""
+msgstr "サイドバー上で選択しているキーリングの URI です。"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:29
 msgid "The column to sort the Seahorse keys by"
-msgstr ""
+msgstr "Seahorse の鍵をソートするための列"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:30
 msgid ""
@@ -364,29 +383,32 @@ msgid ""
 "are: “name”, “id”, “validity”, “expires”, “trust”, and “type”. Put a “-” in "
 "front of the column name to sort in descending order."
 msgstr ""
+"Seahorse 鍵マネージャーのメインウィンドウをソートするための列を指定します。列"
+"は以下の通りです: “name”、“id”、“validity”、“expires”、“trust”、そし"
+"て“type”。降順にソートしたい場合は列の名前の前に“-”を挿入してください。"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:34
 msgid "Show validity column"
-msgstr ""
+msgstr "有効性列を表示する"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:35
 #: data/org.gnome.seahorse.manager.gschema.xml:40
 #: data/org.gnome.seahorse.manager.gschema.xml:45
 #: data/org.gnome.seahorse.manager.gschema.xml:50
 msgid "No longer in use."
-msgstr ""
+msgstr "使われていません。"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:39
 msgid "Show expiry column"
-msgstr ""
+msgstr "有効期限列を表示する"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:44
 msgid "Show trust column"
-msgstr ""
+msgstr "信頼済み列を表示する"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:49
 msgid "Show type column"
-msgstr ""
+msgstr "種類列を表示する"
 
 #: data/org.gnome.seahorse.window.gschema.xml:5
 msgid "Width of the window"
@@ -1534,6 +1556,10 @@ msgstr "サーバー“%s”と通信できませんでした: %s"
 msgid "HTTP Key Server"
 msgstr "HTTP 鍵サーバー"
 
+#: common/server-category.vala:67
+msgid "HTTPS Key Server"
+msgstr "HTTPS 鍵サーバー"
+
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
 msgid "Couldn’t import key: %s"
@@ -1658,10 +1684,20 @@ msgstr "同期する(_S)"
 msgid "Couldn’t communicate with %s: %s"
 msgstr "%s と通信できませんでした: %s"
 
+#: pgp/seahorse-ldap-source.c:593
+#, c-format
+msgid "Couldn’t resolve address %s"
+msgstr "アドレス %s を解決できませんでした"
+
 #: pgp/seahorse-ldap-source.c:642
 #, c-format
 msgid "Connecting to: %s"
 msgstr "接続中: %s"
+
+#: pgp/seahorse-ldap-source.c:653
+#, c-format
+msgid "Invalid URI: %s"
+msgstr "無効な URI: %s"
 
 #: pgp/seahorse-ldap-source.c:647
 #, c-format
