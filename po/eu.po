@@ -4,12 +4,12 @@
 #
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2008, 2009, 2010, 2011, 2012.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2013, 2014, 2015, 2016, 2017.
-# Asier Sarasua Garmendia <asiersarasua@ni.eus>, 2019, 2020, 2021.
+# Asier Sarasua Garmendia <asiersarasua@ni.eus>, 2019, 2020, 2021, 2022.
 msgid ""
 msgstr "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-08-22 10:00+0100\n"
+"POT-Creation-Date: 2022-02-10 14:02+0000\n"
+"PO-Revision-Date: 2022-02-13 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -72,7 +72,7 @@ msgstr "_Utzi"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:390
 msgid "_Delete"
 msgstr "Ez_abatu"
 
@@ -373,7 +373,7 @@ msgstr "Adierazi zein zutaberen arabera ordenatu behar den Seahorse gako-kudeatz
 
 #: data/org.gnome.seahorse.manager.gschema.xml:34
 msgid "Show validity column"
-msgstr "Erakutsi Baliozkotasuna zutabea"
+msgstr "Erakutsi baliozkotasunaren zutabea"
 
 #: data/org.gnome.seahorse.manager.gschema.xml:35
 #: data/org.gnome.seahorse.manager.gschema.xml:40
@@ -411,8 +411,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Leihoaren altuera (pixeletan)."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:174
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Pasahitzak eta Gakoak"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -420,24 +422,20 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Kudeatu pasahitzak eta zifratze-gakoak"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
-msgstr "Seahorse zifratutako gakoak kudeatzeko aplikazio bat da GNOME mahaigainerako."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
+msgstr "Pasahitzak eta Gakoak aplikazioa zifratutako gakoak kudeatzeko aplikazio bat da GNOME mahaigainerako."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
-msgstr "Seahorse-rekin PGP eta SSH gakoak sor eta kudea ditzakezu, gako-zerbitzarietatik gakoak eskuratu eta argitara ditzakezu. Zure pasaesaldia gorde zuk hura berriro ez idazteko eta zure gako eta gako-sorten babeskopia egiten du."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
+msgstr "Pasahitzak eta Gakoak aplikazioarekin PGP eta SSH gakoak sortu eta kudeatu daitezke, gako-zerbitzarietatik gakoak eskuratu eta argitaratu daitezke, pasaesaldiak gordetzen ditu hura berriro idatzi behar ez izateko eta gakoen eta gako-sorten babeskopia egiten du."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "GNOME proiektua"
-
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Pasahitzak eta Gakoak"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
@@ -448,7 +446,7 @@ msgstr "gako sorta;zifratzea;segurtasuna;sinadura;ssh;"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Gorde pasahitz, kredentzial eta ezkutuko pertsonalak"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:448
 msgid "Couldn’t unlock"
 msgstr "Ezin izan da desblokeatu"
 
@@ -1820,7 +1818,7 @@ msgstr "Izengabea"
 msgid "Failed to export certificate"
 msgstr "Huts egin du ziurtagiria esportatzean"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:464
 msgid "Couldn’t delete"
 msgstr "Ezin izan da ezabatu"
 
@@ -1921,11 +1919,11 @@ msgstr "Ekarpenak:"
 msgid "Version of this application"
 msgstr "Aplikazio honen bertsioa"
 
-#: src/application.vala:173
+#: src/application.vala:176
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: src/application.vala:176
+#: src/application.vala:179
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse proiektuaren etxeko orria"
 
@@ -2101,20 +2099,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "Konfiguratu gakoa Shell segururako…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:380
+#: src/sidebar.vala:377
 msgid "_Lock"
 msgstr "_Blokeatu"
 
-#: src/sidebar.vala:385
+#: src/sidebar.vala:382
 msgid "_Unlock"
 msgstr "_Desblokeatu"
 
 #. Properties item
-#: src/sidebar.vala:402
+#: src/sidebar.vala:399
 msgid "_Properties"
 msgstr "_Propietateak"
 
-#: src/sidebar.vala:432
+#: src/sidebar.vala:429
 msgid "Couldn’t lock"
 msgstr "Ezin izan da blokeatu"
 
@@ -2409,6 +2407,9 @@ msgstr "Ezin izan dira konfiguratu Shell seguruko gakoak urruneko ordenagailuan.
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Shell seguruko gakoak konfiguratzen…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
 
 #~ msgid "Display flags"
 #~ msgstr "Bistaratu banderak"
