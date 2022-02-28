@@ -3,7 +3,7 @@
 # Birger Langkjer <birger.langkjer@image.dk>, 2000.
 # flemming christensen <fc@stromata.dk>, 2011, 2012.
 # Ask Hjorth Larsen <asklarsen@gmail.com>, 2008-2018.
-# Alan Mortensen <alanmortensen.am@gmail.com>, 2019-21.
+# Alan Mortensen <alanmortensen.am@gmail.com>, 2019-22.
 # scootergrisen, 2019.
 #
 # Konventioner
@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-09-15 16:42+0200\n"
+"POT-Creation-Date: 2022-02-13 08:25+0000\n"
+"PO-Revision-Date: 2022-02-27 12:44+0100\n"
 "Last-Translator: Alan Mortensen <alanmortensen.am@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -87,7 +87,7 @@ msgstr "_Annullér"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:390
 msgid "_Delete"
 msgstr "_Slet"
 
@@ -436,8 +436,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Vinduets højde i pixel."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:174
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Adgangskoder og nøgler"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -445,28 +447,26 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Håndtér dine adgangskoder og krypteringsnøgler"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
-msgstr "Seahorse er et GNOME-program til håndtering af krypteringsnøgler."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
+msgstr ""
+"Adgangskoder og nøgler er et GNOME-program til håndtering af "
+"krypteringsnøgler."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"Med seahorse kan du oprette og håndtere PGP-nøgler, oprette og håndtere SSH-"
-"nøgler, offentliggøre og hente nøgler fra nøgleservere, lagre din "
-"adgangsfrase så du ikke behøver blive ved med at skrive den, samt "
+"Med Adgangskoder og nøgler kan du oprette og håndtere PGP-nøgler, oprette og "
+"håndtere SSH-nøgler, offentliggøre og hente nøgler fra nøgleservere, lagre "
+"din adgangsfrase, så du ikke behøver blive ved med at skrive den, samt "
 "sikkerhedskopiere dine nøgler og nøglering."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "GNOME-projektet"
-
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Adgangskoder og nøgler"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
@@ -477,7 +477,7 @@ msgstr "nøglering;kryptering;sikkerhed;signering;underskrift;ssh;"
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Gemte personlige adgangskoder, loginoplysninger og hemmeligheder"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:448
 msgid "Couldn’t unlock"
 msgstr "Kunne ikke låse op"
 
@@ -1889,7 +1889,7 @@ msgstr "Unavngivet"
 msgid "Failed to export certificate"
 msgstr "Kunne ikke eksportere certifikat"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:464
 msgid "Couldn’t delete"
 msgstr "Kunne ikke slette"
 
@@ -1990,7 +1990,7 @@ msgstr "Bidrag:"
 msgid "Version of this application"
 msgstr "Version af dette program"
 
-#: src/application.vala:173
+#: src/application.vala:176
 msgid "translator-credits"
 msgstr ""
 "Ask Hjorth Larsen\n"
@@ -2002,7 +2002,7 @@ msgstr ""
 "Websted http://dansk-gruppen.dk\n"
 "E-mail <dansk@dansk-gruppen.dk>"
 
-#: src/application.vala:176
+#: src/application.vala:179
 msgid "Seahorse Project Homepage"
 msgstr "Projekthjemmeside for Seahorse"
 
@@ -2178,20 +2178,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "Konfigurér nøgle til Secure Shell …"
 
 #. Lock and unlock items
-#: src/sidebar.vala:380
+#: src/sidebar.vala:377
 msgid "_Lock"
 msgstr "_Lås"
 
-#: src/sidebar.vala:385
+#: src/sidebar.vala:382
 msgid "_Unlock"
 msgstr "_Lås op"
 
 #. Properties item
-#: src/sidebar.vala:402
+#: src/sidebar.vala:399
 msgid "_Properties"
 msgstr "_Egenskaber"
 
-#: src/sidebar.vala:432
+#: src/sidebar.vala:429
 msgid "Couldn’t lock"
 msgstr "Kunne ikke låse"
 
@@ -2495,6 +2495,9 @@ msgstr "Kunne ikke konfigurere SSH-nøgler på den eksterne computer."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigurerer SSH-nøgler …"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
 
 #~ msgid "Not a valid Key Server address."
 #~ msgstr "Ugyldig nøgleserveradresse."
