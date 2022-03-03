@@ -1,6 +1,6 @@
 # seahorse Korean message translation
 # This file is distributed under the same license as the seahorse package.
-# Changwoo Ryu <cwryu@debian.org>, 2007-2021.
+# Changwoo Ryu <cwryu@debian.org>, 2007-2022.
 #
 # 새로 번역하는 분은 아래 "translator-credit"에 추가하세요.
 #
@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-09-04 21:10+0900\n"
+"POT-Creation-Date: 2022-02-13 08:25+0000\n"
+"PO-Revision-Date: 2022-03-02 20:42+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -78,7 +78,7 @@ msgstr "취소(_C)"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:390
 msgid "_Delete"
 msgstr "삭제(_D)"
 
@@ -422,8 +422,10 @@ msgid "Height (in pixels) of the window."
 msgstr "창의 높이 (픽셀 단위)."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "시호스"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:174
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "암호 및 키"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -431,27 +433,23 @@ msgid "Manage your passwords and encryption keys"
 msgstr "암호 및 암호화 키를 관리합니다"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
-msgstr "시호스는 암호화 키를 관리하는 그놈 프로그램입니다."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
+msgstr "암호 및 키 프로그램은 암호화 키를 관리하는 그놈 프로그램입니다."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"시호스에서 PGP 키를 만들고 관리할 수 있고, SSH 키를 만들고 관리할 수 있고, "
-"키 서버에 키를 공개하거나 가져올 수 있고, 암호를 임시 저장해서 반복해서 타이"
-"핑할 필요가 없게 해 주고, 키와 키 모음을 백업할 수 있습니다."
+"암호와 키 프로그램에서 PGP 키를 만들고 관리할 수 있고, SSH 키를 만들고 관리"
+"할 수 있고, 키 서버에 키를 공개하거나 가져올 수 있고, 암호를 임시 저장해서 반"
+"복해서 타이핑할 필요가 없게 해 주고, 키와 키 모음을 백업할 수 있습니다."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "그놈 프로젝트"
-
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "암호 및 키"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
@@ -464,7 +462,7 @@ msgstr ""
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "저장한 개인 암호, 인증 토큰, 비밀글"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:448
 msgid "Couldn’t unlock"
 msgstr "잠금을 풀 수 없습니다"
 
@@ -1519,7 +1517,8 @@ msgstr "비밀 키 내보내기(_S)"
 #: pgp/seahorse-pgp-private-key-properties.ui:60
 #: pgp/seahorse-pgp-public-key-properties.ui:42
 msgid "The owner of the key revoked the key. It should no longer be used."
-msgstr "키의 소유자가 키를 철회했습니다. 이 키는 더 이상 사용하지 말아야 합니다."
+msgstr ""
+"키의 소유자가 키를 철회했습니다. 이 키는 더 이상 사용하지 말아야 합니다."
 
 #: pgp/seahorse-pgp-private-key-properties.ui:140
 msgid "Add a photo to this key"
@@ -1863,7 +1862,7 @@ msgstr "이름 없음"
 msgid "Failed to export certificate"
 msgstr "인증서를 내보내는데 실패했습니다"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:464
 msgid "Couldn’t delete"
 msgstr "삭제할 수 없습니다"
 
@@ -1964,11 +1963,11 @@ msgstr "기여한 분:"
 msgid "Version of this application"
 msgstr "이 프로그램의 버전"
 
-#: src/application.vala:173
+#: src/application.vala:176
 msgid "translator-credits"
 msgstr "류창우 <cwryu@debian.org>"
 
-#: src/application.vala:176
+#: src/application.vala:179
 msgid "Seahorse Project Homepage"
 msgstr "시호스 프로젝트 홈페이지"
 
@@ -2144,20 +2143,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "보안 셸 키 설정…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:380
+#: src/sidebar.vala:377
 msgid "_Lock"
 msgstr "잠그기(_L)"
 
-#: src/sidebar.vala:385
+#: src/sidebar.vala:382
 msgid "_Unlock"
 msgstr "풀기(_U)"
 
 #. Properties item
-#: src/sidebar.vala:402
+#: src/sidebar.vala:399
 msgid "_Properties"
 msgstr "속성(_P)"
 
-#: src/sidebar.vala:432
+#: src/sidebar.vala:429
 msgid "Couldn’t lock"
 msgstr "잠글 수 없습니다"
 
