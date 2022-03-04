@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-08-29 13:57+0300\n"
+"POT-Creation-Date: 2022-02-13 08:25+0000\n"
+"PO-Revision-Date: 2022-03-04 21:49+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-POT-Import-Date: 2012-02-19 15:25:28+0000\n"
 
 #: common/add-keyserver-dialog.vala:32
@@ -78,7 +78,7 @@ msgstr "_Peru"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:390
 msgid "_Delete"
 msgstr "_Poista"
 
@@ -419,8 +419,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Ikkunan korkeus pikseleissä."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:174
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Salasanat ja avaimet"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -428,26 +430,23 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Hallitse salasanoja ja salausavaimia"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
-msgstr "Seahorse on Gnome-sovellus salausavainten hallintaan."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
+msgstr "Salasanat ja avaimet on Gnome-sovellus salausavainten hallintaan."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
 "Voit luoda sekä hallita PGP- ja SSH-avaimia, julkaista ja noutaa avaimia "
-"avainpalvelimilta sekä varmuuskopioida avaimet ja avainnipun."
+"avainpalvelimilta, asettaa tunnuslauseen välimuistiin sekä varmuuskopioida "
+"avaimet ja avainnipun."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "Gnome-projekti"
-
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Salasanat ja salausavaimet"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
@@ -460,7 +459,7 @@ msgstr ""
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Tallennetut henkilökohtaiset salasanat, pääsyoikeudet ja salaisuudet"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:448
 msgid "Couldn’t unlock"
 msgstr "Lukituksen avaus ei onnistunut"
 
@@ -1506,9 +1505,6 @@ msgstr "Uskon, että “%s” on tämän avaimen omistaja"
 
 #: pgp/seahorse-pgp-key-properties.c:1002
 #, c-format
-#| msgid ""
-#| "If you no longer trust that “%s” owns this key, <i>revoke</i> your "
-#| "signature:"
 msgid "I no longer trust that “%s” owns this key"
 msgstr "En enää luota, että “%s” omistaa tämän avaimen"
 
@@ -1696,7 +1692,6 @@ msgstr "Aliavain %d avaimesta %s"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:203
 #, c-format
-#| msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgid "Are you sure you want to permanently delete subkey %s?"
 msgstr "Haluatko varmasti poistaa pysyvästi aliavaimen %s?"
 
@@ -1872,7 +1867,7 @@ msgstr "Nimetön"
 msgid "Failed to export certificate"
 msgstr "Varmenteen vienti epäonnistui"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:464
 msgid "Couldn’t delete"
 msgstr "Ei voitu poistaa"
 
@@ -1973,18 +1968,18 @@ msgstr "Avustajat:"
 msgid "Version of this application"
 msgstr "Tämän ohjelman versio"
 
-#: src/application.vala:173
+#: src/application.vala:176
 msgid "translator-credits"
 msgstr ""
 "Jarmo Kielosto, 2000\n"
 "Ilkka Tuohela, 2004-2009\n"
 "Tommi Vainikainen, 2008\n"
 "Jani Välimaa, 2009\n"
-"Jiri Grönroos, 2012-2021\n"
+"Jiri Grönroos, 2012-2022\n"
 "\n"
 "https://l10n.gnome.org/teams/fi/"
 
-#: src/application.vala:176
+#: src/application.vala:179
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse-projektin verkkosivusto"
 
@@ -2160,20 +2155,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "Määritä SSH-avain…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:380
+#: src/sidebar.vala:377
 msgid "_Lock"
 msgstr "_Lukitse"
 
-#: src/sidebar.vala:385
+#: src/sidebar.vala:382
 msgid "_Unlock"
 msgstr "_Avaa lukitus"
 
 #. Properties item
-#: src/sidebar.vala:402
+#: src/sidebar.vala:399
 msgid "_Properties"
 msgstr "_Ominaisuudet"
 
-#: src/sidebar.vala:432
+#: src/sidebar.vala:429
 msgid "Couldn’t lock"
 msgstr "Lukitus ei onnistunut"
 
@@ -2472,6 +2467,9 @@ msgstr "SSH-avaimia ei voitu määritellä etätietokoneella."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Määritellään SSH-avaimia…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
 
 #~ msgid "Display flags"
 #~ msgstr "Näytä liput"
