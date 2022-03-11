@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-09-26 07:15+0200\n"
-"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
+"POT-Creation-Date: 2022-03-07 22:40+0000\n"
+"PO-Revision-Date: 2022-03-11 07:08+0100\n"
+"Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
@@ -21,6 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -75,7 +76,7 @@ msgstr "_Откажи"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:390
 msgid "_Delete"
 msgstr "_Обриши"
 
@@ -424,8 +425,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Висина (у пикселима) прозора."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Морски коњић"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:174
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Лозинке и кључеви"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -433,42 +436,38 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Уредите ваше лозинке и кључеве шифровања"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
-msgstr "Морски коњић је Гномов програм за управљање кључевима за шифровање."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
+msgstr ""
+"Лозинке и кључеви су Гномов програм за управљање кључевима за шифровање."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"Са морским коњићем можете да стварате и да управљате ПГП кључевима, да "
-"стварате и управљате кључевима безбедне шкољке (SSH), објављујете и "
-"довлачите кључеве са сервера кључева, да сместите вашу лозинку тако да не "
-"морате стално да је куцате и да направите резерве ваших кључева и привеска "
-"кључева."
+"Са лозинкама и кључевима можете стварати и управљати ПГП кључевима, "
+"кључевима безбедне шкољке (SSH), можете објављивати и довлачити кључеве са "
+"сервера кључева, сачувати вашу лозинку да је не бисте куцали стално и "
+"правити резерве ваших кључева и привеска кључева."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "Гном пројекат"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Лозинке и кључеви"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-msgid "keyring;encryption;security;sign;ssh;"
+msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
 msgstr ""
-"привезак кључева;шифровање;безбедност;приступ;безбедна шкољка;keyring;"
-"encryption;security;sign;ssh;"
+"привезак кључева;шифровање;безбедност;приступ;безбедна шкољка;ссх;гпг;пгп;"
+"keyring;encryption;security;sign;ssh;gpg;pgp;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Сачуване личне лозинке, уверења и тајне"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:448
 msgid "Couldn’t unlock"
 msgstr "Не могу да откључам"
 
@@ -1093,7 +1092,6 @@ msgid "Couldn’t add photo"
 msgstr "Не могу да додам слику"
 
 #: pgp/seahorse-gpgme-photos.c:291
-#| msgid "The file could not be loaded. It may be in an invalid format"
 msgid "The file could not be loaded. It may be in an invalid format."
 msgstr "Не могу да учитам датотеку. Могуће да је у неодговарајућем формату."
 
@@ -1501,7 +1499,6 @@ msgstr "(непознато)"
 
 #: pgp/seahorse-pgp-key-properties.c:472
 #, c-format
-#| msgid "This key expired on: %s"
 msgid "This key expired on %s"
 msgstr "Овај кључ је истекао %s"
 
@@ -1525,14 +1522,10 @@ msgstr "Мислим да је „%s“ власник овог кључа"
 
 #: pgp/seahorse-pgp-key-properties.c:1002
 #, c-format
-#| msgid ""
-#| "If you no longer trust that “%s” owns this key, <i>revoke</i> your "
-#| "signature:"
 msgid "I no longer trust that “%s” owns this key"
 msgstr "Више не верујем да „%s“ поседује овај кључ"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
-#| msgid "Change _Passphrase"
 msgid "Change _passphrase"
 msgstr "Промени _лозинку"
 
@@ -1546,7 +1539,6 @@ msgstr "_Извези тајни кључ"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:60
 #: pgp/seahorse-pgp-public-key-properties.ui:42
-#| msgid "The owner of the key revoked the key. It can no longer be used."
 msgid "The owner of the key revoked the key. It should no longer be used."
 msgstr "Власник кључа је опозвао кључ. Не би требало више да се користи."
 
@@ -1596,23 +1588,19 @@ msgstr "Истиче"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:408
 #: pgp/seahorse-pgp-public-key-properties.ui:334
-#| msgid "Add User ID"
 msgid "User IDs"
 msgstr "ИБ-ови корисника"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:421
-#| msgid "Add User ID"
 msgid "Add user ID"
 msgstr "Додај ИБ корисника"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:445
 #: pgp/seahorse-pgp-public-key-properties.ui:356
-#| msgid "_Subkeys"
 msgid "Subkeys"
 msgstr "Подкључеви"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:458
-#| msgid "Add subkey to %s"
 msgid "_Add subkey"
 msgstr "_Додај подкључ"
 
@@ -1627,7 +1615,6 @@ msgid "Your trust of this key"
 msgstr "Ваше поверење за овај кључ"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:493
-#| msgid "Override Owner _Trust:"
 msgid "Override owner trust"
 msgstr "Премости поверење власника"
 
@@ -1647,37 +1634,30 @@ msgid "Ultimately"
 msgstr "Безусловнo"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:401
-#| msgid "Signature ID"
 msgid "Signature trust"
 msgstr "Поверење потписа"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:402
-#| msgid "I trust signatures from “%s” on other keys"
 msgid "I trust signatures from this key on other keys"
 msgstr "Верујем потписима са овог кључа на другим кључевима"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:418
-#| msgid "Sign Key"
 msgid "Sign key"
 msgstr "Потпишите кључ"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:425
-#| msgid "Sign Key"
 msgid "_Sign key"
 msgstr "_Потпиши кључ"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:436
-#| msgid "_Revoke Signature"
 msgid "Revoke key signature"
 msgstr "Опозовите потпис кључа"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:443
-#| msgid "Revoke"
 msgid "_Revoke"
 msgstr "_Опозови"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:454
-#| msgid "Owner"
 msgid "Owner trust"
 msgstr "Поверење власника"
 
@@ -1728,7 +1708,6 @@ msgstr "Подкључ %d од %s"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:203
 #, c-format
-#| msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgid "Are you sure you want to permanently delete subkey %s?"
 msgstr "Да ли сигурно желите трајно да обришете подкључ „%s“?"
 
@@ -1737,12 +1716,10 @@ msgid "Couldn’t delete subkey"
 msgstr "Не могу да обришем подкључ"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:263
-#| msgid "This key has been revoked"
 msgid "Subkey was revoked"
 msgstr "Подкључ је опозван"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:270
-#| msgid "This key has expired"
 msgid "Subkey has expired"
 msgstr "Подкључ је истекао"
 
@@ -1751,7 +1728,6 @@ msgid "Subkey is disabled"
 msgstr "Подкључ је искључен"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:283
-#| msgid "_Never expires"
 msgid "Never expires"
 msgstr "Никада не истиче"
 
@@ -1763,28 +1739,22 @@ msgid "%s (%d bit)"
 msgstr "%s (%d бита)"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:315
-#| msgctxt "Validity"
-#| msgid "Unknown"
 msgid "Unknown"
 msgstr "Непознато"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:7
-#| msgid "Expiration Date"
 msgid "Change expiration date"
 msgstr "Измените датум истека"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:11
-#| msgid "Revoke key"
 msgid "Revoke subkey"
 msgstr "Опозовите подкључ"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:15
-#| msgid "Couldn’t delete subkey"
 msgid "Delete subkey"
 msgstr "Обришите подкључ"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:46
-#| msgid "Usage"
 msgid "Usages"
 msgstr "Употреба"
 
@@ -1793,7 +1763,6 @@ msgid "Created"
 msgstr "Направљен"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:149
-#| msgid "Couldn’t change expiry date"
 msgid "Change expiry date"
 msgstr "Измените датум истека"
 
@@ -1823,28 +1792,23 @@ msgstr "Не могу да променим ИБ основног корисни
 
 #. Translators: (Unknown) signature name
 #: pgp/seahorse-pgp-uid-list-box.c:372
-#| msgid "(unknown)"
 msgid "(Unknown)"
 msgstr "(Непознат)"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:7
-#| msgid "Primary"
 msgid "Make _primary"
 msgstr "Учини _главним"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:64
-#| msgid "Signature ID"
 msgid "Signatures"
 msgstr "Потписи"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:77
 #: pgp/seahorse-pgp-uid-list-box-row.ui:88
-#| msgid "_Only display the signatures of people I trust"
 msgid "Only display the signatures of people I trust"
 msgstr "Приказуј само потписе људи којима верујем"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:87
-#| msgid "Show _trusted"
 msgid "Only trusted"
 msgstr "Само поверљиве"
 
@@ -1921,7 +1885,7 @@ msgstr "Неиманован"
 msgid "Failed to export certificate"
 msgstr "Нисам успео да извезем уверење"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:464
 msgid "Couldn’t delete"
 msgstr "Не могу да обришем"
 
@@ -2022,7 +1986,7 @@ msgstr "Доприносиоци:"
 msgid "Version of this application"
 msgstr "Издање овог програма"
 
-#: src/application.vala:173
+#: src/application.vala:176
 msgid "translator-credits"
 msgstr ""
 "Данило Шеган <danilo@gnome.org>\n"
@@ -2035,7 +1999,7 @@ msgstr ""
 "\n"
 "https://гном.срб — превод Гнома на српски језик"
 
-#: src/application.vala:176
+#: src/application.vala:179
 msgid "Seahorse Project Homepage"
 msgstr "Страница пројекта Морског коњића"
 
@@ -2211,20 +2175,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "Подеси кључ безбедне шкољке (SSH)…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:380
+#: src/sidebar.vala:377
 msgid "_Lock"
 msgstr "_Закључај"
 
-#: src/sidebar.vala:385
+#: src/sidebar.vala:382
 msgid "_Unlock"
 msgstr "_Откључај"
 
 #. Properties item
-#: src/sidebar.vala:402
+#: src/sidebar.vala:399
 msgid "_Properties"
 msgstr "_Својства"
 
-#: src/sidebar.vala:432
+#: src/sidebar.vala:429
 msgid "Couldn’t lock"
 msgstr "Не могу да закључам"
 
@@ -2456,7 +2420,6 @@ msgid "Copy public key to clipboard"
 msgstr "Копирај јавни кључ у оставу"
 
 #: ssh/seahorse-ssh-key-properties.ui:276
-#| msgid "Remote Access"
 msgid "Remote access"
 msgstr "Удаљени приступ"
 
@@ -2529,6 +2492,9 @@ msgstr "Не могу да подесим кључеве безбедне шко
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Подешавам кључеве безбедне шкољке…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Морски коњић"
 
 #~ msgid "Could not display help: %s"
 #~ msgstr "Не могу да прикажем помоћ: %s"
