@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-08-29 14:19+0500\n"
+"POT-Creation-Date: 2022-03-07 22:40+0000\n"
+"PO-Revision-Date: 2022-03-12 23:00+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -71,7 +71,7 @@ msgstr "Ба_с тарту"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:390
 msgid "_Delete"
 msgstr "Ө_шіру"
 
@@ -176,7 +176,6 @@ msgid "HTTP Key Server"
 msgstr "HTTP кілттер сервері"
 
 #: common/server-category.vala:67
-#| msgid "HTTP Key Server"
 msgid "HTTPS Key Server"
 msgstr "HTTPS кілт сервері"
 
@@ -411,8 +410,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Терезенің биіктігі (пиксельмен)."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:174
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Парольдер және кілттер"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -420,41 +421,38 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Парольдерді және шифрлеу кілттерін басқару"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
 msgstr ""
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"Seahorse көмегімен сіз PGP кілттерін жасау және басқару, SSH кілттерін жасау "
-"және басқару, кілттер серверлеріне кілттерді жариялау және олардан алу, "
-"кілттік фразаны қайта-қайта тере бермеу үшін оны кэштеу, кілттер және "
-"кілттер бауының қор көшірмелерін жасау әрекеттерін жасай аласыз."
+"Парольдер мен Кілттер қолданбасы көмегімен сіз PGP кілттерін жасау және "
+"басқару, SSH кілттерін жасау және басқару, кілттер серверлеріне кілттерді "
+"жариялау және олардан алу, кілттік фразаны қайта-қайта тере бермеу үшін оны "
+"кэштеу, кілттер және кілттер бауының қор көшірмелерін жасау әрекеттерін "
+"жасай аласыз."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "GNOME жобасы"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Парольдер және кілттер"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-msgid "keyring;encryption;security;sign;ssh;"
+msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
 msgstr ""
-"keyring;encryption;security;sign;ssh;кілттер бауы;шифрлеу;қауіпсіздік;"
-"қолтаңба;"
+"keyring;encryption;security;sign;ssh;gpg;pgp;кілттер бауы;шифрлеу;"
+"қауіпсіздік;қолтаңба;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Сақталған жеке парольдер, деректер және құпиялар"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:448
 msgid "Couldn’t unlock"
 msgstr "Блоктаудан босату мүмкін емес"
 
@@ -1364,7 +1362,6 @@ msgstr ""
 
 #: pgp/seahorse-ldap-source.c:593
 #, c-format
-#| msgid "Couldn’t delete"
 msgid "Couldn’t resolve address %s"
 msgstr ""
 
@@ -1433,7 +1430,6 @@ msgstr "(белгісіз)"
 
 #: pgp/seahorse-pgp-key-properties.c:472
 #, c-format
-#| msgid "This key has expired"
 msgid "This key expired on %s"
 msgstr ""
 
@@ -1461,7 +1457,6 @@ msgid "I no longer trust that “%s” owns this key"
 msgstr ""
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
-#| msgid "Change Passphrase"
 msgid "Change _passphrase"
 msgstr ""
 
@@ -1537,7 +1532,6 @@ msgid "Subkeys"
 msgstr ""
 
 #: pgp/seahorse-pgp-private-key-properties.ui:458
-#| msgid "Add subkey to %s"
 msgid "_Add subkey"
 msgstr ""
 
@@ -1583,7 +1577,6 @@ msgid "Sign key"
 msgstr "Кілтке қолтаңба қою"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:425
-#| msgid "SSH key"
 msgid "_Sign key"
 msgstr ""
 
@@ -1596,7 +1589,6 @@ msgid "_Revoke"
 msgstr "Қа_йта шақыру"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:454
-#| msgid "Owner"
 msgid "Owner trust"
 msgstr ""
 
@@ -1647,7 +1639,6 @@ msgstr ""
 
 #: pgp/seahorse-pgp-subkey-list-box.c:203
 #, c-format
-#| msgid "Are you sure you want to permanently delete %s?"
 msgid "Are you sure you want to permanently delete subkey %s?"
 msgstr ""
 
@@ -1656,12 +1647,10 @@ msgid "Couldn’t delete subkey"
 msgstr "Ішкі кілтті өшіру мүмкін емес"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:263
-#| msgid "This key has been revoked"
 msgid "Subkey was revoked"
 msgstr ""
 
 #: pgp/seahorse-pgp-subkey-list-box.c:270
-#| msgid "This key has expired"
 msgid "Subkey has expired"
 msgstr ""
 
@@ -1693,7 +1682,6 @@ msgid "Revoke subkey"
 msgstr "Ішкі кілтті қайта шақыру"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:15
-#| msgid "Couldn’t delete subkey"
 msgid "Delete subkey"
 msgstr ""
 
@@ -1706,7 +1694,6 @@ msgid "Created"
 msgstr "Жасалған"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:149
-#| msgid "Couldn’t change expiry date"
 msgid "Change expiry date"
 msgstr ""
 
@@ -1740,7 +1727,6 @@ msgid "(Unknown)"
 msgstr "(Белгісіз)"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:7
-#| msgid "Primary"
 msgid "Make _primary"
 msgstr ""
 
@@ -1754,7 +1740,6 @@ msgid "Only display the signatures of people I trust"
 msgstr ""
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:87
-#| msgid "Show _trusted"
 msgid "Only trusted"
 msgstr ""
 
@@ -1828,7 +1813,7 @@ msgstr "Атаусыз"
 msgid "Failed to export certificate"
 msgstr "Сертификатты экспорттау сәтсіз аяқталды"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:464
 msgid "Couldn’t delete"
 msgstr "Өшіру мүмкін емес"
 
@@ -1929,11 +1914,11 @@ msgstr "Үлес қосқандар:"
 msgid "Version of this application"
 msgstr "Осы бағдарламасының нұсқасы"
 
-#: src/application.vala:173
+#: src/application.vala:176
 msgid "translator-credits"
 msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>"
 
-#: src/application.vala:176
+#: src/application.vala:179
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse жобасының үй парағы"
 
@@ -2109,20 +2094,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr ""
 
 #. Lock and unlock items
-#: src/sidebar.vala:380
+#: src/sidebar.vala:377
 msgid "_Lock"
 msgstr "Б_локтау"
 
-#: src/sidebar.vala:385
+#: src/sidebar.vala:382
 msgid "_Unlock"
 msgstr "Бо_сату"
 
 #. Properties item
-#: src/sidebar.vala:402
+#: src/sidebar.vala:399
 msgid "_Properties"
 msgstr "Қас_иеттері"
 
-#: src/sidebar.vala:432
+#: src/sidebar.vala:429
 msgid "Couldn’t lock"
 msgstr "Блоктау мүмкін емес"
 
@@ -2416,6 +2401,9 @@ msgstr "Қашықтағы компьютерде қауіпсіз қоршам 
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Қауіпсіз қоршам кілттерін баптау…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
 
 #~ msgid "Not a valid Key Server address."
 #~ msgstr "Жарамды кілттер серверінің адресі емес."
