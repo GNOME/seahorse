@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-09-06 09:45+0000\n"
+"POT-Creation-Date: 2021-05-11 11:48+0000\n"
 "PO-Revision-Date: 2020-09-06 20:44+0200\n"
 "Last-Translator: Miquel-Àngel Burgos i Fradeja <miquel.angel.burgos@gmail."
 "com>\n"
@@ -43,7 +43,7 @@ msgstr "Jim Campbell"
 #: C/keyring.page:27 C/misc-key-backup.page:17 C/misc-key-fingerprint.page:16
 #: C/passwords-stored-create.page:16 C/passwords-view.page:18
 #: C/pgp-create.page:18 C/pgp-create.page:24 C/pgp-delete.page:17
-#: C/pgp-expiration-change.page:16 C/pgp-expired.page:17 C/pgp-export.page:16
+#: C/pgp-expiration-change.page:16 C/pgp-expired.page:17 C/pgp-export.page:17
 #: C/pgp-import.page:18 C/pgp-import.page:23 C/pgp-photoid.page:17
 #: C/pgp-publish.page:18 C/pgp-retrieve-remote.page:18 C/pgp-sign.page:16
 #: C/pgp-subkeys.page:16 C/pgp-sync.page:18 C/pgp-userid-add.page:17
@@ -143,7 +143,7 @@ msgstr ""
 #: C/misc-key-backup.page:15 C/misc-key-fingerprint.page:14
 #: C/passwords-stored-create.page:14 C/passwords-view.page:16
 #: C/pgp-create.page:22 C/pgp-delete.page:15 C/pgp-expiration-change.page:14
-#: C/pgp-expired.page:15 C/pgp-export.page:14 C/pgp-import.page:16
+#: C/pgp-expired.page:15 C/pgp-export.page:15 C/pgp-import.page:16
 #: C/pgp-photoid.page:15 C/pgp-sign.page:14 C/pgp-subkeys.page:14
 #: C/pgp-sync.page:16 C/pgp-userid-add.page:15 C/pgp-userid-primary.page:14
 #: C/pgp-userid-remove.page:15 C/pgp-userid.page:14
@@ -194,7 +194,8 @@ msgid ""
 msgstr ""
 "<app>Contrasenyes i claus</app> és una aplicació per a la gestió de claus. "
 "Tot i que no es pot utilitzar per a xifrar o signar fitxers i missatges, el "
-"podeu utilitzar per a <link xref=\"pgp-sign\">signar</link> claus de confiança."
+"podeu utilitzar per a <link xref=\"pgp-sign\">signar</link> claus de "
+"confiança."
 
 #. (itstool) path: section/p
 #: C/about-pgp.page:38
@@ -227,8 +228,8 @@ msgid ""
 "A <em>Secure Shell key</em>, often just called an <em>SSH key</em>, helps "
 "you create a secure connection over an unsecured network."
 msgstr ""
-"Una <em>Clau d'intèrpret d'ordres segur</em>, que sovint s'anomena <em>clau SSH</"
-"em>, us ajudarà a crear una connexió segura sobre una xarxa no segura."
+"Una <em>Clau d'intèrpret d'ordres segur</em>, que sovint s'anomena <em>clau "
+"SSH</em>, us ajudarà a crear una connexió segura sobre una xarxa no segura."
 
 #. (itstool) path: list/title
 #: C/about-ssh.page:28
@@ -304,8 +305,9 @@ msgid ""
 "terms that you will encounter while reading this help:"
 msgstr ""
 "<app>Contrasenyes i claus</app> us ajuda a generar i gestionar testimonis "
-"que es poden utilitzar per a protegir fitxers i comunicacions. A continuació, "
-"es detallen alguns termes bàsics que trobareu mentre llegiu aquesta ajuda:"
+"que es poden utilitzar per a protegir fitxers i comunicacions. A "
+"continuació, es detallen alguns termes bàsics que trobareu mentre llegiu "
+"aquesta ajuda:"
 
 #. (itstool) path: item/title
 #: C/glossary.page:31
@@ -398,6 +400,12 @@ msgstr "Anell de claus"
 #: C/glossary.page:64
 msgid "A keyring is a collection of passwords or keys."
 msgstr "Un anell de claus és una col·lecció de claus i contrasenyes."
+
+#. (itstool) path: info/title
+#: C/index.page:7
+msgctxt "link:trail"
+msgid "Passwords and Keys"
+msgstr "Contrasenyes i claus"
 
 #. (itstool) path: info/title
 #: C/index.page:8
@@ -698,8 +706,8 @@ msgid ""
 "can choose to protect your keyring with a password."
 msgstr ""
 "Utilitzeu els <link xref=\"keyring\">anells de claus</link> per a agrupar "
-"contrasenyes relacionades. Podeu optar per a protegir l'anell de claus amb una "
-"contrasenya."
+"contrasenyes relacionades. Podeu optar per a protegir l'anell de claus amb "
+"una contrasenya."
 
 #. (itstool) path: steps/title
 #: C/keyring-create.page:40
@@ -1564,17 +1572,17 @@ msgid ""
 "permanently deleted, even though your public key can still be <link xref="
 "\"pgp-retrieve-remote\">retrieved</link> from a key server and used to "
 "encrypt messages to you that you won't be able to read! To prevent such a "
-"key from being used, retrieve and revoke the key. The revoked key can then "
-"be <link xref=\"pgp-sync\">synced</link> with a key server to prevent people "
-"from retrieving and using it."
+"key from being used, retrieve and <link xref=\"subkeys-revoke\">revoke</"
+"link> the key. The revoked key can then be <link xref=\"pgp-sync\">synced</"
+"link> with a key server to prevent people from retrieving and using it."
 msgstr ""
 "Si esborreu la vostra clau GnuPG, significa que la vostra clau privada "
 "s'eliminarà permanentment, tot i que la vostra clau pública encara es pot "
-"<link xref=\"pgp-retrieve-remote\">recuperada</link> des d'un servidor de "
-"claus i utilitzada per a xifrar missatges que no sereu capaç de llegir! Per "
+"<link xref=\"pgp-retrieve-remote\">recuperar</link> des d'un servidor de "
+"claus i ser utilitzada per a xifrar missatges que no sereu capaços de llegir! Per "
 "a evitar que s'utilitzi aquesta clau, recupereu i revoqueu la clau. La clau "
 "revocada es pot <link xref=\"pgp-sync\">sincronitzar</link> amb un servidor "
-"de claus per a evitar que les persones puguin recuperar-la i utilitzar-la."
+"de claus per a evitar que altres persones puguin recuperar-la i utilitzar-la."
 
 #. (itstool) path: item/p
 #: C/pgp-delete.page:64
@@ -1719,45 +1727,45 @@ msgid ""
 "revoking it."
 msgstr ""
 "Si teniu missatges xifrats amb una clau caducada, heu de canviar la data de "
-"caducitat de la clau per a desxifrar aquests missatges abans de suprimir-la o "
-"revocar-la."
+"caducitat de la clau per a desxifrar aquests missatges abans de suprimir-la "
+"o revocar-la."
 
 #. (itstool) path: info/desc
-#: C/pgp-export.page:19
+#: C/pgp-export.page:20
 msgid "Export your public and private PGP keys to store them in keyfiles."
 msgstr ""
 "Exporteu les vostres claus PGP públiques i privades per a emmagatzemar-les "
 "en fitxers de claus."
 
 #. (itstool) path: page/title
-#: C/pgp-export.page:23
+#: C/pgp-export.page:24
 msgid "Export PGP keys"
 msgstr "Exportar claus PGP"
 
 #. (itstool) path: page/p
-#: C/pgp-export.page:25
+#: C/pgp-export.page:26
 msgid ""
 "Export the contents of your PGP keys and store them in keyfiles, to have a "
 "backup of your keys or to share your public key with someone."
 msgstr ""
 "Exporti el contingut de les seves claus PGP i emmagatzemi-les en fitxers de "
-"claus, per a tenir-ne una còpia de seguretat o per a compartir la clau pública "
-"amb algú."
+"claus, per a tenir-ne una còpia de seguretat o per a compartir la clau "
+"pública amb algú."
 
 #. (itstool) path: section/title
-#: C/pgp-export.page:29
+#: C/pgp-export.page:30
 msgid "To export your public PGP key:"
 msgstr "Per a exportar la vostra clau PGP pública:"
 
 #. (itstool) path: item/p
-#: C/pgp-export.page:33 C/pgp-export.page:62 C/pgp-userid-add.page:36
+#: C/pgp-export.page:34 C/pgp-export.page:62 C/pgp-userid-add.page:36
 #: C/pgp-userid-primary.page:32 C/pgp-userid-remove.page:31
 msgid "Select the <gui>GnuPG keys</gui> keyring from the left side panel."
 msgstr ""
 "Seleccioneu l'anell de claus <gui>claus GnuPG</gui> del panell de l'esquerra."
 
 #. (itstool) path: item/p
-#: C/pgp-export.page:37 C/pgp-export.page:66
+#: C/pgp-export.page:38 C/pgp-export.page:66
 msgid ""
 "Select the <gui>Personal PGP key</gui> that has to be exported, from the "
 "list."
@@ -1766,7 +1774,7 @@ msgstr ""
 "llista."
 
 #. (itstool) path: item/p
-#: C/pgp-export.page:41 C/ssh-export.page:42
+#: C/pgp-export.page:42 C/ssh-export.page:42
 msgid ""
 "Right-click on the key and select <gui style=\"menuitem\">Export…</gui>."
 msgstr ""
@@ -1774,7 +1782,7 @@ msgstr ""
 "\">Exporta…</gui>."
 
 #. (itstool) path: item/p
-#: C/pgp-export.page:44
+#: C/pgp-export.page:45
 msgid ""
 "To store the keys in the ASCII format, select <gui>Armored PGP keys</gui> "
 "from the menu at the bottom of the export window"
@@ -1783,7 +1791,7 @@ msgstr ""
 "armadura</gui> del menú inferior de la finestra d'exportació"
 
 #. (itstool) path: item/p
-#: C/pgp-export.page:49 C/pgp-export.page:77
+#: C/pgp-export.page:50 C/pgp-export.page:80
 msgid ""
 "Choose a location for your keyfile, and press <gui style=\"button\">Export</"
 "gui> to finish."
@@ -1807,8 +1815,13 @@ msgstr ""
 
 #. (itstool) path: item/p
 #: C/pgp-export.page:74
-msgid "Press the <gui style=\"button\">Export</gui> button."
-msgstr "Premeu el botó <gui style=\"button\">Exporta</gui>."
+msgid "Press the <gui style=\"button\">Export to file</gui> button."
+msgstr "Premeu el botó <gui style=\"button\">Exporta al fitxer</gui>."
+
+#. (itstool) path: item/p
+#: C/pgp-export.page:77
+msgid "Select <gui style=\"menuitem\">Export secret key</gui>."
+msgstr "Seleccioneu <gui style=\"menuitem\">Exporta una clau secreta</gui>."
 
 #. (itstool) path: info/desc
 #: C/pgp-import.page:26
@@ -2174,12 +2187,12 @@ msgid ""
 "identity, such as a passport, driver's license, or similar. If the two IDs "
 "match, the key is said to be trustworthy."
 msgstr ""
-"Per a demostrar que confieu i creieu en la genuïnitat de la clau d'algú, podeu "
-"signar-la. La clau d'una persona només s'ha de signar després de comparar "
-"l'<link xref=\"pgp-userid\">ID d'usuari</link> de la clau amb una prova "
-"vàlida de la seva identitat, com ara un passaport, un permís de conduir o "
-"similar. Si els dos identificadors coincideixen, es diu que la clau és "
-"fiable."
+"Per a demostrar que confieu i creieu en la genuïnitat de la clau d'algú, "
+"podeu signar-la. La clau d'una persona només s'ha de signar després de "
+"comparar l'<link xref=\"pgp-userid\">ID d'usuari</link> de la clau amb una "
+"prova vàlida de la seva identitat, com ara un passaport, un permís de "
+"conduir o similar. Si els dos identificadors coincideixen, es diu que la "
+"clau és fiable."
 
 #. (itstool) path: steps/title
 #: C/pgp-sign.page:31
@@ -2324,9 +2337,9 @@ msgid ""
 "are also collected on your master key. If the master key is compromised, you "
 "have no choice but to revoke it and all the subkeys attached to it."
 msgstr ""
-"La <em>clau mestra</em> s'utilitza per a <link xref=\"pgp-sign\">signar</link> "
-"altres claus, crear subclaus i <link xref=\"subkeys-revoke\">revocar</link> "
-"subclaus. Cal que la clau mestra sigui molt segura. També es recullen "
+"La <em>clau mestra</em> s'utilitza per a <link xref=\"pgp-sign\">signar</"
+"link> altres claus, crear subclaus i <link xref=\"subkeys-revoke\">revocar</"
+"link> subclaus. Cal que la clau mestra sigui molt segura. També es recullen "
 "signatures de confiança a la vostra clau mestra. Si la clau mestra es "
 "compromet, no tindreu opció per a revocar-la, ni les subclaus que hi té "
 "lligades."
@@ -3048,10 +3061,10 @@ msgstr ""
 #: C/ssh-import.page:45
 msgid ""
 "In the new dialog, select the key you wish to import. Public SSH keys end "
-"with <file>.pub</file>."
+"with <file>pub</file>."
 msgstr ""
 "Al diàleg nou, seleccioneu la clau que vulgueu importar. Les claus SSH "
-"públiques acaben amb <file>.pub</file>."
+"públiques acaben amb <file>pub</file>."
 
 #. (itstool) path: page/p
 #: C/ssh-import.page:53
