@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-09-29 10:36+0000\n"
-"PO-Revision-Date: 2022-01-23 14:58+0100\n"
+"POT-Creation-Date: 2022-03-07 22:40+0000\n"
+"PO-Revision-Date: 2022-03-14 09:45+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -80,7 +80,7 @@ msgstr "A_nnulla"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:390
 msgid "_Delete"
 msgstr "_Elimina"
 
@@ -432,8 +432,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Altezza in pixel della finestra."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:174
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Password e chiavi"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -441,40 +443,38 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Gestisce le proprie password e chiavi di cifratura"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
 msgstr ""
-"Seahorse è un'applicazione GNOME per la gestione di chiavi di cifratura."
+"Password e chiavi è un'applicazione GNOME per la gestione di chiavi di "
+"cifratura."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"Con seahorse è possibile creare e gestire chiavi PGP, SSH, pubblicare e "
-"recuperare chiavi da diversi server di chiavi, mantenere in memoria le "
-"passphrase in modo da non doverle ripetere ed è in grado di eseguire backup "
-"delle proprie chiavi e del portachiavi."
+"Con Password e chiavi è possibile creare e gestire chiavi PGP, SSH, "
+"pubblicare e recuperare chiavi da diversi server di chiavi, mantenere in "
+"memoria le passphrase in modo da non doverle ripetere ed è in grado di "
+"eseguire backup delle proprie chiavi e del portachiavi."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "Il progetto GNOME"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Password e chiavi"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-msgid "keyring;encryption;security;sign;ssh;"
-msgstr "portachiavi;cifratura;cifrare;crittare;sicurezza;firma;firmare;ssh;"
+msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
+msgstr ""
+"portachiavi;cifratura;cifrare;crittare;sicurezza;firma;firmare;ssh;gpg;pgp;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Archivia password, credenziali e segreti personali"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:448
 msgid "Couldn’t unlock"
 msgstr "Impossibile sbloccare"
 
@@ -1888,7 +1888,7 @@ msgstr "Senza nome"
 msgid "Failed to export certificate"
 msgstr "Esportazione del certificato non riuscita"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:464
 msgid "Couldn’t delete"
 msgstr "Impossibile eliminare"
 
@@ -1989,13 +1989,13 @@ msgstr "Contributi:"
 msgid "Version of this application"
 msgstr "Versione di questa applicazione"
 
-#: src/application.vala:173
+#: src/application.vala:176
 msgid "translator-credits"
 msgstr ""
 "Milo Casagrande <milo@milo.name>\n"
 "Luigi Maselli <metnik at tiscali.it>"
 
-#: src/application.vala:176
+#: src/application.vala:179
 msgid "Seahorse Project Homepage"
 msgstr "Sito web del progetto Seahorse"
 
@@ -2171,20 +2171,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "Configura chiave per Secure Shell…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:380
+#: src/sidebar.vala:377
 msgid "_Lock"
 msgstr "_Blocca"
 
-#: src/sidebar.vala:385
+#: src/sidebar.vala:382
 msgid "_Unlock"
 msgstr "_Sblocca"
 
 #. Properties item
-#: src/sidebar.vala:402
+#: src/sidebar.vala:399
 msgid "_Properties"
 msgstr "_Proprietà"
 
-#: src/sidebar.vala:432
+#: src/sidebar.vala:429
 msgid "Couldn’t lock"
 msgstr "Impossibile bloccare"
 
