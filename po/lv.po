@@ -7,13 +7,13 @@
 # Peteris Krisjanis <pecisk@gmail.com>, 2010, 2012.
 # Rudolfs <rudolfs.mazurs@gmail.com>, 2011.
 # Rūdofls Mazurs <rudolfs.mazurs@gmail.com>, 2011, 2012, 2013.
-# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
+# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-09-29 10:36+0000\n"
-"PO-Revision-Date: 2021-10-31 17:13+0200\n"
+"POT-Creation-Date: 2022-03-07 22:40+0000\n"
+"PO-Revision-Date: 2022-03-24 22:26+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -77,7 +77,7 @@ msgstr "At_celt"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:390
 msgid "_Delete"
 msgstr "_Dzēst"
 
@@ -427,8 +427,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Loga augstums pikseļos."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:174
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Paroles un atslēgas"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -436,16 +438,24 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Pārvaldīt paroles un šifrēšanas atslēgas"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
-msgstr "Seahorse ir GNOME lietotne, kas pārvalda šifrēšanas atslēgas."
+#| msgid "Seahorse is a GNOME application for managing encryption keys."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
+msgstr ""
+"“Paroles un atslēgas” ir GNOME lietotne, kas pārvalda šifrēšanas atslēgas."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
+#| msgid ""
+#| "With seahorse you can create and manage PGP keys, create and manage SSH "
+#| "keys, publish and retrieve keys from key servers, cache your passphrase "
+#| "so you don’t have to keep typing it and backup your keys and keyring."
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"Ar seahorse jūs varat izveidot un pārvaldīt PGP atslēgas, izveidot un "
+"Ar “Parolēm un atslēgām” jūs varat izveidot un pārvaldīt PGP atslēgas,"
+" izveidot un "
 "pārvaldīt SSH atslēgas, publicēt un saņemt atslēgas no atslēgu serveriem, "
 "glabāt paroles, lai tās nevajadzētu rakstīt un dublēt atslēgas un atslēgu "
 "saišķus."
@@ -454,21 +464,17 @@ msgstr ""
 msgid "The GNOME Project"
 msgstr "GNOME projekts"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Paroles un atslēgas"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-msgid "keyring;encryption;security;sign;ssh;"
-msgstr "atslēgu saišķis;šifrēšana;drošība;parakstīt;ssh;"
+#| msgid "keyring;encryption;security;sign;ssh;"
+msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
+msgstr "atslēgu saišķis;šifrēšana;drošība;parakstīt;ssh;gpg;pgp;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Noglabātās personiskās paroles, akreditācijas dati un noslēpumi"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:448
 msgid "Couldn’t unlock"
 msgstr "Neizdevās atslēgt"
 
@@ -1089,7 +1095,6 @@ msgid "Couldn’t add photo"
 msgstr "Neizdevās pievienot fotogrāfiju"
 
 #: pgp/seahorse-gpgme-photos.c:291
-#| msgid "The file could not be loaded. It may be in an invalid format"
 msgid "The file could not be loaded. It may be in an invalid format."
 msgstr "Neizdevās ielādēt datni. Iespējams tai ir nederīgs formāts."
 
@@ -1497,7 +1502,6 @@ msgstr "(nezināms)"
 
 #: pgp/seahorse-pgp-key-properties.c:472
 #, c-format
-#| msgid "This key expired on: %s"
 msgid "This key expired on %s"
 msgstr "Šīs atslēgas derīguma termiņš bija līdz %s"
 
@@ -1521,14 +1525,10 @@ msgstr "Uzskatu, ka “%s” ir šīs atslēgas īpašnieks"
 
 #: pgp/seahorse-pgp-key-properties.c:1002
 #, c-format
-#| msgid ""
-#| "If you no longer trust that “%s” owns this key, <i>revoke</i> your "
-#| "signature:"
 msgid "I no longer trust that “%s” owns this key"
 msgstr "Vairāk neuzticos, ka šī atslēga pieder “%s”"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:30
-#| msgid "Change _Passphrase"
 msgid "Change _passphrase"
 msgstr "Mainīt _paroli"
 
@@ -1542,7 +1542,6 @@ msgstr "Eksportēt _slepeno atslēgu"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:60
 #: pgp/seahorse-pgp-public-key-properties.ui:42
-#| msgid "The owner of the key revoked the key. It can no longer be used."
 msgid "The owner of the key revoked the key. It should no longer be used."
 msgstr ""
 "Atslēgas īpašnieks ir atsaucis šo atslēgu. To vairs nevajadzētu izmantot."
@@ -1593,23 +1592,19 @@ msgstr "Derīga līdz"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:408
 #: pgp/seahorse-pgp-public-key-properties.ui:334
-#| msgid "Add User ID"
 msgid "User IDs"
 msgstr "lietotāja ID"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:421
-#| msgid "Add User ID"
 msgid "Add user ID"
 msgstr "Pievienot lietotāja ID"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:445
 #: pgp/seahorse-pgp-public-key-properties.ui:356
-#| msgid "_Subkeys"
 msgid "Subkeys"
 msgstr "Apakšatslēgas"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:458
-#| msgid "Add subkey to %s"
 msgid "_Add subkey"
 msgstr "Pievienot _apakšatslēgu"
 
@@ -1624,7 +1619,6 @@ msgid "Your trust of this key"
 msgstr "Jūsu uzticība šai atslēgai"
 
 #: pgp/seahorse-pgp-private-key-properties.ui:493
-#| msgid "Override Owner _Trust:"
 msgid "Override owner trust"
 msgstr "Aizstāt īpašnieka uzticamību"
 
@@ -1644,37 +1638,30 @@ msgid "Ultimately"
 msgstr "Gandrīz"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:401
-#| msgid "Signature ID"
 msgid "Signature trust"
 msgstr "Paraksta uzticamība"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:402
-#| msgid "I trust signatures from “%s” on other keys"
 msgid "I trust signatures from this key on other keys"
 msgstr "Es uzticos parakstiem no šīs atslēgas par citām atslēgām"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:418
-#| msgid "Sign Key"
 msgid "Sign key"
 msgstr "Parakstīt atslēgu"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:425
-#| msgid "Sign Key"
 msgid "_Sign key"
 msgstr "Parakstīt at_slēgu"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:436
-#| msgid "_Revoke Signature"
 msgid "Revoke key signature"
 msgstr "Atsaukt atslēgas parakstu"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:443
-#| msgid "Revoke"
 msgid "_Revoke"
 msgstr "_Atsaukt"
 
 #: pgp/seahorse-pgp-public-key-properties.ui:454
-#| msgid "Owner"
 msgid "Owner trust"
 msgstr "Īpašnieka uzticamība"
 
@@ -1725,7 +1712,6 @@ msgstr "Apakšatslēga %d no %s"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:203
 #, c-format
-#| msgid "Are you sure you want to permanently delete subkey %d of %s?"
 msgid "Are you sure you want to permanently delete subkey %s?"
 msgstr "Vai tiešām vēlaties neatgriezeniski dzēst apakšatslēgu %s?"
 
@@ -1734,12 +1720,10 @@ msgid "Couldn’t delete subkey"
 msgstr "Neizdevās izdzēst apakšatslēgu"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:263
-#| msgid "This key has been revoked"
 msgid "Subkey was revoked"
 msgstr "Apakšatslēga tika atsaukta"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:270
-#| msgid "This key has expired"
 msgid "Subkey has expired"
 msgstr "Apakšatslēgai beidzās derīguma termiņš"
 
@@ -1748,7 +1732,6 @@ msgid "Subkey is disabled"
 msgstr "Apakšatslēga iz deaktivēta"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:283
-#| msgid "_Never expires"
 msgid "Never expires"
 msgstr "Nekad neizbeidzas"
 
@@ -1760,28 +1743,22 @@ msgid "%s (%d bit)"
 msgstr "%s (%d bitu)"
 
 #: pgp/seahorse-pgp-subkey-list-box.c:315
-#| msgctxt "Validity"
-#| msgid "Unknown"
 msgid "Unknown"
 msgstr "Nezināms"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:7
-#| msgid "Expiration Date"
 msgid "Change expiration date"
 msgstr "Mainīt derīguma beigu datumu"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:11
-#| msgid "Revoke key"
 msgid "Revoke subkey"
 msgstr "Atsaukt apakšatslēgu"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:15
-#| msgid "Couldn’t delete subkey"
 msgid "Delete subkey"
 msgstr "Dzēst apakšatslēgu"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:46
-#| msgid "Usage"
 msgid "Usages"
 msgstr "Lietojumi"
 
@@ -1790,7 +1767,6 @@ msgid "Created"
 msgstr "Izveidota"
 
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:149
-#| msgid "Couldn’t change expiry date"
 msgid "Change expiry date"
 msgstr "Mainīt derīguma beigu datumu"
 
@@ -1821,28 +1797,23 @@ msgstr "Neizdevās izmainīt primāro lietotāja ID"
 
 #. Translators: (Unknown) signature name
 #: pgp/seahorse-pgp-uid-list-box.c:372
-#| msgid "(unknown)"
 msgid "(Unknown)"
 msgstr "(Nezināms)"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:7
-#| msgid "Primary"
 msgid "Make _primary"
 msgstr "_Padarīt par primāro"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:64
-#| msgid "Signature ID"
 msgid "Signatures"
 msgstr "Paraksti"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:77
 #: pgp/seahorse-pgp-uid-list-box-row.ui:88
-#| msgid "_Only display the signatures of people I trust"
 msgid "Only display the signatures of people I trust"
 msgstr "Rādīt šo parakstu tikai man uzticamiem cilvēkiem"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:87
-#| msgid "Show _trusted"
 msgid "Only trusted"
 msgstr "Tikai uzticamie"
 
@@ -1918,7 +1889,7 @@ msgstr "Nenosaukts"
 msgid "Failed to export certificate"
 msgstr "Neizdevās eksportēt sertifikātu"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:464
 msgid "Couldn’t delete"
 msgstr "Neizdevās izdzēst"
 
@@ -2021,7 +1992,7 @@ msgstr "Palīdzējuši:"
 msgid "Version of this application"
 msgstr "Šīs lietotnes versija"
 
-#: src/application.vala:173
+#: src/application.vala:176
 msgid "translator-credits"
 msgstr ""
 "Nauris Kanasnieks <getnrs@inbox.lv>\n"
@@ -2033,7 +2004,7 @@ msgstr ""
 "  Pēteris Krišjānis https://launchpad.net/~pecisk-gmail\n"
 "  Raivis Dejus https://launchpad.net/~orvils"
 
-#: src/application.vala:176
+#: src/application.vala:179
 msgid "Seahorse Project Homepage"
 msgstr "Seahorse projekta mājas lapa"
 
@@ -2209,20 +2180,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "Konfigurēt atslēgu drošajai čaulai…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:380
+#: src/sidebar.vala:377
 msgid "_Lock"
 msgstr "Aiz_slēgt"
 
-#: src/sidebar.vala:385
+#: src/sidebar.vala:382
 msgid "_Unlock"
 msgstr "_Atslēgt"
 
 #. Properties item
-#: src/sidebar.vala:402
+#: src/sidebar.vala:399
 msgid "_Properties"
 msgstr "Ī_pašības"
 
-#: src/sidebar.vala:432
+#: src/sidebar.vala:429
 msgid "Couldn’t lock"
 msgstr "Neizdevās aizslēgt"
 
@@ -2454,7 +2425,6 @@ msgid "Copy public key to clipboard"
 msgstr "Kopēt publisko atslēgu uz starpliktuvi"
 
 #: ssh/seahorse-ssh-key-properties.ui:276
-#| msgid "Remote Access"
 msgid "Remote access"
 msgstr "Attālinātā piekļuve"
 
@@ -2527,6 +2497,9 @@ msgstr "Neizdevās nokonfigurēt attālinātā datora drošās čaulas atslēgas
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigurē drošās čaulas atslēgas…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
 
 #~ msgid "Could not display help: %s"
 #~ msgstr "Neizdevās parādīt palīdzību: %s"
