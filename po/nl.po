@@ -29,14 +29,14 @@
 # Wouter Bolsterlee <wbolster@gnome.org>, 2007–2011.
 # Redmar <redmar@ubuntu.com>, 2012, 2013.
 # Hannie Dumoleyn <hannie@ubuntu-nl.org>, 2013, 2014, 2017, 2018, 2021.
-# Nathan Follens <nfollens@gnome.org>, 2015-2021.
+# Nathan Follens <nfollens@gnome.org>, 2015-2022.
 # Justin van Steijn <jvs@fsfe.org>, 2016, 2017, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-09-02 17:41+0200\n"
+"POT-Creation-Date: 2022-03-07 22:40+0000\n"
+"PO-Revision-Date: 2022-03-25 11:01+0100\n"
 "Last-Translator: Nathan Follens <nfollens@gnome.org>\n"
 "Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
 "Language: nl\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-02-02 09:00+0000\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -100,7 +100,7 @@ msgstr "Annu_leren"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:390
 msgid "_Delete"
 msgstr "_Verwijderen"
 
@@ -450,8 +450,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Hoogte (in pixels) van het venster."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:174
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Wachtwoorden en sleutels"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -459,40 +461,39 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Uw encryptiesleutels en wachtwoorden beheren"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
 msgstr ""
-"Seahorse is een Gnome-toepassing voor het beheren van encryptiesleutels."
+"Wachtwoorden en sleutels is een Gnome-toepassing voor het beheren van "
+"encryptiesleutels."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"Met Seahorse kunt u PGP- en SSH-sleutels aanmaken en beheren, sleutels "
-"publiceren en ophalen van sleutelservers, uw wachtwoord bewaren zodat u dit "
-"niet steeds hoeft in te typen, en een reservekopie maken van uw sleutels en "
-"sleutelbos."
+"Met Wachtwoorden en sleutels kunt u PGP- en SSH-sleutels aanmaken en "
+"beheren, sleutels publiceren en ophalen van sleutelservers, uw wachtwoord "
+"bewaren zodat u dit niet steeds hoeft in te typen, en een reservekopie maken "
+"van uw sleutels en sleutelbos."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:202
 msgid "The GNOME Project"
 msgstr "Het Gnome-project"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Wachtwoorden en sleutels"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-msgid "keyring;encryption;security;sign;ssh;"
-msgstr "sleutelbos;sleutelring;encryptie;versleuteling;beveiliging;ssh;"
+msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
+msgstr ""
+"keyring;encryption;security;sign;ssh;gpg;pgp;sleutelbos;sleutelring;"
+"encryptie;versleuteling;beveiliging;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Opgeslagen persoonlijke wachtwoorden, aanmeldgegevens en geheimen"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:448
 msgid "Couldn’t unlock"
 msgstr "Ontgrendelen mislukt"
 
@@ -1913,7 +1914,7 @@ msgstr "Naamloos"
 msgid "Failed to export certificate"
 msgstr "Certificaat exporteren mislukt"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:464
 msgid "Couldn’t delete"
 msgstr "Verwijderen mislukt"
 
@@ -2014,7 +2015,7 @@ msgstr "Bijdragen:"
 msgid "Version of this application"
 msgstr "Versie van deze toepassing"
 
-#: src/application.vala:173
+#: src/application.vala:176
 msgid "translator-credits"
 msgstr ""
 "Vincent van Adrighem\n"
@@ -2038,7 +2039,7 @@ msgstr ""
 "  Wouter Bolsterlee (uws) https://launchpad.net/~uws\n"
 "  rob https://launchpad.net/~rvdb"
 
-#: src/application.vala:176
+#: src/application.vala:179
 msgid "Seahorse Project Homepage"
 msgstr "Startpagina van het Seahorse-project"
 
@@ -2214,20 +2215,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "Sleutel configureren voor Secure Shell…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:380
+#: src/sidebar.vala:377
 msgid "_Lock"
 msgstr "Ver_grendelen"
 
-#: src/sidebar.vala:385
+#: src/sidebar.vala:382
 msgid "_Unlock"
 msgstr "_Ontgrendelen"
 
 #. Properties item
-#: src/sidebar.vala:402
+#: src/sidebar.vala:399
 msgid "_Properties"
 msgstr "_Eigenschappen"
 
-#: src/sidebar.vala:432
+#: src/sidebar.vala:429
 msgid "Couldn’t lock"
 msgstr "Vergrendelen mislukt"
 
@@ -2530,6 +2531,9 @@ msgstr "Instellen van Secure Shell-sleutels op andere computer mislukt."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Secure Shell-sleutels configureren…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
 
 #~ msgid "[Unknown]"
 #~ msgstr "[Onbekend]"
