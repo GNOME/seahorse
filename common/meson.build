@@ -18,7 +18,6 @@ common_sources = files(
   'passphrase-prompt.vala',
   'pgp-settings.vala',
   'place.vala',
-  'predicate.vala',
   'prefs.vala',
   'registry.vala',
   'server-category.vala',

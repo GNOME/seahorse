@@ -112,14 +112,9 @@ public class Seahorse.SearchProvider : GLib.Object {
         if (get_n_loading() >= 0)
             yield load();
 
-        Predicate predicate = Predicate () {
-            custom = object_matches_search,
-            custom_target = terms
-        };
-
         string?[] results = {};
         foreach (unowned GLib.Object obj in this.collection.get_objects()) {
-            if (predicate.match(obj)) {
+            if (object_matches_search(obj, terms)) {
                 string str = "%p".printf(obj);
 
                 if (!(str in this.handles)) {
@@ -138,18 +133,13 @@ public class Seahorse.SearchProvider : GLib.Object {
             throws GLib.Error {
         this.app.hold ();
 
-        Predicate predicate = Predicate() {
-            custom = object_matches_search,
-            custom_target = new_terms
-        };
-
         string?[] results = {};
         foreach (string previous_result in previous_results) {
             unowned GLib.Object? object = this.handles.lookup(previous_result);
             if (object == null || !this.collection.contains(object))
                 continue; // Bogus value
 
-            if (predicate.match(object))
+            if (object_matches_search(object, new_terms))
                 results += previous_result;
         }
 
@@ -213,7 +203,7 @@ public class Seahorse.SearchProvider : GLib.Object {
         // TODO
     }
 
-    private static bool object_matches_search (GLib.Object? object, void* terms) {
+    private bool object_matches_search (GLib.Object? object, string[] terms) {
         foreach (unowned string term in ((string[]) terms)) {
             if (!object_contains_filtered_text (object, term))
                 return false;
@@ -223,7 +213,7 @@ public class Seahorse.SearchProvider : GLib.Object {
     }
 
     /* Search through row for text */
-    private static bool object_contains_filtered_text (GLib.Object object, string? text) {
+    private bool object_contains_filtered_text (GLib.Object object, string? text) {
         string? name = null;
         object.get("label", out name, null);
         if (name != null && (text in name.down()))
