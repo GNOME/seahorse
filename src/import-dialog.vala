@@ -44,7 +44,10 @@ public class Seahorse.ImportDialog : Gtk.Dialog {
         ((Gtk.HeaderBar) get_header_bar()).pack_end(this.import);
 
         this.viewer = new Gcr.ViewerWidget();
-        this.viewer.added.connect((v, r, parsed) => this.import.add_parsed(parsed));
+        this.viewer.added.connect((v, r, parsed) => {
+            debug("Parsed a '%s' with format %d", parsed.get_description(), parsed.get_format());
+            this.import.add_parsed(parsed);
+        });
         this.viewer.show();
         ((Gtk.Box) get_content_area()).pack_end(this.viewer);
     }
