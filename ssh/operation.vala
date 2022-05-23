@@ -32,14 +32,6 @@ public abstract class Operation : GLib.Object {
 
     private string command_name;
 
-    private StringBuilder _std_out = new StringBuilder();
-    protected StringBuilder std_out { get { return _std_out; } }
-
-    private StringBuilder _std_err = new StringBuilder();
-    protected StringBuilder std_err { get { return _std_err; } }
-
-    private Pid pid;
-
     // These are all fields that will be used in case the user will be prompted.
     protected string? prompt_title;
     protected string? prompt_message;
@@ -54,12 +46,12 @@ public abstract class Operation : GLib.Object {
      * @param cancellable Can be used if you want to cancel. The process will be killed.
      * @return The output of the command.
      */
-    protected async void operation_async(string command,
-                                         string? input,
-                                         Cancellable? cancellable) throws GLib.Error {
-        if (command == null || command == "")
-            return;
+    protected async string? operation_async(string command,
+                                            string? input,
+                                            Cancellable? cancellable) throws GLib.Error {
+        return_val_if_fail (command != null && command != "", null);
 
+        // Strip the command name for logging purposes
         string[] args;
         try {
             Shell.parse_argv(command, out args);
@@ -71,134 +63,34 @@ public abstract class Operation : GLib.Object {
 
         debug("SSHOP: Executing SSH command: %s", command);
 
-        // And off we go to run the program
-        int? fin, fout, ferr;
+        var flags = SubprocessFlags.STDOUT_PIPE | SubprocessFlags.STDERR_PIPE;
         if (input != null)
-            fin = null;
-        Process.spawn_async_with_pipes(null, args, null,
-                                       SpawnFlags.DO_NOT_REAP_CHILD | SpawnFlags.LEAVE_DESCRIPTORS_OPEN,
-                                       on_spawn_setup_child, out this.pid, out fin, out fout, out ferr);
+            flags |= SubprocessFlags.STDIN_PIPE;
+        var launcher = new SubprocessLauncher(flags);
 
-        ulong cancelled_sig = 0;
-        if (cancellable != null) {
-            cancelled_sig = cancellable.connect(() =>  {
-#if VALA_0_40
-                Posix.kill(this.pid, Posix.Signal.TERM);
-#else
-                Posix.kill(this.pid, Posix.SIGTERM);
-#endif
-            });
-        }
-
-        // Copy the input for later writing
-        if (input != null) {
-            StringBuilder std_in = new StringBuilder(input);
-            debug("Sending input to '%s': '%s'", this.command_name, std_in.str);
-            create_io_channel(std_in, fin, IOCondition.OUT | IOCondition.HUP,
-                              (io, cond) => on_io_ssh_write(io, cond, std_in));
-        }
-
-        // Make all the proper IO Channels for the output/error
-        create_io_channel(this.std_out, fout, IOCondition.IN | IOCondition.HUP,
-                          (io, cond) => on_io_ssh_read(io, cond, this.std_out));
-        create_io_channel(this.std_err, ferr, IOCondition.IN | IOCondition.HUP,
-                          (io, cond) => on_io_ssh_read(io, cond, this.std_err));
-
-        // Process watch
-        watch_ssh_process(cancellable, cancelled_sig);
-    }
-
-    private void create_io_channel(StringBuilder data,
-                                   int handle,
-                                   IOCondition io_cond,
-                                   IOFunc io_func) throws GLib.Error {
-        Posix.fcntl(handle, Posix.F_SETFL, Posix.O_NONBLOCK | Posix.fcntl(handle, Posix.F_GETFL));
-        IOChannel io_channel = new IOChannel.unix_new(handle);
-        io_channel.set_encoding(null);
-        io_channel.set_close_on_unref(true);
-        io_channel.add_watch(io_cond, io_func);
-    }
-
-    private void watch_ssh_process(Cancellable? cancellable, ulong cancelled_sig) throws GLib.Error {
-        ChildWatch.add_full(Priority.DEFAULT, this.pid, (pid, status) => {
-            debug("Process '%s' done.", this.command_name);
-
-            // FIXME This is the wrong place to catch that error really
-            try {
-                Process.check_exit_status(status);
-            } catch (GLib.Error e) {
-                Seahorse.Util.show_error(null, this.prompt_title, this.std_err.str);
-            }
-            cancellable.disconnect(cancelled_sig);
-            Process.close_pid(pid);
-        });
-    }
-
-    private bool on_io_ssh_read(IOChannel source, IOCondition condition, StringBuilder data) {
-        try {
-            IOStatus status = IOStatus.NORMAL;
-            while (status != IOStatus.EOF) {
-                string buf;
-                status = source.read_line(out buf, null, null);
-
-                if (status == IOStatus.NORMAL && buf != null) {
-                    data.append(buf);
-                    debug("%s", data.str.substring(buf.length));
-                }
-            }
-        } catch (GLib.Error e) {
-            critical("Couldn't read output of SSH command. Error: %s", e.message);
-#if VALA_0_40
-            Posix.kill(this.pid, Posix.Signal.TERM);
-#else
-            Posix.kill(this.pid, Posix.SIGTERM);
-#endif
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool on_io_ssh_write(IOChannel source, IOCondition condition, StringBuilder input) {
-        debug("SSHOP: SSH ready for input");
-        try {
-            size_t written = 0;
-            IOStatus status = source.write_chars(input.str.to_utf8(), out written);
-            if (status != IOStatus.AGAIN) {
-                debug("SSHOP: Wrote %u bytes to SSH", (uint) written);
-                input.erase(0, (ssize_t) written);
-            }
-        } catch (GLib.Error e) {
-            critical("Couldn't write to STDIN of SSH command. Error: %s", e.message);
-#if VALA_0_40
-            Posix.kill(this.pid, Posix.Signal.TERM);
-#else
-            Posix.kill(this.pid, Posix.SIGTERM);
-#endif
-            return false;
-        }
-
-        return true;
-    }
-
-    private void on_spawn_setup_child() {
         // No terminal for this process
         Posix.setsid();
 
-        Environment.set_variable("SSH_ASKPASS",GLib.Path.build_filename(Config.EXECDIR, "ssh-askpass"), false);
-
-        // We do screen scraping so we need locale C
-        if (Environment.get_variable("LC_ALL") != null)
-            Environment.set_variable("LC_ALL", "C", true);
-        Environment.set_variable("LANG", "C", true);
-
+        // We setup parts of the process using some environment variables
+        launcher.setenv("SSH_ASKPASS", GLib.Path.build_filename(Config.EXECDIR, "ssh-askpass"), false);
         if (this.prompt_title != null)
-            Environment.set_variable("SEAHORSE_SSH_ASKPASS_TITLE", prompt_title, true);
+            launcher.setenv("SEAHORSE_SSH_ASKPASS_TITLE", prompt_title, true);
         if (this.prompt_message != null)
-            Environment.set_variable("SEAHORSE_SSH_ASKPASS_MESSAGE", prompt_message, true);
+            launcher.setenv("SEAHORSE_SSH_ASKPASS_MESSAGE", prompt_message, true);
         if (this.prompt_transient_for != 0) {
             string parent = "%lu".printf(prompt_transient_for);
-            Environment.set_variable("SEAHORSE_SSH_ASKPASS_PARENT", parent, true);
+            launcher.setenv("SEAHORSE_SSH_ASKPASS_PARENT", parent, true);
+        }
+
+        // And off we go to run the program
+        var subprocess = launcher.spawnv(args);
+        string? stdout = null, stderr = null;
+        try {
+            yield subprocess.communicate_utf8_async(input, cancellable, out stdout, out stderr);
+            return stdout;
+        } catch (GLib.Error e) {
+            Seahorse.Util.show_error(null, this.prompt_title, stderr);
+            throw e;
         }
     }
 }
@@ -329,25 +221,28 @@ public class PrivateImportOperation : Operation {
 
         // Start command to generate public key
         string cmd = "%s -y -f '%s'".printf(Config.SSH_KEYGEN_PATH, file);
-        yield operation_async(cmd, null, cancellable);
+        string stdout = yield operation_async(cmd, null, cancellable);
+
+        // We'll build the key string from the output
+        var key_str = new StringBuilder(stdout);
 
         // Only use the first line of the output
-        int pos = int.max(this.std_out.str.index_of_char('\n'), std_out.str.index_of_char('\r'));
+        int pos = int.max(key_str.str.index_of_char('\n'), key_str.str.index_of_char('\r'));
         if (pos != -1)
-            std_out.erase(pos);
+            key_str.erase(pos);
 
         // Parse the data so we can get the fingerprint
-        KeyData? keydata = KeyData.parse_line(std_out.str);
+        KeyData? keydata = KeyData.parse_line(stdout);
 
         // Add the comment to the output
         if (data.comment != null) {
-            std_out.append_c(' ');
-            std_out.append(data.comment);
+            key_str.append_c(' ');
+            key_str.append(data.comment);
         }
 
         // The file to write to
         string pubfile = "%s.pub".printf(file);
-        FileUtils.set_contents(pubfile, std_out.str);
+        FileUtils.set_contents(pubfile, key_str.str);
 
         if (keydata != null && keydata.is_valid())
             return keydata.fingerprint;
