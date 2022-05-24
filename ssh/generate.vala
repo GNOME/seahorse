@@ -24,7 +24,7 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
     public const int DEFAULT_DSA_SIZE = 1024;
     public const int DEFAULT_RSA_SIZE = 2048;
 
-    private Source source;
+    public Ssh.Source source { get; construct set; }
 
     [GtkChild]
     private unowned Gtk.Grid details_grid;
@@ -33,17 +33,15 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
     private unowned Gtk.Entry email_entry;
     [GtkChild]
     private unowned Gtk.ComboBoxText algorithm_combo_box;
-    [GtkChild]
-    private unowned Gtk.Button create_with_setup_button;
-    [GtkChild]
-    private unowned Gtk.Button create_no_setup_button;
 
     public Generate(Source src, Gtk.Window parent) {
-        this.transient_for = parent;
-        this.source = src;
+        GLib.Object (
+            source: src,
+            use_header_bar: 1,
+            transient_for: parent
+        );
 
-        this.create_no_setup_button.clicked.connect((b) => create_key(false));
-        this.create_with_setup_button.clicked.connect((b) => create_key(true));
+        this.source = src;
 
         this.key_length_chooser = new KeyLengthChooser();
         this.key_length_chooser.halign = Gtk.Align.START;
@@ -59,7 +57,13 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
         this.key_length_chooser.algorithm = Algorithm.from_string(t);
     }
 
-    private void create_key(bool upload) {
+    /**
+     * Generate a key from the fields that were filled in.
+     *
+     * Note: make sure you don't destroy the window before this async method
+     * has finished
+     */
+    public async void generate_key() {
         // The email address
         string email = this.email_entry.text;
 
@@ -74,34 +78,22 @@ public class Seahorse.Ssh.Generate : Gtk.Dialog {
         string filename = this.source.new_filename_for_algorithm(type);
 
         // We start creation
-        Cancellable cancellable = new Cancellable();
-        GenerateOperation op = new GenerateOperation();
-        op.generate_async.begin(filename, email, type, bits, cancellable, (obj, res) => {
+        try {
+            debug("Generating %s key '%s' (file '%s')", t, email, filename);
+            GenerateOperation op = new GenerateOperation();
+            Cancellable cancellable = new Cancellable();
+            Seahorse.Progress.show(cancellable, _("Creating Secure Shell Key"), false);
+            yield op.generate_async(filename, email, type, bits, cancellable);
+
+            // We generated a key, but we still need to import it
             try {
-                op.generate_async.end(res);
-
-                // The result of the operation is the key we generated
-                source.add_key_from_filename.begin(filename, (obj, res) => {
-                    try {
-                        Key key = source.add_key_from_filename.end(res);
-
-                        if (upload && key != null) {
-                            List<Key> keys = new List<Key>();
-                            keys.append(key);
-                            Upload.prompt(keys, null);
-                        }
-                    } catch (GLib.Error e) {
-                        Seahorse.Util.show_error(null, _("Couldn’t load newly generated Secure Shell key"), e.message);
-                    }
-                });
+                debug("Importing generated key (file '%s')", filename);
+                Key key = yield source.add_key_from_filename(filename);
             } catch (GLib.Error e) {
-                Seahorse.Util.show_error(null, _("Couldn’t generate Secure Shell key"), e.message);
+                Seahorse.Util.show_error(null, _("Couldn’t load newly generated Secure Shell key"), e.message);
             }
-        });
-        Seahorse.Progress.show(cancellable, _("Creating Secure Shell Key"), false);
-
-        response(Gtk.ResponseType.ACCEPT);
-        destroy();
+        } catch (GLib.Error e) {
+            Seahorse.Util.show_error(null, _("Couldn’t generate Secure Shell key"), e.message);
+        }
     }
-
 }

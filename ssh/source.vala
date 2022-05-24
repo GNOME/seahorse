@@ -229,10 +229,10 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
                 && FileUtils.test(pubfile, FileTest.EXISTS)
                 && check_file_for_ssh(privfile)) {
             try {
-                yield Key.parse_file(pubfile, (keydata) => {
+                var result = yield Key.parse_file(pubfile);
+                foreach (unowned var keydata in result.public_keys) {
                     key = Source.add_key_from_parsed_data(this, keydata, pubfile, false, false, privfile);
-                    return true;
-                });
+                }
             } catch (GLib.Error e) {
                 throw new Error.GENERAL("Couldn't read SSH file: %s (%s)".printf(pubfile, e.message));
             }
@@ -280,17 +280,17 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
 
         // Now load the authorized keys
         string pubfile = authorized_keys_path();
-        Key.parse_file.begin(pubfile, (keydata) => {
+        var result = yield Key.parse_file(pubfile);
+        foreach (unowned var keydata in result.public_keys) {
             Source.add_key_from_parsed_data(this, keydata, pubfile, true, true, null);
-            return true;
-        });
+        }
 
         // Load the "other keys" (public keys without authorization)
         pubfile = other_keys_path();
-        Key.parse_file.begin(pubfile, (keydata) => {
+        result = yield Key.parse_file(pubfile);
+        foreach (unowned var keydata in result.public_keys) {
             Source.add_key_from_parsed_data(this, keydata, pubfile, true, false, null);
-            return true;
-        });
+        }
 
         return true;
     }
@@ -331,7 +331,6 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         return key;
     }
 
-
     /**
      * Parse an inputstream into a list of keys and import those keys.
      */
@@ -342,17 +341,15 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         input.read_all(buffer, out bytes_read, cancellable);
 
         string fullpath = other_keys_path();
-        Source src = this;
 
-        Key.parse.begin((string) buffer,
-                        (keydata) => {
-                            import_public_async.begin(keydata, fullpath, cancellable);
-                            return true;
-                        },
-                        (secdata) => {
-                            new PrivateImportOperation().import_private_async.begin(src, secdata, null, cancellable);
-                            return true;
-                        });
+        var result = yield Key.parse((string) buffer, cancellable);
+        foreach (unowned var keydata in result.public_keys) {
+            yield import_public_async(keydata, fullpath, cancellable);
+        }
+        foreach (unowned var secdata in result.secret_keys) {
+            var op = new PrivateImportOperation();
+            yield op.import_private_async(this, secdata, null, cancellable);
+        }
 
         // TODO: The list of keys imported?
         return null;

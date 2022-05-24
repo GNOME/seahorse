@@ -217,31 +217,31 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
         }
     }
 
+    public struct KeyParseResult {
+        public KeyData[] public_keys;
+        public SecData[] secret_keys;
+    }
+
     /**
      * Parses a string into public/private keys.
      *
      * @param data The string that needs to be parsed.
-     * @param pub_handler Will be called anytime a public key has been parsed.
-     *                    If null, nothing will be done if a public key is parsed.
-     * @param priv_handler Will be called anytime a private key has been parsed.
-     *                     If null, nothing will be done if a private key is parsed.
      * @param cancellable Can be used to cancel the parsing.
      */
-    public static async void parse(string data,
-                                   PubParsedHandler? pub_handler,
-                                   PrivParsedHandler? priv_handler = null,
-                                   Cancellable? cancellable = null) throws GLib.Error {
-        if (data == null || data == "")
-            return;
+    public static async KeyParseResult parse(string data,
+                                             Cancellable? cancellable = null) throws GLib.Error {
+        return_if_fail (data != null || data != "");
+
+        var pubkeys = new GenericArray<KeyData>();
+        var seckeys = new GenericArray<SecData>();
 
         StringBuilder toParse = new StringBuilder(data.chug());
         while (toParse.str.length > 0) {
             // First of all, check for a private key, as it can span several lines
             if (SecData.contains_private_key(toParse.str)) {
                 try {
-                    SecData secdata = SecData.parse_data(toParse);
-                    if (priv_handler != null)
-                        priv_handler(secdata);
+                    var secdata = SecData.parse_data(toParse);
+                    seckeys.add(secdata);
                     continue;
                 } catch (GLib.Error e) {
                     warning(e.message);
@@ -262,41 +262,29 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
             // See if we have a public key
             try {
                 KeyData keydata = KeyData.parse_line(line);
-                if (pub_handler != null)
-                    pub_handler(keydata);
+                pubkeys.add(keydata);
             } catch (GLib.Error e) {
                 warning(e.message);
             }
         }
+
+        var result = KeyParseResult();
+        result.public_keys = pubkeys.steal();
+        result.secret_keys = seckeys.steal();
+        return result;
     }
 
     /**
      * Parses the contents of the given file into public/private keys.
      *
      * @param data The file that will be parsed.
-     * @param pub_handler Will be called anytime a public key has been parsed.
-     *                    If null, nothing will be done if a public key is parsed.
-     * @param priv_handler Will be called anytime a private key has been parsed.
-     *                     If null, nothing will be done if a private key is parsed.
      * @param cancellable Can be used to cancel the parsing.
      */
-    public static async void parse_file(string filename,
-                                        PubParsedHandler? pub_handler,
-                                        PrivParsedHandler? priv_handler = null,
-                                        Cancellable? cancellable = null) throws GLib.Error {
+    public static async KeyParseResult parse_file(string filename,
+                                                  Cancellable? cancellable = null) throws GLib.Error {
         string contents;
         FileUtils.get_contents(filename, out contents);
 
-        yield parse(contents, pub_handler, priv_handler, cancellable);
+        return yield parse(contents, cancellable);
     }
-
-    /**
-     * Takes care of the public key that has been found in a string while parsing.
-     */
-    public delegate bool PubParsedHandler(KeyData data);
-
-    /**
-     * Takes care of the private key that has been found in a string while parsing.
-     */
-    public delegate bool PrivParsedHandler(SecData data);
 }
