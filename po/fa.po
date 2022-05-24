@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2022-03-08 13:04+0330\n"
+"POT-Creation-Date: 2022-05-24 07:17+0000\n"
+"PO-Revision-Date: 2022-05-24 16:41+0430\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "Language: fa\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 "X-DamnedLies-Scope: partial\n"
 "X-Poedit-Bookmarks: -1,38,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
@@ -67,7 +67,7 @@ msgstr "انتخاب تاریخ از تقویم"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "_لغو"
 
@@ -441,7 +441,7 @@ msgstr ""
 "کلیدهای را از کارسازهای کلید گرفته و رویشان منتشر کنید؛ عبارت عبورتان را انبار "
 "کرده تا دیگر نیازی به نوشتنش نباشد و از کلیدها و دسته‌کلیدتان، پشتیبان بگیرید."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "پروژهٔ گنوم"
 
@@ -861,7 +861,7 @@ msgid "PGP keys"
 msgstr "کلیدهای PGP"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -920,11 +920,11 @@ msgstr "گزینه‌های _پیش‌رفتهٔ کلید"
 msgid "_Comment"
 msgstr "_نظر"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "_گونهٔ رمزنگاری"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "_قدرت کلید (بیت)"
 
@@ -1962,12 +1962,12 @@ msgstr "داده‌ها برای درون‌ریزی"
 msgid "_Import"
 msgstr "_درون‌ریزی"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "درون‌ریزی شکست خورد"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "درون‌ریزی کلید"
 
@@ -2178,17 +2178,17 @@ msgstr "کلید SSH"
 msgid "No public key file is available for this key."
 msgstr "هیچ کلید عمومی‌ای برای این کلید موجود نیست."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "ایجاد کلید پوستهٔ امن"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "نتوانست کلید پوستهٔ امن تازه ایجادشده را بار کند"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "نتوانست کلید پوستهٔ امن ایجاد کند"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "ایجاد کلید پوستهٔ امن"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2240,26 +2240,26 @@ msgstr "(کلید پوستهٔ امن ناخوانا)"
 msgid "Secure Shell Key"
 msgstr "کلید پوستهٔ امن"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "گذرواژهٔ میزبان دوردست"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "ورود عبارت عبور کلید"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "عبارت عبور برای کلید پوستهٔ امن جدید"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "در حال درون‌ریزی کلید: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "در حال درون‌ریزی کلید. عبارت عبور را وارد کنید"
 
@@ -2290,49 +2290,45 @@ msgstr "عبارت عبور جدید را برای %s وارد کنید"
 msgid "Enter the new passphrase again: %s"
 msgstr "دوباره عبارت عبور جدید را برای %s وارد کنید"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "کلید پوستهٔ امن جدید"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr "یک کلید پوستهٔ امن (SSH) می‌گذارد به صورت امن به دیگر رایانه‌ها وصل شوید."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_توضیح"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "نشانی رایانامه‌تان، یا یادآوری برای چیستی کلید."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
 msgstr ""
-"اگر رایانه‌ای هست که می‌خواهید این کلید را با آن استفاده کنید،‌می‌ةوانید آن رایانه "
+"اگر رایانه‌ای هست که می‌خواهید این کلید را با آن استفاده کنید، می‌توانید آن رایانه "
 "را برای شناختن کلید جدیدتان برپا کنید."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "_فقط ایجاد کلید"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_ایجاد و برپاسازی"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "_ایجاد"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2437,6 +2433,12 @@ msgstr "نتوانست کلیدهای پوستهٔ امن را روی رایان
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "در حال پیکربندی کلیدهای پوستهٔ امن…"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "_فقط ایجاد کلید"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "_ایجاد و برپاسازی"
 
 #~ msgid "Seahorse"
 #~ msgstr "اسب‌دریایی"
