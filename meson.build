@@ -50,7 +50,10 @@ gpg_bin = find_program('gpg2', 'gpg', required: get_option('pgp-support'))
 gpgme_dep = dependency('gpgme', version: '>= 1.14.0', required: get_option('pgp-support'))
 
 if get_option('pgp-support')
-  gpg_version_check = run_command([gpg_check_version, gpg_bin.full_path(), accepted_gpg_versions ])
+  gpg_version_check = run_command(
+    [gpg_check_version, gpg_bin.full_path(), accepted_gpg_versions ],
+    check: true,
+  )
   # GnuPG now outputs e.g. 2.3.4-unknown so we need to drop this extra cruft
   gpg_version_raw = gpg_version_check.stdout()
   gpg_version_raw_split = gpg_version_raw.split('-')
