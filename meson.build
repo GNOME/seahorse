@@ -1,6 +1,6 @@
 project('seahorse', ['vala', 'c'],
   version: '42.0',
-  meson_version: '>= 0.51',
+  meson_version: '>= 0.59',
   license: 'GPL2+',
 )
 
@@ -13,7 +13,7 @@ valac = meson.get_compiler('vala')
 buildtype = get_option('buildtype')
 
 seahorse_prefix = get_option('prefix')
-po_dir = meson.source_root() / 'po'
+po_dir = meson.current_source_dir() / 'po'
 libexecbindir = seahorse_prefix / get_option('libexecdir') / meson.project_name()
 
 # Application ID
@@ -50,7 +50,7 @@ gpg_bin = find_program('gpg2', 'gpg', required: get_option('pgp-support'))
 gpgme_dep = dependency('gpgme', version: '>= 1.14.0', required: get_option('pgp-support'))
 
 if get_option('pgp-support')
-  gpg_version_check = run_command([gpg_check_version, gpg_bin.path(), accepted_gpg_versions ])
+  gpg_version_check = run_command([gpg_check_version, gpg_bin.full_path(), accepted_gpg_versions ])
   # GnuPG now outputs e.g. 2.3.4-unknown so we need to drop this extra cruft
   gpg_version_raw = gpg_version_check.stdout()
   gpg_version_raw_split = gpg_version_raw.split('-')
@@ -126,10 +126,10 @@ conf.set('WITH_LDAP', get_option('ldap-support'))
 conf.set('WITH_HKP', get_option('hkp-support'))
 conf.set('WITH_KEYSERVER', get_option('keyservers-support'))
 conf.set('WITH_SHARING', get_option('key-sharing'))
-conf.set_quoted('SSH_KEYGEN_PATH', ssh_keygen.path())
-conf.set_quoted('SSH_PATH', ssh_bin.path())
+conf.set_quoted('SSH_KEYGEN_PATH', ssh_keygen.full_path())
+conf.set_quoted('SSH_PATH', ssh_bin.full_path())
 if get_option('pgp-support')
-  conf.set_quoted('GNUPG', gpg_bin.path())
+  conf.set_quoted('GNUPG', gpg_bin.full_path())
   gpg_version_split = gpg_version.split('.')
   conf.set('GPG_MAJOR', gpg_version_split[0])
   conf.set('GPG_MINOR', gpg_version_split[1])
@@ -152,7 +152,7 @@ config_file = configure_file(
 config = declare_dependency(
   sources: config_file,
   dependencies: [
-    valac.find_library('config', dirs: meson.source_root() / 'common'),
+    valac.find_library('config', dirs: meson.current_source_dir() / 'common'),
   ],
   include_directories: include_directories('.'),
 )

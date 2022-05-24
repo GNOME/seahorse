@@ -11,7 +11,7 @@ install_data(gsettings_files,
 )
 
 # Resources
-resources_xml = meson.source_root() / 'data' / 'seahorse.gresource.xml'
+resources_xml = meson.project_source_root() / 'data' / 'seahorse.gresource.xml'
 resources_src = gnome.compile_resources('seahorse-resources',
   resources_xml,
 )
