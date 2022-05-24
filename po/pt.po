@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2022-03-08 22:58+0000\n"
+"POT-Creation-Date: 2022-05-24 07:17+0000\n"
+"PO-Revision-Date: 2022-05-24 15:35+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese < https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -78,7 +78,7 @@ msgstr "Selecionar a data num calendário"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -465,7 +465,7 @@ msgstr ""
 "palavras-passe de forma a que não tenha de inseri-las continuamente e fazer "
 "cópias de segurança das suas chaves e chaveiros."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "Projeto GNOME"
 
@@ -887,7 +887,7 @@ msgid "PGP keys"
 msgstr "Chaves PGP"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -949,11 +949,11 @@ msgstr "Opções _avançadas de chave"
 msgid "_Comment"
 msgstr "_Comentário"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "_Tipo de encriptação"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "_Força da chave (bits):"
 
@@ -2016,12 +2016,12 @@ msgstr "Dados para serem importados"
 msgid "_Import"
 msgstr "_Importar"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Falha ao importar"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Importar chave"
 
@@ -2233,17 +2233,17 @@ msgstr "Chave SSH"
 msgid "No public key file is available for this key."
 msgstr "Não está disponível nenhuma chave pública para esta chave."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "A criar a chave SSH"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Não foi possível gerar a chave SSH"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Não foi possível gerar a chave SSH"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "A criar a chave SSH"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2295,26 +2295,26 @@ msgstr "(chave SSH ilegível)"
 msgid "Secure Shell Key"
 msgstr "Chave SSH"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Palavra-passe da máquina remota"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Insira a palavra-passe da chave"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Palavra-passe para a nova chave SSH"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "A importar a chave: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "A importar a chave. Inserir a palavra-passe"
 
@@ -2345,35 +2345,35 @@ msgstr "Insira a nova palavra-passe para: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Insira novamente a nova palavra-passe: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Nova chave SSH"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr "Uma chave SSH permite ligar de forma segura a outros computadores."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_Descrição"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "O seu endereço de email ou um lembrete de a que se destina esta chave."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2381,13 +2381,9 @@ msgstr ""
 "Se existir um computador onde queira utilizar esta chave, pode configurar "
 "esse computador para reconhecer a sua nova chave."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "_Apenas criar a chave"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_Criar e configurar"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "Gerar"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2492,6 +2488,12 @@ msgstr "Não foi possível configurar as chaves SSH no computador remoto."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "A configurar chaves SSH…"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "_Apenas criar a chave"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "_Criar e configurar"
 
 #~ msgid "Seahorse"
 #~ msgstr "Seahorse"
