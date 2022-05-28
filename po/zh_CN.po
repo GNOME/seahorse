@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2022-03-09 10:01+0800\n"
+"POT-Creation-Date: 2022-05-24 07:17+0000\n"
+"PO-Revision-Date: 2022-05-28 08:33+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 41.0\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -74,7 +74,7 @@ msgstr "从日历中选择日期"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "取消(_C)"
 
@@ -448,13 +448,12 @@ msgstr ""
 "您可以通过密码和密钥创建和管理 PGP 密钥 、SSH 密钥，将密钥发送或取回到密钥服"
 "务器，缓存您的口令以免重复输入，以及备份您的密钥和密钥环。"
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "GNOME 项目"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-#| msgid "keyring;encryption;security;sign;ssh;"
 msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
 msgstr ""
 "keyring;encryption;security;sign;ssh;gpg;pgp;密钥环;加密;安全;签名;密码;密钥;"
@@ -868,7 +867,7 @@ msgid "PGP keys"
 msgstr "PGP 密钥"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -927,11 +926,11 @@ msgstr "高级密钥选项(_A)"
 msgid "_Comment"
 msgstr "注释(_C)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "加密类型(_T)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "密钥保密强度（位）(_S)"
 
@@ -1970,12 +1969,12 @@ msgstr "要导入的数据"
 msgid "_Import"
 msgstr "导入(_I)"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "导入失败"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "导入密钥"
 
@@ -2186,17 +2185,17 @@ msgstr "SSH 密钥"
 msgid "No public key file is available for this key."
 msgstr "此密钥的公钥文件不可用。"
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "创建 SSH 密钥"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "无法载入刚生成的 SSH 密钥"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "无法生成 SSH 密钥"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "创建 SSH 密钥"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2248,26 +2247,26 @@ msgstr "（不可读的 SSH 密钥）"
 msgid "Secure Shell Key"
 msgstr "SSH 密钥"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "远程主机密码"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "输入密钥密码"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "新的 SSH 密钥的密码"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "正在导入密钥：%s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "正在导入密钥。输入密码"
 
@@ -2298,35 +2297,35 @@ msgstr "输入 %s 的新密码"
 msgid "Enter the new passphrase again: %s"
 msgstr "再次输入新密码：%s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "新建 SSH 密钥"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr "安全 Shell（SSH）密钥允许您安全地连接到其它计算机。"
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "描述(_D)"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "使用您的电子邮件地址，或提示密钥的用途的词句。"
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2334,13 +2333,9 @@ msgstr ""
 "如果您打算在一台计算机上使用此密钥，您现在可以将那台计算机设定为识别您的密"
 "钥。"
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "仅创建密钥(_J)"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "创建并设定(_C)"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "生成(_G)"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2445,6 +2440,12 @@ msgstr "无法配置远程服务器上的 SSH 密钥。"
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "正在配置 SSH 密钥……"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "仅创建密钥(_J)"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "创建并设定(_C)"
 
 #~ msgid "Seahorse"
 #~ msgstr "Seahorse"
