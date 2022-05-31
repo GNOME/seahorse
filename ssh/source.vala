@@ -278,18 +278,22 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
             load_key_for_private_file.begin(privfile);
         }
 
-        // Now load the authorized keys
+        // Now load the authorized keys (if it exists)
         string pubfile = authorized_keys_path();
-        var result = yield Key.parse_file(pubfile);
-        foreach (unowned var keydata in result.public_keys) {
-            Source.add_key_from_parsed_data(this, keydata, pubfile, true, true, null);
+        if (FileUtils.test(pubfile, FileTest.IS_REGULAR)) {
+            var result = yield Key.parse_file(pubfile);
+            foreach (unowned var keydata in result.public_keys) {
+                Source.add_key_from_parsed_data(this, keydata, pubfile, true, true, null);
+            }
         }
 
         // Load the "other keys" (public keys without authorization)
         pubfile = other_keys_path();
-        result = yield Key.parse_file(pubfile);
-        foreach (unowned var keydata in result.public_keys) {
-            Source.add_key_from_parsed_data(this, keydata, pubfile, true, false, null);
+        if (FileUtils.test(pubfile, FileTest.IS_REGULAR)) {
+            var result = yield Key.parse_file(pubfile);
+            foreach (unowned var keydata in result.public_keys) {
+                Source.add_key_from_parsed_data(this, keydata, pubfile, true, false, null);
+            }
         }
 
         return true;
@@ -300,8 +304,7 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
                                                 string pubfile,
                                                 bool partial,
                                                 bool authorized,
-                                                string? privfile = null,
-                                                GLib.GenericArray<string>? checks = null) {
+                                                string? privfile = null) {
         return_val_if_fail (keydata != null && keydata.is_valid(), null);
 
         keydata.pubfile = pubfile;
@@ -309,10 +312,6 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         keydata.authorized = authorized;
         if (privfile != null)
             keydata.privfile = privfile;
-
-        // Mark src key as seen
-        if (checks != null)
-            checks.remove(keydata.fingerprint);
 
         // Does src key exist in the context?
         Key? prev = src.find_key_by_fingerprint(keydata.fingerprint);
