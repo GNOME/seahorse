@@ -82,6 +82,10 @@ libsoup = dependency('libsoup-2.4', version: '>= 2.33.92', required: get_option(
 avahi_client = dependency('avahi-client', required: get_option('key-sharing'))
 avahi_glib = dependency('avahi-glib', version: '>= 0.6', required: get_option('key-sharing'))
 
+if get_option('key-sharing')
+  message('NOTE: key-sharing over DNS-SD will possibly be removed in the feature')
+endif
+
 
 # Project-wide flags
 add_project_arguments([
