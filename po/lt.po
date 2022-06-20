@@ -14,16 +14,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2022-03-20 18:30+0200\n"
+"POT-Creation-Date: 2022-06-06 12:37+0000\n"
+"PO-Revision-Date: 2022-06-20 22:12+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2)\n"
 "X-Generator: Gtranslator 40.0\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -74,7 +74,7 @@ msgstr "Pasirinkite iš kalendoriaus datą"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "_Atsisakyti"
 
@@ -455,13 +455,12 @@ msgstr ""
 "nebereikėtų jo rašyti, bei padaryti atsargines savo raktų bei raktinių "
 "kopijas."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "GNOME projektas"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-#| msgid "keyring;encryption;security;sign;ssh;"
 msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
 msgstr "raktinė;šifravimas;saugumas;pasirašyti;ssh;gpg;pgp;"
 
@@ -877,7 +876,7 @@ msgid "PGP keys"
 msgstr "PGP raktai"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -937,11 +936,11 @@ msgstr "_Papildomi rakto parametrai"
 msgid "_Comment"
 msgstr "_Komentaras"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "Šifravimo _tipas"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "Rakto _stiprumas (bitais)"
 
@@ -2000,12 +1999,12 @@ msgstr "Duomenys importavimui"
 msgid "_Import"
 msgstr "_Importuoti"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Nepavyko importuoti"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Importuoti raktą"
 
@@ -2138,11 +2137,16 @@ msgstr "Filtras"
 msgid "This collection seems to be empty"
 msgstr "Atrodo, ši kolekcija yra tuščia"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+#| msgid "Add a new key or item"
+msgid "Add new items"
+msgstr "Pridėti naujų elementų"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "Raktinė yra užrakinta"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Atrakinti"
 
@@ -2218,17 +2222,17 @@ msgstr "SSH raktas"
 msgid "No public key file is available for this key."
 msgstr "Šiam raktui nėra viešo rakto failo."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "Kuriamas saugaus prisijungimo (SSH) raktas"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Nepavyko įkelti naujai sugeneruoto saugaus apvalkalo rakto"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Nepavyko sukurti saugaus apvalkalo rakto"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "Kuriamas saugaus prisijungimo (SSH) raktas"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2280,26 +2284,26 @@ msgstr "(Nenuskaitomas saugaus prisijungimo (SSH) raktas)"
 msgid "Secure Shell Key"
 msgstr "Saugaus prisijungimo (SSH) raktas"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Nuotolinio kompiuterio slaptažodis"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Įveskite rakto slaptažodį"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Naujojo saugaus prisijungimo (SSH) rakto slaptažodis"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "Importuojamas raktas: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "Importuojamas raktas. Įveskite slaptažodį"
 
@@ -2330,38 +2334,38 @@ msgstr "Įveskite naująjį rakto „%s“ slaptažodį:"
 msgid "Enter the new passphrase again: %s"
 msgstr "Dar kartą įveskite naująjį slaptažodį: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Naujas saugaus prisijungimo (SSH) raktas"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Saugaus prisijungimo (SSH) raktas skirtas saugiai prisijungti prie patikimų "
 "kompiuterių."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "Pa_aiškinimas"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "Jūsų el. pašto adresas ar kita užuomina šio rakto paskirties priminimui."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2369,13 +2373,10 @@ msgstr ""
 "Jei turite kompiuterį, prie kurio jungsitės naudodami šį raktą, dabar galite "
 "nustatyti, kad šis kompiuteris atpažintų Jūsų raktą."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "_Tik sukurti raktą"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_Sukurti ir nustatyti"
+#: ssh/seahorse-ssh-generate.ui:201
+#| msgid "Generating key"
+msgid "_Generate"
+msgstr "_Generuoti"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2481,6 +2482,12 @@ msgstr ""
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigūruojami saugaus apvalkalo raktai…"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "_Tik sukurti raktą"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "_Sukurti ir nustatyti"
 
 #~ msgid "Seahorse"
 #~ msgstr "Seahorse"
