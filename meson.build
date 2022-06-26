@@ -78,7 +78,7 @@ endif
 if get_option('hkp-support')
   add_project_arguments('-D', 'WITH_HKP', language: 'vala')
 endif
-libsoup = dependency('libsoup-2.4', version: '>= 2.33.92', required: get_option('hkp-support'))
+libsoup = dependency('libsoup-3.0', required: get_option('hkp-support'))
 avahi_client = dependency('avahi-client', required: get_option('key-sharing'))
 avahi_glib = dependency('avahi-glib', version: '>= 0.6', required: get_option('key-sharing'))
 
