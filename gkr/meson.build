@@ -1,23 +1,23 @@
 gkr_sources = files(
+  'add-item-dialog.vala',
+  'add-keyring-dialog.vala',
   'gkr-backend.vala',
   'gkr-dialogs.vala',
-  'gkr-item-add.vala',
+  'gkr-item-delete-operation.vala',
   'gkr-item-info.vala',
-  'gkr-item-properties.vala',
+  'gkr-item-panel.vala',
   'gkr-item.vala',
-  'gkr-keyring-add.vala',
+  'gkr-keyring-delete-operation.vala',
+  'gkr-keyring-panel.vala',
   'gkr-keyring-permission.vala',
-  'gkr-keyring-properties.vala',
   'gkr-keyring.vala',
   'gkr-module.vala',
-  'gkr-password-entry.vala',
 )
 
 gkr_dependencies = [
   glib_deps,
-  gtk,
-  gcr,
-  gcr_ui,
+  gtk4_dep,
+  gcr4_dep,
   libsecret,
   libpwquality,
   common_dep,
@@ -25,13 +25,16 @@ gkr_dependencies = [
 
 gkr_vala_args = [
   '--gresources', resources_xml,
-  '--vapidir', meson.current_source_dir(),
-  '--pkg=pwquality',
+]
+
+gkr_c_args = [
+  vala_workaround_cflags,
 ]
 
 gkr_lib = static_library('seahorse-gkr',
   gkr_sources,
   vala_args: gkr_vala_args,
+  c_args: gkr_c_args,
   dependencies: gkr_dependencies,
 )
 

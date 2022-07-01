@@ -18,8 +18,6 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-
-// [CCode (cname = "SeahorseValidity", cprefix = "SEAHORSE_VALIDITY_", has_type_id = false)]
 public enum Seahorse.Validity {
     REVOKED   = -3,
     DISABLED  = -2,

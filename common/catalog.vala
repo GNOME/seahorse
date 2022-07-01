@@ -20,16 +20,14 @@
 
 namespace Seahorse {
 
-public abstract class Catalog : Gtk.ApplicationWindow {
+public abstract class Catalog : Adw.ApplicationWindow {
 
     /* Set by the derived classes */
     public string ui_name { construct; get; }
 
     protected MenuModel context_menu;
-    private bool _disposed;
     private GLib.Settings _settings;
 
-    public abstract GLib.List<weak Backend> get_backends();
     public abstract GLib.List<GLib.Object> get_selected_objects();
 
     private const ActionEntry[] ACTION_ENTRIES = {
@@ -46,7 +44,7 @@ public abstract class Catalog : Gtk.ApplicationWindow {
         var width = this._settings.get_int("width");
         var height = this._settings.get_int("height");
         if (width > 0 && height > 0)
-            this.resize (width, height);
+            set_default_size (width, height);
 
         Gtk.Builder builder = new Gtk.Builder.from_resource(
             "/org/gnome/Seahorse/seahorse-%s-widgets.ui".printf(this.ui_name)
@@ -56,17 +54,11 @@ public abstract class Catalog : Gtk.ApplicationWindow {
         add_action_entries (ACTION_ENTRIES, this);
     }
 
-    public override void dispose() {
-        if (!this._disposed) {
-            this._disposed = true;
+    public override bool close_request() {
+        this._settings.set_int("width", this.default_width);
+        this._settings.set_int("height", this.default_height);
 
-            int width, height;
-            this.get_size(out width, out height);
-            this._settings.set_int("width", width);
-            this._settings.set_int("height", height);
-        }
-
-        base.dispose();
+        return base.close_request();
     }
 
     public virtual signal void selection_changed() {
@@ -89,31 +81,46 @@ public abstract class Catalog : Gtk.ApplicationWindow {
         ((SimpleAction) lookup_action("properties-object")).set_enabled(can_properties);
         ((SimpleAction) lookup_action("edit-delete")).set_enabled(can_delete);;
         ((SimpleAction) lookup_action("copy")).set_enabled(can_export);
-        ((SimpleAction) lookup_action("file-export")).set_enabled(can_export);
+
+        // FIXME: for now, we only allow exporting a single item at a time
+        ((SimpleAction) lookup_action("file-export")).set_enabled(can_export && objects.length() == 1);
     }
 
     public void show_properties(GLib.Object obj) {
         Viewable.view(obj, this);
     }
 
-    public void show_context_menu(Gdk.Event? event) {
-        Gtk.Menu menu = new Gtk.Menu.from_model(this.context_menu);
-        menu.insert_action_group("win", this);
-        foreach (weak Backend backend in get_backends()) {
-            ActionGroup actions = backend.actions;
-            menu.insert_action_group(actions.prefix, actions);
-        }
-        menu.popup_at_pointer(event);
-        menu.show();
-    }
-
     private void on_object_delete(SimpleAction action, Variant? param) {
-        try {
-            var objects = this.get_selected_objects();
-            Deletable.delete_with_prompt_wait(objects, this);
-        } catch (GLib.Error err) {
-            Util.show_error(this, _("Cannot delete"), err.message);
+        var objects = this.get_selected_objects();
+        if (objects.length() == 0)
+            return;
+
+        // Sanity check
+        unowned Deletable first = null;
+        foreach (unowned var object in objects) {
+            if (!(object is Deletable)) {
+                objects.remove(object);
+                continue;
+            }
+            if (first == null)
+                first = (Deletable) object;
         }
+
+        var delete_op = first.create_delete_operation();
+        // XXX
+        // foreach (unowned var obj in objects.next()) {
+        //     delete_op.add_item();
+        // }
+
+        delete_op.execute_interactively.begin(this, null, (obj, res) => {
+            try {
+                delete_op.execute_interactively.end(res);
+            } catch (GLib.IOError.CANCELLED e) {
+                debug("Deletion of %u items cancelled by user", delete_op.get_n_items());
+            } catch (GLib.Error e) {
+                Util.show_error(this, _("Couldn’t delete items"), e.message);
+            }
+        });
     }
 
     private void on_properties_object(SimpleAction action, Variant? param) {
@@ -123,27 +130,58 @@ public abstract class Catalog : Gtk.ApplicationWindow {
     }
 
     private void on_key_export_file(SimpleAction action, Variant? param) {
+        export_file_async.begin();
+    }
+
+    private async void export_file_async() {
+        var exportable = get_selected_objects().data as Exportable;
+        var export_op = exportable.create_export_operation();
+
         try {
-            Exportable.export_to_prompt_wait(get_selected_objects(), this);
-        } catch (GLib.Error err) {
-            Util.show_error(this, _("Couldn’t export keys"), err.message);
+            var prompted = yield export_op.prompt_for_file(this);
+            if (!prompted) {
+                debug("no file picked by user");
+                return;
+            }
+
+            yield export_op.execute(null);
+        } catch (GLib.IOError.CANCELLED e) {
+            debug("Exporting of item cancelled by user");
+        } catch (Error e) {
+            Util.show_error(this, _("Couldn’t export item"), e.message);
         }
     }
 
-    private void on_key_export_clipboard (SimpleAction action, Variant? param) {
-        uint8[] output;
+    private void on_key_export_clipboard(SimpleAction action, Variant? param) {
+        key_export_clipboard_async.begin();
+    }
+
+    private async void key_export_clipboard_async() {
+        var output = new MemoryOutputStream.resizable();
+
+        // Do the export
+        var exportable = get_selected_objects().data as Exportable;
+        var export_op = exportable.create_export_operation();
+        export_op.output = output;
+
         try {
-            var objects = this.get_selected_objects ();
-            Exportable.export_to_text_wait (objects, out output);
-        } catch (GLib.Error err) {
-            Util.show_error(this, _("Couldn’t export data"), err.message);
-            return;
+            yield export_op.execute(null);
+
+            output.write ("\0".data);
+            output.close();
+
+            var val = Value(typeof(string));
+            val.set_string((string) output.get_data());
+
+            /* TODO: Print message if only partially exported */
+
+            var board = get_clipboard();
+            board.set_value(val);
+        } catch (GLib.IOError.CANCELLED e) {
+            debug("Exporting of item cancelled by user");
+        } catch (Error e) {
+            Util.show_error(this, _("Couldn’t export item"), e.message);
         }
-
-        /* TODO: Print message if only partially exported */
-
-        var board = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD);
-        board.set_text ((string)output, output.length);
     }
 }
 

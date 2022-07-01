@@ -19,40 +19,35 @@
  * Author: Stef Walter <stefw@collabora.co.uk>
  */
 
-namespace Seahorse
-{
+public interface Seahorse.Viewable : GLib.Object {
 
-public interface Viewable : GLib.Object {
-	public abstract Gtk.Window? create_viewer(Gtk.Window? parent);
+    public static bool can_view(GLib.Object object) {
+        return object is Viewable;
+    }
 
-	public static bool can_view(GLib.Object object) {
-		return object is Viewable;
-	}
+    public abstract Seahorse.Panel create_panel();
 
-	public static bool view(GLib.Object object,
-	                        Gtk.Window? parent) {
-		if (!Viewable.can_view(object))
-			return false;
+    public static bool view(GLib.Object object,
+                            Gtk.Window? parent) {
+        if (!Viewable.can_view(object))
+            return false;
 
-		Gtk.Window? window = null;
+        Gtk.Window? window = null;
 
-		window = object.get_data("viewable-window");
-		if (window == null) {
-			var viewable = (Viewable)object;
-			window = viewable.create_viewer(parent);
-			if (window == null)
-				return false;
+        window = object.get_data("viewable-window");
+        if (window == null) {
+            unowned var viewable = (Viewable) object;
+            var panel = viewable.create_panel();
+            window = new PanelWindow(panel, parent);
 
-			object.set_data("viewable-window", window);
-			window.destroy.connect(() => {
-				object.set_data_full("viewable-window", null, null);
-			});
-		}
+            object.set_data("viewable-window", window);
+            window.close_request.connect(() => {
+                object.set_data_full("viewable-window", null, null);
+                return false;
+            });
+        }
 
-		window.present();
-		window.show();
-		return true;
-	}
-}
-
+        window.present();
+        return true;
+    }
 }

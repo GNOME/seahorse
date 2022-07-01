@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<interface>
+  <template class="SeahorsePkcs11TokenPanel" parent="SeahorsePanel">
+    <property name="title" translatable="yes">PKCS#11 Token Properties</property>
+    <style>
+      <class name="pkcs11-token-panel"/>
+    </style>
+
+    <property name="layout-manager">
+      <object class="GtkBoxLayout">
+        <property name="orientation">vertical</property>
+        <property name="spacing">24</property>
+      </object>
+    </property>
+
+    <child>
+      <object class="AdwPreferencesGroup">
+        <child>
+          <object class="AdwActionRow" id="name_row">
+            <property name="title" translatable="yes">Name</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="manufacturer_row">
+            <property name="title" translatable="yes">Manufacturer</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="model_row">
+            <property name="title" translatable="yes">Model</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="serial_nr_row">
+            <property name="title" translatable="yes">Serial Number</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="hardware_version_row">
+            <property name="title" translatable="yes">Hardware Version</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="firmware_version_row">
+            <property name="title" translatable="yes">Firmware Version</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

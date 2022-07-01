@@ -20,11 +20,13 @@
 
 [DBus (name = "org.gnome.Shell.SearchProvider2")]
 public class Seahorse.SearchProvider : GLib.Object {
-    private Gcr.UnionCollection union_collection = new Gcr.UnionCollection();
+
+    private GLib.ListModel backends;
+    private Gtk.FilterListModel collection;
+
     private HashTable<string, weak GLib.Object> handles
         = new HashTable<string, weak GLib.Object>.full(str_hash, str_equal, free, null);
 
-    private Gcr.FilterCollection collection;
     private GLib.Application app;
     private int n_loading = 0;
     private RWLock n_loading_lock = RWLock();
@@ -32,10 +34,15 @@ public class Seahorse.SearchProvider : GLib.Object {
 
     public SearchProvider(GLib.Application app) {
         this.app = app;
-        this.collection = new Gcr.FilterCollection.with_callback(this.union_collection, filter_objects);
+
+        // XXX test
+        this.backends = Backend.get_registered();
+        var places = new Gtk.FlattenListModel(this.backends);
+        var filter = new Gtk.CustomFilter(filter_objects);
+        this.collection = new Gtk.FilterListModel(places, filter);
     }
 
-    private static bool filter_objects (GLib.Object? obj) {
+    private static bool filter_objects(GLib.Object obj) {
         unowned Object? object = obj as Object;
         if (object == null || !(Flags.PERSONAL in object.object_flags))
             return false;
@@ -52,13 +59,7 @@ public class Seahorse.SearchProvider : GLib.Object {
         return true;
     }
 
-    ~SearchProvider() {
-        this.handles.foreach( (__, obj) => {
-            obj.weak_unref(on_object_gone);
-        });
-    }
-
-    public async void load () throws GLib.Error {
+    public async void load() throws GLib.Error {
         // avoid reentering load () from a different request
         while (!this.loaded && get_n_loading() > 0) {
             var wait = notify["loaded"].connect (() => {
@@ -72,9 +73,9 @@ public class Seahorse.SearchProvider : GLib.Object {
                 return;
         }
 
-        var backends = Backend.get_registered();
-        this.n_loading = (int) backends.length();
-        foreach (var backend in backends) {
+        this.n_loading = (int) this.backends.get_n_items();
+        for (uint i = 0; i < backends.get_n_items(); i++) {
+            var backend = (Backend) backends.get_item(i);
             if (!backend.loaded) {
                 backend.notify["loaded"].connect(() => {
                     change_n_loading(-1);
@@ -84,12 +85,6 @@ public class Seahorse.SearchProvider : GLib.Object {
             } else {
                 change_n_loading(-1);
             }
-
-            backend.added.connect(on_place_added);
-            backend.removed.connect(on_place_removed);
-
-            foreach (GLib.Object place in backend.get_objects())
-                on_place_added(backend, place);
         }
     }
 
@@ -113,7 +108,9 @@ public class Seahorse.SearchProvider : GLib.Object {
             yield load();
 
         string?[] results = {};
-        foreach (unowned GLib.Object obj in this.collection.get_objects()) {
+        for (uint i = 0; i < this.collection.get_n_items(); i++) {
+            var obj = this.collection.get_item(i);
+
             if (object_matches_search(obj, terms)) {
                 string str = "%p".printf(obj);
 
@@ -136,7 +133,7 @@ public class Seahorse.SearchProvider : GLib.Object {
         string?[] results = {};
         foreach (string previous_result in previous_results) {
             unowned GLib.Object? object = this.handles.lookup(previous_result);
-            if (object == null || !this.collection.contains(object))
+            if (object == null)
                 continue; // Bogus value
 
             if (object_matches_search(object, new_terms))
@@ -154,7 +151,7 @@ public class Seahorse.SearchProvider : GLib.Object {
         int good_results = 0;
         foreach (unowned string result in results) {
             unowned GLib.Object object = this.handles.lookup(result);
-            if (object == null || !(object in this.collection))
+            if (object == null)
                 continue; // Bogus value
 
             HashTable<string, Variant> meta = new HashTable<string, Variant>(str_hash, str_equal);
@@ -189,7 +186,7 @@ public class Seahorse.SearchProvider : GLib.Object {
         unowned GLib.Object? object = null;
         identifier.scanf("%p", &object);
         object = this.handles.lookup(identifier);
-        if (object == null || !(object in this.collection) || !(object is Viewable))
+        if (object == null || !(object is Viewable))
             return; // Bogus value
 
         KeyManager key_manager = new KeyManager(GLib.Application.get_default() as Application);
@@ -228,18 +225,6 @@ public class Seahorse.SearchProvider : GLib.Object {
 
     private void on_object_gone(GLib.Object? where_the_object_was) {
         this.handles.remove("%p".printf(where_the_object_was));
-    }
-
-    private void on_place_added (Gcr.Collection places, GLib.Object object) {
-        unowned var place = (Place) object;
-        if (!this.union_collection.have(place))
-            this.union_collection.add(place);
-    }
-
-    private void on_place_removed (Gcr.Collection places, GLib.Object object) {
-        unowned var place = (Place) object;
-        if (this.union_collection.have(place))
-            this.union_collection.remove(place);
     }
 
     private static string? get_description_if_available (GLib.Object? obj) {

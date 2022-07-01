@@ -37,47 +37,43 @@ public class Seahorse.DatePicker : Gtk.Box {
 
           this._datetime = value;
           this.date_entry.text = value.format("%F");
-          // Note: GtkCalendar's months are [0,11] while GDateTime uses [1,12]
-          this.calendar.select_month(value.get_month() - 1, value.get_year());
-          this.calendar.select_day(value.get_day_of_month());
+          this.calendar.select_day(value);
        }
     }
 
     construct {
         this.orientation = Gtk.Orientation.HORIZONTAL;
-        get_style_context().add_class("linked");
+        add_css_class("linked");
 
         // The entry for manual editing
         this.date_entry = new Gtk.Entry();
-        this.date_entry.visible = true;
         this.date_entry.max_length = 10;
         this.date_entry.max_width_chars = 10;
         this.date_entry.tooltip_text = _("Enter the date directly");
         this.date_entry.activate.connect(on_date_entry_activated);
-        add(this.date_entry);
+        append(this.date_entry);
 
         // The button with a popover
         var calendar_button = new Gtk.MenuButton();
-        calendar_button.visible = true;
         calendar_button.tooltip_text = _("Select the date from a calendar");
-        add(calendar_button);
+        append(calendar_button);
 
         // The popover that contains the calendar
-        this.calendar_popover = new Gtk.Popover(calendar_button);
+        this.calendar_popover = new Gtk.Popover();
         calendar_button.popover = this.calendar_popover;
 
         // The calendar
         this.calendar = new Gtk.Calendar();
-        this.calendar.visible = true;
         this.calendar.show_day_names = true;
         this.calendar.show_heading = true;
         this.calendar.day_selected.connect(on_calendar_day_selected);
-        this.calendar.day_selected_double_click.connect(on_calendar_day_selected_double_click);
-        this.calendar_popover.add(this.calendar);
-    }
+        this.calendar_popover.set_child(this.calendar);
 
-    [CCode (type="GtkWidget*")]
-    public DatePicker() {
+        // Pop down the calendar when a date is selected with double click
+        var gesture = new Gtk.GestureClick();
+        gesture.button = Gdk.BUTTON_PRIMARY;
+        gesture.pressed.connect(on_calendar_primary_click);
+        this.calendar.add_controller(gesture);
     }
 
     private void on_date_entry_activated(Gtk.Entry date_entry) {
@@ -88,7 +84,6 @@ public class Seahorse.DatePicker : Gtk.Box {
             return;
 
         var parsed_date = new DateTime.utc(y, m, d, 0, 0, 0);
-        warning("activated, %p", parsed_date);
         // FIXME warn on invalid date, or date before today
         if (parsed_date == null)
             return;
@@ -97,14 +92,19 @@ public class Seahorse.DatePicker : Gtk.Box {
     }
 
     private void on_calendar_day_selected(Gtk.Calendar calendar) {
-        uint y, m, d;
-
-        calendar.get_date(out y, out m, out d);
-        // Note: GtkCalendar's months are [0,11] while GDateTime uses [1,12]
-        this.datetime = new DateTime.utc((int) y, (int) m + 1, (int) d, 0, 0, 0);
+        // Don't use calendar.get_date() directly, as it will return a time at
+        // midnight in the local time zone, which -when converted to UTC can go
+        // back a day or the next.
+        this.datetime = new DateTime.utc(calendar.year, calendar.month, calendar.day,
+                                         0, 0, 0);
     }
 
-    private void on_calendar_day_selected_double_click(Gtk.Calendar calendar) {
-        this.calendar_popover.popdown();
+    private void on_calendar_primary_click(Gtk.GestureClick gesture, int n_press, double x, double y) {
+        if (n_press != 2)
+            return;
+
+        var selected_date = this.calendar.get_date();
+        if (selected_date != null)
+            this.calendar_popover.popdown();
     }
 }

@@ -35,16 +35,18 @@
 #include <string.h>
 
 #define SEAHORSE_TYPE_KEYSERVER_RESULTS_ROW (seahorse_keyserver_results_row_get_type ())
-G_DECLARE_FINAL_TYPE (SeahorseKeyserverResultsRow, seahorse_keyserver_results_row, SEAHORSE, KEYSERVER_RESULTS_ROW, GtkListBoxRow)
+G_DECLARE_FINAL_TYPE (SeahorseKeyserverResultsRow, seahorse_keyserver_results_row,
+                      SEAHORSE, KEYSERVER_RESULTS_ROW,
+                      AdwActionRow)
 
 struct _SeahorseKeyserverResultsRow {
-    GtkListBoxRow parent;
+    AdwActionRow parent;
 
     GObject *key;
     GtkButton *import_button;
 };
 
-G_DEFINE_TYPE (SeahorseKeyserverResultsRow, seahorse_keyserver_results_row, GTK_TYPE_LIST_BOX_ROW);
+G_DEFINE_TYPE (SeahorseKeyserverResultsRow, seahorse_keyserver_results_row, ADW_TYPE_ACTION_ROW);
 
 static void
 on_import_complete (GObject *source, GAsyncResult *result, gpointer user_data)
@@ -52,9 +54,8 @@ on_import_complete (GObject *source, GAsyncResult *result, gpointer user_data)
     SeahorsePgpBackend *backend = SEAHORSE_PGP_BACKEND (source);
     g_autoptr(SeahorseKeyserverResultsRow) row =
         SEAHORSE_KEYSERVER_RESULTS_ROW (user_data);
-    const gchar *result_icon_name;
-    g_autoptr(GtkWidget) result_icon = NULL;
-    g_autofree gchar *result_tooltip = NULL;
+    const char *result_icon_name;
+    g_autofree char *result_tooltip = NULL;
     g_autoptr(GError) err = NULL;
 
     if (!seahorse_pgp_backend_transfer_finish (backend, result, &err)) {
@@ -66,9 +67,7 @@ on_import_complete (GObject *source, GAsyncResult *result, gpointer user_data)
         result_tooltip = g_strdup (_("Key import succeeded"));
     }
 
-    result_icon = gtk_image_new_from_icon_name (result_icon_name,
-                                                GTK_ICON_SIZE_BUTTON);
-    gtk_button_set_image (row->import_button, g_steal_pointer (&result_icon));
+    gtk_button_set_icon_name (row->import_button, result_icon_name);
     gtk_widget_set_tooltip_text (GTK_WIDGET (row->import_button),
                                  result_tooltip);
 }
@@ -78,7 +77,7 @@ on_import_button_clicked (GtkButton *import_button, gpointer user_data)
 {
     SeahorseKeyserverResultsRow *row = user_data;
     g_autoptr(GtkWidget) spinner = NULL;
-    g_autoptr(GList) keys = NULL;
+    g_autoptr(GListStore) keys = NULL;
     g_autoptr(GCancellable) cancellable = NULL;
     SeahorsePgpBackend *backend;
     SeahorseGpgmeKeyring *keyring;
@@ -87,14 +86,16 @@ on_import_button_clicked (GtkButton *import_button, gpointer user_data)
     gtk_widget_set_sensitive (GTK_WIDGET (import_button), FALSE);
     spinner = gtk_spinner_new ();
     gtk_spinner_start (GTK_SPINNER (spinner));
-    gtk_button_set_image (import_button, g_steal_pointer (&spinner));
+    gtk_button_set_child (import_button, g_steal_pointer (&spinner));
 
     /* Now import the key */
-    keys = g_list_append (keys, row->key);
+    keys = g_list_store_new (SEAHORSE_TYPE_OBJECT);
+    g_list_store_append (keys, row->key);
     cancellable = g_cancellable_new ();
     backend = seahorse_pgp_backend_get ();
     keyring = seahorse_pgp_backend_get_default_keyring (backend);
-    seahorse_pgp_backend_transfer_async (backend, keys,
+    seahorse_pgp_backend_transfer_async (backend,
+                                         G_LIST_MODEL (keys),
                                          SEAHORSE_PLACE (keyring),
                                          cancellable, on_import_complete,
                                          g_object_ref (row));
@@ -110,55 +111,41 @@ seahorse_keyserver_results_row_init (SeahorseKeyserverResultsRow *row)
 {
 }
 
-static SeahorseKeyserverResultsRow*
+static GtkWidget *
 seahorse_keyserver_results_row_new (GObject *item)
 {
     g_autoptr(SeahorseKeyserverResultsRow) row = NULL;
-    g_autoptr(GtkWidget) grid = NULL;
-    g_autoptr(GtkWidget) label = NULL;
-    g_autoptr(GtkWidget) import_button = NULL;
-    gchar *item_label;
+    GtkWidget *import_button = NULL;
+    g_autofree char *item_label = NULL;
     gboolean item_exportable;
 
-    g_object_get (item, "markup", &item_label, "exportable", &item_exportable,
+    g_object_get (item,
+                  "markup", &item_label,
+                  "exportable", &item_exportable,
                   NULL);
 
     row = g_object_new (SEAHORSE_TYPE_KEYSERVER_RESULTS_ROW, NULL);
     gtk_list_box_row_set_selectable (GTK_LIST_BOX_ROW (row), FALSE);
     gtk_widget_set_sensitive (GTK_WIDGET (row), item_exportable);
-    gtk_widget_show (GTK_WIDGET (row));
     row->key = item;
 
-    grid = gtk_grid_new ();
-    g_object_set (grid, "margin", 6, NULL);
-    gtk_widget_show (grid);
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), item_label);
 
-    label = gtk_label_new (item_label);
-    gtk_widget_set_hexpand (label, TRUE);
-    gtk_label_set_xalign (GTK_LABEL (label), 0);
-    gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-    gtk_widget_show (label);
-    gtk_grid_attach (GTK_GRID (grid), g_steal_pointer (&label), 0, 0, 1, 1);
-
-    import_button = gtk_button_new_from_icon_name ("document-save-symbolic",
-                                                   GTK_ICON_SIZE_BUTTON);
+    import_button = gtk_button_new_from_icon_name ("document-save-symbolic");
     row->import_button = GTK_BUTTON (import_button);
     g_signal_connect_object (import_button, "clicked",
                              G_CALLBACK (on_import_button_clicked), row, 0);
-    gtk_widget_set_visible (import_button, TRUE);
-    gtk_widget_set_valign (import_button, GTK_ALIGN_START);
-    gtk_widget_set_halign (import_button, GTK_ALIGN_END);
-    gtk_style_context_add_class (gtk_widget_get_style_context (import_button),
-                                 "flat");
-    if (item_exportable)
+    gtk_widget_set_valign (import_button, GTK_ALIGN_CENTER);
+    gtk_widget_add_css_class (import_button, "flat");
+    if (item_exportable) {
         gtk_widget_set_tooltip_text (import_button, _("Import"));
-    else
+    } else {
         gtk_widget_set_tooltip_text (import_button, _("Can’t import key"));
-    gtk_grid_attach (GTK_GRID (grid), g_steal_pointer (&import_button), 1, 0, 1, 1);
+        gtk_widget_set_sensitive (import_button, FALSE);
+    }
+    adw_action_row_add_suffix (ADW_ACTION_ROW (row), import_button);
 
-    gtk_container_add (GTK_CONTAINER (row), g_steal_pointer (&grid));
-
-    return g_steal_pointer (&row);
+    return GTK_WIDGET (g_steal_pointer (&row));
 }
 
 
@@ -173,7 +160,7 @@ struct _SeahorseKeyserverResults {
     GtkBuilder *builder;
 
     char *search_string;
-    GcrSimpleCollection *collection;
+    GListStore *collection;
     GtkListBox *key_list;
 };
 
@@ -190,27 +177,10 @@ on_row_activated (GtkListBox *key_list, GtkListBoxRow *row, gpointer user_data)
     seahorse_viewable_view (_row->key, GTK_WINDOW (self));
 }
 
-static void
-on_item_added (GcrCollection *collection, GObject *item, gpointer user_data)
+static GtkWidget *
+create_row_for_key (void *item, gpointer user_data)
 {
-    SeahorseKeyserverResults *self = SEAHORSE_KEYSERVER_RESULTS (user_data);
-    g_autoptr(SeahorseKeyserverResultsRow) row = NULL;
-
-    g_return_if_fail (G_IS_OBJECT (item));
-
-    row = seahorse_keyserver_results_row_new (item);
-    gtk_list_box_insert (self->key_list,
-                         GTK_WIDGET (g_steal_pointer (&row)),
-                         -1);
-}
-
-static gboolean
-on_delete_event (GtkWidget* widget, GdkEvent* event, gpointer user_data)
-{
-    SeahorseKeyserverResults *self = SEAHORSE_KEYSERVER_RESULTS (user_data);
-
-    gtk_widget_destroy (GTK_WIDGET (self));
-    return TRUE;
+    return seahorse_keyserver_results_row_new ((GObject *) item);
 }
 
 static void
@@ -232,22 +202,15 @@ seahorse_keyserver_results_constructed (GObject *obj)
     gtk_window_set_title (window, title);
     gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
 
-    g_signal_connect (window, "delete-event",
-                      G_CALLBACK (on_delete_event), self);
-
     self->builder = gtk_builder_new_from_resource ("/org/gnome/Seahorse/seahorse-keyserver-results.ui");
-    gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (self))),
-                       GTK_WIDGET (gtk_builder_get_object (self->builder, "keyserver-results")));
+    gtk_window_set_child (GTK_WINDOW (self),
+                          GTK_WIDGET (gtk_builder_get_object (self->builder, "keyserver-results")));
 
     /* init key list */
     self->key_list = GTK_LIST_BOX (gtk_builder_get_object (self->builder, "key_list"));
     g_signal_connect_object (self->key_list, "row-activated",
                              G_CALLBACK (on_row_activated), self, 0);
-    gtk_widget_show (GTK_WIDGET (self->key_list));
-
-    /* Make sure the listbox gets updated with the collection */
-    g_signal_connect_object (self->collection, "added",
-                             G_CALLBACK (on_item_added), self, 0);
+    gtk_list_box_bind_model (self->key_list, G_LIST_MODEL (self->collection), create_row_for_key, self, NULL);
 
     /* Set focus to the current key list */
     gtk_widget_grab_focus (GTK_WIDGET (self->key_list));
@@ -256,7 +219,7 @@ seahorse_keyserver_results_constructed (GObject *obj)
 static void
 seahorse_keyserver_results_init (SeahorseKeyserverResults *self)
 {
-    self->collection = GCR_SIMPLE_COLLECTION (gcr_simple_collection_new ());
+    self->collection = g_list_store_new (SEAHORSE_PGP_TYPE_KEY);
 }
 
 static void

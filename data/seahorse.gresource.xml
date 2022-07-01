@@ -1,49 +1,62 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <gresources>
   <gresource prefix="/org/gnome/Seahorse">
-    <file alias="seahorse.css">../libseahorse/seahorse.css</file>
+    <!-- CSS -->
+    <file>seahorse.css</file>
 
-    <file alias="seahorse-progress.ui" preprocess="xml-stripblanks">../libseahorse/seahorse-progress.ui</file>
+    <!-- Custom icons -->
+    <file preprocess="xml-stripblanks">icons/scalable/actions/key-item-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/secret-item-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/qr-code-symbolic.svg</file>
 
     <!-- Common -->
+    <file alias="seahorse-progress.ui" preprocess="xml-stripblanks">../libseahorse/seahorse-progress.ui</file>
+    <file alias="panel-window.ui" preprocess="xml-stripblanks">../common/panel-window.ui</file>
+    <file alias="passphrase-prompt.ui" preprocess="xml-stripblanks">../common/passphrase-prompt.ui</file>
     <file alias="seahorse-add-keyserver.ui" preprocess="xml-stripblanks">../common/seahorse-add-keyserver.ui</file>
     <file alias="seahorse-prefs-keyservers.ui" preprocess="xml-stripblanks">../common/seahorse-prefs-keyservers.ui</file>
+    <file alias="qr-code-dialog.ui" preprocess="xml-stripblanks">../common/qr-code-dialog.ui</file>
 
     <!-- Seahorse -->
     <file alias="seahorse-change-passphrase.ui" preprocess="xml-stripblanks">../src/seahorse-change-passphrase.ui</file>
     <file alias="seahorse-key-manager-widgets.ui" preprocess="xml-stripblanks">../src/seahorse-key-manager-widgets.ui</file>
     <file alias="seahorse-key-manager.ui" preprocess="xml-stripblanks">../src/seahorse-key-manager.ui</file>
+    <file alias="import-dialog.ui" preprocess="xml-stripblanks">../src/import-dialog.ui</file>
     <file compressed="true" preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
 
     <!-- GKR -->
-    <file alias="seahorse-gkr-add-item.ui" preprocess="xml-stripblanks">../gkr/seahorse-gkr-add-item.ui</file>
-    <file alias="seahorse-gkr-add-keyring.ui" preprocess="xml-stripblanks">../gkr/seahorse-gkr-add-keyring.ui</file>
-    <file alias="seahorse-gkr-item-properties.ui" preprocess="xml-stripblanks">../gkr/seahorse-gkr-item-properties.ui</file>
-    <file alias="seahorse-gkr-keyring.ui" preprocess="xml-stripblanks">../gkr/seahorse-gkr-keyring.ui</file>
+    <file alias="gkr-add-item-dialog.ui" preprocess="xml-stripblanks">../gkr/add-item-dialog.ui</file>
+    <file alias="gkr-add-keyring-dialog.ui" preprocess="xml-stripblanks">../gkr/add-keyring-dialog.ui</file>
+    <file alias="seahorse-gkr-item-panel.ui" preprocess="xml-stripblanks">../gkr/gkr-item-panel.ui</file>
+    <file alias="seahorse-gkr-keyring-panel.ui" preprocess="xml-stripblanks">../gkr/gkr-keyring-panel.ui</file>
 
     <!-- SSH -->
-    <file alias="seahorse-ssh-generate.ui" preprocess="xml-stripblanks">../ssh/seahorse-ssh-generate.ui</file>
-    <file alias="seahorse-ssh-key-properties.ui" preprocess="xml-stripblanks">../ssh/seahorse-ssh-key-properties.ui</file>
-    <file alias="seahorse-ssh-upload.ui" preprocess="xml-stripblanks">../ssh/seahorse-ssh-upload.ui</file>
+    <file alias="ssh-generate-key-dialog.ui" preprocess="xml-stripblanks">../ssh/generate-key-dialog.ui</file>
+    <file alias="ssh-key-panel.ui" preprocess="xml-stripblanks">../ssh/key-panel.ui</file>
+    <file alias="ssh-upload-remote-dialog.ui" preprocess="xml-stripblanks">../ssh/upload-remote-dialog.ui</file>
 
     <!-- PGP -->
     <file alias="seahorse-gpgme-add-subkey.ui" preprocess="xml-stripblanks">../pgp/seahorse-gpgme-add-subkey.ui</file>
     <file alias="seahorse-gpgme-add-uid.ui" preprocess="xml-stripblanks">../pgp/seahorse-gpgme-add-uid.ui</file>
     <file alias="seahorse-gpgme-expires-dialog.ui" preprocess="xml-stripblanks">../pgp/seahorse-gpgme-expires-dialog.ui</file>
     <file alias="seahorse-gpgme-generate-dialog.ui" preprocess="xml-stripblanks">../pgp/seahorse-gpgme-generate-dialog.ui</file>
-    <file alias="seahorse-gpgme-revoke-dialog.ui" preprocess="xml-stripblanks">../pgp/seahorse-revoke.ui</file>
+    <file alias="seahorse-gpgme-keyring-panel.ui" preprocess="xml-stripblanks">../pgp/seahorse-gpgme-keyring-panel.ui</file>
+    <file alias="seahorse-gpgme-revoke-dialog.ui" preprocess="xml-stripblanks">../pgp/seahorse-gpgme-revoke-dialog.ui</file>
     <file alias="seahorse-gpgme-sign-dialog.ui" preprocess="xml-stripblanks">../pgp/seahorse-gpgme-sign-dialog.ui</file>
     <file alias="seahorse-keyserver-results.ui" preprocess="xml-stripblanks">../pgp/seahorse-keyserver-results.ui</file>
     <file alias="seahorse-keyserver-search.ui" preprocess="xml-stripblanks">../pgp/seahorse-keyserver-search.ui</file>
     <file alias="seahorse-keyserver-sync.ui" preprocess="xml-stripblanks">../pgp/seahorse-keyserver-sync.ui</file>
-    <file alias="seahorse-pgp-private-key-properties.ui" preprocess="xml-stripblanks">../pgp/seahorse-pgp-private-key-properties.ui</file>
-    <file alias="seahorse-pgp-public-key-properties.ui" preprocess="xml-stripblanks">../pgp/seahorse-pgp-public-key-properties.ui</file>
+    <file alias="seahorse-pgp-key-panel.ui" preprocess="xml-stripblanks">../pgp/seahorse-pgp-key-panel.ui</file>
+    <file alias="seahorse-pgp-photos-widget.ui" preprocess="xml-stripblanks">../pgp/seahorse-pgp-photos-widget.ui</file>
     <file alias="seahorse-pgp-subkey-list-box-row.ui" preprocess="xml-stripblanks">../pgp/seahorse-pgp-subkey-list-box-row.ui</file>
     <file alias="seahorse-pgp-uid-list-box-row.ui" preprocess="xml-stripblanks">../pgp/seahorse-pgp-uid-list-box-row.ui</file>
 
     <!-- PKCS#11 -->
-    <file alias="seahorse-pkcs11-generate.ui" preprocess="xml-stripblanks">../pkcs11/seahorse-pkcs11-generate.ui</file>
-    <file alias="seahorse-pkcs11-properties.ui" preprocess="xml-stripblanks">../pkcs11/seahorse-pkcs11-properties.ui</file>
-    <file alias="seahorse-pkcs11-request.ui" preprocess="xml-stripblanks">../pkcs11/seahorse-pkcs11-request.ui</file>
+    <file alias="pkcs11-cert-key-pair-panel.ui" preprocess="xml-stripblanks">../pkcs11/pkcs11-cert-key-pair-panel.ui</file>
+    <file alias="pkcs11-certificate-widget.ui" preprocess="xml-stripblanks">../pkcs11/pkcs11-certificate-widget.ui</file>
+    <file alias="pkcs11-generate.ui" preprocess="xml-stripblanks">../pkcs11/pkcs11-generate.ui</file>
+    <file alias="pkcs11-private-key-widget.ui" preprocess="xml-stripblanks">../pkcs11/pkcs11-private-key-widget.ui</file>
+    <file alias="pkcs11-request-certificate-dialog.ui" preprocess="xml-stripblanks">../pkcs11/pkcs11-request-certificate-dialog.ui</file>
+    <file alias="pkcs11-token-panel.ui" preprocess="xml-stripblanks">../pkcs11/pkcs11-token-panel.ui</file>
   </gresource>
 </gresources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="SeahorseGpgmeKeyringPanel" parent="SeahorsePanel">
+    <property name="title" translatable="yes">GPG Keyring</property>
+    <style>
+      <class name="gpgme-keyring-panel"/>
+    </style>
+
+    <property name="layout-manager">
+      <object class="GtkBoxLayout">
+        <property name="orientation">vertical</property>
+        <property name="spacing">18</property>
+      </object>
+    </property>
+
+    <child>
+      <object class="AdwPreferencesGroup">
+        <child>
+          <object class="AdwActionRow" id="homedir_row">
+            <property name="title" translatable="yes">Home directory</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="version_row">
+            <property name="title" translatable="yes">Version</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

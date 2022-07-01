@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="SeahorseImportDialog" parent="AdwWindow">
+    <property name="title" translatable="yes">Import Data</property>
+    <property name="default-width">500</property>
+    <property name="default-height">400</property>
+
+    <property name="content">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-start-title-buttons">False</property>
+            <property name="show-end-title-buttons">False</property>
+
+            <child type="start">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">True</property>
+                <property name="action-name">window.close</property>
+              </object>
+            </child>
+
+            <child type="end">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">_Import All</property>
+                <property name="use-underline">True</property>
+                <property name="action-name">import-all</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <property name="content">
+          <object class="GtkScrolledWindow">
+            <property name="propagate-natural-height">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <child>
+              <object class="AdwClamp">
+                <child>
+                  <object class="GtkBox">
+                    <property name="spacing">24</property>
+                    <property name="orientation">vertical</property>
+                    <property name="margin-start">32</property>
+                    <property name="margin-end">32</property>
+                    <property name="margin-top">32</property>
+                    <property name="margin-bottom">32</property>
+                    <child>
+                      <object class="GtkLabel" id="n_items_label">
+                        <property name="visible">False</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="container">
+                        <property name="spacing">24</property>
+                        <property name="orientation">vertical</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </property>
+  </template>
+</interface>

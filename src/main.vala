@@ -25,9 +25,5 @@ public int main (string[] args) {
     Intl.textdomain(Config.GETTEXT_PACKAGE);
 
     Seahorse.Application app = new Seahorse.Application();
-    int status = app.run(args);
-
-    Seahorse.Registry.cleanup();
-
-    return status;
+    return app.run(args);
 }

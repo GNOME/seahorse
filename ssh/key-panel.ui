@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="action_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Change _Passphrase</attribute>
+        <attribute name="action">panel.change-passphrase</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Export</attribute>
+        <attribute name="action">panel.export-secret-key</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Delete</attribute>
+        <attribute name="action">panel.delete-key</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <template class="SeahorseSshKeyPanel" parent="SeahorsePanel">
+    <property name="title" translatable="yes">SSH Key</property>
+    <property name="menu">action_menu</property>
+    <style>
+      <class name="ssh-key-panel"/>
+    </style>
+
+    <property name="layout-manager">
+      <object class="GtkBoxLayout">
+        <property name="orientation">vertical</property>
+        <property name="spacing">18</property>
+      </object>
+    </property>
+
+    <child>
+      <object class="AdwPreferencesGroup">
+        <child>
+          <object class="AdwEntryRow" id="comment_row">
+            <property name="show-apply-button">True</property>
+            <property name="title" translatable="yes" context="name-of-ssh-key" comments="Name of key, often a persons name">Name</property>
+            <signal name="apply" handler="on_ssh_comment_apply"/>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="algo_row">
+            <property name="title" translatable="yes">Algorithm</property>
+            <property name="subtitle-selectable">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="key_length_row">
+            <property name="title" translatable="yes">Key size</property>
+            <property name="subtitle-selectable">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="location_row">
+            <property name="title" translatable="yes">Location</property>
+            <property name="subtitle-selectable">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="fingerprint_row">
+            <property name="title" translatable="yes">Fingerprint</property>
+            <property name="subtitle-selectable">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <child>
+          <object class="AdwExpanderRow">
+            <property name="title" translatable="yes">Public Key</property>
+            <child type="action">
+              <object class="GtkButton" id="qr_code_button">
+                <property name="icon-name">qr-code-symbolic</property>
+                <property name="tooltip_text" translatable="yes">Generate QR code public key</property>
+                <property name="action-name">panel.generate-qr-code</property>
+                <property name="valign">center</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkButton" id="copy_button">
+                <property name="icon-name">edit-copy-symbolic</property>
+                <property name="tooltip_text" translatable="yes">Copy public key to clipboard</property>
+                <property name="action-name">panel.copy-public-key</property>
+                <property name="valign">center</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="pubkey_label">
+                <property name="wrap">True</property>
+                <property name="wrap-mode">char</property>
+                <property name="selectable">True</property>
+                <property name="max-width-chars">45</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <style>
+                  <class name="monospace"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Remote Access</property>
+        <child>
+          <object class="AdwSwitchRow" id="trust_check">
+            <property name="title" translatable="yes">This Computer</property>
+            <property name="subtitle" translatable="yes">Allow access remotely with this key</property>
+            <signal name="notify::active" handler="on_ssh_trust_changed" swapped="no"/>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Remote Machine</property>
+            <property name="subtitle" translatable="yes">Set up remote machine access with this key</property>
+            <child type="suffix">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Configure</property>
+                <property name="action-name">panel.remote-upload</property>
+                <property name="valign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton">
+        <property name="margin-top">16</property>
+        <property name="label" translatable="yes">Delete Key</property>
+        <property name="action-name">panel.delete-key</property>
+        <property name="halign">center</property>
+        <style>
+          <class name="pill"/>
+          <class name="destructive-action"/>
+        </style>
+      </object>
+    </child>
+  </template>
+</interface>

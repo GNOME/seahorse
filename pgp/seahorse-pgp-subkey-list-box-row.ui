@@ -1,176 +1,144 @@
 <?xml version="1.0"?>
 <interface>
-  <requires lib="gtk+" version="3.24"/>
-  <menu id="subkey_menu">
+  <menu id="actions_menu">
     <section>
       <item>
         <attribute name="label" translatable="yes">Change expiration date</attribute>
         <attribute name="action">subkey.change-expires</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Revoke subkey</attribute>
+        <attribute name="label" translatable="yes">Revoke</attribute>
         <attribute name="action">subkey.revoke</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Delete subkey</attribute>
+        <attribute name="label" translatable="yes">Delete</attribute>
         <attribute name="action">subkey.delete</attribute>
       </item>
     </section>
   </menu>
-  <template class="SeahorsePgpSubkeyListBoxRow" parent="HdyExpanderRow">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child type="action">
-      <object class="GtkImage" id="status_box">
-        <property name="visible">True</property>
-        <property name="icon-name">dialog-warning-symbolic</property>
-        <style>
-          <class name="pgp-subkey-status-box"/>
-        </style>
-      </object>
-      <packing>
-        <property name="top_attach">0</property>
-        <property name="left_attach">2</property>
-      </packing>
-    </child>
+
+  <template class="SeahorsePgpSubkeyListBoxRow" parent="AdwExpanderRow">
+    <style>
+      <class name="pgp-subkey-row"/>
+    </style>
+
     <child>
       <object class="GtkGrid">
-        <property name="visible">True</property>
-        <property name="margin">12</property>
         <property name="row-spacing">12</property>
         <property name="column-spacing">12</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
             <property name="xalign">1</property>
             <property name="label" translatable="yes">Usages</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="top_attach">0</property>
-            <property name="left_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="usages_box">
-            <property name="visible">True</property>
             <property name="spacing">3</property>
             <property name="orientation">horizontal</property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="top_attach">0</property>
-            <property name="left_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
             <property name="xalign">1</property>
             <property name="label" translatable="yes">Fingerprint</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="top_attach">1</property>
-            <property name="left_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="fingerprint_label">
-            <property name="visible">True</property>
             <property name="selectable">True</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="top_attach">1</property>
-            <property name="left_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
             <property name="xalign">1</property>
             <property name="label" translatable="yes">Type</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="top_attach">2</property>
-            <property name="left_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="algo_label">
-            <property name="visible">True</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="top_attach">2</property>
-            <property name="left_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
             <property name="xalign">1</property>
             <property name="label" translatable="yes">Created</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="row">3</property>
+              <property name="column">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="top_attach">3</property>
-            <property name="left_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="created_label">
-            <property name="visible">True</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="row">3</property>
+              <property name="column">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="top_attach">3</property>
-            <property name="left_attach">1</property>
-          </packing>
         </child>
-        <child>
-          <object class="GtkBox" id="action_box">
-            <property name="visible">True</property>
-            <property name="orientation">horizontal</property>
-            <property name="spacing">6</property>
-            <property name="margin">6</property>
-            <child>
-              <object class="GtkButton">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Change expiry date</property>
-                <property name="action-name">subkey.change-expires</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Revoke</property>
-                <property name="action-name">subkey.revoke</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Delete</property>
-                <property name="action-name">subkey.delete</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="top_attach">4</property>
-            <property name="left_attach">0</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
+      </object>
+    </child>
+
+    <child type="action">
+      <object class="GtkImage" id="status_box">
+        <property name="icon-name">dialog-warning-symbolic</property>
+        <style>
+          <class name="pgp-subkey-status-box"/>
+          <class name="warning"/>
+        </style>
+      </object>
+    </child>
+
+    <child type="action">
+      <object class="GtkMenuButton" id="actions_button">
+        <property name="icon-name">view-more-symbolic</property>
+        <property name="valign">center</property>
+        <property name="halign">end</property>
+        <property name="margin-start">6</property>
+        <property name="menu-model">actions_menu</property>
+        <style>
+          <class name="flat"/>
+        </style>
       </object>
     </child>
   </template>

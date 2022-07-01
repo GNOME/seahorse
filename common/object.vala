@@ -25,11 +25,10 @@
  */
 public class Seahorse.Object : GLib.Object {
 
-    // XXX only notify if changed
     /**
      * The place this Object came from.
      */
-    public weak Place place { get; set; default = null; }
+    public weak Place? place { get; set; default = null; }
 
     /**
      * Stock ID for this Object.
@@ -81,7 +80,6 @@ public class Seahorse.Object : GLib.Object {
     /**
      * Displayable ID for the object.
      */
-    // XXX explicit op true zetten in set;
     public string identifier {
         get { return this._identifier; }
         set {
@@ -90,7 +88,6 @@ public class Seahorse.Object : GLib.Object {
     }
     private string _identifier = "";
 
-    // XXX only notify if changed
     /**
      * How this object is used.
      */
@@ -100,16 +97,6 @@ public class Seahorse.Object : GLib.Object {
      * This object's flags.
      */
     public Flags object_flags { get; set; default = Flags.NONE; }
-
-    /**
-     * Whether this Object can be deleted.
-     */
-    public bool deletable { get { return Flags.DELETABLE in this.object_flags; } }
-
-    /**
-     * Whether this Object can be exported.
-     */
-    public bool exportable { get { return Flags.EXPORTABLE in this.object_flags; } }
 
     public Object() {
     }

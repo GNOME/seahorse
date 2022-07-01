@@ -16,24 +16,27 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Seahorse {
+public interface Seahorse.Backend : GLib.ListModel {
 
-public interface Backend : Gcr.Collection {
-	public abstract string name { get; }
-	public abstract string label { get; }
-	public abstract string description { get; }
-	public abstract ActionGroup actions { owned get; }
-	public abstract bool loaded { get; }
+    public abstract string name { get; }
+    public abstract string label { get; }
+    public abstract string description { get; }
+    public abstract ActionGroup actions { owned get; }
+    public abstract bool loaded { get; }
 
-	public abstract Place? lookup_place(string uri);
+    public abstract Place? lookup_place(string uri);
 
-	public void register() {
-		Registry.register_object(this, "backend");
-	}
+    private static GLib.ListStore backends;
 
-	public static GLib.List<Backend> get_registered() {
-		return (GLib.List<Seahorse.Backend>)Registry.object_instances("backend");
-	}
-}
+    public void register() {
+        if (backends == null)
+            backends = new GLib.ListStore(typeof(Backend));
+        backends.append(this);
+    }
 
+    public static GLib.ListModel get_registered() {
+        if (backends == null)
+            backends = new GLib.ListStore(typeof(Backend));
+        return backends;
+    }
 }

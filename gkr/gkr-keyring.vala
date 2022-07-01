@@ -18,34 +18,28 @@
  * License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Seahorse {
-namespace Gkr {
-
-public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lockable, Viewable {
+public class Seahorse.Gkr.Keyring : Secret.Collection, GLib.ListModel, Place,
+                                    Deletable, Lockable, Viewable {
 
     private const ActionEntry[] KEYRING_ACTIONS = {
         { "set-default",     on_action_set_default },
         { "change-password", on_action_change_password },
     };
 
-	public string description {
-		owned get {
-			if (Backend.instance().has_alias ("login", this))
-				return _("A keyring that is automatically unlocked on login");
-			return _("A keyring used to store passwords");
-		}
-	}
+    public string description {
+        owned get {
+            if (Backend.instance().has_alias ("login", this))
+                return _("A keyring that is automatically unlocked on login");
+            return _("A keyring used to store passwords");
+        }
+    }
 
-	public string uri {
-		owned get {
-			var object_path = base.get_object_path ();
-			return "secret-service://%s".printf(object_path);
-		}
-	}
-
-	public GLib.Icon icon {
-		owned get { return new GLib.ThemedIcon("folder"); }
-	}
+    public string uri {
+        owned get {
+            var object_path = base.get_object_path ();
+            return "secret-service://%s".printf(object_path);
+        }
+    }
 
     public Place.Category category {
         get { return Place.Category.PASSWORDS; }
@@ -65,124 +59,132 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
         owned get { return this._menu_model; }
     }
 
-    public bool show_if_empty {
+    public bool is_default {
+        get { return Backend.instance().has_alias ("default", this); }
+    }
+
+    public bool lockable {
+        get { return !get_locked(); }
+    }
+
+    public bool unlockable {
+        get { return get_locked(); }
+    }
+
+    public bool deletable {
         get { return true; }
     }
 
-	public bool is_default {
-		get { return Backend.instance().has_alias ("default", this); }
-	}
+    private GenericArray<Gkr.Item> _items = new GenericArray<Gkr.Item>();
 
-	public bool lockable {
-		get { return !get_locked(); }
-	}
-
-	public bool unlockable {
-		get { return get_locked(); }
-	}
-
-	public bool deletable {
-		get { return true; }
-	}
-
-	private GLib.HashTable<string, Item> _items;
-
-	construct {
-		this._items = new GLib.HashTable<string, Item>(GLib.str_hash, GLib.str_equal);
-		this.notify.connect((pspec) => {
-			if (pspec.name == "items" || pspec.name == "locked")
-				refresh_collection();
-		});
-		Backend.instance().notify.connect((pspec) => {
-			notify_property ("is-default");
-			notify_property ("description");
-		});
+    construct {
+        this.notify.connect((pspec) => {
+            if (pspec.name == "items" || pspec.name == "locked")
+                refresh_collection();
+        });
+        Backend.instance().notify.connect((pspec) => {
+            notify_property ("is-default");
+            notify_property ("description");
+        });
 
         this._actions = create_actions();
         this._menu_model = create_menu_model();
-	}
+    }
 
-	public uint get_length() {
-		return _items.size();
-	}
+    public GLib.Type get_item_type() {
+        return typeof(Gkr.Item);
+    }
 
-	public GLib.List<weak GLib.Object> get_objects() {
-		return _items.get_values();
-	}
+    public uint get_n_items() {
+        return this._items.length;
+    }
 
-	public bool contains(GLib.Object obj) {
-		if (obj is Item)
-			return _items.lookup(((Item)obj).get_object_path()) != null;
-		return false;
-	}
+    public GLib.Object? get_item(uint index) {
+        if (index >= this._items.length)
+            return null;
+        return this._items[index];
+    }
 
-	public Gtk.Window? create_viewer(Gtk.Window? parent) {
-		return new KeyringProperties(this, parent);
-	}
+    private Gkr.Item? lookup_by_path(string object_path) {
+        for (uint i = 0; i < this._items.length; i++) {
+            if (object_path == this._items[i].get_object_path())
+                return this._items[i];
+        }
+        return null;
+    }
 
-	public Deleter create_deleter() {
-		return new KeyringDeleter(this);
-	}
+    public Seahorse.Panel create_panel() {
+        return new KeyringPanel(this);
+    }
 
-	public async bool lock(GLib.TlsInteraction? interaction,
-			GLib.Cancellable? cancellable) throws GLib.Error {
-		var objects = new GLib.List<GLib.DBusProxy>();
-		objects.prepend(this);
+    public DeleteOperation create_delete_operation() {
+        return new KeyringDeleteOperation(this);
+    }
 
-		var service = get_service();
-		GLib.List<GLib.DBusProxy> locked;
-		yield service.lock(objects, cancellable, out locked);
-		refresh_collection ();
-		return locked.length() > 0;
-	}
+    public async bool lock(GLib.TlsInteraction? interaction,
+            GLib.Cancellable? cancellable) throws GLib.Error {
+        var objects = new GLib.List<GLib.DBusProxy>();
+        objects.prepend(this);
 
-	public async bool unlock(GLib.TlsInteraction? interaction,
-	                         GLib.Cancellable? cancellable) throws GLib.Error {
-		var objects = new GLib.List<GLib.DBusProxy>();
-		objects.prepend(this);
+        var service = get_service();
+        GLib.List<GLib.DBusProxy> locked;
+        yield service.lock(objects, cancellable, out locked);
+        refresh_collection ();
+        notify_property("lockable");
+        notify_property("unlockable");
+        return locked.length() > 0;
+    }
 
-		var service = get_service();
-		GLib.List<GLib.DBusProxy> unlocked;
-		yield service.unlock(objects, cancellable, out unlocked);
-		refresh_collection ();
-		return unlocked.length() > 0;
-	}
+    public async bool unlock(GLib.TlsInteraction? interaction,
+                             GLib.Cancellable? cancellable) throws GLib.Error {
+        var objects = new GLib.List<GLib.DBusProxy>();
+        objects.prepend(this);
 
-	public async bool load(GLib.Cancellable? cancellable) throws GLib.Error {
-		refresh_collection();
-		return true;
-	}
+        var service = get_service();
+        GLib.List<GLib.DBusProxy> unlocked;
+        yield service.unlock(objects, cancellable, out unlocked);
+        refresh_collection ();
+        notify_property("lockable");
+        notify_property("unlockable");
+        return unlocked.length() > 0;
+    }
 
-	private void refresh_collection() {
-		var seen = new GLib.GenericSet<string>(GLib.str_hash, GLib.str_equal);
+    public async bool load(GLib.Cancellable? cancellable) throws GLib.Error {
+        refresh_collection();
+        return true;
+    }
 
-		GLib.List<Secret.Item> items = null;
-		if (!get_locked())
-			items = get_items();
+    private void refresh_collection() {
+        var seen = new GLib.GenericSet<string>(GLib.str_hash, GLib.str_equal);
 
-		foreach (var item in items) {
-			var object_path = item.get_object_path();
-			seen.add(object_path);
+        GLib.List<Secret.Item> items = null;
+        if (!get_locked())
+            items = get_items();
 
-			if (_items.lookup(object_path) == null) {
-				item.set("place", this);
-				_items.insert(object_path, (Item)item);
-				emit_added(item);
-			}
-		}
+        // NOTE: this is not _items
+        foreach (var item in items) {
+            unowned var object_path = item.get_object_path();
+            seen.add(object_path);
 
-		/* Remove any that we didn't find */
-		var iter = GLib.HashTableIter<string, Item>(_items);
-		string object_path;
-		while (iter.next (out object_path, null)) {
-			if (!seen.contains(object_path)) {
-				var item = _items.lookup(object_path);
-				item.set("place", null);
-				iter.remove();
-				emit_removed (item);
-			}
-		}
-	}
+            if (lookup_by_path(object_path) == null) {
+                item.set("place", this);
+                this._items.add((Item) item);
+                items_changed(this._items.length - 1, 0, 1);
+            }
+        }
+
+        /* Remove any that we didn't find */
+        for (uint i = 0; i < this._items.length; i++) {
+            unowned var object_path = this._items[i].get_object_path();
+            if (!seen.contains(object_path)) {
+                var item = lookup_by_path(object_path);
+                item.set("place", null);
+                this._items.remove(item);
+                items_changed(i, 1, 0);
+                i--;
+            }
+        }
+    }
 
     public void on_action_set_default(SimpleAction action, Variant? param) {
         set_as_default();
@@ -190,16 +192,16 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 
     public void set_as_default() {
         var parent = null;
-		var service = this.service;
+        var service = this.service;
 
-		service.set_alias.begin("default", this, null, (obj, res) => {
-			try {
-				service.set_alias.end(res);
-				Backend.instance().refresh();
-			} catch (GLib.Error err) {
-				Util.show_error(parent, _("Couldn’t set default keyring"), err.message);
-			}
-		});
+        service.set_alias.begin("default", this, null, (obj, res) => {
+            try {
+                service.set_alias.end(res);
+                Backend.instance().refresh();
+            } catch (GLib.Error err) {
+                Util.show_error(parent, _("Couldn’t set default keyring"), err.message);
+            }
+        });
     }
 
     public void on_action_change_password(SimpleAction action, Variant? param) {
@@ -208,30 +210,30 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
 
     public void change_password() {
         var parent = null;
-		var service = this.service;
-		service.get_connection().call.begin(service.get_name(),
-		                                    service.get_object_path(),
-		                                    "org.gnome.keyring.InternalUnsupportedGuiltRiddenInterface",
-		                                    "ChangeWithPrompt",
-		                                    new GLib.Variant("(o)", this.get_object_path()),
-		                                    new GLib.VariantType("(o)"),
-		                                    GLib.DBusCallFlags.NONE, -1, null, (obj, res) => {
-			try {
-				var retval = service.get_connection().call.end(res);
-				string prompt_path;
-				retval.get("(o)", out prompt_path);
-				service.prompt_at_dbus_path.begin(prompt_path.dup(), null, null, (obj, res) => {
-					try {
-						service.prompt_at_dbus_path.end(res);
-					} catch (GLib.Error err) {
-						Util.show_error(parent, _("Couldn’t change keyring password"), err.message);
-					}
-					Backend.instance().refresh();
-				});
-			} catch (GLib.Error err) {
-				Util.show_error(parent, _("Couldn’t change keyring password"), err.message);
-			}
-		});
+        var service = this.service;
+        service.get_connection().call.begin(service.get_name(),
+                                            service.get_object_path(),
+                                            "org.gnome.keyring.InternalUnsupportedGuiltRiddenInterface",
+                                            "ChangeWithPrompt",
+                                            new GLib.Variant("(o)", this.get_object_path()),
+                                            new GLib.VariantType("(o)"),
+                                            GLib.DBusCallFlags.NONE, -1, null, (obj, res) => {
+            try {
+                var retval = service.get_connection().call.end(res);
+                string prompt_path;
+                retval.get("(o)", out prompt_path);
+                service.prompt_at_dbus_path.begin(prompt_path.dup(), null, null, (obj, res) => {
+                    try {
+                        service.prompt_at_dbus_path.end(res);
+                    } catch (GLib.Error err) {
+                        Util.show_error(parent, _("Couldn’t change keyring password"), err.message);
+                    }
+                    Backend.instance().refresh();
+                });
+            } catch (GLib.Error err) {
+                Util.show_error(parent, _("Couldn’t change keyring password"), err.message);
+            }
+        });
     }
 
     private SimpleActionGroup create_actions() {
@@ -252,48 +254,4 @@ public class Keyring : Secret.Collection, Gcr.Collection, Place, Deletable, Lock
         menu.insert(1, _("Change _Password"), prefix + ".change-password");
         return menu;
     }
-}
-
-class KeyringDeleter : Deleter {
-	private Keyring? _keyring;
-	private GLib.List<GLib.Object> _objects;
-
-	public override Gtk.Dialog create_confirm(Gtk.Window? parent) {
-		var dialog = new DeleteDialog(parent,
-		                              _("Are you sure you want to delete the password keyring “%s”?"),
-		                              this._keyring.label);
-
-		dialog.check_label = _("I understand that all items will be permanently deleted.");
-		dialog.check_require = true;
-
-		return dialog;
-	}
-
-	public KeyringDeleter(Keyring keyring) {
-		if (!add_object(keyring))
-			GLib.assert_not_reached();
-	}
-
-	public override unowned GLib.List<GLib.Object> get_objects() {
-		return this._objects;
-	}
-
-	public override bool add_object (GLib.Object obj) {
-		if (this._keyring != null)
-			return false;
-		if (obj is Keyring) {
-			this._keyring = (Keyring)obj;
-			this._objects.append(obj);
-			return true;
-		}
-		return false;
-	}
-
-	public override async bool delete(GLib.Cancellable? cancellable) throws GLib.Error {
-		yield this._keyring.delete(cancellable);
-		return true;
-	}
-}
-
-}
 }

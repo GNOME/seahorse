@@ -32,13 +32,13 @@
  **/
 
 struct _SeahorseGpgmeAddUid {
-    GtkDialog parent_instance;
+    GtkApplicationWindow parent_instance;
 
     SeahorseGpgmeKey *key;
 
-    GtkWidget *name_entry;
-    GtkWidget *email_entry;
-    GtkWidget *comment_entry;
+    GtkWidget *name_row;
+    GtkWidget *email_row;
+    GtkWidget *comment_row;
 };
 
 enum {
@@ -46,44 +46,80 @@ enum {
     PROP_KEY,
 };
 
-G_DEFINE_TYPE (SeahorseGpgmeAddUid, seahorse_gpgme_add_uid, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (SeahorseGpgmeAddUid, seahorse_gpgme_add_uid, GTK_TYPE_APPLICATION_WINDOW)
+
+static void
+on_gpgme_key_op_uid_added (GObject *source, GAsyncResult *result, gpointer user_data)
+{
+    SeahorseGpgmeAddUid *dialog = SEAHORSE_GPGME_ADD_UID (user_data);
+    SeahorseGpgmeKey *key = SEAHORSE_GPGME_KEY (source);
+    g_autoptr(GError) error = NULL;
+
+    if (!seahorse_gpgme_key_op_add_uid_finish (key, result, &error)) {
+        GtkWindow *window = gtk_window_get_transient_for (GTK_WINDOW (dialog));
+        seahorse_util_show_error (GTK_WIDGET (window),
+                                  _("Couldn’t add user ID"),
+                                  error->message);
+        return;
+    }
+
+    seahorse_gpgme_key_refresh (key);
+    gtk_window_close (GTK_WINDOW (dialog));
+}
+
+static void
+add_uid_action (GtkWidget *widget, const char *action_name, GVariant *param)
+{
+    SeahorseGpgmeAddUid *dialog = SEAHORSE_GPGME_ADD_UID (widget);
+    const char *name, *email, *comment;
+
+    name = gtk_editable_get_text (GTK_EDITABLE (dialog->name_row));
+    email = gtk_editable_get_text (GTK_EDITABLE (dialog->email_row));
+    comment = gtk_editable_get_text (GTK_EDITABLE (dialog->comment_row));
+
+    seahorse_gpgme_key_op_add_uid_async (dialog->key,
+                                         name, email, comment,
+                                         NULL,
+                                         on_gpgme_key_op_uid_added,
+                                         dialog);
+}
 
 static gboolean
 check_name_input (SeahorseGpgmeAddUid *self)
 {
-    const gchar *name;
+    const char *name;
 
-    name = gtk_entry_get_text (GTK_ENTRY (self->name_entry));
+    name = gtk_editable_get_text (GTK_EDITABLE (self->name_row));
     return strlen (name) >= 5;
 }
 
 static gboolean
 check_email_input (SeahorseGpgmeAddUid *self)
 {
-    const gchar *email;
+    const char *email;
 
-    email = gtk_entry_get_text (GTK_ENTRY (self->email_entry));
+    email = gtk_editable_get_text (GTK_EDITABLE (self->email_row));
     return strlen (email) == 0 || g_pattern_match_simple ("?*@?*", email);
 }
 
 static void
 check_ok (SeahorseGpgmeAddUid *self)
 {
-    gtk_dialog_set_response_sensitive (GTK_DIALOG (self),
-                                       GTK_RESPONSE_OK,
-                                       check_name_input (self)
-                                       && check_email_input (self));
+    gboolean enabled;
+
+    enabled = check_name_input (self) && check_email_input (self);
+    gtk_widget_action_set_enabled (GTK_WIDGET (self), "add-uid", enabled);
 }
 
 static void
-on_name_entry_changed (GtkEditable *editable, gpointer user_data)
+on_name_row_changed (GtkEditable *editable, gpointer user_data)
 {
     SeahorseGpgmeAddUid *self = SEAHORSE_GPGME_ADD_UID (user_data);
     check_ok (self);
 }
 
 static void
-on_email_entry_changed (GtkEditable *editable, gpointer user_data)
+on_email_row_changed (GtkEditable *editable, gpointer user_data)
 {
     SeahorseGpgmeAddUid *self = SEAHORSE_GPGME_ADD_UID (user_data);
     check_ok (self);
@@ -153,6 +189,8 @@ static void
 seahorse_gpgme_add_uid_init (SeahorseGpgmeAddUid *self)
 {
     gtk_widget_init_template (GTK_WIDGET (self));
+
+    check_ok (self);
 }
 
 static void
@@ -172,14 +210,16 @@ seahorse_gpgme_add_uid_class_init (SeahorseGpgmeAddUidClass *klass)
                              SEAHORSE_GPGME_TYPE_KEY,
                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+    gtk_widget_class_install_action (widget_class, "add-uid", NULL, add_uid_action);
+
     gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Seahorse/seahorse-gpgme-add-uid.ui");
 
-    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddUid, name_entry);
-    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddUid, email_entry);
-    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddUid, comment_entry);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddUid, name_row);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddUid, email_row);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddUid, comment_row);
 
-    gtk_widget_class_bind_template_callback (widget_class, on_name_entry_changed);
-    gtk_widget_class_bind_template_callback (widget_class, on_email_entry_changed);
+    gtk_widget_class_bind_template_callback (widget_class, on_name_row_changed);
+    gtk_widget_class_bind_template_callback (widget_class, on_email_row_changed);
 }
 
 /**
@@ -198,54 +238,18 @@ seahorse_gpgme_add_uid_new (SeahorseGpgmeKey *pkey, GtkWindow *parent)
     self = g_object_new (SEAHORSE_GPGME_TYPE_ADD_UID,
                          "key", pkey,
                          "transient-for", parent,
-                         "use-header-bar", 1,
                          NULL);
 
     return g_steal_pointer (&self);
-}
-
-static void
-on_gpgme_key_op_uid_added (GObject *source, GAsyncResult *result, gpointer user_data)
-{
-    g_autoptr(SeahorseGpgmeAddUid) dialog = SEAHORSE_GPGME_ADD_UID (user_data);
-    SeahorseGpgmeKey *key = SEAHORSE_GPGME_KEY (source);
-    g_autoptr(GError) error = NULL;
-
-    if (!seahorse_gpgme_key_op_add_uid_finish (key, result, &error)) {
-        GtkWindow *window = gtk_window_get_transient_for (GTK_WINDOW (dialog));
-        seahorse_util_show_error (GTK_WIDGET (window),
-                                  _("Couldn’t add user ID"),
-                                  error->message);
-        return;
-    }
-
-    seahorse_gpgme_key_refresh (key);
-    gtk_widget_destroy (GTK_WIDGET (g_steal_pointer (&dialog)));
 }
 
 void
 seahorse_gpgme_add_uid_run_dialog (SeahorseGpgmeKey *pkey, GtkWindow *parent)
 {
     g_autoptr(SeahorseGpgmeAddUid) dialog = NULL;
-    GtkResponseType response;
-    const gchar *name, *email, *comment;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (pkey));
 
     dialog = seahorse_gpgme_add_uid_new (pkey, parent);
-    response = gtk_dialog_run (GTK_DIALOG (dialog));
-    if (response != GTK_RESPONSE_OK) {
-        gtk_widget_destroy (GTK_WIDGET (g_steal_pointer (&dialog)));
-        return;
-    }
-
-    name = gtk_entry_get_text (GTK_ENTRY (dialog->name_entry));
-    email = gtk_entry_get_text (GTK_ENTRY (dialog->email_entry));
-    comment = gtk_entry_get_text (GTK_ENTRY (dialog->comment_entry));
-
-    seahorse_gpgme_key_op_add_uid_async (pkey,
-                                         name, email, comment,
-                                         NULL,
-                                         on_gpgme_key_op_uid_added,
-                                         g_steal_pointer (&dialog));
+    gtk_window_present (GTK_WINDOW (g_steal_pointer (&dialog)));
 }

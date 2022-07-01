@@ -20,6 +20,7 @@
 
 #include "seahorse-pgp-dialogs.h"
 #include "seahorse-pgp-key.h"
+#include "seahorse-pgp-key-panel.h"
 #include "seahorse-pgp-photo.h"
 #include "seahorse-pgp-uid.h"
 #include "seahorse-pgp-subkey.h"
@@ -253,13 +254,15 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
     g_object_get (self, "usage", &usage, NULL);
 
     /* The type */
-    if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
-        icon_name = GCR_ICON_KEY_PAIR;
-    } else {
-        icon_name = GCR_ICON_KEY;
-        if (usage == SEAHORSE_USAGE_NONE)
-            g_object_set (self, "usage", SEAHORSE_USAGE_PUBLIC_KEY, NULL);
-    }
+    // XXX icon for key pair?
+    icon_name = "key-item-symbolic";
+    /* if (usage == SEAHORSE_USAGE_PRIVATE_KEY) { */
+    /*     icon_name = GCR_ICON_KEY_PAIR; */
+    /* } else { */
+    /*     icon_name = GCR_ICON_KEY; */
+    /*     if (usage == SEAHORSE_USAGE_NONE) */
+    /*         g_object_set (self, "usage", SEAHORSE_USAGE_PUBLIC_KEY, NULL); */
+    /* } */
 
     icon = g_themed_icon_new (icon_name);
     g_object_set (self,
@@ -271,22 +274,21 @@ seahorse_pgp_key_realize (SeahorsePgpKey *self)
               NULL);
 }
 
-static GtkWindow *
-seahorse_pgp_key_create_viewer (SeahorseViewable *viewable,
-                                GtkWindow *parent)
+static SeahorsePanel *
+seahorse_pgp_key_create_panel (SeahorseViewable *viewable)
 {
     SeahorsePgpKey *self = SEAHORSE_PGP_KEY (viewable);
-    g_autoptr(GtkWindow) viewer = NULL;
+    GtkWidget *panel = NULL;
 
-    viewer = seahorse_pgp_key_properties_new (self, parent);
-    g_object_ref_sink (viewer);
-    return GTK_WINDOW (g_steal_pointer (&viewer));
+    panel = seahorse_pgp_key_panel_new (self);
+    g_object_ref_sink (panel);
+    return SEAHORSE_PANEL (panel);
 }
 
 static void
 seahorse_pgp_key_viewable_iface (SeahorseViewableIface *iface)
 {
-    iface->create_viewer = seahorse_pgp_key_create_viewer;
+    iface->create_panel = seahorse_pgp_key_create_panel;
 }
 
 const char*

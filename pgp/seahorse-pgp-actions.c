@@ -64,34 +64,18 @@ on_remote_find (GSimpleAction *action,
                 GVariant *param,
                 gpointer user_data)
 {
-  SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
-  SeahorseCatalog *catalog = NULL;
-  g_autoptr(SeahorseKeyserverSearch) search_dialog = NULL;
-  int response;
-  g_autofree gchar *search_text = NULL;
+    SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
+    SeahorseCatalog *catalog = NULL;
+    SeahorseKeyserverSearch *search_dialog = NULL;
 
-  /* Make a new "Find remote keys" dialog */
-  catalog = seahorse_action_group_get_catalog (actions);
-  search_dialog = seahorse_keyserver_search_new (GTK_WINDOW (catalog));
+    /* Make a new "Find remote keys" dialog */
+    catalog = seahorse_action_group_get_catalog (actions);
+    search_dialog = seahorse_keyserver_search_new (GTK_WINDOW (catalog));
 
-  /* Run it and get the search text */
-  response = gtk_dialog_run (GTK_DIALOG (search_dialog));
-  search_text = seahorse_keyserver_search_get_search_text (search_dialog);
+    /* Run it and get the search text */
+    gtk_window_present (GTK_WINDOW (search_dialog));
 
-  /* We can safely destroy it */
-  gtk_widget_destroy (GTK_WIDGET (g_steal_pointer (&search_dialog)));
-
-  /* If the user pressed "Search", make it happen */
-  if (response == GTK_RESPONSE_ACCEPT) {
-    /* Get search text and save it for next time */
-    g_return_if_fail (search_text && *search_text);
-
-    seahorse_app_settings_set_last_search_text (seahorse_app_settings_instance (),
-                                                search_text);
-    seahorse_keyserver_results_show (search_text, GTK_WINDOW (catalog));
-  }
-
-  g_clear_object (&catalog);
+    g_clear_object (&catalog);
 }
 
 static void
@@ -101,30 +85,34 @@ on_remote_sync (GSimpleAction *action,
 {
     SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
     g_autoptr(SeahorseCatalog) catalog = NULL;
-    g_autoptr(GList) keys = NULL;
+    g_autoptr(GListModel) keys = NULL;
     SeahorseKeyserverSync *dialog = NULL;
 
     catalog = seahorse_action_group_get_catalog (actions);
     if (catalog != NULL) {
         g_autoptr(GList) objects = NULL;
+        g_autoptr(GListStore) store = NULL;
 
+        store = g_list_store_new (SEAHORSE_PGP_TYPE_KEY);
         objects = seahorse_catalog_get_selected_objects (catalog);
         for (GList *l = objects; l != NULL; l = g_list_next (l)) {
             if (SEAHORSE_PGP_IS_KEY (l->data))
-                keys = g_list_prepend (keys, l->data);
+                g_list_store_append (store, l->data);
         }
+        keys = G_LIST_MODEL (g_steal_pointer (&store));
     }
 
-    if (keys == NULL) {
+    if (keys == NULL || g_list_model_get_n_items (G_LIST_MODEL (keys)) == 0) {
         SeahorseGpgmeKeyring *keyring;
 
+        g_clear_object (&keys);
         keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-        keys = gcr_collection_get_objects (GCR_COLLECTION (keyring));
+        keys = g_object_ref (G_LIST_MODEL (keyring));
     }
 
-    dialog = seahorse_keyserver_sync_new (keys, GTK_WINDOW (catalog));
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+    dialog = seahorse_keyserver_sync_new (G_LIST_MODEL (keys), GTK_WINDOW (catalog));
+    g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
+    gtk_window_present (GTK_WINDOW (dialog));
 }
 
 #endif /* WITH_KEYSERVER */
@@ -134,21 +122,20 @@ on_pgp_generate_key (GSimpleAction *action,
                      GVariant *param,
                      gpointer user_data)
 {
-  SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
-  SeahorseGpgmeKeyring* keyring;
-  SeahorseCatalog *catalog;
-  GtkDialog *dialog;
+    SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
+    SeahorseGpgmeKeyring* keyring;
+    SeahorseCatalog *catalog;
+    SeahorseGpgmeGenerateDialog *dialog;
 
-  keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-  g_return_if_fail (keyring != NULL);
+    keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+    g_return_if_fail (keyring != NULL);
 
-  catalog = seahorse_action_group_get_catalog (actions);
+    catalog = seahorse_action_group_get_catalog (actions);
 
-  dialog = seahorse_gpgme_generate_dialog_new (keyring, GTK_WINDOW (catalog));
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+    dialog = seahorse_gpgme_generate_dialog_new (keyring);
+    adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (catalog));
 
-  g_clear_object (&catalog);
+    g_clear_object (&catalog);
 }
 
 static const GActionEntry ACTION_ENTRIES[] = {

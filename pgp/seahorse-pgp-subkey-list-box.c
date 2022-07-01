@@ -19,6 +19,9 @@
 
 #include "config.h"
 
+#include "libseahorse/seahorse-util.h"
+
+#include "seahorse-gpgme-add-subkey.h"
 #include "seahorse-gpgme-expires-dialog.h"
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-gpgme-revoke-dialog.h"
@@ -29,9 +32,11 @@
 #include <glib/gi18n.h>
 
 struct _SeahorsePgpSubkeyListBox {
-    GtkListBox parent_instance;
+    AdwPreferencesGroup parent_instance;
 
     SeahorsePgpKey *key;
+
+    GPtrArray *rows;
 };
 
 enum {
@@ -41,7 +46,59 @@ enum {
 };
 static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
-G_DEFINE_TYPE (SeahorsePgpSubkeyListBox, seahorse_pgp_subkey_list_box, GTK_TYPE_LIST_BOX)
+G_DEFINE_TYPE (SeahorsePgpSubkeyListBox, seahorse_pgp_subkey_list_box, ADW_TYPE_PREFERENCES_GROUP)
+
+static void
+on_add_subkey_completed (GObject *object, GAsyncResult *res, void *user_data)
+{
+    SeahorsePgpSubkeyListBox *self = SEAHORSE_PGP_SUBKEY_LIST_BOX (user_data);
+    g_autoptr(GError) error = NULL;
+
+    if (!seahorse_gpgme_key_op_add_subkey_finish (SEAHORSE_GPGME_KEY (self->key),
+                                                  res, &error)) {
+        seahorse_util_show_error (GTK_WIDGET (self), NULL, error->message);
+    }
+}
+
+static void
+on_add_subkey_response (GtkDialog *dialog, int response, void *user_data)
+{
+    SeahorsePgpSubkeyListBox *self = SEAHORSE_PGP_SUBKEY_LIST_BOX (user_data);
+    SeahorseGpgmeAddSubkey *add_dialog = SEAHORSE_GPGME_ADD_SUBKEY (dialog);
+    SeahorsePgpKeyAlgorithm algo;
+    unsigned int length;
+    GDateTime *expires;
+
+    if (response != GTK_RESPONSE_OK) {
+        gtk_window_destroy (GTK_WINDOW (add_dialog));
+        return;
+    }
+
+    length = seahorse_gpgme_add_subkey_get_keysize (add_dialog);
+    algo = seahorse_gpgme_add_subkey_get_selected_algo (add_dialog);
+    expires = seahorse_gpgme_add_subkey_get_expires (add_dialog);
+    seahorse_gpgme_key_op_add_subkey_async (SEAHORSE_GPGME_KEY (self->key),
+                                            algo, length, expires, NULL,
+                                            on_add_subkey_completed, self);
+
+    gtk_window_destroy (GTK_WINDOW (add_dialog));
+}
+
+static void
+on_add_subkey_clicked (GtkButton *button, void *user_data)
+{
+    SeahorsePgpSubkeyListBox *self = SEAHORSE_PGP_SUBKEY_LIST_BOX (user_data);
+    GtkRoot *root;
+    SeahorseGpgmeAddSubkey *dialog;
+
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
+
+    root = gtk_widget_get_root (GTK_WIDGET (button));
+    dialog = seahorse_gpgme_add_subkey_new (SEAHORSE_GPGME_KEY (self->key),
+                                            GTK_WINDOW (root));
+    g_signal_connect (dialog, "response", G_CALLBACK (on_add_subkey_response), self);
+    gtk_window_present (GTK_WINDOW (dialog));
+}
 
 static void
 seahorse_pgp_subkey_list_box_set_property (GObject      *object,
@@ -53,7 +110,7 @@ seahorse_pgp_subkey_list_box_set_property (GObject      *object,
 
     switch (prop_id) {
     case PROP_KEY:
-        g_set_object (&self->key, g_value_dup_object (value));
+        g_set_object (&self->key, g_value_get_object (value));
         break;
     }
 }
@@ -73,38 +130,82 @@ seahorse_pgp_subkey_list_box_get_property (GObject      *object,
     }
 }
 
-static GtkWidget *
-create_subkey_row (void *item,
-                   void *user_data)
+static void
+on_key_subkeys_changed (GListModel *subkeys,
+                        unsigned int position,
+                        unsigned int removed,
+                        unsigned int added,
+                        void *user_data)
 {
-    SeahorsePgpSubkey *subkey = SEAHORSE_PGP_SUBKEY (item);
+    SeahorsePgpSubkeyListBox *self = SEAHORSE_PGP_SUBKEY_LIST_BOX (user_data);
 
-    return g_object_new (SEAHORSE_PGP_TYPE_SUBKEY_LIST_BOX_ROW,
-                         "subkey", subkey,
-                         NULL);
+    for (unsigned int i = position; i < position + removed; i++) {
+        GtkWidget *row = g_ptr_array_index (self->rows, position);
+
+        adw_preferences_group_remove (ADW_PREFERENCES_GROUP (self),
+                                      row);
+        g_ptr_array_remove_index (self->rows, position);
+    }
+
+    for (unsigned int i = position; i < position + added; i++) {
+        GtkWidget *row;
+        g_autoptr(SeahorsePgpSubkey) subkey = NULL;
+
+        subkey = g_list_model_get_item (subkeys, i);
+        row = g_object_new (SEAHORSE_PGP_TYPE_SUBKEY_LIST_BOX_ROW,
+                            "subkey", subkey,
+                            NULL);
+        g_ptr_array_insert (self->rows, i, row);
+        adw_preferences_group_add (ADW_PREFERENCES_GROUP (self),
+                                   row);
+    }
 }
 
 static void
 seahorse_pgp_subkey_list_box_constructed (GObject *obj)
 {
     SeahorsePgpSubkeyListBox *self = SEAHORSE_PGP_SUBKEY_LIST_BOX (obj);
+    GListModel *subkeys;
+    SeahorseUsage usage;
 
     G_OBJECT_CLASS (seahorse_pgp_subkey_list_box_parent_class)->constructed (obj);
 
-    gtk_list_box_bind_model (GTK_LIST_BOX (self),
-                             seahorse_pgp_key_get_subkeys (self->key),
-                             create_subkey_row,
+    /* Setup the rows for each subkey */
+    subkeys = seahorse_pgp_key_get_subkeys (self->key);
+    g_signal_connect_object (subkeys,
+                             "items-changed",
+                             G_CALLBACK (on_key_subkeys_changed),
                              self,
-                             NULL);
+                             0);
+    on_key_subkeys_changed (subkeys, 0, 0, g_list_model_get_n_items (subkeys), self);
+
+    /* If applicable, add a button to add a new subkey too */
+    usage = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
+    if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
+        GtkWidget *button_content;
+        GtkWidget *button;
+
+        button_content = adw_button_content_new ();
+        adw_button_content_set_icon_name (ADW_BUTTON_CONTENT (button_content),
+                                          "list-add-symbolic");
+        adw_button_content_set_label (ADW_BUTTON_CONTENT (button_content),
+                                      _("Add subkey"));
+
+        button = gtk_button_new ();
+        gtk_button_set_child (GTK_BUTTON (button), button_content);
+        gtk_widget_add_css_class (button, "flat");
+        g_signal_connect (button, "clicked", G_CALLBACK (on_add_subkey_clicked), self);
+        adw_preferences_group_set_header_suffix (ADW_PREFERENCES_GROUP (self),
+                                                 button);
+    }
 }
 
 static void
 seahorse_pgp_subkey_list_box_init (SeahorsePgpSubkeyListBox *self)
 {
-    GtkStyleContext *style_context;
+    self->rows = g_ptr_array_new ();
 
-    style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-    gtk_style_context_add_class (style_context, "content");
+    adw_preferences_group_set_title (ADW_PREFERENCES_GROUP (self), _("Subkeys"));
 }
 
 static void
@@ -112,6 +213,7 @@ seahorse_pgp_subkey_list_box_finalize (GObject *obj)
 {
     SeahorsePgpSubkeyListBox *self = SEAHORSE_PGP_SUBKEY_LIST_BOX (obj);
 
+    g_clear_pointer (&self->rows, g_ptr_array_unref);
     g_clear_object (&self->key);
 
     G_OBJECT_CLASS (seahorse_pgp_subkey_list_box_parent_class)->finalize (obj);
@@ -139,7 +241,6 @@ GtkWidget *
 seahorse_pgp_subkey_list_box_new (SeahorsePgpKey *key)
 {
     return g_object_new (SEAHORSE_PGP_TYPE_SUBKEY_LIST_BOX,
-                         "selection-mode", GTK_SELECTION_NONE,
                          "key", key,
                          NULL);
 }
@@ -154,7 +255,7 @@ seahorse_pgp_subkey_list_box_get_key (SeahorsePgpSubkeyListBox *self)
 /* SeahorsePhpSubkeyListBoxRow */
 
 struct _SeahorsePgpSubkeyListBoxRow {
-    HdyExpanderRow parent_instance;
+    AdwExpanderRow parent_instance;
 
     SeahorsePgpSubkey *subkey;
 
@@ -165,7 +266,7 @@ struct _SeahorsePgpSubkeyListBoxRow {
     GtkWidget *algo_label;
     GtkWidget *created_label;
     GtkWidget *fingerprint_label;
-    GtkWidget *action_box;
+    GtkWidget *actions_button;
 };
 
 enum {
@@ -175,14 +276,14 @@ enum {
 };
 static GParamSpec *row_props[ROW_N_PROPS] = { NULL, };
 
-G_DEFINE_TYPE (SeahorsePgpSubkeyListBoxRow, seahorse_pgp_subkey_list_box_row, HDY_TYPE_EXPANDER_ROW)
+G_DEFINE_TYPE (SeahorsePgpSubkeyListBoxRow, seahorse_pgp_subkey_list_box_row, ADW_TYPE_EXPANDER_ROW)
 
 static GtkWindow *
-get_toplevel_window (SeahorsePgpSubkeyListBoxRow *row)
+get_root (SeahorsePgpSubkeyListBoxRow *row)
 {
-    GtkWidget *toplevel = NULL;
+    GtkRoot *toplevel = NULL;
 
-    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (row));
+    toplevel = gtk_widget_get_root (GTK_WIDGET (row));
     if (GTK_IS_WINDOW (toplevel))
         return GTK_WINDOW (toplevel);
 
@@ -190,24 +291,47 @@ get_toplevel_window (SeahorsePgpSubkeyListBoxRow *row)
 }
 
 static void
+on_subkey_delete_finished (GObject *object, GAsyncResult *result, void *user_data)
+{
+    SeahorsePgpSubkeyListBoxRow *row = SEAHORSE_PGP_SUBKEY_LIST_BOX_ROW (user_data);
+    g_autoptr(SeahorseDeleteOperation) delete_op = SEAHORSE_DELETE_OPERATION (object);
+    gboolean res;
+    g_autoptr(GError) error = NULL;
+
+    res = seahorse_delete_operation_execute_interactively_finish (delete_op,
+                                                                  result,
+                                                                  &error);
+    if (!res) {
+        GtkWidget *window;
+
+        if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+            g_debug ("Subkey delete cancelled by user");
+            return;
+        }
+
+        window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (row)));
+        seahorse_util_show_error (window, _("Couldn't Delete Subkey"), error->message);
+    }
+}
+
+static void
 on_subkey_delete (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpSubkeyListBoxRow *row = SEAHORSE_PGP_SUBKEY_LIST_BOX_ROW (user_data);
-    const char *fingerprint;
+    g_autoptr(SeahorseDeleteOperation) delete_op = NULL;
+    GtkWindow *window;
     g_autofree char *message = NULL;
-    gpgme_error_t err;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (row->subkey));
 
-    fingerprint = seahorse_pgp_subkey_get_fingerprint (row->subkey);
-    message = g_strdup_printf (_("Are you sure you want to permanently delete subkey %s?"), fingerprint);
+    delete_op = seahorse_deletable_create_delete_operation (SEAHORSE_DELETABLE (row->subkey));
 
-    if (!seahorse_delete_dialog_prompt (get_toplevel_window (row), message))
-        return;
-
-    err = seahorse_gpgme_key_op_del_subkey (SEAHORSE_GPGME_SUBKEY (row->subkey));
-    if (!GPG_IS_OK (err))
-        seahorse_gpgme_handle_error (err, _("Couldn’t delete subkey"));
+    window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (row)));
+    seahorse_delete_operation_execute_interactively (g_object_ref (delete_op),
+                                                     window,
+                                                     NULL,
+                                                     on_subkey_delete_finished,
+                                                     row);
 }
 
 static void
@@ -219,23 +343,22 @@ on_subkey_revoke (GSimpleAction *action, GVariant *param, void *user_data)
     g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (row->subkey));
 
     dialog = seahorse_gpgme_revoke_dialog_new (SEAHORSE_GPGME_SUBKEY (row->subkey),
-                                               get_toplevel_window (row));
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
+                                               get_root (row));
+    gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
 on_subkey_change_expires (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpSubkeyListBoxRow *row = SEAHORSE_PGP_SUBKEY_LIST_BOX_ROW (user_data);
-    GtkDialog *dialog;
+    GtkWidget *dialog;
+    GtkWindow *root;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_SUBKEY (row->subkey));
 
-    dialog = seahorse_gpgme_expires_dialog_new (SEAHORSE_GPGME_SUBKEY (row->subkey),
-                                                get_toplevel_window (row));
-    gtk_dialog_run (dialog);
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+    dialog = seahorse_gpgme_expires_dialog_new (SEAHORSE_GPGME_SUBKEY (row->subkey));
+    root = get_root (row);
+    adw_dialog_present (ADW_DIALOG (dialog), root? GTK_WIDGET (root) : NULL);
 }
 
 static const GActionEntry SUBKEY_ACTIONS[] = {
@@ -259,29 +382,29 @@ update_row (SeahorsePgpSubkeyListBoxRow *row)
     if (flags & SEAHORSE_FLAG_REVOKED) {
         GAction *action;
 
-        gtk_widget_show (row->status_box);
+        gtk_widget_set_visible (row->status_box, TRUE);
         gtk_widget_set_tooltip_text (row->status_box, _("Subkey was revoked"));
 
         action = g_action_map_lookup_action (G_ACTION_MAP (row->action_group),
                                              "revoke");
         g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
     } else if (flags & SEAHORSE_FLAG_EXPIRED) {
-        gtk_widget_show (row->status_box);
+        gtk_widget_set_visible (row->status_box, TRUE);
         gtk_widget_set_tooltip_text (row->status_box, _("Subkey has expired"));
     } else if (flags & SEAHORSE_FLAG_DISABLED) {
-        gtk_widget_show (row->status_box);
+        gtk_widget_set_visible (row->status_box, TRUE);
         gtk_widget_set_tooltip_text (row->status_box, _("Subkey is disabled"));
     } else if (flags & SEAHORSE_FLAG_IS_VALID) {
-        gtk_widget_hide (row->status_box);
+        gtk_widget_set_visible (row->status_box, FALSE);
     }
 
     /* Set the key id */
-    hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row),
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row),
                                    seahorse_pgp_subkey_get_keyid (row->subkey));
     expires = seahorse_pgp_subkey_get_expires (row->subkey);
     expires_str = expires? g_date_time_format (expires, "Expires on %x")
                          : g_strdup (_("Never expires"));
-    hdy_expander_row_set_subtitle (HDY_EXPANDER_ROW (row), expires_str);
+    adw_expander_row_set_subtitle (ADW_EXPANDER_ROW (row), expires_str);
 
     /* Add the usage tags */
     usages = seahorse_pgp_subkey_get_usages (row->subkey, &descriptions);
@@ -291,10 +414,8 @@ update_row (SeahorsePgpSubkeyListBoxRow *row)
         label = gtk_label_new (usages[i]);
         gtk_widget_set_tooltip_text (label, descriptions[i]);
         gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-        gtk_widget_show (label);
-        gtk_box_pack_start (GTK_BOX (row->usages_box), label, FALSE, FALSE, 0);
-        gtk_style_context_add_class (gtk_widget_get_style_context (label),
-                                     "pgp-subkey-usage-label");
+        gtk_box_append (GTK_BOX (row->usages_box), label);
+        gtk_widget_add_css_class (label, "pgp-subkey-usage-label");
     }
 
     /* Stuff that is hidden by default (but can be shown with the revealer) */
@@ -317,7 +438,7 @@ update_row (SeahorsePgpSubkeyListBoxRow *row)
 
     parent_key = seahorse_pgp_subkey_get_parent_key (SEAHORSE_PGP_SUBKEY (row->subkey));
     if (seahorse_object_get_usage (SEAHORSE_OBJECT (parent_key)) != SEAHORSE_USAGE_PRIVATE_KEY)
-        gtk_widget_hide (row->action_box);
+        gtk_widget_set_visible (row->actions_button, FALSE);
 }
 
 static void
@@ -373,11 +494,7 @@ seahorse_pgp_subkey_list_box_row_constructed (GObject *obj)
 static void
 seahorse_pgp_subkey_list_box_row_init (SeahorsePgpSubkeyListBoxRow *row)
 {
-    GtkStyleContext *style_context;
-
     gtk_widget_init_template (GTK_WIDGET (row));
-    style_context = gtk_widget_get_style_context (GTK_WIDGET (row));
-    gtk_style_context_add_class (style_context, "pgp-subkey-row");
 
     row->action_group = g_simple_action_group_new ();
     g_action_map_add_action_entries (G_ACTION_MAP (row->action_group),
@@ -426,7 +543,7 @@ seahorse_pgp_subkey_list_box_row_class_init (SeahorsePgpSubkeyListBoxRowClass *k
     gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, algo_label);
     gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, created_label);
     gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, fingerprint_label);
-    gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, action_box);
+    gtk_widget_class_bind_template_child (widget_class, SeahorsePgpSubkeyListBoxRow, actions_button);
 }
 
 SeahorsePgpSubkey *

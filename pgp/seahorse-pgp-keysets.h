@@ -2,6 +2,7 @@
  * Seahorse
  *
  * Copyright (C) 2008 Stefan Walter
+ * Copyright (C) 2022 Niels De Graef
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -18,15 +19,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SEAPGPKEYSETS_H_
-#define SEAPGPKEYSETS_H_
+#pragma once
 
-#include <gcr/gcr.h>
+#include <gio/gio.h>
 
-/* -----------------------------------------------------------------------------
- * SOME COMMON KEYSETS
- */
-
-GcrCollection *     seahorse_keyset_pgp_signers_new     (void);
-
-#endif /*SEAPGPKEYSETS_H_*/
+GListModel *     seahorse_keyset_pgp_signers_new     (void);

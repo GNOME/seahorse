@@ -26,7 +26,7 @@
 #include "seahorse-transfer.h"
 
 #include "seahorse-server-source.h"
-#include "seahorse-gpgme-exporter.h"
+#include "seahorse-gpgme-key-export-operation.h"
 #include "seahorse-gpgme-keyring.h"
 
 #include "seahorse-common.h"
@@ -56,6 +56,7 @@ transfer_closure_free (gpointer user_data)
     g_free (closure);
 }
 
+#if 0
 static void
 on_source_import_ready (GObject *object,
                         GAsyncResult *result,
@@ -104,8 +105,11 @@ on_source_export_ready (GObject *object,
     seahorse_progress_end (cancellable, &closure->from);
 
     if (SEAHORSE_IS_SERVER_SOURCE (closure->from)) {
-        stream_data = seahorse_server_source_export_finish (SEAHORSE_SERVER_SOURCE (object),
-                                                            result, &stream_size, &error);
+        GBytes *stream_bytes;
+
+        stream_bytes = seahorse_server_source_export_finish (SEAHORSE_SERVER_SOURCE (object),
+                                                             result, &error);
+        stream_data = g_bytes_unref_to_data (stream_bytes, &stream_size);
 
     } else if (SEAHORSE_IS_GPGME_KEYRING (closure->from)) {
         stream_data = seahorse_exporter_export_finish (SEAHORSE_EXPORTER (object), result,
@@ -152,6 +156,7 @@ on_source_export_ready (GObject *object,
 
     g_free (stream_data);
 }
+#endif
 
 static gboolean
 on_timeout_start_transfer (gpointer user_data)
@@ -162,6 +167,8 @@ on_timeout_start_transfer (gpointer user_data)
 
     g_assert (SEAHORSE_IS_PLACE (closure->from));
 
+    //XXX
+#if 0
     seahorse_progress_begin (cancellable, &closure->from);
     if (SEAHORSE_IS_SERVER_SOURCE (closure->from)) {
         g_assert (closure->keyids != NULL);
@@ -182,6 +189,7 @@ on_timeout_start_transfer (gpointer user_data)
         g_object_unref (exporter);
         return G_SOURCE_REMOVE;
     }
+#endif
 
     g_warning ("unsupported source for transfer: %s", G_OBJECT_TYPE_NAME (closure->from));
     return G_SOURCE_REMOVE;

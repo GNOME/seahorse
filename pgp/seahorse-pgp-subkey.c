@@ -442,8 +442,7 @@ seahorse_pgp_subkey_calc_fingerprint (const char *raw_fingerprint)
         }
     }
 
-    fpr = string->str;
-    g_string_free (string, FALSE);
+    fpr = g_string_free (string, FALSE);
 
     g_strchomp (fpr);
 

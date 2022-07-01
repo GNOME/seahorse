@@ -1,162 +1,100 @@
 <?xml version="1.0"?>
 <interface>
-  <requires lib="gtk+" version="3.24"/>
-  <object class="GtkAdjustment" id="length_spinner_adjustment">
-    <property name="value">1024</property>
-    <property name="lower">768</property>
-    <property name="upper">1024</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">128</property>
-  </object>
   <template class="SeahorseGpgmeAddSubkey" parent="GtkDialog">
-    <property name="visible">True</property>
-    <property name="border_width">6</property>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox">
-        <property name="visible">True</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
         <child>
-          <object class="GtkGrid">
-            <property name="visible">True</property>
-            <property name="column-spacing">12</property>
-            <property name="row-spacing">6</property>
+          <object class="AdwPreferencesPage">
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="xalign">1</property>
-                <property name="label" translatable="yes">Key _Type</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">type_combo</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="top_attach">0</property>
-                <property name="left_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="type_combo">
-                <property name="visible">True</property>
-                <signal name="changed" handler="handler_gpgme_add_subkey_type_changed"/>
-              </object>
-              <packing>
-                <property name="top_attach">0</property>
-                <property name="left_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="xalign">1</property>
-                <property name="label" translatable="yes">Key _Length</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">length_spinner</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="left_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="length_spinner">
-                <property name="width_request">80</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Length of Key</property>
-                <property name="adjustment">length_spinner_adjustment</property>
-                <property name="climb_rate">128</property>
-                <property name="snap_to_ticks">True</property>
-                <property name="numeric">True</property>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="left_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="xalign">1</property>
-                <property name="label" translatable="yes">Expiration Date</property>
-                <property name="mnemonic-widget">expires_datepicker</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="top_attach">2</property>
-                <property name="left_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="SeahorseDatePicker" id="expires_datepicker">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-              </object>
-              <packing>
-                <property name="top_attach">2</property>
-                <property name="left_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="never_expires_check">
-                <property name="label" translatable="yes">Never E_xpires</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">If key never expires</property>
-                <property name="use_underline">True</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_gpgme_add_subkey_never_expires_toggled"/>
-              </object>
-              <packing>
-                <property name="top_attach">2</property>
-                <property name="left_attach">2</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox">
-            <property name="visible">True</property>
-            <property name="orientation">horizontal</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="cancelbutton1">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="okbutton1">
-                <property name="label">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Generate a new subkey</property>
-                <property name="use_stock">True</property>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwComboRow" id="algo_row">
+                    <property name="title" translatable="yes">Key _Type</property>
+                    <property name="use-underline">True</property>
+                    <signal name="notify::selected" handler="on_algo_row_notify_selected"/>
+                    <property name="model">
+                      <object class="GtkFilterListModel">
+                        <property name="model">
+                          <object class="AdwEnumListModel">
+                            <property name="enum-type">SeahorsePgpKeyAlgorithm</property>
+                          </object>
+                        </property>
+                        <property name="filter">
+                          <object class="GtkCustomFilter" id="algo_filter"/>
+                        </property>
+                      </object>
+                    </property>
+                    <property name="expression">
+                      <closure type="gchararray" function="algo_to_string">
+                        <lookup name="value" type="AdwEnumListItem"/>
+                      </closure>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="length_row">
+                    <property name="title" translatable="yes">Key _Length</property>
+                    <property name="use-underline">True</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment" id="length_row_adjustment">
+                        <property name="value">1024</property>
+                        <property name="lower">768</property>
+                        <property name="upper">1024</property>
+                        <property name="step_increment">1</property>
+                        <property name="page_increment">128</property>
+                      </object>
+                    </property>
+                    <property name="numeric">True</property>
+                    <property name="snap-to-ticks">True</property>
+                    <property name="climb-rate">128</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Expiration Date</property>
+                    <child>
+                      <object class="SeahorseDatePicker" id="expires_datepicker">
+                        <property name="sensitive" bind-source="never_expires_check" bind-property="active" bind-flags="bidirectional|sync-create|invert-boolean" />
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="never_expires_check">
+                        <property name="label" translatable="yes">Never E_xpires</property>
+                        <property name="tooltip_text" translatable="yes">If key never expires</property>
+                        <property name="use_underline">True</property>
+                        <property name="active">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
       </object>
     </child>
+
+    <child type="action">
+      <object class="GtkButton" id="cancel_button">
+        <property name="use-underline">True</property>
+        <property name="label" translatable="yes">_Cancel</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="ok_button">
+        <property name="label" translatable="yes">_Generate</property>
+        <property name="use-underline">True</property>
+        <property name="tooltip_text" translatable="yes">Generate a new subkey</property>
+      </object>
+    </child>
     <action-widgets>
-      <action-widget response="-6">cancelbutton1</action-widget>
-      <action-widget response="-5">okbutton1</action-widget>
+      <action-widget response="-6">cancel_button</action-widget>
+      <action-widget response="-5" default="true">ok_button</action-widget>
     </action-widgets>
   </template>
 </interface>

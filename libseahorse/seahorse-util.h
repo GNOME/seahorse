@@ -35,11 +35,6 @@ typedef guint64 SeahorseVersion;
 
 GQuark          seahorse_util_error_domain              (void);
 
-void            seahorse_util_handle_error              (GError     **error,
-                                                         void        *parent,
-                                                         const char  *description,
-                                                         ...);
-
 unsigned int    seahorse_util_read_data_block           (GString      *buf,
                                                          GInputStream *input,
                                                          const char   *start,
@@ -55,10 +50,6 @@ gboolean        seahorse_util_printf_fd                 (int         fd,
 gboolean        seahorse_util_write_file_private        (const char  *filename,
                                                          const char  *contents,
                                                          GError     **err);
-
-GList *         seahorse_util_objects_sort_by_place     (GList *objects);
-
-GList *         seahorse_util_objects_splice_by_place   (GList *objects);
 
 SeahorseVersion seahorse_util_parse_version             (const char *version);
 

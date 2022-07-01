@@ -8,8 +8,10 @@ seahorse_sources = [
   'application.vala',
   'import-dialog.vala',
   'key-manager.vala',
+  'key-manager-filter.vala',
   'key-manager-item-row.vala',
   'main.vala',
+  'prefs-dialog.vala',
   'search-provider.vala',
   'sidebar.vala',
 
@@ -18,9 +20,10 @@ seahorse_sources = [
 ]
 
 seahorse_dependencies = [
+  pkcs11_dep,
   glib_deps,
-  gtk,
-  libhandy_dep,
+  gtk4_dep,
+  libadwaita_dep,
   libsecret,
   common_dep,
   libseahorse_dep,
@@ -30,11 +33,15 @@ seahorse_dependencies = [
 
 seahorse_c_flags = [
   '-DHANDY_USE_UNSTABLE_API',
+  vala_workaround_cflags,
 ]
 
 seahorse_vala_flags = [
 ]
 
+if get_option('keyservers-support')
+  seahorse_vala_flags += [ '-D', 'WITH_KEYSERVER' ]
+endif
 if get_option('pgp-support')
   seahorse_dependencies += pgp_dep
   seahorse_vala_flags += [ '-D', 'WITH_PGP' ]

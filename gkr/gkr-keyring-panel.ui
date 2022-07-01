@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="action_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Set As _Default</attribute>
+        <attribute name="action">panel.set-default</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Change Password</attribute>
+        <attribute name="action">panel.change-password</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <template class="SeahorseGkrKeyringPanel" parent="SeahorsePanel">
+    <property name="title" translatable="yes">Keyring Properties</property>
+    <property name="menu">action_menu</property>
+    <style>
+      <class name="gkr-keyring-panel"/>
+    </style>
+
+    <property name="layout-manager">
+      <object class="GtkBoxLayout">
+        <property name="orientation">vertical</property>
+        <property name="spacing">24</property>
+      </object>
+    </property>
+
+    <child>
+      <object class="AdwPreferencesGroup">
+        <child>
+          <object class="AdwActionRow" id="name_row">
+            <property name="title" translatable="yes">Name</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="created_row">
+            <property name="title" translatable="yes">Created on</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLockButton" id="lock_button">
+        <property name="halign">center</property>
+        <property name="tooltip_lock" translatable="yes">Keyring is unlocked</property>
+        <property name="tooltip_unlock" translatable="yes">Keyring is locked</property>
+        <property name="tooltip_not_authorized"></property>
+        <style>
+          <class name="pill"/>
+        </style>
+      </object>
+    </child>
+  </template>
+</interface>

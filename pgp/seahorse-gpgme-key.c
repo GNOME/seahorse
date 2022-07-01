@@ -20,12 +20,11 @@
 #include "config.h"
 
 #include "seahorse-gpgme.h"
-#include "seahorse-gpgme-exporter.h"
 #include "seahorse-gpgme-key-op.h"
-#include "seahorse-gpgme-key-deleter.h"
+#include "seahorse-gpgme-key-delete-operation.h"
+#include "seahorse-gpgme-key-export-operation.h"
 #include "seahorse-gpgme-photo.h"
 #include "seahorse-gpgme-keyring.h"
-#include "seahorse-gpgme-secret-deleter.h"
 #include "seahorse-gpgme-uid.h"
 #include "seahorse-pgp-backend.h"
 #include "seahorse-pgp-key.h"
@@ -43,7 +42,11 @@ enum {
     PROP_PUBKEY,
     PROP_SECKEY,
     PROP_VALIDITY,
-    PROP_TRUST
+    PROP_TRUST,
+    N_PROPS,
+    /* override properties */
+    PROP_EXPORTABLE,
+    PROP_DELETABLE,
 };
 
 struct _SeahorseGpgmeKey {
@@ -297,7 +300,7 @@ void
 seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
 {
     SeahorseUsage usage;
-    guint flags;
+    guint flags = 0;
 
     if (!self->pubkey)
         return;
@@ -311,9 +314,6 @@ seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
     /* Update the sub UIDs */
     realize_uids (self);
     realize_subkeys (self);
-
-    /* The flags */
-    flags = SEAHORSE_FLAG_EXPORTABLE | SEAHORSE_FLAG_DELETABLE;
 
     if (!self->pubkey->disabled && !self->pubkey->expired &&
         !self->pubkey->revoked && !self->pubkey->invalid) {
@@ -372,56 +372,47 @@ seahorse_gpgme_key_refresh (SeahorseGpgmeKey *self)
         load_key_photos (self);
 }
 
-static SeahorseDeleter *
-seahorse_gpgme_key_create_deleter (SeahorseDeletable *deletable)
+static SeahorseDeleteOperation *
+seahorse_gpgme_key_create_delete_operation (SeahorseDeletable *deletable)
 {
     SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (deletable);
-    if (self->seckey)
-        return seahorse_gpgme_secret_deleter_new (self);
-    else
-        return seahorse_gpgme_key_deleter_new (self);
+    g_autoptr(SeahorseGpgmeKeyDeleteOperation) delete_op = NULL;
+
+    delete_op = seahorse_gpgme_key_delete_operation_new (self);
+    return SEAHORSE_DELETE_OPERATION (g_steal_pointer (&delete_op));
 }
 
 static gboolean
 seahorse_gpgme_key_get_deletable (SeahorseDeletable *deletable)
 {
-    gboolean can;
-    g_object_get (deletable, "deletable", &can, NULL);
-    return can;
+    return TRUE;
 }
 
 static void
 seahorse_gpgme_key_deletable_iface (SeahorseDeletableIface *iface)
 {
-    iface->create_deleter = seahorse_gpgme_key_create_deleter;
+    iface->create_delete_operation = seahorse_gpgme_key_create_delete_operation;
     iface->get_deletable = seahorse_gpgme_key_get_deletable;
 }
 
-static GList *
-seahorse_gpgme_key_create_exporters (SeahorseExportable *exportable,
-                                     SeahorseExporterType type)
+static SeahorseExportOperation *
+seahorse_gpgme_key_create_export_operation (SeahorseExportable *exportable)
 {
-    GList *result = NULL;
+    SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (exportable);
 
-    if (type != SEAHORSE_EXPORTER_TYPE_TEXTUAL)
-        result = g_list_append (result, seahorse_gpgme_exporter_new (G_OBJECT (exportable), FALSE, FALSE));
-    result = g_list_append (result, seahorse_gpgme_exporter_new (G_OBJECT (exportable), TRUE, FALSE));
-
-    return result;
+    return seahorse_gpgme_key_export_operation_new (self, TRUE, FALSE);
 }
 
 static gboolean
 seahorse_gpgme_key_get_exportable (SeahorseExportable *exportable)
 {
-    gboolean can;
-    g_object_get (exportable, "exportable", &can, NULL);
-    return can;
+    return TRUE;
 }
 
 static void
 seahorse_gpgme_key_exportable_iface (SeahorseExportableIface *iface)
 {
-    iface->create_exporters = seahorse_gpgme_key_create_exporters;
+    iface->create_export_operation = seahorse_gpgme_key_create_export_operation;
     iface->get_exportable = seahorse_gpgme_key_get_exportable;
 }
 
@@ -440,6 +431,9 @@ seahorse_gpgme_key_set_public (SeahorseGpgmeKey *self, gpgme_key_t key)
     GObject *obj;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self));
+
+    if (key == self->pubkey)
+        return;
 
     if (self->pubkey)
         gpgme_key_unref (self->pubkey);
@@ -473,9 +467,12 @@ seahorse_gpgme_key_get_private (SeahorseGpgmeKey *self)
 void
 seahorse_gpgme_key_set_private (SeahorseGpgmeKey *self, gpgme_key_t key)
 {
-    GObject *obj;
+    GObject *obj = G_OBJECT (self);;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self));
+
+    if (key == self->seckey)
+        return;
 
     if (self->seckey)
         gpgme_key_unref (self->seckey);
@@ -483,7 +480,6 @@ seahorse_gpgme_key_set_private (SeahorseGpgmeKey *self, gpgme_key_t key)
     if (self->seckey)
         gpgme_key_ref (self->seckey);
 
-    obj = G_OBJECT (self);
     g_object_freeze_notify (obj);
     seahorse_gpgme_key_realize (self);
     g_object_thaw_notify (obj);
@@ -572,6 +568,7 @@ seahorse_gpgme_key_object_constructed (GObject *object)
     g_signal_connect (uids, "items-changed", G_CALLBACK (on_uids_changed), self);
     photos = seahorse_pgp_key_get_photos (SEAHORSE_PGP_KEY (self));
     g_signal_connect (photos, "items-changed", G_CALLBACK (on_photos_changed), self);
+    load_key_photos (self);
 
     seahorse_gpgme_key_realize (self);
 }
@@ -581,6 +578,8 @@ seahorse_gpgme_key_get_property (GObject *object, guint prop_id,
                                  GValue *value, GParamSpec *pspec)
 {
     SeahorseGpgmeKey *self = SEAHORSE_GPGME_KEY (object);
+    SeahorseExportable *exportable = SEAHORSE_EXPORTABLE (self);
+    SeahorseDeletable *deletable = SEAHORSE_DELETABLE (self);
 
     switch (prop_id) {
     case PROP_PUBKEY:
@@ -595,6 +594,14 @@ seahorse_gpgme_key_get_property (GObject *object, guint prop_id,
     case PROP_TRUST:
         g_value_set_uint (value, seahorse_gpgme_key_get_trust (self));
         break;
+    case PROP_EXPORTABLE:
+        g_value_set_boolean (value, seahorse_gpgme_key_get_exportable (exportable));
+        break;
+    case PROP_DELETABLE:
+        g_value_set_boolean (value, seahorse_gpgme_key_get_deletable (deletable));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
@@ -662,6 +669,8 @@ seahorse_gpgme_key_class_init (SeahorseGpgmeKeyClass *klass)
 
     g_object_class_override_property (gobject_class, PROP_VALIDITY, "validity");
     g_object_class_override_property (gobject_class, PROP_TRUST, "trust");
+    g_object_class_override_property (gobject_class, PROP_EXPORTABLE, "exportable");
+    g_object_class_override_property (gobject_class, PROP_DELETABLE, "deletable");
 }
 
 SeahorseGpgmeKey*

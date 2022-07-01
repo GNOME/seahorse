@@ -29,12 +29,3 @@
 #include "pgp/seahorse-pgp-key.h"
 
 SeahorsePgpKey* seahorse_signer_get                 (GtkWindow *parent);
-
-
-#define SEAHORSE_PGP_TYPE_KEY_PROPERTIES (seahorse_pgp_key_properties_get_type ())
-G_DECLARE_FINAL_TYPE (SeahorsePgpKeyProperties, seahorse_pgp_key_properties,
-                      SEAHORSE_PGP, KEY_PROPERTIES,
-                      GtkDialog);
-
-GtkWindow *     seahorse_pgp_key_properties_new    (SeahorsePgpKey *pkey,
-                                                    GtkWindow *parent);

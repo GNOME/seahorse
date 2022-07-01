@@ -21,224 +21,72 @@
  * 02111-1307, USA.
  */
 
-namespace Seahorse {
-namespace Pkcs11 {
+public class Seahorse.Pkcs11.Certificate : Gck.Object, Gcr.Certificate, Gck.ObjectCache {
 
-public class Certificate : Gck.Object, Gcr.Comparable, Gcr.Certificate,
-                           Gck.ObjectCache, Deletable, Exportable, Viewable {
-	public Token? place {
-		owned get { return (Token?)this._token.get(); }
-		set { this._token.set(value); }
-	}
+    private Gck.Attributes? _attributes;
+    public Gck.Attributes attributes {
+        owned get { return this._attributes; }
+        set {
+            this._attributes = value;
+            this.notify_property("attributes");
+        }
+    }
 
-	public Flags object_flags {
-		get { ensure_flags(); return this._flags; }
-	}
+    public bool exportable {
+        get { return this._der != null; }
+    }
 
-	public Gtk.ActionGroup? actions {
-		get { return null; }
-	}
+    public string? subject_name {
+        owned get { return get_subject_name(); }
+    }
 
-	public PrivateKey? partner {
-		owned get { return (PrivateKey?)this._private_key.get(); }
-		set {
-			this._private_key.set(value);
-			this._icon = null;
-			this.notify_property("partner");
-			this.notify_property("icon");
-			this.notify_property("description");
-		}
-	}
+    public string? issuer_name {
+        owned get { return get_issuer_name(); }
+    }
 
-	public Gck.Attributes attributes {
-		owned get { return this._attributes; }
-		set {
-			this._attributes = value;
-			this.notify_property("attributes");
-		}
-	}
+    public GLib.DateTime? expiry_date {
+        owned get { return get_expiry_date(); }
+    }
 
-	public bool deletable {
-		get {
-			var token = this.place;
-			if (token == null)
-				return false;
-			return token.is_deletable(this);
-		}
-	}
+    public string description {
+        owned get { return _("Certificate"); }
+    }
 
-	public bool exportable {
-		get { return this._der != null; }
-	}
+    public string? label {
+        owned get { return get_subject_name(); }
+    }
 
-	public GLib.Icon icon {
-		owned get {
-			if (this._icon != null)
-				return this._icon;
-			var icon = new GLib.ThemedIcon(Gcr.ICON_CERTIFICATE);
-			if (this._private_key.get() != null) {
-				var eicon = new GLib.ThemedIcon (Gcr.ICON_KEY);
-				var emblem = new GLib.Emblem (eicon);
-				this._icon = new GLib.EmblemedIcon (icon, emblem);
-			} else {
-				this._icon = icon;
-			}
-			return this._icon;
-		}
-	}
+    private unowned Gck.Attribute? _der = null;
 
-	public string description {
-		owned get {
-			ensure_flags ();
-			if (this._private_key.get() != null)
-				return _("Personal certificate and key");
-			if ((this._flags & Flags.PERSONAL) == Flags.PERSONAL)
-				return _("Personal certificate");
-			else
-				return _("Certificate");
-		}
-	}
+    private static uint8[] EMPTY = { };
 
-	public string? label {
-		owned get { return get_subject_name(); }
-	}
+    construct {
+        this.notify["attributes"].connect((pspec) => {
+            if (this._attributes != null)
+                this._der = this._attributes.find(CKA.VALUE);
+            notify_property ("subject-name");
+            notify_property ("issuer-name");
+            notify_property ("expiry-date");
+        });
 
-	public string? subject {
-		owned get { return get_subject_name(); }
-	}
+        if (this._attributes != null)
+            this._der = this._attributes.find(CKA.VALUE);
+    }
 
-	public string? markup {
-		owned get { return get_markup_text(); }
-	}
+    public void fill(Gck.Attributes attributes) {
+        var builder = new Gck.Builder(Gck.BuilderFlags.NONE);
 
-	public string? issuer {
-		owned get { return get_issuer_name(); }
-	}
+        if (this._attributes != null)
+            builder.add_all(this._attributes);
+        builder.set_all(attributes);
+        this._attributes = builder.end();
+        this.notify_property("attributes");
+    }
 
-	public GLib.Date expiry {
-		owned get { return get_expiry_date(); }
-	}
-
-	private GLib.WeakRef _token;
-	private Gck.Attributes? _attributes;
-	private unowned Gck.Attribute? _der;
-	private GLib.WeakRef _private_key;
-	private GLib.Icon? _icon;
-	private Flags _flags;
-
-	private static uint8[] EMPTY = { };
-
-	construct {
-		this._flags = (Flags)uint.MAX;
-		this._der = null;
-		this._private_key = GLib.WeakRef(null);
-		this._token = GLib.WeakRef(null);
-
-		this.notify.connect((pspec) => {
-			if (pspec.name != "attributes")
-				return;
-			if (this._attributes != null)
-				this._der = this._attributes.find(CKA.VALUE);
-			notify_property ("label");
-			notify_property ("markup");
-			notify_property ("subject");
-			notify_property ("issuer");
-			notify_property ("expiry");
-		});
-
-		if (this._attributes != null)
-			this._der = this._attributes.find(CKA.VALUE);
-	}
-
-	public override void dispose() {
-		this.partner = null;
-		base.dispose();
-	}
-
-	public Gtk.Window? create_viewer(Gtk.Window? parent) {
-		var viewer = new Pkcs11.Properties(this, parent);
-		viewer.show();
-		return viewer;
-	}
-
-	public Seahorse.Deleter create_deleter() {
-		Seahorse.Deleter deleter;
-
-		PrivateKey? key = this.partner;
-		if (key == null) {
-			deleter = new Pkcs11.Deleter(this);
-		} else {
-			deleter = key.create_deleter();
-			if (!deleter.add_object(this))
-				GLib.return_val_if_reached(null);
-		}
-
-		return deleter;
-	}
-
-	public GLib.List<Exporter> create_exporters(ExporterType type) {
-		var exporters = new GLib.List<Exporter>();
-
-		if (this.exportable) {
-			var exporter = new CertificateDerExporter(this);
-			exporters.append(exporter);
-		}
-
-		return exporters;
-	}
-
-	public void fill(Gck.Attributes attributes) {
-		Gck.Builder builder = new Gck.Builder(Gck.BuilderFlags.NONE);
-
-		if (this._attributes != null)
-			builder.add_all(this._attributes);
-		builder.set_all(attributes);
-		this._attributes = builder.steal();
-		this.notify_property("attributes");
-	}
-
-	[CCode (array_length_type = "gsize")]
-	public unowned uint8[] get_der_data() {
-		if (this._der == null)
-			return EMPTY;
-		return this._der.get_data();
-	}
-
-	public int compare (Gcr.Comparable? other) {
-		if (other == null)
-			return -1;
-		unowned uint8[] data1 = this.get_der_data();
-		unowned uint8[] data2 = ((Gcr.Certificate)other).get_der_data();
-		return Gcr.Comparable.memcmp(data1, data2);
-	}
-
-	private Flags calc_is_personal_and_trusted() {
-		ulong category = 0;
-		bool is_ca;
-
-		/* If a matching private key, then this is personal*/
-		if (this._private_key.get() != null)
-			return Flags.PERSONAL | Flags.TRUSTED;
-
-		if (this._attributes != null &&
-		    this._attributes.find_ulong (CKA.CERTIFICATE_CATEGORY, out category)) {
-			if (category == 2)
-				return 0;
-			else if (category == 1)
-				return Flags.PERSONAL;
-		}
-
-		if (get_basic_constraints (out is_ca, null))
-			return is_ca ? 0 : Flags.PERSONAL;
-
-		return Flags.PERSONAL;
-	}
-
-	private void ensure_flags() {
-		if (this._flags == uint.MAX)
-			this._flags = Flags.EXPORTABLE | calc_is_personal_and_trusted ();
-	}
-}
-
-}
+    [CCode (array_length_type = "gsize")]
+    public unowned uint8[] get_der_data() {
+        if (this._der == null)
+            return EMPTY;
+        return this._der.get_data();
+    }
 }

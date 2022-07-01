@@ -21,22 +21,15 @@
 #pragma once
 
 #include "seahorse-common.h"
+#include "seahorse-unknown.h"
 
-#define SEAHORSE_TYPE_UNKNOWN_SOURCE            (seahorse_unknown_source_get_type ())
-#define SEAHORSE_UNKNOWN_SOURCE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_UNKNOWN_SOURCE, SeahorseUnknownSource))
-#define SEAHORSE_UNKNOWN_SOURCE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_UNKNOWN_SOURCE, SeahorseUnknownSourceClass))
-#define SEAHORSE_IS_UNKNOWN_SOURCE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_UNKNOWN_SOURCE))
-#define SEAHORSE_IS_UNKNOWN_SOURCE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_UNKNOWN_SOURCE))
-#define SEAHORSE_UNKNOWN_SOURCE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_UNKNOWN_SOURCE, SeahorseUnknownSourceClass))
+#define SEAHORSE_TYPE_UNKNOWN_SOURCE (seahorse_unknown_source_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseUnknownSource, seahorse_unknown_source,
+                      SEAHORSE, UNKNOWN_SOURCE,
+                      GObject)
 
-typedef struct _SeahorseUnknownSource SeahorseUnknownSource;
-typedef struct _SeahorseUnknownSourceClass SeahorseUnknownSourceClass;
-typedef struct _SeahorseUnknownSourcePrivate SeahorseUnknownSourcePrivate;
+SeahorseUnknownSource *   seahorse_unknown_source_new           (void);
 
-GType                    seahorse_unknown_source_get_type      (void);
-
-SeahorseUnknownSource*   seahorse_unknown_source_new           (void);
-
-SeahorseObject*          seahorse_unknown_source_add_object    (SeahorseUnknownSource *self,
-                                                                const gchar *keyid,
-                                                                GCancellable *cancellable);
+SeahorseUnknown *         seahorse_unknown_source_add_object    (SeahorseUnknownSource *self,
+                                                                 const char *keyid,
+                                                                 GCancellable *cancellable);

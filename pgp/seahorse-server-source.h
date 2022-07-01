@@ -46,46 +46,45 @@ G_DECLARE_DERIVABLE_TYPE (SeahorseServerSource, seahorse_server_source,
                           GObject)
 
 struct _SeahorseServerSourceClass {
-	GObjectClass parent_class;
+    GObjectClass parent_class;
 
-	void            (* import_async)         (SeahorseServerSource *source,
-	                                          GInputStream *input,
-	                                          GCancellable *cancellable,
-	                                          GAsyncReadyCallback callback,
-	                                          gpointer user_data);
+    void            (*import_async)          (SeahorseServerSource *source,
+                                              GInputStream *input,
+                                              GCancellable *cancellable,
+                                              GAsyncReadyCallback callback,
+                                              gpointer user_data);
 
-	GList *         (* import_finish)        (SeahorseServerSource *source,
-	                                          GAsyncResult *result,
-	                                          GError **error);
+    GList *         (*import_finish)         (SeahorseServerSource *source,
+                                              GAsyncResult *result,
+                                              GError **error);
 
-	void            (*export_async)          (SeahorseServerSource *source,
-	                                          const gchar **keyids,
-	                                          GCancellable *cancellable,
-	                                          GAsyncReadyCallback callback,
-	                                          gpointer user_data);
+    void            (*export_async)          (SeahorseServerSource *source,
+                                              const gchar **keyids,
+                                              GCancellable *cancellable,
+                                              GAsyncReadyCallback callback,
+                                              gpointer user_data);
 
-	gpointer        (*export_finish)         (SeahorseServerSource *source,
-	                                          GAsyncResult *result,
-	                                          gsize *size,
-	                                          GError **error);
+    GBytes *        (*export_finish)         (SeahorseServerSource *source,
+                                              GAsyncResult *result,
+                                              GError **error);
 
-	void            (*search_async)          (SeahorseServerSource *source,
-	                                          const gchar *match,
-	                                          GcrSimpleCollection *results,
-	                                          GCancellable *cancellable,
-	                                          GAsyncReadyCallback callback,
-	                                          gpointer user_data);
+    void            (*search_async)          (SeahorseServerSource *source,
+                                              const char *match,
+                                              GListStore *results,
+                                              GCancellable *cancellable,
+                                              GAsyncReadyCallback callback,
+                                              gpointer user_data);
 
-	gboolean        (*search_finish)         (SeahorseServerSource *source,
-	                                          GAsyncResult *result,
-	                                          GError **error);
+    gboolean        (*search_finish)         (SeahorseServerSource *source,
+                                              GAsyncResult *result,
+                                              GError **error);
 };
 
 SeahorseServerSource*  seahorse_server_source_new              (const char *uri);
 
 void                   seahorse_server_source_search_async     (SeahorseServerSource *self,
-                                                                const gchar *match,
-                                                                GcrSimpleCollection *results,
+                                                                const char *match,
+                                                                GListStore *results,
                                                                 GCancellable *cancellable,
                                                                 GAsyncReadyCallback callback,
                                                                 gpointer user_data);
@@ -110,7 +109,6 @@ void                   seahorse_server_source_export_async     (SeahorseServerSo
                                                                 GAsyncReadyCallback callback,
                                                                 gpointer user_data);
 
-gpointer               seahorse_server_source_export_finish    (SeahorseServerSource *self,
+GBytes *               seahorse_server_source_export_finish    (SeahorseServerSource *self,
                                                                 GAsyncResult *result,
-                                                                gsize *size,
                                                                 GError **error);

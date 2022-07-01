@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="SeahorsePkcs11CertificateWidget" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <property name="spacing">24</property>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <child>
+          <object class="GtkBox" id="summary_box">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">18</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">application-certificate-symbolic</property>
+                <property name="pixel-size">60</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="name_label">
+                    <property name="selectable">True</property>
+                    <property name="xalign">0.0</property>
+                    <property name="wrap">True</property>
+                    <style>
+                      <class name="heading"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="issuer_short_label">
+                    <property name="selectable">True</property>
+                    <property name="xalign">0.0</property>
+                    <property name="wrap">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="expires_short_label">
+                    <property name="selectable">True</property>
+                    <property name="xalign">0.0</property>
+                    <property name="wrap">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup" id="subject_group">
+        <property name="title" translatable="yes">Subject</property>
+        <child>
+          <object class="AdwExpanderRow" id="subject_row">
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup" id="issuer_group">
+        <property name="title" translatable="yes">Issuer</property>
+        <child>
+          <object class="AdwExpanderRow" id="issuer_row">
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup" id="validity_group">
+        <property name="title" translatable="yes">Validity timespan</property>
+        <child>
+          <object class="AdwActionRow" id="issued_date_row">
+            <property name="title" translatable="yes">Not valid before</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="expires_row">
+            <property name="title" translatable="yes">Not valid after</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Fingerprints</property>
+        <child>
+          <object class="AdwActionRow" id="sha256_fingerprint_row">
+            <property name="title" translatable="yes">SHA-256</property>
+            <property name="subtitle-selectable">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="md5_fingerprint_row">
+            <property name="title" translatable="yes">MD5</property>
+            <property name="subtitle-selectable">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Public key info</property>
+        <child>
+          <object class="AdwActionRow" id="public_key_algo_row">
+            <property name="title" translatable="yes">Algorithm</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="public_key_size_row">
+            <property name="title" translatable="yes">Key size</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="public_key_algo_params_row">
+            <property name="title" translatable="yes">Algorithm Parameters</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwExpanderRow">
+            <property name="title" translatable="yes">Public key</property>
+            <child type="action">
+              <object class="GtkButton">
+                <property name="icon-name">edit-copy-symbolic</property>
+                <property name="tooltip_text" translatable="yes">Copy public key to clipboard</property>
+                <property name="action-name">copy-public-key</property>
+                <property name="valign">center</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="public_key_label">
+                <property name="wrap">True</property>
+                <property name="wrap-mode">char</property>
+                <property name="selectable">True</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">6</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <property name="max-width-chars">45</property>
+                <style>
+                  <class name="monospace"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Miscellaneous</property>
+        <child>
+          <object class="AdwActionRow" id="version_row">
+            <property name="title" translatable="yes">Version</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="serial_nr_row">
+            <property name="title" translatable="yes">Serial number</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

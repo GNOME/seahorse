@@ -252,16 +252,16 @@ seahorse_gpgme_get_keytype_table (SeahorseKeyTypeTable *table)
  * used for GPGME functions like gpgme_op_create(sub)key.
  */
 const char *
-seahorse_gpgme_get_algo_string (SeahorseKeyEncType type)
+seahorse_gpgme_get_algo_string (SeahorsePgpKeyAlgorithm algo)
 {
-    switch (type) {
-        case DSA:
+    switch (algo) {
+        case SEAHORSE_PGP_KEY_ALGO_DSA:
             return "dsa";
-        case RSA_RSA:
-        case RSA_SIGN:
-        case RSA_ENCRYPT:
+        case SEAHORSE_PGP_KEY_ALGO_RSA_RSA:
+        case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
+        case SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT:
             return "rsa";
-        case ELGAMAL:
+        case SEAHORSE_PGP_KEY_ALGO_ELGAMAL:
             return "elg";
         default:
             return NULL;

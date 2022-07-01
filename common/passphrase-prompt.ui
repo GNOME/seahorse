@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="SeahorsePassphrasePrompt" parent="AdwAlertDialog">
+    <property name="default-response">submit</property>
+    <property name="close-response">cancel</property>
+    <responses>
+      <response id="cancel" translatable="yes">_Cancel</response>
+      <response id="submit" translatable="yes" appearance="suggested">_Submit</response>
+    </responses>
+    <property name="extra-child">
+      <object class="GtkBox">
+        <property name="spacing">24</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkPasswordEntry" id="pass_entry">
+            <signal name="activate" handler="on_pass_entry_activate"/>
+            <signal name="changed" handler="on_entry_changed"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="confirm_label">
+            <property name="label" translatable="yes">Confirm:</property>
+            <property name="xalign">0</property>
+            <property name="wrap">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkPasswordEntry" id="confirm_entry">
+            <signal name="activate" handler="on_confirm_entry_activate"/>
+            <signal name="changed" handler="on_entry_changed"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="check_option">
+            <property name="use-underline">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="error_label">
+            <property name="visible">False</property>
+            <property name="label" translatable="yes">The passwords don't match</property>
+            <property name="xalign">0</property>
+            <property name="wrap">True</property>
+            <style>
+              <class name="error"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>

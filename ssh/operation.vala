@@ -36,7 +36,6 @@ public abstract class Operation : GLib.Object {
     protected string? prompt_title;
     protected string? prompt_message;
     protected string? prompt_argument;
-    protected ulong prompt_transient_for;
 
     /**
      * Calls a command and returns the output.
@@ -48,8 +47,8 @@ public abstract class Operation : GLib.Object {
      */
     protected async string? operation_async(string command,
                                             string? input,
-                                            Cancellable? cancellable) throws GLib.Error {
-        return_val_if_fail (command != null && command != "", false);
+                                            Cancellable? cancellable) throws GLib.Error
+            requires(command != "") {
 
         // Strip the command name for logging purposes
         string[] args;
@@ -68,28 +67,37 @@ public abstract class Operation : GLib.Object {
             flags |= SubprocessFlags.STDIN_PIPE;
         var launcher = new SubprocessLauncher(flags);
 
-        // No terminal for this process
-        Posix.setsid();
+        // Set up SSH_ASKPASS according to expected environment variables
+        // Do a sanity check first. If this fails, it's probably a packaging
+        var ssh_askpass_path = Path.build_filename(Config.EXECDIR, "ssh-askpass");
+        if (!FileUtils.test(ssh_askpass_path, FileTest.IS_EXECUTABLE))
+            critical("%s is not an executable file", ssh_askpass_path);
 
-        // We setup parts of the process using some environment variables
-        launcher.setenv("SSH_ASKPASS", GLib.Path.build_filename(Config.EXECDIR, "ssh-askpass"), false);
+        launcher.setenv("SSH_ASKPASS", ssh_askpass_path, false);
         if (this.prompt_title != null)
             launcher.setenv("SEAHORSE_SSH_ASKPASS_TITLE", prompt_title, true);
         if (this.prompt_message != null)
             launcher.setenv("SEAHORSE_SSH_ASKPASS_MESSAGE", prompt_message, true);
-        if (this.prompt_transient_for != 0) {
-            string parent = "%lu".printf(prompt_transient_for);
-            launcher.setenv("SEAHORSE_SSH_ASKPASS_PARENT", parent, true);
-        }
+
+        launcher.set_child_setup(() => {
+            // No terminal for this process
+            if (Posix.setsid() == -1)
+                debug("setsid() unsuccessful: %s", strerror(errno));
+        });
 
         // And off we go to run the program
         var subprocess = launcher.spawnv(args);
         string? std_out = null, std_err = null;
         try {
-            yield subprocess.communicate_utf8_async(input, cancellable, out std_out, out std_err);
+            yield subprocess.communicate_utf8_async(input, cancellable,
+                                                    out std_out, out std_err);
+            if (subprocess.get_exit_status() != 0) {
+                warning("subprocess %s failed with following stderr:\n%s",
+                        this.command_name, std_err);
+                throw new Error.GENERAL("Internal error");
+            }
             return std_out;
         } catch (GLib.Error e) {
-            Seahorse.Util.show_error(null, this.prompt_title, std_err);
             throw e;
         }
     }
@@ -107,13 +115,11 @@ public class UploadOperation : Operation {
      */
     public async void upload_async(List<Key> keys,
                                    string username, string hostname, string? port,
-                                   Cancellable? cancellable) throws GLib.Error {
+                                   Cancellable? cancellable) throws GLib.Error
+            requires(keys != null)
+            requires(username != "")
+            requires(hostname != "") {
         this.prompt_title = _("Remote Host Password");
-
-        if (keys == null
-                || username == null || username == ""
-                || hostname == null || hostname == "")
-            return;
 
         if (port == null)
             port = "";
@@ -140,6 +146,7 @@ public class UploadOperation : Operation {
 }
 
 public class ChangePassphraseOperation : Operation {
+
     /**
      * Changes the passphrase of the given key.
      *
@@ -147,15 +154,18 @@ public class ChangePassphraseOperation : Operation {
      * @param cancellable Used if you want to cancel the operation.
      */
     public async void change_passphrase_async(Key key,
-                                              Cancellable? cancellable) throws GLib.Error {
-        if (key.key_data == null || key.key_data.privfile == null)
-            return;
+                                              Cancellable? cancellable) throws GLib.Error
+            requires(key.key_data != null)
+            requires(key.key_data.privfile != null) {
 
         this.prompt_title = _("Enter Key Passphrase");
         this.prompt_argument = key.label;
 
-        string cmd = "%s -p -f '%s'".printf(Config.SSH_KEYGEN_PATH, key.key_data.privfile);
+        var cmd = "%s -p -f '%s'".printf(Config.SSH_KEYGEN_PATH, key.key_data.privfile);
+
+        debug("Changing passphrase of key %s", key.fingerprint);
         yield operation_async(cmd, null, cancellable);
+        debug("Successfully changed passphrase of key %s", key.fingerprint);
     }
 }
 

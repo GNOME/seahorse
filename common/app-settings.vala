@@ -42,17 +42,21 @@ public class Seahorse.AppSettings : GLib.Settings {
 
     public string server_publish_to {
         owned get { return get_string("server-publish-to"); }
-        set { set_string("server-publish-to", value); }
+        set {
+            if (this.server_publish_to == value)
+                return;
+            set_string("server-publish-to", value);
+        }
     }
 
-	public AppSettings () {
-        GLib.Object (schema_id: "org.gnome.seahorse");
-	}
+    public AppSettings() {
+        GLib.Object(schema_id: "org.gnome.seahorse");
+    }
 
-	private static AppSettings? _instance = null;
-	public static AppSettings instance() {
-		if (_instance == null)
-			_instance = new AppSettings();
-		return _instance;
-	}
+    private static AppSettings? _instance = null;
+    public static AppSettings instance() {
+        if (_instance == null)
+            _instance = new AppSettings();
+        return _instance;
+    }
 }

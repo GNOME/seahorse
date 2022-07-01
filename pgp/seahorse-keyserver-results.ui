@@ -1,56 +1,50 @@
 <?xml version="1.0"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <!-- interface-naming-policy toplevel-contextual -->
-      <object class="GtkBox" id="keyserver-results">
-        <property name="visible">True</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+      <object class="AdwPreferencesPage" id="keyserver-results">
         <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="wrap">True</property>
-            <property name="max-width-chars">40</property>
-            <property name="margin">24</property>
-            <property name="margin-bottom">0</property>
-            <property name="label" translatable="yes">Double click on a key to inspect it, or click the import button to import it into your local keyring.</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow1">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">never</property>
-            <property name="margin">24</property>
-            <property name="margin-top">0</property>
-            <property name="margin-bottom">0</property>
+          <object class="AdwPreferencesGroup">
             <child>
-              <object class="GtkListBox" id="key_list">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="vexpand">True</property>
-                <property name="activate_on_single_click">False</property>
-                <style>
-                  <class name="content"/>
-                </style>
+              <object class="GtkLabel">
+                <property name="wrap">True</property>
+                <property name="max-width-chars">40</property>
+                <property name="label" translatable="yes">Double click on a key to inspect it, or click the import button to import it into your local keyring.</property>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="GtkBox" id="hbox1">
-            <property name="visible">True</property>
-            <property name="orientation">horizontal</property>
+          <object class="AdwPreferencesGroup">
             <child>
-              <object class="GtkProgressBar" id="progress-bar">
-                <property name="visible">True</property>
-                <property name="hexpand">True</property>
-                <property name="pulse_step">0.10000000149</property>
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <child>
+                  <object class="GtkListBox" id="key_list">
+                    <property name="vexpand">True</property>
+                    <property name="activate-on-single-click">False</property>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwPreferencesGroup">
             <child>
-              <object class="GtkStatusbar" id="status">
-                <property name="visible">True</property>
+              <object class="GtkBox" id="hbox1">
+                <property name="orientation">horizontal</property>
+                <child>
+                  <object class="GtkProgressBar" id="progress-bar">
+                    <property name="hexpand">True</property>
+                    <property name="pulse_step">0.10000000149</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStatusbar" id="status">
+                  </object>
+                </child>
               </object>
             </child>
           </object>

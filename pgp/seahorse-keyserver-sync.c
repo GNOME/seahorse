@@ -35,7 +35,7 @@
 struct _SeahorseKeyserverSync {
     GtkDialog parent_instance;
 
-    GList *keys;
+    GListModel *keys;
 
     GtkWidget *detail_message;
     GtkWidget *publish_message;
@@ -66,8 +66,9 @@ on_transfer_upload_complete (GObject      *object,
 
     app_settings = seahorse_app_settings_instance ();
     publish_to = seahorse_app_settings_get_server_publish_to (app_settings);
-    seahorse_util_handle_error (&error, NULL,
-                                _("Couldn’t publish keys to server"), publish_to);
+    seahorse_util_show_error (NULL,
+                              _("Couldn’t publish keys to server"),
+                              error->message);
 }
 
 static void
@@ -82,9 +83,9 @@ on_transfer_download_complete (GObject      *object,
         g_autofree char *uri = NULL;
 
         uri = seahorse_place_get_uri (SEAHORSE_PLACE (ssrc));
-        seahorse_util_handle_error (&error, NULL,
-                                    _("Couldn’t retrieve keys from server: %s"),
-                                    uri);
+        seahorse_util_show_error (NULL,
+                                  g_strdup_printf (_("Couldn’t retrieve keys from server: %s"), uri),
+                                  error->message);
     }
 }
 
@@ -118,20 +119,17 @@ static void
 on_sync_ok_clicked (GtkButton *button, gpointer user_data)
 {
     SeahorseKeyserverSync *self = SEAHORSE_KEYSERVER_SYNC (user_data);
-    g_autoptr(GList) keys = NULL;
 
-    keys = g_list_copy (self->keys);
-    seahorse_keyserver_sync_do_sync (keys);
+    seahorse_keyserver_sync_do_sync (self->keys);
 }
 
 static void
 on_sync_configure_clicked (GtkButton *button, gpointer user_data)
 {
-    SeahorseKeyserverSync *self = SEAHORSE_KEYSERVER_SYNC (user_data);
-    SeahorsePrefs *prefs;
+    GApplication *app;
 
-    prefs = seahorse_prefs_new (GTK_WINDOW (self));
-    gtk_window_present (GTK_WINDOW (prefs));
+    app = g_application_get_default ();
+    g_action_group_activate_action (G_ACTION_GROUP (app), "preferences", NULL);
 }
 
 static void
@@ -144,7 +142,7 @@ seahorse_keyserver_sync_get_property (GObject    *object,
 
     switch (prop_id) {
     case PROP_KEYS:
-        g_value_set_pointer (value, self->keys);
+        g_value_set_object (value, self->keys);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -162,8 +160,7 @@ seahorse_keyserver_sync_set_property (GObject      *object,
 
     switch (prop_id) {
     case PROP_KEYS:
-        g_list_free (self->keys);
-        self->keys = g_list_copy (g_value_get_pointer (value));
+        g_set_object (&self->keys, g_value_get_object (value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -176,7 +173,7 @@ seahorse_keyserver_sync_finalize (GObject *obj)
 {
     SeahorseKeyserverSync *self = SEAHORSE_KEYSERVER_SYNC (obj);
 
-    g_clear_pointer (&self->keys, g_list_free);
+    g_clear_object (&self->keys);
 
     G_OBJECT_CLASS (seahorse_keyserver_sync_parent_class)->finalize (obj);
 }
@@ -192,7 +189,7 @@ seahorse_keyserver_sync_constructed (GObject *obj)
     G_OBJECT_CLASS (seahorse_keyserver_sync_parent_class)->constructed (obj);
 
     /* The details message */
-    n_keys = g_list_length (self->keys);
+    n_keys = g_list_model_get_n_items (self->keys);
     t = g_strdup_printf (ngettext ("<b>%d key is selected for synchronizing</b>",
                                    "<b>%d keys are selected for synchronizing</b>",
                                    n_keys),
@@ -225,9 +222,8 @@ seahorse_keyserver_sync_class_init (SeahorseKeyserverSyncClass *klass)
     gobject_class->finalize = seahorse_keyserver_sync_finalize;
 
     g_object_class_install_property (gobject_class, PROP_KEYS,
-        g_param_spec_pointer ("keys", "Keys",
-                              "A GList of keys which should be synced",
-                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+        g_param_spec_object ("keys", NULL, NULL, G_TYPE_LIST_MODEL,
+                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
     gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Seahorse/seahorse-keyserver-sync.ui");
 
@@ -247,7 +243,7 @@ seahorse_keyserver_sync_class_init (SeahorseKeyserverSyncClass *klass)
  * Non-interactively synchronizes the given @keys with the chosen keyserver.
  */
 void
-seahorse_keyserver_sync_do_sync (GList *keys)
+seahorse_keyserver_sync_do_sync (GListModel *keys)
 {
     SeahorseServerSource *source;
     SeahorseGpgmeKeyring *keyring;
@@ -258,16 +254,17 @@ seahorse_keyserver_sync_do_sync (GList *keys)
     g_auto(GStrv) keyservers = NULL;
     g_autoptr(GPtrArray) keyids = NULL;
 
-    if (!keys)
-        return;
+    g_return_if_fail (G_IS_LIST_MODEL (keys));
 
     keyring = seahorse_pgp_backend_get_default_keyring (NULL);
     pgp_settings = seahorse_pgp_settings_instance ();
     cancellable = g_cancellable_new ();
 
     keyids = g_ptr_array_new ();
-    for (GList *l = keys; l != NULL; l = g_list_next (l))
-        g_ptr_array_add (keyids, (char *) seahorse_pgp_key_get_keyid (l->data));
+    for (unsigned int i = 0; i < g_list_model_get_n_items (keys); i++) {
+        g_autoptr(SeahorsePgpKey) key = g_list_model_get_item (keys, i);
+        g_ptr_array_add (keyids, (char *) seahorse_pgp_key_get_keyid (key));
+    }
     g_ptr_array_add (keyids, NULL);
 
     /* And now synchronizing keys from the servers */
@@ -305,11 +302,11 @@ seahorse_keyserver_sync_do_sync (GList *keys)
 }
 
 SeahorseKeyserverSync *
-seahorse_keyserver_sync_new (GList     *keys,
-                             GtkWindow *parent)
+seahorse_keyserver_sync_new (GListModel *keys,
+                             GtkWindow  *parent)
 {
-    g_return_val_if_fail (keys, NULL);
-    g_return_val_if_fail (keys->data, NULL);
+    g_return_val_if_fail (G_IS_LIST_MODEL (keys), NULL);
+    g_return_val_if_fail (g_list_model_get_n_items (keys) > 0, NULL);
     g_return_val_if_fail (!parent || GTK_IS_WINDOW (parent), NULL);
 
     return g_object_new (SEAHORSE_TYPE_KEYSERVER_SYNC,

@@ -33,6 +33,7 @@
 #include "libseahorse/seahorse-util.h"
 
 #include <glib/gi18n.h>
+#include <locale.h>
 
 #include <string.h>
 
@@ -68,10 +69,10 @@ static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
 static void         seahorse_pgp_backend_iface            (SeahorseBackendIface *iface);
 
-static void         seahorse_pgp_backend_collection_init  (GcrCollectionIface *iface);
+static void         seahorse_pgp_backend_list_model_init  (GListModelInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorsePgpBackend, seahorse_pgp_backend, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_pgp_backend_collection_init);
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, seahorse_pgp_backend_list_model_init);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_BACKEND, seahorse_pgp_backend_iface);
 );
 
@@ -91,7 +92,7 @@ seahorse_pgp_backend_init (SeahorsePgpBackend *self)
 static void
 on_settings_keyservers_changed (GSettings  *settings,
                                 const char *key,
-                                gpointer    user_data)
+                                void       *user_data)
 {
     SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (user_data);
     SeahorsePgpSettings *pgp_settings = SEAHORSE_PGP_SETTINGS (settings);
@@ -136,26 +137,26 @@ on_settings_keyservers_changed (GSettings  *settings,
 #endif /* WITH_KEYSERVER */
 
 static void
-on_place_loaded (GObject       *object,
-                 GAsyncResult  *result,
-                 gpointer       user_data)
+on_place_loaded (GObject      *object,
+                 GAsyncResult *result,
+                 void         *user_data)
 {
-	SeahorsePgpBackend *backend = user_data;
-	gboolean ok;
-	GError *error;
+    SeahorsePgpBackend *backend = user_data;
+    gboolean ok;
+    GError *error;
 
-	error = NULL;
-	ok = seahorse_place_load_finish (SEAHORSE_PLACE (object), result, &error);
+    error = NULL;
+    ok = seahorse_place_load_finish (SEAHORSE_PLACE (object), result, &error);
 
-	if (!ok) {
-		g_warning ("Failed to initialize PGP backend: %s", error->message);
-		g_error_free (error);
-	}
+    if (!ok) {
+        g_warning ("Failed to initialize PGP backend: %s", error->message);
+        g_error_free (error);
+    }
 
-	backend->loaded = TRUE;
-	g_object_notify (G_OBJECT (backend), "loaded");
+    backend->loaded = TRUE;
+    g_object_notify (G_OBJECT (backend), "loaded");
 
-	g_object_unref (backend);
+    g_object_unref (backend);
 }
 
 static void
@@ -186,37 +187,37 @@ seahorse_pgp_backend_constructed (GObject *obj)
 #endif
 }
 
-static const gchar *
+static const char *
 seahorse_pgp_backend_get_name (SeahorseBackend *backend)
 {
-	return SEAHORSE_PGP_NAME;
+    return SEAHORSE_PGP_NAME;
 }
 
-static const gchar *
+static const char *
 seahorse_pgp_backend_get_label (SeahorseBackend *backend)
 {
-	return _("PGP Keys");
+    return _("PGP Keys");
 }
 
-static const gchar *
+static const char *
 seahorse_pgp_backend_get_description (SeahorseBackend *backend)
 {
-	return _("PGP keys are for encrypting email or files");
+    return _("PGP keys are for encrypting email or files");
 }
 
 static SeahorseActionGroup *
 seahorse_pgp_backend_get_actions (SeahorseBackend *backend)
 {
-	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (backend);
-	return g_object_ref (self->actions);
+    SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (backend);
+    return g_object_ref (self->actions);
 }
 
 static gboolean
 seahorse_pgp_backend_get_loaded (SeahorseBackend *backend)
 {
-	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (backend), FALSE);
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (backend), FALSE);
 
-	return SEAHORSE_PGP_BACKEND (backend)->loaded;
+    return SEAHORSE_PGP_BACKEND (backend)->loaded;
 }
 
 const char *
@@ -326,61 +327,60 @@ seahorse_pgp_backend_class_init (SeahorsePgpBackendClass *klass)
     g_object_class_override_property (gobject_class, PROP_LOADED, "loaded");
 }
 
-static guint
-seahorse_pgp_backend_get_length (GcrCollection *collection)
+static GType
+seahorse_pgp_backend_get_item_type (GListModel *model)
 {
-	return 1;
+    return SEAHORSE_TYPE_GPGME_KEYRING;
 }
 
-static GList *
-seahorse_pgp_backend_get_objects (GcrCollection *collection)
+static unsigned int
+seahorse_pgp_backend_get_n_items (GListModel *model)
 {
-	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (collection);
-	return g_list_append (NULL, self->keyring);
+    return 1;
 }
 
-static gboolean
-seahorse_pgp_backend_contains (GcrCollection *collection,
-                               GObject *object)
+static void *
+seahorse_pgp_backend_get_item (GListModel   *model,
+                               unsigned int  position)
 {
-	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (collection);
-	return G_OBJECT (self->keyring) == object;
+    SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (model);
+    return (position == 0)? g_object_ref (self->keyring) : NULL;
 }
 
 static void
-seahorse_pgp_backend_collection_init (GcrCollectionIface *iface)
+seahorse_pgp_backend_list_model_init (GListModelInterface *iface)
 {
-	iface->contains = seahorse_pgp_backend_contains;
-	iface->get_length = seahorse_pgp_backend_get_length;
-	iface->get_objects = seahorse_pgp_backend_get_objects;
+    iface->get_item_type = seahorse_pgp_backend_get_item_type;
+    iface->get_n_items = seahorse_pgp_backend_get_n_items;
+    iface->get_item = seahorse_pgp_backend_get_item;
 }
 
 static SeahorsePlace *
 seahorse_pgp_backend_lookup_place (SeahorseBackend *backend,
-                                   const gchar *uri)
+                                   const char *uri)
 {
-	SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (backend);
-	if (g_str_equal (uri, "gnupg://"))
-		return SEAHORSE_PLACE (seahorse_pgp_backend_get_default_keyring (self));
-	return NULL;
+    SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (backend);
+    if (g_str_equal (uri, "gnupg://"))
+        return SEAHORSE_PLACE (seahorse_pgp_backend_get_default_keyring (self));
+    return NULL;
 }
 
 static void
 seahorse_pgp_backend_iface (SeahorseBackendIface *iface)
 {
-	iface->lookup_place = seahorse_pgp_backend_lookup_place;
-	iface->get_actions = seahorse_pgp_backend_get_actions;
-	iface->get_description = seahorse_pgp_backend_get_description;
-	iface->get_label = seahorse_pgp_backend_get_label;
-	iface->get_name = seahorse_pgp_backend_get_name;
-	iface->get_loaded = seahorse_pgp_backend_get_loaded;
+    iface->lookup_place = seahorse_pgp_backend_lookup_place;
+    iface->get_actions = seahorse_pgp_backend_get_actions;
+    iface->get_description = seahorse_pgp_backend_get_description;
+    iface->get_label = seahorse_pgp_backend_get_label;
+    iface->get_name = seahorse_pgp_backend_get_name;
+    iface->get_loaded = seahorse_pgp_backend_get_loaded;
 }
 
 SeahorsePgpBackend *
 seahorse_pgp_backend_get (void)
 {
-	g_return_val_if_fail (pgp_backend, NULL);
-	return pgp_backend;
+    g_return_val_if_fail (pgp_backend, NULL);
+    return pgp_backend;
 }
 
 /**
@@ -411,10 +411,10 @@ seahorse_pgp_backend_initialize (const char *gpg_homedir)
 SeahorseGpgmeKeyring *
 seahorse_pgp_backend_get_default_keyring (SeahorsePgpBackend *self)
 {
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
-	g_return_val_if_fail (self->keyring, NULL);
-	return self->keyring;
+    self = self ? self : seahorse_pgp_backend_get ();
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
+    g_return_val_if_fail (self->keyring, NULL);
+    return self->keyring;
 }
 
 SeahorsePgpKey *
@@ -446,10 +446,10 @@ seahorse_pgp_backend_get_default_key (SeahorsePgpBackend *self)
 SeahorseDiscovery *
 seahorse_pgp_backend_get_discovery (SeahorsePgpBackend *self)
 {
-	self = self ? self : seahorse_pgp_backend_get ();
-	g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
-	g_return_val_if_fail (self->discovery, NULL);
-	return self->discovery;
+    self = self ? self : seahorse_pgp_backend_get ();
+    g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
+    g_return_val_if_fail (self->discovery, NULL);
+    return self->discovery;
 }
 
 /**
@@ -541,7 +541,7 @@ typedef struct {
 } search_remote_closure;
 
 static void
-search_remote_closure_free (gpointer user_data)
+search_remote_closure_free (void *user_data)
 {
     search_remote_closure *closure = user_data;
     g_free (closure);
@@ -550,7 +550,7 @@ search_remote_closure_free (gpointer user_data)
 static void
 on_source_search_ready (GObject *source,
                         GAsyncResult *result,
-                        gpointer user_data)
+                        void *user_data)
 {
     g_autoptr(GTask) task = G_TASK (user_data);
     search_remote_closure *closure = g_task_get_task_data (task);
@@ -574,19 +574,20 @@ on_source_search_ready (GObject *source,
 
 void
 seahorse_pgp_backend_search_remote_async (SeahorsePgpBackend *self,
-                                          const gchar *search,
-                                          GcrSimpleCollection *results,
+                                          const char *search,
+                                          GListStore *results,
                                           GCancellable *cancellable,
                                           GAsyncReadyCallback callback,
-                                          gpointer user_data)
+                                          void *user_data)
 {
     search_remote_closure *closure;
     g_autoptr(GTask) task = NULL;
     g_autoptr(GHashTable) servers = NULL;
     g_auto(GStrv) names = NULL;
 
-    self = self ? self : seahorse_pgp_backend_get ();
     g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
+    g_return_if_fail (search);
+    g_return_if_fail (G_IS_LIST_STORE (results));
 
     /* Get a list of all selected key servers */
     names = seahorse_app_settings_get_last_search_servers (seahorse_app_settings_instance ());
@@ -637,7 +638,7 @@ typedef struct {
 } transfer_closure;
 
 static void
-transfer_closure_free (gpointer user_data)
+transfer_closure_free (void *user_data)
 {
     transfer_closure *closure = user_data;
     g_free (closure);
@@ -646,7 +647,7 @@ transfer_closure_free (gpointer user_data)
 static void
 on_source_transfer_ready (GObject *source,
                           GAsyncResult *result,
-                          gpointer user_data)
+                          void *user_data)
 {
     g_autoptr(GTask) task = G_TASK (user_data);
     transfer_closure *closure = g_task_get_task_data (task);
@@ -670,52 +671,70 @@ on_source_transfer_ready (GObject *source,
 
 void
 seahorse_pgp_backend_transfer_async (SeahorsePgpBackend *self,
-                                     GList *keys,
+                                     GListModel *keys,
                                      SeahorsePlace *to,
                                      GCancellable *cancellable,
                                      GAsyncReadyCallback callback,
-                                     gpointer user_data)
+                                     void *user_data)
 {
-    transfer_closure *closure;
-    SeahorseObject *object;
     g_autoptr(GTask) task = NULL;
-    SeahorsePlace *from;
+    transfer_closure *closure;
+    g_autoptr(GtkSortListModel) sorted_keys = NULL;
+    g_autoptr(GtkSorter) sorter = NULL;
+    unsigned int current_pos;
 
-    self = self ? self : seahorse_pgp_backend_get ();
     g_return_if_fail (SEAHORSE_PGP_IS_BACKEND (self));
+    g_return_if_fail (G_IS_LIST_MODEL (keys));
+    g_return_if_fail (g_list_model_get_n_items (keys) > 0);
     g_return_if_fail (SEAHORSE_IS_PLACE (to));
 
     task = g_task_new (self, cancellable, callback, user_data);
     closure = g_new0 (transfer_closure, 1);
     g_task_set_task_data (task, closure, transfer_closure_free);
 
-    keys = g_list_copy (keys);
-    /* Sort by key place */
-    keys = seahorse_util_objects_sort_by_place (keys);
+    /* Sort the keys by place and put them into sections as well */
+    sorter = GTK_SORTER (seahorse_place_sorter_new ());
+    sorted_keys = gtk_sort_list_model_new (g_object_ref (keys),
+                                           g_object_ref (sorter));
+    gtk_sort_list_model_set_section_sorter (sorted_keys, sorter);
 
-    while (keys) {
-        GList *next;
+    current_pos = 0;
+    while (current_pos < g_list_model_get_n_items (keys)) {
+        g_autoptr(SeahorsePgpKey) first = NULL;
+        SeahorsePlace *from;
+        g_autolist(SeahorsePgpKey) to_transfer = NULL;
+        unsigned int section_start, section_end;
 
-        /* break off one set (same keysource) */
-        next = seahorse_util_objects_splice_by_place (keys);
+        /* Get the range for this section */
+        gtk_section_model_get_section (GTK_SECTION_MODEL (sorted_keys),
+                                       current_pos,
+                                       &section_start, &section_end);
 
-        g_assert (SEAHORSE_IS_OBJECT (keys->data));
-        object = SEAHORSE_OBJECT (keys->data);
+        /* Build the list of keys to transfer */
+        for (unsigned int i = section_start; i < section_end; i++) {
+            g_autoptr(SeahorsePgpKey) key = NULL;
 
-        /* Export from this key place */
-        from = seahorse_object_get_place (object);
+            key = g_list_model_get_item (G_LIST_MODEL (sorted_keys), i);
+            to_transfer = g_list_prepend (to_transfer, key);
+        }
+
+        /* Get the place were transferring frmo */
+        first = g_list_model_get_item (G_LIST_MODEL (sorted_keys), current_pos);
+        from = seahorse_object_get_place (SEAHORSE_OBJECT (first));
         g_return_if_fail (SEAHORSE_IS_PLACE (from));
 
         if (from != to) {
             /* Start a new transfer operation between the two places */
             seahorse_progress_prep_and_begin (cancellable, GINT_TO_POINTER (closure->num_transfers), NULL);
-            seahorse_transfer_keys_async (from, to, keys, cancellable,
+            seahorse_transfer_keys_async (from, to,
+                                          to_transfer,
+                                          cancellable,
                                           on_source_transfer_ready, g_object_ref (task));
             closure->num_transfers++;
         }
 
-        g_list_free (keys);
-        keys = next;
+        /* Go to the next section */
+        current_pos = section_end;
     }
 
     if (closure->num_transfers == 0)
@@ -735,11 +754,11 @@ seahorse_pgp_backend_transfer_finish (SeahorsePgpBackend *self,
 
 void
 seahorse_pgp_backend_retrieve_async (SeahorsePgpBackend *self,
-                                     const gchar **keyids,
+                                     const char **keyids,
                                      SeahorsePlace *to,
                                      GCancellable *cancellable,
                                      GAsyncReadyCallback callback,
-                                     gpointer user_data)
+                                     void *user_data)
 {
     transfer_closure *closure;
     g_autoptr(GTask) task = NULL;
@@ -783,12 +802,11 @@ seahorse_pgp_backend_retrieve_finish (SeahorsePgpBackend *self,
 
 GList *
 seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
-                                    const gchar **keyids,
+                                    const char **keyids,
                                     GCancellable *cancellable)
 {
     GList *robjects = NULL;
     SeahorseGpgmeKey *key;
-    SeahorseObject *object;
     g_autoptr(GPtrArray) todiscover = NULL;
     int i;
 
@@ -799,14 +817,14 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
 
     /* Check all the ids */
     for (i = 0; keyids[i] != NULL; i++) {
-        const gchar *keyid = keyids[i];
+        const char *keyid = keyids[i];
 
         /* Do we know about this object? */
         key = seahorse_gpgme_keyring_lookup (self->keyring, keyid);
 
         /* No such object anywhere, discover it */
         if (key == NULL) {
-            g_ptr_array_add (todiscover, (gchar *)keyid);
+            g_ptr_array_add (todiscover, (char *) keyid);
             continue;
         }
 
@@ -816,7 +834,7 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
 
     if (todiscover->len > 0) {
         g_ptr_array_add (todiscover, NULL);
-        keyids = (const gchar **)todiscover->pdata;
+        keyids = (const char **) todiscover->pdata;
 
 #ifdef WITH_KEYSERVER
         /* Start a discover process on all todiscover */
@@ -827,10 +845,81 @@ seahorse_pgp_backend_discover_keys (SeahorsePgpBackend *self,
 
         /* Add unknown objects for all these */
         for (i = 0; keyids[i] != NULL; i++) {
-            object = seahorse_unknown_source_add_object (self->unknown, keyids[i], cancellable);
-            robjects = g_list_prepend (robjects, object);
+            SeahorseUnknown *unknown;
+
+            unknown = seahorse_unknown_source_add_object (self->unknown, keyids[i], cancellable);
+            robjects = g_list_prepend (robjects, unknown);
         }
     }
 
     return robjects;
+}
+
+SeahorsePgpKey *
+seahorse_pgp_backend_create_key_for_parsed (SeahorsePgpBackend *self,
+                                            GcrParsed *parsed)
+{
+    g_autoptr(GInputStream) stream = NULL;
+    const void *data;
+    size_t data_len;
+    gpgme_ctx_t gctx;
+    gpgme_error_t gerr;
+    gpgme_key_t gkey;
+    gpgme_key_t end;
+    gpgme_data_t gpgme_data = NULL;
+    g_autoptr(SeahorsePgpKey) key = NULL;
+
+    g_return_val_if_fail (gcr_parsed_get_format (parsed) == GCR_FORMAT_OPENPGP_PACKET, NULL);
+
+    data = gcr_parsed_get_data (parsed, &data_len);
+    g_return_val_if_fail (data != NULL, NULL);
+
+    /* Create a temporary context */
+    setlocale (LC_ALL, "");
+    gpgme_check_version (NULL);
+    gpgme_set_locale (NULL, LC_CTYPE, setlocale (LC_CTYPE, NULL));
+
+    gerr = gpgme_new (&gctx);
+    g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
+
+    gerr = gpgme_set_protocol (gctx, GPGME_PROTOCOL_OPENPGP);
+    g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
+
+    gpgme_set_armor (gctx, 0);
+    gpgme_set_textmode (gctx, 0);
+    gpgme_set_offline (gctx, 1);
+    gpgme_set_keylist_mode (gctx, GPGME_KEYLIST_MODE_LOCAL);
+
+    /* Put it in a gpgme data struct which we can put in the special gpgme_op_keylist_from_data_start() */
+    gerr = gpgme_data_new (&gpgme_data);
+    g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
+
+    gerr = gpgme_data_new_from_mem(&gpgme_data, data, data_len, 0);
+    g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
+
+    gerr = gpgme_op_keylist_from_data_start(gctx, gpgme_data, 0);
+    g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
+
+    gerr = gpgme_op_keylist_next(gctx, &gkey);
+    g_return_val_if_fail (GPG_IS_OK (gerr), NULL);
+
+    gerr = gpgme_op_keylist_next(gctx, &end);
+    // XXX supposedly we're only to have one here? What about public vs secret
+    g_return_val_if_fail (!GPG_IS_OK (gerr), NULL);
+
+    if (gkey->revoked || gkey->expired || gkey->disabled || gkey->invalid || gkey->secret) {
+        //XXX some things can be left here, but what about invalid? disabled?
+        return NULL;
+    }
+
+    //XXX how do we know it's a public or secret key?
+    // XXX something is off here also, as it shows as a private key only
+    if (gkey->secret)
+        key = SEAHORSE_PGP_KEY (seahorse_gpgme_key_new (NULL, NULL, gkey));
+    else
+        key = SEAHORSE_PGP_KEY (seahorse_gpgme_key_new (NULL, gkey, NULL));
+
+    //XXX don't we need to release the gpgme-context?
+
+    return g_steal_pointer (&key);
 }

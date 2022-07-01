@@ -6,33 +6,32 @@ common_sources = files(
   'catalog.vala',
   'datepicker.vala',
   'deletable.vala',
-  'delete-dialog.vala',
-  'deleter.vala',
+  'delete-operation.vala',
   'exportable.vala',
-  'exporter.vala',
-  'icons.vala',
+  'export-operation.vala',
   'interaction.vala',
-  'item-list.vala',
   'lockable.vala',
   'object.vala',
+  'panel.vala',
+  'panel-window.vala',
   'passphrase-prompt.vala',
   'pgp-settings.vala',
   'place.vala',
-  'prefs.vala',
-  'registry.vala',
+  'place-sorter.vala',
   'server-category.vala',
   'types.vala',
   'util.vala',
   'validity.vala',
   'viewable.vala',
+  'qr-code-dialog.vala',
 )
 
 common_deps = [
   glib_deps,
-  gtk,
-  gcr,
-  gcr_ui,
-  libhandy_dep,
+  gtk4_dep,
+  gcr4_dep,
+  libadwaita_dep,
+  libqrencode_dep,
   config,
 ]
 
@@ -41,14 +40,19 @@ common_vala_args = [
   '--use-header',
 ]
 
+common_c_args = [
+  vala_workaround_cflags,
+]
+
 if get_option('keyservers-support')
-  common_sources += ['keyserver-control.vala', 'prefs-keyservers.vala']
+  common_sources += ['keyserver-dropdown.vala', 'prefs-keyservers.vala']
   common_vala_args += [ '-D', 'WITH_KEYSERVER' ]
 endif
 
 common_lib = static_library('common',
   common_sources,
   dependencies: common_deps,
+  c_args: common_c_args,
   vala_args: common_vala_args,
   vala_header: 'seahorse-common.h',
 )

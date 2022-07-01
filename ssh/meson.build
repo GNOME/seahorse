@@ -2,36 +2,41 @@ ssh_sources = files(
   'actions.vala',
   'algorithm.vala',
   'backend.vala',
-  'deleter.vala',
   'errors.vala',
-  'exporter.vala',
-  'generate.vala',
+  'generate-key-dialog.vala',
   'key-data.vala',
+  'key-delete-operation.vala',
+  'key-export-operation.vala',
   'key-length-chooser.vala',
-  'key-properties.vala',
+  'key-panel.vala',
   'key.vala',
   'operation.vala',
   'source.vala',
   'ssh.vala',
-  'upload.vala',
+  'upload-remote-dialog.vala',
 )
 
 ssh_dependencies = [
   glib_deps,
-  gcr,
-  gcr_ui,
+  gcr4_dep,
   posix,
-  gtk,
+  gtk4_dep,
   common_dep,
+  libseahorse_dep,
 ]
 
 ssh_vala_args = [
   '--gresources', resources_xml,
 ]
 
+ssh_c_args = [
+  vala_workaround_cflags,
+]
+
 ssh_lib = static_library('seahorse-ssh',
   ssh_sources,
   vala_args: ssh_vala_args,
+  c_args: ssh_c_args,
   dependencies: ssh_dependencies,
 )
 
@@ -42,18 +47,19 @@ ssh_dep = declare_dependency(
 
 # ssh-askpass helper binary
 ssh_askpass_sources = files(
-  'seahorse-ssh-askpass.c',
+  'seahorse-ssh-askpass.vala',
 )
 
 ssh_askpass_dependencies = [
-  gcr,
-  gtk,
+  gcr4_dep,
+  gtk4_dep,
   config,
   common_dep,
+  posix,
 ]
 
 ssh_askpass = executable('ssh-askpass',
-  ssh_askpass_sources,
+  [ ssh_askpass_sources, resources_src, ],
   dependencies: ssh_askpass_dependencies,
   install: true,
   install_dir: libexecbindir,
@@ -67,6 +73,7 @@ ssh_test_names = [
 foreach _test : ssh_test_names
   test_bin = executable(_test,
     files('test-@0@.vala'.format(_test)),
+    c_args: vala_workaround_cflags,
     dependencies: [
       ssh_dep,
       ssh_dependencies,

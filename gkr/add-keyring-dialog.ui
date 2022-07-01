@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<interface>
+  <template class="SeahorseGkrAddKeyringDialog" parent="AdwDialog">
+    <property name="title" translatable="yes">Add password keyring</property>
+    <property name="follows-content-size">True</property>
+
+    <child>
+      <object class='GtkShortcutController'>
+        <child>
+          <object class='GtkShortcut'>
+            <property name='trigger'>&lt;Ctrl&gt;Return</property>
+            <property name='action'>action(add-keyring)</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-start-title-buttons">False</property>
+            <property name="show-end-title-buttons">False</property>
+
+            <child type="start">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">True</property>
+                <property name="action-name">window.close</property>
+              </object>
+            </child>
+
+            <child type="end">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">_Add</property>
+                <property name="use-underline">True</property>
+                <property name="action-name">add-keyring</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <property name="content">
+          <object class="GtkScrolledWindow">
+            <property name="propagate-natural-height">True</property>
+            <child>
+              <object class="AdwClamp">
+                <child>
+                  <object class="GtkBox" id="container">
+                    <property name="spacing">24</property>
+                    <property name="orientation">vertical</property>
+                    <property name="margin-start">24</property>
+                    <property name="margin-end">32</property>
+                    <property name="margin-top">32</property>
+                    <property name="margin-bottom">32</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Please choose a name for the new keyring. You will be prompted for an unlock password.</property>
+                        <property name="wrap">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup">
+                        <child>
+                          <object class="AdwEntryRow" id="name_row">
+                            <property name="title" translatable="yes">New Keyring Name:</property>
+                            <signal name="changed" handler="on_name_row_changed"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+  </template>
+</interface>

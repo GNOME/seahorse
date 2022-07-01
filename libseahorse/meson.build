@@ -5,7 +5,7 @@ libseahorse_sources = files(
 
 libseahorse_deps = [
   glib_deps,
-  gcr,
+  gcr4_dep,
   libsecret,
   common_dep,
 ]

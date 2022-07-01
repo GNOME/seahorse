@@ -75,12 +75,12 @@ on_key_op_generate_complete (gpgme_error_t gerr,
 
     if (seahorse_gpgme_propagate_error (gerr, &error)) {
         g_task_return_error (task, g_steal_pointer (&error));
-        return FALSE; /* don't call again */
+        return G_SOURCE_REMOVE;
     }
 
     seahorse_progress_end (g_task_get_cancellable (task), task);
     g_task_return_boolean (task, TRUE);
-    return FALSE; /* don't call again */
+    return G_SOURCE_REMOVE;
 }
 
 
@@ -98,17 +98,17 @@ on_key_op_generate_complete (gpgme_error_t gerr,
  * Tries to generate a new key based on given parameters.
  */
 void
-seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
-                                      const char           *name,
-                                      const char           *email,
-                                      const char           *comment,
-                                      const char           *passphrase,
-                                      SeahorseKeyEncType   type,
-                                      unsigned int         length,
-                                      GDateTime           *expires,
-                                      GCancellable        *cancellable,
-                                      GAsyncReadyCallback  callback,
-                                      void                *user_data)
+seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring     *keyring,
+                                      const char               *name,
+                                      const char               *email,
+                                      const char               *comment,
+                                      const char               *passphrase,
+                                      SeahorsePgpKeyAlgorithm  type,
+                                      unsigned int             length,
+                                      GDateTime               *expires,
+                                      GCancellable            *cancellable,
+                                      GAsyncReadyCallback      callback,
+                                      void                    *user_data)
 {
     const char* key_type;
     g_autofree char *common = NULL, *start = NULL, *expires_date = NULL;
@@ -125,14 +125,14 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
 
     /* Check lengths for each type */
     switch (type) {
-    case DSA_ELGAMAL:
+    case SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL:
         g_return_if_fail (length >= ELGAMAL_MIN || length <= LENGTH_MAX);
         break;
-    case DSA:
+    case SEAHORSE_PGP_KEY_ALGO_DSA:
         g_return_if_fail (length >= DSA_MIN || length <= DSA_MAX);
         break;
-    case RSA_RSA:
-    case RSA_SIGN:
+    case SEAHORSE_PGP_KEY_ALGO_RSA_RSA:
+    case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
         g_return_if_fail (length >= RSA_MIN || length <= LENGTH_MAX);
         break;
     default:
@@ -159,7 +159,7 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
     if (comment != NULL && strlen (comment) > 0)
         common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
 
-    if (type == DSA || type == DSA_ELGAMAL)
+    if (type == SEAHORSE_PGP_KEY_ALGO_DSA || type == SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL)
         key_type = "Key-Type: DSA\nKey-Usage: sign";
     else
         key_type = "Key-Type: RSA\nKey-Usage: sign";
@@ -167,10 +167,10 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring *keyring,
     start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
 
     /* Subkey xml */
-    if (type == DSA_ELGAMAL)
+    if (type == SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL)
         parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
                                  start, (length < DSA_MAX) ? length : DSA_MAX, length, common);
-    else if (type == RSA_RSA)
+    else if (type == SEAHORSE_PGP_KEY_ALGO_RSA_RSA)
         parms = g_strdup_printf ("%s%d\nSubkey-Type: RSA\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
                                  start, length, length, common);
     else
@@ -1363,13 +1363,13 @@ seahorse_gpgme_key_op_add_uid_finish (SeahorseGpgmeKey *pkey,
 }
 
 void
-seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey    *pkey,
-                                        SeahorseKeyEncType   type,
-                                        unsigned int         length,
-                                        GDateTime           *expires,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  callback,
-                                        void                *user_data)
+seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey        *pkey,
+                                        SeahorsePgpKeyAlgorithm  type,
+                                        unsigned int             length,
+                                        GDateTime               *expires,
+                                        GCancellable            *cancellable,
+                                        GAsyncReadyCallback      callback,
+                                        void                    *user_data)
 {
     g_autoptr(GTask) task = NULL;
     gpgme_ctx_t gctx;
@@ -1415,10 +1415,10 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey    *pkey,
 
     /* Add usage flags */
     switch (type) {
-        case RSA_SIGN:
+        case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
             flags |= GPGME_CREATE_SIGN;
             break;
-        case RSA_ENCRYPT:
+        case SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT:
             flags |= GPGME_CREATE_ENCR;
             break;
         default:
@@ -1582,9 +1582,9 @@ seahorse_gpgme_key_op_del_subkey (SeahorseGpgmeSubkey *subkey)
 
 typedef struct
 {
-    unsigned int          index;
-    SeahorseRevokeReason  reason;
-    const char           *description;
+    unsigned int             index;
+    SeahorsePgpRevokeReason  reason;
+    const char              *description;
 } RevSubkeyParm;
 
 typedef enum {
@@ -1741,8 +1741,9 @@ rev_subkey_transit (unsigned int   current_state,
 }
 
 gpgme_error_t
-seahorse_gpgme_key_op_revoke_subkey (SeahorseGpgmeSubkey *subkey, SeahorseRevokeReason reason,
-                                     const char *description)
+seahorse_gpgme_key_op_revoke_subkey (SeahorseGpgmeSubkey    *subkey,
+                                     SeahorsePgpRevokeReason reason,
+                                     const char             *description)
 {
     RevSubkeyParm rev_parm;
     SeahorseEditParm *parms;
@@ -2339,9 +2340,6 @@ photoid_load_transit (unsigned int   current_state,
 
         if (g_file_test (parm->output_file, G_FILE_TEST_EXISTS)) {
 
-            photo = seahorse_gpgme_photo_new (parm->key, NULL, parm->uid);
-            parm->photos = g_list_append (parm->photos, photo);
-
             if (g_stat (parm->output_file, &st) == -1) {
                 g_warning ("couldn't stat output image file '%s': %s", parm->output_file,
                            g_strerror (errno));
@@ -2357,13 +2355,9 @@ photoid_load_transit (unsigned int   current_state,
 
             g_unlink (parm->output_file);
 
-            /* Load a 'missing' icon */
-            if (!pixbuf) {
-                pixbuf = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-                                                   "gnome-unknown", 48, 0, NULL);
-            }
+            photo = seahorse_gpgme_photo_new (parm->key, pixbuf, parm->uid);
+            parm->photos = g_list_append (parm->photos, photo);
 
-            seahorse_pgp_photo_set_pixbuf (SEAHORSE_PGP_PHOTO (photo), pixbuf);
             g_object_unref (pixbuf);
         }
 

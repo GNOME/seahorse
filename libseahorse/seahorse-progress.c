@@ -136,7 +136,7 @@ tracked_task_free (void *data)
     g_free (task->notice);
     g_clear_object (&task->builder);
     if (task->dialog)
-      gtk_widget_destroy (task->dialog);
+      gtk_window_destroy (GTK_WINDOW (task->dialog));
     g_free (task);
 }
 
@@ -184,12 +184,10 @@ static void
 progress_update_display (TrackedTask *task)
 {
     GtkProgressBar *progress = NULL;
-    GtkStatusbar *status = NULL;
     GtkLabel *label = NULL;
     GtkWidget *widget;
     TrackedPart *part;
     double fraction;
-    unsigned int id;
 
     if (task->builder == NULL)
         return;
@@ -200,25 +198,13 @@ progress_update_display (TrackedTask *task)
         g_warning ("cannot display progress because seahorse window has no progress widget");
     else
         progress = GTK_PROGRESS_BAR (widget);
-    widget = GTK_WIDGET (gtk_builder_get_object (task->builder, "status"));
-    if (GTK_IS_STATUSBAR (widget)) {
-        status = GTK_STATUSBAR (widget);
-    } else {
-        widget = GTK_WIDGET (gtk_builder_get_object (task->builder, "progress-details"));
-        if (GTK_IS_LABEL (widget))
-            label = GTK_LABEL (widget);
-    }
+    widget = GTK_WIDGET (gtk_builder_get_object (task->builder, "progress-details"));
+    if (GTK_IS_LABEL (widget))
+        label = GTK_LABEL (widget);
 
     /* The details is the first on a begun part */
     part = tracked_part_find (task, find_part_begun_with_details, NULL);
-    if (status) {
-        id = gtk_statusbar_get_context_id (status, "operation-progress");
-        gtk_statusbar_pop (status, id);
-        if (part != NULL)
-            gtk_statusbar_push (status, id, part->details);
-    } else if (label) {
-        gtk_label_set_text (label, part ? part->details : "");
-    }
+    gtk_label_set_text (label, part ? part->details : "");
 
     /* If all parts are running simultaneously then indeterminate */
     if (task->parts_prepped == 0 && task->parts_ended == 0) {
@@ -549,7 +535,7 @@ on_timeout_show_progress (void *user_data)
     if (task->notice) {
         widget = GTK_WIDGET (gtk_builder_get_object (builder, "progress-notice"));
         gtk_label_set_label (GTK_LABEL (widget), task->notice);
-        gtk_widget_show (widget);
+        gtk_widget_set_visible (widget, TRUE);
     }
 
     /* Setup the cancel button */
@@ -560,7 +546,7 @@ on_timeout_show_progress (void *user_data)
     /* Allow attach to work */
     task->showing = FALSE;
     seahorse_progress_attach (task->cancellable, builder);
-    gtk_widget_show (task->dialog);
+    gtk_widget_set_visible (task->dialog, TRUE);
 
     return G_SOURCE_REMOVE;
 }

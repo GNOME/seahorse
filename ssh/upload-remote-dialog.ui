@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<interface>
+  <template class="SeahorseSshUploadRemoteDialog" parent="AdwDialog">
+    <property name="follows-content-size">True</property>
+
+    <child>
+      <object class='GtkShortcutController'>
+        <child>
+          <object class='GtkShortcut'>
+            <property name='trigger'>&lt;Ctrl&gt;Return</property>
+            <property name='action'>action(submit)</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwNavigationView" id="navigation_view">
+        <signal name="popped" handler="on_navigation_view_popped"/>
+
+        <child>
+          <object class="AdwNavigationPage" id="setup_page">
+            <property name="title" translatable="yes">Configure Remote</property>
+            <property name="child">
+              <object class="AdwToolbarView">
+                <child type="top">
+                  <object class="AdwHeaderBar">
+                    <property name="show-start-title-buttons">False</property>
+                    <property name="show-end-title-buttons">False</property>
+
+                    <child type="start">
+                      <object class="GtkButton">
+                        <property name="label" translatable="yes">_Cancel</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">window.close</property>
+                      </object>
+                    </child>
+
+                    <child type="end">
+                      <object class="GtkButton">
+                        <property name="label" translatable="yes">_Set Up</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">submit</property>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <property name="content">
+                  <object class="GtkScrolledWindow">
+                    <property name="propagate-natural-height">True</property>
+                    <child>
+                      <object class="AdwClamp">
+                        <child>
+                          <object class="GtkBox" id="container">
+                            <property name="spacing">24</property>
+                            <property name="orientation">vertical</property>
+                            <property name="margin-start">32</property>
+                            <property name="margin-end">32</property>
+                            <property name="margin-top">32</property>
+                            <property name="margin-bottom">32</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="max_width_chars">60</property>
+                                <property name="label" translatable="yes">To use your Secure Shell key with another computer that uses SSH, you must already have a login account on that computer.</property>
+                                <property name="margin_bottom">6</property>
+                                <property name="wrap">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwPreferencesGroup">
+                                <child>
+                                  <object class="AdwEntryRow" id="host_row">
+                                    <property name="title" translatable="yes">_Server address</property>
+                                    <property name="tooltip_text" translatable="yes">The host name or address of the server.</property>
+                                    <property name="use-underline">True</property>
+                                    <signal name="changed" handler="on_upload_input_changed"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="AdwEntryRow" id="user_row">
+                                    <property name="title" translatable="yes">_Login name</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="tooltip-text" translatable="yes">The login name on the server</property>
+                                    <signal name="changed" handler="on_upload_input_changed"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+
+        <child>
+          <object class="AdwNavigationPage" id="configuring_page">
+            <property name="title" translatable="yes">Configuring</property>
+            <property name="child">
+              <object class="AdwToolbarView">
+                <child type="top">
+                  <object class="AdwHeaderBar">
+                    <property name="show-start-title-buttons">False</property>
+                    <property name="show-end-title-buttons">True</property>
+                  </object>
+                </child>
+
+                <property name="content">
+                  <object class="AdwStatusPage">
+                    <property name="title" translatable="yes">Configuring Secure Shell Keys…</property>
+                    <property name="paintable">
+                      <object class="AdwSpinnerPaintable">
+                        <property name="widget">configuring_page</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

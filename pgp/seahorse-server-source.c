@@ -46,13 +46,11 @@ enum {
     PROP_0,
     PROP_LABEL,
     PROP_DESCRIPTION,
-    PROP_ICON,
     PROP_CATEGORY,
     PROP_URI,
     PROP_ACTIONS,
     PROP_ACTION_PREFIX,
     PROP_MENU_MODEL,
-    PROP_SHOW_IF_EMPTY,
     N_PROPS
 };
 
@@ -65,13 +63,13 @@ typedef struct _SeahorseServerSourcePrivate {
     gchar *uri;
 } SeahorseServerSourcePrivate;
 
-static void      seahorse_server_source_collection_init    (GcrCollectionIface *iface);
+static void      seahorse_server_source_list_model_init    (GListModelInterface *iface);
 
 static void      seahorse_server_source_place_iface        (SeahorsePlaceIface *iface);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (SeahorseServerSource, seahorse_server_source, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (SeahorseServerSource)
-                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_server_source_collection_init);
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, seahorse_server_source_list_model_init);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_server_source_place_iface);
 );
 
@@ -91,14 +89,12 @@ seahorse_server_source_class_init (SeahorseServerSourceClass *klass)
     gobject_class->set_property = seahorse_server_set_property;
     gobject_class->get_property = seahorse_server_get_property;
 
-	g_object_class_override_property (gobject_class, PROP_LABEL, "label");
-	g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
-    g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+    g_object_class_override_property (gobject_class, PROP_LABEL, "label");
+    g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
     g_object_class_override_property (gobject_class, PROP_CATEGORY, "category");
-	g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
-	g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
-	g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
-    g_object_class_override_property (gobject_class, PROP_SHOW_IF_EMPTY, "show-if-empty");
+    g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
+    g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
+    g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
 
     g_object_class_install_property (gobject_class, PROP_URI,
             g_param_spec_string ("uri", "Key Server URI",
@@ -130,7 +126,7 @@ seahorse_server_source_load (SeahorsePlace *self,
                               GAsyncReadyCallback callback,
                               gpointer user_data)
 {
-	g_return_if_reached ();
+    g_return_if_reached ();
 }
 
 static gboolean
@@ -138,7 +134,7 @@ seahorse_server_source_load_finish (SeahorsePlace *self,
                                      GAsyncResult *res,
                                      GError **error)
 {
-	g_return_val_if_reached (FALSE);
+    g_return_val_if_reached (FALSE);
 }
 
 static gchar *
@@ -148,7 +144,7 @@ seahorse_server_source_get_label (SeahorsePlace* self)
     SeahorseServerSourcePrivate *priv =
         seahorse_server_source_get_instance_private (ssrc);
 
-	return g_strdup (priv->server);
+    return g_strdup (priv->server);
 }
 
 static void
@@ -163,7 +159,7 @@ seahorse_server_source_get_description (SeahorsePlace* self)
     SeahorseServerSourcePrivate *priv =
         seahorse_server_source_get_instance_private (ssrc);
 
-	return g_strdup (priv->uri);
+    return g_strdup (priv->uri);
 }
 
 static gchar *
@@ -173,13 +169,7 @@ seahorse_server_source_get_uri (SeahorsePlace* self)
     SeahorseServerSourcePrivate *priv =
         seahorse_server_source_get_instance_private (ssrc);
 
-	return g_strdup (priv->uri);
-}
-
-static GIcon *
-seahorse_server_source_get_icon (SeahorsePlace* self)
-{
-	return g_themed_icon_new (NULL);
+    return g_strdup (priv->uri);
 }
 
 static SeahorsePlaceCategory
@@ -206,12 +196,6 @@ seahorse_server_source_get_menu_model (SeahorsePlace* self)
     return NULL;
 }
 
-static gboolean
-seahorse_server_source_get_show_if_empty (SeahorsePlace *place)
-{
-    return TRUE;
-}
-
 static void
 seahorse_server_source_place_iface (SeahorsePlaceIface *iface)
 {
@@ -221,12 +205,10 @@ seahorse_server_source_place_iface (SeahorsePlaceIface *iface)
     iface->get_action_prefix = seahorse_server_source_get_action_prefix;
     iface->get_menu_model = seahorse_server_source_get_menu_model;
     iface->get_description = seahorse_server_source_get_description;
-    iface->get_icon = seahorse_server_source_get_icon;
     iface->get_category = seahorse_server_source_get_category;
     iface->get_label = seahorse_server_source_get_label;
     iface->set_label = seahorse_server_source_set_label;
     iface->get_uri = seahorse_server_source_get_uri;
-    iface->get_show_if_empty = seahorse_server_source_get_show_if_empty;
 }
 
 static void
@@ -258,21 +240,18 @@ seahorse_server_get_property (GObject *obj,
                               GValue *value,
                               GParamSpec *pspec)
 {
-	SeahorseServerSource *self = SEAHORSE_SERVER_SOURCE (obj);
-	SeahorsePlace *place = SEAHORSE_PLACE (self);
+    SeahorseServerSource *self = SEAHORSE_SERVER_SOURCE (obj);
+    SeahorsePlace *place = SEAHORSE_PLACE (self);
 
-	switch (prop_id) {
-	case PROP_LABEL:
-		g_value_take_string (value, seahorse_server_source_get_label (place));
-		break;
-	case PROP_DESCRIPTION:
-		g_value_take_string (value, seahorse_server_source_get_description (place));
-		break;
-	case PROP_URI:
-		g_value_take_string (value, seahorse_server_source_get_uri (place));
-		break;
-    case PROP_ICON:
-        g_value_take_object (value, seahorse_server_source_get_icon (place));
+    switch (prop_id) {
+    case PROP_LABEL:
+        g_value_take_string (value, seahorse_server_source_get_label (place));
+        break;
+    case PROP_DESCRIPTION:
+        g_value_take_string (value, seahorse_server_source_get_description (place));
+        break;
+    case PROP_URI:
+        g_value_take_string (value, seahorse_server_source_get_uri (place));
         break;
     case PROP_CATEGORY:
         g_value_set_enum (value, seahorse_server_source_get_category (place));
@@ -286,57 +265,56 @@ seahorse_server_get_property (GObject *obj,
     case PROP_MENU_MODEL:
         g_value_set_object (value, seahorse_server_source_get_menu_model (place));
         break;
-    case PROP_SHOW_IF_EMPTY:
-        g_value_set_boolean (value, TRUE);
-        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
         break;
     }
 }
 
-static guint
-seahorse_server_source_get_length (GcrCollection *collection)
+static unsigned int
+seahorse_server_source_get_n_items (GListModel *list)
 {
-	return 0;
+    return 0;
 }
 
-static GList *
-seahorse_server_source_get_objects (GcrCollection *collection)
+static void *
+seahorse_server_source_get_item (GListModel *list,
+                                 unsigned int pos)
 {
-	return NULL;
+    return NULL;
 }
 
-static gboolean
-seahorse_server_source_contains (GcrCollection *collection,
-                                 GObject *object)
+static GType
+seahorse_server_source_get_item_type (GListModel *list)
 {
-	return FALSE;
+    return G_TYPE_OBJECT;
 }
 
 static void
-seahorse_server_source_collection_init (GcrCollectionIface *iface)
+seahorse_server_source_list_model_init (GListModelInterface *iface)
 {
-	/* This is implemented because SeahorseSource requires it */
-	iface->get_length = seahorse_server_source_get_length;
-	iface->get_objects = seahorse_server_source_get_objects;
-	iface->contains = seahorse_server_source_contains;
+    /* This is implemented because SeahorseSource requires it */
+    iface->get_n_items = seahorse_server_source_get_n_items;
+    iface->get_item = seahorse_server_source_get_item;
+    iface->get_item_type = seahorse_server_source_get_item_type;
 }
 
 void
 seahorse_server_source_search_async (SeahorseServerSource *self,
-                                     const gchar *match,
-                                     GcrSimpleCollection *results,
-                                     GCancellable *cancellable,
-                                     GAsyncReadyCallback callback,
-                                     gpointer user_data)
+                                     const char           *match,
+                                     GListStore           *results,
+                                     GCancellable         *cancellable,
+                                     GAsyncReadyCallback   callback,
+                                     gpointer              user_data)
 {
-	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (self));
-	g_return_if_fail (match != NULL);
-	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-	g_return_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_async);
-	SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_async (self, match, results,
-	                                                       cancellable, callback, user_data);
+    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (self));
+    g_return_if_fail (match != NULL);
+    g_return_if_fail (G_IS_LIST_STORE (results));
+    g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+    g_return_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_async);
+
+    SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_async (self, match, results,
+                                                           cancellable, callback, user_data);
 }
 
 gboolean
@@ -344,47 +322,45 @@ seahorse_server_source_search_finish (SeahorseServerSource *self,
                                       GAsyncResult *result,
                                       GError **error)
 {
-	g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (self), FALSE);
-	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-	g_return_val_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_finish, FALSE);
-	return SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_finish (self, result, error);
+    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (self), FALSE);
+    g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+    g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+    g_return_val_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_finish, FALSE);
+
+    return SEAHORSE_SERVER_SOURCE_GET_CLASS (self)->search_finish (self, result, error);
 }
 
 void
 seahorse_server_source_export_async (SeahorseServerSource *self,
-                                     const gchar **keyids,
+                                     const char **keyids,
                                      GCancellable *cancellable,
                                      GAsyncReadyCallback callback,
                                      gpointer user_data)
 {
-	SeahorseServerSourceClass *klass;
+    SeahorseServerSourceClass *klass;
 
-	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (self));
-	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (self));
+    g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
 
-	klass = SEAHORSE_SERVER_SOURCE_GET_CLASS (self);
-	g_return_if_fail (klass->export_async);
-	(klass->export_async) (self, keyids, cancellable, callback, user_data);
+    klass = SEAHORSE_SERVER_SOURCE_GET_CLASS (self);
+    g_return_if_fail (klass->export_async);
+    (klass->export_async) (self, keyids, cancellable, callback, user_data);
 }
 
-gpointer
+GBytes *
 seahorse_server_source_export_finish (SeahorseServerSource *self,
                                       GAsyncResult *result,
-                                      gsize *size,
                                       GError **error)
 {
-	SeahorseServerSourceClass *klass;
+    SeahorseServerSourceClass *klass;
 
-	g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (self), NULL);
-	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-	g_return_val_if_fail (size != NULL, NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (self), NULL);
+    g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+    g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	klass = SEAHORSE_SERVER_SOURCE_GET_CLASS (self);
-	g_return_val_if_fail (klass->export_async != NULL, NULL);
-	g_return_val_if_fail (klass->export_finish != NULL, NULL);
-	return (klass->export_finish) (self, result, size, error);
+    klass = SEAHORSE_SERVER_SOURCE_GET_CLASS (self);
+    g_return_val_if_fail (klass->export_finish != NULL, NULL);
+    return (klass->export_finish) (self, result, error);
 }
 
 void
@@ -394,12 +370,12 @@ seahorse_server_source_import_async (SeahorseServerSource *source,
                                      GAsyncReadyCallback callback,
                                      gpointer user_data)
 {
-	g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (source));
-	g_return_if_fail (G_IS_INPUT_STREAM (input));
-	g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
-	g_return_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_async);
-	SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_async (source, input, cancellable,
-	                                                         callback, user_data);
+    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (source));
+    g_return_if_fail (G_IS_INPUT_STREAM (input));
+    g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
+    g_return_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_async);
+    SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_async (source, input, cancellable,
+                                                             callback, user_data);
 }
 
 GList *
@@ -407,9 +383,9 @@ seahorse_server_source_import_finish (SeahorseServerSource *source,
                                       GAsyncResult *result,
                                       GError **error)
 {
-	g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (source), NULL);
-	g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-	g_return_val_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_finish, NULL);
-	return SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_finish (source, result, error);
+    g_return_val_if_fail (SEAHORSE_IS_SERVER_SOURCE (source), NULL);
+    g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+    g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+    g_return_val_if_fail (SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_finish, NULL);
+    return SEAHORSE_SERVER_SOURCE_GET_CLASS (source)->import_finish (source, result, error);
 }

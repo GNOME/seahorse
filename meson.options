@@ -1,0 +1,60 @@
+option('help',
+  type: 'boolean',
+  value: true,
+  description: 'Build help',
+)
+
+option('profile',
+  type: 'combo',
+  choices: [ 'default', 'development' ],
+  value: 'default',
+  description: 'Indicate whether this is a nightly build (used for CI purposes)',
+)
+
+option('pgp-support',
+  type: 'boolean',
+  value: true,
+  description: 'Add support PGP keys',
+)
+
+option('check-compatible-gpg',
+  type: 'boolean',
+  value: true,
+  description: 'Perform a rudimentary check if the GPG and GPG versions are compatible',
+)
+
+option('pkcs11-support',
+  type: 'boolean',
+  value: true,
+  description: 'Add support for PKCS#11 objects',
+)
+
+option('keyservers-support',
+  type: 'boolean',
+  value: true,
+  description: 'Add support for keyservers',
+)
+
+option('hkp-support',
+  type: 'boolean',
+  value: true,
+  description: 'Add support for keyservers using HKP',
+)
+
+option('ldap-support',
+  type: 'boolean',
+  value: true,
+  description: 'Add support for keyservers using LDAP',
+)
+
+option('key-sharing',
+  type: 'boolean',
+  value: false,
+  description: 'Add support for DNS-SD key sharing',
+)
+
+option('manpage',
+  type: 'boolean',
+  value: false,
+  description: 'Build and install the manpage (requires xsltproc)',
+)

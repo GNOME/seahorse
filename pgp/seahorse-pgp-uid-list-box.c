@@ -33,9 +33,11 @@
 /* ListBox object */
 
 struct _SeahorsePgpUidListBox {
-    GtkListBox parent_instance;
+    AdwPreferencesGroup parent_instance;
 
     SeahorsePgpKey *key;
+
+    GPtrArray *rows;
 };
 
 enum {
@@ -45,39 +47,108 @@ enum {
 };
 static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
-G_DEFINE_TYPE (SeahorsePgpUidListBox, seahorse_pgp_uid_list_box, GTK_TYPE_LIST_BOX);
+G_DEFINE_TYPE (SeahorsePgpUidListBox, seahorse_pgp_uid_list_box, ADW_TYPE_PREFERENCES_GROUP);
 
-static GtkWidget *
-create_row_for_uid (void *item, void *user_data)
+static void
+on_add_uid_clicked (GtkButton *button, void *user_data)
 {
-    g_return_val_if_fail (SEAHORSE_PGP_IS_UID (item), NULL);
+    SeahorsePgpUidListBox *self = SEAHORSE_PGP_UID_LIST_BOX (user_data);
+    GtkRoot *root;
 
-    return g_object_new (SEAHORSE_PGP_TYPE_UID_LIST_BOX_ROW,
-                         "uid", SEAHORSE_PGP_UID (item),
-                         NULL);
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
+
+    root = gtk_widget_get_root (GTK_WIDGET (button));
+    seahorse_gpgme_add_uid_run_dialog (SEAHORSE_GPGME_KEY (self->key),
+                                       GTK_WINDOW (root));
+}
+
+static void
+on_key_uids_changed (GListModel *uids,
+                     unsigned int position,
+                     unsigned int removed,
+                     unsigned int added,
+                     void *user_data)
+{
+    SeahorsePgpUidListBox *self = SEAHORSE_PGP_UID_LIST_BOX (user_data);
+
+    for (unsigned int i = position; i < position + removed; i++) {
+        GtkWidget *row = g_ptr_array_index (self->rows, position);
+
+        adw_preferences_group_remove (ADW_PREFERENCES_GROUP (self),
+                                      row);
+        g_ptr_array_remove_index (self->rows, position);
+    }
+
+    for (unsigned int i = position; i < position + added; i++) {
+        GtkWidget *row;
+        g_autoptr(SeahorsePgpUid) uid = NULL;
+
+        uid = g_list_model_get_item (uids, i);
+        row = g_object_new (SEAHORSE_PGP_TYPE_UID_LIST_BOX_ROW,
+                            "uid", uid,
+                            NULL);
+        g_ptr_array_insert (self->rows, i, row);
+        adw_preferences_group_add (ADW_PREFERENCES_GROUP (self),
+                                   row);
+    }
 }
 
 static void
 seahorse_pgp_uid_list_box_constructed (GObject *object)
 {
     SeahorsePgpUidListBox *self = SEAHORSE_PGP_UID_LIST_BOX (object);
+    GListModel *uids;
+    SeahorseUsage usage;
 
     G_OBJECT_CLASS (seahorse_pgp_uid_list_box_parent_class)->constructed (object);
 
-    gtk_list_box_bind_model (GTK_LIST_BOX (self),
-                             seahorse_pgp_key_get_uids (self->key),
-                             create_row_for_uid,
+    /* Setup the rows for each uid */
+    uids = seahorse_pgp_key_get_uids (self->key);
+    g_signal_connect_object (uids,
+                             "items-changed",
+                             G_CALLBACK (on_key_uids_changed),
                              self,
-                             NULL);
+                             0);
+    on_key_uids_changed (uids, 0, 0, g_list_model_get_n_items (uids), self);
+
+    /* If applicable, add a button to add a new uid too */
+    usage = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
+    if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
+        GtkWidget *button_content;
+        GtkWidget *button;
+
+        button_content = adw_button_content_new ();
+        adw_button_content_set_icon_name (ADW_BUTTON_CONTENT (button_content),
+                                          "list-add-symbolic");
+        adw_button_content_set_label (ADW_BUTTON_CONTENT (button_content),
+                                      _("Add user ID"));
+
+        button = gtk_button_new ();
+        gtk_button_set_child (GTK_BUTTON (button), button_content);
+        gtk_widget_add_css_class (button, "flat");
+        g_signal_connect (button, "clicked", G_CALLBACK (on_add_uid_clicked), self);
+        adw_preferences_group_set_header_suffix (ADW_PREFERENCES_GROUP (self),
+                                                 button);
+    }
 }
 
 static void
 seahorse_pgp_uid_list_box_init (SeahorsePgpUidListBox *self)
 {
-    GtkStyleContext *style_context;
+    self->rows = g_ptr_array_new ();
 
-    style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-    gtk_style_context_add_class (style_context, "content");
+    adw_preferences_group_set_title (ADW_PREFERENCES_GROUP (self), _("User IDs"));
+}
+
+static void
+seahorse_pgp_uid_list_box_finalize (GObject *obj)
+{
+    SeahorsePgpUidListBox *self = SEAHORSE_PGP_UID_LIST_BOX (obj);
+
+    g_clear_pointer (&self->rows, g_ptr_array_unref);
+    g_clear_object (&self->key);
+
+    G_OBJECT_CLASS (seahorse_pgp_uid_list_box_parent_class)->finalize (obj);
 }
 
 static void
@@ -107,7 +178,7 @@ seahorse_pgp_uid_list_box_set_property (GObject      *object,
 
     switch (prop_id) {
     case PROP_KEY:
-        self->key = g_value_get_object (value);
+        g_set_object (&self->key, g_value_get_object (value));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -122,6 +193,7 @@ seahorse_pgp_uid_list_box_class_init (SeahorsePgpUidListBoxClass *klass)
     gobject_class->set_property = seahorse_pgp_uid_list_box_set_property;
     gobject_class->get_property = seahorse_pgp_uid_list_box_get_property;
     gobject_class->constructed = seahorse_pgp_uid_list_box_constructed;
+    gobject_class->finalize = seahorse_pgp_uid_list_box_finalize;
 
     obj_props[PROP_KEY] =
         g_param_spec_object ("key", "PGP key", "The key to list the UIDs for",
@@ -147,14 +219,13 @@ seahorse_pgp_uid_list_box_new (SeahorsePgpKey *key)
     /* XXX We should store the key and connect to ::notify */
     return g_object_new (SEAHORSE_PGP_TYPE_UID_LIST_BOX,
                          "key", key,
-                         "selection-mode", GTK_SELECTION_NONE,
                          NULL);
 }
 
 /* Row object */
 
 struct _SeahorsePgpUidListBoxRow {
-    HdyExpanderRow parent_instance;
+    AdwExpanderRow parent_instance;
 
     SeahorsePgpUid *uid;
 
@@ -172,7 +243,7 @@ enum {
     ROW_N_PROPS
 };
 
-G_DEFINE_TYPE (SeahorsePgpUidListBoxRow, seahorse_pgp_uid_list_box_row, HDY_TYPE_EXPANDER_ROW);
+G_DEFINE_TYPE (SeahorsePgpUidListBoxRow, seahorse_pgp_uid_list_box_row, ADW_TYPE_EXPANDER_ROW);
 
 static void
 update_actions (SeahorsePgpUidListBoxRow *row)
@@ -247,25 +318,47 @@ on_only_trusted_changed (GSimpleAction *action,
 }
 
 static void
+on_uid_delete_finished (GObject *object, GAsyncResult *result, void *user_data)
+{
+    SeahorsePgpUidListBoxRow *row = SEAHORSE_PGP_UID_LIST_BOX_ROW (user_data);
+    g_autoptr(SeahorseDeleteOperation) delete_op = SEAHORSE_DELETE_OPERATION (object);
+    gboolean res;
+    g_autoptr(GError) error = NULL;
+
+    res = seahorse_delete_operation_execute_interactively_finish (delete_op,
+                                                                  result,
+                                                                  &error);
+    if (!res) {
+        GtkWidget *window;
+
+        if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+            g_debug ("UID delete cancelled by user");
+            return;
+        }
+
+        window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (row)));
+        seahorse_util_show_error (window, _("Couldn't Delete User ID"), error->message);
+    }
+}
+
+static void
 on_uid_delete (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpUidListBoxRow *row = SEAHORSE_PGP_UID_LIST_BOX_ROW (user_data);
-    GtkWidget *window;
+    g_autoptr(SeahorseDeleteOperation) delete_op = NULL;
+    GtkWindow *window;
     g_autofree char *message = NULL;
-    gpgme_error_t gerr;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_UID (row->uid));
 
-    window = gtk_widget_get_toplevel (GTK_WIDGET (row));
-    message = g_strdup_printf (_("Are you sure you want to permanently delete the “%s” user ID?"),
-                               seahorse_object_get_label (SEAHORSE_OBJECT (row->uid)));
+    delete_op = seahorse_deletable_create_delete_operation (SEAHORSE_DELETABLE (row->uid));
 
-    if (!seahorse_delete_dialog_prompt (GTK_WINDOW (window), message))
-        return;
-
-    gerr = seahorse_gpgme_key_op_del_uid (SEAHORSE_GPGME_UID (row->uid));
-    if (!GPG_IS_OK (gerr))
-        seahorse_gpgme_handle_error (gerr, _("Couldn’t delete user ID"));
+    window = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (row)));
+    seahorse_delete_operation_execute_interactively (g_object_ref (delete_op),
+                                                     window,
+                                                     NULL,
+                                                     on_uid_delete_finished,
+                                                     row);
 }
 
 static void
@@ -286,13 +379,13 @@ static void
 on_uid_make_primary (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpUidListBoxRow *row = SEAHORSE_PGP_UID_LIST_BOX_ROW (user_data);
-    GtkWidget *toplevel;
+    GtkWindow *toplevel;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_UID (row->uid));
 
     /* Don't pass the row itself as user_data, as that might be destroyed as
      * part of the GListModel shuffle */
-    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (row));
+    toplevel = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (row)));
 
     seahorse_gpgme_key_op_make_primary_async (SEAHORSE_GPGME_UID (row->uid),
                                               NULL,
@@ -309,8 +402,7 @@ on_uid_sign (GSimpleAction *action, GVariant *param, void *user_data)
     g_return_if_fail (SEAHORSE_GPGME_IS_UID (row->uid));
 
     dialog = seahorse_gpgme_sign_dialog_new (SEAHORSE_OBJECT (row->uid));
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+    gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static const GActionEntry UID_ACTION_ENTRIES[] = {
@@ -335,13 +427,11 @@ create_row_for_signature (void *item, void *user_data)
 
     sig_row = gtk_list_box_row_new ();
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-    gtk_widget_show (box);
-    gtk_container_add (GTK_CONTAINER (sig_row), box);
+    gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (sig_row), box);
 
     sig_keyid = seahorse_pgp_signature_get_keyid (signature);
     keyid_label = gtk_label_new (sig_keyid);
-    gtk_widget_show (keyid_label);
-    gtk_box_pack_start (GTK_BOX (box), keyid_label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX (box), keyid_label);
 
     for (GList *l = row->discovered_keys; l; l = g_list_next (l)) {
         if (SEAHORSE_PGP_IS_KEY (l->data)) {
@@ -373,8 +463,7 @@ create_row_for_signature (void *item, void *user_data)
     }
 
     signer_label = gtk_label_new (signer_name);
-    gtk_widget_show (signer_label);
-    gtk_box_pack_start (GTK_BOX (box), signer_label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX (box), signer_label);
 
     return sig_row;
 }
@@ -394,7 +483,7 @@ on_row_expanded (GObject *object,
 
     /* Lazily discover keys by only loading when user actually expands the row
      * (showing the signatures) and not reloading if already done earlier */
-    expanded = hdy_expander_row_get_expanded (HDY_EXPANDER_ROW (row));
+    expanded = adw_expander_row_get_expanded (ADW_EXPANDER_ROW (row));
     if (!expanded || row->discovered_keys)
         return;
 
@@ -445,12 +534,12 @@ update_row (SeahorsePgpUidListBoxRow *row)
     comment = seahorse_pgp_uid_get_comment (row->uid);
     if (comment && *comment)
         g_string_append_printf (title, " (%s)", comment);
-    hdy_preferences_row_set_title (HDY_PREFERENCES_ROW (row), title->str);
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), title->str);
 
     /* Make a linkified version the email as subtitle */
     email = seahorse_pgp_uid_get_email (row->uid);
     if (email && *email)
-        hdy_expander_row_set_subtitle (HDY_EXPANDER_ROW (row), email);
+        adw_expander_row_set_subtitle (ADW_EXPANDER_ROW (row), email);
 
     /* Actions */
     gtk_widget_set_visible (row->actions_button, is_editable);

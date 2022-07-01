@@ -27,6 +27,6 @@
 #define SEAHORSE_GPGME_TYPE_SIGN_DIALOG (seahorse_gpgme_sign_dialog_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorseGpgmeSignDialog, seahorse_gpgme_sign_dialog,
                       SEAHORSE_GPGME, SIGN_DIALOG,
-                      GtkDialog)
+                      GtkApplicationWindow)
 
 SeahorseGpgmeSignDialog*   seahorse_gpgme_sign_dialog_new    (SeahorseObject *to_sign);

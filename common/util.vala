@@ -21,32 +21,23 @@
 
 namespace Seahorse.Util {
 
-	public void show_error (Gtk.Widget? parent,
-	                        string? heading,
-	                        string? message) {
-		Gtk.Window? window = null;
+    public void show_error (Gtk.Widget? parent,
+                            string? heading,
+                            string? message) {
 
-		if (message == null)
-			message = "";
+        if (message == null)
+            message = "";
 
-		if (parent != null) {
-			if (!(parent is Gtk.Window))
-				parent = parent.get_toplevel();
-			if (parent is Gtk.Window)
-				window = (Gtk.Window)parent;
-		}
+        Gtk.Window? window = null;
+        if (parent != null && !(parent is Gtk.Window)) {
+            window = parent.get_root() as Gtk.Window;
+        }
 
-		var dialog = new Gtk.MessageDialog(window, Gtk.DialogFlags.MODAL,
-		                                   Gtk.MessageType.ERROR,
-		                                   Gtk.ButtonsType.CLOSE, "");
-		if (heading == null)
-			dialog.set("text", message);
-		else
-			dialog.set("text", heading, "secondary-text", message);
-
-		dialog.run();
-		dialog.destroy();
-	}
+        var dialog = new Adw.AlertDialog(heading, message);
+        dialog.add_response("close", _("_Close"));
+        dialog.default_response = "close";
+        dialog.present(parent);
+    }
 
     public void toggle_action (GLib.SimpleAction action,
                                GLib.Variant?     variant,

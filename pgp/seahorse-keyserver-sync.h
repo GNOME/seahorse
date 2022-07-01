@@ -27,7 +27,7 @@ G_DECLARE_FINAL_TYPE (SeahorseKeyserverSync, seahorse_keyserver_sync,
                       SEAHORSE, KEYSERVER_SYNC,
                       GtkDialog)
 
-SeahorseKeyserverSync *    seahorse_keyserver_sync_new          (GList     *keys,
-                                                                 GtkWindow *parent);
+SeahorseKeyserverSync *    seahorse_keyserver_sync_new          (GListModel *keys,
+                                                                 GtkWindow  *parent);
 
-void                       seahorse_keyserver_sync_do_sync      (GList *keys);
+void                       seahorse_keyserver_sync_do_sync      (GListModel *keys);

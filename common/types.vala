@@ -63,12 +63,6 @@ public enum Flags {
 
 	[CCode (cname = "SEAHORSE_FLAG_PERSONAL")]
 	PERSONAL =    0x00002000,
-
-	[CCode (cname = "SEAHORSE_FLAG_EXPORTABLE")]
-	EXPORTABLE =  0x00100000,
-
-	[CCode (cname = "SEAHORSE_FLAG_DELETABLE")]
-	DELETABLE =   0x10000000
 }
 
 }

@@ -41,9 +41,9 @@ test_pgp_check_empty_keyring (PgpTestFixture *fixture,
     g_assert_nonnull (keyring);
     g_assert_true (SEAHORSE_IS_GPGME_KEYRING (keyring));
 
-    n_keys = gcr_collection_get_length (GCR_COLLECTION (keyring));
+    n_keys = g_list_model_get_n_items (G_LIST_MODEL (keyring));
     g_assert_cmpint (n_keys, ==, 0);
-    g_assert_null (gcr_collection_get_objects (GCR_COLLECTION (keyring)));
+    g_assert_null (g_list_model_get_item (G_LIST_MODEL (keyring), 0));
 }
 
 static void
