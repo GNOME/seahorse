@@ -26,35 +26,31 @@
  * Please also refer to the man pages of ssh-keygen to know why some
  * some restrictions are added.
  */
-public class Seahorse.Ssh.KeyLengthChooser : Gtk.Stack {
+public class Seahorse.Ssh.KeyLengthChooser : Adw.Bin {
 
     private Gtk.SpinButton spin_button;  // For RSA
-    private Gtk.ComboBoxText combobox;   // For ECDSA
+    private Gtk.DropDown dropdown;   // For ECDSA
     private Gtk.Label not_supported;     // For DSA, ED25519 and unknowns
 
     public Algorithm algorithm { get; set; }
 
     public KeyLengthChooser(Algorithm algo = Algorithm.RSA) {
-        this.visible = true;
+        var stack = new Gtk.Stack();
+        this.child = stack;
 
         // RSA
         var rsa_size_adj = new Gtk.Adjustment(2048, 1024, 8193, 256, 10, 1);
         this.spin_button = new Gtk.SpinButton(rsa_size_adj, 1, 0);
-        add(this.spin_button);
+        stack.add_child(this.spin_button);
 
         // ECDSA
-        this.combobox = new Gtk.ComboBoxText();
-        this.combobox.append_text("256");
-        this.combobox.append_text("384");
-        this.combobox.append_text("521");
-        this.combobox.active = 0;
-        add(this.combobox);
+        this.dropdown = new Gtk.DropDown.from_strings({ "256", "384", "521" });
+        this.dropdown.selected = 0;
+        stack.add_child(this.dropdown);
 
         // DSA, ED25519, and Unknown
         this.not_supported = new Gtk.Label(null);
-        add(this.not_supported);
-
-        show_all();
+        stack.add_child(this.not_supported);
 
         // Now set the initial algorithm
         this.notify["algorithm"].connect(on_algo_changed);
@@ -72,7 +68,8 @@ public class Seahorse.Ssh.KeyLengthChooser : Gtk.Stack {
             case Algorithm.DSA:
                 return 1024;
             case Algorithm.ECDSA:
-                return int.parse(this.combobox.get_active_text());
+                var str = ((Gtk.StringObject) this.dropdown.selected_item).string;
+                return int.parse(str);
             case Algorithm.ED25519:
                 return 256;
             default:
@@ -81,24 +78,26 @@ public class Seahorse.Ssh.KeyLengthChooser : Gtk.Stack {
     }
 
     private void on_algo_changed (GLib.Object src, ParamSpec pspec) {
+        unowned var stack = (Gtk.Stack) this.child;
+
         switch (this.algorithm) {
             case Algorithm.RSA:
-                this.visible_child = this.spin_button;
+                stack.visible_child = this.spin_button;
                 break;
             case Algorithm.ECDSA:
-                this.visible_child = this.combobox;
+                stack.visible_child = this.dropdown;
                 break;
             case Algorithm.DSA:
                 this.not_supported.label = _("1024 bits");
-                this.visible_child = this.not_supported;
+                stack.visible_child = this.not_supported;
                 break;
             case Algorithm.ED25519:
                 this.not_supported.label = _("256 bits");
-                this.visible_child = this.not_supported;
+                stack.visible_child = this.not_supported;
                 break;
             case Algorithm.UNKNOWN:
                 this.not_supported.label = _("Unknown key type!");
-                this.visible_child = this.not_supported;
+                stack.visible_child = this.not_supported;
                 break;
         }
     }

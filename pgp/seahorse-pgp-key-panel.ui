@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="actions_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Change _passphrase</attribute>
+        <attribute name="action">panel.change-password</attribute>
+        <attribute name="hidden-when">action-missing</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Export _public key</attribute>
+        <attribute name="action">panel.export-public</attribute>
+        <attribute name="hidden-when">action-missing</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Export _secret key</attribute>
+        <attribute name="action">panel.export-secret</attribute>
+        <attribute name="hidden-when">action-missing</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <template class="SeahorsePgpKeyPanel" parent="SeahorsePanel">
+    <property name="menu">actions_menu</property>
+    <style>
+      <class name="pgp-key-panel"/>
+    </style>
+
+    <property name="layout-manager">
+      <object class="GtkBoxLayout">
+        <property name="orientation">vertical</property>
+        <property name="spacing">18</property>
+      </object>
+    </property>
+
+    <child>
+      <object class="AdwBanner" id="revoked_banner">
+        <property name="title" translatable="yes">The owner of the key revoked the key. It should no longer be used.</property>
+        <property name="revealed" bind-source="revoked_banner" bind-property="visible" bind-flags="sync-create" />
+        <style>
+          <class name="warning"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwBanner" id="expired_banner">
+        <property name="title">This key expired on (placeholder)</property>
+        <property name="revealed" bind-source="expired_banner" bind-property="visible" bind-flags="sync-create" />
+        <style>
+          <class name="warning"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">18</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">24</property>
+            <child>
+              <object class="AdwBin" id="photos_container">
+                <property name="valign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkGrid">
+                <property name="column_spacing">12</property>
+                <property name="row_spacing">6</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">3</property>
+                    <property name="margin-bottom">12</property>
+                    <child>
+                      <object class="GtkLabel" id="name_label">
+                        <property name="halign">start</property>
+                        <property name="selectable">True</property>
+                        <attributes>
+                          <attribute name="scale" value="1.75"/>
+                        </attributes>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="email_label">
+                        <property name="halign">start</property>
+                        <property name="selectable">True</property>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="row">0</property>
+                      <property name="column">0</property>
+                      <property name="column-span">2</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible" bind-source="comment_label" bind-property="visible" bind-flags="sync-create" />
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Comment</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                    <layout>
+                      <property name="row">1</property>
+                      <property name="column">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="comment_label">
+                    <property name="xalign">0</property>
+                    <property name="selectable">True</property>
+                    <layout>
+                      <property name="row">1</property>
+                      <property name="column">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
+                    <property name="label" translatable="yes">Key ID</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                    <layout>
+                      <property name="row">2</property>
+                      <property name="column">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="keyid_label">
+                    <property name="xalign">0</property>
+                    <property name="selectable">True</property>
+                    <layout>
+                      <property name="row">2</property>
+                      <property name="column">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
+                    <property name="label" translatable="yes">Fingerprint</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                    <layout>
+                      <property name="row">3</property>
+                      <property name="column">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="fingerprint_label">
+                    <property name="xalign">0</property>
+                    <property name="selectable">True</property>
+                    <property name="wrap">True</property>
+                    <property name="wrap-mode">word</property>
+                    <property name="width-chars">24</property>
+                    <property name="max-width-chars">24</property>
+                    <property name="lines">2</property>
+                    <layout>
+                      <property name="row">3</property>
+                      <property name="column">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
+                    <property name="label" translatable="yes">Expires</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                    <layout>
+                      <property name="row">4</property>
+                      <property name="column">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="expires_label">
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="details_expires_button">
+                        <property name="visible" bind-source="details_expires_button" bind-property="sensitive" bind-flags="sync-create" />
+                        <property name="action-name">panel.change-expires</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon_name">x-office-calendar-symbolic</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="row">4</property>
+                      <property name="column">1</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="uids_container">
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="subkeys_container">
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="trust_page">
+            <property name="orientation">vertical</property>
+            <property name="spacing">24</property>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Trust</property>
+                <child>
+                  <object class="AdwSwitchRow" id="trust_marginal_switch">
+                    <property name="title" translatable="yes">Signature trust</property>
+                    <property name="subtitle" translatable="yes">I trust signatures from this key on other keys</property>
+                    <signal name="notify::active" handler="on_trust_marginal_switch_notify_active"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow" id="trust_sign_row">
+                    <property name="title" translatable="yes">Sign key</property>
+                    <child>
+                      <object class="GtkButton" id="sign-button">
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <property name="label" translatable="yes">_Sign key</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">panel.sign-key</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow" id="trust_revoke_row">
+                    <property name="visible">False</property>
+                    <property name="title" translatable="yes">Revoke key signature</property>
+                    <child>
+                      <object class="GtkButton" id="revoke-button">
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <property name="label" translatable="yes">_Revoke</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">panel.revoke-key</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="owner_trust_row">
+                    <property name="title" translatable="yes">Owner trust</property>
+                    <property name="subtitle" translatable="yes">Give a trust level to the owner of this key</property>
+                    <signal name="notify::selected" handler="on_owner_trust_selected_changed"/>
+                    <property name="expression">
+                      <closure type="gchararray" function="pgp_trust_to_string">
+                        <lookup name="value" type="AdwEnumListItem"/>
+                      </closure>
+                    </property>
+                    <property name="model">
+                      <object class="GtkFilterListModel">
+                        <property name="model">
+                          <object class="AdwEnumListModel">
+                            <property name="enum-type">SeahorseValidity</property>
+                          </object>
+                        </property>
+                        <property name="filter">
+                          <object class="GtkCustomFilter" id="owner_trust_filter"/>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

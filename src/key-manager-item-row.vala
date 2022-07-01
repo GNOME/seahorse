@@ -29,21 +29,19 @@ public class Seahorse.KeyManagerItemRow : Gtk.ListBoxRow {
 
     construct {
         var grid = new Gtk.Grid();
-        grid.get_style_context().add_class("seahorse-item-listbox-row");
-        add(grid);
+        grid.add_css_class("seahorse-item-listbox-row");
+        set_child(grid);
 
         GLib.Icon? icon = null;
         object.get("icon", out icon);
         if (icon != null) {
-            var img = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DND);
-            img.margin_end = 12;
-            img.pixel_size = 32;
+            var img = new Gtk.Image.from_gicon(icon);
+            img.pixel_size = 16;
             grid.attach(img, 0, 0, 1, 2);
         }
 
         var markup_label = new Gtk.Label(null);
-        object.bind_property("markup", markup_label, "label", BindingFlags.SYNC_CREATE);
-        markup_label.use_markup = true;
+        object.bind_property("label", markup_label, "label", BindingFlags.SYNC_CREATE);
         markup_label.halign = Gtk.Align.START;
         markup_label.xalign = 0.0f;
         markup_label.hexpand = true;
@@ -54,10 +52,8 @@ public class Seahorse.KeyManagerItemRow : Gtk.ListBoxRow {
         object.bind_property("description", description_label, "label", BindingFlags.SYNC_CREATE);
         description_label.xalign = 1.0f;
         description_label.valign = Gtk.Align.START;
-        description_label.get_style_context().add_class("seahorse-item-listbox-row-description");
+        description_label.add_css_class("seahorse-item-listbox-row-description");
         grid.attach(description_label, 2, 0);
-
-        show_all();
     }
 
     public KeyManagerItemRow(GLib.Object object) {

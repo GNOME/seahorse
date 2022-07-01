@@ -1,315 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkAdjustment" id="adjustment1">
+  <template class="SeahorseGpgmeGenerateDialog" parent="AdwDialog">
+    <property name="title" bind-source="window_title" bind-property="title" bind-flags="sync-create|bidirectional" />
+    <property name="follows-content-size">True</property>
+
+    <child>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-start-title-buttons">False</property>
+            <property name="show-end-title-buttons">False</property>
+
+            <child type="start">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">True</property>
+                <property name="action-name">window.close</property>
+              </object>
+            </child>
+
+            <property name="title-widget">
+              <object class="AdwWindowTitle" id="window_title">
+                <property name="title" translatable="yes">New PGP key</property>
+              </object>
+            </property>
+
+            <child type="end">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">C_reate</property>
+                <property name="use-underline">True</property>
+                <property name="action-name">create-key</property>
+                <property name="tooltip_text" translatable="yes">Generate a new key</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <property name="content">
+          <object class="GtkScrolledWindow">
+            <property name="propagate-natural-height">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <child>
+              <object class="AdwClamp">
+                <child>
+                  <object class="GtkBox" id="container">
+                    <property name="spacing">24</property>
+                    <property name="orientation">vertical</property>
+                    <property name="margin-start">32</property>
+                    <property name="margin-end">32</property>
+                    <property name="margin-top">32</property>
+                    <property name="margin-bottom">32</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
+                        <property name="label" translatable="yes">A PGP key allows you to encrypt email or files to other people.</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup">
+                        <child>
+                          <object class="AdwEntryRow" id="name_row">
+                            <property name="title" translatable="yes" comments="Full name of the key, usually the name of the user.">Full _Name</property>
+                            <property name="use-underline">True</property>
+                            <property name="input-purpose">name</property>
+                            <signal name="changed" handler="on_gpgme_generate_entry_changed"/>
+                            <child type="suffix">
+                              <object class="GtkImage" id="name_row_warning">
+                                <property name="icon-name">dialog-warning-symbolic</property>
+                                <property name="tooltip-text" translatable="yes">Name must be at least 5 characters long.</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwEntryRow" id="email_row">
+                            <property name="title" translatable="yes">_Email Address</property>
+                            <property name="use-underline">True</property>
+                            <property name="input-purpose">email</property>
+                            <signal name="changed" handler="on_gpgme_generate_entry_changed"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup">
+                        <property name="title" translatable="yes">Advanced key options</property>
+                        <child>
+                          <object class="AdwEntryRow" id="comment_row">
+                            <property name="title" translatable="yes">_Comment</property>
+                            <property name="use-underline">True</property>
+                            <signal name="changed" handler="on_gpgme_generate_entry_changed"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwComboRow" id="algorithm_row">
+                            <property name="title" translatable="yes">Encryption _Type</property>
+                            <property name="use-underline">True</property>
+                            <signal name="notify::selected" handler="on_algo_row_notify_selected"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwActionRow" id="bits_row">
+                            <property name="title" translatable="yes">Key _Strength (bits)</property>
+                            <property name="use-underline">True</property>
+                            <child type="suffix">
+                              <object class="GtkSpinButton" id="bits_spin">
+                                <property name="valign">center</property>
+                                <property name="adjustment">bits_spin_adjustment</property>
+                                <property name="climb-rate">1</property>
+                                <property name="numeric">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwActionRow">
+                            <property name="title" translatable="yes">Ne_ver Expires</property>
+                            <property name="use-underline">True</property>
+                            <child type="suffix">
+                              <object class="GtkSwitch" id="expires_switch">
+                                <property name="valign">center</property>
+                                <property name="active">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwActionRow" id="expires_date_row">
+                            <property name="title" translatable="yes">E_xpiration Date</property>
+                            <property name="use-underline">True</property>
+                            <property name="sensitive" bind-source="expires_switch" bind-property="active" bind-flags="bidirectional|sync-create|invert-boolean" />
+                            <child type="suffix">
+                              <object class="SeahorseDatePicker" id="expires_datepicker">
+                                <property name="valign">center</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+  </template>
+
+  <object class="GtkAdjustment" id="bits_spin_adjustment">
     <property name="lower">512</property>
     <property name="upper">8192</property>
     <property name="value">2048</property>
     <property name="step_increment">512</property>
     <property name="page_increment">1</property>
   </object>
-  <object class="GtkListStore" id="model1">
-    <columns>
-      <!-- column-name gchararray -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <template class="SeahorseGpgmeGenerateDialog" parent="GtkDialog">
-    <property name="title" translatable="yes">New PGP key</property>
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <child internal-child="vbox">
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">12</property>
-            <property name="margin">12</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
-                <property name="label" translatable="yes">A PGP key allows you to encrypt email or files to other people.</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="column_spacing">12</property>
-                <property name="row_spacing">6</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes" comments="Full name of the key, usually the name of the user.">Full _Name</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">name_entry</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="top_attach">0</property>
-                    <property name="left_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="name_entry">
-                    <property name="width_request">180</property>
-                    <property name="visible">True</property>
-                    <property name="input-purpose">name</property>
-                    <property name="activates_default">True</property>
-                    <signal name="changed" handler="on_gpgme_generate_entry_changed" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">0</property>
-                    <property name="left_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="email_label">
-                    <property name="visible">True</property>
-                    <property name="halign">end</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Email Address</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">email_entry</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="left_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="email_entry">
-                    <property name="width_request">180</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="input-purpose">email</property>
-                    <property name="activates_default">True</property>
-                    <signal name="changed" handler="on_gpgme_generate_entry_changed" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="left_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="margin_top">18</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Advanced key options</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="left_attach">0</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="halign">end</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Comment</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">comment_entry</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="top_attach">3</property>
-                    <property name="left_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="comment_entry">
-                    <property name="width_request">180</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="invisible_char">●</property>
-                    <property name="activates_default">True</property>
-                    <signal name="changed" handler="on_gpgme_generate_entry_changed" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">3</property>
-                    <property name="left_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label49">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Encryption _Type</property>
-                    <property name="use_underline">True</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="top_attach">4</property>
-                    <property name="left_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="algorithm_choice">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="entry_text_column">0</property>
-                    <property name="id_column">1</property>
-                    <signal name="changed" handler="on_gpgme_generate_algorithm_changed" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">4</property>
-                    <property name="left_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label50">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Key _Strength (bits)</property>
-                    <property name="use_underline">True</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="top_attach">5</property>
-                    <property name="left_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="bits_entry">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="halign">start</property>
-                    <property name="adjustment">adjustment1</property>
-                    <property name="climb_rate">1</property>
-                    <property name="numeric">True</property>
-                  </object>
-                  <packing>
-                    <property name="top_attach">5</property>
-                    <property name="left_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">E_xpiration Date</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic-widget">expires_datepicker</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="top_attach">6</property>
-                    <property name="left_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="can_focus">False</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="SeahorseDatePicker" id="expires_datepicker">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="expires_check">
-                        <property name="label" translatable="yes">Ne_ver Expires</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <signal name="toggled" handler="on_gpgme_generate_expires_toggled" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="pack_type">end</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="top_attach">6</property>
-                    <property name="left_attach">1</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child type="action">
-      <object class="GtkButton" id="cancelbutton1">
-        <property name="label" translatable="yes">_Cancel</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="can_default">True</property>
-        <property name="receives_default">False</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child type="action">
-      <object class="GtkButton" id="ok">
-        <property name="label" translatable="yes">C_reate</property>
-        <property name="visible">True</property>
-        <property name="sensitive">False</property>
-        <property name="can_focus">True</property>
-        <property name="can_default">True</property>
-        <property name="has_default">True</property>
-        <property name="receives_default">False</property>
-        <property name="tooltip_text" translatable="yes">Generate a new key</property>
-        <property name="use_underline">True</property>
-        <style>
-          <class name="suggested-action"/>
-        </style>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="-6">cancelbutton1</action-widget>
-      <action-widget response="-5" default="true">ok</action-widget>
-    </action-widgets>
-  </template>
 </interface>

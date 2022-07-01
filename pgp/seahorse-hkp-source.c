@@ -328,7 +328,7 @@ seahorse_hkp_parse_lookup_response (const char *response)
             }
 
             /* set flags (optional) */
-            flags = SEAHORSE_FLAG_EXPORTABLE;
+            flags = 0;
             if (columns[6])
                 flags |= parse_hkp_flags (columns[6]);
 
@@ -480,7 +480,7 @@ typedef struct {
     SoupMessage *message;
     GString *response;
     int requests;
-    GcrSimpleCollection *results;
+    GListStore *results;
 } SearchClosure;
 
 static void
@@ -522,7 +522,7 @@ on_search_message_complete (GObject *object,
     keys = seahorse_hkp_parse_lookup_response (closure->response->str);
     for (GList *l = keys; l; l = g_list_next (l)) {
         g_object_set (l->data, "place", closure->source, NULL);
-        gcr_simple_collection_add (closure->results, l->data);
+        g_list_store_append (closure->results, l->data);
     }
     g_task_return_boolean (task, TRUE);
 }
@@ -547,7 +547,7 @@ is_hex_keyid (const char *match)
 static void
 seahorse_hkp_source_search_async (SeahorseServerSource *source,
                                   const char           *match,
-                                  GcrSimpleCollection  *results,
+                                  GListStore           *results,
                                   GCancellable         *cancellable,
                                   GAsyncReadyCallback   callback,
                                   void                 *user_data)
@@ -761,7 +761,6 @@ seahorse_hkp_source_import_finish (SeahorseServerSource *source,
 typedef struct {
     SeahorseHKPSource *source;
     GString *data;
-    gsize data_len;
     SoupSession *session;
     SoupMessage *message;
     int requests;
@@ -817,10 +816,12 @@ on_export_message_complete (GObject *object,
     closure->requests--;
 
     if (closure->requests == 0) {
-        closure->data_len = closure->data->len;
+        g_autoptr(GBytes) result = NULL;
+
+        result = g_string_free_to_bytes (g_steal_pointer (&closure->data));
         g_task_return_pointer (task,
-                               g_string_free (g_steal_pointer (&closure->data), FALSE),
-                               g_free);
+                               g_steal_pointer (&result),
+                               (GDestroyNotify) g_bytes_unref);
     }
 }
 
@@ -891,19 +892,13 @@ seahorse_hkp_source_export_async (SeahorseServerSource *source,
                                closure->session, NULL);
 }
 
-static void *
+static GBytes *
 seahorse_hkp_source_export_finish (SeahorseServerSource *source,
                                    GAsyncResult *result,
-                                   gsize *size,
                                    GError **error)
 {
-    ExportClosure *closure;
-
-    g_return_val_if_fail (size != NULL, NULL);
     g_return_val_if_fail (g_task_is_valid (result, source), NULL);
 
-    closure = g_task_get_task_data (G_TASK (result));
-    *size = closure->data_len;
     return g_task_propagate_pointer (G_TASK (result), error);
 }
 

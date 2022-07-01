@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="SeahorsePkcs11Generate" parent="GtkApplicationWindow">
+    <property name="title" bind-source="window_title" bind-property="title" bind-flags="sync-create|bidirectional" />
+
+    <child>
+      <object class='GtkShortcutController'>
+        <child>
+          <object class='GtkShortcut'>
+            <property name='trigger'>Escape</property>
+            <property name='action'>action(window.close)</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="show-title-buttons">False</property>
+
+        <child>
+          <object class="GtkButton">
+            <property name="label" translatable="yes">_Cancel</property>
+            <property name="use-underline">True</property>
+            <property name="action-name">window.close</property>
+          </object>
+        </child>
+
+        <property name="title-widget">
+          <object class="AdwWindowTitle" id="window_title">
+            <property name="title" translatable="yes">New Private Key</property>
+          </object>
+        </property>
+
+        <child type="end">
+          <object class="GtkButton">
+            <property name="label" translatable="yes">C_reate</property>
+            <property name="use-underline">True</property>
+            <property name="action-name">create</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwPreferencesPage">
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">Create a new private key</property>
+            <child>
+              <object class="AdwEntryRow" id="label_row">
+                <property name="title" translatable="yes">Label</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwComboRow" id="token_row">
+                <property name="title" translatable="yes">Stored at</property>
+                <property name="expression">
+                  <lookup type="SeahorsePkcs11Token" name="label"/>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow">
+                <property name="title" translatable="yes">Stored at</property>
+                <property name="visible" bind-source="token_row" bind-property="visible" bind-flags="sync-create|invert-boolean"/>
+                <child type="suffix">
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">No writable tokens found</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">Advanced key options</property>
+            <child>
+              <object class="AdwComboRow" id="mechanism_row">
+                <property name="title" translatable="yes">Key _type</property>
+                <property name="use-underline">True</property>
+                <signal name="notify::selected" handler="on_mechanism_selected"/>
+                <property name="model">
+                  <object class="GtkSortListModel">
+                    <property name="model">
+                      <object class="GListStore" id="mechanism_items">
+                        <property name="item-type">SeahorsePkcs11GenerateMechanismListItem</property>
+                      </object>
+                    </property>
+                    <property name="sorter">
+                      <object class="GtkStringSorter"/>
+                    </property>
+                  </object>
+                </property>
+                <property name="expression">
+                  <lookup name="label" type="SeahorsePkcs11GenerateMechanismListItem"/>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwSpinRow" id="key_size_row">
+                <property name="title" translatable="yes">Key _size</property>
+                <property name="subtitle" translatable="yes">In bits</property>
+                <property name="use-underline">True</property>
+                <property name="adjustment">key_size_row_adjustment</property>
+                <property name="climb-rate">64</property>
+                <property name="numeric">True</property>
+                <property name="value">2048</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <object class="GtkAdjustment" id="key_size_row_adjustment">
+      <property name="lower">0</property>
+      <property name="upper">2147483647</property>
+      <property name="step-increment">128</property>
+      <property name="page-increment">128</property>
+    </object>
+  </template>
+</interface>

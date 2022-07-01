@@ -29,17 +29,18 @@
 
 #include <glib/gi18n.h>
 
+typedef struct _SeahorsePgpSignaturePrivate {
+    guint flags;
+    char *keyid;
+} SeahorsePgpSignaturePrivate;
+
 enum {
     PROP_0,
     PROP_KEYID,
     PROP_FLAGS,
-    PROP_SIGTYPE
+    PROP_SIGTYPE,
+    N_PROPS
 };
-
-typedef struct _SeahorsePgpSignaturePrivate {
-    guint flags;
-    gchar *keyid;
-} SeahorsePgpSignaturePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (SeahorsePgpSignature, seahorse_pgp_signature, G_TYPE_OBJECT);
 
@@ -139,6 +140,8 @@ seahorse_pgp_signature_get_property (GObject *object, guint prop_id,
     case PROP_SIGTYPE:
         g_value_set_uint (value, seahorse_pgp_signature_get_sigtype (self));
         break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 

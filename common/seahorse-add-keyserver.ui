@@ -1,141 +1,72 @@
 <?xml version="1.0"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
-  <object class="GtkListStore" id="model1">
-    <columns>
-      <!-- column-name gchararray -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">initial temporary item</col>
-      </row>
-    </data>
-  </object>
-  <!-- <object class="GtkDialog" id=""> -->
-  <!--   <child internal-child="vbox"> -->
-      <object class="GtkBox" id="add-keyserver">
-        <property name="visible">True</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+  <template class="SeahorseAddKeyserverDialog" parent="GtkApplicationWindow">
+    <property name="default-width">400</property>
+    <property name="modal">True</property>
+
+    <child>
+      <object class='GtkShortcutController'>
         <child>
-          <object class="GtkTable">
-            <property name="visible">True</property>
-            <property name="border_width">5</property>
-            <property name="n_rows">2</property>
-            <property name="n_columns">2</property>
-            <property name="column_spacing">12</property>
-            <property name="row_spacing">6</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Key Server Type:</property>
-              </object>
-              <packing>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="keyserver-type">
-                <property name="visible">True</property>
-                <property name="id_column">1</property>
-                <property name="entry_text_column">0</property>
-                <signal name="changed" handler="on_prefs_add_keyserver_uri_changed"/>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Host:</property>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="orientation">horizontal</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkEntry" id="keyserver-host">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="has_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">The host name or address of the server.</property>
-                    <property name="activates_default">True</property>
-                    <signal name="changed" handler="on_prefs_add_keyserver_uri_changed"/>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="port-block">
-                    <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">:</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="keyserver-port">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">The port to access the server on.</property>
-                        <property name="activates_default">True</property>
-                        <property name="width_chars">5</property>
-                        <signal name="changed" handler="on_prefs_add_keyserver_uri_changed"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
-              </packing>
-            </child>
+          <object class='GtkShortcut'>
+            <property name='trigger'>Escape</property>
+            <property name='action'>action(window.close)</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-    <!-- </child> -->
-  <!-- </object> -->
+    </child>
+
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <child>
+          <object class="GtkButton">
+            <property name="label" translatable="yes">_Cancel</property>
+            <property name="use-underline">True</property>
+            <property name="action-name">window.close</property>
+          </object>
+        </child>
+
+        <property name="title-widget">
+          <object class="AdwWindowTitle">
+            <property name="title" translatable="yes">Add Key Server</property>
+          </object>
+        </property>
+
+        <child type="end">
+          <object class="GtkButton">
+            <property name="label" translatable="yes">_Save</property>
+            <property name="use-underline">True</property>
+            <property name="action-name">window.save</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwPreferencesPage">
+        <child>
+          <object class="AdwPreferencesGroup">
+            <child>
+              <object class="AdwComboRow" id="type_row">
+                <property name="title" translatable="yes">Key Server Type</property>
+                <property name="model">
+                  <object class="GtkStringList" id="types_model">
+                    <items>
+                    </items>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwEntryRow" id="url_row">
+                <property name="title" translatable="yes">URL</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
 </interface>

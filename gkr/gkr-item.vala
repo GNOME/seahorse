@@ -63,20 +63,20 @@ public class Item : Secret.Item, Deletable, Viewable {
     }
 
     public Flags object_flags {
-        get { return Flags.DELETABLE | Flags.PERSONAL; }
+        get { return Flags.PERSONAL; }
     }
 
     public GLib.Icon icon {
         owned get {
             ensure_item_info();
-            return this._info.icon ?? new GLib.ThemedIcon (ICON_PASSWORD);
+            return this._info.icon ?? new GLib.ThemedIcon("secret-item-symbolic");
         }
     }
 
     public new string label {
         owned get {
             ensure_item_info ();
-            return this._info.label;
+            return this._info.label ?? "";
         }
     }
 
@@ -129,12 +129,12 @@ public class Item : Secret.Item, Deletable, Viewable {
         base.dispose();
     }
 
-    public Deleter create_deleter() {
-        return new ItemDeleter(this);
+    public DeleteOperation create_delete_operation() {
+        return new Gkr.ItemDeleteOperation(this);
     }
 
-    public Gtk.Window? create_viewer(Gtk.Window? parent) {
-        return new ItemProperties(this, parent);
+    public Seahorse.Panel create_panel() {
+        return new ItemPanel(this);
     }
 
     private void ensure_item_info() {
@@ -248,7 +248,7 @@ public class Item : Secret.Item, Deletable, Viewable {
         return true;
     }
 
-    public async void copy_secret_to_clipboard(Gtk.Clipboard clipboard) throws GLib.Error {
+    public async void copy_secret_to_clipboard(Gdk.Clipboard clipboard) throws GLib.Error {
         if (this._item_secret == null)
             yield load_item_secret();
 
@@ -261,7 +261,7 @@ public class Item : Secret.Item, Deletable, Viewable {
         if (password == null)
             return;
 
-        clipboard.set_text(password, -1);
+        clipboard.set_text(password);
         debug("Succesfully copied secret to clipboard");
     }
 }
@@ -334,44 +334,4 @@ private unowned string map_item_type_to_specific(string? item_type,
 
     return item_type;
 }
-
-class ItemDeleter : Deleter {
-    private GLib.List<Item> _items;
-
-    public override Gtk.Dialog create_confirm(Gtk.Window? parent) {
-        var num = this._items.length();
-        if (num == 1) {
-            var label = ((Secret.Item)_items.data).label;
-            return new DeleteDialog(parent, _("Are you sure you want to delete the password “%s”?"), label);
-        } else {
-            return new DeleteDialog(parent, ngettext("Are you sure you want to delete %d password?",
-                                                     "Are you sure you want to delete %d passwords?", num), num);
-        }
-    }
-
-    public ItemDeleter(Item item) {
-        if (!add_object(item))
-            assert_not_reached();
-    }
-
-    public override unowned GLib.List<GLib.Object> get_objects() {
-        return this._items;
-    }
-
-    public override bool add_object (GLib.Object obj) {
-        if (obj is Item) {
-            this._items.append((Item)obj);
-            return true;
-        }
-        return false;
-    }
-
-    public override async bool delete(GLib.Cancellable? cancellable) throws GLib.Error {
-        var items = _items.copy();
-        foreach (var item in items)
-            yield item.delete(cancellable);
-        return true;
-    }
-}
-
 }

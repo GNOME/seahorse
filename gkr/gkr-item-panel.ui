@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="action_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Delete Secret</attribute>
+        <attribute name="action">panel.delete-secret</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <template class="SeahorseGkrItemPanel" parent="SeahorsePanel">
+    <property name="title" translatable="yes">Item Properties</property>
+    <property name="menu">action_menu</property>
+    <style>
+      <class name="gkr-item-panel"/>
+    </style>
+
+    <property name="layout-manager">
+      <object class="GtkBoxLayout">
+        <property name="orientation">vertical</property>
+        <property name="spacing">18</property>
+      </object>
+    </property>
+
+    <child>
+      <object class="AdwPreferencesGroup">
+        <child>
+          <object class="AdwEntryRow" id="description_field">
+            <property name="title" translatable="yes">Description</property>
+            <property name="show-apply-button">True</property>
+            <signal name="apply" handler="on_description_field_apply"/>
+          </object>
+        </child>
+        <child>
+          <object class="AdwPasswordEntryRow" id="password_row">
+            <property name="title" translatable="yes">Password</property>
+            <property name="show-apply-button">True</property>
+            <signal name="apply" handler="on_password_row_apply"/>
+            <child type="suffix">
+              <object class="GtkButton">
+                <property name="icon-name">edit-copy-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Copy secret to clipboard</property>
+                <property name="action-name">panel.copy-secret</property>
+                <property name="valign">center</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="use_row">
+            <property name="title" translatable="yes" comments="To translators: This is the noun not the verb.">Use</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="type_row">
+            <property name="title" translatable="yes">Type</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="server_row">
+            <property name="title" translatable="yes">Server</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="login_row">
+            <property name="title" translatable="yes">Login</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="created_row">
+            <property name="title" translatable="yes">Created</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="modified_row">
+            <property name="title" translatable="yes">Modified</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup" id="details_group">
+        <property name="title" translatable="yes">Details</property>
+      </object>
+    </child>
+  </template>
+</interface>

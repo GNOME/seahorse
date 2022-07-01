@@ -689,7 +689,7 @@ seahorse_ldap_source_init (SeahorseLDAPSource *self)
 typedef struct {
     char *filter;
     LDAP *ldap;
-    GcrSimpleCollection *results;
+    GListStore *results;
 } SearchClosure;
 
 static void
@@ -718,9 +718,9 @@ static const char *PGP_ATTRIBUTES[] = {
 /* Add a key to the key source from an LDAP entry */
 static void
 search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
-                                  GcrSimpleCollection *results,
-                                  LDAP *ldap,
-                                  LDAPMessage *res)
+                                  GListStore         *results,
+                                  LDAP               *ldap,
+                                  LDAPMessage        *res)
 {
     const char *algo;
     long int timestamp;
@@ -747,7 +747,7 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
         g_autoptr(SeahorsePgpKey) key = NULL;
         g_autofree char *fingerprint = NULL;
         g_autoptr(SeahorsePgpUid) uid = NULL;
-        guint flags;
+        unsigned int flags = 0;
 
         /* Build up a subkey */
         subkey = seahorse_pgp_subkey_new ();
@@ -768,7 +768,6 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
             seahorse_pgp_subkey_set_expires (subkey, expires_date);
         }
 
-        flags = SEAHORSE_FLAG_EXPORTABLE;
         if (revoked)
             flags |= SEAHORSE_FLAG_REVOKED;
         if (disabled)
@@ -791,7 +790,7 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
                       NULL);
 
         seahorse_pgp_key_realize (key);
-        gcr_simple_collection_add (results, G_OBJECT (key));
+        g_list_store_append (results, key);
     }
 }
 
@@ -893,11 +892,11 @@ on_search_connect_completed (GObject *source,
 
 static void
 seahorse_ldap_source_search_async (SeahorseServerSource *source,
-                                   const char *match,
-                                   GcrSimpleCollection *results,
-                                   GCancellable *cancellable,
-                                   GAsyncReadyCallback callback,
-                                   gpointer user_data)
+                                   const char           *match,
+                                   GListStore           *results,
+                                   GCancellable         *cancellable,
+                                   GAsyncReadyCallback   callback,
+                                   void                 *user_data)
 {
     SeahorseLDAPSource *self = SEAHORSE_LDAP_SOURCE (source);
     SearchClosure *closure;
@@ -1270,11 +1269,11 @@ on_export_connect_completed (GObject *source,
 }
 
 static void
-seahorse_ldap_source_export_async (SeahorseServerSource *source,
-                                   const char **keyids,
-                                   GCancellable *cancellable,
-                                   GAsyncReadyCallback callback,
-                                   gpointer user_data)
+seahorse_ldap_source_export_async (SeahorseServerSource  *source,
+                                   const char           **keyids,
+                                   GCancellable          *cancellable,
+                                   GAsyncReadyCallback    callback,
+                                   void                  *user_data)
 {
     SeahorseLDAPSource *self = SEAHORSE_LDAP_SOURCE (source);
     ExportClosure *closure;
@@ -1300,26 +1299,20 @@ seahorse_ldap_source_export_async (SeahorseServerSource *source,
                                         g_steal_pointer (&task));
 }
 
-static gpointer
+static GBytes *
 seahorse_ldap_source_export_finish (SeahorseServerSource *source,
-                                    GAsyncResult *result,
-                                    gsize *size,
-                                    GError **error)
+                                    GAsyncResult         *result,
+                                    GError              **error)
 {
     ExportClosure *closure;
-    gpointer output;
 
-    g_return_val_if_fail (size != NULL, NULL);
     g_return_val_if_fail (g_task_is_valid (result, source), NULL);
 
     if (!g_task_propagate_boolean (G_TASK (result), error))
         return NULL;
 
     closure = g_task_get_task_data (G_TASK (result));
-    *size = closure->data->len;
-    output = g_string_free (closure->data, FALSE);
-    closure->data = NULL;
-    return output;
+    return g_string_free_to_bytes (g_steal_pointer (&closure->data));
 }
 
 /* Initialize the basic class stuff */

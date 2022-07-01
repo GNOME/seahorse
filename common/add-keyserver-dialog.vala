@@ -18,107 +18,82 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-public class Seahorse.AddKeyserverDialog : Gtk.Dialog {
+[GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-add-keyserver.ui")]
+public class Seahorse.AddKeyserverDialog : Gtk.ApplicationWindow {
 
-    private string[]? keyserver_types;
+    [GtkChild] private unowned Adw.ComboRow type_row;
+    // For now we base the model on the string description and keep the schemes
+    // in a synced list of strings. Probably should move this to ServerCategorys
+    private string?[] server_types;
+    [GtkChild] private unowned Gtk.StringList types_model;
 
-    private Gtk.Entry keyserver_host;
-    private Gtk.Entry keyserver_port;
-    private Gtk.ComboBoxText keyserver_type;
-    private Gtk.Box port_block;
+    [GtkChild] private unowned Adw.EntryRow url_row;
+
+    private const GLib.ActionEntry[] action_entries = {
+         { "save", action_save },
+    };
+
+    construct {
+        add_action_entries(action_entries, this);
+
+        string[] types = {};
+        foreach (unowned string type in ServerCategory.get_types())
+            types += type;
+        types += ""; // Special case the "Custom" key server
+        this.server_types = types;
+
+        // The description for the key server types, plus the custom type
+        foreach (string type in this.server_types) {
+            if (type == "") {
+                this.types_model.append(_("Custom"));
+                continue;
+            }
+            unowned var category = ServerCategory.find_category(type);
+            this.types_model.append(category.description);
+        }
+
+        // Connect signals
+        this.type_row.notify["selected"].connect((obj, pspec) => validate_input());
+        this.url_row.changed.connect(() => validate_input());
+    }
 
     public AddKeyserverDialog(Gtk.Window? parent) {
-        GLib.Object(
-            title: _("Add Key Server"),
-            transient_for: parent,
-            modal: true,
-            window_position: Gtk.WindowPosition.CENTER_ON_PARENT,
-            default_width: 400,
-            use_header_bar: 1
-        );
-        this.keyserver_types = ServerCategory.get_types();
-
-        // Load ui
-        Gtk.Builder builder = new Gtk.Builder();
-        try {
-            string path = "/org/gnome/Seahorse/seahorse-add-keyserver.ui";
-            builder.add_from_resource(path);
-        } catch (GLib.Error err) {
-            GLib.critical("%s", err.message);
-        }
-        Gtk.Box content = (Gtk.Box) builder.get_object("add-keyserver");
-        get_content_area().add(content);
-        this.keyserver_host = (Gtk.Entry) builder.get_object("keyserver-host");
-        this.keyserver_port = (Gtk.Entry) builder.get_object("keyserver-port");
-        this.keyserver_type = (Gtk.ComboBoxText) builder.get_object("keyserver-type");
-        this.port_block = (Gtk.Box) builder.get_object("port-block");
-
-        this.keyserver_type.changed.connect(() => on_prefs_add_keyserver_uri_changed());
-        this.keyserver_host.changed.connect(() => on_prefs_add_keyserver_uri_changed());
-        this.keyserver_port.changed.connect(() => on_prefs_add_keyserver_uri_changed());
-
-        // The description for the key server types, plus custom
-        foreach (string type in this.keyserver_types) {
-            unowned var category = ServerCategory.find_category(type);
-            this.keyserver_type.append_text(category.description);
-        }
-
-        this.keyserver_type.append_text(_("Custom"));
-        this.keyserver_type.set_active(0);
-
-        // Buttons
-        add_button(_("Cancel"), Gtk.ResponseType.CANCEL);
-        Gtk.Button save_button = (Gtk.Button) add_button(_("Save"), Gtk.ResponseType.OK);
-        save_button.get_style_context().add_class("suggested-action");
-
-        show();
+        GLib.Object(transient_for: parent);
     }
 
     public string? calculate_keyserver_uri() {
-        // Figure out the scheme
-        string? scheme = null;
-        int active = this.keyserver_type.get_active();
-        int i;
-        if (active >= 0 && this.keyserver_types != null) {
-            for (i = 0; this.keyserver_types[i] != null && i < active; i++);
-            if (i == active
-                    && this.keyserver_types[active] != null
-                    && this.keyserver_types[active] != "")
-                scheme = this.keyserver_types[active];
-        }
-
-        string? host = this.keyserver_host.text;
-        if (host == null || host == "")
+        var url = this.url_row.text;
+        if (url == null || url == "")
             return null;
 
-        if (scheme == null) // Custom URI?
-            return ServerCategory.is_valid_uri(host)? host : null;
+        var selected = this.type_row.selected;
+        var scheme = this.server_types[selected];
 
-        string? port = this.keyserver_port.text;
-        if (port == "")
-            port = null;
+        if (scheme == "") // Custom URI?
+            return ServerCategory.is_valid_uri(url)? url : null;
 
-        // Mash 'em together into a uri
-        string? uri = "%s://%s".printf(scheme, host);
-        if (port != null)
-            uri += ":%s".printf(port);
+        // Mash it together with the scheme
+        var full_url = "%s://%s".printf(scheme, url);
 
         // And check if it's valid
-        if (!ServerCategory.is_valid_uri(uri))
-            uri = null;
+        if (!ServerCategory.is_valid_uri(full_url))
+            return null;
 
-        return uri;
+        return full_url;
     }
 
-    private void on_prefs_add_keyserver_uri_changed() {
-        set_response_sensitive(Gtk.ResponseType.OK, calculate_keyserver_uri() != null);
+    private void validate_input() {
+        bool valid = (calculate_keyserver_uri() != null);
+        ((SimpleAction) lookup_action("save")).set_enabled (valid);
+    }
 
-        // Show or hide the port section based on whether 'custom' is selected
-        int active = this.keyserver_type.get_active();
-        if (active > -1) {
-            this.port_block.visible = this.keyserver_types != null
-                                      && this.keyserver_types[active] != null
-                                      && this.keyserver_types[active] != "";
+    private void action_save(SimpleAction action, Variant? param) {
+        string? result = calculate_keyserver_uri();
+        if (result == null) {
+            warning("Got invalid URL");
+            return;
         }
+
+        Pgp.Backend.get().add_remote(result, true);
     }
 }

@@ -22,31 +22,16 @@
 #include <gtk/gtk.h>
 
 #include "seahorse-common.h"
-#include "seahorse-unknown-source.h"
 
-#define SEAHORSE_TYPE_UNKNOWN            (seahorse_unknown_get_type ())
-#define SEAHORSE_UNKNOWN(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SEAHORSE_TYPE_UNKNOWN, SeahorseUnknown))
-#define SEAHORSE_UNKNOWN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SEAHORSE_TYPE_UNKNOWN, SeahorseUnknownClass))
-#define SEAHORSE_IS_UNKNOWN(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SEAHORSE_TYPE_UNKNOWN))
-#define SEAHORSE_IS_UNKNOWN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SEAHORSE_TYPE_UNKNOWN))
-#define SEAHORSE_UNKNOWN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SEAHORSE_TYPE_UNKNOWN, SeahorseUnknownClass))
+/* Solve a circular include */
+typedef struct _SeahorseUnknownSource SeahorseUnknownSource;
 
-typedef struct _SeahorseUnknown SeahorseUnknown;
-typedef struct _SeahorseUnknownClass SeahorseUnknownClass;
 
-struct _SeahorseUnknown {
-    SeahorseObject parent;
+#define SEAHORSE_TYPE_UNKNOWN (seahorse_unknown_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseUnknown, seahorse_unknown, SEAHORSE, UNKNOWN, SeahorseObject)
 
-    /*< public >*/
-    gchar *display;
-};
+SeahorseUnknown *    seahorse_unknown_new              (SeahorseUnknownSource *usrc,
+                                                        const char *keyid,
+                                                        const char *display);
 
-struct _SeahorseUnknownClass {
-    SeahorseObjectClass            parent_class;
-};
-
-GType                seahorse_unknown_get_type         (void);
-
-SeahorseUnknown*     seahorse_unknown_new              (SeahorseUnknownSource *usrc,
-                                                        const gchar *keyid,
-                                                        const gchar *display);
+const char *         seahorse_unknown_get_keyid        (SeahorseUnknown *self);

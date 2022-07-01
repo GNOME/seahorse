@@ -23,9 +23,8 @@
 #include "seahorse-unknown-source.h"
 
 #include "seahorse-pgp-key.h"
-#include "seahorse-unknown.h"
 
-#include <gcr/gcr-base.h>
+#include <gcr/gcr.h>
 
 #include <glib/gi18n.h>
 
@@ -33,40 +32,49 @@ enum {
     PROP_0,
     PROP_LABEL,
     PROP_DESCRIPTION,
-    PROP_ICON,
     PROP_CATEGORY,
     PROP_URI,
     PROP_ACTIONS,
     PROP_ACTION_PREFIX,
     PROP_MENU_MODEL,
-    PROP_SHOW_IF_EMPTY,
     N_PROPS
 };
 
 struct _SeahorseUnknownSource {
-	GObject parent;
-	GHashTable *keys;
+    GObject parent;
+
+    GPtrArray *keys;
 };
 
-struct _SeahorseUnknownSourceClass {
-	GObjectClass parent_class;
-};
-
-static void      seahorse_unknown_source_collection_iface      (GcrCollectionIface *iface);
+static void      seahorse_unknown_source_list_model_iface      (GListModelInterface *iface);
 
 static void      seahorse_unknown_source_place_iface           (SeahorsePlaceIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (SeahorseUnknownSource, seahorse_unknown_source, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GCR_TYPE_COLLECTION, seahorse_unknown_source_collection_iface);
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, seahorse_unknown_source_list_model_iface);
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_PLACE, seahorse_unknown_source_place_iface);
 );
 
 static void
 seahorse_unknown_source_init (SeahorseUnknownSource *self)
 {
-	self->keys = g_hash_table_new_full (seahorse_pgp_keyid_hash,
-	                                    seahorse_pgp_keyid_equal,
-	                                    g_free, g_object_unref);
+    self->keys = g_ptr_array_new_with_free_func (g_object_unref);
+}
+
+static SeahorseUnknown *
+seahorse_unknown_lookup_by_keyid (SeahorseUnknownSource *self,
+                                  const char *keyid)
+{
+    for (unsigned int i = 0; i < self->keys->len; i++) {
+        SeahorseUnknown *unknown = g_ptr_array_index (self->keys, i);
+        const char *unknown_keyid;
+
+        unknown_keyid = seahorse_unknown_get_keyid (unknown);
+        if (seahorse_pgp_keyid_equal (keyid, unknown_keyid))
+            return unknown;
+    }
+
+    return NULL;
 }
 
 static void
@@ -75,7 +83,7 @@ seahorse_unknown_source_load (SeahorsePlace *self,
                               GAsyncReadyCallback callback,
                               gpointer user_data)
 {
-	g_return_if_reached ();
+    g_return_if_reached ();
 }
 
 static gboolean
@@ -83,13 +91,13 @@ seahorse_unknown_source_load_finish (SeahorsePlace *self,
                                      GAsyncResult *res,
                                      GError **error)
 {
-	g_return_val_if_reached (FALSE);
+    g_return_val_if_reached (FALSE);
 }
 
 static gchar *
 seahorse_unknown_source_get_label (SeahorsePlace* self)
 {
-	return g_strdup ("");
+    return g_strdup ("");
 }
 
 static void
@@ -100,19 +108,13 @@ seahorse_unknown_source_set_label (SeahorsePlace *self, const char *label)
 static gchar *
 seahorse_unknown_source_get_description (SeahorsePlace* self)
 {
-	return NULL;
+    return NULL;
 }
 
 static gchar *
 seahorse_unknown_source_get_uri (SeahorsePlace* self)
 {
-	return NULL;
-}
-
-static GIcon *
-seahorse_unknown_source_get_icon (SeahorsePlace* self)
-{
-	return NULL;
+    return NULL;
 }
 
 static SeahorsePlaceCategory
@@ -124,7 +126,7 @@ seahorse_unknown_source_get_category (SeahorsePlace *place)
 static GActionGroup *
 seahorse_unknown_source_get_actions (SeahorsePlace* self)
 {
-	return NULL;
+    return NULL;
 }
 
 static const gchar *
@@ -136,13 +138,7 @@ seahorse_unknown_source_get_action_prefix (SeahorsePlace* self)
 static GMenuModel *
 seahorse_unknown_source_get_menu_model (SeahorsePlace* self)
 {
-	return NULL;
-}
-
-static gboolean
-seahorse_unknown_source_get_show_if_empty (SeahorsePlace *place)
-{
-    return TRUE;
+    return NULL;
 }
 
 static void
@@ -151,20 +147,17 @@ seahorse_unknown_source_get_property (GObject *obj,
                                       GValue *value,
                                       GParamSpec *pspec)
 {
-	SeahorsePlace *place = SEAHORSE_PLACE (obj);
+    SeahorsePlace *place = SEAHORSE_PLACE (obj);
 
-	switch (prop_id) {
-	case PROP_LABEL:
-		g_value_take_string (value, seahorse_unknown_source_get_label (place));
-		break;
-	case PROP_DESCRIPTION:
-		g_value_take_string (value, seahorse_unknown_source_get_description (place));
-		break;
-	case PROP_URI:
-		g_value_take_string (value, seahorse_unknown_source_get_uri (place));
-		break;
-    case PROP_ICON:
-        g_value_take_object (value, seahorse_unknown_source_get_icon (place));
+    switch (prop_id) {
+    case PROP_LABEL:
+        g_value_take_string (value, seahorse_unknown_source_get_label (place));
+        break;
+    case PROP_DESCRIPTION:
+        g_value_take_string (value, seahorse_unknown_source_get_description (place));
+        break;
+    case PROP_URI:
+        g_value_take_string (value, seahorse_unknown_source_get_uri (place));
         break;
     case PROP_CATEGORY:
         g_value_set_enum (value, seahorse_unknown_source_get_category (place));
@@ -178,9 +171,6 @@ seahorse_unknown_source_get_property (GObject *obj,
     case PROP_MENU_MODEL:
         g_value_take_object (value, seahorse_unknown_source_get_menu_model (place));
         break;
-    case PROP_SHOW_IF_EMPTY:
-        g_value_set_boolean (value, TRUE);
-        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
         break;
@@ -193,77 +183,78 @@ seahorse_unknown_source_set_property (GObject *obj,
                                       const GValue *value,
                                       GParamSpec *pspec)
 {
-	SeahorsePlace *place = SEAHORSE_PLACE (obj);
+    SeahorsePlace *place = SEAHORSE_PLACE (obj);
 
-	switch (prop_id) {
-	case PROP_LABEL:
-		seahorse_unknown_source_set_label (place, g_value_get_boxed (value));
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
-		break;
-	}
+    switch (prop_id) {
+    case PROP_LABEL:
+        seahorse_unknown_source_set_label (place, g_value_get_boxed (value));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, prop_id, pspec);
+        break;
+    }
 }
 
 static void
 seahorse_unknown_source_finalize (GObject *obj)
 {
-	SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (obj);
+    SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (obj);
 
-	g_hash_table_destroy (self->keys);
+    g_ptr_array_unref (self->keys);
 
-	G_OBJECT_CLASS (seahorse_unknown_source_parent_class)->finalize (obj);
+    G_OBJECT_CLASS (seahorse_unknown_source_parent_class)->finalize (obj);
 }
 
 static void
 seahorse_unknown_source_class_init (SeahorseUnknownSourceClass *klass)
 {
-	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-	gobject_class->get_property = seahorse_unknown_source_get_property;
-	gobject_class->set_property = seahorse_unknown_source_set_property;
-	gobject_class->finalize = seahorse_unknown_source_finalize;
+    gobject_class->get_property = seahorse_unknown_source_get_property;
+    gobject_class->set_property = seahorse_unknown_source_set_property;
+    gobject_class->finalize = seahorse_unknown_source_finalize;
 
     g_object_class_override_property (gobject_class, PROP_LABEL, "label");
     g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
-    g_object_class_override_property (gobject_class, PROP_ICON, "icon");
     g_object_class_override_property (gobject_class, PROP_CATEGORY, "category");
     g_object_class_override_property (gobject_class, PROP_ACTIONS, "actions");
     g_object_class_override_property (gobject_class, PROP_ACTION_PREFIX, "action-prefix");
     g_object_class_override_property (gobject_class, PROP_MENU_MODEL, "menu-model");
     g_object_class_override_property (gobject_class, PROP_URI, "uri");
-    g_object_class_override_property (gobject_class, PROP_SHOW_IF_EMPTY, "show-if-empty");
 }
 
-static guint
-seahorse_unknown_source_get_length (GcrCollection *collection)
+static unsigned int
+seahorse_unknown_source_get_n_items (GListModel *list)
 {
-	SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (collection);
-	return g_hash_table_size (self->keys);
+    SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (list);
+
+    return self->keys->len;
 }
 
-static GList *
-seahorse_unknown_source_get_objects (GcrCollection *collection)
+static void *
+seahorse_unknown_source_get_item (GListModel *list,
+                                  unsigned int pos)
 {
-	SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (collection);
-	return g_hash_table_get_values (self->keys);
+    SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (list);
+
+    if (pos >= self->keys->len)
+        return NULL;
+
+    return g_object_ref (g_ptr_array_index (self->keys, pos));
 }
 
-static gboolean
-seahorse_unknown_source_contains (GcrCollection *collection,
-                                  GObject *object)
+static GType
+seahorse_unknown_source_get_item_type (GListModel *list)
 {
-	SeahorseUnknownSource *self = SEAHORSE_UNKNOWN_SOURCE (collection);
-	const gchar *identifier = seahorse_object_get_identifier (SEAHORSE_OBJECT (object));
-	return g_hash_table_lookup (self->keys, identifier) == object;
+    return SEAHORSE_TYPE_UNKNOWN;
 }
 
 static void
-seahorse_unknown_source_collection_iface (GcrCollectionIface *iface)
+seahorse_unknown_source_list_model_iface (GListModelInterface *iface)
 {
-	iface->contains = seahorse_unknown_source_contains;
-	iface->get_length = seahorse_unknown_source_get_length;
-	iface->get_objects = seahorse_unknown_source_get_objects;
+    iface->get_n_items = seahorse_unknown_source_get_n_items;
+    iface->get_item = seahorse_unknown_source_get_item;
+    iface->get_item_type = seahorse_unknown_source_get_item_type;
 }
 
 static void
@@ -274,45 +265,44 @@ seahorse_unknown_source_place_iface (SeahorsePlaceIface *iface)
     iface->get_actions = seahorse_unknown_source_get_actions;
     iface->get_menu_model = seahorse_unknown_source_get_menu_model;
     iface->get_description = seahorse_unknown_source_get_description;
-    iface->get_icon = seahorse_unknown_source_get_icon;
     iface->get_category = seahorse_unknown_source_get_category;
     iface->get_label = seahorse_unknown_source_get_label;
     iface->set_label = seahorse_unknown_source_set_label;
     iface->get_uri = seahorse_unknown_source_get_uri;
-    iface->get_show_if_empty = seahorse_unknown_source_get_show_if_empty;
 }
 
 SeahorseUnknownSource*
 seahorse_unknown_source_new (void)
 {
-	return g_object_new (SEAHORSE_TYPE_UNKNOWN_SOURCE, NULL);
+    return g_object_new (SEAHORSE_TYPE_UNKNOWN_SOURCE, NULL);
 }
 
 static void
 on_cancellable_gone (gpointer user_data,
                      GObject *where_the_object_was)
 {
-	/* TODO: Change the icon */
+    /* TODO: Change the icon */
 }
 
-SeahorseObject *
+SeahorseUnknown *
 seahorse_unknown_source_add_object (SeahorseUnknownSource *self,
-                                    const gchar *keyid,
+                                    const char *keyid,
                                     GCancellable *cancellable)
 {
-	SeahorseObject *object;
+    SeahorseUnknown *unknown;
 
-	g_return_val_if_fail (keyid != NULL, NULL);
-	g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
+    g_return_val_if_fail (SEAHORSE_IS_UNKNOWN_SOURCE (self), NULL);
+    g_return_val_if_fail (keyid != NULL, NULL);
+    g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
 
-	object = g_hash_table_lookup (self->keys, keyid);
-	if (object == NULL) {
-		object = SEAHORSE_OBJECT (seahorse_unknown_new (self, keyid, NULL));
-		g_hash_table_insert (self->keys, g_strdup (keyid), object);
-	}
+    unknown = seahorse_unknown_lookup_by_keyid (self, keyid);
+    if (unknown == NULL) {
+        unknown = seahorse_unknown_new (self, keyid, NULL);
+        g_ptr_array_add (self->keys, unknown);
+    }
 
-	if (cancellable)
-		g_object_weak_ref (G_OBJECT (cancellable), on_cancellable_gone, object);
+    if (cancellable)
+        g_object_weak_ref (G_OBJECT (cancellable), on_cancellable_gone, unknown);
 
-	return object;
+    return unknown;
 }

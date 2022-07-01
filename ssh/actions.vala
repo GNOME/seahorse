@@ -57,19 +57,12 @@ public class Seahorse.Ssh.Actions : ActionGroup {
     }
 
     private void on_ssh_generate_key(SimpleAction action, Variant? param) {
-        var dialog = new Generate(Backend.instance.get_dot_ssh(),
-                                  this.catalog);
+        var dialog = new GenerateKeyDialog(Backend.instance.get_dot_ssh());
 
-        if (dialog.run() != Gtk.ResponseType.ACCEPT) {
-            dialog.destroy();
-            return;
-        }
-
-        dialog.generate_key.begin ((obj, res) => {
-            dialog.generate_key.end (res);
-            dialog.destroy();
+        dialog.key_created.connect((key) => {
             this.catalog.activate_action("focus-place", "openssh");
         });
+        dialog.present(this.catalog);
     }
 
     private void on_ssh_upload(SimpleAction action, Variant? param) {
@@ -83,6 +76,7 @@ public class Seahorse.Ssh.Actions : ActionGroup {
             }
         }
 
-        Upload.prompt(keys, this.catalog);
+        var dialog = new UploadRemoteDialog.for_multiple(keys);
+        dialog.present(this.catalog);
     }
 }

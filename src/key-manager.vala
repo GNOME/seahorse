@@ -23,52 +23,43 @@
 [GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-key-manager.ui")]
 public class Seahorse.KeyManager : Catalog {
 
-    [GtkChild]
-    private unowned Hdy.Leaflet header;
-    [GtkChild]
-    private unowned Gtk.HeaderBar left_header;
-    [GtkChild]
-    private unowned Gtk.HeaderBar right_header;
-    [GtkChild]
-    private unowned Gtk.Revealer back_revealer;
+    [GtkChild] private unowned Adw.HeaderBar right_header;
+    [GtkChild] private unowned Gtk.SearchEntry filter_entry;
 
-    [GtkChild]
-    private unowned Gtk.SearchBar search_bar;
-    [GtkChild]
-    private unowned Gtk.SearchEntry filter_entry;
-
-    [GtkChild]
-    private unowned Hdy.Leaflet content_box;
-    [GtkChild]
-    private unowned Gtk.ScrolledWindow sidebar_area;
+    [GtkChild] private unowned Adw.NavigationSplitView content_box;
+    [GtkChild] private unowned Gtk.ScrolledWindow sidebar_area;
     private Sidebar sidebar;
-    [GtkChild]
-    private unowned Gtk.Stack content_stack;
-    [GtkChild]
-    private unowned Gtk.ListBox item_listbox;
 
-    [GtkChild]
-    private unowned Gtk.MenuButton new_item_button;
-    [GtkChild]
-    private unowned Gtk.ToggleButton show_search_button;
+    [GtkChild] private unowned Gtk.Stack content_stack;
+    [GtkChild] private unowned Gtk.ScrolledWindow item_listbox_page;
+    [GtkChild] private unowned Adw.StatusPage empty_state_page;
+    [GtkChild] private unowned Adw.StatusPage locked_keyring_page;
 
-    private Seahorse.ItemList item_list;
-    private Gcr.Collection collection;
+    [GtkChild] private unowned Gtk.ListBox item_listbox;
+
+    [GtkChild] private unowned Gtk.MenuButton new_item_button;
+    [GtkChild] private unowned Gtk.Popover new_item_menu_popover;
+    [GtkChild] private unowned Gtk.ToggleButton show_search_button;
+
+    [GtkChild] private unowned Gtk.DropTarget drop_target;
+
+    private KeyManagerFilter item_filter = new KeyManagerFilter();
+    private Gtk.FilterListModel item_list;
 
     private GLib.Settings settings;
 
-    private enum DndTarget { // Drag 'n Drop target type
-        PLAIN,
-        URIS
-    }
-
     private const GLib.ActionEntry[] action_entries = {
-         { "new-item",         on_new_item            },
-         { "show-search",      on_show_search,        },
-         { "filter-items",     on_filter_items,       "s", "'any'" },
-         { "focus-place",      on_focus_place,        "s", "'secret-service'" },
-         { "import-file",      on_import_file          },
-         { "paste",            on_paste,               },
+         { "new-item", on_new_item },
+         { "show-search", on_show_search },
+         { "filter-items", on_filter_items, "s", "'any'" },
+         { "focus-place", on_focus_place, "s", "'secret-service'" },
+         { "import-file", on_import_file },
+         { "paste", on_paste },
+
+         { "lock-place", on_lock_place, "s" },
+         { "unlock-place", on_unlock_place, "s" },
+         { "delete-place", on_delete_place, "s" },
+         { "view-place", on_view_place, "s" },
     };
 
     public KeyManager(Application app) {
@@ -78,18 +69,18 @@ public class Seahorse.KeyManager : Catalog {
         );
         this.settings = new GLib.Settings("org.gnome.seahorse.manager");
 
-        this.collection = setup_sidebar();
+        setup_sidebar();
+
+        this.item_list = new Gtk.FilterListModel(null, this.item_filter);
+        this.sidebar.selection.bind_property("selected-item",
+                                             this.item_list, "model",
+                                             GLib.BindingFlags.SYNC_CREATE);
 
         load_css();
 
         // Add new item list and bind our listbox to it
-        this.item_list = new Seahorse.ItemList(this.collection);
         this.item_list.items_changed.connect((idx, removed, added) => check_empty_state());
         this.item_listbox.bind_model(this.item_list, (obj) => { return new KeyManagerItemRow(obj); });
-        this.item_listbox.row_activated.connect(on_item_listbox_row_activated);
-        this.item_listbox.selected_rows_changed.connect(on_item_listbox_selected_rows_changed);
-        this.item_listbox.popup_menu.connect(on_item_listbox_popup_menu);
-        this.item_listbox.button_press_event.connect(on_item_listbox_button_press_event);
 
         init_actions();
 
@@ -100,12 +91,8 @@ public class Seahorse.KeyManager : Catalog {
         // For the filtering
         on_filter_changed(this.filter_entry);
 
-        // Setup drops
-        Gtk.drag_dest_set(this, Gtk.DestDefaults.ALL, {}, Gdk.DragAction.COPY);
-        Gtk.TargetList targets = new Gtk.TargetList(null);
-        targets.add_uri_targets(DndTarget.URIS);
-        targets.add_text_targets(DndTarget.PLAIN);
-        Gtk.drag_dest_set_target_list(this, targets);
+        // DnD
+        this.drop_target.drop.connect(on_drop);
 
         // In the beginning, nothing's selected, so show empty state
         check_empty_state();
@@ -117,62 +104,86 @@ public class Seahorse.KeyManager : Catalog {
 
     private void load_css() {
         Gtk.CssProvider provider = new Gtk.CssProvider();
-        Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Display.get_default().get_default_screen(),
-            provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(),
+                                                  provider,
+                                                  Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         provider.parsing_error.connect((section, error) => {
-            uint start = section.get_start_line();
-            uint end = section.get_end_line();
+            size_t start = section.get_start_location().lines + 1;
+            size_t end = section.get_end_location().lines + 1;
             if (start == end)
-                debug("Error parsing css on line %u: %s", start, error.message);
+                debug("Error parsing css on line %zu: %s", start, error.message);
             else
-                debug("Error parsing css on lines %u-%u: %s", start, end, error.message);
+                debug("Error parsing css on lines %zu-%zu: %s", start, end, error.message);
         });
 
         provider.load_from_resource("/org/gnome/Seahorse/seahorse.css");
 
         // Makes sure it's visible when people use nightlies
         if (Config.PROFILE == "development")
-            get_style_context().add_class("devel");
+            add_css_class("devel");
     }
 
+    [GtkCallback]
     private void on_item_listbox_row_activated(Gtk.ListBox item_listbox, Gtk.ListBoxRow row) {
         unowned GLib.Object obj = ((KeyManagerItemRow) row).object;
         assert(obj != null);
         show_properties(obj);
     }
 
+    [GtkCallback]
     private void on_item_listbox_selected_rows_changed(Gtk.ListBox item_listbox) {
         selection_changed();
     }
 
-    private bool on_item_listbox_button_press_event (Gdk.EventButton event) {
-        // Check for right click
-        if ((event.type == Gdk.EventType.BUTTON_PRESS) && (event.button == 3)) {
-            // Make sure that the right-clicked row is also selected
-            var row = this.item_listbox.get_row_at_y((int) event.y);
-            if (row != null) {
-                this.item_listbox.unselect_all();
-                this.item_listbox.select_row(row);
-            }
-
-            // Show context menu (unless no row was right clicked or nothing was selected)
-            var objects = get_selected_item_listbox_items();
-            debug("We have %u selected objects", objects.length());
-            if (objects != null)
-                show_context_menu(null);
-            return true;
-        }
-
-        return false;
+    [GtkCallback]
+    private void on_new_item_menu_item_clicked(Gtk.Button button) {
+        // We have to do this manually, or the popover doesn't recognize that
+        // the AdwDialog should be given focus instead.
+        this.new_item_menu_popover.popdown();
     }
 
-    private bool on_item_listbox_popup_menu(Gtk.Widget? listview) {
+    [GtkCallback]
+    private void on_item_listbox_long_pressed(Gtk.GestureLongPress gesture,
+                                              double x, double y) {
+        show_item_context_menu(x, y);
+    }
+    [GtkCallback]
+    private void on_item_listbox_right_click(Gtk.GestureClick gesture,
+                                             int n_press,
+                                             double x,
+                                             double y) {
+        show_item_context_menu(x, y);
+    }
+
+    private void show_item_context_menu(double x, double y) {
+        // Make sure that the right-clicked row is also selected
+        var row = this.item_listbox.get_row_at_y((int) y);
+        if (row != null) {
+            this.item_listbox.unselect_all();
+            this.item_listbox.select_row(row);
+        }
+
+        // Show context menu (unless no row was right clicked or nothing was selected)
         var objects = get_selected_item_listbox_items();
+        debug("We have %u selected objects", objects.length());
         if (objects != null)
-            show_context_menu(null);
-        return false;
+            show_context_menu((int) x, (int) y);
+    }
+
+    public void show_context_menu(int x, int y) {
+        var menu = new Gtk.PopoverMenu.from_model(this.context_menu);
+        menu.insert_action_group("win", this);
+        var backends = Backend.get_registered();
+        for (uint i = 0; i < backends.get_n_items(); i++) {
+            var backend = (Backend) backends.get_item(i);
+            menu.insert_action_group(backend.actions.prefix, backend.actions);
+        }
+
+        menu.set_parent(this.item_listbox);
+        if (x != -1 && y != -1)
+            menu.set_pointing_to({ x, y, 1, 1 });
+        menu.popup();
     }
 
     private GLib.List<weak GLib.Object> get_selected_item_listbox_items() {
@@ -189,29 +200,31 @@ public class Seahorse.KeyManager : Catalog {
         base.selection_changed();
 
         var objects = get_selected_objects();
-        foreach (weak Backend backend in get_backends())
+        var backends = Backend.get_registered();
+        for (uint i = 0; i < backends.get_n_items(); i++) {
+            var backend = (Backend) backends.get_item(i);
             backend.actions.set_actions_for_selected_objects(objects);
+        }
     }
 
     private void check_empty_state() {
         bool empty = (this.item_list.get_n_items() == 0);
         debug("Checking empty state: %s", empty.to_string());
 
-        this.show_search_button.sensitive = !empty;
         if (!empty) {
-            this.content_stack.visible_child_name = "item_listbox_page";
+            this.content_stack.visible_child = this.item_listbox_page;
             return;
         }
 
         // We have an empty page, that might still have 2 reasons:
         // - we really have no items in our collections
         // - we're dealing with a locked keyring
-        Place? place = this.sidebar.get_focused_place();
-        if (place != null && place is Lockable && ((Lockable) place).unlockable) {
-            this.content_stack.visible_child_name = "locked_keyring_page";
+        var place = (Place) this.sidebar.selection.selected_item;
+        if (place != null && (place is Lockable) && ((Lockable) place).unlockable) {
+            this.content_stack.visible_child = this.locked_keyring_page;
             return;
         }
-        this.content_stack.visible_child_name = "empty_state_page";
+        this.content_stack.visible_child = this.empty_state_page;
     }
 
     private void on_new_item(SimpleAction action, GLib.Variant? param) {
@@ -220,60 +233,27 @@ public class Seahorse.KeyManager : Catalog {
 
     [GtkCallback]
     private void on_filter_changed(Gtk.Editable entry) {
-        this.item_list.filter_text = this.filter_entry.text;
+        this.item_filter.filter_text = this.filter_entry.text;
     }
 
-    [GtkCallback]
-    private void on_back_clicked() {
-        show_sidebar_pane();
-    }
-
-    private void show_sidebar_pane() {
-        this.content_box.visible_child_name = "sidebar-pane";
-        update_header();
-    }
-
-    private void show_item_list_pane() {
-        this.content_box.visible_child_name = "item-list-pane";
-        update_header();
-    }
-
-    [GtkCallback]
-    private void on_fold () {
-        update_header();
-    }
-
-    private void update_header() {
-        bool folded = this.content_box.folded;
-
-        this.left_header.show_close_button =
-            !folded || header.visible_child == left_header;
-
-        this.right_header.show_close_button =
-            !folded || header.visible_child == right_header;
-
-        this.back_revealer.reveal_child = this.back_revealer.visible =
-            folded && header.visible_child == right_header;
-    }
-
-    public void import_files(string[]? uris) {
-        ImportDialog dialog = new ImportDialog(this);
-        dialog.add_uris(uris);
-        dialog.run();
-        dialog.destroy();
+    public async void import_file(File file) {
+        try {
+            var file_stream = yield file.read_async();
+            var dialog = new ImportDialog(file_stream, file.get_basename(), this);
+            dialog.present();
+        } catch (GLib.Error err) {
+            Util.show_error(this, _("Couldn't open file"), err.message);
+        }
     }
 
     private void on_import_file(SimpleAction action, GLib.Variant? parameter) {
-        Gtk.FileChooserNative dialog =
-            new Gtk.FileChooserNative(_("Import Key"), this,
-                                      Gtk.FileChooserAction.OPEN,
-                                      _("_Open"), _("_Cancel"));
+        var dialog = new Gtk.FileDialog();
+        dialog.title = _("Import Key");
 
-        dialog.set_local_only(false);
+        var filters = new GLib.ListStore(typeof(Gtk.FileFilter));
 
-        // TODO: This should come from libgcr somehow
-        Gtk.FileFilter filter = new Gtk.FileFilter();
-        filter.set_name(_("All key files"));
+        var filter = new Gtk.FileFilter();
+        filter.name = _("All key files");
         filter.add_mime_type("application/pgp-keys");
         filter.add_mime_type("application/x-ssh-key");
         filter.add_mime_type("application/pkcs12");
@@ -303,70 +283,69 @@ public class Seahorse.KeyManager : Catalog {
         filter.add_pattern("*.cer");
         filter.add_pattern("*.crt");
         filter.add_pattern("*.pem");
-        dialog.add_filter(filter);
-        dialog.set_filter(filter);
+        filters.append(filter);
 
-        filter = new Gtk.FileFilter();
-        filter.set_name(_("All files"));
-        filter.add_pattern("*");
-        dialog.add_filter(filter);
+        var all_filter = new Gtk.FileFilter();
+        all_filter.name = _("All files");
+        all_filter.add_pattern("*");
+        filters.append(all_filter);
 
-        string? uri = null;
-        if (dialog.run() == Gtk.ResponseType.ACCEPT) {
-            uri = dialog.get_uri();
-        }
+        dialog.filters = filters;
+        dialog.default_filter = filter;
 
-        dialog.destroy();
-
-        if (uri != null) {
-            import_files({ uri });
-        }
+        dialog.open.begin(this, null, (obj, res) => {
+            try {
+                var file = dialog.open.end (res);
+                if (file != null) {
+                    import_file.begin(file);
+                }
+            } catch (Error e) {
+                warning("Problem importing key: %s", e.message);
+            }
+        });
     }
 
     private void import_text(string? display_name, string? text) {
-        ImportDialog dialog = new ImportDialog(this);
-        dialog.add_text(display_name, text);
-        dialog.run();
-        dialog.destroy();
+        if (text == null) {
+            return; // FIXME should we show something here?
+        }
+        var data_stream = new MemoryInputStream.from_data(text.data);
+        var dialog = new ImportDialog(data_stream, display_name, this);
+        dialog.present();
     }
 
-    [GtkCallback]
-    private void on_drag_data_received(Gdk.DragContext context, int x, int y,
-                                       Gtk.SelectionData? selection_data, uint info, uint time) {
-        if (selection_data == null)
-            return;
-
-        if (info == DndTarget.PLAIN) {
-            string? text = selection_data.get_text();
-            import_text(_("Dropped text"), text);
-        } else if (info == DndTarget.URIS) {
-            string[]? uris = selection_data.get_uris();
-            foreach (string uri in uris)
-                uri._strip();
-            import_files(uris);
+    private bool on_drop(Gtk.DropTarget drop_target,
+                         GLib.Value? value,
+                         double x,
+                         double y) {
+        if (value.holds(typeof(string))) {
+            import_text(_("Dropped text"), value.get_string());
+            return true;
         }
+        if (value.holds(typeof(GLib.Uri))) {
+            var uri = (GLib.Uri) value.get_boxed();
+            import_file.begin(File.new_for_uri(uri.to_string()));
+            return true;
+        }
+
+        return false;
     }
 
     private void on_paste(SimpleAction action, Variant? param) {
-        Gdk.Atom atom = Gdk.Atom.intern("CLIPBOARD", false);
-        Gtk.Clipboard clipboard = Gtk.Clipboard.get(atom);
+        var clipboard = get_clipboard();
+        clipboard.read_text_async.begin(null, (obj, res) => {
+            try {
+                var text = clipboard.read_text_async.end(res);
 
-        if (clipboard.wait_is_text_available())
-            return;
-
-        clipboard.request_text(on_clipboard_received);
-    }
-
-    private void on_clipboard_received(Gtk.Clipboard board, string? text) {
-        if (text == null)
-            return;
-
-        assert(this.filter_entry != null);
-        if (this.filter_entry.is_focus)
-            this.filter_entry.paste_clipboard();
-        else
-            if (text != null && text.char_count() > 0)
-                import_text(_("Clipboard text"), text);
+                if (this.filter_entry.is_focus())
+                    this.filter_entry.text = text;
+                else
+                    if (text != null && text.char_count() > 0)
+                        import_text(_("Clipboard text"), text);
+            } catch (GLib.Error err) {
+                warning("Couldn't read clipboard: %s", err.message);
+            }
+        });
     }
 
     private void update_view_filter(string filter_str, bool update_settings = true) {
@@ -379,8 +358,7 @@ public class Seahorse.KeyManager : Catalog {
         action.set_state(filter_str);
 
         // Update the item list
-        this.item_list.showfilter = ItemList.ShowFilter.from_string(filter_str);
-        this.item_list.refilter();
+        this.item_filter.show_filter = KeyManagerFilter.ShowFilter.from_string(filter_str);
     }
 
     private void on_show_search(SimpleAction action, Variant? param) {
@@ -411,25 +389,93 @@ public class Seahorse.KeyManager : Catalog {
         }
     }
 
-    private Gcr.Collection setup_sidebar() {
+    private void on_lock_place(SimpleAction action, Variant? param) {
+        string? uri = param.get_string();
+        return_if_fail(uri != null);
+
+        uint pos;
+        var place = this.sidebar.lookup_place_for_uri(uri, out pos) as Lockable;
+        return_if_fail(place != null && place.lockable);
+
+        place.lock.begin(null, null, (obj, res) => {
+            try {
+                place.lock.end(res);
+                check_empty_state();
+            } catch (Error e) {
+                Util.show_error(this, _("Couldn’t lock"), e.message);
+            }
+        });
+    }
+
+    private void on_unlock_place(SimpleAction action, Variant? param) {
+        string? uri = param.get_string();
+        return_if_fail(uri != null);
+
+        uint pos;
+        var place = this.sidebar.lookup_place_for_uri(uri, out pos) as Lockable;
+        return_if_fail(place != null && place.unlockable);
+
+        var interaction = new Interaction(this);
+        place.unlock.begin(interaction, null, (obj, res) => {
+            try {
+                place.unlock.end(res);
+                check_empty_state();
+            } catch (Error e) {
+                Util.show_error(this, _("Couldn’t unlock"), e.message);
+            }
+        });
+    }
+
+    private void on_delete_place(SimpleAction action, Variant? param) {
+        string? uri = param.get_string();
+        return_if_fail(uri != null);
+
+        uint pos;
+        var place = this.sidebar.lookup_place_for_uri(uri, out pos) as Deletable;
+        return_if_fail(place != null && place.deletable);
+
+        var delete_op = place.create_delete_operation();
+        delete_op.execute_interactively.begin(this, null, (obj, res) => {
+            try {
+                delete_op.execute_interactively.end(res);
+            } catch (GLib.IOError.CANCELLED e) {
+                debug("Deletion of place '%s' cancelled by user", uri);
+            } catch (GLib.Error e) {
+                var label = ((Place) place).label;
+                Util.show_error(this,
+                                _("Couldn’t delete '%s'").printf(label),
+                                e.message);
+            }
+        });
+    }
+
+    private void on_view_place(SimpleAction action, Variant? param) {
+        string? uri = param.get_string();
+        return_if_fail(uri != null);
+
+        uint pos;
+        var place = this.sidebar.lookup_place_for_uri(uri, out pos) as Viewable;
+        return_if_fail(place != null);
+        Viewable.view(place, this);
+    }
+
+    private void setup_sidebar() {
         this.sidebar = new Sidebar();
 
         restore_keyring_selection();
 
         // Make sure we update the empty state on any change
-        this.sidebar.selected_rows_changed.connect(on_sidebar_selected_rows_changed);
-        this.sidebar.current_collection_changed.connect((sidebar) => { check_empty_state (); });
+        this.sidebar.selection.selection_changed.connect(on_sidebar_selection_changed);
 
-        foreach (weak Backend backend in get_backends()) {
+        var backends = Backend.get_registered();
+        for (uint i = 0; i < backends.get_n_items(); i++) {
+            var backend = (Backend) backends.get_item(i);
             ActionGroup actions = backend.actions;
             actions.catalog = this;
             insert_action_group(actions.prefix, actions);
         }
 
-        this.sidebar_area.add(this.sidebar);
-        this.sidebar.show();
-
-        return this.sidebar.objects;
+        this.sidebar_area.set_child(this.sidebar);
     }
 
     // On setup, select the LRU place from the user's last session (if any).
@@ -445,8 +491,12 @@ public class Seahorse.KeyManager : Catalog {
             unowned string uri = last_keyring[0];
 
             debug("Selecting last used place %s", uri);
-            if (this.sidebar.set_focused_place_for_uri(uri))
+            uint pos;
+            var place = this.sidebar.lookup_place_for_uri(uri, out pos);
+            if (place != null) {
+                this.sidebar.selection.selected = pos;
                 return GLib.Source.REMOVE;
+            }
 
             // If that didn't work, try do a attempt by matching the scheme.
             // FIXME should do this poperly (not always getting proper URIs atm)
@@ -455,66 +505,50 @@ public class Seahorse.KeyManager : Catalog {
                 return GLib.Source.REMOVE;
 
             // Still nothing. Can happen on first run -> just select first entry
-            this.sidebar.select_row(this.sidebar.get_row_at_index(0));
+            this.sidebar.selection.selected = 0;
             return GLib.Source.REMOVE;
         });
     }
 
-    private void on_sidebar_selected_rows_changed(Gtk.ListBox sidebar) {
+    private void on_sidebar_selection_changed(Gtk.SelectionModel selection,
+                                              uint position,
+                                              uint n_items) {
         check_empty_state();
 
-        show_item_list_pane();
+        this.content_box.show_content = true;
 
-        Place? place = this.sidebar.get_focused_place();
+        var place = (Place) this.sidebar.selection.selected_item;
         return_if_fail (place != null);
 
-        this.right_header.title = place.label;
+        this.right_header.title_widget = new Adw.WindowTitle(place.label, "");
         this.settings.set_strv("keyrings-selected", { place.uri });
-    }
-
-    public override List<weak Backend> get_backends() {
-        return this.sidebar.get_backends();
-    }
-
-    [GtkCallback]
-    private void on_popover_grab_notify(Gtk.Widget widget, bool was_grabbed) {
-        if (!was_grabbed)
-            widget.hide();
     }
 
     [GtkCallback]
     private void on_locked_keyring_unlock_button_clicked(Gtk.Button unlock_button) {
-        Lockable? place = this.sidebar.get_focused_place() as Lockable;
+        unowned var place = this.sidebar.selection.selected_item as Lockable;
         return_if_fail(place != null && place.unlockable);
 
-        unlock_button.sensitive = false;
-        place.unlock.begin(null, null, (obj, res) => {
-            try {
-                unlock_button.sensitive = true;
-                place.unlock.end(res);
-                // Explicitly trigger an update of the main view
-                check_empty_state();
-            } catch (GLib.Error e) {
-                unlock_button.sensitive = true;
-                Util.show_error(this, _("Couldn’t unlock keyring"), e.message);
-            }
-        });
+        activate_action("unlock-place", new Variant.string(((Place) place).uri));
     }
 
     [GtkCallback]
-    private bool on_key_pressed(Gtk.Widget widget, Gdk.EventKey event) {
-        bool folded = this.content_box.folded;
+    private bool on_key_pressed(Gtk.EventControllerKey controller,
+                                uint keyval,
+                                uint keycode,
+                                Gdk.ModifierType state) {
+        bool folded = this.content_box.collapsed;
 
-        switch (event.keyval) {
+        switch (keyval) {
           // <Alt>Down and <Alt>Up for easy sidebar navigation
           case Gdk.Key.Down:
-              if (Gdk.ModifierType.MOD1_MASK in event.state && !folded) {
+              if (Gdk.ModifierType.ALT_MASK in state && !folded) {
                   this.sidebar.select_next_place();
                   return true;
               }
               break;
           case Gdk.Key.Up:
-              if (Gdk.ModifierType.MOD1_MASK in event.state && !folded) {
+              if (Gdk.ModifierType.ALT_MASK in state && !folded) {
                   this.sidebar.select_previous_place();
                   return true;
               }
@@ -522,16 +556,16 @@ public class Seahorse.KeyManager : Catalog {
 
           // <Alt>Left to go back to sidebar in folded mode
           case Gdk.Key.Left:
-              if (Gdk.ModifierType.MOD1_MASK in event.state && folded) {
-                  show_sidebar_pane();
+              if (Gdk.ModifierType.ALT_MASK in state && folded) {
+                  this.content_box.show_content = false;
                   return true;
               }
               break;
 
           // <Alt>Right to open currently selected element in folded mode
           case Gdk.Key.Right:
-              if (Gdk.ModifierType.MOD1_MASK in event.state && folded) {
-                  show_item_list_pane();
+              if (Gdk.ModifierType.ALT_MASK in state && folded) {
+                  this.content_box.show_content = true;
                   return true;
               }
               break;
@@ -539,7 +573,6 @@ public class Seahorse.KeyManager : Catalog {
               break;
         }
 
-        // By default: propagate to the search bar, for search-as-you-type
-        return this.search_bar.handle_event(event);
+        return false;
     }
 }

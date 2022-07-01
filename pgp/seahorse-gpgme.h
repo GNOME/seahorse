@@ -62,13 +62,13 @@ GSource *          seahorse_gpgme_gsource_new       (gpgme_ctx_t gctx,
                                                      GCancellable *cancellable);
 
 typedef enum {
-    RSA_RSA = 1,
-    DSA_ELGAMAL = 2,
-    DSA = 3,
-    RSA_SIGN = 4,
-    ELGAMAL = 5,
-    RSA_ENCRYPT = 6
-} SeahorseKeyEncType;
+    SEAHORSE_PGP_KEY_ALGO_RSA_RSA = 1,
+    SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL = 2,
+    SEAHORSE_PGP_KEY_ALGO_DSA = 3,
+    SEAHORSE_PGP_KEY_ALGO_RSA_SIGN = 4,
+    SEAHORSE_PGP_KEY_ALGO_ELGAMAL = 5,
+    SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT = 6,
+} SeahorsePgpKeyAlgorithm;
 
 /* Length ranges for key types */
 typedef enum {
@@ -93,4 +93,4 @@ typedef enum {
     LENGTH_DEFAULT = 2048
 } SeahorseKeyLength;
 
-const char *    seahorse_gpgme_get_algo_string (SeahorseKeyEncType type);
+const char *    seahorse_gpgme_get_algo_string (SeahorsePgpKeyAlgorithm encoding);

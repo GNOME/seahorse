@@ -28,7 +28,7 @@
 #define SEAHORSE_PGP_TYPE_SUBKEY_LIST_BOX (seahorse_pgp_subkey_list_box_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorsePgpSubkeyListBox, seahorse_pgp_subkey_list_box,
                       SEAHORSE_PGP, SUBKEY_LIST_BOX,
-                      GtkListBox)
+                      AdwPreferencesGroup)
 
 GtkWidget *          seahorse_pgp_subkey_list_box_new                (SeahorsePgpKey *key);
 
@@ -37,6 +37,6 @@ SeahorsePgpKey *     seahorse_pgp_subkey_list_box_get_key            (SeahorsePg
 #define SEAHORSE_PGP_TYPE_SUBKEY_LIST_BOX_ROW (seahorse_pgp_subkey_list_box_row_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorsePgpSubkeyListBoxRow, seahorse_pgp_subkey_list_box_row,
                       SEAHORSE_PGP, SUBKEY_LIST_BOX_ROW,
-                      HdyExpanderRow)
+                      AdwExpanderRow)
 
 SeahorsePgpSubkey *   seahorse_pgp_subkey_list_box_row_get_subkey    (SeahorsePgpSubkeyListBoxRow *self);

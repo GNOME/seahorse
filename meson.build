@@ -1,11 +1,17 @@
 project('seahorse', ['vala', 'c'],
   version: '47.0.1',
-  meson_version: '>= 0.59',
+  meson_version: '>= 1.2.0',
   license: 'GPL-2.0-or-later',
 )
 
 gnome = import('gnome')
 i18n = import('i18n')
+
+# Add our custom VAPI dir
+add_project_arguments(
+  ['--vapidir', meson.project_source_root() / 'vapi'],
+  language: 'vala',
+)
 
 # Some variables
 cc = meson.get_compiler('c')
@@ -24,9 +30,9 @@ else
 endif
 
 # Dependencies
-min_glib_version = '2.66'
-min_gcr_version = '3.38'
-accepted_gpg_versions = [ '2.2.0', '2.3.0', '2.4.0', '2.5.0' ]
+min_glib_version = '2.82'
+min_gcr_version = '4.3.90'
+accepted_gpg_versions = [ '2.4.0', '2.5.0' ]
 gpg_check_version = find_program('build-aux' / 'gpg_check_version.py')
 
 glib_deps = [
@@ -36,15 +42,18 @@ glib_deps = [
   dependency('gio-unix-2.0',version: '>=' + min_glib_version),
   dependency('gmodule-2.0', version: '>=' + min_glib_version),
 ]
-gtk = dependency('gtk+-3.0', version: '>= 3.24.0')
-libhandy_dep = dependency('libhandy-1', version: '>= 1.6.0')
-gcr = dependency('gcr-3',       version: '>=' + min_gcr_version)
-gcr_ui = dependency('gcr-ui-3', version: '>=' + min_gcr_version)
-libsecret = dependency('libsecret-1', version: '>= 0.16')
+gtk4_dep = dependency('gtk4', version: '>= 4.16')
+libadwaita_dep = dependency('libadwaita-1', version: '>= 1.5')
+gcr4_dep = dependency('gcr-4', version: '>=' + min_gcr_version)
+libsecret = dependency('libsecret-1', version: '>= 0.21')
 libpwquality = dependency('pwquality')
 posix = valac.find_library('posix')
 ssh_bin = find_program('ssh')
 ssh_keygen = find_program('ssh-keygen')
+pkcs11_dep = valac.find_library('pkcs11',
+  dirs: meson.project_source_root() / 'vapi',
+)
+libqrencode_dep = dependency('libqrencode', version: '>= 4.1.1')
 gpg_bin = find_program('gpg2', 'gpg', required: get_option('pgp-support'))
 gpgme_dep = dependency('gpgme', version: '>= 1.14.0', required: get_option('pgp-support'))
 
@@ -61,11 +70,6 @@ if get_option('pgp-support')
   if get_option('check-compatible-gpg') and gpg_version_check.returncode() != 0
     error('Incompatible version of GnuPG. Accepted versions are: @0@'.format(accepted_gpg_versions))
   endif
-endif
-
-pkcs11_dep = valac.find_library('pkcs11', required: get_option('pkcs11-support'))
-if get_option('pkcs11-support') and not pkcs11_dep.found()
-  error('Required library "pkcs11" not found (needed for PKCS#11 support)')
 endif
 
 if get_option('ldap-support')
@@ -105,6 +109,10 @@ add_project_arguments([
   language: 'c',
 )
 
+# With the latest GCC, Vala is generating a lot of warning, with no solution in sight...
+# We should only apply this to the pieces that are Vala-only thoughh, since we
+# still want to have warnings for our C code.
+vala_workaround_cflags = [ '-w' ]
 
 # configuration
 conf = configuration_data()

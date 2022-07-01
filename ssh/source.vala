@@ -23,7 +23,7 @@
  * The {@link Place} where SSH keys are stored. By default that is ~/.ssh.
  * Basically, this becomes an interface to the SSH home directory.
  */
-public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
+public class Seahorse.Ssh.Source : GLib.Object, GLib.ListModel, Seahorse.Place {
 
     // Paths to the authorized_keys file and one for unauthorized keys
     // The second file is Seahorse-specific, to allow users to retain public
@@ -40,7 +40,7 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
     private FileMonitor? monitor_handle = null;
 
     // The list of Seahorse.Ssh.Keys
-    private ListStore keys = new ListStore(typeof(Ssh.Key));
+    private GenericArray<Ssh.Key> keys = new GenericArray<Ssh.Key>();
 
     public string label {
         owned get { return _("OpenSSH keys"); }
@@ -53,10 +53,6 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
 
     public string uri {
         owned get { return _("openssh://%s").printf(this.ssh_homedir); }
-    }
-
-    public Icon icon {
-        owned get { return new ThemedIcon(Gcr.ICON_HOME_DIRECTORY); }
     }
 
     public Place.Category category {
@@ -73,10 +69,6 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
 
     public MenuModel? menu_model {
         owned get { return null; }
-    }
-
-    public bool show_if_empty {
-        get { return true; }
     }
 
     /**
@@ -173,26 +165,25 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         }
     }
 
-    public uint get_length() {
-        return this.keys.get_n_items();
+    public GLib.Type get_item_type() {
+        return typeof(Ssh.Key);
     }
 
-    public List<weak GLib.Object> get_objects() {
-        var objects = new List<weak GLib.Object>();
-        for (uint i = 0; i < this.keys.get_n_items(); i++)
-            objects.append(this.keys.get_item(i));
-        return objects;
+    public uint get_n_items() {
+        return this.keys.length;
     }
 
-    public bool contains(GLib.Object object) {
-        return this.keys.find(object, null);
+    public GLib.Object? get_item(uint index) {
+        if (index >= this.keys.length)
+            return null;
+        return this.keys[index];
     }
 
-    public void remove_object(GLib.Object object) {
+    public void remove_object(Ssh.Key key) {
         uint pos;
-        if (this.keys.find(object, out pos)) {
-            this.keys.remove(pos);
-            removed(object);
+        if (this.keys.find(key, out pos)) {
+            this.keys.remove_index(pos);
+            items_changed(pos, 1, 0);
         }
     }
 
@@ -209,8 +200,8 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
             return null;
 
         // Check if it was already loaded once. If not, load it now
-        for (uint i = 0; i < this.keys.get_n_items(); i++) {
-            var key = (Ssh.Key) this.keys.get_item(i);
+        for (uint i = 0; i < this.keys.length; i++) {
+            unowned var key = this.keys[i];
             if (key.key_data.privfile == privfile) {
                 return key;
             }
@@ -231,7 +222,7 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
             try {
                 var result = yield Key.parse_file(pubfile);
                 foreach (unowned var keydata in result.public_keys) {
-                    key = Source.add_key_from_parsed_data(this, keydata, pubfile, false, false, privfile);
+                    key = add_key_from_parsed_data(keydata, pubfile, false, false, privfile);
                 }
             } catch (GLib.Error e) {
                 throw new Error.GENERAL("Couldn't read SSH file: %s (%s)".printf(pubfile, e.message));
@@ -239,22 +230,6 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         }
 
         return key;
-    }
-
-    public string? export_private(Key key) throws GLib.Error {
-        KeyData? keydata = key.key_data;
-        if (keydata == null)
-            return null;
-
-        if (keydata.privfile == null)
-            throw new Error.GENERAL(_("No private key file is available for this key."));
-
-        // And then the data itself
-        string results;
-        if (!FileUtils.get_contents(keydata.privfile, out results))
-            return null;
-
-        return results;
     }
 
     /**
@@ -275,7 +250,13 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         string? filename = null;
         while ((filename = dir.read_name()) != null) {
             string privfile = Path.build_filename(this.ssh_homedir, filename);
-            load_key_for_private_file.begin(privfile);
+            load_key_for_private_file.begin(privfile, (obj, res) => {
+                try {
+                    load_key_for_private_file.end(res);
+                } catch (GLib.Error err) {
+                    warning("Couldn't load key for file: %s", err.message);
+                }
+            });
         }
 
         // Now load the authorized keys (if it exists)
@@ -283,7 +264,7 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         if (FileUtils.test(pubfile, FileTest.IS_REGULAR)) {
             var result = yield Key.parse_file(pubfile);
             foreach (unowned var keydata in result.public_keys) {
-                Source.add_key_from_parsed_data(this, keydata, pubfile, true, true, null);
+                add_key_from_parsed_data(keydata, pubfile, true, true, null);
             }
         }
 
@@ -292,19 +273,18 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
         if (FileUtils.test(pubfile, FileTest.IS_REGULAR)) {
             var result = yield Key.parse_file(pubfile);
             foreach (unowned var keydata in result.public_keys) {
-                Source.add_key_from_parsed_data(this, keydata, pubfile, true, false, null);
+                add_key_from_parsed_data(keydata, pubfile, true, false, null);
             }
         }
 
         return true;
     }
 
-    public static Key? add_key_from_parsed_data(Source src,
-                                                KeyData? keydata,
-                                                string pubfile,
-                                                bool partial,
-                                                bool authorized,
-                                                string? privfile = null) {
+    public Key? add_key_from_parsed_data(KeyData? keydata,
+                                         string pubfile,
+                                         bool partial,
+                                         bool authorized,
+                                         string? privfile = null) {
         return_val_if_fail (keydata != null && keydata.is_valid(), null);
 
         keydata.pubfile = pubfile;
@@ -314,7 +294,7 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
             keydata.privfile = privfile;
 
         // Does src key exist in the context?
-        Key? prev = src.find_key_by_fingerprint(keydata.fingerprint);
+        Key? prev = find_key_by_fingerprint(keydata.fingerprint);
         if (prev != null)
             prev.merge_keydata(keydata);
 
@@ -323,9 +303,9 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
             return prev;
 
         // Create a new key
-        Key key = new Key(src, keydata);
-        src.keys.append(key);
-        src.added(key);
+        Key key = new Key(this, keydata);
+        this.keys.add(key);
+        items_changed(this.keys.length - 1, 0, 1);
 
         return key;
     }
@@ -452,11 +432,9 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
     }
 
     public Key? find_key_by_fingerprint(string fingerprint) {
-        for (uint i = 0; i < this.keys.get_n_items(); i++) {
-            var key = (Ssh.Key) this.keys.get_item(i);
-            if (key.fingerprint == fingerprint) {
-                return key;
-            }
+        for (uint i = 0; i < this.keys.length; i++) {
+            if (this.keys[i].fingerprint == fingerprint)
+                return this.keys[i];
         }
 
         return null;

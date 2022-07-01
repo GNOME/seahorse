@@ -25,43 +25,104 @@
 
 #include <glib/gi18n.h>
 
+struct _SeahorseUnknown {
+    SeahorseObject parent;
+
+    char *keyid;
+};
+
+enum {
+    PROP_0,
+    PROP_KEYID,
+    N_PROPS
+};
+static GParamSpec *properties[N_PROPS] = { NULL, };
+
 G_DEFINE_TYPE (SeahorseUnknown, seahorse_unknown, SEAHORSE_TYPE_OBJECT);
 
-/* -----------------------------------------------------------------------------
- * OBJECT
- */
+static void
+seahorse_unknown_get_property (GObject *object,
+                               unsigned int prop_id,
+                               GValue *value,
+                               GParamSpec *pspec)
+{
+    SeahorseUnknown *self = SEAHORSE_UNKNOWN (object);
 
+    switch (prop_id) {
+    case PROP_KEYID:
+        g_value_set_string (value, seahorse_unknown_get_keyid (self));
+        break;
+    }
+}
+
+static void
+seahorse_unknown_set_property (GObject *object, guint prop_id, const GValue *value,
+                                 GParamSpec *pspec)
+{
+    SeahorseUnknown *self = SEAHORSE_UNKNOWN (object);
+
+    switch (prop_id) {
+    case PROP_KEYID:
+        g_clear_pointer (&self->keyid, g_free);
+        self->keyid = g_value_dup_string (value);
+        break;
+    }
+}
+
+static void
+seahorse_unknown_object_finalize (GObject *obj)
+{
+    SeahorseUnknown *self = SEAHORSE_UNKNOWN (obj);
+
+    g_clear_pointer (&self->keyid, g_free);
+
+    G_OBJECT_CLASS (seahorse_unknown_parent_class)->finalize (G_OBJECT (self));
+}
 
 static void
 seahorse_unknown_init (SeahorseUnknown *self)
 {
-
 }
 
 static void
 seahorse_unknown_class_init (SeahorseUnknownClass *klass)
 {
+    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+    gobject_class->finalize = seahorse_unknown_object_finalize;
+    gobject_class->set_property = seahorse_unknown_set_property;
+    gobject_class->get_property = seahorse_unknown_get_property;
+
+    properties[PROP_KEYID] =
+        g_param_spec_string ("keyid", NULL, NULL, NULL,
+                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+    g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
 
-/* -----------------------------------------------------------------------------
- * PUBLIC METHODS
- */
-
-SeahorseUnknown*
+SeahorseUnknown *
 seahorse_unknown_new (SeahorseUnknownSource *source,
-                      const gchar *keyid,
-                      const gchar *display)
+                      const char *keyid,
+                      const char *display)
 {
-	const char *identifier;
+    const char *identifier;
 
-	if (!display)
-		display = _("Unavailable");
-	identifier = seahorse_pgp_key_calc_identifier (keyid);
+    if (!display)
+        display = _("Unavailable");
+    identifier = seahorse_pgp_key_calc_identifier (keyid);
 
-	return g_object_new (SEAHORSE_TYPE_UNKNOWN,
-	                     "place", source,
-	                     "label", display,
-	                     "identifier", identifier,
-	                     NULL);
+    return g_object_new (SEAHORSE_TYPE_UNKNOWN,
+                         "place", source,
+                         "label", display,
+                         "identifier", identifier,
+                         "keyid", keyid,
+                         NULL);
+}
+
+const char *
+seahorse_unknown_get_keyid (SeahorseUnknown *self)
+{
+    g_return_val_if_fail (SEAHORSE_IS_UNKNOWN (self), NULL);
+
+    return self->keyid;
 }

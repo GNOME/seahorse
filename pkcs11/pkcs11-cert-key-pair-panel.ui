@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="action_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Request Certificate</attribute>
+        <attribute name="action">panel.request-certificate</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Export</attribute>
+        <attribute name="action">panel.export</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Delete</attribute>
+        <attribute name="action">panel.delete</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <template class="SeahorsePkcs11CertKeyPairPanel" parent="SeahorsePanel">
+    <property name="menu">action_menu</property>
+
+    <property name="layout-manager">
+      <object class="GtkBoxLayout">
+        <property name="orientation">vertical</property>
+        <property name="spacing">18</property>
+      </object>
+    </property>
+
+    <child>
+      <object class="GtkStackSwitcher" id="stack_switcher"/>
+    </child>
+    <child>
+      <object class="GtkStack" id="stack"/>
+    </child>
+  </template>
+</interface>

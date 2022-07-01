@@ -25,7 +25,7 @@ public class Seahorse.ServerCategory : GLib.Object {
     [CCode (cname = "SeahorseValidUriFunc", has_target = false)]
     public delegate bool ValidUriFunc(string uri);
 
-    /** The scheme of servers (ie the scheme) */
+    /** The GType that can be used to construct such a server */
     public GLib.Type gtype { get; construct; }
 
     /** The scheme of servers (ie the scheme) */

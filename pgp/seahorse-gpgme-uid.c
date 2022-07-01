@@ -21,6 +21,7 @@
 
 #include "seahorse-gpgme.h"
 #include "seahorse-gpgme-uid.h"
+#include "seahorse-gpgme-uid-delete-operation.h"
 #include "seahorse-pgp-key.h"
 #include "seahorse-pgp-signature.h"
 
@@ -33,7 +34,9 @@ enum {
     PROP_PUBKEY,
     PROP_USERID,
     PROP_GPGME_INDEX,
-    PROP_ACTUAL_INDEX
+    PROP_ACTUAL_INDEX,
+    /* override properties */
+    PROP_DELETABLE,
 };
 
 struct _SeahorseGpgmeUid {
@@ -45,7 +48,10 @@ struct _SeahorseGpgmeUid {
     int actual_index;           /* The actual index of this UID */
 };
 
-G_DEFINE_TYPE (SeahorseGpgmeUid, seahorse_gpgme_uid, SEAHORSE_PGP_TYPE_UID);
+static void seahorse_gpgme_uid_deletable_iface (SeahorseDeletableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (SeahorseGpgmeUid, seahorse_gpgme_uid, SEAHORSE_PGP_TYPE_UID,
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_gpgme_uid_deletable_iface));
 
 static gchar*
 convert_string (const gchar *str)
@@ -86,8 +92,7 @@ realize_signatures (SeahorseGpgmeUid *self)
             flags |= SEAHORSE_FLAG_EXPIRED;
         if (flags == 0 && !gsig->invalid)
             flags = SEAHORSE_FLAG_IS_VALID;
-        if (gsig->exportable)
-            flags |= SEAHORSE_FLAG_EXPORTABLE;
+        /* we don't use gsig->exportable, since we don't provide that option */
 
         seahorse_pgp_signature_set_flags (sig, flags);
         seahorse_pgp_uid_add_signature (SEAHORSE_PGP_UID (self), sig);
@@ -242,6 +247,29 @@ seahorse_gpgme_uid_is_same (SeahorseGpgmeUid *self, gpgme_user_id_t userid)
     return g_strcmp0 (self->userid->uid, userid->uid) == 0;
 }
 
+static SeahorseDeleteOperation *
+seahorse_gpgme_uid_create_delete_operation (SeahorseDeletable *deletable)
+{
+    SeahorseGpgmeUid *self = SEAHORSE_GPGME_UID (deletable);
+    g_autoptr(SeahorseGpgmeUidDeleteOperation) delete_op = NULL;
+
+    delete_op = seahorse_gpgme_uid_delete_operation_new (self);
+    return SEAHORSE_DELETE_OPERATION (g_steal_pointer (&delete_op));
+}
+
+static gboolean
+seahorse_gpgme_uid_get_deletable (SeahorseDeletable *deletable)
+{
+    return TRUE;
+}
+
+static void
+seahorse_gpgme_uid_deletable_iface (SeahorseDeletableIface *iface)
+{
+    iface->create_delete_operation = seahorse_gpgme_uid_create_delete_operation;
+    iface->get_deletable = seahorse_gpgme_uid_get_deletable;
+}
+
 static void
 seahorse_gpgme_uid_init (SeahorseGpgmeUid *self)
 {
@@ -254,6 +282,7 @@ seahorse_gpgme_uid_get_property (GObject *object, guint prop_id,
                                GValue *value, GParamSpec *pspec)
 {
     SeahorseGpgmeUid *self = SEAHORSE_GPGME_UID (object);
+    SeahorseDeletable *deletable = SEAHORSE_DELETABLE (self);
 
     switch (prop_id) {
     case PROP_PUBKEY:
@@ -268,6 +297,11 @@ seahorse_gpgme_uid_get_property (GObject *object, guint prop_id,
     case PROP_ACTUAL_INDEX:
         g_value_set_uint (value, seahorse_gpgme_uid_get_actual_index (self));
         break;
+    case PROP_DELETABLE:
+        g_value_set_boolean (value, seahorse_gpgme_uid_get_deletable (deletable));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
@@ -346,6 +380,8 @@ seahorse_gpgme_uid_class_init (SeahorseGpgmeUidClass *klass)
         g_param_spec_uint ("actual-index", "Actual Index", "Actual GPG Index",
                            0, G_MAXUINT, 0,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+    g_object_class_override_property (gobject_class, PROP_DELETABLE, "deletable");
 }
 
 SeahorseGpgmeUid*

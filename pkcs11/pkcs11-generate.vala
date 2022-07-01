@@ -19,107 +19,104 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-// FIXME: damn broken bindings
-extern Gcr.CollectionModel gcr_collection_model_new(Gcr.Collection collection,
-                                                    Gcr.CollectionModelMode mode, ...);
+[GtkTemplate (ui = "/org/gnome/Seahorse/pkcs11-generate.ui")]
+public class Seahorse.Pkcs11.Generate : Gtk.ApplicationWindow {
 
-[GtkTemplate (ui = "/org/gnome/Seahorse/seahorse-pkcs11-generate.ui")]
-public class Seahorse.Pkcs11.Generate : Gtk.Dialog {
-
-    [GtkChild]
-    private unowned Gtk.Entry label_entry;
-
-    private Pkcs11.Token? token;
-    [GtkChild]
-    private unowned Gtk.ComboBox token_box;
-    private Gcr.CollectionModel? token_model;
+    [GtkChild] private unowned Adw.EntryRow label_row;
+    [GtkChild] private unowned Adw.ComboRow token_row;
 
     private Gck.Mechanism? mechanism;
-    private Gtk.ListStore? mechanism_store;
-    [GtkChild]
-    private unowned Gtk.ComboBox mechanism_box;
+    [GtkChild] private unowned Adw.ComboRow mechanism_row;
+    [GtkChild] private unowned GLib.ListStore mechanism_items;
 
-    [GtkChild]
-    private unowned Gtk.SpinButton key_bits;
+    [GtkChild] private unowned Adw.SpinRow key_size_row;
 
     private Cancellable? cancellable;
     private Gck.Attributes? pub_attrs;
     private Gck.Attributes? prv_attrs;
 
-    private enum Column {
-        LABEL,
-        TYPE,
-        N_COLS
-    }
-
-    private struct Mechanism {
+    // Known mechanisms with their label
+    private struct MechanismEntry {
         ulong mechanism_type;
-        unowned string label;
+        string label;
     }
-    private const Mechanism[] AVAILABLE_MECHANISMS = {
-        { Cryptoki.MechanismType.RSA_PKCS_KEY_PAIR_GEN, N_("RSA") },
+    private const MechanismEntry[] AVAILABLE_MECHANISMS = {
+        { CKM.RSA_PKCS_KEY_PAIR_GEN, N_("RSA") },
     };
 
+    // Helper object for GListModel
+    public class MechanismListItem : GLib.Object {
+        public ulong mechanism_type { get; construct set; }
+        public string label { get; construct set; }
+
+        public MechanismListItem(ulong type, string label) {
+            GLib.Object(mechanism_type: type, label: label);
+        }
+    }
+
+    static construct {
+        install_action("create", null, (Gtk.WidgetActionActivateFunc) create_action);
+
+        typeof(MechanismListItem).ensure();
+    }
+
     construct {
-        this.use_header_bar = 1;
-        this.key_bits.set_range(0, int.MAX); /* updated later */
-        this.key_bits.set_increments(128, 128);
-        this.key_bits.set_value(2048);
-
-        // The mechanism
-        this.mechanism_store = new Gtk.ListStore(2, typeof(string), typeof(ulong));
-        this.mechanism_store.set_default_sort_func(on_mechanism_sort);
-        this.mechanism_store.set_sort_column_id(Gtk.TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, Gtk.SortType.ASCENDING);
-        this.mechanism_box.set_model(this.mechanism_store);
-        Gtk.CellRenderer renderer = new Gtk.CellRendererText();
-        this.mechanism_box.pack_start(renderer, true);
-        this.mechanism_box.add_attribute(renderer, "markup", Column.LABEL);
-        this.mechanism_box.changed.connect(on_mechanism_changed);
-
         // The tokens
-        Gcr.Collection collection = Pkcs11.Backend.get_writable_tokens(null, Cryptoki.MechanismType.RSA_PKCS_KEY_PAIR_GEN);
-        this.token_model = gcr_collection_model_new(collection, Gcr.CollectionModelMode.LIST,
-                                                    "icon", typeof(Icon), "label", typeof(string),
-                                                    null);
-        this.token_model.set_sort_column_id(1, Gtk.SortType.ASCENDING);
-        this.token_box.set_model(this.token_model);
-        Gtk.CellRendererPixbuf icon_renderer = new Gtk.CellRendererPixbuf();
-        icon_renderer.stock_size = Gtk.IconSize.BUTTON;
-        this.token_box.pack_start(icon_renderer, false);
-        this.token_box.add_attribute(icon_renderer, "gicon", 0);
-        renderer = new Gtk.CellRendererText();
-        this.token_box.pack_start(renderer, true);
-        this.token_box.add_attribute(renderer, "text", 1);
-        this.token_box.changed.connect(on_token_changed);
-        if (collection.get_length() > 0)
-            this.token_box.active = 0;
+        var backend = Pkcs11.Backend.get();
+        var filter = new Pkcs11.TokenFilter();
+        filter.only_writable = true;
+        filter.mechanism = CKM.RSA_PKCS_KEY_PAIR_GEN;
+        var writable_tokens_model = new Gtk.FilterListModel(backend, filter);
+        this.token_row.model = writable_tokens_model;
+        // Hide the row when no writable tokens available
+        // (another row will pop up with an explanatory label)
+        this.token_row.visible = (writable_tokens_model.get_n_items() > 0);
+        writable_tokens_model.items_changed.connect((model, pos, removed, added) => {
+            this.token_row.visible = (model.get_n_items() > 0);
+        });
 
-        set_default_response (Gtk.ResponseType.OK);
+        // Adapt the available mechanisms on the selected token
+        this.token_row.notify["selected-item"].connect(on_selected_token_changed);
+        on_selected_token_changed(this.token_row, null);
 
-        update_response ();
+        validate_input();
     }
 
     public Generate(Gtk.Window? parent) {
         GLib.Object(transient_for: parent);
     }
 
-    ~Generate() {
-        this.token = null;
-        this.token_model = null;
-
-        this.mechanism = null;
-        this.mechanism_store = null;
-
-        this.cancellable = null;
-        this.pub_attrs = this.prv_attrs = null;
+    private void validate_input() {
+        action_set_enabled("create",
+                           this.token_row.selected_item != null &&
+                           this.mechanism_row.selected_item != null);
     }
 
-    private void update_response() {
-        set_response_sensitive(Gtk.ResponseType.OK, this.token != null && this.mechanism != null);
+    private void on_selected_token_changed(GLib.Object object, ParamSpec? spec) {
+        var token = (Pkcs11.Token?) this.token_row.selected_item;
+
+        var new_tokens = new GenericArray<MechanismListItem>();
+
+        if (token != null) {
+            for (uint i = 0; i < token.mechanisms.length; i++) {
+                ulong type = token.mechanisms.index(i);
+
+                // Only add types that havea known label
+                unowned string? label = get_available_mechanism_label (type);
+                if (label == null)
+                    continue;
+
+                new_tokens.add(new MechanismListItem(type, label));
+            }
+        }
+
+        this.mechanism_items.splice(0, this.mechanism_items.get_n_items(), new_tokens.data);
+
+        validate_input();
     }
 
     private unowned string? get_available_mechanism_label (ulong type) {
-        foreach (Mechanism mechanism in AVAILABLE_MECHANISMS) {
+        foreach (unowned var mechanism in AVAILABLE_MECHANISMS) {
             if (mechanism.mechanism_type == type)
                 return mechanism.label;
         }
@@ -127,56 +124,19 @@ public class Seahorse.Pkcs11.Generate : Gtk.Dialog {
         return null;
     }
 
-    private void on_token_changed(Gtk.ComboBox combo_box) {
-        this.token = null;
-
-        Gtk.TreeIter iter;
-        if (combo_box.get_active_iter(out iter)) {
-            this.token = (Pkcs11.Token) this.token_model.object_for_iter(iter);
-        }
-
-        bool valid = this.mechanism_store.get_iter_first(out iter);
-        if (this.token != null) {
-            for (uint i = 0; i < this.token.mechanisms.length; i++) {
-                ulong type = this.token.mechanisms.index(i);
-                unowned string? label = get_available_mechanism_label (type);
-                if (label == null)
-                    continue;
-                while (valid) {
-                    ulong otype;
-                    this.mechanism_store.get(iter, Column.TYPE, out otype);
-                    if (otype == type)
-                        break;
-                    valid = this.mechanism_store.remove(ref iter);
-                }
-                if (!valid)
-                    this.mechanism_store.append(out iter);
-                this.mechanism_store.set(iter, Column.TYPE, type,
-                                               Column.LABEL, label);
-                valid = this.mechanism_store.iter_next(ref iter);
-            }
-        }
-        while (valid)
-            valid = this.mechanism_store.remove(ref iter);
-
-        /* Select first mechanism if none are selected */
-        if (!this.mechanism_box.get_active_iter(out iter))
-            if (this.mechanism_store.get_iter_first(out iter))
-                this.mechanism_box.set_active_iter(iter);
-
-        update_response ();
-    }
-
-    private void on_mechanism_changed(Gtk.ComboBox? widget) {
+    [GtkCallback]
+    private void on_mechanism_selected(GLib.Object object, ParamSpec pspec)
+            requires(this.token_row.selected_item != null) {
+        var token = (Pkcs11.Token) this.token_row.selected_item;
         this.mechanism = null;
 
-        Gtk.TreeIter iter;
-        if (widget.get_active_iter(out iter)) {
+        var selected = (MechanismListItem?) this.mechanism_row.selected_item;
+        if (selected != null) {
             this.mechanism = Gck.Mechanism();
-            this.mechanism_store.get(iter, Column.TYPE, out this.mechanism.type);
+            this.mechanism.type = selected.mechanism_type;
 
-            Gck.Slot slot = token.slot;
-            Gck.MechanismInfo info = slot.get_mechanism_info(this.mechanism.type);
+            var slot = token.slot;
+            var info = slot.get_mechanism_info(this.mechanism.type);
 
             ulong min = info.min_key_size;
             ulong max = info.max_key_size;
@@ -185,44 +145,37 @@ public class Seahorse.Pkcs11.Generate : Gtk.Dialog {
                 min = 512;
             if (max > 16384 && min <= 16384)
                 max = 16384;
-            this.key_bits.set_range(min, max);
+            this.key_size_row.set_range(min, max);
         }
 
-        this.key_bits.sensitive = (this.mechanism != null);
+        this.key_size_row.sensitive = (this.mechanism != null);
 
-        update_response();
+        validate_input();
     }
 
-    private int on_mechanism_sort (Gtk.TreeModel? model, Gtk.TreeIter a, Gtk.TreeIter b) {
-        string label_a, label_b;
-        model.get(a, Column.LABEL, out label_a);
-        model.get(b, Column.LABEL, out label_b);
-        return label_a.collate(label_b);
+    private void create_action(string action_name, Variant? param) {
+        create.begin();
     }
 
-    public override void response (int response_id) {
-        if (response_id == Gtk.ResponseType.OK)
-            generate.begin();
+    private async void create()
+            requires(this.token_row.selected_item != null) {
+        close();
 
-        hide();
-    }
-
-    private async void generate() {
-        assert(this.token != null);
+        var token = (Pkcs11.Token) this.token_row.selected_item;
 
         prepare_generate();
 
-        GLib.TlsInteraction interaction = new Seahorse.Interaction(this.transient_for);
+        var interaction = new Seahorse.Interaction(this.transient_for);
         Progress.show(this.cancellable, _("Generating key"), false);
 
         try {
-            Gck.Session session = yield Gck.Session.open_async(this.token.slot,
+            Gck.Session session = yield Gck.Session.open_async(token.slot,
                        Gck.SessionOptions.READ_WRITE | Gck.SessionOptions.LOGIN_USER,
                        interaction, this.cancellable);
             Gck.Object pub, priv;
             yield session.generate_key_pair_async(this.mechanism, this.pub_attrs, this.prv_attrs,
                                                   this.cancellable, out pub, out priv);
-            yield this.token.load(this.cancellable);
+            yield token.load(this.cancellable);
             this.cancellable = null;
             this.pub_attrs = this.prv_attrs = null;
         } catch (Error e) {
@@ -236,39 +189,39 @@ public class Seahorse.Pkcs11.Generate : Gtk.Dialog {
         Gck.Builder publi = new Gck.Builder(Gck.BuilderFlags.SECURE_MEMORY);
         Gck.Builder priva = new Gck.Builder(Gck.BuilderFlags.SECURE_MEMORY);
 
-        assert (this.cancellable == null);
-        assert (this.mechanism != null);
+        assert(this.cancellable == null);
+        assert(this.mechanism != null);
 
-        publi.add_ulong(Cryptoki.Attribute.CLASS, Cryptoki.ObjectClass.PUBLIC_KEY);
-        priva.add_ulong(Cryptoki.Attribute.CLASS, Cryptoki.ObjectClass.PRIVATE_KEY);
+        publi.add_ulong(CKA.CLASS, CKO.PUBLIC_KEY);
+        priva.add_ulong(CKA.CLASS, CKO.PRIVATE_KEY);
 
-        publi.add_boolean(Cryptoki.Attribute.TOKEN, true);
-        priva.add_boolean(Cryptoki.Attribute.TOKEN, true);
+        publi.add_boolean(CKA.TOKEN, true);
+        priva.add_boolean(CKA.TOKEN, true);
 
-        priva.add_boolean(Cryptoki.Attribute.PRIVATE, true);
-        priva.add_boolean(Cryptoki.Attribute.SENSITIVE, true);
+        priva.add_boolean(CKA.PRIVATE, true);
+        priva.add_boolean(CKA.SENSITIVE, true);
 
-        string label = this.label_entry.text;
-        publi.add_string(Cryptoki.Attribute.LABEL, label);
-        priva.add_string(Cryptoki.Attribute.LABEL, label);
+        string label = this.label_row.text;
+        publi.add_string(CKA.LABEL, label);
+        priva.add_string(CKA.LABEL, label);
 
-        if (this.mechanism.type == Cryptoki.MechanismType.RSA_PKCS_KEY_PAIR_GEN) {
-            publi.add_boolean(Cryptoki.Attribute.ENCRYPT, true);
-            publi.add_boolean(Cryptoki.Attribute.VERIFY, true);
-            publi.add_boolean(Cryptoki.Attribute.WRAP, true);
+        if (this.mechanism.type == CKM.RSA_PKCS_KEY_PAIR_GEN) {
+            publi.add_boolean(CKA.ENCRYPT, true);
+            publi.add_boolean(CKA.VERIFY, true);
+            publi.add_boolean(CKA.WRAP, true);
 
-            priva.add_boolean(Cryptoki.Attribute.DECRYPT, true);
-            priva.add_boolean(Cryptoki.Attribute.SIGN, true);
-            priva.add_boolean(Cryptoki.Attribute.UNWRAP, true);
+            priva.add_boolean(CKA.DECRYPT, true);
+            priva.add_boolean(CKA.SIGN, true);
+            priva.add_boolean(CKA.UNWRAP, true);
 
-            publi.add_data(Cryptoki.Attribute.PUBLIC_EXPONENT, rsa_public_exponent);
-            publi.add_ulong(Cryptoki.Attribute.MODULUS_BITS, this.key_bits.get_value_as_int());
+            publi.add_data(CKA.PUBLIC_EXPONENT, rsa_public_exponent);
+            publi.add_ulong(CKA.MODULUS_BITS, (int) this.key_size_row.value);
         } else {
             warning("currently no support for this mechanism");
         }
 
-        this.prv_attrs = priva.steal();
-        this.pub_attrs = publi.steal();
+        this.prv_attrs = priva.end();
+        this.pub_attrs = publi.end();
 
         publi.clear();
         priva.clear();

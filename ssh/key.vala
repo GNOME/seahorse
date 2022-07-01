@@ -90,7 +90,11 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
         get { return this.key_data != null ? this.key_data.length : 0; }
     }
 
-    public Key(Source source, KeyData key_data) {
+    public bool deletable { get { return true; } }
+
+    public bool exportable { get { return true; } }
+
+    public Key(Source? source, KeyData key_data) {
         GLib.Object(place: source, key_data: key_data);
     }
 
@@ -129,18 +133,18 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
                 this.nickname = _("Secure Shell Key");
         }
 
-        this.object_flags = Seahorse.Flags.EXPORTABLE | Seahorse.Flags.DELETABLE;
         if (this.key_data.authorized)
             this.object_flags |= Seahorse.Flags.TRUSTED;
 
         if (this.key_data.privfile != null) {
             this.usage = Seahorse.Usage.PRIVATE_KEY;
             this.object_flags |= Seahorse.Flags.PERSONAL | Seahorse.Flags.TRUSTED;
-            this.icon = new ThemedIcon(Gcr.ICON_KEY_PAIR);
+            this.icon = new ThemedIcon("key-item-symbolic");
+            //XXX some emblem?
         } else {
             this.object_flags = 0;
             this.usage = Seahorse.Usage.PUBLIC_KEY;
-            this.icon = new ThemedIcon(Gcr.ICON_KEY);
+            this.icon = new ThemedIcon("key-item-symbolic");
         }
 
         string filename = Path.get_basename(this.key_data.privfile ?? this.key_data.pubfile);
@@ -154,20 +158,16 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
         // TODO: Need to work on key refreshing
     }
 
-    public GLib.List<Seahorse.Exporter> create_exporters(ExporterType type) {
-        List<Seahorse.Exporter> exporters = new List<Seahorse.Exporter>();
-        exporters.append(new Exporter(this, false));
-        return exporters;
+    public ExportOperation create_export_operation() {
+        return new Ssh.KeyExportOperation(this, false);
     }
 
-    public Seahorse.Deleter create_deleter() {
-        return new Deleter(this);
+    public Seahorse.DeleteOperation create_delete_operation() {
+        return new Ssh.KeyDeleteOperation(this);
     }
 
-    public Gtk.Window? create_viewer(Gtk.Window? parent) {
-        KeyProperties properties_dialog = new KeyProperties(this, parent);
-        properties_dialog.show();
-        return properties_dialog;
+    public Seahorse.Panel create_panel() {
+        return new KeyPanel(this);
     }
 
     public Algorithm get_algo() {

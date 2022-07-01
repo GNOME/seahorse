@@ -58,6 +58,3 @@ void            seahorse_gpgme_expires_new          (SeahorseGpgmeSubkey *subkey
 gboolean        seahorse_gpgme_photo_add            (SeahorseGpgmeKey *pkey,
                                                      GtkWindow        *parent,
                                                      const char       *path);
-
-gboolean        seahorse_gpgme_photo_delete         (SeahorseGpgmePhoto *photo,
-                                                     GtkWindow *parent);

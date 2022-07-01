@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="SeahorsePgpPhotosWidget" parent="GtkWidget">
+    <style>
+      <class name="pgp-photos-widget"/>
+    </style>
+
+    <property name="layout-manager">
+      <object class="GtkBoxLayout">
+        <property name="orientation">vertical</property>
+        <property name="spacing">18</property>
+      </object>
+    </property>
+
+    <child>
+      <object class="GtkImage" id="empty_state">
+        <property name="icon-name">avatar-default-symbolic</property>
+        <property name="pixel-size">42</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwCarousel" id="carousel">
+        <property name="visible"
+          bind-source="empty_state" bind-property="visible"
+          bind-flags="bidirectional|sync-create|invert-boolean"/>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwCarouselIndicatorDots" id="carousel_dots">
+        <property name="carousel">carousel</property>
+      </object>
+    </child>
+
+  </template>
+</interface>

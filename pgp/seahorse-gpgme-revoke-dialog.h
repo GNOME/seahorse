@@ -26,7 +26,7 @@
 #define SEAHORSE_GPGME_TYPE_REVOKE_DIALOG (seahorse_gpgme_revoke_dialog_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorseGpgmeRevokeDialog, seahorse_gpgme_revoke_dialog,
                       SEAHORSE_GPGME, REVOKE_DIALOG,
-                      GtkDialog)
+                      GtkApplicationWindow)
 
 GtkWidget *       seahorse_gpgme_revoke_dialog_new    (SeahorseGpgmeSubkey *subkey,
                                                        GtkWindow           *parent);

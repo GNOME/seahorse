@@ -26,11 +26,11 @@
 #define SEAHORSE_PGP_TYPE_UID_LIST_BOX (seahorse_pgp_uid_list_box_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorsePgpUidListBox, seahorse_pgp_uid_list_box,
                       SEAHORSE_PGP, UID_LIST_BOX,
-                      GtkListBox)
+                      AdwPreferencesGroup)
 
 #define SEAHORSE_PGP_TYPE_UID_LIST_BOX_ROW (seahorse_pgp_uid_list_box_row_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorsePgpUidListBoxRow, seahorse_pgp_uid_list_box_row,
                       SEAHORSE_PGP, UID_LIST_BOX_ROW,
-                      HdyExpanderRow)
+                      AdwExpanderRow)
 
 GtkWidget * seahorse_pgp_uid_list_box_new (SeahorsePgpKey *key);

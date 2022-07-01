@@ -25,7 +25,7 @@
 #define SEAHORSE_GPGME_TYPE_ADD_UID (seahorse_gpgme_add_uid_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorseGpgmeAddUid, seahorse_gpgme_add_uid,
                       SEAHORSE_GPGME, ADD_UID,
-                      GtkDialog)
+                      GtkApplicationWindow)
 
 SeahorseGpgmeAddUid * seahorse_gpgme_add_uid_new        (SeahorseGpgmeKey *pkey,
                                                          GtkWindow *parent);

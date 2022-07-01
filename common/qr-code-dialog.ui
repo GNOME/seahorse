@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="SeahorseQrCodeDialog" parent="AdwDialog">
+    <property name="content-width">400</property>
+    <property name="content-height">550</property>
+
+    <property name="child">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar"/>
+        </child>
+
+        <property name="content">
+          <object class="GtkScrolledWindow">
+            <property name="propagate-natural-height">True</property>
+            <child>
+              <object class="AdwClamp">
+
+                <child>
+                  <object class="GtkBox">
+                    <property name="spacing">24</property>
+                    <property name="orientation">vertical</property>
+                    <property name="margin-top">32</property>
+                    <property name="margin-bottom">32</property>
+                    <property name="margin-start">32</property>
+                    <property name="margin-end">32</property>
+
+                    <child>
+                      <object class="GtkPicture" id="qr_image">
+                        <property name="halign">center</property>
+                        <property name="height-request">200</property>
+                        <property name="can-shrink">True</property>
+                        <property name="alternative-text" translatable="yes">QR Code</property>
+                        <style>
+                          <class name="card"/>
+                          <class name="seahorse-qr-code-dialog-qr-image"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </property>
+  </template>
+</interface>

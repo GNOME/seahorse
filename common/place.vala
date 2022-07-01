@@ -22,7 +22,7 @@
  * A SeahorsePlace is a collection of objects (passwords/keys/certificates/...).
  * An example of this is a keyring.
  */
-public interface Seahorse.Place : Gcr.Collection {
+public interface Seahorse.Place : GLib.ListModel {
 
     /**
      * We generally divide a SeahorsePlace in some high level categories.
@@ -51,15 +51,7 @@ public interface Seahorse.Place : Gcr.Collection {
     public abstract string label { owned get; set; }
     public abstract string description { owned get; }
     public abstract string uri { owned get; }
-    public abstract Icon icon { owned get; }
     public abstract Category category { get; }
-
-    /**
-     * In some cases, we do not want to show the Place in the sidebar
-     * if it's empty (for example p11-kit's System Trust), while we do
-     * want this for others (like libsecret keyrings).
-     */
-    public abstract bool show_if_empty { get; }
 
     /**
      * Returns the {@link GLib.Action}s that are defined for this Place,

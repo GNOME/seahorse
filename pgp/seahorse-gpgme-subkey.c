@@ -21,6 +21,7 @@
 
 #include "seahorse-gpgme.h"
 #include "seahorse-gpgme-subkey.h"
+#include "seahorse-gpgme-subkey-delete-operation.h"
 #include "seahorse-gpgme-uid.h"
 
 #include <string.h>
@@ -30,7 +31,9 @@
 enum {
     PROP_0,
     PROP_SUBKEY,
-    N_PROPS
+    N_PROPS,
+    /* overridden properties */
+    PROP_DELETABLE,
 };
 
 struct _SeahorseGpgmeSubkey {
@@ -39,7 +42,11 @@ struct _SeahorseGpgmeSubkey {
     gpgme_subkey_t subkey;
 };
 
-G_DEFINE_TYPE (SeahorseGpgmeSubkey, seahorse_gpgme_subkey, SEAHORSE_PGP_TYPE_SUBKEY);
+static void       seahorse_gpgme_subkey_deletable_iface       (SeahorseDeletableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (SeahorseGpgmeSubkey, seahorse_gpgme_subkey, SEAHORSE_PGP_TYPE_SUBKEY,
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_DELETABLE, seahorse_gpgme_subkey_deletable_iface);
+);
 
 gpgme_subkey_t
 seahorse_gpgme_subkey_get_subkey (SeahorseGpgmeSubkey *self)
@@ -133,6 +140,27 @@ seahorse_gpgme_subkey_set_subkey (SeahorseGpgmeSubkey *self, gpgme_subkey_t subk
     g_object_thaw_notify (G_OBJECT (self));
 }
 
+static SeahorseDeleteOperation *
+seahorse_gpgme_subkey_create_delete_operation (SeahorseDeletable *deletable)
+{
+    SeahorseGpgmeSubkey *self = SEAHORSE_GPGME_SUBKEY (deletable);
+
+    return seahorse_gpgme_subkey_delete_operation_new (self);
+}
+
+static gboolean
+seahorse_gpgme_subkey_get_deletable (SeahorseDeletable *deletable)
+{
+    return TRUE;
+}
+
+static void
+seahorse_gpgme_subkey_deletable_iface (SeahorseDeletableIface *iface)
+{
+    iface->create_delete_operation = seahorse_gpgme_subkey_create_delete_operation;
+    iface->get_deletable = seahorse_gpgme_subkey_get_deletable;
+}
+
 static void
 seahorse_gpgme_subkey_init (SeahorseGpgmeSubkey *self)
 {
@@ -142,14 +170,20 @@ static void
 seahorse_gpgme_subkey_get_property (GObject      *object,
                                     unsigned int  prop_id,
                                     GValue       *value,
-                                    GParamSpec *pspec)
+                                    GParamSpec   *pspec)
 {
     SeahorseGpgmeSubkey *self = SEAHORSE_GPGME_SUBKEY (object);
+    SeahorseDeletable *deletable = SEAHORSE_DELETABLE (self);
 
     switch (prop_id) {
     case PROP_SUBKEY:
         g_value_set_pointer (value, seahorse_gpgme_subkey_get_subkey (self));
         break;
+    case PROP_DELETABLE:
+        g_value_set_boolean (value, seahorse_gpgme_subkey_get_deletable (deletable));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
@@ -190,6 +224,8 @@ seahorse_gpgme_subkey_class_init (SeahorseGpgmeSubkeyClass *klass)
     g_object_class_install_property (gobject_class, PROP_SUBKEY,
         g_param_spec_pointer ("subkey", "Subkey", "GPGME Subkey",
                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+    g_object_class_override_property (gobject_class, PROP_DELETABLE, "deletable");
 }
 
 SeahorseGpgmeSubkey*

@@ -35,53 +35,56 @@
 static void
 on_settings_default_key_changed (GSettings *settings, const gchar *key, gpointer user_data)
 {
-	/* Default key changed, refresh */
-	gcr_filter_collection_refilter (GCR_FILTER_COLLECTION (user_data));
+    GtkFilter *filter = GTK_FILTER (user_data);
+
+    /* Default key changed, refresh */
+    gtk_filter_changed (filter, GTK_FILTER_CHANGE_DIFFERENT);
 }
 
 static gboolean
-pgp_signers_match (GObject *obj,
-                   gpointer data)
+pgp_signers_match (void *item, void *data)
 {
-	SeahorsePgpKey *defkey;
-	SeahorseUsage usage;
-	SeahorseFlags flags;
+    SeahorsePgpKey *key = SEAHORSE_PGP_KEY (item);
+    SeahorsePgpKey *defkey;
+    SeahorseUsage usage;
+    SeahorseFlags flags;
 
-	if (!SEAHORSE_GPGME_IS_KEY (obj))
-		return FALSE;
+    if (!SEAHORSE_GPGME_IS_KEY (key))
+        return FALSE;
 
-	g_object_get (obj, "usage", &usage, "object-flags", &flags, NULL);
-	if (usage != SEAHORSE_USAGE_PRIVATE_KEY)
-		return FALSE;
-	if (!(flags & SEAHORSE_FLAG_CAN_SIGN))
-		return FALSE;
-	if (flags & (SEAHORSE_FLAG_EXPIRED | SEAHORSE_FLAG_REVOKED | SEAHORSE_FLAG_DISABLED))
-		return FALSE;
+    g_object_get (key, "usage", &usage, "object-flags", &flags, NULL);
+    if (usage != SEAHORSE_USAGE_PRIVATE_KEY)
+        return FALSE;
+    if (!(flags & SEAHORSE_FLAG_CAN_SIGN))
+        return FALSE;
+    if (flags & (SEAHORSE_FLAG_EXPIRED | SEAHORSE_FLAG_REVOKED | SEAHORSE_FLAG_DISABLED))
+        return FALSE;
 
-	defkey = seahorse_pgp_backend_get_default_key (NULL);
+    defkey = seahorse_pgp_backend_get_default_key (NULL);
 
-	/* Default key overrides all, and becomes the only signer available*/
-	if (defkey != NULL &&
-	    g_strcmp0 (seahorse_pgp_key_get_keyid (defkey),
-	               seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (obj))) != 0)
-		return FALSE;
+    /* Default key overrides all, and becomes the only signer available*/
+    if (defkey != NULL &&
+        g_strcmp0 (seahorse_pgp_key_get_keyid (defkey),
+                   seahorse_pgp_key_get_keyid (key)) != 0)
+        return FALSE;
 
-	return TRUE;
+    return TRUE;
 }
 
-GcrCollection *
+GListModel *
 seahorse_keyset_pgp_signers_new (void)
 {
-	GcrCollection *collection;
-	SeahorseGpgmeKeyring *keyring;
+    SeahorseGpgmeKeyring *keyring;
+    g_autoptr(GtkCustomFilter) filter = NULL;
+    GtkFilterListModel *model;
 
-	keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-	collection = gcr_filter_collection_new_with_callback (GCR_COLLECTION (keyring),
-			pgp_signers_match,
-			NULL, NULL);
+    keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+    filter = gtk_custom_filter_new (pgp_signers_match, NULL, NULL);
+    model = gtk_filter_list_model_new (G_LIST_MODEL (keyring),
+                                       GTK_FILTER (g_steal_pointer (&filter)));
 
-	g_signal_connect_object (seahorse_pgp_settings_instance (), "changed::default-key",
-	                         G_CALLBACK (on_settings_default_key_changed), collection, 0);
+    g_signal_connect_object (seahorse_pgp_settings_instance (), "changed::default-key",
+                             G_CALLBACK (on_settings_default_key_changed), filter, 0);
 
-	return collection;
+    return G_LIST_MODEL (model);
 }

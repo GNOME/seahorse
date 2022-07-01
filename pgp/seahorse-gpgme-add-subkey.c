@@ -24,6 +24,7 @@
 #include "libseahorse/seahorse-util.h"
 #include "seahorse-gpgme-add-subkey.h"
 #include "seahorse-gpgme-key-op.h"
+#include "seahorse-pgp-enums.h"
 
 
 /**
@@ -37,10 +38,11 @@ struct _SeahorseGpgmeAddSubkey {
 
     SeahorseGpgmeKey *key;
 
-    GtkTreeModel *types_model;
-    GtkWidget *type_combo;
+    GtkWidget *algo_row;
+    GtkCustomFilter *algo_filter;
 
-    GtkWidget *length_spinner;
+    GtkWidget *length_row;
+    GtkAdjustment *length_row_adjustment;
 
     GtkWidget *expires_datepicker;
     GtkWidget *never_expires_check;
@@ -49,97 +51,70 @@ struct _SeahorseGpgmeAddSubkey {
 enum {
     PROP_0,
     PROP_KEY,
+    N_PROPS
 };
 
 G_DEFINE_TYPE (SeahorseGpgmeAddSubkey, seahorse_gpgme_add_subkey, GTK_TYPE_DIALOG)
 
-enum {
-    COMBO_STRING,
-    COMBO_INT,
-    N_COLUMNS
-};
-
 static void
-handler_gpgme_add_subkey_type_changed (GtkComboBox *combo,
-                                       gpointer user_data)
+on_algo_row_notify_selected (GObject *object, GParamSpec *pspec, void *user_data)
 {
     SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (user_data);
-    int type;
-    GtkSpinButton *length;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
+    SeahorsePgpKeyAlgorithm algo;
+    AdwSpinRow *length_row;
+    GtkAdjustment *adjustment;
 
-    length = GTK_SPIN_BUTTON (self->length_spinner);
+    /* Change the key length row based on the selected algo */
+    algo = seahorse_gpgme_add_subkey_get_selected_algo (self);
+    length_row = ADW_SPIN_ROW (self->length_row);
+    adjustment = self->length_row_adjustment;
 
-    model = gtk_combo_box_get_model (combo);
-    gtk_combo_box_get_active_iter (combo, &iter);
-    gtk_tree_model_get (model, &iter,
-                        COMBO_INT, &type,
-                        -1);
-
-    switch (type) {
-        /* DSA */
-        case 0:
-            gtk_spin_button_set_range (length, DSA_MIN, DSA_MAX);
-            gtk_spin_button_set_value (length, LENGTH_DEFAULT < DSA_MAX ? LENGTH_DEFAULT : DSA_MAX);
+    switch (algo) {
+        case SEAHORSE_PGP_KEY_ALGO_DSA:
+            gtk_adjustment_set_lower (adjustment, DSA_MIN);
+            gtk_adjustment_set_upper (adjustment, DSA_MAX);
+            adw_spin_row_set_value (length_row, MIN (LENGTH_DEFAULT, DSA_MAX));
             break;
         /* ElGamal */
-        case 1:
-            gtk_spin_button_set_range (length, ELGAMAL_MIN, LENGTH_MAX);
-            gtk_spin_button_set_value (length, LENGTH_DEFAULT);
+        case SEAHORSE_PGP_KEY_ALGO_ELGAMAL:
+            gtk_adjustment_set_lower (adjustment, ELGAMAL_MIN);
+            gtk_adjustment_set_upper (adjustment, LENGTH_MAX);
+            adw_spin_row_set_value (length_row, LENGTH_DEFAULT);
             break;
         /* RSA */
-        default:
-            gtk_spin_button_set_range (length, RSA_MIN, LENGTH_MAX);
-            gtk_spin_button_set_value (length, LENGTH_DEFAULT);
+        case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
+        case SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT:
+            gtk_adjustment_set_lower (adjustment, RSA_MIN);
+            gtk_adjustment_set_upper (adjustment, LENGTH_MAX);
+            adw_spin_row_set_value (length_row, LENGTH_DEFAULT);
             break;
+        default:
+            g_return_if_reached ();
     }
 }
 
-static void
-on_gpgme_add_subkey_never_expires_toggled (GtkToggleButton *togglebutton,
-                                           gpointer user_data)
+SeahorsePgpKeyAlgorithm
+seahorse_gpgme_add_subkey_get_selected_algo (SeahorseGpgmeAddSubkey *self)
 {
-    SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (user_data);
-
-    gtk_widget_set_sensitive (self->expires_datepicker,
-                              !gtk_toggle_button_get_active (togglebutton));
-}
-
-SeahorseKeyEncType
-seahorse_gpgme_add_subkey_get_active_type (SeahorseGpgmeAddSubkey *self)
-{
-    GtkTreeIter iter;
-    int type;
+    AdwComboRow *algo_row;
+    GObject *selected_item;
 
     g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
 
-    gtk_combo_box_get_active_iter (GTK_COMBO_BOX (self->type_combo), &iter);
-    gtk_tree_model_get (self->types_model, &iter,
-                        COMBO_INT, &type,
-                        -1);
-
-    switch (type) {
-        case 0:
-            return DSA;
-        case 1:
-            return ELGAMAL;
-        case 2:
-            return RSA_SIGN;
-        default:
-            return RSA_ENCRYPT;
-    }
+    algo_row = ADW_COMBO_ROW (self->algo_row);
+    selected_item = adw_combo_row_get_selected_item (algo_row);
+    return adw_enum_list_item_get_value (ADW_ENUM_LIST_ITEM (selected_item));
 }
 
 GDateTime *
 seahorse_gpgme_add_subkey_get_expires (SeahorseGpgmeAddSubkey *self)
 {
-    g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), NULL);
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->never_expires_check)))
-        return 0;
+    if (gtk_check_button_get_active (GTK_CHECK_BUTTON (self->never_expires_check)))
+        return NULL;
 
-    return seahorse_date_picker_get_datetime (SEAHORSE_DATE_PICKER(self->expires_datepicker));
+    return seahorse_date_picker_get_datetime (SEAHORSE_DATE_PICKER (self->expires_datepicker));
 }
 
 guint
@@ -147,7 +122,7 @@ seahorse_gpgme_add_subkey_get_keysize (SeahorseGpgmeAddSubkey *self)
 {
     g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
 
-    return gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (self->length_spinner));
+    return (guint) adw_spin_row_get_value (ADW_SPIN_ROW (self->length_row));
 }
 
 static void
@@ -197,6 +172,40 @@ seahorse_gpgme_add_subkey_finalize (GObject *obj)
     G_OBJECT_CLASS (seahorse_gpgme_add_subkey_parent_class)->finalize (obj);
 }
 
+static gboolean
+filter_enums (void *item, void *user_data)
+{
+    AdwEnumListItem *enum_item = ADW_ENUM_LIST_ITEM (item);
+
+    switch (adw_enum_list_item_get_value (enum_item)) {
+        case SEAHORSE_PGP_KEY_ALGO_DSA:
+        case SEAHORSE_PGP_KEY_ALGO_ELGAMAL:
+        case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
+        case SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT:
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+static char *
+algo_to_string (void *user_data,
+                SeahorsePgpKeyAlgorithm algo)
+{
+    switch (algo) {
+        case SEAHORSE_PGP_KEY_ALGO_DSA:
+            return g_strdup (_("DSA (sign only)"));
+        case SEAHORSE_PGP_KEY_ALGO_ELGAMAL:
+            return g_strdup (_("ElGamal (encrypt only)"));
+        case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
+            return g_strdup (_("RSA (sign only)"));
+        case SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT:
+            return g_strdup (_("RSA (encrypt only)"));
+        default:
+            return g_strdup ("");
+    }
+}
+
 static void
 seahorse_gpgme_add_subkey_constructed (GObject *obj)
 {
@@ -213,49 +222,14 @@ seahorse_gpgme_add_subkey_constructed (GObject *obj)
 static void
 seahorse_gpgme_add_subkey_init (SeahorseGpgmeAddSubkey *self)
 {
-    GtkTreeIter iter;
-    GtkCellRenderer *renderer;
     g_autoptr (GDateTime) now = NULL;
     g_autoptr (GDateTime) next_year = NULL;
 
+    g_type_ensure (SEAHORSE_TYPE_PGP_KEY_ALGORITHM);
+
     gtk_widget_init_template (GTK_WIDGET (self));
 
-    self->types_model = GTK_TREE_MODEL (gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_INT));
-    gtk_combo_box_set_model (GTK_COMBO_BOX (self->type_combo),
-                             GTK_TREE_MODEL (self->types_model));
-
-    gtk_cell_layout_clear (GTK_CELL_LAYOUT (self->type_combo));
-    renderer = gtk_cell_renderer_text_new ();
-
-    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self->type_combo), renderer, TRUE);
-    gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (self->type_combo), renderer,
-                                    "text", COMBO_STRING);
-
-    gtk_list_store_append (GTK_LIST_STORE (self->types_model), &iter);
-    gtk_list_store_set (GTK_LIST_STORE (self->types_model), &iter,
-                        COMBO_STRING, _("DSA (sign only)"),
-                        COMBO_INT, 0,
-                        -1);
-
-    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (self->type_combo), &iter);
-
-    gtk_list_store_append (GTK_LIST_STORE (self->types_model), &iter);
-    gtk_list_store_set (GTK_LIST_STORE (self->types_model), &iter,
-                        COMBO_STRING, _("ElGamal (encrypt only)"),
-                        COMBO_INT, 1,
-                        -1);
-
-    gtk_list_store_append (GTK_LIST_STORE (self->types_model), &iter);
-    gtk_list_store_set (GTK_LIST_STORE (self->types_model), &iter,
-                        COMBO_STRING, _("RSA (sign only)"),
-                        COMBO_INT, 2,
-                        -1);
-
-    gtk_list_store_append (GTK_LIST_STORE (self->types_model), &iter);
-    gtk_list_store_set (GTK_LIST_STORE (self->types_model), &iter,
-                        COMBO_STRING, _("RSA (encrypt only)"),
-                        COMBO_INT, 3,
-                        -1);
+    gtk_custom_filter_set_filter_func (self->algo_filter, filter_enums, self, NULL);
 
     now = g_date_time_new_now_utc ();
     next_year = g_date_time_add_years (now, 1);
@@ -281,12 +255,14 @@ seahorse_gpgme_add_subkey_class_init (SeahorseGpgmeAddSubkeyClass *klass)
                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
     gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Seahorse/seahorse-gpgme-add-subkey.ui");
-    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, type_combo);
-    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, length_spinner);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, algo_row);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, algo_filter);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, length_row);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, length_row_adjustment);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, expires_datepicker);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, never_expires_check);
-    gtk_widget_class_bind_template_callback (widget_class, handler_gpgme_add_subkey_type_changed);
-    gtk_widget_class_bind_template_callback (widget_class, on_gpgme_add_subkey_never_expires_toggled);
+    gtk_widget_class_bind_template_callback (widget_class, algo_to_string);
+    gtk_widget_class_bind_template_callback (widget_class, on_algo_row_notify_selected);
 }
 
 /**

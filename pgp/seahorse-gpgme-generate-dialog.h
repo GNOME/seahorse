@@ -26,9 +26,8 @@
 #define SEAHORSE_GPGME_TYPE_GENERATE_DIALOG (seahorse_gpgme_generate_dialog_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorseGpgmeGenerateDialog, seahorse_gpgme_generate_dialog,
                       SEAHORSE_GPGME, GENERATE_DIALOG,
-                      GtkDialog)
+                      AdwDialog)
 
 void            seahorse_gpgme_generate_register    (void);
 
-GtkDialog*      seahorse_gpgme_generate_dialog_new  (SeahorseGpgmeKeyring *keyring,
-                                                     GtkWindow *parent);
+SeahorseGpgmeGenerateDialog *      seahorse_gpgme_generate_dialog_new  (SeahorseGpgmeKeyring *keyring);

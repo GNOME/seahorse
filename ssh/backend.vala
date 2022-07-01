@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-public class Seahorse.Ssh.Backend : GLib.Object, Gcr.Collection, Seahorse.Backend {
+public class Seahorse.Ssh.Backend : GLib.Object, GLib.ListModel, Seahorse.Backend {
 
     private Source dot_ssh;
 
@@ -48,20 +48,16 @@ public class Seahorse.Ssh.Backend : GLib.Object, Gcr.Collection, Seahorse.Backen
 
     public static Backend? instance { get; internal set; default = null; }
 
-    public uint get_length() {
+    public GLib.Type get_item_type() {
+        return typeof(Ssh.Source);
+    }
+
+    public uint get_n_items() {
         return 1;
     }
 
-    public List<weak GLib.Object> get_objects() {
-        List<weak GLib.Object> list = new List<weak GLib.Object>();
-        list.append(this.dot_ssh);
-        return list;
-    }
-
-    public bool contains(GLib.Object object) {
-        Source? src = object as Source;
-
-        return (src != null) && (this.dot_ssh == src);
+    public GLib.Object? get_item(uint position) {
+        return (position == 0)? this.dot_ssh : null;
     }
 
     public Seahorse.Place? lookup_place(string uri) {

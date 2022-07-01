@@ -22,6 +22,7 @@
 #include "seahorse-gpgme-revoke-dialog.h"
 #include "seahorse-gpgme-key-op.h"
 #include "seahorse-pgp-dialogs.h"
+#include "seahorse-pgp-enums.h"
 
 #include "libseahorse/seahorse-util.h"
 
@@ -29,20 +30,13 @@
 
 #include <string.h>
 
-enum {
-  COLUMN_TEXT,
-  COLUMN_TOOLTIP,
-  COLUMN_INT,
-  N_COLUMNS
-};
-
 struct _SeahorseGpgmeRevokeDialog {
-    GtkDialog parent_instance;
+    GtkApplicationWindow parent_instance;
 
     SeahorseGpgmeSubkey *subkey;
 
-    GtkWidget *reason_combo;
-    GtkWidget *description_entry;
+    GtkWidget *reason_row;
+    GtkWidget *description_row;
 };
 
 enum {
@@ -52,33 +46,82 @@ enum {
 };
 static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
-G_DEFINE_TYPE (SeahorseGpgmeRevokeDialog, seahorse_gpgme_revoke_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (SeahorseGpgmeRevokeDialog, seahorse_gpgme_revoke_dialog, GTK_TYPE_APPLICATION_WINDOW)
 
+static SeahorsePgpRevokeReason
+get_selected_revoke_reason (SeahorseGpgmeRevokeDialog *self)
+{
+    AdwComboRow *reason_row;
+    GObject *selected_item;
+
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_REVOKE_DIALOG (self), 0);
+
+    reason_row = ADW_COMBO_ROW (self->reason_row);
+    selected_item = adw_combo_row_get_selected_item (reason_row);
+    return adw_enum_list_item_get_value (ADW_ENUM_LIST_ITEM (selected_item));
+}
 
 static void
-on_gpgme_revoke_ok_clicked (GtkButton *button,
-                            gpointer user_data)
+revoke_action (GtkWidget *widget, const char *action_name, GVariant *param)
 {
-    SeahorseGpgmeRevokeDialog *self = SEAHORSE_GPGME_REVOKE_DIALOG (user_data);
-    SeahorseRevokeReason reason;
+    SeahorseGpgmeRevokeDialog *self = SEAHORSE_GPGME_REVOKE_DIALOG (widget);
+    SeahorsePgpRevokeReason reason;
     const char *description;
     gpgme_error_t err;
-    GtkTreeModel *model;
-    GtkTreeIter iter;
-    GValue value = G_VALUE_INIT;
+    GObject *item;
 
-    model = gtk_combo_box_get_model (GTK_COMBO_BOX (self->reason_combo));
-    gtk_combo_box_get_active_iter (GTK_COMBO_BOX (self->reason_combo), &iter);
+    item = adw_combo_row_get_selected_item (ADW_COMBO_ROW (self->reason_row));
+    reason = adw_enum_list_item_get_value (ADW_ENUM_LIST_ITEM (item));
 
-    gtk_tree_model_get_value (model, &iter, COLUMN_INT, &value);
-    reason = g_value_get_int (&value);
-    g_value_unset (&value);
-
-    description = gtk_entry_get_text (GTK_ENTRY (self->description_entry));
+    description = gtk_editable_get_text (GTK_EDITABLE (self->description_row));
 
     err = seahorse_gpgme_key_op_revoke_subkey (self->subkey, reason, description);
     if (!GPG_IS_OK (err))
         seahorse_gpgme_handle_error (err, _("Couldn’t revoke subkey"));
+
+    gtk_window_close (GTK_WINDOW (self));
+}
+
+static char *
+reason_to_string (void                   *user_data,
+                SeahorsePgpRevokeReason reason)
+{
+    switch (reason) {
+        case SEAHORSE_PGP_REVOKE_REASON_NONE:
+            return g_strdup (_("No reason"));
+        case SEAHORSE_PGP_REVOKE_REASON_COMPROMISED:
+            return g_strdup (_("Compromised"));
+        case SEAHORSE_PGP_REVOKE_REASON_SUPERSEDED:
+            return g_strdup (_("Superseded"));
+        case SEAHORSE_PGP_REVOKE_REASON_NOT_USED:
+            return g_strdup (_("Not Used"));
+    }
+
+    g_return_val_if_reached (NULL);
+}
+
+static void
+reason_row_notify_selected (GObject *object, GParamSpec *pspec, void *user_data)
+{
+    SeahorseGpgmeRevokeDialog *self = SEAHORSE_GPGME_REVOKE_DIALOG (user_data);
+    const char *subtitle;
+
+    switch (get_selected_revoke_reason (self)) {
+        case SEAHORSE_PGP_REVOKE_REASON_NONE:
+            subtitle = _("No reason for revoking key");
+            break;
+        case SEAHORSE_PGP_REVOKE_REASON_COMPROMISED:
+            subtitle = _("Key has been compromised");
+            break;
+        case SEAHORSE_PGP_REVOKE_REASON_SUPERSEDED:
+            subtitle = _("Key has been superseded");
+            break;
+        case SEAHORSE_PGP_REVOKE_REASON_NOT_USED:
+            subtitle = _("Key is no longer used");
+            break;
+    }
+
+    adw_action_row_set_subtitle (ADW_ACTION_ROW (self->reason_row), subtitle);
 }
 
 static void
@@ -145,53 +188,10 @@ seahorse_gpgme_revoke_dialog_constructed (GObject *obj)
 static void
 seahorse_gpgme_revoke_dialog_init (SeahorseGpgmeRevokeDialog *self)
 {
-    GtkListStore *store;
-    GtkTreeIter iter;
-    GtkCellRenderer *renderer;
-
     gtk_widget_init_template (GTK_WIDGET (self));
 
-    /* Initialize List Store for the Combo Box */
-    store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
-
-    gtk_list_store_append (store, &iter);
-    gtk_list_store_set (store, &iter,
-                        COLUMN_TEXT, _("No reason"),
-                        COLUMN_TOOLTIP, _("No reason for revoking key"),
-                        COLUMN_INT, REVOKE_NO_REASON,
-                        -1);
-
-    gtk_list_store_append (store, &iter);
-    gtk_list_store_set (store, &iter,
-                        COLUMN_TEXT, _("Compromised"),
-                        COLUMN_TOOLTIP, _("Key has been compromised"),
-                        COLUMN_INT, REVOKE_COMPROMISED,
-                        -1);
-
-    gtk_list_store_append (store, &iter);
-    gtk_list_store_set (store, &iter,
-                        COLUMN_TEXT, _("Superseded"),
-                        COLUMN_TOOLTIP, _("Key has been superseded"),
-                        COLUMN_INT, REVOKE_SUPERSEDED,
-                        -1);
-
-    gtk_list_store_append (store, &iter);
-    gtk_list_store_set (store, &iter,
-                        COLUMN_TEXT, _("Not Used"),
-                        COLUMN_TOOLTIP, _("Key is no longer used"),
-                        COLUMN_INT, REVOKE_NOT_USED,
-                        -1);
-
-    /* Finish Setting Up Combo Box */
-    gtk_combo_box_set_model (GTK_COMBO_BOX (self->reason_combo),
-                             GTK_TREE_MODEL (store));
-    gtk_combo_box_set_active (GTK_COMBO_BOX (self->reason_combo), 0);
-
-    renderer = gtk_cell_renderer_text_new ();
-    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self->reason_combo), renderer, TRUE);
-    gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (self->reason_combo), renderer,
-                                    "text", COLUMN_TEXT,
-                                    NULL);
+    adw_combo_row_set_selected (ADW_COMBO_ROW (self->reason_row), 0);
+    reason_row_notify_selected (G_OBJECT (self->reason_row), NULL, self);
 }
 
 static void
@@ -215,16 +215,19 @@ seahorse_gpgme_revoke_dialog_class_init (SeahorseGpgmeRevokeDialogClass *klass)
 
     g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 
+    gtk_widget_class_install_action (widget_class, "revoke", NULL, revoke_action);
+
     gtk_widget_class_set_template_from_resource (widget_class,
                                                  "/org/gnome/Seahorse/seahorse-gpgme-revoke-dialog.ui");
     gtk_widget_class_bind_template_child (widget_class,
                                           SeahorseGpgmeRevokeDialog,
-                                          reason_combo);
+                                          reason_row);
     gtk_widget_class_bind_template_child (widget_class,
                                           SeahorseGpgmeRevokeDialog,
-                                          description_entry);
+                                          description_row);
+    gtk_widget_class_bind_template_callback (widget_class, reason_to_string);
     gtk_widget_class_bind_template_callback (widget_class,
-                                             on_gpgme_revoke_ok_clicked);
+                                             reason_row_notify_selected);
 }
 
 GtkWidget *
@@ -237,6 +240,5 @@ seahorse_gpgme_revoke_dialog_new (SeahorseGpgmeSubkey *subkey,
     return g_object_new (SEAHORSE_GPGME_TYPE_REVOKE_DIALOG,
                          "subkey", subkey,
                          "transient-for", parent,
-                         "use-header-bar", 1,
                          NULL);
 }

@@ -20,41 +20,36 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-
 // FIXME: there are no bindings generated for these functions
 extern string gcr_secure_memory_strdup(string str);
 extern void gcr_secure_memory_free(void* str);
 
 public class Seahorse.Interaction : GLib.TlsInteraction {
 
-    /**
-     * The parent window
-     */
+    /** The parent window */
     public weak Gtk.Window? parent { get; set; }
 
     public Interaction(Gtk.Window? parent) {
         this.parent = parent;
     }
 
-    public override TlsInteractionResult ask_password(TlsPassword password,
-                                                      Cancellable? cancellable = null)
+    public override async TlsInteractionResult ask_password_async(TlsPassword password,
+                                                                  Cancellable? cancellable = null)
             throws GLib.Error {
-        string description = calc_description (password);
-        PassphrasePrompt dialog = PassphrasePrompt.show_dialog(null, description, null, null, false);
 
-        if (this.parent != null)
-            dialog.transient_for = this.parent;
+        debug("Asking user for password");
+        string description = calc_description(password);
 
-        int response = dialog.run();
-
-        if (response == Gtk.ResponseType.ACCEPT)
-            password.set_value_full((uint8[])gcr_secure_memory_strdup(dialog.get_text()),
+        var dialog = new PassphrasePrompt(null, description, null, null, false);
+        var pass = yield dialog.prompt(this.parent, cancellable);
+        if (pass != null) {
+            debug("Setting password");
+            password.set_value_full((uint8[])gcr_secure_memory_strdup(pass),
                                     gcr_secure_memory_free);
-
-        dialog.destroy();
-
-        if (response != Gtk.ResponseType.ACCEPT)
+        } else {
+            debug("Failed to set password, cancelled");
             throw new GLib.IOError.CANCELLED("The password request was cancelled by the user");
+        }
 
         return TlsInteractionResult.HANDLED;
     }

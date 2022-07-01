@@ -33,7 +33,7 @@ G_DECLARE_FINAL_TYPE (SeahorseGpgmeAddSubkey, seahorse_gpgme_add_subkey,
 SeahorseGpgmeAddSubkey*  seahorse_gpgme_add_subkey_new               (SeahorseGpgmeKey *pkey,
                                                                       GtkWindow *parent);
 
-SeahorseKeyEncType       seahorse_gpgme_add_subkey_get_active_type   (SeahorseGpgmeAddSubkey *self);
+SeahorsePgpKeyAlgorithm  seahorse_gpgme_add_subkey_get_selected_algo (SeahorseGpgmeAddSubkey *self);
 
 guint                    seahorse_gpgme_add_subkey_get_keysize       (SeahorseGpgmeAddSubkey *self);
 

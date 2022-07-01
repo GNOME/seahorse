@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <interface>
-  <requires lib="gtk+" version="3.24"/>
   <menu id="actions_menu">
     <section>
       <item>
@@ -17,48 +16,29 @@
       </item>
     </section>
   </menu>
-  <template class="SeahorsePgpUidListBoxRow" parent="HdyExpanderRow">
-    <property name="visible">True</property>
+
+  <template class="SeahorsePgpUidListBoxRow" parent="AdwExpanderRow">
     <property name="focus-on-click">False</property>
-    <child type="action">
-      <object class="GtkMenuButton" id="actions_button">
-        <property name="visible">True</property>
-        <property name="valign">center</property>
-        <property name="halign">end</property>
-        <property name="margin-start">6</property>
-        <property name="menu-model">actions_menu</property>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="icon-name">open-menu-symbolic</property>
-          </object>
-        </child>
-        <style>
-          <class name="flat"/>
-        </style>
-      </object>
-    </child>
+    <style>
+      <class name="pgp-subkey-row"/>
+    </style>
+
     <child type="prefix">
       <object class="GtkImage" id="avatar">
-        <property name="visible">True</property>
         <property name="icon-name">avatar-default-symbolic</property>
-        <property name="icon-size">5</property>
       </object>
     </child>
+
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
         <property name="spacing">12</property>
-        <property name="margin">18</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
             <property name="spacing">6</property>
             <property name="orientation">horizontal</property>
             <child>
               <object class="GtkLabel" id="signed_by_label">
-                <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="valign">center</property>
                 <property name="label" translatable="yes">Signatures</property>
@@ -72,31 +52,22 @@
             </child>
             <child>
               <object class="GtkSwitch" id="trusted_switch">
-                <property name="visible">True</property>
                 <property name="action-name">uid.only-trusted</property>
                 <property name="tooltip-text" translatable="yes">Only display the signatures of people I trust</property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
                 <property name="xalign">1</property>
                 <property name="label" translatable="yes">Only trusted</property>
                 <property name="tooltip-text" translatable="yes">Only display the signatures of people I trust</property>
                 <property name="mnemonic-widget">trusted_switch</property>
               </object>
-              <packing>
-                <property name="pack_type">end</property>
-              </packing>
             </child>
           </object>
         </child>
         <child>
           <object class="GtkListBox" id="signatures_list">
-            <property name="visible">True</property>
             <property name="selection-mode">none</property>
           </object>
         </child>
@@ -109,6 +80,19 @@
             </style>
           </object>
         </child>
+      </object>
+    </child>
+
+    <child type="action">
+      <object class="GtkMenuButton" id="actions_button">
+        <property name="icon-name">view-more-symbolic</property>
+        <property name="valign">center</property>
+        <property name="halign">end</property>
+        <property name="margin-start">6</property>
+        <property name="menu-model">actions_menu</property>
+        <style>
+          <class name="flat"/>
+        </style>
       </object>
     </child>
   </template>

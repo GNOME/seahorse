@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<interface>
+  <template class="SeahorseGkrAddItemDialog" parent="AdwDialog">
+    <property name="title" translatable="yes">Add Password</property>
+    <property name="follows-content-size">True</property>
+
+    <child>
+      <object class='GtkShortcutController'>
+        <child>
+          <object class='GtkShortcut'>
+            <property name='trigger'>&lt;Ctrl&gt;Return</property>
+            <property name='action'>action(add-item)</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-start-title-buttons">False</property>
+            <property name="show-end-title-buttons">False</property>
+
+            <child type="start">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">True</property>
+                <property name="action-name">window.close</property>
+              </object>
+            </child>
+
+            <child type="end">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">_Add</property>
+                <property name="use-underline">True</property>
+                <property name="action-name">add-item</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <property name="content">
+          <object class="GtkScrolledWindow">
+            <property name="propagate-natural-height">True</property>
+            <child>
+              <object class="AdwClamp">
+                <child>
+                  <object class="GtkBox" id="container">
+                    <property name="spacing">24</property>
+                    <property name="orientation">vertical</property>
+                    <property name="margin-start">32</property>
+                    <property name="margin-end">32</property>
+                    <property name="margin-top">32</property>
+                    <property name="margin-bottom">32</property>
+                    <child>
+                      <object class="AdwPreferencesGroup">
+                        <child>
+                          <object class="AdwComboRow" id="keyring_row">
+                            <property name="title" translatable="yes">_Keyring</property>
+                            <property name="use-underline">True</property>
+                            <property name="expression">
+                              <lookup type="SeahorseGkrKeyring" name="label"/>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwEntryRow" id="description_row">
+                            <property name="title" translatable="yes">_Description</property>
+                            <property name="use-underline">True</property>
+                            <signal name="changed" handler="on_description_row_changed"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPasswordEntryRow" id="password_row">
+                            <property name="title" translatable="yes">_Password</property>
+                            <property name="use-underline">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">horizontal</property>
+                        <child>
+                          <object class="GtkImage" id="password_strength_icon">
+                            <property name="halign">end</property>
+                            <property name="icon-name">dialog-warning-symbolic</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLevelBar" id="password_strength_bar">
+                            <property name="hexpand">True</property>
+                            <property name="valign">center</property>
+                            <property name="min-value">0</property>
+                            <property name="max-value">5</property>
+                            <property name="mode">discrete</property>
+                            <offsets>
+                              <offset name="strength-weak" value="1"/>
+                              <offset name="strength-low" value="2"/>
+                              <offset name="strength-medium" value="3"/>
+                              <offset name="strength-good" value="4"/>
+                              <offset name="strength-high" value="5"/>
+                            </offsets>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+  </template>
+</interface>
