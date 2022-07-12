@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2022-03-08 08:34+0700\n"
+"POT-Creation-Date: 2022-06-26 18:42+0000\n"
+"PO-Revision-Date: 2022-07-12 17:40+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -67,7 +67,7 @@ msgstr "Pilih tanggal dari suatu kalender"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "_Batal"
 
@@ -451,7 +451,7 @@ msgstr ""
 "peladen kunci, menyinggahkan frasa sandi Anda sehingga Anda tak perlu setiap "
 "kali mengetikkannya, dan membuat cadangan kunci dan ring kunci Anda."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "Proyek GNOME"
 
@@ -824,7 +824,7 @@ msgstr "Buat ID pengguna baru"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Dekripsi gagal. Anda barangkali tidak memiliki kunci dekripsi."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "Operasi dibatalkan"
 
@@ -870,7 +870,7 @@ msgid "PGP keys"
 msgstr "Kunci PGP"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -933,11 +933,11 @@ msgstr "Opsi kunci tingk_at lanjut"
 msgid "_Comment"
 msgstr "_Komentar"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "_Tipe Enkripsi"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "Kekuatan Kun_ci (bit)"
 
@@ -1286,18 +1286,6 @@ msgstr "Tak diketahui"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-"Pencarian tidak cukup spesifik. Peladen \"%s\" menemukan terlalu banyak "
-"kunci."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "Tidak dapat berkomunikasi dengan peladen \"'%s\": %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1991,12 +1979,12 @@ msgstr "Data yang akan diimpor"
 msgid "_Import"
 msgstr "_Impor"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Pengimporan gagal"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Impor Kunci"
 
@@ -2129,11 +2117,15 @@ msgstr "Penyaring"
 msgid "This collection seems to be empty"
 msgstr "Koleksi ini tampaknya kosong"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+msgid "Add new items"
+msgstr "Tambah butir baru"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "Ring kunci terkunci"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Buka Kunci"
 
@@ -2207,17 +2199,17 @@ msgstr "Kunci SSH"
 msgid "No public key file is available for this key."
 msgstr "Tak tersedia berkas kunci publik bagi kunci ini."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "Membuat Kunci Secure Shell"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Tidak dapat memuat kunci Secure Shell yang baru dibuat"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Tidak dapat membuat kunci Secure Shell"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "Membuat Kunci Secure Shell"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2269,26 +2261,26 @@ msgstr "(Kunci Secure Shell Tak Dapat Dibaca)"
 msgid "Secure Shell Key"
 msgstr "Kunci Secure Shell"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Kata Sandi Host Jauh"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Masukkan Frasa Sandi Kunci"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Frasa Sandi bagi Kunci Secure Shell Baru"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "Mengimpor kunci: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "Mengimpor kunci. Masukkan frasa kunci"
 
@@ -2319,37 +2311,37 @@ msgstr "Masukkan frasa sandi baru bagi: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Masukkan frasa sandi baru lagi: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Kunci Secure Shell Baru"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Suatu kunci Secure Shell (SSH) memungkinkan Anda menyambung secara aman ke "
 "komputer lain."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_Deskripsi"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "Alamat surel Anda, atau suatu pengingat tentang apa guna kunci ini."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2357,13 +2349,9 @@ msgstr ""
 "Bila sudah ada komputer yang ingin Anda pakaikan kunci ini, Anda dapat "
 "menyiapkan komputer tersebut untuk mengenal kunci Anda sekarang."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "_Hanya Buat Kunci"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_Buat dan Siapkan"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "_Jangkitkan"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2468,6 +2456,20 @@ msgstr "Tidak dapat menata kunci Secure Shell pada komputer jauh."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Mengkonfigurasi Kunci Secure Shell…"
+
+#~ msgid "Search was not specific enough. Server “%s” found too many keys."
+#~ msgstr ""
+#~ "Pencarian tidak cukup spesifik. Peladen \"%s\" menemukan terlalu banyak "
+#~ "kunci."
+
+#~ msgid "Couldn’t communicate with server “%s”: %s"
+#~ msgstr "Tidak dapat berkomunikasi dengan peladen \"'%s\": %s"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "_Hanya Buat Kunci"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "_Buat dan Siapkan"
 
 #~ msgid "Seahorse"
 #~ msgstr "Seahorse"
